@@ -2,61 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2783948C5C2
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jan 2022 15:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6804B48C5CA
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jan 2022 15:16:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354042AbiALOPI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 12 Jan 2022 09:15:08 -0500
-Received: from mail-dm6nam12on2058.outbound.protection.outlook.com ([40.107.243.58]:29301
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        id S241709AbiALOPU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 12 Jan 2022 09:15:20 -0500
+Received: from mail-dm6nam10on2064.outbound.protection.outlook.com ([40.107.93.64]:64608
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1354068AbiALOPH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:15:07 -0500
+        id S241509AbiALOPQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 12 Jan 2022 09:15:16 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gHkMl+YyY/34m5VdRPvIEAvu6kMjYHtxo/uny+ixr7CaDS6Hj4zwbg7ps0lZo8kTMBeY4rTiCjtO+C2fUKyK7AxPaKypHNRyvvjozt9XDWuz3rt8vD3TiOIk6wpneqXhjskkPZv5e5pqUK0ws4NRfoxBTWf9dJ5PI97wixTIZQiLn9uyYh70fTPeAo2P4MjYI3od20fu/RmBwWcNMPC9y0g/1ThBqz+tceCFNs16Utt5kjTI4eO3obEVkF07bYfTXV2JUhErwvEoPJF+45JWM78B7PTNfTk3AclKZgl4QMl0Kk3ucfS4Gl6FZ10jDNWfKAjsP/L/26sNLf74jMPNkQ==
+ b=MiDykrvT7cV3y0/zkuOMPx2smXG9ydPVaTZao32Too7mM/pQiWYsNPPWGUkd0ZETCs09QfRk68hukvFxG8J0c0d21Q3RNEGOw3VJhhUFjoVaMolRXWK3D05QZxh8TNBQKrGpAE9K2/whm5Pj2uNGpofM6Cko69OvpF4I2VR4Kr51pQGg8ytJ566aVITdAKbnl4Ys52+vyZfoSNCUmIo2IVoXcHfsc8ZJj65sru2jr3Subug3NIyvgC6qGL/EsbZFxS5lOGjqhNtlsra20eZxccokR/qkoRfPwA5okZ5OOBqRK6M95K5fNRC3MUkUH8wihUckN+vwYp7DPF4+tsNaBQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Mi6A724na9xjHiGhNnbFWd2LYQzLM5H8jWqHYMX/dV4=;
- b=JRHI5p9AX8hw3+zulUfIyeyob/HVlBairJdqVEpLuMK0xbBtzfXJGwwxLcgvYtvbEc5+ZPH4ElCssvu7AVlytM8ThlpsSqZQwXf1yxaaxGHese4c5C1fMDJumZ7+Z2O/xr6Qej0b4suDZ2lICu85k8vmUH60lxKHPdbpfQ2yq4gKhH4FulT0ATMK00dRRVF/azuatwP/uEcgXJlT8gyl4I51G7mtXf/+0YW1QpHTd5hQT7JiX0cO0P99nl6Q+gRrGImVAy4L7pZzvuAmosfwI5Ty3aA+RfJqv1G0Mba/r+IzsFspi6xsiNEosXsDuvFSNz/b4X6VFDe9GslRSKYyIQ==
+ bh=JrjofGNoyzqB6kIT9HKSx+BNth1yFI9Hm5WTlZi/ZSE=;
+ b=Z29XJ7YerO+bEP2sTrpHh6tuA9ajK1LaA3LAQ2UfUt1F0I3+T5dm+7ks0PTR9KMKNOnzTQXTcOqAJxbt7hhUXbti921tpl3lG2yM8D0P6MWc+uQg09JJ8LO2dGHl8bN84dt0T7EkRC3jUakuSvTWtGxuVjE9r1pEeL4B+9punO4Myspk7654CWL0OMMkDW4jUyQGCCM0b34FpIhk4ChFhzCF+lubRk9H4S5HXWB60PnOWsgQo9uqTz+daB6RfSpJFBm6/FZqzxX8k+lvh94Pj4VQSyM9mrA3w0a3WS/E7VXp7Sez6y3P9yxoMFjwY7jjB1GhzfbqJiGJTCPzomcMOA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com; dmarc=pass
+ 12.22.5.238) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com; dmarc=pass
  (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
  (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Mi6A724na9xjHiGhNnbFWd2LYQzLM5H8jWqHYMX/dV4=;
- b=C4gjJl1HMKiYorGm3sJRZUCmz9ThfT1JjDcfzdARxGft8K1wbCBaJ2cxWCJKTVcqj92LBBJ00tXc6QV5r2xwdDVRPcV9fAbGfWm0Su70qODrwCYUoBi/Ug47ODlSqFhv8aI7L9d5W2WQNVCWQeL08n02o4UualwUQZgKHJcaMCJshDUcK7l5Mzrjor8Lw16f3GagXnyJaRc1FCB48YVtETThlGm8mmMfRdMokrJLG/8+8z1u+LZblmZj0GR6p6qtx9I/x3/jZmcqLWKEYx2JOk9E+2/7uLQ3EXbLTA8Wq7bTtPVDeGw500R4gb9u0Co6XsWTHcc6B1lHdtxycsxuhQ==
-Received: from BN9PR03CA0727.namprd03.prod.outlook.com (2603:10b6:408:110::12)
- by DM5PR1201MB2554.namprd12.prod.outlook.com (2603:10b6:3:ec::14) with
+ bh=JrjofGNoyzqB6kIT9HKSx+BNth1yFI9Hm5WTlZi/ZSE=;
+ b=XW0nKVZ/1dIVH7mpo3FbT9B5bSUlnOKL0NY2ctmCC1vOBtQaemNPkgEkKZji+OMyZLKra6IjFduOnt7GbP/TIMqhhOFc55ZZ94lzbte3PY7/EJcM3oJN3p9pLV54Fnqp0xbTDjhXbxXTMrT81cd3VqiLXMBtsKNRkpwvPiKRptmHMopUVsCJ8YuQ0J3V40BEamvvSi4BHATQJk6x9Gyv7cToquTmb9ty555vYOTVyJl7UYvDLMuepoLfxa8XZPMqj3Aqf+kylHeTnysvGlrLsMK2y2elRqyyknvr6IkvlEKCWi+MNtHtSrSK94aOdBo+FjeuEaMJL4FJoG5smLP+PQ==
+Received: from BN6PR16CA0019.namprd16.prod.outlook.com (2603:10b6:404:f5::29)
+ by BN8PR12MB3522.namprd12.prod.outlook.com (2603:10b6:408:9c::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Wed, 12 Jan
- 2022 14:15:04 +0000
-Received: from BN8NAM11FT033.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:110:cafe::c5) by BN9PR03CA0727.outlook.office365.com
- (2603:10b6:408:110::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9 via Frontend
- Transport; Wed, 12 Jan 2022 14:15:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Wed, 12 Jan
+ 2022 14:15:13 +0000
+Received: from BN8NAM11FT030.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:404:f5:cafe::fc) by BN6PR16CA0019.outlook.office365.com
+ (2603:10b6:404:f5::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9 via Frontend
+ Transport; Wed, 12 Jan 2022 14:15:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.235) by
- BN8NAM11FT033.mail.protection.outlook.com (10.13.177.149) with Microsoft SMTP
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ BN8NAM11FT030.mail.protection.outlook.com (10.13.177.146) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4888.9 via Frontend Transport; Wed, 12 Jan 2022 14:15:04 +0000
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 12 Jan
- 2022 14:15:03 +0000
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 12 Jan
- 2022 06:15:02 -0800
+ 15.20.4888.9 via Frontend Transport; Wed, 12 Jan 2022 14:15:13 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 12 Jan
+ 2022 14:15:12 +0000
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 12 Jan
+ 2022 14:15:12 +0000
 Received: from kyarlagadda-linux.nvidia.com (10.127.8.10) by mail.nvidia.com
  (172.20.187.15) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Wed, 12 Jan 2022 06:14:58 -0800
+ Transport; Wed, 12 Jan 2022 06:15:08 -0800
 From:   Akhil R <akhilrajeev@nvidia.com>
 To:     <andy.shevchenko@gmail.com>, <christian.koenig@amd.com>,
         <digetx@gmail.com>, <gregkh@linuxfoundation.org>,
@@ -66,9 +66,9 @@ To:     <andy.shevchenko@gmail.com>, <christian.koenig@amd.com>,
         <sumit.semwal@linaro.org>, <thierry.reding@gmail.com>,
         <wsa@kernel.org>, <lenb@kernel.org>, <linux-acpi@vger.kernel.org>
 CC:     <akhilrajeev@nvidia.com>
-Subject: [PATCH v2 2/3] docs: firmware-guide: ACPI: Add named interrupt doc
-Date:   Wed, 12 Jan 2022 19:44:21 +0530
-Message-ID: <1641996862-26960-3-git-send-email-akhilrajeev@nvidia.com>
+Subject: [PATCH v2 3/3] i2c: smbus: Use device_*() functions instead of of_*()
+Date:   Wed, 12 Jan 2022 19:44:22 +0530
+Message-ID: <1641996862-26960-4-git-send-email-akhilrajeev@nvidia.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com>
 References: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com>
@@ -77,85 +77,114 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 93495c88-7866-4e8f-7d2d-08d9d5d5edba
-X-MS-TrafficTypeDiagnostic: DM5PR1201MB2554:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR1201MB25540AC1BF35FA9992A3095EC0529@DM5PR1201MB2554.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Office365-Filtering-Correlation-Id: aaf7ab3f-7ea6-4315-6913-08d9d5d5f36b
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3522:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR12MB35223FC78CA394D005DE5151C0529@BN8PR12MB3522.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: L2e04kYsUEOrg80ty5cj9/L0aF+2OEZx/1kezUv7BQ7t+ZhrYqTQcVov092T94TNrLBnuubNW4savC4ehcRgAD8oPoOTmRo4EVy+xYDIR0hpRbNgaH3p+u6q/9Lilx5uOVdPfRrcAzww1cy5YltEk5xZygnoonGd3Ubq1V+mguYJD87l1RqMfkUTyiD4wk7r0tZxHZzczgFW95xzfAPz57AjAhL1VXGUIXp3e03AerxIFlmMkGrKFjG4u4qUgDuHY/CJCCYPR+HPvIMVpBRWQJVJY3NBR3njGix0j3dZqtjznH5Gvtw3olEXz9QI1u5HP4ZVKy7Qw6zRuoklL3gMgiZiGZkJetB64B3X4yMhFhZaQyEpblGXOkUi2esY4TD1kaNjF8i3wrpnkT8PLTvB18TvpU/QJVol82wbSCo8BdB79ByqwFacdFLhQV2yQWbDcLK/Xcdr3TBrhWTNw/4RHInXMfRTHheyHB/TgGBt4tem98QYqLppEJkJA2oTA2Ei3BcIQgdqxvQM1Vg+HDG9aymmhhinJ0lGvtYmGluIiaPJydyASDZtRaK4VP43+f1z2qkJjlS5DyhrP/MnTEp2bQsllFGVqDPrlAiDak+U+INEIXTVBOF2fFpxpR7SvXeo6Zlk0YoyJU1jpc8AVylu5P1Oo3YpZSpTu38cS3Mi7+FpbIP2xoQW+T223+pbBq3HNO7Yq72fIi25tSojRxVbbud2SIW4A+lQ8H9YTVoFIip4gFvZ8zPQEOLM+nKBkI7mHozV8ygmjQNKR7znyBELHXUPXsdBdEb77iabMQDmqdyj3vqJF63gs0gOY3PTavoUlrsam4fE+RbS7bM0ZoJsiG4HeHzyPDQ3LBn0bAenCTY=
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(40470700002)(36840700001)(46966006)(81166007)(356005)(4326008)(2616005)(107886003)(70586007)(82310400004)(508600001)(70206006)(2906002)(47076005)(40460700001)(36756003)(110136005)(36860700001)(921005)(86362001)(7416002)(83380400001)(8676002)(186003)(5660300002)(6666004)(336012)(26005)(7696005)(8936002)(316002)(426003)(83996005)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: WJBFXxCE1xwy5HGrxW0XB9vHGPLvljh3rwzooz1bhrDfQeBSpGs24XQvQ0wQFd9LQkPuO0Zqk9hqGmIBylg/jloP5axBdNGJkVerxJvYwj7cLilpW36PZN2ctQAiRaC+C/pu7agC2mD1e/TTYSsTdgnkpC3nkYkv2lMrtkTGdnBL/FbAVsf7HkGcKyaLDIHOXOtGj9VZPurgC6mceiTiP8GP/S4USqESu9M1UKGDbHnw0jO2p7j/V03DMDEdgRJe+4piypi+ygjE7F0VNGjj26cSsNXYxUp1XUgTKPYkWB/6WURR+5GosR3zO1pfAwrP1ccPJ2yRhrgraA3UWvl0S3y/3P9/JfcMwsMnMqEsPV2NuEM0onhrKI30zcp3sttyKsKc5TmgiiVvcznq3lbRpj4J4MlAUnrnz6te+tnw0nfzheLsm2Mymu38S40QnM33gtKJPz2AmazA0Nz1pat63LozZx0+hC2tsETPpgCUzK6R52cawZBwJ8z8Y4+yJeKD4howTXqzHAqK319zWtl1lkNLb+SORllhubjevkgl1M/QHBq5O3v7zrhqss2n5jK7e5fA0Xl1cNy1HIhOuczOFjrHvlvfbsgjD15M/38cfgdq8w79qYeZkxxU5uqXfW7oNOEWDok8OMWR2laUzmoroRR1Ihf3XdcCvbVXtum4/0+u8GBKyoWosnctDrD9KkxdL6/ME0WG33dfVTeTum4Wbva0PoUOYHXB7fPlKUH+e3yvJ4xH0wrZKib0wfd9wfq1l3sbDtcRWkXbyaR/x3UClg7qNXdlmN0f8Yg8PCLnpho1C6MlQDECjN01TI4N1+HyEoEhZ7gNrm5YXvu/O/gIkRXo5QXcsIirC/+tT0I76Nc=
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700002)(316002)(110136005)(4326008)(107886003)(86362001)(70206006)(8936002)(508600001)(5660300002)(36756003)(7696005)(36860700001)(70586007)(8676002)(2906002)(6666004)(2616005)(7416002)(336012)(26005)(40460700001)(426003)(83380400001)(356005)(47076005)(81166007)(82310400004)(186003)(921005)(36900700001)(83996005)(2101003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2022 14:15:04.1089
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2022 14:15:13.6726
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 93495c88-7866-4e8f-7d2d-08d9d5d5edba
+X-MS-Exchange-CrossTenant-Network-Message-Id: aaf7ab3f-7ea6-4315-6913-08d9d5d5f36b
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT033.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT030.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB2554
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3522
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Added details and example for named interrupts in the ACPI Table
+Change of_*() functions to device_*() for firmware agnostic usage.
+This allows to have smbus_alert interrupt without any changes
+in the controller drivers using ACPI table.
 
 Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
 ---
- Documentation/firmware-guide/acpi/enumeration.rst | 38 +++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ drivers/i2c/i2c-core-base.c  |  2 +-
+ drivers/i2c/i2c-core-smbus.c | 10 +++++-----
+ drivers/i2c/i2c-smbus.c      |  2 +-
+ include/linux/i2c-smbus.h    |  6 +++---
+ 4 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/firmware-guide/acpi/enumeration.rst b/Documentation/firmware-guide/acpi/enumeration.rst
-index 74b830b2..30ae41c 100644
---- a/Documentation/firmware-guide/acpi/enumeration.rst
-+++ b/Documentation/firmware-guide/acpi/enumeration.rst
-@@ -143,6 +143,44 @@ In robust cases the client unfortunately needs to call
- acpi_dma_request_slave_chan_by_index() directly and therefore choose the
- specific FixedDMA resource by its index.
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 1072a47..8e6c7a1 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -1574,7 +1574,7 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
+ 		goto out_list;
+ 	}
  
-+Named Interrupts
-+================
-+
-+Drivers with ACPI node can have names to interrupts in ACPI table which
-+can be used to get the irq number in the driver.
-+
-+The interrupt name can be listed in _DSD as 'interrupt-names'. The names
-+should be listed as an array of strings which will map to the Interrupt
-+property in ACPI table corresponding to its index.
-+
-+The table below shows an example of its usage::
-+
-+	Device (DEV0) {
-+		...
-+		Name (_CRS, ResourceTemplate() {
-+			...
-+			Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) {
-+				0x20,
-+				0x24
-+			}
-+		})
-+
-+		Name (_DSD, Package () {
-+			ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-+			Package () {
-+				Package () {"interrupt-names",
-+					Package (2) {"default", "alert"}},
-+			}
-+			...
-+		})
-+	}
-+
-+The interrupt name 'default' will correspond to 0x20 in Interrupt property
-+and 'alert' to 0x24.
-+
-+The driver can call the function - device_irq_get_byname with the device
-+and interrupt name as arguments to get the corresponding irq number.
-+
- SPI serial bus support
- ======================
+-	res = of_i2c_setup_smbus_alert(adap);
++	res = i2c_setup_smbus_alert(adap);
+ 	if (res)
+ 		goto out_reg;
  
+diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
+index e5b2d14..4c24c84 100644
+--- a/drivers/i2c/i2c-core-smbus.c
++++ b/drivers/i2c/i2c-core-smbus.c
+@@ -701,13 +701,13 @@ struct i2c_client *i2c_new_smbus_alert_device(struct i2c_adapter *adapter,
+ }
+ EXPORT_SYMBOL_GPL(i2c_new_smbus_alert_device);
+ 
+-#if IS_ENABLED(CONFIG_I2C_SMBUS) && IS_ENABLED(CONFIG_OF)
+-int of_i2c_setup_smbus_alert(struct i2c_adapter *adapter)
++#if IS_ENABLED(CONFIG_I2C_SMBUS)
++int i2c_setup_smbus_alert(struct i2c_adapter *adapter)
+ {
+ 	int irq;
+ 
+-	irq = of_property_match_string(adapter->dev.of_node, "interrupt-names",
+-				       "smbus_alert");
++	irq = device_property_match_string(adapter->dev.parent, "interrupt-names",
++					   "smbus_alert");
+ 	if (irq == -EINVAL || irq == -ENODATA)
+ 		return 0;
+ 	else if (irq < 0)
+@@ -715,5 +715,5 @@ int of_i2c_setup_smbus_alert(struct i2c_adapter *adapter)
+ 
+ 	return PTR_ERR_OR_ZERO(i2c_new_smbus_alert_device(adapter, NULL));
+ }
+-EXPORT_SYMBOL_GPL(of_i2c_setup_smbus_alert);
++EXPORT_SYMBOL_GPL(i2c_setup_smbus_alert);
+ #endif
+diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
+index d3d06e3..fdd6d97 100644
+--- a/drivers/i2c/i2c-smbus.c
++++ b/drivers/i2c/i2c-smbus.c
+@@ -128,7 +128,7 @@ static int smbalert_probe(struct i2c_client *ara,
+ 	if (setup) {
+ 		irq = setup->irq;
+ 	} else {
+-		irq = of_irq_get_byname(adapter->dev.of_node, "smbus_alert");
++		irq = device_irq_get_byname(adapter->dev.parent, "smbus_alert");
+ 		if (irq <= 0)
+ 			return irq;
+ 	}
+diff --git a/include/linux/i2c-smbus.h b/include/linux/i2c-smbus.h
+index 1ef4218..95cf902 100644
+--- a/include/linux/i2c-smbus.h
++++ b/include/linux/i2c-smbus.h
+@@ -30,10 +30,10 @@ struct i2c_client *i2c_new_smbus_alert_device(struct i2c_adapter *adapter,
+ 					      struct i2c_smbus_alert_setup *setup);
+ int i2c_handle_smbus_alert(struct i2c_client *ara);
+ 
+-#if IS_ENABLED(CONFIG_I2C_SMBUS) && IS_ENABLED(CONFIG_OF)
+-int of_i2c_setup_smbus_alert(struct i2c_adapter *adap);
++#if IS_ENABLED(CONFIG_I2C_SMBUS)
++int i2c_setup_smbus_alert(struct i2c_adapter *adap);
+ #else
+-static inline int of_i2c_setup_smbus_alert(struct i2c_adapter *adap)
++static inline int i2c_setup_smbus_alert(struct i2c_adapter *adap)
+ {
+ 	return 0;
+ }
 -- 
 2.7.4
 
