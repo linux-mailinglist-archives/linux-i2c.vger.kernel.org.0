@@ -2,56 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8317B48C7B9
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jan 2022 16:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F195148C7FF
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jan 2022 17:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354858AbiALP5Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 12 Jan 2022 10:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348170AbiALP5X (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 12 Jan 2022 10:57:23 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4768FC06173F;
-        Wed, 12 Jan 2022 07:57:23 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id o6so11826807edc.4;
-        Wed, 12 Jan 2022 07:57:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=01FQ6VRzty6iGaHSe+9xP+mXqTdBfUe9WYR3sCX2PJ8=;
-        b=n0msJA6X0ppZR03mdOoeAM+A0+soyqdTWb/lknh2u/D2lNm0CBZikICBKnDp/d4TUB
-         qXpkUXM0GBAkGVaS8s1nkS9r2FgepScTNmlEnk+OQuSre/hPVj0FbHVDN2JhkrN6fXpH
-         o5LVwjpmJbIcFy7w/EVR6AYzjEJWEeIfKqQQXGpBt++jCo4dpaaZl1xlLVJPqXuDqcux
-         ADe1wvhihDRyXYn62PFZm7BE55or7CB9bcXJdXecmt2n+hLJwuYBazRT46oe+FfbM49v
-         9g6udzDYb+cHpvfGKBeuhjKpLiODpkHA/HQAPN4sgBc8kwsp/0yzYZ9qgXUfMDs0nzWP
-         emMA==
+        id S1354948AbiALQOH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 12 Jan 2022 11:14:07 -0500
+Received: from mail-qv1-f51.google.com ([209.85.219.51]:35567 "EHLO
+        mail-qv1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240511AbiALQOF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 12 Jan 2022 11:14:05 -0500
+Received: by mail-qv1-f51.google.com with SMTP id a8so3459751qvx.2;
+        Wed, 12 Jan 2022 08:14:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=01FQ6VRzty6iGaHSe+9xP+mXqTdBfUe9WYR3sCX2PJ8=;
-        b=Zy7czSCk1M86r/L/4sn7TCvW27TrXwxuDggV73N4O7EaPjcRziv+XCDy0HcNiBEatm
-         Er5K0DyNuEw5YQ2uNFmHGbyLx0m6qNGceqVeSOo2vHXQH39saFl5wzGs4fsThx8ppCmE
-         H+4FeWjMPEYb5ekfcq3/skmG4l88gjnzKJ5WA1eIbMuXjL1OyDp0uTNYg69w73UX6RyX
-         7vNjKkw4ZrADfAwmHUMRQwSKWgNWZhm9gpXiHQYeExjEmmJf/JuW/XegDnLce+sDYN21
-         0gHwZtMhblZP/WADTH8ycfu91g5BPhT1Fh0WAAOtTFzw/nDDCIqWjWjkv9Zh6rx7QOJj
-         +SRw==
-X-Gm-Message-State: AOAM533HWvDaVkhNxf4TDhOmcl6sUvuAqXk1QNe8An68FhBcerjt21R3
-        gu+8Ug1knOnEH4T7OmkZaTsthWZKln3//wd3sww=
-X-Google-Smtp-Source: ABdhPJx73qaKX2Qdc1KaoCotkHbaSbvtvnaeA7oTzhb6uMCee+RfZAMikG70wAq/2aqjVxEUZivej7yJAyZowmumwvM=
-X-Received: by 2002:a17:907:968c:: with SMTP id hd12mr260755ejc.639.1642003041845;
- Wed, 12 Jan 2022 07:57:21 -0800 (PST)
+        bh=o7MEgpOOxGt54/hkpy3yNzHIxHgqeMXzxGl0QBEiqQ8=;
+        b=r/WgqwG1Jmawy6A9MQxbp5uWEL+1VzIUGyWlr+jJu7zm8hnrzUsiyXeuqwK7jECOd6
+         Q9ZogepWUIft+4mfZ3stJ4Bj6wyP5/66jOnp0wqK0jOlfb7jkUR0/ElymJG8nZ4RXlyb
+         vHG3JERoO2KyhktCMd8pCWe/9+WWHhj54mrqTHuRXkb0w6sStv0uMUZega01DsdIU3wt
+         bBgcCZDV5iz/C4wFZDrWPnU1P3GoGKzoPlpWzX4bQR6446uQIfn+aYiJOFpjs38FkWkm
+         sacJx2O5RPWaO3i6XfkxVWpiirjjEFwtrKoG72bOGfIKTpmt1rX5r5O8rIy4DqWX9uCw
+         E37w==
+X-Gm-Message-State: AOAM533lB3gfDKrzEYyQ3zIKzRCNDioHNItdqTt5BIMQ+UNMwjJtszi6
+        NE9AWitmKYv+Q2o+Eub2p2WCeX0c1AO1e0L0v+o=
+X-Google-Smtp-Source: ABdhPJyS2AnOwxzgQuWUygWNfan4PYFTyozxvPlJyBn/aWQsWTeqWLf8F7Jto6lKEcKdepyZTrOWftVBmhSNLmLn9d4=
+X-Received: by 2002:ad4:5c41:: with SMTP id a1mr425140qva.130.1642004044858;
+ Wed, 12 Jan 2022 08:14:04 -0800 (PST)
 MIME-Version: 1.0
-References: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com>
-In-Reply-To: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 12 Jan 2022 17:55:35 +0200
-Message-ID: <CAHp75Vdh6znawYhpiU9ra5Nu3mLu_TbpLW_gtBezjASX4TF6Qg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Enable named interrupt smbus-alert for ACPI
+References: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com> <1641996862-26960-2-git-send-email-akhilrajeev@nvidia.com>
+In-Reply-To: <1641996862-26960-2-git-send-email-akhilrajeev@nvidia.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 12 Jan 2022 17:13:53 +0100
+Message-ID: <CAJZ5v0hW-i8+hqkQtHG2H3X7zotABEx_bKei9OFkjBuFbL6JKw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] device property: Add device_irq_get_byname
 To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     Christian Koenig <christian.koenig@amd.com>,
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jon Hunter <jonathanh@nvidia.com>,
@@ -69,22 +56,90 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 4:14 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+On Wed, Jan 12, 2022 at 3:14 PM Akhil R <akhilrajeev@nvidia.com> wrote:
 >
-> I2C - SMBus core drivers use named interrupts to support smbus_alert.
-> As named interrupts are not available for ACPI based systems, it was
-> required to change the i2c bus controller driver if to use smbus alert.
-> These patches provide option for named interrupts in ACPI and  make the
-> implementation similar to DT. This will enable use of interrupt named
-> 'smbus-alert' in ACPI as well which will be taken during i2c adapter
-> register.
+> Get interrupt by name from ACPI table as well.
+>
+> Add option to use 'interrupt-names' in _DSD which can map to interrupt by
+> index. The implementation is similar to 'interrupt-names' in devicetree.
+> Also add a common routine to get irq by name from devicetree and ACPI
+> table.
+>
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+>  drivers/base/property.c  | 35 +++++++++++++++++++++++++++++++++++
+>  include/linux/property.h |  3 +++
+>  2 files changed, 38 insertions(+)
+>
+> diff --git a/drivers/base/property.c b/drivers/base/property.c
+> index cbe4fa2..414c316 100644
+> --- a/drivers/base/property.c
+> +++ b/drivers/base/property.c
+> @@ -920,6 +920,41 @@ int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index)
+>  EXPORT_SYMBOL(fwnode_irq_get);
+>
+>  /**
+> + * fwnode_irq_get_byname - Get IRQ from a fwnode using its name
+> + * @fwnode:    Pointer to the firmware node
+> + * @name:      IRQ name in interrupt-names property in fwnode
+> + *
+> + * Returns Linux IRQ number on success, errno otherwise.
+> + */
+> +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
+> +{
+> +       int index;
+> +
+> +       if (unlikely(!name))
+> +               return -EINVAL;
+> +
+> +       index = fwnode_property_match_string(fwnode, "interrupt-names",  name);
+> +       if (index < 0)
+> +               return index;
+> +
+> +       return fwnode_irq_get(fwnode, index);
+> +}
+> +EXPORT_SYMBOL(fwnode_irq_get_byname);
+> +
+> +/**
+> + * device_irq_get_byname - Get IRQ of a device using interrupt name
+> + * @dev:       Device to get the interrupt
+> + * @name:      IRQ name in interrupt-names property in fwnode
 
-Most of my comments are regarding spelling and documentation.
-The code looks almost good enough. That said, if maintainers will be
-okay, I'm sure the next version will be upstream-ready.
+Which fwnode?
 
-Thanks!
+> + *
+> + * Returns Linux IRQ number on success, errno otherwise.
+> + */
+> +int device_irq_get_byname(struct device *dev, const char *name)
+> +{
+> +       return fwnode_irq_get_byname(dev_fwnode(dev), name);
+> +}
+> +EXPORT_SYMBOL_GPL(device_irq_get_byname);
 
--- 
-With Best Regards,
-Andy Shevchenko
+This can be confusing, because it pretends to be super-generic and in
+fact it depends on an fwnode to be there.
+
+I guess I'd rather not have it at all, or use a more precise name for it.
+
+> +
+> +/**
+>   * fwnode_graph_get_next_endpoint - Get next endpoint firmware node
+>   * @fwnode: Pointer to the parent firmware node
+>   * @prev: Previous endpoint node or %NULL to get the first
+> diff --git a/include/linux/property.h b/include/linux/property.h
+> index 16f736c..bc49350 100644
+> --- a/include/linux/property.h
+> +++ b/include/linux/property.h
+> @@ -121,6 +121,9 @@ struct fwnode_handle *fwnode_handle_get(struct fwnode_handle *fwnode);
+>  void fwnode_handle_put(struct fwnode_handle *fwnode);
+>
+>  int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index);
+> +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name);
+> +
+> +int device_irq_get_byname(struct device *dev, const char *name);
+>
+>  unsigned int device_get_child_node_count(struct device *dev);
+>
+> --
+> 2.7.4
+>
