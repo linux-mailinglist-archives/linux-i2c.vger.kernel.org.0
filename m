@@ -2,155 +2,203 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 334BE48D5B0
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jan 2022 11:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BCD648D654
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jan 2022 12:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiAMK2m (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 13 Jan 2022 05:28:42 -0500
-Received: from mail-bn8nam11on2074.outbound.protection.outlook.com ([40.107.236.74]:12321
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229533AbiAMK2l (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:28:41 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J3IKYcBG9ppoNtWhlz6im0gNvnpm+s+Np1PKJqIgtdtxRzACDnDvVWfAuKvFRSDvjgBvPKsftWGhK1ZmwCK7k9uBH/y0wXj4620nXRZbPfTDQ7TkWUZHKmtroiwLI8zunSU/7ihY1IF0CKkTltrirHz/DGrH3yokn20CHr6HiX2hnT54eZVwCqgquIXBjCn70JDtHdHqPe5qJKh0gDCAL8PYb5PzMFMkFQBf/aCkMIu7hjaopAeNy0hUBdWnS71DeNS9jP4ClYhatXSheA7S/kygVCo74NBqhYkRyo9520EbFTRVc8tnnkbfwl1gV0qrf54guCuPA2G6BsQZtpdnvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=z2WmcspReMlgZpg8ZldEOCzRhxYq+r2NO1hZPIKwSCk=;
- b=I478XNcpn+MdPpx/OUypV/nWfkrvxK2M6Dx+KXMca+jqxtAE9ReK7MCkAF8yN2/0OFWj8YvFmaMAIh5opmRVjXw/Q8zHUPGAt0kXHexoGDen7oTlspmXx2lLgRfoPMwYdl3fU0U3GDyLRT6XldbtnDV1tvreauyNJiqG9S83W4bJOuqViie1cEJX8TkwBYriU5UT/yQPZOZ75t9ysgxVdbSAjZ36Erc34rblxcahJPUF4jRI4k5pG7CCJ3lJ8l6cDxFlO+1Y+nzVvOoge0l3E6GflzrOXVRz+ENp0bf651yOcB9F/BG2TL2bWhpYctReg9c/PvWuHqLY3Tp6M8TgSg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z2WmcspReMlgZpg8ZldEOCzRhxYq+r2NO1hZPIKwSCk=;
- b=OWRq29DxHim2VDA2DtK51pmdKx29B3i+1tBENXxel4wVJD7aaEpDLEc6HvRBEhaEOYGe/NtljPI/FOTl61p94sUr5uQk6LAPDrfrzLavggibHS1NHWHarR+y6/Vt79uc8+q98ONOWybBtinqE4YjNYvIhHhpo3A7dt7I1L9M9gk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4188.namprd12.prod.outlook.com (2603:10b6:5:215::18)
- by MWHPR12MB1885.namprd12.prod.outlook.com (2603:10b6:300:114::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Thu, 13 Jan
- 2022 10:28:36 +0000
-Received: from DM6PR12MB4188.namprd12.prod.outlook.com
- ([fe80::80ea:7f8f:d21f:f277]) by DM6PR12MB4188.namprd12.prod.outlook.com
- ([fe80::80ea:7f8f:d21f:f277%4]) with mapi id 15.20.4888.011; Thu, 13 Jan 2022
- 10:28:36 +0000
-Message-ID: <7a2e7c29-aa0a-ced4-7107-beba8268eca1@amd.com>
-Date:   Thu, 13 Jan 2022 15:58:20 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] i2c: amd-mp2: Remove useless DMA-32 fallback
- configuration
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Elie Morisse <syniurge@gmail.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-References: <80f5c9b0f496d769882d807008c21aad192139f9.1641731644.git.christophe.jaillet@wanadoo.fr>
-From:   "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-In-Reply-To: <80f5c9b0f496d769882d807008c21aad192139f9.1641731644.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BM1PR01CA0095.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00::11)
- To DM6PR12MB4188.namprd12.prod.outlook.com (2603:10b6:5:215::18)
+        id S233959AbiAMLJw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 13 Jan 2022 06:09:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231613AbiAMLJv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Jan 2022 06:09:51 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A76EC06173F
+        for <linux-i2c@vger.kernel.org>; Thu, 13 Jan 2022 03:09:51 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7xyF-0006Q7-HJ; Thu, 13 Jan 2022 12:08:43 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7xy5-00A3Hi-BT; Thu, 13 Jan 2022 12:08:32 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7xy3-0005lb-Nu; Thu, 13 Jan 2022 12:08:31 +0100
+Date:   Thu, 13 Jan 2022 12:08:31 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        platform-driver-x86@vger.kernel.org,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Eric Auger <eric.auger@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        netdev@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
+ <YdyilpjC6rtz6toJ@lunn.ch>
+ <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+ <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 45b6ddac-84c9-4ed9-306f-08d9d67f74b6
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1885:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR12MB18858EA8B7CAEF0718F17C9FA0539@MWHPR12MB1885.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3631;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vkP1tu7yhWdbH4fuO8cOMY8uqipSt/ATL1u/tTnBSb0faWvOAT6wmC7Z8UMkr9cPPcpBSI8Fe7y6zhIOKROt9Mf0TlwOju5gvqNTv5O7q14AltwFc/Nsc4EDu7ZS+lIS/0A2Zs7uVla/XiZEANGm5oWabuYOVE3l4OdYHTy9itOenBDOnOU/fBRmaetafw3pMph+vFVvTYeLnwrKAdr8AIQsSx7lUg7qPeOkPT6dAXZ320vGRDSVBGmCJC9yj7LoU5ajxQloX2kWM7px+X0757FnI7A20O9uDKCDKmCpJ5SqLBB1Vmk4XBRNPrWMwvhFe0otpIDXTvIAs8+JX+d2kvOlqeKJvFexoGiU9/J3f2lGCJ/bAjmNjeGMi/CJlnJ5agEidZ0psdA6+vM8pREPHoAKpdaEuI5xiT1q3KPGX/11M0xnSiOlze3m5OYXeC5Yq1tpupsfa+PnPu7iIAioJJqQL1p+Ubj67gFM+ASBizkDR5J0sZlx9+JCbSuFhlK4GjvKBRfKWJdBzobZHKmS4C1lJMgoQxgV5dFBrk5GCFIbbdkkNyEu1ijw/AgdbGLOWYDEhTSSjHKhKj7HlJYQhkGIIuqEvt+QR98UUTu6f0BWgt0sXIAVVa5pSgmKjgN0v1OUhN+57i4mbLDjJ7QFm2ZB32yiSqCPgk5D+xcp5vtCKrK9jclL8DelUq6Vcn8RJrqqk+Rwm/Y9Dj8ajjw5EojHfVMGP3g05k18A//t09V8oJ111NPc2ORdmZjVq54H2dqmbMyxedVuZmkPW6Db7ww3sfWBSc2wCuUgv3a/Q306kvfYMh5EQhGX+g1bYC4o
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4188.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(6636002)(66946007)(2616005)(31696002)(5660300002)(38100700002)(31686004)(186003)(26005)(966005)(8936002)(110136005)(6512007)(53546011)(66476007)(83380400001)(316002)(36756003)(6506007)(86362001)(2906002)(508600001)(8676002)(6666004)(66556008)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RlpDVlJDTkhZcnNUL0JzclhzL0xUOUFYRW41bUUxWUtUa3Y0UjBWV09PeXpy?=
- =?utf-8?B?L1VPM01FVko3QS9jeS9jTDJFVVFiUXZlRTVMU24wOGJWK2FrcDJ6S0I1RnUz?=
- =?utf-8?B?ak9QSk43cjNiVXdxYWxvVDVXQXlVS21UcGRlL3EyajMxS1k0T3NpN1JFUnJC?=
- =?utf-8?B?ZytCQW1ueC9maU9DUUVqVnFCTzdYY1F4NkNwUE9CNzJDeVRpd0hyYjN2eDY2?=
- =?utf-8?B?SEtHdkJwU0xaTnBzQUhnZDk0MzJNclkySS83VFU5Tk9VN2lyYWVyYnZFMnpD?=
- =?utf-8?B?YTJSK0FWdG1MYjlaL1htME8vMzhWZHdJT1dIUWxHTm1UeHhObkp2VC85bzJ4?=
- =?utf-8?B?R1FEaWlybjE5YmwvYllWcWk5b1JRMWIyaDl3d3Vqa1Y2Z25rcm5rTjZaVFdi?=
- =?utf-8?B?THpyU1dMZmxsZG91S3REWE9iYnNCM0FlYkIyMnJGQXZWSEEybE1Nb1lOVkhv?=
- =?utf-8?B?aW1zZHZDbW4vZWNFVm5IcG5xalVKbG1HaldnZnI4VFVvT3NoOGZkNFFvZURB?=
- =?utf-8?B?cjFyQ3NZL05Ra1dNK2Mzb1lyeEM2aTVrTGljVVVBTjAxZ3UwYi9mbDRlRDlP?=
- =?utf-8?B?MDR4VlJNeVBSU09rVmY5Ty8zWnllMWFzTHlMelh3NWRlWFdCMFlHVzJTTVR6?=
- =?utf-8?B?L2d3VDJTZ3pYK3pvbDBOWUJHY2tvY2djSzd4cXJyZUMyUGVBekV0SEhReWFs?=
- =?utf-8?B?YVc1TlNkRWZuelYxdUVldjhqNXpYVUVKclJpVjZaMGZWekNqcXdLYkhLMGk4?=
- =?utf-8?B?T2N1U2JBdmk5dDJYVVRidDFTd2dPTkdlVlBPb2dMMy8zRndyUVV2Z2xMaHFk?=
- =?utf-8?B?citvSVNxRHFmNGdJVm5XZ2xVZWV6NTZYd2RVZlZsV01mMExxOUk0UDJ5WU1L?=
- =?utf-8?B?bW56OE0yZlY0U3NLeXJBcmtTWE9IWUFBMGlRYWp1VDkra1ZPQ0pvdGFvUzBk?=
- =?utf-8?B?aTdMR2NFQloyUXh2N2p0cnExdFo4ZS8xNEhkRTV1Y21qd29BenpiNUh6d21J?=
- =?utf-8?B?Rm5pNThsS1lteXlBbXV0OEl2RW5aMGZiajJDVS95Nk0raFc4QTFUVDltUzJI?=
- =?utf-8?B?czVscExlbkd4ZEdBRWNqaUVvd01NdVNpc3pmZnM5VXlkLzltVEJLRFgwdUhz?=
- =?utf-8?B?Y3lORGdNR0FZcmNRZjdnaVNpTUlCQ0I1VW1VMVJsYitjQmZDakNoZ1NRWERy?=
- =?utf-8?B?eVNpYnJ5SEcydVQxajRpQ2dTTnowbjVmTTlYM0JNWVpWTVVXNStoQjRkeXJX?=
- =?utf-8?B?Y0w4ckxGUzNOYVpGNDg2dG4rK1UzVnJlVDVuOG9RTXJLcVpoUTdIdExyYjd1?=
- =?utf-8?B?L2VBTWRhalZJZDM2cFJjeUQ3MDMycTdBWE5xOFNUQWxzbGd3ekFCK1JyWUtm?=
- =?utf-8?B?RkV5T2wvZktGc3RVOW1wZlgzQjJ4V3RVcEpSd2FOTVpUdVlzWlN5MnowTzlj?=
- =?utf-8?B?MjY1MDZ4WGd0Q2lHOEVENUR3TVp3aHhTc09zcGJYSDFPUkp3QS9Ud3ZwZnRO?=
- =?utf-8?B?SXc0T0dlVUlDVVR3M3FldnpKVW5ZNFdNU0dnckUrWmpJZmV2djZOeXJ2dVJV?=
- =?utf-8?B?eXlYRkRIYU1WczBxMld6Z2JRS09OUWZ4UGNVdHoyUXVMYUxhdmhXZEk2N0Q3?=
- =?utf-8?B?SFRPSS9FTmYrUUJtU3lSMWtLZzJaN1NKVWdiQTViSFhIa24rRGtHWW52aFdk?=
- =?utf-8?B?djMvM2NVTTJtRWJyS24xemJ0SEJoZm0vcmhBM1FIZjZIL0x1cUFSZHNTQ0Fu?=
- =?utf-8?B?TWVRUXV4SFZtTjRZUXMwZmtjRzlKS3ZMV3FoS3d4NTJqUXo5eWM3TGE2ajZx?=
- =?utf-8?B?V1hmZHFkbWFTYWtRQmI5RFpIYWllN09rZ2RscGh6aVRzRUxsMEd4c2VvVzg4?=
- =?utf-8?B?aVlkT0IxUVlIWFQ4RWxtTjEyNXFzbkZVYWZBUHhrVU55LzBKL2o0aExNV3l2?=
- =?utf-8?B?cGViVkEvUUVaU00rU0UvbUYyOXV0MjkrUmwrU3Z1OStjQ213cVNlSkpyNHhx?=
- =?utf-8?B?TlhQMzRLSzcwRGxwRUFjZ28vOUpxbkVkbllHYUFnU2k1bWlTbjBQVE5nZzB2?=
- =?utf-8?B?RFZhbzB1MUFIWEtDcCs2WTBQOEVCaXE0MW5GdmJwTWVtMjE1bGNLM0Rmc0Vz?=
- =?utf-8?Q?YiI4=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 45b6ddac-84c9-4ed9-306f-08d9d67f74b6
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4188.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2022 10:28:36.1141
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZkqnyX973vzJqJ0vlbW+aDdU5dW45vWVn95GMObIrx0I+dJsuDIWbTn47wAdjRC5
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1885
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zcdy7nemyxfoojub"
+Content-Disposition: inline
+In-Reply-To: <Yd9L9SZ+g13iyKab@sirena.org.uk>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 1/9/2022 6:04 PM, Christophe JAILLET wrote:
-> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
-> dev->dma_mask is non-NULL.
-> So, if it fails, the 32 bits case will also fail for the same reason.
-> 
-> 
-> Simplify code and remove some dead code accordingly.
-> 
-> [1]: https://lkml.org/lkml/2021/6/7/398
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->   drivers/i2c/busses/i2c-amd-mp2-pci.c | 7 ++-----
->   1 file changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-amd-mp2-pci.c b/drivers/i2c/busses/i2c-amd-mp2-pci.c
-> index adf0e8c1ec01..f57077a7448d 100644
-> --- a/drivers/i2c/busses/i2c-amd-mp2-pci.c
-> +++ b/drivers/i2c/busses/i2c-amd-mp2-pci.c
-> @@ -308,11 +308,8 @@ static int amd_mp2_pci_init(struct amd_mp2_dev *privdata,
->   	pci_set_master(pci_dev);
->   
->   	rc = dma_set_mask(&pci_dev->dev, DMA_BIT_MASK(64));
-> -	if (rc) {
-> -		rc = dma_set_mask(&pci_dev->dev, DMA_BIT_MASK(32));
-> -		if (rc)
-> -			goto err_dma_mask;
-> -	}
-> +	if (rc)
-> +		goto err_dma_mask;
->   
->   	/* Set up intx irq */
->   	writel(0, privdata->mmio + AMD_P2C_MSG_INTEN);
-> 
-Acked-by: Nehal Bakulchandra Shah<Nehal-bakulchandra.Shah@amd.com>
+
+--zcdy7nemyxfoojub
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Jan 12, 2022 at 09:45:25PM +0000, Mark Brown wrote:
+> On Wed, Jan 12, 2022 at 10:31:21PM +0100, Uwe Kleine-K=F6nig wrote:
+> > On Wed, Jan 12, 2022 at 11:27:02AM +0100, Geert Uytterhoeven wrote:
+>=20
+> (Do we really need *all* the CCs here?)
+
+It's probably counteractive to finding an agreement because there are
+too many opinions on that matter. But I didn't dare to strip it down,
+too :-)
+
+> > That convinces me, that platform_get_irq_optional() is a bad name. The
+> > only difference to platform_get_irq is that it's silent. And returning
+> > a dummy irq value (which would make it aligned with the other _optional
+> > functions) isn't possible.
+>=20
+> There is regulator_get_optional() which is I believe the earliest of
+> these APIs, it doesn't return a dummy either (and is silent too) - this
+> is because regulator_get() does return a dummy since it's the vastly
+> common case that regulators must be physically present and them not
+> being found is due to there being an error in the system description.
+> It's unfortunate that we've ended up with these two different senses for
+> _optional(), people frequently get tripped up by it.
+
+Yeah, I tripped over that one already, too. And according to my counting
+this results in three different senses now :-\ :
+
+ a) regulator
+    regulator_get returns a dummy, regulator_get_optional returns ERR_PTR(-=
+ENODEV)
+ b) clk + gpiod
+    ..._get returns ERR_PTR(-ENODEV), ..._get_optional returns a dummy
+ c) platform_get_irq()
+    platform_get_irq_optional() is just a silent variant of
+    platform_get_irq(); the return values are identical.
+   =20
+This is all very unfortunate. In my eyes b) is the most sensible
+sense, but the past showed that we don't agree here. (The most annoying
+part of regulator_get is the warning that is emitted that regularily
+makes customers ask what happens here and if this is fixable.)
+
+I think at least c) is easy to resolve because
+platform_get_irq_optional() isn't that old yet and mechanically
+replacing it by platform_get_irq_silent() should be easy and safe.
+And this is orthogonal to the discussion if -ENOXIO is a sensible return
+value and if it's as easy as it could be to work with errors on irq
+lookups.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--zcdy7nemyxfoojub
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHgCCsACgkQwfwUeK3K
+7AktbAf/UzNin6+fnXTmkdrTvXWaXCV8TB76EIUtIdNWwJEjmXxWes5jyBpp/jXj
+7gSmYT3gi4oK0wjB6dKmqF6jba5/RPL4cdS6/8iQDp32Xey0hzWymBPENLc/Nxt5
+Ge81cdot6EFxqSkuW1Zbe55wzmNUmEsez7+e+8gJAviPB6zQndDE/zAkwxczzb04
+GfD6Uixgm4a29NwXNIignwNm8pACez/px2A8cVhILZ8135X0rdwYM17BiQtfM5Uq
+s2hZsLfxWm9ZvdyxA7gGvsfefPmiPfS3k/HWagHMDB8nQq4vqnMmPTu01YJs34dM
++ycJZkglW3eJnCZ9Fr5sjnuP6uLExw==
+=5Hn7
+-----END PGP SIGNATURE-----
+
+--zcdy7nemyxfoojub--
