@@ -2,44 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8518348EC64
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jan 2022 16:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6713D48EC70
+	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jan 2022 16:17:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242332AbiANPPP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 14 Jan 2022 10:15:15 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:1499 "EHLO
+        id S242728AbiANPQV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 14 Jan 2022 10:16:21 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:45208 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242295AbiANPPP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Jan 2022 10:15:15 -0500
+        with ESMTP id S242652AbiANPQR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Jan 2022 10:16:17 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1642173315; x=1673709315;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=scvS3ncjwqYao/YGwe70xpmeP3AaUlpv9xiTi+7gh/Y=;
-  b=Y8sdnxoz0vfmapGkrHwSKrn8UOH3sZ8E8DTU47DtEYCJZFBtlax2EAAK
-   ijaHcRsUfTsnkMW6yDYz+d+bKRDrVDRQz539MAQNYbfiuBD+0FpHpWjTd
-   uRi827D1IUtIkK7sfdgF0j0RhVaRnBFi8rOcxRtBR+dEK+TsBr2W089rC
-   3upFBWtU4ZdpCzQ+iuyn67Ur8HzK8HUwwumlDUqV84atAKpf/t1U6OFXg
-   xGmkfKxBjk61nGbN9SPwRtQe0a5RF7j9MQeEU+5IxuBcjkFLRIU9/adZ2
-   6EfvfobzZyWA5J3imug1CH+j+VErtKWmDMMIigD5ec18vIpGutS4AsOVI
-   w==;
-IronPort-SDR: D0VJuxheRQlQxnDJvUwZmrOQdlMCXyBfp66n+aFXHp40sGZCnkpREKhRmvmdetUWjAxwuF6X6O
- ay5SZ0Ggte4T2XwFLMuiFCxgYHCvk3FxfxFx4Vfe6iupjQSSOH2Pjy8VG4nblmi46kpLEgQr8G
- g2UL5SMCHBGSOKtfBzDtqxU7Pg7d+pI9rgej5xvBIADuwrdJ+NqPRSB8naYdpiCZAIYlo8hBkn
- CrQPDUArOA1mR9jp7RybhiH8ESqSNLG+2YuHi4uC9LjOrBrRXByrzz49rCPX+GHdaukebjfOkD
- f9k5bCycIN0e82GX7OJsP1HV
+  t=1642173376; x=1673709376;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=XUOAM/z0skey1/2aHSGp5yId0ktuv9jM+qE4YtnPYMg=;
+  b=xkz8WQJI6AAI1kTS6sR3Uw9vPOE+KCYsk41TkllMvRU7NVpftQvCkirO
+   WbTXi/lEWsZXXeNCTAY8hfNHcqA27Lgfugy7yCDsA9enMkLpFyqPfigHA
+   DqqgiPMrQ7GdSV58dllJXBwknsUv6u0vNqGB5N1VXLbwtIiBvdu6GcCrE
+   m1o1jpuTmUJ8pZ2Umsucfka0rJ8cbd8BPN00hR6gRnUZEzHCEeCmRhxpY
+   SbTwKOLs33dNCYcXjIs7ltl11tev5rKJZ6BO/VVzj/Y0aWlnWwfh3fzSM
+   Z7ZobnWObQv8rZVP1aJXuk4diTRhFdCYkFd7vLYGdt2HLkXIRfyyH/2WG
+   g==;
+IronPort-SDR: 7bZXMxhI1W6ANOzk/aoRucFoxwWAMmVNSQwQlQiLezS8P01P8wBPS19OtnKWvypYb0p1CReeaU
+ BeOtxx80R+c2gAgEcZIojFy8DpB6czkNmz8B1PDA9fRf1uNh503BHEkectI7uufm9IcJX6HiOQ
+ Qzop4lq7LWIcUmlaWSe2/Ruoojhk9eDw26F06FyTe0fToD0tQnfcVTgDAUyIbTDdo9F7VTq3bH
+ Fb47llcmUFYihcNNUO6s9UwseM3n3hzZUK3wzffTq1SesBMCw+Th1R5dFPOFM1PmN9kob+yxaj
+ i74cDjqGhu8xRybw8iA+axzt
 X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="145454941"
+   d="scan'208";a="150236573"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jan 2022 08:15:13 -0700
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jan 2022 08:16:11 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 14 Jan 2022 08:15:13 -0700
+ 15.1.2375.17; Fri, 14 Jan 2022 08:16:10 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
  (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 14 Jan 2022 08:15:07 -0700
+ Transport; Fri, 14 Jan 2022 08:16:04 -0700
 From:   <conor.dooley@microchip.com>
 To:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
         <robh+dt@kernel.org>, <jassisinghbrar@gmail.com>,
@@ -58,10 +58,12 @@ CC:     <krzysztof.kozlowski@canonical.com>, <geert@linux-m68k.org>,
         <lewis.hanly@microchip.com>, <conor.dooley@microchip.com>,
         <daire.mcnamara@microchip.com>, <ivan.griffin@microchip.com>,
         <atishp@rivosinc.com>
-Subject: [PATCH v3 00/15] Update the Icicle Kit device tree
-Date:   Fri, 14 Jan 2022 15:17:12 +0000
-Message-ID: <20220114151727.2319915-1-conor.dooley@microchip.com>
+Subject: [PATCH v3 01/15] dt-bindings: soc/microchip: update syscontroller compatibles
+Date:   Fri, 14 Jan 2022 15:17:13 +0000
+Message-ID: <20220114151727.2319915-2-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220114151727.2319915-1-conor.dooley@microchip.com>
+References: <20220114151727.2319915-1-conor.dooley@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -71,85 +73,87 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-This series updates the Microchip Icicle Kit device tree by adding a
-host of peripherals, and some updates to the memory map. In addition,
-the device tree has been split into a third part, which contains "soft"
-peripherals that are in the fpga fabric.
+The Polarfire SoC is currently using two different compatible string
+prefixes. Fix this by changing "polarfire-soc-*" strings to "mpfs-*" in
+its system controller in order to match the compatible string used in
+the soc binding and device tree
 
-Several of the entries are for peripherals that have not get had their
-drivers upstreamed, so in those cases the dt bindings are included where
-appropriate in order to avoid the many "DT compatible string <x> appears
-un-documented" errors.
-
-Depends on mpfs clock driver series [1] to provide:
-dt-bindings/clock/microchip,mpfs-clock.h
-and on the other changes to the icicle/mpfs device tree from geert
-that are already in linux/riscv/for-next.
-
-Additionally, the interrupt-extended warnings on the plic/clint are 
-cleared by [2] & [3].
-
-[1] https://lore.kernel.org/linux-clk/20211216140022.16146-1-conor.dooley@microchip.com/T/
-[2] https://lore.kernel.org/linux-riscv/cover.1639744468.git.geert@linux-m68k.org/
-[3] https://lore.kernel.org/linux-riscv/cover.1639744106.git.geert@linux-m68k.org/
-
-Changes from v2:
-- dropped plic int header & corresponding defines in dts{,i}
-- use $ref to drmode in mpfs-musb binding
-- split changes to dts{,i} again: functional changes to existing
-  elements now are in a new patch
-- drop num-cs property in mpfs-spi binding
-- dont make the system controller a simple-mfd
-- move the separate bindings for rng/generic system services into the 
-  system controller binding
-- added an instance corei2c as i2c2 in the fabric dtsi
-- add version numbering to corepwm and corei2c compat string (-rtl-vN)
-
-Conor Dooley (15):
-  dt-bindings: soc/microchip: update syscontroller compatibles
-  dt-bindings: soc/microchip: add services as children of sys ctrlr
-  mailbox: change mailbox-mpfs compatible string
-  dt-bindings: i2c: add bindings for microchip mpfs i2c
-  dt-bindings: rtc: add bindings for microchip mpfs rtc
-  dt-bindings: gpio: add bindings for microchip mpfs gpio
-  dt-bindings: spi: add bindings for microchip mpfs spi
-  dt-bindings: usb: add bindings for microchip mpfs musb
-  dt-bindings: pwm: add microchip corepwm binding
-  riscv: dts: microchip: use clk defines for icicle kit
-  riscv: dts: microchip: add fpga fabric section to icicle kit
-  riscv: dts: microchip: refactor icicle kit device tree
-  riscv: dts: microchip: update peripherals in icicle kit device tree
-  riscv: dts: microchip: add new peripherals to icicle kit device tree
-  MAINTAINERS: update riscv/microchip entry
-
- .../bindings/gpio/microchip,mpfs-gpio.yaml    |  80 ++++++
- .../bindings/i2c/microchip,mpfs-i2c.yaml      |  55 ++++
- ...ilbox.yaml => microchip,mpfs-mailbox.yaml} |   6 +-
- .../bindings/pwm/microchip,corepwm.yaml       |  75 +++++
- .../bindings/rtc/microchip,mfps-rtc.yaml      |  63 +++++
- .../microchip,mpfs-sys-controller.yaml        |  73 +++++
- ...icrochip,polarfire-soc-sys-controller.yaml |  35 ---
- .../bindings/spi/microchip,mpfs-spi.yaml      |  52 ++++
- .../bindings/usb/microchip,mpfs-musb.yaml     |  59 ++++
- MAINTAINERS                                   |   2 +
- .../dts/microchip/microchip-mpfs-fabric.dtsi  |  25 ++
- .../microchip/microchip-mpfs-icicle-kit.dts   | 115 ++++++--
- .../boot/dts/microchip/microchip-mpfs.dtsi    | 262 +++++++++++++++---
- arch/riscv/configs/icicle_kit_defconfig       | 134 +++++++++
- drivers/mailbox/mailbox-mpfs.c                |   2 +-
- 15 files changed, 933 insertions(+), 105 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
- create mode 100644 Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ ...larfire-soc-mailbox.yaml => microchip,mpfs-mailbox.yaml} | 6 +++---
+ ...s-controller.yaml => microchip,mpfs-sys-controller.yaml} | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
  rename Documentation/devicetree/bindings/mailbox/{microchip,polarfire-soc-mailbox.yaml => microchip,mpfs-mailbox.yaml} (82%)
- create mode 100644 Documentation/devicetree/bindings/pwm/microchip,corepwm.yaml
- create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
- delete mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml
- create mode 100644 Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
- create mode 100644 Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml
- create mode 100644 arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
- create mode 100644 arch/riscv/configs/icicle_kit_defconfig
+ rename Documentation/devicetree/bindings/soc/microchip/{microchip,polarfire-soc-sys-controller.yaml => microchip,mpfs-sys-controller.yaml} (75%)
 
+diff --git a/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml
+similarity index 82%
+rename from Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml
+rename to Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml
+index bbb173ea483c..9251c2218c68 100644
+--- a/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml
++++ b/Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/mailbox/microchip,polarfire-soc-mailbox.yaml#"
++$id: "http://devicetree.org/schemas/mailbox/microchip,mpfs-mailbox.yaml#"
+ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+ 
+ title: Microchip PolarFire SoC (MPFS) MSS (microprocessor subsystem) mailbox controller
+@@ -11,7 +11,7 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    const: microchip,polarfire-soc-mailbox
++    const: microchip,mpfs-mailbox
+ 
+   reg:
+     items:
+@@ -38,7 +38,7 @@ examples:
+       #address-cells = <2>;
+       #size-cells = <2>;
+       mbox: mailbox@37020000 {
+-        compatible = "microchip,polarfire-soc-mailbox";
++        compatible = "mpfs-mailbox";
+         reg = <0x0 0x37020000 0x0 0x1000>, <0x0 0x2000318c 0x0 0x40>;
+         interrupt-parent = <&L1>;
+         interrupts = <96>;
+diff --git a/Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+similarity index 75%
+rename from Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml
+rename to Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+index 2cd3bc6bd8d6..f699772fedf3 100644
+--- a/Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml
++++ b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/soc/microchip/microchip,polarfire-soc-sys-controller.yaml#"
++$id: "http://devicetree.org/schemas/soc/microchip/microchip,mpfs-sys-controller.yaml#"
+ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+ 
+ title: Microchip PolarFire SoC (MPFS) MSS (microprocessor subsystem) system controller
+@@ -19,7 +19,7 @@ properties:
+     maxItems: 1
+ 
+   compatible:
+-    const: microchip,polarfire-soc-sys-controller
++    const: microchip,mpfs-sys-controller
+ 
+ required:
+   - compatible
+@@ -30,6 +30,6 @@ additionalProperties: false
+ examples:
+   - |
+     syscontroller: syscontroller {
+-      compatible = "microchip,polarfire-soc-sys-controller";
++      compatible = "microchip,mpfs-sys-controller";
+       mboxes = <&mbox 0>;
+     };
 -- 
 2.32.0
 
