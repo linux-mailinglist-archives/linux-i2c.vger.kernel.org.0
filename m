@@ -2,54 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5DB48E79E
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jan 2022 10:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5352F48E7ED
+	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jan 2022 10:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239494AbiANJjY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Fri, 14 Jan 2022 04:39:24 -0500
-Received: from mail-vk1-f182.google.com ([209.85.221.182]:39619 "EHLO
-        mail-vk1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiANJjX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Jan 2022 04:39:23 -0500
-Received: by mail-vk1-f182.google.com with SMTP id n14so4303363vkk.6;
-        Fri, 14 Jan 2022 01:39:22 -0800 (PST)
+        id S230375AbiANJ7G convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Fri, 14 Jan 2022 04:59:06 -0500
+Received: from mail-ua1-f54.google.com ([209.85.222.54]:35506 "EHLO
+        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240090AbiANJ7F (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Jan 2022 04:59:05 -0500
+Received: by mail-ua1-f54.google.com with SMTP id m90so16094884uam.2;
+        Fri, 14 Jan 2022 01:59:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XIsXuJfmE8JES6Mbtb18c2n3rWZVUZhPWhasZQeRi6Q=;
-        b=B6fVIblE2YvZVeCArGcMUv0EJNHL+C2rkW//YimybgZ4VFOF6qnKGPJBYjiX+q9Dq5
-         nJVlZ2LbWqXpD7YGOyGSeudPe2r8bTHf3AuHH/E/JTEQch+crQsQwq7Xesx6PJuRoHVG
-         vZLoGUjBK4/tgccEHiWg5NGcjFeo/ZYdd/pZ8EadRA5wmgmCgLLaxqlpFck3zhsk9R3g
-         s5LGB2neA5o/2//SrAax7o4hmZkvRNgswZ5FI80jKNxgcY0VxYt74iZSKZnFkopMg/Ad
-         PWLhMOBCniba9fgx5U5sdkjls0O8hAWjVUS70uDszzCGQvcy7c6UaGPWrEX+dVtkV8jd
-         iOSg==
-X-Gm-Message-State: AOAM532dOoWuvtPRgS471+cj2DoVR7o0lPqEF04Zasu/K8Gtvx/nMOFM
-        FIhIPsgx3PVt64ddBzE7FJ0b535mFnUbhej7
-X-Google-Smtp-Source: ABdhPJyk3O8GzDxpL3/PrxHmPJiIYnb05POlLBdMiX4/E5+LHj71bMHAwA4rtBlCUD6Pjl/GZG0tmg==
-X-Received: by 2002:a05:6122:208a:: with SMTP id i10mr366113vkd.16.1642153161863;
-        Fri, 14 Jan 2022 01:39:21 -0800 (PST)
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
-        by smtp.gmail.com with ESMTPSA id x128sm2072722vkx.14.2022.01.14.01.39.19
+        bh=LMpobQFf1iaA0D70o2w2ggZn7pjngkhXQg858+CLGTw=;
+        b=iNuRv7X+axQkS087/SEyVRfO807oDY8shZhs/RwbIOXrSJwDV4ivcCA8aQXWl04XYX
+         0xvRFdm45/m3AH4F6sxbOGY18vGQ2l6/oslhdN25IV2CEKO714zW5bsExRdX3RfwolLx
+         JOZ8Q2zCT/ZbmuUmFJtoLtKwr5MtpKkiuujFgB9cwtyyMz7kjl4E+gjXU6RAH9G6s8g1
+         LtcYRGzW3Y5fNoXLxX4i3HiicVj9EHd2ZOyNcOZfA87BCQYltk85FuYKaCBSzHDZ4OeQ
+         e9xAelfLcLlrvyDQHKJNjblWo5Nf89OJdMHR4liKWiRYvo+IGKjZbjYzvvyoO5COMZ6w
+         Q9wg==
+X-Gm-Message-State: AOAM532sLVmq0HXIdflqmaOJLCYgtWMac8I4GsATtNywZZTwzimhwn5A
+        /VD3wdy52bHeuAx5iNkeZdGttDvg1uOEqEhH
+X-Google-Smtp-Source: ABdhPJxHh8EdXSh3VBEjuVDDfqaR9RmxXk44chjxPH7GeQ/Gjo5pr5JcrJn3S8edkLsVjYbwAobZ+w==
+X-Received: by 2002:a67:e905:: with SMTP id c5mr3767905vso.68.1642154343755;
+        Fri, 14 Jan 2022 01:59:03 -0800 (PST)
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
+        by smtp.gmail.com with ESMTPSA id u33sm2226584uau.7.2022.01.14.01.59.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jan 2022 01:39:19 -0800 (PST)
-Received: by mail-ua1-f41.google.com with SMTP id i5so15890425uaq.10;
-        Fri, 14 Jan 2022 01:39:19 -0800 (PST)
-X-Received: by 2002:a05:6102:3581:: with SMTP id h1mr3716211vsu.5.1642153159149;
- Fri, 14 Jan 2022 01:39:19 -0800 (PST)
+        Fri, 14 Jan 2022 01:59:03 -0800 (PST)
+Received: by mail-ua1-f48.google.com with SMTP id p1so16004267uap.9;
+        Fri, 14 Jan 2022 01:59:02 -0800 (PST)
+X-Received: by 2002:a67:e905:: with SMTP id c5mr3767888vso.68.1642154342466;
+ Fri, 14 Jan 2022 01:59:02 -0800 (PST)
 MIME-Version: 1.0
-References: <20220110195449.12448-1-s.shtylyov@omp.ru> <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220110201014.mtajyrfcfznfhyqm@pengutronix.de> <YdyilpjC6rtz6toJ@lunn.ch>
- <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+References: <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
  <20220112085009.dbasceh3obfok5dc@pengutronix.de> <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
  <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de> <Yd9L9SZ+g13iyKab@sirena.org.uk>
- <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru> <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
-In-Reply-To: <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
+ <20220113110831.wvwbm75hbfysbn2d@pengutronix.de> <YeA7CjOyJFkpuhz/@sirena.org.uk>
+ <20220113194358.xnnbhsoyetihterb@pengutronix.de> <YeCI47ltlWzjzjYy@sirena.org.uk>
+ <1df04d74-8aa2-11f1-54e9-34d0e8f4e58b@omp.ru> <20220113224319.akljsjtu7ps75vun@pengutronix.de>
+In-Reply-To: <20220113224319.akljsjtu7ps75vun@pengutronix.de>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 14 Jan 2022 10:39:07 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVcMNMYf82-rz8_057BGwYWyPyhjAh3e9ynrv82GMiHvg@mail.gmail.com>
-Message-ID: <CAMuHMdVcMNMYf82-rz8_057BGwYWyPyhjAh3e9ynrv82GMiHvg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Date:   Fri, 14 Jan 2022 10:58:51 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWjo36UGde3g5ysdXpLJn=mrPp31SDODuQNPUqoc-ARrQ@mail.gmail.com>
+Message-ID: <CAMuHMdWjo36UGde3g5ysdXpLJn=mrPp31SDODuQNPUqoc-ARrQ@mail.gmail.com>
+Subject: Re: [PATCH] driver core: platform: Rename platform_get_irq_optional()
+ to platform_get_irq_silent()
 To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
@@ -66,14 +67,15 @@ Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
         Thierry Reding <thierry.reding@gmail.com>,
         MTD Maling List <linux-mtd@lists.infradead.org>,
         Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-phy@lists.infradead.org, netdev <netdev@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
         Khuong Dinh <khuong@os.amperecomputing.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
         Kamal Dasu <kdasu.kdev@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Lee Jones <lee.jones@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -97,7 +99,6 @@ Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
         Hans de Goede <hdegoede@redhat.com>,
         Alex Williamson <alex.williamson@redhat.com>,
         Borislav Petkov <bp@alien8.de>,
-        Eric Auger <eric.auger@redhat.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         openipmi-developer@lists.sourceforge.net,
@@ -108,13 +109,13 @@ Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
         linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
         Richard Weinberger <richard@nod.at>,
         Mun Yew Tham <mun.yew.tham@intel.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        netdev@vger.kernel.org,
+        Eric Auger <eric.auger@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Cornelia Huck <cohuck@redhat.com>,
         Linux MMC List <linux-mmc@vger.kernel.org>,
         Joakim Zhang <qiangqing.zhang@nxp.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         Vinod Koul <vkoul@kernel.org>,
         James Morse <james.morse@arm.com>,
@@ -132,131 +133,49 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi Uwe,
 
-On Fri, Jan 14, 2022 at 10:26 AM Uwe Kleine-König
+On Thu, Jan 13, 2022 at 11:43 PM Uwe Kleine-König
 <u.kleine-koenig@pengutronix.de> wrote:
-> On Thu, Jan 13, 2022 at 11:35:34PM +0300, Sergey Shtylyov wrote:
-> > On 1/13/22 12:45 AM, Mark Brown wrote:
-> > >>> To me it sounds much more logical for the driver to check if an
-> > >>> optional irq is non-zero (available) or zero (not available), than to
-> > >>> sprinkle around checks for -ENXIO. In addition, you have to remember
-> > >>> that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
-> > >>> (or some other error code) to indicate absence. I thought not having
-> > >>> to care about the actual error code was the main reason behind the
-> > >>> introduction of the *_optional() APIs.
-> > >
-> > >> No, the main benefit of gpiod_get_optional() (and clk_get_optional()) is
-> > >> that you can handle an absent GPIO (or clk) as if it were available.
+> On Thu, Jan 13, 2022 at 11:57:43PM +0300, Sergey Shtylyov wrote:
+> > On 1/13/22 11:17 PM, Mark Brown wrote:
+> > >> The subsystems regulator, clk and gpio have the concept of a dummy
+> > >> resource. For regulator, clk and gpio there is a semantic difference
+> > >> between the regular _get() function and the _get_optional() variant.
+> > >> (One might return the dummy resource, the other won't. Unfortunately
+> > >> which one implements which isn't the same for these three.) The
+> > >> difference between platform_get_irq() and platform_get_irq_optional() is
+> > >> only that the former might emit an error message and the later won't.
 > >
-> >    Hm, I've just looked at these and must note that they match 1:1 with
-> > platform_get_irq_optional(). Unfortunately, we can't however behave the
-> > same way in request_irq() -- because it has to support IRQ0 for the sake
-> > of i8253 drivers in arch/...
+> >    This is only a current difference but I'm still going to return 0 ISO
+> > -ENXIO from latform_get_irq_optional(), no way I'd leave that -ENXIO there
+> > alone... :-)
 >
-> Let me reformulate your statement to the IMHO equivalent:
+> This would address a bit of the critic in my commit log. But as 0 isn't
+> a dummy value like the dummy values that exist for clk, gpiod and
+> regulator I still think that the naming is a bad idea because it's not
+> in the spirit of the other *_get_optional functions.
 >
->         If you set aside the differences between
->         platform_get_irq_optional() and gpiod_get_optional(),
->         platform_get_irq_optional() is like gpiod_get_optional().
+> Seeing you say that -ENXIO is a bad return value for
+> platform_get_irq_optional() and 0 should be used instead, I wonder why
+> not changing platform_get_irq() to return 0 instead of -ENXIO, too.
+> This question is for now only about a sensible semantic. That actually
+> changing platform_get_irq() is probably harder than changing
+> platform_get_irq_optional() is a different story.
 >
-> The introduction of gpiod_get_optional() made it possible to simplify
-> the following code:
+> If only platform_get_irq_optional() is changed and given that the
+> callers have to do something like:
 >
->         reset_gpio = gpiod_get(...)
->         if IS_ERR(reset_gpio):
->                 error = PTR_ERR(reset_gpio)
->                 if error != -ENDEV:
->                         return error
+>         if (this_irq_exists()):
+>                 ... (e.g. request_irq)
 >         else:
->                 gpiod_set_direction(reset_gpiod, INACTIVE)
+>                 ... (e.g. setup polling)
 >
-> to
->
->         reset_gpio = gpiod_get_optional(....)
->         if IS_ERR(reset_gpio):
->                 return reset_gpio
->         gpiod_set_direction(reset_gpiod, INACTIVE)
->
-> and I never need to actually know if the reset_gpio actually exists.
-> Either the line is put into its inactive state, or it doesn't exist and
-> then gpiod_set_direction is a noop. For a regulator or a clk this works
-> in a similar way.
->
-> However for an interupt this cannot work. You will always have to check
-> if the irq is actually there or not because if it's not you cannot just
-> ignore that. So there is no benefit of an optional irq.
->
-> Leaving error message reporting aside, the introduction of
-> platform_get_irq_optional() allows to change
->
->         irq = platform_get_irq(...);
->         if (irq < 0 && irq != -ENXIO) {
->                 return irq;
->         } else if (irq >= 0) {
->                 ... setup irq operation ...
->         } else { /* irq == -ENXIO */
->                 ... setup polling ...
->         }
->
-> to
->
->         irq = platform_get_irq_optional(...);
->         if (irq < 0 && irq != -ENXIO) {
->                 return irq;
->         } else if (irq >= 0) {
->                 ... setup irq operation ...
->         } else { /* irq == -ENXIO */
->                 ... setup polling ...
->         }
->
-> which isn't a win. When changing the return value as you suggest, it can
-> be changed instead to:
->
->         irq = platform_get_irq_optional(...);
->         if (irq < 0) {
->                 return irq;
->         } else if (irq > 0) {
->                 ... setup irq operation ...
->         } else { /* irq == 0 */
->                 ... setup polling ...
->         }
->
-> which is a tad nicer. If that is your goal however I ask you to also
-> change the semantic of platform_get_irq() to return 0 on "not found".
+> I really think it's a bad idea that this_irq_exists() has to be
+> different for platform_get_irq() vs. platform_get_irq_optional().
 
-Please don't make that change. If platform_get_irq() would return 0 on
-"not found", all existing users have to be changed to:
-
-        irq = platform_get_irq(...);
-        if (irq < 0) {
-                return irq;
-        } else if (!irq) {
-                return -ENOENT;
-        } else {
-                ... setup irq operation ...
-        }
-
-If the IRQ is not optional, there should be an error code when it is
-not present. This keeps error handling simple.
-
-The _optional() difference lies in the zero/NULL vs. error code in
-case of not present.
-
-> Note the win is considerably less compared to gpiod_get_optional vs
-> gpiod_get however. And then it still lacks the semantic of a dummy irq
-> which IMHO forfeits the right to call it ..._optional().
->
-> Now I'm unwilling to continue the discussion unless there pops up a
-> suggestion that results in a considerable part (say > 10%) of the
-> drivers using platform_get_irq_optional not having to check if the
-> return value corresponds to "not found".
-
-Usually drivers do have to check if the interrupt was present or
-not, because they may have to change the operation of the driver,
-depending on interrupt-based or timer/polling-based processing.
-
-Clocks, regulators, and resets are different, as their absence is
-really a no-op.  The absence of an interrupt is not a no-op (except
-for the separate interrupts vs. a single muxed interrupt case).
+For platform_get_irq(), the IRQ being absent is an error condition,
+hence it should return an error code.
+For platform_get_irq_optional(), the IRQ being absent is not an error
+condition, hence it should not return an error code, and 0 is OK.
 
 Gr{oetje,eeting}s,
 
