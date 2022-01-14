@@ -2,101 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBB448ECF4
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jan 2022 16:18:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A6C48ED1B
+	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jan 2022 16:25:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243038AbiANPSh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 14 Jan 2022 10:18:37 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:50786 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242435AbiANPSR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Jan 2022 10:18:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1642173497; x=1673709497;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=raOPInPiNpoFYNkwMgusjdwrbKTRJG+aT7u9K7/NxHA=;
-  b=gPxIQ9NE9Q2L2/TckQMPVAJTxdlePIeLqS84z/5QPH6sHfgEqz1KzVXC
-   4ZIrqSk7/apcKiFYrMVe6zhZa9WeW5mdOum6O7gv09b+bJOnSk4PRnDKh
-   wK3ej4E/JHBJCBPW4ZUJQdf1D/t9af4PXgpICKSEInyENHjc1ydUi3eU0
-   ZnA/taSOPnW19CJ1AxA+K2Lu1qV3vruDnxl4AjlnFHbebL5f1RHwfViXr
-   NptbQXlRD+Fw5VjghfrTKQ9bInQcJwxOx2MxCYqFgaTIxIQqZmTHAJZ32
-   rFxoL9aB4DTw6DR2LJLGNVCS95dIvgi4JiJ/CoeEAbybi36KhdIKEmtoH
-   A==;
-IronPort-SDR: PX/LMa5zroMvcheRMvJmmSuZSQ4sURh5136X1G6xQgzxW+k26UjOZuRymXExNiqT9MCt5VX4W+
- AITDwg3MLwbCnItLQFpO/R+A9JMURhbkHUw4cDD1w20+qK621kaXO0imVRuudpe0ht0LdeslGR
- H7JI6VySU4LTBFkJHiDczDH8KiRWEiUTurnx64EtRNyL9r54En3q5d1QEP//8ZqwWLLUL+sIR7
- NZ7YeM+nd/fNB4GkOb7mogKwvEwd1Jar8nxRkLZsMPBPHcRqvwC284lX5xB2ew4f4wryjeHDUC
- PQhuzBuwhVlxjnPA0qPqREqZ
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="142730993"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jan 2022 08:18:15 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 14 Jan 2022 08:18:13 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 14 Jan 2022 08:18:07 -0700
-From:   <conor.dooley@microchip.com>
-To:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
-        <robh+dt@kernel.org>, <jassisinghbrar@gmail.com>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <broonie@kernel.org>,
-        <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
-        <u.kleine-koenig@pengutronix.de>, <lee.jones@linaro.org>,
-        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-crypto@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
-CC:     <krzysztof.kozlowski@canonical.com>, <geert@linux-m68k.org>,
-        <bin.meng@windriver.com>, <heiko@sntech.de>,
-        <lewis.hanly@microchip.com>, <conor.dooley@microchip.com>,
-        <daire.mcnamara@microchip.com>, <ivan.griffin@microchip.com>,
-        <atishp@rivosinc.com>
-Subject: [PATCH v3 15/15] MAINTAINERS: update riscv/microchip entry
-Date:   Fri, 14 Jan 2022 15:17:27 +0000
-Message-ID: <20220114151727.2319915-16-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220114151727.2319915-1-conor.dooley@microchip.com>
-References: <20220114151727.2319915-1-conor.dooley@microchip.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+        id S229470AbiANPZj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 14 Jan 2022 10:25:39 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60586 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243495AbiANPZc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Jan 2022 10:25:32 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 538B0B8262A;
+        Fri, 14 Jan 2022 15:25:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 039C2C36AEA;
+        Fri, 14 Jan 2022 15:25:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642173930;
+        bh=rD5NHOMz1fPD0u+TQzXoNu4F4mR75dk7ItndCrC90LM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=l+oI1gPUSeeX4lNYkQwxoKonGKo+no87XvfOUb7pq17mILFy7/djMk/43NK0d1Kl7
+         XBUq8PwsoPxnzXTY07IOS2/LNRNrFeLsPetvaN3Pd9TFZigffgPNHa3hUz8yZKEOra
+         NBH/4ZJIxPqyJUGV8RbYbWLkX8C+oATBXp7wzA5S6PvPXMWVW0oHfD7KDlCS32NgBJ
+         P6icRjrYzaR0LaLmr59Wj9Ktoxz8M8jNAr/M05MUarxu0ydgXw2MP3yyOwHxGZ4u4K
+         oSscH25r79KNzsiqWFUkze8we4oFJUaTv9bkr9tIY0FPobR0L5IAwKbaJSI5YDFWPa
+         YOBD4IvKBNWsQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E6CD8F60794;
+        Fri, 14 Jan 2022 15:25:29 +0000 (UTC)
+Subject: Re: [PULL REQUEST] i2c for v5.17
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YeFNz6pdiGvVTPLh@kunai>
+References: <YeFNz6pdiGvVTPLh@kunai>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YeFNz6pdiGvVTPLh@kunai>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-mergewindow
+X-PR-Tracked-Commit-Id: bf3c39f5da43499c52d4127b7f2f495b69dfeebf
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 112450df61b7373529b0fe4c122ad13b89d80a8a
+Message-Id: <164217392993.6456.9900069742517740030.pr-tracker-bot@kernel.org>
+Date:   Fri, 14 Jan 2022 15:25:29 +0000
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+The pull request you sent on Fri, 14 Jan 2022 11:17:51 +0100:
 
-Update the RISC-V/Microchip entry by adding the microchip dts
-directory and myself as maintainer
+> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-mergewindow
 
-Reviewed-by: Lewis Hanly <lewis.hanly@microchip.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/112450df61b7373529b0fe4c122ad13b89d80a8a
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7a2345ce8521..3b1d6be7bd56 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16348,8 +16348,10 @@ K:	riscv
- 
- RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
- M:	Lewis Hanly <lewis.hanly@microchip.com>
-+M:	Conor Dooley <conor.dooley@microchip.com>
- L:	linux-riscv@lists.infradead.org
- S:	Supported
-+F:	arch/riscv/boot/dts/microchip/
- F:	drivers/mailbox/mailbox-mpfs.c
- F:	drivers/soc/microchip/
- F:	include/soc/microchip/mpfs.h
+Thank you!
+
 -- 
-2.32.0
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
