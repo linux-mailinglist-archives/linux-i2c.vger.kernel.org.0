@@ -2,118 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A35B48F877
-	for <lists+linux-i2c@lfdr.de>; Sat, 15 Jan 2022 18:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA22348F8A5
+	for <lists+linux-i2c@lfdr.de>; Sat, 15 Jan 2022 19:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbiAOR1H (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 15 Jan 2022 12:27:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41004 "EHLO
+        id S233369AbiAOSK6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 15 Jan 2022 13:10:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiAOR1H (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 15 Jan 2022 12:27:07 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1BAC06161C
-        for <linux-i2c@vger.kernel.org>; Sat, 15 Jan 2022 09:27:07 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id h23so16155675iol.11
-        for <linux-i2c@vger.kernel.org>; Sat, 15 Jan 2022 09:27:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Mu52mCpV2nrQW+DvvGvGXwkA9rgLAwESwOW831oZMnE=;
-        b=d3c2rEAUTq64Y+w6197B+rfX3aaLSZ92yWel7tJ5VZaQnn0VPZTAewMBNDS0Tmud85
-         KH5j5drTQzOAbIhxudKiZaXo9wwa46OCq2FVaGILXJmQ2lCLgWHDsnVykCSCjIeCHTY/
-         ZQXHtXE3g9CAUtVdt2NYw02fZ7pg8W1ftQR0g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Mu52mCpV2nrQW+DvvGvGXwkA9rgLAwESwOW831oZMnE=;
-        b=H+//yajy/SJF5BSqDJ0KBOkhZ6wR48zxgcEjHDC8L7u+9rkQRh+C6InMYTe1ptbdwD
-         Z+7DvAMrrjSQkto6KWuGm0jemNm0S8nggfvD6OltNXwTQ45rMvGnnWsErkFhjRIigpLP
-         hZTg5YOXZ9Cd5b3olY+hOCEN0jxOl/M4rOFWI2FBST2FGWwCbrX1QW85rN/QTSlPrpL6
-         rg7issVc1XTrbh+evE0vZperSJE9YdjiBD1SHXBNb+J2rrj+fohH+hrXlIFpsd7MzEAP
-         BQQAJgZcbOB4I6bPBNMqAaHbn+iyNGF5KcuEsHtJUZUB/l7mN76IojSWeLqzAMFQ0ISA
-         jn2w==
-X-Gm-Message-State: AOAM5315w7xNbdz1zqm57plfqW9cKnvwAV+yz67GTqo2go0ext+SY0e5
-        XJkvsjvvgbJH1DcvAUTMNPIPpl/NkbFSplDndUkZwg==
-X-Google-Smtp-Source: ABdhPJyR3JZ53vXZtEgCpx9pT/ydRQnd5TmsZ9xh4WkPiq1Hsx2lP0NtdPS27LZu4ouZ2C9SZTB2oznIMinprrNekro=
-X-Received: by 2002:a05:6638:3012:: with SMTP id r18mr6621186jak.282.1642267626434;
- Sat, 15 Jan 2022 09:27:06 -0800 (PST)
+        with ESMTP id S232288AbiAOSK6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 15 Jan 2022 13:10:58 -0500
+Received: from server00.inetadmin.eu (server00.inetadmin.eu [IPv6:2a01:390:1:2:e1b1:2:0:d7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33619C061574;
+        Sat, 15 Jan 2022 10:10:57 -0800 (PST)
+Received: from [192.168.1.103] (ip-46.34.226.0.o2inet.sk [46.34.226.0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: miroslav@wisdomtech.sk)
+        by server00.inetadmin.eu (Postfix) with ESMTPSA id 897F313A19F;
+        Sat, 15 Jan 2022 19:10:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wisdomtech.sk;
+        s=dkiminetadmin; t=1642270254;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NBB3VSrjVv5/iGxbGXnadU4umYpW7eQgvDcAeuNsDGI=;
+        b=KK3MdG1N6zZVCV1QIjORmAWKXPHGgpu3mY0nSJDQ/+tSutWrWDLLs5+OZTSVSK/xk1YZ7Z
+        R3ZNbk9zLcCkXJydXD/evcy+NJlyIt6jPOfpiWWWFL8OAkYWi/Vr1E9S1fxZ6b48H2NWje
+        Wb9XeT6RPKdlO1jx9LKzNHFpaYOWBwA=
+Message-ID: <487a967b-11a3-ae0e-5429-f207b49edfbf@wisdomtech.sk>
+Date:   Sat, 15 Jan 2022 19:10:50 +0100
 MIME-Version: 1.0
-References: <20220106122452.18719-1-wsa@kernel.org> <Yd6gRR0jtqhRLwtB@ninjato>
- <98ed8d6d16a3d472d9432eb169aa2da44b66b5cc.camel@yandex.ru>
- <4dfbee97-14c2-718b-9cbd-fdeeace96f59@yahoo.com> <CAJMQK-h38XdN=QD6ozVNk+wxmpp1DKj21pkFZ+kY31+Lb8ot6Q@mail.gmail.com>
- <6121a782-6927-f033-1c09-ffe4ad7700ae@yahoo.com>
-In-Reply-To: <6121a782-6927-f033-1c09-ffe4ad7700ae@yahoo.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Sun, 16 Jan 2022 01:26:40 +0800
-Message-ID: <CAJMQK-j5YYqen78Vgng_5jhja-YKSTRut7f7vJ4wWufVfbZy6w@mail.gmail.com>
-Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in adapter"
-To:     Tareque Md Hanif <tarequemd.hanif@yahoo.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: Touchpad stickiness on AMD laptops (was Dell Inspiron/XPS)
+Content-Language: en-US
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Benjamin Tissoires <btissoir@redhat.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andrea Ippolito <andrea.ippo@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alex Hung <alex.hung@canonical.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>
+References: <CAGhUXvBw4rzCQrqttyyS=Psxmhppk79c6fDoxPbV91jE7fO_9A@mail.gmail.com>
+ <CAGhUXvDNj2v3O==+wWWKPYVzej8Vq+WNiBtPwmYxSQ2dTuLb9Q@mail.gmail.com>
+ <CAGhUXvC8eHfxEKzkGN06VvRU6Z0ko7MJ9hF6uXNq+PxRZSbEmQ@mail.gmail.com>
+ <70cbe360-6385-2536-32bd-ae803517d2b2@redhat.com> <YdbrLz3tU4ohANDk@ninjato>
+ <42c83ec8-bbac-85e2-9ab5-87e59a679f95@redhat.com>
+ <CAO-hwJJ9ALxpd5oRU8SQ3F65hZjDitR=MzmwDk=uiEguaXZYtw@mail.gmail.com>
+ <5409e747-0c51-24e2-7ffa-7dd9c8a7aec7@amd.com> <Yd6SRl7sm8zS85Al@ninjato>
+ <596d6af1-d67c-b9aa-0496-bd898350865c@wisdomtech.sk>
+ <d39101a9-adc6-df32-12f5-fccc8fd34515@amd.com>
+ <5c0ed06a-617e-077a-a4a4-549e91d372ba@wisdomtech.sk>
+ <BL1PR12MB5157412781B6C84B97C2A3E7E2559@BL1PR12MB5157.namprd12.prod.outlook.com>
+From:   =?UTF-8?Q?Miroslav_Bend=c3=adk?= <miroslav@wisdomtech.sk>
+In-Reply-To: <BL1PR12MB5157412781B6C84B97C2A3E7E2559@BL1PR12MB5157.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-hi Tareque,
+> [AMD Official Use Only]
+>
+>> Now i am trying to change ASF registers instead of SMBus registers.
+>> I have tried to enable interrupts and set listen address, but it don't
+>> work or
+>> i can't recognize the difference between interrupts generated by
+>> transfers and
+>> interrupts generated from slave.
+> Try reading the value of SFx0A ASFStatus bit 5 (it's write to clear if it's an interrupt).
+>
+>> outb_p(0x02, 0x15 + piix4_smba); // SlaveIntrListenEn
+>> outb_p(0x2c << 1 | 0x01, 0x09 + piix4_smba); // ListenAdr | ListenAdrEn
+> ASFx04 SlaveAddress instead of  ASFx09 ListenAdr
+> ?
 
+Without change, but this (0x08 or 0x10, both are not needed) starts 
+generating interrupts
 
-On Fri, Jan 14, 2022 at 6:09 PM Tareque Md Hanif
-<tarequemd.hanif@yahoo.com> wrote:
->
-> Hi Hsin-Yi,
->
-> On 1/12/22 16:58, Hsin-Yi Wang wrote:
->
-> Can you help provide logs if we apply
-> 5a7b95fb993ec399c8a685552aa6a8fc995c40bd but revert
-> 8d35a2596164c1c9d34d4656fd42b445cd1e247f?
->
-> Issue still exists. journalctl log attached in revert_8d.txt
->
->
-> > after apply 5a7b95fb993ec399c8a685552aa6a8fc995c40bd
-> > 1. delete SET_LATE_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late,
-> > i2c_resume_early) and function i2c_suspend_late() and
-> > i2c_resume_early().
->
-> No issues. journalctl log attached in test1.txt
->
->
-> > 2. delete SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume,
-> > NULL) and function i2c_runtime_suspend() and i2c_runtime_resume().
->
-> Issue exists. journalctl log attached in test2.txt
+outb_p(0x08 << 1 | 0x01, 0x09 + piix4_smba);
+outb_p(0x10 << 1 | 0x01, 0x09 + piix4_smba);
 
-Thanks for the testing.
-Can you help us test if applying the following patch on top of
-5a7b95fb993ec399c8a685552aa6a8fc995c40bd works? Thanks
+It generates interrupts with frequency 10 Hz - 0.01 Hz. I don't see correlation with trackpoint / touchpad.
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 9eb4009cb250..6b046012aa08 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -484,7 +484,7 @@ static int i2c_resume_early(struct device *dev)
-        struct i2c_client *client = i2c_verify_client(dev);
-        int err;
-
--       if (!client)
-+       if (!client || dev_pm_skip_resume(dev))
-                return 0;
-
-        if (pm_runtime_status_suspended(&client->dev) &&
-@@ -502,7 +502,7 @@ static int i2c_suspend_late(struct device *dev)
-        struct i2c_client *client = i2c_verify_client(dev);
-        int err;
-
--       if (!client)
-+       if (!client || dev_pm_skip_suspend(dev))
-                return 0;
-
-        err = pm_generic_suspend_late(&client->dev);
