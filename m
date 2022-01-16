@@ -2,187 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E073348FE5B
-	for <lists+linux-i2c@lfdr.de>; Sun, 16 Jan 2022 19:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2354D48FE79
+	for <lists+linux-i2c@lfdr.de>; Sun, 16 Jan 2022 19:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235981AbiAPSPe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 16 Jan 2022 13:15:34 -0500
-Received: from mxout03.lancloud.ru ([45.84.86.113]:59572 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235965AbiAPSPd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 16 Jan 2022 13:15:33 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 2173F206F618
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-iio@vger.kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "ALSA Development Mailing List" <alsa-devel@alsa-project.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
+        id S235820AbiAPSeq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 16 Jan 2022 13:34:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232456AbiAPSeq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 16 Jan 2022 13:34:46 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC61C061574;
+        Sun, 16 Jan 2022 10:34:46 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id e3so46593006lfc.9;
+        Sun, 16 Jan 2022 10:34:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6WEIrPsfwKQAU1waPBDyVpN+M9nuJKvGyQX15lAz6rk=;
+        b=GZ+Hr2x/BF/hAWfuJRFk5ByRkQWqbjzbU8u1NkxuQuycmc1BFzCIWCf6ZXsLtUDtei
+         IN4CoFMZRYDm9y8YtvVE7EHvvKSFEa1ZoeKB/ysYwgWsAChECTrdYHXVC9k9yYKOuQSk
+         Mz1al0ubjCKxfsGW6sOpNqk60YP0CbE8KTmx5WRfE6qVAYOoG6JIDQH5shb4yqLYt1UN
+         qezg1E+ifiX0ApegiQHIbSGaBvsZXGVh1rxfppubb6Wh7X324CzJiUryPwcWnv0srz8p
+         gryCYyQQEHJUuXhmwD+GPg/TRwOsQBU8TtpKqQZqogDAVS3xhdvUyEG5KObk0zihztfa
+         XCZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6WEIrPsfwKQAU1waPBDyVpN+M9nuJKvGyQX15lAz6rk=;
+        b=EI4di82PNYMFQxb0nIIIqGjhboBMhzy8LvmGm4XAMlkAV0sdtpJKfh5xvbO8fdpQ15
+         9xhToQ2i3ioXdlEe1AJARJE6qWwEaTPiTM0rJ2ctBIzgvUDN27vRog26YmtdrDHbjB9a
+         +pA1Uat3GLQuiHwLltUIkxQuphR5OvDwYVKBC02oVojIYlDOZbWAyj06ZRy40NWFNY8E
+         W9gk2ww5bzNV80x01HroR2o85OqJdqCPs1JOHZN8glcwM2kw9BozxwrbtVqAwicklGKT
+         JWmukFfN88/41qp/vQ3JQ6nYd/2gMt0DfxLa2v2y2DUNk04LtrKceeeQyygbyDYJOUB2
+         S0XA==
+X-Gm-Message-State: AOAM531hwuBG8uIhw8mrZ/cVGhr/iDKQKrmKOLdJhwBpXUSZ04L64kQX
+        vPVMiqdCqyd7V0VEdgUuphXrmU0Y/AY=
+X-Google-Smtp-Source: ABdhPJyHw9m8Lq4fHwTkuoYghyy9m0BajUOCA9U7fbAC/xuAo4E1s2ssksNc6eZGwbUBeSQ/SoyyvA==
+X-Received: by 2002:a05:651c:169c:: with SMTP id bd28mr2837052ljb.453.1642358083873;
+        Sun, 16 Jan 2022 10:34:43 -0800 (PST)
+Received: from [192.168.2.145] (46-138-227-157.dynamic.spd-mgts.ru. [46.138.227.157])
+        by smtp.googlemail.com with ESMTPSA id g5sm1175848lfv.0.2022.01.16.10.34.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Jan 2022 10:34:43 -0800 (PST)
+Subject: Re: [PATCH 0/2] i2c: tegra: allow compiling out support for Tegra's
+ special constrollers
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
         Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-phy@lists.infradead.org>, Jiri Slaby <jirislaby@kernel.org>,
-        <openipmi-developer@lists.sourceforge.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        "William Breathitt Gray" <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Borislav Petkov" <bp@alien8.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        <platform-driver-x86@vger.kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        "Linux MMC List" <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        <linux-mediatek@lists.infradead.org>,
-        "Brian Norris" <computersforpeace@gmail.com>,
-        <netdev@vger.kernel.org>
-References: <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
- <YdyilpjC6rtz6toJ@lunn.ch>
- <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
- <20220112085009.dbasceh3obfok5dc@pengutronix.de>
- <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
- <Yd9L9SZ+g13iyKab@sirena.org.uk>
- <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
- <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
- <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru>
- <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <57af1851-9341-985e-7b28-d2ba86770ecb@omp.ru>
-Date:   Sun, 16 Jan 2022 21:15:20 +0300
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <cover.1642348712.git.mirq-linux@rere.qmqm.pl>
+ <ea9ab0b7-022b-93e2-ed7d-dccfa95bd900@gmail.com>
+ <YeRd90gLqtsz2zVV@qmqm.qmqm.pl>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <e7a9a48b-e924-9e14-a4ff-b13853c5033e@gmail.com>
+Date:   Sun, 16 Jan 2022 21:34:42 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
-Content-Type: text/plain; charset="windows-1252"
+In-Reply-To: <YeRd90gLqtsz2zVV@qmqm.qmqm.pl>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello!
-
-On 1/14/22 11:22 PM, Uwe Kleine-K�nig wrote:
-
->>>>>>> To me it sounds much more logical for the driver to check if an
->>>>>>> optional irq is non-zero (available) or zero (not available), than to
->>>>>>> sprinkle around checks for -ENXIO. In addition, you have to remember
->>>>>>> that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
->>>>>>> (or some other error code) to indicate absence. I thought not having
->>>>>>> to care about the actual error code was the main reason behind the
->>>>>>> introduction of the *_optional() APIs.
->>>>>
->>>>>> No, the main benefit of gpiod_get_optional() (and clk_get_optional()) is
->>>>>> that you can handle an absent GPIO (or clk) as if it were available.
->>>>
->>>>    Hm, I've just looked at these and must note that they match 1:1 with
->>>> platform_get_irq_optional(). Unfortunately, we can't however behave the
->>>> same way in request_irq() -- because it has to support IRQ0 for the sake
->>>> of i8253 drivers in arch/...
+16.01.2022 21:03, Michał Mirosław пишет:
+> On Sun, Jan 16, 2022 at 08:54:08PM +0300, Dmitry Osipenko wrote:
+>> 16.01.2022 19:02, Michał Mirosław пишет:
+>>> To patches that, combined, reduce I2C driver's code by ~2kB and a bit
+>>> from runtime overhead for non-Tegra20 or non-Tegra210 builds.
 >>>
->>> Let me reformulate your statement to the IMHO equivalent:
+>>> Michał Mirosław (2):
+>>>   i2c: tegra: allow DVC support to be compiled out
+>>>   i2c: tegra: allow VI support to be compiled out
 >>>
->>> 	If you set aside the differences between
->>> 	platform_get_irq_optional() and gpiod_get_optional(),
+>>>  drivers/i2c/busses/Kconfig     | 16 ++++++++++++++++
+>>>  drivers/i2c/busses/i2c-tegra.c | 35 +++++++++++++++++++++-------------
+>>>  2 files changed, 38 insertions(+), 13 deletions(-)
+>>>
 >>
->>    Sorry, I should make it clear this is actually the diff between a would-be
->> platform_get_irq_optional() after my patch, not the current code...
+>> 2KB is a too small difference to justify the ifdefs and Kconfig entries,
+>> IMO.
 > 
-> The similarity is that with your patch both gpiod_get_optional() and
-> platform_get_irq_optional() return NULL and 0 on not-found. The relevant
-> difference however is that for a gpiod NULL is a dummy value, while for
-> irqs it's not. So the similarity is only syntactically, but not
-> semantically.
+> Maybe I should have mentioned that it's ~20%? With my "embedded" hat on:
+> I think it might be small, but sometimes it is the difference between
+> bootable kernel or one too big.
 
-   I have noting to say here, rather than optional IRQ could well have a different
-meaning than for clk/gpio/etc.
+10KB is a small size too. I'm very doubtful that such changes make any
+real difference in practice.
 
-[...]
->>> However for an interupt this cannot work. You will always have to check
->>> if the irq is actually there or not because if it's not you cannot just
->>> ignore that. So there is no benefit of an optional irq.
->>>
->>> Leaving error message reporting aside, the introduction of
->>> platform_get_irq_optional() allows to change
->>>
->>> 	irq = platform_get_irq(...);
->>> 	if (irq < 0 && irq != -ENXIO) {
->>> 		return irq;
->>> 	} else if (irq >= 0) {
->>
->>    Rather (irq > 0) actually, IRQ0 is considered invalid (but still returned).
-> 
-> This is a topic I don't feel strong for, so I'm sloppy here. If changing
-> this is all that is needed to convince you of my point ...
+Much more practical should be to modularize more kernel code. You should
+be able to squeeze zImage down to 3MB without any code changes by
+toggling more kernel config options to =m. Try to use grate_defconfig
+[1] for the base, that is what postmarketOS kernel build uses.
 
-   Note that we should absolutely (and first of all) stop returning 0 from platform_get_irq()
-on a "real" IRQ0. Handling that "still good" zero absolutely doesn't scale e.g. for the subsystems
-(like libata) which take 0 as an indication that the polling mode should be used... We can't afford
-to be sloppy here. ;-)
-
-[...]
-
-> Best regards
-> Uwe
-
-MBR, Sergey
+[1]
+https://github.com/grate-driver/linux/blob/master/arch/arm/configs/grate_defconfig
