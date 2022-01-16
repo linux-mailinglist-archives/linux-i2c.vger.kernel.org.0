@@ -2,125 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A37C48FD63
-	for <lists+linux-i2c@lfdr.de>; Sun, 16 Jan 2022 15:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E16348FDDC
+	for <lists+linux-i2c@lfdr.de>; Sun, 16 Jan 2022 17:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbiAPOTN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 16 Jan 2022 09:19:13 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50044 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiAPOTM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 16 Jan 2022 09:19:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 31DF260F2E;
-        Sun, 16 Jan 2022 14:19:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D360C36AE7;
-        Sun, 16 Jan 2022 14:19:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642342750;
-        bh=KujYZ44NbqHewC3hStYnBx16eqgxm1SsBiD7vgCzy1A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sKsNPdg/t/aehm0kbBx0+iaMt7Vs15thP7mY+lgsvv2wpHp7hhFp/CL3s/+VFunx8
-         VMGsJpG9T+206AG5qxqWiAVL+YwMP+lMdgO6G29sYG5yQOnXi5Wp9YcaTPGre6QZaH
-         1Q5W85dO5PtMcGij5VwJ57avVdKo6t7UZumaWiEk=
-Date:   Sun, 16 Jan 2022 15:19:06 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-phy@lists.infradead.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        openipmi-developer@lists.sourceforge.net,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        kvm@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
-        Robert Richter <rric@kernel.org>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        Tony Luck <tony.luck@intel.com>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>, netdev@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
- (summary)
-Message-ID: <YeQpWu2sUVOSaT9I@kroah.com>
-References: <20220110195449.12448-1-s.shtylyov@omp.ru>
- <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220115183643.6zxalxqxrhkfgdfq@pengutronix.de>
+        id S236072AbiAPQaK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 16 Jan 2022 11:30:10 -0500
+Received: from rere.qmqm.pl ([91.227.64.183]:63217 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235731AbiAPQ3q (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 16 Jan 2022 11:29:46 -0500
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4JcL944DHLz31;
+        Sun, 16 Jan 2022 17:29:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1642350584; bh=bGGaw/ldrCq1jAH5EChsBqNxiTNzrIjLK3w+QjVTJCw=;
+        h=Resent-From:Resent-Date:Resent-To:Date:From:Subject:To:Cc:From;
+        b=Pd2VbWB0znYwxMr/zuvbiSNcckRInObFJiQtiRGqwDj3EA7SODdZgaBDWEpmLQh2A
+         r32Jytoo0hFOkKPlS5oktGs6H4MvtCRnrjG5SKPuQZfMFz1QHKGXKbvoDIz8YzB2KT
+         OAmcLV09tAc8c1CyWiXGQtrY6uB1nwwwOhvALBTveCDxX30BSU2O4QnKlVvZudEt/o
+         O3RV5cV5zmk6wRPiP3MhP+rrbtlzeSfCGSVp0OaJ08XMI3lz6dCq6kX+pAEz0HxKP0
+         hJsQFv6g8w7yjPSxfRCVQEtrTcuouKKqTl5P9iK7YiGHn137IUMUYeTZ4veQk5oAI5
+         VRirZxQx/XCIA==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.4 at mail
+X-Spam-Action: marked-ham
+X-Bogosity: H 0.000000
+Received: from rere.qmqm.pl
+        by rere.qmqm.pl with LMTP
+        id gCUpJ4tB5GFaKgEAZU03Dg
+        (envelope-from <mirq-linux@rere.qmqm.pl>)
+        for <mirq-linux@rere.qmqm.pl>; Sun, 16 Jan 2022 17:02:19 +0100
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4JcKYR2wYTz63;
+        Sun, 16 Jan 2022 17:02:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1642348939; bh=bGGaw/ldrCq1jAH5EChsBqNxiTNzrIjLK3w+QjVTJCw=;
+        h=Date:From:Subject:To:Cc:From;
+        b=FBgmvOZ5We0GsAgvaOrgo4c7fgbnPoYnoOImUCCiJsRJ0Iwa9CE7aT+amX8e+RXdS
+         y1eOLOJBwpUDUzkIpzNqL2B7eixDqYjsJFvPx5DKxHBWOVGhz946cHyBzuwywLh+ik
+         1MNjQ4wr91aom/rgSmqDeNmHN8+Dg4js8LxzapMr/YjzsruxFZBS05mCY3AJKre+r8
+         OqLXewNTlPfzcKQ4QCpArFWweFoYQEq+S2swpdM4er4QIg+9YU4hu7IyW/BQDMGoKy
+         9Bkpmw50XCnc0lzS9lMT/AH6G6ObSAv8+pXT0TXlnGsA8lA4ciGOxZU05k1GPxtiJ9
+         jJQddSTQck9wg==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.4 at mail
+Date:   Sun, 16 Jan 2022 17:02:17 +0100
+Message-Id: <cover.1642348712.git.mirq-linux@rere.qmqm.pl>
+From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Subject: [PATCH 0/2] i2c: tegra: allow compiling out support for Tegra's special constrollers
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220115183643.6zxalxqxrhkfgdfq@pengutronix.de>
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 07:36:43PM +0100, Uwe Kleine-K�nig wrote:
-> A possible compromise: We can have both. We rename
-> platform_get_irq_optional() to platform_get_irq_silent() (or
-> platform_get_irq_silently() if this is preferred) and once all users are
-> are changed (which can be done mechanically), we reintroduce a
-> platform_get_irq_optional() with Sergey's suggested semantic (i.e.
-> return 0 on not-found, no error message printking).
+To patches that, combined, reduce I2C driver's code by ~2kB and a bit
+from runtime overhead for non-Tegra20 or non-Tegra210 builds.
 
-Please do not do that as anyone trying to forward-port an old driver
-will miss the abi change of functionality and get confused.  Make
-build-breaking changes, if the way a function currently works is
-changed in order to give people a chance.
+Michał Mirosław (2):
+  i2c: tegra: allow DVC support to be compiled out
+  i2c: tegra: allow VI support to be compiled out
 
-thanks,
+ drivers/i2c/busses/Kconfig     | 16 ++++++++++++++++
+ drivers/i2c/busses/i2c-tegra.c | 35 +++++++++++++++++++++-------------
+ 2 files changed, 38 insertions(+), 13 deletions(-)
 
-greg k-h
+-- 
+2.30.2
+
