@@ -2,242 +2,158 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF7C4905FF
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jan 2022 11:36:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66390490665
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jan 2022 12:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236099AbiAQKgI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Mon, 17 Jan 2022 05:36:08 -0500
-Received: from mail-vk1-f178.google.com ([209.85.221.178]:44866 "EHLO
-        mail-vk1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235751AbiAQKgI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jan 2022 05:36:08 -0500
-Received: by mail-vk1-f178.google.com with SMTP id b77so10050961vka.11;
-        Mon, 17 Jan 2022 02:36:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8wbyaDOKHzyncR/a8atHHiwf57S6QrlnXekhvOqZ5Zc=;
-        b=LSqfAKSEMaEAYGbunuoNsuAo80Rk3bWRnbog4vmP3JZLEh9uYSltN70uJc84BpJSr7
-         JJnirAVOJlzWKyDEIR2Diay0j4XTt0t62ENC9pifrHEO7FBWiHhHxuDK1WzAc8e6ELXR
-         kQ9mlj4U0HJfB2+KW8z5oG8eumwZ7pBma/5Dw/MfcUBQY6urYwF8smbH7H3q2qCyOWnZ
-         WMftrgtX96eKLAO99UHB4hY/TEZK/0NkFFeXjMqVUQZMRIBvb4IgC5k585TkQC90Pjjl
-         OCO4TUh6V49qlC5LMsMRqBmcDWSn9b1oJydqBYMjT6BdgJQWG8UIu4fo3Rdo+xKpbYJ/
-         vCYw==
-X-Gm-Message-State: AOAM5305tSrFltxA7gBSd0tqguB9hBRHUBFEH4OLNLs0dzL4jrmjEiQD
-        BXv/dJZDl/cDrQpuSMLa9PFd1Pet6ZxLZku3
-X-Google-Smtp-Source: ABdhPJy0WUl6ljrrNQay/fQ0XF0Z1LDo996FsF8bsiQ2Edql4XjhP64FvczIhYIxWKkP7rQimMMsaw==
-X-Received: by 2002:a1f:2c54:: with SMTP id s81mr4062257vks.38.1642415766251;
-        Mon, 17 Jan 2022 02:36:06 -0800 (PST)
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
-        by smtp.gmail.com with ESMTPSA id b14sm3226412vkk.22.2022.01.17.02.36.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 02:36:04 -0800 (PST)
-Received: by mail-ua1-f45.google.com with SMTP id c36so29466451uae.13;
-        Mon, 17 Jan 2022 02:36:04 -0800 (PST)
-X-Received: by 2002:ab0:4d42:: with SMTP id k2mr5738849uag.78.1642415764003;
- Mon, 17 Jan 2022 02:36:04 -0800 (PST)
+        id S238821AbiAQLFz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Jan 2022 06:05:55 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:7917 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233726AbiAQLFz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jan 2022 06:05:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1642417555; x=1673953555;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gWCB2jSI8ZbCAofIfIvhZNSEbC/cw4Yx/YGwRjsWNEQ=;
+  b=2CWEJkskCIoHgFNxlRAlvvY8TfmuCKW/8hftcg1Et7vcYxLs6BjuIsgd
+   imBEcvOIPpOWhwtK/sPwDg9oFDa0KA3b6x9IRcXIohS5DyX8n4u9mb4ZS
+   uGFWLLy7SAAGCjsHFK1REkhCmPt5Z2OUKBriJezJD3Nxtx7TEBbE1n19E
+   mjN27E9k7jvEfrH+w12LtIyDspdEsaSF2w7HwSGiCHNiS/NcMGd6NzhIK
+   oWTDpcENr3cPeD1cijLQm7hZboyVni43MvA95t4XG1uHDviNWpJ1o4dda
+   UsnUfIn4tnkixP/NyIuAxIvSiKurcOjUycEenBU/ZhQ5JU4qR4cSYc9uJ
+   Q==;
+IronPort-SDR: AfRy/Y5tMEri9D+SlVeOwzlpEo33GD+ODIq9O2nmTIUR3aeUAgeqyoBpBhGw444MilL5dYe7ji
+ LbvwvGAOlLG4gMz6bs4gUuCi1XlX+jkZ/RAhcTeHkD9og86LIFz/JQB9Dkhl+H+B9c8xQBRJ3v
+ fuiFdj4x1zC80djpIGaEujzpTWMGFLi7EAScLOhYF0qlz+GN5XV1rP1wapcWSEHAJPAjAqKTZ2
+ Eww8JPdnydDOisFWeylOtDFOD7ftsJ1ll89be4nI8au6OF/s/8Zb/acd2CxkwOmQc/pR2uY2VQ
+ anLH9qaEbvQjVQmuqX4gfdi+
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="150422938"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Jan 2022 04:05:52 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 17 Jan 2022 04:05:47 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Mon, 17 Jan 2022 04:05:41 -0700
+From:   <conor.dooley@microchip.com>
+To:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
+        <robh+dt@kernel.org>, <jassisinghbrar@gmail.com>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <broonie@kernel.org>,
+        <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
+        <u.kleine-koenig@pengutronix.de>, <lee.jones@linaro.org>,
+        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-crypto@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
+CC:     <krzysztof.kozlowski@canonical.com>, <geert@linux-m68k.org>,
+        <bin.meng@windriver.com>, <heiko@sntech.de>,
+        <lewis.hanly@microchip.com>, <conor.dooley@microchip.com>,
+        <daire.mcnamara@microchip.com>, <ivan.griffin@microchip.com>,
+        <atishp@rivosinc.com>
+Subject: [PATCH v4 00/14] Update the Icicle Kit device tree
+Date:   Mon, 17 Jan 2022 11:07:41 +0000
+Message-ID: <20220117110755.3433142-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220112085009.dbasceh3obfok5dc@pengutronix.de>
- <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de> <Yd9L9SZ+g13iyKab@sirena.org.uk>
- <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru> <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
- <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru> <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
- <c9026f17-2b3f-ee94-0ea3-5630f981fbc1@omp.ru> <CAMuHMdXVbRudGs69f9ZzaP1PXhteDNZiXA658eMFAwP4nr9r3w@mail.gmail.com>
- <20220117092444.opoedfcf5k5u6otq@pengutronix.de>
-In-Reply-To: <20220117092444.opoedfcf5k5u6otq@pengutronix.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 17 Jan 2022 11:35:52 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
-Message-ID: <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>, Andrew Lunn <andrew@lunn.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, netdev <netdev@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        platform-driver-x86@vger.kernel.org,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>, Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        openipmi-developer@lists.sourceforge.net,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Uwe,
+From: Conor Dooley <conor.dooley@microchip.com>
 
-On Mon, Jan 17, 2022 at 10:24 AM Uwe Kleine-König
-<u.kleine-koenig@pengutronix.de> wrote:
-> On Mon, Jan 17, 2022 at 09:41:42AM +0100, Geert Uytterhoeven wrote:
-> > On Sat, Jan 15, 2022 at 9:22 PM Sergey Shtylyov <s.shtylyov@omp.ru> wrote:
-> > > On 1/14/22 11:22 PM, Uwe Kleine-König wrote:
-> > > > You have to understand that for clk (and regulator and gpiod) NULL is a
-> > > > valid descriptor that can actually be used, it just has no effect. So
-> > > > this is a convenience value for the case "If the clk/regulator/gpiod in
-> > > > question isn't available, there is nothing to do". This is what makes
-> > > > clk_get_optional() and the others really useful and justifies their
-> > > > existence. This doesn't apply to platform_get_irq_optional().
-> > >
-> > >    I do understand that. However, IRQs are a different beast with their
-> > > own justifications...
-> >
-> > > > clk_get_optional() is sane and sensible for cases where the clk might be
-> > > > absent and it helps you because you don't have to differentiate between
-> > > > "not found" and "there is an actual resource".
-> > > >
-> > > > The reason for platform_get_irq_optional()'s existence is just that
-> > > > platform_get_irq() emits an error message which is wrong or suboptimal
-> > >
-> > >    I think you are very wrong here. The real reason is to simplify the
-> > > callers.
-> >
-> > Indeed.
->
-> The commit that introduced platform_get_irq_optional() said:
->
->         Introduce a new platform_get_irq_optional() that works much like
->         platform_get_irq() but does not output an error on failure to
->         find the interrupt.
->
-> So the author of 8973ea47901c81a1912bd05f1577bed9b5b52506 failed to
-> mention the real reason? Or look at
-> 31a8d8fa84c51d3ab00bf059158d5de6178cf890:
->
->         [...] use platform_get_irq_optional() to get second/third IRQ
->         which are optional to avoid below error message during probe:
->         [...]
->
-> Look through the output of
->
->         git log -Splatform_get_irq_optional
->
-> to find several more of these.
+This series updates the Microchip Icicle Kit device tree by adding a
+host of peripherals, and some updates to the memory map. In addition,
+the device tree has been split into a third part, which contains "soft"
+peripherals that are in the fpga fabric.
 
-Commit 8973ea47901c81a1 ("driver core: platform: Introduce
-platform_get_irq_optional()") and the various fixups fixed the ugly
-printing of error messages that were not applicable.
-In hindsight, probably commit 7723f4c5ecdb8d83 ("driver core:
-platform: Add an error message to platform_get_irq*()") should have
-been reverted instead, until a platform_get_irq_optional() with proper
-semantics was introduced.  But as we were all in a hurry to kill
-the non-applicable error message, we went for the quick and dirty fix.
+Several of the entries are for peripherals that have not get had their
+drivers upstreamed, so in those cases the dt bindings are included where
+appropriate in order to avoid the many "DT compatible string <x> appears
+un-documented" errors.
 
-> Also I fail to see how a caller of (today's) platform_get_irq_optional()
-> is simpler than a caller of platform_get_irq() given that there is no
-> semantic difference between the two. Please show me a single
-> conversion from platform_get_irq to platform_get_irq_optional that
-> yielded a simplification.
+Depends on mpfs clock driver series [1] to provide:
+dt-bindings/clock/microchip,mpfs-clock.h
+and on the other changes to the icicle/mpfs device tree from geert
+that are already in linux/riscv/for-next.
 
-That's exactly why we want to change the latter to return 0 ;-)
+Additionally, the interrupt-extended warnings on the plic/clint are 
+cleared by [2] & [3].
 
-> So you need some more effort to convince me of your POV.
->
-> > Even for clocks, you cannot assume that you can always blindly use
-> > the returned dummy (actually a NULL pointer) to call into the clk
-> > API.  While this works fine for simple use cases, where you just
-> > want to enable/disable an optional clock (clk_prepare_enable() and
-> > clk_disable_unprepare()), it does not work for more complex use cases.
->
-> Agreed. But for clks and gpiods and regulators the simple case is quite
-> usual. For irqs it isn't.
+[1] https://lore.kernel.org/linux-clk/20211216140022.16146-1-conor.dooley@microchip.com/T/
+[2] https://lore.kernel.org/linux-riscv/cover.1639744468.git.geert@linux-m68k.org/
+[3] https://lore.kernel.org/linux-riscv/cover.1639744106.git.geert@linux-m68k.org/
 
-It is for devices that can have either separate interrupts, or a single
-multiplexed interrupt.
+Changes from v3:
+- drop "mailbox: change mailbox-mpfs compatible string", already upstream:
+  commit f10b1fc0161cd99e
+- fix copy paste error in microchip,mpfs-mailbox dt-binding
+- remove whitespace in syscontroller dt entry
 
-The logic in e.g. drivers/tty/serial/sh-sci.c and
-drivers/spi/spi-rspi.c could be simplified and improved (currently
-it doesn't handle deferred probe) if platform_get_irq_optional()
-would return 0 instead of -ENXIO.
+Changes from v2:
+- dropped plic int header & corresponding defines in dts{,i}
+- use $ref to drmode in mpfs-musb binding
+- split changes to dts{,i} again: functional changes to existing
+  elements now are in a new patch
+- drop num-cs property in mpfs-spi binding
+- dont make the system controller a simple-mfd
+- move the separate bindings for rng/generic system services into the 
+  system controller binding
+- added an instance corei2c as i2c2 in the fabric dtsi
+- add version numbering to corepwm and corei2c compat string (-rtl-vN)
 
-> And if you cannot blindly use the dummy, then you're not the targetted
-> caller of *_get_optional() and should better use *_get() and handle
-> -ENODEV explicitly.
+Conor Dooley (14):
+  dt-bindings: soc/microchip: update syscontroller compatibles
+  dt-bindings: soc/microchip: add services as children of sys ctrlr
+  dt-bindings: i2c: add bindings for microchip mpfs i2c
+  dt-bindings: rtc: add bindings for microchip mpfs rtc
+  dt-bindings: gpio: add bindings for microchip mpfs gpio
+  dt-bindings: spi: add bindings for microchip mpfs spi
+  dt-bindings: usb: add bindings for microchip mpfs musb
+  dt-bindings: pwm: add microchip corepwm binding
+  riscv: dts: microchip: use clk defines for icicle kit
+  riscv: dts: microchip: add fpga fabric section to icicle kit
+  riscv: dts: microchip: refactor icicle kit device tree
+  riscv: dts: microchip: update peripherals in icicle kit device tree
+  riscv: dts: microchip: add new peripherals to icicle kit device tree
+  MAINTAINERS: update riscv/microchip entry
 
-No, because the janitors tend to consolidate error message handling,
-by moving the printing up, inside the *_get() methods.  That's exactly
-what happened here.
-So there are three reasons: because the absence of an optional IRQ
-is not an error, and thus that should not cause (a) an error code
-to be returned, and (b) an error message to be printed, and (c)
-because it can simplify the logic in device drivers.
+ .../bindings/gpio/microchip,mpfs-gpio.yaml    |  80 ++++++
+ .../bindings/i2c/microchip,mpfs-i2c.yaml      |  55 ++++
+ ...ilbox.yaml => microchip,mpfs-mailbox.yaml} |   6 +-
+ .../bindings/pwm/microchip,corepwm.yaml       |  75 +++++
+ .../bindings/rtc/microchip,mfps-rtc.yaml      |  63 +++++
+ .../microchip,mpfs-sys-controller.yaml        |  73 +++++
+ ...icrochip,polarfire-soc-sys-controller.yaml |  35 ---
+ .../bindings/spi/microchip,mpfs-spi.yaml      |  52 ++++
+ .../bindings/usb/microchip,mpfs-musb.yaml     |  59 ++++
+ MAINTAINERS                                   |   2 +
+ .../dts/microchip/microchip-mpfs-fabric.dtsi  |  25 ++
+ .../microchip/microchip-mpfs-icicle-kit.dts   | 115 ++++++--
+ .../boot/dts/microchip/microchip-mpfs.dtsi    | 262 +++++++++++++++---
+ arch/riscv/configs/icicle_kit_defconfig       | 134 +++++++++
+ 14 files changed, 932 insertions(+), 104 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
+ create mode 100644 Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
+ rename Documentation/devicetree/bindings/mailbox/{microchip,polarfire-soc-mailbox.yaml => microchip,mpfs-mailbox.yaml} (82%)
+ create mode 100644 Documentation/devicetree/bindings/pwm/microchip,corepwm.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+ delete mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml
+ create mode 100644 arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
+ create mode 100644 arch/riscv/configs/icicle_kit_defconfig
 
-Commit 8973ea47901c81a1 ("driver core: platform: Introduce
-platform_get_irq_optional()") fixed (b), but didn't address (a) and
-(c).
+-- 
+2.32.0
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
