@@ -2,44 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56CAB49069D
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jan 2022 12:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE82C4906B3
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jan 2022 12:07:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238896AbiAQLGz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S236370AbiAQLGz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Mon, 17 Jan 2022 06:06:55 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:25926 "EHLO
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:55978 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238961AbiAQLGj (ORCPT
+        with ESMTP id S238959AbiAQLGj (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jan 2022 06:06:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1642417600; x=1673953600;
+  t=1642417599; x=1673953599;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=lpP0lJkn+kaM0L/dSWda42EaX0finN6iz9h/n2ezhV4=;
-  b=c2HbDpqPJN9BVnb6Yy71VM6reT2hYNSSAwFZh+ICtW9VVMRODnAxb0Zn
-   VzZRTW/fuN17+jWd6ybdG70n6dmabJK5k/EqX1lcxkSGjF4q2kkToenYe
-   voFvpM/7wdqTusF4+eoiojJbwxUBCCifpXzRtQNoDTsK5I4CTh6CQSdbK
-   4gJ00DflI2OS1sVVvmInmWTr26IkP/h87sVlKHMDkSeMHhdmTnXX/AySL
-   89vGPAocxzhNwTFGPy5Z2snNHxqVyKs7/U01VZKIYWiZeE4CEU9HC4KJq
-   PD6rT1j3W4h6jlZlEEMc//paDqBr7NBuPIoFkf7Ag92kB2oI1ysFqIdu4
-   Q==;
-IronPort-SDR: UPWG/TkFqAVmK/OQhSiZm2kwsVkz3r/aFWDzsMOvcYDCJvzIxkvWSPM//plH9+7tK/RX342ib3
- AA1/NHh505sTgfqittMM3Q4mimHDE4Z5DVIkpELQNiYaZWOGg46wSaaesadow1nqsWU0utgLJw
- JM/dNIrsPOyt6o9HIUnJO7xsgK5Sp7WT+UZh+phvyPu37TXyC1DezlM/bKl1RFvFGTYe1mOJZp
- K/f5YyY0FNrxt5gXF3sjQ+MICve3iEz4/9b8o0HzG+xMYwWn8LPHcbOulCcPbGzxglYEsRoxs8
- A0u3/0c2U95alEivP17ksrcR
+  bh=+qPRXox7zPzI+myjQz8NC5TP9D5voUl5Cp51OFrTMa8=;
+  b=C1mSXSfTDFwE0LjkBM/l2DJZEzPkn+wKokAZ6ve5gKniISUVKUQXlXsb
+   Eoji3hwl0ykdEUq24x/eSs2ca5UJ57xLb4EEPyKIKEGXJtbtJmYMk/2DX
+   oRHHYNBUXrDgAB89okP3mY+InHeMGCHjbX1qsBsCFd6Vzqop4SPZ5ieFZ
+   cWpIUIBfLDzWutcazWGqxQbZJjqV9dNrRHyyXAn/GeIkovIatkl0BC14Q
+   Z/dmf6kOpph6hRV7PKOLCRv/1w22Ci/BmvW6FwYo03CDplz3zoNZQkTV3
+   EqU7VruhX1p7D3jDGuXi2/deB5CnfY8v5KGjY5KbURks1sRY0lHXh0aty
+   A==;
+IronPort-SDR: FMFs/dVFm1dh3LHmbvCAhNMyWmd0VJdKgV3IDMMMmQj6E7NG6jOvEp6uASzQ61JMwzCbA8jRd0
+ FafcqUJEWgltVhrtiMebFIIAT1QNaYvbCTLDsUiSfdt52t1wfic0I+qsd835tqYXcNrtY7AQqB
+ m6CVKQMgrD3UeszrwuRW1tvKTEhDssiubO8ilpGNALGQNgLFt2Yu0SPwj/C/1nSTLS4dDqLnxX
+ LDJvPWNHR+ZhqH6t6ObAj6SrBYrl5cRIOInHod9/XT/z7Gd35n7mKpQsipoWK6s2wMT+tE/Olg
+ UA4NzN1mWxWYV6342OgmWRif
 X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="149870616"
+   d="scan'208";a="142923821"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Jan 2022 04:06:39 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Jan 2022 04:06:37 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 17 Jan 2022 04:06:29 -0700
+ 15.1.2375.17; Mon, 17 Jan 2022 04:06:36 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
  (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 17 Jan 2022 04:06:24 -0700
+ Transport; Mon, 17 Jan 2022 04:06:31 -0700
 From:   <conor.dooley@microchip.com>
 To:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
         <robh+dt@kernel.org>, <jassisinghbrar@gmail.com>,
@@ -58,9 +58,9 @@ CC:     <krzysztof.kozlowski@canonical.com>, <geert@linux-m68k.org>,
         <lewis.hanly@microchip.com>, <conor.dooley@microchip.com>,
         <daire.mcnamara@microchip.com>, <ivan.griffin@microchip.com>,
         <atishp@rivosinc.com>
-Subject: [PATCH v4 06/14] dt-bindings: spi: add bindings for microchip mpfs spi
-Date:   Mon, 17 Jan 2022 11:07:47 +0000
-Message-ID: <20220117110755.3433142-7-conor.dooley@microchip.com>
+Subject: [PATCH v4 07/14] dt-bindings: usb: add bindings for microchip mpfs musb
+Date:   Mon, 17 Jan 2022 11:07:48 +0000
+Message-ID: <20220117110755.3433142-8-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220117110755.3433142-1-conor.dooley@microchip.com>
 References: <20220117110755.3433142-1-conor.dooley@microchip.com>
@@ -73,49 +73,53 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-Add device tree bindings for the {q,}spi controller on
+Add device tree bindings for the usb controller on
 the Microchip PolarFire SoC.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- .../bindings/spi/microchip,mpfs-spi.yaml      | 52 +++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+ .../bindings/usb/microchip,mpfs-musb.yaml     | 59 +++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml
 
-diff --git a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+diff --git a/Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml b/Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml
 new file mode 100644
-index 000000000000..ece261b8e963
+index 000000000000..48c458c65848
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-@@ -0,0 +1,52 @@
++++ b/Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml
+@@ -0,0 +1,59 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/spi/microchip,mpfs-spi.yaml#
++$id: http://devicetree.org/schemas/usb/microchip,mpfs-musb.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Microchip MPFS {Q,}SPI Controller Device Tree Bindings
++title: Microchip MPFS USB Controller Device Tree Bindings
++
++allOf:
++  - $ref: usb-drd.yaml#
 +
 +maintainers:
 +  - Conor Dooley <conor.dooley@microchip.com>
 +
-+allOf:
-+  - $ref: spi-controller.yaml#
-+
 +properties:
 +  compatible:
 +    enum:
-+      - microchip,mpfs-spi
-+      - microchip,mpfs-qspi
++      - microchip,mpfs-musb
++
++  dr_mode: true
 +
 +  reg:
 +    maxItems: 1
 +
 +  interrupts:
-+    maxItems: 1
++    minItems: 2
++    maxItems: 2
 +
-+  clock-names:
-+    maxItems: 1
++  interrupt-names:
++    items:
++      - const: dma
++      - const: mc
 +
 +  clocks:
 +    maxItems: 1
@@ -124,21 +128,24 @@ index 000000000000..ece261b8e963
 +  - compatible
 +  - reg
 +  - interrupts
++  - interrupt-names
 +  - clocks
 +
-+unevaluatedProperties: false
++additionalProperties: false
 +
 +examples:
 +  - |
 +    #include "dt-bindings/clock/microchip,mpfs-clock.h"
-+    spi@20108000 {
-+        compatible = "microchip,mpfs-spi";
-+        reg = <0x20108000 0x1000>;
-+        clocks = <&clkcfg CLK_SPI0>;
++    usb@20201000 {
++        compatible = "microchip,mpfs-musb";
++        reg = <0x20201000 0x1000>;
++        clocks = <&clkcfg CLK_USB>;
 +        interrupt-parent = <&plic>;
-+        interrupts = <54>;
-+        spi-max-frequency = <25000000>;
++        interrupts = <86>, <87>;
++        interrupt-names = "dma", "mc";
++        dr_mode = "host";
 +    };
++
 +...
 -- 
 2.32.0
