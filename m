@@ -2,187 +2,122 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B00490208
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jan 2022 07:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47EF8490405
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jan 2022 09:39:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbiAQGjB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 17 Jan 2022 01:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
+        id S238272AbiAQIjh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Jan 2022 03:39:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbiAQGjB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jan 2022 01:39:01 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F54C061574;
-        Sun, 16 Jan 2022 22:39:01 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id l17so18287506qtk.7;
-        Sun, 16 Jan 2022 22:39:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=SCIluCFzTxQ0TtrLY6TuEHxf2MUxrzhJh6COmbq3iWU=;
-        b=XUOQMXTUtcTfOf9BsQpiygXXKiUZc56gNZVtQH+/NF1tVv/BkUFzyjB3SIKUb+dbuQ
-         KPrNrebmoNr4hVysDx284sWPjG7Zfyf2h6Dl9k1ORBcfkqgytMJtXBVGLGS9F62Ua+3U
-         Q+JTzHzydRtLOW7WPYw8iKLVlXLfYM2fUPRfg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=SCIluCFzTxQ0TtrLY6TuEHxf2MUxrzhJh6COmbq3iWU=;
-        b=ILRJgHtfauNxr83wxsav4JfZT0UBAIY9It3mujIFtBiaoUemxxnPLV7S7Y3lTImDt7
-         Pt7P/MYj+G1fGfGrUzjDo8mi6iqbHvM/V6UuEMHmt+8cwD5q0K/dnBgeysE8sdghjW3G
-         HdP31cjSWTbcmR8/fl4/EZxgYwrZN+gl36UnGzNUhaOTkOyLKmYN/Ald5WENxzgckRcM
-         EeeA6hnFtFPISSpNNjMXBVq9UnVRBo702mP8YVhCVNLHloqKcdCPkzxpXcJHOxKEYfAG
-         o8hh75WJHLKLJkW2rt2NYJ31q1M1Jp/5zvq4e9qHkR+NEKkTFioiBfPKT5sV/9clQ/jQ
-         am+g==
-X-Gm-Message-State: AOAM5301TkD/NKOJDEMRoJ+dVzXt5GvAy9rdahPM1qJXOvgODgMWu5Yr
-        WFnHpDr+PMq1qiYU+ruUm/nBuLMuAYGlmzRHhFxX42eAABU=
-X-Google-Smtp-Source: ABdhPJx3A0SkN3aZCX5+Oi0LolEDukEZHIZ692Qeofq4HDx8uEkmYcqjeqjrsjqSUuJ2WKtgmVX8UiT86lQy8L2WoxI=
-X-Received: by 2002:a05:622a:1116:: with SMTP id e22mr7453887qty.58.1642401540369;
- Sun, 16 Jan 2022 22:39:00 -0800 (PST)
+        with ESMTP id S238285AbiAQIje (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jan 2022 03:39:34 -0500
+Received: from server00.inetadmin.eu (server00.inetadmin.eu [IPv6:2a01:390:1:2:e1b1:2:0:d7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107EBC061574;
+        Mon, 17 Jan 2022 00:39:34 -0800 (PST)
+Received: from [192.168.1.103] (ip-46.34.226.0.o2inet.sk [46.34.226.0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: miroslav@wisdomtech.sk)
+        by server00.inetadmin.eu (Postfix) with ESMTPSA id 4E4D613A1B0;
+        Mon, 17 Jan 2022 09:39:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wisdomtech.sk;
+        s=dkiminetadmin; t=1642408771;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v+W0OeyEs/aAhaW1aUtr5IDfrkfeKWnzFmDd9YiGUYw=;
+        b=eIeTB78Nytlun94F/ydkU0PPjYRed7iZUvtyfsYUAOdXOb4wibhuLNNHmSzZxszExWsuDR
+        mrhchEfoGru/DTHepjEze7bwYZU6aQ9HmZgaA4mgVV3md6rmWJdtUcrJCCpfYM5rgOHpG2
+        1kwSOB1MP9gAW/OoqZT1e9p+A6ux4QI=
+Message-ID: <541865be-207d-01db-efc4-7eff600d56dc@wisdomtech.sk>
+Date:   Mon, 17 Jan 2022 09:39:20 +0100
 MIME-Version: 1.0
-References: <20220109132613.122912-1-guoheyi@linux.alibaba.com>
- <ad5e5438-4a3f-2447-4af3-7caa91e7252a@linux.alibaba.com> <CACPK8XcYp9iAD3fjBQCax41C-1UpA+1AQW3epyEooYzNLt7R5g@mail.gmail.com>
- <e62fba0b-ebb9-934a-d7cf-6da33ecc4335@linux.alibaba.com>
-In-Reply-To: <e62fba0b-ebb9-934a-d7cf-6da33ecc4335@linux.alibaba.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Mon, 17 Jan 2022 06:38:48 +0000
-Message-ID: <CACPK8Xc+v132vM-ytdAUFhywFXGpPF+uPSBWi68ROf_PLD4VQQ@mail.gmail.com>
-Subject: Re: [PATCH] drivers/i2c-aspeed: avoid invalid memory reference after timeout
-To:     Heyi Guo <guoheyi@linux.alibaba.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: Touchpad stickiness on AMD laptops (was Dell Inspiron/XPS)
+Content-Language: en-US
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Benjamin Tissoires <btissoir@redhat.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andrea Ippolito <andrea.ippo@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alex Hung <alex.hung@canonical.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>
+References: <CAGhUXvBw4rzCQrqttyyS=Psxmhppk79c6fDoxPbV91jE7fO_9A@mail.gmail.com>
+ <CAGhUXvDNj2v3O==+wWWKPYVzej8Vq+WNiBtPwmYxSQ2dTuLb9Q@mail.gmail.com>
+ <CAGhUXvC8eHfxEKzkGN06VvRU6Z0ko7MJ9hF6uXNq+PxRZSbEmQ@mail.gmail.com>
+ <70cbe360-6385-2536-32bd-ae803517d2b2@redhat.com> <YdbrLz3tU4ohANDk@ninjato>
+ <42c83ec8-bbac-85e2-9ab5-87e59a679f95@redhat.com>
+ <CAO-hwJJ9ALxpd5oRU8SQ3F65hZjDitR=MzmwDk=uiEguaXZYtw@mail.gmail.com>
+ <5409e747-0c51-24e2-7ffa-7dd9c8a7aec7@amd.com> <Yd6SRl7sm8zS85Al@ninjato>
+ <596d6af1-d67c-b9aa-0496-bd898350865c@wisdomtech.sk>
+ <d39101a9-adc6-df32-12f5-fccc8fd34515@amd.com>
+ <5c0ed06a-617e-077a-a4a4-549e91d372ba@wisdomtech.sk>
+ <BL1PR12MB5157412781B6C84B97C2A3E7E2559@BL1PR12MB5157.namprd12.prod.outlook.com>
+From:   =?UTF-8?Q?Miroslav_Bend=c3=adk?= <miroslav@wisdomtech.sk>
+In-Reply-To: <BL1PR12MB5157412781B6C84B97C2A3E7E2559@BL1PR12MB5157.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 14 Jan 2022 at 14:01, Heyi Guo <guoheyi@linux.alibaba.com> wrote:
+> [AMD Official Use Only]
 >
-> Hi Joel,
+>> Now i am trying to change ASF registers instead of SMBus registers.
+>> I have tried to enable interrupts and set listen address, but it don't
+>> work or
+>> i can't recognize the difference between interrupts generated by
+>> transfers and
+>> interrupts generated from slave.
+> Try reading the value of SFx0A ASFStatus bit 5 (it's write to clear if it's an interrupt).
+>
+>> outb_p(0x02, 0x15 + piix4_smba); // SlaveIntrListenEn
+>> outb_p(0x2c << 1 | 0x01, 0x09 + piix4_smba); // ListenAdr | ListenAdrEn
+> ASFx04 SlaveAddress instead of  ASFx09 ListenAdr
+> ?
 >
 >
-> =E5=9C=A8 2022/1/11 =E4=B8=8B=E5=8D=886:51, Joel Stanley =E5=86=99=E9=81=
-=93:
-> > On Tue, 11 Jan 2022 at 07:52, Heyi Guo <guoheyi@linux.alibaba.com> wrot=
-e:
-> >> Hi all,
-> >>
-> >> Any comments?
-> >>
-> >> Thanks,
-> >>
-> >> Heyi
-> >>
-> >> =E5=9C=A8 2022/1/9 =E4=B8=8B=E5=8D=889:26, Heyi Guo =E5=86=99=E9=81=93=
-:
-> >>> The memory will be freed by the caller if transfer timeout occurs,
-> >>> then it would trigger kernel panic if the peer device responds with
-> >>> something after timeout and triggers the interrupt handler of aspeed
-> >>> i2c driver.
-> >>>
-> >>> Set the msgs pointer to NULL to avoid invalid memory reference after
-> >>> timeout to fix this potential kernel panic.
-> > Thanks for the patch. How did you discover this issue? Do you have a
-> > test I can run to reproduce the crash?
->
-> We are using one i2c channel to communicate with another MCU by
-> implementing user space SSIF protocol, and the MCU may not respond in
-> time if it is busy. If it responds after timeout occurs, it will trigger
-> below kernel panic:
->
+Little bit more informations:
 
-Thanks for the details. It looks like you've done some testing of
-this, which is good.
+Interrupts are generated only if ASFx09 ListenAdr is:
 
-> After applying this patch, we'll get below warning instead:
->
-> "bus in unknown state. irq_status: 0x%x\n"
+(0x08 << 1) | 0x01
+(0x10 << 1) | 0x01
 
-Given we get to here in the irq handler, we've done these two tests:
+and touchpad is initialized with synaptics_intertouch=1
 
- - aspeed_i2c_is_irq_error()
- - the state is not INACTIVE or PENDING
+There is maybe small correlation between frequency and touch, but i am
+not 100% sure.
 
-but there's no buffer ready for us to use. So what has triggered the
-IRQ in this case? Do you have a record of the irq status bits?
+There are no register changed in interrupt handler except of
+ASFx13 DataBankSel. I can't determine if interrupt is generated from
+transfer, or from external event.
 
-I am wondering if the driver should know that the transaction has
-timed out, instead of detecting this unknown state.
+ASF should be system for remote management. It should have access to
+SMBus and data / command registers are identical, this means, that SMBus
+should work (except block transfers).
 
+If ASF just mirrors SMBus, then question is, why i can't access to
+touchpad using SMBus? One strange thing is, that i2cdetect on standard
+SMbus (0xb00), port 0 returns:
 
-> > Can you provide a Fixes tag?
->
-> I think the bug was introduced by the first commit of this file :(
->
-> f327c686d3ba44eda79a2d9e02a6a242e0b75787
->
->
-> >
-> > Do other i2c master drivers do this? I took a quick look at the meson
-> > driver and it doesn't appear to clear it's pointer to msgs.
->
-> It is hard to say. It seems other drivers have some recover scheme like
-> aborting the transfer, or loop each messages in process context and
-> don't do much in IRQ handler, which may disable interrupts or not retain
-> the buffer pointer before returning timeout.
+      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- 36 37 -- -- -- -- -- -- -- --
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+50: 50 -- -- -- -- -- -- -- 58 -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+70: -- -- -- -- -- -- -- --
 
-I think your change is okay to go in as it fixes the crash, but first
-I want to work out if there's some missing handling of a timeout
-condition that we should add as well.
+Address 0x58 is exactly 0x2c (synaptics) moved 1 bit left, but i2c-piix4
+correctly moves address.
 
-
->
-> Thanks,
->
-> Heyi
->
->
-> >
-> >>> Signed-off-by: Heyi Guo <guoheyi@linux.alibaba.com>
-> >>>
-> >>> -------
-> >>>
-> >>> Cc: Brendan Higgins <brendanhiggins@google.com>
-> >>> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> >>> Cc: Joel Stanley <joel@jms.id.au>
-> >>> Cc: Andrew Jeffery <andrew@aj.id.au>
-> >>> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> >>> Cc: linux-i2c@vger.kernel.org
-> >>> Cc: openbmc@lists.ozlabs.org
-> >>> Cc: linux-arm-kernel@lists.infradead.org
-> >>> Cc: linux-aspeed@lists.ozlabs.org
-> >>> ---
-> >>>    drivers/i2c/busses/i2c-aspeed.c | 5 +++++
-> >>>    1 file changed, 5 insertions(+)
-> >>>
-> >>> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c=
--aspeed.c
-> >>> index 67e8b97c0c950..3ab0396168680 100644
-> >>> --- a/drivers/i2c/busses/i2c-aspeed.c
-> >>> +++ b/drivers/i2c/busses/i2c-aspeed.c
-> >>> @@ -708,6 +708,11 @@ static int aspeed_i2c_master_xfer(struct i2c_ada=
-pter *adap,
-> >>>                spin_lock_irqsave(&bus->lock, flags);
-> >>>                if (bus->master_state =3D=3D ASPEED_I2C_MASTER_PENDING=
-)
-> >>>                        bus->master_state =3D ASPEED_I2C_MASTER_INACTI=
-VE;
-> >>> +             /*
-> >>> +              * All the buffers may be freed after returning to call=
-er, so
-> >>> +              * set msgs to NULL to avoid memory reference after fre=
-eing.
-> >>> +              */
-> >>> +             bus->msgs =3D NULL;
-> >>>                spin_unlock_irqrestore(&bus->lock, flags);
-> >>>
-> >>>                return -ETIMEDOUT;
