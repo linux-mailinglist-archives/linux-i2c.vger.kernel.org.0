@@ -2,41 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 661B9490EAB
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jan 2022 18:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE828490E9B
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jan 2022 18:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243067AbiAQRLW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 17 Jan 2022 12:11:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56292 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242785AbiAQRIN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jan 2022 12:08:13 -0500
+        id S243202AbiAQRLX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Jan 2022 12:11:23 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53484 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243041AbiAQRIV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jan 2022 12:08:21 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1C87612C5;
-        Mon, 17 Jan 2022 17:08:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55BFEC36AF8;
-        Mon, 17 Jan 2022 17:08:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98650B81163;
+        Mon, 17 Jan 2022 17:08:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7536CC36B03;
+        Mon, 17 Jan 2022 17:08:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642439292;
-        bh=P8JodIRX2uzjywT3FD6+DpyuTrOHA3GSKST3Iwdgot4=;
+        s=k20201202; t=1642439299;
+        bh=acYIa2DHDSiyTToTyPnjGfQq3nXl/LCD7YZBPa9Qvbc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VLmxv1pjJvz+H9yO8jJvIg+/mp8Vmcjm2EwZ9oz2m9sY8+Hg5zsADln4vH0bsE+hY
-         B5rS8K01uZLCGA+rVfcHkWMGz3cyjSbbLw9IaFfe++PU8QGQhFgn06I90utGbk3B7n
-         VzbuKRtIaFlDNM0/39XMKDYsQIhf8lf3EPQ+NVtFapslRhUz2zB/C6jBA5qG1Hjjru
-         HL5MwOugstyOmS0KIR1k2tm8rsyDXNnsfNr2GKDzguoRWBBb6ed3Hqppul116LM+cU
-         lKhCn1F/ZU2T600yJuVRmiU8eQiJeMBzP9EdtH9hOzn2OHwJPsqDJ6G/3pW0cnSF1P
-         HKRM9fGNY4tOA==
+        b=RXonZqlQJ68Q5XI3BKAxPgyvjfCS4oG1uxBp40XlSZlwEFyI2ZCYWVcZD9FzUzAFJ
+         YbpbxnKM0LDxUdlWC1X/I7sWGgV91PqUrMkncXJPdFI6yKvTbsLjtwHL9UPEb6L7zw
+         tBznVuZ993awGE2Z+91g40EngyUxRVWsBtOB8GsTSWsqkBkPWNhWGpVtqbWEI2rta7
+         Ae3cML0fsbt7ftRZMiPtc8pBb7T7o2nOk3EuiWk2CvXkTLhmoptsC2So4QtnN1ntLM
+         Xpab9gusSXz/168XPEiKt/LaSNUXuiBaULhYc3YSDFWuCSgG24JyujERXe+QOyJtc7
+         AMBv14zMKWuzQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Joakim Tjernlund <joakim.tjernlund@infinera.com>,
-        Scott Wood <oss@buserror.net>, Wolfram Sang <wsa@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        chris.packham@alliedtelesis.co.nz, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 07/12] i2c: mpc: Correct I2C reset procedure
-Date:   Mon, 17 Jan 2022 12:07:51 -0500
-Message-Id: <20220117170757.1473318-7-sashal@kernel.org>
+Cc:     Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 10/12] i2c: designware-pci: Fix to change data types of hcnt and lcnt parameters
+Date:   Mon, 17 Jan 2022 12:07:54 -0500
+Message-Id: <20220117170757.1473318-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220117170757.1473318-1-sashal@kernel.org>
 References: <20220117170757.1473318-1-sashal@kernel.org>
@@ -48,68 +49,42 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Joakim Tjernlund <joakim.tjernlund@infinera.com>
+From: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
 
-[ Upstream commit ebe82cf92cd4825c3029434cabfcd2f1780e64be ]
+[ Upstream commit d52097010078c1844348dc0e467305e5f90fd317 ]
 
-Current I2C reset procedure is broken in two ways:
-1) It only generate 1 START instead of 9 STARTs and STOP.
-2) It leaves the bus Busy so every I2C xfer after the first
-   fixup calls the reset routine again, for every xfer there after.
+The data type of hcnt and lcnt in the struct dw_i2c_dev is of type u16.
+It's better to have same data type in struct dw_scl_sda_cfg as well.
 
-This fixes both errors.
-
-Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
-Acked-by: Scott Wood <oss@buserror.net>
+Reported-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-mpc.c | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
+ drivers/i2c/busses/i2c-designware-pcidrv.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
-index 2e083a71c2215..988ea9df6654c 100644
---- a/drivers/i2c/busses/i2c-mpc.c
-+++ b/drivers/i2c/busses/i2c-mpc.c
-@@ -107,23 +107,30 @@ static irqreturn_t mpc_i2c_isr(int irq, void *dev_id)
- /* Sometimes 9th clock pulse isn't generated, and slave doesn't release
-  * the bus, because it wants to send ACK.
-  * Following sequence of enabling/disabling and sending start/stop generates
-- * the 9 pulses, so it's all OK.
-+ * the 9 pulses, each with a START then ending with STOP, so it's all OK.
-  */
- static void mpc_i2c_fixup(struct mpc_i2c *i2c)
- {
- 	int k;
--	u32 delay_val = 1000000 / i2c->real_clk + 1;
--
--	if (delay_val < 2)
--		delay_val = 2;
-+	unsigned long flags;
+diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+index 1543d35d228df..6831883741215 100644
+--- a/drivers/i2c/busses/i2c-designware-pcidrv.c
++++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+@@ -53,10 +53,10 @@ enum dw_pci_ctl_id_t {
+ };
  
- 	for (k = 9; k; k--) {
- 		writeccr(i2c, 0);
--		writeccr(i2c, CCR_MSTA | CCR_MTX | CCR_MEN);
-+		writeb(0, i2c->base + MPC_I2C_SR); /* clear any status bits */
-+		writeccr(i2c, CCR_MEN | CCR_MSTA); /* START */
-+		readb(i2c->base + MPC_I2C_DR); /* init xfer */
-+		udelay(15); /* let it hit the bus */
-+		local_irq_save(flags); /* should not be delayed further */
-+		writeccr(i2c, CCR_MEN | CCR_MSTA | CCR_RSTA); /* delay SDA */
- 		readb(i2c->base + MPC_I2C_DR);
--		writeccr(i2c, CCR_MEN);
--		udelay(delay_val << 1);
-+		if (k != 1)
-+			udelay(5);
-+		local_irq_restore(flags);
- 	}
-+	writeccr(i2c, CCR_MEN); /* Initiate STOP */
-+	readb(i2c->base + MPC_I2C_DR);
-+	udelay(15); /* Let STOP propagate */
-+	writeccr(i2c, 0);
- }
+ struct dw_scl_sda_cfg {
+-	u32 ss_hcnt;
+-	u32 fs_hcnt;
+-	u32 ss_lcnt;
+-	u32 fs_lcnt;
++	u16 ss_hcnt;
++	u16 fs_hcnt;
++	u16 ss_lcnt;
++	u16 fs_lcnt;
+ 	u32 sda_hold;
+ };
  
- static int i2c_wait(struct mpc_i2c *i2c, unsigned timeout, int writing)
 -- 
 2.34.1
 
