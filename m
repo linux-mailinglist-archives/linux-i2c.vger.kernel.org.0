@@ -2,169 +2,228 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57AF3490498
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jan 2022 10:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 421454904BF
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jan 2022 10:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233676AbiAQJIv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 17 Jan 2022 04:08:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32578 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233645AbiAQJIv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jan 2022 04:08:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642410530;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TCqojMBzneNNc6lN3uFWc2rgbGZACzzVm/491Ruez1Y=;
-        b=gaFDvhkbxtL6THmL40Hf5iEIWN5Aypb2EX6phkN/3sBdiP9oS4g65PmdVY4ZWswey7yRX5
-        lkTGF+KIIm81Cl7iGFVUhkL4+RBuJCuqZyNBqsR/wFbbH2wv/WyEej53/64WaAmfB2eItw
-        bKAGQevsMlRklYshblGW+K/ZXQdURcM=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-304-SAkwlcrdNQiFV0m7c59fzw-1; Mon, 17 Jan 2022 04:08:49 -0500
-X-MC-Unique: SAkwlcrdNQiFV0m7c59fzw-1
-Received: by mail-ed1-f71.google.com with SMTP id t11-20020aa7d70b000000b004017521782dso6053404edq.19
-        for <linux-i2c@vger.kernel.org>; Mon, 17 Jan 2022 01:08:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TCqojMBzneNNc6lN3uFWc2rgbGZACzzVm/491Ruez1Y=;
-        b=ZTeIOnfnCvNaxanown8/KBe90Gld1SKbDTRQmRQHKqg4iJO/JUwYBIeNacwETAyNzb
-         L30VcH8F6Kn1wunsfEezbB3hRQ1zx8rJ/y6x15T7TR8/jDHHc4yoj2E2EftHySKL1Cmq
-         HLCAxZFBlvl2TLx2lwGehT5t9dma4EIuExXRwx2cMk1ZhyVAIlH4CP0TnEF8nq4dMgmQ
-         4PemmuCkaCrvYW082nDcBGS8S327Yle9QpqJ2B9VlpxEI7lEHHOuvKHJgMkn2SOigPm9
-         lilWnsxOWIKeNQy0OqcneY7v4dEuCXW4afUg3zLD/QLQKqsvLwKDnSOq8VnpZ4QpB5gn
-         8uMQ==
-X-Gm-Message-State: AOAM530ONIX7IAh3Lxxa4jhsdU1yuYjPSHxDlOqPNfDDTLvFcJJH55BR
-        8KU6w7VF44XQkcGuMRJMv7mRukHWhdczZ0EewV+JEA6T2JunllF96E3LqiwmD2a396UHO/an6+7
-        8KwMwlChe6y9WCbuBTjsa
-X-Received: by 2002:a17:906:d54e:: with SMTP id cr14mr15920383ejc.527.1642410527888;
-        Mon, 17 Jan 2022 01:08:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwvwd/6SYaUs88+PunBhCPvnI0EorOQA/P4dO8yOYx3DEpXdTek9FzJWwgjdA3oF+nGHuY2gw==
-X-Received: by 2002:a17:906:d54e:: with SMTP id cr14mr15920364ejc.527.1642410527632;
-        Mon, 17 Jan 2022 01:08:47 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id t14sm647141edq.24.2022.01.17.01.08.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 01:08:47 -0800 (PST)
-Message-ID: <cf3c89a5-f242-2c1f-f636-fd3241b18ff1@redhat.com>
-Date:   Mon, 17 Jan 2022 10:08:46 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: Touchpad stickiness on AMD laptops (was Dell Inspiron/XPS)
-Content-Language: en-US
-To:     =?UTF-8?Q?Miroslav_Bend=c3=adk?= <miroslav@wisdomtech.sk>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Benjamin Tissoires <btissoir@redhat.com>,
-        Andrea Ippolito <andrea.ippo@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Alex Hung <alex.hung@canonical.com>,
+        id S235621AbiAQJZp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Jan 2022 04:25:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235626AbiAQJZo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jan 2022 04:25:44 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AD3C061574
+        for <linux-i2c@vger.kernel.org>; Mon, 17 Jan 2022 01:25:44 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n9OFv-0006KR-Ei; Mon, 17 Jan 2022 10:24:51 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n9OFp-00AnDX-Gd; Mon, 17 Jan 2022 10:24:44 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n9OFo-0002fs-6r; Mon, 17 Jan 2022 10:24:44 +0100
+Date:   Mon, 17 Jan 2022 10:24:44 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>, Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
         Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>
-References: <CAGhUXvBw4rzCQrqttyyS=Psxmhppk79c6fDoxPbV91jE7fO_9A@mail.gmail.com>
- <CAGhUXvDNj2v3O==+wWWKPYVzej8Vq+WNiBtPwmYxSQ2dTuLb9Q@mail.gmail.com>
- <CAGhUXvC8eHfxEKzkGN06VvRU6Z0ko7MJ9hF6uXNq+PxRZSbEmQ@mail.gmail.com>
- <70cbe360-6385-2536-32bd-ae803517d2b2@redhat.com> <YdbrLz3tU4ohANDk@ninjato>
- <42c83ec8-bbac-85e2-9ab5-87e59a679f95@redhat.com>
- <CAO-hwJJ9ALxpd5oRU8SQ3F65hZjDitR=MzmwDk=uiEguaXZYtw@mail.gmail.com>
- <5409e747-0c51-24e2-7ffa-7dd9c8a7aec7@amd.com> <Yd6SRl7sm8zS85Al@ninjato>
- <596d6af1-d67c-b9aa-0496-bd898350865c@wisdomtech.sk>
- <d39101a9-adc6-df32-12f5-fccc8fd34515@amd.com>
- <5c0ed06a-617e-077a-a4a4-549e91d372ba@wisdomtech.sk>
- <BL1PR12MB5157412781B6C84B97C2A3E7E2559@BL1PR12MB5157.namprd12.prod.outlook.com>
- <541865be-207d-01db-efc4-7eff600d56dc@wisdomtech.sk>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <541865be-207d-01db-efc4-7eff600d56dc@wisdomtech.sk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        platform-driver-x86@vger.kernel.org,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <20220117092444.opoedfcf5k5u6otq@pengutronix.de>
+References: <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
+ <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
+ <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru>
+ <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
+ <c9026f17-2b3f-ee94-0ea3-5630f981fbc1@omp.ru>
+ <CAMuHMdXVbRudGs69f9ZzaP1PXhteDNZiXA658eMFAwP4nr9r3w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ycu5k3o6g2lyq6o4"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdXVbRudGs69f9ZzaP1PXhteDNZiXA658eMFAwP4nr9r3w@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
 
-On 1/17/22 09:39, Miroslav Bendík wrote:
->> [AMD Official Use Only]
->>
->>> Now i am trying to change ASF registers instead of SMBus registers.
->>> I have tried to enable interrupts and set listen address, but it don't
->>> work or
->>> i can't recognize the difference between interrupts generated by
->>> transfers and
->>> interrupts generated from slave.
->> Try reading the value of SFx0A ASFStatus bit 5 (it's write to clear if it's an interrupt).
->>
->>> outb_p(0x02, 0x15 + piix4_smba); // SlaveIntrListenEn
->>> outb_p(0x2c << 1 | 0x01, 0x09 + piix4_smba); // ListenAdr | ListenAdrEn
->> ASFx04 SlaveAddress instead of  ASFx09 ListenAdr
->> ?
->>
->>
-> Little bit more informations:
-> 
-> Interrupts are generated only if ASFx09 ListenAdr is:
-> 
-> (0x08 << 1) | 0x01
-> (0x10 << 1) | 0x01
-> 
-> and touchpad is initialized with synaptics_intertouch=1
-> 
-> There is maybe small correlation between frequency and touch, but i am
-> not 100% sure.
+--ycu5k3o6g2lyq6o4
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I know very litlle about this, but I believe that when using
-host-notify that after receiving the host-notify you are supposed to
-do an I2C read from the SMBus Alert Response Address (ARA, 0x0c) to find
-out the source of the notify (since multiple devices on the bus may
-be notify capable). I guess that the controller may not do that itself
-and that as long as you have not done it the touchpad may keep repeating
-the notify.
+Hello Geert,
 
-But as said I know very little about this, so take this with a big
-grain of salt :)  I guess you may want to read up a bit on how this
-is supposed to work at the bus level. I believe that the SMBUS spec
-is public.
+On Mon, Jan 17, 2022 at 09:41:42AM +0100, Geert Uytterhoeven wrote:
+> On Sat, Jan 15, 2022 at 9:22 PM Sergey Shtylyov <s.shtylyov@omp.ru> wrote:
+> > On 1/14/22 11:22 PM, Uwe Kleine-K=F6nig wrote:
+> > > You have to understand that for clk (and regulator and gpiod) NULL is=
+ a
+> > > valid descriptor that can actually be used, it just has no effect. So
+> > > this is a convenience value for the case "If the clk/regulator/gpiod =
+in
+> > > question isn't available, there is nothing to do". This is what makes
+> > > clk_get_optional() and the others really useful and justifies their
+> > > existence. This doesn't apply to platform_get_irq_optional().
+> >
+> >    I do understand that. However, IRQs are a different beast with their
+> > own justifications...
+>=20
+> > > clk_get_optional() is sane and sensible for cases where the clk might=
+ be
+> > > absent and it helps you because you don't have to differentiate betwe=
+en
+> > > "not found" and "there is an actual resource".
+> > >
+> > > The reason for platform_get_irq_optional()'s existence is just that
+> > > platform_get_irq() emits an error message which is wrong or suboptimal
+> >
+> >    I think you are very wrong here. The real reason is to simplify the
+> > callers.
+>=20
+> Indeed.
 
-Regards,
+The commit that introduced platform_get_irq_optional() said:
 
-Hans
+	Introduce a new platform_get_irq_optional() that works much like
+	platform_get_irq() but does not output an error on failure to
+	find the interrupt.
 
+So the author of 8973ea47901c81a1912bd05f1577bed9b5b52506 failed to
+mention the real reason? Or look at
+31a8d8fa84c51d3ab00bf059158d5de6178cf890:
 
+	[...] use platform_get_irq_optional() to get second/third IRQ
+	which are optional to avoid below error message during probe:
+	[...]
 
+Look through the output of
 
-> 
-> There are no register changed in interrupt handler except of
-> ASFx13 DataBankSel. I can't determine if interrupt is generated from
-> transfer, or from external event.
-> 
-> ASF should be system for remote management. It should have access to
-> SMBus and data / command registers are identical, this means, that SMBus
-> should work (except block transfers).
-> 
-> If ASF just mirrors SMBus, then question is, why i can't access to
-> touchpad using SMBus? One strange thing is, that i2cdetect on standard
-> SMbus (0xb00), port 0 returns:
-> 
->      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-> 00:                         -- -- -- -- -- -- -- --
-> 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 30: -- -- -- -- -- -- 36 37 -- -- -- -- -- -- -- --
-> 40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 50: 50 -- -- -- -- -- -- -- 58 -- -- -- -- -- -- --
-> 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 70: -- -- -- -- -- -- -- --
-> 
-> Address 0x58 is exactly 0x2c (synaptics) moved 1 bit left, but i2c-piix4
-> correctly moves address.
-> 
+	git log -Splatform_get_irq_optional
 
+to find several more of these.
+
+Also I fail to see how a caller of (today's) platform_get_irq_optional()
+is simpler than a caller of platform_get_irq() given that there is no
+semantic difference between the two. Please show me a single
+conversion from platform_get_irq to platform_get_irq_optional that
+yielded a simplification.
+
+So you need some more effort to convince me of your POV.
+
+> Even for clocks, you cannot assume that you can always blindly use
+> the returned dummy (actually a NULL pointer) to call into the clk
+> API.  While this works fine for simple use cases, where you just
+> want to enable/disable an optional clock (clk_prepare_enable() and
+> clk_disable_unprepare()), it does not work for more complex use cases.
+
+Agreed. But for clks and gpiods and regulators the simple case is quite
+usual. For irqs it isn't.
+
+And if you cannot blindly use the dummy, then you're not the targetted
+caller of *_get_optional() and should better use *_get() and handle
+-ENODEV explicitly.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--ycu5k3o6g2lyq6o4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHlNdMACgkQwfwUeK3K
+7AkbyQf/dzwfw39nzRfi8yss0CiqoAU/yS+7MsnZvnWGKQxcIojgK1OX/xdxiMKI
+C4HnYtImt4dRHJdZDTL5+BWmwrkKo3ytJl8YRHBffgzQdKfAXOit1Pce623dbYvd
+wKJedLR6H9VXuTa1ULEvTnC0cXupHaoxjvQbKkUhlz/PahrhX91+dNJcoWTB6eB2
+YSb6MMcqwMFJ6y2P4pDKDoCf0RNjt8EzTKMWUdx1zcCrqT+wDzA0Ub0UvM7EpUXn
+ziLd4JEC+3SxJZvr2Y8jPQUGb4RMr+Z20vfEOG154m+zZ5lZe7Pcp1ggo6wb+fZ9
+qM6JVYjExAvA43UcTTna2uSeE/+nfA==
+=gHVT
+-----END PGP SIGNATURE-----
+
+--ycu5k3o6g2lyq6o4--
