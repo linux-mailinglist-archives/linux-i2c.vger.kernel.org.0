@@ -2,162 +2,245 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A867492EDB
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jan 2022 21:01:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63675492F35
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jan 2022 21:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349001AbiARUAJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Jan 2022 15:00:09 -0500
-Received: from rere.qmqm.pl ([91.227.64.183]:51039 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348976AbiARUAH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:00:07 -0500
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 4Jdfkt03XJzK5;
-        Tue, 18 Jan 2022 21:00:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1642536006; bh=1NsUG/BObcKgzkj5/bYLxmNDT9t3TKYn2+OPiCW/G7s=;
-        h=Date:In-Reply-To:References:Subject:From:To:Cc:From;
-        b=LU8M68+rcfJtDvyGrCu+EOKWLIGmIuYHu4kGlZHPtlcEq5dd66Fo3UIhpIJNPVOwc
-         XaTd0JRBnEQHdCN5osd+Kcfep8kII5hOKyqcU9MMWdKp2uVKdbWk3vOJA0v03aC8zD
-         wPDoNjaTiKaGaGtPDx/PCzjt43OAxmG0cuU/FF+YJI/fFP6XgYgJX3iP8xayyONFCa
-         vPdSWgKVCtwKysFCFDjf8BbaQBKpk5qMrqYbYXdP3Fb2Tq+OjQGBqHMovJ5YyBEga9
-         nmkSCXapnivw4BzffbualDXm0CywOCrRZdxQU7ossqtflB+c5sv+ZTn/AccDDquCvK
-         kmvmMNAyKUvEQ==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.103.4 at mail
-Date:   Tue, 18 Jan 2022 21:00:05 +0100
-Message-Id: <fd14f1e81691f9655ea2ad58692df94dd2830230.1642535860.git.mirq-linux@rere.qmqm.pl>
-In-Reply-To: <cover.1642535860.git.mirq-linux@rere.qmqm.pl>
-References: <cover.1642535860.git.mirq-linux@rere.qmqm.pl>
-Subject: [PATCH v2 2/2] i2c: tegra: allow VI support to be compiled out
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-To:     Laxman Dewangan <ldewangan@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
+        id S1349156AbiARUV7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Jan 2022 15:21:59 -0500
+Received: from mxout03.lancloud.ru ([45.84.86.113]:41690 "EHLO
+        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233125AbiARUV4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jan 2022 15:21:56 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 291BD20A4270
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-iio@vger.kernel.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "ALSA Development Mailing List" <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-phy@lists.infradead.org>, <netdev@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Kishon Vijay Abraham I" <kishon@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        <platform-driver-x86@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        "Saravanan Sekar" <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        "William Breathitt Gray" <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Borislav Petkov" <bp@alien8.de>, Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <openipmi-developer@lists.sourceforge.net>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+        <linux-edac@vger.kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        "Mun Yew Tham" <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        "Linux MMC List" <linux-mmc@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        "James Morse" <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        <linux-mediatek@lists.infradead.org>,
+        "Brian Norris" <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+References: <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+ <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
+ <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
+ <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru>
+ <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
+ <57af1851-9341-985e-7b28-d2ba86770ecb@omp.ru>
+ <20220117084732.cdy2sash5hxp4lwo@pengutronix.de>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <68d3bb7a-7572-7495-d295-e1d512ef509e@omp.ru>
+Date:   Tue, 18 Jan 2022 23:21:45 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <20220117084732.cdy2sash5hxp4lwo@pengutronix.de>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Save a bit of code for older Tegra platforms by compiling out
-VI's I2C mode support that's used only for Tegra210.
+Hello!
 
-$ size i2c-tegra.o
-   text    data     bss     dec     hex filename
-  10385     240       8   10633    2989 i2c-tegra.o (full)
-   9617     240       8    9865    2689 i2c-tegra.o (no-dvc)
-   9389     240       8    9637    25a5 i2c-tegra.o (no-vi)
-   8617     240       8    8865    22a1 i2c-tegra.o (no-vi,no-dvc)
+On 1/17/22 11:47 AM, Uwe Kleine-K�nig wrote:
 
----
-v2: remove KConfig symbol as per Dmitry Osipenko's suggestion.
-    (Assuming that for Tegra210 the VI part will be used anyway.)
+[...]
+>>>>>>>>> To me it sounds much more logical for the driver to check if an
+>>>>>>>>> optional irq is non-zero (available) or zero (not available), than to
+>>>>>>>>> sprinkle around checks for -ENXIO. In addition, you have to remember
+>>>>>>>>> that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
+>>>>>>>>> (or some other error code) to indicate absence. I thought not having
+>>>>>>>>> to care about the actual error code was the main reason behind the
+>>>>>>>>> introduction of the *_optional() APIs.
+>>>>>>>
+>>>>>>>> No, the main benefit of gpiod_get_optional() (and clk_get_optional()) is
+>>>>>>>> that you can handle an absent GPIO (or clk) as if it were available.
+>>>>>>
+>>>>>>    Hm, I've just looked at these and must note that they match 1:1 with
+>>>>>> platform_get_irq_optional(). Unfortunately, we can't however behave the
+>>>>>> same way in request_irq() -- because it has to support IRQ0 for the sake
+>>>>>> of i8253 drivers in arch/...
+>>>>>
+>>>>> Let me reformulate your statement to the IMHO equivalent:
+>>>>>
+>>>>> 	If you set aside the differences between
+>>>>> 	platform_get_irq_optional() and gpiod_get_optional(),
+>>>>
+>>>>    Sorry, I should make it clear this is actually the diff between a would-be
+>>>> platform_get_irq_optional() after my patch, not the current code...
+>>>
+>>> The similarity is that with your patch both gpiod_get_optional() and
+>>> platform_get_irq_optional() return NULL and 0 on not-found. The relevant
+>>> difference however is that for a gpiod NULL is a dummy value, while for
+>>> irqs it's not. So the similarity is only syntactically, but not
+>>> semantically.
+>>
+>>    I have noting to say here, rather than optional IRQ could well have a different
+>> meaning than for clk/gpio/etc.
+>>
+>> [...]
+>>>>> However for an interupt this cannot work. You will always have to check
+>>>>> if the irq is actually there or not because if it's not you cannot just
+>>>>> ignore that. So there is no benefit of an optional irq.
+>>>>>
+>>>>> Leaving error message reporting aside, the introduction of
+>>>>> platform_get_irq_optional() allows to change
+>>>>>
+>>>>> 	irq = platform_get_irq(...);
+>>>>> 	if (irq < 0 && irq != -ENXIO) {
+>>>>> 		return irq;
+>>>>> 	} else if (irq >= 0) {
+>>>>
+>>>>    Rather (irq > 0) actually, IRQ0 is considered invalid (but still returned).
+>>>
+>>> This is a topic I don't feel strong for, so I'm sloppy here. If changing
+>>> this is all that is needed to convince you of my point ...
+>>
+>>    Note that we should absolutely (and first of all) stop returning 0 from platform_get_irq()
+>> on a "real" IRQ0. Handling that "still good" zero absolutely doesn't scale e.g. for the subsystems
+>> (like libata) which take 0 as an indication that the polling mode should be used... We can't afford
+>> to be sloppy here. ;-)
+> 
+> Then maybe do that really first?
 
-Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
----
- drivers/i2c/busses/i2c-tegra.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+   I'm doing it first already:
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 96bfe7013d85..6ced964c83b2 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -295,6 +295,7 @@ struct tegra_i2c_dev {
- };
- 
- #define IS_DVC(dev) (IS_ENABLED(CONFIG_ARCH_TEGRA_2x_SOC) && dev->is_dvc)
-+#define IS_VI(dev)  (IS_ENABLED(CONFIG_ARCH_TEGRA_210_SOC) && dev->is_vi)
- 
- static void dvc_writel(struct tegra_i2c_dev *i2c_dev, u32 val,
- 		       unsigned int reg)
-@@ -315,7 +316,7 @@ static u32 tegra_i2c_reg_addr(struct tegra_i2c_dev *i2c_dev, unsigned int reg)
- {
- 	if (IS_DVC(i2c_dev))
- 		reg += (reg >= I2C_TX_FIFO) ? 0x10 : 0x40;
--	else if (i2c_dev->is_vi)
-+	else if (IS_VI(i2c_dev))
- 		reg = 0xc00 + (reg << 2);
- 
- 	return reg;
-@@ -444,7 +445,7 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i2c_dev)
- 	u32 *dma_buf;
- 	int err;
- 
--	if (!i2c_dev->hw->has_apb_dma || i2c_dev->is_vi)
-+	if (!i2c_dev->hw->has_apb_dma || IS_VI(i2c_dev))
- 		return 0;
- 
- 	if (!IS_ENABLED(CONFIG_TEGRA20_APB_DMA)) {
-@@ -635,7 +636,7 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
- 	i2c_writel(i2c_dev, val, I2C_CNFG);
- 	i2c_writel(i2c_dev, 0, I2C_INT_MASK);
- 
--	if (i2c_dev->is_vi)
-+	if (IS_VI(i2c_dev))
- 		tegra_i2c_vi_init(i2c_dev);
- 
- 	switch (i2c_dev->bus_clk_rate) {
-@@ -687,7 +688,7 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
- 		return err;
- 	}
- 
--	if (!IS_DVC(i2c_dev) && !i2c_dev->is_vi) {
-+	if (!IS_DVC(i2c_dev) && !IS_VI(i2c_dev)) {
- 		u32 sl_cfg = i2c_readl(i2c_dev, I2C_SL_CNFG);
- 
- 		sl_cfg |= I2C_SL_CNFG_NACK | I2C_SL_CNFG_NEWSL;
-@@ -1612,7 +1613,9 @@ static const struct tegra_i2c_hw_feature tegra194_i2c_hw = {
- static const struct of_device_id tegra_i2c_of_match[] = {
- 	{ .compatible = "nvidia,tegra194-i2c", .data = &tegra194_i2c_hw, },
- 	{ .compatible = "nvidia,tegra186-i2c", .data = &tegra186_i2c_hw, },
-+#if IS_ENABLED(CONFIG_ARCH_TEGRA_210_SOC)
- 	{ .compatible = "nvidia,tegra210-i2c-vi", .data = &tegra210_i2c_hw, },
-+#endif
- 	{ .compatible = "nvidia,tegra210-i2c", .data = &tegra210_i2c_hw, },
- 	{ .compatible = "nvidia,tegra124-i2c", .data = &tegra124_i2c_hw, },
- 	{ .compatible = "nvidia,tegra114-i2c", .data = &tegra114_i2c_hw, },
-@@ -1643,7 +1646,8 @@ static void tegra_i2c_parse_dt(struct tegra_i2c_dev *i2c_dev)
- 	    of_device_is_compatible(np, "nvidia,tegra20-i2c-dvc"))
- 		i2c_dev->is_dvc = true;
- 
--	if (of_device_is_compatible(np, "nvidia,tegra210-i2c-vi"))
-+	if (IS_ENABLED(CONFIG_ARCH_TEGRA_210_SOC) &&
-+	    of_device_is_compatible(np, "nvidia,tegra210-i2c-vi"))
- 		i2c_dev->is_vi = true;
- }
- 
-@@ -1656,7 +1660,7 @@ static int tegra_i2c_init_clocks(struct tegra_i2c_dev *i2c_dev)
- 	if (i2c_dev->hw == &tegra20_i2c_hw || i2c_dev->hw == &tegra30_i2c_hw)
- 		i2c_dev->clocks[i2c_dev->nclocks++].id = "fast-clk";
- 
--	if (i2c_dev->is_vi)
-+	if (IS_VI(i2c_dev))
- 		i2c_dev->clocks[i2c_dev->nclocks++].id = "slow";
- 
- 	err = devm_clk_bulk_get(i2c_dev->dev, i2c_dev->nclocks,
-@@ -1777,7 +1781,7 @@ static int tegra_i2c_probe(struct platform_device *pdev)
- 	 * VI I2C device shouldn't be marked as IRQ-safe because VI I2C won't
- 	 * be used for atomic transfers.
- 	 */
--	if (!i2c_dev->is_vi)
-+	if (!IS_VI(i2c_dev))
- 		pm_runtime_irq_safe(i2c_dev->dev);
- 
- 	pm_runtime_enable(i2c_dev->dev);
-@@ -1850,7 +1854,7 @@ static int __maybe_unused tegra_i2c_runtime_resume(struct device *dev)
- 	 * power ON/OFF during runtime PM resume/suspend, meaning that
- 	 * controller needs to be re-initialized after power ON.
- 	 */
--	if (i2c_dev->is_vi) {
-+	if (IS_VI(i2c_dev)) {
- 		err = tegra_i2c_init(i2c_dev);
- 		if (err)
- 			goto disable_clocks;
--- 
-2.30.2
+https://lore.kernel.org/all/5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru/
 
+   This series is atop of the above patch...
+
+> I didn't recheck, but is this what the
+> driver changes in your patch is about?
+
+   Partly, yes. We can afford to play with the meaning of 0 after the above patch.
+
+> After some more thoughts I wonder if your focus isn't to align
+> platform_get_irq_optional to (clk|gpiod|regulator)_get_optional, but to
+> simplify return code checking. Because with your change we have:
+> 
+>  - < 0 -> error
+>  - == 0 -> no irq
+>  - > 0 -> irq
+
+   Mainly, yes. That's why the code examples were given in the description.
+
+> For my part I'd say this doesn't justify the change, but at least I
+> could better life with the reasoning. If you start at:
+> 
+> 	irq = platform_get_irq_optional(...)
+> 	if (irq < 0 && irq != -ENXIO)
+> 		return irq
+> 	else if (irq > 0)
+> 		setup_irq(irq);
+> 	else
+> 		setup_polling()
+> 
+> I'd change that to
+> 
+> 	irq = platform_get_irq_optional(...)
+> 	if (irq > 0) /* or >= 0 ? */
+
+   Not >= 0, no...
+
+> 		setup_irq(irq)
+> 	else if (irq == -ENXIO)
+> 		setup_polling()
+> 	else
+> 		return irq
+> 
+> This still has to mention -ENXIO, but this is ok and checking for 0 just
+> hardcodes a different return value.
+
+   I think comparing with 0 is simpler (and shorter) than with -ENXIO, if you
+consider the RISC CPUs, like e.g. MIPS...
+
+> Anyhow, I think if you still want to change platform_get_irq_optional
+> you should add a few patches converting some drivers which demonstrates
+> the improvement for the callers.
+
+   Mhm, I did include all the drivers where the IRQ checks have to be modified,
+not sure what else you want me to touch...
+
+> Best regards
+> Uwe
+
+MBR, Sergey
