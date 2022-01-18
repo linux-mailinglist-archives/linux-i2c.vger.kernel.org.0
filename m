@@ -2,114 +2,282 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71BAD492679
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jan 2022 14:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5513C49274D
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jan 2022 14:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbiARNKE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Jan 2022 08:10:04 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:60220 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238429AbiARNKA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jan 2022 08:10:00 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B43C31F3A1;
-        Tue, 18 Jan 2022 13:09:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642511398; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PXNNbzROyGOSXu3Z+k6OKKBWDzl97aAmRM32qh7TiVQ=;
-        b=wtX8HGOhrFg0h3Q5UneoMzpKaWzZ2O7xu1bx++vWf5YUR4mGGw4PIis3TkNuuTFF3qqav4
-        XIKf+DbGYgVJAYQpiJ+ANqXBq16ddcBm5SUJXu68ZJ/8Mxl1PFRvVewxYkQvISnQZuCIjr
-        8lwF+r2pFdWjUSr9Oje/PG55MkXp5Tg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642511398;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PXNNbzROyGOSXu3Z+k6OKKBWDzl97aAmRM32qh7TiVQ=;
-        b=e84QMXHBR7/VIHEJGkDVe/22kUYzDpnRD/Uw7Q5PumQYp089doYlmFTiiLpYSRLElbB9Ua
-        WYeVXtn5qdB4TrCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4418B13DC7;
-        Tue, 18 Jan 2022 13:09:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jNnaDSa85mEvCwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 18 Jan 2022 13:09:58 +0000
-Date:   Tue, 18 Jan 2022 14:09:56 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Terry Bowman <Terry.Bowman@amd.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Robert Richter <rrichter@amd.com>
-Subject: Re: [PATCH] i2c: piix4: Replace piix4_smbus driver's cd6h/cd7h port
- io accesses with mmio accesses
-Message-ID: <20220118140956.1e0538e7@endymion>
-In-Reply-To: <CAHp75VeR4sL1URhf+Vj6_fUjw3wgG98nZd8Mu20NzH1zM590SQ@mail.gmail.com>
-References: <33a0cd08-a336-34b3-d36c-f827b8054e9e@amd.com>
-        <c28ab909-99b4-b43c-e330-b07e35afb981@amd.com>
-        <ebee1239-4ed4-8c68-54e0-f684cea71e93@roeck-us.net>
-        <YdoG+en5Z/MaS/wu@ninjato>
-        <CAHp75VfC2XsF2j=obXu7RLNZkKSsZ20eOH2-UMA9AoMAemKa9Q@mail.gmail.com>
-        <Yd16cw0AaYcf7eSf@kunai>
-        <811d6ec7-7eac-dfd3-5927-4adcc2251fab@amd.com>
-        <CAHp75Vfv9kgxu5u1YfjEuRmwj=jSybmZ92bpt30jB8MX4LFHaQ@mail.gmail.com>
-        <CAHp75Vf3G1ftL6VrCchCTC7UbEyWD65wdjRjYOwxY9ONxZ=DCQ@mail.gmail.com>
-        <74eb7c8f-7072-495a-fc26-b60bf0a1f51a@amd.com>
-        <Yd/X6DlWjACLODe2@ninjato>
-        <CAHp75VeR4sL1URhf+Vj6_fUjw3wgG98nZd8Mu20NzH1zM590SQ@mail.gmail.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S242652AbiARNeO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Jan 2022 08:34:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242600AbiARNeF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jan 2022 08:34:05 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18F0C06173E;
+        Tue, 18 Jan 2022 05:34:04 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id DCC451F43EF3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1642512843;
+        bh=ka1tCJjbJu4h0AAgjoXH7kDQ7yHboZXVgWGNR9YjBCM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Q5Vw+eoBITiTEAzI17iHYxDLwuBJLRK919/yJVOkf9Iy5yYw7y32+cvpni9e1bUDM
+         sZodp9FqyqHveEQTBYIAWUC5j1FDS3dn/79a+hKgArzR7XNaimkvILCNDQdep6xu+Q
+         8h8Ek6m7SoxmR3B7SKJEM3RxwpdqD0KB4FIAbk7ef/TiCwmLi4D/F8Y5R+QeU7RzCR
+         Nm3in5rXPD7YZGS9nYIns/pwII4VxfyAUQgK9ZVfhMWM48ou9LBxKWiV0+wuuztfWz
+         Zm6PtOqWlPkGSCkNi6uDGT5/ODoKzGBFBgaa+NO6ky3Pw+XJShsRhEVUUmjWd7JwOs
+         JW3vyCPnt2Bkw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     qii.wang@mediatek.com
+Cc:     matthias.bgg@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH] i2c: busses: i2c-mt65xx: Simplify with clk-bulk
+Date:   Tue, 18 Jan 2022 14:33:58 +0100
+Message-Id: <20220118133358.111886-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 13 Jan 2022 12:24:41 +0200, Andy Shevchenko wrote:
-> On Thu, Jan 13, 2022 at 9:42 AM Wolfram Sang <wsa@kernel.org> wrote:
-> > > > On top of that I'm wondering why slow I/O is used? Do we have anything
-> > > > that really needs that or is it simply a cargo-cult?  
-> > >
-> > > The efch SMBUS & WDT previously only supported a port I/O interface
-> > > (until recently) and thus dictated the HW access method.  
-> >
-> > Is this enough information to start v2 of this series? Or does the
-> > approach need more discussion?  
-> 
-> I dunno why slow I/O is chosen, but it only affects design (read:
-> ugliness) of the new code.
+Since depending on the SoC or specific bus functionality some clocks
+may be optional, we cannot get the benefit of using devm_clk_bulk_get()
+but, by migrating to clk-bulk, we are able to remove the custom functions
+mtk_i2c_clock_enable() and mtk_i2c_clock_disable(), increasing common
+APIs usage, hence (lightly) decreasing kernel footprint.
 
-I've been wondering about the use of slow (*_p) I/O accessors for some
-time too. All the SMBus controller drivers doing that originate from the
-lm_sensors project (i2c-ali1535, i2c-ali1563, i2c-ali15x3, i2c-amd756,
-i2c-i801, i2c-nforce2, i2c-piix4 and i2c-viapro). So basically *all*
-SMBus controller drivers for non-embedded x86.
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/i2c/busses/i2c-mt65xx.c | 127 +++++++++++++-------------------
+ 1 file changed, 51 insertions(+), 76 deletions(-)
 
-I suspect that most of this is the result of copy-and-paste from one
-driver to the next as support for different chipsets was added in the
-late 90's and early 2000's. I wouldn't be surprised if most, if not
-all, can be replaced with non-pausing counterparts. But I've been too
-shy to give it a try so far.
-
-I must say I find it pretty funny that Andy is asking about it in the
-i2c-piix4 driver when the i2c-i801 driver, which he's been helping with
-quite a lot in the last few years, does exactly the same.
-
+diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+index 9ea427f53083..541b7be88375 100644
+--- a/drivers/i2c/busses/i2c-mt65xx.c
++++ b/drivers/i2c/busses/i2c-mt65xx.c
+@@ -85,6 +85,27 @@
+ 
+ #define I2C_DRV_NAME		"i2c-mt65xx"
+ 
++/**
++ * enum i2c_mt65xx_clks - Clocks enumeration for MT65XX I2C
++ *
++ * @I2C_MT65XX_CLK_MAIN: main clock for i2c bus
++ * @I2C_MT65XX_CLK_DMA:  DMA clock for i2c via DMA
++ * @I2C_MT65XX_CLK_PMIC: PMIC clock for i2c from PMIC
++ * @I2C_MT65XX_CLK_ARB:  Arbitrator clock for i2c
++ * @I2C_MT65XX_CLK_MAX:  Number of supported clocks
++ */
++enum i2c_mt65xx_clks {
++	I2C_MT65XX_CLK_MAIN = 0,
++	I2C_MT65XX_CLK_DMA,
++	I2C_MT65XX_CLK_PMIC,
++	I2C_MT65XX_CLK_ARB,
++	I2C_MT65XX_CLK_MAX
++};
++
++static const char * const i2c_mt65xx_clk_ids[I2C_MT65XX_CLK_MAX] = {
++	"main", "dma", "pmic", "arb"
++};
++
+ enum DMA_REGS_OFFSET {
+ 	OFFSET_INT_FLAG = 0x0,
+ 	OFFSET_INT_EN = 0x04,
+@@ -243,10 +264,7 @@ struct mtk_i2c {
+ 	/* set in i2c probe */
+ 	void __iomem *base;		/* i2c base addr */
+ 	void __iomem *pdmabase;		/* dma base address*/
+-	struct clk *clk_main;		/* main clock for i2c bus */
+-	struct clk *clk_dma;		/* DMA clock for i2c via DMA */
+-	struct clk *clk_pmic;		/* PMIC clock for i2c from PMIC */
+-	struct clk *clk_arb;		/* Arbitrator clock for i2c */
++	struct clk_bulk_data clocks[I2C_MT65XX_CLK_MAX]; /* clocks for i2c */
+ 	bool have_pmic;			/* can use i2c pins from PMIC */
+ 	bool use_push_pull;		/* IO config push-pull mode */
+ 
+@@ -434,55 +452,6 @@ static void mtk_i2c_writew(struct mtk_i2c *i2c, u16 val,
+ 	writew(val, i2c->base + i2c->dev_comp->regs[reg]);
+ }
+ 
+-static int mtk_i2c_clock_enable(struct mtk_i2c *i2c)
+-{
+-	int ret;
+-
+-	ret = clk_prepare_enable(i2c->clk_dma);
+-	if (ret)
+-		return ret;
+-
+-	ret = clk_prepare_enable(i2c->clk_main);
+-	if (ret)
+-		goto err_main;
+-
+-	if (i2c->have_pmic) {
+-		ret = clk_prepare_enable(i2c->clk_pmic);
+-		if (ret)
+-			goto err_pmic;
+-	}
+-
+-	if (i2c->clk_arb) {
+-		ret = clk_prepare_enable(i2c->clk_arb);
+-		if (ret)
+-			goto err_arb;
+-	}
+-
+-	return 0;
+-
+-err_arb:
+-	if (i2c->have_pmic)
+-		clk_disable_unprepare(i2c->clk_pmic);
+-err_pmic:
+-	clk_disable_unprepare(i2c->clk_main);
+-err_main:
+-	clk_disable_unprepare(i2c->clk_dma);
+-
+-	return ret;
+-}
+-
+-static void mtk_i2c_clock_disable(struct mtk_i2c *i2c)
+-{
+-	if (i2c->clk_arb)
+-		clk_disable_unprepare(i2c->clk_arb);
+-
+-	if (i2c->have_pmic)
+-		clk_disable_unprepare(i2c->clk_pmic);
+-
+-	clk_disable_unprepare(i2c->clk_main);
+-	clk_disable_unprepare(i2c->clk_dma);
+-}
+-
+ static void mtk_i2c_init_hw(struct mtk_i2c *i2c)
+ {
+ 	u16 control_reg;
+@@ -1149,7 +1118,7 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
+ 	int left_num = num;
+ 	struct mtk_i2c *i2c = i2c_get_adapdata(adap);
+ 
+-	ret = mtk_i2c_clock_enable(i2c);
++	ret = clk_bulk_prepare_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1203,7 +1172,7 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
+ 	ret = num;
+ 
+ err_exit:
+-	mtk_i2c_clock_disable(i2c);
++	clk_bulk_disable_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
+ 	return ret;
+ }
+ 
+@@ -1281,9 +1250,8 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+ {
+ 	int ret = 0;
+ 	struct mtk_i2c *i2c;
+-	struct clk *clk;
+ 	struct resource *res;
+-	int irq;
++	int i, irq, speed_clk;
+ 
+ 	i2c = devm_kzalloc(&pdev->dev, sizeof(*i2c), GFP_KERNEL);
+ 	if (!i2c)
+@@ -1329,35 +1297,42 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+ 	if (i2c->have_pmic && !i2c->dev_comp->pmic_i2c)
+ 		return -EINVAL;
+ 
+-	i2c->clk_main = devm_clk_get(&pdev->dev, "main");
+-	if (IS_ERR(i2c->clk_main)) {
++	/* Fill in clk-bulk IDs */
++	for (i = 0; i < I2C_MT65XX_CLK_MAX; i++)
++		i2c->clocks[i].id = i2c_mt65xx_clk_ids[i];
++
++	/* Get clocks one by one, some may be optional */
++	i2c->clocks[I2C_MT65XX_CLK_MAIN].clk = devm_clk_get(&pdev->dev, "main");
++	if (IS_ERR(i2c->clocks[I2C_MT65XX_CLK_MAIN].clk)) {
+ 		dev_err(&pdev->dev, "cannot get main clock\n");
+-		return PTR_ERR(i2c->clk_main);
++		return PTR_ERR(i2c->clocks[I2C_MT65XX_CLK_MAIN].clk);
+ 	}
+ 
+-	i2c->clk_dma = devm_clk_get(&pdev->dev, "dma");
+-	if (IS_ERR(i2c->clk_dma)) {
++	i2c->clocks[I2C_MT65XX_CLK_DMA].clk = devm_clk_get(&pdev->dev, "dma");
++	if (IS_ERR(i2c->clocks[I2C_MT65XX_CLK_DMA].clk)) {
+ 		dev_err(&pdev->dev, "cannot get dma clock\n");
+-		return PTR_ERR(i2c->clk_dma);
++		return PTR_ERR(i2c->clocks[I2C_MT65XX_CLK_DMA].clk);
+ 	}
+ 
+-	i2c->clk_arb = devm_clk_get(&pdev->dev, "arb");
+-	if (IS_ERR(i2c->clk_arb))
+-		i2c->clk_arb = NULL;
++	i2c->clocks[I2C_MT65XX_CLK_ARB].clk = devm_clk_get_optional(&pdev->dev, "arb");
++	if (IS_ERR(i2c->clocks[I2C_MT65XX_CLK_ARB].clk))
++		return PTR_ERR(i2c->clocks[I2C_MT65XX_CLK_ARB].clk);
+ 
+-	clk = i2c->clk_main;
+ 	if (i2c->have_pmic) {
+-		i2c->clk_pmic = devm_clk_get(&pdev->dev, "pmic");
+-		if (IS_ERR(i2c->clk_pmic)) {
++		i2c->clocks[I2C_MT65XX_CLK_PMIC].clk = devm_clk_get(&pdev->dev, "pmic");
++		if (IS_ERR(i2c->clocks[I2C_MT65XX_CLK_PMIC].clk)) {
+ 			dev_err(&pdev->dev, "cannot get pmic clock\n");
+-			return PTR_ERR(i2c->clk_pmic);
++			return PTR_ERR(i2c->clocks[I2C_MT65XX_CLK_PMIC].clk);
+ 		}
+-		clk = i2c->clk_pmic;
++		speed_clk = I2C_MT65XX_CLK_PMIC;
++	} else {
++		i2c->clocks[I2C_MT65XX_CLK_PMIC].clk = NULL;
++		speed_clk = I2C_MT65XX_CLK_MAIN;
+ 	}
+ 
+ 	strlcpy(i2c->adap.name, I2C_DRV_NAME, sizeof(i2c->adap.name));
+ 
+-	ret = mtk_i2c_set_speed(i2c, clk_get_rate(clk));
++	ret = mtk_i2c_set_speed(i2c, clk_get_rate(i2c->clocks[speed_clk].clk));
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Failed to set the speed.\n");
+ 		return -EINVAL;
+@@ -1372,13 +1347,13 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	ret = mtk_i2c_clock_enable(i2c);
++	ret = clk_bulk_prepare_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "clock enable failed!\n");
+ 		return ret;
+ 	}
+ 	mtk_i2c_init_hw(i2c);
+-	mtk_i2c_clock_disable(i2c);
++	clk_bulk_disable_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
+ 
+ 	ret = devm_request_irq(&pdev->dev, irq, mtk_i2c_irq,
+ 			       IRQF_NO_SUSPEND | IRQF_TRIGGER_NONE,
+@@ -1423,7 +1398,7 @@ static int mtk_i2c_resume_noirq(struct device *dev)
+ 	int ret;
+ 	struct mtk_i2c *i2c = dev_get_drvdata(dev);
+ 
+-	ret = mtk_i2c_clock_enable(i2c);
++	ret = clk_bulk_prepare_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+ 	if (ret) {
+ 		dev_err(dev, "clock enable failed!\n");
+ 		return ret;
+@@ -1431,7 +1406,7 @@ static int mtk_i2c_resume_noirq(struct device *dev)
+ 
+ 	mtk_i2c_init_hw(i2c);
+ 
+-	mtk_i2c_clock_disable(i2c);
++	clk_bulk_disable_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
+ 
+ 	i2c_mark_adapter_resumed(&i2c->adap);
+ 
 -- 
-Jean Delvare
-SUSE L3 Support
+2.33.1
+
