@@ -2,268 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F490492866
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jan 2022 15:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EC5492B8A
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jan 2022 17:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237993AbiAROa7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Jan 2022 09:30:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236670AbiAROa6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jan 2022 09:30:58 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C77C061574
-        for <linux-i2c@vger.kernel.org>; Tue, 18 Jan 2022 06:30:58 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n9pUj-0000wL-Of; Tue, 18 Jan 2022 15:29:57 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n9pUY-00B1DJ-N0; Tue, 18 Jan 2022 15:29:45 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n9pUX-0003HD-OO; Tue, 18 Jan 2022 15:29:45 +0100
-Date:   Tue, 18 Jan 2022 15:29:45 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        platform-driver-x86@vger.kernel.org,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>, Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        openipmi-developer@lists.sourceforge.net,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-Message-ID: <20220118142945.6y3rmvzt44pjpr4z@pengutronix.de>
-References: <20220117092444.opoedfcf5k5u6otq@pengutronix.de>
- <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
- <20220117114923.d5vajgitxneec7j7@pengutronix.de>
- <CAMuHMdWCKERO20R2iVHq8P=BaoauoBAtiampWzfMRYihi3Sb0g@mail.gmail.com>
- <20220117170609.yxaamvqdkivs56ju@pengutronix.de>
- <CAMuHMdXbuZqEpYivyS6hkaRN+CwTOGaHq_OROwVAWvDD6OXODQ@mail.gmail.com>
- <20220118090913.pjumkq4zf4iqtlha@pengutronix.de>
- <CAMuHMdUW8+Y_=uszD+JOZO3Lpa9oDayk+GO+cg276i2f2T285w@mail.gmail.com>
- <20220118120806.pbjsat4ulg3vnhsh@pengutronix.de>
- <CAMuHMdWkwV9XE_R5FZ=jPtDwLpDbEngG6+X2JmiDJCZJZvUjYA@mail.gmail.com>
+        id S1346349AbiARQvI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Jan 2022 11:51:08 -0500
+Received: from mail-eopbgr70055.outbound.protection.outlook.com ([40.107.7.55]:37185
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239060AbiARQvH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 18 Jan 2022 11:51:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sebuoAICtSsCfUveVIo2nBIcppFsWFuM5uV36ye0+ro=;
+ b=1zDwF6ttcKqJPuAS/6nQSbU82lpGisimNsdmuISMVQMfxCaBELizplcWJ1CSRCDksOjVi4OQRQ7oW4AJoJpr8aNdG1d3uBBwNOi8fnKUwdhzBrolGW7vajAD+WBd5l3rNOoB+Cp52aMmdMWUG5U9Z8C68VmkQ+JZpCzTMqxeR9s=
+Received: from AS9PR06CA0373.eurprd06.prod.outlook.com (2603:10a6:20b:460::8)
+ by AM5PR0801MB1858.eurprd08.prod.outlook.com (2603:10a6:203:47::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Tue, 18 Jan
+ 2022 16:51:05 +0000
+Received: from VE1EUR03FT063.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:20b:460:cafe::bc) by AS9PR06CA0373.outlook.office365.com
+ (2603:10a6:20b:460::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.12 via Frontend
+ Transport; Tue, 18 Jan 2022 16:51:05 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ VE1EUR03FT063.mail.protection.outlook.com (10.152.18.236) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4888.9 via Frontend Transport; Tue, 18 Jan 2022 16:51:05 +0000
+Received: ("Tessian outbound 31aeb3346a45:v113"); Tue, 18 Jan 2022 16:51:04 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: 66fe672b8be6912a
+X-CR-MTA-TID: 64aa7808
+Received: from 1ba3ee8dcea4.1
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id FC18619E-8AB8-4B23-885B-EAC92AD49913.1;
+        Tue, 18 Jan 2022 16:50:58 +0000
+Received: from EUR02-AM5-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 1ba3ee8dcea4.1
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Tue, 18 Jan 2022 16:50:58 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gDKoTxNnuWfHGaPGtMK9OteCWs8nzKXoWYliJVSqcWeDU/ogJo42c0Z9p8LHA7bhexcGJClHsaqjrX8e8fbR5fIxVqjyc+Y4JeFK5emfNbX5t9HWYk7QfmJtACJnE8W3lU5vGMErWBoO1xt1pH2gDP7uk04O0Z280uTomFjA2IztpXbdV3CjxOjvH1lGLpQzKuF0tMPrdjkF50ulKS1Kni5hnOop7xZbfueNHPd0eIEwV5APbMkDF8smdt6oSXDk4v6Lg2qlAliOgFQQ/SxzL3o6aRk+Hd4CWhOCt1skPpVTfEe0tdj4/xtQPjPQWWF5p5IrxNQ9hVHhGi5fggGfdg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sebuoAICtSsCfUveVIo2nBIcppFsWFuM5uV36ye0+ro=;
+ b=kHBG7tRFCaCjWPscTGx4YgnzGrcJ1IzZjVH2Qh3MV8AuP1W5DBSmPD7HTUlqrgFMB+G8xtsMbmwmiAFPoeW93/znQVHHNyDjGQXEA97lie4bzxEusmlGobJeg6MTURuBTmC/WeYwaRlYLQWapc3X05+BdWXO5RtZGsAppKR9gFxuva4y3z4JlXP/PpSTlGtylqEb8/uDU1t6fQflP60vvwJfVKf4FNv7ZA1hKU2IYSfjndtmkQjiFEKFkwAG5f/E34HbG8axNxSo+ygqFIAcFGpWrjOod6ns3YkigOsemhvx0/By7XFZlXuIeOAkuYne4u261ZRc0qeFTwUNjcd3wg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sebuoAICtSsCfUveVIo2nBIcppFsWFuM5uV36ye0+ro=;
+ b=1zDwF6ttcKqJPuAS/6nQSbU82lpGisimNsdmuISMVQMfxCaBELizplcWJ1CSRCDksOjVi4OQRQ7oW4AJoJpr8aNdG1d3uBBwNOi8fnKUwdhzBrolGW7vajAD+WBd5l3rNOoB+Cp52aMmdMWUG5U9Z8C68VmkQ+JZpCzTMqxeR9s=
+Received: from PA4PR08MB7411.eurprd08.prod.outlook.com (2603:10a6:102:2a3::12)
+ by AM0PR08MB5443.eurprd08.prod.outlook.com (2603:10a6:208:183::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Tue, 18 Jan
+ 2022 16:50:56 +0000
+Received: from PA4PR08MB7411.eurprd08.prod.outlook.com
+ ([fe80::d083:610d:66ce:9446]) by PA4PR08MB7411.eurprd08.prod.outlook.com
+ ([fe80::d083:610d:66ce:9446%8]) with mapi id 15.20.4888.013; Tue, 18 Jan 2022
+ 16:50:56 +0000
+From:   Ross Burton <Ross.Burton@arm.com>
+To:     Jean Delvare <jdelvare@suse.de>
+CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] py-smbus/setup.py: use setuptools instead of distutils
+Thread-Topic: [PATCH] py-smbus/setup.py: use setuptools instead of distutils
+Thread-Index: AQHYDGdgRnhGwhZ6AE288QYfDEtLFKxo/lAA
+Date:   Tue, 18 Jan 2022 16:50:56 +0000
+Message-ID: <E663CBEF-A063-4D0E-A983-CC6D93259D54@arm.com>
+References: <20220114134910.3994688-1-ross.burton@arm.com>
+ <20220118131131.388e5d3c@endymion>
+In-Reply-To: <20220118131131.388e5d3c@endymion>
+Accept-Language: en-US
+Content-Language: en-GB
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Microsoft-MacOutlook/16.57.22011101
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-MS-Office365-Filtering-Correlation-Id: 7a4ecf3d-6aaf-4f47-8369-08d9daa2b7c0
+x-ms-traffictypediagnostic: AM0PR08MB5443:EE_|VE1EUR03FT063:EE_|AM5PR0801MB1858:EE_
+X-Microsoft-Antispam-PRVS: <AM5PR0801MB18581553C480CE0FD73B0535E8589@AM5PR0801MB1858.eurprd08.prod.outlook.com>
+x-checkrecipientrouted: true
+nodisclaimer: true
+x-ms-oob-tlc-oobclassifiers: OLM:6108;OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: ezwEAXZ7oUbi6yka0NujLV/9pIEE4iZPNFWQNczert4ycQbjqZcT5G9deSn+PEyUVX9iedslkxxziMqwxzMs+0tVyMSsoAUxy6F2Eyk1LA7zmCqdFTYptHNWjfl87YtWZBCjo+eK2zAEM839jmUzgki+xXUAwL4vq+kk4FswwxKh+SrJw1Rcxjxo9kkmwUiGaI+CSVOGG9cGk9um0ZDEUlT3s9qRSWoLVw/2xIfXPdE3Owb1g5o5B9IERdKfxk9eZHTsHI1X9WDZ+2uxEmGj2tobRaehPIkJXtY4ToMWsN6OtCMXnDMHo1Awv+kTCcx5IG9RSIWMXiL1+oohpqjArMU3RW9unU3d4QT8cSYJ7PktEDalD1ODVJDmhmqWQiqTsi2IaGjCuU+If1C4SIbqYqQi1R1bVvHqFGX1WOqv87g+9he1wgRag8VU2vhXHnThOWMujvNqN44UMVTe7lhvblBOctpm0wxeyo527evYj51hT6/F3ZoUOR6AgZoO4UjYr2RULsqjhFJEF6/AordxSVr06wPITba6C1OU1JT3VQFG1VelMakG68L4lSylxmSOLZpxeqOFtWsOwn/g21SfXtrkdo53TAHmq+4+rAhsYGnzUsMwgpGZ4Wpd6SJMRaLKoV1/DSqbnDDma9bjMvjWEund9NIZtcLBdlG6cSpqBtOynNXZHnuoWthmXK2UEWwu94UQVAiX1c2b9Wy70974054/nglArTiom6kxLH6X5Ljr06n/SY5T6uZP4BrqeumZ
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR08MB7411.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6512007)(83380400001)(5660300002)(38070700005)(508600001)(186003)(316002)(26005)(8936002)(33656002)(36756003)(71200400001)(6506007)(6916009)(91956017)(66946007)(8676002)(86362001)(6486002)(122000001)(4326008)(4744005)(76116006)(2616005)(66446008)(2906002)(38100700002)(66476007)(66556008)(64756008)(45980500001);DIR:OUT;SFP:1101;
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3A724E4A8A14B54A92255DA659792463@eurprd08.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="daitmup5biyyqkwr"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdWkwV9XE_R5FZ=jPtDwLpDbEngG6+X2JmiDJCZJZvUjYA@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR08MB5443
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: VE1EUR03FT063.eop-EUR03.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 00d5dbf1-6923-4f90-4b72-08d9daa2b2bb
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Dpou1iUhzADwp28X22Uzyhi5gtd1YW8hSu9lnwz2OkyhTJb+aNh9zTvB8bzVCsWnqIj5C6BYPocoQYFTvDEdOtcT91nV6jcXuFFtnWnIyrl1slq1W5QqVTedwJD1KUdP3YmRpItJkJga/NdDvHrdd8obY5xzxA5b0MYGTDfuYMGF5SN8pSX6mR4WovqI7hcLM5c2u1/jLR6q837aDZ4AJt2KklLLdlFsj0Gwr7R4WHXkfktSIEUBMK8C4J3x9i11mODXeRDi2RhzuEyIqHr8M+P+FL5PTfhO9s+TrtV9AYPPYfFBp/okTBwceR94xH1UGHrRMgMzn3A1GSNmj/XTKZNeFRnFePCXTWr2edzr89BykMXemUU2H9iQUurm5KSmJTtMpAZvPTZ8RCLlDdBYbJDrrP/KK8BxdrUZ+VGOX8pjjldLmxLbqQ4cNWP87O7ZpP2Oj/gy6wXlm3wFFRK3Yx4345QtCek3NSYBD85ROaiPcWMJ4tZCpxC4QpcEbXHXm1UOb3TamFW7oHX9LsXwGTEgZMKwjoFF3v75FWfGuwwJ4YLAL/GMU6NPXiZTNtnURg/BphGpKjsceCIduKpSKzfOFqAQNukvffzRE4Inu7henEkINnglrmFhXgDLsTux2RQgcNxI+TGwMsl1FpxFyIjt62vjPnF0xc0AgnxAC8nUCJALZa9hDqoNq1dJ21aYZVqaLvDDqchle3qTV5PlK3nhjHLzgV2aR83NGPgfAWem9p5+kLYGQpfPcNKewXXQfYwFM5VSv7l5RLyPs06c/Q==
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(4636009)(40470700002)(36840700001)(46966006)(36860700001)(47076005)(83380400001)(5660300002)(86362001)(508600001)(2616005)(2906002)(356005)(81166007)(4326008)(336012)(4744005)(316002)(70206006)(6512007)(6506007)(70586007)(8936002)(6862004)(82310400004)(33656002)(8676002)(36756003)(186003)(26005)(6486002)(40460700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 16:51:05.0946
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a4ecf3d-6aaf-4f47-8369-08d9daa2b7c0
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR03FT063.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0801MB1858
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
---daitmup5biyyqkwr
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Jan 18, 2022 at 01:49:15PM +0100, Geert Uytterhoeven wrote:
-> nst the magic not-found value (so no implementation detail magic
-> > > > leaks into the caller code) and just pass it to the next API functi=
-on=3D
-> .
-> > > > (And my expectation would be that if you chose to represent not-fou=
-nd=3D
->  by
-> > > > (void *)66 instead of NULL, you won't have to adapt any user, just =
-th=3D
-> e
-> > > > framework internal checks. This is a good thing!)
-> > >
-> > > Ah, there is the wrong assumption: drivers sometimes do need to know
-> > > if the resource was found, and thus do need to know about (void *)66,
-> > > -ENODEV, or -ENXIO.  I already gave examples for IRQ and clk before.
-> > > I can imagine these exist for gpiod and regulator, too, as soon as
-> > > you go beyond the trivial "enable" and "disable" use-cases.
-> >
-> > My premise is that every user who has to check for "not found"
-> > explicitly should not use (clk|gpiod)_get_optional() but
-> > (clk|gpiod)_get() and do proper (and explicit) error handling for
-> > -ENODEV. (clk|gpiod)_get_optional() is only for these trivial use-cases.
-> >
-> > > And 0/NULL vs. > 0 is the natural check here: missing, but not
-> > > an error.
-> >
-> > For me it it 100% irrelevant if "not found" is an error for the query
-> > function or not. I just have to be able to check for "not found" and
-> > react accordingly.
-> >
-> > And adding a function
-> >
-> >         def platform_get_irq_opional():
-> >                 ret =3D3D platform_get_irq()
-> >                 if ret =3D3D=3D3D -ENXIO:
-> >                         return 0
-> >                 return ret
-> >
-> > it's not a useful addition to the API if I cannot use 0 as a dummy
-> > because it doesn't simplify the caller enough to justify the additional
-> > function.
-> >
-> > The only thing I need to be able is to distinguish the cases "there is
-> > an irq", "there is no irq" and anything else is "there is a problem I
-> > cannot handle and so forward it to my caller". The semantic of
-> > platform_get_irq() is able to satisfy this requirement[1], so why intro=
-du=3D
-> ce
-> > platform_get_irq_opional() for the small advantage that I can check for
-> > not-found using
-> >
-> >         if (!irq)
-> >
-> > instead of
-> >
-> >         if (irq !=3D3D -ENXIO)
-> >
-> > ? The semantic of platform_get_irq() is easier ("Either a usable
-> > non-negative irq number or a negative error number") compared to
-> > platform_get_irq_optional() ("Either a usable positive irq number or a
-> > negative error number or 0 meaning not found"). Usage of
-> > platform_get_irq() isn't harder or more expensive (neither for a human
-> > reader nor for a maching running the resulting compiled code).
-> > For a human reader
-> >
-> >         if (irq !=3D3D -ENXIO)
-> >
-> > is even easier to understand because for
-> >
-> >         if (!irq)
-> >
-> > they have to check where the value comes from, see it's
-> > platform_get_irq_optional() and understand that 0 means not-found.
->=20
-> "vIRQ zero does not exist."
-
-With that statement in mind I would expect that a function that gives me
-an (v)irq number never returns 0.
-
-> > This function just adds overhead because as a irq framework user I have
-> > to understand another function. For me the added benefit is too small to
-> > justify the additional function. And you break out-of-tree drivers.
-> > These are all no major counter arguments, but as the advantage isn't
-> > major either, they still matter.
-> >
-> > Best regards
-> > Uwe
-> >
-> > [1] the only annoying thing is the error message.
->=20
-> So there's still a need for two functions.
-
-Or a single function not emitting an error message together with the
-callers being responsible for calling dev_err().
-
-So the options in my preference order (first is best) are:
-
- - Remove the printk from platform_get_irq() and remove
-   platform_get_irq_optional();
-
- - Rename platform_get_irq_optional() to platform_get_irq_silently()
-
- - Keep platform_get_irq_optional() as is
-
- - Collect underpants
-
- - ?
-
- - Change semantic of platform_get_irq_optional()
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---daitmup5biyyqkwr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHmztAACgkQwfwUeK3K
-7AlRQAf6AhYDCHaOxGO6hZ2L8wLnlnF6sFrLHSkHS2GJOuagJzvJ418JJIk3zkkN
-JJX1REM8rmAXGwIKEat5Ea7goFSWiSw4fr7r3eq/xyxBos5XFH7REZd9Le7ac4e7
-BrLcQENmj/gFhEdGk+DOgvOWGWAvWnwp2yKMj33qTbKi72A831OIMsB3+kFwqMt9
-f4X3Ng5JNb59Tl0UXy4GhU/8JdsULov6t3SdBUSdZvjE5yXA5IdEctWoZTaW6Rf9
-NILpiVlIFQCBsJ9haLtjfp1/EXNVmkb4+5eTiJQndvnAZGDV6FBtRn4PPAYSc3L/
-bqjzqdfJVKCdlgfMrOrsPAv2a0DZGQ==
-=l/Sj
------END PGP SIGNATURE-----
-
---daitmup5biyyqkwr--
+PiBJcyBzZXR1cHRvb2xzIGF2YWlsYWJsZSBpbiBweXRob24gMi43PyBGb3Igbm93LCBweS1zbWJ1
+cyBjYW4gYmUgYnVpbHQNCj4gZm9yIGVpdGhlciBweXRob24yIG9yIHB5dGhvbjMsIGFuZCBJIHdv
+dWxkIGxpa2UgdG8gbWFpbnRhaW4gdGhhdA0KPiBwb3NzaWJpbGl0eS4NCg0KWWVzLCBpdCBpcy4N
+Cg0KUm9zcw0KDQpJTVBPUlRBTlQgTk9USUNFOiBUaGUgY29udGVudHMgb2YgdGhpcyBlbWFpbCBh
+bmQgYW55IGF0dGFjaG1lbnRzIGFyZSBjb25maWRlbnRpYWwgYW5kIG1heSBhbHNvIGJlIHByaXZp
+bGVnZWQuIElmIHlvdSBhcmUgbm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQsIHBsZWFzZSBub3Rp
+ZnkgdGhlIHNlbmRlciBpbW1lZGlhdGVseSBhbmQgZG8gbm90IGRpc2Nsb3NlIHRoZSBjb250ZW50
+cyB0byBhbnkgb3RoZXIgcGVyc29uLCB1c2UgaXQgZm9yIGFueSBwdXJwb3NlLCBvciBzdG9yZSBv
+ciBjb3B5IHRoZSBpbmZvcm1hdGlvbiBpbiBhbnkgbWVkaXVtLiBUaGFuayB5b3UuDQo=
