@@ -2,245 +2,175 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63675492F35
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jan 2022 21:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBEE492F41
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jan 2022 21:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349156AbiARUV7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Jan 2022 15:21:59 -0500
-Received: from mxout03.lancloud.ru ([45.84.86.113]:41690 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233125AbiARUV4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jan 2022 15:21:56 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 291BD20A4270
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-iio@vger.kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "ALSA Development Mailing List" <alsa-devel@alsa-project.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-phy@lists.infradead.org>, <netdev@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        <platform-driver-x86@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        "Saravanan Sekar" <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        "William Breathitt Gray" <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Borislav Petkov" <bp@alien8.de>, Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <openipmi-developer@lists.sourceforge.net>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        "Mun Yew Tham" <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        "Linux MMC List" <linux-mmc@vger.kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "James Morse" <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        "Sebastian Reichel" <sre@kernel.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        <linux-mediatek@lists.infradead.org>,
-        "Brian Norris" <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-References: <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
- <20220112085009.dbasceh3obfok5dc@pengutronix.de>
- <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
- <Yd9L9SZ+g13iyKab@sirena.org.uk>
- <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
- <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
- <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru>
- <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
- <57af1851-9341-985e-7b28-d2ba86770ecb@omp.ru>
- <20220117084732.cdy2sash5hxp4lwo@pengutronix.de>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <68d3bb7a-7572-7495-d295-e1d512ef509e@omp.ru>
-Date:   Tue, 18 Jan 2022 23:21:45 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S245093AbiARUWp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Jan 2022 15:22:45 -0500
+Received: from mail-bn7nam10on2084.outbound.protection.outlook.com ([40.107.92.84]:44449
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233125AbiARUWo (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 18 Jan 2022 15:22:44 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Vbbx4qKnDA3hdA+XbWSHXHuPbA3g00Yj2trOhb4Ya1HgfLOcIQ/VfsQ/4EFOd56UYj3253KZCwzeW46Uma5WS0r4/sWuX+ozTXD8UIGQnf0rYdE/U77KaZFldvJE5ri4bQkH0ICbKvkazi5qNKdziP4vOTDL/YYavMGPoSNGbMJ1uYkJ7YmUt9LQuUz9h5cGqfAAynTUixm8/V6HUkHtXCTvX9+fAn99ayHqQ0bB/ZdHnBBf3WaRBIq5qBAQy7qV10aeN7lZDEXbMTSMp+CyMOYqh2T0Vyqv9b0NP2oozsLn5qi46kfNWMxSyePtBy8sL6vOAS/s8coE7/unJPUejg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H/qMMHGP9SGWT1MLSvdGh3D98BCJ+DM+gg45Q8oI6S0=;
+ b=G1ZF5iZHqrTYYTo69Ah+rrzDpNjqEQenA7cU9mBIhfdIiuzYIeKDsRe+UMtk5w7Ldm4DBnxyFAgUkPVSnYnGUBpQoJPnWsfcX6s8/ehQDBFoiAx2ckM7qdlRluy7I1zL+7EvfzXUiya6SpPvSonGuUTBcb2XndtKG9HUqslruHRVHIU6iyIay99OYsTSMENNlPGhuxDu7kpniGZ8GDeTD8hbt3wPJTn5Y4A7Q3fqj70HzM0PEu9RqkhpVPNLwRpXfxytvQdUzs80//ki4tJrOj6cPYPXvZiIgFfE7Yeub9Z413jQHiK+/zW8ffmViO1KafDF1t+m0L7zdlr1VhZbFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H/qMMHGP9SGWT1MLSvdGh3D98BCJ+DM+gg45Q8oI6S0=;
+ b=gCKee4mmz4zA5hwyeGsaenExvvDDTo3x3vUJyr2kTkKP/vIHMg03qk085AWf65R1sN00zCPZ0kTA9z+ehVUnPmwUe2Bn4BkBS5gd6S2Kff8Mq5pI7Tj+T6sNXMKmOoeJuixf7LuKIPlvJJktMku3zwbGGSF3DPgJRAvVv8JqeVM=
+Received: from MW4PR03CA0100.namprd03.prod.outlook.com (2603:10b6:303:b7::15)
+ by BN8PR12MB3218.namprd12.prod.outlook.com (2603:10b6:408:6b::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Tue, 18 Jan
+ 2022 20:22:42 +0000
+Received: from CO1NAM11FT011.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b7:cafe::50) by MW4PR03CA0100.outlook.office365.com
+ (2603:10b6:303:b7::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7 via Frontend
+ Transport; Tue, 18 Jan 2022 20:22:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT011.mail.protection.outlook.com (10.13.175.186) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4888.9 via Frontend Transport; Tue, 18 Jan 2022 20:22:41 +0000
+Received: from ethanolx7ea3host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 18 Jan
+ 2022 14:22:39 -0600
+From:   Terry Bowman <terry.bowman@amd.com>
+To:     <terry.bowman@amd.com>, <linux@roeck-us.net>,
+        <linux-watchdog@vger.kernel.org>, <jdelvare@suse.com>,
+        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
+        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>
+CC:     <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
+        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
+        <Nehal-bakulchandra.Shah@amd.com>, <Basavaraj.Natikar@amd.com>,
+        <Shyam-sundar.S-k@amd.com>, <Mario.Limonciello@amd.com>
+Subject: [PATCH v3 0/4] Watchdog: sp5100_tco: Replace cd6h/cd7h port I/O accesses with MMIO accesses
+Date:   Tue, 18 Jan 2022 14:22:30 -0600
+Message-ID: <20220118202234.410555-1-terry.bowman@amd.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20220117084732.cdy2sash5hxp4lwo@pengutronix.de>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5d40a751-c142-4c48-6b24-08d9dac04768
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3218:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR12MB3218712DE9A8CFE59118378F83589@BN8PR12MB3218.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hQP5B943ofzh/jKW0c4R9qd+jfwy3RDe2bBY02vFh6O+jBMv/bkbz7kV/PdmraWdLnUeWpMMMhR/cggow2Rkw/aUHIHUPK6zNHNA1etEhAo8mEkqDrcVwt8C4XlAW9ETJvhT5TZ0dTJ8p2Lb234h9A472g1CHQJ3aCi3CvchO8ojhjC/3uySbos1J7ZAVTR16jMqZb3Td54D6pLH7lnmYHCsD89xjPqPmMp95FWdKKmU5qMmRDlgG5khmdM18Q0OB5YMLIA370Ny65sl/4yYxSTtQkS7vBkXaXlMO8msfYxA//hXgEyabV55dqFj7rs2lTiK4M7tQplJBj4wlNE8SqbxurKv6KUEqzyxWDKks32tTQ9BnabSjFRXrTRB6YAIUc6rutJx6HlJ/Bqdj6hLHOZzLF5M+LoIthd8ImfOmAR1OzyH1rJL2BaFt8OpbKCeWx64GvSzRGJhlSSdwfRssHnpsz/JQHytQq2HyEyHH1E+3KApMOoMor8I/r6gdLCZB+VaMRqMRvphQ1zrcmpE2/ToV+dv05cRiwJF+bf+JDwW4FUP8iNuZ94p9dQNZB6WUSCAqVrgAP01CvtVHX4rM/oc4/L/OVL3mfBsfZ8VHWJWiqABfEDt/vVa4MJSUvRJdJ9GFj2bsbNjfdxwODE6T9jo9yqPeD1e3cZvnP8w3ID+kPI5r1DLmNNuXoJI84Ik0/ZkGzHTFk17sff2HWtlOuElCrNcLH5taS2lgbSVMdpszsASaNI03vxTzagUFXoofTLU0xQ9vH+sHTGzihTAcFfa6M39oz7cm9cexIJTR6xBDPoYvrrDKlK1fY2Mls1zf0rmlbcYr8Xqd/TSvrbGqnjWh+RsBgOvQygFTq3CSlM/Y3wQ3CIl+kxVmvzLuT2BOvtinooRyZJmnrmWqo2HDu1E5BvtDwfZWhOhhlHIie4=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700002)(36756003)(82310400004)(36860700001)(54906003)(2906002)(426003)(8936002)(26005)(336012)(5660300002)(47076005)(40460700001)(8676002)(508600001)(1076003)(6666004)(356005)(83380400001)(81166007)(7696005)(316002)(110136005)(70206006)(70586007)(966005)(44832011)(186003)(2616005)(16526019)(4326008)(86362001)(32563001)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 20:22:41.4518
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d40a751-c142-4c48-6b24-08d9dac04768
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT011.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3218
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello!
+This driver uses cd6h/cd7h port I/O to access the FCH::PM::DECODEEN and
+FCH::PM::ISACONTROL registers during driver initialization. cd6h/cd7h port
+I/O is no longer supported on later AMD processors and the recommended
+method to access these registers is using MMIO. This series will replace
+the cd6h/cd7h port I/O with MMIO accesses during initialization.
 
-On 1/17/22 11:47 AM, Uwe Kleine-König wrote:
+The first patch refactors watchdog timer initialization into a separate
+function. This is needed to add support for new device layouts without
+adding complexity.
 
-[...]
->>>>>>>>> To me it sounds much more logical for the driver to check if an
->>>>>>>>> optional irq is non-zero (available) or zero (not available), than to
->>>>>>>>> sprinkle around checks for -ENXIO. In addition, you have to remember
->>>>>>>>> that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
->>>>>>>>> (or some other error code) to indicate absence. I thought not having
->>>>>>>>> to care about the actual error code was the main reason behind the
->>>>>>>>> introduction of the *_optional() APIs.
->>>>>>>
->>>>>>>> No, the main benefit of gpiod_get_optional() (and clk_get_optional()) is
->>>>>>>> that you can handle an absent GPIO (or clk) as if it were available.
->>>>>>
->>>>>>    Hm, I've just looked at these and must note that they match 1:1 with
->>>>>> platform_get_irq_optional(). Unfortunately, we can't however behave the
->>>>>> same way in request_irq() -- because it has to support IRQ0 for the sake
->>>>>> of i8253 drivers in arch/...
->>>>>
->>>>> Let me reformulate your statement to the IMHO equivalent:
->>>>>
->>>>> 	If you set aside the differences between
->>>>> 	platform_get_irq_optional() and gpiod_get_optional(),
->>>>
->>>>    Sorry, I should make it clear this is actually the diff between a would-be
->>>> platform_get_irq_optional() after my patch, not the current code...
->>>
->>> The similarity is that with your patch both gpiod_get_optional() and
->>> platform_get_irq_optional() return NULL and 0 on not-found. The relevant
->>> difference however is that for a gpiod NULL is a dummy value, while for
->>> irqs it's not. So the similarity is only syntactically, but not
->>> semantically.
->>
->>    I have noting to say here, rather than optional IRQ could well have a different
->> meaning than for clk/gpio/etc.
->>
->> [...]
->>>>> However for an interupt this cannot work. You will always have to check
->>>>> if the irq is actually there or not because if it's not you cannot just
->>>>> ignore that. So there is no benefit of an optional irq.
->>>>>
->>>>> Leaving error message reporting aside, the introduction of
->>>>> platform_get_irq_optional() allows to change
->>>>>
->>>>> 	irq = platform_get_irq(...);
->>>>> 	if (irq < 0 && irq != -ENXIO) {
->>>>> 		return irq;
->>>>> 	} else if (irq >= 0) {
->>>>
->>>>    Rather (irq > 0) actually, IRQ0 is considered invalid (but still returned).
->>>
->>> This is a topic I don't feel strong for, so I'm sloppy here. If changing
->>> this is all that is needed to convince you of my point ...
->>
->>    Note that we should absolutely (and first of all) stop returning 0 from platform_get_irq()
->> on a "real" IRQ0. Handling that "still good" zero absolutely doesn't scale e.g. for the subsystems
->> (like libata) which take 0 as an indication that the polling mode should be used... We can't afford
->> to be sloppy here. ;-)
-> 
-> Then maybe do that really first?
+The second patch moves region request/release into new functions. The
+request/release functions provide a location for adding MMIO region
+support.
 
-   I'm doing it first already:
+The third patch introduces EFCH initialization using MMIO. This is
+required because the registers are no longer accessible using cd6h/cd7h
+port I/O.
 
-https://lore.kernel.org/all/5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru/
+The fourth patch adds SMBus controller PCI ID check to enable EFCH MMIO
+initialization. This eliminates the need for driver updates to support
+future processors supporting the same EFCH functionality.
 
-   This series is atop of the above patch...
+Important:
+This series includes patches with MMIO accesses to registers
+FCH::PM::DECODEEN and FCH::PM::ISACONTROL. The same registers are also
+accessed by the piix4_smbus driver. The registers are currently accessed
+indirectly through cd6h/cd7h port I/O and both drivers use
+request_muxed_region() to synchronize the accesses. It should be noted the
+request_muxed_region() uses a wait queue to sleep and retry taking
+exclusive access if the port I/O region is busy.
 
-> I didn't recheck, but is this what the
-> driver changes in your patch is about?
+This series uses request_mem_region() to synchronize accesses to the MMIO
+registers mentioned above. request_mem_region() is missing the retry
+logic in the case the resource is busy. As a result, request_mem_region()
+will fail immediately if the resource is busy. The 'muxed' variant is
+needed here but request_muxed_mem_region() is not defined to use.  I will
+follow up with another patch series to define the
+request_muxed_mem_region() and use in both drivers.
 
-   Partly, yes. We can afford to play with the meaning of 0 after the above patch.
+The piix4_smbus driver or the sp5100_tco driver can potentialy fail until
+the muxed mem synchronization series is present in the tree. The potential
+for failure is not likely because the sp5100_tco driver only accesses the
+FCH::PM::DECODEEN and FCH::PM::ISACONTROL registers during driver
+initialization.
 
-> After some more thoughts I wonder if your focus isn't to align
-> platform_get_irq_optional to (clk|gpiod|regulator)_get_optional, but to
-> simplify return code checking. Because with your change we have:
-> 
->  - < 0 -> error
->  - == 0 -> no irq
->  - > 0 -> irq
+Link: https://lore.kernel.org/all/20210715221828.244536-1-Terry.Bowman@amd.com/#t
 
-   Mainly, yes. That's why the code examples were given in the description.
+Based on v5.16
 
-> For my part I'd say this doesn't justify the change, but at least I
-> could better life with the reasoning. If you start at:
-> 
-> 	irq = platform_get_irq_optional(...)
-> 	if (irq < 0 && irq != -ENXIO)
-> 		return irq
-> 	else if (irq > 0)
-> 		setup_irq(irq);
-> 	else
-> 		setup_polling()
-> 
-> I'd change that to
-> 
-> 	irq = platform_get_irq_optional(...)
-> 	if (irq > 0) /* or >= 0 ? */
+Testing:
+Tested on AMD family 17h and family 19h processors using:
 
-   Not >= 0, no...
+cat  >> /dev/watchdog
 
-> 		setup_irq(irq)
-> 	else if (irq == -ENXIO)
-> 		setup_polling()
-> 	else
-> 		return irq
-> 
-> This still has to mention -ENXIO, but this is ok and checking for 0 just
-> hardcodes a different return value.
+Changes in V3:
+  - Remove 'addr' and 'res' variables from struct sp5100_tco.
+    (Guenter Roeck)
+  - Pass address directly to efch_read_pm_reg8() and
+    efch_update_pm_reg8(). (Guenter Roeck)
+  - Reword patch descriptions. (Terry Bowman)
+  - Change #define AMD_ZEN_SMBUS_PCI_REV value from 0x59 to 0x51. This was
+    determined after investigating programmers manual and testing.
+    (Robert Richter)
+  - Refactor efch_* functions() (Robert Richter)
+  - Remove trailing whitespace in patch. (Guenter Roeck)
 
-   I think comparing with 0 is simpler (and shorter) than with -ENXIO, if you
-consider the RISC CPUs, like e.g. MIPS...
+Terry Bowman (4):
+  Watchdog: sp5100_tco: Move timer initialization into function
+  Watchdog: sp5100_tco: Refactor MMIO base address initialization
+  Watchdog: sp5100_tco: Add initialization using EFCH MMIO
+  Watchdog: sp5100_tco: Enable Family 17h+ CPUs
 
-> Anyhow, I think if you still want to change platform_get_irq_optional
-> you should add a few patches converting some drivers which demonstrates
-> the improvement for the callers.
+ drivers/watchdog/sp5100_tco.c | 335 ++++++++++++++++++++++------------
+ drivers/watchdog/sp5100_tco.h |   6 +
+ 2 files changed, 227 insertions(+), 114 deletions(-)
 
-   Mhm, I did include all the drivers where the IRQ checks have to be modified,
-not sure what else you want me to touch...
+--
+2.30.2
 
-> Best regards
-> Uwe
-
-MBR, Sergey
