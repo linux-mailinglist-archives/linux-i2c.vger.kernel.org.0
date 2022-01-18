@@ -2,174 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02347492F4F
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jan 2022 21:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD4D492F6A
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jan 2022 21:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349190AbiARUX3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Jan 2022 15:23:29 -0500
-Received: from mail-bn7nam10on2049.outbound.protection.outlook.com ([40.107.92.49]:55041
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S239708AbiARUX2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:23:28 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P2qizqIDA18anrtePwkQdRdgk9/ARsdc/Q6GQUlQaE/6ro8dbQnGeoRiu1TEqpO3Lw2KDRS1+fBgbDjNf6rb+wSUaHJmMUEEpguacAQm8aj3xBUz1glA0QF2lnNjV1WyO2EjIa+kcq+BV2QaeX8vpedUpLG5Xw/rnivwbEuQPBNcrRYgVoxBN84QGcds87hyzS8Bab6bpEjKoDqz9M7Mc68a1IpwZreQSFeq6vxl2IWvC6KpC4jHDK/gXBLxxqM5C7dFy8tV5mIEAsEz+5an7CcAWfzVb36CMjmyp3Pl20PNGVvGawGD7bw0P5PQO49f7KSGBnCOWPgNgy/zjCIHXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SbIvtPC0slPnXr9HdZTmd6gK6ENtB91sMYXUzm2ay6E=;
- b=SmqWvvbI5SVSrg6pJGiXzxt2EXMJs39/vAquoRBA/wDCHvWaGD38UihOpBL8VsEATTRIGF6/GAyl9ngFBs0otuQLIISPCkEeUJ4KPvofR2SgEjjJMug0QM0y1l0uPx7VrL8KAGDJK5V3MwnTUq41sNyGrBWMdw27VZUfsXTEGX2dW5Zaa6kVhw0hrZO2oLZ8Rkv2ZnR8m517W7JwfY5ORVnprWQyNq02IeF0GvjwQ9/AATHdpdYR9MQZFtoOGOdO7h2e+kBFPnJCcxmAZA8nkfEAi8v6IZSFRrK5FmEH/qdaH/T0TgSyknq0IVLbACbbP7Mf9WNvJVJRd11zKNYBpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SbIvtPC0slPnXr9HdZTmd6gK6ENtB91sMYXUzm2ay6E=;
- b=bRJIm1VKql7cqAkD8BW/vObWcSkcYMy0s49hMpEhMk37sFjW34hVahLV7GApN2NRyxc6+wNb5m8xWlScmFbbVysT1xFvYXL/yYwo5ntCfgfEr6Fl+bT9oP3BtVZBBMc6ncY5Sor5N3BPvAGvNmP/xvXxuzFJCq6PdUtm9I/ElF0=
-Received: from MW2PR16CA0041.namprd16.prod.outlook.com (2603:10b6:907:1::18)
- by CY4PR12MB1429.namprd12.prod.outlook.com (2603:10b6:903:42::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.12; Tue, 18 Jan
- 2022 20:23:26 +0000
-Received: from CO1NAM11FT022.eop-nam11.prod.protection.outlook.com
- (2603:10b6:907:1:cafe::c0) by MW2PR16CA0041.outlook.office365.com
- (2603:10b6:907:1::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11 via Frontend
- Transport; Tue, 18 Jan 2022 20:23:25 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT022.mail.protection.outlook.com (10.13.175.199) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4909.7 via Frontend Transport; Tue, 18 Jan 2022 20:23:25 +0000
-Received: from ethanolx7ea3host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 18 Jan
- 2022 14:23:24 -0600
-From:   Terry Bowman <terry.bowman@amd.com>
-To:     <terry.bowman@amd.com>, <linux@roeck-us.net>,
-        <linux-watchdog@vger.kernel.org>, <jdelvare@suse.com>,
-        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
-        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>
-CC:     <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
-        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
-        <Nehal-bakulchandra.Shah@amd.com>, <Basavaraj.Natikar@amd.com>,
-        <Shyam-sundar.S-k@amd.com>, <Mario.Limonciello@amd.com>
-Subject: [PATCH v3 4/4] Watchdog: sp5100_tco: Enable Family 17h+ CPUs
-Date:   Tue, 18 Jan 2022 14:22:34 -0600
-Message-ID: <20220118202234.410555-5-terry.bowman@amd.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220118202234.410555-1-terry.bowman@amd.com>
-References: <20220118202234.410555-1-terry.bowman@amd.com>
+        id S1349064AbiARUeC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Jan 2022 15:34:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233125AbiARUeB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jan 2022 15:34:01 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CE5C061574;
+        Tue, 18 Jan 2022 12:34:01 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id p27so281722lfa.1;
+        Tue, 18 Jan 2022 12:34:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YOoXZ5fmqgf47wT9od2Gk2XcnDz6yNAacGEgIzOL5RU=;
+        b=DpeLAj85OBU+lLCoFpKnluQI+gaehDVbhIKjBUFf2mhLl7+MCCORlnJXIwxeuL8k2x
+         0asRtfUT6alcz+mKPhdWENMUPftQ2Z3zHPWf4WBFx8rYwhzksbcQBPEQkNkgsWGDWdNr
+         /cA3iMpwF2xgLN898GAdqMjdisQghHl9N2CEEKp5eFKYinhs6XRFB9KGbDNTNEBK256W
+         2PVPiB8yAvsFpIhsYVZzLiSRQP7laIPzdd8Z4+1jIOeyYAr4zjZFjsYjBAAVDhY0mAYI
+         e8pi8XsFyPYye1mo6yyHXIkzQOdsNfNcnV2A5osCXGbPW32zQHkpgtC74Tte9C1erxPn
+         j9PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YOoXZ5fmqgf47wT9od2Gk2XcnDz6yNAacGEgIzOL5RU=;
+        b=tyBtoO1DD1aQxC/JlWBo74LHEkdjFxyk4l/cmOO7OSUzZ7BVCNTMEigybGpEzV83na
+         6GNsifd/QcPUVWaVTdsydyX7PexkiX1TbPsZIQjJyy6FOpFR5coXQY/lc33D368gYZBY
+         9G7ayk0EzoKhTCKM+JBvDLIAmrG8uoRUgHXUWoJ9MZDhgjlCA7QVoByVjBiMfpFSoU4y
+         KmLUsJ3CBU4cWjMMebLe5zfg2VSFEE344WZl0Qhy7+i0tiy7RoTHIhJC6Z3HSS8pt3rg
+         xzeyG6420EXQLCahSNonGxpw5btXLwTsT9WvBVPOtY9ClLUFeis9AJKZ1DFNoh5Itedc
+         k9JA==
+X-Gm-Message-State: AOAM531McszjS4ytSqqaWvHQNrg8YZQ+9Bn8JgBUu+y5OVF2QXIdB+Cb
+        C+kbH6QdKpApQ5Ryh3NXMxUjnu7NXzw=
+X-Google-Smtp-Source: ABdhPJzK7GKEaRKeU+FMnGENA+1pskWCzbefH8oZt/0UyM5JCFADc/h5ILb3ck3VZ32oJudLDkgdSA==
+X-Received: by 2002:a05:651c:199e:: with SMTP id bx30mr6761209ljb.415.1642538039413;
+        Tue, 18 Jan 2022 12:33:59 -0800 (PST)
+Received: from [192.168.2.145] (46-138-227-157.dynamic.spd-mgts.ru. [46.138.227.157])
+        by smtp.googlemail.com with ESMTPSA id p15sm1310350lfc.150.2022.01.18.12.33.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 12:33:58 -0800 (PST)
+Message-ID: <b86fb2be-289c-dcb1-df3b-63171b8a050b@gmail.com>
+Date:   Tue, 18 Jan 2022 23:33:57 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4d34794b-cda2-48a2-6324-08d9dac0619a
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1429:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR12MB1429F8E996DD3416DC7F046E83589@CY4PR12MB1429.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: T+z/ruVCkLvSosEKIvh0P6PlrxvhblyWfqe5O1F5yjCoDsnBIMNeRYcH8xjKN+KyO8aoTZeIBDC7dnAkN8a28M7uOy4RAAw+RTdjfuAK3CrCyFWlGg6ANN3h0oyE6orDYTsnpVB3bnmFdvvOFjt4pw/llBgWBbtuIqGbygTopWK3wn1jWhYB2Uwi0WrmEFWSyCtyiKIOIVxqFEB3oPUmvvATUs0Lj/W8QH4/JX8E3ZgqhkTrXcWqY3wuI74x66iDqis26Wmu0kPXWkiOmQFkF9qyMu3+AUoa1VWZ3mMP8pL2IXGP1mtcTaqV5CnoMd4w8aw8PUmz41+LkRTBM4fvTCzFleEM1Ta7Pm59/TZ7NnMrmqN4FW5wrLyzzpNdc6eCO/fkz5nTWH5BBIq9CcMIzSD99pRVYzePoJq4kOKhzNFYRm7YrWNxRS0hYKfZFs2vvDmLKWcFTam+dIZ1Z2rMFjjzKb4M+7S1OsSkqILpJa+Z/fKLTF9jvB2sSgDcJVLfq919vF/TGj1F3or2QOOVTipSM+NY/jo/OgXcg9i/9mwBUnczsE45M4mw8yLmENa4SYXR8hnwPna20xPXj2oDyMQfxYYqOxV9UH8ZTeQMV4IhlSTALiC7WzsWJkkUwXwJMg7juaV/ftuCs5Ylnj5OxICcGAYI1iDGh410AFeGqjoCY29YE7/bJ8G/WR1Fq2eweSTWWMchUglx1F+H2aGH8gZ3Bbsg8OJn3qf1Gw8hrq7QRPM4Ib/gRXesjTe+OsjZM6/CiZ1mD2lV6/56NaI1OfnRzxvKk7i19Tl5hyCS2pYyt/VujQXGtDuHkaWE3J8X
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(40470700002)(46966006)(36860700001)(26005)(8676002)(70586007)(508600001)(86362001)(8936002)(356005)(110136005)(1076003)(81166007)(7696005)(82310400004)(2616005)(47076005)(36756003)(40460700001)(6666004)(54906003)(426003)(44832011)(2906002)(316002)(336012)(186003)(4326008)(16526019)(83380400001)(5660300002)(70206006)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 20:23:25.4001
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d34794b-cda2-48a2-6324-08d9dac0619a
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT022.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1429
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/2] i2c: tegra: allow DVC support to be compiled out
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1642535860.git.mirq-linux@rere.qmqm.pl>
+ <ebe847bb25016e743c28bd38a10c966b04b06cc8.1642535860.git.mirq-linux@rere.qmqm.pl>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <ebe847bb25016e743c28bd38a10c966b04b06cc8.1642535860.git.mirq-linux@rere.qmqm.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The driver currently uses a CPU family match of 17h to determine
-EFCH_PM_DECODEEN_WDT_TMREN register support. This family check will not
-support future AMD CPUs and instead will require driver updates to add
-support.
+18.01.2022 23:00, Michał Mirosław пишет:
+> Save a bit of code for newer Tegra platforms by compiling out
+> DVC's I2C mode support that's used only for Tegra2.
+> 
+> $ size i2c-tegra.o
+>     text    data     bss     dec     hex filename
+> -  10385     240       8   10633    2989 i2c-tegra.o
+> +   9617     240       8    9865    2689 i2c-tegra.o
+> 
+> ---
+> v2: remove KConfig symbol as per Dmitry Osipenko's suggestion.
+>     (Assuming that for Tegra20 the DVC part will be used anyway.)
+> 
+> Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+> ---
+>  drivers/i2c/busses/i2c-tegra.c | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
 
-Remove the family 17h family check and add a check for SMBus PCI
-revision ID 0x51 or greater. The MMIO access method has been available
-since at least SMBus controllers using PCI revision 0x51. This revision
-check will support family 17h and future AMD processors including EFCH
-functionality without requiring driver changes.
-
-Co-developed-by: Robert Richter <rrichter@amd.com>
-Signed-off-by: Robert Richter <rrichter@amd.com>
-Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-To: Guenter Roeck <linux@roeck-us.net>
-To: linux-watchdog@vger.kernel.org
-To: Jean Delvare <jdelvare@suse.com>
-To: linux-i2c@vger.kernel.org
-To: Wolfram Sang <wsa@kernel.org>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-To: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Robert Richter <rrichter@amd.com>
-Cc: Thomas Lendacky <thomas.lendacky@amd.com>
----
- drivers/watchdog/sp5100_tco.c | 16 ++++------------
- drivers/watchdog/sp5100_tco.h |  1 +
- 2 files changed, 5 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
-index 36519a992ca1..b949dcd9f780 100644
---- a/drivers/watchdog/sp5100_tco.c
-+++ b/drivers/watchdog/sp5100_tco.c
-@@ -86,6 +86,10 @@ static enum tco_reg_layout tco_reg_layout(struct pci_dev *dev)
- 	    dev->device == PCI_DEVICE_ID_ATI_SBX00_SMBUS &&
- 	    dev->revision < 0x40) {
- 		return sp5100;
-+	} else if (dev->vendor == PCI_VENDOR_ID_AMD &&
-+	    sp5100_tco_pci->device == PCI_DEVICE_ID_AMD_KERNCZ_SMBUS &&
-+	    sp5100_tco_pci->revision >= AMD_ZEN_SMBUS_PCI_REV) {
-+		return efch_mmio;
- 	} else if (dev->vendor == PCI_VENDOR_ID_AMD &&
- 	    ((dev->device == PCI_DEVICE_ID_AMD_HUDSON2_SMBUS &&
- 	     dev->revision >= 0x41) ||
-@@ -461,18 +465,6 @@ static int sp5100_tco_setupdevice(struct device *dev,
- 		break;
- 	case efch:
- 		dev_name = SB800_DEVNAME;
--		/*
--		 * On Family 17h devices, the EFCH_PM_DECODEEN_WDT_TMREN bit of
--		 * EFCH_PM_DECODEEN not only enables the EFCH_PM_WDT_ADDR memory
--		 * region, it also enables the watchdog itself.
--		 */
--		if (boot_cpu_data.x86 == 0x17) {
--			val = sp5100_tco_read_pm_reg8(EFCH_PM_DECODEEN);
--			if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
--				sp5100_tco_update_pm_reg8(EFCH_PM_DECODEEN, 0xff,
--							  EFCH_PM_DECODEEN_WDT_TMREN);
--			}
--		}
- 		val = sp5100_tco_read_pm_reg8(EFCH_PM_DECODEEN);
- 		if (val & EFCH_PM_DECODEEN_WDT_TMREN)
- 			mmio_addr = EFCH_PM_WDT_ADDR;
-diff --git a/drivers/watchdog/sp5100_tco.h b/drivers/watchdog/sp5100_tco.h
-index 2df8f8b2c55b..4fac39a2f12f 100644
---- a/drivers/watchdog/sp5100_tco.h
-+++ b/drivers/watchdog/sp5100_tco.h
-@@ -88,3 +88,4 @@
- #define EFCH_PM_ACPI_MMIO_PM_ADDR	(EFCH_PM_ACPI_MMIO_ADDR +	\
- 					 EFCH_PM_ACPI_MMIO_PM_OFFSET)
- #define EFCH_PM_ACPI_MMIO_PM_SIZE       8
-+#define AMD_ZEN_SMBUS_PCI_REV           0x51
--- 
-2.30.2
-
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
