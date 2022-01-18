@@ -2,226 +2,268 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEF149283F
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jan 2022 15:22:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F490492866
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jan 2022 15:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244914AbiAROWL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Jan 2022 09:22:11 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:43922 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244543AbiAROWK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jan 2022 09:22:10 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A2FC1212B9;
-        Tue, 18 Jan 2022 14:22:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642515729; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RvOUe3ELIa/FShs0hbwRjopL1t8qHivicLBTtqfOpfw=;
-        b=NSI9yKIgIRl6zqnD4psUVqzDYe8Hs7TeJiI/Zot8oyInrym2yNaEYlH4y1FRPNhiK0Vmw6
-        LjGglL1irebSbvQDNynBXCMsfV0VGLBGSuVVTIrfQEsGpZz1asScadxQdpfabpG9e6HvVd
-        jyYPt4zBmUOCd48aBviNNjmGKbNy8ME=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642515729;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RvOUe3ELIa/FShs0hbwRjopL1t8qHivicLBTtqfOpfw=;
-        b=5kBEHCzloVHq2byYZEtYZuxj0qMH0BHSKZcq+i4ZIah19UG17g2JLXODQCfHUAAEVGTXa/
-        dE8SoRiP1oCz30Dw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 50CBF13AB6;
-        Tue, 18 Jan 2022 14:22:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id UqX3EBHN5mHHOwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 18 Jan 2022 14:22:09 +0000
-Date:   Tue, 18 Jan 2022 15:22:05 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Terry Bowman <Terry.Bowman@amd.com>
-Cc:     linux-i2c@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, thomas.lendacky@amd.com
-Subject: Re: [PATCH] i2c: piix4: Replace piix4_smbus driver's cd6h/cd7h port
- io accesses with mmio accesses
-Message-ID: <20220118152205.7e88c3f9@endymion>
-In-Reply-To: <33a0cd08-a336-34b3-d36c-f827b8054e9e@amd.com>
-References: <20210715221828.244536-1-Terry.Bowman@amd.com>
-        <20210907183720.6e0be6b6@endymion>
-        <20211105170550.746443b9@endymion>
-        <33a0cd08-a336-34b3-d36c-f827b8054e9e@amd.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S237993AbiAROa7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Jan 2022 09:30:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236670AbiAROa6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jan 2022 09:30:58 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C77C061574
+        for <linux-i2c@vger.kernel.org>; Tue, 18 Jan 2022 06:30:58 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n9pUj-0000wL-Of; Tue, 18 Jan 2022 15:29:57 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n9pUY-00B1DJ-N0; Tue, 18 Jan 2022 15:29:45 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n9pUX-0003HD-OO; Tue, 18 Jan 2022 15:29:45 +0100
+Date:   Tue, 18 Jan 2022 15:29:45 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        platform-driver-x86@vger.kernel.org,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <20220118142945.6y3rmvzt44pjpr4z@pengutronix.de>
+References: <20220117092444.opoedfcf5k5u6otq@pengutronix.de>
+ <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
+ <20220117114923.d5vajgitxneec7j7@pengutronix.de>
+ <CAMuHMdWCKERO20R2iVHq8P=BaoauoBAtiampWzfMRYihi3Sb0g@mail.gmail.com>
+ <20220117170609.yxaamvqdkivs56ju@pengutronix.de>
+ <CAMuHMdXbuZqEpYivyS6hkaRN+CwTOGaHq_OROwVAWvDD6OXODQ@mail.gmail.com>
+ <20220118090913.pjumkq4zf4iqtlha@pengutronix.de>
+ <CAMuHMdUW8+Y_=uszD+JOZO3Lpa9oDayk+GO+cg276i2f2T285w@mail.gmail.com>
+ <20220118120806.pbjsat4ulg3vnhsh@pengutronix.de>
+ <CAMuHMdWkwV9XE_R5FZ=jPtDwLpDbEngG6+X2JmiDJCZJZvUjYA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="daitmup5biyyqkwr"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWkwV9XE_R5FZ=jPtDwLpDbEngG6+X2JmiDJCZJZvUjYA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Terry,
 
-Thank you for following up, and sorry for the later reply.
+--daitmup5biyyqkwr
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 13 Dec 2021 11:48:18 -0600, Terry Bowman wrote:
-> I added Guenter to this email because his input is needed for adding the same
-> changes to the sp5100_tco driver. The sp5100_tco and piix4_smbus driver
-> must use the same synchronization logic for the shared register.
+On Tue, Jan 18, 2022 at 01:49:15PM +0100, Geert Uytterhoeven wrote:
+> nst the magic not-found value (so no implementation detail magic
+> > > > leaks into the caller code) and just pass it to the next API functi=
+on=3D
+> .
+> > > > (And my expectation would be that if you chose to represent not-fou=
+nd=3D
+>  by
+> > > > (void *)66 instead of NULL, you won't have to adapt any user, just =
+th=3D
+> e
+> > > > framework internal checks. This is a good thing!)
+> > >
+> > > Ah, there is the wrong assumption: drivers sometimes do need to know
+> > > if the resource was found, and thus do need to know about (void *)66,
+> > > -ENODEV, or -ENXIO.  I already gave examples for IRQ and clk before.
+> > > I can imagine these exist for gpiod and regulator, too, as soon as
+> > > you go beyond the trivial "enable" and "disable" use-cases.
+> >
+> > My premise is that every user who has to check for "not found"
+> > explicitly should not use (clk|gpiod)_get_optional() but
+> > (clk|gpiod)_get() and do proper (and explicit) error handling for
+> > -ENODEV. (clk|gpiod)_get_optional() is only for these trivial use-cases.
+> >
+> > > And 0/NULL vs. > 0 is the natural check here: missing, but not
+> > > an error.
+> >
+> > For me it it 100% irrelevant if "not found" is an error for the query
+> > function or not. I just have to be able to check for "not found" and
+> > react accordingly.
+> >
+> > And adding a function
+> >
+> >         def platform_get_irq_opional():
+> >                 ret =3D3D platform_get_irq()
+> >                 if ret =3D3D=3D3D -ENXIO:
+> >                         return 0
+> >                 return ret
+> >
+> > it's not a useful addition to the API if I cannot use 0 as a dummy
+> > because it doesn't simplify the caller enough to justify the additional
+> > function.
+> >
+> > The only thing I need to be able is to distinguish the cases "there is
+> > an irq", "there is no irq" and anything else is "there is a problem I
+> > cannot handle and so forward it to my caller". The semantic of
+> > platform_get_irq() is able to satisfy this requirement[1], so why intro=
+du=3D
+> ce
+> > platform_get_irq_opional() for the small advantage that I can check for
+> > not-found using
+> >
+> >         if (!irq)
+> >
+> > instead of
+> >
+> >         if (irq !=3D3D -ENXIO)
+> >
+> > ? The semantic of platform_get_irq() is easier ("Either a usable
+> > non-negative irq number or a negative error number") compared to
+> > platform_get_irq_optional() ("Either a usable positive irq number or a
+> > negative error number or 0 meaning not found"). Usage of
+> > platform_get_irq() isn't harder or more expensive (neither for a human
+> > reader nor for a maching running the resulting compiled code).
+> > For a human reader
+> >
+> >         if (irq !=3D3D -ENXIO)
+> >
+> > is even easier to understand because for
+> >
+> >         if (!irq)
+> >
+> > they have to check where the value comes from, see it's
+> > platform_get_irq_optional() and understand that 0 means not-found.
+>=20
+> "vIRQ zero does not exist."
 
-Correct.
+With that statement in mind I would expect that a function that gives me
+an (v)irq number never returns 0.
 
-> On 11/5/21 11:05, Jean Delvare wrote:
-> > On Tue, 7 Sep 2021 18:37:20 +0200, Jean Delvare wrote:  
-> >> More generally, I am worried about the overall design. The driver
-> >> originally used per-access I/O port requesting because keeping the I/O
-> >> ports busy all the time would prevent other drivers from working. Do we
-> >> still need to do the same with the new code? If it is possible and safe
-> >> to have a permanent mapping to the memory ports, that would be a lot
-> >> faster.
-> 
-> Permanent mapping would likely improve performance but will not provide the
-> needed synchronization.
+> > This function just adds overhead because as a irq framework user I have
+> > to understand another function. For me the added benefit is too small to
+> > justify the additional function. And you break out-of-tree drivers.
+> > These are all no major counter arguments, but as the advantage isn't
+> > major either, they still matter.
+> >
+> > Best regards
+> > Uwe
+> >
+> > [1] the only annoying thing is the error message.
+>=20
+> So there's still a need for two functions.
 
-Depends how it is implemented, see below.
+Or a single function not emitting an error message together with the
+callers being responsible for calling dev_err().
 
-> (...) As you mentioned below the sp5100 driver only uses
-> the DECODEEN register during initialization but the access must be
-> synchronized or an i2c transaction or sp5100_tco timer enable access may be
-> lost. I considered alternatives but most lead to driver coupling or considerable
-> complexity.
-> 
-> >> On the other hand, the read-modify-write cycle in
-> >> piix4_setup_sb800_smba() is unsafe if 2 drivers can actually call
-> >> request_mem_region() on the same memory area successfully.
-> >>
-> >> I'm not opposed to taking your patch with minimal changes (as long as
-> >> the code is safe) and working on performance improvements later.  
-> >   
-> 
-> I confirmed through testing the request_mem_region() and request_muxed_region() 
-> macros provide exclusive locking. One difference between the 2 macros is the 
-> flag parameter, IORESOURCE_MUXED. request_muxed_region() uses the 
-> IORESOURCE_MUXED flag to retry the region lock if it's already locked. 
-> request_mem_region() does not use the IORESOURCE_MUXED and as a result will 
-> return -EBUSY immediately if the region is already locked.
-> 
-> I must clarify: the piix4_smbus v1 patch uses request_mem_region() which is not 
-> correct because it doesn't retry locking an already locked region.  The driver 
-> must support retrying the lock or piix4_smbus and sp5100_tco drivers may 
-> potentially fail loading. I added proposed piix4_smbus v2 changes below to solve.
+So the options in my preference order (first is best) are:
 
-Yes, I mentioned that problem during my initial review (I think).
+ - Remove the printk from platform_get_irq() and remove
+   platform_get_irq_optional();
 
-> I propose reusing the existing request_*() framework from include/linux/ioport.h 
-> and kernel/resource.c. A new helper macro will be required to provide an 
-> interface to the "muxed" iomem locking functionality already present in 
-> kernel/resource.c. The new macro will be similar to request_muxed_region() 
-> but will instead operate on iomem. This should provide the same performance 
-> while using the existing framework.
-> 
-> My plan is to add the following to include/linux/ioport.h in v2. This macro
-> will add the interface for using "muxed" iomem support:
-> #define request_mem_muxed_region(start,n,name)  __request_region(&iomem_resource, (start), (n), (name), IORESOURCE_MUXED)
-> 
-> The proposed changes will need review from more than one subsystem maintainer.
-> The macro addition in include/linux/ioport.h would reside in a
-> different maintainer's tree than this driver. The change to use the
-> request_mem_muxed_region() macro will also be made to the sp5100_tco driver.
-> The v2 review will include maintainers from subsystems owning piix4_smbus
-> driver, sp5100_tco driver, and include/linux/ioport.h.
-> 
-> The details provided above are described in a piix4_smbus context but would also be 
-> applied to the sp5100_tco driver for synchronizing the shared register.
-> 
-> Jean and Guenter, do you have concerns or changes you prefer to the proposal I 
-> described above?
+ - Rename platform_get_irq_optional() to platform_get_irq_silently()
 
-To be honest, I have a conceptual disagreement with
-request_mem_muxed_region().
+ - Keep platform_get_irq_optional() as is
 
-The reason why request_muxed_region() was implemented in the first
-place, is that muxed I/O port pairs allow access to different registers
-"behind" the ports, using what I would call "logical addressing", and
-while it is legitimate for different drivers to have to access
-different register ranges "behind" the ports, the I/O helper functions
-do not allow reserving these, and more generally the I/O requesting
-mechanism in Linux only deals with physical I/O ports and not logical
-ranges behind muxed pairs.
+ - Collect underpants
 
-So request_muxed_region() allows different drivers to use the same I/O
-ports with mutual exclusion in order to access the logical register
-ranges. My feeling is, that the expectation is still that the different
-drivers do not step on each other's toes and each driver only accesses
-their own registers, even though there is no way to enforce that (and
-as a matter of fact, we have found that the i2c-piix4 and sp5100_tco
-drivers do share one register).
+ - ?
 
-(Thankfully, the access to this "shared" register is always done with
-the muxed region owned for the whole duration of the read / modify /
-write cycles, so I think we are on the same side. But it's really up to
-the drivers to behave properly, as in theory it would be possible to
-own the muxed region just for reading, then just for writing, with no
-guarantee that another driver didn't change the register value in
-between.)
+ - Change semantic of platform_get_irq_optional()
 
-Where I'm getting at is, request_muxed_region() works, but only with
-certain restrictions and assumptions. It's there because we need it and
-there's no easy way to implement it differently. On the other hand,
-there's no reason for request_mem_muxed_region() to exist in the first
-place, and as a matter of fact, it does not exist yet. You only want it
-in order to avoid having to redesign 2 drivers that have grown
-organically for 2 decades and that barely talk to each other even
-though they access the very same piece of hardware.
+Best regards
+Uwe
 
-But in fact there's nothing you would do with
-request_mem_muxed_region() that can't be done without it. As mentioned
-before, the i2c-i801 and iTCO_wdt drivers were in a similar situation
-and their design was changed slightly in order to solve the problem.
-See commit 9424693035a5 ("i2c: i801: Create iTCO device on newer Intel
-PCHs").
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-So clearly my personal preference would be to do the same for the
-i2c-piix4+sp5100_tco driver pair, for consistency and because we know
-it is a design that works. And it does allow permanent mapping of the
-registers, so performance should be better. My only concern is that
-you'll have to deal with older chipsets (legacy I/O, permanent mapping
-not possible) and newer chipsets (MMIO access, permanent mapping
-possible) and this is likely to clutter the code to some degree.
+--daitmup5biyyqkwr
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Going with request_mem_muxed_region() is only the second choice as far
-as I'm concerned. I see the advantage (that's clearly the minimal
-effort to get your problem fixed) but I'm afraid to create an API that
-will later be abused to circumvent clean driver design. I'm also not
-sure if you will find someone willing to accept it upstream in the
-first place. The fact that there is no dedicated maintainer
-for <linux/ioport.h> is probably not going to help (unless you want to
-sneak the change in while nobody is paying attention, in which case it
-might actually help ^^).
+-----BEGIN PGP SIGNATURE-----
 
-I see that Andy suggested a regmap approach instead. My only attempt to
-use regmap in one of my drivers ended up in miserable failure, I got
-totally lost in the too many abstraction layers. So I just can't say
-whether this is the right thing to do or even if it can solve the
-problem at hand. The resource reservation and/or locking issue we have
-is clearly not trivial, so the regmap infrastructure would have to be
-highly flexible in order to accommodate that. Feel free to give it a
-try and see for yourself if it's going to fit the bill. If it works, I
-won't object, and I'll finally have to do the effort to understand how
-it works.
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHmztAACgkQwfwUeK3K
+7AlRQAf6AhYDCHaOxGO6hZ2L8wLnlnF6sFrLHSkHS2GJOuagJzvJ418JJIk3zkkN
+JJX1REM8rmAXGwIKEat5Ea7goFSWiSw4fr7r3eq/xyxBos5XFH7REZd9Le7ac4e7
+BrLcQENmj/gFhEdGk+DOgvOWGWAvWnwp2yKMj33qTbKi72A831OIMsB3+kFwqMt9
+f4X3Ng5JNb59Tl0UXy4GhU/8JdsULov6t3SdBUSdZvjE5yXA5IdEctWoZTaW6Rf9
+NILpiVlIFQCBsJ9haLtjfp1/EXNVmkb4+5eTiJQndvnAZGDV6FBtRn4PPAYSc3L/
+bqjzqdfJVKCdlgfMrOrsPAv2a0DZGQ==
+=l/Sj
+-----END PGP SIGNATURE-----
 
-As a conclusion, everything I wrote above is about my opinions and
-preferences. At the end of the day, I understand that we need to fix
-the i2c-piix4 and sp5100_tco drivers, and the sooner the better, so any
-solution that works and nobody objects against will be OK with me.
-
--- 
-Jean Delvare
-SUSE L3 Support
+--daitmup5biyyqkwr--
