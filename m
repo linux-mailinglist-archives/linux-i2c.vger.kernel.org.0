@@ -2,41 +2,41 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 045B449307A
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jan 2022 23:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC7349307E
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jan 2022 23:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346275AbiARWNP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Jan 2022 17:13:15 -0500
-Received: from mail-bn7nam10on2075.outbound.protection.outlook.com ([40.107.92.75]:18368
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        id S1344299AbiARWNX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Jan 2022 17:13:23 -0500
+Received: from mail-co1nam11on2073.outbound.protection.outlook.com ([40.107.220.73]:42401
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234388AbiARWNJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 18 Jan 2022 17:13:09 -0500
+        id S1349909AbiARWNT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 18 Jan 2022 17:13:19 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ASSODMmQ5QnzleWTNinalTx/lZkKn8mMjK5BRDj/ghm2tvkVCWoKMbPPHzOOeYSXH6TOelP/W7hwxqtnf3Os1zp+yO17qeuv5hsC5njZDmagwlApXnJwJVA7dfh25/n+J/phhpdc8ltHsVUZySVP3FUxqtgvF9ppEJLcirVTLx1VLBlYm6p+4B08EY3eQnRTbC/xH53rkuFTYP4b98tj21ag1oO5WvFiSPJZWTUjbBJUqzuZEVOXxdlEEt9+qKJMlj0bNVcJkaPutFvNeg9uJ7SmjEqzvgcN4qqdCCzewevhtgOv/RC/+8CfFldjFNGwwApDPsUVL0MlMTctuVWVQQ==
+ b=b1vzeeKRB+bEqm66Lr8FvAVnQQgiL0PRNh34qrrX/1oRaCxs1MopcNie788K29nnSSIB7GMlM/4ZfOUUKyHIsgpy9B3ZDrL73ETaTPqK6fHoK1m5iuqSxfg2I12AZnTbF01HaIfVpEsV+baJLSeggWyEM8tO06vMu+Ha/TmJ7wnjQHcUalByX9GEXXCAZBAGQY2i7yC83IQlSCvQZ+bMj8qVxjBdh1DfWfJeHMwYQkPi7BwHzAuMG2dnA41hfrMV58tJ67SK8v/1xciT7hZH4av6utM46OlyksXqiy4ZvnCezu39vz5y0GWedtSrVLS5ilQK8ZLAPw5Zevfic7mvSw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HPwRuTUMdOIYd6TaU50MwAZLZb8EHndtlyNKgz9xwY4=;
- b=RJeaHUFZm/ZMVb535zolSKm6OknQdBhXhO9GrAL/KGSbYRhApaK/dKSXwAi5rJjImfV2w0z85xqOB3FnyEjH35lj/TyGnxnKHjdBml1YzFTtjeErVsB8GQFcBFvr+mqYVSE0/bsJ2Miz3GMCvViYdSiZzYEtaQ8Rj14S4FwBSkbGLaoRNlAry7HonW0ULHky11xIWScaYpmkcbi3yHLUXs0c9rH411PgMDyjJL56VPNvPdyOQyVR8BA/lbb0i0CTMtTma3H1RUq2GNZgmBQivbWCk6ooQTBCxdFJRj1N7Sqhr2pSOhXYlwvTAQxZuqo/GoNZXRf1k6A3uH+/Wl9i3Q==
+ bh=KlD9/B59mwzOsdsKJ70bFcth4ckKO81uMo11he+Eqr4=;
+ b=PWwqIiRDf66GWz2RAwcGXk6cjk1SGMhTRHGG9QlCctswjsZz8e5yt7fhnDREmy0k5WxKDgv0af9BjoubN/ysgdEIesLeWSHgRu4MQxhz5v0NXYpggGw3Yp62/wgD923j9McPwgDJE717pY0SF4H9SJHHjvTrEWtx2zpIyEd7i+pfKQqbvWbDid8Y6u0e1f5KQFq9USfKRZIzK1tUKDTVm+l+LePPatWfmnexdwHr0i6o4TvxORZbn4h7kTTdN00K7J42Su4D3skH4X9PkyZkRAXl3NmlOECk8ZQMnsncemAosuxlRZzWnr33JqRX0xiw78Bc6XSv0NzFPKzPE/Enww==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HPwRuTUMdOIYd6TaU50MwAZLZb8EHndtlyNKgz9xwY4=;
- b=DMe6ForudIV/f7oAB4+lQgwC4hridMi9t8tdUowPzjsfWkq80Dm8JAvOL4hV02kB/V6+FS7YvIr1Pd+2yH9nCwcrDzrlAWQREvncLXyiWP0f2tOj8GhJq37RYUBRibtecXg5m8EseX9aEqfVOKkFFF6MV5rzm1ZbRc2M/JmQoTE=
-Received: from BN6PR11CA0017.namprd11.prod.outlook.com (2603:10b6:405:2::27)
- by BN8PR12MB3250.namprd12.prod.outlook.com (2603:10b6:408:99::32) with
+ bh=KlD9/B59mwzOsdsKJ70bFcth4ckKO81uMo11he+Eqr4=;
+ b=XaCa5eY6Ea7b1plouKcVic+OE0rd+BVruumWLbvQUcZQl9sx0Gs0V1uTRP4KZi4jNx2tBdRjClroEblcDxSoH3+KTet4olnuEuM9NlpKousBA1LIe2ffGqkIL81DbicT9kYDBTWLrr8WM0txapiy4wLxaBHtixcIiVRKFxxh4yY=
+Received: from BN9PR03CA0052.namprd03.prod.outlook.com (2603:10b6:408:fb::27)
+ by MW3PR12MB4571.namprd12.prod.outlook.com (2603:10b6:303:5c::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.10; Tue, 18 Jan
- 2022 22:13:05 +0000
-Received: from BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
- (2603:10b6:405:2:cafe::be) by BN6PR11CA0017.outlook.office365.com
- (2603:10b6:405:2::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Tue, 18 Jan
+ 2022 22:13:17 +0000
+Received: from BN8NAM11FT037.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:fb:cafe::33) by BN9PR03CA0052.outlook.office365.com
+ (2603:10b6:408:fb::27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7 via Frontend
- Transport; Tue, 18 Jan 2022 22:13:05 +0000
+ Transport; Tue, 18 Jan 2022 22:13:16 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -44,13 +44,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT013.mail.protection.outlook.com (10.13.176.182) with Microsoft SMTP
+ BN8NAM11FT037.mail.protection.outlook.com (10.13.177.182) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4888.9 via Frontend Transport; Tue, 18 Jan 2022 22:13:05 +0000
+ 15.20.4888.9 via Frontend Transport; Tue, 18 Jan 2022 22:13:16 +0000
 Received: from ethanolx7ea3host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 18 Jan
- 2022 16:13:04 -0600
+ 2022 16:13:15 -0600
 From:   Terry Bowman <terry.bowman@amd.com>
 To:     <terry.bowman@amd.com>, <linux@roeck-us.net>,
         <linux-watchdog@vger.kernel.org>, <jdelvare@suse.com>,
@@ -61,9 +61,9 @@ CC:     <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
         <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
         <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
         <Mario.Limonciello@amd.com>
-Subject: [PATCH v2 6/8] i2c: piix4: Add EFCH MMIO support to SMBus base address detect
-Date:   Tue, 18 Jan 2022 16:11:50 -0600
-Message-ID: <20220118221152.300444-7-terry.bowman@amd.com>
+Subject: [PATCH v2 7/8] i2c: piix4: Add EFCH MMIO support for SMBus port select
+Date:   Tue, 18 Jan 2022 16:11:51 -0600
+Message-ID: <20220118221152.300444-8-terry.bowman@amd.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220118221152.300444-1-terry.bowman@amd.com>
 References: <20220118221152.300444-1-terry.bowman@amd.com>
@@ -75,35 +75,34 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6f7e6d0d-90d2-4d05-926c-08d9dacfb3a1
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3250:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB325001A43C7C444222AAF06083589@BN8PR12MB3250.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3173;
+X-MS-Office365-Filtering-Correlation-Id: 3036f66b-bc20-4bfe-cf4f-08d9dacfba38
+X-MS-TrafficTypeDiagnostic: MW3PR12MB4571:EE_
+X-Microsoft-Antispam-PRVS: <MW3PR12MB4571185F8334B4491D2F7F8183589@MW3PR12MB4571.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dslWlQXeh57zEWj5xc/JBpXjTJF/W0vov4x6Rant5o3CxmP5+0GLRfrbN59I0TwhLVPt04UBrzs8Euz95b4vWuGXEEcb2XyAblRIM6oHkJtchbS6RZUaan8EMeq4tXU7VtOui5zOG9LH2H4BiMgHdPqU18PJpWl+YcVuqbrdYQBQtZUqwHVIQF03yz0oX/DPokpNi4hBVGQxVOJa4T7K0f/NGWv5cMJBKLoiQJ7dVS0q8NXC9VDT8tS8ImzmNbOqHuVlxvZpe9NZx0+a42dLR2FCUJT85LSHuPt8hKEzN5Q2RLktQ0SiB7o6e1YcPsnhPBYgDWsSqCKnPQN1KSwg8bL1IywMj3coTXkGiTKrSPar0WXvd7RBSX1Ubd/Xtr6cshilw9IrjBB0z2IGmzTpFuTg57yuQn6CvjFa0vmzM7XTtPphq8ft708/21GQDkeXFfvOmB4OyFGvhJL/wg1rfi4Ts/Q3IyPMv48i51XAboLb+1ReZdAfDosfJTDv9vIGrvt6qBW6d0P0ldOGAXTvtREXT9Bg3zcL9q+jE4TVslUlqXfxvJvRQ64g5yzBWPIEl3kCzTMsj0u6UUDMvKIgZdQBb7nEGOUSqlduDx6/ef/XZd3cEtRlTI4ycRuKjMTeXR4rb74zQQ6oKHjmP+Ab/SgNPxHiNaLUEpC5mOCC0z8ZMBfU+l1Xfz+uEZ3KJ+c7L3TYXF7XLhR5bovxfngrxNawhF8/vlOJd9B7ILv2ii9ane/YHqosGQTvFzG8rJtdDCe983NVGjlBPUhlQgL04Kn9l2mHDvKoJjnYceNbUd5s7Farw7roeQNHdkbxg0+r
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(40470700002)(46966006)(36840700001)(83380400001)(70206006)(81166007)(426003)(70586007)(356005)(2906002)(40460700001)(1076003)(86362001)(7696005)(82310400004)(54906003)(316002)(110136005)(36756003)(5660300002)(2616005)(47076005)(508600001)(186003)(44832011)(4326008)(8936002)(6666004)(26005)(336012)(16526019)(36860700001)(8676002)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: tXhd37nWy1jboA62dWTWkZR2e7cXqAiVHS/yp5h3wvYgMP9ZxBLf+Mczb9mYoobYPb9CMUjzafwZiJ3KCrBfoo+P5LTud9BR964VexIYNvzX7cyZVLXzp+F4wZ0WJPMbhFXe/Zy4OV9AF6n0MKrBFa+4J0Rd/JzxKOYCTayLzDgRiqYpaS2456lHuqyrsFoLxCN9+EkxAdVqxEcaQiblvtBX6u5ICVO24Vfybh+P8JTLq98OOwOEn0NPLTgdz4KRtJ4XAHNuJ5ZJyCBqYU5Hqgs0w9f+xSwGJv92YzwezOKbUBdKqSJB6GioAXghBIPLjQoEcMemSJYdKt7b2kl60PQL7GhU3GsjeJvWOdsCMp12ncrWDiUhffkfjTcfPvUYRUb/TmvYysiLsBunBfgkdua94C/TZIZ0477uLYFcfo1grUWwOQ7n6Ktyx61NWwcOB5lI1avJAaw24Q+jifGzd6mkJRWUo08XEWvji04ryKIW0VdTTf0IysieZLWAx89fWhj4IGn0nl3x0M4V6SoccdY0W/Hr/w77TvbGyiEsHx6dJyP2WcfOHpQbrTYryW8Eosvc8t7OziBfx/PjTbAu/e636WP/yxetWwkOSQcJOna4EbKN9Gu6pHGRFr8BDrYonX2GjqOdvTUApsPjaiWJBt6PJCboH75XKjnsbBwKLQZx58ZzLUP0X+PFsoWvEUVXj/a/gTPE9Qa3xx6ck6aRWlIW7BYKT2EhpJnzcyOi9ValiBsVja57SALSkYh4TGOlIUz0TkwJi4chvF7Cntf1EJ0e6ShiIidgZNP1hFVx2e2+04DRfzimGpehx52opmnZ
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(40470700002)(36840700001)(316002)(110136005)(2616005)(1076003)(426003)(5660300002)(7696005)(86362001)(336012)(8936002)(54906003)(8676002)(70206006)(82310400004)(40460700001)(4326008)(70586007)(356005)(2906002)(47076005)(36756003)(16526019)(508600001)(81166007)(83380400001)(44832011)(186003)(26005)(36860700001)(6666004)(36900700001)(2101003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 22:13:05.5963
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 22:13:16.6537
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f7e6d0d-90d2-4d05-926c-08d9dacfb3a1
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3036f66b-bc20-4bfe-cf4f-08d9dacfba38
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT037.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3250
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4571
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The EFCH SMBus controller's base address is determined using details in
-FCH::PM::DECODEEN[smbusasfiobase] and FCH::PM::DECODEEN[smbusasfioen].
-This code also writes to FCH::PM::ISACONTROL[mmioen] to enable MMIO
-decoding. These register fields were accessed using cd6h/cd7h port I/O.
-cd6h/cd7h port I/O is no longer available in later AMD processors.
-Change base address detection to use MMIO instead of port I/O cd6h/cd7h.
+AMD processors include registers capable of selecting between 2 SMBus
+ports. Port selection is made during each user access by writing to
+FCH::PM::DECODEEN[smbus0sel]. Change the driver to use MMIO during
+SMBus port selection because cd6h/cd7h port I/O is not available on
+later AMD processors.
 
 Signed-off-by: Terry Bowman <terry.bowman@amd.com>
 To: Guenter Roeck <linux@roeck-us.net>
@@ -118,44 +117,63 @@ Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
 Cc: Robert Richter <rrichter@amd.com>
 Cc: Thomas Lendacky <thomas.lendacky@amd.com>
 ---
- drivers/i2c/busses/i2c-piix4.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-piix4.c | 25 +++++++++++++++++--------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
-index ffb1367dd852..2937f3254c31 100644
+index 2937f3254c31..b59d2c74abf6 100644
 --- a/drivers/i2c/busses/i2c-piix4.c
 +++ b/drivers/i2c/busses/i2c-piix4.c
-@@ -98,6 +98,7 @@
- #define SB800_PIIX4_PORT_IDX_MASK_KERNCZ	0x18
- #define SB800_PIIX4_PORT_IDX_SHIFT_KERNCZ	3
+@@ -755,19 +755,28 @@ static void piix4_imc_wakeup(void)
+ 	release_region(KERNCZ_IMC_IDX, 2);
+ }
  
-+#define SB800_PIIX4_FCH_PM_DECODEEN_MMIO        BIT(1)
- #define SB800_PIIX4_FCH_PM_ADDR                 0xFED80300
- #define SB800_PIIX4_FCH_PM_SIZE                 8
+-static int piix4_sb800_port_sel(u8 port)
++static int piix4_sb800_port_sel(u8 port, struct sb800_mmio_cfg *mmio_cfg)
+ {
+ 	u8 smba_en_lo;
  
-@@ -344,10 +345,18 @@ static int piix4_setup_sb800_smba(struct pci_dev *PIIX4_dev,
- 	if (retval)
- 		return retval;
- 
--	outb_p(smb_en, SB800_PIIX4_SMB_IDX);
+-	outb_p(piix4_port_sel_sb800, SB800_PIIX4_SMB_IDX);
 -	smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
--	outb_p(smb_en + 1, SB800_PIIX4_SMB_IDX);
--	smba_en_hi = inb_p(SB800_PIIX4_SMB_IDX + 1);
-+	if (mmio_cfg.use_mmio) {
-+		iowrite32(ioread32(mmio_cfg.addr + 4) | SB800_PIIX4_FCH_PM_DECODEEN_MMIO,
-+			  mmio_cfg.addr + 4);
++	if (mmio_cfg->use_mmio) {
++		smba_en_lo = ioread8(mmio_cfg->addr + piix4_port_sel_sb800);
 +
-+		smba_en_lo = ioread8(mmio_cfg.addr);
-+		smba_en_hi = ioread8(mmio_cfg.addr + 1);
++		if ((smba_en_lo & piix4_port_mask_sb800) != port)
++			iowrite8((smba_en_lo & ~piix4_port_mask_sb800) | port,
++				 mmio_cfg->addr + piix4_port_sel_sb800);
 +	} else {
-+		outb_p(smb_en, SB800_PIIX4_SMB_IDX);
++		outb_p(piix4_port_sel_sb800, SB800_PIIX4_SMB_IDX);
 +		smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
-+		outb_p(smb_en + 1, SB800_PIIX4_SMB_IDX);
-+		smba_en_hi = inb_p(SB800_PIIX4_SMB_IDX + 1);
+ 
+-	if ((smba_en_lo & piix4_port_mask_sb800) != port)
+-		outb_p((smba_en_lo & ~piix4_port_mask_sb800) | port,
+-		       SB800_PIIX4_SMB_IDX + 1);
++		if ((smba_en_lo & piix4_port_mask_sb800) != port)
++			outb_p((smba_en_lo & ~piix4_port_mask_sb800) | port,
++			       SB800_PIIX4_SMB_IDX + 1);
 +	}
  
- 	piix4_sb800_region_release(&PIIX4_dev->dev, &mmio_cfg);
+ 	return (smba_en_lo & piix4_port_mask_sb800);
+ }
++
+ /*
+  * Handles access to multiple SMBus ports on the SB800.
+  * The port is selected by bits 2:1 of the smb_en register (0x2c).
+@@ -844,12 +853,12 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
+ 		}
+ 	}
  
+-	prev_port = piix4_sb800_port_sel(adapdata->port);
++	prev_port = piix4_sb800_port_sel(adapdata->port, &adapdata->mmio_cfg);
+ 
+ 	retval = piix4_access(adap, addr, flags, read_write,
+ 			      command, size, data);
+ 
+-	piix4_sb800_port_sel(prev_port);
++	piix4_sb800_port_sel(prev_port, &adapdata->mmio_cfg);
+ 
+ 	/* Release the semaphore */
+ 	outb_p(smbslvcnt | 0x20, SMBSLVCNT);
 -- 
 2.30.2
 
