@@ -2,90 +2,170 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0E8493290
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 02:54:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF21493341
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 03:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350311AbiASBxD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Jan 2022 20:53:03 -0500
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:39839 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346039AbiASBxC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jan 2022 20:53:02 -0500
-Received: by mail-oi1-f180.google.com with SMTP id e81so1786970oia.6;
-        Tue, 18 Jan 2022 17:53:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IBx2/hOLa0TpamwOX/KePgd9G0kSxXsL1SCGAEjqAKs=;
-        b=MEV5/MSKtU1XNHEwMfFbaK0C1DgiwKc/xt3QzmA6fyepakFKbSinS1iZ/vH9YDJfcu
-         cdJUDqbTyhmBHN/5cixhkJQYmrrsHuL/8PPM+FHq5jYujg6hvHfKAmrRkLHcZw/McNXh
-         nn2cXeIV9tAPcNwMfltjrACYsCjiyD2TOYrSdsvwi3UBxAU7luWUaGg21tAHqO3cQ6Ke
-         t3aMCO3FH5C1rfPtWyzkwmHJRvnFG1xH+FzrcJiu7Rp/KcFJrUwr5AfWAXF3njS2A1Ka
-         iMYu1yCQ5tqGZI+FGXSEHcSZ4KdpPGlvoIuz+6oAi1PeL1Zw5ox1SV+RJLZ2rR+pDJe+
-         iU9A==
-X-Gm-Message-State: AOAM5313iNZLD+zugkOJKf0XVCLI9wN4UEqTemTCB8zi/lFFDPSfR0z9
-        0uKiHjJ5wTirvzId+FF8uw==
-X-Google-Smtp-Source: ABdhPJw5Kk+Aea7EBsfhNZT1i/XyZCdzhr8UixQ+0QzTi+XrZLb3uHhoffLAsnMAb1AfyYOKVZzjXA==
-X-Received: by 2002:aca:d704:: with SMTP id o4mr1140753oig.99.1642557182186;
-        Tue, 18 Jan 2022 17:53:02 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id l8sm3438274oot.19.2022.01.18.17.53.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 17:53:01 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: i2c: imx: Make each example a separate entry
-Date:   Tue, 18 Jan 2022 19:52:53 -0600
-Message-Id: <20220119015253.2437352-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        id S1351178AbiASC7l (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Jan 2022 21:59:41 -0500
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:46435 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345120AbiASC7i (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jan 2022 21:59:38 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R941e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=guoheyi@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0V2F5eQY_1642561174;
+Received: from 30.225.140.36(mailfrom:guoheyi@linux.alibaba.com fp:SMTPD_---0V2F5eQY_1642561174)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 19 Jan 2022 10:59:35 +0800
+Message-ID: <0f5cd773-2d0a-b782-b967-ecbcec3de7b1@linux.alibaba.com>
+Date:   Wed, 19 Jan 2022 10:59:32 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [PATCH] drivers/i2c-aspeed: avoid invalid memory reference after
+ timeout
+Content-Language: en-US
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>
+References: <20220109132613.122912-1-guoheyi@linux.alibaba.com>
+ <ad5e5438-4a3f-2447-4af3-7caa91e7252a@linux.alibaba.com>
+ <CACPK8XcYp9iAD3fjBQCax41C-1UpA+1AQW3epyEooYzNLt7R5g@mail.gmail.com>
+ <e62fba0b-ebb9-934a-d7cf-6da33ecc4335@linux.alibaba.com>
+ <CACPK8Xc+v132vM-ytdAUFhywFXGpPF+uPSBWi68ROf_PLD4VQQ@mail.gmail.com>
+From:   Heyi Guo <guoheyi@linux.alibaba.com>
+In-Reply-To: <CACPK8Xc+v132vM-ytdAUFhywFXGpPF+uPSBWi68ROf_PLD4VQQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Each independent example should be a separate entry. This allows for
-'interrupts' to have different cell sizes.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/i2c/i2c-imx.yaml | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+在 2022/1/17 下午2:38, Joel Stanley 写道:
+> On Fri, 14 Jan 2022 at 14:01, Heyi Guo <guoheyi@linux.alibaba.com> wrote:
+>> Hi Joel,
+>>
+>>
+>> 在 2022/1/11 下午6:51, Joel Stanley 写道:
+>>> On Tue, 11 Jan 2022 at 07:52, Heyi Guo <guoheyi@linux.alibaba.com> wrote:
+>>>> Hi all,
+>>>>
+>>>> Any comments?
+>>>>
+>>>> Thanks,
+>>>>
+>>>> Heyi
+>>>>
+>>>> 在 2022/1/9 下午9:26, Heyi Guo 写道:
+>>>>> The memory will be freed by the caller if transfer timeout occurs,
+>>>>> then it would trigger kernel panic if the peer device responds with
+>>>>> something after timeout and triggers the interrupt handler of aspeed
+>>>>> i2c driver.
+>>>>>
+>>>>> Set the msgs pointer to NULL to avoid invalid memory reference after
+>>>>> timeout to fix this potential kernel panic.
+>>> Thanks for the patch. How did you discover this issue? Do you have a
+>>> test I can run to reproduce the crash?
+>> We are using one i2c channel to communicate with another MCU by
+>> implementing user space SSIF protocol, and the MCU may not respond in
+>> time if it is busy. If it responds after timeout occurs, it will trigger
+>> below kernel panic:
+>>
+> Thanks for the details. It looks like you've done some testing of
+> this, which is good.
+>
+>> After applying this patch, we'll get below warning instead:
+>>
+>> "bus in unknown state. irq_status: 0x%x\n"
+> Given we get to here in the irq handler, we've done these two tests:
+>
+>   - aspeed_i2c_is_irq_error()
+>   - the state is not INACTIVE or PENDING
+>
+> but there's no buffer ready for us to use. So what has triggered the
+> IRQ in this case? Do you have a record of the irq status bits?
+>
+> I am wondering if the driver should know that the transaction has
+> timed out, instead of detecting this unknown state.
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-imx.yaml b/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
-index c167958ae2a9..01720e338b4c 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
-+++ b/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
-@@ -88,9 +88,7 @@ unevaluatedProperties: false
- examples:
-   - |
-     #include <dt-bindings/clock/imx5-clock.h>
--    #include <dt-bindings/clock/vf610-clock.h>
--    #include <dt-bindings/gpio/gpio.h>
--    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
- 
-     i2c@83fc4000 {
-         compatible = "fsl,imx51-i2c", "fsl,imx21-i2c";
-@@ -99,6 +97,9 @@ examples:
-         clocks = <&clks IMX5_CLK_I2C2_GATE>;
-     };
- 
-+  - |
-+    #include <dt-bindings/clock/vf610-clock.h>
-+
-     i2c@40066000 {
-         compatible = "fsl,vf610-i2c";
-         reg = <0x40066000 0x1000>;
--- 
-2.32.0
+Yes, some drivers will try to abort the transaction before returning to 
+the caller, if timeout happens.
 
+The irq status bits are not always the same; searching from the history 
+logs, I found some messages like below:
+
+[  495.289499] aspeed-i2c-bus 1e78a680.i2c-bus: bus in unknown state. 
+irq_status: 0x2
+[  495.298003] aspeed-i2c-bus 1e78a680.i2c-bus: bus in unknown state. 
+irq_status: 0x10
+
+[   65.176761] aspeed-i2c-bus 1e78a680.i2c-bus: bus in unknown state. 
+irq_status: 0x15
+
+Thanks,
+
+Heyi
+
+>
+>
+>>> Can you provide a Fixes tag?
+>> I think the bug was introduced by the first commit of this file :(
+>>
+>> f327c686d3ba44eda79a2d9e02a6a242e0b75787
+>>
+>>
+>>> Do other i2c master drivers do this? I took a quick look at the meson
+>>> driver and it doesn't appear to clear it's pointer to msgs.
+>> It is hard to say. It seems other drivers have some recover scheme like
+>> aborting the transfer, or loop each messages in process context and
+>> don't do much in IRQ handler, which may disable interrupts or not retain
+>> the buffer pointer before returning timeout.
+> I think your change is okay to go in as it fixes the crash, but first
+> I want to work out if there's some missing handling of a timeout
+> condition that we should add as well.
+>
+>
+>> Thanks,
+>>
+>> Heyi
+>>
+>>
+>>>>> Signed-off-by: Heyi Guo <guoheyi@linux.alibaba.com>
+>>>>>
+>>>>> -------
+>>>>>
+>>>>> Cc: Brendan Higgins <brendanhiggins@google.com>
+>>>>> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+>>>>> Cc: Joel Stanley <joel@jms.id.au>
+>>>>> Cc: Andrew Jeffery <andrew@aj.id.au>
+>>>>> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+>>>>> Cc: linux-i2c@vger.kernel.org
+>>>>> Cc: openbmc@lists.ozlabs.org
+>>>>> Cc: linux-arm-kernel@lists.infradead.org
+>>>>> Cc: linux-aspeed@lists.ozlabs.org
+>>>>> ---
+>>>>>     drivers/i2c/busses/i2c-aspeed.c | 5 +++++
+>>>>>     1 file changed, 5 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+>>>>> index 67e8b97c0c950..3ab0396168680 100644
+>>>>> --- a/drivers/i2c/busses/i2c-aspeed.c
+>>>>> +++ b/drivers/i2c/busses/i2c-aspeed.c
+>>>>> @@ -708,6 +708,11 @@ static int aspeed_i2c_master_xfer(struct i2c_adapter *adap,
+>>>>>                 spin_lock_irqsave(&bus->lock, flags);
+>>>>>                 if (bus->master_state == ASPEED_I2C_MASTER_PENDING)
+>>>>>                         bus->master_state = ASPEED_I2C_MASTER_INACTIVE;
+>>>>> +             /*
+>>>>> +              * All the buffers may be freed after returning to caller, so
+>>>>> +              * set msgs to NULL to avoid memory reference after freeing.
+>>>>> +              */
+>>>>> +             bus->msgs = NULL;
+>>>>>                 spin_unlock_irqrestore(&bus->lock, flags);
+>>>>>
+>>>>>                 return -ETIMEDOUT;
