@@ -2,89 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 288FE494016
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 19:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 835DF49401C
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 19:45:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356853AbiASSnF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Jan 2022 13:43:05 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46486 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356833AbiASSnF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 13:43:05 -0500
+        id S1356895AbiASSoL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Jan 2022 13:44:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356889AbiASSoI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 13:44:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B17C061574;
+        Wed, 19 Jan 2022 10:44:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4AA7EB81B00
-        for <linux-i2c@vger.kernel.org>; Wed, 19 Jan 2022 18:43:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 868E1C004E1;
-        Wed, 19 Jan 2022 18:43:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87ECBB81A88;
+        Wed, 19 Jan 2022 18:44:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAC6DC004E1;
+        Wed, 19 Jan 2022 18:44:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642617783;
-        bh=rQeEhrFUuubE+RzMA2M7hGX5G4O0SnGfghaVa8BZX6A=;
+        s=k20201202; t=1642617845;
+        bh=BbszLFpC1Ue/+uWQOvLvyNU0J3sb2Vs5LQa3Gu5zVvo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GciTxeZZRHgxbWbIjw5mylnCOpHs+E5AZz4i9/FiKijjMBK8lGkQOIyjTwAmm8gi7
-         vujijUIxP5bdBZ31qAelhtU+ZRm2e6JmHdZInigy3+uv12QIQAKOO0CM1fESPueyrN
-         TQZ0t82qJRJwIBE/kQc/7XS/DqQTWzEvykxNNPi75veuwFLfDX/th9W9zLiDmhdrVl
-         VrK1iurRg3CEA/uDyP8izqqEGINgsr2rdl9hKy3IAb3m+uKAPYMj7f7XgaZkaEUYtc
-         JAszm8+i9JBvV9eAYGXOBiV6DQ/7uxyXdhoisWu/CrMwQ9eftGZWy8UPmstipMYDCm
-         HjkBtpp8ttvSA==
-Date:   Wed, 19 Jan 2022 19:43:00 +0100
+        b=AYfjYRVA2ucIr0QDG6Pk90jFJAwY043Y2mCZvyUUegt3Un6th8GM6a4unw9a4bC3Y
+         SacoLtxxHvlprXtJxkWaeIXjylPeyZNLdZv4Lk0Pw8xKzVimAQCHQ0H8ZLWdT6ysqz
+         0HyrHho/qpFSfciSPHseL76yeYTnzDOwTapJU2fKB6Sc0ih4sKstFafC3Reg5C47nT
+         L0EVFiSW13nRyFhI062VHAw9fS3UBKyETQ6mqXC5/YjZmQeiNMOT6pI/jfCnRA8SFt
+         ei+NBphDb17Zf+UYXnKEWyXcmwXYf97LZ4kZ5yyvYCC24frSzPC0dV776ttHOOGJ9R
+         tN0B0FjEbJs+g==
+Date:   Wed, 19 Jan 2022 19:44:02 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Alex Henrie <alexh@vpitech.com>
-Cc:     Hector Martin <marcan@marcan.st>, Jean Delvare <jdelvare@suse.de>,
-        linux-i2c@vger.kernel.org, alexhenrie24@gmail.com
-Subject: Re: [PATCH] i2c: i801: Add module parameter to inhibit BIOS access
-Message-ID: <YehbtKp6QFoQ3NRt@kunai>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Terry Bowman <Terry.Bowman@amd.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        linux-watchdog@vger.kernel.org, jdelvare@suse.com,
+        linux-i2c@vger.kernel.org, andy.shevchenko@gmail.com,
+        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org,
+        wim@linux-watchdog.org, rrichter@amd.com, thomas.lendacky@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+Subject: Re: [PATCH v3 0/4] Watchdog: sp5100_tco: Replace cd6h/cd7h port I/O
+ accesses with MMIO accesses
+Message-ID: <Yehb8h+C4A9/c1Z5@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Alex Henrie <alexh@vpitech.com>, Hector Martin <marcan@marcan.st>,
-        Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
-        alexhenrie24@gmail.com
-References: <20220111233151.8484-1-alexh@vpitech.com>
- <20220118134705.6ae5b0a4@endymion>
- <20220119094900.7792c05f94329f584dad934a@vpitech.com>
- <dc6c3b38-dbc1-3d86-fd87-607a2d6a6685@marcan.st>
- <20220119110156.574ae2d96af6b8a722c8c9ba@vpitech.com>
+        Guenter Roeck <linux@roeck-us.net>,
+        Terry Bowman <Terry.Bowman@amd.com>,
+        Jean Delvare <jdelvare@suse.de>, linux-watchdog@vger.kernel.org,
+        jdelvare@suse.com, linux-i2c@vger.kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+References: <20220118202234.410555-1-terry.bowman@amd.com>
+ <20220119163012.4274665d@endymion>
+ <dda39f1f-b683-35ac-d810-d4759c4f8448@amd.com>
+ <YehOmuqA008XuBHI@kunai>
+ <160d12ca-8493-7536-036c-9dd5af7b4ce0@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LjCAagdX++XMYiVx"
+        protocol="application/pgp-signature"; boundary="hVnjJj2sOhpzsCBJ"
 Content-Disposition: inline
-In-Reply-To: <20220119110156.574ae2d96af6b8a722c8c9ba@vpitech.com>
+In-Reply-To: <160d12ca-8493-7536-036c-9dd5af7b4ce0@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---LjCAagdX++XMYiVx
+--hVnjJj2sOhpzsCBJ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 
-> Jean, please feel free to disregard my patch and to commit Hector's
-> with "Tested-by: Alex Henrie <alexh@vpitech.com>".
+> Also, if the immutable branch only includes the patch introducing
+> request_muxed_mem_region(), the pull order should not really matter.
 
-Please respnd to the mail directly with the Tested-by tag. We have
-tooling which collects tags for us per patch. Makes a maintainers life a
-lot easier.
+Right, good point!
 
 
---LjCAagdX++XMYiVx
+--hVnjJj2sOhpzsCBJ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHoW7AACgkQFA3kzBSg
-KbbSUg//Vp25YCUuJorpILah9K5SAK9MRifbpe/vSkXY3zv6NWaoUqz/TP5sbkqi
-E9zn6sh8xXxSHZbX2sqrOKlAz0/wgXsSTgNIopkDuAmIYpOZjx3DtufBS3brGWes
-kHgE8TX4u7uHSxDR7KKJM1j53d9LdJ62UXE2GxxjTTNmrufaELowDi9vajQW0mTF
-rJ1x6OWh9z8mQa62/TSUeX0t1EjQtaZVPlsiCAKcbD7JZvPpSQahYBgmx6/aOC94
-MNnsKkLrg8P0XdYg0CiE2o4N7pbyVFJ3BjHuL6k2qW8KfBz9pmkE+h2o+gK4Omak
-oeiUocJzejIAqP+Onb764FZdvBZTfsu4+Lego0jq/6ErjP1e/WUhZN7GkHl44y5Q
-I1SLl+J+eb/CZ8vmH4zYZ+oeMgCTf6MkJcr5d1sPKYXWSIyiSmoOxZPaNiItJvdO
-7JgrwNN2Xt7WslY5FyzlywqqPcogZWp5H/j/T0wuUzIRFcTVs+PDSKuRzvI+V9MB
-0xXLZwTcFxktvGzJXYW0uMZ2CzPvoRmWk8vZm267wgrCeJlzZslmSJeYVuKYNcZ6
-PKiduYtbJVnyTA/rGd1Q4kPBugPevCWPFAPJ/+wrADu3oxcxADZC77YAsz3OFChp
-erBf1bOXMqTMwJ9PMsvB4tlMpY0KhvIzDSMyyL9YpBB/cFF5Y4I=
-=cBxo
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHoW/IACgkQFA3kzBSg
+Kba/HA//aVEDzV0cURi59julvcPSNd+S4bo255St0hZj9zUJEiScLukQYnlmY41L
+qMJDQG+XePJpSEJJRrhoSxYslyyoV1udifmHdMar2CJyky5e7htLd3yL+XeHgy+b
+l6G8JDFV2LdOlv+UPH6GCB+bt6bxhuloxslkMrKaUxwARWZvn9eIsV53pZMrRdXw
+MtXJaa/m5PCu2rYBXqR0bK6JF334p7utNumngeECn/Z7gSHD2p5fI1MruaAnQzXq
+LeBFDIZ9fU8vHi2v+slR/Cskcv5PijRaq/d2vnCaFZ00BUGWA6vEMdvg01q6fBm0
+WdoUXsEOP+BS8v48kU64Rjgw4WG5rHYsNzadKhsuzSokkGOM6NNJ4Xwr5i3tML/J
+2syLjil7ebjD6X5rwdMABydE+2T+MYapwod7PCZcaSaPQxQ/qRKPnW/L7C5mhtrT
+GNO1MKO7Ov3vvJz1z26nhS6w8w3IG3IAk+83rGhDDnDJ4iqv16mA/V5n2kJXn4o+
+uhobKjs3aHwj6coTBNy2FACt5Cu3+9PW7VT+nuLu+2FNld+3wMclM3satZ2HWucK
+CQ1YM0o5DR9uO+0bNpRfsxNjTRgVQrGXsSqrxUqvgcHRVAFxqckmcrJ7sToK1LUE
+LpfbeYvr1c5UY6MwmcDMaM+E1zwVHClou2fByOLBUuskroc7WE0=
+=CW1X
 -----END PGP SIGNATURE-----
 
---LjCAagdX++XMYiVx--
+--hVnjJj2sOhpzsCBJ--
