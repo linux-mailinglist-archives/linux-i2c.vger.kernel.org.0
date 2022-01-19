@@ -2,351 +2,257 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E126E493D46
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 16:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36244493D93
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 16:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355767AbiASPfD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Jan 2022 10:35:03 -0500
-Received: from mxout03.lancloud.ru ([45.84.86.113]:36576 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238476AbiASPfC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 10:35:02 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 761F020F6A92
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-iio@vger.kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "ALSA Development Mailing List" <alsa-devel@alsa-project.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-phy@lists.infradead.org>, Jiri Slaby <jirislaby@kernel.org>,
-        <openipmi-developer@lists.sourceforge.net>,
-        "Khuong Dinh" <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
+        id S1355882AbiASPrA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Jan 2022 10:47:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355624AbiASPq4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 10:46:56 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF5FC061574;
+        Wed, 19 Jan 2022 07:46:56 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id e81so4745381oia.6;
+        Wed, 19 Jan 2022 07:46:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=LnWfVRfNsWhn3KCKfkXN1IPDGRcjwiXW3hktOQD1t2c=;
+        b=DGdvkYeVNv4oLdoNZFXAcIQrBVGwi1LW0pO1aw1PUyTMzM/x7RTnx9WbMElqfYkHto
+         9A+m+qNAwb5h8eJZfNU+JiOHzqvJ3Gx8nAt4bpnF5R/SjSigbffSUynmoeU/jZh0/V4e
+         NiemJVFd61ZMqGiuPPGIIWv6aiqWZ4WLlXzOodhtuJeFs5FkxTzDtfso80ILD04zJdQu
+         ZwMfoTVzzrvn1GWuYHG653iJH0nO/a9Wby1LPNYTrD4JK/FdgBfBt/n6egVPpSmvoFNm
+         UFunnqgnDVno/mjWEYf90clfQ4sa0IjicYcXmy9WbpycDOUv6t9sILI+Y+D5PUeFGJtn
+         NMXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LnWfVRfNsWhn3KCKfkXN1IPDGRcjwiXW3hktOQD1t2c=;
+        b=faUHeNZA/+e8W42mB0OnP9SdsDz8dGxD16BhHxpskv3nsTwTvBaYnncSPwJp4+2LqT
+         dYcGqas8eLFcbDtP+FAwoonAMv6c1DhfHOs5RoFbmmtyS6h1s48XJ2Dr7ADMrN6Tpkr1
+         OV0tU7Khox6FMw1Zy3VP3an9v5ghE08qQ3agPT/amYT8LZIwoVrXfFYitSxQFeBswOp3
+         3CnOfRKF+WjwilMaWvwDff2TXpEL9CaoOR42eRtQAOkSrmJXquCOfF9cL6DXj3C04PoN
+         wLrJFuhWDBkMkOgKht2Ddg1ThADMHfxpWPVwUF93BhFttXwoFcKni13JuyVEIBkrfYN3
+         oYjQ==
+X-Gm-Message-State: AOAM532M9VNtMy40Vl4bfJbJUWJJ2fBhXGyVrm9kz4mmzvC9kBp3plM0
+        sd5h7K0bLSnjTj2xRlsFZjU=
+X-Google-Smtp-Source: ABdhPJwc1TT+ChSeoXbg0p0CnzpgXR2ZisNNptyDL+X2NF8gsxcBGGwsXgrMQiKRkJVR2qHi2rd9ng==
+X-Received: by 2002:a05:6808:f13:: with SMTP id m19mr3513973oiw.123.1642607215838;
+        Wed, 19 Jan 2022 07:46:55 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e1sm75857oou.0.2022.01.19.07.46.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 07:46:54 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Terry Bowman <terry.bowman@amd.com>
+Cc:     linux-watchdog@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "Sebastian Reichel" <sre@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        <platform-driver-x86@vger.kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        <netdev@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        "Linux MMC List" <linux-mmc@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "James Morse" <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        <linux-mediatek@lists.infradead.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-References: <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
- <Yd9L9SZ+g13iyKab@sirena.org.uk>
- <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
- <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
- <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru>
- <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
- <57af1851-9341-985e-7b28-d2ba86770ecb@omp.ru>
- <20220117084732.cdy2sash5hxp4lwo@pengutronix.de>
- <68d3bb7a-7572-7495-d295-e1d512ef509e@omp.ru>
- <20220118222606.3iwuzbenl7g6oeiq@pengutronix.de>
-Organization: Open Mobile Platform
-Message-ID: <b6b059bd-1491-26e2-9ba4-d34705a7106d@omp.ru>
-Date:   Wed, 19 Jan 2022 18:34:53 +0300
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Robert Richter <rrichter@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Mario Limonciello <Mario.Limonciello@amd.com>
+References: <20220118202234.410555-1-terry.bowman@amd.com>
+ <20220118202234.410555-3-terry.bowman@amd.com>
+ <CAHp75VdBFN+QMJpYDp8ytGGrBKYyjxU8u=Xrn44Lc3UGLPRQOA@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v3 2/4] Watchdog: sp5100_tco: Refactor MMIO base address
+ initialization
+Message-ID: <b4f66a42-6f25-7e93-2a3b-5d73af39e72e@roeck-us.net>
+Date:   Wed, 19 Jan 2022 07:46:52 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20220118222606.3iwuzbenl7g6oeiq@pengutronix.de>
-Content-Type: text/plain; charset="windows-1252"
+In-Reply-To: <CAHp75VdBFN+QMJpYDp8ytGGrBKYyjxU8u=Xrn44Lc3UGLPRQOA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello!
-
-On 1/19/22 1:26 AM, Uwe Kleine-König wrote:
-
-[...]
->>>>>>> However for an interupt this cannot work. You will always have to check
->>>>>>> if the irq is actually there or not because if it's not you cannot just
->>>>>>> ignore that. So there is no benefit of an optional irq.
->>>>>>>
->>>>>>> Leaving error message reporting aside, the introduction of
->>>>>>> platform_get_irq_optional() allows to change
->>>>>>>
->>>>>>> 	irq = platform_get_irq(...);
->>>>>>> 	if (irq < 0 && irq != -ENXIO) {
->>>>>>> 		return irq;
->>>>>>> 	} else if (irq >= 0) {
->>>>>>
->>>>>>    Rather (irq > 0) actually, IRQ0 is considered invalid (but still returned).
->>>>>
->>>>> This is a topic I don't feel strong for, so I'm sloppy here. If changing
->>>>> this is all that is needed to convince you of my point ...
->>>>
->>>>    Note that we should absolutely (and first of all) stop returning 0 from platform_get_irq()
->>>> on a "real" IRQ0. Handling that "still good" zero absolutely doesn't scale e.g. for the subsystems
->>>> (like libata) which take 0 as an indication that the polling mode should be used... We can't afford
->>>> to be sloppy here. ;-)
->>>
->>> Then maybe do that really first?
+On 1/19/22 3:53 AM, Andy Shevchenko wrote:
+> On Tue, Jan 18, 2022 at 10:23 PM Terry Bowman <terry.bowman@amd.com> wrote:
 >>
->>    I'm doing it first already:
+>> Combine MMIO base address and alternate base address detection. Combine
+>> based on layout type. This will simplify the function by eliminating
+>> a switch case.
 >>
->> https://lore.kernel.org/all/5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru/
->>
->>    This series is atop of the above patch...
+>> Move existing request/release code into functions. This currently only
+>> supports port I/O request/release. The move into a separate function
+>> will make it ready for adding MMIO region support.
 > 
-> Ah, I missed that (probably because I didn't get the cover letter).
+> ...
 > 
->>> I didn't recheck, but is this what the
->>> driver changes in your patch is about?
->>
->>    Partly, yes. We can afford to play with the meaning of 0 after the above patch.
+>> To: Guenter Roeck <linux@roeck-us.net>
+>> To: linux-watchdog@vger.kernel.org
+>> To: Jean Delvare <jdelvare@suse.com>
+>> To: linux-i2c@vger.kernel.org
+>> To: Wolfram Sang <wsa@kernel.org>
+>> To: Andy Shevchenko <andy.shevchenko@gmail.com>
+>> To: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>> Cc: linux-kernel@vger.kernel.org
+>> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+>> Cc: Robert Richter <rrichter@amd.com>
+>> Cc: Thomas Lendacky <thomas.lendacky@amd.com>
 > 
-> But the changes that are in patch 1 are all needed?
-
-   Yes, they follow from the platform_get_irq_optional() changing the sense of its result...
- 
-[...]
->>> For my part I'd say this doesn't justify the change, but at least I
->>> could better life with the reasoning. If you start at:
->>>
->>> 	irq = platform_get_irq_optional(...)
->>> 	if (irq < 0 && irq != -ENXIO)
->>> 		return irq
->>> 	else if (irq > 0)
->>> 		setup_irq(irq);
->>> 	else
->>> 		setup_polling()
->>>
->>> I'd change that to
->>>
->>> 	irq = platform_get_irq_optional(...)
->>> 	if (irq > 0) /* or >= 0 ? */
->>
->>    Not >= 0, no...
->>
->>> 		setup_irq(irq)
->>> 	else if (irq == -ENXIO)
->>> 		setup_polling()
->>> 	else
->>> 		return irq
->>>
->>> This still has to mention -ENXIO, but this is ok and checking for 0 just
->>> hardcodes a different return value.
->>
->>    I think comparing with 0 is simpler (and shorter) than with -ENXIO, if you
->> consider the RISC CPUs, like e.g. MIPS...
+> Same comment to all your patches.
 > 
-> Hmm, I don't know MIPS good enough to judge. So I created a small C
-
-   MIPS has read-only register 0 (containing 0 :-)) which should simplify things. But
-I'd have to check the actual object code... yeah, MIPS has a branching instruction that
-compares 2 registers and branches on the result'; with -ENXIO you'd have to load an
-immediate value into a register first... 
-
-> file:
+> ...
 > 
-> 	$ cat test.c
-> 	#include <errno.h>
+>> +static int __sp5100_tco_prepare_base(struct sp5100_tco *tco,
+>> +                                    u32 mmio_addr,
+>> +                                    const char *dev_name)
+>> +{
+>> +       struct device *dev = tco->wdd.parent;
 > 
-> 	int platform_get_irq_optional(void);
-> 	void a(void);
+>> +       int ret = 0;
 > 
-> 	int func_0()
-> 	{
-> 		int irq = platform_get_irq_optional();
+> Not really used variable.
 > 
-> 		if (irq == 0)
-> 			a();
-> 	}
+>> +       if (!mmio_addr)
+>> +               return -ENOMEM;
+>> +
+>> +       if (!devm_request_mem_region(dev, mmio_addr,
+>> +                                   SP5100_WDT_MEM_MAP_SIZE,
+>> +                                   dev_name)) {
+>> +               dev_dbg(dev, "MMIO address 0x%08x already in use\n",
+>> +                       mmio_addr);
+>> +               return -EBUSY;
+>> +       }
+>> +
+>> +       tco->tcobase = devm_ioremap(dev, mmio_addr,
+>> +                                   SP5100_WDT_MEM_MAP_SIZE);
+
+Talking about line splits, is this one necessary ?
+
+>> +       if (!tco->tcobase) {
+>> +               dev_dbg(dev, "MMIO address 0x%08x failed mapping.\n",
+>> +                       mmio_addr);
 > 
-> 	int func_enxio()
-> 	{
-> 		int irq = platform_get_irq_optional();
+>> +               devm_release_mem_region(dev, mmio_addr,
+>> +                                       SP5100_WDT_MEM_MAP_SIZE);
 > 
-> 		if (irq == -ENXIO)
-> 			a();
-> 	}
+> Why? If it's a short live mapping, do not use devm.
 > 
-> With some cross compilers as provided by Debian doing
+
+This is not short lived; it is needed by the driver. The release
+is an artifact of calling this function twice and ignoring the error
+from devm_ioremap() if the first call fails. devm_release_mem_region()
+isn't strictly needed but that would result in keeping the memory
+region reserved even though it isn't used by the driver.
+
+There is a functional difference to the original code, though.
+The failing devm_ioremap() causes the code to try the alternate
+address. I am not sure if that really adds value; devm_ioremap()
+fails because the system is out of virtual memory, and calling
+it again on a different address doesn't seem to add much value.
+I preferred the original code, which would only call devm_ioremap()
+after successfully reserving a memory region.
+
+>> +               return -ENOMEM;
+>> +       }
 > 
-> 	$CC -c -O3 test.c
-
-   Mhm, do we really use -O3 to build the kernel?
-
-> 	nm --size-sort test.o
+>> +       dev_info(dev, "Using 0x%08x for watchdog MMIO address\n",
+>> +                mmio_addr);
 > 
-> I get:
+> Unneeded noise.
 > 
->   compiler			|  size of func_0  | size of func_enxio
-> ================================+==================|====================
-> aarch64-linux-gnu-gcc		| 0000000000000024 | 0000000000000028
-> arm-linux-gnueabi-gcc		|         00000018 |         00000018
-> arm-linux-gnueabihf-gcc		|         00000010 |         00000012
-
-   Hm, 2 bytes only -- perhaps Thumb mode?
-
-> i686-linux-gnu-gcc		|         0000002a |         0000002a
-
-   Expected.
-
-> mips64el-linux-gnuabi64-gcc	| 0000000000000054 | 000000000000005c
-
-   That's even more than expected -- 64-bit mode used?
-
-> powerpc-linux-gnu-gcc		|         00000058 |         00000058
-
-   Well, they say
-
-> s390x-linux-gnu-gcc		| 000000000000002e | 0000000000000030
-> x86_64-linux-gnu-gcc		| 0000000000000022 | 0000000000000022
-
-   Again, as expected...
-
-> So you save some bytes indeed.
-
-   I see you have a lot of spare time (unlike me!). :-)
-
->>> Anyhow, I think if you still want to change platform_get_irq_optional
->>> you should add a few patches converting some drivers which demonstrates
->>> the improvement for the callers.
->>
->>    Mhm, I did include all the drivers where the IRQ checks have to be modified,
->> not sure what else you want me to touch...
+>> +       return ret;
 > 
-> I somehow expected that the changes that are now necessary (or possible)
-> to callers makes them prettier somehow. Looking at your patch again:
-
-   I think they do...
-
+> On top of above it's a NIH devm_ioremap_resource().
 > 
->  - drivers/counter/interrupt-cnt.c
->    This one is strange in my eyes because it tests the return value of
->    gpiod_get_optional against NULL :-(
 
-   Mhm, how is this connected with my patch? :-/
+Not sure what NIH means, but if you refer to the lack of
+devm_release_mem_region(), again, it isn't short lived.
 
->  - drivers/edac/xgene_edac.c
->    This one just wants a silent irq lookup and then throws away the
->    error code returned by platform_get_irq_optional() to return -EINVAL.
->    Not so nice, is it?
+>> +}
+> 
+> 
+> ...
+> 
+>> +       int ret = 0;
+> 
+> Redundant assignment.
+> 
+> ...
+> 
+>> +       /* Check MMIO address conflict */
+>> +       ret = __sp5100_tco_prepare_base(tco, mmio_addr, dev_name);
+> 
+>> +
+>> +       /* Check alternate MMIO address conflict */
+> 
+> Unify this with the previous comment.
+> 
 
-   I have dropped this file from my (to be posted yet) v2... sorry that it
-took so long...
+Why ? It refers to the code below. If that is a single or two comments
+is really just POV.
 
->  - drivers/gpio/gpio-altera.c
->    This one just wants a silent irq lookup. And maybe it should only
->    goto skip_irq if the irq was not found, but on an other error code
->    abort the probe?!
+>> +       if (ret)
+>> +               ret = __sp5100_tco_prepare_base(tco, alt_mmio_addr,
+>> +                                               dev_name);
+> 
+> ...
+> 
+>> +               if (alt_mmio_addr & ((SB800_ACPI_MMIO_DECODE_EN |
+>> +                                     SB800_ACPI_MMIO_SEL) !=
+>> +                                    SB800_ACPI_MMIO_DECODE_EN)) {
+> 
+> The split looks ugly. Consider to use temporary variables or somehow
+> rearrange the condition that it doesn't break in the middle of the one
+> logical token.
 
-  That's debatable... but anyway it's a matter of a separate (follow up)
-patch...
+Split at the &, maybe.
 
 > 
->  - drivers/gpio/gpio-mvebu.c
->    Similar to gpio-altera.c: Wants a silent irq and improved error
->    handling.
-
-   Same as above...
-
->  - drivers/i2c/busses/i2c-brcmstb.c
->    A bit ugly that we now have dev->irq == 0 if the irq isn't available,
->    but if requesting the irq failed irq = -1 is used?
-
-   This doesn't matter much really but can change to 0, if you want... :-)
-
+>> +                       alt_mmio_addr &= ~0xFFF;
 > 
->  - drivers/mmc/host/sh_mmcif.c
->    Broken error handling. This one wants to abort on irq[1] < 0 (with
->    your changed semantic).
+> Why capital letters?
+> 
+>> +                       alt_mmio_addr += SB800_PM_WDT_MMIO_OFFSET;
+>> +               }
+> 
+> ...
+> 
+>> +               if (!(alt_mmio_addr & (((SB800_ACPI_MMIO_DECODE_EN |
+>> +                                      SB800_ACPI_MMIO_SEL)) !=
+>> +                     SB800_ACPI_MMIO_DECODE_EN))) {
+> 
+> Ditto.
+> 
+>> +                       alt_mmio_addr &= ~0xFFF;
+> 
+> Ditto.
+> 
+>> +                       alt_mmio_addr += SB800_PM_WDT_MMIO_OFFSET;
+> 
+> ...
+> 
+> Okay, I see this is the original code like this... Perhaps it makes
+> sense to reshuffle them (indentation-wise) at the same time and
+> mention this in the changelog.
+> 
+> ...
+> 
+>>          release_region(SP5100_IO_PM_INDEX_REG, SP5100_PM_IOPORTS_SIZE);
+> 
+> Is it still needed? I have no context to say if devm_iomap() and this
+> are not colliding, please double check the correctness.
+> 
+Not sure I understand. This is the release of the io region reserved with
+request_muxed_region() at the beginning of this function. Why would it no
+longer be necessary to release that region ?
 
-   Again, matter of a separate patch (I don't have the guily hardware anymore
-but I guess Geert could help with that).
-
-> I stopped here.
-
-   Note that most of your complaints are about the existing driver logic --
-which my patch just couldn't deal with... I currently don't have the bandwidth
-for addressing all your complaints; some (more obvious) I'm goiing to address
-as the time permits, the draft patches have been done already...
-
-> It seems quite common that drivers assume a value < 0 returned by
-> platform_get_irq means not-found
-
-   Of course, before this patch -ENXIO meant IRQ-not-found, many drivers
-don't bother to filter it out separately (for simplicity?).
-
-> and don't care for -EPROBE_DEFER (what else can happen?).
-
-   Hm, I haven't really seen a lot the probe dererral mishandling in the code
-touched by at least my patch #1...
-
-> Changing a relevant function in that mess seems unfortunate here :-\
-
-   You seem to have some spare time and I'm getting distracted contrariwise...
-want to help? :-)
-
-> Best regards
-> Uwe
-
-MBR, Sergey
+Guenter
