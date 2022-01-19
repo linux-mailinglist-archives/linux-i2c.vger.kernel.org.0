@@ -2,112 +2,146 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D504939BE
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 12:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1D04939C2
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 12:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354252AbiASLmF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Jan 2022 06:42:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236274AbiASLmE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 06:42:04 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5845AC061574;
-        Wed, 19 Jan 2022 03:42:04 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id cx27so9989980edb.1;
-        Wed, 19 Jan 2022 03:42:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1+B4sq8/6TEaBWgWEnV3mLAtHSqc2KRS8IDGfcK24Xo=;
-        b=n8nJ15XTj9DsA1iPCd3e/D3UZrS/N4+PGtIrYUgw7kROEgh1GxwowG6HwoXX05BAWO
-         sGHJLzDS1rKJs2Zq9cY3XgtXlLUMtVgVUwQDxzzNEx/xehkXRQCxquUBWZYqfSiP9hE/
-         Gtazz9zgEhcnGsHP4RzwMwa5/D7CrJQeQUnFLOsfwcucW4paZmomSPA5K9m3KEoj1Aon
-         JYcDxhzUyq/FmN7uF4ivkqMna+1myZndfJNRlBkO9Sk17KACxC3VStABrGHFzVveCUE7
-         8mo7rZWl+ruqq0X4iZ+2adcfVUZyvYfv98Z0qxROLZ2oZNgpL2kZ/kZ1hgIK02YA9UTG
-         3QNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1+B4sq8/6TEaBWgWEnV3mLAtHSqc2KRS8IDGfcK24Xo=;
-        b=OsPBZXGMcv2utlYGGjKUF6dKR6kUvsu2qlGOKQw7DCAgU3fnzkTQIc3Ou3J7CTlJHr
-         Zv14AM12bIv0STKM9XiWZEl/ChcYKv6q3iAZdKz8pCoNMD4Flr7GayKbHoyPSX5JSwuJ
-         yrrnHtKUwmgUrZ/hzz8FdfNAiZ/rLmsOSLP8TK1VL0KReFFDosCwtwiER2TeFJrK/DmA
-         WxtQlyWLHRbC3ED8hx+1JxJSTVa+duy29aP8ivB4rr3kq88ZFp7ls9yRfuZVsPn3fNZH
-         nIvTSOLvrzPAwDpm1xwbdMJRCZJkqgjZ54Ouv0JnPlpBLxfj44BJ8Hz/NHvNcAjMgS2Z
-         BP6g==
-X-Gm-Message-State: AOAM530qBGwCDosPGICgCx+nYtTXmoocuToI+mEpqWSjEM+6MHrE/82F
-        aFioK0zf7x3ks3P+rPsm/cjT3cMfTbeBoCFJrtw=
-X-Google-Smtp-Source: ABdhPJzAQTlv0R11jEPsza2Ux5Y3MNDCkdqf0w81jskUcd0V7TchTarD2HHgi0MIvTsTn5aA4xMiP5RJxiqLIh+bn+c=
-X-Received: by 2002:a17:907:968c:: with SMTP id hd12mr23728698ejc.639.1642592522875;
- Wed, 19 Jan 2022 03:42:02 -0800 (PST)
+        id S1354263AbiASLmU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Jan 2022 06:42:20 -0500
+Received: from mxout03.lancloud.ru ([45.84.86.113]:32826 "EHLO
+        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236274AbiASLmT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 06:42:19 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 3B47720D46BF
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+ (summary)
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>, <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-iio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        <alsa-devel@alsa-project.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        <linux-mtd@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-phy@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        <openipmi-developer@lists.sourceforge.net>,
+        "Khuong Dinh" <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        "Jiri Slaby" <jirislaby@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        <linux-serial@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Jaroslav Kysela" <perex@perex.cz>, <linux-pwm@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>, <linux-pm@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "John Garry" <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        "William Breathitt Gray" <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Takashi Iwai" <tiwai@suse.com>,
+        <platform-driver-x86@vger.kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-edac@vger.kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>, <netdev@vger.kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>, <linux-mmc@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>,
+        "Vinod Koul" <vkoul@kernel.org>, James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        <linux-mediatek@lists.infradead.org>,
+        "Brian Norris" <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220115183643.6zxalxqxrhkfgdfq@pengutronix.de> <YeQpWu2sUVOSaT9I@kroah.com>
+ <20220118091819.zzxpffrxbckoxiys@pengutronix.de>
+ <b6038ec2-da4a-de92-b845-cac2be0efcd1@omp.ru>
+ <20220119113314.tpqfdgi6nurmzfun@pengutronix.de>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <a42e1c8b-2c3d-e3f2-e48c-ad145322ad3d@omp.ru>
+Date:   Wed, 19 Jan 2022 14:42:09 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220118202234.410555-1-terry.bowman@amd.com> <20220118202234.410555-2-terry.bowman@amd.com>
-In-Reply-To: <20220118202234.410555-2-terry.bowman@amd.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 19 Jan 2022 13:40:20 +0200
-Message-ID: <CAHp75VfD2iOF+nkCtOGyAd7sadxJWL2yFKo+zXcrv6E-ADU98g@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] Watchdog: sp5100_tco: Move timer initialization
- into function
-To:     Terry Bowman <terry.bowman@amd.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Robert Richter <rrichter@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220119113314.tpqfdgi6nurmzfun@pengutronix.de>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 10:22 PM Terry Bowman <terry.bowman@amd.com> wrote:
->
-> Refactor driver's timer initialization into new function. This is needed
-> inorder to support adding new device layouts while using common timer
-> initialization.
+On 1/19/22 2:33 PM, Uwe Kleine-König wrote:
 
-> Co-developed-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+[...]
+>>>>> A possible compromise: We can have both. We rename
+>>>>> platform_get_irq_optional() to platform_get_irq_silent() (or
+>>>>> platform_get_irq_silently() if this is preferred) and once all users are
+>>>>> are changed (which can be done mechanically), we reintroduce a
+>>>>> platform_get_irq_optional() with Sergey's suggested semantic (i.e.
+>>>>> return 0 on not-found, no error message printking).
+>>>>
+>>>> Please do not do that as anyone trying to forward-port an old driver
+>>>> will miss the abi change of functionality and get confused.  Make
+>>>> build-breaking changes, if the way a function currently works is
+>>>> changed in order to give people a chance.
+>>>
+>>> Fine for me. I assume this is a Nack for Sergey's patch?
+>>
+>>    Which patch do you mean? I'm starting to get really muddled... :-(
+> 
+> I'm talking about "[PATCH 1/2] platform: make
+> platform_get_irq_optional() optional"
 
-> To: Guenter Roeck <linux@roeck-us.net>
-> To: linux-watchdog@vger.kernel.org
-> To: Jean Delvare <jdelvare@suse.com>
-> To: linux-i2c@vger.kernel.org
-> To: Wolfram Sang <wsa@kernel.org>
-> To: Andy Shevchenko <andy.shevchenko@gmail.com>
-> To: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Robert Richter <rrichter@amd.com>
-> Cc: Thomas Lendacky <thomas.lendacky@amd.com>
+   I thought GregKH was talking about your renaming patch... :-/
 
-Please, do not pollute commit messages with this rather unnecessary
-list of recipients. There are (at least?) two possibilities:
-- use --cc and --to whe run `git send-email`
-- move them under the cutter '--- ' line below
+> because "trying to forward-port an
+> old driver will miss the abi" applies to it.
 
-> ---
+   Mhm... why not tell me right from the start? Jr even tell that to Andy
+instead of merging his patch, so I wouldn't get sucked into this work? 
+I wouldn't bother with v2 and it would have saved a lot of time spent on
+email... :-(
+   Do we also remember that "the stable API is a nonsense" thing? :-)
 
-> +       val = readl(SP5100_WDT_CONTROL(tco->tcobase));
-> +       if (val & SP5100_WDT_DISABLED) {
-> +               dev_err(dev, "Watchdog hardware is disabled\n");
-> +               return(-ENODEV);
+> Best regards
+> Uwe
 
-Missed space, too many parentheses.
-
-> +       }
-
--- 
-With Best Regards,
-Andy Shevchenko
+MBR, Sergey
