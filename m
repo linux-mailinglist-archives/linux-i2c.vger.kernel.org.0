@@ -2,41 +2,41 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B761E49437C
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jan 2022 00:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53950494383
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jan 2022 00:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357681AbiASXHD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Jan 2022 18:07:03 -0500
-Received: from mail-mw2nam10on2073.outbound.protection.outlook.com ([40.107.94.73]:41696
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        id S1344415AbiASXIX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Jan 2022 18:08:23 -0500
+Received: from mail-dm6nam12on2078.outbound.protection.outlook.com ([40.107.243.78]:35008
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1344356AbiASXG6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 19 Jan 2022 18:06:58 -0500
+        id S1357744AbiASXHL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 19 Jan 2022 18:07:11 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MWX9tCszxhMLfjMIOlQGnA+YPSLnP30cy8rBCmrqXa4M2HRq6VVMY1eoWkXnNk6LbA+QxEABEkcgW2CqJ2ByF9xui75In+hw+SteLue5I5obMQcoHfJDGLTjx1leIuhtiOQkb1BmBO9qxpdSzdsJmsyw1jJOkAYS3ARNkRshGPRZxVVQj//JuWbKhAGiEZ80pp0C/bUFVFNex2dvwkXaO2vaU/KG8OkiwSC82lK/fAvBaBbd++afjG8vpb+6OtGqzardzBGT9b4WBmQ33WJ/DKTAuwq0NbRc9Xn7+SVhoNthpKlJvWIMJwtC8BREHwCBunGTEX+uvK3FQ0eGFo9b7g==
+ b=AAPK3lQUhZ6w0TFXmKc3A4cFFaFFFursJdx1TJR6XKq0LhIBs3EhQDDl8UHVLToBJ/f8S1Qi8/YFp1i5BQsV9zRLBBU+VmT+fUAyOwkoDbYQFwr9lQyR4FdC5Xk6LuIlLXyO9NYX/rYdkF+ejdx40vhO1zCBwMnWUB1E4NRVQW42diVrFrmWPXjP1VH7Sm30PkFkV8FaqYdXdFvAWi+simLg4mVZwg+/QGdPyQPg5H88AIAB0NDrVVecEv91jH3LCDsKeVn0qpYYGPLrIf857rkm3MpMyMFSxgEkLPvnWMgcQW11IuNXlB8Bky8lXUzrIkCm2y6bCd8olAIsnV4jXw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PuQ2jEQywtADrnzaFTSCXwUipcUyfr4RWsUJD9MuPLE=;
- b=ZqBfaWRQeaxJWw59chEDQqH9spUD9BLUbYPsxqvZpmBqEdAh6jO/GUXjGwaMjedtqNmXbRKb037OczpmIypR3tT0fIwYz/RDve/fqrF27jp8gpg64VvXJAOPI4OW2UJ7XlKhqPTSoBECj+fqopF+MlfJIkCe4wt+xexDcUm/0Dh+O7vBABcCc7rHu7VyePoWWSEFyXsqJt7J4tJF0dijAImkr39jvmYDJdSLnbBg/nyU5H6zFwrkBjLG7P4BBrWL/IJ9iOakjPeSWbkexLyu0Rz+pOCHEej11RCnz7PDolC76BH/Ve8j2LRyaT4KTR61YniDJT2u+6D5mzXMlkhuuw==
+ bh=05daaBYCHeVDep9kD4pl8GtZZOosFqIupaN0kKpkYS8=;
+ b=mP3Rp0QAzl3L+B7chsUX7FWFJLH+a2CYuX4me4eyjRTADZXeTKU06lsZ7gfOrvCjOgFHEDONKmBjzg5QHMlTXOpn1GUBXix96udX20/Ii7nwRu85J5yXlHS7gMiqWuVWSousjbcRVj1kregh6cvog5Fh6P9sRIfn49lF/9UEU2L9Gwly4FmttyE4OnZ1zUltcKyglyEeSyW12AIYFoiIVfLXXYf4Z2w3CJrfLABTydcsXuEYgp+T/hzny/fqwIXwXw7FZVvbEEToLJ110Eic3RwDKCIQNr9zAFsjwmRR56BEJZCVhj2iuvXCIdXezaqiGtRgy73x0HXd0VARYIskyA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PuQ2jEQywtADrnzaFTSCXwUipcUyfr4RWsUJD9MuPLE=;
- b=Hov3YZBZkSsLPB8N7xawKpfTGCh+7p4Ga+s/TM+ASyXwjHs39n2396ImeBm2CAC8xGPeUqm5kH5X7rn0HHdDAqbMbgnANKnZ+kmboy6n81t5B8C4YwdmqE8Ze1QVQYmNKEnGTFaGZou0eptF93Brb0f55Pb43kP92RymGI6JJHs=
-Received: from DS7PR03CA0131.namprd03.prod.outlook.com (2603:10b6:5:3b4::16)
- by SN6PR12MB2781.namprd12.prod.outlook.com (2603:10b6:805:67::20) with
+ bh=05daaBYCHeVDep9kD4pl8GtZZOosFqIupaN0kKpkYS8=;
+ b=a7qXoodNWxrqqYiRfkurT+cxaENx4Arc7Up/1G2ATv0igTsgnjnldHM/9bhMmsRFBr57SBLSb/es9ACVPbYXBoZ+FeFkILLglFAXv2fevUdBUUvQuKA9TvxwPw4wxWuKA6MtttRIfHbNg7lMuqUrc9EXcrDPIAnY3cWUSzgUD7Q=
+Received: from DM6PR06CA0003.namprd06.prod.outlook.com (2603:10b6:5:120::16)
+ by BY5PR12MB3716.namprd12.prod.outlook.com (2603:10b6:a03:1a1::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.10; Wed, 19 Jan
- 2022 23:06:55 +0000
-Received: from DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b4:cafe::17) by DS7PR03CA0131.outlook.office365.com
- (2603:10b6:5:3b4::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8 via Frontend
- Transport; Wed, 19 Jan 2022 23:06:55 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Wed, 19 Jan
+ 2022 23:07:07 +0000
+Received: from DM6NAM11FT012.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:120:cafe::15) by DM6PR06CA0003.outlook.office365.com
+ (2603:10b6:5:120::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7 via Frontend
+ Transport; Wed, 19 Jan 2022 23:07:06 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -44,13 +44,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT036.mail.protection.outlook.com (10.13.172.64) with Microsoft SMTP
+ DM6NAM11FT012.mail.protection.outlook.com (10.13.173.109) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4909.7 via Frontend Transport; Wed, 19 Jan 2022 23:06:55 +0000
+ 15.20.4909.7 via Frontend Transport; Wed, 19 Jan 2022 23:07:06 +0000
 Received: from ethanolx7ea3host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 19 Jan
- 2022 17:06:54 -0600
+ 2022 17:07:05 -0600
 From:   Terry Bowman <terry.bowman@amd.com>
 To:     <terry.bowman@amd.com>, <linux@roeck-us.net>,
         <linux-watchdog@vger.kernel.org>, <jdelvare@suse.com>,
@@ -61,9 +61,9 @@ CC:     <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
         <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
         <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
         <Mario.Limonciello@amd.com>
-Subject: [PATCH v3 2/9] i2c: piix4: Replace hardcoded memory map size with a #define
-Date:   Wed, 19 Jan 2022 17:06:19 -0600
-Message-ID: <20220119230626.31560-3-terry.bowman@amd.com>
+Subject: [PATCH v3 3/9] i2c: piix4: Move port I/O region request/release code into functions
+Date:   Wed, 19 Jan 2022 17:06:20 -0600
+Message-ID: <20220119230626.31560-4-terry.bowman@amd.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220119230626.31560-1-terry.bowman@amd.com>
 References: <20220119230626.31560-1-terry.bowman@amd.com>
@@ -75,105 +75,122 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9ceb3a3b-0a2a-49e5-731c-08d9dba06349
-X-MS-TrafficTypeDiagnostic: SN6PR12MB2781:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR12MB2781C4C3EB27778F164D6B4483599@SN6PR12MB2781.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
+X-MS-Office365-Filtering-Correlation-Id: ca766633-d22a-431e-d31c-08d9dba069de
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3716:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB3716EB9278950C9E1D04584083599@BY5PR12MB3716.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: S+Dvdaozmsqps6JvXPcOzNGytnGLs0X/thRPtJwQsJwVaJ99fEY1jUtOQXkAXHzSdieRcvTpRvuqM8HW7PkBPcMk0KopuxQ2ktTglMrwCASDaL35UGwxeu3q5AiWQBB3nTuAosguzGV3EQfsEETIHUAinW5qoEGpdDHlJO0C/H9mC2WrlCTZD9bwTlZDiETqVUxVjVRC4OhbLQE3zDHlC7JpiLu4lLI9M6tsv4OfsD+MhlAF3Txue1RZoNbRRtd/6FUikmFztL62/ayXsheJqYHRMXxFsMZxOsvQPQtb1hX2qfKUb2S23XhEcn8WUMqkjYacUPQLu7HAiBStJi+XGeDyTLqAzmPAUaxHtE2sPzHlJZNY6JyLods4BvWsheUVqIdksY4bSqIPufTIXD/nR2KGNjRZpRJcrZawKfcbp+eIIQKB8p3Q8Dt8i8WgR7ZqDDkb/ph/RqRmQkpie6UrOsvSAJNRrSwliDhiqZ5vRz7s1Y3nuEVJD2+2xsZ53UxG/VBhu9DJLsSKVIZcMilJn154mPOLimMouyJmna9SZiJcSU8tdWdB8bykG6Nxzdxu8Xl+fPh7a/RSf/4VhP2AZ9kfm/i0pEYUPzjZX08m/bnFqz/R/m7M28Xn95ksz4ZUayzJ3sw9Hj/wW1CEwLTMjhAt4uNOtmJ8sOfpc3fSKmiM4qiYFYv1ieFE5neUqYOMlath9bLwE0aeqHWsjnsFxVH10V9nxDtxvar9wsQuBldfHhU9FI/kGumb0Ptt97e7iS98jYcm+ZN5sOA3tF2jvuGPBH9zPgpBqdyUwNgLKa40jWPrm9f98yLuRMJCFPxt
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(40470700002)(36840700001)(46966006)(54906003)(6666004)(70586007)(36756003)(70206006)(8676002)(81166007)(2616005)(426003)(1076003)(508600001)(316002)(7696005)(83380400001)(86362001)(36860700001)(47076005)(8936002)(2906002)(356005)(4326008)(16526019)(186003)(82310400004)(40460700001)(336012)(26005)(5660300002)(110136005)(44832011)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: GmfrqvBFbPeyMKA763X3JIqEbKUDWlvb42KUQqhrfF1xIf8Bv2gbpoN53N4AV0gq/E74jyhYr+0uOkw91t5KFRq4CviqPt5v5FPFLFMwoirahH6onlEETpxWpJ/ZGq40UucB1zFG44FKCKbF5lV20j5JWAko0XalgvaFQtnIyPXJCdLLmGeSvYSpr8cF7k81aXYLrlP8P9Y0cyaBnteKn7ohyIEhSqevvTqAGFik2K0hanXNkNPhA55P6byst70caRZoLI6Dj3zeNM1QmLR4B+NhTniqz6zYeA/Voo0E2Fb8PNOcyeLC2cGqnYGVERLnd2vDEGQuLc8xm/qNGw8Bfqh38q7Cgpyw6tIxzvF9w3NQZC6PWTz/zNOiNKPWF6wyj3VcpfUq/Dv3fpzCAzUA83gxkOZdoXh1Zc9jwt4nUP0j7uCj28RxeqdaW9UqjwuHW6jU1oPe0DmMSntUvtb1MQIAfGzzuDz0mjelqIqEaOjIPnO1gKJ/j4mr6fMX6blcit0DMIPXBVrWWiDpCHTjMAAEn0AFUJ0jOII2wlExALP8CNaywudWtS0BsaQeYHonaN3ealrQ1UoblQT8tGQrxNLIxgGNtJbBLkNtYHyt/Vm6fP5l7iGtEEyQnMIpN8Jku6bTW7pW3BXQ9cyeNwB5gSaSWHenuMS3wXE/WFQwiCwR7xn2hrU8XMOQBpVd24WWB0ZrdNarTziD0qFKL3AAjHXqTUdveETeAhwnbbpWkY5mSXg6TGrYWbGuIZWz7gJR5SGdLVJaxp7AVNjRUEN9jTARoGcAd4IyG/n7CeQiGTOx/PtvbeN5Mxi33oI3FNLe
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700002)(81166007)(7696005)(508600001)(26005)(54906003)(2906002)(4326008)(40460700001)(6666004)(86362001)(82310400004)(8676002)(70586007)(316002)(336012)(426003)(1076003)(16526019)(2616005)(5660300002)(110136005)(356005)(36756003)(44832011)(70206006)(83380400001)(47076005)(186003)(8936002)(36860700001)(36900700001)(2101003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2022 23:06:55.5706
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2022 23:07:06.6315
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9ceb3a3b-0a2a-49e5-731c-08d9dba06349
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca766633-d22a-431e-d31c-08d9dba069de
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT012.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2781
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3716
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Replace number constant with #define to improve readability and
-maintainability.
+Move duplicated region request and release code into a function. Move is
+in preparation for following MMIO changes.
 
 Signed-off-by: Terry Bowman <terry.bowman@amd.com>
 ---
- drivers/i2c/busses/i2c-piix4.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ drivers/i2c/busses/i2c-piix4.c | 43 +++++++++++++++++++++++-----------
+ 1 file changed, 29 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
-index 8c1b31ed0c42..b88d990b013f 100644
+index b88d990b013f..14324e03fe24 100644
 --- a/drivers/i2c/busses/i2c-piix4.c
 +++ b/drivers/i2c/busses/i2c-piix4.c
-@@ -77,6 +77,7 @@
+@@ -165,6 +165,26 @@ struct i2c_piix4_adapdata {
+ 	u8 port;		/* Port number, shifted */
+ };
  
- /* SB800 constants */
- #define SB800_PIIX4_SMB_IDX		0xcd6
-+#define SB800_PIIX4_SMB_MAP_SIZE        2
- 
- #define KERNCZ_IMC_IDX			0x3e
- #define KERNCZ_IMC_DATA			0x3f
-@@ -290,7 +291,9 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
- 	else
- 		smb_en = (aux) ? 0x28 : 0x2c;
- 
--	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, 2, "sb800_piix4_smb")) {
++static int piix4_sb800_region_setup(struct device *dev)
++{
 +	if (!request_muxed_region(SB800_PIIX4_SMB_IDX,
 +				  SB800_PIIX4_SMB_MAP_SIZE,
 +				  "sb800_piix4_smb")) {
- 		dev_err(&PIIX4_dev->dev,
- 			"SMB base address index region 0x%x already in use.\n",
- 			SB800_PIIX4_SMB_IDX);
-@@ -302,7 +305,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
++		dev_err(dev,
++			"SMB base address index region 0x%x already in use.\n",
++			SB800_PIIX4_SMB_IDX);
++		return -EBUSY;
++	}
++
++	return 0;
++}
++
++static void piix4_sb800_region_release(struct device *dev)
++{
++	release_region(SB800_PIIX4_SMB_IDX,
++		       SB800_PIIX4_SMB_MAP_SIZE);
++}
++
+ static int piix4_setup(struct pci_dev *PIIX4_dev,
+ 		       const struct pci_device_id *id)
+ {
+@@ -270,6 +290,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
+ 	unsigned short piix4_smba;
+ 	u8 smba_en_lo, smba_en_hi, smb_en, smb_en_status, port_sel;
+ 	u8 i2ccfg, i2ccfg_offset = 0x10;
++	int retval;
+ 
+ 	/* SB800 and later SMBus does not support forcing address */
+ 	if (force || force_addr) {
+@@ -291,21 +312,16 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
+ 	else
+ 		smb_en = (aux) ? 0x28 : 0x2c;
+ 
+-	if (!request_muxed_region(SB800_PIIX4_SMB_IDX,
+-				  SB800_PIIX4_SMB_MAP_SIZE,
+-				  "sb800_piix4_smb")) {
+-		dev_err(&PIIX4_dev->dev,
+-			"SMB base address index region 0x%x already in use.\n",
+-			SB800_PIIX4_SMB_IDX);
+-		return -EBUSY;
+-	}
++	retval = piix4_sb800_region_setup(&PIIX4_dev->dev);
++	if (retval)
++		return retval;
+ 
+ 	outb_p(smb_en, SB800_PIIX4_SMB_IDX);
+ 	smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
  	outb_p(smb_en + 1, SB800_PIIX4_SMB_IDX);
  	smba_en_hi = inb_p(SB800_PIIX4_SMB_IDX + 1);
  
--	release_region(SB800_PIIX4_SMB_IDX, 2);
-+	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
+-	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
++	piix4_sb800_region_release(&PIIX4_dev->dev);
  
  	if (!smb_en) {
  		smb_en_status = smba_en_lo & 0x10;
-@@ -371,7 +374,8 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
- 			piix4_port_shift_sb800 = SB800_PIIX4_PORT_IDX_SHIFT;
- 		}
- 	} else {
--		if (!request_muxed_region(SB800_PIIX4_SMB_IDX, 2,
-+		if (!request_muxed_region(SB800_PIIX4_SMB_IDX,
-+					  SB800_PIIX4_SMB_MAP_SIZE,
- 					  "sb800_piix4_smb")) {
- 			release_region(piix4_smba, SMBIOSIZE);
- 			return -EBUSY;
-@@ -384,7 +388,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
- 				       SB800_PIIX4_PORT_IDX;
- 		piix4_port_mask_sb800 = SB800_PIIX4_PORT_IDX_MASK;
- 		piix4_port_shift_sb800 = SB800_PIIX4_PORT_IDX_SHIFT;
--		release_region(SB800_PIIX4_SMB_IDX, 2);
-+		release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
- 	}
- 
- 	dev_info(&PIIX4_dev->dev,
-@@ -682,7 +686,9 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
+@@ -686,10 +702,9 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
  	u8 port;
  	int retval;
  
--	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, 2, "sb800_piix4_smb"))
-+	if (!request_muxed_region(SB800_PIIX4_SMB_IDX,
-+				  SB800_PIIX4_SMB_MAP_SIZE,
-+				  "sb800_piix4_smb"))
- 		return -EBUSY;
+-	if (!request_muxed_region(SB800_PIIX4_SMB_IDX,
+-				  SB800_PIIX4_SMB_MAP_SIZE,
+-				  "sb800_piix4_smb"))
+-		return -EBUSY;
++	retval = piix4_sb800_region_setup(&adap->dev);
++	if (retval)
++		return retval;
  
  	/* Request the SMBUS semaphore, avoid conflicts with the IMC */
-@@ -758,7 +764,7 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
+ 	smbslvcnt  = inb_p(SMBSLVCNT);
+@@ -764,7 +779,7 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
  		piix4_imc_wakeup();
  
  release:
--	release_region(SB800_PIIX4_SMB_IDX, 2);
-+	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
+-	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
++	piix4_sb800_region_release(&adap->dev);
  	return retval;
  }
  
