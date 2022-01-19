@@ -2,212 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2F74939F7
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 12:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D117B493A2A
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 13:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347023AbiASLy6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Jan 2022 06:54:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
+        id S1354401AbiASMUl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Jan 2022 07:20:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346033AbiASLy6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 06:54:58 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B85C061574;
-        Wed, 19 Jan 2022 03:54:57 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id j23so4884016edp.5;
-        Wed, 19 Jan 2022 03:54:57 -0800 (PST)
+        with ESMTP id S234677AbiASMUj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 07:20:39 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15592C06173E;
+        Wed, 19 Jan 2022 04:20:39 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id o12so8493274lfu.12;
+        Wed, 19 Jan 2022 04:20:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PS6rF1/qC7hs4eJz9gJcqA6Dx/xMCX3EO5vU88DfZZc=;
-        b=M7CPAyDLJkK51lli8eGjFkvNRTyy8qp3E++q68zhCMEl86F8fz18sa0Yx7gGvlOIoX
-         yPFtEjvq0TbGkGBVu02onAkQI6LBbYynWWfkRyy+d2U4Tc03AAW1ysx2pA1Coer3Dg0T
-         DFIuCMs+GHVrkJ469lLT8f/wSbYP7HSYAqOBPS6RXjvqdy3ngibKBIgy/291aNvKeAiv
-         uwOtASk4ZQhAZXtbsVrEnQ5LlQSD4/Hy4RAUh5xAeM7W8uZ6Aj12ugMfZg9kDRFfVMWT
-         oJfEI4iGB8yGaRaIy5BD3RCcSnPSIQkbrdpmfw4OSE9l6Z2BvkSNF5MO73+cC+ufgEpk
-         kY/A==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=x7T608envSn65mtmAeo3YxF/Yj94yNBfmWXtPvIkNW0=;
+        b=I/eG5Cu69oB4/0oQ+fNPOnT9X0A31uHTGLbkOqXSP7km1HqT2g9YJ8jwlJeqCJVsAy
+         R6huVxNhLier+x2F5E/+ai9eX5ff/0dNk1rb9ZMsVsD+hH3gq3zgg08CK5l/R8+wRIGc
+         cd3O1DQmqr1LBrAvWyqCKMB6NKrwgcRPjVV+aizoDmxbsXFyKb+GJaCT+MqqflrdLuD6
+         xA5dyqgr/r9CUvx02JhdnzXHqiX2QCLZVV1eHWt9bAG4Q5tQAhWETakkBjfSl12NJQs+
+         mkOGqBRzuql17MJxD1gOsHm0whP8y6DhyjdMZPI4EFEFyZ6eVnT9ZVqJyNQ3BdOUWiiS
+         5L0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PS6rF1/qC7hs4eJz9gJcqA6Dx/xMCX3EO5vU88DfZZc=;
-        b=YhEFx4/de4oBebjLG6XRMi5wjAaeZpsErANTilzM1leNmUpmv8g1MMujzky7v7xVNs
-         aAhOs08wfGQ8XFgD8M8WsQRGqpkjn569FQcM7efP3qpqkZwuAyx1c7SVIJ4aGmUYpQfx
-         5fYXLx4VDGtL+J1BL8hqrn293G0cZOZoM2EX/nJ1PFULpJX9suVyGZyE186psB/S1pnD
-         xftWWVAFkyOn7dmJm6rTQFC7GjA4E8OrOb06LGQG4ZENPMZIK64Br8rJEDe4jjLEIhvs
-         5Bh3g6eBiNbgcPackuMs/uNS2bTg83paRoZhtXYRhdpAKiK7N0Z3m4Ng6oXSaH304vSd
-         61vg==
-X-Gm-Message-State: AOAM533RHu8PnN3FOAyCHurJTacZwGsp6RTTX4DaZU11QWaB3MEqLeNp
-        9wmSNaQAv/Vqa4vZBdbt3AlxVd6h9jVoqwer9b+s2wz9YClbwQ==
-X-Google-Smtp-Source: ABdhPJwcCyUxQdrXrMBzu5TYLkAIRDj9GnezxNnu4HntlsC0d3wCBQImpqxaj+4/OZU4XNNp4Rz3aGe6kdVP/nVTdJM=
-X-Received: by 2002:a50:c388:: with SMTP id h8mr24181980edf.218.1642593295904;
- Wed, 19 Jan 2022 03:54:55 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=x7T608envSn65mtmAeo3YxF/Yj94yNBfmWXtPvIkNW0=;
+        b=mmO5bLA5HmH/Ogfl8MOVwcamEb9ZY+9JPBFExgjU2DtUHHg8TthyP5ZALdbFa6OGqp
+         hhO390HVCoAJcD9PQ2yPeUefQjAC3O7MUSLnsCRTUojCM+YMDXTJ3mPryBp+K/FDEFvE
+         tZWouydomG6TrbZNZOR+U5Y8YHTHtvfr8EGUff3wSp+Zv79UrGGtVh/9e9QBAY3l5sWE
+         lo+kjd2DQZqat2X8LYQV04rjz7tiQYvVm8ZkLKFEkT3VEcBc04SbkkTMq2uHnZAyuQF3
+         ra6h9k+HWgNdT6TYVWmktOnHjzbh4/76a8BGFOjW9lbZmvHt4aZZcVD9cq5wp5wDzSa1
+         Ys3A==
+X-Gm-Message-State: AOAM530iSxChbOEeMWnxjJ1/sBwcBdhty2C+qGsGNnV/QSk9NCvF1ks8
+        DJNusHrzjNAZOdyAQRUcfyeq3nbjnGg=
+X-Google-Smtp-Source: ABdhPJwe3MenFJXbtwjTP43X46FVmE45XDOXbaFhj5zqSnHc1YYf6U7W+nqb8VaP4KwEdb0Uqiaqgg==
+X-Received: by 2002:a05:651c:2059:: with SMTP id t25mr24872735ljo.427.1642594837409;
+        Wed, 19 Jan 2022 04:20:37 -0800 (PST)
+Received: from [192.168.2.145] (109-252-139-36.dynamic.spd-mgts.ru. [109.252.139.36])
+        by smtp.googlemail.com with ESMTPSA id z13sm141770lfr.183.2022.01.19.04.20.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 04:20:36 -0800 (PST)
+Message-ID: <a7a33c29-427d-5e82-f327-aa4701d51898@gmail.com>
+Date:   Wed, 19 Jan 2022 15:20:35 +0300
 MIME-Version: 1.0
-References: <20220118202234.410555-1-terry.bowman@amd.com> <20220118202234.410555-3-terry.bowman@amd.com>
-In-Reply-To: <20220118202234.410555-3-terry.bowman@amd.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 19 Jan 2022 13:53:13 +0200
-Message-ID: <CAHp75VdBFN+QMJpYDp8ytGGrBKYyjxU8u=Xrn44Lc3UGLPRQOA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] Watchdog: sp5100_tco: Refactor MMIO base address initialization
-To:     Terry Bowman <terry.bowman@amd.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Robert Richter <rrichter@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/6] i2c: tegra: Add support for Tegra234 I2C
+Content-Language: en-US
+To:     Akhil R <akhilrajeev@nvidia.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Petlozu Pravareshwar <petlozup@nvidia.com>
+References: <1642080623-15980-1-git-send-email-akhilrajeev@nvidia.com>
+ <1642080623-15980-2-git-send-email-akhilrajeev@nvidia.com>
+ <d9a21970-b403-4674-dbd6-5dfab0a83a3b@gmail.com>
+ <DM5PR12MB1850237ECA6C115AD776635EC0599@DM5PR12MB1850.namprd12.prod.outlook.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <DM5PR12MB1850237ECA6C115AD776635EC0599@DM5PR12MB1850.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 10:23 PM Terry Bowman <terry.bowman@amd.com> wrote:
->
-> Combine MMIO base address and alternate base address detection. Combine
-> based on layout type. This will simplify the function by eliminating
-> a switch case.
->
-> Move existing request/release code into functions. This currently only
-> supports port I/O request/release. The move into a separate function
-> will make it ready for adding MMIO region support.
+19.01.2022 11:20, Akhil R пишет:
+>> 13.01.2022 16:30, Akhil R пишет:
+>>> +static const struct tegra_i2c_hw_feature tegra234_i2c_hw = {
+>>> +     .has_continue_xfer_support = true,
+>>> +     .has_per_pkt_xfer_complete_irq = true,
+>>> +     .clk_divisor_hs_mode = 0x2,
+>>> +     .clk_divisor_std_mode = 0x4f,
+>>> +     .clk_divisor_fast_mode = 0x58,
+>>> +     .clk_divisor_fast_plus_mode = 0x24,
+>>> +     .has_config_load_reg = true,
+>>> +     .has_multi_master_mode = true,
+>>> +     .has_slcg_override_reg = true,
+>>> +     .has_mst_fifo = true,
+>>> +     .quirks = &tegra194_i2c_quirks,
+>>> +     .supports_bus_clear = true,
+>>> +     .has_apb_dma = false,
+>>> +     .tlow_std_mode = 0x8,
+>>> +     .thigh_std_mode = 0x7,
+>>> +     .tlow_fast_fastplus_mode = 0x1,
+>>> +     .thigh_fast_fastplus_mode = 0x1,
+>>> +     .setup_hold_time_std_mode = 0x08080808,
+>>> +     .setup_hold_time_fast_fast_plus_mode = 0x02020202,
+>>> +     .setup_hold_time_hs_mode = 0x090909,
+>>> +     .has_interface_timing_reg = true, };
+>>
+>> Why tegra194_i2c_hw can't be reused by T234? Looks like I2C h/w hasn't
+>> changed and somebody just made a minor tuning of the timing parameters, does
+>> it really matter in practice?
+> The timing parameters are important to get the desired data rate for I2C. The values,
+> unfortunately, cannot be reused from Tegra194.
 
-...
+From where those T194 parameters specified in the Tegra I2C driver came
+from?
 
-> To: Guenter Roeck <linux@roeck-us.net>
-> To: linux-watchdog@vger.kernel.org
-> To: Jean Delvare <jdelvare@suse.com>
-> To: linux-i2c@vger.kernel.org
-> To: Wolfram Sang <wsa@kernel.org>
-> To: Andy Shevchenko <andy.shevchenko@gmail.com>
-> To: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Robert Richter <rrichter@amd.com>
-> Cc: Thomas Lendacky <thomas.lendacky@amd.com>
-
-Same comment to all your patches.
-
-...
-
-> +static int __sp5100_tco_prepare_base(struct sp5100_tco *tco,
-> +                                    u32 mmio_addr,
-> +                                    const char *dev_name)
-> +{
-> +       struct device *dev = tco->wdd.parent;
-
-> +       int ret = 0;
-
-Not really used variable.
-
-> +       if (!mmio_addr)
-> +               return -ENOMEM;
-> +
-> +       if (!devm_request_mem_region(dev, mmio_addr,
-> +                                   SP5100_WDT_MEM_MAP_SIZE,
-> +                                   dev_name)) {
-> +               dev_dbg(dev, "MMIO address 0x%08x already in use\n",
-> +                       mmio_addr);
-> +               return -EBUSY;
-> +       }
-> +
-> +       tco->tcobase = devm_ioremap(dev, mmio_addr,
-> +                                   SP5100_WDT_MEM_MAP_SIZE);
-> +       if (!tco->tcobase) {
-> +               dev_dbg(dev, "MMIO address 0x%08x failed mapping.\n",
-> +                       mmio_addr);
-
-> +               devm_release_mem_region(dev, mmio_addr,
-> +                                       SP5100_WDT_MEM_MAP_SIZE);
-
-Why? If it's a short live mapping, do not use devm.
-
-> +               return -ENOMEM;
-> +       }
-
-> +       dev_info(dev, "Using 0x%08x for watchdog MMIO address\n",
-> +                mmio_addr);
-
-Unneeded noise.
-
-> +       return ret;
-
-On top of above it's a NIH devm_ioremap_resource().
-
-> +}
-
-
-...
-
-> +       int ret = 0;
-
-Redundant assignment.
-
-...
-
-> +       /* Check MMIO address conflict */
-> +       ret = __sp5100_tco_prepare_base(tco, mmio_addr, dev_name);
-
-> +
-> +       /* Check alternate MMIO address conflict */
-
-Unify this with the previous comment.
-
-> +       if (ret)
-> +               ret = __sp5100_tco_prepare_base(tco, alt_mmio_addr,
-> +                                               dev_name);
-
-...
-
-> +               if (alt_mmio_addr & ((SB800_ACPI_MMIO_DECODE_EN |
-> +                                     SB800_ACPI_MMIO_SEL) !=
-> +                                    SB800_ACPI_MMIO_DECODE_EN)) {
-
-The split looks ugly. Consider to use temporary variables or somehow
-rearrange the condition that it doesn't break in the middle of the one
-logical token.
-
-> +                       alt_mmio_addr &= ~0xFFF;
-
-Why capital letters?
-
-> +                       alt_mmio_addr += SB800_PM_WDT_MMIO_OFFSET;
-> +               }
-
-...
-
-> +               if (!(alt_mmio_addr & (((SB800_ACPI_MMIO_DECODE_EN |
-> +                                      SB800_ACPI_MMIO_SEL)) !=
-> +                     SB800_ACPI_MMIO_DECODE_EN))) {
-
-Ditto.
-
-> +                       alt_mmio_addr &= ~0xFFF;
-
-Ditto.
-
-> +                       alt_mmio_addr += SB800_PM_WDT_MMIO_OFFSET;
-
-...
-
-Okay, I see this is the original code like this... Perhaps it makes
-sense to reshuffle them (indentation-wise) at the same time and
-mention this in the changelog.
-
-...
-
->         release_region(SP5100_IO_PM_INDEX_REG, SP5100_PM_IOPORTS_SIZE);
-
-Is it still needed? I have no context to say if devm_iomap() and this
-are not colliding, please double check the correctness.
-
--- 
-With Best Regards,
-Andy Shevchenko
+I'm now looking at T194 TRM (Xavier_TRM_DP09253002_v1.3p 10.2.3.1.1
+Example Settings for Various I2C Speeds) and see that all the values
+should match T234. Please check whether T194 configuration is correct
+and fix it if needed.
