@@ -2,246 +2,180 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 240E1493E1D
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 17:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CB6493E92
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 17:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356125AbiASQMj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Jan 2022 11:12:39 -0500
-Received: from mxout04.lancloud.ru ([45.84.86.114]:42292 "EHLO
-        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355919AbiASQMe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 11:12:34 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru AA47520A2ADD
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>
-CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-iio@vger.kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "ALSA Development Mailing List" <alsa-devel@alsa-project.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-phy@lists.infradead.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        <platform-driver-x86@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        "Saravanan Sekar" <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Mark Brown" <broonie@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <openipmi-developer@lists.sourceforge.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>, "Tony Luck" <tony.luck@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        "Linux MMC List" <linux-mmc@vger.kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "James Morse" <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        "Sebastian Reichel" <sre@kernel.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        <linux-mediatek@lists.infradead.org>,
-        "Brian Norris" <computersforpeace@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-References: <20220117092444.opoedfcf5k5u6otq@pengutronix.de>
- <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
- <20220117114923.d5vajgitxneec7j7@pengutronix.de>
- <CAMuHMdWCKERO20R2iVHq8P=BaoauoBAtiampWzfMRYihi3Sb0g@mail.gmail.com>
- <20220117170609.yxaamvqdkivs56ju@pengutronix.de>
- <CAMuHMdXbuZqEpYivyS6hkaRN+CwTOGaHq_OROwVAWvDD6OXODQ@mail.gmail.com>
- <20220118090913.pjumkq4zf4iqtlha@pengutronix.de>
- <CAMuHMdUW8+Y_=uszD+JOZO3Lpa9oDayk+GO+cg276i2f2T285w@mail.gmail.com>
- <20220118120806.pbjsat4ulg3vnhsh@pengutronix.de>
- <CAMuHMdWkwV9XE_R5FZ=jPtDwLpDbEngG6+X2JmiDJCZJZvUjYA@mail.gmail.com>
- <20220118142945.6y3rmvzt44pjpr4z@pengutronix.de>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <6370798a-7a7e-243d-99f9-09bf772ddbac@omp.ru>
-Date:   Wed, 19 Jan 2022 19:12:23 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S1356167AbiASQtG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Jan 2022 11:49:06 -0500
+Received: from mail-dm6nam10on2080.outbound.protection.outlook.com ([40.107.93.80]:5184
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235737AbiASQtF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 19 Jan 2022 11:49:05 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UaFVS69ow81hftONb9+XRMtYiu0BJwmTTP/1D/BYq38g7MnLP0W/dWNk8562ycfXsXO2yFLsm9U2a2qf43ra62nQBR0IjfFTrHeSMlhyUmPaWbpIl4i6BzHxnXc1nzbn6VqHKlFSI5wX/LJ/RrsS5GR99jtM3UdG5aVBeQdV8N7OYu893Ww3W4ROa0JynTpnaCsIXCV+Oq7Pc2mJUHQAnB9MM/f4HU+qSOBf6cFGSxm/hpCFbtMD8ttEnP5iLPsS6IDv/QXm0GhsdRu6J2+iUaexsRM84IzkPrYhHAM0lZMStX2p9iFNBeiJ+P8mSmjl1I6Bn6HWPbmBaGtqfrQWyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uDw/OVC5QlRifzRd5S7lcMk0kPhZURF6VmmzgqB2NmE=;
+ b=NvYi/tSu7Zl2sNfBUAwKBWLZHfO79nhdmAJDE36rotXoUuPCH2o0rgbDFoiGG9hvo1dgMYjXn0mM5ySaKPa4yRN+kQojGusTHJZ8jXeXqscqv1n+z2SSVUrBzS/Zs6YyNVbELJHBooI99ZC0WbcMvddpl2B9NUBddsNlEl424+4sfj0wb8g+GabPvo0CW/abDWKHIxdDxIEb/J9htkNQ/vqfnttIcKVHsxuQKPl5GIbWkGWAvMCjW4ClbGMIi7xThFKAvrpgUV5mRWXuoLFGoBdZhjqIxOp+dRwln7kYPFArOUAaIhwJFC2FwbO9g89KLQXSjLsNl7B6GazrofRIPQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=vpitech.onmicrosoft.com; s=selector2-vpitech-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uDw/OVC5QlRifzRd5S7lcMk0kPhZURF6VmmzgqB2NmE=;
+ b=dEQiygHyVwXqmn95TsGM49/gW/l7IHh0SomBFpPav/CLp/LauGZf2GB8B9KUmNbKnSRMojHAzU2LoyHyu0Z+r2siy17WOyGP8atSJfC6P4+lpUW91g4DT9w4Zkk3rn2BBWYv54hglrD5F1Wyh+FUPvLSWhRLIWLZI6LdePoiRfY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vpitech.com;
+Received: from CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:15b::19)
+ by CO1P222MB0225.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:158::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Wed, 19 Jan
+ 2022 16:49:03 +0000
+Received: from CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM
+ ([fe80::acb2:d13e:3a3:c824]) by CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM
+ ([fe80::acb2:d13e:3a3:c824%9]) with mapi id 15.20.4888.014; Wed, 19 Jan 2022
+ 16:49:02 +0000
+Date:   Wed, 19 Jan 2022 09:49:00 -0700
+From:   Alex Henrie <alexh@vpitech.com>
+To:     Jean Delvare <jdelvare@suse.de>, marcan@marcan.st
+Cc:     linux-i2c@vger.kernel.org, wsa@kernel.org, alexhenrie24@gmail.com
+Subject: Re: [PATCH] i2c: i801: Add module parameter to inhibit BIOS access
+Message-Id: <20220119094900.7792c05f94329f584dad934a@vpitech.com>
+In-Reply-To: <20220118134705.6ae5b0a4@endymion>
+References: <20220111233151.8484-1-alexh@vpitech.com>
+        <20220118134705.6ae5b0a4@endymion>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-unknown-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MWHPR15CA0037.namprd15.prod.outlook.com
+ (2603:10b6:300:ad::23) To CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:303:15b::19)
 MIME-Version: 1.0
-In-Reply-To: <20220118142945.6y3rmvzt44pjpr4z@pengutronix.de>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 80bc79fe-d4d4-4dae-9e3f-08d9db6b98c2
+X-MS-TrafficTypeDiagnostic: CO1P222MB0225:EE_
+X-Microsoft-Antispam-PRVS: <CO1P222MB02253062A838CD63940DF663B8599@CO1P222MB0225.NAMP222.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DR9kepcm0fJxLoc2nFE2vIodyuFhs5rLivIM1FCZJ/frFfGjellceLm3pJC0MA439nI43x0vRgKErVCoTdQ6h0RHA044ApktsBSpDmmr51Ot5HJNFIidLr68ENFgLTiCh7r77TvkStR+iyK9WUJ56Og5NL8B7xuqdXns7Ki2oTF11zh61bgLRZwvqrHuO6bUOrIvWfM/PEnrFqy1yKfpx5f486Z342E0tQ85pnYKfcDahW63KSjk2ofrkjqGCnozfXgrj8/yBBaiUc2VzuBXmDVyE+GVY+0NAN5/8hGTIMhp7W+qxiZ9FLAnSlCXue7ubEmVnFt4rWdE/8OWNPrtsPbzJHCUfUM2kUGU2s4c3KslrZp4ZGYyLy7RRtEDsyShre1PHNQLfIlARN/voUmRL/MCO8wxgX1v3DdiT1YGATm633FI7ItEiqYYANDKk3LCRU6O9ZDqzIBnoc/SSkVssKv2urCheF9+dlk95TJRfmyfm5A9gUnHA+KHT+wHgO/D2Bela81gs2O0h17VHoYXJ8zOcDEZnx+3OQhoMc/EESViBjQUOm/8nKZGJTZpeMesSy2iOxJLHau+eP2MskNd6J8EdfI8o3Tx6VEzc9iEVGCTBXrt3kkk/hbHoWkoS0mPZE31aXXyNuLxto1jvW9zD48sfx+TD5r3LItYSIyn9C6CX8Hffbr1R18ncJxC3Gt94Sn1moIeSmTCodsitzlZh6sl8GvpFEF8ffAo43FiLgIhl9tX7j380lBjNauMiUhi+E6lQPJr7Qy8ygnaiOrxqLfiZFtwH1MPMI6BIJ4t4D4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(396003)(376002)(39830400003)(346002)(136003)(366004)(86362001)(52116002)(5660300002)(1076003)(316002)(508600001)(186003)(6506007)(36756003)(66556008)(2616005)(2906002)(8936002)(66476007)(6512007)(8676002)(4326008)(38350700002)(38100700002)(6486002)(966005)(26005)(66946007)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?E2L7QK3jQQUI51f3X32HpDP3W6kbEMzRMQel4ulrtCpCXchrXS9032gYYet+?=
+ =?us-ascii?Q?UmfF0Q1ocuiB9RMZCngE+lnynXZupd/dcFsax/UuOIGyJl2eXcDdEqlwMOMe?=
+ =?us-ascii?Q?ZgLs6ehYjT0yvxEsLPb5ZMtuKFWbwDiiBbvg9kl+KTwsWnhRsdnxr5cY+q3D?=
+ =?us-ascii?Q?yTJRJxNWuwGUviKh44O4AyPINYyu1SwIurtoukypVxPqOERmjYUSvPnTn8m5?=
+ =?us-ascii?Q?31bGKQ9wGlGKl1byFWqtJtX/EsqPbjfPoTZVKotzKAha4fwPGdDenBlpWvfa?=
+ =?us-ascii?Q?+hsr9eHG6HLMZO7TEG07PiQF/UKBLWZWbHJgmpvW0XusJsI761KRaL26k/1S?=
+ =?us-ascii?Q?T7HZ/oPMeBdba+lLFEdDVwSqsouTHBbvlNFgbSNFZcYAOGwVC7VEBo7OT+BD?=
+ =?us-ascii?Q?2pIdAIwb+XiN16o0dYgCQWm86YQGDAEVHiINFCxnmfk4vdpa4ZC+lupJL9Bf?=
+ =?us-ascii?Q?t3NH27l0M/XJeS6YpE7yLc9zsxabN7yS4RT+mDLj+1dW94niKDTNe5l3KQV2?=
+ =?us-ascii?Q?qZ8+unH/mkaUAnJ17XNtmWRBOuS24jhZdFPXcmF6Xs9zSl5fkTWGaWQGEA5G?=
+ =?us-ascii?Q?Ww1nSrcHcQi4gO9N1U93Xv9OmIpYagLRz9C8msNHuzg6IX8W+wyGvpyU6rNg?=
+ =?us-ascii?Q?xa3O3Sg4a8YjjTZq1n0o8+mD4MaOs2uAwdTTqCwkDa2BEvOPwyQQwKGyl4q1?=
+ =?us-ascii?Q?4FBAVWiaZu1M6gov9E2Iwzjg1gzIjqdqa0/zE9oFd3qketSzZnWjYaqBFZDM?=
+ =?us-ascii?Q?gZNL3Y+o+rBDB73eASXErO707lawC5xAg1Gb9pFBf/CmBoIASlbFQwjbvYc0?=
+ =?us-ascii?Q?2Ke49J9JjxpVf+KR/hXzGgBprUD8RAJGtGSMrH9LQ+CR/R0viGtuciOcVLha?=
+ =?us-ascii?Q?MBYP50aHmKYokQ3dXpy8fS9KH8FSXnadM/V73YqEoMb57qBuS7FBmHGx+A/G?=
+ =?us-ascii?Q?RTPriB9lm51iK+kjM782LILEIQ/56Jiv45pQUyB42KBQQuijeAooLVWj/7/u?=
+ =?us-ascii?Q?fZISWvr2CbQLA/Z3zFd1y9FI0iKdP8fDKahfWRqu6WpnEq4YGONZbqE7/QqF?=
+ =?us-ascii?Q?r2UB1LqGL39eefSwDfVO7RRGwkQ3gFSG0O/GLipFbIGO9rs7GoRGrUrV5uQJ?=
+ =?us-ascii?Q?koJe/S01kePmcUi2zTH1joyFe+bc8GH3WwLu1ImusAL4L/apAOHxEo++zPY2?=
+ =?us-ascii?Q?hc1TRHT3jRudYmJebihMVIjXDo5IvMt3hKiS9BVqjlJn09/7op4w2TwDupfd?=
+ =?us-ascii?Q?sJEhFvi0hnMXANkKJqA6mySjRDub+zjOdeQ+Hpwk20DYdUX/SP3Cc6JtgITU?=
+ =?us-ascii?Q?A/nz1oIJZwSqLg/wyMXE6NXejo7bE1id5PH7i/DFw2JlB9rzn6C+k/aiAR8l?=
+ =?us-ascii?Q?F75Np6LK8g6ToYysYTw37upsAk4qNQAoFBX59IR0JI9FFbEbquJ8QhBJ84f+?=
+ =?us-ascii?Q?yjgiKNkyguv1Pr8ANEn/gBnOsOE2oDT6T7avKJ2qNSKWJ4BuxmbI6uYqo12S?=
+ =?us-ascii?Q?z4xjoCwcYrsJfH9X9pNzdE4WUIqUaUDd8w8+Sdcz903YJPv0XCMiNbiPyeyB?=
+ =?us-ascii?Q?q+5ebXVyiyszgjIWUUMpMw+zivSltQWM1kKxYke/uCc+IUocjtAX5rCGDPNP?=
+ =?us-ascii?Q?MGExzrnMCiA6fARNqmcK3k4=3D?=
+X-OriginatorOrg: vpitech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80bc79fe-d4d4-4dae-9e3f-08d9db6b98c2
+X-MS-Exchange-CrossTenant-AuthSource: CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2022 16:49:02.7084
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 130d6264-38b7-4474-a9bf-511ff1224fac
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YQnzViJ1QeIPIjBb6+LtcU8eHfUNFtLmUimCKLy4Q0OSJ217vzD8i5lnPDx5DU1TenKAyA1duqHr8OGqe5x+ng==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1P222MB0225
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 1/18/22 5:29 PM, Uwe Kleine-König wrote:
+On Tue, 18 Jan 2022 13:47:05 +0100
+Jean Delvare <jdelvare@suse.de> wrote:
 
->> nst the magic not-found value (so no implementation detail magic
->>>>> leaks into the caller code) and just pass it to the next API function=
->> .
->>>>> (And my expectation would be that if you chose to represent not-found=
->>  by
->>>>> (void *)66 instead of NULL, you won't have to adapt any user, just th=
->> e
->>>>> framework internal checks. This is a good thing!)
->>>>
->>>> Ah, there is the wrong assumption: drivers sometimes do need to know
->>>> if the resource was found, and thus do need to know about (void *)66,
->>>> -ENODEV, or -ENXIO.  I already gave examples for IRQ and clk before.
->>>> I can imagine these exist for gpiod and regulator, too, as soon as
->>>> you go beyond the trivial "enable" and "disable" use-cases.
->>>
->>> My premise is that every user who has to check for "not found"
->>> explicitly should not use (clk|gpiod)_get_optional() but
->>> (clk|gpiod)_get() and do proper (and explicit) error handling for
->>> -ENODEV. (clk|gpiod)_get_optional() is only for these trivial use-cases.
->>>
->>>> And 0/NULL vs. > 0 is the natural check here: missing, but not
->>>> an error.
->>>
->>> For me it it 100% irrelevant if "not found" is an error for the query
->>> function or not. I just have to be able to check for "not found" and
->>> react accordingly.
->>>
->>> And adding a function
->>>
->>>         def platform_get_irq_opional():
->>>                 ret =3D platform_get_irq()
->>>                 if ret =3D=3D -ENXIO:
->>>                         return 0
->>>                 return ret
->>>
->>> it's not a useful addition to the API if I cannot use 0 as a dummy
->>> because it doesn't simplify the caller enough to justify the additional
->>> function.
->>>
->>> The only thing I need to be able is to distinguish the cases "there is
->>> an irq", "there is no irq" and anything else is "there is a problem I
->>> cannot handle and so forward it to my caller". The semantic of
->>> platform_get_irq() is able to satisfy this requirement[1], so why introdu=
->> ce
->>> platform_get_irq_opional() for the small advantage that I can check for
->>> not-found using
->>>
->>>         if (!irq)
->>>
->>> instead of
->>>
->>>         if (irq !=3D -ENXIO)
->>>
->>> ? The semantic of platform_get_irq() is easier ("Either a usable
->>> non-negative irq number or a negative error number") compared to
->>> platform_get_irq_optional() ("Either a usable positive irq number or a
->>> negative error number or 0 meaning not found"). Usage of
->>> platform_get_irq() isn't harder or more expensive (neither for a human
->>> reader nor for a maching running the resulting compiled code).
->>> For a human reader
->>>
->>>         if (irq !=3D -ENXIO)
->>>
->>> is even easier to understand because for
->>>
->>>         if (!irq)
->>>
->>> they have to check where the value comes from, see it's
->>> platform_get_irq_optional() and understand that 0 means not-found.
->>
->> "vIRQ zero does not exist."
+> On Tue, 11 Jan 2022 16:31:51 -0700, Alex Henrie wrote:
+> > This parameter can only be set before the module is loaded (e.g. by
+> > passing i2c_i801.block_acpi=1 on the kernel command line).
 > 
-> With that statement in mind I would expect that a function that gives me
-> an (v)irq number never returns 0.
+> Before I consider applying this, you'll have to provide a rationale of
+> why this is needed. Preventing the BIOS from accessing the SMBus is
+> pretty dangerous, and I can't really think of a situation where you
+> would want to do that.
+
+I need to access a GPIO chip that is connected via SMBus and this was
+the best way I could find to make it work. However, today I stumbled
+across another solution (see bottom of email).
+
+> Plus, if there's really a reason for doing that, I'd rather have it
+> implemented as an option in the BIOS itself, than in the kernel driver.
+
+I looked for a BIOS option to make it behave better, but found none.
+
+> Furthermore, please run ./scripts/checkpatch.pl on your patches and fix
+> every reported issue before you post them.
+
+Thanks for the tip. I'm a bit new to kernel development.
+
+> > +MODULE_PARM_DESC(block_acpi, "Prevent ACPI AML from accessing SMBus. "
+> > +	"[0] = allow ACPI access, 1 = deny ACPI access");
 > 
->>> This function just adds overhead because as a irq framework user I have
->>> to understand another function. For me the added benefit is too small to
->>> justify the additional function. And you break out-of-tree drivers.
->>> These are all no major counter arguments, but as the advantage isn't
->>> major either, they still matter.
->>>
->>> Best regards
->>> Uwe
->>>
->>> [1] the only annoying thing is the error message.
->>
->> So there's still a need for two functions.
+> I've not seen the square brackets convention for marking the default
+> value used anywhere else in the kernel. For consistency, please instead
+> add "(default)" after the default setting.
+
+This is the convention that is used in drivers/hid/hid-apple.c, which
+was the last driver I worked on. I didn't realize that it's not
+standardized across the kernel.
+
+> > +	 * If BIOS AML code tries to touches the OpRegion we have two options:
 > 
-> Or a single function not emitting an error message together with the
-> callers being responsible for calling dev_err().
+> Spelling: touches -> touch
+
+Good catch.
+
+> > +			/*
+> > +			 * Refuse to allow the BIOS to use SMBus. SMBus does
+> > +			 * have a lock bit in the status register that in theory
+> > +			 * can be used to safely share the SMBus between the
+> > +			 * BIOS and the kernel, but some badly behaved BIOS
+> > +			 * implementations don't use it. In that case, the only
 > 
-> So the options in my preference order (first is best) are:
-> 
->  - Remove the printk from platform_get_irq() and remove
->    platform_get_irq_optional();
+> It's not really fair to blame the BIOS, considering that the driver
+> doesn't use it (yet) either. A patch was proposed months ago actually,
+> reviewing it is still on my to-do list. Could that be an alternative to
+> your patch?
 
-   Strong NAK here:
-- dev_err() in our function saves a lot of (repeatable!) comments;
-- we've already discussed that it's more optimal to check againt 0 than
-  against -ENXIO in the callers.
+I think Hector's patch to share the SMBus is a great idea; my patch was
+meant to complement his, not replace it. The problem is that when I
+tried Hector's patch, I got the message "BIOS left SMBus locked". So I
+didn't want to let the BIOS touch the SMBus at all because once it had
+the lock, it seemed to never let go. However, today I tried v2 of
+Hector's patch [1] instead of v3 [2], and v2 worked perfectly! My guess
+is that despite the text of the error message, it's Linux that's
+leaving the SMBus locked, not the BIOS.
 
->  - Rename platform_get_irq_optional() to platform_get_irq_silently()
+The only difference between v2 and v3 is that v2 called
+outb_p(SMBHSTSTS_INUSE_STS, SMBHSTSTS(priv)) at the end of i801_access.
+Hector, can you clarify why you removed that call in v3?
 
-   NAK as well. We'd better off complaining about irq < 0 in this function.
+-Alex
 
->  - Keep platform_get_irq_optional() as is
-
-   NAK, it's suboptimal in the call sites.
-
->  - Collect underpants
-> 
->  - ?
-
-   You're on your own here. :-)
-
->  - Change semantic of platform_get_irq_optional()
-
-   Yes, we should change the semantics if it serves our goals better. 
-
-> Best regards
-> Uwe
-
-MBR, Sergey
+[1] https://lore.kernel.org/linux-i2c/20210519091707.7248-1-marcan@marcan.st/
+[2] https://lore.kernel.org/linux-i2c/20210626054113.246309-1-marcan@marcan.st/
