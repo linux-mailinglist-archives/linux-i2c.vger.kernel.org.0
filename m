@@ -2,166 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF212493FE4
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 19:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5238E494011
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 19:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356748AbiASS3m (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Jan 2022 13:29:42 -0500
-Received: from mxout02.lancloud.ru ([45.84.86.82]:60414 "EHLO
-        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356737AbiASS3l (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 13:29:41 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru EFD8920BF006
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>
-CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-iio@vger.kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "ALSA Development Mailing List" <alsa-devel@alsa-project.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-phy@lists.infradead.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        <platform-driver-x86@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        "Saravanan Sekar" <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Mark Brown" <broonie@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <openipmi-developer@lists.sourceforge.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>, "Tony Luck" <tony.luck@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        "Linux MMC List" <linux-mmc@vger.kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "James Morse" <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        "Sebastian Reichel" <sre@kernel.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        <linux-mediatek@lists.infradead.org>,
-        "Brian Norris" <computersforpeace@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-References: <20220117092444.opoedfcf5k5u6otq@pengutronix.de>
- <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
- <20220117114923.d5vajgitxneec7j7@pengutronix.de>
- <CAMuHMdWCKERO20R2iVHq8P=BaoauoBAtiampWzfMRYihi3Sb0g@mail.gmail.com>
- <20220117170609.yxaamvqdkivs56ju@pengutronix.de>
- <CAMuHMdXbuZqEpYivyS6hkaRN+CwTOGaHq_OROwVAWvDD6OXODQ@mail.gmail.com>
- <20220118090913.pjumkq4zf4iqtlha@pengutronix.de>
- <CAMuHMdUW8+Y_=uszD+JOZO3Lpa9oDayk+GO+cg276i2f2T285w@mail.gmail.com>
- <20220118120806.pbjsat4ulg3vnhsh@pengutronix.de>
- <CAMuHMdWkwV9XE_R5FZ=jPtDwLpDbEngG6+X2JmiDJCZJZvUjYA@mail.gmail.com>
- <20220118142945.6y3rmvzt44pjpr4z@pengutronix.de>
- <6370798a-7a7e-243d-99f9-09bf772ddbac@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <96ff907a-4ad2-5b2e-9bcc-09592d65a6df@omp.ru>
-Date:   Wed, 19 Jan 2022 21:29:28 +0300
+        id S1356815AbiASSjY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Jan 2022 13:39:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356857AbiASSjP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 13:39:15 -0500
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15EB1C061746;
+        Wed, 19 Jan 2022 10:39:15 -0800 (PST)
+Received: by mail-oo1-xc2e.google.com with SMTP id s13-20020a4aa38d000000b002e28c5100cbso1012246ool.12;
+        Wed, 19 Jan 2022 10:39:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:subject:to:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JwZrhFyXsesNVW0APPBg8u3AGppH28QOmr0Jo7e1xnU=;
+        b=D0qv88QdOyLWJ9xkmMNElPXJyrJNGSYG26h6gsP+Eo4MWjvGhpi+2upWiJhJXMM+gu
+         2D/7L02b4n9jYPNsBmFUaxwc1u5pkwSw4CojHtVYnNszJAndeXyJL2cTo/fXbDp9ye3K
+         BalSwWGgsQm+qFNhocYjm0GsEdUM3RrTalqYkUt0YdbdhhRU3MFtOvjpV4AsGLA+rW+q
+         U/tU0sNYxY/UlYisIVzuovqkOBgkvYxfpB44KHKjLsAMAvEd9WuQG5AkaBEe0Jv01aoO
+         Zh9CX3txIJLbgiSjR5U7aBP7l4wxQWF3DARxqopgCsrCID4+qc26DlRDQlbZt1e5T2rE
+         T28A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:subject:to:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JwZrhFyXsesNVW0APPBg8u3AGppH28QOmr0Jo7e1xnU=;
+        b=eXlv2ZQVmxHYZrjffg4LRK7SRth81BYqS3IaXakM44mMx4awmsyG/Atg26NR/3Ge7L
+         ogqX+N6phOw7vPJaDy142t2bj4/h3R+eFpPZAx4VQH2hf3J3LHPFo7zZ0MaKH7yjyOkl
+         zPFr8t3Ta8GgIAEkboSoHLECqlkVYS59HMCutukSuhOz0SUSnoRk2aHqd5/9YtTGIT6m
+         UsgSV0f2+0Ar5KCT2LGxOK2mxYCn/TrFV3+sa+nPd1lA4DbB78cEe2pGXxTipln88/L8
+         eb+hVgD2RxijLITrSzAuZoJQzvdjxBFzRJ1uQJkfDRX08K7fTSKs3oRrGVBmbEWnpmif
+         vuAg==
+X-Gm-Message-State: AOAM531KYy6CjGXV4LyQiDx1Ws2iWo/yqop71EseGgRLD/c411nLZpPP
+        hTvc3mjfnF4zf60cL02jUPM=
+X-Google-Smtp-Source: ABdhPJyk87oj50nv+Tg34twrpB9CQenCphokibMHi78uMIFkKgpizwmVvJVEPQRFCIX3Zea5JRK7fQ==
+X-Received: by 2002:a4a:e5d7:: with SMTP id r23mr23162915oov.77.1642617554485;
+        Wed, 19 Jan 2022 10:39:14 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u12sm256467ote.26.2022.01.19.10.39.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 10:39:13 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v3 0/4] Watchdog: sp5100_tco: Replace cd6h/cd7h port I/O
+ accesses with MMIO accesses
+To:     Wolfram Sang <wsa@kernel.org>, Terry Bowman <Terry.Bowman@amd.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        linux-watchdog@vger.kernel.org, jdelvare@suse.com,
+        linux-i2c@vger.kernel.org, andy.shevchenko@gmail.com,
+        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org,
+        wim@linux-watchdog.org, rrichter@amd.com, thomas.lendacky@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+References: <20220118202234.410555-1-terry.bowman@amd.com>
+ <20220119163012.4274665d@endymion>
+ <dda39f1f-b683-35ac-d810-d4759c4f8448@amd.com> <YehOmuqA008XuBHI@kunai>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <160d12ca-8493-7536-036c-9dd5af7b4ce0@roeck-us.net>
+Date:   Wed, 19 Jan 2022 10:39:11 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <6370798a-7a7e-243d-99f9-09bf772ddbac@omp.ru>
-Content-Type: text/plain; charset="windows-1252"
+In-Reply-To: <YehOmuqA008XuBHI@kunai>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 1/19/22 7:12 PM, Sergey Shtylyov wrote:
-
-[...]
->>> So there's still a need for two functions.
->>
->> Or a single function not emitting an error message together with the
->> callers being responsible for calling dev_err().
->>
->> So the options in my preference order (first is best) are:
->>
->>  - Remove the printk from platform_get_irq() and remove
->>    platform_get_irq_optional();
+On 1/19/22 9:47 AM, Wolfram Sang wrote:
 > 
->    Strong NAK here:
-> - dev_err() in our function saves a lot of (repeatable!) comments;
-
-   s/comments/code/.
-   Actually, I think I can accept the removal of dev_err_probe() in platform_get_irq()
-as this is not a common practice anyway (yet? :-))...
-
-> - we've already discussed that it's more optimal to check againt 0 than
-
-   Against. :-)
-
->   against -ENXIO in the callers.
-
-   And we also aim to be the error code agnostic in the callers...
-
->>  - Rename platform_get_irq_optional() to platform_get_irq_silently()
+>> I considered sending the request_muxed_mem_region() patch series first but
+>> was concerned the patch might not be accepted without a need or usage. I
+>> didn't see an obvious path forward for the order of submissions because of
+>> the dependencies.
 > 
->    NAK as well. We'd better off complaining about irq < 0 in this function.
-
->>  - Keep platform_get_irq_optional() as is
+> My suggestion: make the request_muxed_mem_region() patch the new patch 1
+> of the piix4 series. Then, the user will directly come in the following
+> patches. From this series, I will create an immutable branch which can
+> be pulled in by the watchdog tree. It will then have the dependency for
+> your watchdog series. During next merge window, we (the maintainers)
+> will make sure that I2C will hit Linus' tree before the watchdog tree.
 > 
->    NAK, it's suboptimal in the call sites.
+> This works the other way around as well, if needed. Make
+> request_muxed_mem_region() the first patch of the watchdog series and
+> let me pull an immutable branch from watchdog into I2C.
+> 
 
-   s/in/on/.
+Creating an immutable branch from i2c is fine. Also, typically Wim sends
+his pull request late in the commit window, so i2c first should be no
+problem either.
 
-[...]
+Also, if the immutable branch only includes the patch introducing
+request_muxed_mem_region(), the pull order should not really matter.
 
->> Best regards
->> Uwe
-
-MBR, Sergey
+Guenter
