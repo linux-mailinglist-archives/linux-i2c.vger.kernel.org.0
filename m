@@ -2,171 +2,112 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0BC49398D
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 12:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D504939BE
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 12:42:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354166AbiASLfh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Jan 2022 06:35:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
+        id S1354252AbiASLmF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Jan 2022 06:42:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354130AbiASLfg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 06:35:36 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8ECC061574
-        for <linux-i2c@vger.kernel.org>; Wed, 19 Jan 2022 03:35:36 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nA9DT-0000wY-2d; Wed, 19 Jan 2022 12:33:27 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nA9DH-00BAYF-T8; Wed, 19 Jan 2022 12:33:15 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nA9DG-00031i-Rx; Wed, 19 Jan 2022 12:33:14 +0100
-Date:   Wed, 19 Jan 2022 12:33:14 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>, kvm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, linux-spi@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        openipmi-developer@lists.sourceforge.net,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>, linux-pwm@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>, linux-gpio@vger.kernel.org,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        platform-driver-x86@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        Tony Luck <tony.luck@intel.com>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>, netdev@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
- (summary)
-Message-ID: <20220119113314.tpqfdgi6nurmzfun@pengutronix.de>
-References: <20220110195449.12448-1-s.shtylyov@omp.ru>
- <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220115183643.6zxalxqxrhkfgdfq@pengutronix.de>
- <YeQpWu2sUVOSaT9I@kroah.com>
- <20220118091819.zzxpffrxbckoxiys@pengutronix.de>
- <b6038ec2-da4a-de92-b845-cac2be0efcd1@omp.ru>
+        with ESMTP id S236274AbiASLmE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 06:42:04 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5845AC061574;
+        Wed, 19 Jan 2022 03:42:04 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id cx27so9989980edb.1;
+        Wed, 19 Jan 2022 03:42:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1+B4sq8/6TEaBWgWEnV3mLAtHSqc2KRS8IDGfcK24Xo=;
+        b=n8nJ15XTj9DsA1iPCd3e/D3UZrS/N4+PGtIrYUgw7kROEgh1GxwowG6HwoXX05BAWO
+         sGHJLzDS1rKJs2Zq9cY3XgtXlLUMtVgVUwQDxzzNEx/xehkXRQCxquUBWZYqfSiP9hE/
+         Gtazz9zgEhcnGsHP4RzwMwa5/D7CrJQeQUnFLOsfwcucW4paZmomSPA5K9m3KEoj1Aon
+         JYcDxhzUyq/FmN7uF4ivkqMna+1myZndfJNRlBkO9Sk17KACxC3VStABrGHFzVveCUE7
+         8mo7rZWl+ruqq0X4iZ+2adcfVUZyvYfv98Z0qxROLZ2oZNgpL2kZ/kZ1hgIK02YA9UTG
+         3QNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1+B4sq8/6TEaBWgWEnV3mLAtHSqc2KRS8IDGfcK24Xo=;
+        b=OsPBZXGMcv2utlYGGjKUF6dKR6kUvsu2qlGOKQw7DCAgU3fnzkTQIc3Ou3J7CTlJHr
+         Zv14AM12bIv0STKM9XiWZEl/ChcYKv6q3iAZdKz8pCoNMD4Flr7GayKbHoyPSX5JSwuJ
+         yrrnHtKUwmgUrZ/hzz8FdfNAiZ/rLmsOSLP8TK1VL0KReFFDosCwtwiER2TeFJrK/DmA
+         WxtQlyWLHRbC3ED8hx+1JxJSTVa+duy29aP8ivB4rr3kq88ZFp7ls9yRfuZVsPn3fNZH
+         nIvTSOLvrzPAwDpm1xwbdMJRCZJkqgjZ54Ouv0JnPlpBLxfj44BJ8Hz/NHvNcAjMgS2Z
+         BP6g==
+X-Gm-Message-State: AOAM530qBGwCDosPGICgCx+nYtTXmoocuToI+mEpqWSjEM+6MHrE/82F
+        aFioK0zf7x3ks3P+rPsm/cjT3cMfTbeBoCFJrtw=
+X-Google-Smtp-Source: ABdhPJzAQTlv0R11jEPsza2Ux5Y3MNDCkdqf0w81jskUcd0V7TchTarD2HHgi0MIvTsTn5aA4xMiP5RJxiqLIh+bn+c=
+X-Received: by 2002:a17:907:968c:: with SMTP id hd12mr23728698ejc.639.1642592522875;
+ Wed, 19 Jan 2022 03:42:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hygdbs7bafily54q"
-Content-Disposition: inline
-In-Reply-To: <b6038ec2-da4a-de92-b845-cac2be0efcd1@omp.ru>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+References: <20220118202234.410555-1-terry.bowman@amd.com> <20220118202234.410555-2-terry.bowman@amd.com>
+In-Reply-To: <20220118202234.410555-2-terry.bowman@amd.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 19 Jan 2022 13:40:20 +0200
+Message-ID: <CAHp75VfD2iOF+nkCtOGyAd7sadxJWL2yFKo+zXcrv6E-ADU98g@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] Watchdog: sp5100_tco: Move timer initialization
+ into function
+To:     Terry Bowman <terry.bowman@amd.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Robert Richter <rrichter@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Mario Limonciello <Mario.Limonciello@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, Jan 18, 2022 at 10:22 PM Terry Bowman <terry.bowman@amd.com> wrote:
+>
+> Refactor driver's timer initialization into new function. This is needed
+> inorder to support adding new device layouts while using common timer
+> initialization.
 
---hygdbs7bafily54q
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Co-developed-by: Robert Richter <rrichter@amd.com>
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
 
-Hello Sergey,
+> To: Guenter Roeck <linux@roeck-us.net>
+> To: linux-watchdog@vger.kernel.org
+> To: Jean Delvare <jdelvare@suse.com>
+> To: linux-i2c@vger.kernel.org
+> To: Wolfram Sang <wsa@kernel.org>
+> To: Andy Shevchenko <andy.shevchenko@gmail.com>
+> To: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> Cc: Robert Richter <rrichter@amd.com>
+> Cc: Thomas Lendacky <thomas.lendacky@amd.com>
 
-On Wed, Jan 19, 2022 at 01:56:12PM +0300, Sergey Shtylyov wrote:
-> On 1/18/22 12:18 PM, Uwe Kleine-K=F6nig wrote:
-> > On Sun, Jan 16, 2022 at 03:19:06PM +0100, Greg Kroah-Hartman wrote:
-> >> On Sat, Jan 15, 2022 at 07:36:43PM +0100, Uwe Kleine-K=F6nig wrote:
-> >>> A possible compromise: We can have both. We rename
-> >>> platform_get_irq_optional() to platform_get_irq_silent() (or
-> >>> platform_get_irq_silently() if this is preferred) and once all users =
-are
-> >>> are changed (which can be done mechanically), we reintroduce a
-> >>> platform_get_irq_optional() with Sergey's suggested semantic (i.e.
-> >>> return 0 on not-found, no error message printking).
-> >>
-> >> Please do not do that as anyone trying to forward-port an old driver
-> >> will miss the abi change of functionality and get confused.  Make
-> >> build-breaking changes, if the way a function currently works is
-> >> changed in order to give people a chance.
-> >=20
-> > Fine for me. I assume this is a Nack for Sergey's patch?
->=20
->    Which patch do you mean? I'm starting to get really muddled... :-(
+Please, do not pollute commit messages with this rather unnecessary
+list of recipients. There are (at least?) two possibilities:
+- use --cc and --to whe run `git send-email`
+- move them under the cutter '--- ' line below
 
-I'm talking about "[PATCH 1/2] platform: make
-platform_get_irq_optional() optional" because "trying to forward-port an
-old driver will miss the abi" applies to it.
+> ---
 
-Best regards
-Uwe
+> +       val = readl(SP5100_WDT_CONTROL(tco->tcobase));
+> +       if (val & SP5100_WDT_DISABLED) {
+> +               dev_err(dev, "Watchdog hardware is disabled\n");
+> +               return(-ENODEV);
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Missed space, too many parentheses.
 
---hygdbs7bafily54q
-Content-Type: application/pgp-signature; name="signature.asc"
+> +       }
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHn9vcACgkQwfwUeK3K
-7Anutgf9H+FHDCwHTQEg3PqL/MwBWEgm2ezhN3NYztqf3gciss+k2d18HSOoYC3U
-FVex76yzow2RaobKMmgXEqSv3MLbHgTm5YExNMaYIM5QuLAVJka/5uiXKJFMEsbE
-GvlbYU/QbcQ/pUw5PTRvi07XghgBpKALgy+DTeK/4cOMQSsHBG8z8q2PSA5T/YX4
-vqrrdvv7F0rIJR0pMUIVWZ0c15DeKt6fy53S9JW/ZQnBS/I7v1mJvP3kKo2+eEo6
-nmF3qMmYbnrzxpAXhhWoB67zMIC+fhq6cYyhS5LuiHRcyM/xej00L+S/ZfXHpRR3
-VTjGawN4GYEia7SPEAsh/CHlO3t4Vw==
-=2ru9
------END PGP SIGNATURE-----
-
---hygdbs7bafily54q--
+-- 
+With Best Regards,
+Andy Shevchenko
