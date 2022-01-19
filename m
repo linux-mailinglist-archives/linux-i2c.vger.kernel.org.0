@@ -2,99 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9AD6493D9F
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 16:50:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 240E1493E1D
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 17:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242648AbiASPuW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Jan 2022 10:50:22 -0500
-Received: from mxout03.lancloud.ru ([45.84.86.113]:37512 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355931AbiASPuU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 10:50:20 -0500
+        id S1356125AbiASQMj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Jan 2022 11:12:39 -0500
+Received: from mxout04.lancloud.ru ([45.84.86.114]:42292 "EHLO
+        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355919AbiASQMe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 11:12:34 -0500
 Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru D78A320F7143
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru AA47520A2ADD
 Received: from LanCloud
 Received: from LanCloud
 Received: from LanCloud
 Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>
+CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         <linux-iio@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
-        <alsa-devel@alsa-project.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        <linux-phy@lists.infradead.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        <linux-mtd@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "ALSA Development Mailing List" <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
         Guenter Roeck <groeck@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        <openipmi-developer@lists.sourceforge.net>,
-        Saravanan Sekar <sravanhome@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-phy@lists.infradead.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Khuong Dinh <khuong@os.amperecomputing.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        <kvm@vger.kernel.org>, Kamal Dasu <kdasu.kdev@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Kishon Vijay Abraham I <kishon@ti.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        <linux-serial@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        "Jaroslav Kysela" <perex@perex.cz>,
-        <platform-driver-x86@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        "Saravanan Sekar" <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
         John Garry <john.garry@huawei.com>,
-        "Robert Richter" <rric@kernel.org>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Corey Minyard <minyard@acm.org>, <linux-pm@vger.kernel.org>,
         Peter Korsgaard <peter@korsgaard.com>,
         William Breathitt Gray <vilhelm.gray@gmail.com>,
-        "Mark Gross" <markgross@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
         Hans de Goede <hdegoede@redhat.com>,
-        "Alex Williamson" <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Mark Brown" <broonie@kernel.org>, Borislav Petkov <bp@alien8.de>,
         Takashi Iwai <tiwai@suse.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <openipmi-developer@lists.sourceforge.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Benson Leung <bleung@chromium.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        <linux-edac@vger.kernel.org>, "Tony Luck" <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
         Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>, <netdev@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>, <linux-mmc@vger.kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        "Linux MMC List" <linux-mmc@vger.kernel.org>,
         Joakim Zhang <qiangqing.zhang@nxp.com>,
-        <linux-spi@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        "James Morse" <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        "Sebastian Reichel" <sre@kernel.org>,
         =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
         <linux-mediatek@lists.infradead.org>,
         "Brian Norris" <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-References: <20220110195449.12448-1-s.shtylyov@omp.ru>
- <20220110195449.12448-2-s.shtylyov@omp.ru>
- <770fb569-03c8-78f9-c174-94b31e866017@omp.ru>
- <20220119150238.5sru3vtuwsswdnkx@pengutronix.de>
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+References: <20220117092444.opoedfcf5k5u6otq@pengutronix.de>
+ <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
+ <20220117114923.d5vajgitxneec7j7@pengutronix.de>
+ <CAMuHMdWCKERO20R2iVHq8P=BaoauoBAtiampWzfMRYihi3Sb0g@mail.gmail.com>
+ <20220117170609.yxaamvqdkivs56ju@pengutronix.de>
+ <CAMuHMdXbuZqEpYivyS6hkaRN+CwTOGaHq_OROwVAWvDD6OXODQ@mail.gmail.com>
+ <20220118090913.pjumkq4zf4iqtlha@pengutronix.de>
+ <CAMuHMdUW8+Y_=uszD+JOZO3Lpa9oDayk+GO+cg276i2f2T285w@mail.gmail.com>
+ <20220118120806.pbjsat4ulg3vnhsh@pengutronix.de>
+ <CAMuHMdWkwV9XE_R5FZ=jPtDwLpDbEngG6+X2JmiDJCZJZvUjYA@mail.gmail.com>
+ <20220118142945.6y3rmvzt44pjpr4z@pengutronix.de>
 From:   Sergey Shtylyov <s.shtylyov@omp.ru>
 Organization: Open Mobile Platform
-Message-ID: <f0470e8b-67af-6788-0bca-0be03bb5d0b3@omp.ru>
-Date:   Wed, 19 Jan 2022 18:50:12 +0300
+Message-ID: <6370798a-7a7e-243d-99f9-09bf772ddbac@omp.ru>
+Date:   Wed, 19 Jan 2022 19:12:23 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 MIME-Version: 1.0
-In-Reply-To: <20220119150238.5sru3vtuwsswdnkx@pengutronix.de>
+In-Reply-To: <20220118142945.6y3rmvzt44pjpr4z@pengutronix.de>
 Content-Type: text/plain; charset="windows-1252"
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -105,124 +120,126 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 1/19/22 6:02 PM, Uwe Kleine-König wrote:
+On 1/18/22 5:29 PM, Uwe Kleine-König wrote:
 
-[...]
->>> This patch is based on the former Andy Shevchenko's patch:
+>> nst the magic not-found value (so no implementation detail magic
+>>>>> leaks into the caller code) and just pass it to the next API function=
+>> .
+>>>>> (And my expectation would be that if you chose to represent not-found=
+>>  by
+>>>>> (void *)66 instead of NULL, you won't have to adapt any user, just th=
+>> e
+>>>>> framework internal checks. This is a good thing!)
+>>>>
+>>>> Ah, there is the wrong assumption: drivers sometimes do need to know
+>>>> if the resource was found, and thus do need to know about (void *)66,
+>>>> -ENODEV, or -ENXIO.  I already gave examples for IRQ and clk before.
+>>>> I can imagine these exist for gpiod and regulator, too, as soon as
+>>>> you go beyond the trivial "enable" and "disable" use-cases.
 >>>
->>> https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko@linux.intel.com/
+>>> My premise is that every user who has to check for "not found"
+>>> explicitly should not use (clk|gpiod)_get_optional() but
+>>> (clk|gpiod)_get() and do proper (and explicit) error handling for
+>>> -ENODEV. (clk|gpiod)_get_optional() is only for these trivial use-cases.
 >>>
->>> Currently platform_get_irq_optional() returns an error code even if IRQ
->>> resource simply has not been found. It prevents the callers from being
->>> error code agnostic in their error handling:
+>>>> And 0/NULL vs. > 0 is the natural check here: missing, but not
+>>>> an error.
 >>>
->>> 	ret = platform_get_irq_optional(...);
->>> 	if (ret < 0 && ret != -ENXIO)
->>> 		return ret; // respect deferred probe
->>> 	if (ret > 0)
->>> 		...we get an IRQ...
+>>> For me it it 100% irrelevant if "not found" is an error for the query
+>>> function or not. I just have to be able to check for "not found" and
+>>> react accordingly.
 >>>
->>> All other *_optional() APIs seem to return 0 or NULL in case an optional
->>> resource is not available. Let's follow this good example, so that the
->>> callers would look like:
+>>> And adding a function
 >>>
->>> 	ret = platform_get_irq_optional(...);
->>> 	if (ret < 0)
->>> 		return ret;
->>> 	if (ret > 0)
->>> 		...we get an IRQ...
+>>>         def platform_get_irq_opional():
+>>>                 ret =3D platform_get_irq()
+>>>                 if ret =3D=3D -ENXIO:
+>>>                         return 0
+>>>                 return ret
 >>>
->>> Reported-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
->>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->> [...]
+>>> it's not a useful addition to the API if I cannot use 0 as a dummy
+>>> because it doesn't simplify the caller enough to justify the additional
+>>> function.
+>>>
+>>> The only thing I need to be able is to distinguish the cases "there is
+>>> an irq", "there is no irq" and anything else is "there is a problem I
+>>> cannot handle and so forward it to my caller". The semantic of
+>>> platform_get_irq() is able to satisfy this requirement[1], so why introdu=
+>> ce
+>>> platform_get_irq_opional() for the small advantage that I can check for
+>>> not-found using
+>>>
+>>>         if (!irq)
+>>>
+>>> instead of
+>>>
+>>>         if (irq !=3D -ENXIO)
+>>>
+>>> ? The semantic of platform_get_irq() is easier ("Either a usable
+>>> non-negative irq number or a negative error number") compared to
+>>> platform_get_irq_optional() ("Either a usable positive irq number or a
+>>> negative error number or 0 meaning not found"). Usage of
+>>> platform_get_irq() isn't harder or more expensive (neither for a human
+>>> reader nor for a maching running the resulting compiled code).
+>>> For a human reader
+>>>
+>>>         if (irq !=3D -ENXIO)
+>>>
+>>> is even easier to understand because for
+>>>
+>>>         if (!irq)
+>>>
+>>> they have to check where the value comes from, see it's
+>>> platform_get_irq_optional() and understand that 0 means not-found.
 >>
->>    Please don't merge this as yet, I'm going thru this patch once again
->> and have already found some sloppy code. :-/
+>> "vIRQ zero does not exist."
 > 
-> Who would you expect to merge this? I would have expected Greg, but he
-
-   Me too, it's his area, the message was addressed to Greg KH...
-
-> seems to have given up this thread.
-
-   You instill too much uncertainty in him. :-)
-
->>> diff --git a/drivers/char/ipmi/bt-bmc.c b/drivers/char/ipmi/bt-bmc.c
->>> index 7450904e330a..fdc63bfa5be4 100644
->>> --- a/drivers/char/ipmi/bt-bmc.c
->>> +++ b/drivers/char/ipmi/bt-bmc.c
->>> @@ -382,12 +382,14 @@ static int bt_bmc_config_irq(struct bt_bmc *bt_bmc,
->>>  	bt_bmc->irq = platform_get_irq_optional(pdev, 0);
->>>  	if (bt_bmc->irq < 0)
->>>  		return bt_bmc->irq;
->>> +	if (!bt_bmc->irq)
->>> +		return 0;
+> With that statement in mind I would expect that a function that gives me
+> an (v)irq number never returns 0.
+> 
+>>> This function just adds overhead because as a irq framework user I have
+>>> to understand another function. For me the added benefit is too small to
+>>> justify the additional function. And you break out-of-tree drivers.
+>>> These are all no major counter arguments, but as the advantage isn't
+>>> major either, they still matter.
+>>>
+>>> Best regards
+>>> Uwe
+>>>
+>>> [1] the only annoying thing is the error message.
 >>
->>    Hm, this is sloppy. Will recast and rebase to the -next branch.
+>> So there's still a need for two functions.
 > 
-> I didn't think about what you mean with sloppy, but the code is
-> equivalent to
+> Or a single function not emitting an error message together with the
+> callers being responsible for calling dev_err().
 > 
-> 	if (bt_bmc->irq <= 0)
-> 		return bt_bmc->irq;
-
-   Exactly.
-
-[...]
->>> diff --git a/drivers/edac/xgene_edac.c b/drivers/edac/xgene_edac.c
->>> index 2ccd1db5e98f..0d1bdd27cd78 100644
->>> --- a/drivers/edac/xgene_edac.c
->>> +++ b/drivers/edac/xgene_edac.c
->>> @@ -1917,7 +1917,7 @@ static int xgene_edac_probe(struct platform_device *pdev)
->>>  
->>>  		for (i = 0; i < 3; i++) {
->>>  			irq = platform_get_irq_optional(pdev, i);
->>
->>    Is *_optinal() even correct here?
+> So the options in my preference order (first is best) are:
 > 
-> _optinal isn't correct, _optional maybe is. :-)
+>  - Remove the printk from platform_get_irq() and remove
+>    platform_get_irq_optional();
 
-   No. :-)
+   Strong NAK here:
+- dev_err() in our function saves a lot of (repeatable!) comments;
+- we've already discussed that it's more optimal to check againt 0 than
+  against -ENXIO in the callers.
 
-> Anyhow, look at e26124cd5f7099949109608845bba9e9bf96599c, the driver was
-> fixed not to print two error messages and the wrong option was picked.
+>  - Rename platform_get_irq_optional() to platform_get_irq_silently()
 
-   I think this patch is wrong...
+   NAK as well. We'd better off complaining about irq < 0 in this function.
 
->>> -			if (irq < 0) {
->>> +			if (irq <= 0) {
->>>  				dev_err(&pdev->dev, "No IRQ resource\n");
+>  - Keep platform_get_irq_optional() as is
 
-   This is what needed to be thrown overboard... :-)
+   NAK, it's suboptimal in the call sites.
 
->>>  				rc = -EINVAL;
->>>  				goto out_err;
+>  - Collect underpants
 > 
-> What's wrong here is that the return code is hardcoded ...
+>  - ?
 
-  This is wrong as well -- kills the deferred probing. I have 2 separate patches
-for this driver now... just need some time to get 'em ready...
+   You're on your own here. :-)
 
-[...]
->>> index bdf924b73e47..51289700a7ac 100644
->>> --- a/drivers/power/supply/mp2629_charger.c
->>> +++ b/drivers/power/supply/mp2629_charger.c
->>> @@ -581,9 +581,9 @@ static int mp2629_charger_probe(struct platform_device *pdev)
->>>  	platform_set_drvdata(pdev, charger);
->>>  
->>>  	irq = platform_get_irq_optional(to_platform_device(dev->parent), 0);
->>
->>    Again, is *_optional() even correct here?
->>
->>> -	if (irq < 0) {
->>> +	if (irq <= 0) {
->>>  		dev_err(dev, "get irq fail: %d\n", irq);
->>> -		return irq;
->>> +		return irq < 0 ? irq : -ENXIO;
-> 
-> Ack, could be simplified by switching to platform_get_irq().
+>  - Change semantic of platform_get_irq_optional()
 
-   Have a draft patch...
+   Yes, we should change the semantics if it serves our goals better. 
 
 > Best regards
 > Uwe
