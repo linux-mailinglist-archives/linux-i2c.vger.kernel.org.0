@@ -2,111 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D30D493F3D
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 18:44:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1592D493F49
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 18:47:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356485AbiASRoQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Jan 2022 12:44:16 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:34518 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356489AbiASRoO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 12:44:14 -0500
-Received: by mail-oi1-f181.google.com with SMTP id bb37so5333862oib.1;
-        Wed, 19 Jan 2022 09:44:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KpLkQGHLvfl7uQnQ0Gz9HQ7CbtFmU1lgLR6VE5GiEys=;
-        b=ixLjhxcnE9gFn0pmLwGrk/mb1TFshjeEMwEM6uqEmNsvqboaAyLkGQ/ktLi5fBCu+l
-         7iRXHceQb0wFIpKH7n9swUNiWKXlaUj8CNddvkdLJs6M3+rpNIpdZ3W1Q/TMhCBxtlB5
-         TvdS4o3WAlVPD7PVrol6kpAyxCyqKqX6h2c87y98qGme1E2uJU17uVzh37KGKCzCNewM
-         +7Qg0V+cj/fcpjWO9/cmnuqp0ZemZ7Em2gD2UH2PpnzT5LVsu5dRzC6N59khusqRg94I
-         wuyZZAA7S89kXloD7v5uTiMXNVS9pQtdTz1A6jBBTyzayxggS/TI6x/oedkQHSF5e0Gh
-         b3Rg==
-X-Gm-Message-State: AOAM531fybZOmmaBuT+SqG7JsST4SrEmLZ04W5N1yVAcHBXw4HzzGwMJ
-        3F5NE8D2BVFX3jtlGsY7ug==
-X-Google-Smtp-Source: ABdhPJyOS1pvnElPNh4TbjSAgOzKuS8FtvhaAUcUpdGJedrl9supK918JbpezOPIInPkzig9dhUT2w==
-X-Received: by 2002:a05:6808:3d1:: with SMTP id o17mr4026302oie.12.1642614254287;
-        Wed, 19 Jan 2022 09:44:14 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id bd41sm284361oib.32.2022.01.19.09.44.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 09:44:13 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: i2c: stm32-i2c: Move st,syscfg-fmp definition to top level
-Date:   Wed, 19 Jan 2022 11:44:07 -0600
-Message-Id: <20220119174407.3810088-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        id S1350551AbiASRrQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Jan 2022 12:47:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55954 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238035AbiASRrP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 12:47:15 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BCAFB8198D;
+        Wed, 19 Jan 2022 17:47:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36D94C004E1;
+        Wed, 19 Jan 2022 17:47:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642614433;
+        bh=tC/6ZKe3YvJDAJ1UvqdPOgvbwNb/l94AtpaoPQkpWOc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WmK/eyceOAsQowVGoCD5/UhMBzfIairTuVU99VFFU/1WkoI7SDbZtOXmMrbRz9moI
+         bHAKBO1SSrcE9De+FViDWve1xtVx0sHJrR0Szsbk8e00Hi5Lypv+TGxC2uhfrIsf1C
+         HfuHQfMXhKJye6j/6/xG6qoZdBQ4RG7EdQhxWx56M3h2kyb3nyXMDtgJI3y8/o4cNT
+         Il0sbNCuqUpZHJH/xx9N/AZcE3Zc/1wBcOldwg87DW1tjWsObG6J9r9riFdejLfo+q
+         VX20M/z/YyeQXqNunECxDMLl2+4wpFP611YENT+x2hZWN9TY9OVPNAqLqmZVrBYKlk
+         sAv+HQ7Cv5Ikw==
+Date:   Wed, 19 Jan 2022 18:47:06 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Terry Bowman <Terry.Bowman@amd.com>
+Cc:     Jean Delvare <jdelvare@suse.de>, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, jdelvare@suse.com,
+        linux-i2c@vger.kernel.org, andy.shevchenko@gmail.com,
+        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org,
+        wim@linux-watchdog.org, rrichter@amd.com, thomas.lendacky@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+Subject: Re: [PATCH v3 0/4] Watchdog: sp5100_tco: Replace cd6h/cd7h port I/O
+ accesses with MMIO accesses
+Message-ID: <YehOmuqA008XuBHI@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Terry Bowman <Terry.Bowman@amd.com>,
+        Jean Delvare <jdelvare@suse.de>, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, jdelvare@suse.com,
+        linux-i2c@vger.kernel.org, andy.shevchenko@gmail.com,
+        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org,
+        wim@linux-watchdog.org, rrichter@amd.com, thomas.lendacky@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+References: <20220118202234.410555-1-terry.bowman@amd.com>
+ <20220119163012.4274665d@endymion>
+ <dda39f1f-b683-35ac-d810-d4759c4f8448@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="UVnt/mNVFlP1bmJ/"
+Content-Disposition: inline
+In-Reply-To: <dda39f1f-b683-35ac-d810-d4759c4f8448@amd.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-It is preferred to define all properties in the main schema and leave
-if/then/else schemas to just be further constraints on properties.
 
-Rework the schema to use be more specific for each cell. Previously,
-multiple entries of 3 cells each was allowed.
+--UVnt/mNVFlP1bmJ/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/i2c/st,stm32-i2c.yaml | 24 ++++++++++---------
- 1 file changed, 13 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-index 46b62e1c9273..dccbb18b6dc0 100644
---- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-@@ -25,16 +25,9 @@ allOf:
- 
-         i2c-scl-falling-time-ns:
-           default: 10
--
--        st,syscfg-fmp:
--          description: Use to set Fast Mode Plus bit within SYSCFG when
--                       Fast Mode Plus speed is selected by slave.
--                       Format is phandle to syscfg / register offset within
--                       syscfg / register bitmask for FMP bit.
--          $ref: "/schemas/types.yaml#/definitions/phandle-array"
--          items:
--            minItems: 3
--            maxItems: 3
-+    else:
-+      properties:
-+        st,syscfg-fmp: false
- 
-   - if:
-       properties:
-@@ -87,6 +80,16 @@ properties:
-     minimum: 1
-     maximum: 1000000
- 
-+  st,syscfg-fmp:
-+    description: Use to set Fast Mode Plus bit within SYSCFG when Fast Mode
-+      Plus speed is selected by slave.
-+    $ref: "/schemas/types.yaml#/definitions/phandle-array"
-+    items:
-+      - items:
-+          - description: phandle to syscfg
-+          - description: register offset within syscfg
-+          - description: register bitmask for FMP bit
-+
- required:
-   - compatible
-   - reg
-@@ -147,4 +150,3 @@ examples:
-           i2c-scl-falling-time-ns = <20>;
-           st,syscfg-fmp = <&syscfg 0x4 0x2>;
-       };
--...
--- 
-2.32.0
+> I considered sending the request_muxed_mem_region() patch series first bu=
+t=20
+> was concerned the patch might not be accepted without a need or usage. I=
+=20
+> didn't see an obvious path forward for the order of submissions because o=
+f=20
+> the dependencies.=20
 
+My suggestion: make the request_muxed_mem_region() patch the new patch 1
+of the piix4 series. Then, the user will directly come in the following
+patches. From this series, I will create an immutable branch which can
+be pulled in by the watchdog tree. It will then have the dependency for
+your watchdog series. During next merge window, we (the maintainers)
+will make sure that I2C will hit Linus' tree before the watchdog tree.
+
+This works the other way around as well, if needed. Make
+request_muxed_mem_region() the first patch of the watchdog series and
+let me pull an immutable branch from watchdog into I2C.
+
+
+--UVnt/mNVFlP1bmJ/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHoTpYACgkQFA3kzBSg
+KbYHhg//SrzTpB0Ic8R2KsEAehSGbEd1m2zpvHYothmTU/oitfQW6H8cO9nbZ6kU
+gnLvTyW24x+cs5j1YvBh+jWOrX+IekGbFbz8amxsFIpwH0VTaNuuYbkgkMDFDiuW
+HDGsQ75IBgMh0DE/ce1b3NAd4ZR4v8EyKoLYzR9EO6yeHBDzdCrwkP1ApOaVZH2v
+Afds7lso+45bQDnOnjGS/VNwY2YYJwK4YM+njJok9RVNtqeDAfpkQEXVwyvwitIY
+RzinrFRcCZd3rHFqvftUMkR/Jr2E7o+UZbX8vT6LlZnQI/EFNpfjEof33/Zw5Sy+
+vbvPqhYQNMBhY8WFkoFr3orZBs6CzgZjUYX9k4mH+/Bc/GyOW2lcSaS13o1fftg2
+xlKgEvytntDr21U3lnmuAxeSyCf1AKlw1SWT+0mgII6DPWR5gwDE5eNfO+s+0WL0
+5jf3PEIzWJISdzCZsdR1D8Lat7taXvVh6INnSqqvzVH/xup8tI8ZSc5yFTdilzwU
+SrwX/t6pmnsCM6OxRGdBeez4WT71XoGPjPhfJtulPfh08LAjXXwdNtYHBsYSLqml
+dPsom+hs4d/eIBzc2JVlpesV4IRYJqqN1DYUQWa91AKgBfQEC4ymnEircrvYLAkQ
+MLExeleuTVPDuZcsf9vWd5NdMq2euBexU5bw5WGRL/wHdxrGoYE=
+=1ffX
+-----END PGP SIGNATURE-----
+
+--UVnt/mNVFlP1bmJ/--
