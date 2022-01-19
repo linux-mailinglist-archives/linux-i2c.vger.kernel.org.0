@@ -2,156 +2,161 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D37494022
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 19:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D942494086
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 20:15:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245570AbiASSp5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Jan 2022 13:45:57 -0500
-Received: from mail-bn1nam07on2045.outbound.protection.outlook.com ([40.107.212.45]:11142
-        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S241670AbiASSp4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:45:56 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mX5PXIJzPPAAEKxHb9Bjo5IOzi9UeTcnzDVNpyiqugVrV1FhRRVs4y+TFbcoo9GsfgkxZi6yjcRzmdjrVsSJcOq930M/luD5Ot7NzMK1g0cA+dotHmQBd04eqe5EA9VTi2L/rpwmdhID2yLp69RKutOGXMfZ9tb7jrJMnEQnYrJEfRn0FRrhI4/5RIu9ub2JLwV1pWQwYkN1DtocYKjvYMC/4X3o0tMvTKPDdNFh4FiTAONZ9gknT5gVum3udWlajtw1DN7fezzaziRIZE/Gya7m8WmsWwmrIsT4uQOI0fEgRvZ/Of9nkTr+2fqyUMttGU1aTKAF335bnhr/C7AmEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=duvyqQs2cMiJDul46ZsU9evOqHeDORYl9uxrxTo8DcA=;
- b=FaPNS4MFxivvhuYmESbXVjxgAOLEi6hvsODplx9TC6x79YFue17cBpN0L/iVVeaM+eIl3VK9oojF7PS8cIw+8C94QWx99EEJwXWCQUqvR8Y/4FAzd+IjKBzFvqTEMtSQKKG+ncE9HJAyQNKGmDfuOPg9FqWaEQg7lGjRh2M0xSWOfh0orF4y7k7v2cq9DXCF2sp/cebNiO1jGeqWkxxBHMxeO1L4mp3H5sq83tPkaFYr6QgmPOixM+q8F6liV1NNotQZccr/bGgLPQJqxPHYLZpz89sVSoSOAY4rqpnAUYfimbsmAV1i/9jdmdRUbYhCbfFr+qjLjo+hmBenSGbGDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=duvyqQs2cMiJDul46ZsU9evOqHeDORYl9uxrxTo8DcA=;
- b=3fxxSi6U7iljo1KPKtZ5uDUwg9a/Mre1u9NoSXmr7W79jLCIkYgfjxEjT/5cY7TrDnShrw8+U2nQeFbZaow/ZrpToTk8CTVYb+ST93n91tYOgCj1o7HfvKZdfKQI5E66JOMiIXDlI8OqM84ojfM6ViJiOMpXdOWVjERk4I14Wv0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CH0PR12MB5346.namprd12.prod.outlook.com (2603:10b6:610:d5::24)
- by MWHPR1201MB0206.namprd12.prod.outlook.com (2603:10b6:301:55::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Wed, 19 Jan
- 2022 18:45:54 +0000
-Received: from CH0PR12MB5346.namprd12.prod.outlook.com
- ([fe80::ad10:b9b4:d5cb:af1e]) by CH0PR12MB5346.namprd12.prod.outlook.com
- ([fe80::ad10:b9b4:d5cb:af1e%4]) with mapi id 15.20.4909.008; Wed, 19 Jan 2022
- 18:45:54 +0000
-Subject: Re: [PATCH v3 0/4] Watchdog: sp5100_tco: Replace cd6h/cd7h port I/O
- accesses with MMIO accesses
-To:     Guenter Roeck <linux@roeck-us.net>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        linux-watchdog@vger.kernel.org, jdelvare@suse.com,
-        linux-i2c@vger.kernel.org, andy.shevchenko@gmail.com,
-        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org,
-        wim@linux-watchdog.org, rrichter@amd.com, thomas.lendacky@amd.com,
-        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
-        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
-References: <20220118202234.410555-1-terry.bowman@amd.com>
- <20220119163012.4274665d@endymion>
- <dda39f1f-b683-35ac-d810-d4759c4f8448@amd.com> <YehOmuqA008XuBHI@kunai>
- <160d12ca-8493-7536-036c-9dd5af7b4ce0@roeck-us.net>
-From:   Terry Bowman <Terry.Bowman@amd.com>
-Message-ID: <efa8606e-7a9d-e970-1367-91dd0332c122@amd.com>
-Date:   Wed, 19 Jan 2022 12:45:51 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <160d12ca-8493-7536-036c-9dd5af7b4ce0@roeck-us.net>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0182.namprd03.prod.outlook.com
- (2603:10b6:610:e4::7) To CH0PR12MB5346.namprd12.prod.outlook.com
- (2603:10b6:610:d5::24)
+        id S237254AbiASTO6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Jan 2022 14:14:58 -0500
+Received: from mga17.intel.com ([192.55.52.151]:44491 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230121AbiASTO5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 19 Jan 2022 14:14:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642619697; x=1674155697;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=UxCJC6eWdEdNah12KsCkH6nSMwzBaq9zmFaRweUROSw=;
+  b=LAc+xMae98biOIe5+1js4+13ymMtQfOZSUQURTlSus0gzNjipYYXMVRV
+   NyUait10iKdR/90KFN5Y1m05QCfp6q3qzq7aMUxV770tU54G7cYAhQtgv
+   pVX9FLJ0gZMdqxMkdJ7QwAtl/ocGGTqCzwLfUnZfBNXYBI0aw53UzRHZQ
+   htJvPpqnvZya6hmULFQD4Y5jo22ao12AxEHZ9RcdHd8qayiqfi6f/Vn+H
+   HDDeAnxl7jb2W+TuQI/wswZl5zM/+T11pBUstVIHHX+nQ191zFUOLeEu4
+   6a2gQVcdPCcvCyM7pE+7iucp6314FpQtnvO2DoPSUNQBK5Y2BdxezH8ST
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="225834857"
+X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
+   d="scan'208";a="225834857"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 10:38:30 -0800
+X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
+   d="scan'208";a="518285423"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 10:38:09 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nAFpH-00CDps-NH;
+        Wed, 19 Jan 2022 20:36:55 +0200
+Date:   Wed, 19 Jan 2022 20:36:55 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        platform-driver-x86@vger.kernel.org,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        John Garry <john.garry@huawei.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH] driver core: platform: Rename
+ platform_get_irq_optional() to platform_get_irq_silent()
+Message-ID: <YehaRwIe4LjymMhS@smile.fi.intel.com>
+References: <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
+ <YeA7CjOyJFkpuhz/@sirena.org.uk>
+ <20220113194358.xnnbhsoyetihterb@pengutronix.de>
+ <745c601f-c782-0904-f786-c9bfced8f11c@gmail.com>
+ <cae0b73e-46df-a491-4a8e-415205038c2c@omp.ru>
+ <20220115135550.dr4ngiz2c6rfs2rl@pengutronix.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fe738ff9-8325-46aa-6139-08d9db7bec0b
-X-MS-TrafficTypeDiagnostic: MWHPR1201MB0206:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR1201MB0206380D56A3E61E238A85FB83599@MWHPR1201MB0206.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1284;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Sm6l0eziz707SSRixmF2kwPXXaDV3Q5tfodXexbLLa9GZo91xenpW6tnNrZz06tyEMljzI6f+aIsYRZGi4orUoUviz9Zz2nD9Of2A9fAm4zbBlLjNTgNZ9efpvc9NCVjJljG+8WIngDiMJzOc/VDUi4UgVWM1FEyEBmemQYXZWIzl8xZNioxzXHfFkulXPZO7QEdomwEENYrLRi8bWOCJE8l+YBGqOqHrtPDI+gUkkXQ6WLkT+QvLbUzbhayZBgN3OJ12P+/LNIX+GTg5Uds9pN8j+Pe7vkLJZfxOqCYp+pLn6TSj3t1MBJNnas2r9ObcCUj0ktcdKcm0xUi1zBST3XhdLeKiHGv/qRGETyrfAUQGPCPSzG8YnZ6nvUk2GOMI+zf3ngGJmpDHJ/QAyjMsmP9KTY/Ey31SLajHKjOQWEazRfMZxCtIrsVQ92KQPb23LEJesRvySaPS8K+uF+GNp+I1nDpYiBF6+4Td9HaEINedWBImJMAp1qqVHsj8ykJYfios+60yHH0Z+1ME6z+P0wMkOHpZtvQLhb6oltDHBur9PSJvA9o3KHo0wiLtAlgoS0Z9yam2ZBo5IxUEwuTHFntOAIhzQznCl0maG/TOfCAhXLgFiaJl5SZfYs01EBf/gvE2uJMi+zQ8I/3cwRqdlyL594YBPyHOh4bXxqCZrtPtwBwW0UOzY/W1EIeXWwJYvOZvX0MDch9QOMxb7Ohs9FeYvfiWCgYoyw2wPzJDB9eR/oJFRvkWnpc4c2TjII/QGWub1wzeecSt18aQ5cHYA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5346.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(66556008)(26005)(921005)(66946007)(508600001)(2906002)(53546011)(8676002)(6486002)(7416002)(31696002)(8936002)(6512007)(2616005)(5660300002)(6506007)(83380400001)(31686004)(6666004)(110136005)(316002)(6636002)(38100700002)(186003)(36756003)(86362001)(32563001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?Windows-1252?Q?YD/cR7EEfEjepsMWzjEQ4qCgPVoXQOVJAznM6dUQsvmUHRBvRsjZiBVD?=
- =?Windows-1252?Q?IWzyGxFg6bwnORE9Lb5pJF+0z1yQtA6/FHxnzBeXBkCNQ3Cjw/5DGW5o?=
- =?Windows-1252?Q?1U82zMGbg/iVux+TK9kFJ2vrwIk1az7v+1utO/I+NaDzvxGaafXO1n7f?=
- =?Windows-1252?Q?+2t9lPTW4PYH/JZ5Bdn9HB1kVcDY2+zFW0aqt+Qe/VE6FCpE0fzl4Ots?=
- =?Windows-1252?Q?JvlcxRJwIrnLHTxrE1pl+oJ3BTP1K8wL+ViYks5+hAN+nvRCzAkHZ3HS?=
- =?Windows-1252?Q?smKUofA9lMFWvAZ3Y+Ktrzt6B5ZIpPeWN2FnCpCef7q55Lo0XVuYdGXv?=
- =?Windows-1252?Q?+XUycQUehPju9yhMP6BG5EJ9/4XZ6HhJeBtjTahlAlc3opAlwvBF+Nna?=
- =?Windows-1252?Q?T8wfXjqnHxaunnulzlXos5CQ3eqQVWXI4tSIoTo7jfn7KyMM0puIm+Zg?=
- =?Windows-1252?Q?MvaZoUqF1Idy8SXyzIJ3DS4Lmp3Pg6n0gi67xKHo491tzz0UNeIPd92I?=
- =?Windows-1252?Q?gF77CkNJMp5NxDkHiUxtOSd2Ia3NlstdKBEuSSsGErNX/lZwwaRqAOSB?=
- =?Windows-1252?Q?bKEO1X/l8RsxA+TmfKZW2f4dY6JKW8VeQVnwRovLB1J1d+HbaLUGsKJB?=
- =?Windows-1252?Q?Qy6u+zmWDT9xCLD49W3z5GsO3Qq6By3sSUiqfDE0Dk7K74N8N08RfPSG?=
- =?Windows-1252?Q?EVLPyNC617TtgtlEVXSFVO3qR4i1DrXTnuxwGJD/3dWIdgYyvXf9H7kz?=
- =?Windows-1252?Q?N6Ecs1oJ3Vg7axwy2tB6LoIhmSV8rnjLlt9k7PfydaUtldxb4ZXZIPef?=
- =?Windows-1252?Q?lOPJJloprZhYjVf2f0nwOlVkr7JPsPfdSTADLo8dxfXT2f0zwlRKe0ZW?=
- =?Windows-1252?Q?te0/ICV7t7fDj1060N5gW0SruIWlUlYLUNz4vT6FsZ/QrPKIfNu7cBSv?=
- =?Windows-1252?Q?g0euhYdkg86d8cc3E3FOVxOomjXkCwtEUCR1Xf8xjJflZbcnuekkJ5HA?=
- =?Windows-1252?Q?+p5UxPA7T39P9E1AKXDp2P2BLJOeDXhOGWwxDLT06ogFhKJRMcjaLXYD?=
- =?Windows-1252?Q?/LNmL7fkzibI6byNE+1mNJ+wXz4sNLpVJtUYnyFzfciVI3++B/2bE+59?=
- =?Windows-1252?Q?A1jFRa4HtCgkVEMxXo1Tf0pZTV6uTX07BLAoW+i93LCQjT386MvqrEFp?=
- =?Windows-1252?Q?eMzvXtibKUtWEDRfK9EKAW8cxOLhbMCrcGtnPHwX3T0VcLpXViqLlULK?=
- =?Windows-1252?Q?BcESjwV5Aqo2Z9+ExdERoSxbHDmOv6nQctFVDTQobh5Rs+QiW6xNvlwH?=
- =?Windows-1252?Q?LIizcrI1iyYdtzhRyuNFl+pvaQCj4jfRkI5l0jahuyL3Inl86EiXPif+?=
- =?Windows-1252?Q?urGQIkX92WrtVBhEJwmdV8T0FW2px3WkqOss2A6BxbbpAXDBgXpLlrbF?=
- =?Windows-1252?Q?FCtSllpOKuH5+O7S2ZiudzM0QdtiIs5Q3/L7X+ASUs9AigwLOka/P29k?=
- =?Windows-1252?Q?nz2k228MNgIUvcT5U7VetGfaG3J0DwPr24s+cJcqyxvdqkMRhY3qjAvp?=
- =?Windows-1252?Q?DrV9KmJmy6PkDwWBFk99FZYbJ4MsoIuBlEjuUI1b8hwDgKgLaV3KLrVB?=
- =?Windows-1252?Q?gmVWhij87lck/JIDZZf1DuZ36PQt9w3amhn7xZluTTMQIqkVQ3ptFV30?=
- =?Windows-1252?Q?0OZYW3n01dC/plu3BddHNVlkJeJwekguf1wm1wKdLl+7aV1glyRUw8ax?=
- =?Windows-1252?Q?4ahie5fjpouVY1DGBvE=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe738ff9-8325-46aa-6139-08d9db7bec0b
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5346.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2022 18:45:53.8983
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ye5pMiFAme+09cj6fsVwMmDIWr3Cyg//zbMY+TA/sD5+db1tvX/tW1g1HGMDjFJ2/hDnHNdS/b0g61KdRJBF7g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0206
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220115135550.dr4ngiz2c6rfs2rl@pengutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Sat, Jan 15, 2022 at 02:55:50PM +0100, Uwe Kleine-König wrote:
+> On Fri, Jan 14, 2022 at 08:55:07PM +0300, Sergey Shtylyov wrote:
+> > On 1/14/22 12:42 AM, Florian Fainelli wrote:
+
+> So you oppose to the name chosen, but not the renaming as such.
+
+I oppose the name change. The unneeded churn right now since it won't fix
+the issues with the underneath API (platform_get_irq() in this case) and
+will require one more iteration over callers again.
+
+The main issue that platform_get_irq*() returns magic error code while
+treating 0 in a very special way (issuing WARN() and considering it as
+a successful cookie) and this all is quite confusing.
+
+If you are going to fix the underlying issue, welcome! Now I see only
+the step to somewhere. I.o.w. this change _standalone_ makes no sense
+to me.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-On 1/19/22 12:39 PM, Guenter Roeck wrote:
-> On 1/19/22 9:47 AM, Wolfram Sang wrote:
->>
->>> I considered sending the request_muxed_mem_region() patch series first but
->>> was concerned the patch might not be accepted without a need or usage. I
->>> didn't see an obvious path forward for the order of submissions because of
->>> the dependencies.
->>
->> My suggestion: make the request_muxed_mem_region() patch the new patch 1
->> of the piix4 series. Then, the user will directly come in the following
->> patches. From this series, I will create an immutable branch which can
->> be pulled in by the watchdog tree. It will then have the dependency for
->> your watchdog series. During next merge window, we (the maintainers)
->> will make sure that I2C will hit Linus' tree before the watchdog tree.
->>
->> This works the other way around as well, if needed. Make
->> request_muxed_mem_region() the first patch of the watchdog series and
->> let me pull an immutable branch from watchdog into I2C.
->>
-> 
-> Creating an immutable branch from i2c is fine. Also, typically Wim sends
-> his pull request late in the commit window, so i2c first should be no
-> problem either.
-> 
-> Also, if the immutable branch only includes the patch introducing
-> request_muxed_mem_region(), the pull order should not really matter.
-> 
-> Guenter
-
-Ok, I'll add the request_muxed_mem_region() patch to the i2c v3 series
-as the first patch.
-
-Reqards,
-Terry
