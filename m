@@ -2,117 +2,276 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D117B493A2A
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 13:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7465493C7D
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 16:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354401AbiASMUl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Jan 2022 07:20:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
+        id S1355460AbiASPD5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Jan 2022 10:03:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234677AbiASMUj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 07:20:39 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15592C06173E;
-        Wed, 19 Jan 2022 04:20:39 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id o12so8493274lfu.12;
-        Wed, 19 Jan 2022 04:20:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=x7T608envSn65mtmAeo3YxF/Yj94yNBfmWXtPvIkNW0=;
-        b=I/eG5Cu69oB4/0oQ+fNPOnT9X0A31uHTGLbkOqXSP7km1HqT2g9YJ8jwlJeqCJVsAy
-         R6huVxNhLier+x2F5E/+ai9eX5ff/0dNk1rb9ZMsVsD+hH3gq3zgg08CK5l/R8+wRIGc
-         cd3O1DQmqr1LBrAvWyqCKMB6NKrwgcRPjVV+aizoDmxbsXFyKb+GJaCT+MqqflrdLuD6
-         xA5dyqgr/r9CUvx02JhdnzXHqiX2QCLZVV1eHWt9bAG4Q5tQAhWETakkBjfSl12NJQs+
-         mkOGqBRzuql17MJxD1gOsHm0whP8y6DhyjdMZPI4EFEFyZ6eVnT9ZVqJyNQ3BdOUWiiS
-         5L0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=x7T608envSn65mtmAeo3YxF/Yj94yNBfmWXtPvIkNW0=;
-        b=mmO5bLA5HmH/Ogfl8MOVwcamEb9ZY+9JPBFExgjU2DtUHHg8TthyP5ZALdbFa6OGqp
-         hhO390HVCoAJcD9PQ2yPeUefQjAC3O7MUSLnsCRTUojCM+YMDXTJ3mPryBp+K/FDEFvE
-         tZWouydomG6TrbZNZOR+U5Y8YHTHtvfr8EGUff3wSp+Zv79UrGGtVh/9e9QBAY3l5sWE
-         lo+kjd2DQZqat2X8LYQV04rjz7tiQYvVm8ZkLKFEkT3VEcBc04SbkkTMq2uHnZAyuQF3
-         ra6h9k+HWgNdT6TYVWmktOnHjzbh4/76a8BGFOjW9lbZmvHt4aZZcVD9cq5wp5wDzSa1
-         Ys3A==
-X-Gm-Message-State: AOAM530iSxChbOEeMWnxjJ1/sBwcBdhty2C+qGsGNnV/QSk9NCvF1ks8
-        DJNusHrzjNAZOdyAQRUcfyeq3nbjnGg=
-X-Google-Smtp-Source: ABdhPJwe3MenFJXbtwjTP43X46FVmE45XDOXbaFhj5zqSnHc1YYf6U7W+nqb8VaP4KwEdb0Uqiaqgg==
-X-Received: by 2002:a05:651c:2059:: with SMTP id t25mr24872735ljo.427.1642594837409;
-        Wed, 19 Jan 2022 04:20:37 -0800 (PST)
-Received: from [192.168.2.145] (109-252-139-36.dynamic.spd-mgts.ru. [109.252.139.36])
-        by smtp.googlemail.com with ESMTPSA id z13sm141770lfr.183.2022.01.19.04.20.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 04:20:36 -0800 (PST)
-Message-ID: <a7a33c29-427d-5e82-f327-aa4701d51898@gmail.com>
-Date:   Wed, 19 Jan 2022 15:20:35 +0300
+        with ESMTP id S1355441AbiASPD4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jan 2022 10:03:56 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575ADC061574
+        for <linux-i2c@vger.kernel.org>; Wed, 19 Jan 2022 07:03:56 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nACU6-0000Mu-Qo; Wed, 19 Jan 2022 16:02:50 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nACTw-00BCee-8V; Wed, 19 Jan 2022 16:02:39 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nACTv-0005e5-0v; Wed, 19 Jan 2022 16:02:39 +0100
+Date:   Wed, 19 Jan 2022 16:02:38 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-phy@lists.infradead.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        kvm@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        Robert Richter <rric@kernel.org>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        Tony Luck <tony.luck@intel.com>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>, netdev@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <20220119150238.5sru3vtuwsswdnkx@pengutronix.de>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <770fb569-03c8-78f9-c174-94b31e866017@omp.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/6] i2c: tegra: Add support for Tegra234 I2C
-Content-Language: en-US
-To:     Akhil R <akhilrajeev@nvidia.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Petlozu Pravareshwar <petlozup@nvidia.com>
-References: <1642080623-15980-1-git-send-email-akhilrajeev@nvidia.com>
- <1642080623-15980-2-git-send-email-akhilrajeev@nvidia.com>
- <d9a21970-b403-4674-dbd6-5dfab0a83a3b@gmail.com>
- <DM5PR12MB1850237ECA6C115AD776635EC0599@DM5PR12MB1850.namprd12.prod.outlook.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <DM5PR12MB1850237ECA6C115AD776635EC0599@DM5PR12MB1850.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="axfsyc4ql4z6wxfj"
+Content-Disposition: inline
+In-Reply-To: <770fb569-03c8-78f9-c174-94b31e866017@omp.ru>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-19.01.2022 11:20, Akhil R пишет:
->> 13.01.2022 16:30, Akhil R пишет:
->>> +static const struct tegra_i2c_hw_feature tegra234_i2c_hw = {
->>> +     .has_continue_xfer_support = true,
->>> +     .has_per_pkt_xfer_complete_irq = true,
->>> +     .clk_divisor_hs_mode = 0x2,
->>> +     .clk_divisor_std_mode = 0x4f,
->>> +     .clk_divisor_fast_mode = 0x58,
->>> +     .clk_divisor_fast_plus_mode = 0x24,
->>> +     .has_config_load_reg = true,
->>> +     .has_multi_master_mode = true,
->>> +     .has_slcg_override_reg = true,
->>> +     .has_mst_fifo = true,
->>> +     .quirks = &tegra194_i2c_quirks,
->>> +     .supports_bus_clear = true,
->>> +     .has_apb_dma = false,
->>> +     .tlow_std_mode = 0x8,
->>> +     .thigh_std_mode = 0x7,
->>> +     .tlow_fast_fastplus_mode = 0x1,
->>> +     .thigh_fast_fastplus_mode = 0x1,
->>> +     .setup_hold_time_std_mode = 0x08080808,
->>> +     .setup_hold_time_fast_fast_plus_mode = 0x02020202,
->>> +     .setup_hold_time_hs_mode = 0x090909,
->>> +     .has_interface_timing_reg = true, };
->>
->> Why tegra194_i2c_hw can't be reused by T234? Looks like I2C h/w hasn't
->> changed and somebody just made a minor tuning of the timing parameters, does
->> it really matter in practice?
-> The timing parameters are important to get the desired data rate for I2C. The values,
-> unfortunately, cannot be reused from Tegra194.
 
-From where those T194 parameters specified in the Tegra I2C driver came
-from?
+--axfsyc4ql4z6wxfj
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'm now looking at T194 TRM (Xavier_TRM_DP09253002_v1.3p 10.2.3.1.1
-Example Settings for Various I2C Speeds) and see that all the values
-should match T234. Please check whether T194 configuration is correct
-and fix it if needed.
+On Mon, Jan 17, 2022 at 02:57:32PM +0300, Sergey Shtylyov wrote:
+> On 1/10/22 10:54 PM, Sergey Shtylyov wrote:
+>=20
+> > This patch is based on the former Andy Shevchenko's patch:
+> >=20
+> > https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko@l=
+inux.intel.com/
+> >=20
+> > Currently platform_get_irq_optional() returns an error code even if IRQ
+> > resource simply has not been found. It prevents the callers from being
+> > error code agnostic in their error handling:
+> >=20
+> > 	ret =3D platform_get_irq_optional(...);
+> > 	if (ret < 0 && ret !=3D -ENXIO)
+> > 		return ret; // respect deferred probe
+> > 	if (ret > 0)
+> > 		...we get an IRQ...
+> >=20
+> > All other *_optional() APIs seem to return 0 or NULL in case an optional
+> > resource is not available. Let's follow this good example, so that the
+> > callers would look like:
+> >=20
+> > 	ret =3D platform_get_irq_optional(...);
+> > 	if (ret < 0)
+> > 		return ret;
+> > 	if (ret > 0)
+> > 		...we get an IRQ...
+> >=20
+> > Reported-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> > Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> [...]
+>=20
+>    Please don't merge this as yet, I'm going thru this patch once again
+> and have already found some sloppy code. :-/
+
+Who would you expect to merge this? I would have expected Greg, but he
+seems to have given up this thread.
+
+> > diff --git a/drivers/char/ipmi/bt-bmc.c b/drivers/char/ipmi/bt-bmc.c
+> > index 7450904e330a..fdc63bfa5be4 100644
+> > --- a/drivers/char/ipmi/bt-bmc.c
+> > +++ b/drivers/char/ipmi/bt-bmc.c
+> > @@ -382,12 +382,14 @@ static int bt_bmc_config_irq(struct bt_bmc *bt_bm=
+c,
+> >  	bt_bmc->irq =3D platform_get_irq_optional(pdev, 0);
+> >  	if (bt_bmc->irq < 0)
+> >  		return bt_bmc->irq;
+> > +	if (!bt_bmc->irq)
+> > +		return 0;
+>=20
+>    Hm, this is sloppy. Will recast and rebase to the -next branch.
+
+I didn't think about what you mean with sloppy, but the code is
+equivalent to
+
+	if (bt_bmc->irq <=3D 0)
+		return bt_bmc->irq;=20
+
+> > =20
+> >  	rc =3D devm_request_irq(dev, bt_bmc->irq, bt_bmc_irq, IRQF_SHARED,
+> >  			      DEVICE_NAME, bt_bmc);
+> >  	if (rc < 0) {
+> >  		dev_warn(dev, "Unable to request IRQ %d\n", bt_bmc->irq);
+> > -		bt_bmc->irq =3D rc;
+> > +		bt_bmc->irq =3D 0;
+>=20
+>    This change isn't needed...
+>=20
+> >  		return rc;
+> >  	}
+> > =20
+> [...]
+> > diff --git a/drivers/edac/xgene_edac.c b/drivers/edac/xgene_edac.c
+> > index 2ccd1db5e98f..0d1bdd27cd78 100644
+> > --- a/drivers/edac/xgene_edac.c
+> > +++ b/drivers/edac/xgene_edac.c
+> > @@ -1917,7 +1917,7 @@ static int xgene_edac_probe(struct platform_devic=
+e *pdev)
+> > =20
+> >  		for (i =3D 0; i < 3; i++) {
+> >  			irq =3D platform_get_irq_optional(pdev, i);
+>=20
+>    Is *_optinal() even correct here?
+
+_optinal isn't correct, _optional maybe is. :-)
+Anyhow, look at e26124cd5f7099949109608845bba9e9bf96599c, the driver was
+fixed not to print two error messages and the wrong option was picked.
+
+> > -			if (irq < 0) {
+> > +			if (irq <=3D 0) {
+> >  				dev_err(&pdev->dev, "No IRQ resource\n");
+> >  				rc =3D -EINVAL;
+> >  				goto out_err;
+
+What's wrong here is that the return code is hardcoded ...
+
+> [...]
+> > diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nan=
+d/raw/brcmnand/brcmnand.c
+> > index f75929783b94..ac222985efde 100644
+> > --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+> > +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+> > @@ -1521,7 +1521,7 @@ static irqreturn_t brcmnand_ctlrdy_irq(int irq, v=
+oid *data)
+> > =20
+> >  	/* check if you need to piggy back on the ctrlrdy irq */
+> >  	if (ctrl->edu_pending) {
+> > -		if (irq =3D=3D ctrl->irq && ((int)ctrl->edu_irq >=3D 0))
+> > +		if (irq =3D=3D ctrl->irq && ((int)ctrl->edu_irq > 0))
+>=20
+>    Note to self: the cast to *int* isn't needed, the edu_irq field is *in=
+t* already...
+>=20
+> [...]
+> > diff --git a/drivers/power/supply/mp2629_charger.c b/drivers/power/supp=
+ly/mp2629_charger.c
+> > index bdf924b73e47..51289700a7ac 100644
+> > --- a/drivers/power/supply/mp2629_charger.c
+> > +++ b/drivers/power/supply/mp2629_charger.c
+> > @@ -581,9 +581,9 @@ static int mp2629_charger_probe(struct platform_dev=
+ice *pdev)
+> >  	platform_set_drvdata(pdev, charger);
+> > =20
+> >  	irq =3D platform_get_irq_optional(to_platform_device(dev->parent), 0);
+>=20
+>    Again, is *_optional() even correct here?
+>=20
+> > -	if (irq < 0) {
+> > +	if (irq <=3D 0) {
+> >  		dev_err(dev, "get irq fail: %d\n", irq);
+> > -		return irq;
+> > +		return irq < 0 ? irq : -ENXIO;
+
+Ack, could be simplified by switching to platform_get_irq().
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--axfsyc4ql4z6wxfj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHoKAsACgkQwfwUeK3K
+7AnJ3wf8Cq4VBWsvtLpuPywS2t8zcX9OLW+0bsxWsDjOHqeg0f9tl0AUgxmt8S9X
+SWtqXkvnd0fKD/AWHIowmqZNGujzE45BD9vwkw+ukhavxyl0lKuWHitl19jLf2tF
+LaBokU8H4RFjBZg81G2SeyXBeDWI+toak3seZ4mnpeDIrSgl7RrEyyKdZRVyeCvS
+PVAC4TvXo94UopGC0KiLom/BRpY9pB6M4M2J/vZRYI2+Eb2tjizO6vc77DQlqTEs
+SVeOuA4nagghgp5Ej7LJ1RpUqI/Ud34jbrXinsPr+F53/9ObxRRRShqRTqmRTQwj
+91WhtqHtqhEzcn1OajDmLZZRPbVc3A==
+=bHLP
+-----END PGP SIGNATURE-----
+
+--axfsyc4ql4z6wxfj--
