@@ -2,111 +2,179 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ABD9494213
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 21:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 751CA494229
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jan 2022 21:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229474AbiASUsG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Jan 2022 15:48:06 -0500
-Received: from mail-dm6nam08on2042.outbound.protection.outlook.com ([40.107.102.42]:13664
-        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234528AbiASUsF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 19 Jan 2022 15:48:05 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RiiLcUkBXZfZo9SI2Nn30MGfuAtw9Uk4q5hvQMfu3PvZre0rFsmTliVQsd6wcCoHZSTz6g/lgzpriNdhAUCRGzdA9k/wocsvSz9m+KQ33dqOQoy2s0z7MKCwoZ4bZVf4A9VwqzOCGQvspgt6KZGORaNbdJrkkyx88GbrxG7IADZq5SP/NFktfOQhsT3od6OEUtlDaeu1RpUHl/kiw/jGjH4MDZKFDeSbauNHllU8W/q7NjMznhIffoPnF2IOBQrkExxEIX/HZKKQs3qY27FRaw+lGibfZOMdjWCi1+1WJICrAz+02NB9Ryempr3BAjKYDHqgGR06iPo5srZofwrU/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Qf+0hHQGNl99NT4rmAZZh0ntXMtHCS+FqKyJsQxxx4k=;
- b=kh7ohrLBLWGuUIa+dyIjP1tbXcEXBSPrPPh1h0L/Dbu1jTXfV3SwZSIs+2KuVtwlWGZLdsEw33k7HGgKVpBateeMNip+kmrxJ3V1f5SJ1rL1YIrH+tbrJgUNm2nas9zJ2eDpTHJlwoPqIC8Fy7s9MsY4BMwZIrhCPh6tLH22w5Rs7NbIlKtP40NR/40s3Qr9/Rj1NeZi2+2aO//uF8dmf3EXwGIvdU586yIEliS/Biqi4LwYMjxHVceWvdFzTi04vGVYJOuTzu5RS8zxQd5A4kc2asZnVxR5Py/Il68K60y8lb/qAQUwQyTxcNumCCd8pUBopcKECeCiT73CJCKpAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=vpitech.onmicrosoft.com; s=selector2-vpitech-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qf+0hHQGNl99NT4rmAZZh0ntXMtHCS+FqKyJsQxxx4k=;
- b=CZ/HMyPoVPnvXoI2N0K8Tk+3OZTXhGmG/Bvw1OwcHaD5g2jNnmE+Pcl7FtaVxdtl6e7rGIY2PMrtScv8oz+HA0GXyEhc6TrliFu6PpB/pdcy31CbTvozoiygcfWOeVLhzBCJUB648lPGe61G/d6GPcU3E3pXUzgosxhxPBAmvac=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vpitech.com;
-Received: from CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:15b::19)
- by CO1P222MB0193.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:158::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Wed, 19 Jan
- 2022 20:48:03 +0000
-Received: from CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM
- ([fe80::acb2:d13e:3a3:c824]) by CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM
- ([fe80::acb2:d13e:3a3:c824%9]) with mapi id 15.20.4888.014; Wed, 19 Jan 2022
- 20:48:03 +0000
-Date:   Wed, 19 Jan 2022 13:48:01 -0700
-From:   Alex Henrie <alexh@vpitech.com>
-To:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Hector Martin <marcan@marcan.st>, Jean Delvare <jdelvare@suse.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH v3] i2c: i801: Safely share SMBus with BIOS/ACPI
-Message-Id: <20220119134801.c9bfa050d8374b37b33c06d1@vpitech.com>
-In-Reply-To: <20210626054113.246309-1-marcan@marcan.st>
-References: <20210626054113.246309-1-marcan@marcan.st>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-unknown-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MWHPR20CA0012.namprd20.prod.outlook.com
- (2603:10b6:300:13d::22) To CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:303:15b::19)
+        id S244562AbiASU4i (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Jan 2022 15:56:38 -0500
+Received: from mga17.intel.com ([192.55.52.151]:54135 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229541AbiASU4h (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 19 Jan 2022 15:56:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642625797; x=1674161797;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Zn3K2EdVeDLJCMJ0xbcykPqu/tTiNlke9kM/JdHhcyA=;
+  b=UKP5BPWQ+uw2sBH+BM1UqeeTghbHvgaSjb/HR8XqV2m/L0x+YVEmxOGG
+   flhgx042uwtvDmyFlbH1w3PHokLzPGv6z+k+i45vi98jaPXt+vr175APx
+   AbZt1GcjiOufYlT52vxr4qzItwd0SVdtcN8WG3VZf89UFYd8sgki/FTZ0
+   nAJVaJF3b9itTPyNWKR/tIDClRlUTOZwB+qhiCz2ulEGjz2iqqn3ekqLu
+   wBY0+mwl9tNWjORFuFbtJE0r88oQiNJ8px6dZJvxRVbsCoXYnnCWjk+qF
+   bKdDmFFe8Dlc4vZoy0A9phMp1kTFErGo9dZCebUQjx5RAQ/pMMDiEL2gZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="225862988"
+X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
+   d="scan'208";a="225862988"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 12:56:37 -0800
+X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
+   d="scan'208";a="615845335"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 12:56:21 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nAHz3-00CGxM-Ht;
+        Wed, 19 Jan 2022 22:55:09 +0200
+Date:   Wed, 19 Jan 2022 22:55:09 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        platform-driver-x86@vger.kernel.org,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        John Garry <john.garry@huawei.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH] driver core: platform: Rename
+ platform_get_irq_optional() to platform_get_irq_silent()
+Message-ID: <Yeh6rdBjEMiavLfh@smile.fi.intel.com>
+References: <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
+ <YeA7CjOyJFkpuhz/@sirena.org.uk>
+ <20220113194358.xnnbhsoyetihterb@pengutronix.de>
+ <YeF05vBOzkN+xYCq@smile.fi.intel.com>
+ <20220115154539.j3tsz5ioqexq2yuu@pengutronix.de>
+ <YehdsUPiOTwgZywq@smile.fi.intel.com>
+ <b7edb713-dd91-14e7-34ff-d8fb559e8e92@omp.ru>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f7085f54-8c24-4ad0-cc13-08d9db8cfca2
-X-MS-TrafficTypeDiagnostic: CO1P222MB0193:EE_
-X-Microsoft-Antispam-PRVS: <CO1P222MB01935A12B88280FE7310E873B8599@CO1P222MB0193.NAMP222.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1728;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5lWZDinowPVPYttRwZYNHekeCA4m+D3dSZp/NQuFPHXX5M7iF3+vX2j9T2HQpL/OaaQvJ/e/ueLacXrSM+jukcVmcs2sdZAKwDz7m4B6zhZI5lNXdetZvtgEwNTm95j9U+FAql7E5pStVp1YulsUqZRfrZlxddNjG5sV2bgI86RpeJVv1vJsVFIIdEGRmNVsTXmqPhgckxtpq34HopDPoSAyp7SZ7yltkeIOlGX0CNAv2WUnpPsNYPx/GVdt1Jyv2/MJkTk6zr3ZipbRXKq/T3hj/M0tLfzoluwJJEBNopHu7/4/pQT5sel172Flgq+HjQDb1mDBB93RGKZbLSWkKyKdkGbV8aFdMfrLkLi9knySrfmhdwekZXpUwiZy8JebE39LDqrgMX7bKplFnlpwldcIWq2vYBLH6h1hxstikurSO1K4q+tV0nFlVv2NKC1vQ3xuLihRCBpdBdKqBiwCkfoBvFokkGtH9Q0DeCBRd1LYiLiIU/2nZdgD5MCDD9jCVELjdZC3jouCn06344uVrqdJnW5UFBl+q3i+RYbsmkH8oXkPL6TlPj1tjlfZSzQqjHdRb4UwtoSdToSknFkWx95b6rkdSLGfwvYHp0UkDLXw4NQcqTHe5FvuGdB5SKchzprmZsIb6jO0T0th/VhmHTZn335xEsP3Ig+aQlNAsdYyR4pXPYgwr7SQ6hnHW2sOBVB1r09wgdVR0w8OgQ5cjQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(39830400003)(376002)(396003)(366004)(136003)(346002)(6486002)(558084003)(4270600006)(1076003)(36756003)(66476007)(66556008)(316002)(52116002)(186003)(38350700002)(66946007)(26005)(2616005)(8676002)(2906002)(8936002)(6512007)(5660300002)(19618925003)(86362001)(38100700002)(6506007)(508600001)(4326008)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1K4zBVdnVKqsQFHVblBAOfD6JyOM7Nitnyp0aSjjFci3B7+7UZvPtSSVZu3a?=
- =?us-ascii?Q?NzcH7JzJaicU+zqeYm3vzFfX4+mSUoqbCK/VDBenz9PORhz8AL3XmNMwwP1Y?=
- =?us-ascii?Q?JOKcFPLS6o0r5skxTf/lPBPLqlc8e6di6W5Pey1LopNDuiLG3pkGqKMbm02n?=
- =?us-ascii?Q?PSuhxXZCKWb5MjK8L7jZxu4uqXQMu9r1D+lBRxb5BzmGpkmWGFbT2Wp5knFd?=
- =?us-ascii?Q?m8Re7tqxuMVMiFim9udxoiop6jgZY4WFvrxH3unuFG+OH5YrMIvYkxKQL4cF?=
- =?us-ascii?Q?ppEpbID0VZozG5Fr/Lz7Z2jMDmN4wAA/8m1CpWS5ofAsgu24IPjnAawpMxDR?=
- =?us-ascii?Q?c8rP6sXpkgMjVZX22BKzn26HI1JFiF0FOeL9GabHP8ij7i1MmiYqI+C4eCIc?=
- =?us-ascii?Q?onUhqz01/qQ/HNUqXcLg9L8m+MbiJTJvGWuDu4Pwkc1oESzih2p5ht8WCJS8?=
- =?us-ascii?Q?+Zi+4MvFkD8bR5nhHocXH+vJbytAzCAZKHKtGe9BIDXPDhiTeiAWrlp5uCxI?=
- =?us-ascii?Q?7yeKAl+XWNtMISoXC+9dzo44ocAcI5AChDz+kf0yftPFrDXuHnFTvhG0yr/5?=
- =?us-ascii?Q?DjMZe3U+lk0F/E2yVGSxFO8ihLqlZ51ydSoUIm7aSPSHI2CXj1GMRuo4cxlF?=
- =?us-ascii?Q?tPmD7CQq4uQmYxiPiVapPdPwHrpOwr28ZmDMt7LWRi5VD3CVbW7UR4o9sXwy?=
- =?us-ascii?Q?c9Wt7IFHHF4E2dPXn2B/JNDI9uHwxoG0MV+6DH2YuLkmysNrk23bzn/ETQKC?=
- =?us-ascii?Q?ryfjXE/tIeMRkR6no7g/pFl2Hh8xE2IAzzoZksBWcm3JGFXzGL5MNCpfZ8Jp?=
- =?us-ascii?Q?9Ya2D46iMJtXIeCLi4AcSQkp8FMjRmJtS0coRsPLum794yM3y8hUTZpo6uHd?=
- =?us-ascii?Q?gO3nAZHEq9U0KZKHcgFcQywteIGCmroBVuOwVRcMIyEmdPAEr1OPIS/OKw0z?=
- =?us-ascii?Q?eeAhW+irdJC8R2XPdoIvHpzsHYuzZnULrO9WA/Ly30fzg9YKb2RYZWy2HmjH?=
- =?us-ascii?Q?u6gPCzYc6wyS94KcBqQSXI1+8POXsBvnj0XBlUHXXxwJNYTdmJCpAuz/SoDV?=
- =?us-ascii?Q?DiY7E6cWDT+rHOu8ua1FmIIoE3I32SrAcq9MO4c6ABBF+XlPbNpaSsvLPSaD?=
- =?us-ascii?Q?Wx7yZyG5u3O95JNZwQASfXk+zDOAIZPkk7VFElGOVK4mBlFSiwbFW6T42ufV?=
- =?us-ascii?Q?T5dFd41iVKyuZjR+MdX9NAI0eqwXKRpHlGl3nPGbF+5vVUk42aV3jYHW+BXA?=
- =?us-ascii?Q?aEpbG5Q1C2j85vTqDnBD7hUgpUj1ZP/2xI0XK+DMQmBo/WJSEQRb/D5R7711?=
- =?us-ascii?Q?uVPfbhNm3/c0OV4c7nCFIeq7W0spvE75mR1tzz5oGfwKQXM4q2jyYw1cpKHV?=
- =?us-ascii?Q?KCUjwF2lOL71QlVmf6iI9FGezdg3vdqJJ0jJeKKXN+K/XXx6/xkLNHMHjTdE?=
- =?us-ascii?Q?hthFizAZQx6UItab3GHi36RCjfLVe6vzYGjBXeh8nBfg6O5WItNsMQCZr4jj?=
- =?us-ascii?Q?UyVHaIXZxdmacP1GqijFDqSKTdohoAe7RjqcWltiPXDPiO9pilLEQ7jJRfrG?=
- =?us-ascii?Q?afmFcJNfjCnvECDn1HHTJRuwHL1SAyc0HzQyN545PJDgpKHV9gtyUZix4ZC3?=
- =?us-ascii?Q?klVrHnGuKx3EF8MpP0wM2t0=3D?=
-X-OriginatorOrg: vpitech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f7085f54-8c24-4ad0-cc13-08d9db8cfca2
-X-MS-Exchange-CrossTenant-AuthSource: CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2022 20:48:03.2579
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 130d6264-38b7-4474-a9bf-511ff1224fac
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8kwPBx50TUVZpkqnPT2JYu2a82hI2aXQvxi3oVaIoHFzy8znW/kNcLV4LLwn3BqkFbQmd1WNvv+UxaUXqkT4Pw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1P222MB0193
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b7edb713-dd91-14e7-34ff-d8fb559e8e92@omp.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Tested-by: Alex Henrie <alexh@vpitech.com>
+On Wed, Jan 19, 2022 at 10:47:06PM +0300, Sergey Shtylyov wrote:
+> On 1/19/22 9:51 PM, Andy Shevchenko wrote:
+
+> >>>>> It'd certainly be good to name anything that doesn't correspond to one
+> >>>>> of the existing semantics for the API (!) something different rather
+> >>>>> than adding yet another potentially overloaded meaning.
+> >>>>
+> >>>> It seems we're (at least) three who agree about this. Here is a patch
+> >>>> fixing the name.
+> >>>
+> >>> And similar number of people are on the other side.
+> >>
+> >> If someone already opposed to the renaming (and not only the name) I
+> >> must have missed that.
+> >>
+> >> So you think it's a good idea to keep the name
+> >> platform_get_irq_optional() despite the "not found" value returned by it
+> >> isn't usable as if it were a normal irq number?
+> > 
+> > I meant that on the other side people who are in favour of Sergey's patch.
+> > Since that I commented already that I opposed the renaming being a standalone
+> > change.
+> > 
+> > Do you agree that we have several issues with platform_get_irq*() APIs?
+> > 
+> > 1. The unfortunate naming
+> 
+>    Mmm, "what's in a name?"... is this the topmost prio issue?
+
+The order is arbitrary.
+
+> > 2. The vIRQ0 handling: a) WARN() followed by b) returned value 0
+> 
+>    This is the most severe issue, I think...
+> 
+> > 3. The specific cookie for "IRQ not found, while no error happened" case
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
