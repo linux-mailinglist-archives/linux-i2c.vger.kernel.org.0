@@ -2,146 +2,154 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B817494D03
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jan 2022 12:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B24494D29
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jan 2022 12:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbiATLbL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 Jan 2022 06:31:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47464 "EHLO
+        id S231475AbiATLkj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Jan 2022 06:40:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbiATLbK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Jan 2022 06:31:10 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C80FC06173F
-        for <linux-i2c@vger.kernel.org>; Thu, 20 Jan 2022 03:31:10 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nAVeb-0003Ed-UQ; Thu, 20 Jan 2022 12:30:57 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nAVeZ-00BLYg-Sj; Thu, 20 Jan 2022 12:30:55 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nAVeY-000E9C-HJ; Thu, 20 Jan 2022 12:30:54 +0100
-Date:   Thu, 20 Jan 2022 12:30:54 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Akhil R <akhilrajeev@nvidia.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Subject: Re: [PATCH v2 3/3] i2c: smbus: Use device_*() functions instead of
- of_*()
-Message-ID: <20220120113054.lmd5rmvmflaf7v7t@pengutronix.de>
-References: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com>
- <1641996862-26960-4-git-send-email-akhilrajeev@nvidia.com>
- <CAHp75Vd=gxF9jFMvRw3qM9rfsxxCsO8qYXKVheuhjOV7ypU9og@mail.gmail.com>
- <DM5PR12MB18509C555A8A6F5891F0CC28C05A9@DM5PR12MB1850.namprd12.prod.outlook.com>
- <CAHp75VfVJo=8FPX_Pw15X5B3awFXpuEq+=LryxB6M4Ub-YJ7uA@mail.gmail.com>
- <DM5PR12MB185098D36F665AC5702D47DDC05A9@DM5PR12MB1850.namprd12.prod.outlook.com>
- <CAHp75VfVt0b+rBTfvTTj4-M11DrM2EGdqb4NNNTq0ApvR+gpDg@mail.gmail.com>
+        with ESMTP id S231459AbiATLkh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Jan 2022 06:40:37 -0500
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FFDC061574;
+        Thu, 20 Jan 2022 03:40:37 -0800 (PST)
+Received: by mail-oo1-xc36.google.com with SMTP id l7-20020a4a2707000000b002dde197c749so2070439oof.10;
+        Thu, 20 Jan 2022 03:40:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IURShh+tAODqAiJh+KDJ+01PfxKxuj1xZUOMackfOOk=;
+        b=Vz1pvQALrPt8wZAYERJlR7js9v4/O4ym8VLsubf10xKBms/HSrNyJXsvLUKVPNz2er
+         z9y+6nPpnS1qbFwvKwvJorb0aIcWu63ZFCha1bhWzJH7j1MFpfTrIFzyaQa00g+b1UFg
+         wCO+8ajcrVTlY4dtkpmSgqGqvfxa4zoI31BvQggtxFB/0MXIwL9qG/XyDMZXxGeTkHiK
+         vDn1LtEM2iBH8xCc+4qhPyIX5aK0onRaVfO6k6V2ZgTS6FQ7r+O88jb7LSRI7mYQh0sP
+         kkC0b533v7hmJ/EjyCQ8E4jxwvWW9+JZqK4CRU2XFJCepYw+mCDbLaLCO0yyFAUVRbME
+         bg1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IURShh+tAODqAiJh+KDJ+01PfxKxuj1xZUOMackfOOk=;
+        b=CBwg8evbXewTKOVoBhJZHj4P0TqGmS9TjGZIAHe4Ki1FvCnRR1jPaDN6izzBj+rthG
+         7/iB1pLaT7T+7i08Mkq6csNs6XAETHypE3o9zbEDNGSHYEhxJM7+ugLfAsbTW2Vdntuk
+         sEtckbCHAB3x/8fOZMp6CXKbYA9UAvxgEZ5xEuLTm/P5qcJf2s3+UrtgbWbR0Do4zJms
+         5ssKA6k2UKpeY5olaH4n0AgS1YUb7B+9AaPiErn/iPNvgn6YlU685vCm45Kj5eqq5fnY
+         EsCS3aXSSCTKs80IzIMKMDNPBBg6FQUO5N0++lLVVWciqJJ+PnyU0C6rryXq0ah5lVr7
+         VQbg==
+X-Gm-Message-State: AOAM530VHa5L2eJsIWZTUZLAG37JmD/D5TDlARfUHxjFJcrC+6IgYpDx
+        K/HPSmaYGUG8GK0eLrMtubIivo5BJWUPg4UqHe4=
+X-Google-Smtp-Source: ABdhPJzVUuPUA0+dLs3T4/ac9raYhHS1yiR6xjixMRgj1sa6nF5nfrTil5Enm8pp/zVblcBTM7eQu4CMn+laojzaQUo=
+X-Received: by 2002:a05:6808:1b25:: with SMTP id bx37mr7082972oib.129.1642678836132;
+ Thu, 20 Jan 2022 03:40:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cdxvf7ymm4mv6sgi"
-Content-Disposition: inline
-In-Reply-To: <CAHp75VfVt0b+rBTfvTTj4-M11DrM2EGdqb4NNNTq0ApvR+gpDg@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+References: <20220120104009.159147-1-krzysztof.kozlowski@canonical.com> <a370a74a-2548-fc20-20b0-89e48645086f@baylibre.com>
+In-Reply-To: <a370a74a-2548-fc20-20b0-89e48645086f@baylibre.com>
+From:   Enric Balletbo Serra <eballetbo@gmail.com>
+Date:   Thu, 20 Jan 2022 12:40:24 +0100
+Message-ID: <CAFqH_52NGQYjtEPvsK+pPM12-U6j9vhVCZCFwh6xAABdd+7hqw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: display: bridge: drop Enric Balletbo i
+ Serra from maintainers
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Simon Glass <sjg@chromium.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-i2c@vger.kernel.org, linux-iio <linux-iio@vger.kernel.org>,
+        Linux Input <linux-input@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi,
 
---cdxvf7ymm4mv6sgi
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Jan 20, 2022 at 12:43:02PM +0200, Andy Shevchenko wrote:
-> On Thu, Jan 20, 2022 at 12:29 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+Missatge de Neil Armstrong <narmstrong@baylibre.com> del dia dj., 20
+de gen. 2022 a les 11:52:
+>
+> On 20/01/2022 11:40, Krzysztof Kozlowski wrote:
+> > Enric Balletbo i Serra emails bounce:
 > >
-> > > ...
-> > >
-> > > > > This change reveals potential issue:
-> > > > >
-> > > > > > -               irq =3D of_irq_get_byname(adapter->dev.of_node,=
- "smbus_alert");
-> > > > > > +               irq =3D device_irq_get_byname(adapter->dev.pare=
-nt,
-> > > "smbus_alert");
-> > > > >
-> > > > > >                 if (irq <=3D 0)
-> > > > >
-> > > > > I guess this '=3D 0' part should be fixed first.
-> > > >
-> > > > '0' is a failure as per the documentation of of_irq_get_byname() as=
- well as
-> > > > of_irq_get(). The case is different for acpi_irq_get(), but it is h=
-andled in
-> > > > fwnode_irq_get(). If I understood it right, a return value of '0' s=
-hould be
-> > > > considered a failure here.
-> > >
-> > > Depends. I have no idea what the original code does here. But
-> > > returning an error or 0 from this function seems confusing to me.
-> > >
-> > The description in of_irq_get*() says -
-> > /* Return: Linux IRQ number on success, or 0 on the IRQ mapping failure=
-, or
-> >  * -EPROBE_DEFER if the IRQ domain is not yet created, or error code in=
- case
-> >  * of any other failure.
-> >  */
-> > As I see from the code of fwnode_irq_get(), which is used in this case,=
- returns
-> > either the return value of of_irq_get() or error code from acpi_irq_get=
-() when
-> > it fails, or res.start if it didn't fail. I guess, any of these would n=
-ot be 0 unless
-> > there is an error.
->=20
-> of_irq_get*() seems inconsistent...
->=20
-> Uwe, what do you think?
+> >   <enric.balletbo@collabora.com>: Recipient address rejected: User unknown in  local recipient table
+> >
+> > so drop him from the maintainers, similarly to commit 3119c28634dd
+> > ("MAINTAINERS: Chrome: Drop Enric Balletbo i Serra").  Add generic DRM
+> > bridge maintainers to Analogix ANX7814.
+> >
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> > ---
+> >  .../devicetree/bindings/display/bridge/analogix,anx7814.yaml  | 4 +++-
+> >  .../bindings/display/bridge/google,cros-ec-anx7688.yaml       | 1 -
+> >  Documentation/devicetree/bindings/display/bridge/ps8640.yaml  | 1 -
+> >  3 files changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7814.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7814.yaml
+> > index 8e13f27b28ed..bce96b5b0db0 100644
+> > --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7814.yaml
+> > +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7814.yaml
+> > @@ -7,7 +7,9 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+> >  title: Analogix ANX7814 SlimPort (Full-HD Transmitter)
+> >
+> >  maintainers:
+> > -  - Enric Balletbo i Serra <enric.balletbo@collabora.com>
+> > +  - Andrzej Hajda <andrzej.hajda@intel.com>
+> > +  - Neil Armstrong <narmstrong@baylibre.com>
+> > +  - Robert Foss <robert.foss@linaro.org>
+> >
+> >  properties:
+> >    compatible:
+> > diff --git a/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml b/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
+> > index 9f7cc6b757cb..a88a5d8c7ba5 100644
+> > --- a/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
+> > +++ b/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
+> > @@ -8,7 +8,6 @@ title: ChromeOS EC ANX7688 HDMI to DP Converter through Type-C Port
+> >
+> >  maintainers:
+> >    - Nicolas Boichat <drinkcat@chromium.org>
+> > -  - Enric Balletbo i Serra <enric.balletbo@collabora.com>
+> >
+> >  description: |
+> >    ChromeOS EC ANX7688 is a display bridge that converts HDMI 2.0 to
+> > diff --git a/Documentation/devicetree/bindings/display/bridge/ps8640.yaml b/Documentation/devicetree/bindings/display/bridge/ps8640.yaml
+> > index cdaf7a7a8f88..186e17be51fb 100644
+> > --- a/Documentation/devicetree/bindings/display/bridge/ps8640.yaml
+> > +++ b/Documentation/devicetree/bindings/display/bridge/ps8640.yaml
+> > @@ -8,7 +8,6 @@ title: MIPI DSI to eDP Video Format Converter Device Tree Bindings
+> >
+> >  maintainers:
+> >    - Nicolas Boichat <drinkcat@chromium.org>
+> > -  - Enric Balletbo i Serra <enric.balletbo@collabora.com>
+> >
+> >  description: |
+> >    The PS8640 is a low power MIPI-to-eDP video format converter supporting
+> >
+>
+> Let's wait for Enric's response, but in any case (removal or new address):
+> Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+>
 
-Yeah, this is something I stumbled over during the platform_get_irq*()
-discussion. But I don't feel like investing any more energy there.
+I'm fine with the removal as I don't have access anymore to this
+hardware so it doesn't really make sense to be there. Sorry for not
+sending the patches myself before.
 
-Best regards
-Uwe
+Acked-by: Enric Balletbo i Serra <eballetbo@kernel.org>
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Best regards,
+  Enric
 
---cdxvf7ymm4mv6sgi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHpR+sACgkQwfwUeK3K
-7AlVDQf/UyEbXUuWCywlD2V5dd6jAINm1Cg0yyuFPxHty9d7WFBu0iL+OmYwdKsf
-VNESVe1lcz+AUYaov33RaM0cMCqR2tZ+i3tnoyxBH80xIRTE0ncyW1zhg0pxkQnE
-vQZRkHAjVtz1DzmOKVP1FPCRqh0H9LmZXfaSJL7lhHDLe5WgAhzXszGDVY1J9xZi
-tlR1vB91vzTk/+TLVsj3l+NU5qbrhqx6Cqwktlnn00XX9QMkH5+FApDMC8NfZ9qI
-CMAh5RjiEBoZEKQY70Ix70kyVLAblmNkVY5rvbie9YoZ+fBMMpRNdykLgPqPUaBv
-kEdOP8qlPlbAKVs7MmUfMgtl+IVocg==
-=bB3r
------END PGP SIGNATURE-----
-
---cdxvf7ymm4mv6sgi--
+> Neil
