@@ -2,81 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA164952F1
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jan 2022 18:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FECB495482
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jan 2022 19:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377234AbiATRM0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 Jan 2022 12:12:26 -0500
-Received: from mga12.intel.com ([192.55.52.136]:12268 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346412AbiATRM0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 20 Jan 2022 12:12:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642698746; x=1674234746;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wLQNADyyNJsuNIww5+s/w6SemtHmpxADc9KQDUzmhA4=;
-  b=KyIZkz4FXRx7PYmajgwYvs28b9Q+2BiNpnu9zk14kM7e3xkiHoR3/3JT
-   d5A+JATJioX3OUW0GlmmD81sj6cBSA4LDp7K7AVb/FGugVB575jOiRDFT
-   2ZUiFvkJC2TnW7C6kIj0C40Bm+naC28QrM7+wiTCTthCPaSSpDm95aLIW
-   ooMpZof4+p3ACh+9PaDV1ShvNCFfyrWLJC05f6oDaQMUzLlAdEOgIhqI5
-   7ARUqLp6PzgQzJBIkQpKjtlCwO9Z+foLejoEUeEXMURq9HOLS1TzTlwsp
-   kXXSZ+ib4XHkGilcxtH0FxUNWmueK8SDFQTt4JPbNrEXCJ2xwWVSDZXk8
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="225382201"
-X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
-   d="scan'208";a="225382201"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 09:11:01 -0800
-X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
-   d="scan'208";a="475600713"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 09:10:57 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nAawW-00CcXd-No;
-        Thu, 20 Jan 2022 19:09:48 +0200
-Date:   Thu, 20 Jan 2022 19:09:48 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jarkko.nikula@linux.intel.com,
-        kbuild-all@lists.01.org, mika.westerberg@linux.intel.com,
-        hdegoede@redhat.com, wsa@kernel.org, rrangel@chromium.org,
-        mw@semihalf.com, jaz@semihalf.com
-Subject: Re: [PATCH 2/2] i2c: designware: Add AMD PSP I2C bus support
-Message-ID: <YemXXCsy4lBsCmDx@smile.fi.intel.com>
-References: <20220120001621.705352-3-jsd@semihalf.com>
- <202201202353.tVXCQlqh-lkp@intel.com>
+        id S1346878AbiATS7B (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Jan 2022 13:59:01 -0500
+Received: from eu-shark1.inbox.eu ([195.216.236.81]:54516 "EHLO
+        eu-shark1.inbox.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243589AbiATS7A (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Jan 2022 13:59:00 -0500
+Received: from eu-shark1.inbox.eu (localhost [127.0.0.1])
+        by eu-shark1-out.inbox.eu (Postfix) with ESMTP id D607B6C00731;
+        Thu, 20 Jan 2022 20:58:58 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mail.ee; s=20150108;
+        t=1642705138; bh=504oCiTJWeqX2jIHwWg0su7+30XUh6cTSgg/DGfLsnE=;
+        h=From:To:Cc:Subject:Date:Message-Id:X-ESPOL:from:date:to:cc;
+        b=0dRKQo4EXfmf93758hL/sxQhMycvRQ87y0cIVDnwd3q6TCE33BEm4CKHqQWDJ7soE
+         ATMB9dRsgF8BgINqCH2saY/8/ArGMcJAV5ncyza3z9nsAARERwIxNSKmihguE/E2Oa
+         qT4ReOhBNmP3zDyymvLl/CthVLmzXKIc4MJKutSI=
+Received: from localhost (localhost [127.0.0.1])
+        by eu-shark1-in.inbox.eu (Postfix) with ESMTP id C8CE76C006AE;
+        Thu, 20 Jan 2022 20:58:58 +0200 (EET)
+Received: from eu-shark1.inbox.eu ([127.0.0.1])
+        by localhost (eu-shark1.inbox.eu [127.0.0.1]) (spamfilter, port 35)
+        with ESMTP id r9CYafVpjFgf; Thu, 20 Jan 2022 20:58:58 +0200 (EET)
+Received: from mail.inbox.eu (eu-pop1 [127.0.0.1])
+        by eu-shark1-in.inbox.eu (Postfix) with ESMTP id 7C0916C0049B;
+        Thu, 20 Jan 2022 20:58:58 +0200 (EET)
+From:   Boris Lysov <arzamas-16@mail.ee>
+To:     linux-i2c@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     qii.wang@mediatek.com
+Subject: [PATCH 0/2] i2c: mediatek: remove mt6577 support
+Date:   Thu, 20 Jan 2022 21:58:51 +0300
+Message-Id: <20220120185853.24266-1-arzamas-16@mail.ee>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202201202353.tVXCQlqh-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: OK
+X-ESPOL: 885ml41QGzuilFygRWXfAQ4r3FlEJo35mZS31AE76Hb7NCeCfEAJVBS0gR8IQDzn/iM=
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 11:33:05PM +0800, kernel test robot wrote:
+This small patch series removes mt6577 support from the i2c-mt65xx driver and
+devicectree binding documentation.
 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    drivers/i2c/busses/i2c-designware-amdpsp.c: In function 'psp_send_cmd':
-> >> drivers/i2c/busses/i2c-designware-amdpsp.c:130:2: error: implicit declaration of function 'writeq'; did you mean 'writel'? [-Werror=implicit-function-declaration]
->      130 |  writeq((uintptr_t)__psp_pa((void *)req), &mbox->i2c_req_addr);
->          |  ^~~~~~
->          |  writel
->    cc1: some warnings being treated as errors
+The existing i2c-mt65xx driver relies on DMA since it was first introduced.
+mt6577 does not support DMA [1] for I2C and SoC's Generic DMA engine cannot
+be used for this purpose, too, which makes this particular driver incompatible
+with mt6577 and other similar SoCs with same I2C IP.
 
-Adding io-64-nonatomic-lo-hi.h after io.h should fix this.
+[1] see references in
+https://lists.infradead.org/pipermail/linux-mediatek/2021-October/030333.html
 
+Boris Lysov (2):
+  dt-bindings: i2c: i2c-mt65xx: remove compatibility with mt6577
+  i2c: mediatek: remove compatibility with mt6577
+
+ .../devicetree/bindings/i2c/i2c-mt65xx.txt    |  9 +++---
+ drivers/i2c/busses/i2c-mt65xx.c               | 28 +++++++++----------
+ 2 files changed, 18 insertions(+), 19 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.20.1
 
