@@ -2,173 +2,128 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CC5495100
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jan 2022 16:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 521AA495185
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jan 2022 16:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376465AbiATPHA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 Jan 2022 10:07:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376424AbiATPG5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Jan 2022 10:06:57 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5A5C06161C;
-        Thu, 20 Jan 2022 07:06:56 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id n10so14327212edv.2;
-        Thu, 20 Jan 2022 07:06:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XqnbvcF63+uApi2EhOn9/7NQ0bQFc9rvPdUrWfP50Zw=;
-        b=cFCSlazVlXbqrLHOgpSmH/470GORmHhtDM7s9dozAE7T5eXQlK0EWoy/iJmzSv3Bv0
-         DgXkVpfi6+rgyqGze/10CTzRBwSvkOhCWMC51qRo5c0gtJmOHgroNZISLf5u/nF+EF2f
-         IPTRm2CNo5/CAX1aqDQVKt7OVT0NYoG7mclTL1Neg7VMztliMYXpggIHibr/+kHruoLB
-         kxT2uwgT42qs5bXHE0h131qyKV/WFlSKHMia7MsOqavgHtSlPEVS1MSutDZIXIf7EFY4
-         L4Lh0Ibf2BiJ/UvLd4xuBO55V1m3l7BLshJiceBSIqZZUxAxvFpnBvEA293LIZ8Yotm4
-         XAig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XqnbvcF63+uApi2EhOn9/7NQ0bQFc9rvPdUrWfP50Zw=;
-        b=00f7MQu/Kge9Y813HYUZP+BprEwW2fhdf9YF4Fi3NNoyyrGlIgDnTKaB7T+gxk5HDw
-         eavvtV1egPS8PqJ3h+s34GvkpkgHUJM0Ye60YPUfnP9oSl6VjxWHx6X8sjWl6HJuRXQ9
-         62mxfKg9BTbv3ZsEA6zt7i8tK23hhi17uvD8XXQfOtNENEbi8ILU0GcVZ1brfDCMUm4B
-         Z1en0timt42FDz3vN6O7C8ZMWxO1zbLJR2PRwmBSyw90G78QLvVAZaghu/V/sVBkbZiz
-         ttpOV1yGit+6Zj5YFtXohqRllkeXLpmaHbMu7tJzewmpddvC+fMOOpqeHFYeZ/mKpzMG
-         6+UQ==
-X-Gm-Message-State: AOAM533KQlfxxGyGnAq3W1hU7FENqVWijrzmx/VA24pBPs9Fkw0OYKt8
-        sfDf97bjZ1ua4DWm179iNhUPz6vBMcYBhAlCYfs=
-X-Google-Smtp-Source: ABdhPJzb5cRpzEAwdTUzxGEj33YV4a0nbkAyA6u/Tf8nCrvMjsqx1WYbld1uzPAX3RZeYJfj0P4RKiEwSPaCO7ZLdvA=
-X-Received: by 2002:a05:6402:34cb:: with SMTP id w11mr35621907edc.158.1642691215196;
- Thu, 20 Jan 2022 07:06:55 -0800 (PST)
+        id S1376708AbiATPeX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Jan 2022 10:34:23 -0500
+Received: from mga03.intel.com ([134.134.136.65]:20497 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1376720AbiATPeM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 20 Jan 2022 10:34:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642692852; x=1674228852;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n+GetYetQGtM9v9Xh074y3oGpFYRrqSTlExUCAYVQi0=;
+  b=Gty5Av4pog4DP1SuWeyNZiSNKG4jzw8jO0FubRHgkOUuxl3AM07c3Xd1
+   Z+Iam7NyD1MpA51u4/9yi3UBDZNxR7n49uwEVdHj9gGX0Tc8nLQv3u3rD
+   HxjEQxY64mwjjObKlRht6giMR6iBaQ79DlKZUYH4TEyj2Yj/yI6btOFau
+   +O0IPNqzLBrvilfsafU0/JXcOexeWUYAOHSS6hoA6+4V4e0KL/Z3llgCV
+   s1RdKp19PKgOg/7WW9tdoYKysuYLVoH6leJvQQ2Vrm6kpjCQO+UcfOIpO
+   vBKhCIGbmeMUoOpjRguIGk0H4cygFTYj3lghrrZafy1FhIElDEOS51Zch
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="245333831"
+X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
+   d="scan'208";a="245333831"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 07:34:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
+   d="scan'208";a="672562952"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Jan 2022 07:34:07 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nAZRu-000EOc-DV; Thu, 20 Jan 2022 15:34:06 +0000
+Date:   Thu, 20 Jan 2022 23:33:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jarkko.nikula@linux.intel.com
+Cc:     kbuild-all@lists.01.org, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, hdegoede@redhat.com,
+        wsa@kernel.org, rrangel@chromium.org, mw@semihalf.com,
+        jaz@semihalf.com
+Subject: Re: [PATCH 2/2] i2c: designware: Add AMD PSP I2C bus support
+Message-ID: <202201202353.tVXCQlqh-lkp@intel.com>
+References: <20220120001621.705352-3-jsd@semihalf.com>
 MIME-Version: 1.0
-References: <1642686255-25951-1-git-send-email-akhilrajeev@nvidia.com> <1642686255-25951-4-git-send-email-akhilrajeev@nvidia.com>
-In-Reply-To: <1642686255-25951-4-git-send-email-akhilrajeev@nvidia.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 20 Jan 2022 17:05:13 +0200
-Message-ID: <CAHp75VcBPn=2EBNfwfs-V81PzT5vrYk5NNqpXnUeHeqcyP1sTg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] i2c: smbus: Use device_*() functions instead of of_*()
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220120001621.705352-3-jsd@semihalf.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 3:45 PM Akhil R <akhilrajeev@nvidia.com> wrote:
->
-> Change of_*() functions to device_*() for firmware agnostic usage.
-> This allows to have the smbus_alert interrupt without any changes
-> in the controller drivers using the ACPI table.
+Hi Jan,
 
-This patch LGTM.
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+I love your patch! Yet something to improve:
 
-The 0 check needs a separate discussion and fixing, which is out of scope here.
+[auto build test ERROR on wsa/i2c/for-next]
+[also build test ERROR on linux/master rafael-pm/linux-next linus/master v5.16 next-20220120]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> ---
->  drivers/i2c/i2c-core-base.c  |  2 +-
->  drivers/i2c/i2c-core-smbus.c | 10 +++++-----
->  drivers/i2c/i2c-smbus.c      |  2 +-
->  include/linux/i2c-smbus.h    |  6 +++---
->  4 files changed, 10 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index 2c59dd7..32a4526 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -1479,7 +1479,7 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
->                 goto out_list;
->         }
->
-> -       res = of_i2c_setup_smbus_alert(adap);
-> +       res = i2c_setup_smbus_alert(adap);
->         if (res)
->                 goto out_reg;
->
-> diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
-> index e5b2d14..4c24c84 100644
-> --- a/drivers/i2c/i2c-core-smbus.c
-> +++ b/drivers/i2c/i2c-core-smbus.c
-> @@ -701,13 +701,13 @@ struct i2c_client *i2c_new_smbus_alert_device(struct i2c_adapter *adapter,
->  }
->  EXPORT_SYMBOL_GPL(i2c_new_smbus_alert_device);
->
-> -#if IS_ENABLED(CONFIG_I2C_SMBUS) && IS_ENABLED(CONFIG_OF)
-> -int of_i2c_setup_smbus_alert(struct i2c_adapter *adapter)
-> +#if IS_ENABLED(CONFIG_I2C_SMBUS)
-> +int i2c_setup_smbus_alert(struct i2c_adapter *adapter)
->  {
->         int irq;
->
-> -       irq = of_property_match_string(adapter->dev.of_node, "interrupt-names",
-> -                                      "smbus_alert");
-> +       irq = device_property_match_string(adapter->dev.parent, "interrupt-names",
-> +                                          "smbus_alert");
->         if (irq == -EINVAL || irq == -ENODATA)
->                 return 0;
->         else if (irq < 0)
-> @@ -715,5 +715,5 @@ int of_i2c_setup_smbus_alert(struct i2c_adapter *adapter)
->
->         return PTR_ERR_OR_ZERO(i2c_new_smbus_alert_device(adapter, NULL));
->  }
-> -EXPORT_SYMBOL_GPL(of_i2c_setup_smbus_alert);
-> +EXPORT_SYMBOL_GPL(i2c_setup_smbus_alert);
->  #endif
-> diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-> index d3d06e3..fdd6d97 100644
-> --- a/drivers/i2c/i2c-smbus.c
-> +++ b/drivers/i2c/i2c-smbus.c
-> @@ -128,7 +128,7 @@ static int smbalert_probe(struct i2c_client *ara,
->         if (setup) {
->                 irq = setup->irq;
->         } else {
-> -               irq = of_irq_get_byname(adapter->dev.of_node, "smbus_alert");
-> +               irq = device_irq_get_byname(adapter->dev.parent, "smbus_alert");
->                 if (irq <= 0)
->                         return irq;
->         }
-> diff --git a/include/linux/i2c-smbus.h b/include/linux/i2c-smbus.h
-> index 1ef4218..95cf902 100644
-> --- a/include/linux/i2c-smbus.h
-> +++ b/include/linux/i2c-smbus.h
-> @@ -30,10 +30,10 @@ struct i2c_client *i2c_new_smbus_alert_device(struct i2c_adapter *adapter,
->                                               struct i2c_smbus_alert_setup *setup);
->  int i2c_handle_smbus_alert(struct i2c_client *ara);
->
-> -#if IS_ENABLED(CONFIG_I2C_SMBUS) && IS_ENABLED(CONFIG_OF)
-> -int of_i2c_setup_smbus_alert(struct i2c_adapter *adap);
-> +#if IS_ENABLED(CONFIG_I2C_SMBUS)
-> +int i2c_setup_smbus_alert(struct i2c_adapter *adap);
->  #else
-> -static inline int of_i2c_setup_smbus_alert(struct i2c_adapter *adap)
-> +static inline int i2c_setup_smbus_alert(struct i2c_adapter *adap)
->  {
->         return 0;
->  }
-> --
-> 2.7.4
->
+url:    https://github.com/0day-ci/linux/commits/Jan-Dabros/i2c-designware-Add-support-for-AMD-PSP-semaphore/20220120-081854
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220120/202201202353.tVXCQlqh-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/f21a75f68baddffd9c50ffdc95d419ad7dbe3f68
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jan-Dabros/i2c-designware-Add-support-for-AMD-PSP-semaphore/20220120-081854
+        git checkout f21a75f68baddffd9c50ffdc95d419ad7dbe3f68
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/i2c/busses/i2c-designware-amdpsp.c: In function 'psp_send_cmd':
+>> drivers/i2c/busses/i2c-designware-amdpsp.c:130:2: error: implicit declaration of function 'writeq'; did you mean 'writel'? [-Werror=implicit-function-declaration]
+     130 |  writeq((uintptr_t)__psp_pa((void *)req), &mbox->i2c_req_addr);
+         |  ^~~~~~
+         |  writel
+   cc1: some warnings being treated as errors
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+vim +130 drivers/i2c/busses/i2c-designware-amdpsp.c
+
+   117	
+   118	static int psp_send_cmd(struct psp_i2c_req *req)
+   119	{
+   120		struct psp_mbox *mbox = (struct psp_mbox *)mbox_iomem;
+   121		union psp_mbox_cmd_reg cmd_reg = {0};
+   122	
+   123		if (psp_check_mbox_recovery(mbox))
+   124			return -EIO;
+   125	
+   126		if (psp_wait_cmd(mbox))
+   127			return -EBUSY;
+   128	
+   129		/* Fill address of command-response buffer */
+ > 130		writeq((uintptr_t)__psp_pa((void *)req), &mbox->i2c_req_addr);
+   131	
+   132		/* Write command register to trigger processing */
+   133		cmd_reg.fields.mbox_cmd = PSP_I2C_REQ_BUS_CMD;
+   134		writel(cmd_reg.val, &mbox->fields.val);
+   135	
+   136		if (psp_wait_cmd(mbox))
+   137			return -ETIMEDOUT;
+   138	
+   139		if (psp_check_mbox_sts(mbox))
+   140			return -EIO;
+   141	
+   142		return 0;
+   143	}
+   144	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
