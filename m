@@ -2,168 +2,175 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6872E494DB7
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jan 2022 13:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64ACB494DEC
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jan 2022 13:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232851AbiATMOr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 Jan 2022 07:14:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
+        id S242280AbiATM37 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Jan 2022 07:29:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232823AbiATMOe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Jan 2022 07:14:34 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12ED2C06174E
-        for <linux-i2c@vger.kernel.org>; Thu, 20 Jan 2022 04:14:27 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id c2so11691844wml.1
-        for <linux-i2c@vger.kernel.org>; Thu, 20 Jan 2022 04:14:27 -0800 (PST)
+        with ESMTP id S233774AbiATM36 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Jan 2022 07:29:58 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E707C061574
+        for <linux-i2c@vger.kernel.org>; Thu, 20 Jan 2022 04:29:58 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id a7so5092953plh.1
+        for <linux-i2c@vger.kernel.org>; Thu, 20 Jan 2022 04:29:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=esc1uJ/1b1Bl5sIRdBGqAaIciPpRZPZmuwi/GvPIASI=;
-        b=HTONie7dMdtGsPLTyvbZfSGUG6+xqdnKWgOaR+qCVxHQRkzxY+vMBxXGXg/5BpxV+b
-         IsDXlYTyi+qXSq+o2cF6MB4vfE+NibpgVZTErgz7kRO3NbuFwIHHojyWk+NGNIO9UnnA
-         QOgrlhvgK9+7zJCfkdZu1+NdcAJ5BJC0d6F9tqWwopjxTY93nBMXwovpVIAtO1PSZys2
-         +xRTK4eY62C1fAimw/6q6j6jT0brcpFfNvdDkVT1WB8+d/jFM/UAWtE9vklfOYwBTxAB
-         6lGJnLsH7bcwADr01qo5DiEENNOMYSuZWWjf+DKi97Se3DRIZhayFeeO2V1ARqdAX5/c
-         9cnA==
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=bJc7E0ZK2JilQOtCTnLnbaOln2zvVu8F3m2cBRki6mg=;
+        b=64qhvyb0dK0pjpg+ZKWlzXCu1XNj46fAUmpwCTvrDsRSMSZ3T52tt0/m2CGv5efY3g
+         leBpis2cE5RxEeOAwkzExgtcpswZf4/uX6/MZrGYsMGqLUPPdxJbZV85kNDCC5FWcBAb
+         yuXRVTtEhpwv/b6bG8zjLgukv8VM2ToH1lODoxRxLiO/UvCGGxbj6kY/zrFbfNpR+o4A
+         Ao5vMlJsjgx1evw/di23lhRYi3bMysCKMWNupGYqsehWjOnTP9EOp5Jd14jb+oYyfCEf
+         iz51uWtJxzYjpuxsBmSBGrI862pGyLVj2j1PhCDUNAN2v5RtbdMzvlotA20nU9YPk7G7
+         eVEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=esc1uJ/1b1Bl5sIRdBGqAaIciPpRZPZmuwi/GvPIASI=;
-        b=Lo56I8I63hjNkoDzfK+6fRRK1mBkXtu5uYzY4TCT5w9aqAADGp3GyLYp1GM1zieQRr
-         xfEdGl3LLHATftnwpaCQ+PRl6/qtVDtuhMeM4z7iVyxXelPhtyEG9zitfHTatooUQMLd
-         25zdxUDWTu6kwIHoz/9xSmbEYzfrXGMqtzRVJ/RsvcCzXjG+uWIhkfXoCdFD1hpPQV2A
-         NtB731mYz0rEfJgZuR5Ck+IxesWFF/WKAWH5c1HjeBv9dVcVrC/Rne3CrwJUBMUFIR+I
-         +AV4Mmrg+ot9UDuzMBepkGEIUZlW2EEmOSLC0Ge27Ohl6gL8FnzUfdOxdPB7biMm1pRX
-         mndA==
-X-Gm-Message-State: AOAM53125q0NO5jz4v1XSvKGfwAt2aLekubJQNjR/pko5rUgIM0XKbEg
-        A9UxrllUD6tVpy/qjnDA02qPh4p2P4GW4Q==
-X-Google-Smtp-Source: ABdhPJzyrsxABb5+2MQcEebguHu+jFibhrZ6TUJ8eIM4jhWsekHkOasUh0vYuPh5kGAaTeCWgnT/RA==
-X-Received: by 2002:a5d:548b:: with SMTP id h11mr33145701wrv.12.1642680865670;
-        Thu, 20 Jan 2022 04:14:25 -0800 (PST)
-Received: from fedora.sec.9e.network (ip-088-153-139-166.um27.pools.vodafone-ip.de. [88.153.139.166])
-        by smtp.gmail.com with ESMTPSA id x4sm2853863wrp.13.2022.01.20.04.14.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 04:14:25 -0800 (PST)
-From:   Patrick Rudolph <patrick.rudolph@9elements.com>
-To:     Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [v3 3/3] i2c: muxes: pca954x: Add regulator support
-Date:   Thu, 20 Jan 2022 13:13:13 +0100
-Message-Id: <20220120121314.463944-4-patrick.rudolph@9elements.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220120121314.463944-1-patrick.rudolph@9elements.com>
-References: <20220120121314.463944-1-patrick.rudolph@9elements.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=bJc7E0ZK2JilQOtCTnLnbaOln2zvVu8F3m2cBRki6mg=;
+        b=f1rjB9iWdBCkL0Kw16dK6KBV2TaE/Y38TUKY0UNN7dvEwHnvYuDKXv1nmt12rMcv1M
+         NGMHmZWDXK5PhyrKF1uC7tSqX43GGmdQLhZVtbdLA5dUSAqP5OON/VzGfkIlAcge6GTd
+         ocqFojyyjgmWuzMNPOE/1/qtfL04WoCbyeB+4haVNeyX4wtWSexDPwHv+OAYJoJO0Xoa
+         FKk8l7k5ZtwZpZCreiuPu3BxLB75aRO1QViDD5G/0SfphSepmqvHn/+HxWgRR9EeuhlZ
+         bGiVKUGyy+R90i5T1+e5I7wFNI/1mrM2npqzL2/xDXlx8BdS0GH37gJo1RCx04KJuMWN
+         wj1w==
+X-Gm-Message-State: AOAM5335kM1DRGwOarXuPeygYc3US/IYqGhvG9p0dlISdvGQX/s1c3tH
+        2CAfiNFvjVjeQLdC6ZFUyiakOfEZFlpTVXTCrXvYlw==
+X-Google-Smtp-Source: ABdhPJwwldgLR3Q8ZK3JlqDBoC69a2fzONh0YE19VpOVYJm+HkSixlLL4VoTULoPUl8unZ+IT10oI5oFLZ78XmnumDw=
+X-Received: by 2002:a17:903:2451:b0:14a:8c5c:97fe with SMTP id
+ l17-20020a170903245100b0014a8c5c97femr32901956pls.145.1642681797692; Thu, 20
+ Jan 2022 04:29:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220120001621.705352-1-jsd@semihalf.com> <2f7610dc-ab57-ddbf-277f-e84680da71bd@redhat.com>
+In-Reply-To: <2f7610dc-ab57-ddbf-277f-e84680da71bd@redhat.com>
+From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
+Date:   Thu, 20 Jan 2022 13:29:46 +0100
+Message-ID: <CAOtMz3MDntus2OzRS_QDfnFpzrVjj4swQjTkgkFYMGuwgbZcWA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] i2c-designware: Add support for AMD PSP semaphore
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add an optional vdd regulator and enable it when found for devices
-that are powered off by default.
+Hi Hans,
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
----
- drivers/i2c/muxes/i2c-mux-pca954x.c | 32 ++++++++++++++++++++++++-----
- 1 file changed, 27 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-index 33b9a6a1fffa..086647193ea9 100644
---- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-+++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-@@ -49,6 +49,7 @@
- #include <linux/module.h>
- #include <linux/pm.h>
- #include <linux/property.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <dt-bindings/mux/mux.h>
-@@ -119,6 +120,7 @@ struct pca954x {
- 	struct irq_domain *irq;
- 	unsigned int irq_mask;
- 	raw_spinlock_t lock;
-+	struct regulator *supply;
- };
- 
- /* Provide specs for the PCA954x and MAX735x types we know about */
-@@ -459,6 +461,9 @@ static void pca954x_cleanup(struct i2c_mux_core *muxc)
- 	struct pca954x *data = i2c_mux_priv(muxc);
- 	int c, irq;
- 
-+	if (!IS_ERR_OR_NULL(data->supply))
-+		regulator_disable(data->supply);
-+
- 	if (data->irq) {
- 		for (c = 0; c < data->chip->nchans; c++) {
- 			irq = irq_find_mapping(data->irq, c);
-@@ -513,15 +518,30 @@ static int pca954x_probe(struct i2c_client *client,
- 			     pca954x_select_chan, pca954x_deselect_mux);
- 	if (!muxc)
- 		return -ENOMEM;
-+
- 	data = i2c_mux_priv(muxc);
- 
- 	i2c_set_clientdata(client, muxc);
- 	data->client = client;
- 
-+	data->supply = devm_regulator_get_optional(dev, "vdd");
-+	if (IS_ERR(data->supply)) {
-+		if ((PTR_ERR(data->supply) == -EPROBE_DEFER))
-+			return -EPROBE_DEFER;
-+	} else {
-+		ret = regulator_enable(data->supply);
-+		if (ret) {
-+			dev_err(dev, "Failed to enable regulator vdd: %d\n", ret);
-+			return ret;
-+		}
-+	}
-+
- 	/* Reset the mux if a reset GPIO is specified. */
- 	gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
--	if (IS_ERR(gpio))
--		return PTR_ERR(gpio);
-+	if (IS_ERR(gpio)) {
-+		ret = PTR_ERR(gpio);
-+		goto fail_cleanup;
-+	}
- 	if (gpio) {
- 		udelay(1);
- 		gpiod_set_value_cansleep(gpio, 0);
-@@ -538,7 +558,7 @@ static int pca954x_probe(struct i2c_client *client,
- 
- 		ret = i2c_get_device_id(client, &id);
- 		if (ret && ret != -EOPNOTSUPP)
--			return ret;
-+			goto fail_cleanup;
- 
- 		if (!ret &&
- 		    (id.manufacturer_id != data->chip->id.manufacturer_id ||
-@@ -546,7 +566,8 @@ static int pca954x_probe(struct i2c_client *client,
- 			dev_warn(dev, "unexpected device id %03x-%03x-%x\n",
- 				 id.manufacturer_id, id.part_id,
- 				 id.die_revision);
--			return -ENODEV;
-+			ret = -ENODEV;
-+			goto fail_cleanup;
- 		}
- 	}
- 
-@@ -565,7 +586,8 @@ static int pca954x_probe(struct i2c_client *client,
- 	ret = pca954x_init(client, data);
- 	if (ret < 0) {
- 		dev_warn(dev, "probe failed\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto fail_cleanup;
- 	}
- 
- 	ret = pca954x_irq_setup(muxc);
--- 
-2.34.1
+czw., 20 sty 2022 o 12:15 Hans de Goede <hdegoede@redhat.com> napisa=C5=82(=
+a):
+>
+> Hi Jan,
+>
+> On 1/20/22 01:16, Jan Dabros wrote:
+> > This patchset comprises support for new i2c-designware controller setup=
+ on some
+> > AMD Cezanne SoCs, where x86 is sharing i2c bus with PSP. PSP uses the s=
+ame
+> > controller and acts as an i2c arbitrator there (x86 is leasing bus from=
+ it).
+> >
+> > First commit aims to improve generic i2c-designware code by adding extr=
+a locking
+> > on probe() and disable() paths. I would like to ask someone with access=
+ to
+> > boards which use Intel BayTrail(CONFIG_I2C_DESIGNWARE_BAYTRAIL) to veri=
+fy
+> > behavior of my changes on such setup.
+> >
+> > Second commit adds support for new PSP semaphore arbitration mechanism.
+> > Implementation is similar to the one from i2c-designware-baytrail.c how=
+ever
+> > there are two main differences:
+> > 1) Add new ACPI ID in order to protect against silent binding of the ol=
+d driver
+> > to the setup with PSP semaphore. Extra flag ARBITRATION_SEMAPHORE added=
+ to this
+> > new _HID allows to recognize setup with PSP.
+> > 2) Beside acquire_lock() and release_lock() methods we are also applyin=
+g quirks
+> > to the lock_bus() and unlock_bus() global adapter methods. With this in=
+ place
+> > all i2c clients drivers may lock i2c bus for a desired number of i2c
+> > transactions (e.g. write-wait-read) without being aware of that such bu=
+s is
+> > shared with another entity.
+> >
+> > This patchset is a follow-up to the RFC sent earlier on LKML [1], with =
+review
+> > comments applied.
+> >
+> > Looking forward to some feedback.
+> >
+> > [1] https://lkml.org/lkml/2021/12/22/219
+>
+>
+> Thank you for your patch series.
+>
+> As you may have seen I've done a lot of work on the Bay Trail semaphore
+> thing. I also own several Bay Trail and Cherry Trail based devices which
+> use this setup.
+>
+> I'll add your patches to my personal WIP tree which I regularly run
+> on these devices and I'll report back if I notice any issues.
 
+Thanks in advance, this will be really helpful! I don't have Bay
+Trail/Cherry Trail, so I've only tested that build of Bay Trail
+semaphore isn't broken.
+
+I would like to point to new locks in i2c_dw_disable() method as
+something to be the most fragile and error-prone, will be great if you
+can verify this thoroughly. This function is invoked on both
+dw_i2c_driver.remove() and dw_i2c_plat_suspend() paths. Considering
+that Bay Trail semaphore means that i2c bus is shared with PMIC, I'm
+not sure whether all corner cases are secured especially on platform
+suspend.
+
+>
+> One remark, I notice that there are no AMD people in the Cc, it
+> would be good if you can find someone from AMD to look at this,
+> also see my remarks to the 2nd patch in my reply to that patch.
+
+This was partially discussed with AMD folks and you are right that I
+should include someone from AMD to take a look at this. Thanks for all
+your comments!
+
+> Regards,
+>
+> Hans
+>
+>
+>
+>
+> >
+> > Jan Dabros (2):
+> >   i2c: designware: Add missing locks
+> >   i2c: designware: Add AMD PSP I2C bus support
+> >
+> >  MAINTAINERS                                  |   1 +
+> >  drivers/acpi/acpi_apd.c                      |   1 +
+> >  drivers/i2c/busses/Kconfig                   |  10 +
+> >  drivers/i2c/busses/Makefile                  |   1 +
+> >  drivers/i2c/busses/i2c-designware-amdpsp.c   | 357 +++++++++++++++++++
+> >  drivers/i2c/busses/i2c-designware-baytrail.c |  10 +-
+> >  drivers/i2c/busses/i2c-designware-common.c   |  12 +
+> >  drivers/i2c/busses/i2c-designware-core.h     |  18 +-
+> >  drivers/i2c/busses/i2c-designware-master.c   |   6 +
+> >  drivers/i2c/busses/i2c-designware-platdrv.c  |  61 ++++
+> >  10 files changed, 469 insertions(+), 8 deletions(-)
+> >  create mode 100644 drivers/i2c/busses/i2c-designware-amdpsp.c
+> >
+>
