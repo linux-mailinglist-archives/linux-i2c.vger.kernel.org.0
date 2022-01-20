@@ -2,173 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82428494CD9
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jan 2022 12:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78412494CF0
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jan 2022 12:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbiATL1W (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 Jan 2022 06:27:22 -0500
-Received: from mxout04.lancloud.ru ([45.84.86.114]:54944 "EHLO
-        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbiATL1T (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Jan 2022 06:27:19 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru C003420DA1E6
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-iio@vger.kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "ALSA Development Mailing List" <alsa-devel@alsa-project.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-phy@lists.infradead.org>, Jiri Slaby <jirislaby@kernel.org>,
-        <openipmi-developer@lists.sourceforge.net>,
-        "Khuong Dinh" <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Tony Luck" <tony.luck@intel.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        "Saravanan Sekar" <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "Sebastian Reichel" <sre@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        <platform-driver-x86@vger.kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        "Hans de Goede" <hdegoede@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        "Yoshihiro Shimoda" <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        "Liam Girdwood" <lgirdwood@gmail.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        <linux-mediatek@lists.infradead.org>,
-        "Brian Norris" <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-References: <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
- <Yd9L9SZ+g13iyKab@sirena.org.uk>
- <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
- <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
- <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru>
- <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
- <c9026f17-2b3f-ee94-0ea3-5630f981fbc1@omp.ru>
- <CAMuHMdXVbRudGs69f9ZzaP1PXhteDNZiXA658eMFAwP4nr9r3w@mail.gmail.com>
- <20220117092444.opoedfcf5k5u6otq@pengutronix.de>
- <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
- <20220117114923.d5vajgitxneec7j7@pengutronix.de>
- <CAMuHMdWCKERO20R2iVHq8P=BaoauoBAtiampWzfMRYihi3Sb0g@mail.gmail.com>
-Organization: Open Mobile Platform
-Message-ID: <b8fda2ae-07b7-af30-2b0d-213a60a7b802@omp.ru>
-Date:   Thu, 20 Jan 2022 14:27:08 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S231426AbiATL26 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Jan 2022 06:28:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231429AbiATL25 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Jan 2022 06:28:57 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FACCC061574;
+        Thu, 20 Jan 2022 03:28:56 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id cx27so27485995edb.1;
+        Thu, 20 Jan 2022 03:28:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=J6y8+5t4F/LCJNkfdsMp+nnf4MqRvaxiESOJ3ybHvPw=;
+        b=SgM/dH91ICYCcYnNb7IV7V9oZriDjfwDicuk18lZoWa9vZ443JLUFhz7kHA/QhnRy/
+         z0ZVYdQ97Va0dWHdG+GQmk42q+HD3QxHjGfSb837/DI7t7RzBB3FC3iJ5KXWeUHMSctd
+         XW+5vGorvITDJ25N3m/wgEuo9FAkRArEGAdrUWyuJm74v9JicIi/30KomqfPDJPMdTNS
+         lzfmg0xGQt0FYaDBilNDX3LdKdBTZk/kTN2jT1PZRX1XCP3MZ0lbRta/dGV0O5PwTcb3
+         omVUPKMyidUyav4bjNXiRh/nqj9aSrKoBrzH2p+D5qQxm6L9T6Q4748yDNBIEsz5Mfzu
+         2OgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J6y8+5t4F/LCJNkfdsMp+nnf4MqRvaxiESOJ3ybHvPw=;
+        b=6ARQwdt/wCtA/YbzTGgUq7YmZfjewtq+oSnG9+Q8d5TvRTfdi8RXK+BYEVq5jBQOF6
+         WB3Fu4OkZGUZ5wjeqlivVu69JDOEghNVTIKAPBWkGdQbkz470K5rZPDcDoK0KYVTHiYd
+         pcK3Te8fZ8iMuDUsd3lnAUBaNUbQ8v/nZlML3k+xdsH+xE7JRp4KKXTsyZJHYb25D0pc
+         YJTI0BUdQiV6k20s5rm9yR3h1kZAWbBfn+nn93C730V4kce/0mXd70xnrkegbbm5mb2V
+         SMwfrXX83WzCuhIizTyvPNRcbYqCMEe7dwNlDLQtniBIIwz6KHIVdt/sPD5b7yUaS7B+
+         DBwQ==
+X-Gm-Message-State: AOAM5337v4b3New8SZpdGU6WBhIsyOjUbhRmdMQZfaQQkzbJI9a6aWp9
+        EKMhLJIRM3I9UBS7mIirHXZEHh/ql5x80oxYs4o=
+X-Google-Smtp-Source: ABdhPJzEt+GzgW0s3PWtot4l1D1Q1PRworkf99qw3GztE5q26pmtd20jAkRtxsynk4b6ltxK3m9ph/MsG6QZbgn/qBk=
+X-Received: by 2002:a17:907:948d:: with SMTP id dm13mr3986568ejc.497.1642678135077;
+ Thu, 20 Jan 2022 03:28:55 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdWCKERO20R2iVHq8P=BaoauoBAtiampWzfMRYihi3Sb0g@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+References: <20220119230626.31560-1-terry.bowman@amd.com> <20220119230626.31560-8-terry.bowman@amd.com>
+In-Reply-To: <20220119230626.31560-8-terry.bowman@amd.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 20 Jan 2022 13:27:12 +0200
+Message-ID: <CAHp75VdtnOuBK1ctkjO59vujopCrQ+MQ_LyBB+Mi2HJk4HaJuQ@mail.gmail.com>
+Subject: Re: [PATCH v3 7/9] i2c: piix4: Add EFCH MMIO support to SMBus base
+ address detect
+To:     Terry Bowman <terry.bowman@amd.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Robert Richter <rrichter@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        sudheesh.mavila@amd.com,
+        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Mario Limonciello <Mario.Limonciello@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 1/17/22 4:08 PM, Geert Uytterhoeven wrote:
+On Thu, Jan 20, 2022 at 1:07 AM Terry Bowman <terry.bowman@amd.com> wrote:
+>
+> The EFCH SMBus controller's base address is determined using details in
+> FCH::PM::DECODEEN[smbusasfiobase] and FCH::PM::DECODEEN[smbusasfioen].
+> This code also writes to FCH::PM::ISACONTROL[mmioen] to enable MMIO
+> decoding. These register fields were accessed using cd6h/cd7h port I/O.
+> cd6h/cd7h port I/O is no longer available in later AMD processors.
+> Change base address detection to use MMIO instead of port I/O cd6h/cd7h.
 
-[...]
->>> But as we were all in a hurry to kill the non-applicable error
->>> message, we went for the quick and dirty fix.
->>>
->>>> Also I fail to see how a caller of (today's) platform_get_irq_optional()
->>>> is simpler than a caller of platform_get_irq() given that there is no
->>>> semantic difference between the two. Please show me a single
->>>> conversion from platform_get_irq to platform_get_irq_optional that
->>>> yielded a simplification.
->>>
->>> That's exactly why we want to change the latter to return 0 ;-)
->>
->> OK. So you agree to my statement "The reason for
->> platform_get_irq_optional()'s existence is just that platform_get_irq()
->> emits an error message [...]". Actually you don't want to oppose but
->> say: It's unfortunate that the silent variant of platform_get_irq() took
->> the obvious name of a function that could have an improved return code
->> semantic.
->>
->> So my suggestion to rename todays platform_get_irq_optional() to
->> platform_get_irq_silently() and then introducing
->> platform_get_irq_optional() with your suggested semantic seems
->> intriguing and straigt forward to me.
-> 
-> I don't really see the point of needing platform_get_irq_silently(),
-> unless as an intermediary step, where it's going to be removed again
-> once the conversion has completed.
-> Still, the rename would touch all users at once anyway.
-> 
->> Another thought: platform_get_irq emits an error message for all
->> problems. Wouldn't it be consistent to let platform_get_irq_optional()
->> emit an error message for all problems but "not found"?
->> Alternatively remove the error printk from platform_get_irq().
-> 
-> Yes, all problems but not found are real errors.
+...
 
-   ACK for using dev_err_probe() in platfrom_get_irq_optional()
-for the real errors...
-   I've also noted that only platfrom_get_irq_optional() got converted
-from dev_err() to dev_err_probe() but not platfrom_get_irq_byname_optional()...
+> +       if (mmio_cfg.use_mmio) {
 
-[...]
+> +               iowrite32(ioread32(mmio_cfg.addr + 4) | SB800_PIIX4_FCH_PM_DECODEEN_MMIO,
+> +                         mmio_cfg.addr + 4);
 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
+Can you split this to three lines (with the help of a temporary variable)?
 
-MBR, Sergey
+> +               smba_en_lo = ioread8(mmio_cfg.addr);
+> +               smba_en_hi = ioread8(mmio_cfg.addr + 1);
+
+This makes me wonder if we can replace these two by defining
+
+  u16 smba_en;
+
+(below also may be easily adjusted for it).
+
+> +       } else {
+> +               outb_p(smb_en, SB800_PIIX4_SMB_IDX);
+> +               smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
+> +               outb_p(smb_en + 1, SB800_PIIX4_SMB_IDX);
+> +               smba_en_hi = inb_p(SB800_PIIX4_SMB_IDX + 1);
+> +       }
+>
+>         piix4_sb800_region_release(&PIIX4_dev->dev, &mmio_cfg);
+
+-- 
+With Best Regards,
+Andy Shevchenko
