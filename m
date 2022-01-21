@@ -2,185 +2,632 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D55495CAE
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jan 2022 10:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB72495D2A
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jan 2022 11:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233335AbiAUJSp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Jan 2022 04:18:45 -0500
-Received: from mail-bn7nam10on2046.outbound.protection.outlook.com ([40.107.92.46]:42913
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235232AbiAUJSp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 21 Jan 2022 04:18:45 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C2JCozzSa2z/W09zJ9heS1Qp34z4Mz0HtVEj2B3HnPB/jKIsSxcNZeI1M63qby1o47cIKJk5y0Zr9Xc8/WbxLT90PimzMcIp3p53e4cv2Dii8R6wcTCTKDxjl8/96Lnmgk1DiT+JyQCgAVvtCzL//Oc3HbWwgJ3ifmxLgHmcnlpCNL4fSlSMbpbW+smUCBd+yuANXPadk1OXvGzNEQoVgNjNGWzDEvPK1kctoN3NnVTrzVp8m+UE3JGO64KRgCdmGEazTSDP5qugO1WCFdvRUnkG3xbCo+JbYoCvYYS40MD7kTbuYA2P5yAEIlVQluo2evmE87VUEtsxSiCmsrG85g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=56+ujtCnJmxp55pgAe9NKelPtjqa2zqm2yAyTSFk40c=;
- b=DdenMRciNSN37F2I5l29wY+27HjgEYzofQ3tnL8pzEq0x6fR3aPN23AH3vj0QPkQAnsMhhEVj9besjqyTKQNEuCbrcVMTGMEHVAzFR98XFOXNBBB199EL7/Iy7bF3J9KlBBfx33db5XXGcuok0QZ34e6UA6i+VPqvz6JqEWNeL4dcUxiN1OntoWdlFBd5Lyx/qur5gDun5umIR32HxErvxiPUIhCO/+hYJno5D4GuGyHq8pSKXHf5T8IRmB73chIqFXrXnbnIS7+Aycl965dFxjkN25McbwrTSrfShNNsdl/D+FWnpjL59lp84wJPlqyOyytvPVUOgEQ9Gw0Lc5Nbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=56+ujtCnJmxp55pgAe9NKelPtjqa2zqm2yAyTSFk40c=;
- b=Or/mMCsGojmXfw6j/z8x+C3EO6jkY+2h1BfZF25bRre1HvdriAG7tM56TANHW+bb/jpJFQHAAQTUCCgslt3Quy8hH49ZgYadGuJLLu4xKb01ASUBTxkF6hDWi8cq+7fAeUFtsG6HcGyuCocYsL2pyurs2fpk3dzmPRv9kKEHs8K5WM+8uBhWn1axWlKN8wmsg0/Xtdag9psM8RL0WVES6v5cgTUP+RkL6J4R5xYLUA1PvyRp4BfzCcgp6Kfaoj4I7PmKuJBkQKlr7CvAzxl9kia8CNF77uINizzqiDvq/60LK9jpurIeQLz9NxWKYsjohZ02DTss/p1KftSP50yrHw==
-Received: from DM5PR12MB1850.namprd12.prod.outlook.com (2603:10b6:3:108::23)
- by DM6PR12MB2731.namprd12.prod.outlook.com (2603:10b6:5:45::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Fri, 21 Jan
- 2022 09:18:42 +0000
-Received: from DM5PR12MB1850.namprd12.prod.outlook.com
- ([fe80::880d:1407:db31:5851]) by DM5PR12MB1850.namprd12.prod.outlook.com
- ([fe80::880d:1407:db31:5851%11]) with mapi id 15.20.4888.014; Fri, 21 Jan
- 2022 09:18:42 +0000
-From:   Akhil R <akhilrajeev@nvidia.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: RE: [PATCH v3 1/3] device property: Add device_irq_get_byname
-Thread-Topic: [PATCH v3 1/3] device property: Add device_irq_get_byname
-Thread-Index: AQHYDgP0GKDzb95CsEKkwcPPL/OBh6xsACaAgAEwamA=
-Date:   Fri, 21 Jan 2022 09:18:42 +0000
-Message-ID: <DM5PR12MB18504794AD0FB11536F893BEC05B9@DM5PR12MB1850.namprd12.prod.outlook.com>
-References: <1642686255-25951-1-git-send-email-akhilrajeev@nvidia.com>
- <1642686255-25951-2-git-send-email-akhilrajeev@nvidia.com>
- <CAHp75VeOvXf6twskZp-Y-s8AQEpftA0SOUJfXqO5sJ1FKNKgCA@mail.gmail.com>
-In-Reply-To: <CAHp75VeOvXf6twskZp-Y-s8AQEpftA0SOUJfXqO5sJ1FKNKgCA@mail.gmail.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1a47f219-f83c-465f-1a0a-08d9dcbf0496
-x-ms-traffictypediagnostic: DM6PR12MB2731:EE_
-x-microsoft-antispam-prvs: <DM6PR12MB2731074FDCC89AF3F953D60AC05B9@DM6PR12MB2731.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: djGWOnYtMTvMhJiKjLz4mngoFiubEPGpXvIbTndr0RmFySzaHe9DR03a4tWcuevwHErLbDi8jXQ4ffHTpwkE085X+H3w6dPuGrLWv6Yl34Ev1fDEXt6Dh58qBmV6KzDR2Bgma5Ux76FQ18r/WkOmQmN30z2w0n5p+oVI/tdoRsL/ioC8GJGWYtlVjQvGltJHppqbStdTVs/ER4IzurlmcbqJeE+g59kzTpoXWrgzhjORjsZP8M9L3nO3CzW70eav0+hWZ/BOjSexQkiy6Ru8T/i3DJDoEJjGK2J9H4QsP9nujCAfQK/U5EWAeoJ71CXJKyNGaJcEDhCh+44B+48muvIgXGzJCcRualWzROuJ7g8EYA/+nsONAX68H5onqZzzPU3jELgZ+LbHmt65tpVnuGza8XRj5BZ+VinTgAjXBCTZM0HSf1GBV2EY5sTWfV2rSI7q6KBgXOZmLZlbJW7QOfUSFEFPgw5woEn1j38r8byy0ETJSFK/MteYttDIYS6W1znQV5csWJ/dYEwqmiJQcDoKgVyenNGLKYk7dL+mPb0j48xlnUd1rZjxA5vV9417RDFLunN/hV27pTPmwopaNTUElFHeShFVTPnZP8LjZtcGMtarzYB8t8uSLrgHrsIWjGminwODnyo9AZAWq1GExZL6MaYnUizbkbSs63y4dL0CK5Npz9Sm522zVjexUuV3P9busEjGpMIS7XT0rnuErw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1850.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(38100700002)(8936002)(64756008)(33656002)(38070700005)(316002)(86362001)(26005)(66446008)(2906002)(4326008)(7416002)(66476007)(55016003)(5660300002)(66556008)(186003)(9686003)(83380400001)(7696005)(6916009)(54906003)(122000001)(66946007)(55236004)(76116006)(8676002)(71200400001)(52536014)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bEQwU3NWcTAwa2hqTDFrZSt3Vmo4bTVvZTFobjJCbWNwTUlnRnZyZzdjMlhJ?=
- =?utf-8?B?eE9tak9OY1NzWWwvT2ZTaU96ME9IYitQVkE3Yk1LM2JQancrYnVTd1ByUlZz?=
- =?utf-8?B?MURvRldVMmtsRnpQVU4rZGhiRkJveHRrY0syQjN3T04yb053QUZmaUtIVXFk?=
- =?utf-8?B?SUIwMzhwekNGUWRVdW5jWG53Z21OeXRNbDRUaTZkNHpIajNVdDJxcXZGNHZ3?=
- =?utf-8?B?OWZPRDNoVGRHcXMyQW1lbGVVVVJtVXB2YzFDbVk4ZUxuOGlhZGVmNm9lSVcz?=
- =?utf-8?B?UkVaeUQ3Z283bkFHdUluczFOejJrQUVDNDJ3ZXJML1JDK1pMUVJiMnB1bERw?=
- =?utf-8?B?L2MxY1dVU2dvbUU3WWZEcEQ0bEJxSWJHcFM2MHFORW9WVHk5TENsYnlseGtQ?=
- =?utf-8?B?S3Q3ZW9DT0ZuU1BDcHlHQUt4R1RiU00wWXhWNTZFcWJSYmRKakw0OWtsSktn?=
- =?utf-8?B?NmdiS0ZZT01xVFo3aUFYU3dXa0VuSHBZK0dERm1ScHpDVU5lQ3RLRU8zSlIw?=
- =?utf-8?B?NVdKS1ZYWmxWSk9KMk5UYVF4RFl4emlqWFpXdlBtZUxEdU9tWExGME9UZVpt?=
- =?utf-8?B?dW9HRENMeFZReS9MazVXR1NySnlSUlo0R3BXWXU1UVV0SVhWb0JZMXlCS2Jl?=
- =?utf-8?B?TVpzWHpCby9tQjg2dk92R3drOXQ1NExHNXJKNjJTQkRYWm8zaFFINzEzbUZa?=
- =?utf-8?B?UmIyYkRnS0RiQzNRR1I4Y3loK1lqZkxMS3dsR2RQZEQyNXZybHBQWlBQSDBn?=
- =?utf-8?B?bTRVMkFvemF4LzhaTm1sTVcrOXlHM0NXK2xFdUVQanBIZVdpUWtOZlN3b053?=
- =?utf-8?B?VHBuS1hXaThEci9hem1zRWZDcm16N2Fuc2VvNTNGSFpZcFdTaDZiVWNaTzVD?=
- =?utf-8?B?Ny95bktwYlQ2NWlTOEYrM1dsYXhSSzhTOHM2VUdaMHc5TGVCdUViTWpkNzkr?=
- =?utf-8?B?bkxGZWxwV0s0MXEzbTNGQTNneW5ITnZkdUljRFAyKzNZcmhFL0l0b1JudTlT?=
- =?utf-8?B?VFNkbGwya3M0Q2dJa2ZWOEZLQWRURStpVUROTHRwWms4Qm5SRXFUSjFXVEkv?=
- =?utf-8?B?OUdkQXQxM0xVbUsxQ3RuR1BqTWxJU3FqTUlpRm5oRkl0Nkw0LzBWellMZy9j?=
- =?utf-8?B?a1ROTTN6Z1cvbWtPUzBHaTAwZ1JiWk1kOUo5NUdNSmUvMHJGMmN1WmxEd20w?=
- =?utf-8?B?endKeGRyclVMNHBpRE9jUWliUWxiUlFqeXBmRzYxNjd2Z1ZZYkxuOWpRbkx4?=
- =?utf-8?B?ajA1RG1hems0Y04rQnk3bXY2blNQd01iT3VsY1ZxTndpcXEvYkNKRzIwOTZi?=
- =?utf-8?B?aHNtUStLZE96V0RXS01PSW5WdUJ1RkgzTGd6WFpVZnhwNFRocEN3K3VMRTA4?=
- =?utf-8?B?anlHQTBTblhaOENLQnhNdmFBVnRGcGh4VW5RTzlPZlArSzlabnJ2RUNqRFAv?=
- =?utf-8?B?ZzlRaVBuc2ttZldvbHJxU3VYSHVMYU83aU5yMTZoOFhIbHhxMmUrdTJQVGFL?=
- =?utf-8?B?ZnduUGZlNzlSOGhWNlFKeFdVTUp3QStBanozQU1wQXFHZS9ZeHdLV0FtMkFD?=
- =?utf-8?B?T1ZKeEs3ZjErNkVLMXQveUJRbjZqNTg2U2w2dnVSTU9NRHUrdGZYbnprOW5X?=
- =?utf-8?B?OXNzbi8rU3Y3WU5uU2NuTWZ3TDZwdW12U0o2QWM2MmFSM3grRGpBZkZ1TGxu?=
- =?utf-8?B?SU9ab1Z2SjA4ZXJFS3Mra1NabEhCRFhWZTdvdTB5U21JaDU5aW1JcWo1Y3N6?=
- =?utf-8?B?VFVWUmFIdDZIQzA1OEN5Skx3Y1V3bVZxUjdvaERVRG0zNnIwdGlFb3VINVJz?=
- =?utf-8?B?TUpFSWVyTTl2b280VHZsOFdTcWhpVjBYRXdoaEJsd2NVNG9MK05Ga21raGhL?=
- =?utf-8?B?eVFJOWNORXVDL3RQbVlBTEN5Yy8yTTVOU1NMcFhSZTdsQ3h4OVlRcnRibDBF?=
- =?utf-8?B?MWI1N1JNYXphaW5zN3dPOXJEYmZueGkycDNtZ0Vtb1BnSFppeGlBWis5NmdX?=
- =?utf-8?B?SlM3d1Zyb1VTNTVzaElueURobGUycUR2Qmd3Q00vSkR6N1dST3dYNXRVM29y?=
- =?utf-8?B?ZnE0RG9LRXQ3YUE2ZTQyWkp2Ykw2Y2srZGJGS1RvSWdRdVZBUDl2RnFOcjB4?=
- =?utf-8?B?djRFTzZIUVFGbFpVcnE4ZStIU01GaUNqUkp4QUxEK2ZnOE1Cb1VLenFJWXd4?=
- =?utf-8?B?MHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1344496AbiAUKAF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Jan 2022 05:00:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349850AbiAUKAF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Jan 2022 05:00:05 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DE6C06173F
+        for <linux-i2c@vger.kernel.org>; Fri, 21 Jan 2022 02:00:05 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id u130so4137478pfc.2
+        for <linux-i2c@vger.kernel.org>; Fri, 21 Jan 2022 02:00:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x+daZel9I9QO4njXE84dTkfP9QeEXvF18SWN8mNzkjo=;
+        b=6MuXsTThptNjLal4NIYgs103kQhZYy9XD2SwikhNCbYf5sbQWgNqrh/9wgmKt8rdfd
+         /iRYz3MkDMuiyd25RPKqsgA6nnzaP6aXq+75DQlFEfHO4K5M3FhX6KLO8PC21tTybF3u
+         ukqXU3CkzTk9O1YB2tAG7T+bGkSJCXeS4pvHEWVYnco5CQXUCs9plvVqSTG6DLDrvCW6
+         bFlb3mSefKJ9TcSnsb7OuRcaDDlGhUiP8+tEbLvA9++hpKcaSJRz+onjaF7BdJSGE8I8
+         Cez/BG6Klm/lhCJj9jBe5xuxvDzTNcekIQw1rxhRg4AF1OyFqa5JthgjjObQuLh5/8Lg
+         fLqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x+daZel9I9QO4njXE84dTkfP9QeEXvF18SWN8mNzkjo=;
+        b=ZUVdzclg8ksSSzF4SaKswRNYG2GX9lH+1niFcyUTEyrvNeLVASgmBBcPWQ4PiZspSm
+         1eDB4ELkb6bst4jcR7JMcwAND5jWvltKj6zCUEJ4IJ3qAc+jkISK6u+EEwh1Dezb0zW6
+         O0dtzHLzgImgvzv1+m9wzlAKrqtAIZSfVu2p6BUuS4Ob9pfNg1AXZBvLGY1Qd7VNPlPq
+         rDysDv3tqtBHSNqcykmaAL1IbTnwWskj1iIkSc4kj5N+b/fcA9aeA5RtClLrLGukTs7H
+         RSINhk/TsDKXmFzoiS75mvf5U0UgLFMbpmZzc3MNeFTKJkpzTwjgkErQQt5DJH/yIb8j
+         eKiA==
+X-Gm-Message-State: AOAM530PfSJti4jrXII6WqbAGWafmBaAYluY/PqOQOuG6peMXDMDqAi9
+        tmo+6BvGGepX3SyE5qmJcGk+zuYereS0DxlECDG9pQ==
+X-Google-Smtp-Source: ABdhPJxCtOAfQp3dzVxSNjnG4KSWYiPhrmMd8dcT6I6SDDSp23waMxM2MKi0nmHlrnGf0s136tIXOeQq2MsbYbugW+o=
+X-Received: by 2002:a05:6a00:22d1:b0:4c2:5a55:960e with SMTP id
+ f17-20020a056a0022d100b004c25a55960emr3227178pfj.74.1642759204436; Fri, 21
+ Jan 2022 02:00:04 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1850.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a47f219-f83c-465f-1a0a-08d9dcbf0496
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jan 2022 09:18:42.2664
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bAGBkqkej0BMrWM9DioGDNl0cL3EWVpa7qDK9vJrVdql4C6DO5zudKnhj/pu+j3YX1F/vkP+CeAG6CWynxenUQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2731
+References: <20220120001621.705352-1-jsd@semihalf.com> <20220120001621.705352-3-jsd@semihalf.com>
+ <a6e0fc62-4a2e-cd2b-557f-5e86088aeeb7@redhat.com>
+In-Reply-To: <a6e0fc62-4a2e-cd2b-557f-5e86088aeeb7@redhat.com>
+From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
+Date:   Fri, 21 Jan 2022 10:59:53 +0100
+Message-ID: <CAOtMz3NcMZsCMO+15wzzwvF44PqRmem1eP-rCbb+dCiaWiGKzA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] i2c: designware: Add AMD PSP I2C bus support
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
+        mario.limonciello@amd.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-PiBUaGFua3MsIG15IGNvbW1lbnRzIGJlbG93Lg0KVGhhbmtzIGZvciB0aGUgaW5wdXRzLiANCj4g
-DQo+ID4gQWRkIGRldmljZV9pcnFfZ2V0X2J5bmFtZSgpIHRvIGdldCBhbiBpbnRlcnJ1cHQgYnkg
-bmFtZSBmcm9tIGJvdGggdGhlDQo+ID4gQUNQSSB0YWJsZSBhbmQgdGhlIERldmljZSBUcmVlLg0K
-PiANCj4gVGhpcyBuZWVkcyB0byBiZSBjbGFyaWZpZWQgKGl0J3Mgbm90IGFuZCwgYnV0IG9yKSwg
-d2hhdCBhYm91dDoNCj4gDQo+ICAgQWRkIGRldmljZV9pcnFfZ2V0X2J5bmFtZSgpIHRvIGdldCBh
-biBpbnRlcnJ1cHQgYnkgbmFtZSBmcm9tIGVpdGhlcg0KPiAgIEFDUEkgdGFibGUgb3IgRGV2aWNl
-IFRyZWUgd2hpY2hldmVyIGhhcyBpdC4NCj4gDQo+ID4gVGhpcyB3aWxsIGFsbG93IHRvIHVzZSAn
-aW50ZXJydXB0LW5hbWVzJyBpbiBfRFNEIHdoaWNoIGNhbiBiZSBtYXBwZWQNCj4gPiB0bw0KPiAN
-Cj4gSW4gdGhlIEFDUEkgY2FzZSB0aGlzDQo+IGFsbG93IHVzIHRvDQo+IA0KPiA+IEludGVycnVw
-dCgpIHJlc291cmNlIGJ5IGluZGV4LiBUaGUgaW1wbGVtZW50YXRpb24gaXMgc2ltaWxhciB0bw0K
-PiA+ICdpbnRlcnJ1cHQtbmFtZXMnIGluIHRoZSBEZXZpY2UgVHJlZS4NCj4gDQo+IC4uLg0KPiAN
-Cj4gPiAgLyoqDQo+ID4gKyAqIGZ3bm9kZV9pcnFfZ2V0X2J5bmFtZSAtIEdldCBJUlEgZnJvbSBh
-IGZ3bm9kZSB1c2luZyBpdHMgbmFtZQ0KPiA+ICsgKiBAZndub2RlOiAgICBQb2ludGVyIHRvIHRo
-ZSBmaXJtd2FyZSBub2RlDQo+ID4gKyAqIEBuYW1lOiAgICAgIElSUSBuYW1lDQo+ID4gKyAqDQo+
-ID4gKyAqIERlc2NyaXB0aW9uOg0KPiA+ICsgKiBGaW5kIGEgbWF0Y2ggdG8gdGhlIHN0cmluZyAn
-bmFtZScgaW4gdGhlICdpbnRlcnJ1cHQtbmFtZXMnIHN0cmluZw0KPiA+ICsgYXJyYXkNCj4gDQo+
-ICduYW1lJyAtLT4gQG5hbWUNCj4gDQo+ID4gKyAqIGluIF9EU0QgZm9yIEFDUEksIG9yIG9mX25v
-ZGUgZm9yIGRldmljZSB0cmVlLiBUaGVuIGdldCB0aGUgTGludXgNCj4gPiArIElSUQ0KPiANCj4g
-RGV2aWNlIFRyZWUNCj4gDQo+ID4gKyAqIG51bWJlciBvZiB0aGUgSVJRIHJlc291cmNlIGNvcnJl
-c3BvbmRpbmcgdG8gdGhlIGluZGV4IG9mIHRoZQ0KPiA+ICsgbWF0Y2hlZA0KPiA+ICsgKiBzdHJp
-bmcuDQo+ID4gKyAqDQo+ID4gKyAqIFJldHVybjoNCj4gDQo+ID4gKyAqIExpbnV4IElSUSBudW1i
-ZXIgb24gc3VjY2Vzcw0KPiA+ICsgKiBOZWdhdGl2ZSBlcnJubyBvdGhlcndpc2UuDQo+IA0KPiAg
-KiBMaW51eCBJUlEgbnVtYmVyIG9uIHN1Y2Nlc3MsIG9yIG5lZ2F0aXZlIGVycm5vIG90aGVyd2lz
-ZS4NCj4gDQo+ID4gKyAqLw0KPiA+ICtpbnQgZndub2RlX2lycV9nZXRfYnluYW1lKGNvbnN0IHN0
-cnVjdCBmd25vZGVfaGFuZGxlICpmd25vZGUsIGNvbnN0DQo+ID4gK2NoYXIgKm5hbWUpIHsNCj4g
-PiArICAgICAgIGludCBpbmRleDsNCj4gPiArDQo+ID4gKyAgICAgICBpZiAoIW5hbWUpDQo+ID4g
-KyAgICAgICAgICAgICAgIHJldHVybiAtRUlOVkFMOw0KPiA+ICsNCj4gPiArICAgICAgIGluZGV4
-ID0gZndub2RlX3Byb3BlcnR5X21hdGNoX3N0cmluZyhmd25vZGUsICJpbnRlcnJ1cHQtbmFtZXMi
-LA0KPiBuYW1lKTsNCj4gPiArICAgICAgIGlmIChpbmRleCA8IDApDQo+ID4gKyAgICAgICAgICAg
-ICAgIHJldHVybiBpbmRleDsNCj4gPiArDQo+ID4gKyAgICAgICByZXR1cm4gZndub2RlX2lycV9n
-ZXQoZndub2RlLCBpbmRleCk7IH0NCj4gDQo+IC4uLg0KPiANCj4gPiArLyoqDQo+ID4gKyAqIGRl
-dmljZV9pcnFfZ2V0X2J5bmFtZSAtIEdldCBJUlEgb2YgYSBkZXZpY2UgdXNpbmcgaW50ZXJydXB0
-IG5hbWUNCj4gPiArICogQGRldjogRGV2aWNlIHRvIGdldCB0aGUgaW50ZXJydXB0DQo+ID4gKyAq
-IEBuYW1lOiBJUlEgbmFtZQ0KPiA+ICsgKg0KPiA+ICsgKiBEZXNjcmlwdGlvbjoNCj4gPiArICog
-RmluZCBhIG1hdGNoIHRvIHRoZSBzdHJpbmcgJ25hbWUnIGluIHRoZSAnaW50ZXJydXB0LW5hbWVz
-JyBzdHJpbmcNCj4gPiArYXJyYXkNCj4gPiArICogaW4gX0RTRCBmb3IgQUNQSSwgb3Igb2Zfbm9k
-ZSBmb3IgZGV2aWNlIHRyZWUuIFRoZW4gZ2V0IHRoZSBMaW51eA0KPiA+ICtJUlENCj4gPiArICog
-bnVtYmVyIG9mIHRoZSBJUlEgcmVzb3VyY2UgY29ycmVzcG9uZGluZyB0byB0aGUgaW5kZXggb2Yg
-dGhlDQo+ID4gK21hdGNoZWQNCj4gPiArICogc3RyaW5nLg0KPiA+ICsgKg0KPiA+ICsgKiBSZXR1
-cm46DQo+ID4gKyAqIExpbnV4IElSUSBudW1iZXIgb24gc3VjY2Vzcw0KPiA+ICsgKiBOZWdhdGl2
-ZSBlcnJubyBvdGhlcndpc2UuDQo+ID4gKyAqLw0KPiANCj4gQXMgcGVyIGFib3ZlLg0KPiANCj4g
-Li4uDQo+IA0KPiA+ICtpbnQgZGV2aWNlX2lycV9nZXRfYnluYW1lKHN0cnVjdCBkZXZpY2UgKmRl
-diwgY29uc3QgY2hhciAqbmFtZSk7DQo+IA0KPiBTaW5jZSB3ZSBkb24ndCBoYXZlIGRldmljZV9p
-cnFfZ2V0KCkgcGVyaGFwcyB3ZSBkb24ndCBuZWVkIHRoaXMgb25lIHJpZ2h0IG5vdw0KPiAoanVz
-dCBvcGVuIGNvZGUgaXQgaW4gdGhlIGNhbGxlcikuIFRoaXMgd2lsbCBzYXRpc2Z5IFJhZmFlbCdz
-IHJlcXVlc3QuDQoNCklmIHRvIGNvZGUgdGhlIHNhbWUgaW4gY2FsbGVyLCBJIGd1ZXNzLCBpdCB3
-b3VsZCBsb29rIGxpa2UgdGhpcyAtDQoJIGlycSA9IGZ3bm9kZV9pcnFfZ2V0X2J5bmFtZShkZXZf
-Zndub2RlKGFkYXB0ZXItPmRldi5wYXJlbnQpLA0KCQkJCQkgInNtYnVzX2FsZXJ0Iik7DQoNCkxv
-b2tzIG9rYXkgdG8gbWUsIGJ1dCBpZiBnaXZlbiBhbiBvcHRpb24gSSB3b3VsZCBnbyB3aXRoIGRl
-dmljZV9pcnFfZ2V0X2J5bmFtZSgpLg0KDQpUaGFua3MsDQpBa2hpbA0K
+(...)
+
+> > --- /dev/null
+> > +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> > @@ -0,0 +1,357 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +
+> > +#include <asm/msr.h>
+> > +#include <linux/i2c.h>
+> > +#include <linux/psp-sev.h>
+> > +
+> > +#include "i2c-designware-core.h"
+>
+> So all the stuff starting here:
+>
+> > +
+> > +#define MSR_AMD_PSP_ADDR     0xc00110a2
+> > +#define PSP_MBOX_OFFSET              0x10570
+> > +#define PSP_CMD_TIMEOUT_MS   500
+> > +
+> > +#define PSP_I2C_REQ_BUS_CMD          0x64
+> > +#define PSP_I2C_REQ_RETRY_CNT                10
+> > +#define PSP_I2C_REQ_RETRY_DELAY_MSEC 50
+> > +#define PSP_I2C_REQ_STS_OK           0x0
+> > +#define PSP_I2C_REQ_STS_BUS_BUSY     0x1
+> > +#define PSP_I2C_REQ_STS_INV_PARAM    0x3
+> > +
+> > +union psp_req_buffer_hdr {
+> > +     struct {
+> > +             u32 total_size;
+> > +             u32 status;
+> > +     } __packed;
+> > +     u64 hdr_val;
+> > +};
+> > +
+> > +enum psp_i2c_req_type {
+> > +     PSP_I2C_REQ_ACQUIRE,
+> > +     PSP_I2C_REQ_RELEASE,
+> > +     PSP_I2C_REQ_MAX,
+> > +};
+> > +
+> > +struct psp_i2c_req {
+> > +     union psp_req_buffer_hdr hdr;
+> > +     enum psp_i2c_req_type type;
+> > +} __packed __aligned(32);
+> > +
+> > +union psp_mbox_cmd_reg {
+> > +     struct psp_mbox_cmd_fields {
+> > +             u16 mbox_status;
+> > +             u8 mbox_cmd;
+> > +             u8 reserved:6;
+> > +             u8 recovery:1;
+> > +             u8 ready:1;
+> > +     } __packed fields;
+> > +     u32 val;
+> > +};
+> > +
+> > +struct psp_mbox {
+> > +     union psp_mbox_cmd_reg fields;
+> > +     uintptr_t i2c_req_addr;
+> > +} __packed;
+> > +
+> > +static DEFINE_MUTEX(psp_i2c_access_mutex);
+> > +static unsigned long psp_i2c_sem_acquired;
+> > +static void __iomem *mbox_iomem;
+> > +static u32 psp_i2c_access_count;
+> > +static bool psp_i2c_mbox_fail;
+> > +static struct device *psp_i2c_dev;
+> > +
+> > +static int psp_get_mbox_addr(unsigned long *mbox_addr)
+> > +{
+> > +     unsigned long long psp_mmio;
+> > +
+> > +     if (rdmsrl_safe(MSR_AMD_PSP_ADDR, &psp_mmio))
+> > +             return -EIO;
+> > +
+> > +     *mbox_addr = (unsigned long)(psp_mmio + PSP_MBOX_OFFSET);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int psp_mbox_probe(void)
+> > +{
+> > +     unsigned long mbox_addr;
+> > +
+> > +     if (psp_get_mbox_addr(&mbox_addr))
+> > +             return -1;
+> > +
+> > +     mbox_iomem = ioremap(mbox_addr, sizeof(struct psp_mbox));
+> > +     if (!mbox_iomem)
+> > +             return -ENOMEM;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +/* Recovery field should be equal 0 to start sending commands */
+> > +static int psp_check_mbox_recovery(struct psp_mbox *mbox)
+> > +{
+> > +     union psp_mbox_cmd_reg tmp = {0};
+> > +
+> > +     tmp.val = readl(&mbox->fields.val);
+> > +     return !!tmp.fields.recovery;
+> > +}
+> > +
+> > +static int psp_wait_cmd(struct psp_mbox *mbox)
+> > +{
+> > +     union psp_mbox_cmd_reg expected = { .val = 0 };
+> > +     u32 tmp;
+> > +
+> > +     /* Expect mbox_cmd to be cleared and ready bit to be set by PSP */
+> > +     expected.fields.ready = 1;
+> > +
+> > +     return readl_poll_timeout(&mbox->fields.val, tmp, (tmp == expected.val),
+> > +                               0, 1000 * PSP_CMD_TIMEOUT_MS);
+> > +}
+> > +
+> > +/* Status equal to 0 means that PSP succeed processing command */
+> > +static int psp_check_mbox_sts(struct psp_mbox *mbox)
+> > +{
+> > +     union psp_mbox_cmd_reg cmd_reg = {0};
+> > +
+> > +     cmd_reg.val = readl(&mbox->fields.val);
+> > +     return cmd_reg.fields.mbox_status;
+> > +}
+> > +
+> > +static int psp_send_cmd(struct psp_i2c_req *req)
+> > +{
+> > +     struct psp_mbox *mbox = (struct psp_mbox *)mbox_iomem;
+> > +     union psp_mbox_cmd_reg cmd_reg = {0};
+> > +
+> > +     if (psp_check_mbox_recovery(mbox))
+> > +             return -EIO;
+> > +
+> > +     if (psp_wait_cmd(mbox))
+> > +             return -EBUSY;
+> > +
+> > +     /* Fill address of command-response buffer */
+> > +     writeq((uintptr_t)__psp_pa((void *)req), &mbox->i2c_req_addr);
+> > +
+> > +     /* Write command register to trigger processing */
+> > +     cmd_reg.fields.mbox_cmd = PSP_I2C_REQ_BUS_CMD;
+> > +     writel(cmd_reg.val, &mbox->fields.val);
+> > +
+> > +     if (psp_wait_cmd(mbox))
+> > +             return -ETIMEDOUT;
+> > +
+> > +     if (psp_check_mbox_sts(mbox))
+> > +             return -EIO;
+> > +
+> > +     return 0;
+> > +}
+>
+> Through here seems to all be generic code for accessing
+> the AMD PSP. To me this seems like something which belongs
+> in a separate AMD-PSP-mbox driver/lib, which can then be
+> shared between other kernel drivers which may also want
+> to access PSP.
+
+I see your point clearly and actually it is not an accident that I've
+put all PSP-mailbox methods in one "block". They are logically
+different than the rest of i2c-adapter specific methods.
+
+That being said, above PSP mailbox was created by AMD solely for the
+purpose of i2c_arbitration. It has its own set of commands and
+specific format of the command-response buffer. Thus it is not and it
+won't be generic in the future. There are already upstreamed drivers
+from AMD (under drivers/crypto/ccp/) which made use of PSP, however
+their channel of communication looks completely different than the
+very simple i2c_arbitration model implemented above.
+
+Because of this I'm treating this as an i2c_semaphore-related code and
+putting this in this module. In my opinion moving this into some
+separate driver (which will be actually used only here) makes code
+less clear. But let's also hear some voice from AMD.
+
+>
+> Sorta like the generic iosf_mbi_read() and
+> iosf_mbi_write() functions from:
+>
+> arch/x86/platform/intel/iosf_mbi.c
+>
+> used on the Intel chips, which are also used outside of
+> the I2C bus-locking code.
+>
+> This is also one of the reasons why I think it would be
+> good to get some AMD folks involved in this, since they
+> may be aware of other drivers which also need to access
+> the PSP mbox.
+>
+
+Right, I'm adding mario.limonciello@amd.com to the CC, so that he can comment.
+
+(...)
+
+> > +/*
+> > + * Locking methods are based on the default implementation from
+> > + * drivers/i2c/i2c-core.base.c, but with psp acquire and release operations
+> > + * added. With this in place we can ensure that i2c clients on the bus shared
+> > + * with psp are able to lock HW access to the bus for arbitrary number of
+> > + * operations - that is e.g. write-wait-read.
+> > + */
+> > +static void i2c_adapter_dw_psp_lock_bus(struct i2c_adapter *adapter,
+> > +                                     unsigned int flags)
+> > +{
+> > +     psp_acquire_i2c_bus();
+> > +     rt_mutex_lock_nested(&adapter->bus_lock, i2c_adapter_depth(adapter));
+>
+> This does not do what you think it does and you will still deadlock
+> when things nest because of someone taking the bus-lock and then
+> the main i2c-designware transfer function calling the acquire_lock
+> callback.
+
+I haven't used rt_mutex_lock_nested() with the intent to prevent me
+from deadlock when i2c-designware calls acquire_lock with bus-lock
+already taken. This is a method copied from
+drivers/i2c/i2c-core-base.c (BTW, I have a typo in above comment).
+This is the default implementation applied by i2c-core when particular
+adapter doesn't register its own locking callbacks - thus it is called
+for i2c-designware for all platforms.
+
+In case of this driver internal i2c-designware acquire_lock() is equal
+to psp_acquire_i2c_bus(). In other words, bus-level lock
+i2c_adapter_dw_psp_lock_bus() is a superset of internal adapter's
+acquire_lock().
+
+In order to prevent deadlock which you are talking about, I'm using
+reference lock counter inside psp_acquire_i2c_bus() thus it is safe to
+invoke acquire_lock() when bus-lock is already taken.
+
+>
+> The _nested postfix is only for the lockdep lock-debugger, this
+> actually turns into a regular mutex_lock when lockdep is not enabled:
+>
+> #ifdef CONFIG_DEBUG_LOCK_ALLOC
+> extern void rt_mutex_lock_nested(struct rt_mutex *lock, unsigned int subclass);
+> #define rt_mutex_lock(lock) rt_mutex_lock_nested(lock, 0)
+> #else
+> extern void rt_mutex_lock(struct rt_mutex *lock);
+> #define rt_mutex_lock_nested(lock, subclass) rt_mutex_lock(lock)
+> #endif
+>
+> The _nested postfix as such is only to tell the lockdep code that
+> even though it seems we are trying to take the same mutex twice
+> since in both cases it is of i2c_adapter.rt_mutex "lock class"
+> that we are sure it is never the same i2c_adapter (but rather
+> one which always gets called in a nested fashion from another
+> i2c_adapter).
+>
+> IOW this only disables a false-positive lockdep warning, it does
+> not allow taking the same mutex twice, you will still hang on
+> the second mutex_lock call on the same lock.
+
+Thanks for the technical background about rt_mutex_lock_nested. I
+think we should keep using it as is, since as I wrote above I don't
+have any reasoning to modify it here.
+
+>
+> Also I don't think you are allowed to use the bus_locking code
+> like this. The i2c bus-locking code is intended to deal with
+> busses which have muxes in them, where the mux must be set
+> to the right branch of the bus to reach the client and then
+> not be changed during the transfer to that client.
+>
+> So i2c-client drivers are never supposed to directly call
+> the bus-locking functions.
+
+I think you are not correct here. There are examples of i2c-clients
+which are using i2c bus_locking for the purpose of locking adapter for
+the bunch of i2c transactions.
+
+As an example let's take drivers/char/tpm/tpm_tis_i2c_cr50.c. It
+operates in write-wait-read model and there is i2c_lock_bus() call
+used to ensure that bus won't be released -
+https://github.com/torvalds/linux/blob/master/drivers/char/tpm/tpm_tis_i2c_cr50.c#L202.
+
+Similar model is followed in drivers/char/tpm/tpm_i2c_infineon.c and
+couple of other i2c-client drivers.
+
+> This is why in the Bay Trail case we have i2c-drivers
+> directly calling iosf_mbi_block_punit_i2c_access() and
+> iosf_mbi_unblock_punit_i2c_access() to lock the bus
+> for multiple i2c-transfers. We can get away with this there
+> because the bus in question is only used to access the
+> PMIC and that PMIC is only used on Bay Trail (and CHT)
+> boards, so the PMIC drivers can just hard-code these
+> calls.
+>
+> If you need to take the PSP I2C semaphore for multiple
+> transfers in some generic drivers, then I guess that the
+> i2c-subsys will need to get some new i2c_adapter callbacks
+> to acquire / release the bus for i2c-controllers where
+> the bus/controller is shared with some co-processor like
+> in the PSP case.
+
+This is exactly my intention to support generic i2c-clients drivers
+without them being aware that i2c-adapter above is using some
+semaphore/arbitration. Hopefully you can agree with me that currently
+available bus_locking can be used and is enough for this purpose.
+
+> Also note that iosf_mbi_block_punit_i2c_access() and
+> iosf_mbi_unblock_punit_i2c_access() do their own
+> ref/lock-counting to allow calling them multiple times and
+> the first block call takes the bus and the last unblock
+> call releases it.
+
+This is exactly what I was talking about above and also implemented
+within psp_acquire_i2c_bus() and psp_release_i2c_bus().
+
+Best Regards,
+Jan
+
+
+>
+> Regards,
+>
+> Hans
+>
+>
+>
+>
+>
+> > +}
+> > +
+> > +static int i2c_adapter_dw_psp_trylock_bus(struct i2c_adapter *adapter,
+> > +                                       unsigned int flags)
+> > +{
+> > +     int ret;
+> > +
+> > +     ret = rt_mutex_trylock(&adapter->bus_lock);
+> > +     if (!ret)
+> > +             psp_acquire_i2c_bus();
+> > +
+> > +     return ret;
+> > +}
+> > +
+> > +static void i2c_adapter_dw_psp_unlock_bus(struct i2c_adapter *adapter,
+> > +                                       unsigned int flags)
+> > +{
+> > +     psp_release_i2c_bus();
+> > +     rt_mutex_unlock(&adapter->bus_lock);
+> > +}
+> > +
+> > +static const struct i2c_lock_operations i2c_dw_psp_lock_ops = {
+> > +     .lock_bus = i2c_adapter_dw_psp_lock_bus,
+> > +     .trylock_bus = i2c_adapter_dw_psp_trylock_bus,
+> > +     .unlock_bus = i2c_adapter_dw_psp_unlock_bus,
+> > +};
+> > +
+> > +int i2c_dw_amdpsp_probe_lock_support(struct dw_i2c_dev *dev)
+> > +{
+> > +     if (!dev || !dev->dev)
+> > +             return -ENODEV;
+> > +
+> > +     if (!(dev->flags & ARBITRATION_SEMAPHORE))
+> > +             return -ENODEV;
+> > +
+> > +     /* Allow to bind only one instance of a driver */
+> > +     if (!psp_i2c_dev)
+> > +             psp_i2c_dev = dev->dev;
+> > +     else
+> > +             return -EEXIST;
+> > +
+> > +     if (psp_mbox_probe())
+> > +             return -EIO;
+> > +
+> > +     dev_info(psp_i2c_dev, "I2C bus managed by AMD PSP\n");
+> > +
+> > +     /*
+> > +      * Install global locking callbacks for adapter as well as internal i2c
+> > +      * controller locks
+> > +      */
+> > +     dev->adapter.lock_ops = &i2c_dw_psp_lock_ops;
+> > +     dev->acquire_lock = psp_acquire_i2c_bus;
+> > +     dev->release_lock = psp_release_i2c_bus;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +/* Unmap area used as a mailbox with PSP */
+> > +void i2c_dw_amdpsp_remove_lock_support(struct dw_i2c_dev *dev)
+> > +{
+> > +     iounmap(mbox_iomem);
+> > +}
+> > diff --git a/drivers/i2c/busses/i2c-designware-baytrail.c b/drivers/i2c/busses/i2c-designware-baytrail.c
+> > index c6a7a00e1d52..0c674542dd99 100644
+> > --- a/drivers/i2c/busses/i2c-designware-baytrail.c
+> > +++ b/drivers/i2c/busses/i2c-designware-baytrail.c
+> > @@ -12,25 +12,25 @@
+> >
+> >  #include "i2c-designware-core.h"
+> >
+> > -int i2c_dw_probe_lock_support(struct dw_i2c_dev *dev)
+> > +int i2c_dw_baytrail_probe_lock_support(struct dw_i2c_dev *dev)
+> >  {
+> >       acpi_status status;
+> >       unsigned long long shared_host = 0;
+> >       acpi_handle handle;
+> >
+> >       if (!dev || !dev->dev)
+> > -             return 0;
+> > +             return -ENODEV;
+> >
+> >       handle = ACPI_HANDLE(dev->dev);
+> >       if (!handle)
+> > -             return 0;
+> > +             return -ENODEV;
+> >
+> >       status = acpi_evaluate_integer(handle, "_SEM", NULL, &shared_host);
+> >       if (ACPI_FAILURE(status))
+> > -             return 0;
+> > +             return -ENODEV;
+> >
+> >       if (!shared_host)
+> > -             return 0;
+> > +             return -ENODEV;
+> >
+> >       if (!iosf_mbi_available())
+> >               return -EPROBE_DEFER;
+> > diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+> > index 4b26cba40139..1d65212fddbd 100644
+> > --- a/drivers/i2c/busses/i2c-designware-core.h
+> > +++ b/drivers/i2c/busses/i2c-designware-core.h
+> > @@ -227,6 +227,8 @@ struct reset_control;
+> >   * @hs_lcnt: high speed LCNT value
+> >   * @acquire_lock: function to acquire a hardware lock on the bus
+> >   * @release_lock: function to release a hardware lock on the bus
+> > + * @semaphore_idx: Index of table with semaphore type attached to the bus. It's
+> > + *   -1 if there is no semaphore.
+> >   * @shared_with_punit: true if this bus is shared with the SoCs PUNIT
+> >   * @disable: function to disable the controller
+> >   * @disable_int: function to disable all interrupts
+> > @@ -285,6 +287,7 @@ struct dw_i2c_dev {
+> >       u16                     hs_lcnt;
+> >       int                     (*acquire_lock)(void);
+> >       void                    (*release_lock)(void);
+> > +     int                     semaphore_idx;
+> >       bool                    shared_with_punit;
+> >       void                    (*disable)(struct dw_i2c_dev *dev);
+> >       void                    (*disable_int)(struct dw_i2c_dev *dev);
+> > @@ -297,6 +300,7 @@ struct dw_i2c_dev {
+> >
+> >  #define ACCESS_INTR_MASK     BIT(0)
+> >  #define ACCESS_NO_IRQ_SUSPEND        BIT(1)
+> > +#define ARBITRATION_SEMAPHORE        BIT(2)
+> >
+> >  #define MODEL_MSCC_OCELOT    BIT(8)
+> >  #define MODEL_BAIKAL_BT1     BIT(9)
+> > @@ -310,6 +314,11 @@ struct dw_i2c_dev {
+> >  #define AMD_UCSI_INTR_REG    0x474
+> >  #define AMD_UCSI_INTR_EN     0xd
+> >
+> > +struct i2c_dw_semaphore_callbacks {
+> > +     int     (*probe)(struct dw_i2c_dev *dev);
+> > +     void    (*remove)(struct dw_i2c_dev *dev);
+> > +};
+> > +
+> >  int i2c_dw_init_regmap(struct dw_i2c_dev *dev);
+> >  u32 i2c_dw_scl_hcnt(u32 ic_clk, u32 tSYMBOL, u32 tf, int cond, int offset);
+> >  u32 i2c_dw_scl_lcnt(u32 ic_clk, u32 tLOW, u32 tf, int offset);
+> > @@ -370,9 +379,12 @@ static inline void i2c_dw_configure(struct dw_i2c_dev *dev)
+> >  }
+> >
+> >  #if IS_ENABLED(CONFIG_I2C_DESIGNWARE_BAYTRAIL)
+> > -extern int i2c_dw_probe_lock_support(struct dw_i2c_dev *dev);
+> > -#else
+> > -static inline int i2c_dw_probe_lock_support(struct dw_i2c_dev *dev) { return 0; }
+> > +int i2c_dw_baytrail_probe_lock_support(struct dw_i2c_dev *dev);
+> > +#endif
+> > +
+> > +#if IS_ENABLED(CONFIG_I2C_DESIGNWARE_AMDPSP)
+> > +int i2c_dw_amdpsp_probe_lock_support(struct dw_i2c_dev *dev);
+> > +void i2c_dw_amdpsp_remove_lock_support(struct dw_i2c_dev *dev);
+> >  #endif
+> >
+> >  int i2c_dw_validate_speed(struct dw_i2c_dev *dev);
+> > diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+> > index 2bd81abc86f6..5844a4df4141 100644
+> > --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> > +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> > @@ -51,6 +51,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] = {
+> >       { "AMD0010", ACCESS_INTR_MASK },
+> >       { "AMDI0010", ACCESS_INTR_MASK },
+> >       { "AMDI0510", 0 },
+> > +     { "AMDI0019", ACCESS_INTR_MASK | ARBITRATION_SEMAPHORE },
+> >       { "APMC0D0F", 0 },
+> >       { "HISI02A1", 0 },
+> >       { "HISI02A2", 0 },
+> > @@ -204,6 +205,64 @@ static const struct dmi_system_id dw_i2c_hwmon_class_dmi[] = {
+> >       { } /* terminate list */
+> >  };
+> >
+> > +static const struct i2c_dw_semaphore_callbacks i2c_dw_semaphore_cb_table[] = {
+> > +#ifdef CONFIG_I2C_DESIGNWARE_BAYTRAIL
+> > +     {
+> > +             .probe = i2c_dw_baytrail_probe_lock_support,
+> > +             .remove = NULL,
+> > +     },
+> > +#endif
+> > +#ifdef CONFIG_I2C_DESIGNWARE_AMDPSP
+> > +     {
+> > +             .probe = i2c_dw_amdpsp_probe_lock_support,
+> > +             .remove = i2c_dw_amdpsp_remove_lock_support,
+> > +     },
+> > +#endif
+> > +     {
+> > +             .probe = NULL,
+> > +             .remove = NULL,
+> > +     },
+> > +};
+> > +
+> > +static int i2c_dw_probe_lock_support(struct dw_i2c_dev *dev)
+> > +{
+> > +     int ret;
+> > +     int i;
+> > +
+> > +     dev->semaphore_idx = -1;
+> > +
+> > +     for (i = 0; i < ARRAY_SIZE(i2c_dw_semaphore_cb_table); i++) {
+> > +             if (!i2c_dw_semaphore_cb_table[i].probe)
+> > +                     continue;
+> > +
+> > +             ret = i2c_dw_semaphore_cb_table[i].probe(dev);
+> > +             if (!ret) {
+> > +                     dev->semaphore_idx = i;
+> > +                     break;
+> > +             } else if (ret == -ENODEV) {
+> > +                     /*
+> > +                      * If there is no semaphore device attached to this
+> > +                      * controller, we shouldn't abort general i2c_controller
+> > +                      * probe.
+> > +                      */
+> > +                     continue;
+> > +             } else {
+> > +                     return ret;
+> > +             }
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static void i2c_dw_remove_lock_support(struct dw_i2c_dev *dev)
+> > +{
+> > +     if (dev->semaphore_idx < 0)
+> > +             return;
+> > +
+> > +     if (i2c_dw_semaphore_cb_table[dev->semaphore_idx].remove)
+> > +             i2c_dw_semaphore_cb_table[dev->semaphore_idx].remove(dev);
+> > +}
+> > +
+> >  static int dw_i2c_plat_probe(struct platform_device *pdev)
+> >  {
+> >       struct i2c_adapter *adap;
+> > @@ -334,6 +393,8 @@ static int dw_i2c_plat_remove(struct platform_device *pdev)
+> >       pm_runtime_put_sync(&pdev->dev);
+> >       dw_i2c_plat_pm_cleanup(dev);
+> >
+> > +     i2c_dw_remove_lock_support(dev);
+> > +
+> >       reset_control_assert(dev->rst);
+> >
+> >       return 0;
+> >
+>
