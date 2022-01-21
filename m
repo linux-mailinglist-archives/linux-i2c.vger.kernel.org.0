@@ -2,57 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF7F495DBC
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jan 2022 11:27:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9097B495DC9
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jan 2022 11:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344614AbiAUK1h (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Jan 2022 05:27:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233456AbiAUK1g (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Jan 2022 05:27:36 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B54C061574
-        for <linux-i2c@vger.kernel.org>; Fri, 21 Jan 2022 02:27:35 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id pf13so9007315pjb.0
-        for <linux-i2c@vger.kernel.org>; Fri, 21 Jan 2022 02:27:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KhlrB2SVGbtIKoVBNVPoy+9dR4p29EtqR1X9fQ4Ad8M=;
-        b=cq81Gfjb0rILYcu0ZNwDYDwgYbr4f/L5oKASBNnJPbsho/KZ8RE76KnQifYvytvN5W
-         LSaOCPLE6chYKNnPiaoTZfg3cBjGijgPKSzB4SerKPypjbFOnE8w2G5djXUWmueG31Bw
-         rdNf2j1rUgtQ4GBfjnc0ZyyXKhX5TpYKfYwbJ3QHcJoGz8/qx2IkavB45wJGIQkxlf5E
-         HTZLfO8ktymEhaU/uV+dEoRpxYYczalL6rc1LaNoQyefFadKA6+HH6BVmDFdBYCXMO7C
-         PE3LI80PBby1pA42dwXVxkFBKxmyMUiKLdwwUgKWk0WIrIfLMWl9VNU0I2TeXdDc95yv
-         aIcg==
+        id S1349983AbiAUKc3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Jan 2022 05:32:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:42825 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349978AbiAUKc2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Jan 2022 05:32:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642761148;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BjbLuT3rjABAPmhV+7k/9649tQb9ApRyvEl0hL9eOZw=;
+        b=hGxZHg/OgVa3B0yBPobE/eEw2lmn0LaF8AIU2D4DE+bUvPNT2EMVddPBBTFZPjmziOatIW
+        kzjtm8UlwQ7kF4N6XMK5xnlzvRsFlK3FW0vkldap4L/n4g3Lqwd/QShKvUnHx49dLlFb3x
+        nkD10jWmW8UtBs01xfOVHGSccXQbKNE=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-589-7HEV8ewXMaOo6A5tqD_JfA-1; Fri, 21 Jan 2022 05:32:25 -0500
+X-MC-Unique: 7HEV8ewXMaOo6A5tqD_JfA-1
+Received: by mail-ed1-f71.google.com with SMTP id c8-20020a05640227c800b003fdc1684cdeso8725267ede.12
+        for <linux-i2c@vger.kernel.org>; Fri, 21 Jan 2022 02:32:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KhlrB2SVGbtIKoVBNVPoy+9dR4p29EtqR1X9fQ4Ad8M=;
-        b=nzxuAXxL47FFvZZ6n/Ybd7o5CScx8QPh1P+p3tAFrkKyzDEnZ+M9a13cQ/R3YVj46t
-         edQ1GFNUSusfWQYdudhJlNDohW9MBIlI7WTiKtI5umxIBG4LEoVP9ID6/e1xLlUuOBLc
-         a4nK1ar5joGR87MZHqeJK7loCzFUsqUF6P0yEfcW/BtJ/C4bHqlnm5UidBpSqZa6Un3o
-         6ZPP3t2quBXHE6TU5qWq0BVRRg/Bhp3L0I8l6LN5u1TcGOa/QizM6fcPv4RJTe9zRpg9
-         +KN1GpjeZh4zNdpG6lwEAAgs1t9kIL7GX1I1N8Nkcd56izRjuwdWuOKjsyq42zscYj0T
-         eQ0g==
-X-Gm-Message-State: AOAM5306QwVFuzpdcogxHSAiY5UViofxvzyAmiMMSPUYRR85oTUV7GGx
-        9foSPqpTYnk6FpAvYuH0+isv5GPTX1Sne5yM6xjgaQ==
-X-Google-Smtp-Source: ABdhPJwbgq3avXkmdTkDPR9LhAV1GzpXOu4XVHFjsRX8R9WKrzZ9f6D3+Vj+v+SIMXSY/vAllw9UXu0c+Jev/9eoa88=
-X-Received: by 2002:a17:902:bb8e:b0:14a:496c:6f2b with SMTP id
- m14-20020a170902bb8e00b0014a496c6f2bmr3112204pls.57.1642760855372; Fri, 21
- Jan 2022 02:27:35 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BjbLuT3rjABAPmhV+7k/9649tQb9ApRyvEl0hL9eOZw=;
+        b=YOf2pW/C77GVY1aoVnpbxnbOPUdj+I+5rCUvtl3rY90cjb5AO38PwGXfrtb72jykoE
+         PZhUYN+Biw4S46A/cHJmLEdLJKWB/RJzSQXZpXfIq+zBhV9xm+M5rwYMgF0J6Db7+x6H
+         E3JMEP6kzA7dhXgHEEmgcnVg1YIZKFHv82EQ5D+pA0cJM1x37QaG0sF13rqUlLzJP7Yp
+         SQPAs5wvPawXBT/LGZz3sBbaVfm1gjdxEYC10xJGaBi0j/YAjzFPsdH3wnBvcBQqaCVz
+         Xh0jIqxeRVwAm3QW5u9sWEMum2fkUJTL3ktvuu38FyBaGzoxWfXN/3WZKPDHj79873Cu
+         BZJQ==
+X-Gm-Message-State: AOAM530SBj+c7Rmn5dIMlZ+F6MWU6ap48yz9FmGz4OH/wZ/6tOES3drZ
+        W27VM3OG9RS+S25C62U1G0F/+6CTwFhFOIeuvCbLtuyKyBT7hHmoYdodHC1OQpC9j4v9w6hru99
+        nyMo/TDNkYOnp2X8MPtnK
+X-Received: by 2002:a17:906:300e:: with SMTP id 14mr2839986ejz.732.1642761144549;
+        Fri, 21 Jan 2022 02:32:24 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw6t0PnxMFnE3ygPuEfkO4j3ZJ1oGED+8racz8c5SiQEz6xgXMK6Guexkqnwq6nwH7Sm1WH1A==
+X-Received: by 2002:a17:906:300e:: with SMTP id 14mr2839966ejz.732.1642761144231;
+        Fri, 21 Jan 2022 02:32:24 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id c14sm2484617edy.66.2022.01.21.02.32.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jan 2022 02:32:23 -0800 (PST)
+Message-ID: <b30a212f-643d-c85d-6301-d92ee0adf098@redhat.com>
+Date:   Fri, 21 Jan 2022 11:32:22 +0100
 MIME-Version: 1.0
-References: <20220120001621.705352-1-jsd@semihalf.com> <2f7610dc-ab57-ddbf-277f-e84680da71bd@redhat.com>
- <CAOtMz3MDntus2OzRS_QDfnFpzrVjj4swQjTkgkFYMGuwgbZcWA@mail.gmail.com> <7f165170-ed25-7804-b756-4944a4067b8a@redhat.com>
-In-Reply-To: <7f165170-ed25-7804-b756-4944a4067b8a@redhat.com>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Fri, 21 Jan 2022 11:27:24 +0100
-Message-ID: <CAOtMz3Of4vViOOum5sZ0r4+fP+QP1eOzpv7rz0o7_HCC7DYPgg@mail.gmail.com>
-Subject: Re: [PATCH 0/2] i2c-designware: Add support for AMD PSP semaphore
-To:     Hans de Goede <hdegoede@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 2/2] i2c: designware: Add AMD PSP I2C bus support
+Content-Language: en-US
+To:     =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-i2c <linux-i2c@vger.kernel.org>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
@@ -61,172 +68,381 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Wolfram Sang <wsa@kernel.org>,
         Raul E Rangel <rrangel@chromium.org>,
         Marcin Wojtas <mw@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
+        mario.limonciello@amd.com
+References: <20220120001621.705352-1-jsd@semihalf.com>
+ <20220120001621.705352-3-jsd@semihalf.com>
+ <a6e0fc62-4a2e-cd2b-557f-5e86088aeeb7@redhat.com>
+ <CAOtMz3NcMZsCMO+15wzzwvF44PqRmem1eP-rCbb+dCiaWiGKzA@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAOtMz3NcMZsCMO+15wzzwvF44PqRmem1eP-rCbb+dCiaWiGKzA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-czw., 20 sty 2022 o 16:57 Hans de Goede <hdegoede@redhat.com> napisa=C5=82(=
-a):
->
-> Hi,
->
-> On 1/20/22 13:29, Jan D=C4=85bro=C5=9B wrote:
-> > Hi Hans,
-> >
-> >
-> > czw., 20 sty 2022 o 12:15 Hans de Goede <hdegoede@redhat.com> napisa=C5=
-=82(a):
-> >>
-> >> Hi Jan,
-> >>
-> >> On 1/20/22 01:16, Jan Dabros wrote:
-> >>> This patchset comprises support for new i2c-designware controller set=
-up on some
-> >>> AMD Cezanne SoCs, where x86 is sharing i2c bus with PSP. PSP uses the=
- same
-> >>> controller and acts as an i2c arbitrator there (x86 is leasing bus fr=
-om it).
-> >>>
-> >>> First commit aims to improve generic i2c-designware code by adding ex=
-tra locking
-> >>> on probe() and disable() paths. I would like to ask someone with acce=
-ss to
-> >>> boards which use Intel BayTrail(CONFIG_I2C_DESIGNWARE_BAYTRAIL) to ve=
-rify
-> >>> behavior of my changes on such setup.
-> >>>
-> >>> Second commit adds support for new PSP semaphore arbitration mechanis=
-m.
-> >>> Implementation is similar to the one from i2c-designware-baytrail.c h=
-owever
-> >>> there are two main differences:
-> >>> 1) Add new ACPI ID in order to protect against silent binding of the =
-old driver
-> >>> to the setup with PSP semaphore. Extra flag ARBITRATION_SEMAPHORE add=
-ed to this
-> >>> new _HID allows to recognize setup with PSP.
-> >>> 2) Beside acquire_lock() and release_lock() methods we are also apply=
-ing quirks
-> >>> to the lock_bus() and unlock_bus() global adapter methods. With this =
-in place
-> >>> all i2c clients drivers may lock i2c bus for a desired number of i2c
-> >>> transactions (e.g. write-wait-read) without being aware of that such =
-bus is
-> >>> shared with another entity.
-> >>>
-> >>> This patchset is a follow-up to the RFC sent earlier on LKML [1], wit=
-h review
-> >>> comments applied.
-> >>>
-> >>> Looking forward to some feedback.
-> >>>
-> >>> [1] https://lkml.org/lkml/2021/12/22/219
-> >>
-> >>
-> >> Thank you for your patch series.
-> >>
-> >> As you may have seen I've done a lot of work on the Bay Trail semaphor=
-e
-> >> thing. I also own several Bay Trail and Cherry Trail based devices whi=
-ch
-> >> use this setup.
-> >>
-> >> I'll add your patches to my personal WIP tree which I regularly run
-> >> on these devices and I'll report back if I notice any issues.
-> >
-> > Thanks in advance, this will be really helpful! I don't have Bay
-> > Trail/Cherry Trail, so I've only tested that build of Bay Trail
-> > semaphore isn't broken.
-> >
-> > I would like to point to new locks in i2c_dw_disable() method as
-> > something to be the most fragile and error-prone, will be great if you
-> > can verify this thoroughly. This function is invoked on both
-> > dw_i2c_driver.remove() and dw_i2c_plat_suspend() paths. Considering
-> > that Bay Trail semaphore means that i2c bus is shared with PMIC, I'm
-> > not sure whether all corner cases are secured especially on platform
-> > suspend.
->
-> You are right that the whole sharing of the bus to the PMIC between
-> the SoC's internal power-management microcontroller (P-Unit) and
-> the OS is a bit fragile (it really is a bit crazy design IMHO).
->
-> You are also right that disabling the controller on suspend
-> is a problem, because once everything is suspended and we hit
-> deeper power-saving states then the P-Unit actually needs the
-> controller to tell the PMIC to disable certain regulators; and
-> the P-Unit is not prepared for us having turned the controller off,
-> therefor dw_i2c_plat_suspend() looks like this:
->
-> static int dw_i2c_plat_suspend(struct device *dev)
-> {
->         struct dw_i2c_dev *i_dev =3D dev_get_drvdata(dev);
->
->         i_dev->suspended =3D true;
->
->         if (i_dev->shared_with_punit)
->                 return 0;
->
->         ...
->
->
-> Note the shared_with_punit flag, so on the Bay Trail case
-> i2c_dw_disable() never gets called on suspend, so that should
-> not be an issue.
+Hi Jan,
 
-Thanks for pointing this! So actually the only path which is now (with
-my patch) altered on the Bay Trails is unbinding driver from the
-device which will call dw_i2c_driver.remove().
+On 1/21/22 10:59, Jan Dąbroś wrote:
+> (...)
+> 
+>>> --- /dev/null
+>>> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+>>> @@ -0,0 +1,357 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +
+>>> +#include <asm/msr.h>
+>>> +#include <linux/i2c.h>
+>>> +#include <linux/psp-sev.h>
+>>> +
+>>> +#include "i2c-designware-core.h"
+>>
+>> So all the stuff starting here:
+>>
+>>> +
+>>> +#define MSR_AMD_PSP_ADDR     0xc00110a2
+>>> +#define PSP_MBOX_OFFSET              0x10570
+>>> +#define PSP_CMD_TIMEOUT_MS   500
+>>> +
+>>> +#define PSP_I2C_REQ_BUS_CMD          0x64
+>>> +#define PSP_I2C_REQ_RETRY_CNT                10
+>>> +#define PSP_I2C_REQ_RETRY_DELAY_MSEC 50
+>>> +#define PSP_I2C_REQ_STS_OK           0x0
+>>> +#define PSP_I2C_REQ_STS_BUS_BUSY     0x1
+>>> +#define PSP_I2C_REQ_STS_INV_PARAM    0x3
+>>> +
+>>> +union psp_req_buffer_hdr {
+>>> +     struct {
+>>> +             u32 total_size;
+>>> +             u32 status;
+>>> +     } __packed;
+>>> +     u64 hdr_val;
+>>> +};
+>>> +
+>>> +enum psp_i2c_req_type {
+>>> +     PSP_I2C_REQ_ACQUIRE,
+>>> +     PSP_I2C_REQ_RELEASE,
+>>> +     PSP_I2C_REQ_MAX,
+>>> +};
+>>> +
+>>> +struct psp_i2c_req {
+>>> +     union psp_req_buffer_hdr hdr;
+>>> +     enum psp_i2c_req_type type;
+>>> +} __packed __aligned(32);
+>>> +
+>>> +union psp_mbox_cmd_reg {
+>>> +     struct psp_mbox_cmd_fields {
+>>> +             u16 mbox_status;
+>>> +             u8 mbox_cmd;
+>>> +             u8 reserved:6;
+>>> +             u8 recovery:1;
+>>> +             u8 ready:1;
+>>> +     } __packed fields;
+>>> +     u32 val;
+>>> +};
+>>> +
+>>> +struct psp_mbox {
+>>> +     union psp_mbox_cmd_reg fields;
+>>> +     uintptr_t i2c_req_addr;
+>>> +} __packed;
+>>> +
+>>> +static DEFINE_MUTEX(psp_i2c_access_mutex);
+>>> +static unsigned long psp_i2c_sem_acquired;
+>>> +static void __iomem *mbox_iomem;
+>>> +static u32 psp_i2c_access_count;
+>>> +static bool psp_i2c_mbox_fail;
+>>> +static struct device *psp_i2c_dev;
+>>> +
+>>> +static int psp_get_mbox_addr(unsigned long *mbox_addr)
+>>> +{
+>>> +     unsigned long long psp_mmio;
+>>> +
+>>> +     if (rdmsrl_safe(MSR_AMD_PSP_ADDR, &psp_mmio))
+>>> +             return -EIO;
+>>> +
+>>> +     *mbox_addr = (unsigned long)(psp_mmio + PSP_MBOX_OFFSET);
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int psp_mbox_probe(void)
+>>> +{
+>>> +     unsigned long mbox_addr;
+>>> +
+>>> +     if (psp_get_mbox_addr(&mbox_addr))
+>>> +             return -1;
+>>> +
+>>> +     mbox_iomem = ioremap(mbox_addr, sizeof(struct psp_mbox));
+>>> +     if (!mbox_iomem)
+>>> +             return -ENOMEM;
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +/* Recovery field should be equal 0 to start sending commands */
+>>> +static int psp_check_mbox_recovery(struct psp_mbox *mbox)
+>>> +{
+>>> +     union psp_mbox_cmd_reg tmp = {0};
+>>> +
+>>> +     tmp.val = readl(&mbox->fields.val);
+>>> +     return !!tmp.fields.recovery;
+>>> +}
+>>> +
+>>> +static int psp_wait_cmd(struct psp_mbox *mbox)
+>>> +{
+>>> +     union psp_mbox_cmd_reg expected = { .val = 0 };
+>>> +     u32 tmp;
+>>> +
+>>> +     /* Expect mbox_cmd to be cleared and ready bit to be set by PSP */
+>>> +     expected.fields.ready = 1;
+>>> +
+>>> +     return readl_poll_timeout(&mbox->fields.val, tmp, (tmp == expected.val),
+>>> +                               0, 1000 * PSP_CMD_TIMEOUT_MS);
+>>> +}
+>>> +
+>>> +/* Status equal to 0 means that PSP succeed processing command */
+>>> +static int psp_check_mbox_sts(struct psp_mbox *mbox)
+>>> +{
+>>> +     union psp_mbox_cmd_reg cmd_reg = {0};
+>>> +
+>>> +     cmd_reg.val = readl(&mbox->fields.val);
+>>> +     return cmd_reg.fields.mbox_status;
+>>> +}
+>>> +
+>>> +static int psp_send_cmd(struct psp_i2c_req *req)
+>>> +{
+>>> +     struct psp_mbox *mbox = (struct psp_mbox *)mbox_iomem;
+>>> +     union psp_mbox_cmd_reg cmd_reg = {0};
+>>> +
+>>> +     if (psp_check_mbox_recovery(mbox))
+>>> +             return -EIO;
+>>> +
+>>> +     if (psp_wait_cmd(mbox))
+>>> +             return -EBUSY;
+>>> +
+>>> +     /* Fill address of command-response buffer */
+>>> +     writeq((uintptr_t)__psp_pa((void *)req), &mbox->i2c_req_addr);
+>>> +
+>>> +     /* Write command register to trigger processing */
+>>> +     cmd_reg.fields.mbox_cmd = PSP_I2C_REQ_BUS_CMD;
+>>> +     writel(cmd_reg.val, &mbox->fields.val);
+>>> +
+>>> +     if (psp_wait_cmd(mbox))
+>>> +             return -ETIMEDOUT;
+>>> +
+>>> +     if (psp_check_mbox_sts(mbox))
+>>> +             return -EIO;
+>>> +
+>>> +     return 0;
+>>> +}
+>>
+>> Through here seems to all be generic code for accessing
+>> the AMD PSP. To me this seems like something which belongs
+>> in a separate AMD-PSP-mbox driver/lib, which can then be
+>> shared between other kernel drivers which may also want
+>> to access PSP.
+> 
+> I see your point clearly and actually it is not an accident that I've
+> put all PSP-mailbox methods in one "block". They are logically
+> different than the rest of i2c-adapter specific methods.
+> 
+> That being said, above PSP mailbox was created by AMD solely for the
+> purpose of i2c_arbitration. It has its own set of commands and
+> specific format of the command-response buffer. Thus it is not and it
+> won't be generic in the future. There are already upstreamed drivers
+> from AMD (under drivers/crypto/ccp/) which made use of PSP, however
+> their channel of communication looks completely different than the
+> very simple i2c_arbitration model implemented above.
+> 
+> Because of this I'm treating this as an i2c_semaphore-related code and
+> putting this in this module. In my opinion moving this into some
+> separate driver (which will be actually used only here) makes code
+> less clear. But let's also hear some voice from AMD.
 
->
-> So all in all I don't really expect any problems, still thank
-> you for Cc-ing me.
+Since as you say this mailbox is special and only for i2c-arbitration,
+keeping it inside this patch / .c file is fine.
 
-Thanks a lot for your help with testing and reviewing my code.
+> 
+>>
+>> Sorta like the generic iosf_mbi_read() and
+>> iosf_mbi_write() functions from:
+>>
+>> arch/x86/platform/intel/iosf_mbi.c
+>>
+>> used on the Intel chips, which are also used outside of
+>> the I2C bus-locking code.
+>>
+>> This is also one of the reasons why I think it would be
+>> good to get some AMD folks involved in this, since they
+>> may be aware of other drivers which also need to access
+>> the PSP mbox.
+>>
+> 
+> Right, I'm adding mario.limonciello@amd.com to the CC, so that he can comment.
+> 
+> (...)
+> 
+>>> +/*
+>>> + * Locking methods are based on the default implementation from
+>>> + * drivers/i2c/i2c-core.base.c, but with psp acquire and release operations
+>>> + * added. With this in place we can ensure that i2c clients on the bus shared
+>>> + * with psp are able to lock HW access to the bus for arbitrary number of
+>>> + * operations - that is e.g. write-wait-read.
+>>> + */
+>>> +static void i2c_adapter_dw_psp_lock_bus(struct i2c_adapter *adapter,
+>>> +                                     unsigned int flags)
+>>> +{
+>>> +     psp_acquire_i2c_bus();
+>>> +     rt_mutex_lock_nested(&adapter->bus_lock, i2c_adapter_depth(adapter));
+>>
+>> This does not do what you think it does and you will still deadlock
+>> when things nest because of someone taking the bus-lock and then
+>> the main i2c-designware transfer function calling the acquire_lock
+>> callback.
+> 
+> I haven't used rt_mutex_lock_nested() with the intent to prevent me
+> from deadlock when i2c-designware calls acquire_lock with bus-lock
+> already taken. This is a method copied from
+> drivers/i2c/i2c-core-base.c (BTW, I have a typo in above comment).
+> This is the default implementation applied by i2c-core when particular
+> adapter doesn't register its own locking callbacks - thus it is called
+> for i2c-designware for all platforms.
+> 
+> In case of this driver internal i2c-designware acquire_lock() is equal
+> to psp_acquire_i2c_bus(). In other words, bus-level lock
+> i2c_adapter_dw_psp_lock_bus() is a superset of internal adapter's
+> acquire_lock().
 
->
-> Regards,
->
-> Hans
->
->
->
-> >> One remark, I notice that there are no AMD people in the Cc, it
-> >> would be good if you can find someone from AMD to look at this,
-> >> also see my remarks to the 2nd patch in my reply to that patch.
-> >
-> > This was partially discussed with AMD folks and you are right that I
-> > should include someone from AMD to take a look at this. Thanks for all
-> > your comments!
-> >
-> >> Regards,
-> >>
-> >> Hans
-> >>
-> >>
-> >>
-> >>
-> >>>
-> >>> Jan Dabros (2):
-> >>>   i2c: designware: Add missing locks
-> >>>   i2c: designware: Add AMD PSP I2C bus support
-> >>>
-> >>>  MAINTAINERS                                  |   1 +
-> >>>  drivers/acpi/acpi_apd.c                      |   1 +
-> >>>  drivers/i2c/busses/Kconfig                   |  10 +
-> >>>  drivers/i2c/busses/Makefile                  |   1 +
-> >>>  drivers/i2c/busses/i2c-designware-amdpsp.c   | 357 +++++++++++++++++=
-++
-> >>>  drivers/i2c/busses/i2c-designware-baytrail.c |  10 +-
-> >>>  drivers/i2c/busses/i2c-designware-common.c   |  12 +
-> >>>  drivers/i2c/busses/i2c-designware-core.h     |  18 +-
-> >>>  drivers/i2c/busses/i2c-designware-master.c   |   6 +
-> >>>  drivers/i2c/busses/i2c-designware-platdrv.c  |  61 ++++
-> >>>  10 files changed, 469 insertions(+), 8 deletions(-)
-> >>>  create mode 100644 drivers/i2c/busses/i2c-designware-amdpsp.c
-> >>>
-> >>
-> >
->
+Ah I missed that this is just mimicking the core functions +
+an extra call to psp_acquire_i2c_bus().
+
+I assumed that the dwc->acquire callback path was also taking
+the mutex and I thought you had fallen for the _nested meaning
+something different then it does, my bad.
+
+> In order to prevent deadlock which you are talking about, I'm using
+> reference lock counter inside psp_acquire_i2c_bus() thus it is safe to
+> invoke acquire_lock() when bus-lock is already taken.
+
+Ah good, that is pretty much is the same as what the Bay Trail code
+is doing.
+
+> 
+>>
+>> The _nested postfix is only for the lockdep lock-debugger, this
+>> actually turns into a regular mutex_lock when lockdep is not enabled:
+>>
+>> #ifdef CONFIG_DEBUG_LOCK_ALLOC
+>> extern void rt_mutex_lock_nested(struct rt_mutex *lock, unsigned int subclass);
+>> #define rt_mutex_lock(lock) rt_mutex_lock_nested(lock, 0)
+>> #else
+>> extern void rt_mutex_lock(struct rt_mutex *lock);
+>> #define rt_mutex_lock_nested(lock, subclass) rt_mutex_lock(lock)
+>> #endif
+>>
+>> The _nested postfix as such is only to tell the lockdep code that
+>> even though it seems we are trying to take the same mutex twice
+>> since in both cases it is of i2c_adapter.rt_mutex "lock class"
+>> that we are sure it is never the same i2c_adapter (but rather
+>> one which always gets called in a nested fashion from another
+>> i2c_adapter).
+>>
+>> IOW this only disables a false-positive lockdep warning, it does
+>> not allow taking the same mutex twice, you will still hang on
+>> the second mutex_lock call on the same lock.
+> 
+> Thanks for the technical background about rt_mutex_lock_nested. I
+> think we should keep using it as is, since as I wrote above I don't
+> have any reasoning to modify it here.
+
+Ack, now that my misreading of the code has been cleared up
+I agree.
+
+>> Also I don't think you are allowed to use the bus_locking code
+>> like this. The i2c bus-locking code is intended to deal with
+>> busses which have muxes in them, where the mux must be set
+>> to the right branch of the bus to reach the client and then
+>> not be changed during the transfer to that client.
+>>
+>> So i2c-client drivers are never supposed to directly call
+>> the bus-locking functions.
+> 
+> I think you are not correct here. There are examples of i2c-clients
+> which are using i2c bus_locking for the purpose of locking adapter for
+> the bunch of i2c transactions.
+> 
+> As an example let's take drivers/char/tpm/tpm_tis_i2c_cr50.c. It
+> operates in write-wait-read model and there is i2c_lock_bus() call
+> used to ensure that bus won't be released -
+> https://github.com/torvalds/linux/blob/master/drivers/char/tpm/tpm_tis_i2c_cr50.c#L202.
+> 
+> Similar model is followed in drivers/char/tpm/tpm_i2c_infineon.c and
+> couple of other i2c-client drivers.
+
+Ah I see, interesting (live and learn).
+
+But this is then combined with using the special __i2c_transfer()
+function for the actual i2c reads/writes, since using the regular
+i2c_transfer() function after already taking the lock would deadlock.
+
+There is a similar unlocked raw __i2c_smbus_xfer(), but as the
+comment in include/linux/i2c.h above the locked i2c_smbus_xfer() says:
+
+/* This is the very generalized SMBus access routine. You probably do not
+   want to use this, though; one of the functions below may be much easier,
+   and probably just as fast.
+   Note that we use i2c_adapter here, because you do not need a specific
+   smbus adapter to call this function. */
+s32 i2c_smbus_xfer(...);
+
+So in this case a driver cannot use the usual
+i2c_smbus_read_byte/word/byte_data/word_data() helpers and
+the same for writes. Also using an i2c_regmap (which is used
+in a ton of places like PMIC drivers) will not work this way.
+
+So yes you can use i2c_bus_lock() for this; but only if all the
+drivers where you want to do that limit themselves to
+__i2c_transfer() and __i2c_smbus_xfer() calls and/or are
+rewritten to only use those.
+>> This is why in the Bay Trail case we have i2c-drivers
+>> directly calling iosf_mbi_block_punit_i2c_access() and
+>> iosf_mbi_unblock_punit_i2c_access() to lock the bus
+>> for multiple i2c-transfers. We can get away with this there
+>> because the bus in question is only used to access the
+>> PMIC and that PMIC is only used on Bay Trail (and CHT)
+>> boards, so the PMIC drivers can just hard-code these
+>> calls.
+>>
+>> If you need to take the PSP I2C semaphore for multiple
+>> transfers in some generic drivers, then I guess that the
+>> i2c-subsys will need to get some new i2c_adapter callbacks
+>> to acquire / release the bus for i2c-controllers where
+>> the bus/controller is shared with some co-processor like
+>> in the PSP case.
+> 
+> This is exactly my intention to support generic i2c-clients drivers
+> without them being aware that i2c-adapter above is using some
+> semaphore/arbitration. Hopefully you can agree with me that currently
+> available bus_locking can be used and is enough for this purpose.
+
+It can be used, but with limitations, see above.
+
+> 
+>> Also note that iosf_mbi_block_punit_i2c_access() and
+>> iosf_mbi_unblock_punit_i2c_access() do their own
+>> ref/lock-counting to allow calling them multiple times and
+>> the first block call takes the bus and the last unblock
+>> call releases it.
+> 
+> This is exactly what I was talking about above and also implemented
+> within psp_acquire_i2c_bus() and psp_release_i2c_bus().
+
+Right, I was to quick in skimming over your code when
+I wrote down my concerns about there being a deadlock
+there, sorry.
+
+Regards,
+
+Hans
+
