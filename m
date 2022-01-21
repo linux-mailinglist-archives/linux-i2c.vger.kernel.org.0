@@ -2,357 +2,376 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A87496484
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jan 2022 18:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DE4496580
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jan 2022 20:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381904AbiAURxZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Jan 2022 12:53:25 -0500
-Received: from mga04.intel.com ([192.55.52.120]:25471 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1381894AbiAURw6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 21 Jan 2022 12:52:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642787578; x=1674323578;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Gh7ZUMv6dLhtBL1dVLe0xcJAhyXZkZeLoBKQAEtz7XQ=;
-  b=g6nQWzp0xTK0o3RmITAAwzZw8uc12/+y8NUtUWcXaTWotUqFy6+u0H8l
-   QIT1ZAwPlw9gl6YJnqaAEx8wqToiB0U7FPsulO820V5+hj6O51X6FhWJM
-   bC5VV9rOHcQCjbZ8O0+WJWD86EyLp6qbSqA5j9QHcOgxbsHgWDmO+BJoH
-   mQbY9icuAj1yKvYZmPyFVULwC3/1KuzyRGavwOpsUxpPYuFIuYfTiceEW
-   Sel+NHou/IRIl/uVHBMCcwXMyk8IJvNSosLgM9bA6S+ydpfQJ69WU7z/5
-   fOBBwtHrXuV2zKms8i+ItH7spd9u7HtLZ0+zAU/BaJM0VWZNG9GnqU9Ph
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="244534007"
-X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
-   d="scan'208";a="244534007"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 09:52:55 -0800
-X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
-   d="scan'208";a="694716362"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 09:52:52 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nAy4e-00D1bm-Cu;
-        Fri, 21 Jan 2022 19:51:44 +0200
-Date:   Fri, 21 Jan 2022 19:51:44 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>
+        id S231517AbiAUTSn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Jan 2022 14:18:43 -0500
+Received: from mail-co1nam11on2077.outbound.protection.outlook.com ([40.107.220.77]:5248
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231400AbiAUTSk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 21 Jan 2022 14:18:40 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VKMhlMiA1V9LdPoe9Zs8E0Dm+Y/zcx9EjMoEdkJOhcytsO0+lRd9J1cXttFI03z0GPr31h+ckT6X2+L4afE/1Gc03njSVPUuRJ/Qg5xeREo+vPlWQJnR89chbrtLNvSk3LnkFAVO8N9ghQwR1Q9YZxc5DB3ziLZ295srZvbZxevjaukClS1dSvHbSLvey1J+pN56UT88X49tt9BDQW69p9USVpETD4Qk8dUU4lEC1xhgd19gwqBywKpc19tDeSEvi/Y7stbdvs9Sqz1m6/ad4HTe/AV7Cl5uN5yR9NUgkaFdxoCXYXS1x+ws4TNpiOCVd1ZSE/W5qg/eVgFOS7Q6aw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LDeSkOdEklulDTkk5YmN0Pas45f7NPDmYiJ4DIrADqY=;
+ b=QuBOYxDNvhgUT+HaBb0C8P9PvIA6J/zVymUFpy3jry5xW453S8KbQyydl/a/8az1aqXOvdFMny7judz8u7C6XGoIcK6PfdMYo2PTBUaGrXSqtFaB/zRobRTjWG2jsTfT4/aAjJquJQVZfRE3YNW8e7tnvOgKHJbl8i9xpDwAvJ6Hw0H7IOpZQV3H/rFE0L8n9/mWXBPyH6n02Ag2AZyNOUrC06iKQZsgbskcbedcyrxhSoF8tZRvSotZM0uoUahIFlivkj8GwTJXdjQoDHiE8TbLBcXXC5k52optCplPhUHwupbfBxAHF+6rY4IHuSrrUFAqwWPhqY+SnngjKC58Zg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LDeSkOdEklulDTkk5YmN0Pas45f7NPDmYiJ4DIrADqY=;
+ b=gegsgPmY8xRZDbYYaoSNPu7qu1QoRpu5hRbzxialMFcjLA/jTzVwJZvblpfMDmqGQ3kpV7ZJ+BkNTxEgNFDSLDXTLkAa6EU0/x3+T5cdmDT0Est9zuQ7d8pol6JupZvpoNIjP/2VSSga4OOdMaSgYalk0hx2ihmqueFijCLC0kY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by BN6PR12MB1123.namprd12.prod.outlook.com (2603:10b6:404:1b::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Fri, 21 Jan
+ 2022 19:18:38 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::ccd7:e520:c726:d0b]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::ccd7:e520:c726:d0b%7]) with mapi id 15.20.4909.012; Fri, 21 Jan 2022
+ 19:18:38 +0000
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-i2c <linux-i2c@vger.kernel.org>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
         Wolfram Sang <wsa@kernel.org>,
         Raul E Rangel <rrangel@chromium.org>,
         Marcin Wojtas <mw@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com
-Subject: Re: [PATCH 2/2] i2c: designware: Add AMD PSP I2C bus support
-Message-ID: <YerysECShhFGl7aO@smile.fi.intel.com>
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        "upstream@semihalf.com" <upstream@semihalf.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>
 References: <20220120001621.705352-1-jsd@semihalf.com>
  <20220120001621.705352-3-jsd@semihalf.com>
- <YelvqHuxaIOB+yP1@smile.fi.intel.com>
- <CAOtMz3OeuhKAikkwdzcEaEKU6FRrYkC7=iiwUeDg+VEZZxsQRA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+ <a6e0fc62-4a2e-cd2b-557f-5e86088aeeb7@redhat.com>
+ <CAOtMz3NcMZsCMO+15wzzwvF44PqRmem1eP-rCbb+dCiaWiGKzA@mail.gmail.com>
+ <b30a212f-643d-c85d-6301-d92ee0adf098@redhat.com>
+ <BL1PR12MB5157C8952EF693A93785FBD2E25B9@BL1PR12MB5157.namprd12.prod.outlook.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [PATCH 2/2] i2c: designware: Add AMD PSP I2C bus support
+Message-ID: <d1a29d3e-c213-3478-966b-4ffbe21b1384@amd.com>
+Date:   Fri, 21 Jan 2022 13:18:35 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+In-Reply-To: <BL1PR12MB5157C8952EF693A93785FBD2E25B9@BL1PR12MB5157.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOtMz3OeuhKAikkwdzcEaEKU6FRrYkC7=iiwUeDg+VEZZxsQRA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-ClientProxiedBy: SN7P220CA0003.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:806:123::8) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c52e8b27-371e-4222-79c1-08d9dd12d38e
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1123:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR12MB1123EBB173F1FA915BF2C58DEC5B9@BN6PR12MB1123.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hDlbGmOVMvtyQoKuK/p/dj3nCpeI3zYZafhIBq7B6OA065f3rBT0qUvkPT/DbxnRuJyjf45Ns91UkgI1o/ak/XAojNJ5AQv7BfNfPtEQ17zQCsFJjlxDkdf/HyGTulAu+qo5dBJfZ4nZ+ozLq5SetEb3DvGSsLy+F0Beqfp8D2GHGBfuw+Z/Bg0t5FYb05RmauYyBqYYtHW09bYScZuKWS9ZFevNbpSrkFC46lopNb2kNV5+poYcswVJZ2d1pSNI6Tz1nhGLAu9urFj6PlIfaNfbNTuLxF+UmEUN+i15JeDWKof4cKZlsUDrWRk6LI6z2whfM0kSTdzq8LAdbA4sGq444Tf+l7UrrFX8Mzn4ZOpjCqZB5KYGFBgvOxUKFVSRmUonoDxCjA+CQlhMorKXYpmuGcQPa7gS46WP9GexssLOGFtLW5QyWNQEErn/CpEoalzOz5/j4tE36Su1wWcOE/Ek+A7WmsXYB+n94QtuYHuaaJOPYqyBNQvUAmTonNB6LsxU/ooTvHbaSeWt4GIvNEHMXDj3yj/TCw3Mifw2E9tFSbn/bSrWFBJSFHoBlLor7ZQgl3x8qKlOelunANyjo2rGa+OL2eK0/CcIbqPvNn1qdBXKX6IDyToX4OP9wqEJWxBAWuXXNZlfCLeJ+0fm8K10vzl+h8IjU6iVEIdoUQBNAGQkuWKfRWUEi1cJhXxX/tF1h/GE6ideWZU5T9j6yzT57uNgUuL67CYNZvOI33pXFuDuWQnWl8v6dMfEGPn0SFee64mbmr/7VVU+iPGph1DXMbDhRiEEcr5Sg1F+qfC9FdoQzG0mbN+WVQQS0/QD
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(316002)(66556008)(4326008)(6506007)(54906003)(6486002)(6666004)(31696002)(8676002)(508600001)(2616005)(110136005)(66574015)(53546011)(966005)(83380400001)(38100700002)(45080400002)(66476007)(66946007)(6512007)(86362001)(2906002)(186003)(7416002)(26005)(8936002)(30864003)(36756003)(5660300002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-2?Q?9gHJcdZfn5S/2I4p4kVOuw/Hr2VNxGB0OJVxqhtXQgSSPr9mBGvNZZ0Dka?=
+ =?iso-8859-2?Q?zVZmWw5h4IHHJP/zFIfWIvTXJRmeuZViCCzZcz8yT5iJgWTRa+kU7Nmoe1?=
+ =?iso-8859-2?Q?cbp7phq0MWBfCibf94sFtGLtkzv3hIbkOfLjV2/UWOyxiaRoCk1oMRQig9?=
+ =?iso-8859-2?Q?XO/AYppSVLBAs5k/NcoE/01s4aeh0BC44yr1K4dr9Bcjsnz0Dbu77aFLUS?=
+ =?iso-8859-2?Q?Rerqt91yFJOUFyj7h+aBcZsLkmmJ9zLBfHS0tfPXOqqYBtRygLq14/GD+v?=
+ =?iso-8859-2?Q?Oxfh87vUJTnhhPwdUzsrhRIxojSwFB9z223Z0AIBQm/T0QTWkk++ARQQEL?=
+ =?iso-8859-2?Q?s1o7NhWk4xrMD+JL7YYHQRiOqO+BB9mkAMEc2iR6eDcsuPASwO8LyshhTO?=
+ =?iso-8859-2?Q?tn95GnEmJwlzSSjAzukBzcDc5aG5d3bMBHsr9TD9FQWYgbFePrBUf4acUU?=
+ =?iso-8859-2?Q?lw4nzbS28p5fxq8yQ16Z+2GPQq+DMwSrAyXv0NYRHepyomoYdoFx3vHsLs?=
+ =?iso-8859-2?Q?kCOczqz+jfi5HDkXWwsLTmmgMDKjWxRbkBddwuqVIav6RWss+AlnEMhtVA?=
+ =?iso-8859-2?Q?1QIVtkwr5HZcPDLMEa5Cfg/S9Kj1IhZGWHlgRoqT3OivI+n5GHzOA9yas6?=
+ =?iso-8859-2?Q?UHei7QIbPFTgBl6RdcU0aENYPK0haGGeg61C99PXQWg83YAXPsEYrau0Bz?=
+ =?iso-8859-2?Q?S1i5iyO5EYa1zGe8+cvroPSCrTfAezG5W4MouAESh4Py0kKSzodCVDnYS2?=
+ =?iso-8859-2?Q?BoRxkAQn6Juc2yU36WaYlI10sFAK+btacTxe/8FgggfnW/GBbBsrU08smB?=
+ =?iso-8859-2?Q?L5w0FI7GW4IOi28dLRO6mBOyQQvLDKvwYUTw+Khz6OYnM+MWt9FOs3D7la?=
+ =?iso-8859-2?Q?hj7cVSuWmZoO9xuNXjt/fK9nDhMoK25rSw4uf9KvCuJee5FBnoPUXHnx98?=
+ =?iso-8859-2?Q?X6bosZLrKoK7AP6MlFHtqFVxwzucEM14wIpQheA0pIyJow3vgA9iXK5zqc?=
+ =?iso-8859-2?Q?bjV/7YupdKrlTNtGsn3MJ7qEaNhOan0khc+EOmMzOAYCJ5wlpQWkY+OMMa?=
+ =?iso-8859-2?Q?ZEuhfF0vJx4XczRJJC4ga3fnhShISrvRndKDQpM43Ryw/hucDeJC0BcWdt?=
+ =?iso-8859-2?Q?m92rczPFFlJ5SvEblIcFpASqtENDRRZ2koEJ+fpysS2r8CxGWnE0I3Pj2b?=
+ =?iso-8859-2?Q?n4E/bNdgqxMOMyKugWhF5Nh42uMAn+jZ/Wh/GtKkUos/O3AnHmTf7iF82w?=
+ =?iso-8859-2?Q?SoCwN1o3hngysEYNhmaYcxd56YYDn2+V/w2MNZv8NZSFMjZYUmaJicCMWh?=
+ =?iso-8859-2?Q?wSlLEBgvZ8wtA9RsGfLZry8wuBytN+453v69cewym7bvQFVPbiN6vg2v1z?=
+ =?iso-8859-2?Q?kjOTbt7dpqT5d0FofP1vuC2j+B4NRffyfJFeKJWPeqQZQLXUDjILuvzfrr?=
+ =?iso-8859-2?Q?X5Vgiz3+4QnzEHwY9SUs9njNqFZ6+RopAPDFMAJH1w5lZGCyd4iqv7fi6e?=
+ =?iso-8859-2?Q?Ww+Oc8lKP607AL3QuQGe5cZao1KSaSWCYr18iO8Za+zOfjbTiKfFiwPg3r?=
+ =?iso-8859-2?Q?yddW+S43LA1Vf5oD/DidT1XmJGjDX9uq0qJvAsG5A7odInklF/HSOuNt1h?=
+ =?iso-8859-2?Q?uE3EN1M3KV0Ot86VuK8Kzbm1X8x1M3EjjqrKV4+OsS85dKELqZt29X0rtU?=
+ =?iso-8859-2?Q?3jn4kfOQRJShgaNKMok=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c52e8b27-371e-4222-79c1-08d9dd12d38e
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2022 19:18:37.9521
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hKqrr5D/2rKrmPdh3gKlzQhUIFbunxZQt51rhWknB/S52k5Uj3leNisA9Iobs1UQoggDJyki9yVNa9HzPHtBVw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1123
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 11:20:19AM +0100, Jan DÄ…broÅ› wrote:
-> czw., 20 sty 2022 o 15:21 Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> napisaÅ‚(a):
-> > On Thu, Jan 20, 2022 at 01:16:21AM +0100, Jan Dabros wrote:
-
-...
-
-> > > Add new entry in MAINTAINERS file to cover new module.
-> >
-> > It's confusing. You added yourself as a reviewer for I2C DesignWare driver,
-> > which is great, but not described in the commit message.
+On 1/21/22 11:38 AM, Limonciello, Mario wrote:
+> [Public]
 > 
-> Should I rephrase this sentence (to be more specific that I may be
-> helpful for reviewing amdpsp.c module) or rather you mean to exclude
-> drivers/i2c/busses/i2c-designware-amdpsp.c from the rest of
-> designware-* modules and create separate entry?
+> +Thomas (ccp driver)
+> +Alex (amdgpu driver)
 > 
-> Actually initially I wasn't planning to modify MAINTAINERS (after all
-> I'm not an I2C DesignWare expert) until run checkpatch.pl which
-> recommended to do so when adding new file. Eventually for me it made
-> some sense since I have a platform equipped with AMD Cezanne SoC and I
-> will be able to review and test potential changes in
-> i2c-designware-amdpsp.c or in general around semaphore areas.
+>>
+>> On 1/21/22 10:59, Jan D±bro¶ wrote:
+
+>>>>
+>>>> Through here seems to all be generic code for accessing
+>>>> the AMD PSP. To me this seems like something which belongs
+>>>> in a separate AMD-PSP-mbox driver/lib, which can then be
+>>>> shared between other kernel drivers which may also want
+>>>> to access PSP.
+>>>
+>>> I see your point clearly and actually it is not an accident that I've
+>>> put all PSP-mailbox methods in one "block". They are logically
+>>> different than the rest of i2c-adapter specific methods.
+>>>
+>>> That being said, above PSP mailbox was created by AMD solely for the
+>>> purpose of i2c_arbitration. It has its own set of commands and
+>>> specific format of the command-response buffer. Thus it is not and it
+>>> won't be generic in the future. There are already upstreamed drivers
+>>> from AMD (under drivers/crypto/ccp/) which made use of PSP, however
+>>> their channel of communication looks completely different than the
+>>> very simple i2c_arbitration model implemented above.
+>>>
 > 
-> This may also work with different model, similar to how you pointed me
-> to Hans as an owner of Bay Trail platform who is acquinted with how
-> its i2c semaphore is working. I will simply remove myself from the
-> MAINTAINERS file and you can add me to the threads if there is
-> anything requiring my help.
+> Can you please double confirm no other users for this mailbox and it's for
+> you only?  And if so is it only specific to this platform that no other users?
+> At least on some UEFI AMD platforms that mailbox is defined for
+> communication with something else.  We might need some way to attest
+> from the firmware that it's safe to use.
 > 
-> Let me know which way is working for you. I just thought it is not
-> good to leave you alone with a new module which you cannot actually
-> test and don't have deep insight about how PSP-x86 communications
-> works.
+> The only mailbox that is defined for OS use across different silicon AFAIK is
+> the GPU driver mailbox.  It may be safer to use that, but I'm not sure if
+> GPU driver has come up early enough for your use.
 
-You have a few options:
-- leave it for us (but it probably won't go well in long-term as you noticed)
-- add yourself as a reviewer (it doesn't require to review everything, but
-  you will get all i2c DesignWare driver changes)
-- add a new MAINTAINERS database entry where you can put yourself for that
-  file even as a maintainaer
+The CCP/PSP driver will load as a PCIe device driver on this platform and 
+will ioremap the MMIO space. Today, that driver doesn't reference those 
+mailbox registers, and I don't know that there will be a need in the 
+future. But if there is a need in the future, you could end up with a 
+conflict between these two drivers.
 
-...
+Thanks,
+Tom
 
-> > > +#include <asm/msr.h>
-> >
-> > Usually linux/* followed by asm/*.
-> >
-> > > +#include <linux/i2c.h>
-> > > +#include <linux/psp-sev.h>
-> >
-> > types.h?
 > 
-> I need to take a deeper look at the headers included here, especially
-> considering errors pointed by kernel test robot. Not sure why I
-> haven't seen any issues on my setup.
-
-The problem here is not so visible. Headers should be a compromise between
-what is really used and what we may include for that. There are headers
-that guaranteed to be included by others, otherwise it will be an implicit
-dependency which is not good in cases of generic headers, such as types.h.
-
-...
-
-> > > +union psp_req_buffer_hdr {
-> > > +     struct {
-> > > +             u32 total_size;
-> > > +             u32 status;
-> > > +     } __packed;
-> >
-> > What does packet bring you here?
-> 
-> In this particular case binary-wise nothing, I can as well drop this.
-> It may be necessary if there are some changes in this structs fields
-> in future (e.g changing total_size to u8), since PSP expects every
-> field to be byte-aligned.
-
-_packed will make another thing which you probably won't need, it brings
-the entire structure to be possible on unaligned addresses and then some
-warnings from compiler may be issued even if there is no problem in the
-flow.
-
-Read this discussion: https://lore.kernel.org/linux-media/20220110224656.266536-1-sakari.ailus@linux.intel.com/
-
-> > > +     u64 hdr_val;
-> >
-> > And why does this not have the same alignment since it's also part of
-> > the union?
-> 
-> __packed is not about alignment of the whole struct/union
-
-It's. See above.
-
-> but about
-> lack of padding between its fields. As above - in this particular case
-> with two u32 it doesn't matter.
-
-...
-
-> > > +struct psp_i2c_req {
-> > > +     union psp_req_buffer_hdr hdr;
-> > > +     enum psp_i2c_req_type type;
-> >
-> > > +} __packed __aligned(32);
-> >
-> > Can you explain, what this means and how it's supposed to work?
-> 
-> This means that each instance of the struct should be aligned (32)
-> while at the same time no padding within members - thus this may
-> result in non-aligned addresses of members.
-
-32 bytes? And on unaligned address at the same time.
-
-...
-
-> > > +union psp_mbox_cmd_reg {
-> > > +     struct psp_mbox_cmd_fields {
-> > > +             u16 mbox_status;
-> > > +             u8 mbox_cmd;
-> > > +             u8 reserved:6;
-> > > +             u8 recovery:1;
-> > > +             u8 ready:1;
-> >
-> > > +     } __packed fields;
-> >
-> > So, what is the __packed purpose here?
-> 
-> As in all above cases - considering current layout of members and
-> their sizes dropping `__packed` will not results in any errors.
-> 
-> However PSP expects all members os structs within shared buffers to be
-> byte-aligned, that's why I've added this attributes to be on the safe
-> side. If you think this doesn't make sense, I can remove them - in
-> (very unlikely) case of changes, one will need to add this specifier.
-
-I guess you don't need them at all in this case in any of the data structure
-you created here.
-
-...
-
-> > > +     struct psp_mbox *mbox = (struct psp_mbox *)mbox_iomem;
-> >
-> > Heck, no!
-> 
-> I need to get acquinted to the kernel-reviewer language:) Pardon my
-> ignorance, but just to be sure I get what you mean here:
-> I'm using global mbox_iomem to keep address of PSP mailbox in IO
-> memory. Casting this to struct psp_mbox layout here, to make access
-> more convenient.
-> Your point here is that:
-> 1. I should move the assignment out from the variable declaration part
-> of this function;
-> 2. I should use ioremap/iounmap each time in psp_send_cmd instead of
-> using it once in `probe` and unmap in `remove`?
-> I thought about this option as to be less effective performance-wise
-> (even though I can get rid of one global variable).
-> 3. Something else?
-
-Casting an __iomem pointer to the some struct without keeping it. I believe
-sparse should blow because of this.
-
-...
-
-> > > +     /* Fill address of command-response buffer */
-> > > +     writeq((uintptr_t)__psp_pa((void *)req), &mbox->i2c_req_addr);
-> >
-> > What does this voodoo mean?!
-> 
-> Basically I need to take physical address (__psp_pa) of request buffer
-> req and write this down into mailbox IO memory.
-> This should be spread into more lines with some comments, is this your point?
-
-It needs much better comment explaining what is this address and its meaning
-for the hardware and why you need physical address here (DMA?). For me it looks
-like a voodoo. Ah, and not using phys_addr_t / dma_addr_t / etc type here, but
-uintptr_t just adds a confusion.
-
-...
-
-> > > +     start = jiffies;
-> > > +     do {
-> > > +             if (psp_send_cmd(req)) {
-> > > +                     ret = -EIO;
-> > > +                     goto cleanup;
-> > > +             }
-> > > +
-> > > +             status = check_i2c_req_sts(req);
-> > > +             if (!status) {
-> > > +                     dev_dbg(psp_i2c_dev, "Request accepted by PSP after %ums\n",
-> > > +                             jiffies_to_msecs(jiffies - start));
-> > > +                     ret = 0;
-> > > +                     goto cleanup;
-> > > +             } else if (status == -EBUSY) {
-> > > +                     retry_cnt--;
-> > > +             } else {
-> > > +                     ret = -EIO;
-> > > +                     goto cleanup;
-> > > +             };
-> > > +
-> > > +             /* IF EBUSY, give PSP time to finish its i2c activities */
-> > > +             mdelay(PSP_I2C_REQ_RETRY_DELAY_MSEC);
-> > > +     } while (retry_cnt);
-> >
-> > NIH iopoll.h API(s).
-> 
-> I don't think macros avaialble in iopoll.h are suitable here.
-> Procedure above is not about simply reading some IO and waiting for
-> particular condition to be met with this particular value. Eventually
-> `psp_send_cmd()` invokes `psp_wait_cmd()` where I'm using
-> `readl_poll_timeout()`, so on lower level I'm making use of this API.
-> However here I don't see any obvious method how to incorporate
-> iopoll.h API to reach my goal.
-
-You do not go to clean up if and only if status == -EBUSY, so here we have
-a condition. the rest can be moved to a function that you wrap by
-read_poll_timeout_atomic() (pay attention to the macro name).
-Here is the question, btw, why _atomic()? I.o.w. why mdelay() and not msleep()?
-
-> > > +     ret = -ETIMEDOUT;
-
-...
-
-> > Handle errors first.
-
-> Addressing above two comments - what do you think about below:
-> if (status) {
->       if (status == -ETIMEDOUT)
->                dev_err(psp_i2c_dev, "Timed out waiting for PSP to
-> release I2C bus\n");
->       else
->                dev_err(psp_i2c_dev, "PSP communication error\n");
-
->        dev_err(psp_i2c_dev, "PSP communication error\n");
-
-This dup message is not needed, otherwise fine to me.
-
->        psp_i2c_mbox_fail = true;
->        goto cleanup;
-> }
-> 
-> psp_i2c_sem_acquired = jiffies;
-> psp_i2c_access_count++;
-> (...)
-
-...
-
-> > > +static int i2c_dw_probe_lock_support(struct dw_i2c_dev *dev)
-> > > +{
-> > > +     int ret;
-> > > +     int i;
-> > > +
-> > > +     dev->semaphore_idx = -1;
-> > > +
-> > > +     for (i = 0; i < ARRAY_SIZE(i2c_dw_semaphore_cb_table); i++) {
-> >
-> > > +             if (!i2c_dw_semaphore_cb_table[i].probe)
-> > > +                     continue;
-> >
-> > Huh?
-> 
-> Just to be sure I get your point.
-> Once I found terminating entry, I will get out of the loop and return
-> 0 as there are no semaphores to be "applied". Actually I should
-> probably use `break;` here as there shouldn't be a case when certain
-> type of semaphore installs without `probe` being implemented.
-
-Yes, that's what I though, and rather using ARRAY_SIZE(), use a terminator you
-provided.
-
-Originally you have used two approaches which seems competing with each other:
-- ARRAY_SIZE
-- terminator entry
-
-And on top of that so confusing continue on top of not-found ->probe() that
-makes me think what the meaning of the entry that has set ->remove(), but no
-->probe().
-
-That said, I would rather see something like
-
-	struct ... *p = &...;
-
-	while (p->probe) {
-		...
-		p++;
-	}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+>>> Because of this I'm treating this as an i2c_semaphore-related code and
+>>> putting this in this module. In my opinion moving this into some
+>>> separate driver (which will be actually used only here) makes code
+>>> less clear. But let's also hear some voice from AMD.
+>>
+>> Since as you say this mailbox is special and only for i2c-arbitration,
+>> keeping it inside this patch / .c file is fine.
+>>
+>>>
+>>>>
+>>>> Sorta like the generic iosf_mbi_read() and
+>>>> iosf_mbi_write() functions from:
+>>>>
+>>>> arch/x86/platform/intel/iosf_mbi.c
+>>>>
+>>>> used on the Intel chips, which are also used outside of
+>>>> the I2C bus-locking code.
+>>>>
+>>>> This is also one of the reasons why I think it would be
+>>>> good to get some AMD folks involved in this, since they
+>>>> may be aware of other drivers which also need to access
+>>>> the PSP mbox.
+>>>>
+>>>
+>>> Right, I'm adding mario.limonciello@amd.com to the CC, so that he can
+>> comment.
+>>>
+>>> (...)
+>>>
+>>>>> +/*
+>>>>> + * Locking methods are based on the default implementation from
+>>>>> + * drivers/i2c/i2c-core.base.c, but with psp acquire and release operations
+>>>>> + * added. With this in place we can ensure that i2c clients on the bus shared
+>>>>> + * with psp are able to lock HW access to the bus for arbitrary number of
+>>>>> + * operations - that is e.g. write-wait-read.
+>>>>> + */
+>>>>> +static void i2c_adapter_dw_psp_lock_bus(struct i2c_adapter *adapter,
+>>>>> +                                     unsigned int flags)
+>>>>> +{
+>>>>> +     psp_acquire_i2c_bus();
+>>>>> +     rt_mutex_lock_nested(&adapter->bus_lock,
+>> i2c_adapter_depth(adapter));
+>>>>
+>>>> This does not do what you think it does and you will still deadlock
+>>>> when things nest because of someone taking the bus-lock and then
+>>>> the main i2c-designware transfer function calling the acquire_lock
+>>>> callback.
+>>>
+>>> I haven't used rt_mutex_lock_nested() with the intent to prevent me
+>>> from deadlock when i2c-designware calls acquire_lock with bus-lock
+>>> already taken. This is a method copied from
+>>> drivers/i2c/i2c-core-base.c (BTW, I have a typo in above comment).
+>>> This is the default implementation applied by i2c-core when particular
+>>> adapter doesn't register its own locking callbacks - thus it is called
+>>> for i2c-designware for all platforms.
+>>>
+>>> In case of this driver internal i2c-designware acquire_lock() is equal
+>>> to psp_acquire_i2c_bus(). In other words, bus-level lock
+>>> i2c_adapter_dw_psp_lock_bus() is a superset of internal adapter's
+>>> acquire_lock().
+>>
+>> Ah I missed that this is just mimicking the core functions +
+>> an extra call to psp_acquire_i2c_bus().
+>>
+>> I assumed that the dwc->acquire callback path was also taking
+>> the mutex and I thought you had fallen for the _nested meaning
+>> something different then it does, my bad.
+>>
+>>> In order to prevent deadlock which you are talking about, I'm using
+>>> reference lock counter inside psp_acquire_i2c_bus() thus it is safe to
+>>> invoke acquire_lock() when bus-lock is already taken.
+>>
+>> Ah good, that is pretty much is the same as what the Bay Trail code
+>> is doing.
+>>
+>>>
+>>>>
+>>>> The _nested postfix is only for the lockdep lock-debugger, this
+>>>> actually turns into a regular mutex_lock when lockdep is not enabled:
+>>>>
+>>>> #ifdef CONFIG_DEBUG_LOCK_ALLOC
+>>>> extern void rt_mutex_lock_nested(struct rt_mutex *lock, unsigned int
+>> subclass);
+>>>> #define rt_mutex_lock(lock) rt_mutex_lock_nested(lock, 0)
+>>>> #else
+>>>> extern void rt_mutex_lock(struct rt_mutex *lock);
+>>>> #define rt_mutex_lock_nested(lock, subclass) rt_mutex_lock(lock)
+>>>> #endif
+>>>>
+>>>> The _nested postfix as such is only to tell the lockdep code that
+>>>> even though it seems we are trying to take the same mutex twice
+>>>> since in both cases it is of i2c_adapter.rt_mutex "lock class"
+>>>> that we are sure it is never the same i2c_adapter (but rather
+>>>> one which always gets called in a nested fashion from another
+>>>> i2c_adapter).
+>>>>
+>>>> IOW this only disables a false-positive lockdep warning, it does
+>>>> not allow taking the same mutex twice, you will still hang on
+>>>> the second mutex_lock call on the same lock.
+>>>
+>>> Thanks for the technical background about rt_mutex_lock_nested. I
+>>> think we should keep using it as is, since as I wrote above I don't
+>>> have any reasoning to modify it here.
+>>
+>> Ack, now that my misreading of the code has been cleared up
+>> I agree.
+>>
+>>>> Also I don't think you are allowed to use the bus_locking code
+>>>> like this. The i2c bus-locking code is intended to deal with
+>>>> busses which have muxes in them, where the mux must be set
+>>>> to the right branch of the bus to reach the client and then
+>>>> not be changed during the transfer to that client.
+>>>>
+>>>> So i2c-client drivers are never supposed to directly call
+>>>> the bus-locking functions.
+>>>
+>>> I think you are not correct here. There are examples of i2c-clients
+>>> which are using i2c bus_locking for the purpose of locking adapter for
+>>> the bunch of i2c transactions.
+>>>
+>>> As an example let's take drivers/char/tpm/tpm_tis_i2c_cr50.c. It
+>>> operates in write-wait-read model and there is i2c_lock_bus() call
+>>> used to ensure that bus won't be released -
+>>>
+>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.c
+>> om%2Ftorvalds%2Flinux%2Fblob%2Fmaster%2Fdrivers%2Fchar%2Ftpm%2Ftpm_
+>> tis_i2c_cr50.c%23L202&amp;data=04%7C01%7Cmario.limonciello%40amd.com
+>> %7C1bdc742bc2a24f59b7d908d9dcc95438%7C3dd8961fe4884e608e11a82d994
+>> e183d%7C0%7C0%7C637783579554955840%7CUnknown%7CTWFpbGZsb3d8ey
+>> JWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C
+>> 3000&amp;sdata=fr0UEka%2BxYyPxqUG6oOZo%2Bc6pWgto2mD7hWA20YulVQ
+>> %3D&amp;reserved=0.
+>>>
+>>> Similar model is followed in drivers/char/tpm/tpm_i2c_infineon.c and
+>>> couple of other i2c-client drivers.
+>>
+>> Ah I see, interesting (live and learn).
+>>
+>> But this is then combined with using the special __i2c_transfer()
+>> function for the actual i2c reads/writes, since using the regular
+>> i2c_transfer() function after already taking the lock would deadlock.
+>>
+>> There is a similar unlocked raw __i2c_smbus_xfer(), but as the
+>> comment in include/linux/i2c.h above the locked i2c_smbus_xfer() says:
+>>
+>> /* This is the very generalized SMBus access routine. You probably do not
+>>     want to use this, though; one of the functions below may be much easier,
+>>     and probably just as fast.
+>>     Note that we use i2c_adapter here, because you do not need a specific
+>>     smbus adapter to call this function. */
+>> s32 i2c_smbus_xfer(...);
+>>
+>> So in this case a driver cannot use the usual
+>> i2c_smbus_read_byte/word/byte_data/word_data() helpers and
+>> the same for writes. Also using an i2c_regmap (which is used
+>> in a ton of places like PMIC drivers) will not work this way.
+>>
+>> So yes you can use i2c_bus_lock() for this; but only if all the
+>> drivers where you want to do that limit themselves to
+>> __i2c_transfer() and __i2c_smbus_xfer() calls and/or are
+>> rewritten to only use those.
+>>>> This is why in the Bay Trail case we have i2c-drivers
+>>>> directly calling iosf_mbi_block_punit_i2c_access() and
+>>>> iosf_mbi_unblock_punit_i2c_access() to lock the bus
+>>>> for multiple i2c-transfers. We can get away with this there
+>>>> because the bus in question is only used to access the
+>>>> PMIC and that PMIC is only used on Bay Trail (and CHT)
+>>>> boards, so the PMIC drivers can just hard-code these
+>>>> calls.
+>>>>
+>>>> If you need to take the PSP I2C semaphore for multiple
+>>>> transfers in some generic drivers, then I guess that the
+>>>> i2c-subsys will need to get some new i2c_adapter callbacks
+>>>> to acquire / release the bus for i2c-controllers where
+>>>> the bus/controller is shared with some co-processor like
+>>>> in the PSP case.
+>>>
+>>> This is exactly my intention to support generic i2c-clients drivers
+>>> without them being aware that i2c-adapter above is using some
+>>> semaphore/arbitration. Hopefully you can agree with me that currently
+>>> available bus_locking can be used and is enough for this purpose.
+>>
+>> It can be used, but with limitations, see above.
+>>
+>>>
+>>>> Also note that iosf_mbi_block_punit_i2c_access() and
+>>>> iosf_mbi_unblock_punit_i2c_access() do their own
+>>>> ref/lock-counting to allow calling them multiple times and
+>>>> the first block call takes the bus and the last unblock
+>>>> call releases it.
+>>>
+>>> This is exactly what I was talking about above and also implemented
+>>> within psp_acquire_i2c_bus() and psp_release_i2c_bus().
+>>
+>> Right, I was to quick in skimming over your code when
+>> I wrote down my concerns about there being a deadlock
+>> there, sorry.
+>>
+>> Regards,
+>>
+>> Hans
