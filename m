@@ -2,162 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 164D3497D3A
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jan 2022 11:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5FD497DB9
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jan 2022 12:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232105AbiAXKdk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Jan 2022 05:33:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231166AbiAXKdj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Jan 2022 05:33:39 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B446FC06173B
-        for <linux-i2c@vger.kernel.org>; Mon, 24 Jan 2022 02:33:38 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id l17so8828979plg.1
-        for <linux-i2c@vger.kernel.org>; Mon, 24 Jan 2022 02:33:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=xuZZHkIuEnvDpyJcRake/wQb+VN1KTh62QLAapj5S6A=;
-        b=yP3/Yb6xFM6+tLxjq5XcIad0refYGallErDeE9C88nR55gLVvfTPJ88r6MTD++X6WO
-         8YHrHPqyc4NtBwhov02CQWHZnBTahB2EwJ2YSVjfSomgxUoPXtA5LHUMzQAGwIR4RpFj
-         RpwJbKue+JC1gMUyUcajyC4AcFFV5NNFWAwQsIu0HTIznMdhbGlQ3pfkjUALHHVHnkbD
-         J4luQJJR1LdEo4eB228pOZ5o9+lxkTHet1xEtmg2DrQoTSMDPojAQEj0/rA11K9V6kCD
-         QVtSjwDQ9/RBV43vgO+0pDKYssXJQVqyw3knC6hckiw9OPSkJSNpHJphUaPWdecd7wz3
-         RfWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xuZZHkIuEnvDpyJcRake/wQb+VN1KTh62QLAapj5S6A=;
-        b=Y5aBnVK9IeuxEQgIVOKiRHqqFZ/TNp1h2YMl5LoOKSIHdSJ+3J3De/n7Lq8d+qc/u/
-         Iez3IZsRaETdIi4XVmqQg35rsVd48cYMWGieRjSf9gFwx3DMDKyB5IdnMipJa5XAN2oo
-         TyYpJLc/9RhRl2IkhV5qVW3qxLl58C65arr1AnOcnklazNu7kUbdVbSCvmEz/plyJ2nO
-         O1+bkO/jLta8gzkKy3b+/LhxSsSfCRxELbbM5rV0tMQtVdGjX8/R8Pe/CP/ojXgi2zFp
-         7fopcM05M4w5J50ylBkF514yHusjHlcisuFoJsT7yh9zNZckqP5fLJQZPx+S/FmHkMXW
-         j4fg==
-X-Gm-Message-State: AOAM533XstFREj2eVSUIBnbEt47syMtKAgAyXyVk23RWxlGBlPJ6R4gN
-        QOCPzbvvUYo/MamDC+70TSTm0/1kk+O68AmOGjMELQ==
-X-Google-Smtp-Source: ABdhPJwuFbZnb2vERsmDh601w9ewh9vuqyRtmzf3a2qbtmwp4E0LvoNexgMawcQOJKUxEcrYp5o7jRcK77wK63Zw+fY=
-X-Received: by 2002:a17:90b:1bcc:: with SMTP id oa12mr1306143pjb.4.1643020418211;
- Mon, 24 Jan 2022 02:33:38 -0800 (PST)
+        id S237250AbiAXLSe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Jan 2022 06:18:34 -0500
+Received: from mail-co1nam11on2069.outbound.protection.outlook.com ([40.107.220.69]:42880
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S237227AbiAXLSd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 24 Jan 2022 06:18:33 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UleyuRVDphjFcf8XxItaiODAgqP7beyFf0y5xZRC/Q8AZKEUuw2sEtB0RSMVxs4DOJCkvvl7fClcXL7Y96bZ6wL97eVwfcsrxgFslF2LXy9BqlVspgA4B0AGuenv2wrHZLOAYyLx2k+ekT44FRtiNr6H1Obeu/7MuN0qQ9GJCgi7iKaZSQQvCvZq9XCLfeg1FUnRmPeWJJTSpdpBmU4JdFzXAqCAwP/y9O35NaWz0c4/tvIE1FbS57NOEp51lG3aM9HotalTH5kjJF2V2LhQh45QwGV/SyHgZkIFCgolRB2w8erCIptCOk4fugQzQipNYrHkIByMcVZjQdwFIsKZHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=15Dlj/HNyqqj3YLwdIIXt99VkBTc0ALkmizgvh4Pz7s=;
+ b=HUSdlH3KOGXHWYk17PJqScC1mTpEZNp7gQPuMTn9RoKoUUfbB7HnXVNgFYMuAThW80Yuppoz0h2Y3pT8l6umUYWbr7m8pM34oAd5+Uu0NzsfiOfN3zwVpP9ZVe+uBnPQg9RCBO58cGT+EpeFRQPvXpxuKIl+7sghPl88p2XYPSJdVrOZeRDWSO3z+gh5uoNhGDC8GfYYIf9tPKtFYL6+cDoR7h/qrGbmagtKFS8+Ib7VWJHC4ReFj/ncv1dN+JCIyNTTZKH0HWX4Ax8HFi/LBEFAKOz9bZ2e5ESQmjfDIBsQHYCqNnk6gF+KSrsq2hRtFd5BYLTilou5KH8tNzOPvg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=15Dlj/HNyqqj3YLwdIIXt99VkBTc0ALkmizgvh4Pz7s=;
+ b=fu0TxYsPecWEzvhn1l7y3YAPSVtAh8jVTVreQOQ9nyxxf+Npq6CePp5wylJUkOgjBiCjMZsrre0HsXUvjRPqtkkr4VWTk3AVKwZpAr/ZOqBlt2b+L7BseAK8sRF2soeAqSx+sgvbxKg7CY7LefBxXMdPoEeSuGAyvT0fgQH0NMAGBHcYLUeUKE2GZqmFLiUsct+51HpgwH2UoETGHjlXoPFMnViXpmOJKmGEhAk70Or4siMrDmjUq3rieEFxjrhe0lzaLw/pspvgxUEdW1KmpbPvokkm/akXVoxCO12zBJlV5KdlfVnmc7/paOLNI0+2MI2LxrtRupwKiFQeK89gWw==
+Received: from MWHPR11CA0033.namprd11.prod.outlook.com (2603:10b6:300:115::19)
+ by MN2PR12MB3790.namprd12.prod.outlook.com (2603:10b6:208:164::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Mon, 24 Jan
+ 2022 11:18:31 +0000
+Received: from CO1NAM11FT024.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:300:115:cafe::91) by MWHPR11CA0033.outlook.office365.com
+ (2603:10b6:300:115::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7 via Frontend
+ Transport; Mon, 24 Jan 2022 11:18:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.234; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.234) by
+ CO1NAM11FT024.mail.protection.outlook.com (10.13.174.162) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4909.7 via Frontend Transport; Mon, 24 Jan 2022 11:18:30 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ DRHQMAIL101.nvidia.com (10.27.9.10) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.18; Mon, 24 Jan 2022 11:18:30 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9;
+ Mon, 24 Jan 2022 03:18:29 -0800
+Received: from kyarlagadda-linux.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server id 15.2.986.9 via Frontend
+ Transport; Mon, 24 Jan 2022 03:18:26 -0800
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     <devicetree@vger.kernel.org>, <digetx@gmail.com>,
+        <jonathanh@nvidia.com>, <ldewangan@nvidia.com>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <mperttunen@nvidia.com>,
+        <robh+dt@kernel.org>, <thierry.reding@gmail.com>
+CC:     <akhilrajeev@nvidia.com>
+Subject: [PATCH v3 0/4] Add I2C and PWM support for T234
+Date:   Mon, 24 Jan 2022 16:48:13 +0530
+Message-ID: <1643023097-5221-1-git-send-email-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-References: <20220120001621.705352-1-jsd@semihalf.com> <20220120001621.705352-2-jsd@semihalf.com>
- <5bec947e-272b-cfa0-b9b6-4d0d2626153f@redhat.com>
-In-Reply-To: <5bec947e-272b-cfa0-b9b6-4d0d2626153f@redhat.com>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Mon, 24 Jan 2022 11:33:27 +0100
-Message-ID: <CAOtMz3ONrgq3QCvMqQHxiQhhaGuEY8PG4hLbFt4r9T9+ALG_iA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] i2c: designware: Add missing locks
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ea79e0ce-36a6-4c83-3f32-08d9df2b4043
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3790:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB3790D5528E0BF857DB224C7DC05E9@MN2PR12MB3790.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZsGj6Mj2Uggf3qFxLk8uv53ZlAvQzIA+qDACyMVMx380iBioSpwxpCq9KKT9GbjG0lcyTNfsXGC/uhOL3uK8j3x4xsdj7QyVaoB8HbyNLWRTOFvuaRLW7fw5ch99TOSC04mCLhCT4x11jCp/5lt0D+xurm+x4OjhqtakHToSJdIEYqboP1M5UoXy5vet+oqr5US5BWXb6z605mIErkaIeYYpZLFCLYszAiEZL/9xKB4JeCDC9qYzx3gVLObEnB1XqQwPeStLjBVoztaX+neg8lMbXXxAX9qOYQhBr0lth+4+Cvs5eJz8wg9UjvH7eAHkDCCpEM7Z5CKO+ckahtkHf7r5RmwE7Gpa9l7XAXWlCiIzCJocwNk/IR7lKona27Vrdot4eOgZ3nLtz21TB+DgFkW3KCSvGCl+cDr0Q355IyM0UAckEeUMdNXOqfu7pXy2MnUcFVY9BbvM5Td9J9ZR32vJtd/Vp4+Ld/JF5/j4/ic0rjwpmcC/s/K94C/13TXMmUXQcmxtlvSTAER8S9yNl3Uth9TsO7yZKFyNH1NEL/+SJYcKV3yruHv4nc9NPKqjvkwBdMMQHxKIU6cPDsmQoKkvyig1XnuZxKPC1Mpgjq71ViRq7ROLkAf4aH5mHtcZDcoPWOfV8EiXaPczUN7zl1R23a2/VYQBfkzeHkXBfrgfZIWVrnbSsNamnmN2ind4GmCgrmd9zXlN49FfVQ+T+ZMa8EDENrSfwaEzPGdFbo4EH0EQ4apYoZODmj8MCbdX+WS0gdlcA+GV64kkDxZr9fXDtDLQy157e/BwklzjaQpUU6+fdK4EMYUg9N0mj5PkL+tOAsEZt4pNxTXuOYLQ6Zk/CHus76g1/z8jUWldC78=
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700004)(82310400004)(921005)(81166007)(86362001)(83380400001)(47076005)(36756003)(2906002)(356005)(40460700003)(4326008)(508600001)(26005)(7696005)(316002)(8936002)(5660300002)(186003)(107886003)(336012)(426003)(110136005)(6666004)(70586007)(2616005)(70206006)(4744005)(36860700001)(8676002)(36900700001)(2101003)(83996005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2022 11:18:30.3278
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea79e0ce-36a6-4c83-3f32-08d9df2b4043
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT024.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3790
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-czw., 20 sty 2022 o 12:25 Hans de Goede <hdegoede@redhat.com> napisa=C5=82(=
-a):
->
-> Hi,
->
-> On 1/20/22 01:16, Jan Dabros wrote:
-> > All accesses to controller's registers should be protected on
-> > probe, disable and xfer paths. This is needed for i2c bus controllers
-> > that are shared with but not controller by kernel.
-> >
-> > Signed-off-by: Jan Dabros <jsd@semihalf.com>
->
-> Thanks, patch looks good to me:
->
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+The patchset contains driver and devicetree changes to support I2C and
+PWM for Tegra234
 
-Thanks!
+v2->v3:
+  * Sorted clock and reset based on ID
+v1->v2:
+  * Reverted changes in i2c-tegra.c. using tegra194_i2c_hw for tegra234
+    as the values are compatible.
 
-Best Regards,
-Jan
+Akhil R (4):
+  dt-bindings: Add headers for Tegra234 I2C
+  arm64: tegra: Add Tegra234 I2C devicetree nodes
+  dt-bindings: Add headers for Tegra234 PWM
+  arm64: tegra: Add Tegra234 PWM devicetree nodes
 
->
->
-> Regards,
->
-> Hans
->
->
-> > ---
-> >  drivers/i2c/busses/i2c-designware-common.c | 12 ++++++++++++
-> >  drivers/i2c/busses/i2c-designware-master.c |  6 ++++++
-> >  2 files changed, 18 insertions(+)
-> >
-> > diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/b=
-usses/i2c-designware-common.c
-> > index bf2a4920638a..9f8574320eb2 100644
-> > --- a/drivers/i2c/busses/i2c-designware-common.c
-> > +++ b/drivers/i2c/busses/i2c-designware-common.c
-> > @@ -578,7 +578,12 @@ int i2c_dw_set_fifo_size(struct dw_i2c_dev *dev)
-> >        * Try to detect the FIFO depth if not set by interface driver,
-> >        * the depth could be from 2 to 256 from HW spec.
-> >        */
-> > +     ret =3D i2c_dw_acquire_lock(dev);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> >       ret =3D regmap_read(dev->map, DW_IC_COMP_PARAM_1, &param);
-> > +     i2c_dw_release_lock(dev);
-> >       if (ret)
-> >               return ret;
-> >
-> > @@ -607,6 +612,11 @@ u32 i2c_dw_func(struct i2c_adapter *adap)
-> >  void i2c_dw_disable(struct dw_i2c_dev *dev)
-> >  {
-> >       u32 dummy;
-> > +     int ret;
-> > +
-> > +     ret =3D i2c_dw_acquire_lock(dev);
-> > +     if (ret)
-> > +             return;
-> >
-> >       /* Disable controller */
-> >       __i2c_dw_disable(dev);
-> > @@ -614,6 +624,8 @@ void i2c_dw_disable(struct dw_i2c_dev *dev)
-> >       /* Disable all interrupts */
-> >       regmap_write(dev->map, DW_IC_INTR_MASK, 0);
-> >       regmap_read(dev->map, DW_IC_CLR_INTR, &dummy);
-> > +
-> > +     i2c_dw_release_lock(dev);
-> >  }
-> >
-> >  void i2c_dw_disable_int(struct dw_i2c_dev *dev)
-> > diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/b=
-usses/i2c-designware-master.c
-> > index 9177463c2cbb..1a4b23556db3 100644
-> > --- a/drivers/i2c/busses/i2c-designware-master.c
-> > +++ b/drivers/i2c/busses/i2c-designware-master.c
-> > @@ -905,7 +905,13 @@ int i2c_dw_probe_master(struct dw_i2c_dev *dev)
-> >               irq_flags =3D IRQF_SHARED | IRQF_COND_SUSPEND;
-> >       }
-> >
-> > +     ret =3D i2c_dw_acquire_lock(dev);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> >       i2c_dw_disable_int(dev);
-> > +     i2c_dw_release_lock(dev);
-> > +
-> >       ret =3D devm_request_irq(dev->dev, dev->irq, i2c_dw_isr, irq_flag=
-s,
-> >                              dev_name(dev->dev), dev);
-> >       if (ret) {
-> >
->
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi   | 133 +++++++++++++++++++++++++++++
+ include/dt-bindings/clock/tegra234-clock.h |  35 +++++++-
+ include/dt-bindings/reset/tegra234-reset.h |  16 ++++
+ 3 files changed, 183 insertions(+), 1 deletion(-)
+
+-- 
+2.7.4
+
