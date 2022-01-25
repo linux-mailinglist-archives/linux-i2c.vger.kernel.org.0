@@ -2,123 +2,134 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7E949B91D
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jan 2022 17:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9FD49BA9F
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jan 2022 18:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1585890AbiAYQpa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Jan 2022 11:45:30 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:39300 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1584416AbiAYQjG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Jan 2022 11:39:06 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 10F7E1F381;
-        Tue, 25 Jan 2022 16:39:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643128742; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8rtmaWBIZkB4evzRWl/a+elxNpDHBMDViK3dm7DyrXY=;
-        b=jxCcb+UNxJm3RN5zJlC+KAxIvdePBPr0TyxuVat1JdtTU21NDpEz0xd3jvyemLmDF9Com+
-        oESd2xPq40JT5HDgw2pwGRLpcJR7w8QVzzXuP60WyuXDQB4joWg+llMgEdhgQGhm2FIwdK
-        yMsRsFnZGWjfdKKPCoS+cMpBkC+P9sE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643128742;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8rtmaWBIZkB4evzRWl/a+elxNpDHBMDViK3dm7DyrXY=;
-        b=X8KDMnPUGIm1FS5WM8OLQ2cGYl9Jd+wwiQpg86/UnAgxr49UA840E/z1Q5bU8sqL9ga7mY
-        gMgfPHMaMTmzhPAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3CD4513E4B;
-        Tue, 25 Jan 2022 16:39:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hCxwDKUn8GGzOQAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 25 Jan 2022 16:39:01 +0000
-Date:   Tue, 25 Jan 2022 17:38:57 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Terry Bowman <Terry.Bowman@amd.com>
-Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
-        linux-i2c@vger.kernel.org, wsa@kernel.org,
-        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
-        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
-        rrichter@amd.com, thomas.lendacky@amd.com,
-        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
-        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
-Subject: Re: [PATCH v3 2/4] Watchdog: sp5100_tco: Refactor MMIO base address
- initialization
-Message-ID: <20220125173857.1c85fddc@endymion>
-In-Reply-To: <a55ca093-d8d1-6821-1cb9-18343c6f1fd0@amd.com>
-References: <20220118202234.410555-1-terry.bowman@amd.com>
-        <20220118202234.410555-3-terry.bowman@amd.com>
-        <20220125144520.17a220bc@endymion>
-        <a55ca093-d8d1-6821-1cb9-18343c6f1fd0@amd.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S235347AbiAYRxL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Jan 2022 12:53:11 -0500
+Received: from mail-yb1-f171.google.com ([209.85.219.171]:43911 "EHLO
+        mail-yb1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243629AbiAYRwr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Jan 2022 12:52:47 -0500
+Received: by mail-yb1-f171.google.com with SMTP id g81so63955733ybg.10;
+        Tue, 25 Jan 2022 09:52:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+j1GpCpGfNY2lH8frLrkCg4vSgaS4ibnLkUccs79nQA=;
+        b=RzcIeeIMikSwVSQ9Yza37NYqsfFrm0hOqPP/KK8YyAjiRunShioLLHtBjsimPmUmi3
+         Eopc3HhOpeMnQKM7ym9MJAt/wDGuoj3yoD/HDh4cT5oB16sis6auVObMBy8oZ1Y77B7N
+         6+Vriqme2ChbJepG2DAlOXPssIElDlFtA8pm9ea/B7qpCV9+r1vKxcewScZ4y742RbeC
+         i5UCoNv3F6jq9cZC6QSlI/fF8FWVjt6/lkdARhb54JHGhDtbfy2Hj+wes4rEw6QbCwBb
+         5NiIu98aWjOUnuO7m6gzKdqEam6ZYvdwSXoHROeg+I/fU6WYB9Is+2SeCgNayW2Xeh8a
+         qAvw==
+X-Gm-Message-State: AOAM5320hUWHXk2MI3tUMmNmGvH2JkzUnGWajZnkOnSfYnUIUp5za9s5
+        f2JofaoVdVi/RNpBUrYbK3YvQQVyphL9lKran8g=
+X-Google-Smtp-Source: ABdhPJyojknnzuIYMmZbjfeJ+s2pzRiKVKx+zefsCZtajgkwxnDKmiqfjgFEq1JOZLL4BipPUObjdUys5vQ1JNLbLZs=
+X-Received: by 2002:a25:bb93:: with SMTP id y19mr30844335ybg.466.1643133165102;
+ Tue, 25 Jan 2022 09:52:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <1642851166-27096-1-git-send-email-akhilrajeev@nvidia.com> <1642851166-27096-2-git-send-email-akhilrajeev@nvidia.com>
+In-Reply-To: <1642851166-27096-2-git-send-email-akhilrajeev@nvidia.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 25 Jan 2022 18:52:34 +0100
+Message-ID: <CAJZ5v0hCREQczOczW6+UGv3UDxskYLRP06qpyQkyXEC1YA3nOw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] device property: Add fwnode_irq_get_byname
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 25 Jan 2022 09:18:59 -0600, Terry Bowman wrote:
-> On 1/25/22 7:45 AM, Jean Delvare wrote:
-> > On Tue, 18 Jan 2022 14:22:32 -0600, Terry Bowman wrote:  
-> >> +static int __sp5100_tco_prepare_base(struct sp5100_tco *tco,
-> >> +				     u32 mmio_addr,
-> >> +				     const char *dev_name)
-> >> +{
-> >> +	struct device *dev = tco->wdd.parent;
-> >> +	int ret = 0;
-> >> +
-> >> +	if (!mmio_addr)
-> >> +		return -ENOMEM;  
-> > 
-> > Can this actually happen? If it does, is -ENOMEM really the best error
-> > value?
-> 
-> This can happen if mmio_addr is not assigned in sp5100_tco_setupdevice_mmio() 
-> before calling sp5100_tco_prepare_base() and __sp5100_tco_prepare_base().
+On Sat, Jan 22, 2022 at 12:33 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+>
+> Add fwnode_irq_get_byname() to get an interrupt by name from either
+> ACPI table or Device Tree, whichever is used for enumeration.
+>
+> In the ACPI case, this allow us to use 'interrupt-names' in
+> _DSD which can be mapped to Interrupt() resource by index.
+> The implementation is similar to 'interrupt-names' in the
+> Device Tree.
+>
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
 
-Ah yes, I can see it now.
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-> I can move the NULL check out of __sp5100_tco_prepare_base() and into
-> sp5100_tco_prepare_base() before calling __sp5100_tco_prepare_base().
-> As you describe below.
-> 
-> The ENOMEM return value should be interpreted as the mmio_addr is not 
-> available. EBUSY does not describe the failure correctly because EBUSY 
-> implies the resource is present and normally available but not available 
-> at this time. Do you have a return value preference ?
-
-Well, if one mmio_addr isn't set, you shouldn't call
-__sp5100_tco_prepare_base() for it so there's no error to return. If
-neither mmio_addr is set then the hardware is simply not configured to
-be used, so that would be a -NODEV returned by
-sp5100_tco_prepare_base() I suppose?
-
-BTW...
- 
-> >> (...)
-> >> +	if (ret)
-> >> +		dev_err(dev, "Failed to reserve-map MMIO (%X) and alternate MMIO (%X) regions. ret=%X",
-> >> +			mmio_addr, alt_mmio_addr, ret);  
-
-... I think that should be a "or" rather than "and", and singular
-"region", in this error message? I mean, the plan was never to
-reserve-map both of them, if I understand correctly.
-
--- 
-Jean Delvare
-SUSE L3 Support
+> ---
+>  drivers/base/property.c  | 29 +++++++++++++++++++++++++++++
+>  include/linux/property.h |  1 +
+>  2 files changed, 30 insertions(+)
+>
+> diff --git a/drivers/base/property.c b/drivers/base/property.c
+> index e6497f6..fc59e0f 100644
+> --- a/drivers/base/property.c
+> +++ b/drivers/base/property.c
+> @@ -936,6 +936,35 @@ void __iomem *fwnode_iomap(struct fwnode_handle *fwnode, int index)
+>  EXPORT_SYMBOL(fwnode_iomap);
+>
+>  /**
+> + * fwnode_irq_get_byname - Get IRQ from a fwnode using its name
+> + * @fwnode:    Pointer to the firmware node
+> + * @name:      IRQ name
+> + *
+> + * Description:
+> + * Find a match to the string @name in the 'interrupt-names' string array
+> + * in _DSD for ACPI, or of_node for Device Tree. Then get the Linux IRQ
+> + * number of the IRQ resource corresponding to the index of the matched
+> + * string.
+> + *
+> + * Return:
+> + * Linux IRQ number on success, or negative errno otherwise.
+> + */
+> +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
+> +{
+> +       int index;
+> +
+> +       if (!name)
+> +               return -EINVAL;
+> +
+> +       index = fwnode_property_match_string(fwnode, "interrupt-names",  name);
+> +       if (index < 0)
+> +               return index;
+> +
+> +       return fwnode_irq_get(fwnode, index);
+> +}
+> +EXPORT_SYMBOL(fwnode_irq_get_byname);
+> +
+> +/**
+>   * fwnode_graph_get_next_endpoint - Get next endpoint firmware node
+>   * @fwnode: Pointer to the parent firmware node
+>   * @prev: Previous endpoint node or %NULL to get the first
+> diff --git a/include/linux/property.h b/include/linux/property.h
+> index 7399a0b..95d56a5 100644
+> --- a/include/linux/property.h
+> +++ b/include/linux/property.h
+> @@ -121,6 +121,7 @@ struct fwnode_handle *fwnode_handle_get(struct fwnode_handle *fwnode);
+>  void fwnode_handle_put(struct fwnode_handle *fwnode);
+>
+>  int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index);
+> +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name);
+>
+>  void __iomem *fwnode_iomap(struct fwnode_handle *fwnode, int index);
+>
+> --
+> 2.7.4
+>
