@@ -2,104 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0302449B2EB
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jan 2022 12:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9332D49B43D
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jan 2022 13:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349015AbiAYLaN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Jan 2022 06:30:13 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:43820 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1350038AbiAYL1x (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Jan 2022 06:27:53 -0500
-X-UUID: edf386d34c224deeb3ea1836fa8b3444-20220125
-X-UUID: edf386d34c224deeb3ea1836fa8b3444-20220125
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <qii.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2079363947; Tue, 25 Jan 2022 19:27:47 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 25 Jan 2022 19:27:45 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 25 Jan 2022 19:27:44 +0800
-Message-ID: <1d9b53a22e307ca90cafbd6fe08fbae3c4c58531.camel@mediatek.com>
-Subject: Re: [v2 2/2] i2c: mediatek: Add i2c compatible for Mediatek MT8186
-From:   Qii Wang <qii.wang@mediatek.com>
-To:     Kewei Xu <kewei.xu@mediatek.com>, <wsa@the-dreams.de>
-CC:     <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
-        <liguo.zhang@mediatek.com>, <caiyu.chen@mediatek.com>,
-        <housong.zhang@mediatek.com>, <yuhan.wei@mediatek.com>,
-        <ryan-jh.yu@mediatek.com>
-Date:   Tue, 25 Jan 2022 19:27:44 +0800
-In-Reply-To: <20220125110413.18988-3-kewei.xu@mediatek.com>
-References: <20220125110413.18988-1-kewei.xu@mediatek.com>
-         <20220125110413.18988-3-kewei.xu@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S1351453AbiAYMp3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Jan 2022 07:45:29 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:34030 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1453058AbiAYMmr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Jan 2022 07:42:47 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B63912190B;
+        Tue, 25 Jan 2022 12:42:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643114546; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L4S5NdclChYm+37M35o9nCi399I97TtP6PnVsYu3Luo=;
+        b=cn6UKb3+e3xOuCyZLA/JXbztoZ72fKvqnARMBeFm2LtB8oSaRdQv5F908O1I2wDf08gzxH
+        /EizippsU7g68gIdlikKFU6XCnO10lc4UDum7s7w+82iI2zAcbhls18YG/70VMM7hsHTqC
+        q6jErn1qXfNvaX9Fpod+HsGZAGkz6LE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643114546;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L4S5NdclChYm+37M35o9nCi399I97TtP6PnVsYu3Luo=;
+        b=Nn+awNBnaWa92hfYNULDfUwjRuQtUW6Kaii9n2zm2cONe5JlxQeX88E7Ei2skQsvvUC534
+        QneO9FDOr/95mNBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 01BBC13DDC;
+        Tue, 25 Jan 2022 12:42:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GmGoOTHw72E5NAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 25 Jan 2022 12:42:25 +0000
+Date:   Tue, 25 Jan 2022 13:42:24 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Terry Bowman <Terry.Bowman@amd.com>
+Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
+        linux-i2c@vger.kernel.org, wsa@kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+Subject: Re: [PATCH v3 3/4] Watchdog: sp5100_tco: Add initialization using
+ EFCH MMIO
+Message-ID: <20220125134224.233b1f80@endymion>
+In-Reply-To: <2b6c9dbb-08c9-e28e-a18c-89f215567c7b@amd.com>
+References: <20220118202234.410555-1-terry.bowman@amd.com>
+        <20220118202234.410555-4-terry.bowman@amd.com>
+        <20220124183651.62d5a97d@endymion>
+        <2b6c9dbb-08c9-e28e-a18c-89f215567c7b@amd.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 2022-01-25 at 19:04 +0800, Kewei Xu wrote:
-> Add i2c compatible for MT8186. Compare to MT8192 i2c controller,
-> MT8186 doesn't need handshake signal witch apdma.
-> 
-> Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
+On Mon, 24 Jan 2022 16:36:33 -0600, Terry Bowman wrote:
+> Is your "Tested-by" for patch 3/4 or the sp5100_tco series?
 
-Reviewed-by: Qii Wang <qii.wang@mediatek.com>
+For the whole series actually, I only tested with all patches applied,
+not the individual patches.
 
-> ---
->  drivers/i2c/busses/i2c-mt65xx.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-mt65xx.c
-> b/drivers/i2c/busses/i2c-mt65xx.c
-> index 9ea427f53083..aa4d21838e14 100644
-> --- a/drivers/i2c/busses/i2c-mt65xx.c
-> +++ b/drivers/i2c/busses/i2c-mt65xx.c
-> @@ -397,6 +397,19 @@ static const struct mtk_i2c_compatible
-> mt8183_compat = {
->  	.max_dma_support = 33,
->  };
->  
-> +static const struct mtk_i2c_compatible mt8186_compat = {
-> +	.regs = mt_i2c_regs_v2,
-> +	.pmic_i2c = 0,
-> +	.dcm = 0,
-> +	.auto_restart = 1,
-> +	.aux_len_reg = 1,
-> +	.timing_adjust = 1,
-> +	.dma_sync = 0,
-> +	.ltiming_adjust = 1,
-> +	.apdma_sync = 0,
-> +	.max_dma_support = 36,
-> +};
-> +
->  static const struct mtk_i2c_compatible mt8192_compat = {
->  	.quirks = &mt8183_i2c_quirks,
->  	.regs = mt_i2c_regs_v2,
-> @@ -418,6 +431,7 @@ static const struct of_device_id
-> mtk_i2c_of_match[] = {
->  	{ .compatible = "mediatek,mt7622-i2c", .data = &mt7622_compat
-> },
->  	{ .compatible = "mediatek,mt8173-i2c", .data = &mt8173_compat
-> },
->  	{ .compatible = "mediatek,mt8183-i2c", .data = &mt8183_compat
-> },
-> +	{ .compatible = "mediatek,mt8186-i2c", .data = &mt8186_compat
-> },
->  	{ .compatible = "mediatek,mt8192-i2c", .data = &mt8192_compat
-> },
->  	{}
->  };
-
+-- 
+Jean Delvare
+SUSE L3 Support
