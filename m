@@ -2,200 +2,306 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B439949B45A
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jan 2022 13:53:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E371949B475
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jan 2022 14:01:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344089AbiAYMxl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Jan 2022 07:53:41 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:30303 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384068AbiAYMuv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Jan 2022 07:50:51 -0500
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JjmsL6HhnzbkBp;
-        Tue, 25 Jan 2022 20:49:58 +0800 (CST)
-Received: from localhost.localdomain (10.67.164.66) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 25 Jan 2022 20:50:48 +0800
-From:   Yicong Yang <yangyicong@hisilicon.com>
-To:     <jarkko.nikula@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <mika.westerberg@linux.intel.com>, <wsa@kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <yangyicong@hisilicon.com>, <prime.zeng@hisilicon.com>,
-        <linuxarm@huawei.com>
-Subject: [PATCH 2/2] i2c: designware: Add ACPI assisted recovery support
-Date:   Tue, 25 Jan 2022 20:49:30 +0800
-Message-ID: <20220125124930.50369-3-yangyicong@hisilicon.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220125124930.50369-1-yangyicong@hisilicon.com>
-References: <20220125124930.50369-1-yangyicong@hisilicon.com>
+        id S1347998AbiAYM7c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Jan 2022 07:59:32 -0500
+Received: from mx1.tq-group.com ([93.104.207.81]:23582 "EHLO mx1.tq-group.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1359066AbiAYM4T (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 25 Jan 2022 07:56:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1643115378; x=1674651378;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=qmHH9G8TVCwWdo3uTby79rF+j0/3SailZLcBZpByLtg=;
+  b=MB4CtmBY/kKUZUkbx858aLxhxtieEwNP3ArjS4boMb6N8oV/9x7+oe+7
+   vBRLZ4YVEvZ/1JO2JM7klGULc8cKXlCkrMAODKUDhoRxB28SicAlb3MwA
+   z4BaKpNCiXG7OZsbwPxYNCX20Nvck+6x4Hz/LZ+ldX2fSU+OXD7ABJ1L3
+   qhCGVEW1kcKUCt7niPCL5EASKNk6v9jLS3splPrSApHD9OyMA3IK+xWnD
+   qyyDv4o+OVOldOqDDmEWH7qIkVMd4VmaPCCCi8zZkUsMRkMvEb3Tf3C3R
+   UUuaUcupgO11DYD/qAb/ED5oLYw/xNWULPE2SGkeHr9g/mXySY1kfHonr
+   w==;
+X-IronPort-AV: E=Sophos;i="5.88,315,1635199200"; 
+   d="scan'208";a="21697221"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 25 Jan 2022 13:56:08 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 25 Jan 2022 13:56:09 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 25 Jan 2022 13:56:09 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1643115368; x=1674651368;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=qmHH9G8TVCwWdo3uTby79rF+j0/3SailZLcBZpByLtg=;
+  b=DZazWES6Z7qX74NIrM+i69skWo5ObJhdpFykKEns/urrKSV7FmjkeM2t
+   YnBYyu8w987PyL5eZzlJ5LqVC1ihXP16gqLHPxLAtK9NLfyfbbnxMJjnE
+   xkheSFbGqZGupY07RAOmoaOCOMZDwMnZDGO5NYbNANthuHRau78001vK2
+   zJddEGsKEXtkeB0hUhuWkr3kF7tYn69GziEH85Y5mupr+z4GI7q8lpN8I
+   tHnvDwxI2K5PUlNNRZSdV0LyBsYg2DAs8tg6Mfpsr/QsP6qCBNv225Vhv
+   9E6GQFdFpwV+AAWYlFUvOpxFqY72lFs4EOW/dDH0eW9QyDbiOHxD6zCA3
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.88,315,1635199200"; 
+   d="scan'208";a="21697220"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 25 Jan 2022 13:56:08 +0100
+Received: from schifferm-ubuntu (SCHIFFERM-M2.tq-net.de [10.121.201.138])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 966B4280065;
+        Tue, 25 Jan 2022 13:56:07 +0100 (CET)
+Message-ID: <33e55c4c0a637b23d76db5d33872378ad04121bd.camel@ew.tq-group.com>
+Subject: Re: [PATCH] driver core: platform: Rename
+ platform_get_irq_optional() to platform_get_irq_silent()
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        platform-driver-x86@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>, netdev@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Date:   Tue, 25 Jan 2022 13:56:05 +0100
+In-Reply-To: <CAMuHMdXouECKa43OwUgQ6dA+gNeOqEZHZgOmQzqknzYiA924YA@mail.gmail.com>
+References: <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+         <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+         <Yd9L9SZ+g13iyKab@sirena.org.uk>
+         <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
+         <YeA7CjOyJFkpuhz/@sirena.org.uk>
+         <20220113194358.xnnbhsoyetihterb@pengutronix.de>
+         <YeF05vBOzkN+xYCq@smile.fi.intel.com>
+         <20220115154539.j3tsz5ioqexq2yuu@pengutronix.de>
+         <YehdsUPiOTwgZywq@smile.fi.intel.com>
+         <20220120075718.5qtrpc543kkykaow@pengutronix.de>
+         <Ye6/NgfxsZnpXE09@smile.fi.intel.com>
+         <15796e57-f7d4-9c66-3b53-0b026eaf31d8@omp.ru>
+         <CAMuHMdXouECKa43OwUgQ6dA+gNeOqEZHZgOmQzqknzYiA924YA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.164.66]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On HiSilicon Kunpeng 920 the SCL/SDA pins are multiplexed with
-GPIO. On bus recovery the driver needs to swich the pin mux
-to GPIO to recover and switch back on finished. Currently the
-pin mux switch is generally implemented by a pinctrl driver
-which is unavailable on our platform.
+On Tue, 2022-01-25 at 09:25 +0100, Geert Uytterhoeven wrote:
+> Hi Sergey,
+> 
+> On Mon, Jan 24, 2022 at 10:02 PM Sergey Shtylyov <s.shtylyov@omp.ru>
+> wrote:
+> > On 1/24/22 6:01 PM, Andy Shevchenko wrote:
+> > > > > > > > > It'd certainly be good to name anything that doesn't
+> > > > > > > > > correspond to one
+> > > > > > > > > of the existing semantics for the API (!) something
+> > > > > > > > > different rather
+> > > > > > > > > than adding yet another potentially overloaded
+> > > > > > > > > meaning.
+> > > > > > > > 
+> > > > > > > > It seems we're (at least) three who agree about this.
+> > > > > > > > Here is a patch
+> > > > > > > > fixing the name.
+> > > > > > > 
+> > > > > > > And similar number of people are on the other side.
+> > > > > > 
+> > > > > > If someone already opposed to the renaming (and not only
+> > > > > > the name) I
+> > > > > > must have missed that.
+> > > > > > 
+> > > > > > So you think it's a good idea to keep the name
+> > > > > > platform_get_irq_optional() despite the "not found" value
+> > > > > > returned by it
+> > > > > > isn't usable as if it were a normal irq number?
+> > > > > 
+> > > > > I meant that on the other side people who are in favour of
+> > > > > Sergey's patch.
+> > > > > Since that I commented already that I opposed the renaming
+> > > > > being a standalone
+> > > > > change.
+> > > > > 
+> > > > > Do you agree that we have several issues with
+> > > > > platform_get_irq*() APIs?
+> > [...]
+> > > > > 2. The vIRQ0 handling: a) WARN() followed by b) returned
+> > > > > value 0
+> > > > 
+> > > > I'm happy with the vIRQ0 handling. Today platform_get_irq() and
+> > > > it's
+> > > > silent variant returns either a valid and usuable irq number or
+> > > > a
+> > > > negative error value. That's totally fine.
+> > > 
+> > > It might return 0.
+> > > Actually it seems that the WARN() can only be issued in two
+> > > cases:
+> > > - SPARC with vIRQ0 in one of the array member
+> > > - fallback to ACPI for GPIO IRQ resource with index 0
+> > 
+> >    You have probably missed the recent discovery that
+> > arch/sh/boards/board-aps4*.c
+> > causes IRQ0 to be passed as a direct IRQ resource?
+> 
+> So far no one reported seeing the big fat warning ;-)
 
-This patch introduces an ACPI method to switch the pin mux of
-SCL/SDA during the recovery process. Then the recovery support
-can be enabled with the assistance of the ACPI.
+FWIW, we had a similar issue with an IRQ resource passed from the
+tqmx86 MFD driver do the GPIO driver, which we noticed due to this
+warning, and which was fixed
+in a946506c48f3bd09363c9d2b0a178e55733bcbb6
+and 9b87f43537acfa24b95c236beba0f45901356eb2.
+I believe these changes are what promted this whole discussion and led
+to my "Reported-by" on the patch?
 
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
----
- drivers/i2c/busses/i2c-designware-core.h    |  2 +
- drivers/i2c/busses/i2c-designware-master.c  | 84 ++++++++++++++++++++-
- drivers/i2c/busses/i2c-designware-platdrv.c |  6 +-
- 3 files changed, 86 insertions(+), 6 deletions(-)
+It is not entirely clear to me when IRQ 0 is valid and when it isn't,
+but the warning seems useful to me. Maybe it would make more sense to
+warn when such an IRQ resource is registered for a platform device, and
+not when it is looked up?
 
-diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-index 4b26cba40139..bbf4bb9c9d0f 100644
---- a/drivers/i2c/busses/i2c-designware-core.h
-+++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -297,6 +297,8 @@ struct dw_i2c_dev {
- 
- #define ACCESS_INTR_MASK	BIT(0)
- #define ACCESS_NO_IRQ_SUSPEND	BIT(1)
-+/* ACPI assists SCL/SDA pin mutiplexing on recovery */
-+#define RECOVERY_WITH_ACPI	BIT(2)
- 
- #define MODEL_MSCC_OCELOT	BIT(8)
- #define MODEL_BAIKAL_BT1	BIT(9)
-diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index 9177463c2cbb..89fdbc48b4a9 100644
---- a/drivers/i2c/busses/i2c-designware-master.c
-+++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -818,11 +818,81 @@ static void i2c_dw_unprepare_recovery(struct i2c_adapter *adap)
- 	i2c_dw_init_master(dev);
- }
- 
-+#ifdef CONFIG_ACPI
-+#include <linux/acpi.h>
-+
-+/*
-+ * i2c_dw_acpi_pin_mux_change - Change the I2C controller's pin mux through ACPI
-+ * @dev: device owns the SCL/SDA pin
-+ * @to_gpio: true to switch to GPIO, false to switch to SCL/SDA
-+ *
-+ * The function invokes the specific ACPI method "PMUX" for changing the
-+ * pin mux of I2C controller between SCL/SDA and GPIO. It's not defined by
-+ * the ACPI spec but used on some platforms like HiSilicon's Kunpeng 920
-+ * server, help on the generic GPIO recovery process.
-+ */
-+static void i2c_dw_acpi_pin_mux_change(struct device *dev, bool to_gpio)
-+{
-+	acpi_handle handle = ACPI_HANDLE(dev);
-+	struct acpi_object_list arg_list;
-+	unsigned long long data;
-+	union acpi_object arg;
-+
-+	arg.type = ACPI_TYPE_INTEGER;
-+	arg.integer.value = to_gpio;
-+	arg_list.count = 1;
-+	arg_list.pointer = &arg;
-+
-+	acpi_evaluate_integer(handle, "PMUX", &arg_list, &data);
-+}
-+
-+static void i2c_dw_acpi_prepare_recovery(struct i2c_adapter *adap)
-+{
-+	struct dw_i2c_dev *dev = i2c_get_adapdata(adap);
-+
-+	i2c_dw_prepare_recovery(adap);
-+	i2c_dw_acpi_pin_mux_change(dev->dev, true);
-+}
-+
-+static void i2c_dw_acpi_unprepare_recovery(struct i2c_adapter *adap)
-+{
-+	struct dw_i2c_dev *dev = i2c_get_adapdata(adap);
-+
-+	i2c_dw_acpi_pin_mux_change(dev->dev, false);
-+	i2c_dw_unprepare_recovery(adap);
-+}
-+
-+static int i2c_dw_acpi_init_recovery_info(struct dw_i2c_dev *dev)
-+{
-+	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
-+	struct acpi_device *adev;
-+
-+	if (acpi_disabled)
-+		return -EOPNOTSUPP;
-+
-+	adev = ACPI_COMPANION(dev->dev);
-+	if (!adev || !acpi_has_method(adev->handle, "PMUX"))
-+		return -EOPNOTSUPP;
-+
-+	rinfo->recover_bus = i2c_generic_scl_recovery;
-+	rinfo->prepare_recovery = i2c_dw_acpi_prepare_recovery;
-+	rinfo->unprepare_recovery = i2c_dw_acpi_unprepare_recovery;
-+
-+	return 0;
-+}
-+#else
-+static int i2c_dw_acpi_init_recovery_info(struct dw_i2c_dev *dev)
-+{
-+	return -EOPNOTSUPP;
-+}
-+#endif
-+
- static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
- {
- 	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
- 	struct i2c_adapter *adap = &dev->adapter;
- 	struct gpio_desc *gpio;
-+	int ret = 0;
- 
- 	gpio = devm_gpiod_get_optional(dev->dev, "scl", GPIOD_OUT_HIGH);
- 	if (IS_ERR_OR_NULL(gpio))
-@@ -835,9 +905,17 @@ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
- 		return PTR_ERR(gpio);
- 	rinfo->sda_gpiod = gpio;
- 
--	rinfo->recover_bus = i2c_generic_scl_recovery;
--	rinfo->prepare_recovery = i2c_dw_prepare_recovery;
--	rinfo->unprepare_recovery = i2c_dw_unprepare_recovery;
-+	if (dev->flags & RECOVERY_WITH_ACPI) {
-+		ret = i2c_dw_acpi_init_recovery_info(dev);
-+	} else {
-+		rinfo->recover_bus = i2c_generic_scl_recovery;
-+		rinfo->prepare_recovery = i2c_dw_prepare_recovery;
-+		rinfo->unprepare_recovery = i2c_dw_unprepare_recovery;
-+	}
-+
-+	if (ret)
-+		return ret;
-+
- 	adap->bus_recovery_info = rinfo;
- 
- 	dev_info(dev->dev, "running with gpio recovery mode! scl%s",
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index 2bd81abc86f6..a7070867a07f 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -52,9 +52,9 @@ static const struct acpi_device_id dw_i2c_acpi_match[] = {
- 	{ "AMDI0010", ACCESS_INTR_MASK },
- 	{ "AMDI0510", 0 },
- 	{ "APMC0D0F", 0 },
--	{ "HISI02A1", 0 },
--	{ "HISI02A2", 0 },
--	{ "HISI02A3", 0 },
-+	{ "HISI02A1", RECOVERY_WITH_ACPI },
-+	{ "HISI02A2", RECOVERY_WITH_ACPI },
-+	{ "HISI02A3", RECOVERY_WITH_ACPI },
- 	{ "HYGO0010", ACCESS_INTR_MASK },
- 	{ }
- };
--- 
-2.24.0
+My opinion is that it would be very confusing if there are any places
+in the kernel (on some platforms) where IRQ 0 is valid, but for
+platform_get_irq() it would suddenly mean "not found". Keeping a
+negative return value seems preferable to me for this reason.
+
+(An alternative, more involved idea would be to add 1 to all IRQ
+"cookies", so IRQ 0 would return 1, leaving 0 as a special value. I
+have absolutely no idea how big the API surface is that would need
+changes, and it is likely not worth the effort at all.)
+
+
+> 
+> > > The bottom line here is the SPARC case. Anybody familiar with the
+> > > platform
+> > > can shed a light on this. If there is no such case, we may remove
+> > > warning
+> > > along with ret = 0 case from platfrom_get_irq().
+> > 
+> >    I'm afraid you're too fast here... :-)
+> >    We'll have a really hard time if we continue to allow IRQ0 to be
+> > returned by
+> > platform_get_irq() -- we'll have oto fileter it out in the callers
+> > then...
+> 
+> So far no one reported seeing the big fat warning?
+> 
+> > > > > 3. The specific cookie for "IRQ not found, while no error
+> > > > > happened" case
+> > > > 
+> > > > Not sure what you mean here. I have no problem that a situation
+> > > > I can
+> > > > cope with is called an error for the query function. I just do
+> > > > error
+> > > > handling and continue happily. So the part "while no error
+> > > > happened" is
+> > > > irrelevant to me.
+> > > 
+> > > I meant that instead of using special error code, 0 is very much
+> > > good for
+> > > the cases when IRQ is not found. It allows to distinguish -ENXIO
+> > > from the
+> > > low layer from -ENXIO with this magic meaning.
+> > 
+> >    I don't see how -ENXIO can trickle from the lower layers,
+> > frankly...
+> 
+> It might one day, leading to very hard to track bugs.
+
+As gregkh noted, changing the return value without also making the
+compile fail will be a huge PITA whenever driver patches are back- or
+forward-ported, as it would require subtle changes in error paths,
+which can easily slip through unnoticed, in particular with half-
+automated stable backports.
+
+Even if another return value like -ENODEV might be better aligned with
+...regulator_get_optional() and similar functions, or we even find a
+way to make 0 usable for this, none of the proposed changes strike me
+as big enough a win to outweigh the churn caused by making such a
+change at all.
+
+Kind regards,
+Matthias
+
+
+
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- 
+> geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a
+> hacker. But
+> when I'm talking to journalists I just say "programmer" or something
+> like that.
+>                                 -- Linus Torvalds
 
