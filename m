@@ -2,45 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9FD49BA9F
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jan 2022 18:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2EB49BAAA
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jan 2022 18:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235347AbiAYRxL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Jan 2022 12:53:11 -0500
-Received: from mail-yb1-f171.google.com ([209.85.219.171]:43911 "EHLO
-        mail-yb1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243629AbiAYRwr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Jan 2022 12:52:47 -0500
-Received: by mail-yb1-f171.google.com with SMTP id g81so63955733ybg.10;
-        Tue, 25 Jan 2022 09:52:46 -0800 (PST)
+        id S1355553AbiAYRxx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Jan 2022 12:53:53 -0500
+Received: from mail-yb1-f182.google.com ([209.85.219.182]:45884 "EHLO
+        mail-yb1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346936AbiAYRxm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Jan 2022 12:53:42 -0500
+Received: by mail-yb1-f182.google.com with SMTP id h14so63923263ybe.12;
+        Tue, 25 Jan 2022 09:53:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+j1GpCpGfNY2lH8frLrkCg4vSgaS4ibnLkUccs79nQA=;
-        b=RzcIeeIMikSwVSQ9Yza37NYqsfFrm0hOqPP/KK8YyAjiRunShioLLHtBjsimPmUmi3
-         Eopc3HhOpeMnQKM7ym9MJAt/wDGuoj3yoD/HDh4cT5oB16sis6auVObMBy8oZ1Y77B7N
-         6+Vriqme2ChbJepG2DAlOXPssIElDlFtA8pm9ea/B7qpCV9+r1vKxcewScZ4y742RbeC
-         i5UCoNv3F6jq9cZC6QSlI/fF8FWVjt6/lkdARhb54JHGhDtbfy2Hj+wes4rEw6QbCwBb
-         5NiIu98aWjOUnuO7m6gzKdqEam6ZYvdwSXoHROeg+I/fU6WYB9Is+2SeCgNayW2Xeh8a
-         qAvw==
-X-Gm-Message-State: AOAM5320hUWHXk2MI3tUMmNmGvH2JkzUnGWajZnkOnSfYnUIUp5za9s5
-        f2JofaoVdVi/RNpBUrYbK3YvQQVyphL9lKran8g=
-X-Google-Smtp-Source: ABdhPJyojknnzuIYMmZbjfeJ+s2pzRiKVKx+zefsCZtajgkwxnDKmiqfjgFEq1JOZLL4BipPUObjdUys5vQ1JNLbLZs=
-X-Received: by 2002:a25:bb93:: with SMTP id y19mr30844335ybg.466.1643133165102;
- Tue, 25 Jan 2022 09:52:45 -0800 (PST)
+         :message-id:subject:to;
+        bh=ESd77Xjv8MULwN2sVsXIepn2DozliSsyhZzc4OEAn5Y=;
+        b=Vypuex+C8p4R5p+3YKXwb8gf9Dr6G0V/5fHFGM1nvbzq1xWF5Uh6iIs9yK68+eyOF3
+         /wv8CybudL2TOYNqTbQRoIK1Y2vh7yvjFH9o7LkiDaCNUHcPyMLuJV0sjrVl0cfnSfsS
+         +5fsPtVSKQeylQp9uoqW6/AzB5Pv8ONItrbofi08g4LcdCx9BA/HTeG+4Fn2QZAavCQk
+         78+P73S29OIMTns+tHB7mwxHW7AHjgP3wUPBABfBL2JWX983MtT0yGZ1ZR7MwsFyYYOq
+         PTaI1FEyWWTJSkf4FAG2DFS613cqujYIvRym3FGHLP7CPthoh2zk3/c+bRD6bF5Ozc8W
+         hILQ==
+X-Gm-Message-State: AOAM531LV5gHtaN69pRzCZC0rgX7nMghMbh2tvasUJzjxnTjGACQ8r9R
+        vPiBqYoJlSjHtrmITOuH9MstKVd6NXl1O6ky3mg=
+X-Google-Smtp-Source: ABdhPJw+fZA+ABzpvnyGB5SeD53YCf+9JGrRh1dC9imogsYshEbzHroZVd66d41wgactfWyqDhegwH8IfU6+3GWu4r0=
+X-Received: by 2002:a25:1e0b:: with SMTP id e11mr30127312ybe.272.1643133207177;
+ Tue, 25 Jan 2022 09:53:27 -0800 (PST)
 MIME-Version: 1.0
-References: <1642851166-27096-1-git-send-email-akhilrajeev@nvidia.com> <1642851166-27096-2-git-send-email-akhilrajeev@nvidia.com>
-In-Reply-To: <1642851166-27096-2-git-send-email-akhilrajeev@nvidia.com>
+References: <1642851166-27096-1-git-send-email-akhilrajeev@nvidia.com>
+ <CAHp75Ve-zYz27baJ9SV3wcyKS5iMnxFO61gGE2LXQPU_hTt+qw@mail.gmail.com>
+ <CAJZ5v0guL4nk21gvvs2K9Ak6sjhDSzMvDQZJvmnq6Frsj3+7yA@mail.gmail.com> <Ye8UTQlHphVtAYUW@shikoro>
+In-Reply-To: <Ye8UTQlHphVtAYUW@shikoro>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 25 Jan 2022 18:52:34 +0100
-Message-ID: <CAJZ5v0hCREQczOczW6+UGv3UDxskYLRP06qpyQkyXEC1YA3nOw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] device property: Add fwnode_irq_get_byname
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
+Date:   Tue, 25 Jan 2022 18:53:16 +0100
+Message-ID: <CAJZ5v0gzfJYG40UdJUncd=b1E=YfLKyUZafEDC0Ej=7OA6867w@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] Enable named interrupt smbus-alert for ACPI
+To:     Wolfram Sang <wsa@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Akhil R <akhilrajeev@nvidia.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Christian Koenig <christian.koenig@amd.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jon Hunter <jonathanh@nvidia.com>,
@@ -50,86 +54,23 @@ Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?=
         linux-i2c <linux-i2c@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-tegra <linux-tegra@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
         Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>
+        Thierry Reding <thierry.reding@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Jan 22, 2022 at 12:33 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+On Mon, Jan 24, 2022 at 10:04 PM Wolfram Sang <wsa@kernel.org> wrote:
 >
-> Add fwnode_irq_get_byname() to get an interrupt by name from either
-> ACPI table or Device Tree, whichever is used for enumeration.
 >
-> In the ACPI case, this allow us to use 'interrupt-names' in
-> _DSD which can be mapped to Interrupt() resource by index.
-> The implementation is similar to 'interrupt-names' in the
-> Device Tree.
+> > It looks good to me.
+> >
+> > If no one else has concerns regarding it, I'll queue it up for 5.18.
 >
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> I'd prefer this to go via I2C because it touches the I2C core. And SMBus
+> alert is I2C material anyway :)
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+OK, so I've just sent an ACK for the first patch and you can go ahead.
 
-> ---
->  drivers/base/property.c  | 29 +++++++++++++++++++++++++++++
->  include/linux/property.h |  1 +
->  2 files changed, 30 insertions(+)
->
-> diff --git a/drivers/base/property.c b/drivers/base/property.c
-> index e6497f6..fc59e0f 100644
-> --- a/drivers/base/property.c
-> +++ b/drivers/base/property.c
-> @@ -936,6 +936,35 @@ void __iomem *fwnode_iomap(struct fwnode_handle *fwnode, int index)
->  EXPORT_SYMBOL(fwnode_iomap);
->
->  /**
-> + * fwnode_irq_get_byname - Get IRQ from a fwnode using its name
-> + * @fwnode:    Pointer to the firmware node
-> + * @name:      IRQ name
-> + *
-> + * Description:
-> + * Find a match to the string @name in the 'interrupt-names' string array
-> + * in _DSD for ACPI, or of_node for Device Tree. Then get the Linux IRQ
-> + * number of the IRQ resource corresponding to the index of the matched
-> + * string.
-> + *
-> + * Return:
-> + * Linux IRQ number on success, or negative errno otherwise.
-> + */
-> +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
-> +{
-> +       int index;
-> +
-> +       if (!name)
-> +               return -EINVAL;
-> +
-> +       index = fwnode_property_match_string(fwnode, "interrupt-names",  name);
-> +       if (index < 0)
-> +               return index;
-> +
-> +       return fwnode_irq_get(fwnode, index);
-> +}
-> +EXPORT_SYMBOL(fwnode_irq_get_byname);
-> +
-> +/**
->   * fwnode_graph_get_next_endpoint - Get next endpoint firmware node
->   * @fwnode: Pointer to the parent firmware node
->   * @prev: Previous endpoint node or %NULL to get the first
-> diff --git a/include/linux/property.h b/include/linux/property.h
-> index 7399a0b..95d56a5 100644
-> --- a/include/linux/property.h
-> +++ b/include/linux/property.h
-> @@ -121,6 +121,7 @@ struct fwnode_handle *fwnode_handle_get(struct fwnode_handle *fwnode);
->  void fwnode_handle_put(struct fwnode_handle *fwnode);
->
->  int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index);
-> +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name);
->
->  void __iomem *fwnode_iomap(struct fwnode_handle *fwnode, int index);
->
-> --
-> 2.7.4
->
+Thanks!
