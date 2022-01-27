@@ -2,38 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D35549E51D
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jan 2022 15:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2174849E84D
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jan 2022 18:03:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234169AbiA0OvQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 Jan 2022 09:51:16 -0500
-Received: from vulcan.natalenko.name ([104.207.131.136]:36798 "EHLO
-        vulcan.natalenko.name" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbiA0OvP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Jan 2022 09:51:15 -0500
-X-Greylist: delayed 627 seconds by postgrey-1.27 at vger.kernel.org; Thu, 27 Jan 2022 09:51:15 EST
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        id S233739AbiA0RDi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 Jan 2022 12:03:38 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:35978 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244258AbiA0RDh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Jan 2022 12:03:37 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 38C73D8B248;
-        Thu, 27 Jan 2022 15:41:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1643294486;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xRfG6qv9eNrmVk+OrljXkrc5mg43YFh2rdY8MzYAUgM=;
-        b=XIOCTcxRxoBYbF1ZVSNa4whYzYj/UVLtiCZawfTGuczIfGj78m+V4SJ5+IBZ+Z8Phvp9A8
-        QQ05YD6gW3L+FqdvakRaKsGakD8q5PwvErpFM6qO7KrgkNw237gy9Qx8SUTiS7E9ZN0BAw
-        rRcK6E3kv+X1jImpCrFsDULfv+iRfng=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4A35CCE22BD;
+        Thu, 27 Jan 2022 17:03:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBA39C340E4;
+        Thu, 27 Jan 2022 17:03:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643303013;
+        bh=94at8KQ2mwsXO6lk24alNapdJfEz9l+tLpUbw2MGJvE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Wmf8Qp2UPnOHrkmSywJK8a/3xwloHfqdLJaQGPzTEyXHv1ngZEGOfUey0llaGmUtJ
+         9bRxfCFiIfdU+SSAmIA/XMy6r1dtROtxkgGUUOb22VZSFd/DWpPzz5YgFLHhSRxYAf
+         SDy2sm7w6olVU7bBXg8q/RTximr2sx7SGgW0HD8rTWlL3B5nGjp7HuoEcZ1EP5jJZ0
+         CpinGI4Yg6vIgl/XXcyRP8O7VKL8KPQBAMrUTXwdcKW5U5BXcVA4G4AoiWAA5qw9sQ
+         gfTDs41o4tX2M2glfUB8hlmgtgt4ScJq8Vx0JbT04x+QbE4qPoIeo83WpH3a8cPlX8
+         rhB18IUNLt0hg==
+Date:   Thu, 27 Jan 2022 18:03:29 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
+        "David S. Miller" <davem@davemloft.net>,
         Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -42,72 +43,75 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Lee Jones <lee.jones@linaro.org>,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>
+Subject: Re: [PATCH 1/7] genirq: Provide generic_handle_irq_safe().
+Message-ID: <YfLQYa5aKJKs7ZUe@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Michael Below <below@judiz.de>,
-        Salvatore Bonaccorso <carnil@debian.org>
-Subject: Re: [PATCH 2/7] i2c: core: Use generic_handle_irq_safe() in i2c_handle_smbus_host_notify().
-Date:   Thu, 27 Jan 2022 15:41:24 +0100
-Message-ID: <4929165.31r3eYUQgx@natalenko.name>
-In-Reply-To: <20220127113303.3012207-3-bigeasy@linutronix.de>
-References: <20220127113303.3012207-1-bigeasy@linutronix.de> <20220127113303.3012207-3-bigeasy@linutronix.de>
+        greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>, Johan Hovold <johan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>, UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>
+References: <20220127113303.3012207-1-bigeasy@linutronix.de>
+ <20220127113303.3012207-2-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="isj9qhmX5nh2QcHe"
+Content-Disposition: inline
+In-Reply-To: <20220127113303.3012207-2-bigeasy@linutronix.de>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello.
 
-On =C4=8Dtvrtek 27. ledna 2022 12:32:58 CET Sebastian Andrzej Siewior wrote:
-> The i2c-i801 driver invokes i2c_handle_smbus_host_notify() from his
-> interrupt service routine. On PREEMPT_RT i2c-i801's handler is forced
-> threaded with enabled interrupts which leads to a warning by
-> handle_irq_event_percpu() assuming that irq_default_primary_handler()
-> enabled interrupts.
->=20
-> i2c-i801's interrupt handler can't be made non-threaded because the
-> interrupt line is shared with other devices.
->=20
-> Use generic_handle_irq_safe() which can invoked with disabled and enabled
-> interrupts.
->=20
-> Reported-by: Michael Below <below@judiz.de>
-> Link: https://bugs.debian.org/1002537
-> Cc: Salvatore Bonaccorso <carnil@debian.org>
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> ---
->  drivers/i2c/i2c-core-base.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index 2c59dd748a49f..3f9e5303b6163 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -1424,7 +1424,7 @@ int i2c_handle_smbus_host_notify(struct i2c_adapter=
- *adap, unsigned short addr)
->  	if (irq <=3D 0)
->  		return -ENXIO;
-> =20
-> -	generic_handle_irq(irq);
-> +	generic_handle_irq_safe(irq);
-> =20
->  	return 0;
->  }
->=20
+--isj9qhmX5nh2QcHe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+Hi Sebastian,
 
-Worth linking [1] [2] and [3] as well maybe?
+> +/**
+> + * generic_handle_irq_safe - Invoke the handler for a particular irq
 
-[1] https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1873673
-[2] https://bugzilla.kernel.org/show_bug.cgi?id=3D202453
-[3] https://lore.kernel.org/lkml/20201204201930.vtvitsq6xcftjj3o@spock.loca=
-ldomain/
+This is the same desc as for generic_handle_irq(). I suggest to add
+something like "from any context" to have some distinction.
 
-=2D-=20
-Oleksandr Natalenko (post-factum)
+> + * This function must be called either from an IRQ context with irq regs
+> + * initialized or with care from any context.
 
+I think "with care" is not obvious enough. Can you describe it a little?
 
+Thanks for this work,
+
+   Wolfram
+
+--isj9qhmX5nh2QcHe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHy0F0ACgkQFA3kzBSg
+KbYGfg/8DbJCFJiQlAG3Yv27Ey+1jfWpgmNZZdoSSO8hcxHmT8ATT7qQPDNw1JXL
+Q0dObGbaNCO1fyflMSd/VBwblWRgGeN6Y7oOgdC5EMTuwAeyvimXPi5rXdEw+xjN
++Hn0VMPv7QIlqyU8a4E3pew1u07eW9drEah3FB/hrWmouw2lAbE6/p4q5JEkhzUN
+/WG8yZzNR8EBUPHQ2eX3Mt2rFViy26AhI+Z0dmJ0O+63CCd6B53RV7AloT/+aGWn
+0XN/CqEKg9I7A22st4lC9nlhhmdviksGYmZiIzbsTLwH+eZBjnQv4eZ4XAHYQEUn
+7Brexu5x9VpcSa668q7AhdbAzBbeo5K2hT0/i1H+HCSqfmIiY039H5mD+fF5m4xd
+C7a4zBBDA5aj0U4Yf3a8pz3DGW7l1196nYET9nC8DN6t97xbaXVeGG2UzYybKv8X
+Oq1rruBjdjf2exYIzHAWZ0OBDdn+OfzixKn9MgG/GNS2JJhoIq8s0nt2zbHLkR86
+cTRblvFyxk4CZ7cRnglREQAWQTd8MElkFNwIlE4dBQ4FYFkpTdOG3URgZu/m7Gly
+8D4B9fMVaoZ6WtzrZ8qZn4zJ5Qm7InR/3C9+TBxPsB2L3vXXOHSYaJYKlUS2OUOZ
+5KNoLxPEoRXl0NSvTv5bsRER+Dvlezf4x/F5nQPkgdq5lNcdRgE=
+=I3gu
+-----END PGP SIGNATURE-----
+
+--isj9qhmX5nh2QcHe--
