@@ -2,33 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC0249E887
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jan 2022 18:11:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3DD49E8A7
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jan 2022 18:16:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244318AbiA0RLX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 Jan 2022 12:11:23 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44374 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244378AbiA0RLV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Jan 2022 12:11:21 -0500
+        id S244370AbiA0RQ6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 Jan 2022 12:16:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237863AbiA0RQ5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Jan 2022 12:16:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C8FC061714;
+        Thu, 27 Jan 2022 09:16:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48EFA61ACA;
-        Thu, 27 Jan 2022 17:11:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE239C340E8;
-        Thu, 27 Jan 2022 17:11:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49C8861AF6;
+        Thu, 27 Jan 2022 17:16:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC363C340E4;
+        Thu, 27 Jan 2022 17:16:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643303480;
-        bh=bfU+KoqrwUxbW6GHxJ2Kly53zgCDNamg4i4wXRZ0FDg=;
+        s=k20201202; t=1643303816;
+        bh=3sFJxFok/Vm/LJYDlprm0kpc3VVV7j3cv3+yv3y74tc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q7XwlbXto8IXJzKhgujjUoiENDbr8hi/oFnC2SoJ+cR/00wx8Pl22dsaxu/ClL6y5
-         +szXc7iQ1yeRmznRtNk4wiAc+nmABws2i0pYfa4kz0CsMmjfkOsxxVOxr7Ws9TYRue
-         TRvaG7YHB9ufZiSmH6rZ6Fi0LqemyNVfxZyu94CVeuT31ezJRyiJTcSbKLMhdtby1m
-         XyqQP3iQgZMNIVGaNOu6t0QNBrNNgPiu8ebTK3Ridkx8rBJa3fYH7VtbMb9R8iXwVc
-         9YXx8uGxh4/5K30h611dwjWZdPHwstw6zVj3Kgr4liFqj9+Gk6cAC/YbDW/hqcBoCz
-         3HxqGW1iUBZBw==
-Date:   Thu, 27 Jan 2022 18:11:16 +0100
+        b=lRgNkVCXGYtS9/yVBxqt81L7KoXwjFl8Kxpt0mAadOFijduZpkvG6B2OrlC83ca0N
+         K1mwC3rv7XJXEGNIBZCJsiULlfXxRu6QvNpbXnc9NmrxwARRL359qr8NZcqzBaqvDD
+         g1KXUkFPNHCYX69BLh/w++PetyJY2fX/WIMv+KiFry6DxFpLLILybA118xe/IagYVe
+         iZtXr4Oj/k4rPZDTy9woATJtIz6/pwaFz55ZYPmBPABRgPNrOEekCZQCvEAt7wGvRk
+         ub/Y7RqWQu+052uUtGB+V0fw8Q7L7KnQcnJSpsnzT7IXdUf8Jn6iOXnngq8inlAz4v
+         Mko0As2NX5EYA==
+Date:   Thu, 27 Jan 2022 18:16:53 +0100
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
@@ -44,12 +47,9 @@ Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Michael Below <below@judiz.de>,
-        Salvatore Bonaccorso <carnil@debian.org>
-Subject: Re: [PATCH 2/7] i2c: core: Use generic_handle_irq_safe() in
- i2c_handle_smbus_host_notify().
-Message-ID: <YfLSNNDVtAFx1P9u@shikoro>
+        Woojung Huh <woojung.huh@microchip.com>
+Subject: Re: [PATCH 3/7] i2c: cht-wc: Use generic_handle_irq_safe().
+Message-ID: <YfLThZsBwAucs2vp@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
@@ -63,72 +63,57 @@ Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Lee Jones <lee.jones@linaro.org>,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>, UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Michael Below <below@judiz.de>,
-        Salvatore Bonaccorso <carnil@debian.org>
+        Woojung Huh <woojung.huh@microchip.com>
 References: <20220127113303.3012207-1-bigeasy@linutronix.de>
- <20220127113303.3012207-3-bigeasy@linutronix.de>
+ <20220127113303.3012207-4-bigeasy@linutronix.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Tote0/I6gsw1g9Hy"
+        protocol="application/pgp-signature"; boundary="ohdBGZcj3HIE2DHF"
 Content-Disposition: inline
-In-Reply-To: <20220127113303.3012207-3-bigeasy@linutronix.de>
+In-Reply-To: <20220127113303.3012207-4-bigeasy@linutronix.de>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Tote0/I6gsw1g9Hy
+--ohdBGZcj3HIE2DHF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 27, 2022 at 12:32:58PM +0100, Sebastian Andrzej Siewior wrote:
-> The i2c-i801 driver invokes i2c_handle_smbus_host_notify() from his
-> interrupt service routine. On PREEMPT_RT i2c-i801's handler is forced
-> threaded with enabled interrupts which leads to a warning by
-> handle_irq_event_percpu() assuming that irq_default_primary_handler()
-> enabled interrupts.
->=20
-> i2c-i801's interrupt handler can't be made non-threaded because the
-> interrupt line is shared with other devices.
->=20
-> Use generic_handle_irq_safe() which can invoked with disabled and enabled
+On Thu, Jan 27, 2022 at 12:32:59PM +0100, Sebastian Andrzej Siewior wrote:
+> Instead of manually disabling interrupts before invoking use
+> generic_handle_irq() which can be invoked with enabled and disabled
+
+generic_handle_irq_safe()
+
 > interrupts.
 >=20
-> Reported-by: Michael Below <below@judiz.de>
-> Link: https://bugs.debian.org/1002537
-> Cc: Salvatore Bonaccorso <carnil@debian.org>
 > Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-I guess you want this to go together with patch 1, so:
+Besides that:
 
 Acked-by: Wolfram Sang <wsa@kernel.org>
 
-I agree with adding the kernel bugzilla entry at least:
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D202453
-
-Probably the others which Oleksandr metioned, too.
-
---Tote0/I6gsw1g9Hy
+--ohdBGZcj3HIE2DHF
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHy0jQACgkQFA3kzBSg
-KbYF0w/+OqNuksglO0/K1veCj0S4r5AKF+9L/Je8+51hxkfVPXaASw8QBtWXEZC0
-AcMCb214DRxTXFl+lIT44Y+BRht09eKKFj3BN6eFi26ROn6kiLs4RwU8vyEM2JoZ
-vgwUs1+qGgOa9CAw5nY1x/DO+8nyJeNrzX0FNIrbjMsKCbFjBNPKdyARdSRqackX
-sxg/DoBd3kAtWaQoedAMl4WyEYHGx5GV6WB1nLsk0Uzr2oF1+0yx5iApJf6OdXot
-5j1vM/7RUr4dDftefslKzATo8sLvH9FhQeyfbHYpnqnssYjHHIc6iaLwH8m93jQB
-CVrgihGYW+4sqxHzdgPYiZHNLxct8WnTb0KblrLc21su9ZpZN9DtM3ySShj+Ok0/
-lhUQijKmWpx0U/QTJZ3Smyk0s+Eg87iBFL+rIzPUF0Se8vNybRpYVeNAWWZDM0nN
-R/vkF2ZUKAEBxnZtL6Scr9eu2REC95bQtJ5LYNYRgH+3y7L5uMIDUGcb1UZBVXTK
-++20+4nO9oCG8HE8RJLJmI2ULo2HrkQ293ROjwMzgLqxgL+C+Llu4bfkTI1MwjQd
-2ZZ3qLdRwQakXceVfOuIH0bNeBdzFIuR6Q5eE+NJpD2R8DeToIt7j+rUTnWSjgcL
-MOlt3i6hTrTxKfp6LF81bI0z1AetI7I1JmDvdvR4Zu76s2ZPj1E=
-=0Whn
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHy04QACgkQFA3kzBSg
+KbbuBBAApe83Cdzr4jHFw/VgdFhkEaqQ9GyIOEbk07yeaTzSKFdMhAJ2mOYFSmix
+BUdKMer4wLUbUw6p8Ogbzh8T5sTB5l36hfLUOFwoQ8dkHCciS+kpdE7oFh8CgudM
+6a2YN8hRxy9pQpxiJhQr9VyLERzoaTsaBMs9wo/H/gbsl4BkmxwLhBGMJrt9MJC+
+x/yIg6r5AmKf4ItMr320DU60tQac0el75+yYq57M6nNIA+PUYV0ZaAS1r1tGHJxM
+nBFDUDrWEvfXHV/HNCl4Gw7FTyhFpSxe+H8RsNZHH76qgykMc+KeDnN8Qb4gfMFg
+U9YRMu7Q6Azv8wpSgtDN+7bINtLAdkj7WywkyWbnLKTi/2nXFuCLXjff0zGbfP1K
+V47ntKY5eoXyEw26FjkXkBTepxGJWy+gY/2c688nCaFAWVYcKxxs1+mGxqhnf2+M
+/O6utGhd2xInMPSTRNEG0WnPOWMNcjUcBUV2kDprYuMJbSGaHklBB8SuZv7M9uOu
+rdHSlJny2chnQBTZOj/ECP10oJXKjCCaSax8YHBuVd12F01wCmiTfx9s7F4SqIXU
+2X0rqY3PhCOPgfptwL1RwkEPxl5MEygPZju7i+1X9dscmZLQeQ4nBdPIH9bUs9s+
+Onbqlw/siGuuqSQ0qpvx5xxU0bchZ/Ra0dexsTEkSsgI509vNJQ=
+=xbBq
 -----END PGP SIGNATURE-----
 
---Tote0/I6gsw1g9Hy--
+--ohdBGZcj3HIE2DHF--
