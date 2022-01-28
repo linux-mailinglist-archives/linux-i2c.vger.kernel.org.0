@@ -2,117 +2,249 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3359249FE56
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jan 2022 17:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA574A0020
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jan 2022 19:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349979AbiA1QuH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 Jan 2022 11:50:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47662 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350253AbiA1QuF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Jan 2022 11:50:05 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24315C061714
-        for <linux-i2c@vger.kernel.org>; Fri, 28 Jan 2022 08:50:05 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id f202-20020a1c1fd3000000b0034dd403f4fbso4456905wmf.1
-        for <linux-i2c@vger.kernel.org>; Fri, 28 Jan 2022 08:50:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=gWV/XN5zRAIOOyre4Hd3/1fPFNZKmFqNYxQX4mefTd8=;
-        b=iQhCP4QJ3ZIaKczGKn75eQyoFch7y+0jad41X5WbyeWpudEj9Y4ji+bpEJSAHZsBVQ
-         lkfzhuiReR3tMm3H/dRE67MlOYNdWanSon6m6voT1a3Hgg/f/hxlTZSovUnOa+iyWQIt
-         QMLn3rz20Y4HcJS8PGzj121W4jc6nYF/t7H4GAb/RiWV+y3h2cufBDhmTfNLDxyyKZFs
-         TyknngVD3tN/8Veb6D86QBy/t8oYJpadm5mFpGO9UH/9MYvD+E0eggjAPfJlL8O2EtWu
-         8KS38Yl6BaEEFQzj8k5Vzr/e4NvKpG4vPxTUZVaLcfX9JydZ0tqb8xTmzTjfhkXyDDD1
-         iVew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=gWV/XN5zRAIOOyre4Hd3/1fPFNZKmFqNYxQX4mefTd8=;
-        b=NOHshK/pNCctvRZ5RZha44UzY7eoL/wuUKIZ22AlomRW0WGNfbHF1S2eWKvQCKBiMU
-         EC34YtNOiaSrAbaFiPOXxE/GI3JWSRmM11jGucXVPt/KxqJr1pRGUJylo+cCM/SI6hDn
-         o0pj3M6D3vV1kNg+4fwxJ47ceT2rOFjKT7X52Xrc1Px5WGpWDaPWJDOW0ntBOb40eBk9
-         g4xoA3LftHVJ+vKt1N79pDrEt/J/A/yQiyiIjcfnftwLinyeqUvXErTl/sxSv5wWbEIz
-         NEutMpEOXMgIZPCj/Z6haSQB8c1gdRmy47SVAR+BNoWgY3g+mqbLFe0PnEZP51+bt4OG
-         cnCw==
-X-Gm-Message-State: AOAM530oVZW/wEvw3JCjNkLo/XWf/Mxxcg9ejIkwkxMn5ltoxOeQkaai
-        0gUba31P+ObR4P3fevnnpFO3VQ==
-X-Google-Smtp-Source: ABdhPJw6QP3li/jhqP7ZNADp8FrhH03P+aiOFZw5bn2VcoRg+qe/gkT7qFizWbRpefPZjrJT/Pw+8A==
-X-Received: by 2002:a05:600c:1da5:: with SMTP id p37mr8171246wms.93.1643388603717;
-        Fri, 28 Jan 2022 08:50:03 -0800 (PST)
-Received: from google.com (cpc106310-bagu17-2-0-cust853.1-3.cable.virginm.net. [86.15.223.86])
-        by smtp.gmail.com with ESMTPSA id a14sm6328156wri.25.2022.01.28.08.50.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 08:50:03 -0800 (PST)
-Date:   Fri, 28 Jan 2022 16:50:01 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S240433AbiA1Sbh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 Jan 2022 13:31:37 -0500
+Received: from mga06.intel.com ([134.134.136.31]:21875 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229827AbiA1Sbd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 28 Jan 2022 13:31:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643394693; x=1674930693;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VY3aZdeFzyu6Va/UkaJ2MHdYDdTIzl5209jkDxWmEc4=;
+  b=gNL88JAhyKeb30oQaaWuOrk0BgUfnCtxHXTmAja8YyaKkjk3m9Q80DOL
+   Q6EFuw+CMMwenEYcAGvrMotEF7jvIK6XDNQgdFSFWCAOor9l39Nbw9CIk
+   zIzHnDnzRQph+5GaPYcr+QifJ5AlG8Y+HMI18iIQZ418rxaaPiMfxKzwI
+   VuTdl2Oo71p2WBvkEqc+Y74j4GxCy8Zb67YG1aqJLJTjs5h0KqS2cW9ej
+   hfsS4yW6T2/SzbaCpsd6PNaGZzjS4xrAL8dzE3qV4DMaBvOQBTHgmUNcp
+   5EajkI4ZGIszHdcHDbcsq+1LsulssNHq6VloRKy7FUQ1gIVAaakDSKX/H
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="307903943"
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="307903943"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 10:31:32 -0800
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="598286304"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 10:31:26 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nDW0q-00FWNa-S2;
+        Fri, 28 Jan 2022 20:30:20 +0200
+Date:   Fri, 28 Jan 2022 20:30:20 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>
-Subject: Re: [PATCH 4/7] mfd: hi6421-spmi-pmic: Use generic_handle_irq_safe().
-Message-ID: <YfQeuWk0S4bxPVCg@google.com>
-References: <20220127113303.3012207-1-bigeasy@linutronix.de>
- <20220127113303.3012207-5-bigeasy@linutronix.de>
- <44b42c37-67a4-1d20-e2ff-563d4f9bfae2@gmail.com>
- <YfPwqfmrWEPm/9K0@google.com>
- <d351e221-ddd4-eb34-5bbe-08314d26a2e0@gmail.com>
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: Re: [PATCH v3 3/8] platform/x86/intel: Add Primary to Sideband
+ (P2SB) bridge support
+Message-ID: <YfQ2PGzOyiBfCppd@smile.fi.intel.com>
+References: <YdhUqhflS/0YsRWJ@smile.fi.intel.com>
+ <20220107171108.GA381493@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d351e221-ddd4-eb34-5bbe-08314d26a2e0@gmail.com>
+In-Reply-To: <20220107171108.GA381493@bhelgaas>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 28 Jan 2022, Sergei Shtylyov wrote:
+On Fri, Jan 07, 2022 at 11:11:08AM -0600, Bjorn Helgaas wrote:
+> On Fri, Jan 07, 2022 at 04:56:42PM +0200, Andy Shevchenko wrote:
+> > On Thu, Jan 06, 2022 at 07:03:05PM -0600, Bjorn Helgaas wrote:
+> > > On Tue, Dec 21, 2021 at 08:15:21PM +0200, Andy Shevchenko wrote:
 
-> On 1/28/22 4:33 PM, Lee Jones wrote:
+...
+
+> > The unhide/hide back has been tested and we have
+> > already users in the kernel (they have other issues though with the
+> > PCI rescan lock, but it doesn't mean it wasn't ever tested).
 > 
-> >>> generic_handle_irq() is invoked from a regular interrupt service
-> >>> routing. This handler will become a forced-threaded handler on
-> >>
-> >>    s/routing/routine/?
-> >>
-> >>> PREEMPT_RT and will be invoked with enabled interrupts. The
-> >>> generic_handle_irq() must be invoked with disabled interrupts in order
-> >>> to avoid deadlocks.
-> >>>
-> >>> Instead of manually disabling interrupts before invoking use
-> >>> generic_handle_irq() which can be invoked with enabled and disabled
-> >>> interrupts.
-> >>>
-> >>> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> >> [...]
-> >>
-> >> MBR, Sergey
+> Does the firmware team that hid this device sign off on the OS
+> unhiding and using it?  How do we know that BIOS is not using the
+> device?
+
+BIOS might use the device via OperationRegion() in ACPI, but that means
+that _CRS needs to have that region available. It seems not the case.
+
+And as far I as see in the internal documentation the hide / unhide
+approach is not forbidden for OS side.
+
+Moreover, we have already this approach in the 3 device drivers on different
+platforms. If you not agree with it, probably you can send a removal to that
+drivers. In the terms of use this code doesn't change the status quo. What
+it does is the concentration of the p2sb code in one place as a library on
+obvious (?) purposes, e.g. maintenance.
+
+> > > And the fact that they went to all this trouble to hide it means
+> > > the BIOS is likely using it for its own purposes and the OS may
+> > > cause conflicts if it also uses it.
 > > 
-> > What does that mean?
+> > What purposes do you have in mind?
 > 
->    Ah, you were asking about MBR! My best regards then. :-)
+> The functionality implemented in the P2SB MMIO space is not specified,
+> so I have no idea what it does or whether BIOS could be using it.
 
-Yes this.  It's okay, Dan was kind enough to enlighten me.
+It's specified based on how MMIO address is encoded.
 
-Every day is a school day on the list! :)
+The third byte (bits [23:16]) representing the port ID on IOSF that
+belongs to the certain IPs, such as GPIO.
+
+> But here's a hypothetical example: some platform firmware logs errors
+> to NVRAM.  That NVRAM could exist on a device like the P2SB, where the
+> firmware assigns the MMIO address and hides the device from the OS.
+> The firmware legitimately assumes it has exclusive control of the
+> device and the OS will never touch it.  If the OS unhides the device
+> and also uses that NVRAM, the platform error logging no longer works.
+> 
+> My point is that the unhide is architecturally messed up.  The OS runs
+> on the platform as described by ACPI.  Devices that cannot be
+> enumerated are described in the ACPI namespace.
+
+This device may or may not be _partially_ or _fully_ (due to being
+multifunctional) described in ACPI. I agree, that ideally the devices
+in question it has behind should be represented properly by firmware.
+However, the firmwares in the wild for selected products / devices
+don't do that. We need to solve (work around) it in the software.
+
+This is already done for a few devices. This series consolidates that
+and enables it for very known GPIO IPs.
+
+> If the OS goes outside that ACPI-described platform and pokes at
+> things it "knows" should be there, the architectural model falls
+> apart.  The OS relies on things the firmware didn't guarantee, and
+> the firmware can't rely on non-interference from the OS.
+> 
+> If you want to go outside the ACPI model, that's up to you, but I
+> don't think we should tweak the PCI core to work with things that
+> the BIOS has explicitly arranged to *not* be PCI devices.
+
+PCI core just provides a code that is very similar to what we need
+here. Are you specifically suggesting that we have to copy'n'paste
+that rather long function and maintain in parallel with PCI?
+
+> > > The way the BIOS has this set up, P2SB is logically not a PCI
+> > > device.  It is not enumerable.  The MMIO space it uses is not in
+> > > the _CRS of a PCI host bridge.  That means it's now a platform
+> > > device.
+> > 
+> > I do not follow what you are implying here.
+> 
+> On an ACPI system, the way we enumerate PCI devices is to find all the
+> PCI host bridges (ACPI PNP0A03 devices), and scan config space to find
+> the PCI devices below them.  That doesn't find P2SB, so from a
+> software point of view, it is not a PCI device.
+
+It's a PCI device that has a PCI programming interface but it has some
+tricks behind. Do you mean that those tricks automatically make it non-PCI
+(software speaking) compatible?
+
+> Platform devices are by definition non-enumerable, and they have to be
+> described via ACPI, DT, or some kind of platform-specific code.  P2SB
+> is not enumerable, so I think a platform device is the most natural
+> way to handle it.
+
+How does it fit the proposed library model? Are you suggesting to create a
+hundreds of LOCs in order just to have some platform device which does what?
+
+I do not follow here the design you are proposing, sorry.
+
+> > As you see the code, it's not a driver, it's a library that reuses
+> > PCI functions because the hardware is represented by an IP inside
+> > PCI hierarchy and with PCI programming interface.
+> 
+> Yes, it's a PCI programming interface at the hardware level, but at
+> the software level, it's not part of PCI.
+
+Why?
+
+> This series does quite a lot of work in the PCI core to read that one
+> register in a device the PCI core doesn't know about.  I think it will
+> be simpler overall if instead of wedging this into PCI, we make p2sb.c
+> start with the ECAM base, ioremap() it, compute the register address,
+> readl() the MMIO address, and be done with it.  No need to deal with
+> pci_find_bus(), pci_lock_rescan_remove(), change the core's BAR sizing
+> code, etc.
+
+So, you are suggesting to write a (simplified) PCI core for the certain device,
+did I get you right? Would it have good long-term maintenance perspective?
+
+> > > The correct way to use this would be as an ACPI device so the OS
+> > > can enumerate it and the firmware can mediate access to it.  Going
+> > > behind the back of the firmware does not sound advisable to me.
+> > 
+> > Are you going to fix all firmwares and devices on the market?  We
+> > have it's done like this and unfortunately we can't fix what's is
+> > done due to users who won't update their firmwares by one or another
+> > reason.
+> 
+> I just mean that from a platform design standpoint, an ACPI device
+> would be the right way to do this.  Obviously it's not practical to
+> add that to systems in the field.  You could create a platform_device
+> manually now, and if there ever is an ACPI device, ACPI can create a
+> platform_device for you.
+
+Why do I need that device? What for? I really don't see a point here.
+
+> > > If you want to hack something in, I think it might be easier to
+> > > treat this purely as a platform device instead of a PCI device.
+> > > You can hack up the config accesses you need, discover the MMIO
+> > > address, plug that in as a resource of the platform device, and go
+> > > wild.  I don't think the PCI core needs to be involved at all.
+> > 
+> > Sorry, I do not follow you. The device is PCI, but it's taken out of
+> > PCI subsystem control by this hardware trick.
+> 
+> The electrical connection might be PCI, but from the software point of
+> view, it's only a PCI device if it can be enumerated by the mechanism
+> specified by the spec, namely, reading the Vendor ID of each potential
+> device.
+> 
+> Yes, doing it as a platform device would involve some code in p2sb.c
+> that looks sort of like code in the PCI core.  But I don't think it's
+> actually very much, and I think it would be less confusing than trying
+> to pretend that this device sometimes behaves like a PCI device and
+> sometimes not.
+
+So, duplicating code is good, right? Why do we have libraries in the code?
+
+> > There are document numbers that make sense.
+> > I believe that
+> > 
+> > [2]: https://cdrdv2.intel.com/v1/dl/getContent/332690?wapkw=332690
+> > [3]: https://cdrdv2.intel.com/v1/dl/getContent/332691?wapkw=332691
+> > 
+> > work for you. Tell me if not (Meanwhile I have changed locally)
+> 
+> Great, thanks.  The links work for me (currently).  I think a proper
+> citation would also include the document title and document number,
+> since I doubt Intel guarantees those URLs will work forever.
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+With Best Regards,
+Andy Shevchenko
+
+
