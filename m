@@ -2,59 +2,118 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 286274A009D
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jan 2022 20:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E9B4A00F6
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jan 2022 20:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350788AbiA1TGT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 Jan 2022 14:06:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        id S1344284AbiA1Thf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 Jan 2022 14:37:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350765AbiA1TGR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Jan 2022 14:06:17 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374A8C06173B
-        for <linux-i2c@vger.kernel.org>; Fri, 28 Jan 2022 11:06:17 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id o30-20020a05600c511e00b0034f4c3186f4so8831513wms.3
-        for <linux-i2c@vger.kernel.org>; Fri, 28 Jan 2022 11:06:17 -0800 (PST)
+        with ESMTP id S1350966AbiA1The (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Jan 2022 14:37:34 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5139FC06174E;
+        Fri, 28 Jan 2022 11:37:33 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id e9so10514337ljq.1;
+        Fri, 28 Jan 2022 11:37:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/M6YqzPL3zjiXUIerqSshoxuIOZoLJI6Zkm2TxA2qxQ=;
-        b=MVKG1ueSHE1vaG/JaRonsECZRx5/D9mZrdFnmYElYPVVLHjpAwFZ13OZbc26Xwzct/
-         Hr6RagnfMKihmbsVJtPcSzjvEhajGw9hvcMtkaa7PWHmlDBH6hRA73RqAU3kakgVmedb
-         nQ5FXz1E8abrIYGdeRxszvYet0VqHxJsuticXgmZmJEtDeQtEdjPyZS/BLKXzbk2goNs
-         6S8i8f5A3EoakBEYivV8c8L3mO6wmXdlTcz0MgSGQQFXIYcfUxlas0VXPzU/3F1o9aWb
-         yb39/E30iyM41EAQBELkfbnr8zL1r/5K3J62H1Y6jjKZx1ZU9mkr0gCG29PCYvpO6e5C
-         0wUQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=aiENhwM8k5s4CI1T29f+7g3ngGtWKHx/bWX81I/XFuo=;
+        b=VsehauSzbNf0n6Z/JkRnEEIXEmu5fPVfxgn01c1ll5kYNgwjlRcLEloqB4fUIcPxJt
+         GdWfe/XgkyzNkttXaf4aRo4s7sUlgvNyt69j5WJbMbArnqwuf1BUpEMr8TlmjgDNGybx
+         GPHmkyvIebgiAMcnbQPPsSM5jTsT7eb7SPBjnj0l58rV9Gv/qWKq+N4WB2sBRVWlnN+e
+         mI/b+m/izcdyzR9uwE/UxKgQIY2cJRrPxoP9E2aglmiokMSP32rwDDmwCMlpniTOG9bO
+         krI+E0b+sC7vs+YUAjpzDr1AQccTFkvb2PGASdFJcSplJN0FxuH5cvMj8AtcuzZQdoyc
+         O6Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/M6YqzPL3zjiXUIerqSshoxuIOZoLJI6Zkm2TxA2qxQ=;
-        b=j4wCHtKFBm0r8QQq0VNNQp5Ilvkc4IZkU5ZyEQbyK0v5abBYRUe8ixDlgWOq8MZX0S
-         xdpU7PICsFJP5Cs2ADxYB0QF8iZvWuSz8cmKv+G/UfKyT7tHtlBJELwit08ECjyjuQYN
-         4ZtKgq2x83k+JFPqJ13gGII0O/X2HOpvFB4rjOoZNu+jCfr/rjqNhdXdaisPdGLXxygT
-         Zsn4/oxlCwec4n85L9sloO/kYLimz9x1F74wqNV3IdqZ+J6MG2MUzuB/i1LUSNuDDTd8
-         4QPta/VDbvHS2dWl7IdSvXUd558ts3BAQGYCL2Q/ffie0Z1d85NBjzLpzuNR83AhpoKV
-         aBVA==
-X-Gm-Message-State: AOAM532OyhlNRhPPV10TkpG7P2/7hRd/6I/pczvZX3VkdmSEr8rTzKKa
-        VAn4OHO1lo+ldYGf5jXMWp5/UWMMR7wlukzuGRU=
-X-Google-Smtp-Source: ABdhPJwHd4CGObnc2wT0KWkG+tVGFqgLWCN9e5ionXYrZxtn4JzsDDQH7Z88YIJE0HIsET2weJVZymW+tpXB8/uL1Xs=
-X-Received: by 2002:a1c:6a14:: with SMTP id f20mr16977099wmc.177.1643396775460;
- Fri, 28 Jan 2022 11:06:15 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=aiENhwM8k5s4CI1T29f+7g3ngGtWKHx/bWX81I/XFuo=;
+        b=OMTM3pSDXOh1YCVaHwDqPbSDR/bBojtii7ebiBbqHxQkiCwoOmYsnyoxJa9axkA7Mb
+         309Nw39T++Ljk7W4x1Q2PCc2b1Gx1Rdip4YJDvTonKYsgUChSEiW89k7/6Ob50tSCja8
+         On0Ytw65j/BXR56A2skcAxLslCYrFzK4NlxPY/qXC1DZAQU0KO68Ba76YV5sk6vOGwUK
+         bjNrl4JpmTlBh50/egwCVwvdw11H3T8DJJXTBjQ0SB9ky6DrKPoiNyLNu/dNaVKH31tu
+         KaGEwAG8xai+cSdg3TaNZO/qtIy4m9nzYYMmTAkYWXXutF2Y/Z6052q9JJgQH8nCWPX3
+         I9uw==
+X-Gm-Message-State: AOAM533WIn0XdBCGveME3+Tpda9at9FqQGrP6uuiIDUFhYSDhJ8VZhwi
+        JuUD/oGn8Rh+dehWwADnHec=
+X-Google-Smtp-Source: ABdhPJwrjMI4ZpB5Ov1Fk2wbeI8iclUzrmf1/QctXusS4SbUXC0q/1kcZ3akLOrdfD9K15D7hbd1+A==
+X-Received: by 2002:a2e:a594:: with SMTP id m20mr6552416ljp.491.1643398651584;
+        Fri, 28 Jan 2022 11:37:31 -0800 (PST)
+Received: from [192.168.1.103] ([178.176.74.103])
+        by smtp.gmail.com with ESMTPSA id d15sm359077lft.202.2022.01.28.11.37.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jan 2022 11:37:30 -0800 (PST)
+Subject: Re: [PATCH 4/7] mfd: hi6421-spmi-pmic: Use generic_handle_irq_safe().
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
+        Woojung Huh <woojung.huh@microchip.com>
+References: <20220127113303.3012207-1-bigeasy@linutronix.de>
+ <20220127113303.3012207-5-bigeasy@linutronix.de>
+ <44b42c37-67a4-1d20-e2ff-563d4f9bfae2@gmail.com>
+ <YfPwqfmrWEPm/9K0@google.com>
+ <d351e221-ddd4-eb34-5bbe-08314d26a2e0@gmail.com>
+ <YfQeuWk0S4bxPVCg@google.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <42d216c4-abf2-7937-1a99-0aecc4ef2222@gmail.com>
+Date:   Fri, 28 Jan 2022 22:37:28 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Received: by 2002:a7b:cd95:0:0:0:0:0 with HTTP; Fri, 28 Jan 2022 11:06:14
- -0800 (PST)
-Reply-To: nelsonbile450@gmail.com
-From:   Nelson Bile <barrben.sheldrack@gmail.com>
-Date:   Fri, 28 Jan 2022 20:06:14 +0100
-Message-ID: <CAEiqoRYG41F7kaJgRVSkbG-+du2Xjqr4j6EmoJVR-No=BMjbVg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YfQeuWk0S4bxPVCg@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Greetings my dear I sent you an email a few days ago. Did you receive
-my message? urgent response please
+On 1/28/22 7:50 PM, Lee Jones wrote:
+
+[...]
+>>>>> generic_handle_irq() is invoked from a regular interrupt service
+>>>>> routing. This handler will become a forced-threaded handler on
+>>>>
+>>>>    s/routing/routine/?
+>>>>
+>>>>> PREEMPT_RT and will be invoked with enabled interrupts. The
+>>>>> generic_handle_irq() must be invoked with disabled interrupts in order
+>>>>> to avoid deadlocks.
+>>>>>
+>>>>> Instead of manually disabling interrupts before invoking use
+>>>>> generic_handle_irq() which can be invoked with enabled and disabled
+>>>>> interrupts.
+>>>>>
+>>>>> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+>>>> [...]
+>>>>
+>>>> MBR, Sergey
+>>>
+>>> What does that mean?
+>>
+>>    Ah, you were asking about MBR! My best regards then. :-)
+> 
+> Yes this.  It's okay, Dan was kind enough to enlighten me.
+> 
+> Every day is a school day on the list! :)
+
+   It's not exactly a well known phrase, I like it mainly because it also stands
+for the Master Boot Record. :-)
+
+MBR, Sergey
