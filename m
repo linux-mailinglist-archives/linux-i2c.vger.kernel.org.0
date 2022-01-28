@@ -2,118 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E9B4A00F6
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jan 2022 20:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7940A4A0151
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jan 2022 21:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344284AbiA1Thf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 Jan 2022 14:37:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350966AbiA1The (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Jan 2022 14:37:34 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5139FC06174E;
-        Fri, 28 Jan 2022 11:37:33 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id e9so10514337ljq.1;
-        Fri, 28 Jan 2022 11:37:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=aiENhwM8k5s4CI1T29f+7g3ngGtWKHx/bWX81I/XFuo=;
-        b=VsehauSzbNf0n6Z/JkRnEEIXEmu5fPVfxgn01c1ll5kYNgwjlRcLEloqB4fUIcPxJt
-         GdWfe/XgkyzNkttXaf4aRo4s7sUlgvNyt69j5WJbMbArnqwuf1BUpEMr8TlmjgDNGybx
-         GPHmkyvIebgiAMcnbQPPsSM5jTsT7eb7SPBjnj0l58rV9Gv/qWKq+N4WB2sBRVWlnN+e
-         mI/b+m/izcdyzR9uwE/UxKgQIY2cJRrPxoP9E2aglmiokMSP32rwDDmwCMlpniTOG9bO
-         krI+E0b+sC7vs+YUAjpzDr1AQccTFkvb2PGASdFJcSplJN0FxuH5cvMj8AtcuzZQdoyc
-         O6Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=aiENhwM8k5s4CI1T29f+7g3ngGtWKHx/bWX81I/XFuo=;
-        b=OMTM3pSDXOh1YCVaHwDqPbSDR/bBojtii7ebiBbqHxQkiCwoOmYsnyoxJa9axkA7Mb
-         309Nw39T++Ljk7W4x1Q2PCc2b1Gx1Rdip4YJDvTonKYsgUChSEiW89k7/6Ob50tSCja8
-         On0Ytw65j/BXR56A2skcAxLslCYrFzK4NlxPY/qXC1DZAQU0KO68Ba76YV5sk6vOGwUK
-         bjNrl4JpmTlBh50/egwCVwvdw11H3T8DJJXTBjQ0SB9ky6DrKPoiNyLNu/dNaVKH31tu
-         KaGEwAG8xai+cSdg3TaNZO/qtIy4m9nzYYMmTAkYWXXutF2Y/Z6052q9JJgQH8nCWPX3
-         I9uw==
-X-Gm-Message-State: AOAM533WIn0XdBCGveME3+Tpda9at9FqQGrP6uuiIDUFhYSDhJ8VZhwi
-        JuUD/oGn8Rh+dehWwADnHec=
-X-Google-Smtp-Source: ABdhPJwrjMI4ZpB5Ov1Fk2wbeI8iclUzrmf1/QctXusS4SbUXC0q/1kcZ3akLOrdfD9K15D7hbd1+A==
-X-Received: by 2002:a2e:a594:: with SMTP id m20mr6552416ljp.491.1643398651584;
-        Fri, 28 Jan 2022 11:37:31 -0800 (PST)
-Received: from [192.168.1.103] ([178.176.74.103])
-        by smtp.gmail.com with ESMTPSA id d15sm359077lft.202.2022.01.28.11.37.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 11:37:30 -0800 (PST)
-Subject: Re: [PATCH 4/7] mfd: hi6421-spmi-pmic: Use generic_handle_irq_safe().
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1347171AbiA1UCX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 Jan 2022 15:02:23 -0500
+Received: from mga04.intel.com ([192.55.52.120]:18956 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245650AbiA1UCX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 28 Jan 2022 15:02:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643400143; x=1674936143;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XDrmYnVBSiMMmYRQWtq8crV165wPH0HVJ543wkoAGpE=;
+  b=AlanSKm6BigKPsRV7IGKgQzOwj1LCIs64KwPWSbbmb683QLSv1O1UETg
+   dhzUYvwTBjtlMXs0E7uxERz00xOU3JJxLfK1M/SB+OX4I9jM+bAKDvkGn
+   NbDto4B22/iDOmEkYGs892jM/cSh+g4KRUD8+RaZG37Fwd8J3Foi+G4as
+   59cxQOIZF68Cundh9nB2cfzQoKYPYkRIgcJ6q/fMWwBkrdFw7BKKCBo7n
+   x68XJmNhNbnJQftrDx8aD5pv8Snd3eXcVxX3Xve1CDi8c1fBsKaGJLa0g
+   sUJ8HpkGujsz56dUtIVOCdeNhRDgEWN01CZpAx2KvUltNMgjyouPHWvZW
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10241"; a="246030520"
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="246030520"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 12:01:42 -0800
+X-IronPort-AV: E=Sophos;i="5.88,324,1635231600"; 
+   d="scan'208";a="564300747"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 12:01:36 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nDXQ7-00FYoH-Jd;
+        Fri, 28 Jan 2022 22:00:31 +0200
+Date:   Fri, 28 Jan 2022 22:00:31 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>
-References: <20220127113303.3012207-1-bigeasy@linutronix.de>
- <20220127113303.3012207-5-bigeasy@linutronix.de>
- <44b42c37-67a4-1d20-e2ff-563d4f9bfae2@gmail.com>
- <YfPwqfmrWEPm/9K0@google.com>
- <d351e221-ddd4-eb34-5bbe-08314d26a2e0@gmail.com>
- <YfQeuWk0S4bxPVCg@google.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <42d216c4-abf2-7937-1a99-0aecc4ef2222@gmail.com>
-Date:   Fri, 28 Jan 2022 22:37:28 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>, Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: Re: [PATCH v3 8/8] i2c: i801: convert to use common P2SB accessor
+Message-ID: <YfRLX/37xv1Sk5G5@smile.fi.intel.com>
+References: <20211221181526.53798-1-andriy.shevchenko@linux.intel.com>
+ <20211221181526.53798-9-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YfQeuWk0S4bxPVCg@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221181526.53798-9-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 1/28/22 7:50 PM, Lee Jones wrote:
-
-[...]
->>>>> generic_handle_irq() is invoked from a regular interrupt service
->>>>> routing. This handler will become a forced-threaded handler on
->>>>
->>>>    s/routing/routine/?
->>>>
->>>>> PREEMPT_RT and will be invoked with enabled interrupts. The
->>>>> generic_handle_irq() must be invoked with disabled interrupts in order
->>>>> to avoid deadlocks.
->>>>>
->>>>> Instead of manually disabling interrupts before invoking use
->>>>> generic_handle_irq() which can be invoked with enabled and disabled
->>>>> interrupts.
->>>>>
->>>>> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
->>>> [...]
->>>>
->>>> MBR, Sergey
->>>
->>> What does that mean?
->>
->>    Ah, you were asking about MBR! My best regards then. :-)
+On Tue, Dec 21, 2021 at 08:15:26PM +0200, Andy Shevchenko wrote:
+> Since we have a common P2SB accessor in tree we may use it instead of
+> open coded variants.
 > 
-> Yes this.  It's okay, Dan was kind enough to enlighten me.
-> 
-> Every day is a school day on the list! :)
+> Replace custom code by pci_p2sb_bar() call.
 
-   It's not exactly a well known phrase, I like it mainly because it also stands
-for the Master Boot Record. :-)
+Wolfram, does this change makes sense to you?
+Can you give your tag or comment?
 
-MBR, Sergey
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
