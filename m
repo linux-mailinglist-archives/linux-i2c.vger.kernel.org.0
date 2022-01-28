@@ -2,111 +2,135 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF38649EDE0
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jan 2022 22:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1B849F58F
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jan 2022 09:47:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236444AbiA0V5c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 Jan 2022 16:57:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231800AbiA0V5c (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Jan 2022 16:57:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7B9C061714;
-        Thu, 27 Jan 2022 13:57:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S237823AbiA1IrT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 Jan 2022 03:47:19 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:44934 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240484AbiA1IrT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Jan 2022 03:47:19 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CCE31B823E7;
-        Thu, 27 Jan 2022 21:57:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C1C7C340E4;
-        Thu, 27 Jan 2022 21:57:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643320649;
-        bh=e723i9JsXHiEBbTu8G5kP5WOqV+gYsQ7539EIk3Couk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jTLm6VUWRh0zBTpuSHzCrAH9ZIyV26PkPIl3E5mZryTpHHnmCw5XQmCP1Q17gPhvT
-         l2dES+87sD0EeITEWzUeAS15F6LbbWTqtvQPlz3WMcCdrFrMY74rlamHWx9dojqfsl
-         UZyupnZeSqb+rIM5/jQLfsC96Tza4wWnP3DBVi3jQ/x7nz3gjWwL7iopJ3va/ZJ+4H
-         XaXmh+gUP7VcWlLkcqq9nIXL0JA+gHSZwKozFhnRQH6ndK3p2cqtfp4se8tQlb+rXm
-         0f8cYxE2h8VSRsOkd7LKgkJWItbXoR2ggYWZR8KYFMblC2A6UwCQ247td45sbubrLW
-         eIOtaGZHmm0fA==
-Date:   Thu, 27 Jan 2022 22:57:25 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     u.kleine-koenig@pengutronix.de, andy.shevchenko@gmail.com,
-        christian.koenig@amd.com, digetx@gmail.com,
-        gregkh@linuxfoundation.org, jonathanh@nvidia.com,
-        ldewangan@nvidia.com, lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, rafael@kernel.org,
-        sumit.semwal@linaro.org, thierry.reding@gmail.com
-Subject: Re: [PATCH v4 3/3] i2c: smbus: Use device_*() functions instead of
- of_*()
-Message-ID: <YfMVRasTSQrr1ob+@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Akhil R <akhilrajeev@nvidia.com>, u.kleine-koenig@pengutronix.de,
-        andy.shevchenko@gmail.com, christian.koenig@amd.com,
-        digetx@gmail.com, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
-        ldewangan@nvidia.com, lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, rafael@kernel.org,
-        sumit.semwal@linaro.org, thierry.reding@gmail.com
-References: <1642851166-27096-1-git-send-email-akhilrajeev@nvidia.com>
- <1642851166-27096-4-git-send-email-akhilrajeev@nvidia.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3A4911F391;
+        Fri, 28 Jan 2022 08:47:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643359638; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fY/lSm8EzEnnwCDiVAHl0UiB6tFu/37NEmoH6LZYNVo=;
+        b=d7WOtP2QmSf7v9hN0MO3ogKKiashVMfzsACJyilCGDAKftJ3hhTrocgf2NDB9N0xEO4kyW
+        pCzAmAc278mheJc00OT+ifbbRCZRQjhAjFpNsrKwbfvj6o9VVoHo0bJ4ijbIIlDqi25dTB
+        lfvGIcbU5XiY/NFxaXsLBGKflQYcvE0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643359638;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fY/lSm8EzEnnwCDiVAHl0UiB6tFu/37NEmoH6LZYNVo=;
+        b=drnnON7D0ria5vTj/fdDSRkVFqWTMNnGUE667XceqQENbfMJvokbs0BxjG8V/fW3ZHSJt1
+        LmSFq+p6diSp+UAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1D1A413A66;
+        Fri, 28 Jan 2022 08:47:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id beqqBpat82FjZQAAMHmgww
+        (envelope-from <iivanov@suse.de>); Fri, 28 Jan 2022 08:47:18 +0000
+Date:   Fri, 28 Jan 2022 10:47:17 +0200
+From:   "Ivan T . Ivanov" <iivanov@suse.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Phil Elwell <phil@raspberrypi.org>
+Subject: Re: [PATCH] i2c: bcm2835: Set clock-stretch timeout to 35ms
+Message-ID: <20220128084717.rbvbciprfqen4rvb@suse>
+References: <20220117102504.90585-1-iivanov@suse.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cP1k5dLGG5uGlg4g"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1642851166-27096-4-git-send-email-akhilrajeev@nvidia.com>
+In-Reply-To: <20220117102504.90585-1-iivanov@suse.de>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
---cP1k5dLGG5uGlg4g
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 01-17 11:25, Ivan T. Ivanov wrote:
+> Date: Mon, 17 Jan 2022 11:25:04 +0100
+> From: "Ivan T. Ivanov" <iivanov@suse.de>
+> To: Florian Fainelli <f.fainelli@gmail.com>, Ray Jui <rjui@broadcom.com>,
+>  Scott Branden <sbranden@broadcom.com>, Nicolas Saenz Julienne
+>  <nsaenz@kernel.org>
+> Cc: linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org, Phil
+>  Elwell <phil@raspberrypi.org>, "Ivan T . Ivanov" <iivanov@suse.de>
+> Subject: [PATCH] i2c: bcm2835: Set clock-stretch timeout to 35ms
+> Message-Id: <20220117102504.90585-1-iivanov@suse.de>
+Tags: all arm i2c linux me ring rpi sent
 
 Hi,
 
-> +	irq = device_property_match_string(adapter->dev.parent, "interrupt-names",
-> +					   "smbus_alert");
+> 
+> From: Phil Elwell <phil@raspberrypi.org>
+> 
+> The BCM2835 I2C blocks have a register to set the clock-stretch
+> timeout - how long the device is allowed to hold SCL low - in bus
+> cycles. The current driver doesn't write to the register, therefore
+> the default value of 64 cycles is being used for all devices.
+> 
+> Set the timeout to the value recommended for SMBus - 35ms.
+> 
+> See: https://github.com/raspberrypi/linux/issues/3064
 
-I think we should include "linux/property.h" for it. Interesting, the of
-header was never included.
+It will be nice if we have this fix upstream.
 
-> -		irq = of_irq_get_byname(adapter->dev.of_node, "smbus_alert");
-> +		irq = fwnode_irq_get_byname(dev_fwnode(adapter->dev.parent),
-> +					    "smbus_alert");
+Regards,
+Ivan
 
-Here we should replace of_irq.h with property.h.
-
-Rest looks good!
-
-Happy hacking,
-
-   Wolfram
-
-
---cP1k5dLGG5uGlg4g
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHzFUUACgkQFA3kzBSg
-KbaXLg/+NbejI22/3hLSSXg4aRbnAL2/VIok3hgahxmZb3KDl0VGicsM+YLDpUT6
-gEc1ZEOvmqhPNiQim+ixd/BeIgAiOlg5Iq2EJPYHroFbWr8olecna4CK+c1Eqjtv
-Esutk0oo0kVDci5N0JTKjvYkN78DsJiPthfl84jRDzQCpIRisx+wV/eskNOAJyVD
-sUbPdR0KG5OyBbayXq5nM0sDWalGXidOXE83BBD87BmETRXQxGEefQH9Cz4JzoMr
-51JM16YkR1ePtGbsmlvzhh/0QImpEFa2iBr1hq0ka3ssM8t8As7nfx1NS+WH67iz
-eiGn51FkX0GVBrHLVNNY3KWymB/leFagHbD8HPx1ULGfxb0WzmqNtpCVq6+sxqug
-D7jcUrLaFynK5a5+grd4UAvciM8vABA69ckm6sQ7DrvvcTn4oLf2ELchKtUBTAJt
-OdGEs67m0gVvM/39kQy1QYBDN5ACj4IQgFMJ1uKzw12G+fFSLZGYGRJOdThwh9YA
-Fjz/Fc2NTft2OH6QhK60o7y4jGz33bLKlILCmTKXraTGQ98dkAO6h3D/uRgoe/7u
-3gEw7GGwyswnPNCXMC15w0HgBIzCxC346TAxu0vteT4pNEiHNlvKWSBXWh2gOPOx
-QV94/mEFUOEvWNUGZTEOF73S0WlSp/M9O3yL/EPkWsU/PwkzrMk=
-=g1E6
------END PGP SIGNATURE-----
-
---cP1k5dLGG5uGlg4g--
+> 
+> Signed-off-by: Phil Elwell <phil@raspberrypi.org>
+> [iivanov@suse.de fix small coding style issue]
+> Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
+> ---
+>  drivers/i2c/busses/i2c-bcm2835.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
+> index 37443edbf754..9cce0e15da32 100644
+> --- a/drivers/i2c/busses/i2c-bcm2835.c
+> +++ b/drivers/i2c/busses/i2c-bcm2835.c
+> @@ -106,6 +106,7 @@ static int clk_bcm2835_i2c_set_rate(struct clk_hw *hw, unsigned long rate,
+>  {
+>  	struct clk_bcm2835_i2c *div = to_clk_bcm2835_i2c(hw);
+>  	u32 redl, fedl;
+> +	u32 clk_tout;
+>  	u32 divider = clk_bcm2835_i2c_calc_divider(rate, parent_rate);
+>  
+>  	if (divider == -EINVAL)
+> @@ -129,6 +130,17 @@ static int clk_bcm2835_i2c_set_rate(struct clk_hw *hw, unsigned long rate,
+>  	bcm2835_i2c_writel(div->i2c_dev, BCM2835_I2C_DEL,
+>  			   (fedl << BCM2835_I2C_FEDL_SHIFT) |
+>  			   (redl << BCM2835_I2C_REDL_SHIFT));
+> +
+> +	/*
+> +	 * Set the clock stretch timeout to the SMBUs-recommended 35ms.
+> +	 */
+> +	if (rate > 0xffff * 1000 / 35)
+> +		clk_tout = 0xffff;
+> +	else
+> +		clk_tout = 35 * rate / 1000;
+> +
+> +	bcm2835_i2c_writel(div->i2c_dev, BCM2835_I2C_CLKT, clk_tout);
+> +
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.26.2
+> 
