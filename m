@@ -2,172 +2,266 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7EE74A34FA
-	for <lists+linux-i2c@lfdr.de>; Sun, 30 Jan 2022 08:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA17C4A367A
+	for <lists+linux-i2c@lfdr.de>; Sun, 30 Jan 2022 14:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243043AbiA3HrH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 30 Jan 2022 02:47:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S231281AbiA3NOv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 30 Jan 2022 08:14:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237577AbiA3HrG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 30 Jan 2022 02:47:06 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6FCC061714;
-        Sat, 29 Jan 2022 23:47:06 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id d8so9936864qvv.2;
-        Sat, 29 Jan 2022 23:47:06 -0800 (PST)
+        with ESMTP id S1347097AbiA3NOu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 30 Jan 2022 08:14:50 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40BAC061714;
+        Sun, 30 Jan 2022 05:14:49 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id d10so34310083eje.10;
+        Sun, 30 Jan 2022 05:14:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=npCjjwPovRha/N7OPY5Pt5Y8ZEDPZK+wTLJ4YtCTeD4=;
-        b=cDs69FRlDNvFX3X+sBEAC9SL+ZNmal9A+aBP3aMK0y+MdRQUQuJVUznv/vLJDO0Piu
-         SiUfz2fEY+0QaQ+WTD78QuPmQKz5Rf/rsI0Dcw8dC7i3m0tZtyi4EcWCXfD0c8Oia6om
-         CFzJXVyyAiERR2oDepaLqPP/fIhN5jo15zLDyn44kUoy3eHgEOp8Wsr+QFwRU6e7AUb7
-         u7V1BVCY4RtLY1YDKG6eSWy9Zknm8RDZNhv1eBRBteoGGrDOvzJuQYdqG7TwWbh14E9J
-         b6n93Vahqd+nx9MPuUK00h4O9C9IR9j0fL4LRQjnH9NkiBagWqV1NWYhu1SFKOLUNM6/
-         gCdg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QvcDRq4neR39bPyJq8ML9UJ19/Fds3F0tLeCK/aNS1I=;
+        b=FOSc53BYqQeWxyJDbHK3FtfppA/So6bx/6lPFS2WepSiM2iLKRfqaDlaiyrnVUkg1S
+         AQFhmR4kuw/UnUnsbhlWp0PAZWCROg1bvgws+uVDkYSfuiVRPfqQra2rWHenKKQ/nXXb
+         pzkhIxKs2Y50y5bvnCNXKOvFJNRcC//UrNFfQuOmeHd+wxeGLDlGvoVLEFOAKYZ+eezJ
+         U2u84EZ4i5lIxboT+fHo2vpxbfp6Q2VGXdtO5Kzq0zBC85EDhQl0c+lhL6lZv0gXuCe2
+         9kwVp/FjyAhydSrGaX3PBBcDE1FVhPnMDYzxdEItP68G7Xuyf20jaok6eH9NZkZAXqew
+         LizQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=npCjjwPovRha/N7OPY5Pt5Y8ZEDPZK+wTLJ4YtCTeD4=;
-        b=Sc8rYQmyHUkwnJShAwE76FLBUYJ1XqjlgX9zA3OBa1gJwoxqsw9sXfYH9ETQv7G1Ri
-         GV0ZZJgY44lye1oRGoydqk+292SQCIJZ2n46UR+3GSHdSBsFhuaB2MILpK0bR2jzfLFA
-         r5f71tgfpL5Y3AC1jHI3dFu5DgWTpLDbEepXF7uj57tQbUf66Kbpfqf7RZtgabk95e/C
-         HC6DG7WPjkU+iYPdkGBecLqH+9fxtWfCPKg9Mj6tHW3pTH5ra3GZZiPql3bSrZECiNeT
-         1d0vr+SMHOJIbKjvgVO4GGFNT9ji8WlQseZgVUNsN3Mnr2NnfhIw55/AeskSRn4xzcd0
-         dsNg==
-X-Gm-Message-State: AOAM532LPe/oAFRCFqopcTPGbyzovOoD1DG77pbmmyrKnddne5R6Kmlj
-        sArTOPH6WUp3UCKyvfToWoMwWNEBAT1TnWzZqgw=
-X-Google-Smtp-Source: ABdhPJwtWn0MO25kdPw0LJuGltLQ9hXEmZkm48vzz0cfgumCsybfKkx4jTDFfdrB7DQCnNF9vhV7tQLXyoYBiRRIVhM=
-X-Received: by 2002:a05:6214:1bc5:: with SMTP id m5mr13249076qvc.4.1643528825725;
- Sat, 29 Jan 2022 23:47:05 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QvcDRq4neR39bPyJq8ML9UJ19/Fds3F0tLeCK/aNS1I=;
+        b=f9A5QjvG+XU+AhO/7AjLj3mlA4wlfcb5R76TG62udwmzoRUDp3uBcuu/ALatToyJTr
+         kulLOTf3Qha35xZ9Iawif7E49KTkvd9APtnmE9cbZX/iqZNMAYcuE7wk0gGXsWNke/cM
+         xu4xo+qR4njoZ6jot6UgMXwaOLCtv/2zHoCn473PiScIoyCQkdeDoUv4g7Iog9CCh3dh
+         QBo36ABS6cZ/++qqIcfutXqgd6A9S/jphAEzqpCReNqbNYjeS2Ay1189iFZ27Zw4yDeY
+         y0nd9ko8LlXRJq/03OONBvEyRp0ttpP62W9pNpj01psyRzPGia3CMEYGaA/d+xH6nujf
+         X9mA==
+X-Gm-Message-State: AOAM532cDqp+wodbDlSUvClOXdbl487pattKLwSiKDaMRLVtgZ43OK/1
+        Ng97zrzi58Jx+7n3v9aNz3I=
+X-Google-Smtp-Source: ABdhPJz06KtPOA0KqSNm2V25Mni3M75FgME+3UJ6Kp2pQF5ljdTZ4fOp//F7FSzM2KJF/77YTDDzRw==
+X-Received: by 2002:a17:907:6e86:: with SMTP id sh6mr14028357ejc.398.1643548488266;
+        Sun, 30 Jan 2022 05:14:48 -0800 (PST)
+Received: from [192.168.1.103] (ip-46.34.228.91.o2inet.sk. [46.34.228.91])
+        by smtp.gmail.com with ESMTPSA id o14sm16158889edr.6.2022.01.30.05.14.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Jan 2022 05:14:47 -0800 (PST)
+Message-ID: <04a38456-8999-36ac-1adc-632b9ba942ad@gmail.com>
+Date:   Sun, 30 Jan 2022 14:14:45 +0100
 MIME-Version: 1.0
-References: <20220129093907.2196730-1-j.neuschaefer@gmx.net> <c2ec8677-e7a2-c9cd-b291-9785e7e2800c@infradead.org>
-In-Reply-To: <c2ec8677-e7a2-c9cd-b291-9785e7e2800c@infradead.org>
-From:   Tali Perry <tali.perry1@gmail.com>
-Date:   Sun, 30 Jan 2022 09:46:55 +0200
-Message-ID: <CAHb3i=vxghPw57Z=aEe-ns=LaD69eYyCv5VqbKBaARn9ZLfL8w@mail.gmail.com>
-Subject: Re: [PATCH] i2c: npcm7xx: Fix typos
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kfting@nuvoton.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: Touchpad stickiness on AMD laptops (was Dell Inspiron/XPS)
+Content-Language: en-US
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Benjamin Tissoires <btissoir@redhat.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Andrea Ippolito <andrea.ippo@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alex Hung <alex.hung@canonical.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>
+References: <CAGhUXvBw4rzCQrqttyyS=Psxmhppk79c6fDoxPbV91jE7fO_9A@mail.gmail.com>
+ <CAGhUXvDNj2v3O==+wWWKPYVzej8Vq+WNiBtPwmYxSQ2dTuLb9Q@mail.gmail.com>
+ <CAGhUXvC8eHfxEKzkGN06VvRU6Z0ko7MJ9hF6uXNq+PxRZSbEmQ@mail.gmail.com>
+ <70cbe360-6385-2536-32bd-ae803517d2b2@redhat.com> <YdbrLz3tU4ohANDk@ninjato>
+ <42c83ec8-bbac-85e2-9ab5-87e59a679f95@redhat.com>
+ <CAO-hwJJ9ALxpd5oRU8SQ3F65hZjDitR=MzmwDk=uiEguaXZYtw@mail.gmail.com>
+ <5409e747-0c51-24e2-7ffa-7dd9c8a7aec7@amd.com>
+From:   =?UTF-8?Q?Miroslav_Bend=c3=adk?= <miroslav.bendik@gmail.com>
+In-Reply-To: <5409e747-0c51-24e2-7ffa-7dd9c8a7aec7@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Reviewed-by: tali.perry@nuvoton.com
+Hello,
+i have small status update.
 
-Thank you very much !
+First most important information:
+On AMD is trackpoint connected to ASF bus (similar to SMBus, but with
+other control registers).
 
-On Sat, Jan 29, 2022 at 6:18 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
->
->
-> On 1/29/22 01:39, Jonathan Neusch=C3=A4fer wrote:
-> > The comments in this driver have a few typos. Let's fix them.
-> >
-> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
->
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
->
-> Thanks.
->
-> > ---
-> >  drivers/i2c/busses/i2c-npcm7xx.c | 16 ++++++++--------
-> >  1 file changed, 8 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-=
-npcm7xx.c
-> > index 2ad166355ec9b..71aad029425d8 100644
-> > --- a/drivers/i2c/busses/i2c-npcm7xx.c
-> > +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-> > @@ -781,7 +781,7 @@ static void npcm_i2c_set_fifo(struct npcm_i2c *bus,=
- int nread, int nwrite)
-> >               /*
-> >                * if we are about to read the first byte in blk rd mode,
-> >                * don't NACK it. If slave returns zero size HW can't NAC=
-K
-> > -              * it immidiattly, it will read extra byte and then NACK.
-> > +              * it immediately, it will read extra byte and then NACK.
-> >                */
-> >               if (bus->rd_ind =3D=3D 0 && bus->read_block_use) {
-> >                       /* set fifo to read one byte, no last: */
-> > @@ -981,7 +981,7 @@ static void npcm_i2c_slave_xmit(struct npcm_i2c *bu=
-s, u16 nwrite,
-> >  /*
-> >   * npcm_i2c_slave_wr_buf_sync:
-> >   * currently slave IF only supports single byte operations.
-> > - * in order to utilyze the npcm HW FIFO, the driver will ask for 16 by=
-tes
-> > + * in order to utilize the npcm HW FIFO, the driver will ask for 16 by=
-tes
-> >   * at a time, pack them in buffer, and then transmit them all together
-> >   * to the FIFO and onward to the bus.
-> >   * NACK on read will be once reached to bus->adap->quirks->max_read_le=
-n.
-> > @@ -1175,7 +1175,7 @@ static irqreturn_t npcm_i2c_int_slave_handler(str=
-uct npcm_i2c *bus)
-> >                               /*
-> >                                * the i2c module can response to 10 own =
-SA.
-> >                                * check which one was addressed by the m=
-aster.
-> > -                              * repond to the first one.
-> > +                              * respond to the first one.
-> >                                */
-> >                               addr =3D ((i2ccst3 & 0x07) << 7) |
-> >                                       (i2ccst2 & 0x7F);
-> > @@ -1753,8 +1753,8 @@ static void npcm_i2c_recovery_init(struct i2c_ada=
-pter *_adap)
-> >       /*
-> >        * npcm i2c HW allows direct reading of SCL and SDA.
-> >        * However, it does not support setting SCL and SDA directly.
-> > -      * The recovery function can togle SCL when SDA is low (but not s=
-et)
-> > -      * Getter functions used internally, and can be used externaly.
-> > +      * The recovery function can toggle SCL when SDA is low (but not =
-set)
-> > +      * Getter functions used internally, and can be used externally.
-> >        */
-> >       rinfo->get_scl =3D npcm_i2c_get_SCL;
-> >       rinfo->get_sda =3D npcm_i2c_get_SDA;
-> > @@ -1768,10 +1768,10 @@ static void npcm_i2c_recovery_init(struct i2c_a=
-dapter *_adap)
-> >
-> >  /*
-> >   * npcm_i2c_init_clk: init HW timing parameters.
-> > - * NPCM7XX i2c module timing parameters are depenent on module core cl=
-k (APB)
-> > + * NPCM7XX i2c module timing parameters are dependent on module core c=
-lk (APB)
-> >   * and bus frequency.
-> > - * 100kHz bus requires tSCL =3D 4 * SCLFRQ * tCLK. LT and HT are simet=
-ric.
-> > - * 400kHz bus requires assymetric HT and LT. A different equation is r=
-ecomended
-> > + * 100kHz bus requires tSCL =3D 4 * SCLFRQ * tCLK. LT and HT are symme=
-tric.
-> > + * 400kHz bus requires asymmetric HT and LT. A different equation is r=
-ecommended
-> >   * by the HW designer, given core clock range (equations in comments b=
-elow).
-> >   *
-> >   */
-> > --
-> > 2.34.1
-> >
->
-> --
-> ~Randy
+This bus has interrupt. After boot always generates interrupts for each
+transaction. After playing it stops generating interrupts for
+transaction, i don't know exactly why. More important is, that it can
+generate interrupts when receives message from slave to broadcast
+address (0x08).
+
+To enable interrupts we should set:
+
+ListenAddr to 0x08 and ListenAddrEn to 1:
+
+outb_p((0x08 << 1) | 0x01, 0x09 + piix4_smba);
+
+Then SlaveIntrListenEn of SlaveEn should be set to 1:
+
+outb_p(inb_p(0x15 + piix4_smba) | 0x02, 0x15 + piix4_smba);
+
+Now funny part, how to read address of slave device
+(0x2c for synaptics):
+
+Important register is ASFx13 DataBankSel register. If interrupt is
+generated from slave device, then DataBankxFull is set. Address can be
+retrieved using block read from 0x07 (DataIndex) register. Before
+reading register SetReadHostDataBank should be 0. After setting
+DataBankSel i am reading HostControl (dummy read), then reading form
+DataIndex value 0x08 (broadcast address) and 0x2c (device, that wanted
+attention). I am using following code, but it don't work good. Sometimes
+there is bad value, sometimes it's reversed, first read gives 0x2c,
+second 0x10. Don't know why. I have looked on decompiled windows driver
+from synaptics and it looks, that there is special handling for
+different DataBankSel values. I don't know exactly why, but problems are
+rare, for now i am ignoring problems.
+
+
+static u8 read_asf_data_bank(unsigned short piix4_smba, u8 bank_number)
+{
+     outb_p(bank_number << 4, 0x13 + piix4_smba);
+     inb_p(0x02 + piix4_smba); // reset DataIndex
+     inb_p(0x07 + piix4_smba); // read SMBus broadcast address
+     return inb_p(0x07 + piix4_smba);
+}
+
+
+static irqreturn_t piix4_isr(int irq, void *dev_id)
+{
+     //struct i2c_adapter *piix4_adapter = (struct i2c_adapter *)dev_id;
+     //struct i2c_piix4_adapdata *adapdata = 
+i2c_get_adapdata(piix4_adapter);
+     unsigned short piix4_smba = 0xb20;
+
+     u8 bank_sel;
+     u8 address[2] = {0x00, 0x00};
+     u8 *current_address;
+
+     current_address = &address[0];
+
+     bank_sel = inb_p(0x13 + piix4_smba); // DataBankSel
+
+     if ((bank_sel & 0x0c) == 0x00) { // bits DataBankxFull not set
+         return IRQ_HANDLED;
+     }
+
+     printk(KERN_INFO "Bank=%02x\n", bank_sel);
+
+     if ((bank_sel & 0x01) == 0) { // Last touched bank is 0
+         if (bank_sel & 0x08) {
+             *current_address = read_asf_data_bank(piix4_smba, 1);
+             current_address++;
+         }
+         if (bank_sel & 0x04) {
+             *current_address = read_asf_data_bank(piix4_smba, 0);
+         }
+     }
+     else { // Last touched bank is 1
+         if (bank_sel & 0x04) {
+             *current_address = read_asf_data_bank(piix4_smba, 0);
+             current_address++;
+         }
+         if (bank_sel & 0x08) {
+             *current_address = read_asf_data_bank(piix4_smba, 1);
+         }
+     }
+
+     outb_p(bank_sel & 0x0c, 0x13 + piix4_smba); // Clear DataBankxFull
+
+     printk(KERN_INFO "Address=%02x %02x\n", address[0] >> 1, address[1] 
+ >> 1);
+
+     if (address[0] != 0x00) {
+         i2c_handle_smbus_host_notify(piix4_aux_adapter, address[0] >> 1);
+     }
+     if (address[1] != 0x00 && address[1] != address[0]) {
+         i2c_handle_smbus_host_notify(piix4_aux_adapter, address[1] >> 1);
+     }
+
+     return IRQ_HANDLED;
+}
+
+Now, when i load module i see this in log:
+
+i2c i2c-11: Error: no response!
+rmi4_f12 rmi4-00.fn12: Failed to read object data. Code: -6.
+Bank=8d
+Address=2c 2c
+input input92: rmi_2d_sensor_abs_report: obj[0]: type: 0x01 X: 323 Y: 
+301 Z: 79 WX: 9 WY: 2
+Bank=8d
+Address=2c 2c
+input input92: rmi_2d_sensor_abs_report: obj[0]: type: 0x01 X: 271 Y: 
+378 Z: 73 WX: 8 WY: 4
+Bank=8d
+Address=2c 2c
+input input92: rmi_2d_sensor_abs_report: obj[0]: type: 0x01 X: 468 Y: 
+378 Z: 72 WX: 7 WY: 3
+Bank=8d
+Address=2c 2c
+i2c i2c-11: Bus collision! SMBus may be locked until next hard reset. 
+(sorry!)
+rmi4_f12 rmi4-00.fn12: Failed to read object data. Code: -5.
+Bank=8d
+Address=2c 2c
+input input92: rmi_2d_sensor_abs_report: obj[0]: type: 0x01 X: 563 Y: 
+373 Z: 73 WX: 7 WY: 2
+Bank=8d
+Address=2c 2c
+i2c i2c-11: Bus collision! SMBus may be locked until next hard reset. 
+(sorry!)
+rmi4_f12 rmi4-00.fn12: Failed to read object data. Code: -5.
+
+
+There are too many bus collisions a no responses. This is my
+implementation of piix4_access_asf
+
+static s32 piix4_access_asf(struct i2c_adapter *adap, u16 addr,
+          unsigned short flags, char read_write,
+          u8 command, int size, union i2c_smbus_data *data)
+{
+     struct i2c_piix4_adapdata *adapdata = i2c_get_adapdata(adap);
+     unsigned short piix4_smba = adapdata->smba;
+     int timeout = 0;
+     int retval;
+     u8 temp;
+
+     // Acquire IMC semaphore
+     outb_p(0x01, 0x14 + piix4_smba);
+     while ((++timeout < MAX_TIMEOUT) && (!((temp = inb_p(0x14 + 
+piix4_smba)) & 0x01))) {
+         usleep_range(250, 500);
+     }
+     if ((temp & 0x01) == 0) {
+         printk(KERN_INFO "lock not acquired\n");
+         return -EBUSY;
+     }
+
+     outb_p(0x80, 0x13 + piix4_smba); // Set DataBankSel to host bank
+
+     retval = piix4_access(adap, addr, flags, read_write, command, size, 
+data);
+
+     // Release semphore
+     outb_p(0x02, 0x14 + piix4_smba);
+
+     return retval;
+}
+
+Before transaction i am requesting HostSemaphore. Semaphore is correctly
+acquired. Always. I don't know how exactly i should avoid bus conflicts.
+
+Interrupts are sometimes generated with low frequency, sometimes with
+high frequency. I don't know exactly why. Frequency changes after
+restart of psmouse driver. Frequency changes with touch activity too, if
+starts generating with high frequency and then i don't touch anything,
+then frequency goes down. After touchpad activity frequency again goes
+up.
+
+Here is video with current state:
+
+https://youtu.be/tf850B7UTWA
