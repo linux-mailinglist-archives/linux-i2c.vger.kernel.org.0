@@ -2,118 +2,208 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8F84A328B
-	for <lists+linux-i2c@lfdr.de>; Sun, 30 Jan 2022 00:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDBE4A333A
+	for <lists+linux-i2c@lfdr.de>; Sun, 30 Jan 2022 03:11:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353492AbiA2XBJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 29 Jan 2022 18:01:09 -0500
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:41237 "EHLO
-        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1353449AbiA2XBB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 29 Jan 2022 18:01:01 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id CEDFA3200C6B;
-        Sat, 29 Jan 2022 18:00:59 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Sat, 29 Jan 2022 18:01:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; bh=KaJi6i1rcpG62yHLxKEhKW/9uykM7g
-        g7A3y7usLAY7o=; b=oVF8yBuw077qKkvBIeh/qAs4mNm9itM9TlGO/vZrmoU4TU
-        9twmdPOAGna6DE/QoGOVOzgkN8UHe3R27egreQ27tQJJuK0SDOf+1ZPxaYomaIMQ
-        EcDLYvLFyxFpbQgBESAlCSHfc8Z/vZfjbPYScgmqYxEeDYG8B/xbrRXg1xxmPk3H
-        2bFQZAROxBkMzTosbWy74aVUISfgrzTCrw0sG0UWEfaXNytWvipwMcXwDqNrJ/Xq
-        FnpyS1Vy18lAaJEPDW2vlNeVsCkqqq97AfomPWIBUNR94FbqlotgUs8e3XFdSdQV
-        qkxiHen9sTgmJfsNMQngzRt2dJbjL1qaSTCuKa5A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=KaJi6i
-        1rcpG62yHLxKEhKW/9uykM7gg7A3y7usLAY7o=; b=fOo321VpFKHEDGKtZDhAdF
-        itndNBHxmgZ79bb2owxng3DMR2PWDOfYk3ZayN+kxCdcCxjWpBw4ibcdnO7ZsWxI
-        HSKbRVccrugHqUJt8hINAej+sYbmj3TWsX7DiUbcNmis/qgDWB+YP/jCD21J74NE
-        QWUMzeZ0znPUHVbkUierrlTF4pzvbBImuhlEoyhzrZYCRF0+JzCbpd1gP9h/S7J1
-        hq5hpvyQ6oaBdL/nOa3zHTXPJAOYA0+FaTejQOKIKddnTp3pwF3uTgDuYNIWPOuf
-        I/TAQZQ5C+UlPkefQ6bxgXVbQgGTA4fe0UzB+P8hPnZoXZNdIwkRm3QrcuCB/tUw
-        ==
-X-ME-Sender: <xms:K8f1Ya-uVsLPzCG95vMYIuFj7naG6fZWaUu67PGCIv9TXlXC-BCxoA>
-    <xme:K8f1Yau2I7NHP0n9R14fbN7yNEOKLnaluoD5Qnay3MCO9J_cijJUBEhTga4VISeIs
-    bHPw38SGm7XLjsZsg>
-X-ME-Received: <xmr:K8f1YQDBVgNCpkgVDZ2i4Sv6Y1gl5Xq3_2Qpj_r1C0OMbsUs5KusSUjJTKHxuLf792dkWJZ24RuTKRQNpkyFBD3zTp8PxXFw_SU2_arv3MbPCWOod4xwdx9iineL0ppS58GmyA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfeejgdduieelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpeduhfejfedvhffgfeehtefghfeiiefgfeehgfdvvdevfeegjeehjedv
-    gfejheeuieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:K8f1YSeZOY6Vkcgw94yYKDOwcS-pVLZhNNpDY0rrZ1cB71vv49SW_w>
-    <xmx:K8f1YfMDV4xma4M__hAF10BNwSa7dOcOAvfwXRYI8EACmfAg-m4N3A>
-    <xmx:K8f1Ycmcg81X-UIlw9MWmr5k7rDRuFT_fCZkQguvox9DGY5mX0u-LA>
-    <xmx:K8f1YadBZJtP_Pos210DMNbyRZQlvJqy3UXjUSIPPm1T8zjY1lbGcQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 29 Jan 2022 18:00:58 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>, Ondrej Jirman <x@xff.cz>,
-        Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 5/5] [DO NOT MERGE] arm64: dts: allwinner: pinephone: Add keyboard
-Date:   Sat, 29 Jan 2022 17:00:42 -0600
-Message-Id: <20220129230043.12422-6-samuel@sholland.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220129230043.12422-1-samuel@sholland.org>
+        id S1353752AbiA3CLR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 29 Jan 2022 21:11:17 -0500
+Received: from vps.xff.cz ([195.181.215.36]:38668 "EHLO vps.xff.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236098AbiA3CLQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 29 Jan 2022 21:11:16 -0500
+X-Greylist: delayed 349 seconds by postgrey-1.27 at vger.kernel.org; Sat, 29 Jan 2022 21:11:13 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+        t=1643508324; bh=QCaFEAKl4lmDsxn776W1aL4aatdwnt4C9rqE/9W3L7g=;
+        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
+        b=hCDHJ3TkEQjc9TVUu0m3zz4GdWvfM/Ce2fsBKF6f94d1v1Bn754t+14N8La/sjHiU
+         Pky5DLlro8yIsxe6Yp6LiqS57g5nJAYdW1eQd520rikAZvyxDAVDMmdVqA7989araM
+         3qmKXzlBNWkzB6eeGzHoEx2GFHvUMI9xorgKundw=
+Date:   Sun, 30 Jan 2022 03:05:23 +0100
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <x@xff.cz>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
+Subject: Re: [PATCH 4/5] Input: pinephone-keyboard - Support the proxied I2C
+ bus
+Message-ID: <20220130020523.f7mx36yj6nlqthoe@core.my.home>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <x@xff.cz>,
+        Samuel Holland <samuel@sholland.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
 References: <20220129230043.12422-1-samuel@sholland.org>
+ <20220129230043.12422-5-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220129230043.12422-5-samuel@sholland.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The official PinePhone keyboard accessory connects to the phone's POGO
-pins for I2C and interrupts. It has an Injoinic IP5209 power bank IC
-connected to the keyboard's internal I2C bus.
+Hello Samuel,
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+On Sat, Jan 29, 2022 at 05:00:41PM -0600, Samuel Holland wrote:
+> The PinePhone keyboard case contains a battery managed by an integrated
+> power bank IC. The power bank IC communicates over I2C, and the keyboard
+> MCU firmware provides an interface to read and write its registers.
+> Let's use this interface to implement a SMBus adapter, so we can reuse
+> the driver for the power bank IC.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> 
+>  drivers/input/keyboard/pinephone-keyboard.c | 73 +++++++++++++++++++++
+>  1 file changed, 73 insertions(+)
+> 
+> diff --git a/drivers/input/keyboard/pinephone-keyboard.c b/drivers/input/keyboard/pinephone-keyboard.c
+> index 8065bc3e101a..7d2e16e588a0 100644
+> --- a/drivers/input/keyboard/pinephone-keyboard.c
+> +++ b/drivers/input/keyboard/pinephone-keyboard.c
+> @@ -3,6 +3,7 @@
+>  // Copyright (C) 2021-2022 Samuel Holland <samuel@sholland.org>
+>  
+>  #include <linux/crc8.h>
+> +#include <linux/delay.h>
+>  #include <linux/i2c.h>
+>  #include <linux/input/matrix_keypad.h>
+>  #include <linux/interrupt.h>
+> @@ -23,6 +24,11 @@
+>  #define PPKB_SCAN_DATA			0x08
+>  #define PPKB_SYS_CONFIG			0x20
+>  #define PPKB_SYS_CONFIG_DISABLE_SCAN		BIT(0)
+> +#define PPKB_SYS_SMBUS_COMMAND		0x21
+> +#define PPKB_SYS_SMBUS_DATA		0x22
+> +#define PPKB_SYS_COMMAND		0x23
+> +#define PPKB_SYS_COMMAND_SMBUS_READ		0x91
+> +#define PPKB_SYS_COMMAND_SMBUS_WRITE		0xa1
+>  
+>  #define PPKB_DEFAULT_KEYMAP_ROWS	6
+>  #define PPKB_DEFAULT_KEYMAP_COLS	12
+> @@ -132,6 +138,7 @@ static const struct matrix_keymap_data ppkb_default_keymap_data = {
+>  };
+>  
+>  struct pinephone_keyboard {
+> +	struct i2c_adapter adapter;
+>  	struct input_dev *input;
+>  	unsigned short *fn_keymap;
+>  	u8 crc_table[CRC8_TABLE_SIZE];
+> @@ -143,6 +150,57 @@ struct pinephone_keyboard {
+>  	u8 buf[];
+>  };
+>  
+> +static int ppkb_adap_smbus_xfer(struct i2c_adapter *adap, u16 addr,
+> +				unsigned short flags, char read_write,
+> +				u8 command, int size,
+> +				union i2c_smbus_data *data)
+> +{
+> +	struct i2c_client *client = adap->algo_data;
+> +	u8 buf[3];
+> +	int ret;
+> +
+> +	buf[0] = command;
+> +	buf[1] = data->byte;
+> +	buf[2] = read_write == I2C_SMBUS_READ ? PPKB_SYS_COMMAND_SMBUS_READ
+> +					      : PPKB_SYS_COMMAND_SMBUS_WRITE;
+> +
+> +	ret = i2c_smbus_write_i2c_block_data(client, PPKB_SYS_SMBUS_COMMAND,
+> +					     sizeof(buf), buf);
+> +	if (ret)
+> +		return ret;
+  
+  [1]
 
- .../dts/allwinner/sun50i-a64-pinephone.dtsi    | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+> +	/* Read back the command status until it passes or fails. */
+> +	do {
+> +		usleep_range(300, 500);
+> +		ret = i2c_smbus_read_byte_data(client, PPKB_SYS_COMMAND);
+> +	} while (ret == buf[2]);
+> +	if (ret < 0)
+> +		return ret;
+> +	/* Commands return 0x00 on success and 0xff on failure. */
+> +	if (ret)
+> +		return -EIO;
+> +
+> +	if (read_write == I2C_SMBUS_READ) {
+> +		ret = i2c_smbus_read_byte_data(client, PPKB_SYS_SMBUS_DATA);
+> +		if (ret < 0)
+> +			return ret;
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
-index 87847116ab6d..2fa1bdf8aa63 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
-@@ -208,6 +208,24 @@ accelerometer@68 {
- /* Connected to pogo pins (external spring based pinheader for user addons) */
- &i2c2 {
- 	status = "okay";
-+
-+	keyboard@15 {
-+		compatible = "pine64,pinephone-keyboard";
-+		reg = <0x15>;
-+		interrupt-parent = <&r_pio>;
-+		interrupts = <0 12 IRQ_TYPE_EDGE_FALLING>; /* PL12 */
-+		wakeup-source;
-+
-+		i2c-bus {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			charger@75 {
-+				compatible = "injoinic,ip5209";
-+				reg = <0x75>;
-+			};
-+		};
-+	};
- };
- 
- &lradc {
--- 
-2.33.1
+Please use a single read transfer to get both command result and data.
+There will be less risk that some userspace app will issue another command
+in between command status being read as 0 and data byte being read.
 
+Otherwise if you use this in some read/modify/write operation, you
+may write unexpected value to PMIC. I2C register layout is designed
+to make this as optimal as possible in a single I2C transaction, so
+you only need 3 bytes to start command and 2 bytes to read the result
+and data, both in a single xfer. There's very high likelihood the command
+will complete in those 300 - 500 us anyway, because the timing is
+predictable. If this delay is set right, it's almost guaranteed,
+only two xfers will be necessary to run the command and get the result+
+status.
+
+And if possible, it would be best if the bus was somehow made busy for
+other users, until the whole comand/result sequence completes, to eliminate
+the possibility of another command being issued by other bus users
+around [1].
+
+Thank you and kind regards,
+	o.
+
+> +		data->byte = ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static u32 ppkg_adap_functionality(struct i2c_adapter *adap)
+> +{
+> +	return I2C_FUNC_SMBUS_BYTE_DATA;
+> +}
+> +
+> +static const struct i2c_algorithm ppkb_adap_algo = {
+> +	.smbus_xfer		= ppkb_adap_smbus_xfer,
+> +	.functionality		= ppkg_adap_functionality,
+> +};
+> +
+>  static int ppkb_set_scan(struct i2c_client *client, bool enable)
+>  {
+>  	struct device *dev = &client->dev;
+> @@ -265,6 +323,7 @@ static int ppkb_probe(struct i2c_client *client)
+>  	unsigned int map_rows, map_cols;
+>  	struct pinephone_keyboard *ppkb;
+>  	u8 info[PPKB_MATRIX_SIZE + 1];
+> +	struct device_node *i2c_bus;
+>  	int ret;
+>  
+>  	ret = i2c_smbus_read_i2c_block_data(client, 0, sizeof(info), info);
+> @@ -312,6 +371,20 @@ static int ppkb_probe(struct i2c_client *client)
+>  
+>  	i2c_set_clientdata(client, ppkb);
+>  
+> +	i2c_bus = of_get_child_by_name(dev->of_node, "i2c-bus");
+> +	if (i2c_bus) {
+> +		ppkb->adapter.owner = THIS_MODULE;
+> +		ppkb->adapter.algo = &ppkb_adap_algo;
+> +		ppkb->adapter.algo_data = client;
+> +		ppkb->adapter.dev.parent = dev;
+> +		ppkb->adapter.dev.of_node = i2c_bus;
+> +		strscpy(ppkb->adapter.name, DRV_NAME, sizeof(ppkb->adapter.name));
+> +
+> +		ret = devm_i2c_add_adapter(dev, &ppkb->adapter);
+> +		if (ret)
+> +			return dev_err_probe(dev, ret, "Failed to add I2C adapter\n");
+> +	}
+> +
+>  	crc8_populate_msb(ppkb->crc_table, PPKB_CRC8_POLYNOMIAL);
+>  	ppkb->row_shift = get_count_order(map_cols);
+>  	ppkb->rows = map_rows;
+> -- 
+> 2.33.1
+> 
