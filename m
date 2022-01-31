@@ -2,105 +2,162 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F464A4850
-	for <lists+linux-i2c@lfdr.de>; Mon, 31 Jan 2022 14:38:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 192154A4A23
+	for <lists+linux-i2c@lfdr.de>; Mon, 31 Jan 2022 16:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376613AbiAaNiL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 31 Jan 2022 08:38:11 -0500
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:46834 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378878AbiAaNhm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 31 Jan 2022 08:37:42 -0500
-Received: by mail-ot1-f45.google.com with SMTP id l12-20020a0568302b0c00b005a4856ff4ceso4851692otv.13;
-        Mon, 31 Jan 2022 05:37:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=hmPqqMH89APxATVRducOHUhrVsYSdhK58FU8hjuJFYU=;
-        b=YODoObUX5rMRyvWW21oR1+43/6LuUq545MHuMwqknaFc/iYIB/Xvc67jRg1Go6fShQ
-         wwCZlrCAmS6n0pegsxFbvKIi2ajSL21NEpRaRxELpQqoTj03liW2kZnT4QVymr2nHRkU
-         Q98IVasJqvp4JBzIaLFrLph2sT3wiaD1vos6D30TYVDZVB0wJyzSZwnI2TpDNdAJ2X5+
-         +EMGeC2Lq9q/4jfAUZjZx1XWN3mgN/oGFR8HSSY4eGWVBLy0dpZEzsl+yxDm2/gOwpHo
-         7+IyS/viiF8HM/YUW46MAkNo3YnaVi9EfPOYaL/pbo0WH1rC4E8i0aqCX4eOcHdsbeK8
-         PnOw==
-X-Gm-Message-State: AOAM530p2SkbRF8tPqMWi4kzAApzKf2VSRnew+AgaW0rbejfgDXpcQ+Y
-        g24yn63o4Mw/+g2uhcRKqg==
-X-Google-Smtp-Source: ABdhPJxRn59r1bJ55L4bUsinNm/Dim5FdPonnilsaHoyZ/qmjUHFKSeP/tTIxH3eXslra7duYbwfsg==
-X-Received: by 2002:a9d:eca:: with SMTP id 68mr1879048otj.274.1643636257269;
-        Mon, 31 Jan 2022 05:37:37 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id q9sm9487122oif.9.2022.01.31.05.37.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 05:37:36 -0800 (PST)
-Received: (nullmailer pid 140171 invoked by uid 1000);
-        Mon, 31 Jan 2022 13:37:31 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     conor.dooley@microchip.com
-Cc:     alexandre.belloni@bootlin.com, geert@linux-m68k.org,
-        heiko@sntech.de, paul.walmsley@sifive.com,
-        ivan.griffin@microchip.com, linux-pwm@vger.kernel.org,
-        thierry.reding@gmail.com, jassisinghbrar@gmail.com,
-        atishp@rivosinc.com, lewis.hanly@microchip.com,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, robh+dt@kernel.org,
-        linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-riscv@lists.infradead.org, bin.meng@windriver.com,
-        devicetree@vger.kernel.org, daire.mcnamara@microchip.com,
-        lee.jones@linaro.org, krzysztof.kozlowski@canonical.com,
-        u.kleine-koenig@pengutronix.de, a.zummo@towertech.it,
-        linux-gpio@vger.kernel.org, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu
-In-Reply-To: <20220131114726.973690-6-conor.dooley@microchip.com>
-References: <20220131114726.973690-1-conor.dooley@microchip.com> <20220131114726.973690-6-conor.dooley@microchip.com>
-Subject: Re: [PATCH v5 05/12] dt-bindings: gpio: add bindings for microchip mpfs gpio
-Date:   Mon, 31 Jan 2022 07:37:31 -0600
-Message-Id: <1643636251.114216.140170.nullmailer@robh.at.kernel.org>
+        id S1379397AbiAaPOr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 31 Jan 2022 10:14:47 -0500
+Received: from mga09.intel.com ([134.134.136.24]:61344 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1377812AbiAaPOS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 31 Jan 2022 10:14:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643642058; x=1675178058;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3D8YLxy7IJXHCZSfu3Aufg/zIoMBFH7k7WLe87F7zsI=;
+  b=JNF9yr4cYM9XUnDWw/z3EYD2K74oNY7CClEqTjoWnyiYZ2KYJH4CCuZv
+   L69GaHOQ9o3RFyNg6TC+eKbo6NHLpc07Jzr07/SxzVU+NG2Kef9vaPP9d
+   6U+3NlCWHzLld3wQi2fxJ24rzogCZK6Q4AZDJ9TsTm81+Ck/zyHamtKPd
+   kSvvc2vg+P0iH3iE0BdT0nAM59cLQ+KzT85MTYjYDyGLX0o28anC6xRIv
+   5/B8trHTB679s/DnAzEeV5VHf6wU7aVjnWKTPD2DJ5KD/2nRxoVOLrKmS
+   sNlJ6QF+GabCQwAQyvY8oFPzz9/getQ7Zg3NqkmFUgAG/sPQDvH1MIrHf
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="247248983"
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="247248983"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 07:14:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="768615387"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 31 Jan 2022 07:14:01 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id BB70F21A; Mon, 31 Jan 2022 17:14:15 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: [PATCH v4 0/8] platform/x86: introduce p2sb_bar() helper
+Date:   Mon, 31 Jan 2022 17:13:38 +0200
+Message-Id: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 31 Jan 2022 11:47:20 +0000, conor.dooley@microchip.com wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Add device tree bindings for the gpio controller on
-> the Microchip PolarFire SoC.
-> 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../bindings/gpio/microchip,mpfs-gpio.yaml    | 80 +++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
-> 
+There are a few users and at least one more is coming (*) that would like
+to utilize P2SB mechanism of hiding and unhiding a device from the PCI
+configuration space.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Here is the series to consolidate p2sb handling code for existing users
+and provide a generic way for new comer(s).
 
-yamllint warnings/errors:
+It also includes a patch to enable GPIO controllers on Apollo Lake
+when it's used with ABL bootloader w/o ACPI support.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.example.dts:19:18: fatal error: dt-bindings/clock/microchip,mpfs-clock.h: No such file or directory
-   19 |         #include "dt-bindings/clock/microchip,mpfs-clock.h"
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:378: Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1398: dt_binding_check] Error 2
+The patch that bring the helper ("platform/x86/intel: Add Primary
+to Sideband (P2SB) bridge support") has a commit message that
+sheds a light on what the P2SB is and why this is needed.
 
-doc reference errors (make refcheckdocs):
+The changes made in v2 do not change the main idea and the functionality
+in a big scale. What we need is probably one more (RE-)test done by Henning.
+I hope to have it merged to v5.18-rc1 that Siemens can develop their changes
+based on this series.
 
-See https://patchwork.ozlabs.org/patch/1586677
+I have tested this on Apollo Lake platform (I'm able to see SPI NOR and
+since we have an ACPI device for GPIO I do not see any attempts to recreate
+one).
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+*) One in this series, and one is a due after merge in the Simatic IPC drivers
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+The series may be routed either via MFD (and I guess Lee would prefer that)
+or via PDx86, whichever seems better for you, folks. As of today patches
+are ACKed by the respective maintainers, but I2C one and one of the MFD.
 
-pip3 install dtschema --upgrade
+Wolfram, can you ACK the patch against i2c-i801 driver, if you have no
+objections?
 
-Please check and re-submit.
+Changes in v4:
+- added tag to the entire series (Hans)
+- added tag to pin control patch (Mika)
+- dropped PCI core changes (PCI core doesn't want modifications to be made)
+- as a consequence of the above merged necessary bits into p2sb.c
+- added a check that p2sb is really hidden (Hans)
+- added EDAC patches (reviewed by maintainer internally)
+
+Changes in v3:
+- resent with cover letter
+
+Changes in v2:
+- added parentheses around bus in macros (Joe)
+- added tag (Jean)
+- fixed indentation and wrapping in the header (Christoph)
+- moved out of PCI realm to PDx86 as the best common denominator (Bjorn)
+- added a verbose commit message to explain P2SB thingy (Bjorn)
+- converted first parameter from pci_dev to pci_bus
+- made first two parameters (bus and devfn) optional (Henning, Lee)
+- added Intel pin control patch to the series (Henning, Mika)
+- fixed English style in the commit message of one of MFD patch (Lee)
+- added tags to my MFD LPC ICH patches (Lee)
+- used consistently (c) (Lee)
+- made indexing for MFD cell and resource arrays (Lee)
+- fixed the resource size in i801 (Jean)
+
+Andy Shevchenko (6):
+  pinctrl: intel: Check against matching data instead of ACPI companion
+  mfd: lpc_ich: Factor out lpc_ich_enable_spi_write()
+  mfd: lpc_ich: Switch to generic p2sb_bar()
+  i2c: i801: convert to use common P2SB accessor
+  EDAC, pnd2: Use proper I/O accessors and address space annotation
+  EDAC, pnd2: convert to use common P2SB accessor
+
+Jonathan Yong (1):
+  platform/x86/intel: Add Primary to Sideband (P2SB) bridge support
+
+Tan Jui Nee (1):
+  mfd: lpc_ich: Add support for pinctrl in non-ACPI system
+
+ drivers/edac/Kconfig                   |   1 +
+ drivers/edac/pnd2_edac.c               |  62 ++---
+ drivers/i2c/busses/Kconfig             |   1 +
+ drivers/i2c/busses/i2c-i801.c          |  39 +---
+ drivers/mfd/Kconfig                    |   1 +
+ drivers/mfd/lpc_ich.c                  | 136 +++++++++--
+ drivers/pinctrl/intel/pinctrl-intel.c  |  14 +-
+ drivers/platform/x86/intel/Kconfig     |  12 +
+ drivers/platform/x86/intel/Makefile    |   1 +
+ drivers/platform/x86/intel/p2sb.c      | 305 +++++++++++++++++++++++++
+ include/linux/platform_data/x86/p2sb.h |  27 +++
+ 11 files changed, 500 insertions(+), 99 deletions(-)
+ create mode 100644 drivers/platform/x86/intel/p2sb.c
+ create mode 100644 include/linux/platform_data/x86/p2sb.h
+
+-- 
+2.34.1
 
