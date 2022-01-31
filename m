@@ -2,52 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7B64A3D75
-	for <lists+linux-i2c@lfdr.de>; Mon, 31 Jan 2022 06:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE1F4A3D87
+	for <lists+linux-i2c@lfdr.de>; Mon, 31 Jan 2022 06:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiAaFiM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 31 Jan 2022 00:38:12 -0500
-Received: from mga11.intel.com ([192.55.52.93]:25533 "EHLO mga11.intel.com"
+        id S235039AbiAaF7N (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 31 Jan 2022 00:59:13 -0500
+Received: from mga05.intel.com ([192.55.52.43]:29021 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229711AbiAaFiM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 31 Jan 2022 00:38:12 -0500
+        id S232130AbiAaF7N (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 31 Jan 2022 00:59:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643607492; x=1675143492;
+  t=1643608753; x=1675144753;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=WtouB6SX+auKKfXg4soIq1olBLZB9Bdu7TGRv9ZOFpo=;
-  b=mt/sVvZj25ojp6YWnl6hNFvPmr9PPWXaZEGvILn68AG5sV/RwFkRz0ZC
-   1qi7uX5k6Se9abB/i4ssYx0wH4RD4+rPg1YP8mIzenTvLtp+BpcXiq5fY
-   v3CKwfI+2H2quaA4+j0VdMfNrGC38Q03A+0kp4uKK1xf17Uv9u2KPNR+t
-   LEKEnOLrISFnepVQMYuqx2mDIIoKYnpN4PtCJRzD0yU0FsAG/s/LVmXNV
-   2iN0Jl0fzg/xHwfLQX/ZagQODk7REGi+bh2NHAUoSsj0ti7YcrE25jLsi
-   Wx83DDgWMsDQH7hOM20aAYhXc5+hyMKx8AMfHSRuoI+bAhm8lKvzjzExR
+  bh=qSMFveX5lVTif1dekQa1h/+KX8io6E0LwxZv+DKJcis=;
+  b=Vfs+DEMAfzgmsz5ZiOxc6g8yardRZalNNWHKYd/zQxkPhAt+qzEoJt5p
+   0FsdZK0UfUawfHskhRHTHEKEwSq4Ozf+GuiX00NMZCWurYDW/AHs026gr
+   Jf1eCVu6SEwr8HIdQ5ea8Zx1gVrUg4JevF8QyY7+AQuU0lcYKyDN34rim
+   wfu+BrFVZCnz/9YP5hCcuWTrKZzZ1F50y75JuIWytUT+0gozLkV5C0FE9
+   BH4f2AFyjC8ifoo+aoQl96uKRatVooai0E9trs28xyBEONTq0nY/hM6l3
+   u0FrhH4DePNcPizl7Yxh5EOPK/ylsG366x7SC60+U6xaRvT3qYnvd4Biq
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="244997993"
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="333763378"
 X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="244997993"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 21:38:11 -0800
+   d="scan'208";a="333763378"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 21:59:12 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="478967430"
+   d="scan'208";a="522530559"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 30 Jan 2022 21:38:08 -0800
+  by orsmga007.jf.intel.com with ESMTP; 30 Jan 2022 21:59:09 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nEPOB-000RRl-PZ; Mon, 31 Jan 2022 05:38:07 +0000
-Date:   Mon, 31 Jan 2022 13:37:57 +0800
+        id 1nEPiW-000RUE-Mz; Mon, 31 Jan 2022 05:59:08 +0000
+Date:   Mon, 31 Jan 2022 13:58:44 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Terry Bowman <terry.bowman@amd.com>, linux@roeck-us.net,
         linux-watchdog@vger.kernel.org, jdelvare@suse.com,
         linux-i2c@vger.kernel.org, wsa@kernel.org,
         andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        wim@linux-watchdog.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org
 Subject: Re: [PATCH v4 3/4] Watchdog: sp5100_tco: Add initialization using
  EFCH MMIO
-Message-ID: <202201311346.KLMS6idr-lkp@intel.com>
+Message-ID: <202201311323.CdxiFZ8V-lkp@intel.com>
 References: <20220130191225.303115-4-terry.bowman@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -70,53 +70,40 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/0day-ci/linux/commits/Terry-Bowman/Watchdog-sp5100_tco-Replace-cd6h-cd7h-port-I-O-accesses-with-MMIO-accesses/20220131-031525
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: x86_64-randconfig-m001-20220131 (https://download.01.org/0day-ci/archive/20220131/202201311346.KLMS6idr-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+config: x86_64-randconfig-a013-20220131 (https://download.01.org/0day-ci/archive/20220131/202201311323.CdxiFZ8V-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f1c18acb07aa40f42b87b70462a6d1ab77a4825c)
 reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
         # https://github.com/0day-ci/linux/commit/92f6f8c644fc7df3d1f3f8e32f8b1f4efc3f321f
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Terry-Bowman/Watchdog-sp5100_tco-Replace-cd6h-cd7h-port-I-O-accesses-with-MMIO-accesses/20220131-031525
         git checkout 92f6f8c644fc7df3d1f3f8e32f8b1f4efc3f321f
         # save the config file to linux build tree
         mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/watchdog/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/watchdog/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from include/linux/device.h:15,
-                    from include/linux/pci.h:37,
-                    from drivers/watchdog/sp5100_tco.c:40:
-   drivers/watchdog/sp5100_tco.c: In function 'sp5100_tco_prepare_base':
-   drivers/watchdog/sp5100_tco.c:272:16: warning: format '%x' expects argument of type 'unsigned int', but argument 3 has type 'void *' [-Wformat=]
-     272 |  dev_info(dev, "Using 0x%08x for watchdog MMIO address\n", tco->tcobase);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:16: note: in definition of macro 'dev_printk_index_wrap'
-     110 |   _p_func(dev, fmt, ##__VA_ARGS__);   \
-         |                ^~~
-   include/linux/dev_printk.h:150:51: note: in expansion of macro 'dev_fmt'
-     150 |  dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                   ^~~~~~~
-   drivers/watchdog/sp5100_tco.c:272:2: note: in expansion of macro 'dev_info'
-     272 |  dev_info(dev, "Using 0x%08x for watchdog MMIO address\n", tco->tcobase);
-         |  ^~~~~~~~
-   drivers/watchdog/sp5100_tco.c:272:28: note: format string is defined here
-     272 |  dev_info(dev, "Using 0x%08x for watchdog MMIO address\n", tco->tcobase);
-         |                         ~~~^
-         |                            |
-         |                            unsigned int
-         |                         %08p
-   drivers/watchdog/sp5100_tco.c: In function 'sp5100_tco_setupdevice_mmio':
-   drivers/watchdog/sp5100_tco.c:345:8: error: implicit declaration of function 'request_mem_region_muxed'; did you mean 'request_mem_region'? [-Werror=implicit-function-declaration]
-     345 |  res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
-         |        ^~~~~~~~~~~~~~~~~~~~~~~~
-         |        request_mem_region
->> drivers/watchdog/sp5100_tco.c:345:6: warning: assignment to 'struct resource *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     345 |  res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
-         |      ^
-   cc1: some warnings being treated as errors
+   drivers/watchdog/sp5100_tco.c:272:60: warning: format specifies type 'unsigned int' but the argument has type 'void *' [-Wformat]
+           dev_info(dev, "Using 0x%08x for watchdog MMIO address\n", tco->tcobase);
+                                  ~~~~                               ^~~~~~~~~~~~
+   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                    ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   drivers/watchdog/sp5100_tco.c:345:8: error: implicit declaration of function 'request_mem_region_muxed' [-Werror,-Wimplicit-function-declaration]
+           res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
+                 ^
+>> drivers/watchdog/sp5100_tco.c:345:6: warning: incompatible integer to pointer conversion assigning to 'struct resource *' from 'int' [-Wint-conversion]
+           res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
+               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings and 1 error generated.
 
 
 vim +345 drivers/watchdog/sp5100_tco.c
