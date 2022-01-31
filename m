@@ -2,117 +2,154 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5700F4A3A90
-	for <lists+linux-i2c@lfdr.de>; Sun, 30 Jan 2022 22:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2654A3C9A
+	for <lists+linux-i2c@lfdr.de>; Mon, 31 Jan 2022 03:53:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356860AbiA3VeC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 30 Jan 2022 16:34:02 -0500
-Received: from wayoftao.net ([80.209.237.75]:57698 "EHLO mail.wayoftao.net"
+        id S236472AbiAaCxK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 30 Jan 2022 21:53:10 -0500
+Received: from mga06.intel.com ([134.134.136.31]:41207 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356904AbiA3Vdq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 30 Jan 2022 16:33:46 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5EADA100800;
-        Sun, 30 Jan 2022 21:33:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wayoftao.net;
-        s=dkim; t=1643578424;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:
-         content-language; bh=dQ0r1T4xej5bDgENcEzkk2nFTMyQWWSWxGyvybljUMA=;
-        b=cfU7ezZTX5a08QzEOPVGGETNB2ryz1hB4gaNsSBK6qMkFaCTOk3Ige5zgi+l/qkFniPxbb
-        oejm5+LYkV7LM61EOmiiFFXX7W937/TPR+JH9oJtKUhmLDEShoxYi/vFiy2z//2hjQ9Diq
-        dDwvrKhJ57zFEOdpkm6MVZCECtv14VlhPdUt3WcCxLpB+rFaz8RtB3eFt/gq3HFYX6nVwL
-        lHupeGYYm4c8gNX5hpjhhqfWTGio/rr1PDGlUIlZ1dQTsG5OvARFJK66sQFKRSDHo8SOD5
-        Oe6JHmrPTtZMlAWN4DCjLkBYVGmbhArnJsnAH6HVyideKPZ0h02WeLccoMAJ0w==
-Message-ID: <2cd98d51-f868-2bbb-f048-8096a13aa2f7@wayoftao.net>
-Date:   Sun, 30 Jan 2022 22:33:43 +0100
+        id S1357393AbiAaCxI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 30 Jan 2022 21:53:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643597587; x=1675133587;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7lGNzKZJkvkP+E3JiYcU2azS9V5iFuZ31UoQmJQLXXo=;
+  b=O9+fsqwiDCKQcISzwXy8E/tn16XTqKWXEfqcX88E22TM+bcIbuluugIE
+   QhUNHxgkXofHQP8EQPiJ6uqg2f0zpBucCe/POx+VmhM2i7YuUrcjx8HcZ
+   2oHGaPqTRxlCJxxQuCRSU36k1uW3A+XA0Ju9bWo6kwT4QAdOQoWTySyVa
+   W53NAjHgm8qBSlWxsKo5MSQPM7bgd/UCuWl4f5bdBZUetTLIIvzlbKMTC
+   Q9iBJSGo4G+UEzI8vjea/3LAttsu9U839coWAQrBsFDC6jPCgyX34Tfih
+   ZaKQlAtjfX13XG1STW5nFxczVgECVAN0gRGNWplhtaoO7ki9iIta/BxNS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="308122614"
+X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
+   d="scan'208";a="308122614"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 18:53:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
+   d="scan'208";a="598719790"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 30 Jan 2022 18:53:03 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nEMoQ-000RIQ-Me; Mon, 31 Jan 2022 02:53:02 +0000
+Date:   Mon, 31 Jan 2022 10:52:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Terry Bowman <terry.bowman@amd.com>, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, jdelvare@suse.com,
+        linux-i2c@vger.kernel.org, wsa@kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        wim@linux-watchdog.org
+Subject: Re: [PATCH v4 2/4] Watchdog: sp5100_tco: Refactor MMIO base address
+ initialization
+Message-ID: <202201311012.U53Rg3e2-lkp@intel.com>
+References: <20220130191225.303115-3-terry.bowman@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Kim Nilsson <kim@wayoftao.net>
-Subject: Possible ACPI bug/regression in i2c-i801 [plain text]
-To:     jdelvare@suse.com
-Content-Language: en-US
-Cc:     linux-i2c@vger.kernel.org
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------GE02uWz56esgVyorUWsYxf0h"
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220130191225.303115-3-terry.bowman@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------GE02uWz56esgVyorUWsYxf0h
-Content-Type: multipart/mixed; boundary="------------2dHvCQAPQk83c4LoeMMMD44B";
- protected-headers="v1"
-From: Kim Nilsson <kim@wayoftao.net>
-To: jdelvare@suse.com
-Cc: linux-i2c@vger.kernel.org
-Message-ID: <2cd98d51-f868-2bbb-f048-8096a13aa2f7@wayoftao.net>
-Subject: Possible ACPI bug/regression in i2c-i801 [plain text]
+Hi Terry,
 
---------------2dHvCQAPQk83c4LoeMMMD44B
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Thank you for the patch! Perhaps something to improve:
 
-SGVsbG8gbWFpbnRhaW5lcnMsDQoNCg0KSSd2ZSByZWNlbnRseSBiZWVuIGRvaW5nIHNvbWUg
-c3VzcGVuZC9yZXN1bWUgdGVzdGluZyByZWxhdGVkIHRvIGFuIA0KczJpZGxlIGJ1ZyBpbiBh
-bWRncHUgDQooaHR0cHM6Ly9naXRsYWIuZnJlZWRlc2t0b3Aub3JnL2RybS9hbWQvLS9pc3N1
-ZXMvMTg3OSkgYW5kIEkndmUgY29tZSANCmFjcm9zcyBzb21lIHByb2JsZW1zIHdpdGggQy1z
-dGF0ZXMuDQoNCkFmdGVyIHJlc3VtaW5nIGZyb20gczJpZGxlLCBQa2coSFcpIHdpbGwgbm8g
-bG9uZ2VyIGVudGVyIGFueSBzdGF0ZSBDMiBvciANCmRlZXBlci4gU3VzcGVuZGluZyB0byBz
-MyB3b3VsZCBub3QgdHJpZ2dlciB0aGlzIGlzc3VlIG9uIDUuMTYuMiwgYnV0IA0KYWZ0ZXIg
-dHJ5aW5nIG91dCA1LjE2LjQgSSdtIGZhY2luZyBhIHNpbWlsYXIgcHJvYmxlbSB3aGVyZSBQ
-a2coSFcpIHdpbGwgDQpyYXJlbHkgaWYgZXZlciBnbyBkZWVwZXIgdGhhbiBDMy4gTm93LCB0
-aGUgcmVhc29uIEkgYW0gY29udGFjdGluZyB5b3UgaXMgDQpiZWNhdXNlIEkgd2FzIHBsYXlp
-bmcgYXJvdW5kIHRvZGF5IGFuZCBmb3VuZCB0aGF0IHVubG9hZGluZyBpMmMtaTgwMSANCnNl
-ZW1zIHRvIGZpeCB0aGUgaXNzdWUuDQoNCg0KIyBDUFU6IEludGVsKFIpIENvcmUoVE0pIGk3
-LTg2NjVVIENQVSBAIDEuOTBHSHoNCiMgR1BVOiBJbnRlbCBDb3Jwb3JhdGlvbiBXaGlza2V5
-TGFrZS1VIEdUMiBbVUhEIEdyYXBoaWNzIDYyMF0sIEFkdmFuY2VkIA0KTWljcm8gRGV2aWNl
-cywgSW5jLiBbQU1EL0FUSV0gTGV4YSBYVCBbUmFkZW9uIFBSTyBXWCAzMTAwXQ0KIyAwMDox
-NS4wIFNlcmlhbCBidXMgY29udHJvbGxlcjogSW50ZWwgQ29ycG9yYXRpb24gQ2Fubm9uIFBv
-aW50LUxQIA0KU2VyaWFsIElPIEkyQyBDb250cm9sbGVyICMwIChyZXYgMzApDQojIDAwOjE1
-LjEgU2VyaWFsIGJ1cyBjb250cm9sbGVyOiBJbnRlbCBDb3Jwb3JhdGlvbiBDYW5ub24gUG9p
-bnQtTFAgDQpTZXJpYWwgSU8gSTJDIENvbnRyb2xsZXIgIzEgKHJldiAzMDA6MTkuMCBTZXJp
-YWwgYnVzIGNvbnRyb2xsZXI6IEludGVsIA0KQ29ycG9yYXRpb24gQ2Fubm9uIFBvaW50LUxQ
-IFNlcmlhbCBJTyBJMkMgSG9zdCBDb250cm9sbGVyIChyZXYgMzApDQoNCg0KZG1lc2cgb3V0
-cHV0IHdoZW4gbG9hZGluZyB0aGUgbW9kdWxlIGFmdGVyIGFuIHVubG9hZDoNCg0KWyAxMDAy
-Ljk2MTA5MV0gaTgwMV9zbWJ1cyAwMDAwOjAwOjFmLjQ6IFNQRCBXcml0ZSBEaXNhYmxlIGlz
-IHNldA0KWyAxMDAyLjk2MTE3MV0gaTgwMV9zbWJ1cyAwMDAwOjAwOjFmLjQ6IFNNQnVzIHVz
-aW5nIFBDSSBpbnRlcnJ1cHQNClsgMTAwMi45NjEzMjFdIGlUQ09fd2R0IGlUQ09fd2R0OiB1
-bmFibGUgdG8gcmVzZXQgTk9fUkVCT09UIGZsYWcsIGRldmljZSANCmRpc2FibGVkIGJ5IGhh
-cmR3YXJlL0JJT1MNClsgMTAwMi45NzUzOTldIGk4MDFfc21idXMgMDAwMDowMDoxZi40OiBB
-Y2NlbGVyb21ldGVyIGxpczNsdjAyZCBpcyANCnByZXNlbnQgb24gU01CdXMgYnV0IGl0cyBh
-ZGRyZXNzIGlzIHVua25vd24sIHNraXBwaW5nIHJlZ2lzdHJhdGlvbg0KWyAxMDAyLjk3NTQw
-Nl0gaTJjIGkyYy0xMDogMi8yIG1lbW9yeSBzbG90cyBwb3B1bGF0ZWQgKGZyb20gRE1JKQ0K
-WyAxMDAyLjk3NjcxM10gZWUxMDA0IDEwLTAwNTA6IDUxMiBieXRlIEVFMTAwNC1jb21wbGlh
-bnQgU1BEIEVFUFJPTSwgDQpyZWFkLW9ubHkNClsgMTAwMi45NzY4MDhdIGkyYyBpMmMtMTA6
-IFN1Y2Nlc3NmdWxseSBpbnN0YW50aWF0ZWQgU1BEIGF0IDB4NTANCg0KDQpUaGlzIGlzIG15
-IGZpcnN0IExLTUwgYnVnIHJlcG9ydCwgc28gSSBjb3VsZCB1c2Ugc29tZSBndWlkYW5jZSBp
-biBob3cgdG8gDQpwcm92aWRlIG1vcmUgaW5mb3JtYXRpb24uDQoNCg0KUmVnYXJkcywNCg0K
-S2ltIE5pbHNzb24NCg0KDQpQUy4gU29ycnkgYWJvdXQgdGhlIGluaXRpYWwgSFRNTCB2ZXJz
-aW9uIQ0KDQoNCg0K
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linux/master linus/master v5.17-rc2 next-20220128]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
---------------2dHvCQAPQk83c4LoeMMMD44B--
+url:    https://github.com/0day-ci/linux/commits/Terry-Bowman/Watchdog-sp5100_tco-Replace-cd6h-cd7h-port-I-O-accesses-with-MMIO-accesses/20220131-031525
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: x86_64-randconfig-m001-20220131 (https://download.01.org/0day-ci/archive/20220131/202201311012.U53Rg3e2-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/e6855f66e7e915cd09a8f8dae411997df8a7c641
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Terry-Bowman/Watchdog-sp5100_tco-Replace-cd6h-cd7h-port-I-O-accesses-with-MMIO-accesses/20220131-031525
+        git checkout e6855f66e7e915cd09a8f8dae411997df8a7c641
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/watchdog/
 
---------------GE02uWz56esgVyorUWsYxf0h
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
------BEGIN PGP SIGNATURE-----
+All warnings (new ones prefixed by >>):
 
-wsF5BAABCAAjFiEEVGq84EJQRtWonhiWfwaiOxiOwqIFAmH3BDcFAwAAAAAACgkQfwaiOxiOwqJy
-lA//fkn1zaGVR+BM9WWY2Oc186JINQK+JnkDIWuS2vV6nnjJeDVthK25pqrWzRIpKygX5B2JKnu2
-DiDsqX957ct36qjQcFvs+tN12V8xhqTvG1FADQ925MHkgPB1mDcnt9Lu3f3ut6uBYAUXoCoujCNK
-qSs8KL/6ZdnAwi7gLqm9H2XZcWhtmucD9PI9zEZm0oW3XL/BSSfDCiaowVTt/ymEkeek+gSjV6mF
-ZfTDtMOihobZ61P2vdb9Amv7p+EYed8WXisCDNxylfwFmzetPJ8C/FzoKDKPu/XapQuyYPmWAYr6
-ona1WS/vsHgQAKloai2vXOG0PR41wx+7ViejIn/UFy6amE5W6skwmMayRRWBXOeDcKx4VZQrpKD2
-uHUmuqtK+AQUq7b4/iopglmla8N1Ob0plVLOT3sMz5ByInAMLggTD9bZIsH9jbro6hmrd7aHRdeC
-0TcMb3IfGvTwWhpGgdwnddXLHRxNE1JRkSU0GbKtKQvtbr1zpRpmjTYlRnUMVdhfej4lH8Ws+ns8
-V+599uP113Umlzv+6dA18XI3h4+nozmyhXIVGH0NhrDcqtWEpPmDPhLMQBuqWAfdxFgG4NqezUv7
-zRsPjyrXEF6ohdOANnlcAKHRoNEZD5eHQeCARyEuKiuuBIJzPm3hMN3tudQrFgT548UoVfPYnWUw
-+TE=
-=zaJK
------END PGP SIGNATURE-----
+   In file included from include/linux/device.h:15,
+                    from include/linux/pci.h:37,
+                    from drivers/watchdog/sp5100_tco.c:40:
+   drivers/watchdog/sp5100_tco.c: In function 'sp5100_tco_prepare_base':
+>> drivers/watchdog/sp5100_tco.c:270:16: warning: format '%x' expects argument of type 'unsigned int', but argument 3 has type 'void *' [-Wformat=]
+     270 |  dev_info(dev, "Using 0x%08x for watchdog MMIO address\n", tco->tcobase);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:16: note: in definition of macro 'dev_printk_index_wrap'
+     110 |   _p_func(dev, fmt, ##__VA_ARGS__);   \
+         |                ^~~
+   include/linux/dev_printk.h:150:51: note: in expansion of macro 'dev_fmt'
+     150 |  dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                   ^~~~~~~
+   drivers/watchdog/sp5100_tco.c:270:2: note: in expansion of macro 'dev_info'
+     270 |  dev_info(dev, "Using 0x%08x for watchdog MMIO address\n", tco->tcobase);
+         |  ^~~~~~~~
+   drivers/watchdog/sp5100_tco.c:270:28: note: format string is defined here
+     270 |  dev_info(dev, "Using 0x%08x for watchdog MMIO address\n", tco->tcobase);
+         |                         ~~~^
+         |                            |
+         |                            unsigned int
+         |                         %08p
 
---------------GE02uWz56esgVyorUWsYxf0h--
+
+vim +270 drivers/watchdog/sp5100_tco.c
+
+   238	
+   239	static u32 sp5100_tco_prepare_base(struct sp5100_tco *tco,
+   240					   u32 mmio_addr,
+   241					   u32 alt_mmio_addr,
+   242					   const char *dev_name)
+   243	{
+   244		struct device *dev = tco->wdd.parent;
+   245	
+   246		dev_dbg(dev, "Got 0x%08x from SBResource_MMIO register\n", mmio_addr);
+   247	
+   248		if (!mmio_addr && !alt_mmio_addr)
+   249			return -ENODEV;
+   250	
+   251		/* Check for MMIO address and alternate MMIO address conflicts */
+   252		if (mmio_addr)
+   253			mmio_addr = sp5100_tco_request_region(dev, mmio_addr, dev_name);
+   254	
+   255		if (!mmio_addr && alt_mmio_addr)
+   256			mmio_addr = sp5100_tco_request_region(dev, alt_mmio_addr, dev_name);
+   257	
+   258		if (!mmio_addr) {
+   259			dev_err(dev, "Failed to reserve MMIO or alternate MMIO region\n");
+   260			return -EBUSY;
+   261		}
+   262	
+   263		tco->tcobase = devm_ioremap(dev, mmio_addr, SP5100_WDT_MEM_MAP_SIZE);
+   264		if (!tco->tcobase) {
+   265			dev_err(dev, "MMIO address 0x%08x failed mapping\n", mmio_addr);
+   266			devm_release_mem_region(dev, mmio_addr, SP5100_WDT_MEM_MAP_SIZE);
+   267			return -ENOMEM;
+   268		}
+   269	
+ > 270		dev_info(dev, "Using 0x%08x for watchdog MMIO address\n", tco->tcobase);
+   271	
+   272		return 0;
+   273	}
+   274	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
