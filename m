@@ -2,216 +2,141 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B164AA8D0
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Feb 2022 13:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 733D24AADA3
+	for <lists+linux-i2c@lfdr.de>; Sun,  6 Feb 2022 04:30:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379843AbiBEMsJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 5 Feb 2022 07:48:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
+        id S229478AbiBFDap (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 5 Feb 2022 22:30:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379783AbiBEMsI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Feb 2022 07:48:08 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F03AC061353
-        for <linux-i2c@vger.kernel.org>; Sat,  5 Feb 2022 04:48:06 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id o1-20020a1c4d01000000b0034d95625e1fso11220356wmh.4
-        for <linux-i2c@vger.kernel.org>; Sat, 05 Feb 2022 04:48:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod-ie.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+LPvcJ2sd5T7CufgUritnA87r/Y5fUmsfeCEUXpPT6E=;
-        b=ef9uwCGIArsx4B0HtycPruLj7UAWV4CigNy4UIbrAY3TClE0iuhryFmiNJKx4dleOg
-         yyA8XqUKF5FM5R0ZmQ30vYByA8DSGJmY1TsX6/zSWJZFfk0llkoBeDYYfGosdLSfS1Qk
-         ehwqDZwKdRwafW/+lg86kz2XUanNm8jZ2g1Tq7SHg0v14EVQKAHRJo/skJ8OeVrzD+qe
-         INtz/+NvmVRRRwzbvAvsNRauN2oObdpKRtrpXXNHFSpmjS9UzLj2X4Y5eLvobCaKL1lB
-         pNd8r5wOZfbFPBEjDbWF5O1+0RDhRc7+e1YfuhSc0UOQQWl8ouLqrtx+n2EqpOuOXDST
-         UQ+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+LPvcJ2sd5T7CufgUritnA87r/Y5fUmsfeCEUXpPT6E=;
-        b=d195mZns2WU2pUS8IQovca8SqJsnrETfZnIHQoceTVaRIQLG5c8fvhuopIN2jbGkTx
-         aVTdzxH2sEOtOPCFCc8m48XsogKu9/JT3gMM9bBBUJS/3uRtwqVoCNFYgQXtnVyPqtZd
-         J/+HO6oU67WvsQBBOxcyeVgZTdKCiF0MYDKEuAtMQjzzfGAIVkjLmdDjSrxrEl/bY57H
-         nVYslOntqAvpVaz7fAKvXsFOiy8OrS2hkMZnKnkfA3i7gSmkOPN1MR+34+rOVOvbtDmH
-         GBa+HOcioDPiVkrTGXLawrVeNxpANnzmrY4lxXOCGnHS8eX6lKszedlTdOnwq7mIiKKG
-         bVMQ==
-X-Gm-Message-State: AOAM530X5uqhi8KtGyPjSw+8sMjS3RafIZUQjHi9HkqTx3pwl4D5+kIk
-        ajqp7quCF9VIFJKdhm1hGuMJaA==
-X-Google-Smtp-Source: ABdhPJxpq/DFWpEEyQIsjuuaVvilLjogf6JlPr9dXqoGfRGP3jRw+knIrG8WTJYlwwMgH5tU0Wc1Vw==
-X-Received: by 2002:a05:600c:3217:: with SMTP id r23mr2998357wmp.159.1644065284763;
-        Sat, 05 Feb 2022 04:48:04 -0800 (PST)
-Received: from [192.168.2.116] ([109.78.72.167])
-        by smtp.gmail.com with ESMTPSA id m8sm4429538wrn.106.2022.02.05.04.48.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Feb 2022 04:48:04 -0800 (PST)
-Message-ID: <c610ce52-e1ef-393c-0948-57a4c6f07d72@conchuod.ie>
-Date:   Sat, 5 Feb 2022 12:48:02 +0000
+        with ESMTP id S1381092AbiBFDan (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Feb 2022 22:30:43 -0500
+X-Greylist: delayed 10803 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 05 Feb 2022 19:30:42 PST
+Received: from mx1.smtp.larsendata.com (mx1.smtp.larsendata.com [91.221.196.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21623C0401C3
+        for <linux-i2c@vger.kernel.org>; Sat,  5 Feb 2022 19:30:41 -0800 (PST)
+Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
+        by mx1.smtp.larsendata.com (Halon) with ESMTPS
+        id 12f30462-8454-11ec-b20b-0050568c148b;
+        Wed, 02 Feb 2022 18:15:17 +0000 (UTC)
+Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sam@ravnborg.org)
+        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 67A6F194BFA;
+        Wed,  2 Feb 2022 19:14:11 +0100 (CET)
+Date:   Wed, 2 Feb 2022 19:14:08 +0100
+X-Report-Abuse-To: abuse@mxhotel.dk
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     nick.hawkins@hpe.com
+Cc:     verdun@hpe.com, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Corey Minyard <minyard@acm.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] HPE BMC GXP SUPPORT
+Message-ID: <YfrJ8JWjyH9ptV4z@ravnborg.org>
+References: <nick.hawkins@hpe.com>
+ <20220202165315.18282-1-nick.hawkins@hpe.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v5 06/12] dt-bindings: pwm: add microchip corepwm binding
-Content-Language: en-US
-To:     Conor.Dooley@microchip.com, geert@linux-m68k.org,
-        u.kleine-koenig@pengutronix.de
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        aou@eecs.berkeley.edu, atishp@rivosinc.com, bin.meng@windriver.com,
-        brgl@bgdev.pl, Daire.McNamara@microchip.com,
-        devicetree@vger.kernel.org, heiko@sntech.de,
-        Ivan.Griffin@microchip.com, jassisinghbrar@gmail.com,
-        krzysztof.kozlowski@canonical.com, lee.jones@linaro.org,
-        Lewis.Hanly@microchip.com, linus.walleij@linaro.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-rtc@vger.kernel.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, robh+dt@kernel.org,
-        robh@kernel.org, thierry.reding@gmail.com
-References: <20220201075824.aixrvkvmjde2ihxx@pengutronix.de>
- <20220202123542.3721512-1-conor.dooley@microchip.com>
- <CAMuHMdWrmuY7pwY8U0t9LumEvUTBEA06uV7hNyKFAPMQtE98_A@mail.gmail.com>
- <3862e358-901c-e848-71af-01eceed26f74@microchip.com>
- <CAMuHMdXvw9cNNzBhp-sSMTXxP2eALhB=fD78Wgx-kks7wr6oiQ@mail.gmail.com>
- <fa747594-a112-d313-5de3-2330bf5ddc8a@microchip.com>
-From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <fa747594-a112-d313-5de3-2330bf5ddc8a@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202165315.18282-1-nick.hawkins@hpe.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Geert, Uwe,
+Hi Nick,
 
-Hopefully the following does a better job of explaining the two parameters?
+good to see all this stuff coming mainline,
 
-Thanks,
-Conor.
+On Wed, Feb 02, 2022 at 10:52:50AM -0600, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> GXP is the name of the HPE SoC.
+> This SoC is used to implement BMC features of HPE servers
+> (all ProLiant, Synergy, and many Apollo, and Superdome machines)
+> It does support many features including:
+> 	ARMv7 architecture, and it is based on a Cortex A9 core
+> 	Use an AXI bus to which
+> 		a memory controller is attached, as well as
+>                  multiple SPI interfaces to connect boot flash,
+>                  and ROM flash, a 10/100/1000 Mac engine which
+>                  supports SGMII (2 ports) and RMII
+> 		Multiple I2C engines to drive connectivity with a host infrastructure
+> 		A video engine which support VGA and DP, as well as
+>                  an hardware video encoder
+> 		Multiple PCIe ports
+> 		A PECI interface, and LPC eSPI
+> 		Multiple UART for debug purpose, and Virtual UART for host connectivity
+> 		A GPIO engine
+> This Patch Includes:
+> 	Documentation for device tree bindings
+> 	Device Tree Bindings
+> 	GXP Timer Support
+> 	GXP Architecture Support
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> ---
+>  .../bindings/display/hpe,gxp-thumbnail.txt    |  21 +
+>  .../devicetree/bindings/gpio/hpe,gxp-gpio.txt |  16 +
+...
 
-microchip,sync-update-mask:
-   description: |
-     Depending on how the IP is instantiated, there are two modes of
-     operation. In synchronous mode, all channels are updated at the
-     beginning of the PWM period, and in asynchronous mode updates
-     happen as the control registers are written. A 16 bit wide
-     "SHADOW_REG_EN" parameter of the IP core controls whether
-     synchronous mode is possible for each channel, and is set by the
-     bitstream programmed to the FPGA. If the IP core is instantiated
-     with SHADOW_REG_ENx=1, both registers that control the duty cycle
-     for channel x have a second "shadow"/buffer reg synthesised.
-     At runtime a bit wide register exposed to APB can be used to toggle
-     on/off synchronised mode for all channels it has been synthesised
-     for.
-     Each bit corresponds to a PWM channel & represents whether
-     synchronous mode is possible for that channel.
+All new bindings must be in the DT-schema format (yaml files).
+This enables a lot of syntax checks and validation.
 
-   $ref: /schemas/types.yaml#/definitions/uint32
-   default: 0
+We are slowly migrating away from the .txt based bindings.
 
-microchip,dac-mode-mask:
-   description: |
-     Optional, per-channel Low Ripple DAC mode is possible on this IP
-     core. It creates a minimum period pulse train whose High/Low
-     average is that of the chosen duty cycle. This "DAC" will have far
-     better bandwidth and ripple performance than the standard PWM
-     algorithm can achieve. A 16 bit DAC_MODE module parameter of the IP
-     core, set at instantiation and by the bitstream programmed to the
-     FPGA, determines whether a given channel operates in regular PWM or
-     DAC mode.
-     Each bit corresponds to a PWM channel & represents whether DAC mode
-     is enabled for that channel.
+Also, for new bindings please follow the guide lines listed in
+Documentation/devicetree/bindings/submitting-patches.rst
 
-   $ref: /schemas/types.yaml#/definitions/uint32
-   default: 0
+Consider including the bindings with the drivers using the bindings so
+things have a more natural split.
 
-On 02/02/2022 14:37, Conor.Dooley@microchip.com wrote:
-> On 02/02/2022 14:02, Geert Uytterhoeven wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->> On Wed, Feb 2, 2022 at 2:46 PM <Conor.Dooley@microchip.com> wrote:
->>> On 02/02/2022 13:28, Geert Uytterhoeven wrote:
->>>> On Wed, Feb 2, 2022 at 1:33 PM <conor.dooley@microchip.com> wrote:
->>>>>> On 01/02/2022 07:58, Uwe Kleine-König wrote:
->>>>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>>>>>> On Mon, Jan 31, 2022 at 11:47:21AM +0000, conor.dooley@microchip.com wrote:
->>>>>>> From: Conor Dooley <conor.dooley@microchip.com>
->>>>>>>
->>>>>>> Add device tree bindings for the Microchip fpga fabric based "core" PWM
->>>>>>> controller.
->>>>>>>
->>>>>>> Reviewed-by: Rob Herring <robh@kernel.org>
->>>>>>>
->>>>>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->>>>>>> ---
->>>>>>> .../bindings/pwm/microchip,corepwm.yaml       | 75 +++++++++++++++++++
->>>>
->>>>>>> +  microchip,sync-update:
->>>>>>> +    description: |
->>>>>>> +      In synchronous mode, all channels are updated at the beginning of the PWM period.
->>>>>>> +      Asynchronous mode is relevant to applications such as LED control, where
->>>>>>> +      synchronous updates are not required. Asynchronous mode lowers the area size,
->>>>>>> +      reducing shadow register requirements. This can be set at run time, provided
->>>>>>> +      SHADOW_REG_EN is asserted. SHADOW_REG_EN is set by the FPGA bitstream programmed
->>>>>>> +      to the device.
->>>>>>> +      Each bit corresponds to a PWM channel & represents whether synchronous mode is
->>>>>>> +      possible for the PWM channel.
->>>>>>> +
->>>>>>> +    $ref: /schemas/types.yaml#/definitions/uint16
->>>>>>> +    default: 0
->>>>>>
->>>>>> I'm not sure I understand this correctly. This is a soft-core and you
->>>>>> can synthesize it either with or without the ability to do synchronous
->>>>>> updates or not, right? All 16 channels share the same period length and
->>>>>> in the simple implementation changing the duty cycle is done at once
->>>>>> (maybe introducing a glitch) and in the more expensive implementation
->>>>>> there is a register to implement both variants?
->>>>>
->>>>> Correct. If the IP is instantiated with SHADOW_REG_ENx=1, both
->>>>> registers that control the duty cycle for channel x have a second
->>>>> "shadow reg" synthesised. At runtime a bit wide register exposed to
->>>>> APB can be used to toggle on/off synchronised mode for all channels
->>>>> it has been synthesised for.
->>>>>
->>>>> I will reword this description since it is not clear.
->>>>
->>>> Shouldn't it use a different compatible value instead?
->>>> Differentiation by properties is not recommended, as it's easy to
->>>> miss a difference.
->>>
->>> Either you have something in mind that I've not thought of, or I've done
->>> a bad job of explaining again. The buffer/"shadow" registers are
->>> synthesised on a per channel basis, so any combination of the 16
->>> channels may have this capability. The same applies to the DAC mode, per
->>> channel there too.
->>
->> Oops, hadn't noticed this is per channel. Indeed, then a different
->> compatible value is futile.
->> So since "microchip,sync-update" is a bitmask, perhaps it should be
->> called "microchip,sync-update-mask"?
->> Same for "microchip,dac-mode" -> "microchip,dac-mode-mask"?
-> 
-> Adding -mask sounds good to me.
-> 
->> Also, using different integer sizes than uint32 is frowned upon, unless
->> there is a very good reason to do so. I can imagine a future version
->> would support more channels, and then uint16 becomes a limitation.
-> 
-> Sure, uint32 it is.
-> 
->> For both: Rob?
-> 
-> Both of these properties fall under the "DO attempt to make bindings
-> complete even if a driver doesn’t support some features" category, so I
-> am perfectly happy to change these properties to whatever is convention
-> (or ultimately drop them for the sake of the remainder of the series).
-> 
-> Thanks,
-> Conor.
-> 
+	Sam
