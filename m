@@ -2,142 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C724A78FE
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Feb 2022 20:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8244A7996
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Feb 2022 21:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347043AbiBBTvy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Feb 2022 14:51:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347055AbiBBTvw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Feb 2022 14:51:52 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C66C061714;
-        Wed,  2 Feb 2022 11:51:52 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id 4so330794oil.11;
-        Wed, 02 Feb 2022 11:51:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=b4gvsDqdGYUqsR8ZAoXwalFh50CbTTaN5Iudw9gTftI=;
-        b=oJp507ANwWxWMGNxbyEJFdAwvflpPjo27jV5cLHjWtLH7jdG80/DhqVlXdRH4/Ld9I
-         Zo64VILfdI8WrYUkrQTgrSrpG170HEZuFwnkfFmo0Toyo7SpeBFaWK4Pf1RFubwJioyZ
-         vn96NqwOP4zYiqBiktQwm4tzvm1/H+fCXJiYoDq9IJAWfU1DvL0nLgBpSvicLZeqBoA5
-         Km2GOc9ERr0945dpIGDkyJW14mt/R/MEr3pm0FW4z9PTS3Oti3EviFBGHxAdpyHBc1+b
-         fcKsdeNRjdKo4/gIenSOywL2BVEE1/+rLsCZawcueehQDXERnWHxTJZJ/tBqFAJY8YTb
-         z+uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=b4gvsDqdGYUqsR8ZAoXwalFh50CbTTaN5Iudw9gTftI=;
-        b=zvdLI1/PsLa+U/Rt/fI22IXizLEnqIAYm6tzVbWg3pMUbrf3gpXy67QaJ7BTQP4/0x
-         tyUJE7s+Juh4kq4zF3d1yLsBMkYD9tUMYys2L/t0xnHY9gVCdUvrn1N8Hvx70qZ4+TBe
-         UsnizFnT4Sjan73qiiKMz/ZSiGe0u/SowJXHIq3NF7ugCwIqeZ+5cLPzjZG3D8LMDdn1
-         9gvzonvb8kvUJdpn8vWYPySu97+3QbXgxRtp1srjqtrRyuwyfYNh43rs+9G23kZZOz2+
-         78INhjoko9jld6W5qJpUAYqSokfs5jRAOvsrBNWRqYmDxxH2RTxO5nHUMrJ5HL6aI3oL
-         kxlQ==
-X-Gm-Message-State: AOAM531apKBjalA4BHR1nlM0y+lXTR9bEI1yP3LqPXHK32ChC0upGBu/
-        +SQgP0lwCqjtYM/YhQVj5v8=
-X-Google-Smtp-Source: ABdhPJzfAuAqG8hYv0K6PSbBQAI/7QAJJ6FKor57K5dMeHOBMlZ5yQwIGUNLOLvPILWCNFETIdoQ3g==
-X-Received: by 2002:a05:6808:1599:: with SMTP id t25mr5670315oiw.210.1643831512094;
-        Wed, 02 Feb 2022 11:51:52 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o1sm7943245oik.0.2022.02.02.11.51.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 11:51:51 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Feb 2022 11:51:50 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Terry Bowman <terry.bowman@amd.com>
-Cc:     linux-watchdog@vger.kernel.org, jdelvare@suse.com,
-        linux-i2c@vger.kernel.org, wsa@kernel.org,
-        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
-        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
-        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
-        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
-        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
-Subject: Re: [PATCH v5 4/4] Watchdog: sp5100_tco: Enable Family 17h+ CPUs
-Message-ID: <20220202195150.GD2346468@roeck-us.net>
-References: <20220202153525.1693378-1-terry.bowman@amd.com>
- <20220202153525.1693378-5-terry.bowman@amd.com>
+        id S236552AbiBBUgy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Feb 2022 15:36:54 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54148 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229750AbiBBUgy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Feb 2022 15:36:54 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8669619C8;
+        Wed,  2 Feb 2022 20:36:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03E97C004E1;
+        Wed,  2 Feb 2022 20:36:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643834213;
+        bh=0BGKMKxHDz655bbS6eHoCnQ6dfdh9lnMmg+71V26wGU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Veg9CsOJvhMMidPlW81xKh8JxyfIpA7e6kTEu5935U5A0lMsmeAlgKgm03A1wYHBy
+         JPfEOe4uQyj53hkvTdHBT53GHnRYnC32qd5r6Guke+shXoEnTh5+jHKLXOw2r7Y9bL
+         g+gbCka+Ss5v4qxxlB36Ln7XsGqC6F0kJZnkuaJOi9nWFKHpKMCBEIIqZR/fqy9Nhg
+         hYU2CzpARjiIcVFBEeSp2dGSWQc7bVH2UI6+6P58ZyZ3iO3oOQRC+EKdDausMT1K68
+         Jn+luIZrgJhs6xiiulBHeJYx4TtQXNx7cQIU69HfQ7VmB3yVWcDhM+kbPtvMhLOsHf
+         nhCzwsBKwo9Pg==
+Date:   Wed, 2 Feb 2022 14:36:51 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: Re: [PATCH v3 3/8] platform/x86/intel: Add Primary to Sideband
+ (P2SB) bridge support
+Message-ID: <20220202203651.GA40446@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220202153525.1693378-5-terry.bowman@amd.com>
+In-Reply-To: <YfmBZvQ28y/Mh60J@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 09:35:25AM -0600, Terry Bowman wrote:
-> The driver currently uses a CPU family match of 17h to determine
-> EFCH_PM_DECODEEN_WDT_TMREN register support. This family check will not
-> support future AMD CPUs and instead will require driver updates to add
-> support.
+On Tue, Feb 01, 2022 at 08:52:22PM +0200, Andy Shevchenko wrote:
+> On Tue, Feb 01, 2022 at 12:14:01PM -0600, Bjorn Helgaas wrote:
+> > On Fri, Jan 28, 2022 at 08:30:20PM +0200, Andy Shevchenko wrote:
+> > > On Fri, Jan 07, 2022 at 11:11:08AM -0600, Bjorn Helgaas wrote:
+> > > > On Fri, Jan 07, 2022 at 04:56:42PM +0200, Andy Shevchenko wrote:
+> > > 
+> > > ...
+> > > 
+> > > > My point is that the unhide is architecturally messed up.  The OS
+> > > > runs on the platform as described by ACPI.  Devices that cannot be
+> > > > enumerated are described in the ACPI namespace.
+> > > 
+> > > This device may or may not be _partially_ or _fully_ (due to being
+> > > multifunctional) described in ACPI. I agree, that ideally the
+> > > devices in question it has behind should be represented properly by
+> > > firmware.  However, the firmwares in the wild for selected products
+> > > / devices don't do that. We need to solve (work around) it in the
+> > > software.
+> > > 
+> > > This is already done for a few devices. This series consolidates
+> > > that and enables it for very known GPIO IPs.
+> > 
+> > Consolidating the code to unhide the device and size the BAR is fine.
+> > 
+> > I would prefer the PCI core to be involved as little as possible
+> > because we're violating some key assumptions and we could trip over
+> > those later.  We're assuming the existence of P2SB based on the fact
+> > that we found some *other* device, we're assuming firmware isn't using
+> > P2SB (may be true now, but impossible to verify), we're assuming the
+> > P2SB BAR contains a valid address that's not used elsewhere but also
+> > won't be assigned to anything.
+> > 
+> > > PCI core just provides a code that is very similar to what we need
+> > > here. Are you specifically suggesting that we have to copy'n'paste
+> > > that rather long function and maintain in parallel with PCI?
+> > 
+> > I think we're talking about __pci_read_base(), which is currently an
+> > internal PCI interface.  This series adds pci_bus_info/warn/etc(),
 > 
-> Remove the family 17h family check and add a check for SMBus PCI
-> revision ID 0x51 or greater. The MMIO access method has been available
-> since at least SMBus controllers using PCI revision 0x51. This revision
-> check will support family 17h and future AMD processors including EFCH
-> functionality without requiring driver changes.
-> 
-> Co-developed-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> Tested-by: Jean Delvare <jdelvare@suse.de>
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
+> The patch that adds those macros is good on its own, if you think so...
+> I tried to submit it separately, but it was no response, so I don't know.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+I'd rather not add pci_bus_info(), etc.  There are only a couple
+places that could use it, and if we cared enough, I think those places
+could avoid it by doing pci_alloc_dev() first.
 
-> ---
->  drivers/watchdog/sp5100_tco.c | 16 ++++------------
->  drivers/watchdog/sp5100_tco.h |  1 +
->  2 files changed, 5 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
-> index e02399ea8730..86ffb58fbc85 100644
-> --- a/drivers/watchdog/sp5100_tco.c
-> +++ b/drivers/watchdog/sp5100_tco.c
-> @@ -86,6 +86,10 @@ static enum tco_reg_layout tco_reg_layout(struct pci_dev *dev)
->  	    dev->device == PCI_DEVICE_ID_ATI_SBX00_SMBUS &&
->  	    dev->revision < 0x40) {
->  		return sp5100;
-> +	} else if (dev->vendor == PCI_VENDOR_ID_AMD &&
-> +	    sp5100_tco_pci->device == PCI_DEVICE_ID_AMD_KERNCZ_SMBUS &&
-> +	    sp5100_tco_pci->revision >= AMD_ZEN_SMBUS_PCI_REV) {
-> +		return efch_mmio;
->  	} else if (dev->vendor == PCI_VENDOR_ID_AMD &&
->  	    ((dev->device == PCI_DEVICE_ID_AMD_HUDSON2_SMBUS &&
->  	     dev->revision >= 0x41) ||
-> @@ -459,18 +463,6 @@ static int sp5100_tco_setupdevice(struct device *dev,
->  		break;
->  	case efch:
->  		dev_name = SB800_DEVNAME;
-> -		/*
-> -		 * On Family 17h devices, the EFCH_PM_DECODEEN_WDT_TMREN bit of
-> -		 * EFCH_PM_DECODEEN not only enables the EFCH_PM_WDT_ADDR memory
-> -		 * region, it also enables the watchdog itself.
-> -		 */
-> -		if (boot_cpu_data.x86 == 0x17) {
-> -			val = sp5100_tco_read_pm_reg8(EFCH_PM_DECODEEN);
-> -			if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
-> -				sp5100_tco_update_pm_reg8(EFCH_PM_DECODEEN, 0xff,
-> -							  EFCH_PM_DECODEEN_WDT_TMREN);
-> -			}
-> -		}
->  		val = sp5100_tco_read_pm_reg8(EFCH_PM_DECODEEN);
->  		if (val & EFCH_PM_DECODEEN_WDT_TMREN)
->  			mmio_addr = EFCH_PM_WDT_ADDR;
-> diff --git a/drivers/watchdog/sp5100_tco.h b/drivers/watchdog/sp5100_tco.h
-> index 8ca1b215e3ce..6a0986d2c94b 100644
-> --- a/drivers/watchdog/sp5100_tco.h
-> +++ b/drivers/watchdog/sp5100_tco.h
-> @@ -89,3 +89,4 @@
->  #define EFCH_PM_ACPI_MMIO_PM_ADDR	(EFCH_PM_ACPI_MMIO_ADDR +	\
->  					 EFCH_PM_ACPI_MMIO_PM_OFFSET)
->  #define EFCH_PM_ACPI_MMIO_PM_SIZE	8
-> +#define AMD_ZEN_SMBUS_PCI_REV		0x51
-> -- 
-> 2.30.2
-> 
+What if you used pci_alloc_dev() and then called the current
+__pci_read_base() on the pci_dev *?
+
+The caller would still have the ugly #include path, but I guess you're
+OK with that.
+
+Since the P2SB BAR is not included in the host bridge _CRS, the
+pcibios_bus_to_resource() done by __pci_read_base() won't work
+correctly, so this only "works" on host bridges with no address
+translation.  But that's also the case with your current series.
+This is an example of one of the PCI core assumptions being violated,
+so things can break.
+
+Bjorn
