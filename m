@@ -2,121 +2,156 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7184A8AA6
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Feb 2022 18:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 613184A8BD9
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Feb 2022 19:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242890AbiBCRuL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Feb 2022 12:50:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
+        id S1353554AbiBCSpy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Feb 2022 13:45:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232884AbiBCRuL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Feb 2022 12:50:11 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99A5C061714;
-        Thu,  3 Feb 2022 09:50:10 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id w25so7599855edt.7;
-        Thu, 03 Feb 2022 09:50:10 -0800 (PST)
+        with ESMTP id S237341AbiBCSpy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Feb 2022 13:45:54 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34A9C06173B
+        for <linux-i2c@vger.kernel.org>; Thu,  3 Feb 2022 10:45:53 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id n8so7919889lfq.4
+        for <linux-i2c@vger.kernel.org>; Thu, 03 Feb 2022 10:45:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=DlHF1ezZsVyyLw16v2PxMSWN/nd7gwtKLelkVX/tiX0=;
-        b=ByMXCyiJMiEqRQ+FEL4KhRZcgt0woCBUqDhuf335ndRQUq+VVT0KBKC9ARSbobSlow
-         EhlODK+uE5wAZ78xmgHSvNH3HMfUjoO0l7XCBapQlmHaJ4R0tzNKmZjU39DUqtECBY/Y
-         lMMUqORd3U+s37MGuvTrdwUTQEvpZMQqyYq5I6Zz2KMnaz00VF1LVxpQlyOUKsRnS5kP
-         r8MJGff6CNUi4ITPpoGJR9yE2qo+Ab6J3w+9WRhODjhiYkkxpOFDrWil94dAK9UMGmql
-         bwej8hONl1blIKeOO6uF7dclZG3RdUdixRL/O2xwKq9s/IBtKambkPYVOplcFFV5ybb8
-         AQSQ==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wwYYEzEJz/i613XhR2H6uN9ZfSJvUkN3a5GGPAJavSU=;
+        b=UCEz0wqqlW8Yc99GZFrWrpWae1dY2uMQhgV5A1zNZ81+zFyXDtn6gwdJEG3i9CA7n9
+         ZI7uJ4IMTXPWNRBgmt6D+mKDTjXypdZe9uDQlJUhwnvoVfJPoRcX9XRJaMHaf6+b07/P
+         S5ECdCWEQ+MKRu5lF91635Ga7Muk1RcjCViHF4FR016EZn0DQB4cEy7hjIlJ2ivsDv+p
+         3TgPppvAaDNaRtjm9AstaxRyLiuSTEgL+UKQQunLjvk6xY4HGu63u9TCWpkks5k6Tq+t
+         eNMsq1/4dSjsByKHPHBWg8hu0OhWfm0lb/8c8bIliBHkqHVyfWqV3kVRAYj8W5s+hHmZ
+         ylFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DlHF1ezZsVyyLw16v2PxMSWN/nd7gwtKLelkVX/tiX0=;
-        b=ieDV4GtgbpMD++wnF8fNHhIikO75PGRjjEJvTIdtRZw9++ga+kjgtngxzwmc7TbG7p
-         j2PxSArZcMTRcnTxy5RzIKZzUOPAIkDB913XNgUm6NSQn7jPFUcWzWsBNnkXLHPYelNf
-         lvREbx05LM4e9FebWOT/QKMK6pLn4I07QS3xp4vrGMNxmbeE2RXWlzK7AZ80H/0C6fOg
-         6jDGpiCFNjkyldCwfMUUn74+o7o84Klh1oelnASiHkJwNpsnnOm29/a5N5ea4/Zt/dpG
-         Hbd/F7rcQstinfDGoWadC0dWu8MrRS7UFl19ppOasN1nXqAScGsWLEuNH7W2Uk1bRsNQ
-         sHXg==
-X-Gm-Message-State: AOAM532zF0rPE61OUz0JUagTfvbDOP2SINpcMAccihEKWrkAG6tAfhAw
-        1Hnq3A2BE/Snds2MEbENS+o=
-X-Google-Smtp-Source: ABdhPJzdxlCUVDtjmB3ENX5mKOqOonAT9GMGhVa+oTeOAuEEbGMNDuDWfBrWS+tw0rV3CDLh3UnogQ==
-X-Received: by 2002:a05:6402:1612:: with SMTP id f18mr14801649edv.454.1643910609310;
-        Thu, 03 Feb 2022 09:50:09 -0800 (PST)
-Received: from orome ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id h8sm22578309edk.14.2022.02.03.09.50.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 09:50:08 -0800 (PST)
-Date:   Thu, 3 Feb 2022 18:50:05 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     devicetree@vger.kernel.org, digetx@gmail.com, jonathanh@nvidia.com,
-        ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        mperttunen@nvidia.com, robh+dt@kernel.org
-Subject: Re: [PATCH v3 0/4] Add I2C and PWM support for T234
-Message-ID: <YfwVzVHZ6SQhKpLF@orome>
-References: <1643023097-5221-1-git-send-email-akhilrajeev@nvidia.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wwYYEzEJz/i613XhR2H6uN9ZfSJvUkN3a5GGPAJavSU=;
+        b=Wji5+0CxcicAa4VUKXZQcWp17Zvpr+5M7UtxpBDg/56T+tOIyyGpGa+VLuU7vrGRYD
+         vWRjVDymiweHItEfvRA4dNDxk/rxWrzWA+iKfDZ76MfE/LGKZSWJQ+HmjMefDf20N4pA
+         e2i5pHVQXfR8F6nX1YByHHZ8UdSse5yFH4hBqqixnoyXspKOsxjCx0z6oAAX2R5aGfLp
+         btE4LqA3HvFbugBY7a29plVTNAqM0SZJtoYyWlBpxbbOI9HO0+b9b0PSXVhuRgydmCWT
+         2HzHwhd+DgUL4cT7PK8jKvbnwCPhVWDHnXeGgytmLUyoX9iN2E2V/1yMtb6cNaIxAzUX
+         9YPg==
+X-Gm-Message-State: AOAM532HA1wXpflnDPTSdLCRfcsN8P4UPe/Q4tspglNQ+K17XGe7au1w
+        OaF4O7wJM+rVydfyTc6PHaOsxA==
+X-Google-Smtp-Source: ABdhPJypHc+BzZOA5mXlLdu/HDx65VNakZJJNfdvhFtCFWCP3DXb1FVC1YBFf4Q7sv72Bq0LzxuICA==
+X-Received: by 2002:a05:6512:689:: with SMTP id t9mr27943252lfe.334.1643913952122;
+        Thu, 03 Feb 2022 10:45:52 -0800 (PST)
+Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi. [88.113.46.102])
+        by smtp.gmail.com with ESMTPSA id b18sm4374543lff.109.2022.02.03.10.45.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 10:45:51 -0800 (PST)
+Subject: Re: [PATCH 5/9] i2c: qcom-cci: initialize CCI controller after
+ registration of adapters
+To:     Loic Poulain <loic.poulain@linaro.org>
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220203164629.1711958-1-vladimir.zapolskiy@linaro.org>
+ <20220203164705.1712027-1-vladimir.zapolskiy@linaro.org>
+ <CAMZdPi_mNzg4ET7FvMeNLiQxVJj7XU1DSxjSQ2CHLBvKu2XZzA@mail.gmail.com>
+From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Message-ID: <a0b1a993-7358-4016-e8d5-538f87d3d252@linaro.org>
+Date:   Thu, 3 Feb 2022 20:45:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ruUbb3Ly1noXTLRH"
-Content-Disposition: inline
-In-Reply-To: <1643023097-5221-1-git-send-email-akhilrajeev@nvidia.com>
-User-Agent: Mutt/2.1.5 (31b18ae9) (2021-12-30)
+In-Reply-To: <CAMZdPi_mNzg4ET7FvMeNLiQxVJj7XU1DSxjSQ2CHLBvKu2XZzA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Loic,
 
---ruUbb3Ly1noXTLRH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2/3/22 7:29 PM, Loic Poulain wrote:
+> Hi Vladimir,
+> 
+> On Thu, 3 Feb 2022 at 17:47, Vladimir Zapolskiy
+> <vladimir.zapolskiy@linaro.org> wrote:
+>>
+>> The change is wanted to postpone initialization of busses on CCI controller
+>> by cci_init() and cci_reset() till adapters are registered, the later is
+>> needed for adding I2C bus devices and get correspondent vbus regulators.
+> 
+> This is odd, I don't think it's a good idea to register an adapter
+> which is not yet initialized. Could you elaborate on why you need to
+> do this, if you can't access the controller without this regulator
+> enabled, maybe it is more than vbus supply, and, in that case, it
+> should be enabled from your probe function.
 
-On Mon, Jan 24, 2022 at 04:48:13PM +0530, Akhil R wrote:
-> The patchset contains driver and devicetree changes to support I2C and
-> PWM for Tegra234
->=20
-> v2->v3:
->   * Sorted clock and reset based on ID
-> v1->v2:
->   * Reverted changes in i2c-tegra.c. using tegra194_i2c_hw for tegra234
->     as the values are compatible.
->=20
-> Akhil R (4):
->   dt-bindings: Add headers for Tegra234 I2C
->   arm64: tegra: Add Tegra234 I2C devicetree nodes
->   dt-bindings: Add headers for Tegra234 PWM
->   arm64: tegra: Add Tegra234 PWM devicetree nodes
->=20
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi   | 133 +++++++++++++++++++++++=
-++++++
->  include/dt-bindings/clock/tegra234-clock.h |  35 +++++++-
->  include/dt-bindings/reset/tegra234-reset.h |  16 ++++
->  3 files changed, 183 insertions(+), 1 deletion(-)
+thank you for review, the controller can be accessed without a vbus regulator,
+but I2C devices connected to the master controller can not.
 
-Applied, thanks.
+The registration of a master controller device done by i2c_add_adapter()
+should be safe to defer IMO, because there shall be no communication on
+the bus at this point, there are no slaves before probe completion, thus
+cci_init()/cci_reset() can be safely called afterwards.
 
-Thierry
+The rationale of the change is to merge two loops over busses, see change 6/9,
+keeping two loops extremely complicates the proper resource management.
 
---ruUbb3Ly1noXTLRH
-Content-Type: application/pgp-signature; name="signature.asc"
+--
+Best wishes,
+Vladimir
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmH8Fc0ACgkQ3SOs138+
-s6GGCg/8CfokZvYlAjOMxpDQHvkgL6CKcSSOuY1KlwkyLC39mJ/NqFzh8rQO7YFe
-9YxInRWkjk0Kjf7uzyQMYIozXS6V+zdqmaPLPCvNyh6wgGlkc4IOuSshJQIyo8V5
-rAHjLtrJvdiw395TQn89XhXPPledVwYfjqE/jfRiVF9ZFhdwkkOmzdcznhPuFBrT
-Ud5fsxhidf8msw6GgEc9CJEwkWM2QIFhx5lZnPh0dMgqNs8DfNzMTYGdc+VjFvYP
-Yxo4TlMqurS4A/qr0a4mFG4FwNcKQEc1W5nNSlJQ8K8psiEk6lO1/MB87G01/uLe
-HYGhXLmo/ZtClcHjNsGuyiFJeevat+nZQd0JizmcCwcqX2zyhnCpRtgW/4dzXP1q
-f4cXtz+SkFuWJ1XXmyI30TySCOBcYPcN/xYE2jUma4lOJzRLhSO31Zdj26Q6pv38
-gKtxBJ37cEv8ON8fVx/mGWbnYgw/H0QMjbavajUJxSoDwh0j9X736mcsIKSX6/PK
-MSfaIuxvOi5gc3hPmVqgg4LO1k76dR3dLESq81fuplGWZROwoyuD8nIpENaH8/bS
-vH6eMoHiFICbNEaV/T73Wr4g8GCY5rQa8gPOp73rQC++7JT6CpOX8CtHDMojnf7R
-X8qR+wQi6uPqwa0BIFMBXlN+D2HioRJY3CUdKqileg2HFgWycuc=
-=v0Xn
------END PGP SIGNATURE-----
-
---ruUbb3Ly1noXTLRH--
+>>
+>> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+>> ---
+>>   drivers/i2c/busses/i2c-qcom-cci.c | 17 ++++++++---------
+>>   1 file changed, 8 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
+>> index cf54f1cb4c57..eebf9603d3d1 100644
+>> --- a/drivers/i2c/busses/i2c-qcom-cci.c
+>> +++ b/drivers/i2c/busses/i2c-qcom-cci.c
+>> @@ -630,14 +630,6 @@ static int cci_probe(struct platform_device *pdev)
+>>          val = readl(cci->base + CCI_HW_VERSION);
+>>          dev_dbg(dev, "CCI HW version = 0x%08x", val);
+>>
+>> -       ret = cci_reset(cci);
+>> -       if (ret < 0)
+>> -               goto error;
+>> -
+>> -       ret = cci_init(cci);
+>> -       if (ret < 0)
+>> -               goto error;
+>> -
+>>          for (i = 0; i < cci->data->num_masters; i++) {
+>>                  if (!cci->master[i].cci)
+>>                          continue;
+>> @@ -649,6 +641,14 @@ static int cci_probe(struct platform_device *pdev)
+>>                  }
+>>          }
+>>
+>> +       ret = cci_reset(cci);
+>> +       if (ret < 0)
+>> +               goto error_i2c;
+>> +
+>> +       ret = cci_init(cci);
+>> +       if (ret < 0)
+>> +               goto error_i2c;
+>> +
+>>          pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
+>>          pm_runtime_use_autosuspend(dev);
+>>          pm_runtime_set_active(dev);
+>> @@ -663,7 +663,6 @@ static int cci_probe(struct platform_device *pdev)
+>>                          of_node_put(cci->master[i].adap.dev.of_node);
+>>                  }
+>>          }
+>> -error:
+>>          disable_irq(cci->irq);
+>>   disable_clocks:
+>>          cci_disable_clocks(cci);
+>> --
+>> 2.33.0
+>>
