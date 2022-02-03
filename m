@@ -2,94 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2844A8741
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Feb 2022 16:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E32E4A88F3
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Feb 2022 17:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351642AbiBCPHZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Feb 2022 10:07:25 -0500
-Received: from mail-ua1-f42.google.com ([209.85.222.42]:38662 "EHLO
-        mail-ua1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351629AbiBCPHY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Feb 2022 10:07:24 -0500
-Received: by mail-ua1-f42.google.com with SMTP id n15so5710679uaq.5;
-        Thu, 03 Feb 2022 07:07:24 -0800 (PST)
+        id S1346215AbiBCQqi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Feb 2022 11:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33118 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239404AbiBCQqh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Feb 2022 11:46:37 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932B6C06173B
+        for <linux-i2c@vger.kernel.org>; Thu,  3 Feb 2022 08:46:37 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id z4so7264935lft.3
+        for <linux-i2c@vger.kernel.org>; Thu, 03 Feb 2022 08:46:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ie1OHE8dynoeStzKHWtxsQXqjLNlKsrhQFt6sTADfMA=;
+        b=M7p2IigGIIkJiS1rj/2sNK1ODqHrIF5SlWms7dSmhOACxEDQV2jqqiF77MyXoWjfLe
+         G2FVtRW/SSwZvA/NPvbxjmkJI7CzIneHelEpx84rgdj4dQRkeBr7m+nKxRQFAENiz5Tu
+         v/bObx6aY6C2x4ke4oesFrbpi6W5OH1EtrIdk/C9F5q6MnXn0xxyO/IMYI3rjARQUCeR
+         GsPXS4wts77pJbeLNx4xkxsR91sJ74YOCkTC0TPSlammkONInMBIqgU68PLS7Q7kpfrT
+         yq/E9+IkXS0mf8w3qeepus7LeK/tnbEYRlO4JYY7VyeSwCGjcNKAR+M0C8LLVJWBK46q
+         NWEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x4GrIT2t/h1QFZy/meIPFQiIESwl7eGudGvKYal0o5g=;
-        b=h+eIA10NFr6yfSFt04hfMwTPNPfrv/WudxF9G2k4ee1a2Hyuy4dJ8aTO5XK/XekxBY
-         kN9UFHQVjL/lVjEKxmjG/CfxXMHimJy+gmkod9NRkY6hZVpHNSn9jdAYhBzdAvi0x9xi
-         wp1hbKazp23evclugPL7eLtZV/40nk6lvbzljzpWc52wOX1zV3nF2WHOgfd6Hj/3aHxz
-         /IJbO5Gf6R0GzlxWgxz6uRaQ5oFoE4rMv1aQ9EcVo2t1QJ9MHfey2FAXuo53WGEiTF/V
-         tj3Zu/9+4sd1dybYy3fgKytrcvueE0a1oaF0/F7Qd1UFjPYGiTYpZ613QUijQt+2egWa
-         TxuQ==
-X-Gm-Message-State: AOAM533bDukYNOvHfR+xbMVuAWJneY3jBepdqb3HC58A7GQCAHdiwPrZ
-        Us/qWsTfOV8oRZDqTXE8l1g/T7m4cWX65w==
-X-Google-Smtp-Source: ABdhPJxpMMtWv18YFehUyunGly0YfmHp2VJycqyzq1kFbdD8AoWLIeGnw6p92WzkEJSZsdOmHSpL0w==
-X-Received: by 2002:ab0:6156:: with SMTP id w22mr13875087uan.61.1643900843457;
-        Thu, 03 Feb 2022 07:07:23 -0800 (PST)
-Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com. [209.85.222.50])
-        by smtp.gmail.com with ESMTPSA id s12sm4523579vsn.29.2022.02.03.07.07.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 07:07:23 -0800 (PST)
-Received: by mail-ua1-f50.google.com with SMTP id r8so5834382uaj.0;
-        Thu, 03 Feb 2022 07:07:23 -0800 (PST)
-X-Received: by 2002:a9f:3b19:: with SMTP id i25mr14689098uah.14.1643900842947;
- Thu, 03 Feb 2022 07:07:22 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ie1OHE8dynoeStzKHWtxsQXqjLNlKsrhQFt6sTADfMA=;
+        b=NjB38LXOR8stBfkvpqSX7I+pstXSIm7WZUM7SNC6oxmSk2+Fg7xmuGpB+H8U+bfGUS
+         z69OFFyH0cCJY0G+BQOEZ+tZNMrhZ15vju3mKKsobHXbwwNLG9Aj9q6mPAmuasEjWV7g
+         UI1zjz/TAyagtrNRQ/Z2ENEhqH8xJRSuuIVXzM/i6MAoneCI1Kjqlr5ozpMDubyBYUu/
+         LEqBhVv59DA5gS9HB8W36t1lKTE3movAKdJ3z39v/IYDkUbSf2wlIGJZAMdTCb1xovW0
+         oDKy/HChLfLOslKAEPwSG3qSJk6ZwDCfhHYhgSubgvyGlR1UyQ1eu6KwmYaiQ4Ryo1dS
+         JT/w==
+X-Gm-Message-State: AOAM530bQahMdIA0/mljasiXUl2Ss+ka8ZxL5X36aziqdJBVTa3LR3dI
+        hBTi32tUIDogz/WdlviLlY/ExA==
+X-Google-Smtp-Source: ABdhPJz4iO8ubgZ56ej9rjRRI92NoRvioTzKBRhVXGP3nBxWdRughDp5LXUfUf8Gd0HmY3Wubghf4w==
+X-Received: by 2002:a19:5219:: with SMTP id m25mr28305305lfb.502.1643906795816;
+        Thu, 03 Feb 2022 08:46:35 -0800 (PST)
+Received: from localhost.localdomain (88-113-46-102.elisa-laajakaista.fi. [88.113.46.102])
+        by smtp.gmail.com with ESMTPSA id h6sm269999lfm.237.2022.02.03.08.46.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 08:46:35 -0800 (PST)
+From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+To:     Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 0/9] i2c: qcom-cci: fixes and updates
+Date:   Thu,  3 Feb 2022 18:46:27 +0200
+Message-Id: <20220203164629.1711958-1-vladimir.zapolskiy@linaro.org>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <e4dcee5f6f521dccd7ac7f2fb6c86cfe4a24d032.1643898820.git.geert+renesas@glider.be>
-In-Reply-To: <e4dcee5f6f521dccd7ac7f2fb6c86cfe4a24d032.1643898820.git.geert+renesas@glider.be>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 3 Feb 2022 16:07:11 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXJnF-Lg-z8kLXNrDxe6q3_ttSXnUAONwwqe+PDfaK_JA@mail.gmail.com>
-Message-ID: <CAMuHMdXJnF-Lg-z8kLXNrDxe6q3_ttSXnUAONwwqe+PDfaK_JA@mail.gmail.com>
-Subject: Re: [PATCH] clk: renesas: r8a779f0: Add I2C clocks
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-CC clock people (sorry for missing that)
+The main intention of the patch series is to add support of vbus
+regulators, which are commonly connected to CCI I2C busses.
 
-On Thu, Feb 3, 2022 at 3:34 PM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
-> Add the module clocks used by the I2C Bus Interfaces on the Renesas
-> R-Car S4-8 (R8A779F0) SoC.
->
-> Extracted from a larger patch in the BSP by LUU HOAI.
->
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> To be queued in renesas-clk-for-v5.18.
->
->  drivers/clk/renesas/r8a779f0-cpg-mssr.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/clk/renesas/r8a779f0-cpg-mssr.c b/drivers/clk/renesas/r8a779f0-cpg-mssr.c
-> index 16271b8c3ed8ea31..76b441965037798d 100644
-> --- a/drivers/clk/renesas/r8a779f0-cpg-mssr.c
-> +++ b/drivers/clk/renesas/r8a779f0-cpg-mssr.c
-> @@ -115,6 +115,12 @@ static const struct cpg_core_clk r8a779f0_core_clks[] __initconst = {
->  };
->
->  static const struct mssr_mod_clk r8a779f0_mod_clks[] __initconst = {
-> +       DEF_MOD("i2c0",         518,    R8A779F0_CLK_S0D6_PER),
-> +       DEF_MOD("i2c1",         519,    R8A779F0_CLK_S0D6_PER),
-> +       DEF_MOD("i2c2",         520,    R8A779F0_CLK_S0D6_PER),
-> +       DEF_MOD("i2c3",         521,    R8A779F0_CLK_S0D6_PER),
-> +       DEF_MOD("i2c4",         522,    R8A779F0_CLK_S0D6_PER),
-> +       DEF_MOD("i2c5",         523,    R8A779F0_CLK_S0D6_PER),
->         DEF_MOD("scif0",        702,    R8A779F0_CLK_S0D12_PER),
->         DEF_MOD("scif1",        703,    R8A779F0_CLK_S0D12_PER),
->         DEF_MOD("scif3",        704,    R8A779F0_CLK_S0D12_PER),
-> --
-> 2.25.1
+The new bus adapter specific bus_regulator from commit 5a7b95fb993e
+("i2c: core: support bus regulator controlling in adapter") is reused,
+however its control is connected to runtime pm of the I2C master
+controller rather than runtime pm of slaves.
+
+In addition the series adds new compatible value for CCI found on QCOM
+SM8450 SoC.
+
+Vladimir Zapolskiy (9):
+  dt-bindings: i2c: qcom-cci: add QCOM SM8450 compatible
+  dt-bindings: i2c: qcom-cci: add description of a vbus-supply property
+  i2c: qcom-cci: don't delete an unregistered adapter
+  i2c: qcom-cci: don't put a device tree node before i2c_add_adapter()
+  i2c: qcom-cci: initialize CCI controller after registration of adapters
+  i2c: qcom-cci: simplify probe by removing one loop over busses
+  i2c: qcom-cci: simplify access to bus data structure
+  i2c: qcom-cci: add support of optional vbus-supply regulators
+  i2c: qcom-cci: add sm8450 compatible
+
+ .../devicetree/bindings/i2c/i2c-qcom-cci.txt  |   9 +-
+ drivers/i2c/busses/i2c-qcom-cci.c             | 159 ++++++++++++------
+ 2 files changed, 114 insertions(+), 54 deletions(-)
+
+-- 
+2.33.0
+
