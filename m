@@ -2,59 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E1D4A88FF
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Feb 2022 17:47:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B764A8903
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Feb 2022 17:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiBCQrJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Feb 2022 11:47:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        id S1352408AbiBCQrM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Feb 2022 11:47:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352408AbiBCQrI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Feb 2022 11:47:08 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DF6C061714
-        for <linux-i2c@vger.kernel.org>; Thu,  3 Feb 2022 08:47:08 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id o12so7138505lfg.12
-        for <linux-i2c@vger.kernel.org>; Thu, 03 Feb 2022 08:47:08 -0800 (PST)
+        with ESMTP id S242660AbiBCQrL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Feb 2022 11:47:11 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7C2C061714
+        for <linux-i2c@vger.kernel.org>; Thu,  3 Feb 2022 08:47:10 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id x23so7356515lfc.0
+        for <linux-i2c@vger.kernel.org>; Thu, 03 Feb 2022 08:47:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=reEPrw9sqpKkfTltdTv+Hj/7serim+AXRNC/H74bgHM=;
-        b=OWFstwB2gFB/0kMFf5Vs2iED+LaRqQrFkoghdt6xdDbpKgVusiczw/ynb+caQoqJPI
-         5E7YLIQA7OoJbyT5zddPa+PXn7ljWqa4/mV5pCKuy9ApiqTWpEsHbUoiaXrHxAdvSKl0
-         ghOL9zgfPf7py/2Q5qK8KaH0Nb/CcPMNcOcGzS7azsd2ilENpfP949pZzQ903+0i+Z9R
-         q8CbV5zam8mbQfoKonjZixx4bQ6bkIw4WzDIagv8rgQoN5vy/GnxgmV2H47gbjY/nN34
-         gf5EVEkAflePAIP6fZg0MoBvqg8I/taHw2OrojZsp9sYZm37uKETy1gjdtkS+FUcq5AZ
-         NJ+g==
+        bh=CZkW/5anEw5GrivfXwnX+cAuoc6zYllNAJ26zHVAzzA=;
+        b=clR2GdAbej5ki7kv6ANbm+BsBtf/uWblDU8kRHZz9d+fMUhLt43E9+0alRcE1SpOrK
+         gwv95xz3tiQa8x0hhpdlJFx04GMlSZOVslgt4eJnTDKSe5uLQaJG5PRco4Htg38TVU9G
+         UCWNFIb87/yuo3wEtoZ4NlZhTYKAVgZfJ7eMXQY07EEin5BLRx2wTJTCPkFbo4mUEo1z
+         thcgLPNyGrWNZfMptGs1GNEl/6TC8BfsxfMHMwHDrrHTncdrkIp4Lc8XiaVx4SRXumQJ
+         2q41azt8xY47UjVFo2BwkZni/RksU8ZTFkAD3dkxLoL1/Yg1vUqEBH9nnizfW7SB78JI
+         7Dlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=reEPrw9sqpKkfTltdTv+Hj/7serim+AXRNC/H74bgHM=;
-        b=1ZhatETEJ/oxXcrmvrer1nQGqF7NjQmM/EOJ20lzGn6oZZgAB/oAf6xqYvv+hFX84Q
-         Al0dWswk+3p+wWlnlSIZigXTe7wu/RsyGnEnlkNwECpNyfa56rOTf9PvGxuNk0T1Tpr/
-         9BECwIGgtU03OuamGEcsSOTjTmbEPidGtjgvG8uR9COrH3oYk7ATy2PGbwgcXzXtG42t
-         WjW8VLyfATMklfu1dOfk81tdw/mSosfkOZ6Maj7/JP1XZR9p79/F7BlF9ao/YKCDt2nz
-         pl77jsVA/VJ5IUyICXmD93xBpXb0quTNpSj8YaNwaQAV9aDc7iy1RvUqGht35mzXMSNn
-         onOA==
-X-Gm-Message-State: AOAM530RsMajYGyWQYeQjoKs/ut+KH5S56O1cIIlXjsRr6IkoGX+ADy9
-        jytVX4ZWrslQpkjVXmRZktW70A==
-X-Google-Smtp-Source: ABdhPJwPyySBBtqTR0AgfkJFyxuAXgiUcz+WqWhlpUsO74QjQfGbU19Edvm/MIOKZGf9Nc9ZKE5rnA==
-X-Received: by 2002:a19:c201:: with SMTP id l1mr27512108lfc.485.1643906826872;
-        Thu, 03 Feb 2022 08:47:06 -0800 (PST)
+        bh=CZkW/5anEw5GrivfXwnX+cAuoc6zYllNAJ26zHVAzzA=;
+        b=GEGweWEvUvpcTzYqNSGNH2O9RkcnAoMWcGP7V7FtikLFEDtFMaNi+UHa+DePngTDtF
+         InBHmz/pou0BRqTxLuwO1lbkAxVgDkWT7TobKhou6XkI21SR4c4Dk3s07leCdhja9YcE
+         2GYfCB66Ktt8OTDYeQn/qXGQci8lEbpF0CHOOwJPiQBaGmFqy8V5auBzKSZjri8rEhn/
+         oteGF4O7jV73Qub6Yk93HlOysKbS924gqHIvkvTyuHYS1OlgA4PeXNnY6u6xIN4RilVI
+         6M9jNOAduqD/nncTNVWLG9bYBS3Hl7uXxM21+fuj1D3X3AIgTAbTlhaEfW5NpP1OQldV
+         8QqA==
+X-Gm-Message-State: AOAM530qlXHDUUKG24Qb0dNkaPmhMolPwERITxaWGhcGAFCWW+tvzcMV
+        Se1wUicS4Lmbqd0S/Dk8sU0XjQ==
+X-Google-Smtp-Source: ABdhPJxOV0nyX/VBI6df0uxPSocrpS1o8pdYoUdtjq5jjc48S8Yv+Ohxi4CQzJJTzHLloUa74wuEaw==
+X-Received: by 2002:a19:7507:: with SMTP id y7mr26804715lfe.224.1643906829297;
+        Thu, 03 Feb 2022 08:47:09 -0800 (PST)
 Received: from localhost.localdomain (88-113-46-102.elisa-laajakaista.fi. [88.113.46.102])
-        by smtp.gmail.com with ESMTPSA id p2sm4208017lfh.55.2022.02.03.08.47.06
+        by smtp.gmail.com with ESMTPSA id t25sm5144559lfr.86.2022.02.03.08.47.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 08:47:06 -0800 (PST)
+        Thu, 03 Feb 2022 08:47:09 -0800 (PST)
 From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 To:     Loic Poulain <loic.poulain@linaro.org>,
         Robert Foss <robert.foss@linaro.org>
 Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
-Subject: [PATCH 5/9] i2c: qcom-cci: initialize CCI controller after registration of adapters
-Date:   Thu,  3 Feb 2022 18:47:05 +0200
-Message-Id: <20220203164705.1712027-1-vladimir.zapolskiy@linaro.org>
+Subject: [PATCH 6/9] i2c: qcom-cci: simplify probe by removing one loop over busses
+Date:   Thu,  3 Feb 2022 18:47:07 +0200
+Message-Id: <20220203164707.1712048-1-vladimir.zapolskiy@linaro.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220203164629.1711958-1-vladimir.zapolskiy@linaro.org>
 References: <20220203164629.1711958-1-vladimir.zapolskiy@linaro.org>
@@ -64,57 +64,129 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The change is wanted to postpone initialization of busses on CCI controller
-by cci_init() and cci_reset() till adapters are registered, the later is
-needed for adding I2C bus devices and get correspondent vbus regulators.
+It's possible to slightly simplify cci_probe() function by merging
+a loop over I2C busses found on CCI controller with a loop which
+actually registers I2C adapters, the data per I2C bus collected early
+on probe is not used before calling i2c_add_adapter() since cci_reset()
+and cci_init() calls were moved to the end of probe.
+
+The change is intended to be non-functional.
 
 Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 ---
- drivers/i2c/busses/i2c-qcom-cci.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+ drivers/i2c/busses/i2c-qcom-cci.c | 82 +++++++++++++++----------------
+ 1 file changed, 39 insertions(+), 43 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
-index cf54f1cb4c57..eebf9603d3d1 100644
+index eebf9603d3d1..cffc01b2285b 100644
 --- a/drivers/i2c/busses/i2c-qcom-cci.c
 +++ b/drivers/i2c/busses/i2c-qcom-cci.c
-@@ -630,14 +630,6 @@ static int cci_probe(struct platform_device *pdev)
+@@ -540,44 +540,6 @@ static int cci_probe(struct platform_device *pdev)
+ 	if (!cci->data)
+ 		return -ENOENT;
+ 
+-	for_each_available_child_of_node(dev->of_node, child) {
+-		u32 idx;
+-
+-		ret = of_property_read_u32(child, "reg", &idx);
+-		if (ret) {
+-			dev_err(dev, "%pOF invalid 'reg' property", child);
+-			continue;
+-		}
+-
+-		if (idx >= cci->data->num_masters) {
+-			dev_err(dev, "%pOF invalid 'reg' value: %u (max is %u)",
+-				child, idx, cci->data->num_masters - 1);
+-			continue;
+-		}
+-
+-		cci->master[idx].adap.quirks = &cci->data->quirks;
+-		cci->master[idx].adap.algo = &cci_algo;
+-		cci->master[idx].adap.dev.parent = dev;
+-		cci->master[idx].adap.dev.of_node = of_node_get(child);
+-		cci->master[idx].master = idx;
+-		cci->master[idx].cci = cci;
+-
+-		i2c_set_adapdata(&cci->master[idx].adap, &cci->master[idx]);
+-		snprintf(cci->master[idx].adap.name,
+-			 sizeof(cci->master[idx].adap.name), "Qualcomm-CCI");
+-
+-		cci->master[idx].mode = I2C_MODE_STANDARD;
+-		ret = of_property_read_u32(child, "clock-frequency", &val);
+-		if (!ret) {
+-			if (val == I2C_MAX_FAST_MODE_FREQ)
+-				cci->master[idx].mode = I2C_MODE_FAST;
+-			else if (val == I2C_MAX_FAST_MODE_PLUS_FREQ)
+-				cci->master[idx].mode = I2C_MODE_FAST_PLUS;
+-		}
+-
+-		init_completion(&cci->master[idx].irq_complete);
+-	}
+-
+ 	/* Memory */
+ 
+ 	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+@@ -630,13 +592,47 @@ static int cci_probe(struct platform_device *pdev)
  	val = readl(cci->base + CCI_HW_VERSION);
  	dev_dbg(dev, "CCI HW version = 0x%08x", val);
  
--	ret = cci_reset(cci);
--	if (ret < 0)
--		goto error;
--
--	ret = cci_init(cci);
--	if (ret < 0)
--		goto error;
--
- 	for (i = 0; i < cci->data->num_masters; i++) {
- 		if (!cci->master[i].cci)
+-	for (i = 0; i < cci->data->num_masters; i++) {
+-		if (!cci->master[i].cci)
++	for_each_available_child_of_node(dev->of_node, child) {
++		u32 idx;
++
++		ret = of_property_read_u32(child, "reg", &idx);
++		if (ret) {
++			dev_err(dev, "%pOF invalid 'reg' property", child);
  			continue;
-@@ -649,6 +641,14 @@ static int cci_probe(struct platform_device *pdev)
- 		}
- 	}
++		}
++
++		if (idx >= cci->data->num_masters) {
++			dev_err(dev, "%pOF invalid 'reg' value: %u (max is %u)",
++				child, idx, cci->data->num_masters - 1);
++			continue;
++		}
++
++		cci->master[idx].adap.quirks = &cci->data->quirks;
++		cci->master[idx].adap.algo = &cci_algo;
++		cci->master[idx].adap.dev.parent = dev;
++		cci->master[idx].adap.dev.of_node = of_node_get(child);
++		cci->master[idx].master = idx;
++		cci->master[idx].cci = cci;
++
++		i2c_set_adapdata(&cci->master[idx].adap, &cci->master[idx]);
++		snprintf(cci->master[idx].adap.name,
++			 sizeof(cci->master[idx].adap.name), "Qualcomm-CCI");
  
-+	ret = cci_reset(cci);
-+	if (ret < 0)
-+		goto error_i2c;
+-		ret = i2c_add_adapter(&cci->master[i].adap);
++		cci->master[idx].mode = I2C_MODE_STANDARD;
++		ret = of_property_read_u32(child, "clock-frequency", &val);
++		if (!ret) {
++			if (val == I2C_MAX_FAST_MODE_FREQ)
++				cci->master[idx].mode = I2C_MODE_FAST;
++			else if (val == I2C_MAX_FAST_MODE_PLUS_FREQ)
++				cci->master[idx].mode = I2C_MODE_FAST_PLUS;
++		}
 +
-+	ret = cci_init(cci);
-+	if (ret < 0)
-+		goto error_i2c;
++		init_completion(&cci->master[idx].irq_complete);
 +
- 	pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
- 	pm_runtime_use_autosuspend(dev);
- 	pm_runtime_set_active(dev);
-@@ -663,7 +663,6 @@ static int cci_probe(struct platform_device *pdev)
- 			of_node_put(cci->master[i].adap.dev.of_node);
++		ret = i2c_add_adapter(&cci->master[idx].adap);
+ 		if (ret < 0) {
+-			of_node_put(cci->master[i].adap.dev.of_node);
++			of_node_put(child);
++			cci->master[idx].cci = NULL;
+ 			goto error_i2c;
  		}
  	}
--error:
- 	disable_irq(cci->irq);
- disable_clocks:
- 	cci_disable_clocks(cci);
+@@ -657,7 +653,7 @@ static int cci_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ error_i2c:
+-	for (--i ; i >= 0; i--) {
++	for (i = 0; i < cci->data->num_masters; i++) {
+ 		if (cci->master[i].cci) {
+ 			i2c_del_adapter(&cci->master[i].adap);
+ 			of_node_put(cci->master[i].adap.dev.of_node);
 -- 
 2.33.0
 
