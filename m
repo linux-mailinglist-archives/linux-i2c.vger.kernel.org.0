@@ -2,114 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD8D4A8354
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Feb 2022 12:52:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0D44A85F4
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Feb 2022 15:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350231AbiBCLwP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Feb 2022 06:52:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49968 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236153AbiBCLwO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Feb 2022 06:52:14 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FEDC061714
-        for <linux-i2c@vger.kernel.org>; Thu,  3 Feb 2022 03:52:14 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id h125so2091693pgc.3
-        for <linux-i2c@vger.kernel.org>; Thu, 03 Feb 2022 03:52:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=AKYL2kdA69UA9aARWAmYaY5qmBbSeF672IAs1r/nhoo=;
-        b=jtKOX3HB3HAeRg8WKXaU/me9qlfEubRFX545xdqAabzwYtS8jLSTZySOLZLLBw69Z0
-         B9BAkriIQYKm98IV3FssgVergEaioaWs4EscsNZTnX8wCcpc+iICIfRaNW1Afly+0OWP
-         bdHEypm+CWl8YpnExV5H5sLuuFrezMtPmZ03SKcG3nWRRd10x21AiUOzUKoa1ZSxa4cO
-         31CHFZ3D+DgK2+nY72jg3B5QCCxHno1AlmTghuyGMG1lqYMu1SKbpuUI+sVYfSqjhlVf
-         7cylTEd3qZu2veaO/2OnM7cdp0Vdz9bFTmkS8RHF96JtZRxWA1dsfyuiwwhaXICmaZOr
-         1P+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=AKYL2kdA69UA9aARWAmYaY5qmBbSeF672IAs1r/nhoo=;
-        b=iiv161XrBmupkklN7hKrPMbWfGAAdK0sqdT1V5Qc8cQmzQ/ggjrjuvzZVK1QnXHMII
-         W5b7H9AWFGsHrmrH81tPVEegTCeZufykHovlzQ7Hmwb6tKdMPi5QEbxlTv6gp/4m9OHl
-         nE7apcFtnNILWeqvdzD/0Me62PJrnOdBI5H2hlqo2XgvBPmUbzkXVqzKTFAmcdy1xft9
-         MSUsrN0eS/Q+pq+tgjghvQnjS9SX4tIXPPjwt/Z9o1KZmki7hS3MqW102n7/c3NzxWee
-         BHR3DLxdy8gtzWQUX9rrz1crxjS27tQ6zVQTXTveeG5+7jNyfIfJMDhozqQ2hwEUelJK
-         /PPQ==
-X-Gm-Message-State: AOAM530h+7xTVgQR0qFlMNsn4YqLBjqm5udEMtawk1OLBpPjvq3yIH14
-        s2ENUgfXYM34O0VKMBn4bFunXXzrU/9B+xHasp6jQQ==
-X-Google-Smtp-Source: ABdhPJx3SOm6QitkPfEg+DVbsz4taQcIK3ZPzk1ds8C/gXMxUeO5l8y1OkIlE9qwCNGqmdorVYFd8AFIyvMoRk0Ybzw=
-X-Received: by 2002:a05:6a00:1a50:: with SMTP id h16mr32054954pfv.74.1643889134395;
- Thu, 03 Feb 2022 03:52:14 -0800 (PST)
-MIME-Version: 1.0
-References: <20220120001621.705352-2-jsd@semihalf.com> <20220202144302.1438303-1-jsd@semihalf.com>
- <20220202144302.1438303-2-jsd@semihalf.com> <724bbaef-8ee5-0904-d871-750643b4ff89@amd.com>
- <YfuxcTFnWQ4MLxvp@smile.fi.intel.com>
-In-Reply-To: <YfuxcTFnWQ4MLxvp@smile.fi.intel.com>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Thu, 3 Feb 2022 12:52:03 +0100
-Message-ID: <CAOtMz3Po2y0=8gDo=4vTV+PBgYHhFBaX_Bs9NOWwP=ZbqsEAMg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] i2c: designware: Add AMD PSP I2C bus support
+        id S235787AbiBCOOd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Feb 2022 09:14:33 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:53144 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234727AbiBCOOb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Feb 2022 09:14:31 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 305722114D;
+        Thu,  3 Feb 2022 14:14:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643897670; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IsVlcPPz4fb5Gf2ImKOnD8UP/Sqe6RXNED24nJE5qKY=;
+        b=TdvsgBazf40G3Zr1OXu884xSANl5KtoMWSjvIFL1QtFI6DEIRomHKAvbkSPCY8f8jade6c
+        gtkp/jGWUimi84/2NsyRq93Cl/PIU8PIsmijCSLm7nidDZnlde4c1dxU8QCxiYoe8nnKci
+        icwsJBsgbD4JpDws/ubGrlApiz7G2E4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643897670;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IsVlcPPz4fb5Gf2ImKOnD8UP/Sqe6RXNED24nJE5qKY=;
+        b=fwkYbBPid4pC93NTSV6xWGdFvVUHzDurGFrnYL0GBEcvMzOIvcZoOcxSMwN3nzXk8fLfKb
+        /6KZpAwTIvHjfnAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 706F313C0F;
+        Thu,  3 Feb 2022 14:14:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 4mTgGUXj+2HsVQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Thu, 03 Feb 2022 14:14:29 +0000
+Date:   Thu, 3 Feb 2022 15:14:24 +0100
+From:   Jean Delvare <jdelvare@suse.de>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
         Hans de Goede <hdegoede@redhat.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        "Easow, Nimesh" <Nimesh.Easow@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: Re: [PATCH v4 6/8] i2c: i801: convert to use common P2SB accessor
+Message-ID: <20220203151424.2a35c864@endymion>
+In-Reply-To: <20220131151346.45792-7-andriy.shevchenko@linux.intel.com>
+References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+        <20220131151346.45792-7-andriy.shevchenko@linux.intel.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andy, Mario,
+Hi Andy,
 
-czw., 3 lut 2022 o 11:43 Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
->
-> On Wed, Feb 02, 2022 at 04:49:40PM -0600, Limonciello, Mario wrote:
-> > On 2/2/2022 08:43, Jan Dabros wrote:
->
-> ...
->
-> > > +   { "AMDI0019", APD_ADDR(wt_i2c_desc) },
-> >
-> > Did you already check with anyone in AMD about reserving this ID?
->
-> Oh, it's a very good point! I was under impression that Jan operates on
-> allocated IDs...
+On Mon, 31 Jan 2022 17:13:44 +0200, Andy Shevchenko wrote:
+> Since we have a common P2SB accessor in tree we may use it instead of
+> open coded variants.
+> 
+> Replace custom code by p2sb_bar() call.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Acked-by: Hans de Goede <hdegoede@redhat.com>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  drivers/i2c/busses/Kconfig        |  1 +
+>  drivers/i2c/busses/i2c-i801.c     | 39 +++++++------------------------
+>  drivers/platform/x86/intel/p2sb.c |  6 +++++
+>  3 files changed, 16 insertions(+), 30 deletions(-)
+> (...)
 
-Yes, I received this ID from AMD.
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
->
-> > Considering this design is specific to arbitration used for Chromebooks=
- I
-> > wonder if it is better to be GOOG ID?
-> >
-> > I can see it both ways, but if you didn't already talk to anyone and th=
-e
-> > consensus is for it to be AMDI****, I will ask around internally about
-> > reserving it / making sure there are no future or existing conflicts.
+And thank you for taking the time to write this neat P2SB API and to
+convert all the code that was doing the same so far.
 
-It was agreed with AMD that we will use "AMDI****" format. This ID is
-already reserved by them.
-
-Best Regards,
-Jan
-
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+-- 
+Jean Delvare
+SUSE L3 Support
