@@ -2,54 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A9A4A9822
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Feb 2022 12:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 995EC4A9824
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Feb 2022 12:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348005AbiBDLDT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Feb 2022 06:03:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
+        id S1352661AbiBDLDm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Feb 2022 06:03:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346009AbiBDLDS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Feb 2022 06:03:18 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29162C06173D
-        for <linux-i2c@vger.kernel.org>; Fri,  4 Feb 2022 03:03:18 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id u130so4795272pfc.2
-        for <linux-i2c@vger.kernel.org>; Fri, 04 Feb 2022 03:03:18 -0800 (PST)
+        with ESMTP id S236450AbiBDLDl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Feb 2022 06:03:41 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5C0C061714
+        for <linux-i2c@vger.kernel.org>; Fri,  4 Feb 2022 03:03:41 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id l24-20020a17090aec1800b001b55738f633so7587394pjy.1
+        for <linux-i2c@vger.kernel.org>; Fri, 04 Feb 2022 03:03:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=4pAGNdLzrzCwGwPPeueOEKXAFHek3uiDSl3RDxGHQ1Y=;
-        b=XArAhyZNknB47MlOtAk3nXAua4bnGx2l4motCPw+oQNnl46oaUfdicimSZO+mM2v/k
-         XeAhE/NsH86NA1kJ481uGTbZfp8wp+wUTrt6ERfASmsrPWSaVe1mshEZKZAHzcwj1n2W
-         L9fekJItXIEdwGl8VGsVIMboXQMrk4jK6z/+KJ75ci3cIKS5NJjie30FfNmuTwM+Bqrg
-         0iaySNX8owJi1xAdwl365CoWaSOJqRB+5TTSHYmX6170luw5fUlqpyYlP0QcMiIXRvSt
-         sCqlkOLEbuNkftZlKnk5faj9+yZsAt0ZEsgVUQnZekdr6Wo85gRP4Ociy4HfkX4DFs96
-         yE8Q==
+        bh=byBwJqtuZSV5NfFenYhnEHDTFDwMBMjfLRkqWPZPKHI=;
+        b=y8lFJW/bcGsF68WeYyOAPUiNQnzMhihNT0vv09pQI0mONSkJn8x+KtCdxSXpgoUYTV
+         WhNog/BVB7+ut/FbMxcqyO5xmorlU0TUsFLf8RPgm3Y7uGzUk3mfklwslViUR2ONdRmU
+         h0CqaVHfLLO9cJexNaVK9rtHf4AmGqLVBR03DJD56KUyGMn4KWwpd8fK/nZsgdjfSAjV
+         5G4AQFx2iNagpKlyeuoQFuSJldkzniiRRs9DoFnT7i9NVHqIPio3BQt3GbxqDV3uToTD
+         nbnEoaoQsHsdhogxtjDhmEbqqPpsDPZaCECZDAsQJfkGcHX6ibodCKDeOFMcpY1sB772
+         NT+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4pAGNdLzrzCwGwPPeueOEKXAFHek3uiDSl3RDxGHQ1Y=;
-        b=fOcTuZGgyAZc95Lqwjd9hRsfKOoweXzclDD0NMBL0Y8r40ekoHtKkhuOrYuHUnKGFN
-         6vahf1elNkVP2Kud+tSybqaEaRpeOmA2/ya7SnaHBc4Vuby66xx6qNWwJCweivtF7yjl
-         glmHxRzcHYfiR8wgAiAt4SS3Qt9V8iOlxr02MJMW8rP64V32q43JBl73b6pUcfbMutq4
-         bezVPAXZdk9r+o0bBL4vG3t8DTWfMRdGxsw6aYs0BHPSl59ntXbetTE/WVhZhE+Q6Dti
-         4liedIZDg0mcS79dMpCJr2ny6efzkMja35aWKqbATtvKi3YvZAFre/HwNv5ED+tYXJrP
-         nn2w==
-X-Gm-Message-State: AOAM531T/v0e+NRi2WLIF0R6xcyklygXenBXFxUlNI2tL5OGBOwMG0Bj
-        w5E0y0hY6zvpoo+1TmVX1opwBIWI8G7IZcihH8VyEw==
-X-Google-Smtp-Source: ABdhPJz8bA0HDoe5xfk97Jhe/A1/tB9+4NHLTVLvaYKGRbd8eRiFlhoFX44sSgC54ga0ar98gxQxRrD7SltD13ebHXM=
-X-Received: by 2002:a62:8fcb:: with SMTP id n194mr2464286pfd.29.1643972597596;
- Fri, 04 Feb 2022 03:03:17 -0800 (PST)
+        bh=byBwJqtuZSV5NfFenYhnEHDTFDwMBMjfLRkqWPZPKHI=;
+        b=LVdUTRBcbt/bqIj85hLwlLQHUb7YJzDnjCE6QuWX8WQlVistoJ8qET+MVSCiTjjquJ
+         K4JQt80JJYWSn3QL+L2F1qaBc3b4iZ95Ixaqea/9d/kk5WCvFC2OkrXSKTa8TC6oaCt8
+         SQsq/2TAV+GZ95U6zZ0VJx3x2K9o+r1YoIh9nCSG4HFnqpy0T7aOmStb9S9Yokve3nN2
+         aIlzVWDDQ+3GvOgxg/DSirSm44gfInX8NApDIjPZ13262wFhowDcUuXfo+2gERjOXNre
+         23r2J6DTuG8kSG0RVOQqnzwnyYmSyUSza/02kQ/rmljxjgMVhzBGpILq4ja86jS+JZzM
+         kGAw==
+X-Gm-Message-State: AOAM532vJ/NrGS3V5FsLozRkNLkfNOpGA4OanCIQtFM+2ZYeJUDcySbu
+        sfE+lzCVlBNQYOBLB4ekqn3AhZ9+hsIzIzPpR4n/qA==
+X-Google-Smtp-Source: ABdhPJxPGEGBB01+fXT2JTlPmtIyaf5RUpOoChSUrewfITUH6eo8TXKwMjep6120SBR/auNp9qz9EyFbwf7l1UU0G34=
+X-Received: by 2002:a17:90b:4a86:: with SMTP id lp6mr2536068pjb.152.1643972621409;
+ Fri, 04 Feb 2022 03:03:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20220203164629.1711958-1-vladimir.zapolskiy@linaro.org> <20220203164711.1712090-1-vladimir.zapolskiy@linaro.org>
-In-Reply-To: <20220203164711.1712090-1-vladimir.zapolskiy@linaro.org>
+References: <20220203164629.1711958-1-vladimir.zapolskiy@linaro.org> <20220203164713.1712111-1-vladimir.zapolskiy@linaro.org>
+In-Reply-To: <20220203164713.1712111-1-vladimir.zapolskiy@linaro.org>
 From:   Robert Foss <robert.foss@linaro.org>
-Date:   Fri, 4 Feb 2022 12:03:06 +0100
-Message-ID: <CAG3jFyuzJmRk47kfd_zVw3g+_eKUQVG6y5hU0z1KfXPEM4quNg@mail.gmail.com>
-Subject: Re: [PATCH 8/9] i2c: qcom-cci: add support of optional vbus-supply regulators
+Date:   Fri, 4 Feb 2022 12:03:30 +0100
+Message-ID: <CAG3jFyt3jm3QJ01QQcDkR17VG8T4CZeGTpN3WzgQN8TjJRKZQA@mail.gmail.com>
+Subject: Re: [PATCH 9/9] i2c: qcom-cci: add sm8450 compatible
 To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 Cc:     Loic Poulain <loic.poulain@linaro.org>,
         Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
@@ -62,116 +62,36 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 On Thu, 3 Feb 2022 at 17:47, Vladimir Zapolskiy
 <vladimir.zapolskiy@linaro.org> wrote:
 >
-> The change adds handling of optional vbus regulators in the driver.
+> Add QCOM SM8450 specific compatible for CCI controller, which is
+> equal to CCI controllers found on QCOM SDM845 and QCOM SM8250 SoCs.
 >
 > Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 > ---
->  drivers/i2c/busses/i2c-qcom-cci.c | 49 +++++++++++++++++++++++++++++++
->  1 file changed, 49 insertions(+)
+>  drivers/i2c/busses/i2c-qcom-cci.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
 > diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
-> index 775945f7b4cd..2fc7f1f2616f 100644
+> index 2fc7f1f2616f..e625857fde41 100644
 > --- a/drivers/i2c/busses/i2c-qcom-cci.c
 > +++ b/drivers/i2c/busses/i2c-qcom-cci.c
-> @@ -11,6 +11,7 @@
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
-> +#include <linux/regulator/consumer.h>
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  // Copyright (c) 2012-2016, The Linux Foundation. All rights reserved.
+> -// Copyright (c) 2017-20 Linaro Limited.
+> +// Copyright (c) 2017-2022 Linaro Limited.
 >
->  #define CCI_HW_VERSION                         0x0
->  #define CCI_RESET_CMD                          0x004
-> @@ -480,6 +481,20 @@ static void cci_disable_clocks(struct cci *cci)
->  static int __maybe_unused cci_suspend_runtime(struct device *dev)
->  {
->         struct cci *cci = dev_get_drvdata(dev);
-> +       struct regulator *bus_regulator;
-> +       unsigned int i;
-> +
-> +       for (i = 0; i < cci->data->num_masters; i++) {
-> +               if (!cci->master[i].cci)
-> +                       continue;
-> +
-> +               bus_regulator = cci->master[i].adap.bus_regulator;
-> +               if (!bus_regulator)
-> +                       continue;
-> +
-> +               if (regulator_is_enabled(bus_regulator) > 0)
-
-Is this check needed? No matter the current status of the regulator,
-we'd like to disable it, and from my reading regulator_disable can be
-called for already disabled regulators.
-
-> +                       regulator_disable(bus_regulator);
-> +       }
->
->         cci_disable_clocks(cci);
->         return 0;
-> @@ -488,12 +503,30 @@ static int __maybe_unused cci_suspend_runtime(struct device *dev)
->  static int __maybe_unused cci_resume_runtime(struct device *dev)
->  {
->         struct cci *cci = dev_get_drvdata(dev);
-> +       struct regulator *bus_regulator;
-> +       unsigned int i;
->         int ret;
->
->         ret = cci_enable_clocks(cci);
->         if (ret)
->                 return ret;
->
-> +       for (i = 0; i < cci->data->num_masters; i++) {
-> +               if (!cci->master[i].cci)
-> +                       continue;
-> +
-> +               bus_regulator = cci->master[i].adap.bus_regulator;
-> +               if (!bus_regulator)
-> +                       continue;
-> +
-> +               if (!regulator_is_enabled(bus_regulator)) {
-> +                       ret = regulator_enable(bus_regulator);
-> +                       if (ret)
-> +                               dev_err(dev, "failed to enable regulator: %d\n",
-> +                                       ret);
-> +               }
-> +       }
-> +
->         cci_init(cci);
->         return 0;
->  }
-> @@ -593,6 +626,7 @@ static int cci_probe(struct platform_device *pdev)
->         dev_dbg(dev, "CCI HW version = 0x%08x", val);
->
->         for_each_available_child_of_node(dev->of_node, child) {
-> +               struct regulator *bus_regulator;
->                 struct cci_master *master;
->                 u32 idx;
->
-> @@ -637,6 +671,21 @@ static int cci_probe(struct platform_device *pdev)
->                         master->cci = NULL;
->                         goto error_i2c;
->                 }
-> +
-> +               /*
-> +                * It might be possible to find an optional vbus supply, but
-> +                * it requires to pass the registration of an I2C adapter
-> +                * device and its association with a bus device tree node.
-> +                */
-> +               bus_regulator = devm_regulator_get_optional(&master->adap.dev,
-> +                                                           "vbus");
-> +               if (IS_ERR(bus_regulator)) {
-> +                       ret = PTR_ERR(bus_regulator);
-> +                       if (ret == -EPROBE_DEFER)
-> +                               goto error_i2c;
-> +                       bus_regulator = NULL;
-> +               }
-> +               master->adap.bus_regulator = bus_regulator;
->         }
->
->         ret = cci_reset(cci);
+>  #include <linux/clk.h>
+>  #include <linux/completion.h>
+> @@ -822,6 +822,7 @@ static const struct of_device_id cci_dt_match[] = {
+>         { .compatible = "qcom,msm8996-cci", .data = &cci_v2_data},
+>         { .compatible = "qcom,sdm845-cci", .data = &cci_v2_data},
+>         { .compatible = "qcom,sm8250-cci", .data = &cci_v2_data},
+> +       { .compatible = "qcom,sm8450-cci", .data = &cci_v2_data},
+>         {}
+>  };
+>  MODULE_DEVICE_TABLE(of, cci_dt_match);
 > --
 > 2.33.0
 >
-
-With the above nit sorted, feel free to add my r-b.
 
 Reviewed-by: Robert Foss <robert.foss@linaro.org>
