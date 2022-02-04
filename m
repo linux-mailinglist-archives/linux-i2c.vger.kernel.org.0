@@ -2,95 +2,113 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F524A9830
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Feb 2022 12:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4551E4A9851
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Feb 2022 12:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbiBDLGX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Feb 2022 06:06:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
+        id S1357310AbiBDLTZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Feb 2022 06:19:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243660AbiBDLGW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Feb 2022 06:06:22 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5411AC061714
-        for <linux-i2c@vger.kernel.org>; Fri,  4 Feb 2022 03:06:22 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id l1so186464pjn.4
-        for <linux-i2c@vger.kernel.org>; Fri, 04 Feb 2022 03:06:22 -0800 (PST)
+        with ESMTP id S241309AbiBDLTZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Feb 2022 06:19:25 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4000BC061714
+        for <linux-i2c@vger.kernel.org>; Fri,  4 Feb 2022 03:19:25 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id oa14-20020a17090b1bce00b001b61aed4a03so5810248pjb.5
+        for <linux-i2c@vger.kernel.org>; Fri, 04 Feb 2022 03:19:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=u+mYL+VzywIVH26wS1HSxqDrA1tNqxXc8JG+oEDOr+8=;
-        b=yhRDisL7/XY+wHS0fCkXmr0aYHrSarzzvh9s2j7O8Za9jVx0OzhyRofVwMqUGNcwMw
-         NbRZoMK0Cw6uLjIiUQDidP7EhZgKhPuOmvuKV/SsAQM53lTEGzytHR2FpzZ57pz3g/xo
-         j0eCfuWSCSjdXySTchww4Di6ZW1rCJDNpcIC48mYsAxAxEJz3frfb102UVeFyV/yTUyE
-         UQ5o1TiJ7F9ANqb59ldrG83GxXHlXf+OCrT3pF0lgiVEsTM7m74qHlTCmuqIqkkgN/iF
-         788piO9ip9CBrV/l5iGKJZ/N8VgNE/NDJ2ZM7nL3l5+OdwFMubrybaqylZHWSWdrH+55
-         gM+A==
+        bh=AXCvnRjZC+8Sx6TYFGjn4jpIJEHY9Tx8WSNO8hG4M0U=;
+        b=oqvvcBNqeJVQpBV+h4lad097EBh+fZWU9+W7ktAOO4m+VaGfKmYRtotuJz0l3lj4UE
+         TfUlqfqBhxOBD+sf/sfqjfWws8zzpfxKaYIrkI4KA4zJqfgGue9240cAJk18Z5hLwPys
+         ELVqUEpcJuaJ5eFsYe2yIKaw/Vqi/027oOwwJOEchKG6SyG7bfBXqA0iLl1bFJxUl7SK
+         k78qUzyXXFHNcIzOcoQtG/3JXxDKnji9ukGexUUtNsl455O4jueJoFfEsaVurXcBFklj
+         vqlnoYPqT6GARBeQjEhfSBocZEd/3djDM7GezvZm09jTPj4PokHi1BifFruCp2JwY0Rb
+         cW5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=u+mYL+VzywIVH26wS1HSxqDrA1tNqxXc8JG+oEDOr+8=;
-        b=khEAa3Y5iGGMdUzrt8yJiW/LaMi2NQAInb5FU4WFnpf+lZPGcZc680i0Kidh+92QLZ
-         LXNxMgiZOBjedn3VkmhbqaLIPX73tP+KlnnQYtbTtnxv54Z9N1O9REnfLw4rnSzHrljQ
-         Vl0+C6khj4OJeaVfXosQSGgzm1rk1dMGdPGuYGsdYIX//nup9wlLnK1PrjW7gaSUyn2b
-         5oIp4G/tLtsa8Vts2eybEP8vbbiL8qgH0nFQhRc9w5j5nmMQPzyyIF+V8TpNiZhbhIS7
-         74i+YdBzf1jotr1Es2ehPB+udMw7/aPZ5aD3n8QNrOH1wetOEcqcqWDJeFEmEGgYIDMi
-         zVFQ==
-X-Gm-Message-State: AOAM5307oB72JNkeZzqnDsZxzqHqK50gnatC/6QzW3lGuW9yw7zF690w
-        vJpJZJ5jeRTYYfBTT5qB9jKw6BdrJWyg3bvOYkVFaOgGGdAimg==
-X-Google-Smtp-Source: ABdhPJye2EDtOdfXqiaul0IQT95mWq+ySddR6CuIfiNMAjJY8THJkrzwSprn0HEScCiK/lI4uJlCQO2+CmuXjmkcx6s=
-X-Received: by 2002:a17:902:d355:: with SMTP id l21mr2632623plk.117.1643972781751;
- Fri, 04 Feb 2022 03:06:21 -0800 (PST)
+        bh=AXCvnRjZC+8Sx6TYFGjn4jpIJEHY9Tx8WSNO8hG4M0U=;
+        b=5F+bztQ1fW6qiqXt8lP5+Men0XBS7cKBg40gkEAfifyEoYFLGyYpb2NhIEzfCuxI86
+         Hnn9AQydbpc3L3cYCWnbV7lD8fx5VKZeR+MZIPBkdDturfhw1sG09fZhEM7pEV2kMBd0
+         yqn4/Ql98qbETp2+u2eP8fv5tekjhrurgDuZXhOpl+lFjfhb6n3q1y98L/exieq9+4Ht
+         jFEOTliF4qC71TqkIZKD/rJmk+TN9socuYE9++2EuOlYKO4C8jbeXaf9kQk+vYEjOV0U
+         KRmdVwfLdVoCnxeCEptr21abA7bOK7bKs+aopQVlDD/TdA5Vsjh2cxzTqGYazBQ0xjdY
+         /t1A==
+X-Gm-Message-State: AOAM5314U96kY5rEgZx1V9pB0Lu1/YIKOcwtPzNnQnqSiUeU2CZOH8lw
+        t6uiksAbfo4kYPOeBnh3duXvbxTBYOlo2lml89JfzQ==
+X-Google-Smtp-Source: ABdhPJxkRUACAsdtHZtVoOhXebj5duO+nCNjZhA4CiXbG5gifi1C0i6cADx7mjk3UpzoABQq8Kz+OmmA0aN877AFcto=
+X-Received: by 2002:a17:90b:198d:: with SMTP id mv13mr2553318pjb.209.1643973564361;
+ Fri, 04 Feb 2022 03:19:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20220203164629.1711958-1-vladimir.zapolskiy@linaro.org> <20220203164629.1711958-3-vladimir.zapolskiy@linaro.org>
-In-Reply-To: <20220203164629.1711958-3-vladimir.zapolskiy@linaro.org>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Fri, 4 Feb 2022 12:06:10 +0100
-Message-ID: <CAG3jFys6V3TD3g8xDb1qzkGCiMj_Rxxq3wBkZL9fBjPx5VfxZQ@mail.gmail.com>
-Subject: Re: [PATCH 2/9] dt-bindings: i2c: qcom-cci: add description of a
- vbus-supply property
+References: <20220203164629.1711958-1-vladimir.zapolskiy@linaro.org>
+ <20220203164705.1712027-1-vladimir.zapolskiy@linaro.org> <CAMZdPi_mNzg4ET7FvMeNLiQxVJj7XU1DSxjSQ2CHLBvKu2XZzA@mail.gmail.com>
+ <a0b1a993-7358-4016-e8d5-538f87d3d252@linaro.org>
+In-Reply-To: <a0b1a993-7358-4016-e8d5-538f87d3d252@linaro.org>
+From:   Loic Poulain <loic.poulain@linaro.org>
+Date:   Fri, 4 Feb 2022 12:18:48 +0100
+Message-ID: <CAMZdPi_mMgi0mb_vu2UEoAwJkiU1+TGQTDt4p-czxriC5tk2UA@mail.gmail.com>
+Subject: Re: [PATCH 5/9] i2c: qcom-cci: initialize CCI controller after
+ registration of adapters
 To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc:     Loic Poulain <loic.poulain@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+Cc:     Robert Foss <robert.foss@linaro.org>,
         Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+        linux-arm-msm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 3 Feb 2022 at 17:46, Vladimir Zapolskiy
+On Thu, 3 Feb 2022 at 19:45, Vladimir Zapolskiy
 <vladimir.zapolskiy@linaro.org> wrote:
 >
-> Quite regularly I2C bus lines on QCOM CCI controller require an external
-> pull-up to a regulator powered line, to be able to define all such
-> cases an additional vbus-supply property of a bus subnode is wanted.
+> Hi Loic,
 >
-> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt | 5 +++++
->  1 file changed, 5 insertions(+)
+> On 2/3/22 7:29 PM, Loic Poulain wrote:
+> > Hi Vladimir,
+> >
+> > On Thu, 3 Feb 2022 at 17:47, Vladimir Zapolskiy
+> > <vladimir.zapolskiy@linaro.org> wrote:
+> >>
+> >> The change is wanted to postpone initialization of busses on CCI controller
+> >> by cci_init() and cci_reset() till adapters are registered, the later is
+> >> needed for adding I2C bus devices and get correspondent vbus regulators.
+> >
+> > This is odd, I don't think it's a good idea to register an adapter
+> > which is not yet initialized. Could you elaborate on why you need to
+> > do this, if you can't access the controller without this regulator
+> > enabled, maybe it is more than vbus supply, and, in that case, it
+> > should be enabled from your probe function.
 >
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt b/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
-> index 924ad8c03464..9f5b321748f1 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
-> @@ -60,6 +60,11 @@ PROPERTIES:
->         Definition: Desired I2C bus clock frequency in Hz, defaults to 100
->                     kHz if omitted.
+> thank you for review, the controller can be accessed without a vbus regulator,
+> but I2C devices connected to the master controller can not.
 >
-> +- vbus-supply:
-> +       Usage: optional
-> +       Value type: phandle
-> +       Definition: Regulator that provides power to SCL/SDA lines
-> +
->  Example:
+> The registration of a master controller device done by i2c_add_adapter()
+> should be safe to defer IMO, because there shall be no communication on
+> the bus at this point, there are no slaves before probe completion, thus
+> cci_init()/cci_reset() can be safely called afterwards.
 >
->         cci@a0c000 {
-> --
-> 2.33.0
->
+> The rationale of the change is to merge two loops over busses, see change 6/9,
+> keeping two loops extremely complicates the proper resource management.
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+OK, I see, I'm sure it works, but I still think that registering the
+adapter should be the last step, without making assumptions on when
+the i2c core is going to use it. Maybe the point here is the initial
+bad design/implementation of cci_reset and cci_init.
+
+cci_reset() is a global reset and then should not depend on subnode
+initialization in order to be executed early in the probe.You can e.g
+add an 'irq_complete' completion to the cci struct. The CCI_IRQ_MASK_0
+bit should probably be added here as well.
+
+cci_init() should be subnode/master specific (cci_init_master) so that
+you call it in the registering loop, updating master specific timings
+and irq-mask bits.
+
+Thoughs?
+
+Regards,
+Loic
