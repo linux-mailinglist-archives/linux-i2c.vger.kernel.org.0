@@ -2,149 +2,192 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60E04A9ED3
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Feb 2022 19:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4820D4A9EDD
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Feb 2022 19:21:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244802AbiBDSSp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Feb 2022 13:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
+        id S1377502AbiBDSVP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Feb 2022 13:21:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238169AbiBDSSp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Feb 2022 13:18:45 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0DAC061714
-        for <linux-i2c@vger.kernel.org>; Fri,  4 Feb 2022 10:18:45 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id i62so8439554ioa.1
-        for <linux-i2c@vger.kernel.org>; Fri, 04 Feb 2022 10:18:45 -0800 (PST)
+        with ESMTP id S232792AbiBDSVP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Feb 2022 13:21:15 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0C2C061714
+        for <linux-i2c@vger.kernel.org>; Fri,  4 Feb 2022 10:21:15 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id r27so9481803oiw.4
+        for <linux-i2c@vger.kernel.org>; Fri, 04 Feb 2022 10:21:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=B0ahm0hdwmzp8LcfxQ8+kQ7YphowIvmbdFdhXbcRawU=;
-        b=YuuKVwxWhqjqDGM91SbOGfO5jk1lvcH2xOKu9SdTS/0AtcSSu6Z74v9BI75XsPuQNQ
-         6voOghPWwZ0DFtuWnIayytbcUYvQLdpxYUw/+iekyW/DRrXWz5L3T9qUdSP4JAL0wOB2
-         AAuLy72nClt9QPT6wEIYZ/WM76WScoUHkqOnE=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Sjg3/h2nK5uyxhoSAH+qELASNv/xBxoCTa1jePZCaCY=;
+        b=IO/TkgdLu64llDCWqOzo75erYz/vjtMgwCU0O3m7Tg5IysMgr5DG9VmVeV0A2K49zW
+         HfVoPaAodqvSSxTkTcGyAY7E54/FnpX2AsjMxrTPtwgsa8fGTXLiFH+itiI7VAQj3NH+
+         b2KC9XeuqbGnf8SAtI7XIecDO1/DQho8BQ2YsThnXGwq9TgexYlS/om3PA8RoNfuHMDQ
+         23pja2nJv1U/LdniMxN7kiInFQmaYYJ+LNbv/5qevh6f1JWjMDsi2lXoMPyDBJ9ZZzPS
+         ShenpnzPAESO91Vkned0gn9bU3zTozcKMxktFhXPhcyD7aWmt2eDWUArjePpEpqcpdLD
+         /QwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=B0ahm0hdwmzp8LcfxQ8+kQ7YphowIvmbdFdhXbcRawU=;
-        b=OGcAmvJQHGr9cU1rxaPIC1/HePgeKljV7eexKfbckBorPQqzMrrXt4uRlw/tfbPUin
-         w8BcizMcjq3TZ2ZmsZm9HA3d5xvCQY8MXg5bouQiPni+E+kgS/0KJ8ZcvMq6HswchNxt
-         KBqkCjN0KosovBytr663QVo7oMt8RACk2mhOs9iYYkYQKEovhajn6STTlhpucuEVWAz5
-         LRbWzSpyhb8zqh+CFUemW6Jx89no7/U20ZmkoNmluovUl/usIePV3UoxoNeKp3vswLOQ
-         fFXs11pE9vJeEHxDid95gKqLbmlXPontWe2c+eRTPNwAkFI47jwLsPxpriL7zAMHPanJ
-         wduw==
-X-Gm-Message-State: AOAM532Bhru1VcmRjgVFi2urCUiqbrGt2jqG7sz9AfCr16HfYf53b5NS
-        ip9nMi2B5gl29sruXSuNrRT3lvIvxvyxfE9g6EemuQ==
-X-Google-Smtp-Source: ABdhPJytny1SyvPfpAVIt5yuyPMy85jb9OFiLTaA6qhpI02J9cXH4cGVPLFMJsAR4d38qn7L7cix9j7++UZ9EJEbmaw=
-X-Received: by 2002:a6b:f218:: with SMTP id q24mr174468ioh.55.1643998724641;
- Fri, 04 Feb 2022 10:18:44 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Sjg3/h2nK5uyxhoSAH+qELASNv/xBxoCTa1jePZCaCY=;
+        b=TrOfe+ItlM3gkx9rHhCOLJSv2LIpM7OZ/LSbfEkQ15Rl/q7w+giEeTYQ8TnwvGZyWn
+         b0Tf7c9V4VHCzeVBIavAyRGg2fdfNMmJaO++l5HB3OgZPCXW9doQzTmRVfllWomQAC3G
+         04FQpttstMLXgus+TQHLfuPrtXjyGRHveeqmnRovz+abm4/1udeH17mmRRHUggOcO1G6
+         H+NrxfVP6AOs5m8GpTWW482Yw0nujZp3Bfm8dtbEyHeLFntUlBz70YD6WA8j3IoAlI2P
+         /11XTf4Q2bqk+pXcwIhOX5T7X8taxk5wlvLxiLyIfZCgyV++vQAhM0k4yAJjiOGLR4Xs
+         +FDw==
+X-Gm-Message-State: AOAM532N6KtN7buR0HIvHHRY1oaOzv+ClW997Ym2DXa1uNq322i3IDmk
+        1SIzL7RtSYVVTw7TFMt0DuzlfQ==
+X-Google-Smtp-Source: ABdhPJzrfnqdaF/1te/cwRLLNKqTKp6nM2zSXppa+/JdLfdcLjOYW1zqVxEFUz8Phe/p4sbNF7rKRg==
+X-Received: by 2002:a05:6808:1444:: with SMTP id x4mr135738oiv.6.1643998874454;
+        Fri, 04 Feb 2022 10:21:14 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id v78sm1072126oie.18.2022.02.04.10.21.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 10:21:14 -0800 (PST)
+Date:   Fri, 4 Feb 2022 10:21:30 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Cc:     Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 8/9] i2c: qcom-cci: add support of optional vbus-supply
+ regulators
+Message-ID: <Yf1uqi/lzF5N1txV@ripper>
+References: <20220203164629.1711958-1-vladimir.zapolskiy@linaro.org>
+ <20220203164711.1712090-1-vladimir.zapolskiy@linaro.org>
 MIME-Version: 1.0
-References: <20220106122452.18719-1-wsa@kernel.org> <Yd6gRR0jtqhRLwtB@ninjato>
- <98ed8d6d16a3d472d9432eb169aa2da44b66b5cc.camel@yandex.ru>
- <4dfbee97-14c2-718b-9cbd-fdeeace96f59@yahoo.com> <CAJMQK-h38XdN=QD6ozVNk+wxmpp1DKj21pkFZ+kY31+Lb8ot6Q@mail.gmail.com>
- <6121a782-6927-f033-1c09-ffe4ad7700ae@yahoo.com> <CAJMQK-j5YYqen78Vgng_5jhja-YKSTRut7f7vJ4wWufVfbZy6w@mail.gmail.com>
- <363432688.323955.1642272250312@mail.yahoo.com>
-In-Reply-To: <363432688.323955.1642272250312@mail.yahoo.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Sat, 5 Feb 2022 02:18:18 +0800
-Message-ID: <CAJMQK-jx+z974AT_p+-AVAbMQQ33V-XU9NKmy-i6nbS5zagHBA@mail.gmail.com>
-Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in adapter"
-To:     "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220203164711.1712090-1-vladimir.zapolskiy@linaro.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, Jan 16, 2022 at 2:44 AM Tareque Md.Hanif
-<tarequemd.hanif@yahoo.com> wrote:
->
-> Hi Hsin-Yi,
->
-> The issue still exists. I reverted a19f75de73c220b4496d2aefb7a605dd032f7c01 (the commit that reverted 5a7b95fb993ec399c8a685552aa6a8fc995c40bd) and manually applied the patch (tags/v5.16). journalctl attached.
+On Thu 03 Feb 08:47 PST 2022, Vladimir Zapolskiy wrote:
 
-hi Tareque,
+> The change adds handling of optional vbus regulators in the driver.
+> 
+> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+> ---
+>  drivers/i2c/busses/i2c-qcom-cci.c | 49 +++++++++++++++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
+> index 775945f7b4cd..2fc7f1f2616f 100644
+> --- a/drivers/i2c/busses/i2c-qcom-cci.c
+> +++ b/drivers/i2c/busses/i2c-qcom-cci.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_runtime.h>
+> +#include <linux/regulator/consumer.h>
+>  
+>  #define CCI_HW_VERSION				0x0
+>  #define CCI_RESET_CMD				0x004
+> @@ -480,6 +481,20 @@ static void cci_disable_clocks(struct cci *cci)
+>  static int __maybe_unused cci_suspend_runtime(struct device *dev)
+>  {
+>  	struct cci *cci = dev_get_drvdata(dev);
+> +	struct regulator *bus_regulator;
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < cci->data->num_masters; i++) {
+> +		if (!cci->master[i].cci)
+> +			continue;
+> +
+> +		bus_regulator = cci->master[i].adap.bus_regulator;
+> +		if (!bus_regulator)
+> +			continue;
+> +
+> +		if (regulator_is_enabled(bus_regulator) > 0)
+> +			regulator_disable(bus_regulator);
+> +	}
+>  
+>  	cci_disable_clocks(cci);
+>  	return 0;
+> @@ -488,12 +503,30 @@ static int __maybe_unused cci_suspend_runtime(struct device *dev)
+>  static int __maybe_unused cci_resume_runtime(struct device *dev)
+>  {
+>  	struct cci *cci = dev_get_drvdata(dev);
+> +	struct regulator *bus_regulator;
+> +	unsigned int i;
+>  	int ret;
+>  
+>  	ret = cci_enable_clocks(cci);
+>  	if (ret)
+>  		return ret;
+>  
+> +	for (i = 0; i < cci->data->num_masters; i++) {
+> +		if (!cci->master[i].cci)
+> +			continue;
+> +
+> +		bus_regulator = cci->master[i].adap.bus_regulator;
+> +		if (!bus_regulator)
+> +			continue;
+> +
+> +		if (!regulator_is_enabled(bus_regulator)) {
 
-Can you apply the same setting[1] again and with this patch to see if
-the issue is still there?
-https://github.com/torvalds/linux/commit/6dc8265f9803ccb7e5da804e01601f0c14f270e0
+regulator_is_enabled() tests if the regulator is enabled, not if you
+have enabled it. So if this is a shared regulator you might learn that
+it's already on, skip your regulator_enable() and then the other
+consumer turns it off behind your back.
 
-[1] reverted a19f75de73c220b4496d2aefb7a605dd032f7c01 (the commit that
-reverted 5a7b95fb993ec399c8a685552aa6a8fc995c40bd) and manually
-applied the patch (tags/v5.16)
+If you want the regulator to be on, you should regulator_enable().
 
-Thanks
->
-> Regards,
->
-> Tareque
->
-> On Saturday, January 15, 2022, 11:27:07 PM GMT+6, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
->
->
-> hi Tareque,
->
->
-> On Fri, Jan 14, 2022 at 6:09 PM Tareque Md Hanif
-> <tarequemd.hanif@yahoo.com> wrote:
-> >
-> > Hi Hsin-Yi,
-> >
-> > On 1/12/22 16:58, Hsin-Yi Wang wrote:
-> >
-> > Can you help provide logs if we apply
-> > 5a7b95fb993ec399c8a685552aa6a8fc995c40bd but revert
-> > 8d35a2596164c1c9d34d4656fd42b445cd1e247f?
-> >
-> > Issue still exists. journalctl log attached in revert_8d.txt
-> >
-> >
-> > > after apply 5a7b95fb993ec399c8a685552aa6a8fc995c40bd
-> > > 1. delete SET_LATE_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late,
-> > > i2c_resume_early) and function i2c_suspend_late() and
-> > > i2c_resume_early().
-> >
-> > No issues. journalctl log attached in test1.txt
-> >
-> >
-> > > 2. delete SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume,
-> > > NULL) and function i2c_runtime_suspend() and i2c_runtime_resume().
-> >
-> > Issue exists. journalctl log attached in test2.txt
->
->
-> Thanks for the testing.
-> Can you help us test if applying the following patch on top of
-> 5a7b95fb993ec399c8a685552aa6a8fc995c40bd works? Thanks
->
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index 9eb4009cb250..6b046012aa08 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -484,7 +484,7 @@ static int i2c_resume_early(struct device *dev)
->         struct i2c_client *client = i2c_verify_client(dev);
->         int err;
->
-> -      if (!client)
-> +      if (!client || dev_pm_skip_resume(dev))
->                 return 0;
->
->         if (pm_runtime_status_suspended(&client->dev) &&
-> @@ -502,7 +502,7 @@ static int i2c_suspend_late(struct device *dev)
->         struct i2c_client *client = i2c_verify_client(dev);
->         int err;
->
-> -      if (!client)
-> +      if (!client || dev_pm_skip_suspend(dev))
->                 return 0;
->
->         err = pm_generic_suspend_late(&client->dev);
->
+> +			ret = regulator_enable(bus_regulator);
+> +			if (ret)
+> +				dev_err(dev, "failed to enable regulator: %d\n",
+> +					ret);
+> +		}
+> +	}
+> +
+>  	cci_init(cci);
+>  	return 0;
+>  }
+> @@ -593,6 +626,7 @@ static int cci_probe(struct platform_device *pdev)
+>  	dev_dbg(dev, "CCI HW version = 0x%08x", val);
+>  
+>  	for_each_available_child_of_node(dev->of_node, child) {
+> +		struct regulator *bus_regulator;
+>  		struct cci_master *master;
+>  		u32 idx;
+>  
+> @@ -637,6 +671,21 @@ static int cci_probe(struct platform_device *pdev)
+>  			master->cci = NULL;
+>  			goto error_i2c;
+>  		}
+> +
+> +		/*
+> +		 * It might be possible to find an optional vbus supply, but
+> +		 * it requires to pass the registration of an I2C adapter
+> +		 * device and its association with a bus device tree node.
+> +		 */
+
+I'm afraid that I don't understand this comment. The regulator is
+optional because most of the time we don't control it explicitly.
+
+So a comment like "Control of IO supply is optional" seems more
+relevant.
+
+Regards,
+Bjorn
+
+> +		bus_regulator = devm_regulator_get_optional(&master->adap.dev,
+> +							    "vbus");
+> +		if (IS_ERR(bus_regulator)) {
+> +			ret = PTR_ERR(bus_regulator);
+> +			if (ret == -EPROBE_DEFER)
+> +				goto error_i2c;
+> +			bus_regulator = NULL;
+> +		}
+> +		master->adap.bus_regulator = bus_regulator;
+>  	}
+>  
+>  	ret = cci_reset(cci);
+> -- 
+> 2.33.0
+> 
