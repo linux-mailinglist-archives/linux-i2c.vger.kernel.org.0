@@ -2,28 +2,23 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197454A99FB
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Feb 2022 14:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 447604A9A94
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Feb 2022 15:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358862AbiBDNdi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Feb 2022 08:33:38 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:42488 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356417AbiBDNdh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 4 Feb 2022 08:33:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=4Ca9I/sAMzQIMCAYXBkIkytKRwdb7KuHMc9w1XGE+7A=; b=0N30fHOeJKKiEmBzHSSAjOwTCo
-        NpvFMTne+ReR7L/rMoQIq2d5/1hRKjsDPqIORGjajQW+UTS2E2q3Z/w61nDp6gVZ6OVzpiYsw2EyW
-        pLoL11FZdneTXfJN6pJjgvs7Ay984ejA0+yx0g4+Hjhydr9jhY9l2gbt/i994/BsW7lk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nFyhL-004Gxv-Fm; Fri, 04 Feb 2022 14:32:23 +0100
-Date:   Fri, 4 Feb 2022 14:32:23 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
+        id S1359219AbiBDOCQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Feb 2022 09:02:16 -0500
+Received: from relay.hostedemail.com ([64.99.140.28]:36195 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359222AbiBDOCP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Feb 2022 09:02:15 -0500
+Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay01.hostedemail.com (Postfix) with ESMTP id CEA06614A8;
+        Fri,  4 Feb 2022 14:02:07 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id A72A11B;
+        Fri,  4 Feb 2022 14:01:08 +0000 (UTC)
+Message-ID: <7cb1ce88cbf977801f2519178c270c1271100ac6.camel@perches.com>
+Subject: Re: [PATCH] HPE BMC GXP SUPPORT
+From:   Joe Perches <joe@perches.com>
 To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
 Cc:     nick.hawkins@hpe.com, verdun@hpe.com,
         David Airlie <airlied@linux.ie>,
@@ -39,7 +34,7 @@ Cc:     nick.hawkins@hpe.com, verdun@hpe.com,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mark Brown <broonie@kernel.org>,
@@ -71,46 +66,52 @@ Cc:     nick.hawkins@hpe.com, verdun@hpe.com,
         linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] HPE BMC GXP SUPPORT
-Message-ID: <Yf0q5/Jus+mz0B2E@lunn.ch>
+Date:   Fri, 04 Feb 2022 06:01:44 -0800
+In-Reply-To: <Yf0cihUQ1byjnh3d@shell.armlinux.org.uk>
 References: <nick.hawkins@hpe.com>
- <20220202165315.18282-1-nick.hawkins@hpe.com>
- <Yf0Wm1kOV1Pss9HJ@shell.armlinux.org.uk>
+         <20220202165315.18282-1-nick.hawkins@hpe.com>
+         <Yf0Wm1kOV1Pss9HJ@shell.armlinux.org.uk>
+         <ad56e88206a8d66b715035362abe16ece0bde7d3.camel@perches.com>
+         <Yf0cihUQ1byjnh3d@shell.armlinux.org.uk>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yf0Wm1kOV1Pss9HJ@shell.armlinux.org.uk>
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: A72A11B
+X-Spam-Status: No, score=-2.03
+X-Stat-Signature: c3yzg6zcu4cpdcebaczubogb94ck3gqq
+X-Rspamd-Server: rspamout07
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+KwoOMBfXWPFnO9qh3WITIVuG9hjhnLgA=
+X-HE-Tag: 1643983268-605794
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-> > +#include <linux/init.h>
-> > +#include <asm/mach/arch.h>
-> > +#include <asm/mach/map.h>
-> > +#include <linux/of.h>
-> > +#include <linux/of_platform.h>
-> > +#include <linux/clk-provider.h>
-> > +#include <linux/clocksource.h>
+On Fri, 2022-02-04 at 12:31 +0000, Russell King (Oracle) wrote:
+> On Fri, Feb 04, 2022 at 04:18:24AM -0800, Joe Perches wrote:
+> > On Fri, 2022-02-04 at 12:05 +0000, Russell King (Oracle) wrote:
+> > > On Wed, Feb 02, 2022 at 10:52:50AM -0600, nick.hawkins@hpe.com wrote:
+> > > > +	if (readb_relaxed(timer->control) & MASK_TCS_TC) {
+> > > > +		writeb_relaxed(MASK_TCS_TC, timer->control);
+> > > > +
+> > > > +		event_handler = READ_ONCE(timer->evt.event_handler);
+> > > > +		if (event_handler)
+> > > > +			event_handler(&timer->evt);
+> > > > +		return IRQ_HANDLED;
+> > > > +	} else {
+> > > > +		return IRQ_NONE;
+> > > > +	}
+> > > > +}
+> > 
+> > It's also less indented code and perhaps clearer to reverse the test
+> > 
+> > 	if (!readb_relaxed(timer->control) & MASK_TCS_TC)
 > 
-> It's normal to list all linux/ includes before asm/ includes. Please
-> rearrange.
+> This will need to be:
+> 
+>  	if (!(readb_relaxed(timer->control) & MASK_TCS_TC))
 
-Hi Nick
+right, thanks.
 
-Since you are new to the kernel, please let me point out, you should
-consider Russell comments for all your code, not just this one file.
-Many of the comments are generic to code anywhere in the kernel. So it
-would be good to fix the same issues in the rest of your code base
-before submitting them.
 
-I would also suggest that when you start submitting drivers, submit
-just one or two to start with. You will learn a lot from the feedback
-you get, and you can apply what you have learnt to the rest of your
-code before you post them for review.
-
-I would also suggest you spend 30 minutes a day just reading comments
-other patches receive. You can also learn a lot that way, see if the
-comments apply to your own code. You will also learn about processes
-this way, which can be just as challenging to get right as code.
-
-     Andrew
