@@ -2,139 +2,149 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759464A9EB5
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Feb 2022 19:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C60E04A9ED3
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Feb 2022 19:18:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377368AbiBDSLT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Feb 2022 13:11:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42144 "EHLO
+        id S244802AbiBDSSp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Feb 2022 13:18:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377402AbiBDSLS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Feb 2022 13:11:18 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55652C061714
-        for <linux-i2c@vger.kernel.org>; Fri,  4 Feb 2022 10:11:18 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id r27so9451431oiw.4
-        for <linux-i2c@vger.kernel.org>; Fri, 04 Feb 2022 10:11:18 -0800 (PST)
+        with ESMTP id S238169AbiBDSSp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Feb 2022 13:18:45 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0DAC061714
+        for <linux-i2c@vger.kernel.org>; Fri,  4 Feb 2022 10:18:45 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id i62so8439554ioa.1
+        for <linux-i2c@vger.kernel.org>; Fri, 04 Feb 2022 10:18:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KvvUeoVHcQUYp9qLT8jpjKoPTGcQsG1JY55qsL8HqKs=;
-        b=mIotiCIsWQXYCNFgz0cZQgzFq3TTWPa251evYCKReaZsjm/inViT4StAdpUsvXxwBy
-         UeK9h1ASdEP9NmoZ0SqvdyywST6KrXWDY0RjxDvQdlGCKy7IRzo9qHTaYI2FENt5A4QD
-         WddtrfqHZfTnurA8D4zzVr3x0oxJC7281RZddt/iHAnm2WLfMx6lmvS+i+OZkeiwyAYH
-         SHDl/MOhnQcK18qdNQF8mZ5W8RNO3NP0TzC3UD30jQAly3CaSKTn8YLfosQK2EoudjZu
-         vhIcUUARakunIqh5j87PcSESpve0j85ZHu3iYmeCeYheoyRbulXNwcjdJjyT9ZyYcCcC
-         J7KQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=B0ahm0hdwmzp8LcfxQ8+kQ7YphowIvmbdFdhXbcRawU=;
+        b=YuuKVwxWhqjqDGM91SbOGfO5jk1lvcH2xOKu9SdTS/0AtcSSu6Z74v9BI75XsPuQNQ
+         6voOghPWwZ0DFtuWnIayytbcUYvQLdpxYUw/+iekyW/DRrXWz5L3T9qUdSP4JAL0wOB2
+         AAuLy72nClt9QPT6wEIYZ/WM76WScoUHkqOnE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KvvUeoVHcQUYp9qLT8jpjKoPTGcQsG1JY55qsL8HqKs=;
-        b=wbHFImPLoMadSny6xxlR02UlVrQksnIO0pLjhD/0OFL+uYbNG291hR9W777Ry8ptGY
-         RuzE5ml5Wexua7qH4XlOj9Cx0zPU0GXm6UEU6TV9qov62K6KK3epE4+qomC4D/4uc/uu
-         dD3Hjxj5j+ey7zrsRB4eaMiJnpeqez7iTGEcQCrkYRoxoSbN1wBSdETyLHkdbmyqyE/t
-         4Qu+7nq0B3n/X5YZ3KS2er5aYLDGYkHXPLMG9KxWi/yQr659psd/PGGnwVeU7w/UXp+U
-         ubaGX8dGSlCYC77SQm8haMZfw+zlFUiH70Xiuzw2idOhvpKQaSzwxjCIu+hSdrqAl9TM
-         mt0g==
-X-Gm-Message-State: AOAM532pffIyvqu9ES+sx6gVnyOZrZCaB/6SVD/mFgZgUmuTnmSxu0A3
-        mFCcJT5DVsNH7BSiCiQkXgAwJw==
-X-Google-Smtp-Source: ABdhPJzfF7KqDkPs+dpT/MMjN3q3LxC06TVuIMMrcaHyklMmgKAePsUVYLe5xiZ8AQKtjlr6Lhxt2A==
-X-Received: by 2002:a05:6808:1283:: with SMTP id a3mr1948942oiw.57.1643998277564;
-        Fri, 04 Feb 2022 10:11:17 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id 71sm1022396otn.43.2022.02.04.10.11.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 10:11:16 -0800 (PST)
-Date:   Fri, 4 Feb 2022 10:11:32 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc:     Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 4/9] i2c: qcom-cci: don't put a device tree node before
- i2c_add_adapter()
-Message-ID: <Yf1sVGfHwrSMX4WA@ripper>
-References: <20220203164629.1711958-1-vladimir.zapolskiy@linaro.org>
- <20220203164703.1712006-1-vladimir.zapolskiy@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=B0ahm0hdwmzp8LcfxQ8+kQ7YphowIvmbdFdhXbcRawU=;
+        b=OGcAmvJQHGr9cU1rxaPIC1/HePgeKljV7eexKfbckBorPQqzMrrXt4uRlw/tfbPUin
+         w8BcizMcjq3TZ2ZmsZm9HA3d5xvCQY8MXg5bouQiPni+E+kgS/0KJ8ZcvMq6HswchNxt
+         KBqkCjN0KosovBytr663QVo7oMt8RACk2mhOs9iYYkYQKEovhajn6STTlhpucuEVWAz5
+         LRbWzSpyhb8zqh+CFUemW6Jx89no7/U20ZmkoNmluovUl/usIePV3UoxoNeKp3vswLOQ
+         fFXs11pE9vJeEHxDid95gKqLbmlXPontWe2c+eRTPNwAkFI47jwLsPxpriL7zAMHPanJ
+         wduw==
+X-Gm-Message-State: AOAM532Bhru1VcmRjgVFi2urCUiqbrGt2jqG7sz9AfCr16HfYf53b5NS
+        ip9nMi2B5gl29sruXSuNrRT3lvIvxvyxfE9g6EemuQ==
+X-Google-Smtp-Source: ABdhPJytny1SyvPfpAVIt5yuyPMy85jb9OFiLTaA6qhpI02J9cXH4cGVPLFMJsAR4d38qn7L7cix9j7++UZ9EJEbmaw=
+X-Received: by 2002:a6b:f218:: with SMTP id q24mr174468ioh.55.1643998724641;
+ Fri, 04 Feb 2022 10:18:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220203164703.1712006-1-vladimir.zapolskiy@linaro.org>
+References: <20220106122452.18719-1-wsa@kernel.org> <Yd6gRR0jtqhRLwtB@ninjato>
+ <98ed8d6d16a3d472d9432eb169aa2da44b66b5cc.camel@yandex.ru>
+ <4dfbee97-14c2-718b-9cbd-fdeeace96f59@yahoo.com> <CAJMQK-h38XdN=QD6ozVNk+wxmpp1DKj21pkFZ+kY31+Lb8ot6Q@mail.gmail.com>
+ <6121a782-6927-f033-1c09-ffe4ad7700ae@yahoo.com> <CAJMQK-j5YYqen78Vgng_5jhja-YKSTRut7f7vJ4wWufVfbZy6w@mail.gmail.com>
+ <363432688.323955.1642272250312@mail.yahoo.com>
+In-Reply-To: <363432688.323955.1642272250312@mail.yahoo.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Sat, 5 Feb 2022 02:18:18 +0800
+Message-ID: <CAJMQK-jx+z974AT_p+-AVAbMQQ33V-XU9NKmy-i6nbS5zagHBA@mail.gmail.com>
+Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in adapter"
+To:     "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu 03 Feb 08:47 PST 2022, Vladimir Zapolskiy wrote:
+On Sun, Jan 16, 2022 at 2:44 AM Tareque Md.Hanif
+<tarequemd.hanif@yahoo.com> wrote:
+>
+> Hi Hsin-Yi,
+>
+> The issue still exists. I reverted a19f75de73c220b4496d2aefb7a605dd032f7c01 (the commit that reverted 5a7b95fb993ec399c8a685552aa6a8fc995c40bd) and manually applied the patch (tags/v5.16). journalctl attached.
 
-> There is a minor chance for a race, if a pointer to an i2c-bus subnode
-> is stored and then reused after releasing its reference, and it would
-> be sufficient to get one more reference under a loop over children
-> subnodes.
-> 
-> Fixes: e517526195de ("i2c: Add Qualcomm CCI I2C driver")
-> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+hi Tareque,
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Can you apply the same setting[1] again and with this patch to see if
+the issue is still there?
+https://github.com/torvalds/linux/commit/6dc8265f9803ccb7e5da804e01601f0c14f270e0
 
-Regards,
-Bjorn
+[1] reverted a19f75de73c220b4496d2aefb7a605dd032f7c01 (the commit that
+reverted 5a7b95fb993ec399c8a685552aa6a8fc995c40bd) and manually
+applied the patch (tags/v5.16)
 
-> ---
->  drivers/i2c/busses/i2c-qcom-cci.c | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
-> index fd4260d18577..cf54f1cb4c57 100644
-> --- a/drivers/i2c/busses/i2c-qcom-cci.c
-> +++ b/drivers/i2c/busses/i2c-qcom-cci.c
-> @@ -558,7 +558,7 @@ static int cci_probe(struct platform_device *pdev)
->  		cci->master[idx].adap.quirks = &cci->data->quirks;
->  		cci->master[idx].adap.algo = &cci_algo;
->  		cci->master[idx].adap.dev.parent = dev;
-> -		cci->master[idx].adap.dev.of_node = child;
-> +		cci->master[idx].adap.dev.of_node = of_node_get(child);
->  		cci->master[idx].master = idx;
->  		cci->master[idx].cci = cci;
->  
-> @@ -643,8 +643,10 @@ static int cci_probe(struct platform_device *pdev)
->  			continue;
->  
->  		ret = i2c_add_adapter(&cci->master[i].adap);
-> -		if (ret < 0)
-> +		if (ret < 0) {
-> +			of_node_put(cci->master[i].adap.dev.of_node);
->  			goto error_i2c;
-> +		}
->  	}
->  
->  	pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
-> @@ -656,8 +658,10 @@ static int cci_probe(struct platform_device *pdev)
->  
->  error_i2c:
->  	for (--i ; i >= 0; i--) {
-> -		if (cci->master[i].cci)
-> +		if (cci->master[i].cci) {
->  			i2c_del_adapter(&cci->master[i].adap);
-> +			of_node_put(cci->master[i].adap.dev.of_node);
-> +		}
->  	}
->  error:
->  	disable_irq(cci->irq);
-> @@ -673,8 +677,10 @@ static int cci_remove(struct platform_device *pdev)
->  	int i;
->  
->  	for (i = 0; i < cci->data->num_masters; i++) {
-> -		if (cci->master[i].cci)
-> +		if (cci->master[i].cci) {
->  			i2c_del_adapter(&cci->master[i].adap);
-> +			of_node_put(cci->master[i].adap.dev.of_node);
-> +		}
->  		cci_halt(cci, i);
->  	}
->  
-> -- 
-> 2.33.0
-> 
+Thanks
+>
+> Regards,
+>
+> Tareque
+>
+> On Saturday, January 15, 2022, 11:27:07 PM GMT+6, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>
+>
+> hi Tareque,
+>
+>
+> On Fri, Jan 14, 2022 at 6:09 PM Tareque Md Hanif
+> <tarequemd.hanif@yahoo.com> wrote:
+> >
+> > Hi Hsin-Yi,
+> >
+> > On 1/12/22 16:58, Hsin-Yi Wang wrote:
+> >
+> > Can you help provide logs if we apply
+> > 5a7b95fb993ec399c8a685552aa6a8fc995c40bd but revert
+> > 8d35a2596164c1c9d34d4656fd42b445cd1e247f?
+> >
+> > Issue still exists. journalctl log attached in revert_8d.txt
+> >
+> >
+> > > after apply 5a7b95fb993ec399c8a685552aa6a8fc995c40bd
+> > > 1. delete SET_LATE_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late,
+> > > i2c_resume_early) and function i2c_suspend_late() and
+> > > i2c_resume_early().
+> >
+> > No issues. journalctl log attached in test1.txt
+> >
+> >
+> > > 2. delete SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume,
+> > > NULL) and function i2c_runtime_suspend() and i2c_runtime_resume().
+> >
+> > Issue exists. journalctl log attached in test2.txt
+>
+>
+> Thanks for the testing.
+> Can you help us test if applying the following patch on top of
+> 5a7b95fb993ec399c8a685552aa6a8fc995c40bd works? Thanks
+>
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index 9eb4009cb250..6b046012aa08 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -484,7 +484,7 @@ static int i2c_resume_early(struct device *dev)
+>         struct i2c_client *client = i2c_verify_client(dev);
+>         int err;
+>
+> -      if (!client)
+> +      if (!client || dev_pm_skip_resume(dev))
+>                 return 0;
+>
+>         if (pm_runtime_status_suspended(&client->dev) &&
+> @@ -502,7 +502,7 @@ static int i2c_suspend_late(struct device *dev)
+>         struct i2c_client *client = i2c_verify_client(dev);
+>         int err;
+>
+> -      if (!client)
+> +      if (!client || dev_pm_skip_suspend(dev))
+>                 return 0;
+>
+>         err = pm_generic_suspend_late(&client->dev);
+>
