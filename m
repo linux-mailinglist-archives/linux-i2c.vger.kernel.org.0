@@ -2,88 +2,118 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E4F4A9C8D
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Feb 2022 16:59:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BFBA4A9E9E
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Feb 2022 19:05:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238207AbiBDP7M (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Feb 2022 10:59:12 -0500
-Received: from mga09.intel.com ([134.134.136.24]:39213 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234808AbiBDP7L (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 4 Feb 2022 10:59:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643990351; x=1675526351;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9KhxQXsAu7RrqbBNDRjQ5GvfIHgWxqlaV3+q1AnfYQs=;
-  b=B9Cti0OD6vfFPuvRCpBuv3G5JOTT/OifxkmX3+UnsH6Fb/Fw4AF1x9x3
-   jEM9fHLGEUCfxrRk5byRaKJU5Na50ajj2E828YgVViXapvRenimGrr7Op
-   EodO7jgacBV3qdhCOmRoctMLEyeVOCopthiMpsHlCqngOnl58dMkEfhb8
-   nmZ4mBaSoDmtgrH0/pjasY21wxGSzAm9OpxrcntieODdOvSO+mtkRkzQ1
-   nUwtKLWwcFmQnJKvQFey7Ft5mQxXcEInUhlhMo90HU1ewbClgUHozJQjb
-   LgLfrtMU4GJ4PLggofsd8Ib1XQ846AL9Fsw8Smnn5Pw4aADXGM83zeYab
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="248150544"
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="248150544"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 07:59:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="600265073"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Feb 2022 07:59:09 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 48D02204; Fri,  4 Feb 2022 17:59:24 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        syzbot+0591ccf54ee05344e4eb@syzkaller.appspotmail.com
-Subject: [PATCH v1 1/1] i2c: smbus: Check for parent device before dereference
-Date:   Fri,  4 Feb 2022 17:59:20 +0200
-Message-Id: <20220204155920.13364-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        id S238825AbiBDSFt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Feb 2022 13:05:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40780 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377361AbiBDSFd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Feb 2022 13:05:33 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29F0C061741
+        for <linux-i2c@vger.kernel.org>; Fri,  4 Feb 2022 10:05:32 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id i5so9468364oih.1
+        for <linux-i2c@vger.kernel.org>; Fri, 04 Feb 2022 10:05:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FjF+sGZpg2iaH76PumvDp14W7fNNxKuPMZR+Us0rVMQ=;
+        b=WDWuvGT/OxA9GID0EgK9YDidQPh+HAa1en+YRr+jT4ZUb4X+eK3H8R6beO+FEvnyDG
+         BZSlJT5PvdgA1sBVwVVVMTQFtMesxbeA9ZwEY//5gfvsSRzU4LZNMFcRnunjU7KSfjcZ
+         okhZlE/GB/zmFuVhvn13M8n5tp8aIG4cwM6rTtTKLGfz+0zyQ3GmM814MUXEv9FgBUhD
+         dWY+Fk4FpY3WU2Qi+JuDc2d2fC71MzEM5cXKgW7RapBc+IXMRjbtd+3uYN9ThXNgYvln
+         HEeM7H/wbzGuKzDXOiKGAgXcNQ2U8NDGW/x6HhrTlnLNiQRLZj/hP+shOOrCFwDFj3L/
+         j5rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FjF+sGZpg2iaH76PumvDp14W7fNNxKuPMZR+Us0rVMQ=;
+        b=j/Q6K7cbiLTNy/a+CqW3qzGU/OL80ewf/TVsQg57pSc3M73GKrqARa2vSgsY+dXnty
+         z7sDedeavJxLvzUI//u/TgKnhJZfAEIy99bMw51/4w2cm1JcpA1oPKz6AThJokkE0+2E
+         Vmc4cLmukxO3/UB1Y/MnUZpWPS859d7EKnPHve+vgktfGUD1EEuJdhHtN5D7aB17Py9k
+         b9rvUVXgDzWcdcgr6sgUCBGT1Rc7n3BC1YWXlXwevfEEG7dJTRxYG5XTVAGiNE75OVd8
+         J8epb8ixy/N9xV2XymGYge0S4qEuPvLlL249+MAgl1eYu+9jvEuZVxDtEj4kdCu4CIZs
+         hHEw==
+X-Gm-Message-State: AOAM533Dx97xbVCJWrtlYEb7U0en1gc0Nhv8NHmMpJ8oPdvAcvN6jqTv
+        ukHLZzuZtPNMqt6QSwQfgDWWRw==
+X-Google-Smtp-Source: ABdhPJylpcEz5omTCtvVVTdyfF1+oj/R9wH56W4rthEOGLG4g7VSkPI6Ojv1x35a8V+C7gXtZf9Ksw==
+X-Received: by 2002:a05:6808:ecf:: with SMTP id q15mr1881768oiv.130.1643997932289;
+        Fri, 04 Feb 2022 10:05:32 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id a15sm1114445oil.13.2022.02.04.10.05.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 10:05:31 -0800 (PST)
+Date:   Fri, 4 Feb 2022 10:05:47 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        linus.walleij@linaro.org, broonie@kernel.org
+Cc:     Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/9] dt-bindings: i2c: qcom-cci: add description of a
+ vbus-supply property
+Message-ID: <Yf1q+wlXo2LAeZX+@ripper>
+References: <20220203164629.1711958-1-vladimir.zapolskiy@linaro.org>
+ <20220203164629.1711958-3-vladimir.zapolskiy@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220203164629.1711958-3-vladimir.zapolskiy@linaro.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-An I²C adapter might be instantiated without parent. In such case
-there is no property can be retrieved. Skip SMBus alert setup when
-this happens.
+On Thu 03 Feb 08:46 PST 2022, Vladimir Zapolskiy wrote:
 
-Fixes: a263a84088f6 ("i2c: smbus: Use device_*() functions instead of of_*()")
-Reported-by: syzbot+0591ccf54ee05344e4eb@syzkaller.appspotmail.com
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/i2c/i2c-core-smbus.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+> Quite regularly I2C bus lines on QCOM CCI controller require an external
+> pull-up to a regulator powered line, to be able to define all such
+> cases an additional vbus-supply property of a bus subnode is wanted.
+> 
+> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt b/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
+> index 924ad8c03464..9f5b321748f1 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
+> @@ -60,6 +60,11 @@ PROPERTIES:
+>  	Definition: Desired I2C bus clock frequency in Hz, defaults to 100
+>  		    kHz if omitted.
+>  
+> +- vbus-supply:
 
-diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
-index 304c2c8fee68..029f1b7c83bc 100644
---- a/drivers/i2c/i2c-core-smbus.c
-+++ b/drivers/i2c/i2c-core-smbus.c
-@@ -705,10 +705,14 @@ EXPORT_SYMBOL_GPL(i2c_new_smbus_alert_device);
- #if IS_ENABLED(CONFIG_I2C_SMBUS)
- int i2c_setup_smbus_alert(struct i2c_adapter *adapter)
- {
-+	struct device *parent = adapter->dev.parent;
- 	int irq;
- 
--	irq = device_property_match_string(adapter->dev.parent, "interrupt-names",
--					   "smbus_alert");
-+	/* Adapter instantiated without parent, skip the SMBus alert setup */
-+	if (!parent)
-+		return 0;
-+
-+	irq = device_property_match_string(parent, "interrupt-names", "smbus_alert");
- 	if (irq == -EINVAL || irq == -ENODATA)
- 		return 0;
- 	else if (irq < 0)
--- 
-2.34.1
+I don't think "vbus" is an appropriate name for his. Perhaps "vddio" or
+something like that would be better.
 
+But there's a bigger question here, this is not a supply for the
+i2c master, it's simply a supply for pulling up the bus. So it's not
+entirely correct to specify it as a supply for the CCI node (which is
+also the reason why the name isn't obvious).
+
+Typically we don't don't mention the bus-supply because it happens to be
+pulled up either by io-supply for the block, or by some always-on
+regulator in the system.
+
+Looping in Linus and Mark in hope they have seen this need elsewhere.
+
+Regards,
+Bjorn
+
+> +	Usage: optional
+> +	Value type: phandle
+> +	Definition: Regulator that provides power to SCL/SDA lines
+> +
+>  Example:
+>  
+>  	cci@a0c000 {
+> -- 
+> 2.33.0
+> 
