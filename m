@@ -2,132 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585DC4A9F0A
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Feb 2022 19:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D58724A9F5D
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Feb 2022 19:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377542AbiBDSa7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Feb 2022 13:30:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
+        id S1377635AbiBDSmX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Feb 2022 13:42:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237456AbiBDSa7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Feb 2022 13:30:59 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A213C06173D
-        for <linux-i2c@vger.kernel.org>; Fri,  4 Feb 2022 10:30:59 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id m9so9430779oia.12
-        for <linux-i2c@vger.kernel.org>; Fri, 04 Feb 2022 10:30:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PIisD2u5+L5xGiAgk4a/+275QjZoX6MczpeabJV4hr4=;
-        b=SH7aB20Tfen2FtRD/erGcdI/pEfIgqD9knH1bOP1jSTMS5dYvuWQLmnRKOEfseuVOP
-         Y18EUrq077SI5LPsIAn01UDSsqpiDAnMl4CbxtGMVpeWW8iNO6IL/vU6KxtzmecCiICU
-         NwhXGA4GIzn6SCkuFbJYYqCaJHjSy2MefowE1zWudvD8Og9WPoT4HJbqrS62ebyaGU1K
-         bHSdl8zDNRdCj5bcGSdK1z1I80b9HVxcMd+KYOBTj7hfLYy1w08At37MbQa8DUH2tY7l
-         6vmedPagFPapde8+XpwmRcpVXKy5eva8ve7aT9jS0jy1oyalYplF8/l4FME9gESwvvx1
-         Gqyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PIisD2u5+L5xGiAgk4a/+275QjZoX6MczpeabJV4hr4=;
-        b=OdyMN6CJc+vuWeBplaiOkwVdhHUzpX7EEzmrJl7UTYec4A4EWfsLW4urAQ0mhYSy48
-         laPyQR3hQFvi6GpX9/XdHShN/m4DkVEgeoudmBvyQ05bHgdibTkR6VysjQFSeLyNDq7e
-         qYVAo2EQRO9kP93qceAmJ2y8x81S5/aQlTGnzG+xIgg+HfsaYPfKw3n5gkHvnp6/yZnt
-         UoiWylRoM5egofxA0ZV4834oY0K3WMnmDMua2/kJNlC6v54g43ofJmhAKIIT2jaj3mLl
-         c5l/1UrSET2fl6KK8IxA2deuMN/xM4jecj6+fMTy0LRnG4zTgp9SJZDdDdoeH5fLHMd2
-         WXpQ==
-X-Gm-Message-State: AOAM532ksRNNONESiRhdMShq1ayIPebW4m6Lq/DPsMzgWO5WbQOHUom1
-        xRzooxEmbdjE4MI2PF7EJx8WbzwaQCOJjQ==
-X-Google-Smtp-Source: ABdhPJxHdHl142/KkvjEf+2pUcj2LnzikFixljG+vY0oGVuBYGqLZteX3Fsprn76avsgzMhGGSk9cQ==
-X-Received: by 2002:aca:eb03:: with SMTP id j3mr1528804oih.280.1643999458422;
-        Fri, 04 Feb 2022 10:30:58 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id j11sm1038343otj.30.2022.02.04.10.30.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 10:30:57 -0800 (PST)
-Date:   Fri, 4 Feb 2022 10:31:12 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc:     Loic Poulain <loic.poulain@linaro.org>,
+        with ESMTP id S1377640AbiBDSmX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Feb 2022 13:42:23 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED393C06173D;
+        Fri,  4 Feb 2022 10:42:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6A9ACCE23D2;
+        Fri,  4 Feb 2022 18:42:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 800C6C004E1;
+        Fri,  4 Feb 2022 18:42:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644000139;
+        bh=gbXlMQkTm6wk7+jYJvwk8s0/hMYzA2jyIoBYYozqmyA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dGWkBTcMQktwcODnovOxids+lkqYf6w6wqbtDvlu51ixa3+5XGKWPXquW/srC25Q0
+         bMaReUQYWC/zycxF12aq1/o85PINE5Eb1pfaa66382MgvoF+pE06XpZzmtXdIOnDtX
+         1K74SR0l6L0tgkt+GhSgMKi/ujNp+7eMnUmAFCugyQm27OpFci1jHWraMNlC18x9vY
+         HcTyqlbcaMDdSmEs1dDV/mKtBhboEzMy+bQU5OUIGgZUD1zKX6Nim+Kjucq2CkkHo9
+         hThdYWCXtzVcn20bIlOMQLRl0Lpm0nbQOMgkz3sb4ILVH5fOv+YtJLDeHXrVaYq+Mj
+         9UFuzTrFSMO3w==
+Date:   Fri, 4 Feb 2022 18:42:14 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        linus.walleij@linaro.org, Loic Poulain <loic.poulain@linaro.org>,
         Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 5/9] i2c: qcom-cci: initialize CCI controller after
- registration of adapters
-Message-ID: <Yf1w8Os2g4VPAKfw@ripper>
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/9] dt-bindings: i2c: qcom-cci: add description of a
+ vbus-supply property
+Message-ID: <Yf1zhojUSxlMNZgV@sirena.org.uk>
 References: <20220203164629.1711958-1-vladimir.zapolskiy@linaro.org>
- <20220203164705.1712027-1-vladimir.zapolskiy@linaro.org>
+ <20220203164629.1711958-3-vladimir.zapolskiy@linaro.org>
+ <Yf1q+wlXo2LAeZX+@ripper>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="d/jMTsDZb3DWepCt"
 Content-Disposition: inline
-In-Reply-To: <20220203164705.1712027-1-vladimir.zapolskiy@linaro.org>
+In-Reply-To: <Yf1q+wlXo2LAeZX+@ripper>
+X-Cookie: Torque is cheap.
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu 03 Feb 08:47 PST 2022, Vladimir Zapolskiy wrote:
 
-> The change is wanted to postpone initialization of busses on CCI controller
-> by cci_init() and cci_reset() till adapters are registered, the later is
-> needed for adding I2C bus devices and get correspondent vbus regulators.
-> 
-> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> ---
->  drivers/i2c/busses/i2c-qcom-cci.c | 17 ++++++++---------
->  1 file changed, 8 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
-> index cf54f1cb4c57..eebf9603d3d1 100644
-> --- a/drivers/i2c/busses/i2c-qcom-cci.c
-> +++ b/drivers/i2c/busses/i2c-qcom-cci.c
-> @@ -630,14 +630,6 @@ static int cci_probe(struct platform_device *pdev)
->  	val = readl(cci->base + CCI_HW_VERSION);
->  	dev_dbg(dev, "CCI HW version = 0x%08x", val);
->  
-> -	ret = cci_reset(cci);
-> -	if (ret < 0)
-> -		goto error;
-> -
-> -	ret = cci_init(cci);
-> -	if (ret < 0)
-> -		goto error;
-> -
->  	for (i = 0; i < cci->data->num_masters; i++) {
->  		if (!cci->master[i].cci)
->  			continue;
-> @@ -649,6 +641,14 @@ static int cci_probe(struct platform_device *pdev)
->  		}
->  	}
->  
-> +	ret = cci_reset(cci);
+--d/jMTsDZb3DWepCt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-i2c_add_adapter() will register and probe child devices, which might
-want to access the bus in their probe functions. Don't you break that by
-initializing the master after the children?
+On Fri, Feb 04, 2022 at 10:05:47AM -0800, Bjorn Andersson wrote:
+> On Thu 03 Feb 08:46 PST 2022, Vladimir Zapolskiy wrote:
 
-Regards,
-Bjorn
+> > +- vbus-supply:
 
-> +	if (ret < 0)
-> +		goto error_i2c;
-> +
-> +	ret = cci_init(cci);
-> +	if (ret < 0)
-> +		goto error_i2c;
-> +
->  	pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
->  	pm_runtime_use_autosuspend(dev);
->  	pm_runtime_set_active(dev);
-> @@ -663,7 +663,6 @@ static int cci_probe(struct platform_device *pdev)
->  			of_node_put(cci->master[i].adap.dev.of_node);
->  		}
->  	}
-> -error:
->  	disable_irq(cci->irq);
->  disable_clocks:
->  	cci_disable_clocks(cci);
-> -- 
-> 2.33.0
-> 
+> I don't think "vbus" is an appropriate name for his. Perhaps "vddio" or
+> something like that would be better.
+
+> But there's a bigger question here, this is not a supply for the
+> i2c master, it's simply a supply for pulling up the bus. So it's not
+> entirely correct to specify it as a supply for the CCI node (which is
+> also the reason why the name isn't obvious).
+
+Does the device (controller?) not have a supply that the I2C bus is
+referenced to?  If so that supply should be named.
+
+> Typically we don't don't mention the bus-supply because it happens to be
+> pulled up either by io-supply for the block, or by some always-on
+> regulator in the system.
+
+If the bus is being pulled up to some supply other than the supply that
+the bus is referenced to that doesn't sound like the greatest electrical
+engineering ever...  without any context it's hard to comment about this
+particular system.
+
+--d/jMTsDZb3DWepCt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH9c4UACgkQJNaLcl1U
+h9CM6Qf/WkwweKjs1czu0qwHwz5DI1EMVc0CWDqBRE/GBJQ7YC6Rle27N/g6Kff/
+IftkieaWxTG5zJsP9y5vs3BJd2I1ArDug4kfZFjg00PeUuizJ/5VcTmo/bLlYz4o
+UWCH0CSX3SJ6kPXxzx+9NBzYy/rytf82p4yWEJDg3D4bHwqVCbNTSAUN/IL82kXx
+D+ao+thL+lEN51KyPlhCtsCUXlua4TPYMuDBoFXOFV7NyWRcamyz0YFPVvEPmBGL
+JsDe7uH2rkj697orgYRYkyZFOlkvee5pFS/uIFamTXNg2kUGby+0bbjXAmGTQu0i
+8esmqS0psl9WN6h+VKqW+NA5v6VuZw==
+=ueXi
+-----END PGP SIGNATURE-----
+
+--d/jMTsDZb3DWepCt--
