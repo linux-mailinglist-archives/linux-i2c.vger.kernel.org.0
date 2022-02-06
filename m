@@ -2,22 +2,22 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775D24AAFC0
-	for <lists+linux-i2c@lfdr.de>; Sun,  6 Feb 2022 14:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53EEB4AAFBA
+	for <lists+linux-i2c@lfdr.de>; Sun,  6 Feb 2022 14:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239785AbiBFN7B (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 6 Feb 2022 08:59:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
+        id S242042AbiBFN6x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 6 Feb 2022 08:58:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241785AbiBFN6v (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Feb 2022 08:58:51 -0500
+        with ESMTP id S242164AbiBFN6s (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Feb 2022 08:58:48 -0500
 Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C00C03FED7;
-        Sun,  6 Feb 2022 05:58:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A74EC0401E3;
+        Sun,  6 Feb 2022 05:58:38 -0800 (PST)
 Received: from [77.244.183.192] (port=63680 helo=melee.fritz.box)
         by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
         (envelope-from <luca@lucaceresoli.net>)
-        id 1nGgCy-00059v-LP; Sun, 06 Feb 2022 12:59:56 +0100
+        id 1nGgD1-00059v-Kg; Sun, 06 Feb 2022 12:59:59 +0100
 From:   Luca Ceresoli <luca@lucaceresoli.net>
 To:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org
 Cc:     Luca Ceresoli <luca@lucaceresoli.net>, devicetree@vger.kernel.org,
@@ -34,10 +34,12 @@ Cc:     Luca Ceresoli <luca@lucaceresoli.net>, devicetree@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         matti.vaittinen@fi.rohmeurope.com
-Subject: [RFCv3 0/6] Hi,
-Date:   Sun,  6 Feb 2022 12:59:33 +0100
-Message-Id: <20220206115939.3091265-1-luca@lucaceresoli.net>
+Subject: [RFCv3 1/6] i2c: core: let adapters be notified of client attach/detach
+Date:   Sun,  6 Feb 2022 12:59:34 +0100
+Message-Id: <20220206115939.3091265-2-luca@lucaceresoli.net>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220206115939.3091265-1-luca@lucaceresoli.net>
+References: <20220206115939.3091265-1-luca@lucaceresoli.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -59,84 +61,113 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-this RFCv3, codename "FOSDEM Fries", of RFC patches to support the TI
-DS90UB9xx serializer/deserializer chipsets with I2C address translation.
+An adapter might need to know when a new device is about to be
+added. This will soon bee needed to implement an "I2C address
+translator" (ATR for short), a device that propagates I2C transactions
+with a different slave address (an "alias" address). An ATR driver
+needs to know when a slave is being added to find a suitable alias and
+program the device translation map.
 
-I sent RFCv2 back in 2019 (!). After that I have applied most of the
-improvements proposed during code review, most notably device tree
-representation and proper use of kernel abstractions for clocks and GPIO. I
-have also done many improvements all over the drivers code.
+Add an attach/detach callback pair to allow adapter drivers to be
+notified of clients being added and removed.
 
-However I still don't consider these drivers "ready", hence the RFC status.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-One reason is that, while the I2C ATR idea has been considered good by
-Wolfram, its implementation requires I2C core changes that have been tried
-but never made it to mainline. I think that discussion needs to be reopened
-and work has to be done on that side. Thus for the time being this code
-still has the alias pool: it is an interim solution until I2C core is
-ready.
+---
 
-Also be aware that the only hardware where I sould test this code runs a
-v4.19 kernel. I cannot guarantee it will work perfectly on mainline.
+Changes RFCv2 -> RFCv3:
 
-And since my hardware has only one camera connected to each deserializer I
-dropped support. However I wrote the code to be able to easily add support
-for 2 and 4 camera inputs as well as 2 CSI-2 outputs (DS90UB960).
+ - rebase on current master
 
-Finally, I dropped all attempts at supporting hotplug. The goals I had 2+
-years ago are not reasonably doable even with current kernels. Luckily all
-the users that I talked with are happy without hotplug. For this reason I
-simplified the serializer management in the DS90UB954 driver by keeping the
-serializer always instantiated.
+Changes RFCv1 -> RFCv2:
 
-Even with the above limitations I felt I'd send this v3 anyway since
-several people have contacted me since v2 asking whether this
-implementation has made progress towards mainline. Some even improved on
-top of my code it their own forks. As I cannot afford to work on this topic
-in the near future, here is the latest and greatest version I can produce,
-with all the improvements I made so far.
+ - Document struct i2c_attach_operations
+---
+ drivers/i2c/i2c-core-base.c | 18 +++++++++++++++++-
+ include/linux/i2c.h         | 16 ++++++++++++++++
+ 2 files changed, 33 insertions(+), 1 deletion(-)
 
-That's all, enjoy the code!
-
-References:
-
-[RFCv2] https://lore.kernel.org/lkml/20190723203723.11730-1-luca@lucaceresoli.net/
-[RFCv1] https://lore.kernel.org/linux-media/20190108223953.9969-1-luca@lucaceresoli.net/
-
-Best regards.
-Luca
-
-Luca Ceresoli (6):
-  i2c: core: let adapters be notified of client attach/detach
-  i2c: add I2C Address Translator (ATR) support
-  media: dt-bindings: add DS90UB953-Q1 video serializer
-  media: dt-bindings: add DS90UB954-Q1 video deserializer
-  media: ds90ub954: new driver for TI DS90UB954-Q1 video deserializer
-  media: ds90ub953: new driver for TI DS90UB953-Q1 video serializer
-
- .../bindings/media/i2c/ti,ds90ub953-q1.yaml   |   96 +
- .../bindings/media/i2c/ti,ds90ub954-q1.yaml   |  235 +++
- MAINTAINERS                                   |   22 +
- drivers/i2c/Kconfig                           |    9 +
- drivers/i2c/Makefile                          |    1 +
- drivers/i2c/i2c-atr.c                         |  557 ++++++
- drivers/i2c/i2c-core-base.c                   |   18 +-
- drivers/media/i2c/Kconfig                     |   22 +
- drivers/media/i2c/Makefile                    |    3 +
- drivers/media/i2c/ds90ub953.c                 |  560 ++++++
- drivers/media/i2c/ds90ub954.c                 | 1648 +++++++++++++++++
- include/dt-bindings/media/ds90ub953.h         |   16 +
- include/linux/i2c-atr.h                       |   82 +
- include/linux/i2c.h                           |   16 +
- 14 files changed, 3284 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.yaml
- create mode 100644 drivers/i2c/i2c-atr.c
- create mode 100644 drivers/media/i2c/ds90ub953.c
- create mode 100644 drivers/media/i2c/ds90ub954.c
- create mode 100644 include/dt-bindings/media/ds90ub953.h
- create mode 100644 include/linux/i2c-atr.h
-
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 2c59dd748a49..aea1e1b552b0 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -966,15 +966,23 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+ 		}
+ 	}
+ 
++	if (adap->attach_ops &&
++	    adap->attach_ops->attach_client &&
++	    adap->attach_ops->attach_client(adap, info, client) != 0)
++		goto out_remove_swnode;
++
+ 	status = device_register(&client->dev);
+ 	if (status)
+-		goto out_remove_swnode;
++		goto out_detach_client;
+ 
+ 	dev_dbg(&adap->dev, "client [%s] registered with bus id %s\n",
+ 		client->name, dev_name(&client->dev));
+ 
+ 	return client;
+ 
++out_detach_client:
++	if (adap->attach_ops && adap->attach_ops->detach_client)
++		adap->attach_ops->detach_client(adap, client);
+ out_remove_swnode:
+ 	device_remove_software_node(&client->dev);
+ out_err_put_of_node:
+@@ -996,9 +1004,17 @@ EXPORT_SYMBOL_GPL(i2c_new_client_device);
+  */
+ void i2c_unregister_device(struct i2c_client *client)
+ {
++	struct i2c_adapter *adap;
++
+ 	if (IS_ERR_OR_NULL(client))
+ 		return;
+ 
++	adap = client->adapter;
++
++	if (adap->attach_ops &&
++	    adap->attach_ops->detach_client)
++		adap->attach_ops->detach_client(adap, client);
++
+ 	if (client->dev.of_node) {
+ 		of_node_clear_flag(client->dev.of_node, OF_POPULATED);
+ 		of_node_put(client->dev.of_node);
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 7d4f52ceb7b5..aadd71e0533c 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -587,6 +587,21 @@ struct i2c_lock_operations {
+ 	void (*unlock_bus)(struct i2c_adapter *adapter, unsigned int flags);
+ };
+ 
++/**
++ * struct i2c_attach_operations - callbacks to notify client attach/detach
++ * @attach_client: Notify of new client being attached
++ * @detach_client: Notify of new client being detached
++ *
++ * Both ops are optional.
++ */
++struct i2c_attach_operations {
++	int  (*attach_client)(struct i2c_adapter *adapter,
++			      const struct i2c_board_info *info,
++			      const struct i2c_client *client);
++	void (*detach_client)(struct i2c_adapter *adapter,
++			      const struct i2c_client *client);
++};
++
+ /**
+  * struct i2c_timings - I2C timing information
+  * @bus_freq_hz: the bus frequency in Hz
+@@ -729,6 +744,7 @@ struct i2c_adapter {
+ 
+ 	/* data fields that are valid for all devices	*/
+ 	const struct i2c_lock_operations *lock_ops;
++	const struct i2c_attach_operations *attach_ops;
+ 	struct rt_mutex bus_lock;
+ 	struct rt_mutex mux_lock;
+ 
 -- 
 2.25.1
 
