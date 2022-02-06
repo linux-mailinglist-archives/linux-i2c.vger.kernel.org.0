@@ -2,23 +2,22 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E05BE4AAF97
-	for <lists+linux-i2c@lfdr.de>; Sun,  6 Feb 2022 14:57:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7D44AAF9C
+	for <lists+linux-i2c@lfdr.de>; Sun,  6 Feb 2022 14:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240420AbiBFN5x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 6 Feb 2022 08:57:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
+        id S240517AbiBFN6A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 6 Feb 2022 08:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233988AbiBFN5w (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Feb 2022 08:57:52 -0500
-X-Greylist: delayed 7071 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 05:57:50 PST
+        with ESMTP id S233988AbiBFN57 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Feb 2022 08:57:59 -0500
 Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B474CC043182;
-        Sun,  6 Feb 2022 05:57:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89463C043183;
+        Sun,  6 Feb 2022 05:57:56 -0800 (PST)
 Received: from [77.244.183.192] (port=63680 helo=melee.fritz.box)
         by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
         (envelope-from <luca@lucaceresoli.net>)
-        id 1nGgDK-00059v-PZ; Sun, 06 Feb 2022 13:00:18 +0100
+        id 1nGgDM-00059v-73; Sun, 06 Feb 2022 13:00:20 +0100
 From:   Luca Ceresoli <luca@lucaceresoli.net>
 To:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org
 Cc:     Luca Ceresoli <luca@lucaceresoli.net>, devicetree@vger.kernel.org,
@@ -35,9 +34,9 @@ Cc:     Luca Ceresoli <luca@lucaceresoli.net>, devicetree@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         matti.vaittinen@fi.rohmeurope.com
-Subject: [RFCv3 3/6] media: dt-bindings: add DS90UB953-Q1 video serializer
-Date:   Sun,  6 Feb 2022 12:59:36 +0100
-Message-Id: <20220206115939.3091265-4-luca@lucaceresoli.net>
+Subject: [RFCv3 4/6] media: dt-bindings: add DS90UB954-Q1 video deserializer
+Date:   Sun,  6 Feb 2022 12:59:37 +0100
+Message-Id: <20220206115939.3091265-5-luca@lucaceresoli.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220206115939.3091265-1-luca@lucaceresoli.net>
 References: <20220206115939.3091265-1-luca@lucaceresoli.net>
@@ -62,8 +61,8 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Describe the Texas Instruments DS90UB953-Q1, a MIPI CSI-2 video serializer
-with I2C Address Translator and remote GPIOs.
+Describe the Texas Instruments DS90UB954-Q1, a 2-input MIPI CSI-2 video
+deserializer with I2C Address Translator and remote GPIOs.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
@@ -72,158 +71,277 @@ Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Changes RFCv2 -> RFCv3:
 
  - rewrite in yaml
+ - use new layout based on remote-chips under the main deser node
+ - new clock configuration based on common clock framework
 
-Changes RFCv1 -> RFCv2: none, this patch is new in RFCv2
+Changes RFCv1 -> RFCv2:
+
+ - add explicit aliases for the FPD-link RX ports (optional)
+ - add proper remote GPIO description
 ---
- .../bindings/media/i2c/ti,ds90ub953-q1.yaml   | 96 +++++++++++++++++++
- MAINTAINERS                                   |  7 ++
- include/dt-bindings/media/ds90ub953.h         | 16 ++++
- 3 files changed, 119 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
- create mode 100644 include/dt-bindings/media/ds90ub953.h
+ .../bindings/media/i2c/ti,ds90ub954-q1.yaml   | 235 ++++++++++++++++++
+ MAINTAINERS                                   |   6 +
+ 2 files changed, 241 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.yaml
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
+diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.yaml
 new file mode 100644
-index 000000000000..2a836a3e65e9
+index 000000000000..95dc3d22f5d8
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
-@@ -0,0 +1,96 @@
++++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.yaml
+@@ -0,0 +1,235 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +# Copyright (C) 2019 Renesas Electronics Corp.
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub953-q1.yaml#
++$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub954-q1.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Texas Instruments DS90UB953-Q1 video serializer
++title: Texas Instruments DS90UB954-Q1 dual video deserializer
 +
 +maintainers:
 +  - Luca Ceresoli <luca@lucaceresoli.net>
 +
 +description: |
-+  The TI DS90UB953-Q1 is a MIPI CSI-2 video serializer that forwards a MIPI
-+  CSI-2 input video stream over an FPD Link 3 connection to a remote
-+  deserializer. It also allows access to I2C and GPIO from the deserializer.
-+
-+  The DT definitions can be found in include/dt-bindings/media/ds90ub953.h
-+
-+  When used as a the remote counterpart of a deserializer (e.g. the
-+  DS90UB954-Q1), the serializer is described in the
-+  "deserializer/remote-chips/remote-chip@[01]" node.
++  The TI DS90UB954-Q1 is a MIPI CSI-2 video deserializer that forwards
++  video streams from up to two FPD-Link 3 connections to a MIPI CSI-2
++  output. It also allows access to remote I2C and GPIO.
 +
 +properties:
 +  compatible:
-+    const: ti,ds90ub953-q1
++    const: ti,ds90ub954-q1
 +
 +  reg:
 +    description: |
-+      Index of the remote (serializer) RX port that this serializer is
-+      connected to.
-+    maxItems: 1
++      main I2C slave address; optionally aliases for RX port registers and
++      remote serializers. The main address is mandatory and must be the
++      first, others are optional and fall back to defaults if not
++      specified. See "reg-names".
++
++  reg-names:
++    description: |
++      Names of I2C address used to communicate with the chip, must match
++      the "reg" values; mandatory if there are 2 or more addresses.
++      "main" is the main I2C address, used to access shared registers.
++      "rxport0" and "rxport1" are the I2C alias to access FPD-link RX
++      port specific registers; must not be used by other slaves on the
++      same bus. "ser0" and "ser1" are the I2C alias to access the remote
++      serializer connected on each FPD-link RX port; must not be used by
++      other slaves on the same bus.
++    minItems: 1
++    maxItems: 5
++    items:
++      - const: main
++      - const: rxport0
++      - const: rxport1
++      - const: ser0
++      - const: ser1
 +
 +  clocks:
-+    description: FPD-Link line rate (provided by the deserializer)
++    description: provider of the clock on the XIN/REFCLK pin
 +    maxItems: 1
 +
-+  gpio-controller: true
++  interrupts:
++    maxItems: 1
 +
-+  '#gpio-cells':
-+    const: 2
++  reset-gpios:
++    description: chip reset GPIO connected to PDB pin (active low)
++
++  i2c-alias-pool:
++    description: |
++      list of I2C addresses that are known to be available on the "local"
++      (SoC-to-deser) I2C bus; they will be picked at runtime and used as
++      aliases to reach remote I2C chips
 +
 +  '#clock-cells':
++    description: |
++      the DS90UB954 provides the FPD line rate clock to the serializer
 +    const: 0
 +
-+  ti,gpio-functions:
-+    description: |
-+      A list of 4 values defining how the 4 GPIO pins are connected in
-+      hardware; possible values are:
-+      - DS90_GPIO_FUNC_UNUSED (0): the GPIO is not unused
-+      - DS90_GPIO_FUNC_INPUT (1): the GPIO is an input to the ds90ub953,
-+        the remote chip (deserializer) can read its value
-+      - DS90_GPIO_FUNC_OUTPUT_REMOTE (2): the GPIO is an output from the
-+        ds90ub953, the remote chip (deserializer) can set its value
-+      For unspecified values the GPIO is assumed to be unused.
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    maxItems: 4
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
 +
-+patternProperties:
-+  '^ti,ds90ub953-q1-(clk|d[0-3])-inv-pol-quirk$':
++    patternProperties:
++      '^port@[01]$':
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        description: FPD-Link RX port 0 (RIN0+/RIN0- pins)
++
++        properties:
++          endpoint:
++            $ref: /schemas/media/video-interfaces.yaml#
++            unevaluatedProperties: false
++
++      '^port@2$':
++        $ref: /schemas/graph.yaml#/properties/port
++        description: MIPI-CSI2 TX port
++
++  remote-chips:
++    type: object
++
++    properties:
++      '#address-cells':
++        const: 1
++      '#size-cells':
++        const: 0
++
++    patternProperties:
++      '^remote-chip@([01]+)$':
++        type: object
++        $ref: /schemas/media/i2c/ti,ds90ub953-q1.yaml#
++
++    required:
++      - '#address-cells'
++      - '#size-cells'
++
++    additionalProperties: false
++
++  i2c-atr:
 +    description: |
-+      The MIPI CSI-2 input clock lane or any of the data lanes has inverted
-+      polarity in hardware
++      Each child describes the I2C bus on the remote side of an RX port
++    type: object
++
++    properties:
++      '#address-cells':
++        const: 1
++      '#size-cells':
++        const: 0
++
++    patternProperties:
++      '^i2c@([01]+)$':
++        type: object
++
++        properties:
++          reg:
++            maxItems: 1
++          '#address-cells':
++            const: 1
++          '#size-cells':
++            const: 0
++          clock-frequency:
++            minimum: 1
++            maximum: 1000000
++
++    additionalProperties: false
 +
 +required:
 +  - compatible
 +  - reg
 +  - clocks
-+  - gpio-controller
-+  - '#gpio-cells'
-+  - '#clock-cells'
++  - ports
++  - remote-chips
++  - i2c-atr
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/gpio/gpio.h>
 +    #include <dt-bindings/media/ds90ub953.h>
-+    remote-chips {
++
++    i2c@0 {
++      reg = <0x0 0x100>;
 +      #address-cells = <1>;
 +      #size-cells = <0>;
 +
-+      remote-chip@0 {
-+        reg = <0>;
-+        compatible = "ti,ds90ub953-q1";
-+        clocks = <&deser>;
-+        ti,gpio-functions =
-+          <DS90_GPIO_FUNC_UNUSED
-+          DS90_GPIO_FUNC_OUTPUT_REMOTE
-+          DS90_GPIO_FUNC_UNUSED
-+          DS90_GPIO_FUNC_UNUSED>;
++      deser: deser@3d {
++        compatible = "ti,ds90ub954-q1";
++        reg-names = "main", "rxport0", "rxport1", "ser0", "ser1";
++        reg       = <0x3d>,  <0x40>,    <0x41>,   <0x44>, <0x45>;
++        clocks = <&clk_25M>;
++        interrupt-parent = <&gic>;
++        interrupts = <3 1 IRQ_TYPE_LEVEL_LOW>;
++        reset-gpios = <&gpio 4 GPIO_ACTIVE_LOW>;
 +
-+        gpio-controller;
-+        #gpio-cells = <2>;
 +        #clock-cells = <0>;
++
++        i2c-alias-pool = /bits/ 16 <0x4a 0x4b 0x4c 0x4d 0x4e 0x4f>;
++
++        ports {
++          #address-cells = <1>;
++          #size-cells = <0>;
++
++          port@0 {
++            reg = <0>;
++            ds90ub954_fpd3_in0: endpoint {
++              remote-endpoint = <&sensor_0_out>;
++            };
++          };
++
++          port@2 {
++            reg = <2>;
++            ds90ub954_mipi_out0: endpoint {
++                    data-lanes = <1 2 3 4>;
++                    link-frequencies = /bits/ 64 <400000000>;
++                    remote-endpoint = <&csirx_0_in>;
++            };
++          };
++        };
++
++        remote-chips {
++          #address-cells = <1>;
++          #size-cells = <0>;
++
++          des0_ser0: remote-chip@0 {
++            reg = <0>;
++            compatible = "ti,ds90ub953-q1";
++            clocks = <&deser>;
++            ti,gpio-functions =
++              <DS90_GPIO_FUNC_UNUSED
++              DS90_GPIO_FUNC_OUTPUT_REMOTE
++              DS90_GPIO_FUNC_UNUSED
++              DS90_GPIO_FUNC_UNUSED>;
++
++            gpio-controller;
++            #gpio-cells = <2>;
++            #clock-cells = <0>;
++          };
++        };
++
++        i2c-atr {
++          #address-cells = <1>;
++          #size-cells = <0>;
++
++          remote_i2c0: i2c@0 {
++            reg = <0>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            sensor_0@1a {
++              compatible = "sony,imx274";
++              reg = <0x1a>;
++
++              reset-gpios = <&des0_ser0 1 GPIO_ACTIVE_LOW>;
++
++              port {
++                sensor_0_out: endpoint {
++                  remote-endpoint = <&ds90ub954_fpd3_in0>;
++                };
++              };
++            };
++          };
++        };
 +      };
 +    };
++
++...
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 7383aec87e4a..4429ce035496 100644
+index 4429ce035496..f0156062f788 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -19090,6 +19090,13 @@ F:	include/linux/dma/k3-udma-glue.h
- F:	include/linux/dma/ti-cppi5.h
- F:	include/linux/dma/k3-psil.h
+@@ -19097,6 +19097,12 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
+ F:	include/dt-bindings/media/ds90ub953.h
  
-+TEXAS INSTRUMENTS DS90UB953 VIDEO SERIALIZER DRIVER
++TEXAS INSTRUMENTS DS90UB954 VIDEO DESERIALIZER DRIVER
 +M:	Luca Ceresoli <luca@lucaceresoli.net>
 +L:	linux-media@vger.kernel.org
 +S:	Maintained
-+F:	Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
-+F:	include/dt-bindings/media/ds90ub953.h
++F:	Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.yaml
 +
  TEXAS INSTRUMENTS' SYSTEM CONTROL INTERFACE (TISCI) PROTOCOL DRIVER
  M:	Nishanth Menon <nm@ti.com>
  M:	Tero Kristo <kristo@kernel.org>
-diff --git a/include/dt-bindings/media/ds90ub953.h b/include/dt-bindings/media/ds90ub953.h
-new file mode 100644
-index 000000000000..5359432968e9
---- /dev/null
-+++ b/include/dt-bindings/media/ds90ub953.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/**
-+ * Definitions for the Texas Instruments DS90UB953-Q1 video serializer
-+ *
-+ * Copyright (c) 2019 Luca Ceresoli <luca@lucaceresoli.net>
-+ */
-+
-+#ifndef _DS90UB953_H
-+#define _DS90UB953_H
-+
-+#define DS90_GPIO_FUNC_UNUSED             0
-+#define DS90_GPIO_FUNC_INPUT              1
-+#define DS90_GPIO_FUNC_OUTPUT_REMOTE      2
-+#define DS90_GPIO_N_FUNCS                 3
-+
-+#endif /* _DS90UB953_H */
 -- 
 2.25.1
 
