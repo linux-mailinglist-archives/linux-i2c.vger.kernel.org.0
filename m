@@ -2,75 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B419F4AAFAF
-	for <lists+linux-i2c@lfdr.de>; Sun,  6 Feb 2022 14:58:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D314AAFE7
+	for <lists+linux-i2c@lfdr.de>; Sun,  6 Feb 2022 15:17:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241472AbiBFN6d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 6 Feb 2022 08:58:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51726 "EHLO
+        id S242092AbiBFORR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 6 Feb 2022 09:17:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241604AbiBFN6c (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Feb 2022 08:58:32 -0500
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C286C06173B;
-        Sun,  6 Feb 2022 05:58:28 -0800 (PST)
-Received: from [77.244.183.192] (port=64704 helo=[192.168.178.41])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1nGgIE-0008JV-V4; Sun, 06 Feb 2022 13:05:23 +0100
-Message-ID: <9e7d1e8a-2270-423e-980d-b47fe374cf33@lucaceresoli.net>
-Date:   Sun, 6 Feb 2022 13:05:21 +0100
+        with ESMTP id S233178AbiBFORQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Feb 2022 09:17:16 -0500
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2F1C06173B;
+        Sun,  6 Feb 2022 06:17:13 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 5D7774254F;
+        Sun,  6 Feb 2022 14:17:03 +0000 (UTC)
+Subject: Re: [PATCH v2] i2c: pasemi: Drop I2C classes from platform driver
+ variant
+To:     =?UTF-8?Q?Martin_Povi=c5=a1er?= <povik+lin@cutebit.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220204095914.5678-1-povik+lin@cutebit.org>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <4884be12-e4e8-1b75-ee1b-3a8dc20bf342@marcan.st>
+Date:   Sun, 6 Feb 2022 23:17:00 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFCv3 0/6] TI camera serdes and I2C address translation
-Content-Language: en-US
-To:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Peter Rosin <peda@axentia.se>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        matti.vaittinen@fi.rohmeurope.com
-References: <20220206115939.3091265-1-luca@lucaceresoli.net>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-In-Reply-To: <20220206115939.3091265-1-luca@lucaceresoli.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+In-Reply-To: <20220204095914.5678-1-povik+lin@cutebit.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: es-ES
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+On 04/02/2022 18.59, Martin Povišer wrote:
+> Drop I2C device-probing classes from platform variant of the PASemi
+> controller as it is only used on platforms where I2C devices should
+> be instantiated in devicetree. (The I2C_CLASS_DEPRECATED flag is not
+> raised as up to this point no devices relied on the old behavior.)
+> 
+> Fixes: d88ae2932df0 ("i2c: pasemi: Add Apple platform driver")
+> Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
 
-apologies for the incorrect cover letter subject. :( It should have been
-as in the present e-mail, which I'm sending mostly to help search
-engines find the subject...
+Acked-by: Hector Martin <marcan@marcan.st>
 
-Regards.
+Heh, so that's where this was... I remember running into this and
+wondering if there was a way to turn it off.
+
 -- 
-Luca
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub
