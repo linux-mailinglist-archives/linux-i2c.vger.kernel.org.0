@@ -2,141 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733D24AADA3
-	for <lists+linux-i2c@lfdr.de>; Sun,  6 Feb 2022 04:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 840254AAF46
+	for <lists+linux-i2c@lfdr.de>; Sun,  6 Feb 2022 13:51:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbiBFDap (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 5 Feb 2022 22:30:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        id S229647AbiBFMvX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 6 Feb 2022 07:51:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381092AbiBFDan (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Feb 2022 22:30:43 -0500
-X-Greylist: delayed 10803 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 05 Feb 2022 19:30:42 PST
-Received: from mx1.smtp.larsendata.com (mx1.smtp.larsendata.com [91.221.196.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21623C0401C3
-        for <linux-i2c@vger.kernel.org>; Sat,  5 Feb 2022 19:30:41 -0800 (PST)
-Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
-        by mx1.smtp.larsendata.com (Halon) with ESMTPS
-        id 12f30462-8454-11ec-b20b-0050568c148b;
-        Wed, 02 Feb 2022 18:15:17 +0000 (UTC)
-Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sam@ravnborg.org)
-        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 67A6F194BFA;
-        Wed,  2 Feb 2022 19:14:11 +0100 (CET)
-Date:   Wed, 2 Feb 2022 19:14:08 +0100
-X-Report-Abuse-To: abuse@mxhotel.dk
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     nick.hawkins@hpe.com
-Cc:     verdun@hpe.com, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Corey Minyard <minyard@acm.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Hao Fang <fanghao11@huawei.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] HPE BMC GXP SUPPORT
-Message-ID: <YfrJ8JWjyH9ptV4z@ravnborg.org>
-References: <nick.hawkins@hpe.com>
- <20220202165315.18282-1-nick.hawkins@hpe.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202165315.18282-1-nick.hawkins@hpe.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S235893AbiBFMvX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Feb 2022 07:51:23 -0500
+X-Greylist: delayed 285 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 04:51:21 PST
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B12C06173B;
+        Sun,  6 Feb 2022 04:51:21 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3F17D5C0097;
+        Sun,  6 Feb 2022 07:46:33 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Sun, 06 Feb 2022 07:46:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; bh=iB7sQB+HR0zZzq
+        fqF6V/y4fSMD6WHmU40dKjddl6GWE=; b=I92EMCIjV/ulOM0Ysw2hT9bxeM9C+P
+        whZNjdbpwDr0ubWQdPxXmEcci/B9zaRTfWQ7URdNgDMFqCWFf6VUsXAgnmKArCil
+        S3X3326BFnC5zztGrbdSVZKKGPXjVW69A+OzySTi5CA1Uin5bMwrABb9YiXR5OuN
+        hNG8cTe4/x9uD8kddmNmG6oq7c8JztS89SQa1ZDdYas9guXH5HF9MUaYhMB0Dmi9
+        hagd9muQ9IET4pCO9rqPCe/L+T7Q5U6+kL63C5OZLCJFYnzS9jQvs82EIAPvO1hk
+        S4qVf447/wEPpHHvtXT+qJKb7wK+lxNPqd8BnTX5rn6aPtYv3DfkJGtQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=iB7sQB+HR0zZzqfqF6V/y4fSMD6WHmU40dKjddl6G
+        WE=; b=V59r16DgpWDZ44/2A7kbi4VnOsPkt7HUDaS39bgRubVLEbEYkdYi6XYGS
+        Fajq0bPHwbJx2514fmASN9PtrYLhuo/NEQGfdUGyEAr9tXKStg0J+/eGcx0DbyF9
+        SssZFjfyYNDqQjagKNDRQDR577UyDKzw8t2VvKnU2M2efzeHz5e3voRGTDp814sz
+        vGMwpdpPbxzyHHvBgnx/hWPCPYkbBN+hjeHEFn5u4hGZ7xLeKVh6dM6b5ca2EIKt
+        0cG4FVmuGnz9L38glCTe3RdSlp5JTPuZwnEExTVRWqGD4YKypGGr/o37tvi5jILz
+        EpUxv1ECsYme7G/fs7Eqh86/S6mNA==
+X-ME-Sender: <xms:J8P_YVFsbJ-8QGmGDFK8DTbKZnjhbPsTwsCYNnc4YjpI_KXOK31B5g>
+    <xme:J8P_YaUAHauvKZxtrMzemzuR50PO9Kbza9l2hVH0aJCuFl_fUp2SIXhr55WUvMoyE
+    zVWS6CMVg1YZphpMXA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheefgdeggecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdfuvhgv
+    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
+    htthgvrhhnpeetueduleetfeeuledvleehheeivedvhfekheejjeduhfeileffffduhfek
+    ieelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:J8P_YXLcaY8FaUrBmdHMu8YmFjmf0yX6dbYBXWHA6Yfgm-EkEXUMPw>
+    <xmx:J8P_YbG0HIbcj0W06pdJ4yUpMx1pNqijn03AfzxgCQfRRGv_4hmzvg>
+    <xmx:J8P_YbW5_zFtSvppx5JAuExh8gtEbG-gqUBXzzV0Or63Aky1VoGcqg>
+    <xmx:KcP_YdKHgXP_rVLQsIsbcD9QtjuQyDGJqJ3YmEA_H2P9aMzhNjOzlA>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C147827402BF; Sun,  6 Feb 2022 07:46:31 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4586-g104bd556f9-fm-20220203.002-g104bd556
+Mime-Version: 1.0
+Message-Id: <6b3ece8e-bba8-425c-91e6-e8b35abbf715@www.fastmail.com>
+In-Reply-To: <20220204095914.5678-1-povik+lin@cutebit.org>
+References: <20220204095914.5678-1-povik+lin@cutebit.org>
+Date:   Sun, 06 Feb 2022 13:46:11 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     =?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc:     "Hector Martin" <marcan@marcan.st>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
+        "Paul Mackerras" <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: pasemi: Drop I2C classes from platform driver variant
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Nick,
+On Fri, Feb 4, 2022, at 10:59, Martin Povi=C5=A1er wrote:
+> Drop I2C device-probing classes from platform variant of the PASemi
+> controller as it is only used on platforms where I2C devices should
+> be instantiated in devicetree. (The I2C_CLASS_DEPRECATED flag is not
+> raised as up to this point no devices relied on the old behavior.)
+>
+> Fixes: d88ae2932df0 ("i2c: pasemi: Add Apple platform driver")
+> Signed-off-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
 
-good to see all this stuff coming mainline,
+Reviewed-by: Sven Peter <sven@svenpeter.dev>
 
-On Wed, Feb 02, 2022 at 10:52:50AM -0600, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> GXP is the name of the HPE SoC.
-> This SoC is used to implement BMC features of HPE servers
-> (all ProLiant, Synergy, and many Apollo, and Superdome machines)
-> It does support many features including:
-> 	ARMv7 architecture, and it is based on a Cortex A9 core
-> 	Use an AXI bus to which
-> 		a memory controller is attached, as well as
->                  multiple SPI interfaces to connect boot flash,
->                  and ROM flash, a 10/100/1000 Mac engine which
->                  supports SGMII (2 ports) and RMII
-> 		Multiple I2C engines to drive connectivity with a host infrastructure
-> 		A video engine which support VGA and DP, as well as
->                  an hardware video encoder
-> 		Multiple PCIe ports
-> 		A PECI interface, and LPC eSPI
-> 		Multiple UART for debug purpose, and Virtual UART for host connectivity
-> 		A GPIO engine
-> This Patch Includes:
-> 	Documentation for device tree bindings
-> 	Device Tree Bindings
-> 	GXP Timer Support
-> 	GXP Architecture Support
-> 
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
-> ---
->  .../bindings/display/hpe,gxp-thumbnail.txt    |  21 +
->  .../devicetree/bindings/gpio/hpe,gxp-gpio.txt |  16 +
-...
-
-All new bindings must be in the DT-schema format (yaml files).
-This enables a lot of syntax checks and validation.
-
-We are slowly migrating away from the .txt based bindings.
-
-Also, for new bindings please follow the guide lines listed in
-Documentation/devicetree/bindings/submitting-patches.rst
-
-Consider including the bindings with the drivers using the bindings so
-things have a more natural split.
-
-	Sam
