@@ -2,97 +2,156 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E864AC9DA
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Feb 2022 20:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B31FA4ACA13
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Feb 2022 21:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235340AbiBGTr6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Feb 2022 14:47:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
+        id S237994AbiBGUKs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Feb 2022 15:10:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236777AbiBGTpf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Feb 2022 14:45:35 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470AAC0401E0
-        for <linux-i2c@vger.kernel.org>; Mon,  7 Feb 2022 11:45:35 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id d8so12291251qvv.2
-        for <linux-i2c@vger.kernel.org>; Mon, 07 Feb 2022 11:45:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version;
-        bh=DMauDMc5TSXIXiB8XhKeO+orLbY/vKJu7K/SYnFChG8=;
-        b=GWblUf9RSFdaoJNJI+86wq8qtFBAeGNZJNH9OuK30xYa9mAD1Cjn5pIdKc0qtz+yTM
-         UQuuAJIIuoglIHelnNAOSGc7+jwabn0jE0WIXHCeVcpSmxQkLUgwJ+sSjPQyDPoXXtN/
-         WHkl6qYeJQiCAhDTU//ne/Sf/Hp+IIMV48sbvtpXimMD3hXL0Ep8C9FBupqhTLQkDExE
-         Akmi6VJCxTpvwgmbUdtEO3owu5iXwabHd6/j4kRbNa6qWr4ZxOmCdJnnEURlDSb/A8JI
-         AZQqR/No441YEIAFZbs8GW4sR8qJWgz4A2mISjUvcwV9xwP/kHn1DcHN0lcXI6xr/kJu
-         5S0Q==
+        with ESMTP id S240553AbiBGUH6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Feb 2022 15:07:58 -0500
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5205BC0401DA;
+        Mon,  7 Feb 2022 12:07:58 -0800 (PST)
+Received: by mail-oo1-f45.google.com with SMTP id o192-20020a4a2cc9000000b00300af40d795so15026052ooo.13;
+        Mon, 07 Feb 2022 12:07:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version;
-        bh=DMauDMc5TSXIXiB8XhKeO+orLbY/vKJu7K/SYnFChG8=;
-        b=CIndOd6OmQgOYCSzZ5eP3gKmIXUoOlsD/O170S+93pXH/gaTFdD2dMMYQCYq5+0xd7
-         BKfearSBXpsFVR3Ry+v9LiMvdalpK2fg39w4+qd1Fjq2Ql1oWO2MmF/g06mM+G6IvLGQ
-         ZHbI1EPk/AKrCEbJYT43AmGTxp8D9iAUNi43ANrskqPw7fX0yLpDK5zHq+EQpuuArnMu
-         wLCuIj6Qmwgkq2JH3qcFgIgkbVFbNhhSjRT3+5IDFsyZEKB0Z/Xj5WsxeThbq2gf+kBe
-         9ubNWqpiOXhulQ2XQTmv9pB71yrdE+egNhg8S34PcF1g1690TkAVF6iHjlw/L4FBuvle
-         gNdg==
-X-Gm-Message-State: AOAM530tLnkNDvm4uvZhwMxO7kFc25ZLObhyTKIBfDw4O+sFAjeWZhFR
-        xXHn2CmgGuF81TBymT4RDq/pMp22QFbDRQ==
-X-Google-Smtp-Source: ABdhPJyHXSRyqeE9rPO314F+wi7vAMCZfgkO3Rzrn16A7k49KyA93HmQy50W1xvPPvzZlpa6MaZe0g==
-X-Received: by 2002:ad4:576e:: with SMTP id r14mr879870qvx.47.1644263134228;
-        Mon, 07 Feb 2022 11:45:34 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id bi11sm5580026qkb.18.2022.02.07.11.45.31
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HsXp1ktRNXXH1ZuQq9T7gkz8YQLCBAGSvs9f6otXSEc=;
+        b=kTD45pxxBRaJAEMawetNv/mQtrIxcK7j9j96hqdJhE0EnE3hbxqzAAWvJkgsX6Hqmt
+         mtmQtr+s/xZaYEoUNxF2jNgxZSVpz0b9llomZuCjyuXdaErEY0WGor6HESxgOruB89Ih
+         qg3DRl8mRLQWfwz7VRRIQppC+WBoPV36HByI7tDF68hOOVyzFmSMArnkSQCvBtfrkoBh
+         j1nTw4rgQ4+G4CA1K5SCWUYt0/DQ6lN9T+RutjVQbJshkBfZdhQIuDuDRUKlI71wSEZK
+         PtRmznH5Dgz0grw6afPCD5C/gBQbnwUWKN04r7Y4joDBBkShbai4oi39rkBObJrGXxkm
+         FoOQ==
+X-Gm-Message-State: AOAM532L3nl4BQkAt8fLUsskaeHHqrZpisclhHZo5v6wfBKVwZx8B52m
+        dXx/1ullVMeZMr5AO4Td8A==
+X-Google-Smtp-Source: ABdhPJwZ69i+KxDCJdLyXXbkdUnY+k1QIC0WKQTQTKD8UaxeMwXblmqX/F1sU7XCejibDstsOhUa7A==
+X-Received: by 2002:a4a:d051:: with SMTP id x17mr562987oor.60.1644264477617;
+        Mon, 07 Feb 2022 12:07:57 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id ep17sm4757304oab.21.2022.02.07.12.07.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 11:45:32 -0800 (PST)
-Date:   Mon, 7 Feb 2022 11:45:21 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Derek Basehore <dbasehore@chromium.org>
-cc:     Rajat Jain <rajatja@google.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: 5.17-rc regression: X1 Carbon touchpad not resumed
-Message-ID: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com>
+        Mon, 07 Feb 2022 12:07:56 -0800 (PST)
+Received: (nullmailer pid 820845 invoked by uid 1000);
+        Mon, 07 Feb 2022 20:07:55 -0000
+Date:   Mon, 7 Feb 2022 14:07:55 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     conor.dooley@microchip.com
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, jassisinghbrar@gmail.com,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        lee.jones@linaro.org, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, geert@linux-m68k.org,
+        krzysztof.kozlowski@canonical.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        atishp@rivosinc.com, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: [PATCH v6 02/12] dt-bindings: soc/microchip: add services as sub
+ devs of sys ctrlr
+Message-ID: <YgF8G/Eed03xn9iI@robh.at.kernel.org>
+References: <20220207162637.1658677-1-conor.dooley@microchip.com>
+ <20220207162637.1658677-3-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207162637.1658677-3-conor.dooley@microchip.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-5.17-rc[1-3] on Lenovo ThinkPad X1 Carbon 5th gen: when lid closed
-and opened and system resumed, the touchpad cursor cannot be moved.
+On Mon, Feb 07, 2022 at 04:26:28PM +0000, conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Document mpfs-rng and mpfs-generic-service as subdevices of the system
+> controller.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> ---
+>  .../microchip,mpfs-sys-controller.yaml        | 35 +++++++++++++++++--
+>  1 file changed, 33 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+> index f699772fedf3..b02c8bd72605 100644
+> --- a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+> +++ b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+> @@ -13,7 +13,6 @@ description: |
+>    The PolarFire SoC system controller is communicated with via a mailbox.
+>    This document describes the bindings for the client portion of that mailbox.
+>  
+> -
+>  properties:
+>    mboxes:
+>      maxItems: 1
+> @@ -21,6 +20,38 @@ properties:
+>    compatible:
+>      const: microchip,mpfs-sys-controller
+>  
+> +  rng:
+> +    type: object
+> +
+> +    description: |
+> +      The hardware random number generator on the Polarfire SoC is
+> +      accessed via the mailbox interface provided by the system controller
+> +
+> +    properties:
+> +      compatible:
+> +        const: microchip,mpfs-rng
+> +
+> +    required:
+> +      - compatible
+> +
+> +  sysserv:
+> +    type: object
+> +
+> +    description: |
+> +      The PolarFire SoC system controller is communicated with via a mailbox.
+> +      This binding represents several of the functions provided by the system
+> +      controller which do not belong in a specific subsystem, such as reading
+> +      the fpga device certificate, all of which follow the same format:
+> +        - a command + optional payload sent to the sys controller
+> +        - a status + a payload returned to Linux
+> +
+> +    properties:
+> +      compatible:
+> +        const: microchip,mpfs-generic-service
+> +
+> +    required:
+> +      - compatible
+> +
+>  required:
+>    - compatible
+>    - mboxes
+> @@ -29,7 +60,7 @@ additionalProperties: false
+>  
+>  examples:
+>    - |
+> -    syscontroller: syscontroller {
+> +    syscontroller {
+>        compatible = "microchip,mpfs-sys-controller";
+>        mboxes = <&mbox 0>;
 
-Some dmesg from bootup:
-[    2.211061] rmi4_smbus 6-002c: registering SMbus-connected sensor
-[    2.263809] ucsi_acpi USBC000:00: UCSI_GET_PDOS failed (-95)
-[    2.291782] rmi4_f01 rmi4-00.fn01: found RMI device, manufacturer: Synaptics, product: TM3289-002, fw id: 2492434
-[    2.371377] input: Synaptics TM3289-002 as /devices/pci0000:00/0000:00:1f.4/i2c-6/6-002c/rmi4-00/input/input8
-[    2.380820] serio: RMI4 PS/2 pass-through port at rmi4-00.fn03
-...
-[    2.725471] input: PS/2 Generic Mouse as /devices/pci0000:00/0000:00:1f.4/i2c-6/6-002c/rmi4-00/rmi4-00.fn03/serio2/input/input9
+Removing the child nodes in the example doesn't address my comment. You 
+still have them in the schema. IOW, this patch should be dropped unless 
+you have reasons for child nodes other than I want to partition the OS 
+drivers a certain way and creating DT nodes instantiates them for me.
 
-Some dmesg from resume:
-[   79.221064] rmi4_smbus 6-002c: failed to get SMBus version number!
-[   79.265074] rmi4_physical rmi4-00: rmi_driver_reset_handler: Failed to read current IRQ mask.
-[   79.308330] rmi4_f01 rmi4-00.fn01: Failed to restore normal operation: -6.
-[   79.308335] rmi4_f01 rmi4-00.fn01: Resume failed with code -6.
-[   79.308339] rmi4_physical rmi4-00: Failed to suspend functions: -6
-[   79.308342] rmi4_smbus 6-002c: Failed to resume device: -6
-[   79.351967] rmi4_physical rmi4-00: Failed to read irqs, code=-6
-
-Bisection led to 172d931910e1db800f4e71e8ed92281b6f8c6ee2
-("i2c: enable async suspend/resume on i2c client devices")
-and reverting that fixes it for me.
-
-Hugh
+>      };
+> -- 
+> 2.35.1
+> 
+> 
