@@ -2,150 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD2C4ABF10
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Feb 2022 14:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 887674ABF0A
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Feb 2022 14:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386950AbiBGNTi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Feb 2022 08:19:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
+        id S1344271AbiBGNTk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Feb 2022 08:19:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442251AbiBGMUt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Feb 2022 07:20:49 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172BCDF8E3EC;
-        Mon,  7 Feb 2022 04:07:01 -0800 (PST)
-Received: from [192.168.1.111] (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4B2FC499;
-        Mon,  7 Feb 2022 13:06:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644235617;
-        bh=uH3r+Qyhm3NdERrDEidXSeR4RXvMj+L+e0iwChpe9eA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=X0ZFIBgrcyPspRGiprabJFQGAPllvw9rkYosOiAtQ8it/1sdpTdjN/XbbNE5n5b00
-         hRSZH5PAYGhr0M7mSGyPct4Davqo6sqFlsu5oaDgse1FQehzu+OxFQtAdeCUXeDi2H
-         +OJzJV7ZrUpVKmjHkxse+x87Lpt2QTBzAZ64aM2U=
-Message-ID: <7e5af144-bd5f-cd0e-2109-49b318449a78@ideasonboard.com>
-Date:   Mon, 7 Feb 2022 14:06:53 +0200
+        with ESMTP id S1442351AbiBGMU4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Feb 2022 07:20:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEE0C02B5C4;
+        Mon,  7 Feb 2022 04:08:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66A1061027;
+        Mon,  7 Feb 2022 12:08:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 239F2C004E1;
+        Mon,  7 Feb 2022 12:08:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644235696;
+        bh=aJS2fMJOFOu6nNUlDjL6FgGlZo9MICA7XYvXLN/4y6k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Fhg3SvK4SFuwMYrPoW/24O1P70+1xqqeudOs8fEyomQr/FN/UJwWCMoUdDjxmgPS5
+         cCesZajB+PjlwovB1EeOhC2UyCYNhejtYILBJuv3/GQWjAQbOoxRpcCyB7IjAoDGVm
+         YiR5fhwPIjf3EZ5/ygKIbW5UuLTD3pT7F0x4rzXVfH+R5ugiHn6pXsESDJtYOAZnZ1
+         UELlN2dofYGqtcQfawmd+sDerheL3N77KK/p2Ku40CYIO8EsZXUjxISCl4gt7MtUmI
+         Efopu4Zp8pTdtKFm0/SHx7zfNKGRZhB8UmS74f7Afv0uRnHJBnx5EMTMCf+efZOVdQ
+         NVkwj+x+4B4xw==
+Date:   Mon, 7 Feb 2022 13:08:10 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Terry Bowman <terry.bowman@amd.com>,
+        Jean Delvare <jdelvare@suse.de>
+Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
+        linux-i2c@vger.kernel.org, andy.shevchenko@gmail.com,
+        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org,
+        wim@linux-watchdog.org, rrichter@amd.com, thomas.lendacky@amd.com,
+        sudheesh.mavila@amd.com, Nehal-bakulchandra.Shah@amd.com,
+        Basavaraj.Natikar@amd.com, Shyam-sundar.S-k@amd.com,
+        Mario.Limonciello@amd.com
+Subject: Re: [PATCH v4 0/9] i2c: piix4: Replace cd6h/cd7h port I/O accesses
+ with MMIO accesses
+Message-ID: <YgELqjDHnPdJeor8@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Terry Bowman <terry.bowman@amd.com>,
+        Jean Delvare <jdelvare@suse.de>, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, linux-i2c@vger.kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+References: <20220130184130.176646-1-terry.bowman@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFCv3 0/6] TI camera serdes and I2C address translation (Was:
- [RFCv3 0/6] Hi,)
-Content-Language: en-US
-To:     Luca Ceresoli <luca@lucaceresoli.net>, linux-media@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Peter Rosin <peda@axentia.se>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        matti.vaittinen@fi.rohmeurope.com
-References: <20220206115939.3091265-1-luca@lucaceresoli.net>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20220206115939.3091265-1-luca@lucaceresoli.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="0kO5rWOtCL0wqwOz"
+Content-Disposition: inline
+In-Reply-To: <20220130184130.176646-1-terry.bowman@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Luca,
 
-On 06/02/2022 13:59, Luca Ceresoli wrote:
-> this RFCv3, codename "FOSDEM Fries", of RFC patches to support the TI
-> DS90UB9xx serializer/deserializer chipsets with I2C address translation.
-> 
-> I sent RFCv2 back in 2019 (!). After that I have applied most of the
-> improvements proposed during code review, most notably device tree
-> representation and proper use of kernel abstractions for clocks and GPIO. I
-> have also done many improvements all over the drivers code.
+--0kO5rWOtCL0wqwOz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks for sending this! I'll have a closer look at the code in the near 
-future.
+On Sun, Jan 30, 2022 at 12:41:21PM -0600, Terry Bowman wrote:
+> This series changes the piix4_smbus driver's cd6h/cd7h port I/O accesses
+> to use MMIO instead. This is necessary because cd6h/cd7h port I/O may be
+> disabled on later AMD processors.
 
-> However I still don't consider these drivers "ready", hence the RFC status.
-> 
-> One reason is that, while the I2C ATR idea has been considered good by
-> Wolfram, its implementation requires I2C core changes that have been tried
-> but never made it to mainline. I think that discussion needs to be reopened
-> and work has to be done on that side. Thus for the time being this code
-> still has the alias pool: it is an interim solution until I2C core is
-> ready.
-> 
-> Also be aware that the only hardware where I sould test this code runs a
-> v4.19 kernel. I cannot guarantee it will work perfectly on mainline.
-> 
-> And since my hardware has only one camera connected to each deserializer I
-> dropped support. However I wrote the code to be able to easily add support
-> for 2 and 4 camera inputs as well as 2 CSI-2 outputs (DS90UB960).
- >
-> Finally, I dropped all attempts at supporting hotplug. The goals I had 2+
-> years ago are not reasonably doable even with current kernels. Luckily all
-> the users that I talked with are happy without hotplug. For this reason I
-> simplified the serializer management in the DS90UB954 driver by keeping the
-> serializer always instantiated.
-> 
-> Even with the above limitations I felt I'd send this v3 anyway since
-> several people have contacted me since v2 asking whether this
-> implementation has made progress towards mainline. Some even improved on
-> top of my code it their own forks. As I cannot afford to work on this topic
-> in the near future, here is the latest and greatest version I can produce,
-> with all the improvements I made so far.
+Review from Andy is already great, I'll give Jean a few more days for comments.
 
-I've discussed with Luca in private emails, but I'll add a short status 
-about my work in this thread:
 
-About a year ago I took Luca's then-latest-patches and started working 
-on them. The aim was to get full multiplexed streams support to v4l2 so 
-that we could support CSI-2 bus with multiple virtual channels and 
-embedded data, and after that, add support for fpdlink devices.
+--0kO5rWOtCL0wqwOz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Since then I have sent multiple versions of the v4l2 work (no drivers 
-yet, only the framework changes) to upstream lists. Some pieces have 
-already been merged to upstream (e.g. subdev state), but most of it is 
-still under work. Here's a link to v10 of the streams series:
+-----BEGIN PGP SIGNATURE-----
 
-https://lore.kernel.org/all/20211130141536.891878-1-tomi.valkeinen@ideasonboard.com/
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIBC6YACgkQFA3kzBSg
+Kbbf+A//QnkzRA2XLzIn4yFkblDLK1v4Eb8XLapnVWTg6CF3fjzr5vYT0PTd/J+c
+OdWVrwW1SlhKHMRVEyfZMpXPw/6Zys8EPKuoBA7eitqXCnz3mSu0RFx9SNcAd1Xm
+HPPamxgrf38Tq7jFOaVpUPzTulkB4rvDfBcy4CdKJAF7hKUdXvGtC3n3tKwRHvrw
+gZalZOaCKK6bvL/VcCrNr0MagP32Lte9+uziOSgBY6e5OJovnux7xHYGlsSU/E49
+Uvy6dcIkK+351RUT+kHe//hPGTyeK8EZ1/vIDd7YSAbOY2bfAC7fcC7UV4DBoX5T
+hwdi2s7nRybXqfORTbN1sPoxjyJx/l3w3yLghhrm3zknNGu24qF/7iAh7ZggRvpK
+we5a1eLAe//7ozZQmmk7Evj1+uEj/JPbDsAX3fOXDJfMlkYaRaGRFtcbCViY7cJj
+1gVApL4oA2/0RhRC9G0DJNsvXeyY6tsW2Kf0RYtAjVnxs4PGFxzDOfyPno78pRuY
+6udoUbHHw46sMYRnhiRxRz8L4EFcNfbKpKjkEV8Ynazpp5qlDwDThCjUgg+EwBSp
+x9H7HjlcuD8T3s2cXtZpyjvT0JoCHcWYL5HYIplBjM+LBF6bjvERHv2xP6PyS0lF
++KHLpea6ON3CJDH+/NWLe8lpNWEZy7IqY36GVMp7xlg/mdQowCw=
+=+FEx
+-----END PGP SIGNATURE-----
 
-It has a link to my (now slightly outdated) git branch which contains 
-the driver work too.
-
-The fpdlink drivers have diverged from Luca's version quite a bit. The 
-most obvious difference is the support for multiplexed streams, of 
-course, but there are lots of other changes too. The drivers support 
-DS90UB960 (no UB954 at the moment), DS90UB953 and DS90UB913. UB960 
-supports all the inputs and outputs. I have also dropped some code which 
-I did not need and which I wasn't sure if it's correctly implemented, to 
-make it easier to work on the multiplexed streams version. Some of that 
-code may need to be added back.
-
-I have not changed the i2c-atr driver, and my fpdlink driver uses it 
-more or less the same way as in Luca's version.
-
-Considering that you're not able to work on this, my suggestion is to 
-review the i2c-atr patches here (or perhaps send those patches in a 
-separate series?), but afaics the fpdlink drivers without multiplexed 
-streams is a dead-end, as they can only support a single camera (and no 
-embedded data), so I don't see much point in properly reviewing them.
-
-However, I will go through the fpdlink drivers in this series and 
-cherry-pick the changes that make sense. I was about to start working on 
-proper fpdlink-clock-rate and clkout support, but I see you've already 
-done that work =).
-
-But, of course, I'm open to other ideas on how to proceed.
-
-  Tomi
+--0kO5rWOtCL0wqwOz--
