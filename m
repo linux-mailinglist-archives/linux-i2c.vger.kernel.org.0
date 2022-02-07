@@ -2,107 +2,186 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517DE4AC15F
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Feb 2022 15:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 523BF4AC158
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Feb 2022 15:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243830AbiBGOgj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Feb 2022 09:36:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
+        id S1382628AbiBGOgH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Feb 2022 09:36:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235071AbiBGOPB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Feb 2022 09:15:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F81AC0401C0;
-        Mon,  7 Feb 2022 06:15:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE95B60A57;
-        Mon,  7 Feb 2022 14:14:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF23C004E1;
-        Mon,  7 Feb 2022 14:14:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644243299;
-        bh=kXCavZxVDpPavOetLGC5KN88JPcZOskGkjpwki3m8Q4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tqOZR3W07vwmXzQCM2E0Jpg29RkdWgGlOikhYShhnfwqLUDp3bwc9NNnNvRRNrEdS
-         NG74LGgdD+pQO0gGxzbxZtLTFn2WfDh7izPqjiqifo1BhL63ZWsPi4fea1HrhNneOw
-         XJezewxS0cAkDkZCAlbvMqDOCn11nAIi7erEPS09RUSMmo495JbQbb9dVeoYYW15Bo
-         B/vG92mt3hmQk4bi6PghWSswbxtq/mcqFkFrcbTw1CxiUXju0ZsYJH+LDz+b9JLkxt
-         5a5EqC2ZB6xulm11xwaKRxewuYvS+Vn1uZazPSwvWlsiqgoy0bOeyna9J1j9vZscoo
-         xZmftkPnQXOWw==
-Date:   Mon, 7 Feb 2022 15:14:56 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Ajay Gupta <ajayg@nvidia.com>,
-        "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-Subject: Re: [PATCH v3 1/5] i2c: Introduce common module to instantiate CCGx
- UCSI
-Message-ID: <YgEpYE2VNc05XhpG@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Ajay Gupta <ajayg@nvidia.com>,
-        "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-References: <20220105141935.24109-1-andriy.shevchenko@linux.intel.com>
- <Ye7AhqMsOkfvHOAg@smile.fi.intel.com>
- <YgEa/blO2UMzztCq@smile.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5Q9Y37aHm32GDcLx"
-Content-Disposition: inline
-In-Reply-To: <YgEa/blO2UMzztCq@smile.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S1391910AbiBGOWp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Feb 2022 09:22:45 -0500
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A64C0401C5;
+        Mon,  7 Feb 2022 06:22:43 -0800 (PST)
+Received: by mail-oo1-f46.google.com with SMTP id f11-20020a4abb0b000000b002e9abf6bcbcso13792088oop.0;
+        Mon, 07 Feb 2022 06:22:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=QIbiP35GQSEEEaU8+SHxv92w3MHEG9bQFU7JRjEoZlY=;
+        b=brozXX9fSBUx2wiyZ45jMCF1zbhTF5Jiiiq/1qNhNEISHbW9idPfyEbk388ryHClRI
+         0nU/I8STgLK1hbT0plPcwny50flkQzxCjsi6LK1snw4iaT282uNMsVQYt3xavJMk9rR+
+         kmLWZYT/g1ay7JqscV/Nfdsh8TqmCQ+1myJ/rKWsopNPrpeC27KI6joXYQuFsXwZu+sJ
+         XrWEqu88NKNf1lc/JCcPGyDLtxIRNHMdEpBZeuDCCGdJbGc2jBn7tV0qeZt18snSUbkX
+         ZQOcuYijB/0aopkICz3ZKm+TMRcz7NFg64I+yiesfeDxG8Muf8DR/v4I4nZtVFv8udTA
+         NMxw==
+X-Gm-Message-State: AOAM532iigGs7hIrfCwwGBbQ6avAsAOcehmfXMqTJBdZFnra8h/l5REp
+        fW9LagM5g+a/gusyp1cm5Q==
+X-Google-Smtp-Source: ABdhPJxfXZdsGyfmTD5R1VDT1P4brg4JwOcmWmQsyw1NxMpW2nnJoH8Cy0v4BgETqUhZfQJQxbm3pg==
+X-Received: by 2002:a05:6870:44:: with SMTP id 4mr3436859oaz.68.1644243762896;
+        Mon, 07 Feb 2022 06:22:42 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id t31sm4334410oaa.9.2022.02.07.06.22.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 06:22:42 -0800 (PST)
+Received: (nullmailer pid 320510 invoked by uid 1000);
+        Mon, 07 Feb 2022 14:22:40 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Tyrone Ting <warp5tw@gmail.com>
+Cc:     Avi.Fishman@nuvoton.com, openbmc@lists.ozlabs.org,
+        lukas.bulwahn@gmail.com, bence98@sch.bme.hu, sven@svenpeter.dev,
+        devicetree@vger.kernel.org, tali.perry1@gmail.com,
+        krzysztof.kozlowski@canonical.com, arnd@arndb.de,
+        benjaminfair@google.com, tmaimon77@gmail.com, yuenn@google.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        semen.protsenko@linaro.org, olof@lixom.net, venture@google.com,
+        wsa@kernel.org, avifishman70@gmail.com, jie.deng@intel.com,
+        robh+dt@kernel.org, linux-i2c@vger.kernel.org, kfting@nuvoton.com,
+        tali.perry@nuvoton.com, yangyicong@hisilicon.com,
+        linux-kernel@vger.kernel.org, andriy.shevchenko@linux.intel.com
+In-Reply-To: <20220207063338.6570-2-warp5tw@gmail.com>
+References: <20220207063338.6570-1-warp5tw@gmail.com> <20220207063338.6570-2-warp5tw@gmail.com>
+Subject: Re: [PATCH v1 1/6] dt-bindings: i2c: npcm: support NPCM845
+Date:   Mon, 07 Feb 2022 08:22:40 -0600
+Message-Id: <1644243760.823059.320509.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Mon, 07 Feb 2022 14:33:33 +0800, Tyrone Ting wrote:
+> From: Tyrone Ting <kfting@nuvoton.com>
+> 
+> This commit adds compatible and syscon description for NPCM845 i2c module.
+> 
+> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
+> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+> ---
+>  .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     | 21 ++++++++++++++-----
+>  1 file changed, 16 insertions(+), 5 deletions(-)
+> 
 
---5Q9Y37aHm32GDcLx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
+
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
+
+Full log is available here: https://patchwork.ozlabs.org/patch/1589171
 
 
-> > Ajay, is it possible to get your tag on the series, please?
->=20
-> Wolfram, can you remind, please, what the process is, if there is
-> a non-responsive (in a meaningful period of time) maintainer?
+i2c@80000: 'syscon' is a required property
+	arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
 
-Well, I can apply patches if there is no response but interest and
-reasonable trust, of course. Your series has interest and trust. But
-still, it may be nice to ping active people from Nvidia and ask about
-Ajay.
+i2c@81000: 'syscon' is a required property
+	arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
 
+i2c@82000: 'syscon' is a required property
+	arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
 
---5Q9Y37aHm32GDcLx
-Content-Type: application/pgp-signature; name="signature.asc"
+i2c@83000: 'syscon' is a required property
+	arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
 
------BEGIN PGP SIGNATURE-----
+i2c@84000: 'syscon' is a required property
+	arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIBKVwACgkQFA3kzBSg
-Kba05RAAk9nEfFctEY0932pfK/smckobW69iSd1by93obopbJTmi5wR0SzqHaCBq
-PQwjiH+vW1OBkwE1oTr1L5CJnub3EB1dnfjmQV5maDyVx/wHO/gVwlsNiDtO8/fG
-AAv7b1EP7jXtbcGMhaB9CDf6K9ZCCb4PuQbe5Wdk0ijcPeDiQbpzgf1yxC522SS/
-dcJbeb5Uth2Mad4G29yyqBlykJW/I2iXDVy3sahMin1c/6hhMkXYJBsodrztKmbt
-3vK6JXRCktFemcKH+SduSmo3Oa3ELwqcphCk+5u65YIEX2hJm9W3+ffakIQVpnRo
-lDoRcJBo63KjJOQvDzN3aDexUgzss42s18/EtEyFVQgsW3zxF3e4sgexn1tii5fj
-KTV9ejhDvlLK4FxijYYTs7IpqOdqwnc9rRmtS1lffVHP04gNoT7RaFbxsLxqrky0
-IxfRUDdJPRdK27M709iGszlYww9SUpSbBuNBbwMC+LgXXPRR2YW0JvoPpWg9Oo20
-MC4B+aQvzW/ubcEYUjaYytGfCca1Ulmm7Zr/sau3IY6zw0gyh/UZtDlg2LTUBzVS
-WpaFNaZpZ7WrdrbnZBZ/6Di3xvGtvgheqPQpaHhajrpeSxlrqCgh0rXMBxe/m7t0
-feKmmC6ffTMWpjUrz7ZZFp/aktcBe7bIZ3ftQlb6dBf9CgE9OX4=
-=HfHu
------END PGP SIGNATURE-----
+i2c@85000: 'syscon' is a required property
+	arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
 
---5Q9Y37aHm32GDcLx--
+i2c@86000: 'syscon' is a required property
+	arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
+
+i2c@87000: 'syscon' is a required property
+	arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
+
+i2c@88000: 'syscon' is a required property
+	arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
+
+i2c@89000: 'syscon' is a required property
+	arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
+
+i2c@8a000: 'syscon' is a required property
+	arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
+
+i2c@8b000: 'syscon' is a required property
+	arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
+
+i2c@8c000: 'syscon' is a required property
+	arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
+
+i2c@8d000: 'syscon' is a required property
+	arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
+
+i2c@8e000: 'syscon' is a required property
+	arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
+
+i2c@8f000: 'syscon' is a required property
+	arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
+	arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
+
