@@ -2,221 +2,163 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F5C4AD365
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Feb 2022 09:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E44FD4AD3F9
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Feb 2022 09:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349498AbiBHI2s (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 8 Feb 2022 03:28:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
+        id S1351624AbiBHIvZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 8 Feb 2022 03:51:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348762AbiBHI2n (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Feb 2022 03:28:43 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF580C0401F6;
-        Tue,  8 Feb 2022 00:28:41 -0800 (PST)
-Received: from [192.168.1.111] (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7A415480;
-        Tue,  8 Feb 2022 09:28:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644308918;
-        bh=LVPB3NYn0uGCZZh4rQMBYBlu5cvuyo8ilUek+HNlfSk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=L6JXKVV1KUPQztP9mTqXQhbx4Uuws1SkypucjFYhcqgejTShKSQESv66QuvWrf7nq
-         yTi4joILralEy+M5893wc+7Lrm5WOj36943KnjB3d64zFukyeiLlc7pYywtYT8XTjm
-         /S4WEdM99pPXnvKGgidNGq+u+aRQn4M/d3fLmUqg=
-Message-ID: <ab71e040-b74e-77a2-86aa-4a537fab2b13@ideasonboard.com>
-Date:   Tue, 8 Feb 2022 10:28:34 +0200
+        with ESMTP id S1351868AbiBHIvY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Feb 2022 03:51:24 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D6EC03FEC8;
+        Tue,  8 Feb 2022 00:51:23 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id c14so5599387qvl.12;
+        Tue, 08 Feb 2022 00:51:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=52Mlxc/AZaE8Cndi19CrmZAb2xd8snlWb6gzXeW+f8c=;
+        b=LIoXET1Vcm+0Yo/759v2FqsPM9tUsLx5soPaRzhSfagqaev0i/jq4YTBq0QXQKPdRn
+         Kbs1VbKM9Vys9h4DE73AhMh80HqZqIG2ciDb+cZAARKQHBryRqURWDb9PWl4iykUvLbx
+         vhFCNNRDwT9aWmNTKkotXhcTvlI0jVPKnUeMRvIF3F5xyP3uidSK1o+FyDLyVobzE5Xc
+         +RYq4C22VTpWstKp9vrwLat1X3z0vDt0sPLkTADDz1kEv0wGLwyOmR6ZxECbWsNA4Plv
+         PyAIXzKAaKValqytpOhB/H/LFIwFoJLFeYiLPMNP5/P/cp2GJJU75tKzVP5CXWisQu/D
+         xx9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=52Mlxc/AZaE8Cndi19CrmZAb2xd8snlWb6gzXeW+f8c=;
+        b=U9Ia4OpCwKrSB4WWagEh9WvIWggsaIO1in+ZRP0FOmVqYjT2S91v9AeU4OILl5prPq
+         oAzRnffNqUkKc7wJKDb9r7LNguubOCFNpBqYzCsSYmqeJVNZv2mqlXprwbqIu3K62N6K
+         g2PS/WaBp+NBgZZspx4Zib33E4z6l9Lhw725j7TqlSdzhucuovMu0rdzYcwo9hd8QBGf
+         hOSC+TOEqrTIeet6DbSKGxQIA1aY3aaYrvqM8TMXny96IxLtFOC51Y9UoE3KPxDDXNwe
+         cvFeXci4kDOoVAYbPUeXNQ1DH5fvXPVYDwdU3dprRoX4smxSwKDezCouFvuECMI2I3Ay
+         D3NA==
+X-Gm-Message-State: AOAM533rYDeALvVu2U0NpaG6bh5tzsAig44gdZMJmKKkxdUjZ6zCFFEP
+        2AhzhbHT9bWthVtMk2fuMjnEwAQAiPugYoiVXNA=
+X-Google-Smtp-Source: ABdhPJwBqxeW2lVYe2YhpeD6J4pREP12QDacbTsGlkhFVIN+DKzqGhtZN16Vv4UkriLaHnkPuW7YJ4oDA16S2sfvwzY=
+X-Received: by 2002:a05:6214:1cc7:: with SMTP id g7mr2429769qvd.124.1644310282674;
+ Tue, 08 Feb 2022 00:51:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFCv3 0/6] TI camera serdes and I2C address translation (Was:
- [RFCv3 0/6] Hi,)
-Content-Language: en-US
-To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Peter Rosin <peda@axentia.se>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>
-References: <20220206115939.3091265-1-luca@lucaceresoli.net>
- <7e5af144-bd5f-cd0e-2109-49b318449a78@ideasonboard.com>
- <5aa3e282-3056-2088-9741-6d17273701b4@fi.rohmeurope.com>
- <74bacec6-35e5-346a-fb05-09ae44fc5592@lucaceresoli.net>
- <608d23fc-eef7-c0dc-de5b-53b140fe2d0f@fi.rohmeurope.com>
- <ef6eec20-6c1b-4c27-e5ad-5fb87300c6ba@ideasonboard.com>
- <c772513f-e60f-8e32-07bd-e3b86f241468@fi.rohmeurope.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <c772513f-e60f-8e32-07bd-e3b86f241468@fi.rohmeurope.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220207063338.6570-1-warp5tw@gmail.com> <20220207063338.6570-7-warp5tw@gmail.com>
+ <YgEJ1M40AG9EuRPI@latitude> <086655b0-b9d2-30ed-1496-47cdc6346003@canonical.com>
+ <CAHb3i=vpFwez+ZzDhHkSxjkios3tyoM2urRpCxOn3vfwzvewog@mail.gmail.com> <30ac5fe7-9d96-a756-24b0-384361b48a2d@canonical.com>
+In-Reply-To: <30ac5fe7-9d96-a756-24b0-384361b48a2d@canonical.com>
+From:   Tali Perry <tali.perry1@gmail.com>
+Date:   Tue, 8 Feb 2022 10:51:11 +0200
+Message-ID: <CAHb3i=ukzVr4DDgcPQ2+DO+LXWWtgjCe03WbG-CqvsOP_qqvUw@mail.gmail.com>
+Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>, semen.protsenko@linaro.org,
+        yangyicong@hisilicon.com, Wolfram Sang <wsa@kernel.org>,
+        jie.deng@intel.com, sven@svenpeter.dev, bence98@sch.bme.hu,
+        lukas.bulwahn@gmail.com, arnd@arndb.de, olof@lixom.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tali Perry <tali.perry@nuvoton.com>,
+        Avi Fishman <Avi.Fishman@nuvoton.com>,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
-
-On 08/02/2022 08:40, Vaittinen, Matti wrote:
-> Morning Tomi,
-> 
-> On 2/7/22 18:23, Tomi Valkeinen wrote:
->> On 07/02/2022 16:38, Vaittinen, Matti wrote:
->>> Hi again Luca,
+>On 08/02/2022 08:14, Tali Perry wrote:
+>>> Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
 >>>
->>> On 2/7/22 16:07, Luca Ceresoli wrote:
->>>> Hi Matti,
+>>> On 07/02/2022 13:00, Jonathan Neusch=C3=A4fer wrote:
+>>>> Hello,
 >>>>
->>>> On 07/02/22 14:21, Vaittinen, Matti wrote:
->>>>> Hi dee Ho peeps,
+>>>> On Mon, Feb 07, 2022 at 02:33:38PM +0800, Tyrone Ting wrote:
+>>>>> From: Tyrone Ting <kfting@nuvoton.com>
 >>>>>
->>>>> On 2/7/22 14:06, Tomi Valkeinen wrote:
->>>>>> Hi Luca,
->>>>>>
->>>>>> On 06/02/2022 13:59, Luca Ceresoli wrote:
->>>>>>> this RFCv3, codename "FOSDEM Fries", of RFC patches to support the TI
->>>>>>> DS90UB9xx serializer/deserializer chipsets with I2C address
->>>>>>> translation.
+>>>>> NPCM8XX uses a similar i2c module as NPCM7XX.
+>>>>> The only difference is that the internal HW FIFO is larger.
 >>>>>
+>>>>> Related Makefile and Kconfig files are modified to support as well.
 >>>>>
->>>>> I am not sure if I am poking in the nest of the wasps - but there's one
->>>>> major difference with the work I've done and with Toni's / Luca's work.
+>>>>> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller
+>>>>> driver")
 >>>>
->>>> You are. ;)
+>>>> It's not really a bug fix, but rather an additional feature.
+>>>> Therefore, I suggest removing the Fixes tag from this patch.
 >>>>
->>>>> The TI DES drivers (like ub960 driver) packs pretty much everything
->>>>> under single driver at media/i2c - which (in my opinion) makes the
->>>>> driver pretty large one.
->>>>>
->>>>> My approach is/was to utilize MFD - and prepare the regmap + IRQs in
->>>>> the
->>>>> MFD (as is pretty usual) - and parse that much of the device-tree that
->>>>> we see how many SER devices are there - and that I get the non I2C
->>>>> related DES<=>SER link parameters set. After that I do kick alive the
->>>>> separate MFD cells for ATR, pinctrl/GPIO and media.
->>>>>
->>>>> The ATR driver instantiates the SER I2C devices like Toni's ub960 does.
->>>>> The SER compatible is once again matched in MFD (for SER) - which again
->>>>> provides regmap for SER, does initial I2C writes so SER starts
->>>>> responding to I2C reads and then kicks cells for media and
->>>>> pinctrl/gpio.
->>>>>
->>>>> I believe splitting the functionality to MFD subdevices makes drivers
->>>>> slightly clearer. You'll get GPIOs/pinctrl under pinctrl as usual,
->>>>> regmaps/IRQ-chips under MFD and only media/v4l2 related parts under
->>>>> media.
+>>>>> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+>>>>> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+>>>>> ---
+>>>> [...]
+>>>>>  /* init register and default value required to enable module */
+>>>>>  #define NPCM_I2CSEGCTL 0xE4
+>>>>> +#ifdef CONFIG_ARCH_NPCM7XX
+>>>>>  #define NPCM_I2CSEGCTL_INIT_VAL 0x0333F000
+>>>>> +#else
+>>>>> +#define NPCM_I2CSEGCTL_INIT_VAL 0x9333F000
+>>>>> +#endif
 >>>>
->>>> There has been quite a fiery discussion about this in the past, you can
->>>> grab some popcorn and read
->>>> https://lore.kernel.org/linux-media/20181008211205.2900-1-vz@mleia.com/T/#m9b01af81665ac956af3c6d57810239420c3f8cee
->>>>
->>>>
->>>> TL;DR: there have been strong opposition the the MFD idea.
+>>>> This is going to cause problems when someone tries to compile a kernel
+>>>> that runs on both NPCM7xx and NPCM8xx (because the driver will then
+>>>> only work on NPCM7xx).
 >>>
->>> Hm. I may be missing something but I didn't see opposition to using MFD
->>> or splitting the drivers. I do see opposition to adding _functionality_
->>> in MFD. If I read this correctly, Lee did oppose adding the I2C stuff,
->>> sysfs attributes etc in MFD. Quoting his reply:
+>>> Yes, good catch.
 >>>
->>> "This driver does too much real work ('stuff') to be an MFD driver.
->>> MFD drivers should not need to care of; links, gates, modes, pixels,
->>> frequencies maps or properties.  Nor should they contain elaborate
->>> sysfs structures to control the aforementioned 'stuff'.
+>>> The NPCM7XX is multiplatform, I guess NPCM8xx will be as well, so this =
+looks like an invalid code. How such code is supposed to work on multiplatf=
+orm kernel?
 >>>
->>> Granted, there may be some code in there which could be appropriate
->>> for an MFD driver.  However most of it needs moving out into a
->>> function driver (or two)."
->>>
->>> And I tend to agree with Lee here. I would not put I2C bridge stuff or
->>> sysfs attributes in MFD. But I think it does not mean SERDESes should
->>> not use MFD when they clearly contain more IP blocks than the
->>> video/media ones :) I am confident Lee and others might be much more
->>> welcoming for driver which simply configures regmap and kicks subdriver
->>> for doing the ATR / I2C stuff.
 >>
->> I admit that I don't know MFD drivers too well, but I was thinking about
->> this some time back and I wasn't quite sure about using MFD here.
+>> NPCM7xx and NPCM8xx are very different devices.
+>> They share same driver sources for some of the modules but it's not ABI.
+>> Users cannot compile a single kernel with two separate DTS.
+>> In case of the i2c controller, the npcm7xx has a 16 byte HW FIFO,
+>> and the NPCM8xx has 32 bytes HW FIFO.
+>> This also means that registers fields are slightly different.
+>> For init data we can move it to the DTS, but register field sizes
+>> can't be handled with this approach.
 >>
->> My thinking was that MFD is fine and good when a device contains more or
->> less independent functionalities, like a PMIC with, say, gpios and
->> regulators, both of which just work as long as the PMIC is powered up.
->>
->> Here all the functionalities depend on the link (fpdlink or some other
->> "link" =), and the serializers. In other words, the link status or any
->> changes to the link or the serializers might affect the GPIO/I2C/IRQ
->> functionalities.
-> 
-> My use case has been such that once the link between DES &  SER
-> established, it should not go away. If it does it is some kind of an
-> error and there is no recovery mechanims (at least not yet). Hence I
-> haven't prepared full solution how to handle dropping/re-connecting the
-> link or re-initializing des/ser/slaves.
-> 
->> So, I don't have any clear concern here. Just a vague feeling that the
->> functionalities in this kind of devices may be more tightly tied
->> together than in normal MFDs. I could be totally wrong here.
-> 
-> I can't prove you're wrong even if that would be so cool :p
-> 
-> I guess a lot of this boils down how the SER behaves when link is
-> dropped. Does it maintain the configuration or reset to some other
-> state? And what happens on des & what we need to do in order to reconnect.
-> 
-> My initial feeling is that the DES should always be available as it is
-> directly connected to I2C. So DES should always be there.
+>
+>What do you mean they cannot compile a kernel with different DTS? Of
+>course they can - when we talk about multiplatform sub-architectures!
+>Maybe there is something specific in NPCMxxx which stops it but then it
+>should not be marked multiplatform.
+>
 
-Yes, I don't see how DES would be affected. But all the services offered 
-by the MFDs are behind the link.
 
-> Access to SERs and the devices on remote buses is naturally depending on
-> the link. So dropping the link means access to SERs and remote devices
-> start failing - which is probably visible to the MFD sub-devices as
-> failing regmap accesses. This needs then appropriate handling.
+NCPM7xx is ARM32 bit (dual core Cortex A9)
+NPCM8xx is ARM64 bit (quad core Cortex A35)
 
-I was also thinking about cases like BIST or link-analysis which 
-temporarily affect the link. They're not errors, but I guess from MFD's 
-point of view they could be handled the same way (whatever that way is).
+They have completely different architecture so not ABI compliant.
+I2C module is similar, but the devices are quite different and have
+separate architectures.
 
-> After that being said, I think we can't get over this problem even when
-> not using MFD. As far as I read your code, the SER and DES have
-> independent drivers also when MFD is not used. So dropping the link is
-> still someting that pulls the legs from the SER, right? I also guess the
-> remote I2C devices like sensors are also implemented as independent drivers.
+Sorry for the confusion.
+This is the first patch we try to upstream for NPCM8xx.
+In the coming weeks we will upstream the architecture of NPCM8xx as well.
 
-That's true. I don't think the problem is really different with or 
-without MFDs. My thinking was just that it's easier to manage all the 
-problem cases if there are no walls between the components.
 
-> Well, (I hope) I'll see where I end up with my code... It really makes
-> this discussion a bit dull when I can't just show the code for
-> comparison :/ I don't (yet) see why the MFD approach could not work, and
-> I still think it's worth trying - but I now certainly understand why you
-> hesitated using MFD. Thanks for taking the time to explain this to me.
 
-I don't think MFD approach could not work. I just don't see why to use 
-it here.
+>
+>Best regards,
+>Krzysztof
 
-I'm curious, why do you think using MFDs makes the driver so much 
-cleaner? The current fpdlink driver is in one file, but, say, if we 
-split it to multiple files, based on the function, while still keeping 
-it as a single driver, would that be so much different from an MFD 
-solution? Is there something in the MFD approach that makes the code 
-simpler?
-
-  Tomi
+Thanks!
+Tali
