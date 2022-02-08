@@ -2,64 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E56E4ADAEC
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Feb 2022 15:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B2E4ADAF6
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Feb 2022 15:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377226AbiBHONs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 8 Feb 2022 09:13:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
+        id S1377874AbiBHOPg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 8 Feb 2022 09:15:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355312AbiBHONr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Feb 2022 09:13:47 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED22C03FED2
-        for <linux-i2c@vger.kernel.org>; Tue,  8 Feb 2022 06:13:46 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id y15-20020a17090a474f00b001b88562650aso1685493pjg.0
-        for <linux-i2c@vger.kernel.org>; Tue, 08 Feb 2022 06:13:46 -0800 (PST)
+        with ESMTP id S1357033AbiBHOPg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Feb 2022 09:15:36 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908DAC03FED0
+        for <linux-i2c@vger.kernel.org>; Tue,  8 Feb 2022 06:15:35 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id b3so583877pfg.7
+        for <linux-i2c@vger.kernel.org>; Tue, 08 Feb 2022 06:15:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=semihalf-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=wUs61oZJqlck5gF/NSnB+WfYV6TsIOcAjV18fUOsHlk=;
-        b=ZuEWBeUc9bEG2LQdnQyHE5UBcFUs8oJSTQ6GPLYPoIjEhRE/LDCWcWCXCAU3m/eMVq
-         ws08ZFiONPO0S/hSLSZomLJ9dX+wvzxaFBpOb8Ci4ojNJWNNgPXyTjv/T7lglm1xII/c
-         wnGAlINh+EY26z0uO8ZPjM911jlqHBhj1tis9NjM3nd+eD6fTeFCwnrvSgO/VTch78J0
-         ZKG2dYPFELaTD1C96wVBKYKu9le83VkbBjXJHamQatoBfxBk91rHxIEaHr4y4UiKNnvC
-         jgAaIYjdqoAxzwc2FTLCK90G1ABjKKKZCdxEQ19loDJZmRnEPvkzZVCPWArpqmS8uPqB
-         nvug==
+         :cc:content-transfer-encoding;
+        bh=LXSv8hqgFIfSvy/vUmuBy6laJV3E0bBQocpR/QGdDDw=;
+        b=q3nUTbmKIFWlU/OTXUEa/H0xEs+ZfN4sePTEYisCm0njLnygF6ppTYefATn5TN67lX
+         8dXGUyHODY36+JV/0UuGAPi5C9Ea5VKVknAWLWdVkvKAXwZ8kXnxnLLY0xa0Hxev+oYR
+         TTxM+OGm12dgNPatAcad/6ktnL+Hq5HVm/G/Bbu5dS6wqlh5dHCc7uVvHT3gPvcGz6ye
+         XFDsFLSygCJ1NLklUGHDaSkBALVhdbNxfM/ZJSJc/ftasrT2v5afz4pW2JsLLLcPNFSV
+         FazjNI8bO6HAJ84xRZsDUEMIH5eAt04ejbgyd4CNx7Yw4x/88e2vK2r7jahLOCPBdE7g
+         Wcew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=wUs61oZJqlck5gF/NSnB+WfYV6TsIOcAjV18fUOsHlk=;
-        b=3nS0w1/IPGsuNJ11mm9TujEHCMoiOH/3HUnu/OJZUHydbsCLejrYuAxjpm62QWYz6e
-         fCkjYWdB1RlJxaWq48iDH9tuJHXwBQ/qVsivNrK4B7xYkde9jkHGN880qYTF6U8sHxIi
-         /4Ujgl+S14HgzKqYTkdT7LQVS3MaoRCxRltxB4L5DZU3OhgriZRns2Vzey+g2v9ocEDl
-         HZafq5OuDdniFrN+WXPnNWUEPAJe7AEzfdWa9u5m4xl5/ZoTCd34rBgu95I+GnVkvvcf
-         UNjwaPEcVKgxCRgA02dzySOY+JBeDse+tptNs+9tIHWLeXTpn5AxwOeE8v7r5zcIU0ZZ
-         5RlQ==
-X-Gm-Message-State: AOAM531k2mWHDyKJs2259iY3Jx7TuHBoYbktsGExVerP6k3udyfZzFH7
-        Gma2xVfwCL6Z9SiR7bziIgXVKqpEuF5EqCRPsDqE/b1jRegGXg==
-X-Google-Smtp-Source: ABdhPJzkOPqpuKjkoaUj11A2U5adT1XOMis3E2cn7BT/wkP8nSrGThhgEaXL6pbGnpEWOkbCWnGvmyLtRYUiMXiAwOU=
-X-Received: by 2002:a17:90b:1e06:: with SMTP id pg6mr1633156pjb.4.1644329625500;
- Tue, 08 Feb 2022 06:13:45 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LXSv8hqgFIfSvy/vUmuBy6laJV3E0bBQocpR/QGdDDw=;
+        b=YMrj6KFNAO34TC/LSk/XUQkXboEV8W17yFEa7jGAaKm0Jq9Ht0TJdnobDuc8EKDtc+
+         kXlPUrMI/je/EUAjqsu/ckv4yE7nOIaL7HTjM6yqI5hYsiStys6cEqEZzQYsb4CmZMAH
+         BinUABbUhGzZEN28sgEIAZwaEHwyqPxMWiXCYw5gWerDca1ZkZQfhwBdCWgu85DAHQB1
+         tVIp4TkgxXg/WDa8XXZxdP5nX3IXJguVQQZKG/2dk6y9RiL7xeV1pch4cJtl55SZQPdl
+         IH4stgqdc/VFlBLeR+ADiY2/z7jibjxowU8QPxl8/aglxD1rUM8sWec2ZrXX8kSdQrEY
+         /cvw==
+X-Gm-Message-State: AOAM532JVyOZ+Krkhj3L/JA3jmhZ9B7CvaAj8igYkKsbNyZ/KhSGBA8q
+        5bJ88ZLIV0qoIwKfgQYfjSrdFJWhorYqEBER0F49HA==
+X-Google-Smtp-Source: ABdhPJxi1fRQv5HfPGz6ZVLmAdi+/PJyFOytcefJpm786JHMNaapMLTxE7gICjI7kTmTb9uj1eI+LPha+In/oZrHTy8=
+X-Received: by 2002:aa7:8484:: with SMTP id u4mr4550457pfn.70.1644329735103;
+ Tue, 08 Feb 2022 06:15:35 -0800 (PST)
 MIME-Version: 1.0
 References: <20220120001621.705352-2-jsd@semihalf.com> <20220202144302.1438303-1-jsd@semihalf.com>
  <20220202144302.1438303-2-jsd@semihalf.com> <YfqtkBIZZxp2Au2l@smile.fi.intel.com>
- <YgEr7LtUAd4QWiiR@shikoro>
-In-Reply-To: <YgEr7LtUAd4QWiiR@shikoro>
+ <CAOtMz3O_j5-0ZLJngQpzQSGduhZVnQ8awBvGkMdUQWAX8nN5Hw@mail.gmail.com> <YgEFWN8K7Yh452GY@smile.fi.intel.com>
+In-Reply-To: <YgEFWN8K7Yh452GY@smile.fi.intel.com>
 From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Tue, 8 Feb 2022 15:13:34 +0100
-Message-ID: <CAOtMz3MEFyW+g8n880rWiZbfU-2Gtfj2b3GNOtZswrFQg_m-yA@mail.gmail.com>
+Date:   Tue, 8 Feb 2022 15:15:24 +0100
+Message-ID: <CAOtMz3P18emF_1tPvXzckVS8V4DWYB6Evqu+V6PsXN6L2YH2aA@mail.gmail.com>
 Subject: Re: [PATCH v3 2/2] i2c: designware: Add AMD PSP I2C bus support
-To:     Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-i2c <linux-i2c@vger.kernel.org>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Hans de Goede <hdegoede@redhat.com>,
+        Wolfram Sang <wsa@kernel.org>,
         Raul E Rangel <rrangel@chromium.org>,
         Marcin Wojtas <mw@semihalf.com>,
         Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
@@ -79,18 +78,61 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+pon., 7 lut 2022 o 12:42 Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
+>
+> On Mon, Feb 07, 2022 at 09:27:12AM +0100, Jan D=C4=85bro=C5=9B wrote:
+> > =C5=9Br., 2 lut 2022 o 17:16 Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
+> > > On Wed, Feb 02, 2022 at 03:43:02PM +0100, Jan Dabros wrote:
+>
+> ...
+>
+> > > > +struct psp_i2c_req {
+> > > > +     struct psp_req_buffer_hdr hdr;
+> > > > +     enum psp_i2c_req_type type;
+> > > > +} __aligned(32);
+> > >
+> > > I forgot if this alignment is requirement due to DMA or so?
+> > > We may use ____cacheline_aligned in such case.
+> >
+> > I used some old code as a reference - this structure is mapped by PSP,
+> > thus alignment applied here. I'm checking this with AMD whether it is
+> > really needed or at least can be somehow limited - still waiting for
+> > their response.
+> > I propose to left this as is right now and eventually remove or make
+> > more liberal in the future.
+>
+> Would be nice to clarify sooner than later.
+> In either case it needs a good comment.
 
-pon., 7 lut 2022 o 15:25 Wolfram Sang <wsa@kernel.org> napisa=C5=82(a):
->
->
-> > Side note, please start a new email thread for new version of the serie=
-s.
->
-> Yes, please. Also, neither me nor patchwork got patch 1 of this series.
-> So, please ensure the series is complete when you resend.
-
-Right, I fixed this in v4.
+I confirmed that we can remove this alignment completely. Removed in v4.
 
 Best Regards,
 Jan
+
+>
+> ...
+>
+> > > > +     return readl_poll_timeout(&mbox->cmd_fields, tmp, (tmp =3D=3D=
+ expected),
+> > > > +                               0, 1000 * PSP_CMD_TIMEOUT_MS);
+> > >
+> > > 0?!
+> >
+> > Yes, we are checking for readiness of PSP mailbox in a tight loop. We
+> > would like to proceed further quickly as soon as this bit is set.
+> > Actually checking this twice per every ACQUIRE&RELEASE - once before
+> > sending command (to check whether PSP is ready to accept requests) and
+> > second time after sending it. Do you think we should increase
+> > @sleep_us value?
+>
+> It depends on what you have in mind about hardware. I'm fine with either =
+way,
+> but 0 has to be explained (in the comment).
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
