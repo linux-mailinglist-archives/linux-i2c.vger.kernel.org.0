@@ -2,112 +2,149 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62ADD4AD8AC
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Feb 2022 14:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC60D4ADADE
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Feb 2022 15:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242185AbiBHNPf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 8 Feb 2022 08:15:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
+        id S244311AbiBHOMh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 8 Feb 2022 09:12:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbiBHM4J (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Feb 2022 07:56:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38750C03FEC0;
-        Tue,  8 Feb 2022 04:56:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4BA0B8199A;
-        Tue,  8 Feb 2022 12:56:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F3C8C340EF;
-        Tue,  8 Feb 2022 12:56:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644324964;
-        bh=Iz6QDWYe8a6FBB91FHO8w5d3p4KkbAejk3eFgH4kqWc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XCZhmtIv9rvQgmEv7vh4q2IVsFpx8eJK2yo5486AXmuBRltLvBFKpaQ26fZJfNsSP
-         NdweG327MQjDKhunx44GQHKn0aAeu+9keqMgrwDxm9cTpBbhOZYsYA8Ref6/o0r720
-         V+k7xA1XvwAM8gFUS3FFMnOq3dWuhCyQGolYqji9uNNSBf+H5oNj5x8NP8eyA5QTn4
-         jjHMzv2SbKSpb/GrVRIxstjVkpVR2BXLdWYae0N9euemoVqbDKihc4Iw3GIE/nzXbE
-         kl1kXcvu59nrgla8WItdKnxAcG5Z551aB6RwiOSj6EB2mTSdPfJv83RB9G56BgXp5h
-         PtX8tYhORLl7w==
-Date:   Tue, 8 Feb 2022 12:55:59 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linus.walleij@linaro.org, Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/9] dt-bindings: i2c: qcom-cci: add description of a
- vbus-supply property
-Message-ID: <YgJoX+Ajgt4dweQJ@sirena.org.uk>
-References: <20220203164629.1711958-1-vladimir.zapolskiy@linaro.org>
- <20220203164629.1711958-3-vladimir.zapolskiy@linaro.org>
- <Yf1q+wlXo2LAeZX+@ripper>
- <Yf1zhojUSxlMNZgV@sirena.org.uk>
- <Yf14LADJ26G9ByZu@ripper>
- <Yf1/X1rXm4QbyoFN@sirena.org.uk>
- <846cdc17-891d-2ee4-fc89-7cf6fbdebc1d@linaro.org>
- <YgEvN0lXXu4lDCN5@sirena.org.uk>
- <682b7ffe-e162-bcf7-3c07-36b3a39c25ab@linaro.org>
+        with ESMTP id S232200AbiBHOMg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Feb 2022 09:12:36 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D6CC03FED0
+        for <linux-i2c@vger.kernel.org>; Tue,  8 Feb 2022 06:12:36 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id o17so24674266ljp.1
+        for <linux-i2c@vger.kernel.org>; Tue, 08 Feb 2022 06:12:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yVgWZ2N1Y3ipUjYUXEezvGNOUs6Y1vt/P4K0hmTOcF4=;
+        b=2WnR+gN9/VdMtplRqSNkKICA7ofvSX2+hUCDaoql5mmxVs11kgYIkqnWxtAFLHF7E1
+         tnpn1GwQasvuerlKqPROPoF0HzKNhlIGACPtZXYfMVL/WLmAGaCvqZp8pDkKF1TWM2Us
+         CLeSbvbmZTNbTXdv1Ic+8BH+NfPt7I+R9tTe8Di0rEHyp1dpfUzjF+hWTqRTYYA12XOc
+         xPtqEuDyo/7VoSXTQWZaCnml0xd6I3BrcXYjiziVIg/u4SZzNp18bRKL5KxgLVcNJI9C
+         Wx+gWEHl7XpEF5ORyb8vXPGzARzL5i4l2k41Ho8IW+jBwQ2jCOLMs/E+1WNrmeG3AbLt
+         vNUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yVgWZ2N1Y3ipUjYUXEezvGNOUs6Y1vt/P4K0hmTOcF4=;
+        b=28ipPaUEEIM1geBYRrZ202yQy5iu+s2OXrX/UBEV31Bi8zox1RQ58fQhCwlR8YNWG2
+         CBsDam+7wW52I1I/qcrzOMS6eqAAKLlzo3PAvvibWXlotM7EukcjhkwTPVWItSbpuloe
+         SiiKmVmv+8172/YIBtiU5yc5a/jTlWY/YpfiENpSAz158jFOn/YuwnWU4FzBpY5lkBUS
+         seguj21rva2AwG0UxE10EngmuRAafYnW3jwyVRGOSS+BRr7IdYwjJ+jEhYTn0xY1+5jD
+         hxOaacgpjemfPc4BTFFgbY1S1NRYn3zaOUK8n/kJJI5UyTu+6nDcEni3IYb2HNzZ6Eau
+         5uOA==
+X-Gm-Message-State: AOAM530QDxkHrUadIgIFJ2HLwlmR4ZrvTVjJobUYVQ+sa5wa+k/eQSFQ
+        33wh9H6PNwSn7N7fAiNkRVAhgg==
+X-Google-Smtp-Source: ABdhPJxZO3JDeGXuOOp7bu/eRMlJvw8kLcNh8e+sAxQoykKtY16B/knGrP4rliOq2jUo/99nI+UaEA==
+X-Received: by 2002:a2e:b947:: with SMTP id 7mr2847382ljs.141.1644329554361;
+        Tue, 08 Feb 2022 06:12:34 -0800 (PST)
+Received: from dabros-l.roam.corp.google.com ([185.157.14.92])
+        by smtp.gmail.com with ESMTPSA id u1sm1935973lff.199.2022.02.08.06.12.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 06:12:33 -0800 (PST)
+From:   Jan Dabros <jsd@semihalf.com>
+To:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com
+Cc:     mika.westerberg@linux.intel.com, hdegoede@redhat.com,
+        wsa@kernel.org, rrangel@chromium.org, mw@semihalf.com,
+        jaz@semihalf.com, upstream@semihalf.com, thomas.lendacky@amd.com,
+        alexander.deucher@amd.com, Nimesh.Easow@amd.com,
+        mario.limonciello@amd.com, jsd@semihalf.com,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v4 0/2] i2c-designware: Add support for AMD PSP semaphore
+Date:   Tue,  8 Feb 2022 15:12:16 +0100
+Message-Id: <20220208141218.2049591-1-jsd@semihalf.com>
+X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MNHkY84JL65Tm1Wd"
-Content-Disposition: inline
-In-Reply-To: <682b7ffe-e162-bcf7-3c07-36b3a39c25ab@linaro.org>
-X-Cookie: This is your fortune.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+This patchset comprises support for new i2c-designware controller setup on some
+AMD Cezanne SoCs, where x86 is sharing i2c bus with PSP. PSP uses the same
+controller and acts as an i2c arbitrator there (x86 is leasing bus from it).
 
---MNHkY84JL65Tm1Wd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+First commit aims to improve generic i2c-designware code by adding extra locking
+on probe() and disable() paths. I would like to ask someone with access to
+boards which use Intel BayTrail(CONFIG_I2C_DESIGNWARE_BAYTRAIL) to verify
+behavior of my changes on such setup.
 
-On Mon, Feb 07, 2022 at 08:31:30PM +0200, Vladimir Zapolskiy wrote:
-> On 2/7/22 4:39 PM, Mark Brown wrote:
+Second commit adds support for new PSP semaphore arbitration mechanism.
+Implementation is similar to the one from i2c-designware-baytrail.c however
+there are two main differences:
+1) Add new ACPI ID in order to protect against silent binding of the old driver
+to the setup with PSP semaphore. Extra flag ARBITRATION_SEMAPHORE added to this
+new _HID allows to recognize setup with PSP.
+2) Beside acquire_lock() and release_lock() methods we are also applying quirks
+to the lock_bus() and unlock_bus() global adapter methods. With this in place
+all i2c clients drivers may lock i2c bus for a desired number of i2c
+transactions (e.g. write-wait-read) without being aware of that such bus is
+shared with another entity.
 
-> > The bindings are ABI, it doesn't seem like a good idea to add new ABI as
-> > a temporary bodge.
+This patchset is a follow-up to the RFC sent earlier on LKML [1], with review
+comments applied.
 
-> The bindings are supposed to describe hardware, thus it's natural to extend
-> them, I believe there is a trilemma in this particular case:
-> 1) add optional vbus-supply property to all I2C master controllers or I2C
->    busses in case of multiple I2C busses managed by a single controller,
-> 2) add optional vbus-supply property to all I2C slave devices,
+Looking forward to some feedback.
 
-If you add a named supply to all I2C controllers or devices then if any
-of them have an actual vbus supply there will be a namespace collision.
+[1] https://lkml.org/lkml/2021/12/22/219
 
-> 3) ignore peculiarities of particular (multiple in fact) PCB designs and
->    a necessity of adding a regulator finely described as a pull-up for I2C
->    bus lines.
+v3->v4:
+* Remove unnecessary alignment of psp_i2c_req
+* Add missing bits.h header
+* Make use of USEC_PER_MSEC
+* Simplify `if` conditions with unsigned variables
+* Add additional comments
 
-There's also the option of representing this as a separate thing on or
-part of the bus.
+v2 -> v3:
+* Change X86_64 Kconfig dependency to X86_MSR
+* Switch from phys_addr_t to u64 in mailbox struct definition
+* Remove redundant guard in semaphores' probes
+* Add comments about error propagation
+* Move credits for kernel test robot into changelog
 
---MNHkY84JL65Tm1Wd
-Content-Type: application/pgp-signature; name="signature.asc"
+v1 -> v2:
+* Remove usage of unions
+* Get rid of unnecessary __packed attributes
+* Switch to use iopoll.h and bitfields.h APIs were applicable
+* Follow the convention to check for the error first
+* Reorder entries (includes, table entries) alphabetically
+* Add necessary includes
+* Add Kconfig dependency on X86_64
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+* Modify probe() to use terminating entry for traversing through table
+  instead of ARRAY_SIZE
+* Fix typos in comments
+* Rebase patchset
 
------BEGIN PGP SIGNATURE-----
+Jan Dabros (2):
+  i2c: designware: Add missing locks
+  i2c: designware: Add AMD PSP I2C bus support
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmICaF4ACgkQJNaLcl1U
-h9AnBgf9HIMMDL6iR3/JslfiIXW5kstK7gnFRptY/bM55vmUXKuO/LfTrUSS7S6e
-zwfAXhBnHMl53aosIq9E/Bra3H0906AOR0S/nmiEb9q/bLDZqkngRY3qQoS0uwbr
-gyv9Hpm8qPn2tqAwjQvcUOUDsj2wKqLvrYzxA0HqksvVtN3t5ApTdOp6Ujoy7rmD
-7s6DPclKi3JdD6vn1Q7jDhYOXmLr9xSnX6VUorZe2tNniABlcRNB+LYKo9iqWUGP
-jSsmyDlwT2WDXKXTLM25cvIUVSaZBI8q5GIkb/1dfwZwIes/DyN5hxldTjYOpf0N
-wPfnM0qxGK5Zm8jy5GJo4hWWq3y4pg==
-=3YVL
------END PGP SIGNATURE-----
+ MAINTAINERS                                  |   1 +
+ drivers/acpi/acpi_apd.c                      |   7 +-
+ drivers/i2c/busses/Kconfig                   |  11 +
+ drivers/i2c/busses/Makefile                  |   1 +
+ drivers/i2c/busses/i2c-designware-amdpsp.c   | 394 +++++++++++++++++++
+ drivers/i2c/busses/i2c-designware-baytrail.c |  12 +-
+ drivers/i2c/busses/i2c-designware-common.c   |  12 +
+ drivers/i2c/busses/i2c-designware-core.h     |  18 +-
+ drivers/i2c/busses/i2c-designware-master.c   |   6 +
+ drivers/i2c/busses/i2c-designware-platdrv.c  |  60 +++
+ 10 files changed, 510 insertions(+), 12 deletions(-)
+ create mode 100644 drivers/i2c/busses/i2c-designware-amdpsp.c
 
---MNHkY84JL65Tm1Wd--
+-- 
+2.35.0.263.gb82422642f-goog
+
