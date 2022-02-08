@@ -2,125 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1343D4AD8B9
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Feb 2022 14:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A6C4AD8B1
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Feb 2022 14:15:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245606AbiBHNPj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 8 Feb 2022 08:15:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
+        id S243680AbiBHNPh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 8 Feb 2022 08:15:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350409AbiBHMSf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Feb 2022 07:18:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6D2C03FEC0;
-        Tue,  8 Feb 2022 04:18:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B073B61572;
-        Tue,  8 Feb 2022 12:18:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58648C340E9;
-        Tue,  8 Feb 2022 12:18:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644322714;
-        bh=+jhBmsQwTJRGwAwlQW6FTGpVyZorlTh6XXyLTNZaKtM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jGFn+QhLelOPYfhz2FlG8XDs13dxBkoE4Sze6DbEgt+XrSfcByVQnWMlOj75yGkhi
-         3yPz6zATvF1nsQbiYOJx9JZa2NZ5oH9zkLywt6bbgEiZb+iH3nDH4YfdjnAGdwVNIf
-         BbsdjCtUVoGVyuXLer7OHfpeFRRx1A4ktMyRfNKQ8Ru0eEEcLfs5JvY94yhUP4G6Qr
-         au2zYAK55xnxMVNnfI/MFnvs5YceUHT17Jq0jB9WZb5gFKtUruw4i8fnZNNWgLPBxp
-         6Xo6/B0qhxeh0wgKvEX9chUI+ldjJ1TDtT4wxmeAgjCGuRG+wmItthm/7gIaYe9OpV
-         gBy8l5vbATDMA==
-Date:   Tue, 8 Feb 2022 13:18:31 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     conor.dooley@microchip.com
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        jassisinghbrar@gmail.com, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, geert@linux-m68k.org,
-        krzysztof.kozlowski@canonical.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        atishp@rivosinc.com, Rob Herring <robh@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v6 03/12] dt-bindings: i2c: add bindings for microchip
- mpfs i2c
-Message-ID: <YgJfl5CmepRMb5He@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, conor.dooley@microchip.com,
-        linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        jassisinghbrar@gmail.com, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        geert@linux-m68k.org, krzysztof.kozlowski@canonical.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, bin.meng@windriver.com,
-        heiko@sntech.de, lewis.hanly@microchip.com,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        atishp@rivosinc.com, Rob Herring <robh@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-References: <20220207162637.1658677-1-conor.dooley@microchip.com>
- <20220207162637.1658677-4-conor.dooley@microchip.com>
+        with ESMTP id S1347086AbiBHMgh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Feb 2022 07:36:37 -0500
+X-Greylist: delayed 306 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 04:36:32 PST
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A163CC03FEC0;
+        Tue,  8 Feb 2022 04:36:32 -0800 (PST)
+Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MeCd5-1nrZkY0I59-00bKxJ; Tue, 08 Feb 2022 13:31:25 +0100
+Received: by mail-wr1-f54.google.com with SMTP id i15so8045233wrb.3;
+        Tue, 08 Feb 2022 04:31:24 -0800 (PST)
+X-Gm-Message-State: AOAM533fnZdpP2AwchPqGk1Dbv8V5VnCruO3LQjkRqZX4uJOuWdES+Ae
+        x3QtpAS4A7jKgoPGlnzmPhCQkD0GVWPC5FFv6is=
+X-Google-Smtp-Source: ABdhPJwjh+iPDutKVoomV+unhCPIxYaBfo3+/C6V9s9/YsnzEY7RKbIpI3TmFrilYu/3zyKr/YPI7OskgWVLlPCf7Is=
+X-Received: by 2002:a05:6000:3c6:: with SMTP id b6mr3354375wrg.12.1644323484543;
+ Tue, 08 Feb 2022 04:31:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sdYSIm6VkoPV0MiH"
-Content-Disposition: inline
-In-Reply-To: <20220207162637.1658677-4-conor.dooley@microchip.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211218165258.16716-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdUg3=q7gyaVHP0XcYUOo3PQUUv8Hc8wp5faVQ+bTBpg4A@mail.gmail.com> <042a2183-3f04-088c-1861-656de870337d@gmail.com>
+In-Reply-To: <042a2183-3f04-088c-1861-656de870337d@gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 8 Feb 2022 13:31:08 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3owi7YWmq-tckD-C7NK5HaX+swGNW-QBkWQuQgVsVWrA@mail.gmail.com>
+Message-ID: <CAK8P3a3owi7YWmq-tckD-C7NK5HaX+swGNW-QBkWQuQgVsVWrA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] i2c: sh_mobile: Use platform_get_irq_optional() to
+ get the interrupt
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Linux-sh list <linux-sh@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:OW1Lh6CTJ007cKq7X22hpR29N5b9uv6n+9VwIxZK1DM7wwzUNob
+ vPVIWoa3wrrTa/U0a+QDJvjUjmfBvH3QI+oUIxVpqyP5XAbeqLNhIGhbj6/jF6RwHTnt3sW
+ gkYhtJcZvLODUNSzoR9lWTr31flYOPvSjfokiNaC0uwvG+OAhqdc8QiBX8K2YRCPEY4TPd0
+ 58TB51npdbZ5KDSlCb25w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vRHoiAS8jqE=:xYejVhw5wpobxIC1gYyBRA
+ ER0znej4HBEw1Xan1dD8GNvpukMTiBKmAhJZqtdaCfgufrI7t8ysgoFyUWZqDhOprip2wqSl5
+ 3Sj+7aeKCCG2VmGAG228oo5CzSp6w9owFrYIR1Cfk8dfSnZMIeeu3hHXLX5KupFMNtBRsoYPJ
+ fK0L1pNx/QldLHdYdBUnfcBOKNApG06EKAhlly3up/4D/S9ddjr0/BCCV0e95sTqemx4OB++F
+ 5jV6XMX4djyYwKap9lYRtXAiqZaUr559nSX/QpTSnshKSBKiQzZhRkCYOwdOTj1d+xWsDM/By
+ X5b6UxwCo7oxQMwNuY6g9NeK4+1aspGYDepcCKWcbo7AwkuE9bdmSzrUr+63RADdBB8Q83huk
+ j/sYeD0v0sYFrWnGrYtkCiXUi1rbF+GRm0rwYws/XMKd4Y7yYTdvGvDZjY6fzyEW4JToBkkI2
+ erQ5/AtuIPr5xuIJPwIJT18sH6PhAA8PX3KhEOX6N2SBOiJuDOu74J0LfGz2o6zydulbvWX/k
+ xJlVrD25cfMXmRh31e2tAbKiKsR6W/hK2lobL5GP+Jz7L6GhnJ+jpzqgtarjv4xCCBzlSXoLR
+ YFzkEMWgBiLXlD/ZG4/PXRPZ7tkuTLjFmmLilbvlFejOGOd2o4SYJQRSnPSxHACJMmwvT0spo
+ ClCbn9S3zbEHHajGzZZuZeyzDvYtyhPnVHz9IsO+MzhGTuz7Jm4qd01qE3cmYQnSclcSMyjfq
+ QlysV+lrVSTDfKETnhveMZpRVZcmBYWUwciuQHGQkJaDP/ZouMgKE8Zh1PzXlIaH2cYK8c6ts
+ tqsCSQpWReHj+OBbNCb2dWs8wOB8H+dNosmOpt4QbZwKKhwFqE=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Mon, Dec 20, 2021 at 12:53 PM Sergei Shtylyov
+<sergei.shtylyov@gmail.com> wrote:
+> On 20.12.2021 13:17, Geert Uytterhoeven wrote:
+>
+> > I might have missed something, but it seems the only user of IRQ 0 on
+> > SuperH is smsc911x Ethernet in arch/sh/boards/board-apsh4a3a.c and
+> > arch/sh/boards/board-apsh4ad0a.c, which use evt2irq(0x200).
+> > These should have been seeing the "0 is an invalid IRQ number"
+> > warning splat since it was introduced in commit a85a6c86c25be2d2
+> > ("driver core: platform: Clarify that IRQ 0 is invalid"). Or not:
+>
+>     Warning or no warning, 0 is still returned. :-/
+>     My attempt to put an end to this has stuck waiting a review from the IRQ
+> people...
 
---sdYSIm6VkoPV0MiH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I had another look at this after you asked about it on IRC. I don't
+know much SH assembly, but I suspect IRQ 0 has not been delivered
+since 2009 after 1e1030dccb10 ("sh: nmi_debug support."). On a
+related note, CONFIG_INTC_BALANCING was broken in 2be6bb0c79c7
+("sh: intc: Split up the INTC code.") by inadvertently removing the Kconfig
+symbol.
 
-On Mon, Feb 07, 2022 at 04:26:29PM +0000, conor.dooley@microchip.com wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
->=20
-> Add device tree bindings for the i2c controller on
-> the Microchip PolarFire SoC.
->=20
-> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-
-Shall this go via DT (Rob) or I2C (me) or some riscv tree?
-
-
---sdYSIm6VkoPV0MiH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmICX5MACgkQFA3kzBSg
-KbZzxhAArSdMKMsyP4zt6H3heN8FNENRNOKYegpVuGgnCzbtLbitNEQvjx0Z9HdF
-BUbaytztYIVoDstV1SxiWczUikuOQ7pQ2TB585jhzhF7FATjt0zqIr22/ATEBmN5
-nUNlnWMt5s05zgcppQyksrVddYYvgs+HqtTCNXCk6LOz0qC54dxze8766ageQYPz
-1gBy5cDmJrUMJ+X8JnveuPgKv4BrZgGKZsrNgHy5dOAdF0B0WyI4i/uv2YTq2y+o
-XIOA/B60tgZtIWkWWcFNPIE+TQQIDVY93O2R3i4gAvCfwYVqyRdtG5i5p3eK74RM
-LwpTEv6SJE5KJ0pxYmo5SP4AKsMaN7Z6ePga6LQz2tPETjhKNZixntc/KsoIPXQJ
-sQ025iG+3stSKxpnpWg/VjqM6ugoDQOX+VvsxFe34KjtmbgRYTROfxHY173+TfVb
-hZb+CYNHbDxl7/gGHkXlsbcNC6sSZq7qvu0ZeCXPvq4nzk1V0KwKPGLocQaTrGVo
-qNHIjEnA5CeIu8y5fF7r26769safY0B9chLwsxXWujW3WSHY3FYPmRDMtX89sVhr
-WxlPZDxBvIv16LQjg4lXWLrTsgkUaVU2xiHe8gd+gulSVMgKeeePSkiU4fKgonRj
-+KJRlq7MvI0G5Mdb0F3PNIHoq4R/P8FYBNmGgRmjvIxBNzggd2M=
-=TDLj
------END PGP SIGNATURE-----
-
---sdYSIm6VkoPV0MiH--
+        Arnd
