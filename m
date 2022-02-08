@@ -2,53 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BBC4ADE28
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Feb 2022 17:20:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 171C54ADE63
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Feb 2022 17:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiBHQTq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 8 Feb 2022 11:19:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
+        id S1383447AbiBHQdU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 8 Feb 2022 11:33:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382974AbiBHQTp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Feb 2022 11:19:45 -0500
+        with ESMTP id S1383341AbiBHQdT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Feb 2022 11:33:19 -0500
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB5EC061579;
-        Tue,  8 Feb 2022 08:19:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7A2C061578;
+        Tue,  8 Feb 2022 08:33:18 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BC8FF1F383;
-        Tue,  8 Feb 2022 16:19:43 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 96A8F1F387;
+        Tue,  8 Feb 2022 16:33:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644337183; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1644337997; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GIf2zFho4Sxk/tEjlY27tIR95Enmi/ydcgbRVDALqAs=;
-        b=LfYkvuBx8JmP+5ga7pRD2fN7t297lYU37VEKxjoX7PGVLj6tuLKv9MUoR6Jr+jvEBkaooI
-        zy2NwJj31hPtuIdMBSRpMuUSzi/RpMi7h8EWjEQGqOLJyTivpcilgovRP7ekqiOx1fRYg8
-        G88K0NI/VbBmHtSblrD8uJCEmI1MZRg=
+        bh=u43owrvzSj9UawIrEeKYAp8l6FlGjTpw15278c1XfMc=;
+        b=EmR2kJsPExV8dKFPfLu6dBRYixqwL82rhl+nTw9H8emBQ39JMxEezlIPEFyqNiQXCD33US
+        BT3epTEjGemsFFsBAdF71npwDVVJwbLY6mVYzj9gYtzkarHD6gkUKPFxay10GHCKYj36t0
+        1dZkD2wkmRS0oMyZzRQcnAgqHKRLGAk=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644337183;
+        s=susede2_ed25519; t=1644337997;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GIf2zFho4Sxk/tEjlY27tIR95Enmi/ydcgbRVDALqAs=;
-        b=ZmimtIw9vp4e/tTgLXcdDYoaPa1Y8Kdtt/+9qhjy581HECLqAeqJGUVVKYZy70lQYXhsIY
-        eNugADZh948UA4AA==
+        bh=u43owrvzSj9UawIrEeKYAp8l6FlGjTpw15278c1XfMc=;
+        b=s4FMXkb4EsOyT64k8Slu804FYhI0z0RxoNg9R8n8/+0qOyH59dltWdgfj0FIplJ61pCmhQ
+        41+J2mxM++eS/BCg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3D1E713CDC;
-        Tue,  8 Feb 2022 16:19:43 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 17DFA13CDC;
+        Tue,  8 Feb 2022 16:33:17 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id fVRSDR+YAmJTQwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 08 Feb 2022 16:19:43 +0000
-Date:   Tue, 8 Feb 2022 17:19:41 +0100
+        id IGY3BE2bAmIVSgAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 08 Feb 2022 16:33:17 +0000
+Date:   Tue, 8 Feb 2022 17:33:16 +0100
 From:   Jean Delvare <jdelvare@suse.de>
 To:     Terry Bowman <terry.bowman@amd.com>
 Cc:     <linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>,
@@ -59,12 +59,11 @@ Cc:     <linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>,
         <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
         <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
         <Mario.Limonciello@amd.com>
-Subject: Re: [PATCH v4 8/9] i2c: piix4: Add EFCH MMIO support for SMBus port
- select
-Message-ID: <20220208171941.18156714@endymion.delvare>
-In-Reply-To: <20220130184130.176646-9-terry.bowman@amd.com>
+Subject: Re: [PATCH v4 9/9] i2c: piix4: Enable EFCH MMIO for Family 17h+
+Message-ID: <20220208173316.403ec944@endymion.delvare>
+In-Reply-To: <20220130184130.176646-10-terry.bowman@amd.com>
 References: <20220130184130.176646-1-terry.bowman@amd.com>
-        <20220130184130.176646-9-terry.bowman@amd.com>
+        <20220130184130.176646-10-terry.bowman@amd.com>
 Organization: SUSE Linux
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
@@ -82,30 +81,30 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi Terry,
 
-On Sun, 30 Jan 2022 12:41:29 -0600, Terry Bowman wrote:
-> AMD processors include registers capable of selecting between 2 SMBus
-> ports. Port selection is made during each user access by writing to
-> FCH::PM::DECODEEN[smbus0sel]. Change the driver to use MMIO during
-> SMBus port selection because cd6h/cd7h port I/O is not available on
-> later AMD processors.
+On Sun, 30 Jan 2022 12:41:30 -0600, Terry Bowman wrote:
+> Enable EFCH MMIO using check for SMBus PCI revision ID value 0x51 or
+> greater. SMBus PCI revision ID 0x51 is first used by family 17h. This
+> PCI revision ID check will also enable future AMD processors with the
+> same EFCH SMBus controller HW.
 > 
 > Signed-off-by: Terry Bowman <terry.bowman@amd.com>
 > ---
->  drivers/i2c/busses/i2c-piix4.c | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
+>  drivers/i2c/busses/i2c-piix4.c | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
 > 
-> (...)
-> @@ -765,6 +774,7 @@ static int piix4_sb800_port_sel(u8 port)
+> diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
+> index c5325cadaf55..6a9495d994bc 100644
+> --- a/drivers/i2c/busses/i2c-piix4.c
+> +++ b/drivers/i2c/busses/i2c-piix4.c
+> @@ -101,6 +101,8 @@
+>  #define SB800_PIIX4_FCH_PM_ADDR			0xFED80300
+>  #define SB800_PIIX4_FCH_PM_SIZE			8
 >  
->  	return (smba_en_lo & piix4_port_mask_sb800);
->  }
+> +#define AMD_PCI_SMBUS_REVISION_MMIO		0x51
 > +
->  /*
->   * Handles access to multiple SMBus ports on the SB800.
->   * The port is selected by bits 2:1 of the smb_en register (0x2c).
 
-We indeed want a blank line here, but it should be inserted in patch
-[5/9] (which adds function piix4_sb800_port_sel), not in this patch.
+I don't think that was worth a define. You only use the value once, in
+a context where the symbolic name doesn't add much value IMHO.
 
 -- 
 Jean Delvare
