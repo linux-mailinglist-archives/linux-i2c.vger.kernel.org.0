@@ -2,112 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC6B4B00CC
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Feb 2022 23:58:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B64B14B0168
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 00:38:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236629AbiBIW5V (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Feb 2022 17:57:21 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38772 "EHLO
+        id S230330AbiBIXib (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Feb 2022 18:38:31 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236730AbiBIW5U (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Feb 2022 17:57:20 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0791E04FF0E;
-        Wed,  9 Feb 2022 14:57:17 -0800 (PST)
-Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MJFpj-1ncUka4Bwp-00Kg3E; Wed, 09 Feb 2022 23:57:16 +0100
-Received: by mail-wr1-f50.google.com with SMTP id k1so6462532wrd.8;
-        Wed, 09 Feb 2022 14:57:15 -0800 (PST)
-X-Gm-Message-State: AOAM531OxbqUDbiD8ccEUA6VLQ5DtT2saq1TFCuWx+hNsGSz0C0UgMO8
-        9Rpy7XZpSVSNUwmaSi46bjAW7lkKdUPxKguXHvM=
-X-Google-Smtp-Source: ABdhPJx6k5SzHUiKxbi22X3ArFfHWnfD1uhdVPHGLwKUVBYNri0Ph5zCMFRBWOFFi/ShRb6G6dCKxmJXRqnm6B99V9s=
-X-Received: by 2002:a05:6000:178d:: with SMTP id e13mr3797888wrg.317.1644447435616;
- Wed, 09 Feb 2022 14:57:15 -0800 (PST)
-MIME-Version: 1.0
-References: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211218165258.16716-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdUg3=q7gyaVHP0XcYUOo3PQUUv8Hc8wp5faVQ+bTBpg4A@mail.gmail.com>
- <042a2183-3f04-088c-1861-656de870337d@gmail.com> <CAK8P3a3owi7YWmq-tckD-C7NK5HaX+swGNW-QBkWQuQgVsVWrA@mail.gmail.com>
- <d74ab454-9337-d168-9b21-842569431b4a@gmail.com> <CAK8P3a20mwJXN4Mb063zQG+HAevj_Odpj58EzPHkX-p6pbtnGA@mail.gmail.com>
- <7c47ce67-88ee-9cba-3356-a530b0d3e657@gmail.com> <CAK8P3a0gf6TeK2vZ+u3NZ2VrrvrGUohAPz5WiZ4Mbk5QQg9FFg@mail.gmail.com>
- <9a07be5a-914b-cec9-f6bc-8c1b0ecef766@gmail.com>
-In-Reply-To: <9a07be5a-914b-cec9-f6bc-8c1b0ecef766@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 9 Feb 2022 23:56:59 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3wOxRdGJfDx86WiNwFvbK=wXYCtPoS-DQKqyYfHZiMjw@mail.gmail.com>
-Message-ID: <CAK8P3a3wOxRdGJfDx86WiNwFvbK=wXYCtPoS-DQKqyYfHZiMjw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] i2c: sh_mobile: Use platform_get_irq_optional() to
- get the interrupt
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        with ESMTP id S230492AbiBIXiG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Feb 2022 18:38:06 -0500
+X-Greylist: delayed 603 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 15:38:09 PST
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1992AE051EB2
+        for <linux-i2c@vger.kernel.org>; Wed,  9 Feb 2022 15:38:08 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.88,356,1635174000"; 
+   d="scan'208";a="110784889"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 10 Feb 2022 08:22:44 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 592F84004CFB;
+        Thu, 10 Feb 2022 08:22:42 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Chris Brandt <chris.brandt@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-renesas-soc@vger.kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:iz4osL0LS/CVwD/e5yrQnoMN5iG7QTanvYybME2u+hzIbUJrl8k
- SXJurOPxymVZf+kuK3k8lwyHGylgPOYeAGSXatMOAxPCIn96aBYoB4Qgh2cQIHjghA7uNsp
- UlcLVhcoGpZBirw9Yo12SkJK453F/fRkQ3tcAtNgRBleprYmqdtKHE+f4xjX36ThU14tpGz
- /Kk+J+w4EtklWFEXlJajQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:fsFsCFBlECc=:RkXJd5cyMagMVbYd1HFAmX
- VPWo5iFnBW6yuIUnu0wlIx01Lur2D9szeda7iwfPXy7gavOpIk7L2jPgXaUG3Y8B9JzWlsODo
- cwXN/TavqXTZH7rwWN93xxWnpiBEW44Ybf+z4Eo48byU9A6wu2YyfZTiTC94pI6JzNgT2xziL
- vMXnntK6A8Ux1xd4x3aEWGJZa3giFHe0Aso5TgtNUuPs66YmVFuXTGtGV91SEmmYpe4+hH8bA
- sboyRG8ztwE++qAnoK1BMmWTcuwf3bOQfJHUkwReJzcJeRlkePAmEq6dK29wwGXGk82RsFj2Z
- lEeWhOSgWm3YyhdKJinVBOhBbsaimilPafvScJ0Pgb5LapmR4LgWOTykyWMOpGipsUueI7mkO
- 9N5Uu6xG8jcpysphDIBupP/z74J0K2k19ZpBjO+6PeWMvXisR1RswYs4EM30khVjjKFAdW3+1
- q7pczo1+T6NFnREnTdo/80fnIhgMZsCWxSy3L9GVosl6SSebQQOoarSeKxrmmgG8QKA6okuCL
- gAfYEGDLoUfJZZzo/73cbZ3t0oLoxZF31aGYD7J2+1hTg9jWm/cxc5LXYwgZQZLJS3QFHOA9l
- ediB0FUmDK3BlRtuxtkfAXHbO02+kBaESaYTCxbXQRo7blTcinhhuxnXWi3kFbEKIA9yrpbgX
- bKOewf6sDaEaKBxOc8+EWDZJk/9hj5r8kVGMAxHkkn8Lr9Sxv3T5/kWfP7JdrSW7IdPY=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] i2c: riic: Simplify reset handling
+Date:   Wed,  9 Feb 2022 23:22:32 +0000
+Message-Id: <20220209232232.18461-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 5:08 PM Sergei Shtylyov
-<sergei.shtylyov@gmail.com> wrote:
-> On 2/9/22 7:02 PM, Arnd Bergmann wrote:
-> >
-> > +       shlr2   r4
-> > +       shlr    r4
-> > +       mov     r4, r0          ! save vector->jmp table offset for later
-> > +
-> > +       shlr2   r4              ! vector to IRQ# conversion
-> > +       add     #-0x10, r4
-> > +
-> > +       cmp/pz  r4              ! is it a valid IRQ?
-> > +       bt      10f
-> >
-> > gets the vector (0x200 for this device), shifts it five bits to 0x10,
-> > and subtracts 0x10,
-> > then branches to do_IRQ if the interrupt number is non-zero, otherwise it goes
-> > through the exception_handling_table.
->
->    The SH4 manual I found on my disk (have it from MontaVista times) tells me cmp/pz
-> sets T if Rn is >= 0, then bt branches if T = 1. So I do think the code is correct.
->    One more thing: the board code for those boards was added in 2011, we can assume
-> it was working back then, right? :-_
+Read reset phandle as optional instead of exclusive so that all the DT's
+passing the reset phandle can be used to assert/deassert the reset line.
+With this change we don't have to differentiate the RZ/G2L SoC.
 
-Indeed, this does make more sense, I had not realized that the numbers could get
-negative here.
+With the above changes we no longer need the "renesas,riic-r9a07g044"
+compatible string, so drop it from riic_i2c_dt_ids[]. No changes are
+required to the r9a07g044.dtsi as we already have "renesas,riic-rz" as a
+fallback compatible string.
 
-         Arnd
+While at it, check the return code of reset_control_deassert() as it might
+fail and also add a devres action to assert the reset line.
+
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/i2c/busses/i2c-riic.c | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
+index 8dfd27dc6149..cded77e06670 100644
+--- a/drivers/i2c/busses/i2c-riic.c
++++ b/drivers/i2c/busses/i2c-riic.c
+@@ -88,11 +88,6 @@
+ 
+ #define RIIC_INIT_MSG	-1
+ 
+-enum riic_type {
+-	RIIC_RZ_A,
+-	RIIC_RZ_G2L,
+-};
+-
+ struct riic_dev {
+ 	void __iomem *base;
+ 	u8 *buf;
+@@ -396,6 +391,11 @@ static struct riic_irq_desc riic_irqs[] = {
+ 	{ .res_num = 5, .isr = riic_tend_isr, .name = "riic-nack" },
+ };
+ 
++static void riic_reset_control_assert(void *data)
++{
++	reset_control_assert(data);
++}
++
+ static int riic_i2c_probe(struct platform_device *pdev)
+ {
+ 	struct riic_dev *riic;
+@@ -404,7 +404,6 @@ static int riic_i2c_probe(struct platform_device *pdev)
+ 	struct i2c_timings i2c_t;
+ 	struct reset_control *rstc;
+ 	int i, ret;
+-	enum riic_type type;
+ 
+ 	riic = devm_kzalloc(&pdev->dev, sizeof(*riic), GFP_KERNEL);
+ 	if (!riic)
+@@ -421,16 +420,18 @@ static int riic_i2c_probe(struct platform_device *pdev)
+ 		return PTR_ERR(riic->clk);
+ 	}
+ 
+-	type = (enum riic_type)of_device_get_match_data(&pdev->dev);
+-	if (type == RIIC_RZ_G2L) {
+-		rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+-		if (IS_ERR(rstc)) {
+-			dev_err(&pdev->dev, "Error: missing reset ctrl\n");
+-			return PTR_ERR(rstc);
+-		}
++	rstc = devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
++	if (IS_ERR(rstc))
++		return dev_err_probe(&pdev->dev, PTR_ERR(rstc),
++				     "Error: missing reset ctrl\n");
+ 
+-		reset_control_deassert(rstc);
+-	}
++	ret = reset_control_deassert(rstc);
++	if (ret)
++		return ret;
++
++	ret = devm_add_action_or_reset(&pdev->dev, riic_reset_control_assert, rstc);
++	if (ret)
++		return ret;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(riic_irqs); i++) {
+ 		ret = platform_get_irq(pdev, riic_irqs[i].res_num);
+@@ -492,8 +493,7 @@ static int riic_i2c_remove(struct platform_device *pdev)
+ }
+ 
+ static const struct of_device_id riic_i2c_dt_ids[] = {
+-	{ .compatible = "renesas,riic-r9a07g044", .data = (void *)RIIC_RZ_G2L },
+-	{ .compatible = "renesas,riic-rz", .data = (void *)RIIC_RZ_A },
++	{ .compatible = "renesas,riic-rz", },
+ 	{ /* Sentinel */ },
+ };
+ 
+-- 
+2.17.1
+
