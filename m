@@ -2,111 +2,148 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA64D4AF501
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Feb 2022 16:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAEA04AF52B
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Feb 2022 16:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235673AbiBIPTC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Feb 2022 10:19:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
+        id S235751AbiBIPYG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Feb 2022 10:24:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233245AbiBIPTB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Feb 2022 10:19:01 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC80C0613C9;
-        Wed,  9 Feb 2022 07:19:03 -0800 (PST)
-Received: from mail-wm1-f42.google.com ([209.85.128.42]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N9MlI-1oMjEg0hU4-015LCk; Wed, 09 Feb 2022 16:19:02 +0100
-Received: by mail-wm1-f42.google.com with SMTP id m126-20020a1ca384000000b0037bb8e379feso3380272wme.5;
-        Wed, 09 Feb 2022 07:19:02 -0800 (PST)
-X-Gm-Message-State: AOAM530QaYBl5zAT8ckwrKkz1/QmgQRB3mUr/fzUDmB+1MtAfTD3R6MD
-        6V+9ESz9BFigxlFWZzh8NO54uzg0CMX5t69PsIk=
-X-Google-Smtp-Source: ABdhPJxC6yS4pZe2435Qd1HxMwKInn1Oh/ph/XdsG7j7cymhJO/oHhExs7jdnGMMcZ3Rtq95pkF7gsXdKA/mOg/25a0=
-X-Received: by 2002:a05:600c:1f06:: with SMTP id bd6mr2495408wmb.98.1644419941772;
- Wed, 09 Feb 2022 07:19:01 -0800 (PST)
+        with ESMTP id S233738AbiBIPYF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Feb 2022 10:24:05 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FBAC0613C9;
+        Wed,  9 Feb 2022 07:24:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644420248; x=1675956248;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nHzrucezh55MZ3ssVxgQFc8eLSNefA8m83ic0IdXwCQ=;
+  b=fzIhNPp2I/4m4ixU8mwAdOKuTI+zNPe4+KcTzcp1dWdmntsalb4OC0nc
+   QBSiiCNgqfo+e+PhOesVhwGc/ydl9juAO6udq//AUDLL0igjStoU9T6CX
+   WUwKfGxlB/SJF0maJJapNYMNn3dDUwOuPT4T8IPqNLELtXTL0qT/2a00E
+   t79wOpMZBk/MK+/mlqca1HYwCkQrbbjm3OV0wIwflOdyJnwZwYmlTY7kL
+   nKxXGs8ZXbpUgha6DKDil/ADPzA0/IjHyu7VWsOFOqjhIPuMp5sNKT5sk
+   POyaCzGNcuruZ2muSzmKBLZu77bINPSZdFhOiGn7wYmvPxdbxiOlsBt1T
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="249174889"
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="249174889"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 07:24:08 -0800
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="500000128"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 07:24:04 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nHooE-002ee9-3z;
+        Wed, 09 Feb 2022 17:23:06 +0200
+Date:   Wed, 9 Feb 2022 17:23:05 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jan Dabros <jsd@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        hdegoede@redhat.com, wsa@kernel.org, rrangel@chromium.org,
+        mw@semihalf.com, jaz@semihalf.com, upstream@semihalf.com,
+        thomas.lendacky@amd.com, alexander.deucher@amd.com,
+        Nimesh.Easow@amd.com, mario.limonciello@amd.com
+Subject: Re: [PATCH v4 1/2] i2c: designware: Add missing locks
+Message-ID: <YgPcWRsaW52Cgii0@smile.fi.intel.com>
+References: <20220208141218.2049591-1-jsd@semihalf.com>
+ <20220208141218.2049591-2-jsd@semihalf.com>
 MIME-Version: 1.0
-References: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211218165258.16716-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdUg3=q7gyaVHP0XcYUOo3PQUUv8Hc8wp5faVQ+bTBpg4A@mail.gmail.com>
- <042a2183-3f04-088c-1861-656de870337d@gmail.com> <CAK8P3a3owi7YWmq-tckD-C7NK5HaX+swGNW-QBkWQuQgVsVWrA@mail.gmail.com>
- <d74ab454-9337-d168-9b21-842569431b4a@gmail.com>
-In-Reply-To: <d74ab454-9337-d168-9b21-842569431b4a@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 9 Feb 2022 16:18:45 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a20mwJXN4Mb063zQG+HAevj_Odpj58EzPHkX-p6pbtnGA@mail.gmail.com>
-Message-ID: <CAK8P3a20mwJXN4Mb063zQG+HAevj_Odpj58EzPHkX-p6pbtnGA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] i2c: sh_mobile: Use platform_get_irq_optional() to
- get the interrupt
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:dQBJIFZTK9zwJLYqmqEGtwvJT36W2YcbFpcMZrBBJ0xvhxJUmpA
- hUV34FTZb1X5/+oTtjTILgFEr120S4BaJpvPJVtMzyTXzPd4B9vJPqq0KpuvokCHnEuDQiH
- LY0YIz3LSwTAB8usE4RUEI/4aCU/LBeOG8Kd92GX/CgldDiyQ8lPRWmCkThcDErm3FWBT88
- gbXlkzh0WQLKMiQ8mU6qQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tR737zmlJjw=:0tHcA+TTCFpWfT1uhePcI/
- D2MfeUGm+3phGJpaMQvMwfvV5M/eOHqNrM6fusvtlWnBpy6kcYYbXa07hBlgR+ppWOZ5bveRm
- 8Q0osF1hBODDpROXrEQsijM9ECikMHBNkH6JXcHZDr7qFfBiQhtGqUfjv/7yjUD2p0vNksCze
- feJ/4kfP3OkJDKoPTJ+/Yj6//WNv3pgfFmdPnvu/39K2xjm6JgUiE5RSRL54aRXc6ZYyVo0aJ
- PoiDhuoXxBT73WBqhO9srA7tsrlM6aFudYKkZDWSl0M17XYSS1xMF2e16p0ngk5lSK1314R1D
- AMtj/rpnc9sr5SdjxVB8JE0Ng0PaoWjyTQXpN5jkEjPTFiC7OjsezubwbRdlGgz9h++Ns9mil
- YmB0j9ZEoplISzcLp1FplGHYGk6HnwQYfCOk/mQj+uPOjc5OJTyhA63aWoguDyc04NPViHKCA
- sIxcq4v1Mu++PPyRdzOMeyIT/UtCzzMXwOmlzRFIzGy6M3Sej4uxBCF2rOwzDdFavcqp5Qou6
- RxlzCcMdWul6/ZU/JSAaEtHngVuibga8bgcCIsv9AcCSQw9eaoeG+3CJnEISrtVyZGWZdVLyt
- wmk8DRbXqooL+lyTW/LfAOBuh+X0VBcLMaYEwsrsHHO2/73Ubbdc7m+G3V0CEn2u21pA8tMr9
- HfCHLKjyqSpgAq0KG4gJt60THytDeSWgwAj5WT6tu4/596LSMc83iYBt+cJK9EM/7RtQ=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220208141218.2049591-2-jsd@semihalf.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 4:11 PM Sergei Shtylyov
-<sergei.shtylyov@gmail.com> wrote:
->
-> On 2/8/22 3:31 PM, Arnd Bergmann wrote:
->
-> [...]
-> >>> I might have missed something, but it seems the only user of IRQ 0 on
-> >>> SuperH is smsc911x Ethernet in arch/sh/boards/board-apsh4a3a.c and
-> >>> arch/sh/boards/board-apsh4ad0a.c, which use evt2irq(0x200).
-> >>> These should have been seeing the "0 is an invalid IRQ number"
-> >>> warning splat since it was introduced in commit a85a6c86c25be2d2
-> >>> ("driver core: platform: Clarify that IRQ 0 is invalid"). Or not:
-> >>
-> >>     Warning or no warning, 0 is still returned. :-/
-> >>     My attempt to put an end to this has stuck waiting a review from the IRQ
-> >> people...
-> >
-> > I had another look at this after you asked about it on IRC. I don't
-> > know much SH assembly, but I suspect IRQ 0 has not been delivered
-> > since 2009 after 1e1030dccb10 ("sh: nmi_debug support."). On a
->
->    Mhm... this commit changes the SH3 code while SH778x are SH4A, no?
+On Tue, Feb 08, 2022 at 03:12:17PM +0100, Jan Dabros wrote:
+> All accesses to controller's registers should be protected on
+> probe, disable and xfer paths. This is needed for i2c bus controllers
+> that are shared with but not controller by kernel.
 
-This code is shared between both:
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-arch/sh/kernel/cpu/sh4/Makefile:common-y        += $(addprefix
-../sh3/, entry.o ex.o)
+> Signed-off-by: Jan Dabros <jsd@semihalf.com>
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+>  drivers/i2c/busses/i2c-designware-common.c | 12 ++++++++++++
+>  drivers/i2c/busses/i2c-designware-master.c |  6 ++++++
+>  2 files changed, 18 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+> index bf2a4920638a..9f8574320eb2 100644
+> --- a/drivers/i2c/busses/i2c-designware-common.c
+> +++ b/drivers/i2c/busses/i2c-designware-common.c
+> @@ -578,7 +578,12 @@ int i2c_dw_set_fifo_size(struct dw_i2c_dev *dev)
+>  	 * Try to detect the FIFO depth if not set by interface driver,
+>  	 * the depth could be from 2 to 256 from HW spec.
+>  	 */
+> +	ret = i2c_dw_acquire_lock(dev);
+> +	if (ret)
+> +		return ret;
+> +
+>  	ret = regmap_read(dev->map, DW_IC_COMP_PARAM_1, &param);
+> +	i2c_dw_release_lock(dev);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -607,6 +612,11 @@ u32 i2c_dw_func(struct i2c_adapter *adap)
+>  void i2c_dw_disable(struct dw_i2c_dev *dev)
+>  {
+>  	u32 dummy;
+> +	int ret;
+> +
+> +	ret = i2c_dw_acquire_lock(dev);
+> +	if (ret)
+> +		return;
+>  
+>  	/* Disable controller */
+>  	__i2c_dw_disable(dev);
+> @@ -614,6 +624,8 @@ void i2c_dw_disable(struct dw_i2c_dev *dev)
+>  	/* Disable all interrupts */
+>  	regmap_write(dev->map, DW_IC_INTR_MASK, 0);
+>  	regmap_read(dev->map, DW_IC_CLR_INTR, &dummy);
+> +
+> +	i2c_dw_release_lock(dev);
+>  }
+>  
+>  void i2c_dw_disable_int(struct dw_i2c_dev *dev)
+> diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+> index 9177463c2cbb..1a4b23556db3 100644
+> --- a/drivers/i2c/busses/i2c-designware-master.c
+> +++ b/drivers/i2c/busses/i2c-designware-master.c
+> @@ -905,7 +905,13 @@ int i2c_dw_probe_master(struct dw_i2c_dev *dev)
+>  		irq_flags = IRQF_SHARED | IRQF_COND_SUSPEND;
+>  	}
+>  
+> +	ret = i2c_dw_acquire_lock(dev);
+> +	if (ret)
+> +		return ret;
+> +
+>  	i2c_dw_disable_int(dev);
+> +	i2c_dw_release_lock(dev);
+> +
+>  	ret = devm_request_irq(dev->dev, dev->irq, i2c_dw_isr, irq_flags,
+>  			       dev_name(dev->dev), dev);
+>  	if (ret) {
+> -- 
+> 2.35.0.263.gb82422642f-goog
+> 
 
-       Arnd
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
