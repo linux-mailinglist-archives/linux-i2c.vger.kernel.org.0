@@ -2,78 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9C04AEAB8
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Feb 2022 08:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4384AEC96
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Feb 2022 09:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235638AbiBIHEL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Feb 2022 02:04:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
+        id S241741AbiBIIeR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Feb 2022 03:34:17 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235596AbiBIHEK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Feb 2022 02:04:10 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE184C0613CB;
-        Tue,  8 Feb 2022 23:04:13 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8AF6A1F390;
-        Wed,  9 Feb 2022 07:04:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644390252; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        with ESMTP id S241729AbiBIIeO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Feb 2022 03:34:14 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA316C05CBB9;
+        Wed,  9 Feb 2022 00:34:06 -0800 (PST)
+Date:   Wed, 9 Feb 2022 09:33:55 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644395637;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=I1UxFXVDdtsCDjZgHFf5AxR7egC3Pit8xnNYveVWhAc=;
-        b=j+9Jdm6onqPTFjKCVI/vgmxCixrmBCPIPSs9hcZJ6QhQyR2P2njU8D4k7eh+89C8Pm/AbO
-        yXN75K04SjBYTM7YPgq4xjd1Apn/J9pdlCslZ6oqIFXDF6GkxP4OQFbUoSQiE3D/pVFvst
-        iDB+sBufU64r0Ek4BR/FB4Aqrwfq9xc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644390252;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        bh=cEegwyHh3AOCLz3cTCj8v6K1zDxKD4yBWV+8sL6bFrc=;
+        b=u/Mob7w/VimevoQAad7DDk4SKgNX8XCDpPf69TQ2lWT3az8CLyezqtq4ny/TGXZbqanHGI
+        VSEC0Jylcd1DFjKAdrhsAtpxuL73f6zCyMioxlYTkQKCBjfoaHZMZUQ251GatAZcK84MJi
+        gwIsFGHot8iYqtULewHoa3+ljzeaZMp7Ljc5FJTWH26EYcb/b3f0ZJDVTYIKifgw6q8Vfb
+        FQrjdsTmmtHMT3fWNnbuMuWfB4CTh6SB+55DwAaqXDYsPJ7WR6DzozP21kZShNZW2IUkkx
+        XqGXK93zv4S9IZiQ9NvbTRZB7LGTnDGfEUMCEuAptS8ZgXpPYXtY+rExB6RCOQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644395637;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=I1UxFXVDdtsCDjZgHFf5AxR7egC3Pit8xnNYveVWhAc=;
-        b=Jp+95xuu4T8ipI1FBSyp5W5LN9QQESji3skTAg1hN2dQc6d2qagkl1dRhZu0585/ic2+eI
-        faQEpSFsGgRBuXCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0149913487;
-        Wed,  9 Feb 2022 07:04:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FNi2OWtnA2L0fQAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Wed, 09 Feb 2022 07:04:11 +0000
-Date:   Wed, 9 Feb 2022 08:04:10 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Terry Bowman <Terry.Bowman@amd.com>
-Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
-        linux-i2c@vger.kernel.org, wsa@kernel.org,
-        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
-        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
-        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
-        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
-        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
-Subject: Re: [PATCH v4 0/9] i2c: piix4: Replace cd6h/cd7h port I/O accesses
- with MMIO accesses
-Message-ID: <20220209080410.1e7dddd9@endymion.delvare>
-In-Reply-To: <27e60021-30cb-3b1c-f429-2618bf891e5e@amd.com>
-References: <20220130184130.176646-1-terry.bowman@amd.com>
-        <20220208181114.180a99ba@endymion.delvare>
-        <4ae57999-0f23-7578-008d-2009bc36d46b@amd.com>
-        <20220208224653.6a62ba22@endymion.delvare>
-        <27e60021-30cb-3b1c-f429-2618bf891e5e@amd.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        bh=cEegwyHh3AOCLz3cTCj8v6K1zDxKD4yBWV+8sL6bFrc=;
+        b=Qh++AmLLRNISAd6f1OEam+WBPL+y4VbfbjTC/YRzjJnVL0kOm0B+pA4QgdRkow7WJ+1bMq
+        pOIppG4y96osryDw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>, greybus-dev@lists.linaro.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: [PATCH v3 1/7] genirq: Provide generic_handle_irq_safe().
+Message-ID: <YgN8cx/t1JvATvxh@linutronix.de>
+References: <20220131123404.175438-1-bigeasy@linutronix.de>
+ <20220131123404.175438-2-bigeasy@linutronix.de>
+ <YgArWgyvy9xF3V5Q@kunai>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YgArWgyvy9xF3V5Q@kunai>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,21 +72,73 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 8 Feb 2022 17:03:09 -0600, Terry Bowman wrote:
-> On 2/8/22 15:46, Jean Delvare wrote:
-> > If so, while there's indeed nothing to be done for the most recent
-> > systems where only MMIO access is possible, you may still need to
-> > enable MMIO access through legacy I/O if you try to use MMIO on
-> > chipsets where both are possible. I'm not sure what exactly where you
-> > set the limit. In the last patch you say that 0x51 is the first
-> > revision of the family 17h CPUs, but is family 17h the first where MMIO
-> > is available, or the first where legacy I/O isn't?
->
-> Family 17h, SMBus PCI ID >= 0x51 is the first where cd6h/cd7h port I/O is disabled. 
-> If SMBus PCI ID < 0x51 then cd6h/cd7h port I/O is used. 
+Provide generic_handle_irq_safe() which can used from any context.
 
-OK, we are safe then :-)
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
--- 
-Jean Delvare
-SUSE L3 Support
+v2=E2=80=A6v3: Correct kernel doc for generic_handle_irq_safe() as per Wolf=
+ram
+       Sang.
+
+ include/linux/irqdesc.h |  1 +
+ kernel/irq/irqdesc.c    | 23 +++++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+
+diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
+index 93d270ca0c567..a77584593f7d1 100644
+--- a/include/linux/irqdesc.h
++++ b/include/linux/irqdesc.h
+@@ -160,6 +160,7 @@ static inline void generic_handle_irq_desc(struct irq_d=
+esc *desc)
+=20
+ int handle_irq_desc(struct irq_desc *desc);
+ int generic_handle_irq(unsigned int irq);
++int generic_handle_irq_safe(unsigned int irq);
+=20
+ #ifdef CONFIG_IRQ_DOMAIN
+ /*
+diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+index 2267e6527db3c..346d283d2da14 100644
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -662,6 +662,29 @@ int generic_handle_irq(unsigned int irq)
+ }
+ EXPORT_SYMBOL_GPL(generic_handle_irq);
+=20
++/**
++ * generic_handle_irq_safe - Invoke the handler for a particular irq from =
+any
++ *			     context.
++ * @irq:	The irq number to handle
++ *
++ * Returns:	0 on success, a negative value on error.
++ *
++ * This function can be called from any context (IRQ or process context). =
+It
++ * will report an error if not invoked from IRQ context and the irq has be=
+en
++ * marked to enforce IRQ-context only.
++ */
++int generic_handle_irq_safe(unsigned int irq)
++{
++	unsigned long flags;
++	int ret;
++
++	local_irq_save(flags);
++	ret =3D handle_irq_desc(irq_to_desc(irq));
++	local_irq_restore(flags);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(generic_handle_irq_safe);
++
+ #ifdef CONFIG_IRQ_DOMAIN
+ /**
+  * generic_handle_domain_irq - Invoke the handler for a HW irq belonging
+--=20
+2.34.1
+
