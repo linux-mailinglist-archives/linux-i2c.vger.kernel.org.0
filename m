@@ -2,124 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0644B14CE
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 19:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E8A4B1528
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 19:22:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245453AbiBJSAT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Feb 2022 13:00:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59238 "EHLO
+        id S244485AbiBJSVy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Feb 2022 13:21:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243410AbiBJSAT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 13:00:19 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF3B109E
-        for <linux-i2c@vger.kernel.org>; Thu, 10 Feb 2022 10:00:19 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id ft32so1456362ejc.11
-        for <linux-i2c@vger.kernel.org>; Thu, 10 Feb 2022 10:00:19 -0800 (PST)
+        with ESMTP id S245664AbiBJSVy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 13:21:54 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDC421AE
+        for <linux-i2c@vger.kernel.org>; Thu, 10 Feb 2022 10:21:54 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id y8so6215168qtn.8
+        for <linux-i2c@vger.kernel.org>; Thu, 10 Feb 2022 10:21:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VyiRrCTCvD3kSlcteklEwF1Z7ulIFO497MFIShZC2EQ=;
-        b=lDJDV3gk7vJd8epZow77aLEhctdFJiMdWg4bPXyRqV+P8SCznLTjg9qaMrl4uBKi4W
-         FIa5xSqiTkfMTDDaQX3a6eOR3PULr05leKgBb7dtj1Z9aBTmqdnSEHwpCDlCePcizdIr
-         RL4deMl0WEaY0Jh1Ab9JXnycY4MaE3/yjJweZ3uE1EswISDRfgGvftKiIcyY4+H4cJmx
-         ksSJIN7XeO+LqnG802F/TkZsEYNXr+GmnNkQS0ZABy7zH5ImLkTkhCeBnSYlJHR3czCM
-         ubCKLT2cdNKaVcXthXtuVbskMddyIIhCb3KdDg7PxHdghxxP8+GQpQM+WnSRcdvK6IOK
-         wuSg==
+        bh=/ofn3bSq3MDpUX5izntvFUqZlJnwicKzFuuWVWBilV0=;
+        b=Ea7ZdrFyBcNGjLoOwtve/xy9vJDkVSxMF8DRJcrT98tobQpxS1uLgh4H1lGH7m/zT1
+         e5+rEGeVzuYx2Hlqc7HA1x7/U38vdj+obJLGGFdDSM53jITOpB5muXbexEptprxUXxHu
+         OmR9eJWwJA0eOYvc9fMmwwNeJpUn1HQVJrNMCrP4A11YR/tPrz8X4hC81Amu5m6xTmSR
+         3X9vbLCCOmrPU5nEv1uY2PG1I5qIOrAFZKgDo2NdnDdOnMqR0TUjQZpThKQ1Ymy+pYxm
+         h200qgeY2yFbi9YbsIRaJtQZCnzXzagG/MtmuWHhBkP0V9t7a4sRbYipYLcM8Lms4uZ8
+         34tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VyiRrCTCvD3kSlcteklEwF1Z7ulIFO497MFIShZC2EQ=;
-        b=xYJAcYCnMzZZG8koQGqhl82dCtRV4OA127EPHIupMdSZV8BiHaszXPXB5hEnVlSGfa
-         e+VRu1BtCMxw+x7POR6cj+Xq+YxWiHcN0kOToY0z6T+WaCk/EMwyC5ZaCr/rMaEDUYpb
-         LpsSQhwz1NInbs4Bp2MRf0S9oMtfaO0xf7JX2CdNfLtJoFhp7oP3G+/Q94K6UoaUTSXG
-         1nYEkKLuXQ3WvO6OOqMvt5KGNHnTdTKTe1KLwIA8NWqVyBlRm0MUBGDL60ZCDY59cPz4
-         3FbHLUL8kfumgXjH6yZtiIg2RBlQqR4llkfIMJastzgdfcFvLcg4WOZDO5r1tKRZLr54
-         196g==
-X-Gm-Message-State: AOAM533/FkhWrbg1U2RdO3CjfGfxSiXg0VQZgwfrx6Qw4QXtcBS5X1K9
-        4SVrxd2uFuxFn0s+EYSTi4P2CAblpdnHfIwFmUpVnhchqY8=
-X-Google-Smtp-Source: ABdhPJxJuyhh7OCTVxsg1XD+thnzuteOezciR0odv+RtncFHrFra5L3HMOaU0zxHkSa4CRu6l4IZA/I4m8Gi0BaaQrw=
-X-Received: by 2002:a17:906:7948:: with SMTP id l8mr7308424ejo.636.1644516018273;
- Thu, 10 Feb 2022 10:00:18 -0800 (PST)
+        bh=/ofn3bSq3MDpUX5izntvFUqZlJnwicKzFuuWVWBilV0=;
+        b=UKPfqWLiEa8uMOzF4+MiDFeW4goUBqhHZMPGNruFfCsEpjiYAFHcnq9Q3hri2qQVB5
+         9aFGj5F1gc8tFPSjDUT9ESmDwaQdCaH0HwEzysseqzghgvFV9/MBfJyQoPBz6OX9KhAf
+         KppiYZvR2Tw2y1ZVa0BKbWrnFtCMUuDNwYSFomWaUWamp1zsfGRHLJTiLckPGA9pYGl2
+         d0Hcno1VPDF6Cw8jBGQPW+HY8kdndaExUpnFXcUoh59bxRBFDfa6bpny9U5nuBvVJ4or
+         l9T8l8Z2m9/MFTBQ4R8Gh35mRyLK+mXd7EIkmpYB+OuURy6ldrblqXOcFe3HaDyvHkfB
+         663A==
+X-Gm-Message-State: AOAM530X5LuGGjetdp7TKOpUbHbSgcfqZC+OBizMQZAuHqxW2T1RqSFD
+        LGPMEZxMEVKSfiEq2z9B6eCS2A6NqhbWnyGgZXpMlg==
+X-Google-Smtp-Source: ABdhPJwS3ZI0Mi6QVMlCGaXnDzINY3t30Jhr2IGg4NzhgWLTU6SjTyrdiWUa4++A/1XUdiBOO2y/eHAEf9Vcyi65jd4=
+X-Received: by 2002:ac8:7fca:: with SMTP id b10mr5813303qtk.62.1644517313884;
+ Thu, 10 Feb 2022 10:21:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20211116093833.245542-1-shreeya.patel@collabora.com> <874k56znix.fsf@collabora.com>
-In-Reply-To: <874k56znix.fsf@collabora.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 10 Feb 2022 19:00:07 +0100
-Message-ID: <CAMRc=MdByxO3+hJruvUkULtXAaB7aWewTd=Wv0MbWyX2vykdjA@mail.gmail.com>
-Subject: Re: [PATCH v4] gpio: Return EPROBE_DEFER if gc->to_irq is NULL
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Shreeya Patel <shreeya.patel@collabora.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        wsa@kernel.org, kernel@collabora.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        kbuild test robot <lkp@intel.com>
+References: <Yf1zhojUSxlMNZgV@sirena.org.uk> <Yf14LADJ26G9ByZu@ripper>
+ <Yf1/X1rXm4QbyoFN@sirena.org.uk> <846cdc17-891d-2ee4-fc89-7cf6fbdebc1d@linaro.org>
+ <YgEvN0lXXu4lDCN5@sirena.org.uk> <682b7ffe-e162-bcf7-3c07-36b3a39c25ab@linaro.org>
+ <YgJoX+Ajgt4dweQJ@sirena.org.uk> <CAA8EJppEjFqPUBXtdkTsx2U2CjsrjNsXEmrx_DkAS9a9jmB9cg@mail.gmail.com>
+ <YgUy9KMXocSqnv7b@sirena.org.uk> <CAA8EJpqN_T7eAOdLhK-P_0HCuChpE9JhPBg9HVJ=N1kKMbgDjA@mail.gmail.com>
+ <YgVNJHTQufLu1sM5@sirena.org.uk>
+In-Reply-To: <YgVNJHTQufLu1sM5@sirena.org.uk>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 10 Feb 2022 21:21:42 +0300
+Message-ID: <CAA8EJprrhame0zG4=4cFF7PBS0c9synjStLBingk58y7EJfV6w@mail.gmail.com>
+Subject: Re: [PATCH 2/9] dt-bindings: i2c: qcom-cci: add description of a
+ vbus-supply property
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linus.walleij@linaro.org, Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 5:36 PM Gabriel Krisman Bertazi
-<krisman@collabora.com> wrote:
+On Thu, 10 Feb 2022 at 20:36, Mark Brown <broonie@kernel.org> wrote:
 >
-> Shreeya Patel <shreeya.patel@collabora.com> writes:
+> On Thu, Feb 10, 2022 at 08:32:09PM +0300, Dmitry Baryshkov wrote:
+> > On Thu, 10 Feb 2022 at 18:45, Mark Brown <broonie@kernel.org> wrote:
 >
-> > We are racing the registering of .to_irq when probing the
-> > i2c driver. This results in random failure of touchscreen
-> > devices.
-> >
-> > Following errors could be seen in dmesg logs when gc->to_irq is NULL
-> >
-> > [2.101857] i2c_hid i2c-FTS3528:00: HID over i2c has not been provided an Int IRQ
-> > [2.101953] i2c_hid: probe of i2c-FTS3528:00 failed with error -22
-> >
-> > To avoid this situation, defer probing until to_irq is registered.
-> >
-> > This issue has been reported many times in past and people have been
-> > using workarounds like changing the pinctrl_amd to built-in instead
-> > of loading it as a module or by adding a softdep for pinctrl_amd into
-> > the config file.
-> >
-> > BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=209413
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+> > > I would hope it's a temporary thing given the namespace collision
+> > > issues...
 >
-> Hi guys,
+> > Which collision? CCI doesn't have a separate vbus power input (and
+> > probably never will).
 >
-> This seems to not have reached the Linus tree on 5.17.  If I'm not
-> mistaken, it also hasn't reached linux-next as of today. Is there
-> anything I'm missing here?
+> That "probably" there is doing some work, and if you're doing something
+> at the I2C core level (as it seems should be done) it needs to cope with
+> all possible controllers and devices.
 >
-> This is required to prevent spurious probe crashes of devices like this
-> FocalTech touchscreen, FT3528, when using pinctrl-amd. We've been
-> carrying it downstream for quite a while.
+> > > Do these controllers actually have a supply called vbus?
 >
-> Thanks,
+> > No. It's a separate entity, a regulator-controller pull-up for the bus.
+> > So far we'd like to hear better suggestions. Using regulator-always-on
+> > doesn't sound like a good idea, it will increase unnecessary power
+> > drain.
 >
-> --
-> Gabriel Krisman Bertazi
+> Please see my suggestions elsewhere in the thread.
 
-Hi Gabriel!
+Please excuse me. I missed the e-mail suggesting to move support for
+that into the core level.
+I'd second a request to handle the adapter->bus_regulator in the core code.
+Would you be ok with the 'external-sda-scl-supply' property? Would you
+demand that it's completely handled by the core layer (including DT
+parsing) or should we let a driver parse the DT property?
 
-My email address changed in September, that's why I didn't see the
-email you sent in November to my old one.
 
-gpiod_to_irq() can be used in context other than driver probing, I'm
-worried existing users would not know how to handle it. Also: how come
-you can get the GPIO descriptor from the provider but its interrupts
-are not yet set up?
-
-Bart
+-- 
+With best wishes
+Dmitry
