@@ -2,150 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38104B1132
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 16:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 564904B11BB
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 16:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243369AbiBJPFM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Feb 2022 10:05:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45644 "EHLO
+        id S243642AbiBJPdW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Feb 2022 10:33:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243366AbiBJPFM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 10:05:12 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1A2DB0
-        for <linux-i2c@vger.kernel.org>; Thu, 10 Feb 2022 07:05:09 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id y7so2063792plp.2
-        for <linux-i2c@vger.kernel.org>; Thu, 10 Feb 2022 07:05:09 -0800 (PST)
+        with ESMTP id S240898AbiBJPdV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 10:33:21 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041431DC
+        for <linux-i2c@vger.kernel.org>; Thu, 10 Feb 2022 07:33:22 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id bs32so5197606qkb.1
+        for <linux-i2c@vger.kernel.org>; Thu, 10 Feb 2022 07:33:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=mfykEeq/PTWMM19FDkGyT6i2vjI4PN8vGRSXZaauxBA=;
-        b=J99beh/dFKbwczl+iefr85tYXygTDqzfmcp4hD5snVXbMessrrsZcFNMwOihVibpjf
-         l0zGtzlnzw5SD3iCmXiusUnz1nRyHcdbs05hmQ7s5vaaNX8n8YVxawCGYYB0RbDUzmPa
-         nKicx9V4k29lZtUW5XcLf5qSj4Yh9RPGSUqwYt2Ypr4sEGQrYLdmZ6knOfjJ8D5AvMyw
-         bS3jU2Zocl3m1w3iYKzy90frCk2g6+k9igHjJ6fXlZZ5h3UH4cbwJN+5Qet/TP6pQs5C
-         Ug+CjjEI1+XL6I9wAobYFdmLYRSzJbpDrXi2nXDTQ3nta5yP6HRXyuMgRtDawx7GTmMI
-         olfA==
+         :cc;
+        bh=FL/C4Z8yVwITrvLePD7PW2Jh2OQUiy4zpTquT5szMek=;
+        b=qeouTAFQBSLpoh8wkQn7kXpOttRk9Gv3ezXt7zdNPmb9P5eqkcvquLwiOSj+NY0O39
+         jExbqpUz6GTIgvr7F/SNKwhxlIaddLakzvNgGipS9nQPQD/FUFbmaG/KyqZNIEVuyRCS
+         KsQBGYv/RmF8VclP+Wwo0RYy+LWTRyLfMSWDzdaqeDV5s3JubMvBq0+/A4UuFhXBpfKx
+         oSWFDteSho1x3i7f7d3rRIQ1JlTRrNXp6O1NcEcyfY7M9xARz78qi33mBj74rVBKPMP6
+         5k4d/oO7hUo4a9LJSy4h7muGwin3Woq6P6oBN8NWcfzTFgp6MWNfT7dp/VEqViTIsF1m
+         kt9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=mfykEeq/PTWMM19FDkGyT6i2vjI4PN8vGRSXZaauxBA=;
-        b=B99lZxQ0zf9q0H6RS53auIsM8TXsxdLbJi1Wa7H/kyvCCa8Twe0knT5BO5CcksaJDr
-         7X1tYfw0ziqSITbCDen4Lds7yG+nYi5NZQh3JZ7c1qP3N9voiXDCO/4QbWEiO2Qnm85l
-         uPXLe/tJxq/hDY+ui1bFryDUnjth5fJfGT8O4cSXLbkrjwuxh4eUnZXpGpU1rZn7N4D+
-         dQ0OHCOjr2oh2L5nyOLkAtApHEmhBYzAQFk6hcPmxVhmXWvyQHpVEXxARiTMEFIo1qJo
-         NwHh3FPK5zGm0Izm1rPpwMhWLudLbmr0D5hWBuoIlhYsLy66KnGvVDT8Gpq4m2GBtAlT
-         6ZGA==
-X-Gm-Message-State: AOAM533hFvORFc/zhX8LcCu+p9SKze2JjV9OibUMeUiYIs86n2vghAN8
-        rRFs4CllGuhX80yI0cxo0honb7ddgGhWycaxBVOVpw==
-X-Google-Smtp-Source: ABdhPJwr4x3i6Nf67loyk6jbAiodHIl76q6PyyG31Ql4a+v7heG0BPTUUYhiy61JclAE3o6aFw2oDqlYIQIEv9cDwGE=
-X-Received: by 2002:a17:90b:4c08:: with SMTP id na8mr1472697pjb.90.1644505508583;
- Thu, 10 Feb 2022 07:05:08 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=FL/C4Z8yVwITrvLePD7PW2Jh2OQUiy4zpTquT5szMek=;
+        b=6d6nt4I7he+RiZqiRUcdMNlijKiRSfiUL6FP9gwSZ2WqkoGMjldYfBA3nws4wBxcop
+         3cdOmFqlgBthXlU3bnC8hoJ64rjn6AuDKCTDzY+0eHdA333NHvsMQHRtG1EbZH0djGaR
+         s2e84VU+oJ8Oqjh4H1tRy3O1JD+bfdsQkxLcMV4QZf9WliRL33oyYoHOdRHmYw3Onpu5
+         MhvewDRTokxAlla2z7XkZSm4dco8YwXqfJAq2nwB/Cni9JaHYiOc2f8wCEAqCj5XRU6l
+         /hvhhoKImLzla4MkFy4jRnjqKII4Er5tNu3WyFMkVUpwihHN6QhASCjz72kXzJYy2/lp
+         lxrA==
+X-Gm-Message-State: AOAM533sLWg0L9G7I5MODLvjhKvFH/NOH9iaAH807sba7v2Xm8SYs75F
+        JEzcI1CiCRcWdPOQEHJKbnCQpo1WXe+cM39Ph4atdg==
+X-Google-Smtp-Source: ABdhPJyHyx35eqG+mDoZXo+4b0lEDjXxuVtsuUbpESl7ZzUT3JUOOliWvKZ4XFvW9Lywzp2UQZCzw2j854aPgD09pf0=
+X-Received: by 2002:a05:620a:1664:: with SMTP id d4mr4053644qko.363.1644507201150;
+ Thu, 10 Feb 2022 07:33:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20220208141218.2049591-1-jsd@semihalf.com> <20220208141218.2049591-3-jsd@semihalf.com>
- <YgPdYw6hDoN198Hf@smile.fi.intel.com> <CAOtMz3OJNopHKgKDvGNfVWwvvo57=LyiRcnT+x6TxwLb+hgkyw@mail.gmail.com>
- <87fcba54-b54a-ea20-63ba-f447f4d34506@linux.intel.com>
-In-Reply-To: <87fcba54-b54a-ea20-63ba-f447f4d34506@linux.intel.com>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Thu, 10 Feb 2022 16:04:57 +0100
-Message-ID: <CAOtMz3P1ZC7euRJK0e1Fn7W4EGx6J-KqevUbfaGGZbVOuu0q8g@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] i2c: designware: Add AMD PSP I2C bus support
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
+References: <20220203164629.1711958-1-vladimir.zapolskiy@linaro.org>
+ <20220203164629.1711958-3-vladimir.zapolskiy@linaro.org> <Yf1q+wlXo2LAeZX+@ripper>
+ <Yf1zhojUSxlMNZgV@sirena.org.uk> <Yf14LADJ26G9ByZu@ripper>
+ <Yf1/X1rXm4QbyoFN@sirena.org.uk> <846cdc17-891d-2ee4-fc89-7cf6fbdebc1d@linaro.org>
+ <YgEvN0lXXu4lDCN5@sirena.org.uk> <682b7ffe-e162-bcf7-3c07-36b3a39c25ab@linaro.org>
+ <YgJoX+Ajgt4dweQJ@sirena.org.uk>
+In-Reply-To: <YgJoX+Ajgt4dweQJ@sirena.org.uk>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 10 Feb 2022 18:33:09 +0300
+Message-ID: <CAA8EJppEjFqPUBXtdkTsx2U2CjsrjNsXEmrx_DkAS9a9jmB9cg@mail.gmail.com>
+Subject: Re: [PATCH 2/9] dt-bindings: i2c: qcom-cci: add description of a
+ vbus-supply property
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        "Easow, Nimesh" <Nimesh.Easow@amd.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linus.walleij@linaro.org, Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
-
-czw., 10 lut 2022 o 15:43 Jarkko Nikula
-<jarkko.nikula@linux.intel.com> napisa=C5=82(a):
+On Tue, 8 Feb 2022 at 16:16, Mark Brown <broonie@kernel.org> wrote:
 >
-> On 2/10/22 10:18, Jan D=C4=85bro=C5=9B wrote:
-> > =C5=9Br., 9 lut 2022 o 16:28 Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
-> >>
-> >> On Tue, Feb 08, 2022 at 03:12:18PM +0100, Jan Dabros wrote:
-> >>
-> >> ...
-> >>
-> >> I have noticed code duplication.
-> >>
-> >>> +     status =3D psp_send_i2c_req(PSP_I2C_REQ_ACQUIRE);
-> >>> +     if (status) {
-> >>> +             if (status =3D=3D -ETIMEDOUT)
-> >>> +                     dev_err(psp_i2c_dev, "Timed out waiting for PSP=
- to release I2C bus\n");
-> >>> +             else
-> >>> +                     dev_err(psp_i2c_dev, "PSP communication error\n=
-");
-> >>> +
-> >>> +             dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive h=
-ost usage\n");
-> >>> +             psp_i2c_mbox_fail =3D true;
-> >>> +             goto cleanup;
-> >>> +     }
-> >>
-> >>> +     /* Send a release command to PSP */
-> >>> +     status =3D psp_send_i2c_req(PSP_I2C_REQ_RELEASE);
-> >>> +     if (status) {
-> >>> +             if (status =3D=3D -ETIMEDOUT)
-> >>> +                     dev_err(psp_i2c_dev, "Timed out waiting for PSP=
- to acquire I2C bus\n");
-> >>> +             else
-> >>> +                     dev_err(psp_i2c_dev, "PSP communication error\n=
-");
-> >>> +
-> >>> +             dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive h=
-ost usage\n");
-> >>> +             psp_i2c_mbox_fail =3D true;
-> >>> +             goto cleanup;
-> >>> +     }
-> >>
-> >> If you are going to update the series, consider to introduce a common =
-helper.
-> >> Otherwise, consider a follow up.
-> >
-> > Thanks for your comment. Since Jarkko is running some long-lasting
-> > tests with v4 patchset, I would like to keep this as is for now (and
-> > make a follow up commit). If there will be some additional comments
-> > for v4 from him and will spin v5 - I will introduce a common helper
-> > function then.
-> >
-> Test run fine overnight, although I wasn't expecting this breaking
-> Baytrail since patch is practically touching only semaphore detection at
-> probe time on Baytrail. I'm up to you would you address Andy's comments
-> as a follow up or as v5.
+> On Mon, Feb 07, 2022 at 08:31:30PM +0200, Vladimir Zapolskiy wrote:
+> > On 2/7/22 4:39 PM, Mark Brown wrote:
 >
-> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> > > The bindings are ABI, it doesn't seem like a good idea to add new ABI as
+> > > a temporary bodge.
 
-Thanks!
+It's not a temporary bodge. The i2c-core piece was reverted, but not
+the mediatek driver code/bindings.
+Vladimir has provided a replacement for the i2c-core code handling the
+vbus-regulator. When thee code will be back, the code from i2c-cci can
+be removed. The bindings will be the same.
 
-If you don't mind I'd prefer a merge and a follow-up improvement on
-top. Current version is tested and in case of breakage it would be
-easier to track.
+>
+> > The bindings are supposed to describe hardware, thus it's natural to extend
+> > them, I believe there is a trilemma in this particular case:
+> > 1) add optional vbus-supply property to all I2C master controllers or I2C
+> >    busses in case of multiple I2C busses managed by a single controller,
+> > 2) add optional vbus-supply property to all I2C slave devices,
+>
+> If you add a named supply to all I2C controllers or devices then if any
+> of them have an actual vbus supply there will be a namespace collision.
+>
+> > 3) ignore peculiarities of particular (multiple in fact) PCB designs and
+> >    a necessity of adding a regulator finely described as a pull-up for I2C
+> >    bus lines.
+>
+> There's also the option of representing this as a separate thing on or
+> part of the bus.
 
-Best Regards,
-Jan
+4) (which you have implemented in your patch). Add support for  the
+vbus-supplies property for the I2C CCI controllers.
+
+This is the option I'd vote for.
+
+-- 
+With best wishes
+Dmitry
