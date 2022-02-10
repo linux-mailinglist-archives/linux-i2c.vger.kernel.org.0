@@ -2,161 +2,211 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87564B11CB
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 16:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A854B11D1
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 16:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243663AbiBJPh3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Feb 2022 10:37:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35016 "EHLO
+        id S241932AbiBJPiA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Feb 2022 10:38:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234987AbiBJPh1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 10:37:27 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2060.outbound.protection.outlook.com [40.107.237.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 074BF1DF;
-        Thu, 10 Feb 2022 07:37:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GO9g49AVGqEax+7bP/O/VzAhN9HeMAj0C+k6ycZOORU/QqqSx7m6Mz3zd0yAL9aKB8Pv4/eKptqXQ5t6BUXiG7usbE0WqiNXCbi5OXbXLnjM1iwrbBk8EV2Mktdmw8wik4+6S4OHnLdZMibgPfHpMw6filAk2ZZCgLFleMbhBvyd+8Z6wLV8OIhXZwARLnYugikh/7nMeQQNmmDfTbMOUiqJ1tzH4ayGqOAYUkPTQBJqzNRx18K1GnsRGCc5i5Me1rspy5TWUYgJDnBl+AeKqyUDYjrsAuTc+rk350koEayBs6TGj+89HmlHSv0VefBIRH/+9dXGGMmcDaR4hJVwcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sJEeEMyV6Nlb38k4MXvSJxXG6mRre2WYA9JBUTQNIPU=;
- b=MR7W5XehSYzPiCemqhaReap582xFsWLKIBX/5bF83YjGe5dT5m5rkmHCgvZKNvHfX+g8R46x2v48g30RrlLWZ8JMRtw9s/G0rs74qMaZAsQhTL+1mlsLUE/IUJynPt4DYqjRinil7JPCedhZ0LLpVJDinu5abL9uyvzH1zS8vurRpyaHAGfw9+tw2+xMA9XDx3jesjqVj08f84GsQ7NRrg+9Bio6S+R2gtwlz2KGdxTrBXsa8Tm4s53mPy7J6D6NrqkroR0uEu21edGfIWXEbRF00GwsNr+bjleVo/Dr0tYjdAQy6Ez9K2Ca5zj/LsSQHNNiK5fo0rkshnESQzoKiA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=pengutronix.de smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sJEeEMyV6Nlb38k4MXvSJxXG6mRre2WYA9JBUTQNIPU=;
- b=EjgfUkFM6mEdgBICUlA3fVLS7E3rPJyo0rCFm+VDrfXHUFblZT4GIS29EMmXRc0T+Jeun1MSBCeDmc5PSxSRf324ASyrMppu1unkpGN01jQW9FJalPhT9L8yJAXcK1NOUhy1EaJvqijLO0+yUHR5PhWEfiE+BBjKDviGT7WKMlalRkM08FpgziPAaaO1OfgkIR7YKNR8thGicEg0eK4aswiBIQxMYRgHhceK7qhBfyd9AJLlxzOqPomXNtu5rk9c7PIe1GI9SWx7+QkjYeukuMhjlWHfHp4KqkjgTqA+VPCaksJg+PEX1a5cuVM4p6Dsmqz8vVKD1ZrbG/RaIYzNNw==
-Received: from BN6PR11CA0005.namprd11.prod.outlook.com (2603:10b6:405:2::15)
- by MN2PR12MB4047.namprd12.prod.outlook.com (2603:10b6:208:1de::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.12; Thu, 10 Feb
- 2022 15:37:26 +0000
-Received: from BN8NAM11FT067.eop-nam11.prod.protection.outlook.com
- (2603:10b6:405:2:cafe::6f) by BN6PR11CA0005.outlook.office365.com
- (2603:10b6:405:2::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.12 via Frontend
- Transport; Thu, 10 Feb 2022 15:37:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.235) by
- BN8NAM11FT067.mail.protection.outlook.com (10.13.177.159) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4975.11 via Frontend Transport; Thu, 10 Feb 2022 15:37:26 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 10 Feb
- 2022 15:36:30 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Thu, 10 Feb 2022
- 07:36:30 -0800
-Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server id 15.2.986.9 via Frontend
- Transport; Thu, 10 Feb 2022 07:36:26 -0800
-From:   Akhil R <akhilrajeev@nvidia.com>
-To:     <christian.koenig@amd.com>, <digetx@gmail.com>,
-        <jonathanh@nvidia.com>, <ldewangan@nvidia.com>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <mperttunen@nvidia.com>,
-        <p.zabel@pengutronix.de>, <sumit.semwal@linaro.org>,
-        <thierry.reding@gmail.com>
-CC:     <akhilrajeev@nvidia.com>
-Subject: [PATCH RESEND] i2c: tegra: Add SMBus block read function
-Date:   Thu, 10 Feb 2022 21:06:03 +0530
-Message-ID: <20220210153603.61894-1-akhilrajeev@nvidia.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S238726AbiBJPh7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 10:37:59 -0500
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C9CFA
+        for <linux-i2c@vger.kernel.org>; Thu, 10 Feb 2022 07:38:00 -0800 (PST)
+Received: by mail-qk1-x735.google.com with SMTP id b35so5181923qkp.6
+        for <linux-i2c@vger.kernel.org>; Thu, 10 Feb 2022 07:38:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dOIcJ6wQhY02nLa4jykUVh5HXVg6014x9J8/El/aByw=;
+        b=UnZkf5JbRLhoxh2+rUNY0Y7PyxIkqLcEdAF/0BqSbgfUP68ieI6zShxTLjzggvblj0
+         Aj2Mdb5FslsJeKFU+0QqDjfP1EkTs1tyV5j8+ei1fKWcm9+IxH4lo89gFqjchrXSt5tt
+         ERnE61tF150G7lLUgTQIJQI26MyyKwU7w89Ed0YD7z6WctcOH3BlvyaI7VWVgE9o0a/l
+         du51in55C+DMxgsCWe40l/YP0VW9oyOHbOmcGmlUPxSOWGJHu/Nc/M5rGO59GLPxjC4M
+         6ciuirA0sWydcYZqHJ8y5dI3Lwy2JPKmkk5TfkHlc8cwzzbBfhNFo3WbpL7f7RJSnGH+
+         h6TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dOIcJ6wQhY02nLa4jykUVh5HXVg6014x9J8/El/aByw=;
+        b=tNBDSC+5SKQKbrOFkijaM7U8x7DOvHZbj8NVUMbtoXj7+0ClqGYtJwgUnarBRma30T
+         T2nZK9MP16Ed1qMr4u/DTru1e7i+8kneApiL9lUDgUixDJyCc1DiULzRKCdrbt5yT23D
+         U1sLu2YbOApWWrKSJJm6nFm7VweVsUBqKwtp2ty8+slsl2axzL+0XkChgsEB6G7Wxdwc
+         VB+VVb9lK81vfRGvoKAkKkHr4mjRuHraaP3FvZj20kmkTG6AFt2OThl2+xcSpzBj1KZq
+         ENV0xt9hvnq4sckOL6FX1XSnBeyvT+8CnlsvpSCDuCt6rD6HTLjIiiNPDwCpP42OXU/q
+         2E9A==
+X-Gm-Message-State: AOAM533b57/6YnQJuwK70DxxRaQ1EBZ/d65eVtlvoCmqU+5RmKFmHRMx
+        ZDJThc48lG1/Zb2uVs86uYgM2CF+3KmJeKVy/kcfzQ==
+X-Google-Smtp-Source: ABdhPJxgzM9OcdSJ67Pr7qWlAMGObbohX1R5smPQ9jC8pkCvNMgwYm8hy0eWMluvW3d8pXc4PaefPMVtp4VmedLAlW4=
+X-Received: by 2002:ae9:eb87:: with SMTP id b129mr4223200qkg.203.1644507479554;
+ Thu, 10 Feb 2022 07:37:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f675af9d-91e7-4dc1-f7ec-08d9ecab3d97
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4047:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB404764C0D7A3FF40F0AEBB42C02F9@MN2PR12MB4047.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1227;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: b9qq6rCz6sfUBfxp0MP1X/H4T/s1NMteWXEsGW/ZL+d8ufO4ovHkoq1FF9Wv/NxYcwkUvEb5E4B/1v2FeSP1u43wo1pB5VrwgWJ7omDj68bIhq5ASSsb2J2lMUOyRhOiYQBjR69KJ2wFBRAuevTyNtc3rALQDFUfAJoxc0m/G1gegLn9cBfTaBApZ0P2NlBIsXxiVSrdbnP+Jzwc4UnPzglEHNd+UkEIoOJsiQNwXHSxKv6t+8ks6BH666jssgZYtuTjpRXF63CCcu2vlIM/D0Iod2N6/HSN4H8YPUh0XDOih1UZyBz5Hh2DWuXTtRgsoQusDSM4+8Ab2c9yqNaNNEXbH/yAnWSgHCdPXlfytusu9Z8Xd6jtkqgxr2c/ie+55zDfvktxCDQjyDVuH0wU4wVbVjwwkBtNLJfsN8azT7i4l6wN/lGoMq2E9Fd8dAqyBoQcSeDkLMgUpj5d+kggjP8WXra2Ih1oYP4ELcTIXWjt0lEdf/XRTuJo/GdABbspKhVxe8ezmUrVnTj4CxgvyJzRVw1zrzjlxY56C3eFYuwihk9gYgizkchID8ZkzbWOVgZXsFt/K3QtjIuWUrNEqC4zqnJcldnO5lhEev0hyKpv7mls4dXQU86pcdVgerYbq5mvNK8xwEGKSxL+pZf6X7+olxh6Q4vvTEaMJUUGNrbMDjjkkqWtwtseAq2nrcwDogzL0uztbsikhVcbLuqLRXR2OAaiH9Kwlapye2QPuwCVJDl+gUGKRZQq6KmUqNAjpLrVR9sF+DSJE2FP9c3bqQ==
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(70586007)(70206006)(36860700001)(36756003)(82310400004)(316002)(6666004)(8676002)(8936002)(83380400001)(47076005)(110136005)(7696005)(4326008)(81166007)(921005)(356005)(40460700003)(107886003)(2906002)(26005)(186003)(2616005)(1076003)(86362001)(5660300002)(336012)(426003)(508600001)(83996005)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 15:37:26.4537
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f675af9d-91e7-4dc1-f7ec-08d9ecab3d97
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT067.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4047
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220203164629.1711958-1-vladimir.zapolskiy@linaro.org>
+ <20220203164711.1712090-1-vladimir.zapolskiy@linaro.org> <CAG3jFyuzJmRk47kfd_zVw3g+_eKUQVG6y5hU0z1KfXPEM4quNg@mail.gmail.com>
+ <CAMZdPi9cbH2Xiwr+QOF46pqZEtaZCBbq8Zq-3gUaYDp7MekJSA@mail.gmail.com>
+In-Reply-To: <CAMZdPi9cbH2Xiwr+QOF46pqZEtaZCBbq8Zq-3gUaYDp7MekJSA@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 10 Feb 2022 18:37:48 +0300
+Message-ID: <CAA8EJpri7d+RPSaUKG+g3HUbiNawCVnnNtW-xA8ON+Obm5x5yw@mail.gmail.com>
+Subject: Re: [PATCH 8/9] i2c: qcom-cci: add support of optional vbus-supply regulators
+To:     Loic Poulain <loic.poulain@linaro.org>
+Cc:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Emulate SMBus block read using ContinueXfer to read the length byte
+On Fri, 4 Feb 2022 at 14:42, Loic Poulain <loic.poulain@linaro.org> wrote:
+>
+> On Fri, 4 Feb 2022 at 12:03, Robert Foss <robert.foss@linaro.org> wrote:
+> >
+> > On Thu, 3 Feb 2022 at 17:47, Vladimir Zapolskiy
+> > <vladimir.zapolskiy@linaro.org> wrote:
+> > >
+> > > The change adds handling of optional vbus regulators in the driver.
+> > >
+> > > Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+> > > ---
+> > >  drivers/i2c/busses/i2c-qcom-cci.c | 49 +++++++++++++++++++++++++++++++
+> > >  1 file changed, 49 insertions(+)
+> > >
+> > > diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
+> > > index 775945f7b4cd..2fc7f1f2616f 100644
+> > > --- a/drivers/i2c/busses/i2c-qcom-cci.c
+> > > +++ b/drivers/i2c/busses/i2c-qcom-cci.c
+> > > @@ -11,6 +11,7 @@
+> > >  #include <linux/of.h>
+> > >  #include <linux/platform_device.h>
+> > >  #include <linux/pm_runtime.h>
+> > > +#include <linux/regulator/consumer.h>
+> > >
+> > >  #define CCI_HW_VERSION                         0x0
+> > >  #define CCI_RESET_CMD                          0x004
+> > > @@ -480,6 +481,20 @@ static void cci_disable_clocks(struct cci *cci)
+> > >  static int __maybe_unused cci_suspend_runtime(struct device *dev)
+> > >  {
+> > >         struct cci *cci = dev_get_drvdata(dev);
+> > > +       struct regulator *bus_regulator;
+> > > +       unsigned int i;
+> > > +
+> > > +       for (i = 0; i < cci->data->num_masters; i++) {
+> > > +               if (!cci->master[i].cci)
+> > > +                       continue;
+> > > +
+> > > +               bus_regulator = cci->master[i].adap.bus_regulator;
+> > > +               if (!bus_regulator)
+> > > +                       continue;
+> > > +
+> > > +               if (regulator_is_enabled(bus_regulator) > 0)
+> >
+> > Is this check needed? No matter the current status of the regulator,
+> > we'd like to disable it, and from my reading regulator_disable can be
+> > called for already disabled regulators.
+>
+> +1, but why do we even assign this regulator to each adapter, a
+> simpler solution would be to have the regulator part of the cci
+> struct, and simply disable/enable it on runtime suspend/resume,
+> without extra loop/check. I2C core does nothing with
+> adap.bus_regulator anyway (5a7b95fb993e has been partially reverted).
 
-Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
----
- drivers/i2c/busses/i2c-tegra.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+I like the idea of having the regulator per bus (rather than per
+controller). However instead of pushing handling these changes to the
+CCI controller, I'd suggest to move this code to the i2c-core itself.
+The original patch tried to do the regulator control per client.
+Instead it should be done per adapter. I think this should also solve
+the reported issue for AMD controllers (since that i2c adapters won't
+have vbus-supply).
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 03cea102ab76..2941e42aa6a0 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -1233,6 +1233,11 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 		return err;
- 
- 	i2c_dev->msg_buf = msg->buf;
-+
-+	/* The condition true implies smbus block read and len is already read */
-+	if (msg->flags & I2C_M_RECV_LEN && end_state != MSG_END_CONTINUE)
-+		i2c_dev->msg_buf = msg->buf + 1;
-+
- 	i2c_dev->msg_buf_remaining = msg->len;
- 	i2c_dev->msg_err = I2C_ERR_NONE;
- 	i2c_dev->msg_read = !!(msg->flags & I2C_M_RD);
-@@ -1389,6 +1394,15 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
- 			else
- 				end_type = MSG_END_REPEAT_START;
- 		}
-+		/* If M_RECV_LEN use ContinueXfer to read the first byte */
-+		if (msgs[i].flags & I2C_M_RECV_LEN) {
-+			ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], MSG_END_CONTINUE);
-+			if (ret)
-+				break;
-+			/* Set the read byte as msg len */
-+			msgs[i].len = msgs[i].buf[0];
-+			dev_dbg(i2c_dev->dev, "reading %d bytes\n", msgs[i].len);
-+		}
- 		ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], end_type);
- 		if (ret)
- 			break;
-@@ -1416,10 +1430,10 @@ static u32 tegra_i2c_func(struct i2c_adapter *adap)
- {
- 	struct tegra_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
- 	u32 ret = I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK) |
--		  I2C_FUNC_10BIT_ADDR |	I2C_FUNC_PROTOCOL_MANGLING;
-+		  I2C_FUNC_10BIT_ADDR | I2C_FUNC_PROTOCOL_MANGLING;
- 
- 	if (i2c_dev->hw->has_continue_xfer_support)
--		ret |= I2C_FUNC_NOSTART;
-+		ret |= I2C_FUNC_NOSTART | I2C_FUNC_SMBUS_READ_BLOCK_DATA;
- 
- 	return ret;
- }
+>
+> >
+> > > +                       regulator_disable(bus_regulator);
+> > > +       }
+> > >
+> > >         cci_disable_clocks(cci);
+> > >         return 0;
+> > > @@ -488,12 +503,30 @@ static int __maybe_unused cci_suspend_runtime(struct device *dev)
+> > >  static int __maybe_unused cci_resume_runtime(struct device *dev)
+> > >  {
+> > >         struct cci *cci = dev_get_drvdata(dev);
+> > > +       struct regulator *bus_regulator;
+> > > +       unsigned int i;
+> > >         int ret;
+> > >
+> > >         ret = cci_enable_clocks(cci);
+> > >         if (ret)
+> > >                 return ret;
+> > >
+> > > +       for (i = 0; i < cci->data->num_masters; i++) {
+> > > +               if (!cci->master[i].cci)
+> > > +                       continue;
+> > > +
+> > > +               bus_regulator = cci->master[i].adap.bus_regulator;
+> > > +               if (!bus_regulator)
+> > > +                       continue;
+> > > +
+> > > +               if (!regulator_is_enabled(bus_regulator)) {
+> > > +                       ret = regulator_enable(bus_regulator);
+> > > +                       if (ret)
+> > > +                               dev_err(dev, "failed to enable regulator: %d\n",
+> > > +                                       ret);
+> > > +               }
+> > > +       }
+> > > +
+> > >         cci_init(cci);
+> > >         return 0;
+> > >  }
+> > > @@ -593,6 +626,7 @@ static int cci_probe(struct platform_device *pdev)
+> > >         dev_dbg(dev, "CCI HW version = 0x%08x", val);
+> > >
+> > >         for_each_available_child_of_node(dev->of_node, child) {
+> > > +               struct regulator *bus_regulator;
+> > >                 struct cci_master *master;
+> > >                 u32 idx;
+> > >
+> > > @@ -637,6 +671,21 @@ static int cci_probe(struct platform_device *pdev)
+> > >                         master->cci = NULL;
+> > >                         goto error_i2c;
+> > >                 }
+> > > +
+> > > +               /*
+> > > +                * It might be possible to find an optional vbus supply, but
+> > > +                * it requires to pass the registration of an I2C adapter
+> > > +                * device and its association with a bus device tree node.
+> > > +                */
+> > > +               bus_regulator = devm_regulator_get_optional(&master->adap.dev,
+> > > +                                                           "vbus");
+> > > +               if (IS_ERR(bus_regulator)) {
+> > > +                       ret = PTR_ERR(bus_regulator);
+> > > +                       if (ret == -EPROBE_DEFER)
+> > > +                               goto error_i2c;
+> > > +                       bus_regulator = NULL;
+> > > +               }
+> > > +               master->adap.bus_regulator = bus_regulator;
+> > >         }
+> > >
+> > >         ret = cci_reset(cci);
+> > > --
+> > > 2.33.0
+> > >
+> >
+> > With the above nit sorted, feel free to add my r-b.
+> >
+> > Reviewed-by: Robert Foss <robert.foss@linaro.org>
+
+
+
 -- 
-2.17.1
-
+With best wishes
+Dmitry
