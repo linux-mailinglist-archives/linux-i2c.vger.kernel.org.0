@@ -2,53 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CC24B17E2
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 23:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 105C74B17EA
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 23:08:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344764AbiBJWCE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Feb 2022 17:02:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41536 "EHLO
+        id S1344814AbiBJWIR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Feb 2022 17:08:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236817AbiBJWCD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 17:02:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A59EBBC;
-        Thu, 10 Feb 2022 14:02:03 -0800 (PST)
+        with ESMTP id S1344810AbiBJWIR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 17:08:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD96E1F5;
+        Thu, 10 Feb 2022 14:08:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC44361BCD;
-        Thu, 10 Feb 2022 22:02:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94026C340ED;
-        Thu, 10 Feb 2022 22:02:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68376B8277C;
+        Thu, 10 Feb 2022 22:08:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69F23C004E1;
+        Thu, 10 Feb 2022 22:08:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644530522;
-        bh=FuA/vqugt280wWCxhxZPTSLe70pjFP3XNTWK4mjkZK8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=SpDKy7QRhMlA9bXNKBRu4KtjJa8jIRmRvxhf6VP1avsbU6/DPJu0u5/CeMZvmV9QW
-         bf5IY4iX+2nnDvIyjJNDc/qBgA0oP8PpizL06ElHs4DKXrTNaczpA8efdh0EW+Jrb5
-         6SRtWtj2Edaq+H7SGjL8VXIEUcY2yqiY56gE766rVJFxuYumV+iGvUlRwSBqJ4ZyQr
-         zhMWHZr+Uz76Mm7XbupcxyrXAqxyZp/tpl1KG/9pF8+uwj9bB87ix6AoPWUkHlz3qW
-         RbrwCYC5ipYPzPDsUhrwpmCEmEGNPLAIG2j+s/MQwjrEgTKr0TPQBjvKN1RpR3ZC6p
-         zMx989cHvwN0Q==
-Date:   Thu, 10 Feb 2022 23:01:58 +0100
+        s=k20201202; t=1644530894;
+        bh=im05UYjFr5xVQmXlVHl+Yh2qcTmxBBBiFbmqQpJ38Ik=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bZ4a0xfnep4I9B1TdtjTkuxbmxOd3LrzEx+KHgX/HRJwMQlHr6BWPQABrNQKFyPDS
+         DrGEL3o8alwDzg+kd9IzrkfSdKVezJen4V+fJk7Uh7BF3xzk3UhVEbJVlUIEOjisRl
+         yuh42lfnDOYIyDLLdNGBIHVLhwF9GY29/aCs2gm8jgKgldmKr7Ujqucp7/pl+ZKZhS
+         GRzUJORC15TCwlntA5WpODg1swPVnBrhiJxqwtfHkVyaV3QtS95VxPhvoKDgzYNU1c
+         dXyASnxElPKWJgpJlpEeG+imvcWbwQY2p4Y/5j4Na1Zo8keUPEjL7SONje9/I5leuk
+         mjemPxxyC4vng==
+Date:   Thu, 10 Feb 2022 23:08:10 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     linux-watchdog@vger.kernel.org
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PULL REQUEST] immutable branch
- "i2c/add-request_mem_region_muxed-20220210"
-Message-ID: <YgWLVmSsav7XULiC@kunai>
+To:     Jan Dabros <jsd@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, hdegoede@redhat.com,
+        rrangel@chromium.org, mw@semihalf.com, jaz@semihalf.com,
+        upstream@semihalf.com, thomas.lendacky@amd.com,
+        alexander.deucher@amd.com, Nimesh.Easow@amd.com,
+        mario.limonciello@amd.com
+Subject: Re: [PATCH v4 1/2] i2c: designware: Add missing locks
+Message-ID: <YgWMyj6ZZzBQRODX@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        linux-watchdog@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
+        Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        hdegoede@redhat.com, rrangel@chromium.org, mw@semihalf.com,
+        jaz@semihalf.com, upstream@semihalf.com, thomas.lendacky@amd.com,
+        alexander.deucher@amd.com, Nimesh.Easow@amd.com,
+        mario.limonciello@amd.com
+References: <20220208141218.2049591-1-jsd@semihalf.com>
+ <20220208141218.2049591-2-jsd@semihalf.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="upvdmhasOsfGQAmT"
+        protocol="application/pgp-signature"; boundary="BMLDJw7+yCNEw4UV"
 Content-Disposition: inline
+In-Reply-To: <20220208141218.2049591-2-jsd@semihalf.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,63 +69,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---upvdmhasOsfGQAmT
+--BMLDJw7+yCNEw4UV
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Guenter, Wim
+On Tue, Feb 08, 2022 at 03:12:17PM +0100, Jan Dabros wrote:
+> All accesses to controller's registers should be protected on
+> probe, disable and xfer paths. This is needed for i2c bus controllers
+> that are shared with but not controller by kernel.
+>=20
+> Signed-off-by: Jan Dabros <jsd@semihalf.com>
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-here are the ioport changes needed for the WDT series by Terry Bowman.
-Please pull them into your branch.
-
-Thanks,
-
-   Wolfram
-
-
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
-
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/add-request_mem_region_muxed
-
-for you to fetch changes up to 27c196c7b73cb70bbed3a9df46563bab60e63415:
-
-  kernel/resource: Introduce request_mem_region_muxed() (2022-02-10 22:40:00 +0100)
-
-----------------------------------------------------------------
-Terry Bowman (1):
-      kernel/resource: Introduce request_mem_region_muxed()
+Applied to for-next, thanks!
 
 
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      (Rev.) kernel/resource: Introduce request_mem_region_muxed()
-
- include/linux/ioport.h | 2 ++
- 1 file changed, 2 insertions(+)
-
---upvdmhasOsfGQAmT
+--BMLDJw7+yCNEw4UV
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIFi1YACgkQFA3kzBSg
-KbZROBAAo05toUcrtIJud8wqybjTg4u6VcLsPHYNmXwQrIL6630BeyYEWsMbN/0n
-inXhBriOTRq21Rjb5XQk0ftXVKZPiZiutHAHi75XD7VqpSo23BE3wPZ/WK4r8NcT
-nOTXojj8ISEfDwEr1ZTUNL1oZBoH6/9mnx6ZmYFTqcCAxN/jCOy6oMCxDjSuVA33
-LguH97rDUYZbqTLlcq+MJZlpd6ep+v362gAPsTawPrIi/C1aSUqDMqInWHRwJD2L
-TwroPT0Sq6QFmV9zCqwzSGD7cVWybYgo3+5MfdhEeEJZewPhxw1L/U2IxIhXvREc
-EQ3FlEr5Zp9exsaVhmap3ToL2RMHCaIvKhx0cbIB5BTSgRakp7DiRK9SJScVljFe
-Fev3HejCcXXa31v8OflMdaKnTJxjH4WhOgPgKool0tAsXBR/vJ/kv+Sl+O8R2Yrj
-+MlwxRr3JV3X3IMkl3OJycyo7fLdnXI+oEAZx9LfzppTYic2qrGft4VrZPP/JTxu
-rx2qhRuUtSe7YraJrq0cCmanWwuRfdnP+mzTBlKTOLK6u6EOYFSVwrGc7D4Rdvwd
-6kPlwg33zOHc4P/GabxOuMqiFODirirzwDy+FQxrw4h3jChG1kACWxZD34nV0uv6
-4m1+dUExWETsFHcYBPUYpfdatd5OvNOcD+RTu4lgtJuhW9lVx2k=
-=pTXp
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIFjMoACgkQFA3kzBSg
+Kbar3hAAnKWx4hVH7usYrHMzNV52RqTDUm6EPmnoQMuHArBuGynsHfjAcNVBOuit
+Ail8RGo6OdhbP9X8nLAlRVfbHBiU2yqwqgYdSwYmNfmlYjAuBasyM1qsQAjvgUYo
+aGYrfY6oxqZaq/9qe4T3LTSzWxF4WcpyJ5VnnmCXhiQL0ZA8pBtEq+iwwVZkPh50
+/9bk5kjLJ7cj3VumsvHLV127m6/y4ZYd/cQhcZtFzYVdCKF5q3Xm616BjJtukuVM
+V6xfNSu3bH0Oce3pGKJsW4WpQgdQ1OJKA+xHQZhl8kFYyUDr/Z1rAzLcFL6Tpgpr
+I49jjewVw6xK5QorAStgOs2H65gWjR9z6YXovuH0SQx4ggKbPHRFkZQHprBLBUKD
+OJHX5HW9Gx6ydb4LJTkXd3IX+fhl1tr8zycfhnDc9319ZDGYT/T7uB7tS/G4OmXM
+ncHIcJiJqjb2X77Mc7g26oeuUuYg4tsp5nx8OwpeznUhVzYBlU9VfTNr9XENWS1I
+v5RMXEJd70ZIo/XWfun/8qNdCRX+gwiF4bTZ3oBWewy9CcmbjgzYM1aWrmEG4z1l
+ldl5paYNvmJK1EkZ2HXEuZKV1P2us98dzhdqhAKK9PdXssJNMzzKoAW/7r5XmfVF
+W0JH5inYNqXU7zsamtrL31u+j/QVrx+HJ+wBp5NFAe+cgEE/B9c=
+=oKvU
 -----END PGP SIGNATURE-----
 
---upvdmhasOsfGQAmT--
+--BMLDJw7+yCNEw4UV--
