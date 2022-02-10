@@ -2,105 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C984B08EC
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 09:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C144B0974
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 10:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238017AbiBJIzJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Feb 2022 03:55:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53502 "EHLO
+        id S238197AbiBJJ1d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Feb 2022 04:27:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238013AbiBJIzI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 03:55:08 -0500
-Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D616BD4A;
-        Thu, 10 Feb 2022 00:55:09 -0800 (PST)
-Received: by mail-vk1-f174.google.com with SMTP id w207so2142594vkd.2;
-        Thu, 10 Feb 2022 00:55:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3WoIIEMj24t8PFRjDuDzok8HeC1xxHYqU5dE7ucu2Ks=;
-        b=ANtY4mZeTE0nJoQ+Qcmz4cBd5ftxgavmaCB+A2pFhOGdoGeQW9l/jLl6uf3n/gskUQ
-         YXYCQSVPHWBPnrNbWFH//z6SCo50wy/eLbSHH+vcoV7WLPN4ApbCl92mCDZGF32JafOk
-         /4J/f6ZZI2Ea4ofpHqO9QCi5PBHQau7vPJhCgwyAkmGunbO8+GgL1woH1XzpAgCdi+E6
-         qS0gVWoLf5IkGKXw5dcWGkzWwP8+xBocBVFWkPn1I9kSBhNXTqfalKO2aLxyM1gcAnNn
-         W0wAISuChQB9TWloRlj/IVGZ5i1auiiQQhqNqBBIJfU34efA0KB3mLM3B5mpYMzoyc72
-         bKog==
-X-Gm-Message-State: AOAM530CmS+yPa10uDfuaqZxS85ErMdS1QtkCn6gd+cDl2rReavVor3v
-        Xatdq/f9/kdc+adkizplU1F1ubmISu47gA==
-X-Google-Smtp-Source: ABdhPJzJMqj51Kru2IrMKdWHNU2o+sXqHfY9Ui+79DN8JUppbZBPxlNZKjZ0Ak3hpEZHr4NakPTzIg==
-X-Received: by 2002:a05:6122:507:: with SMTP id x7mr2178276vko.14.1644483308822;
-        Thu, 10 Feb 2022 00:55:08 -0800 (PST)
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com. [209.85.221.175])
-        by smtp.gmail.com with ESMTPSA id 66sm902864vsh.33.2022.02.10.00.55.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 00:55:08 -0800 (PST)
-Received: by mail-vk1-f175.google.com with SMTP id w207so2142554vkd.2;
-        Thu, 10 Feb 2022 00:55:08 -0800 (PST)
-X-Received: by 2002:a1f:2ac3:: with SMTP id q186mr1408230vkq.33.1644483307856;
- Thu, 10 Feb 2022 00:55:07 -0800 (PST)
+        with ESMTP id S237964AbiBJJ1c (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 04:27:32 -0500
+X-Greylist: delayed 66 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 01:27:33 PST
+Received: from qq.com (smtpbg468.qq.com [59.36.132.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8E81083
+        for <linux-i2c@vger.kernel.org>; Thu, 10 Feb 2022 01:27:32 -0800 (PST)
+X-QQ-mid: bizesmtp7t1644485113tmirrnd0j
+Received: from localhost.localdomain (unknown [123.114.60.34])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 10 Feb 2022 17:25:11 +0800 (CST)
+X-QQ-SSF: 01400000002000B0L000B00A0000000
+X-QQ-FEAT: F3yR32iATbhAQRozjq/gd6A+ycs4suDR+IjPdybesPlhivT2B/iKjlYafIKa1
+        1gbjBK7a9XUT5dF0hcYVcCXggTGbuooygvM7JwTfr5hDTSLTs1M+bPZWXDEIjT9maGOFsO2
+        Co+dQ9S+7O19b0DtaYh2STMxy/YXPSAaiqGb1JSqozfIZUrNsVIu5ie6X5m3swdJRFEFm8I
+        CRSo+S4fBfh8iTkloFw/8EA5YjNl2CWtfzipZU7mlVZhPf6tKR6y2I0X45b4XaohQCpRs+h
+        nUkqwkRQTMyKkQauyWjsKMd41VACYmGI6ljvdtW3Z2jCs3xS4KEAqbjrFdg1RDr4AOTWgMJ
+        ApMVPbz98T0rYwAWCDD8+LcTFeTcQ==
+X-QQ-GoodBg: 2
+From:   zhaoxiao <zhaoxiao@uniontech.com>
+To:     f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        nsaenz@kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        zhaoxiao <zhaoxiao@uniontech.com>
+Subject: [PATCH] i2c: bcm2835: Use platform_get_irq() to get the interrupt
+Date:   Thu, 10 Feb 2022 17:25:06 +0800
+Message-Id: <20220210092506.21251-1-zhaoxiao@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211218165258.16716-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdUg3=q7gyaVHP0XcYUOo3PQUUv8Hc8wp5faVQ+bTBpg4A@mail.gmail.com>
- <042a2183-3f04-088c-1861-656de870337d@gmail.com> <CAK8P3a3owi7YWmq-tckD-C7NK5HaX+swGNW-QBkWQuQgVsVWrA@mail.gmail.com>
- <d74ab454-9337-d168-9b21-842569431b4a@gmail.com> <CAK8P3a20mwJXN4Mb063zQG+HAevj_Odpj58EzPHkX-p6pbtnGA@mail.gmail.com>
- <7c47ce67-88ee-9cba-3356-a530b0d3e657@gmail.com> <CAK8P3a0gf6TeK2vZ+u3NZ2VrrvrGUohAPz5WiZ4Mbk5QQg9FFg@mail.gmail.com>
- <9a07be5a-914b-cec9-f6bc-8c1b0ecef766@gmail.com>
-In-Reply-To: <9a07be5a-914b-cec9-f6bc-8c1b0ecef766@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 10 Feb 2022 09:54:56 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV-zBMqHV4aC58E925Aiyqag4TModL8dR1SA8Cwg1Drkw@mail.gmail.com>
-Message-ID: <CAMuHMdV-zBMqHV4aC58E925Aiyqag4TModL8dR1SA8Cwg1Drkw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] i2c: sh_mobile: Use platform_get_irq_optional() to
- get the interrupt
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Sergei,
+platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+allocation of IRQ resources in DT core code, this causes an issue
+when using hierarchical interrupt domains using "interrupts" property
+in the node as this bypassed the hierarchical setup and messed up the
+irq chaining.
 
-On Wed, Feb 9, 2022 at 5:08 PM Sergei Shtylyov
-<sergei.shtylyov@gmail.com> wrote:
->    One more thing: the board code for those boards was added in 2011, we can assume
-> it was working back then, right? :-_
+In preparation for removal of static setup of IRQ resource from DT core
+code use platform_get_irq().
 
-This assumption may not be true: there is plenty of driver/board
-support that was only upstreamed partially.
+Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
+---
+ drivers/i2c/busses/i2c-bcm2835.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-Gr{oetje,eeting}s,
+diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
+index 37443edbf754..dfc534065595 100644
+--- a/drivers/i2c/busses/i2c-bcm2835.c
++++ b/drivers/i2c/busses/i2c-bcm2835.c
+@@ -402,7 +402,7 @@ static const struct i2c_adapter_quirks bcm2835_i2c_quirks = {
+ static int bcm2835_i2c_probe(struct platform_device *pdev)
+ {
+ 	struct bcm2835_i2c_dev *i2c_dev;
+-	struct resource *mem, *irq;
++	struct resource *mem;
+ 	int ret;
+ 	struct i2c_adapter *adap;
+ 	struct clk *mclk;
+@@ -452,12 +452,9 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!irq) {
+-		dev_err(&pdev->dev, "No IRQ resource\n");
+-		return -ENODEV;
+-	}
+-	i2c_dev->irq = irq->start;
++	i2c_dev->irq = platform_get_irq(pdev, 0);
++	if (i2c_dev->irq < 0)
++		return i2c_dev->irq;
+ 
+ 	ret = request_irq(i2c_dev->irq, bcm2835_i2c_isr, IRQF_SHARED,
+ 			  dev_name(&pdev->dev), i2c_dev);
+-- 
+2.20.1
 
-                        Geert
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
