@@ -2,66 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 232B34B17ED
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 23:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA9E4B17F9
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 23:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344801AbiBJWJ3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Feb 2022 17:09:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44438 "EHLO
+        id S1344875AbiBJWNP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Feb 2022 17:13:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241875AbiBJWJ3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 17:09:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD36E7B;
-        Thu, 10 Feb 2022 14:09:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D474B8277B;
-        Thu, 10 Feb 2022 22:09:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E016C004E1;
-        Thu, 10 Feb 2022 22:09:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644530967;
-        bh=+4yvyX7PL/o1aUlKtZM+y5DyMbqKBp/T0joxRm70QJM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RYgDhrZ/8e10s7o31z/gfptXJi5wydGHjl4gOa69iXCSPzpg610dL/NEfD9AsiwPl
-         QXYc643G6SB54pPui5ZBRR46KAUopwFvIm1thxGsDDbK6YumH4PaYW7ubqKE76TAos
-         z69fPQyEWMzhXp7gGD0xiejG26y67gtjd+ShzGqcsid7T0JM0weZUkgFRUZAlxBwl/
-         2LH463pvowaZJM+36t/Sqd+WQWzupGDVTSWrNW5aCjmpFkI9J+iXXbZmYmzOTWtR+R
-         on7m3UcnQ1HzUUaLbPM7lWA4/WTEFYCTkHxjNCD/3V2iDt3g69tFESxDoA9hrdc0JN
-         cCCrD6IOFw8bQ==
-Date:   Thu, 10 Feb 2022 23:09:23 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Jan Dabros <jsd@semihalf.com>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, hdegoede@redhat.com,
-        rrangel@chromium.org, mw@semihalf.com, jaz@semihalf.com,
-        upstream@semihalf.com, thomas.lendacky@amd.com,
-        alexander.deucher@amd.com, Nimesh.Easow@amd.com,
-        mario.limonciello@amd.com
-Subject: Re: [PATCH v4 2/2] i2c: designware: Add AMD PSP I2C bus support
-Message-ID: <YgWNE05eVK+LijL/@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        hdegoede@redhat.com, rrangel@chromium.org, mw@semihalf.com,
-        jaz@semihalf.com, upstream@semihalf.com, thomas.lendacky@amd.com,
-        alexander.deucher@amd.com, Nimesh.Easow@amd.com,
-        mario.limonciello@amd.com
-References: <20220208141218.2049591-1-jsd@semihalf.com>
- <20220208141218.2049591-3-jsd@semihalf.com>
+        with ESMTP id S241989AbiBJWNO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 17:13:14 -0500
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4157D1139
+        for <linux-i2c@vger.kernel.org>; Thu, 10 Feb 2022 14:13:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=qzNXjMfCsETljVkvP2LDFM/YWid3
+        44fLWjDK5p9Qm8I=; b=TW/EJL+rO0K2MKiN07lwO/KLsvnAwuTxBXxHbAn9inup
+        2WXLvLr2P5E4B5lEe9b4rzACQO3PPmpdcRJs3V+jTne1dQFuWGbDpWeH2TJUcLoJ
+        27ODDX+X7r7eXdCicT9HcmpdVyqs5ETu0adldq019T0USoD/9B5fsRk/Ss6OTo4=
+Received: (qmail 1362118 invoked from network); 10 Feb 2022 23:13:13 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 10 Feb 2022 23:13:13 +0100
+X-UD-Smtp-Session: l3s3148p1@9y+WQbHX5rsgAQnoAGmtADvKpjkX1tF1
+Date:   Thu, 10 Feb 2022 23:13:13 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] clk: renesas: r8a779f0: Add I2C clocks
+Message-ID: <YgWN+eNEqoZpy6Y/@kunai>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>, linux-renesas-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+References: <e4dcee5f6f521dccd7ac7f2fb6c86cfe4a24d032.1643898820.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TzVXNhoD/5i1HVBQ"
+        protocol="application/pgp-signature"; boundary="HCBf47RTDvI5rhSU"
 Content-Disposition: inline
-In-Reply-To: <20220208141218.2049591-3-jsd@semihalf.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e4dcee5f6f521dccd7ac7f2fb6c86cfe4a24d032.1643898820.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,58 +52,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---TzVXNhoD/5i1HVBQ
+--HCBf47RTDvI5rhSU
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 08, 2022 at 03:12:18PM +0100, Jan Dabros wrote:
-> Implement an I2C controller sharing mechanism between the host (kernel)
-> and PSP co-processor on some platforms equipped with AMD Cezanne SoC.
+On Thu, Feb 03, 2022 at 03:34:28PM +0100, Geert Uytterhoeven wrote:
+> Add the module clocks used by the I2C Bus Interfaces on the Renesas
+> R-Car S4-8 (R8A779F0) SoC.
 >=20
-> On these platforms we need to implement "software" i2c arbitration.
-> Default arbitration owner is PSP and kernel asks for acquire as well
-> as inform about release of the i2c bus via mailbox mechanism.
+> Extracted from a larger patch in the BSP by LUU HOAI.
 >=20
->             +---------+
->  <- ACQUIRE |         |
->   +---------|   CPU   |\
->   |         |         | \      +----------+  SDA
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Applied to for-next, thanks! I fixed the following checkpatch warnings:
-
-CHECK: Please don't use multiple blank lines
-#232: FILE: drivers/i2c/busses/i2c-designware-amdpsp.c:92:
-+
-+
-
-WARNING: braces {} are not necessary for single statement blocks
-#361: FILE: drivers/i2c/busses/i2c-designware-amdpsp.c:221:
-+	if (ret) {
-+		goto cleanup;
-+	}
-
-Please also use checkpatch next time.
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
---TzVXNhoD/5i1HVBQ
+--HCBf47RTDvI5rhSU
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIFjRMACgkQFA3kzBSg
-KbaLFQ/8DKZmeRjUSNfLZh6Kfbjk1tQaIbq2RFIvYtX6aDyJdr2WAfzwqYg4yDNZ
-2lP1LlqgaAJfbUjw7MucblsRy96TBS5qa8DfzgSQ7CHd1kJ+4gJTrJipozmyt/0d
-AWh88pnH+zTz0cfL9VXgzXMETLJl9NHar69mox5e9dunsEJphkr99sQCpAbVYgac
-EyuplJGGGhqyTV2dB9Twtb7jx4mIN4JGbpP0HUJwbVscqrzgzc2ChK5eCYkwagZ8
-H2+kLVs4DyEtmP0vI00xiB56k3xAXDCuj6TpZBq0W9kSUvDtrJHLVNi1yWbKomIH
-nGSiN+xqz7Pcy9Od+95mgVCgZ1QyfvbghIGG2MwKn5OWAfcoSTOE7nyouGw+9Hku
-ZcciytjnwuzMmFkWU3JRz/MoMrHljlekGE2mT1gnUL0DmVdumb5MZAskJurPTXYh
-0Gine2IZCLRgokO4Dm8Z0qZslaRzVrByMggnU36nLX4auqV08LdhS3w0QrfCRKZc
-lcvHdBNNoR2Uv1GnAbuhSRwHsDy4dcO4Ug1n7sVOJEZ5Dxmleqz8VME1RRFwjZhu
-QftepRfZu5VKLlX57ELq6iWylDeY1m8/SmaRQjQK842QqhTyrKX7t2gW+d/WcO/k
-MTiJ5tpwGsHqPdtbcJozfmGBPb5e2Qo6yPunc3xUAFDIVChYZTw=
-=gemd
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIFjfgACgkQFA3kzBSg
+KbZYZA//VOKwFUTaxW2efmKOSTFkuphMMrQioXjS5z7meLiKVx0tRCRQZCVZr+Kb
+nk6/22dLUWd0SyCDPnwgO3X0K23ncsNghjvxo/gP4EJMI2pb/JAkXlAiDFnQaHi7
+dpcwFpYx1zRmmT4thKPnY88kSNCTsnZ1QJOKJrza25/u1EZhPczWM5ttB/c9c+Pp
+za9MzdR6puBo0m/S/1tud9sAR0xD2murGhMkIuMUPB4c8Pe5+TmMT0tG+1q8Mj5C
+0MuB0/api/oUCGZpOeuWXhtjndfUY2EsKGO8SECPW8EBfde4vea+6ugm5+oZN/5y
+TVlsH6PdGsJU1YPlHj2sh5kfc/x2FXSoiyjSSD2Ok4QBexCde69rgjXJGiFllwj/
+95yMAUFCgxDIHdKccyO4yRIBX1nZRbZerDbyeEujw0H3LQ2exha/g3vO5b6WMND7
+wiptg1oZ+fTY/uWvygh3cU80XzTd7rOVtSK+B/zwIfOjzwRZV6CufkPb1cooXrj4
+c1PNoeB5kDIDLxTgARdY6b2No/dBCtjYVtAz0JPi6oCIacFcneeOfrNi9JlbjRN9
+GvNzvp0cyas4m8boSpLovxTPDDQoDWKkq31anJk3H4+Qc51iFCPUNploU3OHCv7U
+9UBeABBzs0nNg/N/LnK4BQ69RIiucglzRq9WPsn7JQiwi9Fhj1I=
+=KcFJ
 -----END PGP SIGNATURE-----
 
---TzVXNhoD/5i1HVBQ--
+--HCBf47RTDvI5rhSU--
