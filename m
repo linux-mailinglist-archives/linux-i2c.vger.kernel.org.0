@@ -2,61 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39CC4B10A6
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 15:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 873CB4B10AF
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 15:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242570AbiBJOmN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Feb 2022 09:42:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51162 "EHLO
+        id S243068AbiBJOnw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Feb 2022 09:43:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243091AbiBJOmL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 09:42:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EA1BD4;
-        Thu, 10 Feb 2022 06:42:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F9DBB82570;
-        Thu, 10 Feb 2022 14:42:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0DEBC340E5;
-        Thu, 10 Feb 2022 14:42:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644504128;
-        bh=a4M/rYYWto+M6gF5xYlU8eBsD4sZ/r4lcdv1lGuC7fo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hBnkUSgucBq4WkI8fAi9ZwaWb7ENfsF/+THZa8KB7Jd2mRhCZEIG3uOh1XIUFQXzN
-         +kogdBsoxzkC16eOk1qW9Ku+4Ribm0LhywTBpLo5dDktxmyGsNC1fYK4dxvgBoSSdB
-         6iUxsRPiXdO0wyvES5JAyEkiIGWcTB39fb8hxQAwc/aHhl5Pa93D7EWuF/yM+Y1+TJ
-         7DPlJp11+YOfCo6WcKHZgg+9SyZPL45+FAivtLTauI6inBVeLN+xCSOD8JfGRg/Iwh
-         0AmNXTfOtojs7a+YLPy1E5zCFogXW++5ls6TAjR5nvQiptggOqDhREW6VVzDJjSdDq
-         GQyabZkVYa02g==
-Received: by mail-ed1-f52.google.com with SMTP id m11so11220251edi.13;
-        Thu, 10 Feb 2022 06:42:08 -0800 (PST)
-X-Gm-Message-State: AOAM5300EnOe5OFExz2+0eXwej9noc756PsRHdfQYyujD64HrVetXJ8j
-        xGjf2h1CYd+tBFFUDiI2nDYduE9XOLz7elF6eA==
-X-Google-Smtp-Source: ABdhPJwgLchtcgBH9V1DoJdRfQDtG3i+RFBrDF7ZWN69K0vPTMOXBzwNOm994/JMepPOrMAsiJYPwpyINuKpSBGEaVw=
-X-Received: by 2002:a50:e68d:: with SMTP id z13mr8805643edm.307.1644504127113;
- Thu, 10 Feb 2022 06:42:07 -0800 (PST)
+        with ESMTP id S243024AbiBJOnw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 09:43:52 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EE2C4C;
+        Thu, 10 Feb 2022 06:43:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644504233; x=1676040233;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Wy1OKbDjlys8WDbmOYGKsbCiELtfH7IPmgm1WpHu2Dg=;
+  b=g5T/0zQgVDZBPH/bR7lRoGFx26/yN1v41l1t4uOtFbnIlohI8YvoE6at
+   mvGXeV/4HsvNblDcsfU+xxvQ2o/woc4sOja86a0y2ziOc+0anWh6HZAoE
+   NToNk3nNty58s1I1dMr+i4754Y1flMQng96tq9ZMJqS0kYj7IRC8eDdAR
+   MUwZoMPyQ9mRvQaPY00Y7+cSdYgpf5395alljQ6SuKAr+1nw1MoN7rufB
+   RvI6qoUB6hkAt+DHF9o9bPKPx/EYDBiEmtq8jCJUMnlyxPPPcndBDdFQm
+   Hf2H0D3ZWZqZY+fYuJ9U0diP089B28GZkhZ8j2xRwX1UAULbjgOeHCtrQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="249453007"
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="249453007"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 06:43:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="485705992"
+Received: from mylly.fi.intel.com (HELO [10.237.72.152]) ([10.237.72.152])
+  by orsmga006.jf.intel.com with ESMTP; 10 Feb 2022 06:43:49 -0800
+Message-ID: <87fcba54-b54a-ea20-63ba-f447f4d34506@linux.intel.com>
+Date:   Thu, 10 Feb 2022 16:43:48 +0200
 MIME-Version: 1.0
-References: <20220210063651.798007-1-matt@codeconstruct.com.au> <20220210063651.798007-2-matt@codeconstruct.com.au>
-In-Reply-To: <20220210063651.798007-2-matt@codeconstruct.com.au>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 10 Feb 2022 08:41:55 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJac2XzpBdN2rs63qSkwrpcODWN+5e5ts3Tkx0fSM167Q@mail.gmail.com>
-Message-ID: <CAL_JsqJac2XzpBdN2rs63qSkwrpcODWN+5e5ts3Tkx0fSM167Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 1/2] dt-bindings: net: New binding mctp-i2c-controller
-To:     Matt Johnston <matt@codeconstruct.com.au>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Zev Weiss <zev@bewilderbeest.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.1
+Subject: Re: [PATCH v4 2/2] i2c: designware: Add AMD PSP I2C bus support
+Content-Language: en-US
+To:     =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Deucher, Alexander" <alexander.deucher@amd.com>,
+        "Easow, Nimesh" <Nimesh.Easow@amd.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>
+References: <20220208141218.2049591-1-jsd@semihalf.com>
+ <20220208141218.2049591-3-jsd@semihalf.com>
+ <YgPdYw6hDoN198Hf@smile.fi.intel.com>
+ <CAOtMz3OJNopHKgKDvGNfVWwvvo57=LyiRcnT+x6TxwLb+hgkyw@mail.gmail.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <CAOtMz3OJNopHKgKDvGNfVWwvvo57=LyiRcnT+x6TxwLb+hgkyw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,162 +76,54 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 12:37 AM Matt Johnston
-<matt@codeconstruct.com.au> wrote:
->
+On 2/10/22 10:18, Jan Dąbroś wrote:
+> śr., 9 lut 2022 o 16:28 Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> napisał(a):
+>>
+>> On Tue, Feb 08, 2022 at 03:12:18PM +0100, Jan Dabros wrote:
+>>
+>> ...
+>>
+>> I have noticed code duplication.
+>>
+>>> +     status = psp_send_i2c_req(PSP_I2C_REQ_ACQUIRE);
+>>> +     if (status) {
+>>> +             if (status == -ETIMEDOUT)
+>>> +                     dev_err(psp_i2c_dev, "Timed out waiting for PSP to release I2C bus\n");
+>>> +             else
+>>> +                     dev_err(psp_i2c_dev, "PSP communication error\n");
+>>> +
+>>> +             dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
+>>> +             psp_i2c_mbox_fail = true;
+>>> +             goto cleanup;
+>>> +     }
+>>
+>>> +     /* Send a release command to PSP */
+>>> +     status = psp_send_i2c_req(PSP_I2C_REQ_RELEASE);
+>>> +     if (status) {
+>>> +             if (status == -ETIMEDOUT)
+>>> +                     dev_err(psp_i2c_dev, "Timed out waiting for PSP to acquire I2C bus\n");
+>>> +             else
+>>> +                     dev_err(psp_i2c_dev, "PSP communication error\n");
+>>> +
+>>> +             dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
+>>> +             psp_i2c_mbox_fail = true;
+>>> +             goto cleanup;
+>>> +     }
+>>
+>> If you are going to update the series, consider to introduce a common helper.
+>> Otherwise, consider a follow up.
+> 
+> Thanks for your comment. Since Jarkko is running some long-lasting
+> tests with v4 patchset, I would like to keep this as is for now (and
+> make a follow up commit). If there will be some additional comments
+> for v4 from him and will spin v5 - I will introduce a common helper
+> function then.
+> 
+Test run fine overnight, although I wasn't expecting this breaking 
+Baytrail since patch is practically touching only semaphore detection at 
+probe time on Baytrail. I'm up to you would you address Andy's comments 
+as a follow up or as v5.
 
-No need to resend, but the DT list should be CCed so that checks run.
-They do fail sometimes after I've reviewed patches.
-
-> Used to define a local endpoint to communicate with MCTP peripherals
-> attached to an I2C bus. This I2C endpoint can communicate with remote
-> MCTP devices on the I2C bus.
->
-> In the example I2C topology below (matching the second yaml example) we
-> have MCTP devices on busses i2c1 and i2c6. MCTP-supporting busses are
-> indicated by the 'mctp-controller' DT property on an I2C bus node.
->
-> A mctp-i2c-controller I2C client DT node is placed at the top of the
-> mux topology, since only the root I2C adapter will support I2C slave
-> functionality.
->                                                .-------.
->                                                |eeprom |
->     .------------.     .------.               /'-------'
->     | adapter    |     | mux  --@0,i2c5------'
->     | i2c1       ----.*|      --@1,i2c6--.--.
->     |............|    \'------'           \  \  .........
->     | mctp-i2c-  |     \                   \  \ .mctpB  .
->     | controller |      \                   \  '.0x30   .
->     |            |       \  .........        \  '.......'
->     | 0x50       |        \ .mctpA  .         \ .........
->     '------------'         '.0x1d   .          '.mctpC  .
->                             '.......'          '.0x31   .
->                                                 '.......'
-> (mctpX boxes above are remote MCTP devices not included in the DT at
-> present, they can be hotplugged/probed at runtime. A DT binding for
-> specific fixed MCTP devices could be added later if required)
->
-> Signed-off-by: Matt Johnston <matt@codeconstruct.com.au>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/i2c/i2c.txt |  4 +
->  .../bindings/net/mctp-i2c-controller.yaml     | 92 +++++++++++++++++++
->  2 files changed, 96 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/mctp-i2c-controller.yaml
->
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
-> index b864916e087f..fc3dd7ec0445 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c.txt
-> +++ b/Documentation/devicetree/bindings/i2c/i2c.txt
-> @@ -95,6 +95,10 @@ wants to support one of the below features, it should adapt these bindings.
->  - smbus-alert
->         states that the optional SMBus-Alert feature apply to this bus.
->
-> +- mctp-controller
-> +       indicates that the system is accessible via this bus as an endpoint for
-> +       MCTP over I2C transport.
-> +
->  Required properties (per child device)
->  --------------------------------------
->
-> diff --git a/Documentation/devicetree/bindings/net/mctp-i2c-controller.yaml b/Documentation/devicetree/bindings/net/mctp-i2c-controller.yaml
-> new file mode 100644
-> index 000000000000..afd11c9422fa
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/mctp-i2c-controller.yaml
-> @@ -0,0 +1,92 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/mctp-i2c-controller.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MCTP I2C transport binding
-> +
-> +maintainers:
-> +  - Matt Johnston <matt@codeconstruct.com.au>
-> +
-> +description: |
-> +  An mctp-i2c-controller defines a local MCTP endpoint on an I2C controller.
-> +  MCTP I2C is specified by DMTF DSP0237.
-> +
-> +  An mctp-i2c-controller must be attached to an I2C adapter which supports
-> +  slave functionality. I2C busses (either directly or as subordinate mux
-> +  busses) are attached to the mctp-i2c-controller with a 'mctp-controller'
-> +  property on each used bus. Each mctp-controller I2C bus will be presented
-> +  to the host system as a separate MCTP I2C instance.
-> +
-> +properties:
-> +  compatible:
-> +    const: mctp-i2c-controller
-> +
-> +  reg:
-> +    minimum: 0x40000000
-> +    maximum: 0x4000007f
-> +    description: |
-> +      7 bit I2C address of the local endpoint.
-> +      I2C_OWN_SLAVE_ADDRESS (1<<30) flag must be set.
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +examples:
-> +  - |
-> +    // Basic case of a single I2C bus
-> +    #include <dt-bindings/i2c/i2c.h>
-> +
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      mctp-controller;
-> +
-> +      mctp@30 {
-> +        compatible = "mctp-i2c-controller";
-> +        reg = <(0x30 | I2C_OWN_SLAVE_ADDRESS)>;
-> +      };
-> +    };
-> +
-> +  - |
-> +    // Mux topology with multiple MCTP-handling busses under
-> +    // a single mctp-i2c-controller.
-> +    // i2c1 and i2c6 can have MCTP devices, i2c5 does not.
-> +    #include <dt-bindings/i2c/i2c.h>
-> +
-> +    i2c1: i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      mctp-controller;
-> +
-> +      mctp@50 {
-> +        compatible = "mctp-i2c-controller";
-> +        reg = <(0x50 | I2C_OWN_SLAVE_ADDRESS)>;
-> +      };
-> +    };
-> +
-> +    i2c-mux {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      i2c-parent = <&i2c1>;
-> +
-> +      i2c5: i2c@0 {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        reg = <0>;
-> +        eeprom@33 {
-> +          reg = <0x33>;
-> +        };
-> +      };
-> +
-> +      i2c6: i2c@1 {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        reg = <1>;
-> +        mctp-controller;
-> +      };
-> +    };
-> --
-> 2.32.0
->
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
