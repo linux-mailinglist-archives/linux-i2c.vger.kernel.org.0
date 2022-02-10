@@ -2,43 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548144B1787
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 22:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0649B4B1798
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 22:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344573AbiBJV10 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Feb 2022 16:27:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45282 "EHLO
+        id S1344605AbiBJVdn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Feb 2022 16:33:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243233AbiBJV1Z (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 16:27:25 -0500
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140084.outbound.protection.outlook.com [40.107.14.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DC626CD;
-        Thu, 10 Feb 2022 13:27:25 -0800 (PST)
+        with ESMTP id S230287AbiBJVdm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 16:33:42 -0500
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140088.outbound.protection.outlook.com [40.107.14.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D089D102F;
+        Thu, 10 Feb 2022 13:33:42 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fchNVMknc1gm4LWGdbxVWU1zBf8pi+f1Ktkkky6C8hZmVxhaCUlWsIan9u9Cyc1zGgtrtxcqg1++VV0XvM0diukOcNsrkvdccq13GXizmJGiS8ZGrr3iLc9xzpmFLYsg6ET2iW9lh39GCfea6pXIgrfbdnymgdw5uexWRev3g0wlmog+cj6KYvPVHlq85WTYHJ0Vwx8OVb0tLFFbJ3vs12BC3Ec6x3U6Ffx60SWfpz7TUz/wJOyX+NcYmE3pfAfYmoBFcMbIfnBwsL/O0xSCbH/U7G//W9OwUe6u2yA7IuYqkKIfkU6zWoTslUjR59HEoBg9h+vS8dkNKKhRcRHoIQ==
+ b=SvWTPg3lW43pmAwFWjGeYmJPbVUox0rgI0CuZClcmi1mPxdYEtrzQiGAxegJc+UYBtcD9tmEYUWrp4Y5QNHainZ+AvTROMam5/r568wE3TthxR7rCeiH9QbSxYRvE8BJcp83oVjq7DGZzpifeNmIzYFT3NmjgUFbX6V9xJJh1NunJMiztsBBZo9KwqHirOPK+3p6GUiSoWGVF/KCdgziBxgOJuL1XXypr6U8+pJvjsdnjzpjZ3x03NHJktjcVIQyXcseWHyTf9l6l4jvvaAfx4v7Ez0vdNCURivN+BFkbJbIWUdd/eF2wQNmpbDMm6Znu29Y6T/+b1hzCZBJS/h9QA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gv89HjljmZ7gXki4JKuZ7etbR6eDMXYakRjhn9H98HE=;
- b=BWMZM6kqrz6A/MPac9xQPgFEBGr3+UDRokWufs0wAUehRGBnuY5T9ZrQ4KxQneRuuCF9yFOn3IOLWeFnwyuSnDeibU3yk2Uq1a+ZF4qC+SKQmWBN9cHBDeYsklYokDwB93Fdnqfhglu7R+k//dtuKEbOBhPN+s9Rs9SqEmtH/7BCaDGHt22QYxWgPBMVSnFWqFppeR/wYG9UpT1rbBPdFSY2SWHr3iW9t3JoOp+OBNf5tC0xuTdcTLXvM84Cra4uO0R8kiGbGfvWrO4DJxgSYdnJhJzFD+bCDgmRGq0TKQkquFj6Wt9eoOWzZjkg4nhWKAxFmP773rFVQ5oJuApqOA==
+ bh=9MtpD7IW46cwPezzmDojTR4IOQpiupBXQ2jWgYD3aW4=;
+ b=MY2ba208f6M7RxFJv307DnKDpJez3q6Ad3qKryl7Da30+Q7AZQCxJv84X9igTBypxqzl/TPYidNaswt6qM6sUesrul5OG8nynctRjKbiPDsStb+hJAV01ofPZ7sJJs/w95z1RL1rUEk9tZXx/TP+4WifYGjenrUglNqT0n1Snwg9CAVOy2s88G6UZh1aZVf9EXvUJ5TPZi1HKDb288b/qgECaJmYVJIyC8+sAMAaSYqCq9+B2gdZTgrT8cBEfTCMrUQ/i0D3PLhGgGvw44JCwqHqBMj3dSHc02UOZLaf8iCMZuFYuhAH8VujnOBVJDt/UAqD2+r4pQRMYB7GoduzbQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gv89HjljmZ7gXki4JKuZ7etbR6eDMXYakRjhn9H98HE=;
- b=r8LSFi8lnBgn2whI/tO1UgUfks7SDJzk83G/EjdaYUn0VyRuKgq42VJE4a4eHi7wGkabHJMhmXe99jvYWOTlyt+p9oHBU+3o+sLtQpyN/jsPi8DL3kG+A1BXdkAFGgx8J6wu+nZ+aiKxgUSuGb4tOZb5kF/hg3pNlYaamxB80hA=
+ bh=9MtpD7IW46cwPezzmDojTR4IOQpiupBXQ2jWgYD3aW4=;
+ b=cgGuPp9c8Ds7DG014zNjmYJhh1Njn8oBWcOZnDaSp0SjX3B/hd5Y6z7T2zqE0TaWSKEJr/v/GioJX6aAhEbeNszjpMTATykCVNac31xr6NwM3O6eQK124IUsZ68yJl/q+Dqt/zDyfR4qUnAEEVb6w2H1eAlZsWbCO+oJPyrd9Wo=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM6PR04MB4679.eurprd04.prod.outlook.com (2603:10a6:20b:15::32)
  by DBBPR04MB6075.eurprd04.prod.outlook.com (2603:10a6:10:c4::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Thu, 10 Feb
- 2022 21:27:15 +0000
+ 2022 21:33:38 +0000
 Received: from AM6PR04MB4679.eurprd04.prod.outlook.com
  ([fe80::28f3:36a7:fc3c:b9aa]) by AM6PR04MB4679.eurprd04.prod.outlook.com
  ([fe80::28f3:36a7:fc3c:b9aa%5]) with mapi id 15.20.4975.011; Thu, 10 Feb 2022
- 21:27:14 +0000
-Date:   Thu, 10 Feb 2022 23:27:10 +0200
+ 21:33:38 +0000
+Date:   Thu, 10 Feb 2022 23:33:36 +0200
 From:   Abel Vesa <abel.vesa@nxp.com>
 To:     Shawn Guo <shawnguo@kernel.org>
 Cc:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
@@ -51,68 +51,68 @@ Cc:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         Jacky Bai <ping.bai@nxp.com>
-Subject: Re: [RESEND v4 08/10] arm64: dts: imx8dxl: Add i.MX8DXL evk board
- support
-Message-ID: <YgWDLo/+bdoyqOAY@abelvesa>
+Subject: Re: [RESEND v4 05/10] arm64: dts: freescale: Add the imx8dxl
+ connectivity subsys dtsi
+Message-ID: <YgWEsHZHqDK1sCYz@abelvesa>
 References: <1639680494-23183-1-git-send-email-abel.vesa@nxp.com>
- <1639680494-23183-9-git-send-email-abel.vesa@nxp.com>
- <20220126125355.GS4686@dragon>
+ <1639680494-23183-6-git-send-email-abel.vesa@nxp.com>
+ <20220126124732.GR4686@dragon>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220126125355.GS4686@dragon>
-X-ClientProxiedBy: VE1PR08CA0009.eurprd08.prod.outlook.com
- (2603:10a6:803:104::22) To AM6PR04MB4679.eurprd04.prod.outlook.com
+In-Reply-To: <20220126124732.GR4686@dragon>
+X-ClientProxiedBy: VI1PR0102CA0027.eurprd01.prod.exchangelabs.com
+ (2603:10a6:802::40) To AM6PR04MB4679.eurprd04.prod.outlook.com
  (2603:10a6:20b:15::32)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bfd032de-c52a-41e9-ec7a-08d9ecdc1b4f
+X-MS-Office365-Filtering-Correlation-Id: 88862aed-b2e0-4d40-d0a5-08d9ecdd0053
 X-MS-TrafficTypeDiagnostic: DBBPR04MB6075:EE_
-X-Microsoft-Antispam-PRVS: <DBBPR04MB607586558E63DD402D6DFADEF62F9@DBBPR04MB6075.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-Microsoft-Antispam-PRVS: <DBBPR04MB607588A6A727609E82AE464DF62F9@DBBPR04MB6075.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Qyd9wBRA04k8+F/DGfDRRpX2uhVqMgRQzRYDZ9qZ2kKU3Mh5v8FvKpfmZMV/SzEaaTpzb5E2X1hYHoQKa0mld/iSTorEyeUSffdvfFBtXG9kudmBNW2R1nSpR088/6vmpYi9B4eIgylX+3MZZqGRMykflSZkWnFSLuCypxPkvz40zJ2WXcAPk49L5AsxIiCbTSivnag6Oo64qzsL7Qwdgw2jl+UV8oBm7N6VUtwOuFUKWFewACypyCh2t29jSpDCvXmaill8KWax0NlVJtYjFgERTL8F0zV6bnLq6zgxSXuhEmP3L8+FnzERtItcRqMLr/J8aht13vXDRaBtkfATCI0wduUaqupIKpRCq7LhwY7gK/pUpB1lCGI047vsbgnuQNfrrJTAFFJzWL/qNGkc9oXnWtSAE3Dxp8hQOcxeu4g7pkJunIvoIFgyYzmeOZjCmF5wETcgMr530rOIub5n0rKFnWXJoaHaGHDLpcXMnvE1DZBO9DrVMXSbQlGg1xvwD1aAYS+Zt1VDwxmwYaySiTmQ9GzYjKnrJaC13Ddapitf59VkJy1yPl68jAkFbk6FTe2ab2tFgdtYfKYdYY8UuDLKZCkzuUtsr6BKo23fQrFTZzVtSiksZ012Pr5fRm3iW7T8Xrl6IJLdAuY1bkouDitAaL3IfKKIZZci2th+04niCIH/jvhzLUkgdxl5LuwdkwdHkbCVWid4pKky+OV9ez6hYDhYoquOFGH3O6NYbXBw++Q7G462rYkFpWGXEC6i
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4679.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(316002)(26005)(8936002)(6916009)(54906003)(186003)(38350700002)(38100700002)(8676002)(86362001)(7416002)(5660300002)(44832011)(2906002)(66946007)(66556008)(66476007)(9686003)(6512007)(4326008)(6486002)(52116002)(6666004)(6506007)(53546011)(508600001)(33716001)(32563001)(473944003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Hniuf8ELvYKDRlSSUinYWKeQR7+bDKUDzymAIix0CzHczz0cswbgy6XupsI9QCW6qLFefy0ZHXDlyE0sZNlWkUmT80gJCXv7doN8mV7JkM2MB82zU33LRKY9J+iBESG5EaV4/KJmB9HdPqYHJM3YC7lpvrIS5YnuLE2qgnprDuVuzjTQ6AGgqqmqiiPDKY1wjll9i5i5JtskY5WqjOuNzX+VM6Wd8kLIpi9J2C4vWafx+oVNxDgEy9jCgtcfU9+MSZOiYWEaFu/cTrJeUmN269W2lnu1C2nigqn4epwPtXSNj8MzkoHUDszVkc1CHvzjDF3BhI/sIwJc487KItHsyMD/cmq3DHZLk3Ecg/s+SgRIh87yrcYf8vfOAuxDUV1/QGtREOgQBxZYV4qn6eT3erGQQcg4+p+tz7jwVGRv8nzGxUN/3nQ+oLZzEzzVlHHJmLPW3LEHk4cfMVXhRLKdipkVLn7ocoJhcv2bHFVrOkSYVusTT/kP9BBqhSb47JHC58mRfTMjfaufEydZBgzjtvmjaWFcZfdfuZqdkz1dnJxINJq0wiOxSfsKGpwhhkv4ShS6zfaQWbCog4rljtV1UgsqrcTE0xuJgEeqBceafiyibNg5yMQGMrbY/yFzkyW4AlcXNpE4BBPeB08ZEWuG7GOJU4i3WW7Nh/Xadce11O4QEAFvxtqNA5beCqnyYScBJZllbvZXbzwgBs1heSIUcX9ZFDEwEkcdEQst36i3tYk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4679.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(52116002)(6486002)(83380400001)(508600001)(53546011)(33716001)(6506007)(8676002)(86362001)(38100700002)(7416002)(5660300002)(44832011)(8936002)(26005)(316002)(186003)(38350700002)(54906003)(6916009)(9686003)(6512007)(4326008)(2906002)(66556008)(66476007)(66946007)(32563001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7m++7mO3vWMyNwSmxtIwOuqho1oCinYZHNR3GKKPrgdulSxulyLSjPHDcGxk?=
- =?us-ascii?Q?pBmiLdgT3gbKQr46HklQ0oxy6KXhggcYIFzGWNY9kXLwicFd0reAg8WWiV6A?=
- =?us-ascii?Q?CZ/eYS3+dqfahUoycJ4SjD17/uv+ZxQ5U5+YRoZCExlW/ldK3CQLTWwKfiwu?=
- =?us-ascii?Q?9aLwt0OHz1WDiOE6lAO6rcV/z6E6eJ46YItRgDTQmMJDr7K9jPFnTcisASCv?=
- =?us-ascii?Q?Z7yQzY76GIH2fU2SqOrTlYb27mlUbXWkDA41M2yRtJyVGKQSWUh1Mvphx0hw?=
- =?us-ascii?Q?Xyq9GGf3ZTY3o+959oRqYAgbXxwwImVCAHTksz6Iq1Hk7xempgFdotOrUWvQ?=
- =?us-ascii?Q?5sbQsdgvnz0MCnQPvBVflKUoEdqDgDOvspV/xjx0ijJf7ptXGhsMhRZzrH3W?=
- =?us-ascii?Q?Ykrt19dphWwAXg3G5AJGGCDsUHngUQIv+y3Y7mnb3/VRAocFUYEsHdd9Jm44?=
- =?us-ascii?Q?e021e05pHKm2/iYVmrquYLnRLKpXbXesf5LvMCJSo1GydVuv6EJhaBwbB1YC?=
- =?us-ascii?Q?DMz2BS4FtEmAHTec1B/8UF1L7sxz0hM+UcWEDT3L9Azz2Vx+lqvPDhjqA4I2?=
- =?us-ascii?Q?oCOb7n7Vnyshhsx4UNe5GSEUt4dJ0YKxXuViTdnKjY+/ZrwXJatXC8e4yAYN?=
- =?us-ascii?Q?ZSEX7g5OfU7kN3fdT7AxaX0Ddg6Dl6OOUzOYWpGDPvar1CuiOXDvmHDuJaM8?=
- =?us-ascii?Q?gvJPxSVJbuuW9ve3qAxKNpCqmDFVX1QymslLIRehZtagC8d+WKxAlvMNG7gq?=
- =?us-ascii?Q?DoqT5xevziYcYpxE9jTm9IQyYhqVsV4nptGaUDOrxszkU+H5/hzrOHLPJ7Bg?=
- =?us-ascii?Q?9gKT563o7YOr72uz0H86N0yXqoAveHVvYq1h2PfEq/6GCJTlidO48BjqAcRD?=
- =?us-ascii?Q?kmew+qJqFWDh0IhKXG1HYtsjDEEDALxXMGPcnERYmOcV3lKPMh4Y4vaEnNRy?=
- =?us-ascii?Q?S0MplzUHgRfBnyNd/vcpVDngNhVhIgyTS7MCY3xQOY2N8QldhgnY3V87wAB8?=
- =?us-ascii?Q?Ti6wpntrNBO+QdcCcoEGDhX07/+E6wiUVyUxbIVQUYPrWf+WfgvLamGNhCGW?=
- =?us-ascii?Q?KyN0dwp5X9vLDL+fr8GsYZYZIkn0qfzmqIbQQz5tmpB8Wwpe7yT8OMAaD+2o?=
- =?us-ascii?Q?0Sa2G1Ftyrx83ztR345QCUTliO/e3Zq6fwelW/CMgCv/Cg1UM5pdudacGNRE?=
- =?us-ascii?Q?g+z7XgcGIctrIMuUZZNyJtRB1FU1zGBHptA8Jq1Fa19WxsIdf5W4UnZtMsS7?=
- =?us-ascii?Q?nZiM+5RJbFQnfKi13pzFFhChdXsHXPuguDGFqp8HoCEe53Sb6gGObrVestiM?=
- =?us-ascii?Q?lEwYetbVeRGsdZzhAj8t22HfcsC0e842Fkb8dTXziI2WyhDvznsbg3QsMS7n?=
- =?us-ascii?Q?4NQ7BCX0e/tw9ioMBUYiv7w9hpqqcYJx/hy8QFJ6Y+XyMueKDrV+YV+s4du5?=
- =?us-ascii?Q?0IFOTRFdvyX6h8ThsFLRZfjXuPwuWbwzQYgfBs5QK10wh0eSsEZ8ON/JNzRv?=
- =?us-ascii?Q?JS0hODY6ApNIfRheFTOp6a1nPvUyexIAsE5zr7bkJuLq5POw4v4u+tJNHr3g?=
- =?us-ascii?Q?IoOvyouSeVIt1ioHIGQWxFnS+fWWfei+58APJGNXRiKen+/mg5+2dg6DNsO9?=
- =?us-ascii?Q?6YCMUP3TnMWTBU39TrVrbzI=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?K7noT6TCaNbmqgJKrnCrbeyRnoxfid4QOR438MXVgRKXJgFjvk1MzU9WkPcV?=
+ =?us-ascii?Q?5I4O0jS5INFxzLUJVl7ASyzJMJQRYaX9O8TS/uiIhnKpu09AQWHXjcGj0to7?=
+ =?us-ascii?Q?QOW7o+m+tDcBMAZpLz3kPJlvaZkCF4E0UuRo/0uPmPWBHT89GLmBCkvu7SfV?=
+ =?us-ascii?Q?B0Op34G6+nNpwnGH+fqf4SYh5fbWHwxORuSnePQ7KomoQiJtaTO5el6whvm2?=
+ =?us-ascii?Q?VqH1WsV4ATVDAz0/PXYmrCRwpogL7OhXYrDaOqmLl73Zke6QqwzD1n1hN9tw?=
+ =?us-ascii?Q?QI3Iz5ge8kkowdt91rpzBXaOOSroCk8TW5FRT2dEtxPKU7sywrGMFJ3TF+5E?=
+ =?us-ascii?Q?zZZqnFA0rZhkf68AfbrY2FKIfuv0Ew+zM8sotx0k0RP6TMCYR3EOQEshwCQd?=
+ =?us-ascii?Q?GcPhosJvTjSxLXHs9g7FnmfvKGoaZrGG7kE7A/FHcIAlxGIO0AXiLkl9Ivox?=
+ =?us-ascii?Q?1HptVCethBZrEWEDjG0wY+vJdEsVA8j0iM9rkDBMdL8IM9Dh66sJGHeQGeDx?=
+ =?us-ascii?Q?PJa5jVtrfCiRKc51b08kMVOUC7w/xgn0saChA2m6NvNe69awD5j3OiI68+PA?=
+ =?us-ascii?Q?x4mD2xj48TRSOAtzhyWzyxmxKpEHXJwH5ZhO1cVj8oLctgMNLlaiHMrITEvK?=
+ =?us-ascii?Q?Z0Y7DiRrjIdZy9Wv6DVicWfNdc8iY7sqNhsRXcNgCi1am2hxHys+ESBmPsJZ?=
+ =?us-ascii?Q?94VckzdzStYf5sk31iR9Ao286KoOUkcAoJSAJyhvAcPKa3IKKqd/krJx3wjG?=
+ =?us-ascii?Q?XG/wJ1pjOFbGZ7V6SYX0sWcEQUrn0yPOv24GmVB21u6CP2R2KgI5MS7P4+Ne?=
+ =?us-ascii?Q?uweTeEi6ZZb5YpERcTyy7puasu8dcOAnxn5FtOIOeIDeWmyQHx/C8w1lw4Uf?=
+ =?us-ascii?Q?1osiVFNVtGnK8jBcHZAr4MCjRTR4MPEDdiHcPwV6x7Qw3eeB3T9SELaSuRPO?=
+ =?us-ascii?Q?8jQSIkWlAzyNgf6b1gagWsNOuJCfah7lUBKnL++OLAwBxouscIYkwmwtsJIK?=
+ =?us-ascii?Q?qr6g8MlRYjndDFIt+wEIUIhUki8nv0dqCQZsmulzggHI97QEbN4J9kAZvnI+?=
+ =?us-ascii?Q?QFOstVMLKMQoPFqSwSklMFuoJX2Dky5SYMDnO+JFqR3VVChhm/g6B86Im59Y?=
+ =?us-ascii?Q?dgKwHcn1bzEBhvy4Dzp8yEtSNJJygRMrsZxW9X7wNPgBgaIhPCk0AxeVKWEs?=
+ =?us-ascii?Q?S3Qms5fZjAXxQch9Zwgo6Tszjs8/Q2CpadVJnDrxg57eZFmNjFG6I0tEpMoL?=
+ =?us-ascii?Q?SMRwjYRS9iSvPPrFPY8K4USDSeCYoZc1zYSClJLkjFRgEGFW3Jzm67hC50uL?=
+ =?us-ascii?Q?YJoORDXcAZHYJz/8XNwWrW2hrAIybYeCHI/bDM9KO1GSU0y8/Ka0F+RLftXs?=
+ =?us-ascii?Q?wNVizDvcMkD0/1qLZx5MxRBPdKwAO2338VWX3Tt+Z8UfAmQQp9UC+U3timTK?=
+ =?us-ascii?Q?B0mZpW6aQNB/mRkaVXh25E+a0eT057vxOwfRWhY/0WjxsxBaYIDIqzukf3Pc?=
+ =?us-ascii?Q?tZtjhB6oEP9ukOLzjJ5ZNhHoz8bE/+1BdBGv9PPMpkcmttGBtmOcpu5F6enA?=
+ =?us-ascii?Q?/N972f8ty4t6tbK+9UjPIkh2c336BgwR0ER2pnKWCxC71WT3xu41ad6ZU+oE?=
+ =?us-ascii?Q?Svah1Hep6FFDigl46TnsqBU=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bfd032de-c52a-41e9-ec7a-08d9ecdc1b4f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88862aed-b2e0-4d40-d0a5-08d9ecdd0053
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4679.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 21:27:14.7474
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 21:33:38.8462
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZnmLK9ReYSE2bOFkUuFPu0Al/j+HUUH87YR6niB+oRS4jKtEUMNoqrAZlzyYRgIp383M1l/BWd+djPIZ1oHGKw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: tDksEAWXe0WyaMUejAkQlmPkAacLhGMU1bfqy5cbvOVt5GxSFT2sVd7cY2pMuGKRJ0vz23emqqbFmbEgZVzrhg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB6075
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -124,127 +124,189 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 22-01-26 20:53:55, Shawn Guo wrote:
-> On Thu, Dec 16, 2021 at 08:48:12PM +0200, Abel Vesa wrote:
+On 22-01-26 20:47:33, Shawn Guo wrote:
+> On Thu, Dec 16, 2021 at 08:48:09PM +0200, Abel Vesa wrote:
 > > From: Jacky Bai <ping.bai@nxp.com>
 > > 
-> > Add i.MX8DXL EVK board support.
+> > On i.MX8DXL, the Connectivity subsystem includes below peripherals:
+> > 1x ENET with AVB support, 1x ENET with TSN support, 2x USB OTG,
+> > 1x eMMC, 2x SD, 1x NAND.
 > > 
 > > Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 > > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 > > ---
-> >  arch/arm64/boot/dts/freescale/Makefile        |   1 +
-> >  arch/arm64/boot/dts/freescale/imx8dxl-evk.dts | 266 ++++++++++++++++++
-> >  2 files changed, 267 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl-evk.dts
+> >  .../boot/dts/freescale/imx8dxl-ss-conn.dtsi   | 137 ++++++++++++++++++
+> >  1 file changed, 137 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
 > > 
-> > diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-> > index 5018b8b1e5f2..f117d3e811ba 100644
-> > --- a/arch/arm64/boot/dts/freescale/Makefile
-> > +++ b/arch/arm64/boot/dts/freescale/Makefile
-> > @@ -72,6 +72,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mq-pico-pi.dtb
-> >  dtb-$(CONFIG_ARCH_MXC) += imx8mq-thor96.dtb
-> >  dtb-$(CONFIG_ARCH_MXC) += imx8mq-zii-ultra-rmb3.dtb
-> >  dtb-$(CONFIG_ARCH_MXC) += imx8mq-zii-ultra-zest.dtb
-> > +dtb-$(CONFIG_ARCH_MXC) += imx8dxl-evk.dtb
-> 
-> Keep the list sorted.
-> 
-> >  dtb-$(CONFIG_ARCH_MXC) += imx8qm-mek.dtb
-> >  dtb-$(CONFIG_ARCH_MXC) += imx8qxp-ai_ml.dtb
-> >  dtb-$(CONFIG_ARCH_MXC) += imx8qxp-colibri-eval-v3.dtb
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts b/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
 > > new file mode 100644
-> > index 000000000000..68dfe722af6d
+> > index 000000000000..b0059296a03f
 > > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts
-> > @@ -0,0 +1,266 @@
+> > +++ b/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
+> > @@ -0,0 +1,137 @@
 > > +// SPDX-License-Identifier: GPL-2.0+
 > > +/*
 > > + * Copyright 2019-2021 NXP
 > > + */
-> > +
-> > +/dts-v1/;
-> > +
-> > +#include "imx8dxl.dtsi"
-> > +
-> > +/ {
-> > +	model = "Freescale i.MX8DXL EVK";
-> > +	compatible = "fsl,imx8dxl-evk", "fsl,imx8dxl";
-> > +
-> > +	chosen {
-> > +		stdout-path = &lpuart0;
-> > +	};
-> > +
-> > +	memory@80000000 {
-> > +		device_type = "memory";
-> > +		reg = <0x00000000 0x80000000 0 0x40000000>;
-> > +	};
-
- ...
-
-> > +	pinctrl_usdhc1: usdhc1grp {
-> > +		fsl,pins = <
-> > +			IMX8DXL_EMMC0_CLK_CONN_EMMC0_CLK	0x06000041
-> > +			IMX8DXL_EMMC0_CMD_CONN_EMMC0_CMD	0x00000021
-> > +			IMX8DXL_EMMC0_DATA0_CONN_EMMC0_DATA0	0x00000021
-> > +			IMX8DXL_EMMC0_DATA1_CONN_EMMC0_DATA1	0x00000021
-> > +			IMX8DXL_EMMC0_DATA2_CONN_EMMC0_DATA2	0x00000021
-> > +			IMX8DXL_EMMC0_DATA3_CONN_EMMC0_DATA3	0x00000021
-> > +			IMX8DXL_EMMC0_DATA4_CONN_EMMC0_DATA4	0x00000021
-> > +			IMX8DXL_EMMC0_DATA5_CONN_EMMC0_DATA5	0x00000021
-> > +			IMX8DXL_EMMC0_DATA6_CONN_EMMC0_DATA6	0x00000021
-> > +			IMX8DXL_EMMC0_DATA7_CONN_EMMC0_DATA7	0x00000021
-> > +			IMX8DXL_EMMC0_STROBE_CONN_EMMC0_STROBE	0x00000041
-> > +		>;
-> > +	};
-> > +
-> > +	pinctrl_usdhc1_100mhz: usdhc1grp100mhz {
 > 
-> For sake of consistency, we probably should still end the node name with 'grp'.
+> Shouldn't we include imx8-ss-conn.dtsi here?  Otherwise, the
+> /delete-node/ and &conn_subsys reference below looks baseless.
 > 
 
-I think we should either leave as is or use usdhc1-100mhz-grp.
-
-I, for one, would leave as is and then maybe we can do a replace for all imx
-platforms as a separate patch at some point.
-
-Let me know what you would prefer.
+Nope. The way this works is: imx8dxl.dtsi includes both
+imx8-ss-conn.dtsi (the generic part) and imx8dxl-ss-conn.dtsi
+(the imx8dxl specific part), in this exact order.
+And same does imx8qxp.dtsi. It includes the imx8-ss-conn.dtsi
+(the generic part) and then includes imx8qxp-ss-conn.dtsi
+(the imx8qxp specific part). And so on.
 
 All other comments will be addressed in the next version of this
 patchset.
 
-> Shawn
-> 
-> > +		fsl,pins = <
-> > +			IMX8DXL_EMMC0_CLK_CONN_EMMC0_CLK	0x06000041
-> > +			IMX8DXL_EMMC0_CMD_CONN_EMMC0_CMD	0x00000021
-> > +			IMX8DXL_EMMC0_DATA0_CONN_EMMC0_DATA0	0x00000021
-> > +			IMX8DXL_EMMC0_DATA1_CONN_EMMC0_DATA1	0x00000021
-> > +			IMX8DXL_EMMC0_DATA2_CONN_EMMC0_DATA2	0x00000021
-> > +			IMX8DXL_EMMC0_DATA3_CONN_EMMC0_DATA3	0x00000021
-> > +			IMX8DXL_EMMC0_DATA4_CONN_EMMC0_DATA4	0x00000021
-> > +			IMX8DXL_EMMC0_DATA5_CONN_EMMC0_DATA5	0x00000021
-> > +			IMX8DXL_EMMC0_DATA6_CONN_EMMC0_DATA6	0x00000021
-> > +			IMX8DXL_EMMC0_DATA7_CONN_EMMC0_DATA7	0x00000021
-> > +			IMX8DXL_EMMC0_STROBE_CONN_EMMC0_STROBE	0x00000041
-> > +		>;
+> > +
+> > +/delete-node/ &enet1_lpcg;
+> > +/delete-node/ &fec2;
+> > +
+> > +&conn_subsys {
+> > +	conn_enet0_root_clk: clock-conn-enet0-root {
+> > +		compatible = "fixed-clock";
+> > +		#clock-cells = <0>;
+> > +		clock-frequency = <250000000>;
+> > +		clock-output-names = "conn_enet0_root_clk";
 > > +	};
 > > +
-
- ...
-
-> > +	pinctrl_usdhc2_200mhz: usdhc2grp200mhz {
-> > +		fsl,pins = <
-> > +			IMX8DXL_ENET0_RGMII_RXC_CONN_USDHC1_CLK		0x06000041
-> > +			IMX8DXL_ENET0_RGMII_RX_CTL_CONN_USDHC1_CMD	0x00000021
-> > +			IMX8DXL_ENET0_RGMII_RXD0_CONN_USDHC1_DATA0	0x00000021
-> > +			IMX8DXL_ENET0_RGMII_RXD1_CONN_USDHC1_DATA1	0x00000021
-> > +			IMX8DXL_ENET0_RGMII_RXD2_CONN_USDHC1_DATA2	0x00000021
-> > +			IMX8DXL_ENET0_RGMII_RXD3_CONN_USDHC1_DATA3	0x00000021
-> > +			IMX8DXL_ENET0_RGMII_TXD0_CONN_USDHC1_VSELECT	0x00000021
-> > +		>;
+> > +	eqos: ethernet@5b050000 {
+> > +		compatible = "nxp,imx8dxl-dwmac-eqos", "snps,dwmac-5.10a";
+> > +		reg = <0x5b050000 0x10000>;
+> > +		interrupt-parent = <&gic>;
+> > +		interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>,
+> > +			     <GIC_SPI 162 IRQ_TYPE_LEVEL_HIGH>;
+> > +		interrupt-names = "eth_wake_irq", "macirq";
+> > +		clocks = <&eqos_lpcg IMX_LPCG_CLK_2>,
+> > +			 <&eqos_lpcg IMX_LPCG_CLK_4>,
+> > +			 <&eqos_lpcg IMX_LPCG_CLK_0>,
+> > +			 <&eqos_lpcg IMX_LPCG_CLK_3>,
+> > +			 <&eqos_lpcg IMX_LPCG_CLK_1>;
+> > +		clock-names = "stmmaceth", "pclk", "ptp_ref", "tx", "mem";
+> > +		assigned-clocks = <&clk IMX_SC_R_ENET_1 IMX_SC_PM_CLK_PER>;
+> > +		assigned-clock-rates = <125000000>;
+> > +		power-domains = <&pd IMX_SC_R_ENET_1>;
+> > +		clk_csr = <0>;
+> 
+> Is this property documented anywhere?
+> 
+> > +		status = "disabled";
 > > +	};
+> > +
+> > +	usbotg2: usb@5b0e0000 {
+> > +		compatible = "fsl,imx8dxl-usb", "fsl,imx7ulp-usb";
+> > +		reg = <0x5b0e0000 0x200>;
+> > +		interrupt-parent = <&gic>;
+> > +		interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_HIGH>;
+> > +		fsl,usbphy = <&usbphy2>;
+> > +		fsl,usbmisc = <&usbmisc2 0>;
+> > +		/*
+> > +		 * usbotg1 and usbotg2 share one clcok
+> 
+> s/clcok/clock
+> 
+> > +		 * scfw disable clock access and keep it always on
+> > +		 * in case other core (M4) use one of these.
+> > +		 */
+> > +		clocks = <&clk_dummy>;
+> > +		ahb-burst-config = <0x0>;
+> > +		tx-burst-size-dword = <0x10>;
+> > +		rx-burst-size-dword = <0x10>;
+> > +		#stream-id-cells = <1>;
+> > +		power-domains = <&pd IMX_SC_R_USB_1>;
+> > +		status = "disabled";
+> > +	};
+> > +
+> > +	usbmisc2: usbmisc@5b0e0200 {
+> > +		#index-cells = <1>;
+> > +		compatible = "fsl,imx8dxl-usbmisc", "fsl,imx7ulp-usbmisc";
+> > +		reg = <0x5b0e0200 0x200>;
+> > +	};
+> > +
+> > +	usbphy2: usbphy@0x5b110000 {
+> > +		compatible = "fsl,imx8dxl-usbphy", "fsl,imx7ulp-usbphy";
+> > +		reg = <0x5b110000 0x1000>;
+> > +		clocks = <&usb2_2_lpcg IMX_LPCG_CLK_7>;
+> > +		status = "disabled";
+> > +	};
+> > +
+> > +	eqos_lpcg: clock-controller@5b240000 {
+> > +		compatible = "fsl,imx8qxp-lpcg";
+> > +		reg = <0x5b240000 0x10000>;
+> > +		#clock-cells = <1>;
+> > +		clocks = <&conn_enet0_root_clk>,
+> > +			 <&conn_axi_clk>,
+> > +			 <&conn_axi_clk>,
+> > +			 <&clk IMX_SC_R_ENET_1 IMX_SC_PM_CLK_PER>,
+> > +			 <&conn_ipg_clk>;
+> > +		clock-indices = <IMX_LPCG_CLK_0>,
+> > +				<IMX_LPCG_CLK_2>,
+> > +				<IMX_LPCG_CLK_4>,
+> > +				<IMX_LPCG_CLK_5>,
+> > +				<IMX_LPCG_CLK_6>;
+> > +		clock-output-names = "eqos_ptp",
+> > +				     "eqos_mem_clk",
+> > +				     "eqos_aclk",
+> > +				     "eqos_clk",
+> > +				     "eqos_csr_clk";
+> > +		power-domains = <&pd IMX_SC_R_ENET_1>;
+> > +	};
+> > +
+> > +	usb2_2_lpcg: clock-controller@5b280000 {
+> > +		compatible = "fsl,imx8qxp-lpcg";
+> > +		reg = <0x5b280000 0x10000>;
+> > +		#clock-cells = <1>;
+> > +
+> 
+> Unneeded newline.
+> 
+> Shawn
+> 
+> > +		clock-indices = <IMX_LPCG_CLK_7>;
+> > +		clocks = <&conn_ipg_clk>;
+> > +		clock-output-names = "usboh3_2_phy_ipg_clk";
+> > +	};
+> > +
+> > +};
+> > +
+> > +&enet0_lpcg {
+> > +	clocks = <&conn_enet0_root_clk>,
+> > +		 <&conn_enet0_root_clk>,
+> > +		 <&conn_axi_clk>,
+> > +		 <&clk IMX_SC_R_ENET_0 IMX_SC_C_TXCLK>,
+> > +		 <&conn_ipg_clk>,
+> > +		 <&conn_ipg_clk>;
+> > +};
+> > +
+> > +&fec1 {
+> > +	compatible = "fsl,imx8dxl-fec", "fsl,imx8qm-fec";
+> > +	interrupts = <GIC_SPI 160 IRQ_TYPE_LEVEL_HIGH>,
+> > +		     <GIC_SPI 158 IRQ_TYPE_LEVEL_HIGH>,
+> > +		     <GIC_SPI 159 IRQ_TYPE_LEVEL_HIGH>,
+> > +		     <GIC_SPI 161 IRQ_TYPE_LEVEL_HIGH>;
+> > +	assigned-clocks = <&clk IMX_SC_R_ENET_0 IMX_SC_C_CLKDIV>;
+> > +	assigned-clock-rates = <125000000>;
+> > +};
+> > +
+> > +&usdhc1 {
+> > +	compatible = "fsl,imx8dxl-usdhc", "fsl,imx8qxp-usdhc";
+> > +	interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
+> > +};
+> > +
+> > +&usdhc2 {
+> > +	compatible = "fsl,imx8dxl-usdhc", "fsl,imx8qxp-usdhc";
+> > +	interrupts = <GIC_SPI 139 IRQ_TYPE_LEVEL_HIGH>;
+> > +};
+> > +
+> > +&usdhc3 {
+> > +	compatible = "fsl,imx8dxl-usdhc", "fsl,imx8qxp-usdhc";
+> > +	interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
 > > +};
 > > -- 
 > > 2.31.1
