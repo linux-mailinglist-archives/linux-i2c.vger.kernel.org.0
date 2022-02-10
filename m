@@ -2,442 +2,257 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A5D4B17D4
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 22:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 160254B17D7
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Feb 2022 22:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243840AbiBJVtQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Feb 2022 16:49:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37504 "EHLO
+        id S1344767AbiBJVt3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Feb 2022 16:49:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240940AbiBJVtP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 16:49:15 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2062.outbound.protection.outlook.com [40.107.20.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18890E6B;
-        Thu, 10 Feb 2022 13:49:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K23MVWvuNhpnSIgGQ+eyiHLsbBNf1md1bUqpntuJwrYSj1dc7Xid2WQ9sHu+IX4GgOrTtrOikQhG4/xQoE6RjgPdUQBLqpkWOvtp6oXFc6KIiaUq5/J0ykq5SYSVAs1Ya6I49cI0c72wlYHyHWzHmiZh7GWhbh22CkL7LOW5WmdJsLyAyQmv4D9ANrP+mPwo+9339Wp029lw46YtA4cwORudAcFn7yiw9AdGW05dxKY4g9DItE8LhIU/6kP3rIw0exFc7Jl1iPKCniyhn2gu15KqeqQs5kVS4xPhujG1HV6wncoB5k9KBTGOBQSqPNOyDMF3OUuyzDInFjj7C2lKJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LQEHHaTX7I5SgolIYjQ0ynAKoPAUpZ5ydbdrsoKeVw4=;
- b=NPTtjJ4InK5Ybn0Aa0iBWgSiELMPyMEdxhidUxWudV4ir9abvDHOugoK6ISygQfCqz67l4YRxL7sRK5GYtupVjVNCpy57pUFS/OEXTVvApu/u/q3A/H0yH7jN/A2fWNxO3CMuyveo9w8MvSWg8u90q8QVLy+Cq8rWSH5P46PYMr6Z0Ry3qnStae/ceTAtRRwxXOSu5xOmqF9t4IXgFbIO9HKJOeJXXrAb+qrIBF1Zas+PPTPA0FJjfas2zaCjOWqEz2R8eYwy1v2ji300U7hggLCIFLpsklA3wn6Zd/1j7QUzsRq7TFGp6kVdDvxiVY10LUMpHOoOJDMCk3qpO1zuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LQEHHaTX7I5SgolIYjQ0ynAKoPAUpZ5ydbdrsoKeVw4=;
- b=YG+8Bhmjdj+9qawGDighP2MAJ/tF79T2+rrzWLOvUbS0/HV6twRXgjgHPLm34x898/jz/tR1gKkJ2jp36ZyQnWDcZAtqL9heyUPC1GVTDEboXri8YpfwoGVtHHQrFUOoEOw5M+niyqP0kNnyf66lMwpSVc8qYIgG9XmZ8f1gF4U=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB4679.eurprd04.prod.outlook.com (2603:10a6:20b:15::32)
- by DB7PR04MB4172.eurprd04.prod.outlook.com (2603:10a6:5:1d::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Thu, 10 Feb
- 2022 21:49:10 +0000
-Received: from AM6PR04MB4679.eurprd04.prod.outlook.com
- ([fe80::28f3:36a7:fc3c:b9aa]) by AM6PR04MB4679.eurprd04.prod.outlook.com
- ([fe80::28f3:36a7:fc3c:b9aa%5]) with mapi id 15.20.4975.011; Thu, 10 Feb 2022
- 21:49:10 +0000
-Date:   Thu, 10 Feb 2022 23:49:07 +0200
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Jacky Bai <ping.bai@nxp.com>
-Subject: Re: [RESEND v4 02/10] arm64: dts: freescale: Add the top level dtsi
- support for imx8dxl
-Message-ID: <YgWIU4JznR1twQCa@abelvesa>
-References: <1639680494-23183-1-git-send-email-abel.vesa@nxp.com>
- <1639680494-23183-3-git-send-email-abel.vesa@nxp.com>
- <20220126122748.GP4686@dragon>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126122748.GP4686@dragon>
-X-ClientProxiedBy: VI1PR02CA0055.eurprd02.prod.outlook.com
- (2603:10a6:802:14::26) To AM6PR04MB4679.eurprd04.prod.outlook.com
- (2603:10a6:20b:15::32)
+        with ESMTP id S245076AbiBJVt2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Feb 2022 16:49:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF60EF23;
+        Thu, 10 Feb 2022 13:49:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E99EB8277F;
+        Thu, 10 Feb 2022 21:49:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79F8EC004E1;
+        Thu, 10 Feb 2022 21:49:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644529766;
+        bh=mBlKdnmPcBD68cbrky1GB/7GaWbt94JXLwJNBU+phTc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gvbduKbG0nKZnFZQ+hIbDlz07R7ivreBGWdiXmAsg28jJcMb65VybnHnqMKVUY08K
+         T7JPqc6iM3Yx8eyHBvJHu4I2mc5CA1BNCbH2rd7nOc+mXixwGb+5b+l1YDK0smB1e4
+         Ji0aPsazN9utsUjvMQ9qroRhaV9C0olxwX8VGJrS+SAqToINYIT/osZHysbbpuQ+d1
+         9+Z4sLcZpkrKcd+JT9ncJ9lxC/74Gx2WQ3eyf5ovZ6ENc8QULLpkp3nM4LPkhTYISX
+         fSgX/is9XdXapCfI5pxitNyJs9sP0+XvubokAcCwh5HhwCqqsoOb2oahfYD6EUwWBR
+         UAG2Z7C9/M3WQ==
+Date:   Thu, 10 Feb 2022 22:49:22 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Terry Bowman <terry.bowman@amd.com>
+Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
+        jdelvare@suse.com, linux-i2c@vger.kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+Subject: Re: [PATCH v5 0/9] i2c: piix4: Replace cd6h/cd7h port I/O accesses
+ with MMIO accesses
+Message-ID: <YgWIYiQG8NPmcrbl@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Terry Bowman <terry.bowman@amd.com>, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, jdelvare@suse.com,
+        linux-i2c@vger.kernel.org, andy.shevchenko@gmail.com,
+        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org,
+        wim@linux-watchdog.org, rrichter@amd.com, thomas.lendacky@amd.com,
+        sudheesh.mavila@amd.com, Nehal-bakulchandra.Shah@amd.com,
+        Basavaraj.Natikar@amd.com, Shyam-sundar.S-k@amd.com,
+        Mario.Limonciello@amd.com
+References: <20220209172717.178813-1-terry.bowman@amd.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a254c922-3192-4b8f-5fc9-08d9ecdf2b54
-X-MS-TrafficTypeDiagnostic: DB7PR04MB4172:EE_
-X-Microsoft-Antispam-PRVS: <DB7PR04MB4172793D799FDF8AD221A87EF62F9@DB7PR04MB4172.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2150;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YMXVm8huquwwer9EE+nEuZ52RO7ssYCRKjSBOKofoo7a1x5XOGz0MuiFmZA5AuOcQLK/y/No9jp/HPSBFFuTzV+BAvBUZebUvLhxOmv+GrTo6G9TOJX64VuUXUfKG/sLi5tvKx4heUJGDIoBA+Qm5EAt+zefkFtMPB0qlcAduiQwhAwPt+DDAk21Eg6ARmFW389MA+vOdAs5gaRelYeycjEDYHT6acgr9hONXaMCgM/7h+64d74UXtt3QqQVrTCLUTwVQ2dYRixIu/mEHOBkEZ5AsycGy1Cz0lZuX72CJiiz+oFb5/uDN8syQWvpktHGkfdU7YdL/Anw7M09YJpzDbyZ7ftAs49csMJcuJB3Z6Su2BAVPUjwLB6xbZNqNBhPussDUk0GUX6uOXO9iO6JwFAv9dYWx6KjcXKRoD6XSN/wfea4jc42mkhryy4MGqnz3TwLkaIBi+pIVmk+dYPbichlo4YlRvcmBGkJ2bEiVebW5ByLtduVNq2cpQJKOwncOBCBt/DpScGJoFks7vk2l4NXhFL0h3VWaf2LBeyJBA6nzoSvwTWiMz9xgrf2h7BVPGiyoVRIoaYJMBTPMch51i/0nnYVNkSJRJgqZuR7MRBV6xzKa1/SonXa5zCNV1/32FlrfBkLHSXV6LAEhVAurO6cy6aAJoWefm+6g5QGlYRxbFoAfA7zWFXXLJT7PCl5UKqqIhGUuJc/BCZkSKhETjL4RQV67ebPF1zRCtAbFJY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4679.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(33716001)(6916009)(54906003)(508600001)(9686003)(6486002)(6512007)(6666004)(6506007)(53546011)(52116002)(316002)(7416002)(38100700002)(26005)(186003)(8936002)(5660300002)(2906002)(66946007)(66476007)(4326008)(86362001)(66556008)(44832011)(8676002)(38350700002)(83380400001)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?e8eSHCKVV/67KFUw563JUHUw6jcuIGQKNcNE7I1rpf2eggBKKPCHHejVayqz?=
- =?us-ascii?Q?2gM5uh8Ub8ophZ7mu4/Uf7D0P3musFIV+VZVsmzb8hlLJFS0203XA0aVVxRW?=
- =?us-ascii?Q?P6atRv2OCCTaY1OjdJwWmwqQedgUMArs+4msNjgNfTFhGUoDGCRXcocILGsZ?=
- =?us-ascii?Q?Ac13F5nRpEgf5Q0q0LEkosrrPLUrzbV23s9Q0P/Chexsu4/i3dYlU4AqOSXL?=
- =?us-ascii?Q?AIuLJ/d3m0tgtwnpn1LtJkEXUlnP4t/MKyvk3ssgE+HKYgvhErASzl4Ibhq2?=
- =?us-ascii?Q?t3rw5RVQGITMlocJ3YB1iukeyOOYYwDu0iJ2H9qv7Of1+dnrX1zc2eVQBKgE?=
- =?us-ascii?Q?Vx/uAp160lc43DXZ/olCz0CIVP2iTil00twQ/12KGcCr0QyEZt6GhBrqqknw?=
- =?us-ascii?Q?WA1zKsxPJ3UAkaPehraE/NuQjELbC/yQQ1L0bYoDXvCFL03MMYXdfX306jcf?=
- =?us-ascii?Q?e+f6G/cUgBQGmeSNfaD7BGPLNL2KYIqXc9qFdkQBkFFPiT+tmO/3xbOM04zj?=
- =?us-ascii?Q?gCULj2xsH2dTyTUNS+mpcjYL50deeZPZSsTwSeDNi5QlB9elLxsweDN5GzEP?=
- =?us-ascii?Q?Xf1QbTUd0aFun8AgoNnjY2POp1G3CvN6Qo8OYYqZ+dZ1I/sqJyVuY+MFL1tI?=
- =?us-ascii?Q?8iDheNHxLPQsGRdmtqVud1TjN4gFH9+091ULzGkwSYQaYMqCpcY3okFD0Ilr?=
- =?us-ascii?Q?5LBBCSUdbh/j/8s1A9a/52eEUh0JYiZ/Estqqml3tBR+xiKVSPU9ftcGGn2t?=
- =?us-ascii?Q?cMeN6RyL4HD3y4c/WoAu1cbj+JQgG2yO5qw540obysP9nwA5VSDKB2lsWWaO?=
- =?us-ascii?Q?0DF/+frjDBhtpS3oZRe62GrxoXMjDq2zVsznMmaeDrXMMqzuid9R4TxTAFNQ?=
- =?us-ascii?Q?BerKlIeJGemSthUa6W2zhMfKgmqnzH8I4BMJk4I1XytD9VYjPBoAlnncaQh5?=
- =?us-ascii?Q?6j1fWXTbjN98txye7AMY48GW1KOA5OgFCyRqJYiqZlZMo7hvZPdNeJ3Wcu25?=
- =?us-ascii?Q?NK3lvM68fti+0SfZxdToCmA5IDyIihuPzodd+xDIFOjVHB/nJnq89ukLSUl8?=
- =?us-ascii?Q?525FyT3CqoO2gtXXT34lV1M+Hog7C/Zr8Vjk8x0YUSCNi5TcMqZZ16sMr2Cd?=
- =?us-ascii?Q?X6c73EmjhLq6zauqUypfs2ErdPyt0KWE8hCzQGWgmwPp9AuY64v/gXFK7UW1?=
- =?us-ascii?Q?TQdVyKJuJwqdWomloLIKOAhsuK7rG75/PT5Vwla535+Xxmu1Jz0rtnieeZEr?=
- =?us-ascii?Q?C1M6zHcQXDyD4sOgnjnhPV5FmK9dwQGgLDizIdYbQi06kCcoC9vCMweSDbw2?=
- =?us-ascii?Q?FawHSacX1Gx/faojdqYEeNPi8q41G9CdvTB5j4vW4Tm95ZoJJGqSbgngGOBD?=
- =?us-ascii?Q?Mwx1fQwCpoEp7Je3aeLeus/zuIf0vQfBGUunQEu1MXxsWuCduDFPW03JrBOr?=
- =?us-ascii?Q?W78mP4T7T5E4CSxEIlNHItMNsU4lQm1PwYGA34qu6fyU1VDtBi3UzYwC8Iz9?=
- =?us-ascii?Q?NdWCi64U2rlOec05dJ10HWoXXvkKWilfb0Xw6Ank7EeBQp9ugQEuzXC+U7OS?=
- =?us-ascii?Q?3PSk2QrZE0cR9ocswh1QAIXG73J79dgecizGgYDTQ66FW8oaPPXIClA5b7cU?=
- =?us-ascii?Q?wQIhg8p4wmqMqyhf6jSd1gc=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a254c922-3192-4b8f-5fc9-08d9ecdf2b54
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4679.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 21:49:10.0635
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UT5Bcq4n7STvj+GFlYo/PL4z2TY0fILvFTrgd7BSQzgioliMmE+xC4vQX/ZrLJLaIPompZPSA7MU7mVwQeWCzg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4172
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/ksDgt2nnkFtgRNi"
+Content-Disposition: inline
+In-Reply-To: <20220209172717.178813-1-terry.bowman@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 22-01-26 20:27:49, Shawn Guo wrote:
-> On Thu, Dec 16, 2021 at 08:48:06PM +0200, Abel Vesa wrote:
-> > From: Jacky Bai <ping.bai@nxp.com>
-> > 
-> > The i.MX8DXL is a device targeting the automotive and industrial
-> > market segments. The flexibility of the architecture allows for
-> > use in a wide variety of general embedded applications. The chip
-> > is designed to achieve both high performance and low power consumption.
-> > The chip relies on the power efficient dual (2x) Cortex-A35 cluster.
-> > 
-> > Add the reserved memory node property for dsp reserved memory,
-> > the wakeup-irq property for SCU node, the imx ion, the rpmsg and the
-> 
-> Not sure what "ion" is.
-> 
 
-Nevermind, the commit message was not updated after the imx ion was
-dropped from NXP's internal tree. I'll update the commit message in the
-next version.
+--/ksDgt2nnkFtgRNi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > cm4 rproc support.
-> > 
-> > Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-> > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> > ---
-> >  arch/arm64/boot/dts/freescale/imx8dxl.dtsi | 245 +++++++++++++++++++++
-> >  1 file changed, 245 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl.dtsi
-> > 
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8dxl.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl.dtsi
-> > new file mode 100644
-> > index 000000000000..f16f88882c39
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/freescale/imx8dxl.dtsi
-> > @@ -0,0 +1,245 @@
-> > +// SPDX-License-Identifier: GPL-2.0+
-> > +/*
-> > + * Copyright 2019-2021 NXP
-> > + */
-> > +
-> > +#include <dt-bindings/clock/imx8-clock.h>
-> > +#include <dt-bindings/firmware/imx/rsrc.h>
-> > +#include <dt-bindings/gpio/gpio.h>
-> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +#include <dt-bindings/input/input.h>
-> > +#include <dt-bindings/pinctrl/pads-imx8dxl.h>
-> > +#include <dt-bindings/thermal/thermal.h>
-> > +
-> > +/ {
-> > +	interrupt-parent = <&gic>;
-> > +	#address-cells = <2>;
-> > +	#size-cells = <2>;
-> > +
-> > +	aliases {
-> > +		ethernet0 = &fec1;
-> > +		ethernet1 = &eqos;
-> > +		gpio0 = &lsio_gpio0;
-> > +		gpio1 = &lsio_gpio1;
-> > +		gpio2 = &lsio_gpio2;
-> > +		gpio3 = &lsio_gpio3;
-> > +		gpio4 = &lsio_gpio4;
-> > +		gpio5 = &lsio_gpio5;
-> > +		gpio6 = &lsio_gpio6;
-> > +		gpio7 = &lsio_gpio7;
-> > +		i2c2 = &i2c2;
-> > +		i2c3 = &i2c3;
-> > +		mmc0 = &usdhc1;
-> > +		mmc1 = &usdhc2;
-> > +		mu1 = &lsio_mu1;
-> > +		serial0 = &lpuart0;
-> > +		serial1 = &lpuart1;
-> > +		serial2 = &lpuart2;
-> > +		serial3 = &lpuart3;
-> > +	};
-> > +
-> > +	cpus: cpus {
-> > +		#address-cells = <2>;
-> > +		#size-cells = <0>;
-> > +
-> > +		/* We have 1 clusters with 2 Cortex-A35 cores */
-> 
-> s/clusters/cluster
-> 
+On Wed, Feb 09, 2022 at 11:27:08AM -0600, Terry Bowman wrote:
+> This series changes the piix4_smbus driver's cd6h/cd7h port I/O accesses
+> to use MMIO instead. This is necessary because cd6h/cd7h port I/O may be
+> disabled on later AMD processors.
+>=20
+> This series includes patches with MMIO accesses to register
+> FCH::PM::DECODEEN. The same register is also accessed by the sp5100_tco
+> driver.[1] Synchronization to the MMIO register is required in both
+> drivers.
+>=20
+> The first patch creates a macro to request MMIO region using the 'muxed'
+> retry logic. This is used in patch 6 to synchronize accesses to EFCH MMIO.
+>=20
+> The second patch replaces a hardcoded region size with a #define. This is
+> to improve maintainability and was requested from v2 review.
+>=20
+> The third patch moves duplicated region request/release code into
+> functions. This locates related code into functions and reduces code line
+> count. This will also make adding MMIO support in patch 6 easier.
+>=20
+> The fourth patch moves SMBus controller address detection into a function=
+=2E=20
+> This is in preparation for adding MMIO region support.
+>=20
+> The fifth patch moves EFCH port selection into a function. This is in
+> preparation for adding MMIO region support.
+>=20
+> The sixth patch adds MMIO support for region requesting/releasing and
+> mapping. This is necessary for using MMIO to detect SMBus controller
+> address, enable SMBbus controller region, and control the port select.
+>=20
+> The seventh patch updates the SMBus controller address detection to suppo=
+rt
+> using MMIO. This is necessary because the driver accesses register
+> FCH::PM::DECODEEN during initialization and only available using MMIO on
+> later AMD processors.
+>=20
+> The eighth patch updates the SMBus port selection to support MMIO. This is
+> required because port selection control resides in the
+> FCH::PM::DECODEEN[smbus0sel] and is only accessible using MMIO on later A=
+MD
+> processors.
+>=20
+> The ninth patch enables the EFCH MMIO functionality added earlier in this
+> series. The SMBus controller's PCI revision ID is used to check if EFCH
+> MMIO is supported by HW and should be enabled in the driver.
+>=20
+> Based on v5.17-rc2.
+>=20
+> Testing:
+>   Tested on family 19h using:
+>     i2cdetect -y 0
+>     i2cdetect -y 2
+>=20
+>   - Results using v5.16 and this pachset applied. Below
+>     shows the devices detected on the busses:
+>    =20
+>     # i2cdetect -y 0=20
+>          0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+>     00:                         -- -- -- -- -- -- -- --=20
+>     10: 10 11 -- -- -- -- -- -- 18 -- -- -- -- -- -- --=20
+>     20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+>     30: 30 -- -- -- -- 35 36 -- -- -- -- -- -- -- -- --=20
+>     40: -- -- -- -- -- -- -- -- -- -- 4a -- -- -- -- --=20
+>     50: 50 -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+>     60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+>     70: -- -- -- 73 -- -- -- --                        =20
+>     # i2cdetect -y 2
+>          0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+>     00:                         -- -- -- -- -- -- -- --=20
+>     10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+>     20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+>     30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+>     40: -- -- -- -- -- -- -- -- -- -- -- -- 4c -- -- --=20
+>     50: -- 51 -- -- 54 -- -- -- -- -- -- -- -- -- -- --=20
+>     60: 60 -- -- 63 -- -- 66 -- -- -- -- 6b -- -- 6e --=20
+>     70: 70 71 72 73 74 75 -- 77
+>=20
+>   Also tested using sp5100_tco submitted series listed below.[1]
+>   I applied the sp5100_tco v4 series and ran:
+>     cat  >> /dev/watchdog
+>=20
+> [1] sp5100_tco v4 patchset can be found here:
+> Link: https://lore.kernel.org/linux-watchdog/20220130191225.303115-1-terr=
+y.bowman@amd.com/
+>=20
+> Changes in v5:
+>  - Use request/release helper function for sb800 device in
+>    piix4_setup_sb800(). Patch 3. (Jean Delvare)    =20
+>  - Revert 'piix4_smba' variable definition ordering back as it was in
+>    piix4_setup_sb800(). Patch 4. (Jean Delvare)
+>  - Add newline after piix4_sb800_port_sel(). Patch 5. (Jean Delvare)
+>  - Remove unnecessary initialization in piix4_add_adapter(). Patch 6.
+>    (Jean Delvare)
+>  - Remove unnecessary #define AMD_PCI_SMBUS_REVISION_MMIO. Patch 9.
+>    (Jean Delvare)
+>  - Add description for 0x51 constant moved in the above item. This is
+>    in piix4_sb800_use_mmio(). Patch 9. (Andy Shevchenko)
+>  - Rebase to v5.17-rc2. (Andy Shevchenko)
+>  - Update patch 9 description. (Terry Bowman)
+> =20
+> Changes in v4:
+>  - Changed request_muxed_mem_region() macro to request_mem_region_muxed()
+>    in patch 1. (Andy Shevchenko)
+>  - Removed unnecessary newline where possible in calls to
+>    request_muxed_region() in patch 2. (Terry Bowman)
+>  - Changed piix4_sb800_region_setup() to piix4_sb800_region_request().
+>    Patch 3. (Jean Delvare)
+>  - Reordered piix4_setup_sb800() local variables from longest name length
+>    to shortest name length. Patch 4. (Terry Bowman)
+>  - Changed piix4_sb800_region_request() and piix4_sb800_region_release() =
+by
+>    adding early return() to remove 'else' improving readability. Patch 6.
+>    (Terry Bowman)
+>  - Removed iowrite32(ioread32(...), ...). Unnecessary because MMIO is
+>    already enabled. (Terry Bowman)
+>  - Refactored piix4_sb800_port_sel() to simplify the 'if' statement using
+>    temp variable. Patch 8. (Terry Bowman)
+>  - Added mmio_cfg.use_mmio assignment in piix4_add_adapter(). This is
+>    needed for calls to piix4_sb800_port_sel() after initialization during
+>    normal operation. Patch 9. (Terry Bowman)
+> =20
+> Changes in v3:
+>  - Added request_muxed_mem_region() patch (Wolfram, Guenter)
+>  - Reduced To/Cc list length. (Andy)
+> =20
+> Changes in v2:
+>  - Split single patch. (Jean Delvare)
+>  - Replace constant 2 with SB800_PIIX4_SMB_MAP_SIZE where appropriate.
+>    (Jean Delvare)
+>  - Shorten SB800_PIIX4_FCH_PM_DECODEEN_MMIO_EN name length to
+>    SB800_PIIX4_FCH_PM_DECODEEN_MMIO. (Jean Delvare)
+>  - Change AMD_PCI_SMBUS_REVISION_MMIO from 0x59 to 0x51. (Terry Bowman)
+>  - Change piix4_sb800_region_setup() to piix4_sb800_region_request().
+>    (Jean Delvare)
+>  - Change 'SMB' text in  logging to 'SMBus' (Jean Delvare)
+>  - Remove unnecessary NULL assignment in piix4_sb800_region_release().
+>    (Jean Delvare)
+>  - Move 'u8' variable definitions to single line. (Jean Delvare)
+>  - Hardcode piix4_setup_sb800_smba() return value to 0 since it is always
+>    0. (Jean Delvare)
+>=20
+> Terry Bowman (9):
+>   kernel/resource: Introduce request_mem_region_muxed()
+>   i2c: piix4: Replace hardcoded memory map size with a #define
+>   i2c: piix4: Move port I/O region request/release code into functions
+>   i2c: piix4: Move SMBus controller base address detect into function
+>   i2c: piix4: Move SMBus port selection into function
+>   i2c: piix4: Add EFCH MMIO support to region request and release
+>   i2c: piix4: Add EFCH MMIO support to SMBus base address detect
+>   i2c: piix4: Add EFCH MMIO support for SMBus port select
+>   i2c: piix4: Enable EFCH MMIO for Family 17h+
+>=20
 
-Fixed in the next version.
-
-> > +		A35_0: cpu@0 {
-> > +			device_type = "cpu";
-> > +			compatible = "arm,cortex-a35";
-> > +			reg = <0x0 0x0>;
-> > +			enable-method = "psci";
-> > +			next-level-cache = <&A35_L2>;
-> > +			clocks = <&clk IMX_SC_R_A35 IMX_SC_PM_CLK_CPU>;
-> > +			#cooling-cells = <2>;
-> > +			operating-points-v2 = <&a35_opp_table>;
-> > +		};
-> > +
-> > +		A35_1: cpu@1 {
-> > +			device_type = "cpu";
-> > +			compatible = "arm,cortex-a35";
-> > +			reg = <0x0 0x1>;
-> > +			enable-method = "psci";
-> > +			next-level-cache = <&A35_L2>;
-> > +			clocks = <&clk IMX_SC_R_A35 IMX_SC_PM_CLK_CPU>;
-> > +			#cooling-cells = <2>;
-> > +			operating-points-v2 = <&a35_opp_table>;
-> > +		};
-> > +
-> > +		A35_L2: l2-cache0 {
-> > +			compatible = "cache";
-> > +		};
-> > +	};
-> > +
-> > +	a35_opp_table: opp-table {
-> > +		compatible = "operating-points-v2";
-> > +		opp-shared;
-> > +
-> > +		opp-900000000 {
-> > +			opp-hz = /bits/ 64 <900000000>;
-> > +			opp-microvolt = <1000000>;
-> > +			clock-latency-ns = <150000>;
-> > +		};
-> > +
-> > +		opp-1200000000 {
-> > +			opp-hz = /bits/ 64 <1200000000>;
-> > +			opp-microvolt = <1100000>;
-> > +			clock-latency-ns = <150000>;
-> > +			opp-suspend;
-> > +		};
-> > +	};
-> > +
-> > +	reserved-memory {
-> > +		#address-cells = <2>;
-> > +		#size-cells = <2>;
-> > +		ranges;
-> > +
-> > +		dsp_reserved: dsp@92400000 {
-> > +			reg = <0 0x92400000 0 0x2000000>;
-> > +			no-map;
-> > +		};
-> > +	};
-> > +
-> > +	gic: interrupt-controller@51a00000 {
-> > +		compatible = "arm,gic-v3";
-> > +		reg = <0x0 0x51a00000 0 0x10000>, /* GIC Dist */
-> > +		      <0x0 0x51b00000 0 0xc0000>; /* GICR (RD_base + SGI_base) */
-> > +		#interrupt-cells = <3>;
-> > +		interrupt-controller;
-> > +		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-> > +	};
-> > +
-> > +	pmu {
-> > +		compatible = "arm,armv8-pmuv3";
-> > +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
-> > +	};
-> > +
-> > +	psci {
-> > +		compatible = "arm,psci-1.0";
-> > +		method = "smc";
-> > +	};
-> > +
-> > +	scu {
-> > +		compatible = "fsl,imx-scu";
-> > +		mbox-names = "tx0",
-> > +			     "rx0",
-> > +			     "gip3";
-> > +		mboxes = <&lsio_mu1 0 0
-> > +			  &lsio_mu1 1 0
-> > +			  &lsio_mu1 3 3>;
-> > +
-> > +		pd: imx8dxl-pd {
-> > +			compatible = "fsl,imx8dxl-scu-pd", "fsl,scu-pd";
-> > +			#power-domain-cells = <1>;
-> > +		};
-> > +
-> > +		clk: clock-controller {
-> > +			compatible = "fsl,imx8dxl-clk", "fsl,scu-clk";
-> > +			#clock-cells = <2>;
-> > +			clocks = <&xtal32k &xtal24m>;
-> > +			clock-names = "xtal_32KHz", "xtal_24Mhz";
-> > +		};
-> > +
-> > +		iomuxc: pinctrl {
-> > +			compatible = "fsl,imx8dxl-iomuxc";
-> > +		};
-> > +
-> > +		ocotp: imx8qx-ocotp {
-> > +			compatible = "fsl,imx8dxl-scu-ocotp", "fsl,imx8qxp-scu-ocotp";
-> > +			#address-cells = <1>;
-> > +			#size-cells = <1>;
-> > +
-> > +			fec_mac0: mac@2c4 {
-> > +				reg = <0x2c4 6>;
-> > +			};
-> > +
-> > +			fec_mac1: mac@2c6 {
-> > +				reg = <0x2c6 6>;
-> > +			};
-> > +		};
-> > +
-> > +		watchdog {
-> > +			compatible = "fsl,imx-sc-wdt";
-> > +			timeout-sec = <60>;
-> > +		};
-> > +
-> > +		tsens: thermal-sensor {
-> > +			compatible = "fsl,imx-sc-thermal";
-> > +			#thermal-sensor-cells = <1>;
-> > +		};
-> > +	};
-> > +
-> > +	timer {
-> > +		compatible = "arm,armv8-timer";
-> > +		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>, /* Physical Secure */
-> > +			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>, /* Physical Non-Secure */
-> > +			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>, /* Virtual */
-> > +			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>; /* Hypervisor */
-> > +	};
-> > +
-> > +	thermal_zones: thermal-zones {
-> > +		cpu-thermal0 {
-> > +			polling-delay-passive = <250>;
-> > +			polling-delay = <2000>;
-> > +			thermal-sensors = <&tsens IMX_SC_R_SYSTEM>;
-> > +
-> > +			trips {
-> > +				cpu_alert0: trip0 {
-> > +					temperature = <107000>;
-> > +					hysteresis = <2000>;
-> > +					type = "passive";
-> > +				};
-> 
-> Have a newline between nodes.
-> 
-
-Fixed in the next version.
-
-> > +				cpu_crit0: trip1 {
-> > +					temperature = <127000>;
-> > +					hysteresis = <2000>;
-> > +					type = "critical";
-> > +				};
-> > +			};
-> > +			cooling-maps {
-> > +				map0 {
-> > +					trip = <&cpu_alert0>;
-> > +					cooling-device =
-> > +					<&A35_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> > +					<&A35_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-> > +				};
-> > +			};
-> > +		};
-> > +	};
-> > +
-> > +	clk_dummy: clock-dummy {
-> > +		compatible = "fixed-clock";
-> > +		#clock-cells = <0>;
-> > +		clock-frequency = <0>;
-> > +		clock-output-names = "clk_dummy";
-> > +	};
-> 
-> Why do we need this?
-> 
+Applied the series to for-next, thank you Terry for keeping at it and
+Jean and Andy for the review. I'll send the pull request containing the
+ioport update to the WDT maintainers now. All further changes should be
+based on top of this now.
 
 
-The following comment is found in imx8dxl-ss-conn.dtsi:
+--/ksDgt2nnkFtgRNi
+Content-Type: application/pgp-signature; name="signature.asc"
 
-/*
- * usbotg1 and usbotg2 share one clcok
- * scfw disable clock access and keep it always on
- * in case other core (M4) use one of these.
- */
+-----BEGIN PGP SIGNATURE-----
 
-So I guess it is basically a hack to allow both usbotg instances
-to have a shared clock, while the clock is handled by the
-SCU.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIFiF0ACgkQFA3kzBSg
+KbY8ORAAiR2qPdf3doez6yl+qy2erLsx5HiDXkQHEl8VwsuNji4Npr07bSsUgF64
+c5rM0czyZWPoGfwST6YBzjLsHliG+IniKhFIC5/wC0BsnyuTuw3xCK8iXSDlXW5g
+J6NrPK5RUuZZF/kVmhp5TfY/8oe3vMRwNhG2Cy1jj8OGD/m/TSOfNSEww8f+wtvn
+Dw0xFGm3lWIpXbd8Qpg6dvNX5lIsRtbvguly0bG+qK107mObwNjnYNCjrEggoDo6
++0HiY/yPpceVrgrGUFCOq6ArRJyIIsSFvFVm1QnYuFOJaWDQW74NJRvLRK7JsLPX
+nKLgFq5BC6o6JZu+LxTrdDLwWpzr1x7FSR+e6NM1gancW4qTW/Amx4VEVALxds7k
+hEf4LsrrM75qC1x2WUj+5WzhDLPffVe6sayJNjhk//Jk0iHmo7ZMruNoL78o+NWA
+5EjHFLTVZmmrNtc/jvu/9IWEMqiLNC+8+H84kaVPTPnSgWUPTMWfSem9V31tL5EV
+MCOmcg/7akbkMyYA0zl+OV6qFn9T7qHOn8uLqQ57wux/TF9RX/slkCWLyLltGa8v
+811xn9yAYuGf0iufUCEIovajONaZsaHZV0w2/5L8hFv6rng40iDJSWzKm//Nol2f
+shTZjpK/6FGss9uSMFqw+WLLuB9Pv02ygc2lCNJgDGyiBLLiizo=
+=cYnD
+-----END PGP SIGNATURE-----
 
-Also, the venndor tree seems to be making use of this dummy clock
-in a lot of dts nodes. Even on QXP and QM.
-
-> Shawn
-> 
-> > +
-> > +	xtal32k: clock-xtal32k {
-> > +		compatible = "fixed-clock";
-> > +		#clock-cells = <0>;
-> > +		clock-frequency = <32768>;
-> > +		clock-output-names = "xtal_32KHz";
-> > +	};
-> > +
-> > +	xtal24m: clock-xtal24m {
-> > +		compatible = "fixed-clock";
-> > +		#clock-cells = <0>;
-> > +		clock-frequency = <24000000>;
-> > +		clock-output-names = "xtal_24MHz";
-> > +	};
-> > +
-> > +	sc_pwrkey: sc-powerkey {
-> > +		compatible = "fsl,imx8-pwrkey";
-> > +		linux,keycode = <KEY_POWER>;
-> > +		wakeup-source;
-> > +	};
-> > +
-> > +	/* sorted in register address */
-> > +	#include "imx8-ss-adma.dtsi"
-> > +	#include "imx8-ss-conn.dtsi"
-> > +	#include "imx8-ss-ddr.dtsi"
-> > +	#include "imx8-ss-lsio.dtsi"
-> > +};
-> > +
-> > +#include "imx8dxl-ss-adma.dtsi"
-> > +#include "imx8dxl-ss-conn.dtsi"
-> > +#include "imx8dxl-ss-lsio.dtsi"
-> > +#include "imx8dxl-ss-ddr.dtsi"
-> > -- 
-> > 2.31.1
-> >
+--/ksDgt2nnkFtgRNi--
