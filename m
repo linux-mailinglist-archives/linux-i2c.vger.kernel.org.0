@@ -2,50 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECAE4B2BCF
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Feb 2022 18:34:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7CD24B2BD5
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Feb 2022 18:36:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352190AbiBKRds (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 11 Feb 2022 12:33:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52554 "EHLO
+        id S233241AbiBKRff (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 11 Feb 2022 12:35:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343905AbiBKRdr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Feb 2022 12:33:47 -0500
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56790394
-        for <linux-i2c@vger.kernel.org>; Fri, 11 Feb 2022 09:33:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=BY/rAX94vOy0LpznrWnml4RFBUfP
-        YzoCCpV+uaQz+hM=; b=hnZDaJhAF4inZeTdkdy0eH3oEJM/F2vmOXOqNQF6iYjN
-        jzyDaVRFmLcjH7UsUACx3flbybWz26f4cJ1+fIBPEQgMfcVd2NOg8UME48eigu7M
-        8YvZ8h03Jz02iDsIGlCozKuaItoy8vYS2GzzBBbxO5yYJ6j1RQk1PwbmEUcAZKA=
-Received: (qmail 1733240 invoked from network); 11 Feb 2022 18:33:44 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Feb 2022 18:33:44 +0100
-X-UD-Smtp-Session: l3s3148p1@HQfsd8HXrpsgAQnoAG/OAF8CQcyiW2Kh
-Date:   Fri, 11 Feb 2022 18:33:43 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/2] i2c: rcar: Add R-Car Gen4 support
-Message-ID: <Ygad90zoOm+3nH1w@kunai>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        with ESMTP id S239369AbiBKRff (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Feb 2022 12:35:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAD1391
+        for <linux-i2c@vger.kernel.org>; Fri, 11 Feb 2022 09:35:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19367B82B25
+        for <linux-i2c@vger.kernel.org>; Fri, 11 Feb 2022 17:35:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29A98C340E9;
+        Fri, 11 Feb 2022 17:35:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644600930;
+        bh=Fye5DYxYqeX0DYIQSBLhLXfqkeTnxb1Soj9jvLLBMxc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=era3a0UnjW3f56fr9u1UcWjPF4Y06sspB926sKbA5OQVl42uOxuz+RIuPFp39xhtY
+         Pgc5L+0eHgoJFzK2kAwEdLoAOrSSqQDJ7Wvd5OXEx5ifF3j5TWmbs3k/xdNKbNrJaU
+         n+0N602nxKOCF//ZlhGTzv6WQLyabA5nmycv4H1aslhFP5wnxKjxQj89/+ajX59rrD
+         z5pQZzRiRoCCLwiqTbj0BhmDl4FudxTkp2jQMsdTtM5XzH4r7I5RqZgXIsHIygEjpj
+         1nSVGL9jt2es+FIyFBGMQKm8ZOB/J28+zPmIyI0/M2mxgmz7/Rn2uwKKjtyyjUwK4D
+         r2/9C6PIqVqmg==
+Date:   Fri, 11 Feb 2022 18:35:27 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     linux-i2c@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh@kernel.org>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>, linux-renesas-soc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
-References: <cover.1643898531.git.geert+renesas@glider.be>
- <127a63594229deca2f63c7393b9bdf17b572163a.1643898531.git.geert+renesas@glider.be>
+        Jan Dabros <jsd@semihalf.com>, Sven Peter <sven@svenpeter.dev>,
+        Jie Deng <jie.deng@intel.com>,
+        Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH] i2c: brcmstb: allow compiling on BCM4908
+Message-ID: <YgaeX7X53d597kVr@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        linux-i2c@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh@kernel.org>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jan Dabros <jsd@semihalf.com>, Sven Peter <sven@svenpeter.dev>,
+        Jie Deng <jie.deng@intel.com>,
+        Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20220211105806.14341-1-zajec5@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oR+G0fOIQhQzDh9v"
+        protocol="application/pgp-signature"; boundary="fQBQTKe0JP/Go6s9"
 Content-Disposition: inline
-In-Reply-To: <127a63594229deca2f63c7393b9bdf17b572163a.1643898531.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220211105806.14341-1-zajec5@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,42 +79,39 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---oR+G0fOIQhQzDh9v
-Content-Type: text/plain; charset=us-ascii
+--fQBQTKe0JP/Go6s9
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 03, 2022 at 03:33:17PM +0100, Geert Uytterhoeven wrote:
-> Add support for the I2C Bus Interface on R-Car Gen4 SoCs (e.g. R-Car
-> S4-8) by matching on a family-specific compatible value.
+On Fri, Feb 11, 2022 at 11:58:06AM +0100, Rafa=C5=82 Mi=C5=82ecki wrote:
+> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
 >=20
-> While I2C on R-Car Gen4 does support some extra features (Slave Clock
-> Stretch Select, Fast-mode Plus), for now it is treated the same as I2C
-> on R-Car Gen3.
+> BCM4908 SoCs use the same I2C hardware block as STB and BCM63xx devices.
 >=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
 
-Fixed commit message and applied to for-next, thanks!
+Applied to for-next, thanks!
 
 
---oR+G0fOIQhQzDh9v
+--fQBQTKe0JP/Go6s9
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIGnfcACgkQFA3kzBSg
-KbZuMQ/9GlokBVb7c1remuc0jR9jpBpJUrp6vNziZgkhYvaryGZ4BLcNNx2+9IbR
-MVu85ZTNAbW0/Cr8xdnsN7PdQ1D4OM4k2mME+ywur2tUod2cD0lq0bbf6sT2iiKY
-A4M2uBeVmp9xBmjlIPnsd92SGV5SJcPRwCLrO0lEfaNpe3tX3NuB8qx55v8t3yzX
-Q4cLrhpeL4NsldRfRpYbq8IPozduVAAEqB3nnUPFLE0Ko+8vGzfth60+EmFXkGos
-qL5TChzD9emqodRzDWM3Tg1Vd3VHxTGym9wBlDIQvVOOZSmCg0YwaLP0U1Shm4cX
-J7UVNwRb15IHYWvdf5/F2/dgBdBJS2NcCNy/YgcVCTUXOolmdHkYnXIAlLGO+XAa
-ZyBG8j8DGhOAEiN8Blhg22BNpUlK/dZdXMzVH5s8bc320zFsNAxAfQdyGDuWyZWu
-Lfncxmls0rh4GbRbQYMd9IotRucOuDIvJVn/S7xybGuxUL1GWnfz1QG0HwTV9N3Y
-S8eJIro8wXt9A8H++m0KP1mX/9w76kLpU0reu68nEulD6FiJ2euhMcR+Y/J2fHOp
-tauQaR0tVN1Xc67IYMNDXLL+1LSYgz0gdFsNEcNjMQ9+4ahji2fBJmeU/mFHqskO
-GOU2tRL/t0BSQ1szDGNToK9Prh5uOJN+zcuKnQq+RlU2ZG3I1jk=
-=21P6
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIGnl8ACgkQFA3kzBSg
+KbZMaQ/8D38CbLWMJdQg73nXL2XgP/ddJLpR4vvXuyzNKnjVj2Er1McVkARXx4OR
+VxgN20JiXGfmEmkws7z9y5pxNP8Sbwrb6Sz0bliGuRomOXaxJkMD1/dCHQTVNJta
+iiTBnzQUEY0T10Znmx0PmQx5WLbJuNcQMfYvQ2oMvWrQNfkImQEgAH89V9jep8Ev
+guC1njTcGtAxlYZtm7WIagN70dtT6PjaBwRnDJO2wIO/L8rVyAbl/su5TnX4ek6i
+p+bKDZYMFZ4W94b5jaoWT8H6ixTu5wCz0F99a8CAdQ8Fl4QnBWXN8u9EkJgd+/TG
+Bew0VXextnE4aVKmD9GRH0hG499VQFeuhtrWFBtkdZCxIfwlvxeDPCWIV965352O
+wT9x3DMG5ChKevwxKsAZUOLNW3qm+j4BhEy0RJe3Od1IjnQFu9Iy0qohi99L83LT
+M3lJyqhXqIWDO5lQxAiQTw1fqIupitaCwP4LZrLviPS8lKeV3++mfn/KMYDgUMAS
+vIYUvQiXXrrV71Wt5yMf+iAX1WOk6kSjf86fREhnxgKG3orXObX0lg5PTH4oKGTl
+Dnn/96H+HxnpK9NXq2f2DreWvCIPAn1Lx0dM+PopPAZhwVbZF/fREpm/t9PBJp1k
+qtkBDLoSXnIs6GafE4QmKRNHNMzPoMtQJXrwsmyXDkaBFY/O5q8=
+=IiU5
 -----END PGP SIGNATURE-----
 
---oR+G0fOIQhQzDh9v--
+--fQBQTKe0JP/Go6s9--
