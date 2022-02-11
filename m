@@ -2,63 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE924B279E
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Feb 2022 15:12:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6099D4B2828
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Feb 2022 15:42:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245644AbiBKOMa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 11 Feb 2022 09:12:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53538 "EHLO
+        id S240344AbiBKOmm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 11 Feb 2022 09:42:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235702AbiBKOM2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Feb 2022 09:12:28 -0500
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5063DDE9;
-        Fri, 11 Feb 2022 06:12:27 -0800 (PST)
-Received: by mail-oi1-f173.google.com with SMTP id u3so9601753oiv.12;
-        Fri, 11 Feb 2022 06:12:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lAkUnjcZkQaj/Jq2IySe0qTtnqDiy/JqCybGCbj3Xr4=;
-        b=5mNmr8yHdbwp5y5Z7i4FgoIsKJMsKAO9MIu0CIG0lr7DykEvXtPE0Z96oUtRTXbwyf
-         lyLNIHgtetc5wnUJcc2RmNHI3+cMM2OXoKjpsVmj0cVjzSjSnq8z+2nmhEguPmZVFnO1
-         MkVPlI3TM2kyJC5ithzkG0xu9rXiP9He8NHSuQt2EaBRlcUEN8IQ9rNQjIHulZtoGmhc
-         o+O+h20evJds50LnCXJsofiBs2aWv7Z+SzIkHqdcWupI4C2aAuQq3/AaeGbEGNjyMV5O
-         P1Omuupa8MgKsqoRSDRoJz+MdKVsytvswqSJx/BYBzfjI10CMncBF/Cr/9H2jccJVLH/
-         IPLQ==
-X-Gm-Message-State: AOAM530cOwetM4Q3AmxLtkeJTW+5TncQDG2Vza3N9AkfPpHild1BVuS4
-        gBc4g1WuRWBrMiWcTQsU8Y2W/va13w==
-X-Google-Smtp-Source: ABdhPJwmSbOHF34SzzapTIDb7eEv5EgBL3YRReQ1KuJvfhTPrEgsWRjiCFNskT7QkRP715c6n1sF+A==
-X-Received: by 2002:a05:6808:ec2:: with SMTP id q2mr249429oiv.124.1644588746611;
-        Fri, 11 Feb 2022 06:12:26 -0800 (PST)
-Received: from robh.at.kernel.org ([2607:fb90:20d7:a802:e6b0:6d9c:32f7:4bd9])
-        by smtp.gmail.com with ESMTPSA id c61sm9016445otb.52.2022.02.11.06.12.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 06:12:25 -0800 (PST)
-Received: (nullmailer pid 291081 invoked by uid 1000);
-        Fri, 11 Feb 2022 14:12:23 -0000
-Date:   Fri, 11 Feb 2022 08:12:23 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Loic Poulain <loic.poulain@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 1/9] dt-bindings: i2c: qcom-cci: add QCOM SM8450
- compatible
-Message-ID: <YgZux6VgMQqpA0dj@robh.at.kernel.org>
-References: <20220203164629.1711958-1-vladimir.zapolskiy@linaro.org>
- <20220203164629.1711958-2-vladimir.zapolskiy@linaro.org>
+        with ESMTP id S1350970AbiBKOml (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Feb 2022 09:42:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD038FE;
+        Fri, 11 Feb 2022 06:42:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 72C8DB82A7D;
+        Fri, 11 Feb 2022 14:42:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74E30C340E9;
+        Fri, 11 Feb 2022 14:42:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644590558;
+        bh=s/pTecxpwPSj1JZATHAN1IBVXRCtptKD60t3I7oSlqg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=snJW3VzLM7MRYLPyHK6bOjNsF0pJgsZEYVeL2SDXyz0nEq0E2BpVKxFf9iKU05R84
+         CIKst0p0ORyWeHofL0055LQWu6oKhXesdl1+DARzMqkMqXcMHmKasrYIcmaoyoe2MB
+         Y4M5OXbbgVoxzw7pOiEPuoguicEWGR9EMpEkd5lsFH2a1AaGL5C3Z5JJMA0hqF8qG/
+         y3B0dxmg4gR/OhMaDLVC6fJVD2SsV1jKrkroGHNZpEqxfnsTfRKJ68WW90hrPtHZpL
+         KlaOejDBFBjGE7zYqwdAeuAdQ9IqguJ4A/s/eKzNdBZ1rMIwLPhg1+yDeRIhvF3L+1
+         jq37C/BFH6YuA==
+Date:   Fri, 11 Feb 2022 15:42:34 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Terry Bowman <terry.bowman@amd.com>, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, linux-i2c@vger.kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+Subject: Re: [PATCH v5 3/9] i2c: piix4: Move port I/O region request/release
+ code into functions
+Message-ID: <YgZ12hCMUlqtLKD3@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Terry Bowman <terry.bowman@amd.com>, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, linux-i2c@vger.kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+References: <20220209172717.178813-1-terry.bowman@amd.com>
+ <20220209172717.178813-4-terry.bowman@amd.com>
+ <20220211105322.180ad89d@endymion.delvare>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="PkwvlxkbgJDsTi5p"
 Content-Disposition: inline
-In-Reply-To: <20220203164629.1711958-2-vladimir.zapolskiy@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220211105322.180ad89d@endymion.delvare>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,15 +71,42 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 03 Feb 2022 18:46:28 +0200, Vladimir Zapolskiy wrote:
-> The change adds QCOM SM8450 compatible value to the list of QCOM CCI
-> controller compatibles, the controller found on the SoC is equal to
-> the ones found on previous SoC generations.
-> 
-> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
 
-Acked-by: Rob Herring <robh@kernel.org>
+--PkwvlxkbgJDsTi5p
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+> > +		if (retval)
+>=20
+> Missing curly brace here, breaks the build.
+
+Bummer, need to check why this wasn't found by my build-testing.
+
+I fixed it up and also rebased patch 6 to my change. Terry, please have
+a look that I did everything correctly once I push out later today.
+
+Thanks everyone!
+
+
+--PkwvlxkbgJDsTi5p
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIGddUACgkQFA3kzBSg
+KbYvmRAAhUdcWN2s+goYkycnoB8cDn3Ged/czC8TVpwttDTjs+hdb2sMrw+WZE9R
+Tl1mW7AOUZ3HYfLVLOoZr5BAwyrFcBDTgSEk5SZG++Av1ne7swb5T8fvzwz6X/Kg
+L4MK4H7wHNK0lGP+fsn/sGuNbVzmO8bW5LajApo9azHGQQhoSPdmnWsEmNJnodLt
+Hz8BPkmXtw9jxW1enPtztPUR7xJXJyf+KrIivFo57c6SzNGQJZ+5l7QN/lqWoJ1d
+Jz8eNlH6bJCgBNSWPij9VyagyzPc+3wgD163HoYVtAEnOX8HEWt2aLVMcia0tV24
+q2cmK1lc1Tqc5UF8sevvz1ArFopUoaAPALrQmm7ehvtYbfOS7uUSVIZmOH8HosvZ
+giMNF2EKPi/i/t4mfAtJez6359AhpMup20sYZMajS0GfhzmQF4oZh8Fe0czu1qaV
+2v93Uzifvcy1tFtWKquzNHyBBH3jd2qwHyGkKbFmwj7Br279aqg0S1knB+x44e/O
+6Zy7wkoflBDBvoRiSKwMjovE5GFPdWZ2/DWwkcjee6aIvLYnvKTch+PXmDDP2/ul
+aMBQW9o74Wqfvcbn76/W27RRFjoEbTFidWpm2cxpcyQDukjlM7gpl8pB6ij/7K1H
+HdgOIjCB7yx8QE5srVZC++8lj+Ff1PZ2/sEAMj9YCJC3OP7S7rY=
+=5oBw
+-----END PGP SIGNATURE-----
+
+--PkwvlxkbgJDsTi5p--
