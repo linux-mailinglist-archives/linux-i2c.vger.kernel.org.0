@@ -2,72 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3EE4B2C1D
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Feb 2022 18:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 522F54B2C2B
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Feb 2022 18:55:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352348AbiBKRvZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 11 Feb 2022 12:51:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43038 "EHLO
+        id S1352404AbiBKRxq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 11 Feb 2022 12:53:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352338AbiBKRvY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Feb 2022 12:51:24 -0500
+        with ESMTP id S1352400AbiBKRxp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Feb 2022 12:53:45 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B434CD5;
-        Fri, 11 Feb 2022 09:51:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80600CE9;
+        Fri, 11 Feb 2022 09:53:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF85D61D23;
-        Fri, 11 Feb 2022 17:51:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E45DC340E9;
-        Fri, 11 Feb 2022 17:51:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AC6361DA3;
+        Fri, 11 Feb 2022 17:53:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25105C340E9;
+        Fri, 11 Feb 2022 17:53:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644601882;
-        bh=F9tdVd/GDTZbvc3ckgl4zG5hYWLfWn7hfZRmCIg/enA=;
+        s=k20201202; t=1644602023;
+        bh=j9io4CjQGVmdKTFgkV+LOFNgAGw4pDMvV9VClqq4hNk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IXOeZ1iY3ZvTdG1cnr+PnCeqk52FaVZ4zceA+hi4w+Z75siHdwa7pQU3L0KhrDNFe
-         T7CGyOEZN/+K0WqHR2YYMFLZ27mDlP2MFnahsgjWrX4WuKGJDfsshuNFhuIVJK/Ams
-         1xjdU76gzEtVZMJ+urrQB/DtIAwsAu2SHuemK6blx8PXA6FmMGar+AtzbT5lGOyGpe
-         kLfN8lsr79dGy03jOugMcSW8MepZg77nX1O9Gfw3vlxddnglAfMKZObEKUtVGj3dzy
-         wBg0YypUP+gO5EP8Syad13aMW0nDnyPjw8UcvD2mxE7jEwwfSrkbEsfnGMtcEZCdqi
-         EDwlA31Ad4Lqw==
-Date:   Fri, 11 Feb 2022 18:51:18 +0100
+        b=ImbAKQ08m0iW6t5yD2Mda3NMteEnVLoMuQgQ9UKKJBNvanJ3/fCwzKuSQpoxUEkQa
+         ktg9R1F0JLd6e+rr8mc7dTEn04rO2kXUN2uRdwMHVAJE3yMr43XizMt7NuK5G7VH+9
+         8GfrijmzRv8mfDxeW6/TihWh+owSsDtaaDV9sW328/dhe9p1Q/pfHcgL30pWCUn5eR
+         eyY68igzE9qcTQ7gkMtwDz5X0gIvSqFpdcYiDi2we5kkwIcat9jzx2tyMNniWMKx5P
+         kRi8O7OKyWyHl3FkQeV0DdLyBqT0EORI3+MFh3iAGR74ZkAWEOSPYaaDcesD4bdla2
+         vY29d+PAfi+/Q==
+Date:   Fri, 11 Feb 2022 18:53:38 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in
- adapter"
-Message-ID: <YgaiFsgQUSeUTUwz@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-References: <20220106122452.18719-1-wsa@kernel.org>
- <Yd6gRR0jtqhRLwtB@ninjato>
- <98ed8d6d16a3d472d9432eb169aa2da44b66b5cc.camel@yandex.ru>
- <4dfbee97-14c2-718b-9cbd-fdeeace96f59@yahoo.com>
- <CAJMQK-h38XdN=QD6ozVNk+wxmpp1DKj21pkFZ+kY31+Lb8ot6Q@mail.gmail.com>
- <6121a782-6927-f033-1c09-ffe4ad7700ae@yahoo.com>
- <CAJMQK-j5YYqen78Vgng_5jhja-YKSTRut7f7vJ4wWufVfbZy6w@mail.gmail.com>
- <363432688.323955.1642272250312@mail.yahoo.com>
- <CAJMQK-jx+z974AT_p+-AVAbMQQ33V-XU9NKmy-i6nbS5zagHBA@mail.gmail.com>
- <297191986.3285872.1644002564779@mail.yahoo.com>
+To:     conor.dooley@microchip.com
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, geert@linux-m68k.org,
+        krzysztof.kozlowski@canonical.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        atishp@rivosinc.com, Rob Herring <robh@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: [PATCH v6 03/12] dt-bindings: i2c: add bindings for microchip
+ mpfs i2c
+Message-ID: <YgaiorHf7/Za5vib@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, conor.dooley@microchip.com,
+        linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        geert@linux-m68k.org, krzysztof.kozlowski@canonical.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, bin.meng@windriver.com,
+        heiko@sntech.de, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        atishp@rivosinc.com, Rob Herring <robh@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+References: <20220207162637.1658677-1-conor.dooley@microchip.com>
+ <20220207162637.1658677-4-conor.dooley@microchip.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3O157vMkPgoB/jJu"
+        protocol="application/pgp-signature"; boundary="jVl1itNwmbBofVyK"
 Content-Disposition: inline
-In-Reply-To: <297191986.3285872.1644002564779@mail.yahoo.com>
+In-Reply-To: <20220207162637.1658677-4-conor.dooley@microchip.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -79,39 +84,43 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---3O157vMkPgoB/jJu
+--jVl1itNwmbBofVyK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 04, 2022 at 07:22:44PM +0000, Tareque Md.Hanif wrote:
->  The issue still exists. It takes very long time to suspend (10-12s). `DR=
-I_PRIME=3D1 glxgears` is a black window.
+On Mon, Feb 07, 2022 at 04:26:29PM +0000, conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 >=20
-> journalctl attached
-> Looking forward to any testing.
+> Add device tree bindings for the i2c controller on
+> the Microchip PolarFire SoC.
+>=20
+> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-Any new ideas which Tareque could test?
+Applied to for-next, thanks!
 
 
---3O157vMkPgoB/jJu
+--jVl1itNwmbBofVyK
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIGohYACgkQFA3kzBSg
-KbYDQw//dSIhBi4A9Y5h1tFwTrTxqGfsRpDAbPqba0S7hNAE+QbhZ4KpBc04w36A
-c6btSwh/3oE9UKJzjxxiS6ZcZUzkZeVvhhyWq/Z1Ihg0xVfwXgm5G3Vlm9bh+JWA
-ABxqZy4xcKnCspu3s0gARFnvD1g+iFcRkIDnBQM6xcSySBL/Ke0hK6s5xdO5ia20
-69U31+agvOLQPyo6QsFlt1aDMT7XgzUUtQ70p7fuQfno+yfNGsSN6AF1DnOwkiGg
-/IIfeU/kTC6fYTNdbjUETvBHmjLH8yXYySyFRsMQIFwDUVsNwUS4c87eZgH8iWsf
-kCIpq/+hdFvapcKe+JqzuhbrExEBnevj6fcRQZKwWvgbznOuIc1HKrksiKIdfBZV
-OdM2qOwJpDhOKJY92moMFMsKqa/2uw4VZmho+bOUYTzFufnal6ljDuPvMph3wLig
-21Ri0cMGDINVg54LTS/BE7oUZfvfE6lb4e0fRI9z/bPhcAOdAepHNuLmUjkK7Vfy
-8PCwa/cX37mUpQM7ECgYwrTzKm+iuQhY7Gh+Pcjb8EUFut1OVIRhrtSQFM3ufeNh
-RsmFZx31UDr/0RBnxTdhSsJU2JDDI9bfRxbaJBkSG1R4B3DgSbw1j5cBTsHyOwb3
-gBT6emvOJ6h1bLF32+/IaJft0JKu33hPpwTvu74v8VdeS1BNV4I=
-=ZVJG
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIGoqIACgkQFA3kzBSg
+KbY5zBAAky+SkyXA2LOT59kq0mn8oO/pzp+w/OnfTlN/Dn3GgC5ljGVYLc8MECQ/
+Q2KKs+hINDGYIlDYCWxrDTQqNtaK+j35bY4m5uXiWFZWA7p4kMkOeaHfRVrbyg6S
+b7XaVq7myEkDrO+Xfw2MGxyJTLksSq0o7Ql7g4mSZkPyDYNycT/JUTyb5ac+D/pD
+yN/GK6kgiUvWeYrRCueJCTzYzpgwEdGex0wVQaOXDGVwSPZbM/j9RlBrmw4IBEIH
+1gToRHIKoLmbVx+MvyRACu2aRXUXhS7nPg9Yuq3Ftfge4RWzYhlzIITdcpSs+U74
+iuQkSCkKr0J3DvMwDKURl4g1BiPsKODTgvvYp4Fkw1LUad4hNEPrnLbxgZP6HYB6
+svl6Jy9aQoqQx5UeH1WHIBeRqzJlCKrr4HOCwuC+HIQ9//sqwd9OEIah32F1B+AZ
+wl0VhHqHDBUOimTbhr5QrvrTNEn4U5f5+eLToJbaGKEcplkJXlOFQg3xqaYN8hdB
+o/MAbfRWOPDYm/nXM+gK6LbXxCmhEBWgsqOeiOuC13RBOdiLyRNhl/tH0wd+e24K
+IHvmbZwmDhaKQ7U6Al0aeCQDzwULEpRtIhqHR1c+z18q9tA33GDfg0ukH6URjaLa
+PnbVeIhZNqyNmsa4P0nbDSjxqVhzZPiiPyEmAA/t0cFAaad37CA=
+=9qL3
 -----END PGP SIGNATURE-----
 
---3O157vMkPgoB/jJu--
+--jVl1itNwmbBofVyK--
