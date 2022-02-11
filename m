@@ -2,208 +2,118 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF794B227E
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Feb 2022 10:54:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D064B2296
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Feb 2022 10:56:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232699AbiBKJx0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 11 Feb 2022 04:53:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35866 "EHLO
+        id S1347151AbiBKJ4Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 11 Feb 2022 04:56:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232289AbiBKJx0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Feb 2022 04:53:26 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801FEC4F;
-        Fri, 11 Feb 2022 01:53:25 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S236464AbiBKJ4X (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Feb 2022 04:56:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E37E98;
+        Fri, 11 Feb 2022 01:56:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 333EB1F3A2;
-        Fri, 11 Feb 2022 09:53:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644573204; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W62L88+zcZHOeh2jlIvhoTBCBvPlWiH1lU+vLtZUc/k=;
-        b=KfZxou1t9z35AvGMqZANlog57oVxaQtBtsvqwxztAB1fhwLWbGh7WM+5ECf9wq+nAXyTve
-        cFBOAHWHU7MrfxKBSaR9sGrpWv+sF25DH+hBtJhjSl+IXbg7iERdRAGsd9WaH8PyGtyicY
-        AJvuBg9EmIS0t2QFry9FgeQYghC2xiY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644573204;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W62L88+zcZHOeh2jlIvhoTBCBvPlWiH1lU+vLtZUc/k=;
-        b=6SzhxnS+9p6k94x5ix65ydYlTHFzYd+EVX0laWZF+8PPAbMYbkGK3XzaJ/skfzahZJkaTX
-        cP+G+Y/coJsswMBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AD8A313BC3;
-        Fri, 11 Feb 2022 09:53:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 65POKBMyBmKBIAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Fri, 11 Feb 2022 09:53:23 +0000
-Date:   Fri, 11 Feb 2022 10:53:22 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Terry Bowman <terry.bowman@amd.com>
-Cc:     <linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
-        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>,
-        <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
-        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
-        <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
-        <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
-        <Mario.Limonciello@amd.com>
-Subject: Re: [PATCH v5 3/9] i2c: piix4: Move port I/O region request/release
- code into functions
-Message-ID: <20220211105322.180ad89d@endymion.delvare>
-In-Reply-To: <20220209172717.178813-4-terry.bowman@amd.com>
-References: <20220209172717.178813-1-terry.bowman@amd.com>
-        <20220209172717.178813-4-terry.bowman@amd.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1102961E06;
+        Fri, 11 Feb 2022 09:56:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA85CC340E9;
+        Fri, 11 Feb 2022 09:56:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644573380;
+        bh=0FStBV/9SBeI+EFPz6ZTJLDbJT+HjShaFqliyCFiedY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GX9L6FNqs4NEdyCWsr1BMveBBzlfZcDdrEK0Xzd+Qu9at0HPo51/agBfSbcV5Px16
+         fs1pOQr2JV7YAfcTGJOzaKqp26N0T4IOcXYmVRDOp/KpYxq8G6FQuhX+rIKRqE6zo+
+         6jlJawckcJ1RSeFPhlWbcrXPycamUsZz2yFU8l1AXigMgEI5sEyw4n/mQVQMUztS0G
+         zVMH3gXcQRY4yywVo+GW+6W4Yh3LkLtx7PQ4ESC2u+Q0oLlX4rQJ5qyjrfPI4gxxa7
+         mFVS0VldmU8UvRGPkNMl3UzJE2uTXTDXahQdRRmsWM9SD2X+z5C3V1xQX+zYFYWHFE
+         6ulhjHFBh5saA==
+Date:   Fri, 11 Feb 2022 10:56:14 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Deucher, Alexander" <alexander.deucher@amd.com>,
+        "Easow, Nimesh" <Nimesh.Easow@amd.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>
+Subject: Re: [PATCH v4 2/2] i2c: designware: Add AMD PSP I2C bus support
+Message-ID: <YgYyvgIIshpi7Wgb@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Deucher, Alexander" <alexander.deucher@amd.com>,
+        "Easow, Nimesh" <Nimesh.Easow@amd.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>
+References: <20220208141218.2049591-1-jsd@semihalf.com>
+ <20220208141218.2049591-3-jsd@semihalf.com>
+ <YgWNE05eVK+LijL/@kunai>
+ <CAOtMz3OyYXeyrpcSUpHZCR4tqroKWd09gYsjsU2W_idt8udMbQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Q5MBvKOSjtVh37zW"
+Content-Disposition: inline
+In-Reply-To: <CAOtMz3OyYXeyrpcSUpHZCR4tqroKWd09gYsjsU2W_idt8udMbQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 09 Feb 2022 11:27:11 -0600, Terry Bowman wrote:
-> Move duplicated region request and release code into a function. Move is
-> in preparation for following MMIO changes.
-> 
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
-> ---
->  drivers/i2c/busses/i2c-piix4.c | 48 ++++++++++++++++++++++------------
->  1 file changed, 31 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
-> index 3ff68967034e..cc488b1e92c3 100644
-> --- a/drivers/i2c/busses/i2c-piix4.c
-> +++ b/drivers/i2c/busses/i2c-piix4.c
-> @@ -165,6 +165,24 @@ struct i2c_piix4_adapdata {
->  	u8 port;		/* Port number, shifted */
->  };
->  
-> +static int piix4_sb800_region_request(struct device *dev)
-> +{
-> +	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
-> +				  "sb800_piix4_smb")) {
-> +		dev_err(dev,
-> +			"SMBus base address index region 0x%x already in use.\n",
-> +			SB800_PIIX4_SMB_IDX);
-> +		return -EBUSY;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void piix4_sb800_region_release(struct device *dev)
-> +{
-> +	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
-> +}
-> +
->  static int piix4_setup(struct pci_dev *PIIX4_dev,
->  		       const struct pci_device_id *id)
->  {
-> @@ -270,6 +288,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
->  	unsigned short piix4_smba;
->  	u8 smba_en_lo, smba_en_hi, smb_en, smb_en_status, port_sel;
->  	u8 i2ccfg, i2ccfg_offset = 0x10;
-> +	int retval;
->  
->  	/* SB800 and later SMBus does not support forcing address */
->  	if (force || force_addr) {
-> @@ -291,20 +310,16 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
->  	else
->  		smb_en = (aux) ? 0x28 : 0x2c;
->  
-> -	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
-> -				  "sb800_piix4_smb")) {
-> -		dev_err(&PIIX4_dev->dev,
-> -			"SMB base address index region 0x%x already in use.\n",
-> -			SB800_PIIX4_SMB_IDX);
-> -		return -EBUSY;
-> -	}
-> +	retval = piix4_sb800_region_request(&PIIX4_dev->dev);
-> +	if (retval)
-> +		return retval;
->  
->  	outb_p(smb_en, SB800_PIIX4_SMB_IDX);
->  	smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
->  	outb_p(smb_en + 1, SB800_PIIX4_SMB_IDX);
->  	smba_en_hi = inb_p(SB800_PIIX4_SMB_IDX + 1);
->  
-> -	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
-> +	piix4_sb800_region_release(&PIIX4_dev->dev);
->  
->  	if (!smb_en) {
->  		smb_en_status = smba_en_lo & 0x10;
-> @@ -373,11 +388,10 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
->  			piix4_port_shift_sb800 = SB800_PIIX4_PORT_IDX_SHIFT;
->  		}
->  	} else {
-> -		if (!request_muxed_region(SB800_PIIX4_SMB_IDX,
-> -					  SB800_PIIX4_SMB_MAP_SIZE,
-> -					  "sb800_piix4_smb")) {
-> +		retval = piix4_sb800_region_request(&PIIX4_dev->dev);
-> +		if (retval)
 
-Missing curly brace here, breaks the build.
-
->  			release_region(piix4_smba, SMBIOSIZE);
-> -			return -EBUSY;
-> +			return retval;
->  		}
->  
->  		outb_p(SB800_PIIX4_PORT_IDX_SEL, SB800_PIIX4_SMB_IDX);
-> @@ -387,7 +401,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
->  				       SB800_PIIX4_PORT_IDX;
->  		piix4_port_mask_sb800 = SB800_PIIX4_PORT_IDX_MASK;
->  		piix4_port_shift_sb800 = SB800_PIIX4_PORT_IDX_SHIFT;
-> -		release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
-> +		piix4_sb800_region_release(&PIIX4_dev->dev);
->  	}
->  
->  	dev_info(&PIIX4_dev->dev,
-> @@ -685,9 +699,9 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
->  	u8 port;
->  	int retval;
->  
-> -	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
-> -				  "sb800_piix4_smb"))
-> -		return -EBUSY;
-> +	retval = piix4_sb800_region_request(&adap->dev);
-> +	if (retval)
-> +		return retval;
->  
->  	/* Request the SMBUS semaphore, avoid conflicts with the IMC */
->  	smbslvcnt  = inb_p(SMBSLVCNT);
-> @@ -762,7 +776,7 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
->  		piix4_imc_wakeup();
->  
->  release:
-> -	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
-> +	piix4_sb800_region_release(&adap->dev);
->  	return retval;
->  }
->  
+--Q5MBvKOSjtVh37zW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 
--- 
-Jean Delvare
-SUSE L3 Support
+> Ooops, sorry for this. Actually I used checkpatch till v3, but forgot
+> to run this on v4 where this change was introduced, my bad. Will
+> improve going forward :)
+
+No worries, happened to me as well. Thanks for your contribution!
+
+
+--Q5MBvKOSjtVh37zW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIGMrsACgkQFA3kzBSg
+KbZZ+Q/+IMEbLkgi7z8MYSCctupgbtkiIiFmykqzbjOFohLuRUfGqPXtHIOIgpM9
+fxB4kwaQ4XpxtEv8Ny/Er2sQKddlhfM69LD595upC1HiMhAqT05L+XnMdzinbVMJ
+OkDynoSQF1rMYCi0AooKGvXMAsXKeYBahaCygq2v6JmcNscJ4WmoCmaANdAxMkP9
+PfRQr31m9NxceOrg0S+9u9K5Z8ZXx6fhcPLOwua1Rg73vn1kCzmiEQfh2oBX4sd3
+uJJfcnZxG9Ktld43BuGarHR00Jhy4kUQ51PcTaLyEkuzy56JI8JQ5HfLQiB8DJZh
++7DIMPvQoEPJBGSaiXj8fPFVaD9b0TjixKvWvyVWuNQStjOLYx49+PocpUVdOgeW
+/WuW/QQoe/MAPjlx/puJKKVr6hrLqcJj7iMJr1Wwa5Dm+LoqsLc1kZ7nCFggbmBJ
+wWQPUr8iQzz5cFvQ78iLNay3Ji/hoqGEkAqbDIY552CCOVpF/fQcAvR71LBtQwMg
+X0PoC4/G5o25m2yNZzjDQ+DASSgaeFjKvPoUntAitS7rQpXni7scCTZvu9iaqtA9
+PHHvqk3hG0PQ8XbYkHpCb4gOkDhsXXefVWIr9VwbkfYrXbixc0+YxXD/po3hnisu
+XeQAHXRVHJ2Rznx+KftSwz/axYyRCDI61tkvUhZpfjQM+B/BsZc=
+=I62k
+-----END PGP SIGNATURE-----
+
+--Q5MBvKOSjtVh37zW--
