@@ -2,222 +2,179 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEC14B30CB
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Feb 2022 23:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17CB34B32D5
+	for <lists+linux-i2c@lfdr.de>; Sat, 12 Feb 2022 04:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348290AbiBKWiU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 11 Feb 2022 17:38:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37764 "EHLO
+        id S230523AbiBLDT7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 11 Feb 2022 22:19:59 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348124AbiBKWiT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Feb 2022 17:38:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB6FD5D;
-        Fri, 11 Feb 2022 14:38:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A2F2616A3;
-        Fri, 11 Feb 2022 22:38:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFB89C340E9;
-        Fri, 11 Feb 2022 22:38:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644619097;
-        bh=NTbz/5bCQa7uPxPadJcsQCUFt6hzv0vK4pjKcw/rKYk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=C4YLb9PJPQf1Dn3aiWF0Ge5FPu4xB2bQjKSN/58DOBoiRT53Q35ySmeyGVph4SzT+
-         ls6OMwQmhk0XRqY0vT5eVFA0hym+Q+kruJytOJ6tHAnWH53HrVZhp3JPUVAUAwwXtL
-         G6EJUZYM0b2nCGBKZmEfpl9iXu5+GmSVhNV2eitHlf3GoL043KS9Tn/1x9i4cEc74y
-         T5XBSQSZ+38jBy3Pp5OvoiUj2cWlsTAboZBVGKmbMkDt0PAx7SfbavYY9kaiES8rXH
-         L3jkUTO7AHGxQ3XWhBYwRcS6jc6/IYInfT7F8EH+0ECJ4dQh5h3zWtx2j/fvflTKvM
-         ARSQo/kTL+0tg==
-Date:   Fri, 11 Feb 2022 14:38:15 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Matt Johnston <matt@codeconstruct.com.au>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
-        Zev Weiss <zev@bewilderbeest.net>
-Subject: Re: [PATCH net-next v5 2/2] mctp i2c: MCTP I2C binding driver
-Message-ID: <20220211143815.55fb29e3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220210063651.798007-3-matt@codeconstruct.com.au>
-References: <20220210063651.798007-1-matt@codeconstruct.com.au>
-        <20220210063651.798007-3-matt@codeconstruct.com.au>
+        with ESMTP id S229541AbiBLDT7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Feb 2022 22:19:59 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB682BB16;
+        Fri, 11 Feb 2022 19:19:57 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id j5so9183322vsm.5;
+        Fri, 11 Feb 2022 19:19:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=VsyfeuJ6g/2GunJL7YeMT1Xjct0dmD0TxFd0nF8PH8U=;
+        b=TwmGdMbxLLHVUn9Ba5bpyMP6jFwDyBiTYLHgXVRkaZujZ8eyCU+aHfYjLY7KNVukYT
+         3MlOT/3rrOb9bN11+ueZ5hiUJr1GTkpFMozsfpwnpk4YOMQcReN4NOHyQnMMy8v/5lp/
+         WKY5aFvS9XzKFm0kP+e7GuhPXAU2+Bw3unDK3nY79MNQcyqbK5Xj3e94BV0fqSb84ok5
+         VMIWd5OolmStlZVA20lMLsCHvW1WKPZPrIF2pk16Rfxnp0vGFDzVl9odAe4yzwqPFB+X
+         xsLLI4I2PYOsfAJIDRMXtXMLrFPynOXoC+K8u6uoCo+flcSP0cMUxbZrH1UJ9cjKwCaG
+         neJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=VsyfeuJ6g/2GunJL7YeMT1Xjct0dmD0TxFd0nF8PH8U=;
+        b=W4U0TthyeY1zH2HgzyuZYIyUjI8ThqAiuBhVbX8Jy2v1BZjXxCBwuptEHQstEzDHlH
+         ZBmjOfK6F/9cxYzRuf0FLjSQyouX798eS9NqRL4wAFPVKPwlZZ2iU7+VXnBZfHPSEgQQ
+         PMy0nmiZDj3PXNe3Ed13IRzaVEMZbpHBfSS08k0qsnW4ia8T/Fx2s684ICzVVh/aBH4V
+         N1s5E06OWQP6vQmaxWtH1mSgQ03cpTgIexq/Pu0hD2AqI3Oi3izt3svHJ3gCo/q7tWsB
+         10KxHkh1z1nAedwRY5xUylPrA13lHw193Yzl2bQ2WsF+t+1A0xt8SmRQnxdLtGe+Cz+B
+         k/gw==
+X-Gm-Message-State: AOAM530h2UxA0fJmElLq8VH/Y3DnqVpvFybbX9gAaXTRA+Rx80hbeGAu
+        tw/jrmEbzzcuPAB2d9xThBoHAYbsjHghUSrSEl9CIVzEqsOg
+X-Google-Smtp-Source: ABdhPJzhjID5O0hs9dVvNkisAW79JP9/wSPy4zZ+fykuuiQaviQ2GaxlsbRxg65F5PWz5IrOOGqZd0wwcwJKtqYWe8g=
+X-Received: by 2002:a67:eed4:: with SMTP id o20mr1544446vsp.29.1644635995958;
+ Fri, 11 Feb 2022 19:19:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220207063338.6570-1-warp5tw@gmail.com> <20220207063338.6570-2-warp5tw@gmail.com>
+ <YgaLZLuCwdpUgMea@robh.at.kernel.org>
+In-Reply-To: <YgaLZLuCwdpUgMea@robh.at.kernel.org>
+From:   warp5tw <warp5tw@gmail.com>
+Date:   Sat, 12 Feb 2022 11:19:43 +0800
+Message-ID: <CACD3sJYbS0_ak_BEJY0P9nYTP0NUZPmQ5re+-jL0qiWivZrL0g@mail.gmail.com>
+Subject: Re: [PATCH v1 1/6] dt-bindings: i2c: npcm: support NPCM845
+To:     Rob Herring <robh@kernel.org>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        krzysztof.kozlowski@canonical.com, semen.protsenko@linaro.org,
+        yangyicong@hisilicon.com, wsa@kernel.org, jie.deng@intel.com,
+        sven@svenpeter.dev, bence98@sch.bme.hu, lukas.bulwahn@gmail.com,
+        arnd@arndb.de, olof@lixom.net, andriy.shevchenko@linux.intel.com,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 10 Feb 2022 14:36:51 +0800 Matt Johnston wrote:
-> Provides MCTP network transport over an I2C bus, as specified in
-> DMTF DSP0237. All messages between nodes are sent as SMBus Block Writes.
-> 
-> Each I2C bus to be used for MCTP is flagged in devicetree by a
-> 'mctp-controller' property on the bus node. Each flagged bus gets a
-> mctpi2cX net device created based on the bus number. A
-> 'mctp-i2c-controller' I2C client needs to be added under the adapter. In
-> an I2C mux situation the mctp-i2c-controller node must be attached only
-> to the root I2C bus. The I2C client will handle incoming I2C slave block
-> write data for subordinate busses as well as its own bus.
-> 
-> In configurations without devicetree a driver instance can be attached
-> to a bus using the I2C slave new_device mechanism.
-> 
-> The MCTP core will hold/release the MCTP I2C device while responses
-> are pending (a 6 second timeout or once a socket is closed, response
-> received etc). While held the MCTP I2C driver will lock the I2C bus so
-> that the correct I2C mux remains selected while responses are received.
-> 
-> (Ideally we would just lock the mux to keep the current bus selected for
-> the response rather than a full I2C bus lock, but that isn't exposed in
-> the I2C mux API)
-> 
-> Signed-off-by: Matt Johnston <matt@codeconstruct.com.au>
-> Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
+Hi Rob:
 
-The i2c stuff looks quite unfamiliar, can we can an ack for that?
-Does it look sane to you, Wolfram?
+Thank you for your comments and they will be addressed.
 
->  menu "MCTP Device Drivers"
->  
-> +
+Regards,
+Tyrone
 
-spurious
 
->  config MCTP_SERIAL
->  	tristate "MCTP serial transport"
->  	depends on TTY
-
-> +static int mctp_i2c_add_netdev(struct mctp_i2c_client *mcli,
-> +			       struct i2c_adapter *adap)
-> +{
-> +	unsigned long flags;
-> +	struct mctp_i2c_dev *midev = NULL;
-> +	struct net_device *ndev = NULL;
-> +	struct i2c_adapter *root;
-> +	char namebuf[30];
-> +	int rc;
-> +
-> +	root = mux_root_adapter(adap);
-> +	if (root != mcli->client->adapter) {
-> +		dev_err(&mcli->client->dev,
-> +			"I2C adapter %s is not a child bus of %s",
-> +			mcli->client->adapter->name, root->name);
-> +		return -EINVAL;
-> +	}
-> +
-> +	WARN_ON(!mutex_is_locked(&mi_driver_state.lock));
-> +	snprintf(namebuf, sizeof(namebuf), "mctpi2c%d", adap->nr);
-> +	ndev = alloc_netdev(sizeof(*midev), namebuf, NET_NAME_ENUM, mctp_i2c_net_setup);
-> +	if (!ndev) {
-> +		dev_err(&mcli->client->dev, "%s alloc netdev failed\n", __func__);
-> +		rc = -ENOMEM;
-> +		goto err;
-> +	}
-> +	dev_net_set(ndev, current->nsproxy->net_ns);
-> +	SET_NETDEV_DEV(ndev, &adap->dev);
-> +	dev_addr_set(ndev, &mcli->lladdr);
-> +
-> +	midev = netdev_priv(ndev);
-> +	skb_queue_head_init(&midev->tx_queue);
-> +	INIT_LIST_HEAD(&midev->list);
-> +	midev->adapter = adap;
-> +	midev->client = mcli;
-> +	spin_lock_init(&midev->flow_lock);
-> +	midev->i2c_lock_count = 0;
-> +	midev->release_count = 0;
-> +	/* Hold references */
-> +	get_device(&midev->adapter->dev);
-> +	get_device(&midev->client->client->dev);
-> +	midev->ndev = ndev;
-> +	init_waitqueue_head(&midev->tx_wq);
-> +	midev->tx_thread = kthread_create(mctp_i2c_tx_thread, midev,
-> +					  "%s/tx", namebuf);
-> +	if (IS_ERR_OR_NULL(midev->tx_thread)) {
-> +		rc = -ENOMEM;
-> +		goto err_free;
-> +	}
-> +
-> +	rc = mctp_register_netdev(ndev, &mctp_i2c_mctp_ops);
-> +	if (rc < 0) {
-> +		dev_err(&mcli->client->dev,
-> +			"%s register netdev \"%s\" failed %d\n", __func__,
-> +			ndev->name, rc);
-> +		goto err_stop_kthread;
-> +	}
-> +	spin_lock_irqsave(&mcli->curr_lock, flags);
-> +	list_add(&midev->list, &mcli->devs);
-> +	// Select a device by default
-> +	if (!mcli->sel)
-> +		__mctp_i2c_device_select(mcli, midev);
-> +	spin_unlock_irqrestore(&mcli->curr_lock, flags);
-> +
-> +	wake_up_process(midev->tx_thread);
-
-Simliar but inverse comment as below...
-
-> +	return 0;
-> +
-> +err_stop_kthread:
-> +	kthread_stop(midev->tx_thread);
-> +
-> +err_free:
-> +	free_netdev(ndev);
-> +
-> +err:
-> +	return rc;
-> +}
-> +
-> +// Removes and unregisters a mctp-i2c netdev
-> +static void mctp_i2c_free_netdev(struct mctp_i2c_dev *midev)
-> +{
-> +	struct mctp_i2c_client *mcli = midev->client;
-> +	unsigned long flags;
-> +
-> +	netif_stop_queue(midev->ndev);
-> +	kthread_stop(midev->tx_thread);
-> +	skb_queue_purge(&midev->tx_queue);
-> +
-> +	/* Release references, used only for TX which has stopped */
-> +	put_device(&midev->adapter->dev);
-> +	put_device(&mcli->client->dev);
-> +
-> +	/* Remove it from the parent mcli */
-> +	spin_lock_irqsave(&mcli->curr_lock, flags);
-> +	list_del(&midev->list);
-> +	if (mcli->sel == midev) {
-> +		struct mctp_i2c_dev *first;
-> +
-> +		first = list_first_entry_or_null(&mcli->devs, struct mctp_i2c_dev, list);
-> +		__mctp_i2c_device_select(mcli, first);
-> +	}
-> +	spin_unlock_irqrestore(&mcli->curr_lock, flags);
-
-You're doing a lot before the unregister call, this is likely racy.
-The usual flow is to unregister the netdev, then do uninit, then free.
-For instance you purge the queue but someone may Tx afterwards.
-needs_free_netdev is a footgun.
-
-> +	/* Remove netdev. mctp_i2c_slave_cb() takes a dev_hold() so removing
-> +	 * it now is safe. unregister_netdev() frees ndev and midev.
-> +	 */
-> +	mctp_unregister_netdev(midev->ndev);
-> +}
-
-> +static __init int mctp_i2c_init(void)
-> +{
-> +	int rc;
-> +
-> +	INIT_LIST_HEAD(&mi_driver_state.clients);
-> +	mutex_init(&mi_driver_state.lock);
-
-I think there are static initializers for these.
+Rob Herring <robh@kernel.org> =E6=96=BC 2022=E5=B9=B42=E6=9C=8812=E6=97=A5 =
+=E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=8812:14=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Mon, Feb 07, 2022 at 02:33:33PM +0800, Tyrone Ting wrote:
+> > From: Tyrone Ting <kfting@nuvoton.com>
+> >
+> > This commit adds compatible and syscon description for NPCM845 i2c modu=
+le.
+> >
+> > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller dri=
+ver")
+> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+> > Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+> > ---
+> >  .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     | 21 ++++++++++++++-----
+> >  1 file changed, 16 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.=
+yaml b/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
+> > index 128444942aec..05e58f44b03a 100644
+> > --- a/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
+> > +++ b/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
+> > @@ -7,17 +7,22 @@ $schema: http://devicetree.org/meta-schemas/core.yaml=
+#
+> >  title: nuvoton NPCM7XX I2C Controller Device Tree Bindings
+> >
+> >  description: |
+> > -  The NPCM750x includes sixteen I2C bus controllers. All Controllers s=
+upport
+> > -  both master and slave mode. Each controller can switch between maste=
+r and slave
+> > -  at run time (i.e. IPMB mode). Each controller has two 16 byte HW FIF=
+O for TX and
+> > -  RX.
+> > +  The NPCM7XX includes sixteen I2C bus controllers and the NPCM8XX inc=
+ludes
+> > +  twenty-seven I2C bus controllers. NPCM8XX controllers 24-26 are conn=
+ected on I2C
+> > +  pins in parallel to controllers 8-10.
+>
+> How many instances is really outside the scope of this binding. And I
+> don't want to be updating this for every new SoC. So rework it to cover
+> both chips and the next one.
+>
+> > +  All controllers support both master and slave mode.
+> > +  Each controller can switch between master and slave at run time (i.e=
+. IPMB mode).
+> > +  NPCM7XX I2C controller has two 16 byte HW FIFO for TX and RX and NPC=
+M8XX I2C
+> > +  controller has two 32 byte HW FIFO for TX and RX.
+> >
+> >  maintainers:
+> >    - Tali Perry <tali.perry1@gmail.com>
+> >
+> >  properties:
+> >    compatible:
+> > -    const: nuvoton,npcm750-i2c
+> > +    enum:
+> > +      - nuvoton,npcm750-i2c
+> > +      - nuvoton,npcm845-i2c
+> >
+> >    reg:
+> >      maxItems: 1
+> > @@ -36,11 +41,16 @@ properties:
+> >      default: 100000
+> >      enum: [100000, 400000, 1000000]
+> >
+> > +  syscon:
+>
+> nuvoton,sys-mgr or similar.
+>
+> > +    $ref: "/schemas/types.yaml#/definitions/phandle"
+> > +    description: The phandle of system manager register node.
+> > +
+> >  required:
+> >    - compatible
+> >    - reg
+> >    - interrupts
+> >    - clocks
+> > +  - syscon
+> >
+> >  allOf:
+> >    - $ref: /schemas/i2c/i2c-controller.yaml#
+> > @@ -57,6 +67,7 @@ examples:
+> >          clock-frequency =3D <100000>;
+> >          interrupts =3D <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
+> >          compatible =3D "nuvoton,npcm750-i2c";
+> > +        syscon =3D <&gcr>;
+> >      };
+> >
+> >  ...
+> > --
+> > 2.17.1
+> >
+> >
