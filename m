@@ -2,92 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CAC04B42FB
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Feb 2022 08:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE084B4343
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Feb 2022 09:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239285AbiBNHge (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Feb 2022 02:36:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54134 "EHLO
+        id S241563AbiBNIIU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Feb 2022 03:08:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiBNHgd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Feb 2022 02:36:33 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3392D5A09D
-        for <linux-i2c@vger.kernel.org>; Sun, 13 Feb 2022 23:36:25 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id k25so14738192qtp.4
-        for <linux-i2c@vger.kernel.org>; Sun, 13 Feb 2022 23:36:24 -0800 (PST)
+        with ESMTP id S240249AbiBNIIT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Feb 2022 03:08:19 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D0DD5F8E6
+        for <linux-i2c@vger.kernel.org>; Mon, 14 Feb 2022 00:08:11 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id i21so26439841pfd.13
+        for <linux-i2c@vger.kernel.org>; Mon, 14 Feb 2022 00:08:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=DJb3H9k1RoLuRCYBQIyf/S7xP16DHTTl/b/4dHlbEFk=;
-        b=SHviuUWkRdIirgu4jo+5R0jZrs2MKvJRxa0Oor/KyXjgCzhULvbTK6njE1g045X4x7
-         TWSC9Rc7Sp89V12bqLKiLbPGYFvuIBd2xqtzX7ZtohNIZeeDDpuwgMMkkstf6I2RZ2SR
-         1rpJVsB/yR0EayMPyEAf6YlVO2tFkRfykNEVWAcnT7W1tCYDCJOy2cg9vHOf+ZCRzqo5
-         PlxO++n+Dp+C22/BbWEQgKK8LJxIumborKrwEMeHxoKgp6ATWh7w7Wz5z23Ctt6UDkNa
-         nFlskOQKnOKWco0jMTKE0AA0CH1CcxrdxLs2Y8GWNSWI0z/peOx7dmYTQv6+OmVaeutF
-         +dTQ==
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=56W7FW3d2YQP4s0rwZDFp5xphOL7Nyc7P1QxkUB2iqM=;
+        b=y9XgUKB1iGK/QkLywtzU1ltCMoxyUeURdvdRqdC+54fM33esphESWPShK5Y6zb6eSY
+         tn/cwGuMWZJFKiAM3yfVuL3yERpDUgpw2Rg5/EzuKT2GrkVikgwFETOhK2taBwzghcUJ
+         iNXWN2zGDvTM1CV7k56WTm7pMJtuN0Re4i58/tcUYb7xFj4P3swqUounq06DAG6ttqGN
+         QQsdxvtEyoptINBAa8/mFeEUkxQZeyMLP7733ktyHDgh4tVqPSFIjS/2pJOBQVQ/Bv5Q
+         eiUkygVs0uJCiZm+YKm7A6ylBkkGt5CpLF5k3ke+JCg0W47yqgnVyJ9SfYmeoAm5XTDP
+         GExg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=DJb3H9k1RoLuRCYBQIyf/S7xP16DHTTl/b/4dHlbEFk=;
-        b=IVJqa1KglLFFMlwDa1+YE+iJ9PVRJxuE4EIL5Wnulo2EAfep8inw4xG0vDT8qQgpxk
-         fPqVyUXNycnsCWTTCly6PWJA1hgzruO+rfSsEWc2lo52DRTD6DfUj05RulS7I2lhdbQ+
-         JogmpwmetgQPZF7K0B6WhU2qadbe683XSkGtgTaQnIICaXlILGXFyAdKbyZRRimhYA35
-         ItcpE5StSyFtJiVjhO7PZ/cHcosUjQtuzS2HeNjsjx+7MUSCZiAGPb9UGFzJN6DKPCjL
-         J1K9i5GX6kPBl5QeVrhA1W+Hv+W2FUaSLT72WtuiaPrXZrElDYh+6UDE6OSV88IW9SFa
-         3MpQ==
-X-Gm-Message-State: AOAM533tfRa3rWeEc2FbOtF4vmgd3HLVjcMzXYjTTA6oMicK+cBrUuVi
-        AjFs5y8Ie9wlau6T+9J9CpEy4g==
-X-Google-Smtp-Source: ABdhPJxbn/nu6Ezf0s3ZlITnHRXlxl/qzIW8mY+p63hmNzWbEOx1Vl27A/99ZQsdVeSoWQgt/hif6A==
-X-Received: by 2002:a05:622a:354:: with SMTP id r20mr8506388qtw.0.1644824184029;
-        Sun, 13 Feb 2022 23:36:24 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id 22sm17988632qtw.75.2022.02.13.23.36.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Feb 2022 23:36:23 -0800 (PST)
-Date:   Sun, 13 Feb 2022 23:36:01 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rajat Jain <rajatja@google.com>, Wolfram Sang <wsa@kernel.org>,
-        Derek Basehore <dbasehore@chromium.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        "loic.poulain@linaro.org" <loic.poulain@linaro.org>,
-        Andrew Duggan <aduggan@synaptics.com>,
-        vincent.huang@tw.synaptics.com, cheiny@synaptics.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: 5.17-rc regression: rmi4 clients cannot deal with asynchronous
- suspend? (was: X1 Carbon touchpad not resumed)
-In-Reply-To: <Ygm+5rS7Cxeea5Dp@google.com>
-Message-ID: <3741afae-305a-4ba-187d-eb52b039bc1a@google.com>
-References: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com> <YgF/0QGFN4SppLKg@shikoro> <CACK8Z6Etj-gq1VKpkUBstiXEETekPWG9p9gKBtuFaZF05pQEvQ@mail.gmail.com> <CACK8Z6FUsceYgBoaAtN8o4m9HpZaBZMt0Nqtvw0a1Z3EuD_nWg@mail.gmail.com> <YgHTYrODoo2ou49J@google.com>
- <b76771e5-b8e-54c9-2474-d5a73d236cba@google.com> <6f1103af-595c-ed0a-b946-97a9331ed148@linux.intel.com> <Ygm+5rS7Cxeea5Dp@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=56W7FW3d2YQP4s0rwZDFp5xphOL7Nyc7P1QxkUB2iqM=;
+        b=q2oJHEh3kPvUlXBnoMCmUp2PP1ZzzZzlc5FWNCdcxS01L1S4qVCeRTTC7DxV3yIEBf
+         oUy4MKvI1oJ3VNQCEjDMozrZALrd5ZlmySdij4Ev3k7kvmkD1lfmgf0dTghktBRdP4OH
+         uLfMfbC6GkgBw5FhrPjwiqd27utHswqPAvdPytmqdkq7aiQb+3nyEGKDY93Kizrh/vkj
+         75n5sw83Poo0jETjEzrPfsVx3czOXY47K60wbFmREoIAAbG9n64TUdCG8ZnmOej5zT+x
+         1SKkFJCh3iUz6Qz0EgDtJKhBdBUM9pBktzLvZDFUkHHW/cyTwrCrWzn0i86WnNaZSlKN
+         /gtA==
+X-Gm-Message-State: AOAM531UhVq1FB+HaYsMkiuKmieB5dOx9ZWGyDOpFCvqi35/Qf342/9w
+        H+yQZZD1zrbWmO2uN4vBqiyLr7aUfnAUExAnrQIFKA==
+X-Google-Smtp-Source: ABdhPJy4Z+JLlYYMU4cCyJ5vx3/ZKTD9+2/JwTdyd1UIFlXHKEYvwCMUeMCAAcz2Zmpq0a6uBSE/Dpey0PKRNniOhRU=
+X-Received: by 2002:aa7:85c3:: with SMTP id z3mr13104120pfn.70.1644826090449;
+ Mon, 14 Feb 2022 00:08:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220214010348.129251-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20220214010348.129251-1-yang.lee@linux.alibaba.com>
+From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
+Date:   Mon, 14 Feb 2022 09:07:59 +0100
+Message-ID: <CAOtMz3OqPCF6ykBAaO-gYTkDpjcaRnq5pDietXYmY6_eASj95Q@mail.gmail.com>
+Subject: Re: [PATCH -next] i2c: designware: remove unneeded semicolon
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, 13 Feb 2022, Dmitry Torokhov wrote:
-> 
-> Sorry for the delay, but I wonder if you could try the patch below and
-> tell me if that also fixes the issue for you?
+pon., 14 lut 2022 o 02:03 Yang Li <yang.lee@linux.alibaba.com> napisa=C5=82=
+(a):
+>
+> Eliminate the following coccicheck warning:
+> ./drivers/i2c/busses/i2c-designware-amdpsp.c:248:2-3: Unneeded semicolon
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  drivers/i2c/busses/i2c-designware-amdpsp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/bus=
+ses/i2c-designware-amdpsp.c
+> index 752e0024db03..f589d3a1a19e 100644
+> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
+> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> @@ -245,7 +245,7 @@ static int psp_acquire_i2c_bus(void)
+>         if (psp_i2c_access_count) {
+>                 psp_i2c_access_count++;
+>                 goto cleanup;
+> -       };
+> +       }
 
-It fixes it for me, thanks Dmitry; with nothing unpleasant in dmesg.
+Thanks. While fixing this, please do the same for the 'switch' in
+check_i2c_req_sts() function above. Isn't your tool reporting this?
 
-Hugh
+Best Regards,
+Jan
