@@ -2,65 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8A04B529F
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Feb 2022 15:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4BF4B543F
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Feb 2022 16:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354804AbiBNOB6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Feb 2022 09:01:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41094 "EHLO
+        id S1355654AbiBNPKu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Feb 2022 10:10:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354794AbiBNOB4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Feb 2022 09:01:56 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C394A3D0
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Feb 2022 06:01:47 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id g1so9572103pfv.1
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Feb 2022 06:01:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ZtJBXFGxhLB/AmPMwrX/NjwznKIH/7fgrpcoz8N5kic=;
-        b=opjh4f8gNr9LBqCC2YFoI7Ml6wBw/eNpZpnkURCXwARbUFRl0LbAitddUQUeVvcd9q
-         2cQ7AjupuKzoZne+LFlxFgc0crV/hgsy7GSVhS3ar7stu8L5jM5PmeKcl/4bc5gclrEH
-         BQIT2sMNOGUWLgsYFsX/4yFayo5EbRH+Oo9rbSKxphD9lFvICU64PklAcHsvUGc9QIdx
-         pFgrln57ki4yUj7YE7iqpzj93+1Io0dVbuBU5Nn8opmrp55gPpVxDAOtxInegprQjBgT
-         03LOSr5GnDgKG1DGgdMxhVJLKmQvuJYt3RGPNjFlb1lcqOEUdLx1ZKsclib+F2R7FjB8
-         uECw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ZtJBXFGxhLB/AmPMwrX/NjwznKIH/7fgrpcoz8N5kic=;
-        b=qyiee/nmaMUcJ4AoZK35h+Hv2u0K/87srAfT5GDxSKtGsbkMl973trXNtJRei8+wyp
-         j+6zOJuDYuB6/l+C+slbsinci0LyaYDE4SCVNqx3FqWMEiCPmOT5CIkXg4KaA3y0My8q
-         ZqH7MeqeZXNOpKtGc3RTd8GKFb93tK5nA1G8AWvkohX5O5ip27WHkhIQ7yFvfXYeV7vl
-         pI1rjhKg2/q/hQ1NCX2NYHjVoMzHrpOppGUpASmH4cKcFtlajb3pw1mgbZQPmUIWKOLe
-         7cPSI30BmFrinza0QGHee5CSgl2OAzbP0ksz0mxSAzUawdbYrlFJZFq95zUMNWRJsIY7
-         p3xg==
-X-Gm-Message-State: AOAM5303F6nT3xJH5UWsG8ZdfLMjeAFxmzprmpSIVE/a2nfAuESnjWs7
-        x7CPrZsmOyv5SuDsg5qsyPC84+YGHctSJKdYJnqTrG8En/Q=
-X-Google-Smtp-Source: ABdhPJzffjo+QEwNzDHB0CRx9MnWlZITjtNpnpzUbwKFvAptOlvtj8ik632DCVeAC05OtDlqOFH6LOL4qpS6dV3iuf8=
-X-Received: by 2002:a63:d848:: with SMTP id k8mr11972681pgj.164.1644847306786;
- Mon, 14 Feb 2022 06:01:46 -0800 (PST)
+        with ESMTP id S1355658AbiBNPKe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Feb 2022 10:10:34 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648C94E398;
+        Mon, 14 Feb 2022 07:10:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644851426; x=1676387426;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=kKVOBmMe2B7p8elBdEp7lhzQwa1aL7hnCEPJyvhHj1I=;
+  b=QEhlFIzQZ89Oq1L/pSpv5Z7mutPmU+z86pwikYXDpqp9db7Ot7Si0GLX
+   ug7PuoGS/wO1eW7HEIO99bGG/th59GpxTjK/4nnlG0rKv/mkLZrLGyOGJ
+   TweehWXGH90K446wLWr053ZL+VfEdKPPNNMIl2xw2igB7R8X1KRPLfWvG
+   ztZt2IHZ2TsgImfTn9OWqNzyGtraG/hGN+91lGbliDyoBk70ZKeBWu4c4
+   Osjc6YVSHwL7KYVY7fq7iL07ISQ2eQkkDPho9drPJD5pTKBOXoy6uSZG4
+   s4ACdjZz4fGNfwg77X1EyEQ/h952V0PceY/0pDZcPIgAxcQm3PLDEjvmQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="237516123"
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="237516123"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 07:10:26 -0800
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="495709581"
+Received: from unknown (HELO smile.fi.intel.com) ([10.237.72.59])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 07:10:24 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nJcyn-004Zzv-JX;
+        Mon, 14 Feb 2022 17:09:29 +0200
+Date:   Mon, 14 Feb 2022 17:09:29 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        syzbot+0591ccf54ee05344e4eb@syzkaller.appspotmail.com
+Subject: Re: [PATCH v1 1/1] i2c: smbus: Check for parent device before
+ dereference
+Message-ID: <YgpwqcRbDp38+NAa@smile.fi.intel.com>
+References: <20220204155920.13364-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20220214124701.105814-1-yang.lee@linux.alibaba.com> <307ca790-e9ca-c8f3-e0f7-28ad594db2aa@linux.intel.com>
-In-Reply-To: <307ca790-e9ca-c8f3-e0f7-28ad594db2aa@linux.intel.com>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Mon, 14 Feb 2022 15:01:35 +0100
-Message-ID: <CAOtMz3P0-y0NX8BM2SpEf3ZnaWO0nRfchRSv-nAJm51JJOn+Cw@mail.gmail.com>
-Subject: Re: [PATCH -next v2 RESEND] i2c: designware: remove unneeded semicolon
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Yang Li <yang.lee@linux.alibaba.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220204155920.13364-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,42 +65,15 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-pon., 14 lut 2022 o 14:03 Jarkko Nikula
-<jarkko.nikula@linux.intel.com> napisa=C5=82(a):
->
-> Hi
->
-> On 2/14/22 14:47, Yang Li wrote:
-> > Eliminate the following coccicheck warnings:
-> > ./drivers/i2c/busses/i2c-designware-amdpsp.c:172:2-3: Unneeded semicolo=
-n
-> > ./drivers/i2c/busses/i2c-designware-amdpsp.c:245:2-3: Unneeded semicolo=
-n
-> >
-> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> > ---
-> >
-> > --Changes in v2:
-> >    According to Jan's suggestion
-> >    Fix the same problem in check_i2c_req_sts() function.
-> >
-> >   drivers/i2c/busses/i2c-designware-amdpsp.c | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> For future contributions: Technically this would be v3 rather than v2
-> RESEND since you fixed the typo in commit log noted by Jan for v2.
->
-> Please use RESEND only if you'll send exactly the same version for
-> instance if you didn't receive any comments for several weeks or some
-> recipient was missing from Cc field.
->
-> I believe Jan will give Reviewed-by tag to this version too.
->
-> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+On Fri, Feb 04, 2022 at 05:59:20PM +0200, Andy Shevchenko wrote:
+> An I²C adapter might be instantiated without parent. In such case
+> there is no property can be retrieved. Skip SMBus alert setup when
+> this happens.
 
-Correct.
-Reviewed-by: Jan Dabros <jsd@semihalf.com>
+As of today the problem is still in v5.17-rcX.
 
-Best Regards,
-Jan
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
