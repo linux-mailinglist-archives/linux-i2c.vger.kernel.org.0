@@ -2,159 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EEE74B529A
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Feb 2022 15:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8A04B529F
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Feb 2022 15:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354814AbiBNOB6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S1354804AbiBNOB6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Mon, 14 Feb 2022 09:01:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41190 "EHLO
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354817AbiBNOB5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Feb 2022 09:01:57 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41ABABCBF
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Feb 2022 06:01:48 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJbu2-0007Aw-Jd; Mon, 14 Feb 2022 15:00:30 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJbu1-00GYgZ-R1; Mon, 14 Feb 2022 15:00:29 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJbu0-0038OM-4h; Mon, 14 Feb 2022 15:00:28 +0100
-Date:   Mon, 14 Feb 2022 15:00:27 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>, kvm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>, linux-gpio@vger.kernel.org,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Eric Auger <eric.auger@redhat.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        openipmi-developer@lists.sourceforge.net,
-        Jaroslav Kysela <perex@perex.cz>,
-        Benson Leung <bleung@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Brian Norris <computersforpeace@gmail.com>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] platform: make platform_get_irq_optional()
- optional
-Message-ID: <20220214140027.npw6ddrxklarb6wp@pengutronix.de>
-References: <20220212201631.12648-1-s.shtylyov@omp.ru>
- <20220212201631.12648-2-s.shtylyov@omp.ru>
- <20220214071351.pcvstrzkwqyrg536@pengutronix.de>
- <CAMuHMdWi8gno_FBbc=AwsdRtDJik8_bANjQrrRtUOOBRjFN=KA@mail.gmail.com>
+        with ESMTP id S1354794AbiBNOB4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Feb 2022 09:01:56 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C394A3D0
+        for <linux-i2c@vger.kernel.org>; Mon, 14 Feb 2022 06:01:47 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id g1so9572103pfv.1
+        for <linux-i2c@vger.kernel.org>; Mon, 14 Feb 2022 06:01:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ZtJBXFGxhLB/AmPMwrX/NjwznKIH/7fgrpcoz8N5kic=;
+        b=opjh4f8gNr9LBqCC2YFoI7Ml6wBw/eNpZpnkURCXwARbUFRl0LbAitddUQUeVvcd9q
+         2cQ7AjupuKzoZne+LFlxFgc0crV/hgsy7GSVhS3ar7stu8L5jM5PmeKcl/4bc5gclrEH
+         BQIT2sMNOGUWLgsYFsX/4yFayo5EbRH+Oo9rbSKxphD9lFvICU64PklAcHsvUGc9QIdx
+         pFgrln57ki4yUj7YE7iqpzj93+1Io0dVbuBU5Nn8opmrp55gPpVxDAOtxInegprQjBgT
+         03LOSr5GnDgKG1DGgdMxhVJLKmQvuJYt3RGPNjFlb1lcqOEUdLx1ZKsclib+F2R7FjB8
+         uECw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ZtJBXFGxhLB/AmPMwrX/NjwznKIH/7fgrpcoz8N5kic=;
+        b=qyiee/nmaMUcJ4AoZK35h+Hv2u0K/87srAfT5GDxSKtGsbkMl973trXNtJRei8+wyp
+         j+6zOJuDYuB6/l+C+slbsinci0LyaYDE4SCVNqx3FqWMEiCPmOT5CIkXg4KaA3y0My8q
+         ZqH7MeqeZXNOpKtGc3RTd8GKFb93tK5nA1G8AWvkohX5O5ip27WHkhIQ7yFvfXYeV7vl
+         pI1rjhKg2/q/hQ1NCX2NYHjVoMzHrpOppGUpASmH4cKcFtlajb3pw1mgbZQPmUIWKOLe
+         7cPSI30BmFrinza0QGHee5CSgl2OAzbP0ksz0mxSAzUawdbYrlFJZFq95zUMNWRJsIY7
+         p3xg==
+X-Gm-Message-State: AOAM5303F6nT3xJH5UWsG8ZdfLMjeAFxmzprmpSIVE/a2nfAuESnjWs7
+        x7CPrZsmOyv5SuDsg5qsyPC84+YGHctSJKdYJnqTrG8En/Q=
+X-Google-Smtp-Source: ABdhPJzffjo+QEwNzDHB0CRx9MnWlZITjtNpnpzUbwKFvAptOlvtj8ik632DCVeAC05OtDlqOFH6LOL4qpS6dV3iuf8=
+X-Received: by 2002:a63:d848:: with SMTP id k8mr11972681pgj.164.1644847306786;
+ Mon, 14 Feb 2022 06:01:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mxy3a336cmbyaspi"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdWi8gno_FBbc=AwsdRtDJik8_bANjQrrRtUOOBRjFN=KA@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220214124701.105814-1-yang.lee@linux.alibaba.com> <307ca790-e9ca-c8f3-e0f7-28ad594db2aa@linux.intel.com>
+In-Reply-To: <307ca790-e9ca-c8f3-e0f7-28ad594db2aa@linux.intel.com>
+From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
+Date:   Mon, 14 Feb 2022 15:01:35 +0100
+Message-ID: <CAOtMz3P0-y0NX8BM2SpEf3ZnaWO0nRfchRSv-nAJm51JJOn+Cw@mail.gmail.com>
+Subject: Re: [PATCH -next v2 RESEND] i2c: designware: remove unneeded semicolon
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     Yang Li <yang.lee@linux.alibaba.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+pon., 14 lut 2022 o 14:03 Jarkko Nikula
+<jarkko.nikula@linux.intel.com> napisa=C5=82(a):
+>
+> Hi
+>
+> On 2/14/22 14:47, Yang Li wrote:
+> > Eliminate the following coccicheck warnings:
+> > ./drivers/i2c/busses/i2c-designware-amdpsp.c:172:2-3: Unneeded semicolo=
+n
+> > ./drivers/i2c/busses/i2c-designware-amdpsp.c:245:2-3: Unneeded semicolo=
+n
+> >
+> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> > ---
+> >
+> > --Changes in v2:
+> >    According to Jan's suggestion
+> >    Fix the same problem in check_i2c_req_sts() function.
+> >
+> >   drivers/i2c/busses/i2c-designware-amdpsp.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> For future contributions: Technically this would be v3 rather than v2
+> RESEND since you fixed the typo in commit log noted by Jan for v2.
+>
+> Please use RESEND only if you'll send exactly the same version for
+> instance if you didn't receive any comments for several weeks or some
+> recipient was missing from Cc field.
+>
+> I believe Jan will give Reviewed-by tag to this version too.
+>
+> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
---mxy3a336cmbyaspi
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Correct.
+Reviewed-by: Jan Dabros <jsd@semihalf.com>
 
-Hello Geert,
-
-On Mon, Feb 14, 2022 at 10:01:14AM +0100, Geert Uytterhoeven wrote:
-> Also IMHO, the dummy value handling is a red herring.  Contrary to
-> optional clocks and resets, a missing optional interrupt does not
-> always mean there is nothing to do: in case of polling, something
-> else must definitely be done.=20
-
-Note this is exactly why I don't like this change. I'd even go so far
-and claim that "a missing optional interrupt hardly ever means there is
-nothing to do".
-
-> So even if request_irq() would accept a dummy interrupt zero and just
-> do nothing, it would give the false impression that that is all there
-> is to do, while an actual check for zero with polling code handling
-> may still need to be present, thus leading to more not less bugs.
-
-Yes, a dummy irq value will just not be possible.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---mxy3a336cmbyaspi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIKYHgACgkQwfwUeK3K
-7AkfUwf+PjHT71nPQKjE5hOrUJs08gV3dPyFE+Lky6h3jHjtzp+VwX3waHB3n4Iy
-r1fdR+06wiK9BWaTD2PdT8FdEYo9n0yQlTx+03PQXtLFnutK7QSb0fBMQs7sVAfa
-nxp4CK8a1wlf0mzj1zSaeiGm6BYTsoJxoblrZ8hWbpbiVfhF6Eo5zXr0toHMI0WF
-QOhqgWNpQjHlpU+2paIvbOnBpNxJaXj3cycd6036NHAFQvZN5xrDdqHa+By0jeU0
-bm8NmjRjwHCqvhBpRYUglt+KhyRYWWTC/83WFKviLwnPV7tnkh5ZhJE50aUUp1Lr
-hyNbZjQKG8NIOTLNKMgY4nM0uni8jg==
-=vr2/
------END PGP SIGNATURE-----
-
---mxy3a336cmbyaspi--
+Best Regards,
+Jan
