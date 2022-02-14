@@ -2,253 +2,140 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A1D4B4DCE
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Feb 2022 12:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE26B4B4DE2
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Feb 2022 12:21:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350396AbiBNLOU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Feb 2022 06:14:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45108 "EHLO
+        id S235833AbiBNLSe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Feb 2022 06:18:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350291AbiBNLOF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Feb 2022 06:14:05 -0500
-Received: from mxout02.lancloud.ru (mxout02.lancloud.ru [45.84.86.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2337ECC71;
-        Mon, 14 Feb 2022 02:43:26 -0800 (PST)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 5B93A232DBED
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH v2 1/2] platform: make platform_get_irq_optional()
- optional
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Corey Minyard <minyard@acm.org>,
-        "Oleksij Rempel" <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        "Mun Yew Tham" <mun.yew.tham@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Kamal Dasu" <kdasu.kdev@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        "Miquel Raynal" <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        "Guenter Roeck" <groeck@chromium.org>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        "Liam Girdwood" <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        "Takashi Iwai" <tiwai@suse.com>,
-        <openipmi-developer@lists.sourceforge.net>,
-        <linux-iio@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mmc@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <netdev@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>,
-        <platform-driver-x86@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-References: <20220212201631.12648-1-s.shtylyov@omp.ru>
- <20220212201631.12648-2-s.shtylyov@omp.ru>
- <CAMuHMdUPxX7Tja6BCjEb4KDobNFPMcM66Fk7Z+VsO7pgb8JnjA@mail.gmail.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <41b49828-e0bc-3e7a-32d7-5ee41c778206@omp.ru>
-Date:   Mon, 14 Feb 2022 13:43:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S1350663AbiBNLSS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Feb 2022 06:18:18 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8954165828
+        for <linux-i2c@vger.kernel.org>; Mon, 14 Feb 2022 02:51:26 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 33C561F38B;
+        Mon, 14 Feb 2022 10:51:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644835885; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PRX3IQG7OaJxoZrZ33FhHgSbfLUYDWQJ3Ke9IkgSTIA=;
+        b=Ljlb0gnHKYjaHCrTBqkYq9ZR05z0z/nXOdaCWZ9p91B+vDZWPik33VcTZ20FzYKX1h6oPu
+        ya35gl+TJ4vKsl9qaqZLwUSavwY0pk5HjdaoKhZZ80Swi5rux0zJMtxklgpEovIS0d4ePp
+        77P9hClI0sWArrbEKHjo4Or8olr7V+Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644835885;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PRX3IQG7OaJxoZrZ33FhHgSbfLUYDWQJ3Ke9IkgSTIA=;
+        b=BpOSrZyXfA3ZFzRbG4gyS9qpj95rGQCuzEd4Wl2y7ChpOkXEm+5Un3RhDuFfmrZNwvJiXo
+        WrPNtCfto+l2jIBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0E8B413AA7;
+        Mon, 14 Feb 2022 10:51:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gZnBAS00CmLLUAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Mon, 14 Feb 2022 10:51:25 +0000
+Date:   Mon, 14 Feb 2022 11:51:23 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
+Subject: Re: [PATCH] i2c: i801: Add support for Intel Raptor Lake PCH-S
+Message-ID: <20220214115123.1b16e1d8@endymion.delvare>
+In-Reply-To: <20220211150001.1004004-1-jarkko.nikula@linux.intel.com>
+References: <20220211150001.1004004-1-jarkko.nikula@linux.intel.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdUPxX7Tja6BCjEb4KDobNFPMcM66Fk7Z+VsO7pgb8JnjA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello!
-
-On 2/14/22 11:54 AM, Geert Uytterhoeven wrote:
-
-[...]
-
->> This patch is based on the former Andy Shevchenko's patch:
->>
->> https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko@linux.intel.com/
->>
->> Currently platform_get_irq_optional() returns an error code even if IRQ
->> resource simply has not been found.  It prevents the callers from being
->> error code agnostic in their error handling:
->>
->>         ret = platform_get_irq_optional(...);
->>         if (ret < 0 && ret != -ENXIO)
->>                 return ret; // respect deferred probe
->>         if (ret > 0)
->>                 ...we get an IRQ...
->>
->> All other *_optional() APIs seem to return 0 or NULL in case an optional
->> resource is not available.  Let's follow this good example, so that the
->> callers would look like:
->>
->>         ret = platform_get_irq_optional(...);
->>         if (ret < 0)
->>                 return ret;
->>         if (ret > 0)
->>                 ...we get an IRQ...
->>
->> Reported-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
->> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->> ---
->> Changes in version 2:
+On Fri, 11 Feb 2022 17:00:01 +0200, Jarkko Nikula wrote:
+> Add SMBus PCI ID on Intel Raptor Lake PCH-S.
 > 
-> Thanks for the update!
+> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> ---
+>  Documentation/i2c/busses/i2c-i801.rst | 1 +
+>  drivers/i2c/busses/Kconfig            | 1 +
+>  drivers/i2c/busses/i2c-i801.c         | 3 +++
+>  3 files changed, 5 insertions(+)
 > 
->>  drivers/base/platform.c                  | 60 +++++++++++++++---------
-> 
-> The core change LGTM.
+> diff --git a/Documentation/i2c/busses/i2c-i801.rst b/Documentation/i2c/busses/i2c-i801.rst
+> index 42bbdd6e7fd8..cad59170b2ad 100644
+> --- a/Documentation/i2c/busses/i2c-i801.rst
+> +++ b/Documentation/i2c/busses/i2c-i801.rst
+> @@ -45,6 +45,7 @@ Supported adapters:
+>    * Intel Jasper Lake (SOC)
+>    * Intel Emmitsburg (PCH)
+>    * Intel Alder Lake (PCH)
+> +  * Intel Raptor Lake (PCH)
+>  
+>     Datasheets: Publicly available at the Intel website
+>  
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 42da31c1ab70..bce0dbb6fd86 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -148,6 +148,7 @@ config I2C_I801
+>  	    Jasper Lake (SOC)
+>  	    Emmitsburg (PCH)
+>  	    Alder Lake (PCH)
+> +	    Raptor Lake (PCH)
+>  
+>  	  This driver can also be built as a module.  If so, the module
+>  	  will be called i2c-i801.
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index 7428cc6af5cc..36b086ef1378 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -75,6 +75,7 @@
+>   * Alder Lake-S (PCH)		0x7aa3	32	hard	yes	yes	yes
+>   * Alder Lake-P (PCH)		0x51a3	32	hard	yes	yes	yes
+>   * Alder Lake-M (PCH)		0x54a3	32	hard	yes	yes	yes
+> + * Raptor Lake-S (PCH)		0x7a23	32	hard	yes	yes	yes
+>   *
+>   * Features supported by this driver:
+>   * Software PEC				no
+> @@ -228,6 +229,7 @@
+>  #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS		0x51a3
+>  #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_M_SMBUS		0x54a3
+>  #define PCI_DEVICE_ID_INTEL_BROXTON_SMBUS		0x5ad4
+> +#define PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_S_SMBUS		0x7a23
+>  #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS		0x7aa3
+>  #define PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS		0x8c22
+>  #define PCI_DEVICE_ID_INTEL_WILDCATPOINT_SMBUS		0x8ca2
+> @@ -1041,6 +1043,7 @@ static const struct pci_device_id i801_ids[] = {
+>  	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+>  	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_P_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+>  	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_M_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, RAPTOR_LAKE_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+>  	{ 0, }
+>  };
+>  
 
-   Thanx! :-)
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
-> I'm only looking at Renesas drivers below...
-> 
->> --- a/drivers/mmc/host/sh_mmcif.c
->> +++ b/drivers/mmc/host/sh_mmcif.c
->> @@ -1465,14 +1465,14 @@ static int sh_mmcif_probe(struct platform_device *pdev)
->>         sh_mmcif_sync_reset(host);
->>         sh_mmcif_writel(host->addr, MMCIF_CE_INT_MASK, MASK_ALL);
->>
->> -       name = irq[1] < 0 ? dev_name(dev) : "sh_mmc:error";
->> +       name = irq[1] <= 0 ? dev_name(dev) : "sh_mmc:error";
-> 
-> "== 0" should be sufficient here, if the code above would bail out
-> on errors returned by platform_get_irq_optional(), which it currently
-> doesn't do.
-> As this adds missing error handling, this is to be fixed by a separate
-> patch later?
-
-   Yes.
-
-[...]
->>                 ret = devm_request_threaded_irq(dev, irq[1],
->>                                                 sh_mmcif_intr, sh_mmcif_irqt,
->>                                                 0, "sh_mmc:int", host);
-> 
->> --- a/drivers/phy/renesas/phy-rcar-gen3-usb2.c
->> +++ b/drivers/phy/renesas/phy-rcar-gen3-usb2.c
->> @@ -439,7 +439,7 @@ static int rcar_gen3_phy_usb2_init(struct phy *p)
->>         u32 val;
->>         int ret;
->>
->> -       if (!rcar_gen3_is_any_rphy_initialized(channel) && channel->irq >= 0) {
->> +       if (!rcar_gen3_is_any_rphy_initialized(channel) && channel->irq > 0) {
->>                 INIT_WORK(&channel->work, rcar_gen3_phy_usb2_work);
->>                 ret = request_irq(channel->irq, rcar_gen3_phy_usb2_irq,
->>                                   IRQF_SHARED, dev_name(channel->dev), channel);
->> @@ -486,7 +486,7 @@ static int rcar_gen3_phy_usb2_exit(struct phy *p)
->>                 val &= ~USB2_INT_ENABLE_UCOM_INTEN;
->>         writel(val, usb2_base + USB2_INT_ENABLE);
->>
->> -       if (channel->irq >= 0 && !rcar_gen3_is_any_rphy_initialized(channel))
->> +       if (channel->irq > 0 && !rcar_gen3_is_any_rphy_initialized(channel))
->>                 free_irq(channel->irq, channel);
->>
->>         return 0;
-> 
-> LGTM, but note that all errors returned by platform_get_irq_optional()
-> are currently ignored, even real errors, which should be propagated
-> up.
-> As this adds missing error handling, this is to be fixed by a separate
-> patch later?
-
-   Yes.
-
->> --- a/drivers/thermal/rcar_gen3_thermal.c
->> +++ b/drivers/thermal/rcar_gen3_thermal.c
->> @@ -432,6 +432,8 @@ static int rcar_gen3_thermal_request_irqs(struct rcar_gen3_thermal_priv *priv,
->>                 irq = platform_get_irq_optional(pdev, i);
->>                 if (irq < 0)
->>                         return irq;
->> +               if (!irq)
->> +                       return -ENXIO;
-> 
-> While correct, and preserving existing behavior, this looks strange
-> to me.  Probably this should return zero instead (i.e. the check
-> above should be changed to "<= 0"), and the caller should start caring
-> about and propagating up real errors.
-
-   Hm, you're right... should be <= 0 there, it seems.
-
-> As this adds missing error handling, this is to be fixed by a separate
-> patch later?
-
-   Propagating errors from the probe() method is a matter of separate patch, yes.
-
->>
->>                 irqname = devm_kasprintf(dev, GFP_KERNEL, "%s:ch%d",
->>                                          dev_name(dev), i);
->> diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
->> index fb65dc601b23..328ab074fd89 100644
-> 
->> --- a/drivers/tty/serial/sh-sci.c
->> +++ b/drivers/tty/serial/sh-sci.c
-> 
-> I think you missed
-> 
->     #define SCIx_IRQ_IS_MUXED(port)                 \
->             ((port)->irqs[SCIx_ERI_IRQ] ==  \
->              (port)->irqs[SCIx_RXI_IRQ]) || \
->             ((port)->irqs[SCIx_ERI_IRQ] &&  \
->              ((port)->irqs[SCIx_RXI_IRQ] < 0))
-> 
-> above? The last condition should become "<= 0".
-
-   Yes, probably... TY!
-
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-
-MBR, Sergey
+-- 
+Jean Delvare
+SUSE L3 Support
