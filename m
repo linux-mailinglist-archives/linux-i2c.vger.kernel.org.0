@@ -2,60 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD814B66FF
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Feb 2022 10:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E27D4B670A
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Feb 2022 10:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbiBOJI7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Feb 2022 04:08:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51122 "EHLO
+        id S230044AbiBOJKW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Feb 2022 04:10:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235640AbiBOJI6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Feb 2022 04:08:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67BC13DCA;
-        Tue, 15 Feb 2022 01:08:45 -0800 (PST)
+        with ESMTP id S229667AbiBOJKW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Feb 2022 04:10:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4BC13DC0;
+        Tue, 15 Feb 2022 01:10:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47282B81806;
-        Tue, 15 Feb 2022 09:08:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC7EEC340EC;
-        Tue, 15 Feb 2022 09:08:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2FB4616A1;
+        Tue, 15 Feb 2022 09:10:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB3F7C340EC;
+        Tue, 15 Feb 2022 09:10:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644916122;
-        bh=ZNO8TI8MMfIyG+Txd0JtWfjzN83NmBBd0o8oxWTjKPQ=;
+        s=k20201202; t=1644916212;
+        bh=suJ3VlnFKPJ2Ze7Qe8vaxeMRr35IuOsHoJUMz2ulquY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qu1/FDvg7HAUqQOhLB3Dtzz5DJDtgTdepxAddtkhxL8AtvmnUnK0UiUrRUbwSTny/
-         xd2zHiMkswIMpA0bDm2Cz68aNArivuYy53jXxQ7sWmqysjHbvNQVP7MNQQVqqzjzhc
-         mM5bGpUM1Au000g6XwT1pYx6S0Kn7G83aCmbODcYnPD3ISyz4Z2Yqeioy0zJqe1ixV
-         l5FymZGO646b5MawiPggsPHjDKH+h2zlcuXClXpWCNG+kpfQd/HI7MIcl/Zudmpl1M
-         iK6yyGd/QleFFGk74Pm7VrAqQovHTHI4JJXbpPmLoPojUt4AI00pjNvfL7iM+Tnm1z
-         T4hJwXel64M6w==
-Date:   Tue, 15 Feb 2022 10:08:37 +0100
+        b=fhjGBHvs+Cj0p2HMmI2Vzf6zb6g8oalR5NvjafZQ+ZfebIynJ5844I0TA9EHD8w20
+         adPE9HU8X/uq1cqdYFIL5UP3WBiYoCq7206fwULOS+w/x/oLHrBWj/k81bAPZZsKvj
+         QhvnQdyRB6Ada2Dt4z32wSKdyPcAFjqsJjWwpnS8uzXKKaF89Svay8g1oXKG3fxmto
+         ngR76XzAUBbHqpguTWLHRbmaf9WmOSTDZY9tKvRLP8baubyBkWZMk1uDNsL7+tMdli
+         /KC4Sjrrf4Hb0+WGluDIdz5+dU/NDCTN58yinUVB9dgb4Kn+2QBbffxxj4OXgL6LWi
+         tmuOvxbGZRnHA==
+Date:   Tue, 15 Feb 2022 10:10:09 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Thierry Reding <treding@nvidia.com>
 Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Ajay Gupta <ajayg@nvidia.com>,
-        "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-Subject: Re: [PATCH v3 5/5] i2c: designware-pci: Switch to use
- i2c_new_ccgx_ucsi()
-Message-ID: <YgttldLT+O8I7PXV@kunai>
+        "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Sameer Pujar <spujar@nvidia.com>
+Subject: Re: [PATCH v3 1/5] i2c: Introduce common module to instantiate CCGx
+ UCSI
+Message-ID: <Ygtt8c+s7LiAuI6C@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Thierry Reding <treding@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Ajay Gupta <ajayg@nvidia.com>,
-        "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
+        "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Sameer Pujar <spujar@nvidia.com>
 References: <20220105141935.24109-1-andriy.shevchenko@linux.intel.com>
- <20220105141935.24109-5-andriy.shevchenko@linux.intel.com>
+ <Ye7AhqMsOkfvHOAg@smile.fi.intel.com>
+ <YgEa/blO2UMzztCq@smile.fi.intel.com>
+ <YgEpYE2VNc05XhpG@shikoro>
+ <YgEvEQ7BRc4KhOcF@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="noqXf99UqhOvZJh5"
+        protocol="application/pgp-signature"; boundary="XxhwZy5TBIl7Y8Gn"
 Content-Disposition: inline
-In-Reply-To: <20220105141935.24109-5-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <YgEvEQ7BRc4KhOcF@smile.fi.intel.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,38 +78,42 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---noqXf99UqhOvZJh5
-Content-Type: text/plain; charset=us-ascii
+--XxhwZy5TBIl7Y8Gn
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 05, 2022 at 04:19:35PM +0200, Andy Shevchenko wrote:
-> Instead of open coded variant switch to use i2c_new_ccgx_ucsi().
+
+> Okay, I have Cc'ed this message to the people whose addresses I found in =
+the
+> changes in the Git history of the vanilla kernel with most frequent appea=
+rance.
 >=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> The Q is who is on nVidia side is responsible now for I=C2=B2C controller=
+ driver?
 
-Applied to for-next, thanks!
+I applied your series now. But the question where Ajay is or who now
+maintains the i2c-nvidia-gpu driver still remains...
 
 
---noqXf99UqhOvZJh5
+--XxhwZy5TBIl7Y8Gn
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmILbZUACgkQFA3kzBSg
-KbYpkg//WIs/bUPRmAhuwh6WPU4S97fhc7TNpnAl25T8ZeqzVDHfqPuASzByiH/Q
-YmmszfDC3WmR3SCt9yQitsYYHIHkdYELZzg+qZSF2EJ3w/pe63hx94gPVwnaRea5
-97h1UcmSbZE/9LQGId1hH5B/dQFnF1qwgHMPVPVEIgbEllo4D5PrZuhuYkxDmR/i
-x/HVgGbSsgcEpG8bXDHpuXZ3kto/vjh5N0h0vdwd0Y5LrL1ogM++QGNfpAaCNn8a
-FRCj7wAyo8dmZecSA8LtICR91tV8bZ4ED2ZEJ3/CCoK4tgFRfxmmcMWbUW9gOMS7
-c9HOSsBg9XV8l049Qf6SfjsNgDQzhVOCfmZ+tCe1DPjRR/IpXbumKg3l37K26tPJ
-6RBKK/EDmfzfyMBCZXsVA+63MNzLL9WUl0etayPnDvebt2QQa7OWJAvzX4zLE+Eo
-NY/yEsZnasf7E01RzJbLYBFBYyT8UjYJGU1xZr+nsZkTfvKVezsHbGN9nz4+z9TR
-NcYMOzRA46pzujyrrmkRNv7YNaOu3HyI0VytXFhizV6jYg8Uv85UZuSnropFNWGI
-Df+HJBtfFedfB6iTNgZgdVO9VbngGBIo89Q2SsOJ1wrHLFdv1n7p15Q1yChjbDFV
-BADjn/cfeI7ld17+XrUJ14893UH/wPmNWeMT039Jv8l6AiH/x1Q=
-=BwJc
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmILbfEACgkQFA3kzBSg
+KbYZRA//Xy3qOUAXX5SqWnN0vMVYaUvAMGQL6tyXaJDmDw+EkCAkAvIoEiw/4UbT
+Dfpj20ailTrWIpKrjxrXC1l5P3GE0H03wrE6sNxd1uMIKOF0yotZWECnr7bYRObQ
+P0DBN1bOk0uBy4ghdjDjMGtGfIRW7Pncwp8GYvZ46HT/2ZHUtKtufYTUemnA8F4H
+4Wy8TibV7L5w2yPVVyDY8E+/L6b4a8QfBifAgpAa+fEkKoXbnx0fdDWu4k0XMn1Q
+ZaVdNBKtmFj9QVMfg7coMDz86IRtXYQjuyB0KE+OChlQnIm5WajE6Qkf04ENXTbs
+FPOrQhkTJMHllbFuxwWD2JNZ7+GKHsgOGgjAziB66vqNQpKQVXz44hIBqV3U9g06
+AF+XsO07E3QxnQMoDpsj0jK2wN491xKBbL036gUxKlpVJXA8pJqeFh0InU6yPpJ0
+ZF8dUL4Rc9rjtWCWLFMBFf7Sk4BMohZIhAs2tXMmp+RICoN+eTUK6oT16OXeq3bT
+ojTbhe0AJB/IplLYLCUgWs33jx7USOTJPI1zHyN902TjRr7fiQAc+HyBBwH+Zxw3
+XlgeooGLpvg0PjG6LQrqManfXodeYJFCAiBcsh2snsrOht6xzF9IN80tofW3iQrv
+DrpqYya2BtZq+h+V6Z06N8WMrSOrrNJlYZAJiRFg0QuvtmnVmEo=
+=Xxo7
 -----END PGP SIGNATURE-----
 
---noqXf99UqhOvZJh5--
+--XxhwZy5TBIl7Y8Gn--
