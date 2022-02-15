@@ -2,43 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B364B6892
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Feb 2022 11:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E38AF4B6C96
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Feb 2022 13:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236362AbiBOKCN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Feb 2022 05:02:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36402 "EHLO
+        id S237882AbiBOMqk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Feb 2022 07:46:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236413AbiBOKB7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Feb 2022 05:01:59 -0500
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E517F1111A4;
-        Tue, 15 Feb 2022 02:01:30 -0800 (PST)
-Received: from [192.168.12.102] (unknown [159.196.94.94])
-        by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 3F7292015A;
-        Tue, 15 Feb 2022 18:01:26 +0800 (AWST)
-Message-ID: <e891478fbb4c3a5a5b44d13c5ce3557a884d10f5.camel@codeconstruct.com.au>
-Subject: Re: [PATCH net-next v5 2/2] mctp i2c: MCTP I2C binding driver
-From:   Matt Johnston <matt@codeconstruct.com.au>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
-        Zev Weiss <zev@bewilderbeest.net>
-Date:   Tue, 15 Feb 2022 18:01:25 +0800
-In-Reply-To: <20220214210410.2d49e55f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20220210063651.798007-1-matt@codeconstruct.com.au>
-         <20220210063651.798007-3-matt@codeconstruct.com.au>
-         <20220211143815.55fb29e3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-         <b857c3087443f86746d81c1d686eaf5044db98a7.camel@codeconstruct.com.au>
-         <20220214210410.2d49e55f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        with ESMTP id S237883AbiBOMqi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Feb 2022 07:46:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5AC33E;
+        Tue, 15 Feb 2022 04:46:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8E06B818F1;
+        Tue, 15 Feb 2022 12:46:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DA8EC340EB;
+        Tue, 15 Feb 2022 12:46:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644929183;
+        bh=3fLrGDk3Xw3Jm5QbJ6pynEJiF8xk4Fr8Cy2/Hh31CYc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OOKbJRsRE5R/vyBy0Q+iZEeSmhF42FRVs6UhTZNUruBwjO8FUj3rDolCjOgRTQpLT
+         mMrx19HLKEYCaIgXjS2xEV2L55N7gJ2ooFG8waLCeO0MX/uETGjIoWnDudbOqC2IJH
+         yAPHtiBXYB7QvT3v+9pgVjMK/RhlBazmZncqTejn9yHLYSh9gVdCi5cqtGSllTwYpT
+         yvnLEN59QI1ysIDuKmmoJ9u7ZbU7iMDg2HZ84jCURjJQ3Kiymb9kTPP9atqWWzmDQI
+         GgP+2+d7XH1FdBNSyeyt8bd9F8P9GlS+D4wbalZEbSZzc09dI8XI+m9HTv/zKHFzuX
+         KquatsVRTciiA==
+Date:   Tue, 15 Feb 2022 13:46:16 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Thierry Reding <treding@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Ajay Gupta <ajayg@nvidia.com>,
+        "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Sameer Pujar <spujar@nvidia.com>
+Subject: Re: [PATCH v3 1/5] i2c: Introduce common module to instantiate CCGx
+ UCSI
+Message-ID: <YgugmDb7h1mhEqm0@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Thierry Reding <treding@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Ajay Gupta <ajayg@nvidia.com>,
+        "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Sameer Pujar <spujar@nvidia.com>
+References: <20220105141935.24109-1-andriy.shevchenko@linux.intel.com>
+ <Ye7AhqMsOkfvHOAg@smile.fi.intel.com>
+ <YgEa/blO2UMzztCq@smile.fi.intel.com>
+ <YgEpYE2VNc05XhpG@shikoro>
+ <YgEvEQ7BRc4KhOcF@smile.fi.intel.com>
+ <Ygtt8c+s7LiAuI6C@kunai>
+ <Ygt2L/WkJ9rCe3XF@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9YhSN8RjZQw+69V6"
+Content-Disposition: inline
+In-Reply-To: <Ygt2L/WkJ9rCe3XF@smile.fi.intel.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,28 +79,36 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 2022-02-14 at 21:04 -0800, Jakub Kicinski wrote:
-> > 
-> > One question, the tx thread calls netif_wake_queue() - is it safe to call
-> > that after unregister_netdev()? (before free_netdev)
-> 
-> I don't think so.
-> 
-> > I've moved the kthread_stop() to the post-unregister cleanup.
-> 
-> The usual way to deal with Tx would be to quiesce the worker in
-> ndo_stop. Maybe keep it simple and add a mutex around the worker?
-> You can then take the same mutex around:
 
-Thanks. I'll just make sure to kthread_stop() prior to calling unregister. It
-looks like the kthread needs to keep running when the interface is down to
-handle MCTP release timeouts which unlock the i2c bus, so can't use ndo_stop.
+--9YhSN8RjZQw+69V6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Similarly for the RX path, can I safely call netif_rx(skb) after unregister?
-It looks like in that case it should be OK, since enqueue_to_backlog() tests
-for netif_running() and just drops the packet. (It's running from the I2C
-slave irq so can't just use a mutex).
 
-Thanks,
-Matt
+> Maybe we should orphan the driver if no-one response in meaningful time
+> (let's say till the next merge window)?
 
+Yes, I had a similar idea.
+
+
+--9YhSN8RjZQw+69V6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmILoJQACgkQFA3kzBSg
+KbaVJw//VUerUGgcK+sPuSvcKdk99SBRIHVpv58EWGdN9KLD5VxvJuhB6Os1N5Sh
+CxvU1t/ravSAqjRVi3bnp8KicYXgh85WOcJtd06xP7QU/Jy/dM+8OeQzpaa0ejJV
+CPdGnMXCfRjtaU5ZiPZm94ZtsAfXwXkFll1KRaPBvnQ/XLXE/jkefRUHV5hztMDD
+4Ij9lzujI+iQDauy3lmPT0oGrVM+6S/bqrMkYthAjAoHgegP2oK1638y6oZDT3rq
+wyZJzO0tODXvvKrZP54+9GXBbCdSeBbqkmighMRFmhz4eMwWsMkMNI0+sFqirt9W
+yw+esnhH83fwTRQKFpgcTK6NUUnO1FZwjhzPCWWn36xfiu8WuK54m/DkSLDvPsXu
+pHNirVtBqbb+xoA71D9neRlrMjTNH0eQerKHtWpS7yP4uCWIQCYTXbVj2N9dRTcB
+USHh0gZBZHSdY6lj/CnxsFGmRzYgQMvR3LyuAPJK5P4iDEKQCEg+f7DszloiZsAq
+RwsUH1y0p4yjXN5dZaDh6Twz23dGtqK6jRlPzJvkaXNlmQyRWT+5vor1SxB3nIsg
+ZZ5xtXZ/0orN3ScoSJnvujAqeOqon+w9gnli1W08TcjtRWn8jGqFmp/RTHUBG6Lt
+5Jp56qUk46PB2/fH5jVpcpp54732OisAOgaZENfZ73oc+evTh9o=
+=7xqj
+-----END PGP SIGNATURE-----
+
+--9YhSN8RjZQw+69V6--
