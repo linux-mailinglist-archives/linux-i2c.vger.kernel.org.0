@@ -2,55 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868724B760E
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Feb 2022 21:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1B64B76CF
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Feb 2022 21:49:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241948AbiBOQyW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Feb 2022 11:54:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37764 "EHLO
+        id S242370AbiBORPZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Feb 2022 12:15:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241893AbiBOQyP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Feb 2022 11:54:15 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77CB115948
-        for <linux-i2c@vger.kernel.org>; Tue, 15 Feb 2022 08:54:04 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id k3-20020a1ca103000000b0037bdea84f9cso1812025wme.1
-        for <linux-i2c@vger.kernel.org>; Tue, 15 Feb 2022 08:54:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=6dxUHfHd2thSyna+SP246lbFbUtj41Yjp+oFZyo2GbY=;
-        b=DCat5VP9YVrqN0n/0UgbjvOxszAmCAanPIP4ymZHjEC3Wd41GjjR1nrq1O+FrhOxy7
-         5MDQFMLJkVXiOsm8DeO85Hp4YFWeuEXdmvTkHvQ5onCspvycAdD3fP7dpBWoDNsQyRQp
-         veeJuqjHZXT0dAzG4sZGe4NC/IqSx/spfjcf+pNZmsV8Qs6kbiRCLE8BDRv5Q+q38qUk
-         ghhDR2hw8cfQxUGXUcD3pZ3Tzwe+4nJGBf+7Ynq6lK9rofaHsmXzRil+bhcbgZdJcPT8
-         W2u24tBzncuNzK1rZTCgJI+5DhG6jgB2c362c5jxtPHKDZKcBnkv9X1pdtBYpcGK/0+C
-         4q1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=6dxUHfHd2thSyna+SP246lbFbUtj41Yjp+oFZyo2GbY=;
-        b=o4nm/MdjUF9MaoqF6YWKOmrwxLru5ee1kChAg1hJ8SDFYgEwYIikeBcEf98fhNwco/
-         i8a9ZRCD9FcBUqjbObhS/F0H3S646B/xjz19uYZ96wIAFoIzFW7Qmen68A/MaOzDCOgN
-         gjYKTIzrV6ps4MUpbFD+wbgBJhdT+/OT3kM+E0FpNp0RegisPjA7Ecr4A+zxPV1fKZRf
-         lc27TwzByBBX946o1CUmem+wqMPM8JHEwznZaJH1P7pF9kvTKpJlm4+c5ZZ5aPocVTmE
-         gdHgJfDKplXjuv6KYeWKq9Z4TE/qKOfeQhN1O9RydCk6tz5TOoFDrgsMfCja7AWFte6B
-         2dRQ==
-X-Gm-Message-State: AOAM530jCfQzsINNcAVDdkG3Uv4BY736tnTYmhl0Cw2hEuWggHdLsrej
-        QLMkQY5/czFqH3Wu0iehNsEWHLrGhSV3Rg==
-X-Google-Smtp-Source: ABdhPJwuKI+bNPJZZ1qflmVanE4vrI3VVZi31qJXYrb9UatcTi6G2+Lh1Fm0dLKpD/YcVimukmd//A==
-X-Received: by 2002:a1c:2645:: with SMTP id m66mr3917370wmm.39.1644944043162;
-        Tue, 15 Feb 2022 08:54:03 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id 7sm15721841wrb.43.2022.02.15.08.54.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 08:54:02 -0800 (PST)
-Date:   Tue, 15 Feb 2022 16:54:00 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        with ESMTP id S242362AbiBORPY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Feb 2022 12:15:24 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D63311ADEA;
+        Tue, 15 Feb 2022 09:15:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644945312; x=1676481312;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0RT88KVIkpcIt49KegmwACI0CL9gcweN2MoVMiIbVRY=;
+  b=Ao0Y02dPb3pRuLZzfaEZnYMMkBBsWLxSaPYsbMLL0D9MpkzLQ39YaH+1
+   ZvXwnOefsgEeyS1M3HvdXVtf4F0I3vT4UGyVeek641LLxmM4IgGsBo2BC
+   3hubo6iaqCXuvDQzNiGkSFkxmLnLqcVaJPDzYOyGkwSkjEv77MLq0/1Nw
+   yURhrTO8z7y8SW0qtwpqkFkmDb5RFqJIFhfmCYzA28YXQDvbRJNS2LCa2
+   mwKIk1PPxuykw/80CqsEg6r9ELwU6jRMgegiWmxdXSBWduFgFOHLUHDHm
+   7tXHKockhkdhHTa/5UBJnuCb7141dH97E2dZxphT9wKef4MIaNlcXZqb2
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="274975411"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="274975411"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 09:12:41 -0800
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="486258571"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 09:12:34 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nK1MY-0050PZ-TS;
+        Tue, 15 Feb 2022 19:11:38 +0200
+Date:   Tue, 15 Feb 2022 19:11:38 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Lee Jones <lee.jones@linaro.org>
 Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -74,196 +66,58 @@ Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
         Henning Schild <henning.schild@siemens.com>
 Subject: Re: [PATCH v4 5/8] mfd: lpc_ich: Add support for pinctrl in non-ACPI
  system
-Message-ID: <YgvaqBB8fNVWp1lN@google.com>
+Message-ID: <YgveyspHVXCp2ul+@smile.fi.intel.com>
 References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
  <20220131151346.45792-6-andriy.shevchenko@linux.intel.com>
+ <YgvaqBB8fNVWp1lN@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220131151346.45792-6-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YgvaqBB8fNVWp1lN@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 31 Jan 2022, Andy Shevchenko wrote:
+On Tue, Feb 15, 2022 at 04:54:00PM +0000, Lee Jones wrote:
+> On Mon, 31 Jan 2022, Andy Shevchenko wrote:
 
-> From: Tan Jui Nee <jui.nee.tan@intel.com>
+Thank you for the review, my answers below.
+
+...
+
+> > +static struct resource apl_gpio_resources[APL_GPIO_NR_DEVICES][2] = {
+> > +	[APL_GPIO_NORTH] = {
+> > +		DEFINE_RES_MEM(APL_GPIO_NORTH_OFFSET, 0x1000),
 > 
-> Add support for non-ACPI systems, such as system that uses
-> Advanced Boot Loader (ABL) whereby a platform device has to be created
-> in order to bind with pin control and GPIO.
+> Are these 0x1000's being over-written in lpc_ich_init_pinctrl()?
 > 
-> At the moment, Intel Apollo Lake In-Vehicle Infotainment (IVI) system
-> requires a driver to hide and unhide P2SB to lookup P2SB BAR and pass
-> the PCI BAR address to GPIO.
+> If so, why pre-initialise?
+
+You mean to pre-initialize the offsets, but leave the length to be added
+in the function? It can be done, but it feels inconsistent, since we would
+have offsets and lengths in different places for the same thingy. That said,
+I prefer current way for the sake of consistency.
+
+> > +		DEFINE_RES_IRQ(APL_GPIO_IRQ),
+> > +	},
+
+...
+
+> > +/* The order must be in sync with apl_pinctrl_soc_data */
 > 
-> Signed-off-by: Tan Jui Nee <jui.nee.tan@intel.com>
-> Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Acked-by: Hans de Goede <hdegoede@redhat.com>
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->  drivers/mfd/lpc_ich.c | 101 +++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 100 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mfd/lpc_ich.c b/drivers/mfd/lpc_ich.c
-> index 95dca5434917..e1bca5325ce7 100644
-> --- a/drivers/mfd/lpc_ich.c
-> +++ b/drivers/mfd/lpc_ich.c
-> @@ -8,7 +8,8 @@
->   *  Configuration Registers.
->   *
->   *  This driver is derived from lpc_sch.
-> -
-> + *
-> + *  Copyright (c) 2017, 2021-2022 Intel Corporation
->   *  Copyright (c) 2011 Extreme Engineering Solution, Inc.
->   *  Author: Aaron Sierra <asierra@xes-inc.com>
->   *
-> @@ -42,6 +43,7 @@
->  #include <linux/errno.h>
->  #include <linux/acpi.h>
->  #include <linux/pci.h>
-> +#include <linux/pinctrl/pinctrl.h>
->  #include <linux/mfd/core.h>
->  #include <linux/mfd/lpc_ich.h>
->  #include <linux/platform_data/itco_wdt.h>
-> @@ -140,6 +142,70 @@ static struct mfd_cell lpc_ich_gpio_cell = {
->  	.ignore_resource_conflicts = true,
->  };
->  
-> +#define APL_GPIO_NORTH		0
-> +#define APL_GPIO_NORTHWEST	1
-> +#define APL_GPIO_WEST		2
-> +#define APL_GPIO_SOUTHWEST	3
-> +#define APL_GPIO_NR_DEVICES	4
-> +
-> +/* Offset data for Apollo Lake GPIO controllers */
-> +#define APL_GPIO_NORTH_OFFSET		0xc50000
-> +#define APL_GPIO_NORTHWEST_OFFSET	0xc40000
-> +#define APL_GPIO_WEST_OFFSET		0xc70000
-> +#define APL_GPIO_SOUTHWEST_OFFSET	0xc00000
-> +
-> +#define APL_GPIO_IRQ			14
-> +
-> +static struct resource apl_gpio_resources[APL_GPIO_NR_DEVICES][2] = {
-> +	[APL_GPIO_NORTH] = {
-> +		DEFINE_RES_MEM(APL_GPIO_NORTH_OFFSET, 0x1000),
+> Why does the order matter if you've pre-enumerated them all?
 
-Are these 0x1000's being over-written in lpc_ich_init_pinctrl()?
-
-If so, why pre-initialise?
-
-> +		DEFINE_RES_IRQ(APL_GPIO_IRQ),
-> +	},
-> +	[APL_GPIO_NORTHWEST] = {
-> +		DEFINE_RES_MEM(APL_GPIO_NORTHWEST_OFFSET, 0x1000),
-> +		DEFINE_RES_IRQ(APL_GPIO_IRQ),
-> +	},
-> +	[APL_GPIO_WEST] = {
-> +		DEFINE_RES_MEM(APL_GPIO_WEST_OFFSET, 0x1000),
-> +		DEFINE_RES_IRQ(APL_GPIO_IRQ),
-> +	},
-> +	[APL_GPIO_SOUTHWEST] = {
-> +		DEFINE_RES_MEM(APL_GPIO_SOUTHWEST_OFFSET, 0x1000),
-> +		DEFINE_RES_IRQ(APL_GPIO_IRQ),
-> +	},
-> +};
-> +
-> +/* The order must be in sync with apl_pinctrl_soc_data */
-
-Why does the order matter if you've pre-enumerated them all?
-
-> +static const struct mfd_cell apl_gpio_devices[APL_GPIO_NR_DEVICES] = {
-> +	[APL_GPIO_NORTH] = {
-> +		.name = "apollolake-pinctrl",
-> +		.id = APL_GPIO_NORTH,
-> +		.num_resources = ARRAY_SIZE(apl_gpio_resources[APL_GPIO_NORTH]),
-> +		.resources = apl_gpio_resources[APL_GPIO_NORTH],
-> +		.ignore_resource_conflicts = true,
-> +	},
-> +	[APL_GPIO_NORTHWEST] = {
-> +		.name = "apollolake-pinctrl",
-> +		.id = APL_GPIO_NORTHWEST,
-> +		.num_resources = ARRAY_SIZE(apl_gpio_resources[APL_GPIO_NORTHWEST]),
-> +		.resources = apl_gpio_resources[APL_GPIO_NORTHWEST],
-> +		.ignore_resource_conflicts = true,
-> +	},
-> +	[APL_GPIO_WEST] = {
-> +		.name = "apollolake-pinctrl",
-> +		.id = APL_GPIO_WEST,
-> +		.num_resources = ARRAY_SIZE(apl_gpio_resources[APL_GPIO_WEST]),
-> +		.resources = apl_gpio_resources[APL_GPIO_WEST],
-> +		.ignore_resource_conflicts = true,
-> +	},
-> +	[APL_GPIO_SOUTHWEST] = {
-> +		.name = "apollolake-pinctrl",
-> +		.id = APL_GPIO_SOUTHWEST,
-> +		.num_resources = ARRAY_SIZE(apl_gpio_resources[APL_GPIO_SOUTHWEST]),
-> +		.resources = apl_gpio_resources[APL_GPIO_SOUTHWEST],
-> +		.ignore_resource_conflicts = true,
-> +	},
-> +};
->  
->  static struct mfd_cell lpc_ich_spi_cell = {
->  	.name = "intel-spi",
-> @@ -1083,6 +1149,33 @@ static int lpc_ich_init_wdt(struct pci_dev *dev)
->  	return ret;
->  }
->  
-> +static int lpc_ich_init_pinctrl(struct pci_dev *dev)
-> +{
-> +	struct resource base;
-> +	unsigned int i;
-> +	int ret;
-> +
-> +	/* Check, if GPIO has been exported as an ACPI device */
-> +	if (acpi_dev_present("INT3452", NULL, -1))
-> +		return -EEXIST;
-> +
-> +	ret = p2sb_bar(dev->bus, 0, &base);
-> +	if (ret)
-> +		return ret;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(apl_gpio_devices); i++) {
-> +		struct resource *mem = &apl_gpio_resources[i][0];
-> +
-> +		/* Fill MEM resource */
-> +		mem->start += base.start;
-> +		mem->end += base.start;
-> +		mem->flags = base.flags;
-> +	}
-> +
-> +	return mfd_add_devices(&dev->dev, 0, apl_gpio_devices,
-> +			       ARRAY_SIZE(apl_gpio_devices), NULL, 0, NULL);
-> +}
-> +
->  static void lpc_ich_test_spi_write(struct pci_dev *dev, unsigned int devfn,
->  				   struct intel_spi_boardinfo *info)
->  {
-> @@ -1199,6 +1292,12 @@ static int lpc_ich_probe(struct pci_dev *dev,
->  			cell_added = true;
->  	}
->  
-> +	if (priv->chipset == LPC_APL) {
-> +		ret = lpc_ich_init_pinctrl(dev);
-> +		if (!ret)
-> +			cell_added = true;
-> +	}
-> +
->  	if (lpc_chipset_info[priv->chipset].spi_type) {
->  		ret = lpc_ich_init_spi(dev);
->  		if (!ret)
+Indeed. I will drop the confusing comment in the next version.
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+With Best Regards,
+Andy Shevchenko
+
+
