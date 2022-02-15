@@ -2,101 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BBE64B6450
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Feb 2022 08:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A5A4B6644
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Feb 2022 09:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbiBOH16 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Feb 2022 02:27:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54628 "EHLO
+        id S234189AbiBOIhy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Feb 2022 03:37:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbiBOH15 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Feb 2022 02:27:57 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAAFEF78F
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Feb 2022 23:27:46 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id be32so6964251ljb.7
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Feb 2022 23:27:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mwXfURWRRFSQ93MpcoTcwvmUvVA7/3MO8WoXlU+6SNU=;
-        b=dc6zN7vCCMwYw7ZSQNxXgT1Qh+ORz16Lj4xvvU54FTUEehUSG3ZMnOeQIZQCafsm/0
-         dWkYSC1H8Cq3ULOCUIL4J5p21h5L8MjT1zzNKdjFpvgfvYyT/lhbsWu3b7Du3AakyzWd
-         BeOc+pfWnlob66O+Io3LhkbFjFkk6MZ8tmOgiS3VlTxX52PTV0U9XETkOTS5Oa6mCvnT
-         mjneO03oAbzVj31OYGDJ+M9eWWKJU1Hpk0tofSD29IS3eeC3ku5+v2a4YbXt1GNGKjqv
-         ZiotZTTy+b2M5e7KxXZyMqOUBW3V4M0SjkC7btpWgu10XkCm8BC//EPUqOACA9QtKb98
-         l30g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mwXfURWRRFSQ93MpcoTcwvmUvVA7/3MO8WoXlU+6SNU=;
-        b=fAd3YIlqYXLOhn/JSPYg8p9iTX3NDlM8aH+gQMvSl6QsePg6/8JPMjaQeQ/wbB6C+/
-         Tvoj0L8O1jnOQHV6Nbzn4RyegVigSX6gbZLsNWOO48tBqmqPJxq8ebIVYtE+WGV8shwS
-         aHb77UqsuEPlhx5vjUxPsO2LlBDaYrEqYqQr/ROVemd3EeZYZLYPb9UJfESTNdGnMEu0
-         QqsKpJIETJllWxHXYiRtDWsxxZIDH4/rafOT8x1Gl8TfAsHAp48stVqbRFLVA6CFfXyB
-         gYq1E6Bn/WdC4LHT3j9G8X1o7u1jCYu6Hnr0YyLP+HzLqPmE5bsPYiusUDKV3Ed2u8BR
-         OEhw==
-X-Gm-Message-State: AOAM532LxuHBiWrHBLlPAt6ZIr8nJwn8clI9u13snoW5z/JOBmsqNMoC
-        JYzGhNuGxJwL82d4TYVoLSo=
-X-Google-Smtp-Source: ABdhPJyABb6eMTTYrFrs2t6P4KNEy1v2OJO7d+6r0KjQtprn/CkyRJZH175YG1z+uXomAazvfQjLfg==
-X-Received: by 2002:a05:651c:54f:: with SMTP id q15mr1641979ljp.0.1644910064529;
-        Mon, 14 Feb 2022 23:27:44 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id p21sm4315071lja.32.2022.02.14.23.27.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 23:27:44 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+        with ESMTP id S231600AbiBOIhy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Feb 2022 03:37:54 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15215D21EF;
+        Tue, 15 Feb 2022 00:37:45 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C3BE01F38A;
+        Tue, 15 Feb 2022 08:37:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644914263; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uzVwnsIjLssBzWGNB+hpjSkudu31HwVtVfUXyPW31Kw=;
+        b=s9cA6alHMUL97Q96ZVtT9w6GSFm/ZvnTBfgEWz4z8rfIjBclBgEVRljFL+2uv5eU900Ptm
+        XP+A4xaR/lFntW85uwFttLGG4zAVHWWGrCdT2xMjnLIxpbwQ/o6sjZ36i7zZqeww9CQ4di
+        tWju+GvmphBAXmZc6/I677RqGZEqw5U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644914263;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uzVwnsIjLssBzWGNB+hpjSkudu31HwVtVfUXyPW31Kw=;
+        b=3RLD1E+vgmzgP5oqMWYXycbjaCblXe9GzLkn14qpwTzvslraHD6LplePL1TfzFf0Idc87i
+        3x/E6S74oq7dyuAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4AE8413BE8;
+        Tue, 15 Feb 2022 08:37:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id s4tuEFdmC2LlYwAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 15 Feb 2022 08:37:43 +0000
+Date:   Tue, 15 Feb 2022 09:37:42 +0100
+From:   Jean Delvare <jdelvare@suse.de>
 To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] i2c: brcmstb: fix support for DSL and CM variants
-Date:   Tue, 15 Feb 2022 08:27:35 +0100
-Message-Id: <20220215072735.17335-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Cc:     Terry Bowman <terry.bowman@amd.com>, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, linux-i2c@vger.kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+Subject: Re: [PATCH v5 3/9] i2c: piix4: Move port I/O region request/release
+ code into functions
+Message-ID: <20220215093742.3f3894c5@endymion.delvare>
+In-Reply-To: <YgZ12hCMUlqtLKD3@kunai>
+References: <20220209172717.178813-1-terry.bowman@amd.com>
+        <20220209172717.178813-4-terry.bowman@amd.com>
+        <20220211105322.180ad89d@endymion.delvare>
+        <YgZ12hCMUlqtLKD3@kunai>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On Fri, 11 Feb 2022 15:42:34 +0100, Wolfram Sang wrote:
+> > > +		if (retval)  
+> > 
+> > Missing curly brace here, breaks the build.  
+> 
+> Bummer, need to check why this wasn't found by my build-testing.
 
-DSL and CM (Cable Modem) support 8 B max transfer size and have a custom
-DT binding for that reason. This driver was checking for a wrong
-"compatible" however which resulted in an incorrect setup.
+Maybe you build-tested the series as a whole but not individual
+patches? The series did build fine, as the missing curly brace was
+added back in a later patch.
 
-Fixes: e2e5a2c61837 ("i2c: brcmstb: Adding support for CM and DSL SoCs")
-Cc: Kamal Dasu <kdasu.kdev@gmail.com>
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- drivers/i2c/busses/i2c-brcmstb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-brcmstb.c b/drivers/i2c/busses/i2c-brcmstb.c
-index 490ee3962645..b00f35c0b066 100644
---- a/drivers/i2c/busses/i2c-brcmstb.c
-+++ b/drivers/i2c/busses/i2c-brcmstb.c
-@@ -673,7 +673,7 @@ static int brcmstb_i2c_probe(struct platform_device *pdev)
- 
- 	/* set the data in/out register size for compatible SoCs */
- 	if (of_device_is_compatible(dev->device->of_node,
--				    "brcmstb,brcmper-i2c"))
-+				    "brcm,brcmper-i2c"))
- 		dev->data_regsz = sizeof(u8);
- 	else
- 		dev->data_regsz = sizeof(u32);
 -- 
-2.34.1
-
+Jean Delvare
+SUSE L3 Support
