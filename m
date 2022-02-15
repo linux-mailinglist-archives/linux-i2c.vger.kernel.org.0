@@ -2,75 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFECA4B728D
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Feb 2022 17:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC24A4B7301
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Feb 2022 17:43:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240878AbiBOP6a (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Feb 2022 10:58:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55230 "EHLO
+        id S240984AbiBOQLn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Feb 2022 11:11:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238710AbiBOP63 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Feb 2022 10:58:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7ED3BD2F9;
-        Tue, 15 Feb 2022 07:58:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1DCD6173A;
-        Tue, 15 Feb 2022 15:58:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDB07C340EB;
-        Tue, 15 Feb 2022 15:58:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644940698;
-        bh=METPB92CtNbr6/d2L9GqXB2/kwPevXX1yNucGxSNXmE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dEdeMFUxg/2iUjXJZUkI26sBeNbtJZ1nmzy6ny2Wfjd4WPddAoev9Refn+mdZssgi
-         5Iy1xJuuz14QDQDZO3L6YwsWpIiVnG3xavGMamRBOibB6ThAH5fD1+EJMcISjuxgSf
-         63CPivcTBMEB22svZ0rdC13VHAiq4nb9esFm3em2GzP12n+hNqbYwkllvFjaH8Vk1l
-         zUbqSZqsBRldRQPABcnCTybfLWY134UdEhFTCn3PHXPJq4uhbjSiUOlWBy4s6k3Cf4
-         HUkPc6t/rQvwS+RlP+vlpPNlfikaNR942cFpPmbTLWZNGvMT+96v1vmm/Bj/OrtYOl
-         EbDDfs202xImQ==
-Date:   Tue, 15 Feb 2022 07:58:16 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Matt Johnston <matt@codeconstruct.com.au>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
-        Zev Weiss <zev@bewilderbeest.net>
-Subject: Re: [PATCH net-next v5 2/2] mctp i2c: MCTP I2C binding driver
-Message-ID: <20220215075816.4188df1e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <e891478fbb4c3a5a5b44d13c5ce3557a884d10f5.camel@codeconstruct.com.au>
-References: <20220210063651.798007-1-matt@codeconstruct.com.au>
-        <20220210063651.798007-3-matt@codeconstruct.com.au>
-        <20220211143815.55fb29e3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <b857c3087443f86746d81c1d686eaf5044db98a7.camel@codeconstruct.com.au>
-        <20220214210410.2d49e55f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <e891478fbb4c3a5a5b44d13c5ce3557a884d10f5.camel@codeconstruct.com.au>
+        with ESMTP id S238908AbiBOQKj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Feb 2022 11:10:39 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D5BCC53B
+        for <linux-i2c@vger.kernel.org>; Tue, 15 Feb 2022 08:10:28 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id v13-20020a17090ac90d00b001b87bc106bdso3363989pjt.4
+        for <linux-i2c@vger.kernel.org>; Tue, 15 Feb 2022 08:10:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=DxPXqOfUMU15EyrVycNZtLqTDiurnQ0UjF132dPaRYQ=;
+        b=hBrXJo01rIFJFUf9sVSaLANkFIh3IjC9nxkz0u9tePivt7++/MJpm/CZKvoGJwB4yI
+         DTwRgG56zjsArojnGrpoYeoC/OmRdj7hvAvUMjCKydKb2gV9DoG8AXqLXMd0KA1owF3L
+         F9x8g6z5wn2gRXWL62npsR8EtqL31QvndDABafuTvli40L/d6y/T4avWsiS7hXpV4SsS
+         7jsJdW6N24mNlONKB7zN5dMgdllnnBp0EBbAUP1nNUUTPf9UBJ1QllmLtkH+0pr9TfGK
+         ScvxZVjDt13skYd3gfqGd+xvUr8KBxqT3xi7CyOtGQL7HvrKQJZtWDqh8OYa8HplU+HN
+         2zTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DxPXqOfUMU15EyrVycNZtLqTDiurnQ0UjF132dPaRYQ=;
+        b=qJeFo8bhrmdxzxG2eUGFIPoDN08G90NkneT14hF55eiY35pjuu41SCG19UVrhvqgRT
+         K+xOcyqK9TRbWHQFR6t1sixo6ccWoXfLU5XFbnJbMDEArCQYxPPY3p+0AUomga/E6Ixr
+         1yyk3Z7R3wxZlhz5GAFqIneK/7fW4cU8ty0B+AgiJdw2wR1QtoLLnI4VyYUPHnBZQRMB
+         lzQOMHSaBX5psWEKvYk/tznc7J8SHpe7h89KuYwmmOPxSIiBe0H/4yhN+UMxsyPTe4fS
+         j0iEhz9bMMT3d5olnHwXr0jfoTApvhfk4WFt0Ayp/2HXUpG2aoFsZKfSr4TXRc2Lka6P
+         GgDA==
+X-Gm-Message-State: AOAM533dvftqM4DcI6mCR0sSWvLnlY1WkrWNnTtJVxRbTVlJQ7hu7HEW
+        UIzO8zMduqXqN8fJAWU9k3U=
+X-Google-Smtp-Source: ABdhPJzqs202BLnwgibYg0v+23khU3mZahUWu07cF6krxuhhywrBB7iu4i53VuSJU0m+JcrDJCHB7Q==
+X-Received: by 2002:a17:902:ef4c:: with SMTP id e12mr4706326plx.102.1644941428454;
+        Tue, 15 Feb 2022 08:10:28 -0800 (PST)
+Received: from ?IPV6:2600:8802:b00:4a48:fd58:13e6:31bf:9336? ([2600:8802:b00:4a48:fd58:13e6:31bf:9336])
+        by smtp.gmail.com with ESMTPSA id k14sm41403664pff.25.2022.02.15.08.10.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 08:10:27 -0800 (PST)
+Message-ID: <ac9805f9-742d-868e-2140-e454c18b98cf@gmail.com>
+Date:   Tue, 15 Feb 2022 08:10:26 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] i2c: brcmstb: fix support for DSL and CM variants
+Content-Language: en-US
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20220215072735.17335-1-zajec5@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220215072735.17335-1-zajec5@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 15 Feb 2022 18:01:25 +0800 Matt Johnston wrote:
-> Thanks. I'll just make sure to kthread_stop() prior to calling unregister. It
-> looks like the kthread needs to keep running when the interface is down to
-> handle MCTP release timeouts which unlock the i2c bus, so can't use ndo_stop.
-> 
-> Similarly for the RX path, can I safely call netif_rx(skb) after unregister?
-> It looks like in that case it should be OK, since enqueue_to_backlog() tests
-> for netif_running() and just drops the packet. (It's running from the I2C
-> slave irq so can't just use a mutex).
 
-I wouldn't do it, using an object after it's unregistered is asking for
-trouble. RPS seems to happily dereference skb->dev. It may or may not
-work.
+
+On 2/14/2022 11:27 PM, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> DSL and CM (Cable Modem) support 8 B max transfer size and have a custom
+> DT binding for that reason. This driver was checking for a wrong
+> "compatible" however which resulted in an incorrect setup.
+> 
+> Fixes: e2e5a2c61837 ("i2c: brcmstb: Adding support for CM and DSL SoCs")
+> Cc: Kamal Dasu <kdasu.kdev@gmail.com>
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
