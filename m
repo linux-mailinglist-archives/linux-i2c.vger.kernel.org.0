@@ -2,47 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1B64B76CF
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Feb 2022 21:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87D824B75D4
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Feb 2022 21:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242370AbiBORPZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Feb 2022 12:15:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41016 "EHLO
+        id S241040AbiBORaG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Feb 2022 12:30:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242362AbiBORPY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Feb 2022 12:15:24 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D63311ADEA;
-        Tue, 15 Feb 2022 09:15:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644945312; x=1676481312;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0RT88KVIkpcIt49KegmwACI0CL9gcweN2MoVMiIbVRY=;
-  b=Ao0Y02dPb3pRuLZzfaEZnYMMkBBsWLxSaPYsbMLL0D9MpkzLQ39YaH+1
-   ZvXwnOefsgEeyS1M3HvdXVtf4F0I3vT4UGyVeek641LLxmM4IgGsBo2BC
-   3hubo6iaqCXuvDQzNiGkSFkxmLnLqcVaJPDzYOyGkwSkjEv77MLq0/1Nw
-   yURhrTO8z7y8SW0qtwpqkFkmDb5RFqJIFhfmCYzA28YXQDvbRJNS2LCa2
-   mwKIk1PPxuykw/80CqsEg6r9ELwU6jRMgegiWmxdXSBWduFgFOHLUHDHm
-   7tXHKockhkdhHTa/5UBJnuCb7141dH97E2dZxphT9wKef4MIaNlcXZqb2
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="274975411"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="274975411"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 09:12:41 -0800
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="486258571"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 09:12:34 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nK1MY-0050PZ-TS;
-        Tue, 15 Feb 2022 19:11:38 +0200
-Date:   Tue, 15 Feb 2022 19:11:38 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Lee Jones <lee.jones@linaro.org>
+        with ESMTP id S239786AbiBORaF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Feb 2022 12:30:05 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35699DB84C
+        for <linux-i2c@vger.kernel.org>; Tue, 15 Feb 2022 09:29:55 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id e3so33427632wra.0
+        for <linux-i2c@vger.kernel.org>; Tue, 15 Feb 2022 09:29:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ICO1ml37Huyez+etV+dT6D2+k0fK+dVgQX5aKLEtpWE=;
+        b=im6LJNHwlFAY9cu/QQdYtskumJ2IlnWWzqdt5Z9BVaTZVNb6jEK7vusRjOzoETzlLy
+         D8CRih2welvIHDPxp+CBf1zRAWFB46gczAOOyzgQoBImzsy1sUBHpK17HTxUymgTgY+4
+         k3OV3VwgNG34VgF+pPMAWCJ+0t3V1u9KfifiwaoSxom9ARUIvx/a2Mq54gahxgbpXCkM
+         xHHr1UsBoR0xMqLrL39HDlu+dvBcZQuK+Q0jSfIhSP2cacCDhNapx7cvb+CrUi3VYD7F
+         5w1bEqTDFVkfjQnDy6CGZEuG8TFGtZSsdrSsfrYE/OPXw2taYRSitUXrncwpTOU/rkyj
+         yUHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ICO1ml37Huyez+etV+dT6D2+k0fK+dVgQX5aKLEtpWE=;
+        b=AZJzw1rNYDuG1JIlffAwEf4mAnrA6pFZiCYaWO/KHsLGnGWJjFLG5FfSHLaw/KjydY
+         JqnSu4pCu5+RQrdeioDSnjVsXIK9j/tU6Vudq6SZShBu/dsMf8wIdIzeSQr+l0g44xTP
+         REfPXXD8lmDOrq+Zg6z47/h7c/+NjGwHHXSxako12N7Za9VbO1BoUFDNB5rr+sPxkwdo
+         ScI3++ZICgV6lwS4CKB8ad0sYbPS1Q3V7VhS6JuZHX0cp8g1k5jSLnQowez9+M12faIo
+         WgEfPBOzGy94W/y48Tw8xV8FTaxMv/sjj4vGahR7Wm4vy1dYzkh0lRKDwm512oliMNVi
+         LCZg==
+X-Gm-Message-State: AOAM531/wXLxHWYr1Tg19Mo+i/aoB2i8ehGIHcuO5iHZg1vl7HGVknoy
+        hQ8YMNFLq0HxzdRKDWOcTqTqSw==
+X-Google-Smtp-Source: ABdhPJwOSH7G6HmOK9tUgixHAXjPC1RBzQXDR1s7T2yUWuUsnh1GJ/d+msUEl3DzoTdLHmv2ZT68gw==
+X-Received: by 2002:adf:e5cb:: with SMTP id a11mr17283wrn.255.1644946193787;
+        Tue, 15 Feb 2022 09:29:53 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id f8sm13204075wmq.19.2022.02.15.09.29.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 09:29:53 -0800 (PST)
+Date:   Tue, 15 Feb 2022 17:29:51 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -66,58 +74,65 @@ Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
         Henning Schild <henning.schild@siemens.com>
 Subject: Re: [PATCH v4 5/8] mfd: lpc_ich: Add support for pinctrl in non-ACPI
  system
-Message-ID: <YgveyspHVXCp2ul+@smile.fi.intel.com>
+Message-ID: <YgvjDy1R06IC8FE5@google.com>
 References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
  <20220131151346.45792-6-andriy.shevchenko@linux.intel.com>
  <YgvaqBB8fNVWp1lN@google.com>
+ <YgveyspHVXCp2ul+@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YgvaqBB8fNVWp1lN@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YgveyspHVXCp2ul+@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 04:54:00PM +0000, Lee Jones wrote:
-> On Mon, 31 Jan 2022, Andy Shevchenko wrote:
+On Tue, 15 Feb 2022, Andy Shevchenko wrote:
 
-Thank you for the review, my answers below.
-
-...
-
-> > +static struct resource apl_gpio_resources[APL_GPIO_NR_DEVICES][2] = {
-> > +	[APL_GPIO_NORTH] = {
-> > +		DEFINE_RES_MEM(APL_GPIO_NORTH_OFFSET, 0x1000),
+> On Tue, Feb 15, 2022 at 04:54:00PM +0000, Lee Jones wrote:
+> > On Mon, 31 Jan 2022, Andy Shevchenko wrote:
 > 
-> Are these 0x1000's being over-written in lpc_ich_init_pinctrl()?
+> Thank you for the review, my answers below.
 > 
-> If so, why pre-initialise?
-
-You mean to pre-initialize the offsets, but leave the length to be added
-in the function? It can be done, but it feels inconsistent, since we would
-have offsets and lengths in different places for the same thingy. That said,
-I prefer current way for the sake of consistency.
-
-> > +		DEFINE_RES_IRQ(APL_GPIO_IRQ),
-> > +	},
-
-...
-
-> > +/* The order must be in sync with apl_pinctrl_soc_data */
+> ...
 > 
-> Why does the order matter if you've pre-enumerated them all?
+> > > +static struct resource apl_gpio_resources[APL_GPIO_NR_DEVICES][2] = {
+> > > +	[APL_GPIO_NORTH] = {
+> > > +		DEFINE_RES_MEM(APL_GPIO_NORTH_OFFSET, 0x1000),
+> > 
+> > Are these 0x1000's being over-written in lpc_ich_init_pinctrl()?
+> > 
+> > If so, why pre-initialise?
+> 
+> You mean to pre-initialize the offsets, but leave the length to be added
+> in the function? It can be done, but it feels inconsistent, since we would
+> have offsets and lengths in different places for the same thingy. That said,
+> I prefer current way for the sake of consistency.
 
-Indeed. I will drop the confusing comment in the next version.
+Don't you over-write this entry entirely?
+
+  for (i = 0; i < ARRAY_SIZE(apl_gpio_devices); i++) {
+        struct resource *mem = &apl_gpio_resources[i][0];
+
+        /* Fill MEM resource */
+        mem->start += base.start;
+        mem->end += base.start;
+        mem->flags = base.flags;
+  }
+
+Oh wait, you're just adding the base value to the offsets.
+
+In which case that comment is also confusing!
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
