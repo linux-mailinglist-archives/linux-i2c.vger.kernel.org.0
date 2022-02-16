@@ -2,175 +2,250 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 203F74B81EB
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Feb 2022 08:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D70014B832D
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Feb 2022 09:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbiBPHrc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 16 Feb 2022 02:47:32 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:48166 "EHLO
+        id S231330AbiBPIkf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 16 Feb 2022 03:40:35 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbiBPHrR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Feb 2022 02:47:17 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAAEB2DD5
-        for <linux-i2c@vger.kernel.org>; Tue, 15 Feb 2022 23:46:54 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id q17so2448823edd.4
-        for <linux-i2c@vger.kernel.org>; Tue, 15 Feb 2022 23:46:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UXFVdha6mdWIMpTuHA+4tNIC4aJVupleztPzYIr+WPI=;
-        b=IWGOoTDEmlPr6DtIASuFxDjhqh5/L0fV+GCo/Si5iX3xTv5LSIB/gHCtw/jl/17UhV
-         o8B9B91aM7Ay2uW/kJkTld1BNFL8oQhsz/JzoOEV2Ei6Gb1f6ABBYu1E1nnPcm4c3AIx
-         KccTMJdDOg/2rXec48mltO60Om5XKWGSqP4QgjOa8MB7Txybrkb5eEEp6v0A1xxEfPQp
-         gxaLx82Pjmh48q9sLqqU0AWpZ7yB6VUubrSnYaLCwXEdpGfJC2ZvQapy80SraRdztfHE
-         Z/gDKy7aeJLNWkgdpmhD1a6m6J0FkxFZ4ThoST3TJhNenyVJjVgslooDOSULFlv94OCZ
-         IEBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UXFVdha6mdWIMpTuHA+4tNIC4aJVupleztPzYIr+WPI=;
-        b=KOHy+DmROmyiaLlWAjfDd4P1VySNJBIw5zBNlNe/6XILr1owMpk7AGV+AsE2DfvA77
-         0Satvc8DeUPWaMb9IpeE2j71bp38QXi15DAJFEdkPRtZx3WL/tf9nuWuSEj9AioqKfOu
-         xTBWgmPeRTTtdrEykiZyniIxp6Lk8Eg2t5attffBo2K0TOmCEDfmSUrxWjAnBwXaewpC
-         Nr10/VgYKXua2KEyVkIHEhqkLTCCv+F9QskCBKo6xR1w/Yvf+2CGqnEg7Ki8ZHQOVHHF
-         7xTpWyWGoCUDGMX6p/WlAkH2lb6SaA650zptVJ/Ja5e3LO5m3sD6yBP+htiKCBPFSF22
-         lIRA==
-X-Gm-Message-State: AOAM530pV0cn17SwhHjgjyLG5oAg5gMuruypzE4bfzxrEwGfVcYoQtou
-        RXdhME9Pzm6vwgtgJN7G1lHLIQ==
-X-Google-Smtp-Source: ABdhPJw0NxKrW2MThGN7NIdtD3nPnvUA7EhJt3HLsCndpIsnFXXpAl9ArWuefX/23/LbYnF2kNOFJw==
-X-Received: by 2002:aa7:c793:0:b0:408:4a69:90b4 with SMTP id n19-20020aa7c793000000b004084a6990b4mr1608214eds.58.1644997613266;
-        Tue, 15 Feb 2022 23:46:53 -0800 (PST)
-Received: from fedora.sec.9e.network (ip-088-153-139-166.um27.pools.vodafone-ip.de. [88.153.139.166])
-        by smtp.gmail.com with ESMTPSA id gq1sm11615202ejb.58.2022.02.15.23.46.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 23:46:52 -0800 (PST)
-From:   Patrick Rudolph <patrick.rudolph@9elements.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [v6 3/3] i2c: muxes: pca954x: Add regulator support
-Date:   Wed, 16 Feb 2022 08:46:12 +0100
-Message-Id: <20220216074613.235725-4-patrick.rudolph@9elements.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220216074613.235725-1-patrick.rudolph@9elements.com>
-References: <20220216074613.235725-1-patrick.rudolph@9elements.com>
+        with ESMTP id S229455AbiBPIke (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Feb 2022 03:40:34 -0500
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768B31C8847;
+        Wed, 16 Feb 2022 00:40:22 -0800 (PST)
+Received: from host-79-2-93-196.business.telecomitalia.it ([79.2.93.196]:33352 helo=[192.168.101.73])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1nKFrH-0005i7-NY; Wed, 16 Feb 2022 09:40:19 +0100
+Message-ID: <f412980a-4e41-54c7-f000-f826e015f6d2@lucaceresoli.net>
+Date:   Wed, 16 Feb 2022 09:40:18 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [RFCv3 2/6] i2c: add I2C Address Translator (ATR) support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Peter Rosin <peda@axentia.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+References: <20220206115939.3091265-1-luca@lucaceresoli.net>
+ <20220206115939.3091265-3-luca@lucaceresoli.net>
+ <CAHp75Vejw86kLUJfwXR_kUn+=UCaixbcy=epO8Foe=9S2LqXTQ@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAHp75Vejw86kLUJfwXR_kUn+=UCaixbcy=epO8Foe=9S2LqXTQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add a vdd regulator and enable it for boards that have the
-mux powered off by default.
+Hi Andy,
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
----
- drivers/i2c/muxes/i2c-mux-pca954x.c | 34 ++++++++++++++++++++++++-----
- 1 file changed, 29 insertions(+), 5 deletions(-)
+thank you for the _very_ detailed review and apologies for not having
+found the time to reply until now.
 
-diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-index 33b9a6a1fffa..e25383752616 100644
---- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-+++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-@@ -49,6 +49,7 @@
- #include <linux/module.h>
- #include <linux/pm.h>
- #include <linux/property.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <dt-bindings/mux/mux.h>
-@@ -119,6 +120,7 @@ struct pca954x {
- 	struct irq_domain *irq;
- 	unsigned int irq_mask;
- 	raw_spinlock_t lock;
-+	struct regulator *supply;
- };
- 
- /* Provide specs for the PCA954x and MAX735x types we know about */
-@@ -459,6 +461,9 @@ static void pca954x_cleanup(struct i2c_mux_core *muxc)
- 	struct pca954x *data = i2c_mux_priv(muxc);
- 	int c, irq;
- 
-+	if (!IS_ERR_OR_NULL(data->supply))
-+		regulator_disable(data->supply);
-+
- 	if (data->irq) {
- 		for (c = 0; c < data->chip->nchans; c++) {
- 			irq = irq_find_mapping(data->irq, c);
-@@ -513,15 +518,32 @@ static int pca954x_probe(struct i2c_client *client,
- 			     pca954x_select_chan, pca954x_deselect_mux);
- 	if (!muxc)
- 		return -ENOMEM;
-+
- 	data = i2c_mux_priv(muxc);
- 
- 	i2c_set_clientdata(client, muxc);
- 	data->client = client;
- 
-+	data->supply = devm_regulator_get(dev, "vdd");
-+	if (IS_ERR(data->supply)) {
-+		ret = PTR_ERR(data->supply);
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(dev, "Failed to request regulator: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = regulator_enable(data->supply);
-+	if (ret) {
-+		dev_err(dev, "Failed to enable regulator: %d\n", ret);
-+		return ret;
-+	}
-+
- 	/* Reset the mux if a reset GPIO is specified. */
- 	gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
--	if (IS_ERR(gpio))
--		return PTR_ERR(gpio);
-+	if (IS_ERR(gpio)) {
-+		ret = PTR_ERR(gpio);
-+		goto fail_cleanup;
-+	}
- 	if (gpio) {
- 		udelay(1);
- 		gpiod_set_value_cansleep(gpio, 0);
-@@ -538,7 +560,7 @@ static int pca954x_probe(struct i2c_client *client,
- 
- 		ret = i2c_get_device_id(client, &id);
- 		if (ret && ret != -EOPNOTSUPP)
--			return ret;
-+			goto fail_cleanup;
- 
- 		if (!ret &&
- 		    (id.manufacturer_id != data->chip->id.manufacturer_id ||
-@@ -546,7 +568,8 @@ static int pca954x_probe(struct i2c_client *client,
- 			dev_warn(dev, "unexpected device id %03x-%03x-%x\n",
- 				 id.manufacturer_id, id.part_id,
- 				 id.die_revision);
--			return -ENODEV;
-+			ret = -ENODEV;
-+			goto fail_cleanup;
- 		}
- 	}
- 
-@@ -565,7 +588,8 @@ static int pca954x_probe(struct i2c_client *client,
- 	ret = pca954x_init(client, data);
- 	if (ret < 0) {
- 		dev_warn(dev, "probe failed\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto fail_cleanup;
- 	}
- 
- 	ret = pca954x_irq_setup(muxc);
+I'm OK with most of your comments, so I'm not commenting on them for
+brevity. Below my comments on the remaining topics.
+
+On 08/02/22 12:16, Andy Shevchenko wrote:
+> On Mon, Feb 7, 2022 at 7:55 PM Luca Ceresoli <luca@lucaceresoli.net> wrote:
+>>
+>> An ATR is a device that looks similar to an i2c-mux: it has an I2C
+>> slave "upstream" port and N master "downstream" ports, and forwards
+>> transactions from upstream to the appropriate downstream port. But is
+>> is different in that the forwarded transaction has a different slave
+>> address. The address used on the upstream bus is called the "alias"
+>> and is (potentially) different from the physical slave address of the
+>> downstream chip.
+>>
+>> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
+>> implementing ATR features in a device driver. The helper takes care or
+>> adapter creation/destruction and translates addresses at each transaction.
+> 
+> Why I2C mux driver can't be updated to support this feature?
+
+My first version did that. But it was very complex to shoehorn the ATR
+features in the i2c-mux code which already handles various [corner]
+cases. If memory serves, code reuse was limited to the trivial code:
+allocations, cleanups and the like.
+
+The root reason is that an atr and a mux have a similar electric
+topology, but they do very different things. An mux need to be commanded
+to switch from one downstream bus to another, an atr does not. An atr
+modifies the transaction, including the speed, a mux does not.
+
+>>  RFCv1 was implemented inside i2c-mux.c and added yet more complexity
+>>  there. RFCv2 creates a new file on its own, i2c-atr.c. Since many ATR
+>>  features are not in a MUX and vice versa, the overlapping is low. This was
+>>  almost a complete rewrite, but for the records here are the main
+>>  differences from the old implementation:
+> 
+> While this is from a code perspective, maybe i2c mux and this one can
+> still share some parts?
+
+Possibly. I'd have to look into that in more detail.
+I must say having a separate file allowed me to be free to implement
+whatever is best for atr. With that done I would certainly make sense to
+check whether there are still enough commonalities to share code, maybe
+in a .c file with shared functions.
+
+>> +config I2C_ATR
+>> +       tristate "I2C Address Translator (ATR) support"
+>> +       help
+>> +         Enable support for I2C Address Translator (ATR) chips.
+>> +
+>> +         An ATR allows accessing multiple I2C busses from a single
+>> +         physical bus via address translation instead of bus selection as
+>> +         i2c-muxes do.
+> 
+> What would be the module name?
+
+Isn't the module name written in Kconfig files just to avoid checkpatch
+complain about "too few doc lines"? :) Oook, it's i2s-atr anyway.
+
+>> +/**
+> 
+> Is this a kernel doc formatted documentation?
+> Haven't you got a warning?
+
+Not from checkpatch, but I got one from the kernel test robot. Will fix.
+
+[...]
+
+>> + *
+>> + * An I2C Address Translator (ATR) is a device with an I2C slave parent
+>> + * ("upstream") port and N I2C master child ("downstream") ports, and
+>> + * forwards transactions from upstream to the appropriate downstream port
+>> + * with a modified slave address. The address used on the parent bus is
+>> + * called the "alias" and is (potentially) different from the physical
+>> + * slave address of the child bus. Address translation is done by the
+>> + * hardware.
+>> + *
+>> + * An ATR looks similar to an i2c-mux except:
+>> + * - the address on the parent and child busses can be different
+>> + * - there is normally no need to select the child port; the alias used on
+>> + *   the parent bus implies it
+>> + *
+>> + * The ATR functionality can be provided by a chip with many other
+>> + * features. This file provides a helper to implement an ATR within your
+>> + * driver.
+>> + *
+>> + * The ATR creates a new I2C "child" adapter on each child bus. Adding
+>> + * devices on the child bus ends up in invoking the driver code to select
+>> + * an available alias. Maintaining an appropriate pool of available aliases
+>> + * and picking one for each new device is up to the driver implementer. The
+>> + * ATR maintains an table of currently assigned alias and uses it to modify
+>> + * all I2C transactions directed to devices on the child buses.
+>> + *
+>> + * A typical example follows.
+>> + *
+>> + * Topology:
+>> + *
+>> + *                       Slave X @ 0x10
+>> + *               .-----.   |
+>> + *   .-----.     |     |---+---- B
+>> + *   | CPU |--A--| ATR |
+>> + *   `-----'     |     |---+---- C
+>> + *               `-----'   |
+>> + *                       Slave Y @ 0x10
+>> + *
+>> + * Alias table:
+>> + *
+>> + *   Client  Alias
+>> + *   -------------
+>> + *      X    0x20
+>> + *      Y    0x30
+>> + *
+>> + * Transaction:
+>> + *
+>> + *  - Slave X driver sends a transaction (on adapter B), slave address 0x10
+>> + *  - ATR driver rewrites messages with address 0x20, forwards to adapter A
+>> + *  - Physical I2C transaction on bus A, slave address 0x20
+>> + *  - ATR chip propagates transaction on bus B with address translated to 0x10
+>> + *  - Slave X chip replies on bus B
+>> + *  - ATR chip forwards reply on bus A
+>> + *  - ATR driver rewrites messages with address 0x10
+>> + *  - Slave X driver gets back the msgs[], with reply and address 0x10
+>> + *
+>> + * Usage:
+>> + *
+>> + *  1. In your driver (typically in the probe function) add an ATR by
+>> + *     calling i2c_atr_new() passing your attach/detach callbacks
+>> + *  2. When the attach callback is called pick an appropriate alias,
+>> + *     configure it in your chip and return the chosen alias in the
+>> + *     alias_id parameter
+>> + *  3. When the detach callback is called, deconfigure the alias from
+>> + *     your chip and put it back in the pool for later usage
+>> + *
+>> + * Originally based on i2c-mux.c
+>> + */
+> 
+> Shouldn't this comment be somewhere under Documentation/ ?
+
+Uhm, yes, I agree it's a good idea to move this entire comment there.
+
+>> +       if (dev->of_node) {
+> 
+> This check can be dropped, also please use device property and fwnode
+> APIs. No good of having OF-centric generic modules nowadays.
+
+Sure! This code was written in another decade and I didn't update it...
+As you noticed elsewhere it also honors the old, strict 80-chars per
+line limit in various places where it makes no sense anymore.
+
+>> +       WARN(sysfs_create_link(&chan->adap.dev.kobj, &dev->kobj, "atr_device"),
+>> +            "can't create symlink to atr device\n");
+>> +       snprintf(symlink_name, sizeof(symlink_name), "channel-%u", chan_id);
+>> +       WARN(sysfs_create_link(&dev->kobj, &chan->adap.dev.kobj, symlink_name),
+>> +            "can't create symlink for channel %u\n", chan_id);
+> 
+> Doesn't sysfs already has a warning when it's really needed?
+
+I have to check that. I usually don't add unnecessary log messages.
+
+[...]
+
+>> +#include <linux/i2c.h>
+>> +#include <linux/mutex.h>
+> 
+> Missed types.h
+> 
+> Missed struct device;
+
+Not sure I got your point here. This file has some 'struct device *',
+which do not need a declaration, and has zero non-pointer uses of
+'struct device'.
+
 -- 
-2.34.1
-
+Luca
