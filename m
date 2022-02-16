@@ -2,61 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3484B8CF2
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Feb 2022 16:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0524B8DA3
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Feb 2022 17:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235727AbiBPPzP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 16 Feb 2022 10:55:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52496 "EHLO
+        id S236216AbiBPQQQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 16 Feb 2022 11:16:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235747AbiBPPzO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Feb 2022 10:55:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4D9295FE6;
-        Wed, 16 Feb 2022 07:55:02 -0800 (PST)
+        with ESMTP id S236148AbiBPQQP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Feb 2022 11:16:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613C62AE061;
+        Wed, 16 Feb 2022 08:16:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB97B61A5A;
-        Wed, 16 Feb 2022 15:55:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3390C004E1;
-        Wed, 16 Feb 2022 15:55:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13834B81F72;
+        Wed, 16 Feb 2022 16:16:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87362C004E1;
+        Wed, 16 Feb 2022 16:15:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645026901;
-        bh=eE1+ZOG+o56GVBrCD53cuQ0ru/sUiq3uQkgLPoUhz1w=;
+        s=k20201202; t=1645028160;
+        bh=qPGOjCsk5qP8/ldMi4Gopws8pyTxuZAyGGhgDyKcdTA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vPR17qhqgiXT9d/mA/vVROVXEvcaOdNU2jYiED4+XYWO4YWvqlDpBs3ektG2BKQ22
-         W0jitEPCFWpGcxdGObCRU3IJyzxSE1qoE9AIIN6qmej72SEVsVke9nj7U39vxg3VjR
-         AYKbhIOOGT9YCTd5Wpu+sUjeV8S+5iJaO67pKfia6RpeBqS7GwGStPzypOYYdYjW20
-         307hpDvq/Bh1PvQM/bnJ6vQILwNnaSN6WGR71fk4SndK58an360cyUYnvCp+fhdrik
-         Qc8GeS9IB8CGEoxTlSVJPdxleADPNzpJGr1PNrxwq/pEKsYR+JbgOzFLdboXsV7y+y
-         A5YhejyNAovww==
-Date:   Wed, 16 Feb 2022 16:54:54 +0100
+        b=mOJR/di1IvuM5MFS5yHENjDpbf9iMYOj5t/e9JW9HqjG+HBzQy0WrpdZYZ94FOsbB
+         0Jm1S8YlVUYV4fliWBisJ2/JCbqcnIsi8xnn8ytlY+rZ3RNrthnVjsQhoFtiWQFkSZ
+         c4LclVZWwpF+Adng/coN+I1rU68CUdKHT9xwmEOFr4D8J271AFc3+7inf9SGPAFwdX
+         M6R1iyKLXOOMX0/ur75u9Q3q3VmiA8YxVk9aXVXIiczTdtWebqncsuBcAnxeE2jODM
+         JYYnhVGGL3MgPkgbJ4cqwy6XHPezvS7ry0nGGtABWALFBFbOuApLqpWErmiWm2ztMl
+         BrYGYbJbjLShg==
+Date:   Wed, 16 Feb 2022 17:15:46 +0100
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Matt Johnston <matt@codeconstruct.com.au>
 Cc:     "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Jeremy Kerr <jk@codeconstruct.com.au>,
         linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
-        Zev Weiss <zev@bewilderbeest.net>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH net-next v5 1/2] dt-bindings: net: New binding
- mctp-i2c-controller
-Message-ID: <Yg0eTtiChnmfJeqX@ninjato>
+        Zev Weiss <zev@bewilderbeest.net>
+Subject: Re: [PATCH net-next v5 2/2] mctp i2c: MCTP I2C binding driver
+Message-ID: <Yg0jMkt56EhrBybc@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Matt Johnston <matt@codeconstruct.com.au>,
         "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Jeremy Kerr <jk@codeconstruct.com.au>, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org, Zev Weiss <zev@bewilderbeest.net>,
-        Rob Herring <robh@kernel.org>
+        netdev@vger.kernel.org, Zev Weiss <zev@bewilderbeest.net>
 References: <20220210063651.798007-1-matt@codeconstruct.com.au>
- <20220210063651.798007-2-matt@codeconstruct.com.au>
+ <20220210063651.798007-3-matt@codeconstruct.com.au>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u2d3AB3C5u+1/++1"
+        protocol="application/pgp-signature"; boundary="aqq7uLdNiV09xLK0"
 Content-Disposition: inline
-In-Reply-To: <20220210063651.798007-2-matt@codeconstruct.com.au>
+In-Reply-To: <20220210063651.798007-3-matt@codeconstruct.com.au>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,64 +65,95 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---u2d3AB3C5u+1/++1
+--aqq7uLdNiV09xLK0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 10, 2022 at 02:36:50PM +0800, Matt Johnston wrote:
-> Used to define a local endpoint to communicate with MCTP peripherals
-> attached to an I2C bus. This I2C endpoint can communicate with remote
-> MCTP devices on the I2C bus.
+Hi Matt, all,
+
+On Thu, Feb 10, 2022 at 02:36:51PM +0800, Matt Johnston wrote:
+> Provides MCTP network transport over an I2C bus, as specified in
+> DMTF DSP0237. All messages between nodes are sent as SMBus Block Writes.
 >=20
-> In the example I2C topology below (matching the second yaml example) we
-> have MCTP devices on busses i2c1 and i2c6. MCTP-supporting busses are
-> indicated by the 'mctp-controller' DT property on an I2C bus node.
+> Each I2C bus to be used for MCTP is flagged in devicetree by a
+> 'mctp-controller' property on the bus node. Each flagged bus gets a
+> mctpi2cX net device created based on the bus number. A
+> 'mctp-i2c-controller' I2C client needs to be added under the adapter. In
+> an I2C mux situation the mctp-i2c-controller node must be attached only
+> to the root I2C bus. The I2C client will handle incoming I2C slave block
+> write data for subordinate busses as well as its own bus.
 >=20
-> A mctp-i2c-controller I2C client DT node is placed at the top of the
-> mux topology, since only the root I2C adapter will support I2C slave
-> functionality.
->                                                .-------.
->                                                |eeprom |
->     .------------.     .------.               /'-------'
->     | adapter    |     | mux  --@0,i2c5------'
->     | i2c1       ----.*|      --@1,i2c6--.--.
->     |............|    \'------'           \  \  .........
->     | mctp-i2c-  |     \                   \  \ .mctpB  .
->     | controller |      \                   \  '.0x30   .
->     |            |       \  .........        \  '.......'
->     | 0x50       |        \ .mctpA  .         \ .........
->     '------------'         '.0x1d   .          '.mctpC  .
->                             '.......'          '.0x31   .
->                                                 '.......'
-> (mctpX boxes above are remote MCTP devices not included in the DT at
-> present, they can be hotplugged/probed at runtime. A DT binding for
-> specific fixed MCTP devices could be added later if required)
+> In configurations without devicetree a driver instance can be attached
+> to a bus using the I2C slave new_device mechanism.
+>=20
+> The MCTP core will hold/release the MCTP I2C device while responses
+> are pending (a 6 second timeout or once a socket is closed, response
+> received etc). While held the MCTP I2C driver will lock the I2C bus so
+> that the correct I2C mux remains selected while responses are received.
+>=20
+> (Ideally we would just lock the mux to keep the current bus selected for
+> the response rather than a full I2C bus lock, but that isn't exposed in
+> the I2C mux API)
 >=20
 > Signed-off-by: Matt Johnston <matt@codeconstruct.com.au>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
+So, I did a high level review regardings the I2C stuff. I did not check
+locking, device lifetime, etc. My biggest general remark is the mixture
+of multi-comment styles, like C++ style or no empty "/*" at the
+beginning as per Kernel coding style. Some functions have nice
+explanations in the header but not proper kdoc formatting. And also on
+the nitbit side, I don't think '__func__' helps here on the error
+messages. But that's me, I'll leave it to the netdev maintainers.
+
+Now for the I2C part. It looks good. I have only one remark:
+
+> +static const struct i2c_device_id mctp_i2c_id[] =3D {
+> +	{ "mctp-i2c", 0 },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(i2c, mctp_i2c_id);
+
+=2E..
+
+> +static struct i2c_driver mctp_i2c_driver =3D {
+> +	.driver =3D {
+> +		.name =3D "mctp-i2c",
+> +		.of_match_table =3D mctp_i2c_of_match,
+> +	},
+> +	.probe_new =3D mctp_i2c_probe,
+> +	.remove =3D mctp_i2c_remove,
+> +	.id_table =3D mctp_i2c_id,
+> +};
+
+I'd suggest to add 'slave' to the 'mctp-i2c' string somewhere to make it
+easily visible that this driver does not manage a remote device but
+processes requests to its own address.
+
+Thanks for the work!
+
+   Wolfram
 
 
---u2d3AB3C5u+1/++1
+--aqq7uLdNiV09xLK0
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmINHkkACgkQFA3kzBSg
-KbYWQQ//T0o6sAFYpqHYgqQJC9nytNVfRU3yp4Q8LKKpkVW7gZJetq7TtiGYTb4g
-iSydYQGckhPUVt2f7xsdvkEhm3fXtlD5T/T83pgB8nNIkCxlpzIOouv+jE+WG42x
-zFVUutvUV536WsXdYQ7COEasoa+k3W3kBZemOfvh0QcDbubswuSdf3yMezI9BE4y
-mpovo/lBXQEG5NTzQDBUJ5jg0UzHl0P/jc2OU0gQ/tLP1H8nC6JG4KlPbF/E0A2r
-I+iy9NgaI1nRka/3e7ylB8ejmNsrv1LWNtP5TFmEB/L3pV/IJ+/Sd639oyUN2+OY
-WvdItszZHOWa1X6rlft9/IJudrev3XA9QzHm+2lksjJAozhXkUXHQTD1etPZLFZM
-J1bcVHhqwiy2zzgRcOfJ6113FDlMWR7DkG9ocoQ0n/ic6xyS1YNktJBFEdmNKeBD
-SinABwdhIbsPDfAHx/X0n0K9yAZemoJu2ZeLMsivuoTIDpSKuVH7js1SzQuBhqgR
-hvfJjg9AW4YUW/uatwBRX1TP5vBuxCJEzVjsCophVLlIPAkASrFoAeXf47xa/N3S
-StC1EJlF52wI+iSJ9441Xds7kpk45nza+vXJ1h1nA8P76dn6zbwssp+S8oWhbVZd
-coC8Tc2m02xdzRHjieuqSiPT5pv68f0rdE6Xg5Qg4VfcfGRDkU4=
-=8P1o
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmINIzEACgkQFA3kzBSg
+KbY2hg//Y4x99TwK6piUWmXG9SqGoMRZVgAgtOr2p5Itm23ASqIhQZRlV8CLwFZ+
+YCJUG7WYRqi7hgU4iaW4wSW2sHnovCcvPACJtqg5H17teJ6bwzVkHglvOKOvnn70
+fMQsGxR8boR1BZS/YZbIZ1VJULx/tJzCFubhC7TfTvIpS2SriP5vh6X/uc4nG43c
+T5OLRKlgzwgvQYuCVi0J4aXpUuZmlKf8MYf8rAkukAkPxnry86m4f7tdlxlNXhC+
+PSVGihmgoNAxga7esmnT+ymHEV9qyUj1F2ByVtph20/XsxzBrPtrUbL98ACI35fC
+GYpbRIdlFT3gnJsCxxOyYI8+Z8Xg5MUWUfCD6Xql2nz23bAiCrkVgGxjA1Sh59BO
+GMqmz5GBzFN/t7e8RUvCKh1zvRm4W9MQZ/zqqJRMHVjKpxUHacSABaDWH+3Vbpav
+K1AyGCVWQglG2wRruWQpBgHMmk36samEcXNLzSmIXvHq1e+b4OKPGyeqCWDLNtk5
+8uDOOMgZrBlc1XJOJxFgan+ZQnU4DMMPfVJfUzDbdcGn6W8MRHBYIvSO8u6VDUq7
+wzdMFX2lAoOqKexkoiwqZ8FLR+Lu8xrpfpcu4H1+F6r/G65Fchr/+gROsuZ9ELcN
+8UzrnG2KTeWnxJm8tWrmJ6LNzsXHfKgNboYefXJSqMpIdTzb6Co=
+=YZkx
 -----END PGP SIGNATURE-----
 
---u2d3AB3C5u+1/++1--
+--aqq7uLdNiV09xLK0--
