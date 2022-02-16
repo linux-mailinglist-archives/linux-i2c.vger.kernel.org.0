@@ -2,86 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6494B9252
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Feb 2022 21:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F784B94A2
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Feb 2022 00:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbiBPUdn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 16 Feb 2022 15:33:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52954 "EHLO
+        id S230469AbiBPXnY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 16 Feb 2022 18:43:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231354AbiBPUdn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Feb 2022 15:33:43 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640E127018A;
-        Wed, 16 Feb 2022 12:33:30 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id p22so6066602lfu.5;
-        Wed, 16 Feb 2022 12:33:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=NxGb0gbH9H2D9ZSQG3YZmRCR8LnjoKRdk0keYL9QTKo=;
-        b=a3/6KweZEvNgM+Mak9Jq8lmNtt+AmHnjH7EyadGOwpmThKVNQEQN+n92+FGA9vkofI
-         BFtfXH1fevyKIkxga6upTPc1rPtijOk1SHKbkZyD2eh/qgp6nFS2Los5mjtYecPVPh1+
-         zQ2JyGE4dgWN0gEVsoKlmXAFilfrDrO2NEc2wvrUHP8Zj680jsq3htl/Z8nkPE6qOFq7
-         jBHvCVwD1rjjcIuqoynFE1OibBiUSmfznnzL571+qFzskuskpJMByn5OgmXyEftl0Kpq
-         g0GzTB2Bphuf1IbA8BRdqRdszrbQxWYAO3lfcDVywbpKkXGE5PqlVMADo5Tu3u53bANx
-         HY5A==
+        with ESMTP id S236907AbiBPXnY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Feb 2022 18:43:24 -0500
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC9E13C38E;
+        Wed, 16 Feb 2022 15:43:11 -0800 (PST)
+Received: by mail-io1-f52.google.com with SMTP id a26so1717299iot.6;
+        Wed, 16 Feb 2022 15:43:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NxGb0gbH9H2D9ZSQG3YZmRCR8LnjoKRdk0keYL9QTKo=;
-        b=6fNIfzKKJgIWLhSbMu5SYCXNCJRXglZv8XKMPXLzMvzlSo5BNeVspzhSawgcJo7lgf
-         bHY3p+QUUsjYYb0tRtZGtmqlsxVRz+S2qn/9FmxeQLUPi/77rjsPL82PZqq0yR/vtFZD
-         c1nK3kjJK3aVH0F7L1YVjSWuy1vKSsfgsM7o0PJDdCcVAO4yJgGcir2IBjLkuArGW8ke
-         cSFCMc3pu4ZkASOOkw9LgeNXO5+NndMy6pLQ2wVlC+3Q7QAqr4K+2RBAFsZVDAL8Mvgb
-         bWvu0cvrh7VR/o9ROCWhuUQvWwY93caodCRDCXBEO70QtNJ7mHslyi/Y/DDPfQgkNqN/
-         XHXg==
-X-Gm-Message-State: AOAM532ruEecDIP1C3niGolRujAYxmNmNeYhuFEzZJRq06JWptYi+YXE
-        9Zf3OTyCL/Tqaf2gdLZJBcQ=
-X-Google-Smtp-Source: ABdhPJyJEJt+PKJQLoGP3tTl88vSogQnupHC10z0lGsbyTv/p+ktbFXUvofSa7jog4V5BQ+d6KTt/w==
-X-Received: by 2002:a05:6512:1050:b0:438:2e9:2160 with SMTP id c16-20020a056512105000b0043802e92160mr3394585lfb.682.1645043608664;
-        Wed, 16 Feb 2022 12:33:28 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
-        by smtp.googlemail.com with ESMTPSA id h2sm4888538ljk.41.2022.02.16.12.33.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 12:33:03 -0800 (PST)
-Message-ID: <0497d0a9-c512-5472-c705-756c62ccccb3@gmail.com>
-Date:   Wed, 16 Feb 2022 23:32:57 +0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CRjHfQOjI0mmOa6NhLg+/gN/vr6jaESGsMoKgehOdWk=;
+        b=NxJkwvgbiVlL1GMEmDT0NJrKJWumHuWD11F1GcIUn6iZCfmmbO0B1XRrFlk6ihrLiT
+         I8BkcmsuOxVkAI4z85mRnWiTMLgXhNs9NNE0im6xy1jiAyG0V6qDvCz9wbni1ayV+y3i
+         sSz4Ju0WdPrGzAfZgMgUvCycWV7eqYEcW/cWS2k2uSc3pNzO5/5hiepzGIpcvHrWZIKl
+         rFqHaDkkm/9rZBdw8WNKQgQECKGosJgF9a1ckOSy3ll7RWHlV9XLuNuEZuNSLt/1SC8c
+         pJ9MMCf2B3WKoy50DkXs3nxBpVpR4KObVjjpdDJK8Xu/kzFxD0vPh76yNh3KbP8RzzoS
+         Q5sQ==
+X-Gm-Message-State: AOAM531fbcIPVETl/aIibwal8sDsHv2/Jr1CZsZ73Fx+uU6vXVdHjeNe
+        dpGKifclf1JDIfGxQ8bYpBrzJ+bGKg==
+X-Google-Smtp-Source: ABdhPJzYA3SGZs3cIXGfYrgcESqrOx7Ezc+E2xRcM2xfKgqnUewWsDFahrdSZDa1d8exUTaPCL3ZKw==
+X-Received: by 2002:a05:6638:3183:b0:306:7ccc:92af with SMTP id z3-20020a056638318300b003067ccc92afmr153577jak.259.1645054990760;
+        Wed, 16 Feb 2022 15:43:10 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id x15sm906308ilu.11.2022.02.16.15.43.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 15:43:10 -0800 (PST)
+Received: (nullmailer pid 1902474 invoked by uid 1000);
+        Wed, 16 Feb 2022 23:43:08 -0000
+Date:   Wed, 16 Feb 2022 17:43:08 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [v6 1/3] dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
+Message-ID: <Yg2MDCQNJJBhO5UY@robh.at.kernel.org>
+References: <20220216074613.235725-1-patrick.rudolph@9elements.com>
+ <20220216074613.235725-2-patrick.rudolph@9elements.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH RESEND] i2c: tegra: Add SMBus block read function
-Content-Language: en-US
-To:     Akhil R <akhilrajeev@nvidia.com>, christian.koenig@amd.com,
-        jonathanh@nvidia.com, ldewangan@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, mperttunen@nvidia.com,
-        p.zabel@pengutronix.de, sumit.semwal@linaro.org,
-        thierry.reding@gmail.com
-References: <20220210153603.61894-1-akhilrajeev@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20220210153603.61894-1-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216074613.235725-2-patrick.rudolph@9elements.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-10.02.2022 18:36, Akhil R пишет:
-> Emulate SMBus block read using ContinueXfer to read the length byte
+On Wed, 16 Feb 2022 08:46:10 +0100, Patrick Rudolph wrote:
+> Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
+> chips. The functionality will be provided by the exisintg pca954x driver.
 > 
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> While on it make the interrupts support conditionally as not all of the
+> existing chips have interrupts.
+> 
+> For chips that are powered off by default add an optional regulator
+> called vdd-supply.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 > ---
->  drivers/i2c/busses/i2c-tegra.c | 18 ++++++++++++++++--
->  1 file changed, 16 insertions(+), 2 deletions(-)
+>  .../bindings/i2c/i2c-mux-pca954x.yaml         | 44 ++++++++++++++-----
+>  1 file changed, 34 insertions(+), 10 deletions(-)
+> 
 
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
+
+If a tag was not added on purpose, please state why and what changed.
+
