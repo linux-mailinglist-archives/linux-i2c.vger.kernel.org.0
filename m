@@ -2,70 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F624BA732
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Feb 2022 18:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D40254BA77D
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Feb 2022 18:52:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243749AbiBQRd5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Feb 2022 12:33:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46300 "EHLO
+        id S243901AbiBQRvu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Feb 2022 12:51:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243746AbiBQRd5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Feb 2022 12:33:57 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09871732EB
-        for <linux-i2c@vger.kernel.org>; Thu, 17 Feb 2022 09:33:41 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id p15so374788oip.3
-        for <linux-i2c@vger.kernel.org>; Thu, 17 Feb 2022 09:33:41 -0800 (PST)
+        with ESMTP id S243882AbiBQRvs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Feb 2022 12:51:48 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F4085BFC
+        for <linux-i2c@vger.kernel.org>; Thu, 17 Feb 2022 09:51:32 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id a28so9735734qvb.10
+        for <linux-i2c@vger.kernel.org>; Thu, 17 Feb 2022 09:51:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cHjzJ4tu0iwWERzLvjnOhK3bm3Iy4LFFoOV9TvsEMeo=;
-        b=nrmepXRcU1iuIEYOOb/8DbGk26nvYN+q39+L6353I7F1sNluHZiARO+PnrTMRyzkKC
-         3trnT3Kwex55q3fhQe/HiF2jHqC+2xqPpXyFFkVLlApay/uCAux1lEuNF2L3S32+d5m5
-         LE5Ss4YYW2KCQPK4AgPTNe9Yuf8D+LNzyg3omuayIGLgbsm47fi5wl+DDTJOAf8HPF83
-         FxCYviAThgU93iw8jyYf617FeOuVbBdKuE406v+E2OJiABXa75S5sNqVD6g0dkjD9bXP
-         BQaQdNiQJqtXAEVeksTq0VK/QqHZfVJi4mtyv9EHVXZ+GAdLs00BHqytZgu2uXhIWyOw
-         leDA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7P1LnNg8m8iNH6efSsOJFujkEPn8411mWUjnE7PK0ss=;
+        b=TqwCB19EBIJfH+fraIvA8pPYGh8RvpHppRDQv/w6QmUB9MZafHO7H5S10vRCAHAFTw
+         oO1RsM90wkJ8bDZQpsJGmmZpt6v5s7uuB0j0U7Fz2N1v2WWlWdHvFyQ+aUJBKVecMH43
+         ru1PK422VTVlrP0zGqpYp0waanXnhM0JoCFw26lIa1NXzQVlvTkdf3Kmk5xmJurJz04F
+         pdX8iHKTft4SnJn4QP1MgWh8ojDJDJorF0BAQ/pZOOTGJKmHRmjgBfcfyX6+oGTfKghL
+         U4gmw5GICQm0R5BZqpXHakD70bDjVacvoCCdkmdFkkyafEYWo/4Oq1e1LW28Jmmu2z8N
+         Dx+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cHjzJ4tu0iwWERzLvjnOhK3bm3Iy4LFFoOV9TvsEMeo=;
-        b=EJ5lgV/WbPh+oeLtugqptnX+UPnKUvtaITQOqX5FUMHs4k3TE0kCJnoloi6yUR2lnO
-         blHDF1dqrmT1GNNLqFGr4C55UYiciwiB0dwWkgmilJ+Wi+11EfsgIWRfP/1g3UGkMwin
-         9BpAL0ZDqG/Ph33LxDLUSViBT7G+5ejGiM4ThV3iKmPT9pZBwgb0timuU3PifqHLaH4q
-         14usfP9MWVTGJ5jJ+64MJEpFq+qlgHvDajL8/lMptTwso+JozAv7tUlra6cuUmW2ZWwU
-         H5kjM1kFNRCNzplj/TOGWXhn1jeSyo/GLhovq7B/pNz5BHrs/RKjhtHRh2UluauA61CZ
-         6ztw==
-X-Gm-Message-State: AOAM530iAoi9/eWEyVibCaXGSg9gZkVf4DIyireM0YPMAFK6/ZCDZLW+
-        zNIzFwietTNWEDNc+X9CdjwcLA==
-X-Google-Smtp-Source: ABdhPJx4+RwrrWNNQzsWdj2ES3Ot+nHFgEONSR6Dy57JbnogPDlZoiTE2j/fuilrFVHCHUlDAHRIvA==
-X-Received: by 2002:aca:5a86:0:b0:2ce:6ee7:2caa with SMTP id o128-20020aca5a86000000b002ce6ee72caamr3158348oib.216.1645119220870;
-        Thu, 17 Feb 2022 09:33:40 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id 128sm163526oor.15.2022.02.17.09.33.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 09:33:40 -0800 (PST)
-Date:   Thu, 17 Feb 2022 09:35:47 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7P1LnNg8m8iNH6efSsOJFujkEPn8411mWUjnE7PK0ss=;
+        b=vxQqGasV0GfvaoewpQtYiLAfs+K9/so3289KXtFhBqlwb9C2sjuaarhZ9MuTP6Ob6A
+         6PkKHSx5kMCkYc+tl2ARzXkBw1G3zt7hP9JnvGYCZujpiq0+C2Vq7ZDGLGMQ1ac6iQ/Q
+         KmMfUxvqwKyAeX2hBxy2jAxwbJmBXXO/lXCUr4OzfYn95B6q+6QCCUM7ntLCP53RHv6x
+         SzQuiHkhcqFG84bohSJDVp/EW+Zu50JjfLGDSM93M5CUiYsAQGtwrHJcoJExJT5rzIpz
+         upFzgOWWc+oxPmR4tJdhx61NqyQA7XYpvEWBJOghVQkpa41cY7AEy7Qjt39VIHpRRrth
+         TMiA==
+X-Gm-Message-State: AOAM530qajNgMOqvU2U9H2ltBHvvX9Jpx+Jq16oiyChDY7m6LEWLgiIs
+        WKzxt1W745FmB10cWW+uHkUyLoZUFvnm95MWoBKfsVMuOMNHHA==
+X-Google-Smtp-Source: ABdhPJyA/qAp/R7b2qoAIWMXbTiDnTMtqIKpF913w0ZLzTM0L4hxqtE3L9HqZlQ1nOVFtI9/iUyaknibzgc8RXr15ys=
+X-Received: by 2002:ac8:5716:0:b0:2d6:4f00:6a76 with SMTP id
+ 22-20020ac85716000000b002d64f006a76mr3395452qtw.682.1645120291246; Thu, 17
+ Feb 2022 09:51:31 -0800 (PST)
+MIME-Version: 1.0
+References: <20220131120403.2481995-1-vkoul@kernel.org>
+In-Reply-To: <20220131120403.2481995-1-vkoul@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 17 Feb 2022 20:51:19 +0300
+Message-ID: <CAA8EJpoqCJbYgOUpEhcoae3=Mivp8c7PZU8XO78EMZMR+NQQKw@mail.gmail.com>
+Subject: Re: [PATCH v5] i2c: qcom-geni: Add support for GPI DMA
 To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-arm-msm@vger.kernel.org,
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-arm-msm@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
         Douglas Anderson <dianders@chromium.org>,
         Matthias Kaehlcke <mka@chromium.org>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Alexey Minnekhanov <alexeymin@postmarketos.org>
-Subject: Re: [PATCH v5] i2c: qcom-geni: Add support for GPI DMA
-Message-ID: <Yg6Hc2pT8DFKS2dT@ripper>
-References: <20220131120403.2481995-1-vkoul@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131120403.2481995-1-vkoul@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,37 +70,37 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon 31 Jan 04:04 PST 2022, Vinod Koul wrote:
-
+On Mon, 31 Jan 2022 at 15:04, Vinod Koul <vkoul@kernel.org> wrote:
+>
 > QUP Serial engines supports data transfers thru FIFO mode, SE DMA mode and
 > lastly GPI DMA mode. Former two are already supported and this adds supports the
 > last mode.
-> 
+>
 > In GPI DMA mode, the firmware is issued commands by driver to perform DMA
 > and setup the serial port.
-> 
+>
 > Signed-off-by: Vinod Koul <vkoul@kernel.org>
 > ---
-> 
+>
 > Changes since v4:
 >  - Fix buildbot warn
 >  - Fix flase warn reported by Alexey
 >  - Fix feedback from Bjorn and cleanup the probe code and add more details
 >    in changelog
-> 
+>
 > Changes since v3:
 >  - remove separate tx and rx function for gsi dma and make a common one
 >  - remove global structs and use local variables instead
-> 
+>
 >  drivers/i2c/busses/i2c-qcom-geni.c | 300 ++++++++++++++++++++++++++---
 >  1 file changed, 273 insertions(+), 27 deletions(-)
-> 
+>
 > diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
 > index 6d635a7c104c..696253d178a6 100644
 > --- a/drivers/i2c/busses/i2c-qcom-geni.c
 > +++ b/drivers/i2c/busses/i2c-qcom-geni.c
 > @@ -3,7 +3,9 @@
->  
+>
 >  #include <linux/acpi.h>
 >  #include <linux/clk.h>
 > +#include <linux/dmaengine.h>
@@ -113,166 +110,397 @@ On Mon 31 Jan 04:04 PST 2022, Vinod Koul wrote:
 >  #include <linux/i2c.h>
 >  #include <linux/interrupt.h>
 > @@ -48,6 +50,9 @@
->  #define LOW_COUNTER_SHFT	10
->  #define CYCLE_COUNTER_MSK	GENMASK(9, 0)
->  
-> +#define I2C_PACK_TX		BIT(0)
-> +#define I2C_PACK_RX		BIT(1)
+>  #define LOW_COUNTER_SHFT       10
+>  #define CYCLE_COUNTER_MSK      GENMASK(9, 0)
+>
+> +#define I2C_PACK_TX            BIT(0)
+> +#define I2C_PACK_RX            BIT(1)
 > +
 >  enum geni_i2c_err_code {
->  	GP_IRQ0,
->  	NACK,
+>         GP_IRQ0,
+>         NACK,
 > @@ -89,6 +94,9 @@ struct geni_i2c_dev {
->  	void *dma_buf;
->  	size_t xfer_len;
->  	dma_addr_t dma_addr;
-> +	struct dma_chan *tx_c;
-> +	struct dma_chan *rx_c;
-> +	bool gpi_mode;
+>         void *dma_buf;
+>         size_t xfer_len;
+>         dma_addr_t dma_addr;
+> +       struct dma_chan *tx_c;
+> +       struct dma_chan *rx_c;
+> +       bool gpi_mode;
 >  };
->  
+>
 >  struct geni_i2c_err_log {
 > @@ -456,12 +464,199 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
->  	return gi2c->err;
+>         return gi2c->err;
 >  }
->  
+>
 > +static void i2c_gpi_cb_result(void *cb, const struct dmaengine_result *result)
 > +{
-> +	struct geni_i2c_dev *gi2c = cb;
+> +       struct geni_i2c_dev *gi2c = cb;
 > +
-> +	if (result->result != DMA_TRANS_NOERROR) {
-> +		dev_err(gi2c->se.dev, "DMA txn failed:%d\n", result->result);
-
-Iiuc the API the expectation is that if we get !NOERROR we shouldn't
-expect to get NOERROR after that.
-
-If so we're just returning here and leaving geni_i2c_gpi_xfer() to just
-timeout in a HZ or so. Given that xfer happens under the adaptor lock,
-how about carrying an error in geni_i2c_dev and complete(&done) here as
-well?
-
-> +		return;
-> +	}
+> +       if (result->result != DMA_TRANS_NOERROR) {
+> +               dev_err(gi2c->se.dev, "DMA txn failed:%d\n", result->result);
+> +               return;
+> +       }
 > +
-> +	if (result->residue)
-> +		dev_dbg(gi2c->se.dev, "DMA xfer has pending: %d\n", result->residue);
+> +       if (result->residue)
+> +               dev_dbg(gi2c->se.dev, "DMA xfer has pending: %d\n", result->residue);
 > +
-> +	complete(&gi2c->done);
+> +       complete(&gi2c->done);
 > +}
 > +
-[..]
+> +static void geni_i2c_gpi_unmap(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+> +                              void *tx_buf, dma_addr_t tx_addr,
+> +                              void *rx_buf, dma_addr_t rx_addr)
+> +{
+> +       if (tx_buf) {
+> +               dma_unmap_single(gi2c->se.dev->parent, tx_addr, msg->len, DMA_TO_DEVICE);
+> +               i2c_put_dma_safe_msg_buf(tx_buf, msg, false);
+> +       }
+> +
+> +       if (rx_buf) {
+> +               dma_unmap_single(gi2c->se.dev->parent, rx_addr, msg->len, DMA_FROM_DEVICE);
+> +               i2c_put_dma_safe_msg_buf(rx_buf, msg, false);
+> +       }
+> +}
+> +
+> +static int geni_i2c_gpi(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+> +                          struct dma_slave_config *config, dma_addr_t *dma_addr_p,
+> +                          void **buf, unsigned int op, struct dma_chan *dma_chan)
+> +{
+> +       struct gpi_i2c_config *peripheral;
+> +       unsigned int flags;
+> +       void *dma_buf;
+> +       dma_addr_t addr;
+> +       enum dma_data_direction map_dirn;
+> +       enum dma_transfer_direction dma_dirn;
+> +       struct dma_async_tx_descriptor *desc;
+> +       int ret;
+> +
+> +       peripheral = config->peripheral_config;
+> +
+> +       dma_buf = i2c_get_dma_safe_msg_buf(msg, 1);
+> +       if (!dma_buf)
+> +               return -ENOMEM;
+> +
+> +       if (op == I2C_WRITE)
+> +               map_dirn = DMA_TO_DEVICE;
+> +       else
+> +               map_dirn = DMA_FROM_DEVICE;
+> +
+> +       addr = dma_map_single(gi2c->se.dev->parent, dma_buf, msg->len, map_dirn);
+> +       if (dma_mapping_error(gi2c->se.dev->parent, addr)) {
+> +               i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
+> +               return -ENOMEM;
+> +       }
+> +
+> +       /* set the length as message for rx txn */
+> +       peripheral->rx_len = msg->len;
+> +       peripheral->op = op;
+> +
+> +       ret = dmaengine_slave_config(dma_chan, config);
+> +       if (ret) {
+> +               dev_err(gi2c->se.dev, "dma config error: %d for op:%d\n", ret, op);
+> +               goto err_config;
+> +       }
+> +
+> +       peripheral->set_config = 0;
+> +       peripheral->multi_msg = true;
+> +       flags = DMA_PREP_INTERRUPT | DMA_CTRL_ACK;
+> +
+> +       if (op == I2C_WRITE)
+> +               dma_dirn = DMA_MEM_TO_DEV;
+> +       else
+> +               dma_dirn = DMA_DEV_TO_MEM;
+> +
+> +       desc = dmaengine_prep_slave_single(dma_chan, addr, msg->len, dma_dirn, flags);
+> +       if (!desc) {
+> +               dev_err(gi2c->se.dev, "prep_slave_sg failed\n");
+> +               ret = -EIO;
+> +               goto err_config;
+> +       }
+> +
+> +       desc->callback_result = i2c_gpi_cb_result;
+> +       desc->callback_param = gi2c;
+> +
+> +       dmaengine_submit(desc);
+> +       *dma_addr_p = addr;
+> +
+> +       return 0;
+> +
+> +err_config:
+> +       dma_unmap_single(gi2c->se.dev->parent, addr, msg->len, map_dirn);
+> +       i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
+> +       return ret;
+> +}
 > +
 > +static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], int num)
 > +{
-> +	struct dma_slave_config config = {};
-> +	struct gpi_i2c_config peripheral = {};
-> +	int i, ret = 0, timeout;
-> +	dma_addr_t tx_addr, rx_addr;
-> +	void *tx_buf = NULL, *rx_buf = NULL;
-> +	const struct geni_i2c_clk_fld *itr = gi2c->clk_fld;
+> +       struct dma_slave_config config = {};
+> +       struct gpi_i2c_config peripheral = {};
+> +       int i, ret = 0, timeout;
+> +       dma_addr_t tx_addr, rx_addr;
+> +       void *tx_buf = NULL, *rx_buf = NULL;
+> +       const struct geni_i2c_clk_fld *itr = gi2c->clk_fld;
 > +
-> +	config.peripheral_config = &peripheral;
-> +	config.peripheral_size = sizeof(peripheral);
+> +       config.peripheral_config = &peripheral;
+> +       config.peripheral_size = sizeof(peripheral);
 > +
-> +	peripheral.pack_enable = I2C_PACK_TX | I2C_PACK_RX;
-> +	peripheral.cycle_count = itr->t_cycle_cnt;
-> +	peripheral.high_count = itr->t_high_cnt;
-> +	peripheral.low_count = itr->t_low_cnt;
-> +	peripheral.clk_div = itr->clk_div;
-> +	peripheral.set_config = 1;
-> +	peripheral.multi_msg = false;
+> +       peripheral.pack_enable = I2C_PACK_TX | I2C_PACK_RX;
+> +       peripheral.cycle_count = itr->t_cycle_cnt;
+> +       peripheral.high_count = itr->t_high_cnt;
+> +       peripheral.low_count = itr->t_low_cnt;
+> +       peripheral.clk_div = itr->clk_div;
+> +       peripheral.set_config = 1;
+> +       peripheral.multi_msg = false;
 > +
-> +	for (i = 0; i < num; i++) {
-> +		gi2c->cur = &msgs[i];
-> +		dev_dbg(gi2c->se.dev, "msg[%d].len:%d\n", i, gi2c->cur->len);
+> +       for (i = 0; i < num; i++) {
+> +               gi2c->cur = &msgs[i];
+> +               dev_dbg(gi2c->se.dev, "msg[%d].len:%d\n", i, gi2c->cur->len);
 > +
-> +		peripheral.stretch = 0;
-> +		if (i < num - 1)
-> +			peripheral.stretch = 1;
+> +               peripheral.stretch = 0;
+> +               if (i < num - 1)
+> +                       peripheral.stretch = 1;
 > +
-> +		peripheral.addr = msgs[i].addr;
+> +               peripheral.addr = msgs[i].addr;
 > +
-> +		if (msgs[i].flags & I2C_M_RD) {
-> +			ret =  geni_i2c_gpi(gi2c, &msgs[i], &config, &rx_addr, &rx_buf, I2C_READ, gi2c->rx_c);
-> +			if (ret)
-> +				goto err;
-> +		}
+> +               if (msgs[i].flags & I2C_M_RD) {
+> +                       ret =  geni_i2c_gpi(gi2c, &msgs[i], &config, &rx_addr, &rx_buf, I2C_READ, gi2c->rx_c);
+> +                       if (ret)
+> +                               goto err;
+> +               }
 > +
-> +		ret =  geni_i2c_gpi(gi2c, &msgs[i], &config, &tx_addr, &tx_buf, I2C_WRITE, gi2c->tx_c);
-> +		if (ret)
-> +			goto err;
+> +               ret =  geni_i2c_gpi(gi2c, &msgs[i], &config, &tx_addr, &tx_buf, I2C_WRITE, gi2c->tx_c);
+> +               if (ret)
+> +                       goto err;
 > +
-> +		if (msgs[i].flags & I2C_M_RD)
-> +			dma_async_issue_pending(gi2c->rx_c);
-> +		dma_async_issue_pending(gi2c->tx_c);
+> +               if (msgs[i].flags & I2C_M_RD)
+> +                       dma_async_issue_pending(gi2c->rx_c);
+> +               dma_async_issue_pending(gi2c->tx_c);
 > +
-> +		timeout = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
-> +		if (!timeout) {
-> +			dev_err(gi2c->se.dev, "I2C timeout gpi flags:%d addr:0x%x\n",
-> +				gi2c->cur->flags, gi2c->cur->addr);
-> +			ret = gi2c->err = -ETIMEDOUT;
-> +			goto err;
-> +		}
+> +               timeout = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
+> +               if (!timeout) {
+> +                       dev_err(gi2c->se.dev, "I2C timeout gpi flags:%d addr:0x%x\n",
+> +                               gi2c->cur->flags, gi2c->cur->addr);
+> +                       ret = gi2c->err = -ETIMEDOUT;
+> +                       goto err;
+> +               }
 > +
-> +		geni_i2c_gpi_unmap(gi2c, &msgs[i], tx_buf, tx_addr, rx_buf, rx_addr);
-> +	}
+> +               geni_i2c_gpi_unmap(gi2c, &msgs[i], tx_buf, tx_addr, rx_buf, rx_addr);
+> +       }
 > +
-> +	return 0;
+> +       return 0;
 > +
 > +err:
-> +	dmaengine_terminate_sync(gi2c->rx_c);
-> +	dmaengine_terminate_sync(gi2c->tx_c);
-> +	geni_i2c_gpi_unmap(gi2c, &msgs[i], tx_buf, tx_addr, rx_buf, rx_addr);
-> +	return ret;
+> +       dmaengine_terminate_sync(gi2c->rx_c);
+> +       dmaengine_terminate_sync(gi2c->tx_c);
+> +       geni_i2c_gpi_unmap(gi2c, &msgs[i], tx_buf, tx_addr, rx_buf, rx_addr);
+> +       return ret;
 > +}
-[..]
+> +
+> +static int geni_i2c_fifo_xfer(struct geni_i2c_dev *gi2c,
+> +                             struct i2c_msg msgs[], int num)
+> +{
+> +       int i, ret = 0;
+> +
+> +       for (i = 0; i < num; i++) {
+> +               u32 m_param = i < (num - 1) ? STOP_STRETCH : 0;
+> +
+> +               m_param |= ((msgs[i].addr << SLV_ADDR_SHFT) & SLV_ADDR_MSK);
+> +
+> +               gi2c->cur = &msgs[i];
+> +               if (msgs[i].flags & I2C_M_RD)
+> +                       ret = geni_i2c_rx_one_msg(gi2c, &msgs[i], m_param);
+> +               else
+> +                       ret = geni_i2c_tx_one_msg(gi2c, &msgs[i], m_param);
+> +
+> +               if (ret)
+> +                       break;
+
+I'd suggest to 'return ret' here and change the return line to 'return num'.
+
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+>  static int geni_i2c_xfer(struct i2c_adapter *adap,
+>                          struct i2c_msg msgs[],
+>                          int num)
+>  {
+>         struct geni_i2c_dev *gi2c = i2c_get_adapdata(adap);
+> -       int i, ret;
+> +       int ret;
+>
+>         gi2c->err = 0;
+>         reinit_completion(&gi2c->done);
+> @@ -475,22 +670,11 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
+>         }
+>
+>         qcom_geni_i2c_conf(gi2c);
+> -       for (i = 0; i < num; i++) {
+> -               u32 m_param = i < (num - 1) ? STOP_STRETCH : 0;
+> -
+> -               m_param |= ((msgs[i].addr << SLV_ADDR_SHFT) & SLV_ADDR_MSK);
+> -
+> -               gi2c->cur = &msgs[i];
+> -               if (msgs[i].flags & I2C_M_RD)
+> -                       ret = geni_i2c_rx_one_msg(gi2c, &msgs[i], m_param);
+> -               else
+> -                       ret = geni_i2c_tx_one_msg(gi2c, &msgs[i], m_param);
+>
+> -               if (ret)
+> -                       break;
+> -       }
+> -       if (ret == 0)
+> -               ret = num;
+> +       if (gi2c->gpi_mode)
+> +               ret = geni_i2c_gpi_xfer(gi2c, msgs, num);
+> +       else
+> +               ret = geni_i2c_fifo_xfer(gi2c, msgs, num);
+
+We should return num if ret is 0 here (or in
+geni_i2c_fifo_xfer()/geni_i2c_gpi_xfer()).
+
+>
+>         pm_runtime_mark_last_busy(gi2c->se.dev);
+>         pm_runtime_put_autosuspend(gi2c->se.dev);
+> @@ -517,11 +701,52 @@ static const struct acpi_device_id geni_i2c_acpi_match[] = {
+>  MODULE_DEVICE_TABLE(acpi, geni_i2c_acpi_match);
+>  #endif
+>
+> +static void release_gpi_dma(struct geni_i2c_dev *gi2c)
+> +{
+> +       if (gi2c->rx_c)
+> +               dma_release_channel(gi2c->rx_c);
+> +
+> +       if (gi2c->tx_c)
+> +               dma_release_channel(gi2c->tx_c);
+> +}
+> +
 > +static int setup_gpi_dma(struct geni_i2c_dev *gi2c)
 > +{
-> +	int ret;
+> +       int ret;
 > +
-> +	geni_se_select_mode(&gi2c->se, GENI_GPI_DMA);
-> +	gi2c->tx_c = dma_request_chan(gi2c->se.dev, "tx");
-> +	if (IS_ERR(gi2c->tx_c)) {
-> +		ret = dev_err_probe(gi2c->se.dev, PTR_ERR(gi2c->tx_c),
-> +				    "Failed to get tx DMA ch\n");
-> +		if (ret < 0)
-> +			goto err_tx;
-> +	}
+> +       geni_se_select_mode(&gi2c->se, GENI_GPI_DMA);
+> +       gi2c->tx_c = dma_request_chan(gi2c->se.dev, "tx");
+> +       if (IS_ERR(gi2c->tx_c)) {
+> +               ret = dev_err_probe(gi2c->se.dev, PTR_ERR(gi2c->tx_c),
+> +                                   "Failed to get tx DMA ch\n");
+> +               if (ret < 0)
+> +                       goto err_tx;
+> +       }
 > +
-> +	gi2c->rx_c = dma_request_chan(gi2c->se.dev, "rx");
-> +	if (IS_ERR(gi2c->rx_c)) {
-> +		ret = dev_err_probe(gi2c->se.dev, PTR_ERR(gi2c->rx_c),
-> +				    "Failed to get rx DMA ch\n");
-> +		if (ret < 0)
-> +			goto err_rx;
-> +	}
+> +       gi2c->rx_c = dma_request_chan(gi2c->se.dev, "rx");
+> +       if (IS_ERR(gi2c->rx_c)) {
+> +               ret = dev_err_probe(gi2c->se.dev, PTR_ERR(gi2c->rx_c),
+> +                                   "Failed to get rx DMA ch\n");
+> +               if (ret < 0)
+> +                       goto err_rx;
+> +       }
 > +
-> +	dev_dbg(gi2c->se.dev, "Grabbed GPI dma channels\n");
-> +	return 0;
+> +       dev_dbg(gi2c->se.dev, "Grabbed GPI dma channels\n");
+> +       return 0;
 > +
 > +err_rx:
-> +	dma_release_channel(gi2c->tx_c);
-> +	gi2c->tx_c = NULL;
-
-You're not accessing tx_c or rx_c again when returning an error here. So
-I don't think there's a reason to clear them.
-
+> +       dma_release_channel(gi2c->tx_c);
+> +       gi2c->tx_c = NULL;
 > +err_tx:
-> +	gi2c->rx_c = NULL;
-> +	return ret;
+> +       gi2c->rx_c = NULL;
+> +       return ret;
 > +}
 > +
-[..]
+>  static int geni_i2c_probe(struct platform_device *pdev)
+>  {
+>         struct geni_i2c_dev *gi2c;
+>         struct resource *res;
+> -       u32 proto, tx_depth;
+> +       u32 proto, tx_depth, fifo_disable;
+>         int ret;
+>         struct device *dev = &pdev->dev;
+>
+> @@ -601,27 +826,43 @@ static int geni_i2c_probe(struct platform_device *pdev)
+>                 return ret;
+>         }
+>         proto = geni_se_read_proto(&gi2c->se);
+> -       tx_depth = geni_se_get_tx_fifo_depth(&gi2c->se);
+>         if (proto != GENI_SE_I2C) {
+>                 dev_err(dev, "Invalid proto %d\n", proto);
+>                 geni_se_resources_off(&gi2c->se);
+>                 return -ENXIO;
+>         }
+> -       gi2c->tx_wm = tx_depth - 1;
+> -       geni_se_init(&gi2c->se, gi2c->tx_wm, tx_depth);
+> -       geni_se_config_packing(&gi2c->se, BITS_PER_BYTE, PACKING_BYTES_PW,
+> -                                                       true, true, true);
+> +
+> +       fifo_disable = readl_relaxed(gi2c->se.base + GENI_IF_DISABLE_RO) & FIFO_IF_DISABLE;
+> +       if (fifo_disable) {
+> +               /* FIFO is disabled, so we can only use GPI DMA */
+> +               gi2c->gpi_mode = true;
+> +               ret = setup_gpi_dma(gi2c);
+> +               if (ret) {
+> +                       dev_err(dev, "Failed to setup GPI DMA mode:%d ret\n", ret);
+> +                       return ret;
+> +               }
+> +
+> +               dev_dbg(dev, "Using GPI DMA mode for I2C\n");
+> +       } else {
+> +               gi2c->gpi_mode = false;
+> +               tx_depth = geni_se_get_tx_fifo_depth(&gi2c->se);
+> +               gi2c->tx_wm = tx_depth - 1;
+> +               geni_se_init(&gi2c->se, gi2c->tx_wm, tx_depth);
+> +               geni_se_config_packing(&gi2c->se, BITS_PER_BYTE,
+> +                                      PACKING_BYTES_PW, true, true, true);
+> +
+> +               dev_dbg(dev, "i2c fifo/se-dma mode. fifo depth:%d\n", tx_depth);
+> +       }
+> +
+>         ret = geni_se_resources_off(&gi2c->se);
+>         if (ret) {
+>                 dev_err(dev, "Error turning off resources %d\n", ret);
+> -               return ret;
+> +               goto err_dma;
+>         }
+>
+>         ret = geni_icc_disable(&gi2c->se);
+>         if (ret)
+> -               return ret;
+> -
+> -       dev_dbg(dev, "i2c fifo/se-dma mode. fifo depth:%d\n", tx_depth);
+> +               goto err_dma;
+>
+>         gi2c->suspended = 1;
+>         pm_runtime_set_suspended(gi2c->se.dev);
+> @@ -633,18 +874,23 @@ static int geni_i2c_probe(struct platform_device *pdev)
+>         if (ret) {
+>                 dev_err(dev, "Error adding i2c adapter %d\n", ret);
+>                 pm_runtime_disable(gi2c->se.dev);
+> -               return ret;
+> +               goto err_dma;
+>         }
+>
+>         dev_dbg(dev, "Geni-I2C adaptor successfully added\n");
+>
+>         return 0;
+> +
+> +err_dma:
+> +       release_gpi_dma(gi2c);
+> +       return ret;
+>  }
+>
 >  static int geni_i2c_remove(struct platform_device *pdev)
 >  {
->  	struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
->  
-> +	release_gpi_dma(gi2c);
+>         struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
+>
+> +       release_gpi_dma(gi2c);
+>         i2c_del_adapter(&gi2c->adap);
+>         pm_runtime_disable(gi2c->se.dev);
+>         return 0;
+> --
+> 2.31.1
+>
 
-Your i2c devices aren't torn down until i2c_del_adapter(), so you might
-still end up trying to use the two channels here, after releasing them.
 
-In other words, I think you should reorder these.
-
-Regards,
-Bjorn
+-- 
+With best wishes
+Dmitry
