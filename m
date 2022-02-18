@@ -2,58 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2D44BBA8C
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Feb 2022 15:22:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5412D4BBEBB
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Feb 2022 18:51:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233216AbiBROWl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Feb 2022 09:22:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42536 "EHLO
+        id S238861AbiBRRvY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Feb 2022 12:51:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232114AbiBROWk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Feb 2022 09:22:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A2A1FA7B;
-        Fri, 18 Feb 2022 06:22:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 593F461AA5;
-        Fri, 18 Feb 2022 14:22:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 016B8C340E9;
-        Fri, 18 Feb 2022 14:22:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645194142;
-        bh=w0WZYwLOiEuJNU7GAvFxF6BbgZOag6a6efQqp0DgTlE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JUfbr9jy9h7nHY7610UTWAaGIpXgbMGAXExtIo53fxN8B/HR8dQ3wYdOL+GNClRq9
-         vHkZYv8FJdelua1OJ/3svZWzofM9Zoy5ktocNRKN/IMa4+EWAsbqlk7Rj893psb888
-         dacEhbQePKjEhLDNguu59LIVmaopLewGwLfBQRXOeaxigJVjQtPEYA6jyX/0MEkN84
-         dYelpXzZZCT2BSr1+P1wBSOOSamAICZ2E8HO44qV80Okfy4pUESJJVViPxMXGesV1s
-         zroOzi7UhZPAy87iXkcdQnDknvFn5soanLFE1rlnCEU4D2NTmMb6wL0LT4Fo0zgDLB
-         I8Nx4xjS/y4Rg==
-Date:   Fri, 18 Feb 2022 15:22:19 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Johan Hovold <johan@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+0591ccf54ee05344e4eb@syzkaller.appspotmail.com
-Subject: Re: [PATCH v1 1/1] i2c: robotfuzz-osif: Propagate parent device to
- I2C core
-Message-ID: <Yg+rm+ZjuhT4zPWB@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+0591ccf54ee05344e4eb@syzkaller.appspotmail.com
-References: <20220204151726.8924-1-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S238447AbiBRRvL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Feb 2022 12:51:11 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4142673FB
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Feb 2022 09:50:54 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id r15-20020a4ae5cf000000b002edba1d3349so4371131oov.3
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Feb 2022 09:50:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=i6PdaTZaoqrR3pWnqrcADN2t1Wh6WW3RvOic4loCQ2g=;
+        b=mXgCS7/y0gs6Lf1lr7O/RG+nXEWcseUmfzR3/nAl+1Pb1Qs2+zyz5rgRUTqH3Ne/V1
+         K/hT1kYcuCq7WbHpIgjK9HxuM7i1UDsV+5ZuOnSUHccmkcWg59O4KA/DmatwPyvv2avC
+         5Gmcas/lcHb9ycO847tUmhK3HUOjO7l6m8K0bC1jjHwubpQm0HB8/u866HemwCQoElwc
+         +zFDBVTF8HZJL1Rxq1XP2GDELr3d/zw/dCYmi7YigYKy534vB0oShlOdQ9EEvXsGhDV4
+         CFwS3Q+zBzdGjWi4jDosguzFMrcpCODNmO4M6zZhZp9xICL4p9MAaYbhEhFeMnYjzfs0
+         aImg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i6PdaTZaoqrR3pWnqrcADN2t1Wh6WW3RvOic4loCQ2g=;
+        b=6Xo5IuhnrpTOvG4pTzgQJichi8HLpC/QrhxjEV1zuf/7kiW4i7dnIz6Hyz0XnKBUD/
+         PhcIMr1Sg+SW0RDo5PoE18WzzgBAtndMrrVOOuRzYEahsu9RIP0TJt4UTsnkBkF1ZPYM
+         fRcDGD3vNGFBnPfT5mQ+42er6gfoeXxQbIkp/BR77AtJ/YwzObncFxIleUNrmdMWsgpn
+         JptVvVXSTe0SLYvzOjylKRWy4LbRE917N5WHIz7HC6nwiueXwj/4za8HCW98M6URoO1z
+         HhEEzRAnNQoMBwGwV2bbXJfdYSDMxrTeKS74EUeeN8r6wSNTb0nhVrVBxLfkIycNNgFs
+         hEcg==
+X-Gm-Message-State: AOAM531F0/vOpEz+oColoAWYwWES5w5PXARkPnrZDPIu4TlsvQaK+JKe
+        UvzT4hPNP53BeZQyxXuuMwByRg==
+X-Google-Smtp-Source: ABdhPJwGiKIuSKLq2Srt/umgk9hiZl0LZ27JYC0IPjV3D+pJl3Dpcskij6xMdpTTIeUvmcxqQpj8Qg==
+X-Received: by 2002:a05:6870:8305:b0:d2:793b:1eaa with SMTP id p5-20020a056870830500b000d2793b1eaamr3325187oae.332.1645206654072;
+        Fri, 18 Feb 2022 09:50:54 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id i18sm60354oof.29.2022.02.18.09.50.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 09:50:53 -0800 (PST)
+Date:   Fri, 18 Feb 2022 09:52:59 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: remove duplicate entry for i2c-qcom-geni
+Message-ID: <Yg/c+27yR1P0b+eL@ripper>
+References: <20220218104904.14405-1-wsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="recV/eJlF8BO4qDi"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220204151726.8924-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220218104904.14405-1-wsa@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,40 +69,45 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri 18 Feb 02:49 PST 2022, Wolfram Sang wrote:
 
---recV/eJlF8BO4qDi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> The driver is already covered in the ARM/QUALCOMM section. Also, Akash
+> Asthana's email bounces meanwhile and Mukesh Savaliya has never
+> responded to mails regarding this driver.
+> 
+> Signed-off-by: Wolfram Sang <wsa@kernel.org>
 
+It would have been nice to go the other direction (reducing
+ARM/QUALCOMM), but your assessment looks accurate, so:
 
-> +	struct device *dev = &interface->dev;
+Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-This now creates a mixture of 'dev' and '&interface->dev'...
+Regards,
+Bjorn
 
-> +	priv->adapter.dev.parent = dev;
-
-I propose to use &interface->dev here in this patch and convert to dev
-in a later patch?
-
-
---recV/eJlF8BO4qDi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIPq5cACgkQFA3kzBSg
-KbZc8hAAtJdAX75gOJ5ybcR/7FyoCoFu9eZvH1B4TwUazSnn8Dm5JRHeChb4jaad
-xOQ1kC1hArvPzv1KY6B5kz1TTeZHREofwtqsTlpWjWUvFHo+/NR38+8ocSX/J5v1
-9E19jsAR6b+hdxQydxcr9iASIS1//RKnPvbVcnpfrZFBM52o5CGy+T+MLcrQRCbm
-f84knkQRD1DtsQajbj+RTLfd887eKx2N8aNqsV/JnqprDN6jsYXfcTbWvsvrLRGr
-c9G1IqlT85VNeEm418TxWe6p1cdFyCNpohzru90yM8Qipz3tqnD/V2eYy7tDveL9
-LKusa3AGch1NOJ7ol0Pn7LuKkt0MHiJoCJeHAMXi6RBTgbstL8fBtsM0O8IIcPIQ
-qOEqCG29H1WDrm8caLhoWdo+bjHE3Bfx/DDtXiarbBQzD7GXTBWOYUaMKgS9Kyuv
-GSpN+BZVupUzXHCopoagH7NM/eCHfYrLFC5qcUxZqxPV9jAI4RYNzkOfyrLPKIq4
-o+A9y+i12auEDzhK5DbgEz4eMeImdtLO1/zX/4mLp/5DkzIhxNhI3J9lEZn0w4iR
-PQJodOvyJSp3EA9TW8xGdJrSdxZfx6Tfbiu8BfoBsPe6GtAUbk2ZvxiagqdrpO0c
-KurHyAXpiWI8HPCAfXyD0BJOEvflXK+yRxUTUXlsd/omqs6pAZo=
-=3kUI
------END PGP SIGNATURE-----
-
---recV/eJlF8BO4qDi--
+> ---
+>  MAINTAINERS | 8 --------
+>  1 file changed, 8 deletions(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ea3e6c914384..f0485f61295d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -15972,14 +15972,6 @@ F:	Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
+>  F:	drivers/misc/fastrpc.c
+>  F:	include/uapi/misc/fastrpc.h
+>  
+> -QUALCOMM GENERIC INTERFACE I2C DRIVER
+> -M:	Akash Asthana <akashast@codeaurora.org>
+> -M:	Mukesh Savaliya <msavaliy@codeaurora.org>
+> -L:	linux-i2c@vger.kernel.org
+> -L:	linux-arm-msm@vger.kernel.org
+> -S:	Supported
+> -F:	drivers/i2c/busses/i2c-qcom-geni.c
+> -
+>  QUALCOMM HEXAGON ARCHITECTURE
+>  M:	Brian Cain <bcain@codeaurora.org>
+>  L:	linux-hexagon@vger.kernel.org
+> -- 
+> 2.30.2
+> 
