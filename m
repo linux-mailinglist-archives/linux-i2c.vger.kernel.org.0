@@ -2,52 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57EA54BB25F
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Feb 2022 07:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C04F4BB2DA
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Feb 2022 08:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbiBRGeN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Feb 2022 01:34:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51104 "EHLO
+        id S231314AbiBRHGt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Feb 2022 02:06:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiBRGeA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Feb 2022 01:34:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D360A369D7;
-        Thu, 17 Feb 2022 22:33:43 -0800 (PST)
+        with ESMTP id S230436AbiBRHGr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Feb 2022 02:06:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9853C9024B;
+        Thu, 17 Feb 2022 23:06:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 020EAB82537;
-        Fri, 18 Feb 2022 06:33:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF86AC340EC;
-        Fri, 18 Feb 2022 06:33:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B932B82486;
+        Fri, 18 Feb 2022 07:06:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22A1CC340E9;
+        Fri, 18 Feb 2022 07:06:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645166020;
-        bh=oQK3hn8aIgAl4tYz+ZxnTVfrY4IVhUqyJJf7MAjs6rg=;
+        s=k20201202; t=1645167986;
+        bh=QJPbN3zuIFj6R/D7I1HLXCBbU2fB00n1t4O0aal5Tc0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WrLbA6+NkvFz3cXjrHpU9UPR+Oqb0OvTNd5Wip3xvgwDS4CsMCWIQJPM5xX/BYwtn
-         WA/Bquj+XlOa96Rd6lDPFE2GFs35/Tza5wNk48smSNr4I+xPlB7vCKxsvm4XO8L794
-         GF+q0yfoSq9cueq4RZlrTbk3G8moWVqW4bI8Y+0aQbTT0WSjoyWaQMLgXa8l5WCLTx
-         YpN+iaVMsF5eBIqNHvEe9c9Got1aA3YvrXCKFlRbBw32bdWOuuZEpwlp733OALEA3X
-         WrEVX2/jdtDTpacFun+dD9Vxw6eLHRqQEYd6o/gpu/aeXqbIah3LkzIZHGcRqo0wKM
-         nmOhsEnkrgEkA==
-Date:   Fri, 18 Feb 2022 12:03:36 +0530
+        b=cgrIS+wndLdGLfD5FJUJai7yFBfhaBwN+0AEv07k2WFCbvJ6IeU8OytKUMI3CLV6A
+         EvmQG6RIat5X0C6GoXlqLy6zOLnfztj/dYTQQPPNPpUyawE8pK568arYvU6kS62xLk
+         svcpJoqDxDQGkfxeSdUKZ/U2ZBCm1aTxIaN0ZcjY8m/dc/hekCgtz2YDiLtH42gdYG
+         J+F2GuqmNr09DQ5h7glj/TUxqMuvUkoBWZyxYnnXMMxoJTj/OTE5g+0m+mSuX+sS9h
+         yZqQSWr8CG83DXDv3bQ4MXyzILyupI9KB+R/nvlNvXyYdJj8HQmxAoqmqJZZGkGTSL
+         sSfd6gTQO9qIg==
+Date:   Fri, 18 Feb 2022 12:36:22 +0530
 From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-arm-msm@vger.kernel.org,
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-arm-msm@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
         Douglas Anderson <dianders@chromium.org>,
         Matthias Kaehlcke <mka@chromium.org>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Alexey Minnekhanov <alexeymin@postmarketos.org>
 Subject: Re: [PATCH v5] i2c: qcom-geni: Add support for GPI DMA
-Message-ID: <Yg89wEi9I4LpcPus@matsya>
+Message-ID: <Yg9Fbh//iSe+VAiT@matsya>
 References: <20220131120403.2481995-1-vkoul@kernel.org>
- <Yg6Hc2pT8DFKS2dT@ripper>
+ <CAA8EJpoqCJbYgOUpEhcoae3=Mivp8c7PZU8XO78EMZMR+NQQKw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yg6Hc2pT8DFKS2dT@ripper>
+In-Reply-To: <CAA8EJpoqCJbYgOUpEhcoae3=Mivp8c7PZU8XO78EMZMR+NQQKw@mail.gmail.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,71 +59,70 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 17-02-22, 09:35, Bjorn Andersson wrote:
+On 17-02-22, 20:51, Dmitry Baryshkov wrote:
+> On Mon, 31 Jan 2022 at 15:04, Vinod Koul <vkoul@kernel.org> wrote:
 
-> > +static void i2c_gpi_cb_result(void *cb, const struct dmaengine_result *result)
+> > +static int geni_i2c_fifo_xfer(struct geni_i2c_dev *gi2c,
+> > +                             struct i2c_msg msgs[], int num)
 > > +{
-> > +	struct geni_i2c_dev *gi2c = cb;
+> > +       int i, ret = 0;
 > > +
-> > +	if (result->result != DMA_TRANS_NOERROR) {
-> > +		dev_err(gi2c->se.dev, "DMA txn failed:%d\n", result->result);
+> > +       for (i = 0; i < num; i++) {
+> > +               u32 m_param = i < (num - 1) ? STOP_STRETCH : 0;
+> > +
+> > +               m_param |= ((msgs[i].addr << SLV_ADDR_SHFT) & SLV_ADDR_MSK);
+> > +
+> > +               gi2c->cur = &msgs[i];
+> > +               if (msgs[i].flags & I2C_M_RD)
+> > +                       ret = geni_i2c_rx_one_msg(gi2c, &msgs[i], m_param);
+> > +               else
+> > +                       ret = geni_i2c_tx_one_msg(gi2c, &msgs[i], m_param);
+> > +
+> > +               if (ret)
+> > +                       break;
 > 
-> Iiuc the API the expectation is that if we get !NOERROR we shouldn't
-> expect to get NOERROR after that.
->
-> If so we're just returning here and leaving geni_i2c_gpi_xfer() to just
-> timeout in a HZ or so. Given that xfer happens under the adaptor lock,
-> how about carrying an error in geni_i2c_dev and complete(&done) here as
-> well?
+> I'd suggest to 'return ret' here and change the return line to 'return num'.
 
-Yes we should call complete for errors too, will add that
+Done
 
-> > +static int setup_gpi_dma(struct geni_i2c_dev *gi2c)
-> > +{
-> > +	int ret;
-> > +
-> > +	geni_se_select_mode(&gi2c->se, GENI_GPI_DMA);
-> > +	gi2c->tx_c = dma_request_chan(gi2c->se.dev, "tx");
-> > +	if (IS_ERR(gi2c->tx_c)) {
-> > +		ret = dev_err_probe(gi2c->se.dev, PTR_ERR(gi2c->tx_c),
-> > +				    "Failed to get tx DMA ch\n");
-> > +		if (ret < 0)
-> > +			goto err_tx;
-> > +	}
-> > +
-> > +	gi2c->rx_c = dma_request_chan(gi2c->se.dev, "rx");
-> > +	if (IS_ERR(gi2c->rx_c)) {
-> > +		ret = dev_err_probe(gi2c->se.dev, PTR_ERR(gi2c->rx_c),
-> > +				    "Failed to get rx DMA ch\n");
-> > +		if (ret < 0)
-> > +			goto err_rx;
-> > +	}
-> > +
-> > +	dev_dbg(gi2c->se.dev, "Grabbed GPI dma channels\n");
-> > +	return 0;
-> > +
-> > +err_rx:
-> > +	dma_release_channel(gi2c->tx_c);
-> > +	gi2c->tx_c = NULL;
-> 
-> You're not accessing tx_c or rx_c again when returning an error here. So
-> I don't think there's a reason to clear them.
-
-Will drop that
-
-> >  static int geni_i2c_remove(struct platform_device *pdev)
+> >  static int geni_i2c_xfer(struct i2c_adapter *adap,
+> >                          struct i2c_msg msgs[],
+> >                          int num)
 > >  {
-> >  	struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
-> >  
-> > +	release_gpi_dma(gi2c);
+> >         struct geni_i2c_dev *gi2c = i2c_get_adapdata(adap);
+> > -       int i, ret;
+> > +       int ret;
+> >
+> >         gi2c->err = 0;
+> >         reinit_completion(&gi2c->done);
+> > @@ -475,22 +670,11 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
+> >         }
+> >
+> >         qcom_geni_i2c_conf(gi2c);
+> > -       for (i = 0; i < num; i++) {
+> > -               u32 m_param = i < (num - 1) ? STOP_STRETCH : 0;
+> > -
+> > -               m_param |= ((msgs[i].addr << SLV_ADDR_SHFT) & SLV_ADDR_MSK);
+> > -
+> > -               gi2c->cur = &msgs[i];
+> > -               if (msgs[i].flags & I2C_M_RD)
+> > -                       ret = geni_i2c_rx_one_msg(gi2c, &msgs[i], m_param);
+> > -               else
+> > -                       ret = geni_i2c_tx_one_msg(gi2c, &msgs[i], m_param);
+> >
+> > -               if (ret)
+> > -                       break;
+> > -       }
+> > -       if (ret == 0)
+> > -               ret = num;
+> > +       if (gi2c->gpi_mode)
+> > +               ret = geni_i2c_gpi_xfer(gi2c, msgs, num);
+> > +       else
+> > +               ret = geni_i2c_fifo_xfer(gi2c, msgs, num);
 > 
-> Your i2c devices aren't torn down until i2c_del_adapter(), so you might
-> still end up trying to use the two channels here, after releasing them.
-> 
-> In other words, I think you should reorder these.
+> We should return num if ret is 0 here (or in
+> geni_i2c_fifo_xfer()/geni_i2c_gpi_xfer()).
 
-Agreed it should be other way round!
-
-Thanks
+I have picked your fix for that!
 -- 
 ~Vinod
