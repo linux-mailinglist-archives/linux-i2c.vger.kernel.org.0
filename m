@@ -2,39 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 514A44BC42E
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Feb 2022 02:10:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8FD4BC463
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Feb 2022 02:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240730AbiBSAzo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Feb 2022 19:55:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40032 "EHLO
+        id S237307AbiBSA4O (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Feb 2022 19:56:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240786AbiBSAzl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Feb 2022 19:55:41 -0500
+        with ESMTP id S240816AbiBSAzx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Feb 2022 19:55:53 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3336C27B988
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Feb 2022 16:55:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68F152782AC
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Feb 2022 16:55:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645232117;
+        s=mimecast20190719; t=1645232126;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=ClO/R9JRyaaM8bjM+2BOla/lLPUNMsID41a68FPN8DI=;
-        b=bo7VjF24UMdbtxaHprk33A1muHj9fywR2QlB7yzGXmWhC5zbtB3W0JAeoba/AZEqKJcXQ+
-        XJrGg/e2DLr1zaLHGI/kDrIXaZuNAtpGCmhjCrrCjywFvJW378Q4M8CFZJ5eI2wyEq0z5R
-        lvQwOpkiYsGfxMM9clWvUYl+RYyAmew=
+        bh=DZGh4bIHBOmHOiALkgVaQHB6FPGaLxO56EvLhQh60X4=;
+        b=EoKbME37I5Xcn7388CswoYBZY67ceyIW2LarS8PRkk8uzWm42FmDJA82HMNAP7doizVqrL
+        s/YtCVpNLHf4qQoNt8lu6X0pHLe/zOZp8a67if13NrSU7CL/itFYNl01WMjS30R1Fxl4Qw
+        zEkzGoHHtTtgc0lipS+Lzm3Ah1ZSxUs=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-86-a-TIrPYBP8-42XIzhwQwjA-1; Fri, 18 Feb 2022 19:55:12 -0500
-X-MC-Unique: a-TIrPYBP8-42XIzhwQwjA-1
+ us-mta-670-b_nDA3aCMyKcIv_TXZ3MAg-1; Fri, 18 Feb 2022 19:55:21 -0500
+X-MC-Unique: b_nDA3aCMyKcIv_TXZ3MAg-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D73291091DA1;
-        Sat, 19 Feb 2022 00:55:08 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7B4341006AA0;
+        Sat, 19 Feb 2022 00:55:18 +0000 (UTC)
 Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-39.pek2.redhat.com [10.72.12.39])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 190B262D4E;
-        Sat, 19 Feb 2022 00:54:49 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7366162D56;
+        Sat, 19 Feb 2022 00:55:09 +0000 (UTC)
 From:   Baoquan He <bhe@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
@@ -47,9 +47,9 @@ Cc:     linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
         agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
         svens@linux.ibm.com, linux-s390@vger.kernel.org, michael@walle.cc,
         linux-i2c@vger.kernel.org, wsa@kernel.org
-Subject: [PATCH 12/22] staging: emxx_udc: Don't use GFP_DMA when calling dma_alloc_coherent()
-Date:   Sat, 19 Feb 2022 08:52:11 +0800
-Message-Id: <20220219005221.634-13-bhe@redhat.com>
+Subject: [PATCH 13/22] spi: atmel: Don't use GFP_DMA when calling dma_alloc_coherent()
+Date:   Sat, 19 Feb 2022 08:52:12 +0800
+Message-Id: <20220219005221.634-14-bhe@redhat.com>
 In-Reply-To: <20220219005221.634-1-bhe@redhat.com>
 References: <20220219005221.634-1-bhe@redhat.com>
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
@@ -72,22 +72,30 @@ dma_alloc_coherent().
 Signed-off-by: Baoquan He <bhe@redhat.com>
 Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 ---
- drivers/staging/emxx_udc/emxx_udc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-atmel.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/emxx_udc/emxx_udc.c b/drivers/staging/emxx_udc/emxx_udc.c
-index b6abd3770e81..673f8de50213 100644
---- a/drivers/staging/emxx_udc/emxx_udc.c
-+++ b/drivers/staging/emxx_udc/emxx_udc.c
-@@ -2593,7 +2593,7 @@ static int nbu2ss_ep_queue(struct usb_ep *_ep,
- 		if (!ep->virt_buf)
- 			ep->virt_buf = dma_alloc_coherent(udc->dev, PAGE_SIZE,
- 							  &ep->phys_buf,
--							  GFP_ATOMIC | GFP_DMA);
-+							  GFP_ATOMIC);
- 		if (ep->epnum > 0)  {
- 			if (ep->direct == USB_DIR_IN)
- 				memcpy(ep->virt_buf, req->req.buf,
+diff --git a/drivers/spi/spi-atmel.c b/drivers/spi/spi-atmel.c
+index 9e300a932699..271dacf3b7d2 100644
+--- a/drivers/spi/spi-atmel.c
++++ b/drivers/spi/spi-atmel.c
+@@ -1516,14 +1516,14 @@ static int atmel_spi_probe(struct platform_device *pdev)
+ 		as->addr_rx_bbuf = dma_alloc_coherent(&pdev->dev,
+ 						      SPI_MAX_DMA_XFER,
+ 						      &as->dma_addr_rx_bbuf,
+-						      GFP_KERNEL | GFP_DMA);
++						      GFP_KERNEL);
+ 		if (!as->addr_rx_bbuf) {
+ 			as->use_dma = false;
+ 		} else {
+ 			as->addr_tx_bbuf = dma_alloc_coherent(&pdev->dev,
+ 					SPI_MAX_DMA_XFER,
+ 					&as->dma_addr_tx_bbuf,
+-					GFP_KERNEL | GFP_DMA);
++					GFP_KERNEL);
+ 			if (!as->addr_tx_bbuf) {
+ 				as->use_dma = false;
+ 				dma_free_coherent(&pdev->dev, SPI_MAX_DMA_XFER,
 -- 
 2.17.2
 
