@@ -2,39 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0944BC41C
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Feb 2022 02:09:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F59B4BC44E
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Feb 2022 02:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240990AbiBSA5p (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Feb 2022 19:57:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41790 "EHLO
+        id S240768AbiBSA5x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Feb 2022 19:57:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241033AbiBSA51 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Feb 2022 19:57:27 -0500
+        with ESMTP id S240979AbiBSA53 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Feb 2022 19:57:29 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73EC327FBA7
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Feb 2022 16:56:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A44B28883D
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Feb 2022 16:56:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645232196;
+        s=mimecast20190719; t=1645232206;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=FO0qQ5sZB2PmWKfJvF7iXis0tLeqxwcvnj2fdvRQ2t8=;
-        b=LipaSMGvB7mrfDbzbCDTeCsQ8m34XKiREV1puqDCVCCZTZ4DwHC0D3H2Xj2CFaakgdTL2g
-        C8U2uW6rTjHUHBuuvx3y5adHfpG/LFCfY5T4cajwd1HgFej2A1XEjh7T8k2Ujuh7+Qgp62
-        YLntf0u848jHB/Ny3miMyyliosEFM5E=
+        bh=/y0XKs0dIaXiTJCDs4pP0SCRY3JMgE3839iRkTVhm8s=;
+        b=LdaLxuoQbHjPmQjeanJY71VbkQWlOTERyxmCFW/d60z2+Rt0WFvb7QVIEef8cB7eRmd9uk
+        MsL5OdW4sw0h72K7ypfixEUqnJS6r1Maw19/Zpu8+TuTUOPvOt1R5rNoD6JffHwEyyodZd
+        YG1yKYz4llsahmjHnAlNW+dcYyBFhjc=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-583-HEfMI6qUOHavu7krOgDO2w-1; Fri, 18 Feb 2022 19:56:31 -0500
-X-MC-Unique: HEfMI6qUOHavu7krOgDO2w-1
+ us-mta-187-d1x5YKnqPheP2aWNdoPuLg-1; Fri, 18 Feb 2022 19:56:40 -0500
+X-MC-Unique: d1x5YKnqPheP2aWNdoPuLg-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 53BD01091DA1;
-        Sat, 19 Feb 2022 00:56:28 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7E74E1006AA3;
+        Sat, 19 Feb 2022 00:56:37 +0000 (UTC)
 Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-39.pek2.redhat.com [10.72.12.39])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E14D062D4E;
-        Sat, 19 Feb 2022 00:56:16 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E55B062D4E;
+        Sat, 19 Feb 2022 00:56:28 +0000 (UTC)
 From:   Baoquan He <bhe@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
@@ -47,9 +47,9 @@ Cc:     linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
         agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
         svens@linux.ibm.com, linux-s390@vger.kernel.org, michael@walle.cc,
         linux-i2c@vger.kernel.org, wsa@kernel.org
-Subject: [PATCH 17/22] net: marvell: prestera: Don't use GFP_DMA when calling dma_pool_alloc()
-Date:   Sat, 19 Feb 2022 08:52:16 +0800
-Message-Id: <20220219005221.634-18-bhe@redhat.com>
+Subject: [PATCH 18/22] net: ethernet: mtk-star-emac: Don't use GFP_DMA when calling dmam_alloc_coherent()
+Date:   Sat, 19 Feb 2022 08:52:17 +0800
+Message-Id: <20220219005221.634-19-bhe@redhat.com>
 In-Reply-To: <20220219005221.634-1-bhe@redhat.com>
 References: <20220219005221.634-1-bhe@redhat.com>
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
@@ -63,25 +63,26 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-dma_pool_alloc() uses dma_alloc_coherent() to pre-allocate DMA buffer,
-so it's redundent to specify GFP_DMA when calling.
+dmam_alloc_coherent() uses struct dma_devres to manage data, and call
+dma_alloc_attrs() to allocate cohenrent DMA memory, so it's redundent
+to specify GFP_DMA when calling.
 
 Signed-off-by: Baoquan He <bhe@redhat.com>
 ---
- drivers/net/ethernet/marvell/prestera/prestera_rxtx.c | 2 +-
+ drivers/net/ethernet/mediatek/mtk_star_emac.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c b/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c
-index e452cdeaf703..9f32dcabefb9 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c
-@@ -116,7 +116,7 @@ static int prestera_sdma_buf_init(struct prestera_sdma *sdma,
- 	struct prestera_sdma_desc *desc;
- 	dma_addr_t dma;
+diff --git a/drivers/net/ethernet/mediatek/mtk_star_emac.c b/drivers/net/ethernet/mediatek/mtk_star_emac.c
+index 89ca7960b225..55b95f51ac75 100644
+--- a/drivers/net/ethernet/mediatek/mtk_star_emac.c
++++ b/drivers/net/ethernet/mediatek/mtk_star_emac.c
+@@ -1533,7 +1533,7 @@ static int mtk_star_probe(struct platform_device *pdev)
  
--	desc = dma_pool_alloc(sdma->desc_pool, GFP_DMA | GFP_KERNEL, &dma);
-+	desc = dma_pool_alloc(sdma->desc_pool, GFP_KERNEL, &dma);
- 	if (!desc)
+ 	priv->ring_base = dmam_alloc_coherent(dev, MTK_STAR_DMA_SIZE,
+ 					      &priv->dma_addr,
+-					      GFP_KERNEL | GFP_DMA);
++					      GFP_KERNEL);
+ 	if (!priv->ring_base)
  		return -ENOMEM;
  
 -- 
