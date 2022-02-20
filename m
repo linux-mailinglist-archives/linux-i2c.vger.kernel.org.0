@@ -2,51 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989EF4BCBFC
+	by mail.lfdr.de (Postfix) with ESMTP id 4D11E4BCBFB
 	for <lists+linux-i2c@lfdr.de>; Sun, 20 Feb 2022 04:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiBTD5U (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 19 Feb 2022 22:57:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56730 "EHLO
+        id S234565AbiBTD50 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 19 Feb 2022 22:57:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiBTD5U (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Feb 2022 22:57:20 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836F43EABD;
-        Sat, 19 Feb 2022 19:56:59 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id m11so6679786pls.5;
-        Sat, 19 Feb 2022 19:56:59 -0800 (PST)
+        with ESMTP id S229446AbiBTD5W (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Feb 2022 22:57:22 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70ABA3FD9E;
+        Sat, 19 Feb 2022 19:57:02 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id i6so5712820pfc.9;
+        Sat, 19 Feb 2022 19:57:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VGpYslQLZPwISm1nPTwx+q6e8M94h8NxJolstJ+8zQM=;
-        b=P9X9sMyI7X93Ba8SNlRossbnpsMILrGKyaJrgVRXG/RSlV5ONnsyZsco/sXQbmZwhG
-         wBJMF2PpkVn7aWFaQygvPLr/IXjyIkh42fd5ziaE5LnsJw0jSAYN29LPgk5vJpN+S2mo
-         D8Png8rM+rMH4zh6IBRe2SUnYwVgSqAm/xplXvGxpFtLlZ7xhTK2N7LuKso+LCAdboqv
-         pRcj+jups7UYUp1RSCTNmAN4F2LxmVDtHnTSWeg5L7sxpuTWY0B1cDaoHCKWHbJZosqO
-         f4Gn8r7SvybllTAObt8VHoEMpB/AbsHjr+jMNse9EQR6eqaaA8P9lWI7rFTJoM7y+1rD
-         BfCg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=erxXp3pM+vmnwt5dCKBDd+mcnjI272utGNSkJjQm9os=;
+        b=DwrEBVmtD6umKXvFbEPmqi3ChydYqF9Do0lV1D7o6JDcbhF0HWZvlU77IplLVNNpnZ
+         HGeubBCQyEDrsZsBGwrdHwS2pegxP0pW61+IY4P5EUJQq07Vjo4pa42DycZQRruoX3FS
+         msKFOqwv0algQqyxsq7VvsYncb/8y8fbWdOxUNUK/mYzHkIIChDJgPMSqosNUDwIqkpa
+         2sJkQocjzguWmrbPW0+uAKWT4u4sAtNxwtDmG1hshX+J0BcX+Hpov4Te/01Eei7ADh0d
+         AL55vicQ4F/gwipuvnYAoS51TFt4XzAuD96PRSQFCeyK/hF+qxwgFwDeASdeiMjLQ/uw
+         8lGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VGpYslQLZPwISm1nPTwx+q6e8M94h8NxJolstJ+8zQM=;
-        b=qQbOKn1Ttv16fYtR7aj2NiZXTJqwn/f2w6MqLRYH7PQwbtIepv807JwbwgCB6JPgTO
-         SeMWA/QGA4cs3J7wJPAog+Y47IuaHLwhytFX5OIvn+I3xzT6K50rxqgmGaXGK1L41sGV
-         oq5jgV0/q6aSccIKOc6ucgKapR7MHwuzToEUjpj/sL3IfO7rf5xplVVlX3VaSxKW+gN2
-         jibSBA6bEQT7hVL9mbGbFdFeCJ/ZpNrazcrh3BubcHrABeWkoOe5dcU3TmgG+UXm+AnZ
-         5MYTgY7oT9Hnc0X8taqZZkoa7Im/jxDfa7up1Y8A3rQLqsG3i605q0ioWWA3/9c3/v3q
-         1vwA==
-X-Gm-Message-State: AOAM530GBZ6Bz6EMGZ7vCRuOBafo+pkOejNEgvssyqVv9KxYtYCUPcNo
-        W5xbEY7T9XCIUe336ogrIg==
-X-Google-Smtp-Source: ABdhPJwGgQQH415hnEbc4rho2GZhnPF17sXaRpaHqfTkpT+EBgslDBF0FKkp3zbIQ+e3Wj/O715rfw==
-X-Received: by 2002:a17:903:24d:b0:14f:84dd:babb with SMTP id j13-20020a170903024d00b0014f84ddbabbmr6823923plh.47.1645329418805;
-        Sat, 19 Feb 2022 19:56:58 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=erxXp3pM+vmnwt5dCKBDd+mcnjI272utGNSkJjQm9os=;
+        b=78EvTaGDFUnE3Tr3GnZ07J3yFr0ZMCPLVwvFwOhZvTFu3BCs4hjL3+dqs+nvPXc95R
+         y9zwVK1oTBAnQXnKZBzOObQ9llHJWFnWRe0Vkje7CxsUjil89YfabTH/gpn4e7SXleH/
+         qp7jelwqsW1YWU3sn6ph5uRsGdqOBGHINLzlHxnxFc28c2XFRmxCJH7v8VSUt4O0yV0D
+         itEixyFU/4dBcS2h+2iM6eH9BwDqlpENgglH1MCfXzt3mR2DzNeOr9OwSfYLUnkAjc7U
+         uLqh0iwECN9xq2Op8SP+tvTCCYl1GmHEUrwpZIjJPcwUu1OTfhlZOqgqVrU2+3E4NaAh
+         DoMQ==
+X-Gm-Message-State: AOAM530GY4A52FW5YZxqwzXn85lthEwViKcjE92Ra11bpUVHH8OwAzz/
+        3NLjWM7gCh8E1mjAvMpdOA==
+X-Google-Smtp-Source: ABdhPJzGMy+SAIsfp0thxPyF6s6/dL06QnFuRJKnkvyqz1XIaFiwvLSYo7DoTHXKjl3CwgmJAoOwNQ==
+X-Received: by 2002:a63:802:0:b0:374:2e45:c6fa with SMTP id 2-20020a630802000000b003742e45c6famr1449715pgi.246.1645329421670;
+        Sat, 19 Feb 2022 19:57:01 -0800 (PST)
 Received: from localhost ([2401:e180:8842:e799:9593:a6f2:788b:a48c])
-        by smtp.gmail.com with ESMTPSA id k21sm2687921pff.25.2022.02.19.19.56.57
+        by smtp.gmail.com with ESMTPSA id m17-20020a17090ab79100b001b89fd7e298sm3473916pjr.4.2022.02.19.19.57.00
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 19 Feb 2022 19:56:58 -0800 (PST)
+        Sat, 19 Feb 2022 19:57:01 -0800 (PST)
 From:   Tyrone Ting <warp5tw@gmail.com>
 To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -61,13 +60,12 @@ To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         kfting@nuvoton.com
 Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 00/11] i2c: npcm: Bug fixes timeout, spurious interrupts
-Date:   Sun, 20 Feb 2022 11:53:10 +0800
-Message-Id: <20220220035321.3870-1-warp5tw@gmail.com>
+Subject: [PATCH v2 01/11] arm: dts: add new property for NPCM i2c module
+Date:   Sun, 20 Feb 2022 11:53:11 +0800
+Message-Id: <20220220035321.3870-2-warp5tw@gmail.com>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220220035321.3870-1-warp5tw@gmail.com>
+References: <20220220035321.3870-1-warp5tw@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -80,66 +78,146 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Tyrone Ting <kfting@nuvoton.com>
 
-This patchset includes the following fixes:
+Add nuvoton,sys-mgr property for controlling NPCM gcr register.
 
-- Add dt-bindings description for NPCM845.
-- Bug fix for timeout calculation.
-- Better handling of spurious interrupts.
-- Fix for event type in slave mode.
-- Removal of own slave addresses [2:10].
-- Support for next gen BMC (NPCM845).
+Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+---
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-The NPCM I2C driver is tested on NPCM750 and NPCM845 evaluation boards.
-
-Addressed comments from:
- - Jonathan Neuschäfer : https://lkml.org/lkml/2022/2/7/670
- - Krzysztof Kozlowski : https://lkml.org/lkml/2022/2/7/760
- - Rob Herring : https://lkml.org/lkml/2022/2/7/1166
-                 https://lkml.org/lkml/2022/2/11/711
- - Krzysztof Kozlowski : https://lkml.org/lkml/2022/2/7/742
- - Jonathan Neuschäfer : https://lkml.org/lkml/2022/2/7/934
- - Jonathan Neuschäfer : https://lkml.org/lkml/2022/2/7/947
- - Jonathan Neuschäfer : https://lkml.org/lkml/2022/2/7/1057
- - Krzysztof Kozlowski : https://lkml.org/lkml/2022/2/7/1192
- - kernel test robot : https://lore.kernel.org/all/
-                       202202072020.toQ349pg-lkp@intel.com/
+diff --git a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
+index 3696980a3da1..0fee5fc67e02 100644
+--- a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
++++ b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
+@@ -371,6 +371,7 @@
+ 				interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&smb0_pins>;
++				nuvoton,sys-mgr = <&gcr>;
+ 				status = "disabled";
+ 			};
  
-Changes since version 1:
- - Add nuvoton,sys-mgr property in NPCM devicetree.
- - Describe the commit message in imperative mood.
- - Modify the description in i2c binding document to cover NPCM series.
- - Add new property in i2c binding document.
- - Create a new patch for client address calculation.
- - Create a new patch for updating gcr property name.
- - Create a new patch for removing unused clock node.
- - Explain EOB in the commit description.
- - Create a new patch for correcting NPCM register access width.
- - Remove some comment since the corresponding logic no longer exists.
- - Remove fixes tag while the patch adds an additional feature.
- - Use devicetree data field to support NPCM845.
-
-Tali Perry (7):
-  i2c: npcm: Fix client address calculation
-  i2c: npcm: Update gcr property name
-  i2c: npcm: Remove unused clock node
-  i2c: npcm: Fix timeout calculation
-  i2c: npcm: Add tx complete counter
-  i2c: npcm: Handle spurious interrupts
-  i2c: npcm: Remove own slave addresses 2:10
-
-Tyrone Ting (4):
-  arm: dts: add new property for NPCM i2c module
-  dt-bindings: i2c: npcm: support NPCM845
-  i2c: npcm: Correct register access width
-  i2c: npcm: Support NPCM845
-
- .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     |  17 +-
- arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |  16 ++
- drivers/i2c/busses/Kconfig                    |   8 +-
- drivers/i2c/busses/Makefile                   |   2 +-
- drivers/i2c/busses/i2c-npcm7xx.c              | 251 +++++++++++-------
- 5 files changed, 193 insertions(+), 101 deletions(-)
-
+@@ -383,6 +384,7 @@
+ 				interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&smb1_pins>;
++				nuvoton,sys-mgr = <&gcr>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -395,6 +397,7 @@
+ 				interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&smb2_pins>;
++				nuvoton,sys-mgr = <&gcr>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -407,6 +410,7 @@
+ 				interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&smb3_pins>;
++				nuvoton,sys-mgr = <&gcr>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -419,6 +423,7 @@
+ 				interrupts = <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&smb4_pins>;
++				nuvoton,sys-mgr = <&gcr>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -431,6 +436,7 @@
+ 				interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&smb5_pins>;
++				nuvoton,sys-mgr = <&gcr>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -443,6 +449,7 @@
+ 				interrupts = <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&smb6_pins>;
++				nuvoton,sys-mgr = <&gcr>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -455,6 +462,7 @@
+ 				interrupts = <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&smb7_pins>;
++				nuvoton,sys-mgr = <&gcr>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -467,6 +475,7 @@
+ 				interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&smb8_pins>;
++				nuvoton,sys-mgr = <&gcr>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -479,6 +488,7 @@
+ 				interrupts = <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&smb9_pins>;
++				nuvoton,sys-mgr = <&gcr>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -491,6 +501,7 @@
+ 				interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&smb10_pins>;
++				nuvoton,sys-mgr = <&gcr>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -503,6 +514,7 @@
+ 				interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&smb11_pins>;
++				nuvoton,sys-mgr = <&gcr>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -515,6 +527,7 @@
+ 				interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&smb12_pins>;
++				nuvoton,sys-mgr = <&gcr>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -527,6 +540,7 @@
+ 				interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&smb13_pins>;
++				nuvoton,sys-mgr = <&gcr>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -539,6 +553,7 @@
+ 				interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&smb14_pins>;
++				nuvoton,sys-mgr = <&gcr>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -551,6 +566,7 @@
+ 				interrupts = <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&smb15_pins>;
++				nuvoton,sys-mgr = <&gcr>;
+ 				status = "disabled";
+ 			};
+ 		};
 -- 
 2.17.1
 
