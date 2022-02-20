@@ -2,50 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D11E4BCBFB
+	by mail.lfdr.de (Postfix) with ESMTP id E4A3B4BCBFD
 	for <lists+linux-i2c@lfdr.de>; Sun, 20 Feb 2022 04:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234565AbiBTD50 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 19 Feb 2022 22:57:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56964 "EHLO
+        id S237865AbiBTD51 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 19 Feb 2022 22:57:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiBTD5W (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Feb 2022 22:57:22 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70ABA3FD9E;
-        Sat, 19 Feb 2022 19:57:02 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id i6so5712820pfc.9;
-        Sat, 19 Feb 2022 19:57:02 -0800 (PST)
+        with ESMTP id S237572AbiBTD50 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Feb 2022 22:57:26 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5195E40E6C;
+        Sat, 19 Feb 2022 19:57:05 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id l8so10241852pls.7;
+        Sat, 19 Feb 2022 19:57:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=erxXp3pM+vmnwt5dCKBDd+mcnjI272utGNSkJjQm9os=;
-        b=DwrEBVmtD6umKXvFbEPmqi3ChydYqF9Do0lV1D7o6JDcbhF0HWZvlU77IplLVNNpnZ
-         HGeubBCQyEDrsZsBGwrdHwS2pegxP0pW61+IY4P5EUJQq07Vjo4pa42DycZQRruoX3FS
-         msKFOqwv0algQqyxsq7VvsYncb/8y8fbWdOxUNUK/mYzHkIIChDJgPMSqosNUDwIqkpa
-         2sJkQocjzguWmrbPW0+uAKWT4u4sAtNxwtDmG1hshX+J0BcX+Hpov4Te/01Eei7ADh0d
-         AL55vicQ4F/gwipuvnYAoS51TFt4XzAuD96PRSQFCeyK/hF+qxwgFwDeASdeiMjLQ/uw
-         8lGg==
+        bh=EHVv67KSR6zDSWz8cwXw0lmEsHGkvf35iFMIN1Dv6lw=;
+        b=eUWV62m2mWgNEygve3r4gAQGgbtJC8vfCn8Je+GAOVzGcyLmyzaKr/KtgkITk1/SgQ
+         wz0ZBYFcfP8mPxXg1cUEI5eQbbqSYZxwOGYQTaw1agnvUU1e/3IrfGCdnkvfCRxzuVFp
+         hX/6JGhzM9IQ3x/zvcwma7WNSs3S7z9wvj0X7MfvuwoGNlW/v1xgjlnWN0RNUFBdUyMN
+         CVmX5D7OvoH4AWi1gIH2kawP3FTsroqNJpwmbUUVs8+yiZmjH8AR+CXcjO06FYJpwrmt
+         bxfJeniM0d9Jxc0Ni+ut/UbhGE6wyysqJYp0P/00HKEMAPGMTNCBJshwTsn4Qpz+OO0j
+         l8pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=erxXp3pM+vmnwt5dCKBDd+mcnjI272utGNSkJjQm9os=;
-        b=78EvTaGDFUnE3Tr3GnZ07J3yFr0ZMCPLVwvFwOhZvTFu3BCs4hjL3+dqs+nvPXc95R
-         y9zwVK1oTBAnQXnKZBzOObQ9llHJWFnWRe0Vkje7CxsUjil89YfabTH/gpn4e7SXleH/
-         qp7jelwqsW1YWU3sn6ph5uRsGdqOBGHINLzlHxnxFc28c2XFRmxCJH7v8VSUt4O0yV0D
-         itEixyFU/4dBcS2h+2iM6eH9BwDqlpENgglH1MCfXzt3mR2DzNeOr9OwSfYLUnkAjc7U
-         uLqh0iwECN9xq2Op8SP+tvTCCYl1GmHEUrwpZIjJPcwUu1OTfhlZOqgqVrU2+3E4NaAh
-         DoMQ==
-X-Gm-Message-State: AOAM530GY4A52FW5YZxqwzXn85lthEwViKcjE92Ra11bpUVHH8OwAzz/
-        3NLjWM7gCh8E1mjAvMpdOA==
-X-Google-Smtp-Source: ABdhPJzGMy+SAIsfp0thxPyF6s6/dL06QnFuRJKnkvyqz1XIaFiwvLSYo7DoTHXKjl3CwgmJAoOwNQ==
-X-Received: by 2002:a63:802:0:b0:374:2e45:c6fa with SMTP id 2-20020a630802000000b003742e45c6famr1449715pgi.246.1645329421670;
-        Sat, 19 Feb 2022 19:57:01 -0800 (PST)
+        bh=EHVv67KSR6zDSWz8cwXw0lmEsHGkvf35iFMIN1Dv6lw=;
+        b=QCOTD7WIpR0KyDhQKEvm0Q7ByEBj6BL6Hb5/qG3HqoPrXOgcokVONhHy0m8wq+38Ns
+         OP6CaCKSHEWp+pctg9Mhl8URpqNbSyoSgMb43opNr0KnECnbLd8VYiKoQf9O5dTQclYc
+         CnxOn27FShABioTZe4oZLWNwXrR/wZEQV719HK3Fc5yo1J1FQkTfXifBbs5dZv9ov9dP
+         QyPJtIJbkVC+R76IDqP3GBvYa64PNtvqS4NSHPnX3oaMS87NgbW9pT4QfhLZhhkQEdAd
+         M1mATRI3sVq5cr5K67gAOV/xrF/JMP4r50mxbZMJPB98s7gW31tr+oB1SMdqn8M2PT02
+         Ighg==
+X-Gm-Message-State: AOAM533MdLvXibuk2O+ftO/rKUlpqsI0iKVEdFUE93ccCk9sNjHrN0Xm
+        GRxvAY8D84K6x+qyZHeczw==
+X-Google-Smtp-Source: ABdhPJz9OY16LTtX2vHBLEbctEpEm6VpfzTvfP02ftY0JmhIZEclV4d9bO7Bmto1PlmWqBBW9TkJlg==
+X-Received: by 2002:a17:90b:4a85:b0:1b9:d80d:bff with SMTP id lp5-20020a17090b4a8500b001b9d80d0bffmr19706270pjb.67.1645329424649;
+        Sat, 19 Feb 2022 19:57:04 -0800 (PST)
 Received: from localhost ([2401:e180:8842:e799:9593:a6f2:788b:a48c])
-        by smtp.gmail.com with ESMTPSA id m17-20020a17090ab79100b001b89fd7e298sm3473916pjr.4.2022.02.19.19.57.00
+        by smtp.gmail.com with ESMTPSA id ck20sm3497136pjb.27.2022.02.19.19.57.03
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 19 Feb 2022 19:57:01 -0800 (PST)
+        Sat, 19 Feb 2022 19:57:04 -0800 (PST)
 From:   Tyrone Ting <warp5tw@gmail.com>
 To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -60,9 +60,9 @@ To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         kfting@nuvoton.com
 Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 01/11] arm: dts: add new property for NPCM i2c module
-Date:   Sun, 20 Feb 2022 11:53:11 +0800
-Message-Id: <20220220035321.3870-2-warp5tw@gmail.com>
+Subject: [PATCH v2 02/11] dt-bindings: i2c: npcm: support NPCM845
+Date:   Sun, 20 Feb 2022 11:53:12 +0800
+Message-Id: <20220220035321.3870-3-warp5tw@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220220035321.3870-1-warp5tw@gmail.com>
 References: <20220220035321.3870-1-warp5tw@gmail.com>
@@ -78,146 +78,67 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Tyrone Ting <kfting@nuvoton.com>
 
-Add nuvoton,sys-mgr property for controlling NPCM gcr register.
+Add compatible and nuvoton,sys-mgr description for NPCM i2c module.
 
 Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
 Signed-off-by: Tali Perry <tali.perry1@gmail.com>
 ---
- arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml       | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-index 3696980a3da1..0fee5fc67e02 100644
---- a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-+++ b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-@@ -371,6 +371,7 @@
- 				interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&smb0_pins>;
-+				nuvoton,sys-mgr = <&gcr>;
- 				status = "disabled";
- 			};
+diff --git a/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml b/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
+index 128444942aec..809c51ac32fe 100644
+--- a/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
++++ b/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
+@@ -7,17 +7,18 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: nuvoton NPCM7XX I2C Controller Device Tree Bindings
  
-@@ -383,6 +384,7 @@
- 				interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>;
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&smb1_pins>;
-+				nuvoton,sys-mgr = <&gcr>;
- 				status = "disabled";
- 			};
+ description: |
+-  The NPCM750x includes sixteen I2C bus controllers. All Controllers support
+-  both master and slave mode. Each controller can switch between master and slave
+-  at run time (i.e. IPMB mode). Each controller has two 16 byte HW FIFO for TX and
+-  RX.
++  I2C bus controllers of the NPCM series support both master and
++  slave mode. Each controller can switch between master and slave at run time
++  (i.e. IPMB mode). HW FIFO for TX and RX are supported.
  
-@@ -395,6 +397,7 @@
- 				interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&smb2_pins>;
-+				nuvoton,sys-mgr = <&gcr>;
- 				status = "disabled";
- 			};
+ maintainers:
+   - Tali Perry <tali.perry1@gmail.com>
  
-@@ -407,6 +410,7 @@
- 				interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>;
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&smb3_pins>;
-+				nuvoton,sys-mgr = <&gcr>;
- 				status = "disabled";
- 			};
+ properties:
+   compatible:
+-    const: nuvoton,npcm750-i2c
++     enum:
++      - nuvoton,npcm750-i2c
++      - nuvoton,npcm845-i2c
  
-@@ -419,6 +423,7 @@
- 				interrupts = <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>;
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&smb4_pins>;
-+				nuvoton,sys-mgr = <&gcr>;
- 				status = "disabled";
- 			};
+   reg:
+     maxItems: 1
+@@ -36,11 +37,16 @@ properties:
+     default: 100000
+     enum: [100000, 400000, 1000000]
  
-@@ -431,6 +436,7 @@
- 				interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&smb5_pins>;
-+				nuvoton,sys-mgr = <&gcr>;
- 				status = "disabled";
- 			};
++  nuvoton,sys-mgr:
++    $ref: "/schemas/types.yaml#/definitions/phandle"
++    description: The phandle of system manager register node.
++
+ required:
+   - compatible
+   - reg
+   - interrupts
+   - clocks
++  - nuvoton,sys-mgr
  
-@@ -443,6 +449,7 @@
- 				interrupts = <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&smb6_pins>;
-+				nuvoton,sys-mgr = <&gcr>;
- 				status = "disabled";
- 			};
+ allOf:
+   - $ref: /schemas/i2c/i2c-controller.yaml#
+@@ -57,6 +63,7 @@ examples:
+         clock-frequency = <100000>;
+         interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
+         compatible = "nuvoton,npcm750-i2c";
++        nuvoton,sys-mgr = <&gcr>;
+     };
  
-@@ -455,6 +462,7 @@
- 				interrupts = <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&smb7_pins>;
-+				nuvoton,sys-mgr = <&gcr>;
- 				status = "disabled";
- 			};
- 
-@@ -467,6 +475,7 @@
- 				interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&smb8_pins>;
-+				nuvoton,sys-mgr = <&gcr>;
- 				status = "disabled";
- 			};
- 
-@@ -479,6 +488,7 @@
- 				interrupts = <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&smb9_pins>;
-+				nuvoton,sys-mgr = <&gcr>;
- 				status = "disabled";
- 			};
- 
-@@ -491,6 +501,7 @@
- 				interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&smb10_pins>;
-+				nuvoton,sys-mgr = <&gcr>;
- 				status = "disabled";
- 			};
- 
-@@ -503,6 +514,7 @@
- 				interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&smb11_pins>;
-+				nuvoton,sys-mgr = <&gcr>;
- 				status = "disabled";
- 			};
- 
-@@ -515,6 +527,7 @@
- 				interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&smb12_pins>;
-+				nuvoton,sys-mgr = <&gcr>;
- 				status = "disabled";
- 			};
- 
-@@ -527,6 +540,7 @@
- 				interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&smb13_pins>;
-+				nuvoton,sys-mgr = <&gcr>;
- 				status = "disabled";
- 			};
- 
-@@ -539,6 +553,7 @@
- 				interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&smb14_pins>;
-+				nuvoton,sys-mgr = <&gcr>;
- 				status = "disabled";
- 			};
- 
-@@ -551,6 +566,7 @@
- 				interrupts = <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&smb15_pins>;
-+				nuvoton,sys-mgr = <&gcr>;
- 				status = "disabled";
- 			};
- 		};
+ ...
 -- 
 2.17.1
 
