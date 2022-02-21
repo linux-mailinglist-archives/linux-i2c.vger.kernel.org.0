@@ -2,81 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8034BEB15
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Feb 2022 20:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 758304BECC1
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Feb 2022 22:44:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231747AbiBUSmM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Feb 2022 13:42:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57072 "EHLO
+        id S234969AbiBUVor (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Feb 2022 16:44:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232321AbiBUSlw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Feb 2022 13:41:52 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1103062CF;
-        Mon, 21 Feb 2022 10:40:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645468855; x=1677004855;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uQrV/nhZGmqBQaK5yJ+b1uhayz6zJFbAKucjtUG4ATU=;
-  b=Ssci7z2FR5RGOqHXuDCSvpUsPn2hKa6QirU8cY3kJmGUZ7rxicJ1v7H7
-   BKLcPC1U8sV9XwNe+NpStA8EPDXyfYk8CWPt7vrnIpCzTr1Y3u1qlXe2r
-   LtYF/HoRAlbI/HlzlajK2T20eNIkLAS3XS28Aq/0BNBWfzphyWeheSc49
-   aEdqlyjO7caf/WHSggnzYTphEhtwRM0omV8Gk9UhHthxzYaqjfkpY30uX
-   FmA0Ec5NRmz4caCqN3u+LiPSYEj1LHEbfaree+8oHFdx0LGuA8RZQNpgO
-   IlSTEYBFO8pqgtrQIrPmcwMMWKkHDk9kq9wxti+L+pERuXpoje9ptZ0aU
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="251739157"
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="251739157"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 10:40:54 -0800
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="490519800"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 10:40:53 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nMDbN-006siK-Ra;
-        Mon, 21 Feb 2022 20:40:01 +0200
-Date:   Mon, 21 Feb 2022 20:40:01 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>,
-        syzbot+0591ccf54ee05344e4eb@syzkaller.appspotmail.com
-Subject: Re: [PATCH v1 1/1] i2c: robotfuzz-osif: Propagate parent device to
- I2C core
-Message-ID: <YhPcgTNmAN0uICJx@smile.fi.intel.com>
-References: <20220204151726.8924-1-andriy.shevchenko@linux.intel.com>
- <YhNhxPEt6kZ2xzMJ@hovoldconsulting.com>
+        with ESMTP id S230430AbiBUVoq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Feb 2022 16:44:46 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCC922BC6;
+        Mon, 21 Feb 2022 13:44:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=WenxZscsM06/+bT/19IGHZEhWMyvVaGW5AQNl0sRgAg=; b=c1Zpoi2CCRTbgsy/twPRazIVDE
+        RsaVvwLsNgoYnXukPhUxNayXBYCtgChSG9VOR8/fDcq5RZyrCkh+v11lnHnRe2YnmKtRTFzAR1s/Y
+        obF0/aidXb21wf1uaGahKjhyW6T53io0igFHZbNlRQg23achMWsKdIH5wvUMIfJoXO78=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nMGTY-007Qz4-3N; Mon, 21 Feb 2022 22:44:08 +0100
+Date:   Mon, 21 Feb 2022 22:44:08 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [RFC 00/10] add support for fwnode in i2c mux system and sfp
+Message-ID: <YhQHqDJvahgriDZK@lunn.ch>
+References: <20220221162652.103834-1-clement.leger@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YhNhxPEt6kZ2xzMJ@hovoldconsulting.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220221162652.103834-1-clement.leger@bootlin.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 10:56:20AM +0100, Johan Hovold wrote:
-> On Fri, Feb 04, 2022 at 05:17:26PM +0200, Andy Shevchenko wrote:
-> > I2C core might use parent device to retrieve properties of
-> > the controller. Propagate parent device for that.
-> 
-> What is the problem you're trying to solve here?
+> This series has been tested on a x86 kernel build without CONFIG_OF.
+> Another kernel was also built with COMPILE_TEST and CONFIG_OF support
+> to build as most drivers as possible. It was also tested on a sparx5
+> arm64 with CONFIG_OF. However, it was not tested with an ACPI
+> description evolved enough to validate all the changes.
 
-Okay, let's drop the patch.
+By that, do you mean a DSD description?
 
--- 
-With Best Regards,
-Andy Shevchenko
+In the DT world, we avoid snow flakes. Once you define a binding, it
+is expected every following board will use it. So what i believe you
+are doing here is defining how i2c muxes are described in APCI. How
+SFP devices are described in ACPI. Until the ACPI standards committee
+says otherwise, this is it. So you need to clearly document
+this. Please add to Documentation/firmware-guide/acpi/dsd.
 
-
+      Andrew
