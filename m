@@ -2,75 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F454BD7BF
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Feb 2022 09:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B123E4BD808
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Feb 2022 09:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237863AbiBUIcP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Feb 2022 03:32:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46316 "EHLO
+        id S1343700AbiBUIcx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Feb 2022 03:32:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiBUIcN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Feb 2022 03:32:13 -0500
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E321AA;
-        Mon, 21 Feb 2022 00:31:50 -0800 (PST)
-Received: by mail-vk1-xa2f.google.com with SMTP id n142so8214523vkf.5;
-        Mon, 21 Feb 2022 00:31:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=tHxyOUfMHqTikNQZhmqKh+kXdtIHhN+LVh74A17t+GY=;
-        b=ZmRctxBTa88LrYcPKv48Jo2DOkCPg3J8+BJGa5YAf4qOWj4lDPQyaGBnoh5LK07bSl
-         GuQkwjUEljvrWqMVuobUqaDSiNGYe+hM4PAXzMX0AWUkzf3BLa89jzcu+lGYqfr3xev/
-         jYZ2jaurO3ZKelDzIG+mbyK1S6C2u8hbxw8cd85rRcKq5RqK4laMNsQ+3j0IVgE99Tgn
-         H1P+umePLXCVFT+WjUMEjkZn6ysW3T2YbFaE1mR4PeaygwaJSX0pxUGx7LWWr32xnNGM
-         vCr3y9faUhyqQ+zxyJrFPgICPPI5FYG6b5XT1TgCEIjSYPIqbVEUkfJefYNqUTix8Ec1
-         pzqA==
+        with ESMTP id S1343706AbiBUIcw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Feb 2022 03:32:52 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1409510FE4
+        for <linux-i2c@vger.kernel.org>; Mon, 21 Feb 2022 00:32:29 -0800 (PST)
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id BBAC3405A8
+        for <linux-i2c@vger.kernel.org>; Mon, 21 Feb 2022 08:32:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645432347;
+        bh=TVZC7r8G6CEaD3eIO9b+oUrW2d/ZxrtJL667P7jAzwE=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=LcxaZXJRoaZZNSVfzR4pXprqQ1X+f4+YMx4YH0m8B4JJU8oTCBAMA81GzIg3QEP+c
+         WPikNZrKeH9SQRq/sqpsl/8CNXlEJDERJRMpo78Wfw4lYsk1OhkKWta207ZeXXJBRY
+         CnlZkaHfOHNfgTMQWHo8u34oLsOXTLZ7tr6QgDAMwuLzyPf8O3LNXQKj3+C82EVwnD
+         XDffgpEu5+ycDFj59VwUjSZVB9NUoQ1zyCZJ3FERzq2NO2N5cEvNtelxs7e61WYm8e
+         /unWX5s6/5wXOmgbP9oyRbiXqjQYVadmf5bo+aQQdokYMRi8va5S6ZyFc+DB6C5uNp
+         FpaW0PFCIhe5g==
+Received: by mail-wr1-f70.google.com with SMTP id k20-20020adfc714000000b001e305cd1597so7075864wrg.19
+        for <linux-i2c@vger.kernel.org>; Mon, 21 Feb 2022 00:32:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=tHxyOUfMHqTikNQZhmqKh+kXdtIHhN+LVh74A17t+GY=;
-        b=vhY2ug2mYcp9CZQ9wlHvYA1HOnXfj9bRf7aphI52gUTyYdwdshY1YLiJuKVkwncMbv
-         XGY8FT9ZwiPXAzTMh1an6U6nz1KK3Ht/wXzwdcgfQ+RWpHP3NV93suNA+mG+POOKVE/S
-         R8RBK3cNp93e6+Qe/U4X4P+WqvOPieVk0T8eUdcAJXtBhbQz/LLcTwGO60opVCOc/pcl
-         gRrV6FOFpffs+44UzTNS6vz8u58LPlHKovw71W5Bm/gykjIigCUO1ZeHZFrxKy/QyWbk
-         +oAIt2Ooj73rdcNrr0rOkwD7vtDPcEwI2xS6RDACF7OuKQm2xJ16ucX2yPugt1vqHdcz
-         7r+w==
-X-Gm-Message-State: AOAM530bembsqkEwvKtF301qtSR2oJyow/SostmLPjrTRI7NquMW86o9
-        y2FMdcqUhrr/6182cA28btqRTMJ4Ec/R1v/NTw==
-X-Google-Smtp-Source: ABdhPJyO2ShXUpYzMd0qiTi2EndkIjvRyGYXHcDdCeZDikC/rlrNM+t7NrbqGV6Pcl/kj/FJx2GB9JU1jI5j/1eJS7o=
-X-Received: by 2002:a05:6122:180b:b0:330:ee39:966e with SMTP id
- ay11-20020a056122180b00b00330ee39966emr7269125vkb.5.1645432309857; Mon, 21
- Feb 2022 00:31:49 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TVZC7r8G6CEaD3eIO9b+oUrW2d/ZxrtJL667P7jAzwE=;
+        b=OgMcH3zx6p620oyG8dna/l2RJftg9l6W4SR7RQKXcLW5SYtsbbH2j3LjIUakFkKr/r
+         pTZ3fiQgZjIKvdDHjjsD5PLJSiYaDdbf99vo3IMn95ksf3Gg4qrIvLp19cJFTrklrydf
+         o5pb41WphBYAD7oMDsBdbx0CybN7hFAFF1ouyvNqwvh6TA7LYw0rsjxOrQx1coE+uVmi
+         rhLZbQ+KaWYDXBHwsuwa83kBNP6SfuzhnBHxS0gMwaXHx3wo53WysLI4jYz3iBUHMRyb
+         kkpwVBRKYv3xKRiN7/Mjyhs1qkvUObOXNny4N1NiBQpUA2Ccs7GVhsy1MucXvVsgI9bm
+         DSDw==
+X-Gm-Message-State: AOAM533N6piMwYT5RlBZEYS7q72IbkT/sHPlGUGxV6F6BrBqfuCUXe+V
+        dnzuqTg4F5QNv9Hsvj+8jtzlfHxrjX+sR7oUif0lwo+KFrw1V9TVm2w1UkmXiAxhK8aj13XfERk
+        0l0timkV5+RfetB1A/FPKJ1BfHlWtva/PIKjylg==
+X-Received: by 2002:a5d:6146:0:b0:1e6:16b6:3e99 with SMTP id y6-20020a5d6146000000b001e616b63e99mr14752138wrt.693.1645432346958;
+        Mon, 21 Feb 2022 00:32:26 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJynWXDCyxnh3FFGUZaBfjSfsvzFafvVR9mLxa6NHv05YRkhHU0HA5xGoQ8svay3G9FKddP6HA==
+X-Received: by 2002:a5d:6146:0:b0:1e6:16b6:3e99 with SMTP id y6-20020a5d6146000000b001e616b63e99mr14752122wrt.693.1645432346730;
+        Mon, 21 Feb 2022 00:32:26 -0800 (PST)
+Received: from [192.168.0.120] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id f18sm12660140wre.66.2022.02.21.00.32.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 00:32:26 -0800 (PST)
+Message-ID: <5ce0f6a6-4a5f-4f25-3cc6-ab0f24bf15cf@canonical.com>
+Date:   Mon, 21 Feb 2022 09:32:25 +0100
 MIME-Version: 1.0
-References: <20220220035321.3870-1-warp5tw@gmail.com> <20220220035321.3870-3-warp5tw@gmail.com>
- <1645410969.402841.2041548.nullmailer@robh.at.kernel.org>
-In-Reply-To: <1645410969.402841.2041548.nullmailer@robh.at.kernel.org>
-From:   Tyrone Ting <warp5tw@gmail.com>
-Date:   Mon, 21 Feb 2022 16:31:37 +0800
-Message-ID: <CACD3sJaC-8BO9TkunmAfFQOow1rmWxEjhSRE-kekFRM1wmKq2Q@mail.gmail.com>
-Subject: Re: [PATCH v2 02/11] dt-bindings: i2c: npcm: support NPCM845
-To:     Rob Herring <robh@kernel.org>
-Cc:     semen.protsenko@linaro.org, andriy.shevchenko@linux.intel.com,
-        yuenn@google.com, digetx@gmail.com, devicetree@vger.kernel.org,
-        tmaimon77@gmail.com, krzysztof.kozlowski@canonical.com,
-        lukas.bulwahn@gmail.com, Avi.Fishman@nuvoton.com,
-        JJLIU0@nuvoton.com, tali.perry1@gmail.com, jie.deng@intel.com,
-        openbmc@lists.ozlabs.org, sven@svenpeter.dev,
-        linux-i2c@vger.kernel.org, tali.perry@nuvoton.com,
-        robh+dt@kernel.org, benjaminfair@google.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, olof@lixom.net,
-        wsa@kernel.org, kfting@nuvoton.com, avifishman70@gmail.com,
-        yangyicong@hisilicon.com, bence98@sch.bme.hu,
-        christophe.leroy@csgroup.eu, venture@google.com,
-        linux-kernel@vger.kernel.org, arnd@arndb.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 00/11] i2c: npcm: Bug fixes timeout, spurious
+ interrupts
+Content-Language: en-US
+To:     Tyrone Ting <warp5tw@gmail.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, semen.protsenko@linaro.org,
+        yangyicong@hisilicon.com, wsa@kernel.org, jie.deng@intel.com,
+        sven@svenpeter.dev, bence98@sch.bme.hu,
+        christophe.leroy@csgroup.eu, lukas.bulwahn@gmail.com,
+        olof@lixom.net, arnd@arndb.de, digetx@gmail.com,
+        andriy.shevchenko@linux.intel.com, tali.perry@nuvoton.com,
+        Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
+        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
+        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220220035321.3870-1-warp5tw@gmail.com>
+ <5d507fda-525e-4064-3add-0bb0cc23d016@canonical.com>
+ <CACD3sJaXeWLu6=oLgxJcU9R+A1J+jB7xKaGcDFwYxof33yj17Q@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CACD3sJaXeWLu6=oLgxJcU9R+A1J+jB7xKaGcDFwYxof33yj17Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,52 +95,52 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Rob:
+On 21/02/2022 09:16, Tyrone Ting wrote:
+> Hi Krzysztof:
+> 
+> Thank you for your comments and please find my reply next to your comments.
+> 
+> Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> 於 2022年2月20日
+> 週日 下午5:30寫道：
+>>
+>> On 20/02/2022 04:53, Tyrone Ting wrote:
+>>> From: Tyrone Ting <kfting@nuvoton.com>
+>>>
+>>> This patchset includes the following fixes:
+>>>
+>>> - Add dt-bindings description for NPCM845.
+>>> - Bug fix for timeout calculation.
+>>> - Better handling of spurious interrupts.
+>>> - Fix for event type in slave mode.
+>>> - Removal of own slave addresses [2:10].
+>>> - Support for next gen BMC (NPCM845).
+>>>
+>>> The NPCM I2C driver is tested on NPCM750 and NPCM845 evaluation boards.
+>>>
+>>> Addressed comments from:
+>>>  - Jonathan Neuschäfer : https://lkml.org/lkml/2022/2/7/670
+>>>  - Krzysztof Kozlowski : https://lkml.org/lkml/2022/2/7/760
+>>
+>> How did you address the ABI change comment? I still see you break the
+>> ABI with the introduction of a new, required property.
+>>
+> 
+> I add the new, required property "nuvoton,sys-mgr" in the file
+> nuvoton-common-npcm7xx.dtsi.
+> The file nuvoton-common-npcm7xx.dtsi is required by the existing
+> upstream NPCM devicetree files.
+> It is also updated and committed in this patch set [PATCH v2 01/11]
+> arm: dts: add new property for NPCM i2c module.
+> Please let me know if I misunderstand the meaning of "breaking the ABI".
+> Thank you again.
 
-Thank you for your comments and they will be addressed.
+Breaking the ABI means that old DTS stop working with new kernel. Your
+change breaks old (and out-of-tree) DTS.
 
-Rob Herring <robh@kernel.org> =E6=96=BC 2022=E5=B9=B42=E6=9C=8821=E6=97=A5 =
-=E9=80=B1=E4=B8=80 =E4=B8=8A=E5=8D=8810:36=E5=AF=AB=E9=81=93=EF=BC=9A
+What is more, your change is not bisectable because DTS goes via
+separate branch or tree than driver change.
 
->
-> On Sun, 20 Feb 2022 11:53:12 +0800, Tyrone Ting wrote:
-> > From: Tyrone Ting <kfting@nuvoton.com>
-> >
-> > Add compatible and nuvoton,sys-mgr description for NPCM i2c module.
-> >
-> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-> > Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-> > ---
-> >  .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml       | 17 ++++++++++++-----
-> >  1 file changed, 12 insertions(+), 5 deletions(-)
-> >
->
-> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->
-> yamllint warnings/errors:
-> ./Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml:19:6: [w=
-arning] wrong indentation: expected 4 but found 5 (indentation)
-> ./Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml:20:7: [w=
-arning] wrong indentation: expected 7 but found 6 (indentation)
->
-> dtschema/dtc warnings/errors:
->
-> doc reference errors (make refcheckdocs):
->
-> See https://patchwork.ozlabs.org/patch/1595125
->
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
->
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
->
-> pip3 install dtschema --upgrade
->
-> Please check and re-submit.
->
+You need to keep old code as fallback, if getting nuvoton,sys-mgr fails.
 
 Best regards,
-Tyrone
+Krzysztof
