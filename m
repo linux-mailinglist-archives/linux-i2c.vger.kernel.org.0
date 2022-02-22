@@ -2,78 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7F94BF8EA
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Feb 2022 14:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7113E4BF933
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Feb 2022 14:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232226AbiBVNQo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Feb 2022 08:16:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
+        id S231152AbiBVN1C (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Feb 2022 08:27:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232231AbiBVNQn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Feb 2022 08:16:43 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226CE15C9C0;
-        Tue, 22 Feb 2022 05:16:18 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id C982468BEB; Tue, 22 Feb 2022 14:16:10 +0100 (CET)
-Date:   Tue, 22 Feb 2022 14:16:10 +0100
-From:   'Christoph Hellwig' <hch@lst.de>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Christoph Hellwig' <hch@lst.de>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Baoquan He <bhe@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "cl@linux.com" <cl@linux.com>,
-        "penberg@kernel.org" <penberg@kernel.org>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "david@redhat.com" <david@redhat.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "steffen.klassert@secunet.com" <steffen.klassert@secunet.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "svens@linux.ibm.com" <svens@linux.ibm.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "wsa@kernel.org" <wsa@kernel.org>
-Subject: Re: [PATCH 22/22] mtd: rawnand: Use dma_alloc_noncoherent() for
- dma buffer
-Message-ID: <20220222131610.GA10464@lst.de>
-References: <20220219005221.634-1-bhe@redhat.com> <20220219005221.634-23-bhe@redhat.com> <20220219071900.GH26711@lst.de> <YhDSAJG+LksZSnLP@ip-172-31-19-208.ap-northeast-1.compute.internal> <20220222084652.GB6210@lst.de> <fe8deb6dd0b44a8a839820747451c37c@AcuMS.aculab.com>
+        with ESMTP id S229766AbiBVN1C (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Feb 2022 08:27:02 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C56F13DD3;
+        Tue, 22 Feb 2022 05:26:35 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2E0F62000C;
+        Tue, 22 Feb 2022 13:26:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1645536393;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+IeCrIvtHEXj+/TrckXq5Glou6qAet2MevCs2vi9JaY=;
+        b=I8E4xgDu9bdg2csxyff9myhmdP9T8H3rRW7JiKdPYxnMHQuPETlACfrGDksH3L4Clzyki6
+        OvL3hPaJIH8Mafgst2chAKdQ8DXNoOqfSrZoCotmQST48nAphr1z3mRqbUyp2pflX/p+Fh
+        NR3iw/S2RJkcieGSrJvV6KKN1wV8/DdKQe+3WM1A0F6fMZesKf9e+UrHNWRGqmRXXTRZAG
+        YSQKEU0RaA20Ys88kbiomOEhwnSOr3v8v+PUykfxCxDRKf42mzpkHGsxiPp3fGXJ5aLVvc
+        c0P7IoCsDjQxoBHIjmwXDadzIcgPIxTudOGChfxezymkbnylZoxt4bOF/W6UCQ==
+Date:   Tue, 22 Feb 2022 14:25:13 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [RFC 10/10] net: sfp: add support for fwnode
+Message-ID: <20220222142513.026ad98c@fixe.home>
+In-Reply-To: <YhPSkz8+BIcdb72R@smile.fi.intel.com>
+References: <20220221162652.103834-1-clement.leger@bootlin.com>
+        <20220221162652.103834-11-clement.leger@bootlin.com>
+        <YhPSkz8+BIcdb72R@smile.fi.intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fe8deb6dd0b44a8a839820747451c37c@AcuMS.aculab.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 09:06:48AM +0000, David Laight wrote:
-> From: Christoph Hellwig
-> > Sent: 22 February 2022 08:47
-> ...
-> > > Hmm.. for this specific case, What about allocating two buffers
-> > > for DMA_TO_DEVICE and DMA_FROM_DEVICE at initialization time?
-> > 
-> > That will work, but I don't see the benefit as you'd still need to call
-> > dma_sync_single* before and after each data transfer.
-> 
-> For systems with an iommu that should save all the iommu setup
-> for every transfer.
+Le Mon, 21 Feb 2022 19:57:39 +0200,
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> a =C3=A9crit :
 
-So does allocating a single buffer as in the patch we are replying to.
+> On Mon, Feb 21, 2022 at 05:26:52PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Add support to retrieve a i2c bus in sfp with a fwnode. This support
+> > is using the fwnode API which also works with device-tree and ACPI.
+> > For this purpose, the device-tree and ACPI code handling the i2c
+> > adapter retrieval was factorized with the new code. This also allows
+> > i2c devices using a software_node description to be used by sfp code. =
+=20
+>=20
+> If I'm not mistaken this patch can even go separately right now, since al=
+l used
+> APIs are already available.
+>=20
+
+This patches uses fwnode_find_i2c_adapter_by_node() which is introduced
+by "i2c: fwnode: add fwnode_find_i2c_adapter_by_node()" but they can
+probably be contributed both in a separate series.
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com
