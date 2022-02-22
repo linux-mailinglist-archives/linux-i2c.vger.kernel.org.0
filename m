@@ -2,70 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D7A4BF9A6
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Feb 2022 14:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 756FF4BF9BE
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Feb 2022 14:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbiBVNnN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Feb 2022 08:43:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
+        id S232468AbiBVNrM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Feb 2022 08:47:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbiBVNnN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Feb 2022 08:43:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA5E610EC5D
-        for <linux-i2c@vger.kernel.org>; Tue, 22 Feb 2022 05:42:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645537367;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2uPQ0PrAQ4ziIfXTltU6gJp/EwSDQPeLt7vadw1dPrc=;
-        b=MHH5xlq7eyC5xoX2bHeZTICnGVrpHzKIHPSe2/1QH8hNf4Z0mPUKiLDLd0zrPFozYpPKQw
-        n+zmB3yzxWd2UaVX1I1SnSh12es1RtS2MlnqDQebrrclrcAt/GL57YKC1Dg7tAizCGvUZT
-        Wx38L0JiWSTNVWXLFyNvS1w0P6bd8ns=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-372-_ooy5SJoPIK9TtAFxEoSiw-1; Tue, 22 Feb 2022 08:42:43 -0500
-X-MC-Unique: _ooy5SJoPIK9TtAFxEoSiw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B56A0FC80;
-        Tue, 22 Feb 2022 13:42:40 +0000 (UTC)
-Received: from localhost (ovpn-12-122.pek2.redhat.com [10.72.12.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E511D106D5B4;
-        Tue, 22 Feb 2022 13:42:24 +0000 (UTC)
-Date:   Tue, 22 Feb 2022 21:42:22 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, cl@linux.com, 42.hyeyoo@gmail.com,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        vbabka@suse.cz, David.Laight@aculab.com, david@redhat.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, steffen.klassert@secunet.com,
-        netdev@vger.kernel.org, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, linux-s390@vger.kernel.org, michael@walle.cc,
-        linux-i2c@vger.kernel.org, wsa@kernel.org
-Subject: [PATCH 2/2] kernel/dma: rename dma_alloc_direct and dma_map_direct
-Message-ID: <YhToPpeuTqdQgC80@MiWiFi-R3L-srv>
-References: <20220219005221.634-1-bhe@redhat.com>
- <20220219005221.634-22-bhe@redhat.com>
- <20220219071730.GG26711@lst.de>
- <20220220084044.GC93179@MiWiFi-R3L-srv>
- <20220222084530.GA6210@lst.de>
- <YhSpaGfiQV8Nmxr+@MiWiFi-R3L-srv>
- <20220222131120.GB10093@lst.de>
+        with ESMTP id S232268AbiBVNrL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Feb 2022 08:47:11 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2062.outbound.protection.outlook.com [40.107.237.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7281A6E4C4;
+        Tue, 22 Feb 2022 05:46:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dUPBLKgMXKgxImcv3WeeiOV1BNrRKmFcDJsmFtLLXeaGeqqp3WdzZX1ll5ZHDTxTOBAh9ZCyUx+zs26Sx5JWwcibYypfNLgGYtwtbtWSmEmomGjS8GwuHGspaXIBPCFjxonFHZYqck7lhNs+OGRvKZv6Y/VFW1tAvxh5j8U6JZBQhEWge3jK2Nx/MDIKNJI4Hz1jdHsIer8di478vuBzzYSFd7DzO3UrKDCsAM8oTw7TTpYjpttExKwOyQn8HFMJnGpZGI6rBJwTi2yaoUliFC4JmzkSwsBDdcDnp93jj4H/uwRhFJcjFHAOciayrcZInGULHwtFES++2hVu1YoGvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=taTQKiq06mws3wfAeH3jLrhDRw2ynjRAmGQBFYn9eeo=;
+ b=a5GLgsOzCiNgWcjsML47E4G/N0QMKWvcR90pQlYBZ2frL0oekq/FA7tnM0iX+H8b5PyRYNujo1z4yFgWnyQBmsA47ZZX55p4nL3fEeS5iNX8FrfPboKSeWKSMmWjyTHM8ODoPbxAN2aU2VS0g5ITUW61VoFN/Xb600pcRl2Gi64v13Qc3P6JTOMsoFdm1knan53TVq5XoJahxGJvkp2LBj3Z8RV7ddVIXNr4VoKAYrc+l5aWi9FuO37FF9AkHvELFV2Nto97EzdRzLiWG77YDqbh7TPuPvFZcz4+Op+CGuwhpW8LPbud4IZlGfXUUZDA7I5bGlQ3JPywkzADN+LRjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=taTQKiq06mws3wfAeH3jLrhDRw2ynjRAmGQBFYn9eeo=;
+ b=nZp5jrNTRdG/5hpOGCjYgRS2kkPZ9KCVyXhoBYJG2fZzHY/nhxSUmrlThTopN2J07Ev7vnA/4K3UCUWRKq4YzdXOpw93CU+rSZVE2IaGUxjFLyhv5UmiFCpnWPTPSIwxsFAG1+eiBFSznb6NA5UExVoC/tThRTzix36kmUpsw9s=
+Received: from BN0PR04CA0133.namprd04.prod.outlook.com (2603:10b6:408:ed::18)
+ by SA2PR02MB7563.namprd02.prod.outlook.com (2603:10b6:806:14d::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.24; Tue, 22 Feb
+ 2022 13:46:42 +0000
+Received: from BN1NAM02FT060.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:ed:cafe::d9) by BN0PR04CA0133.outlook.office365.com
+ (2603:10b6:408:ed::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16 via Frontend
+ Transport; Tue, 22 Feb 2022 13:46:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT060.mail.protection.outlook.com (10.13.3.168) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4995.19 via Frontend Transport; Tue, 22 Feb 2022 13:46:41 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 22 Feb 2022 05:46:39 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 22 Feb 2022 05:46:39 -0800
+Envelope-to: git@xilinx.com,
+ linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Received: from [10.140.6.59] (port=35756 helo=xhdshubhraj40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <shubhrajyoti.datta@xilinx.com>)
+        id 1nMVV0-00071z-Gh; Tue, 22 Feb 2022 05:46:38 -0800
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To:     <linux-i2c@vger.kernel.org>
+CC:     <git@xilinx.com>, <michal.simek@xilinx.com>,
+        <linux-kernel@vger.kernel.org>, Chirag Parekh <chiragp@xilinx.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Subject: [PATCH] i2c: cadence: Recover bus after controller reset
+Date:   Tue, 22 Feb 2022 19:16:32 +0530
+Message-ID: <20220222134632.18598-1-shubhrajyoti.datta@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220222131120.GB10093@lst.de>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cddca7e0-0c4f-43bc-0f48-08d9f609c218
+X-MS-TrafficTypeDiagnostic: SA2PR02MB7563:EE_
+X-Microsoft-Antispam-PRVS: <SA2PR02MB75638C253E20E57C97FA522AAA3B9@SA2PR02MB7563.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: H+6SaDIn1MWsRQJPQmslM9ab32G3wst/WQz3RIuO0LsUCWpqPMOqxwYdIKicIhInyncP/+32XRIaq5i8GrBZYc1QrRQH5ArYi+sYky5Ai6qWaV0GCL4Amvl/mGf4tgVh8J8M8Luf/IgdUcog1AAj5i9xLV49jPqHerDrLm2tMR/bclRZtSGJxrf6pM1Saq4ftzB390UvuL8tk5LAaA7MNBGwR3QzWpfhriHpChpPEElrncUQH3XfF+SbOAuZH4UKUIa8ii+TxYJZxQKBvdLtEkmIr/gD8jIJJ4LR9UFqiRkREsl+vbtD/T2KZJ3SqGMQaJyHLuMS0V0rN68ySPfjRRgQV2LxhiOhOt1EsJsTLnVeIW6ChYxey/k/JqN+dKL2wKFwVgNkNLHqXprrGOpY41GECxexIzxev5eyM3EH3rjx+BGTi76x5Xzo2USsQXp27pgvq6BwohMYO9J6escfQFU4QOX3zR4gFsXrT2+M1kXpLDr4dSxqMQTuL/ii+QjYdLULI4F7lsJRXtHvo1+Tj28jKTBd/cRLE3fw8yXMs8ZxhuwUIoX5sVcENaORIISmV7RQeByciXSVbzw+7FTTQ5eUMBYvYLpj6T+aIzZ/TurGD+C/ZXF2s+DqOBp6NlmB+vCimiSCWUdFNMA8G7khWC7w///jpKt64j2SXH8kxjMk55I5ZJGBQvUcVYkIh9/jTcdi8KmzCT68g0ZTyb035g==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(4326008)(426003)(47076005)(336012)(83380400001)(44832011)(40460700003)(36756003)(5660300002)(9786002)(2906002)(8936002)(450100002)(26005)(7696005)(2616005)(107886003)(36860700001)(186003)(70586007)(70206006)(356005)(7636003)(54906003)(8676002)(508600001)(316002)(1076003)(6916009)(82310400004)(6666004)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2022 13:46:41.9724
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cddca7e0-0c4f-43bc-0f48-08d9f609c218
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT060.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR02MB7563
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,226 +105,180 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In the old dma mapping, coherent mapping uses dma_alloc_coherent() to
-allocate DMA buffer and mapping; while streaming mapping can only get
-memory from slab or buddy allocator, then map with dma_map_single().
-In that situation, dma_alloc_direct() checks a direct mapping for
-coherent DMA, dma_map_direct() checks a direct mapping for streaming
-DMA.
+From: Chirag Parekh <chiragp@xilinx.com>
 
-However, several new APIs have been added for streaming mapping, e.g
-dma_alloc_pages(). These new APIs take care of DMA buffer allocating
-and mapping which are similar with dma_alloc_coherent(). So we should
-rename both of them to reflect their real intention to avoid confusion.
+This will save from potential lock-up caused when I2c master controller
+resets in the middle of transfer and the slave is holding SDA line to
+transmit more data.
 
-       dma_alloc_direct()  ==>  dma_coherent_direct()
-       dma_map_direct()    ==>  dma_streaming_direct()
-
-Signed-off-by: Baoquan He <bhe@redhat.com>
+Signed-off-by: Chirag Parekh <chiragp@xilinx.com>
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 ---
- kernel/dma/mapping.c | 44 ++++++++++++++++++++++----------------------
- 1 file changed, 22 insertions(+), 22 deletions(-)
+ drivers/i2c/busses/i2c-cadence.c | 109 +++++++++++++++++++++++++++++++
+ 1 file changed, 109 insertions(+)
 
-diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-index e66847aeac67..2835b08e96c6 100644
---- a/kernel/dma/mapping.c
-+++ b/kernel/dma/mapping.c
-@@ -127,13 +127,13 @@ static bool dma_go_direct(struct device *dev, dma_addr_t mask,
-  * This allows IOMMU drivers to set a bypass mode if the DMA mask is large
-  * enough.
-  */
--static inline bool dma_alloc_direct(struct device *dev,
-+static inline bool dma_coherent_direct(struct device *dev,
- 		const struct dma_map_ops *ops)
- {
- 	return dma_go_direct(dev, dev->coherent_dma_mask, ops);
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+index 805c77143a0f..682821481b67 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -7,13 +7,16 @@
+ 
+ #include <linux/clk.h>
+ #include <linux/delay.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/of.h>
++#include <linux/of_gpio.h>
+ #include <linux/pm_runtime.h>
++#include <linux/pinctrl/consumer.h>
+ 
+ /* Register offsets for the I2C device. */
+ #define CDNS_I2C_CR_OFFSET		0x00 /* Control Register, RW */
+@@ -179,6 +182,10 @@ enum cdns_i2c_slave_state {
+  * @clk_rate_change_nb:	Notifier block for clock rate changes
+  * @quirks:		flag for broken hold bit usage in r1p10
+  * @ctrl_reg:		Cached value of the control register.
++ * @rinfo:		Structure holding recovery information.
++ * @pinctrl:		Pin control state holder.
++ * @pinctrl_pins_default: Default pin control state.
++ * @pinctrl_pins_gpio:	GPIO pin control state.
+  * @ctrl_reg_diva_divb: value of fields DIV_A and DIV_B from CR register
+  * @slave:		Registered slave instance.
+  * @dev_mode:		I2C operating role(master/slave).
+@@ -204,6 +211,10 @@ struct cdns_i2c {
+ 	struct notifier_block clk_rate_change_nb;
+ 	u32 quirks;
+ 	u32 ctrl_reg;
++	struct i2c_bus_recovery_info rinfo;
++	struct pinctrl *pinctrl;
++	struct pinctrl_state *pinctrl_pins_default;
++	struct pinctrl_state *pinctrl_pins_gpio;
+ #if IS_ENABLED(CONFIG_I2C_SLAVE)
+ 	u16 ctrl_reg_diva_divb;
+ 	struct i2c_client *slave;
+@@ -788,6 +799,7 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
+ 	/* Wait for the signal of completion */
+ 	time_left = wait_for_completion_timeout(&id->xfer_done, adap->timeout);
+ 	if (time_left == 0) {
++		i2c_recover_bus(adap);
+ 		cdns_i2c_master_reset(adap);
+ 		dev_err(id->adap.dev.parent,
+ 				"timeout waiting on completion\n");
+@@ -1208,6 +1220,96 @@ static int __maybe_unused cdns_i2c_runtime_resume(struct device *dev)
+ 	return 0;
  }
  
--static inline bool dma_map_direct(struct device *dev,
-+static inline bool dma_streaming_direct(struct device *dev,
- 		const struct dma_map_ops *ops)
- {
- 	return dma_go_direct(dev, *dev->dma_mask, ops);
-@@ -151,7 +151,7 @@ dma_addr_t dma_map_page_attrs(struct device *dev, struct page *page,
- 	if (WARN_ON_ONCE(!dev->dma_mask))
- 		return DMA_MAPPING_ERROR;
++/**
++ * cdns_i2c_prepare_recovery - Withhold recovery state
++ * @adapter:    Pointer to i2c adapter
++ *
++ * This function is called to prepare for recovery.
++ * It changes the state of pins from SCL/SDA to GPIO.
++ */
++static void cdns_i2c_prepare_recovery(struct i2c_adapter *adapter)
++{
++	struct cdns_i2c *p_cdns_i2c;
++	int ret;
++
++	p_cdns_i2c = container_of(adapter, struct cdns_i2c, adap);
++
++	/* Setting pin state as gpio */
++	ret = pinctrl_select_state(p_cdns_i2c->pinctrl,
++			     p_cdns_i2c->pinctrl_pins_gpio);
++	if (ret < 0)
++		dev_err(p_cdns_i2c->adap.dev.parent,
++				"pinctrl_select_state failed\n");
++}
++
++/**
++ * cdns_i2c_unprepare_recovery - Release recovery state
++ * @adapter:    Pointer to i2c adapter
++ *
++ * This function is called on exiting recovery. It reverts
++ * the state of pins from GPIO to SCL/SDA.
++ */
++static void cdns_i2c_unprepare_recovery(struct i2c_adapter *adapter)
++{
++	struct cdns_i2c *p_cdns_i2c;
++	int ret;
++
++	p_cdns_i2c = container_of(adapter, struct cdns_i2c, adap);
++
++	/* Setting pin state to default(i2c) */
++	ret = pinctrl_select_state(p_cdns_i2c->pinctrl,
++			     p_cdns_i2c->pinctrl_pins_default);
++	if (ret < 0)
++		dev_err(p_cdns_i2c->adap.dev.parent,
++				"pinctrl_select_state failed\n");
++}
++
++/**
++ * cdns_i2c_init_recovery_info  - Initialize I2C bus recovery
++ * @pid:        Pointer to cdns i2c structure
++ * @pdev:       Handle to the platform device structure
++ *
++ * This function does required initialization for i2c bus
++ * recovery. It registers three functions for prepare,
++ * recover and unprepare
++ *
++ * Return: 0 on Success, negative error otherwise.
++ */
++static int cdns_i2c_init_recovery_info(struct cdns_i2c *pid,
++		struct platform_device *pdev)
++{
++	struct i2c_bus_recovery_info *rinfo = &pid->rinfo;
++
++	pid->pinctrl_pins_default = pinctrl_lookup_state(pid->pinctrl,
++			PINCTRL_STATE_DEFAULT);
++	pid->pinctrl_pins_gpio = pinctrl_lookup_state(pid->pinctrl, "gpio");
++
++	/* Fetches GPIO pins */
++	rinfo->sda_gpiod = devm_gpiod_get(&pdev->dev, "sda-gpios", GPIOD_ASIS);
++	rinfo->scl_gpiod = devm_gpiod_get(&pdev->dev, "scl-gpios", GPIOD_ASIS);
++
++	/* if GPIO driver isn't ready yet, deffer probe */
++	if (PTR_ERR(rinfo->sda_gpiod) == -EPROBE_DEFER ||
++	    PTR_ERR(rinfo->scl_gpiod) == -EPROBE_DEFER)
++		return -EPROBE_DEFER;
++
++	/* Validates fetched information */
++	if (IS_ERR(rinfo->sda_gpiod) ||
++	    IS_ERR(rinfo->scl_gpiod) ||
++			IS_ERR(pid->pinctrl_pins_default) ||
++			IS_ERR(pid->pinctrl_pins_gpio)) {
++		dev_dbg(&pdev->dev, "recovery information incomplete\n");
++		return 0;
++	}
++
++	rinfo->prepare_recovery     = cdns_i2c_prepare_recovery;
++	rinfo->unprepare_recovery   = cdns_i2c_unprepare_recovery;
++	rinfo->recover_bus          = i2c_generic_scl_recovery;
++	pid->adap.bus_recovery_info = rinfo;
++
++	return 0;
++}
++
+ static const struct dev_pm_ops cdns_i2c_dev_pm_ops = {
+ 	SET_RUNTIME_PM_OPS(cdns_i2c_runtime_suspend,
+ 			   cdns_i2c_runtime_resume, NULL)
+@@ -1254,6 +1356,13 @@ static int cdns_i2c_probe(struct platform_device *pdev)
+ 		id->quirks = data->quirks;
+ 	}
  
--	if (dma_map_direct(dev, ops) ||
-+	if (dma_streaming_direct(dev, ops) ||
- 	    arch_dma_map_page_direct(dev, page_to_phys(page) + offset + size))
- 		addr = dma_direct_map_page(dev, page, offset, size, dir, attrs);
- 	else
-@@ -168,7 +168,7 @@ void dma_unmap_page_attrs(struct device *dev, dma_addr_t addr, size_t size,
- 	const struct dma_map_ops *ops = get_dma_ops(dev);
- 
- 	BUG_ON(!valid_dma_direction(dir));
--	if (dma_map_direct(dev, ops) ||
-+	if (dma_streaming_direct(dev, ops) ||
- 	    arch_dma_unmap_page_direct(dev, addr + size))
- 		dma_direct_unmap_page(dev, addr, size, dir, attrs);
- 	else if (ops->unmap_page)
-@@ -188,7 +188,7 @@ static int __dma_map_sg_attrs(struct device *dev, struct scatterlist *sg,
- 	if (WARN_ON_ONCE(!dev->dma_mask))
- 		return 0;
- 
--	if (dma_map_direct(dev, ops) ||
-+	if (dma_streaming_direct(dev, ops) ||
- 	    arch_dma_map_sg_direct(dev, sg, nents))
- 		ents = dma_direct_map_sg(dev, sg, nents, dir, attrs);
- 	else
-@@ -277,7 +277,7 @@ void dma_unmap_sg_attrs(struct device *dev, struct scatterlist *sg,
- 
- 	BUG_ON(!valid_dma_direction(dir));
- 	debug_dma_unmap_sg(dev, sg, nents, dir);
--	if (dma_map_direct(dev, ops) ||
-+	if (dma_streaming_direct(dev, ops) ||
- 	    arch_dma_unmap_sg_direct(dev, sg, nents))
- 		dma_direct_unmap_sg(dev, sg, nents, dir, attrs);
- 	else if (ops->unmap_sg)
-@@ -296,7 +296,7 @@ dma_addr_t dma_map_resource(struct device *dev, phys_addr_t phys_addr,
- 	if (WARN_ON_ONCE(!dev->dma_mask))
- 		return DMA_MAPPING_ERROR;
- 
--	if (dma_map_direct(dev, ops))
-+	if (dma_streaming_direct(dev, ops))
- 		addr = dma_direct_map_resource(dev, phys_addr, size, dir, attrs);
- 	else if (ops->map_resource)
- 		addr = ops->map_resource(dev, phys_addr, size, dir, attrs);
-@@ -312,7 +312,7 @@ void dma_unmap_resource(struct device *dev, dma_addr_t addr, size_t size,
- 	const struct dma_map_ops *ops = get_dma_ops(dev);
- 
- 	BUG_ON(!valid_dma_direction(dir));
--	if (!dma_map_direct(dev, ops) && ops->unmap_resource)
-+	if (!dma_streaming_direct(dev, ops) && ops->unmap_resource)
- 		ops->unmap_resource(dev, addr, size, dir, attrs);
- 	debug_dma_unmap_resource(dev, addr, size, dir);
- }
-@@ -324,7 +324,7 @@ void dma_sync_single_for_cpu(struct device *dev, dma_addr_t addr, size_t size,
- 	const struct dma_map_ops *ops = get_dma_ops(dev);
- 
- 	BUG_ON(!valid_dma_direction(dir));
--	if (dma_map_direct(dev, ops))
-+	if (dma_streaming_direct(dev, ops))
- 		dma_direct_sync_single_for_cpu(dev, addr, size, dir);
- 	else if (ops->sync_single_for_cpu)
- 		ops->sync_single_for_cpu(dev, addr, size, dir);
-@@ -338,7 +338,7 @@ void dma_sync_single_for_device(struct device *dev, dma_addr_t addr,
- 	const struct dma_map_ops *ops = get_dma_ops(dev);
- 
- 	BUG_ON(!valid_dma_direction(dir));
--	if (dma_map_direct(dev, ops))
-+	if (dma_streaming_direct(dev, ops))
- 		dma_direct_sync_single_for_device(dev, addr, size, dir);
- 	else if (ops->sync_single_for_device)
- 		ops->sync_single_for_device(dev, addr, size, dir);
-@@ -352,7 +352,7 @@ void dma_sync_sg_for_cpu(struct device *dev, struct scatterlist *sg,
- 	const struct dma_map_ops *ops = get_dma_ops(dev);
- 
- 	BUG_ON(!valid_dma_direction(dir));
--	if (dma_map_direct(dev, ops))
-+	if (dma_streaming_direct(dev, ops))
- 		dma_direct_sync_sg_for_cpu(dev, sg, nelems, dir);
- 	else if (ops->sync_sg_for_cpu)
- 		ops->sync_sg_for_cpu(dev, sg, nelems, dir);
-@@ -366,7 +366,7 @@ void dma_sync_sg_for_device(struct device *dev, struct scatterlist *sg,
- 	const struct dma_map_ops *ops = get_dma_ops(dev);
- 
- 	BUG_ON(!valid_dma_direction(dir));
--	if (dma_map_direct(dev, ops))
-+	if (dma_streaming_direct(dev, ops))
- 		dma_direct_sync_sg_for_device(dev, sg, nelems, dir);
- 	else if (ops->sync_sg_for_device)
- 		ops->sync_sg_for_device(dev, sg, nelems, dir);
-@@ -391,7 +391,7 @@ int dma_get_sgtable_attrs(struct device *dev, struct sg_table *sgt,
- {
- 	const struct dma_map_ops *ops = get_dma_ops(dev);
- 
--	if (dma_alloc_direct(dev, ops))
-+	if (dma_streaming_direct(dev, ops))
- 		return dma_direct_get_sgtable(dev, sgt, cpu_addr, dma_addr,
- 				size, attrs);
- 	if (!ops->get_sgtable)
-@@ -430,7 +430,7 @@ bool dma_can_mmap(struct device *dev)
- {
- 	const struct dma_map_ops *ops = get_dma_ops(dev);
- 
--	if (dma_alloc_direct(dev, ops))
-+	if (dma_coherent_direct(dev, ops))
- 		return dma_direct_can_mmap(dev);
- 	return ops->mmap != NULL;
- }
-@@ -455,7 +455,7 @@ int dma_mmap_attrs(struct device *dev, struct vm_area_struct *vma,
- {
- 	const struct dma_map_ops *ops = get_dma_ops(dev);
- 
--	if (dma_alloc_direct(dev, ops))
-+	if (dma_coherent_direct(dev, ops))
- 		return dma_direct_mmap(dev, vma, cpu_addr, dma_addr, size,
- 				attrs);
- 	if (!ops->mmap)
-@@ -468,7 +468,7 @@ u64 dma_get_required_mask(struct device *dev)
- {
- 	const struct dma_map_ops *ops = get_dma_ops(dev);
- 
--	if (dma_alloc_direct(dev, ops))
-+	if (dma_streaming_direct(dev, ops))
- 		return dma_direct_get_required_mask(dev);
- 	if (ops->get_required_mask)
- 		return ops->get_required_mask(dev);
-@@ -499,7 +499,7 @@ void *dma_alloc_attrs(struct device *dev, size_t size, dma_addr_t *dma_handle,
- 	/* let the implementation decide on the zone to allocate from: */
- 	flag &= ~(__GFP_DMA | __GFP_DMA32 | __GFP_HIGHMEM);
- 
--	if (dma_alloc_direct(dev, ops))
-+	if (dma_coherent_direct(dev, ops))
- 		cpu_addr = dma_direct_alloc(dev, size, dma_handle, flag, attrs);
- 	else if (ops->alloc)
- 		cpu_addr = ops->alloc(dev, size, dma_handle, flag, attrs);
-@@ -531,7 +531,7 @@ void dma_free_attrs(struct device *dev, size_t size, void *cpu_addr,
- 		return;
- 
- 	debug_dma_free_coherent(dev, size, cpu_addr, dma_handle);
--	if (dma_alloc_direct(dev, ops))
-+	if (dma_coherent_direct(dev, ops))
- 		dma_direct_free(dev, size, cpu_addr, dma_handle, attrs);
- 	else if (ops->free)
- 		ops->free(dev, size, cpu_addr, dma_handle, attrs);
-@@ -550,7 +550,7 @@ static struct page *__dma_alloc_pages(struct device *dev, size_t size,
-         gfp &= ~(__GFP_DMA | __GFP_DMA32 | __GFP_HIGHMEM);
- 
- 	size = PAGE_ALIGN(size);
--	if (dma_alloc_direct(dev, ops))
-+	if (dma_streaming_direct(dev, ops))
- 		return dma_direct_alloc_pages(dev, size, dma_handle, dir, gfp);
- 	if (!ops->alloc_pages)
- 		return NULL;
-@@ -574,7 +574,7 @@ static void __dma_free_pages(struct device *dev, size_t size, struct page *page,
- 	const struct dma_map_ops *ops = get_dma_ops(dev);
- 
- 	size = PAGE_ALIGN(size);
--	if (dma_alloc_direct(dev, ops))
-+	if (dma_streaming_direct(dev, ops))
- 		dma_direct_free_pages(dev, size, page, dma_handle, dir);
- 	else if (ops->free_pages)
- 		ops->free_pages(dev, size, page, dma_handle, dir);
-@@ -769,7 +769,7 @@ size_t dma_max_mapping_size(struct device *dev)
- 	const struct dma_map_ops *ops = get_dma_ops(dev);
- 	size_t size = SIZE_MAX;
- 
--	if (dma_map_direct(dev, ops))
-+	if (dma_streaming_direct(dev, ops))
- 		size = dma_direct_max_mapping_size(dev);
- 	else if (ops && ops->max_mapping_size)
- 		size = ops->max_mapping_size(dev);
-@@ -782,7 +782,7 @@ bool dma_need_sync(struct device *dev, dma_addr_t dma_addr)
- {
- 	const struct dma_map_ops *ops = get_dma_ops(dev);
- 
--	if (dma_map_direct(dev, ops))
-+	if (dma_streaming_direct(dev, ops))
- 		return dma_direct_need_sync(dev, dma_addr);
- 	return ops->sync_single_for_cpu || ops->sync_single_for_device;
- }
++	id->pinctrl = devm_pinctrl_get(&pdev->dev);
++	if (!IS_ERR(id->pinctrl)) {
++		ret = cdns_i2c_init_recovery_info(id, pdev);
++		if (ret)
++			return ret;
++	}
++
+ 	id->membase = devm_platform_get_and_ioremap_resource(pdev, 0, &r_mem);
+ 	if (IS_ERR(id->membase))
+ 		return PTR_ERR(id->membase);
 -- 
-2.31.1
+2.17.1
 
