@@ -2,180 +2,132 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25434BFE9C
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Feb 2022 17:31:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A84844C00A2
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Feb 2022 18:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233936AbiBVQcM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Feb 2022 11:32:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
+        id S234745AbiBVR53 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Feb 2022 12:57:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233875AbiBVQcJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Feb 2022 11:32:09 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1FA6E54E;
-        Tue, 22 Feb 2022 08:31:41 -0800 (PST)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2F93420003;
-        Tue, 22 Feb 2022 16:31:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1645547500;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DX9NhASmajHZnyC217wOwL7ov42sa2Tz6XVPF8ddW48=;
-        b=fxrNoOOksIBC1l5jidCWAAr+FXTdxwIp8gWk4WyB7gClWMLtgcsXyc3A5AR4kvQb8TldMv
-        2BWw2VfmwDCecO2uE9h3yultbIRm+SfRJUFKnKcB4r0GOXZ7j9uIrvktXSkufIhm0Fax9S
-        FGMZt6csFKJ5F1Yw0euMmULxpV+Y6eI50ruJqz3N69qRQq6EEXqP1pZ+nGrNtFo61aKHQE
-        Fue4GuJVvnmemlvUWJ6gT56QOxQ43FonwjGxNUzB4BoEWAfgMREaLy30XEWDrxH/daz3k9
-        4ieES7Wfi6/8u47FTCyuIT1BfnD1MxOao7CzI/KejjawmbhpvBZ7rx5w1czB+g==
-Date:   Tue, 22 Feb 2022 17:30:19 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [RFC 00/10] add support for fwnode in i2c mux system and sfp
-Message-ID: <20220222173019.2380dcaf@fixe.home>
-In-Reply-To: <YhPOxL++yhNHh+xH@smile.fi.intel.com>
-References: <20220221162652.103834-1-clement.leger@bootlin.com>
-        <YhPOxL++yhNHh+xH@smile.fi.intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        with ESMTP id S234726AbiBVR52 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Feb 2022 12:57:28 -0500
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0463E9F3AB;
+        Tue, 22 Feb 2022 09:56:48 -0800 (PST)
+Received: by mail-oo1-f53.google.com with SMTP id i10-20020a4aab0a000000b002fccf890d5fso18694899oon.5;
+        Tue, 22 Feb 2022 09:56:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=d0c5eaekgCsd/2MB/A2s3Yr0/x87WiLkg0ydsvjSbdg=;
+        b=X5ln7daP7x36ZsQwdFB3GPGWMZbyrSw1tImIzf0EpnnNkjrt1zBa4+uwoixGuyE8Ko
+         bgEhFZvEVl2Czxutg1OAhZv3S8fqJUs/N4onWCRB64yda9IFuA51xoRfmvpjOStBZJRX
+         WpvqmsJ6KjKYrq6kCllipG9O0s0wU3cyM+WJIzkW/fJv/gQzTa9x/kIPaidKAUdVRytm
+         ktqCiORrcA4/2xPE44Lc7tKu0jZAPLxKM8f+5F7qbMiBmLhdqjmQ4WacS2HzKqEOqqp7
+         P2nJtXHWoHTLNwiPlgV7ufu5whS81R+jvaKHMkDzgLl4kEa19v4Dt0tig5u8IOvquaip
+         z1Iw==
+X-Gm-Message-State: AOAM531G135hW3DBrg/Gjr7+0Jfvy9GGgzveZRGjOgN0qEZI+tkLFVVT
+        n0tOMbBMxyrShGVHpdKgDw==
+X-Google-Smtp-Source: ABdhPJzyCoIdb4zb2XlsBbH2K09wgxaBCtYwIdcE2Yqsud2oVcKlTNvKGVY6PBPFKAl9JjY+BPTX8g==
+X-Received: by 2002:a05:6870:790c:b0:d2:8591:d4a5 with SMTP id hg12-20020a056870790c00b000d28591d4a5mr2255509oab.265.1645552607973;
+        Tue, 22 Feb 2022 09:56:47 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id o15sm6387844ooi.31.2022.02.22.09.56.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 09:56:47 -0800 (PST)
+Received: (nullmailer pid 3307024 invoked by uid 1000);
+        Tue, 22 Feb 2022 17:56:46 -0000
+Date:   Tue, 22 Feb 2022 11:56:46 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Tyrone Ting <warp5tw@gmail.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        krzysztof.kozlowski@canonical.com, semen.protsenko@linaro.org,
+        yangyicong@hisilicon.com, wsa@kernel.org, jie.deng@intel.com,
+        sven@svenpeter.dev, bence98@sch.bme.hu,
+        christophe.leroy@csgroup.eu, lukas.bulwahn@gmail.com,
+        olof@lixom.net, arnd@arndb.de, digetx@gmail.com,
+        andriy.shevchenko@linux.intel.com, tali.perry@nuvoton.com,
+        Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
+        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
+        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 02/11] dt-bindings: i2c: npcm: support NPCM845
+Message-ID: <YhUj3uRQinOVF4eM@robh.at.kernel.org>
+References: <20220220035321.3870-1-warp5tw@gmail.com>
+ <20220220035321.3870-3-warp5tw@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220220035321.3870-3-warp5tw@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Le Mon, 21 Feb 2022 19:41:24 +0200,
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> a =C3=A9crit :
+On Sun, Feb 20, 2022 at 11:53:12AM +0800, Tyrone Ting wrote:
+> From: Tyrone Ting <kfting@nuvoton.com>
+> 
+> Add compatible and nuvoton,sys-mgr description for NPCM i2c module.
+> 
+> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+> ---
+>  .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml       | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml b/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
+> index 128444942aec..809c51ac32fe 100644
+> --- a/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
+> @@ -7,17 +7,18 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: nuvoton NPCM7XX I2C Controller Device Tree Bindings
+>  
+>  description: |
+> -  The NPCM750x includes sixteen I2C bus controllers. All Controllers support
+> -  both master and slave mode. Each controller can switch between master and slave
+> -  at run time (i.e. IPMB mode). Each controller has two 16 byte HW FIFO for TX and
+> -  RX.
+> +  I2C bus controllers of the NPCM series support both master and
+> +  slave mode. Each controller can switch between master and slave at run time
+> +  (i.e. IPMB mode). HW FIFO for TX and RX are supported.
+>  
+>  maintainers:
+>    - Tali Perry <tali.perry1@gmail.com>
+>  
+>  properties:
+>    compatible:
+> -    const: nuvoton,npcm750-i2c
+> +     enum:
+> +      - nuvoton,npcm750-i2c
+> +      - nuvoton,npcm845-i2c
+>  
+>    reg:
+>      maxItems: 1
+> @@ -36,11 +37,16 @@ properties:
+>      default: 100000
+>      enum: [100000, 400000, 1000000]
+>  
+> +  nuvoton,sys-mgr:
+> +    $ref: "/schemas/types.yaml#/definitions/phandle"
+> +    description: The phandle of system manager register node.
+> +
+>  required:
+>    - compatible
+>    - reg
+>    - interrupts
+>    - clocks
+> +  - nuvoton,sys-mgr
 
-> >=20
-> > We thought about adding CONFIG_OF to x86 and potentially describe this
-> > card using device-tree overlays but it introduce other problems that
-> > also seems difficult to solve (overlay loading without base
-> > device-tree, fixup of IRQs, adresses, and so on) and CONFIG_OF is not
-> > often enabled on x86 to say the least. =20
->=20
-> Why it can't be described by SSDT overlay (if the x86 platform in questio=
-n is
-> ACPI based)?
+You can't make nuvoton,sys-mgr required for existing users. You can add 
+an if/then schema for nuvoton,npcm845-i2c if you want to make it 
+required in that case.
 
-This devices uses a SoC for which drivers are already available but are
-meant to be used by a device-tree description. These drivers uses the
-following subsystems:
-- reset (no ACPI support ?)
-- clk (no ACPI support ?)
-- pinctrl (no ACPI support ?)
-- syscon (no ACPI support ?)
-- gpio
-- phy
-- mdio
-
-Converting existing OF support to fwnode support and thus allowing
-drivers and subsystems to be compatible with software nodes seemed like
-the easiest way to do what I needed by keeping all existing drivers.
-With this support, the driver is completely self-contained and does
-allow the card to be plugged on whatever platform the user may have.
-
-Again, the PCI card is independent of the platform, I do not really see
-why it should be described using platform description language.
-
-> >=20
-> > This series introduce a number of changes in multiple subsystems to
-> > allow registering and using devices that are described with a
-> > software_node description attached to a mfd_cell, making them usable
-> > with the fwnode API. It was needed to modify many subsystem where
-> > CONFIG_OF was tightly integrated through the use of of_xlate()
-> > functions and other of_* calls. New calls have been added to use fwnode
-> > API and thus be usable with a wider range of nodes. Functions that are
-> > used to get the devices (pinctrl_get, clk_get and so on) also needed
-> > to be changed to use the fwnode API internally.
-> >=20
-> > For instance, the clk framework has been modified to add a
-> > fwnode_xlate() callback and a new named fwnode_clk_add_hw_provider()
-> > has been added. This function will register a clock using
-> > fwnode_xlate() callback. Note that since the fwnode API is compatible
-> > with devices that have a of_node member set, it will still be possible
-> > to use the driver and get the clocks with CONFIG_OF enabled
-> > configurations. =20
->=20
-> How does this all is compatible with ACPI approaches?
-> I mean we usually do not reintroduce 1:1 DT schemas in ACPI.
-
-For the moment, I only added fwnode API support as an alternative to
-support both OF and software nodes. ACPI is not meant to be handled by
-this code "as-is". There is for sure some modifications to be made and
-I do not know how clocks are handled when using ACPI. Based on some
-thread dating back to 2018 [1], it seem it was even not supported at
-all.
-
-To be clear, I added the equivalent of the OF support but using
-fwnode API because I was interested primarly in using it with software
-nodes and still wanted OF support to work. I did not planned it to be
-"ACPI compliant" right now since I do not have any knowledge in that
-field.
-
->=20
-> I think the CCF should be converted to use fwnode APIs and meanwhile
-> we may discuss how to deal with clocks on ACPI platforms, because
-> it may be a part of the power management methods.
-
-Ok, before going down that way, should the fwnode support be the "only"
-one, ie remove of_clk_register and others and convert them to
-fwnode_clk_register for instance or should it be left to avoid
-modifying all clock drivers ?
-
->=20
-> > In some subsystems, it was possible to keep OF related function by
-> > wrapping the fwnode ones. It is not yet sure if both support
-> > (device-tree and fwnode) should still continue to coexists. For instance
-> > if fwnode_xlate() and of_xlate() should remain since the fwnode version
-> > also supports device-tree. Removing of_xlate() would of course require
-> > to modify all drivers that uses it.
-> >=20
-> > Here is an excerpt of the lan966x description when used as a PCIe card.
-> > The complete description is visible at [2]. This part only describe the
-> > flexcom controller and the fixed-clock that is used as an input clock.
-> >=20
-> > static const struct property_entry ddr_clk_props[] =3D {
-> >         PROPERTY_ENTRY_U32("clock-frequency", 30000000), =20
->=20
-> >         PROPERTY_ENTRY_U32("#clock-cells", 0), =20
->=20
-> Why this is used?
->=20
-
-These props actually describes a fixed-clock properties. When adding
-fwnode support to clk framework, it was needed to add the
-equivalent of of_xlate() for fwnode (fwnode_xlate()). The number of
-cells used to describe a reference is still needed to do the
-translation using fwnode_property_get_reference_args() and give the
-correct arguments to fwnode_xlate().
-
-[1]
-https://lore.kernel.org/lkml/914341e7-ca94-054d-6127-522b745006b4@arm.com/T/
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+Rob
