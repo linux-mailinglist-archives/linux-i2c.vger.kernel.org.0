@@ -2,48 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3533B4C0927
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Feb 2022 03:39:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6562A4C0966
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Feb 2022 03:39:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237980AbiBWCi7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Feb 2022 21:38:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
+        id S237311AbiBWCjw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Feb 2022 21:39:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237741AbiBWCiA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Feb 2022 21:38:00 -0500
+        with ESMTP id S237813AbiBWCiG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Feb 2022 21:38:06 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB9F5DE7C;
-        Tue, 22 Feb 2022 18:32:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E3522BF6;
+        Tue, 22 Feb 2022 18:33:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E66CB81E01;
-        Wed, 23 Feb 2022 02:32:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4514CC340E8;
-        Wed, 23 Feb 2022 02:32:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B20CB81E0D;
+        Wed, 23 Feb 2022 02:32:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 951FCC340E8;
+        Wed, 23 Feb 2022 02:32:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645583561;
-        bh=p3NpOOloCl+up0CATJ/0J6lmGf3pYfYwJI3ux1MhqfE=;
+        s=k20201202; t=1645583574;
+        bh=94F1j0DiZ7qJpTyWsfI+MmjhV156Q0ciHj/koAEnTgk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a/Roze0u7XsorpaiXZJk500RKk4DMig+cXtx51Sac+VNX/5SnekYyAhH/sstxdX89
-         IVJyTp+1VQaTqGvTYD2BwkY74c8pkn0Y6iYTkqLfGmc4yoRhzGrWsAjB+XJvY0uOnv
-         /vburDZRQ1nxHLf5mh310Ql+z/ndIf/5iwRqVgnMnKBub7Uqv9jJ45efQiZtb83+vQ
-         XG0OHJKe/Wu8acMoca80tnaQptXUsHwUqVHWNtH+LKqnvfp7MMqlYTSY5zP76SaqIO
-         aiQ0hGzfrsVBlm8u9PgQg3KsbV1CEmcZLl6MSBNf0DYPl3QG24/4DDP1zk4bfMRuW5
-         DX2u9okNHgixg==
+        b=eWLZ2d7oxK+MBn7U0dGpsBzbGxHBUPooNDBcU5CiE0doiwBOjBGYOg7w97/P1L4EE
+         ZTpmXME1TmRTmeCBm7i92NvvdeQ6XG+LCRkSoWhC+AklU5aia0PrXCA0iVXox3vIQU
+         OU/CTri8nABv02cjsJCKEy/Rln8v8EtoSW+Jiey8rIUwfFnICcE6kFArjhse7pWOeq
+         /FSc4sRrZNf1IouKEQW9OJP3MOgfLABKGFHkI+JkF2m6qCdZjWq34bgRCdDYRGyoP3
+         NHUNsZ1iWEQPdTFLTK52BXckprK093euqNGFIEuKr3zJcPOnwsXqD1E1gf3EYs9xgv
+         Oc3hEICWoRngA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Eric Anholt <eric@anholt.net>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        nsaenz@kernel.org, f.fainelli@gmail.com, rjui@broadcom.com,
-        sbranden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        prabhakar.mahadev-lad.rj@bp.renesas.com, linux-i2c@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.14 03/10] i2c: bcm2835: Avoid clock stretching timeouts
-Date:   Tue, 22 Feb 2022 21:32:26 -0500
-Message-Id: <20220223023233.242468-3-sashal@kernel.org>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Sasha Levin <sashal@kernel.org>,
+        krzysztof.kozlowski@canonical.com, robh@kernel.org,
+        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
+        sven@svenpeter.dev, jie.deng@intel.com, bence98@sch.bme.hu,
+        lukas.bulwahn@gmail.com, linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 08/10] i2c: cadence: allow COMPILE_TEST
+Date:   Tue, 22 Feb 2022 21:32:31 -0500
+Message-Id: <20220223023233.242468-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220223023233.242468-1-sashal@kernel.org>
 References: <20220223023233.242468-1-sashal@kernel.org>
@@ -61,53 +60,33 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Eric Anholt <eric@anholt.net>
+From: Wolfram Sang <wsa@kernel.org>
 
-[ Upstream commit 9495b9b31abe525ebd93da58de2c88b9f66d3a0e ]
+[ Upstream commit 0b0dcb3882c8f08bdeafa03adb4487e104d26050 ]
 
-The CLKT register contains at poweron 0x40, which at our typical 100kHz
-bus rate means .64ms. But there is no specified limit to how long devices
-should be able to stretch the clocks, so just disable the timeout. We
-still have a timeout wrapping the entire transfer.
+Driver builds fine with COMPILE_TEST. Enable it for wider test coverage
+and easier maintenance.
 
-Signed-off-by: Eric Anholt <eric@anholt.net>
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-BugLink: https://github.com/raspberrypi/linux/issues/3064
 Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Acked-by: Michal Simek <michal.simek@xilinx.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-bcm2835.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/i2c/busses/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
-index 4d19254f78c8a..db1ab9ccc30e7 100644
---- a/drivers/i2c/busses/i2c-bcm2835.c
-+++ b/drivers/i2c/busses/i2c-bcm2835.c
-@@ -28,6 +28,11 @@
- #define BCM2835_I2C_FIFO	0x10
- #define BCM2835_I2C_DIV		0x14
- #define BCM2835_I2C_DEL		0x18
-+/*
-+ * 16-bit field for the number of SCL cycles to wait after rising SCL
-+ * before deciding the slave is not responding. 0 disables the
-+ * timeout detection.
-+ */
- #define BCM2835_I2C_CLKT	0x1c
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index c457f65136f83..ab9c7f2f1f79b 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -459,7 +459,7 @@ config I2C_BLACKFIN_TWI_CLK_KHZ
  
- #define BCM2835_I2C_C_READ	BIT(0)
-@@ -398,6 +403,12 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
- 	adap->dev.of_node = pdev->dev.of_node;
- 	adap->quirks = &bcm2835_i2c_quirks;
- 
-+	/*
-+	 * Disable the hardware clock stretching timeout. SMBUS
-+	 * specifies a limit for how long the device can stretch the
-+	 * clock, but core I2C doesn't.
-+	 */
-+	bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_CLKT, 0);
- 	bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_C, 0);
- 
- 	ret = i2c_add_adapter(adap);
+ config I2C_CADENCE
+ 	tristate "Cadence I2C Controller"
+-	depends on ARCH_ZYNQ || ARM64 || XTENSA
++	depends on ARCH_ZYNQ || ARM64 || XTENSA || COMPILE_TEST
+ 	help
+ 	  Say yes here to select Cadence I2C Host Controller. This controller is
+ 	  e.g. used by Xilinx Zynq.
 -- 
 2.34.1
 
