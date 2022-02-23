@@ -2,48 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868004C1130
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Feb 2022 12:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A064C121B
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Feb 2022 13:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238597AbiBWLYG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Feb 2022 06:24:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
+        id S240255AbiBWMC5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Feb 2022 07:02:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234705AbiBWLYF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Feb 2022 06:24:05 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCDE8AE55;
-        Wed, 23 Feb 2022 03:23:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645615418; x=1677151418;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=FWh5Gytqdi+aFrZmALBpSFgdHMcuZf1UxHQVAqFhB5s=;
-  b=Lfd/d5VFioq8U76Z6qj/v1k5QV/dLpXva1E7xYTPBUEOhjljVCAdKtU9
-   rug7bkovoW5kFYvhrGaV8P352YAjlvcMndxqY3VMr2lH+7M6e/3FVnMCV
-   wZF/biA+fdrZW2K4l4fKYsUln/EHReoBoODToZ6Ach85JCDRTiRra8R2k
-   9YbF+4DuXp/B+GbMVFmy+/sbLO2NgHlKoi6QOcrtTf86VlB0jkUNexFXd
-   UE4W+nNx+HZWVn1rN91SPV6V0BWF5TcsGibInGGHCfhv+4jPUN+QAucom
-   nab+qoJRG+g2njtIYLon/Tl1ApU/awm1p6SjZgwu/aTBIKEZfc7pjMVOR
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="231915372"
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="231915372"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 03:23:37 -0800
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="532642764"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 03:23:33 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nMpjF-007OHE-SU;
-        Wed, 23 Feb 2022 13:22:41 +0200
-Date:   Wed, 23 Feb 2022 13:22:41 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-        Hans de Goede <hdegoede@redhat.com>
+        with ESMTP id S240231AbiBWMC4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Feb 2022 07:02:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A09198F4D
+        for <linux-i2c@vger.kernel.org>; Wed, 23 Feb 2022 04:02:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645617747;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rxw0Z+reGZb0g3ZpKzxxXhVmrLWhbn6dM0h9967n9S4=;
+        b=Y6pdqY7cuOtczfvBkwSEM6srAvve0XTst7PAvyaSJ2Nj33vvCygqXvVvFtz6S/3gAGLn95
+        yaHRqV7cmrEN9299Px6+lUwGLucNMwu02+BGlYeSHbPXTKqE0jJsM55ZcAb+w8T1AWENt/
+        zXnmXMwCv4ZG9fMTDepaVBd3DKIVNc8=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-331-0kL0QwL3OVuChE0HDzHWzw-1; Wed, 23 Feb 2022 07:02:26 -0500
+X-MC-Unique: 0kL0QwL3OVuChE0HDzHWzw-1
+Received: by mail-ed1-f71.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso13473946edt.20
+        for <linux-i2c@vger.kernel.org>; Wed, 23 Feb 2022 04:02:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Rxw0Z+reGZb0g3ZpKzxxXhVmrLWhbn6dM0h9967n9S4=;
+        b=NtUL9gt5Xuf4Ijo+GG3QbZxoxhEcatjBT0F4vvu0M2pfDKOLqRuAW1TX2kJwIaZ4Xj
+         cxENkKo9NV6oW0foVyu63NRjOuNdfexp6XztZzfD/vgTdiGxP5Z5sY1uM6quHRFver6d
+         uvQ+KBzOkfCR2KcbJcqYhD6veEP67I2iBvv+G7mxBr63S3vVhTE6Px7TCiQ7l2EdXKLK
+         RCzgb7zNXAJfBw6DEHq5b8P7sVGNr57e5B2uGlxMCfmnFGmNIkBfFBBTliPoxAzXmfxD
+         XQYhzWhCArYIWjKvv0bftFPPpkq6ZZsib+x8YWzinkRcfkGhhvOfAxGPuRF3DadoWlfr
+         hgIw==
+X-Gm-Message-State: AOAM533UDVoFcw68UvRDzdC2gOXz6ij3Q6fIsE0Jm6vRKS7XCh0AMFyK
+        YHF8sMxTP0SskPlWKWNXhiXd8OBYv5UgBlbO+/M8p7cWAJAIltQbTq9yMUXbgDHDJpOtDyWqH3U
+        ROqF+MzTkLYZeUgX2Fair
+X-Received: by 2002:aa7:cc96:0:b0:410:b9ac:241 with SMTP id p22-20020aa7cc96000000b00410b9ac0241mr31879384edt.246.1645617744687;
+        Wed, 23 Feb 2022 04:02:24 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzfeaFDjsJwitSmeTHc7QM+d+toZyNkK8DQVMWIsAnMGqcK0Rpdfv174Ak9wkYZNTh4U2N2nQ==
+X-Received: by 2002:aa7:cc96:0:b0:410:b9ac:241 with SMTP id p22-20020aa7cc96000000b00410b9ac0241mr31879344edt.246.1645617744435;
+        Wed, 23 Feb 2022 04:02:24 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id e15sm3312059ejk.3.2022.02.23.04.02.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 04:02:24 -0800 (PST)
+Message-ID: <888f9f1a-ca5a-1250-1423-6c012ec773e2@redhat.com>
+Date:   Wed, 23 Feb 2022 13:02:23 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC 10/10] net: sfp: add support for fwnode
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
 Cc:     Daniel Scally <djrscally@gmail.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -59,21 +79,18 @@ Cc:     Daniel Scally <djrscally@gmail.com>,
         netdev@vger.kernel.org,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [RFC 10/10] net: sfp: add support for fwnode
-Message-ID: <YhYZAc5+Q1rN3vhk@smile.fi.intel.com>
 References: <20220221162652.103834-1-clement.leger@bootlin.com>
  <20220221162652.103834-11-clement.leger@bootlin.com>
- <YhPSkz8+BIcdb72R@smile.fi.intel.com>
- <20220222142513.026ad98c@fixe.home>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+ <YhPSkz8+BIcdb72R@smile.fi.intel.com> <20220222142513.026ad98c@fixe.home>
+ <YhYZAc5+Q1rN3vhk@smile.fi.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <YhYZAc5+Q1rN3vhk@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220222142513.026ad98c@fixe.home>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,30 +98,92 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 02:25:13PM +0100, Clément Léger wrote:
-> Le Mon, 21 Feb 2022 19:57:39 +0200,
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> a écrit :
-> 
-> > On Mon, Feb 21, 2022 at 05:26:52PM +0100, Clément Léger wrote:
-> > > Add support to retrieve a i2c bus in sfp with a fwnode. This support
-> > > is using the fwnode API which also works with device-tree and ACPI.
-> > > For this purpose, the device-tree and ACPI code handling the i2c
-> > > adapter retrieval was factorized with the new code. This also allows
-> > > i2c devices using a software_node description to be used by sfp code.  
-> > 
-> > If I'm not mistaken this patch can even go separately right now, since all used
-> > APIs are already available.
-> 
-> This patches uses fwnode_find_i2c_adapter_by_node() which is introduced
-> by "i2c: fwnode: add fwnode_find_i2c_adapter_by_node()" but they can
-> probably be contributed both in a separate series.
+Hi,
 
-I summon Hans into the discussion since I remember he recently refactored
-a bit I2C (ACPI/fwnode) APIs. Also he might have an idea about entire big
-picture approach with this series based on his ACPI experience.
+On 2/23/22 12:22, Andy Shevchenko wrote:
+> On Tue, Feb 22, 2022 at 02:25:13PM +0100, ClÃ©ment LÃ©ger wrote:
+>> Le Mon, 21 Feb 2022 19:57:39 +0200,
+>> Andy Shevchenko <andriy.shevchenko@linux.intel.com> a Ã©crit :
+>>
+>>> On Mon, Feb 21, 2022 at 05:26:52PM +0100, ClÃ©ment LÃ©ger wrote:
+>>>> Add support to retrieve a i2c bus in sfp with a fwnode. This support
+>>>> is using the fwnode API which also works with device-tree and ACPI.
+>>>> For this purpose, the device-tree and ACPI code handling the i2c
+>>>> adapter retrieval was factorized with the new code. This also allows
+>>>> i2c devices using a software_node description to be used by sfp code.  
+>>>
+>>> If I'm not mistaken this patch can even go separately right now, since all used
+>>> APIs are already available.
+>>
+>> This patches uses fwnode_find_i2c_adapter_by_node() which is introduced
+>> by "i2c: fwnode: add fwnode_find_i2c_adapter_by_node()" but they can
+>> probably be contributed both in a separate series.
+> 
+> I summon Hans into the discussion since I remember he recently refactored
+> a bit I2C (ACPI/fwnode) APIs. Also he might have an idea about entire big
+> picture approach with this series based on his ACPI experience.
 
--- 
-With Best Regards,
-Andy Shevchenko
+If I understand this series correctly then this is about a PCI-E card
+which has an I2C controller on the card and behind that I2C-controller
+there are a couple if I2C muxes + I2C clients.
+
+And the goal of the series is to describe those I2C muxes + I2C clients
+with software nodes so that the existing I2C enumeration code can be
+used (after porting the existing I2C enumeration code from OF functions
+to generic fwnode functions).
+
+Did I understand this bit correctly? I believe that a lot of the
+discussion here is caused by the initial problem / hw-setup this
+series tries to address / support is not described very well ?
+
+Assuming I did understand the above correctly. One alternative would be
+to simply manually instantiate the I2C muxes + clients using
+i2c_new_client_device(). But I'm not sure if i2c_new_client_device()
+will work for the muxes without adding some software_nodes which
+brings us back to something like this patch-set.
+
+In general I believe that porting things away from OF specific parsing
+to the generic fwnode APIs is a good thing.
+
+Making device_get_match_data() for devices with only a software fwnode
+use of_device_id matching feels a bit weird. But it also makes sense
+since that requires just adding a compatible string to the software
+fwnode properties which is easy and it allows re-uses existing
+matching code in the drivers.
+
+I understand various people falling over this weirdness but AFAICT
+the alternative would be adding some special swnode_id type + matching
+code for devices where the primary fwnode is a software fwnode, which
+would just be a whole bunch of extra code ending up with something
+similar.
+
+So re-using of_device_id-s for matching of devices where the primary
+fwnode is a software fwnode seems like a good idea. *But* this all
+needs to be explained in the commit message a lot better. It really
+needs to be spelled out that this is:
+
+a) Only for matching devices where the primary fwnode is a software fwnode 
+
+b) Really has nothing to do with of/dt but of_device_id matching is
+   used here to avoid having to introduce a new matching mechanism just
+   for devices where the primary fwnode is a software fwnode
+
+c) That introducing a new software fwnode matching mechanism would be
+   a bad idea since this will require adding new swnode_match tables
+   to many drivers, where as re-using of_device_id will make drivers
+   which already have an of_match_table just work.
+
+And this should be spelled out in both the commit message as well
+as in some documentation / kdoc comments. Because although a useful
+trick, reusing the of_match_id-s is also confusing which I believe
+is what has led to a lot of the discussion on this patch-set so far.
+
+Note the above all relies on my interpretation of this patch set,
+which may be wrong, since as said the patch-set does seem to be
+lacking when it comes to documentation / motivation of the patches.
+
+Regards,
+
+Hans
 
 
