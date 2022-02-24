@@ -2,98 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4792C4C2C52
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Feb 2022 13:59:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BAB4C2C69
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Feb 2022 14:01:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234583AbiBXM7L (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 24 Feb 2022 07:59:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42776 "EHLO
+        id S231846AbiBXNCF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 24 Feb 2022 08:02:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbiBXM7K (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Feb 2022 07:59:10 -0500
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FFD28DDD5;
-        Thu, 24 Feb 2022 04:58:41 -0800 (PST)
-Received: by mail-vs1-f44.google.com with SMTP id i27so1990138vsr.10;
-        Thu, 24 Feb 2022 04:58:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xjFekihS/Muhh+U1v0fi300Fdzno0lDIR6KuI4I6xow=;
-        b=eZ6SzqgASD2JY6A7uRzRSXyID72TOVOMSO7skqDIPRt4b0XJEx3dOkIdi5JR5Oscbf
-         SNj/sEm90/z3J9X0Gxje8tFIzEReLhUIWEA2geni/adkn5wcHzeum5GOlUw8b15JzCMC
-         izVMRxwxdRNMQLYWijdZM+GVzZJgomNjMVCVR4r2khdExezP5uxCY+AkzHGxfUuucwf4
-         t5mBLa8X+lP+0XY2DLd2JBu2n5rqOWVeU+mtttDO8bsRP3NmEKoXbwUc/UHjPU5b90CR
-         TuNZUV9acGSguYS9/BxMkP0RZhNK0Gq4VXdxf7Dv0FIiQ+Qs45fkdON90UAQ42HxyLmG
-         DcIw==
-X-Gm-Message-State: AOAM532Xv9m4Ii4z15QMyyCPer8R1CN4KG44pSU0OZ31gqjp7ZsuhNN8
-        1utTvJXyv00f/OgM/jpzhNIt/R5eTZe+0w==
-X-Google-Smtp-Source: ABdhPJzNEIdKk54OxTdfBC2MP6b96VC+1cOmSzu98fXJglfkoWOmWQNRvG7inrPblfaR8nRlHZhJpQ==
-X-Received: by 2002:a67:d317:0:b0:31b:9b12:dd6b with SMTP id a23-20020a67d317000000b0031b9b12dd6bmr919406vsj.27.1645707520215;
-        Thu, 24 Feb 2022 04:58:40 -0800 (PST)
-Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com. [209.85.221.177])
-        by smtp.gmail.com with ESMTPSA id v128sm376914vkv.2.2022.02.24.04.58.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 04:58:39 -0800 (PST)
-Received: by mail-vk1-f177.google.com with SMTP id w128so1123377vkd.3;
-        Thu, 24 Feb 2022 04:58:39 -0800 (PST)
-X-Received: by 2002:a05:6122:114e:b0:32d:4662:65a8 with SMTP id
- p14-20020a056122114e00b0032d466265a8mr951435vko.0.1645707519516; Thu, 24 Feb
- 2022 04:58:39 -0800 (PST)
+        with ESMTP id S234627AbiBXNCE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Feb 2022 08:02:04 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B333E0A9;
+        Thu, 24 Feb 2022 05:01:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645707693; x=1677243693;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5aznmc5N7mLUl584bkbTiNqi1v3rIz5jaM+TI+KfQd0=;
+  b=mDtncJToo1gUt+6IziRfwMFWb8wRTmueAabf9qIPB+tDzwlZ6jGIVkuy
+   UrYI4JN/zRHRFLd0bcMA48DM0Oi9JHYaqu/J6dPbgGj2QzzCakUMWWybG
+   o15XR7UZBeEjQ7cuRJM4pu4sSKcijCNVnDr5y3+eZs+i0QxtoJuoltLw4
+   CXMcLVhwzknmGbS6Yb0mdOFm6DMCmYyYOxYUo3Ct4soajeXT1qO8gOTkE
+   tVIWW7wjNL56+d33lUfsOp4WbP1uzG6vQmZ1FerJNkLQU4WaNiHiivEWW
+   AoAWP/28W6LQQLWfy/LijwUhBBl9IiWsb+Yos8/3+ElMW2DlcypsV0cJd
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="252421890"
+X-IronPort-AV: E=Sophos;i="5.88,134,1635231600"; 
+   d="scan'208";a="252421890"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 05:01:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,134,1635231600"; 
+   d="scan'208";a="548737676"
+Received: from mylly.fi.intel.com (HELO [10.237.72.156]) ([10.237.72.156])
+  by orsmga008.jf.intel.com with ESMTP; 24 Feb 2022 05:01:28 -0800
+Message-ID: <a56eac7a-fd97-b371-c426-524c71abeb1d@linux.intel.com>
+Date:   Thu, 24 Feb 2022 15:01:27 +0200
 MIME-Version: 1.0
-References: <365d32c63c2fe080866be60c32dddd0f3634d19d.1645705789.git.geert@linux-m68k.org>
- <97b69b3a-bf17-6a43-bf96-da19822051b3@microchip.com>
-In-Reply-To: <97b69b3a-bf17-6a43-bf96-da19822051b3@microchip.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 24 Feb 2022 13:58:28 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXGQDqMagqzD8VNYm2oucE=_nas9mM2sT_RoW2GKhr4vw@mail.gmail.com>
-Message-ID: <CAMuHMdXGQDqMagqzD8VNYm2oucE=_nas9mM2sT_RoW2GKhr4vw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: i2c: microchip,corei2c: Fix indentation of
- compatible items
-To:     Conor Dooley <Conor.Dooley@microchip.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Daire.McNamara@microchip.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.6.0
+Subject: Re: [PATCH -next] i2c: designware: Fix improper usage of readl
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        wsa@kernel.org, rrangel@chromium.org, upstream@semihalf.com,
+        kernel test robot <lkp@intel.com>
+References: <20220218133348.628962-1-jsd@semihalf.com>
+ <YhZNu0pHKiK9Vf55@smile.fi.intel.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <YhZNu0pHKiK9Vf55@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Conor,
-
-On Thu, Feb 24, 2022 at 1:55 PM <Conor.Dooley@microchip.com> wrote:
-> On 24/02/2022 12:31, Geert Uytterhoeven wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >
-> > make dt_binding_check:
-> >
-> >      Documentation/devicetree/bindings/i2c/microchip,corei2c.yaml:19:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
->
-> Hey Geert,
-> I've run dt_binding_check locally but I dont get a warning, is there
-> something I am missing?
-
-Interesting. Are you using the latest dtschema?
-https://github.com/devicetree-org/dt-schema.git
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+On 2/23/22 17:07, Andy Shevchenko wrote:
+> On Fri, Feb 18, 2022 at 02:33:48PM +0100, Jan Dabros wrote:
+>> Kernel test robot reported incorrect type in argument 1 of readl(), but
+>> more importantly it brought attention that MMIO accessor shouldn't be
+>> used in this case, since req->hdr.status is part of a command-response
+>> buffer in system memory.
+>>
+>> Since its value may be altered by PSP outside of the scope of current
+>> thread (somehow similar to IRQ handler case), we need to use
+>> READ_ONCE() to ensure compiler won't optimize this call.
+>>
+>> Fix also 'status' variable type to reflect that corresponding field in
+>> command-response buffer is platform-independent u32.
+> 
+> Thanks for the fix, seems reasonable to me.
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
