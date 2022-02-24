@@ -2,64 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49A14C2D77
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Feb 2022 14:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0004C2D7C
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Feb 2022 14:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234702AbiBXNoS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 24 Feb 2022 08:44:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
+        id S234840AbiBXNoq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 24 Feb 2022 08:44:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234186AbiBXNoS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Feb 2022 08:44:18 -0500
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA7526F4E5;
-        Thu, 24 Feb 2022 05:43:48 -0800 (PST)
-Received: by mail-oi1-f175.google.com with SMTP id l25so2459484oic.13;
-        Thu, 24 Feb 2022 05:43:48 -0800 (PST)
+        with ESMTP id S234942AbiBXNoq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Feb 2022 08:44:46 -0500
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D742927790C;
+        Thu, 24 Feb 2022 05:44:15 -0800 (PST)
+Received: by mail-oi1-f171.google.com with SMTP id y7so2515426oih.5;
+        Thu, 24 Feb 2022 05:44:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=oFxox6Rtx3Fe6uNuzzj0Rk7m4YUgm6HJR0qPe+JqODI=;
-        b=rk6FGbXP2eMw3qqlY02r5eVoeDXibnMPsgHnHbdyGZFW8K/nh3EKC7lLkP1lAmiAfy
-         Z1b0NIrfV5CC/7yUGDVCgu4K+N73eW5qdIGTS3DLQNK6+TxNXEXMq3VaW9OMwmM0aB7Y
-         6XZnMwabuOWdh02QX0Psp/3ISnfb7yFRTodbMuBk7MNlo1tliUQMHOSva1crC+UybQ91
-         kDWaHE/H+gEFA0l3ovETgUIGgztcYsAoA2nuriTFqPrFDYVyafQyGuJEksykWmD+Hd4M
-         OocSsrtMoS7xYv5in0zbEhR1cA9oxyvmDSNfTCQM3DSSaTFJTzr/IxBXEQxK53U3I1BK
-         FVzg==
-X-Gm-Message-State: AOAM531tO9BZpy4mLgjcV0W48rFsC3g/q1Y6QnDOf+sDRHrHUf/ykSrl
-        sM+okzYMt10uAhDpjcc8Qg==
-X-Google-Smtp-Source: ABdhPJz1QWLgsv7VejcwUyb9puTqDbXaF4wtVejxP+C4vYRH92gEBQrg+gcDbXCzplcwJCyn6il+cA==
-X-Received: by 2002:a05:6808:19a5:b0:2d4:edeb:9beb with SMTP id bj37-20020a05680819a500b002d4edeb9bebmr7271243oib.279.1645710227600;
-        Thu, 24 Feb 2022 05:43:47 -0800 (PST)
+        bh=DJaCkmpyl7WN5zxMWv0jhGKd+KkN9y5UoA8z60hGkaE=;
+        b=hB+izTTyQSFAwXHy6wz9120LzWQDp4i2qWBjz64T6MHsMlifOLmjatrtALkXURS9QK
+         Ihq8zny/7kXF+RuDbylxCObV5lo+AQgC7Xn76VjW100RpDurh9omAAUKeq9UbTybsp1i
+         Afb+g2T9X1djF9bPQqzrluVqLVjcIdOxG9FQgFVTIWidB9/7e1A54OrBZraxNzL/jcq0
+         xU5Y8PjpIJuNik3Pfrc1a12LuBojPVkyfAZpi51XXzo9Wh9c071zyEvEhb4OkQuhYy30
+         tTLQoRr9Bek1MvsKIECkZmctAh3qZoHb9GpqZItiVxO87v2pbfUTu6cxF1f/0zRB8Afh
+         XXGA==
+X-Gm-Message-State: AOAM530m5FvrCwVu4+piqWhi49P4dgk8VhlB6+SX0kEsBpNaHv+5iEAF
+        lDtO5s/7bd0V8ogK5vxDSg==
+X-Google-Smtp-Source: ABdhPJys835v4LU0JrZHk0HesTzIy9UfEcGCwgt5A7l5zQlujtwo6NQJbVGXMKOPke2txS9Icv9htQ==
+X-Received: by 2002:aca:d88a:0:b0:2d3:96f8:6cf0 with SMTP id p132-20020acad88a000000b002d396f86cf0mr7044750oig.338.1645710255130;
+        Thu, 24 Feb 2022 05:44:15 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id du3sm259712oab.6.2022.02.24.05.43.46
+        by smtp.gmail.com with ESMTPSA id l14sm1094680ooq.12.2022.02.24.05.44.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 05:43:46 -0800 (PST)
-Received: (nullmailer pid 2901179 invoked by uid 1000);
-        Thu, 24 Feb 2022 13:43:46 -0000
-Date:   Thu, 24 Feb 2022 07:43:46 -0600
+        Thu, 24 Feb 2022 05:44:14 -0800 (PST)
+Received: (nullmailer pid 2901790 invoked by uid 1000);
+        Thu, 24 Feb 2022 13:44:13 -0000
+Date:   Thu, 24 Feb 2022 07:44:13 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Conor Dooley <Conor.Dooley@microchip.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Daire.McNamara@microchip.com,
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] dt-bindings: i2c: microchip,corei2c: Fix indentation of
  compatible items
-Message-ID: <YheLklKvZqR1qY90@robh.at.kernel.org>
+Message-ID: <YheLrYJuNu0SxYY4@robh.at.kernel.org>
 References: <365d32c63c2fe080866be60c32dddd0f3634d19d.1645705789.git.geert@linux-m68k.org>
- <97b69b3a-bf17-6a43-bf96-da19822051b3@microchip.com>
- <CAMuHMdXGQDqMagqzD8VNYm2oucE=_nas9mM2sT_RoW2GKhr4vw@mail.gmail.com>
- <ae6b0849-a3e3-33fe-b540-6dc77c868f4b@microchip.com>
- <CAMuHMdV5ghvAze-zOVAm9LSv9261PE0hh3nxyv5db18azmo2=w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdV5ghvAze-zOVAm9LSv9261PE0hh3nxyv5db18azmo2=w@mail.gmail.com>
+In-Reply-To: <365d32c63c2fe080866be60c32dddd0f3634d19d.1645705789.git.geert@linux-m68k.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -71,37 +66,15 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 02:34:18PM +0100, Geert Uytterhoeven wrote:
-> Hi Conor,
+On Thu, Feb 24, 2022 at 01:31:21PM +0100, Geert Uytterhoeven wrote:
+> make dt_binding_check:
 > 
-> On Thu, Feb 24, 2022 at 2:15 PM <Conor.Dooley@microchip.com> wrote:
-> > On 24/02/2022 12:58, Geert Uytterhoeven wrote:
-> > > On Thu, Feb 24, 2022 at 1:55 PM <Conor.Dooley@microchip.com> wrote:
-> > >> On 24/02/2022 12:31, Geert Uytterhoeven wrote:
-> > >>> make dt_binding_check:
-> > >>>
-> > >>>       Documentation/devicetree/bindings/i2c/microchip,corei2c.yaml:19:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-> > >>
-> > >> Hey Geert,
-> > >> I've run dt_binding_check locally but I dont get a warning, is there
-> > >> something I am missing?
-> > >
-> > > Interesting. Are you using the latest dtschema?
-> > > https://github.com/devicetree-org/dt-schema.git
-> >
-> > I was on v2021.12, but have now tried v2022.01 & master
-> > (2022.2.dev1+gf677c85).
-> >
-> > Is there something other than running "make dt_binding_check" in a fresh
-> > checkout that I need to do?
+>     Documentation/devicetree/bindings/i2c/microchip,corei2c.yaml:19:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
 > 
-> You did update your installation after the fresh[1] checkout?
-> 
-> $ cd dt-schema
-> $ pip3 install -e .
-> 
-> [1] What about "git pull"? ;-)
+> Fixes: f1bd6661946b20d1 ("dt-bindings: i2c: add bindings for microchip mpfs i2c")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+>  Documentation/devicetree/bindings/i2c/microchip,corei2c.yaml | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-yamllint is not installed. It's optional from the kbuild perspective.
-
-Rob
+Acked-by: Rob Herring <robh@kernel.org>
