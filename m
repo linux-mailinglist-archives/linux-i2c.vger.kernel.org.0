@@ -2,46 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2410C4C241D
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Feb 2022 07:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BBA74C27D5
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Feb 2022 10:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbiBXGeF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 24 Feb 2022 01:34:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
+        id S232224AbiBXJPd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 24 Feb 2022 04:15:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiBXGeE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Feb 2022 01:34:04 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC89AC915;
-        Wed, 23 Feb 2022 22:33:35 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 3C97768AA6; Thu, 24 Feb 2022 07:33:30 +0100 (CET)
-Date:   Thu, 24 Feb 2022 07:33:30 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Baoquan He <bhe@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, cl@linux.com, 42.hyeyoo@gmail.com,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        vbabka@suse.cz, David.Laight@aculab.com, david@redhat.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, steffen.klassert@secunet.com,
-        netdev@vger.kernel.org, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        linux-s390@vger.kernel.org, michael@walle.cc,
-        linux-i2c@vger.kernel.org, wsa@kernel.org,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>
-Subject: Re: [PATCH 00/22] Don't use kmalloc() with GFP_DMA
-Message-ID: <20220224063330.GB20383@lst.de>
-References: <20220219005221.634-1-bhe@redhat.com> <YhOaTsWUKO0SWsh7@osiris> <20220222084422.GA6139@lst.de> <YhaIcPmc8qi1zmnj@osiris>
+        with ESMTP id S232654AbiBXJPc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Feb 2022 04:15:32 -0500
+X-Greylist: delayed 440 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 01:15:03 PST
+Received: from mail.onlinesuccesses.pl (mail.onlinesuccesses.pl [198.244.150.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F14B23BF17
+        for <linux-i2c@vger.kernel.org>; Thu, 24 Feb 2022 01:15:03 -0800 (PST)
+Received: by mail.onlinesuccesses.pl (Postfix, from userid 1002)
+        id 30307A43D4; Thu, 24 Feb 2022 09:06:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=onlinesuccesses.pl;
+        s=mail; t=1645693637;
+        bh=nE8HqilgMh4dy7+Z8ksfg7Bc9rmPeQtYFq3/3YR2ODU=;
+        h=Date:From:To:Subject:From;
+        b=p5BNJeUN5LeenXXVi2uhw9ZrWTUWeefk3GBFL3kQY+OrzRnvjcbOk8PEfwCSJIEPd
+         3CogvPjShVM+3rKsyhYcY5yD3RQe09yV/Pj3hf1l1rDGS0ABaMsr95Ntcp4Z9m8SJB
+         XI0qDvbrcAHkzy8ECyXxcqJD10slTFUTS30SIdEwQ9jXputMlYX4eArjeMRMTi/3NQ
+         OhUurnHpOCd+jMUsCI6W5IvPoI22GWex8u/OY76Oyl57wVnFtNxkhhh8P2Ez13/Uu5
+         d4EigvTHT+IJlYZTPVtdUmTn4U0nmCISuW5O/P0TWj+vkuJYdbeZhXa7vr1S/sMwKu
+         Y5FCMygKNjt2w==
+Received: by mail.onlinesuccesses.pl for <linux-i2c@vger.kernel.org>; Thu, 24 Feb 2022 09:05:53 GMT
+Message-ID: <20220224074501-0.1.2r.hoec.0.jxrf7acle1@onlinesuccesses.pl>
+Date:   Thu, 24 Feb 2022 09:05:53 GMT
+From:   "Wiktor Zielonko" <wiktor.zielonko@onlinesuccesses.pl>
+To:     <linux-i2c@vger.kernel.org>
+Subject: Ruch z pierwszej pozycji w Google
+X-Mailer: mail.onlinesuccesses.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhaIcPmc8qi1zmnj@osiris>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,20 +47,22 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 08:18:08PM +0100, Heiko Carstens wrote:
-> > The long term goal is to remove ZONE_DMA entirely at least for
-> > architectures that only use the small 16MB ISA-style one.  It can
-> > then be replaced with for example a CMA area and fall into a movable
-> > zone.  I'd have to prototype this first and see how it applies to the
-> > s390 case.  It might not be worth it and maybe we should replace
-> > ZONE_DMA and ZONE_DMA32 with a ZONE_LIMITED for those use cases as
-> > the amount covered tends to not be totally out of line for what we
-> > built the zone infrastructure.
-> 
-> So probably I'm missing something; but for small systems where we
-> would only have ZONE_DMA, how would a CMA area within this zone
-> improve things?
+Dzie=C5=84 dobry,=20
 
-It would not, but more importantly we would not need it at all.  The
-thinking here is really about the nasty 16MB ISA-style zone DMA.
-a 31-bit something rather different.
+jaki=C5=9B czas temu zg=C5=82osi=C5=82a si=C4=99 do nas firma, kt=C3=B3re=
+j strona internetowa nie pozycjonowa=C5=82a si=C4=99 wysoko w wyszukiwarc=
+e Google.=20
+
+Na podstawie wykonanego przez nas audytu SEO zoptymalizowali=C5=9Bmy tre=C5=
+=9Bci na stronie pod k=C4=85tem wcze=C5=9Bniej opracowanych s=C5=82=C3=B3=
+w kluczowych. Nasz wewn=C4=99trzny system codziennie analizuje prawid=C5=82=
+owe dzia=C5=82anie witryny.  Dzi=C4=99ki indywidualnej strategii, firma z=
+dobywa coraz wi=C4=99cej Klient=C3=B3w. =20
+
+Czy chcieliby Pa=C5=84stwo zwi=C4=99kszy=C4=87 liczb=C4=99 os=C3=B3b odwi=
+edzaj=C4=85cych stron=C4=99 internetow=C4=85 firmy? M=C3=B3g=C5=82bym prz=
+edstawi=C4=87 ofert=C4=99?=20
+
+
+Pozdrawiam serdecznie,
+Wiktor Zielonko
