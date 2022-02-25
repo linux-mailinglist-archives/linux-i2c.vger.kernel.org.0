@@ -2,41 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 909A34C38E7
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Feb 2022 23:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C41594C3F9F
+	for <lists+linux-i2c@lfdr.de>; Fri, 25 Feb 2022 08:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235654AbiBXWl7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 24 Feb 2022 17:41:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35876 "EHLO
+        id S238314AbiBYHye (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 25 Feb 2022 02:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235653AbiBXWl6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Feb 2022 17:41:58 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041CE20C1B6;
-        Thu, 24 Feb 2022 14:41:28 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id C228A1C0B82; Thu, 24 Feb 2022 23:41:26 +0100 (CET)
-Date:   Thu, 24 Feb 2022 23:41:26 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>,
-        krzysztof.kozlowski@canonical.com, semen.protsenko@linaro.org,
-        robh@kernel.org, yangyicong@hisilicon.com, geert+renesas@glider.be,
-        sven@svenpeter.dev, jie.deng@intel.com, bence98@sch.bme.hu,
-        lukas.bulwahn@gmail.com, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 4.19 12/13] i2c: qup: allow COMPILE_TEST
-Message-ID: <20220224224126.GC6522@duo.ucw.cz>
-References: <20220223023152.242065-1-sashal@kernel.org>
- <20220223023152.242065-12-sashal@kernel.org>
+        with ESMTP id S238306AbiBYHyd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Feb 2022 02:54:33 -0500
+X-Greylist: delayed 493 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 23:54:02 PST
+Received: from mail.powerangels.com.pl (mail.powerangels.com.pl [45.86.209.159])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030781B3A77
+        for <linux-i2c@vger.kernel.org>; Thu, 24 Feb 2022 23:54:01 -0800 (PST)
+Received: by mail.powerangels.com.pl (Postfix, from userid 1001)
+        id 074E6837A7; Fri, 25 Feb 2022 02:45:38 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=powerangels.com.pl;
+        s=mail; t=1645775148;
+        bh=07NAgW1e0WiNB9zqagiM2BnwZfWBCpNa2E4+ccxBPgw=;
+        h=Date:From:To:Subject:From;
+        b=Or5ZXo+mmHejdF2jm9a3BdoBnM2wP0BrkcnttHEcZRyvq0QGyBrefvWFLkNrJHk7y
+         WqBarAsAKf12tCO2M7AvclrS4Bp5ufzb4jQCCh8SDJ6wL5qGMH7bEyokYw/P1t2oLu
+         z/xnww4igf7mljZ1pBrRh+9FhI1SK1WnJaMD6z1dbyHZ5/3+TrOwT7j62Nkk59L5WL
+         QmC2FLp+eOtoL2+Vm0w2m3LqD7iRHGH1AVDoBszvo8kkCC1gm/kGyNrYeQLKL1SjS9
+         cxPA3wD3fbSG4NNaj5Acxap6rI732bOQUMUWx4cgAcDB7fh64BDSR3aYCNYG1lOYJH
+         uERgDk78965HA==
+Received: by mail.powerangels.com.pl for <linux-i2c@vger.kernel.org>; Fri, 25 Feb 2022 07:45:30 GMT
+Message-ID: <20220225024500-0.1.j.20yz.0.e1kmwnxzx3@powerangels.com.pl>
+Date:   Fri, 25 Feb 2022 07:45:30 GMT
+From:   "Jakub Daroch" <jakub.daroch@powerangels.com.pl>
+To:     <linux-i2c@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.powerangels.com.pl
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="5QAgd0e35j3NYeGe"
-Content-Disposition: inline
-In-Reply-To: <20220223023152.242065-12-sashal@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,35 +47,17 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
---5QAgd0e35j3NYeGe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-Hi!
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
-> [ Upstream commit 5de717974005fcad2502281e9f82e139ca91f4bb ]
->=20
-> Driver builds fine with COMPILE_TEST. Enable it for wider test coverage
-> and easier maintenance.
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
 
-I believe this does not fix a bug and so is not suitable for stable.
 
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---5QAgd0e35j3NYeGe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYhgJlgAKCRAw5/Bqldv6
-8kzrAJwIZg94IIqQJJX8/1MldsEW5DWfFgCfadX3BksxlWl5kx5bh7Bwwz85eC0=
-=jpxD
------END PGP SIGNATURE-----
-
---5QAgd0e35j3NYeGe--
+Pozdrawiam,
+Jakub Daroch
