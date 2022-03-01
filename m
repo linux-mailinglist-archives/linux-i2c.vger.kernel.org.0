@@ -2,104 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2684C9182
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Mar 2022 18:29:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B734C943E
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Mar 2022 20:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236099AbiCARa3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Mar 2022 12:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49176 "EHLO
+        id S235354AbiCATaF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Mar 2022 14:30:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236055AbiCARa3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Mar 2022 12:30:29 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06433D1D7
-        for <linux-i2c@vger.kernel.org>; Tue,  1 Mar 2022 09:29:47 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id e13so14029051plh.3
-        for <linux-i2c@vger.kernel.org>; Tue, 01 Mar 2022 09:29:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=2oNpK26q2m6Xy1nhECvVdzb9bqyZgEj4dQVtxGQNBDs=;
-        b=BHfJ0FHd1Coau+LOYNsZsVB8kOtSFmA6BEPwpphBU2aloxrCe2B0jf9YCDPIztHZLQ
-         EICWMfm9XajoxPzMSnn7PoVdCLAfTqqc48f+TMfZ4luwi3CcwQvRP/t1ktBRSTBwwyBm
-         X49RGa8LBYAZ0digj3MfFtaS8MmGKwbIbtxTwqEDqdRZELHgAcxaHuq06wFmx+ChxNrc
-         ULY9ocjHI1Tg5CUU07FrJIOrM8VBTQiWXbyeEAfLxDkLltphHrbO1zPKtKF3nRhpDx3M
-         pnVDs2kqcaPIG7xrSOX+OGnm2uY4KlmI2vnxKTA7W+4sM6VtACLrDomcT2qnlkBc9xpW
-         vzQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=2oNpK26q2m6Xy1nhECvVdzb9bqyZgEj4dQVtxGQNBDs=;
-        b=tqIo2RyW3w49CkxonWk2h8YA8mvCs8COjcuDmmhtOL3FpND8h+C3bxXwZ/eXdrdBp+
-         yAFkbP5QBQ/RtPPFobSJjStPBBl/WVis7nVYFz72qYZLm75mGlHoXeI0z0xWgj5tnoGz
-         PlWMvs6lNiiqKpXCu5J58biKn/cdn/hVfFkeVdPfkdGKIzwpGQJgh8gZGAliVqK/uO5U
-         6recpWWHhwfHy+iEOzU5D+w2TsNl5I5H5P5iZzYo8GzJ7QtUQlAIabjBqHAp7A4b7bej
-         gwifa7ko6Sr3xt7BYuyHunM5MGEEArT3wSzHBU+30kyUjnidrZOQLz5jvXLHrne4Zi5L
-         5arg==
-X-Gm-Message-State: AOAM532VyGpQoIsQDXE3byeXUl7yzXTFeqzO2E3lJn+2wV8+ATBGy4me
-        HBz5LC2fe9SJbqk4+V5ltClAZEdUoKnfzgI4aqqeRg==
-X-Google-Smtp-Source: ABdhPJwyHcGgYRV6ulnduStD4+XYTEcWUCI6ji8Qj9JOv5J7fxk+4Z6aC9W+VnvzfE8JpFvhG34PVYafBwpkFJmUHVc=
-X-Received: by 2002:a17:90a:5a85:b0:1bc:8bda:6a42 with SMTP id
- n5-20020a17090a5a8500b001bc8bda6a42mr23106990pji.4.1646155787286; Tue, 01 Mar
- 2022 09:29:47 -0800 (PST)
-MIME-Version: 1.0
-References: <20220218133348.628962-1-jsd@semihalf.com> <Yh44rYi6m9csyF28@ninjato>
-In-Reply-To: <Yh44rYi6m9csyF28@ninjato>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Tue, 1 Mar 2022 18:29:36 +0100
-Message-ID: <CAOtMz3N+wv1N_VmN-iGx0AeptvgYKw47PtaTv73CDqHkaCKMtg@mail.gmail.com>
+        with ESMTP id S235057AbiCATaE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Mar 2022 14:30:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB8245789;
+        Tue,  1 Mar 2022 11:29:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DEC5FB81C00;
+        Tue,  1 Mar 2022 19:29:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D0ADC340EE;
+        Tue,  1 Mar 2022 19:29:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646162960;
+        bh=uNrsfjrvwxmS4fwU6brFrs/8dvSzhgafz38Pv0bO1Wg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=odbmiyXgcNFBnO53zdYtqp6fuu34H7vuSe/DmFIDD8CdkrQKubApQ3GL7mF9LjbJI
+         etWrcr9uo+b6ekp/vdSATrxoLCOF3pGmbNHdGbG3f+ko9pf/o++GPZK/W0ZBhMunUe
+         nzquL8kbd/1m7cT9krZMg3cJ6fu/NkePrYn3titjWmsOCuceRM+sS+W3KAp5HcxHhC
+         6Dr7vkEhzrKEp+rSaZdtJWnifIHsoly9hPZDwS4bkXTHPxji5zjA8/pzqmMnnDGqUs
+         lI1zk7VVM8UI65qVD4hlPt+5d8CdJOdQTIVMVYFHF8nqRf2U7+woscOKgYoJtBOk+X
+         5NJXoaiuIJcdQ==
+Date:   Tue, 1 Mar 2022 20:29:17 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Raul E Rangel <rrangel@chromium.org>, upstream@semihalf.com,
+        kernel test robot <lkp@intel.com>
 Subject: Re: [PATCH -next] i2c: designware: Fix improper usage of readl
-To:     Wolfram Sang <wsa@kernel.org>, Jan Dabros <jsd@semihalf.com>,
+Message-ID: <Yh50DUUYXRMEIua0@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-i2c <linux-i2c@vger.kernel.org>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Raul E Rangel <rrangel@chromium.org>, upstream@semihalf.com,
         kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220218133348.628962-1-jsd@semihalf.com>
+ <Yh44rYi6m9csyF28@ninjato>
+ <CAOtMz3N+wv1N_VmN-iGx0AeptvgYKw47PtaTv73CDqHkaCKMtg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aHBu2wCgS9t/xhcV"
+Content-Disposition: inline
+In-Reply-To: <CAOtMz3N+wv1N_VmN-iGx0AeptvgYKw47PtaTv73CDqHkaCKMtg@mail.gmail.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-wt., 1 mar 2022 o 16:16 Wolfram Sang <wsa@kernel.org> napisa=C5=82(a):
->
-> On Fri, Feb 18, 2022 at 02:33:48PM +0100, Jan Dabros wrote:
-> > Kernel test robot reported incorrect type in argument 1 of readl(), but
-> > more importantly it brought attention that MMIO accessor shouldn't be
-> > used in this case, since req->hdr.status is part of a command-response
-> > buffer in system memory.
-> >
-> > Since its value may be altered by PSP outside of the scope of current
-> > thread (somehow similar to IRQ handler case), we need to use
-> > READ_ONCE() to ensure compiler won't optimize this call.
-> >
-> > Fix also 'status' variable type to reflect that corresponding field in
-> > command-response buffer is platform-independent u32.
-> >
-> > Signed-off-by: Jan Dabros <jsd@semihalf.com>
-> > Reported-by: kernel test robot <lkp@intel.com>
->
-> Applied to for-next, thanks!
 
-Thanks!
+--aHBu2wCgS9t/xhcV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Jan, I wonder if you want to be the maintainer for this driver? If you'd
-> like, then please send me the patch adding you to MAINTAINERS. So, you
-> will get notified if people want to enhance this driver.
 
-So actually I've already added myself as a R:eviewer for
-i2c-designware-* files in one of the previous patches with the purpose
-of reviewing code touching this driver. This makes sense since I can
-also test modifications on my device.
+> So actually I've already added myself as a R:eviewer for
+> i2c-designware-* files in one of the previous patches with the purpose
 
-Best Regards,
-Jan
+Ah, this is perfect then. I was only grepping for amdpsp, so I missed
+it. Thanks for the heads up!
+
+
+--aHBu2wCgS9t/xhcV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIedAgACgkQFA3kzBSg
+Kbbqgw//YYPl9qrWmVGvIzu+FySDmA1/5MwonKQv4nwS7a4EYSUDOvQVbPtOh2Yx
+MxG3NMTGiPX/yJfRWKQXYG8GEGV3Ghc9cuzR+dTebepkJZh3/E+0PPmEbyItVQ2r
+7nopuiZ6UpOWd3KF8kT3kEh5ewRXokdzb3iVGURwX1MfIT9/mYczox6HelNhgxMX
+d+f9MeZDbuuCdxuv7eL8B9pxoP+vAljmAOUnrw9DqIE6tkHjppW2OI9vMB42vjZJ
+09r8+3/vG17B7DBNPxSzEnNYQcVHCPBfHziRYnXQGBFj67S7QQWMyg+MKc0IKzjt
+/tpQJYFvxhqRklAefP0mSY6WMLvUUfy3/MJbrhphW9ypDIf+t5nwALhOAwBkZ+4p
+JH4rMYV/SgT1NMatSLfcfgFSRDMjSXzly9S45C7DFjNAK/gGW3A4zDXnGZXhgr5/
+zpsbqIo7cgh3wkJUuBoLO5fZeacGYmoY0rvCLq7+JxRFQhzTEutVaTQC03oodTeu
+0OHhrSyxqJ8j88eOOrqmw9mTVe6pSHWYpzXn6QhUczpisDShJlunaSzbIYq3htgs
+H5Qxm+aKKNjMQo8FD9hkSNjc7JzA0EmyRQesSuekJMk1UXxtCOkn08Ga9Cb39TRf
+ok8mdEoujDmEcjRuAkgwXQ5vYYYnUshnAVKXsi0UxdnrxVqExEc=
+=hOS2
+-----END PGP SIGNATURE-----
+
+--aHBu2wCgS9t/xhcV--
