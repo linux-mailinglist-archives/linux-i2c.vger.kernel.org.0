@@ -2,61 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28D14C8E80
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Mar 2022 16:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3BA4C8E8A
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Mar 2022 16:06:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234077AbiCAPD7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Mar 2022 10:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
+        id S235525AbiCAPHB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Mar 2022 10:07:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234347AbiCAPD6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Mar 2022 10:03:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7D22DD5A;
-        Tue,  1 Mar 2022 07:03:17 -0800 (PST)
+        with ESMTP id S235482AbiCAPHA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Mar 2022 10:07:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E61CA647F;
+        Tue,  1 Mar 2022 07:06:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B68E661635;
-        Tue,  1 Mar 2022 15:03:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6426C340EE;
-        Tue,  1 Mar 2022 15:03:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA056B81986;
+        Tue,  1 Mar 2022 15:06:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE474C340EE;
+        Tue,  1 Mar 2022 15:06:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646146996;
-        bh=6VT7ZZJE4eWH69e6J3p5kOcPN+nEhh3aFJ++ueF3zUw=;
+        s=k20201202; t=1646147176;
+        bh=3rErMr8HPx66Jp00WJd9yEBIjWGz3wiDvsGrMjqCVAg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S+tQe4FjIdeps0VYDJkSNfO5UCzixWi4v3DyOubRtW9YCDsH3GqxnWyoX2lh+1utd
-         hft8Lnmq2DuUL/j0knLDy6aIMrR+2dgDhdNIU0bOVoJ/t/0VkkNom29QiJVGC9Vtlw
-         pAEbl3bw8KC5RIpZIonko9Bp/mBDM2d9Xy7vrmczGQnO9s208Lax4exXNOGuS7Y+qH
-         j6AuS7rHwTyrWa15JXgFrNsGWHI+T5uk6WAubqnVO/nw+RHXXgxRTFGQTr1vwFEwfb
-         V9HuLLIf8XF3m8MRR2onuEHFux9AFTwIV2geLi/VHo7z52tq/7JxFdeYXB0dWd6NOL
-         6ffaV6uYIQWLg==
-Date:   Tue, 1 Mar 2022 16:03:12 +0100
+        b=hdimVuBrc+VRHT8NLNPkQIB6GizNq9maujOWeKdrDVMnAQYQRm2LmLfzNyF3wvOIJ
+         LBPsO/PCcc0nroUoIJq2MjkInjaELLtHkyQoLGJe71NL8il9/nIPKnGZXr1aqh+Ewl
+         x0SXQafhrW9XgowgZPXdWiYFTSdagsEyygI5xMqlQZmR0/HpQFgjRac148KyG9Ga3k
+         LCSsMK9o31q24sTrg7XobBbuSAz6jK5XDrjkIPg2tO6ICqV2e+kEF1RZm9Oib5f+Mb
+         jXdbH8GJA204lhfUZtooGpel8rzHa7B6xg3a76EPzfr+sB/H2rDARzNB+6M0se5UrN
+         HNubxkMRCB/cw==
+Date:   Tue, 1 Mar 2022 16:06:13 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: i2c: microchip,corei2c: Fix indentation of
- compatible items
-Message-ID: <Yh41sLhyhxwxfH+l@ninjato>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Michael Below <below@judiz.de>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: Re: [PATCH v4 2/7] i2c: core: Use generic_handle_irq_safe() in
+ i2c_handle_smbus_host_notify().
+Message-ID: <Yh42ZZFFcXnXqS5K@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <365d32c63c2fe080866be60c32dddd0f3634d19d.1645705789.git.geert@linux-m68k.org>
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>, Johan Hovold <johan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>, UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Michael Below <below@judiz.de>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>
+References: <20220211181500.1856198-1-bigeasy@linutronix.de>
+ <20220211181500.1856198-3-bigeasy@linutronix.de>
+ <YhY03EojmT3eaIcR@ninjato>
+ <YhlXplZCkflfkg1W@linutronix.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BVBLWRpeC9NpsvkP"
+        protocol="application/pgp-signature"; boundary="vly9pc/cg0xZd513"
 Content-Disposition: inline
-In-Reply-To: <365d32c63c2fe080866be60c32dddd0f3634d19d.1645705789.git.geert@linux-m68k.org>
+In-Reply-To: <YhlXplZCkflfkg1W@linutronix.de>
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,42 +91,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---BVBLWRpeC9NpsvkP
+--vly9pc/cg0xZd513
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 24, 2022 at 01:31:21PM +0100, Geert Uytterhoeven wrote:
-> make dt_binding_check:
+On Fri, Feb 25, 2022 at 11:26:46PM +0100, Sebastian Andrzej Siewior wrote:
+> On 2022-02-23 14:21:32 [+0100], Wolfram Sang wrote:
+> > Is this 5.17 material? Or is 5.18 fine, too?
 >=20
->     Documentation/devicetree/bindings/i2c/microchip,corei2c.yaml:19:9: [w=
-arning] wrong indentation: expected 10 but found 8 (indentation)
->=20
-> Fixes: f1bd6661946b20d1 ("dt-bindings: i2c: add bindings for microchip mp=
-fs i2c")
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> 5.18 is fine. I intend to push into the RT-stable trees and this can't
+> be backported without 1/7 and it does not affect !RT so I wouldn't
+> bother.
 
-Applied to for-next, thanks!
+Ok, applied to for-next then. Thanks for the heads up!
 
 
---BVBLWRpeC9NpsvkP
+--vly9pc/cg0xZd513
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIeNbAACgkQFA3kzBSg
-KbZpsw/+JLQL5ZthwQqog4jI4XxWkbADS4uk/hkQ4/BMRjORDB7JaZFLhOP+bFYw
-R2BipPuikXdVhVjZVN/JDkwWArBgPyB7p+QtKdtOCwmB4tdopasy6/nNVKWbXJt5
-8Ue3RUq6SRvNGAJPkNdKnORxI1DPXIRuYMoHWgG9AQ84zkVmxUiwtFNP1UcAnOjs
-cVEgbw17ZyfTCEWYy9E5BYycXcofb25LcOkLqtQAGZySW5phXXb4WHpdNPciCnQt
-zquFrKxTC0NB6faRrkDS2ijdjqlQ9y8nHXcvoqgyAmce98jjHUmT+puzxAM+rM8C
-G50R9dhLpdkR0fsZqO8k3NX5HZZvk8Q5oOV3mmiI1gNfIIoghFLfVo7/dG3XHGZT
-Qpev6wZiM1bHcqD8PFI4+7+W7mwMUB723cAjYv20q8HG64FtYtziwV5vs54sQh+q
-E1LfPKRuUM/IcoQ3zWdqZ3BNqL1crdfKaxwBTrEYIlkZHhNpqUotnh8FaSTUMNYp
-jp4lEBXludGP9CyFFry2f3RAPstPIntEH0+2UQyiWeYA9ZFpgIduupjumnA8SOj3
-P/9+S8dsWb+fFhs7JlDGCl6OkvXqeV+I6ENbu4apLHQMlPWMuS6VrziFrzBD42/U
-7pLMg/nvreUTjw2afUEv8rhw/2lhOF3Dmd32nDL9ickhr/et8dU=
-=1Gz3
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIeNmQACgkQFA3kzBSg
+KbbfYxAAgtOpVKmeFifH+JWyqT1mW6M6PKCY098U/utaJDTEnIPOnkUsMe4spnDs
+TctqYaihXKSZf9UxlJhVPZ/ZIRHYSA+KF14IDEeLzkL49d4ojSGarl893u0l7bx2
+6aQQeO3oJT4dGN7ohZsg2AYD6ym1baCtAH+zimu6hPacRHgucRh+0IvjYxgioXg3
+rhYauOkmcDPxqPvS33shdRagDKbjZ3V+HqswU2FGmLEMCTOxNhvDw4q7mUsAsIqO
+Ct370v13+nH6HQlXaOMzzIGROyz3GO3Xo/ZOYJdRsp/UCRHIMHabGMvyFBX5p4Hj
+gAyWkNCqvLJdzYNmqtosc6r0iQFuZSUItW/wM+kHpwwwdOsup5n7QY7uBp78G6Ea
+eRZJmC80xn3HEZ75FJTkT6aHucCZApCT3uBViUVwOA34fQYuujCcHvhuCEkGeJz5
+kNdx6JdigSxX40Re7h6/ac1sz2EXm4CxmcFzQm10AFjJjjdzU2+zIqi/tk/6J+yS
+oR2DR95lglxohOmzidOAL/qTmBNdeh+eQL0Ta9JJqSnVnRWCzu5iTzt/PXo8Vs5N
+4cg8cpOAOFtYwxQrF1JaHgCStljwQbBp+IHBaJbOtzBYaLA3HoETlXLv/7opaFk4
++rw1pWvsOmQkGbFW/n+eVO0aYMnOMFGx8AOuKco5SQ73Otp5GSM=
+=3Lg4
 -----END PGP SIGNATURE-----
 
---BVBLWRpeC9NpsvkP--
+--vly9pc/cg0xZd513--
