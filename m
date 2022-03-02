@@ -2,54 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E88CE4CB146
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Mar 2022 22:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 493AC4CB176
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Mar 2022 22:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245283AbiCBV1y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Mar 2022 16:27:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50594 "EHLO
+        id S235845AbiCBViv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Mar 2022 16:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245292AbiCBV1s (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Mar 2022 16:27:48 -0500
+        with ESMTP id S242559AbiCBViv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Mar 2022 16:38:51 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781AEBF95D
-        for <linux-i2c@vger.kernel.org>; Wed,  2 Mar 2022 13:27:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C597D31932;
+        Wed,  2 Mar 2022 13:38:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2543EB82240
-        for <linux-i2c@vger.kernel.org>; Wed,  2 Mar 2022 21:27:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AE20C004E1;
-        Wed,  2 Mar 2022 21:27:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B20CB8225E;
+        Wed,  2 Mar 2022 21:38:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E2F5C004E1;
+        Wed,  2 Mar 2022 21:38:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646256421;
-        bh=llHE41UJhD2Kv3pp3e8fNyL4NjRhXLgQ5DW4xL/covc=;
+        s=k20201202; t=1646257083;
+        bh=u3CiApm/HAA54PdzVzkQa0SMTvOR974KdivaMD9drI4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oi9HB2iVkNm7m727tMrHmMl+ePWOI3AoBFE1+IkOAMoY+kWodWZIVJETlVuVVi1cy
-         h2OgdSuw9IuAZbHNsNPer8NE0ZaiGVXrPA5nXmPE8trRcrQ91tpaZklb5YJQa/w8Er
-         VkiWSfCEw8VnWAla9d6bXtnadM0KnKIb08RxUE3D9MkmQMcPWPTkSz4NNVnkPnjqxt
-         /5PX3/1LlHrBtuSB6NPiHgDliIQT8cY346jlx63N6HrfGzTJtbTad3Zh4qrlkIymqj
-         7HJsCgSM7YOFHp4t9gQxwpk0C+7xTl2BwUCDOzUC4udO4TQqdElvjRtMFF92G1MVA9
-         6tnFu5xX8EOfg==
-Date:   Wed, 2 Mar 2022 22:26:58 +0100
+        b=tZYrzcGxX7uFzIDR32pl5B/rTE0/WsMB1BWvGgu442qpQ74f11LAQKckgT97lFPwG
+         HgXefWfUqNuA//PZU7OaDdbSYq6fSRWAfKDm2DHdYaGfQeV7EZQCa/98sp/U731dxB
+         ose0XODYq3HUb9C5/FeaGYGyjpO/qgju1gXpC30CNKNEImQiMRX728nMscXoTdcNUM
+         bfC20sjgcimXwUCFfigaveVy3hftkPdaXUiBzoPYKSe8aH7SYgDQdPXXthEdiWHTDQ
+         a22Le4EGgnOtBLYINH+JEJ62n6GEEt+U8H/4zV5/kx5uzr4HWkNI/KDBVYqWtgaCLB
+         aUPpD1LjQlKvw==
+Date:   Wed, 2 Mar 2022 22:38:00 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Robert Hancock <robert.hancock@calian.com>
-Cc:     linux-i2c@vger.kernel.org, michal.simek@xilinx.com,
-        ben-linux@fluff.org, richard.rojfors@pelagicore.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] i2c: xiic: Make bus names unique
-Message-ID: <Yh/hIl9CRP8gkc3K@ninjato>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     qii.wang@mediatek.com, matthias.bgg@gmail.com,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH] i2c: busses: i2c-mt65xx: Simplify with clk-bulk
+Message-ID: <Yh/juKe395aNHajb@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>,
-        linux-i2c@vger.kernel.org, michal.simek@xilinx.com,
-        ben-linux@fluff.org, richard.rojfors@pelagicore.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20220127175013.3689724-1-robert.hancock@calian.com>
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        qii.wang@mediatek.com, matthias.bgg@gmail.com,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20220118133358.111886-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="12z37EMSCvCYktyg"
+        protocol="application/pgp-signature"; boundary="0hUHtEcZp+Fkfqii"
 Content-Disposition: inline
-In-Reply-To: <20220127175013.3689724-1-robert.hancock@calian.com>
+In-Reply-To: <20220118133358.111886-1-angelogioacchino.delregno@collabora.com>
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,43 +64,44 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---12z37EMSCvCYktyg
+--0hUHtEcZp+Fkfqii
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 27, 2022 at 11:50:13AM -0600, Robert Hancock wrote:
-> This driver is for an FPGA logic core, so there can be arbitrarily many
-> instances of the bus on a given system. Previously all of the I2C bus
-> names were "xiic-i2c" which caused issues with lm_sensors when trying to
-> map human-readable names to sensor inputs because it could not properly
-> distinguish the busses, for example. Append the platform device name to
-> the I2C bus name so it is unique between different instances.
+On Tue, Jan 18, 2022 at 02:33:58PM +0100, AngeloGioacchino Del Regno wrote:
+> Since depending on the SoC or specific bus functionality some clocks
+> may be optional, we cannot get the benefit of using devm_clk_bulk_get()
+> but, by migrating to clk-bulk, we are able to remove the custom functions
+> mtk_i2c_clock_enable() and mtk_i2c_clock_disable(), increasing common
+> APIs usage, hence (lightly) decreasing kernel footprint.
 >=20
-> Fixes: e1d5b6598cdc ("i2c: Add support for Xilinx XPS IIC Bus Interface")
-> Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
 
-Applied to for-next, thanks!
+Hmm, it doesn't apply to my for-mergewindow branch because of other
+mediatek patches. Would you be so kind and rebase this patch on top of
+it and add Qii Wang's tag, too?
 
 
---12z37EMSCvCYktyg
+--0hUHtEcZp+Fkfqii
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIf4SIACgkQFA3kzBSg
-KbbgAg//ZNNjlf4ZJ2N/nI4KZUshWHf9dHFtzFoWCbLlOF6BfCMNJAj+TqaIAl/1
-g5nPMdrJLQ3cwAfPqLb05yA1SvXGQB+ONKngcMfCbp0PoICTZoznSJF8ei0NYudL
-RVcmXS5UtavUiLO8FDbp42e9IWFdU5fLqWX0AT9KhlewHjCA/2/gAHgXVt7QVbOC
-AC6XhBtLGo0dE+HwO2vGAn0VosvRuFDqHQ0aj1xfvnKodrii4ugfOPHHTCHIzDeq
-Szz7TIGT1Uf6v+5v5WSL2FycSSXhe+hwP2fmShTyMuQawQ05M8R45StzX+Zl4jR0
-XMusin/xOk8jmMpI7DeCxzFqv1jtfrn+YahhyrG5Qssdi/eEkJmZkH5BFNrqVg0g
-gVbS5T+yQ1Yc0Bkb9DmbC6xFWk1k5x3OmkFO+9soUFpKavQ711frJK47W74BcwJW
-SJM60DE5PAGbix3EQzHQpr2eYJzItvjcB5bCQ1hr8iVGtSILzW3GRdvTxzfkpaPJ
-pS+LdQYWzjGuZ9zWvzy8nrh7UCZ/S6zdeywAaWhLnaM8tK3loq0fP+yT6FWQu5hk
-BUlH4Ax+SZ+MIwRnq1AdEf3jkSROpOfuF3rF7x2m/9V8TzJpBA83DcduCZMGzJrD
-+9+FKb1D7ND/n3+w9GDOsR+Lq7oehQvkIZwPjXASpsC/xShmX/8=
-=96qj
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIf47gACgkQFA3kzBSg
+KbanuhAAmqYnaoy6/gsLbutpo9FX8hs9F1lvxqeyg6zRxqY0Hc63iN8VZXioZXOK
+MdvYwd25pL5u1+TAB7Ds+18sYd+qO+2t8v7KsM1g6f72ycT5v8cmaNfekJ0RqQ2G
+gAXwOCbqhL8+N2P0Y4xqd2CLwc0SUWXv3nabFE6wMkW7U45ptNHLzctwF7EBzZnx
+sNu0Tt3ke2oaOjvH27m/XCnJyWWCqlWqNfh4ntKYFqIO6GB9H6/kmpfOo9U7RSVR
+6PM/56kLpVrfTbCqDgllQ0C06zUwvj80n66dBlvEQdQDXGewyJcK6herIYOoGRz3
+bg1dSZQ2qunMfuf8QgVsZFv3xyFxHkXCfOv8G0ybc5pkr1SDjiemKp38zrtl93AV
+2vQPyI/KySnLa+LpFseVHR2a8efOtBWGLVWl763GAKBQyp3rEMARXAn58iRonrBc
+kmXMii7nbxGepw23ec4tTbyux14edXxIdNQ9atfuFi1fQ+qeOe8aM5PCu9DRtETY
+p5I6E2WhD/21GfYAEQJhW6V9lRYv/I/VlMgjHQf5Zt/NazUpiQoMvemEqGc8lo23
+hStP2HSI0ZAtBRf7V6HlM7io47nPmYAe3AKXNJ9KWYooQXh/PpcbGS8M9kCZ3qKR
+SWdoU5fv93J7sZXgT3huWxvjVT293uUiRbc8FA3ZQ4LWwlR3jS8=
+=78JX
 -----END PGP SIGNATURE-----
 
---12z37EMSCvCYktyg--
+--0hUHtEcZp+Fkfqii--
