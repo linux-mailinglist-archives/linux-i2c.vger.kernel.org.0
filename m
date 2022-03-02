@@ -2,119 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 375E54C97E4
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Mar 2022 22:45:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CCC24C9A32
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Mar 2022 01:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234533AbiCAVpu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Mar 2022 16:45:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
+        id S233820AbiCBA41 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Mar 2022 19:56:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbiCAVpt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Mar 2022 16:45:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883194F463;
-        Tue,  1 Mar 2022 13:45:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 445D6B81B0A;
-        Tue,  1 Mar 2022 21:45:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7968DC340EE;
-        Tue,  1 Mar 2022 21:45:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646171105;
-        bh=3uwjHBi4Kpijzi8jIbSYaOoMSYmXzyJTEeVMSIbESIA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=koZS6u1JYkyQ/AsymFmTevOBEDEPaaFBGL6bIbEiw+654IcjZt5RiF8dHOJISRbT/
-         JFeksndmw6/gr35h37+vXWL3eYm92pB4aIsercuDesP+jF+/RmkXOJHDAyXHkg4yMK
-         UfnXJzS7je8f7jq1gI/FLooe0RYJjB29hB/b8J9fcwPZZHFuuJ9IjYmeSJsxR8/GfB
-         kEGrJF2ElSyM3+7jZGYMOqG77Dk5BwPnvW7l1KPdsBKbLJeEjGJAfKbUQNp1d8GNWh
-         biDlTh2kCDPfqMrxpWQ6nucjhgujHZpMRDGdhVjOuPyIHv1GvAt8iV6lmYyzc7EFzu
-         ubgflTWfhuiMQ==
-Date:   Tue, 1 Mar 2022 22:45:01 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     qii.wang@mediatek.com, matthias.bgg@gmail.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH] i2c: busses: i2c-mt65xx: Simplify with clk-bulk
-Message-ID: <Yh6T3RSfvcXCi4sb@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        qii.wang@mediatek.com, matthias.bgg@gmail.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20220118133358.111886-1-angelogioacchino.delregno@collabora.com>
- <8725a111-0ee2-8935-86b5-01c61774a628@collabora.com>
+        with ESMTP id S231641AbiCBA40 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Mar 2022 19:56:26 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6437A39B92
+        for <linux-i2c@vger.kernel.org>; Tue,  1 Mar 2022 16:55:44 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id q10so310354qtw.4
+        for <linux-i2c@vger.kernel.org>; Tue, 01 Mar 2022 16:55:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=hjKdxeFD5vtwqdjV3V6Ma/CRLQW4KSqRce9D0z79v8o=;
+        b=YeRlX/litRjF6p//YlUSLLEINz56167rG49MMFzCLtEoRQuOy0OtC2aPzXtbvaf2Zr
+         V28iyTZmhOSufzHBxBB6yC6ghmjB2izZJ/sz7U7oAAWATfTAuHkR1MdWABy1RN+997XT
+         sAwkeikbwPWXdEz09ALeFR31K+0/QRpv7UtGb+EA5e+yfYD2QQR7HVNUrW8B8vRi1GFT
+         etoDX4JQqQ6Coy87yHqZVIjDFuKpF6R45jZP6iFfR8wT6iQJ+Yn98KC1u1CbAk29Yumr
+         yPsvuLX03sZSci1BKBwgoO7H/6R2mE+Zn1Y/neav0nfOoSS5PeIblELBQ6K7D4SuObUT
+         BfMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=hjKdxeFD5vtwqdjV3V6Ma/CRLQW4KSqRce9D0z79v8o=;
+        b=I7HA4tEj0uCD2FdUHH5fQaix9JNpiOTLRe/a8f6B66z18vjYTzh0bi7Y4dhLloqgCr
+         M2unkutzOXL6zIi9ry15GDzhvBifJyL49YU61mcafud7J9XmBmLiGuDwdxUfymDJpRvz
+         9w1rk/Mgpp7LxZ5ZFIj9mlhkgYM6TVZGNfEQt5mcQ93XzDwrSMXnWFLTdRWrnLKidgI6
+         4u9wBY6svWwAOlGo/+djYIySA4MP/MWad+r/PA+FeUJTYTeQT0GvoPV5hQfr/4CHMpca
+         ED9uZw5U+HdwaKrljSug+qPiTaCc6n/gPL7pFdyB+wFOxFLkmslmv/6UNgPXL5F1l6Oq
+         KHtQ==
+X-Gm-Message-State: AOAM532IHRKHAlV4HhEYhdaDZQjN2bJx2JLL6eeP00PxINCYG3Rjd/+l
+        8wsQg8kuGQkR+qYEZMNrLlnfiZ87p8DdHFoSWS0=
+X-Google-Smtp-Source: ABdhPJzpCRnfySNQFvTEtSlbK4QjS1EMfT1NUW6C8Bp4EhR81e00L8n+jQEHSL7hnutTyqRWS/yxiIS5EIyhpsFFt8Y=
+X-Received: by 2002:ac8:4e8c:0:b0:2de:a2f9:15cb with SMTP id
+ 12-20020ac84e8c000000b002dea2f915cbmr21593642qtp.385.1646182543294; Tue, 01
+ Mar 2022 16:55:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RuPdci4FI09i3u+P"
-Content-Disposition: inline
-In-Reply-To: <8725a111-0ee2-8935-86b5-01c61774a628@collabora.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:ac8:58c3:0:0:0:0:0 with HTTP; Tue, 1 Mar 2022 16:55:42 -0800 (PST)
+Reply-To: mrslovethkonnia5@gmail.com
+From:   "Mrs.Loveth Konnia" <deni6513aw@gmail.com>
+Date:   Wed, 2 Mar 2022 00:55:42 +0000
+Message-ID: <CANOq_xZytac_wbnXwcVfeh4o86BLrHWMi9A3=nW0frTEmGMnkg@mail.gmail.com>
+Subject: Helloo
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:82c listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4005]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrslovethkonnia5[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [deni6513aw[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
---RuPdci4FI09i3u+P
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Feb 14, 2022 at 12:26:30PM +0100, AngeloGioacchino Del Regno wrote:
-> Il 18/01/22 14:33, AngeloGioacchino Del Regno ha scritto:
-> > Since depending on the SoC or specific bus functionality some clocks
-> > may be optional, we cannot get the benefit of using devm_clk_bulk_get()
-> > but, by migrating to clk-bulk, we are able to remove the custom functio=
-ns
-> > mtk_i2c_clock_enable() and mtk_i2c_clock_disable(), increasing common
-> > APIs usage, hence (lightly) decreasing kernel footprint.
-> >=20
-> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@co=
-llabora.com>
-> > ---
-> >   drivers/i2c/busses/i2c-mt65xx.c | 127 +++++++++++++-------------------
-> >   1 file changed, 51 insertions(+), 76 deletions(-)
-> >=20
->=20
-> Hello,
-> this is a friendly ping to request review on this patch as to avoid forge=
-tting it.
->=20
-> Adding context, I have tested this patch on multiple (older/newer) MediaT=
-ek
-> platforms.
-
-Qii Wang, what do you think about this patch?
-
-
---RuPdci4FI09i3u+P
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIek90ACgkQFA3kzBSg
-KbafGw/9GFenif8e7sf8WDjqoiTJ19bnc5EA2wFP1yuCOK3ITglAu9Yya8tTY/3J
-phPYTkQlqYXpth6+AndEsBGv2g4sDb8T7MkcNCi6rZYper8oyS6Xro7qkprCvzqZ
-Nj6ltSANZqjsmKsQGNQjiZtXYG+uYzXMKGzbuf4SF9tSJ1GiC43usBv7KKW3wZie
-n9iP2Ii76q0nqJ5v44a2E1AIxQkyn1DQOotD4F+TFZEgpUSIIWctq2Ez3G6LpjjW
-YtERdPi5nCNB90V55nn13ksUKLv5pertnc4elqEbsFT6ZOtYUvUDYOo1oA/5sLIP
-rlLVSM2kZyRbomIPFW4n3AAX+Ag60eDc/VtBOj9rR2ZpRTe1GZCfCokk03/UIqiq
-CeWAEJPQ3kd1eqY2Hp46uNUMgS/zt5Xuc7uKNqZmSs9KIs6NUKi5ydH6/9AW1hrV
-f4xP9pm+CyZv+2/qrcMG3INfL4QRAmRgaVCIThN5n0Rapr7PELa+0bpnXND1a/AL
-SkRJUIX8r5nOMbeKGBkccTBnHr+asXr7FqY2EjO9fdzCj9CY7HaP/QXTjYzHdOsT
-Dnpz6clEeaUPmdG2zeNeS+nmjnWFpJhdQPt6Ac9CBJ6mGTXYH1tJR4C960YBQ5wF
-Tm92kQCkYCQDQE90ftGoq5AZVseXlmnPKXYiAndBXkX/9TmlUTU=
-=cpdN
------END PGP SIGNATURE-----
-
---RuPdci4FI09i3u+P--
+Poslal jsem v=C3=A1m dopis na v=C3=A1=C5=A1 mail, ale nedostal jsem od v=C3=
+=A1s =C5=BE=C3=A1dnou
+odpov=C4=9B=C4=8F. Dostal jsi m=C5=AFj p=C5=99edchoz=C3=AD mail
+.......................................
+I sent a letter to your mail but got no reply  from you. Did you
+receive my previous mail
