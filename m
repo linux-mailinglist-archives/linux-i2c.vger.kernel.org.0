@@ -2,77 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D91A54CBFC6
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Mar 2022 15:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24AC74CC108
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Mar 2022 16:19:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiCCORB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Mar 2022 09:17:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
+        id S234293AbiCCPUU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 3 Mar 2022 10:20:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232647AbiCCORA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Mar 2022 09:17:00 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631EC18CC67;
-        Thu,  3 Mar 2022 06:16:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646316974; x=1677852974;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ynRuusHJD/05mmCsacrrHzXmY4ZK7oPmKnF+sWwUGc0=;
-  b=ad3FVEqRnM1S71RjthFR8oAZGtR1oAaiWno5wPDeEJYdH94Tk/yNFryz
-   BOIE1Ho9+E5QpXR0NiyFmA98r/06rlHo2pN6G4IEAfaw0Oy5l+WmUXexj
-   lxZ9smG5BrPxIU0rEn8v2Zot2xy6qGcJTJErrTMAAkaMvq3VFGjWahNIm
-   kpcEeQnrUKpxt7112/XOCfOh2/rpK+K3DZaVyuukzV0jtiDpjFdao2CpL
-   nSHaVcK5a8Xj2flSJ9fnEtWwFk8/coRyilDkldsHp+p8gSXbhD/ikQAI7
-   oX6j1trALy3VUlysw4M3PexiI8UDjbE1LzidPoVqSKLcvo0Avk2+nR/ky
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="253614680"
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="253614680"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 06:16:12 -0800
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="545876842"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 06:16:05 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nPmEg-00ApL3-8j;
-        Thu, 03 Mar 2022 16:15:18 +0200
-Date:   Thu, 3 Mar 2022 16:15:18 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tali Perry <tali.perry1@gmail.com>
-Cc:     Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
-        Wolfram Sang <wsa@kernel.org>, jie.deng@intel.com,
-        sven@svenpeter.dev, bence98@sch.bme.hu, lukas.bulwahn@gmail.com,
-        arnd@arndb.de, olof@lixom.net, Tali Perry <tali.perry@nuvoton.com>,
-        Avi Fishman <Avi.Fishman@nuvoton.com>,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 08/11] i2c: npcm: Correct register access width
-Message-ID: <YiDNdlEKqorDFkZB@smile.fi.intel.com>
-References: <20220303083141.8742-1-warp5tw@gmail.com>
- <20220303083141.8742-9-warp5tw@gmail.com>
- <YiCZlhJoXPLpQ6/D@smile.fi.intel.com>
- <CAHb3i=t+Ai3w5mMhmZxxMsD7Zv0xpM4ZicMCmdDMtVn_OMbWYA@mail.gmail.com>
+        with ESMTP id S234286AbiCCPUT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Mar 2022 10:20:19 -0500
+Received: from mail.irisgmbh.de (mail.irisgmbh.de [81.169.172.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC4B191429
+        for <linux-i2c@vger.kernel.org>; Thu,  3 Mar 2022 07:19:32 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.irisgmbh.de (Postfix) with ESMTP id 7F88B31E0368
+        for <linux-i2c@vger.kernel.org>; Thu,  3 Mar 2022 16:19:01 +0100 (CET)
+X-Virus-Scanned: amavisd-new at irisgmbh.de
+Received: from mail.irisgmbh.de ([127.0.0.1])
+        by localhost (s15324379.rootmaster.info [127.0.0.1]) (amavisd-new, port 10027)
+        with ESMTP for <linux-i2c@vger.kernel.org>;
+        Thu,  3 Mar 2022 16:19:01 +0100 (CET)
+Received: from ERDE.irisgmbh.local (unknown [213.61.209.158])
+        by mail.irisgmbh.de (Postfix) with ESMTPS id 692C231E0365
+        for <linux-i2c@vger.kernel.org>; Thu,  3 Mar 2022 16:19:01 +0100 (CET)
+Received: from ERDE.irisgmbh.local ([172.30.10.11]) by ERDE.irisgmbh.local
+ ([172.30.10.11]) with mapi id 14.03.0513.000; Thu, 3 Mar 2022 16:19:01 +0100
+From:   Ian Dannapel <Ian.Dannapel@iris-sensing.com>
+To:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: i2c-imx.c: Unnecessary delay slowing down i2c communication
+Thread-Topic: i2c-imx.c: Unnecessary delay slowing down i2c communication
+Thread-Index: AdgvBUmpZZWYjd95QeeF9X7DSq2tRAADGcLQ
+Date:   Thu, 3 Mar 2022 15:19:00 +0000
+Message-ID: <D783F898DE87F646B39A5F514F7A514C672F0E@ERDE.irisgmbh.local>
+References: <D783F898DE87F646B39A5F514F7A514C672EC8@ERDE.irisgmbh.local>
+In-Reply-To: <D783F898DE87F646B39A5F514F7A514C672EC8@ERDE.irisgmbh.local>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.30.10.1]
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHb3i=t+Ai3w5mMhmZxxMsD7Zv0xpM4ZicMCmdDMtVn_OMbWYA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,33 +53,33 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 02:54:27PM +0200, Tali Perry wrote:
-> > On Thu, Mar 03, 2022 at 04:31:38PM +0800, Tyrone Ting wrote:
-> > > From: Tyrone Ting <kfting@nuvoton.com>
-> > >
-> > > Use ioread8 instead of ioread32 to access the SMBnCTL3 register since
-> > > the register is only 8-bit wide.
-> >
-> > > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
-> >
-> > No, this is bad commit message, since you have bitwise masks and there is
-> > nothing to fix from functional point of view. So, why is this a fix?
-> >
-> 
-> The next gen of this device is a 64 bit cpu.
-> The module is and was 8 bit.
-> 
-> The ioread32 that seemed to work smoothly on a 32 bit machine
-> was causing a panic on a 64 bit machine.
-> since the module is 8 bit we changed to ioread8.
-> This is working both for the 32 and 64 CPUs with no issue.
+Hello I≤C Driver Maintainers,
 
-Then the commit message is completely wrong here.
-And provide necessary (no need to have noisy commit messages)
-bits of the oops to show what's going on
+please excuse me if I am not following the right steps to report a question. I did not find consensus between all instructions that I read.
 
--- 
-With Best Regards,
-Andy Shevchenko
+We noted that on the IMX i2c driver, at the i2c_imx_start funtion, some sleep/delay was introduced without any apparent reason:
+Line 448 at:  https://github.com/Freescale/linux-fslc/commit/3a5ee18d2a32bda6b9a1260136f6805848e3839d 
+Line 528 at:  https://github.com/Freescale/linux-fslc/commit/2b899f34e1db9adef8716d07e872a800dfa60790
+Line 200 at:  https://github.com/Freescale/linux-fslc/commit/43309f3b521302bb66c4c9e66704dd3675e4d725
+
+This sleep causes a pretty big latency overhead on I≤C writes and no IMX8MP document states the need of this delay on the controller. NXP Support also informed that this delay might not be needed.
+Some early tests with removing this delay completely showed a great reduction on the write latency and no problems with the communication.
+
+But since we want a stable and fast communication, I ask here again if someone knows the reason or the need for this delay when starting to communicate on the I2C bus.
+
+I appreciate any response and if further information is needed, I can gladly report it.
+
+
+Best regards,
+Ian Dannapel
+ian.dannapel@iris-sensing.com
+ï ï ï ï ï ï ï ï ï ï ï ï ï ï ï ï ï ï ï ï ï ï ï ï ï ï
+iris-GmbH
+infrared & intelligent sensors
+Schnellerstraﬂe 1-5 | 12439 Berlin
+www.iris-sensing.com
+
+
+
 
 
