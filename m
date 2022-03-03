@@ -2,58 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8314CBD49
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Mar 2022 13:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DA34CBDBC
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Mar 2022 13:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbiCCMDj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Mar 2022 07:03:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
+        id S233180AbiCCM04 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Mar 2022 07:26:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbiCCMDi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Mar 2022 07:03:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FC43BFB2;
-        Thu,  3 Mar 2022 04:02:53 -0800 (PST)
+        with ESMTP id S232881AbiCCM0z (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Mar 2022 07:26:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870CC17926F;
+        Thu,  3 Mar 2022 04:26:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB31561867;
-        Thu,  3 Mar 2022 12:02:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C15EC004E1;
-        Thu,  3 Mar 2022 12:02:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3CEDFB82510;
+        Thu,  3 Mar 2022 12:26:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F72C004E1;
+        Thu,  3 Mar 2022 12:26:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646308972;
-        bh=joVFOZmms9HBOXgoZuJ9RkqFVCdj5U89jr7ZSVH6EQM=;
+        s=k20201202; t=1646310367;
+        bh=B3BHZUoFkAxakpfWVy7Ovv7STmV7xnVb3Bv9zPL7UD0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TZZSF6TfMAQvdtUbORxyyZ1laxtoEDK+breNkO3og95FYG+sCa+lfCi20qQth4/yt
-         CED3FwKQEixoFfzJDy1Px5awEACzAjHNWNtPw7YhoX20sBuRmdZ0gN1plPHNcwN1zu
-         QsBhk0dinEYAp4Hc/tMYSHYOJ+8VGk5lg6NtzCh1PlXdy21Rx36AVYCH66UEmG2G1D
-         ObRTKStZHJ5iZw4A87eI5bTzqTzkKAedEzmkUzzKEV6+/ZarqU7pxVlKrbDq/5VjlB
-         cx4nyHUS4axCPej7NQkRqcft0KhM9ywXE3A8nbgJRN9TfgAmZa5ZQVbrW1yYPRU+E8
-         kyjdwCJC5gaZg==
-Date:   Thu, 3 Mar 2022 13:02:45 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     qii.wang@mediatek.com, matthias.bgg@gmail.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, Qii Wang <wii.wang@mediatek.com>
-Subject: Re: [PATCH v2] i2c: busses: i2c-mt65xx: Simplify with clk-bulk
-Message-ID: <YiCuZZs8T6AKtpbe@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        qii.wang@mediatek.com, matthias.bgg@gmail.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, Qii Wang <wii.wang@mediatek.com>
-References: <20220303091547.17522-1-angelogioacchino.delregno@collabora.com>
- <22eccb9e-45fa-683e-640d-6f34fa63ca52@collabora.com>
+        b=pCuj49GGDkQkoGwM+RIDo+JdR8DK8baCoyAru3+ZPTttEE/xtWzb/8uCXEzIbNsZ2
+         KtJhieu3p8poLHalvoNhuc+EEy9K3wZPhrGT4I17XmHId3V3qZ+jQDJFQctT2FbqCH
+         ElR/xoO7t/AuT+OSk61bq8XYu04GEOiTqCMRMchekp3Zt+XfqhTkjG3cyI0Q6+C+fl
+         QV08LZN26O9fltuRDrbpurCWsQtObij4/cQgDoaNAwm+/th09WTEXq1FjNS1twoJjT
+         PnKyDyfLeTR063/BUdhA1f6+46VJ2wFj7JCSIGj4EonLz8vw0YVVtiHnZFAjU36dvq
+         LtD8tN9jx7S8Q==
+Date:   Thu, 3 Mar 2022 12:26:00 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [RFC 00/10] add support for fwnode in i2c mux system and sfp
+Message-ID: <YiCz2Dk/0Mf2XgDR@sirena.org.uk>
+References: <20220221162652.103834-1-clement.leger@bootlin.com>
+ <20220224154040.2633a4e4@fixe.home>
+ <2d3278ef-0126-7b93-319b-543b17bccdc2@redhat.com>
+ <20220224174205.43814f3f@fixe.home>
+ <Yhe/qhFNNiGVHSW1@sirena.org.uk>
+ <20220303094840.3b75c4c9@fixe.home>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="j0lwsQweqcGwCt7j"
+        protocol="application/pgp-signature"; boundary="ot7L5NG/LQsDdHwB"
 Content-Disposition: inline
-In-Reply-To: <22eccb9e-45fa-683e-640d-6f34fa63ca52@collabora.com>
+In-Reply-To: <20220303094840.3b75c4c9@fixe.home>
+X-Cookie: Password:
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,34 +76,43 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---j0lwsQweqcGwCt7j
-Content-Type: text/plain; charset=us-ascii
+--ot7L5NG/LQsDdHwB
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Mar 03, 2022 at 09:48:40AM +0100, Cl=E9ment L=E9ger wrote:
 
-> Please, can you fix that while applying, or should I send a v3?
+> Instead of making it specific for swnode, could we make it instead non
+> working for acpi nodes ? Thus, the parsing would work only for swnode
+> and device_node, not allowing to use the fwnode support with acpi for
+> such subsystems (not talking about regulators here).
 
-I'll fix it. Thank you for the rebase!
+*Potentially*.  I'd need to see the code, it doesn't fill me with great
+joy and there are disadvantages in terms of input validation but that
+does address the main issue and perhaps the implementation would be
+nicer than I'm immediately imagining.
 
+> If switching to board file based mechanism, this means that all drivers
+> that are used by the PCIe card will have to be modified to support this
+> mechanism.
 
---j0lwsQweqcGwCt7j
+You should be able to mix the use of board file regulator descriptions
+with other descriptions for other bits of the hardware.
+
+--ot7L5NG/LQsDdHwB
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIgrmEACgkQFA3kzBSg
-KbZ7Vw/+P4t6jxxU+NlXS44NM14j/3DF6/rUS+26gLGmUiUUHI9Ggr63ImC/481K
-QeHlVA+WluBuP8OWKvFWReTCOM1t1KnapFDGWESqanG6W0vSN5Br3cNq2nLmD2+P
-JHdQ5m6Ssn12KkTm1i3+EpFpTlU4kx5TyvAvvQ1iM/W8jNRwmKIx93pcL1pYU9Z9
-xsNbJ6isE2ZdicxaaHuHnSy0XCIkl6YXtDwDNo3vMmmAvLvMwxGjcLO3PW+j9PWm
-YvMC+CuiyJ3l9OCA3vAEDuJdneW9sBz25mNpzE2esUuQrPyHjTTAHThbE075q40y
-5SkdcJL9G1gdPAHiJeFkW+P0j22o1JVFm7T6SZJdnvmilslBqtn7ay1QMuqDuBEr
-KuR2h9kB4wUs9bklY1coegtkNpk75O6wQ1CA5e8Ec5l6kq8S0OFxXXFa1jv9Q3a3
-kZ8si8YEH2+NWYESsbgtIQXoohFHC85x9T3PpvEewlNPpyCP6eRwfcUdkMHQuvcT
-oBkXd4OWlNZC9PLotz5NPp5xHPrKptRxoPcIfbdR9tYaSnN+vhq9VEU2qPS40iiB
-Ae1O6W82yVeTXZEQ5VUUnYdYvfBP3hUxFT+GHqBx+sV4hQrc70YDr10dVPf0IMPP
-loOnoSm7D5eXmeMecI6jxmEfd4SEApZ0E4faYO1pMMJ9SBaOtvA=
-=vPdX
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIgs9cACgkQJNaLcl1U
+h9CCDQf+NV5Fk1jewvCyw3G34WWQh95R6QE48mTxBv/1+F9d9hwDTq4abojmWB2A
+hhd5HoCBN1k71bQJUJz60ERbP7RGMOKnPBBKRMHNDiPIeTpP9gRZvw5c4E+YZD0l
+MPEtVE6bcPrKstw5eGmn3YC0Sh9V7NkpLZN3xz0NBToEjT92curG0Mq1x3y93OxH
+44F1DxZnMbZYU6pvcaZhloCCt9qApNua1kukHYcYPquii7yIC87xEYC/sqZLn6Tn
+LZFkhQo8QpkEWzGPiMdJJgQuABK36vk6LGVHKj1jPOztuZX7NPT0oQiYsWVXYR/M
+XgmoV02ViiGGoaAieUpYB1F2ex6UEg==
+=y3p8
 -----END PGP SIGNATURE-----
 
---j0lwsQweqcGwCt7j--
+--ot7L5NG/LQsDdHwB--
