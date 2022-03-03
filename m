@@ -2,50 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10FC94CB8E9
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Mar 2022 09:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B0B4CB8ED
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Mar 2022 09:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiCCIcj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Mar 2022 03:32:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
+        id S231431AbiCCIcs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Mar 2022 03:32:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbiCCIch (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Mar 2022 03:32:37 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B301517226C;
-        Thu,  3 Mar 2022 00:31:52 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id z4so3888545pgh.12;
-        Thu, 03 Mar 2022 00:31:52 -0800 (PST)
+        with ESMTP id S231433AbiCCIcl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Mar 2022 03:32:41 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A7417225F;
+        Thu,  3 Mar 2022 00:31:55 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id ay5so3903742plb.1;
+        Thu, 03 Mar 2022 00:31:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=fQpyb1xRORaJV/DufaNl+38HQWPZYtiWclCn3fUkzf4=;
-        b=PYzW0wLj9FixipL/QF2CIOANDUyFs1yK5UAbx00qEvtO2rBrWp1uzz3GssZ1ZW/KZ9
-         slOoZQHUscZKFf+N1UPTrIcs2vSX5g6qyqADdu/OfTIuDDLFEpE+DQYsyC46goMGF1k9
-         5hMdJdlHiTEdzTeaUJ9La9VOrSDATRSKhuJ6OD+vu/Y8jYpgytLosvEiYBhwIvNt7ZtZ
-         aADob6EGXUPD3/txGdZX6LHssopScZvNtG1XZJW05eV1RL03wavRjRdzlCx8w5mckHi0
-         WpGs3vtFMYQhqojtVsiidGgKCbBDHUW1+1AAZk75z/gV/NKk/lepLJ1h+RVfbmcgTRaY
-         PqZg==
+        bh=VHaRDl/NeA/sk1ew9ZkQ6wgAVfjZxhVj9/cWGyaZpno=;
+        b=AJBqM8KINeoSRfWd9e1yx+VHrQVOEYrRFBl3cJiRuwIUKEbKVendgOQ7Xy46sdKU3k
+         glEwJj3KfpKi4Qm2qhlqxhpUjd5S5v/Dy1R3NBpp3YS0QBY6+cuKJcFcMgZaRQSkhs+B
+         1fONo7ec+hBHBOMcreST8AMQeepSlkLBe5XAgpIGa62HQECMIDO8gzkwiDvDmlUGNOUU
+         QZND0Vv/NyOhr/Rq3dQObQ0poDmRxzIXO+xzOyr4Mk0NS8QLXeCwhm+dZIcXgq8PJnLh
+         kccjPPScsJCao6pDfscVLkAg2Mgk+b0VmqdnPVdO5vqApQrDdvuC0Yc+dvcs9zp2Ff6D
+         8IIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=fQpyb1xRORaJV/DufaNl+38HQWPZYtiWclCn3fUkzf4=;
-        b=Q0hXLvKDgagEETpFRPdTGMTjfcburdU4E8i89z+RmIDzUxb6fPBbg+e9ERD3UxRB6h
-         mrogzG8fT5nvKfsLhszcxsxjUrS8kU9fZeESehYLo+18lvNmV6QMPKIb0E3dldUUO4SK
-         09kfbSAgeLlWDZvtUlRAUeNSNqwSAfajF+LBspFD7CkwJm6poz/VZgrqE1WhWLrrKOXT
-         RJq3V1ptpxT6YJVb2TOJC/crceXLxGPfSDvc46yCNYq7cv5mU4ebgLRVz33v95GfLzOo
-         7ewxVALubfrVqaa62jYGA6dF09rQLr2btPOEvXSNeGnKw534JC0a6ioXyq5GXOE1+Adi
-         ITVw==
-X-Gm-Message-State: AOAM532IP1/Dvx3oRYmNCxAngx7hqz44Z6zq+cqczCr2tH/OeEcVEiGL
-        u/Sa35A1o6nCGaqRXEHYag==
-X-Google-Smtp-Source: ABdhPJze89CGaMasQnOXZQIxTN/3aDGe/s8xXpxmQ391InTv4sf4WsJq91pwoniorPop+SUBVbaMaQ==
-X-Received: by 2002:aa7:909a:0:b0:4e1:6d4:5905 with SMTP id i26-20020aa7909a000000b004e106d45905mr37141907pfa.34.1646296312106;
-        Thu, 03 Mar 2022 00:31:52 -0800 (PST)
+        bh=VHaRDl/NeA/sk1ew9ZkQ6wgAVfjZxhVj9/cWGyaZpno=;
+        b=ekXjHIzr2Of//1Lc8rBKVzVGZFX3qH6Q9Uo8x/YAB4DwYg7i9uyECjSJdwcxX3NSQx
+         UzlYczeKE3A6o92W9RrtH7achWrFgBojKnI/HxTV5b26afXQBPc6aLnpeDvhAYSweMSL
+         ZMjdHKjgdd+k38cCjebeyIg8+Ei8nIFzLWgn9Vaiz+tArnYf1hKGJnE3hfLI6Cv5TAFt
+         lgl94ztdN5Mlcwpm+QINSNw2niIelEpVKDzci9ZJA89RT+4FgbSJPPVPRVfV3z4CiptO
+         VZgQnDnRaMBtc7weYQFg/PUMDcxR3OOlu+Qj7w6DCR1VXJ4xIDKL5tiKkh84FIbmNCDy
+         QERA==
+X-Gm-Message-State: AOAM533XRy6HDeYhJac0oej3uoZuTy87LEEQ2+v9wyBxqLXwoem2kN77
+        a9VUrZLX5WHdoV/AmMpK8g==
+X-Google-Smtp-Source: ABdhPJzZrSthr04PXHtErJjKuzAkidzKO32y5t0cJZbCPeiqz0iaSN6WVOgZ7Iqc0ZrnKM+EKsrtIA==
+X-Received: by 2002:a17:902:d643:b0:151:6f2c:cfb4 with SMTP id y3-20020a170902d64300b001516f2ccfb4mr17463091plh.120.1646296314590;
+        Thu, 03 Mar 2022 00:31:54 -0800 (PST)
 Received: from localhost ([2401:e180:8860:3b30:e4a0:392a:996e:c525])
-        by smtp.gmail.com with ESMTPSA id k7-20020a63ff07000000b00372dc67e854sm1392521pgi.14.2022.03.03.00.31.51
+        by smtp.gmail.com with ESMTPSA id ng11-20020a17090b1a8b00b001beefe9a1cbsm1488852pjb.31.2022.03.03.00.31.53
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 03 Mar 2022 00:31:51 -0800 (PST)
+        Thu, 03 Mar 2022 00:31:54 -0800 (PST)
 From:   Tyrone Ting <warp5tw@gmail.com>
 To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -59,9 +59,9 @@ To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         kfting@nuvoton.com
 Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 02/11] dt-bindings: i2c: npcm: support NPCM845
-Date:   Thu,  3 Mar 2022 16:31:32 +0800
-Message-Id: <20220303083141.8742-3-warp5tw@gmail.com>
+Subject: [PATCH v3 03/11] i2c: npcm: Fix client address calculation
+Date:   Thu,  3 Mar 2022 16:31:33 +0800
+Message-Id: <20220303083141.8742-4-warp5tw@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220303083141.8742-1-warp5tw@gmail.com>
 References: <20220303083141.8742-1-warp5tw@gmail.com>
@@ -75,80 +75,31 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Tyrone Ting <kfting@nuvoton.com>
+From: Tali Perry <tali.perry1@gmail.com>
 
-Add compatible and nuvoton,sys-mgr description for NPCM i2c module.
+Fix i2c client address by left-shifting 1 bit before
+applying it to the data register.
 
-Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
 Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
 ---
- .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     | 26 +++++++++++++++----
- 1 file changed, 21 insertions(+), 5 deletions(-)
+ drivers/i2c/busses/i2c-npcm7xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml b/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
-index 128444942aec..37976ddcf406 100644
---- a/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
-@@ -7,17 +7,18 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: nuvoton NPCM7XX I2C Controller Device Tree Bindings
+diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
+index 2ad166355ec9..4c225e1a058f 100644
+--- a/drivers/i2c/busses/i2c-npcm7xx.c
++++ b/drivers/i2c/busses/i2c-npcm7xx.c
+@@ -2131,7 +2131,7 @@ static int npcm_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+ 	}
  
- description: |
--  The NPCM750x includes sixteen I2C bus controllers. All Controllers support
--  both master and slave mode. Each controller can switch between master and slave
--  at run time (i.e. IPMB mode). Each controller has two 16 byte HW FIFO for TX and
--  RX.
-+  I2C bus controllers of the NPCM series support both master and
-+  slave mode. Each controller can switch between master and slave at run time
-+  (i.e. IPMB mode). HW FIFO for TX and RX are supported.
- 
- maintainers:
-   - Tali Perry <tali.perry1@gmail.com>
- 
- properties:
-   compatible:
--    const: nuvoton,npcm750-i2c
-+    enum:
-+      - nuvoton,npcm750-i2c
-+      - nuvoton,npcm845-i2c
- 
-   reg:
-     maxItems: 1
-@@ -36,6 +37,10 @@ properties:
-     default: 100000
-     enum: [100000, 400000, 1000000]
- 
-+  nuvoton,sys-mgr:
-+    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    description: The phandle of system manager register node.
-+
- required:
-   - compatible
-   - reg
-@@ -44,6 +49,16 @@ required:
- 
- allOf:
-   - $ref: /schemas/i2c/i2c-controller.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const:
-+              - nuvoton,npcm845-i2c
-+
-+    then:
-+      required:
-+        - nuvoton,sys-mgr
- 
- unevaluatedProperties: false
- 
-@@ -57,6 +72,7 @@ examples:
-         clock-frequency = <100000>;
-         interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
-         compatible = "nuvoton,npcm750-i2c";
-+        nuvoton,sys-mgr = <&gcr>;
-     };
- 
- ...
+ 	npcm_i2c_init_params(bus);
+-	bus->dest_addr = slave_addr;
++	bus->dest_addr = slave_addr << 1;
+ 	bus->msgs = msgs;
+ 	bus->msgs_num = num;
+ 	bus->cmd_err = 0;
 -- 
 2.17.1
 
