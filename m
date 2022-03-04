@@ -2,129 +2,132 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C51E4CD45E
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Mar 2022 13:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B02E4CD510
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Mar 2022 14:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiCDMk5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Mar 2022 07:40:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
+        id S233438AbiCDNV3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Mar 2022 08:21:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbiCDMk4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Mar 2022 07:40:56 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41ED21768D1
-        for <linux-i2c@vger.kernel.org>; Fri,  4 Mar 2022 04:40:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646397608; x=1677933608;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lu2A8nr4iljZZ3A9dmddmJKaKz+e0D2A7UK6WgZvM78=;
-  b=VYoglmUTfzvbEGhFq/YH0NHlx0tvlxOjhsQRMh1fcAZgzWHH5VVDwnXa
-   Og8neSPFsKvUbsMuzkXyQbk44Mh9GUfRNvydcOMoWFjX0Z63OWIS7v7W+
-   hEYDZF50uKymx9sM01TlLDTbwFUYB7+wpaVIivhDwBv4bmBMzSITSP7wu
-   IbMe+Rw1wexc4Zc1/s3Bnb7OAymcUhvFqQ773rCTaYpCG6IZJqP7RcI+S
-   sgvkyyCRt3T+Gq/8B7djLMuemHmMxhFYqOHyH2Om8L6UimFlag4pQfAyk
-   0l4MDG9Boparadpr/5426UYgYnh2nLtdGuoNqvbSfgb+k176dQALExzRm
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="254159714"
-X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
-   d="scan'208";a="254159714"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 04:39:55 -0800
-X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
-   d="scan'208";a="508971098"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 04:39:52 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nQ7D8-00BDd6-E7;
-        Fri, 04 Mar 2022 14:39:06 +0200
-Date:   Fri, 4 Mar 2022 14:39:06 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-i2c@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH -next] i2c: designware: Mark
- dw_i2c_plat_{suspend,resume}() as __maybe_unused
-Message-ID: <YiIIanhJXnoDWJkq@smile.fi.intel.com>
-References: <20220303191713.2402461-1-nathan@kernel.org>
+        with ESMTP id S229748AbiCDNV2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Mar 2022 08:21:28 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5924D4FC40
+        for <linux-i2c@vger.kernel.org>; Fri,  4 Mar 2022 05:20:41 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nQ7rK-00073v-W1; Fri, 04 Mar 2022 14:20:38 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nQ7rJ-0003YJ-Qv; Fri, 04 Mar 2022 14:20:37 +0100
+Date:   Fri, 4 Mar 2022 14:20:37 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Ian Dannapel <Ian.Dannapel@iris-sensing.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: i2c-imx.c: Unnecessary delay slowing down i2c communication
+Message-ID: <20220304132037.GA15901@pengutronix.de>
+References: <D783F898DE87F646B39A5F514F7A514C672EC8@ERDE.irisgmbh.local>
+ <D783F898DE87F646B39A5F514F7A514C672F0E@ERDE.irisgmbh.local>
+ <YiE0FnKL4+4RXEaY@shikoro>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220303191713.2402461-1-nathan@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YiE0FnKL4+4RXEaY@shikoro>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:07:24 up 83 days, 19:52, 84 users,  load average: 0.40, 0.34,
+ 0.23
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 12:17:13PM -0700, Nathan Chancellor wrote:
-> When CONFIG_PM is set but CONFIG_PM_SLEEP is not, two compiler warnings
-> appear:
-> 
->   drivers/i2c/busses/i2c-designware-platdrv.c:444:12: error: unused function 'dw_i2c_plat_suspend' [-Werror,-Wunused-function]
->   static int dw_i2c_plat_suspend(struct device *dev)
->              ^
->   drivers/i2c/busses/i2c-designware-platdrv.c:465:12: error: unused function 'dw_i2c_plat_resume' [-Werror,-Wunused-function]
->   static int dw_i2c_plat_resume(struct device *dev)
->              ^
->   2 errors generated.
-> 
-> These functions are only used in SET_LATE_SYSTEM_SLEEP_PM_OPS(), which
-> is defined as empty when CONFIG_PM_SLEEP is not defined. Mark the
-> functions as __maybe_unused to make it clear that these functions might
-> be unused in this configuration.
+Hi Ian,
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Thanks!
-
-
-> Fixes: c57813b8b288 ("i2c: designware: Lock the adapter while setting the suspended flag")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/i2c/busses/i2c-designware-platdrv.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On Thu, Mar 03, 2022 at 10:33:10PM +0100, Wolfram Sang wrote:
+> On Thu, Mar 03, 2022 at 03:19:00PM +0000, Ian Dannapel wrote:
+> > Hello I²C Driver Maintainers,
 > 
-> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-> index 116a297d1f6b..70ade5306e45 100644
-> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
-> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-> @@ -441,7 +441,7 @@ static int dw_i2c_plat_runtime_suspend(struct device *dev)
->  	return 0;
->  }
->  
-> -static int dw_i2c_plat_suspend(struct device *dev)
-> +static int __maybe_unused dw_i2c_plat_suspend(struct device *dev)
->  {
->  	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
->  
-> @@ -462,7 +462,7 @@ static int dw_i2c_plat_runtime_resume(struct device *dev)
->  	return 0;
->  }
->  
-> -static int dw_i2c_plat_resume(struct device *dev)
-> +static int __maybe_unused dw_i2c_plat_resume(struct device *dev)
->  {
->  	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
->  
+> Adding the i2c-imx maintainer to CC.
 > 
-> base-commit: 1d366c2f9df8279df2adbb60471f86fc40a1c39e
-> -- 
-> 2.35.1
-> 
+> > 
+> > please excuse me if I am not following the right steps to report a question. I did not find consensus between all instructions that I read.
+> > 
+> > We noted that on the IMX i2c driver, at the i2c_imx_start funtion, some sleep/delay was introduced without any apparent reason:
+> > Line 448 at:  https://github.com/Freescale/linux-fslc/commit/3a5ee18d2a32bda6b9a1260136f6805848e3839d
 
+In case of atomic use, for example on poweroff or system panic, we can't
+schedule, polling the register at CPU speed makes no sense too. May be
+this part can be optimized. I assume you don't care about atomic path. Correct?
+
+> > Line 528 at:  https://github.com/Freescale/linux-fslc/commit/2b899f34e1db9adef8716d07e872a800dfa60790
+
+This commit provides enough description in the commit log. But I assume, you
+refer more to the next commit. Since this commit is changing only existing
+sleep.
+
+> > Line 200 at:  https://github.com/Freescale/linux-fslc/commit/43309f3b521302bb66c4c9e66704dd3675e4d725
+
+Good question. We have "Enable I2C controller" instruction and next step
+is "Wait controller to be stable". It looks like some SoC/IP specific
+workaround.
+
+Different iMX* documentation say:
+....
+Master mode is not aware that the bus is busy, so when a START cycle is
+initiated, the current bus cycle can become corrupted and cause either
+the current bus master or the I2C module to lose arbitration, after
+which bus operation returns to normal.
+...
+
+In this case it would make no real sense to start, but the question is,
+In what case should we care and can we optimize it?
+
+> > This sleep causes a pretty big latency overhead on I²C writes and no
+> > IMX8MP document states the need of this delay on the controller.
+
+I would be careful using one SoC and apply same rule to all of them. 
+
+> > NXP Support also informed that this delay might not be needed.  Some
+> > early tests with removing this delay completely showed a great
+> > reduction on the write latency and no problems with the
+> > communication.
+
+I assume, the test was done on iMX8MP only with only one use case?
+
+> > But since we want a stable and fast communication, I ask here again
+> > if someone knows the reason or the need for this delay when starting
+> > to communicate on the I2C bus.
+
+Since this delay was added as part of completely different functionality
+it is hard to say, what issue it is addressing.
+
+Removing this sleep may affect different devices. We can disable it SoC
+by SoC or disable it for all SoC and wait for the feedback. Last option
+is probably only way to get usable results. So, please send patches and
+be ready to respond on possible regressions.
+
+Regards,
+Oleksij
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
