@@ -2,136 +2,229 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE8F4D0732
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Mar 2022 20:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD6D4D075F
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Mar 2022 20:13:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244937AbiCGTGP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Mar 2022 14:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41748 "EHLO
+        id S235770AbiCGTOG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Mar 2022 14:14:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233935AbiCGTGO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Mar 2022 14:06:14 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3194ECD6;
-        Mon,  7 Mar 2022 11:05:18 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id y12so1602553edc.13;
-        Mon, 07 Mar 2022 11:05:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iXQiyusXSHknsabSyew3dw1NkYbYI4nNb8+pTTi1PQI=;
-        b=A0Qm2gzVSL627z/YIsLeTA5SP5E7x2U5Pe29dKLwHmbPEL/WdOL2oAodAGHmZcZpjn
-         JKkq7YdVAzJz4/V5YePclrtVeqaRb3FlmEdYcDTmntzHNErOPkXMN6lHILSMfGmlkTh2
-         oaBQHovjcLuesxDDS5NBnseM7LWCnuzzVOgwWQlGkg9d+MVqS8IGM5vUOQiHEvcZW/6S
-         hqDRJTeuz1h8QjgvPbQm1SQa9XYrv/Q9JLwddI7kp+ynr3928GWZqis41b22wjvOruu8
-         64T3kDN3Q0m46Bwnm3Q4WjMZMAiV/oH7HpPpM9I2eig6JNcTKl9rT5QrRceZDpfzeh72
-         TKjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iXQiyusXSHknsabSyew3dw1NkYbYI4nNb8+pTTi1PQI=;
-        b=cx1n/wcT87A/D0FHnUrq+2YOr8cZzmsEZBu33IHAwQaZu8hlJxNaStbVO9VxOXZ05K
-         44TjaWxE0tuHQqAOM2/ukJVqUIPEWTrR26RSUfuGNvTsugHs/8K52COzB1ah4iiKnDEV
-         UxCvhx7HWhxjuLvljwVpLeFpXW/gnwB0qFsonSPiLAT5SqFSXkhyaiXjuwqanZhWq69X
-         2R0QoW5eu7TbCE97M2UeotrYSwdFjveQ1MkPbOETIx50D6bti5k3OkbyBszaBcWjvziV
-         oWsYV0vjuI4LrvsNAf/FD38gE6KCT6QVQXLxnjRX/ElwlF3/3a4zlzV90VJJsj4JHEGF
-         tmVQ==
-X-Gm-Message-State: AOAM531bFf4l0yesVT4uPWFALUuW1kPISymcERQOwUR1n5WDGAG4g4xH
-        J+oU0VgUrsZ6nVmyqKSSU6/FRy/uTLHfZoQy/Xs=
-X-Google-Smtp-Source: ABdhPJxy2ZUaE3jKuxMdHwPTygdRtYs5VUR/hF+JBH/n7tsdurRqjjrqMjRdNeaD2Y6s4TVmSih1gf2kzIRgo8jrXaw=
-X-Received: by 2002:aa7:da93:0:b0:416:4aca:bef7 with SMTP id
- q19-20020aa7da93000000b004164acabef7mr5481099eds.296.1646679916550; Mon, 07
- Mar 2022 11:05:16 -0800 (PST)
+        with ESMTP id S234144AbiCGTOG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Mar 2022 14:14:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4793338BF;
+        Mon,  7 Mar 2022 11:13:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E8B5B81678;
+        Mon,  7 Mar 2022 19:13:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CD1DC340F4;
+        Mon,  7 Mar 2022 19:13:07 +0000 (UTC)
+Date:   Mon, 7 Mar 2022 14:13:05 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Graeme Gregory <quic_ggregory@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] i2c: add tracepoints for I2C slave events
+Message-ID: <20220307141305.18f0c20b@gandalf.local.home>
+In-Reply-To: <20220307182049.3790905-1-quic_jaehyoo@quicinc.com>
+References: <20220307182049.3790905-1-quic_jaehyoo@quicinc.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
- <20220131151346.45792-6-andriy.shevchenko@linux.intel.com> <20220307192138.10f5fc32@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20220307192138.10f5fc32@md1za8fc.ad001.siemens.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 7 Mar 2022 21:03:58 +0200
-Message-ID: <CAHp75Vf71FB_=i2FSoGmPbWikHLq2YLCh_J=oQz7u50hyALm0g@mail.gmail.com>
-Subject: Re: [PATCH v4 5/8] mfd: lpc_ich: Add support for pinctrl in non-ACPI system
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 8:21 PM Henning Schild
-<henning.schild@siemens.com> wrote:
+On Mon, 7 Mar 2022 10:20:49 -0800
+Jae Hyun Yoo <quic_jaehyoo@quicinc.com> wrote:
 
-Please, do not top-post.
+> I2C slave events tracepoints can be enabled by:
+> 
+> 	echo 1 > /sys/kernel/tracing/events/i2c_slave/enable
+> 
+> and logs in /sys/kernel/tracing/trace will look like:
+> 
+> 	... i2c_slave: i2c-0 a=010 WR_REQ []
+> 	... i2c_slave: i2c-0 a=010 WR_RCV [02]
+> 	... i2c_slave: i2c-0 a=010 WR_RCV [0c]
+> 	... i2c_slave: i2c-0 a=010   STOP []
+> 	... i2c_slave: i2c-0 a=010 RD_REQ [04]
+> 	... i2c_slave: i2c-0 a=010 RD_PRO [b4]
+> 	... i2c_slave: i2c-0 a=010   STOP []
+> 
+> formatted as:
+> 
+> 	i2c-<adapter-nr>
+> 	a=<addr>
+> 	<event>
+> 	[<data>]
+> 
+> trace printings can be selected by adding a filter like:
+> 
+> 	echo adapter_nr==1 >/sys/kernel/tracing/events/i2c_slave/filter
+> 
+> Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+> ---
+>  drivers/i2c/i2c-core-slave.c     | 15 +++++++++
+>  include/linux/i2c.h              |  8 ++---
+>  include/trace/events/i2c_slave.h | 57 ++++++++++++++++++++++++++++++++
+>  3 files changed, 74 insertions(+), 6 deletions(-)
+>  create mode 100644 include/trace/events/i2c_slave.h
+> 
+> diff --git a/drivers/i2c/i2c-core-slave.c b/drivers/i2c/i2c-core-slave.c
+> index 1589179d5eb9..4968a17328b3 100644
+> --- a/drivers/i2c/i2c-core-slave.c
+> +++ b/drivers/i2c/i2c-core-slave.c
+> @@ -14,6 +14,9 @@
+>  
+>  #include "i2c-core.h"
+>  
+> +#define CREATE_TRACE_POINTS
+> +#include <trace/events/i2c_slave.h>
+> +
+>  int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb)
+>  {
+>  	int ret;
+> @@ -79,6 +82,18 @@ int i2c_slave_unregister(struct i2c_client *client)
+>  }
+>  EXPORT_SYMBOL_GPL(i2c_slave_unregister);
+>  
+> +int i2c_slave_event(struct i2c_client *client,
+> +		    enum i2c_slave_event event, u8 *val)
+> +{
+> +	int ret = client->slave_cb(client, event, val);
+> +
+> +	if (!ret)
 
-> Can this patch not be proposed separately? Maybe i am wrong but it
-> seems unrelated to the p2sb story.
+You can make the above into:
 
-The entire story happens to begin from this very change. The author
-(you may see that's not me) proposed the change a long time ago and
-AFAIU this is the requirement to have it upstreamed.
+	if (trace_i2c_slave_enabled() && !ret)
 
-> The whole p2sb base and size discovery is easy and switching the
-> simatic drivers is also. It is an interface change, where the old open
-> coding remains working.
->
-> But having to switch to GPIO in the same series is kind of weird. That
-> is a functional change which even might deserve its own cover letter. I
-> bet there are tons of out-of-tree modules which will stop working on
-> apl after that gets merged.
+to make this conditional compare only happen if the tracepoint is enabled.
+As the trace_i2c_slave_enabled() is a static branch (non-conditional jump).
 
-Upstream rarely, if at all, cares about 3rd party modules. From the
-upstream point of view the thing (whatever the 3rd party module
-supports) wasn't working ("no driver" in upstream) and won't work
-(still "no driver" in upstream) after the change, so there may not be
-any regression.
+> +		trace_i2c_slave(client, event, val);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(i2c_slave_event);
+> +
+>  /**
+>   * i2c_detect_slave_mode - detect operation mode
+>   * @dev: The device owning the bus
+> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> index 7d4f52ceb7b5..fbda5ada2afc 100644
+> --- a/include/linux/i2c.h
+> +++ b/include/linux/i2c.h
+> @@ -392,12 +392,8 @@ enum i2c_slave_event {
+>  int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
+>  int i2c_slave_unregister(struct i2c_client *client);
+>  bool i2c_detect_slave_mode(struct device *dev);
+> -
+> -static inline int i2c_slave_event(struct i2c_client *client,
+> -				  enum i2c_slave_event event, u8 *val)
+> -{
+> -	return client->slave_cb(client, event, val);
+> -}
+> +int i2c_slave_event(struct i2c_client *client,
+> +		    enum i2c_slave_event event, u8 *val);
+>  #else
+>  static inline bool i2c_detect_slave_mode(struct device *dev) { return false; }
+>  #endif
+> diff --git a/include/trace/events/i2c_slave.h b/include/trace/events/i2c_slave.h
+> new file mode 100644
+> index 000000000000..1f0c1cfbf2ef
+> --- /dev/null
+> +++ b/include/trace/events/i2c_slave.h
+> @@ -0,0 +1,57 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> +/*
+> + * I2C slave tracepoints
+> + *
+> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +#undef TRACE_SYSTEM
+> +#define TRACE_SYSTEM i2c_slave
+> +
+> +#if !defined(_TRACE_I2C_SLAVE_H) || defined(TRACE_HEADER_MULTI_READ)
+> +#define _TRACE_I2C_SLAVE_H
+> +
+> +#include <linux/i2c.h>
+> +#include <linux/tracepoint.h>
+> +
+> +TRACE_EVENT(i2c_slave,
+> +	TP_PROTO(const struct i2c_client *client, enum i2c_slave_event event,
+> +		 __u8 *val),
+> +	TP_ARGS(client, event, val),
+> +	TP_STRUCT__entry(
+> +		__field(int,				adapter_nr	)
+> +		__field(__u16,				addr		)
+> +		__field(enum i2c_slave_event,		event		)
+> +		__field(__u16,				len		)
 
-> I still did not understand why apl is special and other boards do not
-> get their pinctrl brought up without ACPI/p2sb-visible.
+I would keep the u16 together:
 
-The platform is being heavily used by one of our departments in such
-configuration with firmwares that may not be fully compatible with
-UEFI.They want to support that along with the case when BIOS has no
-GPIO device being provided.
+		__field(int,				adapter_nr	)
+		__field(__u16,				addr		)
+		__field(__u16,				len		)
+		__field(enum i2c_slave_event,		event		)
 
-> I have patches floating around, but still would be happy if we could do
-> one thing at a time.
+Otherwise you will likely have a hole in the event, which wastes space on
+the ring buffer.
 
-Either way any new changes must use a pin control driver and the
-previous work was accepted only on this basis.
 
-> Or maybe it is strongly coupled and I do not understand why.
+> +		__dynamic_array(__u8, buf, 1)				),
+> +
+> +	TP_fast_assign(
+> +		__entry->adapter_nr = client->adapter->nr;
+> +		__entry->addr = client->addr;
+> +		__entry->event = event;
+> +		switch (event) {
+> +		case I2C_SLAVE_READ_REQUESTED:
+> +		case I2C_SLAVE_READ_PROCESSED:
+> +		case I2C_SLAVE_WRITE_RECEIVED:
+> +			__entry->len = 1;
+> +			memcpy(__get_dynamic_array(buf), val, __entry->len);
 
-That's the initial requirement by our peer departament.
+Why the dynamic event, if it is always the size of 1? Why not make it an
+array. It will save space, as the dynamic meta data has to live on the
+event which is 4 bytes big. Just make it:
 
--- 
-With Best Regards,
-Andy Shevchenko
+		__array(__u8, buf, 1);
+
+It's faster and saves space.
+
+-- Steve
+
+> +			break;
+> +		default:
+> +			__entry->len = 0;
+> +			break;
+> +		}
+> +		),
+> +	TP_printk("i2c-%d a=%03x %s [%*phD]",
+> +		__entry->adapter_nr, __entry->addr,
+> +		__print_symbolic(__entry->event,
+> +				 { I2C_SLAVE_READ_REQUESTED,	"RD_REQ" },
+> +				 { I2C_SLAVE_WRITE_REQUESTED,	"WR_REQ" },
+> +				 { I2C_SLAVE_READ_PROCESSED,	"RD_PRO" },
+> +				 { I2C_SLAVE_WRITE_RECEIVED,	"WR_RCV" },
+> +				 { I2C_SLAVE_STOP,		"  STOP" }),
+> +		__entry->len, __get_dynamic_array(buf)
+> +		));
+> +
+> +#endif /* _TRACE_I2C_SLAVE_H */
+> +
+> +/* This part must be outside protection */
+> +#include <trace/define_trace.h>
+
