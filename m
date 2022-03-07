@@ -2,85 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7391C4D06D1
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Mar 2022 19:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE8F4D0732
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Mar 2022 20:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239807AbiCGSsC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Mar 2022 13:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47068 "EHLO
+        id S244937AbiCGTGP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Mar 2022 14:06:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241305AbiCGSrx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Mar 2022 13:47:53 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5108BF5B
-        for <linux-i2c@vger.kernel.org>; Mon,  7 Mar 2022 10:46:58 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 14AA83F79C
-        for <linux-i2c@vger.kernel.org>; Mon,  7 Mar 2022 18:46:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646678817;
-        bh=7Du6NUZLSH6JPd0VdCqJVM5KAFisPVhRd3glhN4UZOQ=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=ZH/oSi7URveDAMBb9Lavf3tmKC61lAgU695SejnodQd4GV5svsK1W7Lmo04xCrxq3
-         ypYtQYtBQGE8/8Zfxu/KyBp5giI8zBtWx943Vpag856JYNkQtrjysDMBTomNZOlsiW
-         zGuU/3xWlFjlR8NlZ8nor338G8Y5TXSAnwSkJdvYn9kkYVjdmc7S4zxohx24ohci1h
-         mUmkGx8K8w5eNURmV0yFQ9u0Sp4tsCwLPAoUEY4I/zy4XiWxzdRVi7LG5MGYMuKP34
-         LVCNQEzOWowCvEoxrQIgkI/wvO+21JNEnB5NDqb8k85yro6P/GiomC5tojJ2fX+Y1b
-         O0UQSjlZ+VuIg==
-Received: by mail-ed1-f71.google.com with SMTP id l8-20020a056402028800b0041636072ef0so3112749edv.13
-        for <linux-i2c@vger.kernel.org>; Mon, 07 Mar 2022 10:46:57 -0800 (PST)
+        with ESMTP id S233935AbiCGTGO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Mar 2022 14:06:14 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3194ECD6;
+        Mon,  7 Mar 2022 11:05:18 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id y12so1602553edc.13;
+        Mon, 07 Mar 2022 11:05:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iXQiyusXSHknsabSyew3dw1NkYbYI4nNb8+pTTi1PQI=;
+        b=A0Qm2gzVSL627z/YIsLeTA5SP5E7x2U5Pe29dKLwHmbPEL/WdOL2oAodAGHmZcZpjn
+         JKkq7YdVAzJz4/V5YePclrtVeqaRb3FlmEdYcDTmntzHNErOPkXMN6lHILSMfGmlkTh2
+         oaBQHovjcLuesxDDS5NBnseM7LWCnuzzVOgwWQlGkg9d+MVqS8IGM5vUOQiHEvcZW/6S
+         hqDRJTeuz1h8QjgvPbQm1SQa9XYrv/Q9JLwddI7kp+ynr3928GWZqis41b22wjvOruu8
+         64T3kDN3Q0m46Bwnm3Q4WjMZMAiV/oH7HpPpM9I2eig6JNcTKl9rT5QrRceZDpfzeh72
+         TKjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7Du6NUZLSH6JPd0VdCqJVM5KAFisPVhRd3glhN4UZOQ=;
-        b=VvN8e0IKRue83UPo6dWntRF/oOXdussRAL1y2ry4cqcwxN7a4vQOy+XhpE63XyZT2Y
-         RjfnivGB/sHdASNYok4B0LFnB2P+55mtMonAAbpc3hEjWUmVeT6cE4BdbUw7IEOxSnu3
-         e7N7AZzAa9uk5xn4RPiep2N0o5SIQHtG/tWWz0uLw4ra+SHLMm/ilk7vWWjC8366HSAl
-         CGiNBq5fR87PH8D1WA7J8MfIEsRfbI2Os7T98CDdfRQl3kEdzL4S9a0q4bbkf+fvkyZU
-         KbvxHHn6lPxqUIFdeXHA3JYZA34dOMfYn40ugPMRdklENG3xHw3wV4Lv/1XB/eef3m2b
-         x4nw==
-X-Gm-Message-State: AOAM532HTYauvDdToDfiDEcC1OJTQfeWOfFcEofbfsLdGJL42ivdXECC
-        g+KEDxfHCQSFJi8VM0N1X8qUgkWkrvijBLE6tAjXOzetEucHOPg2l1puQCJQqPQCFcM+mPTeg+R
-        atWOK5OllX4Syqeuyl8W2hgGt0JV0LczV55yDeA==
-X-Received: by 2002:a17:907:9956:b0:6cf:cd25:c5a7 with SMTP id kl22-20020a170907995600b006cfcd25c5a7mr9944899ejc.635.1646678816736;
-        Mon, 07 Mar 2022 10:46:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxpJUHm+abc5eCLSEqkNsLa+Mh4u6+Bzb3sUElgNYSsiueLRLyvJgLpRmFoXyMOzSLGycIl0Q==
-X-Received: by 2002:a17:907:9956:b0:6cf:cd25:c5a7 with SMTP id kl22-20020a170907995600b006cfcd25c5a7mr9944880ejc.635.1646678816500;
-        Mon, 07 Mar 2022 10:46:56 -0800 (PST)
-Received: from [192.168.0.143] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id t19-20020a1709060c5300b006d582121f99sm4960417ejf.36.2022.03.07.10.46.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 10:46:55 -0800 (PST)
-Message-ID: <0901c63a-6684-348c-6f74-919075700e8b@canonical.com>
-Date:   Mon, 7 Mar 2022 19:46:54 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iXQiyusXSHknsabSyew3dw1NkYbYI4nNb8+pTTi1PQI=;
+        b=cx1n/wcT87A/D0FHnUrq+2YOr8cZzmsEZBu33IHAwQaZu8hlJxNaStbVO9VxOXZ05K
+         44TjaWxE0tuHQqAOM2/ukJVqUIPEWTrR26RSUfuGNvTsugHs/8K52COzB1ah4iiKnDEV
+         UxCvhx7HWhxjuLvljwVpLeFpXW/gnwB0qFsonSPiLAT5SqFSXkhyaiXjuwqanZhWq69X
+         2R0QoW5eu7TbCE97M2UeotrYSwdFjveQ1MkPbOETIx50D6bti5k3OkbyBszaBcWjvziV
+         oWsYV0vjuI4LrvsNAf/FD38gE6KCT6QVQXLxnjRX/ElwlF3/3a4zlzV90VJJsj4JHEGF
+         tmVQ==
+X-Gm-Message-State: AOAM531bFf4l0yesVT4uPWFALUuW1kPISymcERQOwUR1n5WDGAG4g4xH
+        J+oU0VgUrsZ6nVmyqKSSU6/FRy/uTLHfZoQy/Xs=
+X-Google-Smtp-Source: ABdhPJxy2ZUaE3jKuxMdHwPTygdRtYs5VUR/hF+JBH/n7tsdurRqjjrqMjRdNeaD2Y6s4TVmSih1gf2kzIRgo8jrXaw=
+X-Received: by 2002:aa7:da93:0:b0:416:4aca:bef7 with SMTP id
+ q19-20020aa7da93000000b004164acabef7mr5481099eds.296.1646679916550; Mon, 07
+ Mar 2022 11:05:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 1/2] dt-bindings: i2c: update bindings for MT8168 SoC
-Content-Language: en-US
-To:     Kewei Xu <kewei.xu@mediatek.com>, wsa@the-dreams.de
-Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        leilk.liu@mediatek.com, qii.wang@mediatek.com,
-        liguo.zhang@mediatek.com, caiyu.chen@mediatek.com,
-        housong.zhang@mediatek.com, yuhan.wei@mediatek.com
-References: <20220307033649.11564-1-kewei.xu@mediatek.com>
- <20220307033649.11564-2-kewei.xu@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220307033649.11564-2-kewei.xu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+ <20220131151346.45792-6-andriy.shevchenko@linux.intel.com> <20220307192138.10f5fc32@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20220307192138.10f5fc32@md1za8fc.ad001.siemens.net>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 7 Mar 2022 21:03:58 +0200
+Message-ID: <CAHp75Vf71FB_=i2FSoGmPbWikHLq2YLCh_J=oQz7u50hyALm0g@mail.gmail.com>
+Subject: Re: [PATCH v4 5/8] mfd: lpc_ich: Add support for pinctrl in non-ACPI system
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,18 +87,51 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 07/03/2022 04:36, Kewei Xu wrote:
-> Add a DT binding documentation for the MT8168 soc.
-> 
-> Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
+On Mon, Mar 7, 2022 at 8:21 PM Henning Schild
+<henning.schild@siemens.com> wrote:
 
+Please, do not top-post.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Can this patch not be proposed separately? Maybe i am wrong but it
+> seems unrelated to the p2sb story.
 
+The entire story happens to begin from this very change. The author
+(you may see that's not me) proposed the change a long time ago and
+AFAIU this is the requirement to have it upstreamed.
 
-Best regards,
-Krzysztof
+> The whole p2sb base and size discovery is easy and switching the
+> simatic drivers is also. It is an interface change, where the old open
+> coding remains working.
+>
+> But having to switch to GPIO in the same series is kind of weird. That
+> is a functional change which even might deserve its own cover letter. I
+> bet there are tons of out-of-tree modules which will stop working on
+> apl after that gets merged.
+
+Upstream rarely, if at all, cares about 3rd party modules. From the
+upstream point of view the thing (whatever the 3rd party module
+supports) wasn't working ("no driver" in upstream) and won't work
+(still "no driver" in upstream) after the change, so there may not be
+any regression.
+
+> I still did not understand why apl is special and other boards do not
+> get their pinctrl brought up without ACPI/p2sb-visible.
+
+The platform is being heavily used by one of our departments in such
+configuration with firmwares that may not be fully compatible with
+UEFI.They want to support that along with the case when BIOS has no
+GPIO device being provided.
+
+> I have patches floating around, but still would be happy if we could do
+> one thing at a time.
+
+Either way any new changes must use a pin control driver and the
+previous work was accepted only on this basis.
+
+> Or maybe it is strongly coupled and I do not understand why.
+
+That's the initial requirement by our peer departament.
+
+-- 
+With Best Regards,
+Andy Shevchenko
