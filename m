@@ -2,124 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A304CF3E8
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Mar 2022 09:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E50B4CF827
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Mar 2022 10:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiCGIrn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Mar 2022 03:47:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
+        id S234920AbiCGJwA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Mar 2022 04:52:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233060AbiCGIrm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Mar 2022 03:47:42 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140B763537
-        for <linux-i2c@vger.kernel.org>; Mon,  7 Mar 2022 00:46:48 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id u1so21959021wrg.11
-        for <linux-i2c@vger.kernel.org>; Mon, 07 Mar 2022 00:46:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=WQB8Wj8L2naBf99gAuyw+5VYV82BNeXK+2ElJRbWO5s=;
-        b=mFke2k3O5n2KTc+OBpSwEGYxGgXKklKBN1I7HJNehUDSEQDOLPuvhG6WYa4jPUWSaB
-         /Qc2aYNubYEebqhM4q80rAJQc0hQeeMehWol8JFOfDp0o4nGAM8wU0ZQYCNevtniMC8/
-         E1CwvTwI+JzsusxsubfnfYR3n5efnrFVR/OtCVB+7Zi2UsQOMD706qgJ6u3PJt/5s4+4
-         Gp79oyuxv4jdVk78kP58UV3grp76skMsBgymyPcyQy2bTEXRerBgIFcAz8+p/IpPTDNN
-         QXzErHXq4OcBWvqJHQm1NARbJHpFftY3LGImleS2tvtr56DIVmVWexf8wt+7GYtV+6rB
-         ZgFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=WQB8Wj8L2naBf99gAuyw+5VYV82BNeXK+2ElJRbWO5s=;
-        b=lDHLHoyyZznM7bCt+a9Sx8uztZmLet4VpWQMA4ewlEek1uNv0/GRu9Y5W66JkURYx5
-         FA9yRJz8Zj7B04V1Z5a0nXnXCx6K8j8rIxmban4wXmo32HrgcTeATFMsaPxZSRDhDHIJ
-         9wBPAcUlkRIUBF6fv+7/vcawK1kf/BlfC9I1DBgKm2Uvkcf28icSSvdDQF0O/uIpU98o
-         kaBlYyAhUtu6yhJ5m9XT1uI4vxcIrhS58ul9wC97pckCTyTOVFkPMYIvxRhlYG3s4pLM
-         sI86SYw2XNtrEXTYzMyrjgef8oLjxFea7mtxANjN1tCtC4jjPOrCRzVrkqxAmAp1+mCV
-         +bOQ==
-X-Gm-Message-State: AOAM5306T9Fko/tJ5LOn893DQ8+ao5O3+4VH01HgUvov7MTQ9vZZGuEZ
-        LPmltXi4SBs9Zgx9+P3LbOqZgw==
-X-Google-Smtp-Source: ABdhPJybKFvjFWhNXd7UECd+xULEdoPrtBag7Uk01fy8gziWwt4F73T11HzmlUw4rbLsGhxf0KElsw==
-X-Received: by 2002:a5d:52d2:0:b0:1ef:e22d:18ba with SMTP id r18-20020a5d52d2000000b001efe22d18bamr7382573wrv.30.1646642806566;
-        Mon, 07 Mar 2022 00:46:46 -0800 (PST)
-Received: from ?IPV6:2001:861:44c0:66c0:1451:71b4:fefe:6096? ([2001:861:44c0:66c0:1451:71b4:fefe:6096])
-        by smtp.gmail.com with ESMTPSA id v188-20020a1cacc5000000b00384b71a50d5sm12647353wme.24.2022.03.07.00.46.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 00:46:46 -0800 (PST)
-Message-ID: <72059eeb-dec6-286d-7006-0a1d4d947d4f@baylibre.com>
-Date:   Mon, 7 Mar 2022 09:46:48 +0100
+        with ESMTP id S240505AbiCGJvE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Mar 2022 04:51:04 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767787562C;
+        Mon,  7 Mar 2022 01:44:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646646286; x=1678182286;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iYmh9KvmrAN/9n49jwIZ1qbV8GdSrmGWQVFa5C6rxI4=;
+  b=amwK989APox6E/AfbAd0YUDGIOOPLjF8xKh4zmJgdz1NOS3F+trbAizf
+   M0Xi1Gb7xwz12Dn2u9lJV8G5sV3n2eUM6ywdPtzhWow5toqbUoy7ZlG92
+   09dFqh2wCNUwBxjGuYf6nhq2phKDYdmTeHBLawX75UdJXjZFk+vfC4idi
+   ErGGN/AvNy6HNsPEmBGoRXDMZhNeiYa1fzjoZbanCbW50M1C0+1pSK+Gm
+   Rl/HXN/shXUN9xCl0j5AP1z0m7xxsj4OL1CDYmPSBUn6d6tSVz5oyOBZl
+   8NimXjo2+Hzc7OFCn9LqU37eOz8migoBOb8fRxF+MTIV1XxKfhkZToeou
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="254541218"
+X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
+   d="scan'208";a="254541218"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 01:44:40 -0800
+X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
+   d="scan'208";a="495003939"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 01:44:34 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nR9u8-00Ch1M-IP;
+        Mon, 07 Mar 2022 11:43:48 +0200
+Date:   Mon, 7 Mar 2022 11:43:48 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Tali Perry <tali.perry1@gmail.com>,
+        Tyrone Ting <warp5tw@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
+        Wolfram Sang <wsa@kernel.org>, jie.deng@intel.com,
+        sven@svenpeter.dev, bence98@sch.bme.hu, lukas.bulwahn@gmail.com,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Tali Perry <tali.perry@nuvoton.com>,
+        Avi Fishman <Avi.Fishman@nuvoton.com>,
+        Tomer Maimon <tomer.maimon@nuvoton.com>, KWLIU@nuvoton.com,
+        JJLIU0@nuvoton.com, kfting@nuvoton.com,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 11/11] i2c: npcm: Support NPCM845
+Message-ID: <YiXT1JX5A7Ez7C6G@smile.fi.intel.com>
+References: <20220303083141.8742-1-warp5tw@gmail.com>
+ <20220303083141.8742-12-warp5tw@gmail.com>
+ <YiCb7LNY9tmMCZx7@smile.fi.intel.com>
+ <CAHb3i=tWhtXK+c5GGbp6m23AHoyy=4woT_+n3a_N-6CqKUYb=g@mail.gmail.com>
+ <YiDMX7pUqs/rLJUU@smile.fi.intel.com>
+ <CAP6Zq1iy0yNMemqDjrLu1F0rrRSDFhZ+SqdoOa9FyJDNL0ENXA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] i2c: meson: Fix wrong speed use from probe
-Content-Language: en-US
-To:     Lucas Tanure <tanure@linux.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220301072600.12352-1-tanure@linux.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220301072600.12352-1-tanure@linux.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP6Zq1iy0yNMemqDjrLu1F0rrRSDFhZ+SqdoOa9FyJDNL0ENXA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 01/03/2022 08:26, Lucas Tanure wrote:
-> Having meson_i2c_set_clk_div after i2c_add_adapter
-> causes issues for client drivers that try to use
-> the bus before the requested speed is applied.
-> 
-> The bus can be used just after i2c_add_adapter, so
-> move i2c_add_adapter to the final step as
-> meson_i2c_set_clk_div needs to be called before
-> the bus is used.
-> 
-> Signed-off-by: Lucas Tanure <tanure@linux.com>
-> ---
->   drivers/i2c/busses/i2c-meson.c | 12 ++++++------
->   1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
-> index ef73a42577cc..07eb819072c4 100644
-> --- a/drivers/i2c/busses/i2c-meson.c
-> +++ b/drivers/i2c/busses/i2c-meson.c
-> @@ -465,18 +465,18 @@ static int meson_i2c_probe(struct platform_device *pdev)
->   	 */
->   	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_START, 0);
->   
-> -	ret = i2c_add_adapter(&i2c->adap);
-> -	if (ret < 0) {
-> -		clk_disable_unprepare(i2c->clk);
-> -		return ret;
-> -	}
-> -
->   	/* Disable filtering */
->   	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR,
->   			   REG_SLV_SDA_FILTER | REG_SLV_SCL_FILTER, 0);
->   
->   	meson_i2c_set_clk_div(i2c, timings.bus_freq_hz);
->   
-> +	ret = i2c_add_adapter(&i2c->adap);
-> +	if (ret < 0) {
-> +		clk_disable_unprepare(i2c->clk);
-> +		return ret;
-> +	}
-> +
->   	return 0;
->   }
->   
+On Sun, Mar 06, 2022 at 03:33:20PM +0200, Tomer Maimon wrote:
+> On Thu, 3 Mar 2022 at 16:11, Andy Shevchenko <
+> andriy.shevchenko@linux.intel.com> wrote:
+> > On Thu, Mar 03, 2022 at 02:35:58PM +0200, Tali Perry wrote:
+> > > > On Thu, Mar 3, 2022 at 12:45 PM Andy Shevchenko <
+> > andriy.shevchenko@linux.intel.com> wrote:
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+...
+
+> > But hold on and read set of questions below.
+> >
+> > Previously it was a fixed field with the NPCM_I2CTXF_STS_TX_BYTES mask
+> > applied,
+> > right? From above I have got that FIFO is growing twice. Is it correct?
+> 
+> What do you mean by growing twice? TX and RX?
+
+I meant from 16 bytes to 32 bytes.
+
+> > Does the LSB stay at the same offset? What is the meaning of the MSB in 32
+> > byte
+> > case? If it's reserved then why not to always use 32 byte approach?
+> 
+> Yes, the LSB stays in the same place, and bit 5 is reserved in the NPCM7XX
+> SoC.
+> Unfortunately, the I2C test failed when we tried to use the 32 bytes
+> approach at NPCM7XX Soc, this is why we added NPCM_I2CTXF_STS_TX_BYTES and
+> NPCM_I2C_STSRXF_RX_BYTES to the data structure.
+> 
+> The device tree data structure pass data for each specific device, so I
+> don't understand why not use device tree data for supporting the I2C
+> specific device? this is not the case here?
+
+Basically we use compatible strings for that, but in any case if something
+can be autodetected from hardware, it's better to use autodetection.
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
