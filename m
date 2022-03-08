@@ -2,84 +2,224 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 014704D1A34
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Mar 2022 15:17:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BCF84D1D47
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Mar 2022 17:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235123AbiCHOSc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 8 Mar 2022 09:18:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
+        id S1348361AbiCHQep (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 8 Mar 2022 11:34:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237156AbiCHOSa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Mar 2022 09:18:30 -0500
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFB22BDD
-        for <linux-i2c@vger.kernel.org>; Tue,  8 Mar 2022 06:17:33 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:6100:2d37:4115:c358])
-        by albert.telenet-ops.be with bizsmtp
-        id 3qHT270081Yj8bA06qHTJB; Tue, 08 Mar 2022 15:17:30 +0100
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nRaeU-003Bwf-Oo; Tue, 08 Mar 2022 15:17:26 +0100
-Date:   Tue, 8 Mar 2022 15:17:26 +0100 (CET)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-X-X-Sender: geert@ramsan.of.borg
-To:     Nathan Chancellor <nathan@kernel.org>
-cc:     Wolfram Sang <wsa@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-i2c@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH -next] i2c: designware: Mark dw_i2c_plat_{suspend,resume}()
- as __maybe_unused
-In-Reply-To: <20220303191713.2402461-1-nathan@kernel.org>
-Message-ID: <alpine.DEB.2.22.394.2203081513270.760560@ramsan.of.borg>
-References: <20220303191713.2402461-1-nathan@kernel.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        with ESMTP id S1348377AbiCHQen (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Mar 2022 11:34:43 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4904D506CE;
+        Tue,  8 Mar 2022 08:33:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1646757225; x=1678293225;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DZeF35G0A8841s/xlpff5KaFqSf7UHIdCnEJeRGaFq0=;
+  b=URByAveWrU0j3h3bVxqpplTOnr2dnbZaH9vwGk6EiN03W/e3iOqE/5g8
+   7ByVTTCAKPYJ90K6W5sneOq0RGl7NVwcMdAYJGEhDhpMWMdbetxtIaEkl
+   OTvO+WyIBoLNwsCU8bjiTtAQkj7FetWQs1aO/KELUisuW9pATchq7eBa8
+   U=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 08 Mar 2022 08:33:45 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 08:33:44 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 8 Mar 2022 08:33:44 -0800
+Received: from maru.qualcomm.com (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Tue, 8 Mar 2022
+ 08:33:43 -0800
+From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Ingo Molnar" <mingo@redhat.com>
+CC:     Jamie Iles <quic_jiles@quicinc.com>,
+        Graeme Gregory <quic_ggregory@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+Subject: [PATCH v2] i2c: add tracepoints for I2C slave events
+Date:   Tue, 8 Mar 2022 08:33:33 -0800
+Message-ID: <20220308163333.3985974-1-quic_jaehyoo@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 3 Mar 2022, Nathan Chancellor wrote:
-> When CONFIG_PM is set but CONFIG_PM_SLEEP is not, two compiler warnings
-> appear:
->
->  drivers/i2c/busses/i2c-designware-platdrv.c:444:12: error: unused function 'dw_i2c_plat_suspend' [-Werror,-Wunused-function]
->  static int dw_i2c_plat_suspend(struct device *dev)
->             ^
->  drivers/i2c/busses/i2c-designware-platdrv.c:465:12: error: unused function 'dw_i2c_plat_resume' [-Werror,-Wunused-function]
->  static int dw_i2c_plat_resume(struct device *dev)
->             ^
->  2 errors generated.
->
-> These functions are only used in SET_LATE_SYSTEM_SLEEP_PM_OPS(), which
-> is defined as empty when CONFIG_PM_SLEEP is not defined. Mark the
-> functions as __maybe_unused to make it clear that these functions might
-> be unused in this configuration.
->
-> Fixes: c57813b8b288 ("i2c: designware: Lock the adapter while setting the suspended flag")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+I2C slave events tracepoints can be enabled by:
 
-As I just ran into this myself...
+	echo 1 > /sys/kernel/tracing/events/i2c_slave/enable
 
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+and logs in /sys/kernel/tracing/trace will look like:
 
-Gr{oetje,eeting}s,
+	... i2c_slave: i2c-0 a=010 WR_REQ []
+	... i2c_slave: i2c-0 a=010 WR_RCV [02]
+	... i2c_slave: i2c-0 a=010 WR_RCV [0c]
+	... i2c_slave: i2c-0 a=010   STOP []
+	... i2c_slave: i2c-0 a=010 RD_REQ [04]
+	... i2c_slave: i2c-0 a=010 RD_PRO [b4]
+	... i2c_slave: i2c-0 a=010   STOP []
 
- 						Geert
+formatted as:
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+	i2c-<adapter-nr>
+	a=<addr>
+	<event>
+	[<data>]
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+trace printings can be selected by adding a filter like:
+
+	echo adapter_nr==1 >/sys/kernel/tracing/events/i2c_slave/filter
+
+Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+---
+Changes v1 -> v2:
+* Fixed trace_2c_slave call condition to optimize conditional compare logic
+  (Steven)
+* Fixed TP entry order to prevent wasting spaces in the ring buffer (Steven)
+* Replaced __get_dynamic_array with __array for storing 1-length data value
+  to make it faster and save space (Steven)
+
+ drivers/i2c/i2c-core-slave.c     | 15 +++++++++
+ include/linux/i2c.h              |  8 ++---
+ include/trace/events/i2c_slave.h | 57 ++++++++++++++++++++++++++++++++
+ 3 files changed, 74 insertions(+), 6 deletions(-)
+ create mode 100644 include/trace/events/i2c_slave.h
+
+diff --git a/drivers/i2c/i2c-core-slave.c b/drivers/i2c/i2c-core-slave.c
+index 1589179d5eb9..4299de933ac6 100644
+--- a/drivers/i2c/i2c-core-slave.c
++++ b/drivers/i2c/i2c-core-slave.c
+@@ -14,6 +14,9 @@
+ 
+ #include "i2c-core.h"
+ 
++#define CREATE_TRACE_POINTS
++#include <trace/events/i2c_slave.h>
++
+ int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb)
+ {
+ 	int ret;
+@@ -79,6 +82,18 @@ int i2c_slave_unregister(struct i2c_client *client)
+ }
+ EXPORT_SYMBOL_GPL(i2c_slave_unregister);
+ 
++int i2c_slave_event(struct i2c_client *client,
++		    enum i2c_slave_event event, u8 *val)
++{
++	int ret = client->slave_cb(client, event, val);
++
++	if (trace_i2c_slave_enabled() && !ret)
++		trace_i2c_slave(client, event, val);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(i2c_slave_event);
++
+ /**
+  * i2c_detect_slave_mode - detect operation mode
+  * @dev: The device owning the bus
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 7d4f52ceb7b5..fbda5ada2afc 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -392,12 +392,8 @@ enum i2c_slave_event {
+ int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
+ int i2c_slave_unregister(struct i2c_client *client);
+ bool i2c_detect_slave_mode(struct device *dev);
+-
+-static inline int i2c_slave_event(struct i2c_client *client,
+-				  enum i2c_slave_event event, u8 *val)
+-{
+-	return client->slave_cb(client, event, val);
+-}
++int i2c_slave_event(struct i2c_client *client,
++		    enum i2c_slave_event event, u8 *val);
+ #else
+ static inline bool i2c_detect_slave_mode(struct device *dev) { return false; }
+ #endif
+diff --git a/include/trace/events/i2c_slave.h b/include/trace/events/i2c_slave.h
+new file mode 100644
+index 000000000000..3aaf5fb76796
+--- /dev/null
++++ b/include/trace/events/i2c_slave.h
+@@ -0,0 +1,57 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ * I2C slave tracepoints
++ *
++ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM i2c_slave
++
++#if !defined(_TRACE_I2C_SLAVE_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_I2C_SLAVE_H
++
++#include <linux/i2c.h>
++#include <linux/tracepoint.h>
++
++TRACE_EVENT(i2c_slave,
++	TP_PROTO(const struct i2c_client *client, enum i2c_slave_event event,
++		 __u8 *val),
++	TP_ARGS(client, event, val),
++	TP_STRUCT__entry(
++		__field(int,				adapter_nr	)
++		__field(__u16,				addr		)
++		__field(__u16,				len		)
++		__field(enum i2c_slave_event,		event		)
++		__array(__u8, buf, 1)					),
++
++	TP_fast_assign(
++		__entry->adapter_nr = client->adapter->nr;
++		__entry->addr = client->addr;
++		__entry->event = event;
++		switch (event) {
++		case I2C_SLAVE_READ_REQUESTED:
++		case I2C_SLAVE_READ_PROCESSED:
++		case I2C_SLAVE_WRITE_RECEIVED:
++			__entry->len = 1;
++			memcpy(__entry->buf, val, __entry->len);
++			break;
++		default:
++			__entry->len = 0;
++			break;
++		}
++		),
++	TP_printk("i2c-%d a=%03x %s [%*phD]",
++		__entry->adapter_nr, __entry->addr,
++		__print_symbolic(__entry->event,
++				 { I2C_SLAVE_READ_REQUESTED,	"RD_REQ" },
++				 { I2C_SLAVE_WRITE_REQUESTED,	"WR_REQ" },
++				 { I2C_SLAVE_READ_PROCESSED,	"RD_PRO" },
++				 { I2C_SLAVE_WRITE_RECEIVED,	"WR_RCV" },
++				 { I2C_SLAVE_STOP,		"  STOP" }),
++		__entry->len, __entry->buf
++		));
++
++#endif /* _TRACE_I2C_SLAVE_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+-- 
+2.25.1
+
