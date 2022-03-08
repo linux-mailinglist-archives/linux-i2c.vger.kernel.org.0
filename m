@@ -2,102 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03954D1154
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Mar 2022 08:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8C54D12BA
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Mar 2022 09:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237159AbiCHHz0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 8 Mar 2022 02:55:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41018 "EHLO
+        id S1345131AbiCHIul (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 8 Mar 2022 03:50:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbiCHHz0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Mar 2022 02:55:26 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2B73CFD7;
-        Mon,  7 Mar 2022 23:54:30 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id u10so25426509wra.9;
-        Mon, 07 Mar 2022 23:54:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=W/L+r+/fCB4l9p33UVukPXEu1m+B4kpeTuPR2wNzOHU=;
-        b=b5LX5LPNmCMY06SaJ5mLXQxyzWLUfiF1g9SL7sppq1S1FDvcn/iBvEGfe3yuQRrQx4
-         5tVNZazKaD27iGOCp1oy+29lxfRymkC/t5sWWSAuD7qgcAY7YBv2aWt8bUiCJaiqIvLp
-         5ODvI0ArQoNTIm4c5kTupzpjIP/mgm4w2AiQBh2JjgQ4osHshF6fa1an9wwzUfOPAxfK
-         9GpBjthGPseaRb2YWY+2LBpKdETJX28FsYFjGSvfCscMkTVYuhoLoLX1Rvhq6LCx0KMi
-         rlUdAyQUrTPBuKcG3UVxOMz6G01u8Veh7A33fbFgF63mLaJTChQTZIew9+LZ0hkNxZVm
-         23AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=W/L+r+/fCB4l9p33UVukPXEu1m+B4kpeTuPR2wNzOHU=;
-        b=zOIKgPXFbfwcn1oXdQpPEC9LXj1nd9GRQuKIyAmxuj60UOW/56MQtwQlGmyxfEU0NF
-         m5njyF+QdTfwrf3hNMoWkEpfDrYdfuleghNXsc7gP1e2s+5tHZVhBzozQyuJWoqvlRMx
-         qYTy/mt/VBqflLr/ryIxMjCg/JBQqlw9cCrCj0piEF+R2TGBpFn8iwI6ciDsTIv4SCj2
-         YMw3ix8qfy8q1i+fpYnhAje+plA9V7g8L8IlCQ0Nt0z3DU95NZCYFb17lTEBwMYSX5Ul
-         v1kT9mvapbupi1ZZEMvSvZJGepKNOIe88J5TRl1UGPJ91SePJap/rNYvzOqarFXT85xH
-         W3sw==
-X-Gm-Message-State: AOAM533SQ/OxfDzBOnrSMm4FdlSyj676uG7jm0e9TJ2HVXg62j9hhLme
-        s6N30mw8bhtpo8R/4s9sy4k=
-X-Google-Smtp-Source: ABdhPJx2i/m1TJ34EsrMs3DcWt3NZKdOkhFTyD0itWRUKEpWHEAee5Qkm/gFAx5RO6V6Uujm8GEh/Q==
-X-Received: by 2002:adf:8bd4:0:b0:1ed:c1f8:3473 with SMTP id w20-20020adf8bd4000000b001edc1f83473mr11904148wra.435.1646726068479;
-        Mon, 07 Mar 2022 23:54:28 -0800 (PST)
-Received: from felia.fritz.box (200116b82626c9000cc91df728b27ead.dip.versatel-1u1.de. [2001:16b8:2626:c900:cc9:1df7:28b2:7ead])
-        by smtp.gmail.com with ESMTPSA id v15-20020a5d590f000000b001f04b96f9a9sm12929673wrd.42.2022.03.07.23.54.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 23:54:28 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
-Cc:     George Cherian <gcherian@marvell.com>,
-        Rob Herring <robh@kernel.org>, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: adjust XLP9XX I2C DRIVER after removing the devicetree binding
-Date:   Tue,  8 Mar 2022 08:54:14 +0100
-Message-Id: <20220308075414.30026-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S234024AbiCHIul (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Mar 2022 03:50:41 -0500
+Received: from mail.olerise.pl (mail.olerise.pl [46.183.184.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914CA3FDB6
+        for <linux-i2c@vger.kernel.org>; Tue,  8 Mar 2022 00:49:45 -0800 (PST)
+Received: by mail.olerise.pl (Postfix, from userid 1001)
+        id 6F6E043F79; Tue,  8 Mar 2022 09:46:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=olerise.pl; s=mail;
+        t=1646729328; bh=ZNYiuZLXlxCdAPtstEG/gwJieB5RBwA/cHj1SZ3Mpl0=;
+        h=Date:From:To:Subject:From;
+        b=zXuNdGzb7Y9UaEmX7J/XzcDlslJN4fCzF9NV0Irg8nrfTlb7lnT4Kft6RS0W3V+Nv
+         NuVvLhkuInqV9SSm7QvYd+qA5mFGn3x0D90TDmYqnSTucQJbZqNBJ1/+wrAYT167nt
+         32HgILc1g0mAgPNmjZrizNuBnSfd1WEu4NSMWxUgPc/pFbrLye1LZKTILGZZaPPKWv
+         S8Tntfn7d4ux96yLpqoG80XFb5T8zFrhcPzjfZGwUiYvglln2KDw1r1dQOl0cPFqiv
+         znpYJUiNoHCBMCh5sCoRL71iIAu6B3SZN1JIQSYgzo44tLdoGQJHvS87xfupZrIbYc
+         5O77sUaLbERiQ==
+Received: by mail.olerise.pl for <linux-i2c@vger.kernel.org>; Tue,  8 Mar 2022 08:45:41 GMT
+Message-ID: <20220308084500-0.1.26.mt1r.0.h7jrhxgnb8@olerise.pl>
+Date:   Tue,  8 Mar 2022 08:45:41 GMT
+From:   =?UTF-8?Q? "Miko=C5=82aj_Rudzik" ?= <mikolaj.rudzik@olerise.pl>
+To:     <linux-i2c@vger.kernel.org>
+Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
+X-Mailer: mail.olerise.pl
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_BL,
+        RCVD_IN_MSPIKE_L3,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Commit 0e5f897708e8 ("dt-bindings: Remove Netlogic bindings") removes the
-devicetree binding i2c-xlp9xx.txt, but misses to adjust the reference in
-MAINTAINERS.
+Dzie=C5=84 dobry,
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
+chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
+skania nowych zlece=C5=84 ze strony www.
 
-Remove the file reference to i2c-xlp9xx.txt in XLP9XX I2C DRIVER.
+Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
+, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
+=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
+jonowania strony w Google.
 
-As commit ef99066c7ded ("i2c: Remove Netlogic XLP variant") explains, the
-i2c-xlp9xx driver is still used by the Cavium ThunderX2 platform. So, keep
-the XLP9XX I2C DRIVER section in MAINTAINERS with its reference to
-drivers/i2c/busses/i2c-xlp9xx.c.
+Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Wolfram, please pick this minor non-urgent clean-up patch. Thanks.
 
- MAINTAINERS | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1e567236146f..dc984c050086 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21305,7 +21305,6 @@ M:	George Cherian <gcherian@marvell.com>
- L:	linux-i2c@vger.kernel.org
- S:	Supported
- W:	http://www.marvell.com
--F:	Documentation/devicetree/bindings/i2c/i2c-xlp9xx.txt
- F:	drivers/i2c/busses/i2c-xlp9xx.c
- 
- XRA1403 GPIO EXPANDER
--- 
-2.17.1
-
+Pozdrawiam
+Miko=C5=82aj Rudzik
