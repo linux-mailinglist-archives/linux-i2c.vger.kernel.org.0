@@ -2,61 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E408F4D6985
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Mar 2022 21:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 593264D6989
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Mar 2022 21:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbiCKUgy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 11 Mar 2022 15:36:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
+        id S229613AbiCKUi3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 11 Mar 2022 15:38:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiCKUgy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Mar 2022 15:36:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4201CD7E5;
-        Fri, 11 Mar 2022 12:35:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB165B80E97;
-        Fri, 11 Mar 2022 20:35:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15CABC340E9;
-        Fri, 11 Mar 2022 20:35:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647030947;
-        bh=YP9SzrgQyjOQZskM7I0k1hU6CTv2m60VmTGJYg+FQNA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MTmQn9kYhV2vDgtP9ZbrZTDgz3ww0WANjipJ9cNFF+MoGIsJ1leq1/4UrDwYkuREx
-         qCZrxi4PVxz1rixel+Jjq7JGSbPQbsE8tHy15vcPUxtEz99jK9/dmEnIK/uFeajruM
-         tAPiHKtePtmTOYdsglDRt5UQsiEbqsMYpgb3ABqvD0fZQHfvbKPG1BkSwp1sXsR8YY
-         FM8eaQlREpHiH523xHHItfNaJRznXQSSdL9gRO/D1+rSCjnzQwWPixXHMQQCvOpgbe
-         1pkQMrZv36CCVtGXE6SiSndrgnAP+G1s0dxMFTsPI/sTDNadAJ5zGOFZTegsuSOmXP
-         mVz4RYoNDlH3Q==
-Date:   Fri, 11 Mar 2022 21:35:43 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     qii.wang@mediatek.com, matthias.bgg@gmail.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, Qii Wang <wii.wang@mediatek.com>
-Subject: Re: [PATCH v2] i2c: busses: i2c-mt65xx: Simplify with clk-bulk
-Message-ID: <Yiuyn4269G/hXunT@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        qii.wang@mediatek.com, matthias.bgg@gmail.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, Qii Wang <wii.wang@mediatek.com>
-References: <20220303091547.17522-1-angelogioacchino.delregno@collabora.com>
+        with ESMTP id S229958AbiCKUi2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Mar 2022 15:38:28 -0500
+Received: from pokefinder.org (sauhun.de [88.99.104.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 224311D2B61;
+        Fri, 11 Mar 2022 12:37:23 -0800 (PST)
+Received: from localhost (i5E861B4A.versanet.de [94.134.27.74])
+        by pokefinder.org (Postfix) with ESMTPSA id B77CD2C007C;
+        Fri, 11 Mar 2022 21:37:21 +0100 (CET)
+Date:   Fri, 11 Mar 2022 21:37:20 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Kewei Xu <kewei.xu@mediatek.com>
+Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        leilk.liu@mediatek.com, qii.wang@mediatek.com,
+        liguo.zhang@mediatek.com, caiyu.chen@mediatek.com,
+        housong.zhang@mediatek.com, yuhan.wei@mediatek.com
+Subject: Re: [PATCH v1 1/2] dt-bindings: i2c: update bindings for MT8168 SoC
+Message-ID: <YiuzAJW6wp5FM1kU@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
+        Kewei Xu <kewei.xu@mediatek.com>, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        srv_heupstream@mediatek.com, leilk.liu@mediatek.com,
+        qii.wang@mediatek.com, liguo.zhang@mediatek.com,
+        caiyu.chen@mediatek.com, housong.zhang@mediatek.com,
+        yuhan.wei@mediatek.com
+References: <20220307033649.11564-1-kewei.xu@mediatek.com>
+ <20220307033649.11564-2-kewei.xu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iM51bsSenGYDG0Ia"
+        protocol="application/pgp-signature"; boundary="ZOhpGpznujtjvgC1"
 Content-Disposition: inline
-In-Reply-To: <20220303091547.17522-1-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220307033649.11564-2-kewei.xu@mediatek.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,43 +55,37 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---iM51bsSenGYDG0Ia
+--ZOhpGpznujtjvgC1
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 03, 2022 at 10:15:47AM +0100, AngeloGioacchino Del Regno wrote:
-> Since depending on the SoC or specific bus functionality some clocks
-> may be optional, we cannot get the benefit of using devm_clk_bulk_get()
-> but, by migrating to clk-bulk, we are able to remove the custom functions
-> mtk_i2c_clock_enable() and mtk_i2c_clock_disable(), increasing common
-> APIs usage, hence (lightly) decreasing kernel footprint.
+On Mon, Mar 07, 2022 at 11:36:48AM +0800, Kewei Xu wrote:
+> Add a DT binding documentation for the MT8168 soc.
 >=20
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> Reviewed-by: Qii Wang <wii.wang@mediatek.com>
+> Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
 
-Applied to for-next with the typo fixed, thanks!
+Applied to for-next, thanks!
 
 
---iM51bsSenGYDG0Ia
+--ZOhpGpznujtjvgC1
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIrsp8ACgkQFA3kzBSg
-KbYVhA/9Fdk1lLIyW+tXH7zNHFJt6bDQCScxVKi/bTuMFCDG4CXIDWa7vy2KZbkK
-6jDhklB8Okkyd8O15z1Sm4Qi6xUNpS8tTDtctbYo34ydjl2TcCGZu88HZguCtI21
-yXOvW4Yi0J4F0/+w/ENfwX2i8g7esPcP967YWsIpAhWv+VI7CYhigrIspCJ/DahW
-IaI3m3l9XP1+QLoFHF2QFqpHhcUlrFty6cs1YTaK3iQgzqBhyxMlkwSvBlldpxsV
-pHkK8BfIEPf3kshDbRma1N0nwZEdkaZwjX7XPzUGgvBrY1YaFIXLUzTwy+/kI2lJ
-lcJs4ypUkJaQMXjt3s+hYWRHuTqpBDiVEvubpn2uxiEE1w6T2OHkpnvYLdIP5sxZ
-1G09p348JoaC4zFlezEpORn6WV/O+E7qjebKyJ9sGX6/iDEjPH5941+sBp7sQ69A
-deUJ0s/1l8nSscTw5YcsRmdhuPfbDE/GfkKCkqV32syiojZXHKtogdlOstpjc9My
-D532FqE+L/hwOiUzmZ1C9AHoqluTU+SeVq97iHk2KZAftkr3NsarhQsZyiImrEOr
-jFbS8SaTZNBbv+9paHK2TZQUqrKS4X4V5VNRFFOp+WmgRV/PoPXa655mTNWMNAUf
-DtA1j/GIjSNBE1Vlo3t4Zaiu3YqFmGA+MISD5N+k9oyH65K24q8=
-=+Dxs
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIrswAACgkQFA3kzBSg
+KbZ30Q//dOWbpz8BmJ0OA6br6Fvjoj/q5NY3fYUt7B6BPGqkP9zOPKtZTOkP5s1p
+aK1ityZxejamdR+6DPTXzpJIf1xQG+aM/l50R5MUwedvvwaTikFiG2Up8nkkn8fH
+ni9dRoqj95SGVlz0BFWvRZJMbzioGkf3A3HsGZ7gvGCfsBDyj9g6wyIyTkZ/mq8V
+FYhrD5euM+VYXJ36tss4nVDJbzfoDHdvqY1Q6hBLB7dC0iLmFkTmdvWgDhyceBtC
+Ijq64aCujO4ZXE66VuZy0pPJV9slTmoPNpRgwDr+jasc4qeBH84ROOpvJEu44Q/j
+rMArOOEt3E8WJfBPHZS7Yrgcziz682A/YJybquJJCFd00J/apP9TS/8ngWo/xkSr
+271G3QoUmtMY7NBR0B3M8BX0mf+pC2yTB2fc7GGqy3uePMXb9AAEoIfBqSz27FKQ
+l7K9gAMpXqhnC9i4FtZ7RznodwWDFWe/Be5K6+Psh6LKSZcGuEtjsRFcbyeJL2ZC
+omllvzpGpO8WiordArphPXCW1Le64jQLwuWoKHmexsPKv7XvNsSEqBVG9vFmFQkI
+diK5CQzBoMOy23pVfLuLjkotMZuAZUrz+nWyRZTk56T/sW+c38mWvEcfLscb89lZ
+XzQQcG47eQVIsoLMNTmHjA7py9vs4hgnmDnOdAK2cbG0A9V7eK4=
+=lRaC
 -----END PGP SIGNATURE-----
 
---iM51bsSenGYDG0Ia--
+--ZOhpGpznujtjvgC1--
