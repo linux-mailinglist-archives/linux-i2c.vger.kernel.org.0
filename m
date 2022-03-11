@@ -2,136 +2,161 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8DE4D603D
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Mar 2022 11:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C85804D6700
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Mar 2022 18:02:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346696AbiCKK66 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 11 Mar 2022 05:58:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
+        id S234127AbiCKRDJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 11 Mar 2022 12:03:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346129AbiCKK65 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Mar 2022 05:58:57 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A692BFBA77;
-        Fri, 11 Mar 2022 02:57:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1646996274; x=1678532274;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=3DJWRY8DxKyOlSga9F41zew51/GuSj1jE3Ph1MQJt8Y=;
-  b=o7ebj9CS08+koP150V/bvVKSFP17oPq1gXb293SgV4/TUDZlWXAMefqd
-   QjeOpVFkWUB/xWbd1ARKC7gKbA3nVUvOK1Rd7KWbiPv3PYpOdfJ0s+qP5
-   4kW6m/UaqrqTJDRDU3Udz8HHMu+P/d1MwPjJjNvmxUkR59vAOsM5dTjQH
-   eJoh6aKxtfMUxgiI6h19G+R3kLaiUj+O25Au5hw+StDIBceMZQHj2zs9G
-   c6IU2hy+nc50RG1cldYeF428ytfW6139h9byu9iSxhbojLXetYEy20s0b
-   +G8rZwRgJ6yHm8cQxneg5/Tpb30tvjnvuiXXzE9Uv5CoWOuzGkSSPy+ri
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,173,1643670000"; 
-   d="scan'208";a="22608829"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 11 Mar 2022 11:57:51 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 11 Mar 2022 11:57:51 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Fri, 11 Mar 2022 11:57:51 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1646996271; x=1678532271;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=3DJWRY8DxKyOlSga9F41zew51/GuSj1jE3Ph1MQJt8Y=;
-  b=YNN0iYzRCHmLitYGgTinhhK1M5AwB2Nrb78y5oKbHqwYImogY2X9CX6l
-   7pLf7XLFEGrValAEsaaQtAs36mIhtQEaPOUsbKyAcvrSWRFNPUAtuK6wV
-   9nrBm52Blrzu+KpCH0bzh/47vzeVzo/q98E03eV0ZK43JA1dULMZ7S2on
-   HtT3enQv48RBQWF56TRFLL4vsS0adUD7O4JfjajefAU8OgGjzKnt2E4We
-   8+vEWYDo41K5G0ET2Ch/bt6eGrbv57UI016ZGD4bfW8iwEeWpIZnBQclQ
-   i31DGCDORaTi5Spx6mtnCiyHBQHUcLBE7Lp9DZ7O9RJZ3PLVbVoJunF4b
+        with ESMTP id S1350596AbiCKRDB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Mar 2022 12:03:01 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8421D5296;
+        Fri, 11 Mar 2022 09:01:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647018117; x=1678554117;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xAtkn+6Yrm4CPGtSJwRMIk0Yc8i3ptN3pVxxjuuFOVQ=;
+  b=E/bpg2Jz5xLr7XEAFjHFdea/hFYc4uBpzocYfowGotyxjMLNLdiBqADR
+   hz1BWSlmD9fQAlGcOlO8VKJZCZDKxPJcrgKjA/FiNH18GPZ+IRlCIvKh1
+   QHuD15u5QrqQAPsGVScI/jUxNm5LEu8wNY0+x/8aVEpvvJ1EaSJ05Gp3D
+   s667t8TF8a0eNbArf/n5cXydVLKAuleuM7+L6ZAXo8+Jmcl/D28c9s3vF
+   JxnQfVonDzeffnkisW2fYQBwdLjxDF9hepTeVyRE/5GoBNYzrv6KhmXm8
+   mq80LAiMXFCkretuo6LQrmNKeV35FMEGqjXA04T8JhdpaCayshpgoxjyY
    g==;
-X-IronPort-AV: E=Sophos;i="5.90,173,1643670000"; 
-   d="scan'208";a="22608828"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 11 Mar 2022 11:57:51 +0100
-Received: from steina-w.localnet (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id CB1F2280065;
-        Fri, 11 Mar 2022 11:57:50 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Alifer Moraes <alifer.m@variscite.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        eran.m@variscite.com, festevam@gmail.com, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
-        linux-i2c@vger.kernel.org, linux@rempel-privat.de,
-        pierluigi.p@variscite.com, s.hauer@pengutronix.de,
-        shawnguo@kernel.org, gaopan <b54642@freescale.com>,
-        Fugang Duan <B38611@freescale.com>,
-        Vipul Kumar <vipul_kumar@mentor.com>
-Subject: Re: (EXT) [PATCH] i2c: imx: add irqf_no_suspend
-Date:   Fri, 11 Mar 2022 11:57:48 +0100
-Message-ID: <3676803.kQq0lBPeGt@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20220307143630.28697-1-alifer.m@variscite.com>
-References: <20220307143630.28697-1-alifer.m@variscite.com>
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="237782111"
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="237782111"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 09:01:56 -0800
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="633469267"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 09:01:55 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nSidc-00FTUT-Sz;
+        Fri, 11 Mar 2022 19:01:12 +0200
+Date:   Fri, 11 Mar 2022 19:01:12 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jan Dabros <jsd@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, wsa@kernel.org,
+        upstream@semihalf.com
+Subject: Re: [PATCH v2 -next] i2c: designware: Remove code duplication
+Message-ID: <YiuAWFtg1ApWQMxR@smile.fi.intel.com>
+References: <20220310220932.140973-1-jsd@semihalf.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310220932.140973-1-jsd@semihalf.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hallo,
+On Thu, Mar 10, 2022 at 11:09:32PM +0100, Jan Dabros wrote:
+> Simplify code by moving common part to one function.
 
-Am Montag, 7. M=E4rz 2022, 15:36:30 CET schrieb Alifer Moraes:
-> From: gaopan <b54642@freescale.com>
->=20
-> The i2c irq is masked when pcie starts a i2c transfer process
-> during noirq suspend stage. As a result, i2c transfer fails.
-> To solve the problem, IRQF_NO_SUSPEND is added to i2c bus.
->=20
-> Signed-off-by: Gao Pan <b54642@freescale.com>
-> Signed-off-by: Fugang Duan <B38611@freescale.com>
-> Signed-off-by: Vipul Kumar <vipul_kumar@mentor.com>
+LGTM
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Signed-off-by: Jan Dabros <jsd@semihalf.com>
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  drivers/i2c/busses/i2c-imx.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index 27f969b3dc07..fcc09a1e7f44 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -1478,7 +1478,8 @@ static int i2c_imx_probe(struct platform_device *pd=
-ev)
-> goto rpm_disable;
->=20
->  	/* Request IRQ */
-> -	ret =3D request_threaded_irq(irq, i2c_imx_isr, NULL, IRQF_SHARED,
-> +	ret =3D request_threaded_irq(irq, i2c_imx_isr, NULL,
-> +				   IRQF_SHARED | IRQF_NO_SUSPEND,
->  				   pdev->name, i2c_imx);
->  	if (ret) {
->  		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
+> v1->v2:
+> * Add kudos for Andy who suggested this change
+> * Get rid of extra function and move common code to psp_send_i2c_req
+> * Update commit message and commit title
+>   (was "i2c:designware: Add helper to remove redundancy")
+>  drivers/i2c/busses/i2c-designware-amdpsp.c | 35 ++++++++++------------
+>  1 file changed, 15 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> index c64e459afb5c..5c32255c3239 100644
+> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
+> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> @@ -214,17 +214,28 @@ static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
+>  				PSP_I2C_REQ_RETRY_DELAY_US,
+>  				PSP_I2C_REQ_RETRY_CNT * PSP_I2C_REQ_RETRY_DELAY_US,
+>  				0, req);
+> -	if (ret)
+> +	if (ret) {
+> +		dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C bus\n",
+> +			(i2c_req_type == PSP_I2C_REQ_ACQUIRE) ?
+> +			"release" : "acquire");
+>  		goto cleanup;
+> +	}
+>  
+>  	ret = status;
+> -	if (ret)
+> +	if (ret) {
+> +		dev_err(psp_i2c_dev, "PSP communication error\n");
+>  		goto cleanup;
+> +	}
+>  
+>  	dev_dbg(psp_i2c_dev, "Request accepted by PSP after %ums\n",
+>  		jiffies_to_msecs(jiffies - start));
+>  
+>  cleanup:
+> +	if (ret) {
+> +		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
+> +		psp_i2c_mbox_fail = true;
+> +	}
+> +
+>  	kfree(req);
+>  	return ret;
+>  }
+> @@ -249,16 +260,8 @@ static int psp_acquire_i2c_bus(void)
+>  	};
+>  
+>  	status = psp_send_i2c_req(PSP_I2C_REQ_ACQUIRE);
+> -	if (status) {
+> -		if (status == -ETIMEDOUT)
+> -			dev_err(psp_i2c_dev, "Timed out waiting for PSP to release I2C bus\n");
+> -		else
+> -			dev_err(psp_i2c_dev, "PSP communication error\n");
+> -
+> -		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
+> -		psp_i2c_mbox_fail = true;
+> +	if (status)
+>  		goto cleanup;
+> -	}
+>  
+>  	psp_i2c_sem_acquired = jiffies;
+>  	psp_i2c_access_count++;
+> @@ -294,16 +297,8 @@ static void psp_release_i2c_bus(void)
+>  
+>  	/* Send a release command to PSP */
+>  	status = psp_send_i2c_req(PSP_I2C_REQ_RELEASE);
+> -	if (status) {
+> -		if (status == -ETIMEDOUT)
+> -			dev_err(psp_i2c_dev, "Timed out waiting for PSP to acquire I2C bus\n");
+> -		else
+> -			dev_err(psp_i2c_dev, "PSP communication error\n");
+> -
+> -		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
+> -		psp_i2c_mbox_fail = true;
+> +	if (status)
+>  		goto cleanup;
+> -	}
+>  
+>  	dev_dbg(psp_i2c_dev, "PSP semaphore held for %ums\n",
+>  		jiffies_to_msecs(jiffies - psp_i2c_sem_acquired));
+> -- 
+> 2.31.0
+> 
 
-
-I stumbled across Documentation/power/suspend-and-interrupts.rst which stat=
-es:
-> For this reason, using IRQF_NO_SUSPEND and IRQF_SHARED at the
-> same time should be avoided.
-Given this IMHO at least a comment should be inserted why this is fine. I d=
-ont=20
-have a full picture about the situation, but to me it seems there is a=20
-reference missing, or why/how does some PCIe start some I2C transfer when t=
-he
-controller is suspended already? Do I miss something?
-
-Best regards,
-Alexander
-
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
