@@ -2,161 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C85804D6700
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Mar 2022 18:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4604D697F
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Mar 2022 21:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234127AbiCKRDJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 11 Mar 2022 12:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36398 "EHLO
+        id S235447AbiCKUfH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 11 Mar 2022 15:35:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350596AbiCKRDB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Mar 2022 12:03:01 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8421D5296;
-        Fri, 11 Mar 2022 09:01:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647018117; x=1678554117;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xAtkn+6Yrm4CPGtSJwRMIk0Yc8i3ptN3pVxxjuuFOVQ=;
-  b=E/bpg2Jz5xLr7XEAFjHFdea/hFYc4uBpzocYfowGotyxjMLNLdiBqADR
-   hz1BWSlmD9fQAlGcOlO8VKJZCZDKxPJcrgKjA/FiNH18GPZ+IRlCIvKh1
-   QHuD15u5QrqQAPsGVScI/jUxNm5LEu8wNY0+x/8aVEpvvJ1EaSJ05Gp3D
-   s667t8TF8a0eNbArf/n5cXydVLKAuleuM7+L6ZAXo8+Jmcl/D28c9s3vF
-   JxnQfVonDzeffnkisW2fYQBwdLjxDF9hepTeVyRE/5GoBNYzrv6KhmXm8
-   mq80LAiMXFCkretuo6LQrmNKeV35FMEGqjXA04T8JhdpaCayshpgoxjyY
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="237782111"
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="237782111"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 09:01:56 -0800
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="633469267"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 09:01:55 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nSidc-00FTUT-Sz;
-        Fri, 11 Mar 2022 19:01:12 +0200
-Date:   Fri, 11 Mar 2022 19:01:12 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jan Dabros <jsd@semihalf.com>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, wsa@kernel.org,
-        upstream@semihalf.com
-Subject: Re: [PATCH v2 -next] i2c: designware: Remove code duplication
-Message-ID: <YiuAWFtg1ApWQMxR@smile.fi.intel.com>
-References: <20220310220932.140973-1-jsd@semihalf.com>
+        with ESMTP id S230171AbiCKUfG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Mar 2022 15:35:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7A11CABDC
+        for <linux-i2c@vger.kernel.org>; Fri, 11 Mar 2022 12:34:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CCC060FC1
+        for <linux-i2c@vger.kernel.org>; Fri, 11 Mar 2022 20:34:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1835C340E9;
+        Fri, 11 Mar 2022 20:34:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647030841;
+        bh=uww9Nhv9VKyrSClYeMpPYyGd6Ws2Cbm/cJ6C2oxshMs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IQfIY56YWyuYSSqM42BkoIWxgplsVs2Q45E+x+wsCnzDm4q64YZzWXkposGo2PpkK
+         mzDd7T032DAE7LUgikvnDlPYWBgxw+Qma7tmz3q7dvNP4TgcyeoDhDxHt476TzzUTP
+         2e8BtxkBOE71IHToe9CE+V4/Q/SIkWmrxNVnWFruW5o4j/ZdPwjWEkvPzZ7NU2dfqv
+         8KJ15EdPhLnZXI+/HTMvA3lcVwM0UX/AI9/BqTQ1DojDL3tT7EBqoY1PWlSmQr8XqQ
+         WM/6AVbhS9o0DbthEincH21SiFiQJaNQCYpmwu3AFL1vPAC+HSvvLd4+eYGQjW6Xdj
+         UY/5czIZgoAiQ==
+Date:   Fri, 11 Mar 2022 21:33:57 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: Re: [PATCH] i2c: i801: Drop two outdated comments
+Message-ID: <YiuyNSay807lf5fk@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+References: <20220303174256.61067165@endymion.delvare>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l4345nmBgghtUJM7"
 Content-Disposition: inline
-In-Reply-To: <20220310220932.140973-1-jsd@semihalf.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220303174256.61067165@endymion.delvare>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 11:09:32PM +0100, Jan Dabros wrote:
-> Simplify code by moving common part to one function.
 
-LGTM
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+--l4345nmBgghtUJM7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Signed-off-by: Jan Dabros <jsd@semihalf.com>
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v1->v2:
-> * Add kudos for Andy who suggested this change
-> * Get rid of extra function and move common code to psp_send_i2c_req
-> * Update commit message and commit title
->   (was "i2c:designware: Add helper to remove redundancy")
->  drivers/i2c/busses/i2c-designware-amdpsp.c | 35 ++++++++++------------
->  1 file changed, 15 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
-> index c64e459afb5c..5c32255c3239 100644
-> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
-> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-> @@ -214,17 +214,28 @@ static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
->  				PSP_I2C_REQ_RETRY_DELAY_US,
->  				PSP_I2C_REQ_RETRY_CNT * PSP_I2C_REQ_RETRY_DELAY_US,
->  				0, req);
-> -	if (ret)
-> +	if (ret) {
-> +		dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C bus\n",
-> +			(i2c_req_type == PSP_I2C_REQ_ACQUIRE) ?
-> +			"release" : "acquire");
->  		goto cleanup;
-> +	}
->  
->  	ret = status;
-> -	if (ret)
-> +	if (ret) {
-> +		dev_err(psp_i2c_dev, "PSP communication error\n");
->  		goto cleanup;
-> +	}
->  
->  	dev_dbg(psp_i2c_dev, "Request accepted by PSP after %ums\n",
->  		jiffies_to_msecs(jiffies - start));
->  
->  cleanup:
-> +	if (ret) {
-> +		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
-> +		psp_i2c_mbox_fail = true;
-> +	}
-> +
->  	kfree(req);
->  	return ret;
->  }
-> @@ -249,16 +260,8 @@ static int psp_acquire_i2c_bus(void)
->  	};
->  
->  	status = psp_send_i2c_req(PSP_I2C_REQ_ACQUIRE);
-> -	if (status) {
-> -		if (status == -ETIMEDOUT)
-> -			dev_err(psp_i2c_dev, "Timed out waiting for PSP to release I2C bus\n");
-> -		else
-> -			dev_err(psp_i2c_dev, "PSP communication error\n");
-> -
-> -		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
-> -		psp_i2c_mbox_fail = true;
-> +	if (status)
->  		goto cleanup;
-> -	}
->  
->  	psp_i2c_sem_acquired = jiffies;
->  	psp_i2c_access_count++;
-> @@ -294,16 +297,8 @@ static void psp_release_i2c_bus(void)
->  
->  	/* Send a release command to PSP */
->  	status = psp_send_i2c_req(PSP_I2C_REQ_RELEASE);
-> -	if (status) {
-> -		if (status == -ETIMEDOUT)
-> -			dev_err(psp_i2c_dev, "Timed out waiting for PSP to acquire I2C bus\n");
-> -		else
-> -			dev_err(psp_i2c_dev, "PSP communication error\n");
-> -
-> -		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
-> -		psp_i2c_mbox_fail = true;
-> +	if (status)
->  		goto cleanup;
-> -	}
->  
->  	dev_dbg(psp_i2c_dev, "PSP semaphore held for %ums\n",
->  		jiffies_to_msecs(jiffies - psp_i2c_sem_acquired));
-> -- 
-> 2.31.0
-> 
+On Thu, Mar 03, 2022 at 05:42:56PM +0100, Jean Delvare wrote:
+> * Timeouts are reported even in interrupt mode since commit
+>   b3b8df97723d ("i2c: i801: Use wait_event_timeout to wait for
+>   interrupts") so drop the comment which claims this only happens in
+>   polled mode.
+> * xact does not include the PEC bit, as the driver does not support
+>   software PEC.
+>=20
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
 
--- 
-With Best Regards,
-Andy Shevchenko
+Applied to for-next, thanks!
 
 
+--l4345nmBgghtUJM7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIrsjAACgkQFA3kzBSg
+Kba1GQ/+P4Gw64aZVQ5ItclxcoEYcsuSGD9FuyHdReGhxny7SLNGi81UKZvpGdnx
+ZB/XDOF62hpSVmHHT6JMc77oFZL1skmNTTj7KYQh7yIke92uabfeHwY9IgdsaJvn
+NAgGxEgFEe7VQipXva+y8WgN8B+hG+XVGWckEapOh7d6bSiy4S82wtyivQUon+wM
+H3Ew2I9o5ni2Ev3QrHZEDCVuDNrQlRIGjHBTs8qkfBctoPiBXiAPhPqv5D2wRxpA
+nHB3jI197uvFA3/o8zBJNYA6DilrtApg6xRpNV8svsKpZRJxqoq2P4FhTgW04wzY
+fs94rPnpJtbTxSsyT73P5LPkhyG16+XWuW10e3GnfWhaiL7WhpMQ+ubyHkrkf2fW
+M8cqGEuhSF0bcz0+KtYwTCYnt2gIBeEnOZuNe10RDufHZGy7QaMm6/5acJ1YJE7O
+QLFYXOzC1qdBkWlj9xdhaDiqxNxiFGbICB1VYRqrQFFz0OlKAC17E2//hc+VFaMY
+6Rtzy7jXU6ki/T8eKZeeAD1H70Aa0DzMsx6+ThtXyxIFRPPaPkRrToEkwh8Noa4e
+m0M/9vH91EDryNXjEZvj5XfEdGG+rFUnzDDqpswguw4ApKE61C/KVNLnhVjlsqfT
+s1WRxdBAf1SLo0q/NdGXrSa5gTdl0bfCsZA7BcijV7BrD4DGAUg=
+=2b6K
+-----END PGP SIGNATURE-----
+
+--l4345nmBgghtUJM7--
