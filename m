@@ -2,255 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739E54D790F
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Mar 2022 02:18:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E58C4D7DEB
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Mar 2022 09:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiCNBTI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 13 Mar 2022 21:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
+        id S234859AbiCNI5k (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Mar 2022 04:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiCNBTH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 13 Mar 2022 21:19:07 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123E1186F9
-        for <linux-i2c@vger.kernel.org>; Sun, 13 Mar 2022 18:17:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647220679; x=1678756679;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i/XLUQUAEKBRwQ0XGNgDcvlSlECvEVlqgIp1t3T6Pvk=;
-  b=HiyAs8psEAKhzPQAbL9jur925DTx2PObjX+NXbhMwPw/gU4+D5O4yHDZ
-   BkdIWUDyF28pxyFQL/MNldFVLOphTI3y3H5ZGIhMJiQlgEWOStqSpJA6f
-   HtE2HJO95OJX3Rsk/ed6NS8OhkeMTsvTxUOhj2x3QAWdDXj+02b9yCEMg
-   nhrMhOUtA4sCLQvyVqDo73n/YqOKTnPgLf+dlKCnKtBpew57TWRTS/fTs
-   JpAnTEo3ZrRDNx2dap6KzL8rYlKapMqLhbcYJR6YdLLjwPZegMFkkCS0H
-   3lJ2ikTALknV2ToDFHCSA2+n5YWzeCMTXFtVI2n8qKWXBgFDu27oc9C1v
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="256099308"
-X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="256099308"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 18:17:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="515221518"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 13 Mar 2022 18:17:49 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nTZLI-0009SC-Fw; Mon, 14 Mar 2022 01:17:48 +0000
-Date:   Mon, 14 Mar 2022 09:17:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Adam Honse <calcprogrammer1@gmail.com>, jdelvare@suse.de,
-        linux-i2c@vger.kernel.org, jdelvare@suse.com
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH] i2c: New driver for Nuvoton SMBus adapters
-Message-ID: <202203140908.OiQgTMB7-lkp@intel.com>
-References: <20220313224020.9005-1-calcprogrammer1@gmail.com>
+        with ESMTP id S237506AbiCNI5g (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Mar 2022 04:57:36 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6903F8B0
+        for <linux-i2c@vger.kernel.org>; Mon, 14 Mar 2022 01:56:27 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id d10-20020a17090a7bca00b001c5ed9a196bso2476138pjl.1
+        for <linux-i2c@vger.kernel.org>; Mon, 14 Mar 2022 01:56:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=xJkiDlz3HjpJV2R+3JbmTlL+SAG14PZ3xVrckfn5kNk=;
+        b=dkYXGOyJzkjCjEaUYwMBBwUQ2lQfJ7mDnqUx083FGEQ+pkorSa1ttsyS+AdZFuEmPS
+         kmCCSIVnfSNZKhFXBYZFR8ki+O6JHuUUhqbIfosIdBU3GqZIkHYj2alLZ3FUXUf6ZNBc
+         LP5A8bNHQJLkfjqrUBCLHBdaNkQsWMWyNIV1kTkhFbq6SRGP/sBtTvdQNe6HkrKrkv2k
+         Lf82xZ7m2xkbDg7xl1inT8y5ZZOtijYg6ORnC/8uJxIKZAtHsfHEYsFcdk4gaOPpSmeT
+         eiZgL6CUY/s+cesA1eNYmHMI5CFnN3eTyglBgFafMFY6hw77sJlG7SZ4F3sDb6hpKr/D
+         d4vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=xJkiDlz3HjpJV2R+3JbmTlL+SAG14PZ3xVrckfn5kNk=;
+        b=kstPFHasvVCp0ghqNbTka9DM2dQtkU7hY8asf1mtnsvcDVFzslTNX9G8C/rVX2Pe6J
+         1LZtyzGHURzj48aR2mg8N4YqqOJxKnGaSzR23qKaJhxueXfrSDqR6rvTcMr9wOG2qD8t
+         C0pkL+5uVdUp7CJbd84lKiYF/9UL43JT2X0xL1T8vQXPTsaH1WKGVHGoZbvp8GfDn83h
+         fKYgVBkQpbZkwZ4qF5yBoCJBP6P0K2Q76Dw2sy+04hEA8neAws0DLcUBK53ONfd/juCC
+         VyQ3pVesVKw2YnazNxMjWFwmcUEBzNAKz4pS+a3XapVpVoienl/+5EOEC5XXv0edHYNK
+         3ryg==
+X-Gm-Message-State: AOAM531UdE3haCOY1l6e65q0bc5fjSMFiaeD+uyjXJ2n5WDZ20LAiq8g
+        uy22jsT0jgeQ8KXSw/0Tn4Zg30CnZTjovG9u8zHpcg==
+X-Google-Smtp-Source: ABdhPJxfESJhZgMSB07Ud5xszy38lMUWBSmH5NVzvowlZrXZkoq+MgH4i4vNjgmR0ELx688xrYGljHac7kXGrIgNgSo=
+X-Received: by 2002:a17:902:a585:b0:14d:58ef:65 with SMTP id
+ az5-20020a170902a58500b0014d58ef0065mr22469940plb.139.1647248187124; Mon, 14
+ Mar 2022 01:56:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220313224020.9005-1-calcprogrammer1@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220310220932.140973-1-jsd@semihalf.com> <Yiu2NIvEOow87s+r@ninjato>
+In-Reply-To: <Yiu2NIvEOow87s+r@ninjato>
+From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
+Date:   Mon, 14 Mar 2022 09:56:16 +0100
+Message-ID: <CAOtMz3OM9c7NpGiYVHxs+KOVBVNykbQkj+KarBbNtUt6iiiQCw@mail.gmail.com>
+Subject: Re: [PATCH v2 -next] i2c: designware: Remove code duplication
+To:     Wolfram Sang <wsa@kernel.org>, Jan Dabros <jsd@semihalf.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Adam,
+Hi Wolfram,
 
-Thank you for the patch! Perhaps something to improve:
+pt., 11 mar 2022 o 21:51 Wolfram Sang <wsa@kernel.org> napisa=C5=82(a):
+>
+> On Thu, Mar 10, 2022 at 11:09:32PM +0100, Jan Dabros wrote:
+> > Simplify code by moving common part to one function.
+> >
+> > Signed-off-by: Jan Dabros <jsd@semihalf.com>
+> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>
+> Is it really based on for-next? I can't apply the patch. Am I missing
+> something?
 
-[auto build test WARNING on wsa/i2c/for-next]
-[also build test WARNING on v5.17-rc8 next-20220310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I checked this once again and I mistakenly used the old linux-next
+baseline. Actually the cherry-pick of the above patch was successful,
+but I confirmed "git am" is not happy because of the missing semicolon
+in one of the lines from context. Baseline for v2 doesn't include
+1e4fe5430b: "i2c: designware: remove unneeded semicolon" thus the
+problem.
 
-url:    https://github.com/0day-ci/linux/commits/Adam-Honse/i2c-New-driver-for-Nuvoton-SMBus-adapters/20220314-064247
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-config: powerpc64-randconfig-r035-20220314 (https://download.01.org/0day-ci/archive/20220314/202203140908.OiQgTMB7-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/040a1be0d30ce2c611e30eb923d6f1b0afc44e7d
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Adam-Honse/i2c-New-driver-for-Nuvoton-SMBus-adapters/20220314-064247
-        git checkout 040a1be0d30ce2c611e30eb923d6f1b0afc44e7d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/i2c/busses/
+Sorry for the confusion, I will send v3 rebased on top of fresh -next.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/i2c/busses/i2c-nct6775.c: In function 'nct6775_access':
->> drivers/i2c/busses/i2c-nct6775.c:218:31: warning: this statement may fall through [-Wimplicit-fallthrough=]
-     218 |                 tmp_data.byte = data->byte;
-         |                 ~~~~~~~~~~~~~~^~~~~~~~~~~~
-   drivers/i2c/busses/i2c-nct6775.c:219:9: note: here
-     219 |         case I2C_SMBUS_BYTE:
-         |         ^~~~
-   At top level:
-   drivers/i2c/busses/i2c-nct6775.c:90:27: warning: 'nct6775_device_names' defined but not used [-Wunused-const-variable=]
-      90 | static const char * const nct6775_device_names[] = {
-         |                           ^~~~~~~~~~~~~~~~~~~~
-
-
-vim +218 drivers/i2c/busses/i2c-nct6775.c
-
-   194	
-   195	/* Return negative errno on error. */
-   196	static s32 nct6775_access(struct i2c_adapter *adap, u16 addr,
-   197			 unsigned short flags, char read_write,
-   198			 u8 command, int size, union i2c_smbus_data *data)
-   199	{
-   200		struct i2c_nct6775_adapdata *adapdata = i2c_get_adapdata(adap);
-   201		unsigned short nuvoton_nct6793d_smba = adapdata->smba;
-   202		int i, len, cnt;
-   203		union i2c_smbus_data tmp_data;
-   204		int timeout = 0;
-   205	
-   206		tmp_data.word = 0;
-   207		cnt = 0;
-   208		len = 0;
-   209	
-   210		outb_p(NCT6793D_SOFT_RESET, SMBHSTCTL);
-   211	
-   212		switch (size) {
-   213		case I2C_SMBUS_QUICK:
-   214			outb_p((addr << 1) | read_write,
-   215					SMBHSTADD);
-   216			break;
-   217		case I2C_SMBUS_BYTE_DATA:
- > 218			tmp_data.byte = data->byte;
-   219		case I2C_SMBUS_BYTE:
-   220			outb_p((addr << 1) | read_write,
-   221					SMBHSTADD);
-   222			outb_p(command, SMBHSTIDX);
-   223			if (read_write == I2C_SMBUS_WRITE) {
-   224				outb_p(tmp_data.byte, SMBHSTDAT);
-   225				outb_p(NCT6793D_WRITE_BYTE, SMBHSTCMD);
-   226			} else {
-   227				outb_p(NCT6793D_READ_BYTE, SMBHSTCMD);
-   228			}
-   229			break;
-   230		case I2C_SMBUS_WORD_DATA:
-   231			outb_p((addr << 1) | read_write,
-   232					SMBHSTADD);
-   233			outb_p(command, SMBHSTIDX);
-   234			if (read_write == I2C_SMBUS_WRITE) {
-   235				outb_p(data->word & 0xff, SMBHSTDAT);
-   236				outb_p((data->word & 0xff00) >> 8, SMBHSTDAT);
-   237				outb_p(NCT6793D_WRITE_WORD, SMBHSTCMD);
-   238			} else {
-   239				outb_p(NCT6793D_READ_WORD, SMBHSTCMD);
-   240			}
-   241			break;
-   242		case I2C_SMBUS_BLOCK_DATA:
-   243			outb_p((addr << 1) | read_write,
-   244					SMBHSTADD);
-   245			outb_p(command, SMBHSTIDX);
-   246			if (read_write == I2C_SMBUS_WRITE) {
-   247				len = data->block[0];
-   248				if (len == 0 || len > I2C_SMBUS_BLOCK_MAX)
-   249					return -EINVAL;
-   250				outb_p(len, SMBBLKSZ);
-   251	
-   252				cnt = 1;
-   253				if (len >= 4) {
-   254					for (i = cnt; i <= 4; i++)
-   255						outb_p(data->block[i], SMBHSTDAT);
-   256	
-   257					len -= 4;
-   258					cnt += 4;
-   259				} else {
-   260					for (i = cnt; i <= len; i++)
-   261						outb_p(data->block[i], SMBHSTDAT);
-   262	
-   263					len = 0;
-   264				}
-   265	
-   266				outb_p(NCT6793D_WRITE_BLOCK, SMBHSTCMD);
-   267			} else {
-   268				return -EOPNOTSUPP;
-   269			}
-   270			break;
-   271		default:
-   272			dev_warn(&adap->dev, "Unsupported transaction %d\n", size);
-   273			return -EOPNOTSUPP;
-   274		}
-   275	
-   276		outb_p(NCT6793D_MANUAL_START, SMBHSTCTL);
-   277	
-   278		while ((size == I2C_SMBUS_BLOCK_DATA) && (len > 0)) {
-   279			if (read_write == I2C_SMBUS_WRITE) {
-   280				timeout = 0;
-   281				while ((inb_p(SMBHSTSTS) & NCT6793D_FIFO_EMPTY) == 0) {
-   282					if (timeout > MAX_RETRIES)
-   283						return -ETIMEDOUT;
-   284	
-   285					usleep_range(250, 500);
-   286					timeout++;
-   287				}
-   288	
-   289				//Load more bytes into FIFO
-   290				if (len >= 4) {
-   291					for (i = cnt; i <= (cnt + 4); i++)
-   292						outb_p(data->block[i], SMBHSTDAT);
-   293	
-   294					len -= 4;
-   295					cnt += 4;
-   296				} else {
-   297					for (i = cnt; i <= (cnt + len); i++)
-   298						outb_p(data->block[i], SMBHSTDAT);
-   299	
-   300					len = 0;
-   301				}
-   302			} else {
-   303				return -EOPNOTSUPP;
-   304			}
-   305	
-   306		}
-   307	
-   308		//wait for manual mode to complete
-   309		timeout = 0;
-   310		while ((inb_p(SMBHSTSTS) & NCT6793D_MANUAL_ACTIVE) != 0) {
-   311			if (timeout > MAX_RETRIES)
-   312				return -ETIMEDOUT;
-   313	
-   314			usleep_range(250, 500);
-   315			timeout++;
-   316		}
-   317	
-   318		if ((inb_p(SMBHSTERR) & NCT6793D_NO_ACK) != 0)
-   319			return -ENXIO;
-   320	
-   321		else if ((read_write == I2C_SMBUS_WRITE) || (size == I2C_SMBUS_QUICK))
-   322			return 0;
-   323	
-   324		switch (size) {
-   325		case I2C_SMBUS_QUICK:
-   326		case I2C_SMBUS_BYTE_DATA:
-   327			data->byte = inb_p(SMBHSTDAT);
-   328			break;
-   329		case I2C_SMBUS_WORD_DATA:
-   330			data->word = inb_p(SMBHSTDAT) + (inb_p(SMBHSTDAT) << 8);
-   331			break;
-   332		}
-   333		return 0;
-   334	}
-   335	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Best Regards,
+Jan
