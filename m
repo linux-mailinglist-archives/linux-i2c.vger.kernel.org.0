@@ -2,102 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A60E14D7F4C
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Mar 2022 10:59:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 996174D7F96
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Mar 2022 11:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236907AbiCNKAe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Mar 2022 06:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
+        id S238336AbiCNKPH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Mar 2022 06:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236723AbiCNKAd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Mar 2022 06:00:33 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018B413FA7;
-        Mon, 14 Mar 2022 02:59:24 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id yy13so32634922ejb.2;
-        Mon, 14 Mar 2022 02:59:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PsQNFBWA1EYlWL3JRbf/rtOCOkamxrVDSuDVIjgIR4o=;
-        b=Odt8+9N/t1UJqOHii0oFmoTGa0XVGEaSk0m+Opd7PNjwmGiA19Z3+Z0YGXQAhHm6Io
-         9qJBRjGF9EW/BnKor8o6eob+8rCP5x6u9/lmIyJZiUPx/U9Hvs6/T/OzsMWy/gwM4aZy
-         lY/IadiLCsMmVCyEzhI6q6utFcl/f8X3tWz+cwrRyJ6Dlb4+08dS4ITreAlbPVfRKWxV
-         KDvk+QZB27zthh5VrdbjK30KUSYA6sYWJIzCmZ7UVc51+SzRjhTdh8RnUTU+WiH36JMq
-         YNVuyQj4NLs2/lzzq+I+U7CAh27sAf0W5EU/2bMHbSLSOnbVoE9frKv593Oci6iE9fuh
-         0b9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PsQNFBWA1EYlWL3JRbf/rtOCOkamxrVDSuDVIjgIR4o=;
-        b=mIc51MuHaFDs0D1ls5P1qxH3YRQ0D1cB6AuO1copwsuoXk7D4BIXsD7s2g8e7dl6oT
-         Up3mN98BXqpO06zt1s27xx6V8x8btcQN6btQlt6gkiOZsml0aVstOfxw2CLEdO8+bC+b
-         5oo3zsNl6+TBjGj1KzNWBzYd96a4//HPGrSmQKz4CKOYdcYkknKheYLvztLawfkNEr/5
-         9p8n5RnoBQhJjZKqlXNIcsyjIlwIFnqjOA9HDyiYlOZbuZpfrsXSMg+qmtDwwFJvPttw
-         fuA/yFLfBSRUVFJI6JBfd/nr52AZBzzsWzbgvJHDz/ObIvsCOYP3CDXKS58ZQj5LpGPN
-         HAxg==
-X-Gm-Message-State: AOAM531Ld7wx9dYpks8JA9JSsvOQLuwoPQ7yHd7UK+P6uktfhi2vgSbG
-        +vCsGlxX99+jmk3t4BM6i6w=
-X-Google-Smtp-Source: ABdhPJzXCHhNgZJb8D0D1qr9Mm4UXShFVL/kE231KCbkM3J6kKbxUDbSJgKYRl7pYdyLICPzW3Bsmw==
-X-Received: by 2002:a17:906:9704:b0:6da:aa98:d459 with SMTP id k4-20020a170906970400b006daaa98d459mr18549838ejx.294.1647251962463;
-        Mon, 14 Mar 2022 02:59:22 -0700 (PDT)
-Received: from NB2240.irisgmbh.local (p200300c3af44a500646b36c3c097229d.dip0.t-ipconnect.de. [2003:c3:af44:a500:646b:36c3:c097:229d])
-        by smtp.gmail.com with ESMTPSA id gv9-20020a170906f10900b006d7128b2e6fsm6598648ejb.162.2022.03.14.02.59.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 02:59:21 -0700 (PDT)
-From:   Ian Dannapel <iansdannapel@gmail.com>
-To:     linux@rempel-privat.de
-Cc:     kernel@pengutronix.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Michael.Glembotzki@iris-sensing.com,
-        Erik.Schumacher@iris-sensing.com,
-        Ian Dannapel <iansdannapel@gmail.com>
-Subject: [PATCH] i2c: imx: remove unnecessary delay at startup
-Date:   Mon, 14 Mar 2022 10:59:18 +0100
-Message-Id: <20220314095918.50014-1-iansdannapel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S234054AbiCNKPG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Mar 2022 06:15:06 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58BB33E85
+        for <linux-i2c@vger.kernel.org>; Mon, 14 Mar 2022 03:13:57 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nThht-0005HL-Og; Mon, 14 Mar 2022 11:13:41 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nThhs-000cHE-5u; Mon, 14 Mar 2022 11:13:38 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nThhp-0095TP-Pc; Mon, 14 Mar 2022 11:13:37 +0100
+Date:   Mon, 14 Mar 2022 11:13:37 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Ian Dannapel <iansdannapel@gmail.com>
+Cc:     linux@rempel-privat.de, Erik.Schumacher@iris-sensing.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de,
+        linux-kernel@vger.kernel.org, Michael.Glembotzki@iris-sensing.com,
+        linux-imx@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: imx: remove unnecessary delay at startup
+Message-ID: <20220314101337.4x2cu3nvg2vg7ulh@pengutronix.de>
+References: <20220314095918.50014-1-iansdannapel@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fncywnvjwvzgq2r3"
+Content-Disposition: inline
+In-Reply-To: <20220314095918.50014-1-iansdannapel@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-a delay on the startup of the i2c imx controller is not required or defined in the specs.
-By removing it, the user can see a latency decrease from up to 150μs in communication.
-Additional info: https://lore.kernel.org/all/20220304132037.GA15901@pengutronix.de/
 
-Signed-off-by: Ian S. Dannapel <iansdannapel@gmail.com>
----
- drivers/i2c/busses/i2c-imx.c | 6 ------
- 1 file changed, 6 deletions(-)
+--fncywnvjwvzgq2r3
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index 3576b63a6c03..019dda5301df 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -602,12 +602,6 @@ static int i2c_imx_start(struct imx_i2c_struct *i2c_imx, bool atomic)
- 	imx_i2c_write_reg(i2c_imx->hwdata->i2sr_clr_opcode, i2c_imx, IMX_I2C_I2SR);
- 	imx_i2c_write_reg(i2c_imx->hwdata->i2cr_ien_opcode, i2c_imx, IMX_I2C_I2CR);
- 
--	/* Wait controller to be stable */
--	if (atomic)
--		udelay(50);
--	else
--		usleep_range(50, 150);
--
- 	/* Start I2C transaction */
- 	temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
- 	temp |= I2CR_MSTA;
--- 
-2.25.1
+Hello,
 
+On Mon, Mar 14, 2022 at 10:59:18AM +0100, Ian Dannapel wrote:
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index 3576b63a6c03..019dda5301df 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -602,12 +602,6 @@ static int i2c_imx_start(struct imx_i2c_struct *i2c_=
+imx, bool atomic)
+>  	imx_i2c_write_reg(i2c_imx->hwdata->i2sr_clr_opcode, i2c_imx, IMX_I2C_I2=
+SR);
+>  	imx_i2c_write_reg(i2c_imx->hwdata->i2cr_ien_opcode, i2c_imx, IMX_I2C_I2=
+CR);
+> =20
+> -	/* Wait controller to be stable */
+> -	if (atomic)
+> -		udelay(50);
+> -	else
+> -		usleep_range(50, 150);
+> -
+>  	/* Start I2C transaction */
+>  	temp =3D imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
+>  	temp |=3D I2CR_MSTA;
+
+This contradicts statements made in
+43309f3b521302bb66c4c9e66704dd3675e4d725.
+
+Maybe the sleep/delay should be done conditionally on the busy bit?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--fncywnvjwvzgq2r3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIvFU4ACgkQwfwUeK3K
+7Alh1gf/T9ilRlo3OTdSAhGMBsbG6iKLnQhIxWRtuFxlQqn8ONnvJW52Y0jWgvOM
+Yp9vRTAMgHBqCokTHgdagbzt6ZQQfcNCK3W7BBCH8UgsdD7XLYlCXmuSYmMJw3De
+GfcecsRNMi1vEu3poriNCjp5I/mjWM0oGgUh0LoPoNS0HqL6Rhcs878aS5thhSci
+UYQLxVmT9/IN2wQGqPYxnas8onX5v+3//+E5kiNN8gGb6l41NbGA8MqnZ7adjOB8
+U1uFjA1GTDSzH/MoZESMjuLwPZ35vMSjhx7xbMDsLoO1JIpIKzlxlytMSbHWPT0i
++o+pIq8kgPChq74K6sclJ2RoBRhT6A==
+=q0lc
+-----END PGP SIGNATURE-----
+
+--fncywnvjwvzgq2r3--
