@@ -2,66 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB13D4DB32B
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Mar 2022 15:25:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC6E4DB51C
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Mar 2022 16:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243886AbiCPO0c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 16 Mar 2022 10:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
+        id S240823AbiCPPop (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 16 Mar 2022 11:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235985AbiCPO0b (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Mar 2022 10:26:31 -0400
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7423A1BD;
-        Wed, 16 Mar 2022 07:25:16 -0700 (PDT)
-Received: from [77.244.183.192] (port=63008 helo=[192.168.178.75])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1nUUaQ-000DFG-2U; Wed, 16 Mar 2022 15:25:14 +0100
-Message-ID: <02af807d-c35e-afc6-7a41-22eafd3c46f9@lucaceresoli.net>
-Date:   Wed, 16 Mar 2022 15:25:11 +0100
+        with ESMTP id S1350516AbiCPPoo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Mar 2022 11:44:44 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0422333E14;
+        Wed, 16 Mar 2022 08:43:30 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id a17so2190726edm.9;
+        Wed, 16 Mar 2022 08:43:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=EL8SPq0tFGKKMPZ6eWOoFq+B8Y0BC0Wp+VatKXyZsfg=;
+        b=ilg6KEssa9OxmAVaCZokfR8oveD05mfB2MjaDdtdZDOfsQ8sQhGe7i4Kx/aNPa6aPN
+         gZaH2xA2LCFpFjnLburwk2rSVaaHfJWl7tneHlobMqwkLCp1J8K436Em9pJ1qtJZ2Ke9
+         EyfTt9OU2rZeJkRMM3WOn+N2v/uuTYHumXN6/gT1/dJsAVb0E9YOyWXBgqZ1N5VZWicf
+         M0iRhMGMw00HQRdkqTL7JCNDHDGH8lI5SAvVSF/rCkosc61ZFPo4MZl5yjZ/7mBocWif
+         qT32n/kYN+lHVmHwMc/PXDLArbUcnVL3RGRh+PNMXdbQQTwzwQveo3K+keBGR+d4F9dE
+         lXBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=EL8SPq0tFGKKMPZ6eWOoFq+B8Y0BC0Wp+VatKXyZsfg=;
+        b=wn5Jb/B035EuqEclqzv1VahJJpZ5/PZVIo5TBux/z6DX215rLE3Cq0DDHGS1pBu5j1
+         QuKdE8ozbjw7UYYmDTVsvAxGMyjJq3YimBUo8kfAgSY4sTtEtujwQxeS4zeUWuOpJ4CM
+         42MObuamw6YTsSK/9uSLt3w6XFgwqSjrdYqHbEg3u/WwFCRcCZA5gfn5vgkMiqIWLgyg
+         Yt5ujiQlLcog1lZOTbA5ag422qm2FDU7WujfYYIBgs7BjgtRzpl52rJpACIr8wb9s7Xn
+         spSO3MEHfJsoINgKbNjW/QLc8uOGQF/6B0HP4GmMnpQEl3sNbe0qFXwK8nDQcatQuExV
+         p9ZQ==
+X-Gm-Message-State: AOAM533Ir0TbiMrCw9B0uf3XCzu0s/5nb4ou2mzUIVk5qL9INDMUHz1S
+        MPCLt5RiDMUt6ETGhUCPOKv6OYVT2N32nWygVhQ=
+X-Google-Smtp-Source: ABdhPJybEl1wu5fLBjs9JJKe9wXxnEFgIV4wrI5bCRrEaFk7ObVhQKonoGWk2+0ayUXt+GkwD9+hDw5opq0w5monWKQ=
+X-Received: by 2002:aa7:da93:0:b0:416:4aca:bef7 with SMTP id
+ q19-20020aa7da93000000b004164acabef7mr111360eds.296.1647445408611; Wed, 16
+ Mar 2022 08:43:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFCv3 2/6] i2c: add I2C Address Translator (ATR) support
-Content-Language: en-US
-To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Peter Rosin <peda@axentia.se>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
-References: <20220206115939.3091265-1-luca@lucaceresoli.net>
- <20220206115939.3091265-3-luca@lucaceresoli.net>
- <a8796cde-e97b-7157-33ac-1b6020053c5d@fi.rohmeurope.com>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-In-Reply-To: <a8796cde-e97b-7157-33ac-1b6020053c5d@fi.rohmeurope.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+References: <20220316064716.16587-1-linmq006@gmail.com> <CAHp75Veae=8Ev-xU3zbVYh=AxbAPFayZD3MeRSrAGNNZ8LMBPg@mail.gmail.com>
+ <20220316071841.GA43@VICKYMQLIN-NB1.localdomain>
+In-Reply-To: <20220316071841.GA43@VICKYMQLIN-NB1.localdomain>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 16 Mar 2022 17:42:15 +0200
+Message-ID: <CAHp75Ve+tkrzzz3ZjhexW4eRXXCjejh=w=uTbb4Vuo6XL6jP3Q@mail.gmail.com>
+Subject: Re: [PATCH] i2c: busses: Fix error handling in synquacer_i2c_probe
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,96 +68,28 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Matti,
+On Wed, Mar 16, 2022 at 9:18 AM Miaoqian Lin <linmq006@gmail.com> wrote:
+>
+> Hi, Andy Shevchenko
+>
+> On Wed, Mar 16, 2022 at 09:04:06AM +0200, Andy Shevchenko wrote:
+> >
+> > > In the error handling path, the clk_prepare_enable() function
+> > > call should be balanced by a corresponding 'clk_disable_unprepare()'
+> > > call, as already done in the remove function.
+> >
+> >
+> > It=E2=80=99s not good to mix devm approach with non-devm.
+> >
+> Thanks for your review. I'm sorry, I don't quite understand. Could you pl=
+ease explain more? What functions are your referring to? Thanks.
 
-On 16/03/22 15:11, Vaittinen, Matti wrote:
-> Hi dee Ho peeps!
-> 
-> On 2/6/22 13:59, Luca Ceresoli wrote:
->> An ATR is a device that looks similar to an i2c-mux: it has an I2C
->> slave "upstream" port and N master "downstream" ports, and forwards
->> transactions from upstream to the appropriate downstream port. But is
->> is different in that the forwarded transaction has a different slave
->> address. The address used on the upstream bus is called the "alias"
->> and is (potentially) different from the physical slave address of the
->> downstream chip.
->>
->> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
->> implementing ATR features in a device driver. The helper takes care or
->> adapter creation/destruction and translates addresses at each transaction.
->>
-> 
-> snip
-> 
->> diff --git a/drivers/i2c/Kconfig b/drivers/i2c/Kconfig
->> index 438905e2a1d0..c6d1a345ea6d 100644
->> --- a/drivers/i2c/Kconfig
->> +++ b/drivers/i2c/Kconfig
->> @@ -71,6 +71,15 @@ config I2C_MUX
->>   
->>   source "drivers/i2c/muxes/Kconfig"
->>   
->> +config I2C_ATR
->> +	tristate "I2C Address Translator (ATR) support"
->> +	help
->> +	  Enable support for I2C Address Translator (ATR) chips.
->> +
->> +	  An ATR allows accessing multiple I2C busses from a single
->> +	  physical bus via address translation instead of bus selection as
->> +	  i2c-muxes do.
->> +
-> 
-> I continued playing with the ROHM (de-)serializer and ended up having 
-> .config where the I2C_ATR was ='m', while my ATR driver was ='y' even 
-> though it selects the I2C_ATR.
-> 
-> Yep, most probably my error somewhere.
-> 
-> Anyways, this made me think that most of the I2C_ATR users are likely to 
-> just silently select the I2C_ATR, right? The I2C_ATR has no much reason 
-> to be compiled in w/o users, right? So perhaps the menu entry for 
-> selecting the I2C_ATR could be dropped(?) Do we really need this entry 
-> in already long list of configs to be manually picked?
+Your entire patch is broken. The error handling in ->probe() and
+complete ->remove() now have asymmetrical ordering.
 
-Maybe we could make it a blind option, sure. The only reason it could be
-useful that it's visible is that one might implement a user driver could
-be written out of tree. I don't care very much about that, but it is
-possible. Maybe it's the reason for I2C_MUX to be a visible option too.
-Peter?
+On top of that the CCF is NULL aware (and error pointer IIRC), so no
+need to have additional checks.
 
->> +struct i2c_atr *i2c_atr_new(struct i2c_adapter *parent, struct device *dev,
->> +			    const struct i2c_atr_ops *ops, int max_adapters)
->> +{
->> +	struct i2c_atr *atr;
->> +
->> +	if (!ops || !ops->attach_client || !ops->detach_client)
->> +		return ERR_PTR(-EINVAL);
->> +
-> 
-> I believe that most of the attach_client implementations will have 
-> similar approach of allocating and populating an address-pool and 
-> searching for first unused address. As a 'further dev' it'd be great to 
-> see a common helper implementation for attach/detach - perhaps so that 
-> the atr drivers would only need to specify the slave-address 
-> configuration register(s) / mask and the use a 'generic' attach/detach 
-> helpers. Well, just thinking how to reduce the code from actual IC 
-> drivers but this is really not something that is required during this 
-> initial series :)
-> 
-> Also, devm-variants would be great - although that falls to the same 
-> category of things that do not need to be done immediately - but would 
-> perhaps be worth considering in the future.
-
-Both of your proposals make sense, however I did deliberately not
-generalize too much because I knew only one chipset. I don't like trying
-to generalize for an unpredictable future use case, it generally leads
-(me) to generalizing in the wrong direction. That means you'd be very
-welcome to propose helpers and/or devm variants, possibly in the same
-patchset as the first Rohm serdes driver. ;)
-
-> Reviewed-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-
-Thanks for your review!
-
--- 
-Luca
+--=20
+With Best Regards,
+Andy Shevchenko
