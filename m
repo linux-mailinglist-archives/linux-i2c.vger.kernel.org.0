@@ -2,120 +2,241 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6FE4DE288
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Mar 2022 21:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35D24DE2AE
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Mar 2022 21:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236824AbiCRUaU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Mar 2022 16:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
+        id S240747AbiCRUnR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Mar 2022 16:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233115AbiCRUaT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Mar 2022 16:30:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498212BB36E;
-        Fri, 18 Mar 2022 13:29:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B600AB82559;
-        Fri, 18 Mar 2022 20:28:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94384C340E8;
-        Fri, 18 Mar 2022 20:28:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647635337;
-        bh=Mg/DyLpcoxRXJnmL4DUhCt5Wg1OShxiLk/qxnj2wARA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qcrEi+YdaZwD1LkkwvJbiFVB+9lOkfbIrNDN6upq13gtU6y3N3FKhPMgLamto7jYG
-         xevwKfDWxbCUhQuAa3QAwWnOjaG8yVvWyuA+GAHiyEUVAAR1KeloVnhmy1OBfrxsba
-         7DstZKquDsuEW4eAaW7S34jtvSd/phliNh6M4TzULd4RZN7ErmCqGMP7a2UsmNlwaU
-         QOH7DnffubMCsRRYwofHsKDWg6yAxisponWINosXlaAgg8Pldz8i+Abjj7nxTZHsdj
-         W7l5owFFElt0kmu5gnulb+Lss6IGMmF+Q1rsKwuei9aiOop3RK/2FjGu81ShwfedCE
-         aSvgZxi4MmCwA==
-Date:   Fri, 18 Mar 2022 21:28:50 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Tyrone Ting <warp5tw@gmail.com>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
-        jie.deng@intel.com, sven@svenpeter.dev, bence98@sch.bme.hu,
-        lukas.bulwahn@gmail.com, arnd@arndb.de, olof@lixom.net,
-        andriy.shevchenko@linux.intel.com, tali.perry@nuvoton.com,
-        Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
-        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
-        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 01/11] arm: dts: add new property for NPCM i2c module
-Message-ID: <YjTrgia/VX6rBT1r@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski@canonical.com, yangyicong@hisilicon.com,
-        semen.protsenko@linaro.org, jie.deng@intel.com, sven@svenpeter.dev,
-        bence98@sch.bme.hu, lukas.bulwahn@gmail.com, arnd@arndb.de,
-        olof@lixom.net, andriy.shevchenko@linux.intel.com,
-        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220303083141.8742-1-warp5tw@gmail.com>
- <20220303083141.8742-2-warp5tw@gmail.com>
+        with ESMTP id S240614AbiCRUnQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Mar 2022 16:43:16 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688552878BA;
+        Fri, 18 Mar 2022 13:41:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647636117; x=1679172117;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Fq0wZbk8atxPuFaALjnooW2wpUoFFUKI6rkPZWH8VS8=;
+  b=DyXIa84j1h0dUr93EcQNRlkgURt7oFzDSF4/vsoKNpSzDMdtDyCK10G5
+   AQh4AVL9NR3agBdcnaV5hNMmeHrwkj1m9gOfy2lvfFDPRarErpEkmowJH
+   OHFkfM5vwWlCwTK2XZFvFMGzvTVwiXN8fM/ilcckpJHOxo7AWXgDTPyNh
+   4=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 Mar 2022 13:41:57 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 13:41:56 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 18 Mar 2022 13:41:56 -0700
+Received: from maru.qualcomm.com (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 18 Mar
+ 2022 13:41:55 -0700
+From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Ingo Molnar" <mingo@redhat.com>
+CC:     Jamie Iles <quic_jiles@quicinc.com>,
+        Graeme Gregory <quic_ggregory@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+Subject: [PATCH v3] i2c: add tracepoints for I2C slave events
+Date:   Fri, 18 Mar 2022 13:41:33 -0700
+Message-ID: <20220318204133.657568-1-quic_jaehyoo@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5z/A5pCunj4GhFoV"
-Content-Disposition: inline
-In-Reply-To: <20220303083141.8742-2-warp5tw@gmail.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+I2C slave events tracepoints can be enabled by:
 
---5z/A5pCunj4GhFoV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+	echo 1 > /sys/kernel/tracing/events/i2c_slave/enable
 
-On Thu, Mar 03, 2022 at 04:31:31PM +0800, Tyrone Ting wrote:
-> From: Tyrone Ting <kfting@nuvoton.com>
->=20
-> Add nuvoton,sys-mgr property for controlling NPCM gcr register.
->=20
-> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+and logs in /sys/kernel/tracing/trace will look like:
 
-There are some comments about this series, so I am expecting a v4
-somewhen. However, I already want to state that I usually don't take DTS
-patches. So, I guess the path forward is that Rob needs to ack the patch
-which is now patch 2. Once he does this and I apply it, you can take this
-DTS patch via arm-soc. Sounds good?
+	... i2c_slave: i2c-0 a=010 ret=0 WR_REQ []
+	... i2c_slave: i2c-0 a=010 ret=0 WR_RCV [02]
+	... i2c_slave: i2c-0 a=010 ret=0 WR_RCV [0c]
+	... i2c_slave: i2c-0 a=010 ret=0   STOP []
+	... i2c_slave: i2c-0 a=010 ret=0 RD_REQ [04]
+	... i2c_slave: i2c-0 a=010 ret=0 RD_PRO [b4]
+	... i2c_slave: i2c-0 a=010 ret=0  STOP []
 
+formatted as:
 
---5z/A5pCunj4GhFoV
-Content-Type: application/pgp-signature; name="signature.asc"
+	i2c-<adapter_nr>
+	a=<addr>
+	ret=<ret>	<- callback return value
+	<event>
+	[<data>]
 
------BEGIN PGP SIGNATURE-----
+trace printings can be selected by adding a filter like:
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmI0634ACgkQFA3kzBSg
-Kbbklg//Sv2r47FQFg3Yk8MUTB0RS4+pUNIlJHLR548TGl2isIIXUFQ5AY4FrLUB
-Vlb41WvFoHVDizEZDtXz1ciqXJrPr6957AX6VpLPw0TiAjEDjWYBxSrmhNgdCzcx
-eWSPlSz8D+aGN3X9CKc75S3UCXLAGlTufnlc2Er9raOEUvBsXf4vXv3US4jkoE1S
-UC1igte3GDhoK+SnsQh4dAenTUseAcxkJAYZRDZ0Ll/il2Q4P1ZZqndqGIstUA1R
-jyVZk8lmB7P8mGhHTdpJlMq33wPHsOx+R5TO+UO9HPGbqso8rNAsDp/50wjrVJQT
-saSFrwyrE66gZQVYuikWKW6Ais7XClwj047rlAZ2aFxbCvCiBlu/dLWNr//9++Md
-cOcmTP6VCyZveEdEZoY1oHQRRawlIQMoVpiYtELn7Q3Vv//2zcImdkrFoC+5bcf6
-/5YwgRSirN6Ih7KaWO1zlGlIf7BV8GmeiDfa1AllahJO1qgqsSZSpeWmWKZ/APnw
-trP6iFDftFsBFFKooYtdnwdUTU6eX2KBOwn3OddOoNHmYfN/tiUc3t51OF5Vg8Dp
-+8ZXkmHmVkGpxq0lEKRRtsBlQAeZxLapSrwvrNY8pf0Nn3aveX7HpN4x7nkEShZZ
-h5yEAUVfSOcAZVj48/7exExVlMPK5CoCpUQfpuHRR+S0WHQdYEQ=
-=yg2W
------END PGP SIGNATURE-----
+	echo adapter_nr==1 >/sys/kernel/tracing/events/i2c_slave/filter
 
---5z/A5pCunj4GhFoV--
+Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+---
+Changes in v3:
+* Made trace print even when a callback return value is non-zero and print
+  out the value too (Wolfram)
+* Added TRACE_DEFINE_ENUM export for events to make it useful for perf and
+  trace-cmd (Steven)
+
+Changes in v2:
+* Fixed trace_2c_slave call condition to optimize conditional compare logic
+  (Steven)
+* Fixed TP entry order to prevent wasting spaces in the ring buffer (Steven)
+* Replaced __get_dynamic_array with __array for storing 1-length data value
+  to make it faster and save space (Steven)
+
+ drivers/i2c/i2c-core-slave.c     | 15 +++++++
+ include/linux/i2c.h              |  8 +---
+ include/trace/events/i2c_slave.h | 67 ++++++++++++++++++++++++++++++++
+ 3 files changed, 84 insertions(+), 6 deletions(-)
+ create mode 100644 include/trace/events/i2c_slave.h
+
+diff --git a/drivers/i2c/i2c-core-slave.c b/drivers/i2c/i2c-core-slave.c
+index 1589179d5eb9..e3765e12f93b 100644
+--- a/drivers/i2c/i2c-core-slave.c
++++ b/drivers/i2c/i2c-core-slave.c
+@@ -14,6 +14,9 @@
+ 
+ #include "i2c-core.h"
+ 
++#define CREATE_TRACE_POINTS
++#include <trace/events/i2c_slave.h>
++
+ int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb)
+ {
+ 	int ret;
+@@ -79,6 +82,18 @@ int i2c_slave_unregister(struct i2c_client *client)
+ }
+ EXPORT_SYMBOL_GPL(i2c_slave_unregister);
+ 
++int i2c_slave_event(struct i2c_client *client,
++		    enum i2c_slave_event event, u8 *val)
++{
++	int ret = client->slave_cb(client, event, val);
++
++	if (trace_i2c_slave_enabled())
++		trace_i2c_slave(client, event, val, ret);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(i2c_slave_event);
++
+ /**
+  * i2c_detect_slave_mode - detect operation mode
+  * @dev: The device owning the bus
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 7d4f52ceb7b5..fbda5ada2afc 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -392,12 +392,8 @@ enum i2c_slave_event {
+ int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
+ int i2c_slave_unregister(struct i2c_client *client);
+ bool i2c_detect_slave_mode(struct device *dev);
+-
+-static inline int i2c_slave_event(struct i2c_client *client,
+-				  enum i2c_slave_event event, u8 *val)
+-{
+-	return client->slave_cb(client, event, val);
+-}
++int i2c_slave_event(struct i2c_client *client,
++		    enum i2c_slave_event event, u8 *val);
+ #else
+ static inline bool i2c_detect_slave_mode(struct device *dev) { return false; }
+ #endif
+diff --git a/include/trace/events/i2c_slave.h b/include/trace/events/i2c_slave.h
+new file mode 100644
+index 000000000000..811166abbe3a
+--- /dev/null
++++ b/include/trace/events/i2c_slave.h
+@@ -0,0 +1,67 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ * I2C slave tracepoints
++ *
++ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM i2c_slave
++
++#if !defined(_TRACE_I2C_SLAVE_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_I2C_SLAVE_H
++
++#include <linux/i2c.h>
++#include <linux/tracepoint.h>
++
++TRACE_DEFINE_ENUM(I2C_SLAVE_READ_REQUESTED);
++TRACE_DEFINE_ENUM(I2C_SLAVE_WRITE_REQUESTED);
++TRACE_DEFINE_ENUM(I2C_SLAVE_READ_PROCESSED);
++TRACE_DEFINE_ENUM(I2C_SLAVE_WRITE_RECEIVED);
++TRACE_DEFINE_ENUM(I2C_SLAVE_STOP);
++
++#define show_event_type(type)						\
++	__print_symbolic(type,						\
++		{ I2C_SLAVE_READ_REQUESTED,	"RD_REQ" },		\
++		{ I2C_SLAVE_WRITE_REQUESTED,	"WR_REQ" },		\
++		{ I2C_SLAVE_READ_PROCESSED,	"RD_PRO" },		\
++		{ I2C_SLAVE_WRITE_RECEIVED,	"WR_RCV" },		\
++		{ I2C_SLAVE_STOP,		"  STOP" })
++
++TRACE_EVENT(i2c_slave,
++	TP_PROTO(const struct i2c_client *client, enum i2c_slave_event event,
++		 __u8 *val, int cb_ret),
++	TP_ARGS(client, event, val, cb_ret),
++	TP_STRUCT__entry(
++		__field(int,				adapter_nr	)
++		__field(int,				ret		)
++		__field(__u16,				addr		)
++		__field(__u16,				len		)
++		__field(enum i2c_slave_event,		event		)
++		__array(__u8,				buf,	1)	),
++
++	TP_fast_assign(
++		__entry->adapter_nr = client->adapter->nr;
++		__entry->addr = client->addr;
++		__entry->event = event;
++		__entry->ret = cb_ret;
++		switch (event) {
++		case I2C_SLAVE_READ_REQUESTED:
++		case I2C_SLAVE_READ_PROCESSED:
++		case I2C_SLAVE_WRITE_RECEIVED:
++			__entry->len = 1;
++			memcpy(__entry->buf, val, __entry->len);
++			break;
++		default:
++			__entry->len = 0;
++			break;
++		}
++		),
++	TP_printk("i2c-%d a=%03x ret=%d %s [%*phD]",
++		__entry->adapter_nr, __entry->addr, __entry->ret,
++		show_event_type(__entry->event), __entry->len, __entry->buf
++		));
++
++#endif /* _TRACE_I2C_SLAVE_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+-- 
+2.25.1
+
