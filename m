@@ -2,34 +2,34 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2AFF4DDF56
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Mar 2022 17:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 360D04DDF6C
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Mar 2022 17:56:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238872AbiCRQwC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Mar 2022 12:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46052 "EHLO
+        id S239393AbiCRQ5Q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Mar 2022 12:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238639AbiCRQwC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Mar 2022 12:52:02 -0400
+        with ESMTP id S236575AbiCRQ5P (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Mar 2022 12:57:15 -0400
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F33167C6;
-        Fri, 18 Mar 2022 09:50:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57362B963F;
+        Fri, 18 Mar 2022 09:55:55 -0700 (PDT)
 Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 788891C0012;
-        Fri, 18 Mar 2022 16:50:35 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 70F3D1C0008;
+        Fri, 18 Mar 2022 16:55:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1647622238;
+        t=1647622554;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aS1N89uzvpd8jnYBFJepA/ZxoklG7RH275pUOIYJ0bQ=;
-        b=MOBC9vWcqqqeGLx0FQdShhqqb2keJX3tphFbdRpb+gQoME0eXl2nKpOm7Kl7k9e93WGny1
-        5Pw8x9ZnakL+laJgvyKtVypoJnBOObCnEORbAfO4+QBOOGF4FVqLV7C1Zqr6hHlXlbWneD
-        eU+Yj7qmJYW7fa7qG0N1C4OBP37XxiOGK7jz4FVfEtHyuPMx5DzmKjXycSeDHix/7vJVrs
-        ay4CRgKQ7bJQ8/ro46txKovtyPGgmxSP6QhQ+SQfeXrL5qWwBwXHMY5IBG4IqoEyP3oSOT
-        T44vb0ESLpVWNugprcg6u0RF2cRZaICvaryvN24h0nJ/bWfLpWiIfn0BhPzbWQ==
-Date:   Fri, 18 Mar 2022 17:49:12 +0100
+        bh=VTm3WCGd+Gc+MnbF+RGD9FPstNQafRl1ZXxnP/UfLeA=;
+        b=H+LZHHVcv37ltIFe0vaPUCcnLIH+W2pJCsEpVmfs6KlTVbfIz3LRb4dWlfcqGDEj0mPHYT
+        2eiYJ+wPS0aytxDkN3ocUrgRDCv4pmDQlaWMO0qlwF0p/S8M+qNCSseX5Xqc78j/HGekVc
+        KkHKQVeLcRkVMaD/5usyLbTGPYeFRQBWoJsESUlf5pToSTMQNzMxsZ8y5o2gnibzHWfrj8
+        ymaXPGKPB+IDdcrm/GAdP2mM95Nnqw6rInIImkq5CDTvmxGLtOUdGnWHp3eRR7oTefe6KL
+        w6SM9BcBYSHoF5JfQLBgRpJoiiGjDfW+C9uHBpzCUF0tphPST41yqW3pFWeGbQ==
+Date:   Fri, 18 Mar 2022 17:54:29 +0100
 From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Daniel Scally <djrscally@gmail.com>,
@@ -50,12 +50,12 @@ Cc:     Daniel Scally <djrscally@gmail.com>,
         Allan Nielsen <allan.nielsen@microchip.com>,
         linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-i2c@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 1/6] property: add fwnode_property_read_string_index()
-Message-ID: <20220318174912.5759095f@fixe.home>
-In-Reply-To: <YjSymEpNH8vnkQ+L@smile.fi.intel.com>
+Subject: Re: [PATCH 2/6] i2c: fwnode: add fwnode_find_i2c_adapter_by_node()
+Message-ID: <20220318175402.1e62503d@fixe.home>
+In-Reply-To: <YjSzc/Eek8NvqEN6@smile.fi.intel.com>
 References: <20220318160059.328208-1-clement.leger@bootlin.com>
-        <20220318160059.328208-2-clement.leger@bootlin.com>
-        <YjSymEpNH8vnkQ+L@smile.fi.intel.com>
+        <20220318160059.328208-3-clement.leger@bootlin.com>
+        <YjSzc/Eek8NvqEN6@smile.fi.intel.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
@@ -71,35 +71,25 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Le Fri, 18 Mar 2022 18:26:00 +0200,
+Le Fri, 18 Mar 2022 18:29:39 +0200,
 Andy Shevchenko <andriy.shevchenko@linux.intel.com> a =C3=A9crit :
 
-> On Fri, Mar 18, 2022 at 05:00:47PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
-> > Add fwnode_property_read_string_index() function which allows to
-> > retrieve a string from an array by its index. This function is the
-> > equivalent of of_property_read_string_index() but for fwnode support. =
-=20
+> On Fri, Mar 18, 2022 at 05:00:48PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Add fwnode_find_i2c_adapter_by_node() which allows to retrieve a i2c
+> > adapter using a fwnode. Since dev_fwnode() uses the fwnode provided by
+> > the of_node member of the device, this will also work for devices were
+> > the of_node has been set and not the fwnode field.
 >=20
-> ...
+> > +	/* For ACPI device node, we do not want to match the parent */ =20
 >=20
-> > +	values =3D kcalloc(nval, sizeof(*values), GFP_KERNEL);
-> > +	if (!values)
-> > +		return -ENOMEM;
-> > +
-> > +	ret =3D fwnode_property_read_string_array(fwnode, propname, values, n=
-val);
-> > +	if (ret < 0)
-> > +		goto out;
-> > +
-> > +	*string =3D values[index];
-> > +out:
-> > +	kfree(values); =20
->=20
-> Here is UAF (use after free). How is it supposed to work?
+> Why?
+> Neither commit message nor this comment does not answer to this question.
 >=20
 
-values is an array of pointers. I'm only retrieving a pointer out of
-it.
+Yes you are right. This is done to keep the existing behavior that is
+applied by i2c_acpi_find_adapter_by_handle() which only checks the
+device node and not the parent one. Using the same behavior than for DT
+would add some unwanted behavior in I2C device lookup for ACPI.
 
 --=20
 Cl=C3=A9ment L=C3=A9ger,
