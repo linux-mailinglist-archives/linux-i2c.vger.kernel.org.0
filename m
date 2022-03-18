@@ -2,45 +2,45 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82C94DE0D3
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Mar 2022 19:13:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C684DE102
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Mar 2022 19:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239825AbiCRSOt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Mar 2022 14:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43866 "EHLO
+        id S238303AbiCRSZp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Mar 2022 14:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233194AbiCRSOt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Mar 2022 14:14:49 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB014939DC;
-        Fri, 18 Mar 2022 11:13:29 -0700 (PDT)
+        with ESMTP id S238890AbiCRSZg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Mar 2022 14:25:36 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE3CEDF2F;
+        Fri, 18 Mar 2022 11:24:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647627210; x=1679163210;
+  t=1647627857; x=1679163857;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=ZcLZFns2cmqmUDYsf79yEaH3pnYex27zE67UUmjrAQU=;
-  b=PrPujoHJH+SZDrMGogNvPpMufkdHurjQmdh0x5c7p3hAGzTYo4vxwJmR
-   Gi6DUuujeBg3g2ZqI3gAfNSbBbOgAPoMeIeUfrYe927nYbnIfMBjg8t8M
-   04oqWCVHCuKPLY8qeSbXWBe8zh+sxdoKrGDqw64wbF5gQ5AzWDSxnkRp8
-   lya8WF9j0LBhfMp1Bplr+2Y4NzlFROgjmPSgBBtZxuPY4/Fr4bNBeRHJu
-   9OuKQvvecB3u0hBKsv/fpjAK0g6vQWPOebT5ucNFetRxIw67flhFYI7mV
-   xMavr6svoQILCavL3sDUpRsARds2iIko7otmdQ343WSNOTJ3LkVhtKcoM
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="256920621"
+  bh=wpIS4R443Nce+z/m4Mc2carJ5M+X4U+cG/spU7q0iJU=;
+  b=MBb9M1/vjaNnIKvN8fe/t0g9yLSMQIIQPN9P1ZDa04QpAGJGvLqt6Py1
+   cikhcOfVVFRghA2XRHU4B2rHS4Vl27I+LONmU/hWbE6rPNTfkeBZejJpw
+   wNFWsnvA0uQVcSeGNAD4qMdC3F/oR2IIl5G67CPhyJGqnu1l6SAINfFbl
+   c+JPjC7e/ENy2GJds6OYdGuWPn9NXInB9OWMhUwnfhQUb5LyAH7YzEk6y
+   z6OHoa66psdsHwIXZKuTdKybAoFGs6KzqSiWE6H135jaH6z+h70/PFkeO
+   67hCvIKfenfSIyYGWfzxUX9t+UzsIwHN8TiLnXvAPRaZ4dB8BcY0JUpvJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="320404134"
 X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="256920621"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 11:10:27 -0700
+   d="scan'208";a="320404134"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 11:12:14 -0700
 X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="558577638"
+   d="scan'208";a="550837171"
 Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 11:10:17 -0700
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 11:12:08 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.95)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nVH2f-002Npa-DH;
-        Fri, 18 Mar 2022 20:09:37 +0200
-Date:   Fri, 18 Mar 2022 20:09:37 +0200
+        id 1nVH4S-002Ns0-Qz;
+        Fri, 18 Mar 2022 20:11:28 +0200
+Date:   Fri, 18 Mar 2022 20:11:28 +0200
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
 Cc:     Daniel Scally <djrscally@gmail.com>,
@@ -61,60 +61,47 @@ Cc:     Daniel Scally <djrscally@gmail.com>,
         Allan Nielsen <allan.nielsen@microchip.com>,
         linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-i2c@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 1/6] property: add fwnode_property_read_string_index()
-Message-ID: <YjTK4UW7DwZ0S3QY@smile.fi.intel.com>
+Subject: Re: [PATCH 4/6] i2c: mux: pinctrl: remove CONFIG_OF dependency and
+ use fwnode API
+Message-ID: <YjTLUL0umgw+ZVTU@smile.fi.intel.com>
 References: <20220318160059.328208-1-clement.leger@bootlin.com>
- <20220318160059.328208-2-clement.leger@bootlin.com>
- <YjSymEpNH8vnkQ+L@smile.fi.intel.com>
- <20220318174912.5759095f@fixe.home>
+ <20220318160059.328208-5-clement.leger@bootlin.com>
+ <YjSzPeWpcR/SSX1a@smile.fi.intel.com>
+ <20220318175630.0e235f41@fixe.home>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220318174912.5759095f@fixe.home>
+In-Reply-To: <20220318175630.0e235f41@fixe.home>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 05:49:12PM +0100, Clément Léger wrote:
-> Le Fri, 18 Mar 2022 18:26:00 +0200,
+On Fri, Mar 18, 2022 at 05:56:30PM +0100, Clément Léger wrote:
+> Le Fri, 18 Mar 2022 18:28:45 +0200,
 > Andy Shevchenko <andriy.shevchenko@linux.intel.com> a écrit :
-> > On Fri, Mar 18, 2022 at 05:00:47PM +0100, Clément Léger wrote:
-> > > Add fwnode_property_read_string_index() function which allows to
-> > > retrieve a string from an array by its index. This function is the
-> > > equivalent of of_property_read_string_index() but for fwnode support.  
-
-...
-
-> > > +	values = kcalloc(nval, sizeof(*values), GFP_KERNEL);
-> > > +	if (!values)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	ret = fwnode_property_read_string_array(fwnode, propname, values, nval);
-> > > +	if (ret < 0)
-> > > +		goto out;
-> > > +
-> > > +	*string = values[index];
-> > > +out:
-> > > +	kfree(values);  
+> > On Fri, Mar 18, 2022 at 05:00:50PM +0100, Clément Léger wrote:
+> > > In order to use i2c muxes with software_node when added with a struct
+> > > mfd_cell, switch to fwnode API. The fwnode layer will allow to use this
+> > > with both device_node and software_node.  
 > > 
-> > Here is UAF (use after free). How is it supposed to work?
+> > > -	struct device_node *np = dev->of_node;
+> > > +	struct fwnode_handle *np = dev_fwnode(dev);  
+> > 
+> > np is now a misleading name. Use fwnode.
 > 
-> values is an array of pointers. I'm only retrieving a pointer out of
-> it.
+> Ok I thought np was meaning "node pointer" and it looked like okay to
+> avoid avoid a diff that is too huge. But agreed, I'll rename that.
 
-I see, thanks for pointing out.
-
-Nevertheless, I don't like the idea of allocating memory in this case.
-Can we rather add a new callback that will provide us the necessary
-property directly?
+It's rather "in practice", np stands for "OF node pointer", while fwnode
+stands for "firmware node handle".
 
 -- 
 With Best Regards,
