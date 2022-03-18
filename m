@@ -2,34 +2,34 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB084DDF77
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Mar 2022 17:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2547A4DDF83
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Mar 2022 18:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239435AbiCRQ7R (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Mar 2022 12:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
+        id S239460AbiCRRB2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Mar 2022 13:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237562AbiCRQ7Q (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Mar 2022 12:59:16 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF3A1E0;
-        Fri, 18 Mar 2022 09:57:56 -0700 (PDT)
+        with ESMTP id S236102AbiCRRB0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Mar 2022 13:01:26 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF512C57AC;
+        Fri, 18 Mar 2022 10:00:06 -0700 (PDT)
 Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D83D61BF204;
-        Fri, 18 Mar 2022 16:57:52 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8744F1C0005;
+        Fri, 18 Mar 2022 17:00:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1647622675;
+        t=1647622804;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=255thDF/aiPYpzBrM90c9D6DpMZZoegXddau3Sj7vXQ=;
-        b=PXnPiPPVCHTGqwcDR20xLQ7sfJUOj+rgke5v12jHY+ZJUwby9NAT2QHPjrosClkrXpJU4r
-        v01qDEEAyualGDL2SyXVCWfljAS1Dc2/JlDet3Lc8U7UbzK4JQYBDTwf9n03QWus+Fdxrs
-        wG68YD9/qLYeV5hEYrBwYf4J496Em4+EpVh3J5TgzmiDcS739x83yP+j8edABhDHCrBrc8
-        /XYXOfiZ2FDe4kn4KAfNVEoc3Mz0Sk4qLtqlABv/U16nfGSl2ggjs1EraelaoNZbrmjpve
-        gC8YQb8Uz5NnuxLnGKliroWMQOWmbVN2EA3nO4DPhTpnHBDuY7051I4cihWr2A==
-Date:   Fri, 18 Mar 2022 17:56:30 +0100
+        bh=UwommDYWujYAkS12uhV+76cfeQxEyafiZsBFh8MY/ao=;
+        b=VHjoF/lZHoFlunNwxnZPdl6qo8e9bKkcfOX6tg4Q9OWsLKGMr+3hAVk8vyv3RE4HMoSjFs
+        +llSGc+J/EC23te7mFR2SHWP7yMXvd4IU+BXRr0LUDCtDYusvQ3zNAuwf/xO1HNJj691l/
+        Z926XEs47wdPkT+lggi/2eJ8RruA/7hJRlvve8KAHx60gfFzLDEEVzyH8AQ71ohy3xtvt6
+        LwFL7ZUKv8y+bPG/wee2r5aGek2D4C3QGPBg1JTcojFzU7ko/kkWqken0v8gvzyaLkHFqO
+        ukI81sebn22m53QZJEZMBiV/didOAEins0CxI1s7TAe9Xzoy0JpErlzvpIQj0A==
+Date:   Fri, 18 Mar 2022 17:58:37 +0100
 From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Daniel Scally <djrscally@gmail.com>,
@@ -50,13 +50,12 @@ Cc:     Daniel Scally <djrscally@gmail.com>,
         Allan Nielsen <allan.nielsen@microchip.com>,
         linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-i2c@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 4/6] i2c: mux: pinctrl: remove CONFIG_OF dependency and
- use fwnode API
-Message-ID: <20220318175630.0e235f41@fixe.home>
-In-Reply-To: <YjSzPeWpcR/SSX1a@smile.fi.intel.com>
+Subject: Re: [PATCH 6/6] net: sfp: add support for fwnode
+Message-ID: <20220318175837.5fefba5b@fixe.home>
+In-Reply-To: <YjS0EbKOUb4Q++mF@smile.fi.intel.com>
 References: <20220318160059.328208-1-clement.leger@bootlin.com>
-        <20220318160059.328208-5-clement.leger@bootlin.com>
-        <YjSzPeWpcR/SSX1a@smile.fi.intel.com>
+        <20220318160059.328208-7-clement.leger@bootlin.com>
+        <YjS0EbKOUb4Q++mF@smile.fi.intel.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
@@ -72,22 +71,30 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Le Fri, 18 Mar 2022 18:28:45 +0200,
+Le Fri, 18 Mar 2022 18:32:17 +0200,
 Andy Shevchenko <andriy.shevchenko@linux.intel.com> a =C3=A9crit :
 
-> On Fri, Mar 18, 2022 at 05:00:50PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
-> > In order to use i2c muxes with software_node when added with a struct
-> > mfd_cell, switch to fwnode API. The fwnode layer will allow to use this
-> > with both device_node and software_node. =20
+> On Fri, Mar 18, 2022 at 05:00:52PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Add support to retrieve a i2c bus in sfp with a fwnode. This support
+> > is using the fwnode API which also works with device-tree and ACPI.
+> > For this purpose, the device-tree and ACPI code handling the i2c
+> > adapter retrieval was factorized with the new code. This also allows
+> > i2c devices using a software_node description to be used by sfp code. =
+=20
 >=20
-> > -	struct device_node *np =3D dev->of_node;
-> > +	struct fwnode_handle *np =3D dev_fwnode(dev); =20
+> > +		i2c =3D fwnode_find_i2c_adapter_by_node(np); =20
 >=20
-> np is now a misleading name. Use fwnode.
+> Despite using this, I believe you may split this patch to at least two wh=
+ere
+> first one is preparatory (converting whatever parts is possible to fwnode
+> (looks like ACPI case may be optimized) followed by this change.
 >=20
 
-Ok I thought np was meaning "node pointer" and it looked like okay to
-avoid avoid a diff that is too huge. But agreed, I'll rename that.
+Indeed, I had hesitate to do so but is seems more correct not to mix
+everything.
+
+Thanks for the review.
+
 
 --=20
 Cl=C3=A9ment L=C3=A9ger,
