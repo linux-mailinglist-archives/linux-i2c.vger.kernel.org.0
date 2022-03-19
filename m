@@ -2,57 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790234E18FA
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Mar 2022 00:15:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A084E1904
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Mar 2022 00:22:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244351AbiCSXRL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 19 Mar 2022 19:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
+        id S244379AbiCSXXW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 19 Mar 2022 19:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234512AbiCSXRL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Mar 2022 19:17:11 -0400
+        with ESMTP id S240641AbiCSXXV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Mar 2022 19:23:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7793A198;
-        Sat, 19 Mar 2022 16:15:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0ACB45078;
+        Sat, 19 Mar 2022 16:21:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E8C9B80A3B;
-        Sat, 19 Mar 2022 23:15:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B130AC340EC;
-        Sat, 19 Mar 2022 23:15:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47E76B801BA;
+        Sat, 19 Mar 2022 23:21:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40892C340EC;
+        Sat, 19 Mar 2022 23:21:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647731744;
-        bh=IFxZCDwY1ZlKVK/McsyTTEC3rqryBIPTRJjCWhFXaUE=;
+        s=k20201202; t=1647732116;
+        bh=7rNCrigihKYFJsz9mQGJnD95OoZCiJnpX8Y/WhFL9sA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oGyunC/tRxa5oQRmeS+erQC1B6Fbtc+FkKLeBCQlFTEnDIlvkg7k5DU85CG37JXv/
-         KE5upr4vWIRXJYglJs7MlvsRsn1TMB5Ekwf/Dn1hq70DtwfGOp7uH82wGAt0xTjN7U
-         UVCBDUYfS2qMWowIaBpkag8fFO6yB3UsotvDOKEJ8dnYOoKV0gxXH/+nV8yUepVL5d
-         aFKYB6vx3xomIw1F4DQWzEIo2S9FI7VxMvdQ0IML874O2S9aFfqfiIWhT3+k4m7Xjo
-         Ah7UBfrGi2dXv3y0Wg70wk3PStuj53MKvzaTin7LO1LPP1CZ5zPTrNbsvewq4tvYrf
-         LvOALW5H0yMgw==
-Date:   Sun, 20 Mar 2022 00:15:34 +0100
+        b=K9vIasWY030kTGiFRsRkRw4eze+GOnjq3FST37B19P7HkJJJCB0v8Kjc73NIIS9ZV
+         dmfdScdCAGGogjXCOWhp0AHhS8XiwSPTP1/pS6YY3iOGpiizn4Uzycn1g7VHGA1yN1
+         RKRSBp7uFk6O8C41fL6vOCll8lAHv/FGMpOjC4LmqWdlKXQiYXbZLzSV4LR44RMMWr
+         QyRSa8nWJOhIIH4wVe9zEHeIkSRMHtN/TfoJQ7hqq4Z6AywL0wPL8GYsD7POo6rTaO
+         pTozNIfl9JM+kZsu4z7irfwL6Ai+9cn5Kbxou4pohaWfA/3XOiZTIEy8fGYhcpmMtR
+         ORIzS8OWT6NJA==
+Date:   Sun, 20 Mar 2022 00:21:53 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Graeme Gregory <quic_ggregory@quicinc.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: add tracepoints for I2C slave events
-Message-ID: <YjZkFrPTW6sR6ATX@shikoro>
+To:     Lucas Tanure <tanure@linux.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: meson: Fix wrong speed use from probe
+Message-ID: <YjZlkRHWsQRVuj4j@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Jamie Iles <quic_jiles@quicinc.com>,
-        Graeme Gregory <quic_ggregory@quicinc.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20220318204133.657568-1-quic_jaehyoo@quicinc.com>
+        Lucas Tanure <tanure@linux.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220301072600.12352-1-tanure@linux.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eETdPFtlrvLqgiBG"
+        protocol="application/pgp-signature"; boundary="M1jqmkmfi3QEXijd"
 Content-Disposition: inline
-In-Reply-To: <20220318204133.657568-1-quic_jaehyoo@quicinc.com>
+In-Reply-To: <20220301072600.12352-1-tanure@linux.com>
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,61 +67,44 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---eETdPFtlrvLqgiBG
+--M1jqmkmfi3QEXijd
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 18, 2022 at 01:41:33PM -0700, Jae Hyun Yoo wrote:
-> I2C slave events tracepoints can be enabled by:
+On Tue, Mar 01, 2022 at 07:26:00AM +0000, Lucas Tanure wrote:
+> Having meson_i2c_set_clk_div after i2c_add_adapter
+> causes issues for client drivers that try to use
+> the bus before the requested speed is applied.
 >=20
-> 	echo 1 > /sys/kernel/tracing/events/i2c_slave/enable
+> The bus can be used just after i2c_add_adapter, so
+> move i2c_add_adapter to the final step as
+> meson_i2c_set_clk_div needs to be called before
+> the bus is used.
 >=20
-> and logs in /sys/kernel/tracing/trace will look like:
->=20
-> 	... i2c_slave: i2c-0 a=3D010 ret=3D0 WR_REQ []
-> 	... i2c_slave: i2c-0 a=3D010 ret=3D0 WR_RCV [02]
-> 	... i2c_slave: i2c-0 a=3D010 ret=3D0 WR_RCV [0c]
-> 	... i2c_slave: i2c-0 a=3D010 ret=3D0   STOP []
-> 	... i2c_slave: i2c-0 a=3D010 ret=3D0 RD_REQ [04]
-> 	... i2c_slave: i2c-0 a=3D010 ret=3D0 RD_PRO [b4]
-> 	... i2c_slave: i2c-0 a=3D010 ret=3D0  STOP []
->=20
-> formatted as:
->=20
-> 	i2c-<adapter_nr>
-> 	a=3D<addr>
-> 	ret=3D<ret>	<- callback return value
-> 	<event>
-> 	[<data>]
->=20
-> trace printings can be selected by adding a filter like:
->=20
-> 	echo adapter_nr=3D=3D1 >/sys/kernel/tracing/events/i2c_slave/filter
->=20
-> Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+> Signed-off-by: Lucas Tanure <tanure@linux.com>
 
-Applied to for-next, thanks!
+Applied to for-next with a Fixes tag added, thanks!
 
 
---eETdPFtlrvLqgiBG
+--M1jqmkmfi3QEXijd
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmI2ZBIACgkQFA3kzBSg
-KbbZeRAAmR6eAVN3lFkHcekhn1380YxReKaRNd7uBP3TPyQ1SLRQ5S42zraw43XE
-e/JA5FIl56UX75Wi7AalXD8i6ZTgRmbfmyrlr1IcwE0syHdKxbJTW/Brhex87MJl
-bpOAlfQx3NjtUZQAwFXlj2CxMWqUvAFPXvDgcr9s7iDk1r/kgwbreSYIveicuF7C
-/eg8aIAJ3hG/LcqyqzM9GAQfYOp6yp8aNAhAF0AEQMlHwNQRhmWMCq+M+mCHHFq4
-TV48FQBMWPtNKGdkyN+XaHiNm20Up5RlAzixJ30/pW7Hrzu5Vo+EWkXTTbIv5GrS
-qqnZNg8vF73vco0wo0Kx+TSD7HXF1lKvZi4lfPCWzmJ13NMrjfv6hXuhAvI50U2+
-kd/PP9CcNayLIeADyl+h/KesEoAUAZfO67wlLkaLTRnoCUrqIeqCClDws4NsPHtD
-22Vt4l+o4wYMp+2P5G/wi/a8EutivZIUQuZlFbQqzl/4F+KdXrkWgovrzS0yplFt
-CWtTJXB9gmdv+PT4tLRDr3cQjyiKdMTDuRRsrAffYDBL2A0ZLYN6SHH9+h01dKw3
-p4yLNrKbARoqd8XMWO3DRlfJwqKpEelUEy8+Ti1q7YKu8BqXJIIAu9FE80QVR0nM
-sEO8ozlyfZV8vJtwAaxFkWCWI1daY7xOAHL66cO/gcUENYoYagE=
-=oaPP
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmI2ZZEACgkQFA3kzBSg
+KbYFPA/7BD/tp4i2gYsqEpAqGKr1iM9kvlzI8IWgsLobfM4DUGr3pLs/ftcJJNWV
+XxlgAWGqjG9YKVNh+o8CWunvGDvxoCZIZoMldP+wiBlLlTmMMXy4mhYMJ9So1Im5
+FFX8zbS0bBNPXQXfwI7v523ibOB/fpue0cmM4nVVIY0IGh1/FxKgvpNcTDlLl1e0
+4IuVNa0WL3PSdaKpkbZC5bvWUaAFZOoUhDGu0UbfTlyNtsH3DcAxYYPi6xq7xYRA
+WHPhfwfKhMf8tvIK4IUSw7LY1fPa6p69TvUOtWT4/tXjGDASgwRPzcPAlpLty6wb
+G3T0lun5sSFegy0wyBem98avUfulHU+8KP5MG/lWW5NUOSUL2gL9UQMuFwMj2tbW
+OxgUbj7bt94EXfbMVyTaIWLfHduxPAUij2/rWMnc767bbb4vKuV/bMJltnAwpA4C
+/WdSUysadIRlvsR3ttPimKE3U1nHxrHG/gvOR+HUkOJaB6wAW0nawotK//jHFftw
+rk+16AemIhRy71h/qt+JPYdVpdJbyzMTloUSeaiywmusZl4eNuxRHHEHQaaVPWh8
+DqjmVDOyn8DYJIT+vJ4ZnMJnnrpM7RU1d5kWIZYXVDZnlsUSzWhHiSMAZORo43hX
+TQIFqIoiAfff05ic3+LIpWp/nIN3yuMf76adaIpdhygCMYJx+i4=
+=eJIv
 -----END PGP SIGNATURE-----
 
---eETdPFtlrvLqgiBG--
+--M1jqmkmfi3QEXijd--
