@@ -2,341 +2,402 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFF04DEA0C
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Mar 2022 19:22:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E584DEA93
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Mar 2022 21:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243880AbiCSSXy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 19 Mar 2022 14:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
+        id S238117AbiCSURT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 19 Mar 2022 16:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243868AbiCSSXx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Mar 2022 14:23:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FED2689A8;
-        Sat, 19 Mar 2022 11:22:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1A85B80D9B;
-        Sat, 19 Mar 2022 18:22:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E32FEC340EC;
-        Sat, 19 Mar 2022 18:22:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647714148;
-        bh=hhu+iiM+PEsCTNMjvrEDz1ucmDg+Fr+55HCY0c8/UsU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NXtiYgj8z1V7NwGkSTBqzfcsA2AcF0FUaqWmKBlbJdkZlY+5X/Y+POt10MISO2kS/
-         +1wBVMn6in+UaYxrsB+ld5KedeYkHNIj02KA2XruXSe2eHDPJ8URwB8AcSYSv8ps+Z
-         Ifuohar81D4hwwl9tgfqOVucJpMb+IwOwfp/yuzmcpASxtg1A0RlMGefuRRTYs6DZ8
-         Xkap8/jSbiLBifie7GY6O1b3vhEHaGasq6nPAxrFZ7DCPkDSnV0SrTrqs0Z0rxACg7
-         vwu2sYtiP3sQddRlnOw3C8WIjDKnbeTbeq2k5N++3G6fabIoEi1fRpinli5QNuYYzo
-         nvfjeQZ5q5TAQ==
-Date:   Sat, 19 Mar 2022 18:29:36 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Tomislav Denis <tomislav.denis@avl.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        =?UTF-8?B?QW5kcsOp?= Gustavo Nakagomi Lopez <andregnl@usp.br>,
-        Cai Huoqing <caihuoqing@baidu.com>, linux-iio@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mips@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        linux-watchdog@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-pwm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        Amireddy Mallikarjuna reddy 
-        <mallikarjunax.reddy@linux.intel.com>, dmaengine@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>
-Subject: Re: [PATCH v8 02/16] clk: Provide new devm_clk helpers for prepared
- and enabled clocks
-Message-ID: <20220319182936.06d75742@jic23-huawei>
-In-Reply-To: <20220314141643.22184-3-u.kleine-koenig@pengutronix.de>
-References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
-        <20220314141643.22184-3-u.kleine-koenig@pengutronix.de>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S240604AbiCSURS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Mar 2022 16:17:18 -0400
+X-Greylist: delayed 597 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 19 Mar 2022 13:15:55 PDT
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [5.144.164.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85769193E4
+        for <linux-i2c@vger.kernel.org>; Sat, 19 Mar 2022 13:15:55 -0700 (PDT)
+Received: from localhost.localdomain (abxi119.neoplus.adsl.tpnet.pl [83.9.2.119])
+        by m-r2.th.seeweb.it (Postfix) with ESMTPA id ED29F3F424;
+        Sat, 19 Mar 2022 21:05:53 +0100 (CET)
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+To:     ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC DNM PATCH] i2c: busses: qcom-cci: Add support for passing data in DT
+Date:   Sat, 19 Mar 2022 21:05:49 +0100
+Message-Id: <20220319200549.530387-1-konrad.dybcio@somainline.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 14 Mar 2022 15:16:29 +0100
-Uwe Kleine-K=C3=B6nig         <u.kleine-koenig@pengutronix.de> wrote:
+Some vendors, such as SONY, fine-tune CCI parameters to better suit their
+specific combinations of devices and camera sensors, mostly in order to save a
+tiny bit more power. Add support for specifying all the CCI parameters in DT to
+avoid adding millions of structs in the driver itself.
 
-> When a driver keeps a clock prepared (or enabled) during the whole
-> lifetime of the driver, these helpers allow to simplify the drivers.
->=20
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Reviewed-by: Alexandru Ardelean <aardelean@deviqon.com>
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+---
+This is a ridiculously blatant RFC and PoC just to start the discussion.
+(thus it's missing the S-o-b on purpose)
 
-One trivial thing below.
+My point is that our favourite (cough cough) phone vendor likes to
+fine-tune every bit of the hardware and they are probably not alone
+doing this. Moving the properties into the DT would allow for more
+flexibility with the configuration, instead of having to add a separate
+set of structs for each one.
 
-> ---
->  drivers/clk/clk-devres.c | 31 ++++++++++++++
->  include/linux/clk.h      | 90 +++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 120 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/clk/clk-devres.c b/drivers/clk/clk-devres.c
-> index fb7761888b30..4707fe718f0b 100644
-> --- a/drivers/clk/clk-devres.c
-> +++ b/drivers/clk/clk-devres.c
-> @@ -67,12 +67,43 @@ struct clk *devm_clk_get(struct device *dev, const ch=
-ar *id)
->  }
->  EXPORT_SYMBOL(devm_clk_get);
-> =20
-> +struct clk *devm_clk_get_prepared(struct device *dev, const char *id)
-> +{
-> +	return __devm_clk_get(dev, id, clk_get, clk_prepare, clk_unprepare);
+If it were to make it in any form, it would probably be much saner
+to represent each mode as an individual subnode in the dt, specifying
+its parameters over there (which would incidentally also allow for
+adding more/less modes if need be), something like this:
 
-Nitpick but this spacing before } in functions is rather unusual and not
-in keeping with the existing code in this file.
+cci@0badbeef {
+	/* compatible and stuff */
 
-> +
-> +}
-> +EXPORT_SYMBOL(devm_clk_get_prepared);
-> +
-> +struct clk *devm_clk_get_enabled(struct device *dev, const char *id)
-> +{
-> +	return __devm_clk_get(dev, id, clk_get,
-> +			      clk_prepare_enable, clk_disable_unprepare);
-> +
-> +}
-> +EXPORT_SYMBOL(devm_clk_get_enabled);
-> +
->  struct clk *devm_clk_get_optional(struct device *dev, const char *id)
->  {
->  	return __devm_clk_get(dev, id, clk_get_optional, NULL, NULL);
->  }
->  EXPORT_SYMBOL(devm_clk_get_optional);
-> =20
-> +struct clk *devm_clk_get_optional_prepared(struct device *dev, const cha=
-r *id)
-> +{
-> +	return __devm_clk_get(dev, id, clk_get_optional,
-> +			      clk_prepare, clk_unprepare);
-> +
-> +}
-> +EXPORT_SYMBOL(devm_clk_get_optional_prepared);
-> +
-> +struct clk *devm_clk_get_optional_enabled(struct device *dev, const char=
- *id)
-> +{
-> +	return __devm_clk_get(dev, id, clk_get_optional,
-> +			      clk_prepare_enable, clk_disable_unprepare);
-> +
-> +}
-> +EXPORT_SYMBOL(devm_clk_get_optional_enabled);
-> +
->  struct clk_bulk_devres {
->  	struct clk_bulk_data *clks;
->  	int num_clks;
-> diff --git a/include/linux/clk.h b/include/linux/clk.h
-> index 266e8de3cb51..b011dbba7109 100644
-> --- a/include/linux/clk.h
-> +++ b/include/linux/clk.h
-> @@ -449,7 +449,7 @@ int __must_check devm_clk_bulk_get_all(struct device =
-*dev,
->   * the clock producer.  (IOW, @id may be identical strings, but
->   * clk_get may return different clock producers depending on @dev.)
->   *
-> - * Drivers must assume that the clock source is not enabled.
-> + * Drivers must assume that the clock source is neither prepared nor ena=
-bled.
->   *
->   * devm_clk_get should not be called from within interrupt context.
->   *
-> @@ -458,6 +458,47 @@ int __must_check devm_clk_bulk_get_all(struct device=
- *dev,
->   */
->  struct clk *devm_clk_get(struct device *dev, const char *id);
-> =20
-> +/**
-> + * devm_clk_get_prepared - devm_clk_get() + clk_prepare()
-> + * @dev: device for clock "consumer"
-> + * @id: clock consumer ID
-> + *
-> + * Returns a struct clk corresponding to the clock producer, or
-> + * valid IS_ERR() condition containing errno.  The implementation
-> + * uses @dev and @id to determine the clock consumer, and thereby
-> + * the clock producer.  (IOW, @id may be identical strings, but
-> + * clk_get may return different clock producers depending on @dev.)
-> + *
-> + * The returned clk (if valid) is prepared. Drivers must however assume =
-that the
-> + * clock is not enabled.
-> + *
-> + * devm_clk_get_prepared should not be called from within interrupt cont=
-ext.
-> + *
-> + * The clock will automatically be unprepared and freed when the
-> + * device is unbound from the bus.
-> + */
-> +struct clk *devm_clk_get_prepared(struct device *dev, const char *id);
-> +
-> +/**
-> + * devm_clk_get_enabled - devm_clk_get() + clk_prepare_enable()
-> + * @dev: device for clock "consumer"
-> + * @id: clock consumer ID
-> + *
-> + * Returns a struct clk corresponding to the clock producer, or valid IS=
-_ERR()
-> + * condition containing errno.  The implementation uses @dev and @id to
-> + * determine the clock consumer, and thereby the clock producer.  (IOW, =
-@id may
-> + * be identical strings, but clk_get may return different clock producers
-> + * depending on @dev.)
-> + *
-> + * The returned clk (if valid) is prepared and enabled.
-> + *
-> + * devm_clk_get_prepared should not be called from within interrupt cont=
-ext.
-> + *
-> + * The clock will automatically be disabled, unprepared and freed when t=
-he
-> + * device is unbound from the bus.
-> + */
-> +struct clk *devm_clk_get_enabled(struct device *dev, const char *id);
-> +
->  /**
->   * devm_clk_get_optional - lookup and obtain a managed reference to an o=
-ptional
->   *			   clock producer.
-> @@ -469,6 +510,29 @@ struct clk *devm_clk_get(struct device *dev, const c=
-har *id);
->   */
->  struct clk *devm_clk_get_optional(struct device *dev, const char *id);
-> =20
-> +/**
-> + * devm_clk_get_optional_prepared - devm_clk_get_optional() + clk_prepar=
-e()
-> + * @dev: device for clock "consumer"
-> + * @id: clock consumer ID
-> + *
-> + * Behaves the same as devm_clk_get_prepared() except where there is no =
-clock
-> + * producer.  In this case, instead of returning -ENOENT, the function r=
-eturns
-> + * NULL.
-> + */
-> +struct clk *devm_clk_get_optional_prepared(struct device *dev, const cha=
-r *id);
-> +
-> +/**
-> + * devm_clk_get_optional_enabled - devm_clk_get_optional() +
-> + *                                 clk_prepare_enable()
-> + * @dev: device for clock "consumer"
-> + * @id: clock consumer ID
-> + *
-> + * Behaves the same as devm_clk_get_enabled() except where there is no c=
-lock
-> + * producer.  In this case, instead of returning -ENOENT, the function r=
-eturns
-> + * NULL.
-> + */
-> +struct clk *devm_clk_get_optional_enabled(struct device *dev, const char=
- *id);
-> +
->  /**
->   * devm_get_clk_from_child - lookup and obtain a managed reference to a
->   *			     clock producer from child node.
-> @@ -813,12 +877,36 @@ static inline struct clk *devm_clk_get(struct devic=
-e *dev, const char *id)
->  	return NULL;
->  }
-> =20
-> +static inline struct clk *devm_clk_get_prepared(struct device *dev,
-> +						const char *id)
-> +{
-> +	return NULL;
-> +}
-> +
-> +static inline struct clk *devm_clk_get_enabled(struct device *dev,
-> +					       const char *id)
-> +{
-> +	return NULL;
-> +}
-> +
->  static inline struct clk *devm_clk_get_optional(struct device *dev,
->  						const char *id)
->  {
->  	return NULL;
->  }
-> =20
-> +static inline struct clk *devm_clk_get_optional_prepared(struct device *=
-dev,
-> +							 const char *id)
-> +{
-> +	return NULL;
-> +}
-> +
-> +static inline struct clk *devm_clk_get_optional_enabled(struct device *d=
-ev,
-> +							const char *id)
-> +{
-> +	return NULL;
-> +}
-> +
->  static inline int __must_check devm_clk_bulk_get(struct device *dev, int=
- num_clks,
->  						 struct clk_bulk_data *clks)
->  {
+	mode-standard {
+		parameter-1 = <1>;
+	};
+
+	mode-fast {
+		parameter-1 = <1>;
+	};
+
+	mode-supercustomlightspeed {
+		parameter-1 = <1>;
+		parameter-2 = <1337>;
+	};
+};
+
+What are your thoughts about this, and do you think the form shown above
+(and probably not the one in the patch) would be fitting, or is there a
+better approach to this?
+
+ drivers/i2c/busses/i2c-qcom-cci.c | 274 ++++++++++++++++++++++++++++++
+ 1 file changed, 274 insertions(+)
+
+diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
+index 07c11e2a446d..6754b5d11c52 100644
+--- a/drivers/i2c/busses/i2c-qcom-cci.c
++++ b/drivers/i2c/busses/i2c-qcom-cci.c
+@@ -117,6 +117,7 @@ struct cci_master {
+ };
+ 
+ struct cci_data {
++	bool read_params_from_dt;
+ 	unsigned int num_masters;
+ 	struct i2c_adapter_quirks quirks;
+ 	u16 queue_size[NUM_QUEUES];
+@@ -520,11 +521,20 @@ static const struct dev_pm_ops qcom_cci_pm = {
+ 	SET_RUNTIME_PM_OPS(cci_suspend_runtime, cci_resume_runtime, NULL)
+ };
+ 
++static struct cci_data cci_dt_data = {
++	.read_params_from_dt = true,
++	.quirks = {},
++	.params[I2C_MODE_STANDARD] = {},
++	.params[I2C_MODE_FAST] = {},
++	.params[I2C_MODE_FAST_PLUS] = {},
++};
++
+ static int cci_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	unsigned long cci_clk_rate = 0;
+ 	struct device_node *child;
++	struct cci_data *dt_data;
+ 	struct resource *r;
+ 	struct cci *cci;
+ 	int ret, i;
+@@ -540,6 +550,267 @@ static int cci_probe(struct platform_device *pdev)
+ 	if (!cci->data)
+ 		return -ENOENT;
+ 
++	if (cci->data->read_params_from_dt) {
++		dt_data = &cci_dt_data;
++
++		/* CCI params */
++		ret = of_property_read_u32(dev->of_node, "num-masters", &val);
++		if (ret) {
++			dev_err(dev, "Error reading num-masters from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->num_masters = val;
++
++		ret = of_property_read_u16_array(dev->of_node, "queue-size", dt_data->queue_size,
++			(size_t)&dt_data->num_masters);
++		if (ret) {
++			dev_err(dev, "Error reading queue-size from DT, ret = %d", ret);
++			return ret;
++		}
++
++		if (ARRAY_SIZE(dt_data->queue_size) != dt_data->num_masters) {
++			dev_err(dev, "num-masters doesn't match the number of queue-size elements!");
++			return -EINVAL;
++		}
++
++		ret = of_property_read_u32(dev->of_node, "max-write-len", &val);
++		if (ret) {
++			dev_err(dev, "Error reading max-write-len from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->quirks.max_write_len = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "max-read-len", &val);
++		if (ret) {
++			dev_err(dev, "Error reading max-read-len from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->quirks.max_read_len = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "cci-clk-rate", &val);
++		if (ret) {
++			dev_err(dev, "Error reading cci-clk-rate from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->cci_clk_rate = (unsigned long)val;
++
++		/* STANDARD mode params */
++		ret = of_property_read_u32(dev->of_node, "thigh-standard", &val);
++		if (ret) {
++			dev_err(dev, "Error reading thigh-standard from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_STANDARD].thigh = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "tlow-standard", &val);
++		if (ret) {
++			dev_err(dev, "Error reading tlow-standard from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_STANDARD].tlow = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "tsu-sto-standard", &val);
++		if (ret) {
++			dev_err(dev, "Error reading tsu-sto-standard from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_STANDARD].tsu_sto = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "tsu-sta-standard", &val);
++		if (ret) {
++			dev_err(dev, "Error reading tsu-sta-standard from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_STANDARD].tsu_sta = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "thd-dat-standard", &val);
++		if (ret) {
++			dev_err(dev, "Error reading thd-dat-standard from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_STANDARD].thd_dat = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "thd-sta-standard", &val);
++		if (ret) {
++			dev_err(dev, "Error reading thd-sta-standard from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_STANDARD].thd_sta = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "tbuf-standard", &val);
++		if (ret) {
++			dev_err(dev, "Error reading tbuf-standard from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_STANDARD].tbuf = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "scl-stretch-en-standard", &val);
++		if (ret) {
++			dev_err(dev, "Error reading scl-stretch-en-standard from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_STANDARD].scl_stretch_en = (u8)val;
++
++		ret = of_property_read_u32(dev->of_node, "trdhld-standard", &val);
++		if (ret) {
++			dev_err(dev, "Error reading trdhld-standard from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_STANDARD].trdhld = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "tsp-standard", &val);
++		if (ret) {
++			dev_err(dev, "Error reading tsp-standard from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_STANDARD].tsp = (u16)val;
++
++		/* FAST mode params */
++		ret = of_property_read_u32(dev->of_node, "thigh-fast", &val);
++		if (ret) {
++			dev_err(dev, "Error reading thigh-fast from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST].thigh = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "tlow-fast", &val);
++		if (ret) {
++			dev_err(dev, "Error reading tlow-fast from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST].tlow = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "tsu-sto-fast", &val);
++		if (ret) {
++			dev_err(dev, "Error reading tsu-sto-fast from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST].tsu_sto = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "tsu-sta-fast", &val);
++		if (ret) {
++			dev_err(dev, "Error reading tsu-sta-fast from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST].tsu_sta = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "thd-dat-fast", &val);
++		if (ret) {
++			dev_err(dev, "Error reading thd-dat-fast from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST].thd_dat = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "thd-sta-fast", &val);
++		if (ret) {
++			dev_err(dev, "Error reading thd-sta-fast from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST].thd_sta = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "tbuf-fast", &val);
++		if (ret) {
++			dev_err(dev, "Error reading tbuf-fast from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST].tbuf = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "scl-stretch-en-fast", &val);
++		if (ret) {
++			dev_err(dev, "Error reading scl-stretch-en-fast from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST].scl_stretch_en = (u8)val;
++
++		ret = of_property_read_u32(dev->of_node, "trdhld-fast", &val);
++		if (ret) {
++			dev_err(dev, "Error reading trdhld-fast from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST].trdhld = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "tsp-fast", &val);
++		if (ret) {
++			dev_err(dev, "Error reading tsp-fast from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST].tsp = (u16)val;
++
++		/* FAST_PLUS mode params */
++		ret = of_property_read_u32(dev->of_node, "thigh-fast-plus", &val);
++		if (ret) {
++			dev_err(dev, "Error reading thigh-fast-plus from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST_PLUS].thigh = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "tlow-fast-plus", &val);
++		if (ret) {
++			dev_err(dev, "Error reading tlow-fast-plus from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST_PLUS].tlow = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "tsu-sto-fast-plus", &val);
++		if (ret) {
++			dev_err(dev, "Error reading tsu-sto-fast-plus from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST_PLUS].tsu_sto = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "tsu-sta-fast-plus", &val);
++		if (ret) {
++			dev_err(dev, "Error reading tsu-sta-fast-plus from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST_PLUS].tsu_sta = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "thd-dat-fast-plus", &val);
++		if (ret) {
++			dev_err(dev, "Error reading thd-dat-fast-plus from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST_PLUS].thd_dat = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "thd-sta-fast-plus", &val);
++		if (ret) {
++			dev_err(dev, "Error reading thd-sta-fast-plus from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST_PLUS].thd_sta = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "tbuf-fast-plus", &val);
++		if (ret) {
++			dev_err(dev, "Error reading tbuf-fast-plus from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST_PLUS].tbuf = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "scl-stretch-en-fast-plus", &val);
++		if (ret) {
++			dev_err(dev, "Error reading scl-stretch-en-fast-plus from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST_PLUS].scl_stretch_en = (u8)val;
++
++		ret = of_property_read_u32(dev->of_node, "trdhld-fast-plus", &val);
++		if (ret) {
++			dev_err(dev, "Error reading trdhld-fast-plus from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST_PLUS].trdhld = (u16)val;
++
++		ret = of_property_read_u32(dev->of_node, "tsp-fast-plus", &val);
++		if (ret) {
++			dev_err(dev, "Error reading tsp-fast-plus from DT, ret = %d", ret);
++			return ret;
++		}
++		dt_data->params[I2C_MODE_FAST_PLUS].tsp = (u16)val;
++
++		/* Let's ship it! */
++		cci->data = dt_data;
++	}
++
+ 	for_each_available_child_of_node(dev->of_node, child) {
+ 		u32 idx;
+ 
+@@ -818,6 +1089,9 @@ static const struct cci_data cci_msm8994_data = {
+ };
+ 
+ static const struct of_device_id cci_dt_match[] = {
++	{ .compatible = "qcom,cci", .data = &cci_dt_data },
++
++	/* Legacy compatibles for older DTs */
+ 	{ .compatible = "qcom,msm8916-cci", .data = &cci_v1_data},
+ 	{ .compatible = "qcom,msm8994-cci", .data = &cci_msm8994_data},
+ 	{ .compatible = "qcom,msm8996-cci", .data = &cci_v2_data},
+-- 
+2.35.1
 
