@@ -2,58 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2BE4E1AE0
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Mar 2022 10:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F50B4E1AEC
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Mar 2022 10:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243227AbiCTJf7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 20 Mar 2022 05:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
+        id S239894AbiCTJnh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 20 Mar 2022 05:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241129AbiCTJf7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 20 Mar 2022 05:35:59 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31BA985AC;
-        Sun, 20 Mar 2022 02:34:35 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id a127so4713421vsa.3;
-        Sun, 20 Mar 2022 02:34:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=k96JhXl3WCD4rA/nH5gA5Te+rz3QsUmRsaPBqcMVBro=;
-        b=L5nbzkpvlCIIjhR5U72pm4Gf81AS26MXKr4gBtTeHv72wOkdrrqBi7uM58y4kWqE2L
-         NaQTufKL8JYCwSb4AeDQ4RqSyNuuX2v/qfnVwIUi0KYhT+p0hdNzxYi/m4J+Xh83hhLz
-         AY4oyZGSXslc4Xz2AkcKYSm/ovuDMGELJSCRXC4hU+Lwuk7QrBJfaWkF90Rfar98xHP8
-         ZI7tD0cG+tmRHQuvhxHZxxWjx4/XrWJ1LHWRurhPjIkbOriLkGgjbfIArw6cP9IMLLEp
-         00RTqk0BzNTdgi346D6z5BybWhzbapieP6zbFuXLJ4soZsSE9yOaCSPCaFK83VUn568C
-         BZYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=k96JhXl3WCD4rA/nH5gA5Te+rz3QsUmRsaPBqcMVBro=;
-        b=WFXpUwqDRo3DCsMBqsBAFBa+BcXaLBPDNX3lVNmrX+iZ4osOi2wVOXZPEW/kjt6phz
-         glo82aDVqJbbzF+NZBHMt2sKHvSoXYCkUuL6h8AXaDNhPlMyWuXQLBCIO75ScIg7id6G
-         Ls4Xv2lddrU/eoh2xKDGc9kuTd3qXyFraOju9mJNQB5NcFwH+n7x9Ly0IrjVpEx9NMdl
-         b09smpgPtvjs0+zpKOOpCQa8vAYd6J/jjt2okLODM+nuWiv/1om771VC8iaELEYHQx1A
-         SzCKbexFSbSxeqGfMXKoNh8J+hMPpBtgoMtC89II5tWnKKVqe9aZTrokPFBqdOxMGwx2
-         bdfg==
-X-Gm-Message-State: AOAM53335ECwzJSAs9M/TqXpREKnmGovgSlnAUgaiJASIHuCI80D/ysR
-        Lcy4h0mfCQKDdXsh98siw9HsBi0dLbm47yS9sA==
-X-Google-Smtp-Source: ABdhPJxz/+otTMk11U8KJ5mGaJRfVbBxkf9afGF7WtFFI5Z9nzL4Z6guq/Xh6KBFSKcN/wtr1W2v2eCd6vYHLnmNABY=
-X-Received: by 2002:a67:f353:0:b0:324:fc5f:5261 with SMTP id
- p19-20020a67f353000000b00324fc5f5261mr1031275vsm.47.1647768874683; Sun, 20
- Mar 2022 02:34:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220303083141.8742-1-warp5tw@gmail.com> <20220303083141.8742-2-warp5tw@gmail.com>
- <YjTrgia/VX6rBT1r@shikoro>
-In-Reply-To: <YjTrgia/VX6rBT1r@shikoro>
-From:   Tyrone Ting <warp5tw@gmail.com>
-Date:   Sun, 20 Mar 2022 17:34:24 +0800
-Message-ID: <CACD3sJarf9jBny8ru0YihehT4C6k1pqw9Ln+5a+Rs6_F_o6=AQ@mail.gmail.com>
-Subject: Re: [PATCH v3 01/11] arm: dts: add new property for NPCM i2c module
-To:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <warp5tw@gmail.com>,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        with ESMTP id S239506AbiCTJng (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 20 Mar 2022 05:43:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F7749F84;
+        Sun, 20 Mar 2022 02:42:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5762B80DB3;
+        Sun, 20 Mar 2022 09:42:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BA43C340E9;
+        Sun, 20 Mar 2022 09:42:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647769331;
+        bh=m+CrXHcs1IMz031io+qrVwSLHQcIkDc2WgYRBJMoU5I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SJCZbu5FTyVw0taTsBz0vOAiE+XN0VdhH5f9jqSD6hhSETTg2crd9GcDC3tMqcq9O
+         crMsDdveov+dpqa5KsNJLxCkdzYtdp7u/knUnkWSQB5/SH5br4ZXr6A8qXBPIzV+tO
+         KWUXxmCuYOH1l1sRamcEmt9hNAeKvyKJxwDVxNN6NsUuJA0L8eBaJbsn7La85DMoyO
+         0Db5sSXyhbZImY+adn7DqnDhUscYF7vfYJpaJHXaM5juFox+JK+HtfpxPNJnv0x6HD
+         Z4VxOnPUYP3u3qSTQjlmiMBVwAk8ELMWyGsHzaTSSLDQx4PDHN9T2t17D9qLCdUYr4
+         2HSZAlJoKtZGw==
+Date:   Sun, 20 Mar 2022 10:42:05 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Tyrone Ting <warp5tw@gmail.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
         robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
         yangyicong@hisilicon.com, semen.protsenko@linaro.org,
@@ -64,46 +45,82 @@ To:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <warp5tw@gmail.com>,
         KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
         openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 01/11] arm: dts: add new property for NPCM i2c module
+Message-ID: <Yjb27Qbl8VRFZTkm@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski@canonical.com, yangyicong@hisilicon.com,
+        semen.protsenko@linaro.org, jie.deng@intel.com, sven@svenpeter.dev,
+        bence98@sch.bme.hu, lukas.bulwahn@gmail.com, arnd@arndb.de,
+        olof@lixom.net, andriy.shevchenko@linux.intel.com,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220303083141.8742-1-warp5tw@gmail.com>
+ <20220303083141.8742-2-warp5tw@gmail.com>
+ <YjTrgia/VX6rBT1r@shikoro>
+ <CACD3sJarf9jBny8ru0YihehT4C6k1pqw9Ln+5a+Rs6_F_o6=AQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zy3zYHWxJ9cmIO3t"
+Content-Disposition: inline
+In-Reply-To: <CACD3sJarf9jBny8ru0YihehT4C6k1pqw9Ln+5a+Rs6_F_o6=AQ@mail.gmail.com>
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram:
 
-Thank you for your reminder and suggestion.
+--zy3zYHWxJ9cmIO3t
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-There are still some discussions for the patch V4 and it might take
-some time though.
+Hi Tyrone,
 
-Yes, the dts patch could be submitted via arm-soc.
+> There are still some discussions for the patch V4 and it might take
+> some time though.
 
-I really appreciate your comments.
+Take your time, I am not in a hurry. Just wanted to outline the best
+process so it will be easier to apply the new version.
 
-Wolfram Sang <wsa@kernel.org> =E6=96=BC 2022=E5=B9=B43=E6=9C=8819=E6=97=A5 =
-=E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=884:29=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Thu, Mar 03, 2022 at 04:31:31PM +0800, Tyrone Ting wrote:
-> > From: Tyrone Ting <kfting@nuvoton.com>
-> >
-> > Add nuvoton,sys-mgr property for controlling NPCM gcr register.
-> >
-> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-> > Signed-off-by: Tali Perry <tali.perry1@gmail.com>
->
-> There are some comments about this series, so I am expecting a v4
-> somewhen. However, I already want to state that I usually don't take DTS
-> patches. So, I guess the path forward is that Rob needs to ack the patch
-> which is now patch 2. Once he does this and I apply it, you can take this
-> DTS patch via arm-soc. Sounds good?
->
+> Yes, the dts patch could be submitted via arm-soc.
 
-Regards,
-Tyrone
+Great.
+
+> I really appreciate your comments.
+
+Thank you and happy hacking,
+
+   Wolfram
+
+
+--zy3zYHWxJ9cmIO3t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmI29u0ACgkQFA3kzBSg
+KbYWaQ/+OmWLzRVx0uITX7+yRTH8JlxcvGXr/kxT3kHYYKURJbJQLUDXrLgAasbq
+Yaf+7x9LECjsNF2zpr6ndF/pxvClrDmVdH7MMjjXrpMVgcFFQiJFufMkDDURtT+w
+ed7maEfDwwk1gjnrgZfmIKONhnrw0PwOxu+W+5N+gT7cX/i6/cmm4k9OMV18VJLs
+hMhz/DXuYFwqj/NKrDbQSqeRp9hPmNWXMWHWBaJARZOL6rB7/uLwM2JvJOJl/1gS
+X5upnQGJIBQs9LQ8TKFZqBHLb6HUBi4YE/EKGfVsAmJh48TdaIe4ava7X1ec41wc
+MBKW64Q5Hqmh85pSZLwTqkbhS/4xFIDUClPuV3ED8RzOdVWD9EMc3ubXrxYppEU1
+dTsp76kgMJjVoa17zizzMx2dvvceuonI0QPZvltb/qoWWeGrPt6HS5Lr+GzMtQ+e
+6tuIcmCxQnbIPVNvsXAO+ISzw4g07AEJTHD7azy3PMVRoo6YBajHiwWbRC9Q6+Iw
+H1BYlsOIvrVrYyydfN1gnxycbnwGDVu3ZVy+CCwIAeU4QLzHW+HobLHQg+U76wOr
+sz/KN/t+7XzP3bHUiLI9DjBP/PLxs5A2fJqNMZi8MiOH6WGAFPOJ+cP4GRN5F4Hk
+1xyPmSk+WQHr33vieTjYoG3hIAuMvJQPvbyyVAsl8rT0o/3/Ic4=
+=7k8X
+-----END PGP SIGNATURE-----
+
+--zy3zYHWxJ9cmIO3t--
