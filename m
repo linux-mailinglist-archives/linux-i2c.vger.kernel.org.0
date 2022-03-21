@@ -2,56 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F79F4E2E39
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Mar 2022 17:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 857994E2ED1
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Mar 2022 18:09:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243578AbiCUQlj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Mar 2022 12:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
+        id S1351621AbiCURIu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Mar 2022 13:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237331AbiCUQlj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Mar 2022 12:41:39 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8136A5F259;
-        Mon, 21 Mar 2022 09:40:12 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id d10so30974435eje.10;
-        Mon, 21 Mar 2022 09:40:12 -0700 (PDT)
+        with ESMTP id S1349584AbiCURIt (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Mar 2022 13:08:49 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29ABAF1F1;
+        Mon, 21 Mar 2022 10:07:23 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a8so31169621ejc.8;
+        Mon, 21 Mar 2022 10:07:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EJtLOy1z9qbTwrw3Odhnv9M+mtBkKVnNxZm6T651y2Q=;
-        b=JVDIFxZhuOHeEVexVd7T/hSG4JJGfSXpKlQR/ylBx3yWAjVJYEfPItWO8ljpF3SXyK
-         kxElOTx1KaFQuoERVOWLkF4AIAGfY2CqpmWMz82BdUET9PVmL2RlKqkCv+zRIe2EryPA
-         tjnTmY9UUibI1pF/rlunvzkCvkgRbAVnnRb13kguTQnkdlT4i7F9G0ND9/kYYbyeqz/L
-         vXctdMmUYxXFocGHomYINVhoQEUcNt7WvGjR1lhEnXabSL2ct4ttKaBXiSbP/1KhqEmd
-         F0lJTOmz1BZeJuRd/MHvUxJfkkxt8nKXEtPXNLJxrcd34Yyj/tCqf0qgPcxYzgqz0Vqo
-         kS7Q==
+         :cc:content-transfer-encoding;
+        bh=nNbNlGuXV6X4fWF2qLDMdJsQMzIxqfeeRH+sUuCiCXQ=;
+        b=db9Mw7BqATvzLY1U2pGCP7VeG2dUUK3OxrlF/KdZGWer11Uc7abtZMQ2dHoWY0qtEV
+         BENMVa4hEQxaHRJYvYuhFrogLje5nOt7i1KZhMRbW7HIIuJHIb2YqCT6uGtTWd7qDq9d
+         NhymuRw43M7tzX4C39venxpI3bHQEkM9nKhYKYRzBBsDXYVOTPXQmcUTXG6HHzHwz0ku
+         MH80Pk/ulwEpF7kCClk/Iqkji3iRjNV0Ld3jfuGtM1uIWuu5vKtxsv0V3704ujRD74ru
+         SAypy3Ae861RvOsQn/QEjkOxaF7q9HcXx0juWk0M33LJMpap7VyxBn1C4oKmBmnQekuS
+         444Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EJtLOy1z9qbTwrw3Odhnv9M+mtBkKVnNxZm6T651y2Q=;
-        b=LjldzHyIthHOCwxyMHwb83wD/uCCkifxkUYd5Fxv8QneLLP12HtOs2V97NPA7kBBmZ
-         kkukIoMwgPAntXf3TfUHrlQo3Pw2AVsShSQXMnzBvTP/kQy5ZaHnPbI28H/IXvpRGbay
-         EAeVM/3JXK6HOKsNdTz2G/UMmyMTgg/tUkPAmJTKI8hxZZ+/3SfH/CdxvoKqoJVnKP3p
-         4mF8bgFkSuHag/JWGBWK7StTJ5WGZ5ODf9w3r3Cz7bFB1x6mr6a2vAfIUuaaJNS6hDi6
-         H/0SWF5AZjhOf0bRlueGXG4z+aCMcGmOmTOdxXiXSaU1/W5xFti3XYn36aA/3t0nBZIv
-         cdPg==
-X-Gm-Message-State: AOAM533i4638Lp1opecOyKXqYOfjHVYNOMn11EWfNxtA1bGR6IM436LA
-        Op7etaNevAwKfH2WURgWkL2WMKpXjXZZVN6bSD8=
-X-Google-Smtp-Source: ABdhPJx0/vREgiXqKTqUQ4+7St5r1LVPAwbRsGJP8mIxaSQcjKrEYSltuiOJGLsg2j99Lus5dg+jzHabi5US69p6aVg=
-X-Received: by 2002:a17:906:4cc7:b0:6d0:7efb:49f with SMTP id
- q7-20020a1709064cc700b006d07efb049fmr21578550ejt.639.1647880811015; Mon, 21
- Mar 2022 09:40:11 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nNbNlGuXV6X4fWF2qLDMdJsQMzIxqfeeRH+sUuCiCXQ=;
+        b=cMlIgll78cQB8MGQ4Yz6uAAXYVC2dWxd2dteEFQGA2SYv7Bns6j5wyAW8FAtlaXeMq
+         LmCK6aJarxbbdozCxta4mwOi0RAa4gMIJvFNvxFsUL/UjrpCaRJ0o/BTczJI9NqeDW3J
+         DF/YjcoXDYuomAPbDtRx+tWAIdwBdcfOCiM0ygdZ8FV50a6D98Pae9NDpo25tz2J3ikz
+         uey13EjGpNgzBpq7B1RDd3MP6fkRu5YlsBBGkzxaKJELrm3abeY9lN3ngeAJf/MghYo6
+         JAA1E0Zi9ZtI5TcNbDnlSF8PCzyZjnA99fp4OQJNPL6MU+Jc6LdOaoQOVN5mFbJtsS6r
+         RWrg==
+X-Gm-Message-State: AOAM530eTwVeNytBXGzQXk2Myuovz7iEZnOJuA+Ph2LCVmuib76IRk2b
+        lmwnG8iNARQN/mzwdkkgNMj1g4h9jQIkyum/F3Q=
+X-Google-Smtp-Source: ABdhPJz3+5NZZMx6LfOczVDWh8iPK8wiFLRlrTjLaXEGAzbTMpJ0HoYaMDtbC7h4sMTpGeMQo3gxiUfgSLQ9LdtTCqk=
+X-Received: by 2002:a17:907:7289:b0:6df:9746:e7c4 with SMTP id
+ dt9-20020a170907728900b006df9746e7c4mr20246985ejc.497.1647882442198; Mon, 21
+ Mar 2022 10:07:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220321042142.69239-1-frank@zago.net> <20220321042142.69239-2-frank@zago.net>
-In-Reply-To: <20220321042142.69239-2-frank@zago.net>
+References: <20220321042142.69239-1-frank@zago.net> <20220321042142.69239-3-frank@zago.net>
+In-Reply-To: <20220321042142.69239-3-frank@zago.net>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 21 Mar 2022 18:39:00 +0200
-Message-ID: <CAHp75VcyNDNfYyUvSk4kToLiLCVDWo5-Rz_1_fRtR7i8ZjGr7g@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] mfd: ch341: add core driver for the WCH CH341 in
- I2C/GPIO mode
+Date:   Mon, 21 Mar 2022 19:06:10 +0200
+Message-ID: <CAHp75VdfEheEPWBDb+3FUwmwGx_4NR8o+SMwTwjgPr7oGGM5-A@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] gpio: ch341: add MFD cell driver for the CH341
 To:     frank zago <frank@zago.net>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -63,6 +62,7 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         linux-i2c <linux-i2c@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -73,150 +73,329 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 11:17 AM frank zago <frank@zago.net> wrote:
+On Mon, Mar 21, 2022 at 4:13 PM frank zago <frank@zago.net> wrote:
 >
-> The CH341 is a multifunction chip, presenting 3 different USB PID. One
-> of these functions is for I2C/SPI/GPIO. This new set of drivers will
-> manage I2C and GPIO.
+> The GPIO interface offers 16 GPIOs. 6 are read/write, and 10 are
+> read-only.
+
+We use terminology of output-only and input-only. Is it what you are
+telling us? If it's something else, you have to elaborate much better
+on what's going on with these GPIO lines.
 
 ...
 
-> +The driver doesn't support detection of I2C device present on the
+> +config GPIO_CH341
+> +       tristate "CH341 USB adapter in GPIO/I2C/SPI mode"
 
-devices
+How is this driver related to either SPI or I=C2=B2C modes?
 
-> +bus. Apparently when a device is not present at a given address, the
-> +CH341 will return an extra byte of data, but the driver doesn't
-> +support that. This may be addressed in the future.
+> +       depends on MFD_CH341
 
-...
+Can't be compile tested?
 
->     spear-pcie-gadget
->     uacce
->     xilinx_sdfec
-> +   ch341
-
-Seems you broke the order.
-
-...
-
-> +config MFD_CH341
-
-> +       tristate "WinChipHead CH341 in I2C/SPI/GPIO mode"
-
-(1)
-
-> +       depends on USB
 > +       help
-> +         If you say yes to this option, support for the CH341 series
-> +         of chips, running in I2C/SPI/GPIO mode will be included.
-
-"chips running" (no comma needed)
-
-> +         The chip's SPI mode is not supported.
-
-Maybe no need to include SPI in the (1) along with dropping this line?
-
-> +         This driver can also be built as a module.  If so, the
-> +         module will be called ch341-core.
+> +         If you say yes to this option, GPIO support will be included fo=
+r the
+> +         WCH CH341, a USB to I2C/SPI/GPIO interface.
+> +
+> +         This driver can also be built as a module.  If so, the module
+> +         will be called gpio-ch341.
 
 ...
+
+> +/* Notes.
+
+Keep the proper (not network) style for multi-line comments.
+
 
 > +#include <linux/kernel.h>
 > +#include <linux/module.h>
-> +#include <linux/slab.h>
-
-(2)
-
+> +#include <linux/platform_device.h>
 > +#include <linux/mfd/core.h>
+> +#include <linux/gpio.h>
 
-> +
 > +#include <linux/mfd/ch341.h>
 
-Moving these two to (2) ?
+If I got your intention with groups of headers, I would see rather
+
+...ordered headers...
+blank line
+#include <linux/gpio.h>
+
+But more importantly that gpio.h is the wrong header and must be
+replaced with the appropriate one from the include/gpio/ folder.
+
+Also you have missed headers, like types.h.
 
 ...
 
-> +       dev = kzalloc(sizeof(*dev), GFP_KERNEL);
+> +#define CH341_PARA_CMD_STS          0xA0  /* Get pins status */
+> +#define CH341_CMD_UIO_STREAM        0xAB  /* UIO stream command */
+> +
+> +#define CH341_CMD_UIO_STM_OUT       0x80  /* UIO interface OUT command (=
+D0~D5) */
+> +#define CH341_CMD_UIO_STM_DIR       0x40  /* UIO interface DIR command (=
+D0~D5) */
+> +#define CH341_CMD_UIO_STM_END       0x20  /* UIO interface END command *=
+/
 
-devm_kzalloc() ?
+What does UIO mean here? If it is Userspace I/O in terms of Linux
+kernel, it's no-go we want this. Otherwise needs to be explained
+somewhere.
 
-> +       if (!dev)
+...
+
+> +struct ch341_gpio {
+> +       struct gpio_chip gpio;
+> +       struct mutex gpio_lock;
+> +       u16 gpio_dir;           /* 1 bit per pin, 0=3DIN, 1=3DOUT. */
+> +       u16 gpio_last_read;     /* last GPIO values read */
+> +       u16 gpio_last_written;  /* last GPIO values written */
+> +       u8 gpio_buf[SEG_SIZE];
+> +
+> +       struct {
+> +               char name[32];
+> +               bool enabled;
+> +               struct irq_chip irq;
+> +               int num;
+> +               struct urb *urb;
+> +               struct usb_anchor urb_out;
+> +               u8 buf[CH341_USB_MAX_INTR_SIZE];
+> +       } gpio_irq;
+
+We have a specific GPIO IRQ chip structure, what is the purpose of
+semi-duplication of it?
+
+> +
+> +       struct ch341_device *ch341;
+> +};
+
+...
+
+> +static void ch341_gpio_dbg_show(struct seq_file *s, struct gpio_chip *ch=
+ip)
+> +{
+> +       struct ch341_gpio *dev =3D gpiochip_get_data(chip);
+> +
+> +       seq_printf(s, "pin config  : %04x  (0=3DIN, 1=3DOUT)\n", dev->gpi=
+o_dir);
+> +       seq_printf(s, "last read   : %04x\n", dev->gpio_last_read);
+> +       seq_printf(s, "last written: %04x\n", dev->gpio_last_written);
+
+Multi-line debug output is quite non-standard among GPIO drivers.
+
+> +}
+
+> +{
+> +       struct ch341_device *ch341 =3D dev->ch341;
+> +       int actual;
+> +       int rc;
+> +
+> +       mutex_lock(&ch341->usb_lock);
+> +
+> +       rc =3D usb_bulk_msg(ch341->usb_dev,
+> +                         usb_sndbulkpipe(ch341->usb_dev, ch341->ep_out),
+> +                         dev->gpio_buf, out_len,
+> +                         &actual, DEFAULT_TIMEOUT);
+
+> +       if (rc < 0)
+> +               goto done;
+> +
+> +       if (in_len =3D=3D 0) {
+> +               rc =3D actual;
+> +               goto done;
+> +       }
+
+You may do it better. See below.
+
+> +       rc =3D usb_bulk_msg(ch341->usb_dev,
+> +                         usb_rcvbulkpipe(ch341->usb_dev, ch341->ep_in),
+> +                         dev->gpio_buf, SEG_SIZE, &actual, DEFAULT_TIMEO=
+UT);
+> +
+> +       if (rc =3D=3D 0)
+> +               rc =3D actual;
+
+> +done:
+
+out_unlock: sounds better.
+
+> +       mutex_unlock(&ch341->usb_lock);
+
+> +       return rc;
+
+if (rc < 0)
+  return rc;
+
+return actual;
+
+> +}
+
+...
+
+> +       int result;
+
+rc / result / etc... Please, become consistent in naming the return
+code variable.
+
+...
+
+> +       if (result =3D=3D 6)
+> +               dev->gpio_last_read =3D le16_to_cpu(*(__le16 *)dev->gpio_=
+buf);
+
+So, it means you have the wrong type of gpio_but. Also you missed the
+pointer versions of leXX_to_cpu() helpers.
+
+...
+
+> +       return (result !=3D 6) ? result : 0;
+
+Besides redundant parentheses, this can be optimized. I will leave it
+for your homework (the hint is given at the top part of the review).
+
+...
+
+> +       return (dev->gpio_last_read & BIT(offset)) ? 1 : 0;
+
+!! can be used. But it's up to you and maintainers, the compiler will
+do its job anyway.
+
+...
+
+> +       dev->gpio_last_written &=3D ~*mask;
+> +       dev->gpio_last_written |=3D (*bits & *mask);
+
+Can be done in one line as it's a well established pattern in Linux
+kernel for drivers.
+
+...
+
+> +       return (dev->gpio_dir & BIT(offset)) ? 0 : 1;
+
+! will do the job.
+
+...
+
+> +       if (!(pin_can_output & mask))
+> +               return -EINVAL;
+
+I don't remember if we have a valid mask for this case.
+
+...
+
+> +       if (!urb->status) {
+
+Will be much better to simply do:
+
+if (urb_status) {
+ ...
+ return;
+}
+
+> +       } else {
+> +               usb_unanchor_urb(dev->gpio_irq.urb);
+> +       }
+
+...
+
+> +       if (data->irq !=3D dev->gpio_irq.num || type !=3D IRQ_TYPE_EDGE_R=
+ISING)
+> +               return -EINVAL;
+
+Usually we lock the handler type here while in ->probe() we assign a
+bad handler by default in order to filter out spurious interrupts.
+
+...
+
+> +       dev->gpio_irq.enabled =3D true;
+
+What is the purpose of this flag? Note there is a patch to add a
+specific flag to the descriptor to do exactly this.
+
+...
+
+> +/* Convert the GPIO index to the IRQ number */
+> +static int ch341_gpio_to_irq(struct gpio_chip *chip, unsigned int offset=
+)
+> +{
+> +       struct ch341_gpio *dev =3D gpiochip_get_data(chip);
+> +
+> +       if (offset !=3D CH341_GPIO_INT_LINE)
+> +               return -ENXIO;
+> +
+> +       return dev->gpio_irq.num;
+
+In the new code we will have the special field that limits the GPIO
+IRQ lines (can be different to the ngpio).
+
+> +}
+
+...
+
+> +       snprintf(dev->gpio_irq.name, sizeof(dev->gpio_irq.name),
+> +                "ch341-%s-gpio", dev_name(&ch341->usb_dev->dev));
+
+> +       dev->gpio_irq.name[sizeof(dev->gpio_irq.name) - 1] =3D 0;
+
+This is redundant. Have you read the manual page on snprintf()?
+
+...
+
+> +       rc =3D devm_irq_alloc_desc(&pdev->dev, 0);
+> +       if (rc < 0) {
+
+> +               dev_err(&pdev->dev, "Cannot allocate an IRQ desc");
+> +               return rc;
+
+return dev_err_probe();
+
+> +       }
+> +
+> +       dev->gpio_irq.num =3D rc;
+> +       dev->gpio_irq.enabled =3D false;
+> +
+> +       irq_set_chip_data(dev->gpio_irq.num, dev);
+> +       irq_set_chip_and_handler(dev->gpio_irq.num, &dev->gpio_irq.irq,
+> +                                handle_simple_irq);
+
+Oh l=C3=A0 l=C3=A0. Can you use the latest and greatest approach of
+instantiating the GPIO IRQ chip?
+
+...
+
+> +               dev_err(&pdev->dev, "Cannot allocate the int URB");
 > +               return -ENOMEM;
 
+return dev_err_probe();
+
 ...
 
-> +       rc = mfd_add_hotplug_devices(&iface->dev, ch341_devs,
-> +                                    ARRAY_SIZE(ch341_devs));
+> +       rc =3D gpiochip_add_data(gpio, dev);
+
+Why not devm?
 
 > +       if (rc) {
+> +               dev_err(&pdev->dev, "Could not add GPIO\n");
+> +               goto release_urb;
 
-> +               dev_err(&iface->dev, "Failed to add mfd devices to core.");
-> +               goto free_dev;
-
-return dev_err_probe(...); ?
+return dev_err_probe();
 
 > +       }
 
 ...
 
-> +       usb_set_intfdata(dev->iface, NULL);
-
-This has been done by device driver core  for the past 10+ years.
-
-...
-
-> +static const struct usb_device_id ch341_usb_table[] = {
-> +       { USB_DEVICE(0x1a86, 0x5512) },
-> +       { }
+> +static struct platform_driver ch341_gpio_driver =3D {
+> +       .driver.name    =3D "ch341-gpio",
+> +       .probe          =3D ch341_gpio_probe,
+> +       .remove         =3D ch341_gpio_remove,
 > +};
-
 > +
 
 Redundant blank line.
 
-> +MODULE_DEVICE_TABLE(usb, ch341_usb_table);
-> +
-> +static struct usb_driver ch341_usb_driver = {
-> +       .name       = "ch341-mfd",
-> +       .id_table   = ch341_usb_table,
-> +       .probe      = ch341_usb_probe,
+> +module_platform_driver(ch341_gpio_driver);
 
-> +       .disconnect = ch341_usb_disconnect
-
-Keep a comma to avoid unneeded churn in the future.
-
-> +};
-
-> +
-
-Redundant blank line.
-
-> +module_usb_driver(ch341_usb_driver);
-
-
-> +/*
-> + * Definitions for CH341 MFD driver
-> + */
-
-One line?
-
-...
-
-> +#include <linux/usb.h>
-
-No users of this header. Use forward declarations.
-
-> +#include <linux/mutex.h>
-
-Missed types.h.
-
-...
-
-> +#define DEFAULT_TIMEOUT 1000   /* 1s USB requests timeout */
-
-Use proper suffix, i.e. _MS.
-
--- 
+--=20
 With Best Regards,
 Andy Shevchenko
