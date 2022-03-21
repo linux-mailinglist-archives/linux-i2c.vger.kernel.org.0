@@ -2,454 +2,186 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA2D4E1F8B
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Mar 2022 05:31:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C14714E2144
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Mar 2022 08:24:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344336AbiCUEce (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Mar 2022 00:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44770 "EHLO
+        id S1344871AbiCUHZM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Mar 2022 03:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244179AbiCUEcb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Mar 2022 00:32:31 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B256530F47;
-        Sun, 20 Mar 2022 21:31:02 -0700 (PDT)
-Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id C84DEC974C;
-        Mon, 21 Mar 2022 04:22:06 +0000 (UTC)
-Received: (Authenticated sender: frank@zago.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7EC2440005;
-        Mon, 21 Mar 2022 04:21:56 +0000 (UTC)
-From:   frank zago <frank@zago.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
-        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        with ESMTP id S1344856AbiCUHZE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Mar 2022 03:25:04 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83DA19296
+        for <linux-i2c@vger.kernel.org>; Mon, 21 Mar 2022 00:23:37 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nWCND-0006et-Tt; Mon, 21 Mar 2022 08:22:39 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nWCMp-0021t4-Og; Mon, 21 Mar 2022 08:22:16 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nWCMp-00AcZn-OA; Mon, 21 Mar 2022 08:22:15 +0100
+Date:   Mon, 21 Mar 2022 08:22:15 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        frank zago <frank@zago.net>
-Subject: [PATCH v4 3/3] i2c: ch341: add MFD cell driver CH341 for I2C
-Date:   Sun, 20 Mar 2022 23:21:42 -0500
-Message-Id: <20220321042142.69239-4-frank@zago.net>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220321042142.69239-1-frank@zago.net>
-References: <20220321042142.69239-1-frank@zago.net>
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Tomislav Denis <tomislav.denis@avl.com>,
+        =?utf-8?B?QW5kcsOp?= Gustavo Nakagomi Lopez <andregnl@usp.br>,
+        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-i2c@vger.kernel.org,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        linux-rtc@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-pwm@vger.kernel.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-iio@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Michal Simek <michal.simek@xilinx.com>, kernel@pengutronix.de,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Vladimir Zapolskiy <vz@mleia.com>, linux-gpio@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Fabio Estevam <festevam@gmail.com>,
+        Matt Mackall <mpm@selenic.com>,
+        linux-amlogic@lists.infradead.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        linux-hwmon@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        UNGLinuxDriver@microchip.com, Vinod Koul <vkoul@kernel.org>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        linux-crypto@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        dmaengine@vger.kernel.org,
+        Amireddy Mallikarjuna reddy 
+        <mallikarjunax.reddy@linux.intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>
+Subject: Re: [PATCH v8 02/16] clk: Provide new devm_clk helpers for prepared
+ and enabled clocks
+Message-ID: <20220321072215.5lffm7qtpvg5ofk4@pengutronix.de>
+References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
+ <20220314141643.22184-3-u.kleine-koenig@pengutronix.de>
+ <20220319182936.06d75742@jic23-huawei>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oterd73bfcoy35ck"
+Content-Disposition: inline
+In-Reply-To: <20220319182936.06d75742@jic23-huawei>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The I2C interface can run at 4 different speeds. This driver currently
-only offer 100MHz. Tested with a variety of I2C sensors, and the IIO
-subsystem.
 
-Signed-off-by: frank zago <frank@zago.net>
----
- MAINTAINERS                    |   1 +
- drivers/i2c/busses/Kconfig     |  10 +
- drivers/i2c/busses/Makefile    |   1 +
- drivers/i2c/busses/i2c-ch341.c | 325 +++++++++++++++++++++++++++++++++
- drivers/mfd/ch341-core.c       |   3 +
- 5 files changed, 340 insertions(+)
- create mode 100644 drivers/i2c/busses/i2c-ch341.c
+--oterd73bfcoy35ck
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fdff76a5d9b0..ba367013b463 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20850,6 +20850,7 @@ M:	Frank Zago <frank@zago.net>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
- F:	drivers/gpio/gpio-ch341.c
-+F:	drivers/i2c/busses/i2c-ch341.c
- F:	drivers/mfd/ch341-core.c
- F:	include/linux/mfd/ch341.h
- 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 8a6c6ee28556..987645220d20 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -1178,6 +1178,16 @@ config I2C_RCAR
- 
- comment "External I2C/SMBus adapter drivers"
- 
-+config I2C_CH341
-+	tristate "CH341 USB adapter in GPIO/I2C/SPI mode"
-+	depends on MFD_CH341
-+	help
-+	  If you say yes to this option, I2C support will be included for the
-+	  WCH CH341, a USB to I2C/SPI/GPIO interface.
-+
-+	  This driver can also be built as a module.  If so, the module
-+	  will be called i2c-ch341.
-+
- config I2C_DIOLAN_U2C
- 	tristate "Diolan U2C-12 USB adapter"
- 	depends on USB
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index 1d00dce77098..bca529c325b8 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -123,6 +123,7 @@ obj-$(CONFIG_I2C_XLP9XX)	+= i2c-xlp9xx.o
- obj-$(CONFIG_I2C_RCAR)		+= i2c-rcar.o
- 
- # External I2C/SMBus adapter drivers
-+obj-$(CONFIG_I2C_CH341)		+= i2c-ch341.o
- obj-$(CONFIG_I2C_DIOLAN_U2C)	+= i2c-diolan-u2c.o
- obj-$(CONFIG_I2C_DLN2)		+= i2c-dln2.o
- obj-$(CONFIG_I2C_CP2615) += i2c-cp2615.o
-diff --git a/drivers/i2c/busses/i2c-ch341.c b/drivers/i2c/busses/i2c-ch341.c
-new file mode 100644
-index 000000000000..f1fbc6e349fa
---- /dev/null
-+++ b/drivers/i2c/busses/i2c-ch341.c
-@@ -0,0 +1,325 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * I2C cell driver for the CH341A, CH341B and CH341T.
-+ *
-+ * Copyright 2022, Frank Zago
-+ * Copyright (c) 2016 Tse Lun Bien
-+ * Copyright (c) 2014 Marco Gittler
-+ * Copyright (C) 2006-2007 Till Harbaum (Till@Harbaum.org)
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/i2c.h>
-+#include <linux/platform_device.h>
-+
-+#include <linux/mfd/ch341.h>
-+
-+/* I2C bus speed. Speed selection is not implemented. */
-+#define CH341_I2C_20KHZ  0
-+#define CH341_I2C_100KHZ 1
-+#define CH341_I2C_400KHZ 2
-+#define CH341_I2C_750KHZ 3
-+
-+#define CH341_CMD_I2C_STREAM 0xAA
-+#define CH341_CMD_I2C_STM_END 0x00
-+
-+#define CH341_CMD_I2C_STM_STA 0x74
-+#define CH341_CMD_I2C_STM_STO 0x75
-+#define CH341_CMD_I2C_STM_OUT 0x80
-+#define CH341_CMD_I2C_STM_IN 0xC0
-+#define CH341_CMD_I2C_STM_SET 0x60
-+
-+/* The maximum request size is 4096 bytes, both for reading and
-+ * writing, split in up to 128 32-byte segments. The I2C stream must
-+ * start and stop in each 32-byte segment. Reading must also be split,
-+ * with up to 32-byte per segment.
-+ */
-+#define SEG_COUNT 128
-+
-+/* Limit the transfer size that can be written. 4KiB is the maximum
-+ * size of the whole buffer, but it must include all the command
-+ * delimiters. 3KiB sounds reasonable.
-+ */
-+#define MAX_RW_LENGTH 3072
-+
-+struct ch341_i2c {
-+	struct i2c_adapter adapter;
-+
-+	/* I2C request and response state */
-+	int idx_out;		/* current offset in buf */
-+	int out_seg;		/* current segment */
-+	u8 i2c_buf[SEG_COUNT * SEG_SIZE];
-+};
-+
-+/* Append a write command to the current request. A set of 32-byte
-+ * packets is filled. Each packet starts with STREAM and finishes with
-+ * END, and contains an OUT field, leaving up to 29 bytes of data. The
-+ * first packet must also include a START and the device address.
-+ */
-+static int append_write(struct ch341_i2c *dev, const struct i2c_msg *msg)
-+{
-+	bool start_done = false;
-+	u8 *out = dev->i2c_buf;
-+	int len;
-+	u8 *p;
-+
-+	len = msg->len;
-+	p = msg->buf;
-+
-+	while (len) {
-+		int to_write;
-+		int avail;
-+
-+		if (dev->idx_out % SEG_SIZE) {
-+			/* Finish current packet, and advance to the next one */
-+			out[dev->idx_out++] = CH341_CMD_I2C_STM_END;
-+			dev->out_seg++;
-+			dev->idx_out = dev->out_seg * SEG_SIZE;
-+
-+			if (dev->out_seg == SEG_COUNT)
-+				return -E2BIG;
-+		}
-+
-+		out[dev->idx_out++] = CH341_CMD_I2C_STREAM;
-+
-+		/* account for stream start and end */
-+		avail = SEG_SIZE - 3;
-+
-+		if (!start_done) {
-+			/* Each message has a start */
-+			out[dev->idx_out++] = CH341_CMD_I2C_STM_STA;
-+
-+			avail -= 2; /* room for STA and device address */
-+		}
-+
-+		to_write = min_t(int, len, avail);
-+
-+		if (!start_done) {
-+			out[dev->idx_out++] = CH341_CMD_I2C_STM_OUT | (to_write + 1);
-+			out[dev->idx_out++] = msg->addr << 1;
-+
-+			start_done = true;
-+		} else {
-+			out[dev->idx_out++] = CH341_CMD_I2C_STM_OUT | to_write;
-+		}
-+
-+		memcpy(&out[dev->idx_out], p, to_write);
-+		dev->idx_out += to_write;
-+		len -= to_write;
-+		p += to_write;
-+	}
-+
-+	return 0;
-+}
-+
-+/* Append a read command to the request. It usually follows a write
-+ * command. When that happens, the driver will attempt to concat the
-+ * read command into the same packet.  Each read command, of up to 32
-+ * bytes, must be written to a new packet. It is not possible to
-+ * concat them.
-+ */
-+static int append_read(struct ch341_i2c *dev, const struct i2c_msg *msg)
-+{
-+	bool start_done = false;
-+	u8 *out = dev->i2c_buf;
-+	int len;
-+
-+	len = msg->len;
-+
-+	while (len) {
-+		int to_read;
-+
-+		if (dev->idx_out % SEG_SIZE) {
-+			if (!start_done &&
-+			    (dev->idx_out % SEG_SIZE) <  (SEG_SIZE - 7)) {
-+				/* There's enough left for a read */
-+			} else {
-+				/* Finish current packet, and advance to the next one */
-+				out[dev->idx_out++] = CH341_CMD_I2C_STM_END;
-+				dev->out_seg++;
-+				dev->idx_out = dev->out_seg * SEG_SIZE;
-+
-+				if (dev->out_seg == SEG_COUNT)
-+					return -E2BIG;
-+
-+				out[dev->idx_out++] = CH341_CMD_I2C_STREAM;
-+			}
-+		} else {
-+			out[dev->idx_out++] = CH341_CMD_I2C_STREAM;
-+		}
-+
-+		if (!start_done) {
-+			/* Each message has a start */
-+			out[dev->idx_out++] = CH341_CMD_I2C_STM_STA;
-+			out[dev->idx_out++] = CH341_CMD_I2C_STM_OUT | 1;
-+			out[dev->idx_out++] = msg->addr << 1 | 1;
-+
-+			start_done = true;
-+		}
-+
-+		/* Apparently the last command must be an STM_IN to
-+		 * read the last byte. Without it, the adapter gets
-+		 * lost.
-+		 */
-+		to_read = min_t(int, len, 32);
-+		len -= to_read;
-+		if (len == 0) {
-+			if (to_read > 1)
-+				out[dev->idx_out++] = CH341_CMD_I2C_STM_IN | (to_read - 1);
-+			out[dev->idx_out++] = CH341_CMD_I2C_STM_IN;
-+		} else {
-+			out[dev->idx_out++] = CH341_CMD_I2C_STM_IN | to_read;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int ch341_i2c_xfer(struct i2c_adapter *adapter, struct i2c_msg *msgs, int num)
-+{
-+	struct ch341_i2c *dev = i2c_get_adapdata(adapter);
-+	struct ch341_device *ch341 = adapter->algo_data;
-+	u8 *out = dev->i2c_buf;
-+	int actual;
-+	int rc;
-+	int i;
-+
-+	/* Prepare the request */
-+	dev->idx_out = 0;
-+	dev->out_seg = 0;
-+
-+	for (i = 0; i != num; i++) {
-+		if (msgs[i].flags & I2C_M_RD)
-+			rc = append_read(dev, &msgs[i]);
-+		else
-+			rc = append_write(dev, &msgs[i]);
-+
-+		if (rc)
-+			return rc;
-+	}
-+
-+	/* Finish the last packet */
-+	if (SEG_SIZE - (dev->idx_out % SEG_SIZE) < 2) {
-+		out[dev->idx_out++] = CH341_CMD_I2C_STM_END;
-+
-+		dev->out_seg++;
-+		if (dev->out_seg == SEG_COUNT)
-+			return -E2BIG;
-+
-+		dev->idx_out = dev->out_seg * SEG_SIZE;
-+
-+		out[dev->idx_out++] = CH341_CMD_I2C_STREAM;
-+	}
-+
-+	out[dev->idx_out++] = CH341_CMD_I2C_STM_STO;
-+	out[dev->idx_out++] = CH341_CMD_I2C_STM_END;
-+
-+	dev_dbg(&adapter->dev, "bulk_out request with %d bytes\n",
-+		dev->idx_out);
-+
-+	mutex_lock(&ch341->usb_lock);
-+
-+	/* Issue the request */
-+	rc = usb_bulk_msg(ch341->usb_dev,
-+			      usb_sndbulkpipe(ch341->usb_dev, ch341->ep_out),
-+			      dev->i2c_buf, dev->idx_out, &actual, DEFAULT_TIMEOUT);
-+	if (rc < 0) {
-+		mutex_unlock(&ch341->usb_lock);
-+		return rc;
-+	}
-+
-+	for (i = 0; i != num; i++) {
-+		if (!(msgs[i].flags & I2C_M_RD))
-+			continue;
-+
-+		rc = usb_bulk_msg(ch341->usb_dev,
-+				      usb_rcvbulkpipe(ch341->usb_dev, ch341->ep_in),
-+				      dev->i2c_buf, msgs[i].len, &actual, DEFAULT_TIMEOUT);
-+
-+		if (rc) {
-+			mutex_unlock(&ch341->usb_lock);
-+			return rc;
-+		}
-+
-+		if (actual != msgs[i].len) {
-+			mutex_unlock(&ch341->usb_lock);
-+			return -EIO;
-+		}
-+
-+		memcpy(msgs[i].buf, dev->i2c_buf, actual);
-+	}
-+
-+	mutex_unlock(&ch341->usb_lock);
-+
-+	return num;
-+}
-+
-+static u32 ch341_i2c_func(struct i2c_adapter *adap)
-+{
-+	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
-+}
-+
-+static const struct i2c_algorithm ch341_i2c_algorithm = {
-+	.master_xfer = ch341_i2c_xfer,
-+	.functionality = ch341_i2c_func,
-+};
-+
-+static const struct i2c_adapter_quirks ch341_i2c_quirks = {
-+	.max_read_len = MAX_RW_LENGTH,
-+	.max_write_len = MAX_RW_LENGTH,
-+};
-+
-+static int ch341_i2c_probe(struct platform_device *pdev)
-+{
-+	struct ch341_device *ch341 = dev_get_drvdata(pdev->dev.parent);
-+	struct ch341_i2c *ch341_i2c;
-+	int actual;
-+	int rc;
-+
-+	ch341_i2c = devm_kzalloc(&pdev->dev, sizeof(*ch341_i2c), GFP_KERNEL);
-+	if (ch341_i2c == NULL)
-+		return -ENOMEM;
-+
-+	ch341_i2c->adapter.owner = THIS_MODULE;
-+	ch341_i2c->adapter.class = I2C_CLASS_HWMON;
-+	ch341_i2c->adapter.algo = &ch341_i2c_algorithm;
-+	ch341_i2c->adapter.algo_data = ch341;
-+	ch341_i2c->adapter.quirks = &ch341_i2c_quirks;
-+	ch341_i2c->adapter.dev.parent = &pdev->dev;
-+	snprintf(ch341_i2c->adapter.name, sizeof(ch341_i2c->adapter.name),
-+		 "CH341 I2C USB bus %03d device %03d",
-+		 ch341->usb_dev->bus->busnum, ch341->usb_dev->devnum);
-+
-+	i2c_set_adapdata(&ch341_i2c->adapter, ch341_i2c);
-+	platform_set_drvdata(pdev, ch341_i2c);
-+
-+	/* Set ch341 i2c speed */
-+	ch341_i2c->i2c_buf[0] = CH341_CMD_I2C_STREAM;
-+	ch341_i2c->i2c_buf[1] = CH341_CMD_I2C_STM_SET | CH341_I2C_100KHZ;
-+	ch341_i2c->i2c_buf[2] = CH341_CMD_I2C_STM_END;
-+	mutex_lock(&ch341->usb_lock);
-+	rc = usb_bulk_msg(ch341->usb_dev,
-+			      usb_sndbulkpipe(ch341->usb_dev, ch341->ep_out),
-+			      ch341_i2c->i2c_buf, 3, &actual, DEFAULT_TIMEOUT);
-+	mutex_unlock(&ch341->usb_lock);
-+	if (rc < 0) {
-+		dev_err(&pdev->dev, "Cannot set I2C speed\n");
-+		return rc;
-+	}
-+
-+	return devm_i2c_add_adapter(&pdev->dev, &ch341_i2c->adapter);
-+}
-+
-+static struct platform_driver ch341_i2c_driver = {
-+	.driver.name	= "ch341-i2c",
-+	.driver.owner	= THIS_MODULE,
-+	.probe		= ch341_i2c_probe,
-+};
-+
-+module_platform_driver(ch341_i2c_driver);
-+
-+MODULE_AUTHOR("Various");
-+MODULE_DESCRIPTION("CH341 USB to I2C");
-+MODULE_LICENSE("GPL v2");
-+MODULE_ALIAS("platform:ch341-i2c");
-diff --git a/drivers/mfd/ch341-core.c b/drivers/mfd/ch341-core.c
-index 85e0ae812098..400e44bd71ef 100644
---- a/drivers/mfd/ch341-core.c
-+++ b/drivers/mfd/ch341-core.c
-@@ -22,6 +22,9 @@ static const struct mfd_cell ch341_devs[] = {
- 	{
- 		.name = "ch341-gpio",
- 	},
-+	{
-+		.name = "ch341-i2c",
-+	},
- };
- 
- static int ch341_usb_probe(struct usb_interface *iface,
--- 
-2.32.0
+On Sat, Mar 19, 2022 at 06:29:36PM +0000, Jonathan Cameron wrote:
+> On Mon, 14 Mar 2022 15:16:29 +0100
+> Uwe Kleine-K=F6nig         <u.kleine-koenig@pengutronix.de> wrote:
+>=20
+> > When a driver keeps a clock prepared (or enabled) during the whole
+> > lifetime of the driver, these helpers allow to simplify the drivers.
+> >=20
+> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > Reviewed-by: Alexandru Ardelean <aardelean@deviqon.com>
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> One trivial thing below.
+>=20
+> > ---
+> >  drivers/clk/clk-devres.c | 31 ++++++++++++++
+> >  include/linux/clk.h      | 90 +++++++++++++++++++++++++++++++++++++++-
+> >  2 files changed, 120 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/clk/clk-devres.c b/drivers/clk/clk-devres.c
+> > index fb7761888b30..4707fe718f0b 100644
+> > --- a/drivers/clk/clk-devres.c
+> > +++ b/drivers/clk/clk-devres.c
+> > @@ -67,12 +67,43 @@ struct clk *devm_clk_get(struct device *dev, const =
+char *id)
+> >  }
+> >  EXPORT_SYMBOL(devm_clk_get);
+> > =20
+> > +struct clk *devm_clk_get_prepared(struct device *dev, const char *id)
+> > +{
+> > +	return __devm_clk_get(dev, id, clk_get, clk_prepare, clk_unprepare);
+>=20
+> Nitpick but this spacing before } in functions is rather unusual and not
+> in keeping with the existing code in this file.
+>=20
+> > +
+> > +}
 
+ack, I fixed that in my tree, so this will be part of an v9. I won't
+send it just for this change, though. I fixed three further functions
+that had a similar empty line, too.
+
+Thanks for looking
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--oterd73bfcoy35ck
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmI4J6MACgkQwfwUeK3K
+7Ak5sAf/aG3oVD1FgzqJLWD3uSmF0uX0/3lky1l56go3LpRjDym8tlGglXT4z7Hl
+Z3q8YXru6LSihHT/n6V4EUdpV6f49dxPfrr9hu9OFU+UY0Cd7NgisKr+0Wi61dbS
+d8IVGHwcCPqBZanHdAEjhle7d7WdWhfukR1oLljd8B2XM6qP2jQgjFWzrSJfZ+hd
+qd6k9TcfIHjy8n8xBtyIYSvYZbywqfa+wJeU54fe4fp4NNPVTmxGtzHFNDipSZGL
+uF+yg7qDqSezst7wO3dNeblEvpVZfG9TZAXvGMCZQLn9x4b35iSmZtLVPN+HZZM4
+WBr/EA6mCSOr4iHXCKfNr4UegGV4/w==
+=gON5
+-----END PGP SIGNATURE-----
+
+--oterd73bfcoy35ck--
