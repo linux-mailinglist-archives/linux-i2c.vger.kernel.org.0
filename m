@@ -2,97 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5763B4E39EF
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Mar 2022 08:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E3C4E3E99
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Mar 2022 13:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbiCVHzq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Mar 2022 03:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
+        id S233843AbiCVMkA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Mar 2022 08:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiCVHzp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Mar 2022 03:55:45 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14A74A3D4;
-        Tue, 22 Mar 2022 00:54:17 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D2EA4240002;
-        Tue, 22 Mar 2022 07:54:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1647935656;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hL95WIkdjvtUtma7mkkPOD4nhIAtPPlN3w0wuizzJOs=;
-        b=CtYGjJ3RELDYNEkF8xpunTXp7/UOD8Z1R5pYu/yHzgzpNiIWaVp+5QTsjUZ7X1eUepxBiT
-        7AdNl5rSbXWguc2UV5n8SRvtlL7SwbaOzuqTjJ6axk5N9M0aHhs8N6XQ9bmAioR4sdpax9
-        sDKHg8s13+R4MwRpc6/Fk1lloD+yl00xvaI9bafNniv0TtZUYBHA2zpqFQ+daiuqRd2e/S
-        q9SvPNlVW2QremxkvnjZmr99XWsWmaEM4bEajI4ZUXUkKYtsWRH6zJOtIhs0ct23zFa9/F
-        xOh2gHpUdmvscPFGHNJpsQ7v3XjUj4dt1dj7JlpL0mM4Lne0bah6cuomJFm6cQ==
-Date:   Tue, 22 Mar 2022 08:52:52 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "'Rafael J . Wysocki '" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 0/6] introduce fwnode in the I2C subsystem
-Message-ID: <20220322085252.143a700f@fixe.home>
-In-Reply-To: <20220321113634.56d6fe2b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20220318160059.328208-1-clement.leger@bootlin.com>
-        <20220318100201.630c70bf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20220321115634.5f4b8bd4@fixe.home>
-        <20220321113634.56d6fe2b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        with ESMTP id S234934AbiCVMj7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Mar 2022 08:39:59 -0400
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747EF49276
+        for <linux-i2c@vger.kernel.org>; Tue, 22 Mar 2022 05:38:30 -0700 (PDT)
+X-QQ-mid: bizesmtp80t1647952668t817pwab
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 22 Mar 2022 20:37:43 +0800 (CST)
+X-QQ-SSF: 0140000000200090E000B00A0000000
+X-QQ-FEAT: ypgDW/Zu0kXr1CQDYbMWjnqU05VXdwzKjT0uEplbMwiOr+S68QuMQSVaSOzZO
+        Tj4lRUs1T1ZD/yybbZZXr1BFpl7m5GBfVsmz9/H/5KbKjdr7/E7oX/7fYkegVL3ZKPlpnS/
+        yha+1R98KejdnOX3ZwVu1wq+KRVcRNIB6+Z8BgBNpZ+0woutmtbgrKIEAPbb2T4qPRJLrF5
+        I38mS1ZprNP3d7AFW2I10urC/U/onqAG+5ROe5azxBFmLwMFfNT57OFBDWckDjtBUJHTmDQ
+        h/J/yFK3PF9R1a3uTbaJ8WyFBs4EMiEMQZTYqjedibtls6xqXDvOS2sfmw3844EsIjVReMP
+        B3cBK6XtJFiLDI9i28=
+X-QQ-GoodBg: 2
+From:   Zhen Ni <nizhen@uniontech.com>
+To:     ldewangan@nvidia.com, digetx@gmail.com, thierry.reding@gmail.com
+Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zhen Ni <nizhen@uniontech.com>
+Subject: [PATCH] i2c: tegra: fix reference leak when pm_runtime_get_sync fails
+Date:   Tue, 22 Mar 2022 20:37:40 +0800
+Message-Id: <20220322123740.9257-1-nizhen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign10
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Le Mon, 21 Mar 2022 11:36:34 -0700,
-Jakub Kicinski <kuba@kernel.org> a =C3=A9crit :
+The PM reference count is not expected to be incremented on
+return in tegra_i2c_xfer and tegra_i2c_init_hardware.
 
-> > Hi Jakub,
-> >=20
-> > Ok, to be clear, you would like a series which contains all the
-> > "base" fwnode functions that I'm going to add to be sent separately
-> > right ? And then also split i2c/net stuff that was sent in this series =
-? =20
->=20
-> I'm mostly concerned about conflicts, so if you can get the entire
-> series into 5.18 before the merge window is over then consider it=20
-> acked. If it doesn't make 5.18 looks like you'd need to send patches=20
-> 1 and 2 as a PR so that both the i2c and net trees can pull it.=20
-> Once pulled send patch 6 out to net-next. Does that make sense?
+However, pm_runtime_get_sync will increment the PM reference
+count even failed. Forgetting to putting operation will result
+in a reference leak here.
 
-Yes totally, I guess I'll go for I2C only and then I'll move on with
-next patches individually later. No need to hurry.
+Replace it with pm_runtime_resume_and_get to keep usage
+counter balanced.
+
+Signed-off-by: Zhen Ni <nizhen@uniontech.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index 03cea102ab76..4e7e75be58c2 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -1372,7 +1372,7 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+ 	struct tegra_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
+ 	int i, ret;
+ 
+-	ret = pm_runtime_get_sync(i2c_dev->dev);
++	ret = pm_runtime_resume_and_get(i2c_dev->dev);
+ 	if (ret < 0) {
+ 		dev_err(i2c_dev->dev, "runtime resume failed %d\n", ret);
+ 		pm_runtime_put_noidle(i2c_dev->dev);
+@@ -1713,7 +1713,7 @@ static int tegra_i2c_init_hardware(struct tegra_i2c_dev *i2c_dev)
+ {
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(i2c_dev->dev);
++	ret = pm_runtime_resume_and_get(i2c_dev->dev);
+ 	if (ret < 0)
+ 		dev_err(i2c_dev->dev, "runtime resume failed: %d\n", ret);
+ 	else
+-- 
+2.20.1
 
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+
