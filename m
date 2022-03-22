@@ -2,114 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D77344E44E2
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Mar 2022 18:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C6E4E458A
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Mar 2022 18:52:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239492AbiCVRUW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Mar 2022 13:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
+        id S239928AbiCVRxp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Mar 2022 13:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239496AbiCVRUU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Mar 2022 13:20:20 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2054.outbound.protection.outlook.com [40.107.243.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3EF8275FE;
-        Tue, 22 Mar 2022 10:18:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XE2InLqALM19y2jK9BrfHYl4oMM+Nm6Jtt3Qd2JnNryFHjvucf4+Bwg5edpIddsQwsmeBfROhxIycbqj6amw5C6laeR/XNnBP79wz0HUMX6TTNSbLVKVKbekKCoMXPzDJsnyrvSNNbM0wiDcktHp9a8rBCNSPINSD/ei66d6kgUBsdejun7MWIUujK0HiijjzBOUBawYEIJ17Pr7cImyvF2BOZdN+fFj1NkGSdihKGkkKzLUa1mm/vEgoU0rixf2py9s0pHenZUZuQGMHU+Mpn+woYlNS7KS4XqeHKrL1ePxWZui3Gb8ue0W8TFrJEeFjjYO5Bngj7knwggOMvSaLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nVtTgbHsc90fzXfoEVy09CXgpO+HLKSp0zFUH7+CPFE=;
- b=eArubhg2UR4fQiffL+ok9APlwxJVDbs7QBASK+NR+RTVDpQl3XqdF+bZBtgwAZfIWZWsNY+Fs3dHnPxH2ifyREHZCpk+C9R/pZA3oRmKj2L33aXsvYb/yDPjv7vfP1GD7YBlyIpzSU9anhndi+qIaiFU/Oi6XHAqdGczwjEUZgPje7+F59bYM/bGyePR29ormRMAkQze638di6HYUhKCFqPDk94gUkw5xsYZ4ve6HlDbRXz9XlzRAzz83toYm39yZ8jjHxKdW4UWrqRBmSIJb9mBNJDUvOwWpsxF+W87Bzh8JRJSqNSK7CJTMA846D8FGd/H8B5mcjfYcgtm5Nax0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=opensource.cirrus.com
- smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
- header.from=xilinx.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nVtTgbHsc90fzXfoEVy09CXgpO+HLKSp0zFUH7+CPFE=;
- b=Q3MSZq20TekkJc5mKehjka3w8owXz81AZI63LGmR+KTC2y/WRLdKVXmkF+8Z44O1h2dWy7X2Hf2gep3HNTAE2XeoH8oT5/Q1kCn6OH0tzpqiORmgFVhcknpW9O+KOK2ulyaPwrYpxhzUgxo4+ymuuamXW1KfAIJSRxIknFD4oHE=
-Received: from DM5PR12CA0008.namprd12.prod.outlook.com (2603:10b6:4:1::18) by
- BL0PR02MB5650.namprd02.prod.outlook.com (2603:10b6:208:83::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5102.16; Tue, 22 Mar 2022 17:18:48 +0000
-Received: from DM3NAM02FT013.eop-nam02.prod.protection.outlook.com
- (2603:10b6:4:1:cafe::3c) by DM5PR12CA0008.outlook.office365.com
- (2603:10b6:4:1::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.23 via Frontend
- Transport; Tue, 22 Mar 2022 17:18:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT013.mail.protection.outlook.com (10.13.5.126) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5081.14 via Frontend Transport; Tue, 22 Mar 2022 17:18:47 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 22 Mar 2022 10:18:47 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 22 Mar 2022 10:18:47 -0700
-Envelope-to: tanureal@opensource.cirrus.com,
- linux-arm-kernel@lists.infradead.org,
- linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- patches@opensource.cirrus.com
-Received: from [10.254.241.50] (port=58266)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1nWi9e-000CFf-Pn; Tue, 22 Mar 2022 10:18:47 -0700
-Message-ID: <08dc1f90-586a-a47a-7c13-bce0405c13d6@xilinx.com>
-Date:   Tue, 22 Mar 2022 18:18:44 +0100
+        with ESMTP id S234579AbiCVRxn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Mar 2022 13:53:43 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D6E8D6AF;
+        Tue, 22 Mar 2022 10:52:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1647971499;
+        bh=8I3GWS6pWMeWlp9zUKzJSs1LzgYKqg1PVBPAq/Lm0LU=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=QGdT7wfvtbx7EEq50BWSNOASiB8Ii9nryA7qMItQPCg349ur6bRln9+OctCQWWaFw
+         sKEmfK1ssCrodaywip/zGtr1TH9dzGkPDga3DON2C8SDJrjv3Q4Yk4TNwFde19j3Rf
+         TgNQQ5wqXK/XhOkavE7/CibOdmg6poxuBj+4PKko=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MGz1V-1nJIfA2WJf-00E1fI; Tue, 22
+ Mar 2022 18:51:39 +0100
+Date:   Tue, 22 Mar 2022 18:51:35 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Avi Fishman <avifishman70@gmail.com>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Tomer Maimon <tmaimon77@gmail.com>, KWLIU@nuvoton.com,
+        Tali Perry <tali.perry1@gmail.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        JJLIU0@nuvoton.com, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Tomer Maimon <tomer.maimon@nuvoton.com>,
+        devicetree <devicetree@vger.kernel.org>, bence98@sch.bme.hu,
+        Arnd Bergmann <arnd@arndb.de>, sven@svenpeter.dev,
+        Rob Herring <robh+dt@kernel.org>,
+        Avi Fishman <Avi.Fishman@nuvoton.com>,
+        Tyrone Ting <warp5tw@gmail.com>, yangyicong@hisilicon.com,
+        semen.protsenko@linaro.org, jie.deng@intel.com,
+        Patrick Venture <venture@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, kfting@nuvoton.com,
+        Tali Perry <tali.perry@nuvoton.com>, olof@lixom.net
+Subject: Re: [PATCH v3 08/11] i2c: npcm: Correct register access width
+Message-ID: <YjoMpyEmuXHObF1p@latitude>
+References: <20220303083141.8742-1-warp5tw@gmail.com>
+ <20220303083141.8742-9-warp5tw@gmail.com>
+ <YiCZlhJoXPLpQ6/D@smile.fi.intel.com>
+ <CAHb3i=t+Ai3w5mMhmZxxMsD7Zv0xpM4ZicMCmdDMtVn_OMbWYA@mail.gmail.com>
+ <YiDNdlEKqorDFkZB@smile.fi.intel.com>
+ <YiJ5unrCb82ZMV4Z@latitude>
+ <CAKKbWA4quvDbHWBdckAsKe65fDXXe8M-9CsjaP=4wsA=-NnULA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] i2c: cadence: Increase timeout per message if necessary
-Content-Language: en-US
-To:     <tanureal@opensource.cirrus.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <20220309093147.102385-1-tanureal@opensource.cirrus.com>
- <dd26fa4a-870e-d969-04df-1f42487e2b54@xilinx.com>
- <4af9c968-b837-e984-1051-2dcd240f2c08@opensource.cirrus.com>
-From:   Michal Simek <michal.simek@xilinx.com>
-In-Reply-To: <4af9c968-b837-e984-1051-2dcd240f2c08@opensource.cirrus.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6fa863f0-d39d-47c5-0aa9-08da0c2806d5
-X-MS-TrafficTypeDiagnostic: BL0PR02MB5650:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR02MB5650B97C295EACE2476BB4C8C6179@BL0PR02MB5650.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4ag7UY1DsrjoHfG7UNaFB9g3IOIu+bdvDYE24k4JjapPAsZKvLVssXjRzU6GJ1qvBG5xkaeal9A8yM13AYL5iU7pFHzjfqt2jFDGqTnJJy1Pv3EIBbzqd/TqPOx1RtYMFOXI/BOFoYLbRCzR1CKUzUqpB251e7alQyRtVUpgmxPw8r5z/f/NrR7FXqcx3VzLQAOSHdzg0LBNs0O/JqI5iKoOASafz3Pbxa2K1T/NwJo6dnZrLNWqnZpMcwZNfaA7qonKdsJrWl8H9kNQw/X7PgN8PHZ/1uRX2W+2YmbXYEY7wLrViZD9AkjImv0h1uEdO3+1eZ4J/68/gf3JAcYPBvpc/am3a//Zvh16CtMPUu3U+Bb/TMiQb6HxOWxC+8gUHznOpgEUpwqE6L0fCKaOhpu2nO2nigBNDwnIbM/L7TVWEDz+HLNu9vHupR3yg9jP+Gz4FyVBKDdvALpU+ksJnpVgZnPy2t7iWx8ecW3pwveOJKB162r5LhkBVOaf0dwNZDDX7ObfpAkyt2eFpu3xn4SAJcvhUSIoKLsOhanwcLECvKISxS25sU6cx+NkH4Nft9gcpW0frUej7iTZuD3ho0Mv5qmDlL2A3zZyQo1AGT/IXHSCfOAFcLh0Ta6IXcuHR5lRuUDARWDvurG0WMuomHLEflWxna4Kyq7J9Py4YIwOrsAymSvULUKdRqLMczkB2i89mkpNRI5TZQvpWII8k3FAg4kcuzOS5Ws6KtPFaKUpJak/BEPSkMxW7LDLa3B8
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(508600001)(53546011)(9786002)(8936002)(82310400004)(15650500001)(26005)(186003)(83380400001)(44832011)(7636003)(6666004)(5660300002)(356005)(2616005)(336012)(426003)(2906002)(31696002)(40460700003)(8676002)(36860700001)(47076005)(110136005)(70206006)(31686004)(36756003)(316002)(70586007)(50156003)(2101003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2022 17:18:47.8415
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6fa863f0-d39d-47c5-0aa9-08da0c2806d5
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT013.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB5650
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xEONTgdtFn65elzz"
+Content-Disposition: inline
+In-Reply-To: <CAKKbWA4quvDbHWBdckAsKe65fDXXe8M-9CsjaP=4wsA=-NnULA@mail.gmail.com>
+X-Provags-ID: V03:K1:0rjSZOfEJikFn7A+rHnQNa8z+5/c3I2xEC7rEjobVZzMEAraX6e
+ HuMvVgLJ7P7UCggzPmwigflP5I4Y42Hx83j5Wq4SLEmryBl9Q62CsWZ5TVO2lnQ9e4YVuLt
+ ce9YVgEYqgx/WHDMUqNy6S2guHkv8SCiC72aUek3IHtIqD2Lo6gY+hqyRGy6/GYZY/8SsCU
+ 21BsmVI3TAmgW/4gTihZw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ClpHcWe8vX0=:FnYR1l8g/xZYeCZXfKUnPC
+ ZQ1Jm5fS9cmjKDrj78s7VFpOhu3kBgNos+6ZQguLEF9pHKnSh9+npF2SdI80BXPXR4Di1Z08F
+ A11pAz5nZl7/G0IxbtG4eBNDVHMJr8slGm8t/719Lsdwc3P7xKYCO31ExqHApgZYBz8tUFqEf
+ mXYly5cDCwimiO9Ny4meh5dfynQ4OjJ53zT3Y76TzNC2h7CFOMyMNCOgmESg0wyAoKwIK7Xqw
+ ULrqaLAr3zJuV/wN2VNGK48+Nsx1RNaNbPX/n+8BepsAf0FYm51CAZpelLD9dqfYn1pgm/0tg
+ fN7/mNErFnSsfPDIlGI+DY+uaDrXEB48aHwO7PFL8oHsRMgTKSB8/vxHLkShyu0ixa80Ah1AC
+ mUTjB7Ep46l9DojTrkHSOIKvCTG24kTmzK12GtvZAay597EKCn+pdCUiqNCxtGDdr8MibGlr1
+ liR7qS6Xzx6B7hiBlyuoRQGtIsmkhSW42LXdVPqzFaQeZQ+YFoO5rpqk/ZyNKZ1F9s/krbbt+
+ 4Imm8dSEfsXTVTDNaJEALxF/uEas5uzTP2BpIVKEmD0EymQkFuqNfXzypVMo47L7N4ITbmML8
+ oPFSfLIv0xJMpc3dMBj8r9PWMin7Wa++ManQcf3O/GF/WU/RZMfLHJ5ndxB/i4/U0j11GEIe0
+ ATkE0rlYWI0qleAyWQ+tnv+q+RFdUEcVqiv1yCGi2BzcmjU0KuVlN2BdzO3MkPjKuXbpf1uIp
+ cT+EFhJejQNm/mljmHEsCEIaUw7lZYOqYPtAaWBJ3N3/rT46ijUNyicrAtvc+I470x6v+pDzp
+ BMKuZEfMR430mGMbS+ng1ofWwVz1oy+tdsM+qKSI+sYsvTmGJWY+c2+bSxnGaaKseQQI8/ct2
+ Zj8kg9vRi6LoMTwQqcmFeiygjPCjDlvlmOoRt+DQXl064e05wX+NhPPPjxQrNrZOEp39zmCOD
+ N+S5rVXt0hWElZmwZoeQmKmon7b/RY0U7Mm+cb34+sYMJw6TcI/nlDcxTLV3hTYPpD5ZCfydF
+ K04Vrx1fA5aJNtueyyXXjmIEnivAYonb2LtK4pSM42REOm/YQ0bD5dqMx8koNn3SuKmT/StPn
+ Evc2hracwZPBr8=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -117,81 +94,94 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
+--xEONTgdtFn65elzz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 3/22/22 16:34, tanureal@opensource.cirrus.com wrote:
-> On 3/21/22 3:57 PM, Michal Simek <michal.simek@xilinx.com> wrote:
->> +Shubhrajyoti
->>
->> On 3/9/22 10:31, Lucas Tanure wrote:
->> > Timeout as 1 second sets a upper limit on the length of
->> > the transfer executed, but there is no maximum length of
->> > a write or read message set in i2c_adapter_quirks for this
->> > controller.
->>
->> nit: I would expect that you have run any test and you reached an issue.
->> Would be good to describe what exactly you have tried on which configuration 
->> to make it super clear.
->>
->> >
->> > To remove that limitation calculate the minimal time
->> > necessary, plus some wiggle room, for every message
->> > and use it instead of the default one second, if
->> > more than one second.
->> >
->> > Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
->> > ---
->> >   drivers/i2c/busses/i2c-cadence.c | 12 ++++++++++--
->> >   1 file changed, 10 insertions(+), 2 deletions(-)
->> >
->> > diff --git a/drivers/i2c/busses/i2c-cadence.c > 
->> b/drivers/i2c/busses/i2c-cadence.c
->> > index 805c77143a0f..b4c1ad19cdae 100644
->> > --- a/drivers/i2c/busses/i2c-cadence.c
->> > +++ b/drivers/i2c/busses/i2c-cadence.c
->> > @@ -760,7 +760,7 @@ static void cdns_i2c_master_reset(struct > i2c_adapter 
->> *adap)
->> >   static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg > *msg,
->> >           struct i2c_adapter *adap)
->> >   {
->> > -    unsigned long time_left;
->> > +    unsigned long time_left, msg_timeout;
->> >       u32 reg;
->> >       id->p_msg = msg;
->> > @@ -785,8 +785,16 @@ static int cdns_i2c_process_msg(struct cdns_i2c > *id, 
->> struct i2c_msg *msg,
->> >       else
->> >           cdns_i2c_msend(id);
->> > +    /* Minimal time to execute this message */
->> > +    msg_timeout = msecs_to_jiffies((1000 * msg->len * BITS_PER_BYTE) > / 
->> id->i2c_clk);
->> > +    /* Plus some wiggle room */
->> > +    msg_timeout += msecs_to_jiffies(500);
->> > +
->> > +    if (msg_timeout < adap->timeout)
->> > +        msg_timeout = adap->timeout;
->> > +
->> >       /* Wait for the signal of completion */
->> > -    time_left = wait_for_completion_timeout(&id->xfer_done, > adap->timeout);
->> > +    time_left = wait_for_completion_timeout(&id->xfer_done, > msg_timeout);
->> >       if (time_left == 0) {
->> >           cdns_i2c_master_reset(adap);
->> >           dev_err(id->adap.dev.parent,
->>
->>
->> If my assumption is right and there is any actual issue you had please send v2 
->> and feel free to add there my:
->> Acked-by: Michal Simek <michal.simek@xilinx.com>
->>
->> Thanks,
->> Michal
->>
->>
->>
-> The issue happens for I2C devices that have firmware, which will send a big I2C 
-> message, but the I2C controller will timeout on it.
-> That happened for CS35L41 DSP firmware tests, so no particular configuration, 
-> just a driver sending firmware blob over I2C.
+On Tue, Mar 22, 2022 at 07:18:34PM +0200, Avi Fishman wrote:
+> On Fri, Mar 4, 2022 at 10:42 PM Jonathan Neusch=C3=A4fer
+> <j.neuschaefer@gmx.net> wrote:
+> >
+> > Hello,
+> >
+> > On Thu, Mar 03, 2022 at 04:15:18PM +0200, Andy Shevchenko wrote:
+> > > On Thu, Mar 03, 2022 at 02:54:27PM +0200, Tali Perry wrote:
+> > > > > On Thu, Mar 03, 2022 at 04:31:38PM +0800, Tyrone Ting wrote:
+> > > > > > From: Tyrone Ting <kfting@nuvoton.com>
+> > > > > >
+> > > > > > Use ioread8 instead of ioread32 to access the SMBnCTL3 register=
+ since
+> > > > > > the register is only 8-bit wide.
+> > > > >
+> > > > > > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C contro=
+ller driver")
+> > > > >
+> > > > > No, this is bad commit message, since you have bitwise masks and =
+there is
+> > > > > nothing to fix from functional point of view. So, why is this a f=
+ix?
+> > > > >
+> > > >
+> > > > The next gen of this device is a 64 bit cpu.
+> > > > The module is and was 8 bit.
+> > > >
+> > > > The ioread32 that seemed to work smoothly on a 32 bit machine
+> > > > was causing a panic on a 64 bit machine.
+> > > > since the module is 8 bit we changed to ioread8.
+> > > > This is working both for the 32 and 64 CPUs with no issue.
+> > >
+> > > Then the commit message is completely wrong here.
+> >
+> > I disagree: The commit message is perhaps incomplete, but not wrong.
+> > The SMBnCTL3 register was specified as 8 bits wide in the datasheets of
+> > multiple chip generations, as far as I can tell, but the driver wrongly
+> > made a 32-bit access, which just happened not to blow up.
+> >
+> > So, indeed, "since the register is only 8-bit wide" seems to be a
+> > correct claim.
+> >
+> > > And provide necessary (no need to have noisy commit messages)
+> > > bits of the oops to show what's going on
+> >
+> > I guess it's blowing up now because SMBnCTL3 isn't 32-bit aligned
+> > (being at offset 0x0e in the controller).
+> >
+>=20
+> Hi Andy,
+> After this clarification can you please acknowledge this specific patch?
+> If you think there is a better way to describe this, can you propose one?
 
-How big is it?
+To be honest, I think it's probably best to include all the necessary
+explanations in the next version of this patch, i.e.:
 
-M
+ - That the register was always defined as 8-bit in the datasheets,
+   and so the 32-bit access was always incorrect, but simply didn't
+   cause a visible error
+ - How the 32-bit access caused an error now, perhaps with a trimmed
+   Oops log as Andy suggested
+
+
+Jonathan
+
+--xEONTgdtFn65elzz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmI6DIQACgkQCDBEmo7z
+X9s7OQ//X2W94xxyy5YEI/+1O2hIBvmm36jDMTS3z+mAnxmeUKhEBZdn0v8d/euk
+JSimNGFJCDze0zmLhJK6yve/1N0Jg0IersKHikjnx06ZU4mgxG5udJKCU2W6MPVj
+Zp4IiXgBQ7pTDEMlgEPbT0wSjkmuiiimkjp6QWJZkyKapp3SttzUOiKX/3SeyUtZ
+Y1/L3txILtSnYuzlvlL5knG+KJu2Um3/BKCOEzqop+FeQr/16wEvYUWS5Ggg94kK
+M9uwBI9cgOhvqS+SOFoNHyPc2VIJ6zsshwz6lB8/NrRQMqrpqyjwZttderEguxNO
+MP96a9M7VKpytM+eEbzIZFIxSa/A0zeNqXXXQNB/K+t7Awwdhf32qD4jPRIK0JCK
+2pO+hBT5XfRXmRI6f3U7X7lpSpzlR+DMLkq7nEI76rgJfN5qI87ml+WmbzIDXPFf
+b04x9eu6AbFeSuz0HW+F/MFwimMiTz+CKVpF7hgZEmJew7OiJT2a1bu6eTPr+4Fv
+pOut/60haUWiMulL9QXqbk+0gWWa8k3Mzv6DwQ0wbO/GFHkzlRfBOkMyUUXmNnho
+RdBd0cCISHsGLRsRkXEHgCRT67X1sadBrxcB03k91MKNNJoD4mnUr79JpFvIJidC
+XL4AOd2HO/z+OFq2y4K14ea8dPl1NgziCcFpC46TAKBrywMDtgg=
+=EGzi
+-----END PGP SIGNATURE-----
+
+--xEONTgdtFn65elzz--
