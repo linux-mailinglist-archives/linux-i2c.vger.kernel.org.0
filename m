@@ -2,32 +2,33 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A5A4E7232
-	for <lists+linux-i2c@lfdr.de>; Fri, 25 Mar 2022 12:34:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42DF94E7235
+	for <lists+linux-i2c@lfdr.de>; Fri, 25 Mar 2022 12:34:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235690AbiCYLfk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 25 Mar 2022 07:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54122 "EHLO
+        id S1353022AbiCYLfl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 25 Mar 2022 07:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbiCYLfj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Mar 2022 07:35:39 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F50A9956;
-        Fri, 25 Mar 2022 04:34:04 -0700 (PDT)
+        with ESMTP id S232143AbiCYLfk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Mar 2022 07:35:40 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06998A995C;
+        Fri, 25 Mar 2022 04:34:05 -0700 (PDT)
 Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8779320003;
-        Fri, 25 Mar 2022 11:34:00 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id CD46820012;
+        Fri, 25 Mar 2022 11:34:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1648208042;
+        t=1648208044;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=qF9syJqPzWTEYD5QGUV7EFY8GaWp9HCNhV2qmKXb9Nw=;
-        b=DfxL25n9DRB/Qw0W7qIpdyUscecNzg6LjWgpoCEr1DGWOL2fAU+od0gCGQcRCvlCZ3Tqnz
-        Ov+XGQx0fKvOSzJyAWaugFpb4V5uGA54XGL3HObJHckvLdS0504rzCccAeEbLJdGGrtMSS
-        19FJaCm2TrHPOxOlPaK1hNlTJWFsVCA19FUdtF1nWs+tLrWg5/iKN+Jq/P8qFh7CckQwU6
-        sd/eL5ZFbMWNFZFysKGIDI8zjopmvSY8iRkfYajqKlNvQk9S+la8y9MH/V/AkNjn9VduOx
-        woH0YPgEIVyQw1BU4BE1gU1kdo5vBdGR3YWpuRX2lbeaX6uOVovNto/w9aNI5Q==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7h5U+Wv/MCPvlMQZC9RddFjnnGvegr7ExkBEVjPAZkg=;
+        b=oUisZjuRnZzAKfKfHS3IZA9SPvSHB+yh+uf4+RJ97ZHAowKVOSJ0hubxoeLZB177rqgqtJ
+        3AIHilOvwZEFzWDXX6IFKmLhGoX5qdlQ07raXrZN6wJTL/R9o5S5coNj7/rZ8tdtITlAQf
+        kZWjmyBB+xoqe3030lR5tMhQGA5/ZkXOTUhbDpGLuqZBdlTedzhdua5Hlt6b7DDM71LjDo
+        pAGggGuXsZWc+3FSJEzws13t4D0r71RBAUn6BakSWIpwvou3TCP3yXieLqhXQLlieS0cP6
+        /jqqJc8yU2M75s5Z5WjmYypBsdjKJ3TjFD7q+UUzMJwal/WetMDeHyFbbc061A==
 From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Daniel Scally <djrscally@gmail.com>,
@@ -46,83 +47,65 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-Subject: [PATCH v3 0/9] introduce fwnode in the I2C subsystem
-Date:   Fri, 25 Mar 2022 12:31:39 +0100
-Message-Id: <20220325113148.588163-1-clement.leger@bootlin.com>
+Subject: [PATCH v3 1/9] of: add of_property_read_string_array_index()
+Date:   Fri, 25 Mar 2022 12:31:40 +0100
+Message-Id: <20220325113148.588163-2-clement.leger@bootlin.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220325113148.588163-1-clement.leger@bootlin.com>
+References: <20220325113148.588163-1-clement.leger@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In order to allow the I2C subsystem to be usable with fwnode, add
-some functions to retrieve an i2c_adapter from a fwnode and use
-these functions in both i2c mux and sfp. ACPI and device-tree are
-handled to allow these modifications to work with both descriptions.
-I2C mux support has also been modified to support fwnode based
-descriptions.
+Add of_property_read_string_array_index() which allows to read a string
+array starting at a specific index.
 
-This series is a subset of the one that was first submitted as a larger
-series to add swnode support [1]. In this one, it will be focused on
-fwnode support only since it seems to have reach a consensus that
-adding fwnode to subsystems makes sense.
+Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+---
+ include/linux/of.h | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-[1] https://lore.kernel.org/netdev/YhPSkz8+BIcdb72R@smile.fi.intel.com/T/
-
----------------
-
-Changes in V3:
- - Add index parameter to property_read_string_array()
- - Implement support for devbice-tree and software nodes
- - Restrict index support for ACPI to 0
- - Add unittests for of_property_read_string_array_index()
- - Add unittests for fwnode_property_read_string_index()
-
-Changes in V2:
- - Remove sfp modifications
- - Add property_read_string_index fwnode_operation callback
- - Implement .property_read_string_index for of and swnode
- - Renamed np variable to fwnode
-
-Clément Léger (9):
-  of: add of_property_read_string_array_index()
-  of: unittests: add tests for of_property_read_string_array_index()
-  device property: add index argument to property_read_string_array()
-    callback
-  device property: add fwnode_property_read_string_index()
-  device property: add tests for fwnode_property_read_string_index()
-  i2c: fwnode: add fwnode_find_i2c_adapter_by_node()
-  i2c: of: use fwnode_get_i2c_adapter_by_node()
-  i2c: mux: pinctrl: remove CONFIG_OF dependency and use fwnode API
-  i2c: mux: add support for fwnode
-
- drivers/acpi/property.c                 |  5 ++-
- drivers/base/property.c                 | 37 ++++++++++++++++++--
- drivers/base/swnode.c                   | 21 ++++++++----
- drivers/base/test/property-entry-test.c | 18 ++++++++++
- drivers/i2c/Makefile                    |  1 +
- drivers/i2c/i2c-core-fwnode.c           | 45 +++++++++++++++++++++++++
- drivers/i2c/i2c-core-of.c               | 30 -----------------
- drivers/i2c/i2c-mux.c                   | 39 ++++++++++-----------
- drivers/i2c/muxes/Kconfig               |  1 -
- drivers/i2c/muxes/i2c-mux-pinctrl.c     | 23 +++++++------
- drivers/of/property.c                   |  5 +--
- drivers/of/unittest.c                   | 20 +++++++++++
- include/linux/fwnode.h                  |  7 ++--
- include/linux/i2c.h                     |  8 ++++-
- include/linux/of.h                      | 22 ++++++++++++
- include/linux/property.h                |  3 ++
- 16 files changed, 207 insertions(+), 78 deletions(-)
- create mode 100644 drivers/i2c/i2c-core-fwnode.c
-
+diff --git a/include/linux/of.h b/include/linux/of.h
+index 2dc77430a91a..93f04c530bd1 100644
+--- a/include/linux/of.h
++++ b/include/linux/of.h
+@@ -1115,6 +1115,28 @@ static inline int of_property_read_string_array(const struct device_node *np,
+ 	return of_property_read_string_helper(np, propname, out_strs, sz, 0);
+ }
+ 
++/**
++ * of_property_read_string_array_index() - Read an array of strings from a
++ * multiple strings property starting at a specified index
++ * @np:		device node from which the property value is to be read.
++ * @propname:	name of the property to be searched.
++ * @out_strs:	output array of string pointers.
++ * @sz:		number of array elements to read.
++ * @index:	index to start reading from
++ *
++ * Search for a property in a device tree node and retrieve a list of
++ * terminated string values (pointer to data, not a copy) in that property
++ * starting at specified index.
++ *
++ * Return: If @out_strs is NULL, the number of strings in the property is returned.
++ */
++static inline int of_property_read_string_array_index(const struct device_node *np,
++						      const char *propname,
++						      const char **out_strs,
++						      size_t sz, int index)
++{
++	return of_property_read_string_helper(np, propname, out_strs, sz, index);
++}
+ /**
+  * of_property_count_strings() - Find and return the number of strings from a
+  * multiple strings property.
 -- 
 2.34.1
 
