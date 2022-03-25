@@ -2,100 +2,118 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D554E7C1E
-	for <lists+linux-i2c@lfdr.de>; Sat, 26 Mar 2022 01:21:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66AC04E7D52
+	for <lists+linux-i2c@lfdr.de>; Sat, 26 Mar 2022 01:22:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbiCYVJs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 25 Mar 2022 17:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
+        id S230091AbiCYThD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 25 Mar 2022 15:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbiCYVJr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Mar 2022 17:09:47 -0400
-X-Greylist: delayed 16201 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Mar 2022 14:08:12 PDT
-Received: from 15.mo584.mail-out.ovh.net (15.mo584.mail-out.ovh.net [91.121.62.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974EA17ECDB
-        for <linux-i2c@vger.kernel.org>; Fri, 25 Mar 2022 14:08:12 -0700 (PDT)
-Received: from player695.ha.ovh.net (unknown [10.110.115.188])
-        by mo584.mail-out.ovh.net (Postfix) with ESMTP id 31CE722182
-        for <linux-i2c@vger.kernel.org>; Fri, 25 Mar 2022 16:19:27 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player695.ha.ovh.net (Postfix) with ESMTPSA id C9F4628AAD10E;
-        Fri, 25 Mar 2022 16:19:23 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-102R004ceb7d065-e90c-401e-ab9e-18557b73c586,
-                    1702D5D0C6B5DF16716081994498F990499A02DA) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-From:   Stephen Kitt <steve@sk2.org>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephen Kitt <steve@sk2.org>
-Subject: [PATCH] docs: i2c: reference simple probes
-Date:   Fri, 25 Mar 2022 17:19:10 +0100
-Message-Id: <20220325161910.1202539-1-steve@sk2.org>
-X-Mailer: git-send-email 2.27.0
+        with ESMTP id S230346AbiCYTg4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Mar 2022 15:36:56 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0A52042B7
+        for <linux-i2c@vger.kernel.org>; Fri, 25 Mar 2022 12:09:47 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-de48295467so9034703fac.2
+        for <linux-i2c@vger.kernel.org>; Fri, 25 Mar 2022 12:09:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Or3XD0+Zb4OV2+OCkaJAUpyaadYeZVEGGbOLPheJqiU=;
+        b=MOkglHrE+qluYE0n2oJYXD++OIpDTYTZd7qFcjz9GJTHYU0iZlWNMErzQX/oHzczlK
+         bFEQCC65kETyWcJDgZQp3Uh+GahNf2crCYEZKLU5t5E4QnJh8FyNO/KkKSY3USqCLGP8
+         0BvUlxzlLjrZ7guFBmEsAkdtQT0xtLXdXfdlPStQabU1J6lfi2f/7A+zToHXIJvmoune
+         lYXjmtm3fLGXVCpexOPYltbsJu502UXwXFRJIcKFp8hpt44jxAOVBM2+GC5ZWvO39MGa
+         ts64MThTanZO4DTsKwzyy+nzU4i0Gbc1//virPgkg50ZHj4b2gUo3S4j2O//MVh/19fK
+         v/KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Or3XD0+Zb4OV2+OCkaJAUpyaadYeZVEGGbOLPheJqiU=;
+        b=qXJqYlAXTUvF5m0+G+fHg3swlvIdA46STMfO2pszimwRfB5OR8hdAogYB1nbCAmbbT
+         u0M7xceDspgwi/mglkIe7odVzY2EbhmcyjVY6Ht7ks+Jw0kDrjQBIs/uGJMPlwPQhQ1w
+         CFyq0yUIldmQyAm2GJ9ESDO5YZezccCBh67TdfNPvzIYNap2PDov8oPlOGuKBTidrvkB
+         PdmpUDqJNmtR0+2c1zjB0kxmpWtZgv3b66nKD7ZZdkLQMMubZxWqLbi3S6M/VQzEJT1x
+         U90UqpcMhf6ontVlIP2H8jIBq+0yAthAwpIOBV0LoHJqp3F5B1arSiabGqsnaVhSIS6C
+         ekcQ==
+X-Gm-Message-State: AOAM532PVDtjHR47MRq2AH21KPvUG2q2j5EH0SwK+lGnrhkzjDt5O/ds
+        CO4JoJm5c4ZQLZNWoPMU7duNn+Vu+wk=
+X-Google-Smtp-Source: ABdhPJxpxscr5Eqf/EOMrjECcaIFMFw92O44qlOfPYNBAzJOoITwNyLzZvyarTujWzT+I4GeB4d4Cg==
+X-Received: by 2002:a05:6870:4411:b0:de:6c37:43b4 with SMTP id u17-20020a056870441100b000de6c3743b4mr8000099oah.25.1648231596716;
+        Fri, 25 Mar 2022 11:06:36 -0700 (PDT)
+Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
+        by smtp.gmail.com with ESMTPSA id c8-20020a4ad788000000b0031ce69b1640sm2725519oou.10.2022.03.25.11.06.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 11:06:34 -0700 (PDT)
+From:   Chris Morgan <macroalpha82@gmail.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     gregory.clement@bootlin.com, Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH] i2c: mv64xxx: Remove shutdown method from driver
+Date:   Fri, 25 Mar 2022 13:06:25 -0500
+Message-Id: <20220325180625.31414-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 16973785521511499398
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudehuddgkeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrheileehrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Instead of documenting old-style probes, reference "simple probes" and
-document the i2c_match_id function. This might help reduce the use of
-two-argument probes in new code.
+From: Chris Morgan <macromorgan@hotmail.com>
 
-Signed-off-by: Stephen Kitt <steve@sk2.org>
+When I attempt to shut down (or reboot) my R8 based NTC CHIP with this
+i2c driver I get the following error: "i2c i2c-0: mv64xxx: I2C bus
+locked, block: 1, time_left: 0". Reboots are successful but shutdowns
+freeze. If I comment out the shutdown routine the device both reboots
+and shuts down successfully without receiving this error (however it
+does receive a warning of missing atomic_xfer).
+
+It appears that very few i2c drivers have a shutdown method, I assume
+because these devices are often used to communicate with PMICs (such
+as in my case with the R8 based NTC CHIP). I'm proposing we simply
+remove this method so long as it doesn't cause trouble for others
+downstream. I'll work on an atomic_xfer method and submit that in
+a different patch.
+
+Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
 ---
- Documentation/i2c/writing-clients.rst | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ drivers/i2c/busses/i2c-mv64xxx.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/Documentation/i2c/writing-clients.rst b/Documentation/i2c/writing-clients.rst
-index 978cc8210bf3..e3b126cf4a3b 100644
---- a/Documentation/i2c/writing-clients.rst
-+++ b/Documentation/i2c/writing-clients.rst
-@@ -46,7 +46,7 @@ driver model device node, and its I2C address.
- 	},
+diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
+index 5c8e94b6cdb5..424c53e4c513 100644
+--- a/drivers/i2c/busses/i2c-mv64xxx.c
++++ b/drivers/i2c/busses/i2c-mv64xxx.c
+@@ -1047,14 +1047,6 @@ mv64xxx_i2c_remove(struct platform_device *pd)
+ 	return 0;
+ }
  
- 	.id_table	= foo_idtable,
--	.probe		= foo_probe,
-+	.probe_new	= foo_probe,
- 	.remove		= foo_remove,
- 	/* if device autodetection is needed: */
- 	.class		= I2C_CLASS_SOMETHING,
-@@ -155,8 +155,7 @@ those devices, and a remove() method to unbind.
- 
- ::
- 
--	static int foo_probe(struct i2c_client *client,
--			     const struct i2c_device_id *id);
-+	static int foo_probe(struct i2c_client *client);
- 	static int foo_remove(struct i2c_client *client);
- 
- Remember that the i2c_driver does not create those client handles.  The
-@@ -165,8 +164,12 @@ handle may be used during foo_probe().  If foo_probe() reports success
- foo_remove() returns.  That binding model is used by most Linux drivers.
- 
- The probe function is called when an entry in the id_table name field
--matches the device's name. It is passed the entry that was matched so
--the driver knows which one in the table matched.
-+matches the device's name. If the probe function needs that entry, it
-+can retrieve it using
-+
-+::
-+
-+	const struct i2c_device_id *id = i2c_match_id(foo_idtable, client);
- 
- 
- Device Creation
+-static void
+-mv64xxx_i2c_shutdown(struct platform_device *pd)
+-{
+-	pm_runtime_disable(&pd->dev);
+-	if (!pm_runtime_status_suspended(&pd->dev))
+-		mv64xxx_i2c_runtime_suspend(&pd->dev);
+-}
+-
+ static const struct dev_pm_ops mv64xxx_i2c_pm_ops = {
+ 	SET_RUNTIME_PM_OPS(mv64xxx_i2c_runtime_suspend,
+ 			   mv64xxx_i2c_runtime_resume, NULL)
+@@ -1065,7 +1057,6 @@ static const struct dev_pm_ops mv64xxx_i2c_pm_ops = {
+ static struct platform_driver mv64xxx_i2c_driver = {
+ 	.probe	= mv64xxx_i2c_probe,
+ 	.remove	= mv64xxx_i2c_remove,
+-	.shutdown = mv64xxx_i2c_shutdown,
+ 	.driver	= {
+ 		.name	= MV64XXX_I2C_CTLR_NAME,
+ 		.pm     = &mv64xxx_i2c_pm_ops,
 -- 
-2.27.0
+2.25.1
 
