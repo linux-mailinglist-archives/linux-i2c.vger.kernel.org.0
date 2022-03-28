@@ -2,76 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 366E74E9246
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Mar 2022 12:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4571A4E9251
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Mar 2022 12:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233683AbiC1KGK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Mar 2022 06:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
+        id S236973AbiC1KLE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Mar 2022 06:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233834AbiC1KGJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Mar 2022 06:06:09 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09ED4656E;
-        Mon, 28 Mar 2022 03:04:26 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C7DA79BC;
-        Mon, 28 Mar 2022 12:04:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1648461865;
-        bh=tMK+R9kj1Lsag9DOJO+ldf5okh290gG3kRXbCJfVZn0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m5mXdWlWSz78+D4U+hhr9L4SP50EgSlTMjA6DrHaNVrQuMjPzM0XJ65IngZAXrMne
-         xl3nva2CQFt+muTiDkZGWjgjMjriAsa/IlPdIEOFS93oD26Z2N0gYpV4tHyRfZCBBr
-         j4LDFEeIp9xSeNf+B6nDd0jMyBcachnAouTWytOA=
-Date:   Mon, 28 Mar 2022 13:04:23 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sean Nyekjaer <sean@geanix.com>, devicetree@vger.kernel.org,
-        Jose Cazarin <joseespiriki@gmail.com>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v1.1 2/2] iio: dac: dac5571: Fix chip id detection for OF
- devices
-Message-ID: <YkGIJ5MQoZ7RN6Y5@pendragon.ideasonboard.com>
-References: <20210723183114.26017-3-laurent.pinchart@ideasonboard.com>
- <20210724000654.23168-1-laurent.pinchart@ideasonboard.com>
- <20210724154308.55afb03c@jic23-huawei>
- <YRwfpOuyVEstwsza@kunai>
- <YRwhej9Hz00qnvlQ@pendragon.ideasonboard.com>
- <YRwi62E4xYcMyyFi@kunai>
- <YRwoAgie/mDDunn9@pendragon.ideasonboard.com>
- <YkF99t+NlO+IKMXg@ninjato>
+        with ESMTP id S235601AbiC1KLD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Mar 2022 06:11:03 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4556E4477F
+        for <linux-i2c@vger.kernel.org>; Mon, 28 Mar 2022 03:09:23 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id w4so14344268ply.13
+        for <linux-i2c@vger.kernel.org>; Mon, 28 Mar 2022 03:09:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=UIbSwXETQo8py8NKWWoOzTbdb19k4UaVxjqlebXhaiE=;
+        b=UH5BenksiQsPzEarBBpvtI+DTye7obdn+GL51djnBAcS1MebVUGF3hry9o4uOMH5Vs
+         EiBh2CgDATjBho6TZeNEk0ESva0l4dzWyGpdpSqLbBLQaFBQISQ/xYquaSTF9vtzR+4h
+         1oEqSXMUOOPKVnNW7QcnpqTrSIh1qzmYARq+/29/R5Wvx5/jhPTsIT8PsJ91nbnZ6nqc
+         vcIifud7GDtkZCNymUq1R9G+jkFM+/71g8y7FrSbq5nvbINTudWQzY77qsTvJL+EHW/h
+         BuZUE9Lktbi0LKckbllJ9Vxy8tUM6K0SdKbtCxK5a2UGstY9vymXpOj83SU8HnbUlyk1
+         eyaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=UIbSwXETQo8py8NKWWoOzTbdb19k4UaVxjqlebXhaiE=;
+        b=heMZnyZpJV+Jw6i87hciSvkwr2r5zl7noqo+WOjJyXe3tWPRBSPqMy2HTkyG4JyVjk
+         TtLm1Bnywf447zzeXJUprlr2Z9kiOEcdf71lvdViQYqkfjU+l3Ucu+6H5dLstR9jjp8A
+         EUyNakZ3SPuLfAxk6XjvYW+94aQc7RXIzct5OYpLLp6waQ0awrp/Kcj3kyyIM91DMFx1
+         L/yfqgaZeaBMhD1XxuIre9cm/9rCJ1UmZ09GccJKu/SgU/qr68aS9BDYlRDr+MHU153J
+         B+n1EeikP1rQxogI0Jvf215zUVHpcnT8QctfpNxjz1y3g79PFGxzyClkeG6JaRl19aHc
+         H8Sg==
+X-Gm-Message-State: AOAM531ntz0vCF9S73SwNAmz2exAz3faXKlIudCnP9323ThSazXUQMa6
+        iI3hYjKeqo6bir19LiGDyse2YYPNpW4d9IMSFW0=
+X-Google-Smtp-Source: ABdhPJxVQK8wZiIhOrY0jRfUMeLqlgCnzMAaeZ6ID/Yc70cDitOgudk3xJ/aZgskBnWd00fKtXnj4IOaKviklFOcpGU=
+X-Received: by 2002:a17:902:c412:b0:154:4012:4beb with SMTP id
+ k18-20020a170902c41200b0015440124bebmr24855194plk.107.1648462162838; Mon, 28
+ Mar 2022 03:09:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YkF99t+NlO+IKMXg@ninjato>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a17:90b:380f:0:0:0:0 with HTTP; Mon, 28 Mar 2022 03:09:22
+ -0700 (PDT)
+Reply-To: fionahill.usa@outlook.com
+From:   Fiona Hill <sylviajones046@gmail.com>
+Date:   Mon, 28 Mar 2022 03:09:22 -0700
+Message-ID: <CAGH1ixsCTgMUHjRnSsRVfxnUMTdG2W6YNmD8xEZKQBUQmVbmcg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 11:20:54AM +0200, Wolfram Sang wrote:
-> 
-> > My point is that this patch shouldn't be needed. I'd like if the I2C
-> > core could get the driver data from the i2c_device_id table instead of
-> > duplicating it in the of_device_id. This isn't possible today as
-> > i2c_match_id() doesn't have the fallback mechanism that OF matching has.
-> 
-> I think the proper fix would be naming the I2C client after the actually
-> matched compatible property, and not after the first one? I am a bit
-> afraid of regressions when we change that, however...
-
-That would be the right way indeed. I have the same concern regarding
-regressions though. Is it worth a try to see what could break ?
-
 -- 
-Regards,
-
-Laurent Pinchart
+Hello, did you receive my message i sent to you ?
