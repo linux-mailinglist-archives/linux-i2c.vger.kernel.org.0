@@ -2,66 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9545C4E9A56
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Mar 2022 17:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9179A4E9F56
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Mar 2022 21:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244250AbiC1PIB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Mar 2022 11:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
+        id S245467AbiC1TDK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Mar 2022 15:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244188AbiC1PHu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Mar 2022 11:07:50 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583654EA0D
-        for <linux-i2c@vger.kernel.org>; Mon, 28 Mar 2022 08:06:09 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id m67so26539614ybm.4
-        for <linux-i2c@vger.kernel.org>; Mon, 28 Mar 2022 08:06:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M/wRiyThS5X8/D2KX8GPji/87UrigbGUnnN2Y5aIQZk=;
-        b=yV5Sdnq4Kjd2UWp/LZ5lwEEIERJNIr6KcM46CNCVWFvx5wlzaJKddNK3VRi9pv7R2o
-         hWLbRfqsYLG0O6BNwadNXFRL0YPv+6GRHkR0IzKLPhfmrUR2KryNXljHadxnyCDBIKfG
-         KF3hEMCHNIbTbUadbfHl44Bxavmpj4Yv1hA3CuM83B2CxsfvMWvxfFESE+lhkcc2sl81
-         sVn2fmUkIK1jSq6CSafEfGsW+woSpsvXDMkS8B+IG38HEM9XFKMRr8RrXUF/P0GXJxbn
-         0RCKTCb0nMdQINyuCCC1bFgIRbmReMA7sVoFZOdeeWwD8F4hNP9k17WhtrZi3ge5CPd4
-         ikkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M/wRiyThS5X8/D2KX8GPji/87UrigbGUnnN2Y5aIQZk=;
-        b=diJ0jNJNWBf5dlDbWI2ufIoKZ5h0Ie+UirmYUGau8203UZwAMm9BRFZJTzllZeSTl7
-         T4RKSwJcNLynMwQ5lpB8Z0f4yZpIVdJ7RHIgbjUFZ6fQEcDCUatQDQTEGIyrMUhJHqrF
-         Tjg2eM17GCt8W1YElxwNfKhL58lZPIcXjJT/KBNElWCNxJ9rvEcWB8EleAUmpvdAEyOl
-         HlKb5TnL9Kk2tCoL8OcjsCmU/9YCVAlV93cdM5mS7Z6SBtQYMkZtA1pQnKXW3sA63QaS
-         M4v5RJjFFJUEelBR/K7jM8ncUrmY2OzEeNn9aUG0vgpX2VNiFTi1WMQgjn/O2Wv3wizQ
-         K0cw==
-X-Gm-Message-State: AOAM533/+a5gbnZBuPXHks5oAryBX7i+R1TeJkWTq1kvJdvQRg+WtzRy
-        TWqscP2WXTo8VubxH/WxRLmbznMw7e5iJCaX1Bfa2A==
-X-Google-Smtp-Source: ABdhPJyBvWP4T/nWYSh2/FjJMHmzkTwu66lNSkHUz/fBNP/OZSAqAsPGed14FjOgCZ7TguMcw0Nj5dmdm+VJ9v0F0CI=
-X-Received: by 2002:a25:ab64:0:b0:633:6d02:ebc8 with SMTP id
- u91-20020a25ab64000000b006336d02ebc8mr23196123ybi.492.1648479968482; Mon, 28
- Mar 2022 08:06:08 -0700 (PDT)
+        with ESMTP id S245424AbiC1TCx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Mar 2022 15:02:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D923734653;
+        Mon, 28 Mar 2022 12:01:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D8E0611D8;
+        Mon, 28 Mar 2022 19:01:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40D00C004DD;
+        Mon, 28 Mar 2022 19:01:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648494071;
+        bh=yvaaCgkKBw/wP5pC/CxghAEA/MkhepzW343jCYdxRlw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CktgMdy63xvsQJ48Ef+BwQtyqnflrPL1QdRCfQskIL1Y4ax1SKH5/+8f18GE7gO0o
+         DZnqLtXoae1mbFXbqGRonkbj5g3rvSU5VIDe4bUEg7CnYOXbtth8ZDOc+NOdCQDk0B
+         TEXAz6BCbFoElulz+98p9LA9yVklDw/xJddhoj4ztYIEPkEOtM3UWlq6sWfI6fls07
+         2Y9sLCUqvZdIqigpGkDzdHaFK3QDfZpe3TXd1YS3ki2RZ+SFM7omavpz+S3si7ur8l
+         eIxu5RNjqOP4MqvW8U4vUTeWlDvdNr1RI2lPnLel9qHdVmPwQVMLw963DEUKzSgMrO
+         bmpbqxciuB7Zg==
+Date:   Mon, 28 Mar 2022 21:01:08 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jean Delvare <jdelvare@suse.de>
+Cc:     linux-i2c@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Terry Bowman <terry.bowman@amd.com>
+Subject: Re: [PULL REQUEST] i2c for v5.18
+Message-ID: <YkIF9OqbZQ8yinz8@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Terry Bowman <terry.bowman@amd.com>
+References: <Yj19RH3qpzQsIV/O@shikoro>
+ <CAHk-=wgoeUc15-8Wu8U=4FnwhgmyU3C13R107oigbmJRpi_sZA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220321042142.69239-1-frank@zago.net> <20220321042142.69239-3-frank@zago.net>
-In-Reply-To: <20220321042142.69239-3-frank@zago.net>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 28 Mar 2022 17:05:57 +0200
-Message-ID: <CACRpkdaOHHkJnvB=RQ8dLXGxT_h5mGgy5Np87QVMcPzegNi2oQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] gpio: ch341: add MFD cell driver for the CH341
-To:     frank zago <frank@zago.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
-        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="E7iTNvwRJK4hNqtW"
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgoeUc15-8Wu8U=4FnwhgmyU3C13R107oigbmJRpi_sZA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,37 +65,55 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Frank,
 
-thanks for your patch!
+--E7iTNvwRJK4hNqtW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I see you already got a bunch of homework from Andy, I will do a more
-thorough review on the next iteration, just a few things:
+On Sat, Mar 26, 2022 at 12:58:36PM -0700, Linus Torvalds wrote:
+> On Fri, Mar 25, 2022 at 1:28 AM Wolfram Sang <wsa@kernel.org> wrote:
+> >
+> > I2C has for 5.18: tracepoints when Linux acts as an I2C client, added
+> > support for AMD PSP, whole subsytsem now uses generic_handle_irq_safe(),
+> > piix4 driver gained MMIO access enabling so far missed controllers with
+> > AMD chipsets, plus a bulk of device driver updates, refactorization, and
+> > fixes.
+>=20
+> It feels odd/wrong to use the piix4 driver for the AMD MMIO case on SB800.
+>=20
+> Would it not have made more sense to just make that a separate driver?
+>=20
+> It feels like now the piix4 driver has a lot of "if SB800" for the
+> probing code, and then a lot of "if (mmio)" at runtime.
+>=20
+> I've pulled this, but just wanted to mention this "that looks a bit
+> odd". How much code is actually _shared_ in the SB800 case?
+>=20
+> I'm not insisting on splitting this up - maybe it all makes sense. I'm
+> just questioning it.
 
-On Mon, Mar 21, 2022 at 5:21 AM frank zago <frank@zago.net> wrote:
+Adding Jean to CC, he maintains the PC-style drivers.
 
-> The GPIO interface offers 16 GPIOs. 6 are read/write, and 10 are
-> read-only.
->
-> Signed-off-by: frank zago <frank@zago.net>
-(...)
-> +config GPIO_CH341
-> +       tristate "CH341 USB adapter in GPIO/I2C/SPI mode"
-> +       depends on MFD_CH341
 
-I would add
-default MFD_CD341
+--E7iTNvwRJK4hNqtW
+Content-Type: application/pgp-signature; name="signature.asc"
 
-This way it gets selected automatically if the MFD module gets
-selected. (I suspect you should do the same with the I2C module).
+-----BEGIN PGP SIGNATURE-----
 
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/gpio.h>
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJCBe4ACgkQFA3kzBSg
+KbbCFg/6Auuw5ANAZruLaiGI24QQzxC6+s6g3SKjue4LQeR8iw07tnPpulI56ugn
+aZo3JTe8+/LJEcVFZokMPhQs6KH3qiByWj1J2BTWRu6Q1DJm7P8QsM/6ouHh0N+l
+llI9p+Qdav9dhFcbrl0pjdEh/WrNnqYsUxnplY77cxFdQjV7j1U5oZbnseg91fZF
+pAMfLADhqCUJVwvh3v4kQ7CUDgM5800zc2C6Eq7btiU8Fh9uKbDNkhprc+lNpg0y
+kXY/3sAdhWZmxBuZXAUh2HumVNggOTOf6Svk76iJ2YoK1slp34C5YuP/Z4jsvhEY
+zCwuGPdAVezo59pXe2s19qG5f49jEiO777s47UgZeK4nSSj2RUqTF1L5bF5UF4AI
+H58A7ohnZ5SLEyDfvJ1HWQHB+RmUU3bRvSGHtP62cTnIdZqeGxoZtOo8FPupQ2+C
+ZgRLdE4sKI6Sh2u/dt1VDuXXZFP95uTG/DHhQwgsHFHfaSdUDMvAmxSYMejfOv8s
++ua1mUF1mkNiR719ksAdgaWr2IMMB9726G6PdBnywSHnb6kUCeKioBg8GBp377t4
+l2mXgzvW5OEyLorRE/db0hGmybhTjQ5TjCIaLa6iX03n6IO5Iu6Ji1YLI+1HUzwa
+WiAvmsykMIe8m6/0uxk23YOc64bJT/rLS4ufNYr9am4wEtZ38RE=
+=XFSv
+-----END PGP SIGNATURE-----
 
-Use <linux/gpio/driver.h>
-
-Yours,
-Linus Walleij
+--E7iTNvwRJK4hNqtW--
