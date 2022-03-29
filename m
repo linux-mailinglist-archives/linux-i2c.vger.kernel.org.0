@@ -2,112 +2,176 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710D34EA9EE
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Mar 2022 10:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A524EAD1E
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Mar 2022 14:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234350AbiC2JBA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 29 Mar 2022 05:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
+        id S235172AbiC2M23 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 29 Mar 2022 08:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234344AbiC2JA7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 29 Mar 2022 05:00:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199181DE59A;
-        Tue, 29 Mar 2022 01:59:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S232550AbiC2M22 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 29 Mar 2022 08:28:28 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100C14D9D7;
+        Tue, 29 Mar 2022 05:26:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC4E7615F4;
-        Tue, 29 Mar 2022 08:59:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F6B3C340F2;
-        Tue, 29 Mar 2022 08:59:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648544356;
-        bh=u4u0Oj/nXBybt46EJgPF/pPuLsbdH4xX+S6TUsf5Bws=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H/SGEVIrZnSvAuZ7Zt1Wwnc++TUokR+j+blPDTwsaWEoGGfzhC6gev1tedRFNUm4Y
-         dblH1Kj4FvHxmJFE/tKcxekXq+IGDaw+1XFioR97CX5P8aHxYovlXw5ihm/mCtrbTu
-         AYocTsmoIZHJfaONSCbH6dsCx5CBQUfhFzl/h1C9k/ebQFXc/A369MjwsqeQ5Wj7gP
-         ADdu9Y1tAz8fEm5+j1Pk+MBuAkuo6wih2jFl51An30SkB9+k/HKuC9hhGPp6bk5d9I
-         78lPIjdZwnsUxamf8pNQTN6Vi8wxKOSKW6wvzC1L4GttdhQWR3F37i4b8pfCCpJkno
-         5OzsH1WezM6uQ==
-Date:   Tue, 29 Mar 2022 10:59:07 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sean Nyekjaer <sean@geanix.com>, devicetree@vger.kernel.org,
-        Jose Cazarin <joseespiriki@gmail.com>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v1.1 2/2] iio: dac: dac5571: Fix chip id detection for OF
- devices
-Message-ID: <YkLKW7pIQcf2Qbji@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>, Sean Nyekjaer <sean@geanix.com>,
-        devicetree@vger.kernel.org, Jose Cazarin <joseespiriki@gmail.com>,
-        linux-i2c@vger.kernel.org
-References: <20210724000654.23168-1-laurent.pinchart@ideasonboard.com>
- <20210724154308.55afb03c@jic23-huawei>
- <YRwfpOuyVEstwsza@kunai>
- <YRwhej9Hz00qnvlQ@pendragon.ideasonboard.com>
- <YRwi62E4xYcMyyFi@kunai>
- <YRwoAgie/mDDunn9@pendragon.ideasonboard.com>
- <YkF99t+NlO+IKMXg@ninjato>
- <YkGIJ5MQoZ7RN6Y5@pendragon.ideasonboard.com>
- <YkGogxobUcRddA4L@ninjato>
- <YkJWZQJ2f2tyS6sH@pendragon.ideasonboard.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id AD714210FD;
+        Tue, 29 Mar 2022 12:26:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648556803; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GHCym1FAfk584NsBbZrS25WXA0fFraZHorF91Z4iPvM=;
+        b=ASediyECI19f//wM1oXpm6I2b+9U65HF9mqs1lX3VAaIC85MNereMsnIDLw5YjjjUB2Jlm
+        l7q28MaBy3X9NJH+i7oySHQ0xlkitEb1glicBEzuVIUOBtSqaYNu8IRF8pRp6EmkoMUUbo
+        y5Fp1q3wjyFIXty7vC9lLMUeybaGpLw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648556803;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GHCym1FAfk584NsBbZrS25WXA0fFraZHorF91Z4iPvM=;
+        b=qAguEPr7+9CTLyj/+Fh9mGF4gyppAwvriarmrAxPsvcYg1hAaBa12CZcK7rN4bOoG/U09t
+        Znh21U7xO0EXE5Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 50A3513A7E;
+        Tue, 29 Mar 2022 12:26:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id PkZPEQP7QmIGHgAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 29 Mar 2022 12:26:43 +0000
+Date:   Tue, 29 Mar 2022 14:26:42 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Terry Bowman <terry.bowman@amd.com>
+Subject: Re: [PULL REQUEST] i2c for v5.18
+Message-ID: <20220329142642.11692e8f@endymion.delvare>
+In-Reply-To: <YkIF9OqbZQ8yinz8@ninjato>
+References: <Yj19RH3qpzQsIV/O@shikoro>
+        <CAHk-=wgoeUc15-8Wu8U=4FnwhgmyU3C13R107oigbmJRpi_sZA@mail.gmail.com>
+        <YkIF9OqbZQ8yinz8@ninjato>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4/xIa57C4s+C0PDg"
-Content-Disposition: inline
-In-Reply-To: <YkJWZQJ2f2tyS6sH@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Linus, Wolfram,
 
---4/xIa57C4s+C0PDg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Mon, 28 Mar 2022 21:01:08 +0200, Wolfram Sang wrote:
+> On Sat, Mar 26, 2022 at 12:58:36PM -0700, Linus Torvalds wrote:
+> > It feels odd/wrong to use the piix4 driver for the AMD MMIO case on SB800.
+> > 
+> > Would it not have made more sense to just make that a separate driver?
+> > 
+> > It feels like now the piix4 driver has a lot of "if SB800" for the
+> > probing code, and then a lot of "if (mmio)" at runtime.
+> > 
+> > I've pulled this, but just wanted to mention this "that looks a bit
+> > odd". How much code is actually _shared_ in the SB800 case?
+> > 
+> > I'm not insisting on splitting this up - maybe it all makes sense. I'm
+> > just questioning it.  
+> 
+> Adding Jean to CC, he maintains the PC-style drivers.
 
+Well, that's a legitimate question, that I asked myself before many
+times to be honest.
 
-> I've had a look, but it seems to be problematic. The name of the client
-> is set in i2c_new_client_device(), way before we match with a driver.
-> The name is used in the uevent sent to userspace, so changing it
-> afterwards is likely not a good idea.
+To understand why things are the way they are, you have to dig through
+the history of the driver. Originally it was a driver for Intel
+chipsets (82371 aka PIIX4, then 82443 aka 440BX). Then support was
+added for various clones (Victory66 and several ServerWorks chipsets)
+which were fully compatible (modulo the srvrworks_csb5_delay quirk).
 
-Okay, that is a definitive no-go. Thanks for checking. Seems we really
-need to update i2c_match_id to handle the extra case as you suggested.
+Then ATI came with compatible chipsets as well (IXP200, IXP300 and
+IXP400). These were still very similar to the original Intel design,
+with a single SMBus controller driving a single SMBus port. So far so
+good.
 
+Where things started diverging is with the ATI SB700, which introduced
+a second SMBus controller. Then came the ATI SB800, which introduced a
+4-port multiplexer on top of the main SMBus controller. Then AMD bought
+ATI and the new chipsets came with new PCI device IDs and a slightly
+different configuration procedure, plus a potential conflict with the
+IMC which require extra care. The move of the latest AMD chipsets to
+MMIO is only one more diverging step in this list.
 
---4/xIa57C4s+C0PDg
-Content-Type: application/pgp-signature; name="signature.asc"
+The reason why I find a driver split difficult is because there's no
+clear line where to cut. We could have a driver with MMIO support and
+one without, as suggested by Linus. But we could also move the line and
+have a driver with multiplexer + MMIO support, and one with neither
+[1]. Or a driver with aux port + multiplexer + MMIO support, and one
+with neither. None of these cuts is obviously "the good one", they are
+all pretty arbitrary.
 
------BEGIN PGP SIGNATURE-----
+In all cases, that's going to duplicate a fair amount of code, as the
+SMBus block itself is still exactly the same. So at least
+piix4_transaction(), piix4_access(), piix4_add_adapter() and
+piix4_func() would be needed by both drivers. If we don't want to
+duplicate the code, we'd have to create a shared module that both
+drivers would rely on. While a clean design, it does not really go in
+the direction of simplification.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJCylcACgkQFA3kzBSg
-Kbbq4BAAjwfwH/GzKBWMz7XQORgDgxHrlNlEoHGfwSgnzTHsixbAM44xgl1ZoyGx
-h4sMczAPYMs9SWhnREBahx3V80gzgbgrXcInPPaHO9twpxkzyZ5uPsFq2E3YO+Ud
-Jw1BJH+ssyNl7Z9qLU4v2miY1eXP5aCyOPy9McUhrykI/hpMjfpQjOuKEKpw5ldA
-C8hQGjNQOr7jLgC5VHSyCvCjFWERR/QKcfOlB8aB7TfwBIbclQsgsN5kBBLo+XmG
-x272UmrFnICJp7TSYqqoUybfiSDRB5IrYx/ed26oZ0db6ZpM20zPb3iokkWH8Cyx
-N9WWA4HeoAyYGhT1Bpz8koWtcKrOSb5IxFNxxdvBJJ4AsD+QOH9WaWZMxNnf/QCu
-BLXg4SENMRckUxQC3bWCL0/VGCBsVOfqp3kHyHCQfWufsvCYaMiR0H/XKUnmQuU2
-UpaNA1pNctcbI3TzHBJvnmtAKWNXoso/CUXFQV15/XgIs/FTpEtR9e38MJn1qUKZ
-jiB+Y65DCtlzp53FBJ86CwzguOWhDKVg5tUSLqxL1y8VOjHPACzsrpGQawPLFv/q
-E6uTF5cep7cI38x5Tr42VhFChjgUf2SS0eLo1e2fXzCbi4bxMWskaE1rTpDllSMw
-yFUXOc0jIzuB+zWU6vaRmtPCGSehZvi12lssd1f1oJoL0UR1uBo=
-=RA6W
------END PGP SIGNATURE-----
+If we split on MMIO support then the amount of duplicated (or shared)
+code would be even larger, as it would also include support of the aux
+port, multiplexing and IMC conflict workaround.
 
---4/xIa57C4s+C0PDg--
+The real question here is, what do we win by having 2 drivers? We better
+win something, because that's a large amount of work, and renaming a
+driver can make life difficult for downstream (it breaks blacklisting,
+preset module parameters, requires kernel configuration and packaging
+adjustments, etc). And a split is even worse than a rename, as some of
+these changes then become conditional.
+
+In the end, the only benefit I can see is a reduced memory footprint on
+old systems, which could use the "simple" driver which would be very
+close to what the i2c-piix4 driver looked like 15 years ago. I don't
+think that's a goal worth pursuing though, as the number of users of
+these old chipsets must very small by now.
+
+On the other hand, the benefit for the users of recent hardware is
+marginal, as removing support for the oldest chipsets from the current
+driver wouldn't remove much code in the end. A rough estimation would
+be between 50 and 100 lines removed, which for a 1159-line driver isn't
+really meaningful.
+
+Plus, from a maintenance perspective, two drivers instead of one will
+automatically mean more work (maybe not much, but still).
+
+And this is how I came to the conclusion that, despite the weird
+feeling that there are too many conditionals in the i2c-piix4 driver,
+there's nothing smart that can be done to get rid of them, and we just
+have to live with them.
+
+[1] That would put the support of the SB700 in one driver, and the
+support of the SB800 in another, while they share the same PCI device
+ID (but with a different revision range). So both drivers would load on
+such systems by default, wasting memory.
+
+-- 
+Jean Delvare
+SUSE L3 Support
+7
