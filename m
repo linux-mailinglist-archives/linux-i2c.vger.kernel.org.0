@@ -2,87 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5164EB5A4
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Mar 2022 00:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBF54EB5E7
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Mar 2022 00:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236149AbiC2WMf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 29 Mar 2022 18:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
+        id S237220AbiC2WbQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 29 Mar 2022 18:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236048AbiC2WMe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 29 Mar 2022 18:12:34 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1640518461B
-        for <linux-i2c@vger.kernel.org>; Tue, 29 Mar 2022 15:10:51 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id v12so12576369ljd.3
-        for <linux-i2c@vger.kernel.org>; Tue, 29 Mar 2022 15:10:50 -0700 (PDT)
+        with ESMTP id S237187AbiC2WbQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 29 Mar 2022 18:31:16 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9466565D1C;
+        Tue, 29 Mar 2022 15:29:32 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id w21so22224476wra.2;
+        Tue, 29 Mar 2022 15:29:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5NszAzyCxeqCYVF4rcK1etWk+lEs38VK5zvRzeDlGh0=;
-        b=KQCd+gO4PoDRepPTc/MgjHeabBWTTOlSRI+8rzh47UsJNwJP7SFfBYTTvHx+cKjOOd
-         p03PYtz4rTHsrzEpQTzkyaguV5RxijqsK56lFbbMBqKt2a7k7JnkkaG/F1bNe0YGVTDC
-         3vc3jh+wUG1YiwvUk0ww6Wo9c1zmM0yvafCWo=
+        d=gmail.com; s=20210112;
+        h=message-id:mime-version:content-transfer-encoding
+         :content-description:subject:to:from:date:reply-to;
+        bh=+v//v9bV1cKxYYqp6E5HrJfuFydY/JXcjMGnmfr7lM0=;
+        b=CofhH8nchDKrCLKpjJS6KYHEaLu5DrxrBUY1FuqNxffnpSGpilWdv6xrcAI8hh+i58
+         CNvcYzKJilYjMvYMFRnvOzagq4dhnIWthXiP6Cm7zt7I8Y4OBlNhflihGI0OV8gXa64w
+         EccC9HCkgXc7GjgL1G4XC+kfFKY0qF0JUYQ48Oc/0GoeXXBaEHZ4RMBEWb9DokdD5ZAS
+         yMdNMO3Tgmq1iQMXboCw4wrF8kKfLjkAlJE8DyvFGWPgEE9H02UuS+KRocjbPkTrp3En
+         xhlM+cH8KqBUeV0Afz//HPJ/Ib2yrJin0lS52PU6WCxHNFYcv0izr4KgMuDBRXqBle/M
+         5uVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5NszAzyCxeqCYVF4rcK1etWk+lEs38VK5zvRzeDlGh0=;
-        b=UGaDDMq/hjsbZRu7Du0NdMytcyWN9aAkyr9bMe/jD8L9Jn1rX+RnYgXXW9LdVDNgpd
-         IbwoDfbgs5SC3WgRG16/DXAs3lQGH9tqNxb0rPA5pIIe+234pJFR3FQdAXVDu0ZGSlpK
-         PxWA3P3GapmMWSnQ1+dsVnNuXcXNjWDtOP6chfGRqJKATsBO8kVBklRSuHvIHhZn9DmY
-         40xiZ4+njjc57DBNGNwMFayVQHkD6MWRdloyKwD7P0xFXK4EXPdISNC7JE8e2sSUhvL6
-         v34gUTzvp2IJWHFXofXpU4uDEE7o+gKIkakn/weYHj9xspR9MhBH7/5L4TaK4JiZyv7U
-         jYag==
-X-Gm-Message-State: AOAM532wlext4IKRacTus455cqKkS9R3qwAtJ8VVvARFljeCB1HFqAcB
-        wY0A1F2oyCZds0KbeiMDgd0+5SDGx5On7onW
-X-Google-Smtp-Source: ABdhPJzQd5fXdf6aneg9XYp7vkG6MEJQ2agpjBMb7BKqy69k3G6qkJm36GWeSX44JPzIQ8F2mvYVng==
-X-Received: by 2002:a05:651c:1542:b0:249:a87f:8a34 with SMTP id y2-20020a05651c154200b00249a87f8a34mr4451795ljp.442.1648591848224;
-        Tue, 29 Mar 2022 15:10:48 -0700 (PDT)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
-        by smtp.gmail.com with ESMTPSA id l8-20020a056512332800b0044a379f58fcsm2114869lfe.55.2022.03.29.15.10.46
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 15:10:46 -0700 (PDT)
-Received: by mail-lf1-f51.google.com with SMTP id t25so32668903lfg.7
-        for <linux-i2c@vger.kernel.org>; Tue, 29 Mar 2022 15:10:46 -0700 (PDT)
-X-Received: by 2002:a05:6512:3055:b0:44a:3914:6603 with SMTP id
- b21-20020a056512305500b0044a39146603mr4470007lfb.435.1648591846330; Tue, 29
- Mar 2022 15:10:46 -0700 (PDT)
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:content-description:subject:to:from:date
+         :reply-to;
+        bh=+v//v9bV1cKxYYqp6E5HrJfuFydY/JXcjMGnmfr7lM0=;
+        b=HtIXSJLgGlURdnWtnErMCjOCLf4wOsDRiSkGYifXPLEzuwPMF0iOYOk4iQ4h2ehzML
+         lOGwqwjtoAT/kyBM8Cyy+Sy9IxkprXY38aqA2JO4mm9KBgk6t6vble841OiCGWHzveyV
+         84nYCVAnPHye92+fL2rjTmYLpkSQjNlMTY5+0wIpUDo7oxujhhPv0xpkGF/VIxXaRf19
+         JPgWgxul5/CC9Fw4QT8E7zveuLiSBAWtLXM5ttL2tNDUnY96hBDlgqH+V0KoH62irlUt
+         fKn2UMJB41n7OEHedNGGe2SXDrST5Qv5oAx6naTaccg4q9VIZhvad6+u5TJh9ndpX+Go
+         Rexw==
+X-Gm-Message-State: AOAM530qO6yO3ERe/RyAh8lQq/tIkTO4s7MyQawdlDxrBw7shfHT0JTR
+        mV7KdE2ao9c97R0GzHwcC6M=
+X-Google-Smtp-Source: ABdhPJyi1qE6effmjETV9+HIlPV8oeAtVSi3GgGVH/c7Ne8O1wB8Cb3Bd4sY91uX/AZo6cC2f/99hg==
+X-Received: by 2002:a05:6000:239:b0:204:101:8fdd with SMTP id l25-20020a056000023900b0020401018fddmr34133764wrz.267.1648592971177;
+        Tue, 29 Mar 2022 15:29:31 -0700 (PDT)
+Received: from [172.20.10.4] ([102.91.4.187])
+        by smtp.gmail.com with ESMTPSA id z5-20020a05600c0a0500b0037bb8df81a2sm4047096wmp.13.2022.03.29.15.29.20
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Tue, 29 Mar 2022 15:29:27 -0700 (PDT)
+Message-ID: <62438847.1c69fb81.ca756.0916@mx.google.com>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-References: <Yj19RH3qpzQsIV/O@shikoro> <CAHk-=wgoeUc15-8Wu8U=4FnwhgmyU3C13R107oigbmJRpi_sZA@mail.gmail.com>
- <YkIF9OqbZQ8yinz8@ninjato> <20220329142642.11692e8f@endymion.delvare>
-In-Reply-To: <20220329142642.11692e8f@endymion.delvare>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 29 Mar 2022 15:10:30 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgqC1OU_a_r80-1EdwSc2SFY0m-V9u6XXr24_C3_XaNcw@mail.gmail.com>
-Message-ID: <CAHk-=wgqC1OU_a_r80-1EdwSc2SFY0m-V9u6XXr24_C3_XaNcw@mail.gmail.com>
-Subject: Re: [PULL REQUEST] i2c for v5.18
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Terry Bowman <terry.bowman@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Gefeliciteerd, er is geld aan je gedoneerd
+To:     Recipients <adeboyejofolashade55@gmail.com>
+From:   adeboyejofolashade55@gmail.com
+Date:   Tue, 29 Mar 2022 23:29:09 +0100
+Reply-To: mike.weirsky.foundation003@gmail.com
+X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_US_DOLLARS_3 autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 5:26 AM Jean Delvare <jdelvare@suse.de> wrote:
->
-> And this is how I came to the conclusion that, despite the weird
-> feeling that there are too many conditionals in the i2c-piix4 driver,
-> there's nothing smart that can be done to get rid of them, and we just
-> have to live with them.
+Beste begunstigde,
 
-Thanks for the very complete response. Color me convinced.
+ Je hebt een liefdadigheidsdonatie van ($ 10.000.000,00) van Mr. Mike Weirs=
+ky, een winnaar van een powerball-jackpotloterij van $ 273 miljoen.  Ik don=
+eer aan 5 willekeurige personen als je deze e-mail ontvangt, dan is je e-ma=
+il geselecteerd na een spin-ball. Ik heb vrijwillig besloten om het bedrag =
+van $ 10 miljoen USD aan jou te doneren als een van de geselecteerde 5, om =
+mijn winst te verifi=EBren
+ =
 
-              Linus
+  Vriendelijk antwoord op: mike.weirsky.foundation003@gmail.com
+ Voor uw claim.
