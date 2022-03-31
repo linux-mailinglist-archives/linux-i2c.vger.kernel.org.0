@@ -2,105 +2,235 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6514ED726
-	for <lists+linux-i2c@lfdr.de>; Thu, 31 Mar 2022 11:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAB64EDE1E
+	for <lists+linux-i2c@lfdr.de>; Thu, 31 Mar 2022 18:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232626AbiCaJnX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 31 Mar 2022 05:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
+        id S239460AbiCaQED (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 31 Mar 2022 12:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233957AbiCaJnW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 31 Mar 2022 05:43:22 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6191D207A;
-        Thu, 31 Mar 2022 02:41:33 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4B0E02000D;
-        Thu, 31 Mar 2022 09:41:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1648719692;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VbsxCOa9JzqELpaQ9PziPailes9HwLBLI2gZIQcLonI=;
-        b=JRMitclP+ldhl0KYInG2ZqCFOIsMhLfD1uad+8wNS9RwXCiRH8wLk/xKp6TXafoFiCJxkk
-        H+A0pU5Gf65OGTQS3GDo8a8lDlhTm1EXpj/8CU6AfBstfbD69/HKIZ3Pbd4CKBA8BresO3
-        l9hYLR/ZDPGNRVLE0qn7NTthWAxu34+YOTudhVtC7U/AW6M1KfVgGNZaPWTzTihwhZtTeV
-        jkKCw4yo9G4kgpFH8OFBBJA9WespPxe15OMAbjubVUafBti2s7ND10NbfvXZbogyzlyxa4
-        C6RPmbiEBw0opSDNx504roXkNUCXLBdRsGFAEd7IPlUL5tNG5/rmVO54KMXaWw==
-Date:   Thu, 31 Mar 2022 11:40:06 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 8/9] i2c: mux: pinctrl: remove CONFIG_OF dependency
- and use fwnode API
-Message-ID: <20220331114006.0c7bc47a@fixe.home>
-In-Reply-To: <6f519f94-9185-a29b-2eff-fd6c9a36cfaf@axentia.se>
-References: <20220325113148.588163-1-clement.leger@bootlin.com>
-        <20220325113148.588163-9-clement.leger@bootlin.com>
-        <6f519f94-9185-a29b-2eff-fd6c9a36cfaf@axentia.se>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        with ESMTP id S233278AbiCaQEC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 31 Mar 2022 12:04:02 -0400
+Received: from smtp1.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2449660D9E;
+        Thu, 31 Mar 2022 09:02:14 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 52F603C04C0;
+        Thu, 31 Mar 2022 18:02:12 +0200 (CEST)
+Received: from lxhi-065 (10.72.94.4) by hi2exch02.adit-jv.com (10.72.92.28)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Thu, 31 Mar
+ 2022 18:02:11 +0200
+Date:   Thu, 31 Mar 2022 18:02:07 +0200
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+CC:     Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        <linux-renesas-soc@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH v2] i2c: rcar: add SMBus block read support
+Message-ID: <20220331160207.GA27757@lxhi-065>
+References: <20210922160649.28449-1-andrew_gabbasov@mentor.com>
+ <CAMuHMdVVDpBAQR+H1TAnpf65aVbAL0Mm0km7Z9L7+1JuF6n1gQ@mail.gmail.com>
+ <000001d7badd$a8512d30$f8f38790$@mentor.com>
+ <20211006182314.10585-1-andrew_gabbasov@mentor.com>
+ <Yg6ls0zyTDe7LQbK@kunai>
+ <20220323215229.GA9403@lxhi-065>
+ <YkQ31VMqj1MXqBd3@shikoro>
+ <YkQ6XRITOFZ7hLXV@shikoro>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YkQ6XRITOFZ7hLXV@shikoro>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.72.94.4]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Le Fri, 25 Mar 2022 17:48:19 +0100,
-Peter Rosin <peda@axentia.se> a =C3=A9crit :
+Hello Wolfram,
 
-> > =20
-> > -	parent_np =3D of_parse_phandle(np, "i2c-parent", 0);
-> > -	if (!parent_np) {
-> > +	parent_fwnode =3D fwnode_find_reference(fwnode, "i2c-parent", 0);
-> > +	if (!parent_fwnode) {
-> >  		dev_err(dev, "Cannot parse i2c-parent\n");
-> >  		return ERR_PTR(-ENODEV);
-> >  	}
-> > -	parent =3D of_find_i2c_adapter_by_node(parent_np);
-> > -	of_node_put(parent_np);
-> > -	if (!parent)
-> > +	parent =3D fwnode_find_i2c_adapter_by_node(parent_fwnode);
-> > +	if (!parent) {
-> > +		dev_err(dev, "Cannot find i2c-parent\n"); =20
->=20
-> Why do we need to log this as an error?
+Thanks for your feedback!
 
-Hi Peter, sorry for the late answer, your mail ended up in my SPAM
-folder.
+On Wed, Mar 30, 2022 at 01:09:17PM +0200, Wolfram Sang wrote:
+> 
+> BTW...
+> 
+> > > ############################################################
+> > > ##################### WOLFRAM'S PATCH ######################
+> > > ############################################################
+> > > root@rcar-gen3:# i2cget -y 4 0x68 0 i 8
+> > > 0x08 0xff 0x06 0xff 0x5f 0xff 0x11 0x08
+> 
+> ... for further tests I think the last parameter should be "i 9" here...
 
-Regarding the error logging, you are right, this is not needed. I'll
-remove it.
+Your patch re-tested on your request (we'll use -i 9 in the future):
 
-Thanks,
+root@rcar-gen3:# i2cget -y 4 0x68 0 s
+0xff 0x06 0xff 0x5f 0xff 0x11 0x08 0x08
+root@rcar-gen3:# i2cget -y 4 0x68 0 i 9
+0x08 0xff 0x06 0xff 0x5f 0xff 0x11 0x08 0x08
+root@rcar-gen3:# i2cget -y 4 0x68 0 i
+0x08 0xff 0x06 0xff 0x5f 0xff 0x11 0x08 0x08 0xff 0xff 0x7e 0x99 0x3e 0x00 0x00 0xfb 0xff 0xff 0x87 0x27 0xff 0x04 0xff 0x30 0x03 0xfd 0xff 0xff 0xff 0xff 0xff
+ 
+> > > 
+> > > root@rcar-gen3:# i2cget -y 4 0x68 0 s
+> > > 0xff 0x06 0xff 0x5f 0xff 0x11 0x08 0x08
+> 
+> ... to see if these 8 bytes match the last 8 bytes from above. The first
+> byte from above is returned internally as the length. It is not a data
+> byte.
+> 
 
-Cl=C3=A9ment=20
+BTW, thanks to Bhuvanesh, we've got another patch [*] which tries
+to combine the best of both worlds:
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+* DMA support in the v1/v2 patches from Andrew/Bhuvanesh
+* Simplicity of your proposal in https://lore.kernel.org/lkml/Yg6ls0zyTDe7LQbK@kunai/
+
+Unfortunately, this patch has a dependency to the rcar_i2c_is_pio()
+in https://github.com/renesas-rcar/linux-bsp/commit/55d2d2fb8b0 
+(which should be resolvable by extracting the function).
+
+Do you think we are on the right track with this new approach or do
+you feel the implementation is still overly complicated?
+
+Appreciate your time/feedback.
+
+Best regards,
+Eugeniu
+
+[*] v3
+
+From: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
+Date: Wed, 26 May 2021 11:36:36 +0530
+Subject: [PATCH v3] i2c: rcar: add SMBus block read support
+
+The SMBus block read is currently not supported for rcar i2c devices.
+
+Add appropriate support to R-Car i2c driver, so that blocks of data
+can be read using SMbus block reads (using i2c_smbus_read_block_data()
+function from i2c-core-smbus.c).
+
+Inspired from:
+ - commit 8e8782c71595a5 ("i2c: imx: add SMBus block read support")
+ - https://lore.kernel.org/lkml/Yg6ls0zyTDe7LQbK@kunai/
+   (proposal/suggestion from Wolfram Sang)
+
+Suggested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Signed-off-by: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
+Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
+---
+ drivers/i2c/busses/i2c-rcar.c | 39 ++++++++++++++++++++++++++++++++---
+ 1 file changed, 36 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
+index f71c730f9838..f4f36689464c 100644
+--- a/drivers/i2c/busses/i2c-rcar.c
++++ b/drivers/i2c/busses/i2c-rcar.c
+@@ -105,6 +105,7 @@
+ #define ID_DONE		(1 << 2)
+ #define ID_ARBLOST	(1 << 3)
+ #define ID_NACK		(1 << 4)
++#define ID_EPROTO	(1 << 5)
+ /* persistent flags */
+ #define ID_P_HOST_NOTIFY	BIT(28)
+ #define ID_P_REP_AFTER_RD	BIT(29)
+@@ -522,6 +523,7 @@ static void rcar_i2c_irq_send(struct rcar_i2c_priv *priv, u32 msr)
+ static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
+ {
+ 	struct i2c_msg *msg = priv->msg;
++	bool recv_len_init = priv->pos == 0 && msg->flags & I2C_M_RECV_LEN;
+ 
+ 	/* FIXME: sometimes, unknown interrupt happened. Do nothing */
+ 	if (!(msr & MDR))
+@@ -535,12 +537,37 @@ static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
+ 		rcar_i2c_dma(priv);
+ 	} else if (priv->pos < msg->len) {
+ 		/* get received data */
+-		msg->buf[priv->pos] = rcar_i2c_read(priv, ICRXTX);
++		u8 data = rcar_i2c_read(priv, ICRXTX);
++
++		if (recv_len_init) {
++			/*
++			 * First byte is the length of remaining packet
++			 * in the SMBus block data read. Add it to
++			 * msg->len.
++			 */
++			if (data == 0 || data > I2C_SMBUS_BLOCK_MAX) {
++				priv->flags |= ID_DONE | ID_EPROTO;
++				return;
++			}
++			msg->len += data;
++
++			if (!rcar_i2c_is_pio(priv)) {
++				/*
++				 * Still try to use DMA to receive the rest of
++				 * data
++				 */
++				rcar_i2c_dma(priv);
++				goto next_txn;
++			} else {
++				recv_len_init = false;
++			}
++		}
++		msg->buf[priv->pos] = data;
+ 		priv->pos++;
+ 	}
+ 
+ 	/* If next received data is the _LAST_, go to new phase. */
+-	if (priv->pos + 1 == msg->len) {
++	if (priv->pos + 1 == msg->len && !recv_len_init) {
+ 		if (priv->flags & ID_LAST_MSG) {
+ 			rcar_i2c_write(priv, ICMCR, RCAR_BUS_PHASE_STOP);
+ 		} else {
+@@ -549,6 +576,7 @@ static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
+ 		}
+ 	}
+ 
++next_txn:
+ 	if (priv->pos == msg->len && !(priv->flags & ID_LAST_MSG))
+ 		rcar_i2c_next_msg(priv);
+ 	else
+@@ -847,6 +875,8 @@ static int rcar_i2c_master_xfer(struct i2c_adapter *adap,
+ 		ret = -ENXIO;
+ 	} else if (priv->flags & ID_ARBLOST) {
+ 		ret = -EAGAIN;
++	} else if (priv->flags & ID_EPROTO) {
++		ret = -EPROTO;
+ 	} else {
+ 		ret = num - priv->msgs_left; /* The number of transfer */
+ 	}
+@@ -909,6 +939,8 @@ static int rcar_i2c_master_xfer_atomic(struct i2c_adapter *adap,
+ 		ret = -ENXIO;
+ 	} else if (priv->flags & ID_ARBLOST) {
+ 		ret = -EAGAIN;
++	} else if (priv->flags & ID_EPROTO) {
++		ret = -EPROTO;
+ 	} else {
+ 		ret = num - priv->msgs_left; /* The number of transfer */
+ 	}
+@@ -975,7 +1007,8 @@ static u32 rcar_i2c_func(struct i2c_adapter *adap)
+ 	 * I2C_M_IGNORE_NAK (automatically sends STOP after NAK)
+ 	 */
+ 	u32 func = I2C_FUNC_I2C | I2C_FUNC_SLAVE |
+-		   (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
++		   (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK) |
++		   I2C_FUNC_SMBUS_READ_BLOCK_DATA;
+ 
+ 	if (priv->flags & ID_P_HOST_NOTIFY)
+ 		func |= I2C_FUNC_SMBUS_HOST_NOTIFY;
+-- 
+2.35.1
