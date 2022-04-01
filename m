@@ -2,24 +2,24 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E2D4EE62F
-	for <lists+linux-i2c@lfdr.de>; Fri,  1 Apr 2022 04:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2060E4EE628
+	for <lists+linux-i2c@lfdr.de>; Fri,  1 Apr 2022 04:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244190AbiDACpq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 31 Mar 2022 22:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32774 "EHLO
+        id S244213AbiDACpt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 31 Mar 2022 22:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241371AbiDACpq (ORCPT
+        with ESMTP id S244194AbiDACpq (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Thu, 31 Mar 2022 22:45:46 -0400
 Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5CB145989;
-        Thu, 31 Mar 2022 19:43:56 -0700 (PDT)
-Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 3BFA2C826C;
-        Fri,  1 Apr 2022 02:33:48 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8801459AE;
+        Thu, 31 Mar 2022 19:43:57 -0700 (PDT)
+Received: from relay1-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::221])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id ED04AC54D9;
+        Fri,  1 Apr 2022 02:33:49 +0000 (UTC)
 Received: (Authenticated sender: frank@zago.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 53743240002;
-        Fri,  1 Apr 2022 02:33:22 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4DC72240006;
+        Fri,  1 Apr 2022 02:33:26 +0000 (UTC)
 From:   frank zago <frank@zago.net>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org,
@@ -29,14 +29,13 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linus Walleij <linus.walleij@linaro.org>,
         linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
         frank zago <frank@zago.net>
-Subject: [PATCH v5 1/3] mfd: ch341: add core driver for the WCH CH341 in I2C/SPI/GPIO mode
-Date:   Thu, 31 Mar 2022 21:33:04 -0500
-Message-Id: <20220401023306.79532-2-frank@zago.net>
+Subject: [PATCH v5 2/3] gpio: ch341: add GPIO MFD cell driver for the CH341
+Date:   Thu, 31 Mar 2022 21:33:05 -0500
+Message-Id: <20220401023306.79532-3-frank@zago.net>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220401023306.79532-1-frank@zago.net>
 References: <20220401023306.79532-1-frank@zago.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -47,218 +46,73 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The CH341 is a multifunction chip, presenting 3 different USB PID. One
-of these functions is for I2C/SPI/GPIO. This new set of drivers will
-manage I2C and GPIO.
+The GPIO interface offers 16 GPIOs. 6 are read/write, and 10 are
+read-only.
 
 Signed-off-by: frank zago <frank@zago.net>
 ---
- Documentation/misc-devices/ch341.rst | 114 +++++++++++++++++++++++++++
- Documentation/misc-devices/index.rst |   1 +
- MAINTAINERS                          |   7 ++
- drivers/mfd/Kconfig                  |  10 +++
- drivers/mfd/Makefile                 |   1 +
- drivers/mfd/ch341-core.c             |  99 +++++++++++++++++++++++
- include/linux/mfd/ch341.h            |  26 ++++++
- 7 files changed, 258 insertions(+)
- create mode 100644 Documentation/misc-devices/ch341.rst
- create mode 100644 drivers/mfd/ch341-core.c
- create mode 100644 include/linux/mfd/ch341.h
+ MAINTAINERS               |   1 +
+ drivers/gpio/Kconfig      |  10 +
+ drivers/gpio/Makefile     |   1 +
+ drivers/gpio/gpio-ch341.c | 383 ++++++++++++++++++++++++++++++++++++++
+ drivers/mfd/ch341-core.c  |   3 +
+ 5 files changed, 398 insertions(+)
+ create mode 100644 drivers/gpio/gpio-ch341.c
 
-diff --git a/Documentation/misc-devices/ch341.rst b/Documentation/misc-devices/ch341.rst
-new file mode 100644
-index 000000000000..bf0b83f2eb85
---- /dev/null
-+++ b/Documentation/misc-devices/ch341.rst
-@@ -0,0 +1,114 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+===========================================================
-+WinChipHead (沁恒) CH341 linux driver for I2C and GPIO mode
-+===========================================================
-+
-+The CH341 is declined in several flavors, and may support one or more
-+of UART, SPI, I2C and GPIO, but not always simultaneously:
-+
-+  - CH341 A/B/F: UART, Printer, SPI, I2C and GPIO
-+  - CH341 C/T: UART and I2C
-+  - CH341 H: SPI
-+
-+They work in 3 different modes, with only one being presented
-+depending on the USB PID:
-+
-+  - 0x5523: UART mode, covered by the USB `ch341` serial driver
-+  - 0x5512: SPI/I2C/GPIO mode, covered by the ch341 MFD drivers
-+  - 0x5584: Parallel printer mode, covered by the USB `usblp` driver
-+
-+Mode selection is done at the hardware level by tying some
-+pins. Breakout boards with one of the CH341 chip usually have one or
-+more jumpers to select which mode they work on. At least one model
-+(CJMCU-341) appears to need bridging some solder pads to select a
-+different default. Breakout boards also don't usually offer an option
-+to configure the chip into printer mode; for that case, connect the
-+SCL and SDA lines directly together.
-+
-+The various CH341 appear to be indistinguishable from the
-+software. For instance the ch341 MFD driver will present a GPIO
-+interface for the CH341T although physical pins are not present, and
-+the device will accept GPIO commands.
-+
-+The ch341 MFD driver has been tested with a CH341A, CH341B and
-+CH341T.
-+
-+Some breakout boards work in 3.3V and 5V depending on some jumpers.
-+
-+The black chip programmer with a ZIF socket will power the CH341 at
-+3.3V if a jumper is set, but will only output 5V to the chips to be
-+programmed, which is not always desirable. A hardware hack to use 3.3V
-+everywhere, involving some soldering, is available at
-+https://eevblog.com/forum/repair/ch341a-serial-memory-programmer-power-supply-fix/
-+
-+Some sample code for the CH341 is available at the manufacturer
-+website, at http://wch-ic.com/products/CH341.html
-+
-+The repository at https://github.com/boseji/CH341-Store contains a lot
-+of information on these chips, including datasheets.
-+
-+This driver is based on the pre-existing work at
-+https://github.com/gschorcht/i2c-ch341-usb
-+
-+
-+I2C Caveats
-+-----------
-+
-+The ch341 doesn't work with a Wii nunchuk, possibly because the
-+pull-up value is too low (1500 ohms).
-+
-+i2c AT24 eeproms can be read but not programmed properly because the
-+at24 linux driver tries to write a byte at a time, and doesn't wait at
-+all (or enough) between writes. Data corruption on writes does occur.
-+
-+The driver doesn't support detection of I2C devices present on the
-+bus. Apparently when a device is not present at a given address, the
-+CH341 will return an extra byte of data, but the driver doesn't
-+support that. This may be addressed in the future.
-+
-+
-+The GPIOs
-+---------
-+
-+16 GPIOs are available on the CH341 A/B/F. The first 6 are input/output,
-+and the last 10 are input only.
-+
-+Pinout and their names as they appear on some breakout boards::
-+
-+  CH341A/B/F     GPIO  Names                    Mode
-+    pin          line
-+
-+   15             0     D0, CS0                  input/output
-+   16             1     D1, CS1                  input/output
-+   17             2     D2, CS2                  input/output
-+   18             3     D3, SCK, DCK             input/output
-+   19             4     D4, DOUT2, CS3           input/output
-+   20             5     D5, MOSI, DOUT, SDO      input/output
-+   21             6     D6, DIN2                 input
-+   22             7     D7, MISO, DIN            input
-+    5             8     ERR                      input
-+    6             9     PEMP                     input
-+    7            10     INT                      input
-+    8            11     SLCT (SELECT)            input
-+   26            12     RST# (?)                 input
-+   27            13     WT (WAIT)                input
-+    4            14     DS (Data Select?)        input
-+    3            15     AS (Address Select?)     input
-+
-+
-+GPIO interrupt
-+~~~~~~~~~~~~~~
-+
-+The INT pin, corresponding to GPIO 10 is an input pin that can trigger
-+an interrupt on a rising edge. Only that pin is able to generate an
-+interrupt, and only on a rising edge. Trying to monitor events on
-+another GPIO, or that GPIO on something other than a rising edge, will
-+be rejected.
-+
-+
-+SPI
-+---
-+
-+This driver doesn't offer an SPI interface (yet) due to the
-+impossibility of declaring an SPI device like I2C does.
-diff --git a/Documentation/misc-devices/index.rst b/Documentation/misc-devices/index.rst
-index 30ac58f81901..52d03715601e 100644
---- a/Documentation/misc-devices/index.rst
-+++ b/Documentation/misc-devices/index.rst
-@@ -19,6 +19,7 @@ fit into other categories.
-    bh1770glc
-    eeprom
-    c2port
-+   ch341
-    dw-xdata-pcie
-    ibmvmc
-    ics932s401
 diff --git a/MAINTAINERS b/MAINTAINERS
-index cbbd3ce7e0c2..b61af813fb9f 100644
+index b61af813fb9f..757ab4f6f9f6 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -21211,6 +21211,13 @@ M:	David Härdeman <david@hardeman.nu>
+@@ -21215,6 +21215,7 @@ WINCHIPHEAD CH341 I2C/GPIO MFD DRIVER
+ M:	Frank Zago <frank@zago.net>
+ L:	linux-usb@vger.kernel.org
  S:	Maintained
- F:	drivers/media/rc/winbond-cir.c
++F:	drivers/gpio/gpio-ch341.c
+ F:	drivers/mfd/ch341-core.c
+ F:	include/linux/mfd/ch341.h
  
-+WINCHIPHEAD CH341 I2C/GPIO MFD DRIVER
-+M:	Frank Zago <frank@zago.net>
-+L:	linux-usb@vger.kernel.org
-+S:	Maintained
-+F:	drivers/mfd/ch341-core.c
-+F:	include/linux/mfd/ch341.h
-+
- WINSYSTEMS EBC-C384 WATCHDOG DRIVER
- M:	William Breathitt Gray <vilhelm.gray@gmail.com>
- L:	linux-watchdog@vger.kernel.org
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 3b59456f5545..893acc821a42 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -1784,6 +1784,16 @@ config MFD_LOCHNAGAR
- 	help
- 	  Support for Cirrus Logic Lochnagar audio development board.
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index 45764ec3b2eb..0e868c26daf6 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -1652,6 +1652,16 @@ endmenu
+ menu "USB GPIO expanders"
+ 	depends on USB
  
-+config MFD_CH341
-+	tristate "WinChipHead CH341 in I2C/SPI/GPIO mode"
-+	depends on USB
++config GPIO_CH341
++	tristate "CH341 USB to GPIO support"
++	select MFD_CH341
 +	help
-+	  If you say yes to this option, support for the CH341 series
-+	  of chips, running in I2C/SPI/GPIO mode will be included.
++	  If you say yes to this option, GPIO support will be included for the
++	  WCH CH341, a USB to I2C/SPI/GPIO interface.
 +
-+	  This driver can also be built as a module.  If so, the
-+	  module will be called ch341-core.
++	  This driver can also be built as a module.  If so, the module
++	  will be called gpio-ch341.
 +
- config MFD_ARIZONA
- 	select REGMAP
- 	select REGMAP_IRQ
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index 858cacf659d6..fd615ab3929f 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -13,6 +13,7 @@ obj-$(CONFIG_MFD_ASIC3)		+= asic3.o tmio_core.o
- obj-$(CONFIG_ARCH_BCM2835)	+= bcm2835-pm.o
- obj-$(CONFIG_MFD_BCM590XX)	+= bcm590xx.o
- obj-$(CONFIG_MFD_BD9571MWV)	+= bd9571mwv.o
-+obj-$(CONFIG_MFD_CH341)		+= ch341-core.o
- obj-$(CONFIG_MFD_CROS_EC_DEV)	+= cros_ec_dev.o
- obj-$(CONFIG_MFD_ENE_KB3930)	+= ene-kb3930.o
- obj-$(CONFIG_MFD_EXYNOS_LPASS)	+= exynos-lpass.o
-diff --git a/drivers/mfd/ch341-core.c b/drivers/mfd/ch341-core.c
+ config GPIO_VIPERBOARD
+ 	tristate "Viperboard GPIO a & b support"
+ 	depends on MFD_VIPERBOARD
+diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+index 14352f6dfe8e..beef802cbfb1 100644
+--- a/drivers/gpio/Makefile
++++ b/drivers/gpio/Makefile
+@@ -44,6 +44,7 @@ obj-$(CONFIG_GPIO_BD9571MWV)		+= gpio-bd9571mwv.o
+ obj-$(CONFIG_GPIO_BRCMSTB)		+= gpio-brcmstb.o
+ obj-$(CONFIG_GPIO_BT8XX)		+= gpio-bt8xx.o
+ obj-$(CONFIG_GPIO_CADENCE)		+= gpio-cadence.o
++obj-$(CONFIG_GPIO_CH341)		+= gpio-ch341.o
+ obj-$(CONFIG_GPIO_CLPS711X)		+= gpio-clps711x.o
+ obj-$(CONFIG_GPIO_SNPS_CREG)		+= gpio-creg-snps.o
+ obj-$(CONFIG_GPIO_CRYSTAL_COVE)		+= gpio-crystalcove.o
+diff --git a/drivers/gpio/gpio-ch341.c b/drivers/gpio/gpio-ch341.c
 new file mode 100644
-index 000000000000..0bb6eb8057e9
+index 000000000000..8e81ccf93d71
 --- /dev/null
-+++ b/drivers/mfd/ch341-core.c
-@@ -0,0 +1,99 @@
++++ b/drivers/gpio/gpio-ch341.c
+@@ -0,0 +1,383 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Core driver for the CH341A, CH341B and CH341T in I2C/SPI/GPIO
-+ * mode. There are cell drivers available for I2C and GPIO. SPI is not
-+ * yet supported.
++ * GPIO cell driver for the CH341A and CH341B chips.
 + *
 + * Copyright 2022, Frank Zago
 + * Copyright (c) 2017 Gunar Schorcht (gunar@schorcht.net)
@@ -267,124 +121,392 @@ index 000000000000..0bb6eb8057e9
 + * Copyright (c) 2006-2007 Till Harbaum (Till@Harbaum.org)
 + */
 +
++/*
++ * Notes.
++ *
++ * For the CH341, 0=IN, 1=OUT, but for the GPIO subsystem, 1=IN and
++ * 0=OUT. Translation happens in a couple places.
++ */
++
 +#include <linux/kernel.h>
-+#include <linux/mfd/ch341.h>
-+#include <linux/mfd/core.h>
 +#include <linux/module.h>
-+#include <linux/slab.h>
++#include <linux/platform_device.h>
++#include <linux/types.h>
 +#include <linux/usb.h>
 +
-+static const struct mfd_cell ch341_devs[] = {
++#include <linux/gpio/driver.h>
++
++#include <linux/mfd/ch341.h>
++
++#define CH341_GPIO_NUM_PINS         16    /* Number of GPIO pins */
++
++/* GPIO chip commands */
++#define CH341_PARA_CMD_STS          0xA0  /* Get pins status */
++#define CH341_CMD_UIO_STREAM        0xAB  /* pin IO stream command */
++
++#define CH341_CMD_UIO_STM_OUT       0x80  /* pin IO interface OUT command (D0~D5) */
++#define CH341_CMD_UIO_STM_DIR       0x40  /* pin IO interface DIR command (D0~D5) */
++#define CH341_CMD_UIO_STM_END       0x20  /* pin IO interface END command */
++
++#define CH341_USB_MAX_INTR_SIZE 8
++
++struct ch341_gpio {
++	struct gpio_chip gpio;
++	struct mutex gpio_lock;
++	u16 gpio_dir;		/* 1 bit per pin, 0=IN, 1=OUT. */
++	u16 gpio_last_read;	/* last GPIO values read */
++	u16 gpio_last_written;	/* last GPIO values written */
++	union {
++		u8 gpio_buf[SEG_SIZE];
++		__le16 gpio_buf_status;
++	};
++
++	struct urb *irq_urb;
++	struct usb_anchor irq_urb_out;
++	u8 irq_buf[CH341_USB_MAX_INTR_SIZE];
++	struct irq_chip irq_chip;
++
++	struct ch341_device *ch341;
 +};
 +
-+static int ch341_usb_probe(struct usb_interface *iface,
-+			   const struct usb_device_id *usb_id)
++/*
++ * Masks to describe the 16 GPIOs. Pins D0 to D5 (mapped to GPIOs 0 to
++ * 5) can do input/output, but the other pins are input-only.
++ */
++static const u16 pin_can_output = 0b111111;
++
++/* Only GPIO 10 (INT# line) has hardware interrupt */
++#define CH341_GPIO_INT_LINE 10
++
++/* Send a command and get a reply if requested */
++static int gpio_transfer(struct ch341_gpio *dev, int out_len, int in_len)
 +{
-+	struct usb_host_endpoint *endpoints;
-+	struct ch341_device *dev;
++	struct ch341_device *ch341 = dev->ch341;
++	int actual;
 +	int rc;
 +
-+	dev = devm_kzalloc(&iface->dev, sizeof(*dev), GFP_KERNEL);
-+	if (!dev)
++	mutex_lock(&ch341->usb_lock);
++
++	rc = usb_bulk_msg(ch341->usb_dev,
++			  usb_sndbulkpipe(ch341->usb_dev, ch341->ep_out),
++			  dev->gpio_buf, out_len,
++			  &actual, DEFAULT_TIMEOUT_MS);
++	if (rc < 0)
++		goto out_unlock;
++
++	if (in_len == 0)
++		goto out_unlock;
++
++	rc = usb_bulk_msg(ch341->usb_dev,
++			  usb_rcvbulkpipe(ch341->usb_dev, ch341->ep_in),
++			  dev->gpio_buf, SEG_SIZE, &actual, DEFAULT_TIMEOUT_MS);
++
++out_unlock:
++	mutex_unlock(&ch341->usb_lock);
++
++	if (rc < 0)
++		return rc;
++
++	return actual;
++}
++
++/* Read the GPIO line status. */
++static int read_inputs(struct ch341_gpio *dev)
++{
++	int rc;
++
++	mutex_lock(&dev->gpio_lock);
++
++	dev->gpio_buf[0] = CH341_PARA_CMD_STS;
++
++	rc = gpio_transfer(dev, 1, 1);
++
++	/*
++	 * The status command returns 6 bytes of data. Byte 0 has
++	 * status for lines 0 to 7, and byte 1 is lines 8 to 15. The
++	 * 3rd has the status for the SCL/SDA/SCK pins. The 4th byte
++	 * might have some remaining pin status. Byte 5 and 6 content
++	 * is unknown.
++	 */
++	if (rc == 6)
++		dev->gpio_last_read = le16_to_cpu(dev->gpio_buf_status);
++	else
++		rc = -EIO;
++
++	mutex_unlock(&dev->gpio_lock);
++
++	if (rc < 0)
++		return rc;
++
++	return 0;
++}
++
++static int ch341_gpio_get(struct gpio_chip *chip, unsigned int offset)
++{
++	struct ch341_gpio *dev = gpiochip_get_data(chip);
++	int rc;
++
++	rc = read_inputs(dev);
++	if (rc)
++		return rc;
++
++	return !!(dev->gpio_last_read & BIT(offset));
++}
++
++static int ch341_gpio_get_multiple(struct gpio_chip *chip,
++				   unsigned long *mask, unsigned long *bits)
++{
++	struct ch341_gpio *dev = gpiochip_get_data(chip);
++	int rc;
++
++	rc = read_inputs(dev);
++	if (rc)
++		return rc;
++
++	*bits = dev->gpio_last_read & *mask;
++
++	return 0;
++}
++
++static void write_outputs(struct ch341_gpio *dev)
++{
++	mutex_lock(&dev->gpio_lock);
++
++	/* Only the first 6 lines can output. */
++	dev->gpio_buf[0] = CH341_CMD_UIO_STREAM;
++	dev->gpio_buf[1] = CH341_CMD_UIO_STM_DIR | (dev->gpio_dir & pin_can_output);
++	dev->gpio_buf[2] = CH341_CMD_UIO_STM_OUT |
++		(dev->gpio_last_written & dev->gpio_dir & pin_can_output);
++	dev->gpio_buf[3] = CH341_CMD_UIO_STM_END;
++
++	gpio_transfer(dev, 4, 0);
++
++	mutex_unlock(&dev->gpio_lock);
++}
++
++static void ch341_gpio_set(struct gpio_chip *chip, unsigned int offset, int value)
++{
++	struct ch341_gpio *dev = gpiochip_get_data(chip);
++
++	if (value)
++		dev->gpio_last_written |= BIT(offset);
++	else
++		dev->gpio_last_written &= ~BIT(offset);
++
++	write_outputs(dev);
++}
++
++static void ch341_gpio_set_multiple(struct gpio_chip *chip,
++				    unsigned long *mask, unsigned long *bits)
++{
++	struct ch341_gpio *dev = gpiochip_get_data(chip);
++
++	dev->gpio_last_written = (dev->gpio_last_written & ~*mask) | (*bits & *mask);
++
++	write_outputs(dev);
++}
++
++static int ch341_gpio_get_direction(struct gpio_chip *chip,
++				    unsigned int offset)
++{
++	struct ch341_gpio *dev = gpiochip_get_data(chip);
++
++	return !(dev->gpio_dir & BIT(offset));
++}
++
++static int ch341_gpio_direction_input(struct gpio_chip *chip,
++				      unsigned int offset)
++{
++	struct ch341_gpio *dev = gpiochip_get_data(chip);
++
++	dev->gpio_dir &= ~BIT(offset);
++
++	write_outputs(dev);
++
++	return 0;
++}
++
++static int ch341_gpio_direction_output(struct gpio_chip *chip,
++				       unsigned int offset, int value)
++{
++	struct ch341_gpio *dev = gpiochip_get_data(chip);
++	u16 mask = BIT(offset);
++
++	if (!(pin_can_output & mask))
++		return -EINVAL;
++
++	dev->gpio_dir |= mask;
++
++	ch341_gpio_set(chip, offset, value);
++
++	return 0;
++}
++
++static void ch341_complete_intr_urb(struct urb *urb)
++{
++	struct ch341_gpio *dev = urb->context;
++	int rc;
++
++	if (urb->status) {
++		usb_unanchor_urb(dev->irq_urb);
++	} else {
++		/*
++		 * Data is 8 bytes. Byte 0 might be the length of
++		 * significant data, which is 3 more bytes. Bytes 1
++		 * and 2, and possibly 3, are the pin status. The byte
++		 * order is different than for the GET_STATUS
++		 * command. Byte 1 is GPIOs 8 to 15, and byte 2 is
++		 * GPIOs 0 to 7.
++		 */
++
++		handle_nested_irq(irq_find_mapping(dev->gpio.irq.domain,
++						   CH341_GPIO_INT_LINE));
++
++		rc = usb_submit_urb(dev->irq_urb, GFP_ATOMIC);
++		if (rc)
++			usb_unanchor_urb(dev->irq_urb);
++	}
++}
++
++static int ch341_gpio_irq_set_type(struct irq_data *data, unsigned int flow_type)
++{
++	const unsigned long offset = irqd_to_hwirq(data);
++
++	if (offset != CH341_GPIO_INT_LINE || flow_type != IRQ_TYPE_EDGE_RISING)
++		return -EINVAL;
++
++	return 0;
++}
++
++static void ch341_gpio_irq_enable(struct irq_data *data)
++{
++	struct ch341_gpio *dev = irq_data_get_irq_chip_data(data);
++	int rc;
++
++	/*
++	 * The URB might have just been unlinked in
++	 * ch341_gpio_irq_disable, but the completion handler hasn't
++	 * been called yet.
++	 */
++	if (!usb_wait_anchor_empty_timeout(&dev->irq_urb_out, 5000))
++		usb_kill_anchored_urbs(&dev->irq_urb_out);
++
++	usb_anchor_urb(dev->irq_urb, &dev->irq_urb_out);
++	rc = usb_submit_urb(dev->irq_urb, GFP_ATOMIC);
++	if (rc)
++		usb_unanchor_urb(dev->irq_urb);
++}
++
++static void ch341_gpio_irq_disable(struct irq_data *data)
++{
++	struct ch341_gpio *dev = irq_data_get_irq_chip_data(data);
++
++	usb_unlink_urb(dev->irq_urb);
++}
++
++static int ch341_gpio_remove(struct platform_device *pdev)
++{
++	struct ch341_gpio *dev = platform_get_drvdata(pdev);
++
++	usb_kill_anchored_urbs(&dev->irq_urb_out);
++	gpiochip_remove(&dev->gpio);
++	usb_free_urb(dev->irq_urb);
++
++	return 0;
++}
++
++static int ch341_gpio_probe(struct platform_device *pdev)
++{
++	struct ch341_device *ch341 = dev_get_drvdata(pdev->dev.parent);
++	struct gpio_irq_chip *girq;
++	struct ch341_gpio *dev;
++	struct gpio_chip *gpio;
++	int rc;
++
++	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
++	if (dev == NULL)
 +		return -ENOMEM;
 +
-+	dev->usb_dev = usb_get_dev(interface_to_usbdev(iface));
-+	dev->iface = iface;
-+	mutex_init(&dev->usb_lock);
++	platform_set_drvdata(pdev, dev);
++	dev->ch341 = ch341;
++	mutex_init(&dev->gpio_lock);
 +
-+	if (iface->cur_altsetting->desc.bNumEndpoints != 3) {
-+		rc = -ENODEV;
-+		goto free_dev;
-+	}
++	gpio = &dev->gpio;
++	gpio->label = dev_name(&pdev->dev);
++	gpio->parent = &pdev->dev;
++	gpio->owner = THIS_MODULE;
++	gpio->get_direction = ch341_gpio_get_direction;
++	gpio->direction_input = ch341_gpio_direction_input;
++	gpio->direction_output = ch341_gpio_direction_output;
++	gpio->get = ch341_gpio_get;
++	gpio->get_multiple = ch341_gpio_get_multiple;
++	gpio->set = ch341_gpio_set;
++	gpio->set_multiple = ch341_gpio_set_multiple;
++	gpio->base = -1;
++	gpio->ngpio = CH341_GPIO_NUM_PINS;
++	gpio->can_sleep = true;
 +
-+	endpoints = iface->cur_altsetting->endpoint;
-+	if (!usb_endpoint_is_bulk_in(&endpoints[0].desc) ||
-+	    !usb_endpoint_is_bulk_out(&endpoints[1].desc) ||
-+	    !usb_endpoint_xfer_int(&endpoints[2].desc)) {
-+		rc = -ENODEV;
-+		goto free_dev;
-+	}
++	dev->irq_chip.name = dev_name(&pdev->dev);
++	dev->irq_chip.irq_set_type = ch341_gpio_irq_set_type;
++	dev->irq_chip.irq_enable = ch341_gpio_irq_enable;
++	dev->irq_chip.irq_disable = ch341_gpio_irq_disable;
 +
-+	dev->ep_in = endpoints[0].desc.bEndpointAddress;
-+	dev->ep_out = endpoints[1].desc.bEndpointAddress;
-+	dev->ep_intr = endpoints[2].desc.bEndpointAddress;
-+	dev->ep_intr_interval = endpoints[2].desc.bInterval;
++	girq = &gpio->irq;
++	girq->chip = &dev->irq_chip;
++	girq->handler = handle_simple_irq;
++	girq->default_type = IRQ_TYPE_NONE;
 +
-+	usb_set_intfdata(iface, dev);
++	/* Create an URB for handling interrupt */
++	dev->irq_urb = usb_alloc_urb(0, GFP_KERNEL);
++	if (!dev->irq_urb)
++		return dev_err_probe(&pdev->dev, -ENOMEM, "Cannot allocate the int URB\n");
 +
-+	rc = mfd_add_hotplug_devices(&iface->dev, ch341_devs,
-+				     ARRAY_SIZE(ch341_devs));
++	usb_fill_int_urb(dev->irq_urb, ch341->usb_dev,
++			 usb_rcvintpipe(ch341->usb_dev, ch341->ep_intr),
++			 dev->irq_buf, CH341_USB_MAX_INTR_SIZE,
++			 ch341_complete_intr_urb, dev, ch341->ep_intr_interval);
++
++	init_usb_anchor(&dev->irq_urb_out);
++
++	rc = gpiochip_add_data(gpio, dev);
 +	if (rc) {
-+		rc = dev_err_probe(&iface->dev, rc,
-+				   "Failed to add mfd devices to core\n");
-+		goto free_dev;
++		rc = dev_err_probe(&pdev->dev, rc, "Could not add GPIO\n");
++		goto release_urb;
 +	}
 +
 +	return 0;
 +
-+free_dev:
-+	usb_put_dev(dev->usb_dev);
++release_urb:
++	usb_free_urb(dev->irq_urb);
 +
 +	return rc;
 +}
 +
-+static void ch341_usb_disconnect(struct usb_interface *usb_if)
-+{
-+	struct ch341_device *dev = usb_get_intfdata(usb_if);
-+
-+	mfd_remove_devices(&usb_if->dev);
-+	usb_put_dev(dev->usb_dev);
-+}
-+
-+static const struct usb_device_id ch341_usb_table[] = {
-+	{ USB_DEVICE(0x1a86, 0x5512) },
-+	{ }
++static struct platform_driver ch341_gpio_driver = {
++	.driver.name	= "ch341-gpio",
++	.probe		= ch341_gpio_probe,
++	.remove		= ch341_gpio_remove,
 +};
-+MODULE_DEVICE_TABLE(usb, ch341_usb_table);
-+
-+static struct usb_driver ch341_usb_driver = {
-+	.name       = "ch341-mfd",
-+	.id_table   = ch341_usb_table,
-+	.probe      = ch341_usb_probe,
-+	.disconnect = ch341_usb_disconnect,
-+};
-+module_usb_driver(ch341_usb_driver);
++module_platform_driver(ch341_gpio_driver);
 +
 +MODULE_AUTHOR("Various");
-+MODULE_DESCRIPTION("CH341 USB to I2C/SPI/GPIO adapter");
++MODULE_DESCRIPTION("CH341 USB to GPIO");
 +MODULE_LICENSE("GPL");
-diff --git a/include/linux/mfd/ch341.h b/include/linux/mfd/ch341.h
-new file mode 100644
-index 000000000000..a87b23e30123
---- /dev/null
-+++ b/include/linux/mfd/ch341.h
-@@ -0,0 +1,26 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Definitions for the CH341 MFD driver */
-+
-+#include <linux/mutex.h>
-+#include <linux/types.h>
-+
-+#define DEFAULT_TIMEOUT_MS 1000	/* 1s USB requests timeout */
-+
-+/* All commands fit inside a 32-byte segment. There may be several
-+ * of these segments in a USB command.
-+ */
-+#define SEG_SIZE 32
-+
-+struct usb_device;
-+struct usb_interface;
-+
-+struct ch341_device {
-+	struct usb_device *usb_dev;
-+	struct usb_interface *iface;
-+	struct mutex usb_lock;
-+
-+	int ep_in;
-+	int ep_out;
-+	int ep_intr;
-+	u8 ep_intr_interval;
-+};
++MODULE_ALIAS("platform:ch341-gpio");
+diff --git a/drivers/mfd/ch341-core.c b/drivers/mfd/ch341-core.c
+index 0bb6eb8057e9..e919f6901a14 100644
+--- a/drivers/mfd/ch341-core.c
++++ b/drivers/mfd/ch341-core.c
+@@ -19,6 +19,9 @@
+ #include <linux/usb.h>
+ 
+ static const struct mfd_cell ch341_devs[] = {
++	{
++		.name = "ch341-gpio",
++	},
+ };
+ 
+ static int ch341_usb_probe(struct usb_interface *iface,
 -- 
 2.32.0
 
