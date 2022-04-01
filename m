@@ -2,38 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2274EF83C
-	for <lists+linux-i2c@lfdr.de>; Fri,  1 Apr 2022 18:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 954544EF847
+	for <lists+linux-i2c@lfdr.de>; Fri,  1 Apr 2022 18:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346190AbiDAQpw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 1 Apr 2022 12:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S1349562AbiDAQqv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 1 Apr 2022 12:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349447AbiDAQpU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 1 Apr 2022 12:45:20 -0400
+        with ESMTP id S242816AbiDAQql (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 1 Apr 2022 12:46:41 -0400
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B7E326E1
-        for <linux-i2c@vger.kernel.org>; Fri,  1 Apr 2022 09:27:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B198C16BFAE
+        for <linux-i2c@vger.kernel.org>; Fri,  1 Apr 2022 09:29:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=Kh7Hqlzc7MnS43AS8ze4d+2/TLzg
-        ccHyyFDZONfz9aw=; b=1Ro4RrC4DeK48wEb/yrhZGMHT8cqP/8epvE4fBWV6uf9
-        q+T+zKmc6fjTyYzh50uIFIgcwcMgAFWGVBFpC9O+rf7vlx8N/1HOiYgJGODCBTRH
-        H+y3rcbP477REzJkvKvdaH9US2itoEICNXTFfu2yIGddPlu49mrohE11iBOaQOY=
-Received: (qmail 802408 invoked from network); 1 Apr 2022 18:27:01 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Apr 2022 18:27:01 +0200
-X-UD-Smtp-Session: l3s3148p1@x4+GP5rbeKYgAQnoAGGbAFirbAEmXd1u
-Date:   Fri, 1 Apr 2022 18:27:00 +0200
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=ktNL83zFsqcHZQmH520XjhHZQ3xo
+        saNUtB3KzFboe7w=; b=Z5/UmC+Dx1eQX67RWkfQO7/vMBet/5A8gUjIpC0M2wtT
+        cvpen/Hf236XtVjuCiah4V1UR+JBRLFyxIgkQJK7bKhO3m0q5enTdHPtoS3WuTxm
+        N6daqHx8sL1meXnzP9m2Y5xE+dlnBZRv0quy3PEBAIPVTY8SxpqWvpPCQTJ8HTY=
+Received: (qmail 803177 invoked from network); 1 Apr 2022 18:29:43 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Apr 2022 18:29:43 +0200
+X-UD-Smtp-Session: l3s3148p1@xUQ1SZrbeqYgAQnoAGGbAFirbAEmXd1u
+Date:   Fri, 1 Apr 2022 18:29:43 +0200
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     "Gabbasov, Andrew" <Andrew_Gabbasov@mentor.com>,
-        "linux-renesas-soc@vger.kernel.org" 
+To:     "Gabbasov, Andrew" <Andrew_Gabbasov@mentor.com>
+Cc:     "linux-renesas-soc@vger.kernel.org" 
         <linux-renesas-soc@vger.kernel.org>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         "Surachari, Bhuvanesh" <Bhuvanesh_Surachari@mentor.com>
 Subject: Re: [PATCH v2] i2c: rcar: add SMBus block read support
-Message-ID: <Ykcn1Kw+9OgznFd/@ninjato>
+Message-ID: <Ykcod/XOYvGfUsga@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
         "Gabbasov, Andrew" <Andrew_Gabbasov@mentor.com>,
         "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
@@ -47,12 +47,11 @@ References: <20210922160649.28449-1-andrew_gabbasov@mentor.com>
  <20211006182314.10585-1-andrew_gabbasov@mentor.com>
  <Yg6ls0zyTDe7LQbK@kunai>
  <0a07902900bc4ecc84bd93a6b85a2e0c@svr-ies-mbx-02.mgc.mentorg.com>
- <YkQ5LkUyicWFLlSJ@shikoro>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="IrrbXKcUvrUAvBpE"
+        protocol="application/pgp-signature"; boundary="mF/tvCESj+ud+RK9"
 Content-Disposition: inline
-In-Reply-To: <YkQ5LkUyicWFLlSJ@shikoro>
+In-Reply-To: <0a07902900bc4ecc84bd93a6b85a2e0c@svr-ies-mbx-02.mgc.mentorg.com>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
@@ -64,36 +63,48 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---IrrbXKcUvrUAvBpE
+--mF/tvCESj+ud+RK9
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+> >  	/* If next received data is the _LAST_, go to new phase. */
+> > -	if (priv->pos + 1 =3D=3D msg->len) {
+> > +	if (priv->pos + 1 =3D=3D msg->len && !recv_len_init) {
+>=20
+> If a message contains a single byte after the length byte,
+> when we come here after processing the length (in the same function call),
+> "pos" is 1, "len" is 2, and we indeed are going to process the last byte.
+> However, "recv_len_init" is still "true", and we skip these corresponding
+> register writes, which is probably incorrect.
+> The flag in this case should be re-set back to "false" after length
+> processing and "pos" moving, but I think the variant in my patch
+
+Confirmed. Tests fail with only one extra byte and clearing
+'recv_len_init' fixes the issue. I don't think this is the proper
+solution, though. I think it will create more readable code if we update
+the checks. So people will understand what we are aiming for. The
+current code is already implicit enough.
 
 
-> I use the EXIO connectors on a Salvator-X(S).
-
-Sorry, I confused things. The EXIO connectors on Salvator-X(S) are not
-so helpful. I use the EXIO connectors on a Lager board (R-Car H2) for
-testing.
-
-
---IrrbXKcUvrUAvBpE
+--mF/tvCESj+ud+RK9
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJHJ9QACgkQFA3kzBSg
-KbbFtw//RsRMa8hB7ahID29cpyXTQ0O9Ja2S9jXk5mVcgewFnQPzsYahvQl3dYJb
-ssJLVp/oPiU4fYuro0COAoFo5vSTGpO9W1P3FO3mF1WYRCUxpGVhBF0muOqQRkbA
-1CJRnzTfvXZXfpl9k68IR9oFymIY9eSy0Mg5mg0m1/s0HabC/30m1bBMmWHM0Exp
-0+QyP5OEaanhRZJ798hxXdc3NyESFhpB3iesRfHnGYH980VPIWaUdFZORfH9pTh/
-QYjJH0EOVS/R6AzNYGgBQG9MvJACCsBaOX6nzm30RGGg5M/i5gdgnfdvmv/kWb8v
-vFgY6tvbFW2OD22PtKwUjGEwvcRF2Tf6LHwUj7mNB8UmdwUS2ARFK+gzURf5ytto
-ipoAWjuHGZgWOWI5YHsILxnI+50uJYYWE+ijNQ0ukGyibJVWRUGimpuuCdCVf3An
-iv1KR0zlenXO/JySoLL16/4xGS+5S0/AOuGR9+QrW6T5UqGE/zY16zxfK/T3wmn2
-RVUh/7q1o0CFXIevcdiq1gt0HUFpcLIGH6XEOvo5sB1spzRDU7TC3+sN2VmKlj/j
-g1W7F3n0fKrGPHS/o1oc0Y8oSvwviiSlsp4xde5zpJ9ZK5PJuxAyA92vdzwZkj2v
-xABxW59jvJMyIjcrbansWepfvnf1Wxz2nhn8ZNUM+eqEema2qoQ=
-=T2KR
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJHKHYACgkQFA3kzBSg
+KbY3RRAAjBujpOTFoM4N3pzMYiwyeRWB9MO733t7w+Ds9VMMxXdAp/nAR5zTj6NK
+CqEyWDL6Mjahp6Ajwmp1XQg+tOX7xV+Bz+4VFe0vlCFsi7t9vzEjPYnVevjP/BBq
+JH1/v/iUkJlb70M/+/7tpDkPKFcBP+fEl2mLe1aRAPCf1KOXgnsoTqYeMcZyFYor
+qCDN5Tku2N9y1zRe9x48BYZcHwzuH3FQ/lYEu/BhAsYaChHP+fnfS+Ax3zY5Sa7V
+t3XYgEi8aREHqZD5njV/YCukS75PGeu33AWlQnguBxNc/hdkt/HtqS/foqDop6Ok
+qxMh/ETZXkUoq0QJL9ChPf+8+zh+EWeuXt7EuH6XedBJYkFcr0Og9gwvKYnuFp6f
++5FMik3Xz19rsoGoVP+C+a/G6zUvCurnDFZTlBvU05JpA99gWagcHjn1jdnlYlp1
+l/6Dv/cKdER+af2Rc8Ixz3t6pJvFffOGSqKJRcaJSxWDhiT7wc3xKEbevMYv3+/f
+PMKXLkvaPihsRjvsuTMbJ9wbxU5AtYE9C/o5E+t9ZdkTgT8P9WOqMixkxorQDJmP
+tc99oRHnLyuOWo1sE+GHIIfuxdFhTLW3Df4so//r5BKcX6VqqnuJXBb7q6D1jjRh
+2J+BVpbjNSPxbnvd1g3Kz4tsFCav2VR+jotcJc38rKPoeGuS8ck=
+=20pe
 -----END PGP SIGNATURE-----
 
---IrrbXKcUvrUAvBpE--
+--mF/tvCESj+ud+RK9--
