@@ -2,92 +2,165 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9D34F004E
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Apr 2022 12:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A37FE4F0175
+	for <lists+linux-i2c@lfdr.de>; Sat,  2 Apr 2022 14:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240043AbiDBKJM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 2 Apr 2022 06:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
+        id S1345049AbiDBMbz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 2 Apr 2022 08:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbiDBKJI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 2 Apr 2022 06:09:08 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1726615CB79;
-        Sat,  2 Apr 2022 03:07:17 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KVt4g5QcQz9sSQ;
-        Sat,  2 Apr 2022 12:07:15 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id asFxCh_05TOq; Sat,  2 Apr 2022 12:07:15 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KVt4g4WGXz9sSK;
-        Sat,  2 Apr 2022 12:07:15 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7F5988B76D;
-        Sat,  2 Apr 2022 12:07:15 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 2D74MgcuY2Vi; Sat,  2 Apr 2022 12:07:15 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.136])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 48F538B768;
-        Sat,  2 Apr 2022 12:07:15 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 232A74wg684262
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Sat, 2 Apr 2022 12:07:04 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 232A74Ji684261;
-        Sat, 2 Apr 2022 12:07:04 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH] i2c: powermac: Prepare cleanup of powerpc's asm/prom.h
-Date:   Sat,  2 Apr 2022 12:06:59 +0200
-Message-Id: <f1785f7b2b9f79bb41525e3b5c3e06894852414f.1648833430.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S243066AbiDBMby (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 2 Apr 2022 08:31:54 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170714F9F5
+        for <linux-i2c@vger.kernel.org>; Sat,  2 Apr 2022 05:30:02 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id c7so7851396wrd.0
+        for <linux-i2c@vger.kernel.org>; Sat, 02 Apr 2022 05:30:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WHHY6/AA+RV5B6HQp/JMxKSATkAk8e0U+XPm3mIVbG4=;
+        b=w0+Pu5NJu0h1cXv19IbjAmNV5ldGQMzlT1e5o18hrVpSP81bd/f43dGd4yCkcjnXFj
+         R2qlaT8dm6+KGQHjMYI04hf69HstNdN/nB7hBe9L6nw7imHMUmYH62EuePSEGeotSAyo
+         TMYbT9Rl0CP6maAEFQJhy0+zlZZYuue+n0MScmtkGpgZXbQ/jCVFOhunGuUpuXOT7DY6
+         ++1yAu+IKf8/nhs+mI8cEXHjLfuxqOLTiQVnSp14MrHUZJctA7D9dx7v01OJSVxKR5YV
+         Jjw5XaIx4iuyqjwSE8ny0tXsCnqRScAYHTaFNURSwCIo602rpbOAl+bStzbU7xV3EaaW
+         /9iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WHHY6/AA+RV5B6HQp/JMxKSATkAk8e0U+XPm3mIVbG4=;
+        b=74xcy4oJdNCqb/tj65W+CLS6K49VdeK+QktFFVw3FXJoBis50ZDLtUkEMejr7BYkQX
+         a9epNcSUIG+wsSXwDfuuxzKhTUvm+xyKzphprogskVcwHvtii8Bwp/3QghT8rG1mEA6r
+         rHGeceyoY4s49YiYMjWH1HzL5jGDFe01i17RLcDPZMJxNBRTVSBjDjek0OiZGNn9btMn
+         5xS34Q2nMDwt7jYnlk317nJKJCXcyUOr8c/rJz1JzlYp2CpocNLR56LmSqfO7GwtiHcU
+         0cAEqgi39hlIRjs1hzCLg1KAGQHQ8aqrzs2UXnjrD4m+3g2cBW6o2vYZz7l2lz/1bEm+
+         U7tA==
+X-Gm-Message-State: AOAM532E/5vg5wgWV8B3tmzKYpI3raOYXqXuCnmJrZWnxVSulOJPdAFs
+        i9LPX3me2mz7AFGDtQHNHokJeHz5EEs2Hue+
+X-Google-Smtp-Source: ABdhPJwdpU3ivl1IB9fl4GewiNTFa7+yJoV0fEBquDI28ZJajPWiHd7NxgeG3sRDbNbcE2+dDMylew==
+X-Received: by 2002:a5d:47a7:0:b0:203:d1b4:8f6 with SMTP id 7-20020a5d47a7000000b00203d1b408f6mr11192742wrb.36.1648902600596;
+        Sat, 02 Apr 2022 05:30:00 -0700 (PDT)
+Received: from [192.168.0.171] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id r4-20020a1c2b04000000b0038a0e15ee13sm12705690wmr.8.2022.04.02.05.29.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Apr 2022 05:30:00 -0700 (PDT)
+Message-ID: <b27db209-d146-e104-6f0c-b0d860e9cc8c@linaro.org>
+Date:   Sat, 2 Apr 2022 14:29:59 +0200
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1648894018; l=777; s=20211009; h=from:subject:message-id; bh=TTfGC1WVgw9/YdK3SjnxF1B4kO3mMlAN6QcoLSGLB/k=; b=/lNEosBlMu6rfLiBCzuIWPEQEvxU2MGvGLDvhQIyqNb0YnjzigdBtVfokmx4fyj2yloatRsDKRr7 8eYGvxjWATj3Ttzp6VaIeRKrSc318JxMIfASTb5n7uXyCZL+WysU
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/5] dt-bindings: i2c: Add Qualcomm Geni based QUP i2c
+ bindings
+Content-Language: en-US
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220402051206.6115-1-singh.kuldeep87k@gmail.com>
+ <20220402051206.6115-2-singh.kuldeep87k@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220402051206.6115-2-singh.kuldeep87k@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-powerpc's asm/prom.h brings some headers that it doesn't
-need itself.
+On 02/04/2022 07:12, Kuldeep Singh wrote:
+> GENI(generic interface) based Qualcomm Universal Peripheral controller
+> can support multiple serial interfaces like spi,uart and i2c.
+> 
+> Unlike other i2c controllers, QUP i2c bindings are present in parent
+> schema. Move it out from parent to an individual binding and let parent
+> refer to child schema later on.
+> 
+> Please note, current schema isn't complete as it misses out few
+> properties and thus, add these missing properties along the process.
+> 
+> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+> ---
+>  .../bindings/i2c/qcom,i2c-geni-qcom.yaml      | 110 ++++++++++++++++++
+>  1 file changed, 110 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> new file mode 100644
+> index 000000000000..01a02e680ea3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> @@ -0,0 +1,110 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/i2c/qcom,i2c-geni-qcom.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Qualcomm Geni based QUP I2C Controller
+> +
+> +maintainers:
+> +  - Andy Gross <agross@kernel.org>
+> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,geni-i2c
 
-In order to clean it up, first add missing headers in
-users of asm/prom.h
+Just const, no enum. There are no other flavors of this (unless you
+think there are?).
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- drivers/i2c/busses/i2c-powermac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    const: se
+> +
+> +  clock-frequency:
+> +    description: Desired I2C bus clock frequency in Hz
+> +    default: 100000
+> +
+> +  interconnects:
+> +    maxItems: 3
+> +
+> +  interconnect-names:
+> +    items:
+> +      - const: qup-core
+> +      - const: qup-config
+> +      - const: qup-memory
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  required-opps:
+> +    maxItems: 1
 
-diff --git a/drivers/i2c/busses/i2c-powermac.c b/drivers/i2c/busses/i2c-powermac.c
-index 5241e6f414e9..2e74747eec9c 100644
---- a/drivers/i2c/busses/i2c-powermac.c
-+++ b/drivers/i2c/busses/i2c-powermac.c
-@@ -15,7 +15,7 @@
- #include <linux/device.h>
- #include <linux/platform_device.h>
- #include <linux/of_irq.h>
--#include <asm/prom.h>
-+
- #include <asm/pmac_low_i2c.h>
- 
- MODULE_AUTHOR("Benjamin Herrenschmidt <benh@kernel.crashing.org>");
--- 
-2.35.1
+I have doubts this is correct property. Usually it is part of the
+opp-table. I see sc7180 needs this, but I think it is a mistake. Do you
+know how it is supposed to work?
 
+
+Best regards,
+Krzysztof
