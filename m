@@ -2,167 +2,116 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACBB4F1CF9
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Apr 2022 23:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4053E4F1D01
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Apr 2022 23:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380532AbiDDV3p (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 4 Apr 2022 17:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
+        id S1382436AbiDDV3t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 4 Apr 2022 17:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379402AbiDDRFy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 4 Apr 2022 13:05:54 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FCAF12086;
-        Mon,  4 Apr 2022 10:03:57 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id bu29so18600074lfb.0;
-        Mon, 04 Apr 2022 10:03:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JweidwxrjFhAI/2v7P1YrxPew3638Ty2dzeJpVrQWYE=;
-        b=I8pC/miIU61OHd5dqRJenQe4iwqEMNWcbRRJquHcwqrA41pIdbn+rDkftP4Wgy8De6
-         l2P/kMX+m1AlHndTCFw3I9e8C2PbWnptwDkLhCKGENUjppP00s+oaSpn30odJADOWz80
-         gZ8aVgizdoRJMD3T6AeNpo8DIwPDr87SzDVdFiM8OdSG4AmvAn65FA0Q/pYGDN1oIlao
-         +YKcox4/vRA3RiBKPCUROakAioTHX5ZKNwEvMn7A4BVVjmQPgHDz09Xezqhs7kUtDDfY
-         rUW3RKJYgdzLAkmjcApGuwZWiQMC6aAEsIC1HT66RK9v0vxmMklonMMLr9nzl3HGoQcI
-         8TDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JweidwxrjFhAI/2v7P1YrxPew3638Ty2dzeJpVrQWYE=;
-        b=nWUf9C3SEGVmGBxXGgqgOjKzTw5U8BMB1Ivzx6o7pKMu0Rv2z6cTt1h77mlrzvNYAm
-         2sg0tVAYvE5dTv+Rn9I9o1IwcT7k5/9CpbNYE0MFDq6Bo3dgz8gj0CBUd9l7pqHNMzbH
-         qZjCwV+PiiemdMDpIQzn+8Nt1mp15MtAvFkIEkX59Xm81fqARBQaSAcKgNiKUDBCnIA9
-         MIGr3RQXfyGJUfF7Pn3ifinQ3EaYkL4/Drh6g3JXt3jiwpI5mmV9E4QD6Eu3GcviZyYR
-         fwsSi9OspxO/y7ldlyC9hXvXzqFAPUPjpEFX/GMbIqCq1nfhRXn84j496BHrJ2AZ5x3L
-         WbkA==
-X-Gm-Message-State: AOAM5334RbHfa900H78JbYhacd6y6ejmGa2uu8LQCfFpsEQn/CCixLU+
-        6Ek5G9edFNbYcADMYqF4uCVLIYqyTueH/ZS+kzbGOaYq1A==
-X-Google-Smtp-Source: ABdhPJyWHkLML0CW+orqZVMU399DWfiqN//krw23FbqOQO+YZ/LLJNNX0j1rbJvWijFJbBpeNZJnAR2Kqa0Pofh74F8=
-X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
- y3-20020ac24203000000b004488053d402mr252549lfh.687.1649091835467; Mon, 04 Apr
- 2022 10:03:55 -0700 (PDT)
+        with ESMTP id S1379787AbiDDSIL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 4 Apr 2022 14:08:11 -0400
+X-Greylist: delayed 348 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Apr 2022 11:06:14 PDT
+Received: from mx.msync.work (mx.msync.work [51.91.38.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F036237BCE
+        for <linux-i2c@vger.kernel.org>; Mon,  4 Apr 2022 11:06:14 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CC3A73B01F;
+        Mon,  4 Apr 2022 18:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lexina.in; s=dkim;
+        t=1649095223; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+         content-transfer-encoding:content-language:in-reply-to:references;
+        bh=e4rEEW1CHNAO9Rw05pMKLdvrOaRjn2nB0lWvqsJB/YE=;
+        b=AGxfBeyUsX2CJvgiIWm9xFYwWlrarsTY0GIWhYZj3CYvlEOgR/Gnws76052KycThOR4h14
+        wuwBMur/eJ80gpveFSKQ7w1BktIOziBXSN3lkTYY1RiqxaSubjGpKDzcTL9bWxxGne/dZ5
+        N0J4K+Zrf/lJzIQqlmNDohShl1c6I2+EveF4ikgLmfWrAUpJ4ktvniMl9PJwY30VEqI/zf
+        lUEJctuhA3h2WDs3q2rJ+nyu5x/Iaz9KjCxUg+G0YW5/8uc3I099BtVMke8n5hKlRloAtk
+        Rd0cThQGLCujPT7NYNy0lcv+3Hz7Rt+ZE/W2C5hFk5wb9rDU5BTH8+9ooAIlwA==
+Message-ID: <d4ebfe84-2948-8270-32f4-6cfc55047600@lexina.in>
+Date:   Mon, 4 Apr 2022 21:00:20 +0300
 MIME-Version: 1.0
-References: <20220303083141.8742-1-warp5tw@gmail.com> <20220303083141.8742-10-warp5tw@gmail.com>
- <YiCaSSbbszm3qYIQ@smile.fi.intel.com> <CAHb3i=sStqdSpLKtF_UGmTsOssR_swssTd3pv6c2-z_kiUPTTA@mail.gmail.com>
- <YiDNDsPWKyaIUlQR@smile.fi.intel.com>
-In-Reply-To: <YiDNDsPWKyaIUlQR@smile.fi.intel.com>
-From:   Avi Fishman <avifishman70@gmail.com>
-Date:   Mon, 4 Apr 2022 20:03:44 +0300
-Message-ID: <CAKKbWA5FyCKTjEUw8rqtkoL7aw6f7Fa_QzcAkgaRnnUMTe0SKg@mail.gmail.com>
-Subject: Re: [PATCH v3 09/11] i2c: npcm: Handle spurious interrupts
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Tali Perry <tali.perry1@gmail.com>,
-        Tyrone Ting <warp5tw@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
-        Wolfram Sang <wsa@kernel.org>, jie.deng@intel.com,
-        sven@svenpeter.dev, bence98@sch.bme.hu,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, olof@lixom.net,
-        Tali Perry <tali.perry@nuvoton.com>,
-        Avi Fishman <Avi.Fishman@nuvoton.com>,
-        Tomer Maimon <tomer.maimon@nuvoton.com>, KWLIU@nuvoton.com,
-        JJLIU0@nuvoton.com, kfting@nuvoton.com,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 0/3] Ensure Low period of SCL is correct
+Content-Language: ru
+To:     Neil Armstrong <narmstrong@baylibre.com>, tanure@linux.com,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220326102229.421718-1-tanure@linux.com>
+ <7hee2lu82n.fsf@baylibre.com>
+ <CAJX_Q+1tz7BYL+CvXnc=zAamPiZDEFAASv9a7YoWGmzqYL+cUg@mail.gmail.com>
+ <8986ec34-616b-d497-29d1-6f7896c26e37@baylibre.com>
+From:   Vyacheslav <adeep@lexina.in>
+In-Reply-To: <8986ec34-616b-d497-29d1-6f7896c26e37@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 4:14 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Mar 03, 2022 at 02:48:20PM +0200, Tali Perry wrote:
-> > > On Thu, Mar 3, 2022 at 12:37 PM Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > > >
-> > > > On Thu, Mar 03, 2022 at 04:31:39PM +0800, Tyrone Ting wrote:
-> > > > > From: Tali Perry <tali.perry1@gmail.com>
-> > > > >
-> > > > > In order to better handle spurious interrupts:
-> > > > > 1. Disable incoming interrupts in master only mode.
-> > > > > 2. Clear end of busy (EOB) after every interrupt.
-> > > > > 3. Return correct status during interrupt.
-> > > >
-> > > > This is bad commit message, it doesn't explain "why" you are doing these.
->
-> ...
->
-> > BMC users connect a huge tree of i2c devices and muxes.
-> > This tree suffers from spikes, noise and double clocks.
-> > All these may cause spurious interrupts to the BMC.
-> >
-> > If the driver gets an IRQ which was not expected and was not handled
-> > by the IRQ handler,
-> > there is nothing left to do but to clear the interrupt and move on.
->
-> Yes, the problem is what "move on" means in your case.
-> If you get a spurious interrupts there are possibilities what's wrong:
-> 1) HW bug(s)
-> 2) FW bug(s)
-> 3) Missed IRQ mask in the driver
-> 4) Improper IRQ mask in the driver
->
-> The below approach seems incorrect to me.
->
-
-Andy, What about this explanation:
-On rare cases the i2c gets a spurious interrupt which means that we
-enter an interrupt but in
-the interrupt handler we don't find any status bit that points to the
-reason we got this interrupt.
-This may be a rare case of HW issue that is still under investigation.
-In order to overcome this we are doing the following:
-1. Disable incoming interrupts in master mode only when slave mode is
-not enabled.
-2. Clear end of busy (EOB) after every interrupt.
-3. Clear other status bits (just in case since we found them cleared)
-4. Return correct status during the interrupt that will finish the transaction.
-On next xmit transaction if the bus is still busy the master will
-issue a recovery process before issuing the new transaction.
-> > If the transaction failed, driver has a recovery function.
-> > After that, user may retry to send the message.
-> >
-> > Indeed the commit message doesn't explain all this.
-> > We will fix and add to the next patchset.
-> >
-> > > > > +     /*
-> > > > > +      * if irq is not one of the above, make sure EOB is disabled and all
-> > > > > +      * status bits are cleared.
-> > > >
-> > > > This does not explain why you hide the spurious interrupt.
-> > > >
-> > > > > +      */
-> > > > > +     if (ret == IRQ_NONE) {
-> > > > > +             npcm_i2c_eob_int(bus, false);
-> > > > > +             npcm_i2c_clear_master_status(bus);
-> > > > > +     }
-> > > > > +
-> > > > > +     return IRQ_HANDLED;
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
 
 
--- 
-Regards,
-Avi
+04.04.2022 11:01, Neil Armstrong wrote:
+> Hi,
+> 
+> On 29/03/2022 00:31, Lucas Tanure wrote:
+>> On Mon, 28 Mar 2022, 21:37 Kevin Hilman, <khilman@baylibre.com> wrote:
+>>>
+>>> Hi Lucas,
+>>>
+>>> Lucas Tanure <tanure@linux.com> writes:
+>>>
+>>>> The default duty cycle of 33% is less than the required
+>>>> by the I2C specs for the LOW period of the SCL clock.
+>>>>
+>>>> So, for 100Khz or less, use 50%H/50%L duty cycle, and
+>>>> for the clock above 100Khz, use 40%H/60%L duty cycle.
+>>>> That ensures the low period of SCL is always more than
+>>>> the minimum required by the specs at any given frequency.
+>>>
+>>> Thanks for the fixes!
+>>>
+>>> This is going to affect all SoCs, so ould you please summarize how your
+>>> changes were tested, and on which SoCs & boards?
+>>>
+>>> Thanks,
+>>>
+>>> Kevin
+>>
+>> Hi,
+>>
+>> I only tested against the vim3 board, measured the bus with a Saleae
+>> logic pro 16.
+>> The measurements were with 100k, 400k, and a few in-between frequencies.
+> 
+> Thanks, it's a great addition to have !
+> 
+>>
+>> Is that enough?
+> 
+> A test on GXL/GXM (VIM1 or VIM2) & GXBB (Odroid-C2) devices is lacking 
+> before we
+> can merge this.
+> 
+> If I find some time, I'll have a try, but everyone is welcome testing 
+> this serie
+> and report if it still works fine for them.
+> 
+> Vyacheslav, do you think you can test on your JetHub devices ? it would 
+> validate GXL & AXG.
+
+It builds ok on 5.17. JetHub H1/D1 has only rtc clock (pcf8563) and 
+1-wire controller (ds2482) on i2c bus. I did't see any difference with 
+or without patches. all works at first look.
+
+Vyacheslav
+
