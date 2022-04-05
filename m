@@ -2,61 +2,41 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2809E4F3540
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Apr 2022 15:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 242364F3B19
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Apr 2022 17:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbiDEKcQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 Apr 2022 06:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
+        id S245079AbiDELu0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 Apr 2022 07:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349268AbiDEJtc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Apr 2022 05:49:32 -0400
+        with ESMTP id S1356233AbiDEKXa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Apr 2022 06:23:30 -0400
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDFCBE0
-        for <linux-i2c@vger.kernel.org>; Tue,  5 Apr 2022 02:43:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAEBBABA4
+        for <linux-i2c@vger.kernel.org>; Tue,  5 Apr 2022 03:08:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=Bfwz8y1D94kMO0NGJwC/qIDtqe69
-        /v7hVn9ltcVOOLk=; b=3fz/f6TTSAA6ubzJLmWhDyPH0xB/bI6vdo5YRouQJ0e0
-        u0sKeWDz4AE4jjfGDw6X6E2939FpSF5FuGHyHvsoARv0i8aI8TmCXReeZiE6wBAf
-        yTHBNTpSWyObbHHGo33bzFH5xT3Y3XHhVPHnoWr+kIF0+Ix2DqgcQyxf+G+4m40=
-Received: (qmail 2236509 invoked from network); 5 Apr 2022 11:43:29 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Apr 2022 11:43:29 +0200
-X-UD-Smtp-Session: l3s3148p1@W1XIE+XbQLggAQnoAHlrADXnfPIF6sP/
-Date:   Tue, 5 Apr 2022 11:43:29 +0200
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=OrW2E1pcDjKZoQF/AXmdHvsNIYk
+        ywXHAVyE1xLW/o1A=; b=Jd7y+V0D9OVOj3rQdTMqpfyI1b6FVWXR9HqjoujfePm
+        niD5dfwl4f9v3h7mRVWjuoFq3RAgfh6EulSZTxitNAhSN3oKTavu3NwwJzo+46lI
+        5Abt9rQiPi0Jdg4T8sVzeuL+E+57m5dJDdCxpa/azIkWxSLYVs+K2ZkLVLXM1KrY
+        =
+Received: (qmail 2245954 invoked from network); 5 Apr 2022 12:08:00 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Apr 2022 12:08:00 +0200
+X-UD-Smtp-Session: l3s3148p1@FKp1a+XbRrggAQnoAHlrADXnfPIF6sP/
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-Cc:     Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH v2] i2c: rcar: add SMBus block read support
-Message-ID: <YkwPQSPed18iyHox@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
         Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-References: <CAMuHMdVVDpBAQR+H1TAnpf65aVbAL0Mm0km7Z9L7+1JuF6n1gQ@mail.gmail.com>
- <000001d7badd$a8512d30$f8f38790$@mentor.com>
- <20211006182314.10585-1-andrew_gabbasov@mentor.com>
- <Yg6ls0zyTDe7LQbK@kunai>
- <20220323215229.GA9403@lxhi-065>
- <YkQ31VMqj1MXqBd3@shikoro>
- <YkQ6XRITOFZ7hLXV@shikoro>
- <20220331160207.GA27757@lxhi-065>
- <YkcqoIMF2uw4FSZh@ninjato>
- <20220405093048.GA7151@lxhi-065>
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>
+Subject: [PATCH v4] i2c: rcar: add support for I2C_M_RECV_LEN
+Date:   Tue,  5 Apr 2022 12:07:56 +0200
+Message-Id: <20220405100756.42920-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RrYwz9n59qpjVHlS"
-Content-Disposition: inline
-In-Reply-To: <20220405093048.GA7151@lxhi-065>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
@@ -67,82 +47,115 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+With this feature added, SMBus Block reads and Proc calls are now
+supported. This patch is the best of two independent developments by
+Wolfram and Bhuvanesh + Andrew, refactored again by Wolfram.
 
---RrYwz9n59qpjVHlS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
+Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-Hi Eugeniu,
+For testing, I wired a Lager board (R-Car H2) and a Salvator-XS (R-Car
+H3 ES2.0) together. The Lager board ran the testunit and provided SMBus
+Proc Calls. The Salvator-XS board was requesting the data.
 
-> The idea was to push it to LKML, once/after you are happy with it.
+Compared to my previous version: sending 1 byte works now, sending with
+DMA as well. Invalid sizes are detected, too. This is as much as I can
+test, I'd think.
 
-I see.
+Compared to Bhuvanesh + Andrew's last version: less intrusive and more
+self contained (no goto), Proc Calls are covered as well
 
-> Thanks for the precious feedback. We've requested Renesas to revert the
-> obsolete BSP commit, based on your recommendation.
+I tried some other refactoring as well (like one single place where
+rcar_i2c_dma() is called) but IMHO this is the most readable solution.
 
-Thank you!
+Thank you everyone for working on this. I am very interested in your
+comments and test results!
 
-> In general, the Renesas kernel always carries a set of patches with
-> non-mainlined changes, Fortunately, for i2c specifically (as opposed
-> to other subsystems), it is narrow enough to not raise major concerns:
+ drivers/i2c/busses/i2c-rcar.c | 31 +++++++++++++++++++++++++++----
+ 1 file changed, 27 insertions(+), 4 deletions(-)
 
-Well, yes, that shows that I am mostly successful with reporting back to
-the BSP team :D But some are still missing, as you can see.
+diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
+index f71c730f9838..f45991252993 100644
+--- a/drivers/i2c/busses/i2c-rcar.c
++++ b/drivers/i2c/busses/i2c-rcar.c
+@@ -105,6 +105,7 @@
+ #define ID_DONE		(1 << 2)
+ #define ID_ARBLOST	(1 << 3)
+ #define ID_NACK		(1 << 4)
++#define ID_EPROTO	(1 << 5)
+ /* persistent flags */
+ #define ID_P_HOST_NOTIFY	BIT(28)
+ #define ID_P_REP_AFTER_RD	BIT(29)
+@@ -522,6 +523,7 @@ static void rcar_i2c_irq_send(struct rcar_i2c_priv *priv, u32 msr)
+ static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
+ {
+ 	struct i2c_msg *msg = priv->msg;
++	bool recv_len_init = priv->pos == 0 && msg->flags & I2C_M_RECV_LEN;
+ 
+ 	/* FIXME: sometimes, unknown interrupt happened. Do nothing */
+ 	if (!(msr & MDR))
+@@ -535,12 +537,29 @@ static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
+ 		rcar_i2c_dma(priv);
+ 	} else if (priv->pos < msg->len) {
+ 		/* get received data */
+-		msg->buf[priv->pos] = rcar_i2c_read(priv, ICRXTX);
++		u8 data = rcar_i2c_read(priv, ICRXTX);
++
++		msg->buf[priv->pos] = data;
++		if (recv_len_init) {
++			if (data == 0 || data > I2C_SMBUS_BLOCK_MAX) {
++				priv->flags |= ID_DONE | ID_EPROTO;
++				return;
++			}
++			msg->len += msg->buf[0];
++			/* Enough data for DMA? */
++			if (rcar_i2c_dma(priv))
++				return;
++			/* new length after RECV_LEN now properly initialized */
++			recv_len_init = false;
++		}
+ 		priv->pos++;
+ 	}
+ 
+-	/* If next received data is the _LAST_, go to new phase. */
+-	if (priv->pos + 1 == msg->len) {
++	/*
++	 * If next received data is the _LAST_ and we are not waiting for a new
++	 * length because of RECV_LEN, then go to a new phase.
++	 */
++	if (priv->pos + 1 == msg->len && !recv_len_init) {
+ 		if (priv->flags & ID_LAST_MSG) {
+ 			rcar_i2c_write(priv, ICMCR, RCAR_BUS_PHASE_STOP);
+ 		} else {
+@@ -847,6 +866,8 @@ static int rcar_i2c_master_xfer(struct i2c_adapter *adap,
+ 		ret = -ENXIO;
+ 	} else if (priv->flags & ID_ARBLOST) {
+ 		ret = -EAGAIN;
++	} else if (priv->flags & ID_EPROTO) {
++		ret = -EPROTO;
+ 	} else {
+ 		ret = num - priv->msgs_left; /* The number of transfer */
+ 	}
+@@ -909,6 +930,8 @@ static int rcar_i2c_master_xfer_atomic(struct i2c_adapter *adap,
+ 		ret = -ENXIO;
+ 	} else if (priv->flags & ID_ARBLOST) {
+ 		ret = -EAGAIN;
++	} else if (priv->flags & ID_EPROTO) {
++		ret = -EPROTO;
+ 	} else {
+ 		ret = num - priv->msgs_left; /* The number of transfer */
+ 	}
+@@ -975,7 +998,7 @@ static u32 rcar_i2c_func(struct i2c_adapter *adap)
+ 	 * I2C_M_IGNORE_NAK (automatically sends STOP after NAK)
+ 	 */
+ 	u32 func = I2C_FUNC_I2C | I2C_FUNC_SLAVE |
+-		   (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
++		   (I2C_FUNC_SMBUS_EMUL_ALL & ~I2C_FUNC_SMBUS_QUICK);
+ 
+ 	if (priv->flags & ID_P_HOST_NOTIFY)
+ 		func |= I2C_FUNC_SMBUS_HOST_NOTIFY;
+-- 
+2.30.2
 
-> $ git log --oneline v5.10.41..rcar-5.1.2 -- drivers/i2c/busses/i2c-rcar.c
-> 6745303b2bfa i2c: rcar: Add support for r8a77961 (R-Car M3-W+)
-
-Can be dropped: "Driver matches against family-specific compatible
-value, which has always been present in upstream DTS"
-
-> 3422d3131700 i2c: rcar: Support the suspend/resume
-
-Already upstream: "18569fa89a4db9ed6b5181624788a1574a9b6ed7 # i2c: rcar:
-add suspend/resume support"
-
-> 5680e77f2427 i2c: rcar: Tidy up the register order for hardware specification ver1.00.
-
-Relevant parts upstream: "e7f4264821a4ee07775f3775f8530cfa9a6d4b5d #
-i2c: rcar: enable interrupts before starting transfer"
-
-Other parts can be dropped.
-
-> 41394ab7420f i2c: rcar: Fix I2C DMA transmission by setting sequence
-
-Upstream: "94e290b0e9a6c360a5660c480c1ba996d892c650 # i2c: rcar: wait
-for data empty before starting DMA"
-
-> Thank you for the review comments. We are still working on a cleaner
-> solution. In case it comes from you first, we are very much keen to
-> give it a try on the target and report the results.
-
-I have a cleaner solution quite ready. Give me another hour for testing
-before I send it out.
-
-All the best,
-
-   Wolfram
-
-
---RrYwz9n59qpjVHlS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJMDz0ACgkQFA3kzBSg
-KbaOhxAAoI0omHSuhycLfshFJ6BI5W7Ur+QhwOpvdww1A0/conrlyXCee3HawtyP
-MPA3WP8MFSis50yXz07zMkGvhvrHpqFaEMlxSikXCYn08yf4lBK0WwiGh82FdrJs
-Ar6DeylyG+NRBQpd/l3YZ3YJPVlqXfqUOsKPfmeHR3oUrnrEfzw4uk8P9E4oUvsT
-Ntz66NY9uEdcP+c2/RM/8aRhI2/ZLBH+HfZJb62WswsH/w8pQceuVRvzXEG0F1jy
-U39QWRL2wFz1NS+Bs3Nf/oMhZzBqLtY5p0ByzAOY+sxfr7nmCQDeXZtEHXWJ80uS
-vF89pAGvlMDZD8RUBISIihjsEqcADoad8qj3MSBG+Ln4RGOf+vr65D92CquOA5W0
-zgEUZ3UBt1x38F/3ka6O6LgpLpna4goJ5A7vVvAXxLUEh/7F4y9hmiUDU5oHlyT8
-dnnPZR8yFiE8MxOU7Zj6WETYRopEe2JCvLWHlUwb6pC+tFPfRPCYjI5u6ilgos/w
-EMgpPR6YL+9ujpmF1Ep057yrTcxMyiYmal91TD3CWzpCPXl3yJU9TdA/Q8XFsRyB
-QVjgdDX0cHyeMAn5wLw4ECYkl9yl7ZcIrTI/ZuZF5YN/8ZHaSYxbGrAMbtrH9Uve
-cTIcee5hrXjceaJdMSnz1ObT3/VBABHHzZdt3crgpi8R9TkJts8=
-=lfpu
------END PGP SIGNATURE-----
-
---RrYwz9n59qpjVHlS--
