@@ -2,135 +2,192 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 473AB4F48F1
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Apr 2022 02:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0384F48EE
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Apr 2022 02:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234143AbiDEV4C (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 Apr 2022 17:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
+        id S231779AbiDEVzm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 Apr 2022 17:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383966AbiDEPOv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Apr 2022 11:14:51 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCB157B08;
-        Tue,  5 Apr 2022 06:28:32 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 709324000D;
-        Tue,  5 Apr 2022 13:28:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649165311;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qnhE1fGjUafmBC+KaTBnXvOD8ef7wgKM3WFEC0Tf58Q=;
-        b=PNZNMPwtfLbDvJj2rr5VXgbxaCGxcXBVC+gZHBtIAYoLT4hU6bhMpirHr8gz34mNJXLwRO
-        6LDLtXVpQnIuL7joOzxx9Ymx88UJvXp25mqd5+1fwpkfq9LPc28eaU0N05kaOwcWtbuWmk
-        GiTNuRJji7YMiyuTKfkrzQ+z3IpmfDY/JtMPHS4AI82mAnxjTgra4Kc/vf8XNy2XPyhn4G
-        +R377fFgzWK/qsqrQV4FhwQeZHFkMf9ok4VSgKwai8hmm2ocIWz0Z7N3wOY3gDfIsP4wdc
-        1+jboRxEU1Fhwg8JYtN+22rUVhqpabxaS2J78OFowBUg/dKrZYmIvsQQdPdskw==
-Date:   Tue, 5 Apr 2022 15:27:02 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v3 3/9] device property: add index argument to
- property_read_string_array() callback
-Message-ID: <20220405152702.50ba516d@fixe.home>
-In-Reply-To: <CAJZ5v0hOjaOCUxbFzKG90Db0bgfdb3q988oAvLB4kmD3-HS8sQ@mail.gmail.com>
-References: <20220325113148.588163-1-clement.leger@bootlin.com>
-        <20220325113148.588163-4-clement.leger@bootlin.com>
-        <Yj3SFYdUQ4r7GXqs@smile.fi.intel.com>
-        <20220328162812.16deac92@fixe.home>
-        <CAJZ5v0hOjaOCUxbFzKG90Db0bgfdb3q988oAvLB4kmD3-HS8sQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        with ESMTP id S1392147AbiDEPfq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Apr 2022 11:35:46 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF9F710DB;
+        Tue,  5 Apr 2022 06:46:39 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A8D535D;
+        Tue,  5 Apr 2022 15:46:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1649166397;
+        bh=NozpGi0NsTMG/sB7xLGYVBuLZzmbJ7B3Gwh+tj4+cQI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G8zkeM3lID2r8WMzYcbEXGAKX30vNSczc4ScWlOdPdazVH/RfNFQL0KJdhysWOadF
+         UCQQNWpNkGeaaTSgDAiZVcb+ZdCBuPEJQszJlD+quolRO/UOwM3K1+BDhoqKaHBHyj
+         YDypJs7DW5COOEgATFL/Z3vHTMi97p9eqOQGL8UM=
+Date:   Tue, 5 Apr 2022 16:46:34 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Peter Rosin <peda@axentia.se>, Rob Herring <robh+dt@kernel.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [v7 1/3] dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
+Message-ID: <YkxIOgTl876orHbf@pendragon.ideasonboard.com>
+References: <20220405120552.433415-1-patrick.rudolph@9elements.com>
+ <20220405120552.433415-2-patrick.rudolph@9elements.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220405120552.433415-2-patrick.rudolph@9elements.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Le Tue, 5 Apr 2022 15:22:51 +0200,
-"Rafael J. Wysocki" <rafael@kernel.org> a =C3=A9crit :
+Hi Patrick,
 
-> On Mon, Mar 28, 2022 at 4:29 PM Cl=C3=A9ment L=C3=A9ger <clement.leger@bo=
-otlin.com> wrote:
-> >
-> > Le Fri, 25 Mar 2022 16:30:45 +0200,
-> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> a =C3=A9crit :
-> > =20
-> > > >     pointer =3D property_entry_find(props, propname, length);
-> > > >     if (IS_ERR(pointer))
-> > > >             return PTR_ERR(pointer); =20
-> > > =20
-> > > > +   if (index >=3D array_len)
-> > > > +           return -ENODATA; =20
-> > >
-> > > I was about to ask if we can check this before the
-> > > property_entry_find() call, but realized that in such case it will
-> > > shadow possible errors due to wrong or absent property. =20
-> >
-> > I think you are actually right, the check can be done after
-> > property_entry_count_elems_of_size() since it already checks for the
-> > property to be present. I'll move that check.
-> > =20
-> > >
-> > > ...
-> > > =20
-> > > > -           of_property_read_string_array(node, propname, val,
-> > > > nval) :
-> > > > +           of_property_read_string_array_index(node,
-> > > > propname, val, nval,
-> > > > +                                               index) : =20
-> > >
-> > > Dunno about the style there, but I think it can be one line. =20
-> >
-> > Seems like the complete file is strictly applying the 80 columns rules
-> > so I thought it was better to keep it like this. However, I think the
-> > ternary oeprator is not really readable with such split. =20
->=20
-> So FWIW I would entirely change it to
->=20
-> if (!val)
->         return of_property_count_strings(node, propname);
->=20
-> return of_property_read_string_array_index(node, propname, val,
->=20
-> nval, index);
->=20
-> which IMO would be way easier to read.
+Thank you for the patch.
 
-Hi Rafael,
+On Tue, Apr 05, 2022 at 02:05:49PM +0200, Patrick Rudolph wrote:
+> Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
+> chips. The functionality will be provided by the exisintg pca954x driver.
+> 
+> While on it make the interrupts support conditionally as not all of the
+> existing chips have interrupts.
+> 
+> For chips that are powered off by default add an optional regulator
+> called vdd-supply.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> ---
+>  .../bindings/i2c/i2c-mux-pca954x.yaml         | 44 ++++++++++++++-----
+>  1 file changed, 34 insertions(+), 10 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> index 9f1726d0356b..132c3e54e7ab 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> @@ -4,21 +4,48 @@
+>  $id: http://devicetree.org/schemas/i2c/i2c-mux-pca954x.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: NXP PCA954x I2C bus switch
+> +title: NXP PCA954x I2C and compatible bus switches
+>  
+>  maintainers:
+>    - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>  
+>  description:
+> -  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
+> +  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices,
+> +  and the Maxim MAX735x and MAX736x I2C mux/switch devices.
+>  
+>  allOf:
+>    - $ref: /schemas/i2c/i2c-mux.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - maxim,max7367
+> +              - maxim,max7369
+> +              - nxp,pca9542
+> +              - nxp,pca9543
+> +              - nxp,pca9544
+> +              - nxp,pca9545
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          maxItems: 1
+> +
+> +        "#interrupt-cells":
+> +          const: 2
+> +
+> +        interrupt-controller: true
 
-Agreed, this is way more readable. I'll modify that.
+It feels a bit out of place to have those properties listed before the
+main "properties" property, but we can only have a sincel allOf. I
+wonder if the i2c-mux schema could be selected automatically based on
+node name, but that's out of scope for this patch.
 
-Thanks,
+I thought it was more customary to define properties in the main
+"properties" property, and then have
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+if:
+  not:
+    properties:
+      compatible:
+        contains:
+          enum:
+            - maxim,max7367
+            - maxim,max7369
+            - nxp,pca9542
+            - nxp,pca9543
+            - nxp,pca9544
+            - nxp,pca9545
+  then:
+    properties:
+      interrupts: false
+      "#interrupt-cells": false
+      interrupt-controller: false
+
+I don't mind much either way though, but if one option is preferred over
+the other, we may want to be consistent.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+>  properties:
+>    compatible:
+>      oneOf:
+>        - enum:
+> +          - maxim,max7356
+> +          - maxim,max7357
+> +          - maxim,max7358
+> +          - maxim,max7367
+> +          - maxim,max7368
+> +          - maxim,max7369
+>            - nxp,pca9540
+>            - nxp,pca9542
+>            - nxp,pca9543
+> @@ -38,14 +65,6 @@ properties:
+>    reg:
+>      maxItems: 1
+>  
+> -  interrupts:
+> -    maxItems: 1
+> -
+> -  "#interrupt-cells":
+> -    const: 2
+> -
+> -  interrupt-controller: true
+> -
+>    reset-gpios:
+>      maxItems: 1
+>  
+> @@ -59,6 +78,9 @@ properties:
+>      description: if present, overrides i2c-mux-idle-disconnect
+>      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
+>  
+> +  vdd-supply:
+> +    description: A voltage regulator supplying power to the chip.
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -79,6 +101,8 @@ examples:
+>              #size-cells = <0>;
+>              reg = <0x74>;
+>  
+> +            vdd-supply = <&p3v3>;
+> +
+>              interrupt-parent = <&ipic>;
+>              interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
+>              interrupt-controller;
+
+-- 
+Regards,
+
+Laurent Pinchart
