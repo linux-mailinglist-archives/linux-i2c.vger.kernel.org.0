@@ -2,192 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0384F48EE
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Apr 2022 02:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04BBD4F48F3
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Apr 2022 02:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbiDEVzm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 Apr 2022 17:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
+        id S1354484AbiDEV4Q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 Apr 2022 17:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392147AbiDEPfq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Apr 2022 11:35:46 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF9F710DB;
-        Tue,  5 Apr 2022 06:46:39 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A8D535D;
-        Tue,  5 Apr 2022 15:46:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1649166397;
-        bh=NozpGi0NsTMG/sB7xLGYVBuLZzmbJ7B3Gwh+tj4+cQI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G8zkeM3lID2r8WMzYcbEXGAKX30vNSczc4ScWlOdPdazVH/RfNFQL0KJdhysWOadF
-         UCQQNWpNkGeaaTSgDAiZVcb+ZdCBuPEJQszJlD+quolRO/UOwM3K1+BDhoqKaHBHyj
-         YDypJs7DW5COOEgATFL/Z3vHTMi97p9eqOQGL8UM=
-Date:   Tue, 5 Apr 2022 16:46:34 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Peter Rosin <peda@axentia.se>, Rob Herring <robh+dt@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v7 1/3] dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
-Message-ID: <YkxIOgTl876orHbf@pendragon.ideasonboard.com>
-References: <20220405120552.433415-1-patrick.rudolph@9elements.com>
- <20220405120552.433415-2-patrick.rudolph@9elements.com>
+        with ESMTP id S1443621AbiDEPkA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Apr 2022 11:40:00 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3EE17DC86
+        for <linux-i2c@vger.kernel.org>; Tue,  5 Apr 2022 06:57:19 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id bg10so26934320ejb.4
+        for <linux-i2c@vger.kernel.org>; Tue, 05 Apr 2022 06:57:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IVfxiW6zKe0dHxT2NnEjml4pjCNh93EsN7m5exyESZw=;
+        b=UXRyAeEeXf2x76rRsTVT85Yu3qMDdIO8T76/plyF2HR/xrK6SSH+NaRviJpVZh7Qwg
+         sDlhRAI83MwCI3gbOLnBxOCANE1IcKQwEfrAwCIyDHAAtFq710fD+ZRlVWZv/xEqZlP2
+         2xaaXUL1FQTdhZiuvu+h3FVmKJ21wi4tSIvUxoAwP1nhl6vffFEzbfhRI4nAsZi2EVnd
+         pMeyjuSEWFMQCRF/nJ7z/vfgUOwNgvH2iTxe8G1ZXH7d9W9pBEqLvYhucm/tg3XSPyUf
+         uvwFMkqw+KsPAZDRjdA3KHBjqlNYwp3fE3vsEHxRyU2l/m40UVa6h2Ljee9euWBm9D1t
+         GkIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IVfxiW6zKe0dHxT2NnEjml4pjCNh93EsN7m5exyESZw=;
+        b=cqzR2XKWutOgSZlqIS6h/pUklEVIGBTmchJl2tLUZ6SjC1fZezTl+X1xFdduq/p3Ue
+         kl/FnJMeBTfHcc1BDpEhHRiljoGppqP6zhpyX0qomolYG12DFU0ijfSZN7olKUAuzfnQ
+         l7hsAweMC5IuneR9LtQ0GZ2wqgroebOWwOPXfLZf9ZOjY3Lvmk6TNkhsEx4WgDdPp1E2
+         iI63m+4eax0gnN/E0epYclXZ7T6zIsVXDlMKuX/53KGRm35sCp5igj54IJsTO1yGJWoL
+         WWa0ruNj4aXEiNx1xr5N8n08XpxFdnieVlkGsR1PuwFNtv0C+qyEpGgySmjiZgvFG5Ct
+         pwtg==
+X-Gm-Message-State: AOAM530tHIfQg2Sjcs6uWS5Ir7TCSlvU9WlvnHiGGwydXhOCsL4iSSh2
+        ZzCmYgTJPk3zUbH3/q/D0l6Vrw==
+X-Google-Smtp-Source: ABdhPJzrbED2j3hKopCA4gDE01wRh9WEQTM3OOohAmICtp6UQWRL7za5ii7DlT49Qvcs5o0Kwd6rww==
+X-Received: by 2002:a17:906:3ad3:b0:6cd:382b:86e5 with SMTP id z19-20020a1709063ad300b006cd382b86e5mr3579318ejd.145.1649167038173;
+        Tue, 05 Apr 2022 06:57:18 -0700 (PDT)
+Received: from [192.168.0.182] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id v20-20020a056402349400b00419651e513asm6776474edc.45.2022.04.05.06.57.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 06:57:17 -0700 (PDT)
+Message-ID: <e3247f0f-5d3d-d981-699e-7dcedb30f881@linaro.org>
+Date:   Tue, 5 Apr 2022 15:57:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220405120552.433415-2-patrick.rudolph@9elements.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] i2c: add binding to prevent device detection
+Content-Language: en-US
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>, wsa@kernel.org
+Cc:     kernel@axis.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, krzk+dt@kernel.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220405121627.1560949-1-vincent.whitchurch@axis.com>
+ <20220405121627.1560949-2-vincent.whitchurch@axis.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220405121627.1560949-2-vincent.whitchurch@axis.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Patrick,
+On 05/04/2022 14:16, Vincent Whitchurch wrote:
+> When drivers with ->detect callbacks are loaded, the I2C core does a
+> bunch of transactions to try to probe for these devices, regardless of
+> whether they are specified in the devicetree or not.  (This only happens
+> on I2C controllers whose drivers enable the I2C_CLASS* flags, but this
+> is the case for generic drivers like i2c-gpio.)
+> 
 
-Thank you for the patch.
+Thank you for your patch. There is something to discuss/improve.
 
-On Tue, Apr 05, 2022 at 02:05:49PM +0200, Patrick Rudolph wrote:
-> Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
-> chips. The functionality will be provided by the exisintg pca954x driver.
+> These kinds of transactions are unnecessary on systems where the
+> devicetree specifies all the devices on the I2C bus, so add a property
+> to allow them to be disabled.
 > 
-> While on it make the interrupts support conditionally as not all of the
-> existing chips have interrupts.
-> 
-> For chips that are powered off by default add an optional regulator
-> called vdd-supply.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 > ---
->  .../bindings/i2c/i2c-mux-pca954x.yaml         | 44 ++++++++++++++-----
->  1 file changed, 34 insertions(+), 10 deletions(-)
+>  Documentation/devicetree/bindings/i2c/i2c.txt | 4 ++++
+
+Use the subject matching the subsystem (git log --oneline -- .......).
+
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> index 9f1726d0356b..132c3e54e7ab 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> @@ -4,21 +4,48 @@
->  $id: http://devicetree.org/schemas/i2c/i2c-mux-pca954x.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
+> index fc3dd7ec0445..5f7bdf4851e8 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c.txt
+> +++ b/Documentation/devicetree/bindings/i2c/i2c.txt
+> @@ -72,6 +72,10 @@ wants to support one of the below features, it should adapt these bindings.
+>  	this information to adapt power management to keep the arbitration awake
+>  	all the time, for example. Can not be combined with 'single-master'.
 >  
-> -title: NXP PCA954x I2C bus switch
-> +title: NXP PCA954x I2C and compatible bus switches
->  
->  maintainers:
->    - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->  
->  description:
-> -  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
-> +  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices,
-> +  and the Maxim MAX735x and MAX736x I2C mux/switch devices.
->  
->  allOf:
->    - $ref: /schemas/i2c/i2c-mux.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - maxim,max7367
-> +              - maxim,max7369
-> +              - nxp,pca9542
-> +              - nxp,pca9543
-> +              - nxp,pca9544
-> +              - nxp,pca9545
-> +    then:
-> +      properties:
-> +        interrupts:
-> +          maxItems: 1
-> +
-> +        "#interrupt-cells":
-> +          const: 2
-> +
-> +        interrupt-controller: true
+> +- no-detect
+> +	states that the system should not attempt to automatically detect
+> +	devices which are not explicitly specified as child nodes.
 
-It feels a bit out of place to have those properties listed before the
-main "properties" property, but we can only have a sincel allOf. I
-wonder if the i2c-mux schema could be selected automatically based on
-node name, but that's out of scope for this patch.
+Focus on the hardware, not on system and behavior. The hardware property
+is that bus is completely described in Devicetree or detection does not
+work correctly. I guess the property name could stay like this, but the
+description could be rephrased.
 
-I thought it was more customary to define properties in the main
-"properties" property, and then have
-
-if:
-  not:
-    properties:
-      compatible:
-        contains:
-          enum:
-            - maxim,max7367
-            - maxim,max7369
-            - nxp,pca9542
-            - nxp,pca9543
-            - nxp,pca9544
-            - nxp,pca9545
-  then:
-    properties:
-      interrupts: false
-      "#interrupt-cells": false
-      interrupt-controller: false
-
-I don't mind much either way though, but if one option is preferred over
-the other, we may want to be consistent.
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
->  properties:
->    compatible:
->      oneOf:
->        - enum:
-> +          - maxim,max7356
-> +          - maxim,max7357
-> +          - maxim,max7358
-> +          - maxim,max7367
-> +          - maxim,max7368
-> +          - maxim,max7369
->            - nxp,pca9540
->            - nxp,pca9542
->            - nxp,pca9543
-> @@ -38,14 +65,6 @@ properties:
->    reg:
->      maxItems: 1
->  
-> -  interrupts:
-> -    maxItems: 1
-> -
-> -  "#interrupt-cells":
-> -    const: 2
-> -
-> -  interrupt-controller: true
-> -
->    reset-gpios:
->      maxItems: 1
->  
-> @@ -59,6 +78,9 @@ properties:
->      description: if present, overrides i2c-mux-idle-disconnect
->      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
->  
-> +  vdd-supply:
-> +    description: A voltage regulator supplying power to the chip.
-> +
->  required:
->    - compatible
->    - reg
-> @@ -79,6 +101,8 @@ examples:
->              #size-cells = <0>;
->              reg = <0x74>;
->  
-> +            vdd-supply = <&p3v3>;
-> +
->              interrupt-parent = <&ipic>;
->              interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
->              interrupt-controller;
-
--- 
-Regards,
-
-Laurent Pinchart
+Best regards,
+Krzysztof
