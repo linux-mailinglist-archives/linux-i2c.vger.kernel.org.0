@@ -2,160 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 242364F3B19
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Apr 2022 17:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE59A4F3B16
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Apr 2022 17:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245079AbiDELu0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 Apr 2022 07:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
+        id S1344849AbiDELua (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 Apr 2022 07:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356233AbiDEKXa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Apr 2022 06:23:30 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAEBBABA4
-        for <linux-i2c@vger.kernel.org>; Tue,  5 Apr 2022 03:08:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=OrW2E1pcDjKZoQF/AXmdHvsNIYk
-        ywXHAVyE1xLW/o1A=; b=Jd7y+V0D9OVOj3rQdTMqpfyI1b6FVWXR9HqjoujfePm
-        niD5dfwl4f9v3h7mRVWjuoFq3RAgfh6EulSZTxitNAhSN3oKTavu3NwwJzo+46lI
-        5Abt9rQiPi0Jdg4T8sVzeuL+E+57m5dJDdCxpa/azIkWxSLYVs+K2ZkLVLXM1KrY
-        =
-Received: (qmail 2245954 invoked from network); 5 Apr 2022 12:08:00 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Apr 2022 12:08:00 +0200
-X-UD-Smtp-Session: l3s3148p1@FKp1a+XbRrggAQnoAHlrADXnfPIF6sP/
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>
-Subject: [PATCH v4] i2c: rcar: add support for I2C_M_RECV_LEN
-Date:   Tue,  5 Apr 2022 12:07:56 +0200
-Message-Id: <20220405100756.42920-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S1381268AbiDELnj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Apr 2022 07:43:39 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BA6114FC3;
+        Tue,  5 Apr 2022 04:09:06 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 65CC922247;
+        Tue,  5 Apr 2022 13:09:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1649156944;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HhCRNMxeN/GjO55RvomQG0xoJmMvvbdrMDnAktj+ZOw=;
+        b=cNqMfgmXtFPvgEEwbWq+VnwdvMuscRpK20137u0iJSnBDLVHoJFUu5w4qyLSMk8UBd8eum
+        0HMbGVUDIyLdMdlDNStBDi+KY7vBSzta24pjZddLL/yJGIlyoEPC3VL3TgfKTOY12IUtu8
+        hkJrB7ZhYGB9P1u1D5xx4Y+a7XRIo5o=
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Date:   Tue, 05 Apr 2022 13:09:04 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Codrin.Ciubotariu@microchip.com
+Cc:     Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        Claudiu.Beznea@microchip.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, stable@vger.kernel.org
+Subject: Re: [PATCH] i2c: at91: use dma safe buffers
+In-Reply-To: <360914ee-594c-86bc-2436-aa863a67953a@microchip.com>
+References: <20220303161724.3324948-1-michael@walle.cc>
+ <46e1be55-9377-75b7-634d-9eadbebc98d7@microchip.com>
+ <bc32f1107786ebcbfb4952e1a6142304@walle.cc>
+ <360914ee-594c-86bc-2436-aa863a67953a@microchip.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <27f124c9adaf8a4fbdfb7a38456c4a2e@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-With this feature added, SMBus Block reads and Proc calls are now
-supported. This patch is the best of two independent developments by
-Wolfram and Bhuvanesh + Andrew, refactored again by Wolfram.
+Am 2022-04-05 12:02, schrieb Codrin.Ciubotariu@microchip.com:
+> On 05.04.2022 12:38, Michael Walle wrote:
+>> Am 2022-04-05 11:23, schrieb Codrin.Ciubotariu@microchip.com:
+>>>> +       if (dev->use_dma) {
+>>>> +               dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
+>>> 
+>>> If you want, you could just dev->buf = i2c_get_dma_safe...
+>> 
+>> But where is the error handling in that case? dev->buf will
+>> be NULL, which is eventually passed to dma_map_single().
+>> 
+>> Also, I need the dma_buf for the i2c_put_dma_safe_msg_buf()
+>> call anyway, because dev->buf will be modified during
+>> processing.
+> 
+> You still:
+> 	if (!dev->buf) {
+> 		ret = -ENOMEM;
+> 		goto out;
+> 	}
+> 
+> So, at91_do_twi_transfer()/dma_map_single() will not be called.
 
-Signed-off-by: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
-Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+Ahh, I misunderstood you. Yes, but as I said, I need the dma_buf
+temporary variable anyway, because dev->buf is modified, eg. see
+at91_twi_read_data_dma_callback().
 
-For testing, I wired a Lager board (R-Car H2) and a Salvator-XS (R-Car
-H3 ES2.0) together. The Lager board ran the testunit and provided SMBus
-Proc Calls. The Salvator-XS board was requesting the data.
-
-Compared to my previous version: sending 1 byte works now, sending with
-DMA as well. Invalid sizes are detected, too. This is as much as I can
-test, I'd think.
-
-Compared to Bhuvanesh + Andrew's last version: less intrusive and more
-self contained (no goto), Proc Calls are covered as well
-
-I tried some other refactoring as well (like one single place where
-rcar_i2c_dma() is called) but IMHO this is the most readable solution.
-
-Thank you everyone for working on this. I am very interested in your
-comments and test results!
-
- drivers/i2c/busses/i2c-rcar.c | 31 +++++++++++++++++++++++++++----
- 1 file changed, 27 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
-index f71c730f9838..f45991252993 100644
---- a/drivers/i2c/busses/i2c-rcar.c
-+++ b/drivers/i2c/busses/i2c-rcar.c
-@@ -105,6 +105,7 @@
- #define ID_DONE		(1 << 2)
- #define ID_ARBLOST	(1 << 3)
- #define ID_NACK		(1 << 4)
-+#define ID_EPROTO	(1 << 5)
- /* persistent flags */
- #define ID_P_HOST_NOTIFY	BIT(28)
- #define ID_P_REP_AFTER_RD	BIT(29)
-@@ -522,6 +523,7 @@ static void rcar_i2c_irq_send(struct rcar_i2c_priv *priv, u32 msr)
- static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
- {
- 	struct i2c_msg *msg = priv->msg;
-+	bool recv_len_init = priv->pos == 0 && msg->flags & I2C_M_RECV_LEN;
- 
- 	/* FIXME: sometimes, unknown interrupt happened. Do nothing */
- 	if (!(msr & MDR))
-@@ -535,12 +537,29 @@ static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
- 		rcar_i2c_dma(priv);
- 	} else if (priv->pos < msg->len) {
- 		/* get received data */
--		msg->buf[priv->pos] = rcar_i2c_read(priv, ICRXTX);
-+		u8 data = rcar_i2c_read(priv, ICRXTX);
-+
-+		msg->buf[priv->pos] = data;
-+		if (recv_len_init) {
-+			if (data == 0 || data > I2C_SMBUS_BLOCK_MAX) {
-+				priv->flags |= ID_DONE | ID_EPROTO;
-+				return;
-+			}
-+			msg->len += msg->buf[0];
-+			/* Enough data for DMA? */
-+			if (rcar_i2c_dma(priv))
-+				return;
-+			/* new length after RECV_LEN now properly initialized */
-+			recv_len_init = false;
-+		}
- 		priv->pos++;
- 	}
- 
--	/* If next received data is the _LAST_, go to new phase. */
--	if (priv->pos + 1 == msg->len) {
-+	/*
-+	 * If next received data is the _LAST_ and we are not waiting for a new
-+	 * length because of RECV_LEN, then go to a new phase.
-+	 */
-+	if (priv->pos + 1 == msg->len && !recv_len_init) {
- 		if (priv->flags & ID_LAST_MSG) {
- 			rcar_i2c_write(priv, ICMCR, RCAR_BUS_PHASE_STOP);
- 		} else {
-@@ -847,6 +866,8 @@ static int rcar_i2c_master_xfer(struct i2c_adapter *adap,
- 		ret = -ENXIO;
- 	} else if (priv->flags & ID_ARBLOST) {
- 		ret = -EAGAIN;
-+	} else if (priv->flags & ID_EPROTO) {
-+		ret = -EPROTO;
- 	} else {
- 		ret = num - priv->msgs_left; /* The number of transfer */
- 	}
-@@ -909,6 +930,8 @@ static int rcar_i2c_master_xfer_atomic(struct i2c_adapter *adap,
- 		ret = -ENXIO;
- 	} else if (priv->flags & ID_ARBLOST) {
- 		ret = -EAGAIN;
-+	} else if (priv->flags & ID_EPROTO) {
-+		ret = -EPROTO;
- 	} else {
- 		ret = num - priv->msgs_left; /* The number of transfer */
- 	}
-@@ -975,7 +998,7 @@ static u32 rcar_i2c_func(struct i2c_adapter *adap)
- 	 * I2C_M_IGNORE_NAK (automatically sends STOP after NAK)
- 	 */
- 	u32 func = I2C_FUNC_I2C | I2C_FUNC_SLAVE |
--		   (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
-+		   (I2C_FUNC_SMBUS_EMUL_ALL & ~I2C_FUNC_SMBUS_QUICK);
- 
- 	if (priv->flags & ID_P_HOST_NOTIFY)
- 		func |= I2C_FUNC_SMBUS_HOST_NOTIFY;
--- 
-2.30.2
-
+-michael
