@@ -2,263 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12F84F67AD
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Apr 2022 19:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 871C54F6A6F
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Apr 2022 21:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238875AbiDFR2a (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Apr 2022 13:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
+        id S232825AbiDFTw1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Apr 2022 15:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239679AbiDFR2M (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Apr 2022 13:28:12 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C95CC90D9;
-        Wed,  6 Apr 2022 08:29:45 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 85B8A1F4136D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649258984;
-        bh=1NhAchyfhmSmpQJUfImxIt/WQmIDi6gHQsa7Fft+Rks=;
-        h=From:To:Cc:Subject:Date:From;
-        b=OQDpeJ1CvB/HRIMKBLggLHHm4RAqWhHYwby3rUsfvR/bfVO5vAKJnmfn+oetuspeA
-         440NJiHS1nRDY07b8iuW/cgnQ86eDw/Ep1UI7RrYdICUUUbnsUbD5O9bf2+fmI+q5u
-         1MeOw3e4oce3zdG5Q8JpghmoV2KJ52Mmn7EzvBeNK6kGFB2lfDVqG8wyP+ny1F+qXv
-         fTi264g+xqUm+bT+LBUSkuGpshloy4JN3SfdmWV2yJKNYPDiTZDMDpctL5WU1/OVc4
-         nJEerUftYKTv3EKDQBivUgtjHy3JS1J6Q9r0/WcAWVX9KK2EJteMRcYhLSHSttOQV3
-         Qp6xHefrUW6aw==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     robh+dt@kernel.org
-Cc:     krzk+dt@kernel.org, matthias.bgg@gmail.com, qii.wang@mediatek.com,
-        wsa@kernel.org, kewei.xu@mediatek.com,
-        angelogioacchino.delregno@collabora.com, hsinyi@chromium.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: i2c: convert i2c-mt65xx to json-schema
-Date:   Wed,  6 Apr 2022 17:29:40 +0200
-Message-Id: <20220406152940.140224-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S232840AbiDFTwG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Apr 2022 15:52:06 -0400
+Received: from smtp1.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F5B1AE1BA;
+        Wed,  6 Apr 2022 10:18:41 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id CBD203C0579;
+        Wed,  6 Apr 2022 19:18:39 +0200 (CEST)
+Received: from lxhi-065 (10.72.94.4) by hi2exch02.adit-jv.com (10.72.92.28)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Wed, 6 Apr
+ 2022 19:18:39 +0200
+Date:   Wed, 6 Apr 2022 19:18:34 +0200
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+CC:     <linux-i2c@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH v4] i2c: rcar: add support for I2C_M_RECV_LEN
+Message-ID: <20220406171834.GA14741@lxhi-065>
+References: <20220405100756.42920-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220405100756.42920-1-wsa+renesas@sang-engineering.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.72.94.4]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Convert I2C binding for MediaTek SoCs to Devicetree schema.
+Hello Wolfram,
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- .../devicetree/bindings/i2c/i2c-mt65xx.txt    |  53 --------
- .../devicetree/bindings/i2c/i2c-mt65xx.yaml   | 118 ++++++++++++++++++
- MAINTAINERS                                   |   2 +-
- 3 files changed, 119 insertions(+), 54 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
- create mode 100644 Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+On Di, Apr 05, 2022 at 12:07:56 +0200, Wolfram Sang wrote:
+> With this feature added, SMBus Block reads and Proc calls are now
+> supported. This patch is the best of two independent developments by
+> Wolfram and Bhuvanesh + Andrew, refactored again by Wolfram.
+> 
+> Signed-off-by: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
+> Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+> 
+> For testing, I wired a Lager board (R-Car H2) and a Salvator-XS (R-Car
+> H3 ES2.0) together. The Lager board ran the testunit and provided SMBus
+> Proc Calls. The Salvator-XS board was requesting the data.
+> 
+> Compared to my previous version: sending 1 byte works now, sending with
+> DMA as well. Invalid sizes are detected, too. This is as much as I can
+> test, I'd think.
+> 
+> Compared to Bhuvanesh + Andrew's last version: less intrusive and more
+> self contained (no goto), Proc Calls are covered as well
+> 
+> I tried some other refactoring as well (like one single place where
+> rcar_i2c_dma() is called) but IMHO this is the most readable solution.
+> 
+> Thank you everyone for working on this. I am very interested in your
+> comments and test results!
+> 
+>  drivers/i2c/busses/i2c-rcar.c | 31 +++++++++++++++++++++++++++----
+>  1 file changed, 27 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
-deleted file mode 100644
-index 026985b8f61a..000000000000
---- a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
-+++ /dev/null
-@@ -1,53 +0,0 @@
--* MediaTek's I2C controller
--
--The MediaTek's I2C controller is used to interface with I2C devices.
--
--Required properties:
--  - compatible: value should be either of the following.
--      "mediatek,mt2701-i2c", "mediatek,mt6577-i2c": for MediaTek MT2701
--      "mediatek,mt2712-i2c": for MediaTek MT2712
--      "mediatek,mt6577-i2c": for MediaTek MT6577
--      "mediatek,mt6589-i2c": for MediaTek MT6589
--      "mediatek,mt6797-i2c", "mediatek,mt6577-i2c": for MediaTek MT6797
--      "mediatek,mt7622-i2c": for MediaTek MT7622
--      "mediatek,mt7623-i2c", "mediatek,mt6577-i2c": for MediaTek MT7623
--      "mediatek,mt7629-i2c", "mediatek,mt2712-i2c": for MediaTek MT7629
--      "mediatek,mt8168-i2c": for MediaTek MT8168
--      "mediatek,mt8173-i2c": for MediaTek MT8173
--      "mediatek,mt8183-i2c": for MediaTek MT8183
--      "mediatek,mt8186-i2c": for MediaTek MT8186
--      "mediatek,mt8192-i2c": for MediaTek MT8192
--      "mediatek,mt8195-i2c", "mediatek,mt8192-i2c": for MediaTek MT8195
--      "mediatek,mt8516-i2c", "mediatek,mt2712-i2c": for MediaTek MT8516
--  - reg: physical base address of the controller and dma base, length of memory
--    mapped region.
--  - interrupts: interrupt number to the cpu.
--  - clock-div: the fixed value for frequency divider of clock source in i2c
--    module. Each IC may be different.
--  - clocks: clock name from clock manager
--  - clock-names: Must include "main" and "dma", "arb" is for multi-master that
--    one bus has more than two i2c controllers, if enable have-pmic need include
--    "pmic" extra.
--
--Optional properties:
--  - clock-frequency: Frequency in Hz of the bus when transfer, the default value
--    is 100000.
--  - mediatek,have-pmic: platform can control i2c form special pmic side.
--    Only mt6589 and mt8135 support this feature.
--  - mediatek,use-push-pull: IO config use push-pull mode.
--  - vbus-supply: phandle to the regulator that provides power to SCL/SDA.
--
--Example:
--
--	i2c0: i2c@1100d000 {
--			compatible = "mediatek,mt6577-i2c";
--			reg = <0x1100d000 0x70>,
--			      <0x11000300 0x80>;
--			interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_LOW>;
--			clock-frequency = <400000>;
--			mediatek,have-pmic;
--			clock-div = <16>;
--			clocks = <&i2c0_ck>, <&ap_dma_ck>;
--			clock-names = "main", "dma";
--	};
--
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
-new file mode 100644
-index 000000000000..889064f24a8c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
-@@ -0,0 +1,118 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i2c/i2c-mt65xx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek I2C controller
-+
-+description:
-+  This driver interfaces with the native I2C controller present in
-+  various MediaTek SoCs.
-+
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
-+
-+maintainers:
-+  - Qii Wang <qii.wang@mediatek.com>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: mediatek,mt2712-i2c
-+      - const: mediatek,mt6577-i2c
-+      - const: mediatek,mt6589-i2c
-+      - const: mediatek,mt7622-i2c
-+      - const: mediatek,mt8168-i2c
-+      - const: mediatek,mt8173-i2c
-+      - const: mediatek,mt8183-i2c
-+      - const: mediatek,mt8186-i2c
-+      - const: mediatek,mt8192-i2c
-+      - items:
-+          - enum:
-+              - mediatek,mt7629-i2c
-+              - mediatek,mt8516-i2c
-+          - const: mediatek,mt2712-i2c
-+      - items:
-+          - enum:
-+              - mediatek,mt2701-i2c
-+              - mediatek,mt6797-i2c
-+              - mediatek,mt7623-i2c
-+          - const: mediatek,mt6577-i2c
-+      - items:
-+          - enum:
-+              - mediatek,mt8195-i2c
-+          - const: mediatek,mt8192-i2c
-+
-+  reg:
-+    items:
-+      - description: Physical base address
-+      - description: DMA base address
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+    items:
-+      - description: Main clock for I2C bus
-+      - description: Clock for I2C via DMA
-+      - description: Bus arbitrator clock
-+      - description: Clock for I2C from PMIC
-+
-+  clock-names:
-+    minItems: 1
-+    items:
-+      - const: main
-+      - const: dma
-+      - const: arb
-+      - const: pmic
-+
-+  clock-div:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Frequency divider of clock source in I2C module
-+
-+  clock-frequency:
-+    default: 100000
-+    description:
-+      SCL frequency to use (in Hz). If omitted, 100kHz is used.
-+
-+  mediatek,have-pmic:
-+    description: Platform controls I2C from PMIC side
-+    type: boolean
-+
-+  mediatek,use-push-pull:
-+    description: Use push-pull mode I/O config
-+    type: boolean
-+
-+  vbus-supply:
-+    description: Phandle to the regulator providing power to SCL/SDA
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - clock-div
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    i2c0: i2c@1100d000 {
-+      compatible = "mediatek,mt6577-i2c";
-+      reg = <0x1100d000 0x70>, <0x11000300 0x80>;
-+      interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_LOW>;
-+      clocks = <&i2c0_ck>, <&ap_dma_ck>;
-+      clock-names = "main", "dma";
-+      clock-div = <16>;
-+      clock-frequency = <400000>;
-+      mediatek,have-pmic;
-+
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ee0b5a70aff1..28a17d4c8d12 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12361,7 +12361,7 @@ MEDIATEK I2C CONTROLLER DRIVER
- M:	Qii Wang <qii.wang@mediatek.com>
- L:	linux-i2c@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
-+F:	Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
- F:	drivers/i2c/busses/i2c-mt65xx.c
- 
- MEDIATEK IOMMU DRIVER
--- 
-2.35.1
+I am not an i2c/SMBus expert, but I genuinely tried to attack the patch
+from multiple angles, including static analysis (smatch, cppcheck, sparse,
+PVS Studio, coccicheck, make W=123), code review, dynamic testing
+(KASAN, UBSAN and friends enabled) and couldn't spot any misbehavior or
+any obvious opportunities for optimization.
 
+We've tested this patch on vanilla and on 4.14 using reference and
+non-reference boards and the behavior matched our expectations.
+
+I've also briefly glanced at the i2c fault injection possibilities, as
+described in https://elinux.org/Tests:I2C-fault-injection, but soon
+realized this will require HW/board modifications, which are not
+straightforward in my personal environment.
+
+Looking forward to any other review comments.
+Thank you for your friendly support and cooperation.
+
+Reviewed-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+Tested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+
+Best regards,
+Eugeniu
