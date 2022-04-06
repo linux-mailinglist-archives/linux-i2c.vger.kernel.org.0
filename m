@@ -2,110 +2,263 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A6A4F64FA
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Apr 2022 18:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B12F84F67AD
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Apr 2022 19:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237259AbiDFQNd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Apr 2022 12:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
+        id S238875AbiDFR2a (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Apr 2022 13:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237906AbiDFQMo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Apr 2022 12:12:44 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138D910DA62
-        for <linux-i2c@vger.kernel.org>; Tue,  5 Apr 2022 20:23:11 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id kw18so1310440pjb.5
-        for <linux-i2c@vger.kernel.org>; Tue, 05 Apr 2022 20:23:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=matician-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nl7SX+b5OGaSDzvlaBhcoDYJhu7qvmloOq719EKVN4w=;
-        b=D0wLjV2hKK8FhkyDepiJad1TNZ7sISTXvrWpTNkxvS5eOnAZZtLOtmlCA98mC1Fj2V
-         AMKj9ttDNkzQqKWmulPBZksk/OpBF+mhDohEMZhe3FqBP6tmTzVCNmyzmUtX2ugiuHtV
-         KnR0muml6VPYoAG+6yskjbXagoSuGG6ScvZ/9DCZPmVWPRVRcsSZMyqbJTqwro6podjY
-         Ft2f6WP3rYAxTMnaapOTK4B90It21X8I00OD52uXusmIuNE+/4LharriC2+5lBiXdJmj
-         YQlMBp7dGc7JNF5c+sU6deJl1BQTZ7YtVScxQZgib070UY9mlJ9zDg11ap7OxpfhSFmz
-         Tz5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nl7SX+b5OGaSDzvlaBhcoDYJhu7qvmloOq719EKVN4w=;
-        b=46eE4EI8dndfzkRAM6w66y9FuSxYinrj2L0Qak8Hh3TeWxsHJFg1t9hL+8QSD4V6Et
-         LSfGRrxnOsAbnRATosvCAK8TOtFN06LFj4UbKqQZlPTARP+XvtihcL5y4kZzCdeevqT7
-         vsvKs8T89G8xE6fJ7B+7xr1aUSPLqgvhmifAN43l2j6g1gzzCSFiCQW3+SzNwxgiWAI6
-         2cN8OAMp1Dv0c/6oKD39oUAgAOlgvCYJQMk0/hysT8v/VSvDjuZ+Ed9SBQ3RNCxoCi4Z
-         7wwOBZbK0C6NRUrUXF8Ffc/JTHziu1XYqLeqD/QLOh4XXl3IMvLu9lstX5Ya2TbREkFT
-         xTLQ==
-X-Gm-Message-State: AOAM532ZT68G+Zc9SrOiJPsybxtA/EyUvlNZ3+OD4cJXZrRus7Lc0ZJQ
-        mCR81mPsxX1EW1MeE6EpawsH1A==
-X-Google-Smtp-Source: ABdhPJz7dqGTm0vgSVyF1U6dobg0vqBl1Pe6bW1rGXJzjrXAwC2GElpy5iI+dXkjITJfkLjEnPX+cw==
-X-Received: by 2002:a17:902:e746:b0:156:9eed:d2d6 with SMTP id p6-20020a170902e74600b001569eedd2d6mr6522503plf.144.1649215390419;
-        Tue, 05 Apr 2022 20:23:10 -0700 (PDT)
-Received: from mtgav.corp.matician.com ([38.88.246.146])
-        by smtp.gmail.com with ESMTPSA id b16-20020a056a000cd000b004fadb6f0290sm17973786pfv.11.2022.04.05.20.23.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 20:23:09 -0700 (PDT)
-From:   gavin@matician.com
-To:     Rishi Gupta <gupt21@gmail.com>
-Cc:     linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        Gavin Li <gavin@matician.com>
-Subject: [PATCH] HID: mcp2221: fix hang on probe while setting up gpiochip
-Date:   Tue,  5 Apr 2022 20:23:07 -0700
-Message-Id: <20220406032307.4001281-1-gavin@matician.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S239679AbiDFR2M (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Apr 2022 13:28:12 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C95CC90D9;
+        Wed,  6 Apr 2022 08:29:45 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 85B8A1F4136D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649258984;
+        bh=1NhAchyfhmSmpQJUfImxIt/WQmIDi6gHQsa7Fft+Rks=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OQDpeJ1CvB/HRIMKBLggLHHm4RAqWhHYwby3rUsfvR/bfVO5vAKJnmfn+oetuspeA
+         440NJiHS1nRDY07b8iuW/cgnQ86eDw/Ep1UI7RrYdICUUUbnsUbD5O9bf2+fmI+q5u
+         1MeOw3e4oce3zdG5Q8JpghmoV2KJ52Mmn7EzvBeNK6kGFB2lfDVqG8wyP+ny1F+qXv
+         fTi264g+xqUm+bT+LBUSkuGpshloy4JN3SfdmWV2yJKNYPDiTZDMDpctL5WU1/OVc4
+         nJEerUftYKTv3EKDQBivUgtjHy3JS1J6Q9r0/WcAWVX9KK2EJteMRcYhLSHSttOQV3
+         Qp6xHefrUW6aw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     robh+dt@kernel.org
+Cc:     krzk+dt@kernel.org, matthias.bgg@gmail.com, qii.wang@mediatek.com,
+        wsa@kernel.org, kewei.xu@mediatek.com,
+        angelogioacchino.delregno@collabora.com, hsinyi@chromium.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: i2c: convert i2c-mt65xx to json-schema
+Date:   Wed,  6 Apr 2022 17:29:40 +0200
+Message-Id: <20220406152940.140224-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Gavin Li <gavin@matician.com>
+Convert I2C binding for MediaTek SoCs to Devicetree schema.
 
-The driver expects HID events to be delivered to it during probe()
-because the devm_gpiochip_add_data() call indirectly calls
-get_direction(), which fires an HID command that expects an HID
-response. Without this patch, the get_direction() would timeout (of 4
-seconds) once per pin, leading to a 16 second delay before the device is
-usable.
-
-This patch adds calls to hid_device_io_start() and hid_device_io_stop()
-to notify the HID subsystem that the driver is ready to receive events
-before the probe() finishes.
-
-Signed-off-by: Gavin Li <gavin@matician.com>
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/hid/hid-mcp2221.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../devicetree/bindings/i2c/i2c-mt65xx.txt    |  53 --------
+ .../devicetree/bindings/i2c/i2c-mt65xx.yaml   | 118 ++++++++++++++++++
+ MAINTAINERS                                   |   2 +-
+ 3 files changed, 119 insertions(+), 54 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
 
-diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
-index 4211b9839209b..567ef8b93376d 100644
---- a/drivers/hid/hid-mcp2221.c
-+++ b/drivers/hid/hid-mcp2221.c
-@@ -877,6 +877,9 @@ static int mcp2221_probe(struct hid_device *hdev,
- 	}
- 	i2c_set_adapdata(&mcp->adapter, mcp);
- 
-+	/* gpiolib calls get_direction(), so become ready to process events */
-+	hid_device_io_start(hdev);
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
+deleted file mode 100644
+index 026985b8f61a..000000000000
+--- a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
++++ /dev/null
+@@ -1,53 +0,0 @@
+-* MediaTek's I2C controller
+-
+-The MediaTek's I2C controller is used to interface with I2C devices.
+-
+-Required properties:
+-  - compatible: value should be either of the following.
+-      "mediatek,mt2701-i2c", "mediatek,mt6577-i2c": for MediaTek MT2701
+-      "mediatek,mt2712-i2c": for MediaTek MT2712
+-      "mediatek,mt6577-i2c": for MediaTek MT6577
+-      "mediatek,mt6589-i2c": for MediaTek MT6589
+-      "mediatek,mt6797-i2c", "mediatek,mt6577-i2c": for MediaTek MT6797
+-      "mediatek,mt7622-i2c": for MediaTek MT7622
+-      "mediatek,mt7623-i2c", "mediatek,mt6577-i2c": for MediaTek MT7623
+-      "mediatek,mt7629-i2c", "mediatek,mt2712-i2c": for MediaTek MT7629
+-      "mediatek,mt8168-i2c": for MediaTek MT8168
+-      "mediatek,mt8173-i2c": for MediaTek MT8173
+-      "mediatek,mt8183-i2c": for MediaTek MT8183
+-      "mediatek,mt8186-i2c": for MediaTek MT8186
+-      "mediatek,mt8192-i2c": for MediaTek MT8192
+-      "mediatek,mt8195-i2c", "mediatek,mt8192-i2c": for MediaTek MT8195
+-      "mediatek,mt8516-i2c", "mediatek,mt2712-i2c": for MediaTek MT8516
+-  - reg: physical base address of the controller and dma base, length of memory
+-    mapped region.
+-  - interrupts: interrupt number to the cpu.
+-  - clock-div: the fixed value for frequency divider of clock source in i2c
+-    module. Each IC may be different.
+-  - clocks: clock name from clock manager
+-  - clock-names: Must include "main" and "dma", "arb" is for multi-master that
+-    one bus has more than two i2c controllers, if enable have-pmic need include
+-    "pmic" extra.
+-
+-Optional properties:
+-  - clock-frequency: Frequency in Hz of the bus when transfer, the default value
+-    is 100000.
+-  - mediatek,have-pmic: platform can control i2c form special pmic side.
+-    Only mt6589 and mt8135 support this feature.
+-  - mediatek,use-push-pull: IO config use push-pull mode.
+-  - vbus-supply: phandle to the regulator that provides power to SCL/SDA.
+-
+-Example:
+-
+-	i2c0: i2c@1100d000 {
+-			compatible = "mediatek,mt6577-i2c";
+-			reg = <0x1100d000 0x70>,
+-			      <0x11000300 0x80>;
+-			interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_LOW>;
+-			clock-frequency = <400000>;
+-			mediatek,have-pmic;
+-			clock-div = <16>;
+-			clocks = <&i2c0_ck>, <&ap_dma_ck>;
+-			clock-names = "main", "dma";
+-	};
+-
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+new file mode 100644
+index 000000000000..889064f24a8c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+@@ -0,0 +1,118 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/i2c/i2c-mt65xx.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- 	/* Setup GPIO chip */
- 	mcp->gc = devm_kzalloc(&hdev->dev, sizeof(*mcp->gc), GFP_KERNEL);
- 	if (!mcp->gc) {
-@@ -902,6 +905,7 @@ static int mcp2221_probe(struct hid_device *hdev,
- 	return 0;
++title: MediaTek I2C controller
++
++description:
++  This driver interfaces with the native I2C controller present in
++  various MediaTek SoCs.
++
++allOf:
++  - $ref: /schemas/i2c/i2c-controller.yaml#
++
++maintainers:
++  - Qii Wang <qii.wang@mediatek.com>
++
++properties:
++  compatible:
++    oneOf:
++      - const: mediatek,mt2712-i2c
++      - const: mediatek,mt6577-i2c
++      - const: mediatek,mt6589-i2c
++      - const: mediatek,mt7622-i2c
++      - const: mediatek,mt8168-i2c
++      - const: mediatek,mt8173-i2c
++      - const: mediatek,mt8183-i2c
++      - const: mediatek,mt8186-i2c
++      - const: mediatek,mt8192-i2c
++      - items:
++          - enum:
++              - mediatek,mt7629-i2c
++              - mediatek,mt8516-i2c
++          - const: mediatek,mt2712-i2c
++      - items:
++          - enum:
++              - mediatek,mt2701-i2c
++              - mediatek,mt6797-i2c
++              - mediatek,mt7623-i2c
++          - const: mediatek,mt6577-i2c
++      - items:
++          - enum:
++              - mediatek,mt8195-i2c
++          - const: mediatek,mt8192-i2c
++
++  reg:
++    items:
++      - description: Physical base address
++      - description: DMA base address
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    minItems: 1
++    items:
++      - description: Main clock for I2C bus
++      - description: Clock for I2C via DMA
++      - description: Bus arbitrator clock
++      - description: Clock for I2C from PMIC
++
++  clock-names:
++    minItems: 1
++    items:
++      - const: main
++      - const: dma
++      - const: arb
++      - const: pmic
++
++  clock-div:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Frequency divider of clock source in I2C module
++
++  clock-frequency:
++    default: 100000
++    description:
++      SCL frequency to use (in Hz). If omitted, 100kHz is used.
++
++  mediatek,have-pmic:
++    description: Platform controls I2C from PMIC side
++    type: boolean
++
++  mediatek,use-push-pull:
++    description: Use push-pull mode I/O config
++    type: boolean
++
++  vbus-supply:
++    description: Phandle to the regulator providing power to SCL/SDA
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - clock-div
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c0: i2c@1100d000 {
++      compatible = "mediatek,mt6577-i2c";
++      reg = <0x1100d000 0x70>, <0x11000300 0x80>;
++      interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_LOW>;
++      clocks = <&i2c0_ck>, <&ap_dma_ck>;
++      clock-names = "main", "dma";
++      clock-div = <16>;
++      clock-frequency = <400000>;
++      mediatek,have-pmic;
++
++      #address-cells = <1>;
++      #size-cells = <0>;
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ee0b5a70aff1..28a17d4c8d12 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12361,7 +12361,7 @@ MEDIATEK I2C CONTROLLER DRIVER
+ M:	Qii Wang <qii.wang@mediatek.com>
+ L:	linux-i2c@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
++F:	Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+ F:	drivers/i2c/busses/i2c-mt65xx.c
  
- err_gc:
-+	hid_device_io_stop(hdev);
- 	i2c_del_adapter(&mcp->adapter);
- err_i2c:
- 	hid_hw_close(mcp->hdev);
+ MEDIATEK IOMMU DRIVER
 -- 
-2.34.1
+2.35.1
 
