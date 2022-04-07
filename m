@@ -2,79 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A274F7F62
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Apr 2022 14:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C864F7FFB
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 Apr 2022 15:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230497AbiDGMqL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 7 Apr 2022 08:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
+        id S235009AbiDGNGq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 7 Apr 2022 09:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245371AbiDGMqK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 7 Apr 2022 08:46:10 -0400
-X-Greylist: delayed 65 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Apr 2022 05:44:11 PDT
-Received: from esa3.mentor.iphmx.com (esa3.mentor.iphmx.com [68.232.137.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A452FC131;
-        Thu,  7 Apr 2022 05:44:09 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.90,242,1643702400"; 
-   d="scan'208";a="73983575"
-Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
-  by esa3.mentor.iphmx.com with ESMTP; 07 Apr 2022 04:43:05 -0800
-IronPort-SDR: qil+dP4+M93KfKqdu8Ka66cgFkLAFSYFvqhg8mI/CYl3PI8d6oIlwZX7CgawE/2psBAOOtD1BO
- uLxHHyzP8qkbuytjDNtWgXtkBHG9+bwz6BgV/oCoCZqVd9o/z2TFuUbEgByiaymSoBXOYpbgN9
- afv3QLJjSZCYijXe7aYxZsCs7h05FZcIx0AGxpB1jFsqADXICVW94mLizaZY0oxNkaRTyLFkq/
- Umh287JNJfb+EcPBm5k7O5GRYUak6Bmp4+WOBwzWn3rnMlJWCTasAjHGMS+QRnWp9F1whbAosO
- suo=
-From:   "Gabbasov, Andrew" <Andrew_Gabbasov@mentor.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        with ESMTP id S1343583AbiDGNGj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 7 Apr 2022 09:06:39 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE4225CB84
+        for <linux-i2c@vger.kernel.org>; Thu,  7 Apr 2022 06:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=C/8/ksrMJeH5Wt54M5R3dsIUAkVb
+        JzRxMLyWX11GEK0=; b=OG5N0PKKEIGZ3iiUEfS/JeCyrP0xlz+MSNCYUGRM1nCU
+        sbDIRPU09RA4MJfqLTvstNlwGQypaaKnFfgMiWKnuK+Vh/eX6MM4Zwb4vUKU4K1N
+        yNCpEuyx7ESfzrXgaIwmnlPKPsCjcJ+UxKhxLcHDLBdRwJ0KYgiCLYuRZK4uehY=
+Received: (qmail 3186926 invoked from network); 7 Apr 2022 15:04:37 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Apr 2022 15:04:37 +0200
+X-UD-Smtp-Session: l3s3148p1@9ky7HhDcANAgAQnoAEUrAF1rv4rSPqUC
+Date:   Thu, 7 Apr 2022 15:04:36 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     "Gabbasov, Andrew" <Andrew_Gabbasov@mentor.com>
+Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         "linux-renesas-soc@vger.kernel.org" 
         <linux-renesas-soc@vger.kernel.org>,
         Eugeniu Rosca <erosca@de.adit-jv.com>,
         "Surachari, Bhuvanesh" <Bhuvanesh_Surachari@mentor.com>
 Subject: Re: [PATCH v4] i2c: rcar: add support for I2C_M_RECV_LEN
-Thread-Topic: [PATCH v4] i2c: rcar: add support for I2C_M_RECV_LEN
-Thread-Index: AQHYSNUQyopoQTRIREK+Oe0vqly5pazkTnWwgAACLQCAABbrbw==
-Date:   Thu, 7 Apr 2022 12:42:59 +0000
-Message-ID: <1649335378392.75260@mentor.com>
+Message-ID: <Yk7hZGvxucOpcXhw@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "Gabbasov, Andrew" <Andrew_Gabbasov@mentor.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        "Surachari, Bhuvanesh" <Bhuvanesh_Surachari@mentor.com>
 References: <20220405100756.42920-1-wsa+renesas@sang-engineering.com>
- <1649330034935.59928@mentor.com>,<Yk7WfPUVa6l25RbM@shikoro>
-In-Reply-To: <Yk7WfPUVa6l25RbM@shikoro>
-Accept-Language: en-US, en-IE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [137.202.0.90]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+ <1649330034935.59928@mentor.com>
+ <Yk7WfPUVa6l25RbM@shikoro>
+ <1649335378392.75260@mentor.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2MSBGhHXUV3er9w+"
+Content-Disposition: inline
+In-Reply-To: <1649335378392.75260@mentor.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
 
-> > Besides avoiding of double assignment of that "length" byte to the buffer,
-> > this move will avoid pollution of the buffer in case of an error (invalid length).
-> 
-> This was intendend as a feature not a bug ;) This was the reason I put
-> the data to the buffer at the beginning, so people could see the wrong
-> data length. But yes, it can be argued if it should be logged somewhere
-> instead of being in the buffer. I'll check what other drivers do.
-> 
-> Sidenote: It is planned to add SMBus3 features somewhen. Then, there
-> won't be an invalid length anymore because it allows 255 byte transfers.
+--2MSBGhHXUV3er9w+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Fair enough. That makes sense.
-I withdraw my proposal then ;-) Sorry for the noise.
 
-Thanks.
+> I withdraw my proposal then ;-) Sorry for the noise.
 
-Best regards,
-Andrew
+Not noise, this was a valid discussion :)
+
+
+--2MSBGhHXUV3er9w+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJO4WAACgkQFA3kzBSg
+KbYomg/+PFpslkgf5f29T9iHTIPY7GYHjFQr92oWEhBOa738XYAIb/s4hxRMykAN
+LH9SOVFALetXf1hVaIZZ+8SmoZSs9Sb3QLj8L8zGaz4IaitORn9mfDvRnlJP93c9
+2LdEVUh+6ZUpo+GUdY3yaIOvOoMfieZensT7Cugc5hLJJLeVKbzs4IOvtRtURXP1
+80NNHmFIv2JTZjspwruSxVjOJ+RRLM44S8gwzhzHnI+qgqW+NfZ9VdvfU4K9ixoh
+nbE5m/9Vu6BSNpt+a+393BAVs2uw6uqSInmAbWW9fa9gSDzOTdCU4amqzQQZ3fck
+imvdBVuAoUHd4ClLPb/KNOENnL9reyTJxdPsHlwsLs+eSN15lUNQN0WupcfNfNQp
+54/jj8QxVYTPDyNxRA+cdBVD6QoEZcP0GG7MrfOXC/2AQ1wbfmmYZUhIZbrNWi++
+JZ8/Aw8frmeLR0cvrdZFfA3L6BveUK5sLyspUMVMtV2ZU4/lCZhyiGrjcwL/Ag9C
+V623gOEX9fJTez45t4eTw7M3VVdZKocruc9o1oXNN+u5WCaXA753IGJvxR6Oz0bz
+iDAQAdQVYpUJLTp+dMh7pQMU4W2u1S5lDUDsFESUI89l0ggZPA3hh7bpEyGhLYER
+5Nxu8/0B1yQmtaLy3ENdbqwVnXyDhqqOIqpoUyvBH9w6XSkWv4k=
+=ZbZV
+-----END PGP SIGNATURE-----
+
+--2MSBGhHXUV3er9w+--
