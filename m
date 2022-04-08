@@ -2,565 +2,177 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3DB4F8E82
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Apr 2022 08:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0FE4F8F5E
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Apr 2022 09:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234302AbiDHEnS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 8 Apr 2022 00:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36618 "EHLO
+        id S229713AbiDHHUb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 8 Apr 2022 03:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233655AbiDHEnK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Apr 2022 00:43:10 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2133.outbound.protection.outlook.com [40.107.100.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686311BB782;
-        Thu,  7 Apr 2022 21:41:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WZFPUGIE1IV1XBwvOhoAJpvz71o4mQ2RIS6+fnmxIepj11IylaKfuv+PZAWYeCZ7vawYq0Tm/A0Q6EYyRl3SHQc6zJDybm1iCvXtKXObFpCidV2fmV22pVi5hGbFKWE/6rLVJsZB4ozM4xgxa3GKDOH3bmw5af8tyc+zf9vYdG+oqNosbCDSuCmGNY/mtI8HxWE4sZjFhGdXMX83ZtgyrHY+xYddZx4rMzQbZpwaGdpHwZJCY0VvmDNU+EJTbgCt3OU+015bKCE5GoTSXEfilFDJRHvk0miLZmiDgU3PjuQH4LbWfalx4lXtsdVV8wkEdK7P+5FgZQokSR1jkTDi/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xfL8xJCVIbLB53B+QJyM8NUM+E2lo2AYnMXMh56GvjU=;
- b=LGAaEOarW9d4uYtNsZeibODnnLqbjxWJh5ao8yUZpvfcY9SeG4fMTk2KoppUPDdu8rxIBz8PXURPcPESaqdB5r+KyIAOjnzt95E/54zrBK8CBn/NGyeimfwb6cHUKzbsf2KpiYLIGnf+fEQuDW9jJ8DyrgLJlKYJeLCzv1/wmuOh9MmjPcA89E23BD921nnRC/HuScVlNum4BCyZxXXTAefi0ZbvTeteOUsc2NdUzmaIa8fgC0pgN6VLqlexjdRlQN6l5xNt17k+dHVhc7jq1iNSNeVJtQ4a2rMir69vHUM5KeJUs0ANl+pzZ/HCXDSyGa9PB1YQ5AhYMNd6pPpQJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xfL8xJCVIbLB53B+QJyM8NUM+E2lo2AYnMXMh56GvjU=;
- b=GlzR3moQnhqyyOejPF19gbIYn0Pl1l+0GgxXdtTbW8Wn1aEuXLke9AqmFxMINme5SQ0GErm65bjLsGTwAJGl9uTsQ5ZBFwcVVD31pLqYDGewhbON+Rhc3u4mXYyKipkODnjOsaXYoDemCvyDUu3GiaJloHTJ47YQta3Oc3WWSU0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
- DM6PR01MB4123.prod.exchangelabs.com (2603:10b6:5:22::26) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5123.30; Fri, 8 Apr 2022 04:41:00 +0000
-Received: from SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::68f1:1dd2:fa3e:28be]) by SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::68f1:1dd2:fa3e:28be%3]) with mapi id 15.20.5144.022; Fri, 8 Apr 2022
- 04:41:00 +0000
-Message-ID: <2552a9e2-ca37-c2d3-f636-da18a56bf32e@os.amperecomputing.com>
-Date:   Fri, 8 Apr 2022 11:40:47 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH v6 1/4] ipmi: ssif_bmc: Add SSIF BMC driver
-Content-Language: en-US
-To:     minyard@acm.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20220310114119.13736-1-quan@os.amperecomputing.com>
- <20220310114119.13736-2-quan@os.amperecomputing.com>
- <20220311011942.GX3457@minyard.net>
- <569f50d5-8f13-280e-b944-6e26d95dc50b@os.amperecomputing.com>
- <20220317131356.GC3457@minyard.net>
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-In-Reply-To: <20220317131356.GC3457@minyard.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR06CA0005.apcprd06.prod.outlook.com
- (2603:1096:4:186::12) To SJ0PR01MB7282.prod.exchangelabs.com
- (2603:10b6:a03:3f2::24)
+        with ESMTP id S229718AbiDHHUa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Apr 2022 03:20:30 -0400
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896A121FF50;
+        Fri,  8 Apr 2022 00:18:27 -0700 (PDT)
+Received: by mail-vk1-f178.google.com with SMTP id q10so2160327vkh.0;
+        Fri, 08 Apr 2022 00:18:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=d3gNHoy16ZlsDLV8bQepLcY1WMSrBsifmbORH9+6qxw=;
+        b=yEHmvUbRlGG/64Tp/hE7IQilX4hPaFUk9Kplh6hHXG+y9jzxyhOmkMxvo6UKdquqD0
+         GqbhIQvTg9Ir1fiKk2mOm8Vd5zCLpQD6oI4m11KSes0a5wFcz0L+kRlptA0t7HHZJkZL
+         Ex8wdx6+eQ9P9LQ6iQQvd39WKHmu8wrAo/qdVQpniC9tH6uJy/fdDQEe6cCXAoLQ6PmI
+         aKZzSzYLiw2Hiw1vCouRUkJ+PGr+F1Q0NDF3Y1UWhlsnTH+yfy8dUTcBeCKI8lDfMMA1
+         bAoDpxqqhuGywM9AcEwgqUmpO/CGhk1L7bkJJgGfAJI/HhF4/zqm6BM4viKkLxOz+YLx
+         mobg==
+X-Gm-Message-State: AOAM5305y6X9OEJqN8iKzQar0h2gTVN9qvIKdCFIAYIP3R9lfJO7yxht
+        w0aTwJqLXs27e+RXd3SNQKbDv3I1+/JWoA==
+X-Google-Smtp-Source: ABdhPJw4nW6JPKtb3JaLOFRJubHdhfutGfqcOb/CxCgc7qJdWXGvxzx4A5tgytHWyDyuluBP+Y6uiw==
+X-Received: by 2002:a1f:2c4b:0:b0:345:698:582a with SMTP id s72-20020a1f2c4b000000b003450698582amr2249252vks.25.1649402306187;
+        Fri, 08 Apr 2022 00:18:26 -0700 (PDT)
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com. [209.85.217.43])
+        by smtp.gmail.com with ESMTPSA id x6-20020a67c086000000b003227f6f6b44sm2408043vsi.17.2022.04.08.00.18.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 00:18:25 -0700 (PDT)
+Received: by mail-vs1-f43.google.com with SMTP id r25so4563594vsa.13;
+        Fri, 08 Apr 2022 00:18:25 -0700 (PDT)
+X-Received: by 2002:a05:6102:32c3:b0:325:c919:bef4 with SMTP id
+ o3-20020a05610232c300b00325c919bef4mr5902203vss.60.1649402305499; Fri, 08 Apr
+ 2022 00:18:25 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d958bdeb-01fa-4bd7-535d-08da1919fabf
-X-MS-TrafficTypeDiagnostic: DM6PR01MB4123:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR01MB4123D72DF7CA327E0E3C5F0FF2E99@DM6PR01MB4123.prod.exchangelabs.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YO++buxVyiBDlwevWtFbv4XDAZM+vgfta62XwlfZjIEWRmdPe5RCB44t0vr+p10VY/o3nY0DzeyuQuWR1dZf+2tbyLrjnG1Bnkk5kRFxiZYIdkJ9O8hlgmQzEsE/ewLKwU0fFn6rUDb/OMoMFejJ6SvE6UmJt7n38ZJRHgKHepupoJoDuJq8AYWANj1mM4ig/+66Kn5RdS7orUmkZpVNOz3Lej6LnR9T5gRPQwIy4MzinFtPmCQfb948eXbpWzmyg5FIOGC5xvfYiem3lH95cV9z21ifUDBfNlC5y2PAb5w8IbP+jQxK3TRacilV+SjffxJHT4coQAW0qGRUgKMAAbL8/0gkfuIegbv/mib8Xyvt46z5KgSMU6TyP6eb9HFHNIgPtbwRWETW2EvxJHzFY4kvi/T4sRRPk2kDJsw+GJCnwFT7LIcbB1OglTR8EWCctFxYiPdS5PPMYMeGle/VY95QXkYeyr8L2iC3JBwDRBTZsBugwQaZeapHSd4rn/FEZApUHPAxtGsH/+zKCUKD9bisWhdv3o1MlV7DhhNbYd1Os1F0ohYSI1go7TSS5Vnr7VSHlQv9koN1vivQG44npizx/H4IIWeyLHDYMERh/6a/aegTRC1OZdP6lg183Bh+cObXhsHIR3YEcZ0XJn28yR03oXmQ5jiR4XQluiyAU3BjWxdghTymqGjm6TmqUMW57FudKlis9m/Q2sfZo80iU0DY2BPZo/AJjHwImEWJvE8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(6916009)(66556008)(4326008)(31696002)(66946007)(38350700002)(38100700002)(186003)(66476007)(6512007)(8676002)(316002)(86362001)(52116002)(53546011)(6506007)(26005)(8936002)(6486002)(107886003)(2906002)(5660300002)(30864003)(83380400001)(508600001)(7416002)(6666004)(31686004)(2616005)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cVlDUDBtNy9yK2JJRndaU25lQlJsYlNHZnNzWE1ZWjNnQlVKdi9PMkM1TEpy?=
- =?utf-8?B?UjBxN0puU1dhcjlvMnM1T1crRDhMaGR5MHdiak5BeVNpNmM1Wm9IS2VtdW91?=
- =?utf-8?B?Q2pibDF4SWlkWG11UXZzekl2YXBwRDRUTnBrRWJucDd4N1hXVDgxM2NNRDRx?=
- =?utf-8?B?b0Y2LzJRc3BBaUIvK2U0SzNBNlYzWjM2cUQ5NiszT0l5MXpBNmVMdElMcTlC?=
- =?utf-8?B?NGJTUnBTN1ZoVFFWamJmQzVXUDU1NHZrWUtzL2FlZmtEV1BFWEFHTy9pY1Jq?=
- =?utf-8?B?N3lQaHN6WGN6eEJGb1NCRDROR0UvZGgvWkFXbzNDdG1pcnBndFh5dmVGYS9u?=
- =?utf-8?B?SXp3QW40TUJqMjlNZk9UZzRRQlgxTklYd0h6c2c4UXQxL00vdDJDRFpmUDBs?=
- =?utf-8?B?M04xZnZ4L1ZBMWdlV2JPaTl3eUhUb0pTYTVIR3BiZGI3Zkw3VnZWTkVBbENl?=
- =?utf-8?B?c2RSY2JkclgxclNkMm9FZktlM3JkLzlLeWNLRS8xTy9MQkY1aUpLcnBnQUpJ?=
- =?utf-8?B?ZUo4YjlkamQ2MHhseGcveWhYRHJyd1VLbUF2T1JOY3hTTUl6Z1NTKzBNTnRr?=
- =?utf-8?B?c3dmL3U5UFp0aUhUWWUxZXQ0Z3BEd2hReHVmNFU0dXBvc0RpbE45QUxGb3V1?=
- =?utf-8?B?ZnRJTEt1T3dkc29PalJ1ODQxclBoSUJINUdTampEQmxzNXMwYVpldWNVNVVo?=
- =?utf-8?B?d2Q1cE01R3ZkdGphVGxwVWw0WlVGYk1Mczd1djRuaFRTalh1SDh3Z1ZmSVg0?=
- =?utf-8?B?bWgvQ21kNDZSTjJwbEp4aGEwNFdISFlFV2FwYzBsbEtzaXBjYitaaTEwVENz?=
- =?utf-8?B?RVdSQzN5dHFOY1BaUVZncTUra1duUkdLZ0x5R1NvaTJjZWdORXdBd1dpNEV1?=
- =?utf-8?B?a2FPdlgyMHBiRy9CTjJGSFFXdm9ZYkFrcFVNR3BSQ3dGV2RTMXZFYStnS3dM?=
- =?utf-8?B?SzlpcDZ6cGo0NlZvNmplZlVqclhxWEdFMTFXQkYwdkxMbEVyNTA5RXJHWDJk?=
- =?utf-8?B?dHB6dU1XSHdlU2VmalNqaEJpMWRVZHNvL3pWU3puUUF3K0hKbnY0MXRpUUxQ?=
- =?utf-8?B?UTZMV0lEcmFiZ2R3NGF0enJRSWFwWjZKRUJzaG4vNXhqMXVHU3kwd1M4azFu?=
- =?utf-8?B?R3B1N2NWa01GUjdPdndSNmo0L3BPeGJIUnRoUDB5SzNuMCtnTWQ1blQvVnJS?=
- =?utf-8?B?M2NoZjMrOTVxSkhKUmVENjk1U3VZV3FSbUpsd1VJd0FOMHgyYzBMYlQrM2NZ?=
- =?utf-8?B?ejRqWkc4MW1USlBaaWxtbGZLb3I0OVoyVkMxWm43Q3RZcnNGODNOYy9jNGZX?=
- =?utf-8?B?SW5qNUtzbFRtdVd2bDZTa0tmVDJWRUp4TCtQOHZiekxlS0ErajZwa2VUUFVQ?=
- =?utf-8?B?T2NWY05mRGpKdlNrMTRnMXc5TkdyeGEyNUsyZjJKMm56YysrRTVzakJwY0cx?=
- =?utf-8?B?MUpHdjVBamRQajFWWmIzSWRVaDBJc0dWWWU0ZjJVNmp4a0cwSmVLZCsvWGk4?=
- =?utf-8?B?Rkd5Vm5wekQzTU44VVZHNlZ6dHFObEYyRjhFanlmMEsxVHZQRzRwVXg5UVlF?=
- =?utf-8?B?N2t3Q3pLeGpFV0VPSSsyWWJXazNmN08yRlo4RXVkODBYN2hSYjRVV0crazc1?=
- =?utf-8?B?TktUbXV3MEZGeWQxWEVLVjl3dncxRG5JTzM4Y25aYWU5TmJ4TDR0WElBWG9G?=
- =?utf-8?B?UDRIVVNTWW9mK3FPcW55U2UrU3Z3RTluWkZ6VWQ0cXZZN0MxMmJlanQzNURr?=
- =?utf-8?B?czJ5ejI4YnRZUFhEN3hqUE1UOG1waEF1QUNtZlRuZ3NLM3dsWHdPZEF5VHQ1?=
- =?utf-8?B?MWprMzFMV0RoR1Rnbi95WlFWZ216SVo0NGhLZEY0Y3Y3OE1ERERpbTQwQjRm?=
- =?utf-8?B?VlhiNE5IcTg0WXM1OEJJbTQwbHZWY3NVdDhNSmJ3L2hhb251SjNIOWluUmcr?=
- =?utf-8?B?NjFnbGwxTWs1S2pDV1ZJNUZhL0ljdWczQmlwRm00cVBiUEkxQ1JLbTREQnU5?=
- =?utf-8?B?ZGdXM0cxNHp5R3U0UDBERDZGb3FTZVZzeG91MnkxYTFWY3luZUVzUmZ0cVFN?=
- =?utf-8?B?SU4yS21FcjY3bisrOFRnTXlSTnYza09vcmFnYlVuSzM2QUc0cUI4Wk5pRGVw?=
- =?utf-8?B?czhmaUZUaUFmM0pFVDBzaFNQVWJpd25OY3VTWjJacDZaMk5XelZTZDIwbHA4?=
- =?utf-8?B?Rm1BMmE0WmdGTmZIbHRxTCtxT3FEL3UvTWNjL1hVNHg1aFNqNkdnZmM5OTFx?=
- =?utf-8?B?SThQU3JkWHlnbFBibHIrUXh0SUZWd1M2UHM5UTNYVHJ2d1V0YVA4MEx2TUF6?=
- =?utf-8?B?Z3hra1Y0MVFMVVk0Slc2eG9PdzJCcmhzRnBxTjVQS1RJbktmd0RLUDgrYVgw?=
- =?utf-8?Q?kWBCJgMFeqdDt/2Ro+gJ88YJpF98tr1lNRxB0?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d958bdeb-01fa-4bd7-535d-08da1919fabf
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2022 04:41:00.2127
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mlroa2n6m0KpsRQS6Y5P/+4aEvGsqislp3ZrAjLPbqUMPsG4qC+2ji9YPfYjcWBhX7HvhmXpvn0h3ctBY22UwWENsJT9TIVKon65c7t7DrU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB4123
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220326102229.421718-1-tanure@linux.com> <20220326102229.421718-3-tanure@linux.com>
+ <c789adcd-d072-bec2-a823-5f5993704365@baylibre.com>
+In-Reply-To: <c789adcd-d072-bec2-a823-5f5993704365@baylibre.com>
+Reply-To: tanure@linux.com
+From:   Lucas Tanure <tanure@linux.com>
+Date:   Fri, 8 Apr 2022 08:18:14 +0100
+X-Gmail-Original-Message-ID: <CAJX_Q+3WHCKmg3Fq5jPTY=PNjow2HdLkgFVLd9GQRuGg_q96=Q@mail.gmail.com>
+Message-ID: <CAJX_Q+3WHCKmg3Fq5jPTY=PNjow2HdLkgFVLd9GQRuGg_q96=Q@mail.gmail.com>
+Subject: Re: [PATCH 2/3] i2c: meson: Use 50% duty cycle for I2C clock
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Wed, Apr 6, 2022 at 12:31 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
+>
+> Hi,
+>
+> On 26/03/2022 11:22, Lucas Tanure wrote:
+> > The duty cycle of 33% is less than the required
+> > by the I2C specs for the LOW period of the SCL
+> > clock.
+> >
+> > Move the duty cyle to 50% for 100Khz or lower
+> > clocks, and (40% High SCL / 60% Low SCL) duty
+> > cycle for clocks above 100Khz.
+> >
+> > Signed-off-by: Lucas Tanure <tanure@linux.com>
+> > ---
+> >   drivers/i2c/busses/i2c-meson.c | 45 +++++++++++++++++++++++++---------
+> >   1 file changed, 33 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
+> > index 4b4a5b2d77ab..b913ba20f06e 100644
+> > --- a/drivers/i2c/busses/i2c-meson.c
+> > +++ b/drivers/i2c/busses/i2c-meson.c
+> > @@ -140,29 +140,50 @@ static void meson_i2c_add_token(struct meson_i2c *i2c, int token)
+> >   static void meson_i2c_set_clk_div(struct meson_i2c *i2c, unsigned int freq)
+> >   {
+> >       unsigned long clk_rate = clk_get_rate(i2c->clk);
+> > -     unsigned int div;
+> > +     unsigned int div_h, div_l;
+> >
+> > -     div = DIV_ROUND_UP(clk_rate, freq);
+> > -     div -= FILTER_DELAY;
+> > -     div = DIV_ROUND_UP(div, i2c->data->div_factor);
+> > +     if (freq <= 100000) {
+>
+> You should use I2C_MAX_STANDARD_MODE_FREQ instead here
+>
+> > +             div_h = DIV_ROUND_UP(clk_rate, freq);
+> > +             div_l = DIV_ROUND_UP(div_h, 4);
+> > +             div_h = DIV_ROUND_UP(div_h, 2) - FILTER_DELAY;
+> > +     } else {
+> > +     /* According to I2C-BUS Spec 2.1, in FAST-MODE, the minimum LOW period is 1.3uS, and
+> > +      * minimum HIGH is least 0.6us.
+> > +      * For 400000 freq, the period is 2.5us. To keep within the specs, give 40% of period to
+> > +      * HIGH and 60% to LOW. This means HIGH at 1.0us and LOW 1.5us.
+> > +      * The same applies for Fast-mode plus, where LOW is 0.5us and HIGH is 0.26us.
+> > +      * Duty = H/(H + L) = 2/5
+> > +      */
+>
+> Please move the comment before the if()
+>
+> > +             div_h = DIV_ROUND_UP(clk_rate * 2, freq * 5) - FILTER_DELAY;
+> > +             div_l = DIV_ROUND_UP(clk_rate * 3, freq * 5 * 2);
+> > +     }
+> >
+> >       /* clock divider has 12 bits */
+> > -     if (div > GENMASK(11, 0)) {
+> > +     if (div_h > GENMASK(11, 0)) {
+> >               dev_err(i2c->dev, "requested bus frequency too low\n");
+> > -             div = GENMASK(11, 0);
+> > +             div_h = GENMASK(11, 0);
+> > +     }
+> > +     if (div_l > GENMASK(11, 0)) {
+> > +             dev_err(i2c->dev, "requested bus frequency too low\n");
+> > +             div_l = GENMASK(11, 0);
+> >       }
+> >
+> >       meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_CLKDIV_MASK,
+> > -                        FIELD_PREP(REG_CTRL_CLKDIV_MASK, div & GENMASK(9, 0)));
+> > +                        FIELD_PREP(REG_CTRL_CLKDIV_MASK, div_h & GENMASK(9, 0)));
+> >
+> >       meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_CLKDIVEXT_MASK,
+> > -                        FIELD_PREP(REG_CTRL_CLKDIVEXT_MASK, div >> 10));
+> > +                        FIELD_PREP(REG_CTRL_CLKDIVEXT_MASK, div_h >> 10));
+> > +
+> > +
+> > +     /* set SCL low delay */
+> > +     meson_i2c_set_mask(i2c, REG_SLAVE_ADDR, REG_SLV_SCL_LOW_MASK,
+> > +                        (div_l << REG_SLV_SCL_LOW_SHIFT) & REG_SLV_SCL_LOW_MASK);
+>
+> You could use FIELD_PREP() here
+>
+> >
+> > -     /* Disable HIGH/LOW mode */
+> > -     meson_i2c_set_mask(i2c, REG_SLAVE_ADDR, REG_SLV_SCL_LOW_EN, 0);
+> > +     /* Enable HIGH/LOW mode */
+> > +     meson_i2c_set_mask(i2c, REG_SLAVE_ADDR, REG_SLV_SCL_LOW_EN, REG_SLV_SCL_LOW_EN);
+> >
+> > -     dev_dbg(i2c->dev, "%s: clk %lu, freq %u, div %u\n", __func__,
+> > -             clk_rate, freq, div);
+> > +     dev_dbg(i2c->dev, "%s: clk %lu, freq %u, divh %u, divl %u\n", __func__,
+> > +             clk_rate, freq, div_h, div_l);
+> >   }
+> >
+> >   static void meson_i2c_get_data(struct meson_i2c *i2c, char *buf, int len)
+>
+> I looked at different amlogic downstream sources, and those match the recommended
+> calculations.
+>
+> So with the legacy back for Meson6, it will be OK.
+>
+> Neil
 
+Ok, I will do the modifications this weekend.
+I only tested i2c3 and i2c_ao and will execute more measures and show
+the results.
 
-On 17/03/2022 20:13, Corey Minyard wrote:
-> snip...
->>>> +
->>>> +static void response_timeout(struct timer_list *t)
->>>> +{
->>>> +	struct ssif_bmc_ctx *ssif_bmc = from_timer(ssif_bmc, t, response_timer);
->>>> +	unsigned long flags;
->>>> +
->>>
->>> Is there a possible race here?  The timeout can happen at the same time
->>> as a received message, will something bad happen if that's the case?
->>>
->>
->> Thanks Corey,
->> I think I need extra comment here.
->>
->> The purpose of this timeout is to make sure ssif_bmc will recover from busy
->> state in case the upper stack does not provide the response.
->> Hence, the response timeout is set as 500ms, twice the time of max
->> Request-to-Response in spec as the code below. Should it be longer?
-> 
-> That's not what I was asking.  I know what the timer is for.  But what
-> happens if the response comes in at the same time this timer goes off?
-> What will keep the data from getting messed up?
-> 
-
-Dear Corey, thanks for pointing this out.
-
-In case the response comes in at the same time this timer goes off, both 
-timeout handler and the ssif_bmc_write must first win to acquire the 
-lock first, eg: ssif_bmc->lock
-
-If timeout handler wins it firstly test ssif_bmc->response_in_progress 
-to make sure if the ssif_bmc_write() is succeeded. If not, 
-ssif_bmc->response_in_progress is false, then set the ssif_bmc->busy and 
-ssif_bmc->response_timer_inited flags to false, and set the flag 
-ssif_bmc->aborting = true to start aborting the current response.
-
-If ssif_bmc_write() wins, it then first test if the timer not yet goes 
-off, ie: ssif_bmc->response_timer_inited is true, if so, del the timer 
-and let the response ready to send back to host. If not, make 
-ssif_bmc_write() to return -EINVAL as the driver had already aborted the 
-response and wait for the new request.
-
-This will be included in my next version.
-
->>
->> As per spec, the max Request-to-Respose would not exceed 250ms.
->>
->> I put the comment in ssif_bmc.h as below:
->>>> +/*
->>>> + * IPMI 2.0 Spec, section 12.7 SSIF Timing,
->>>> + * Request-to-Response Time is T6max(250ms) - T1max(20ms) - 3ms = 227ms
->>>> + * Recover ssif_bmc from busy state if it takes upto 500ms
->>>> + */
->>>> +#define RESPONSE_TIMEOUT			500 /* ms */
->>
->>
->>>> +	spin_lock_irqsave(&ssif_bmc->lock, flags);
->>>> +
->>>> +	/* Recover ssif_bmc from busy */
->>>> +	ssif_bmc->busy = false;
->>>> +	del_timer(&ssif_bmc->response_timer);
->>>
->>> You don't need to delete the timer, it's in the timeout.
->>>
->>
->> Will remove this redundant code in next version
->>
->>>> +	ssif_bmc->response_timer_inited = false;
->>>> +
->>>> +	spin_unlock_irqrestore(&ssif_bmc->lock, flags);
->>>> +}
->>>> +
->>>> +/* Called with ssif_bmc->lock held. */
->>>> +static void handle_request(struct ssif_bmc_ctx *ssif_bmc)
->>>> +{
->>>> +	/* set ssif_bmc to busy waiting for response */
->>>> +	ssif_bmc->busy = true;
->>>> +
->>>> +	/* Request message is available to process */
->>>> +	ssif_bmc->request_available = true;
->>>> +
->>>> +	/* Clean old response buffer */
->>>> +	memset(&ssif_bmc->response, 0, sizeof(struct ssif_msg));
->>>> +
->>>> +	/* This is the new READ request.*/
->>>> +	wake_up_all(&ssif_bmc->wait_queue);
->>>> +
->>>> +	/* Armed timer to recover slave from busy state in case of no response */
->>>> +	if (!ssif_bmc->response_timer_inited) {
->>>> +		timer_setup(&ssif_bmc->response_timer, response_timeout, 0);
->>>> +		ssif_bmc->response_timer_inited = true;
->>>> +	}
->>>> +	mod_timer(&ssif_bmc->response_timer, jiffies + msecs_to_jiffies(RESPONSE_TIMEOUT));
->>>> +}
->>>> +
->>>> +static void set_multipart_response_buffer(struct ssif_bmc_ctx *ssif_bmc, u8 *val)
->>>> +{
->>>> +	u8 response_len = 0;
->>>> +	int idx = 0;
->>>> +	u8 data_len;
->>>> +
->>>> +	data_len = ssif_bmc->response.len;
->>>> +	switch (ssif_bmc->smbus_cmd) {
->>>> +	case SSIF_IPMI_MULTIPART_READ_START:
->>>> +		/*
->>>> +		 * Read Start length is 32 bytes.
->>>> +		 * Read Start transfer first 30 bytes of IPMI response
->>>> +		 * and 2 special code 0x00, 0x01.
->>>> +		 */
->>>> +		*val = MAX_PAYLOAD_PER_TRANSACTION;
->>>> +		ssif_bmc->remain_len = data_len - MAX_IPMI_DATA_PER_START_TRANSACTION;
->>>> +		ssif_bmc->block_num = 0;
->>>
->>> Do you need to validate the data length before using this?
->>> This applies for lots of places through here.
->>>
->>
->> set_multipart_response_buffer() is called only when ->is_singlepart_read is
->> false, which is determined by the below code under the *_write()
->>
->> ssif_bmc->is_singlepart_read = (ssif_msg_len(&msg) <=
->> MAX_PAYLOAD_PER_TRANSACTION + 1);
->>
->> So, I think the len is validated and could be use in this functions.
-> 
-> Ah, I had things backwards.  "Read" here is when you are writing to
-> the other side.  I understand now.
-> 
->>
->>>> +
->>>> +		ssif_bmc->response_buf[idx++] = 0x00; /* Start Flag */
->>>> +		ssif_bmc->response_buf[idx++] = 0x01; /* Start Flag */
->>>> +		ssif_bmc->response_buf[idx++] = ssif_bmc->response.netfn_lun;
->>>> +		ssif_bmc->response_buf[idx++] = ssif_bmc->response.cmd;
->>>> +		ssif_bmc->response_buf[idx++] = ssif_bmc->response.payload[0];
->>>> +
->>>> +		response_len = MAX_PAYLOAD_PER_TRANSACTION - idx;
->>>> +
->>>> +		memcpy(&ssif_bmc->response_buf[idx], &ssif_bmc->response.payload[1],
->>>> +		       response_len);
->>>> +		break;
->>>> +
->>>> +	case SSIF_IPMI_MULTIPART_READ_MIDDLE:
->>>> +		/*
->>>> +		 * IPMI READ Middle or READ End messages can carry up to 31 bytes
->>>> +		 * IPMI data plus block number byte.
->>>> +		 */
->>>> +		if (ssif_bmc->remain_len < MAX_IPMI_DATA_PER_MIDDLE_TRANSACTION) {
->>>> +			/*
->>>> +			 * This is READ End message
->>>> +			 *  Return length is the remaining response data length
->>>> +			 *  plus block number
->>>> +			 *  Block number 0xFF is to indicate this is last message
->>>> +			 *
->>>> +			 */
->>>> +			*val = ssif_bmc->remain_len + 1;
->>>> +			ssif_bmc->block_num = 0xFF;
->>>> +			ssif_bmc->response_buf[idx++] = ssif_bmc->block_num;
->>>> +			response_len = ssif_bmc->remain_len;
->>>> +			/* Clean the buffer */
->>>> +			memset(&ssif_bmc->response_buf[idx], 0, MAX_PAYLOAD_PER_TRANSACTION - idx);
->>>> +		} else {
->>>> +			/*
->>>> +			 * This is READ Middle message
->>>> +			 *  Response length is the maximum SMBUS transfer length
->>>> +			 *  Block number byte is incremented
->>>> +			 * Return length is maximum SMBUS transfer length
->>>> +			 */
->>>> +			*val = MAX_PAYLOAD_PER_TRANSACTION;
->>>> +			ssif_bmc->remain_len -= MAX_IPMI_DATA_PER_MIDDLE_TRANSACTION;
->>>> +			response_len = MAX_IPMI_DATA_PER_MIDDLE_TRANSACTION;
->>>> +			ssif_bmc->response_buf[idx++] = ssif_bmc->block_num;
->>>> +			ssif_bmc->block_num++;
->>>> +		}
->>>> +
->>>> +		memcpy(&ssif_bmc->response_buf[idx],
->>>> +		       ssif_bmc->response.payload + 1 + ssif_bmc->nbytes_processed,
->>>> +		       response_len);
->>>> +		break;
->>>> +
->>>> +	default:
->>>> +		/* Do not expect to go to this case */
->>>> +		dev_err(&ssif_bmc->client->dev,
->>>> +			"%s: Unexpected SMBus command 0x%x\n",
->>>> +			__func__, ssif_bmc->smbus_cmd);
->>>> +		break;
->>>> +	}
->>>> +
->>>> +	ssif_bmc->nbytes_processed += response_len;
->>>> +}
->>>> +
->>>> +/* Process the IPMI response that will be read by master */
->>>> +static void handle_read_processed(struct ssif_bmc_ctx *ssif_bmc, u8 *val)
->>>> +{
->>>> +	u8 *buf;
->>>> +	u8 pec_len, addr, len;
->>>> +	u8 pec = 0;
->>>> +
->>>> +	pec_len = ssif_bmc->pec_support ? 1 : 0;
->>>> +	/* PEC - Start Read Address */
->>>> +	addr = GET_8BIT_ADDR(ssif_bmc->client->addr);
->>>> +	pec = i2c_smbus_pec(pec, &addr, 1);
->>>> +	/* PEC - SSIF Command */
->>>> +	pec = i2c_smbus_pec(pec, &ssif_bmc->smbus_cmd, 1);
->>>> +	/* PEC - Restart Write Address */
->>>> +	addr = addr | 0x01;
->>>> +	pec = i2c_smbus_pec(pec, &addr, 1);
->>>> +
->>>> +	if (ssif_bmc->is_singlepart_read) {
->>>> +		/* Single-part Read processing */
->>>> +		buf = (u8 *)&ssif_bmc->response;
->>>> +
->>>> +		if (ssif_bmc->response.len && ssif_bmc->msg_idx < ssif_bmc->response.len) {
->>>> +			ssif_bmc->msg_idx++;
->>>> +			*val = buf[ssif_bmc->msg_idx];
->>>> +		} else if (ssif_bmc->response.len && ssif_bmc->msg_idx == ssif_bmc->response.len) {
->>>> +			ssif_bmc->msg_idx++;
->>>> +			*val = i2c_smbus_pec(pec, buf, ssif_msg_len(&ssif_bmc->response));
->>>> +		} else {
->>>
->>> I thought for a second that this was wrong, but I think it's correct.
->>> Supply zero if you don't have data.
->>>
->>>> +			*val = 0;
->>>> +		}
->>>> +		/* Invalidate response buffer to denote it is sent */
->>>> +		if (ssif_bmc->msg_idx + 1 >= (ssif_msg_len(&ssif_bmc->response) + pec_len))
->>>> +			complete_response(ssif_bmc);
->>>> +	} else {
->>>> +		/* Multi-part Read processing */
->>>
->>> You don't check the length here like you did above.  I think that's
->>> required.
->>>
->>
->> As per my explanation above, the ->is_singlepart_read is determined by
->> testing the length, so it is validated as I assumed.
->>
->>>> +		switch (ssif_bmc->smbus_cmd) {
->>>> +		case SSIF_IPMI_MULTIPART_READ_START:
->>>> +		case SSIF_IPMI_MULTIPART_READ_MIDDLE:
->>>> +			buf = (u8 *)&ssif_bmc->response_buf;
->>>> +			*val = buf[ssif_bmc->msg_idx];
->>>> +			ssif_bmc->msg_idx++;
->>>> +			break;
->>>> +		default:
->>>> +			/* Do not expect to go to this case */
->>>> +			dev_err(&ssif_bmc->client->dev,
->>>> +				"%s: Unexpected SMBus command 0x%x\n",
->>>> +				__func__, ssif_bmc->smbus_cmd);
->>>> +			break;
->>>> +		}
->>>> +
->>>> +		len = (ssif_bmc->block_num == 0xFF) ?
->>>> +		       ssif_bmc->remain_len + 1 : MAX_PAYLOAD_PER_TRANSACTION;
->>>> +		if (ssif_bmc->msg_idx == (len + 1)) {
->>>> +			pec = i2c_smbus_pec(pec, &len, 1);
->>>> +			*val = i2c_smbus_pec(pec, ssif_bmc->response_buf, len);
->>>> +		}
->>>> +		/* Invalidate response buffer to denote last response is sent */
->>>> +		if (ssif_bmc->block_num == 0xFF &&
->>>> +		    ssif_bmc->msg_idx > (ssif_bmc->remain_len + pec_len)) {
->>>> +			complete_response(ssif_bmc);
->>>> +		}
->>>> +	}
->>>> +}
->>>> +
->>>> +static void handle_write_received(struct ssif_bmc_ctx *ssif_bmc, u8 *val)
->>>> +{
->>>> +	u8 *buf = (u8 *)&ssif_bmc->request;
->>>> +
->>>> +	if (ssif_bmc->msg_idx >= sizeof(struct ssif_msg))
->>>> +		return;
-> 
-> I don't think this check is valid.  I believe the msg_idx only covers
-> the current message, but ssif_msg is a full multi-part message.  It
-> covers the single-part message, I think but not the multi-part ones.
-> Also, abort the operation and log on bad data.
-> 
-
-Yes, thank you for this catch.
-
-Will change in next version.
-
->>>> +
->>>> +	switch (ssif_bmc->smbus_cmd) {
->>>> +	case SSIF_IPMI_SINGLEPART_WRITE:
->>>> +		buf[ssif_bmc->msg_idx - 1] = *val;
->>>> +		ssif_bmc->msg_idx++;
->>>> +
->>>> +		break;
->>>> +	case SSIF_IPMI_MULTIPART_WRITE_START:
->>>> +		if (ssif_bmc->msg_idx == 1)
->>>> +			ssif_bmc->request.len = 0;
->>>> +
->>>> +		fallthrough;
->>>> +	case SSIF_IPMI_MULTIPART_WRITE_MIDDLE:
->>>> +		/* The len should always be 32 */
->>>> +		if (ssif_bmc->msg_idx == 1 && *val != MAX_PAYLOAD_PER_TRANSACTION)
->>>> +			dev_warn(&ssif_bmc->client->dev,
->>>> +				 "Warn: Invalid Multipart Write len");
-> 
-> You should abort the operation here.  Don't deliver obviously bad data.
-> Same in the code just below.
-> 
-> This will require that you add a message aborted type of state to just
-> ignore everything that comes in until the full sequence ends or a new
-> message starts.
-> 
-
-Will introduce the abort state which will ignore everything until the 
-new request comes to handle those invalid cases.
-
->>>> +
->>>> +		fallthrough;
->>>> +	case SSIF_IPMI_MULTIPART_WRITE_END:
->>>> +		/* Multi-part write, 2nd byte received is length */
->>>> +		if (ssif_bmc->msg_idx == 1) {
->>>> +			if (*val > MAX_PAYLOAD_PER_TRANSACTION)
->>>> +				dev_warn(&ssif_bmc->client->dev,
->>>> +					 "Warn: Invalid Multipart Write End len");
->>>> +
->>>> +			ssif_bmc->request.len += *val;
->>>> +			ssif_bmc->recv_len = *val;
->>>> +
->>>> +			/* request len should never exceeded 255 bytes */
->>>> +			if (ssif_bmc->request.len > 255)
->>>> +				dev_warn(&ssif_bmc->client->dev,
->>>> +					 "Warn: Invalid request len");
->>>> +
->>>> +		} else {
->>>
->>> You check msg_idx above, but I'm not sure that check will cover this
->>> operation.
->>>
->> That check is to make sure the length (*val) must always be strictly 32
->> bytes in case of MULTIPART_WRITE_START/MIDDLE. And this check allows the
->> length is up to 32 bytes in MULTIPART_WRITE_END.
-> 
-> Now that I have read and write straight, this is where the previous
-> comments apply.
-> 
-> You are trusting the the length sent by the remote end in the second
-> byte is correct, but there is no guarantee of this.  The remote end can
-> send as many bytes as it likes.  You need to check that you don't
-> overflow buf here and that it actually sends the number of bytes that it
-> said it was going to send to avoid underflow.
-> 
-
-Will include in next version. The request which is exceeded the 255 
-bytes should be aborted.
-
->>
->>>> +			buf[ssif_bmc->msg_idx - 1 +
->>>> +			    ssif_bmc->request.len - ssif_bmc->recv_len]	= *val;
-> 
-> This computation is fairly complicated and hard to understand.
-> Calculations like this are asking for trouble.
-> 
-> It would be easier to understand had request.len be the current length
-> of what is in request.payload and increment it on every incoming byte.
-> Then request.len could be used to add data to the buffer, like
-> 
-> 	if (ssif_bmc->request.len >= sizeof(ssif_bmc->payload))
-> 		error...
-> 	ssif_bmc->payload[ssif_bmc->request.len++] = *val;
-> 
-> If you renamed msg_idx to curr_recv_idx and recv_len to curr_recv_len,
-> it would be more clear that these are related and operate on the current
-> incoming message.
-> 
-> It would also be nice to get rid of the casts from ssif_msg to a buffer
-> array and just index directly into request.payload[].
-> 
-
-Really appreciate for these comments, Corey.
-I have rechecked the code and there will be, definitely, changes to 
-refactor this code in my next version.
-
-> In thinking about this further, I have a few more observations...
-> 
-> There is no need to have the netfn and cmd in ssif_msg.  They are just
-> the first and second bytes of the message.  You don't care what they
-> are in this code.
-> 
-Agree. Will change in next version
-
-> Why do you deliver the length as part of the message to the user?  The
-> length is returned by the system call.  You have all these +1 and -1
-> things around the message length, which is error-prone.  Removing the
-> length from the message would get rid of all of that.  And using packed
-> structures is generally not the best, anyway.
-> 
-
-Will avoid those +1, -1 in next version.
-About the packed structures, I think it is needed because we want to 
-just copy the whole request/response struct from/to user space.
-
-> The PEC calculations remove one byte from the maximum message length.
-> Since they are not included in the length byte, it's kind of unnatural
-> to do this the way you are doing it.  Instead, it might be best to say
-> if you receive a byte and curr_recv_idx == curr_recv_len, process it
-> as PEC.  That way the PEC never hits the buffer.
-> 
-> There is no need for msg_idx, or cur_recv_idx, to be size_t.
-> 
-> I need to look at this some more, but I'll need to see the rewrite.
-> 
-> -corey
-> 
-Thanks Corey,
-
-Will address these suggestions on next version.
-
-- Quan
+Thanks
+Lucas
