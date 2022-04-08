@@ -2,55 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0FE4F8F5E
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Apr 2022 09:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9224F8F6B
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Apr 2022 09:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbiDHHUb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 8 Apr 2022 03:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
+        id S229831AbiDHHV6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 8 Apr 2022 03:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiDHHUa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Apr 2022 03:20:30 -0400
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896A121FF50;
-        Fri,  8 Apr 2022 00:18:27 -0700 (PDT)
-Received: by mail-vk1-f178.google.com with SMTP id q10so2160327vkh.0;
-        Fri, 08 Apr 2022 00:18:27 -0700 (PDT)
+        with ESMTP id S229854AbiDHHVn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Apr 2022 03:21:43 -0400
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36833283F5C;
+        Fri,  8 Apr 2022 00:19:41 -0700 (PDT)
+Received: by mail-vs1-f44.google.com with SMTP id k7so2019854vsb.5;
+        Fri, 08 Apr 2022 00:19:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
          :from:date:message-id:subject:to:cc;
-        bh=d3gNHoy16ZlsDLV8bQepLcY1WMSrBsifmbORH9+6qxw=;
-        b=yEHmvUbRlGG/64Tp/hE7IQilX4hPaFUk9Kplh6hHXG+y9jzxyhOmkMxvo6UKdquqD0
-         GqbhIQvTg9Ir1fiKk2mOm8Vd5zCLpQD6oI4m11KSes0a5wFcz0L+kRlptA0t7HHZJkZL
-         Ex8wdx6+eQ9P9LQ6iQQvd39WKHmu8wrAo/qdVQpniC9tH6uJy/fdDQEe6cCXAoLQ6PmI
-         aKZzSzYLiw2Hiw1vCouRUkJ+PGr+F1Q0NDF3Y1UWhlsnTH+yfy8dUTcBeCKI8lDfMMA1
-         bAoDpxqqhuGywM9AcEwgqUmpO/CGhk1L7bkJJgGfAJI/HhF4/zqm6BM4viKkLxOz+YLx
-         mobg==
-X-Gm-Message-State: AOAM5305y6X9OEJqN8iKzQar0h2gTVN9qvIKdCFIAYIP3R9lfJO7yxht
-        w0aTwJqLXs27e+RXd3SNQKbDv3I1+/JWoA==
-X-Google-Smtp-Source: ABdhPJw4nW6JPKtb3JaLOFRJubHdhfutGfqcOb/CxCgc7qJdWXGvxzx4A5tgytHWyDyuluBP+Y6uiw==
-X-Received: by 2002:a1f:2c4b:0:b0:345:698:582a with SMTP id s72-20020a1f2c4b000000b003450698582amr2249252vks.25.1649402306187;
-        Fri, 08 Apr 2022 00:18:26 -0700 (PDT)
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com. [209.85.217.43])
-        by smtp.gmail.com with ESMTPSA id x6-20020a67c086000000b003227f6f6b44sm2408043vsi.17.2022.04.08.00.18.25
+        bh=DMeNt3olG0Wp2du+dxBX3Q71fHxom9k/adJcwm0QXDo=;
+        b=Mf4ZofDF6wIkxnvzY1Pz9ysNZC/BcP5v3Rotxz8PpWBARNCta6isMKmhixvs4ujynW
+         J3UuBchf8/utPG7XZOYYqdXTQYHGyFC+twKIGDzM6W91r/Jfd7JwIzyvX2OD9hPH9sqB
+         j6uNslj1ZNJacdmv8B0PeAE+qAGNFU+AdK9845csIFopJleN3Gb/uYzJw9xuagunv4Dt
+         bM48L6QMFJqcG6iNHp+go631aw/wO1Cq+sdbRplpzfq+P0kZugWbxqcybhJ+CkXwk1x+
+         x+HAWtohEGR3BGLugyit6Jg/sfgnenZG7D+AhNdz+UsBNl6LD1Xdn0OGbTAYB2RpWduO
+         3Fxg==
+X-Gm-Message-State: AOAM530qJNhN9wuN0BwkCWLQG1QWeNtrpFmzKsILdc+mnRDy/UUhZb4k
+        JJvWeSee/FOUDL0GB1HHrHNKOhVic7kIqw==
+X-Google-Smtp-Source: ABdhPJykRpguBv+hpcGWZZpHcdjvdnCexnwRpUZevdNca67RIl5TxbskkbWO4CepFwnD5fdqVdYG7Q==
+X-Received: by 2002:a67:6147:0:b0:328:1669:86a0 with SMTP id v68-20020a676147000000b00328166986a0mr2107658vsb.71.1649402379922;
+        Fri, 08 Apr 2022 00:19:39 -0700 (PDT)
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
+        by smtp.gmail.com with ESMTPSA id u185-20020a1fddc2000000b00344fe0cc19dsm571673vkg.10.2022.04.08.00.19.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 00:18:25 -0700 (PDT)
-Received: by mail-vs1-f43.google.com with SMTP id r25so4563594vsa.13;
-        Fri, 08 Apr 2022 00:18:25 -0700 (PDT)
-X-Received: by 2002:a05:6102:32c3:b0:325:c919:bef4 with SMTP id
- o3-20020a05610232c300b00325c919bef4mr5902203vss.60.1649402305499; Fri, 08 Apr
- 2022 00:18:25 -0700 (PDT)
+        Fri, 08 Apr 2022 00:19:39 -0700 (PDT)
+Received: by mail-ua1-f48.google.com with SMTP id w21so4301692uan.3;
+        Fri, 08 Apr 2022 00:19:39 -0700 (PDT)
+X-Received: by 2002:ab0:21d5:0:b0:35d:1f9:3481 with SMTP id
+ u21-20020ab021d5000000b0035d01f93481mr3129410uan.48.1649402379387; Fri, 08
+ Apr 2022 00:19:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220326102229.421718-1-tanure@linux.com> <20220326102229.421718-3-tanure@linux.com>
- <c789adcd-d072-bec2-a823-5f5993704365@baylibre.com>
-In-Reply-To: <c789adcd-d072-bec2-a823-5f5993704365@baylibre.com>
+References: <20220326102229.421718-1-tanure@linux.com> <7hee2lu82n.fsf@baylibre.com>
+ <CAJX_Q+1Y5pO_AGaFSXfo-J3EdGQeM2XYXzvsUtjtAFEXdwKEdQ@mail.gmail.com> <a27da359-3922-e4ee-16d2-b4cb6fc06ca8@baylibre.com>
+In-Reply-To: <a27da359-3922-e4ee-16d2-b4cb6fc06ca8@baylibre.com>
 Reply-To: tanure@linux.com
 From:   Lucas Tanure <tanure@linux.com>
-Date:   Fri, 8 Apr 2022 08:18:14 +0100
-X-Gmail-Original-Message-ID: <CAJX_Q+3WHCKmg3Fq5jPTY=PNjow2HdLkgFVLd9GQRuGg_q96=Q@mail.gmail.com>
-Message-ID: <CAJX_Q+3WHCKmg3Fq5jPTY=PNjow2HdLkgFVLd9GQRuGg_q96=Q@mail.gmail.com>
-Subject: Re: [PATCH 2/3] i2c: meson: Use 50% duty cycle for I2C clock
+Date:   Fri, 8 Apr 2022 08:19:28 +0100
+X-Gmail-Original-Message-ID: <CAJX_Q+2F_b+1Q_qAi6ZLkT=EoW+JjoT-cyONSnoehd5mkfUdsg@mail.gmail.com>
+Message-ID: <CAJX_Q+2F_b+1Q_qAi6ZLkT=EoW+JjoT-cyONSnoehd5mkfUdsg@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Ensure Low period of SCL is correct
 To:     Neil Armstrong <narmstrong@baylibre.com>
 Cc:     Kevin Hilman <khilman@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
@@ -68,111 +68,85 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 12:31 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
+On Tue, Apr 5, 2022 at 4:11 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
 >
 > Hi,
 >
-> On 26/03/2022 11:22, Lucas Tanure wrote:
-> > The duty cycle of 33% is less than the required
-> > by the I2C specs for the LOW period of the SCL
-> > clock.
+> On 28/03/2022 23:51, Lucas Tanure wrote:
 > >
-> > Move the duty cyle to 50% for 100Khz or lower
-> > clocks, and (40% High SCL / 60% Low SCL) duty
-> > cycle for clocks above 100Khz.
 > >
-> > Signed-off-by: Lucas Tanure <tanure@linux.com>
-> > ---
-> >   drivers/i2c/busses/i2c-meson.c | 45 +++++++++++++++++++++++++---------
-> >   1 file changed, 33 insertions(+), 12 deletions(-)
+> > On Mon, 28 Mar 2022, 21:37 Kevin Hilman, <khilman@baylibre.com <mailto:khilman@baylibre.com>> wrote:
 > >
-> > diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
-> > index 4b4a5b2d77ab..b913ba20f06e 100644
-> > --- a/drivers/i2c/busses/i2c-meson.c
-> > +++ b/drivers/i2c/busses/i2c-meson.c
-> > @@ -140,29 +140,50 @@ static void meson_i2c_add_token(struct meson_i2c *i2c, int token)
-> >   static void meson_i2c_set_clk_div(struct meson_i2c *i2c, unsigned int freq)
-> >   {
-> >       unsigned long clk_rate = clk_get_rate(i2c->clk);
-> > -     unsigned int div;
-> > +     unsigned int div_h, div_l;
+> >     Hi Lucas,
 > >
-> > -     div = DIV_ROUND_UP(clk_rate, freq);
-> > -     div -= FILTER_DELAY;
-> > -     div = DIV_ROUND_UP(div, i2c->data->div_factor);
-> > +     if (freq <= 100000) {
+> >     Lucas Tanure <tanure@linux.com <mailto:tanure@linux.com>> writes:
+> >
+> >      > The default duty cycle of 33% is less than the required
+> >      > by the I2C specs for the LOW period of the SCL clock.
+> >      >
+> >      > So, for 100Khz or less, use 50%H/50%L duty cycle, and
+> >      > for the clock above 100Khz, use 40%H/60%L duty cycle.
+> >      > That ensures the low period of SCL is always more than
+> >      > the minimum required by the specs at any given frequency.
+> >
+> >     Thanks for the fixes!
+> >
+> >     This is going to affect all SoCs, so ould you please summarize how your
+> >     changes were tested, and on which SoCs & boards?
+> >
+> >     Thanks,
+> >
+> >     Kevin
+> >
+> >
+> > Hi,
+> >
+> > I only tested against vim3 board, measured the bus with an saleae logic pro 16.
+> > The measurements were with 100k, 400k and a few in between frequencies.
+> >
+> > Is that enough?
 >
-> You should use I2C_MAX_STANDARD_MODE_FREQ instead here
+> I did a few measures on the Libre Computer Le Potato S905X board:
 >
-> > +             div_h = DIV_ROUND_UP(clk_rate, freq);
-> > +             div_l = DIV_ROUND_UP(div_h, 4);
-> > +             div_h = DIV_ROUND_UP(div_h, 2) - FILTER_DELAY;
-> > +     } else {
-> > +     /* According to I2C-BUS Spec 2.1, in FAST-MODE, the minimum LOW period is 1.3uS, and
-> > +      * minimum HIGH is least 0.6us.
-> > +      * For 400000 freq, the period is 2.5us. To keep within the specs, give 40% of period to
-> > +      * HIGH and 60% to LOW. This means HIGH at 1.0us and LOW 1.5us.
-> > +      * The same applies for Fast-mode plus, where LOW is 0.5us and HIGH is 0.26us.
-> > +      * Duty = H/(H + L) = 2/5
-> > +      */
+> i2c_AO:
 >
-> Please move the comment before the if()
+> Before the patchset, I got:
+> - 100KHz: 1.66uS HIGH, 6.75uS LOW, 20%/80%, Freq 118KHz /!\
+> - 400KHz: Unable to decode, clock line is invalid, Data line is also invalid
 >
-> > +             div_h = DIV_ROUND_UP(clk_rate * 2, freq * 5) - FILTER_DELAY;
-> > +             div_l = DIV_ROUND_UP(clk_rate * 3, freq * 5 * 2);
-> > +     }
-> >
-> >       /* clock divider has 12 bits */
-> > -     if (div > GENMASK(11, 0)) {
-> > +     if (div_h > GENMASK(11, 0)) {
-> >               dev_err(i2c->dev, "requested bus frequency too low\n");
-> > -             div = GENMASK(11, 0);
-> > +             div_h = GENMASK(11, 0);
-> > +     }
-> > +     if (div_l > GENMASK(11, 0)) {
-> > +             dev_err(i2c->dev, "requested bus frequency too low\n");
-> > +             div_l = GENMASK(11, 0);
-> >       }
-> >
-> >       meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_CLKDIV_MASK,
-> > -                        FIELD_PREP(REG_CTRL_CLKDIV_MASK, div & GENMASK(9, 0)));
-> > +                        FIELD_PREP(REG_CTRL_CLKDIV_MASK, div_h & GENMASK(9, 0)));
-> >
-> >       meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_CLKDIVEXT_MASK,
-> > -                        FIELD_PREP(REG_CTRL_CLKDIVEXT_MASK, div >> 10));
-> > +                        FIELD_PREP(REG_CTRL_CLKDIVEXT_MASK, div_h >> 10));
-> > +
-> > +
-> > +     /* set SCL low delay */
-> > +     meson_i2c_set_mask(i2c, REG_SLAVE_ADDR, REG_SLV_SCL_LOW_MASK,
-> > +                        (div_l << REG_SLV_SCL_LOW_SHIFT) & REG_SLV_SCL_LOW_MASK);
+> With the patchset
+> - 100KHz: 4.25uS HIGH, 6.58uS LOW, 40%/60%, Freq 92KHz
+> - 400KHz: 0.33uS HIGH, 3.00uS LOW, 10%/90%, Freq 300KHz
 >
-> You could use FIELD_PREP() here
+> i2c_B:
 >
-> >
-> > -     /* Disable HIGH/LOW mode */
-> > -     meson_i2c_set_mask(i2c, REG_SLAVE_ADDR, REG_SLV_SCL_LOW_EN, 0);
-> > +     /* Enable HIGH/LOW mode */
-> > +     meson_i2c_set_mask(i2c, REG_SLAVE_ADDR, REG_SLV_SCL_LOW_EN, REG_SLV_SCL_LOW_EN);
-> >
-> > -     dev_dbg(i2c->dev, "%s: clk %lu, freq %u, div %u\n", __func__,
-> > -             clk_rate, freq, div);
-> > +     dev_dbg(i2c->dev, "%s: clk %lu, freq %u, divh %u, divl %u\n", __func__,
-> > +             clk_rate, freq, div_h, div_l);
-> >   }
-> >
-> >   static void meson_i2c_get_data(struct meson_i2c *i2c, char *buf, int len)
+> Before the patchset, I got:
+> - 100KHz: 2.25uS HIGH, 5.41uS LOW, 29%/71%, Freq 130KHz /!\
+> - 400KHz: 0.42uS HIGH, 1.66uS LOW, 20%/80%, Freq 480KHz /!\
 >
-> I looked at different amlogic downstream sources, and those match the recommended
-> calculations.
+> With the patchset
+> - 100KHz: 4.75uS HIGH, 5.42uS LOW, 46%/54%, Freq 98KHz
+> - 400KHz: 0.66uS HIGH, 2.00uS LOW, 24%/75%, Freq 375KHz
 >
-> So with the legacy back for Meson6, it will be OK.
+>
+> So this fixes the frequency, before they were invalid.
+> And it fixes 400KHz on i2c_AO...
+>
+> I do not understand why behavior is different between i2c_AO & i2c_B, they
+> are feed with the same clock so it should be the same.
+>
+> Did you check on both i2c interfaces ? can you share your results ?
+
+I only checked I2C interfaces i2c3 and i2c_ao.
+I will submit a new patch chain with more results.
+
 >
 > Neil
-
-Ok, I will do the modifications this weekend.
-I only tested i2c3 and i2c_ao and will execute more measures and show
-the results.
-
-Thanks
-Lucas
+>
+> >
+> > Thanks
+> > Lucas
+> >
+> >
+> >
+>
