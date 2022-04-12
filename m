@@ -2,113 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2284FDC37
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA704FDC36
 	for <lists+linux-i2c@lfdr.de>; Tue, 12 Apr 2022 13:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237762AbiDLKP3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 12 Apr 2022 06:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        id S236797AbiDLKP2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 12 Apr 2022 06:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351629AbiDLJmd (ORCPT
+        with ESMTP id S1352101AbiDLJmd (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 Apr 2022 05:42:33 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFB952E51;
-        Tue, 12 Apr 2022 01:50:53 -0700 (PDT)
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31ABA13E98
+        for <linux-i2c@vger.kernel.org>; Tue, 12 Apr 2022 01:52:29 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id z12so8936301edl.2
+        for <linux-i2c@vger.kernel.org>; Tue, 12 Apr 2022 01:52:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1649753455;
-  x=1681289455;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=uLQdlfAQXlCN4pf6t7na9yusjUfO4K5tqg+Dz7YUDFM=;
-  b=Rr4kEVfRpFsMjSaJj/0JFOFNCi8+JOAdv6lqvppuw5AS2jvUp1il8T7f
-   j7mNOyFEO0TM+JiQYcD5RfuTUO1tWMGKpMtAA8Hi0OkYChMgIhpVD3fg4
-   Qrv3bP+NZhEROqKfIjP/sO4UHmJDGhrvs9xu2Exal3vRZH7IWa21X6a5+
-   6OsI00oMHRqcFOH09wnr6WXqJR4Oly4KUnzSR/J3gP5uMdhCyYK/C6u0X
-   UgUrvdT+1uOTMej86LF2+0dszNno9Ve7yFVsDZb/baXLYbasuQ754Fq9R
-   44IpE9R6jtqbJ+NCl0JFYOtv9E6FFU0jcVDLIVNtGWbelhD6T6ROPnr0R
-   Q==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     <wsa@kernel.org>
-CC:     <kernel@axis.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <krzk+dt@kernel.org>, <robh+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/2] i2c: core: support no-detect property
-Date:   Tue, 12 Apr 2022 10:50:46 +0200
-Message-ID: <20220412085046.1110127-3-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220412085046.1110127-1-vincent.whitchurch@axis.com>
-References: <20220412085046.1110127-1-vincent.whitchurch@axis.com>
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=pB+1JohUx/AAEa/eALR+9ZzJFy4+pwowrpjWY0TEY6s=;
+        b=g8oMWg7WaTEuIIf7SFur7baOsKDy1aiy27S3Ckz9bAm+8KujIwQkIc97hAPh+AzqEG
+         mRg9Bfu3IHa23w/tuKemvpsGngozqjFtft+1gPnxeCG62HCahLmUnOYOVcAbH89MfTxY
+         7fHOBXbcyyY/XF+IKx9M8npbHXSzHuVJMCELMOUqW10ce4TIO3+YH4TGsuCvQBbxu68j
+         ZgS3euFwXmfjbjBEBQ7Zsk7g2xSHQBFsFPJA8PePYO2Fo6kyKrvP3z+Y00eOAIjZ9YGu
+         6So0c3+Qu1ou28750cgLq/BEK/grwoiv+BLMSNzX1J1Q3T9I+rNLqPLoXpJs5fSE2X5N
+         i9Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pB+1JohUx/AAEa/eALR+9ZzJFy4+pwowrpjWY0TEY6s=;
+        b=F4mAn6WxRuuuY2p63grdtNwctj65VTx/H5DSS3w4N8NXVsEufXzVdzjKUnqQjSf0wt
+         v8zIPTftl2Lp9CXLkMwdXnjbXqmF9UzvbT4KvIJA+BzbZbm870D4BOrPxLk9qqbkWlXy
+         Q3umWtxFmuCMGRbu0DV1OkHIp6z/SJClFais+L/1BQHsPNReOoDcpnMYaaPCPaFvdIrh
+         W8CIDQkrCutOq8KHmNMMzZ4Kmt9PZ0+Lf+47EhDBmQVJdQNFYsROEvZdLGppuYg+Lulh
+         PF0QaSRLEE2x9KLpDajeXElIWcju6S6euF/8xmVTVqZglUkaG02Mr2MO1cVqcPGVgKsD
+         pzLw==
+X-Gm-Message-State: AOAM530h1UbYZgG8INfeym2ODHIx94CVcur9L0M04HlZ0GLvEWaP69ZS
+        WhOwhyLTpOUlXPGv99ryGlhTCg==
+X-Google-Smtp-Source: ABdhPJxFhtwpTL4eKhml6vgwWIqP+H4DWUDHQoZAIyaHwztXfad7VbrscMEEk+gBT3gfSXKH703Byw==
+X-Received: by 2002:a05:6402:42d4:b0:412:c26b:789 with SMTP id i20-20020a05640242d400b00412c26b0789mr37519085edc.232.1649753547814;
+        Tue, 12 Apr 2022 01:52:27 -0700 (PDT)
+Received: from [192.168.0.194] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id p15-20020a170906228f00b006e86ff7db33sm3894546eja.68.2022.04.12.01.52.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 01:52:27 -0700 (PDT)
+Message-ID: <ab2252b6-a986-6f3b-0b5a-eb1cad3f28ae@linaro.org>
+Date:   Tue, 12 Apr 2022 10:52:26 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: add property to avoid device
+ detection
+Content-Language: en-US
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>, wsa@kernel.org
+Cc:     kernel@axis.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, krzk+dt@kernel.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220412085046.1110127-1-vincent.whitchurch@axis.com>
+ <20220412085046.1110127-2-vincent.whitchurch@axis.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220412085046.1110127-2-vincent.whitchurch@axis.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-If the devicetree specifies the no-detect property, we know that there
-are no other devices on the bus other than the ones listed in the
-devicetree, so avoid calling drivers' detect callback and wasting time
-probing for devices which do not exist.
+On 12/04/2022 10:50, Vincent Whitchurch wrote:
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
+> index fc3dd7ec0445..960d1d5c9362 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c.txt
+> +++ b/Documentation/devicetree/bindings/i2c/i2c.txt
+> @@ -72,6 +72,10 @@ wants to support one of the below features, it should adapt these bindings.
+>  	this information to adapt power management to keep the arbitration awake
+>  	all the time, for example. Can not be combined with 'single-master'.
+>  
+> +- no-detect
+> +	states that no other devices are present on this bus other than the
+> +	ones listed in the devicetree.
 
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
- drivers/i2c/i2c-core-base.c | 8 +++++++-
- include/linux/i2c.h         | 1 +
- 2 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index d43db2c3876e..d43025b84546 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -1341,7 +1341,8 @@ static int i2c_do_add_adapter(struct i2c_driver *driver,
- 			      struct i2c_adapter *adap)
- {
- 	/* Detect supported devices on that bus, and instantiate them */
--	i2c_detect(adap, driver);
-+	if (adap->detect)
-+		i2c_detect(adap, driver);
- 
- 	return 0;
- }
-@@ -1432,6 +1433,7 @@ EXPORT_SYMBOL_GPL(i2c_handle_smbus_host_notify);
- 
- static int i2c_register_adapter(struct i2c_adapter *adap)
- {
-+	struct device_node *np = adap->dev.of_node;
- 	int res = -EINVAL;
- 
- 	/* Can't register until after driver model init */
-@@ -1502,6 +1504,10 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
- 			 "Failed to create compatibility class link\n");
- #endif
- 
-+	adap->detect = true;
-+	if (np && of_property_read_bool(np, "no-detect"))
-+		adap->detect = false;
-+
- 	/* create pre-declared device nodes */
- 	of_i2c_register_devices(adap);
- 	i2c_acpi_install_space_handler(adap);
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index fbda5ada2afc..8fad5fe85685 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -728,6 +728,7 @@ struct i2c_adapter {
- 	struct rt_mutex bus_lock;
- 	struct rt_mutex mux_lock;
- 
-+	bool detect;
- 	int timeout;			/* in jiffies */
- 	int retries;
- 	struct device dev;		/* the adapter device */
--- 
-2.34.1
+Looks good to me.
 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof
