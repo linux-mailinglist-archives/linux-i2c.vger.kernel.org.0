@@ -2,120 +2,137 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 835304FF323
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Apr 2022 11:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB1C4FFB6D
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Apr 2022 18:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbiDMJRC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 13 Apr 2022 05:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
+        id S236895AbiDMQjY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 13 Apr 2022 12:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234313AbiDMJQ7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Apr 2022 05:16:59 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C62A237EF;
-        Wed, 13 Apr 2022 02:14:20 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23D8ZUZ3023705;
-        Wed, 13 Apr 2022 04:14:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=V3w7OsZXrFneyHUnLK1Ci1c4WOnspWrTkpaaeM+/9lk=;
- b=FYY90fiFFrsSsYG5bsleo3WwLkG00GvRjtaK9bYNzh2PqaBL/1shpBge8QHkiDMQkI0O
- i5gzZef7vEVLp+CWo9joj9Cdv95At+wYxuo/wRahpOo+5ZTk8vmea44AyAOlDW6FkB4g
- +p5xToU3aWGrroRN2VE812iIR+Ows/UAOYoOdtgTmu+p3gmjA9FvDzdvRTIRxLauSSFU
- DWcVx8mW4v/be6DK1uCM8Yh8st4iH3XW+3Npwn10umSEHu3mUqGR0urJUzMmv5+ouqFI
- LQi+lTwSaKae3Uajw8jGA6+dIiM+5pl5qrUl0cnS7L4/XFZyaIHfQk3YLpRSGmc+K4bP ig== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3fb7hymxbk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 13 Apr 2022 04:14:14 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
- 2022 10:14:12 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
- Transport; Wed, 13 Apr 2022 10:14:12 +0100
-Received: from aryzen.ad.cirrus.com (unknown [198.61.64.152])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D7E95475;
-        Wed, 13 Apr 2022 09:14:11 +0000 (UTC)
-From:   Lucas Tanure <tanureal@opensource.cirrus.com>
-To:     Michal Simek <michal.simek@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>
-Subject: [PATCH v2 RESEND] i2c: cadence: Increase timeout per message if necessary
-Date:   Wed, 13 Apr 2022 10:14:10 +0100
-Message-ID: <20220413091410.17970-1-tanureal@opensource.cirrus.com>
-X-Mailer: git-send-email 2.35.2
+        with ESMTP id S235243AbiDMQjX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Apr 2022 12:39:23 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82345D64A;
+        Wed, 13 Apr 2022 09:36:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1649867816; x=1681403816;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SioN7hE4JJ0EbzEEpsQ1nTa8K8QRrunFk5RvqYz6FjE=;
+  b=qSh4h/Gx67jnHDr+Es3enJwuFaRfxEWjXYJXNQiZF0OiiJdsKmZchplY
+   4IwlaDd18/ya8Iknr5yEzvEfW85WCMAE7/KGhLFD5/Zsr67zy2eq/5NdD
+   rdRMvukT5AgstTjJJsjxPzfS7LbB6iiyRy7YXobpzSdUEFvNiYzAiE+6a
+   1C576vdmC2QvnEeIflPWJjBKfzRKd+MIAyLFHgUHZ0WvYRstwprLvftw5
+   pls0FYxfr9MAXNBE7/htEf+kE4ODnPJz/Dw3GGAAPYplrqTFTm9USbwfu
+   5U9OjvaFW7y/SWICI4TxoNRa1g4Bbc4mFl3L0wCT7P81yME9pv/yPSqPJ
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,257,1643698800"; 
+   d="scan'208";a="152546254"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2022 09:36:55 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 13 Apr 2022 09:36:55 -0700
+Received: from [10.12.72.146] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Wed, 13 Apr 2022 09:36:53 -0700
+Message-ID: <703ee79c-3b25-5b1f-dfe1-bfafade468fd@microchip.com>
+Date:   Wed, 13 Apr 2022 18:36:52 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: 5aljsWVwJRGGfYP4FdAwCtEeDgeCkHMI
-X-Proofpoint-ORIG-GUID: 5aljsWVwJRGGfYP4FdAwCtEeDgeCkHMI
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/3] ARM: dts: at91: sama7g5: Swap `rx` and `tx` for
+ `i2c` nodes
+Content-Language: en-US
+To:     Sergiu Moga <sergiu.moga@microchip.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@canonical.com>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>
+References: <20220310114553.184763-1-sergiu.moga@microchip.com>
+ <20220310114553.184763-2-sergiu.moga@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20220310114553.184763-2-sergiu.moga@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Timeout as 1 second sets an upper limit on the length
-of the transfer executed, but there is no maximum length
-of a write or read message set in i2c_adapter_quirks for
-this controller.
+On 10/03/2022 at 12:45, Sergiu Moga wrote:
+> Swap `rx` and `tx` for the `dma-names` property of the `i2c` nodes
+> in order to maintain consistency across Microchip/Atmel SoC files.
+> 
+> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+> Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 
-This upper limit affects devices that require sending
-large firmware blobs over I2C.
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+As it fixes some of the warning in dt schema check in 5.18-rc1, I queue 
+this patch in "fixes" branch for 5.18.
 
-To remove that limitation, calculate the minimal time
-necessary, plus some wiggle room, for every message and
-use it instead of the default one second, if more than
-one second.
+Thanks, best regards,
+   Nicolas
 
-Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
-Acked-by: Michal Simek <michal.simek@xilinx.com>
----
- drivers/i2c/busses/i2c-cadence.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+> ---
+>   arch/arm/boot/dts/sama7g5.dtsi | 18 +++++++++---------
+>   1 file changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
+> index 4decd3a91a76..f691c8f08d04 100644
+> --- a/arch/arm/boot/dts/sama7g5.dtsi
+> +++ b/arch/arm/boot/dts/sama7g5.dtsi
+> @@ -601,9 +601,9 @@ i2c1: i2c@600 {
+>   				#size-cells = <0>;
+>   				clocks = <&pmc PMC_TYPE_PERIPHERAL 39>;
+>   				atmel,fifo-size = <32>;
+> -				dmas = <&dma0 AT91_XDMAC_DT_PERID(7)>,
+> -					<&dma0 AT91_XDMAC_DT_PERID(8)>;
+> -				dma-names = "rx", "tx";
+> +				dmas = <&dma0 AT91_XDMAC_DT_PERID(8)>,
+> +					<&dma0 AT91_XDMAC_DT_PERID(7)>;
+> +				dma-names = "tx", "rx";
+>   				status = "disabled";
+>   			};
+>   		};
+> @@ -786,9 +786,9 @@ i2c8: i2c@600 {
+>   				#size-cells = <0>;
+>   				clocks = <&pmc PMC_TYPE_PERIPHERAL 46>;
+>   				atmel,fifo-size = <32>;
+> -				dmas = <&dma0 AT91_XDMAC_DT_PERID(21)>,
+> -					<&dma0 AT91_XDMAC_DT_PERID(22)>;
+> -				dma-names = "rx", "tx";
+> +				dmas = <&dma0 AT91_XDMAC_DT_PERID(22)>,
+> +					<&dma0 AT91_XDMAC_DT_PERID(21)>;
+> +				dma-names = "tx", "rx";
+>   				status = "disabled";
+>   			};
+>   		};
+> @@ -810,9 +810,9 @@ i2c9: i2c@600 {
+>   				#size-cells = <0>;
+>   				clocks = <&pmc PMC_TYPE_PERIPHERAL 47>;
+>   				atmel,fifo-size = <32>;
+> -				dmas = <&dma0 AT91_XDMAC_DT_PERID(23)>,
+> -					<&dma0 AT91_XDMAC_DT_PERID(24)>;
+> -				dma-names = "rx", "tx";
+> +				dmas = <&dma0 AT91_XDMAC_DT_PERID(24)>,
+> +					<&dma0 AT91_XDMAC_DT_PERID(23)>;
+> +				dma-names = "tx", "rx";
+>   				status = "disabled";
+>   			};
+>   		};
 
-diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index 805c77143a0f..b4c1ad19cdae 100644
---- a/drivers/i2c/busses/i2c-cadence.c
-+++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -760,7 +760,7 @@ static void cdns_i2c_master_reset(struct i2c_adapter *adap)
- static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
- 		struct i2c_adapter *adap)
- {
--	unsigned long time_left;
-+	unsigned long time_left, msg_timeout;
- 	u32 reg;
- 
- 	id->p_msg = msg;
-@@ -785,8 +785,16 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
- 	else
- 		cdns_i2c_msend(id);
- 
-+	/* Minimal time to execute this message */
-+	msg_timeout = msecs_to_jiffies((1000 * msg->len * BITS_PER_BYTE) / id->i2c_clk);
-+	/* Plus some wiggle room */
-+	msg_timeout += msecs_to_jiffies(500);
-+
-+	if (msg_timeout < adap->timeout)
-+		msg_timeout = adap->timeout;
-+
- 	/* Wait for the signal of completion */
--	time_left = wait_for_completion_timeout(&id->xfer_done, adap->timeout);
-+	time_left = wait_for_completion_timeout(&id->xfer_done, msg_timeout);
- 	if (time_left == 0) {
- 		cdns_i2c_master_reset(adap);
- 		dev_err(id->adap.dev.parent,
+
 -- 
-2.35.2
-
+Nicolas Ferre
