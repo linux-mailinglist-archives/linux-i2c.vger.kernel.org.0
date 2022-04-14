@@ -2,137 +2,146 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB1C4FFB6D
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Apr 2022 18:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C50500381
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Apr 2022 03:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236895AbiDMQjY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 13 Apr 2022 12:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
+        id S233757AbiDNBSU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 13 Apr 2022 21:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235243AbiDMQjX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Apr 2022 12:39:23 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82345D64A;
-        Wed, 13 Apr 2022 09:36:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649867816; x=1681403816;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=SioN7hE4JJ0EbzEEpsQ1nTa8K8QRrunFk5RvqYz6FjE=;
-  b=qSh4h/Gx67jnHDr+Es3enJwuFaRfxEWjXYJXNQiZF0OiiJdsKmZchplY
-   4IwlaDd18/ya8Iknr5yEzvEfW85WCMAE7/KGhLFD5/Zsr67zy2eq/5NdD
-   rdRMvukT5AgstTjJJsjxPzfS7LbB6iiyRy7YXobpzSdUEFvNiYzAiE+6a
-   1C576vdmC2QvnEeIflPWJjBKfzRKd+MIAyLFHgUHZ0WvYRstwprLvftw5
-   pls0FYxfr9MAXNBE7/htEf+kE4ODnPJz/Dw3GGAAPYplrqTFTm9USbwfu
-   5U9OjvaFW7y/SWICI4TxoNRa1g4Bbc4mFl3L0wCT7P81yME9pv/yPSqPJ
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,257,1643698800"; 
-   d="scan'208";a="152546254"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2022 09:36:55 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 13 Apr 2022 09:36:55 -0700
-Received: from [10.12.72.146] (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Wed, 13 Apr 2022 09:36:53 -0700
-Message-ID: <703ee79c-3b25-5b1f-dfe1-bfafade468fd@microchip.com>
-Date:   Wed, 13 Apr 2022 18:36:52 +0200
+        with ESMTP id S232466AbiDNBST (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Apr 2022 21:18:19 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2117.outbound.protection.outlook.com [40.107.114.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1504C424
+        for <linux-i2c@vger.kernel.org>; Wed, 13 Apr 2022 18:15:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IxHhDeOGV+j5QTqf/Z3zXmymp11RdyqlaaoUrpXT41a9ksG5E09Ro4Wd17mnC2UJfKVIMIHeeS4Zjuka33wJuoia7rLB49jF5vS9GTvlPl6cOsy0hqIkTm0iC/p9PQzO79AQ5U03VxgA7K421u82CJjdL1cs8xoAjGYDmyQJIwqa6vZORPC9VPoK6QRINpu1BFOdJaJ1wkfmSPGZkhXZhcKtGdpzTsDWCeroSOtKyvWZGME6sC6Int6rzo/BS/q5l4LuqmCLbFeBbM7glLe2wLvetKpQbGOnzEJskJLHNWBaduKlfvSsvuxCbSjSi6WDbSKrC6BaMeMDfoTcttPaWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9NxTYUP5r01VOo8GbpUR0RkKbXLIkA8o6kUWZY2dA2g=;
+ b=Qzhp68G8M/V3xtapEfHjIi0+6Va7vGwLyzZx5g3LxsGc4vT8Xum+TW9KriMUzmgBSqlhiZgb28Ns8c7AV0BrcF+XLNv7fuaXUtQGQxg0Wq9yFYuI1s6NpT7eH5Ny1/wD5rKrZsjyEXERcj4TAbjX/O57TEGD4k14rPW6oRAGVaIjPQABYWfO1VLphJ3J075MgOq/zgHowXLD4JypNP0fEMqfNRjRlRVsSNwPEmL6CRcFmA94oRZ5H4onlILRFBCZdD6iQwQbWuhIwmYZUFF5ExHiA1N7kMkHxfRzirhTGtD2scd532sVDZwhRrWJAlYw/LvUb1BZ8MWjPa4fIAF7kw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9NxTYUP5r01VOo8GbpUR0RkKbXLIkA8o6kUWZY2dA2g=;
+ b=YlD10csE5ux8IeyLFiFDSnNk/2FJTQzAbjhQdATEWcSQShsLLz37c50TyqFimSW1ZMFJP1Kdd/tb4elSYUCYkaSGbXXfrhJKXzX8FZ0dWNG0fP80em+aB618UY43NY11/Rl+arE1ShFbxmEDOgQ3csr67MqrO1qJpGMhS0u/hqg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+Received: from OS3PR01MB8426.jpnprd01.prod.outlook.com (2603:1096:604:194::10)
+ by TY2PR01MB2427.jpnprd01.prod.outlook.com (2603:1096:404:7b::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Thu, 14 Apr
+ 2022 01:15:51 +0000
+Received: from OS3PR01MB8426.jpnprd01.prod.outlook.com
+ ([fe80::697c:9b30:7de5:706f]) by OS3PR01MB8426.jpnprd01.prod.outlook.com
+ ([fe80::697c:9b30:7de5:706f%4]) with mapi id 15.20.5144.029; Thu, 14 Apr 2022
+ 01:15:51 +0000
+Message-ID: <874k2wtqgp.wl-kuninori.morimoto.gx@renesas.com>
+From:   Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Subject: [PATCH] i2c: rcar: call pm_runtime_put() only if it has ID_P_PM_BLOCKED
+User-Agent: Wanderlust/2.15.9 Emacs/26.3 Mule/6.0
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Date:   Thu, 14 Apr 2022 01:15:51 +0000
+X-ClientProxiedBy: TY2PR04CA0014.apcprd04.prod.outlook.com
+ (2603:1096:404:f6::26) To OS3PR01MB8426.jpnprd01.prod.outlook.com
+ (2603:1096:604:194::10)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/3] ARM: dts: at91: sama7g5: Swap `rx` and `tx` for
- `i2c` nodes
-Content-Language: en-US
-To:     Sergiu Moga <sergiu.moga@microchip.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@canonical.com>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-References: <20220310114553.184763-1-sergiu.moga@microchip.com>
- <20220310114553.184763-2-sergiu.moga@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20220310114553.184763-2-sergiu.moga@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1e243c6d-1a6f-4ee1-d366-08da1db450ad
+X-MS-TrafficTypeDiagnostic: TY2PR01MB2427:EE_
+X-Microsoft-Antispam-PRVS: <TY2PR01MB24274E5B7DD986299461E875D4EF9@TY2PR01MB2427.jpnprd01.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WbHa6bSJ9b25ijNWgBC+dqRhuUn2jM/dblc5Kf1e1BeNq1M1IrF3OdXPlOYYvPAGseJpGGHSCQAwedbWbAfYrpvsm5a7ov3dzmUHW728GSInuxGLX1FuyhoRNcYjPbadP8hbcf0HY00aL0JmUVNyiYMjM4p4RY95tdvBFR9kUR0Djc4yPszjo+zgD1DiYbALSkU/L8EQ+8PVlg44ywMIJVpv+DGYg9aehTgwQUZeI3xg0gmMHRiASijIamfZ9NOPjwmYgMcQj4N5Ha8Pgr/y7yenaife6DOthciSB43QaM7R7JzwjwaDvCyd73k7WzQUqVpXU0jjqrgFfPo0qUk+wuFG/GM+ChhuoywlnoOFcD0J6zYewvFFzZyXybFc8OUSHl9DD+YULjKRaJtjx1A/06r/VIZ9cEt6pHY+zjM42uYZFWPZgI+1rlE3GtlsocmYKebwed6fLfNSEGEjfItgqds1/3BrZ+d0nKfP2VJpgl4zMpZ/s+V7yZ22P3V8X2OuBLvJKF6jDM00ujfH9c6dZWz6qRm+KvbH9YBulaupPIhKPu3pbdInOClzIa+COxywJyWx56vJe9E1d77xRJNDl8jEYfSwEFKtSeJPj6Lr/9tq/858jIZd1vLkqG+xmzxDnChWHHGC62Y7bOJRm2zaaQwive9fC6lMSJLQbnaANJHbV4O53JSZTEe5xv93SK82s1QFO9gZ+n470XLgfUnnNg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB8426.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(66556008)(8676002)(66946007)(66476007)(26005)(186003)(316002)(508600001)(2616005)(110136005)(6506007)(6512007)(6486002)(52116002)(83380400001)(36756003)(2906002)(86362001)(5660300002)(38350700002)(38100700002)(4744005)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uJyuf1XZwOwLRdIe4msJffCxoNpbLNYf+/WnEjx+y0dSJhywmNDzxFfl1e8J?=
+ =?us-ascii?Q?tmrC0dMSin6wUPo7+0qoQFqONeBnP7zkl8k7w5fa3JiPb9w5h+rB8YNyxgft?=
+ =?us-ascii?Q?CRTquUujReo1+9fHzwAT+wWHy7tpZw8BbdI20oyDhgkOnQGve6sYaY4ITESO?=
+ =?us-ascii?Q?VKbCfgA2X7zOvg/3vRGsLuodJAwnudecjnO+k+ya58aZyxSkuQFM4HY1aG4O?=
+ =?us-ascii?Q?8T3ik2Qng5ebcBxScFUlImItQBxMFcjablINobH6Y9LrtoNAnEr3MjO8dlm+?=
+ =?us-ascii?Q?f86bvhXQLaXIDxgsaGaQT4s0cIQbqkbdAIFQlPrIEgcAeeZoI7k7Ikk64CL+?=
+ =?us-ascii?Q?5wNfkX8JAmf2DMjG+LupB3pJRAQmeR7/u/U7tKDHVF2JuZ9wDNBB9IDcTa0E?=
+ =?us-ascii?Q?xOyldNybyS5JlC0HXL9vVEDVDHl11uITN4OWxnD3dRLHM0xLWQjfIUqZoS6t?=
+ =?us-ascii?Q?AD9vZPO4Ny0FFdMsIoREFbVBTdycRbOwjAIzLFHXhIjcfU2q7KaEcne2C6iv?=
+ =?us-ascii?Q?ZBpW2aki8etQoEaGztSr88KzDRVFsL/HNu47dVmk4X9TNhNVEjMbtKSgCj2d?=
+ =?us-ascii?Q?ujyroZAWXl5ZNieeOqOuE6FTJVDbpyKVa+NRWNAJ1IWkTqX+wHkN+dCVocuL?=
+ =?us-ascii?Q?cHSGklkcfSjA0nNZbBnZgMnsKGhnbGOh2fP5jcKACkrqEWajKVke2d+Duyy4?=
+ =?us-ascii?Q?E3V3hpOtWANv0N//7QL3Wo1TEq9aW7XL2vvz24df0E019mK7053gWi+zrPuL?=
+ =?us-ascii?Q?yVRLWoV+T6MaKMxb7cO70QOGmCMW6JC5SI6/hsbGkslpbAzQQegm5rk9di7p?=
+ =?us-ascii?Q?fH62swWT5TcMVPUGLdmOg/dGQO3YnsYAtLQ+icQQOt4QAz3oxw43G2Oua0De?=
+ =?us-ascii?Q?IKbWTKGyDxHgFumwLgb8zYzPjl7ZQhEbhSQ3AhYh6/+QZphFlCBJm9/G8AzY?=
+ =?us-ascii?Q?7c75cx6kOLuUOt2xUMFvtTXYfmT8lmI+pXplyuAaK0jEzH4k1d4XMYlgiyTO?=
+ =?us-ascii?Q?ZO+NsNa8lmfIM3kmaNZXU8gWq4PppdZTh5HNWEa/+90SBLSyLlc8740NLSsg?=
+ =?us-ascii?Q?yFKeofFAzVIfKjPPuuDbNCsJDus0/GOS+ZmxIBp06+JCN6v318YZg3eZNzyK?=
+ =?us-ascii?Q?4sIfU1sBuhctqnmiNTg3aZltY8HabL5OpaEQrQGVOSc8qtpYt6505GBOZYlE?=
+ =?us-ascii?Q?8X0ru4gNXTQhxEXomiuAl0DDluBd345kZoCrHpoLIpKyBsEyEzq1lTH6pHSJ?=
+ =?us-ascii?Q?Wzxu49A5fOifrv0DXGQWYBE1DExt5HTQpFD1jzUG5l6/AL9PGyeryT80I6SM?=
+ =?us-ascii?Q?IaNcpNKOxOHP2d2kYM21R75RoheVmeBDlRiKRPkvWX+dXKqdBZ8kGffEJ/+o?=
+ =?us-ascii?Q?/fCPfVpmfXsnJ1tipKmWIGo8Y6DB5+HYisAs+4or6aOVc3ywySYt1MWpp4aZ?=
+ =?us-ascii?Q?7y9GMYhgm/Ko75xRCiRAWxfCO0N4AmNBVwvQ4srZJyqFIZllQzvq5VO8XHAf?=
+ =?us-ascii?Q?23kkPm1SEK2DylxMFrJQyWr4UURhtBEuqIvXz9r/2AvP7Swe9hDJyjErADwx?=
+ =?us-ascii?Q?x6cXekWM6k7dTSNY9CHPGM7tSwso2BdXOjT89GavAkdCjzrByScqRoBs2HwY?=
+ =?us-ascii?Q?22LThIQw2b6juWN8Czbxrd1kmoMU9KTjUCn8xzOOtlvtOPJl9leDbf0PMiw0?=
+ =?us-ascii?Q?tuYrJDDKWqrxzI/441SxzpfohJdRywXSI8N2byCx2W+0RD+gVcOAOD36QRcR?=
+ =?us-ascii?Q?WoIuELtDHhwffs9HoGfvZKx8lsa7pGFvAvno3FMDGvF5jdtVCrmD?=
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e243c6d-1a6f-4ee1-d366-08da1db450ad
+X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB8426.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2022 01:15:51.2640
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: o1dLgjAvWcjcaxB8rtn0i4Ez/AUaE+QbO+wlA9optjbRGa6xT2/tCbr+NpFvFDTqUVSu7PzCCJKcrm1SpgAANbtMMyC9mUPo0uJubdLmrlY6Kmsd7Ao9CbYiO0gOg4jl
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB2427
+X-Spam-Status: No, score=0.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 10/03/2022 at 12:45, Sergiu Moga wrote:
-> Swap `rx` and `tx` for the `dma-names` property of the `i2c` nodes
-> in order to maintain consistency across Microchip/Atmel SoC files.
-> 
-> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
-> Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-As it fixes some of the warning in dt schema check in 5.18-rc1, I queue 
-this patch in "fixes" branch for 5.18.
+ID_P_PM_BLOCKED is controlling PM status.
+We need to check it for pm_runtime_put() on rcar_i2c_probe(),
+otherwise it will be duplicated put.
 
-Thanks, best regards,
-   Nicolas
+Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+---
+Wolfram:
+It is not deeply tested.
 
-> ---
->   arch/arm/boot/dts/sama7g5.dtsi | 18 +++++++++---------
->   1 file changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
-> index 4decd3a91a76..f691c8f08d04 100644
-> --- a/arch/arm/boot/dts/sama7g5.dtsi
-> +++ b/arch/arm/boot/dts/sama7g5.dtsi
-> @@ -601,9 +601,9 @@ i2c1: i2c@600 {
->   				#size-cells = <0>;
->   				clocks = <&pmc PMC_TYPE_PERIPHERAL 39>;
->   				atmel,fifo-size = <32>;
-> -				dmas = <&dma0 AT91_XDMAC_DT_PERID(7)>,
-> -					<&dma0 AT91_XDMAC_DT_PERID(8)>;
-> -				dma-names = "rx", "tx";
-> +				dmas = <&dma0 AT91_XDMAC_DT_PERID(8)>,
-> +					<&dma0 AT91_XDMAC_DT_PERID(7)>;
-> +				dma-names = "tx", "rx";
->   				status = "disabled";
->   			};
->   		};
-> @@ -786,9 +786,9 @@ i2c8: i2c@600 {
->   				#size-cells = <0>;
->   				clocks = <&pmc PMC_TYPE_PERIPHERAL 46>;
->   				atmel,fifo-size = <32>;
-> -				dmas = <&dma0 AT91_XDMAC_DT_PERID(21)>,
-> -					<&dma0 AT91_XDMAC_DT_PERID(22)>;
-> -				dma-names = "rx", "tx";
-> +				dmas = <&dma0 AT91_XDMAC_DT_PERID(22)>,
-> +					<&dma0 AT91_XDMAC_DT_PERID(21)>;
-> +				dma-names = "tx", "rx";
->   				status = "disabled";
->   			};
->   		};
-> @@ -810,9 +810,9 @@ i2c9: i2c@600 {
->   				#size-cells = <0>;
->   				clocks = <&pmc PMC_TYPE_PERIPHERAL 47>;
->   				atmel,fifo-size = <32>;
-> -				dmas = <&dma0 AT91_XDMAC_DT_PERID(23)>,
-> -					<&dma0 AT91_XDMAC_DT_PERID(24)>;
-> -				dma-names = "rx", "tx";
-> +				dmas = <&dma0 AT91_XDMAC_DT_PERID(24)>,
-> +					<&dma0 AT91_XDMAC_DT_PERID(23)>;
-> +				dma-names = "tx", "rx";
->   				status = "disabled";
->   			};
->   		};
+ drivers/i2c/busses/i2c-rcar.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-
+diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
+index f71c730f9838..b5f0929bcea5 100644
+--- a/drivers/i2c/busses/i2c-rcar.c
++++ b/drivers/i2c/busses/i2c-rcar.c
+@@ -1121,7 +1121,8 @@ static int rcar_i2c_probe(struct platform_device *pdev)
+  out_del_device:
+ 	i2c_del_adapter(&priv->adap);
+  out_pm_put:
+-	pm_runtime_put(dev);
++	if (priv->flags & ID_P_PM_BLOCKED)
++		pm_runtime_put(dev);
+  out_pm_disable:
+ 	pm_runtime_disable(dev);
+ 	return ret;
 -- 
-Nicolas Ferre
+2.25.1
+
