@@ -2,59 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5541502E18
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Apr 2022 19:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65B7502E19
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Apr 2022 19:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356041AbiDORCq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 15 Apr 2022 13:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
+        id S1356051AbiDORCr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 15 Apr 2022 13:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356037AbiDORCo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 15 Apr 2022 13:02:44 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010AF532DF
+        with ESMTP id S1356046AbiDORCq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 15 Apr 2022 13:02:46 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7BE54187
+        for <linux-i2c@vger.kernel.org>; Fri, 15 Apr 2022 10:00:16 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id g20so10509440edw.6
         for <linux-i2c@vger.kernel.org>; Fri, 15 Apr 2022 10:00:15 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id k23so16290437ejd.3
-        for <linux-i2c@vger.kernel.org>; Fri, 15 Apr 2022 10:00:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language
          :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=k29L/Xi7olDMt2fBZ4FbGuDNkL5mRiH9SqZXW9yPuGE=;
-        b=Rb0+R5kdvxO2j7Kj6lI0Jmo75FnUCp+8tyoaB/rb4pdAFNcbxPtX39xLxy38FpHrfN
-         cgzBbyJz/8tH/zBstFisA6u3WNZBB6UlQ/ZVe5YLDLXQJKKnMWG5S6hcHTDTA9Rm2G2a
-         h+yqfLUPzb085yOYRY/mZqTGgIZKvKHihOGUe7Cz9vLzqo0BMA+rZZSPRd4jZEdAPEzd
-         ZZI1Du/2seEp6dmMbd9yPzm+R6sCBbmKkeoC2DifHDtfwqHZnfOZs4fAVWkkTuo25xMT
-         9UQB/jzM093a2LH1F4Fmo72qCsFQg+ggR2dVEXnSyLw/pyvVNTzLjKLH9XWpxFrosPQm
-         Yy3w==
+        bh=mSA7WCyLrRzQfIX93yIDBxzW5BL3jtV81phFmpM45Dk=;
+        b=W5E/n88p+LJggtggfX2UhlsUV9p3mYQEDd0a7gznULM6bgtw3HbmmZDk1T0Ah37T3I
+         6GgO9hK+0d28eQzh4c/ZgcpdnKNjBfapQLoYTv4nhxA/4s5UvcOeyob/wFs9sj7wmE4M
+         zuulKpleZpKgvQSG17ZHwdA5PE3hI0KTpIpujjRyWNIQBUXS2oEqbNy/f3GnRI+V/QKt
+         MrNpZlaDBHJ/RCSqz+a9KXrhmAdcvG+HViqurst+1OFbGF3gvgHCZCksSUHNco3eO4Lm
+         ef65aNzrIbMmkNfardsdxC1d43L5nlj9nNhLkiGBxNnoCAfeedxoieI7cdpsVJjpKmxF
+         lW9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=k29L/Xi7olDMt2fBZ4FbGuDNkL5mRiH9SqZXW9yPuGE=;
-        b=5Cn40rOeWohgowzO/srvLYgA2jMqFQ9x5FL0o820W9NIGVjoHhJjoxAw2cL8z6jNrC
-         PFeF+jaoJU1cYPnhevtBcF16b2fUSibCc7M8XgyGJHgPgHfivsRj+BfzLzfMTvT5lVRl
-         0p31cK0eAF4UtiVRsxJZfbanR8v3LI/rVnuseNLfvlBq7I9JWsb4f2PuyCHhEnEc0Wc8
-         FdTgTHbvgYMUwuob7ufP6X20s63gCHh4wHPleNkSUkY1MoYmPp/O7JmXq/5y2QamrZKL
-         h/7UEJhX0HByvkTcA7A1Bjc4Sl5wtjB8ebx7hMcb5IvIh9096nW14nz1wuRUS0CMdMdy
-         Jxow==
-X-Gm-Message-State: AOAM533BlwF7b3KtoJIii1dPpbVH9Nf3axF4sy6cKvzxHLoD9kpih71L
-        Mg7BjBGHaWI2W6yWOYm9rSQ6AWjEm64=
-X-Google-Smtp-Source: ABdhPJwJtJGSwQRLecyfzhRQBTimQGEQI58I3+WEu4MyYceG+OSgR42i0H/i2VavqiVLhPKPnWhAgA==
-X-Received: by 2002:a17:907:724a:b0:6e8:4f12:b6fd with SMTP id ds10-20020a170907724a00b006e84f12b6fdmr70132ejc.198.1650042013451;
-        Fri, 15 Apr 2022 10:00:13 -0700 (PDT)
+        bh=mSA7WCyLrRzQfIX93yIDBxzW5BL3jtV81phFmpM45Dk=;
+        b=H7ckSO9OuJc3EgiJk94h7XrPvGoA1FQlLlYq9JQ/iLJSYvv0RVb/lyNIItxo7r+bAO
+         9xN3EqIJNp58trm9lbKICmkjXQ69EZMOpDCbxdrWd9umU2DRCqz2A5bnmWs7VGfqDKRi
+         moQqWMTZb23UM0nUbqNw843lN7w9D6j2zWIZwzol1ppNdJS0aUHDW7Gvg+wOmE2fe8gD
+         rBmX5uGSwaPCBASOAm8rda9oG/jla0a40mSM3VuaMqKVfe6yj7h3gEpDFrVF8q5fdPnv
+         delT2n/p1eA+zcDD8JhTFNNxNrl+6LXninw9jDUVAKVQmrPT+dzEuu1yVTpIH12rk3oi
+         VDVw==
+X-Gm-Message-State: AOAM533HoBODQaSJS4unmcbHbHdTXh4cHvLNOnjcRYSSJZ+5WMY7ZhiF
+        nbZkLW8sVvnPPuvwlq97e78=
+X-Google-Smtp-Source: ABdhPJwlvfQdhJC6owOVuY84kOO0/u65bca23UI6Bi/tCYWgY9aOS/NcCKzS2mtzS/vwDePCcTLj+A==
+X-Received: by 2002:a05:6402:2709:b0:422:adc9:bc39 with SMTP id y9-20020a056402270900b00422adc9bc39mr155962edd.111.1650042014643;
+        Fri, 15 Apr 2022 10:00:14 -0700 (PDT)
 Received: from ?IPV6:2a01:c22:6faa:ed00:b906:e23f:946b:b9f7? (dynamic-2a01-0c22-6faa-ed00-b906-e23f-946b-b9f7.c22.pool.telefonica.de. [2a01:c22:6faa:ed00:b906:e23f:946b:b9f7])
-        by smtp.googlemail.com with ESMTPSA id b12-20020a056402278c00b004195a50759fsm3097849ede.84.2022.04.15.10.00.12
+        by smtp.googlemail.com with ESMTPSA id i12-20020a05640200cc00b00421058b175esm2659969edu.53.2022.04.15.10.00.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 10:00:12 -0700 (PDT)
-Message-ID: <eba39e4d-fb5f-c9d3-0d51-001f8d584d51@gmail.com>
-Date:   Fri, 15 Apr 2022 18:58:03 +0200
+        Fri, 15 Apr 2022 10:00:14 -0700 (PDT)
+Message-ID: <261bddb8-1a1e-13e9-8557-e4ad1c7f9826@gmail.com>
+Date:   Fri, 15 Apr 2022 18:58:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
-Subject: [PATCH 6/8] i2c: i801: add i801_single_transaction(), complementing
- i801_block_transaction()
+Subject: [PATCH 7/8] i2c: i801: call i801_check_pre() from i801_access()
 Content-Language: en-US
 From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Jean Delvare <jdelvare@suse.com>
@@ -73,166 +72,51 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This patch factors out non-block pre/post processing to a new function
-i801_single_transaction(), complementing existing function
-i801_block_transaction(). This makes i801_access() better readable.
+This avoids code duplication, in a next step we'll call
+i801_check_post() from i801_access() as well.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/busses/i2c-i801.c | 95 +++++++++++++++++++++--------------
- 1 file changed, 58 insertions(+), 37 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index bf77f8640..8c2245f38 100644
+index 8c2245f38..9061333f2 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -771,6 +771,62 @@ static int i801_block_transaction(struct i801_priv *priv, union i2c_smbus_data *
- 	return result;
- }
+@@ -460,10 +460,6 @@ static int i801_transaction(struct i801_priv *priv, int xact)
+ 	unsigned long result;
+ 	const struct i2c_adapter *adap = &priv->adapter;
  
-+/* Single transaction function */
-+static int i801_single_transaction(struct i801_priv *priv, union i2c_smbus_data *data,
-+				   char read_write, int command)
-+{
-+	int xact, ret;
-+
-+	switch (command) {
-+	case I2C_SMBUS_QUICK:
-+		xact = I801_QUICK;
-+		break;
-+	case I2C_SMBUS_BYTE:
-+                xact = I801_BYTE;
-+                break;
-+	case I2C_SMBUS_BYTE_DATA:
-+		if (read_write == I2C_SMBUS_WRITE)
-+			outb_p(data->byte, SMBHSTDAT0(priv));
-+		xact = I801_BYTE_DATA;
-+		break;
-+	case I2C_SMBUS_WORD_DATA:
-+		if (read_write == I2C_SMBUS_WRITE) {
-+			outb_p(data->word & 0xff, SMBHSTDAT0(priv));
-+			outb_p((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
-+		}
-+		xact = I801_WORD_DATA;
-+		break;
-+	case I2C_SMBUS_PROC_CALL:
-+		outb_p(data->word & 0xff, SMBHSTDAT0(priv));
-+		outb_p((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
-+		xact = I801_PROC_CALL;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	ret = i801_transaction(priv, xact);
-+
-+	if (ret || read_write == I2C_SMBUS_WRITE)
-+		return ret;
-+
-+	switch (command) {
-+	case I2C_SMBUS_BYTE:
-+	case I2C_SMBUS_BYTE_DATA:
-+		data->byte = inb_p(SMBHSTDAT0(priv));
-+		break;
-+	case I2C_SMBUS_WORD_DATA:
-+	case I2C_SMBUS_PROC_CALL:
-+		data->word = inb_p(SMBHSTDAT0(priv)) +
-+			     (inb_p(SMBHSTDAT1(priv)) << 8);
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
- static void i801_set_hstadd(struct i801_priv *priv, u8 addr, char read_write)
- {
- 	addr <<= 1;
-@@ -784,9 +840,7 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
- 		       unsigned short flags, char read_write, u8 command,
- 		       int size, union i2c_smbus_data *data)
- {
--	int hwpec;
--	int block = 0;
--	int ret, xact;
-+	int hwpec, ret, block = 0;
- 	struct i801_priv *priv = i2c_get_adapdata(adap);
+-	status = i801_check_pre(priv);
+-	if (status < 0)
+-		return status;
+-
+ 	if (priv->features & FEATURE_IRQ) {
+ 		reinit_completion(&priv->done);
+ 		outb_p(xact | SMBHSTCNT_INTREN | SMBHSTCNT_START,
+@@ -647,10 +643,6 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
+ 	if (command == I2C_SMBUS_BLOCK_PROC_CALL)
+ 		return -EOPNOTSUPP;
  
- 	mutex_lock(&priv->acpi_lock);
-@@ -804,36 +858,23 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
- 	switch (size) {
- 	case I2C_SMBUS_QUICK:
- 		i801_set_hstadd(priv, addr, read_write);
--		xact = I801_QUICK;
- 		break;
- 	case I2C_SMBUS_BYTE:
- 		i801_set_hstadd(priv, addr, read_write);
- 		if (read_write == I2C_SMBUS_WRITE)
- 			outb_p(command, SMBHSTCMD(priv));
--		xact = I801_BYTE;
- 		break;
- 	case I2C_SMBUS_BYTE_DATA:
- 		i801_set_hstadd(priv, addr, read_write);
- 		outb_p(command, SMBHSTCMD(priv));
--		if (read_write == I2C_SMBUS_WRITE)
--			outb_p(data->byte, SMBHSTDAT0(priv));
--		xact = I801_BYTE_DATA;
- 		break;
- 	case I2C_SMBUS_WORD_DATA:
- 		i801_set_hstadd(priv, addr, read_write);
- 		outb_p(command, SMBHSTCMD(priv));
--		if (read_write == I2C_SMBUS_WRITE) {
--			outb_p(data->word & 0xff, SMBHSTDAT0(priv));
--			outb_p((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
--		}
--		xact = I801_WORD_DATA;
- 		break;
- 	case I2C_SMBUS_PROC_CALL:
- 		i801_set_hstadd(priv, addr, I2C_SMBUS_WRITE);
- 		outb_p(command, SMBHSTCMD(priv));
--		outb_p(data->word & 0xff, SMBHSTDAT0(priv));
--		outb_p((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
--		xact = I801_PROC_CALL;
- 		read_write = I2C_SMBUS_READ;
- 		break;
- 	case I2C_SMBUS_BLOCK_DATA:
-@@ -883,7 +924,7 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
- 	if (block)
- 		ret = i801_block_transaction(priv, data, read_write, size);
- 	else
--		ret = i801_transaction(priv, xact);
-+		ret = i801_single_transaction(priv, data, read_write, size);
+-	status = i801_check_pre(priv);
+-	if (status < 0)
+-		return status;
+-
+ 	len = data->block[0];
  
- 	/* Some BIOSes don't like it when PEC is enabled at reboot or resume
- 	   time, so we forcibly disable it after every transaction. Turn off
-@@ -891,26 +932,6 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
- 	if (hwpec || block)
- 		outb_p(inb_p(SMBAUXCTL(priv)) &
- 		       ~(SMBAUXCTL_CRC | SMBAUXCTL_E32B), SMBAUXCTL(priv));
--
--	if (block)
--		goto out;
--	if (ret)
--		goto out;
--	if ((read_write == I2C_SMBUS_WRITE) || (xact == I801_QUICK))
--		goto out;
--
--	switch (xact) {
--	case I801_BYTE:	/* Result put in SMBHSTDAT0 */
--	case I801_BYTE_DATA:
--		data->byte = inb_p(SMBHSTDAT0(priv));
--		break;
--	case I801_WORD_DATA:
--	case I801_PROC_CALL:
--		data->word = inb_p(SMBHSTDAT0(priv)) +
--			     (inb_p(SMBHSTDAT1(priv)) << 8);
--		break;
--	}
--
- out:
- 	/*
- 	 * Unlock the SMBus device for use by BIOS/ACPI,
+ 	if (read_write == I2C_SMBUS_WRITE) {
+@@ -851,6 +843,10 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+ 
+ 	pm_runtime_get_sync(&priv->pci_dev->dev);
+ 
++	ret = i801_check_pre(priv);
++	if (ret)
++		goto out;
++
+ 	hwpec = (priv->features & FEATURE_SMBUS_PEC) && (flags & I2C_CLIENT_PEC)
+ 		&& size != I2C_SMBUS_QUICK
+ 		&& size != I2C_SMBUS_I2C_BLOCK_DATA;
 -- 
 2.35.3
 
