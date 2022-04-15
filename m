@@ -2,58 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9BA5030A0
-	for <lists+linux-i2c@lfdr.de>; Sat, 16 Apr 2022 01:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2553503101
+	for <lists+linux-i2c@lfdr.de>; Sat, 16 Apr 2022 01:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356110AbiDOVgQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 15 Apr 2022 17:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
+        id S1356108AbiDOVjK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 15 Apr 2022 17:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356108AbiDOVgP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 15 Apr 2022 17:36:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FD1C748B;
-        Fri, 15 Apr 2022 14:33:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12F38B83021;
-        Fri, 15 Apr 2022 21:33:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C426C385A5;
-        Fri, 15 Apr 2022 21:33:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650058423;
-        bh=dmfD8gJvfQz8+xpzJY079QIq69bv692mUtRVsFose0g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VuPlpI79krHgJhXKyBIRRYgKnTSHtUFLZQ714eenLXVKtw8kGDxbUwQclDwhmA/wV
-         BNtwhKqP7E95OMz7fTLaYvJQnZ72K87DAPNXeG/JRZEhKYL8ShVk3VlmBb79kNKA15
-         X/SRDd6JQzEY7k75+E2J4V7BDY2hxAkFuLWhw2CeSRPGo2/Tl0W58mn5f9KjhtdMWg
-         W/7SYttSs9+ISx5qXvquYKxre9rDkUi+GUw3o8kT6uqsXyVxmC0otUCUZA2vQ8+Snc
-         KsKJNZGOul0mrgUfmnzajrNiI23Yy/614QQpy8LGKEgisfQCAP1ZrLkaDfA0eDz2Hn
-         y8Ss/P53FOoRg==
-Date:   Fri, 15 Apr 2022 23:33:40 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] i2c: dev: Force case user pointers in
- compat_i2cdev_ioctl()
-Message-ID: <YlnktBB0uT3kmzo0@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220411180752.36920-1-andriy.shevchenko@linux.intel.com>
- <20220411180752.36920-2-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S1356118AbiDOVjF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 15 Apr 2022 17:39:05 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539133C705
+        for <linux-i2c@vger.kernel.org>; Fri, 15 Apr 2022 14:36:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=KcELiUq4UXkjbcAbGj+sesWF2rJC
+        rUIBupy8gzNtfbU=; b=ubFGBk2TPg6e9D+xvl4vLucv3Fo5xV6Zojj1Zboa09Gq
+        /qCx1WsqXPlEnog9q4IbbCvSvzI2I+Etb/4x7xrKeV9S4rLNPozj29lQqCOQtWzy
+        zhfC0cPO+K9V2w4o39wb5VtlCFBRtPYSNPMMxrU3aQrE6juArOETszvoZANYMPw=
+Received: (qmail 2350265 invoked from network); 15 Apr 2022 23:36:31 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Apr 2022 23:36:31 +0200
+X-UD-Smtp-Session: l3s3148p1@a500NLjcurIgAwDtxwyoAOfJPDZkSTZ/
+Date:   Fri, 15 Apr 2022 23:36:31 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>
+Subject: Re: [PATCH v4] i2c: rcar: add support for I2C_M_RECV_LEN
+Message-ID: <YlnlXwHTqFR7yRs+@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>
+References: <20220405100756.42920-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6CxANf8x6srDia+u"
+        protocol="application/pgp-signature"; boundary="VzUhE8JpOvSImoqk"
 Content-Disposition: inline
-In-Reply-To: <20220411180752.36920-2-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220405100756.42920-1-wsa+renesas@sang-engineering.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,48 +54,41 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---6CxANf8x6srDia+u
-Content-Type: text/plain; charset=utf-8
+--VzUhE8JpOvSImoqk
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 11, 2022 at 09:07:52PM +0300, Andy Shevchenko wrote:
-> Sparse has warned us about wrong address space for user pointers:
+On Tue, Apr 05, 2022 at 12:07:56PM +0200, Wolfram Sang wrote:
+> With this feature added, SMBus Block reads and Proc calls are now
+> supported. This patch is the best of two independent developments by
+> Wolfram and Bhuvanesh + Andrew, refactored again by Wolfram.
 >=20
->   i2c-dev.c:561:50: warning: incorrect type in initializer (different add=
-ress spaces)
->   i2c-dev.c:561:50:    expected unsigned char [usertype] *buf
->   i2c-dev.c:561:50:    got void [noderef] __user *
->=20
-> Force cast the pointer to (__u8 *) that is used by I=C2=B2C core code.
->=20
-> Note, this is an additional fix to the previously addressed similar issue
-> in the I2C_RDWR case in the same function.
->=20
-> Fixes: 3265a7e6b41b ("i2c: dev: Add __user annotation")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
+> Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Applied to for-current, thanks!
+Applied to for-next, thanks!
 
 
---6CxANf8x6srDia+u
+--VzUhE8JpOvSImoqk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJZ5LQACgkQFA3kzBSg
-KbYNOA//bjCJp6EkFMXNUP17edlc97VgHgbxAEKWstAWfaUZoryKMkHsOttvSZc/
-eTP2GxMtlgIlYJCQUqrDhaNKS/yXk3hblT+Xxh5MvU95UyKRI3ieBpwzTGHhXyGS
-qnqTZCeq1oLgqDnj5ufQd248Xer+c6zqG+dro+fOTxA4zgsDGyuH/UeTdNV03UAD
-4C4ZRciX3kSbgXpS1R1Lki5WXKfnSmMP0m2DXAc4c2DFyT/+mIV3AS+XzfHcfmzl
-3LvvobjjLfahBy5rOfMWmhFgCJFb8BA+LUbkSQjWz1QGoIbLHPbpuIRmRu5VQRzI
-cFRnfU+wUdb3/m3aVV+QEI5TJu1/esfk5CTSM1bBDae/sssfI7q/EYiC2K1Nd2HI
-zahKIEouL7DHh9PsInWCOUKgcvNpc0i+Zj86onkiBzmawN+Y/cZwlUD4m7q8LHoX
-OQ4VKsFi7l1ara5TVqbVqVjQKqQTl1nss/pYbUivosNAftL/2XpgeEWt/pirLKLo
-aRM4L1mSQqw8bynwtc+nq0RvA3KYUgozNSeT794yOc6mGjaTlRr9ImuqTiRk2Y4w
-qbvqfejSKwbiYDZPmW70UlnknT7QW2ICF9Cx5Veli1FPoPICqqpkdElq4+t6Dldr
-YNSZZiR4LzY/zUFvP72dg0L/9WIncppcNkP7Z9tJFmmskVGxyaI=
-=VHna
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJZ5V8ACgkQFA3kzBSg
+KbY5bw/9HolaQiOxvC5o9RMyWkwnUjCjG5ltNOHIXF5JCj76/SubNH0YoVSEH7Bh
+BiwTJDuV/O9Db0SUUzmD/RKpZcyC7QS/iiWqdnwP0xYlBxWi3pgXYmD/+rBLlefP
+PGD8+igxJV5guKHzz2RQhZIAjBcbX8LQRLzJOKRD6ydD3uYMuGvGiXJWfehjlH9+
+b3IsYolXsS2nDBjql2mu6/helqrlJQnmhjME4tijKz3cUrx6/CvWXflE7aAHn4KF
+gHHwif/QT1VqZuCpkc2sjElmjt6pbbu4vo6iDZz/luXUoOq27aC4LaHENXoDvOyi
+iwZR6x0evOH0AmuucL0Pv3B0Bc5ERaUNWHfp1bfGwpGwMGIhfxuORh66RMgUKsDo
+qwX+S0YvO9gnjVgBZYYvrphMGaTRsvtDdvoSgyXFebD1uSDLmZ/iGkVoaj1U359O
+BaHR2PYBg0n+qXuKnw1fwkJFeNW3jti/li64fhJXSFxM46jiXNV6gVQSUgmNIGF3
+Gf9GwgTz1xGIxreJyk3wmvNGyGFreIZNW9xUre2gq5lnCmHawcqRx+ZQ1JQYd8WO
+rX0ppWNkjdEpUK5omxXEsRKoSRJMU4M9Ie/EKWkmlHN01su2qnMDGIfqctTXemF8
+OOofkyZb0mO1xyZ6ctcGBOiRrEC26HolF4QxlXPSfG5VA0r/ts4=
+=rVkV
 -----END PGP SIGNATURE-----
 
---6CxANf8x6srDia+u--
+--VzUhE8JpOvSImoqk--
