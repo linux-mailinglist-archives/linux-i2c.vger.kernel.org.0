@@ -2,58 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65B7502E19
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Apr 2022 19:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB830502E1C
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Apr 2022 19:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356051AbiDORCr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S1356043AbiDORCr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Fri, 15 Apr 2022 13:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356046AbiDORCq (ORCPT
+        with ESMTP id S1356037AbiDORCq (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Fri, 15 Apr 2022 13:02:46 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7BE54187
-        for <linux-i2c@vger.kernel.org>; Fri, 15 Apr 2022 10:00:16 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id g20so10509440edw.6
-        for <linux-i2c@vger.kernel.org>; Fri, 15 Apr 2022 10:00:15 -0700 (PDT)
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FD254BC5
+        for <linux-i2c@vger.kernel.org>; Fri, 15 Apr 2022 10:00:17 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id l7so16311546ejn.2
+        for <linux-i2c@vger.kernel.org>; Fri, 15 Apr 2022 10:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language
          :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=mSA7WCyLrRzQfIX93yIDBxzW5BL3jtV81phFmpM45Dk=;
-        b=W5E/n88p+LJggtggfX2UhlsUV9p3mYQEDd0a7gznULM6bgtw3HbmmZDk1T0Ah37T3I
-         6GgO9hK+0d28eQzh4c/ZgcpdnKNjBfapQLoYTv4nhxA/4s5UvcOeyob/wFs9sj7wmE4M
-         zuulKpleZpKgvQSG17ZHwdA5PE3hI0KTpIpujjRyWNIQBUXS2oEqbNy/f3GnRI+V/QKt
-         MrNpZlaDBHJ/RCSqz+a9KXrhmAdcvG+HViqurst+1OFbGF3gvgHCZCksSUHNco3eO4Lm
-         ef65aNzrIbMmkNfardsdxC1d43L5nlj9nNhLkiGBxNnoCAfeedxoieI7cdpsVJjpKmxF
-         lW9Q==
+        bh=ASk5uZk2fLWGA+NYzLU0luN5ZBTpjvEbcnbyw6pqzkg=;
+        b=NmF1gfBuEWSPHJid0rX+RacmpMNnwKECJWmTVbJ70XTnVxUreHGXq7463L8DwPdiy6
+         TV28JGRgDjURZhntapTrP9CSa+bRmgbYKMnhB5n5kJ9Tpfh5vhTBmTqQXmR9KhN2LDi1
+         eYcfroHdMA3Z8UEc+603Grhzvhok1gsbtQ88w1jYWURBtmIVbrMKLuUikXId0GOyrKtz
+         S6PflafmTbXOFgLswbS1E7Y0cOhhRdY+K23MrIf+ROw971TFrdcqX9U9/mY9FpyD49uW
+         694B26zJT0aT6btN0Wk4JDOvavzuKcY4n3qqKbD4u9YEtvRdSwMLgD+9FSnNSf1OLOad
+         Xdig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=mSA7WCyLrRzQfIX93yIDBxzW5BL3jtV81phFmpM45Dk=;
-        b=H7ckSO9OuJc3EgiJk94h7XrPvGoA1FQlLlYq9JQ/iLJSYvv0RVb/lyNIItxo7r+bAO
-         9xN3EqIJNp58trm9lbKICmkjXQ69EZMOpDCbxdrWd9umU2DRCqz2A5bnmWs7VGfqDKRi
-         moQqWMTZb23UM0nUbqNw843lN7w9D6j2zWIZwzol1ppNdJS0aUHDW7Gvg+wOmE2fe8gD
-         rBmX5uGSwaPCBASOAm8rda9oG/jla0a40mSM3VuaMqKVfe6yj7h3gEpDFrVF8q5fdPnv
-         delT2n/p1eA+zcDD8JhTFNNxNrl+6LXninw9jDUVAKVQmrPT+dzEuu1yVTpIH12rk3oi
-         VDVw==
-X-Gm-Message-State: AOAM533HoBODQaSJS4unmcbHbHdTXh4cHvLNOnjcRYSSJZ+5WMY7ZhiF
-        nbZkLW8sVvnPPuvwlq97e78=
-X-Google-Smtp-Source: ABdhPJwlvfQdhJC6owOVuY84kOO0/u65bca23UI6Bi/tCYWgY9aOS/NcCKzS2mtzS/vwDePCcTLj+A==
-X-Received: by 2002:a05:6402:2709:b0:422:adc9:bc39 with SMTP id y9-20020a056402270900b00422adc9bc39mr155962edd.111.1650042014643;
-        Fri, 15 Apr 2022 10:00:14 -0700 (PDT)
+        bh=ASk5uZk2fLWGA+NYzLU0luN5ZBTpjvEbcnbyw6pqzkg=;
+        b=5ITiB2lxCOya/K9ke0CJIMYjb/Xof+PFDwdPRV+DJevygw75tlJB5kTjo9y7Qig3SY
+         CgqGqSp4LEqmLTfnPOVvQNAtLrnkj/8RYINfvUY7I4AKsmNv8+YADwnmZzKAH/ZTUOO9
+         b+f74gDZcOVZ6mTDZU4dHYxv7z6NPWCGhbJN0FhSnSTKvc+KvkAD5/ZxFlu5Kk7I43ZK
+         jrZblUUFBQOzS92gvjpMLwAN0lEuoBcjeYHEZ3FStT9SeDJV1DsEowpypCmVw0xaPlrF
+         sEOSsauKRYNDg9l2Or1+yGBg8KtwVqIHEJNUBKAk4p8I1swdR7JT4EV4sObhgbji+BXp
+         UE5Q==
+X-Gm-Message-State: AOAM530cLM56rk1zUKXpFyBVB7fDB0u87KIeKI4oddwF+Hz81GNzd6vy
+        jXge7sPrQXsbQpW64ygtodjTiF0CBzs=
+X-Google-Smtp-Source: ABdhPJx+XcEhmaPvic2CO771rKg5wOrCx6Qgs0nHjwchw24BL5njy317nF9ev0fldFF4Zeqw3pT/Ew==
+X-Received: by 2002:a17:907:6284:b0:6e0:f895:15a with SMTP id nd4-20020a170907628400b006e0f895015amr25680ejc.713.1650042015728;
+        Fri, 15 Apr 2022 10:00:15 -0700 (PDT)
 Received: from ?IPV6:2a01:c22:6faa:ed00:b906:e23f:946b:b9f7? (dynamic-2a01-0c22-6faa-ed00-b906-e23f-946b-b9f7.c22.pool.telefonica.de. [2a01:c22:6faa:ed00:b906:e23f:946b:b9f7])
-        by smtp.googlemail.com with ESMTPSA id i12-20020a05640200cc00b00421058b175esm2659969edu.53.2022.04.15.10.00.13
+        by smtp.googlemail.com with ESMTPSA id cq24-20020a056402221800b00420ad7d2dd0sm2888134edb.29.2022.04.15.10.00.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 10:00:14 -0700 (PDT)
-Message-ID: <261bddb8-1a1e-13e9-8557-e4ad1c7f9826@gmail.com>
-Date:   Fri, 15 Apr 2022 18:58:40 +0200
+        Fri, 15 Apr 2022 10:00:15 -0700 (PDT)
+Message-ID: <9103e680-6436-42a3-d4be-39edf851aaf9@gmail.com>
+Date:   Fri, 15 Apr 2022 18:59:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
-Subject: [PATCH 7/8] i2c: i801: call i801_check_pre() from i801_access()
+Subject: [PATCH 8/8] i2c: i801: call i801_check_post() from i801_access()
 Content-Language: en-US
 From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Jean Delvare <jdelvare@suse.com>
@@ -72,51 +72,97 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This avoids code duplication, in a next step we'll call
-i801_check_post() from i801_access() as well.
+Avoid code duplication by calling i801_check_post() from i801_access().
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/busses/i2c-i801.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 8c2245f38..9061333f2 100644
+index 9061333f2..ecec7a3a8 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -460,10 +460,6 @@ static int i801_transaction(struct i801_priv *priv, int xact)
+@@ -432,7 +432,7 @@ static int i801_wait_intr(struct i801_priv *priv)
+ 		busy = status & SMBHSTSTS_HOST_BUSY;
+ 		status &= STATUS_ERROR_FLAGS | SMBHSTSTS_INTR;
+ 		if (!busy && status)
+-			return status;
++			return status & STATUS_ERROR_FLAGS;
+ 	} while (time_is_after_eq_jiffies(timeout));
+ 
+ 	return -ETIMEDOUT;
+@@ -456,7 +456,6 @@ static int i801_wait_byte_done(struct i801_priv *priv)
+ 
+ static int i801_transaction(struct i801_priv *priv, int xact)
+ {
+-	int status;
  	unsigned long result;
  	const struct i2c_adapter *adap = &priv->adapter;
  
--	status = i801_check_pre(priv);
--	if (status < 0)
--		return status;
--
- 	if (priv->features & FEATURE_IRQ) {
- 		reinit_completion(&priv->done);
+@@ -465,13 +464,12 @@ static int i801_transaction(struct i801_priv *priv, int xact)
  		outb_p(xact | SMBHSTCNT_INTREN | SMBHSTCNT_START,
-@@ -647,10 +643,6 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
- 	if (command == I2C_SMBUS_BLOCK_PROC_CALL)
- 		return -EOPNOTSUPP;
+ 		       SMBHSTCNT(priv));
+ 		result = wait_for_completion_timeout(&priv->done, adap->timeout);
+-		return i801_check_post(priv, result ? priv->status : -ETIMEDOUT);
++		return result ? priv->status : -ETIMEDOUT;
+ 	}
  
--	status = i801_check_pre(priv);
--	if (status < 0)
--		return status;
--
- 	len = data->block[0];
+ 	outb_p(xact | SMBHSTCNT_START, SMBHSTCNT(priv));
  
- 	if (read_write == I2C_SMBUS_WRITE) {
-@@ -851,6 +843,10 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+-	status = i801_wait_intr(priv);
+-	return i801_check_post(priv, status);
++	return i801_wait_intr(priv);
+ }
  
- 	pm_runtime_get_sync(&priv->pci_dev->dev);
+ static int i801_block_transaction_by_block(struct i801_priv *priv,
+@@ -618,7 +616,7 @@ static irqreturn_t i801_isr(int irq, void *dev_id)
  
-+	ret = i801_check_pre(priv);
-+	if (ret)
-+		goto out;
+ 	status &= STATUS_ERROR_FLAGS | SMBHSTSTS_INTR;
+ 	if (status) {
+-		priv->status = status;
++		priv->status = status & STATUS_ERROR_FLAGS;
+ 		complete(&priv->done);
+ 	}
+ 
+@@ -668,7 +666,7 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
+ 		reinit_completion(&priv->done);
+ 		outb_p(priv->cmd | SMBHSTCNT_START, SMBHSTCNT(priv));
+ 		result = wait_for_completion_timeout(&priv->done, adap->timeout);
+-		return i801_check_post(priv, result ? priv->status : -ETIMEDOUT);
++		return result ? priv->status : -ETIMEDOUT;
+ 	}
+ 
+ 	for (i = 1; i <= len; i++) {
+@@ -682,7 +680,7 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
+ 
+ 		status = i801_wait_byte_done(priv);
+ 		if (status)
+-			goto exit;
++			return status;
+ 
+ 		if (i == 1 && read_write == I2C_SMBUS_READ
+ 		 && command != I2C_SMBUS_I2C_BLOCK_DATA) {
+@@ -712,9 +710,7 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
+ 		outb_p(SMBHSTSTS_BYTE_DONE, SMBHSTSTS(priv));
+ 	}
+ 
+-	status = i801_wait_intr(priv);
+-exit:
+-	return i801_check_post(priv, status);
++	return i801_wait_intr(priv);
+ }
+ 
+ /* Block transaction function */
+@@ -922,6 +918,8 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+ 	else
+ 		ret = i801_single_transaction(priv, data, read_write, size);
+ 
++	ret = i801_check_post(priv, ret);
 +
- 	hwpec = (priv->features & FEATURE_SMBUS_PEC) && (flags & I2C_CLIENT_PEC)
- 		&& size != I2C_SMBUS_QUICK
- 		&& size != I2C_SMBUS_I2C_BLOCK_DATA;
+ 	/* Some BIOSes don't like it when PEC is enabled at reboot or resume
+ 	   time, so we forcibly disable it after every transaction. Turn off
+ 	   E32B for the same reason. */
 -- 
 2.35.3
 
