@@ -2,61 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B4E502E01
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Apr 2022 18:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4264C502E13
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Apr 2022 19:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355861AbiDOQ4E (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 15 Apr 2022 12:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43050 "EHLO
+        id S1356033AbiDORCc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 15 Apr 2022 13:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234466AbiDOQ4E (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 15 Apr 2022 12:56:04 -0400
+        with ESMTP id S1356054AbiDORC3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 15 Apr 2022 13:02:29 -0400
 Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C259728B
-        for <linux-i2c@vger.kernel.org>; Fri, 15 Apr 2022 09:53:35 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id s25so10043615edi.13
-        for <linux-i2c@vger.kernel.org>; Fri, 15 Apr 2022 09:53:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C648B3E5C9
+        for <linux-i2c@vger.kernel.org>; Fri, 15 Apr 2022 09:59:59 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id b15so10519294edn.4
+        for <linux-i2c@vger.kernel.org>; Fri, 15 Apr 2022 09:59:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=6LpYU4N//QjLB0vLS7ZLbmqjiPwib6o+qQNX7EGbHmQ=;
-        b=jit544Ky4NcT15BzcYq4YZAyWTAdDb9L7hXzVBAi30OwSv6YWiLiGC0hXX8kDM7g43
-         34vaW4PKID1PuDjyhahrKnF5I61K9HRtES2obvAsiffBwNaCX4NEnAtZdY4Jh++uS/+8
-         X+We46yPJso5TRwzj5ukf1wTSrsUA+q3SY3o8dg51kFe7zWe6FAaYFZ4pdT5ZRiM8iiZ
-         /QSX8jvUMQmHbZA+QeHkk8p4lFBkRCAC8TIyJXTYE8yvFX7QgCKlpwED7iwvCOut7+e+
-         jYEII9hroFaW+xky/jB3vTFBzLBADXchJ+gAeE+wyRN5ujPN/DZ72MJDn/m4/P4qlGGl
-         Ncjg==
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=J0MymH7xtuu9E48UR9lg1o6xdrHIesht/4b5Wb50scs=;
+        b=ChFHSrLLHfk+v+xhFOgz0Ou9lj2yJJPnZvBJTZS4hXK6BnWm8urfGusOKe8X6uP6vv
+         OYBjb4TOpWkwDKCQpNti3z2aI3VY3xwapCtEI66T+5vF9orNkREca0xzmEddL1yAK62L
+         P7WzJETBQePvFtc1iBmDWxMVgCt4auHjeHhu4/swWCNhgNQPobNK5+TgSXg/IXSPaoUt
+         Fl9Zrtkl85GXyJV1dUSBOnDqvAEkYYeEEoaHARWY7hQLk7154xN2utnQsBfwHpQBHrN5
+         XI3+ezGDagGKDpW/dpZzSj+xnOvzki6b7OsWGL/Wi2cg41NVNjT4PiPOsuju6xZAa30J
+         ak5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=6LpYU4N//QjLB0vLS7ZLbmqjiPwib6o+qQNX7EGbHmQ=;
-        b=CJ3BW/aJSTvE0feC3hRydh8RR8dxM8uYLh3npWEOgMsBG59s12FZLE6Yi8/HyRysAQ
-         HgYIN5My+Me6lggWWWiNyXgsRIVgj4j3Jed1kYgjVuoIrZ2qiyOIEyUKfnhflqeX3ojJ
-         /SabS6htQ3VM2Gqj+M3H1tXTPQLloipH+g+QOEIZzeTY1YkqYJ8yxLtz5eF4WOrMn8eM
-         2MdLWJnAuJDo+YpTCIk0Oex7N2CcdEwikmEPJc6yqcOJC6nNqkgRL3nxep+o6U2SxFIn
-         1xS7PfrGhSjyWwTnLw/+/rqa9J9cbRxdQPoghOyklEQ+NJ3Wz32y2d/vorb4rq34cdZP
-         g6mQ==
-X-Gm-Message-State: AOAM532XeAVS0wuxn3k1Pv74dy3c8IM47erIoVzL7gNsxbiA6U3vHdrq
-        8I8BdkBqpy9H2krxW9J9aZWD8djdSG8=
-X-Google-Smtp-Source: ABdhPJynAL5PGH05jHjrjIkpycL/iD7MP69YJQAEnFIauNHZNqN7EVKtoGByURNz6gw2JFTJ5kzXBA==
-X-Received: by 2002:aa7:db0f:0:b0:41d:7b44:2613 with SMTP id t15-20020aa7db0f000000b0041d7b442613mr163350eds.126.1650041613539;
-        Fri, 15 Apr 2022 09:53:33 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=J0MymH7xtuu9E48UR9lg1o6xdrHIesht/4b5Wb50scs=;
+        b=rU4DlNVd6s0cyQJBhnizU3rlDuVa9NJvu5k85YJ5qM+ToQWkS9+4jLYIxlexI9R4Mm
+         PHNL5y7wF17ep/OlnpMzhakkucjoxyZkWm8s6SENvUq1ic2linwOmk5bNeNxhUwNohr4
+         AtayzlBzwp1iZyulQwqWGURDvuuAgbDLzm/9S7j2YQpgvV8wzrD5HWQbgmjcMgJWMIPK
+         SDq9n16cHU2G7grBBvNVIc4AHY9EDzSTygwzPl4ZdrlR92iAorpUkKmeO2tLWgHru0EV
+         SFa5puCDKKuGYWIHYER8OmdnbJ4q3chpDjWafUk3P2vsFnmS9+z9DpLzZPib+iK1V8NL
+         bPPg==
+X-Gm-Message-State: AOAM531kFT3Zlcmaosyzcy6YzcCDahuGL72Bhn5SOQcbR96EDNbZcXNz
+        FMcpeSMjbjGKMspx4Ghlam8DmT8c9Qk=
+X-Google-Smtp-Source: ABdhPJwa0P0d7u/ram1ThJ5YXF2F281QeMBTG3sctlUeBBES5l36Oj7uZ5aN0kNhIVi1Uh7HIg6xDA==
+X-Received: by 2002:aa7:c793:0:b0:408:4a69:90b4 with SMTP id n19-20020aa7c793000000b004084a6990b4mr194081eds.58.1650041998274;
+        Fri, 15 Apr 2022 09:59:58 -0700 (PDT)
 Received: from ?IPV6:2a01:c22:6faa:ed00:b906:e23f:946b:b9f7? (dynamic-2a01-0c22-6faa-ed00-b906-e23f-946b-b9f7.c22.pool.telefonica.de. [2a01:c22:6faa:ed00:b906:e23f:946b:b9f7])
-        by smtp.googlemail.com with ESMTPSA id el14-20020a056402360e00b0042121aee887sm2373587edb.77.2022.04.15.09.53.32
+        by smtp.googlemail.com with ESMTPSA id 10-20020a170906310a00b006e834953b55sm1803245ejx.27.2022.04.15.09.59.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 09:53:32 -0700 (PDT)
-Message-ID: <4125f9ce-ce5f-fbcf-7d6f-9bc586ac43e0@gmail.com>
-Date:   Fri, 15 Apr 2022 18:53:04 +0200
+        Fri, 15 Apr 2022 09:59:57 -0700 (PDT)
+Message-ID: <05bec021-6958-0157-b825-619ac21ddd41@gmail.com>
+Date:   Fri, 15 Apr 2022 18:54:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
+Subject: [PATCH 1/8] i2c: i801: improve interrupt handler
 Content-Language: en-US
+From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Jean Delvare <jdelvare@suse.com>
 Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH 0/8] i2c: i801: Series with minor improvements
+References: <4125f9ce-ce5f-fbcf-7d6f-9bc586ac43e0@gmail.com>
+In-Reply-To: <4125f9ce-ce5f-fbcf-7d6f-9bc586ac43e0@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,24 +72,72 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This series includes a number of minor improvements, partially it's
-a re-send of patches submitted in December last year already.
+Not sure if it can happen, but better play safe: If SMBHSTSTS_BYTE_DONE
+and an error flag is set, then don't trust the result and skip calling
+i801_isr_byte_done(). In addition clear status bit SMBHSTSTS_BYTE_DONE
+in the main interrupt handler, this allows to simplify the code a
+little.
 
-Heiner Kallweit (8):
-  i2c: i801: improve interrupt handler
-  i2c: i801: make FEATURE_HOST_NOTIFY dependent on FEATURE_IRQ
-  i2c: i801: make FEATURE_BLOCK_PROC dependent on FEATURE_BLOCK_BUFFER
-  i2c: i801: enable FEATURE_IRQ and FEATURE_I2C_BLOCK_READ on all chip
-    versions
-  i2c: i801: add helper i801_set_hstadd
-  i2c: i801: add i801_single_transaction(), complementing
-    i801_block_transaction()
-  i2c: i801: call i801_check_pre() from i801_access()
-  i2c: i801: call i801_check_post() from i801_access()
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+ drivers/i2c/busses/i2c-i801.c | 25 ++++++++-----------------
+ 1 file changed, 8 insertions(+), 17 deletions(-)
 
- drivers/i2c/busses/i2c-i801.c | 339 ++++++++++++++++++----------------
- 1 file changed, 175 insertions(+), 164 deletions(-)
-
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index ff706349b..c481f121d 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -556,9 +556,6 @@ static void i801_isr_byte_done(struct i801_priv *priv)
+ 		/* Write next byte, except for IRQ after last byte */
+ 		outb_p(priv->data[++priv->count], SMBBLKDAT(priv));
+ 	}
+-
+-	/* Clear BYTE_DONE to continue with next byte */
+-	outb_p(SMBHSTSTS_BYTE_DONE, SMBHSTSTS(priv));
+ }
+ 
+ static irqreturn_t i801_host_notify_isr(struct i801_priv *priv)
+@@ -588,7 +585,6 @@ static irqreturn_t i801_host_notify_isr(struct i801_priv *priv)
+  *      BUS_ERR - SMI# transaction collision
+  *      FAILED - transaction was canceled due to a KILL request
+  *    When any of these occur, update ->status and signal completion.
+- *    ->status must be cleared before kicking off the next transaction.
+  *
+  * 2) For byte-by-byte (I2C read/write) transactions, one BYTE_DONE interrupt
+  *    occurs for each byte of a byte-by-byte to prepare the next byte.
+@@ -613,23 +609,18 @@ static irqreturn_t i801_isr(int irq, void *dev_id)
+ 	}
+ 
+ 	status = inb_p(SMBHSTSTS(priv));
+-	if (status & SMBHSTSTS_BYTE_DONE)
++	if ((status & SMBHSTSTS_BYTE_DONE) && !(status & STATUS_ERROR_FLAGS))
+ 		i801_isr_byte_done(priv);
+ 
+ 	/*
+-	 * Clear remaining IRQ sources: Completion of last command, errors
+-	 * and the SMB_ALERT signal. SMB_ALERT status is set after signal
+-	 * assertion independently of the interrupt generation being blocked
+-	 * or not so clear it always when the status is set.
+-	 */
+-	status &= SMBHSTSTS_INTR | STATUS_ERROR_FLAGS | SMBHSTSTS_SMBALERT_STS;
+-	if (status)
+-		outb_p(status, SMBHSTSTS(priv));
+-	status &= ~SMBHSTSTS_SMBALERT_STS; /* SMB_ALERT not reported */
+-	/*
+-	 * Report transaction result.
+-	 * ->status must be cleared before the next transaction is started.
++	 * Clear IRQ sources: SMB_ALERT status is set after signal assertion
++	 * independently of the interrupt generation being blocked or not
++	 * so clear it always when the status is set.
+ 	 */
++	status &= STATUS_FLAGS | SMBHSTSTS_SMBALERT_STS;
++	outb_p(status, SMBHSTSTS(priv));
++
++	status &= STATUS_ERROR_FLAGS | SMBHSTSTS_INTR;
+ 	if (status) {
+ 		priv->status = status;
+ 		complete(&priv->done);
 -- 
 2.35.3
+
 
