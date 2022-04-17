@@ -2,53 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A88E0504620
-	for <lists+linux-i2c@lfdr.de>; Sun, 17 Apr 2022 04:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D8750462F
+	for <lists+linux-i2c@lfdr.de>; Sun, 17 Apr 2022 05:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233283AbiDQCaN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 16 Apr 2022 22:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
+        id S233387AbiDQDDz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 16 Apr 2022 23:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbiDQCaM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 16 Apr 2022 22:30:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35D840909
-        for <linux-i2c@vger.kernel.org>; Sat, 16 Apr 2022 19:27:37 -0700 (PDT)
+        with ESMTP id S233373AbiDQDDn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 16 Apr 2022 23:03:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66A8222A2;
+        Sat, 16 Apr 2022 20:01:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C96461027
-        for <linux-i2c@vger.kernel.org>; Sun, 17 Apr 2022 02:27:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EA21C385A3;
-        Sun, 17 Apr 2022 02:27:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB62FB80835;
+        Sun, 17 Apr 2022 03:01:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB9DEC385A1;
+        Sun, 17 Apr 2022 03:01:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650162456;
-        bh=tpD+Tr6/Z7h3kNVI5ow60huxqpFBnXzy98WYzHD92mo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e3de4zEojVr4xa1ziBtVZZ6AA1a4A+aQbebg/vk6pobBYqF18meZm2wKT/PrQcu7f
-         LxJFKoYnZ+UbwH6LB677tw79r7y2FH6Rx+tMtoVFdGnIrknlLNFwfKHi3pCWO2sxUw
-         JDVaxfKmaGg3QdtZpDcX41CWRCI7iNUyY5PeS4T3xMDtxtXX3oMlVZf149pdbo56WY
-         ZNCYQ6cnVjgYdvEDMzM8128X0JEfk0JMmLkXiJszRRxJY0XevNZnfa/TOjD4Fwylqn
-         Z3W34f/BrdYBeAT63NWdWGYzn2vk35lhjzMfPz9ZIZR665uvwVwLo89qjwU5LJ1vKs
-         10RQM217UXZ0g==
-Date:   Sun, 17 Apr 2022 04:27:33 +0200
+        s=k20201202; t=1650164465;
+        bh=lUFkJLDBY6NZ/dlERmsGK/M1rsZz04lLDTPMRsMyWsc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=WoCQ7IoBa8yT0C13PQp3NBcP/9GQAt9xpZX5RPB8GJHMSmXgjCFhKttxf3ESdd/v2
+         pQwvb8dCuPjBaqvtz+3PLxW2CktBvOeOqGu8rp0O0rI/0qTC7niCdkKQwieWkGiuNu
+         uBbel5pkRISyVV4b56dFQ/ye51RC7yl+r7nuKDwPSqrfhuKuRtlBGAY/ICcNZsakpY
+         1pgdY+olO14wN9Ubj/Qjs0IHA3H8jQhf0cXzKzPTtTdVSzxTlnY74rX4VdbmsSzcXM
+         aL8lTKWH+ePVwjILzbj/NMcKYJn/P9AgBs1E1+VjW8B2D0UI30eH8wJS2/CfAiSSMP
+         QKPHVZ+nJ3jCg==
+Date:   Sun, 17 Apr 2022 05:01:02 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: i801: I2C block read should be usable also on
- ICH/ICH0/ICH2/ICH3/ICH4
-Message-ID: <Ylt7FU/3TTvvcNx7@shikoro>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for v5.18
+Message-ID: <YluC7rAj5syHOYWi@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <b4cb50db-7226-282f-e04a-02fbe0b605a0@gmail.com>
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5PbVUHGuYLJWDvrX"
+        protocol="application/pgp-signature"; boundary="K1b8b/K9oM98zgqc"
 Content-Disposition: inline
-In-Reply-To: <b4cb50db-7226-282f-e04a-02fbe0b605a0@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,61 +58,92 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---5PbVUHGuYLJWDvrX
-Content-Type: text/plain; charset=us-ascii
+--K1b8b/K9oM98zgqc
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 06, 2021 at 10:18:49PM +0100, Heiner Kallweit wrote:
-> Currently we use the following feature definitions. However, according to
-> the respective datasheets, also ICH/ICH0/ICH2/ICH3/ICH4 support I2C block
-> read. The implementation we have should work also on these chip versions.
->=20
-> The commit message of 6342064cad7a ("i2c-i801: Implement I2C block read
-> support") states that i2c block read is supported from ICH5 only.
-> This doesn't seem to be true. Or is this feature broken on older chip
-> versions?=20
->=20
-> To me it seems we could remove FEATURE_I2C_BLOCK_READ because all chip
-> versions support this feature. Below is an experimental patch, for the
-> ones with test hw. A test case could be to use decode-dimms that
-> uses i2c block read to read the EEPROM content.
->=20
-> * Supports the following Intel I/O Controller Hubs (ICH):
->  *
->  *					I/O			Block	I2C
->  *					region	SMBus	Block	proc.	block
->  * Chip name			PCI ID	size	PEC	buffer	call	read
->  * ----------------------------------------------------------------------=
------
->  * 82801AA (ICH)		0x2413	16	no	no	no	no
->  * 82801AB (ICH0)		0x2423	16	no	no	no	no
->  * 82801BA (ICH2)		0x2443	16	no	no	no	no
->  * 82801CA (ICH3)		0x2483	32	soft	no	no	no
->  * 82801DB (ICH4)		0x24c3	32	hard	yes	no	no
->  * 82801E (ICH5)		0x24d3	32	hard	yes	yes	yes
+Linus,
 
-Any reason you skipped this patch in your latest series?
+I2C has a quite regular set of fixes for drivers and the dev-interface.
+
+Please pull.
+
+Thanks,
+
+   Wolfram
 
 
---5PbVUHGuYLJWDvrX
+The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
+
+  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-curre=
+nt
+
+for you to fetch changes up to e35c93695c742b88f5fe32063674551440c63d08:
+
+  i2c: ismt: Fix undefined behavior due to shift overflowing the constant (=
+2022-04-15 23:49:02 +0200)
+
+----------------------------------------------------------------
+Andy Shevchenko (2):
+      i2c: dev: check return value when calling dev_set_name()
+      i2c: dev: Force case user pointers in compat_i2cdev_ioctl()
+
+Bjorn Andersson (1):
+      i2c: qcom-geni: Use dev_err_probe() for GPI DMA error
+
+Borislav Petkov (1):
+      i2c: ismt: Fix undefined behavior due to shift overflowing the consta=
+nt
+
+Marek Vasut (1):
+      i2c: imx: Implement errata ERR007805 or e7805 bus frequency limit
+
+Martin Povi=C5=A1er (1):
+      i2c: pasemi: Wait for write xfers to finish
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Seth Heasley (1):
+      (Rev.) i2c: ismt: Fix undefined behavior due to shift overflowing the=
+ constant
+
+Sven Peter (1):
+      (Rev.) i2c: pasemi: Wait for write xfers to finish
+
+Vinod Koul (1):
+      (Rev.) i2c: qcom-geni: Use dev_err_probe() for GPI DMA error
+
+ drivers/i2c/busses/i2c-imx.c         | 33 +++++++++++++++++++++++++++++++++
+ drivers/i2c/busses/i2c-ismt.c        |  4 ++--
+ drivers/i2c/busses/i2c-pasemi-core.c |  6 ++++++
+ drivers/i2c/busses/i2c-qcom-geni.c   |  6 ++----
+ drivers/i2c/i2c-dev.c                | 17 +++++++++++------
+ 5 files changed, 54 insertions(+), 12 deletions(-)
+
+--K1b8b/K9oM98zgqc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJbexUACgkQFA3kzBSg
-KbaQJA/8DGTTuHvIW9Eq4giPkDEjLgmcTnZAVuWHagPyiAkhgW/4ykcJ1sEt85Yh
-zw+Qc9oDehg1niOV8VAnhBZmz/5Nqq+Q4m0/ZrGqDaPpaJO4bxp0r7tHFyOCLyW+
-wY8RBRWpeAEj2O3er9onROAsXXaIpz4Vv6rlUhrtYjikB0EjMJiJqO8iIZpex/WE
-K0WxuBCOqNjuNN9IWTS3ypVB6TtDCkPcOWQP6cQ3rvHW4ZaawX5hWU6MCJu1apIs
-Z17QqD3LvpjdoARJaE9hGRXyf+2mbOk5za+uCaddTgz7SpE5B0AUix1VTwQTDP6J
-8C2hmTU2ez8ImdW8gX1cFy6vlo1tQcn6izguLya/hXJ35+1YYpMfKeY6dIip0fou
-H1z97zSjtfgN320pIwY87PRXszy0kOCp0BZXma+tH1jqXz7qJFN879NrkblUAwLp
-d6UVb4L85Tych52qRK7lNEofNy08il5i0D4Z451QlcQSnbIzYaKbTJ79M4ieVKgP
-4kEr/9iY0ZlhMx7wf4LWfZeewZhWm+FMCMXpMex0fFS4lavgrLYB1aIY46ccAqcy
-q4y+RDCOhj1AMylCvE8Cdad//c1yHDUulxoQkF5HJqd1lMcIY0GhzMtU5AbjqU+A
-Tmbd2Syo75vDdud/i5K/asEfMplPgTXe5Dk5Sai16heQdfQuv8Y=
-=D8Gy
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJbgukACgkQFA3kzBSg
+KbZbqhAArzYscKt3nDsd5QT1v+szQtV9azuSIK1drUDpAf7A51PduRbik6HQjHhQ
+CcmLRZwyORMJzoIUoxq47FaZSgW0rPbb0h5yIlpre3amiBAx55gtCasTwV9WTBNS
+Scrn7cQixr8CKlSOyuCcrRTC5s0uQwGrzxuKZfNrIexhnhppJy0h4W2zhjS1GnES
+VB9AIvAQlCgNq5Bjg/GgF7CbsFSD1OU0ieGW/kVl0ygjpj6/tdq0bNqT8udPYPX6
+8vd86qL1OicyQQvNkTwM5rysbP10qeLyU6Fv4123HKFbcKFfxEpDLs3z2PHWjdY8
+ib+uHsNakYzeAq10QXLIR0cO7tqdWF1nNdaAJTJPJgyQvmtRvARygTYJuvkr+QA0
+Gi6Pyb2PZvkI+mcPhHqAeKsU/OwYDZm3IPSh72QwPla9Abahn1SlwIMrvXq7rWmh
+WbQBDfpvsEJYcveLs47CbHA91dwBdJPmtgxKKLLwGb4scxly2Uj2DXYdxaNmtXLj
+aGRlutTmE52qYTEUP2psziTjEYoRjKR4Re7+oGUm5wDRG9rJFQIDVZ5pqnvsKjDM
+dOfAUqCin8VKcPNliuep6v8fgd0dY8yPx1C5kZAoeXn0TjORaPLHcwnSWL/yVJ81
+2PVlg5a0OtD/JiClGmbZvpjp3BxdsW107YRFxeujocgo7eE99W4=
+=Zqhk
 -----END PGP SIGNATURE-----
 
---5PbVUHGuYLJWDvrX--
+--K1b8b/K9oM98zgqc--
