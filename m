@@ -2,109 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE68504753
-	for <lists+linux-i2c@lfdr.de>; Sun, 17 Apr 2022 11:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F48F504856
+	for <lists+linux-i2c@lfdr.de>; Sun, 17 Apr 2022 18:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233771AbiDQJM3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 17 Apr 2022 05:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
+        id S234404AbiDQQfp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 17 Apr 2022 12:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233750AbiDQJM1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 17 Apr 2022 05:12:27 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8FD140C8
-        for <linux-i2c@vger.kernel.org>; Sun, 17 Apr 2022 02:09:52 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id t25so14560176edt.9
-        for <linux-i2c@vger.kernel.org>; Sun, 17 Apr 2022 02:09:52 -0700 (PDT)
+        with ESMTP id S234403AbiDQQfo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 17 Apr 2022 12:35:44 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635B233E94
+        for <linux-i2c@vger.kernel.org>; Sun, 17 Apr 2022 09:33:08 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id q14so14523594ljc.12
+        for <linux-i2c@vger.kernel.org>; Sun, 17 Apr 2022 09:33:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=GiPK6NF7dA83/ZSlJ194lqXCRBkv0Amy9M4fkRNGgTQ=;
-        b=KK9reSaYWMJkb2LTAcRu4vnFrWuMGSD5uZkIQOaEn8Dgr/cikkKCse0sxICtqJJo3v
-         3fREWJM+QjRtZjoCw9OHRhcMDoUYIEhZO3M4Pudcq3FDzPhUEVNdUy2RM/M/LWjXitKc
-         upd+hwELrFPG9BfJnWvch5KEi6BWi2bheu3Qkb4x9Eq3efeLND1Ix3gt1GuY0zjyMz1x
-         /EZcKY2zulqHCUccb/SHM5mViwBudOep0EiC4woamZTK9o0hoLrfPhCQtYjD5/FPu/kv
-         MbipPhRpsuMxIz+KUqSqQxqEtyErCBJ53bGUBVl3sh36++NBmtYUggR+rPf6+L7tHQqG
-         soLQ==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=EzHT4bjn+XF/AaUOpciq4qGv6/YksgSdEhZzkeKjcvo=;
+        b=e+OYMo3kxvENVv8OuYHnr/PMfrf41QlQfF/zz3+oCdT1na1kGstke0S5ZPB63i3aYe
+         2Zdz2IVdCpdVb1N2aJzO9JeInwOyzB2Xc1T0Bt7vPbCHdZTJmCxnSFtTChwTvo5HCSVC
+         34j2qNKoVWR2I8SrPrj7Qef//KoRIa+hP7TXg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GiPK6NF7dA83/ZSlJ194lqXCRBkv0Amy9M4fkRNGgTQ=;
-        b=ND9jUDZB69kjSN0N3I470pk1vuLo2iEa8RxnNfNSeog8xT27yKNgn8h8Q6OiBl49An
-         erPzqG/4G04RV84QmB8C7Tpz4w6qLjK3elfkwdW54mVXPFNUU1zFUXHbebPCvoo7djQn
-         zaZtoYrXhPu4QNWPUmBKm1P4FV3Rq+1cVD+igwlwAazpOExw7YTa8U5tKV5baTbRk7Lg
-         UnkFwaCjiUHcLkG/QjRmpO5YrBCumsEWM28U2jMHAk6Btt6v6lkt5ZquRNjWUTj243j3
-         T7xcebjwYYYNyYCTuuhCfpk5AIdV5iSGie9E6x6ypYsVCR5oN+kwLUfPx0F4A6sx7Z3l
-         jKPQ==
-X-Gm-Message-State: AOAM531zNFyh8Km7Ev+IP299SWsoJXTBoq44x5VSWewZ0niWUiBxz+Bn
-        gqHbES30xE58w0TRyZEfYJk=
-X-Google-Smtp-Source: ABdhPJz+4gwwvieJlAKdiyeJO2Ifconzfizf5JA++SGAb7FCwB87ruChvTjQpSFRhRm8iOAWBfA+9A==
-X-Received: by 2002:a05:6402:4499:b0:41d:7e83:8565 with SMTP id er25-20020a056402449900b0041d7e838565mr7158005edb.332.1650186591066;
-        Sun, 17 Apr 2022 02:09:51 -0700 (PDT)
-Received: from ?IPV6:2a01:c23:c4c8:500:7d1f:a75a:cedd:d1a2? (dynamic-2a01-0c23-c4c8-0500-7d1f-a75a-cedd-d1a2.c23.pool.telefonica.de. [2a01:c23:c4c8:500:7d1f:a75a:cedd:d1a2])
-        by smtp.googlemail.com with ESMTPSA id jw12-20020a17090776ac00b006e87137194esm3354417ejc.150.2022.04.17.02.09.50
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=EzHT4bjn+XF/AaUOpciq4qGv6/YksgSdEhZzkeKjcvo=;
+        b=xLhYB2JtKGuUOVbGlfNLqSyHfo/TXr6Neb0Vdn1Gpz/T8A+/rUge6CCaP6BQQUHrFI
+         mcv1JW8ZoFu9W9az8QM9F0X1qbjB3VxWbzWA6M6iQwzVFwWgvjou+VTHjU3lmLW3mnd3
+         Gue+yhmRwF6tqBfd2apHVvATHilqu5L7SwF0SJI+jcA8VADkFprhjyE9jhlym/bNIjE6
+         80iAOuStTuJUwe1gwWgLfIl8XQpb+SdMNtSaUOOl94F3IimIuH1Zc8Q8PujheusWNQ3h
+         aeQ4b8SrYdRg3DwqWaamevGYNCenHosmXSZ5BVu0LyipomL/OszvolsnRTnMOVGU2lqZ
+         IusQ==
+X-Gm-Message-State: AOAM530g8B0nDA6TsDslWifdBt84X9CMlJKZ/7k/s7tMPeaPnU4VO64K
+        FbDCSjFDCdv9nXmhDmOGDfnIsXq6FpYNw+CeV2Q=
+X-Google-Smtp-Source: ABdhPJykzII/rPWLNYV9toATESToiHeJ+IMRCquj7sRxREB3VmRGocYWOnfiTylMBYIhUxS6NKAWMg==
+X-Received: by 2002:a05:651c:50d:b0:249:8a0e:cecc with SMTP id o13-20020a05651c050d00b002498a0ececcmr5014254ljp.402.1650213186432;
+        Sun, 17 Apr 2022 09:33:06 -0700 (PDT)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
+        by smtp.gmail.com with ESMTPSA id x11-20020a056512046b00b0046bbe5d2eabsm979542lfd.75.2022.04.17.09.33.03
+        for <linux-i2c@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Apr 2022 02:09:50 -0700 (PDT)
-Message-ID: <16a7db3c-6caa-6738-e5d8-aab665912542@gmail.com>
-Date:   Sun, 17 Apr 2022 11:09:44 +0200
+        Sun, 17 Apr 2022 09:33:04 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id o2so21052590lfu.13
+        for <linux-i2c@vger.kernel.org>; Sun, 17 Apr 2022 09:33:03 -0700 (PDT)
+X-Received: by 2002:a05:6512:3055:b0:44a:3914:6603 with SMTP id
+ b21-20020a056512305500b0044a39146603mr5562738lfb.435.1650213183288; Sun, 17
+ Apr 2022 09:33:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: i801: I2C block read should be usable also on
- ICH/ICH0/ICH2/ICH3/ICH4
-Content-Language: en-US
-To:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <b4cb50db-7226-282f-e04a-02fbe0b605a0@gmail.com>
- <Ylt7FU/3TTvvcNx7@shikoro>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <Ylt7FU/3TTvvcNx7@shikoro>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <YluC7rAj5syHOYWi@shikoro>
+In-Reply-To: <YluC7rAj5syHOYWi@shikoro>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 17 Apr 2022 09:32:47 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whbEOBMSUkCRc+0dhRWrzJ1=2UsTLxNm=jW+u8Sc-n7Aw@mail.gmail.com>
+Message-ID: <CAHk-=whbEOBMSUkCRc+0dhRWrzJ1=2UsTLxNm=jW+u8Sc-n7Aw@mail.gmail.com>
+Subject: Re: [PULL REQUEST] i2c for v5.18
+To:     Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 17.04.2022 04:27, Wolfram Sang wrote:
-> On Mon, Dec 06, 2021 at 10:18:49PM +0100, Heiner Kallweit wrote:
->> Currently we use the following feature definitions. However, according to
->> the respective datasheets, also ICH/ICH0/ICH2/ICH3/ICH4 support I2C block
->> read. The implementation we have should work also on these chip versions.
->>
->> The commit message of 6342064cad7a ("i2c-i801: Implement I2C block read
->> support") states that i2c block read is supported from ICH5 only.
->> This doesn't seem to be true. Or is this feature broken on older chip
->> versions? 
->>
->> To me it seems we could remove FEATURE_I2C_BLOCK_READ because all chip
->> versions support this feature. Below is an experimental patch, for the
->> ones with test hw. A test case could be to use decode-dimms that
->> uses i2c block read to read the EEPROM content.
->>
->> * Supports the following Intel I/O Controller Hubs (ICH):
->>  *
->>  *					I/O			Block	I2C
->>  *					region	SMBus	Block	proc.	block
->>  * Chip name			PCI ID	size	PEC	buffer	call	read
->>  * ---------------------------------------------------------------------------
->>  * 82801AA (ICH)		0x2413	16	no	no	no	no
->>  * 82801AB (ICH0)		0x2423	16	no	no	no	no
->>  * 82801BA (ICH2)		0x2443	16	no	no	no	no
->>  * 82801CA (ICH3)		0x2483	32	soft	no	no	no
->>  * 82801DB (ICH4)		0x24c3	32	hard	yes	no	no
->>  * 82801E (ICH5)		0x24d3	32	hard	yes	yes	yes
-> 
-> Any reason you skipped this patch in your latest series?
-> 
-Supporting I2C block read on all chip versions is part of patch 4 in the
-series. I didn't remove feature flag FEATURE_I2C_BLOCK_READ yet to give users
-the chance to disable the feature via module parameter in case of problems.
+On Sat, Apr 16, 2022 at 8:01 PM Wolfram Sang <wsa@kernel.org> wrote:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+
+Can I ask for signed tags, please?
+
+I've pulled this, but I'd be happier if everything I pulled was signed.
+
+                 Linus
