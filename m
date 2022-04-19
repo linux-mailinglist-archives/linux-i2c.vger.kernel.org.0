@@ -2,56 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20845507C74
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Apr 2022 00:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A1F507CDB
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Apr 2022 00:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239117AbiDSWXC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 19 Apr 2022 18:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
+        id S1354414AbiDSWzV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 Apr 2022 18:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiDSWXB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Apr 2022 18:23:01 -0400
-Received: from g-sta01.g-sta.jp (ip10.g-sta.jp [59.106.212.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9FA71EEE9;
-        Tue, 19 Apr 2022 15:20:17 -0700 (PDT)
-Received: from 127.0.0.1 (unknown [59.106.209.29])
-        by g-sta01.g-sta.jp (Postfix) with SMTP id B947010821;
-        Tue, 19 Apr 2022 18:27:08 +0900 (JST)
-Message-ID: <0f6582d1daf124280f4afcaf5b99636f5d5fefb1@www>
-Reply-To: "GCAP  Supplies" <gcapsupplies@inbox.ru>
-From:   "GCAP  Supplies" <www@vger.kernel.org>
-Subject: Re: Supplies needed from INDIA, reply for details
-Date:   Tue, 19 Apr 2022 02:27:07 -0700
-Organization: Agile FCA
+        with ESMTP id S231476AbiDSWzU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Apr 2022 18:55:20 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD11C289A1
+        for <linux-i2c@vger.kernel.org>; Tue, 19 Apr 2022 15:52:36 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id t67so33759172ybi.2
+        for <linux-i2c@vger.kernel.org>; Tue, 19 Apr 2022 15:52:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dGxEPoSmeIiVN+kWljOoFUiaxfdNkmXv2+VPeoexn/w=;
+        b=tLO1vkuyKGUcdIGMRyqZPIO+6Fs0Rt8QeQ7ExLtvOHs5wEaTl37TJYbK6zmfS/YBKn
+         6LNlNNePHFM3X5wx0v0ciGBBVCNE07I6dL5tVEn4c0Xzu1jeUTlHhvtrwPamCBgt6YEz
+         0zgKS84hV+mFniAnhe1MDszKaKbVUPBG0Zjw6dOiZiguUA0gXQOC2YOsMKTIT3zLhRo+
+         4tTbEWC13mFVP1rIfPX7ZZtYaUSn0Nd9pKF7lZvMVD3EnI+OthLQIdy74bqzDzjuRQyb
+         UGvxnDETSUCE9S1Or5u6RhuIokP3lEE3EyYF2uSil640/kBW7m1s87/G/7lvNIykBSyq
+         0tIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dGxEPoSmeIiVN+kWljOoFUiaxfdNkmXv2+VPeoexn/w=;
+        b=RtVHKMNDC1330YkqbSV28DB1dZBl11Yu+VF5KZ3RLJLPr4QzHOvPCoxbvVZLq8D149
+         SR7intV9PBXyOhlnVT5lP7bU4kl1ekTnOk1HP4DK2cP17EcYkG1kEhosrjkmyUxzNry4
+         14D8HzJ//DU5eJl+ZB9oRc99SViOiNMRYo+b0cHcDiC7RHgT385BJvmC68qN1xuUGZHx
+         gdhfU9FFHwRKRnhbzPpJbww/hatGWtBDrIWtbM8OvU6NSQfSTEYtHxwulmXUmoZiBHbr
+         y7tsz/OXimdxN56Ib26xXnP9hSXbxBrlnqc3YV1QLR3L4pF3SL2oExl/XM1MxdMQ/CgP
+         OatQ==
+X-Gm-Message-State: AOAM533i7XIzmS8vjheFkUyKsx899WSyMEDT5fCUGucqO2PgNfaaFl1/
+        rfDp6OtdDqfMDi20k1gW6j8flYELpOOY3zO7Zs4aSg==
+X-Google-Smtp-Source: ABdhPJyJrXEZ2TUGlRwB5uW/Zc+cwpXk4Rq+ww8H648TL0zPn9ZcG1qzvHfQBTBZn7txEdFekcEnbQbza7oUOPpNlPs=
+X-Received: by 2002:a25:a12a:0:b0:644:e94e:5844 with SMTP id
+ z39-20020a25a12a000000b00644e94e5844mr12696268ybh.492.1650408756081; Tue, 19
+ Apr 2022 15:52:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8";
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: Yes, score=6.7 required=5.0 tests=BAYES_80,
-        FREEMAIL_FORGED_REPLYTO,MISSING_HEADERS,REPLYTO_WITHOUT_TO_CC,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220401023306.79532-1-frank@zago.net> <20220401023306.79532-3-frank@zago.net>
+In-Reply-To: <20220401023306.79532-3-frank@zago.net>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 20 Apr 2022 00:52:24 +0200
+Message-ID: <CACRpkdZFQtPkWWNFZEDVKtoGYEL9+g5iEZVozWxuQmVpx4+8Ag@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] gpio: ch341: add GPIO MFD cell driver for the CH341
+To:     frank@zago.net
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
+        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.9081]
-        *  1.0 MISSING_HEADERS Missing To: header
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-To: Managing Director, 
+On Fri, Apr 1, 2022 at 4:33 AM frank zago <frank@zago.net> wrote:
 
-Good Morning Sir,
-How is India today and did you get my previous message?
-Some products required by our company were recently found to be cheaper in India.
-Most importantly, I want to introduce you to our company board of directors, to enable you supply these products to our company from India, with very good profits and commissions.
-Please note that your present job type or business does not matter to supply these products to our company from India.
-Kindly respond back with your direct telephone or whatsapp number, for details.
-Procurement, GCAP Supplies
+> The GPIO interface offers 16 GPIOs. 6 are read/write, and 10 are
+> read-only.
+>
+> Signed-off-by: frank zago <frank@zago.net>
+
+Looks good to me:
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Yours,
+Linus Walleij
