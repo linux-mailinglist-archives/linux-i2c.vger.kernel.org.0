@@ -2,106 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 023B7509D20
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Apr 2022 12:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4631509E12
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Apr 2022 12:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388095AbiDUKHq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 21 Apr 2022 06:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
+        id S1388586AbiDUK4Z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 21 Apr 2022 06:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388097AbiDUKHo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Apr 2022 06:07:44 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74492111E
-        for <linux-i2c@vger.kernel.org>; Thu, 21 Apr 2022 03:04:54 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id b19so5898397wrh.11
-        for <linux-i2c@vger.kernel.org>; Thu, 21 Apr 2022 03:04:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=3F324L+2J98n+Lan1RyT/eWUeM6GkGX/RXQR6LB0/4k=;
-        b=oZScCh8tKhUHn5IqyR7GetNckEnYLsAay36jS+dQX5N4WkKbSHqHnAUndORk3Wdv21
-         c0tVl1PkJXKqOwZJYB6taoPSsfczNdpWaRAUKLP5jTWp0kLb7jpPHwje5iZSLWVQ78Wa
-         aUETFfwp2F58i5av3tKbzNeF14/0N04ld0d/IEgEANj3DWimHAasAU2Mab1fm9WL/RvY
-         g4uSoxn4RwesXTnD6Dd2wicyrLmQViYv5zU/11EeXnJjbwCw9QkmlESsvKTRkZ5hh/gm
-         gwL8AYVVYMUlnlX0mXVn6Fz1bABeGyyr31dYdeVy9SQPLHdbO7acyEqccGtX7seQAspK
-         kdoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=3F324L+2J98n+Lan1RyT/eWUeM6GkGX/RXQR6LB0/4k=;
-        b=vvWS3RpZNnFpvQUNp0mLooR0wqp96c8fS9t8eSJ2mLofNEg4E7k/nDBLUyoAeWojWQ
-         i96914ecR7SX1/wsFwDQ/ll64OWG5peAtZJCaRYsBkKhFQxksMQ8tmSLJ3gpHvNR/42m
-         lbgD4bhi/MroVyDxtc0+JbIkFxVn4l2eTooWUI3K0/cr6bMoEGoldaNyrCn0R0c0wfW5
-         2R8f/fB+BsGW2RnrMhOhcodEX+TpSTfWfT21pUoiATN5MdTzuxAS/zc3kgh8hKa0ua89
-         H4k8Wr7Aq0ud1u0JnTKSKoJBMQSSR6zDGgqxusWVTlshiNK7zZ3Z7MbJgMaZLm2swsJQ
-         cDYg==
-X-Gm-Message-State: AOAM533e9jKrE/qreeEqrfFc3PbbQ9jnn6Gk+hPl9uWcEneageiE1b2H
-        Ch9XhOqjuANABNU/TcUuloHADQ==
-X-Google-Smtp-Source: ABdhPJzPcTNEggQIdZUTB+ITMSuLWsBKyApCBNUoQNpjDvesu8eXr2DyijjlfhOx5peSt7JVHgLyQA==
-X-Received: by 2002:a05:6000:178a:b0:20a:b841:e245 with SMTP id e10-20020a056000178a00b0020ab841e245mr2445214wrg.480.1650535492968;
-        Thu, 21 Apr 2022 03:04:52 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:35ba:2677:956:980d? ([2001:861:44c0:66c0:35ba:2677:956:980d])
-        by smtp.gmail.com with ESMTPSA id u20-20020a05600c19d400b003929c4bf23asm1770295wmq.44.2022.04.21.03.04.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 03:04:52 -0700 (PDT)
-Message-ID: <e524328e-5e91-a550-45a6-053ac73cc8e5@baylibre.com>
-Date:   Thu, 21 Apr 2022 12:04:51 +0200
+        with ESMTP id S1388575AbiDUK4V (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Apr 2022 06:56:21 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553351408C;
+        Thu, 21 Apr 2022 03:53:32 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id B36F81F4558D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650538411;
+        bh=FBd9UQCF3y8blk7MUJd+m6iRG4OWorxrv+jpCV+U8Mk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KJkRBia6J5KzqsVbeppoDnuwy8hU/Tsp6FPN0BXe16JtWyGSs8OQBa2kd5BjM13fb
+         mrub0DRmAYR4+hivTepMnAe/gbKHKzGqFBKZv+QKMmYU3A7c1QgZ25ozb9hMpfI6Qn
+         zPEy9gcFNCXhnPZsyG+/+7NS1YyN/a9kjRy3I4oH7ygusMuDcCwgjSK0VCdPdNfhuE
+         56Pa1SruogNTZyC2oLrLXvCjcWFar5aC5gbqXfF6cMEON+rxEicQoRPpcN36KMVlum
+         khBUmygJ0uZ/8UuDh1hVyJbL+B80kmBM0sEaKzRk2OFZgxyS+Y8IxdEioPNjRmBdT3
+         o8RKuMUzQpiqA==
+Message-ID: <4afda652-e360-cfd9-a0f5-07910b513621@collabora.com>
+Date:   Thu, 21 Apr 2022 12:53:27 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH -next] i2c: meson: fix missing clk_disable_unprepare() on
- error in meson_i2c_probe()
+Subject: Re: [PATCH v2] i2c: mediatek: Optimize master_xfer() and avoid
+ circular locking
 Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Cc:     wsa@kernel.org, tanure@linux.com
-References: <20220421090042.2278081-1-yangyingliang@huawei.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220421090042.2278081-1-yangyingliang@huawei.com>
+To:     qii.wang@mediatek.com
+Cc:     matthias.bgg@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wsa@kernel.org, nfraprado@collabora.com, kernel@collabora.com
+References: <20220411132107.136369-1-angelogioacchino.delregno@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220411132107.136369-1-angelogioacchino.delregno@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 21/04/2022 11:00, Yang Yingliang wrote:
-> Fix the missing clk_disable_unprepare() before return
-> from meson_i2c_probe() in the error handling case.
+Il 11/04/22 15:21, AngeloGioacchino Del Regno ha scritto:
+> Especially (but not only) during probe, it may happen that multiple
+> devices are communicating via i2c (or multiple i2c busses) and
+> sometimes while others are probing asynchronously.
+> For example, a Cr50 TPM may be filling entropy (or userspace may be
+> reading random data) while the rt5682 (i2c) codec driver reads/sets
+> some registers, like while getting/setting a clock's rate, which
+> happens both during probe and during system operation.
 > 
-> Fixes: a57f9b4dd6f5 ("i2c: meson: Use 50% duty cycle for I2C clock")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->   drivers/i2c/busses/i2c-meson.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
+> In this driver, the mtk_i2c_transfer() function (which is the i2c
+> .master_xfer() callback) was granularly managing the clocks by
+> performing a clk_bulk_prepare_enable() to start them and its inverse.
+> This is not only creating possible circular locking dependencies in
+> the some cases (like former explanation), but it's also suboptimal,
+> as clk_core prepare/unprepare operations are using mutex locking,
+> which creates a bit of unwanted overhead (for example, i2c trackpads
+> will call master_xfer() every few milliseconds!).
 > 
-> diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
-> index 50dab123380a..195a9716da31 100644
-> --- a/drivers/i2c/busses/i2c-meson.c
-> +++ b/drivers/i2c/busses/i2c-meson.c
-> @@ -520,8 +520,10 @@ static int meson_i2c_probe(struct platform_device *pdev)
->   	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR,
->   			   REG_SLV_SDA_FILTER_MASK | REG_SLV_SCL_FILTER_MASK, 0);
->   
-> -	if (!i2c->data->set_clk_div)
-> +	if (!i2c->data->set_clk_div) {
-> +		clk_disable_unprepare(i2c->clk);
->   		return -EINVAL;
-> +	}
->   	i2c->data->set_clk_div(i2c, timings.bus_freq_hz);
->   
->   	ret = i2c_add_adapter(&i2c->adap);
+> With this commit, we avoid both the circular locking and additional
+> overhead by changing how we handle the clocks in this driver:
+> - Prepare the clocks during probe (and PM resume)
+> - Enable/disable clocks in mtk_i2c_transfer()
+> - Unprepare the clocks only for driver removal (and PM suspend)
+> 
+> For the sake of providing a full explanation: during probe, the
+> clocks are not only prepared but also enabled, as this is needed
+> for some hardware initialization but, after that, we are disabling
+> but not unpreparing them, leaving an expected state for the
+> aforementioned clock handling strategy.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Hello,
+this is a friendly ping to not let this be forgotten.
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Cheers,
+Angelo
+
+> ---
+> 
+> v2: Fixed typos in commit description
+> 
+>   drivers/i2c/busses/i2c-mt65xx.c | 11 +++++++----
+>   1 file changed, 7 insertions(+), 4 deletions(-)
+> 
