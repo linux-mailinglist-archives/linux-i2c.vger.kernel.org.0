@@ -2,68 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2F250CCF1
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 Apr 2022 20:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D19E350CD15
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 Apr 2022 20:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236781AbiDWSri (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 23 Apr 2022 14:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
+        id S236807AbiDWTAp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 23 Apr 2022 15:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236773AbiDWSrV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 23 Apr 2022 14:47:21 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1187C1A1772
-        for <linux-i2c@vger.kernel.org>; Sat, 23 Apr 2022 11:44:24 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id f17so14060496edt.4
-        for <linux-i2c@vger.kernel.org>; Sat, 23 Apr 2022 11:44:23 -0700 (PDT)
+        with ESMTP id S236814AbiDWTAo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 23 Apr 2022 15:00:44 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD591C65F8
+        for <linux-i2c@vger.kernel.org>; Sat, 23 Apr 2022 11:57:46 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id k23so22286824ejd.3
+        for <linux-i2c@vger.kernel.org>; Sat, 23 Apr 2022 11:57:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=4IaqoV2aer2ghFwptz6czU9/m6KAIR9YxsYbGNc2GUo=;
-        b=Z1ZeEVzC1VvY3AdAu4mV/yDyIjapQmjj+PVR2QXHLOdgESIJBMnx8kfv3AYks7oOpW
-         vRSWOJ6PmkEa/ih62LCvcP2aGNoLhQIiPrjrZ9g0H7bLJ7GXN6nSLYiP0OsuM5/CVkHY
-         ubztUbbeCKvJeTIrmVozO9lTnCL/UcW+kWcRt8pNeiSSwPsyPK/J7qDQdliASeTfICHL
-         mvmFL0KilpGvS3bZQ+LvMyn+lb0MjOI1VFdWdwPL16wmcEaDxAMLYsnS3bVsbi7Gf6ej
-         1mrPbhcKsY2MZblQ/OIg1seL00/A54DEqTEU+V2jnLujvgbCc+ktw6au5v3Ux7Ngso5V
-         ePsw==
+        bh=PZYZo4riuAASrgNYiBnvXj2fNHSGkngTmMftoxnKnxw=;
+        b=S99uY+KgXY67ufTlCYtEQPsZsiZ7a7vlBE3DAb0FD3v0RBR/yokzgKtQjAIpzjjDT1
+         Q0LN16pQ0xVe0KyOph982meSjp8BtRoTgVC2DGFAWD+zKev1g4ZL/HA+VbwZxhMTT8R1
+         F0EMdytvzkupg9J+f2A7mRXhu4/LqvM6nICpukdsx8Hf2AOcG6H4NG8ghnNk4cyNEZTH
+         UXt4Pav/LF89DbfIROk4zoLnWmvlrgshaR25g3/sbuze5/8RxKV1mxBmOAAEEjE6Ud/G
+         J5I2x3AeZiJSHEzkvAzqywQZwy9MDJwaVYEDvi97GhkfOrKtKfPuAsVk/CMnZuxtPkbt
+         LSBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=4IaqoV2aer2ghFwptz6czU9/m6KAIR9YxsYbGNc2GUo=;
-        b=7+eDB/vQy+AJBAT8+zx49X3zi/Cd/u/+8FIEY8ZnJyEe+tAr1HVOe8h86HEHxRDl+6
-         oDVQszcCZCwxgTlpTxL2ZdXaoUg+AkDAXHP0tAd4D1cJfVnminGHG2z5er99KjgM79gL
-         R5SQoG1TA/++/AlieDyeT2fhw9fQEHNsPc3OqbgDQAfZIWnSD4V/W6FcvNyVpi+pEIde
-         nJWCk9V1hnbT74+Y5OJXlKbYmWI+A9c5I0VyPYRn5LQbXu/+mTQ4x+RPnSgkca8NgZrj
-         kUel/G0YvQeYV8TWm73RuChm753VhejRXsmVV8CHJXGJO2os20ky7/Qxmxes6avvljeD
-         igKg==
-X-Gm-Message-State: AOAM53390ODqC45HfHA9wDStGSTAJFPIGqwcYL/eiQhvx1fJ5UF86mEg
-        txYJaAqTAy/oSZBFhePBsTX0/Q==
-X-Google-Smtp-Source: ABdhPJysu/N9ZmoV+TvxH4Hab8PZ640rwRA0heikAoh8g5hbAmxzP50T5zIfII15paVch3cH/zDorQ==
-X-Received: by 2002:a05:6402:268f:b0:423:e68b:1942 with SMTP id w15-20020a056402268f00b00423e68b1942mr11381141edd.73.1650739462636;
-        Sat, 23 Apr 2022 11:44:22 -0700 (PDT)
+        bh=PZYZo4riuAASrgNYiBnvXj2fNHSGkngTmMftoxnKnxw=;
+        b=Hw9g0KBsuU/B1uSHExcTDFcQ8khb55KERcP/XeU20oNlxOcRDQGmqQmOjbqdHNqDue
+         toh7oC3e9j9oP8CvqknxOiHZx+gpFX6e5LutvvBGSlep7ztmEQx54Yf8fbF4B4kiW+tU
+         FO6rPUVKPtAku667PTKFiYLaAZjJoQSDUC3rpSJXMtIY9WUEbEiormRaITHYJ6cz1i8E
+         A4Dy2Sg6JWUk3rhkzJtTAeXPo24j0oSQ7cZCn/fos/QWERs3Bg4G/adAZPYBvv67d0f2
+         CLBtFJPivhXY6Anx4obeLQR4bfcmjp4qK+4QX3uKAxnHmkI0a+fPHp9Q7QusA/vmG4y4
+         ykLg==
+X-Gm-Message-State: AOAM533e72v9xMkZqI48/i5Vot4Nl4oOlB1HcXf2MwUrWAO4iaR+fScN
+        j31J6p1S3sSUDXWhCNao8GXmkA==
+X-Google-Smtp-Source: ABdhPJz2nWyRKZg1zq6pTJKVo9fEAxz7J/WZFcUk2197nRcFLmsa6ZBUp2Uv9560LFLVvyWESQ3dDQ==
+X-Received: by 2002:a17:907:6d17:b0:6ef:f06c:89 with SMTP id sa23-20020a1709076d1700b006eff06c0089mr9807501ejc.649.1650740264867;
+        Sat, 23 Apr 2022 11:57:44 -0700 (PDT)
 Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id x18-20020a170906b09200b006e8baac3a09sm1913007ejy.157.2022.04.23.11.44.21
+        by smtp.gmail.com with ESMTPSA id p12-20020a50c94c000000b00425c48132bfsm1831124edh.55.2022.04.23.11.57.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Apr 2022 11:44:22 -0700 (PDT)
-Message-ID: <469d7ac0-7cf6-af91-7e24-1d9df88c9221@linaro.org>
-Date:   Sat, 23 Apr 2022 20:44:21 +0200
+        Sat, 23 Apr 2022 11:57:44 -0700 (PDT)
+Message-ID: <a5ed1592-630a-0c42-151e-6271989f07d9@linaro.org>
+Date:   Sat, 23 Apr 2022 20:57:43 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: eeprom/at24: Add samsung,s524ad0xd1
- compatible
+Subject: Re: [PATCH] dt-bindings: i2c: renesas,riic: Document RZ/G2UL SoC
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+To:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220422192355.2597523-1-robh@kernel.org>
+Cc:     Chris Brandt <chris.brandt@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220423132043.139672-1-biju.das.jz@bp.renesas.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220422192355.2597523-1-robh@kernel.org>
+In-Reply-To: <20220423132043.139672-1-biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,21 +81,16 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 22/04/2022 21:23, Rob Herring wrote:
-> The samsung,s524ad0xd1 compatible is in use, but not documented. According
-> to arch/arm/mach-s3c/mach-smdk6410.c, the samsung,s524ad0xd1 is compatible
-> with the 24c128.
+On 23/04/2022 15:20, Biju Das wrote:
+> Document RZ/G2UL I2C bindings. RZ/G2UL I2C is identical to one found on
+> the RZ/G2L SoC. No driver changes are required as RZ/G2L compatible
+> string "renesas,riic-rz" will be used as a fallback.
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/eeprom/at24.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-The compatible - without 24c128 fallback - is used also in
-arch/arm/boot/dts/exynos5250-smdk5250.dts and
-Documentation/devicetree/bindings/i2c/samsung,s3c2410-i2c.yaml, so these
-files should be fixed as well.
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
 Best regards,
 Krzysztof
