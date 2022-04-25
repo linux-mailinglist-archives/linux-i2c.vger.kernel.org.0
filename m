@@ -2,89 +2,116 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7386950E1D2
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Apr 2022 15:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DAD850E92B
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Apr 2022 21:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237187AbiDYNfH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 Apr 2022 09:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
+        id S244749AbiDYTLu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 Apr 2022 15:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242111AbiDYNfE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Apr 2022 09:35:04 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 306BEBA8;
-        Mon, 25 Apr 2022 06:32:00 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.90,288,1643641200"; 
-   d="scan'208";a="119093272"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 25 Apr 2022 22:31:59 +0900
-Received: from localhost.localdomain (unknown [10.226.93.95])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 90EEC40065CF;
-        Mon, 25 Apr 2022 22:31:55 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2] dt-bindings: i2c: renesas,riic: Document RZ/G2UL SoC
-Date:   Mon, 25 Apr 2022 14:31:52 +0100
-Message-Id: <20220425133152.176949-1-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S235743AbiDYTLr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Apr 2022 15:11:47 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3D4443D4
+        for <linux-i2c@vger.kernel.org>; Mon, 25 Apr 2022 12:08:38 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id h1so15670703pfv.12
+        for <linux-i2c@vger.kernel.org>; Mon, 25 Apr 2022 12:08:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=mmd4qjxvG29M6kC9w1keSuqoCPTvZCriqLVPrV/8mEU=;
+        b=Mw+LboTJXGuoBHQGBKGTExYO4sTBX56pRtPORYFQO6rGGwdzNIAKQfi3EWSPmdLnAS
+         JlDH+J/qQyZ9OdmANiFxLVqY/0QB49y2Eb+svi2XRoVCqxefrrL3crIE3sBnms3y4O09
+         bUSKmSvMte79gGNK6V5dWSL7JJuPTENv07B8lW90gd+BWkpgo2PBcVEmThT/0dGG7okW
+         5PKeYsX0xKw8bVykF8mFaBIxae8fORqwXuLQEQBaJF4ckDjoqGBOm+GL6R+pXWgM4VT0
+         AKmrgNyYcsVwP7hxFQxVC5a7MbBbkswwPmJ0IyXdvefzGeaAgFAmpn9s4jjGwtqKlIYs
+         IbKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=mmd4qjxvG29M6kC9w1keSuqoCPTvZCriqLVPrV/8mEU=;
+        b=7ntY3/p6KXXN5d8OO8DgLJC6STSHiohSgwBJzgH0hFigHovBSMffK1PJcGYSjscdwZ
+         ekooHmJ2K+mMLPsHAG1n7cjpCnfUnis7doBlsA+bjlktbG7I6c5kY9YA1VarVdZ2WkNr
+         c7AJisa3bU2k98Q13qeEJwpOatmrxsjd7jnzMcUB5zlBwZbk5Z3NRXuMZP2VwatkMXFa
+         Y1Xs981LsrN1AmbTWTzlPw5ytVifRMMO3hwBuJYeZShlG8ZRDYwafp8QPzYYX91GeZi5
+         KgpGNzG2hn9g13zPh6JoL+owBBkITTF5ru7apg48HPWK3IPx7IiBUi/ulu/Y9tzzdVOU
+         luSQ==
+X-Gm-Message-State: AOAM530Vy5CYP0eRUDagaX+JW84kHx4PyQBiQYq7Z2VN6AT1vN1icrI6
+        pItHbGPHazfSWCfH1oupDaRFKLF+2gAffzygmdc=
+X-Google-Smtp-Source: ABdhPJwyCFyq+7KF47+tV8lgMMCb1dQa5hTp/vrypWTJzXrtf5C4xvwMf+VHCKJzzz+UzGVMDQmeeNAsGrANyKul6V8=
+X-Received: by 2002:a63:4c4b:0:b0:3aa:4af8:9ab8 with SMTP id
+ m11-20020a634c4b000000b003aa4af89ab8mr16854843pgl.430.1650913718454; Mon, 25
+ Apr 2022 12:08:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Received: by 2002:a05:7300:2145:b0:5f:334f:9982 with HTTP; Mon, 25 Apr 2022
+ 12:08:37 -0700 (PDT)
+Reply-To: gb528796@gmail.com
+From:   george brown <ewill2845@gmail.com>
+Date:   Mon, 25 Apr 2022 21:08:37 +0200
+Message-ID: <CAAQya0aAtjvbZLuRv-9GCY+41c_rJixBBsWqc=_MVnB_0i9UZw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,REPTO_419_FRAUD_GM,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:431 listed in]
+        [list.dnswl.org]
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  3.0 REPTO_419_FRAUD_GM Reply-To is known advance fee fraud
+        *      collector mailbox
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ewill2845[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [gb528796[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ewill2845[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Document RZ/G2UL I2C bindings. RZ/G2UL I2C is identical to one found on
-the RZ/G2L SoC. No driver changes are required as RZ/G2L compatible
-string "renesas,riic-rz" will be used as a fallback.
+Ahoj
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-v1->v2:
- * Added Reset property required on RZ/G2UL SoC
- * Added Ack from Krzysztof Kozlowski
- * Added Rb tag from Geert
----
- Documentation/devicetree/bindings/i2c/renesas,riic.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+Jmenuji se George Brown, povol=C3=A1n=C3=ADm jsem pr=C3=A1vn=C3=ADk. Chci v=
+=C3=A1m nab=C3=ADdnout
+nejbli=C5=BE=C5=A1=C3=AD p=C5=99=C3=ADbuzn=C3=BD m=C3=A9ho klienta. Zd=C4=
+=9Bd=C3=ADte =C4=8D=C3=A1stku (8,5 milionu $)
+dolar=C5=AF, kter=C3=A9 m=C5=AFj klient nechal v bance p=C5=99ed svou smrt=
+=C3=AD.
 
-diff --git a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-index f4b235a87ac6..2f315489aaae 100644
---- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-+++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-@@ -19,6 +19,7 @@ properties:
-       - enum:
-           - renesas,riic-r7s72100   # RZ/A1H
-           - renesas,riic-r7s9210    # RZ/A2M
-+          - renesas,riic-r9a07g043  # RZ/G2UL
-           - renesas,riic-r9a07g044  # RZ/G2{L,LC}
-           - renesas,riic-r9a07g054  # RZ/V2L
-       - const: renesas,riic-rz      # RZ/A or RZ/G2L
-@@ -75,6 +76,7 @@ if:
-     compatible:
-       contains:
-         enum:
-+          - renesas,riic-r9a07g043
-           - renesas,riic-r9a07g044
-           - renesas,riic-r9a07g054
- then:
--- 
-2.25.1
+M=C5=AFj klient je ob=C4=8Dan va=C5=A1=C3=AD zem=C4=9B, kter=C3=BD zem=C5=
+=99el p=C5=99i autonehod=C4=9B se svou =C5=BEenou
+a jedin=C3=BD syn. Budu m=C3=ADt n=C3=A1rok na 50 % z celkov=C3=A9ho fondu,=
+ zat=C3=ADmco 50 % ano
+b=C3=BDt pro tebe.
+Pro v=C3=ADce informac=C3=AD pros=C3=ADm kontaktujte m=C5=AFj soukrom=C3=BD=
+ e-mail zde:gb528796@gmail.com
 
+P=C5=99edem d=C4=9Bkuji,
+pane George Brown,
