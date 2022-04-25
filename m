@@ -2,106 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6F650DC3A
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Apr 2022 11:17:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5779850E0F7
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Apr 2022 15:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235794AbiDYJTf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 Apr 2022 05:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
+        id S234807AbiDYNEI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 Apr 2022 09:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241584AbiDYJRO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Apr 2022 05:17:14 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78731321;
-        Mon, 25 Apr 2022 02:14:10 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id b17so11297389qvf.12;
-        Mon, 25 Apr 2022 02:14:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=91flSxJRmaGK0ryyqZaGiTUm7eWeBTNwUgCLD8/8Uro=;
-        b=L9/rhY2ePaHSSwjdh2A33AILDVsApMM7Ctenn2VhSyYRJ3fiISwNKGfVzE1HyIKKhV
-         HyCydbVX1/3CrF8ivT3BVWT9cmWfwSNUoXZoY5BLtqHij5fLwx+4eVpFSRQCSQtG3mY4
-         RbijpuYanTqiJdu+31HKaT+e46zNROKwvThGkl2H6sn84brODGHnJV8l8p7b8DqSSPuW
-         dvtxQOcdxn4pPmxemgCMc/sZHYpJfYDV2yK6LKjneC9DjEMAKmoTe6oDyPyr/stSzmo1
-         eE2/oq9Dede1dFJokr+53OQRxjgMPn0TUkTqWRU84P7/EhUBDwjnjpSmgMECiYHJJpxB
-         kDdA==
+        with ESMTP id S231466AbiDYNEF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Apr 2022 09:04:05 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2242DFF9;
+        Mon, 25 Apr 2022 06:01:01 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id d14so10194279qtw.5;
+        Mon, 25 Apr 2022 06:01:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=91flSxJRmaGK0ryyqZaGiTUm7eWeBTNwUgCLD8/8Uro=;
-        b=3D5zX1cF0XeSw890mzeAqDKXxrskhLryMvPvCBwjAfYSnc+PoAQZtVJkZWD/wTYzkS
-         K967ekVzBNzY2PgxOOnf/TI7YLHZq+BED/t8nXcclwOVp8ZkyHDpmr2Ty+CbCN94TTtm
-         Z8W///BKmMdWvpO2sU5pBUbc/GrpWypur9C6yhU9wLFV0mQL5GKWowMTj5p/+oj9/eYk
-         MCOWAaCrvBkA/f8OpwkzMmcNenAHTW5gloyK1g3k/fBhEms/8rDfCXU+gIIDBLi74dpH
-         7dXagxDBqXjo2nRa3ntNQW/tSyUins3HS5Uh87iSp6alG+rBS5nMy1xciXuvnULwmMyr
-         LovQ==
-X-Gm-Message-State: AOAM532Vzpy9WMKwwB6vwabpeF+uAH2kGCVhklqMDFEgqRC3u5hcWE8f
-        uBYFL0eC+SIucUtQpE0/BXg=
-X-Google-Smtp-Source: ABdhPJyY45oyFv7a9F5kcWk6B4Z5OsbslNhlS7WGnw+lfI2L+vnaW/SdJypqKXT6ac8e4TFniW3m9w==
-X-Received: by 2002:ad4:5b81:0:b0:456:2c7f:97ab with SMTP id 1-20020ad45b81000000b004562c7f97abmr6640486qvp.71.1650878049672;
-        Mon, 25 Apr 2022 02:14:09 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id b2-20020a37b202000000b0069c7ad47221sm4701011qkf.38.2022.04.25.02.14.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 02:14:09 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     benh@kernel.crashing.org, joel@jms.id.au
-Cc:     brendanhiggins@google.com, tglx@linutronix.de, maz@kernel.org,
-        andrew@aj.id.au, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] drm/msm/dsi: fix error check return value of irq_of_parse_and_map()
-Date:   Mon, 25 Apr 2022 09:14:02 +0000
-Message-Id: <20220425091402.3499657-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+vnDAvBvlFIQr4wFseqaJb0VYP6iBq0UNmsGT7OX5bE=;
+        b=ma0Qzz3/ePuFeqZ4aO68ZPPe+jibwfBfMt0F92aE9nozkvUgHtVZIUzm8nc1qNumdp
+         MQyww0hQvGWsfP0wA91+llrk8AWF/7NeNS2fM8edvPj67HWF80XrkDu6nN0ougGTGSnV
+         UQOw2EeG3fedWjH8bc2jkZmJMfNNQCU9Vlp2mrEaAlYpFiFiiwaneWQN9cdevJlTwjLD
+         N76ZsUdfBXIzUaYrxof18qGffmHDHcHnWj90x6WLzQRNCiW/t+6M7NzqhW6rCdQWLIb/
+         LoINUnpgHKG00ZcJODRskIw4T6Uxn7Z/bfaxH+7VxuEEYo5TQXrs16Hv/yRW0saUA8PS
+         RzMw==
+X-Gm-Message-State: AOAM533ohjxSzafWVHW6blg53ytimbUFV99Vx6BTJcSyiaDE2KxygtbP
+        ihemHHQ2aR7b4rqlpACVn836MIxZ0x7+bg==
+X-Google-Smtp-Source: ABdhPJzIuMTEjme/di9IjJMr28eBRRce5qzVqU1RkxjZxKVTSJNT9D29Tqvw/yfVxMXcpDzj2a68LQ==
+X-Received: by 2002:a05:622a:1cf:b0:2f1:f542:7083 with SMTP id t15-20020a05622a01cf00b002f1f5427083mr11647836qtw.78.1650891660758;
+        Mon, 25 Apr 2022 06:01:00 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id l130-20020a37a288000000b0069e8290f28asm4978910qke.97.2022.04.25.06.01.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 06:01:00 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id f38so26886218ybi.3;
+        Mon, 25 Apr 2022 06:01:00 -0700 (PDT)
+X-Received: by 2002:a25:8087:0:b0:641:dd06:577d with SMTP id
+ n7-20020a258087000000b00641dd06577dmr15632922ybk.207.1650891660240; Mon, 25
+ Apr 2022 06:01:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220423132043.139672-1-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20220423132043.139672-1-biju.das.jz@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 25 Apr 2022 15:00:48 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVu9ha7TYEDpZXjDBWDroEukzA0GwDhkOuohH7godG8dg@mail.gmail.com>
+Message-ID: <CAMuHMdVu9ha7TYEDpZXjDBWDroEukzA0GwDhkOuohH7godG8dg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: i2c: renesas,riic: Document RZ/G2UL SoC
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+Hi Biju,
 
-The irq_of_parse_and_map() function returns 0 on failure, and does not
-return a negative value anyhow, so never enter this conditional branch.
+On Sat, Apr 23, 2022 at 3:20 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> Document RZ/G2UL I2C bindings. RZ/G2UL I2C is identical to one found on
+> the RZ/G2L SoC. No driver changes are required as RZ/G2L compatible
+> string "renesas,riic-rz" will be used as a fallback.
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-Fixes: bf94ec093d0 ("drm/msm/dsi: do not enable irq handler before powering up the host")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
----
- drivers/gpu/drm/msm/dsi/dsi_host.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Thanks for your patch!
 
-diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-index d51e70fab93d..29199e6e15ee 100644
---- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-+++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-@@ -1873,10 +1873,9 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
- 	}
- 
- 	msm_host->irq = irq_of_parse_and_map(pdev->dev.of_node, 0);
--	if (msm_host->irq < 0) {
--		ret = msm_host->irq;
--		dev_err(&pdev->dev, "failed to get irq: %d\n", ret);
--		return ret;
-+	if (!msm_host->irq) {
-+		dev_err(&pdev->dev, "failed to get irq\n");
-+		return -EINVAL;
- 	}
- 
- 	/* do not autoenable, will be enabled later */
--- 
-2.25.1
+> --- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
+> @@ -19,6 +19,7 @@ properties:
+>        - enum:
+>            - renesas,riic-r7s72100   # RZ/A1H
+>            - renesas,riic-r7s9210    # RZ/A2M
+> +          - renesas,riic-r9a07g043  # RZ/G2UL
+>            - renesas,riic-r9a07g044  # RZ/G2{L,LC}
+>            - renesas,riic-r9a07g054  # RZ/V2L
+>        - const: renesas,riic-rz      # RZ/A or RZ/G2L
 
+You forgot to make the resets property required on RZ/G2UL.
+
+With that fixes:
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
