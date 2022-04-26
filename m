@@ -2,105 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C72550FE9F
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 Apr 2022 15:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380D2510051
+	for <lists+linux-i2c@lfdr.de>; Tue, 26 Apr 2022 16:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347337AbiDZNRZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 26 Apr 2022 09:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
+        id S1351106AbiDZO0I (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 26 Apr 2022 10:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350796AbiDZNRU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 26 Apr 2022 09:17:20 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B729C7306A
-        for <linux-i2c@vger.kernel.org>; Tue, 26 Apr 2022 06:14:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650978851; x=1682514851;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ytIWqc057ix9SvuOXgl+FMLYUEj3n6agUztSwF8j1uo=;
-  b=J8/Hli2rBF4CczmW62fzCTOYnvEOOP9BS6kgQ+oSBv7H0cQWO2sgtW0G
-   NsuSfW9XuHTiVnrInKajgYzfqiN7muvg2+mnKfoS2Rr4tN5yXYP2cmKDM
-   HuWEYx5yz/7f6bOv/YMME3gVnzm6zPkz/8BGRPUM2S5mHy6fI2oaVf/lr
-   5+iXuE8LJl6IFUOspJB+tquTZl+m4SleicVWtabyGXljIEyzl7OxdcGLc
-   aorkTXjP2+5GkjbEXEUReKGXjSlO2Toi71KyrE66n5DWqZDy9dZlU+qd2
-   6YPsYeL18YHFh6CPppja7R4vhDqxWdX+VqejjD5LZGgEqklg+WDf92Gta
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="245495649"
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="245495649"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:14:11 -0700
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="807512383"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:14:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1njL15-008Kr5-96;
-        Tue, 26 Apr 2022 16:14:07 +0300
-Date:   Tue, 26 Apr 2022 16:14:06 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>
-Subject: Re: [PATCH] i2c: designware: Sort timing parameter ACPI method calls
- by the speed
-Message-ID: <YmfwHgw7W8WJM9e7@smile.fi.intel.com>
-References: <20220420125802.352306-1-jarkko.nikula@linux.intel.com>
+        with ESMTP id S1347196AbiDZO0E (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 26 Apr 2022 10:26:04 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B1E18E18;
+        Tue, 26 Apr 2022 07:22:57 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id z8so20829165oix.3;
+        Tue, 26 Apr 2022 07:22:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xvzda8Pfpd3wwPcLRsSY8ulA8iZIYiMmmNvBbB50ZBo=;
+        b=eMtzTu+9uo5RpoE29cwdTplDs7/1J23yJE9Pfj9OMPuzbbx+2yLtEYyr2oi2JWlcwK
+         JnF1dVf0VvgaeP9vlxr/bRvjQWsOJEJmffgAcFlsRagXKFtaC4gYAQfWOXV5zFRcql4a
+         mS5DBqzkUxcV/eE1nRqIqtTQy2JLhO5fwkFrok57mckE6EnqUxV+mm2Q3u+vGsivyN5C
+         IMkF9R+jw25h4Zdy8RRp/A5jz6dRgGOEXuspMC49uHQ3AVlX33wJ7TMdAchfHSrjYqA6
+         xjArKKbB7uO1DlCn5Xlk+isirOxoN6j5U5GytQJrZGB52YbIT7nHAQsMqZPSTvBnlA7H
+         eSwA==
+X-Gm-Message-State: AOAM531qEZiePkPLLikWNob41Mv/KZ2XXKph6xyNORB+/3wiC+IS+8Kr
+        xLTU3NJ9OqZRoLfs2g0jJmPoCn70dg==
+X-Google-Smtp-Source: ABdhPJxhcjFhGIM6Fai/2gb+tvQSLuzGNZLP5mUuf7pSQ1nmqeeR538p3fZzoZhebGXVBtICKYmQTw==
+X-Received: by 2002:a54:4f04:0:b0:325:3659:ee90 with SMTP id e4-20020a544f04000000b003253659ee90mr4880405oiy.199.1650982976502;
+        Tue, 26 Apr 2022 07:22:56 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s6-20020a4ae546000000b0032480834193sm5599150oot.46.2022.04.26.07.22.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 07:22:56 -0700 (PDT)
+Received: (nullmailer pid 1917494 invoked by uid 1000);
+        Tue, 26 Apr 2022 14:22:55 -0000
+Date:   Tue, 26 Apr 2022 09:22:55 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: eeprom/at24: Add samsung,s524ad0xd1
+ compatible
+Message-ID: <YmgAP5yrHWJESq8N@robh.at.kernel.org>
+References: <20220422192355.2597523-1-robh@kernel.org>
+ <469d7ac0-7cf6-af91-7e24-1d9df88c9221@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220420125802.352306-1-jarkko.nikula@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <469d7ac0-7cf6-af91-7e24-1d9df88c9221@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 03:58:02PM +0300, Jarkko Nikula wrote:
-> It's more logical to read these get timing parameters ACPI method calls
-> sorted by speed categories in increasing order: Standard-mode,
-> Fast-mode, Fast-mode Plus and High-speed mode.
+On Sat, Apr 23, 2022 at 08:44:21PM +0200, Krzysztof Kozlowski wrote:
+> On 22/04/2022 21:23, Rob Herring wrote:
+> > The samsung,s524ad0xd1 compatible is in use, but not documented. According
+> > to arch/arm/mach-s3c/mach-smdk6410.c, the samsung,s524ad0xd1 is compatible
+> > with the 24c128.
+> > 
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  Documentation/devicetree/bindings/eeprom/at24.yaml | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
 > 
-> Originally these were in order after commit a92ec1746f10
-> ("i2c: designware: get fast plus and high speed *CNT configuration") but
-> got mixed up over the years.
+> The compatible - without 24c128 fallback - is used also in
+> arch/arm/boot/dts/exynos5250-smdk5250.dts and
+> Documentation/devicetree/bindings/i2c/samsung,s3c2410-i2c.yaml, so these
+> files should be fixed as well.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+The dts file I was aware of and I leave that to the Exynos 
+maintainers/users. :)
 
-> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> ---
->  drivers/i2c/busses/i2c-designware-common.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
-> index 9f8574320eb2..e7d316b1401a 100644
-> --- a/drivers/i2c/busses/i2c-designware-common.c
-> +++ b/drivers/i2c/busses/i2c-designware-common.c
-> @@ -266,9 +266,9 @@ int i2c_dw_acpi_configure(struct device *device)
->  	 * selected speed modes.
->  	 */
->  	i2c_dw_acpi_params(device, "SSCN", &dev->ss_hcnt, &dev->ss_lcnt, &ss_ht);
-> +	i2c_dw_acpi_params(device, "FMCN", &dev->fs_hcnt, &dev->fs_lcnt, &fs_ht);
->  	i2c_dw_acpi_params(device, "FPCN", &dev->fp_hcnt, &dev->fp_lcnt, &fp_ht);
->  	i2c_dw_acpi_params(device, "HSCN", &dev->hs_hcnt, &dev->hs_lcnt, &hs_ht);
-> -	i2c_dw_acpi_params(device, "FMCN", &dev->fs_hcnt, &dev->fs_lcnt, &fs_ht);
->  
->  	switch (t->bus_freq_hz) {
->  	case I2C_MAX_STANDARD_MODE_FREQ:
-> -- 
-> 2.35.1
-> 
+For some reason samsung,s3c2410-i2c.yaml is not getting a warning. I'll 
+have to investigate.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Rob
