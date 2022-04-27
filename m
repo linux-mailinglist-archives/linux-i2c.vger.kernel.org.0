@@ -2,65 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1993D51227F
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Apr 2022 21:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E915122AE
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Apr 2022 21:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232398AbiD0TZw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 27 Apr 2022 15:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
+        id S232516AbiD0TaV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 27 Apr 2022 15:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234249AbiD0TZQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 Apr 2022 15:25:16 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FD6515B8;
-        Wed, 27 Apr 2022 12:20:46 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id t6so3848434wra.4;
-        Wed, 27 Apr 2022 12:20:46 -0700 (PDT)
+        with ESMTP id S233876AbiD0T3A (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 Apr 2022 15:29:00 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F046C4ECF2;
+        Wed, 27 Apr 2022 12:25:18 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id d5so3859990wrb.6;
+        Wed, 27 Apr 2022 12:25:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :content-language:content-transfer-encoding;
-        bh=l+fWRCnlsDX073yEnS2AwNoaDg75F4nU098U70Iwazw=;
-        b=XQ7Tmh35axRFQPHV2QSYPADNzmaPb568O/5D2oDi9Een/DFOirBn1j6CPAcNahRZcS
-         MYBGgi0+DA6aNu0j/7V6pP/goI5jW7ktJgIXN71ofVmFeIdz3fSfNjYZ4LlWGjE4+y8G
-         H8XvyIqEdyQ2pCR4QqSXcvicztmmfnrEExE5mfhed7HIv+xaPMXBnPrvs44ubuUdO5WL
-         yRHG0SL4wCsh2rAcmmI1l40qer4f0Sm1KKodjNaFtYMUt60hSzcdHRfy5bJIRHuHIe/X
-         bwMeZRGe0AE8FSDh6L4+mDZVHKyWEVIz/hVUvUbShU7PumxTCTcGRJi1oINmldVd8Lr0
-         ZQfQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=0W3gP71n1MpZQMJz0XuN2Q/9yyGOAs5p7ZQydj5TXzM=;
+        b=IopDI538q2NMk/iwKb7awj5KfPdKiaM1XdpuM9nkHAkyvoji6a83CyYMnOnB68MYpN
+         Ut50K3HFUOgy3rCVTGq+yZGRUMUzPY/HHa8GAThXKVnFdQU82ZT9NtHh2LOVHPZs8dP+
+         yxLEeillobzoDqW/KJkhTOEQV52p7QcqN+/xXZz+ekIC+u7RNOAcwL9kQV3WEg3+vHPR
+         WhOwr/NlYCOyrCY6LXssKZsIA4T/DwUUJEx80UiuIFoja5EMNP2XrEhAdNOOyS8BFrSG
+         0/qT20j3hA6TizkAgAUwc9SjWi5gr9jcqA5kEL+bznCRKIkEKdf8TUXbFvOAoO5w2Zu5
+         eZaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:content-transfer-encoding;
-        bh=l+fWRCnlsDX073yEnS2AwNoaDg75F4nU098U70Iwazw=;
-        b=I2PHlu07BMt5J1b/eVL4+FsC3NxPdR5fMtDkw/TXPPZw8C62pfKgl4Q9NHgQKslJs2
-         yI63+TiHrt0WlqkJXjZ4P/Ei5+pdtJ2XByysKiMiSUWwtPjsQNEJbFcmGeinlcBK57W4
-         e17fik3S94XA2MnqaoYt3hKBRHOpMJLKqyIV7ywNx0OZkJGxpsvO1uc/mD5jvKgYLEH5
-         WRH5xAh5UNfU53QsnvgIWgNyaQ1uOdN93+ai3mnyddzj2IDz/M8DFNrmPK9lnoWNfIMY
-         e7hnShsIlqDz2JhrnHFImb4EKUAAEaoQSElDn36YyVxPtTydYN13n2cAsiPerBXiLEe7
-         vTIA==
-X-Gm-Message-State: AOAM530SkXyN0M6I1LEeVzTmAzES2fUY7tj/DtZmvJoO0e5AHnY7i6PJ
-        kMyysm3sK3YbKklEdbNcZt8=
-X-Google-Smtp-Source: ABdhPJyQuKyD0Ue7NvGpQOg3e2fy2XDG7LhcnSm4XToT4rx/2GyfR4m+gitgPaifyJLYl/9Fp+Awhg==
-X-Received: by 2002:adf:eb09:0:b0:207:bb77:9abb with SMTP id s9-20020adfeb09000000b00207bb779abbmr23721563wrn.375.1651087245295;
-        Wed, 27 Apr 2022 12:20:45 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=0W3gP71n1MpZQMJz0XuN2Q/9yyGOAs5p7ZQydj5TXzM=;
+        b=Fi3Oj5/iQzn43cINgBPf0Jcc+n8HOsEHriAskmHqynk+JSpiN4U19ldXKcJh7l2Vgp
+         Vslakm/WbHEwvNfYbbfk2Ki68D86OLMM+wYZf9jSu/DcalTkHMhf4iEpxzLT6deOZCFT
+         D6xpFsoLkUFsTCE7ar+qCsQaHNX0Pjb3+7QftIyIjmn1uNSEgkvJXdfaHxMxydb2WezP
+         H/WgfxLf7Xax3ccW33j4d1KbSyrkTRjFv+88+r5QRqLyKSUtLSkWH780xdvwX1C0bEu8
+         HnLdCsjCrh5JslOUWN0VcTziNQwXKNOntiZH3W7tR+xVo19XJLf0DjVHbBBEWn3f+dQx
+         +Sog==
+X-Gm-Message-State: AOAM5316jojx9vn8JsRa8hFGTbcANXMegwDc8xmYEbfuVHq0ttqTVbPm
+        FY6eLmjwhdNc8asqQziQTW9tqK1wjG8=
+X-Google-Smtp-Source: ABdhPJxlQSR42melvpN8JuJWA3iGQzH2dKFKRtRFwARgPNEKySFm88SLBQBfG2iWXu5+dJel1mP9wg==
+X-Received: by 2002:a5d:6e87:0:b0:20a:c40a:cda4 with SMTP id k7-20020a5d6e87000000b0020ac40acda4mr23215366wrz.370.1651087516222;
+        Wed, 27 Apr 2022 12:25:16 -0700 (PDT)
 Received: from ?IPV6:2a01:c23:c002:fc00:393a:1fdf:a518:6420? (dynamic-2a01-0c23-c002-fc00-393a-1fdf-a518-6420.c23.pool.telefonica.de. [2a01:c23:c002:fc00:393a:1fdf:a518:6420])
-        by smtp.googlemail.com with ESMTPSA id v18-20020adfc5d2000000b0020589b76704sm16188366wrg.70.2022.04.27.12.20.44
+        by smtp.googlemail.com with ESMTPSA id p3-20020adfaa03000000b00207a1db96cfsm15067055wrd.71.2022.04.27.12.25.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 12:20:44 -0700 (PDT)
-Message-ID: <3e6c934e-5298-42c5-c346-31b1acaa06ba@gmail.com>
-Date:   Wed, 27 Apr 2022 21:20:40 +0200
+        Wed, 27 Apr 2022 12:25:15 -0700 (PDT)
+Message-ID: <e2e30c3b-21db-72d1-1b40-d1f2fbcaaa43@gmail.com>
+Date:   Wed, 27 Apr 2022 21:23:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
+Subject: [PATCH v2 1/3] dt-bindings: i2c-gpio: Add property
+ i2c-gpio,sda-output-only
+Content-Language: en-US
 From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH v2 0/3] i2c: gpio: support write-only sda
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>
 Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Content-Language: en-US
+References: <3e6c934e-5298-42c5-c346-31b1acaa06ba@gmail.com>
+In-Reply-To: <3e6c934e-5298-42c5-c346-31b1acaa06ba@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,23 +80,36 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 There are slave devices that understand I2C but have read-only
 SDA and SCL. Examples are FD650 7-segment LED controller and
 its derivatives. Typical board designs don't even have a
-pull-up for both pins. This patch makes i2c-gpio usable with
-such devices, based on new DT property i2c-gpio,sda-output-only.
+pull-up for both pins. Therefore don't enforce open-drain
+if SDA and SCL both are unidirectional. This patch makes
+i2c-gpio usable with such devices, based on new DT property
+i2c-gpio,sda-output-only.
 
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
 v2:
-- improve commit message for patch 1
+- improve commit message
+---
+ Documentation/devicetree/bindings/i2c/i2c-gpio.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Heiner Kallweit (3):
-  dt-bindings: i2c-gpio: Add property i2c-gpio,sda-output-only
-  i2c: algo: bit: allow getsda to be NULL
-  i2c: gpio: support write-only sda
-
- .../devicetree/bindings/i2c/i2c-gpio.yaml        |  4 ++++
- drivers/i2c/algos/i2c-algo-bit.c                 | 16 +++++++++++++---
- drivers/i2c/busses/i2c-gpio.c                    | 14 +++++++++++---
- include/linux/platform_data/i2c-gpio.h           |  2 ++
- 4 files changed, 30 insertions(+), 6 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-gpio.yaml b/Documentation/devicetree/bindings/i2c/i2c-gpio.yaml
+index fd0402845..25cd1b260 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-gpio.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-gpio.yaml
+@@ -33,6 +33,10 @@ properties:
+       open drain.
+     maxItems: 1
+ 
++  i2c-gpio,sda-output-only:
++    description: sda as output only
++    type: boolean
++
+   i2c-gpio,scl-output-only:
+     description: scl as output only
+     type: boolean
 -- 
 2.35.3
+
+
 
