@@ -2,99 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF01512906
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Apr 2022 03:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7905133AB
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Apr 2022 14:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbiD1Brp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 27 Apr 2022 21:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
+        id S1346227AbiD1Mao (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 28 Apr 2022 08:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiD1Bro (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 Apr 2022 21:47:44 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CBF98F5C;
-        Wed, 27 Apr 2022 18:44:31 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id bo5so3011939pfb.4;
-        Wed, 27 Apr 2022 18:44:31 -0700 (PDT)
+        with ESMTP id S1346080AbiD1Mao (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 Apr 2022 08:30:44 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CCCA6E27
+        for <linux-i2c@vger.kernel.org>; Thu, 28 Apr 2022 05:27:29 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id p12so8329150lfs.5
+        for <linux-i2c@vger.kernel.org>; Thu, 28 Apr 2022 05:27:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iFHqCQRjOjnZR4+Edhuht6dyVV23jVkd4G8gkgGiMd8=;
-        b=KkxJxoypCAU4IHX3T8/MwB3JJzUPsS7qKN8rj1qlGEDB7aweXU/UwntjuzFNfWlov0
-         1+QgRqC5aM29/cz/twV+pwJhD6TeqZ+0l5W9cGo5LzyWga8DAKyuPclsVU7advwHfNx6
-         eYI9+cpzYcKh6pM3FwwLt8o2kdvoAMzd4demBH8aS9969MYDVElqwNKVKNc55IoJZBxC
-         4kTMrPvxGKyRFxZtamUUwNzb3b7ZEOqesOFY7mDgtO4jQ/hv3UXcUNwO7POXcYSzKJvo
-         g0Hevg2GzKUN5C1u+h9HoFNCUiyEAm7rqI9OE1hb5iXmrB35UgRXyt/YzAMAuHac8mIw
-         PX0A==
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D86VqWFsSM3Q2BxVORseBTMD8q1EWJ6nNtqyTRVzxzo=;
+        b=m0Z2OtpFG7W1/JRCK1QHki2+nTLtGozvlTi+CEdYgSrcoC+gkJGA/Z5cpXEAHZnApd
+         T2y4NjA2cdQPHZ0s3Bxtb+iGu4WvJAdiGJbvyVeya2YXiyPk0j7nf+LXpJfeROqWAXlf
+         hAkL3jmYjJHAZlOkZh9TFXQNxzxla/mVgcW5zLiCkuKHiysb/h2hNOyY+jGIgPNCvVE8
+         VfvSBjvX7blFyifiwkBIB2+3YcovnTxxj4Jf+6o/JLHow3ilROL+4MAk6CZhlJsDT9Lg
+         U2xAJPC1a/vS1wgds9M9xWG3zxvs9v53QZXEKMd3TQ4UdWLitMKneFHCB0WjHC8zaz85
+         yELA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iFHqCQRjOjnZR4+Edhuht6dyVV23jVkd4G8gkgGiMd8=;
-        b=Rxj7J0MJ+/oYTm26zPAUGGiQgpDkNhSOoXiPGsYhEymMKWTmglf7j3HFIgI8Q5EvW1
-         knIq1TuMh/vYSKlFpkUtBa4iHqNRXLFMr5TrNbXSN5Mf74Cy7ZlPCvntspN5nMhL1Cs9
-         8U+9fW2rjacW5N1uIxbI2HOwBwYGguay6S3h5ej98ys5oRDfCFg2PXQZgrrd+O4b6b6x
-         VbS78aY0hKVQmzYP/Srxy8n1Y+vLBlZnCvuOw5SRbXKRe4diMdnN+0R/anCBc5conu/b
-         5qhe4kEWO75bzudisEYoU5EiTLbXS7j36NG3/MatiZ9dau8kEu4eCAkfCI10iospVUhr
-         D9tg==
-X-Gm-Message-State: AOAM530w0n3otJ6KYsrF3Fkek+hJeQz/nce8fDe1do8Ms9FLVor4rbCa
-        5RLK8FYYIIfMu2GWgrPUxaU=
-X-Google-Smtp-Source: ABdhPJyLAcse4aT8yNI3XvKGkp0gEKbv+Sqha9Wd+n+TT2mpsyGXnI0AG2KhVUjMh6NJMyYFA6EcsQ==
-X-Received: by 2002:aa7:9085:0:b0:50d:35ae:271 with SMTP id i5-20020aa79085000000b0050d35ae0271mr21469622pfa.42.1651110271497;
-        Wed, 27 Apr 2022 18:44:31 -0700 (PDT)
-Received: from 9a2d8922b8f1 ([122.161.52.85])
-        by smtp.gmail.com with ESMTPSA id w137-20020a62828f000000b0050d2f9c3409sm14420842pfd.199.2022.04.27.18.44.28
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D86VqWFsSM3Q2BxVORseBTMD8q1EWJ6nNtqyTRVzxzo=;
+        b=R3giU0EbubgdmU7i2OAKivULTzvlRq770F01P54O9oeYH7ak7xGA/F4oM1GEtz7ni3
+         EWUcIYroIZEXSRHYGADuEdtvwXYSFK4zLPzVXnKsNwfh20K7QxZYSnZ3bnSVNN7oZoli
+         2KbRNnUXMKyhMc990BYFgrs86Q3wvhJ9J3L4Og64xzyipDc4MsVeC8cS3QhAKZ5KD5xw
+         PeW2C0whFwf8EQfbv4tSw5P71ZhQa68Qote68zWwDsbGmo3BmlTdgtGADaIwu0YOU4ex
+         2ooiSxlD1I5dK8IdyveGwhQoHg96VdzTDCDwkq+5uS2hz5dbZC4T7H/v4fnKGMRx+zxk
+         gmGg==
+X-Gm-Message-State: AOAM533ZhVkQy86FIq9Gc0gHUPO05wPE5CuPNmwwDk5WslIYUFX6l4RG
+        D35vh4ycrzQodH3vGKOb3v8lQ1hETm6mJA==
+X-Google-Smtp-Source: ABdhPJwVaLVWeZh7xSITy/Q++AcEKHxRKqg7clfLQNHY+c1uh7VRfE5Rhk7uUtS+kWH1nGV1BbWf9w==
+X-Received: by 2002:a05:6512:694:b0:471:8eae:8c13 with SMTP id t20-20020a056512069400b004718eae8c13mr23805009lfe.37.1651148847853;
+        Thu, 28 Apr 2022 05:27:27 -0700 (PDT)
+Received: from dabros-l.wifi.semihalf.net ([185.157.14.92])
+        by smtp.gmail.com with ESMTPSA id s12-20020ac25fec000000b0044837422334sm2340475lfg.154.2022.04.28.05.27.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 18:44:31 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 07:14:25 +0530
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: I2C: Add Qualcomm Geni based QUP I2C
- bindings
-Message-ID: <20220428014425.GB72033@9a2d8922b8f1>
-References: <20220404182938.29492-1-singh.kuldeep87k@gmail.com>
- <20220404182938.29492-2-singh.kuldeep87k@gmail.com>
+        Thu, 28 Apr 2022 05:27:27 -0700 (PDT)
+From:   Jan Dabros <jsd@semihalf.com>
+To:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com
+Cc:     mika.westerberg@linux.intel.com, rrangel@chromium.org,
+        Nimesh.Easow@amd.com, upstream@semihalf.com,
+        Jan Dabros <jsd@semihalf.com>
+Subject: [PATCH] i2c: designware: Modify timing parameters for amdpsp mailbox
+Date:   Thu, 28 Apr 2022 14:26:51 +0200
+Message-Id: <20220428122651.208575-1-jsd@semihalf.com>
+X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220404182938.29492-2-singh.kuldeep87k@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 11:59:34PM +0530, Kuldeep Singh wrote:
-> GENI(generic interface) based Qualcomm Universal Peripheral controller
-> can support multiple serial interfaces like SPI,UART and I2C.
-> 
-> Unlike other I2C controllers, QUP I2C bindings are present in parent
-> schema. Move it out from parent to an individual binding and let parent
-> refer to child schema later on.
-> 
-> Please note, current schema isn't complete as it misses out few
-> properties and thus, add these missing properties along the process.
-> 
-> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-> ---
-> v2:
-> - Change compatible from enum to const
-> - Drop clock-frequency description
-> - Sort nodes
-> ---
+Adjust retry period and timeout values for x86-PSP mailbox based on the
+typical I2C traffic generated by PSP. In order to limit the possibility
+of timeouts, x86 should reduce the interval between retries as well as
+increase overall time after which it gives up.
 
-Gentle ping to revive this thread.
-Patch 2,3,4 are accepted in this series and this one is only left.
+Signed-off-by: Jan Dabros <jsd@semihalf.com>
+---
+ drivers/i2c/busses/i2c-designware-amdpsp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Bjorn, could you please help in picking this up if there are no further
-review comments. Thanks!
+diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
+index 9b37f2b95abc..b624356c945f 100644
+--- a/drivers/i2c/busses/i2c-designware-amdpsp.c
++++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+@@ -16,8 +16,8 @@
+ #define PSP_CMD_TIMEOUT_US	(500 * USEC_PER_MSEC)
+ 
+ #define PSP_I2C_REQ_BUS_CMD		0x64
+-#define PSP_I2C_REQ_RETRY_CNT		10
+-#define PSP_I2C_REQ_RETRY_DELAY_US	(50 * USEC_PER_MSEC)
++#define PSP_I2C_REQ_RETRY_CNT		400
++#define PSP_I2C_REQ_RETRY_DELAY_US	(25 * USEC_PER_MSEC)
+ #define PSP_I2C_REQ_STS_OK		0x0
+ #define PSP_I2C_REQ_STS_BUS_BUSY	0x1
+ #define PSP_I2C_REQ_STS_INV_PARAM	0x3
+-- 
+2.36.0.rc2.479.g8af0fa9b8e-goog
+
