@@ -2,97 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7905133AB
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Apr 2022 14:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62EAE51348A
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Apr 2022 15:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346227AbiD1Mao (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 28 Apr 2022 08:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
+        id S231643AbiD1NLK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 28 Apr 2022 09:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346080AbiD1Mao (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 Apr 2022 08:30:44 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CCCA6E27
-        for <linux-i2c@vger.kernel.org>; Thu, 28 Apr 2022 05:27:29 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id p12so8329150lfs.5
-        for <linux-i2c@vger.kernel.org>; Thu, 28 Apr 2022 05:27:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D86VqWFsSM3Q2BxVORseBTMD8q1EWJ6nNtqyTRVzxzo=;
-        b=m0Z2OtpFG7W1/JRCK1QHki2+nTLtGozvlTi+CEdYgSrcoC+gkJGA/Z5cpXEAHZnApd
-         T2y4NjA2cdQPHZ0s3Bxtb+iGu4WvJAdiGJbvyVeya2YXiyPk0j7nf+LXpJfeROqWAXlf
-         hAkL3jmYjJHAZlOkZh9TFXQNxzxla/mVgcW5zLiCkuKHiysb/h2hNOyY+jGIgPNCvVE8
-         VfvSBjvX7blFyifiwkBIB2+3YcovnTxxj4Jf+6o/JLHow3ilROL+4MAk6CZhlJsDT9Lg
-         U2xAJPC1a/vS1wgds9M9xWG3zxvs9v53QZXEKMd3TQ4UdWLitMKneFHCB0WjHC8zaz85
-         yELA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D86VqWFsSM3Q2BxVORseBTMD8q1EWJ6nNtqyTRVzxzo=;
-        b=R3giU0EbubgdmU7i2OAKivULTzvlRq770F01P54O9oeYH7ak7xGA/F4oM1GEtz7ni3
-         EWUcIYroIZEXSRHYGADuEdtvwXYSFK4zLPzVXnKsNwfh20K7QxZYSnZ3bnSVNN7oZoli
-         2KbRNnUXMKyhMc990BYFgrs86Q3wvhJ9J3L4Og64xzyipDc4MsVeC8cS3QhAKZ5KD5xw
-         PeW2C0whFwf8EQfbv4tSw5P71ZhQa68Qote68zWwDsbGmo3BmlTdgtGADaIwu0YOU4ex
-         2ooiSxlD1I5dK8IdyveGwhQoHg96VdzTDCDwkq+5uS2hz5dbZC4T7H/v4fnKGMRx+zxk
-         gmGg==
-X-Gm-Message-State: AOAM533ZhVkQy86FIq9Gc0gHUPO05wPE5CuPNmwwDk5WslIYUFX6l4RG
-        D35vh4ycrzQodH3vGKOb3v8lQ1hETm6mJA==
-X-Google-Smtp-Source: ABdhPJwVaLVWeZh7xSITy/Q++AcEKHxRKqg7clfLQNHY+c1uh7VRfE5Rhk7uUtS+kWH1nGV1BbWf9w==
-X-Received: by 2002:a05:6512:694:b0:471:8eae:8c13 with SMTP id t20-20020a056512069400b004718eae8c13mr23805009lfe.37.1651148847853;
-        Thu, 28 Apr 2022 05:27:27 -0700 (PDT)
-Received: from dabros-l.wifi.semihalf.net ([185.157.14.92])
-        by smtp.gmail.com with ESMTPSA id s12-20020ac25fec000000b0044837422334sm2340475lfg.154.2022.04.28.05.27.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 05:27:27 -0700 (PDT)
-From:   Jan Dabros <jsd@semihalf.com>
-To:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com
-Cc:     mika.westerberg@linux.intel.com, rrangel@chromium.org,
-        Nimesh.Easow@amd.com, upstream@semihalf.com,
-        Jan Dabros <jsd@semihalf.com>
-Subject: [PATCH] i2c: designware: Modify timing parameters for amdpsp mailbox
-Date:   Thu, 28 Apr 2022 14:26:51 +0200
-Message-Id: <20220428122651.208575-1-jsd@semihalf.com>
-X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
+        with ESMTP id S229846AbiD1NLJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 Apr 2022 09:11:09 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB75B0A6C;
+        Thu, 28 Apr 2022 06:07:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651151271; x=1682687271;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SJ2/jLDGpB14X2V0z6/tb8tFxo8ClzdlQrUjJQrpJ6k=;
+  b=dMmArZomIsnfHGj0vxuj/BVmrX61FoefIJ/miEZwb8hUI+XNWOKFq65H
+   fcWT1mRo9e1l8YeKZGgzC2tP0F0o7tq4I+R+uGJSWQYj7VpOOcwEHWr4J
+   8bJblhrZ3sLzJKv2lbaVBkeSs0xRQY501jQQHxH8+RtOw+9NxhCp9kTKK
+   b+ywFXWhkI/YkZZOj0zUmGDKojgc2PGyl1vnU/IwoYc+Fbsv+c8Zh1ePx
+   EPKhWb7zbVq/zxrIW+C5cMrouuP7MBkIlRwG8CxjUX5w11vMG6+/dT7zW
+   CPg49sQ0oBph3CzLN4CwYJnvsASBJpNTXCjZ8qZSfISYgfK7Os8ORptsi
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="266097474"
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="266097474"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 06:07:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="618124881"
+Received: from mylly.fi.intel.com (HELO [10.237.72.151]) ([10.237.72.151])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Apr 2022 06:07:48 -0700
+Message-ID: <60218a3b-9b56-d9c1-a0f4-97c171a050ba@linux.intel.com>
+Date:   Thu, 28 Apr 2022 16:07:47 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.0
+Subject: Re: [PATCH] i2c: designware: Modify timing parameters for amdpsp
+ mailbox
+Content-Language: en-US
+To:     Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, andriy.shevchenko@linux.intel.com
+Cc:     mika.westerberg@linux.intel.com, rrangel@chromium.org,
+        Nimesh.Easow@amd.com, upstream@semihalf.com
+References: <20220428122651.208575-1-jsd@semihalf.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20220428122651.208575-1-jsd@semihalf.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Adjust retry period and timeout values for x86-PSP mailbox based on the
-typical I2C traffic generated by PSP. In order to limit the possibility
-of timeouts, x86 should reduce the interval between retries as well as
-increase overall time after which it gives up.
+On 4/28/22 15:26, Jan Dabros wrote:
+> Adjust retry period and timeout values for x86-PSP mailbox based on the
+> typical I2C traffic generated by PSP. In order to limit the possibility
+> of timeouts, x86 should reduce the interval between retries as well as
+> increase overall time after which it gives up.
+> 
+> Signed-off-by: Jan Dabros <jsd@semihalf.com>
+> ---
+>   drivers/i2c/busses/i2c-designware-amdpsp.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> index 9b37f2b95abc..b624356c945f 100644
+> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
+> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> @@ -16,8 +16,8 @@
+>   #define PSP_CMD_TIMEOUT_US	(500 * USEC_PER_MSEC)
+>   
+>   #define PSP_I2C_REQ_BUS_CMD		0x64
+> -#define PSP_I2C_REQ_RETRY_CNT		10
+> -#define PSP_I2C_REQ_RETRY_DELAY_US	(50 * USEC_PER_MSEC)
+> +#define PSP_I2C_REQ_RETRY_CNT		400
+> +#define PSP_I2C_REQ_RETRY_DELAY_US	(25 * USEC_PER_MSEC)
+>   #define PSP_I2C_REQ_STS_OK		0x0
+>   #define PSP_I2C_REQ_STS_BUS_BUSY	0x1
+>   #define PSP_I2C_REQ_STS_INV_PARAM	0x3
 
-Signed-off-by: Jan Dabros <jsd@semihalf.com>
----
- drivers/i2c/busses/i2c-designware-amdpsp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Out of curiosity, can it be up to 400 * 25 ms = 10 s?
 
-diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
-index 9b37f2b95abc..b624356c945f 100644
---- a/drivers/i2c/busses/i2c-designware-amdpsp.c
-+++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-@@ -16,8 +16,8 @@
- #define PSP_CMD_TIMEOUT_US	(500 * USEC_PER_MSEC)
- 
- #define PSP_I2C_REQ_BUS_CMD		0x64
--#define PSP_I2C_REQ_RETRY_CNT		10
--#define PSP_I2C_REQ_RETRY_DELAY_US	(50 * USEC_PER_MSEC)
-+#define PSP_I2C_REQ_RETRY_CNT		400
-+#define PSP_I2C_REQ_RETRY_DELAY_US	(25 * USEC_PER_MSEC)
- #define PSP_I2C_REQ_STS_OK		0x0
- #define PSP_I2C_REQ_STS_BUS_BUSY	0x1
- #define PSP_I2C_REQ_STS_INV_PARAM	0x3
--- 
-2.36.0.rc2.479.g8af0fa9b8e-goog
-
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
