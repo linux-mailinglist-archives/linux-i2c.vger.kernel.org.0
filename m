@@ -2,111 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F392B513570
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Apr 2022 15:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84145514A3B
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Apr 2022 15:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241058AbiD1Npi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 28 Apr 2022 09:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60722 "EHLO
+        id S231274AbiD2NLR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 29 Apr 2022 09:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbiD1Nph (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 Apr 2022 09:45:37 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2371B5C666
-        for <linux-i2c@vger.kernel.org>; Thu, 28 Apr 2022 06:42:23 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id q76so969002pgq.10
-        for <linux-i2c@vger.kernel.org>; Thu, 28 Apr 2022 06:42:23 -0700 (PDT)
+        with ESMTP id S230424AbiD2NLR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 29 Apr 2022 09:11:17 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537445FBF;
+        Fri, 29 Apr 2022 06:07:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=TF6mXmKGNoDwU6foP54u0rtByZLvOZZHf1ea13Jp9jo=;
-        b=UtizHoh7Wnf8sQMlLrn++pJjIO2Yt86r/dJMxPTfIIOQPd5NDV0M4NKMUmjNG5pPDX
-         wHLvFQK0QNLY1EmUuxlLifQqOCwvy6a3IB/iru4Yzqgt+YfuN1bILyApKLmKbhXOkPrk
-         Y79EF4kT7vAEbi23ZVaFMVQAdNPGygXn/aPVnnDs0Uus1etxdGHwoH2FstKMVHeJReXo
-         05cJD6wxXl3LNLK3fmDugO6ae2hEvkHu/QY1FgsVTmLtplMyzsi1dEvh4S22TGwTgqhB
-         J+8uNs1EUnmWnUr55MBfwZ+xf2pHftjtsTb6PmLXHQf0XyFmPzeOQREA+5UIojF61sRW
-         sK0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=TF6mXmKGNoDwU6foP54u0rtByZLvOZZHf1ea13Jp9jo=;
-        b=wm4ivJ75ryOaGYY2zCmTKxO0O6mpX67X/Tjc2XH3Fa8P7A9DQUKtvk145Nr1SsgxqS
-         Ai3+1BuJL0Z9E6a42jTTBTgXkJiDIdofQmw5LDjM7q+xeNj5Af9Gj24gb/jbr4mO3AIR
-         UoiAOa9rNS4lSTyqyo4aj1zYlgqvpkAgTSNneilDkA1b0aAWuGLaWutHtvA4qFyqcoC5
-         /fx2hHYGXrBlhHlR8AEzvCmlNwUTE0ukpdThtpVIFxqavAznjk0O5XEMIKxui5CiZ+Uw
-         39MAgt7mQ3Cbzuy9u2q/rVkO85yNw2Ne+lB1g7hWo3pnNgPvS+DYZgsqxLbn0xahI7Hm
-         t40g==
-X-Gm-Message-State: AOAM532kWmLtZtbRIq/AebA8tx4XEC8mHUzIAk2Aeb2eBxuEpc41FZGL
-        EScF7ZRScwUNpMWlCx6D9BOhVzovwIVzA8yLQVkd6g==
-X-Google-Smtp-Source: ABdhPJyILdXQ2shK4sF3iS/l+Xso76KavH4e9aIAo/F9XVcR9zKVKp3G55ODRHOm/XfAxE/2P6ZGvz26bT1ooYV+Q+s=
-X-Received: by 2002:a63:42:0:b0:3a8:47f7:bf0d with SMTP id 63-20020a630042000000b003a847f7bf0dmr28454845pga.276.1651153342394;
- Thu, 28 Apr 2022 06:42:22 -0700 (PDT)
+  d=axis.com; q=dns/txt; s=axis-central1; t=1651237678;
+  x=1682773678;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uJsOw0YEEsJ2CEhKf3f5//UtbKJYw9da+eeqF/N/AZ0=;
+  b=PX4KQlsZU5WvXDJ+45EUT/CBieEFSNyzdaJYbpS4QCDDC/lEZxWyF+Zc
+   +G39Ycy6B7zyX9pwA/oRmTgGoIPaUZFUynBxJHKJvvKvLgL4VyaUCAVpn
+   J0fm8yL+vPdN6Img9DT01IL0CZDh6IfotyWQF7GPl5r0AZoRvzbUd80PB
+   PFhx4em/B5Z2MXsBCTyjd1DXcGICM65zNQZl6YHhb+iPthzV0r12TTSD2
+   KdOYlNj6XVluZmLC8Bxlh9Iv5LHXhtp9gVRQ+crDsLHcZOQbfSRNYQJBk
+   +OsPPf98LYzbh1fy7JB3OL4V7csy/MYEAVgqJB35G5PiV3Zf0KYMoqYbG
+   Q==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     <wsa@kernel.org>
+CC:     <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/1] i2c: Allow disabling auto detection via devicetree
+Date:   Fri, 29 Apr 2022 15:07:48 +0200
+Message-ID: <20220429130749.3032462-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220428122651.208575-1-jsd@semihalf.com> <60218a3b-9b56-d9c1-a0f4-97c171a050ba@linux.intel.com>
-In-Reply-To: <60218a3b-9b56-d9c1-a0f4-97c171a050ba@linux.intel.com>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Thu, 28 Apr 2022 15:42:11 +0200
-Message-ID: <CAOtMz3OeLzvtJ_T6w9v-OYCbTTxpfQjLsajN-a439QuETod7hQ@mail.gmail.com>
-Subject: Re: [PATCH] i2c: designware: Modify timing parameters for amdpsp mailbox
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Raul E Rangel <rrangel@chromium.org>,
-        "Easow, Nimesh" <Nimesh.Easow@amd.com>, upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-czw., 28 kwi 2022 o 15:07 Jarkko Nikula
-<jarkko.nikula@linux.intel.com> napisa=C5=82(a):
->
-> On 4/28/22 15:26, Jan Dabros wrote:
-> > Adjust retry period and timeout values for x86-PSP mailbox based on the
-> > typical I2C traffic generated by PSP. In order to limit the possibility
-> > of timeouts, x86 should reduce the interval between retries as well as
-> > increase overall time after which it gives up.
-> >
-> > Signed-off-by: Jan Dabros <jsd@semihalf.com>
-> > ---
-> >   drivers/i2c/busses/i2c-designware-amdpsp.c | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/b=
-usses/i2c-designware-amdpsp.c
-> > index 9b37f2b95abc..b624356c945f 100644
-> > --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
-> > +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-> > @@ -16,8 +16,8 @@
-> >   #define PSP_CMD_TIMEOUT_US  (500 * USEC_PER_MSEC)
-> >
-> >   #define PSP_I2C_REQ_BUS_CMD         0x64
-> > -#define PSP_I2C_REQ_RETRY_CNT                10
-> > -#define PSP_I2C_REQ_RETRY_DELAY_US   (50 * USEC_PER_MSEC)
-> > +#define PSP_I2C_REQ_RETRY_CNT                400
-> > +#define PSP_I2C_REQ_RETRY_DELAY_US   (25 * USEC_PER_MSEC)
-> >   #define PSP_I2C_REQ_STS_OK          0x0
-> >   #define PSP_I2C_REQ_STS_BUS_BUSY    0x1
-> >   #define PSP_I2C_REQ_STS_INV_PARAM   0x3
->
-> Out of curiosity, can it be up to 400 * 25 ms =3D 10 s?
+v3:
+- Drop bindings patch since it has been merged in dt-schema:
+  https://github.com/devicetree-org/dt-schema/commit/ba55f96c6d8d
+- Reword commit message of i2c patch to indicate that the property is
+  documented in dt-schema.
 
-Right, worst case x86 is trying to take arbitration of the bus for
-10s. But this is very unlikely (margin of safety).
+v2:
+- Change subject prefix of bindings patch
+- Reword description of property in bindings patch
 
-> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+When a driver with a ->detect callback (such as lm75) is loaded, the i2c core
+performs I2C transactions on the bus to all the addresses listed in that
+driver's address_list.  This kind of probing wastes time and as
+Documentation/i2c/instantiating-devices.rst says, this method is not
+recommended and it is instead advised to list all devices in the devicetree.
 
-Thanks!
+However, even if all the devices are listed in the devicetree, there is
+currently no way to prevent the core from attempting auto detection short of
+patching controller drivers to not pass the I2C_CLASS* bits in adap->class.
+The latter is not always possible since generic drivers like i2c-gpio set these
+bits.
 
-Best Regards,
-Jan
+To avoid this unnecessary probing and reduce boot time, this series adds
+support in the I2C core to allow this feature to be disabled.
+
+Cc: linux-i2c@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Vincent Whitchurch (1):
+  i2c: core: support no-detect property
+
+ drivers/i2c/i2c-core-base.c | 8 +++++++-
+ include/linux/i2c.h         | 1 +
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+-- 
+2.34.1
+
