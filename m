@@ -2,58 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3D85170A0
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 May 2022 15:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 238395173FD
+	for <lists+linux-i2c@lfdr.de>; Mon,  2 May 2022 18:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236157AbiEBNjk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 2 May 2022 09:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42652 "EHLO
+        id S1386186AbiEBQSD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 2 May 2022 12:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385392AbiEBNix (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 May 2022 09:38:53 -0400
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C21B1DD
-        for <linux-i2c@vger.kernel.org>; Mon,  2 May 2022 06:35:20 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:194e:5782:c420:7f87])
-        by michel.telenet-ops.be with bizsmtp
-        id Rpb52700J28fWK506pb5Ud; Mon, 02 May 2022 15:35:18 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nlWCe-002mrk-Ls; Mon, 02 May 2022 15:35:04 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nlWCe-002vAm-5C; Mon, 02 May 2022 15:35:04 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
+        with ESMTP id S1357459AbiEBQSC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 May 2022 12:18:02 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC241DFE4;
+        Mon,  2 May 2022 09:14:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651508073; x=1683044073;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J/zBHDxhx9Erqph7DBTL1Nk5osAbgd2b/7QSvJaYzxE=;
+  b=F0a77bk2Kbi/bbTcCkXDLX/Egw7XW8812Vs0SbM1wdt6fwkXFlEB3c4W
+   UU5LLxQL1ycnWZCdst4+CHWLO6OIalIz675WKPbydTEGiJMOhbeKVS0RD
+   651vsyst9fmmCZFolb+5KaYWRkzc9cz3wo9sSzClkreUgFa5eZtA7z7hx
+   9LYuvKNZPIojRetHJRqL4dGvG9LSFUwD+wpFuUxV4IOwOoA8egX1byzm5
+   Wxeu4SfZ8YO6h38JwEzfsqj6ABO1+VzGyVfk8dHtdlr/FVDiw2WqdQkY2
+   YJCrz5v6W1mjt/FSMjdqW/EBN/TmPkTnvgkGM/vOo8fhaGzZB26u3G4VY
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="247801312"
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="247801312"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 09:14:33 -0700
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="619957666"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 09:14:27 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nlYgq-00B6dj-2Z;
+        Mon, 02 May 2022 19:14:24 +0300
+Date:   Mon, 2 May 2022 19:14:23 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Cc:     devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 7/7] dt-bindings: watchdog: renesas,wdt: R-Car V3U is R-Car Gen4
-Date:   Mon,  2 May 2022 15:34:59 +0200
-Message-Id: <2882a6de3905a57ae62d91060d27521af43c4068.1651497024.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1651497024.git.geert+renesas@glider.be>
-References: <cover.1651497024.git.geert+renesas@glider.be>
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: Re: [PATCH v4 5/8] mfd: lpc_ich: Add support for pinctrl in non-ACPI
+ system
+Message-ID: <YnADXy3A+kIsL+f9@smile.fi.intel.com>
+References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+ <20220131151346.45792-6-andriy.shevchenko@linux.intel.com>
+ <YgvaqBB8fNVWp1lN@google.com>
+ <YgveyspHVXCp2ul+@smile.fi.intel.com>
+ <YgvjDy1R06IC8FE5@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgvjDy1R06IC8FE5@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,31 +87,48 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Despite the name, R-Car V3U is the first member of the R-Car Gen4
-family.  Hence move its compatible value to the R-Car Gen4 section.
+On Tue, Feb 15, 2022 at 05:29:51PM +0000, Lee Jones wrote:
+> On Tue, 15 Feb 2022, Andy Shevchenko wrote:
+> > On Tue, Feb 15, 2022 at 04:54:00PM +0000, Lee Jones wrote:
+> > > On Mon, 31 Jan 2022, Andy Shevchenko wrote:
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+...
 
-diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-index 77ee7c4b8067f506..1fa243052327bffe 100644
---- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-@@ -59,11 +59,11 @@ properties:
-               - renesas,r8a77980-wdt     # R-Car V3H
-               - renesas,r8a77990-wdt     # R-Car E3
-               - renesas,r8a77995-wdt     # R-Car D3
--              - renesas,r8a779a0-wdt     # R-Car V3U
-           - const: renesas,rcar-gen3-wdt # R-Car Gen3 and RZ/G2
- 
-       - items:
-           - enum:
-+              - renesas,r8a779a0-wdt     # R-Car V3U
-               - renesas,r8a779f0-wdt     # R-Car S4-8
-           - const: renesas,rcar-gen4-wdt # R-Car Gen4
- 
+> > > > +static struct resource apl_gpio_resources[APL_GPIO_NR_DEVICES][2] = {
+> > > > +	[APL_GPIO_NORTH] = {
+> > > > +		DEFINE_RES_MEM(APL_GPIO_NORTH_OFFSET, 0x1000),
+> > > 
+> > > Are these 0x1000's being over-written in lpc_ich_init_pinctrl()?
+> > > 
+> > > If so, why pre-initialise?
+> > 
+> > You mean to pre-initialize the offsets, but leave the length to be added
+> > in the function? It can be done, but it feels inconsistent, since we would
+> > have offsets and lengths in different places for the same thingy. That said,
+> > I prefer current way for the sake of consistency.
+> 
+> Don't you over-write this entry entirely?
+> 
+>   for (i = 0; i < ARRAY_SIZE(apl_gpio_devices); i++) {
+>         struct resource *mem = &apl_gpio_resources[i][0];
+> 
+>         /* Fill MEM resource */
+>         mem->start += base.start;
+>         mem->end += base.start;
+>         mem->flags = base.flags;
+>   }
+> 
+> Oh wait, you're just adding the base value to the offsets.
+
+Right.
+
+> In which case that comment is also confusing!
+
+I will fix a comment in the next version.
+
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
