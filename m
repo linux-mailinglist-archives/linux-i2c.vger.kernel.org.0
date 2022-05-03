@@ -2,58 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 025F15184BC
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 May 2022 15:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6CB5184C5
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 May 2022 15:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235663AbiECNFW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 3 May 2022 09:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
+        id S235664AbiECNFj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 3 May 2022 09:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235667AbiECNFV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 3 May 2022 09:05:21 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C25193ED
-        for <linux-i2c@vger.kernel.org>; Tue,  3 May 2022 06:01:47 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id p18so19748136edr.7
-        for <linux-i2c@vger.kernel.org>; Tue, 03 May 2022 06:01:47 -0700 (PDT)
+        with ESMTP id S235683AbiECNFj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 3 May 2022 09:05:39 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B301C119
+        for <linux-i2c@vger.kernel.org>; Tue,  3 May 2022 06:02:05 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id l18so33263791ejc.7
+        for <linux-i2c@vger.kernel.org>; Tue, 03 May 2022 06:02:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7Ds4LsGaaSrzpA9k9avFD90e+PqgmFVGpadAexhLvgE=;
-        b=TdQOH2zo//QPttTudYGt81Z/yDrk3BSGIIjNieyYejqrMODsRAdwkCkxG18RvmueY6
-         iHFaaqU2/gYGDutjRihcCZFaaai0E01p24AIiaL8R/CQ4n112uUATO3kkkVoKcptUI1o
-         Sn+gCjKas+iRbrUB+31MZeSCs6QnEqo5T0yo0DWpz1TNP0IGP9LTJd26Fg74q/sFQWvX
-         uIyzYpKYZZYkVDdC3nuHpXYj/+ApiO3w9x/b+9HpuFzGQOU0z9hI90Ah15PrgqYMaDbq
-         BUwq10cb9/Nn050mB+f3Zn8of/wNnGLWFGnXKAgfBOQa17weFRGlsp2Fbxwgy7bU7bDU
-         +yWw==
+        bh=wjuyFMi3EftK+wExgb79hTBMB0k+0b/v8BwPvQxw7y4=;
+        b=oOvQhBmRi4yPVLzZLUCYGs+BVsIOuNPmOP7zuAv3LXMD5ryY+jr8t0qhKx9q+F29WQ
+         BFUMY9tC0t8775IV0zq6ZGatAqZ8vb+XQPoD5u8WlFYXY9Uh+p91xkYsKG1i6AMM+dea
+         QjUYneOUmX+FKsXrxfDeRI0ClPGkjLAM7MA2UhERQfXsNikqp61+ZKvyowpZMAVC1kcc
+         IE+J4noOuFayzwmzRnfXx3bb+i4h+LEFOJSnIgygLWD/q1uU/+Jj/KuwQbLrnbyGdnyL
+         bI29AB4FWa5i4EPxR51jt+dA0JJVySxiPs/gI4T72agQLr11VJ9FxB4fZ4IyFzsXoqlV
+         6vHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=7Ds4LsGaaSrzpA9k9avFD90e+PqgmFVGpadAexhLvgE=;
-        b=7j0Qjz6kkyKibgh8rQK1KrzL4gTPAs855rsYUskCQSBD1qQdYLwvUWlhMc1Fwwlqgg
-         KeFgI+SglWgKjNA+fjyO0/FsJ+4rDmpYh1EMZ6CBz8+vLhhLbdTneuvLykIqeWFSYQGI
-         shk7CUXP9B9hq5PckkxJwqTGJH+TuY0aTbX3AepRznP8kD14hOlV9HgxrhdHwq8xBj8D
-         lmtWgOW/NZjk6HZHNSRaxP0GQv3LQUIIesUSYHoAgT88t1f29zcMuVV4wa48F/VFmlI1
-         RFgpVBkAyC6L1gpEW8oKwczfWaFb/pogXied85iOc5di4GK4L6MUhVqDDHX7mljn3sVS
-         bbMg==
-X-Gm-Message-State: AOAM533BDVlEwsV7VyKz5wr1DeFvvtjxAGRDdDXmtJPmrLSLULWIX8x5
-        ze9560nPIZZrs1AECp1y+d50hQ==
-X-Google-Smtp-Source: ABdhPJzXf9VagfCKbioCX60kpRy8+OaEk9krJsm0GbbDF+wR9UXDeBuW7D0hkkgWHFhOjR95J6X9Hg==
-X-Received: by 2002:a05:6402:e99:b0:41d:11f2:85e0 with SMTP id h25-20020a0564020e9900b0041d11f285e0mr17473687eda.339.1651582906512;
-        Tue, 03 May 2022 06:01:46 -0700 (PDT)
+        bh=wjuyFMi3EftK+wExgb79hTBMB0k+0b/v8BwPvQxw7y4=;
+        b=NqbUfU1o+i6lrhjyuD0vhUFgiI3+cIQG86N/yxzGOX8E5WCLXhZsA4FKjGixR6Kfv9
+         VgWHe4MjJqrMgnHQgCH/7gXVfzTj129NAGNKecT40MEPdBeq0dMhCxQhWP+5FzTMtYT7
+         R4Z5uz8EGGrjCRKEsVDq8yoKvBdcBG09nrnvA0u0JJb6sSRMbSpiJtKH5UVo/VVp8kzn
+         u/aiQtbmBVh7CZgTvtVFMxAOEDP/z+kQID3RlXYX83auItnjVZyAnfX0Fzjm8ZW8OVtS
+         WibbeVi5wLxyjuRj4MG9wTS4rFT3Qu6FTGlBAf/CcpY09xsVi2ZNWmGNIWuQBzbUTE7T
+         ubZg==
+X-Gm-Message-State: AOAM530jHg/P9LtKlt+G12hHw+5/z0t5gQWBTF2fyU0d9MXMyAfJpj2b
+        YqRBlDyLPlmQp31vHZp6lWAI0w==
+X-Google-Smtp-Source: ABdhPJxwG4sLoDPShcHTI6lbe5nIz0+kudelkrlQymVFFYb3TDP1oKvJEVUWereTSbkBgJoKAqV1MA==
+X-Received: by 2002:a17:907:6e28:b0:6f4:6428:6ee8 with SMTP id sd40-20020a1709076e2800b006f464286ee8mr6584030ejc.608.1651582918486;
+        Tue, 03 May 2022 06:01:58 -0700 (PDT)
 Received: from [192.168.0.203] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id e12-20020a170906844c00b006f3ef214e3esm4573792ejy.164.2022.05.03.06.01.44
+        by smtp.gmail.com with ESMTPSA id jz26-20020a17090775fa00b006f3ef214e49sm4580080ejc.175.2022.05.03.06.01.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 06:01:45 -0700 (PDT)
-Message-ID: <8adbf80b-f057-c915-954a-12bd07ee7cc8@linaro.org>
-Date:   Tue, 3 May 2022 15:01:44 +0200
+        Tue, 03 May 2022 06:01:57 -0700 (PDT)
+Message-ID: <b854c7b1-b0b5-b921-e6bf-ee88472d2f66@linaro.org>
+Date:   Tue, 3 May 2022 15:01:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 2/7] dt-bindings: i2c: renesas,rcar-i2c: R-Car V3U is
+Subject: Re: [PATCH 3/7] dt-bindings: iommu: renesas,ipmmu-vmsa: R-Car V3U is
  R-Car Gen4
 Content-Language: en-US
 To:     Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -74,9 +74,9 @@ Cc:     devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
         linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
         linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
 References: <cover.1651497024.git.geert+renesas@glider.be>
- <a0402ff46027196953fe9c13f60576d40c5aea4c.1651497024.git.geert+renesas@glider.be>
+ <d351ca12724d5b306119bd8dcd9bfac09ba2a925.1651497024.git.geert+renesas@glider.be>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a0402ff46027196953fe9c13f60576d40c5aea4c.1651497024.git.geert+renesas@glider.be>
+In-Reply-To: <d351ca12724d5b306119bd8dcd9bfac09ba2a925.1651497024.git.geert+renesas@glider.be>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -91,14 +91,9 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 On 02/05/2022 15:34, Geert Uytterhoeven wrote:
 > Despite the name, R-Car V3U is the first member of the R-Car Gen4
-> family.  I2C on R-Car V3U also supports some extra features (e.g. Slave
-> Clock Stretch Select), which are supported by other R-Car Gen4 SoCs, but
-> not by any other R-Car Gen3 SoC.
-> 
-> Hence move its compatible value to the R-Car Gen4 section.
+> family.  Hence move its compatible value to the R-Car Gen4 section.
 > 
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
