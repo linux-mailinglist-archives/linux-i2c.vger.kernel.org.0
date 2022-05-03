@@ -2,80 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116ED518782
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 May 2022 16:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FC0518FC5
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 May 2022 23:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236332AbiECPAX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 3 May 2022 11:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54030 "EHLO
+        id S242688AbiECVPS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 3 May 2022 17:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234498AbiECPAW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 3 May 2022 11:00:22 -0400
-X-Greylist: delayed 460 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 May 2022 07:56:50 PDT
-Received: from mail.megasoftsol.com (mail.megasoftsol.com [43.231.250.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6266739168
-        for <linux-i2c@vger.kernel.org>; Tue,  3 May 2022 07:56:50 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.megasoftsol.com (Postfix) with ESMTP id 4550190E2FA
-        for <linux-i2c@vger.kernel.org>; Tue,  3 May 2022 20:16:38 +0530 (IST)
-Received: from mail.megasoftsol.com ([127.0.0.1])
-        by localhost (mail.megasoftsol.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id xWVeWDohkRya for <linux-i2c@vger.kernel.org>;
-        Tue,  3 May 2022 20:16:37 +0530 (IST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.megasoftsol.com (Postfix) with ESMTP id C97AD90E9E5
-        for <linux-i2c@vger.kernel.org>; Tue,  3 May 2022 20:16:37 +0530 (IST)
-X-Virus-Scanned: amavisd-new at megasoftsol.com
-Received: from mail.megasoftsol.com ([127.0.0.1])
-        by localhost (mail.megasoftsol.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 5_vztPuxsEfM for <linux-i2c@vger.kernel.org>;
-        Tue,  3 May 2022 20:16:37 +0530 (IST)
-Received: from asda.co.uk (unknown [20.97.211.134])
-        (Authenticated sender: admin)
-        by mail.megasoftsol.com (Postfix) with ESMTPSA id 039F690E9FA
-        for <linux-i2c@vger.kernel.org>; Tue,  3 May 2022 20:16:36 +0530 (IST)
-Reply-To: sales@asdaa.uk
-From:   ASDA Stores Limited <Hanes.Thomas23877@asda.co.uk>
-To:     linux-i2c@vger.kernel.org
-Subject: 2nd Quater puchase request
-Date:   03 May 2022 14:49:05 +0000
-Message-ID: <20220503092157.9275EFEEB31B3DAF@asda.co.uk>
+        with ESMTP id S242714AbiECVPQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 3 May 2022 17:15:16 -0400
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F3840A1A;
+        Tue,  3 May 2022 14:11:36 -0700 (PDT)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so18425339fac.7;
+        Tue, 03 May 2022 14:11:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eh5OGgJnAtIHXJdL+WfBTLIsraxjNAm1ti5EfhZuw40=;
+        b=q07uQBBKZNLbIawLBhceyZAjduHt8soVMgaPxS8bzyd/QQXXkLiQK/WSCbXohl8snN
+         moEzZmcJWXqE/ULuz3hNw6CJq4OXz56dtaU5ELrI5y/NA4vuoaMQCU6TGFVl8cV3gsrq
+         BT1kjUKoul1cjrnb6aHAtnHsY+9g6VqdDtnbNuOMtvco8zycA24GAozGBC3SMoaimc4z
+         ECrhVCdM26pFOjHQVt1Au5vngxpXkisRnhk8Amq8jG3FYt8Jx3I/UCWE4uZ4pnlTAlFU
+         WFpUxTImzAffXhIyc8AJfqgO7bK3a0xe1vQ7LjPFv0DTnVkDADATYH+lxmzstXGXfS8x
+         xA6g==
+X-Gm-Message-State: AOAM530EesFiXMOVkfaM+TC8xqNKh59460KXHwdVuzQ/4UpoeV+n3wA1
+        lFeFL0PWsdQUrfug5IBBHA==
+X-Google-Smtp-Source: ABdhPJxDpfn/Ees5StxaeeMPeh0vYo/Z6K2dj90q21D8dLT7ggEODCoMfKr8DnNQeDmJz6P7UYBccg==
+X-Received: by 2002:a05:6870:a108:b0:ec:43ef:5338 with SMTP id m8-20020a056870a10800b000ec43ef5338mr2563907oae.16.1651612295751;
+        Tue, 03 May 2022 14:11:35 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 8-20020a056870124800b000e686d13888sm7671639oao.34.2022.05.03.14.11.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 14:11:35 -0700 (PDT)
+Received: (nullmailer pid 38846 invoked by uid 1000);
+        Tue, 03 May 2022 21:11:34 -0000
+Date:   Tue, 3 May 2022 16:11:34 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] dt-bindings: i2c-gpio: Add property
+ i2c-gpio,sda-output-only
+Message-ID: <YnGahvdwtOpqW7D7@robh.at.kernel.org>
+References: <3e6c934e-5298-42c5-c346-31b1acaa06ba@gmail.com>
+ <e2e30c3b-21db-72d1-1b40-d1f2fbcaaa43@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_50,
-        RCVD_IN_BL_SPAMCOP_NET,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e2e30c3b-21db-72d1-1b40-d1f2fbcaaa43@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Dear linux-i2c
+On Wed, 27 Apr 2022 21:23:28 +0200, Heiner Kallweit wrote:
+> There are slave devices that understand I2C but have read-only
+> SDA and SCL. Examples are FD650 7-segment LED controller and
+> its derivatives. Typical board designs don't even have a
+> pull-up for both pins. Therefore don't enforce open-drain
+> if SDA and SCL both are unidirectional. This patch makes
+> i2c-gpio usable with such devices, based on new DT property
+> i2c-gpio,sda-output-only.
+> 
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
+> v2:
+> - improve commit message
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c-gpio.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
 
-We are interested in having some of your hot selling product in 
-our stores and outlets spread all over United Kingdom, Northern 
-Island and Africa. ASDA Stores Limited is one of the highest-
-ranking Wholesale & Retail outlets in the United Kingdom. 
-  
-We shall furnish our detailed company profile in our next 
-correspondent. However, it would be appreciated if you can send 
-us your catalog through email to learn more about your company's 
-products and wholesale quote. It is hopeful that we can start a 
-viable long-lasting business relationship (partnership) with you.  
-  
-  
-Your prompt response would be delightfully appreciated. 
-  
-Best Wishes 
-  
-  
-Hanes S. Thomas 
-Procurement Office. 
-ASDA Stores Limited 
-Tel:  + 44 - 7451271650 
-WhatsApp: + 44 – 7441440360 
-Website: www.asda.co.uk
+Reviewed-by: Rob Herring <robh@kernel.org>
