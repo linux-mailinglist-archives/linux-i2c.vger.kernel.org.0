@@ -2,75 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C757517934
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 May 2022 23:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C85F5184B3
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 May 2022 15:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379970AbiEBVkC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 2 May 2022 17:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S230133AbiECNFM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 3 May 2022 09:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387716AbiEBVjn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 May 2022 17:39:43 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB8AE0A4;
-        Mon,  2 May 2022 14:36:09 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 3F88A221D4;
-        Mon,  2 May 2022 23:36:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1651527367;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NXiTU+OHkuDffifSh9UIXBSPftKavHLkehOxtPzIoyA=;
-        b=dxUWftASJW8AAT8FM9QsPGbpk6LCEH7fYEEgcvCJecmWkLNSCECyPUaU9x4Icc5Ecx43QL
-        vUuVvDK9fTxIvwfAMUB5GbPmubpr/THe7/050IOs0dh1g3U70gVHAjA2Fo7+66amWyq9Rq
-        E0WyOM6pULx4OX57s/ia+vAaoKYH+8s=
+        with ESMTP id S235668AbiECNFL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 3 May 2022 09:05:11 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4972B192B5
+        for <linux-i2c@vger.kernel.org>; Tue,  3 May 2022 06:01:37 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id y21so19782513edo.2
+        for <linux-i2c@vger.kernel.org>; Tue, 03 May 2022 06:01:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gG0dwpdZEvdDBuvEs96CRkJ96qnrRXLRezy0ryDW5k4=;
+        b=ALFTAYUx97uyNKW+lAnYdzjZir2++CoTgHbyUjF7Tyu8FB355br9ymFrLHz0yjDrvH
+         DrBwdFc3LklD9yrRb89qLlvZA45swTSbmHuxKgldKlCxDB9G9Bd/rTJMgy2E5BhuXpNG
+         yb3uDyAd0RZWZOAzkIzno8BwG1U9FqEA2iDDfvFQdY1zAtE4mcYmqd0IK3E8B6WW5z6O
+         Il7T85auivSNN1fPpuxtB8GmcDN5yYpug0AHyoO9xlmN/aBKvPJd2Lo3lmc7T3UxTryT
+         aSyIBP9yrCWMYKMi9FYlBuxD7LnSgPuAOlxYmPFIuuY5zYNOFH/jYeetXY4nPgZt1+cp
+         4lTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gG0dwpdZEvdDBuvEs96CRkJ96qnrRXLRezy0ryDW5k4=;
+        b=Vzu8NF7cfhKOsi4zYfv5QLaT+jGZM416eAcbMK4zm5pn8QE5BjUyZKQZ5UdTjmuq4X
+         06zPklo1gTaXI6KkL5f+tHzz/IKkMjfihFxavY505bUE7rkp4DDEZgl0MvqZxqwkvchj
+         ilbY4eTbIXdRimo/7bF7QFMasdaeboMQYc8IwOZJokyeqWkGVaBS/ADh/Wxws7QbfSAI
+         /z0gvQxqCa95s4EDmODC41ooEeq/00Wm1icQWrApo+FmNIt7g2TquG9s1lmEBORhNn/8
+         d/Vcv3hSbtpNZss4x3liIj8DIOMGOtz3YfofWhcSR8RldbYBI1baAV55xafj4qsTaDuK
+         eyXQ==
+X-Gm-Message-State: AOAM533c5wTu2BgmfgJwfRxUf5B0BkbdPb5vK/VuqTYpMrZ/OYIGuJpb
+        uIBFAyrAkBFlfuz4BYD6ivizOg==
+X-Google-Smtp-Source: ABdhPJx2Srwjeq9nawpv4x1JuljzsyhT5QkLcbjVFz2bgafQYS+1B1AShuziH+AsAOVKPNcC8AG0zA==
+X-Received: by 2002:aa7:c0c4:0:b0:425:c776:6f17 with SMTP id j4-20020aa7c0c4000000b00425c7766f17mr17610108edp.131.1651582895443;
+        Tue, 03 May 2022 06:01:35 -0700 (PDT)
+Received: from [192.168.0.203] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id hy10-20020a1709068a6a00b006f3ef214dd4sm4687649ejc.58.2022.05.03.06.01.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 06:01:34 -0700 (PDT)
+Message-ID: <9d7514fd-511e-6596-5eb0-6001ead5a081@linaro.org>
+Date:   Tue, 3 May 2022 15:01:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/7] dt-bindings: gpio: renesas,rcar-gpio: R-Car V3U is
+ R-Car Gen4
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Cc:     devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <cover.1651497024.git.geert+renesas@glider.be>
+ <5628a862688bd9d3b4f6c66cb338671211058641.1651497024.git.geert+renesas@glider.be>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <5628a862688bd9d3b4f6c66cb338671211058641.1651497024.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Date:   Mon, 02 May 2022 23:36:06 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>, wsa@kernel.org
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: at91: use dma safe buffers
-In-Reply-To: <20220407150828.202513-1-michael@walle.cc>
-References: <20220407150828.202513-1-michael@walle.cc>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <454e874e53bc5d15308a60bcef335d8c@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Am 2022-04-07 17:08, schrieb Michael Walle:
-> The supplied buffer might be on the stack and we get the following 
-> error
-> message:
-> [    3.312058] at91_i2c e0070600.i2c: rejecting DMA map of vmalloc 
-> memory
+On 02/05/2022 15:34, Geert Uytterhoeven wrote:
+> Despite the name, R-Car V3U is the first member of the R-Car Gen4
+> family.  Hence move its compatible value to the R-Car Gen4 section.
 > 
-> Use i2c_{get,put}_dma_safe_msg_buf() to get a DMA-able memory region if
-> necessary.
-> 
-> Fixes: 60937b2cdbf9 ("i2c: at91: add dma support")
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Wolfgang, will you pick this one?
 
--michael
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof
