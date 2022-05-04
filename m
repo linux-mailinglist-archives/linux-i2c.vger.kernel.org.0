@@ -2,76 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD21851AE5E
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 May 2022 21:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EDA51AE74
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 May 2022 21:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377701AbiEDTzU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 4 May 2022 15:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
+        id S232390AbiEDT7X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 4 May 2022 15:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376487AbiEDTzT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 4 May 2022 15:55:19 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456C54E399
-        for <linux-i2c@vger.kernel.org>; Wed,  4 May 2022 12:51:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=roOe+AeBY7DP+Q6uo/3NlHB6bacD
-        iF8cZtCOKwDNtfY=; b=AVvmqY7D3UH/BWMnn7wIorUCqnrJ/+VLUtw394q8E+Om
-        FcZj38Meag68aRXJMZqBMV/ykDiAbYkJb7JobePTVSDwsJScwk5GU/y4NLU/d2X/
-        TtjYV05OBt+x37dH92tXFElqcjQbmeUxdL9XANm472CsC+dHuhk7AahZPz9ANQE=
-Received: (qmail 1533983 invoked from network); 4 May 2022 21:51:39 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 May 2022 21:51:39 +0200
-X-UD-Smtp-Session: l3s3148p1@aBgC9DTeXJwgAwDtxwyXAP9dq+3qRUcy
-Date:   Wed, 4 May 2022 21:51:36 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 2/7] dt-bindings: i2c: renesas,rcar-i2c: R-Car V3U is
- R-Car Gen4
-Message-ID: <YnLZSNJh7rdH77Lp@kunai>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <cover.1651497024.git.geert+renesas@glider.be>
- <a0402ff46027196953fe9c13f60576d40c5aea4c.1651497024.git.geert+renesas@glider.be>
+        with ESMTP id S229503AbiEDT7U (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 4 May 2022 15:59:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD0C282;
+        Wed,  4 May 2022 12:55:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD39D60C25;
+        Wed,  4 May 2022 19:55:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81658C385A4;
+        Wed,  4 May 2022 19:55:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651694142;
+        bh=Fc7TKOapEDiSTVYg8J8ppOTkNfnmVAFqfSwAH7ygR9Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Nu7+omXrDdXyfUuqZtR03nNOpGdKexslmmt5/AkAYWvrosPm8nYzUg1rI+TDVmYN9
+         NrZTLGRFiCrLNxPQYy4OcIb4H2acX0a0rEyJkL80OSIpAa38rDCBFNOS4SKs8GMH0d
+         dUyEogY9WMLLvpsu9IGvF8xgRPO04WJzKOkVg3yiemO1awt+la/69trrrcLh8bPa2M
+         iQpFlRZYaFcW+Xm1vn35v0SEf9QAS3MqGUo9xWGOdZjMB0LeyqDxRQdU5WaEjBlGWh
+         JcbJCN9ipEveKPYeTGjGq3lN6m91Blk44NdjFIL2EwW1B1RQPkP9EgFuOBeK2b9n8J
+         QGL+umAh9r1sQ==
+Date:   Wed, 4 May 2022 21:55:38 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Jan Dabros <jsd@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, rrangel@chromium.org,
+        Nimesh.Easow@amd.com, upstream@semihalf.com
+Subject: Re: [PATCH] i2c: designware: Modify timing parameters for amdpsp
+ mailbox
+Message-ID: <YnLaOkzTA1dUrMkc@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        rrangel@chromium.org, Nimesh.Easow@amd.com, upstream@semihalf.com
+References: <20220428122651.208575-1-jsd@semihalf.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="j/bfMYaLl7xWqyb8"
+        protocol="application/pgp-signature"; boundary="3DCxUqrF3RDH4NSn"
 Content-Disposition: inline
-In-Reply-To: <a0402ff46027196953fe9c13f60576d40c5aea4c.1651497024.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220428122651.208575-1-jsd@semihalf.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,42 +63,41 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---j/bfMYaLl7xWqyb8
+--3DCxUqrF3RDH4NSn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 02, 2022 at 03:34:54PM +0200, Geert Uytterhoeven wrote:
-> Despite the name, R-Car V3U is the first member of the R-Car Gen4
-> family.  I2C on R-Car V3U also supports some extra features (e.g. Slave
-> Clock Stretch Select), which are supported by other R-Car Gen4 SoCs, but
-> not by any other R-Car Gen3 SoC.
+On Thu, Apr 28, 2022 at 02:26:51PM +0200, Jan Dabros wrote:
+> Adjust retry period and timeout values for x86-PSP mailbox based on the
+> typical I2C traffic generated by PSP. In order to limit the possibility
+> of timeouts, x86 should reduce the interval between retries as well as
+> increase overall time after which it gives up.
 >=20
-> Hence move its compatible value to the R-Car Gen4 section.
->=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Jan Dabros <jsd@semihalf.com>
 
-Applied to for-next, thanks!
+Applied to for-next, thanks! Let me know if you think this is a bugfix
+and should be in for-current.
 
 
---j/bfMYaLl7xWqyb8
+--3DCxUqrF3RDH4NSn
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJy2UgACgkQFA3kzBSg
-KbbbBQ//bHWIRu7MnsRqfYi9eFC5lxec3M3uiwvykedIMxXDdWQCC2qXlAn6efuH
-qv9GS22D0TLykN9cUMh/mwkF8j4CpK1hxncdTz7//FyzfDcEhuABgks83Z1Z1Vib
-X8oYEjRjx5kRJD+TC6OXer3OVwKfFX8V+6FpRruFVW/LWVEZa/LTKFqlSLw1sO3A
-fy4Mw5pcBbKlDiXWmyTiAjk+Rv+apo2VXaO9nV7UxAJSICixTe0GmOPZzXHCem/z
-GvqpFKcaXWXtQ1FHt1zwxuscEhTf8YD4XDB3S1iCvkh1BXwN7xK0BW5vLQYtwxKJ
-c/F9Zwwg7dz5VHAy8Sf+AFIi3Q5Iv9gBJ7kjt6G4hpYG4itHOpCopBjmfxQu0YcD
-J5bOb/F1jKOVjPHfnE2IFzyH4Alsy+z7hAMk3R90WM/AumDfVB1d1msG/1V3rnFe
-IRRaP3yu9mmcPkG7rRWs3oi/HH3SWzeDCywaqJgIMwJWE0oFHuw5LA8KzKvk5rbD
-lVm+yJTMx0GyyhqV/dl+fyPdLTHj+5O1grgopDg6xjKDiN+2EmbstKJdGKtocA6N
-tHNzcp80bFOHV6eO3j89GhutyTdL0ma8z892LN/+Lk7dQDpyoTKLmC51fvE7BHBK
-+yqozekqkqbqe/qUVYEV0UCB/VkIEgSIoJJP39lRITx/rY2F404=
-=hJCI
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJy2joACgkQFA3kzBSg
+KbZfvQ/9FtJLrSlbhQhIlCwj5UShEHCg1lMA6jROIM4nhMUXccAzQQSlpKSdqUny
+GISePI9smnKVoTeShKRRvtNTzojL+mRcKxH9cn5KtvAttqhystdGJxRYbMO1+3KS
+ZOWkVd7/6NCPYqIkxxRc3WQo1Nkemi/Qw6Fp/2FfF2XgrJ/w1nDqSoGOWH8QsP5w
+zH1I44HwPu6rURKQhy1olj/It7adsj8ZHJPaq1+ZcpvG0WNjovH+g406/+4/zQej
+6X5M1QKS/kWlEZvEANE5PYe8CQvsVOXGEJIHE4cUwipSRGugBfb6fOCo1Hg+ikcO
+spvQCfJjBnUSFko3qf0bwWpTPlf0UzMp53m3F9sn8bPdX9v4UjJRx+Xg4u3NxLnX
+Hofx4kwRC60tGV3QrBPLl00F24plhgQIyTgWCMehwAXqQnPY1L2RQjThNfVMckmY
+VM56hJjTHbTQVU7JIML28KhxeodEh1tiCMCul+cOWefPORJXB0hTEq52pKHaoq9l
+eEl9tRJvl3zy3jvst+UXR8gBY+Rnl6KY4S2vwOzQFfI9eot6sgQNdixeCdMzlLfp
+crhdO2N46x3Z3z+TGJNKbqHQBm1DQZBA0qoJOa1ycjeQtXzS8LKsvU54TB6B6lOS
+MwmD0lqpeQ5jE2XZxmH7aIz9XyaAhnC+pBqGB3W1m1K074nUD24=
+=uLg5
 -----END PGP SIGNATURE-----
 
---j/bfMYaLl7xWqyb8--
+--3DCxUqrF3RDH4NSn--
