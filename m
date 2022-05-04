@@ -2,106 +2,116 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32DBB51A53E
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 May 2022 18:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4D251ADEB
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 May 2022 21:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353356AbiEDQV3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 4 May 2022 12:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
+        id S1357837AbiEDTlk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 4 May 2022 15:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351824AbiEDQVW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 4 May 2022 12:21:22 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9D725EAA
-        for <linux-i2c@vger.kernel.org>; Wed,  4 May 2022 09:17:46 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id q23so2730707wra.1
-        for <linux-i2c@vger.kernel.org>; Wed, 04 May 2022 09:17:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=q1QS1h63jdwlMuyWNP8xmEDpzxKjGMK4DEb1a7HY6v8=;
-        b=B5/wgTRM47Tl6PkYtUKKGOHAofL12q1D1XeQV2au8EsqDuKXxnhiEQ1NxmJNWAzdP2
-         3x4xdSeMWZUJQ+cV0ZMU+IeYQqTjTKcy168mCV6zySdGCVFpO5pgWlWaC5G3JLOGOmms
-         vBeH+yOKH0ArVlnht8uegF3WR1oh1AfRINI8z2Iy/QvIl4OMwngm41/ddl3h18Ga+Zm/
-         Pe5WXPQ25sM2RmJwQqg/8XprcUfWZtCcvwPuUVHQLVeCXkpEM6GNMbteVBkz0N1d6BY1
-         ec9Ls/wwmM1dRLKpVWHS1mVSPryPH9WniYE24/zlS9edV9v3RgFvDj/us7VuKziCRZgn
-         eC8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=q1QS1h63jdwlMuyWNP8xmEDpzxKjGMK4DEb1a7HY6v8=;
-        b=0RWgfdxuJ+1N1wG8nyoWngkPVn2kSGUBk628YbTC0y8+MFLkpSXRaojj9sdv6rA38U
-         dlM7aaU3NLHt6POyEoTR67zd5DOtiIS1BdxYnSbMn6F9O+BN/6leVYr/oJKYZF2DB0VD
-         /0rrPCLoZQbVnWPXSPO+jOA7l0dHPVJVQ9rc4WvmExxKOwT5VcHvQkLtpR1OkFTuy5I2
-         qGA2vOnCZSHCzyjKwm3ECmF3hieBs4eJe4YlukjJfZgi7kcn74IPYmakt9tWG4wBe26Q
-         reFxdgLi521eYRri6g0yMv+iff2lvOjBAO6o+zUdyk02fjg2Aim2go6hfna5mRLX+Kjb
-         5Iyg==
-X-Gm-Message-State: AOAM530+xoHKcMGFNgTlgP46sCR7vcB0u3w3pvTRoF8de6iLvYWleCz3
-        SBS8AAt+mtIHWMamTEAtNAY4VA==
-X-Google-Smtp-Source: ABdhPJwuSiqhD1Cyjq81kfirw20i4hiDQULPYQWg/PuvNNeMNt1Vngp/iBTK7LXsBJS82EKqd4hhDg==
-X-Received: by 2002:a5d:474f:0:b0:20a:cb5c:bbd7 with SMTP id o15-20020a5d474f000000b0020acb5cbbd7mr16610323wrs.21.1651681065007;
-        Wed, 04 May 2022 09:17:45 -0700 (PDT)
-Received: from [192.168.2.222] ([109.77.36.132])
-        by smtp.gmail.com with ESMTPSA id p20-20020a7bcc94000000b003942a244f38sm4153161wma.17.2022.05.04.09.17.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 09:17:44 -0700 (PDT)
-Message-ID: <1e6de466-eefc-c5f7-5db7-6a87ff1608ed@conchuod.ie>
-Date:   Wed, 4 May 2022 17:17:43 +0100
+        with ESMTP id S244837AbiEDTlk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 4 May 2022 15:41:40 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3F536E1E
+        for <linux-i2c@vger.kernel.org>; Wed,  4 May 2022 12:38:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=T0SMZXN87mfbGYdslVIzxN731a69
+        yFRI35AcyNOGoKA=; b=cJ05izlUVZhs3a/OGCJhfaEPDq8PXcukKlu8Il9yxvUk
+        yBZmk8Rqb+YW7lWH/akUJAQbXT/au+b1AV3NRXOp9KEdeMM+HxUsj7/PQqiQeXoo
+        gGmCVFhDMdmBFzurUEl0hzInZw8baa9qFG4wqyLb5xlTiZYy8VuOoO3J3wJO6PM=
+Received: (qmail 1529521 invoked from network); 4 May 2022 21:37:56 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 May 2022 21:37:56 +0200
+X-UD-Smtp-Session: l3s3148p1@fBecwjTeCpwgAwDtxwyXAP9dq+3qRUcy
+Date:   Wed, 4 May 2022 21:37:47 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 1/7] dt-bindings: gpio: renesas,rcar-gpio: R-Car V3U is
+ R-Car Gen4
+Message-ID: <YnLWCzLESZ3NwNg7@kunai>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <cover.1651497024.git.geert+renesas@glider.be>
+ <5628a862688bd9d3b4f6c66cb338671211058641.1651497024.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] i2c: add support for microchip fpga i2c controllers
-Content-Language: en-US
-To:     Conor.Dooley@microchip.com, wsa@kernel.org,
-        linux-i2c@vger.kernel.org
-Cc:     ben.dooks@codethink.co.uk, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Daire.McNamara@microchip.com,
-        geert@linux-m68k.org
-References: <20220321125855.3227057-1-conor.dooley@microchip.com>
- <cad04bc5-ce7b-d7db-f967-8b2bb67897ae@microchip.com>
-From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <cad04bc5-ce7b-d7db-f967-8b2bb67897ae@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YNJ34uo+OPtBXoDU"
+Content-Disposition: inline
+In-Reply-To: <5628a862688bd9d3b4f6c66cb338671211058641.1651497024.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 04/05/2022 09:40, Conor.Dooley@microchip.com wrote:
-> On 21/03/2022 12:58, Conor Dooley wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>
->> Add Microchip CoreI2C i2c controller support. This driver supports the
->> "hard" i2c controller on the Microchip PolarFire SoC & the basic feature
->> set for "soft" i2c controller implemtations in the FPGA fabric.
->>
->> Co-developed-by: Daire McNamara <daire.mcnamara@microchip.com>
->> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
->> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->> ---
->> Changes from v1:
->> - Use byte write and read functions
-> 
-> So it turns out that how I made this change, which worked in my
-> test app, has issues.
-> I will rework and send a v3.
-> 
 
-Welp, as it turns out we can chalk the issues up to user error,
-aka me entirely forgetting what the correct i2cdetect options
-were - d'oh.
+--YNJ34uo+OPtBXoDU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Apologies for the noise & unless something else changes, don't
-expect a V3.
+On Mon, May 02, 2022 at 03:34:53PM +0200, Geert Uytterhoeven wrote:
+> Despite the name, R-Car V3U is the first member of the R-Car Gen4
+> family.  Hence move its compatible value to the R-Car Gen4 section.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
 
-Sorry,
-Conor.
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+
+--YNJ34uo+OPtBXoDU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJy1gUACgkQFA3kzBSg
+Kbacvg/+M5weBbp8eucQzeQfhiSXmoUq8Y085EPJPVnSs9VIxmDp6QiVP3OYgeZb
+mRyvi3cG+gfUGSnZZs+0VDmQBPHCz2V7d731JxT0LVhv/uJz/ItLPzrlIWO50KcD
+Qdeo2KKaVnm99fZLzjh+NLUEz3miB20m16D61q7tdMyJ4RoVPHV4vhks0XO8PBTU
+c/reVsCjoxzwHbhNaRKmDbhzwtvOdLG4HyWDJU98ZD3p//Pakjb3E0ke//Ka6Jwu
+CRVqd4iih7pq/VXCJRQfFihTRcWN6WQFu7CqtJI0zZijuKMRHrFbzB6jmao8D6Oy
+GRiRFwjfgoc+emlOKRGUy8C3puUnn4zBJlSHdnHYjXyMdsHS2W0aCtrT4U1cXBuR
+geyysQdp07zxfSVLA/4c7Ct+wF98JJXFlJ0ccFTRRwtRUrRpcvq0PuWEF0VaWoSM
+t9OvT5PWv3wQAOTcP1En5UP0wZUXOJznRcGOOinvCVVYAlcjP9oDQqDTkdRFwYdz
+HJXj7xpF290VMZh0uC0zleU632ngk5UA8N4mnEKLGRo6jppkZWRrxKt/CU0T4upC
+MGnS/oywZKz2PKoQeO+6QX75pRe8DdVjYNiNHYyiFYMsc/gw1mJ1tKgplWZvdmZU
+Ooarfwc9vDJQX5C4HeXnNLdsIKtmxzspIs2+nAM/tpIcVi3AZz8=
+=k7OO
+-----END PGP SIGNATURE-----
+
+--YNJ34uo+OPtBXoDU--
