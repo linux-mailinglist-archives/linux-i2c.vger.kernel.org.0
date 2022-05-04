@@ -2,50 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186C051A173
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 May 2022 15:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2F751A1DA
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 May 2022 16:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350903AbiEDN7X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 4 May 2022 09:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
+        id S1351090AbiEDONJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 4 May 2022 10:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350942AbiEDN7L (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 4 May 2022 09:59:11 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948471F615;
-        Wed,  4 May 2022 06:55:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651672535; x=1683208535;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hziUNVmt++nnYBmzUV09YMbcy639ADbCMZfzePTO9CI=;
-  b=c0V//KqhGytQpO0yQch1VkVmLHU51alGYZFYTHuOlHjq3tLfmM/ZmavZ
-   CPFdLsIo8v3uIg1IGcef15aW5frjHhmeAsTdT6UiPfJ+CMDvzBeZEUelm
-   vlXDK5+u8w5aOx/VM89igzjqaZ7s5FdEVFhnTTKBeTH+8FQ/Twn0MZkSx
-   nyQvImgpHdPhn2E7AG1oNXStY86pY2p9vsaVpb2ANNDl+Ni7n/wbGKSXp
-   wfCtXNiFM3X7hR5Ydeznxq4aIZBrI1EpCBFKh+i/wVi2qH8pATkYtaquo
-   M5i+z3UQFmxzvbEKTQQEhBpWoBRVKe4AUAy1FX4Z3KL/uaQzrtbX9SwCf
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="247682196"
-X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
-   d="scan'208";a="247682196"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 06:55:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
-   d="scan'208";a="568113838"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 04 May 2022 06:55:28 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id DE9801A5; Wed,  4 May 2022 16:55:29 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        with ESMTP id S238088AbiEDONI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 4 May 2022 10:13:08 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DD4419AA
+        for <linux-i2c@vger.kernel.org>; Wed,  4 May 2022 07:09:32 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nmFgM-0000h2-LG; Wed, 04 May 2022 16:08:46 +0200
+Received: from pengutronix.de (unknown [IPv6:2a00:20:7019:a9b6:6aae:fc9e:d3ef:96db])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 347A975CE1;
+        Wed,  4 May 2022 14:08:34 +0000 (UTC)
+Date:   Wed, 4 May 2022 16:08:33 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
         Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Wolfram Sang <wsa@kernel.org>,
         Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -53,8 +40,8 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         Anatolij Gustschin <agust@denx.de>,
@@ -63,155 +50,80 @@ Cc:     Michael Ellerman <mpe@ellerman.id.au>,
         Paolo Abeni <pabeni@redhat.com>,
         Pantelis Antoniou <pantelis.antoniou@gmail.com>,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 4/4] powerpc/52xx: Convert to use fwnode API
-Date:   Wed,  4 May 2022 16:44:49 +0300
-Message-Id: <20220504134449.64473-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220504134449.64473-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 2/4] powerpc/mpc5xxx: Switch
+ mpc5xxx_get_bus_frequency() to use fwnode
+Message-ID: <20220504140833.b2itvapuqlssm74k@pengutronix.de>
 References: <20220504134449.64473-1-andriy.shevchenko@linux.intel.com>
+ <20220504134449.64473-2-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vz3cm7jicnfhqyjt"
+Content-Disposition: inline
+In-Reply-To: <20220504134449.64473-2-andriy.shevchenko@linux.intel.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-We may convert the GPT driver to use fwnode API for the sake
-of consistency of the used APIs inside the driver.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- arch/powerpc/platforms/52xx/mpc52xx_gpt.c | 47 +++++++++++------------
- 1 file changed, 22 insertions(+), 25 deletions(-)
+--vz3cm7jicnfhqyjt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/powerpc/platforms/52xx/mpc52xx_gpt.c b/arch/powerpc/platforms/52xx/mpc52xx_gpt.c
-index 0831f28345af..7006700aeaab 100644
---- a/arch/powerpc/platforms/52xx/mpc52xx_gpt.c
-+++ b/arch/powerpc/platforms/52xx/mpc52xx_gpt.c
-@@ -53,10 +53,9 @@
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/list.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
- #include <linux/mutex.h>
--#include <linux/of.h>
--#include <linux/of_platform.h>
--#include <linux/of_gpio.h>
- #include <linux/kernel.h>
- #include <linux/property.h>
- #include <linux/slab.h>
-@@ -64,7 +63,7 @@
- #include <linux/watchdog.h>
- #include <linux/miscdevice.h>
- #include <linux/uaccess.h>
--#include <linux/module.h>
-+
- #include <asm/div64.h>
- #include <asm/mpc52xx.h>
- 
-@@ -235,18 +234,17 @@ static const struct irq_domain_ops mpc52xx_gpt_irq_ops = {
- 	.xlate = mpc52xx_gpt_irq_xlate,
- };
- 
--static void
--mpc52xx_gpt_irq_setup(struct mpc52xx_gpt_priv *gpt, struct device_node *node)
-+static void mpc52xx_gpt_irq_setup(struct mpc52xx_gpt_priv *gpt)
- {
- 	int cascade_virq;
- 	unsigned long flags;
- 	u32 mode;
- 
--	cascade_virq = irq_of_parse_and_map(node, 0);
--	if (!cascade_virq)
-+	cascade_virq = platform_get_irq(to_platform_device(gpt->dev), 0);
-+	if (cascade_virq < 0)
- 		return;
- 
--	gpt->irqhost = irq_domain_add_linear(node, 1, &mpc52xx_gpt_irq_ops, gpt);
-+	gpt->irqhost = irq_domain_create_linear(dev_fwnode(gpt->dev), 1, &mpc52xx_gpt_irq_ops, gpt);
- 	if (!gpt->irqhost) {
- 		dev_err(gpt->dev, "irq_domain_add_linear() failed\n");
- 		return;
-@@ -670,8 +668,7 @@ static int mpc52xx_gpt_wdt_init(void)
- 	return err;
- }
- 
--static int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt,
--				 const u32 *period)
-+static int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt, const u32 period)
- {
- 	u64 real_timeout;
- 
-@@ -679,14 +676,14 @@ static int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt,
- 	mpc52xx_gpt_wdt = gpt;
- 
- 	/* configure the wdt if the device tree contained a timeout */
--	if (!period || *period == 0)
-+	if (period == 0)
- 		return 0;
- 
--	real_timeout = (u64) *period * 1000000000ULL;
-+	real_timeout = (u64)period * 1000000000ULL;
- 	if (mpc52xx_gpt_do_start(gpt, real_timeout, 0, 1))
- 		dev_warn(gpt->dev, "starting as wdt failed\n");
- 	else
--		dev_info(gpt->dev, "watchdog set to %us timeout\n", *period);
-+		dev_info(gpt->dev, "watchdog set to %us timeout\n", period);
- 	return 0;
- }
- 
-@@ -697,8 +694,7 @@ static int mpc52xx_gpt_wdt_init(void)
- 	return 0;
- }
- 
--static inline int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt,
--					const u32 *period)
-+static inline int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt, const u32 period)
- {
- 	return 0;
- }
-@@ -726,25 +722,26 @@ static int mpc52xx_gpt_probe(struct platform_device *ofdev)
- 	dev_set_drvdata(&ofdev->dev, gpt);
- 
- 	mpc52xx_gpt_gpio_setup(gpt);
--	mpc52xx_gpt_irq_setup(gpt, ofdev->dev.of_node);
-+	mpc52xx_gpt_irq_setup(gpt);
- 
- 	mutex_lock(&mpc52xx_gpt_list_mutex);
- 	list_add(&gpt->list, &mpc52xx_gpt_list);
- 	mutex_unlock(&mpc52xx_gpt_list_mutex);
- 
- 	/* check if this device could be a watchdog */
--	if (of_get_property(ofdev->dev.of_node, "fsl,has-wdt", NULL) ||
--	    of_get_property(ofdev->dev.of_node, "has-wdt", NULL)) {
--		const u32 *on_boot_wdt;
-+	if (device_property_present(gpt->dev, "fsl,has-wdt") ||
-+	    device_property_present(gpt->dev, "has-wdt")) {
-+		u32 on_boot_wdt = 0;
-+		int ret;
- 
- 		gpt->wdt_mode = MPC52xx_GPT_CAN_WDT;
--		on_boot_wdt = of_get_property(ofdev->dev.of_node,
--					      "fsl,wdt-on-boot", NULL);
--		if (on_boot_wdt) {
-+		ret = device_property_read_u32(gpt->dev, "fsl,wdt-on-boot", &on_boot_wdt);
-+		if (ret) {
-+			dev_info(gpt->dev, "can function as watchdog\n");
-+		} else {
- 			dev_info(gpt->dev, "used as watchdog\n");
- 			gpt->wdt_mode |= MPC52xx_GPT_IS_WDT;
--		} else
--			dev_info(gpt->dev, "can function as watchdog\n");
-+		}
- 		mpc52xx_gpt_wdt_setup(gpt, on_boot_wdt);
- 	}
- 
--- 
-2.35.1
+On 04.05.2022 16:44:47, Andy Shevchenko wrote:
+> Switch mpc5xxx_get_bus_frequency() to use fwnode in order to help
+> cleaning up other parts of the kernel from OF specific code.
+>=20
+> No functional change intended.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  arch/powerpc/include/asm/mpc5xxx.h            |  9 +++-
+>  arch/powerpc/platforms/52xx/mpc52xx_gpt.c     |  2 +-
+>  arch/powerpc/sysdev/mpc5xxx_clocks.c          | 41 ++++++++++---------
+>  drivers/ata/pata_mpc52xx.c                    |  2 +-
+>  drivers/i2c/busses/i2c-mpc.c                  |  7 ++--
+>  drivers/net/can/mscan/mpc5xxx_can.c           |  2 +-
+>  drivers/net/ethernet/freescale/fec_mpc52xx.c  |  2 +-
+>  .../net/ethernet/freescale/fec_mpc52xx_phy.c  |  3 +-
+>  .../net/ethernet/freescale/fs_enet/mii-fec.c  |  4 +-
+>  drivers/spi/spi-mpc52xx.c                     |  2 +-
+>  drivers/tty/serial/mpc52xx_uart.c             |  4 +-
+>  11 files changed, 44 insertions(+), 34 deletions(-)
 
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for mscan/mpc5xxx_can
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--vz3cm7jicnfhqyjt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJyiN4ACgkQrX5LkNig
+010OIAf8CBk7q4SlnkqYRtXPIROz3oNFhMidCM6GZg2jjdclJJWBQBKZcqVIqVOE
+d8lOgUvYv1HV6YvQfoaTflFSAabkzzrzJHOzvrPjpQN8m/g/jQWrtgnLsnXR6DQ8
++IlS6l/ePviEK1b1wBflbpnXNDvqyuZ1JI6raS33OtF23UfR9i3okaA7vtWhBH2p
+w/pqkLeh9WHNBneeJaf9q5ag2Z99PothsCek8lEUrwJYaw9/bn0is0JWC8Zjze4C
+skOkxpOERxfSedvx4WSFuU7U+CNYXk4/BkWQa/1dcLbzFuW/WdgAJDKFOtWTOI9C
+od+uCAGiK4UNsWkGX3PG24Mrvry9iw==
+=o7Bz
+-----END PGP SIGNATURE-----
+
+--vz3cm7jicnfhqyjt--
