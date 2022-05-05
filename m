@@ -2,41 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1051051BC8A
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 May 2022 11:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D40551C03A
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 May 2022 15:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236532AbiEEJ4f (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 May 2022 05:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
+        id S1378896AbiEENJq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 May 2022 09:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiEEJ4e (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 May 2022 05:56:34 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B39450070;
-        Thu,  5 May 2022 02:52:53 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nmYAF-0007lg-8h; Thu, 05 May 2022 11:52:51 +0200
-Message-ID: <941f292d-2ce2-d7aa-3d70-01a11ba171cf@leemhuis.info>
-Date:   Thu, 5 May 2022 11:52:50 +0200
+        with ESMTP id S1378807AbiEENIr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 May 2022 09:08:47 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3888456747
+        for <linux-i2c@vger.kernel.org>; Thu,  5 May 2022 06:05:07 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id z2so7025743ejj.3
+        for <linux-i2c@vger.kernel.org>; Thu, 05 May 2022 06:05:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sxVJoGvxoT/BfORhwUe0lF83tKeGUQ56jY7vzgfAHU4=;
+        b=Y0K2T7eDDIErEPqMy8O6G47SIMuNV/FV2iBabtCwdZYCRksLJj+E+c7fbrSt9ZBBXD
+         DaXJNvwCp8O95B7G3qBBBXd/ZY5LglYP8OcOlRsRkLkFbnOz5YGjf1+Kq+Cej6sf1PKz
+         8jox3zcMMsB69mnVMtXKZEg+/RyB0rS4FojXfONdqL7k9Dw/I4yA/G/3RFFnSgWC8agR
+         bsZsTNdQJo4ur+mN0mOVzXqc/pW10pVTqbvQpkdO4R2oawKCjQrPZ/LhQquGSb8INoG5
+         zUIcx6Usp3yJ11Kt8LC8bG4AgtPbYUl5xx+MqNZTXX94AuUxIh18hRHgvcWzdek9DC0O
+         2i3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sxVJoGvxoT/BfORhwUe0lF83tKeGUQ56jY7vzgfAHU4=;
+        b=fkDseHFYY2qZKXFJOZa35zUpR3leB3SV4yku/DNHnuy19Y6AVd83RLB7abk5IjcdZA
+         V0jL7QVQ2Wxsoacrp/vSgC0PwDHTa/SGrIB0hHn4OCdhuBy+Akc40a4pXhT/Gr3ALUH+
+         EIHl96O8TZ5D+QpkleAu5LWuCaTIDycC2CO2z92k5UmkbgzpA+5xrZq6pJNZ2iBenKM/
+         yIdKSRD8e+GB//y8wLya32quTxwBeT0j1jxuNh+JECSnRh7hrTgky8OQABvo1VOjLK7a
+         JVfT12tyoI7mdVylXvTOQuq/jNvR6/4WJOMt9gPMDpbulb4DB7NVk5mMrA0lbIPoaf+u
+         9DXg==
+X-Gm-Message-State: AOAM530+I7zgeHb2cqTUE6QL6L/tveZvNsU0nV0PccGbngqJYrVOSmrS
+        fRkFzCEfQQTNvjNEtv31Qsx9V59eShsPsbtHQ9yyCQ==
+X-Google-Smtp-Source: ABdhPJxyNkSLwouP3OR63NyFLRxUlmDS+dFIZZqJlV9mcUABNttg9TsG8+o4n8l4yoY3YgwsQa8BiV83N6jWTpdMxkc=
+X-Received: by 2002:a17:907:3e28:b0:6f4:3900:78f8 with SMTP id
+ hp40-20020a1709073e2800b006f4390078f8mr21714935ejc.736.1651755905797; Thu, 05
+ May 2022 06:05:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Samuel Clark <slc2015@gmail.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: regression: Null pointer exception on resume from S3 with i2c
- DesignWare driver
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1651744374;334872db;
-X-HE-SMSGID: 1nmYAF-0007lg-8h
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <cover.1651497024.git.geert+renesas@glider.be> <5628a862688bd9d3b4f6c66cb338671211058641.1651497024.git.geert+renesas@glider.be>
+In-Reply-To: <5628a862688bd9d3b4f6c66cb338671211058641.1651497024.git.geert+renesas@glider.be>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 5 May 2022 15:04:55 +0200
+Message-ID: <CAMRc=MeQZ_T_AoHUO3qx7oW68UMC6HH9CaC041vYr7wQisqjHA@mail.gmail.com>
+Subject: Re: [PATCH 1/7] dt-bindings: gpio: renesas,rcar-gpio: R-Car V3U is
+ R-Car Gen4
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        dmaengine@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        iommu@lists.linux-foundation.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,61 +82,36 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
+On Mon, May 2, 2022 at 3:35 PM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> Despite the name, R-Car V3U is the first member of the R-Car Gen4
+> family.  Hence move its compatible value to the R-Car Gen4 section.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  Documentation/devicetree/bindings/gpio/renesas,rcar-gpio.yaml | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/gpio/renesas,rcar-gpio.yaml b/Documentation/devicetree/bindings/gpio/renesas,rcar-gpio.yaml
+> index 0681a4790cd62e23..75e5da6a7cc04bbd 100644
+> --- a/Documentation/devicetree/bindings/gpio/renesas,rcar-gpio.yaml
+> +++ b/Documentation/devicetree/bindings/gpio/renesas,rcar-gpio.yaml
+> @@ -48,11 +48,9 @@ properties:
+>                - renesas,gpio-r8a77995     # R-Car D3
+>            - const: renesas,rcar-gen3-gpio # R-Car Gen3 or RZ/G2
+>
+> -      - items:
+> -          - const: renesas,gpio-r8a779a0  # R-Car V3U
+> -
+>        - items:
+>            - enum:
+> +              - renesas,gpio-r8a779a0     # R-Car V3U
+>                - renesas,gpio-r8a779f0     # R-Car S4-8
+>            - const: renesas,rcar-gen4-gpio # R-Car Gen4
+>
+> --
+> 2.25.1
+>
 
-I noticed a regression report in bugzilla.kernel.org that afaics nobody
-acted upon since it was reported about a week ago, that's why I decided
-to forward it to the lists and all people that seemed to be relevant. To
-quote from https://bugzilla.kernel.org/show_bug.cgi?id=215907 :
-
-> Running Manjaro on a Gigabyte B660M DS3H DDR4 with custom 5.17 kernel. Confirmed on other distributions and kernels back to 5.12; issue is not present on most recent 5.11 kernel. dmesg traceback points to i2c DesignWare driver, specifically drivers/i2c/busses/i2c-designware-master.c:369. It seems the msgs struct passed in to i2c_dw_xfer_msg is null.
-> 
-> Similar issue seems to be reported here:  https://lore.kernel.org/lkml/YY5BRrE8bLyvd3PB@smile.fi.intel.com/t/  
-> 
-> lspci output: https://pastebin.com/MwFM2VBJ
-> dmesg from crashed kernel: https://pastebin.com/t6GsHjkq
-> kernel config: https://pastebin.com/awrSve5u
-
-Could somebody take a look into this? Or was this discussed somewhere
-else already? Or even fixed?
-
-Anyway, to get this tracked:
-
-#regzbot introduced: v5.11..v5.12
-#regzbot from: Samuel Clark <slc2015@gmail.com>
-#regzbot title: i2c: designware: Null pointer exception on resume from S3
-#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215907
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
-
--- 
-Additional information about regzbot:
-
-If you want to know more about regzbot, check out its web-interface, the
-getting start guide, and the references documentation:
-
-https://linux-regtracking.leemhuis.info/regzbot/
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The last two documents will explain how you can interact with regzbot
-yourself if your want to.
-
-Hint for reporters: when reporting a regression it's in your interest to
-CC the regression list and tell regzbot about the issue, as that ensures
-the regression makes it onto the radar of the Linux kernel's regression
-tracker -- that's in your interest, as it ensures your report won't fall
-through the cracks unnoticed.
-
-Hint for developers: you normally don't need to care about regzbot once
-it's involved. Fix the issue as you normally would, just remember to
-include 'Link:' tag in the patch descriptions pointing to all reports
-about the issue. This has been expected from developers even before
-regzbot showed up for reasons explained in
-'Documentation/process/submitting-patches.rst' and
-'Documentation/process/5.Posting.rst'.
+Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
