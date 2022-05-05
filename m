@@ -2,54 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A8551C3B8
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 May 2022 17:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFF851C3EE
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 May 2022 17:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377830AbiEEPWC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 May 2022 11:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
+        id S1355427AbiEEPbb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 May 2022 11:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347238AbiEEPWC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 May 2022 11:22:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7B65676C;
-        Thu,  5 May 2022 08:18:21 -0700 (PDT)
+        with ESMTP id S234496AbiEEPba (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 May 2022 11:31:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C039B50B1E;
+        Thu,  5 May 2022 08:27:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BCF7CB82DBB;
-        Thu,  5 May 2022 15:18:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBF23C385AE;
-        Thu,  5 May 2022 15:18:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A68761D0F;
+        Thu,  5 May 2022 15:27:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBE8EC385A8;
+        Thu,  5 May 2022 15:27:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651763899;
-        bh=BSLHwZBU7CEcphBe/qi0nQ6hse+0DaLEQ9dWC+R/3Fc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EuJrI7SOU5Y/UcoEhlXrTw6pKOQ0AMRNAdrLI8NhFbPYVnDqpyFZBpA1gqepEkxZN
-         bvvH6XGUgEOAU5/weZia3rDkML8glIxPAzFij2pwQP75xBfwZ3xJo7SMqMVg+R09Sn
-         5rkCau7yV2ibfVTurh6YLgJvoOLa4vTdhHcnxmI9PCGpM2y3FTeST6TcsDGdWLz5OX
-         Yk0K99EeTAcCAcSvI/A40vnGeicpMjeK42bmvMZ+Xa8d64Fi+Digwj1UrhWo4U/nwz
-         flMRmQgjS0gH5ApSf35HEqY+HAV+dx9b7oeI2Fg/mVW5uaecVh9/q/5gmYq5tQ7Fdw
-         5AVkxyu8gFfDA==
-Date:   Thu, 5 May 2022 08:18:17 -0700
+        s=k20201202; t=1651764469;
+        bh=mVIRt4yoiSxRUkECE7FwEEKVUQMrty6/i5Bfy9avcZw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IqTfK1DOBA9q7un4+7ST/1fhCQ5C0Fsqk1K9f4pSfp36DSjneyNQDm9bDfyD0H8rs
+         UMIOn/Bl9GUzZ4Ust3lh4XKsbaCwlPB8CKP+d+Gi7p/hUMyVNucjoV/WIUnRULQlMA
+         9m2Pv2LlbxiruPNjFUNKcuN+MyYSaqnLbqBoczTRDgTmFCkiWusCOek8yWtPRuEjE8
+         w4zruAgWJAoq9nWgvDdXMZqpi3givElrdGT4+BwtSzalG8poEXzELnuSpqs8/+Z6gh
+         g6uE6D5pHuqLH+Z5v329/qucwK4zPczzpRGh1ETfAhDJqrwssKDjFgFXcomwbzAd/z
+         mqVzUvHmWKO8A==
 From:   Nathan Chancellor <nathan@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH v2] i2c: at91: use dma safe buffers
-Message-ID: <YnPquUxSSlJehVgY@dev-arch.thelio-3990X>
-References: <20220407150828.202513-1-michael@walle.cc>
- <YnPkfrI4Udl9lMR8@dev-arch.thelio-3990X>
- <54f02090e6621460b66dc9d233d53283@walle.cc>
+        Wolfram Sang <wsa@kernel.org>, Michael Walle <michael@walle.cc>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] i2c: at91: Initialize dma_buf in at91_twi_xfer()
+Date:   Thu,  5 May 2022 08:27:38 -0700
+Message-Id: <20220505152738.1440249-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <54f02090e6621460b66dc9d233d53283@walle.cc>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,105 +57,41 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, May 05, 2022 at 05:11:30PM +0200, Michael Walle wrote:
-> [+ Wolfram]
-> 
-> Am 2022-05-05 16:51, schrieb Nathan Chancellor:
-> > On Thu, Apr 07, 2022 at 05:08:28PM +0200, Michael Walle wrote:
-> > > The supplied buffer might be on the stack and we get the following
-> > > error
-> > > message:
-> > > [    3.312058] at91_i2c e0070600.i2c: rejecting DMA map of vmalloc
-> > > memory
-> > > 
-> > > Use i2c_{get,put}_dma_safe_msg_buf() to get a DMA-able memory region
-> > > if
-> > > necessary.
-> > > 
-> > > Fixes: 60937b2cdbf9 ("i2c: at91: add dma support")
-> > > Signed-off-by: Michael Walle <michael@walle.cc>
-> > > Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-> > > ---
-> > > changes since v1:
-> > >  - remove extra empty line
-> > >  - add fixes tag as suggested by Codrin
-> > > 
-> > >  drivers/i2c/busses/i2c-at91-master.c | 11 +++++++++++
-> > >  1 file changed, 11 insertions(+)
-> > > 
-> > > diff --git a/drivers/i2c/busses/i2c-at91-master.c
-> > > b/drivers/i2c/busses/i2c-at91-master.c
-> > > index b0eae94909f4..5eca3b3bb609 100644
-> > > --- a/drivers/i2c/busses/i2c-at91-master.c
-> > > +++ b/drivers/i2c/busses/i2c-at91-master.c
-> > > @@ -656,6 +656,7 @@ static int at91_twi_xfer(struct i2c_adapter
-> > > *adap, struct i2c_msg *msg, int num)
-> > >  	unsigned int_addr_flag = 0;
-> > >  	struct i2c_msg *m_start = msg;
-> > >  	bool is_read;
-> > > +	u8 *dma_buf;
-> > > 
-> > >  	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
-> > > 
-> > > @@ -703,7 +704,17 @@ static int at91_twi_xfer(struct i2c_adapter
-> > > *adap, struct i2c_msg *msg, int num)
-> > >  	dev->msg = m_start;
-> > >  	dev->recv_len_abort = false;
-> > > 
-> > > +	if (dev->use_dma) {
-> > > +		dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
-> > > +		if (!dma_buf) {
-> > > +			ret = -ENOMEM;
-> > > +			goto out;
-> > > +		}
-> > > +		dev->buf = dma_buf;
-> > > +	}
-> > > +
-> > >  	ret = at91_do_twi_transfer(dev);
-> > > +	i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
-> > > 
-> > >  	ret = (ret < 0) ? ret : num;
-> > >  out:
-> > > --
-> > > 2.30.2
-> > > 
-> > > 
-> > 
-> > This change as commit 03fbb903c8bf ("i2c: at91: use dma safe buffers")
-> > causes the following clang warning:
-> 
-> Ugh..
-> 
-> > drivers/i2c/busses/i2c-at91-master.c:707:6: error: variable 'dma_buf'
-> > is used uninitialized whenever 'if' condition is false
-> > [-Werror,-Wsometimes-uninitialized]
-> >         if (dev->use_dma) {
-> >             ^~~~~~~~~~~~
-> > drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use
-> > occurs here
-> >         i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
-> >                                  ^~~~~~~
-> > drivers/i2c/busses/i2c-at91-master.c:707:2: note: remove the 'if' if
-> > its condition is always true
-> >         if (dev->use_dma) {
-> >         ^~~~~~~~~~~~~~~~~~
-> > drivers/i2c/busses/i2c-at91-master.c:659:13: note: initialize the
-> > variable 'dma_buf' to silence this warning
-> >         u8 *dma_buf;
-> >                    ^
-> >                     = NULL
-> > 1 error generated.
-> > 
-> > Should this variable be initialized or should the call to
-> > i2c_put_dma_safe_msg_buf() be moved into the if statement?
-> 
-> Initializing dma_buf with NULL should to the trick because
-> i2c_put_dma_safe_msg_buf() is handling NULL gracefully. No
-> need for an extra "if (dma_buf)".
-> 
-> Will you take care or should I send a patch?
+Clang warns:
 
-I can send a patch, thank you for the input!
+  drivers/i2c/busses/i2c-at91-master.c:707:6: warning: variable 'dma_buf' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+          if (dev->use_dma) {
+              ^~~~~~~~~~~~
+  drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use occurs here
+          i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
+                                   ^~~~~~~
 
-Cheers,
-Nathan
+Initialize dma_buf to NULL, as i2c_put_dma_safe_msg_buf() is a no-op
+when the first argument is NULL, which will work for the !dev->use_dma
+case.
+
+Fixes: 03fbb903c8bf ("i2c: at91: use dma safe buffers")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1629
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/i2c/busses/i2c-at91-master.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
+index 5eca3b3bb609..c0c35785a0dc 100644
+--- a/drivers/i2c/busses/i2c-at91-master.c
++++ b/drivers/i2c/busses/i2c-at91-master.c
+@@ -656,7 +656,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
+ 	unsigned int_addr_flag = 0;
+ 	struct i2c_msg *m_start = msg;
+ 	bool is_read;
+-	u8 *dma_buf;
++	u8 *dma_buf = NULL;
+ 
+ 	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
+ 
+
+base-commit: a181b8d187319bf265a2019ddde856a3d2f107a6
+-- 
+2.36.0
+
