@@ -2,116 +2,135 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D40551C03A
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 May 2022 15:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A64E51C303
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 May 2022 16:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378896AbiEENJq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 May 2022 09:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
+        id S1380807AbiEEOz0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 May 2022 10:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378807AbiEENIr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 May 2022 09:08:47 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3888456747
-        for <linux-i2c@vger.kernel.org>; Thu,  5 May 2022 06:05:07 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id z2so7025743ejj.3
-        for <linux-i2c@vger.kernel.org>; Thu, 05 May 2022 06:05:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sxVJoGvxoT/BfORhwUe0lF83tKeGUQ56jY7vzgfAHU4=;
-        b=Y0K2T7eDDIErEPqMy8O6G47SIMuNV/FV2iBabtCwdZYCRksLJj+E+c7fbrSt9ZBBXD
-         DaXJNvwCp8O95B7G3qBBBXd/ZY5LglYP8OcOlRsRkLkFbnOz5YGjf1+Kq+Cej6sf1PKz
-         8jox3zcMMsB69mnVMtXKZEg+/RyB0rS4FojXfONdqL7k9Dw/I4yA/G/3RFFnSgWC8agR
-         bsZsTNdQJo4ur+mN0mOVzXqc/pW10pVTqbvQpkdO4R2oawKCjQrPZ/LhQquGSb8INoG5
-         zUIcx6Usp3yJ11Kt8LC8bG4AgtPbYUl5xx+MqNZTXX94AuUxIh18hRHgvcWzdek9DC0O
-         2i3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sxVJoGvxoT/BfORhwUe0lF83tKeGUQ56jY7vzgfAHU4=;
-        b=fkDseHFYY2qZKXFJOZa35zUpR3leB3SV4yku/DNHnuy19Y6AVd83RLB7abk5IjcdZA
-         V0jL7QVQ2Wxsoacrp/vSgC0PwDHTa/SGrIB0hHn4OCdhuBy+Akc40a4pXhT/Gr3ALUH+
-         EIHl96O8TZ5D+QpkleAu5LWuCaTIDycC2CO2z92k5UmkbgzpA+5xrZq6pJNZ2iBenKM/
-         yIdKSRD8e+GB//y8wLya32quTxwBeT0j1jxuNh+JECSnRh7hrTgky8OQABvo1VOjLK7a
-         JVfT12tyoI7mdVylXvTOQuq/jNvR6/4WJOMt9gPMDpbulb4DB7NVk5mMrA0lbIPoaf+u
-         9DXg==
-X-Gm-Message-State: AOAM530+I7zgeHb2cqTUE6QL6L/tveZvNsU0nV0PccGbngqJYrVOSmrS
-        fRkFzCEfQQTNvjNEtv31Qsx9V59eShsPsbtHQ9yyCQ==
-X-Google-Smtp-Source: ABdhPJxyNkSLwouP3OR63NyFLRxUlmDS+dFIZZqJlV9mcUABNttg9TsG8+o4n8l4yoY3YgwsQa8BiV83N6jWTpdMxkc=
-X-Received: by 2002:a17:907:3e28:b0:6f4:3900:78f8 with SMTP id
- hp40-20020a1709073e2800b006f4390078f8mr21714935ejc.736.1651755905797; Thu, 05
- May 2022 06:05:05 -0700 (PDT)
+        with ESMTP id S1350734AbiEEOzZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 May 2022 10:55:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877542CC83;
+        Thu,  5 May 2022 07:51:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C1A36198B;
+        Thu,  5 May 2022 14:51:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB37C385AE;
+        Thu,  5 May 2022 14:51:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651762304;
+        bh=UYCZjEShRpoFfzDqVuQUnq+KLuye9U/K272vgc4gV+M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YaaCc8QxzSWDamM6l1uMJ+YHmA7aOpzQANULytCi/9o5dCqw1RSPG0BR8oFdVnyUF
+         0i7G3r879MfJ5V77awaQ7LC5UlfJkinLk+x5CMGge7jX6r9C4TxPDReme5nTSk9O5S
+         LiSdMJn8FEwGCq+H7IHWwD6YTLZVPqA8E9SBPRwoJCQcjlco142d+bUuL8/yRpAeFS
+         HTnfB+sQNA56TnlnoTZD8YpnEP07ihKWnGrYUMio0DwWlxAlOIfUGIcLJZeREAOSfW
+         7f3XgH12q4KaIrFhOB4kr654GI/2VXtYYYwJmlG+8fwYeDLzVX4ZtJ4Nr4JhDUUcjZ
+         hkEVYZlT/UfTA==
+Date:   Thu, 5 May 2022 07:51:42 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] i2c: at91: use dma safe buffers
+Message-ID: <YnPkfrI4Udl9lMR8@dev-arch.thelio-3990X>
+References: <20220407150828.202513-1-michael@walle.cc>
 MIME-Version: 1.0
-References: <cover.1651497024.git.geert+renesas@glider.be> <5628a862688bd9d3b4f6c66cb338671211058641.1651497024.git.geert+renesas@glider.be>
-In-Reply-To: <5628a862688bd9d3b4f6c66cb338671211058641.1651497024.git.geert+renesas@glider.be>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 5 May 2022 15:04:55 +0200
-Message-ID: <CAMRc=MeQZ_T_AoHUO3qx7oW68UMC6HH9CaC041vYr7wQisqjHA@mail.gmail.com>
-Subject: Re: [PATCH 1/7] dt-bindings: gpio: renesas,rcar-gpio: R-Car V3U is
- R-Car Gen4
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dmaengine@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        iommu@lists.linux-foundation.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407150828.202513-1-michael@walle.cc>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, May 2, 2022 at 3:35 PM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
->
-> Despite the name, R-Car V3U is the first member of the R-Car Gen4
-> family.  Hence move its compatible value to the R-Car Gen4 section.
->
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On Thu, Apr 07, 2022 at 05:08:28PM +0200, Michael Walle wrote:
+> The supplied buffer might be on the stack and we get the following error
+> message:
+> [    3.312058] at91_i2c e0070600.i2c: rejecting DMA map of vmalloc memory
+> 
+> Use i2c_{get,put}_dma_safe_msg_buf() to get a DMA-able memory region if
+> necessary.
+> 
+> Fixes: 60937b2cdbf9 ("i2c: at91: add dma support")
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 > ---
->  Documentation/devicetree/bindings/gpio/renesas,rcar-gpio.yaml | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/gpio/renesas,rcar-gpio.yaml b/Documentation/devicetree/bindings/gpio/renesas,rcar-gpio.yaml
-> index 0681a4790cd62e23..75e5da6a7cc04bbd 100644
-> --- a/Documentation/devicetree/bindings/gpio/renesas,rcar-gpio.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/renesas,rcar-gpio.yaml
-> @@ -48,11 +48,9 @@ properties:
->                - renesas,gpio-r8a77995     # R-Car D3
->            - const: renesas,rcar-gen3-gpio # R-Car Gen3 or RZ/G2
->
-> -      - items:
-> -          - const: renesas,gpio-r8a779a0  # R-Car V3U
-> -
->        - items:
->            - enum:
-> +              - renesas,gpio-r8a779a0     # R-Car V3U
->                - renesas,gpio-r8a779f0     # R-Car S4-8
->            - const: renesas,rcar-gen4-gpio # R-Car Gen4
->
-> --
-> 2.25.1
->
+> changes since v1:
+>  - remove extra empty line
+>  - add fixes tag as suggested by Codrin
+> 
+>  drivers/i2c/busses/i2c-at91-master.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
+> index b0eae94909f4..5eca3b3bb609 100644
+> --- a/drivers/i2c/busses/i2c-at91-master.c
+> +++ b/drivers/i2c/busses/i2c-at91-master.c
+> @@ -656,6 +656,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
+>  	unsigned int_addr_flag = 0;
+>  	struct i2c_msg *m_start = msg;
+>  	bool is_read;
+> +	u8 *dma_buf;
+>  
+>  	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
+>  
+> @@ -703,7 +704,17 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
+>  	dev->msg = m_start;
+>  	dev->recv_len_abort = false;
+>  
+> +	if (dev->use_dma) {
+> +		dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
+> +		if (!dma_buf) {
+> +			ret = -ENOMEM;
+> +			goto out;
+> +		}
+> +		dev->buf = dma_buf;
+> +	}
+> +
+>  	ret = at91_do_twi_transfer(dev);
+> +	i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
+>  
+>  	ret = (ret < 0) ? ret : num;
+>  out:
+> -- 
+> 2.30.2
+> 
+> 
 
-Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
+This change as commit 03fbb903c8bf ("i2c: at91: use dma safe buffers")
+causes the following clang warning:
+
+drivers/i2c/busses/i2c-at91-master.c:707:6: error: variable 'dma_buf' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+        if (dev->use_dma) {
+            ^~~~~~~~~~~~
+drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use occurs here
+        i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
+                                 ^~~~~~~
+drivers/i2c/busses/i2c-at91-master.c:707:2: note: remove the 'if' if its condition is always true
+        if (dev->use_dma) {
+        ^~~~~~~~~~~~~~~~~~
+drivers/i2c/busses/i2c-at91-master.c:659:13: note: initialize the variable 'dma_buf' to silence this warning
+        u8 *dma_buf;
+                   ^
+                    = NULL
+1 error generated.
+
+Should this variable be initialized or should the call to
+i2c_put_dma_safe_msg_buf() be moved into the if statement?
+
+Cheers,
+Nathan
