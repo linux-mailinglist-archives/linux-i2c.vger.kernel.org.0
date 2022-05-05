@@ -2,135 +2,186 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A64E51C303
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 May 2022 16:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F224151C30F
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 May 2022 16:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380807AbiEEOz0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 May 2022 10:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
+        id S240812AbiEEO6r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 May 2022 10:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350734AbiEEOzZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 May 2022 10:55:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877542CC83;
-        Thu,  5 May 2022 07:51:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C1A36198B;
-        Thu,  5 May 2022 14:51:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB37C385AE;
-        Thu,  5 May 2022 14:51:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651762304;
-        bh=UYCZjEShRpoFfzDqVuQUnq+KLuye9U/K272vgc4gV+M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YaaCc8QxzSWDamM6l1uMJ+YHmA7aOpzQANULytCi/9o5dCqw1RSPG0BR8oFdVnyUF
-         0i7G3r879MfJ5V77awaQ7LC5UlfJkinLk+x5CMGge7jX6r9C4TxPDReme5nTSk9O5S
-         LiSdMJn8FEwGCq+H7IHWwD6YTLZVPqA8E9SBPRwoJCQcjlco142d+bUuL8/yRpAeFS
-         HTnfB+sQNA56TnlnoTZD8YpnEP07ihKWnGrYUMio0DwWlxAlOIfUGIcLJZeREAOSfW
-         7f3XgH12q4KaIrFhOB4kr654GI/2VXtYYYwJmlG+8fwYeDLzVX4ZtJ4Nr4JhDUUcjZ
-         hkEVYZlT/UfTA==
-Date:   Thu, 5 May 2022 07:51:42 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] i2c: at91: use dma safe buffers
-Message-ID: <YnPkfrI4Udl9lMR8@dev-arch.thelio-3990X>
-References: <20220407150828.202513-1-michael@walle.cc>
+        with ESMTP id S233840AbiEEO6q (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 May 2022 10:58:46 -0400
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CF25A5B5;
+        Thu,  5 May 2022 07:55:05 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id D70CF3000A3AD;
+        Thu,  5 May 2022 16:55:03 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id CB4F01D8B44; Thu,  5 May 2022 16:55:03 +0200 (CEST)
+Date:   Thu, 5 May 2022 16:55:03 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: Re: [PATCH v4 1/8] platform/x86/intel: Add Primary to Sideband
+ (P2SB) bridge support
+Message-ID: <20220505145503.GA25423@wunner.de>
+References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+ <20220131151346.45792-2-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220407150828.202513-1-michael@walle.cc>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220131151346.45792-2-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 05:08:28PM +0200, Michael Walle wrote:
-> The supplied buffer might be on the stack and we get the following error
-> message:
-> [    3.312058] at91_i2c e0070600.i2c: rejecting DMA map of vmalloc memory
+On Mon, Jan 31, 2022 at 05:13:39PM +0200, Andy Shevchenko wrote:
+> Background information
+> ======================
+
+The wealth of information in the commit message obscures what the
+actual problem is, which is actually quite simple:  SoC features
+such as GPIO are accessed via a reserved MMIO area, we don't know
+its address but can obtain it from the BAR of the P2SB device,
+that device is normally hidden so we have to temporarily unhide it.
+
+
+> On top of that in some cases P2SB is represented by function 0 on PCI
+> slot (in terms of B:D.F) and according to the PCI specification any
+> other function can't be seen until function 0 is present and visible.
+
+I find that paragraph confusing:  Do multi-function P2SB devices exist?
+What are the other functions?  Are they visible but merely not enumerated
+because function 0 is not visible?
+
+
+> P2SB unconditional unhiding awareness
+> =====================================
+> Technically it's possible to unhide the P2SB device and devices on
+> the same PCI slot and access them at any time as needed. But there are
+> several potential issues with that:
 > 
-> Use i2c_{get,put}_dma_safe_msg_buf() to get a DMA-able memory region if
-> necessary.
+>  - the systems were never tested against such configuration and hence
+>    nobody knows what kind of bugs it may bring, especially when we talk
+>    about SPI NOR case which contains Intel FirmWare Image (IFWI) code
+>    (including BIOS) and already known to be problematic in the past for
+>    end users
 > 
-> Fixes: 60937b2cdbf9 ("i2c: at91: add dma support")
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-> ---
-> changes since v1:
->  - remove extra empty line
->  - add fixes tag as suggested by Codrin
+>  - the PCI by its nature is a hotpluggable bus and in case somebody
+>    attaches a driver to the functions of a P2SB slot device(s) the
+>    end user experience and system behaviour can be unpredictable
 > 
->  drivers/i2c/busses/i2c-at91-master.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
-> index b0eae94909f4..5eca3b3bb609 100644
-> --- a/drivers/i2c/busses/i2c-at91-master.c
-> +++ b/drivers/i2c/busses/i2c-at91-master.c
-> @@ -656,6 +656,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
->  	unsigned int_addr_flag = 0;
->  	struct i2c_msg *m_start = msg;
->  	bool is_read;
-> +	u8 *dma_buf;
->  
->  	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
->  
-> @@ -703,7 +704,17 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
->  	dev->msg = m_start;
->  	dev->recv_len_abort = false;
->  
-> +	if (dev->use_dma) {
-> +		dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
-> +		if (!dma_buf) {
-> +			ret = -ENOMEM;
-> +			goto out;
-> +		}
-> +		dev->buf = dma_buf;
-> +	}
+>  - the kernel code would need some ugly hacks (or code looking as an
+>    ugly hack) under arch/x86/pci in order to enable these devices on
+>    only selected platforms (which may include CPU ID table followed by
+>    a potentially growing number of DMI strings
+
+Honestly I would have taken the step to always expose the device,
+identify breakages and then fix those.
+
+We had a similar issue with HD audio controllers on Nvidia GPUs
+which were only visible when an HDMI cable was plugged in.
+We always expose them since b516ea586d71 and I recall we merely
+had a few cases that an audio device was exposed in cases when
+the card had no HDMI connectors at all.  So there was a useless
+HD audio card visible to the user but no real harm.
+
+
+> +	pci_lock_rescan_remove();
 > +
->  	ret = at91_do_twi_transfer(dev);
-> +	i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
->  
->  	ret = (ret < 0) ? ret : num;
->  out:
-> -- 
-> 2.30.2
-> 
-> 
+> +	/* Unhide the P2SB device, if needed */
+> +	pci_bus_read_config_dword(bus, devfn_p2sb, P2SBC, &value);
+> +	if ((value & P2SBC_HIDE) == P2SBC_HIDE)
+> +		pci_bus_write_config_dword(bus, devfn_p2sb, P2SBC, 0);
+> +
+> +	/* Read the first BAR of the device in question */
+> +	__pci_bus_read_base(bus, devfn, mem, PCI_BASE_ADDRESS_0);
+> +
+> +	/* Hide the P2SB device, if it was hidden */
+> +	if (value & P2SBC_HIDE)
+> +		pci_bus_write_config_dword(bus, devfn_p2sb, P2SBC, P2SBC_HIDE);
+> +
+> +	pci_unlock_rescan_remove();
 
-This change as commit 03fbb903c8bf ("i2c: at91: use dma safe buffers")
-causes the following clang warning:
+Please add a code comment why you're calling pci_lock_rescan_remove(),
+such as:
 
-drivers/i2c/busses/i2c-at91-master.c:707:6: error: variable 'dma_buf' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-        if (dev->use_dma) {
-            ^~~~~~~~~~~~
-drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use occurs here
-        i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
-                                 ^~~~~~~
-drivers/i2c/busses/i2c-at91-master.c:707:2: note: remove the 'if' if its condition is always true
-        if (dev->use_dma) {
-        ^~~~~~~~~~~~~~~~~~
-drivers/i2c/busses/i2c-at91-master.c:659:13: note: initialize the variable 'dma_buf' to silence this warning
-        u8 *dma_buf;
-                   ^
-                    = NULL
-1 error generated.
+	/*
+	 * Prevent concurrent PCI bus scan from seeing the P2SB device
+	 * while it is temporarily exposed.
+	 */
 
-Should this variable be initialized or should the call to
-i2c_put_dma_safe_msg_buf() be moved into the if statement?
+Otherwise it looks like you're abusing that lock to prevent multiple
+simultaneous RMW operations of the P2SBC_HIDE bit.
 
-Cheers,
-Nathan
+
+I think the first if-clause above can be simplified to
+
+	if (value & P2SBC_HIDE)
+
+I don't understand why one of the two if-clauses adds "== P2SBC_HIDE".
+
+
+Do you really need all the complicated logic in __pci_bus_read_base()?
+For comparison, simatic_ipc_get_membase0() in simatic-ipc.c merely does:
+
+	pci_bus_read_config_dword(bus, p2sb, PCI_BASE_ADDRESS_0, &bar0);
+
+If that's sufficient for simatic-ipc.c, why is the more complicated code
+necessary in p2sb.c?
+
+
+I'm wondering, since you're only retrieving the base address (and thus
+temporarily expose the P2SB device) when it's actually needed by a driver,
+would there be any harm in keeping the P2SB device exposed indefinitely
+from the moment a driver first requests the base address?  I.e., unhide it
+but don't hide it again.  That would allow you to call pci_scan_slot() and
+pci_bus_add_devices(), thus instantiating a proper pci_dev which you can
+access without the __pci_bus_read_base() kludge.
+
+
+> +	/*
+> +	 * I don't know how l can have all bits set.  Copied from old code.
+> +	 * Maybe it fixes a bug on some ancient platform.
+> +	 */
+> +	if (PCI_POSSIBLE_ERROR(l))
+> +		l = 0;
+
+l can have all bits set if the device was hot-removed.  That can't happen
+with a built-in device such as P2SB.
+
+Thanks,
+
+Lukas
