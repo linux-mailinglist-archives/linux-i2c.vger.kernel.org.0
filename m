@@ -2,72 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CD451D299
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 May 2022 09:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1896E51D39A
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 May 2022 10:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344647AbiEFH4S (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 6 May 2022 03:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46050 "EHLO
+        id S1390253AbiEFIse (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 6 May 2022 04:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353933AbiEFH4R (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 May 2022 03:56:17 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A833467D0A
-        for <linux-i2c@vger.kernel.org>; Fri,  6 May 2022 00:52:34 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso6394071wma.0
-        for <linux-i2c@vger.kernel.org>; Fri, 06 May 2022 00:52:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gMeYUcunQ9s7ulEnRlF5vKDKL/0JjyKSw80VuJAbcaY=;
-        b=Aho85y8yggkvIcNTBvN2ySStCMWKvXOE++5WTQ1nWsY/APWLTtz8NbH/T8+AL+uk6i
-         HYEV16PfXYgM6s5O9OkqrxTXt0BORdJ4Bp+CPpblnkwETLcEwUCuS93cspfSW4hA4mNS
-         0LnCc2qsyRVru3A8K1oS9cqXLLWfJUG+36OhVF8BVN/XORdx/fwDWCZPggPxUFnUCIJj
-         bHT2nHVGj88c/v81JCkZTfhANHJZ1pCwkz/5OQ8A1FO7SE6oywpfzNoTDIx6GPV8HVS5
-         i4bg70ObD8nDHrEItV+W9v89StkToAKyD/j3J8kUEJdpar+pJdFD3/e1HIhM7J3ZGdbw
-         +70Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gMeYUcunQ9s7ulEnRlF5vKDKL/0JjyKSw80VuJAbcaY=;
-        b=Ya96Z7pYejSdXxoKXxhENfiTjLeC+rpgbWmMGpioF8lrsNgMd+D1+9UYnOwKMiD9Ki
-         nG+h06L1W0afH7Q/9WYiInR15rgj5vAaodZAy+OuyNlfYdKVHDN+JnW4dO2YFzcswpx9
-         KQrRjCGGwXiFkL3BZzULPKRl0zBXAkrVOfsqzaGnGzJry7xjJkvRCui0od6TDBcTb3Tm
-         3Re6pC0aNDIEBITd20cv9l+G7zdlx0FkY2f1nNGZ0+dswrzdoquQRHKQFOs5E3i0bCnU
-         tl/c0O8sbmyzKQXoMPKou4EiJQpYmIkA0NGKMWBMb+IgXM52EPJJfEtRHvLIRBGqq4Zt
-         dnUg==
-X-Gm-Message-State: AOAM532bI4dRdCm5Av9qaR+mfA3AkgzhiGGAWWI8grXoGbQ91o2NoWiv
-        kDwXuj1CM1Ea1QOwE0rDSLCuLw==
-X-Google-Smtp-Source: ABdhPJwbl8yjl/Xxp5ORYcUlHPMyIQHV5om0GxDNcFsIzsx17MOQuyljt/6IxM7sSwEamGITfOqtFQ==
-X-Received: by 2002:a05:600c:190b:b0:392:95b8:5b18 with SMTP id j11-20020a05600c190b00b0039295b85b18mr8490715wmq.152.1651823553220;
-        Fri, 06 May 2022 00:52:33 -0700 (PDT)
-Received: from [192.168.0.223] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u26-20020a05600c00da00b00394517e7d98sm3291109wmm.25.2022.05.06.00.52.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 00:52:32 -0700 (PDT)
-Message-ID: <60612719-a41d-3523-0109-2f2406d31d6e@linaro.org>
-Date:   Fri, 6 May 2022 09:52:31 +0200
+        with ESMTP id S1358066AbiEFIs2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 May 2022 04:48:28 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13825689A2;
+        Fri,  6 May 2022 01:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651826686; x=1683362686;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fLBX9GbzXaLrNCQkVHxOtSlfQQ+hsbnt+ws0YOCuwuM=;
+  b=ewnM6cmLNbUrQJNjq3Ub6OURDOMVxEYCkL+iVd5n9/tH353vuAWlwoxi
+   3G3I3e5HZzfKx6uaTsuY3vt+h85RRlp1WI16anLCyS0My7Dt615ez/DV9
+   BKFR5hi4EGtqSwrE/MN9TAtJkd/QVpFtvEiGq3yISe8esILa3kBSmszPD
+   NB3aECKoApD6AUBoQAfOE8MxB9L7kuvs7e3LsJj6xRf6vJmeLOyibxT6x
+   HD7gYxdi8HpdkVZHgKgY3cSP0+V+fybm0u3QyLBJqwSsQoRQB+2PlFyqI
+   fNoAtFzp8nnM09Xa/JA/vZ5k454aE4fuUOrELXf7AgRJiK2o/6qDuChAP
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="267237945"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="267237945"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 01:44:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="585863619"
+Received: from mylly.fi.intel.com (HELO [10.237.72.150]) ([10.237.72.150])
+  by orsmga008.jf.intel.com with ESMTP; 06 May 2022 01:44:43 -0700
+Message-ID: <e6eacb51-bd9f-e014-5735-a624186458a8@linux.intel.com>
+Date:   Fri, 6 May 2022 11:44:43 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] i2c: s3c2410: fix returnvar.cocci warning
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: regression: Null pointer exception on resume from S3 with i2c
+ DesignWare driver
 Content-Language: en-US
-To:     Yihao Han <hanyihao@vivo.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com
-References: <20220506073134.6544-1-hanyihao@vivo.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220506073134.6544-1-hanyihao@vivo.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Samuel Clark <slc2015@gmail.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <941f292d-2ce2-d7aa-3d70-01a11ba171cf@leemhuis.info>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <941f292d-2ce2-d7aa-3d70-01a11ba171cf@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,22 +65,33 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 06/05/2022 09:31, Yihao Han wrote:
-> Fix the following coccicheck warning:
+Hi
+
+On 5/5/22 12:52, Thorsten Leemhuis wrote:
+>> Running Manjaro on a Gigabyte B660M DS3H DDR4 with custom 5.17 kernel. Confirmed on other distributions and kernels back to 5.12; issue is not present on most recent 5.11 kernel. dmesg traceback points to i2c DesignWare driver, specifically drivers/i2c/busses/i2c-designware-master.c:369. It seems the msgs struct passed in to i2c_dw_xfer_msg is null.
+>>
+>> Similar issue seems to be reported here:  https://lore.kernel.org/lkml/YY5BRrE8bLyvd3PB@smile.fi.intel.com/t/
+>>
+>> lspci output: https://pastebin.com/MwFM2VBJ
+>> dmesg from crashed kernel: https://pastebin.com/t6GsHjkq
+>> kernel config: https://pastebin.com/awrSve5u
 > 
-> drivers/i2c/busses/i2c-s3c2410.c:388:5-8: Unneeded variable: "ret".
-> Return "0" on line 551
+> Could somebody take a look into this? Or was this discussed somewhere
+> else already? Or even fixed?
 > 
-> Signed-off-by: Yihao Han <hanyihao@vivo.com>
-> ---
->  drivers/i2c/busses/i2c-s3c2410.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> Anyway, to get this tracked:
+> 
+> #regzbot introduced: v5.11..v5.12
+> #regzbot from: Samuel Clark <slc2015@gmail.com>
+> #regzbot title: i2c: designware: Null pointer exception on resume from S3
+> #regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215907
+> 
+Thanks for sharing the bug. The reason why it occurs after v5.11 is that 
+the i2c-designware support for Alder Lake -S came to v5.12 and issue is 
+hiding before it.
 
-This was already reported:
-https://lore.kernel.org/all/0d1a0027-e74d-9f07-3b96-372b5ca14ae3@canonical.com/
+Looks like there are suspend/resume issues with i2c-designware on some 
+Gigabyte motherboards. I commented in the bugzilla if Samuel can attach 
+the ACPI dump there.
 
-Please apply instead my previous suggestion.
-
-
-Best regards,
-Krzysztof
+Jarkko
