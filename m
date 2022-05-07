@@ -2,98 +2,153 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F53D51E542
-	for <lists+linux-i2c@lfdr.de>; Sat,  7 May 2022 09:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 668AF51E644
+	for <lists+linux-i2c@lfdr.de>; Sat,  7 May 2022 12:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239466AbiEGHko (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 7 May 2022 03:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42668 "EHLO
+        id S1446229AbiEGKFt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 7 May 2022 06:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235270AbiEGHko (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 7 May 2022 03:40:44 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B4D51E71
-        for <linux-i2c@vger.kernel.org>; Sat,  7 May 2022 00:36:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9C443CE3895
-        for <linux-i2c@vger.kernel.org>; Sat,  7 May 2022 07:36:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDABCC385A9;
-        Sat,  7 May 2022 07:36:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651909014;
-        bh=PyksUCvdTF7Gh3/3+KDrTJ7i+V/rnFuNnczAo4Rljv0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JG7ow76lS9PjAeluFePh6t1yp8/LSf99q7QPdoAUvLH/xLKr/mTCD21GxEZ6PXHh+
-         21HOQPI9RylIcaMvqqaOojvPlRfX84381GBTST4gz1KKxADTrkEc713TxurnTWNE8Q
-         L5+I5QnYimXXhT/rHL1sasdnoIb8lPA7XUAuWoBwa+GrQDgKrSkFrlpS3sKUN0oe+w
-         6oPjAIdbWDp44vjbetqrZiKBQh5QVnI2uQFXMfSeHh0/OSOzm91PsmNvx2UX1FQOtF
-         /UhHZEg2p7/6KChGANpD6QhvjVEvm/6v+MGHASWZSpKkTwQwsnW8lLfENUuqyegb+O
-         kPUZV/zsoB94A==
-Date:   Sat, 7 May 2022 09:36:48 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH 1/2] i2c-tools: Use getopt
-Message-ID: <YnYhkHKGbMTewH11@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Linux I2C <linux-i2c@vger.kernel.org>
-References: <20220506160652.61d61aa6@endymion.delvare>
- <YnU0fTi+Pa91sNyJ@shikoro>
- <20220506183413.703b39dc@endymion.delvare>
+        with ESMTP id S232437AbiEGKFl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 7 May 2022 06:05:41 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040C53D4B9;
+        Sat,  7 May 2022 03:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651917715; x=1683453715;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Q/otdjcbA6WbbPS5f3qcEn378K8z0rLFkeMOCGtuneE=;
+  b=B61f1fM1p9qVEJQbfg4WSL1V39NNCIKF5mwSY0Zk4neWljbwsvU7x8Jl
+   3j5ijrmTAsc7i0aYl4I6LSE4RjKFwCJ8yIq3dQCbeuwsAJqFCz6LJnrRZ
+   QfPcNbP5eHDPdnDehEgjgi7n5huQSbFUuv9iIlCeYDLKec6X4pvkUkeHF
+   +B/ee2gSw8gY4i7eDZrrQx3YArTQkX9Ec0lTgOtX2zwX8bvRfQpAlPxZR
+   L1LsMLMjWmrukvMKmbtg3P4gYjjb/EX/gKj1FB/JjT/wOiNqrym0zQEhR
+   BnsJ0O/KdvGj53iH6nwdA4L74HYMqdyNXVmoa8EmDBD4URt2LXy6RnoRf
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="268828938"
+X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
+   d="scan'208";a="268828938"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 03:01:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
+   d="scan'208";a="695555683"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 07 May 2022 03:01:48 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 78FB3155; Sat,  7 May 2022 13:01:49 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Mark Brown <broonie@kernel.org>,
+        chris.packham@alliedtelesis.co.nz,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Anatolij Gustschin <agust@denx.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pantelis Antoniou <pantelis.antoniou@gmail.com>
+Subject: [PATCH v2 1/4] powerpc/52xx: Remove dead code, i.e. mpc52xx_get_xtal_freq()
+Date:   Sat,  7 May 2022 13:01:44 +0300
+Message-Id: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SGaBCGKxRFEKgzzM"
-Content-Disposition: inline
-In-Reply-To: <20220506183413.703b39dc@endymion.delvare>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+It seems mpc52xx_get_xtal_freq() is not used anywhere. Remove dead code.
 
---SGaBCGKxRFEKgzzM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Wolfram Sang <wsa@kernel.org>
+---
+v2: collected tags
+ arch/powerpc/include/asm/mpc52xx.h           |  1 -
+ arch/powerpc/platforms/52xx/mpc52xx_common.c | 37 --------------------
+ 2 files changed, 38 deletions(-)
 
-Hi Jean,
+diff --git a/arch/powerpc/include/asm/mpc52xx.h b/arch/powerpc/include/asm/mpc52xx.h
+index ce1e0aabaa64..ddd80aae1e32 100644
+--- a/arch/powerpc/include/asm/mpc52xx.h
++++ b/arch/powerpc/include/asm/mpc52xx.h
+@@ -274,7 +274,6 @@ extern void mpc52xx_declare_of_platform_devices(void);
+ extern int mpc5200_psc_ac97_gpio_reset(int psc_number);
+ extern void mpc52xx_map_common_devices(void);
+ extern int mpc52xx_set_psc_clkdiv(int psc_id, int clkdiv);
+-extern unsigned int mpc52xx_get_xtal_freq(struct device_node *node);
+ extern void __noreturn mpc52xx_restart(char *cmd);
+ 
+ /* mpc52xx_gpt.c */
+diff --git a/arch/powerpc/platforms/52xx/mpc52xx_common.c b/arch/powerpc/platforms/52xx/mpc52xx_common.c
+index 565e3a83dc9e..4a39e1cb2263 100644
+--- a/arch/powerpc/platforms/52xx/mpc52xx_common.c
++++ b/arch/powerpc/platforms/52xx/mpc52xx_common.c
+@@ -203,43 +203,6 @@ int mpc52xx_set_psc_clkdiv(int psc_id, int clkdiv)
+ }
+ EXPORT_SYMBOL(mpc52xx_set_psc_clkdiv);
+ 
+-/**
+- * mpc52xx_get_xtal_freq - Get SYS_XTAL_IN frequency for a device
+- *
+- * @node: device node
+- *
+- * Returns the frequency of the external oscillator clock connected
+- * to the SYS_XTAL_IN pin, or 0 if it cannot be determined.
+- */
+-unsigned int mpc52xx_get_xtal_freq(struct device_node *node)
+-{
+-	u32 val;
+-	unsigned int freq;
+-
+-	if (!mpc52xx_cdm)
+-		return 0;
+-
+-	freq = mpc5xxx_get_bus_frequency(node);
+-	if (!freq)
+-		return 0;
+-
+-	if (in_8(&mpc52xx_cdm->ipb_clk_sel) & 0x1)
+-		freq *= 2;
+-
+-	val  = in_be32(&mpc52xx_cdm->rstcfg);
+-	if (val & (1 << 5))
+-		freq *= 8;
+-	else
+-		freq *= 4;
+-	if (val & (1 << 6))
+-		freq /= 12;
+-	else
+-		freq /= 16;
+-
+-	return freq;
+-}
+-EXPORT_SYMBOL(mpc52xx_get_xtal_freq);
+-
+ /**
+  * mpc52xx_restart: ppc_md->restart hook for mpc5200 using the watchdog timer
+  */
+-- 
+2.35.1
 
-> I did not want to step on your toes ;-) I'll look into applying the
-> same changes to i2ctransfer if possible, no problem.
-
-Thank you, much appreciated! My toes are far away tackling other
-problems currently ;)
-
-All the best,
-
-   Wolfram
-
-
---SGaBCGKxRFEKgzzM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJ2IYwACgkQFA3kzBSg
-Kbb+Hg//XRkm7SxvIFqSvq7Eh308lLz8XrtUsSHGIrRX4uajcBf4VIA6AjUCXLwq
-WaUMZ/Phgr6FdKFK44mKy/wkpW5zIKDxD6GBQw8n3GyR4eEHZBH3Mo8iX6VvEUBw
-SXzB5+8dxruwJJZ4ZYhoyKWHzu3+YaCXaOj8ubiyAHLa2nPkb3IHZRHFoXWacITI
-Wg69SBSJydpne92PMj+W2nZ9a/wJFRjZS9Gqxt4dDfXYaglkYsgtFq3PMed2NtWn
-2t28en5E44BrZVTkxb4PmuioZV0kBfuc58uWJlLSiKcYJt1t+8VpsCBKjN/CynEt
-aLcD34zootFyypPrqs38AzSKuEZrnS4W+BgXmYw3SQwRbEr9AH7kwxzeBlpxO+fI
-8FsN8LW0UoevrY6HPMRjIXp4B8McvbNt569mzEG9e61zDQBLelQkLPuNJJAXg3WY
-xtDY196DQ8hXdR0gTrB2YA9ehjFM2fKAlOEKSnRnC6GNsTbDzJ8cQkgPW+aenB6a
-PTCF1juXmrdq2VlFg25+kzwDcKW/tv9br9/XZu4NoMV3yD2rrIItB9yCWyDmne+/
-EiAMmQtMHYKT/wgrhwqhZQEPnqjTyrSlPt1IylcBKp4am/MA7fzMqfq5yy8rQ8iD
-nP1Iv2Cab1MUcys83E6MPUw6qqEhCIdsVu2VWZARlIgm1X6b1oM=
-=rY7I
------END PGP SIGNATURE-----
-
---SGaBCGKxRFEKgzzM--
