@@ -2,352 +2,154 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 398F751F8A3
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 May 2022 11:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C495521083
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 May 2022 11:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235945AbiEIJmX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 9 May 2022 05:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
+        id S238250AbiEJJV2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 May 2022 05:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237514AbiEIJMu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 9 May 2022 05:12:50 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D611F0DCE
-        for <linux-i2c@vger.kernel.org>; Mon,  9 May 2022 02:08:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3BC0E1FA07;
-        Mon,  9 May 2022 09:08:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1652087325; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qem5J1sQQK5QRnnmlM67PITn8y6eEOqC4dcpPn6vP2o=;
-        b=weT2OfwS2XetduKqvbZcDq9E0NhYpojUsnEb+3miXwuGFLG6P4wQoU5fERejXnZg5FVCDC
-        sC7jk/E15tR3mg2a4B2rdjgXyKQ2kzq06PqIlzT/wec5YzW3WV9+EimhFRSg3MfooeJEsv
-        pcg9qYeCZIXGwT3w9OX6cbzfu6uMvNg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1652087325;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qem5J1sQQK5QRnnmlM67PITn8y6eEOqC4dcpPn6vP2o=;
-        b=SxfD351LUmZfSKO3QIsrD7DcwxA+QYGG5pE8Cpy3KXJ9jS8pkmyTzdJ57T5rf7D8mfAMQ4
-        j+zgO1jTjowqUyCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 15E1413AA5;
-        Mon,  9 May 2022 09:08:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id vRKzAx3aeGKzVwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Mon, 09 May 2022 09:08:45 +0000
-Date:   Mon, 9 May 2022 11:08:44 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Linux I2C <linux-i2c@vger.kernel.org>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        david kerns <david.t.kerns@gmail.com>
-Subject: [PATCH v2 2/2] i2c-tools: Implement and document option -h
-Message-ID: <20220509110844.7a8078cb@endymion.delvare>
-In-Reply-To: <20220509110326.53e4b669@endymion.delvare>
-References: <20220509110326.53e4b669@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        with ESMTP id S238556AbiEJJV0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 May 2022 05:21:26 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3D520B54B;
+        Tue, 10 May 2022 02:17:29 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id s16so4061290pgs.3;
+        Tue, 10 May 2022 02:17:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5ohWrWKhb7DH4mWT2Vpbml6C/Yi2zU4//OgZmCLMHe0=;
+        b=DId4zWWENPDBe803yDU0EgPlkAgQ9UTEmkZciNnfJlpTHSpfNoJI95GDoIEYDdCzwF
+         YHykbhHXb2XRKqHpB7aVx36MRJIKNAptpmJv7s0vpEscKjGUS5eeqq8Ggj1ime0uBxdp
+         rrSZVmNe84M0w85Bfp5hZMGBiBDkbYHQMlOLZA5mb/LSNAEv5nRnjnjJpoJX7Qw76f/3
+         341Xvdhnm58Kr6i73uqCXDy3gwhmLHeYz/YDNhmuxC7BIvXIwm0NIYuGjh8XbS2e/rEe
+         RGDcCUdqNhloApQSLjHHVPd4avvJ6ISxRxdsL5fogqd8Q2Zkgj2JWm+0kbuSl+y4xe0I
+         U5FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5ohWrWKhb7DH4mWT2Vpbml6C/Yi2zU4//OgZmCLMHe0=;
+        b=Je3qa3lxopGzK2G+iklrr9JmYE0nH7JU02SHygmdXBcQZ7bzgrhaKzbMmIW4LSJS6e
+         sQcIwCDJPyhNGRjUp6omNYN7mSMF3zf7bW8vKLOTWS+7fNm0QnudacwgCFJtDU+tLe+s
+         DpT/GsCEDO8VdzRPaHSVL+llY1A0rn4abjrH5I3b/1nYRcidDWiB/5M+9lZQr3NERKmW
+         opnT1LuvG92BbjqWgXiEdnvI+dvSYDqqg2cC7X+aeiwn1gBjlLDb8vHDVf49HgaiCUSn
+         +Kb3qa568OWG0lLlDjwrPEUUxtE0uALAKNqUvxPvl/aWObpLb4+9aoOC4SICjI6yPFLF
+         2mpA==
+X-Gm-Message-State: AOAM530HXu9TJnRIG0jMd0vMhb/ocnnCmouzUG6u7EexrH34WUsO9qJh
+        JwX/VgE4wi4QE0iyxto4zA==
+X-Google-Smtp-Source: ABdhPJzWUJ6bTi6v+qZvP1Qcqb96Ilp/dJd0/Q4FsknFBWSeSF9G2Go/2vlTzyKn+anKaKWYXTo9Ow==
+X-Received: by 2002:a63:d312:0:b0:3c6:74a2:da72 with SMTP id b18-20020a63d312000000b003c674a2da72mr12651836pgg.16.1652174248702;
+        Tue, 10 May 2022 02:17:28 -0700 (PDT)
+Received: from localhost (2001-b011-7010-358e-c990-a8c9-85a7-1d3e.dynamic-ip6.hinet.net. [2001:b011:7010:358e:c990:a8c9:85a7:1d3e])
+        by smtp.gmail.com with ESMTPSA id 20-20020a17090a035400b001dcf49d92a1sm1283670pjf.28.2022.05.10.02.17.20
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 10 May 2022 02:17:28 -0700 (PDT)
+From:   Tyrone Ting <warp5tw@gmail.com>
+To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        wsa@kernel.org, andriy.shevchenko@linux.intel.com,
+        jarkko.nikula@linux.intel.com, semen.protsenko@linaro.org,
+        sven@svenpeter.dev, jie.deng@intel.com, jsd@semihalf.com,
+        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
+        warp5tw@gmail.com, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com
+Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/9] i2c: npcm: Bug fixes timeout, spurious interrupts
+Date:   Tue, 10 May 2022 17:16:45 +0800
+Message-Id: <20220510091654.8498-1-warp5tw@gmail.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add an option -h to display the help of the tools. This is a common
-practice so users may expect it to work.
+From: Tyrone Ting <kfting@nuvoton.com>
 
-Based on a preliminary patch from David Kerns.
+This patchset includes the following fixes:
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
----
-Changes since v1:
- * Update the getopt strings so that option -h is actually accepted
- * Update i2ctransfer too
- * Update the date of all modified man pages
+- Add dt-bindings description for NPCM845.
+- Bug fix for timeout calculation.
+- Better handling of spurious interrupts.
+- Fix for event type in slave mode.
+- Removal of own slave addresses [2:10].
+- Support for next gen BMC (NPCM845).
 
- tools/i2cdetect.8   |    8 +++++++-
- tools/i2cdetect.c   |    5 +++--
- tools/i2cdump.8     |    8 +++++++-
- tools/i2cdump.c     |    5 +++--
- tools/i2cget.8      |    8 +++++++-
- tools/i2cget.c      |    5 +++--
- tools/i2cset.8      |    8 +++++++-
- tools/i2cset.c      |    5 +++--
- tools/i2ctransfer.8 |    8 +++++++-
- tools/i2ctransfer.c |    5 +++--
- 10 files changed, 50 insertions(+), 15 deletions(-)
+The NPCM I2C driver is tested on NPCM750 and NPCM845 evaluation boards.
 
---- i2c-tools.orig/tools/i2cdetect.8	2022-05-09 10:57:59.426739954 +0200
-+++ i2c-tools/tools/i2cdetect.8	2022-05-09 11:05:28.840435141 +0200
-@@ -1,4 +1,4 @@
--.TH I2CDETECT 8 "October 2017"
-+.TH I2CDETECT 8 "May 2022"
- .SH NAME
- i2cdetect \- detect I2C chips
+Addressed comments from:
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/3/289
+ - Andy Shevchenko : https://lkml.org/lkml/2022/3/3/286
+ - Andy Shevchenko : https://lkml.org/lkml/2022/4/5/140
+ - Andy Shevchenko : https://lkml.org/lkml/2022/3/3/295
+
+Changes since version 3:
+ - Correct the const format in if condition in i2c binding document.
+ - Add the oops message statement and register information in register
+   access width patch.
+ - Add the occurring rate of the i2c spurious interrupt issue and more
+   details in driver's behavior to overcome this issue.
+ - Address Andy's comments in the patch to support NPCM845.
  
-@@ -18,6 +18,9 @@ i2cdetect \- detect I2C chips
- .I -V
- .br
- .B i2cdetect
-+.I -h
-+.br
-+.B i2cdetect
- .I -l
+Changes since version 2:
+ - Keep old code as fallback, if getting nuvoton,sys-mgr property fails.
+ - Fix the error reported by running 'make DT_CHECKER_FLAGS=-m 
+   dt_binding_check'.
+ - Make nuvoton,sys-mgr required for nuvoton,npcm845-i2c.
+ - Correct the patch's subject about changing the way of getting GCR
+   regmap and add the description about keeping old code as fallback
+   if getting nuvoton,sys-mgr property fails.
+ - Correct the patch title and description about removing the unused 
+   variable clk_regmap.
+ - Use the data field directly instead of the macros since macros are
+   not constants anymore in this patch.
  
- .SH DESCRIPTION
-@@ -78,6 +81,9 @@ Display the list of functionalities impl
- .B "\-V"
- Display the version and exit.
- .TP
-+.B "\-h"
-+Display the help and exit.
-+.TP
- .B "\-l"
- Output a list of installed busses.
- 
---- i2c-tools.orig/tools/i2cdetect.c	2022-05-09 11:05:28.832435039 +0200
-+++ i2c-tools/tools/i2cdetect.c	2022-05-09 11:06:15.086024749 +0200
-@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
- 	int yes = 0, version = 0, list = 0;
- 
- 	/* handle (optional) flags first */
--	while ((opt = getopt(argc, argv, "FValqry")) != -1) {
-+	while ((opt = getopt(argc, argv, "FVahlqry")) != -1) {
- 		switch (opt) {
- 		case 'V': version = 1; break;
- 		case 'y': yes = 1; break;
-@@ -242,9 +242,10 @@ int main(int argc, char *argv[])
- 			first = 0x00;
- 			last = 0x7F;
- 			break;
-+		case 'h':
- 		case '?':
- 			help();
--			exit(1);
-+			exit(opt == '?');
- 		}
- 	}
- 
---- i2c-tools.orig/tools/i2cdump.8	2022-05-09 10:57:59.426739954 +0200
-+++ i2c-tools/tools/i2cdump.8	2022-05-09 11:05:28.840435141 +0200
-@@ -1,4 +1,4 @@
--.TH I2CDUMP 8 "June 2021"
-+.TH I2CDUMP 8 "May 2022"
- .SH NAME
- i2cdump \- examine I2C registers
- 
-@@ -14,6 +14,9 @@ i2cdump \- examine I2C registers
- .br
- .B i2cdump
- .B -V
-+.br
-+.B i2cdump
-+.B -h
- 
- .SH DESCRIPTION
- i2cdump is a small helper program to examine registers
-@@ -24,6 +27,9 @@ visible through the I2C bus.
- .B -V
- Display the version and exit.
- .TP
-+.B -h
-+Display the help and exit.
-+.TP
- .B -f
- Force access to the device even if it is already busy. By default, i2cdump
- will refuse to access a device which is already under the control of a
---- i2c-tools.orig/tools/i2cdump.c	2022-05-09 11:05:28.832435039 +0200
-+++ i2c-tools/tools/i2cdump.c	2022-05-09 11:06:22.017113117 +0200
-@@ -116,16 +116,17 @@ int main(int argc, char *argv[])
- 	int first = 0x00, last = 0xff;
- 
- 	/* handle (optional) flags first */
--	while ((opt = getopt(argc, argv, "Vafr:y")) != -1) {
-+	while ((opt = getopt(argc, argv, "Vafhr:y")) != -1) {
- 		switch (opt) {
- 		case 'V': version = 1; break;
- 		case 'f': force = 1; break;
- 		case 'r': range = optarg; break;
- 		case 'y': yes = 1; break;
- 		case 'a': all_addrs = 1; break;
-+		case 'h':
- 		case '?':
- 			help();
--			exit(1);
-+			exit(opt == '?');
- 		}
- 	}
- 
---- i2c-tools.orig/tools/i2cget.8	2022-05-09 10:57:59.426739954 +0200
-+++ i2c-tools/tools/i2cget.8	2022-05-09 11:05:28.840435141 +0200
-@@ -1,4 +1,4 @@
--.TH I2CGET 8 "July 2021"
-+.TH I2CGET 8 "May 2022"
- .SH "NAME"
- i2cget \- read from I2C/SMBus chip registers
- 
-@@ -13,6 +13,9 @@ i2cget \- read from I2C/SMBus chip regis
- .br
- .B i2cget
- .B -V
-+.br
-+.B i2cget
-+.B -h
- 
- .SH DESCRIPTION
- i2cget is a small helper program to read registers visible through the I2C
-@@ -23,6 +26,9 @@ bus (or SMBus).
- .B -V
- Display the version and exit.
- .TP
-+.B -h
-+Display the help and exit.
-+.TP
- .B -f
- Force access to the device even if it is already busy. By default, i2cget
- will refuse to access a device which is already under the control of a
---- i2c-tools.orig/tools/i2cget.c	2022-05-09 11:05:28.832435039 +0200
-+++ i2c-tools/tools/i2cget.c	2022-05-09 11:06:33.221255964 +0200
-@@ -186,15 +186,16 @@ int main(int argc, char *argv[])
- 	unsigned char block_data[I2C_SMBUS_BLOCK_MAX];
- 
- 	/* handle (optional) flags first */
--	while ((opt = getopt(argc, argv, "Vafy")) != -1) {
-+	while ((opt = getopt(argc, argv, "Vafhy")) != -1) {
- 		switch (opt) {
- 		case 'V': version = 1; break;
- 		case 'f': force = 1; break;
- 		case 'y': yes = 1; break;
- 		case 'a': all_addrs = 1; break;
-+		case 'h':
- 		case '?':
- 			help();
--			exit(1);
-+			exit(opt == '?');
- 		}
- 	}
- 
---- i2c-tools.orig/tools/i2cset.8	2022-05-09 10:57:59.426739954 +0200
-+++ i2c-tools/tools/i2cset.8	2022-05-09 11:05:28.840435141 +0200
-@@ -1,4 +1,4 @@
--.TH I2CSET 8 "October 2017"
-+.TH I2CSET 8 "May 2022"
- .SH "NAME"
- i2cset \- set I2C registers
- 
-@@ -18,6 +18,9 @@ i2cset \- set I2C registers
- .br
- .B i2cset
- .B -V
-+.br
-+.B i2cset
-+.B -h
- 
- .SH DESCRIPTION
- i2cset is a small helper program to set registers visible through the I2C
-@@ -28,6 +31,9 @@ bus.
- .B -V
- Display the version and exit.
- .TP
-+.B -h
-+Display the help and exit.
-+.TP
- .B -f
- Force access to the device even if it is already busy. By default, i2cset
- will refuse to access a device which is already under the control of a
---- i2c-tools.orig/tools/i2cset.c	2022-05-09 11:05:28.832435039 +0200
-+++ i2c-tools/tools/i2cset.c	2022-05-09 11:06:40.280345962 +0200
-@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
- 	int len;
- 
- 	/* handle (optional) flags first */
--	while ((opt = getopt(argc, argv, "Vafm:ry")) != -1) {
-+	while ((opt = getopt(argc, argv, "Vafhm:ry")) != -1) {
- 		switch (opt) {
- 		case 'V': version = 1; break;
- 		case 'f': force = 1; break;
-@@ -176,9 +176,10 @@ int main(int argc, char *argv[])
- 		case 'm': maskp = optarg; break;
- 		case 'r': readback = 1; break;
- 		case 'a': all_addrs = 1; break;
-+		case 'h':
- 		case '?':
- 			help();
--			exit(1);
-+			exit(opt == '?');
- 		}
- 	}
- 
---- i2c-tools.orig/tools/i2ctransfer.8	2022-05-09 10:57:59.426739954 +0200
-+++ i2c-tools/tools/i2ctransfer.8	2022-05-09 11:05:28.841435154 +0200
-@@ -1,4 +1,4 @@
--.TH i2ctransfer 8 "February 2017"
-+.TH i2ctransfer 8 "May 2022"
- .SH "NAME"
- i2ctransfer \- send user-defined I2C messages in one transfer
- 
-@@ -16,6 +16,9 @@ i2ctransfer \- send user-defined I2C mes
- .br
- .B i2ctransfer
- .B -V
-+.br
-+.B i2ctransfer
-+.B -h
- 
- .SH DESCRIPTION
- .B i2ctransfer
-@@ -63,6 +66,9 @@ It will print infos about all messages s
- .B -V
- Display the version and exit.
- .TP
-+.B -h
-+Display the help and exit.
-+.TP
- .B -a
- Allow using addresses between 0x00 - 0x07 and 0x78 - 0x7f. Not recommended.
- 
---- i2c-tools.orig/tools/i2ctransfer.c	2022-05-09 11:05:28.832435039 +0200
-+++ i2c-tools/tools/i2ctransfer.c	2022-05-09 11:06:47.812441993 +0200
-@@ -141,16 +141,17 @@ int main(int argc, char *argv[])
- 		msgs[i].buf = NULL;
- 
- 	/* handle (optional) flags first */
--	while ((opt = getopt(argc, argv, "Vafvy")) != -1) {
-+	while ((opt = getopt(argc, argv, "Vafhvy")) != -1) {
- 		switch (opt) {
- 		case 'V': version = 1; break;
- 		case 'v': verbose = 1; break;
- 		case 'f': force = 1; break;
- 		case 'y': yes = 1; break;
- 		case 'a': all_addrs = 1; break;
-+		case 'h':
- 		case '?':
- 			help();
--			exit(1);
-+			exit(opt == '?');
- 		}
- 	}
- 
+Changes since version 1:
+ - Add nuvoton,sys-mgr property in NPCM devicetree.
+ - Describe the commit message in imperative mood.
+ - Modify the description in i2c binding document to cover NPCM series.
+ - Add new property in i2c binding document.
+ - Create a new patch for client address calculation.
+ - Create a new patch for updating gcr property name.
+ - Create a new patch for removing unused clock node.
+ - Explain EOB in the commit description.
+ - Create a new patch for correcting NPCM register access width.
+ - Remove some comment since the corresponding logic no longer exists.
+ - Remove fixes tag while the patch adds an additional feature.
+ - Use devicetree data field to support NPCM845.
+
+Tali Perry (6):
+  i2c: npcm: Change the way of getting GCR regmap
+  i2c: npcm: Remove unused variable clk_regmap
+  i2c: npcm: Fix timeout calculation
+  i2c: npcm: Add tx complete counter
+  i2c: npcm: Handle spurious interrupts
+  i2c: npcm: Remove own slave addresses 2:10
+
+Tyrone Ting (3):
+  dt-bindings: i2c: npcm: support NPCM845
+  i2c: npcm: Correct register access width
+  i2c: npcm: Support NPCM845
+
+ .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     |  25 +-
+ drivers/i2c/busses/Kconfig                    |   8 +-
+ drivers/i2c/busses/Makefile                   |   2 +-
+ drivers/i2c/busses/i2c-npcm7xx.c              | 277 +++++++++++-------
+ 4 files changed, 196 insertions(+), 116 deletions(-)
 
 -- 
-Jean Delvare
-SUSE L3 Support
+2.17.1
+
