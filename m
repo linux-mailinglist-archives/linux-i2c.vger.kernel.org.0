@@ -2,126 +2,112 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E7E5228CF
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 May 2022 03:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA5E522901
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 May 2022 03:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239822AbiEKBQQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 May 2022 21:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40962 "EHLO
+        id S231779AbiEKBeX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 May 2022 21:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240206AbiEKBQP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 May 2022 21:16:15 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBD0275F7;
-        Tue, 10 May 2022 18:16:13 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KycQX0Q2Kz1JC3x;
-        Wed, 11 May 2022 09:15:00 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 11 May 2022 09:16:11 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 11 May
- 2022 09:16:11 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-CC:     <wsa@kernel.org>
-Subject: [PATCH v2] i2c: core: Fix possible memleak in i2c_new_client_device()
-Date:   Wed, 11 May 2022 09:27:38 +0800
-Message-ID: <20220511012738.3031346-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230440AbiEKBeW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 May 2022 21:34:22 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E34525AF99;
+        Tue, 10 May 2022 18:34:21 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id j14so457275vkp.4;
+        Tue, 10 May 2022 18:34:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hUbRV+sAgUiSy2bUpARcOgCdPqjZDpreSWj6clywayk=;
+        b=cvhcSZYUE8WppwVWg0K4i5OGAupu2BbFv5EGZXMWzpyT92xjLPbdPc1UlmdsYKkABF
+         lSqmnsumW5ssSuqP8HBrh6tPngZ1sbcKIk55pFFSByEsnVM4Af3DQbTOyTwytZTC1iko
+         L7lotJWsXyi7iUilU9qlKRgjLNIInmcPwFm6uLDBWQDEKcgzrY+5ibXsuEatjHkh9Izg
+         Q791RaPG5meZIxhnwOBKEp1j5Alx9xIT1BclmVWMaAtso/Kt3cdks6c4dA0tzjGuTf36
+         VEPuwOq2f5EsBS0qfj/JhqEoUxzS2nE1T8C+xOP1x7dGf37VexSP/HBNMPY5MlY+T1iC
+         9ujQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hUbRV+sAgUiSy2bUpARcOgCdPqjZDpreSWj6clywayk=;
+        b=MXoIaJTptUhd1o/a9oTIcKcOXwMKDMjPjUM3aqJE3EeX2uHIfbxcqhvs/exCloBlpx
+         j3i6nm0VT+5FVAriGPoVmyt3O/kEKVV/474YVqJ7VjsuTm0qa5ghcbA3EVV9oE4rLUYQ
+         o4oBHqNCImD74N6kYKkKXdmzljcGkpR+WKVFzDqP6BF4prhBJ1++cWlKGrEXVYLlewiW
+         nLnC9cBsE9u1QtmpdZnU1IbCq1bZDJkL3job0LX5HKB3bKFwyiExdYjHWuaS1A0hSXJE
+         kU0s1l0dOUyuNdqUuea1sM8g6CogwbXcHaRqv38GnHudC+iGFVqzR98rxqyeOmOW9QGb
+         XgdQ==
+X-Gm-Message-State: AOAM531u0PN8GEN1kgxCQOrVqbmYa3GamEq/RgNA6dGa3VYIbeWNjwbp
+        p/htfLFufgvZHIV/pxG7f98pHflW1JGQ/2HDlw==
+X-Google-Smtp-Source: ABdhPJy1LvIQrZzYr0kMhSSq0YcMODrI0B+H/NSEPuNclCK78Buj4unTd+AwI3LvbBD9ZUZI7/QEyyzgDsuIgF5A4y8=
+X-Received: by 2002:a1f:91cb:0:b0:34e:10c8:cf1c with SMTP id
+ t194-20020a1f91cb000000b0034e10c8cf1cmr13428181vkd.31.1652232860533; Tue, 10
+ May 2022 18:34:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220510091654.8498-1-warp5tw@gmail.com> <20220510091654.8498-3-warp5tw@gmail.com>
+ <Yno5mJMi/3dZyjNz@smile.fi.intel.com>
+In-Reply-To: <Yno5mJMi/3dZyjNz@smile.fi.intel.com>
+From:   Tyrone Ting <warp5tw@gmail.com>
+Date:   Wed, 11 May 2022 09:34:08 +0800
+Message-ID: <CACD3sJYgb-kkTLFwCi16WotYTC3vN8ZReeuPf4=r7CT1-6CX6w@mail.gmail.com>
+Subject: Re: [PATCH v4 2/9] i2c: npcm: Change the way of getting GCR regmap
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        wsa@kernel.org, jarkko.nikula@linux.intel.com,
+        semen.protsenko@linaro.org, sven@svenpeter.dev, jie.deng@intel.com,
+        jsd@semihalf.com, lukas.bulwahn@gmail.com, olof@lixom.net,
+        arnd@arndb.de, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-I got memory leak as follows when doing fault injection test:
+Hi Andy:
 
-unreferenced object 0xffff888014aec078 (size 8):
-  comm "xrun", pid 356, jiffies 4294910619 (age 16.332s)
-  hex dump (first 8 bytes):
-    31 2d 30 30 31 63 00 00                          1-001c..
-  backtrace:
-    [<00000000eb56c0a9>] __kmalloc_track_caller+0x1a6/0x300
-    [<000000000b220ea3>] kvasprintf+0xad/0x140
-    [<00000000b83203e5>] kvasprintf_const+0x62/0x190
-    [<000000002a5eab37>] kobject_set_name_vargs+0x56/0x140
-    [<00000000300ac279>] dev_set_name+0xb0/0xe0
-    [<00000000b66ebd6f>] i2c_new_client_device+0x7e4/0x9a0
+Thank you for your comment and it will be addressed.
 
-In error path after calling dev_set_name() which called by
-i2c_dev_set_name(), the put_device() should be used to give up
-the device reference, then the name allocated in dev_set_name()
-will be freed in kobject_cleanup().
-In this patch, I splited device_register() into device_initialize()
-and device_add() to make the code more clear.
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> =E6=96=BC 2022=E5=B9=B4=
+5=E6=9C=8810=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=886:08=E5=AF=AB=E9=
+=81=93=EF=BC=9A
+>
+> On Tue, May 10, 2022 at 05:16:47PM +0800, Tyrone Ting wrote:
+> > From: Tali Perry <tali.perry1@gmail.com>
+> >
+> > Change the way of getting NPCM system manager reigster (GCR)
+> > and still maintain the old mechanism as a fallback if getting
+> > nuvoton,sys-mgr fails while working with the legacy devicetree
+> > file.
+>
+> ...
+>
+> > @@ -2236,6 +2236,7 @@ static int npcm_i2c_probe_bus(struct platform_dev=
+ice *pdev)
+> >       static struct regmap *clk_regmap;
+> >       int irq;
+> >       int ret;
+> > +     struct device_node *np =3D pdev->dev.of_node;
+>
+> Can we keep "longer line first" order?
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
-v2:
-  split device_register() into device_initialize() and device_add()
----
- drivers/i2c/i2c-core-base.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index d43db2c3876e..e7dded8b037b 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -928,6 +928,11 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
- 	client->flags = info->flags;
- 	client->addr = info->addr;
- 
-+	client->dev.parent = &client->adapter->dev;
-+	client->dev.bus = &i2c_bus_type;
-+	client->dev.type = &i2c_client_type;
-+	device_initialize(&client->dev);
-+
- 	client->init_irq = info->irq;
- 	if (!client->init_irq)
- 		client->init_irq = i2c_dev_irq_from_resources(info->resources,
-@@ -947,9 +952,6 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
- 	if (status)
- 		goto out_err;
- 
--	client->dev.parent = &client->adapter->dev;
--	client->dev.bus = &i2c_bus_type;
--	client->dev.type = &i2c_client_type;
- 	client->dev.of_node = of_node_get(info->of_node);
- 	client->dev.fwnode = info->fwnode;
- 
-@@ -966,7 +968,7 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
- 		}
- 	}
- 
--	status = device_register(&client->dev);
-+	status = device_add(&client->dev);
- 	if (status)
- 		goto out_remove_swnode;
- 
-@@ -984,7 +986,7 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
- 		"Failed to register i2c client %s at 0x%02x (%d)\n",
- 		client->name, client->addr, status);
- out_err_silent:
--	kfree(client);
-+	put_device(&client->dev);
- 	return ERR_PTR(status);
- }
- EXPORT_SYMBOL_GPL(i2c_new_client_device);
--- 
-2.25.1
-
+Best Regards,
+Tyrone
