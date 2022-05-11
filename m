@@ -2,124 +2,126 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E39C52287C
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 May 2022 02:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E7E5228CF
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 May 2022 03:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239632AbiEKA3A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 May 2022 20:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
+        id S239822AbiEKBQQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 May 2022 21:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239649AbiEKA2y (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 May 2022 20:28:54 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD80266C93;
-        Tue, 10 May 2022 17:28:53 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id z144so390564vsz.13;
-        Tue, 10 May 2022 17:28:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ArJ+P0yP41IspvL16vZgXyp5wGPDg81O0e5eE6H/vks=;
-        b=TmeVRx9py0dFnEm1+1TQ/UZnrTgHHdOLlw2Hg/DmfL9RPjUBspUNsO6IaFp9AHo04x
-         CyrG9eP8kVS+Q0M5scz+SpJ+oPm5ftB+uKdpygdqfsG5TGs2lgT5BbmFpW6uig2eAc+x
-         L92C4Sl0SGJgJ1RqYttF7dIj/CbeT/+aEjlFJKtUYsjG3bSf19nn3hxMK5psMj/Kdyev
-         vwUkLPp4Sd6DoHsVVgWFTywVAA93pVhPOmL2jh0RvBmDjYLuHXHeN/8moU7QoL1dXddI
-         dO9j3yGjXudx0e7cszWgN7B/Rupgac9uvTPYxwqmewbBjQww9y8hsZGjGVohCqNKHbsE
-         YuIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ArJ+P0yP41IspvL16vZgXyp5wGPDg81O0e5eE6H/vks=;
-        b=DFdvEJsmn8t3ZysHbhyEcfUMMbwdnGXZCqGXFA8T8sOT9rgyc8WbfrFkr9076BNVqm
-         zVFNeCe963tFF7+TOrJ0R5IkyYBzg0KXxGOJb7pRviJh+Uh3Es3LjuJpHRNN00N1U9YD
-         nvMkOxu4MIs+T37Uz2Jd1NjD7Qj6NwdCY8ohDJzhMukQMnf2yl4UZaCwKZNrc+0lo97O
-         sgyTg/Ujszq5QH4TxBsJVxx93ikiNIAP/gnVi2kqPtR2VofPf/mD54ahHJa/h2yNgOqO
-         BP0UL+UYNSOWmQGZ2qTq+q+yjDNBnwWB61JRitWNFN92+UgOLoHc7b0J1j9QjuyXYH7Y
-         NJDQ==
-X-Gm-Message-State: AOAM530W6OkLaTm5XKx30KsPggVdnn9HuuUwOnVnAiD6UNrdogZXaQxy
-        7yn2LJxDy4nO2wHV32jhoTC8MUvDARDY6LV5AQ==
-X-Google-Smtp-Source: ABdhPJxhZxAx7pGH4pYIhNGd5w1vurCriRZkY02XBkZ32jUrSC70/SiZ/pB1dgdPFtRowcflumM3uWIdxBgBCnQZs4Q=
-X-Received: by 2002:a67:ec48:0:b0:32c:e56b:6e85 with SMTP id
- z8-20020a67ec48000000b0032ce56b6e85mr12394926vso.50.1652228932835; Tue, 10
- May 2022 17:28:52 -0700 (PDT)
+        with ESMTP id S240206AbiEKBQP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 May 2022 21:16:15 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBD0275F7;
+        Tue, 10 May 2022 18:16:13 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KycQX0Q2Kz1JC3x;
+        Wed, 11 May 2022 09:15:00 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 11 May 2022 09:16:11 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 11 May
+ 2022 09:16:11 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+CC:     <wsa@kernel.org>
+Subject: [PATCH v2] i2c: core: Fix possible memleak in i2c_new_client_device()
+Date:   Wed, 11 May 2022 09:27:38 +0800
+Message-ID: <20220511012738.3031346-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220510100328.9191-1-warp5tw@gmail.com> <20220510100328.9191-2-warp5tw@gmail.com>
- <28029d30-6d18-d28c-a7d2-d86b9ab9ad35@linaro.org> <CACD3sJa6qEPDD58NqiXJ+hHHSSbB6BRqEPXuX+m49ei8HrHF+g@mail.gmail.com>
-In-Reply-To: <CACD3sJa6qEPDD58NqiXJ+hHHSSbB6BRqEPXuX+m49ei8HrHF+g@mail.gmail.com>
-From:   Tyrone Ting <warp5tw@gmail.com>
-Date:   Wed, 11 May 2022 08:28:40 +0800
-Message-ID: <CACD3sJa2qdocMXX3QFj5OdjFGd95M5nArJqPpEMjCYmb2ZvgHA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/9] dt-bindings: i2c: npcm: support NPCM845
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        avifishman70@gmail.com, Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>, robh+dt@kernel.org,
-        Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        jarkko.nikula@linux.intel.com, semen.protsenko@linaro.org,
-        sven@svenpeter.dev, jsd@semihalf.com, lukas.bulwahn@gmail.com,
-        olof@lixom.net, arnd@arndb.de, Tyrone Ting <warp5tw@gmail.com>,
-        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting <kfting@nuvoton.com>
-Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Tyrone Ting <warp5tw@gmail.com> =E6=96=BC 2022=E5=B9=B45=E6=9C=8811=E6=97=
-=A5 =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=888:25=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Hi Krzysztof:
->
-> Thank you for your review and it will be addressed.
->
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
-=B45=E6=9C=8810=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=886:59=E5=AF=AB=
-=E9=81=93=EF=BC=9A
-> >
-> > On 10/05/2022 12:03, Tyrone Ting wrote:
-> > >
-> > >  maintainers:
-> > >    - Tali Perry <tali.perry1@gmail.com>
-> > >
-> > >  properties:
-> > >    compatible:
-> > > -    const: nuvoton,npcm750-i2c
-> > > +    enum:
-> > > +      - nuvoton,npcm750-i2c
-> > > +      - nuvoton,npcm845-i2c
-> > >
-> > >    reg:
-> > >      maxItems: 1
-> > > @@ -36,6 +37,10 @@ properties:
-> > >      default: 100000
-> > >      enum: [100000, 400000, 1000000]
-> > >
-> > > +  nuvoton,sys-mgr:
-> > > +    $ref: "/schemas/types.yaml#/definitions/phandle"
-> >
-> > Minor nit: No quotes. The other places don't have it.
-> >
-> >
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >
-> >
-> > Best regards,
-> > Krzysztof
->
-> Best regards,
-> Tyrone
+I got memory leak as follows when doing fault injection test:
+
+unreferenced object 0xffff888014aec078 (size 8):
+  comm "xrun", pid 356, jiffies 4294910619 (age 16.332s)
+  hex dump (first 8 bytes):
+    31 2d 30 30 31 63 00 00                          1-001c..
+  backtrace:
+    [<00000000eb56c0a9>] __kmalloc_track_caller+0x1a6/0x300
+    [<000000000b220ea3>] kvasprintf+0xad/0x140
+    [<00000000b83203e5>] kvasprintf_const+0x62/0x190
+    [<000000002a5eab37>] kobject_set_name_vargs+0x56/0x140
+    [<00000000300ac279>] dev_set_name+0xb0/0xe0
+    [<00000000b66ebd6f>] i2c_new_client_device+0x7e4/0x9a0
+
+In error path after calling dev_set_name() which called by
+i2c_dev_set_name(), the put_device() should be used to give up
+the device reference, then the name allocated in dev_set_name()
+will be freed in kobject_cleanup().
+In this patch, I splited device_register() into device_initialize()
+and device_add() to make the code more clear.
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+v2:
+  split device_register() into device_initialize() and device_add()
+---
+ drivers/i2c/i2c-core-base.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index d43db2c3876e..e7dded8b037b 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -928,6 +928,11 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+ 	client->flags = info->flags;
+ 	client->addr = info->addr;
+ 
++	client->dev.parent = &client->adapter->dev;
++	client->dev.bus = &i2c_bus_type;
++	client->dev.type = &i2c_client_type;
++	device_initialize(&client->dev);
++
+ 	client->init_irq = info->irq;
+ 	if (!client->init_irq)
+ 		client->init_irq = i2c_dev_irq_from_resources(info->resources,
+@@ -947,9 +952,6 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+ 	if (status)
+ 		goto out_err;
+ 
+-	client->dev.parent = &client->adapter->dev;
+-	client->dev.bus = &i2c_bus_type;
+-	client->dev.type = &i2c_client_type;
+ 	client->dev.of_node = of_node_get(info->of_node);
+ 	client->dev.fwnode = info->fwnode;
+ 
+@@ -966,7 +968,7 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+ 		}
+ 	}
+ 
+-	status = device_register(&client->dev);
++	status = device_add(&client->dev);
+ 	if (status)
+ 		goto out_remove_swnode;
+ 
+@@ -984,7 +986,7 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+ 		"Failed to register i2c client %s at 0x%02x (%d)\n",
+ 		client->name, client->addr, status);
+ out_err_silent:
+-	kfree(client);
++	put_device(&client->dev);
+ 	return ERR_PTR(status);
+ }
+ EXPORT_SYMBOL_GPL(i2c_new_client_device);
+-- 
+2.25.1
+
