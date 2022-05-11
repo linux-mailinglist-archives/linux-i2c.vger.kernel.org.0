@@ -2,137 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EBE52290D
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 May 2022 03:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABD8522B55
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 May 2022 06:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239646AbiEKBkD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 May 2022 21:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
+        id S238154AbiEKEkl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 May 2022 00:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234515AbiEKBkD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 May 2022 21:40:03 -0400
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41111260863;
-        Tue, 10 May 2022 18:40:01 -0700 (PDT)
-Received: by mail-ua1-x930.google.com with SMTP id z15so211647uad.7;
-        Tue, 10 May 2022 18:40:01 -0700 (PDT)
+        with ESMTP id S239588AbiEKEj1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 May 2022 00:39:27 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9663A14CA01
+        for <linux-i2c@vger.kernel.org>; Tue, 10 May 2022 21:39:24 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-e93bbb54f9so1441022fac.12
+        for <linux-i2c@vger.kernel.org>; Tue, 10 May 2022 21:39:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=CcFxQLzTZRJwr99fvgXAPxv27Gu79cyIN89beQ0h8+I=;
-        b=doQTqwTJY/0aNgS3TuLFjyoXwLksQMSfsszsNSnDHaolf1MYeOl9gG5O24PLVU82fH
-         btXj6S4frOw6tM9Z8GDA3by2QXpXn/WRgFG2WHiPhccEtDXkigJ3McQdvck16+qFbQUE
-         zcajmkr9sYjabxlbjMGVYu3hiaVg9TVfrkJcfEgzK0w/ftyVRIOUzjJrdJFVyHoMfYz1
-         xTTsT4FPfpa6wRskPwjoM8B5YNU8mRgis934ucNRgBsKSZbXoFHAdgPjgO6p5rGhYd9W
-         T+jYjGuPqxjbF18YNLyhCe27fVQsAQxm7h+Farsbe/wFNi60+8nVHRybTq1F8v5W8g5s
-         KStQ==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
+        b=nrkBIDyCffFbQz5WNhQU88q5l+bx8m1CoLNL/nRcxBFZRgp3B2RwRJzpJi69hjmFPQ
+         Eotn36CVTQor8sTwq84btYhQQ+OsypTpYdHIfGkC/Ekjg8a9U0HkQq0T/gbcQg5/if4Y
+         i1yzcJYhTRMm8ny1NIiOYUNRazrfloxlCC/1XVxW2+TG0ItQpx2/G3cXjgMuOALgO1Rc
+         auxKHXwS3ghK6vFFIfR8essc70JXfRi2oIpi3YT/VLqISCMTaVWCOI/Xf0rWfpfTmlnw
+         XgqCFC8jOuHD5AjsEtox3h0b9tzcHlVM0fA1RrJyDFubK9aS707t1BYf/K43qSc4slo4
+         wrQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=CcFxQLzTZRJwr99fvgXAPxv27Gu79cyIN89beQ0h8+I=;
-        b=jLU/Bi9RKtgj4NsbUgcjCxlFbPqqc7aWU11+PkvTQ/AvHjpmxtRKaHbJ+ULBVYOruA
-         4QM9wVQermynbIW1dHcEKNDBgCZeQ0GxM4ZWi4/KBDkD9tn14Cjkd2SPBpCan/Er6rqW
-         VJH0zmIsV+BxTN55Wfm8dW49zTaW/peo+9YstNxAgQCStpMhso9yn8GF57Pyg2gfVH+G
-         s1pyhjZIjoFhM1pramAArkL5vDks7r+UohvG7IZ7vWFLxmLoGeqjla98a5+R+L6R6hK3
-         5EPfb6TCKWB0iL0xWBarvVEidrW+7EGP6UMzO+6Q63y4/70XECEgF/vH499If+HqLxE7
-         d+QA==
-X-Gm-Message-State: AOAM533bKQXDE8qJrQHnDl6LaI5h1TjUZIwoW3kBXzC1DlHV++Jc0zIY
-        CCK95e/OyCjhWGYuhzeYIuAhDBApFORSimvJFA==
-X-Google-Smtp-Source: ABdhPJwOdeGJuYqe4UdD24r6xFX8A4WORqnypLWn7xKLOUFSl3SkCt3/PITp6+sTRwqH8HOqqFo3SqgByFDcT98cVao=
-X-Received: by 2002:ab0:6f95:0:b0:362:8cb3:36f3 with SMTP id
- f21-20020ab06f95000000b003628cb336f3mr12861637uav.46.1652233200103; Tue, 10
- May 2022 18:40:00 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
+        b=pd5xdNW3ugELon7EeBHDyj8wqajJlBDQV4g/LrCoukvaqoIyXQaZ1QcH/dTxTjN4Ue
+         6MlHulWzpEH0rJhAXV2Y29/KolYOONK7xW70xVH7BLyHhDQjQBFLlrGaV8rI5NrL+zFp
+         q1X3cvxYLWTv2CTAYpyAsaO+pyUNBKXWnU9Q0QAiws0ULyrdAJme06mhwQ4QPWzJCE63
+         WiyRXx193/J1C3eIDzs2zaxL5lgZ3XxnvwXyS8ahaqphthguRWINSrm5pEklZDSy/DZ6
+         qvN8y12F2fQT7d8XFc1A/LRRRPeZRLqut9/ITTd/NFILbWZlJtS91rNUEAHsI/WDOGo+
+         1/zQ==
+X-Gm-Message-State: AOAM531D/Jj8Sz3T3UcuTO+1mCC9bZRi3b2v4I90s8j9pwfbAHhZhtoM
+        bmAzybVJk+TRQbb563J3xFTEfS/qJHIf9wObH/5CN4VYac7DwA==
+X-Google-Smtp-Source: ABdhPJwbKHmbnZDflMHBZCcp2YbZAAZvFdPcM4owWeuPIkoxodmwIZJ+Xpgi08ylB1RFXLrw63SQRxJzumbwJKMTxhs=
+X-Received: by 2002:a17:90b:1007:b0:1dc:9862:68af with SMTP id
+ gm7-20020a17090b100700b001dc986268afmr3261389pjb.205.1652243951499; Tue, 10
+ May 2022 21:39:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220510091654.8498-1-warp5tw@gmail.com> <20220510091654.8498-9-warp5tw@gmail.com>
- <Yno8KMycNbJ+VGtc@smile.fi.intel.com>
-In-Reply-To: <Yno8KMycNbJ+VGtc@smile.fi.intel.com>
-From:   Tyrone Ting <warp5tw@gmail.com>
-Date:   Wed, 11 May 2022 09:39:48 +0800
-Message-ID: <CACD3sJYVyV_fFJu9zXJGL1ro02KnkHoeNNSNB8O46FRwd6=-BA@mail.gmail.com>
-Subject: Re: [PATCH v4 8/9] i2c: npcm: Remove own slave addresses 2:10
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        wsa@kernel.org, jarkko.nikula@linux.intel.com,
-        semen.protsenko@linaro.org, sven@svenpeter.dev, jsd@semihalf.com,
-        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
-        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Received: by 2002:a05:6a10:319:0:0:0:0 with HTTP; Tue, 10 May 2022 21:39:10
+ -0700 (PDT)
+From:   Private Mail <privatemail1961@gmail.com>
+Date:   Tue, 10 May 2022 21:39:10 -0700
+Message-ID: <CANjAOAiiVcSrSv31FjThCVmeppS54UVvGVj3SRSvMfxOB+T8DA@mail.gmail.com>
+Subject: Have you had this? It is for your Benefit
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=4.3 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
+        BAYES_50,DEAR_BENEFICIARY,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
+        LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andy:
+Our Ref: BG/WA0151/2022
 
-Thank you for your comments and they will be addressed.
+Dear Beneficiary
 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> =E6=96=BC 2022=E5=B9=B4=
-5=E6=9C=8810=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=886:19=E5=AF=AB=E9=
-=81=93=EF=BC=9A
->
-> On Tue, May 10, 2022 at 05:16:53PM +0800, Tyrone Ting wrote:
-> > From: Tali Perry <tali.perry1@gmail.com>
-> >
-> > NPCM can support up to 10 own slave addresses.
-> > In practice, only one address is actually being used.
-> > In order to access addresses 2 and above, need to switch
-> > register banks. The switch needs spinlock.
-> > To avoid using spinlock for this useless feature
-> > removed support of SA >=3D 2.
->
-> > Also fix returned slave event enum.
-> >
-> > Remove some comment since the bank selection is not
-> > required. The bank selection is not required since
-> > the supported slave addresses are reduced.
->
-> Fancy indentation. Please fix it in all your commit messages where it app=
-lies.
->
-> ...
->
-> > +     if (addr_type > I2C_SLAVE_ADDR2 && addr_type <=3D I2C_SLAVE_ADDR1=
-0) {
-> > +             dev_err(bus->dev,
-> > +                     "try to enable more then 2 SA not supported\n");
->
-> Make it one line and drop {}.
->
-> > +     }
->
-> ...
->
-> > +     if (addr_type > I2C_SLAVE_ADDR2 && addr_type <=3D I2C_SLAVE_ADDR1=
-0) {
-> > +             dev_err(bus->dev,
-> > +                     "get slave: try to use more then 2 slave addresse=
-s not supported\n");
->
-> As per above be consistent with abbreviations ("SA" here, which makes lin=
-e
-> shorter) and follow the above recommendation.
->
-> > +     }
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+Subject: An Estate of US$15.8 Million
 
-Best Regards,
-Tyrone
+Blount and Griffin Genealogical Investigators specializes in probate
+research to locate missing heirs and beneficiaries to estates in the
+United Kingdom and Europe.
+
+We can also help you find wills, obtain copies of certificates, help
+you to administer an estate, as well as calculating how an estate,
+intestacy or trust should be distributed.
+
+You may be entitled to a large pay out for an inheritance in Europe
+worth US$15.8 million. We have discovered an estate belonging to the
+late Depositor has remained unclaimed since he died in 2011 and we
+have strong reasons to believe you are the closest living relative to
+the deceased we can find.
+
+You may unknowingly be the heir of this person who died without
+leaving a will (intestate). We will conduct a probate research to
+prove your entitlement, and can submit a claim on your behalf all at
+no risk to yourselves.
+
+Our service fee of 10% will be paid to us after you have received the estate.
+
+The estate transfer process should take just a matter of days as we
+have the mechanism and expertise to get this done very quickly. This
+message may come to you as a shock, however we hope to work with you
+to transfer the estate to you as quickly as possible.
+
+Feel free to email our senior case worker Mr. Malcolm Casey on email:
+malcolmcasey68@yahoo.com for further discussions.
+
+With warm regards,
+
+Mr. Blount W. Gort, CEO.
+Blount and Griffin Associates Inc
