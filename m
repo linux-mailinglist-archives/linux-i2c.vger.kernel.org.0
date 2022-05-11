@@ -2,104 +2,192 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABD8522B55
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 May 2022 06:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5EE8522BCC
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 May 2022 07:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238154AbiEKEkl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 11 May 2022 00:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S235575AbiEKFiA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 May 2022 01:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239588AbiEKEj1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 May 2022 00:39:27 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9663A14CA01
-        for <linux-i2c@vger.kernel.org>; Tue, 10 May 2022 21:39:24 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-e93bbb54f9so1441022fac.12
-        for <linux-i2c@vger.kernel.org>; Tue, 10 May 2022 21:39:24 -0700 (PDT)
+        with ESMTP id S233701AbiEKFh6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 May 2022 01:37:58 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5133B2AF;
+        Tue, 10 May 2022 22:37:56 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id a127so907543vsa.3;
+        Tue, 10 May 2022 22:37:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
-        b=nrkBIDyCffFbQz5WNhQU88q5l+bx8m1CoLNL/nRcxBFZRgp3B2RwRJzpJi69hjmFPQ
-         Eotn36CVTQor8sTwq84btYhQQ+OsypTpYdHIfGkC/Ekjg8a9U0HkQq0T/gbcQg5/if4Y
-         i1yzcJYhTRMm8ny1NIiOYUNRazrfloxlCC/1XVxW2+TG0ItQpx2/G3cXjgMuOALgO1Rc
-         auxKHXwS3ghK6vFFIfR8essc70JXfRi2oIpi3YT/VLqISCMTaVWCOI/Xf0rWfpfTmlnw
-         XgqCFC8jOuHD5AjsEtox3h0b9tzcHlVM0fA1RrJyDFubK9aS707t1BYf/K43qSc4slo4
-         wrQw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=99+74zi/ugqpPP/H1BYx5mgxsw+MDJDahwiZMO6/fXg=;
+        b=iSXjFtVdoulAW6NWsq1PlmfC+Qc6T0H6RCPJgN+0OIjZRODULDLwlVSQfCwx2mvpu4
+         LeRNFlmImRZYhJo2Gipt91G9tXQlMJR6esNrSwjqvBDd218CuRg2Ct7WOxdYUoxA3dcy
+         mma0bmpQdUAuxDWaBP4/vx2EshnDFGylyHaeVxK5KWWuW4mZpSOOy0Ogmyd1JaSkxuQg
+         unlANkeTyEalXxWZMCJnsK2WG+XLkJJnMllmD17jQf2zbwj1Yl6Hn4s8ySOGuNUBoc3i
+         si4s7/48IlQJ+tsGWUao50RjPAMdunVkiXKe6wmV9pUS/if4BYYIxycPZe5AqxByEjUE
+         b69g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
-        b=pd5xdNW3ugELon7EeBHDyj8wqajJlBDQV4g/LrCoukvaqoIyXQaZ1QcH/dTxTjN4Ue
-         6MlHulWzpEH0rJhAXV2Y29/KolYOONK7xW70xVH7BLyHhDQjQBFLlrGaV8rI5NrL+zFp
-         q1X3cvxYLWTv2CTAYpyAsaO+pyUNBKXWnU9Q0QAiws0ULyrdAJme06mhwQ4QPWzJCE63
-         WiyRXx193/J1C3eIDzs2zaxL5lgZ3XxnvwXyS8ahaqphthguRWINSrm5pEklZDSy/DZ6
-         qvN8y12F2fQT7d8XFc1A/LRRRPeZRLqut9/ITTd/NFILbWZlJtS91rNUEAHsI/WDOGo+
-         1/zQ==
-X-Gm-Message-State: AOAM531D/Jj8Sz3T3UcuTO+1mCC9bZRi3b2v4I90s8j9pwfbAHhZhtoM
-        bmAzybVJk+TRQbb563J3xFTEfS/qJHIf9wObH/5CN4VYac7DwA==
-X-Google-Smtp-Source: ABdhPJwbKHmbnZDflMHBZCcp2YbZAAZvFdPcM4owWeuPIkoxodmwIZJ+Xpgi08ylB1RFXLrw63SQRxJzumbwJKMTxhs=
-X-Received: by 2002:a17:90b:1007:b0:1dc:9862:68af with SMTP id
- gm7-20020a17090b100700b001dc986268afmr3261389pjb.205.1652243951499; Tue, 10
- May 2022 21:39:11 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=99+74zi/ugqpPP/H1BYx5mgxsw+MDJDahwiZMO6/fXg=;
+        b=OoaaEcky3UIAORh7nPF1TaVbpVZW7xQLx+xq6V+GGcybSM/d9lDoSe0fqCWbQYooOl
+         Hpx68uT7zbGA88XX8m0jNBp3ag/8KhKQYSwB6+S+IMeSg70lSNLmQk167RHokcwiXCdK
+         R57lIW+2Gsb/OsqqGD20dBKny+BUNBFJDzyLxqa8rI36GZgGbmy3hJprm2uXaBA9IHnf
+         rIpsx+HfOlrnhKtn38TiKUhyKQkdVlxBsrSbKUgRqQGEoKthQwVKKm8MZrSLytu6+aeM
+         Pg8j9Qc9WFtHq1Zx3Ecf5lQjpCHv+ttWDp5SP9vw9M7uW4VxmdoZ8vOnN9jK7Gh0L6cz
+         Xnsg==
+X-Gm-Message-State: AOAM533qJrhLcYRcMA3k9x9K3uHUkh92JpYZukj/GdJUMRlvpqAs+8AE
+        bXtL0iP9Pvmx/QT2GfkGtu2yocK3z4hfl8YnRg==
+X-Google-Smtp-Source: ABdhPJzGI4xLPZN4cIpW61gkAg41dLMEipuG1mmnFJBEpFDmP97YmzjtAqLMeg6hmzlp8t4UkpaMK8VUfoOjgxnHaNs=
+X-Received: by 2002:a67:b60b:0:b0:32c:e69e:15b3 with SMTP id
+ d11-20020a67b60b000000b0032ce69e15b3mr13088417vsm.2.1652247475469; Tue, 10
+ May 2022 22:37:55 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:319:0:0:0:0 with HTTP; Tue, 10 May 2022 21:39:10
- -0700 (PDT)
-From:   Private Mail <privatemail1961@gmail.com>
-Date:   Tue, 10 May 2022 21:39:10 -0700
-Message-ID: <CANjAOAiiVcSrSv31FjThCVmeppS54UVvGVj3SRSvMfxOB+T8DA@mail.gmail.com>
-Subject: Have you had this? It is for your Benefit
-To:     undisclosed-recipients:;
+References: <20220510091654.8498-1-warp5tw@gmail.com> <20220510091654.8498-8-warp5tw@gmail.com>
+ <Yno7IaBNnR5U2GuF@smile.fi.intel.com>
+In-Reply-To: <Yno7IaBNnR5U2GuF@smile.fi.intel.com>
+From:   Tyrone Ting <warp5tw@gmail.com>
+Date:   Wed, 11 May 2022 13:37:43 +0800
+Message-ID: <CACD3sJYPrQoWzOkOKM5tWuTWS0uEertBSrwMa5QmX0cMAPF4EQ@mail.gmail.com>
+Subject: Re: [PATCH v4 7/9] i2c: npcm: Handle spurious interrupts
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, wsa@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jarkko.nikula@linux.intel.com,
+        semen.protsenko@linaro.org, sven@svenpeter.dev, jsd@semihalf.com,
+        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.3 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
-        BAYES_50,DEAR_BENEFICIARY,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
-        LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Our Ref: BG/WA0151/2022
+Hi Andy:
 
-Dear Beneficiary
+Thank you for your comments and they will be addressed.
 
-Subject: An Estate of US$15.8 Million
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> =E6=96=BC 2022=E5=B9=B4=
+5=E6=9C=8810=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=886:15=E5=AF=AB=E9=
+=81=93=EF=BC=9A
+>
+> On Tue, May 10, 2022 at 05:16:52PM +0800, Tyrone Ting wrote:
+> > From: Tali Perry <tali.perry1@gmail.com>
+> >
+> > On some platforms in rare cases (1 to 100,000 transactions),
+> > the i2c gets a spurious interrupt which means that we enter an interrup=
+t
+> > but in the interrupt handler we don't find any status bit that points t=
+o
+> > the reason we got this interrupt.
+> >
+> > This may be a case of a rare HW issue or signal integrity issue that is
+> > still under investigation.
+> >
+> > In order to overcome this we are doing the following:
+> > 1. Disable incoming interrupts in master mode only when slave mode is n=
+ot
+> >    enabled.
+> > 2. Clear end of busy (EOB) after every interrupt.
+> > 3. Clear other status bits (just in case since we found them cleared)
+> > 4. Return correct status during the interrupt that will finish the
+> >    transaction.
+> >
+> > On next xmit transaction if the bus is still busy the master will issue=
+ a
+> > recovery process before issuing the new transaction.
+>
+> ...
+>
+> > +     /* clear status bits for spurious interrupts */
+>
+> Clear
+>
+> ...
+>
+> > +     /*
+> > +      * if irq is not one of the above, make sure EOB is disabled and =
+all
+>
+> If
+>
+> > +      * status bits are cleared.
+> > +      */
+>
+> ...
+>
+> > +             /* verify no status bits are still set after bus is relea=
+sed */
+>
+> Verify
+>
+> ...
+>
+> > +     /* check HW is OK: SDA and SCL should be high at this point. */
+>
+> Check
+>
+> ...
+>
+> > +     if ((npcm_i2c_get_SDA(&bus->adap) =3D=3D 0) ||
+> > +         (npcm_i2c_get_SCL(&bus->adap) =3D=3D 0)) {
+>
+> This fits one line
+>
+> > +             dev_err(bus->dev, "I2C%d init fail: lines are low", bus->=
+num);
+> > +             dev_err(bus->dev, "SDA=3D%d SCL=3D%d", npcm_i2c_get_SDA(&=
+bus->adap),
+> > +                     npcm_i2c_get_SCL(&bus->adap));
+>
+> No '\n' at the end of each?!
+>
+> > +             return -ENXIO;
+> > +     }
+>
+> ...
+>
+> > +     /* clear status bits for spurious interrupts */
+>
+> Clear
+>
+> ...
+>
+> > +     /* after any xfer, successful or not, stall and EOB must be disab=
+led */
+>
+> After
+>
+> ...
+>
+> Maybe you chose the small letter for one-liner comments, but I see even i=
+n the
+> original code the inconsistent style. Please, add an explanation to the c=
+over
+> letter and follow it, assuming you add the patch at the end of the series=
+ that
+> makes comment style consistent (for the one-liners, for the multi-line co=
+mments
+> we have a clear understanding about the style).
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
-Blount and Griffin Genealogical Investigators specializes in probate
-research to locate missing heirs and beneficiaries to estates in the
-United Kingdom and Europe.
-
-We can also help you find wills, obtain copies of certificates, help
-you to administer an estate, as well as calculating how an estate,
-intestacy or trust should be distributed.
-
-You may be entitled to a large pay out for an inheritance in Europe
-worth US$15.8 million. We have discovered an estate belonging to the
-late Depositor has remained unclaimed since he died in 2011 and we
-have strong reasons to believe you are the closest living relative to
-the deceased we can find.
-
-You may unknowingly be the heir of this person who died without
-leaving a will (intestate). We will conduct a probate research to
-prove your entitlement, and can submit a claim on your behalf all at
-no risk to yourselves.
-
-Our service fee of 10% will be paid to us after you have received the estate.
-
-The estate transfer process should take just a matter of days as we
-have the mechanism and expertise to get this done very quickly. This
-message may come to you as a shock, however we hope to work with you
-to transfer the estate to you as quickly as possible.
-
-Feel free to email our senior case worker Mr. Malcolm Casey on email:
-malcolmcasey68@yahoo.com for further discussions.
-
-With warm regards,
-
-Mr. Blount W. Gort, CEO.
-Blount and Griffin Associates Inc
+Best Regards,
+Tyrone
