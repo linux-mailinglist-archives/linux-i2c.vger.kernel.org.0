@@ -2,78 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9EB523C2B
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 May 2022 20:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F629524215
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 May 2022 03:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345057AbiEKSCX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 11 May 2022 14:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
+        id S229725AbiELBbT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 May 2022 21:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231759AbiEKSCS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 May 2022 14:02:18 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8578381991;
-        Wed, 11 May 2022 11:02:17 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id z19so3485606edx.9;
-        Wed, 11 May 2022 11:02:17 -0700 (PDT)
+        with ESMTP id S229615AbiELBbT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 May 2022 21:31:19 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B41994CD;
+        Wed, 11 May 2022 18:31:17 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id z15so1453422uad.7;
+        Wed, 11 May 2022 18:31:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WXSifZkVMNKJIWFI2353UCu3hiqezZq+FGcwxX96rkU=;
-        b=G+0Za8nPUrc8M0fsDLPxGWlmEaKAp942tfzktpszcavil+hsJTVX794SkbzQ/4gxHG
-         zPfJuX/ctiEtkVXbI+iyAkObd23R2vM54dbSvqo0AmvAdqDoYkSTKIH+oksSFKoIvpr8
-         OdNV7sbn4X6o1ScR/3ah7q5ZA8YDLHOowO+FlJ75oyoaO0cUEcTr53Nx6Hu57P1GDdgV
-         EWkoRGlWhnvF1Cj8GKw2amyZlIySmYbjduYLE21gYJcqRHDK60uJWe4HfwIWpSRW4GqQ
-         d/00sYksDLT0W3c/YnrkFPS8zSl+s5dJOQYBMIhSBavxqsHr4jLh9Rg1L1wGtUrRMzEP
-         RTNw==
+         :cc:content-transfer-encoding;
+        bh=izi87e4xdMz6LmYhPRp48LrcOnBQxKpRxLhyMwRFH0c=;
+        b=b+gkm0bYZ8uNyQdSPV8PZRfQzGQtBxCjNaHXwmxEEL0encPEDceqhmcqMKWc0J86VO
+         bWKJZ22mU/irATvyq2v+pvad+frrSJonoOeNZY5ZnPxTX5xPMT5N9L98udGOy65AJNdN
+         KVgw5ZZtbxRJx/PRPeauWz4VDF0F/c9pKfyzKqQuMChX5EV0FMx68sjGjEJZMkE9d8Ka
+         XRNTbhCDa/cw+Nh7u4WXo6TS+4uQUbXXkllNcdQIl1uNAR7s5AZxD/e+Y4vjJUKjOGVF
+         yy5/JYsMs3tgryVPM+OadJcWrcGKENrirKQuIaQhOB81t1Z8/sik9haw7XbLw+psYzGt
+         uuxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WXSifZkVMNKJIWFI2353UCu3hiqezZq+FGcwxX96rkU=;
-        b=UX3AkJmqjS/ELQXvMTBPdR82lRXtOvX7KiH0Gk/+RzPYItccDfK5SRCpdsN/IYABoS
-         pyCAtGHhpPPJ6LKIugg5i5hUicCWQVHhtxWXZ9wezGm0vTJMEyZx5e9qetLx6J3VbeoO
-         9BMwfLGeHVakRSIJb6ixkMB9kzKe6Jxu3/2uJ540c47YjrDc6B1DYLbvl7VgLB5gGKI7
-         EpXmPyRmT4OnCb9CGt9WUpMsBYcVk8FA75sc9oVhU8wpj9yakdwBfJ/eor7td10OS8R2
-         LXnHwvLBqUd/XZGE67rSndCNGmOD+ddZGC0dx6apI7ojikJDrXYmroI5qa/E9wolwLCA
-         k7lw==
-X-Gm-Message-State: AOAM530qz0UMzVIisZfoPARu4PyzKRi0AjP584jbRmJlJ2AAH3j6SPw7
-        WrkTqQsSWBGZY9au5mJde8Y00P7gpOEwMcP+PMQ=
-X-Google-Smtp-Source: ABdhPJzED7Bj/17e150QFoZy4+zLcq3hKeUUGjsXs0im7kbV5CxZM9b9YkqCYtGyfOXYgxCLa43Mb4ikyMkmyAox4Qk=
-X-Received: by 2002:a05:6402:d51:b0:425:d5e1:e9f0 with SMTP id
- ec17-20020a0564020d5100b00425d5e1e9f0mr30316725edb.125.1652292136090; Wed, 11
- May 2022 11:02:16 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=izi87e4xdMz6LmYhPRp48LrcOnBQxKpRxLhyMwRFH0c=;
+        b=ous5EYgl+ixcmRrTawnAuDcpC0+JOUqy+rJLrTI2GV+fYE5yBhoV1KMI1Lplv2hnjw
+         XWAGz9aD81V0NezmKSe7fu8IRZiyjRx0cs8wlw1iJCoLv5i9FZjOtRgxpSNwNrVURLDW
+         VS39OoH75PzTzV6II/HT3BgnNgIxoI7FE10f7V6asEcbhKG6Ybju94x9OM9ms3m3pqPc
+         RXdzn0eqoMxwmwbnTaefT274VmTPQdeSANXAVGUdL6Jz8olmMRt3UDxWUeLwHJXgwN0p
+         D4TnPTcTDAAJRLPx8VAnXW6LymKwBWC2zbpGFp7TQbHrJ9NpxkeGpNN+L/Mi/XidkL2g
+         kUsw==
+X-Gm-Message-State: AOAM532QWSXib+eW6JWUD4OsdtSpfzrjKPmtPa6EDRvaOf6AJM/D5EXq
+        r4t1UVdLaHSzW3TtRFh7X7ZaHBjMb5WrU6Aa8A==
+X-Google-Smtp-Source: ABdhPJxFpJ2a8wB4d9oBe1bLcmgo7DLtuCR49Ty/ZdQW74K93TPNyttHA0PwWQOkkjHrO4v0bEo0GynEtX+sVQJYVkk=
+X-Received: by 2002:ab0:6f95:0:b0:362:8cb3:36f3 with SMTP id
+ f21-20020ab06f95000000b003628cb336f3mr15208878uav.46.1652319076461; Wed, 11
+ May 2022 18:31:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220510151451.85561-1-andriy.shevchenko@linux.intel.com> <eff9907f-e92b-9115-bea7-b1093d1dc28e@redhat.com>
-In-Reply-To: <eff9907f-e92b-9115-bea7-b1093d1dc28e@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 11 May 2022 20:01:39 +0200
-Message-ID: <CAHp75Vcnq=Ou6QNyPjwC+HR9wJ2BheonTqmkGvQU0qFtHO2BDw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/8] platform/x86: introduce p2sb_bar() helper
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?=C5=81ukasz_Bartosik?= <lb@semihalf.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
+References: <20220510091654.8498-1-warp5tw@gmail.com> <20220510091654.8498-2-warp5tw@gmail.com>
+ <20220511152422.GA339769-robh@kernel.org>
+In-Reply-To: <20220511152422.GA339769-robh@kernel.org>
+From:   Tyrone Ting <warp5tw@gmail.com>
+Date:   Thu, 12 May 2022 09:31:05 +0800
+Message-ID: <CACD3sJbiPYcckyLncXcVR-TFBo_-3XwSDYbmid4qwnoHX-JtUw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/9] dt-bindings: i2c: npcm: support NPCM845
+To:     Rob Herring <robh@kernel.org>
+Cc:     sven@svenpeter.dev, JJLIU0@nuvoton.com,
+        linux-kernel@vger.kernel.org, olof@lixom.net,
+        lukas.bulwahn@gmail.com, jarkko.nikula@linux.intel.com,
+        yuenn@google.com, arnd@arndb.de, tali.perry1@gmail.com,
+        openbmc@lists.ozlabs.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-i2c@vger.kernel.org,
+        tmaimon77@gmail.com, benjaminfair@google.com,
+        tomer.maimon@nuvoton.com, kfting@nuvoton.com,
+        semen.protsenko@linaro.org, Avi.Fishman@nuvoton.com,
+        jsd@semihalf.com, wsa@kernel.org, devicetree@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, KWLIU@nuvoton.com,
+        tali.perry@nuvoton.com, avifishman70@gmail.com, venture@google.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -84,41 +77,33 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, May 11, 2022 at 6:08 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> On 5/10/22 17:14, Andy Shevchenko wrote:
+Hi Rob:
 
-...
+Thank you for your review. I would like to apply Krzysztof's comment
+from the link https://www.spinics.net/lists/linux-i2c/msg56795.html
+and remove the
+quotes of the statement "$ref: "/schemas/types.yaml#/definitions/phandle"".
 
-> I must admit I have lost track of all the Ack-s / Reviewed-by-s a bit.
+If it's okay with you, I'll come up with a new patch with
+"Reviewed-by" from you and Krzysztof.
+
+Thank you.
+
+Rob Herring <robh@kernel.org> =E6=96=BC 2022=E5=B9=B45=E6=9C=8811=E6=97=A5 =
+=E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=8811:24=E5=AF=AB=E9=81=93=EF=BC=9A
 >
-> So from the above I take it that the Ack-s resp. Reviewed-by-s on the
-> other non drivers/platform/x86 bits also signal an Ack to merge the entire
-> series through the pdx86 tree?
+> On Tue, 10 May 2022 17:16:46 +0800, Tyrone Ting wrote:
+> > From: Tyrone Ting <kfting@nuvoton.com>
+> >
+> > Add compatible and nuvoton,sys-mgr description for NPCM i2c module.
+> >
+> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+> > ---
+> >  .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     | 25 +++++++++++++++----
+> >  1 file changed, 20 insertions(+), 5 deletions(-)
+> >
 >
-> Lee, any chance you can take a look at patches 3-5 and give your Ack
-> for merging these through the pdx86 tree together with the rest?
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Actually I misinterpreted Lee's different tags again. Acked-by is
-normal for routing MFD code via other subsystems, while
-Acked-for-MFD-by is for Lee (scripts?) to route the code via MFD tree.
-Lee, is it the correct interpretation now?
-
-...
-
-> p.s.
->
-> Since this is mostly a cleanup series and since we are getting close
-> to the next merge-window I believe that it likely is best to merge
-> this after 5.19-rc1 has been released.
-
-OK.
-
-> I can then also provide
-> an immutable branch for other maintainers early on in the 5.19
-> cycle which should help to avoid merge conflicts.
-
-I guess I will send a v6 anyway in order to attach Henning's series to mine.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Best Regards,
+Tyrone
