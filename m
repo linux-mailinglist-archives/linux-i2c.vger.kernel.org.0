@@ -2,105 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76BBC525D81
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 May 2022 10:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77ECB525F60
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 May 2022 12:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356303AbiEMIcZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 13 May 2022 04:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
+        id S229527AbiEMJ45 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 13 May 2022 05:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241051AbiEMIcY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 May 2022 04:32:24 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB74E62A00
-        for <linux-i2c@vger.kernel.org>; Fri, 13 May 2022 01:32:22 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id y74so7671877vsy.7
-        for <linux-i2c@vger.kernel.org>; Fri, 13 May 2022 01:32:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=SUWQMmwZSct1NUq5pHL/uGOr0m/f9iWjJQkP63QJuAY=;
-        b=fc/T5NG9JRA7AXUZbvqYt8UJhzaqABFfnPhhtSQOxDrV/XfuL919TNbOEzvFofShzW
-         3liF2OYgEmwCri+fdWLHSxysG14KvQ9xOKtLhOBBxZR5P+vM6Orzmj0zFelIvzl491UH
-         hI80Xqk8HvOgZG28/XN3ggl6iw0U/7iC6ImnLy0GID0oQXZLlA2JmvfCfJ4XdgKCZhO0
-         9f6uq5xeEeF67X3LObvYI7zNOBenPLz26UIr6Z0n6Ehgpvp6jiQsVGuEsK/taRc3EaCq
-         RaIf12KhP5OpMnwaoZOcx89TyfmPM+8xir+ebcAyJLrkrxM1YHZ2InZadQcNcIp1AiLz
-         10Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=SUWQMmwZSct1NUq5pHL/uGOr0m/f9iWjJQkP63QJuAY=;
-        b=pc9NN7KQPGk7VhLiyZujQdGXcss5ScCkY4SHMQqpp9U0jiImfDdlT3LEeMK+dGbE/4
-         QhdZtCVJjoA7StwQr+r8ssVlg/NA/m9Nlr6aa+YvDD+cOlimhEg/hD6YD6Ecnh7nrrMf
-         9oFMmoh4tK4l6GfUUAjDli4yNQLha/zVYw3DAA3PPtESuX5mPWoI0S1HMgD5qiYze+fg
-         1gEHu4FILsyHTc4U/3seRDYmTEpkXwHqAZQkzhBQN+7O5W+VTYZzsqESAFcjkfHMdUP4
-         sLCFabxqJinUxKRYUgfgF6dk7aT2AljVgZLCcudrheUwWKYi8ULo3pq6tFK1wcMH4Juy
-         /Zug==
-X-Gm-Message-State: AOAM531J9Joiwm4LMuBuP5srpznyKc/yGpao1VcqAR07ieLFNrKdF862
-        LVv1jKDcgTR8xHgn3PkfSSi0+79Je/j2jCSAdIA=
-X-Google-Smtp-Source: ABdhPJx7Y7PzOSrYHgH4giSxqgK/EXD2sZEblvcj+nyobCw45yfMvfuegRyeroFvQR4IaGa/6NpGAFNWwyeTwpjazag=
-X-Received: by 2002:a67:1a02:0:b0:320:a51f:8067 with SMTP id
- a2-20020a671a02000000b00320a51f8067mr2020787vsa.38.1652430741893; Fri, 13 May
- 2022 01:32:21 -0700 (PDT)
+        with ESMTP id S242977AbiEMJ44 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 May 2022 05:56:56 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306E725599;
+        Fri, 13 May 2022 02:56:55 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L03tz2sr9zhZ2n;
+        Fri, 13 May 2022 17:56:11 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 13 May 2022 17:56:53 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 13 May
+ 2022 17:56:52 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>
+CC:     <matthias.bgg@gmail.com>, <sr@denx.de>, <wsa@the-dreams.de>
+Subject: [PATCH -next 1/2] i2c: mt7621: fix missing clk_disable_unprepare() on error in mtk_i2c_probe()
+Date:   Fri, 13 May 2022 18:08:18 +0800
+Message-ID: <20220513100819.2711845-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a05:612c:1095:b0:2ba:f7f:f651 with HTTP; Fri, 13 May 2022
- 01:32:21 -0700 (PDT)
-Reply-To: jub47823@gmail.com
-From:   Julian Bikarm <kodjoafanou2001@gmail.com>
-Date:   Fri, 13 May 2022 08:32:21 +0000
-Message-ID: <CALgh3e=VaySLLsOW0LFNWmkxquy4mkewecKteQ-051PLQEOLAw@mail.gmail.com>
-Subject: Please can i have your attention
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e31 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4992]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [kodjoafanou2001[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [kodjoafanou2001[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [jub47823[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Dear ,
+Fix the missing clk_disable_unprepare() before return
+from mtk_i2c_probe() in the error handling case.
 
+Fixes: d04913ec5f89 ("i2c: mt7621: Add MediaTek MT7621/7628/7688 I2C driver")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/i2c/busses/i2c-mt7621.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Please can I have your attention and possibly help me for humanity's
-sake please. I am writing this message with a heavy heart filled with
-sorrows and sadness.
+diff --git a/drivers/i2c/busses/i2c-mt7621.c b/drivers/i2c/busses/i2c-mt7621.c
+index 45fe4a7fe0c0..f117c3d9ca19 100644
+--- a/drivers/i2c/busses/i2c-mt7621.c
++++ b/drivers/i2c/busses/i2c-mt7621.c
+@@ -304,7 +304,8 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+ 
+ 	if (i2c->bus_freq == 0) {
+ 		dev_warn(i2c->dev, "clock-frequency 0 not supported\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto err_disable_clk;
+ 	}
+ 
+ 	adap = &i2c->adap;
+@@ -322,10 +323,13 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+ 
+ 	ret = i2c_add_adapter(adap);
+ 	if (ret < 0)
+-		return ret;
++		goto err_disable_clk;
+ 
+ 	dev_info(&pdev->dev, "clock %u kHz\n", i2c->bus_freq / 1000);
+ 
++err_disable_clk:
++	clk_disable_unprepare(i2c->clk);
++
+ 	return ret;
+ }
+ 
+-- 
+2.25.1
 
-Please if you can respond, i have an issue that i will be most
-grateful if you could help me deal with it please.
-
-Julian
