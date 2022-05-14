@@ -2,57 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7AB527163
-	for <lists+linux-i2c@lfdr.de>; Sat, 14 May 2022 15:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E06527169
+	for <lists+linux-i2c@lfdr.de>; Sat, 14 May 2022 15:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232710AbiENNoT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 14 May 2022 09:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
+        id S232776AbiENNxd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 14 May 2022 09:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232692AbiENNoS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 14 May 2022 09:44:18 -0400
+        with ESMTP id S232762AbiENNxV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 14 May 2022 09:53:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDBB2315E
-        for <linux-i2c@vger.kernel.org>; Sat, 14 May 2022 06:44:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217D73389B
+        for <linux-i2c@vger.kernel.org>; Sat, 14 May 2022 06:53:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A838060F00
-        for <linux-i2c@vger.kernel.org>; Sat, 14 May 2022 13:44:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8179EC340EE;
-        Sat, 14 May 2022 13:44:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC5A960F00
+        for <linux-i2c@vger.kernel.org>; Sat, 14 May 2022 13:53:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84A06C340EE;
+        Sat, 14 May 2022 13:53:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652535857;
-        bh=eZWI+Szkgq5NZXPq7AfLNcFKcxshUglUYk3iist48n0=;
+        s=k20201202; t=1652536399;
+        bh=xug21/oeia3VFFc1AHCwn/gd7gpn7PCZZOl45awAXj0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=arjOBfYHlUcwui4tG2nGfj3MnH4J92VHDGZ/NaxWZPSx3oRpRWccQSjKJHNwlB3WO
-         xISSF10J5mN4B/eUee4ecS5wpww8kEG+jOAj27phnE0L5J/EYcsFrwPNfI2fhL1NDp
-         U3WxXgvZ1DtzMA/n4P2jSeDwjd4K86yiaUX3OpYjXhKV0FNKYPXySreQTLLYJcyBER
-         hWCFt2woBz0upcNW1m52ST7VxP7ms5ZbagEA8nm6djs0oMf0sIbgKOfC12ahIeHQmQ
-         mFKd7EcrkBsF8VPvIF43oSiO8CLUa3yqu1qHq+5UcwDJkn+B7t0czas3HoR/mNc0NT
-         08yuM9HXcg5Vg==
-Date:   Sat, 14 May 2022 15:44:12 +0200
+        b=WLcWtfvMy6N3fbjGxvUvopgHCho528b//0h9HJyMlFIzpFqP/MG8/w+ZM6QClm0q2
+         SNqPH6+CGpS98PklVEypoN+Qy4gewrqdoqqIKGu0kQ/BqpwaW6u6QhFpL4kqg0ZwUC
+         xlVpiC8v/IqMzK3lgCSqVqH6d7Nlj+qlmbUhGtfO6YcpSqd7PcB9/GTTGHUZEhEHSQ
+         fDZAGmd/zEFvAXGKMDL8HnVCD6JvFkwdA9CWPetUW7m6gQSyUMoNzYGSwjZJpovy2z
+         PqZt/z7eZwKqBalWmzd0P9kgPEOfICAPHpfhYMLLd7TOzvXrLbjMKldH22sx7ZCKEQ
+         fiK12KcbGYhyg==
+Date:   Sat, 14 May 2022 15:53:14 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>
-Subject: Re: [PATCH] i2c: designware: Sort timing parameter ACPI method calls
- by the speed
-Message-ID: <Yn+yLKBRB6Fl++sx@shikoro>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        david kerns <david.t.kerns@gmail.com>
+Subject: Re: [PATCH v2 1/2] i2c-tools: Use getopt
+Message-ID: <Yn+0SrNnWpkCeib6@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>
-References: <20220420125802.352306-1-jarkko.nikula@linux.intel.com>
+        Jean Delvare <jdelvare@suse.de>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        david kerns <david.t.kerns@gmail.com>
+References: <20220509110326.53e4b669@endymion.delvare>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2uqtVc+wmPa8RV8k"
+        protocol="application/pgp-signature"; boundary="VI0/8ZlcLNgxgBZ6"
 Content-Disposition: inline
-In-Reply-To: <20220420125802.352306-1-jarkko.nikula@linux.intel.com>
+In-Reply-To: <20220509110326.53e4b669@endymion.delvare>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,43 +59,53 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---2uqtVc+wmPa8RV8k
+--VI0/8ZlcLNgxgBZ6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 20, 2022 at 03:58:02PM +0300, Jarkko Nikula wrote:
-> It's more logical to read these get timing parameters ACPI method calls
-> sorted by speed categories in increasing order: Standard-mode,
-> Fast-mode, Fast-mode Plus and High-speed mode.
+On Mon, May 09, 2022 at 11:03:26AM +0200, Jean Delvare wrote:
+> Use the standard C getopt() function instead of parsing the options
+> manually. The benefit of this move is that getopt() supports merged
+> flags (for example -fy instead of -f -y) and does not require options
+> to come first on the command line. As this is pretty standard by now,
+> not supporting such possibilities can confuse and disappoint the user.
 >=20
-> Originally these were in order after commit a92ec1746f10
-> ("i2c: designware: get fast plus and high speed *CNT configuration") but
-> got mixed up over the years.
+> Based on a preliminary patch from David Kerns.
 >=20
-> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> ---
+> Note: For i2ctransfer, I chose to keep arg_idx although it has the same
+> meaning as getopt's optind variable, as I'm not sure if it is considered
+> an acceptable practice for the caller to tinkle with it. If it is then
+> we could get rid of arg_idx and use optind everywhere instead.
 
-Applied to for-next, thanks!
+I think we can improve that incrementally once we find out. A quick
+glimpse from my side also did not reveal any conclusion. So:
+
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+Thank you for doing it!
 
 
---2uqtVc+wmPa8RV8k
+--VI0/8ZlcLNgxgBZ6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJ/siwACgkQFA3kzBSg
-KbacMg/9Hc/PSfa0/SqqOQIhOwUx6jFjafp2NfKbPnTm8GmiW644BJZPEPzG/kVz
-QGPZChVzxxAWPFe5IXiZjammtGkptt8Xlcjg3iwHzJ+p7+bql5D42qevvllzc83H
-rzO9e2UVa4fN5I4/cGhsSwOqoKSI6vSbFjOthf7lnuOTScmCqn4Q8qsDR9MQutWV
-5p6RM59A71vrfnAU5L097JPyqi6L5plogl9FRw7k1zzU/adtSIR0guUwiOSAnDzy
-kEne4/TUk2rl/PlkBx+fqSS8xApyFe9cd7GyPvoLaijmXWb5ZHTM0O6lm+uOoJd0
-+RoHl/2fEaUtaRYExHKZQvmkcfyjoB4BXQ5hd4EY2u/zvaMU8kLOst66vJMKG5Dl
-VMAVcWvdiiRelrG1yBdAIqKHVb1NOI72XfysXl3zgPaQu0E1iLkV+flMU7fE2Sgs
-FB+HLfqmtrDyRpbao8D6/a30xAQAmOr06VUNnGELVo0K7tefgMCP+8WRAVj+MQEN
-l8unvfaEVrW1rrwpDg5KfbZQbBdd4YvjMzvJzh9YZt8m2BgeCnr+MDQh5lQAGIFQ
-UyVdSA1fb+8Gdi3ezue8hQeurRp3jT1LzBDLLwuP6tjS6RHWszGFzTa0Rr9BIqDk
-2vtKV1zDbmh3Or8cseWQlQwT/kOeXtTu2b+KAAEeTEACPp8ThXE=
-=bMPk
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJ/tEoACgkQFA3kzBSg
+KbaFZQ/8CHeTPqa1aMa6uK2Fwyx+gsUVik4q/D+H0LlTUgT7LO4xnrgT7RkOWYXG
+ixkHW6VXsCELX0hmaxNpPb9JYpZJbVZHg5J71gBxPFJWltIXTGb5RgcLr9mKoilY
+aYPzNP8lLsnO3vuxc6YVBD+PTJuKYqpT5Ime4dhZASj67v4raV+88LwQ1+Fz+rm7
+cbK95ajf/gpfhpKVCQB1sTU4LTuElguCbzp1sS1JeTZGp6vDEFUW3X/HnZ/SczHK
+lbnHdteZS1NPMnBOnqo33y0Hc2pSSvc99IWT4HTnIH3+q6E1OCF/NMPatPXF95Fn
+78MZksQZ/NO6CXVZLUxtzz50y5DUZ7YseJrKz5UflMuN2Ryrq8MQdCie/vKxzLpy
+Bb2kSObLW7wh6GEN2kE2TSreNkcwQ/5ZdbHJjd2x2WBi46ry1NRrvbNAeej6ihpz
+thBo3MRpQijNHXrR+StfhyawmYLI4ZLZ/wdJ6FCVVIAPSCspDpk/F1Qn75qXz9Ai
+1RGNSp1aaTiVIK5PeDBhTgFtqIstsWDlLIiRVFwpRfXylx1hk0LW6vlEJsttcbyG
+G/J2Jds0SBT5RoqxqqYVSVmbXlQj9eXnOBGpNH1Nwi/XuY7lXUXcTgsCZBxeBELv
+6Ao7K5i/Qlt1jyXKojl3/Hw4j+kcoTf/R+ifb5IKruweBoqzDJI=
+=2Gff
 -----END PGP SIGNATURE-----
 
---2uqtVc+wmPa8RV8k--
+--VI0/8ZlcLNgxgBZ6--
