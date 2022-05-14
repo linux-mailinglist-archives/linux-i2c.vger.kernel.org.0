@@ -2,54 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB28C52718A
-	for <lists+linux-i2c@lfdr.de>; Sat, 14 May 2022 16:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C74527190
+	for <lists+linux-i2c@lfdr.de>; Sat, 14 May 2022 16:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232927AbiENOEf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 14 May 2022 10:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
+        id S232890AbiENOGt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 14 May 2022 10:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232890AbiENOE1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 14 May 2022 10:04:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BEB1409E
-        for <linux-i2c@vger.kernel.org>; Sat, 14 May 2022 07:04:26 -0700 (PDT)
+        with ESMTP id S231546AbiENOGs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 14 May 2022 10:06:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7AC2BFF;
+        Sat, 14 May 2022 07:06:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E70CD60F00
-        for <linux-i2c@vger.kernel.org>; Sat, 14 May 2022 14:04:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C61A3C340EE;
-        Sat, 14 May 2022 14:04:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97008B802BD;
+        Sat, 14 May 2022 14:06:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86DA9C340EE;
+        Sat, 14 May 2022 14:06:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652537065;
-        bh=fLmh9v/8tBIB59+1j3VtnSsTU0ItnIoNNZu1xV3/0Hc=;
+        s=k20201202; t=1652537205;
+        bh=M9LnE+5XvGie9JPlIYthAhjFKriiOzSI0H7xEm5v8Gc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kjTMGkUEKuVEP11oBs7SRtVET9XhDyuZcUYWcnhPPzoN9S8+ORJTsAx2ihdI06tmE
-         40V7PC8m+/GQeOfZVaL3v9PTbwb3lw7j76Dh3LxCjwu2KwunBDLhD4p1amid5ksa4n
-         L6tvMDpWxr8jvsfPEI3EOc0xY7LeOd/PfG6gHOP6X2J6Qblw9jK2PnDziESvpvBCkY
-         ISZu6nFBXjeYqz9UDiNomfTxPoKqXjJtNGkza5QU3G3UIUqd6vlkR0iFux12kZtldn
-         uX0eDnkeo+hnFf1mhxV9c3XgL45X4aHv6rovaqVFWUHl5tHrztWPJXwzag+LShv5Jd
-         X7BTx4hfSeSTA==
-Date:   Sat, 14 May 2022 16:04:21 +0200
+        b=i7abPAGJhDsOM7a9V+d2iwArG2F5E6+nAgWV14diZzo+Fggw+sF6aovBcVEgxkRBV
+         nJDmScndAVZ3UnxOQtR+xaJULJf+qG4etnHqeKdZQCRwksjEpoc6G4mGiVyJJPWMd+
+         h8AvmaG/hyQRAQjya84me/HQ4HPXb1GNvhIT4lBgUvtkdWyrFJG2krcizzoBJM2s2K
+         vpk8Hy4x4aj7/0vts8TsZKWF4WDbKdvqGE0F1fjpAbQccLQ3AteCLuD3oKG/gFVBGw
+         aTJBFuQTGjy7G8ceGDFbi65yRaN3tkZweT+mBoqxyVNGqd2o2UbD+gXUpZKHAieJv/
+         D5C1YaE+6JklQ==
+Date:   Sat, 14 May 2022 16:06:41 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Michal Simek <michal.simek@xilinx.com>
-Cc:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        linux-i2c@vger.kernel.org, git@xilinx.com
-Subject: Re: [PATCH 3/4] i2c: xiic: Correct the datatype for rx_watermark
-Message-ID: <Yn+25eC8sre9RVH9@shikoro>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>
+Subject: Re: [RFC v2 12/39] i2c: add HAS_IOPORT dependencies
+Message-ID: <Yn+3cZ02UDP19XGu@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        linux-i2c@vger.kernel.org, git@xilinx.com
-References: <20220420075924.14546-1-shubhrajyoti.datta@xilinx.com>
- <20220420075924.14546-4-shubhrajyoti.datta@xilinx.com>
- <29058bda-e040-2b69-7dd1-33e52ba431c5@xilinx.com>
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+ <20220429135108.2781579-22-schnelle@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ejs1y04uAST7l8rO"
+        protocol="application/pgp-signature"; boundary="1Ae8AEsrKJseqCtm"
 Content-Disposition: inline
-In-Reply-To: <29058bda-e040-2b69-7dd1-33e52ba431c5@xilinx.com>
+In-Reply-To: <20220429135108.2781579-22-schnelle@linux.ibm.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,65 +66,51 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Ejs1y04uAST7l8rO
+--1Ae8AEsrKJseqCtm
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 21, 2022 at 10:50:32AM +0200, Michal Simek wrote:
+On Fri, Apr 29, 2022 at 03:50:19PM +0200, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
 >=20
->=20
-> On 4/20/22 09:59, Shubhrajyoti Datta wrote:
-> > The message length data type should be u16 as per the i2c_msg structure
-> >=20
-> > Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> > ---
-> >   drivers/i2c/busses/i2c-xiic.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xii=
-c.c
-> > index 16a7e3164e68..eb4d34e7c0fe 100644
-> > --- a/drivers/i2c/busses/i2c-xiic.c
-> > +++ b/drivers/i2c/busses/i2c-xiic.c
-> > @@ -576,7 +576,7 @@ static int xiic_busy(struct xiic_i2c *i2c)
-> >   static void xiic_start_recv(struct xiic_i2c *i2c)
-> >   {
-> > -	u8 rx_watermark;
-> > +	u16 rx_watermark;
-> >   	struct i2c_msg *msg =3D i2c->rx_msg =3D i2c->tx_msg;
-> >   	/* Clear and enable Rx full interrupt. */
->=20
-> xiic_setreg8(struct xiic_i2c *i2c, int reg, u8 value) has u8 value it mea=
-ns
-> I would expect you will also recast it.
-> Value can't be more then IIC_RX_FIFO_DEPTH anyway that's why it shouldn't=
- be
-> a problem.
->=20
-> xiic_setreg8(i2c, XIIC_RFD_REG_OFFSET, (u8)(rx_watermark - 1));
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-Waiting for v2 here.
+What has changed since RFC v1?
+
+> @@ -1232,6 +1233,7 @@ config I2C_CP2615
+>  config I2C_PARPORT
+>  	tristate "Parallel port adapter"
+>  	depends on PARPORT
+> +	depends on HAS_IOPORT
+>  	select I2C_ALGOBIT
+>  	select I2C_SMBUS
+>  	help
+
+Didn't you want to drop this one?
 
 
---Ejs1y04uAST7l8rO
+--1Ae8AEsrKJseqCtm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJ/tuUACgkQFA3kzBSg
-KbZjQA//VgMDkT9ReM4CTI45C0Q+lJkcrKdnMtr3Z8jRDgR5LVZaBJnAytEEN3iF
-K4VOb+ePX6GOEyvEPGIfat5nn+yZQOYSC4IIdXi8dZOheRMJhlR29Ls92Yo7BW5e
-wfkkdLWCwKQZCU1GX9KsNVBPsOmnVg2Tclr+wVhcsgegW06gVmlbidTxPCqGfoRN
-gnfUdt8SJmnzNjdgn81fEsQKSxWMLfJ6oE6p9h22In2GZE7NLhYXtTyg0/WmPRbt
-6CtJWs6hh4PQGJOi8cwAlx4JubjZnstxsw+VM+7E8XJu52RkU1HvcWQNkjA9tLRN
-1sUeEPOWSJj3Zn5kN0ZmKOGvOGCeRw0pwNvZUutO8qB4K3h1roXc6gKqCGy0ielk
-TRoEbJPV9y+VMe7Juntg7P2IrY/uaasGxx3xg9eJfz2aZLqyQoNoCVY8l+14RUci
-2jbG6Qgka/9COtLeYNTsBxgnhMCYv+gC+Z9vQBxoLci2clIpOgnA9UQZvM35deiW
-HZfUfHeCAyDs4E2MDwiUSuD4OXvCDU6wBxt1XuwcMnba2DeduGPKkrn2GPZ1jS5B
-X3O2seNe3NAYFeEN1u9sgnnYP/ej6AKEm67cH8AqyOHRmbueywScWcq65/9pg/kt
-AU00ZPp4Ow3l6l71nh+h6xD+seqw7/ZaoPlLsj0LEey7dzaVjx8=
-=DTYd
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJ/t3AACgkQFA3kzBSg
+KbbldxAAijJWDKJn8oOjI9OPknBQkZs2iRuzoaBa6ZCu999lpIIAc+qAGmcGU67D
+X/Qqcolemb14Pz2vDFjR9Sh1XH3UxwZ6/EA9tzwLf/LxMGC+PI9bzEi+3Li78GBx
+XX0ZXenzcJoxBOihybOGxRnMgBfgflXOhfL/jpaD1Wdh6D51nS0Ygc7abGnEnZ2t
+LbCeVUOeMSfAAolitmruD3uboSY65agsXrCtO0M3q/fU2CCZS5B+B9kGAYteB6BC
+3ySbZqA9IPbPFgRjsAhVfcUkIHMrm5IBAG64FhacqFG+DcoHin8W0UbCBV2OByTE
+khy6rI1VhJ3PmwmvN3X6Nbsi6OH3gur+MgqwnwyrgwZ5ILjxMaN2Uy7Vbr5B7MMh
+YGVA0H7hX38DH4MaAsVCYr8JZ/sp42iydw1rhEVgNFqkGK+6dRtmkxkNGQh4P6Rb
+mtr7Caxf+haa8YnKXcEMkHjDmkjpYAeJAhK1mUC6D/slsUlGM75FsJ/NdDZ1Ccob
+Iq9ZUe0eZHCTDaegfrSdI1DmIYSbT6ZupJN40Wbt/Rv41HvjB8GGPyUI0y0zGpSx
+tGbDB0wsm6ZvEtzOhAg6tiSJW/rjh4I3zuuutPYKYGJgva/JxITYWXRRg5qnqfW4
+Ja3oXwiYCpDPT2ZsIqdegh5FTayAdecztDIp8YeYp0eVqRDabO4=
+=ojBv
 -----END PGP SIGNATURE-----
 
---Ejs1y04uAST7l8rO--
+--1Ae8AEsrKJseqCtm--
