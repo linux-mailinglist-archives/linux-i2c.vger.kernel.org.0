@@ -2,51 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA42D527186
-	for <lists+linux-i2c@lfdr.de>; Sat, 14 May 2022 16:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 884F9527187
+	for <lists+linux-i2c@lfdr.de>; Sat, 14 May 2022 16:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232895AbiENOEA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 14 May 2022 10:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
+        id S231540AbiENOEG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 14 May 2022 10:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232860AbiENODy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 14 May 2022 10:03:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EED1645F
-        for <linux-i2c@vger.kernel.org>; Sat, 14 May 2022 07:03:53 -0700 (PDT)
+        with ESMTP id S232521AbiENOEG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 14 May 2022 10:04:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7657013FB8
+        for <linux-i2c@vger.kernel.org>; Sat, 14 May 2022 07:04:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B3EE60ECF
-        for <linux-i2c@vger.kernel.org>; Sat, 14 May 2022 14:03:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 098D7C340EE;
-        Sat, 14 May 2022 14:03:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1058560ECF
+        for <linux-i2c@vger.kernel.org>; Sat, 14 May 2022 14:04:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0472C340EE;
+        Sat, 14 May 2022 14:04:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652537032;
-        bh=dUehTpQsDzTfMXA9wEM+I+M/s8TMqQv8Feft56j5xms=;
+        s=k20201202; t=1652537044;
+        bh=lA/ncMX/s6j27vmAdo2DnMzAdIag6jwvg4ARMvjxDxA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XP/m4GiiXzYttkYDJ77wA+ngMEqv57ICG7IMNKgAmyEqwr2HLn7gg/vmismv80ajx
-         rnse01YFl+MFUYyVA4ELp2EO+0m31A/RoRAaQTO2eB5onjHgFMyv/CTRb/oAhJ/lqb
-         uDHgTtcH8KcsW70n/NUVD+kARn4TjnZUTAFxtUuZ+ermZSpIeEWQXtBKgplwdag6A5
-         95hjAK+NmNGnStCV42wonL3DwmNpmH/UxSTb7BeIo4A6T93i57vx6gb9X4ZtjNVEEy
-         udvM1TfPJKZCtj79VuQVvLiRfnVlvHlgRpGcB0+zqCy31v49xhXDJPKGgDT/nU224p
-         fhFmi/CVERABw==
-Date:   Sat, 14 May 2022 16:03:48 +0200
+        b=b/3HCy8WIe/N3p81gndiVDorPaNoCRe7qgZ92tCH/bA3tVoV7fcAMa+K7Lb3hjP7L
+         GJ0tAIihTAXtotevNCnoCyyZOZOIFitYtPXfIZ77YfLIBI1m3NjD/LFSqCd/2Iy2l+
+         +Eah29AEoOtgUE40fI4MCtBaeklx2ADcKug8cj9dvetpmg7uAjeqQiTiCuKs2PNkwG
+         yyCX24sTvsMz+e1v0DrKhDb1z8Z8V+G2qF2UCGCFO7yeGQVsyxXRSGFv07/5LUq7C4
+         HcknOi8K0++4tpS9wxDUsi5YxpobMvfKW0FPGEoa5l1tFAq+GQWyjIAha/z2xYJGVx
+         BL9JEAPSXhH+w==
+Date:   Sat, 14 May 2022 16:04:00 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Cc:     linux-i2c@vger.kernel.org, michal.simek@xilinx.com, git@xilinx.com
-Subject: Re: [PATCH 2/4] i2c: xiic: Fix coding style issues
-Message-ID: <Yn+2xF0/h+bwRC8p@shikoro>
+Cc:     linux-i2c@vger.kernel.org, michal.simek@xilinx.com, git@xilinx.com,
+        Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+Subject: Re: [PATCH 4/4] i2c: xiic: Fix Tx Interrupt path for grouped messages
+Message-ID: <Yn+20DoaDKLKKM4D@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        linux-i2c@vger.kernel.org, michal.simek@xilinx.com, git@xilinx.com
+        linux-i2c@vger.kernel.org, michal.simek@xilinx.com, git@xilinx.com,
+        Raviteja Narayanam <raviteja.narayanam@xilinx.com>
 References: <20220420075924.14546-1-shubhrajyoti.datta@xilinx.com>
- <20220420075924.14546-3-shubhrajyoti.datta@xilinx.com>
+ <20220420075924.14546-5-shubhrajyoti.datta@xilinx.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5cAGBK0bcrr9MLi2"
+        protocol="application/pgp-signature"; boundary="kOiJ8G6OH/lgVq/z"
 Content-Disposition: inline
-In-Reply-To: <20220420075924.14546-3-shubhrajyoti.datta@xilinx.com>
+In-Reply-To: <20220420075924.14546-5-shubhrajyoti.datta@xilinx.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,48 +60,47 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---5cAGBK0bcrr9MLi2
+--kOiJ8G6OH/lgVq/z
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 20, 2022 at 01:29:22PM +0530, Shubhrajyoti Datta wrote:
-> From: Michal Simek <michal.simek@xilinx.com>
+On Wed, Apr 20, 2022 at 01:29:24PM +0530, Shubhrajyoti Datta wrote:
+> From: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
 >=20
-> Most of these stuff are reported by checkpatch.
-> But fixes are:
-> - Incorrect indetation
-> - Missing blank line after variable declaration
-> - Additional ()
-> - Missing spaces around +
-> - Missing parenthesis when if has them
-> - Newlines
-> - Remove MODULE_ALIAS - none is really using it
+> When a group of messages are sent from user space as a set, if
+> the last message has less than Tx FIFO DEPTH number of bytes
+> to transfer, Tx half empty interrupt is triggered continuously
+> from the hardware. It is due to Bus not busy interrupt coming
+> along with Tx half empty and tx empty.
 >=20
-> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+> Hence, service the Tx interrupts before Bus not busy interrupt
+> to update the i2c message status correctly.
+>=20
+> Signed-off-by: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
 > Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 
 Applied to for-next, thanks!
 
 
---5cAGBK0bcrr9MLi2
+--kOiJ8G6OH/lgVq/z
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJ/tsQACgkQFA3kzBSg
-KbZPjg/+PPCQfww3cSSvuHcGf75cGO+NNZKVmPhq+hCwKDaWVpueA5CNe6B3fm2f
-w6k3Lqjy2TyUoFiLGcI1aCnBrCIUG36EHTHDR04Xhmx2tq6uathpDxZWF4GoNKHe
-RO9NDNN1nuwhfZ+5hL/qWQB3DbM0wSu6XczqAmVC7LL5S1HA1IYD0U1oukR5b8m7
-r5hKV/lIGCPVGrwe9/4CmhoSK2d1vn3vdXcBdKj3LC9DwE3RhXeypvdkwgJJpH+b
-1AD9sRypieXm7pFvZwerCewXBo/mlSrGHIi7UjkyK3DeA36C1NHvof1SeU5CyQc+
-5StsFdG5pPxNoLcOOGi6vRVbhbgMpSTnAtMQraStFCxRy/tkgrpRIsWSpNeexoXi
-TFgCS2VN658gs8EwJImVa1XrFzxoRka5LpxKXovwlB9LRhzWNy4s6aibNl74ltQX
-1JaKvgpdNZ9ZwdgKeMTbZG2Jhw9fNiBHQZBRMo5AQLw7XIPm08ibhB87dOMybBI5
-RwRzp3o+EcSoHqE/7Uoz864VC8UZfBwYbvDRV3db22o5cygn4jvNkryx9jiJABlC
-sxsC+PQMtwrS1FTDm+LpSOqirA42AZdDc8cXsMD7hVDBA8mx/EdDDWblTlfpw6aU
-ovNPqK2KmEFkIw1z20K6+DO6h6jdsQq09nJi9M4Gt+3Fgv1fx1M=
-=n6rI
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJ/ttAACgkQFA3kzBSg
+KbZXuBAAp0gQ27ag0SnrUH97O5q7Oj+k63xwrl82V8+LsO67fnAdYNFkAcUCdctl
+kbxTEFxIZ+xzqtdbitb3wzu3Xj2B/pqvMp3UuYmx4UtqV8iKHcZX6qzoRHC5y0iu
+bz+mNVC3kr0xuqv7syS92wpE3BCMdsVuW7VhmTTW2NSO18cFm2n/uXTBCYvpJaG/
+cyN45+b3wDxVM9eEGT0vJD/7e7NZckblUuOSZ9KATHsE2W4USl6Gf8C3zBrDg1+W
+d2C/lfBkGb9u0GwLJMEDB8wVxa51oQdy5KURZCVGn3F9/0aljkbj7kS+svibad3+
+cDLbOTankQYeUaoDwkddWfcIfBGpur11V59lRsx1rQLIcsGtNQWxn/1Fj6c/u0CS
+05tCNV5FfPAhR9hcSmGiLIOT+2HDi+wmsWf5GGz6booNeNJH9M0ljzA2r8/pg4tQ
+uzvpjsGpRhVJZUrI+6HGDHO8ZRWoBnh95CKhbyp7fuVw9aSmL5TS1l4aTr/m+uZQ
+g2Nmy0vdiq8MEG9Jd0AoYZ//pwJ8e0UIdqdFIx9sz++Cqn0i9HQl3jJCr8QbybTY
+jx3ETC4+OCxUpKchKhs6EMlMfl2GSProBioPQbpSSNm/BnO/lmFvUe7YpkwGDHBB
+QAMlW+CKuJ3kwaC2f9j+1idvT20OW1FI+coqXAnvBOYkEz0ZVcc=
+=T2y7
 -----END PGP SIGNATURE-----
 
---5cAGBK0bcrr9MLi2--
+--kOiJ8G6OH/lgVq/z--
