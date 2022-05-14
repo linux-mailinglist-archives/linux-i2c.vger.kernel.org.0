@@ -2,118 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1FD5271C4
-	for <lists+linux-i2c@lfdr.de>; Sat, 14 May 2022 16:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E619B5271ED
+	for <lists+linux-i2c@lfdr.de>; Sat, 14 May 2022 16:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232877AbiENOPk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 14 May 2022 10:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52608 "EHLO
+        id S233218AbiENO00 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 14 May 2022 10:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbiENOPk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 14 May 2022 10:15:40 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E7E140F3;
-        Sat, 14 May 2022 07:15:38 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-edf9ddb312so13977046fac.8;
-        Sat, 14 May 2022 07:15:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=V0UWMw+8IC5/blrDj2MNiuz1nnIEdolub0ud2xnX3wc=;
-        b=dkxvJMEFx6NNgw1tH/UOFEVkB83/cvgCoN2PlMfOTAvFF3YrqCpWz24cv5z8xQwuP7
-         BcwvEsuFTuyE8yjru1Pi9Q9cgXnx/x9R5X1crekVv9DRnAcrnELwo3xV1+gyUaEzYXqH
-         2VUhW79PlCNlREYwLWgPacsLZpLg/SR1rbTxCrHKruvIDmJ15NRQ1aWlUpvb1oblcA6c
-         U16dqcZxJxDVmmhhEtOaqJlvLnZm618xa4XDWfp31YWmyoDpO6YqqvqeDNcXATzvnLdr
-         AjTjqn6W2vguXwB/Unl/2mEHV4UkX8F6g+4VT6wc7OouhdHE7n3go4ycJIu1c2LG90Js
-         AvrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=V0UWMw+8IC5/blrDj2MNiuz1nnIEdolub0ud2xnX3wc=;
-        b=hGphlE7Rgn1gf5CsnBJig/mnyhXZ3VW4J+zm+gomQpfQRi6dfJJIhO81cky131Xe16
-         Q0ccY/oF6P6SneoN6d8kYZmjMu0aSsQqcJzgzQ9xowirQmW8lB2dj4XLcNTF07/Ckg5T
-         6qyvJberBhE1UsxjC/a8LPhAH7An8kYjvVOtXShlVX3yanziM6roiB1Bk/w3FxMDTjqs
-         S+uQ9LxErrTm33yMzUFUYAezdUkn0Im1wIUnq7LFGAGw7/DEJ8jEpxlVN+30XD7JBUFh
-         7I3yGPcyouCoiBzlQSlJKkLy8CB93k03tigstXnTtUTHsx4nRYZ6GSvbAdkBsoNWoKgI
-         Zclw==
-X-Gm-Message-State: AOAM532ZeNNmWIhinyChocr2Ti4cd40IOguG2fOha8JmcXtKXUcGBWJM
-        gDKA9QJvTRyIMUV9mAX/ur3Q9lOarnQm6w==
-X-Google-Smtp-Source: ABdhPJxIh4A6RDGJLkqD3wI+SAa3lP6jsUbrzhaqHnQbP/kqqs6hM/AP18eGNJmYYJxAgVXlsnJ15A==
-X-Received: by 2002:a05:6871:70c:b0:ed:e6c2:e599 with SMTP id f12-20020a056871070c00b000ede6c2e599mr5088966oap.70.1652537737907;
-        Sat, 14 May 2022 07:15:37 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n39-20020a05687055a700b000e686d1389dsm2401199oao.55.2022.05.14.07.15.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 07:15:37 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 14 May 2022 07:15:36 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 7/7] dt-bindings: watchdog: renesas,wdt: R-Car V3U is
- R-Car Gen4
-Message-ID: <20220514141536.GA1319284@roeck-us.net>
-References: <cover.1651497024.git.geert+renesas@glider.be>
- <2882a6de3905a57ae62d91060d27521af43c4068.1651497024.git.geert+renesas@glider.be>
+        with ESMTP id S233050AbiENO0Z (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 14 May 2022 10:26:25 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA7EDF48;
+        Sat, 14 May 2022 07:26:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C600CCE0ABA;
+        Sat, 14 May 2022 14:26:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 452CCC340EE;
+        Sat, 14 May 2022 14:26:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652538381;
+        bh=ToD809RuY6hiXX+oncfqN67gVFXAQVrADjiQjJV3dEI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i65GwFOC0zB83eUL9/lR2auEhM9UrNTQT2dN75bb0bl90eK/Bx5DTmmt2nDK4dsRP
+         b3SvvU9TskXzHzbOUK1e/oIuaVJhJwBQT3Yy7EIRL+7OBjFafG5TKHpAv8oWKGOvP4
+         E4a84GMXmT2I8LRhA04FSdNw2JJBf7ocBTB7JbLPHyY0Czp6APaLGtIVpEXia65z9C
+         Ha2Q1sAr6UNntams5ZDpedtIzbVH11PbMLdtMqxyh8BCokqvSaWZnu5t0tMIN/gTpi
+         bNXTG/LUOGL/hg02MAlq401zTCLeqF76C68zt3W7L4MESAVjfZnB8FnQSFh9Wh9w99
+         qxfVnJoruzCuw==
+Date:   Sat, 14 May 2022 16:26:16 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     kernel@axis.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, krzk+dt@kernel.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: add property to avoid device
+ detection
+Message-ID: <Yn+8CJ3j2SY2+Mq+@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>, kernel@axis.com,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        krzk+dt@kernel.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220412085046.1110127-1-vincent.whitchurch@axis.com>
+ <20220412085046.1110127-2-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NL3Sz6YKj32sHoBj"
 Content-Disposition: inline
-In-Reply-To: <2882a6de3905a57ae62d91060d27521af43c4068.1651497024.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220412085046.1110127-2-vincent.whitchurch@axis.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, May 02, 2022 at 03:34:59PM +0200, Geert Uytterhoeven wrote:
-> Despite the name, R-Car V3U is the first member of the R-Car Gen4
-> family.  Hence move its compatible value to the R-Car Gen4 section.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+--NL3Sz6YKj32sHoBj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> index 77ee7c4b8067f506..1fa243052327bffe 100644
-> --- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> @@ -59,11 +59,11 @@ properties:
->                - renesas,r8a77980-wdt     # R-Car V3H
->                - renesas,r8a77990-wdt     # R-Car E3
->                - renesas,r8a77995-wdt     # R-Car D3
-> -              - renesas,r8a779a0-wdt     # R-Car V3U
->            - const: renesas,rcar-gen3-wdt # R-Car Gen3 and RZ/G2
->  
->        - items:
->            - enum:
-> +              - renesas,r8a779a0-wdt     # R-Car V3U
->                - renesas,r8a779f0-wdt     # R-Car S4-8
->            - const: renesas,rcar-gen4-wdt # R-Car Gen4
->  
+On Tue, Apr 12, 2022 at 10:50:45AM +0200, Vincent Whitchurch wrote:
+> When drivers with ->detect callbacks are loaded, the I2C core does a
+> bunch of transactions to try to probe for these devices, regardless of
+> whether they are specified in the devicetree or not.  (This only happens
+> on I2C controllers whose drivers enable the I2C_CLASS* flags, but this
+> is the case for generic drivers like i2c-gpio.)
+>=20
+> These kinds of transactions are unnecessary on systems where the
+> devicetree specifies all the devices on the I2C bus, so add a property
+> to indicate that the devicetree description of the hardware is complete
+> and thus allow this discovery to be disabled.
+
+Hmm, I don't think the name is fitting. "no-detect" is the desired
+behaviour but a proper description is more like "bus-complete" or
+something?
+
+That aside, I am not sure we should handle this at DT level. Maybe we
+should better change the GPIO driver to not populate a class if we have
+a firmware node?
+
+
+--NL3Sz6YKj32sHoBj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJ/vAQACgkQFA3kzBSg
+KbbFog/9Gv3IJ+MHl6N3qQ0ieQcG5+wD+BO8/McbKQuR+2LqOOd8LVx5TV1+5czC
++Ef69jO9ch6vV5T9WVrnErF4h1wtGiK5HF/1AnMjagTXtNNIaxbyEOBvowY4hVUM
+E58vzkrlZNIKY+147vnatDWw670DOTAP6GvvKg4cfGSK0ZXxRGkuXzWreYM9seJD
+V1L9EpBDEZ80Y6RYJbWzExPyslGja8avFLzOqy5Q4dvsHnB8P7Mq6jrQXB6bqNWQ
+hakv42huhY+WzplBlqNpfUiqGOC/5C71s17g8NKQ5BZfjV+HSO9L1ueHgFsOpWS7
+6PEj8o2t+GJagce4TZJ2ofi7YrJNRNemxK9uLNwmdmmcLFZCTBxn/3/rZQotCPzu
+VM9HDgnNQhdavit/Sqw9Vq89oeAq9QGbj/FWCTIELbmToVE0d3ufuWaLnDPctLW9
+TzWV2C/B/zjDtglZmg1fjJI5nr38l7qpWbhd95rzxO1vsYSXTwYRYfOIGukgDNlj
+gURWV+df7I89Rc6DL9ZSM5qu0h7iqmZLbE3RAnqrYjdr7AVXVqq2rmu0r0VjkzYw
+6rzr4BN6oWPrthHLWOCsz4uCIeO802Vj5hkXqKRf8SrhkyoQFTv1H3RrSQ/F/qmV
+diN/c0v5IqmndTctQau7yl+AuCgj9wJ8M32Zb6N+ZZuyXQr+EEU=
+=AA2G
+-----END PGP SIGNATURE-----
+
+--NL3Sz6YKj32sHoBj--
