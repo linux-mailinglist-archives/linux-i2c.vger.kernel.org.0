@@ -2,121 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36174529003
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 May 2022 22:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F503529561
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 May 2022 01:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346564AbiEPTyT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 16 May 2022 15:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55684 "EHLO
+        id S1350405AbiEPXjS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 16 May 2022 19:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348082AbiEPTwj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 May 2022 15:52:39 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D1945078;
-        Mon, 16 May 2022 12:48:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S1350404AbiEPXjQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 May 2022 19:39:16 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBFF42EFE;
+        Mon, 16 May 2022 16:39:13 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 33CB3CE179F;
-        Mon, 16 May 2022 19:48:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2E80C34100;
-        Mon, 16 May 2022 19:48:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652730488;
-        bh=8saUzmqA0TOvmnjsDMAn3OVfh2E1uA+myZYrsq0y0hc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OEevVY1UECT25EBcbHYE8J4mfBKuo+DyKQ8QD0QiEhQtGbpIuzKP5GI6z4lI1eXsB
-         81nbnWHIs/OOEJvNw6Hl6ZJ5HYOz0op63d9rpo3Ah1d2pEYVg1zdSAAkqwnRhlK2sd
-         46p32qHgAKWCrxAlIYtwD8AiB8kwIftyEySQECuMqC+bWkOOQ+K1M+M/nHkkGU4E9Q
-         UmK3i1TjPqmS9KKjWDUiaY9c1i4o2b7DW2j9IeYqZtkSDjS5CGsUADi21K8ORTXCda
-         wC/qIKs8aF8WM1iVXxLFHZSXOx7twJsthoezj9YOGgMF1H+6RME/ljFbe7cCiezfIt
-         rEMovxZjmG34Q==
-Date:   Mon, 16 May 2022 21:48:05 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Tyrone Ting <warp5tw@gmail.com>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
-        semen.protsenko@linaro.org, sven@svenpeter.dev, jie.deng@intel.com,
-        jsd@semihalf.com, lukas.bulwahn@gmail.com, olof@lixom.net,
-        arnd@arndb.de, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/9] i2c: npcm: Change the way of getting GCR regmap
-Message-ID: <YoKqdfLSeJ69WFhi@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski@canonical.com,
-        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
-        semen.protsenko@linaro.org, sven@svenpeter.dev, jie.deng@intel.com,
-        jsd@semihalf.com, lukas.bulwahn@gmail.com, olof@lixom.net,
-        arnd@arndb.de, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220510091654.8498-1-warp5tw@gmail.com>
- <20220510091654.8498-3-warp5tw@gmail.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L2G166yl7z4xZ2;
+        Tue, 17 May 2022 09:39:06 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1652744351;
+        bh=shMAgr3KnLfduKB2nfq7HCfF2fOXsMLLY0bGSFIz4Ms=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=QLY2t/FKtddLoKYu8LG0sSKbrlIDbQb907F8fJRC5dkfgoQ4VcE8ZYWVwVOoK7EM4
+         xzfu8+So2JKiaEzF7GSQJ9gueS9zaiy8W0ZSlhez0VFXy4Wb0j8KP+yhCabzAY1A+C
+         0FgNnaqMk20UWxmOM3R6jumDaJQD3hLDqa2kTOU3pR8ceSVpLscdB0G74mWPjxfypW
+         1YbJXhatDs5+BG95Jjxs9mw7zFQliQ6Q027nffmAN+9od+JVIb8Te0z/N9Z2mv7B/v
+         RTBKi84QByAmv5PC2z6tmhRB7b8jCnaApdBNfdiJ8XpCmLW2Ws4btTP6KU81mSwIaj
+         LQs8XWcGd88vg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Mark Brown <broonie@kernel.org>,
+        chris.packham@alliedtelesis.co.nz,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Anatolij Gustschin <agust@denx.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pantelis Antoniou <pantelis.antoniou@gmail.com>
+Subject: Re: [PATCH v2 4/4] powerpc/52xx: Convert to use fwnode API
+In-Reply-To: <YoJbaTNJFV2A1Etw@smile.fi.intel.com>
+References: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
+ <20220507100147.5802-4-andriy.shevchenko@linux.intel.com>
+ <877d6l7fmy.fsf@mpe.ellerman.id.au> <YoJaGGwfoSYhaT13@smile.fi.intel.com>
+ <YoJbaTNJFV2A1Etw@smile.fi.intel.com>
+Date:   Tue, 17 May 2022 09:38:56 +1000
+Message-ID: <874k1p6oa7.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Bta3H5MZ7K5kULNQ"
-Content-Disposition: inline
-In-Reply-To: <20220510091654.8498-3-warp5tw@gmail.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+> On Mon, May 16, 2022 at 05:05:12PM +0300, Andy Shevchenko wrote:
+>> On Mon, May 16, 2022 at 11:48:05PM +1000, Michael Ellerman wrote:
+>> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+>> > > We may convert the GPT driver to use fwnode API for the sake
+>> > > of consistency of the used APIs inside the driver.
+>> > 
+>> > I'm not sure about this one.
+>> > 
+>> > It's more consistent to use fwnode in this driver, but it's very
+>> > inconsistent with the rest of the powerpc code. We have basically no
+>> > uses of the fwnode APIs at the moment.
+>> 
+>> Fair point!
+>> 
+>> > It seems like a pretty straight-forward conversion, but there could
+>> > easily be a bug in there, I don't have any way to test it. Do you?
+>> 
+>> Nope, only compile testing. The important part of this series is to
+>> clean up of_node from GPIO library, so since here it's a user of
+>> it I want to do that. This patch is just ad-hoc conversion that I
+>> noticed is possible. But there is no any requirement to do so.
+>> 
+>> Lemme drop this from v3.
+>
+> I just realize that there is no point to send a v3. You can just apply
+> first 3 patches. Or is your comment against entire series?
 
---Bta3H5MZ7K5kULNQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+No, my comment is just about this patch.
 
-On Tue, May 10, 2022 at 05:16:47PM +0800, Tyrone Ting wrote:
-> From: Tali Perry <tali.perry1@gmail.com>
->=20
-> Change the way of getting NPCM system manager reigster (GCR)
-> and still maintain the old mechanism as a fallback if getting
-> nuvoton,sys-mgr fails while working with the legacy devicetree
-> file.
->=20
-> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller drive=
-r")
-> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+I don't mind converting to new APIs when it's blocking some other
+cleanup. But given the age of this code I think it's probably better to
+just leave the rest of it as-is, unless someone volunteers to test it.
 
-Tyrone, your SoB is missing for all patches from Tali.
+So yeah I'll just take patches 1-3 of this v2 series, no need to resend.
 
-
---Bta3H5MZ7K5kULNQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKCqnUACgkQFA3kzBSg
-KbZ34Q/+OETkCQXb502yS3rtiWo8z1tWp3hrOEDevtsQso3n1oiwKkySOcuqiLsb
-f/u+j1YLisJPS6Zdcg7bfi5bGruOmGG4O03ZqAwLfoRXzgwkMchSEB9Ti3HbdIe/
-mqlOfmDYXMek199DevOBKY5AouPHsVbuVj8ihNTlARtxx1WHT43w2nWj9w4GAfWg
-p2hJG467QwoHNZ5aoNH9JkFW5JxjIkn8ZVOQfBZ8juWTY9s7X/J/Mqq3PDUjAssE
-csolAlW117VU2Bde3yWzy9joNo2Cz1acSHXDK2dTFbCccvK/Pm+UsRxrOnNaUSAM
-wdX8RvPB8pku8scSI42QR8c3Y3Di6thLgvLJ08zOzVOHrsd7MThvn0cqJuo93VqL
-qEoSmGMbKVVUewpD9P9xGat8IfRbaEDeJn7dMXUNhckb5UXVB78eg/SUdMPuhTkr
-Nojnyz8XNgFbIWyrtyvJ9Amr1F4pLEJURpfWJkH9xys1BPCdQt8efMEVJPmVyFip
-K6SfQt6ZaXlSkAy//W6Y5PDwgNLJWbsoAQ5feStuhpJpLKwsrWfE0DUHn+V41EAv
-0V7AAekM8XRVe3lsC+oAw6VJYoTPD6cwMgp8DW/Lb3BPGltoi5W7KD5HZ5aV3E8K
-g4P97TcCmS5+YF9a2+PuTsaOBF61n6F7lOwoiJcYW9U0p3ceOws=
-=hHWq
------END PGP SIGNATURE-----
-
---Bta3H5MZ7K5kULNQ--
+cheers
