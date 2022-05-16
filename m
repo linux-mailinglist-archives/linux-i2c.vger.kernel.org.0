@@ -2,67 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2DD528572
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 May 2022 15:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453BB5285C3
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 May 2022 15:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236153AbiEPNe0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 16 May 2022 09:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
+        id S238770AbiEPNsS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 16 May 2022 09:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbiEPNeZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 May 2022 09:34:25 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DE32E08B
-        for <linux-i2c@vger.kernel.org>; Mon, 16 May 2022 06:34:24 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id t11-20020a17090a6a0b00b001df6f318a8bso1303821pjj.4
-        for <linux-i2c@vger.kernel.org>; Mon, 16 May 2022 06:34:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=8Wiw0YaKHgp2/CNUgU6ftGJizsrvl4U6a/ESGbrf7k8=;
-        b=MDur2QTO4g7JVhtUilqfWkMIg54Mhh/LX86V0xy1WvIYVQRHVki/VNB6W7pV4Usg28
-         x7C7+NxQ8DFHwA7Gd/i0a+YfkkLGwPPMUbXCh4UtFK3cwajNXUrNTSaWxWoqJeGaRAI0
-         g4Ay6XCqhjamVZBN1hhQq1WPReYf+p7xMd4YyqOVJ4nIC/5Z58PIWFkpDoTGN1LOfIoc
-         RodDest2UNvbfQw4oPyq1ZoLF1Ig/xuujB+ZOpBZJohE9PBUdDhuPTR8lpjC6xpfcjWY
-         hKdFyOz+eHm4+j5ppa/c/3y9vXf89lRlDnOHpyQkTEYjFqcamCQBgbd/ulELMV7/VJph
-         hWyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=8Wiw0YaKHgp2/CNUgU6ftGJizsrvl4U6a/ESGbrf7k8=;
-        b=ewdWHlvSmr6JR1uH5ckCSIIs1L46b5u2h98GVrq331aehwsFaLnj9hGoF4CuJHNX1U
-         q3Yg5FY/HpDY1FalBalYon/R55G2wlervI0thyMu2+L3t01pb4kO+8kpqZOha8rTOKZS
-         WbW71W+BFjvZxO8mnRjK5HYXRfmtslDUI8fR2CPqsL4FwRGbVGxOezr4Ki7wc5Cbn0Hz
-         Kgo6iyS/q8Rzg0PRkd98n07BHfmBR1M1Sr62mVdcpOt3AISbc6w14h3tvcgAkibgR7O6
-         Q5hjvvzSg20QhVGKzCQF9Z5igiWo61SKCgIWVfHlk7NzB1AT4Vk/CdqTTMLeTSCf9tvs
-         J29A==
-X-Gm-Message-State: AOAM533TSuPhPRWI3BsXX1DQb/qKNbhnDE3v3h7Q+yMjdXR40AQ56z04
-        vH6Lml0W600uMtwGcuGBjNb8oenU9/KGBER8W/nbGQ==
-X-Google-Smtp-Source: ABdhPJwAKmaGENO0E5Q6WGiICunx/2bCv23XGNqs3kAg4mQcKbWysHi8jhp7hufATZDbT34VFHZtxAOBuF6obNx8QqI=
-X-Received: by 2002:a17:902:b581:b0:161:5f37:6688 with SMTP id
- a1-20020a170902b58100b001615f376688mr9056984pls.145.1652708063872; Mon, 16
- May 2022 06:34:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220428122651.208575-1-jsd@semihalf.com> <YnLaOkzTA1dUrMkc@kunai>
-In-Reply-To: <YnLaOkzTA1dUrMkc@kunai>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Mon, 16 May 2022 15:34:13 +0200
-Message-ID: <CAOtMz3PWNOwTzmLB4d5tmRP5L6zg2ELcth8fd6_8vEEP7+=WoA@mail.gmail.com>
-Subject: Re: [PATCH] i2c: designware: Modify timing parameters for amdpsp mailbox
-To:     Wolfram Sang <wsa@kernel.org>, Jan Dabros <jsd@semihalf.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        with ESMTP id S237525AbiEPNsR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 May 2022 09:48:17 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34883914C;
+        Mon, 16 May 2022 06:48:15 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L20vB6skwz4xZ5;
+        Mon, 16 May 2022 23:48:06 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1652708890;
+        bh=IoEgFN1b2dRBNPBgpQ3TrV8TAD3LrZl3dnKWhxyBcE8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=eOCT8tTgO0HB3LTSAxu5VPZmIDCja3jmYMxo19810CBMQQW4VUwng4Vi307xbkQp3
+         NtGdL+eJoxbZnFWifwb7kCOChKLsaCuGHJ7kenALzxiy/5D+lDIzS/Pa9H71ujoCuJ
+         1PcimRASMi9dPMp1ajYEAnJJ845+xdMAWXVLExUxp7rHLl+PjV+9dDRmB7YTQb3gCn
+         dg31DcWS+4zmI+yfmKkMWaecSijwxwHugdByRa5Px62h2UGh7tUSMCsI1YSl6uu9u9
+         OL7ZW1+kKqSCaifOCHd32fjcMBnXMDsj8J86SFvZdwAx4giXzsNaNy7F1zFwFwAeyT
+         iQLit7nUMYGng==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Raul E Rangel <rrangel@chromium.org>,
-        "Easow, Nimesh" <Nimesh.Easow@amd.com>, upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        Wolfram Sang <wsa@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Mark Brown <broonie@kernel.org>,
+        chris.packham@alliedtelesis.co.nz,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Anatolij Gustschin <agust@denx.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pantelis Antoniou <pantelis.antoniou@gmail.com>
+Subject: Re: [PATCH v2 4/4] powerpc/52xx: Convert to use fwnode API
+In-Reply-To: <20220507100147.5802-4-andriy.shevchenko@linux.intel.com>
+References: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
+ <20220507100147.5802-4-andriy.shevchenko@linux.intel.com>
+Date:   Mon, 16 May 2022 23:48:05 +1000
+Message-ID: <877d6l7fmy.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,21 +71,145 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-=C5=9Br., 4 maj 2022 o 21:55 Wolfram Sang <wsa@kernel.org> napisa=C5=82(a):
->
-> On Thu, Apr 28, 2022 at 02:26:51PM +0200, Jan Dabros wrote:
-> > Adjust retry period and timeout values for x86-PSP mailbox based on the
-> > typical I2C traffic generated by PSP. In order to limit the possibility
-> > of timeouts, x86 should reduce the interval between retries as well as
-> > increase overall time after which it gives up.
-> >
-> > Signed-off-by: Jan Dabros <jsd@semihalf.com>
->
-> Applied to for-next, thanks! Let me know if you think this is a bugfix
-> and should be in for-current.
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+> We may convert the GPT driver to use fwnode API for the sake
+> of consistency of the used APIs inside the driver.
 
-Sorry for the late response! I believe this is not necessary to
-include this patch in for-current. Thanks.
+I'm not sure about this one.
 
-Best Regards,
-Jan
+It's more consistent to use fwnode in this driver, but it's very
+inconsistent with the rest of the powerpc code. We have basically no
+uses of the fwnode APIs at the moment.
+
+It seems like a pretty straight-forward conversion, but there could
+easily be a bug in there, I don't have any way to test it. Do you?
+
+cheers
+
+
+
+> diff --git a/arch/powerpc/platforms/52xx/mpc52xx_gpt.c b/arch/powerpc/platforms/52xx/mpc52xx_gpt.c
+> index ae47fdcc8a96..58c3651034bd 100644
+> --- a/arch/powerpc/platforms/52xx/mpc52xx_gpt.c
+> +++ b/arch/powerpc/platforms/52xx/mpc52xx_gpt.c
+> @@ -53,10 +53,9 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+>  #include <linux/list.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+>  #include <linux/mutex.h>
+> -#include <linux/of.h>
+> -#include <linux/of_platform.h>
+> -#include <linux/of_gpio.h>
+>  #include <linux/kernel.h>
+>  #include <linux/property.h>
+>  #include <linux/slab.h>
+> @@ -64,7 +63,7 @@
+>  #include <linux/watchdog.h>
+>  #include <linux/miscdevice.h>
+>  #include <linux/uaccess.h>
+> -#include <linux/module.h>
+> +
+>  #include <asm/div64.h>
+>  #include <asm/mpc52xx.h>
+>  
+> @@ -235,18 +234,17 @@ static const struct irq_domain_ops mpc52xx_gpt_irq_ops = {
+>  	.xlate = mpc52xx_gpt_irq_xlate,
+>  };
+>  
+> -static void
+> -mpc52xx_gpt_irq_setup(struct mpc52xx_gpt_priv *gpt, struct device_node *node)
+> +static void mpc52xx_gpt_irq_setup(struct mpc52xx_gpt_priv *gpt)
+>  {
+>  	int cascade_virq;
+>  	unsigned long flags;
+>  	u32 mode;
+>  
+> -	cascade_virq = irq_of_parse_and_map(node, 0);
+> -	if (!cascade_virq)
+> +	cascade_virq = platform_get_irq(to_platform_device(gpt->dev), 0);
+> +	if (cascade_virq < 0)
+>  		return;
+>  
+> -	gpt->irqhost = irq_domain_add_linear(node, 1, &mpc52xx_gpt_irq_ops, gpt);
+> +	gpt->irqhost = irq_domain_create_linear(dev_fwnode(gpt->dev), 1, &mpc52xx_gpt_irq_ops, gpt);
+>  	if (!gpt->irqhost) {
+>  		dev_err(gpt->dev, "irq_domain_add_linear() failed\n");
+>  		return;
+> @@ -670,8 +668,7 @@ static int mpc52xx_gpt_wdt_init(void)
+>  	return err;
+>  }
+>  
+> -static int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt,
+> -				 const u32 *period)
+> +static int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt, const u32 period)
+>  {
+>  	u64 real_timeout;
+>  
+> @@ -679,14 +676,14 @@ static int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt,
+>  	mpc52xx_gpt_wdt = gpt;
+>  
+>  	/* configure the wdt if the device tree contained a timeout */
+> -	if (!period || *period == 0)
+> +	if (period == 0)
+>  		return 0;
+>  
+> -	real_timeout = (u64) *period * 1000000000ULL;
+> +	real_timeout = (u64)period * 1000000000ULL;
+>  	if (mpc52xx_gpt_do_start(gpt, real_timeout, 0, 1))
+>  		dev_warn(gpt->dev, "starting as wdt failed\n");
+>  	else
+> -		dev_info(gpt->dev, "watchdog set to %us timeout\n", *period);
+> +		dev_info(gpt->dev, "watchdog set to %us timeout\n", period);
+>  	return 0;
+>  }
+>  
+> @@ -697,8 +694,7 @@ static int mpc52xx_gpt_wdt_init(void)
+>  	return 0;
+>  }
+>  
+> -static inline int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt,
+> -					const u32 *period)
+> +static inline int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt, const u32 period)
+>  {
+>  	return 0;
+>  }
+> @@ -726,25 +722,26 @@ static int mpc52xx_gpt_probe(struct platform_device *ofdev)
+>  	dev_set_drvdata(&ofdev->dev, gpt);
+>  
+>  	mpc52xx_gpt_gpio_setup(gpt);
+> -	mpc52xx_gpt_irq_setup(gpt, ofdev->dev.of_node);
+> +	mpc52xx_gpt_irq_setup(gpt);
+>  
+>  	mutex_lock(&mpc52xx_gpt_list_mutex);
+>  	list_add(&gpt->list, &mpc52xx_gpt_list);
+>  	mutex_unlock(&mpc52xx_gpt_list_mutex);
+>  
+>  	/* check if this device could be a watchdog */
+> -	if (of_get_property(ofdev->dev.of_node, "fsl,has-wdt", NULL) ||
+> -	    of_get_property(ofdev->dev.of_node, "has-wdt", NULL)) {
+> -		const u32 *on_boot_wdt;
+> +	if (device_property_present(gpt->dev, "fsl,has-wdt") ||
+> +	    device_property_present(gpt->dev, "has-wdt")) {
+> +		u32 on_boot_wdt = 0;
+> +		int ret;
+>  
+>  		gpt->wdt_mode = MPC52xx_GPT_CAN_WDT;
+> -		on_boot_wdt = of_get_property(ofdev->dev.of_node,
+> -					      "fsl,wdt-on-boot", NULL);
+> -		if (on_boot_wdt) {
+> +		ret = device_property_read_u32(gpt->dev, "fsl,wdt-on-boot", &on_boot_wdt);
+> +		if (ret) {
+> +			dev_info(gpt->dev, "can function as watchdog\n");
+> +		} else {
+>  			dev_info(gpt->dev, "used as watchdog\n");
+>  			gpt->wdt_mode |= MPC52xx_GPT_IS_WDT;
+> -		} else
+> -			dev_info(gpt->dev, "can function as watchdog\n");
+> +		}
+>  		mpc52xx_gpt_wdt_setup(gpt, on_boot_wdt);
+>  	}
+>  
+> -- 
+> 2.35.1
