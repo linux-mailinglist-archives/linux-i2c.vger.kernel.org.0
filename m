@@ -2,44 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3ED4527DA7
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 May 2022 08:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8023527DBB
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 May 2022 08:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236705AbiEPGd0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 16 May 2022 02:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47426 "EHLO
+        id S238502AbiEPGnn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 16 May 2022 02:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236110AbiEPGdZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 May 2022 02:33:25 -0400
-X-Greylist: delayed 415 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 15 May 2022 23:33:23 PDT
-Received: from mout-u-107.mailbox.org (mout-u-107.mailbox.org [IPv6:2001:67c:2050:101:465::107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E162983F
-        for <linux-i2c@vger.kernel.org>; Sun, 15 May 2022 23:33:23 -0700 (PDT)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-u-107.mailbox.org (Postfix) with ESMTPS id 4L1q5V1TT4z9sy0;
-        Mon, 16 May 2022 08:26:22 +0200 (CEST)
-Message-ID: <fe4d398e-978c-6784-e3f6-01b83da3f249@denx.de>
-Date:   Mon, 16 May 2022 08:26:20 +0200
+        with ESMTP id S229568AbiEPGnm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 May 2022 02:43:42 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CF335876;
+        Sun, 15 May 2022 23:43:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1652683421;
+  x=1684219421;
+  h=date:from:to:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=UBLXuJ3x/eQp0h7RffFZ6La9xjLghucU1bkO5zIfwR8=;
+  b=E6wWDmE0XsYIeyYopAjQls833PBad5MWIL0I+04i7EG41kmbR7/sfSKR
+   7WCEagOqsbmvTVRsyzZABhDgYZRLAUXTVtmOspOkNPKHm14sANr1DoQsX
+   fvAIR/J5c/N8vGt5sUIWkx2qBA7XPRCo/qvmMldK32n+fwHmY28jbzWL9
+   gdeG17Txb9xPYGyCJrTVb1zPBLc22fj2ejojJsEibsQr54j25ZKcQrD2F
+   B1i2EjUJcBUOhoindOh3bIywmz2KaKJieH0A3/3RplcvDxa8DkpIwemaI
+   nNZVgGhmH1K9Et+Cciu0mKJRSw5qC0sNFSUmWEcRYEaeMKYsO+U620xJV
+   Q==;
+Date:   Mon, 16 May 2022 08:43:38 +0200
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Wolfram Sang <wsa@kernel.org>, <kernel@axis.com>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <krzk+dt@kernel.org>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: add property to avoid device
+ detection
+Message-ID: <20220516064338.GA28916@axis.com>
+References: <20220412085046.1110127-1-vincent.whitchurch@axis.com>
+ <20220412085046.1110127-2-vincent.whitchurch@axis.com>
+ <Yn+8CJ3j2SY2+Mq+@shikoro>
 MIME-Version: 1.0
-Subject: Re: [PATCH -next v2 1/2] i2c: mt7621: fix missing
- clk_disable_unprepare() on error in mtk_i2c_probe()
-Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Cc:     matthias.bgg@gmail.com, wsa@the-dreams.de,
-        christophe.jaillet@wanadoo.fr
-References: <20220514023148.305457-1-yangyingliang@huawei.com>
-From:   Stefan Roese <sr@denx.de>
-In-Reply-To: <20220514023148.305457-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4L1q5V1TT4z9sy0
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Yn+8CJ3j2SY2+Mq+@shikoro>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,60 +54,12 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 14.05.22 04:31, Yang Yingliang wrote:
-> Fix the missing clk_disable_unprepare() before return
-> from mtk_i2c_probe() in the error handling case.
-> 
-> Fixes: d04913ec5f89 ("i2c: mt7621: Add MediaTek MT7621/7628/7688 I2C driver")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+On Sat, May 14, 2022 at 04:26:16PM +0200, Wolfram Sang wrote:
+> That aside, I am not sure we should handle this at DT level. Maybe we
+> should better change the GPIO driver to not populate a class if we have
+> a firmware node?
 
-Reviewed-by: Stefan Roese <sr@denx.de>
-
-Thanks,
-Stefan
-
-> ---
->     v2: add return 0 in normal path.
-> ---
->   drivers/i2c/busses/i2c-mt7621.c | 10 ++++++++--
->   1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-mt7621.c b/drivers/i2c/busses/i2c-mt7621.c
-> index 45fe4a7fe0c0..901f0fb04fee 100644
-> --- a/drivers/i2c/busses/i2c-mt7621.c
-> +++ b/drivers/i2c/busses/i2c-mt7621.c
-> @@ -304,7 +304,8 @@ static int mtk_i2c_probe(struct platform_device *pdev)
->   
->   	if (i2c->bus_freq == 0) {
->   		dev_warn(i2c->dev, "clock-frequency 0 not supported\n");
-> -		return -EINVAL;
-> +		ret = -EINVAL;
-> +		goto err_disable_clk;
->   	}
->   
->   	adap = &i2c->adap;
-> @@ -322,10 +323,15 @@ static int mtk_i2c_probe(struct platform_device *pdev)
->   
->   	ret = i2c_add_adapter(adap);
->   	if (ret < 0)
-> -		return ret;
-> +		goto err_disable_clk;
->   
->   	dev_info(&pdev->dev, "clock %u kHz\n", i2c->bus_freq / 1000);
->   
-> +	return 0;
-> +
-> +err_disable_clk:
-> +	clk_disable_unprepare(i2c->clk);
-> +
->   	return ret;
->   }
->   
-
-Viele Grüße,
-Stefan Roese
-
--- 
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-51 Fax: (+49)-8142-66989-80 Email: sr@denx.de
+Is it always safe to not do this detection if we have a firmware node?
+Then maybe the core could just always skip it in that case without
+looking for a special property or requiring individual drivers to choose
+what to do?
