@@ -2,77 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3834528344
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 May 2022 13:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2DD528572
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 May 2022 15:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243160AbiEPLbb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 16 May 2022 07:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
+        id S236153AbiEPNe0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 16 May 2022 09:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243193AbiEPLbK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 May 2022 07:31:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B88270E;
-        Mon, 16 May 2022 04:31:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AB2660FEB;
-        Mon, 16 May 2022 11:31:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FD1DC385B8;
-        Mon, 16 May 2022 11:31:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652700668;
-        bh=ZUEmliErSd51RiMCP41XFunKKxEzgbyR6TU1VDmqeFg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OwHwwzsfSzLP0Uce40JHWVOXb60biukmdN90zMYRkS5G9tzrnmYjYUW7T9kRkPIAI
-         vE2lIUrrlFNJBG4JrjnEs55gi5D5ycBEEl7YRix30Qqlkn23RtPftT0VwGey/IeNfm
-         6eF2mgsVxQNwdNmLgkUGQiqhOVJHKmuLiX5pOE39dh3A6GVdOluffWB8cQ4ouVoRvu
-         AEOtc5EOeJMvYJRv1hts3L6KpcRf8bvFSkhQSMRN2Qyb12RUUmQyB1YXEd1UpULbe6
-         XV4wn3zHRRFRRhw4WaNrUhlB5Z4NhDLcL4mQe4tCWp2TCLvbS8IXNVfOsws8kkTZis
-         L66BD/UsAC+jw==
-Date:   Mon, 16 May 2022 17:01:04 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 4/7] dt-bindings: renesas,rcar-dmac: R-Car V3U is R-Car
- Gen4
-Message-ID: <YoI1+HDb9Sr4mWmB@matsya>
-References: <cover.1651497024.git.geert+renesas@glider.be>
- <e6e4cf701f3a43b061b9c3f7f0adc4d6addd4722.1651497024.git.geert+renesas@glider.be>
+        with ESMTP id S232047AbiEPNeZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 May 2022 09:34:25 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DE32E08B
+        for <linux-i2c@vger.kernel.org>; Mon, 16 May 2022 06:34:24 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id t11-20020a17090a6a0b00b001df6f318a8bso1303821pjj.4
+        for <linux-i2c@vger.kernel.org>; Mon, 16 May 2022 06:34:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=8Wiw0YaKHgp2/CNUgU6ftGJizsrvl4U6a/ESGbrf7k8=;
+        b=MDur2QTO4g7JVhtUilqfWkMIg54Mhh/LX86V0xy1WvIYVQRHVki/VNB6W7pV4Usg28
+         x7C7+NxQ8DFHwA7Gd/i0a+YfkkLGwPPMUbXCh4UtFK3cwajNXUrNTSaWxWoqJeGaRAI0
+         g4Ay6XCqhjamVZBN1hhQq1WPReYf+p7xMd4YyqOVJ4nIC/5Z58PIWFkpDoTGN1LOfIoc
+         RodDest2UNvbfQw4oPyq1ZoLF1Ig/xuujB+ZOpBZJohE9PBUdDhuPTR8lpjC6xpfcjWY
+         hKdFyOz+eHm4+j5ppa/c/3y9vXf89lRlDnOHpyQkTEYjFqcamCQBgbd/ulELMV7/VJph
+         hWyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=8Wiw0YaKHgp2/CNUgU6ftGJizsrvl4U6a/ESGbrf7k8=;
+        b=ewdWHlvSmr6JR1uH5ckCSIIs1L46b5u2h98GVrq331aehwsFaLnj9hGoF4CuJHNX1U
+         q3Yg5FY/HpDY1FalBalYon/R55G2wlervI0thyMu2+L3t01pb4kO+8kpqZOha8rTOKZS
+         WbW71W+BFjvZxO8mnRjK5HYXRfmtslDUI8fR2CPqsL4FwRGbVGxOezr4Ki7wc5Cbn0Hz
+         Kgo6iyS/q8Rzg0PRkd98n07BHfmBR1M1Sr62mVdcpOt3AISbc6w14h3tvcgAkibgR7O6
+         Q5hjvvzSg20QhVGKzCQF9Z5igiWo61SKCgIWVfHlk7NzB1AT4Vk/CdqTTMLeTSCf9tvs
+         J29A==
+X-Gm-Message-State: AOAM533TSuPhPRWI3BsXX1DQb/qKNbhnDE3v3h7Q+yMjdXR40AQ56z04
+        vH6Lml0W600uMtwGcuGBjNb8oenU9/KGBER8W/nbGQ==
+X-Google-Smtp-Source: ABdhPJwAKmaGENO0E5Q6WGiICunx/2bCv23XGNqs3kAg4mQcKbWysHi8jhp7hufATZDbT34VFHZtxAOBuF6obNx8QqI=
+X-Received: by 2002:a17:902:b581:b0:161:5f37:6688 with SMTP id
+ a1-20020a170902b58100b001615f376688mr9056984pls.145.1652708063872; Mon, 16
+ May 2022 06:34:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e6e4cf701f3a43b061b9c3f7f0adc4d6addd4722.1651497024.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220428122651.208575-1-jsd@semihalf.com> <YnLaOkzTA1dUrMkc@kunai>
+In-Reply-To: <YnLaOkzTA1dUrMkc@kunai>
+From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
+Date:   Mon, 16 May 2022 15:34:13 +0200
+Message-ID: <CAOtMz3PWNOwTzmLB4d5tmRP5L6zg2ELcth8fd6_8vEEP7+=WoA@mail.gmail.com>
+Subject: Re: [PATCH] i2c: designware: Modify timing parameters for amdpsp mailbox
+To:     Wolfram Sang <wsa@kernel.org>, Jan Dabros <jsd@semihalf.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Raul E Rangel <rrangel@chromium.org>,
+        "Easow, Nimesh" <Nimesh.Easow@amd.com>, upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 02-05-22, 15:34, Geert Uytterhoeven wrote:
-> Despite the name, R-Car V3U is the first member of the R-Car Gen4
-> family.  Hence move its compatible value to the R-Car Gen4 section.
+=C5=9Br., 4 maj 2022 o 21:55 Wolfram Sang <wsa@kernel.org> napisa=C5=82(a):
+>
+> On Thu, Apr 28, 2022 at 02:26:51PM +0200, Jan Dabros wrote:
+> > Adjust retry period and timeout values for x86-PSP mailbox based on the
+> > typical I2C traffic generated by PSP. In order to limit the possibility
+> > of timeouts, x86 should reduce the interval between retries as well as
+> > increase overall time after which it gives up.
+> >
+> > Signed-off-by: Jan Dabros <jsd@semihalf.com>
+>
+> Applied to for-next, thanks! Let me know if you think this is a bugfix
+> and should be in for-current.
 
-Applied, thanks
+Sorry for the late response! I believe this is not necessary to
+include this patch in for-current. Thanks.
 
--- 
-~Vinod
+Best Regards,
+Jan
