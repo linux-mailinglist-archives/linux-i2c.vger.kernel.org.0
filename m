@@ -2,130 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 427A5529668
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 May 2022 03:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B2E529684
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 May 2022 03:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234949AbiEQBBP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 16 May 2022 21:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
+        id S230254AbiEQBGp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 16 May 2022 21:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242167AbiEQBBO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 May 2022 21:01:14 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C035F275DA;
-        Mon, 16 May 2022 18:01:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652749273; x=1684285273;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Wov2LQaQVG/3AxlEqLF0YKuINCkabUjD2lygg5Hs/uo=;
-  b=fT5qgD0WQlF6T9Fn8C0EAQ5dQycc7rJhmUwMD2IMx2c2D5G8ztOBUf2W
-   NKLSYBx2V6xg5Rt7ixeGReAjoeqGbJpJLC16dwo3UDxZlClEV7DAyI+9R
-   0Z94i4QAvO4doqBZqe1NzEVvpgSp+106cpz1c14I/1rT8C2Mo/AcnOKAk
-   AVoX6hq5SFwcEngwI2UC38eMHOuBHBu6uW0jwupzaDM0nOpB2B1xSiYdL
-   Unc5xnnEIIjAKvP4zGypOK9fAZmysLC0huiQaSo+oWfykGnbqmUSs2HWO
-   +dkS7rja3mY+3JgZ6kP7V/hirBx+/m1GXmANEBZOHbkKJxeBGaWxDc8Mc
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="296284238"
-X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
-   d="scan'208";a="296284238"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 18:01:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
-   d="scan'208";a="596817843"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 16 May 2022 18:00:58 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqla6-0000Sd-0v;
-        Tue, 17 May 2022 01:00:58 +0000
-Date:   Tue, 17 May 2022 09:00:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Piyush Malgujar <pmalgujar@marvell.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        sgarapati@marvell.com, sbalcerak@marvell.com, cchavva@marvell.com,
-        Piyush Malgujar <pmalgujar@marvell.com>
-Subject: Re: [PATCH 1/3] drivers: i2c: thunderx: octeontx2 clock divisor
- logic changes
-Message-ID: <202205170856.ko6UxqWi-lkp@intel.com>
-References: <20220511133659.29176-2-pmalgujar@marvell.com>
+        with ESMTP id S243436AbiEQBGK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 May 2022 21:06:10 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D3F26C9;
+        Mon, 16 May 2022 18:06:07 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id t85so17288681vst.4;
+        Mon, 16 May 2022 18:06:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=PqfKXA6ummtQ+loFC+cW0O+uRd4VLSHz2ygvVnQgwiU=;
+        b=EwqkajjvILngo/hPlj2gD1B0kZLe+HqgcsLrswamUj84PjcL8x5fFL8PyyMx/WPQyZ
+         J8y037SO1wFqV7A7t8TRJBitoBuKP+qt+bCSzrhcKo79VN7VsKM3rT8HFAGoV6xlOdf/
+         yeDSi3FJmV84SvF24GORUnCEJij9TXExClyVBx1l481rYPTphONONmk6tr0kI34GlXwp
+         MygAf1aeauH5DfQh10gsfHK8YfpuszVX7RIDU8wIMj2A1rV6/u8dFzNqV4HeHwNFIAxS
+         5oYyRsRYQ2Yg705cfpRhl7bjBDSM2KGSEn3tmrNR7ioSni3NF2DNc/+fumrg2jyGAZvA
+         AYcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PqfKXA6ummtQ+loFC+cW0O+uRd4VLSHz2ygvVnQgwiU=;
+        b=eUtcIRL/e4Ed/4Ni0aCoPPLNlIc6WUippa0glJ+C0z/2rsnF+dfYLODcEsl6li2rHQ
+         wXEeX2b6ih2VaFNHiQ6lNUIiwn2k3w586QBD54ubU1jjTI5ErX+HbyDv7AqBnRmCTnSU
+         3g/A30fZFM5V8FN1MsV2XYoHzt0mura1JRExkeB563P4eK28Lz93hX7UQeulKV73v/ED
+         cnFongLXu0RwByHjAQtVvn78rIDHVrmPan3/UtcWvTsB+WvbEEuBYr1QY9OUGCY06uHf
+         5W5YiFEYgyhSQJPbQTX8VF/bNLutkVE1CrdvB0xa//DmO9wCQWDaXnlNYBc4RLcpskzg
+         S3Lg==
+X-Gm-Message-State: AOAM532eUdG/RjT59Y7CqBiRlhCvGr+WzCoR3mAvo/ZE77UCPzRJPpz8
+        GjwM5Qmds5q4kc/Tk9+RnD8MU7dmuWitSxXZXw==
+X-Google-Smtp-Source: ABdhPJyHd5SN+PJcKF3EF7zTD8roA8ERM0HTQe4FTb7vQj3gof9y61JaQmfxGfW5LVwLF5BKV3X/Dz4+dgmGOzY4HTw=
+X-Received: by 2002:a67:cb98:0:b0:32d:6652:cedb with SMTP id
+ h24-20020a67cb98000000b0032d6652cedbmr7824968vsl.29.1652749566894; Mon, 16
+ May 2022 18:06:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511133659.29176-2-pmalgujar@marvell.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220510091654.8498-1-warp5tw@gmail.com> <20220510091654.8498-3-warp5tw@gmail.com>
+ <YoKqdfLSeJ69WFhi@kunai>
+In-Reply-To: <YoKqdfLSeJ69WFhi@kunai>
+From:   Tyrone Ting <warp5tw@gmail.com>
+Date:   Tue, 17 May 2022 09:05:54 +0800
+Message-ID: <CACD3sJa3koHGsC3PBbfZuBhTfVHhjF=3g3YysxZ0+TvQ1qwfyA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/9] i2c: npcm: Change the way of getting GCR regmap
+To:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <warp5tw@gmail.com>,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
+        semen.protsenko@linaro.org, sven@svenpeter.dev, jsd@semihalf.com,
+        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     krzysztof.kozlowski@canonical.com, jie.deng@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Piyush,
+Hi Wolfram:
 
-Thank you for the patch! Yet something to improve:
+Thank you for your feedback and here is my reply below.
 
-[auto build test ERROR on wsa/i2c/for-next]
-[also build test ERROR on linux/master linus/master v5.18-rc7 next-20220516]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Wolfram Sang <wsa@kernel.org> =E6=96=BC 2022=E5=B9=B45=E6=9C=8817=E6=97=A5 =
+=E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=883:48=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Tue, May 10, 2022 at 05:16:47PM +0800, Tyrone Ting wrote:
+> > From: Tali Perry <tali.perry1@gmail.com>
+> >
+> > Change the way of getting NPCM system manager reigster (GCR)
+> > and still maintain the old mechanism as a fallback if getting
+> > nuvoton,sys-mgr fails while working with the legacy devicetree
+> > file.
+> >
+> > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller dri=
+ver")
+> > Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>
+> Tyrone, your SoB is missing for all patches from Tali.
+>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Piyush-Malgujar/drivers-i2c-thunderx-Marvell-thunderx-i2c-changes/20220511-213853
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-config: mips-randconfig-r025-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170856.ko6UxqWi-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/56654d280f7c130d4f1d78eb8a3fa57fedc86b7b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Piyush-Malgujar/drivers-i2c-thunderx-Marvell-thunderx-i2c-changes/20220511-213853
-        git checkout 56654d280f7c130d4f1d78eb8a3fa57fedc86b7b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+After reviewing these two links, we decided to keep only the author's
+SoB for each commit.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+https://lore.kernel.org/lkml/YiCZlhJoXPLpQ6%2FD@smile.fi.intel.com/
+https://lore.kernel.org/lkml/YiCb7LNY9tmMCZx7@smile.fi.intel.com/
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/i2c/busses/i2c-octeon-platdrv.c:27:
->> drivers/i2c/busses/i2c-octeon-core.h:223:21: error: incomplete definition of type 'struct pci_dev'
-           u32 chip_id = (pdev->subsystem_device >> 12) & 0xF;
-                          ~~~~^
-   include/asm-generic/pci_iomap.h:10:8: note: forward declaration of 'struct pci_dev'
-   struct pci_dev;
-          ^
-   1 error generated.
-
-
-vim +223 drivers/i2c/busses/i2c-octeon-core.h
-
-   213	
-   214	#define PCI_SUBSYS_DEVID_9XXX 0xB
-   215	/**
-   216	 * octeon_i2c_is_otx2 - check for chip ID
-   217	 * @pdev: PCI dev structure
-   218	 *
-   219	 * Returns TRUE if OcteonTX2, FALSE otherwise.
-   220	 */
-   221	static inline bool octeon_i2c_is_otx2(struct pci_dev *pdev)
-   222	{
- > 223		u32 chip_id = (pdev->subsystem_device >> 12) & 0xF;
-   224	
-   225		return (chip_id == PCI_SUBSYS_DEVID_9XXX);
-   226	}
-   227	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards,
+Tyrone
