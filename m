@@ -2,39 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA9552993F
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 May 2022 08:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D9952994F
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 May 2022 08:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232153AbiEQGEX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 May 2022 02:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
+        id S236363AbiEQGJT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 May 2022 02:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbiEQGEW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 May 2022 02:04:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318CA3E5EA;
-        Mon, 16 May 2022 23:04:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3B5061543;
-        Tue, 17 May 2022 06:04:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22F0BC385B8;
-        Tue, 17 May 2022 06:04:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652767460;
-        bh=FgE6LrLuJ3LeyvdaaxAW7dFJk8FTlG8i7HpgFaazl5c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QhDkSXztayy6bs5gf3G4/xyEiLlU5CZzhRwEXzrX24pHhEkIdDn06LO5VIwTuozP+
-         q8yhj+V/mKS36NtDJr8a0+LeE58nFyHFlObbQsJ3wc23P6d+6B2y9vlWNpGw8lxiHB
-         VvUPpV8B8ZhN5dAy/HYlUFva46wrAWZvrRscvw1eF/e9VbyxWoJPH82JuLi/47tUWv
-         PgLUKQWTyBLzHo4emDomwHq+N0jduMwBe+oANXk2RVfPquL5uSVWm6HT/vlaYIpi5V
-         DTg+Np+LPBPDAf0uRxS42t7LUX82JBVG3xaPeVz77dh2vznyXH1Mlg5QfsaVTfyL6N
-         iVIAK65zYkecw==
-Date:   Tue, 17 May 2022 08:04:13 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Tyrone Ting <warp5tw@gmail.com>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        with ESMTP id S231177AbiEQGJS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 May 2022 02:09:18 -0400
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3399537A37;
+        Mon, 16 May 2022 23:09:18 -0700 (PDT)
+Received: by mail-vk1-xa29.google.com with SMTP id y27so8553885vkl.8;
+        Mon, 16 May 2022 23:09:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=X3p/bJpggzYIlRPwptvT4yV9Dv1X4oCHyy6l5VIG8EM=;
+        b=AwPZC/c3Z9TSGTZRgivdf8rrE7Z+UwN+w8JlZlCF+Xg1e0bCfvOvyTnpSE5ve3+Wl8
+         rMYGCZD5m6z2jwvW3Bn1HV1nDLYwWX6/h/0o+GgOvOzQASOebkBEWjUuDyuw9XeWlCjH
+         ehRDXSuDNo0JXNRQ/82tPQ8OBb348SWgJA57PxQST/OE5Sw/ewF+1ld0mZ7gsMRancXy
+         i0SP3xItR4NOphFHCnAv6+7wzZ3rs1P+RVfjmDPCdlfSDmOXp2ylRsfcZ6zOutcWb0ic
+         0j5AMtl/1TgssVjgY22To693SgD3ldeGVx0iPtq4hFt6aq9HuM7qTwebpCaeCXiaMZJw
+         16pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=X3p/bJpggzYIlRPwptvT4yV9Dv1X4oCHyy6l5VIG8EM=;
+        b=s8Dchm7EpI4iboN+wJ21vmqum2lAx3Huht7gHi0SqYlAEOzvg/isRvIuXiiXJuAIeV
+         G25IH6koB3Steui+Pqu3LosJK5IOOxlDkSxMKSARuP0RV01nAXuBFVs64rvNLiya9Ga0
+         R1Atgl7GjuvOU8uNLGt4MiCAFgqleiAtbe4IcyuM3M99z7wVYoVZVcKcW4987HxOFlAb
+         H+vxTSzWcFK9jmhY5KxM5IRpBeWFje70TRU3lLiWG49FXL8os+AI8iFiuDIzjNJHeY4j
+         3ieN9VXtY/e0pqA4cU46RZyi9qLc11ShdS2YrDm53N0KtsQo0l7vq+MNxWZLALGDpZ/M
+         kxHw==
+X-Gm-Message-State: AOAM530wFnHUUfADLHEMjQZb+vIFLZ6OVBjJw8D/wFis+iY95dtFmdeC
+        N/C6jSOw5bDFKRFiQGn5Vfnca7EfeWWSyH8nWw==
+X-Google-Smtp-Source: ABdhPJx31C9WjnaA9Ui9cwwZ1/uZK5DCWJXNtlPrRxpk2SIkz1TMVt6x3UUJ2oy3erDGaLz95TXTNxD5ZEF34kG90kQ=
+X-Received: by 2002:a1f:3254:0:b0:34e:b02d:bdd7 with SMTP id
+ y81-20020a1f3254000000b0034eb02dbdd7mr7928465vky.11.1652767757269; Mon, 16
+ May 2022 23:09:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220510091654.8498-1-warp5tw@gmail.com> <20220510091654.8498-3-warp5tw@gmail.com>
+ <YoKqdfLSeJ69WFhi@kunai> <CACD3sJa3koHGsC3PBbfZuBhTfVHhjF=3g3YysxZ0+TvQ1qwfyA@mail.gmail.com>
+ <YoM63XoYZbFGJ8s7@kunai>
+In-Reply-To: <YoM63XoYZbFGJ8s7@kunai>
+From:   Tyrone Ting <warp5tw@gmail.com>
+Date:   Tue, 17 May 2022 14:09:05 +0800
+Message-ID: <CACD3sJaJbmoR-txb2V3Q=YkKpMD76S4zvF5_5SyVmUkPh9tvMQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/9] i2c: npcm: Change the way of getting GCR regmap
+To:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <warp5tw@gmail.com>,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
@@ -46,79 +66,40 @@ Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, krzysztof.kozlowski@canonical.com,
         jie.deng@intel.com
-Subject: Re: [PATCH v4 2/9] i2c: npcm: Change the way of getting GCR regmap
-Message-ID: <YoM63XoYZbFGJ8s7@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
-        semen.protsenko@linaro.org, sven@svenpeter.dev, jsd@semihalf.com,
-        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
-        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski@canonical.com,
-        jie.deng@intel.com
-References: <20220510091654.8498-1-warp5tw@gmail.com>
- <20220510091654.8498-3-warp5tw@gmail.com>
- <YoKqdfLSeJ69WFhi@kunai>
- <CACD3sJa3koHGsC3PBbfZuBhTfVHhjF=3g3YysxZ0+TvQ1qwfyA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZD0WxnqJMfI4UMfN"
-Content-Disposition: inline
-In-Reply-To: <CACD3sJa3koHGsC3PBbfZuBhTfVHhjF=3g3YysxZ0+TvQ1qwfyA@mail.gmail.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Wolfram:
 
---ZD0WxnqJMfI4UMfN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Got it and thank you for your help.
 
+I'll come up with the new patch set with the corrected SoBs.
 
-> After reviewing these two links, we decided to keep only the author's
-> SoB for each commit.
->=20
-> https://lore.kernel.org/lkml/YiCZlhJoXPLpQ6%2FD@smile.fi.intel.com/
-> https://lore.kernel.org/lkml/YiCb7LNY9tmMCZx7@smile.fi.intel.com/
+Wolfram Sang <wsa@kernel.org> =E6=96=BC 2022=E5=B9=B45=E6=9C=8817=E6=97=A5 =
+=E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=882:04=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+>
+> > After reviewing these two links, we decided to keep only the author's
+> > SoB for each commit.
+> >
+> > https://lore.kernel.org/lkml/YiCZlhJoXPLpQ6%2FD@smile.fi.intel.com/
+> > https://lore.kernel.org/lkml/YiCb7LNY9tmMCZx7@smile.fi.intel.com/
+>
+> When Andy said "chain is wrong", he meant the order. You must add your
+> SoB, otherwise I can't take the patches. But yours should be last. The
+> SoBs need to be in the order people worked on it.
+>
+> Does that make sense to you?
+>
 
-When Andy said "chain is wrong", he meant the order. You must add your
-SoB, otherwise I can't take the patches. But yours should be last. The
-SoBs need to be in the order people worked on it.
-
-Does that make sense to you?
-
-
---ZD0WxnqJMfI4UMfN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKDOtkACgkQFA3kzBSg
-Kba2dQ/8DA/NMvr5xjTQrg+KZeVKu1FP8k7R6RkznvixaWJUaDTuRTuPXcFExLAu
-urIUfpDjZiVWqRQCqBKp2AGAh7yFnZU/V0GAEzhMI6OReamobsqq/TUPFdQ+TAgr
-ronrfnzaCMmjEFNzbZyhrcusCbtL0QczMxa1RIkfRzZSyYscuxVm8Nj8Ypy09r8k
-wd3UU+SHyow27742jNfoSYEVjC2J9r++Qb5ms4bjrW3JvsrTIHvP0FedPDBbJVrt
-fnXeEgOHkX6PYdopvaEVQb8/Dz1D04lgBtkZoqScHC3JHKskbaeNPoWkafRL9oKI
-AHuhRw1zebM82X+UpEfGzZDQprSikW1iKA780VwbI7xiR3ZTWTYPpRzqKayDWT5m
-X8cFQqWiaVXMOK2va2IdQT4hh8A1Y4kRlcV2w7u2Uk+K3qefl7PlN5xK2ysb+9Ij
-srbNuXUjeI0CXDg4CT20eHLiom5uhRQyd0ih8HZtkW+uddWXd/zaTfHxdFbXYUcj
-d/dpYAToxGjFPvyt9bbx8uGTs/NoEiNvTXyvgbCKR3wv9PhfQ0Duq7rPfH1BY1S0
-uNxh4nXMZeviqgx1Qu1ouL+5AJlGDp8hjW+58RzaIhvreLNn1GREPJ8X/s5vf+gb
-MG2K2pIS45sucLXqB5t+vWdYQDQigOx1IOt/x7YtUo2+IRqccVI=
-=71Iy
------END PGP SIGNATURE-----
-
---ZD0WxnqJMfI4UMfN--
+Best Regards,
+Tyrone
