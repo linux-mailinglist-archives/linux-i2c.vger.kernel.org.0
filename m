@@ -2,627 +2,168 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82028529ED9
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 May 2022 12:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DC8529F07
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 May 2022 12:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233900AbiEQKIA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 May 2022 06:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36498 "EHLO
+        id S1343831AbiEQKNO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 May 2022 06:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343542AbiEQKF7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 May 2022 06:05:59 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4F9DEEA
-        for <linux-i2c@vger.kernel.org>; Tue, 17 May 2022 03:05:56 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f8398e99dcso153739217b3.9
-        for <linux-i2c@vger.kernel.org>; Tue, 17 May 2022 03:05:56 -0700 (PDT)
+        with ESMTP id S1343605AbiEQKMl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 May 2022 06:12:41 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C1F1BEA2;
+        Tue, 17 May 2022 03:11:56 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id f10so5017162pjs.3;
+        Tue, 17 May 2022 03:11:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=M7IGpJo20g6qdpbOYNHl9t4OXru5vzejsHQP1oVzQQk=;
-        b=deOgNxB/rPuer4QvR9U4hnJgDoXAEGJnxfeE1gFNycjhT0OgPtZEz2/xRAOkQOuIaJ
-         wRNqZuMVmCH9HOro5GJOygpgw6eNN7VtQ3rzM2rTUQZP0GHbCwR286O89qtwgcAHreTE
-         JkoH3kqLBarEaEyv4scAs7PsQxFNZVwIARLlg4lec3hZ0shoezrzuXMU7lkMDAHkqsuA
-         oAXQ3+2esLbc136NwfTuSB8495k3oQHy0VQPzMk1vzvMA5S3OG44tRu8x8KyX7cpGade
-         wCWp9YBERuz/kkc1mWCqw0huF+nK+4xLXyFxaVv3Pxcj7mPacb3mJsm1Yo+9fZbXZyJr
-         pCCA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZkTRZ6J4nz1IazWIkYQ8lrxwI0vxdTjV3HhYpyhKWHk=;
+        b=DjYDgjgcSC/bcNm05ZGmpgYxI0LcM5bYtSjVab3ShHtq8kCLyIAUC5zpE5oxW9DYiO
+         Sm9NQK4zBAQFEVsBx7Sy3EQkIEBk4N3m7o48lKFLkeUXNyJIIhqCmZOfnCkU91NSV5Zs
+         Rop/S1ljOInPtxQ5b0WW16IsivGyhNRTBuT7tJtZHkTH1LT98OC8vNmuuocKufipHX+k
+         JI8t0Yhdc3Tb8zbfj+JWu/B7zm90p4bds5D0w4VgMG+kynpUeC/T8dnwCbE38Oe4GpCy
+         WxH+Sx7NU2XQbRuI+c5dl6eO9HsTT/Nsn9jGAer2Qp0Ra+UQcUNJVg01nEsZH/N/SrHl
+         9VdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=M7IGpJo20g6qdpbOYNHl9t4OXru5vzejsHQP1oVzQQk=;
-        b=qcJRCM9PR8ZhC2tlqNEbp820WedGX4FnkqGbngX83XS16fs6xO5gNiVDJ7Xnr8o6hj
-         26TERiHGLKeIX3gNaIaWaP+O4gTrOJWwFxT3Rnhbp0q87q6teHkFyWFXPWTJd+43rFba
-         hnUrZlwKFbVmjqrb4yWoCbz3X+k8NskgCcZc5ZCVmcHpUXdUtpzJ/xKRM3hPMWaUx5fV
-         EQiTiqVq4e+Tiatt9NPcYgFGFtI8L5J45EJINtziooNkzDQV8+Ho/TeNuIbCtvDj4Gm9
-         JcD2Iu3/8B3U/o+dXfpm73OP9BFoRZtmI5bf2hsQ7gqP0pgCoKFzYFRO9kwSTZnHqsK3
-         PlWQ==
-X-Gm-Message-State: AOAM532BjFPfItQg/fLd9L9pqVJWYUsIX4yixZBegn6E8ONR9SeoYgkY
-        WEY0WyKGSS0o0Ua6YzKAeQQld6iiVxlV
-X-Google-Smtp-Source: ABdhPJx/Cp/IQu7Vjz5N3Z2e6+GlNi/+LhE6bPQVUpKyx2EvX+4JbVqOwD1tvTBbTRJiZfRn0O8AUi3P3UF+
-X-Received: from suichen.svl.corp.google.com ([2620:15c:2c5:13:ae7d:134a:180d:9b32])
- (user=suichen job=sendgmr) by 2002:a25:cd07:0:b0:64d:6cb9:7d88 with SMTP id
- d7-20020a25cd07000000b0064d6cb97d88mr14280136ybf.184.1652781956057; Tue, 17
- May 2022 03:05:56 -0700 (PDT)
-Date:   Tue, 17 May 2022 03:05:05 -0700
-In-Reply-To: <20220517100505.2569874-1-suichen@google.com>
-Message-Id: <20220517100505.2569874-2-suichen@google.com>
-Mime-Version: 1.0
-References: <20220517100505.2569874-1-suichen@google.com>
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [RFC Patch v5 1/1] i2c debug counters as sysfs attributes
-From:   Sui Chen <suichen@google.com>
-To:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        wsa@kernel.org, openbmc@lists.ozlabs.org, tali.perry1@gmail.com
-Cc:     joel@jms.id.au, andrew@aj.id.au, benjaminfair@google.com,
-        krellan@google.com, Sui Chen <suichen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZkTRZ6J4nz1IazWIkYQ8lrxwI0vxdTjV3HhYpyhKWHk=;
+        b=zC25wME6rkbmpKJ5b4POm6Q8W64nrAW/aUxiEPlVcjw7gZ6BtrfV5QRFpK6ivpV+ag
+         2KHP5pqKn1LF6mWCY1WWESLEF+KPKxJSyJB2Ad/Cpjj8UYBgN9GERaMTe1GBHijpGBhX
+         ssuuidmyxhYQWlKPOWlCmXuHywimFOjys4XO5xUpa+huIIvIxX45ec7RW15lP8SQKQXV
+         VtWimBS/NS0RcI3zSvf5FO4feC2J0AztubmhTNslwmzOjOrsNxsnywHx6cNM/INP1WOW
+         qHF9F42pZ0GvmhtIAANh6SwHclwqlzCpBED1U7/3qyl1eVUIOXdcw/NQWTqH2NAMrh+o
+         BIaw==
+X-Gm-Message-State: AOAM533hLni6Z8uMaEou1e7G5Qget1DuQv4J7P6FVsQhH5Rcd/pjo2xm
+        nKbS4OW1zyhPMdyjtiVtlQ==
+X-Google-Smtp-Source: ABdhPJz/YlKbVfMuxNEm3/Q/9AoIqoclOeyZ0WODTabygG6G1k89loa6G3yO1f/dYGhlI60zatr2Kg==
+X-Received: by 2002:a17:902:b58b:b0:15f:4421:ba5e with SMTP id a11-20020a170902b58b00b0015f4421ba5emr21280278pls.103.1652782315720;
+        Tue, 17 May 2022 03:11:55 -0700 (PDT)
+Received: from localhost (220-133-130-217.hinet-ip.hinet.net. [220.133.130.217])
+        by smtp.gmail.com with ESMTPSA id h188-20020a62dec5000000b0050dc762816esm8478832pfg.72.2022.05.17.03.11.55
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 17 May 2022 03:11:55 -0700 (PDT)
+From:   Tyrone Ting <warp5tw@gmail.com>
+To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        wsa@kernel.org, andriy.shevchenko@linux.intel.com,
+        jarkko.nikula@linux.intel.com, semen.protsenko@linaro.org,
+        rafal@milecki.pl, sven@svenpeter.dev, jsd@semihalf.com,
+        jie.deng@intel.com, lukas.bulwahn@gmail.com, arnd@arndb.de,
+        olof@lixom.net, warp5tw@gmail.com, tali.perry@nuvoton.com,
+        Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
+        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com
+Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 00/10] i2c: npcm: Bug fixes timeout, spurious interrupts
+Date:   Tue, 17 May 2022 18:11:32 +0800
+Message-Id: <20220517101142.28421-1-warp5tw@gmail.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This change renames the I2C debug counters as suggested, and makes them
-available to i2c_adapter's and i2c_client's:
+From: Tyrone Ting <kfting@nuvoton.com>
 
- - bus_errors
- - transfers (only applicable to i2c_adapter)
- - messages (only applicable to i2c_client)
- - nacks
- - timeouts
- - recovery_successes (only applicable to i2c_adapter)
- - recovery_failures (only applicable to i2c_adapter)
+This patchset includes the following fixes:
 
-The above stats are located in the sysfs path "stats". The kobj for
-"stats" for a i2c-device or an i2c-adapter are added as children of
-the device's and adapter's kobj.
+- Add dt-bindings description for NPCM845.
+- Bug fix for timeout calculation.
+- Better handling of spurious interrupts.
+- Fix for event type in slave mode.
+- Removal of own slave addresses [2:10].
+- Support for next gen BMC (NPCM845).
 
-Did some quick tests with QEMU using a program that saves/replays I2C
-trace by reading hwmon sensors (the program is located at
-https://gerrit.openbmc-project.xyz/c/openbmc/openbmc-tools/+/52527)
+The NPCM I2C driver is tested on NPCM750 and NPCM845 evaluation boards.
 
-(normal read)
-root@gsj:~# cat /sys/class/i2c-adapter/i2c-1/stats/{transfers,nacks}\
-/sys/class/i2c-adapter/i2c-1/1-005c/stats/{messages,nacks} && \
-sleep 1 && ./i2c_bmk_bmc 0
-46
-0
-92
-0
-/sys/class/hwmon/hwmon0/temp1_input: 0
-[FindTraceEntries] t0=111.000000 t1=113.000000
-Found 4 interesting I2C trace entries:
- i2c_write: i2c-1 #0 a=05c f=0000 l=1 [00]
- i2c_read: i2c-1 #1 a=05c f=0001 l=2
- i2c_reply: i2c-1 #1 a=05c f=0001 l=2 [00-00]
- i2c_result: i2c-1 n=2 ret=2
+Addressed comments from:
+ - Krzysztof Kozlowski : https://www.spinics.net/lists/linux-i2c/
+   msg56795.html
+ - Andy Shevchenko : https://lkml.org/lkml/2022/5/10/297
+ - Wolfram Sang : https://lkml.org/lkml/2022/5/17/38
+ - Andy Shevchenko : https://lkml.org/lkml/2022/5/10/306
+ - Andy Shevchenko : https://lkml.org/lkml/2022/5/10/309
 
-root@gsj:~# cat /sys/class/i2c-adapter/i2c-1/stats/{transfers,nacks} \
-/sys/class/i2c-adapter/i2c-1/1-005c/stats/{messages,nacks}
-47  <-- 1 more transfer on i2c-1
-0
-94  <-- 2 more messages sent to 1-005c
-0
+Changes since version 4:
+ - Remove quotes around ref handle to nuvoton,sys-mgr in i2c binding
+   document.
+ - Keep the "longer line first" order.
+ - Correct the SoB chain.
+ - Modify the if statement in one line and add new line characters.
+ - Modify the commit message format in the patch Remove own slave
+   addresses 2:10. Correct the if statement in one line and shorten the
+   debug messages.
+ - Create a new patch to capitalize the one-line comment in the driver.
 
-(deliberately nack)
-root@gsj:~# sleep 1 && ./i2c_bmk_bmc 0
-(injects 1 NACK using QEMU)
-/sys/class/hwmon/hwmon0/temp1_input: 0
-[FindTraceEntries] t0=116.000000 t1=118.000000
-Found 3 interesting I2C trace entries:
- i2c_write: i2c-1 #0 a=05c f=0000 l=1 [00]
- i2c_read: i2c-1 #1 a=05c f=0001 l=2
- i2c_result: i2c-1 n=2 ret=-6
+Changes since version 3:
+ - Correct the const format in if condition in i2c binding document.
+ - Add the oops message statement and register information in register
+   access width patch.
+ - Add the occurring rate of the i2c spurious interrupt issue and more
+   details in driver's behavior to overcome this issue.
+ - Address Andy's comments in the patch to support NPCM845.
+ 
+Changes since version 2:
+ - Keep old code as fallback, if getting nuvoton,sys-mgr property fails.
+ - Fix the error reported by running 'make DT_CHECKER_FLAGS=-m 
+   dt_binding_check'.
+ - Make nuvoton,sys-mgr required for nuvoton,npcm845-i2c.
+ - Correct the patch's subject about changing the way of getting GCR
+   regmap and add the description about keeping old code as fallback
+   if getting nuvoton,sys-mgr property fails.
+ - Correct the patch title and description about removing the unused 
+   variable clk_regmap.
+ - Use the data field directly instead of the macros since macros are
+   not constants anymore in this patch.
+ 
+Changes since version 1:
+ - Add nuvoton,sys-mgr property in NPCM devicetree.
+ - Describe the commit message in imperative mood.
+ - Modify the description in i2c binding document to cover NPCM series.
+ - Add new property in i2c binding document.
+ - Create a new patch for client address calculation.
+ - Create a new patch for updating gcr property name.
+ - Create a new patch for removing unused clock node.
+ - Explain EOB in the commit description.
+ - Create a new patch for correcting NPCM register access width.
+ - Remove some comment since the corresponding logic no longer exists.
+ - Remove fixes tag while the patch adds an additional feature.
+ - Use devicetree data field to support NPCM845.
 
-root@gsj:~# cat /sys/class/i2c-adapter/i2c-1/stats/{transfers,nacks} \
-/sys/class/i2c-adapter/i2c-1/1-005c/stats/{messages,nacks}
-47
-1   <-- 1 more NACK on i2c-1
-94
-1   <-- 1 more NACK attributed to 1-005c
+Tali Perry (6):
+  i2c: npcm: Change the way of getting GCR regmap
+  i2c: npcm: Remove unused variable clk_regmap
+  i2c: npcm: Fix timeout calculation
+  i2c: npcm: Add tx complete counter
+  i2c: npcm: Handle spurious interrupts
+  i2c: npcm: Remove own slave addresses 2:10
 
-Signed-off-by: Sui Chen <suichen@google.com>
----
- drivers/i2c/i2c-core-base.c | 240 +++++++++++++++++++++++++++++++++++-
- drivers/i2c/i2c-dev.c       |  94 ++++++++++++++
- include/linux/i2c.h         |  41 ++++++
- 3 files changed, 374 insertions(+), 1 deletion(-)
+Tyrone Ting (4):
+  dt-bindings: i2c: npcm: support NPCM845
+  i2c: npcm: Correct register access width
+  i2c: npcm: Support NPCM845
+  i2c: npcm: Capitalize the one-line comment
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 84f12bf90644..4e7bd849f127 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -270,11 +270,22 @@ EXPORT_SYMBOL_GPL(i2c_generic_scl_recovery);
- 
- int i2c_recover_bus(struct i2c_adapter *adap)
- {
-+	if (!adap->stats)
-+		i2c_adapter_create_stats_directory(adap);
-+
- 	if (!adap->bus_recovery_info)
- 		return -EBUSY;
- 
- 	dev_dbg(&adap->dev, "Trying i2c bus recovery\n");
--	return adap->bus_recovery_info->recover_bus(adap);
-+	int ret = adap->bus_recovery_info->recover_bus(adap);
-+
-+	if (ret == 0)
-+		++(adap->stats->recovery_successes);
-+	else
-+		++(adap->stats->recovery_failures);
-+
-+	return ret;
-+
- }
- EXPORT_SYMBOL_GPL(i2c_recover_bus);
- 
-@@ -993,6 +1004,78 @@ int i2c_dev_irq_from_resources(const struct resource *resources,
- 	return 0;
- }
- 
-+ssize_t i2c_client_stats_messages_show(struct kobject *kobj, struct kobj_attribute *addr,
-+				       char *buf)
-+{
-+	return sysfs_emit(buf, "%llu\n",
-+		container_of(kobj, struct i2c_client_stats, kobj)->messages);
-+}
-+
-+struct kobj_attribute i2c_client_stats_messages_attr = {
-+	.attr = { .name = "messages", .mode = 0444 },
-+	.show = i2c_client_stats_messages_show,
-+};
-+
-+ssize_t i2c_client_stats_bus_errors_show(struct kobject *kobj, struct kobj_attribute *addr,
-+					 char *buf)
-+{
-+	return sysfs_emit(buf, "%llu\n",
-+		container_of(kobj, struct i2c_client_stats, kobj)->bus_errors);
-+}
-+
-+struct kobj_attribute i2c_client_stats_bus_errors_attr = {
-+	.attr = { .name = "bus_errors", .mode = 0444 },
-+	.show = i2c_client_stats_bus_errors_show,
-+};
-+
-+ssize_t i2c_client_stats_nacks_show(struct kobject *kobj, struct kobj_attribute *addr,
-+				    char *buf)
-+{
-+	return sysfs_emit(buf, "%llu\n",
-+		container_of(kobj, struct i2c_client_stats, kobj)->nacks);
-+}
-+
-+struct kobj_attribute i2c_client_stats_nacks_attr = {
-+	.attr = { .name = "nacks", .mode = 0444 },
-+	.show = i2c_client_stats_nacks_show,
-+};
-+
-+ssize_t i2c_client_stats_timeouts_show(struct kobject *kobj, struct kobj_attribute *addr,
-+				       char *buf)
-+{
-+	return sysfs_emit(buf, "%llu\n",
-+		container_of(kobj, struct i2c_client_stats, kobj)->timeouts);
-+}
-+
-+struct kobj_attribute i2c_client_stats_timeouts_attr = {
-+	.attr = { .name = "timeouts", .mode = 0444 },
-+	.show = i2c_client_stats_timeouts_show,
-+};
-+
-+static struct attribute *i2c_client_stats_attrs[] = {
-+	&i2c_client_stats_messages_attr.attr,
-+	&i2c_client_stats_bus_errors_attr.attr,
-+	&i2c_client_stats_nacks_attr.attr,
-+	&i2c_client_stats_timeouts_attr.attr,
-+	NULL
-+};
-+
-+static struct kobj_type i2c_client_stats_ktype = {
-+	.sysfs_ops = &kobj_sysfs_ops,
-+	.default_attrs = i2c_client_stats_attrs,
-+};
-+
-+/**
-+ * Functions for maintaining the adapter -> client stats lookup structure
-+ */
-+static struct i2c_client_stats *__get_i2c_client_stats(struct i2c_adapter_stats *stats,
-+						       int i2c_addr);
-+static void __insert_i2c_client_stats(struct i2c_adapter_stats *stats,
-+				      struct i2c_client_stats *client_stats,
-+				      int i2c_addr);
-+static void __remove_i2c_client_stats(struct i2c_adapter_stats *stats, int i2c_addr);
-+static int __count_i2c_client_stats(struct i2c_adapter_stats *stats);
-+
- /**
-  * i2c_new_client_device - instantiate an i2c device
-  * @adap: the adapter managing the device
-@@ -1014,6 +1097,7 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
- {
- 	struct i2c_client	*client;
- 	int			status;
-+	struct i2c_client_stats *client_stats;
- 
- 	client = kzalloc(sizeof *client, GFP_KERNEL);
- 	if (!client)
-@@ -1069,6 +1153,20 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
- 	dev_dbg(&adap->dev, "client [%s] registered with bus id %s\n",
- 		client->name, dev_name(&client->dev));
- 
-+	client_stats = kzalloc(sizeof(*client_stats), GFP_KERNEL);
-+	client->stats = client_stats;
-+	client_stats->address = info->addr;
-+
-+	kobject_init_and_add(&client_stats->kobj, &i2c_client_stats_ktype,
-+			     &client->dev.kobj, "stats");
-+
-+	if (!adap->stats)
-+		i2c_adapter_create_stats_directory(adap);
-+
-+	__insert_i2c_client_stats(adap->stats, client_stats, info->addr);
-+	dev_info(&adap->dev, "Added i2c_client_stats, adapter has %d client stats now",
-+		 __count_i2c_client_stats(adap->stats));
-+
- 	return client;
- 
- out_remove_swnode:
-@@ -1103,6 +1201,12 @@ void i2c_unregister_device(struct i2c_client *client)
- 	if (ACPI_COMPANION(&client->dev))
- 		acpi_device_clear_enumerated(ACPI_COMPANION(&client->dev));
- 	device_remove_software_node(&client->dev);
-+
-+	__remove_i2c_client_stats(client->adapter->stats, client->addr);
-+	dev_info(&client->adapter->dev, "Removed i2c_client_stats, adapter has %d client stats now",
-+		 __count_i2c_client_stats(client->adapter->stats));
-+	kfree(client->stats);
-+
- 	device_unregister(&client->dev);
- }
- EXPORT_SYMBOL_GPL(i2c_unregister_device);
-@@ -2176,6 +2280,8 @@ int __i2c_transfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
- {
- 	unsigned long orig_jiffies;
- 	int ret, try;
-+	int i, j, addr;
-+	struct i2c_client_stats *cs;
- 
- 	if (WARN_ON(!msgs || num < 1))
- 		return -EINVAL;
-@@ -2223,6 +2329,50 @@ int __i2c_transfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
- 		trace_i2c_result(adap, num, ret);
- 	}
- 
-+	// Per-adapter I2C stats
-+	if (!adap->stats)
-+		i2c_adapter_create_stats_directory(adap);
-+	if (ret < 0) {
-+		if (ret == -ENXIO)
-+			++(adap->stats->nacks);
-+		else if (ret == -ETIMEDOUT)
-+			++(adap->stats->timeouts);
-+		else
-+			++(adap->stats->bus_errors);
-+	} else if (num > 0) {
-+		++(adap->stats->transfers);
-+	}
-+
-+	// Per-address I2C stats
-+	// If no errors, incerement the message count per client
-+	if (ret >= 0) {
-+		for (i = 0; i < ret; ++i) {
-+			addr = msgs[i].addr;
-+			cs = __get_i2c_client_stats(adap->stats, addr);
-+			if (!cs)  // For muxed devices, their stats are at the leaf level
-+				continue;
-+			if (num > 0)
-+				++(cs->messages);
-+		}
-+	} else {  // Otherwise, attribute the error to each of the distinct addresses
-+		for (i = 0; i < num; ++i) {
-+			for (j = 0; j < i; ++j) {  // de-duplicate
-+				if (msgs[i].addr == msgs[j].addr)
-+					goto done;
-+			}
-+			cs = __get_i2c_client_stats(adap->stats, msgs[i].addr);
-+			if (!cs)
-+				continue;
-+			if (ret == -ENXIO)
-+				++(cs->nacks);
-+			else if (ret == -ETIMEDOUT)
-+				++(cs->timeouts);
-+			else
-+				++(cs->bus_errors);
-+done:
-+			{}
-+		}
-+	}
- 	return ret;
- }
- EXPORT_SYMBOL(__i2c_transfer);
-@@ -2619,6 +2769,94 @@ void i2c_put_dma_safe_msg_buf(u8 *buf, struct i2c_msg *msg, bool xferred)
- }
- EXPORT_SYMBOL_GPL(i2c_put_dma_safe_msg_buf);
- 
-+static struct i2c_client_stats *__get_i2c_client_stats(struct i2c_adapter_stats *stats,
-+						       int i2c_addr)
-+{
-+	int addr;
-+	struct rb_node *n, *parent;
-+	struct i2c_client_stats_rbnode *cs_node;
-+
-+	n = stats->i2c_client_stats_root.rb_node;
-+	parent = NULL;
-+	while (n) {
-+		parent = n;
-+		cs_node = rb_entry(parent, struct i2c_client_stats_rbnode, rb_node);
-+		addr = cs_node->stats->address;
-+		if (addr > i2c_addr)
-+			n = n->rb_left;
-+		else if (addr < i2c_addr)
-+			n = n->rb_right;
-+		else
-+			return cs_node->stats;
-+	}
-+	return NULL;
-+}
-+
-+static void __insert_i2c_client_stats(struct i2c_adapter_stats *stats,
-+				      struct i2c_client_stats *client_stats, int i2c_addr)
-+{
-+	char buf[32];
-+	int ret, addr;
-+	struct rb_node **link, *parent;
-+	struct i2c_client_stats_rbnode *cs_node;
-+
-+	ret = 1;
-+	link = &stats->i2c_client_stats_root.rb_node;
-+	parent = NULL;
-+	while (*link) {
-+		parent = *link;
-+		cs_node = rb_entry(parent, struct i2c_client_stats_rbnode, rb_node);
-+		addr = cs_node->stats->address;
-+		if (addr > i2c_addr)
-+			link = &(*link)->rb_left;
-+		else if (addr < i2c_addr)
-+			link = &(*link)->rb_right;
-+		else
-+			return; // Already exists
-+	}
-+
-+	cs_node = kzalloc(sizeof(*cs_node), GFP_KERNEL);
-+
-+	cs_node->stats = client_stats;
-+	rb_link_node(&cs_node->rb_node, parent, link);
-+	rb_insert_color(&cs_node->rb_node, &stats->i2c_client_stats_root);
-+}
-+
-+static void __remove_i2c_client_stats(struct i2c_adapter_stats *stats, int i2c_addr)
-+{
-+	int addr;
-+	struct rb_node *n, *parent;
-+	struct i2c_client_stats_rbnode *cs_node;
-+
-+	n = stats->i2c_client_stats_root.rb_node;
-+	parent = NULL;
-+	while (n) {
-+		parent = n;
-+		cs_node = rb_entry(parent, struct i2c_client_stats_rbnode, rb_node);
-+		addr = cs_node->stats->address;
-+		if (addr > i2c_addr) {
-+			n = n->rb_left;
-+		} else if (addr < i2c_addr) {
-+			n = n->rb_right;
-+		} else {
-+			rb_erase(&cs_node->rb_node, &stats->i2c_client_stats_root);
-+			return;
-+		}
-+	}
-+}
-+
-+static int __count_i2c_client_stats(struct i2c_adapter_stats *stats)
-+{
-+	struct rb_node *n = stats->i2c_client_stats_root.rb_node;
-+	int ret = 0;
-+
-+	while (n) {
-+		++ret;
-+		n = rb_next(n);
-+	}
-+	return ret;
-+}
-+
- MODULE_AUTHOR("Simon G. Vogl <simon@tk.uni-linz.ac.at>");
- MODULE_DESCRIPTION("I2C-Bus main module");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
-index 77f576e51652..50141dd42796 100644
---- a/drivers/i2c/i2c-dev.c
-+++ b/drivers/i2c/i2c-dev.c
-@@ -767,6 +767,100 @@ static void __exit i2c_dev_exit(void)
- 	unregister_chrdev_region(MKDEV(I2C_MAJOR, 0), I2C_MINORS);
- }
- 
-+static struct i2c_adapter *kobj_to_adapter(struct device *pdev)
-+{
-+	struct kobject *dev_kobj;
-+	struct device *dev;
-+
-+	dev_kobj = ((struct kobject *)pdev)->parent;
-+	dev = container_of(dev_kobj, struct device, kobj);
-+	return to_i2c_adapter(dev);
-+}
-+
-+ssize_t bus_errors_show(struct device *pdev,
-+			struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%llu\n", kobj_to_adapter(pdev)->stats->bus_errors);
-+}
-+DEVICE_ATTR_RO(bus_errors);
-+
-+ssize_t transfers_show(struct device *pdev,
-+		       struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%llu\n", kobj_to_adapter(pdev)->stats->transfers);
-+}
-+DEVICE_ATTR_RO(transfers);
-+
-+ssize_t nacks_show(struct device *pdev,
-+		   struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%llu\n", kobj_to_adapter(pdev)->stats->nacks);
-+}
-+DEVICE_ATTR_RO(nacks);
-+
-+ssize_t recovery_successes_show(struct device *pdev,
-+				struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%llu\n", kobj_to_adapter(pdev)->stats->recovery_successes);
-+}
-+DEVICE_ATTR_RO(recovery_successes);
-+
-+ssize_t recovery_failures_show(struct device *pdev,
-+			       struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%llu\n", kobj_to_adapter(pdev)->stats->recovery_failures);
-+}
-+DEVICE_ATTR_RO(recovery_failures);
-+
-+ssize_t timeouts_show(struct device *pdev,
-+		      struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%llu\n", kobj_to_adapter(pdev)->stats->timeouts);
-+}
-+DEVICE_ATTR_RO(timeouts);
-+
-+/**
-+ * i2c_adapter_create_stats_directory - creates folder for I2C statistics.
-+ * @adapter: the i2c_adapter to create the stats directory for.
-+ *
-+ * Return: 0 if successful, 1 if failed.
-+ */
-+int i2c_adapter_create_stats_directory(struct i2c_adapter *adapter)
-+{
-+	struct i2c_adapter_stats *stats;
-+	int ret = 1;
-+
-+	stats = kzalloc(sizeof(*stats), GFP_KERNEL);
-+	if (!stats) {
-+		adapter->stats = NULL;
-+		return ret;
-+	}
-+	adapter->stats = stats;
-+	adapter->stats->kobj = kobject_create_and_add("stats", &adapter->dev.kobj);
-+
-+	ret = sysfs_create_file(adapter->stats->kobj, &dev_attr_transfers.attr);
-+	if (ret)
-+		dev_warn(&adapter->dev, "Failed to create sysfs file for tx_complete_cnt\n");
-+
-+	ret = sysfs_create_file(adapter->stats->kobj, &dev_attr_bus_errors.attr);
-+	if (ret)
-+		dev_warn(&adapter->dev, "Failed to create sysfs file for bus_errors\n");
-+
-+	ret = sysfs_create_file(adapter->stats->kobj, &dev_attr_nacks.attr);
-+	if (ret)
-+		dev_warn(&adapter->dev, "Failed to create sysfs file for nacks\n");
-+
-+	ret = sysfs_create_file(adapter->stats->kobj, &dev_attr_recovery_successes.attr);
-+	if (ret)
-+		dev_warn(&adapter->dev, "Failed to create sysfs file for recovery_successes\n");
-+
-+	ret = sysfs_create_file(adapter->stats->kobj, &dev_attr_recovery_failures.attr);
-+	if (ret)
-+		dev_warn(&adapter->dev, "Failed to create sysfs file for recovery_failures\n");
-+
-+	return ret;
-+}
-+
- MODULE_AUTHOR("Frodo Looijaard <frodol@dds.nl>");
- MODULE_AUTHOR("Simon G. Vogl <simon@tk.uni-linz.ac.at>");
- MODULE_DESCRIPTION("I2C /dev entries driver");
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 3eb60a2e9e61..4547c4c782b6 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -20,6 +20,7 @@
- #include <linux/irqdomain.h>		/* for Host Notify IRQ */
- #include <linux/of.h>		/* for struct device_node */
- #include <linux/swab.h>		/* for swab16 */
-+#include <linux/rbtree.h>
- #include <uapi/linux/i2c.h>
- 
- extern struct bus_type i2c_bus_type;
-@@ -297,6 +298,20 @@ struct i2c_driver {
- };
- #define to_i2c_driver(d) container_of(d, struct i2c_driver, driver)
- 
-+int i2c_adapter_create_stats_directory(struct i2c_adapter *adapter);
-+
-+void i2c_adapter_stats_register_counter(struct i2c_adapter *adapter,
-+					const char *counter_name, void *data_source);
-+
-+struct i2c_client_stats {
-+	struct kobject kobj;
-+	int address;
-+	u64 messages;
-+	u64 bus_errors;
-+	u64 nacks;
-+	u64 timeouts;
-+};
-+
- /**
-  * struct i2c_client - represent an I2C slave device
-  * @flags: see I2C_CLIENT_* for possible flags
-@@ -342,6 +357,7 @@ struct i2c_client {
- 	i2c_slave_cb_t slave_cb;	/* callback for slave mode	*/
- #endif
- 	void *devres_group_id;		/* ID of probe devres group	*/
-+	struct i2c_client_stats *stats; /* i2c client stats             */
- };
- #define to_i2c_client(d) container_of(d, struct i2c_client, dev)
- 
-@@ -684,6 +700,30 @@ struct i2c_adapter_quirks {
- 	u16 max_comb_2nd_msg_len;
- };
- 
-+/**
-+ * I2C adapter statistics
-+ */
-+struct i2c_adapter_stats {
-+	struct kobject *kobj;
-+
-+	u64 transfers;
-+	u64 bus_errors;
-+	u64 nacks;
-+	u64 recovery_successes;
-+	u64 recovery_failures;
-+	u64 timeouts;
-+
-+	struct rb_root i2c_client_stats_root;
-+};
-+
-+struct i2c_client_stats_rbnode {
-+	struct i2c_client_stats *stats;
-+	struct rb_node rb_node;
-+};
-+
-+struct i2c_client_stats *__get_or_create_i2c_client_stats(struct i2c_adapter_stats *stats,
-+							  int i2c_addr);
-+
- /* enforce max_num_msgs = 2 and use max_comb_*_len for length checks */
- #define I2C_AQ_COMB			BIT(0)
- /* first combined message must be write */
-@@ -738,6 +778,7 @@ struct i2c_adapter {
- 
- 	struct irq_domain *host_notify_domain;
- 	struct regulator *bus_regulator;
-+	struct i2c_adapter_stats *stats;
- };
- #define to_i2c_adapter(d) container_of(d, struct i2c_adapter, dev)
- 
+ .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     |  25 +-
+ drivers/i2c/busses/Kconfig                    |   8 +-
+ drivers/i2c/busses/Makefile                   |   2 +-
+ drivers/i2c/busses/i2c-npcm7xx.c              | 277 +++++++++++-------
+ 4 files changed, 194 insertions(+), 118 deletions(-)
+
 -- 
-2.36.0.550.gb090851708-goog
+2.17.1
 
