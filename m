@@ -2,69 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F503529561
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 May 2022 01:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 427A5529668
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 May 2022 03:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350405AbiEPXjS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 16 May 2022 19:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
+        id S234949AbiEQBBP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 16 May 2022 21:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350404AbiEPXjQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 May 2022 19:39:16 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBFF42EFE;
-        Mon, 16 May 2022 16:39:13 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L2G166yl7z4xZ2;
-        Tue, 17 May 2022 09:39:06 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1652744351;
-        bh=shMAgr3KnLfduKB2nfq7HCfF2fOXsMLLY0bGSFIz4Ms=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=QLY2t/FKtddLoKYu8LG0sSKbrlIDbQb907F8fJRC5dkfgoQ4VcE8ZYWVwVOoK7EM4
-         xzfu8+So2JKiaEzF7GSQJ9gueS9zaiy8W0ZSlhez0VFXy4Wb0j8KP+yhCabzAY1A+C
-         0FgNnaqMk20UWxmOM3R6jumDaJQD3hLDqa2kTOU3pR8ceSVpLscdB0G74mWPjxfypW
-         1YbJXhatDs5+BG95Jjxs9mw7zFQliQ6Q027nffmAN+9od+JVIb8Te0z/N9Z2mv7B/v
-         RTBKi84QByAmv5PC2z6tmhRB7b8jCnaApdBNfdiJ8XpCmLW2Ws4btTP6KU81mSwIaj
-         LQs8XWcGd88vg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Mark Brown <broonie@kernel.org>,
-        chris.packham@alliedtelesis.co.nz,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Anatolij Gustschin <agust@denx.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pantelis Antoniou <pantelis.antoniou@gmail.com>
-Subject: Re: [PATCH v2 4/4] powerpc/52xx: Convert to use fwnode API
-In-Reply-To: <YoJbaTNJFV2A1Etw@smile.fi.intel.com>
-References: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
- <20220507100147.5802-4-andriy.shevchenko@linux.intel.com>
- <877d6l7fmy.fsf@mpe.ellerman.id.au> <YoJaGGwfoSYhaT13@smile.fi.intel.com>
- <YoJbaTNJFV2A1Etw@smile.fi.intel.com>
-Date:   Tue, 17 May 2022 09:38:56 +1000
-Message-ID: <874k1p6oa7.fsf@mpe.ellerman.id.au>
+        with ESMTP id S242167AbiEQBBO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 May 2022 21:01:14 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C035F275DA;
+        Mon, 16 May 2022 18:01:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652749273; x=1684285273;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Wov2LQaQVG/3AxlEqLF0YKuINCkabUjD2lygg5Hs/uo=;
+  b=fT5qgD0WQlF6T9Fn8C0EAQ5dQycc7rJhmUwMD2IMx2c2D5G8ztOBUf2W
+   NKLSYBx2V6xg5Rt7ixeGReAjoeqGbJpJLC16dwo3UDxZlClEV7DAyI+9R
+   0Z94i4QAvO4doqBZqe1NzEVvpgSp+106cpz1c14I/1rT8C2Mo/AcnOKAk
+   AVoX6hq5SFwcEngwI2UC38eMHOuBHBu6uW0jwupzaDM0nOpB2B1xSiYdL
+   Unc5xnnEIIjAKvP4zGypOK9fAZmysLC0huiQaSo+oWfykGnbqmUSs2HWO
+   +dkS7rja3mY+3JgZ6kP7V/hirBx+/m1GXmANEBZOHbkKJxeBGaWxDc8Mc
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="296284238"
+X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
+   d="scan'208";a="296284238"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 18:01:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
+   d="scan'208";a="596817843"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 16 May 2022 18:00:58 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nqla6-0000Sd-0v;
+        Tue, 17 May 2022 01:00:58 +0000
+Date:   Tue, 17 May 2022 09:00:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Piyush Malgujar <pmalgujar@marvell.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        sgarapati@marvell.com, sbalcerak@marvell.com, cchavva@marvell.com,
+        Piyush Malgujar <pmalgujar@marvell.com>
+Subject: Re: [PATCH 1/3] drivers: i2c: thunderx: octeontx2 clock divisor
+ logic changes
+Message-ID: <202205170856.ko6UxqWi-lkp@intel.com>
+References: <20220511133659.29176-2-pmalgujar@marvell.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511133659.29176-2-pmalgujar@marvell.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,40 +66,66 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
-> On Mon, May 16, 2022 at 05:05:12PM +0300, Andy Shevchenko wrote:
->> On Mon, May 16, 2022 at 11:48:05PM +1000, Michael Ellerman wrote:
->> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
->> > > We may convert the GPT driver to use fwnode API for the sake
->> > > of consistency of the used APIs inside the driver.
->> > 
->> > I'm not sure about this one.
->> > 
->> > It's more consistent to use fwnode in this driver, but it's very
->> > inconsistent with the rest of the powerpc code. We have basically no
->> > uses of the fwnode APIs at the moment.
->> 
->> Fair point!
->> 
->> > It seems like a pretty straight-forward conversion, but there could
->> > easily be a bug in there, I don't have any way to test it. Do you?
->> 
->> Nope, only compile testing. The important part of this series is to
->> clean up of_node from GPIO library, so since here it's a user of
->> it I want to do that. This patch is just ad-hoc conversion that I
->> noticed is possible. But there is no any requirement to do so.
->> 
->> Lemme drop this from v3.
->
-> I just realize that there is no point to send a v3. You can just apply
-> first 3 patches. Or is your comment against entire series?
+Hi Piyush,
 
-No, my comment is just about this patch.
+Thank you for the patch! Yet something to improve:
 
-I don't mind converting to new APIs when it's blocking some other
-cleanup. But given the age of this code I think it's probably better to
-just leave the rest of it as-is, unless someone volunteers to test it.
+[auto build test ERROR on wsa/i2c/for-next]
+[also build test ERROR on linux/master linus/master v5.18-rc7 next-20220516]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-So yeah I'll just take patches 1-3 of this v2 series, no need to resend.
+url:    https://github.com/intel-lab-lkp/linux/commits/Piyush-Malgujar/drivers-i2c-thunderx-Marvell-thunderx-i2c-changes/20220511-213853
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+config: mips-randconfig-r025-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170856.ko6UxqWi-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/56654d280f7c130d4f1d78eb8a3fa57fedc86b7b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Piyush-Malgujar/drivers-i2c-thunderx-Marvell-thunderx-i2c-changes/20220511-213853
+        git checkout 56654d280f7c130d4f1d78eb8a3fa57fedc86b7b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-cheers
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/i2c/busses/i2c-octeon-platdrv.c:27:
+>> drivers/i2c/busses/i2c-octeon-core.h:223:21: error: incomplete definition of type 'struct pci_dev'
+           u32 chip_id = (pdev->subsystem_device >> 12) & 0xF;
+                          ~~~~^
+   include/asm-generic/pci_iomap.h:10:8: note: forward declaration of 'struct pci_dev'
+   struct pci_dev;
+          ^
+   1 error generated.
+
+
+vim +223 drivers/i2c/busses/i2c-octeon-core.h
+
+   213	
+   214	#define PCI_SUBSYS_DEVID_9XXX 0xB
+   215	/**
+   216	 * octeon_i2c_is_otx2 - check for chip ID
+   217	 * @pdev: PCI dev structure
+   218	 *
+   219	 * Returns TRUE if OcteonTX2, FALSE otherwise.
+   220	 */
+   221	static inline bool octeon_i2c_is_otx2(struct pci_dev *pdev)
+   222	{
+ > 223		u32 chip_id = (pdev->subsystem_device >> 12) & 0xF;
+   224	
+   225		return (chip_id == PCI_SUBSYS_DEVID_9XXX);
+   226	}
+   227	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
