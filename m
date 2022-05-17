@@ -2,50 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1FA7529EFC
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 May 2022 12:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1713F529F06
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 May 2022 12:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343936AbiEQKM6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 May 2022 06:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
+        id S235136AbiEQKNL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 May 2022 06:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343865AbiEQKMl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 May 2022 06:12:41 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1211C11F;
-        Tue, 17 May 2022 03:11:58 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id bo5so16461949pfb.4;
-        Tue, 17 May 2022 03:11:58 -0700 (PDT)
+        with ESMTP id S1343887AbiEQKMm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 May 2022 06:12:42 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABD91C133;
+        Tue, 17 May 2022 03:12:00 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id l14so6025960pjk.2;
+        Tue, 17 May 2022 03:12:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=MM5thYIrVi5i+cbkS2jxRX5IeuN8MkqxSCa5bh/mFUY=;
-        b=pFloAIsahv1LwGSPVFyN6dinFSmhbMza4Vj8W2MJNhWmxS2b9/L6hWtqpbRrWkaTVI
-         /KJ7EX8tq2oiwEpZA1GT1FCRreo8J8rZ57OjbOk+r2oIV0tJozfD2UGqQ9MVFBbxMv4u
-         pat9rZAwUgwEnR3M7OIzK2z1LI3trsh6u5wHkGtla9OnrTpzuHkAPQS/2ilDPm2+vcnt
-         pkx+fL20/OuALewWgpgaB00fxyLRIWvAwtLpkMDMC3sE3OehpYT3IgTiS/GchsV0rg5S
-         QsniY+nwgp56xJGCMdHNzAZiF/rlqsYysxJAt2D3FP98kCwzem8qI8XzLIk2+vDmcZPl
-         B6HQ==
+        bh=oBrUS4cUnYCukBR9QE9N3XBr+fjKNffpl/fgC0cqOiw=;
+        b=U4TUEDQdH7GITaysYyldEdGwlpv6UEzDB5eXkMk+C/CuL4/H0IMXqID1CQghmGhXBZ
+         tOhdwuPM5FuRUGd+cwETTJA+HuuxxWheGPzqkyaJwnS9H1Q6MGLiJ6kw0ZP0u/sB/HcF
+         AmmzSNBe8g5HcxIMtyUlVg7KSamG2zQ03qfiJtGm0e334EOm8zpR/h4gS86mu1hv7ptG
+         6TtY0+LM2jXYoidXplKAAx49o7iVt2clz2lghoiLmyBbgN0+JBawh/IzdcsunMu7cHaH
+         vsJ7aPM64E1rtimGzMqWCO1dkVMMIin+FyiumV5iQppsXcIeFeoauf+M9iHDrE4WDOkT
+         7fgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=MM5thYIrVi5i+cbkS2jxRX5IeuN8MkqxSCa5bh/mFUY=;
-        b=lFpRxsoKRjfska6D+jHLGvLjnULd0pOvp3x41C21P9/o+4DcBu6MTLncr9cCq1mm50
-         hn5x9SQw//Ug5NTkbd+k3DiRdhkqEqGBgtbyQVFi1nCPZRmg0RzTbXFchQc7lX16TA5U
-         sDoE6mLL+0FoAzBPaIg0ec/rsx5EdvWBqSJ5IngOf8RdoUDViZwUMbM/5ClE2KuAhKTV
-         4z6beICtv1hxLnymJiJZPhubzi4KWvoQLa5BXkPlFuZPSt2Nsi1RuaHBOZlqa4qP/TiA
-         jhBGwQ+QEdJ6B1/bNS+7sornspasIYn4IQu9YlkyI/znmTfApb7+Pkedr2Vd9Vw17SNk
-         AG/w==
-X-Gm-Message-State: AOAM531I25CVgPdCV9OVaQdb03TRkYliTQ5TFyNMnQ2KyO+Pm3dyGhU3
-        hz5IGEJTTQkDb5tqaux3iw==
-X-Google-Smtp-Source: ABdhPJzxvdrgUgkR++3q5wIQdY+NCisWO/v8qM2lIGnIGECEDfN/2e7awdGf+ibdbfFc5k3MyvQKrg==
-X-Received: by 2002:a05:6a00:996:b0:505:b6d2:abc8 with SMTP id u22-20020a056a00099600b00505b6d2abc8mr21562749pfg.11.1652782317854;
-        Tue, 17 May 2022 03:11:57 -0700 (PDT)
+        bh=oBrUS4cUnYCukBR9QE9N3XBr+fjKNffpl/fgC0cqOiw=;
+        b=VHuyIhOzoomAQAnn3Ziuyz6/V0JHt1uRalowZqa5JQuSQJZh6XOc+lAuX1g0bIrVCM
+         ZMo360YpNPUQfWEOyGTl3pNKrKaVOCENI//duyFAKR2zF7ULe34HkaLi+q2aefRYc1zf
+         4khU4P2wI8XISBVi9mXBkg9Hf1DwPGxQfKTtvoeqTwZQsvhAqIs8A5YIl//oG42+w+FX
+         q6jqlHnb1HZy96D8xeN+laIetmbSsM8hKBYQrUTYNO70Y8XQjJJ9yXtQCG50C+/YmeIT
+         GxZtFoWzT+ZlVTgSE7cvhtLzKmRUxWZBoMAatk08oyGkf6U1+SdEs8EFwVG+KqGDGC2K
+         Z51A==
+X-Gm-Message-State: AOAM531YUh53ra28kJoPkyaqnFwTte/wZ0DoBNF/MkJxAVuqC72h42rk
+        y27F7+Uaow4mhoFDo8M+xQ==
+X-Google-Smtp-Source: ABdhPJwyHdOXXr1USDm5VHABkdGunFN0dkddP7cfCZyjpdaZzp/TBVc6dDq5QHZCZLtB6IsZoWphwA==
+X-Received: by 2002:a17:902:cf0a:b0:156:39c9:4c44 with SMTP id i10-20020a170902cf0a00b0015639c94c44mr21528650plg.124.1652782319470;
+        Tue, 17 May 2022 03:11:59 -0700 (PDT)
 Received: from localhost (220-133-130-217.hinet-ip.hinet.net. [220.133.130.217])
-        by smtp.gmail.com with ESMTPSA id br22-20020a17090b0f1600b001df82551cf2sm1225548pjb.44.2022.05.17.03.11.57
+        by smtp.gmail.com with ESMTPSA id 193-20020a6214ca000000b0050dc76281ecsm902465pfu.198.2022.05.17.03.11.59
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 17 May 2022 03:11:57 -0700 (PDT)
+        Tue, 17 May 2022 03:11:59 -0700 (PDT)
 From:   Tyrone Ting <warp5tw@gmail.com>
 To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -59,9 +59,9 @@ To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com
 Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 01/10] dt-bindings: i2c: npcm: support NPCM845
-Date:   Tue, 17 May 2022 18:11:33 +0800
-Message-Id: <20220517101142.28421-2-warp5tw@gmail.com>
+Subject: [PATCH v5 02/10] i2c: npcm: Change the way of getting GCR regmap
+Date:   Tue, 17 May 2022 18:11:34 +0800
+Message-Id: <20220517101142.28421-3-warp5tw@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220517101142.28421-1-warp5tw@gmail.com>
 References: <20220517101142.28421-1-warp5tw@gmail.com>
@@ -75,80 +75,53 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Tyrone Ting <kfting@nuvoton.com>
+From: Tali Perry <tali.perry1@gmail.com>
 
-Add compatible and nuvoton,sys-mgr description for NPCM i2c module.
+Change the way of getting NPCM system manager reigster (GCR)
+and still maintain the old mechanism as a fallback if getting
+nuvoton,sys-mgr fails while working with the legacy devicetree
+file.
 
+Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
+Signed-off-by: Tali Perry <tali.perry1@gmail.com>
 Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     | 25 +++++++++++++++----
- 1 file changed, 20 insertions(+), 5 deletions(-)
+ drivers/i2c/busses/i2c-npcm7xx.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml b/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
-index 128444942aec..09d2591e1fa3 100644
---- a/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
-@@ -7,17 +7,18 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: nuvoton NPCM7XX I2C Controller Device Tree Bindings
+diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
+index 71aad029425d..de4e5f2f3e5a 100644
+--- a/drivers/i2c/busses/i2c-npcm7xx.c
++++ b/drivers/i2c/busses/i2c-npcm7xx.c
+@@ -2229,11 +2229,12 @@ static void npcm_i2c_init_debugfs(struct platform_device *pdev,
  
- description: |
--  The NPCM750x includes sixteen I2C bus controllers. All Controllers support
--  both master and slave mode. Each controller can switch between master and slave
--  at run time (i.e. IPMB mode). Each controller has two 16 byte HW FIFO for TX and
--  RX.
-+  I2C bus controllers of the NPCM series support both master and
-+  slave mode. Each controller can switch between master and slave at run time
-+  (i.e. IPMB mode). HW FIFO for TX and RX are supported.
+ static int npcm_i2c_probe_bus(struct platform_device *pdev)
+ {
+-	struct npcm_i2c *bus;
+-	struct i2c_adapter *adap;
+-	struct clk *i2c_clk;
++	struct device_node *np = pdev->dev.of_node;
+ 	static struct regmap *gcr_regmap;
+ 	static struct regmap *clk_regmap;
++	struct i2c_adapter *adap;
++	struct npcm_i2c *bus;
++	struct clk *i2c_clk;
+ 	int irq;
+ 	int ret;
  
- maintainers:
-   - Tali Perry <tali.perry1@gmail.com>
+@@ -2250,7 +2251,10 @@ static int npcm_i2c_probe_bus(struct platform_device *pdev)
+ 		return PTR_ERR(i2c_clk);
+ 	bus->apb_clk = clk_get_rate(i2c_clk);
  
- properties:
-   compatible:
--    const: nuvoton,npcm750-i2c
-+    enum:
-+      - nuvoton,npcm750-i2c
-+      - nuvoton,npcm845-i2c
- 
-   reg:
-     maxItems: 1
-@@ -36,6 +37,10 @@ properties:
-     default: 100000
-     enum: [100000, 400000, 1000000]
- 
-+  nuvoton,sys-mgr:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: The phandle of system manager register node.
+-	gcr_regmap = syscon_regmap_lookup_by_compatible("nuvoton,npcm750-gcr");
++	gcr_regmap = syscon_regmap_lookup_by_phandle(np, "nuvoton,sys-mgr");
++	if (IS_ERR(gcr_regmap))
++		gcr_regmap = syscon_regmap_lookup_by_compatible("nuvoton,npcm750-gcr");
 +
- required:
-   - compatible
-   - reg
-@@ -44,6 +49,15 @@ required:
- 
- allOf:
-   - $ref: /schemas/i2c/i2c-controller.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: nuvoton,npcm845-i2c
-+
-+    then:
-+      required:
-+        - nuvoton,sys-mgr
- 
- unevaluatedProperties: false
- 
-@@ -57,6 +71,7 @@ examples:
-         clock-frequency = <100000>;
-         interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
-         compatible = "nuvoton,npcm750-i2c";
-+        nuvoton,sys-mgr = <&gcr>;
-     };
- 
- ...
+ 	if (IS_ERR(gcr_regmap))
+ 		return PTR_ERR(gcr_regmap);
+ 	regmap_write(gcr_regmap, NPCM_I2CSEGCTL, NPCM_I2CSEGCTL_INIT_VAL);
 -- 
 2.17.1
 
