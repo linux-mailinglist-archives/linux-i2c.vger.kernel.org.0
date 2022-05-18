@@ -2,222 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8604D52BFA1
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 May 2022 18:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E342F52C0D7
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 May 2022 19:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239733AbiERPwQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 18 May 2022 11:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
+        id S240069AbiERQ0c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 18 May 2022 12:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239593AbiERPwP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 May 2022 11:52:15 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A4F1C83EB;
-        Wed, 18 May 2022 08:52:14 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IFElLE013025;
-        Wed, 18 May 2022 15:51:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=AM2xQGtGTyOcD/kklWCco7altrVDggH1p+vQaapH7mo=;
- b=T2ePE/cKae/zGG6w7B//p2Yn8/83O8IzvH9b+/SMHSVBgtU/W2em6bWJnjDN+OvSdE22
- v49QGUfrleazDI8lm7x6JbzWynp2B7sxZGIpPNceAeC87ETuvzyLoiSM5jdNLAo3sik4
- aoPxdbnAd62H3u5XRRLFmWRTgeXxc47Vypv5IKhLr6ZLfPeCgi325IwHIBj4Pfq5PCgK
- g5LE95Evhazk8M2WPNV2bjqva1p2PY22IHOGMTw9coZLoet5vVXTAi4awlw+YkBn/hJ8
- XSTH2Ngy84eeW0uO+8uVztgoEm+dsPDFyVnQwzmrKqLau0ecoFBJE5cWSkQGXa7faacx /g== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5392rx8q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 15:51:29 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IFnZUG003184;
-        Wed, 18 May 2022 15:51:28 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma02wdc.us.ibm.com with ESMTP id 3g2429wger-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 15:51:28 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IFpSlm12779816
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 May 2022 15:51:28 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 40BC3AE060;
-        Wed, 18 May 2022 15:51:28 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 48FE9AE05F;
-        Wed, 18 May 2022 15:51:27 +0000 (GMT)
-Received: from [9.163.6.139] (unknown [9.163.6.139])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 18 May 2022 15:51:27 +0000 (GMT)
-Message-ID: <6d517473-9ac4-8a58-64c5-1c27ecd6f95f@linux.ibm.com>
-Date:   Wed, 18 May 2022 10:51:26 -0500
+        with ESMTP id S240118AbiERQ0K (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 May 2022 12:26:10 -0400
+X-Greylist: delayed 965 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 May 2022 09:26:05 PDT
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D8A1D0E6;
+        Wed, 18 May 2022 09:26:04 -0700 (PDT)
+Received: from [77.244.183.192] (port=64666 helo=[192.168.178.75])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1nrMFJ-000DgX-8b; Wed, 18 May 2022 18:09:57 +0200
+Message-ID: <806462b6-e85e-f5e8-9ffb-cffa5dae72c2@lucaceresoli.net>
+Date:   Wed, 18 May 2022 18:09:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 0/2] iio: humidity: si7020: Check device property for
- skipping reset in probe
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: add property to avoid device
+ detection
 Content-Language: en-US
-From:   Eddie James <eajames@linux.ibm.com>
-To:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
-        devicetree@vger.kernel.org
-Cc:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        lars@metafoo.de, miltonm@us.ibm.com, linux-i2c@vger.kernel.org
-References: <20220512162020.33450-1-eajames@linux.ibm.com>
- <20220512174859.000042b6@Huawei.com>
- <4fd44316-689e-1b72-d483-2c617d2a455d@linux.ibm.com>
- <20220513174531.00007b9b@Huawei.com>
- <b2761479-50fe-0dce-62a2-3beff5cdef9d@axentia.se>
- <20220514144318.309be1ec@jic23-huawei>
- <0569bb70-e2dc-de85-268d-30ee7c9491fb@axentia.se>
- <bbeaa4b6-1412-dfac-a6ef-dbcd9f1e3f5c@linux.ibm.com>
-In-Reply-To: <bbeaa4b6-1412-dfac-a6ef-dbcd9f1e3f5c@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Kg_7SlHu9GjMAyDKOhMjl65LN9NYtQPe
-X-Proofpoint-ORIG-GUID: Kg_7SlHu9GjMAyDKOhMjl65LN9NYtQPe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-18_05,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- suspectscore=0 bulkscore=0 spamscore=0 priorityscore=1501 adultscore=0
- malwarescore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205180092
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Peter Rosin <peda@axentia.se>, Wolfram Sang <wsa@kernel.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        kernel@axis.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, krzk+dt@kernel.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220412085046.1110127-1-vincent.whitchurch@axis.com>
+ <20220412085046.1110127-2-vincent.whitchurch@axis.com>
+ <Yn+8CJ3j2SY2+Mq+@shikoro> <7ab1f387-3670-4b49-211d-3ff9a7c3d40b@axentia.se>
+ <758ebcab-b0a2-29bd-d79c-1fbdc95212ae@axentia.se>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+In-Reply-To: <758ebcab-b0a2-29bd-d79c-1fbdc95212ae@axentia.se>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Peter, all,
 
-On 5/18/22 10:28, Eddie James wrote:
->
-> On 5/14/22 10:02, Peter Rosin wrote:
->> 2022-05-14 at 15:43, Jonathan Cameron wrote:
->>> On Sat, 14 May 2022 00:48:51 +0200
->>> Peter Rosin <peda@axentia.se> wrote:
+On 16/05/22 10:07, Peter Rosin wrote:
+> [Now with the proper email to Luca, sorry about that...]
+> 
+> 2022-05-16 at 09:57, Peter Rosin wrote:
+>> 2022-05-14 at 16:26, Wolfram Sang wrote:
+>>> On Tue, Apr 12, 2022 at 10:50:45AM +0200, Vincent Whitchurch wrote:
+>>>> When drivers with ->detect callbacks are loaded, the I2C core does a
+>>>> bunch of transactions to try to probe for these devices, regardless of
+>>>> whether they are specified in the devicetree or not.  (This only happens
+>>>> on I2C controllers whose drivers enable the I2C_CLASS* flags, but this
+>>>> is the case for generic drivers like i2c-gpio.)
+>>>>
+>>>> These kinds of transactions are unnecessary on systems where the
+>>>> devicetree specifies all the devices on the I2C bus, so add a property
+>>>> to indicate that the devicetree description of the hardware is complete
+>>>> and thus allow this discovery to be disabled.
+>>> Hmm, I don't think the name is fitting. "no-detect" is the desired
+>>> behaviour but a proper description is more like "bus-complete" or
+>>> something?
 >>>
->>>> Hi!
->>>>
->>>> 2022-05-13 at 18:45, Jonathan Cameron wrote:
->>>>> On Thu, 12 May 2022 12:08:07 -0500
->>>>> Eddie James <eajames@linux.ibm.com> wrote:
->>>>>> On 5/12/22 11:48, Jonathan Cameron wrote:
->>>>>>> On Thu, 12 May 2022 11:20:18 -0500
->>>>>>> Eddie James <eajames@linux.ibm.com> wrote:
->>>>>>>> I2C commands issued after the SI7020 is starting up or after reset
->>>>>>>> can potentially upset the startup sequence. Therefore, the host
->>>>>>>> needs to wait for the startup sequence to finish before issuing
->>>>>>>> further i2c commands. This is impractical in cases where the 
->>>>>>>> SI7020
->>>>>>>> is on a shared bus or behind a mux, which may switch channels at
->>>>>>>> any time (generating I2C traffic). Therefore, check for a device
->>>>>>>> property that indicates that the driver should skip resetting the
->>>>>>>> device when probing.
->>>>>>> Why not lock the bus?  It's not ideal, but then not resetting 
->>>>>>> and hence
->>>>>>> potentially ending up in an unknown state isn't great either.
->>>>>>
->>>>>> Agreed, but locking the bus doesn't work in the case where the 
->>>>>> chip is
->>>>>> behind a mux. The mux core driver deselects the mux immediately 
->>>>>> after
->>>>>> the transfer to reset the si7020, causing some i2c traffic, 
->>>>>> breaking the
->>>>>> si7020. So it would also be a requirement to configure the mux to 
->>>>>> idle
->>>>>> as-is... That's why I went with the optional skipping of the reset.
->>>>>> Maybe I should add the bus lock too?
->>>>> +Cc Peter and linux-i2c for advice as we should resolve any potential
->>>>> issue with the mux side of things rather than hiding it in the driver
->>>>> (if possible!)
->>>> IIUC, the chip in question cannot handle *any* action on the I2C bus
->>>> for 15ms (or so) after a "soft reset", or something bad<tm> happens
->>>> (or at least may happen).
->>>>
->>>> If that's the case, then providing a means of skipping the reset is
->>>> insufficient. If you don't lock the bus, you would need to *always*
->>>> skip the reset, because you don't know for certain if something else
->>>> does I2C xfers.
->>>>
->>>> So, in order to make the soft reset not be totally dangerous even in
->>>> a normal non-muxed environment, the bus must be locked for the 15ms.
->>>>
->>>> However, Eddie is correct in that the I2C mux code may indeed do its
->>>> muxing xfer right after the soft reset command. There is currently
->>>> no way to avoid that muxing xfer. However, it should be noted that
->>>> there are ways to mux an I2C bus without using xfers on the bus
->>>> itself, so it's not problematic for *all* mux variants.
->>>>
->>>> It can be debated if the problem should be worked around with extra
->>>> dt properties like this, or if a capability should be added to delay
->>>> a trailing muxing xfer.
->>>>
->>>> I bet there are other broken chips that have drivers that do in fact
->>>> lock the bus to give the chip a break, but then it all stumbles
->>>> because of the unexpected noise if there's a (wrong kind of) mux in
->>>> the mix.
->>> Ok, so for now I think we need the bus lock for the reset + either
->>> a work around similar to this series, or additions to the i2c mux code
->>> to stop it doing a muxing xfer if the bus is locked?
->> I think there might be cases where it might be valid to restore the mux
->> directly after an xfer even if the mux is externally locked prior to the
->> muxed xfer. But I'm not sure? In any case, it will be a bit convoluted
->> for the mux code to remember that it might need to restore the mux
->> later. And it will get even hairier when multiple levels of muxing is
->> considered...
+>>> That aside, I am not sure we should handle this at DT level. Maybe we
+>>> should better change the GPIO driver to not populate a class if we have
+>>> a firmware node?
+>> We also have the somewhat related address translation case (which I
+>> still need to look at). [Adding Luca to Cc]
 >>
->> Maybe some kind of hook/callback that could be installed temporarily on
->> the I2C adapter that is called right after the "real" xfer, where the
->> driver could then make the needed mdelay call?
+>> https://lore.kernel.org/lkml/20220206115939.3091265-1-luca@lucaceresoli.net/
 >>
->> I.e.
->> 1. lock the bus
->> 2. install this new hook/callback
->> 3. do an unlocked xfer, get notified and call mdelay
->> 5. uninstall the hook/callback
->> 6. unlock the bus
->>
->> The hook/callback could be uninstalled automatically on unlock, then
->> you would not need to handle multiple notifications. But then again,
->> there is probably some existing framework that should be used that
->> handles all than neatly and efficiently.
->
->
-> Hm, interesting. Sounds a bit complicated, though very flexible. For a 
-> less flexible, but less complex, approch, we could add a i2c_msg flag 
-> that says to do a delay in the core? And then si7020 could just submit 
-> a couple of raw messages rather than smbus... What do you think?
+>> If a bus is "bus-complete", then address translation could use
+>> any unused address instead of from an explicit list of addresses.
+>> I.e. the "i2c-alias-pool" in the binding in patch 4/6 of that
+>> series could be made optional if the bus is "bus-complete".
 
+Indeed the alias pool is meant to completely disappear from the ATR
+implementation. The i2c core should evolve to know which addresses
+correspond to a device (no matter if it has a driver or not) and use any
+other addresses as aliases. This was the outcome of discussion on this
+topic with Wolfram, even though I AFAIK any implementation effort is
+idle since a long time.
 
-Um, nevermind... that would require changes in all the bus drivers. I'll 
-look into implementing the hook/callback.
-
-Thanks,
-
-Eddie
-
-
->
->
-> Thanks,
->
-> Eddie
->
->
->
->>
->> Me waves hand a bit...
->>
->> Cheers,
->> Peter
->
->
+-- 
+Luca
