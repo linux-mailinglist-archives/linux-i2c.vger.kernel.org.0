@@ -2,105 +2,140 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E342F52C0D7
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 May 2022 19:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5840E52C438
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 May 2022 22:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240069AbiERQ0c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 18 May 2022 12:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
+        id S242531AbiERUWj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 18 May 2022 16:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240118AbiERQ0K (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 May 2022 12:26:10 -0400
-X-Greylist: delayed 965 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 May 2022 09:26:05 PDT
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D8A1D0E6;
-        Wed, 18 May 2022 09:26:04 -0700 (PDT)
-Received: from [77.244.183.192] (port=64666 helo=[192.168.178.75])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1nrMFJ-000DgX-8b; Wed, 18 May 2022 18:09:57 +0200
-Message-ID: <806462b6-e85e-f5e8-9ffb-cffa5dae72c2@lucaceresoli.net>
-Date:   Wed, 18 May 2022 18:09:55 +0200
+        with ESMTP id S242520AbiERUW3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 May 2022 16:22:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18CDEBA9D;
+        Wed, 18 May 2022 13:22:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D3DBB820BF;
+        Wed, 18 May 2022 20:22:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AFCBC385A9;
+        Wed, 18 May 2022 20:22:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652905346;
+        bh=hLHKO7qKN+i0jdECk57N3nCVEGIJesNQBGUeRkLQTrg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VWFxt0ChnONpIORLUPrOsDgokdX6XJ0Xl6IYDhrDqfY3CUFz+1iWrX1LrvC1T1vqv
+         2ZcFQLAmTPagIPJgoyk19yirlUorPByNN6hEzCKRotliwUJrvQdRxY0OxbP2l2KyYG
+         2JK267/LEIb13lanePjToO+EMGAThE6q+nYw8A7SSLwGSpQGlGNLvEU/UVgrMqQscR
+         K9tOuBqobzrLCo+TDFT7MP1vPRORTAoHw8E7OEHDh97MOmUXekCOR1I03wcz+2Z40k
+         g9OJOggQ7sSEFiF1HgMHzRjbKrm8shxyX5Uih3zvO1FhksBi8+orBbZcidxmKW7FDQ
+         Brdx2LQwcQ50A==
+From:   Dinh Nguyen <dinguyen@kernel.org>
+To:     jarkko.nikula@linux.intel.com
+Cc:     dinguyen@kernel.org, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, robh+dt@kernel.org,
+        krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 1/2] i2c: designware: introduce a custom scl recovery for SoCFPGA platforms
+Date:   Wed, 18 May 2022 15:22:16 -0500
+Message-Id: <20220518202217.85803-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: add property to avoid device
- detection
-Content-Language: en-US
-To:     Peter Rosin <peda@axentia.se>, Wolfram Sang <wsa@kernel.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        kernel@axis.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, krzk+dt@kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220412085046.1110127-1-vincent.whitchurch@axis.com>
- <20220412085046.1110127-2-vincent.whitchurch@axis.com>
- <Yn+8CJ3j2SY2+Mq+@shikoro> <7ab1f387-3670-4b49-211d-3ff9a7c3d40b@axentia.se>
- <758ebcab-b0a2-29bd-d79c-1fbdc95212ae@axentia.se>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-In-Reply-To: <758ebcab-b0a2-29bd-d79c-1fbdc95212ae@axentia.se>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Peter, all,
+The I2C pins on the SoCFPGA platforms do not go through a GPIO module,
+thus cannot be recovered by the default method of by doing a GPIO access.
+Only a reset of the I2C IP block can a recovery be successful.
 
-On 16/05/22 10:07, Peter Rosin wrote:
-> [Now with the proper email to Luca, sorry about that...]
-> 
-> 2022-05-16 at 09:57, Peter Rosin wrote:
->> 2022-05-14 at 16:26, Wolfram Sang wrote:
->>> On Tue, Apr 12, 2022 at 10:50:45AM +0200, Vincent Whitchurch wrote:
->>>> When drivers with ->detect callbacks are loaded, the I2C core does a
->>>> bunch of transactions to try to probe for these devices, regardless of
->>>> whether they are specified in the devicetree or not.  (This only happens
->>>> on I2C controllers whose drivers enable the I2C_CLASS* flags, but this
->>>> is the case for generic drivers like i2c-gpio.)
->>>>
->>>> These kinds of transactions are unnecessary on systems where the
->>>> devicetree specifies all the devices on the I2C bus, so add a property
->>>> to indicate that the devicetree description of the hardware is complete
->>>> and thus allow this discovery to be disabled.
->>> Hmm, I don't think the name is fitting. "no-detect" is the desired
->>> behaviour but a proper description is more like "bus-complete" or
->>> something?
->>>
->>> That aside, I am not sure we should handle this at DT level. Maybe we
->>> should better change the GPIO driver to not populate a class if we have
->>> a firmware node?
->> We also have the somewhat related address translation case (which I
->> still need to look at). [Adding Luca to Cc]
->>
->> https://lore.kernel.org/lkml/20220206115939.3091265-1-luca@lucaceresoli.net/
->>
->> If a bus is "bus-complete", then address translation could use
->> any unused address instead of from an explicit list of addresses.
->> I.e. the "i2c-alias-pool" in the binding in patch 4/6 of that
->> series could be made optional if the bus is "bus-complete".
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+---
+ drivers/i2c/busses/i2c-designware-core.h    |  3 ++-
+ drivers/i2c/busses/i2c-designware-master.c  | 19 +++++++++++++++++--
+ drivers/i2c/busses/i2c-designware-platdrv.c |  2 ++
+ 3 files changed, 21 insertions(+), 3 deletions(-)
 
-Indeed the alias pool is meant to completely disappear from the ATR
-implementation. The i2c core should evolve to know which addresses
-correspond to a device (no matter if it has a driver or not) and use any
-other addresses as aliases. This was the outcome of discussion on this
-topic with Wolfram, even though I AFAIK any implementation effort is
-idle since a long time.
-
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index 70b80e710990..4e997e381fb6 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -303,7 +303,8 @@ struct dw_i2c_dev {
+ #define MODEL_MSCC_OCELOT	BIT(8)
+ #define MODEL_BAIKAL_BT1	BIT(9)
+ #define MODEL_AMD_NAVI_GPU	BIT(10)
+-#define MODEL_MASK		GENMASK(11, 8)
++#define MODEL_SOCFPGA		BIT(11)
++#define MODEL_MASK		GENMASK(12, 8)
+ 
+ /*
+  * Enable UCSI interrupt by writing 0xd at register
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index 44a94b225ed8..333ad17b967d 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -813,12 +813,29 @@ static void i2c_dw_unprepare_recovery(struct i2c_adapter *adap)
+ 	i2c_dw_init_master(dev);
+ }
+ 
++static int i2c_custom_scl_recovery(struct i2c_adapter *adap)
++{
++	i2c_dw_prepare_recovery(adap);
++	i2c_dw_unprepare_recovery(adap);
++	return 0;
++}
++
+ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
+ {
+ 	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
+ 	struct i2c_adapter *adap = &dev->adapter;
+ 	struct gpio_desc *gpio;
+ 
++	switch (dev->flags & MODEL_MASK) {
++	case MODEL_SOCFPGA:
++		rinfo->recover_bus = i2c_custom_scl_recovery;
++		break;
++	default:
++		rinfo->recover_bus = i2c_generic_scl_recovery;
++		break;
++	}
++	adap->bus_recovery_info = rinfo;
++
+ 	gpio = devm_gpiod_get_optional(dev->dev, "scl", GPIOD_OUT_HIGH);
+ 	if (IS_ERR_OR_NULL(gpio))
+ 		return PTR_ERR_OR_ZERO(gpio);
+@@ -830,10 +847,8 @@ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
+ 		return PTR_ERR(gpio);
+ 	rinfo->sda_gpiod = gpio;
+ 
+-	rinfo->recover_bus = i2c_generic_scl_recovery;
+ 	rinfo->prepare_recovery = i2c_dw_prepare_recovery;
+ 	rinfo->unprepare_recovery = i2c_dw_unprepare_recovery;
+-	adap->bus_recovery_info = rinfo;
+ 
+ 	dev_info(dev->dev, "running with gpio recovery mode! scl%s",
+ 		 rinfo->sda_gpiod ? ",sda" : "");
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index 70ade5306e45..92dfe3456ca7 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -153,6 +153,8 @@ static const struct of_device_id dw_i2c_of_match[] = {
+ 	{ .compatible = "snps,designware-i2c", },
+ 	{ .compatible = "mscc,ocelot-i2c", .data = (void *)MODEL_MSCC_OCELOT },
+ 	{ .compatible = "baikal,bt1-sys-i2c", .data = (void *)MODEL_BAIKAL_BT1 },
++	{ .compatible = "intel,socfpga-i2c", .data = (void *)MODEL_SOCFPGA },
++
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, dw_i2c_of_match);
 -- 
-Luca
+2.25.1
+
