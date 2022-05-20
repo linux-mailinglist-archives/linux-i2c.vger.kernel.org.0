@@ -2,35 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBB152F464
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 May 2022 22:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EA552F466
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 May 2022 22:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353453AbiETU3b (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S241803AbiETU3b (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Fri, 20 May 2022 16:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347363AbiETU3a (ORCPT
+        with ESMTP id S1353446AbiETU3a (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 May 2022 16:29:30 -0400
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FEF185C87
-        for <linux-i2c@vger.kernel.org>; Fri, 20 May 2022 13:29:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35430186286
+        for <linux-i2c@vger.kernel.org>; Fri, 20 May 2022 13:29:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=U29WYmQyVQCYUu
-        V8AWl6uqxuHoxGbWuriGBrCNSHgRs=; b=mEazvjZqGGpMBb6NFCskHYFKKePDvY
-        eZi9krVXQjaWWxFweSANE3eBZcq5CX2tVOnAhuWFe/PJmsPNbx9lcE4O1t4TQazw
-        6Nwe7W+lQFzgeqIcKCcj8LTOpp9CpVDbW2OoR+Q/w+fFOWCpYLyjWTATSG5ygNOF
-        ZOake1cEYjbc0=
-Received: (qmail 3917295 invoked from network); 20 May 2022 22:29:25 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 May 2022 22:29:25 +0200
-X-UD-Smtp-Session: l3s3148p1@YZinWHffhusgAwDtxwyXAGMY7IbT6g6m
+        :mime-version:content-transfer-encoding; s=k1; bh=rHfBZDV61v2cgd
+        nDCsDQmTlJBFkrE/duuOMKhNkhQbI=; b=dVu79n/uWLd+hEO/yCPp+yCRc5Zjra
+        wvITFVBZyMPQcTL4TJ6k6RKtyA/gjILztgvzmkVZRLA5+R3OVw2JTvZNNgYBeeVx
+        93pYoQoSZAIcw5gXJQ6V9JMlvSHpmuPwp2ME+vGX92h+xzXrGJMNq+Fz7DPREh5P
+        acdPLwiop5BRU=
+Received: (qmail 3917320 invoked from network); 20 May 2022 22:29:26 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 May 2022 22:29:26 +0200
+X-UD-Smtp-Session: l3s3148p1@b9OxWHffiOsgAwDtxwyXAGMY7IbT6g6m
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     linux-renesas-soc@vger.kernel.org,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH 2/3] i2c: rcar: REP_AFTER_RD is not a persistent flag
-Date:   Fri, 20 May 2022 22:29:17 +0200
-Message-Id: <20220520202918.17889-3-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 3/3] i2c: rcar: use flags instead of atomic_xfer
+Date:   Fri, 20 May 2022 22:29:18 +0200
+Message-Id: <20220520202918.17889-4-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220520202918.17889-1-wsa+renesas@sang-engineering.com>
 References: <20220520202918.17889-1-wsa+renesas@sang-engineering.com>
@@ -46,84 +47,116 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Previous refactoring makes it easy now to convert the above flag to a
-non-persistent one. This is more apropriate and easier to maintain.
+From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 
+i2c-rcar already has priv->flags. This patch adds a new persistent flag
+ID_P_NOT_ATOMIC and uses it to save the extra variable. The negation of
+the logic was done to make the code more readable.
+
+Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+[wsa: negated the logic, rebased, updated the commit message]
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/i2c/busses/i2c-rcar.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+ drivers/i2c/busses/i2c-rcar.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
-index 88d060725301..034d1ec64cf0 100644
+index 034d1ec64cf0..6e7be9d9f504 100644
 --- a/drivers/i2c/busses/i2c-rcar.c
 +++ b/drivers/i2c/busses/i2c-rcar.c
-@@ -98,16 +98,16 @@
- #define RCAR_IRQ_STOP	(MST)
- 
- #define ID_LAST_MSG		BIT(0)
-+#define ID_REP_AFTER_RD		BIT(1)
- #define ID_DONE			BIT(2)
- #define ID_ARBLOST		BIT(3)
+@@ -104,10 +104,11 @@
  #define ID_NACK			BIT(4)
  #define ID_EPROTO		BIT(5)
  /* persistent flags */
--#define ID_P_HOST_NOTIFY	BIT(28)
--#define ID_P_REP_AFTER_RD	BIT(29)
-+#define ID_P_HOST_NOTIFY	BIT(29)
++#define ID_P_NOT_ATOMIC		BIT(28)
+ #define ID_P_HOST_NOTIFY	BIT(29)
  #define ID_P_NO_RXDMA		BIT(30) /* HW forbids RXDMA sometimes */
  #define ID_P_PM_BLOCKED		BIT(31)
--#define ID_P_MASK		GENMASK(31, 28)
-+#define ID_P_MASK		GENMASK(31, 29)
+-#define ID_P_MASK		GENMASK(31, 29)
++#define ID_P_MASK		GENMASK(31, 28)
  
  enum rcar_i2c_type {
  	I2C_RCAR_GEN1,
-@@ -341,6 +341,7 @@ static int rcar_i2c_clock_calculate(struct rcar_i2c_priv *priv)
- static void rcar_i2c_prepare_msg(struct rcar_i2c_priv *priv)
- {
- 	int read = !!rcar_i2c_is_recv(priv);
-+	bool rep_start = !(priv->flags & ID_REP_AFTER_RD);
+@@ -138,7 +139,6 @@ struct rcar_i2c_priv {
+ 	enum dma_data_direction dma_direction;
  
- 	priv->pos = 0;
- 	priv->flags &= ID_P_MASK;
-@@ -352,9 +353,7 @@ static void rcar_i2c_prepare_msg(struct rcar_i2c_priv *priv)
- 	if (!priv->atomic_xfer)
+ 	struct reset_control *rstc;
+-	bool atomic_xfer;
+ 	int irq;
+ 
+ 	struct i2c_client *host_notify_client;
+@@ -350,7 +350,7 @@ static void rcar_i2c_prepare_msg(struct rcar_i2c_priv *priv)
+ 		priv->flags |= ID_LAST_MSG;
+ 
+ 	rcar_i2c_write(priv, ICMAR, i2c_8bit_addr_from_msg(priv->msg));
+-	if (!priv->atomic_xfer)
++	if (priv->flags & ID_P_NOT_ATOMIC)
  		rcar_i2c_write(priv, ICMIER, read ? RCAR_IRQ_RECV : RCAR_IRQ_SEND);
  
--	if (priv->flags & ID_P_REP_AFTER_RD)
--		priv->flags &= ~ID_P_REP_AFTER_RD;
--	else
-+	if (rep_start)
- 		rcar_i2c_write(priv, ICMCR, RCAR_BUS_PHASE_START);
- }
+ 	if (rep_start)
+@@ -420,7 +420,7 @@ static bool rcar_i2c_dma(struct rcar_i2c_priv *priv)
+ 	int len;
  
-@@ -575,7 +574,7 @@ static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
- 			rcar_i2c_write(priv, ICMCR, RCAR_BUS_PHASE_STOP);
- 		} else {
- 			rcar_i2c_write(priv, ICMCR, RCAR_BUS_PHASE_START);
--			priv->flags |= ID_P_REP_AFTER_RD;
-+			priv->flags |= ID_REP_AFTER_RD;
- 		}
+ 	/* Do various checks to see if DMA is feasible at all */
+-	if (priv->atomic_xfer || IS_ERR(chan) || msg->len < RCAR_MIN_DMA_LEN ||
++	if (!(priv->flags & ID_P_NOT_ATOMIC) || IS_ERR(chan) || msg->len < RCAR_MIN_DMA_LEN ||
+ 	    !(msg->flags & I2C_M_DMA_SAFE) || (read && priv->flags & ID_P_NO_RXDMA))
+ 		return false;
+ 
+@@ -670,7 +670,7 @@ static irqreturn_t rcar_i2c_irq(int irq, struct rcar_i2c_priv *priv, u32 msr)
+ 	/* Nack */
+ 	if (msr & MNR) {
+ 		/* HW automatically sends STOP after received NACK */
+-		if (!priv->atomic_xfer)
++		if (priv->flags & ID_P_NOT_ATOMIC)
+ 			rcar_i2c_write(priv, ICMIER, RCAR_IRQ_STOP);
+ 		priv->flags |= ID_NACK;
+ 		goto out;
+@@ -692,7 +692,7 @@ static irqreturn_t rcar_i2c_irq(int irq, struct rcar_i2c_priv *priv, u32 msr)
+ 	if (priv->flags & ID_DONE) {
+ 		rcar_i2c_write(priv, ICMIER, 0);
+ 		rcar_i2c_write(priv, ICMSR, 0);
+-		if (!priv->atomic_xfer)
++		if (priv->flags & ID_P_NOT_ATOMIC)
+ 			wake_up(&priv->wait);
  	}
  
-@@ -706,7 +705,7 @@ static irqreturn_t rcar_i2c_gen2_irq(int irq, void *ptr)
- 	u32 msr;
- 
- 	/* Clear START or STOP immediately, except for REPSTART after read */
--	if (likely(!(priv->flags & ID_P_REP_AFTER_RD)))
-+	if (likely(!(priv->flags & ID_REP_AFTER_RD)))
- 		rcar_i2c_write(priv, ICMCR, RCAR_BUS_PHASE_DATA);
+@@ -710,7 +710,7 @@ static irqreturn_t rcar_i2c_gen2_irq(int irq, void *ptr)
  
  	/* Only handle interrupts that are currently enabled */
-@@ -731,7 +730,7 @@ static irqreturn_t rcar_i2c_gen3_irq(int irq, void *ptr)
- 	 * Clear START or STOP immediately, except for REPSTART after read or
- 	 * if a spurious interrupt was detected.
- 	 */
--	if (likely(!(priv->flags & ID_P_REP_AFTER_RD) && msr))
-+	if (likely(!(priv->flags & ID_REP_AFTER_RD) && msr))
- 		rcar_i2c_write(priv, ICMCR, RCAR_BUS_PHASE_DATA);
+ 	msr = rcar_i2c_read(priv, ICMSR);
+-	if (!priv->atomic_xfer)
++	if (priv->flags & ID_P_NOT_ATOMIC)
+ 		msr &= rcar_i2c_read(priv, ICMIER);
  
  	return rcar_i2c_irq(irq, priv, msr);
+@@ -723,7 +723,7 @@ static irqreturn_t rcar_i2c_gen3_irq(int irq, void *ptr)
+ 
+ 	/* Only handle interrupts that are currently enabled */
+ 	msr = rcar_i2c_read(priv, ICMSR);
+-	if (!priv->atomic_xfer)
++	if (priv->flags & ID_P_NOT_ATOMIC)
+ 		msr &= rcar_i2c_read(priv, ICMIER);
+ 
+ 	/*
+@@ -832,7 +832,7 @@ static int rcar_i2c_master_xfer(struct i2c_adapter *adap,
+ 	int i, ret;
+ 	long time_left;
+ 
+-	priv->atomic_xfer = false;
++	priv->flags |= ID_P_NOT_ATOMIC;
+ 
+ 	pm_runtime_get_sync(dev);
+ 
+@@ -896,7 +896,7 @@ static int rcar_i2c_master_xfer_atomic(struct i2c_adapter *adap,
+ 	bool time_left;
+ 	int ret;
+ 
+-	priv->atomic_xfer = true;
++	priv->flags &= ~ID_P_NOT_ATOMIC;
+ 
+ 	pm_runtime_get_sync(dev);
+ 
 -- 
 2.35.1
 
