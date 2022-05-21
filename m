@@ -2,56 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D0F52FC8F
-	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 15:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95EBE52FCD0
+	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 15:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238449AbiEUNKU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 21 May 2022 09:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
+        id S1344477AbiEUNW1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 21 May 2022 09:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233555AbiEUNKU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 09:10:20 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649D66339E;
-        Sat, 21 May 2022 06:10:15 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id k13so1245378uad.0;
-        Sat, 21 May 2022 06:10:15 -0700 (PDT)
+        with ESMTP id S236684AbiEUNWY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 09:22:24 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F13F60064;
+        Sat, 21 May 2022 06:22:23 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id e19so10715932vsu.12;
+        Sat, 21 May 2022 06:22:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=gY5YVxSZXZa4246xLEbiahVb0abGv5fP2xn0Bj47TQk=;
-        b=MMm10EHw5NfVdmbzl5QnYyuVlnEypnTwmxnUjZrASRiX2RdolTkvhEPaQEtTnLzUcB
-         ZPAuRWUOk+JmMv9bCijbs03VPBKqVtjZ7zq6h8L2C+h3o8rJT3OajJkR2cAaX5auDWCW
-         +avBzKF5XDR+EziuGPLwVH/foFpjhWUxdS91ikc3apcg+i12qRKv9rzwBOjRNcNhBezU
-         aYXJaFYNxGJXFmu0+EqfbFRLe+EaHYb4jbQ0NMowo3xV4VLAgCK54EguUwQZggvFLcMq
-         7QuXzDy12eydEhmCkozNV9kXSyckNYYMHmeIUyUOkCP5dJOC4OTWamw8CWnWFI4OsfMj
-         OziQ==
+        bh=k83DVcIcffNjBmT+wlu9VAh4wJXwqJzexEQvALMCO7A=;
+        b=mKHk4RofXhQK4eLxHsDk3reXwyjiqEQbNfsXRsKBcRxL7PGJHEfGWrQ8bhweXz4jxG
+         uq+3+8pHy4BRpHyRFeRtZ0gukNg7qQ6O7sILCCMt58U483zdPWBKHp+ueWMB3r3hNIVi
+         8VsP5a0g5Tevkx/KXwAhUwOCsSamPX0ltozwWgemNIDUlnehLD9A6Z+MOLWODO4kxKqN
+         +yLwWy1K675pz86c3DP780FZwasgG0lUh6T6jv871cdhEKFR5Xo8rVwjmyORMiBikx/7
+         2ANja/zRSj6Y1f9ToeFivDSqScWMwSO+nI23R3B4z5xaT/XlIDwp0Bbx7CrAs3KZ8z0G
+         i4dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:content-transfer-encoding;
-        bh=gY5YVxSZXZa4246xLEbiahVb0abGv5fP2xn0Bj47TQk=;
-        b=f2Uu0XpgqxufFdZpYN1BHvvqBO3sNsKtKrBBjSXrfs5/aHUsXG2d2841XXH7BFGWkt
-         LVdV4uUIIqWuOLR+gFiuh5hD5fuyPZB7SwEc9H8YrxHDEqkuV7G+X6tViD+d8tbX6tFL
-         xP3fDiLSyeo+wG3XRFOeXCBX6p9gv05LN0OySAQWB3OWuDmC0wrtPR2WNyfN0O0F9ZhS
-         07t9IbimIze7I1eZ7RK83W8lh7ijwUGVrBzGYltohfS8rlWhFQPR1S/8L6rAYd0OiJZ1
-         KmDx+GMvaJTelmzhOvtJettSuLnBfcVD4rOlz1nzc51EJbmHp6TgQwm8kMr2wBCbqWte
-         RmLg==
-X-Gm-Message-State: AOAM531cJZ4Yorq9u8sUod2kvcUZCt8pHKLWdbTgOCZQUY46wVPEtuPO
-        JjLHakTq6TorNuIwgpJIfW63l/eJMilotPTGfw==
-X-Google-Smtp-Source: ABdhPJxMM64PIFeMevBuR5+/jP8tWbXAUSF3xQaHJhxiF1PXLUgVCD+aHXQWr5I9X4Fu4iz9yZN9yRf/dfAQ0K4A0Y4=
-X-Received: by 2002:ab0:2e90:0:b0:368:acd4:f2cd with SMTP id
- f16-20020ab02e90000000b00368acd4f2cdmr5227856uaa.116.1653138614398; Sat, 21
- May 2022 06:10:14 -0700 (PDT)
+        bh=k83DVcIcffNjBmT+wlu9VAh4wJXwqJzexEQvALMCO7A=;
+        b=qIibgR1fg08Kg3ds3oG4ydHYtCKdirbgHC2SsUlyCwajrCsp5vB5KGvncGfGVDK+5I
+         F4Zh+XzuFILnnM0I/Tnm9ppYWAO7ILuDzNhe8tw3hAnrzFWMkI9HbmVbMiyWcPPLvtgA
+         afc8wIAa+aBvtGe2MLz2qlIbHc2OC9nzP9L7dRHDQm75U+iyl9AqITw6n+v+ZZ8p8xqr
+         u8usWu4wB0f0QyvDZXQ4an7D6MBd4v28J186IdPUuKcBG7sm+tS3aeoChbnb8RAMtROQ
+         uZsKFzO2WfMipkMOo0n12UT2+d+Lg1oaWvuz25dtO2NBFiRS0widXw/susQ0LXEXt1LI
+         r5GA==
+X-Gm-Message-State: AOAM5325OvUnJMi1ScgcNQUEeQGv9/k1JT5Vj9n7mSZMRDXETtMyXjcF
+        fZi0VQT8th6saUKNa1pjBQO5QrjUxIRfXzKRKw==
+X-Google-Smtp-Source: ABdhPJwdtT3lmW5L/ar4Qia93oyUEeZtSo6Wvd80aKSyRZZ7LHnsu45ANLywj2/NuRH/cy3ZSEbxXTtiwQ9Y6ncBtno=
+X-Received: by 2002:a67:cc02:0:b0:335:c5ac:96d7 with SMTP id
+ q2-20020a67cc02000000b00335c5ac96d7mr5905980vsl.50.1653139342676; Sat, 21 May
+ 2022 06:22:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220517101142.28421-1-warp5tw@gmail.com> <20220517101142.28421-10-warp5tw@gmail.com>
- <YoiAF3fcFJiH4nGP@shikoro>
-In-Reply-To: <YoiAF3fcFJiH4nGP@shikoro>
+References: <20220517101142.28421-1-warp5tw@gmail.com> <20220517101142.28421-11-warp5tw@gmail.com>
+ <YoiAmI2wZz2Bkcm1@shikoro>
+In-Reply-To: <YoiAmI2wZz2Bkcm1@shikoro>
 From:   Tyrone Ting <warp5tw@gmail.com>
-Date:   Sat, 21 May 2022 21:10:02 +0800
-Message-ID: <CACD3sJb6OParLBQxe+JwcGRpnLfihFRLMOQWEwC_DJHrpzcr_w@mail.gmail.com>
-Subject: Re: [PATCH v5 09/10] i2c: npcm: Support NPCM845
+Date:   Sat, 21 May 2022 21:22:11 +0800
+Message-ID: <CACD3sJb3ZBsZF=qtbvSikxUU8C-BLChZeHL2mG5JXKkx3QNWyw@mail.gmail.com>
+Subject: Re: [PATCH v5 10/10] i2c: npcm: Capitalize the one-line comment
 To:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <warp5tw@gmail.com>,
         avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -78,22 +78,23 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi Wolfram:
 
-Thank you for your reminder.
+Got it and thank you for your help.
 
 Wolfram Sang <wsa@kernel.org> =E6=96=BC 2022=E5=B9=B45=E6=9C=8821=E6=97=A5 =
-=E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=882:01=E5=AF=AB=E9=81=93=EF=BC=9A
-
+=E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=882:03=E5=AF=AB=E9=81=93=EF=BC=9A
 >
-> On Tue, May 17, 2022 at 06:11:41PM +0800, Tyrone Ting wrote:
+> On Tue, May 17, 2022 at 06:11:42PM +0800, Tyrone Ting wrote:
 > > From: Tyrone Ting <kfting@nuvoton.com>
 > >
-> > Add NPCM8XX I2C support.
-> > The NPCM8XX uses a similar i2c module as NPCM7XX.
-> > The internal HW FIFO is larger in NPCM8XX.
+> > Make the one-line comments capital in the driver to get the comment sty=
+le
+> > consistent.
 > >
+> > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller dri=
+ver")
 > > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
 >
-> Would be great to get an ack from one of the listed Nuvoton maintainers.
+> Needs to wait until comments to patches 8+9 are addressed.
 >
 
 Best Regards,
