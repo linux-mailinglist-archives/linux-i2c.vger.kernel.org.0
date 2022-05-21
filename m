@@ -2,55 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A50852F946
-	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 08:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D8652F94B
+	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 08:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbiEUGft (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 21 May 2022 02:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
+        id S1353985AbiEUGhs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 21 May 2022 02:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiEUGfq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 02:35:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DF1135
-        for <linux-i2c@vger.kernel.org>; Fri, 20 May 2022 23:35:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E125B82F47
-        for <linux-i2c@vger.kernel.org>; Sat, 21 May 2022 06:35:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3053CC385A9;
-        Sat, 21 May 2022 06:35:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653114942;
-        bh=KKQqI8kOC5rIvIIWwPl4CL51ZVKLHBbwlqhXPOoLCEQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k1nn9xxQNeYJlrEzUOxtFUP5SSkexyO87GGLjRXvr1HPYAN22lkaRJE2YcE72prpG
-         sa743XfV/wTpzguN3/HH6OIknlCXkrVpCyCowntM01yb/N6bU+DGm2ZERlfoAm6ZnX
-         E2d6JqHXjC7FzZxLAjdJaEns8e2yGCpFGWH32YC5FqZosbrW+smdM7GlQSktouLdgv
-         Jw7xW7rd20g+9U/OvsXGh+150qs0gUFQp241m9LrKzIAP5WiVOhIGDr5pZuK4Zdsv4
-         Vtsl7h/JS5rdpnYVPDfMrkQIKEv+taO9JJm7rFS+4JIFxHaWUnfESUU6u00bn6EXgv
-         au/txuIxiMJ5w==
-Date:   Sat, 21 May 2022 08:35:37 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Chris Morgan <macroalpha82@gmail.com>
-Cc:     linux-i2c@vger.kernel.org, gregory.clement@bootlin.com,
-        Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH] i2c: mv64xxx: Add atomic_xfer method to driver
-Message-ID: <YoiIOcmeOnbPIafh@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Chris Morgan <macroalpha82@gmail.com>, linux-i2c@vger.kernel.org,
-        gregory.clement@bootlin.com, Chris Morgan <macromorgan@hotmail.com>
-References: <20220330171657.9039-1-macroalpha82@gmail.com>
+        with ESMTP id S239029AbiEUGhs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 02:37:48 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D82814AB
+        for <linux-i2c@vger.kernel.org>; Fri, 20 May 2022 23:37:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=bMykPHv2PPnGKGVW2ZM+j+OfQTvS
+        jDylrLO+e9ack5E=; b=TcS7IUEl7Xfg+I+9wWNFQwy0+TaSeEsisfqDkhYk0XUM
+        ghccHSXSvFOxS4w59/tKe8NRTZjjswTjC48dIk7+aWqTNRLgGRQjtFLhk0Ii8OzE
+        Orw/9JPtR7CY2QSDx5R+w6FKRdDFy/6LVfCbpiVj38a14NIAKeNRODDPuBP0lco=
+Received: (qmail 4065707 invoked from network); 21 May 2022 08:37:45 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 May 2022 08:37:45 +0200
+X-UD-Smtp-Session: l3s3148p1@lzI12H/furAgAwDtxwyXAGMY7IbT6g6m
+Date:   Sat, 21 May 2022 08:37:44 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: Re: [PATCH 1/2] i2c: rcar: avoid race condition with SMIs
+Message-ID: <YoiIuBtm2cPcYK00@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+References: <20220520103325.81110-1-wsa+renesas@sang-engineering.com>
+ <20220520103325.81110-2-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hrPLV8z2cN1FzJkR"
+        protocol="application/pgp-signature"; boundary="e6xPWi79qiLbN3k3"
 Content-Disposition: inline
-In-Reply-To: <20220330171657.9039-1-macroalpha82@gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220520103325.81110-2-wsa+renesas@sang-engineering.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,46 +51,52 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---hrPLV8z2cN1FzJkR
+--e6xPWi79qiLbN3k3
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 30, 2022 at 12:16:57PM -0500, Chris Morgan wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
+On Fri, May 20, 2022 at 12:33:24PM +0200, Wolfram Sang wrote:
+> A customer experienced a race condition with 'repeated starts' when a
+> System Management Interrupt took over for 30us and more. The problem was
+> that during the SMI a new MAT interrupt came in because we set up the
+> 'repeated start' condition. But the old one was not acknowledged yet.
+> So, when it was acknowledged after the SMI, the new MAT interrupt was
+> lost, confusing the state machine of the driver.
 >=20
-> Add an atomic_xfer method to the driver so that it behaves correctly
-> when controlling a PMIC that is responsible for device shutdown.
+> The fix consists of two parts. First, we do not clear the status
+> register for 'repeated starts' when preparing the next message anymore.
+> The interrupt handlers for sending and receiving data is now solely
+> responsible for that and it makes the code easier to follow, in fact.
+> Secondly, clearing the status register is now split up to handle MAT
+> interrupts independently. This avoids the race condition because the old
+> MAT interrupt will be now cleared before we initiate the "repeated
+> start" condition.
 >=20
-> The atomic_xfer method added is similar to the one from the i2c-rk3x
-> driver. When running an atomic_xfer a bool flag in the driver data is
-> set, the interrupt is not unmasked on transfer start, and the IRQ
-> handler is manually invoked while waiting for pending transfers to
-> complete.
->=20
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+> Reported-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Gregory? Looks reasonable to me.
+Applied to for-next, thanks!
 
 
---hrPLV8z2cN1FzJkR
+--e6xPWi79qiLbN3k3
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKIiDkACgkQFA3kzBSg
-Kba1rw/+IKOnem11uXodh9+MaFM7jikdkYTBUMQGWyNLPgNp8d7mrE+O5xx4htOf
-2D/CiI6O6zu6zpPP6Tfp7XN/NMOm8veyuIZMoVXfwBa88L6kreSeCJXkTyaOGfVS
-eboLnB6Hxg9F34MR8m45KzIP/EMkrE3UkNcccCWmoLy2nbhw/7TMiB+zj+SPB4Ss
-O7zkzjKrchTiMXQjLxkgoSempoSuL1b+tXPfhT+03hHT5aXiR25AuvzUlSC+uZ5m
-H/6X0Yj0yOVPfo4T9CYY4iIKlWbQDcFWT86BciGH6y68XiupyN66RvhmMHFMaQY8
-lCYYImqmsbFXI86oMd+AZHKkqXMSSYw/VpYiRWG6U3vph80nBSZsF0IQP+Alj/3K
-FVh7l4wKh9jHo5GvqBrTnSjrC0M9S9yBSwHxcYbxIBS+TEpTbRAPz8nc6weEbi2T
-Wroz2fX/fQk/oGx+bPwd+H69UqG3JUz5db/9gO/thRCv/QeIWu1baEgIgFBCIHpO
-PEglrLijVt0D0wj5Z48LglvMIbxAoJW2zyUzfknQTd0NcY6Sdv/WbsN/3q93/c+Q
-hDAZFII4Nx2nrhbmAmlTgVq/rcPPXVw0GrBR2fPyypaxpjMnwRpBQx5UrHvPMunB
-pwH4gvC9e232a122Nupx/47Zhi7WRQBjHejKXXlCj3X0jh0MJYI=
-=9Zrq
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKIiLgACgkQFA3kzBSg
+KbbO/Q/+OHQE+e+Z1EKJWXgbOwBseqOjU6NFc1mOtU9AAYOUg74DksUaZPeJgi7S
+X/sqCc14wlm0mgBV2iF4BLqecAq3VS7uFWUftHPc7foH3FaqB0ECyy87gGmHI02T
+3wDNhBUrYgCNHsNmG1m5jJWMOsRyMiyfmg328muILpNvuvdtongamTc+psS8sWqX
+xiEmhzpqUSpGq0sBjo9ssJ8sXdhx3dcQpXKfQXJnNUtpFm0JRpAr4imlgZJhqZ+H
+ElQJzDlafcnTR/KjioxDefjFNafL/DNFaHSHZX/X7P+x8uGhK9IWIbRxDEQyzX4C
+D36xT5jRLvIQWY1DGaDGwDZy6csDedfXX3763ncJ9BM+U5n6JFSFzszyrv3xyEQI
+QKFIPIY8w0J2KwMaP2TltJF+QyQIiCj9DisMxMimdK6gnIhgqFJ7mHdHoX8sH2Op
+Pidy3e78iVDq0JVk4vHBs/wwO5ZjcjdHVkSEmpcJVJyWWiej4CHuGly2mheWCmo9
+HYNzL6Md32RG2H+dZng4hA8gbYPldPP3/SrAvoRwch4luCoAq8n12DgnKiIhRMRn
+gdafYjaqCzkb/Fev1mhErH3HodLIGHfCOaaQym9IhRbwelq9jjnYe1PMIN0MTZYL
+AVLDQiovhA4UCp81SDzPUHTnvhELGiUbQmlmoq98rvRGv8+cMCw=
+=8lAM
 -----END PGP SIGNATURE-----
 
---hrPLV8z2cN1FzJkR--
+--e6xPWi79qiLbN3k3--
