@@ -2,56 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8551A52FC5C
-	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 14:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBEFF52FC68
+	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 14:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239553AbiEUMa6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 21 May 2022 08:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
+        id S241150AbiEUMge (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 21 May 2022 08:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233731AbiEUMa5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 08:30:57 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE8F1276A;
-        Sat, 21 May 2022 05:30:55 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id m2so10660092vsr.8;
-        Sat, 21 May 2022 05:30:55 -0700 (PDT)
+        with ESMTP id S232693AbiEUMgc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 08:36:32 -0400
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92DFE0AC;
+        Sat, 21 May 2022 05:36:30 -0700 (PDT)
+Received: by mail-vk1-xa29.google.com with SMTP id m203so5168290vke.13;
+        Sat, 21 May 2022 05:36:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=PLiUGsx86B2IgJe8KKAVS/qHitUeMZlk8GB1xxBGZXM=;
-        b=K6lwCJy8pSzS5W0RmZDgVBc9ap8q6yLL+ZvdnP3IHErkTb2N+R1Co3xlAJguLh7WoQ
-         S/T2DTU/OJ/Lpa69I/5ehApXAbjZKTwk4Y/3s1JRI2gImpuSTvXK2q/NrBpKfLeE4Yse
-         JZ2O8RnIjJLPg7s2Ox0aQxdublM9mfNhkpuoXd2IfYHCRX1SX1Qw/kFv7vVg4GmHqAje
-         YDosDgnPDRAmRrhe9ZS4jNTyg7sWS8EeWoYxxbdfcBQuw5onL0xSzDjTbpt6+r+NfVji
-         rHKScJrEXiTx6gopnvCOrH3WIWknJSm2BwzlLWcKpoHetN3zArXODEx+qAt7xuiH+tWL
-         7dXQ==
+        bh=88aWhuqLs48EjscpwDp8i6PCYgkUo8462NUVXo2FVNA=;
+        b=gUz5LdAEB5GxPpTjh1e8cjpjIMcrQpFsYNFNVGK/BPs9nt34cI8exCnEEZ0o1WMZee
+         NI9JISZwwxqCJJfphAhwkxrcNyEFmuPHazmMcTWaKXs46ziSwGLgkwKoRdFfsZjfGJhV
+         DwRmE4ispD/0SbCLONa7xQWSuS8nPeioFkLaucUZJrtKSf8n+Mf78bQ0yuaaAFPLwVUT
+         BOQNxNjCGJv/ediiRTnsaZVxABohBoI/JoSfXXA3LmBqM+lv8pJJZfb6tXQ8rERKuTVE
+         55QiOLT0vwwraKtz93jSzeQGofeCM0AJXP7LwEXnrcVpFF9nfyCkeQFguZDUObMfc7w2
+         FVyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:content-transfer-encoding;
-        bh=PLiUGsx86B2IgJe8KKAVS/qHitUeMZlk8GB1xxBGZXM=;
-        b=YVGBRpl/5v6fJDeTV/M7vbj0sD6aCClJzJ/z6evp1usnzMBfEN/tJ9N+aInwYgGaZg
-         nowaFHIs8hAl3adYiwd+I94KkDbHZmDXRFvI92DcVXf/DoS4prePhKT3QZJcYelh3LR1
-         f2PRiqmpwcnLrRZTuiX7deGwU2KJF6UQlZfnTXIHVXgDB67lNDXxnm3XHnicmbzNxBO/
-         1Nq2G8U9qE5xj0bMu/2gdo1naGjz/SpHSQG69pXjQebEGy7kIlvXNPU+uPmEKEre7JjX
-         GxkhiTfClA/Or7QvVKgQeUT6S7kcMB75iN2PaYlb0uqJyfYgk6Fsi6Gr0UP56rDPSDeY
-         ur8Q==
-X-Gm-Message-State: AOAM5320Ruqp6lQBGKKdIkF5NjEnlXCeysFNdPAyA8+bTiQv/zBA/rBC
-        iQyTAL0isV2JZTChO1xtdKqzoWzwakviBhlFLw==
-X-Google-Smtp-Source: ABdhPJzgU6FZ4AbE/027a0BTPCNgs0tj4cM53LwYNT4x6xuAyl667ifMD7gq1uwVW49viywaTzGAZkwJH7o7fPxouVc=
-X-Received: by 2002:a67:d88c:0:b0:337:9a25:36c3 with SMTP id
- f12-20020a67d88c000000b003379a2536c3mr795937vsj.84.1653136254639; Sat, 21 May
- 2022 05:30:54 -0700 (PDT)
+        bh=88aWhuqLs48EjscpwDp8i6PCYgkUo8462NUVXo2FVNA=;
+        b=PaLBjj2PYtnkmPkkoI3Npb0UsPXHZMVrGlbx33GC2XPKwKJ3BS2JKPQteM614beQKw
+         eixh3yfgOaENuMK8FX6CflJYHMN0MmCFG+BMu5oXDQk398dsgU6wcJ1BzEP4MEmbAKLK
+         2IU6rQbLM4OZDjJYNhnBgxBqzeMu0Q10B9p05gDiinODQBlForQfDPs3INCmCD7YmGJr
+         svJFFiVp+UoqjzuiJgkwDc9J0c+WjLzcJyd2zQQWAZ1WdmLayrvCrwulXjRkpIv3uPPQ
+         a22ycJDm5IRlY5r2zFQ6vg72aeYSnlNEt4yjQ+HquZ7/a2W0O5sTmsEU4iE08Ail8alJ
+         myPA==
+X-Gm-Message-State: AOAM530cHkNcVF3gp8O8mfbanJOg7TOFyFl8vy+BzvlkdoRR8WisQmBh
+        MIj1yZ+Jo45NnEEbkzCYLOEmysCsAb7gHls9cg==
+X-Google-Smtp-Source: ABdhPJyKo2dgiaE4q9V+2eJn02CIy5nUblJlWy/nu1zDZs6GmSd3FvSRN3TranOng2H4DBrLGGjHIZvth/2ZQBBIKng=
+X-Received: by 2002:a05:6122:8c5:b0:357:8a48:5239 with SMTP id
+ 5-20020a05612208c500b003578a485239mr162784vkg.5.1653136589971; Sat, 21 May
+ 2022 05:36:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220517101142.28421-1-warp5tw@gmail.com> <20220517101142.28421-2-warp5tw@gmail.com>
- <YoiAqhZBILoxFLih@shikoro>
-In-Reply-To: <YoiAqhZBILoxFLih@shikoro>
+References: <20220517101142.28421-1-warp5tw@gmail.com> <20220517101142.28421-3-warp5tw@gmail.com>
+ <Yoh9yL1FO7aXme69@shikoro>
+In-Reply-To: <Yoh9yL1FO7aXme69@shikoro>
 From:   Tyrone Ting <warp5tw@gmail.com>
-Date:   Sat, 21 May 2022 20:30:42 +0800
-Message-ID: <CACD3sJYnS3VV8yykmbsg+CjARrywJk2zYz9NkBnC7bT=5kAwuw@mail.gmail.com>
-Subject: Re: [PATCH v5 01/10] dt-bindings: i2c: npcm: support NPCM845
+Date:   Sat, 21 May 2022 20:36:18 +0800
+Message-ID: <CACD3sJYuPJM5NCrD85gnBe=JEvfsfyjZN18prDwY043GqHAj+w@mail.gmail.com>
+Subject: Re: [PATCH v5 02/10] i2c: npcm: Change the way of getting GCR regmap
 To:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <warp5tw@gmail.com>,
         avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -78,21 +78,28 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi Wolfram:
 
-Thank you for your help.
+Got it and thank you for your review.
 
 Wolfram Sang <wsa@kernel.org> =E6=96=BC 2022=E5=B9=B45=E6=9C=8821=E6=97=A5 =
-=E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=882:03=E5=AF=AB=E9=81=93=EF=BC=9A
+=E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=881:51=E5=AF=AB=E9=81=93=EF=BC=9A
 >
-> On Tue, May 17, 2022 at 06:11:33PM +0800, Tyrone Ting wrote:
-> > From: Tyrone Ting <kfting@nuvoton.com>
+> On Tue, May 17, 2022 at 06:11:34PM +0800, Tyrone Ting wrote:
+> > From: Tali Perry <tali.perry1@gmail.com>
 > >
-> > Add compatible and nuvoton,sys-mgr description for NPCM i2c module.
+> > Change the way of getting NPCM system manager reigster (GCR)
+> > and still maintain the old mechanism as a fallback if getting
+> > nuvoton,sys-mgr fails while working with the legacy devicetree
+> > file.
 > >
+> > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller dri=
+ver")
+> > Signed-off-by: Tali Perry <tali.perry1@gmail.com>
 > > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 >
-> Needs to wait until comments to patches 8+9 are addressed.
+> Applied to for-next, thanks!
+>
+> I dropped the Fixes tag, doesn't look like a bugfix to me.
 >
 
 Best Regards,
