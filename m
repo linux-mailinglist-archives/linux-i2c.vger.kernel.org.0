@@ -2,92 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC4C52FAC3
-	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 12:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3275952FB52
+	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 13:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232831AbiEUK4y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 21 May 2022 06:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
+        id S1354955AbiEULNR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 21 May 2022 07:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232956AbiEUK4x (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 06:56:53 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED9355220
-        for <linux-i2c@vger.kernel.org>; Sat, 21 May 2022 03:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=XNjMIjslYS0gsqboDqg3xCy6RknD
-        qyuCskpYH8PWXAI=; b=DHxoeS/j+XG8hyIp8iAkQfn4usgxNDixtHrrseXNjqNH
-        7+BphxM4UF4HQWNMhWLZV2FXEbPNFPobv+4Fij1ErZxHl81o9X5ti6pcsOrlgIjW
-        u+E2ybqf7NfG7I8c+KBYVoqqcrIKWfU6zTkkBx+sHACKOGtulpF0B7S3IoTSqIw=
-Received: (qmail 4129084 invoked from network); 21 May 2022 12:56:48 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 May 2022 12:56:48 +0200
-X-UD-Smtp-Session: l3s3148p1@UZSvdoPfxrAgAwDtxwyXAGMY7IbT6g6m
-Date:   Sat, 21 May 2022 12:56:48 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Subject: Re: [PATCH 3/3] i2c: rcar: use flags instead of atomic_xfer
-Message-ID: <YojFcPIIFgagCkS5@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-References: <20220520202918.17889-1-wsa+renesas@sang-engineering.com>
- <20220520202918.17889-4-wsa+renesas@sang-engineering.com>
+        with ESMTP id S1354828AbiEULMl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 07:12:41 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FE13EA85;
+        Sat, 21 May 2022 04:12:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9wrNYIqEvyrnG9iiMAt+K7orQjSJi1d7S7pYQrFwucI=;
+  b=EfF0aOKSs4g3wIIaklisoXUwQF+siyCP+iLoqh8+Ts2ANXeSXtlxpOEA
+   8bv0ot52CkAASAgnLiwGstKTOL4eDALptGDX26OB47+hXzgWv8zq39RdM
+   PWFAHHjMxXGD9P9el3K+BOta4etD1Bg8i2WNj1vcy5Rg/50IzYrWSLOmy
+   4=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
+   d="scan'208";a="14727955"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:01 +0200
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     kernel-janitors@vger.kernel.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: meson: fix typo in comment
+Date:   Sat, 21 May 2022 13:11:03 +0200
+Message-Id: <20220521111145.81697-53-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g/EUe/8R9Jeh62kS"
-Content-Disposition: inline
-In-Reply-To: <20220520202918.17889-4-wsa+renesas@sang-engineering.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Spelling mistake (triple letters) in comment.
+Detected with the help of Coccinelle.
 
---g/EUe/8R9Jeh62kS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-On Fri, May 20, 2022 at 10:29:18PM +0200, Wolfram Sang wrote:
-> From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
->=20
-> i2c-rcar already has priv->flags. This patch adds a new persistent flag
-> ID_P_NOT_ATOMIC and uses it to save the extra variable. The negation of
-> the logic was done to make the code more readable.
->=20
-> Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-> [wsa: negated the logic, rebased, updated the commit message]
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ drivers/i2c/busses/i2c-meson.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to for-next, thanks!
+diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
+index 195a9716da31..61cc5b2462c6 100644
+--- a/drivers/i2c/busses/i2c-meson.c
++++ b/drivers/i2c/busses/i2c-meson.c
+@@ -82,7 +82,7 @@ enum {
+  * @done:	Completion used to wait for transfer termination
+  * @tokens:	Sequence of tokens to be written to the device
+  * @num_tokens:	Number of tokens
+- * @data:	Pointer to the controlller's platform data
++ * @data:	Pointer to the controller's platform data
+  */
+ struct meson_i2c {
+ 	struct i2c_adapter	adap;
 
-
---g/EUe/8R9Jeh62kS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIyBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKIxXAACgkQFA3kzBSg
-Kbaq0Q/4kUH+FPKRe7K24vaYCZoZzBPxsdv67Vgvp8WUrjEoIXdiUXRlKJBJxULl
-v347a156YG9os9VyMWgWmkV/sB3mVQtqFoBWd5X+QGOLn6NgmZXQJfJazo1S1oEZ
-HoEjJiaUgkhLNOo0kiR+ltBNGTZCoRGIqjeXpnYGjSXfBvx8xoBIgT1m4EbIoaPH
-c/RVLo20xRSRvYatHWc4zASJZoL3/528mrYuVx0asrE6EslHy+tQhk2ltnv3WANQ
-cbWIyhhceXATvNYXMr/sMqidrr1GGjLUi29NOoj8RIFxd8ZNnCGwSmabr2ZtX8f0
-MeRoaVjKizD6jtqU3RIAc+HX53f65Hp0sff/P8NEb1fo3A9BDnU4HqXosdSvOdIO
-eongGdKffBsrDRXQWFAVl2XRP57rZX7sh9WJv8rQjPKd6xlk3N9HqglKyGCeFkAN
-DCNxv6A41YrxubXo334jxAtobCuvYIj4rwlqtH5Vcp3dlWQoT50fxzmn/erdlgum
-C2/sz5m7ofZuj2Pgu3eNK91Miskawswd+llaUWSioTA6P11lsABKcJRSn/1y8caK
-GIto6HiO4DWqm5UZmeGLijfsSDtd6I8BkK7Nlop1l/VyjO5PRpW7rF3gzayOwIQQ
-QMpYeCEqDWnivFNd4k69SZQlcNnp8FWOVcglDs8L7vB2yn8e6w==
-=eong
------END PGP SIGNATURE-----
-
---g/EUe/8R9Jeh62kS--
