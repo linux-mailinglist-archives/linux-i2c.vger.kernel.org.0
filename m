@@ -2,66 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B3452FAA6
-	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 12:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC0052FAB0
+	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 12:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235863AbiEUKY3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 21 May 2022 06:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
+        id S230203AbiEUK3A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 21 May 2022 06:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbiEUKY0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 06:24:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C0E53B58;
-        Sat, 21 May 2022 03:24:22 -0700 (PDT)
+        with ESMTP id S229725AbiEUK26 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 06:28:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A1D1053C9;
+        Sat, 21 May 2022 03:28:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1EA6B81B22;
-        Sat, 21 May 2022 10:24:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 937A4C385A9;
-        Sat, 21 May 2022 10:24:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0EF961211;
+        Sat, 21 May 2022 10:28:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CA57C385A9;
+        Sat, 21 May 2022 10:28:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653128660;
-        bh=aQ66ppQ61E71sBFPrUxFfvV2qUpYZYEcuTJAKUG3/QU=;
+        s=k20201202; t=1653128936;
+        bh=RSUo/hdb+FVQEL0K3q6Q4nfnWm+qkD2uvJI2Uca9Bmc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AY+09pKT65P2pPSdS3VAfGddTMbpF/wFn9/KqlXrneEKNqbFZRY44lI5pUmqmleY5
-         UYgKcKRWWgorhTduIw0Ol3Tey50HhqiJUm9HL71TkFgMORRbjwgjDd2d1JJobHGl5w
-         9nXOzj4KWnDEKldhqtBBgF6X+fFaZ2PruRuwkRoH1gg6AgNv//w1f2Iay8ftg8TLdc
-         gsijrQdMiZnoM34Y+I80MSYd3FiXQE/8ht7+heIARr1wOJXMt27EUmQh17ayCCRF7B
-         zUWZAeZS7JXjSSpIQw4/z18rP0tEpFcDEVBbseWiC5Am0eV645QLdRSFoWRPP/LLrr
-         5h9/fj/k+w0gA==
-Date:   Sat, 21 May 2022 12:24:16 +0200
+        b=Q/x0Npmn5VBdfdFRbsRtt93IVd4doEfqU4LqXBlkij4A+F8XXJejgO96kpyeQ6Som
+         4nXO8YaPBXAMalAdGEoYUzFDDR+KbbSUTC+vDXDRJ17DgagO7NKSLshT8DdPU3YbkU
+         xmV7E/HJH4PF3l+RN2eto2cBE8hHnZnX/061aRvD++t4UmI/LrrDYnEbjOc2t5viui
+         0e10A7+CuoLUYD311APZSLsDVwk/nm/QZB7lmWDOMDSQJPQ7thDAf5yNUpzWzSIam0
+         iUaCFuGOCblfudHGaNQDVJirh+356OniEbdbOPpJJPjz+8kevMb7xPR05ueviM45IH
+         TfM1frIYT83Yg==
+Date:   Sat, 21 May 2022 12:28:52 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Alifer Moraes <alifer.m@variscite.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        eran.m@variscite.com, festevam@gmail.com, kernel@pengutronix.de,
-        linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        linux@rempel-privat.de, pierluigi.p@variscite.com,
-        s.hauer@pengutronix.de, shawnguo@kernel.org,
-        gaopan <b54642@freescale.com>,
-        Fugang Duan <B38611@freescale.com>,
-        Vipul Kumar <vipul_kumar@mentor.com>
-Subject: Re: (EXT) [PATCH] i2c: imx: add irqf_no_suspend
-Message-ID: <Yoi90G5cphagcxpp@shikoro>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Andy Gross <agross@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-i2c@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] i2c: qcom-geni: remove unnecessary conditions
+Message-ID: <Yoi+5Fkn7+8whKcm@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Alifer Moraes <alifer.m@variscite.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        eran.m@variscite.com, festevam@gmail.com, kernel@pengutronix.de,
-        linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        linux@rempel-privat.de, pierluigi.p@variscite.com,
-        s.hauer@pengutronix.de, shawnguo@kernel.org,
-        gaopan <b54642@freescale.com>, Fugang Duan <B38611@freescale.com>,
-        Vipul Kumar <vipul_kumar@mentor.com>
-References: <20220307143630.28697-1-alifer.m@variscite.com>
- <3676803.kQq0lBPeGt@steina-w>
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Gross <agross@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-i2c@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <20220307125603.GB16710@kili>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bW5lVs4zqF9WjfiD"
+        protocol="application/pgp-signature"; boundary="folh36nxpehRSWJR"
 Content-Disposition: inline
-In-Reply-To: <3676803.kQq0lBPeGt@steina-w>
+In-Reply-To: <20220307125603.GB16710@kili>
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -73,71 +61,38 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---bW5lVs4zqF9WjfiD
+--folh36nxpehRSWJR
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi everyone,
-
-> > The i2c irq is masked when pcie starts a i2c transfer process
-> > during noirq suspend stage. As a result, i2c transfer fails.
-> > To solve the problem, IRQF_NO_SUSPEND is added to i2c bus.
-> >=20
-> > Signed-off-by: Gao Pan <b54642@freescale.com>
-> > Signed-off-by: Fugang Duan <B38611@freescale.com>
-> > Signed-off-by: Vipul Kumar <vipul_kumar@mentor.com>
-
-The SoB from Alifer Moraes is missing, too.
-
-> > goto rpm_disable;
-> >=20
-> >  	/* Request IRQ */
-> > -	ret =3D request_threaded_irq(irq, i2c_imx_isr, NULL, IRQF_SHARED,
-> > +	ret =3D request_threaded_irq(irq, i2c_imx_isr, NULL,
-> > +				   IRQF_SHARED | IRQF_NO_SUSPEND,
-> >  				   pdev->name, i2c_imx);
-> >  	if (ret) {
-> >  		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
+On Mon, Mar 07, 2022 at 03:56:03PM +0300, Dan Carpenter wrote:
+> We know that "ret" is a negative error code at this point so there is
+> no need to check.
 >=20
->=20
-> I stumbled across Documentation/power/suspend-and-interrupts.rst which st=
-ates:
-> > For this reason, using IRQF_NO_SUSPEND and IRQF_SHARED at the
-> > same time should be avoided.
-> Given this IMHO at least a comment should be inserted why this is fine. I=
- dont=20
-> have a full picture about the situation, but to me it seems there is a=20
-> reference missing, or why/how does some PCIe start some I2C transfer when=
- the
-> controller is suspended already? Do I miss something?
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Thank you for this comment, Alexander. I second you, this needs
-explanation.
-
-Happy hacking,
-
-   Wolfram
+Applied to for-next, thanks!
 
 
---bW5lVs4zqF9WjfiD
+--folh36nxpehRSWJR
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKIvcwACgkQFA3kzBSg
-KbYBVw//eUEuyxhP5NHyCEWeN7/A9Rbd45Wch8anz2ZxTHwrQ/d5jocPR0ZZjb7H
-pGhesAIMaw+LH88Bhw49U8TpbjKNRUwB8J9uaREwtI8X7rlmx8iHLqMadis83HPM
-RZblDYVbe+69+EAKHfKu3WrzMWhGc+tO+hinRPaxCY26h1isuQPaELPBfTyuqiJ5
-NHYfDhVV/qZtMYZI8xfEf8UAN/wGYaVL4Zhputw/XL5ZjCAuczavsInFdwzkzRyX
-JlRb+VXvJAqI5CAz6AYGuaWlMO7hZB81fpGm4+5B6UVPQA6jWl9e9s/L7sVZ1Zjs
-cJYjL3BD3/j0XQArEoMhySZAfs2KNeoXHWnc0zVas1lHHh4HwbEWLFRrK/sv5Wkz
-KkR1mMiLjlFsmxHwFIh+eWN0KDM8pTWCYEaiiCuYaQfeQH6RTE9Ju1l/+tb03mu7
-dPOK6S9Vl+nJ6qYGAS/HDj9nq6GQIX1i3T/bkYvLYE1/lK81AJt/7TuQdV7ulmwF
-jQHd5hpFjh8Bx25oyaK3kqQeCV6PUVtqdxoNCPffqH9BJwRWPdy275ucpZR9+7p9
-ysOhQQ+HDc3kXAVgpWE1AJgj95w/O7WVSpf7D5zwfpjiRyHaNp8qTB1IbcSC6Ty4
-frxbSqyQa4wbGBJfcsiuAe8linmZkmoZfCa3+Sh0vggMmpBM9Pg=
-=CxIu
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKIvuQACgkQFA3kzBSg
+KbZK/BAAiV6DDTVatgnvmW6bM4q0wIlQsq4rML0w0tmthyskSmhOFki/OFEH4hoW
+s3Z8Rrsfm9O4vEVf3YrqyASdfSVFxKxCVKBy5mUHrozBfZa5pbymoBnRnuQTf98/
+OVFXje9iDr9GysNSW4E6PWBnyjs4qvsAbQGLLmvDFcokEoJ4dFV4rFz2OMtailFT
+XexidptGh04+8twSu4v/8IE10OF2liXrrbCOVVQTY/IOvwy979ILSHtFbn8FMVyY
+T/jQ7mLmwOpHProQI8YeVJpd6tXp7X8VJ3HAafLXqfpd393mlHZj3K8Sebf/nqTz
+jcA3OkOUrq3FsBw30ObZ7R+2AnHUWkbDtTj74drL9tF925a3zCKUo16lr2IwGUdL
+j/6c5zUjIxhkYpPdSRxkZeaAbVKTQBTijP31EqtDcP1oBqPH9pacB7JbdpePznNB
+ck3okQ4tHYZqFie+k5oDNdvHJbOp4JUeEM6DK3koEjrDIIJRXJOlBLlWoEPLNsYu
+i5QoIR4MDvaVmVXkM/JHXul0/Bd2F/bGW5kc51A7o6CHln+2ucqUTvpG0fx26Kqe
++thWi3Iq+AIsOoOscASu0nJ2tfyt5AXF8Fqg6OGWTckJho8n4bckFJJjQJ7hnFeV
+8K7HQqMQTYrNpmMyIgA8U/AR0gsa1AClg/5qqmvUt5sqDe5JWO8=
+=QWMR
 -----END PGP SIGNATURE-----
 
---bW5lVs4zqF9WjfiD--
+--folh36nxpehRSWJR--
