@@ -2,56 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085BB52FC7B
-	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 14:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D894D52FC7E
+	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 14:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234229AbiEUM5O (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 21 May 2022 08:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
+        id S234905AbiEUM6Z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 21 May 2022 08:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbiEUM5O (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 08:57:14 -0400
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19305DD1F;
-        Sat, 21 May 2022 05:57:12 -0700 (PDT)
-Received: by mail-ua1-x92e.google.com with SMTP id 63so3791671uaw.10;
-        Sat, 21 May 2022 05:57:12 -0700 (PDT)
+        with ESMTP id S231732AbiEUM6Y (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 08:58:24 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BF65E770;
+        Sat, 21 May 2022 05:58:22 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id bc42so5179651vkb.12;
+        Sat, 21 May 2022 05:58:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=v7lrzZz0TqmDNB8iA94k1xpruUt+qA1fWDXV+uIRpKk=;
-        b=Q3TeCmucO50s7J5M6a3xN+W+q61y8GAmoRzuhg6QJKfZL4uou5QBw6ij591vK2UqVA
-         B6XgyomQFok7CXOXdu2PYPd89cHEbxeHJlb5iAGj1tDA5zzBmUDKmWD0AiVFu563fFLi
-         ujv+a7etD0ShVX6rAPn2umQymv7TrkQGxcSONuZL1Y1aUG2sE196l5LdJyfWp9/rDBU9
-         55Cmvmgsf/a8IslNkLCHcesXNmMDRkGE4uaGf2gwKYiGLzJb37ejRriZa+A2UCBoqLhU
-         FJD+GWiHRFtgZvqiuCdVOllb5avu0Q7l3XTndvHVnBhmtqb8LfIEMBCB51aGLKrGVK98
-         r9Dw==
+        bh=bykWdl7RkLd7Jog7GhgIWoVbo/GRYcAx6n48qBmXwJQ=;
+        b=gTDImOFg2B6vBdQngixeW/HBPTktxpECBn/wsKGgzGqvIB/rHUt2m6Lx8G2UhwbFR6
+         eFHv+2FUP23EXjhF0JGO7oeZH9VWAWwPx+yH7evdpZuMu8ew1iTVo53uGCD0Ywz03b08
+         1Rb+j7cO8b99jzj5uYdBfnAw08STnAdQ0JQV5lp3sjiKzwyrkMgEkZmkeF+MjKjL0Pgd
+         98uyQnUMYaQrHP02V5PitoHKi6JBPLag0nQyoEJUWuFjRZkklusWihMRj6th0Xx83rKM
+         98UzlkRgsztjyb0ZklsrVWu4+aLKj3XECXsaTMG82pEfx9JO+WIe3Vdil8drO7OKMD4E
+         WW0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=v7lrzZz0TqmDNB8iA94k1xpruUt+qA1fWDXV+uIRpKk=;
-        b=5ljsPW65MCj5m9aZKzqVp6C2emN328aza8XPwAlIApffXkB4Hu6s1n5yxvjRB/j/SC
-         6ZP3FRMuf27VV0w5zTfPzzgvOPc6Wvcha/qRIzDZ3g3ITNztcwrMn9HWzKbpyIbS3tp/
-         iCcX+8EF6eTYzmnMYjlNUGarQiI97s/3cxzrntJBz1E6AgEdRpO5eo7EK1QBaA53pQu4
-         VQZ5AIQDM1lMj9bpE+ADSQBtbAA5p7SToCputL2Ze3lRZz8Dq3Q4ZnaKb6ER60ORN13G
-         KHropqE8C9BPnjaviW4nobiuvd3IjuETgq2J0zji0H4b3cAR+mbc4aIBbEOB3WFXU8gw
-         nuqg==
-X-Gm-Message-State: AOAM530ubGToRbntEsbDAgWm9YkxO0s/CPCWrtz1O0I5cRmCxAVBM504
-        cssfxn2HvLud7EcgjhFE9vcMq0yRuzjFE2WoYw==
-X-Google-Smtp-Source: ABdhPJwi1fjgS3MbDK+Zsx3uIqu1nMkDhsIcuffkfADCaBMWQnKsuU8847NRfSHjq0/iuOs8KnhQFNBcov83tKIqFl8=
-X-Received: by 2002:ab0:66c1:0:b0:35f:c5a8:8a2e with SMTP id
- d1-20020ab066c1000000b0035fc5a88a2emr5047687uaq.98.1653137831733; Sat, 21 May
- 2022 05:57:11 -0700 (PDT)
+        bh=bykWdl7RkLd7Jog7GhgIWoVbo/GRYcAx6n48qBmXwJQ=;
+        b=Jc4C5eNg+LgYMVczlpsg+jLja+XAXcodL+SjXRiOqVBXVrfK1r2YmZ49r5/mj+sj2P
+         Jb6XlS+o01K8HTXEGDjDl8ricEh9DRwJ15vCDb04vNlfXMkh9DLFruuex2JZAZwKTLNZ
+         cjjUmr9mnDoDb5mimOLxjLg0qH5OoFQmMWfsJJ9T8Bb7a+14ATFYl2nk8WC/RkmcdQAN
+         wMzuv01KezMzkuYANKibMDagzJpBadrRo/7lqUbXH402ZTPhrt3uCrKNK9g6gUYPR4DB
+         oYxwIErNjba+ynksiYBcPHjsPhcCgWdOY+WJTBc0rHRP/rwagMbL5v0CkFWDQIO+OObL
+         iBTw==
+X-Gm-Message-State: AOAM5316l48yzqpo5degmqGAGBQe4ahe8d+b7VAS2IfoqmdXFu+BiEil
+        +7nHr5n9HI/O/Y8UdkTYm86ubqKuZFR8rEFnQw==
+X-Google-Smtp-Source: ABdhPJw2hjnkCON9vjPf/cymYkRdWh75PM+u9FYDAz5c58fDuAVkVCoVnkqkOCnc/jPPILXIWW5ufceScMZiovqk4Os=
+X-Received: by 2002:a1f:3254:0:b0:34e:b02d:bdd7 with SMTP id
+ y81-20020a1f3254000000b0034eb02dbdd7mr5659802vky.11.1653137902033; Sat, 21
+ May 2022 05:58:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220517101142.28421-1-warp5tw@gmail.com> <20220517101142.28421-6-warp5tw@gmail.com>
- <Yoh+KYtRzzbdsB9M@shikoro>
-In-Reply-To: <Yoh+KYtRzzbdsB9M@shikoro>
+References: <20220517101142.28421-1-warp5tw@gmail.com> <20220517101142.28421-7-warp5tw@gmail.com>
+ <Yoh+RUTtmiQsrCg3@shikoro>
+In-Reply-To: <Yoh+RUTtmiQsrCg3@shikoro>
 From:   Tyrone Ting <warp5tw@gmail.com>
-Date:   Sat, 21 May 2022 20:57:00 +0800
-Message-ID: <CACD3sJYE9AEFrQ7MgXN3=P9W66cw4tDwNc5xch3vn9TJjL7bfg@mail.gmail.com>
-Subject: Re: [PATCH v5 05/10] i2c: npcm: Add tx complete counter
+Date:   Sat, 21 May 2022 20:58:10 +0800
+Message-ID: <CACD3sJb1GOFNeXU3csDWR7mSeUEDqqNkT+JvKVavRL1Epik-zw@mail.gmail.com>
+Subject: Re: [PATCH v5 06/10] i2c: npcm: Correct register access width
 To:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <warp5tw@gmail.com>,
         avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -79,26 +79,31 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi Wolfram:
 
-Thank you for your help and review.
+Thank you for your help.
 
 Wolfram Sang <wsa@kernel.org> =E6=96=BC 2022=E5=B9=B45=E6=9C=8821=E6=97=A5 =
-=E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=881:52=E5=AF=AB=E9=81=93=EF=BC=9A
+=E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=881:53=E5=AF=AB=E9=81=93=EF=BC=9A
 >
-> On Tue, May 17, 2022 at 06:11:37PM +0800, Tyrone Ting wrote:
-> > From: Tali Perry <tali.perry1@gmail.com>
+> On Tue, May 17, 2022 at 06:11:38PM +0800, Tyrone Ting wrote:
+> > From: Tyrone Ting <kfting@nuvoton.com>
 > >
-> > tx_complete counter is used to indicate successful transaction
-> > count.
-> > Similar counters for failed tx were previously added.
+> > The SMBnCTL3 register is 8-bit wide and the 32-bit access was always
+> > incorrect, but simply didn't cause a visible error on the 32-bit machin=
+e.
+> >
+> > On the 64-bit machine, the kernel message reports that ESR value is
+> > 0x96000021. Checking Arm Architecture Reference Manual Armv8 suggests t=
+hat
+> > it's the alignment fault.
+> >
+> > SMBnCTL3's address is 0xE.
 > >
 > > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller dri=
 ver")
-> > Signed-off-by: Tali Perry <tali.perry1@gmail.com>
 > > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+> > Reviewed-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
 >
 > Applied to for-next, thanks!
->
-> I dropped the Fixes tag, doesn't look like a bugfix to me.
 >
 
 Best Regards,
