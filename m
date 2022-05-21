@@ -2,50 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ECE052F937
-	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 08:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D0A52F93B
+	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 08:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237613AbiEUGSq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 21 May 2022 02:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
+        id S236782AbiEUG1B (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 21 May 2022 02:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233827AbiEUGSq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 02:18:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4886E16D5E3
-        for <linux-i2c@vger.kernel.org>; Fri, 20 May 2022 23:18:45 -0700 (PDT)
+        with ESMTP id S229786AbiEUG1B (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 02:27:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4D9132A2A
+        for <linux-i2c@vger.kernel.org>; Fri, 20 May 2022 23:27:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 07F54B82E29
-        for <linux-i2c@vger.kernel.org>; Sat, 21 May 2022 06:18:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F38F5C385A5;
-        Sat, 21 May 2022 06:18:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3699360ED5
+        for <linux-i2c@vger.kernel.org>; Sat, 21 May 2022 06:27:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEBD8C385A5;
+        Sat, 21 May 2022 06:26:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653113922;
-        bh=jU+XrLaLSh35ziRsEYL9VJuyeCZ/6A5rSA7NXvGhK6E=;
+        s=k20201202; t=1653114419;
+        bh=GSs+CT4S6eHEa35M+FhYSSmwHH7TsiTbGwwfv6j+88c=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vKxQVa0RETD3oEF3u590/wRsJPghtVUB2lr+EerBSPF5lKSDl3fVuMVPuIcY8IbI5
-         tdvhrH4GGQ/gtN7J3l38NqrQBN6KNB+5CYLScRpG5JPsHO2yxs3ALjxI/1ZDW/So86
-         vqqf9F4jPfeXuoP3yH8dA6VeDgyGpQ47n5DfAjaescnhUMQTuprUeFnbRCuWtCGf4S
-         yB4WJvv3bOQvp1rj5fVIlRtXr+ZBd+jHUss2p1cbQBuYexWgxyMBBfuOpcNdW7rmmC
-         5+iIDL9TNnKo9mPaHvprvFC1TeYM8XyTb/oNsIJJeHIauOdnKZRa9AphmCRVsvGBcj
-         4V50+Nr+cYDFg==
-Date:   Sat, 21 May 2022 08:18:38 +0200
+        b=aGMtIPwY+d+31rmNmtecb4F1tkRCpzrS4+d4mDO8BspOU6CTZJighvQCthKPX87qJ
+         UVFgquv9lGF3ubzpud67mzWc72riL3aC3pAfIy2SpMJ71Y34xj0T1czEW5gk7Erx/0
+         xyiJcjg3DocXO1T4l6nK2HK/oluQzO9MjMzjm+Fn4cHubwOlOQ7r5DKGOSVzN6/g22
+         5z4/EPMno0LfLwiLm1kEiEQYvsvX4YGFXu5ncTKX8G52b9e34K81BBEb6TK+0n4KtI
+         SIsC9ymcosZd/qbOA9sOb+ke4uKOKBnag8TMWQRkMXUKmt+ypHKNOYvpFMgpsAzyiH
+         0fK4layBg8hLw==
+Date:   Sat, 21 May 2022 08:26:55 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Cc:     linux-i2c@vger.kernel.org, michal.simek@xilinx.com, git@xilinx.com
-Subject: Re: [PATCH v2] i2c: xiic: Correct the datatype for rx_watermark
-Message-ID: <YoiEPm2RAEaBNU63@shikoro>
+To:     Chris Morgan <macroalpha82@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, gregory.clement@bootlin.com,
+        Chris Morgan <macromorgan@hotmail.com>
+Subject: Re: [PATCH] i2c: mv64xxx: Remove shutdown method from driver
+Message-ID: <YoiGLxhfgYxLURyt@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        linux-i2c@vger.kernel.org, michal.simek@xilinx.com, git@xilinx.com
-References: <20220517053452.1526862-1-shubhrajyoti.datta@xilinx.com>
+        Chris Morgan <macroalpha82@gmail.com>, linux-i2c@vger.kernel.org,
+        gregory.clement@bootlin.com, Chris Morgan <macromorgan@hotmail.com>
+References: <20220325180625.31414-1-macroalpha82@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NyHtdcaeOEDYPhbW"
+        protocol="application/pgp-signature"; boundary="xMra8U078ZP1zSOP"
 Content-Disposition: inline
-In-Reply-To: <20220517053452.1526862-1-shubhrajyoti.datta@xilinx.com>
+In-Reply-To: <20220325180625.31414-1-macroalpha82@gmail.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,37 +58,51 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---NyHtdcaeOEDYPhbW
+--xMra8U078ZP1zSOP
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 17, 2022 at 11:04:52AM +0530, Shubhrajyoti Datta wrote:
-> The message length data type should be u16 as per the i2c_msg structure.
+On Fri, Mar 25, 2022 at 01:06:25PM -0500, Chris Morgan wrote:
+> From: Chris Morgan <macromorgan@hotmail.com>
 >=20
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> When I attempt to shut down (or reboot) my R8 based NTC CHIP with this
+> i2c driver I get the following error: "i2c i2c-0: mv64xxx: I2C bus
+> locked, block: 1, time_left: 0". Reboots are successful but shutdowns
+> freeze. If I comment out the shutdown routine the device both reboots
+> and shuts down successfully without receiving this error (however it
+> does receive a warning of missing atomic_xfer).
+>=20
+> It appears that very few i2c drivers have a shutdown method, I assume
+> because these devices are often used to communicate with PMICs (such
+> as in my case with the R8 based NTC CHIP). I'm proposing we simply
+> remove this method so long as it doesn't cause trouble for others
+> downstream. I'll work on an atomic_xfer method and submit that in
+> a different patch.
+>=20
+> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
 
-Applied to for-next, thanks!
+Gregory? Looks reasonable to me.
 
 
---NyHtdcaeOEDYPhbW
+--xMra8U078ZP1zSOP
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKIhD4ACgkQFA3kzBSg
-Kba/Uw//YvYolBdKaLFZVER82V7Q/XI0IRuLxM9BsuTi7+u9Du+9YrxGynDIS/2w
-IlcWJJxRjOAcZLWFsTtqUT2hWVuKXSYmKwA0EzWkrY/abu9ByZp/tKUwGgk4Ls4x
-zqMQAou+JBBAkMPOnv+xmBU/eQ2wKxPlpdHe9Z1542Cdwk0WirdQbqfc8NX8+S2P
-cZwNoDXf388fiQ0wuzIbxu6HDP8I2N+f2xlR3pAtmWs4SZYhuvlJGw09BTZLvSFG
-ucXL7lhR96nZhVWbKWy/Ki4IgoB7x7sMr5t4s2E+t+i7MvEmLg7HPoMsNNicfYpT
-swV4COQz5dCuqaeDDcGa/JYMCYkHMLtjMmkOxskzyEB6ufQA17fEAUO9MXu493lX
-mhvmcRz+8jZJJzT/d6a/XeJ/abNHNoPec7IkZwTPdGaV5PNDavEkFQ8yo91hNIdj
-uGfZIKEz7ytOJAurGZ7d2Uxy7CRjSEpUbDgmWhrPDj32CviJRKXvOX9zYK9K1BZg
-whZIEGMaQ5Q52jfcAtz5Ua/FEyiEwwPRvaeJGcSCFatLeX4ISmp13DI97wjmo+1G
-0EJeb2aNZZLG2Q6W7Ur6LLTvQEGiecPF425RV8z8dCGy+fphRJGC0q4QhukiDlF1
-VHb5533V1PnW0tylvh2Z+46W2oDhTy0YryIwFWpTegSvcGaj4Fc=
-=cyQW
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKIhiwACgkQFA3kzBSg
+KbaWqQ//e+fwvYeaKYJ26QQgE6iA5tDOrPTkJz9ijeZCarjwaTa9ha/8dhvPAQde
+hFjf0MkrLmfWRfoPmuZFkjxby8AukCWp5p309Xa9hwYZLc2NjdKJExqG8uYFP55M
+tA4sKxrxSXxxNiMvsvdQQrM1Pwd+cffs8tTAtfUHDPRTr1aVm0ZPKsjVT//VPwBh
+ZM4H0ySK7U3M4tcriAhP3ICurghGJxF8pM0Qi3IDv6xQ1PXGmIjLjYEiqse1hUdG
+CbMgHL4Pr2fNgH26RVOBfkYbMs87l25wVif4iv2TjegLhv4SBsxiOVoKMMyIn9oA
+oTIR2DVLiuXfi7LfyGCVaO6DValbKJFlnVYGRLT3yXtx23R7If8K7RfcRiN1/CC5
+gkuBIkv0EjnN6YE0FUZjSFK0AvUL0OVFG69MAMwKW/donA0aymtB/sTdY5Rbvg7y
+e+Z+LV8yudNrjQyP3XtwI3ul/bFsudXLIAWtoGRfY7QV/t4JpolSKPjLNk5OdBSI
+BLat8oS+HKM/BStOtJAJ2ERpbtMwae0UgFGI0m4b8/ROq0UqXhRnHFxvJBFJBqLZ
+Dsppdj8dXhYwidM08hxTJFQ7SuZuTW6padbUzj0y3HHKVkT8DP4tsTD5qSVvSMcp
+veXmkzUS7/36ROFhuhQ78DlACAGjLRlxK/HbC44rXqWPkia23vE=
+=bLgV
 -----END PGP SIGNATURE-----
 
---NyHtdcaeOEDYPhbW--
+--xMra8U078ZP1zSOP--
