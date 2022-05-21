@@ -2,36 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A647352F902
-	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 07:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9576D52F906
+	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 07:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354615AbiEUFwW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 21 May 2022 01:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51182 "EHLO
+        id S1354626AbiEUFwv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 21 May 2022 01:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354605AbiEUFwV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 01:52:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA9B5E77A;
-        Fri, 20 May 2022 22:52:19 -0700 (PDT)
+        with ESMTP id S1354621AbiEUFwu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 01:52:50 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FBD63381;
+        Fri, 20 May 2022 22:52:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08E66B82E26;
-        Sat, 21 May 2022 05:52:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A28E7C385A9;
-        Sat, 21 May 2022 05:52:13 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 33C32CE2E83;
+        Sat, 21 May 2022 05:52:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD4AEC385A5;
+        Sat, 21 May 2022 05:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653112334;
-        bh=gqEk2G2c+0WQ6teafqOuUt9h21Krn5Oy3NvQ+/5GkBI=;
+        s=k20201202; t=1653112365;
+        bh=jZcZhL3X9mmvJFsPPiWmyujX/hOqhXLpZSIvlMicpR4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mx+EfyH416zuLYyavxesotOJIfbYbPbvJjEC0Kcvhj8hxbMUnoaLxbGgjsYBjyUJD
-         JcOGwdfbLoMsTzB0e6YMHhDmevmCrum8C4EQJUmF2hInbjP89LhqZFLpjteFhFwP9W
-         D0Spw/gYgHYyZ8eyYvWLBfpGtqWhALWU/pJUdyw5z8DdQwcpHEreDnDvfX3CO8r2vQ
-         HugOnQgnqE29hd+7AG1+Lj20UXvf8Bj0McRQQHiuvCTORTYc7UenkbM5VOtRPzN1Et
-         t50ZSGCJ0nZ/fb8iyAxZ8L7tFwh7IW6+1QMW/yq/qC9GfFyeqZyj+poIY5/KbCM9wW
-         a1vd845q35waw==
-Date:   Sat, 21 May 2022 07:52:10 +0200
+        b=XZ/ex17VIVkQg3cSltZ7rBQnLNhUzy6aqZirn3yu4bvw0z2B61FStySUfiHR8hhic
+         cB2nEqXw2DDqxDZgyB5s+INMrotYYoVCT+a1mPMRISWNA8cCp7jmxSBD1ZT0h++wu1
+         GDL4MvDEBSOJqFPvLylvccKLBtLfyM16fXi6NyVz/QgVqJ6tWI2Iv40328XgU8zHOP
+         FSD+cJOQgSkOVynjf65SZ771M9uprxU2InhljyHLkt6QXGD5z1ClU7C0YnUiBwb0eZ
+         bE5NLGkWqp6LhIA57rwA1PllZtri0Eu2PEyocEfmmhCWndJNMWCkXpY2gTfU0BVFzO
+         7LFYW4oMxDAQQ==
+Date:   Sat, 21 May 2022 07:52:41 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Tyrone Ting <warp5tw@gmail.com>
 Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
@@ -45,8 +45,8 @@ Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
         openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 04/10] i2c: npcm: Fix timeout calculation
-Message-ID: <Yoh+CgMPJM/Qp2V+@shikoro>
+Subject: Re: [PATCH v5 05/10] i2c: npcm: Add tx complete counter
+Message-ID: <Yoh+KYtRzzbdsB9M@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
         tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
@@ -61,12 +61,12 @@ Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20220517101142.28421-1-warp5tw@gmail.com>
- <20220517101142.28421-5-warp5tw@gmail.com>
+ <20220517101142.28421-6-warp5tw@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sr7GoX7S9ot2v/dV"
+        protocol="application/pgp-signature"; boundary="zcJ0vOC2Hk9d1kli"
 Content-Disposition: inline
-In-Reply-To: <20220517101142.28421-5-warp5tw@gmail.com>
+In-Reply-To: <20220517101142.28421-6-warp5tw@gmail.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -78,16 +78,17 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---sr7GoX7S9ot2v/dV
+--zcJ0vOC2Hk9d1kli
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 17, 2022 at 06:11:36PM +0800, Tyrone Ting wrote:
+On Tue, May 17, 2022 at 06:11:37PM +0800, Tyrone Ting wrote:
 > From: Tali Perry <tali.perry1@gmail.com>
 >=20
-> Use adap.timeout for timeout calculation instead of hard-coded
-> value of 35ms.
+> tx_complete counter is used to indicate successful transaction
+> count.
+> Similar counters for failed tx were previously added.
 >=20
 > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller drive=
 r")
@@ -96,28 +97,27 @@ r")
 
 Applied to for-next, thanks!
 
-I dropped the Reported-by tag, doesn't look like test robot found this
-issue.
+I dropped the Fixes tag, doesn't look like a bugfix to me.
 
 
---sr7GoX7S9ot2v/dV
+--zcJ0vOC2Hk9d1kli
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKIfgoACgkQFA3kzBSg
-KbauVQ//ZUeQap9aumasQz94DsgHplMl1MEur+0lhsbMJnVScP9toqh9/SKoL4tJ
-aMH4pqaRYlEnQYoDF/9POi8/pdjSF7xbyhGQmx00Z/u+YdY0PX2QlFJ32Teaqdus
-syi9r4DFk09l2CKjQMKOEG7UdIiuNp/JhQzEGZBblHYVM2f0ph67dKV33i6CRoGt
-q5tjKkgiX8UPTjTDTW4OHSH+KogatMjX/xms1ZHN1PTjsZ6ZpTUD0EES62IQxw/N
-5a+pnqZ0cpOVLyqA5+wWp3CoSRD4oRCww/Rpn2bzwr/VkQxc8bw3laq60L+nrZM0
-53i88MW27DIkHt4SaJ4JSHISOiFJ/1pDW81/CUmHs3anTPQxLyQP5VHcnSWwYvu4
-zx5QYAUWrtul/lV1F5ErD+zT3R5kFvV1VjZRFbVm8HKLG0RiDGoLoP44++RscMTw
-zHTaSHTpazMCfWJ2JtZNKi/wSUVwqhb0GRN33NV5+lwy8NhENfsS8SxXhSEX3NGu
-RIr7SOhcquhv+20ar9zbLx3dX75IzdPe2DicM1/tWYL0wvubVZDj4gr/ofdUtPCj
-TwoZtZqf8YplpOMbBoG+8ziGZDSurdtYK8KHdiYIhfZTfbutBb6F/+JR9RoMkh51
-G1q/eyBlKc1DmycYOzPKaT0RFNe1dEQlN5oPA7ogwGZiIzmbhqs=
-=Un6H
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKIfikACgkQFA3kzBSg
+KbYowA/+N3UTmwF4C9VAX8TTCnH/yJfoK+WmiMmINK6S/tQiBgJ14pBBrPCiQmnZ
+Lez5J1leVLau1QBYsPev6Qm/wE+0Xr/YGCToOf72bfS5vkQxeroeukHL46y5/4X5
+CrCeygDQ5X9gxMT2qINWNKb2LXGw8EyYHpU5Mw36nGVyhKuXXZjjMQZsEqxnmhEf
+oSzoPJROCs6Vdtb4GxEQqRKZZkyKAasxGMfAPJy6FDUi/ZcWpZd+7Gvlvwql4ekt
+c1VROwstFXca60XvEFwW1WP4PlcP8v78kNo5+23N2ISYtTC9yb0ytw8sRFsvFJos
+kycNiFqKsfuyAsZZVOuUGtsgwoGdJVyRpmpKvuYsfahSGUABlb0jIRdvLZjsFQsd
+RKZZPADtL5UM6WQhs4j8KwlzFMycFqDNQK19t8ToFl9M7UwvQahcUFxmMzDNNUUx
+4swmrOE1vjaO6+1Hf3bIMhBzQ/ZyVSN6mJJDn/avt0VQqdkpJo2nrKCa+gTFUM3J
+V6+/kMVVuBPynrDOodMPpBJIphWLQkjZ+Zgo35iWfTrRFXZa05Togv5o0rPjVrVF
+wS7gluBO7inAvH2fbPOyeFgp0uusKom1qpOzgwBFd4AEU8nj71HS2duqAYtMuhrf
+3LAS83oPh0yAiuaAFdtMzvrajhdaEs6K1pv020R5d94NxNTecss=
+=S0HZ
 -----END PGP SIGNATURE-----
 
---sr7GoX7S9ot2v/dV--
+--zcJ0vOC2Hk9d1kli--
