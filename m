@@ -2,42 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2175E52FABF
-	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 12:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82C552FAC1
+	for <lists+linux-i2c@lfdr.de>; Sat, 21 May 2022 12:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233819AbiEUK4q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 21 May 2022 06:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
+        id S229478AbiEUK4r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 21 May 2022 06:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiEUK4p (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 06:56:45 -0400
+        with ESMTP id S235388AbiEUK4q (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 May 2022 06:56:46 -0400
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FB72E9FD
-        for <linux-i2c@vger.kernel.org>; Sat, 21 May 2022 03:56:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438E14BB85
+        for <linux-i2c@vger.kernel.org>; Sat, 21 May 2022 03:56:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=Ug9KAilHZG3ngVihbf5BtyjUXT0+
-        GuD7bTab0Yw8FtE=; b=RtY5f1TgsoXt0CQeARvVge3JQU88WQl2XzfZca8eeg6C
-        MfXajeaUCb39EMaMMW/F2cwn3JB9ydR32Pa8bYXoWxm+K+vFiBnP19oIK2HH2VYK
-        +daHuRTbw6JNjWLy/Ospa+KRitmpYA418fVaeyBL1Z4j6aplxxdfSMEe1Cw1KCs=
-Received: (qmail 4129024 invoked from network); 21 May 2022 12:56:39 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 May 2022 12:56:39 +0200
-X-UD-Smtp-Session: l3s3148p1@ACwZdoPfwrAgAwDtxwyXAGMY7IbT6g6m
-Date:   Sat, 21 May 2022 12:56:38 +0200
+        :content-type:in-reply-to; s=k1; bh=jkX7hJdXDwyMtaoNwzUaUTft6Tj6
+        kG36MjroXZFFjW4=; b=dLAAKKiFyTUaBBNidXaT5plCwCVHCQro8G/fmHIv1xXk
+        MOv/ZOGgAONSi1nQvBrXTYwpvlJOmsVwLxMIoUnjRfVc7MRyMzaoC8yqS36dPlQi
+        gCAkg1fR8sEr6gB8yJbxYV9q5C53gN/OOsMPRz7qgf75ATPPKy0UqoQGkJPvu/I=
+Received: (qmail 4129057 invoked from network); 21 May 2022 12:56:43 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 May 2022 12:56:43 +0200
+X-UD-Smtp-Session: l3s3148p1@Ci9fdoPfxLAgAwDtxwyXAGMY7IbT6g6m
+Date:   Sat, 21 May 2022 12:56:43 +0200
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 1/3] i2c: rcar: use BIT macro consistently
-Message-ID: <YojFZvCcodpKuWJY@shikoro>
+Subject: Re: [PATCH 2/3] i2c: rcar: REP_AFTER_RD is not a persistent flag
+Message-ID: <YojFa5igxj/+3w9L@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
 References: <20220520202918.17889-1-wsa+renesas@sang-engineering.com>
- <20220520202918.17889-2-wsa+renesas@sang-engineering.com>
+ <20220520202918.17889-3-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0xjlV80opfeMfQda"
+        protocol="application/pgp-signature"; boundary="aVpPbLhWKpE8e15f"
 Content-Disposition: inline
-In-Reply-To: <20220520202918.17889-2-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220520202918.17889-3-wsa+renesas@sang-engineering.com>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
@@ -49,37 +49,38 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---0xjlV80opfeMfQda
+--aVpPbLhWKpE8e15f
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 20, 2022 at 10:29:16PM +0200, Wolfram Sang wrote:
-> Easier to read and ensures proper types.
+On Fri, May 20, 2022 at 10:29:17PM +0200, Wolfram Sang wrote:
+> Previous refactoring makes it easy now to convert the above flag to a
+> non-persistent one. This is more apropriate and easier to maintain.
 >=20
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 Applied to for-next, thanks!
 
 
---0xjlV80opfeMfQda
+--aVpPbLhWKpE8e15f
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKIxWIACgkQFA3kzBSg
-KbZgBw//ZyrN05MheZ0C0Cru8CfSuYAURUZ7pwX+U9VvdL2FNEIiKulydpeIuKXB
-ZbpKnyn+q3Lruy7Wwoe/UC1LCD1MIrF9g7ZYSvf6l3ZDdZOOzTij0bb2YFpvT5wG
-58dVeQLzxstdOU0r+0660C3zH0MjqfK+J8ZpGO8RYDPELFp9SjGffL8yzfY3xk5l
-Wyty4Pb1wbj5gZKsk8cCA9awYzbF6/QBt8Z6oFAzzuGmAHXpbazLjm8NRi2Ee6qZ
-ZK5Iq/cLxI3fremDMjZ6h434bg3ZAvG6OX2QCbtBLjwQxibH/REY4k5g93q6WtRg
-WaUOLcz22luoiyEmj5IHvLE05lG1PRRa/zRiZwFNNpTYb0XVt/thOe0EFSY+90ha
-45CPA2FSxlCEa40UxjKb2cVSvSlatWHVcsppVRGH/Id0ugqEtunkJ+MupEpjSLnS
-CaRhDj/0fHNRR4LqJBqIDYiG2vaYXUFy88YmM0nDnYq3gFUmvfRGdOVA+OVMXNYn
-fGI5bSib/8PbPQuYkR8K2xfcmLMdmlGGBNUUghGKzT4VkHi6HoWSMwLP2yXKWsYF
-md3T7fqnIqtnRV4y3UVe1TVZZNd2ukW0jSHUW9XKXmPJtiH8uJZemDoW2g1S7uJW
-mIqNgNlZklNmrf/xu261G/2ZLAQgT9LGtRNG9BtlJsbXc/ewE08=
-=olOd
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKIxWsACgkQFA3kzBSg
+KbbnnQ//dYENLiiI0Xi4iAT+TLTfAFzjzPh4gkwM2pKxo3VjRf/MBgUeQkWcDV9B
+brHAhSvHGPpetmxSCm6oVA7fuiaqhHmqSOzkvZ9FC1tqSPex813HhlWVNlRhT8P/
+YFNL8zcCW1K7SA1fQxhYSAk8ktQAXb0sjSrMMiuo9OB34sQLIAo2cHU0oMDURmKz
+mhSs3zqVcJCsQ5neeWlGZ5zhywOpOPfg3pMN0LF23RZzf/u1DJPiIL/Wi3SrG2il
+UkfMc/ZLs+clYe0GGhOpIKSw84WbuYuOz7WLfVcxr5a/jXeRd2mokTKbpbh/ie5t
+7pFfcz/JCdiAW1ZwBYJ+GJkN/yZ5YHMBADIGaGFk/TusM0I1j2w/ObXEUXYdXJMq
+TV2hWxPFtgMSLwv14njrw43xsY6fQEMZgjYLOfeioPtOxaRxIygH0wssAu0/4oAZ
+kj2WK1MTdXU8nl8HiN442/6OFNNHKlo7nVYEoWT/hSia4F6OKIDGbQo0oZKA6eSn
+05Qd8JUNWXTNLu3mj5CjX05nQTpsaeVG6uMgsdvbdSjJloB7No3mCf75Xc8D76+0
+tA7jD7JQMqkqGT+xSg/TAvA8tVCejXWuAxkMz0gJB3Fm0R9pFaHC0gPh7jvo2NJZ
+Q8+M6H6KnSFTlz6tOPoWSeI8wHpCaeVLHa7tyYnXr+5SpaevDY0=
+=21Uv
 -----END PGP SIGNATURE-----
 
---0xjlV80opfeMfQda--
+--aVpPbLhWKpE8e15f--
