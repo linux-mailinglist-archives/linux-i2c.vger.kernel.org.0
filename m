@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A1553047A
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 May 2022 18:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5B35304B3
+	for <lists+linux-i2c@lfdr.de>; Sun, 22 May 2022 18:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349224AbiEVQ2e (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 22 May 2022 12:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
+        id S1349798AbiEVQaA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 22 May 2022 12:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344417AbiEVQ20 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 22 May 2022 12:28:26 -0400
+        with ESMTP id S1349919AbiEVQ3N (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 22 May 2022 12:29:13 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C26140AE;
-        Sun, 22 May 2022 09:28:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BE43BBC2;
+        Sun, 22 May 2022 09:29:01 -0700 (PDT)
 Received: from g550jk.arnhem.chello.nl (a246182.upc-a.chello.nl [62.163.246.182])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 47E78CCD4B;
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id C260BCCD4C;
         Sun, 22 May 2022 16:28:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1653236899; bh=4TTxOmR2wLD3TeNU2SiNXSl4p2JhyoECNe34bUMzQIg=;
+        t=1653236900; bh=IgPmeXh7eVwr5HxZ2OomHFKNX8KpazVLkhoxxY0pExM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=l/cbL+zaC68xLzqKUyYLHx7IVtKrbMU80WFEw3IwVKuFiIdHMuvanw5PDpzyb665q
-         V+uqjXo12iGkdy6OYU1OXe6le5yZ1dVMKfyy/Rzh4gxmMRrwroqnyiYv3amtPrD4uU
-         FpuYkJAxvAJ+qbrCElrsPGFB0kugBw59ghMFPGJc=
+        b=c4i9i5n8jBgfDVKePplF1mJyCQ/ynI+kLQKvgP50y5sbU9Z1GPJ4G7mLcnnM7GTgB
+         PpLG8h4PsyQxOiB4gL3hf4OMzvaZO3xtwgQEKbWVbnuvdRH3wE9xgAOtWoQUdEoIdk
+         oDSbNoV9vWuSFXT1oSqjBubD2zua86FWq4HVTLlw=
 From:   Luca Weiss <luca@z3ntu.xyz>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -37,9 +37,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         matti.lehtimaki@gmail.com, Luca Weiss <luca@z3ntu.xyz>
-Subject: [RFC PATCH 12/14] ARM: dts: qcom: msm8974: add CAMSS node
-Date:   Sun, 22 May 2022 18:28:00 +0200
-Message-Id: <20220522162802.208275-13-luca@z3ntu.xyz>
+Subject: [RFC PATCH 13/14] ARM: dts: qcom: msm8974-FP2: Add OV8865 rear camera
+Date:   Sun, 22 May 2022 18:28:01 +0200
+Message-Id: <20220522162802.208275-14-luca@z3ntu.xyz>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220522162802.208275-1-luca@z3ntu.xyz>
 References: <20220522162802.208275-1-luca@z3ntu.xyz>
@@ -55,146 +55,110 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add a node for the camera subsystem found on msm8974.
+Configure the rear camera found in the 8MP camera module for
+Fairphone 2. There's also a AD5823 autofocus coil and an EEPROM present
+on the module but currently not included.
 
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- arch/arm/boot/dts/qcom-msm8974.dtsi | 122 ++++++++++++++++++++++++++++
- 1 file changed, 122 insertions(+)
+ .../dts/qcom-msm8974pro-fairphone-fp2.dts     | 70 +++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
-diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
-index a80b4ae71745..e684a9229f8c 100644
---- a/arch/arm/boot/dts/qcom-msm8974.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
-@@ -1615,6 +1615,128 @@ dsi0_phy: dsi-phy@fd922a00 {
- 			};
- 		};
+diff --git a/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
+index 0fad82fc9e03..9a2c3a9177de 100644
+--- a/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
++++ b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
+@@ -77,6 +77,60 @@ &blsp1_uart2 {
+ 	status = "okay";
+ };
  
-+		camss: camss@fda00000 {
-+			compatible = "qcom,msm8974-camss";
-+			reg = <0xfda0ac00 0x200>,
-+			      <0xfda00030 0x4>,
-+			      <0xfda0b000 0x200>,
-+			      <0xfda00038 0x4>,
-+			      <0xfda0b400 0x200>,
-+			      <0xfda00040 0x4>,
-+			      <0xfda08000 0x100>,
-+			      <0xfda08400 0x100>,
-+			      <0xfda08800 0x100>,
-+			      <0xfda08c00 0x100>,
-+			      <0xfda0a000 0x800>,
-+			      <0xfda00020 0x10>,
-+			      <0xfda10000 0x1000>,
-+			      <0xfda14000 0x1000>;
-+			reg-names = "csiphy0",
-+				    "csiphy0_clk_mux",
-+				    "csiphy1",
-+				    "csiphy1_clk_mux",
-+				    "csiphy2",
-+				    "csiphy2_clk_mux",
-+				    "csid0",
-+				    "csid1",
-+				    "csid2",
-+				    "csid3",
-+				    "ispif",
-+				    "csi_clk_mux",
-+				    "vfe0",
-+				    "vfe1";
-+			interrupts = <GIC_SPI 78 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 79 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 80 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 51 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 52 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 53 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 54 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 55 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 57 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 58 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "csiphy0",
-+					  "csiphy1",
-+					  "csiphy2",
-+					  "csid0",
-+					  "csid1",
-+					  "csid2",
-+					  "csid3",
-+					  "ispif",
-+					  "vfe0",
-+					  "vfe1";
-+			power-domains = <&mmcc CAMSS_VFE_GDSC>;
-+			clocks = <&mmcc CAMSS_TOP_AHB_CLK>,
-+				 <&mmcc CAMSS_ISPIF_AHB_CLK>,
-+				 <&mmcc CAMSS_PHY0_CSI0PHYTIMER_CLK>,
-+				 <&mmcc CAMSS_PHY1_CSI1PHYTIMER_CLK>,
-+				 <&mmcc CAMSS_PHY2_CSI2PHYTIMER_CLK>,
-+				 <&mmcc CAMSS_CSI0_AHB_CLK>,
-+				 <&mmcc CAMSS_CSI0_CLK>,
-+				 <&mmcc CAMSS_CSI0PHY_CLK>,
-+				 <&mmcc CAMSS_CSI0PIX_CLK>,
-+				 <&mmcc CAMSS_CSI0RDI_CLK>,
-+				 <&mmcc CAMSS_CSI1_AHB_CLK>,
-+				 <&mmcc CAMSS_CSI1_CLK>,
-+				 <&mmcc CAMSS_CSI1PHY_CLK>,
-+				 <&mmcc CAMSS_CSI1PIX_CLK>,
-+				 <&mmcc CAMSS_CSI1RDI_CLK>,
-+				 <&mmcc CAMSS_CSI2_AHB_CLK>,
-+				 <&mmcc CAMSS_CSI2_CLK>,
-+				 <&mmcc CAMSS_CSI2PHY_CLK>,
-+				 <&mmcc CAMSS_CSI2PIX_CLK>,
-+				 <&mmcc CAMSS_CSI2RDI_CLK>,
-+				 <&mmcc CAMSS_CSI3_AHB_CLK>,
-+				 <&mmcc CAMSS_CSI3_CLK>,
-+				 <&mmcc CAMSS_CSI3PHY_CLK>,
-+				 <&mmcc CAMSS_CSI3PIX_CLK>,
-+				 <&mmcc CAMSS_CSI3RDI_CLK>,
-+				 <&mmcc CAMSS_VFE_VFE0_CLK>,
-+				 <&mmcc CAMSS_VFE_VFE1_CLK>,
-+				 <&mmcc CAMSS_CSI_VFE0_CLK>,
-+				 <&mmcc CAMSS_CSI_VFE1_CLK>,
-+				 <&mmcc CAMSS_VFE_VFE_AHB_CLK>,
-+				 <&mmcc CAMSS_VFE_VFE_AXI_CLK>;
-+			clock-names = "top_ahb",
-+				      "ispif_ahb",
-+				      "csiphy0_timer",
-+				      "csiphy1_timer",
-+				      "csiphy2_timer",
-+				      "csi0_ahb",
-+				      "csi0",
-+				      "csi0_phy",
-+				      "csi0_pix",
-+				      "csi0_rdi",
-+				      "csi1_ahb",
-+				      "csi1",
-+				      "csi1_phy",
-+				      "csi1_pix",
-+				      "csi1_rdi",
-+				      "csi2_ahb",
-+				      "csi2",
-+				      "csi2_phy",
-+				      "csi2_pix",
-+				      "csi2_rdi",
-+				      "csi3_ahb",
-+				      "csi3",
-+				      "csi3_phy",
-+				      "csi3_pix",
-+				      "csi3_rdi",
-+				      "vfe0",
-+				      "vfe1",
-+				      "csi_vfe0",
-+				      "csi_vfe1",
-+				      "iface",
-+				      "bus";
++&camss {
++	status = "okay";
 +
-+			status = "disabled";
++	vdda-supply = <&pm8941_l12>;
 +
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
++	ports {
++		port@0 {
++			reg = <0>;
++			csiphy0_ep: endpoint {
++				clock-lanes = <1>;
++				data-lanes = <0 2 3 4>;
++				link-frequencies = /bits/ 64 <360000000>;
++				remote-endpoint = <&ov8865_ep>;
 +			};
 +		};
++	};
++};
 +
- 		cci: cci@fda0c000 {
- 			compatible = "qcom,msm8974-cci";
- 			#address-cells = <1>;
++&cci {
++	status = "okay";
++};
++
++&cci_i2c0 {
++	ov8865: camera-sensor@10 {
++		compatible = "ovti,ov8865";
++		reg = <0x10>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&mclk0_pin_a>;
++
++		clocks = <&mmcc CAMSS_MCLK0_CLK>;
++
++		avdd-supply = <&pm8941_l17>;
++		dovdd-supply = <&pm8941_lvs3>;
++		dvdd-supply = <&pm8941_l3>;
++
++		powerdown-gpios = <&tlmm 89 GPIO_ACTIVE_LOW>;
++		reset-gpios = <&tlmm 90 GPIO_ACTIVE_LOW>;
++
++		/* Rear camera */
++		orientation = <1>;
++		rotation = <90>;
++
++		port {
++			ov8865_ep: endpoint {
++				clock-lanes = <1>;
++				data-lanes = <0 2 3 4>;
++				link-frequencies = /bits/ 64 <360000000>;
++				remote-endpoint = <&csiphy0_ep>;
++			};
++		};
++	};
++};
++
+ &dsi0 {
+ 	status = "okay";
+ 
+@@ -413,6 +467,15 @@ pm8941_l24: l24 {
+ 			regulator-max-microvolt = <3075000>;
+ 			regulator-boot-on;
+ 		};
++
++		pm8941_lvs3: lvs3 {
++			/*
++			 * TODO: Used as CCI0 and CCI1 pull-up.
++			 * Replace with vbus-supply or similar once this lands
++			 * upstream!
++			 */
++			regulator-always-on;
++		};
+ 	};
+ };
+ 
+@@ -449,6 +512,13 @@ &smbb {
+ };
+ 
+ &tlmm {
++	mclk0_pin_a: mclk0-pin-active {
++		pins = "gpio15";
++		function = "cam_mclk0";
++		drive-strength = <2>;
++		bias-disable;
++	};
++
+ 	panel_pin: panel {
+ 		te {
+ 			pins = "gpio12";
 -- 
 2.36.0
 
