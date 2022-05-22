@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5B35304B3
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 May 2022 18:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2AA530487
+	for <lists+linux-i2c@lfdr.de>; Sun, 22 May 2022 18:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349798AbiEVQaA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 22 May 2022 12:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
+        id S1349163AbiEVQ2d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 22 May 2022 12:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349919AbiEVQ3N (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 22 May 2022 12:29:13 -0400
+        with ESMTP id S1348017AbiEVQ22 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 22 May 2022 12:28:28 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BE43BBC2;
-        Sun, 22 May 2022 09:29:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4BB14087;
+        Sun, 22 May 2022 09:28:27 -0700 (PDT)
 Received: from g550jk.arnhem.chello.nl (a246182.upc-a.chello.nl [62.163.246.182])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id C260BCCD4C;
-        Sun, 22 May 2022 16:28:19 +0000 (UTC)
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 188C6CCD4E;
+        Sun, 22 May 2022 16:28:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1653236900; bh=IgPmeXh7eVwr5HxZ2OomHFKNX8KpazVLkhoxxY0pExM=;
+        t=1653236900; bh=ZlU+QqaeeUpgg6ydwdW9tHYSbBg1JjP1qdMb8cM8JSE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=c4i9i5n8jBgfDVKePplF1mJyCQ/ynI+kLQKvgP50y5sbU9Z1GPJ4G7mLcnnM7GTgB
-         PpLG8h4PsyQxOiB4gL3hf4OMzvaZO3xtwgQEKbWVbnuvdRH3wE9xgAOtWoQUdEoIdk
-         oDSbNoV9vWuSFXT1oSqjBubD2zua86FWq4HVTLlw=
+        b=hP3NdJf6PTBiI/nZloaHgFq06IVg0B4nvzxBOzwW1puRDXe7bq3v9VvUKjhtE3ZAn
+         tWEeap2QOohVKt/BdbTAWCpfv23yPfccYqkUeOapjMPbABlc8d9MSEMG/Ru5uF5Zad
+         P7JbsE9Np1pU1STE6hVEcHDsT0xZKNJGpJRN/uZ8=
 From:   Luca Weiss <luca@z3ntu.xyz>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -37,9 +37,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         matti.lehtimaki@gmail.com, Luca Weiss <luca@z3ntu.xyz>
-Subject: [RFC PATCH 13/14] ARM: dts: qcom: msm8974-FP2: Add OV8865 rear camera
-Date:   Sun, 22 May 2022 18:28:01 +0200
-Message-Id: <20220522162802.208275-14-luca@z3ntu.xyz>
+Subject: [RFC PATCH 14/14] [DNM] media: camss: hacks for MSM8974
+Date:   Sun, 22 May 2022 18:28:02 +0200
+Message-Id: <20220522162802.208275-15-luca@z3ntu.xyz>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220522162802.208275-1-luca@z3ntu.xyz>
 References: <20220522162802.208275-1-luca@z3ntu.xyz>
@@ -55,110 +55,76 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Configure the rear camera found in the 8MP camera module for
-Fairphone 2. There's also a AD5823 autofocus coil and an EEPROM present
-on the module but currently not included.
+Remove IOMMU_DMA dependency from VIDEO_QCOM_CAMSS: We don't have IOMMU
+on msm8974 yet.
+
+DMA_SG -> DMA_CONTIG: Taking a photo without this works but is offset
+and doing weird stuff.
 
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- .../dts/qcom-msm8974pro-fairphone-fp2.dts     | 70 +++++++++++++++++++
- 1 file changed, 70 insertions(+)
+ drivers/media/platform/qcom/camss/Kconfig       |  4 ++--
+ drivers/media/platform/qcom/camss/camss-video.c | 14 +++++++-------
+ 2 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-index 0fad82fc9e03..9a2c3a9177de 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-@@ -77,6 +77,60 @@ &blsp1_uart2 {
- 	status = "okay";
- };
+diff --git a/drivers/media/platform/qcom/camss/Kconfig b/drivers/media/platform/qcom/camss/Kconfig
+index 4eda48cb1adf..e382fd77ecc3 100644
+--- a/drivers/media/platform/qcom/camss/Kconfig
++++ b/drivers/media/platform/qcom/camss/Kconfig
+@@ -2,8 +2,8 @@ config VIDEO_QCOM_CAMSS
+ 	tristate "Qualcomm V4L2 Camera Subsystem driver"
+ 	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_DEV
+-	depends on (ARCH_QCOM && IOMMU_DMA) || COMPILE_TEST
++	depends on ARCH_QCOM || COMPILE_TEST
+ 	select MEDIA_CONTROLLER
+ 	select VIDEO_V4L2_SUBDEV_API
+-	select VIDEOBUF2_DMA_SG
++	select VIDEOBUF2_DMA_CONTIG
+ 	select V4L2_FWNODE
+diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
+index ca955808fd6d..885a809cc941 100644
+--- a/drivers/media/platform/qcom/camss/camss-video.c
++++ b/drivers/media/platform/qcom/camss/camss-video.c
+@@ -13,7 +13,7 @@
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-ioctl.h>
+ #include <media/v4l2-mc.h>
+-#include <media/videobuf2-dma-sg.h>
++#include <media/videobuf2-dma-contig.h>
  
-+&camss {
-+	status = "okay";
-+
-+	vdda-supply = <&pm8941_l12>;
-+
-+	ports {
-+		port@0 {
-+			reg = <0>;
-+			csiphy0_ep: endpoint {
-+				clock-lanes = <1>;
-+				data-lanes = <0 2 3 4>;
-+				link-frequencies = /bits/ 64 <360000000>;
-+				remote-endpoint = <&ov8865_ep>;
-+			};
-+		};
-+	};
-+};
-+
-+&cci {
-+	status = "okay";
-+};
-+
-+&cci_i2c0 {
-+	ov8865: camera-sensor@10 {
-+		compatible = "ovti,ov8865";
-+		reg = <0x10>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&mclk0_pin_a>;
-+
-+		clocks = <&mmcc CAMSS_MCLK0_CLK>;
-+
-+		avdd-supply = <&pm8941_l17>;
-+		dovdd-supply = <&pm8941_lvs3>;
-+		dvdd-supply = <&pm8941_l3>;
-+
-+		powerdown-gpios = <&tlmm 89 GPIO_ACTIVE_LOW>;
-+		reset-gpios = <&tlmm 90 GPIO_ACTIVE_LOW>;
-+
-+		/* Rear camera */
-+		orientation = <1>;
-+		rotation = <90>;
-+
-+		port {
-+			ov8865_ep: endpoint {
-+				clock-lanes = <1>;
-+				data-lanes = <0 2 3 4>;
-+				link-frequencies = /bits/ 64 <360000000>;
-+				remote-endpoint = <&csiphy0_ep>;
-+			};
-+		};
-+	};
-+};
-+
- &dsi0 {
- 	status = "okay";
+ #include "camss-video.h"
+ #include "camss.h"
+@@ -410,15 +410,15 @@ static int video_buf_init(struct vb2_buffer *vb)
+ 						   vb);
+ 	const struct v4l2_pix_format_mplane *format =
+ 						&video->active_fmt.fmt.pix_mp;
+-	struct sg_table *sgt;
++	//struct sg_table *sgt;
+ 	unsigned int i;
  
-@@ -413,6 +467,15 @@ pm8941_l24: l24 {
- 			regulator-max-microvolt = <3075000>;
- 			regulator-boot-on;
- 		};
-+
-+		pm8941_lvs3: lvs3 {
-+			/*
-+			 * TODO: Used as CCI0 and CCI1 pull-up.
-+			 * Replace with vbus-supply or similar once this lands
-+			 * upstream!
-+			 */
-+			regulator-always-on;
-+		};
- 	};
- };
+ 	for (i = 0; i < format->num_planes; i++) {
+-		sgt = vb2_dma_sg_plane_desc(vb, i);
+-		if (!sgt)
+-			return -EFAULT;
++		//sgt = vb2_dma_sg_plane_desc(vb, i);
++		//if (!sgt)
++		//	return -EFAULT;
  
-@@ -449,6 +512,13 @@ &smbb {
- };
+-		buffer->addr[i] = sg_dma_address(sgt->sgl);
++		buffer->addr[i] = vb2_dma_contig_plane_dma_addr(vb, i); //sg_dma_address(sgt->sgl);
+ 	}
  
- &tlmm {
-+	mclk0_pin_a: mclk0-pin-active {
-+		pins = "gpio15";
-+		function = "cam_mclk0";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
- 	panel_pin: panel {
- 		te {
- 			pins = "gpio12";
+ 	if (format->pixelformat == V4L2_PIX_FMT_NV12 ||
+@@ -966,7 +966,7 @@ int msm_video_register(struct camss_video *video, struct v4l2_device *v4l2_dev,
+ 
+ 	q = &video->vb2_q;
+ 	q->drv_priv = video;
+-	q->mem_ops = &vb2_dma_sg_memops;
++	q->mem_ops = &vb2_dma_contig_memops;
+ 	q->ops = &msm_video_vb2_q_ops;
+ 	q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+ 	q->io_modes = VB2_DMABUF | VB2_MMAP | VB2_READ;
 -- 
 2.36.0
 
