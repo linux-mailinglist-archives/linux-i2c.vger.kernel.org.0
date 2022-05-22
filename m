@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC90053047E
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 May 2022 18:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E757553048A
+	for <lists+linux-i2c@lfdr.de>; Sun, 22 May 2022 18:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245051AbiEVQ2Z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 22 May 2022 12:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37584 "EHLO
+        id S1348028AbiEVQ22 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 22 May 2022 12:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbiEVQ2X (ORCPT
+        with ESMTP id S242277AbiEVQ2X (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Sun, 22 May 2022 12:28:23 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806B61408A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A31140A5;
         Sun, 22 May 2022 09:28:19 -0700 (PDT)
 Received: from g550jk.arnhem.chello.nl (a246182.upc-a.chello.nl [62.163.246.182])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 58879CCD3E;
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 9BD06CCD3F;
         Sun, 22 May 2022 16:28:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1653236896; bh=PJTM0T2EqEM4oY5oIkQuUA4VA97D2zu/UUBRa6M68wc=;
+        t=1653236896; bh=IFedgtBwp9D2KJuEP5HWLqXXyvyVv6MDZe6OMaClztA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=xYrtyj7j9C76OnQ+SgcTjdSFWKZaxt2wg6vddfcVYzMdMBxW1LbThJwKacvPj6UGD
-         8YjiK4KQuxbDTTZ7KgsnclazwXG7uo+S+xwmBRCHBIa3iO1k9McB+EDz762I9c5pqo
-         TXZlLKpbwtIPc4aI8f6jamg+8j60z4U8gZNqShUc=
+        b=u1E75YC2lj5dxIsJOBIvz17uyyEXx8OSQOcZtalAIP3a0i/04ScLtRAdSmXysAJpt
+         JUlBndwXYjqmCNHyBEOBmeVT7SK8QaIaaNhB44K/jE0VaP4zsJaHAHQSLyNqDyNPld
+         hEI56rG80N+d92PeTjcocdlOScqjey6EuhARYS8A=
 From:   Luca Weiss <luca@z3ntu.xyz>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -37,9 +37,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         matti.lehtimaki@gmail.com, Luca Weiss <luca@z3ntu.xyz>
-Subject: [RFC PATCH 02/14] media: camss: Add CAMSS_8x74 camss version
-Date:   Sun, 22 May 2022 18:27:50 +0200
-Message-Id: <20220522162802.208275-3-luca@z3ntu.xyz>
+Subject: [RFC PATCH 03/14] media: camss: vfe: Add support for 8x74
+Date:   Sun, 22 May 2022 18:27:51 +0200
+Message-Id: <20220522162802.208275-4-luca@z3ntu.xyz>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220522162802.208275-1-luca@z3ntu.xyz>
 References: <20220522162802.208275-1-luca@z3ntu.xyz>
@@ -58,26 +58,46 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Matti Lehtimäki <matti.lehtimaki@gmail.com>
 
-Add enum representing the MSM8x74 SOC.
+VFE hardware modules on 8x74 and 8x16 are similar.
 
 Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- drivers/media/platform/qcom/camss/camss.h | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/qcom/camss/camss-vfe.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
-index c9b3e0df5be8..663cf24f52d9 100644
---- a/drivers/media/platform/qcom/camss/camss.h
-+++ b/drivers/media/platform/qcom/camss/camss.h
-@@ -76,6 +76,7 @@ enum pm_domain {
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index 5b148e9f8134..ace53ed24884 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -170,7 +170,8 @@ static u32 vfe_src_pad_code(struct vfe_line *line, u32 sink_code,
+ {
+ 	struct vfe_device *vfe = to_vfe(line);
  
- enum camss_version {
- 	CAMSS_8x16,
-+	CAMSS_8x74,
- 	CAMSS_8x96,
- 	CAMSS_660,
- 	CAMSS_845,
+-	if (vfe->camss->version == CAMSS_8x16)
++	if (vfe->camss->version == CAMSS_8x16 ||
++		vfe->camss->version == CAMSS_8x74)
+ 		switch (sink_code) {
+ 		case MEDIA_BUS_FMT_YUYV8_2X8:
+ 		{
+@@ -1286,6 +1287,7 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
+ 
+ 	switch (camss->version) {
+ 	case CAMSS_8x16:
++	case CAMSS_8x74:
+ 		vfe->ops = &vfe_ops_4_1;
+ 		break;
+ 	case CAMSS_8x96:
+@@ -1390,7 +1392,8 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
+ 		init_completion(&l->output.sof);
+ 		init_completion(&l->output.reg_update);
+ 
+-		if (camss->version == CAMSS_8x16) {
++		if (camss->version == CAMSS_8x16 ||
++			camss->version == CAMSS_8x74) {
+ 			if (i == VFE_LINE_PIX) {
+ 				l->formats = formats_pix_8x16;
+ 				l->nformats = ARRAY_SIZE(formats_pix_8x16);
 -- 
 2.36.0
 
