@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027C853047F
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 May 2022 18:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D0A53049B
+	for <lists+linux-i2c@lfdr.de>; Sun, 22 May 2022 18:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349268AbiEVQ2f (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 22 May 2022 12:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
+        id S1349845AbiEVQ3R (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 22 May 2022 12:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344039AbiEVQ20 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 22 May 2022 12:28:26 -0400
+        with ESMTP id S1349493AbiEVQ3L (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 22 May 2022 12:29:11 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C821408F;
-        Sun, 22 May 2022 09:28:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12813BA52;
+        Sun, 22 May 2022 09:28:54 -0700 (PDT)
 Received: from g550jk.arnhem.chello.nl (a246182.upc-a.chello.nl [62.163.246.182])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 63A4CCCD47;
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id ABE17CCD48;
         Sun, 22 May 2022 16:28:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1653236898; bh=CoTN//IFcGHJAD0zibGBr30oBzqXrd4ztzhciPGcdAQ=;
+        t=1653236898; bh=NwhpmevNUU2gq+eDnD+yz+ZmjE9TKPUK+80uSILSa24=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=v/dN0W5j+weiTe/2/qSO5tq38/vu4DJVPBBtiqhYYE1TNQL2GXbkTxpX+HPYn2S0Z
-         1enz1FfKmkLGZY7Rrxc79UXYsTcknXf1LbYEeq7JXQAG9ie1y5twoNyPjzxKgaNkey
-         5ABGHm+J/XyXQxr9hL0LvVgyv5UoYocUk6ebL1qw=
+        b=EtlqUowxpcRSB7A+wmr/ig8CW8R3ymUErisirN1xMvfb2w+UIfk6zIaQozo3mXtu5
+         HKGpfvkhdKw7yy1omR93Nt88DpyAUX3dGPeDcYGVdvcd8wxuJC83fjmYVe6pM8xNB1
+         aK4eqqiPIHPIQdYbR9QNi9HPMsC6w5vVGa6kXtBE=
 From:   Luca Weiss <luca@z3ntu.xyz>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -37,13 +37,14 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         matti.lehtimaki@gmail.com, Luca Weiss <luca@z3ntu.xyz>
-Subject: [RFC PATCH 09/14] dt-bindings: i2c: qcom-cci: add QCOM MSM8974 compatible
-Date:   Sun, 22 May 2022 18:27:57 +0200
-Message-Id: <20220522162802.208275-10-luca@z3ntu.xyz>
+Subject: [RFC PATCH 10/14] i2c: qcom-cci: add msm8974 compatible
+Date:   Sun, 22 May 2022 18:27:58 +0200
+Message-Id: <20220522162802.208275-11-luca@z3ntu.xyz>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220522162802.208275-1-luca@z3ntu.xyz>
 References: <20220522162802.208275-1-luca@z3ntu.xyz>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
@@ -55,39 +56,73 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add the compatible for the CCI found in MSM8974 which supports two I2C
-masters.
+From: Matti Lehtimäki <matti.lehtimaki@gmail.com>
 
+MSM8974 CCI is the same as MSM8916 except it has two masters.
+
+Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+To note, the cci_v1_5_data variable name is just a bit arbitrary and
+isn't meant to reflect IP version "1.5". I'd be happy to change the
+variable name to something else.
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt b/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
-index 924ad8c03464..166865e48849 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
-+++ b/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
-@@ -7,6 +7,7 @@ PROPERTIES:
- 	Value type: <string>
- 	Definition: must be one of:
- 		"qcom,msm8916-cci"
-+		"qcom,msm8974-cci"
- 		"qcom,msm8996-cci"
- 		"qcom,sdm845-cci"
- 		"qcom,sm8250-cci"
-@@ -43,9 +44,9 @@ PROPERTIES:
+ drivers/i2c/busses/i2c-qcom-cci.c | 35 +++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
+index 5c7cc862f08f..a68f17eb9dd0 100644
+--- a/drivers/i2c/busses/i2c-qcom-cci.c
++++ b/drivers/i2c/busses/i2c-qcom-cci.c
+@@ -725,6 +725,40 @@ static const struct cci_data cci_v1_data = {
+ 	},
+ };
  
- SUBNODES:
++static const struct cci_data cci_v1_5_data = {
++	.num_masters = 2,
++	.queue_size = { 64, 16 },
++	.quirks = {
++		.max_write_len = 10,
++		.max_read_len = 12,
++	},
++	.cci_clk_rate =  19200000,
++	.params[I2C_MODE_STANDARD] = {
++		.thigh = 78,
++		.tlow = 114,
++		.tsu_sto = 28,
++		.tsu_sta = 28,
++		.thd_dat = 10,
++		.thd_sta = 77,
++		.tbuf = 118,
++		.scl_stretch_en = 0,
++		.trdhld = 6,
++		.tsp = 1
++	},
++	.params[I2C_MODE_FAST] = {
++		.thigh = 20,
++		.tlow = 28,
++		.tsu_sto = 21,
++		.tsu_sta = 21,
++		.thd_dat = 13,
++		.thd_sta = 18,
++		.tbuf = 32,
++		.scl_stretch_en = 0,
++		.trdhld = 6,
++		.tsp = 3
++	},
++};
++
+ static const struct cci_data cci_v2_data = {
+ 	.num_masters = 2,
+ 	.queue_size = { 64, 16 },
+@@ -773,6 +807,7 @@ static const struct cci_data cci_v2_data = {
  
--The CCI provides I2C masters for one (msm8916) or two i2c busses (msm8996,
--sdm845, sm8250 and sm8450), described as subdevices named "i2c-bus@0" and
--"i2c-bus@1".
-+The CCI provides I2C masters for one (msm8916) or two i2c busses (msm8974,
-+msm8996, sdm845, sm8250 and sm8450), described as subdevices named "i2c-bus@0"
-+and "i2c-bus@1".
- 
- PROPERTIES:
- 
+ static const struct of_device_id cci_dt_match[] = {
+ 	{ .compatible = "qcom,msm8916-cci", .data = &cci_v1_data},
++	{ .compatible = "qcom,msm8974-cci", .data = &cci_v1_5_data},
+ 	{ .compatible = "qcom,msm8996-cci", .data = &cci_v2_data},
+ 	{ .compatible = "qcom,sdm845-cci", .data = &cci_v2_data},
+ 	{ .compatible = "qcom,sm8250-cci", .data = &cci_v2_data},
 -- 
 2.36.0
 
