@@ -2,82 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C50530AFF
-	for <lists+linux-i2c@lfdr.de>; Mon, 23 May 2022 10:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD1D530BBC
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 May 2022 11:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbiEWIAy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 23 May 2022 04:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
+        id S231820AbiEWI32 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 23 May 2022 04:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbiEWIAv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 23 May 2022 04:00:51 -0400
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9569A16593;
-        Mon, 23 May 2022 01:00:49 -0700 (PDT)
-Received: by mail-qk1-f170.google.com with SMTP id x65so7990604qke.2;
-        Mon, 23 May 2022 01:00:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=78dk875LafIfDiQAHXpXdnt3YIhTksx5eQ10JxEZ2W4=;
-        b=dx/LACimog30dDhKTx5qh8+OtZNpQ4RZTGeyV0DnrR/+zgklBizNkQ+C7M/3RsGwcp
-         obvXxrrZlz0YfMKQdr5d01mtwfIBuzDo3UeGiFEnT5+hafXWLJPfU1FT0rkwh2LnkDCh
-         RKpFdof+8JhcC/8qEQhQFmhOe8sKL7QE11pkN0j4/LKYFzVzawL++TaTLa4pDR9USfkn
-         6sjig+3fWsPcUjiFFiILAZU5Xdh2S8+njdJ53rHYAibTn1TDgKRwcoC1b0fPu8qBLuLl
-         buiRK3om9IJFDEbta9pxPHo5vinpZNB/DqWFfLVXpTbdTHYFsvdBBkRFjAY1OGzAnXPs
-         zffg==
-X-Gm-Message-State: AOAM531BDp8+GdxzIwVcymmof8jbeZTKQuv5aAlYJDZvbVynahtoDvQR
-        Sh6IYSnI8SzO16hqYIAeOWqMNJquAGP3vw==
-X-Google-Smtp-Source: ABdhPJxlyZH0qzYNPIYegu9AFGKM06lQUh6v+/CwZPs41YoDkRqJLr2isyyJrMT7vXVTTz5YBBKpGw==
-X-Received: by 2002:a37:a6d5:0:b0:6a3:4872:32fb with SMTP id p204-20020a37a6d5000000b006a3487232fbmr10154136qke.588.1653292848625;
-        Mon, 23 May 2022 01:00:48 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id t5-20020a05620a004500b0069fc13ce24asm3894961qkt.123.2022.05.23.01.00.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 01:00:48 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id b124so11982576ybg.12;
-        Mon, 23 May 2022 01:00:48 -0700 (PDT)
-X-Received: by 2002:a25:e04d:0:b0:64d:6f23:b906 with SMTP id
- x74-20020a25e04d000000b0064d6f23b906mr20256218ybg.380.1653292848029; Mon, 23
- May 2022 01:00:48 -0700 (PDT)
+        with ESMTP id S231852AbiEWI31 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 23 May 2022 04:29:27 -0400
+X-Greylist: delayed 792 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 May 2022 01:29:26 PDT
+Received: from mail.tireplot.pl (mail.tireplot.pl [46.183.184.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFAF3153D
+        for <linux-i2c@vger.kernel.org>; Mon, 23 May 2022 01:29:26 -0700 (PDT)
+Received: by mail.tireplot.pl (Postfix, from userid 1001)
+        id 28A424A343; Mon, 23 May 2022 10:06:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tireplot.pl; s=mail;
+        t=1653293303; bh=Rfzvu4C+yJ1wyuJ4V+t/udh6cgYEQVnY6S5ltO4wdNg=;
+        h=Date:From:To:Subject:From;
+        b=IEcx7gfpzK5C6CJzbObAjnPmavR5vPtN2Q4NXtDOvo61y/+23/EzKWDcZPeJiGtPS
+         nvpLk17UMstpe6q4aQaWewX4f2GzyBeN6wV873hZsnXemPFfG2E/mIafqjCe2fJbtb
+         QNnt0YFLIGIXsD8itBn8FelcIksIoQ6a+JNXcj90wAECxcpVkETMiS7PP9t7lsMiw1
+         KeVqsMfUJQUkm2Q1zUTO6fq3Yur3PphCeGmhFakiDuGuyiCl46MlMu5rsOzRHkZCfK
+         chTdJqG9/NuvWhn+Z7f89g2VliAqPNLPilYrMIeUUQc/XYiRcr+ELartkcksUXQ0f1
+         oKKMgxEb0t2ng==
+Received: by mail.tireplot.pl for <linux-i2c@vger.kernel.org>; Mon, 23 May 2022 08:05:32 GMT
+Message-ID: <20220523084501-0.1.2k.fy5s.0.aai7fzp76o@tireplot.pl>
+Date:   Mon, 23 May 2022 08:05:32 GMT
+From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
+        <arkadiusz.sokolowski@tireplot.pl>
+To:     <linux-i2c@vger.kernel.org>
+Subject: Koszty instalacji fotowoltaicznej
+X-Mailer: mail.tireplot.pl
 MIME-Version: 1.0
-References: <20220520202918.17889-1-wsa+renesas@sang-engineering.com> <20220520202918.17889-2-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220520202918.17889-2-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 23 May 2022 10:00:36 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWiAQRYUafh5874dA599BxSXa8=g=5ya0XQ63Xffn=Spg@mail.gmail.com>
-Message-ID: <CAMuHMdWiAQRYUafh5874dA599BxSXa8=g=5ya0XQ63Xffn=Spg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] i2c: rcar: use BIT macro consistently
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, May 21, 2022 at 5:39 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> Easier to read and ensures proper types.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Dzie=C5=84 dobry,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
+ obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99. =20
 
-Gr{oetje,eeting}s,
+Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
+acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
+ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
 
-                        Geert
+Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
+=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
+=2E
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
+temacie?
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Pozdrawiam
+Arkadiusz Soko=C5=82owski
