@@ -2,57 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDA55312DC
-	for <lists+linux-i2c@lfdr.de>; Mon, 23 May 2022 18:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88DF6531B71
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 May 2022 22:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238682AbiEWQQ7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 23 May 2022 12:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
+        id S239693AbiEWRMr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 23 May 2022 13:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238634AbiEWQQq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 23 May 2022 12:16:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4872A6543B;
-        Mon, 23 May 2022 09:16:45 -0700 (PDT)
+        with ESMTP id S240343AbiEWRL6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 23 May 2022 13:11:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33F62F007;
+        Mon, 23 May 2022 10:11:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1955B8101B;
-        Mon, 23 May 2022 16:16:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CECFC385A9;
-        Mon, 23 May 2022 16:16:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69294614DA;
+        Mon, 23 May 2022 17:09:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F42DC34119;
+        Mon, 23 May 2022 17:09:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653322602;
-        bh=xfepUKvQ7sCLevxiv5+hN7CvEb5owQ3Fs6hC8vUBBNM=;
+        s=k20201202; t=1653325779;
+        bh=49TG0H75Ya9Io/9Ra/lmXTl1jm17VfmzpHpMWj3rv+E=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sjICK09wvrS1+7OIscEQWeasa141fB+xn3ZgGjGq7lUEPFtbGf2/8kbaCYO4QAPsP
-         J/wlOnhuvQFwBRVV+SDgmt2EhDY/IxYbLgq/YTbhIUjI7d6XRi18JIF3xCAESh7diQ
-         vOzs4nJG9aNxPoJEATOHDjnHJbtPd38iGWldzc1lO1wZUZPwG/Z49Teh3ck4EQYMlD
-         iav0fx1iHPoFQLBKlKc+kAHsWKqi8Z7W7syVEWaCzD+7Ju8KzDAPmztKYepllWagLs
-         YH++IXRao9IagEoMO68hUikYn6OmcWvmCZEosWDRzjBGJyup4xdHXU9c32Dq7ke+EM
-         3guKsdcHoe8dQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ntAjY-00083G-ND; Mon, 23 May 2022 18:16:40 +0200
-Date:   Mon, 23 May 2022 18:16:40 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     frank zago <frank@zago.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        b=b6xEBdre8qQxI4OPS0gvtMDU6OupCLO/qTN0Vdp+kRmb/+GNJjBaHIyrlHP14WTRN
+         2lN++TK4jQREtckUKH2NUto/WNrjF3u22KWjdyG5QZ3ptVF85LQqQcWR8HJyavvj9y
+         jYdoQxoRXO1X2PkTLqTbuvxNVwJALvnBfwOpjXTCUtffsQYXN8Qm/cflYXjBDXkVY2
+         P9FTgBolGOA95VyUeWovObgqdvfUhtAT4FD6eNdwCaUHf71zffDAih/Go/Bf6oXSvp
+         hnX5DoGCEvOugX/b6oXjNfeW8ZhOGscpvroLH2D6AMZIlZYDpNPdvknFAoxPn+TH0w
+         RTZdx64qsf5kg==
+Date:   Mon, 23 May 2022 19:09:31 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     frank zago <frank@zago.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-usb@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
+        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
         Linus Walleij <linus.walleij@linaro.org>,
         linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] gpio: ch341: add GPIO MFD cell driver for the
- CH341
-Message-ID: <YouzaO6ogxYj40Bp@hovoldconsulting.com>
+Subject: Re: [PATCH v5 3/3] i2c: ch341: add I2C MFD cell driver for the CH341
+Message-ID: <You/y4Go+7ZvXgTz@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Johan Hovold <johan@kernel.org>, frank zago <frank@zago.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
 References: <20220401023306.79532-1-frank@zago.net>
- <20220401023306.79532-3-frank@zago.net>
+ <20220401023306.79532-4-frank@zago.net>
+ <YojVHBofkBOFVYap@shikoro>
+ <Youtgr7a3dw58KT0@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qOyTUoqo6Ka2qIM3"
 Content-Disposition: inline
-In-Reply-To: <20220401023306.79532-3-frank@zago.net>
+In-Reply-To: <Youtgr7a3dw58KT0@hovoldconsulting.com>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,180 +70,37 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 09:33:05PM -0500, frank zago wrote:
-> The GPIO interface offers 16 GPIOs. 6 are read/write, and 10 are
-> read-only.
-> 
-> Signed-off-by: frank zago <frank@zago.net>
-> ---
 
-> +struct ch341_gpio {
-> +	struct gpio_chip gpio;
-> +	struct mutex gpio_lock;
-> +	u16 gpio_dir;		/* 1 bit per pin, 0=IN, 1=OUT. */
-> +	u16 gpio_last_read;	/* last GPIO values read */
-> +	u16 gpio_last_written;	/* last GPIO values written */
-> +	union {
-> +		u8 gpio_buf[SEG_SIZE];
-> +		__le16 gpio_buf_status;
-> +	};
-> +
-> +	struct urb *irq_urb;
-> +	struct usb_anchor irq_urb_out;
-> +	u8 irq_buf[CH341_USB_MAX_INTR_SIZE];
-> +	struct irq_chip irq_chip;
-> +
-> +	struct ch341_device *ch341;
-> +};
+--qOyTUoqo6Ka2qIM3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> +static void ch341_complete_intr_urb(struct urb *urb)
-> +{
-> +	struct ch341_gpio *dev = urb->context;
-> +	int rc;
-> +
-> +	if (urb->status) {
-> +		usb_unanchor_urb(dev->irq_urb);
 
-URBs are unanchored by USB core on completion.
+> There's no (longer) any difference. See bf7fbeeae6db ("module: Cure the
+> MODULE_LICENSE "GPL" vs. "GPL v2" bogosity").
 
-> +	} else {
-> +		/*
-> +		 * Data is 8 bytes. Byte 0 might be the length of
-> +		 * significant data, which is 3 more bytes. Bytes 1
-> +		 * and 2, and possibly 3, are the pin status. The byte
-> +		 * order is different than for the GET_STATUS
-> +		 * command. Byte 1 is GPIOs 8 to 15, and byte 2 is
-> +		 * GPIOs 0 to 7.
-> +		 */
-> +
-> +		handle_nested_irq(irq_find_mapping(dev->gpio.irq.domain,
-> +						   CH341_GPIO_INT_LINE));
-> +
-> +		rc = usb_submit_urb(dev->irq_urb, GFP_ATOMIC);
-> +		if (rc)
-> +			usb_unanchor_urb(dev->irq_urb);
-> +	}
-> +}
+Wow, cool. Thanks for the heads up! Sidenote: just from the title of
+this commit I guessed the author correctly ;)
 
-> +static void ch341_gpio_irq_enable(struct irq_data *data)
-> +{
-> +	struct ch341_gpio *dev = irq_data_get_irq_chip_data(data);
-> +	int rc;
-> +
-> +	/*
-> +	 * The URB might have just been unlinked in
-> +	 * ch341_gpio_irq_disable, but the completion handler hasn't
-> +	 * been called yet.
-> +	 */
-> +	if (!usb_wait_anchor_empty_timeout(&dev->irq_urb_out, 5000))
-> +		usb_kill_anchored_urbs(&dev->irq_urb_out);
-> +
-> +	usb_anchor_urb(dev->irq_urb, &dev->irq_urb_out);
-> +	rc = usb_submit_urb(dev->irq_urb, GFP_ATOMIC);
-> +	if (rc)
-> +		usb_unanchor_urb(dev->irq_urb);
 
-This looks confused and broken.
+--qOyTUoqo6Ka2qIM3
+Content-Type: application/pgp-signature; name="signature.asc"
 
-usb_kill_anchored_urbs() can sleep so either calling it is broken or
-using GFP_ATOMIC is unnecessary.
+-----BEGIN PGP SIGNATURE-----
 
-And isn't this function called multiple times when enabling more than
-one irq?!
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKLv8cACgkQFA3kzBSg
+KbY4RQ/+Ieko2JdoUgZRAjmlX7cy2lxd8StL9yenYst/u9weA/o82dLUA//dpudn
+ym8yTzgPIA0my2AL3k4tC+WkSaWBiUTThJvOxwtaD5HrlvhAaP/zwnjWJQUnY1zu
+aOWscNepDIN1yXPda3osYeuTO/jq0pfKzO7k/4A8Kn4aFWlkozx4TiPhj6s72Puu
+IJGoDbwNbGcmLcoyMFCUalOYUI5mbVbR3Mle2w1uMFIuCR16wP+5TnOlW6GVqm4R
+7KBHa7efxQ09DgYzk11JmO5ztGbQ96taI5TSbUjdAaEUOrU4MDCISrLo9poniAB1
+ZgW4c1aWFKZvBl/MZ5IxcFK52DpwZWfk+WVNM281javS6gUvDh0tzAZmGzw1kOek
+pwnNDV9IzWvfGhlcawbtKjqV0yoYFAtzK1cQzpauS8TLj35piYkdJVnuCmj/6+yc
+qJYhXSM5Et8PGXPiWgxd1Umtt+YFwLgyxtas6dV2LUCDtBxRbxhdIg8L4MYBxd9n
+zVWZNIpELd3rD8E1HKDDtOaiF5N0wYH8rOzFxQXq9ObgCvxHeElXrSoROg7VQMId
+c8+21NWHYFJ0I024N/usdhrsPGxNpobgZhvhD15gF90R3hDQ80ySR7Y3MYRyCpWG
+BdvDMl8A4rC5JEaxLYESS/9Hy2kWH+83BkIjC6PZVJSvAZGaVAQ=
+=KYIA
+-----END PGP SIGNATURE-----
 
-> +}
-> +
-> +static void ch341_gpio_irq_disable(struct irq_data *data)
-> +{
-> +	struct ch341_gpio *dev = irq_data_get_irq_chip_data(data);
-> +
-> +	usb_unlink_urb(dev->irq_urb);
-
-Same here...
-
-> +}
-> +
-> +static int ch341_gpio_remove(struct platform_device *pdev)
-> +{
-> +	struct ch341_gpio *dev = platform_get_drvdata(pdev);
-> +
-> +	usb_kill_anchored_urbs(&dev->irq_urb_out);
-
-You only have one URB...
-
-And what prevents it from being resubmitted here?
-
-> +	gpiochip_remove(&dev->gpio);
-> +	usb_free_urb(dev->irq_urb);
-> +
-> +	return 0;
-> +}
-> +
-> +static int ch341_gpio_probe(struct platform_device *pdev)
-> +{
-> +	struct ch341_device *ch341 = dev_get_drvdata(pdev->dev.parent);
-> +	struct gpio_irq_chip *girq;
-> +	struct ch341_gpio *dev;
-> +	struct gpio_chip *gpio;
-> +	int rc;
-> +
-> +	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
-> +	if (dev == NULL)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, dev);
-> +	dev->ch341 = ch341;
-> +	mutex_init(&dev->gpio_lock);
-> +
-> +	gpio = &dev->gpio;
-> +	gpio->label = dev_name(&pdev->dev);
-> +	gpio->parent = &pdev->dev;
-> +	gpio->owner = THIS_MODULE;
-> +	gpio->get_direction = ch341_gpio_get_direction;
-> +	gpio->direction_input = ch341_gpio_direction_input;
-> +	gpio->direction_output = ch341_gpio_direction_output;
-> +	gpio->get = ch341_gpio_get;
-> +	gpio->get_multiple = ch341_gpio_get_multiple;
-> +	gpio->set = ch341_gpio_set;
-> +	gpio->set_multiple = ch341_gpio_set_multiple;
-> +	gpio->base = -1;
-> +	gpio->ngpio = CH341_GPIO_NUM_PINS;
-> +	gpio->can_sleep = true;
-> +
-> +	dev->irq_chip.name = dev_name(&pdev->dev);
-> +	dev->irq_chip.irq_set_type = ch341_gpio_irq_set_type;
-> +	dev->irq_chip.irq_enable = ch341_gpio_irq_enable;
-> +	dev->irq_chip.irq_disable = ch341_gpio_irq_disable;
-> +
-> +	girq = &gpio->irq;
-> +	girq->chip = &dev->irq_chip;
-> +	girq->handler = handle_simple_irq;
-> +	girq->default_type = IRQ_TYPE_NONE;
-> +
-> +	/* Create an URB for handling interrupt */
-> +	dev->irq_urb = usb_alloc_urb(0, GFP_KERNEL);
-> +	if (!dev->irq_urb)
-> +		return dev_err_probe(&pdev->dev, -ENOMEM, "Cannot allocate the int URB\n");
-> +
-> +	usb_fill_int_urb(dev->irq_urb, ch341->usb_dev,
-> +			 usb_rcvintpipe(ch341->usb_dev, ch341->ep_intr),
-> +			 dev->irq_buf, CH341_USB_MAX_INTR_SIZE,
-> +			 ch341_complete_intr_urb, dev, ch341->ep_intr_interval);
-> +
-> +	init_usb_anchor(&dev->irq_urb_out);
-> +
-> +	rc = gpiochip_add_data(gpio, dev);
-> +	if (rc) {
-> +		rc = dev_err_probe(&pdev->dev, rc, "Could not add GPIO\n");
-> +		goto release_urb;
-> +	}
-> +
-> +	return 0;
-> +
-> +release_urb:
-> +	usb_free_urb(dev->irq_urb);
-> +
-> +	return rc;
-> +}
-
-Johan
+--qOyTUoqo6Ka2qIM3--
