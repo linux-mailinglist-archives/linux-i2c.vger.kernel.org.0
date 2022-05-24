@@ -2,88 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C623532E89
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 May 2022 18:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7DF532F28
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 May 2022 18:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239668AbiEXQFP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 May 2022 12:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46538 "EHLO
+        id S239610AbiEXQn2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 May 2022 12:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239663AbiEXQEQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 May 2022 12:04:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F416D862;
-        Tue, 24 May 2022 09:01:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EFEBB817F2;
-        Tue, 24 May 2022 16:01:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F0E2C34118;
-        Tue, 24 May 2022 16:01:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653408110;
-        bh=hcEIL1pzwL3kUjm/DoQRDd1vOkGaipd/dvLI4ffFRP0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=caN0OCkLCSz/17j9N9rGlz1atUKq4pnCTANUXm2MPBNEadvwXawa9Y1Blz53gldru
-         en5MoltyGgq3RocV7wRKriPLsbSymQwYzzrGPK3kSlnH0ZlJucCVCmGwDU3KzoagIz
-         WCEunah1g6DY/zjShhiG4E42zXYzoDg8CDdd0xoud+k+k91A3PY2EMuWnYnrG3yxbx
-         0PgFdzpZqI8IDaoRtZHXU+pt9i0ofBJmvrs9wRIH09svhCtKh5Q11yJ7jpgJKR8dZO
-         26znVux/kIHpZqFQZZfqKpZUrW75lSE69I0ALBLMmBP9223GGB7JRbNRxoFd+ykqxA
-         To+JXWqTyP3kw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Piyush Malgujar <pmalgujar@marvell.com>,
-        Szymon Balcerak <sbalcerak@marvell.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        rric@kernel.org, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 2/2] drivers: i2c: thunderx: Allow driver to work with ACPI defined TWSI controllers
-Date:   Tue, 24 May 2022 12:01:44 -0400
-Message-Id: <20220524160144.827435-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220524160144.827435-1-sashal@kernel.org>
-References: <20220524160144.827435-1-sashal@kernel.org>
+        with ESMTP id S233170AbiEXQn0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 May 2022 12:43:26 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4637C434A4;
+        Tue, 24 May 2022 09:43:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653410606; x=1684946606;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6UMCM+RBG4JBxylz5LrdwSJ2Dpx/YvGxgj1zkXLPFqU=;
+  b=mm8KztO4bQQJJq/lPq2pbpmiL8iulFLxtKAR2UUQKq14t9sECpMDknYW
+   Nni94xUpT6nAGFIhtGTtHhnGgoGOUWQSLI4nOkd3v1bgWPZ+jT7Bi0tOa
+   t7kYzlVV2I1gXr+8527SiQmYUpWFVryX3uVkrlOLmc4AzKavx24D5Kd+3
+   PFm0Hn/zIaV6R/90ZLftKeqpjaPtH90JNxKC4O42YQRWDRi5F8tzCJmOP
+   YeceXTxETuL8YuFZQRcvfFxtrekLyFiNOtppxFGof6pmD5DfWx8lXl95h
+   fJGdrvBKoi5JZ/FSzLhi7Id/NNZPS1zzJaxw964xZfMiIoAH4iF7jPaBp
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="336634859"
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="336634859"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 09:43:25 -0700
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="548544106"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 09:43:23 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ntXcv-000KF8-7Y;
+        Tue, 24 May 2022 19:43:21 +0300
+Date:   Tue, 24 May 2022 19:43:21 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Cc:     jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCHv2 1/2] i2c: designware: introduce a custom scl recovery
+ for SoCFPGA platforms
+Message-ID: <Yo0LKQchQwitJVHm@smile.fi.intel.com>
+References: <20220524135441.420600-1-dinguyen@kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524135441.420600-1-dinguyen@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Piyush Malgujar <pmalgujar@marvell.com>
+On Tue, May 24, 2022 at 08:54:40AM -0500, Dinh Nguyen wrote:
+> The I2C pins on the SoCFPGA platforms do not go through a GPIO module,
+> thus cannot be recovered by the default method of by doing a GPIO access.
+> Only a reset of the I2C IP block can a recovery be successful.
 
-[ Upstream commit 03a35bc856ddc09f2cc1f4701adecfbf3b464cb3 ]
+Better now, but see my additional comments.
 
-Due to i2c->adap.dev.fwnode not being set, ACPI_COMPANION() wasn't properly
-found for TWSI controllers.
+...
 
-Signed-off-by: Szymon Balcerak <sbalcerak@marvell.com>
-Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-thunderx-pcidrv.c | 1 +
- 1 file changed, 1 insertion(+)
+> +	switch (dev->flags & MODEL_MASK) {
+> +	case MODEL_SOCFPGA:
+> +		rinfo->recover_bus = i2c_socfpga_scl_recovery;
+> +		break;
+> +	default:
+> +		rinfo->recover_bus = i2c_generic_scl_recovery;
+> +		break;
+> +	}
 
-diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-index bba5b429f69c..3298483bb9b4 100644
---- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-@@ -208,6 +208,7 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
- 	i2c->adap.bus_recovery_info = &octeon_i2c_recovery_info;
- 	i2c->adap.dev.parent = dev;
- 	i2c->adap.dev.of_node = pdev->dev.of_node;
-+	i2c->adap.dev.fwnode = dev->fwnode;
- 	snprintf(i2c->adap.name, sizeof(i2c->adap.name),
- 		 "Cavium ThunderX i2c adapter at %s", dev_name(dev));
- 	i2c_set_adapdata(&i2c->adap, i2c);
+> +	adap->bus_recovery_info = rinfo;
+
+Usually we do not assign the pointer while data structure is incomplete.
+That's said, please leave this line as it was.
+
+On top of that, why you can't move the above switch to the place where old
+function was assigned?
+
 -- 
-2.35.1
+With Best Regards,
+Andy Shevchenko
+
 
