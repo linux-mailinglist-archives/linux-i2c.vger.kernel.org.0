@@ -2,47 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F50A532E71
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 May 2022 18:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C623532E89
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 May 2022 18:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239438AbiEXQEX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 May 2022 12:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46986 "EHLO
+        id S239668AbiEXQFP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 May 2022 12:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239498AbiEXQDp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 May 2022 12:03:45 -0400
+        with ESMTP id S239663AbiEXQEQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 May 2022 12:04:16 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6D373572;
-        Tue, 24 May 2022 09:01:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F416D862;
+        Tue, 24 May 2022 09:01:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F475B819DC;
-        Tue, 24 May 2022 16:01:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6266C34113;
-        Tue, 24 May 2022 16:01:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8EFEBB817F2;
+        Tue, 24 May 2022 16:01:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F0E2C34118;
+        Tue, 24 May 2022 16:01:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653408103;
-        bh=PQnNo4qjHa38rWy1F+GxoQE+4yWWYf8kdz4fnLlJYmc=;
+        s=k20201202; t=1653408110;
+        bh=hcEIL1pzwL3kUjm/DoQRDd1vOkGaipd/dvLI4ffFRP0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hJK8dtzXJ8mYzp/OmJuC3Hl3uFqcpbQDsE5njhNhxfypXjxR5lSjUgyb1bKFFOONa
-         sNQPZ4xzem5sa8ky3RGQ3w7xmW1EpjmCy4YLcH0dR0Z+xZS5jJn4mU6X3LH6qZGFnG
-         bihzv/y7mUSzmMFyhhPshbfoCCIjgCEb6u3OCdt9Gak1T9LL+FJeu2MFTitKYr2cYR
-         hZvPvbHEvXkarB8kZf1xfU9vTyMKL8psuXO7yapVSY0PR+VumFLdD3oLDrGEDmYc2j
-         JZRmvPz+f+NRuuCBldHXsZXZnYaMkNuntvFwgMbTOgCNZ5x/bb4THEM4RlSTsOzRFl
-         MeEbx3AhXwNmg==
+        b=caN0OCkLCSz/17j9N9rGlz1atUKq4pnCTANUXm2MPBNEadvwXawa9Y1Blz53gldru
+         en5MoltyGgq3RocV7wRKriPLsbSymQwYzzrGPK3kSlnH0ZlJucCVCmGwDU3KzoagIz
+         WCEunah1g6DY/zjShhiG4E42zXYzoDg8CDdd0xoud+k+k91A3PY2EMuWnYnrG3yxbx
+         0PgFdzpZqI8IDaoRtZHXU+pt9i0ofBJmvrs9wRIH09svhCtKh5Q11yJ7jpgJKR8dZO
+         26znVux/kIHpZqFQZZfqKpZUrW75lSE69I0ALBLMmBP9223GGB7JRbNRxoFd+ykqxA
+         To+JXWqTyP3kw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Piyush Malgujar <pmalgujar@marvell.com>,
         Szymon Balcerak <sbalcerak@marvell.com>,
         Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
         rric@kernel.org, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 3/3] drivers: i2c: thunderx: Allow driver to work with ACPI defined TWSI controllers
-Date:   Tue, 24 May 2022 12:01:31 -0400
-Message-Id: <20220524160131.827384-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 2/2] drivers: i2c: thunderx: Allow driver to work with ACPI defined TWSI controllers
+Date:   Tue, 24 May 2022 12:01:44 -0400
+Message-Id: <20220524160144.827435-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220524160131.827384-1-sashal@kernel.org>
-References: <20220524160131.827384-1-sashal@kernel.org>
+In-Reply-To: <20220524160144.827435-1-sashal@kernel.org>
+References: <20220524160144.827435-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -73,10 +73,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-index df0976f4432a..4f0456fe8691 100644
+index bba5b429f69c..3298483bb9b4 100644
 --- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
 +++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-@@ -215,6 +215,7 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
+@@ -208,6 +208,7 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
  	i2c->adap.bus_recovery_info = &octeon_i2c_recovery_info;
  	i2c->adap.dev.parent = dev;
  	i2c->adap.dev.of_node = pdev->dev.of_node;
