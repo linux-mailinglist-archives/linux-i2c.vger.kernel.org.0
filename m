@@ -2,112 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 222BA532CE0
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 May 2022 17:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B15E532E18
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 May 2022 18:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238674AbiEXPGI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 May 2022 11:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        id S236055AbiEXQAp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 May 2022 12:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238668AbiEXPGF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 May 2022 11:06:05 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2063.outbound.protection.outlook.com [40.107.220.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDFCF0;
-        Tue, 24 May 2022 08:06:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YPSG1hXMQvDWRpJfhbcraNjQIKEAAw1usIF0ntvgdEkLTIsCxBJ0Y+i84vzIyOVsEBqv2YBsM2dniKThLHBN0LVc0XYS/tA4I6+yZRa2r6H9/lZd2sjk9vskmrH5vvwULdS892Y8N004CTIFgGYH2qTmS141tOoX09wb/rR5U1mH+74CQsf5rKvY/3MYCRpb8DtfzP7p/nH+fagG7j/vfADxPiPoX4uXYZrIBNFeoUpt9MCfvOKfBqFoJpRVHmSIklsAfcAq9vI2stN12zlYqvLk26Fg00+TMtAYsGBqMz4fsEjeiT7uE4OHQxyrnps8XvzpLnHpXUQqrBaYxAeDnw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fp3IYZm3PyZ1zPEGsYQl1Wi0Qa5U93WxIzPsK7b6kFw=;
- b=VqcyNK/CLix2oVrQQcp+PlC9mA/kFVWdzMUBFML3o6ORYbw888kyl5mizQ9/xlyodZxI1KF172P+7S1/D3E9oClPAEEb6sRx9r7R7J3GF+Wg26osbhjsetW44ApSBG8bDnIQnx9FsKuRYDDNt5j0YfUcU9TQBddcPd5FQZtntB0zvVWMB4IfMUOEsYwe62DoBsoewz5R6wSpRdvWwyVIzwzXnysjRMlHKOgzr4c6wAcJjXA18ITT1ftzFtH1P/TTk3yFlscDPDJmBS1sXBnbW3fcd+haZ1mrd/1slCQCie6TgS1VPNNPw53VkzPaVzrP72bh9GtdNbhLvC5SwGb+zg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=wujek.eu smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fp3IYZm3PyZ1zPEGsYQl1Wi0Qa5U93WxIzPsK7b6kFw=;
- b=MzOaoTvK6drDqHgCT2Ma2swtTv4WWTym5uB4zhxM+ZaZEri+u2LL2tIRTKJbTiISHOsvJEnO7mArAptGj/yXQEKn3w68rcVTYGNcN9CJBzuuRoxZDmgBrGJwpfIvcW9wkkWvXK4R+XBLn+79vRpKvGpb/n2pq3ugqzMCYFA3hug=
-Received: from SN1PR12CA0107.namprd12.prod.outlook.com (2603:10b6:802:21::42)
- by BL0PR02MB4817.namprd02.prod.outlook.com (2603:10b6:208:52::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.17; Tue, 24 May
- 2022 15:05:58 +0000
-Received: from SN1NAM02FT0030.eop-nam02.prod.protection.outlook.com
- (2603:10b6:802:21:cafe::a4) by SN1PR12CA0107.outlook.office365.com
- (2603:10b6:802:21::42) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13 via Frontend
- Transport; Tue, 24 May 2022 15:05:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0030.mail.protection.outlook.com (10.97.5.194) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5273.14 via Frontend Transport; Tue, 24 May 2022 15:05:58 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 24 May 2022 08:05:56 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 24 May 2022 08:05:56 -0700
-Envelope-to: dev_public@wujek.eu,
- linux-arm-kernel@lists.infradead.org,
- linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Received: from [10.254.241.50] (port=39154)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1ntW6e-000F01-3K; Tue, 24 May 2022 08:05:56 -0700
-Message-ID: <006cdaf6-2fe3-7f01-2597-50e7da1f88c8@xilinx.com>
-Date:   Tue, 24 May 2022 17:05:54 +0200
+        with ESMTP id S239367AbiEXQAQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 May 2022 12:00:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC189A0D24;
+        Tue, 24 May 2022 09:00:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8265B81785;
+        Tue, 24 May 2022 16:00:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49972C34113;
+        Tue, 24 May 2022 16:00:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653408003;
+        bh=g01vBZVStxAahFQTmtaV2HaIpT1FseCZakkCwgxe3N4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=eoc6kqvzhTMevu48p42rOmBR5X1xRmDZQr1/hTCqlnNBTxgmKl3ywbHFhfLxR8Db+
+         Gd6IqboOXlqrn+V56+TFJY8C9mzk3tRcFLL3G854Z7fFc58jhFkQ6WlLm4+bYgtFq7
+         1F7taFsgUaHOLfbbbrlO/IEfhnrQLmnVcXSJ4KNdDybqacyrJlXeQU4QE/8h9JCrpA
+         M+1zdHVnkuUqLLXWeIhswT9q+qR/fwctcMVHJmujhMXzxI8o8/rx+m/TDFAyilyjju
+         SxA9aOZIvVhDleRL8tnZRCxLFk9j1jr+MoPGrDs8WzTSW5tqR+Z0CKu4IPHv6ssmWL
+         b6o/LZj/f6pMg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "From : Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        seth.heasley@intel.com, nhorman@tuxdriver.com, bp@suse.de,
+        christophe.jaillet@wanadoo.fr, linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 11/12] i2c: ismt: Provide a DMA buffer for Interrupt Cause Logging
+Date:   Tue, 24 May 2022 11:59:25 -0400
+Message-Id: <20220524155929.826793-11-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220524155929.826793-1-sashal@kernel.org>
+References: <20220524155929.826793-1-sashal@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] i2c: busses: i2c-cadence: fix message length when
- receive block message
-Content-Language: en-US
-To:     Adam Wujek <dev_public@wujek.eu>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-CC:     Michal Simek <michal.simek@xilinx.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220519124946.387373-1-dev_public@wujek.eu>
- <20220519231058.437365-1-dev_public@wujek.eu>
-From:   Michal Simek <michal.simek@xilinx.com>
-In-Reply-To: <20220519231058.437365-1-dev_public@wujek.eu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 726df282-8e73-4e03-7d87-08da3d96e8a4
-X-MS-TrafficTypeDiagnostic: BL0PR02MB4817:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR02MB4817CEF55F1EA055BE71FDEDC6D79@BL0PR02MB4817.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nHcCLTZtNCchF1/iKMrawwMxEBfwjDZ5uMzFg9z2pSg4VO/JDXbrnjvnyAirNVwIcORBZAUZR9AJdF32uuJq9UWqk25FI5EM6fbTdRaKWEGkYMxHYT/c0fGCjdgfX6H+mD5bxtbyzgdG/d9OqZUxkKr6MWFGpfV5sAsEQOji0pcFJ9MAGVnNxImpWZl6nJCbwVGQDccvFwDDgY2/pTvAQVkjbbvk4iDkna6++sN43Qt9b9MJTcoL2/Z+ijoKJPJgELwhRBQTzeFPLvjhldWNvlq/ernyHMrMe7Yi49ex+bVvB7XS4qHL2Z5tcNC2Rd7asmM3DB3+5M7cppFhgCZm8QlcLuJ07dKzFO1xvoupJPz6F7vnlZogmbSRM8br0dFw7f1uMrUrf+59XTaHx0btVSZmarPmfhHGNb+OuX12KAIGTA+cNds7K0hWzZiUti7XcHJgxh47hX+uEpAXWI20pDzLqFAR+6TdGtmmxJSrqKDvaPkfPoOqD8en8m8E2OOWdWmUGB0pS97RrEsRHLQA+BIdrLhDe54mjHOaK5w9NZAWYOHxSm9PLzAnJI2Bd0BQ1S9DiyXjTDDmmfmkuVamG4edpKCmFxWUeQr4/QY+ma2ZgQ5u7zbYpwYoSLbmOwueCvcOwT15aOfKMmfkc4XjmmR1M+L0Pu9oLznhyYmefhis3DLuFlkIO2+C0w2CTLrgUO3y2EFlC/mNI19hmtyo4Gf7o6DUbRxezQuYqrm0mjo=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(8936002)(6636002)(36756003)(82310400005)(316002)(8676002)(70586007)(70206006)(4326008)(53546011)(110136005)(508600001)(15650500001)(5660300002)(54906003)(2906002)(31686004)(44832011)(9786002)(40460700003)(7636003)(26005)(356005)(186003)(31696002)(2616005)(47076005)(336012)(426003)(36860700001)(83380400001)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2022 15:05:58.3048
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 726df282-8e73-4e03-7d87-08da3d96e8a4
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0030.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB4817
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,47 +58,86 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 
+[ Upstream commit 17a0f3acdc6ec8b89ad40f6e22165a4beee25663 ]
 
-On 5/20/22 01:11, Adam Wujek wrote:
-> Needed by hwmon/pmbus_core driver to calculate PEC correctly.
-> The hwmon/pmbus_core driver relies on bus drivers to update the message
-> length of receive block transfers. Only in this type of smbus transfer
-> the length is not known before the transfer is started.
-> 
-> Signed-off-by: Adam Wujek <dev_public@wujek.eu>
-> ---
-> Notes:
->      Changes in v2:
->      - fix multiline comment
-> 
->   drivers/i2c/busses/i2c-cadence.c | 7 +++++++
->   1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-> index 805c77143a0f..a679eb390ef5 100644
-> --- a/drivers/i2c/busses/i2c-cadence.c
-> +++ b/drivers/i2c/busses/i2c-cadence.c
-> @@ -794,6 +794,13 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
->   		return -ETIMEDOUT;
->   	}
-> 
-> +	/*
-> +	 * Update message len, as i2c/smbus driver (function
-> +	 * i2c_smbus_xfer_emulated) relies on i2c device drivers to do this.
-> +	 */
-> +	if ((msg->flags & I2C_M_RECV_LEN) && (msg->flags & I2C_M_RD))
-> +		msg->len = msg->buf[0] + 2; /* add len byte + PEC byte */
-> +
->   	cdns_i2c_writereg(CDNS_I2C_IXR_ALL_INTR_MASK,
->   			  CDNS_I2C_IDR_OFFSET);
-> 
-> --
-> 2.17.1
-> 
-> 
+Before sending a MSI the hardware writes information pertinent to the
+interrupt cause to a memory location pointed by SMTICL register. This
+memory holds three double words where the least significant bit tells
+whether the interrupt cause of master/target/error is valid. The driver
+does not use this but we need to set it up because otherwise it will
+perform DMA write to the default address (0) and this will cause an
+IOMMU fault such as below:
 
-Shubhrajyoti: Can you please test it?
+  DMAR: DRHD: handling fault status reg 2
+  DMAR: [DMA Write] Request device [00:12.0] PASID ffffffff fault addr 0
+        [fault reason 05] PTE Write access is not set
 
-Thanks,
-Michal
+To prevent this from happening, provide a proper DMA buffer for this
+that then gets mapped by the IOMMU accordingly.
+
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Reviewed-by: From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/i2c/busses/i2c-ismt.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/drivers/i2c/busses/i2c-ismt.c b/drivers/i2c/busses/i2c-ismt.c
+index f4820fd3dc13..c01430ce103a 100644
+--- a/drivers/i2c/busses/i2c-ismt.c
++++ b/drivers/i2c/busses/i2c-ismt.c
+@@ -82,6 +82,7 @@
+ 
+ #define ISMT_DESC_ENTRIES	2	/* number of descriptor entries */
+ #define ISMT_MAX_RETRIES	3	/* number of SMBus retries to attempt */
++#define ISMT_LOG_ENTRIES	3	/* number of interrupt cause log entries */
+ 
+ /* Hardware Descriptor Constants - Control Field */
+ #define ISMT_DESC_CWRL	0x01	/* Command/Write Length */
+@@ -175,6 +176,8 @@ struct ismt_priv {
+ 	u8 head;				/* ring buffer head pointer */
+ 	struct completion cmp;			/* interrupt completion */
+ 	u8 buffer[I2C_SMBUS_BLOCK_MAX + 16];	/* temp R/W data buffer */
++	dma_addr_t log_dma;
++	u32 *log;
+ };
+ 
+ static const struct pci_device_id ismt_ids[] = {
+@@ -411,6 +414,9 @@ static int ismt_access(struct i2c_adapter *adap, u16 addr,
+ 	memset(desc, 0, sizeof(struct ismt_desc));
+ 	desc->tgtaddr_rw = ISMT_DESC_ADDR_RW(addr, read_write);
+ 
++	/* Always clear the log entries */
++	memset(priv->log, 0, ISMT_LOG_ENTRIES * sizeof(u32));
++
+ 	/* Initialize common control bits */
+ 	if (likely(pci_dev_msi_enabled(priv->pci_dev)))
+ 		desc->control = ISMT_DESC_INT | ISMT_DESC_FAIR;
+@@ -708,6 +714,8 @@ static void ismt_hw_init(struct ismt_priv *priv)
+ 	/* initialize the Master Descriptor Base Address (MDBA) */
+ 	writeq(priv->io_rng_dma, priv->smba + ISMT_MSTR_MDBA);
+ 
++	writeq(priv->log_dma, priv->smba + ISMT_GR_SMTICL);
++
+ 	/* initialize the Master Control Register (MCTRL) */
+ 	writel(ISMT_MCTRL_MEIE, priv->smba + ISMT_MSTR_MCTRL);
+ 
+@@ -795,6 +803,12 @@ static int ismt_dev_init(struct ismt_priv *priv)
+ 	priv->head = 0;
+ 	init_completion(&priv->cmp);
+ 
++	priv->log = dmam_alloc_coherent(&priv->pci_dev->dev,
++					ISMT_LOG_ENTRIES * sizeof(u32),
++					&priv->log_dma, GFP_KERNEL);
++	if (!priv->log)
++		return -ENOMEM;
++
+ 	return 0;
+ }
+ 
+-- 
+2.35.1
+
