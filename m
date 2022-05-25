@@ -2,212 +2,169 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D0153408D
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 May 2022 17:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D930C534235
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 May 2022 19:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbiEYPoW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 25 May 2022 11:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
+        id S245690AbiEYRch (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 25 May 2022 13:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiEYPoW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 25 May 2022 11:44:22 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C712BB1E;
-        Wed, 25 May 2022 08:44:21 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id z7so15682138ybf.7;
-        Wed, 25 May 2022 08:44:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wW60Ei1LEDr4i3KMNYvUE+Jfx8WzRpVMj4wd8F6Eb8c=;
-        b=V7Nwv9fgiJ0bQxYe49i7Mg37xs4qvR0/vZap13GiBj11xBxeREay48xMpiYK7+qsSw
-         gr1o+Sz549iJ4UO3yv5lW+EXCpNx3bReR2wmFjDJoHyPXAAZpImvTdy9MKj3AYRB26W9
-         VDWaJi0PxjTnYbUbhSgmvEC9qgYP9xSwZOQUuEWmMWtiD4egBW4kSjXETzZOwK/XGdMO
-         ZKTlbBGaDihBrT4ZLdvCGTg+f5bQtY8UCd1f5uR4/RtUnnMu8cDAjHNRkk7jr/7yTw16
-         +Occ6XWlKdwsxGtpfiLSX6fXJCvB0K6eF/oacyz9TXKJxIT4xdXDzRn3aJ7tmsRUUXCR
-         Ov/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wW60Ei1LEDr4i3KMNYvUE+Jfx8WzRpVMj4wd8F6Eb8c=;
-        b=ujrhJwGYi9XxDJPWL2h/KeOMv83BNR3UjArIOhUhE9PGNxkcUpJFB17WOgcTkxMELD
-         WFnCnxhnHh02nWYB7aBrI5u+0evqdg/kefh2NvY7TXhSXEf1l/yPPzQ+vI+hJ2HRfihH
-         p6ANHzb4mg+XB5YsCp54+9KsnWD+Hzyb6MzJ68LDGRf056aMPNtfBnxwYFSmoTv6oZOO
-         6GFh0z8opnV5kwyhXE0cxrkuueU+owH2NZG/fxZNwzge5wLjgydLu9Hl9Lb6kw21YgEZ
-         OT0P8kZPCm7sxpGbUU74PoGGyo+GEFgRyRN4l1M/bE1g+pZBHw9Fx/4k9FwK0m2std31
-         x6+A==
-X-Gm-Message-State: AOAM531/kRoj8Q9AXrgeDTZMtYwhJCZiLJcLUS8efoELj/NEM8hWCWMF
-        reFNvHmeGBlQqA7D0SYxp+MSPH+40/kazRtkrxgfaRW7q/beIQ==
-X-Google-Smtp-Source: ABdhPJwt+NfnKj2VKz+x3FOzOFwAqCKrdsgAFJl5Sq4ANwRciQDuXogfYc1SZ3B3WS7WeNUC5HDUP7kO5cIGzKNpvXA=
-X-Received: by 2002:a25:3447:0:b0:655:b2da:cefc with SMTP id
- b68-20020a253447000000b00655b2dacefcmr3048383yba.96.1653493460311; Wed, 25
- May 2022 08:44:20 -0700 (PDT)
+        with ESMTP id S238126AbiEYRcg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 25 May 2022 13:32:36 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B079AAE27A;
+        Wed, 25 May 2022 10:32:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653499953; x=1685035953;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zFfZG5aE64Sz5hHGHeaLLPFGzXoXwE70vbeN27URneg=;
+  b=FAJSFFKrU+HyWNzP7MRxvQw3czX1dcvw53hG65+CX2uxmbJuobGoqDIU
+   x9RDJfusIHY4NpYQK1+ZcnQe+5ilwjpDE/LxAyqW8VMx41YMU9Gb99eCc
+   xCLO6T6OU0LFSt6OXUbmEcTdqkmys6IOwspBJszxMhZLmCRVFifQ6t9h3
+   dsjB52U8WDySOqsvGN3C/XwtpESiA8ZE1GJQ3wo0uyovR3l2z171u5SH6
+   cN7e7DAGptSeMAPPaFptMJMnaPcXWEnZQZK37NgkUhybpO4tx3LKx1tld
+   EIdAxXMuNbrylDP3J4e7kCmddacFvU9L18WYHfHAAUOqZnMjaeDj7qXsd
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="253752142"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="253752142"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 10:08:39 -0700
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="609286483"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 10:08:33 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ntuUn-000L4I-9o;
+        Wed, 25 May 2022 20:08:29 +0300
+Date:   Wed, 25 May 2022 20:08:28 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tyrone Ting <warp5tw@gmail.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        wsa@kernel.org, jarkko.nikula@linux.intel.com,
+        semen.protsenko@linaro.org, jie.deng@intel.com, jsd@semihalf.com,
+        sven@svenpeter.dev, lukas.bulwahn@gmail.com, olof@lixom.net,
+        arnd@arndb.de, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/5] i2c: npcm: Bug fixes timeout, spurious interrupts
+Message-ID: <Yo5ijJ9mqXRNB7d8@smile.fi.intel.com>
+References: <20220525032341.3182-1-warp5tw@gmail.com>
 MIME-Version: 1.0
-References: <20220525074757.7519-1-michael.zaidman@gmail.com> <20220525074757.7519-4-michael.zaidman@gmail.com>
-In-Reply-To: <20220525074757.7519-4-michael.zaidman@gmail.com>
-From:   Guillaume Champagne <champagne.guillaume.c@gmail.com>
-Date:   Wed, 25 May 2022 11:44:09 -0400
-Message-ID: <CAHSN6OfdHfiZRXjnqvnpcbwS0nt0vBuLiwMHcbpsd_AWiJ3i1g@mail.gmail.com>
-Subject: Re: [PATCH v1 3/5] HID: ft260: support i2c writes larger than HID
- report size
-To:     Michael Zaidman <michael.zaidman@gmail.com>
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, wsa@kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Mathieu Gallichand <mathieu.gallichand@sonatest.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220525032341.3182-1-warp5tw@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Le mer. 25 mai 2022 =C3=A0 03:48, Michael Zaidman
-<michael.zaidman@gmail.com> a =C3=A9crit :
->
-> To support longer than one HID report size write, the driver splits a sin=
-gle
-> i2c message data payload into multiple i2c messages of HID report size.
-> However, it does not replicate the offset bytes within the EEPROM chip in
-> every consequent HID report because it is not and should not be aware of
-> the EEPROM type. It breaks the i2c write message integrity and causes the
-> EEPROM device not to acknowledge the second HID report keeping the i2c bu=
-s
-> busy until the ft260 controller reports failure.
->
+On Wed, May 25, 2022 at 11:23:36AM +0800, Tyrone Ting wrote:
+> From: Tyrone Ting <kfting@nuvoton.com>
+> 
+> This patchset includes the following fixes:
+> 
+> - Add dt-bindings description for NPCM845.
+> - Bug fix for timeout calculation.
+> - Better handling of spurious interrupts.
+> - Fix for event type in slave mode.
+> - Removal of own slave addresses [2:10].
+> - Support for next gen BMC (NPCM845).
+> 
+> The NPCM I2C driver is tested on NPCM750 and NPCM845 evaluation boards.
 
-I tested this whole patchset and it resolves the issue I raised
-https://patchwork.kernel.org/project/linux-input/patch/20220524192422.13967=
--1-champagne.guillaume.c@gmail.com/,
-thanks.
+LGTM,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> This patch preserves the i2c write message integrity by manipulating the
-> i2c flag bits across multiple HID reports to be seen by the EEPROM device
-> as a single i2c write transfer.
->
-> Before:
->
-> $ sudo ./i2cperf -f 2 -o 2 -s 64 -r 0-0xff 13 0x51 -S
-> Error: Sending messages failed: Input/output error
->
-> [  +3.667741] ft260_i2c_write: rep 0xde addr 0x51 off 0 len 60 d[0] 0x0
-> [  +0.007330] ft260_hid_output_report_check_status: wait 6400 usec, len 6=
-4
-> [  +0.000203] ft260_xfer_status: bus_status 0x40, clock 100
-> [  +0.000001] ft260_i2c_write: rep 0xd1 addr 0x51 off 60 len 6 d[0] 0x0
-> [  +0.002337] ft260_hid_output_report_check_status: wait 1000 usec, len 1=
-0
-> [  +0.000157] ft260_xfer_status: bus_status 0x2e, clock 100
-> [  +0.000241] ft260_i2c_reset: done
-> [  +0.000003] ft260 0003:0403:6030.000E: ft260_i2c_write: failed to start=
- transfer, ret -5
->
-> After:
->
-> $ sudo ./i2cperf -f 2 -o 2 -s 128 -r 0-0xff 13 0x51 -S
->
->   Fill block with increment via i2ctransfer by chunks
->   -------------------------------------------------------------------
->   data rate(bps)  efficiency(%)  data size(B)  total IOs   IO size(B)
->   -------------------------------------------------------------------
->   58986           86             256           2           128
->
-> Signed-off-by: Michael Zaidman <michael.zaidman@gmail.com>
-> ---
->  drivers/hid/hid-ft260.c | 45 ++++++++++++++++++++++++-----------------
->  1 file changed, 27 insertions(+), 18 deletions(-)
->
-> diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
-> index 44106cadd746..bfda5b191a3a 100644
-> --- a/drivers/hid/hid-ft260.c
-> +++ b/drivers/hid/hid-ft260.c
-> @@ -378,41 +378,50 @@ static int ft260_hid_output_report_check_status(str=
-uct ft260_device *dev,
->  }
->
->  static int ft260_i2c_write(struct ft260_device *dev, u8 addr, u8 *data,
-> -                          int data_len, u8 flag)
-> +                          int len, u8 flag)
->  {
-> -       int len, ret, idx =3D 0;
-> +       int ret, wr_len, idx =3D 0;
-> +       bool first =3D true;
->         struct hid_device *hdev =3D dev->hdev;
->         struct ft260_i2c_write_request_report *rep =3D
->                 (struct ft260_i2c_write_request_report *)dev->write_buf;
->
->         do {
-> -               if (data_len <=3D FT260_WR_DATA_MAX)
-> -                       len =3D data_len;
-> -               else
-> -                       len =3D FT260_WR_DATA_MAX;
-> +               rep->flag =3D 0;
-> +               if (first) {
-> +                       rep->flag =3D FT260_FLAG_START;
+> Addressed comments from:
+>  - Wolfram Sang : https://lkml.org/lkml/2022/5/21/51
+> 
+> Changes since version 5:
+>  - Shorten npcm_i2caddr array since the number of supported i2c slave
+>    addresses is reduced.
+>  - Create a new patch from the original PATCH v5 08/10 to modify the slave
+>    transaction logic.
+> 
+> Changes since version 4:
+>  - Remove quotes around ref handle to nuvoton,sys-mgr in i2c binding
+>    document.
+>  - Keep the "longer line first" order.
+>  - Correct the SoB chain.
+>  - Modify the if statement in one line and add new line characters.
+>  - Modify the commit message format in the patch Remove own slave
+>    addresses 2:10. Correct the if statement in one line and shorten the
+>    debug messages.
+>  - Create a new patch to capitalize the one-line comment in the driver.
+> 
+> Changes since version 3:
+>  - Correct the const format in if condition in i2c binding document.
+>  - Add the oops message statement and register information in register
+>    access width patch.
+>  - Add the occurring rate of the i2c spurious interrupt issue and more
+>    details in driver's behavior to overcome this issue.
+>  - Address Andy's comments in the patch to support NPCM845.
+>  
+> Changes since version 2:
+>  - Keep old code as fallback, if getting nuvoton,sys-mgr property fails.
+>  - Fix the error reported by running 'make DT_CHECKER_FLAGS=-m 
+>    dt_binding_check'.
+>  - Make nuvoton,sys-mgr required for nuvoton,npcm845-i2c.
+>  - Correct the patch's subject about changing the way of getting GCR
+>    regmap and add the description about keeping old code as fallback
+>    if getting nuvoton,sys-mgr property fails.
+>  - Correct the patch title and description about removing the unused 
+>    variable clk_regmap.
+>  - Use the data field directly instead of the macros since macros are
+>    not constants anymore in this patch.
+>  
+> Changes since version 1:
+>  - Add nuvoton,sys-mgr property in NPCM devicetree.
+>  - Describe the commit message in imperative mood.
+>  - Modify the description in i2c binding document to cover NPCM series.
+>  - Add new property in i2c binding document.
+>  - Create a new patch for client address calculation.
+>  - Create a new patch for updating gcr property name.
+>  - Create a new patch for removing unused clock node.
+>  - Explain EOB in the commit description.
+>  - Create a new patch for correcting NPCM register access width.
+>  - Remove some comment since the corresponding logic no longer exists.
+>  - Remove fixes tag while the patch adds an additional feature.
+>  - Use devicetree data field to support NPCM845.
+> 
+> Tali Perry (2):
+>   i2c: npcm: Remove own slave addresses 2:10
+>   i2c: npcm: Correct slave role behavior
+> 
+> Tyrone Ting (3):
+>   dt-bindings: i2c: npcm: support NPCM845
+>   i2c: npcm: Support NPCM845
+>   i2c: npcm: Capitalize the one-line comment
+> 
+>  .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     |  25 ++-
+>  drivers/i2c/busses/Kconfig                    |   8 +-
+>  drivers/i2c/busses/Makefile                   |   2 +-
+>  drivers/i2c/busses/i2c-npcm7xx.c              | 176 ++++++++++--------
+>  4 files changed, 124 insertions(+), 87 deletions(-)
+> 
+> -- 
+> 2.17.1
+> 
 
-I feel like multi packet transactions must still honor flag sent to
-ft20_i2c_write. This adds a START even if ft260_i2c_write is called
-with FT260_FLAG_START_REPEATED or FT260_FLAG_NONE.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> +                       first =3D false;
-> +               }
-> +
-> +               if (len <=3D FT260_WR_DATA_MAX) {
-> +                       wr_len =3D len;
-> +                       if (flag =3D=3D FT260_FLAG_START_STOP)
-> +                               rep->flag |=3D FT260_FLAG_STOP;
-> +               } else {
-> +                       wr_len =3D FT260_WR_DATA_MAX;
-> +               }
->
-> -               rep->report =3D FT260_I2C_DATA_REPORT_ID(len);
-> +               rep->report =3D FT260_I2C_DATA_REPORT_ID(wr_len);
->                 rep->address =3D addr;
-> -               rep->length =3D len;
-> -               rep->flag =3D flag;
-> +               rep->length =3D wr_len;
->
-> -               memcpy(rep->data, &data[idx], len);
-> +               memcpy(rep->data, &data[idx], wr_len);
->
-> -               ft260_dbg("rep %#02x addr %#02x off %d len %d d[0] %#02x\=
-n",
-> -                         rep->report, addr, idx, len, data[0]);
-> +               ft260_dbg("rep %#02x addr %#02x off %d len %d wlen %d fla=
-g %#x d[0] %#02x\n",
-> +                         rep->report, addr, idx, len, wr_len,
-> +                         rep->flag, data[0]);
->
->                 ret =3D ft260_hid_output_report_check_status(dev, (u8 *)r=
-ep,
-> -                                                          len + 4);
-> +                                                          wr_len + 4);
->                 if (ret < 0) {
-> -                       hid_err(hdev, "%s: failed to start transfer, ret =
-%d\n",
-> -                               __func__, ret);
-> +                       hid_err(hdev, "%s: failed with %d\n", __func__, r=
-et);
->                         return ret;
->                 }
->
-> -               data_len -=3D len;
-> -               idx +=3D len;
-> +               len -=3D wr_len;
-> +               idx +=3D wr_len;
->
-> -       } while (data_len > 0);
-> +       } while (len > 0);
->
->         return 0;
->  }
-> --
-> 2.25.1
->
+
