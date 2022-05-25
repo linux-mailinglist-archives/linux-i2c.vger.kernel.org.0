@@ -2,50 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E90E5335B7
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 May 2022 05:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5EA5335B9
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 May 2022 05:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239740AbiEYDYW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 May 2022 23:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
+        id S241848AbiEYDYg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 May 2022 23:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239372AbiEYDYV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 May 2022 23:24:21 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53C6644C4;
-        Tue, 24 May 2022 20:24:20 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id z25so5404493pfr.1;
-        Tue, 24 May 2022 20:24:20 -0700 (PDT)
+        with ESMTP id S241178AbiEYDYY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 May 2022 23:24:24 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA372719E3;
+        Tue, 24 May 2022 20:24:22 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id gk22so88285pjb.1;
+        Tue, 24 May 2022 20:24:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=wHBp9QnqH/tjk3SXwINVbP3RweD3cBoDf4EfzPLLtdI=;
-        b=fNBFiUKlpKIxyGJZvI0uX+HBUBj+QfngKb8DmXACjcba45H7uzizIr8jCBbXk6HpJv
-         EkwruyuWEGhCyE5vmZ6GJChN8dJcmhKDzAB7QUuwyeznTcMp+AUaCAEH3F1VvGJglyrW
-         2KT0+/XWKurwchH5Vc9GOPMo6zNmhOTRHs8/+kmEVJGtbNfFRGujZMI6EJrKrafrb7x1
-         h09jkoXzq53WMBZjc0nhspW2x3HteiOZEZ3x2kXjpQzxTwvhOU3qi9EAAH2sP3mjC07N
-         9fzH/GFkL1aGOCP+V1S/4D2IK3DHj7pEj6WrloC42k9BdE+3kbel7kTAfhbzTukEOeGu
-         94wQ==
+        bh=0rffUNaGY9JVFcRgt64Xz6CcZdQ3YWgSvvOXYBNVtz8=;
+        b=jKuli6//St0+LziZumcEVU9gK0gJSh/AzpWH/KvZOrjGADjGd6q9QqwOD441webjpK
+         gilAjG+LuVOpD5IOFK/83ezJe7pJ1xqeoRB4UvizS6FSRJdbXVn2SzPhhAsakxycJwyn
+         7GpFGlNuuN9u8cwWO24d/KKSp0P81EbToYQUryYUC6uqU2aEmdYMj935T+wh9nVI7KZm
+         phcqaebLfwXYhPlJYL2KvrRvV/iV6MH4KGFT7f2eaDjIIdP/B4tUYjWXq9CoX2quPY3w
+         CTPyYOnMOliR0s4mXNMyyGCBhUjg/CB3CecF3CxL995slIZGw57pNDs5Qnw+edU1DIPT
+         j8xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=wHBp9QnqH/tjk3SXwINVbP3RweD3cBoDf4EfzPLLtdI=;
-        b=glxIR09BEZkuEMHZetsoEhQZS5SYkHhPeDZepDdcL5o8BfTA/Acu9paIiKmLvNex6u
-         FcWjcq5rU/rCmfNWO+jKRrJl0YAFeof434uMZBCNXUp4g5fb6MFeDtRAYpWV6MrT5TBr
-         pe9NUk55Yw5GAixknfItL0ioleMMxitsaIGLxSZGL40wg/HXUqQigWYLChkZLZ94QUhY
-         W8zUHDL+/cchy4kK2Q3u8fRUqK1iVWG/iauW7OtbnJcbN9EK3lcgn2gjHLpPb7S9ZLJU
-         KYQjVna+2VwrX/yFPVuZPA5+0dNh6Fs/wO4B0HX5ujf4WPOID9gPw2y3fc/q3zgE2c6w
-         uJxg==
-X-Gm-Message-State: AOAM531zf9Tt5cqxm2QIkXD+R2Wv00Zr3YzO8gIf/YDwXMfu49tefDHv
-        cqOhfLc5awgDtw0PEv1q+A==
-X-Google-Smtp-Source: ABdhPJxa8vJIr5qyiq99KNOmQoXdVeta0mlKAEHonS3Wg0JV3UGwIJ2FjdIKoBhvdIqTXlSP8WhU2w==
-X-Received: by 2002:a63:2117:0:b0:3c2:85f9:1b6f with SMTP id h23-20020a632117000000b003c285f91b6fmr26742199pgh.66.1653449060045;
-        Tue, 24 May 2022 20:24:20 -0700 (PDT)
+        bh=0rffUNaGY9JVFcRgt64Xz6CcZdQ3YWgSvvOXYBNVtz8=;
+        b=KvxhFifVnRS6fIQVEkAGYA+qa2PNDTyMbkhOp3T8d39b8nQiC98Uqtyat1NTHjUDfP
+         j6WDBuZuPDDx4u+Ax08535w5fO2DUQxFm5wv5UVCAiic+oWJfviF/V3TGoNuMROJeLBX
+         BT5DcE2wrbzSjwvcnvh6A9QEscCSZZgf07Gt+oEiG8/pnhiP1H9Iz7/Fbf4RQU7uzcS9
+         jUSt93Bf914PofBPFUJxBRxrDRd0hPDfL0LI2xiw0BCpcT6N3Xrw0QZpeTSyR3331J1K
+         2KqA7ejuLfcDB+zuwsGSAdt/g25L+1j7JZudG4c2qxheB9Cqu0FpXkqt0K+RqRkEtzKV
+         RmoA==
+X-Gm-Message-State: AOAM530J329K4HfNdEZM3PuwDksF6ZIw2+BPVYSRS+yRbEnpc7vGORo2
+        jGfOLJKFH6S5e8tM3x61sg==
+X-Google-Smtp-Source: ABdhPJwAu5NH9jyXsBMmzbw6/e/vdCqMz64XE5Xk0CvUDXMx3MBbQxxY2jDtg1yuSX72ujd35ZM00Q==
+X-Received: by 2002:a17:90a:8807:b0:1df:78c7:c215 with SMTP id s7-20020a17090a880700b001df78c7c215mr7941634pjn.234.1653449061947;
+        Tue, 24 May 2022 20:24:21 -0700 (PDT)
 Received: from localhost (220-133-130-217.hinet-ip.hinet.net. [220.133.130.217])
-        by smtp.gmail.com with ESMTPSA id gx3-20020a17090b124300b001df6ccdf3f6sm461772pjb.47.2022.05.24.20.24.19
+        by smtp.gmail.com with ESMTPSA id c21-20020a62e815000000b00518e3256022sm711553pfi.104.2022.05.24.20.24.21
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 24 May 2022 20:24:19 -0700 (PDT)
+        Tue, 24 May 2022 20:24:21 -0700 (PDT)
 From:   Tyrone Ting <warp5tw@gmail.com>
 To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -59,9 +59,9 @@ To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         kfting@nuvoton.com
 Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 2/5] i2c: npcm: Remove own slave addresses 2:10
-Date:   Wed, 25 May 2022 11:23:38 +0800
-Message-Id: <20220525032341.3182-3-warp5tw@gmail.com>
+Subject: [PATCH v6 3/5] i2c: npcm: Correct slave role behavior
+Date:   Wed, 25 May 2022 11:23:39 +0800
+Message-Id: <20220525032341.3182-4-warp5tw@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220525032341.3182-1-warp5tw@gmail.com>
 References: <20220525032341.3182-1-warp5tw@gmail.com>
@@ -77,124 +77,46 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Tali Perry <tali.perry1@gmail.com>
 
-NPCM can support up to 10 own slave addresses. In practice, only one
-address is actually being used. In order to access addresses 2 and above,
-need to switch register banks. The switch needs spinlock.
-To avoid using spinlock for this useless feature removed support of SA >=
-2. Also fix returned slave event enum.
-
-Remove some comment since the bank selection is not required. The bank
-selection is not required since the supported slave addresses are reduced.
+Correct the slave transaction logic to be compatible with the generic
+slave backend driver.
 
 Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
 Signed-off-by: Tali Perry <tali.perry1@gmail.com>
 Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
 ---
- drivers/i2c/busses/i2c-npcm7xx.c | 41 +++++++++++++-------------------
- 1 file changed, 16 insertions(+), 25 deletions(-)
+ drivers/i2c/busses/i2c-npcm7xx.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index 5960ccde6574..b5cc83e51029 100644
+index b5cc83e51029..b4d218c6c8fb 100644
 --- a/drivers/i2c/busses/i2c-npcm7xx.c
 +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -123,11 +123,11 @@ enum i2c_addr {
-  * Since the addr regs are sprinkled all over the address space,
-  * use this array to get the address or each register.
-  */
--#define I2C_NUM_OWN_ADDR 10
-+#define I2C_NUM_OWN_ADDR 2
-+#define I2C_NUM_OWN_ADDR_SUPPORTED 2
-+
- static const int npcm_i2caddr[I2C_NUM_OWN_ADDR] = {
--	NPCM_I2CADDR1, NPCM_I2CADDR2, NPCM_I2CADDR3, NPCM_I2CADDR4,
--	NPCM_I2CADDR5, NPCM_I2CADDR6, NPCM_I2CADDR7, NPCM_I2CADDR8,
--	NPCM_I2CADDR9, NPCM_I2CADDR10,
-+	NPCM_I2CADDR1, NPCM_I2CADDR2,
- };
- #endif
- 
-@@ -392,14 +392,10 @@ static void npcm_i2c_disable(struct npcm_i2c *bus)
- #if IS_ENABLED(CONFIG_I2C_SLAVE)
- 	int i;
- 
--	/* select bank 0 for I2C addresses */
--	npcm_i2c_select_bank(bus, I2C_BANK_0);
--
- 	/* Slave addresses removal */
--	for (i = I2C_SLAVE_ADDR1; i < I2C_NUM_OWN_ADDR; i++)
-+	for (i = I2C_SLAVE_ADDR1; i < I2C_NUM_OWN_ADDR_SUPPORTED; i++)
- 		iowrite8(0, bus->reg + npcm_i2caddr[i]);
- 
--	npcm_i2c_select_bank(bus, I2C_BANK_1);
- #endif
- 	/* Disable module */
- 	i2cctl2 = ioread8(bus->reg + NPCM_I2CCTL2);
-@@ -604,8 +600,7 @@ static int npcm_i2c_slave_enable(struct npcm_i2c *bus, enum i2c_addr addr_type,
- 			i2cctl1 &= ~NPCM_I2CCTL1_GCMEN;
- 		iowrite8(i2cctl1, bus->reg + NPCM_I2CCTL1);
- 		return 0;
--	}
--	if (addr_type == I2C_ARP_ADDR) {
-+	} else if (addr_type == I2C_ARP_ADDR) {
- 		i2cctl3 = ioread8(bus->reg + NPCM_I2CCTL3);
- 		if (enable)
- 			i2cctl3 |= I2CCTL3_ARPMEN;
-@@ -614,16 +609,16 @@ static int npcm_i2c_slave_enable(struct npcm_i2c *bus, enum i2c_addr addr_type,
- 		iowrite8(i2cctl3, bus->reg + NPCM_I2CCTL3);
- 		return 0;
+@@ -915,11 +915,15 @@ static int npcm_i2c_slave_get_wr_buf(struct npcm_i2c *bus)
+ 	for (i = 0; i < I2C_HW_FIFO_SIZE; i++) {
+ 		if (bus->slv_wr_size >= I2C_HW_FIFO_SIZE)
+ 			break;
+-		i2c_slave_event(bus->slave, I2C_SLAVE_READ_REQUESTED, &value);
++		if (bus->state == I2C_SLAVE_MATCH) {
++			i2c_slave_event(bus->slave, I2C_SLAVE_READ_REQUESTED, &value);
++			bus->state = I2C_OPER_STARTED;
++		} else {
++			i2c_slave_event(bus->slave, I2C_SLAVE_READ_PROCESSED, &value);
++		}
+ 		ind = (bus->slv_wr_ind + bus->slv_wr_size) % I2C_HW_FIFO_SIZE;
+ 		bus->slv_wr_buf[ind] = value;
+ 		bus->slv_wr_size++;
+-		i2c_slave_event(bus->slave, I2C_SLAVE_READ_PROCESSED, &value);
  	}
-+	if (addr_type > I2C_SLAVE_ADDR2 && addr_type <= I2C_SLAVE_ADDR10)
-+		dev_err(bus->dev, "try to enable more than 2 SA not supported\n");
-+
- 	if (addr_type >= I2C_ARP_ADDR)
- 		return -EFAULT;
--	/* select bank 0 for address 3 to 10 */
--	if (addr_type > I2C_SLAVE_ADDR2)
--		npcm_i2c_select_bank(bus, I2C_BANK_0);
-+
- 	/* Set and enable the address */
- 	iowrite8(sa_reg, bus->reg + npcm_i2caddr[addr_type]);
- 	npcm_i2c_slave_int_enable(bus, enable);
--	if (addr_type > I2C_SLAVE_ADDR2)
--		npcm_i2c_select_bank(bus, I2C_BANK_1);
-+
- 	return 0;
+ 	return I2C_HW_FIFO_SIZE - ret;
  }
- #endif
-@@ -846,15 +841,11 @@ static u8 npcm_i2c_get_slave_addr(struct npcm_i2c *bus, enum i2c_addr addr_type)
- {
- 	u8 slave_add;
+@@ -967,7 +971,6 @@ static void npcm_i2c_slave_xmit(struct npcm_i2c *bus, u16 nwrite,
+ 	if (nwrite == 0)
+ 		return;
  
--	/* select bank 0 for address 3 to 10 */
--	if (addr_type > I2C_SLAVE_ADDR2)
--		npcm_i2c_select_bank(bus, I2C_BANK_0);
-+	if (addr_type > I2C_SLAVE_ADDR2 && addr_type <= I2C_SLAVE_ADDR10)
-+		dev_err(bus->dev, "get slave: try to use more than 2 SA not supported\n");
+-	bus->state = I2C_OPER_STARTED;
+ 	bus->operation = I2C_WRITE_OPER;
  
- 	slave_add = ioread8(bus->reg + npcm_i2caddr[(int)addr_type]);
- 
--	if (addr_type > I2C_SLAVE_ADDR2)
--		npcm_i2c_select_bank(bus, I2C_BANK_1);
--
- 	return slave_add;
- }
- 
-@@ -864,12 +855,12 @@ static int npcm_i2c_remove_slave_addr(struct npcm_i2c *bus, u8 slave_add)
- 
- 	/* Set the enable bit */
- 	slave_add |= 0x80;
--	npcm_i2c_select_bank(bus, I2C_BANK_0);
--	for (i = I2C_SLAVE_ADDR1; i < I2C_NUM_OWN_ADDR; i++) {
-+
-+	for (i = I2C_SLAVE_ADDR1; i < I2C_NUM_OWN_ADDR_SUPPORTED; i++) {
- 		if (ioread8(bus->reg + npcm_i2caddr[i]) == slave_add)
- 			iowrite8(0, bus->reg + npcm_i2caddr[i]);
- 	}
--	npcm_i2c_select_bank(bus, I2C_BANK_1);
-+
- 	return 0;
- }
- 
+ 	/* get the next buffer */
 -- 
 2.17.1
 
