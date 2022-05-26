@@ -2,132 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E015349A6
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 May 2022 06:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165FD534CBD
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 May 2022 11:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238033AbiEZEJ3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 May 2022 00:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
+        id S238105AbiEZJtA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 May 2022 05:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbiEZEJ1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 May 2022 00:09:27 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2088.outbound.protection.outlook.com [40.107.223.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FE0BCE8E
-        for <linux-i2c@vger.kernel.org>; Wed, 25 May 2022 21:09:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HOTFKzZRX6BEvG1SzOv2it5VN0w47eGwu6kTL/yDjwFqGkOAsjO8D14pmW1BeaSvXqHVuc+eX0UP1/guFuWjaLPAHmR6ZaIUSwl81p+d1jXwkahmjHg7Q7Nkap++uiJfhP2sG6XyXM9N6rh8+Gz1S0ymUz9MoNuSH1WKXyu6nYm0iSvQePvFvqQqaMjS+HrLttDC4x4MmIn428I3JNy2lU5lCHpsKrnBgXk2T9DcNn90PX14ge7rURMt3SpwvHLcAyDA+ZWaY4uLtfM0ZFWg9qEVXHG2Q4yORIbUNF39FdMlLSvTVjnMBW2Rvy/jrK+BfrErllCrt8ZRekq9XOxr3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PhcYE6VBBb2MpQaOyepmdUaQBSvkXjjjYuYZSPJ+dYk=;
- b=UanSd0fl1pmvcnsYVql2vL9F3yC1Z+B9Yg+1xrXJEQQfhZWTLcNZT1ZTIBxweUoTEbzqADkfEAD/GX//OhYwynCOdhyIAa1dEsPWUlYgSPB13BfGLbC1Y/EXDzuy0hZmwseo2R6ZSWcGt6L72MSqa1JiSk3/l1IYxuOoIUDEW99cCjRaQieMvoz5PlrqLKQPWkM+dXnhfRIIrqNv9TvFLPUyDSjx7WGG8CWA2encNlCXOBTSvtl9LYRssJJBsrr8y7Q25JlQlKEhKG7weEZ9XPq0sFnyc2b9R+djfVAypqEhkaqIc7ysHgj88Ntc5BaS8Wb9gqC84ZuXDELmggTm2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PhcYE6VBBb2MpQaOyepmdUaQBSvkXjjjYuYZSPJ+dYk=;
- b=cPWh33EdgAjSa2SOOqPBsLR8D41atEnBdO1XoEsJmmrkpRilMuMPY8EXfDrOVt6sdn/OBumZ5AUGcPUDBOh6k8iwRu0BLOxBrTrTcVt1hQ3Qh/8T9tDDEl1QPkn3eu6xBOxK8HU5wM8uVYxkehYA5gScLNmJ297swVHKSIK/XRw=
-Received: from BN8PR16CA0029.namprd16.prod.outlook.com (2603:10b6:408:4c::42)
- by SA0PR02MB7211.namprd02.prod.outlook.com (2603:10b6:806:e6::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Thu, 26 May
- 2022 04:09:23 +0000
-Received: from BN1NAM02FT013.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:4c:cafe::5a) by BN8PR16CA0029.outlook.office365.com
- (2603:10b6:408:4c::42) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.23 via Frontend
- Transport; Thu, 26 May 2022 04:09:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT013.mail.protection.outlook.com (10.13.2.88) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5293.13 via Frontend Transport; Thu, 26 May 2022 04:09:23 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Wed, 25 May 2022 21:09:21 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Wed, 25 May 2022 21:09:21 -0700
-Envelope-to: linux-i2c@vger.kernel.org
-Received: from [10.140.6.39] (port=53862 helo=xhdsgoud40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <shubhrajyoti.datta@xilinx.com>)
-        id 1nu4oH-0001Fi-5K; Wed, 25 May 2022 21:09:21 -0700
-From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-To:     <linux-i2c@vger.kernel.org>
-CC:     <michal.simek@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Subject: [PATCH] i2c-xiic: Fix the type check for xiic_wakeup
-Date:   Thu, 26 May 2022 09:39:14 +0530
-Message-ID: <20220526040914.4159495-1-shubhrajyoti.datta@xilinx.com>
+        with ESMTP id S231214AbiEZJs7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 May 2022 05:48:59 -0400
+X-Greylist: delayed 471 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 May 2022 02:48:58 PDT
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 846CF6579
+        for <linux-i2c@vger.kernel.org>; Thu, 26 May 2022 02:48:58 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowABnbIwvS49iER99Cg--.42112S2;
+        Thu, 26 May 2022 17:41:04 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com
+Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] i2c: npcm7xx: barco-p50-gpio: Add check for platform_driver_register
+Date:   Thu, 26 May 2022 17:41:00 +0800
+Message-Id: <20220526094100.1494193-1-jiasheng@iscas.ac.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c2bfd3f0-4ccb-4e01-de51-08da3ecd8447
-X-MS-TrafficTypeDiagnostic: SA0PR02MB7211:EE_
-X-Microsoft-Antispam-PRVS: <SA0PR02MB72116948238C9272FC21FD74AAD99@SA0PR02MB7211.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: w2PnpsD2n23LLTxGYI2cp1MkaNuuj7EP1MAuoiLIXnI+VZd/3KoVsWmxFDYmKjWTXhc8gMu7GsbVvyAZQucaqP3pWhLxkvNRxdF+NUX/GndVI1ZwhNuSxGwcB2wOE/IqhmfGhwKDFOYG3xWXWefVaA3OHMIByJ1mF1ZotgpJXJvDUcMvzmZHpCAvkgvQ+p+MtmSISx2vTfrv5044CmIWaCkpvspGtsO/i/FakSkr8lCkA5mwv3TCuPgofUi3Lp+4PBi4O3myxeZK7Vpt76QRz+e7BElKBcH05URLOsiY8948Yppxpcy5FO8PoOqY+I9ArL4NROSWq3T4FHW3I8/7+v6eTE3BZL4ECuxA10wLenByUfgz0QFNRxyEqxSY3SLmRwlsZKgYVXALEF8ajHetAUyUmdrD1wrZP4MPMOIcU78v1fb/Bpm15O7gNcfhF5TB87TJSfgJRb15s4eW9Y0Rg+D1UspfwEhuzhen2F4cyV+Yme2o+co2G9+EoGpBRURDk8jtQvbZ25ULHFULgM6uAOiDmTbRnJmGtTUm+1JmYPBCx/yPf6BK5eymf2iVZnbAmBveDXu0mTm8qXsonDzxYCt692LG3qjPAls0/rhojn0yphOGArwbvE5TlGmZhXOr4g5krBAtwCDhf+yLPzzUCAGD7GMluxORUOuuxU+hlyKW+SpASq6VHWk3SUDvZQRPW+b8rV4AisHiwdC/M/FgZg==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(508600001)(6666004)(107886003)(1076003)(2616005)(47076005)(70586007)(82310400005)(4744005)(40460700003)(36756003)(9786002)(44832011)(7696005)(7636003)(186003)(336012)(2906002)(426003)(8936002)(26005)(5660300002)(316002)(83380400001)(356005)(4326008)(8676002)(54906003)(70206006)(6916009)(36860700001)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2022 04:09:23.3304
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2bfd3f0-4ccb-4e01-de51-08da3ecd8447
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT013.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR02MB7211
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: qwCowABnbIwvS49iER99Cg--.42112S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw18uF43GF45uw48uw4xXrb_yoWDJFbEkr
+        18WasrJw1DCr93W3W8tr43Zr1vkayYkrZ5G34vv393K34xWw47Gr1UZrW3GFsrur4xJ3Wq
+        g34jkF1xAr17AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbVAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
+        n2IY04v7MxkIecxEwVAFwVW8uwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF
+        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
+        VjvjDU0xZFpf9x0JUPPEfUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Fix the coverity warning
-mixed_enum_type: enumerated type mixed with another type
+As platform_driver_register() could fail, it should be better
+to deal with the return value in order to maintain the code
+consisitency.
 
-Enum is passed to xiic_wakeup, change the function parameter
-to reflect it.
-
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
+ drivers/i2c/busses/i2c-npcm7xx.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
- drivers/i2c/busses/i2c-xiic.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-index 9a1c3f8b7048..2b6341f08d71 100644
---- a/drivers/i2c/busses/i2c-xiic.c
-+++ b/drivers/i2c/busses/i2c-xiic.c
-@@ -367,7 +367,7 @@ static void xiic_fill_tx_fifo(struct xiic_i2c *i2c)
- 	}
- }
- 
--static void xiic_wakeup(struct xiic_i2c *i2c, int code)
-+static void xiic_wakeup(struct xiic_i2c *i2c, enum xilinx_i2c_state code)
+diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
+index 71aad029425d..08737fa2dcbf 100644
+--- a/drivers/i2c/busses/i2c-npcm7xx.c
++++ b/drivers/i2c/busses/i2c-npcm7xx.c
+@@ -2336,8 +2336,7 @@ static struct platform_driver npcm_i2c_bus_driver = {
+ static int __init npcm_i2c_init(void)
  {
- 	i2c->tx_msg = NULL;
- 	i2c->rx_msg = NULL;
+ 	npcm_i2c_debugfs_dir = debugfs_create_dir("npcm_i2c", NULL);
+-	platform_driver_register(&npcm_i2c_bus_driver);
+-	return 0;
++	return platform_driver_register(&npcm_i2c_bus_driver);
+ }
+ module_init(npcm_i2c_init);
+ 
 -- 
 2.25.1
 
