@@ -2,103 +2,172 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B2F534E2B
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 May 2022 13:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21CA7534EF2
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 May 2022 14:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiEZLmf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 May 2022 07:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
+        id S1345780AbiEZMQP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 May 2022 08:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiEZLme (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 May 2022 07:42:34 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712A82A738;
-        Thu, 26 May 2022 04:42:32 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id j7so1139659vsj.7;
-        Thu, 26 May 2022 04:42:32 -0700 (PDT)
+        with ESMTP id S231835AbiEZMQO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 May 2022 08:16:14 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82BC121241
+        for <linux-i2c@vger.kernel.org>; Thu, 26 May 2022 05:16:12 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id b5so1272632plx.10
+        for <linux-i2c@vger.kernel.org>; Thu, 26 May 2022 05:16:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=JEe4JTq4HMoZ+I0YWVgsR8sQxwI+sin4+wwLO1J3RKE=;
-        b=JLvO98Fu21sCqp2drA5IfmaUVr0h4lXAXWuPssLA5gtFkyn/FNC1jLwcQi+AGBV7wH
-         uJrpcQYkVYpsRk0cSakfbvPtYDIyFqdskvQJ1qsUHfT+rPBKMNjdeW6IOShNFFKid1b2
-         0vNUdDNqr6zoooiZ0/NarObdmNt80ywVrC/tAsYJTXXogKHxQnQYvkkCFB7b7XWPYvmz
-         KCMVKcwrNpvs/ZDYn28Ru24YXag2mLh0gV/bYbWeabYCR7Oo+d0fh2EC+ynAeCzEApky
-         AvBjMkJrEKG49Q63WoPqYa0sO+vBpxe7FJ5oQ0VotbsdoOrm873KJcD3X0yKlZhjsv8X
-         33jQ==
+        bh=pSsFxHfEMcrHOSBoFMEeUFcZhoPO+KxNjOCmccE7VEc=;
+        b=j1LakW1276mdhdZUQsSFgcp6av448PqaRz7jViMY+GiGwh5iEij2Cm5mimSgVPEdiL
+         Ozj3HVl3aUCQNnL22XjmDerl2WGv3ej+oU5YMVtYH9VIgXAWsX2inzVAfnyQqa2b5xnX
+         W2Y4WrZkxJ+HRox9oe5wjmagh65jqeEWGjW8fstEyuAjiqnZGpAs/+pspSCQIhlehDyP
+         xDU30Ahlo1lxgsqq/URVcKV4vlRa+Ug1dhRi/5993PYb81ygDBtRkwhfgFcpx+IwipjA
+         ioZ7k1tvfTIqVetbCWXoO8xV/OhK2fIufIzWIIGxVrM90tgy7w3bSaH4Mpz4weYTocdg
+         ER1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JEe4JTq4HMoZ+I0YWVgsR8sQxwI+sin4+wwLO1J3RKE=;
-        b=4cnGZV2OYi42H2Mu9Gpq4P0oxgvqtzIJPOO7KDSpV047tTQZlhy9nj/qvCBITtbTzv
-         GDDXKejtCgczoGickWxDAcVLt2vj24B3aWuGR2hDL92dZhVf4FpgeA8hNQUMwe4u9NXX
-         xfFv2j2pcozv+QVtXMQdSnjP8LHwDkKrq1nHHoLt15U50LTEjmUaR4jUVzCF3lj5twi/
-         YDyjUWq6UxJ275QCc9/5qb/O8bMdAxr/MYiSRHm702SLKGvCxTESNkAEI53x/X83scmi
-         3c+hq11sHIpAlRlwax3BFod7g7EsZcHjvTmQ+rPOgF5BnnBJm+TyApjUfF9v7wULvYKe
-         ywqw==
-X-Gm-Message-State: AOAM532713nz082V4MIKoV2WFvz5pG8mBul8hmEabi393K2tiEggWEkE
-        BsHMP2z3cgYSPa8euWx+uk8Z5CYtAPIz1YfYiXI=
-X-Google-Smtp-Source: ABdhPJxIWXKb0kNzslGKXSAJfQCxTBRn9ur413NVMbEzqZ/Rc3zTbpcH1KxoGPjgrUzciHvXWJHHcjItv26rUnsZcWM=
-X-Received: by 2002:a67:e09d:0:b0:335:def7:e939 with SMTP id
- f29-20020a67e09d000000b00335def7e939mr14828589vsl.27.1653565351588; Thu, 26
- May 2022 04:42:31 -0700 (PDT)
+        bh=pSsFxHfEMcrHOSBoFMEeUFcZhoPO+KxNjOCmccE7VEc=;
+        b=KLTgDpBXIMwoktE+DfECwTzddU5J+hyI+QoY5OJy5MzaZOEOvFuYp2hd5xWzA1yCFv
+         i4HUbof4d+xu78VGR3/vsoFUEzctybn8W92DvohkfNwD9P48VO27fMihf4EThSlKtA5C
+         Yn5hcOsN9dFn/pel7I33n7vOSdmk2JVcNr3qjI2oAS0QhHn3Vjpgz70MJXGgV7mFUjBG
+         3EebnZtj7I0S1zmnerxjWu6V548tV3RxxT30rx+EutAVdsFjkEo7QuWjr/loHPb5NVck
+         88mXlSldFNu7NVpGlCSuxSXSWYsurQDNK8br33z7RnMcU6RtAoGqMhhE88jdubu0eWl2
+         K0DA==
+X-Gm-Message-State: AOAM531UBQUgob1Ot5iPxrxs1+FuyDCYz0sMirMl1TjdHNsWgrOGCNqE
+        ZTLNlrZ2NlsfmGWL6fGk+bN61JoVETLL/dVJq1Nazg==
+X-Google-Smtp-Source: ABdhPJyPE1Wcb5k1NYZNag1s+hH2MlPohRmJCsdM2BsWrYm5w9w9F6ArFLEhJ5Lmyc8aI7BQaEykL1CgVfGR0Wh+Ecc=
+X-Received: by 2002:a17:902:8f81:b0:161:f4a7:f2fc with SMTP id
+ z1-20020a1709028f8100b00161f4a7f2fcmr30701452plo.117.1653567371993; Thu, 26
+ May 2022 05:16:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220526094100.1494193-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20220526094100.1494193-1-jiasheng@iscas.ac.cn>
-From:   Tali Perry <tali.perry1@gmail.com>
-Date:   Thu, 26 May 2022 14:42:20 +0300
-Message-ID: <CAHb3i=v+LV=sGCX8obuy=sXBFvnP9k-THb=mGw4ze8M5AVCYoQ@mail.gmail.com>
-Subject: Re: [PATCH] i2c: npcm7xx: barco-p50-gpio: Add check for platform_driver_register
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     avifishman70@gmail.com, Tomer Maimon <tmaimon77@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220522162802.208275-1-luca@z3ntu.xyz> <20220522162802.208275-12-luca@z3ntu.xyz>
+In-Reply-To: <20220522162802.208275-12-luca@z3ntu.xyz>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Thu, 26 May 2022 14:16:01 +0200
+Message-ID: <CAG3jFys4o6vsqhDJXMkL2fFdjDGstdzaB59j=Md6KDinMDNVRg@mail.gmail.com>
+Subject: Re: [RFC PATCH 11/14] ARM: dts: qcom: msm8974: add CCI bus
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        matti.lehtimaki@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, May 26, 2022 at 12:41 PM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
->
-> As platform_driver_register() could fail, it should be better
-> to deal with the return value in order to maintain the code
-> consisitency.
->
-> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/i2c/busses/i2c-npcm7xx.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-> index 71aad029425d..08737fa2dcbf 100644
-> --- a/drivers/i2c/busses/i2c-npcm7xx.c
-> +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-> @@ -2336,8 +2336,7 @@ static struct platform_driver npcm_i2c_bus_driver = {
->  static int __init npcm_i2c_init(void)
->  {
->         npcm_i2c_debugfs_dir = debugfs_create_dir("npcm_i2c", NULL);
-> -       platform_driver_register(&npcm_i2c_bus_driver);
-> -       return 0;
-> +       return platform_driver_register(&npcm_i2c_bus_driver);
->  }
->  module_init(npcm_i2c_init);
->
-> --
-> 2.25.1
->
-thanks, Jiansheng !
+This patch does not apply on upstream-media/master or
+upstream-next/master. Is there another branch this series should be
+applied to?
 
-Acked-by: Tali Perry <tali.perry1@gmail.com>
+On Sun, 22 May 2022 at 18:28, Luca Weiss <luca@z3ntu.xyz> wrote:
+>
+> Add a node for the camera-specific i2c bus found on msm8974.
+>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>  arch/arm/boot/dts/qcom-msm8974.dtsi | 62 +++++++++++++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+>
+> diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
+> index ffa6f874917a..a80b4ae71745 100644
+> --- a/arch/arm/boot/dts/qcom-msm8974.dtsi
+> +++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
+> @@ -1434,6 +1434,34 @@ blsp2_i2c5_sleep: blsp2-i2c5-sleep {
+>
+>                         /* BLSP2_I2C6 info is missing - nobody uses it though? */
+>
+> +                       cci0_default: cci0-default {
+> +                               pins = "gpio19", "gpio20";
+> +                               function = "cci_i2c0";
+> +                               drive-strength = <2>;
+> +                               bias-disable;
+> +                       };
+> +
+> +                       cci0_sleep: cci0-sleep {
+> +                               pins = "gpio19", "gpio20";
+> +                               function = "gpio";
+> +                               drive-strength = <2>;
+> +                               bias-disable;
+> +                       };
+> +
+> +                       cci1_default: cci1-default {
+> +                               pins = "gpio21", "gpio22";
+> +                               function = "cci_i2c1";
+> +                               drive-strength = <2>;
+> +                               bias-disable;
+> +                       };
+> +
+> +                       cci1_sleep: cci1-sleep {
+> +                               pins = "gpio21", "gpio22";
+> +                               function = "gpio";
+> +                               drive-strength = <2>;
+> +                               bias-disable;
+> +                       };
+> +
+>                         spi8_default: spi8_default {
+>                                 mosi {
+>                                         pins = "gpio45";
+> @@ -1587,6 +1615,40 @@ dsi0_phy: dsi-phy@fd922a00 {
+>                         };
+>                 };
+>
+> +               cci: cci@fda0c000 {
+> +                       compatible = "qcom,msm8974-cci";
+> +                       #address-cells = <1>;
+> +                       #size-cells = <0>;
+> +                       reg = <0xfda0c000 0x1000>;
+> +                       interrupts = <GIC_SPI 50 IRQ_TYPE_EDGE_RISING>;
+> +                       clocks = <&mmcc CAMSS_TOP_AHB_CLK>,
+> +                                <&mmcc CAMSS_CCI_CCI_AHB_CLK>,
+> +                                <&mmcc CAMSS_CCI_CCI_CLK>;
+> +                       clock-names = "camss_top_ahb",
+> +                                     "cci_ahb",
+> +                                     "cci";
+> +
+> +                       pinctrl-names = "default", "sleep";
+> +                       pinctrl-0 = <&cci0_default &cci1_default>;
+> +                       pinctrl-1 = <&cci0_sleep &cci1_sleep>;
+> +
+> +                       status = "disabled";
+> +
+> +                       cci_i2c0: i2c-bus@0 {
+> +                               reg = <0>;
+> +                               clock-frequency = <400000>;
+> +                               #address-cells = <1>;
+> +                               #size-cells = <0>;
+> +                       };
+> +
+> +                       cci_i2c1: i2c-bus@1 {
+> +                               reg = <1>;
+> +                               clock-frequency = <400000>;
+> +                               #address-cells = <1>;
+> +                               #size-cells = <0>;
+> +                       };
+> +               };
+> +
+>                 gpu: adreno@fdb00000 {
+>                         compatible = "qcom,adreno-330.1", "qcom,adreno";
+>                         reg = <0xfdb00000 0x10000>;
+> --
+> 2.36.0
+>
