@@ -2,86 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3FC534FCA
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 May 2022 15:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334705353C7
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 May 2022 21:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237966AbiEZNM2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 May 2022 09:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
+        id S233708AbiEZTJC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 May 2022 15:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiEZNM0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 May 2022 09:12:26 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145B6D6825
-        for <linux-i2c@vger.kernel.org>; Thu, 26 May 2022 06:12:24 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nuDHq-0003wu-FR; Thu, 26 May 2022 15:12:22 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nuDHq-004gV4-Vy; Thu, 26 May 2022 15:12:21 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nuDHo-00CFzW-T1; Thu, 26 May 2022 15:12:20 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH] i2c: dummy: Drop no-op remove function
-Date:   Thu, 26 May 2022 15:12:13 +0200
-Message-Id: <20220526131213.1591909-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S229896AbiEZTJB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 May 2022 15:09:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C797DBA55A;
+        Thu, 26 May 2022 12:09:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8776CB821AA;
+        Thu, 26 May 2022 19:08:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61EEBC385A9;
+        Thu, 26 May 2022 19:08:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653592138;
+        bh=Tmtblp5WjlLWc8JQfBqXUxUtQqL2wo/TVVPY6RHiXl4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SwRUJPwzs7dNhqM/Hk1X4C/h8vQF9gF7PnGt43HJVqTs22Qf9YK5Lfu3OkFoOfu26
+         g5t9UZNyASt93JGKMzdT1dtKHulUUUStmmN4ecaVMPSwwg4nbNBROG+Q4MVcV7U8cO
+         pWoW8G+1cWkAQN+7vLaCyleISQfUIJcZEdnRr7+JxH+wrshIiru/7PpzpfNevQjkqz
+         VdTOt6BSoQNp6JkTf5UTDv1tM0OJIJaEVJqXKLowShhUSiUHJcWiJsr3JmdCI6xsHE
+         Nd1q4akU2/72v20a0Xl3ETpIVb+4NFWiYsp6wMpEQ/IN7LutYSllfoUM/iEralcdD9
+         JjifB4EKOweBw==
+Message-ID: <3dafa370-cd77-e3ba-a48b-2ca3674432ab@kernel.org>
+Date:   Thu, 26 May 2022 14:08:55 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=872; h=from:subject; bh=StQ2EOIhTbR9dAkeEx3hcctKNvhl7Y6Di8b00CuUESU=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBij3ypd9bGv2r2o29wYpPgV4drx+VINxamBGUlGwWg awW9cEuJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYo98qQAKCRDB/BR4rcrsCaaZB/ 0ZnoDtRMcEnfHgfqF4p55BpfpCjX+gr+V3XC2/h8pxbXrNLOd+i493Qij9Zctu4gyE6sJbOlRwT8Pk PcI60oXD943hG06hK7/Iz/rewzBWFWp1V4hz5QLCjLwoca5h7K8ldZnLm4cjj5lI581cEbkmCq3g8m K0eB7t3tvCurupimioUyePz8VktDuhIQWMEHjrFAj38lNaQeKVgY1trbKdHa/FDs1u10wo/ES/xlc2 FBN5al9lBnihzoQDARL2grodD4rMmiRXRWI/I8PLN8eZPNy2vJVE7XR5FzL6XGrvW0vKFFvYbe/P33 m4CQgvaTWorG/NCmxxdvM/Uyo49Fqo
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCHv2 1/2] i2c: designware: introduce a custom scl recovery
+ for SoCFPGA platforms
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220524135441.420600-1-dinguyen@kernel.org>
+ <Yo0LKQchQwitJVHm@smile.fi.intel.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <Yo0LKQchQwitJVHm@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-A remove callback that just returns 0 is equivalent to no callback at all
-as can be seen in i2c_device_remove(). So simplify accordingly.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/i2c/i2c-core-base.c | 6 ------
- 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index d43db2c3876e..8ae47e0bbd67 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -1023,15 +1023,9 @@ static int dummy_probe(struct i2c_client *client,
- 	return 0;
- }
- 
--static int dummy_remove(struct i2c_client *client)
--{
--	return 0;
--}
--
- static struct i2c_driver dummy_driver = {
- 	.driver.name	= "dummy",
- 	.probe		= dummy_probe,
--	.remove		= dummy_remove,
- 	.id_table	= dummy_id,
- };
- 
+On 5/24/22 11:43, Andy Shevchenko wrote:
+> On Tue, May 24, 2022 at 08:54:40AM -0500, Dinh Nguyen wrote:
+>> The I2C pins on the SoCFPGA platforms do not go through a GPIO module,
+>> thus cannot be recovered by the default method of by doing a GPIO access.
+>> Only a reset of the I2C IP block can a recovery be successful.
+> 
+> Better now, but see my additional comments.
+> 
+> ...
+> 
+>> +	switch (dev->flags & MODEL_MASK) {
+>> +	case MODEL_SOCFPGA:
+>> +		rinfo->recover_bus = i2c_socfpga_scl_recovery;
+>> +		break;
+>> +	default:
+>> +		rinfo->recover_bus = i2c_generic_scl_recovery;
+>> +		break;
+>> +	}
+> 
+>> +	adap->bus_recovery_info = rinfo;
+> 
+> Usually we do not assign the pointer while data structure is incomplete.
+> That's said, please leave this line as it was.
+> 
+> On top of that, why you can't move the above switch to the place where old
+> function was assigned?
+> 
 
-base-commit: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f
--- 
-2.36.1
+I have to put the switch statement before the call to 
+devm_gpiod_get_optional(), otherwise the recover_bus function pointer 
+will not get set.
 
+Dinh
