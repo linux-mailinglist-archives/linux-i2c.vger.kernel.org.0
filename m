@@ -2,74 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F0A536330
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 May 2022 15:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 950EE536626
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 May 2022 18:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244534AbiE0NIz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Fri, 27 May 2022 09:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
+        id S1351569AbiE0Qus (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 May 2022 12:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbiE0NIy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 May 2022 09:08:54 -0400
-X-Greylist: delayed 7202 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 May 2022 06:08:53 PDT
-Received: from mail.composit.net (mail.composit.net [195.49.185.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA7FFED7BC;
-        Fri, 27 May 2022 06:08:53 -0700 (PDT)
-Received: from mail.composit.net (localhost.localdomain [127.0.0.1])
-        by mail.composit.net (Proxmox) with ESMTP id 6A7C13941C0;
-        Fri, 27 May 2022 14:04:50 +0300 (MSK)
-Received: from mail.composit.net (unknown [192.168.101.14])
-        by mail.composit.net (Proxmox) with SMTP id 315AE386970;
-        Fri, 27 May 2022 14:04:50 +0300 (MSK)
-Received: from [192.168.1.105] (Unknown [197.234.219.23])
-        by mail.composit.net with ESMTPSA
-        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256)
-        ; Fri, 27 May 2022 14:04:51 +0300
-Message-ID: <71DDB2B1-2A37-45B2-B68A-F7F20F810133@mail.composit.net>
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S1350778AbiE0Qus (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 May 2022 12:50:48 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B28F527E0;
+        Fri, 27 May 2022 09:50:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653670247; x=1685206247;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5Zd5oXs4G2DMNG/uRxSGRYwoT2gZG7cDj4UtN+8pWG8=;
+  b=IMoFM3dbkm2L5vdmkAIqR/7wtRdH1tFMREH/Z9N7X81NWLBuEdlwNKlM
+   AWpaULE+LAwoUaIxscQsCkm7sp67v3FNfeN4KP/zrimXEdeklw6Lo5Q9b
+   zS5YjZ9EdG0PmQYOV2g/cEftv2oNnCA8uE2E110uqPjR8eAQS/T7YODnW
+   4XFe2MjqcFAox17RM9nSXcG4GuyxdfcqmAjuJklVrun/jpCOSs4clvRnU
+   6hEqtaFPrzbr/0LA9IWDC7dktOFdRv8f2HloMCkFnxYIeJjxAfvyJCs8N
+   K+brPJH/dUVov2iDgzJyzbTA48wGHEE/DsZSXJYGsswVDTRYnU9a5LkOO
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="274253961"
+X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
+   d="scan'208";a="274253961"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 09:50:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
+   d="scan'208";a="902635036"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 27 May 2022 09:50:43 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nudAh-0004wH-7T;
+        Fri, 27 May 2022 16:50:43 +0000
+Date:   Sat, 28 May 2022 00:50:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Eddie James <eajames@linux.ibm.com>, linux-i2c@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wsa@kernel.org, peda@axentia.se,
+        jic23@kernel.org, lars@metafoo.de, eajames@linux.ibm.com,
+        miltonm@us.ibm.com, joel@jms.id.au
+Subject: Re: [PATCH 1/2] i2c: core: Add mux root adapter operations
+Message-ID: <202205280002.xJm7ad0Z-lkp@intel.com>
+References: <20220526205334.64114-2-eajames@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Greetings From Ukraine.  
-To:     Recipients <heiss@dnet.it>
-From:   "Kostiantyn Chichkov" <heiss@dnet.it>
-Date:   Fri, 27 May 2022 12:00:41 +0100
-Reply-To: kostiantync@online.ee
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_SBL,RCVD_IN_SORBS_WEB,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
-        *      bl.spamcop.net
-        *      [Blocked - see <https://www.spamcop.net/bl.shtml?195.49.185.119>]
-        *  1.5 RCVD_IN_SORBS_WEB RBL: SORBS: sender is an abusable web server
-        *      [197.234.219.23 listed in dnsbl.sorbs.net]
-        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
-        *      [197.234.219.23 listed in zen.spamhaus.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [195.49.185.119 listed in bl.score.senderscore.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220526205334.64114-2-eajames@linux.ibm.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Good Morning,
+Hi Eddie,
 
-We are Kostiantyn Chychkov and Maryna Chudnovska from Ukraine, we need your service, we have gone through your profile and we will like to work with you on an important service that needs urgent attention due to the ongoing war in our country. Kindly acknowledge this inquiry as soon as possible for a detailed discussion about the service.
+I love your patch! Perhaps something to improve:
 
-Thank you.
+[auto build test WARNING on wsa/i2c/for-next]
+[also build test WARNING on jic23-iio/togreg linux/master linus/master v5.18 next-20220527]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Yours expectantly,
+url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/i2c-core-Add-mux-root-adapter-operations/20220527-050852
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+reproduce: make htmldocs
 
-Kostiantyn Chichkov & Ms. Maryna Chudnovska,
-From Ukraine.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
 
+>> include/linux/i2c.h:858: warning: expecting prototype for i2c_unlock_deslect_bus(). Prototype was for i2c_unlock_deselect_bus() instead
+
+vim +858 include/linux/i2c.h
+
+   852	
+   853	/**
+   854	 * i2c_unlock_deslect_bus - Release exclusive access to the root I2C bus
+   855	 * @adapter: Target I2C bus
+   856	 */
+   857	static inline void i2c_unlock_deselect_bus(struct i2c_adapter *adapter)
+ > 858	{
+   859		adapter->mux_root_ops->unlock_deselect(adapter);
+   860	}
+   861	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
