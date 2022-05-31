@@ -2,106 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54AC8538F69
-	for <lists+linux-i2c@lfdr.de>; Tue, 31 May 2022 13:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 522E55391F9
+	for <lists+linux-i2c@lfdr.de>; Tue, 31 May 2022 15:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238251AbiEaLD7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 31 May 2022 07:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
+        id S1343744AbiEaNr0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 31 May 2022 09:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233919AbiEaLD6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 May 2022 07:03:58 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2085.outbound.protection.outlook.com [40.107.244.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453A2994D2
-        for <linux-i2c@vger.kernel.org>; Tue, 31 May 2022 04:03:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JIjMrPJ9G/B3Fewnm2hGAfxQXe3oiFBiBWzTM1k6xXnfj+jboyF3G/Fz/+o0XDFbrJnDxILUH/W/hWORNvbupRmZWvw65Wh5b8CvV8hsMuHzCWAJF3thHE309t8aME4rWbAuQqT3P6JSkQgA5YUxk9IPFdG7y9WKHGSGz0DqQKnXiMe+BCmmRLTMqcLs1ksBpxm/Wfv3TECKuRb8zg+0OZka3TUS72qTs6SgOeoDod46zj0hF8j4n6D9/3OTbJ5QdlkAHOIGcc9k5WSoCWCTdRCpm9AFfLuvmL7p9QgjtZTwxqP0UTINiSv0ht6r2z0+3tmeLXZoiZIu3eH67NDruw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xZ/L/UBqufVsiApOvTMcfLGTSzT40ZaZy9+WxmFAJcU=;
- b=XBgyFQDzwkf4kNBUAsFsivy17QxtE/eUnz18PrmjYmlBdwNhaesGNHqmmiIe9J/c0x6wxtmTZNlvL6zESUlt5HGYpmtTWY9qkI6hRvUdBjtPbMyGv/IkpThbdLBAvbQg4raEZonh2IHAuR/A1G9X5JOBN9Ah4FRpzRn2JE3vl2ApOD4/y5oZ/MSza4Pk2StcBhf53+wiaVB24ZU/B5PP7+0kt+q4Q8yABgbW0yFA/a6JbBQkHo08ELgiQKB5moj4e2MBjfDqhgg5iDRzM/zI7X4ZCe+FWNTUt0jOzFrAKSwzdRNGC1Z+8mKMlKr6ZpQjtHhJ3YaQwERrigPm08j93w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xZ/L/UBqufVsiApOvTMcfLGTSzT40ZaZy9+WxmFAJcU=;
- b=EXGeqhEetKiHrWOUgJTKqLe1NFU/qSDqrGEpBagWK6h2PBtjZIv0rtr1nP2k8mpdq4jq2EJWDrbAJPWHUvo1eGESuCECHXJVOxMo5pMBD1H5n9P+ONqdYOGSwRC+HcZfeZMX2K+tMJwMtQC1Kpt86OiVoJx9PP9fTwrNIYuOkVg=
-Received: from BN6PR12CA0044.namprd12.prod.outlook.com (2603:10b6:405:70::30)
- by CY4PR02MB2552.namprd02.prod.outlook.com (2603:10b6:903:73::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Tue, 31 May
- 2022 11:03:53 +0000
-Received: from BN1NAM02FT040.eop-nam02.prod.protection.outlook.com
- (2603:10b6:405:70:cafe::7a) by BN6PR12CA0044.outlook.office365.com
- (2603:10b6:405:70::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.19 via Frontend
- Transport; Tue, 31 May 2022 11:03:53 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT040.mail.protection.outlook.com (10.13.2.151) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5293.13 via Frontend Transport; Tue, 31 May 2022 11:03:52 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 31 May 2022 04:03:49 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 31 May 2022 04:03:49 -0700
-Envelope-to: linux-i2c@vger.kernel.org
-Received: from [10.254.241.50] (port=35252)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1nvzfB-000GKM-AO; Tue, 31 May 2022 04:03:49 -0700
-Message-ID: <ff7dd070-455f-3482-6176-400119f9af6b@xilinx.com>
-Date:   Tue, 31 May 2022 13:03:47 +0200
+        with ESMTP id S233818AbiEaNr0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 May 2022 09:47:26 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9C12126F;
+        Tue, 31 May 2022 06:47:24 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id DEBE03200035;
+        Tue, 31 May 2022 09:47:20 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 31 May 2022 09:47:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1654004840; x=1654091240; bh=s8b8COO5Yb
+        Ga8xG5/i9yEEf+vE3uG78vIzviBYnAo1M=; b=N52hijfpV1UMRrhHBEsjZlBlof
+        doLJ+cEEVuVC54JKFV3kw7tnE9v3C8cO1Wt+0t7wRVY1tYWZpyfKd8Caxr5vd6ec
+        JpFTyqF8PYyiHrFnfJvcHYDB/Arzr9AFkaYy7gQsyrRi/0JT0GgCnlWydd9IagYJ
+        qrwoFtG4Rm43CY2v6G39mNz/KfRzpFnhSKDPu9GSp2Cu54I8M/+3Pi14pUmePLi2
+        wqN1CQuVTcplyDzrlS+tHZSS+oLdcpeOf6ABVntZE4MIA3WaQsJ75bJ58qlJT6Gw
+        nHLBBoPweRyZA1ZCMiTq/jQJKl5v3vIGAQfAKW6U1wfCaNzGW/BAp3v8QEKw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1654004840; x=1654091240; bh=s8b8COO5YbGa8xG5/i9yEEf+vE3u
+        G78vIzviBYnAo1M=; b=y0LexLUkBrU37DxqXCaEEErb5ht+9N5MV5M4VfIMEV1b
+        I+fn/jYy1h8qDjqRVfLUtTwm0pdnggWsfDmoww8Z5iU8+a+zPxlWdoNF/qTr6Y4w
+        kYTr9b9GRJPJJfUuGeZ2FXDYhVPDsjtk9EY/Sa2YW+rjxcxON/PCMWkzcfTBK0zv
+        NEyh4SKPZ3HWFlXmOu27SQdsIq/8HbZj8s3WkrcFf4O5K9PrjhczF9uSRtNlNfeQ
+        u9A09CvdAO23kFYDtwDpZ0JxhfUn/f5GHGXa2O7+UT2JivzRGYakabBIo6XdMZPZ
+        WBm1R0x2d2dAyQhnAy0KMueo7qoqdj9/ElTDgQJK6g==
+X-ME-Sender: <xms:ZxyWYmY8Qh1VZxpOy26rSI2cJxMVFaaxDaDlTTfCq6BxWkJJ0jukZA>
+    <xme:ZxyWYpZ3dWFBaiLd2xZBIXKgecGLJ-H5cSyk7vEcGcWABmRRgCxF6AXjkvhGBVkLr
+    2zUgcJB1vuYGzdX4Dc>
+X-ME-Received: <xmr:ZxyWYg8HHVL_n7RN5p0Vsi9JIzojqpAiBWubSVwHfH5RtKdv_H_zv7zsXOL_B7kcmJL5I4rdliXbvw8y6ffqftWqpFBUkVOz0Kg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkeekgdeijecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
+    hrlhcuvffnffculddvfedmnecujfgurhepfffhvfevuffkfhggtggujgesghdtreertddt
+    vdenucfhrhhomheprfgrthhrihgtkhcuhghilhhlihgrmhhsuceophgrthhrihgtkhessh
+    htfigtgidrgiihiieqnecuggftrfgrthhtvghrnhepheefjeehfedtjeeivdefkeffheel
+    udekudelleffkefgtdeludelvddtgedtheeknecuvehluhhsthgvrhfuihiivgepudenuc
+    frrghrrghmpehmrghilhhfrhhomhepphgrthhrihgtkhesshhtfigtgidrgiihii
+X-ME-Proxy: <xmx:ZxyWYornatPqLkQdmOBuIYSOEMpvBA4BGe1zPcfwo3qlrNwfG1Y39Q>
+    <xmx:ZxyWYhpWBmzgnbEuaJZPfpxWtYftXt53l8cIHN-o0kau3LP1fT7vHw>
+    <xmx:ZxyWYmSh7ByBNWghoeSCPk78S7TKf4VbwA9KxFTJkl3sN6BegI1D6g>
+    <xmx:aByWYs3-kEv5BUqz_2o6XvkhLxXOEw6c1y-I_r7zMBTjXMGt6UyHbQ>
+Feedback-ID: i68a1478a:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 31 May 2022 09:47:19 -0400 (EDT)
+Date:   Tue, 31 May 2022 08:47:18 -0500
+From:   Patrick Williams <patrick@stwcx.xyz>
+To:     Potin Lai <potin.lai.pt@gmail.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Porin Lai <potin.lai@quantatw.com>, linux-i2c@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] aspeed: i2c: add manual clock setup feature
+Message-ID: <YpYcZn+Zsz3g7xl+@heinlein.stwcx.org.github.beta.tailscale.net>
+References: <20220530114056.8722-1-potin.lai.pt@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] i2c-xiic: Fix the type check for xiic_wakeup
-Content-Language: en-US
-To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        <linux-i2c@vger.kernel.org>
-CC:     <michal.simek@xilinx.com>
-References: <20220526040914.4159495-1-shubhrajyoti.datta@xilinx.com>
-From:   Michal Simek <michal.simek@xilinx.com>
-In-Reply-To: <20220526040914.4159495-1-shubhrajyoti.datta@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 977b8421-0a80-40fc-ba8f-08da42f53fb4
-X-MS-TrafficTypeDiagnostic: CY4PR02MB2552:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR02MB2552B313DC8EA1DECDD5C9C0C6DC9@CY4PR02MB2552.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YgmVZkv87b+81YcruN++swemxDfswS9khFFZ8JmYSPn33a/t25srO6jtkFwC5+nUKXL6nAqiZV4B/dlHfUXzWAKxE1EkQ7JDqGDb3hPypj892+bkw6qfdz6vhUde1de/dKdoLYmAuMWCAX1fYOV979369lQN8I8GHV/dmMj/pBI+KlG02c4gC2RjYTsAWaq6mCcCJPAogjc/TtwaFD13uKtRcmTtWH8xznU47FAdvnZFs2Rpylev0CyWyDHHmKsYaZsRb619cS/ukJikFgdL0DUfJsS9vV8qa5g7v7730UsZfK7FyK3nJ+fUF0FhooMU3QvITR3MAAw1N6l0iv7TtS+L3FEioK495e+NaTRicWrEJx1JEDedsGzFXQEP5+sscd3QJjWmxN9CMj3qopW+w0HZXpukWNfsrbTWtqWM+XQHRuKmHXS5TD30x0PJEXu/JRtGrzmOUSUnViv9JZsFLATY4p2xK5Gpg8Yt4QKotqHsIxtzRxr7cFnKG5BZNZumXV1LIpTK8r8eMwVVrA8PaC8N9OeJlB4TJFwvnN+NPaIL/Wc15M5N+/PkUJFyIjhPMViKbyml0OEoieQcmgYvGyjm5D322g5MOu+Ev2euiPS1WvvVD12C4HUCPMkhw8yJtPVdKHtyIIZFH4PEexfVrpK51aucagqPBhDyFyaaFMM++d1A1nwTP09tRHoj+l0I3rv+FdmoA4Z++JomFlcL4nhumdEKHn05La166QgEKCc=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(40460700003)(26005)(356005)(508600001)(8676002)(53546011)(44832011)(316002)(5660300002)(110136005)(31686004)(83380400001)(36756003)(36860700001)(9786002)(8936002)(2906002)(426003)(336012)(82310400005)(2616005)(186003)(70206006)(70586007)(107886003)(31696002)(7636003)(47076005)(4326008)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2022 11:03:52.8169
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 977b8421-0a80-40fc-ba8f-08da42f53fb4
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT040.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB2552
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="K2Ju2BjYugMc6h9r"
+Content-Disposition: inline
+In-Reply-To: <20220530114056.8722-1-potin.lai.pt@gmail.com>
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -109,67 +89,131 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
+--K2Ju2BjYugMc6h9r
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 5/26/22 06:09, Shubhrajyoti Datta wrote:
-> Fix the coverity warning
-> mixed_enum_type: enumerated type mixed with another type
-> 
-> Enum is passed to xiic_wakeup, change the function parameter
-> to reflect it.
-> 
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+On Mon, May 30, 2022 at 07:40:56PM +0800, Potin Lai wrote:
+> From: Porin Lai <potin.lai.pt@gmail.com>
+>=20
+> Add properties for manual tuning i2c clock timing register.
+>=20
+> * aspeed,i2c-manual-clk: Enable aspeed i2c clock manual setup
+> * aspeed,i2c-base-clk-div: Base Clock divisor (tBaseClk)
+> * aspeed,i2c-clk-high-cycle: Cycles of clock-high pulse (tClkHigh)
+> * aspeed,i2c-clk-low-cycle: Cycles of clock-low pulse (tClkLow)
+
+Do we need to add these to
+Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml ?
+
+>=20
+> Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
 > ---
-> 
->   drivers/i2c/busses/i2c-xiic.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-> index 9a1c3f8b7048..2b6341f08d71 100644
-> --- a/drivers/i2c/busses/i2c-xiic.c
-> +++ b/drivers/i2c/busses/i2c-xiic.c
-> @@ -367,7 +367,7 @@ static void xiic_fill_tx_fifo(struct xiic_i2c *i2c)
->   	}
->   }
->   
-> -static void xiic_wakeup(struct xiic_i2c *i2c, int code)
-> +static void xiic_wakeup(struct xiic_i2c *i2c, enum xilinx_i2c_state code)
->   {
->   	i2c->tx_msg = NULL;
->   	i2c->rx_msg = NULL;
+>  drivers/i2c/busses/i2c-aspeed.c | 55 ++++++++++++++++++++++++++++++++-
+>  1 file changed, 54 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-asp=
+eed.c
+> index 67e8b97c0c95..1f4b5c4b5bf4 100644
+> --- a/drivers/i2c/busses/i2c-aspeed.c
+> +++ b/drivers/i2c/busses/i2c-aspeed.c
+> @@ -898,6 +898,56 @@ static int aspeed_i2c_init_clk(struct aspeed_i2c_bus=
+ *bus)
+>  	return 0;
+>  }
+> =20
+> +/* precondition: bus.lock has been acquired. */
+> +static int aspeed_i2c_manual_clk_setup(struct aspeed_i2c_bus *bus)
+> +{
+> +	u32 divisor, clk_high, clk_low, clk_reg_val;
+> +
+> +	if (device_property_read_u32(bus->dev, "aspeed,i2c-base-clk-div",
+> +				     &divisor) !=3D 0) {
+> +		dev_err(bus->dev, "Could not read aspeed,i2c-base-clk-div\n");
+> +		return -EINVAL;
+> +	} else if (divisor > ASPEED_I2CD_TIME_BASE_DIVISOR_MASK) {
+> +		dev_err(bus->dev, "Invalid aspeed,i2c-base-clk-div: %u\n",
+> +			divisor);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (device_property_read_u32(bus->dev, "aspeed,i2c-clk-high-cycle",
+> +				     &clk_high) !=3D 0) {
+> +		dev_err(bus->dev, "Could not read aspeed,i2c-clk-high-cycle\n");
+> +		return -EINVAL;
+> +	} else if (clk_high > ASPEED_I2CD_TIME_SCL_REG_MAX) {
+> +		dev_err(bus->dev, "Invalid aspeed,i2c-clk-high-cycle: %u\n",
+> +			clk_high);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (device_property_read_u32(bus->dev, "aspeed,i2c-clk-low-cycle",
+> +				     &clk_low) !=3D 0) {
+> +		dev_err(bus->dev, "Could not read aspeed,i2c-clk-low-cycle\n");
+> +		return -EINVAL;
+> +	} else if (clk_low > ASPEED_I2CD_TIME_SCL_REG_MAX) {
+> +		dev_err(bus->dev, "Invalid aspeed,i2c-clk-low-cycle: %u\n",
+> +			clk_low);
+> +		return -EINVAL;
+> +	}
+> +
+> +	clk_reg_val =3D readl(bus->base + ASPEED_I2C_AC_TIMING_REG1);
+> +	clk_reg_val &=3D (ASPEED_I2CD_TIME_TBUF_MASK |
+> +			ASPEED_I2CD_TIME_THDSTA_MASK |
+> +			ASPEED_I2CD_TIME_TACST_MASK);
+> +	clk_reg_val |=3D (divisor & ASPEED_I2CD_TIME_BASE_DIVISOR_MASK)
+> +			| ((clk_high << ASPEED_I2CD_TIME_SCL_HIGH_SHIFT)
+> +			   & ASPEED_I2CD_TIME_SCL_HIGH_MASK)
+> +			| ((clk_low << ASPEED_I2CD_TIME_SCL_LOW_SHIFT)
+> +			   & ASPEED_I2CD_TIME_SCL_LOW_MASK);
+> +	writel(clk_reg_val, bus->base + ASPEED_I2C_AC_TIMING_REG1);
+> +	writel(ASPEED_NO_TIMEOUT_CTRL, bus->base + ASPEED_I2C_AC_TIMING_REG2);
+> +
+> +	return 0;
+> +}
+> +
+>  /* precondition: bus.lock has been acquired. */
+>  static int aspeed_i2c_init(struct aspeed_i2c_bus *bus,
+>  			     struct platform_device *pdev)
+> @@ -908,7 +958,10 @@ static int aspeed_i2c_init(struct aspeed_i2c_bus *bu=
+s,
+>  	/* Disable everything. */
+>  	writel(0, bus->base + ASPEED_I2C_FUN_CTRL_REG);
+> =20
+> -	ret =3D aspeed_i2c_init_clk(bus);
+> +	if (of_property_read_bool(pdev->dev.of_node, "aspeed,i2c-manual-clk"))
+> +		ret =3D aspeed_i2c_manual_clk_setup(bus);
+> +	else
+> +		ret =3D aspeed_i2c_init_clk(bus);
+>  	if (ret < 0)
+>  		return ret;
+> =20
+> --=20
+> 2.17.1
+>=20
 
+--=20
+Patrick Williams
 
-Change itself is fine but
+--K2Ju2BjYugMc6h9r
+Content-Type: application/pgp-signature; name="signature.asc"
 
-wakeup_code in xiic_process should be also fixed because it is defined as int 
-now and you are using initial value as 0.
+-----BEGIN PGP SIGNATURE-----
 
-It means your change and this one too.
+iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmKWHGYACgkQqwNHzC0A
+wRmniw//ReljGNV+Q4CIui/96gQHz615me2pPG7mqsYlvAJHQDt4GDYYEcJzl0l4
+KqYKK03DW5c7UGsk2MddvPOdHGLFt9Qxb8aqh+cTelPjzrezByNBYtuQC6zs+3Si
+VLYNjz1cXsrRPuVnsKhgEgCMpALC+6Js3luUMDBpW1FpZ83FIwQFlLk7oit9oHN2
+eZSQiQYlnsUx9ZV5BrI8VALrhNtbyfyC4sAMIeuIEtjCbgOv6LUIQl1PCFZOWM9O
+fsaLJhuaulKfHHYPrumt6VlFgXT4M7Bn+KvOoHGK36HmByKZVjy7K9mFmhsxrUXq
+6TeQzn0vixKO4myXxO/SbkVdRxquKCnFXicNT1BFt/P2M6HJ4GxjVaTbAptWNRHy
+QXSmI8py77yctldXfk2mPGGfhQ+KkuiNCtHJVCARMY93CQA0nYhLLrDNRhWx9wjp
+GGvCk/VZhmfr1TVeH15Lqxh1h+xVE3NItVumVYnu0xSccOwIRf5NOtDJc9MLXB1H
+Q5F4bSJNd5wgb3V/ULVqaxpys62jo7p+Ks0TSULVE8hJ7FfC8YMqJP7z8oPvmLoU
+u97WB7urZpQGjjTKZlPzFpPlSp1VjM3GV154FexUGKNMnASZZU8sdC5brXAotMsa
+BtSeHG788WBtHi6PWqSuSaqy9tyqUCSm/Je90yJ5PvX4ULfhAh0=
+=Z5+f
+-----END PGP SIGNATURE-----
 
-diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-index ffefe3c482e9..b369b42fffd7 100644
---- a/drivers/i2c/busses/i2c-xiic.c
-+++ b/drivers/i2c/busses/i2c-xiic.c
-@@ -34,9 +34,9 @@
-  #define DRIVER_NAME "xiic-i2c"
-
-  enum xilinx_i2c_state {
--       STATE_DONE,
--       STATE_ERROR,
--       STATE_START
-+       STATE_DONE = 0,
-+       STATE_ERROR = 1,
-+       STATE_START = 2
-  };
-
-  enum xiic_endian {
-@@ -380,7 +380,7 @@ static irqreturn_t xiic_process(int irq, void *dev_id)
-         u32 clr = 0;
-         int xfer_more = 0;
-         int wakeup_req = 0;
--       int wakeup_code = 0;
-+       enum xilinx_i2c_state wakeup_code = STATE_DONE;
-
-         /* Get the interrupt Status from the IPIF. There is no clearing of
-          * interrupts in the IPIF. Interrupts must be cleared at the source.
-
-M
+--K2Ju2BjYugMc6h9r--
