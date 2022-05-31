@@ -2,88 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D962A537ABA
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 May 2022 14:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F27B538CCA
+	for <lists+linux-i2c@lfdr.de>; Tue, 31 May 2022 10:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232599AbiE3Mku (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 30 May 2022 08:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
+        id S239667AbiEaIYD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 31 May 2022 04:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiE3Mku (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 May 2022 08:40:50 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB9C7DE09;
-        Mon, 30 May 2022 05:40:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653914449; x=1685450449;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BbByahY1nfmcJEgPBRh3UpjJMSql/8lYm9tvLU4hTs0=;
-  b=dMa8KfUSRvWsh0RzfnvldZAmkuOln7v7I2PO97m2gXAZF4+t0IZntUnf
-   5mkQ6sgMt4yyiW/L8hJunIFAfqZvmotgmXeyRYfLpSoHOTUfVXZjDNZn4
-   tpzS5QihTyaNoFFDIHElgxY0YAgamHJ6qmTymwYf5fVv9hosgJYjC0fG6
-   Uyc/L39jnWlKhoZ7ffpl4c0jfIiRuAtc2HpnTZiIzfiS+ftQAGvmkmeyx
-   naQ9VpQM87lDYGqML7w83oK+XpAI+5BB38/TrPCygCdpeCYBR37Q38+7y
-   csHaw++k28x+ZRSgTUha13mvn7kRm412H+vBW22A2LpeSTvxZXz8k3+h7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="274708112"
-X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
-   d="scan'208";a="274708112"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 05:40:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
-   d="scan'208";a="644611148"
-Received: from mylly.fi.intel.com (HELO [10.237.72.161]) ([10.237.72.161])
-  by fmsmga004.fm.intel.com with ESMTP; 30 May 2022 05:40:47 -0700
-Message-ID: <178d6b21-ef29-0790-1470-3324efa76def@linux.intel.com>
-Date:   Mon, 30 May 2022 15:40:46 +0300
+        with ESMTP id S244693AbiEaIYC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 May 2022 04:24:02 -0400
+Received: from mail.onlinesuccesses.pl (mail.onlinesuccesses.pl [198.244.150.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBB395484
+        for <linux-i2c@vger.kernel.org>; Tue, 31 May 2022 01:24:02 -0700 (PDT)
+Received: by mail.onlinesuccesses.pl (Postfix, from userid 1002)
+        id E92E5AE2B3; Tue, 31 May 2022 08:16:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=onlinesuccesses.pl;
+        s=mail; t=1653985138;
+        bh=nE8HqilgMh4dy7+Z8ksfg7Bc9rmPeQtYFq3/3YR2ODU=;
+        h=Date:From:To:Subject:From;
+        b=QCP8+1x+ujG/QiAs7sI6LzkOfu47oo92gdaqN3BTtwNrbPP7Tt8jy18MGmeP9f75C
+         Jw2zF8QMm4voMC2tsV0X1WJT2fS3IE43foEKoKgVA61qOQiNyhgCf3kXSz6KK4MMRv
+         Hy9ea1TJAiYEZHv2bMhn6Zlk2W9hjkhNZFaPGUt28gXuuMQm+tWf0kXwlWgQy31MrL
+         hdY5sA0q6WD0MtVb0/JPG7FbwAiSSRkCeee47Q3kjwtYstmEJIIJzwhWdGer22/n1d
+         PYiGSuSNvnrADEhTwjLI2ZkZnS4CemZVPooQv3/7vU1ze1cR0JhecLFApX09UCzNXN
+         rJf6zWRLJbXQw==
+Received: by mail.onlinesuccesses.pl for <linux-i2c@vger.kernel.org>; Tue, 31 May 2022 08:15:36 GMT
+Message-ID: <20220531064501-0.1.4l.1dctn.0.quloa70ry3@onlinesuccesses.pl>
+Date:   Tue, 31 May 2022 08:15:36 GMT
+From:   "Wiktor Zielonko" <wiktor.zielonko@onlinesuccesses.pl>
+To:     <linux-i2c@vger.kernel.org>
+Subject: Ruch z pierwszej pozycji w Google
+X-Mailer: mail.onlinesuccesses.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.0
-Subject: Re: [PATCH v1 1/1] MAINTAINERS: Update Synopsys DesingWare I2C to
- Supported
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, dave.hansen@linux.intel.com
-References: <20220530120247.70582-1-andriy.shevchenko@linux.intel.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20220530120247.70582-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 5/30/22 15:02, Andy Shevchenko wrote:
-> The actual status of the code is Supported (from x86 perspective).
-> 
-> Reported-by: dave.hansen@linux.intel.com
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->   MAINTAINERS | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 56dd473d5d59..f8ff2b523498 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19066,7 +19066,7 @@ R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->   R:	Mika Westerberg <mika.westerberg@linux.intel.com>
->   R:	Jan Dabros <jsd@semihalf.com>
->   L:	linux-i2c@vger.kernel.org
-> -S:	Maintained
-> +S:	Supported
->   F:	drivers/i2c/busses/i2c-designware-*
->   
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Dzie=C5=84 dobry,=20
 
+jaki=C5=9B czas temu zg=C5=82osi=C5=82a si=C4=99 do nas firma, kt=C3=B3re=
+j strona internetowa nie pozycjonowa=C5=82a si=C4=99 wysoko w wyszukiwarc=
+e Google.=20
+
+Na podstawie wykonanego przez nas audytu SEO zoptymalizowali=C5=9Bmy tre=C5=
+=9Bci na stronie pod k=C4=85tem wcze=C5=9Bniej opracowanych s=C5=82=C3=B3=
+w kluczowych. Nasz wewn=C4=99trzny system codziennie analizuje prawid=C5=82=
+owe dzia=C5=82anie witryny.  Dzi=C4=99ki indywidualnej strategii, firma z=
+dobywa coraz wi=C4=99cej Klient=C3=B3w. =20
+
+Czy chcieliby Pa=C5=84stwo zwi=C4=99kszy=C4=87 liczb=C4=99 os=C3=B3b odwi=
+edzaj=C4=85cych stron=C4=99 internetow=C4=85 firmy? M=C3=B3g=C5=82bym prz=
+edstawi=C4=87 ofert=C4=99?=20
+
+
+Pozdrawiam serdecznie,
+Wiktor Zielonko
