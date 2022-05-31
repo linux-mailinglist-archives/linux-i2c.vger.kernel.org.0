@@ -2,239 +2,174 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5208538DD1
-	for <lists+linux-i2c@lfdr.de>; Tue, 31 May 2022 11:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54AC8538F69
+	for <lists+linux-i2c@lfdr.de>; Tue, 31 May 2022 13:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245284AbiEaJgE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 31 May 2022 05:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
+        id S238251AbiEaLD7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 31 May 2022 07:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237594AbiEaJgD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 May 2022 05:36:03 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF27819BE
-        for <linux-i2c@vger.kernel.org>; Tue, 31 May 2022 02:35:58 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id t144so16749684oie.7
-        for <linux-i2c@vger.kernel.org>; Tue, 31 May 2022 02:35:58 -0700 (PDT)
+        with ESMTP id S233919AbiEaLD6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 May 2022 07:03:58 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2085.outbound.protection.outlook.com [40.107.244.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453A2994D2
+        for <linux-i2c@vger.kernel.org>; Tue, 31 May 2022 04:03:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JIjMrPJ9G/B3Fewnm2hGAfxQXe3oiFBiBWzTM1k6xXnfj+jboyF3G/Fz/+o0XDFbrJnDxILUH/W/hWORNvbupRmZWvw65Wh5b8CvV8hsMuHzCWAJF3thHE309t8aME4rWbAuQqT3P6JSkQgA5YUxk9IPFdG7y9WKHGSGz0DqQKnXiMe+BCmmRLTMqcLs1ksBpxm/Wfv3TECKuRb8zg+0OZka3TUS72qTs6SgOeoDod46zj0hF8j4n6D9/3OTbJ5QdlkAHOIGcc9k5WSoCWCTdRCpm9AFfLuvmL7p9QgjtZTwxqP0UTINiSv0ht6r2z0+3tmeLXZoiZIu3eH67NDruw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xZ/L/UBqufVsiApOvTMcfLGTSzT40ZaZy9+WxmFAJcU=;
+ b=XBgyFQDzwkf4kNBUAsFsivy17QxtE/eUnz18PrmjYmlBdwNhaesGNHqmmiIe9J/c0x6wxtmTZNlvL6zESUlt5HGYpmtTWY9qkI6hRvUdBjtPbMyGv/IkpThbdLBAvbQg4raEZonh2IHAuR/A1G9X5JOBN9Ah4FRpzRn2JE3vl2ApOD4/y5oZ/MSza4Pk2StcBhf53+wiaVB24ZU/B5PP7+0kt+q4Q8yABgbW0yFA/a6JbBQkHo08ELgiQKB5moj4e2MBjfDqhgg5iDRzM/zI7X4ZCe+FWNTUt0jOzFrAKSwzdRNGC1Z+8mKMlKr6ZpQjtHhJ3YaQwERrigPm08j93w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=rNIUiIBXyDGvzHE+zEymfz2BuuwWa1afkL1Ck+gh5so=;
-        b=bUd/ibq+bmZUSmRa/qTzHSW6UPiz5wLoLGk3kS74svogQoGRP9EnEwUMFZQQx2Dtr4
-         6xZ/PXALBWBE7Wq3nYGo/doZcb2ASNxDtz1uDwfoYA0moFl/6d0BEl7f8UFyYp82szmJ
-         tzjFCMtOy9B3Rt6P+xaaL/FOThNkMjon01ZTazOeHw1qZv53Wq6+te8b84bErXZZXuCP
-         Z44t7iicNlvEnxEMmAuizTvVk4+Wkwx7V/CxgXq4JcoPrvb9VZqiz4m4A8ZMA8StTTQU
-         mgF5dVb7OTGEY6sHO00KEz99z7YFaEajC0N+NvcrIAa1KJsnXTA7wRU4bvzj08sYVcMQ
-         JibA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rNIUiIBXyDGvzHE+zEymfz2BuuwWa1afkL1Ck+gh5so=;
-        b=VSsXSAkbnvzV/gHfSwbPhPk1EyLTWs8erTloDQugS7HgXc8d1uSrjd9BgH7BLQCTmk
-         x7UdPLikss6W4nU7pDBxUQKYNAwMyf5lCOy7etmu67QieNqaD9P8KckKb4DcAQ9+C3zh
-         EmmQkZl8VoOMxWhQq30Uwv3u0Ml4Rho/pNBtdXVYaLh7+Lbvaq7/sDBCHgfG3yNgBXnb
-         XrrQDHZSd/JQJa2n03zexspBjNXwRY+tlWqsnD7iCVrACYPwrjAwPEm9VTIC90JoBXoD
-         +08YKgTg4exFrxophCxP6XJGEEQ5w4MWyvycwQfyCePH1Gs4eTuY5GmIrfUlbfy47nlv
-         Owhg==
-X-Gm-Message-State: AOAM533FUtu/Fu9AXQ8SP1ycS4KkQNFJ753W/TPe0g6SKD6AIRgiA7J1
-        4H5I/S5XFiudA8A3LEhKyjIyK+2d6gICmby1TW6kZQ==
-X-Google-Smtp-Source: ABdhPJxBNxkVY3rd7hL5fhkw0+H4Wgohxf2NOuEGwfG7qs2dWKUzMdr6nRKwgndZs0sFXNaAopWhP5rfACegYpbKokM=
-X-Received: by 2002:aca:ac93:0:b0:32a:e3b6:7c52 with SMTP id
- v141-20020acaac93000000b0032ae3b67c52mr11585107oie.294.1653989757860; Tue, 31
- May 2022 02:35:57 -0700 (PDT)
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xZ/L/UBqufVsiApOvTMcfLGTSzT40ZaZy9+WxmFAJcU=;
+ b=EXGeqhEetKiHrWOUgJTKqLe1NFU/qSDqrGEpBagWK6h2PBtjZIv0rtr1nP2k8mpdq4jq2EJWDrbAJPWHUvo1eGESuCECHXJVOxMo5pMBD1H5n9P+ONqdYOGSwRC+HcZfeZMX2K+tMJwMtQC1Kpt86OiVoJx9PP9fTwrNIYuOkVg=
+Received: from BN6PR12CA0044.namprd12.prod.outlook.com (2603:10b6:405:70::30)
+ by CY4PR02MB2552.namprd02.prod.outlook.com (2603:10b6:903:73::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Tue, 31 May
+ 2022 11:03:53 +0000
+Received: from BN1NAM02FT040.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:405:70:cafe::7a) by BN6PR12CA0044.outlook.office365.com
+ (2603:10b6:405:70::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.19 via Frontend
+ Transport; Tue, 31 May 2022 11:03:53 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT040.mail.protection.outlook.com (10.13.2.151) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5293.13 via Frontend Transport; Tue, 31 May 2022 11:03:52 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 31 May 2022 04:03:49 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 31 May 2022 04:03:49 -0700
+Envelope-to: linux-i2c@vger.kernel.org
+Received: from [10.254.241.50] (port=35252)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1nvzfB-000GKM-AO; Tue, 31 May 2022 04:03:49 -0700
+Message-ID: <ff7dd070-455f-3482-6176-400119f9af6b@xilinx.com>
+Date:   Tue, 31 May 2022 13:03:47 +0200
 MIME-Version: 1.0
-References: <20220109132613.122912-1-guoheyi@linux.alibaba.com>
- <ad5e5438-4a3f-2447-4af3-7caa91e7252a@linux.alibaba.com> <CACPK8XcYp9iAD3fjBQCax41C-1UpA+1AQW3epyEooYzNLt7R5g@mail.gmail.com>
- <e62fba0b-ebb9-934a-d7cf-6da33ecc4335@linux.alibaba.com> <CACPK8Xc+v132vM-ytdAUFhywFXGpPF+uPSBWi68ROf_PLD4VQQ@mail.gmail.com>
- <0f5cd773-2d0a-b782-b967-ecbcec3de7b1@linux.alibaba.com>
-In-Reply-To: <0f5cd773-2d0a-b782-b967-ecbcec3de7b1@linux.alibaba.com>
-From:   Lei Yu <yulei.sh@bytedance.com>
-Date:   Tue, 31 May 2022 17:35:47 +0800
-Message-ID: <CAGm54UFUxNpwKjQyQnqtbys_nfgx2KcEEJt3-0nJWYjyjM9pvw@mail.gmail.com>
-Subject: Re: [PATCH] drivers/i2c-aspeed: avoid invalid memory reference after timeout
-To:     Heyi Guo <guoheyi@linux.alibaba.com>
-Cc:     Joel Stanley <joel@jms.id.au>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] i2c-xiic: Fix the type check for xiic_wakeup
+Content-Language: en-US
+To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        <linux-i2c@vger.kernel.org>
+CC:     <michal.simek@xilinx.com>
+References: <20220526040914.4159495-1-shubhrajyoti.datta@xilinx.com>
+From:   Michal Simek <michal.simek@xilinx.com>
+In-Reply-To: <20220526040914.4159495-1-shubhrajyoti.datta@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 977b8421-0a80-40fc-ba8f-08da42f53fb4
+X-MS-TrafficTypeDiagnostic: CY4PR02MB2552:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR02MB2552B313DC8EA1DECDD5C9C0C6DC9@CY4PR02MB2552.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YgmVZkv87b+81YcruN++swemxDfswS9khFFZ8JmYSPn33a/t25srO6jtkFwC5+nUKXL6nAqiZV4B/dlHfUXzWAKxE1EkQ7JDqGDb3hPypj892+bkw6qfdz6vhUde1de/dKdoLYmAuMWCAX1fYOV979369lQN8I8GHV/dmMj/pBI+KlG02c4gC2RjYTsAWaq6mCcCJPAogjc/TtwaFD13uKtRcmTtWH8xznU47FAdvnZFs2Rpylev0CyWyDHHmKsYaZsRb619cS/ukJikFgdL0DUfJsS9vV8qa5g7v7730UsZfK7FyK3nJ+fUF0FhooMU3QvITR3MAAw1N6l0iv7TtS+L3FEioK495e+NaTRicWrEJx1JEDedsGzFXQEP5+sscd3QJjWmxN9CMj3qopW+w0HZXpukWNfsrbTWtqWM+XQHRuKmHXS5TD30x0PJEXu/JRtGrzmOUSUnViv9JZsFLATY4p2xK5Gpg8Yt4QKotqHsIxtzRxr7cFnKG5BZNZumXV1LIpTK8r8eMwVVrA8PaC8N9OeJlB4TJFwvnN+NPaIL/Wc15M5N+/PkUJFyIjhPMViKbyml0OEoieQcmgYvGyjm5D322g5MOu+Ev2euiPS1WvvVD12C4HUCPMkhw8yJtPVdKHtyIIZFH4PEexfVrpK51aucagqPBhDyFyaaFMM++d1A1nwTP09tRHoj+l0I3rv+FdmoA4Z++JomFlcL4nhumdEKHn05La166QgEKCc=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(40460700003)(26005)(356005)(508600001)(8676002)(53546011)(44832011)(316002)(5660300002)(110136005)(31686004)(83380400001)(36756003)(36860700001)(9786002)(8936002)(2906002)(426003)(336012)(82310400005)(2616005)(186003)(70206006)(70586007)(107886003)(31696002)(7636003)(47076005)(4326008)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2022 11:03:52.8169
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 977b8421-0a80-40fc-ba8f-08da42f53fb4
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT040.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB2552
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-I hit a similar problem that has a slightly different backtrace on a
-malfunctioning device.
-https://pastebin.com/TiWdkdrG
-
-With this patch, the kernel panic is gone and it gets below logs instead:
-
- aspeed-i2c-bus 1e78a180.i2c-bus: bus in unknown state. irq_status: 0x1
- aspeed-i2c-bus 1e78a180.i2c-bus: irq handled !=3D irq. expected
-0x00000001, but was 0x00000000
- aspeed-i2c-bus 1e78a180.i2c-bus: bus in unknown state. irq_status: 0x10
- aspeed-i2c-bus 1e78a180.i2c-bus: irq handled !=3D irq. expected
-0x00000010, but was 0x00000000
-
-So I think this patch is good in that it prevents the kernel panic.
-
-On Wed, Jan 19, 2022 at 11:00 AM Heyi Guo <guoheyi@linux.alibaba.com> wrote=
-:
->
->
-> =E5=9C=A8 2022/1/17 =E4=B8=8B=E5=8D=882:38, Joel Stanley =E5=86=99=E9=81=
-=93:
-> > On Fri, 14 Jan 2022 at 14:01, Heyi Guo <guoheyi@linux.alibaba.com> wrot=
-e:
-> >> Hi Joel,
-> >>
-> >>
-> >> =E5=9C=A8 2022/1/11 =E4=B8=8B=E5=8D=886:51, Joel Stanley =E5=86=99=E9=
-=81=93:
-> >>> On Tue, 11 Jan 2022 at 07:52, Heyi Guo <guoheyi@linux.alibaba.com> wr=
-ote:
-> >>>> Hi all,
-> >>>>
-> >>>> Any comments?
-> >>>>
-> >>>> Thanks,
-> >>>>
-> >>>> Heyi
-> >>>>
-> >>>> =E5=9C=A8 2022/1/9 =E4=B8=8B=E5=8D=889:26, Heyi Guo =E5=86=99=E9=81=
-=93:
-> >>>>> The memory will be freed by the caller if transfer timeout occurs,
-> >>>>> then it would trigger kernel panic if the peer device responds with
-> >>>>> something after timeout and triggers the interrupt handler of aspee=
-d
-> >>>>> i2c driver.
-> >>>>>
-> >>>>> Set the msgs pointer to NULL to avoid invalid memory reference afte=
-r
-> >>>>> timeout to fix this potential kernel panic.
-> >>> Thanks for the patch. How did you discover this issue? Do you have a
-> >>> test I can run to reproduce the crash?
-> >> We are using one i2c channel to communicate with another MCU by
-> >> implementing user space SSIF protocol, and the MCU may not respond in
-> >> time if it is busy. If it responds after timeout occurs, it will trigg=
-er
-> >> below kernel panic:
-> >>
-> > Thanks for the details. It looks like you've done some testing of
-> > this, which is good.
-> >
-> >> After applying this patch, we'll get below warning instead:
-> >>
-> >> "bus in unknown state. irq_status: 0x%x\n"
-> > Given we get to here in the irq handler, we've done these two tests:
-> >
-> >   - aspeed_i2c_is_irq_error()
-> >   - the state is not INACTIVE or PENDING
-> >
-> > but there's no buffer ready for us to use. So what has triggered the
-> > IRQ in this case? Do you have a record of the irq status bits?
-> >
-> > I am wondering if the driver should know that the transaction has
-> > timed out, instead of detecting this unknown state.
->
-> Yes, some drivers will try to abort the transaction before returning to
-> the caller, if timeout happens.
->
-> The irq status bits are not always the same; searching from the history
-> logs, I found some messages like below:
->
-> [  495.289499] aspeed-i2c-bus 1e78a680.i2c-bus: bus in unknown state.
-> irq_status: 0x2
-> [  495.298003] aspeed-i2c-bus 1e78a680.i2c-bus: bus in unknown state.
-> irq_status: 0x10
->
-> [   65.176761] aspeed-i2c-bus 1e78a680.i2c-bus: bus in unknown state.
-> irq_status: 0x15
->
-> Thanks,
->
-> Heyi
->
-> >
-> >
-> >>> Can you provide a Fixes tag?
-> >> I think the bug was introduced by the first commit of this file :(
-> >>
-> >> f327c686d3ba44eda79a2d9e02a6a242e0b75787
-> >>
-> >>
-> >>> Do other i2c master drivers do this? I took a quick look at the meson
-> >>> driver and it doesn't appear to clear it's pointer to msgs.
-> >> It is hard to say. It seems other drivers have some recover scheme lik=
-e
-> >> aborting the transfer, or loop each messages in process context and
-> >> don't do much in IRQ handler, which may disable interrupts or not reta=
-in
-> >> the buffer pointer before returning timeout.
-> > I think your change is okay to go in as it fixes the crash, but first
-> > I want to work out if there's some missing handling of a timeout
-> > condition that we should add as well.
-> >
-> >
-> >> Thanks,
-> >>
-> >> Heyi
-> >>
-> >>
-> >>>>> Signed-off-by: Heyi Guo <guoheyi@linux.alibaba.com>
-> >>>>>
-> >>>>> -------
-> >>>>>
-> >>>>> Cc: Brendan Higgins <brendanhiggins@google.com>
-> >>>>> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> >>>>> Cc: Joel Stanley <joel@jms.id.au>
-> >>>>> Cc: Andrew Jeffery <andrew@aj.id.au>
-> >>>>> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> >>>>> Cc: linux-i2c@vger.kernel.org
-> >>>>> Cc: openbmc@lists.ozlabs.org
-> >>>>> Cc: linux-arm-kernel@lists.infradead.org
-> >>>>> Cc: linux-aspeed@lists.ozlabs.org
-> >>>>> ---
-> >>>>>     drivers/i2c/busses/i2c-aspeed.c | 5 +++++
-> >>>>>     1 file changed, 5 insertions(+)
-> >>>>>
-> >>>>> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i=
-2c-aspeed.c
-> >>>>> index 67e8b97c0c950..3ab0396168680 100644
-> >>>>> --- a/drivers/i2c/busses/i2c-aspeed.c
-> >>>>> +++ b/drivers/i2c/busses/i2c-aspeed.c
-> >>>>> @@ -708,6 +708,11 @@ static int aspeed_i2c_master_xfer(struct i2c_a=
-dapter *adap,
-> >>>>>                 spin_lock_irqsave(&bus->lock, flags);
-> >>>>>                 if (bus->master_state =3D=3D ASPEED_I2C_MASTER_PEND=
-ING)
-> >>>>>                         bus->master_state =3D ASPEED_I2C_MASTER_INA=
-CTIVE;
-> >>>>> +             /*
-> >>>>> +              * All the buffers may be freed after returning to ca=
-ller, so
-> >>>>> +              * set msgs to NULL to avoid memory reference after f=
-reeing.
-> >>>>> +              */
-> >>>>> +             bus->msgs =3D NULL;
-> >>>>>                 spin_unlock_irqrestore(&bus->lock, flags);
-> >>>>>
-> >>>>>                 return -ETIMEDOUT;
 
 
+On 5/26/22 06:09, Shubhrajyoti Datta wrote:
+> Fix the coverity warning
+> mixed_enum_type: enumerated type mixed with another type
+> 
+> Enum is passed to xiic_wakeup, change the function parameter
+> to reflect it.
+> 
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> ---
+> 
+>   drivers/i2c/busses/i2c-xiic.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
+> index 9a1c3f8b7048..2b6341f08d71 100644
+> --- a/drivers/i2c/busses/i2c-xiic.c
+> +++ b/drivers/i2c/busses/i2c-xiic.c
+> @@ -367,7 +367,7 @@ static void xiic_fill_tx_fifo(struct xiic_i2c *i2c)
+>   	}
+>   }
+>   
+> -static void xiic_wakeup(struct xiic_i2c *i2c, int code)
+> +static void xiic_wakeup(struct xiic_i2c *i2c, enum xilinx_i2c_state code)
+>   {
+>   	i2c->tx_msg = NULL;
+>   	i2c->rx_msg = NULL;
 
---=20
-BRs,
-Lei YU
+
+Change itself is fine but
+
+wakeup_code in xiic_process should be also fixed because it is defined as int 
+now and you are using initial value as 0.
+
+It means your change and this one too.
+
+diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
+index ffefe3c482e9..b369b42fffd7 100644
+--- a/drivers/i2c/busses/i2c-xiic.c
++++ b/drivers/i2c/busses/i2c-xiic.c
+@@ -34,9 +34,9 @@
+  #define DRIVER_NAME "xiic-i2c"
+
+  enum xilinx_i2c_state {
+-       STATE_DONE,
+-       STATE_ERROR,
+-       STATE_START
++       STATE_DONE = 0,
++       STATE_ERROR = 1,
++       STATE_START = 2
+  };
+
+  enum xiic_endian {
+@@ -380,7 +380,7 @@ static irqreturn_t xiic_process(int irq, void *dev_id)
+         u32 clr = 0;
+         int xfer_more = 0;
+         int wakeup_req = 0;
+-       int wakeup_code = 0;
++       enum xilinx_i2c_state wakeup_code = STATE_DONE;
+
+         /* Get the interrupt Status from the IPIF. There is no clearing of
+          * interrupts in the IPIF. Interrupts must be cleared at the source.
+
+M
