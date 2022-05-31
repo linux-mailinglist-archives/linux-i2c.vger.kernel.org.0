@@ -2,51 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B82A539276
-	for <lists+linux-i2c@lfdr.de>; Tue, 31 May 2022 15:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2B85392B6
+	for <lists+linux-i2c@lfdr.de>; Tue, 31 May 2022 15:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344812AbiEaNwM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 31 May 2022 09:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43326 "EHLO
+        id S1345173AbiEaNxE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 31 May 2022 09:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241180AbiEaNv6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 May 2022 09:51:58 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2D39A982
-        for <linux-i2c@vger.kernel.org>; Tue, 31 May 2022 06:51:10 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id u3so18782487wrg.3
-        for <linux-i2c@vger.kernel.org>; Tue, 31 May 2022 06:51:10 -0700 (PDT)
+        with ESMTP id S1345188AbiEaNwI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 May 2022 09:52:08 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38C69B1BB
+        for <linux-i2c@vger.kernel.org>; Tue, 31 May 2022 06:51:27 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id e2so18823787wrc.1
+        for <linux-i2c@vger.kernel.org>; Tue, 31 May 2022 06:51:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lS6mPjcp3pJcGZKSKOrBRDQ5D/bjAdtV0DGXyq7R5yA=;
-        b=jWZkTEvodPuiB96Qs6mXattako2shiUcmHOK5JCPnAa/+dANk3kCQEaU2j85maInOS
-         7wccapwJAXJMVZSv5+22WnUBpFJo9r7NT/6S0QVmHHcnH5qh8r4urIOxZVxgFcsi0Gb/
-         QG42jxpY2LIJZvOqzPN9R1RWaMUTe81vHnQNMi9Q5WKx/Zbaomv4SJJAsmekVgErWqtf
-         89s8Cpd8ZdPXDgHVg7CM8bMLUKHuOm0mcoOg34P2RLVV1QQdIHx7UkLLvk1SGeQfCGoF
-         9VmuXQD2zv3Xea/wA2mZUbXLA11NotIMmfx/FonKioSuGfAmLTCIcYFQW6OmwGnj17+K
-         f18g==
+        bh=Mxap1WEwdByjvPC0mpGlD9RkZLO1nqQEbYm1KO0qpGw=;
+        b=Z9AaZe+YN+9Y/DvkBQCGoi5C4fe9XwkJsBqz0DUpj73OvfDgpM3DE7NK/2uva3ubaZ
+         f2ZA/2Y6ysdvsGSYtsX/pGbzO2O7FqeY//RQLhQpTdNLVOlhO6fqj59Fcm8LXaXfFk0Y
+         g+MVKfQ+no7vwNWgYSkmWaZij9tKQ1fDwhDSNkITHwlkXrmNoow4akG8Q3kb7ATYotH5
+         0zEsilKFjPM+joe5D9qFDSJTTUfQjTfYnvi5ZtUXHidu/KT8stZ2ckPNzez1qhmM+LWw
+         EYhGP6mq+1CzbAhWtpbV9DbiDpsV8QCgYDRKslfW4flDCQW3XYGe+qAl18djucj/hFGs
+         IS4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lS6mPjcp3pJcGZKSKOrBRDQ5D/bjAdtV0DGXyq7R5yA=;
-        b=uuk4bDAHKVmzWc7MfqjwvS3MjW3pRVu93k03cwNWLnK7S5rdUV1MhXnkHfFtZNLq7X
-         WlKk2i94Ndw/wBNhehe4iPca/4csHRzB9zhOR+9bslfvW4Tj4gOyB+1ASG9OHUHPOYMv
-         jgPMBceG7bIc2GXJXGLn1ySblZUplcp7LECifaFUFCsGSczQPk4DcjgdL0TZAloeWj6b
-         cmWHgM8QVao7KKaVyuDLg7MmgfF9RIyw+WPotk6FUi80JItBO7i4mByoAZKujLPwSGK1
-         9QPj35t7agSb+srJN6VTTKapaDy9ovnuKZfWXkS2oC8f4mqlT92WFT0CRmmYirVDudyO
-         C0eg==
-X-Gm-Message-State: AOAM532dG6LZd4L88eBKO8gpI7Zjo4m119GRgt0fpklgK9jW67j787KA
-        3/N69XSTkhHDntJA9GKa/dESTQ==
-X-Google-Smtp-Source: ABdhPJyxUqp7A5lKp0lBRLaWN+7I+dgn6zxQIsw6ockQUNU2QQ+BWz60+i5V4pEHknJmf3zXNnmz2Q==
-X-Received: by 2002:adf:f905:0:b0:20f:ca3e:387f with SMTP id b5-20020adff905000000b0020fca3e387fmr42257311wrr.362.1654005069500;
-        Tue, 31 May 2022 06:51:09 -0700 (PDT)
+        bh=Mxap1WEwdByjvPC0mpGlD9RkZLO1nqQEbYm1KO0qpGw=;
+        b=Xw+OutW6lpmJjnSKPxZu/CW0rrRGQfOfe6PzZGeGMX+7Bqz3JlTz+L0YVOmgWkUhA1
+         gBI05TCTPc4mEy+SQ+7wQP1vjlVpittim6X/Qms6xQx0//NCvhotatEiYT47ypwYHZ1Z
+         2HHiZUKLF7JWrMSNwdPi61kVFpU+hNzqy1x/pEdkGvPvGrZUm1zlmMhScRf8kq4cXFGv
+         ajn/50BgoovJE5L3wjygUQYO8LpI1VSLmY8Vz+QzFJT3BiiJJHt0ad65QbagFINjbflv
+         d3ClY/zRLR674XbDopuGfCPC8t9BUu95ZFSfxJC+QbBxMK+MfS9tsjvVVscGdMJYApos
+         +iGA==
+X-Gm-Message-State: AOAM533n9DeV9x0opMBZ5zLtfuLZPa51DWCHT4KAtiLjQ2DEvo5/W6Pb
+        GOOXUR/Yjmm3J06kNw/EqdeoWA==
+X-Google-Smtp-Source: ABdhPJyXl0DdP2e9n/QxwXICD+w+MV38jIzwdGj4vIoq26OkXHJf3AfQ2K5zFBto6WtGSVWccVFl0A==
+X-Received: by 2002:a5d:5145:0:b0:210:55c:4790 with SMTP id u5-20020a5d5145000000b00210055c4790mr23043579wrt.714.1654005071847;
+        Tue, 31 May 2022 06:51:11 -0700 (PDT)
 Received: from localhost.localdomain ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id l11-20020a05600c1d0b00b00394351e35edsm2404806wms.26.2022.05.31.06.51.07
+        by smtp.gmail.com with ESMTPSA id l11-20020a05600c1d0b00b00394351e35edsm2404806wms.26.2022.05.31.06.51.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 06:51:08 -0700 (PDT)
+        Tue, 31 May 2022 06:51:11 -0700 (PDT)
 From:   Fabien Parent <fparent@baylibre.com>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         vkoul@kernel.org, qii.wang@mediatek.com, matthias.bgg@gmail.com,
@@ -62,9 +62,9 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
         Fabien Parent <fparent@baylibre.com>
-Subject: [PATCH 16/17] arm64: dts: mediatek: add mt8365 device-tree
-Date:   Tue, 31 May 2022 15:50:25 +0200
-Message-Id: <20220531135026.238475-17-fparent@baylibre.com>
+Subject: [PATCH 17/17] arm64: dts: mediatek: add mt8365-evk board device-tree
+Date:   Tue, 31 May 2022 15:50:26 +0200
+Message-Id: <20220531135026.238475-18-fparent@baylibre.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220531135026.238475-1-fparent@baylibre.com>
 References: <20220531135026.238475-1-fparent@baylibre.com>
@@ -80,207 +80,116 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add device-tree for the MT8365 SoC. More information can be found
-about that SoC at the following address:
-https://www.mediatek.com/products/aiot/i350-mt8365
+Add device-tree for the MT8365-EVK board. The MT8365 EVK board
+has the following IOs:
+* DPI <-> HDMI bridge and HDMI connector.
+* 2 audio jack
+* 1 USB Type-A Host port
+* 2 UART to USB port
+* 1 battery connector
+* 1 eMMC
+* 1 SD card
+* 2 camera connectors
+* 1 M.2 slot for connectivity
+* 1 DSI connector + touchscreen connector
+* RPI compatible header
+* 1 Ethernet port
 
 Signed-off-by: Fabien Parent <fparent@baylibre.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8365.dtsi | 1047 ++++++++++++++++++++++
- 1 file changed, 1047 insertions(+)
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8365.dtsi
+ arch/arm64/boot/dts/mediatek/Makefile       |   1 +
+ arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 578 ++++++++++++++++++++
+ 2 files changed, 579 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
+index c7d4636a2cb7..02a9f784358e 100644
+--- a/arch/arm64/boot/dts/mediatek/Makefile
++++ b/arch/arm64/boot/dts/mediatek/Makefile
+@@ -40,4 +40,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-pumpkin.dtb
+ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-evb.dtb
+ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-demo.dtb
+ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
++dtb-$(CONFIG_ARCH_MEDIATEK) += mt8365-evk.dtb
+ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
+diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
 new file mode 100644
-index 000000000000..e22b1d259418
+index 000000000000..8f472caa06a3
 --- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-@@ -0,0 +1,1047 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+@@ -0,0 +1,578 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Copyright (c) 2018 MediaTek Inc.
++ * Copyright (c) 2021 BayLibre, SAS.
++ * Author: Fabien Parent <fparent@baylibre.com>
 + */
 +
-+#include <dt-bindings/clock/mediatek,mt8365-clk.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/phy/phy.h>
-+#include <dt-bindings/power/mt8365-power.h>
-+#include <dt-bindings/memory/mt8365-larb-port.h>
-+#include <dt-bindings/thermal/thermal.h>
++/dts-v1/;
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/pinctrl/mt8365-pinfunc.h>
++#include "mt8365.dtsi"
++#include "mt6357.dtsi"
 +
 +/ {
-+	compatible = "mediatek,mt8365";
-+	interrupt-parent = <&sysirq>;
-+	#address-cells = <2>;
-+	#size-cells = <2>;
++	model = "MediaTek MT8365 Open Platform EVK";
++	compatible = "mediatek,mt8365-evk", "mediatek,mt8365";
 +
 +	aliases {
-+		ovl0 = &ovl0;
-+		rdma0 = &rdma0;
-+		rdma1 = &rdma1;
-+		color0 = &color0;
-+		ccorr0 = &ccorr0;
-+		aal0 = &aal0;
-+		gamma0 = &gamma0;
-+		dither0 = &dither0;
-+		dsi0 = &dsi0;
-+		dpi0 = &dpi0;
++		serial0 = &uart0;
 +	};
 +
-+	cpus: cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
++	chosen {
++		stdout-path = "serial0:921600n8";
++	};
 +
-+		cpu-map {
-+			cluster0: cluster0 {
-+				core0 {
-+					cpu = <&cpu0>;
-+				};
-+				core1 {
-+					cpu = <&cpu1>;
-+				};
-+				core2 {
-+					cpu = <&cpu2>;
-+				};
-+				core3 {
-+					cpu = <&cpu3>;
-+				};
++	connector {
++		compatible = "hdmi-connector";
++		label = "hdmi";
++		type = "a";
++
++		port {
++			hdmi_connector_in: endpoint {
++				remote-endpoint = <&hdmi_connector_out>;
 +			};
 +		};
++	};
 +
-+		cpu0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a53";
-+			reg = <0x0>;
-+			clock-frequency = <1600000000>;
-+			clocks = <&mcucfg CLK_MCU_BUS_SEL>,
-+				 <&apmixedsys CLK_APMIXED_MAINPLL>;
-+			clock-names = "cpu", "intermediate";
-+			operating-points-v2 = <&cluster0_opp>;
-+			#cooling-cells = <2>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu1: cpu@1 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a53";
-+			reg = <0x1>;
-+			clock-frequency = <1600000000>;
-+			clocks = <&mcucfg CLK_MCU_BUS_SEL>,
-+				 <&apmixedsys CLK_APMIXED_MAINPLL>;
-+			clock-names = "cpu", "intermediate", "armpll";
-+			operating-points-v2 = <&cluster0_opp>;
-+			#cooling-cells = <2>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu2: cpu@2 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a53";
-+			reg = <0x2>;
-+			clock-frequency = <1600000000>;
-+			clocks = <&mcucfg CLK_MCU_BUS_SEL>,
-+				 <&apmixedsys CLK_APMIXED_MAINPLL>;
-+			clock-names = "cpu", "intermediate", "armpll";
-+			operating-points-v2 = <&cluster0_opp>;
-+			#cooling-cells = <2>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu3: cpu@3 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a53";
-+			reg = <0x3>;
-+			clock-frequency = <1600000000>;
-+			clocks = <&mcucfg CLK_MCU_BUS_SEL>,
-+				 <&apmixedsys CLK_APMIXED_MAINPLL>;
-+			clock-names = "cpu", "intermediate", "armpll";
-+			operating-points-v2 = <&cluster0_opp>;
-+			#cooling-cells = <2>;
-+			enable-method = "psci";
++	firmware {
++		optee {
++			compatible = "linaro,optee-tz";
++			method = "smc";
 +		};
 +	};
 +
-+	cluster0_opp: opp-table-0 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+		opp-850000000 {
-+			opp-hz = /bits/ 64 <850000000>;
-+			opp-microvolt = <650000>;
-+		};
-+		opp-918000000 {
-+			opp-hz = /bits/ 64 <918000000>;
-+			opp-microvolt = <668750>;
-+		};
-+		opp-987000000 {
-+			opp-hz = /bits/ 64 <987000000>;
-+			opp-microvolt = <687500>;
-+		};
-+		opp-1056000000 {
-+			opp-hz = /bits/ 64 <1056000000>;
-+			opp-microvolt = <706250>;
-+		};
-+		opp-1125000000 {
-+			opp-hz = /bits/ 64 <1125000000>;
-+			opp-microvolt = <725000>;
-+		};
-+		opp-1216000000 {
-+			opp-hz = /bits/ 64 <1216000000>;
-+			opp-microvolt = <750000>;
-+		};
-+		opp-1308000000 {
-+			opp-hz = /bits/ 64 <1308000000>;
-+			opp-microvolt = <775000>;
-+		};
-+		opp-1400000000 {
-+			opp-hz = /bits/ 64 <1400000000>;
-+			opp-microvolt = <800000>;
-+		};
-+		opp-1466000000 {
-+			opp-hz = /bits/ 64 <1466000000>;
-+			opp-microvolt = <825000>;
-+		};
-+		opp-1533000000 {
-+			opp-hz = /bits/ 64 <1533000000>;
-+			opp-microvolt = <850000>;
-+		};
-+		opp-1633000000 {
-+			opp-hz = /bits/ 64 <1633000000>;
-+			opp-microvolt = <887500>;
-+		};
-+		opp-1700000000 {
-+			opp-hz = /bits/ 64 <1700000000>;
-+			opp-microvolt = <912500>;
-+		};
-+		opp-1767000000 {
-+			opp-hz = /bits/ 64 <1767000000>;
-+			opp-microvolt = <937500>;
-+		};
-+		opp-1834000000 {
-+			opp-hz = /bits/ 64 <1834000000>;
-+			opp-microvolt = <962500>;
-+		};
-+		opp-1917000000 {
-+			opp-hz = /bits/ 64 <1917000000>;
-+			opp-microvolt = <993750>;
-+		};
-+		opp-2001000000 {
-+			opp-hz = /bits/ 64 <2001000000>;
-+			opp-microvolt = <1025000>;
++	gpio-keys {
++		compatible = "gpio-keys";
++		input-name = "gpio-keys";
++		pinctrl-names = "default";
++		pinctrl-0 = <&gpio_keys>;
++
++		volume-up {
++			gpios = <&pio 24 GPIO_ACTIVE_LOW>;
++			label = "volume_up";
++			linux,code = <KEY_VOLUMEUP>;
++			wakeup-source;
++			debounce-interval = <15>;
 +		};
 +	};
 +
-+	clk26m: oscillator {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <26000000>;
-+		clock-output-names = "clk26m";
++	memory@40000000 {
++		device_type = "memory";
++		reg = <0 0x40000000 0 0xc0000000>;
 +	};
 +
-+	psci {
-+		compatible = "arm,psci-1.0";
-+		method = "smc";
++	usb_otg_vbus: regulator-2 {
++		compatible = "regulator-fixed";
++		regulator-name = "otg_vbus";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		gpio = <&pio 16 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
 +	};
 +
 +	reserved-memory {
@@ -288,860 +197,504 @@ index 000000000000..e22b1d259418
 +		#size-cells = <2>;
 +		ranges;
 +
-+		/* 128 KiB reserved for ARM Trusted Firmware (BL31) */
-+		bl31_secmon_reserved: secmon@43000000 {
++		/* 12 MiB reserved for OP-TEE (BL32)
++		 * +-----------------------+ 0x43e0_0000
++		 * |      SHMEM 2MiB       |
++		 * +-----------------------+ 0x43c0_0000
++		 * |        | TA_RAM  8MiB |
++		 * + TZDRAM +--------------+ 0x4340_0000
++		 * |        | TEE_RAM 2MiB |
++		 * +-----------------------+ 0x4320_0000
++		 */
++		optee_reserved: optee@43200000 {
 +			no-map;
-+			reg = <0 0x43000000 0 0x20000>;
++			reg = <0 0x43200000 0 0x00c00000>;
++		};
++	};
++};
++
++&cpu0 {
++	proc-supply = <&mt6357_vproc_reg>;
++	sram-supply = <&mt6357_vsram_proc_reg>;
++};
++
++&cpu1 {
++	proc-supply = <&mt6357_vproc_reg>;
++	sram-supply = <&mt6357_vsram_proc_reg>;
++};
++
++&cpu2 {
++	proc-supply = <&mt6357_vproc_reg>;
++	sram-supply = <&mt6357_vsram_proc_reg>;
++};
++
++&cpu3 {
++	proc-supply = <&mt6357_vproc_reg>;
++	sram-supply = <&mt6357_vsram_proc_reg>;
++};
++
++&dpi0 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&dpi_func_pins>;
++	pinctrl-1 = <&dpi_idle_pins>;
++	assigned-clocks = <&topckgen CLK_TOP_DPI0_SEL>;
++	assigned-clock-parents = <&topckgen CLK_TOP_LVDSPLL_D4>;
++
++	/*
++	 * Ethernet and HDMI are sharing pins.
++	 * Only one can be enabled at a time and require the physical switch
++	 * SW2101 to be set on DPI position
++	 */
++	status = "okay";
++
++	port {
++		dpi_out: endpoint {
++			remote-endpoint = <&it66121_in>;
++		};
++	};
++};
++
++&ethernet {
++	pinctrl-names = "default";
++	pinctrl-0 = <&ethernet_pins>;
++	phy-handle = <&eth_phy>;
++	phy-mode = "rmii";
++	mac-address = [00 00 00 00 00 00];
++
++	/*
++	 * Ethernet and HDMI are sharing pins.
++	 * Only one can be enabled at a time and require the physical switch
++	 * SW2101 to be set on LAN position
++	 */
++	status = "disabled";
++
++	mdio {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		eth_phy: ethernet-phy@0 {
++			reg = <0>;
++		};
++	};
++};
++
++&i2c1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c1_pins>;
++	clock-frequency = <100000>;
++	status = "okay";
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	it66121hdmitx: hdmi@4c {
++		compatible = "ite,it66121";
++		pinctrl-names = "default";
++		pinctrl-0 = <&ite_pins>;
++		vcn33-supply = <&mt6357_vibr_reg>;
++		vcn18-supply = <&mt6357_vsim2_reg>;
++		vrf12-supply = <&mt6357_vrf12_reg>;
++		reset-gpios = <&pio 69 GPIO_ACTIVE_LOW>;
++		interrupts-extended = <&pio 68 IRQ_TYPE_LEVEL_LOW>;
++		#sound-dai-cells = <0>;
++		reg = <0x4c>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++
++				it66121_in: endpoint {
++					bus-width = <12>;
++					remote-endpoint = <&dpi_out>;
++				};
++			};
++
++			port@1 {
++				reg = <1>;
++
++				hdmi_connector_out: endpoint {
++					remote-endpoint = <&hdmi_connector_in>;
++				};
++			};
++		};
++	};
++};
++
++&mmc0 {
++	status = "okay";
++	pinctrl-names = "default", "state_uhs";
++	pinctrl-0 = <&mmc0_pins_default>;
++	pinctrl-1 = <&mmc0_pins_uhs>;
++	bus-width = <8>;
++	max-frequency = <200000000>;
++	cap-mmc-highspeed;
++	mmc-hs200-1_8v;
++	mmc-hs400-1_8v;
++	cap-mmc-hw-reset;
++	no-sdio;
++	no-sd;
++	hs400-ds-delay = <0x12012>;
++	vmmc-supply = <&mt6357_vemc_reg>;
++	vqmmc-supply = <&mt6357_vio18_reg>;
++	assigned-clocks = <&topckgen CLK_TOP_MSDC50_0_SEL>;
++	assigned-clock-parents = <&topckgen CLK_TOP_MSDCPLL>;
++	non-removable;
++};
++
++&mmc1 {
++	pinctrl-names = "default", "state_uhs";
++	pinctrl-0 = <&mmc1_pins_default>;
++	pinctrl-1 = <&mmc1_pins_uhs>;
++	cd-gpios = <&pio 76 GPIO_ACTIVE_LOW>;
++	bus-width = <4>;
++	max-frequency = <200000000>;
++	cap-sd-highspeed;
++	sd-uhs-sdr50;
++	sd-uhs-sdr104;
++	vmmc-supply = <&mt6357_vmch_reg>;
++	vqmmc-supply = <&mt6357_vio18_reg>;
++	status = "okay";
++};
++
++&mt6357_pmic {
++	interrupt-parent = <&pio>;
++	interrupts = <145 IRQ_TYPE_LEVEL_HIGH>;
++	interrupt-controller;
++	#interrupt-cells = <2>;
++};
++
++&mt6357_vibr_reg {
++	regulator-always-on;
++};
++
++/* Needed by MSDC1 */
++&mt6357_vmc_reg {
++	regulator-always-on;
++};
++
++&mt6357_vrf12_reg {
++	regulator-always-on;
++};
++
++&mt6357_vsim2_reg {
++	regulator-always-on;
++};
++
++&mt6357keys {
++	power-key {
++		label = "power";
++		linux,keycodes = <KEY_POWER>;
++		wakeup-source;
++	};
++
++	volume-down {
++		label = "volume_down";
++		linux,keycodes = <KEY_VOLUMEDOWN>;
++		wakeup-source;
++	};
++};
++
++&pio {
++	dpi_func_pins: dpi-func-pins {
++		pins {
++			pinmux = <MT8365_PIN_0_GPIO0__FUNC_DPI_D0>,
++				 <MT8365_PIN_1_GPIO1__FUNC_DPI_D1>,
++				 <MT8365_PIN_2_GPIO2__FUNC_DPI_D2>,
++				 <MT8365_PIN_3_GPIO3__FUNC_DPI_D3>,
++				 <MT8365_PIN_4_GPIO4__FUNC_DPI_D4>,
++				 <MT8365_PIN_5_GPIO5__FUNC_DPI_D5>,
++				 <MT8365_PIN_6_GPIO6__FUNC_DPI_D6>,
++				 <MT8365_PIN_7_GPIO7__FUNC_DPI_D7>,
++				 <MT8365_PIN_8_GPIO8__FUNC_DPI_D8>,
++				 <MT8365_PIN_9_GPIO9__FUNC_DPI_D9>,
++				 <MT8365_PIN_10_GPIO10__FUNC_DPI_D10>,
++				 <MT8365_PIN_11_GPIO11__FUNC_DPI_D11>,
++				 <MT8365_PIN_12_GPIO12__FUNC_DPI_DE>,
++				 <MT8365_PIN_13_GPIO13__FUNC_DPI_VSYNC>,
++				 <MT8365_PIN_14_GPIO14__FUNC_DPI_CK>,
++				 <MT8365_PIN_15_GPIO15__FUNC_DPI_HSYNC>;
++			drive-strength = <MTK_DRIVE_4mA>;
 +		};
 +	};
 +
-+	soc {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		compatible = "simple-bus";
-+		ranges;
-+
-+		gic: interrupt-controller@c000000 {
-+			compatible = "arm,gic-v3";
-+			#interrupt-cells = <4>;
-+			interrupt-parent = <&gic>;
-+			interrupt-controller;
-+			reg = <0 0x0c000000 0 0x80000>,
-+			      <0 0x0c080000 0 0x80000>;
-+
-+			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH 0>;
-+		};
-+
-+		topckgen: syscon@10000000 {
-+			compatible = "mediatek,mt8365-topckgen", "syscon";
-+			reg = <0 0x10000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		infracfg: syscon@10001000 {
-+			compatible = "mediatek,mt8365-infracfg", "syscon";
-+			reg = <0 0x10001000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		pericfg: syscon@10003000 {
-+			compatible = "mediatek,mt8365-pericfg", "syscon";
-+			reg = <0 0x10003000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		syscfg_pctl: syscfg-pctl@10005000 {
-+			compatible = "syscon";
-+			reg = <0 0x10005000 0 0x1000>;
-+		};
-+
-+		scpsys: syscon@10006000 {
-+			compatible = "syscon", "simple-mfd";
-+			reg = <0 0x10006000 0 0x1000>;
-+			#power-domain-cells = <1>;
-+
-+			/* System Power Manager */
-+			spm: power-controller {
-+				compatible = "mediatek,mt8365-power-controller";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				#power-domain-cells = <1>;
-+
-+				/* power domains of the SoC */
-+				power-domain@MT8365_POWER_DOMAIN_MM {
-+					reg = <MT8365_POWER_DOMAIN_MM>;
-+					clocks = <&topckgen CLK_TOP_MM_SEL>,
-+						 <&mmsys CLK_MM_MM_SMI_COMMON>,
-+						 <&mmsys CLK_MM_MM_SMI_COMM0>,
-+						 <&mmsys CLK_MM_MM_SMI_COMM1>,
-+						 <&mmsys CLK_MM_MM_SMI_LARB0>;
-+					clock-names = "mm", "mm-0", "mm-1",
-+						      "mm-2", "mm-3";
-+					#power-domain-cells = <0>;
-+					mediatek,infracfg = <&infracfg>;
-+					mediatek,infracfg_nao = <&infracfg_nao>;
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					power-domain@MT8365_POWER_DOMAIN_CAM {
-+						reg = <MT8365_POWER_DOMAIN_CAM>;
-+						clocks = <&camsys CLK_CAM_LARB2>,
-+							 <&camsys CLK_CAM_SENIF>,
-+							 <&camsys CLK_CAMSV0>,
-+							 <&camsys CLK_CAMSV1>,
-+							 <&camsys CLK_CAM_FDVT>,
-+							 <&camsys CLK_CAM_WPE>;
-+						clock-names = "cam-0", "cam-1",
-+							      "cam-2", "cam-3",
-+							      "cam-4", "cam-5";
-+						#power-domain-cells = <0>;
-+						mediatek,infracfg = <&infracfg>;
-+						mediatek,smi = <&smi_common>;
-+					};
-+
-+					power-domain@MT8365_POWER_DOMAIN_VDEC {
-+						reg = <MT8365_POWER_DOMAIN_VDEC>;
-+						#power-domain-cells = <0>;
-+						mediatek,smi = <&smi_common>;
-+					};
-+
-+					power-domain@MT8365_POWER_DOMAIN_VENC {
-+						reg = <MT8365_POWER_DOMAIN_VENC>;
-+						#power-domain-cells = <0>;
-+						mediatek,smi = <&smi_common>;
-+					};
-+
-+					power-domain@MT8365_POWER_DOMAIN_APU {
-+						reg = <MT8365_POWER_DOMAIN_APU>;
-+						clocks = <&infracfg CLK_IFR_APU_AXI>,
-+							 <&apu CLK_APU_IPU_CK>,
-+							 <&apu CLK_APU_AXI>,
-+							 <&apu CLK_APU_JTAG>,
-+							 <&apu CLK_APU_IF_CK>,
-+							 <&apu CLK_APU_EDMA>,
-+							 <&apu CLK_APU_AHB>;
-+						clock-names = "apu", "apu-0",
-+							      "apu-1", "apu-2",
-+							      "apu-3", "apu-4",
-+							      "apu-5";
-+						#power-domain-cells = <0>;
-+						mediatek,infracfg = <&infracfg>;
-+						mediatek,smi = <&smi_common>;
-+					};
-+				};
-+
-+				power-domain@MT8365_POWER_DOMAIN_CONN {
-+					reg = <MT8365_POWER_DOMAIN_CONN>;
-+					clocks = <&topckgen CLK_TOP_CONN_32K>,
-+						 <&topckgen CLK_TOP_CONN_26M>;
-+					clock-names = "conn", "conn1";
-+					#power-domain-cells = <0>;
-+					mediatek,infracfg = <&infracfg>;
-+				};
-+
-+				power-domain@MT8365_POWER_DOMAIN_MFG {
-+					reg = <MT8365_POWER_DOMAIN_MFG>;
-+					clocks = <&topckgen CLK_TOP_MFG_SEL>;
-+					clock-names = "mfg";
-+					#power-domain-cells = <0>;
-+					mediatek,infracfg = <&infracfg>;
-+				};
-+
-+				power-domain@MT8365_POWER_DOMAIN_AUDIO {
-+					reg = <MT8365_POWER_DOMAIN_AUDIO>;
-+					clocks = <&topckgen CLK_TOP_AUD_INTBUS_SEL>,
-+						 <&infracfg CLK_IFR_AUDIO>,
-+						 <&infracfg CLK_IFR_AUD_26M_BK>;
-+					clock-names = "audio", "audio1", "audio2";
-+					#power-domain-cells = <0>;
-+					mediatek,infracfg = <&infracfg>;
-+				};
-+
-+				power-domain@MT8365_POWER_DOMAIN_DSP {
-+					reg = <MT8365_POWER_DOMAIN_DSP>;
-+					clocks = <&topckgen CLK_TOP_DSP_SEL>,
-+						 <&topckgen CLK_TOP_DSP_26M>;
-+					clock-names = "dsp", "dsp1";
-+					#power-domain-cells = <0>;
-+					mediatek,infracfg = <&infracfg>;
-+				};
-+			};
-+		};
-+
-+		watchdog: watchdog@10007000 {
-+			compatible = "mediatek,mt8365-wdt",
-+				     "mediatek,mt6589-wdt";
-+			reg = <0 0x10007000 0 0x100>;
-+			#reset-cells = <1>;
-+		};
-+
-+		gpt: apxgpt@10008000 {
-+			compatible = "mediatek,mt8365-timer",
-+				     "mediatek,mt6577-timer";
-+			reg = <0 0x10008000 0 0x1000>;
-+			interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&topckgen CLK_TOP_SYS_26M_D2>;
-+			clock-names = "clk13m";
-+		};
-+
-+		pio: pinctrl@1000b000 {
-+			compatible = "mediatek,mt8365-pinctrl";
-+			reg = <0 0x1000b000 0 0x1000>;
-+			mediatek,pctl-regmap = <&syscfg_pctl>;
-+			pins-are-numbered;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+			interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
-+		};
-+
-+		apmixedsys: syscon@1000c000 {
-+			compatible = "mediatek,mt8365-apmixedsys", "syscon";
-+			reg = <0 0x1000c000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		pwrap: pwrap@1000d000 {
-+			compatible = "mediatek,mt8365-pwrap";
-+			reg = <0 0x1000d000 0 0x1000>;
-+			reg-names = "pwrap";
-+			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&infracfg CLK_IFR_PWRAP_SPI>,
-+				 <&infracfg CLK_IFR_PMIC_AP>,
-+				 <&infracfg CLK_IFR_PWRAP_SYS>,
-+				 <&infracfg CLK_IFR_PWRAP_TMR>;
-+			clock-names = "spi", "wrap", "sys", "tmr";
-+		};
-+
-+		keypad: kp@10010000 {
-+			compatible = "mediatek,mt6779-keypad";
-+			reg = <0 0x10010000 0 0x1000>;
-+			wakeup-source;
-+			interrupts = <GIC_SPI 124 IRQ_TYPE_EDGE_FALLING>;
-+			clocks = <&clk26m>;
-+			clock-names = "kpd";
-+			status = "disabled";
-+		};
-+
-+		mcucfg: syscon@10200000 {
-+			compatible = "mediatek,mt8365-mcucfg", "syscon";
-+			reg = <0 0x10200000 0 0x2000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		sysirq: intpol-controller@10200a80 {
-+			compatible = "mediatek,mt8365-sysirq",
-+				     "mediatek,mt6577-sysirq";
-+			interrupt-controller;
-+			#interrupt-cells = <3>;
-+			interrupt-parent = <&gic>;
-+			reg = <0 0x10200a80 0 0x20>;
-+		};
-+
-+		iommu: iommu@10205000 {
-+			compatible = "mediatek,mt8365-m4u";
-+			reg = <0 0x10205000 0 0x1000>;
-+			interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_LOW>;
-+			mediatek,larbs = <&larb0>, <&larb1>, <&larb2>, <&larb3>;
-+			#iommu-cells = <1>;
-+		};
-+
-+		infracfg_nao: infracfg-nao@1020e000 {
-+			compatible = "syscon";
-+			reg = <0 0x1020e000 0 0x1000>;
-+		};
-+
-+		rng: rng@1020f000 {
-+			compatible = "mediatek,mt8365-rng",
-+				     "mediatek,mt7623-rng";
-+			reg = <0 0x1020f000 0 0x100>;
-+			clocks = <&infracfg CLK_IFR_TRNG>;
-+			clock-names = "rng";
-+		};
-+
-+		apdma: dma-controller@11000280 {
-+			compatible = "mediatek,mt8365-uart-dma",
-+				     "mediatek,mt6577-uart-dma";
-+			reg = <0 0x11000280 0 0x80>,
-+			      <0 0x11000300 0 0x80>,
-+			      <0 0x11000380 0 0x80>,
-+			      <0 0x11000400 0 0x80>,
-+			      <0 0x11000580 0 0x80>,
-+			      <0 0x11000600 0 0x80>;
-+			interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_LOW>,
-+				     <GIC_SPI 46 IRQ_TYPE_LEVEL_LOW>,
-+				     <GIC_SPI 47 IRQ_TYPE_LEVEL_LOW>,
-+				     <GIC_SPI 48 IRQ_TYPE_LEVEL_LOW>,
-+				     <GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>,
-+				     <GIC_SPI 52 IRQ_TYPE_LEVEL_LOW>;
-+			dma-requests = <6>;
-+			clocks = <&infracfg CLK_IFR_AP_DMA>;
-+			clock-names = "apdma";
-+			#dma-cells = <1>;
-+		};
-+
-+		auxadc: adc@11001000 {
-+			compatible = "mediatek,mt8365-auxadc",
-+				     "mediatek,mt8173-auxadc";
-+			reg = <0 0x11001000 0 0x1000>;
-+			clocks = <&infracfg CLK_IFR_AUXADC>;
-+			clock-names = "main";
-+			#io-channel-cells = <1>;
-+		};
-+
-+		uart0: serial@11002000 {
-+			compatible = "mediatek,mt8365-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11002000 0 0x1000>;
-+			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&clk26m>, <&infracfg CLK_IFR_UART0>;
-+			clock-names = "baud", "bus";
-+			dmas = <&apdma 0
-+				&apdma 1>;
-+			dma-names = "tx", "rx";
-+			status = "disabled";
-+		};
-+
-+		uart1: serial@11003000 {
-+			compatible = "mediatek,mt8365-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11003000 0 0x1000>;
-+			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&clk26m>, <&infracfg CLK_IFR_UART1>;
-+			clock-names = "baud", "bus";
-+			dmas = <&apdma 2
-+				&apdma 3>;
-+			dma-names = "tx", "rx";
-+			status = "disabled";
-+		};
-+
-+		uart2: serial@11004000 {
-+			compatible = "mediatek,mt8365-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11004000 0 0x1000>;
-+			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&clk26m>, <&infracfg CLK_IFR_UART2>;
-+			clock-names = "baud", "bus";
-+			dmas = <&apdma 4
-+				&apdma 5>;
-+			dma-names = "tx", "rx";
-+			status = "disabled";
-+		};
-+
-+		pwm: pwm@11006000 {
-+			compatible = "mediatek,mt8365-pwm";
-+			reg = <0 0x11006000 0 0x1000>;
-+			#pwm-cells = <2>;
-+			interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&infracfg CLK_IFR_PWM_HCLK>,
-+				 <&infracfg CLK_IFR_PWM>,
-+				 <&infracfg CLK_IFR_PWM1>,
-+				 <&infracfg CLK_IFR_PWM2>,
-+				 <&infracfg CLK_IFR_PWM3>;
-+			clock-names = "top", "main", "pwm1", "pwm2", "pwm3";
-+		};
-+
-+		i2c0: i2c@11007000 {
-+			compatible = "mediatek,mt8365-i2c",
-+				     "mediatek,mt8168-i2c";
-+			reg = <0 0x11007000 0 0xa0>,
-+			      <0 0x11000080 0 0x80>;
-+			interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_LOW>;
-+			clock-div = <1>;
-+			clocks = <&infracfg CLK_IFR_I2C0_AXI>,
-+				 <&infracfg CLK_IFR_AP_DMA>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c1: i2c@11008000 {
-+			compatible = "mediatek,mt8365-i2c",
-+				     "mediatek,mt8168-i2c";
-+			reg = <0 0x11008000 0 0xa0>,
-+			      <0 0x11000100 0 0x80>;
-+			interrupts = <GIC_SPI 29 IRQ_TYPE_LEVEL_LOW>;
-+			clock-div = <1>;
-+			clocks = <&infracfg CLK_IFR_I2C1_AXI>,
-+				 <&infracfg CLK_IFR_AP_DMA>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c2: i2c@11009000 {
-+			compatible = "mediatek,mt8365-i2c",
-+				     "mediatek,mt8168-i2c";
-+			reg = <0 0x11009000 0 0xa0>,
-+			      <0 0x11000180 0 0x80>;
-+			interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_LOW>;
-+			clock-div = <1>;
-+			clocks = <&infracfg CLK_IFR_I2C2_AXI>,
-+				 <&infracfg CLK_IFR_AP_DMA>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		spi: spi@1100a000 {
-+			compatible = "mediatek,mt8365-spi",
-+				     "mediatek,mt7622-spi";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0 0x1100a000 0 0x100>;
-+			interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&topckgen CLK_TOP_UNIVPLL2_D4>,
-+				 <&topckgen CLK_TOP_SPI_SEL>,
-+				 <&infracfg CLK_IFR_SPI0>;
-+			clock-names = "parent-clk", "sel-clk", "spi-clk";
-+			status = "disabled";
-+		};
-+
-+		thermal: thermal@1100b000 {
-+			compatible = "mediatek,mt8365-thermal";
-+			reg = <0 0x1100b000 0 0x1000>;
-+			interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&infracfg CLK_IFR_THERM>,
-+				 <&infracfg CLK_IFR_AUXADC>;
-+			clock-names = "therm", "auxadc";
-+			mediatek,auxadc = <&auxadc>;
-+			mediatek,apmixedsys = <&apmixedsys>;
-+			nvmem-cells = <&thermal_calibration>;
-+			nvmem-cell-names = "calibration-data";
-+			#thermal-sensor-cells = <1>;
-+		};
-+
-+		disp_pwm: disp-pwm@1100e000 {
-+			compatible = "mediatek,mt8365-disp-pwm",
-+				     "mediatek,mt8183-disp-pwm";
-+			reg = <0 0x1100e000 0 0x1000>;
-+			#pwm-cells = <2>;
-+			clocks = <&topckgen CLK_TOP_DISP_PWM_SEL>,
-+				 <&infracfg CLK_IFR_DISP_PWM>;
-+			clock-names = "main", "mm";
-+			power-domains = <&spm MT8365_POWER_DOMAIN_MM>;
-+			status = "disabled";
-+		};
-+
-+		i2c3: i2c@1100f000 {
-+			compatible = "mediatek,mt8365-i2c",
-+				     "mediatek,mt8168-i2c";
-+			reg = <0 0x1100f000 0 0xa0>,
-+			      <0 0x11000200 0 0x80>;
-+			interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_LOW>;
-+			clock-div = <1>;
-+			clocks = <&infracfg CLK_IFR_I2C3_AXI>,
-+				 <&infracfg CLK_IFR_AP_DMA>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		ssusb: usb@11201000 {
-+			compatible = "mediatek,mt8365-mtu3", "mediatek,mtu3";
-+			reg = <0 0x11201000 0 0x2e00>,
-+			      <0 0x11203e00 0 0x0100>;
-+			reg-names = "mac", "ippc";
-+			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_LOW>;
-+			phys = <&u2port0 PHY_TYPE_USB2>,
-+			       <&u2port1 PHY_TYPE_USB2>;
-+			clocks = <&topckgen CLK_TOP_SSUSB_TOP_CK_EN>,
-+				 <&infracfg CLK_IFR_SSUSB_REF>,
-+				 <&infracfg CLK_IFR_SSUSB_SYS>,
-+				 <&infracfg CLK_IFR_ICUSB>;
-+			clock-names = "sys_ck", "ref_ck", "mcu_ck",
-+				      "dma_ck";
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+			status = "disabled";
-+
-+			usb_host: usb@11200000 {
-+				compatible = "mediatek,mt8365-xhci",
-+					     "mediatek,mtk-xhci";
-+				reg = <0 0x11200000 0 0x1000>;
-+				reg-names = "mac";
-+				interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_LOW>;
-+				clocks = <&topckgen CLK_TOP_SSUSB_TOP_CK_EN>,
-+					 <&infracfg CLK_IFR_SSUSB_REF>,
-+					 <&infracfg CLK_IFR_SSUSB_SYS>,
-+					 <&infracfg CLK_IFR_ICUSB>,
-+					 <&infracfg CLK_IFR_SSUSB_XHCI>;
-+				clock-names = "sys_ck", "ref_ck", "mcu_ck",
-+					      "dma_ck", "xhci_ck";
-+				status = "disabled";
-+			};
-+		};
-+
-+		mmc0: mmc@11230000 {
-+			compatible = "mediatek,mt8365-mmc", "mediatek,mt8183-mmc";
-+			reg = <0 0x11230000 0 0x1000>,
-+			      <0 0x11cd0000 0 0x1000>;
-+			interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&topckgen CLK_TOP_MSDC50_0_SEL>,
-+				 <&infracfg CLK_IFR_MSDC0_HCLK>,
-+				 <&infracfg CLK_IFR_MSDC0_SRC>;
-+			clock-names = "source", "hclk", "source_cg";
-+			status = "disabled";
-+		};
-+
-+		mmc1: mmc@11240000 {
-+			compatible = "mediatek,mt8365-mmc", "mediatek,mt8183-mmc";
-+			reg = <0 0x11240000 0 0x1000>,
-+			      <0 0x11c90000 0 0x1000>;
-+			interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&topckgen CLK_TOP_MSDC30_1_SEL>,
-+				 <&infracfg CLK_IFR_MSDC1_HCLK>,
-+				 <&infracfg CLK_IFR_MSDC1_SRC>;
-+			clock-names = "source", "hclk", "source_cg";
-+			status = "disabled";
-+		};
-+
-+		ethernet: ethernet@112a0000 {
-+			compatible = "mediatek,mt8365-eth";
-+			reg = <0 0x112a0000 0 0x1000>;
-+			mediatek,pericfg = <&infracfg>;
-+			interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&topckgen CLK_TOP_ETH_SEL>,
-+				 <&infracfg CLK_IFR_NIC_AXI>,
-+				 <&infracfg CLK_IFR_NIC_SLV_AXI>;
-+			clock-names = "core", "reg", "trans";
-+			status = "disabled";
-+		};
-+
-+		mipi_tx0: dsi-phy@11c00000 {
-+			compatible = "mediatek,mt8365-mipi-tx",
-+				     "mediatek,mt8183-mipi-tx";
-+			reg = <0 0x11c00000 0 0x800>;
-+			clocks = <&clk26m>;
-+			clock-names = "ref_clk";
-+			#clock-cells = <0>;
-+			#phy-cells = <0>;
-+			clock-output-names = "mipi_tx0_pll";
-+		};
-+
-+		efuse: efuse@11c50000 {
-+			compatible = "mediatek,mt8365-efuse", "mediatek,efuse";
-+			reg = <0 0x11c50000 0 0x1000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			thermal_calibration: calib@180 {
-+				reg = <0x180 0xc>;
-+			};
-+		};
-+
-+		u3phy: t-phy@11cc0000 {
-+			compatible = "mediatek,mt8365-tphy",
-+				     "mediatek,generic-tphy-v2";
-+			#address-cells = <2>;
-+			#phy-cells = <1>;
-+			#size-cells = <2>;
-+			ranges;
-+			status = "okay";
-+
-+			u2port0: usb-phy@11cc0000 {
-+				reg = <0 0x11cc0000 0 0x400>;
-+				clocks = <&topckgen CLK_TOP_SSUSB_PHY_CK_EN>,
-+					 <&topckgen CLK_TOP_USB20_48M_EN>;
-+				clock-names = "ref", "da_ref";
-+				#phy-cells = <1>;
-+				status = "okay";
-+			};
-+
-+			u2port1: usb-phy@11cc1000 {
-+				reg = <0 0x11cc1000 0 0x400>;
-+				clocks = <&topckgen CLK_TOP_SSUSB_PHY_CK_EN>,
-+					 <&topckgen CLK_TOP_USB20_48M_EN>;
-+				clock-names = "ref", "da_ref";
-+				#phy-cells = <1>;
-+				status = "okay";
-+			};
-+		};
-+
-+		mfgcfg: syscon@13000000 {
-+			compatible = "mediatek,mt8365-mfgcfg", "syscon";
-+			reg = <0 0x13000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		mmsys: syscon@14000000 {
-+			compatible = "mediatek,mt8365-mmsys", "syscon";
-+			reg = <0 0x14000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		mutex: mutex@14001000 {
-+			compatible =  "mediatek,mt8365-disp-mutex";
-+			reg = <0 0x14001000 0 0x1000>;
-+			interrupts = <GIC_SPI 154 IRQ_TYPE_LEVEL_LOW>;
-+			power-domains = <&spm MT8365_POWER_DOMAIN_MM>;
-+		};
-+
-+		smi_common: smi@14002000 {
-+			compatible = "mediatek,mt8365-smi-common",
-+				     "mediatek,mt8186-smi-common";
-+			reg = <0 0x14002000 0 0x1000>;
-+			clocks = <&mmsys CLK_MM_MM_SMI_COMMON>,
-+				 <&mmsys CLK_MM_MM_SMI_COMMON>,
-+				 <&mmsys CLK_MM_MM_SMI_COMM0>,
-+				 <&mmsys CLK_MM_MM_SMI_COMM1>;
-+			clock-names = "apb", "smi", "gals0", "gals1";
-+			power-domains = <&spm MT8365_POWER_DOMAIN_MM>;
-+		};
-+
-+		larb0: larb@14003000 {
-+			compatible = "mediatek,mt8365-smi-larb",
-+				     "mediatek,mt8186-smi-larb";
-+			reg = <0 0x14003000 0 0x1000>;
-+			mediatek,smi = <&smi_common>;
-+			clocks = <&mmsys CLK_MM_MM_SMI_LARB0>,
-+				 <&mmsys CLK_MM_MM_SMI_LARB0>;
-+			clock-names = "apb", "smi";
-+			power-domains = <&spm MT8365_POWER_DOMAIN_MM>;
-+			mediatek,larb-id = <0>;
-+		};
-+
-+		ovl0: ovl@1400b000 {
-+			compatible = "mediatek,mt8365-disp-ovl",
-+				     "mediatek,mt8192-disp-ovl";
-+			reg = <0 0x1400b000 0 0x1000>;
-+			interrupts = <GIC_SPI 161 IRQ_TYPE_LEVEL_LOW>;
-+			power-domains = <&spm MT8365_POWER_DOMAIN_MM>;
-+			clocks = <&mmsys CLK_MM_MM_DISP_OVL0>;
-+			iommus = <&iommu M4U_PORT_DISP_OVL0>;
-+		};
-+
-+		rdma0: rdma@1400d000 {
-+			compatible = "mediatek,mt8365-disp-rdma",
-+				     "mediatek,mt8183-disp-rdma";
-+			reg = <0 0x1400d000 0 0x1000>;
-+			interrupts = <GIC_SPI 162 IRQ_TYPE_LEVEL_LOW>;
-+			power-domains = <&spm MT8365_POWER_DOMAIN_MM>;
-+			clocks = <&mmsys CLK_MM_MM_DISP_RDMA0>;
-+			iommus = <&iommu M4U_PORT_DISP_RDMA0>;
-+			mediatek,rdma-fifo-size = <5120>;
-+		};
-+
-+		color0: color@1400f000 {
-+			compatible = "mediatek,mt8365-disp-color",
-+				     "mediatek,mt8173-disp-color";
-+			reg = <0 0x1400f000 0 0x1000>;
-+			interrupts = <GIC_SPI 164 IRQ_TYPE_LEVEL_LOW>;
-+			power-domains = <&spm MT8365_POWER_DOMAIN_MM>;
-+			clocks = <&mmsys CLK_MM_MM_DISP_COLOR0>;
-+		};
-+
-+		ccorr0: ccorr@14010000 {
-+			compatible = "mediatek,mt8365-disp-ccorr",
-+				     "mediatek,mt8183-disp-ccorr";
-+			reg = <0 0x14010000 0 0x1000>;
-+			interrupts = <GIC_SPI 165 IRQ_TYPE_LEVEL_LOW>;
-+			power-domains = <&spm MT8365_POWER_DOMAIN_MM>;
-+			clocks = <&mmsys CLK_MM_MM_DISP_CCORR0>;
-+		};
-+
-+		aal0: aal@14011000 {
-+			compatible = "mediatek,mt8365-disp-aal",
-+				     "mediatek,mt8183-disp-aal";
-+			reg = <0 0x14011000 0 0x1000>;
-+			interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_LOW>;
-+			power-domains = <&spm MT8365_POWER_DOMAIN_MM>;
-+			clocks = <&mmsys CLK_MM_MM_DISP_AAL0>;
-+		};
-+
-+		gamma0: gamma@14012000 {
-+			compatible = "mediatek,mt8365-disp-gamma",
-+				     "mediatek,mt8183-disp-gamma";
-+			reg = <0 0x14012000 0 0x1000>;
-+			interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_LOW>;
-+			power-domains = <&spm MT8365_POWER_DOMAIN_MM>;
-+			clocks = <&mmsys CLK_MM_MM_DISP_GAMMA0>;
-+		};
-+
-+		dither0: dither@14013000 {
-+			compatible = "mediatek,mt8365-disp-dither",
-+				     "mediatek,mt8183-disp-dither";
-+			reg = <0 0x14013000 0 0x1000>;
-+			interrupts = <GIC_SPI 168 IRQ_TYPE_LEVEL_LOW>;
-+			power-domains = <&spm MT8365_POWER_DOMAIN_MM>;
-+			clocks = <&mmsys CLK_MM_MM_DISP_DITHER0>;
-+		};
-+
-+		dsi0: dsi@14014000 {
-+			compatible = "mediatek,mt8365-dsi",
-+				     "mediatek,mt8183-dsi";
-+			reg = <0 0x14014000 0 0x1000>;
-+			interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_LOW>;
-+			power-domains = <&spm MT8365_POWER_DOMAIN_MM>;
-+			clocks = <&mmsys CLK_MM_MM_DSI0>,
-+				 <&mmsys CLK_MM_DSI0_DIG_DSI>,
-+				 <&mipi_tx0>;
-+			clock-names = "engine", "digital", "hs";
-+			phys = <&mipi_tx0>;
-+			phy-names = "dphy";
-+			status = "disabled";
-+		};
-+
-+		rdma1: rdma@14016000 {
-+			compatible = "mediatek,mt8365-disp-rdma",
-+				     "mediatek,mt8183-disp-rdma";
-+			reg = <0 0x14016000 0 0x1000>;
-+			interrupts = <GIC_SPI 195 IRQ_TYPE_LEVEL_LOW>;
-+			power-domains = <&spm MT8365_POWER_DOMAIN_MM>;
-+			clocks = <&mmsys CLK_MM_MM_DISP_RDMA1>;
-+			iommus = <&iommu M4U_PORT_DISP_RDMA1>;
-+			mediatek,rdma-fifo-size = <2048>;
-+		};
-+
-+		dpi0: dpi@14018000 {
-+			compatible = "mediatek,mt8365-dpi",
-+				     "mediatek,mt8192-dpi";
-+			reg = <0 0x14018000 0 0x1000>;
-+			interrupts = <GIC_SPI 197 IRQ_TYPE_LEVEL_LOW>;
-+			power-domains = <&spm MT8365_POWER_DOMAIN_MM>;
-+			clocks = <&topckgen CLK_TOP_DPI0_SEL>,
-+				 <&mmsys CLK_MM_MM_DPI0>,
-+				 <&apmixedsys CLK_APMIXED_LVDSPLL>,
-+				 <&mmsys CLK_MM_DPI0_DPI0>;
-+			clock-names = "pixel", "engine", "pll", "dpi";
-+			status = "disabled";
-+		};
-+
-+		camsys: syscon@15000000 {
-+			compatible = "mediatek,mt8365-imgsys", "syscon";
-+			reg = <0 0x15000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		larb2: larb@15001000 {
-+			compatible = "mediatek,mt8365-smi-larb",
-+				     "mediatek,mt8186-smi-larb";
-+			reg = <0 0x15001000 0 0x1000>;
-+			mediatek,smi = <&smi_common>;
-+			clocks = <&mmsys CLK_MM_MM_SMI_IMG>,
-+				 <&camsys CLK_CAM_LARB2>;
-+			clock-names = "apb", "smi";
-+			power-domains = <&spm MT8365_POWER_DOMAIN_CAM>;
-+			mediatek,larb-id = <2>;
-+		};
-+
-+		vdecsys: syscon@16000000 {
-+			compatible = "mediatek,mt8365-vdecsys", "syscon";
-+			reg = <0 0x16000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		larb3: larb@16010000 {
-+			compatible = "mediatek,mt8365-smi-larb",
-+				     "mediatek,mt8186-smi-larb";
-+			reg = <0 0x16010000 0 0x1000>;
-+			mediatek,smi = <&smi_common>;
-+			clocks = <&vdecsys CLK_VDEC_LARB1>,
-+				 <&vdecsys CLK_VDEC_LARB1>;
-+			clock-names = "apb", "smi";
-+			power-domains = <&spm MT8365_POWER_DOMAIN_VDEC>;
-+			mediatek,larb-id = <3>;
-+		};
-+
-+		vencsys: syscon@17000000 {
-+			compatible = "mediatek,mt8365-vencsys", "syscon";
-+			reg = <0 0x17000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		larb1: larb@17010000 {
-+			compatible = "mediatek,mt8365-smi-larb",
-+				     "mediatek,mt8186-smi-larb";
-+			reg = <0 0x17010000 0 0x1000>;
-+			mediatek,smi = <&smi_common>;
-+			clocks = <&vencsys CLK_VENC>, <&vencsys CLK_VENC>;
-+			clock-names = "apb", "smi";
-+			power-domains = <&spm MT8365_POWER_DOMAIN_VENC>;
-+			mediatek,larb-id = <1>;
-+		};
-+
-+		apu: syscon@19020000 {
-+			compatible = "mediatek,mt8365-apu", "syscon";
-+			reg = <0 0x19020000 0 0x1000>;
-+			#clock-cells = <1>;
++	dpi_idle_pins: dpi-idle-pins {
++		pins {
++			pinmux = <MT8365_PIN_0_GPIO0__FUNC_GPIO0>,
++				 <MT8365_PIN_1_GPIO1__FUNC_GPIO1>,
++				 <MT8365_PIN_2_GPIO2__FUNC_GPIO2>,
++				 <MT8365_PIN_3_GPIO3__FUNC_GPIO3>,
++				 <MT8365_PIN_4_GPIO4__FUNC_GPIO4>,
++				 <MT8365_PIN_5_GPIO5__FUNC_GPIO5>,
++				 <MT8365_PIN_6_GPIO6__FUNC_GPIO6>,
++				 <MT8365_PIN_7_GPIO7__FUNC_GPIO7>,
++				 <MT8365_PIN_8_GPIO8__FUNC_GPIO8>,
++				 <MT8365_PIN_9_GPIO9__FUNC_GPIO9>,
++				 <MT8365_PIN_10_GPIO10__FUNC_GPIO10>,
++				 <MT8365_PIN_11_GPIO11__FUNC_GPIO11>,
++				 <MT8365_PIN_12_GPIO12__FUNC_GPIO12>,
++				 <MT8365_PIN_13_GPIO13__FUNC_GPIO13>,
++				 <MT8365_PIN_14_GPIO14__FUNC_GPIO14>,
++				 <MT8365_PIN_15_GPIO15__FUNC_GPIO15>;
 +		};
 +	};
 +
-+	thermal-zones {
-+		cpu_thermal: cpu-thermal {
-+			polling-delay-passive = <1000>; /* milliseconds */
-+			polling-delay = <1000>; /* milliseconds */
-+			thermal-sensors = <&thermal 0>;
-+
-+			trips {
-+				threshold: trip-point0 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				target: trip-point1 {
-+					temperature = <105000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu_crit: cpu_crit0 {
-+					temperature = <117000>;
-+					hysteresis = <2000>;
-+					type = "critical";
-+				};
-+			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&target>;
-+					cooling-device =
-+						<&cpu0
-+						 THERMAL_NO_LIMIT
-+						 THERMAL_NO_LIMIT>,
-+						<&cpu1
-+						 THERMAL_NO_LIMIT
-+						 THERMAL_NO_LIMIT>,
-+						<&cpu2
-+						 THERMAL_NO_LIMIT
-+						 THERMAL_NO_LIMIT>,
-+						<&cpu3
-+						 THERMAL_NO_LIMIT
-+						 THERMAL_NO_LIMIT>;
-+					contribution = <100>;
-+				};
-+			};
++	ethernet_pins: ethernet-pins {
++		pins-ethernet {
++			pinmux = <MT8365_PIN_0_GPIO0__FUNC_EXT_TXD0>,
++				 <MT8365_PIN_1_GPIO1__FUNC_EXT_TXD1>,
++				 <MT8365_PIN_2_GPIO2__FUNC_EXT_TXD2>,
++				 <MT8365_PIN_3_GPIO3__FUNC_EXT_TXD3>,
++				 <MT8365_PIN_4_GPIO4__FUNC_EXT_TXC>,
++				 <MT8365_PIN_5_GPIO5__FUNC_EXT_RXER>,
++				 <MT8365_PIN_6_GPIO6__FUNC_EXT_RXC>,
++				 <MT8365_PIN_7_GPIO7__FUNC_EXT_RXDV>,
++				 <MT8365_PIN_8_GPIO8__FUNC_EXT_RXD0>,
++				 <MT8365_PIN_9_GPIO9__FUNC_EXT_RXD1>,
++				 <MT8365_PIN_10_GPIO10__FUNC_EXT_RXD2>,
++				 <MT8365_PIN_11_GPIO11__FUNC_EXT_RXD3>,
++				 <MT8365_PIN_12_GPIO12__FUNC_EXT_TXEN>,
++				 <MT8365_PIN_13_GPIO13__FUNC_EXT_COL>,
++				 <MT8365_PIN_14_GPIO14__FUNC_EXT_MDIO>,
++				 <MT8365_PIN_15_GPIO15__FUNC_EXT_MDC>;
 +		};
 +
-+		tzts1: tzts1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&thermal 1>;
-+			trips {};
-+			cooling-maps {};
-+		};
-+
-+		tzts2: tzts2-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&thermal 2>;
-+			trips {};
-+			cooling-maps {};
-+		};
-+
-+		tzts3: tzts3-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&thermal 3>;
-+			trips {};
-+			cooling-maps {};
-+		};
-+
-+		tzts4: tzts4-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&thermal 4>;
-+			trips {};
-+			cooling-maps {};
++		pins-phy-reset {
++			pinmux = <MT8365_PIN_133_TDM_TX_DATA1__FUNC_GPIO133>;
 +		};
 +	};
 +
-+
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW 0>,
-+			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW 0>,
-+			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW 0>,
-+			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW 0>;
++	gpio_keys: gpio-keys-pins {
++		pins {
++			pinmux = <MT8365_PIN_24_KPCOL0__FUNC_KPCOL0>;
++			bias-pull-up;
++			input-enable;
++		};
 +	};
++
++	i2c1_pins: i2c1-pins {
++		pins {
++			pinmux = <MT8365_PIN_59_SDA1__FUNC_SDA1_0>,
++				 <MT8365_PIN_60_SCL1__FUNC_SCL1_0>;
++			mediatek,pull-up-adv = <3>;
++			mediatek,drive-strength-adv = <00>;
++			bias-pull-up;
++		};
++	};
++
++	ite_pins: ite-pins {
++		pins-rst-ite {
++			pinmux = <MT8365_PIN_69_CMDAT1__FUNC_GPIO69>;
++			output-high;
++		};
++
++		pins-irq-ite {
++			pinmux = <MT8365_PIN_68_CMDAT0__FUNC_GPIO68>;
++			input-enable;
++			bias-pull-up;
++		};
++
++		pins-pwr {
++			pinmux = <MT8365_PIN_70_CMDAT2__FUNC_GPIO70>,
++				 <MT8365_PIN_71_CMDAT3__FUNC_GPIO71>;
++			output-high;
++		};
++	};
++
++	mmc0_pins_default: mmc0-default-pins {
++		pins-clk {
++			pinmux = <MT8365_PIN_99_MSDC0_CLK__FUNC_MSDC0_CLK>;
++			bias-pull-down;
++		};
++
++		pins-cmd-dat {
++			pinmux = <MT8365_PIN_103_MSDC0_DAT0__FUNC_MSDC0_DAT0>,
++				 <MT8365_PIN_102_MSDC0_DAT1__FUNC_MSDC0_DAT1>,
++				 <MT8365_PIN_101_MSDC0_DAT2__FUNC_MSDC0_DAT2>,
++				 <MT8365_PIN_100_MSDC0_DAT3__FUNC_MSDC0_DAT3>,
++				 <MT8365_PIN_96_MSDC0_DAT4__FUNC_MSDC0_DAT4>,
++				 <MT8365_PIN_95_MSDC0_DAT5__FUNC_MSDC0_DAT5>,
++				 <MT8365_PIN_94_MSDC0_DAT6__FUNC_MSDC0_DAT6>,
++				 <MT8365_PIN_93_MSDC0_DAT7__FUNC_MSDC0_DAT7>,
++				 <MT8365_PIN_98_MSDC0_CMD__FUNC_MSDC0_CMD>;
++			input-enable;
++			bias-pull-up;
++		};
++
++		pins-rst {
++			pinmux = <MT8365_PIN_97_MSDC0_RSTB__FUNC_MSDC0_RSTB>;
++			bias-pull-up;
++		};
++	};
++
++	mmc0_pins_uhs: mmc0-uhs-pins {
++		pins-clk {
++			pinmux = <MT8365_PIN_99_MSDC0_CLK__FUNC_MSDC0_CLK>;
++			drive-strength = <MTK_DRIVE_10mA>;
++			bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
++		};
++
++		pins-cmd-dat {
++			pinmux = <MT8365_PIN_103_MSDC0_DAT0__FUNC_MSDC0_DAT0>,
++				 <MT8365_PIN_102_MSDC0_DAT1__FUNC_MSDC0_DAT1>,
++				 <MT8365_PIN_101_MSDC0_DAT2__FUNC_MSDC0_DAT2>,
++				 <MT8365_PIN_100_MSDC0_DAT3__FUNC_MSDC0_DAT3>,
++				 <MT8365_PIN_96_MSDC0_DAT4__FUNC_MSDC0_DAT4>,
++				 <MT8365_PIN_95_MSDC0_DAT5__FUNC_MSDC0_DAT5>,
++				 <MT8365_PIN_94_MSDC0_DAT6__FUNC_MSDC0_DAT6>,
++				 <MT8365_PIN_93_MSDC0_DAT7__FUNC_MSDC0_DAT7>,
++				 <MT8365_PIN_98_MSDC0_CMD__FUNC_MSDC0_CMD>;
++			input-enable;
++			drive-strength = <MTK_DRIVE_10mA>;
++			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
++		};
++
++		pins-ds {
++			pinmux = <MT8365_PIN_104_MSDC0_DSL__FUNC_MSDC0_DSL>;
++			drive-strength = <MTK_DRIVE_10mA>;
++			bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
++		};
++
++		pins-rst {
++			pinmux = <MT8365_PIN_97_MSDC0_RSTB__FUNC_MSDC0_RSTB>;
++			drive-strength = <MTK_DRIVE_10mA>;
++			bias-pull-up;
++		};
++	};
++
++	mmc1_pins_default: mmc1-default-pins {
++		pins-cd {
++			pinmux = <MT8365_PIN_76_CMDAT8__FUNC_GPIO76>;
++			bias-pull-up;
++		};
++
++		pins-clk {
++			pinmux = <MT8365_PIN_88_MSDC1_CLK__FUNC_MSDC1_CLK>;
++			bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
++		};
++
++		pins-cmd-dat {
++			pinmux = <MT8365_PIN_89_MSDC1_DAT0__FUNC_MSDC1_DAT0>,
++				 <MT8365_PIN_90_MSDC1_DAT1__FUNC_MSDC1_DAT1>,
++				 <MT8365_PIN_91_MSDC1_DAT2__FUNC_MSDC1_DAT2>,
++				 <MT8365_PIN_92_MSDC1_DAT3__FUNC_MSDC1_DAT3>,
++				 <MT8365_PIN_87_MSDC1_CMD__FUNC_MSDC1_CMD>;
++			input-enable;
++			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
++		};
++	};
++
++	mmc1_pins_uhs: mmc1-uhs-pins {
++		pins-clk {
++			pinmux = <MT8365_PIN_88_MSDC1_CLK__FUNC_MSDC1_CLK>;
++			drive-strength = <MTK_DRIVE_8mA>;
++			bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
++		};
++
++		pins-cmd-dat {
++			pinmux = <MT8365_PIN_89_MSDC1_DAT0__FUNC_MSDC1_DAT0>,
++				 <MT8365_PIN_90_MSDC1_DAT1__FUNC_MSDC1_DAT1>,
++				 <MT8365_PIN_91_MSDC1_DAT2__FUNC_MSDC1_DAT2>,
++				 <MT8365_PIN_92_MSDC1_DAT3__FUNC_MSDC1_DAT3>,
++				 <MT8365_PIN_87_MSDC1_CMD__FUNC_MSDC1_CMD>;
++			input-enable;
++			drive-strength = <MTK_DRIVE_6mA>;
++			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
++		};
++	};
++
++	uart0_pins: uart0-pins {
++		pins {
++			pinmux = <MT8365_PIN_35_URXD0__FUNC_URXD0>,
++				 <MT8365_PIN_36_UTXD0__FUNC_UTXD0>;
++		};
++	};
++
++	uart1_pins: uart1-pins {
++		pins {
++			pinmux = <MT8365_PIN_37_URXD1__FUNC_URXD1>,
++				 <MT8365_PIN_38_UTXD1__FUNC_UTXD1>;
++		};
++	};
++
++	uart2_pins: uart2-pins {
++		pins {
++			pinmux = <MT8365_PIN_39_URXD2__FUNC_URXD2>,
++				 <MT8365_PIN_40_UTXD2__FUNC_UTXD2>;
++		};
++	};
++
++	usb_pins: usb-pins {
++		pins-id {
++			pinmux = <MT8365_PIN_17_GPIO17__FUNC_GPIO17>;
++			input-enable;
++			bias-pull-up;
++		};
++
++		pins-usb0-vbus {
++			pinmux = <MT8365_PIN_16_GPIO16__FUNC_USB_DRVVBUS>;
++			output-high;
++		};
++
++		pin-usb1-vbus {
++			pinmux = <MT8365_PIN_18_GPIO18__FUNC_GPIO18>;
++			output-high;
++		};
++	};
++
++	pwm_pins: pwm-pins {
++		pins {
++			pinmux = <MT8365_PIN_19_DISP_PWM__FUNC_PWM_A>,
++				 <MT8365_PIN_116_I2S_BCK__FUNC_PWM_C>;
++		};
++	};
++};
++
++&pwm {
++	pinctrl-0 = <&pwm_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++};
++
++&ssusb {
++	pinctrl-0 = <&usb_pins>;
++	pinctrl-names = "default";
++	maximum-speed = "high-speed";
++	usb-role-switch;
++	dr_mode = "otg";
++	vusb33-supply = <&mt6357_vusb33_reg>;
++	status = "okay";
++
++	connector {
++		compatible = "gpio-usb-b-connector", "usb-b-connector";
++		type = "micro";
++		id-gpios = <&pio 17 GPIO_ACTIVE_HIGH>;
++		vbus-supply = <&usb_otg_vbus>;
++	};
++};
++
++&uart0 {
++	pinctrl-0 = <&uart0_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++};
++
++&uart1 {
++	pinctrl-0 = <&uart1_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++};
++
++&uart2 {
++	pinctrl-0 = <&uart2_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++};
++
++&usb_host {
++	vusb33-supply = <&mt6357_vusb33_reg>;
++	status = "okay";
 +};
 -- 
 2.36.1
