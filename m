@@ -2,50 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C01A2539C00
-	for <lists+linux-i2c@lfdr.de>; Wed,  1 Jun 2022 06:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC201539C05
+	for <lists+linux-i2c@lfdr.de>; Wed,  1 Jun 2022 06:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232755AbiFAERs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 1 Jun 2022 00:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        id S232558AbiFAERy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 1 Jun 2022 00:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232558AbiFAERr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Jun 2022 00:17:47 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CA750010;
-        Tue, 31 May 2022 21:17:46 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id v11-20020a17090a4ecb00b001e2c5b837ccso4939343pjl.3;
-        Tue, 31 May 2022 21:17:46 -0700 (PDT)
+        with ESMTP id S232968AbiFAERv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Jun 2022 00:17:51 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B460B57175;
+        Tue, 31 May 2022 21:17:48 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id 187so821886pfu.9;
+        Tue, 31 May 2022 21:17:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=p/+ntGXUelw5ZDKTegotppZpOKb88sw5s3W1VT60Y9Y=;
-        b=BU4zuxcHxh+X+A8rj2aKOosynv9Ke9MJ76UXkz7klHU11GJSFLHzRfLrO6Hf/BrqPF
-         3zXbiI0QmoKyPoP+cZ8T/Rvmm+nISUxm6buoXmGvhyR0K3NH++WHSyEQG22ZdCPuw6Tg
-         1SQQz+84Xu5ZPs4A62/st5YNzXkEN1K3O8FYxm8CbL9boCVhfeeYOeXROdwzitvUBqrA
-         DFH+Ham35Nc3eWm4XF4cOkgyClE2QcUKQOxadEUL7Z+hdzSJtLQzFhQliJrPVx2RsAk4
-         77MLz5V0xpX8sbC6i4P2FnftnE4COW4hGeECaHQtafPBsG0frihMYwzq6rYL58kZ/+F+
-         dtOw==
+        bh=DQ+FCy1HGI3Ies4LEu7xbJ8vvBaBXxmKzVnykcfWgYc=;
+        b=cz3+YUGhugwCO8sy3yMoeG9UKTe6cXoNB5HsquXRcM1x8kO4l2SB2p5lA3nEn7WHWa
+         vR2BzibqnYCojzjoHn+4fh4xjPWlRVY+rwgWhDLd7ZnQmBsP69280m3iSRgGt+9jutJv
+         G9Llp2q7NwZL/JNUf2bMttPSk+928J91kB9mWKKvkUK57YIozSOy84Laj8iLBbTzixp1
+         ydZx6tkcdIeO49cwUT6epL0z5+oxO0+UFwZtffi9aras6j6qIvE9QEPVOm8OvxW2DxTY
+         ErKdgi+a1t90qzQlL5P5BwJ4oYrjaFEMectidaqmmDN1fWzDcCcbm3RViAZr7/yUncms
+         XUrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=p/+ntGXUelw5ZDKTegotppZpOKb88sw5s3W1VT60Y9Y=;
-        b=F48pQkkOwTHQiL+AI+fq7cNAVYb7ilU7bG3bU1qNqg3fMA0b+BfKKB08IdFihuV3Y9
-         +UY+1yuUM/68qQLkbjbqfbhwaFrVxypgL5Iwg5n0HihYsgzl+yJHEaEiiW+Mwn8QcqNE
-         i0IldiINbbHaGXGNHO+ot/6QfgROZIB+ePfnI1ncBCEx4tKRHtJKElM3d9uWg+rAAJnp
-         zH8mMqlMf5vYdyTURrjTo5vSz8i6zvPWGmghsVeg1Q8YehThlw770jq/Au6b9EEY/yjB
-         lOgwY42NPfPqJzfeylzgvJG24qIFHi8VFund59H0YS4c3IaZFwqDZ91RrcBz6JeRK3ro
-         IdMQ==
-X-Gm-Message-State: AOAM530EQfKN2sjnLljqk3Tozl/hw+m/CH7g2VHK+SnRNwth+gNvm+0+
-        //xO8G9lOCyOCpO5cjD5zr3CKn0llJRHtg==
-X-Google-Smtp-Source: ABdhPJx+oMC5YHO/HcdO/PczBVYNasPXpb2NZykBAGhnAUC/SLEgp2vTpff2UMHbUmeZMm0e2M4m7A==
-X-Received: by 2002:a17:90a:bb17:b0:1e0:ab18:4491 with SMTP id u23-20020a17090abb1700b001e0ab184491mr31807267pjr.120.1654057065640;
-        Tue, 31 May 2022 21:17:45 -0700 (PDT)
+        bh=DQ+FCy1HGI3Ies4LEu7xbJ8vvBaBXxmKzVnykcfWgYc=;
+        b=x2KOuCfqjJVcnVwhKAC3LD+plhAwWKThQWIhKduwoXFqRpUlbikUGOH7hZ8CD4TxId
+         jAnJSP7x1drFNanLWlQ6mW8SkBSQ2iSH4pKCPqF/P0PTSpgHO89Df40ML40RX3yCRRDT
+         rTqSxM7rFwmtdOPKIuB1h49Q17E5H48Ugo5NkxtWS1aSWx81/qjy0mpRfv73LAZZZjlQ
+         OWJImP6JCmVBe8GE7tHn/eV0oori401+Y8S9av+kJWYWQlUfq7kasfbZHyDrNpHwqRSG
+         gUWmg4ceX7kKWGPYVwN0Ad5BKHJbC1sJOR37DKDqZFLMr4Kl5bxv1owbNvXxPhx2lgy3
+         kJ2Q==
+X-Gm-Message-State: AOAM530VJjNouHolB9zWfHj7OJ5h8p5ye1zMLLkhr1ep9sUKo0J4v8VH
+        nUT7Eq1lN+8QrdPziByZs6w=
+X-Google-Smtp-Source: ABdhPJxuABQQ5nnDs9x6ucPra80+mc4j7aUfsFQDxn8DBnNB6maVVyCDmZ2Lamz55ogHhWOIjy1jkw==
+X-Received: by 2002:a63:a0f:0:b0:3fa:95b9:8c70 with SMTP id 15-20020a630a0f000000b003fa95b98c70mr36216628pgk.385.1654057068274;
+        Tue, 31 May 2022 21:17:48 -0700 (PDT)
 Received: from potin-quanta.dhcpserver.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id u11-20020a63d34b000000b003c14af505f6sm290749pgi.14.2022.05.31.21.17.42
+        by smtp.gmail.com with ESMTPSA id u11-20020a63d34b000000b003c14af505f6sm290749pgi.14.2022.05.31.21.17.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 21:17:45 -0700 (PDT)
+        Tue, 31 May 2022 21:17:47 -0700 (PDT)
 From:   Potin Lai <potin.lai.pt@gmail.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -58,9 +58,9 @@ Cc:     Patrick Williams <patrick@stwcx.xyz>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         Potin Lai <potin.lai.pt@gmail.com>
-Subject: [PATCH v2 1/2] aspeed: i2c: add manual clock setting feature
-Date:   Wed,  1 Jun 2022 12:15:11 +0800
-Message-Id: <20220601041512.21484-2-potin.lai.pt@gmail.com>
+Subject: [PATCH v2 2/2] dt-bindings: aspeed-i2c: add properties for manual clock setting
+Date:   Wed,  1 Jun 2022 12:15:12 +0800
+Message-Id: <20220601041512.21484-3-potin.lai.pt@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220601041512.21484-1-potin.lai.pt@gmail.com>
 References: <20220601041512.21484-1-potin.lai.pt@gmail.com>
@@ -74,8 +74,8 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add manual tuning i2c clock timing register support by reading
-following properties.
+Add following properties for manual tuning clock divisor and cycle of
+hign/low pulse witdh.
 
 * aspeed,i2c-manual-clk: Enable aspeed i2c clock manual setting
 * aspeed,i2c-base-clk-div: Base Clock divisor (tBaseClk)
@@ -84,91 +84,71 @@ following properties.
 
 Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
 ---
- drivers/i2c/busses/i2c-aspeed.c | 57 ++++++++++++++++++++++++++++++++-
- 1 file changed, 56 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/i2c/aspeed,i2c.yaml   | 44 +++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-index 67e8b97c0c95..64424f377f27 100644
---- a/drivers/i2c/busses/i2c-aspeed.c
-+++ b/drivers/i2c/busses/i2c-aspeed.c
-@@ -60,6 +60,7 @@
- #define ASPEED_I2CD_TIME_SCL_LOW_MASK			GENMASK(15, 12)
- #define ASPEED_I2CD_TIME_BASE_DIVISOR_MASK		GENMASK(3, 0)
- #define ASPEED_I2CD_TIME_SCL_REG_MAX			GENMASK(3, 0)
-+#define ASPEED_I2CD_TIME_BASE_DIVISOR_MAX		32768
- /* 0x08 : I2CD Clock and AC Timing Control Register #2 */
- #define ASPEED_NO_TIMEOUT_CTRL				0
+diff --git a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
+index ea643e6c3ef5..e2f67fe2aa0c 100644
+--- a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
++++ b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
+@@ -12,6 +12,28 @@ maintainers:
+ allOf:
+   - $ref: /schemas/i2c/i2c-controller.yaml#
  
-@@ -898,6 +899,57 @@ static int aspeed_i2c_init_clk(struct aspeed_i2c_bus *bus)
- 	return 0;
- }
++  - if:
++      properties:
++        compatible:
++          const: st,stm32-uart
++
++    then:
++      properties:
++        aspeed,i2c-clk-high-cycle:
++          maximum: 8
++        aspeed,i2c-clk-low-cycle:
++          maximum: 8
++
++  - if:
++      required:
++        - aspeed,i2c-manual-clk
++
++    then:
++      required:
++        - aspeed,i2c-base-clk-div
++        - aspeed,i2c-clk-high-cycle
++        - aspeed,i2c-clk-low-cycle
++
+ properties:
+   compatible:
+     enum:
+@@ -49,6 +71,28 @@ properties:
+     description:
+       states that there is another master active on this bus
  
-+/* precondition: bus.lock has been acquired. */
-+static int aspeed_i2c_manual_clk_setup(struct aspeed_i2c_bus *bus)
-+{
-+	u32 divisor, clk_high, clk_low, clk_reg_val;
++  aspeed,i2c-manual-clk:
++    type: boolean
++    description: enable manual clock setting
 +
-+	if (device_property_read_u32(bus->dev, "aspeed,i2c-base-clk-div",
-+				     &divisor) != 0) {
-+		dev_err(bus->dev, "Could not read aspeed,i2c-base-clk-div\n");
-+		return -EINVAL;
-+	} else if (!divisor || divisor > ASPEED_I2CD_TIME_BASE_DIVISOR_MAX ||
-+		   BIT(__fls(divisor)) != divisor) {
-+		dev_err(bus->dev, "Invalid aspeed,i2c-base-clk-div: %u\n",
-+			divisor);
-+		return -EINVAL;
-+	}
++  aspeed,i2c-base-clk-div:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192,
++           16384, 32768]
++    description: base clock divisor
 +
-+	if (device_property_read_u32(bus->dev, "aspeed,i2c-clk-high-cycle",
-+				     &clk_high) != 0) {
-+		dev_err(bus->dev, "Could not read aspeed,i2c-clk-high-cycle\n");
-+		return -EINVAL;
-+	} else if ((clk_high-1) > ASPEED_I2CD_TIME_SCL_REG_MAX) {
-+		dev_err(bus->dev, "Invalid aspeed,i2c-clk-high-cycle: %u\n",
-+			clk_high);
-+		return -EINVAL;
-+	}
++  aspeed,i2c-clk-high-cycle:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 1
++    maximum: 16
++    description: cycles of master clock-high pulse width
 +
-+	if (device_property_read_u32(bus->dev, "aspeed,i2c-clk-low-cycle",
-+				     &clk_low) != 0) {
-+		dev_err(bus->dev, "Could not read aspeed,i2c-clk-low-cycle\n");
-+		return -EINVAL;
-+	} else if ((clk_low-1) > ASPEED_I2CD_TIME_SCL_REG_MAX) {
-+		dev_err(bus->dev, "Invalid aspeed,i2c-clk-low-cycle: %u\n",
-+			clk_low);
-+		return -EINVAL;
-+	}
++  aspeed,i2c-clk-low-cycle:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 1
++    maximum: 16
++    description: cycles of master clock-low pulse width
 +
-+	clk_reg_val = readl(bus->base + ASPEED_I2C_AC_TIMING_REG1);
-+	clk_reg_val &= (ASPEED_I2CD_TIME_TBUF_MASK |
-+			ASPEED_I2CD_TIME_THDSTA_MASK |
-+			ASPEED_I2CD_TIME_TACST_MASK);
-+	clk_reg_val |= (ilog2(divisor) & ASPEED_I2CD_TIME_BASE_DIVISOR_MASK)
-+			| (((clk_high-1) << ASPEED_I2CD_TIME_SCL_HIGH_SHIFT)
-+			   & ASPEED_I2CD_TIME_SCL_HIGH_MASK)
-+			| (((clk_low-1) << ASPEED_I2CD_TIME_SCL_LOW_SHIFT)
-+			   & ASPEED_I2CD_TIME_SCL_LOW_MASK);
-+	writel(clk_reg_val, bus->base + ASPEED_I2C_AC_TIMING_REG1);
-+	writel(ASPEED_NO_TIMEOUT_CTRL, bus->base + ASPEED_I2C_AC_TIMING_REG2);
-+
-+	return 0;
-+}
-+
- /* precondition: bus.lock has been acquired. */
- static int aspeed_i2c_init(struct aspeed_i2c_bus *bus,
- 			     struct platform_device *pdev)
-@@ -908,7 +960,10 @@ static int aspeed_i2c_init(struct aspeed_i2c_bus *bus,
- 	/* Disable everything. */
- 	writel(0, bus->base + ASPEED_I2C_FUN_CTRL_REG);
- 
--	ret = aspeed_i2c_init_clk(bus);
-+	if (of_property_read_bool(pdev->dev.of_node, "aspeed,i2c-manual-clk"))
-+		ret = aspeed_i2c_manual_clk_setup(bus);
-+	else
-+		ret = aspeed_i2c_init_clk(bus);
- 	if (ret < 0)
- 		return ret;
- 
+ required:
+   - reg
+   - compatible
 -- 
 2.17.1
 
