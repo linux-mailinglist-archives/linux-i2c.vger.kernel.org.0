@@ -2,73 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D602653B93F
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jun 2022 15:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C844E53B983
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jun 2022 15:15:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234375AbiFBNB4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 2 Jun 2022 09:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
+        id S235274AbiFBNPk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 2 Jun 2022 09:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbiFBNBz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Jun 2022 09:01:55 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081059FDD;
-        Thu,  2 Jun 2022 06:01:53 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id i66so6392643oia.11;
-        Thu, 02 Jun 2022 06:01:53 -0700 (PDT)
+        with ESMTP id S234121AbiFBNPi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Jun 2022 09:15:38 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CC8F506E
+        for <linux-i2c@vger.kernel.org>; Thu,  2 Jun 2022 06:15:36 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id s6so7730965lfo.13
+        for <linux-i2c@vger.kernel.org>; Thu, 02 Jun 2022 06:15:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LolDsnGW3SOAD2FkVFrJJhEfXZjmRip7OxOTM4BASTg=;
+        b=HluOWAOZ2Qe9d1dOy5co+ZzsLWO+WnAfLDWH1EP1dRlKH20Pmt52sQIQ7Xu4uP7EPQ
+         VH5hdHOD7uu20Mv3Tlm00UNafeXaBT7Lf7KmLDU7kDAYd8gl3T8hBLcP+13KkktmmWKH
+         5Wr3Fv/2W0EoT6kYItIVVjlx8U4pf6RNhTlu72Qtim5WX6XgarhRiTZh0H6nEPFTGGjq
+         T2k5JJxDXUJhADReTRJ03NR7ejgqaZcpxRsuegBq98mFzbIKIiCQsyKeDZrUT+1C2kVk
+         ZMDitfStsOyiHtbCI0eUVQY1iW+Epwcl7gUfdp9iO39+k3QyVmMLU51OAPXdxq1FYQ7x
+         d+PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=zH0vAIDZXcoFpFqiWQ5v3Gj8I+dG4f2c74XYlrF44os=;
-        b=BVsqTs5DhCAGULvB7/KJYST1VsWJ3Hq/xSvVQ6cMGtcB07mqdETgqieieSQExud7Il
-         XshOtBWK4DYHrUgaUf/vIhWrwxTnaibiGAqhLylodxP47j6+4ZoHvSwVTQsi3tH7bDMV
-         JBZAa0E8vylDOABJlSPUNJh0YE//azj0JXe9S9At+gp4l22rjTW5hOzi0CtLGv1bLC33
-         5eZuHrRT/he++FnBb3c/OVFObJ08OYUgPFLeyLMmWNXgPIQcFsbRkAt+139UBN6tbLKk
-         y2XNVALfBRSAjDv1P6uEFKN54vTOwuCy5x2bvUxxDfzU1ixJF2LG7B8AdMpqk56izs6s
-         O75w==
-X-Gm-Message-State: AOAM530jwyCtUUlCgYH3GfiG+kN5CH3I+A+Yh1ScE6wbhj+yiguZcdnl
-        UQbA6harl5XfyvmdwHeTiA==
-X-Google-Smtp-Source: ABdhPJz1YCMnZKdEqJ9Nc4Y7GX22TlUyGIgRVd47MrHyXORgKllboWODdHg/Pjcr4JPyEHqstG5PWQ==
-X-Received: by 2002:a05:6808:170a:b0:2fa:7168:392b with SMTP id bc10-20020a056808170a00b002fa7168392bmr18341645oib.84.1654174912162;
-        Thu, 02 Jun 2022 06:01:52 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i7-20020a056870890700b000f32e094abbsm2156532oao.23.2022.06.02.06.01.51
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LolDsnGW3SOAD2FkVFrJJhEfXZjmRip7OxOTM4BASTg=;
+        b=XyanIpWLJYkLV+1C8TvxeDT0g9xB34Gvo3guUGKd6vBY+iK3WPOwHodSivm6GCag4L
+         VINsfTrtqqk3d/92x6AlEEFbQBEHFBsHVeehP7EYpKXhQkoLHETJf7YsjcbdpxQ0WiyO
+         su4HeGFm1xnnLEwXR2nk9N164uc1U0IxBgSWUL+8f4RtqXCcKbe5dNXlErH7ZnYAmIn5
+         aeqo4MFvGbuO64HTX/kT1q+ZRg/jd7Bp0bGMaj/6P3tEh1pPvDNZBn88hM/mntWND1Jr
+         +gpfMKhGnyiCuMxdX9hYapX+Pt6UcADIukqpuVYnimaD5P+8JLGbHORVXufsCysB1Mqk
+         ESrg==
+X-Gm-Message-State: AOAM530u1td4fW3EfHOaQ1ApME5vBEViujL3pPtD50l5+K5AVHfMcYcn
+        1W/WgtLAU84u+xb9KIPrFaGf0g==
+X-Google-Smtp-Source: ABdhPJwUl3solzkyamaoY2KgiqJvNb6IBgAizzaqXx7uraVT9ueURv8yJ2c/xWTl1+MPRWPe+LgZ0A==
+X-Received: by 2002:a05:6512:2593:b0:478:6327:3672 with SMTP id bf19-20020a056512259300b0047863273672mr40706999lfb.497.1654175735188;
+        Thu, 02 Jun 2022 06:15:35 -0700 (PDT)
+Received: from localhost.localdomain (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
+        by smtp.gmail.com with ESMTPSA id m1-20020a056512014100b0047255d211bbsm1019603lfo.234.2022.06.02.06.15.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 06:01:51 -0700 (PDT)
-Received: (nullmailer pid 2100950 invoked by uid 1000);
-        Thu, 02 Jun 2022 13:01:50 -0000
-Date:   Thu, 2 Jun 2022 08:01:50 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        matti.lehtimaki@gmail.com
-Subject: Re: [RFC PATCH 01/14] media: dt-bindings: media: camss: Add
- qcom,msm8974-camss binding
-Message-ID: <20220602130150.GA2095683-robh@kernel.org>
-References: <20220522162802.208275-1-luca@z3ntu.xyz>
- <20220522162802.208275-2-luca@z3ntu.xyz>
- <170dd20b-ab0b-0f61-bfe9-cb9167a2e133@linaro.org>
+        Thu, 02 Jun 2022 06:15:34 -0700 (PDT)
+From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+To:     Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH] i2c: qcom-cci: simplify access to bus data structure
+Date:   Thu,  2 Jun 2022 16:15:28 +0300
+Message-Id: <20220602131528.2246339-1-vladimir.zapolskiy@linaro.org>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <170dd20b-ab0b-0f61-bfe9-cb9167a2e133@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,153 +67,68 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, May 23, 2022 at 12:07:10PM +0200, Krzysztof Kozlowski wrote:
-> On 22/05/2022 18:27, Luca Weiss wrote:
-> > From: Matti Lehtimäki <matti.lehtimaki@gmail.com>
-> 
-> Thank you for your patch. There is something to discuss/improve.
-> 
-> > 
-> > Add bindings for qcom,msm8974-camss in order to support the camera
-> > subsystem on MSM8974.
-> > 
-> > Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > ---
-> >  .../bindings/media/qcom,msm8974-camss.yaml    | 321 ++++++++++++++++++
-> >  1 file changed, 321 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/qcom,msm8974-camss.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/media/qcom,msm8974-camss.yaml b/Documentation/devicetree/bindings/media/qcom,msm8974-camss.yaml
-> > new file mode 100644
-> > index 000000000000..f8f71e477535
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/qcom,msm8974-camss.yaml
-> > @@ -0,0 +1,321 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +
-> > +%YAML 1.2
-> > +---
-> > +$id: "http://devicetree.org/schemas/media/qcom,msm8974-camss.yaml#"
-> > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> > +
-> > +title: Qualcomm CAMSS ISP
-> > +
-> > +maintainers:
-> > +  - Robert Foss <robert.foss@linaro.org>
-> > +
-> > +description: |
-> > +  The CAMSS IP is a CSI decoder and ISP present on Qualcomm platforms
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: qcom,msm8974-camss
-> > +
-> > +  clocks:
-> > +    minItems: 31
-> 
-> No need for minItems, they are equal to max by default.
-> 
-> > +    maxItems: 31
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: top_ahb
-> > +      - const: ispif_ahb
-> > +      - const: csiphy0_timer
-> > +      - const: csiphy1_timer
-> > +      - const: csiphy2_timer
-> > +      - const: csi0_ahb
-> > +      - const: csi0
-> > +      - const: csi0_phy
-> > +      - const: csi0_pix
-> > +      - const: csi0_rdi
-> > +      - const: csi1_ahb
-> > +      - const: csi1
-> > +      - const: csi1_phy
-> > +      - const: csi1_pix
-> > +      - const: csi1_rdi
-> > +      - const: csi2_ahb
-> > +      - const: csi2
-> > +      - const: csi2_phy
-> > +      - const: csi2_pix
-> > +      - const: csi2_rdi
-> > +      - const: csi3_ahb
-> > +      - const: csi3
-> > +      - const: csi3_phy
-> > +      - const: csi3_pix
-> > +      - const: csi3_rdi
-> > +      - const: vfe0
-> > +      - const: vfe1
-> > +      - const: csi_vfe0
-> > +      - const: csi_vfe1
-> > +      - const: iface
-> > +      - const: bus
-> > +
-> > +  interrupts:
-> > +    minItems: 10
-> 
-> Same.
-> 
-> > +    maxItems: 10
-> > +
-> > +  interrupt-names:
-> > +    items:
-> > +      - const: csiphy0
-> > +      - const: csiphy1
-> > +      - const: csiphy2
-> > +      - const: csid0
-> > +      - const: csid1
-> > +      - const: csid2
-> > +      - const: csid3
-> > +      - const: ispif
-> > +      - const: vfe0
-> > +      - const: vfe1
-> > +
-> > +  power-domains:
-> > +    items:
-> > +      - description: VFE GDSC - Video Front End, Global Distributed Switch Controller.
-> > +
-> > +  ports:
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +
-> > +    description:
-> > +      CSI input ports.
-> > +
-> > +    properties:
-> > +      port@0:
-> > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > +        unevaluatedProperties: false
-> > +        description:
-> > +          Input port for receiving CSI data.
-> > +
-> > +        properties:
-> > +          endpoint:
-> > +            $ref: video-interfaces.yaml#
-> > +            unevaluatedProperties: false
-> > +
-> > +            properties:
-> > +              clock-lanes:
-> > +                items:
-> > +                  - const: 1
-> > +
-> > +              data-lanes:
-> > +                minItems: 1
-> > +                maxItems: 4
-> > +
-> > +            required:
-> > +              - clock-lanes
-> > +              - data-lanes
-> > +
-> > +      port@1:
-> 
-> These look all the same, so just use patternPropreties (in "ports") with
-> proper pattern.
+Trivial non-functional change, which adds an alias to an extensively
+used data location.
 
-That's fine, but whatever difference there is in ports 0, 1, and 2 needs 
-to be described.
+Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+---
+ drivers/i2c/busses/i2c-qcom-cci.c | 28 +++++++++++++++-------------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
 
-> > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > +        unevaluatedProperties: false
-> > +        description:
-> > +          Input port for receiving CSI data.
+diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
+index 8d078bdb5c1b..c4a4a4b54131 100644
+--- a/drivers/i2c/busses/i2c-qcom-cci.c
++++ b/drivers/i2c/busses/i2c-qcom-cci.c
+@@ -541,6 +541,7 @@ static int cci_probe(struct platform_device *pdev)
+ 		return -ENOENT;
+ 
+ 	for_each_available_child_of_node(dev->of_node, child) {
++		struct cci_master *master;
+ 		u32 idx;
+ 
+ 		ret = of_property_read_u32(child, "reg", &idx);
+@@ -555,27 +556,28 @@ static int cci_probe(struct platform_device *pdev)
+ 			continue;
+ 		}
+ 
+-		cci->master[idx].adap.quirks = &cci->data->quirks;
+-		cci->master[idx].adap.algo = &cci_algo;
+-		cci->master[idx].adap.dev.parent = dev;
+-		cci->master[idx].adap.dev.of_node = of_node_get(child);
+-		cci->master[idx].master = idx;
+-		cci->master[idx].cci = cci;
++		master = &cci->master[idx];
++		master->adap.quirks = &cci->data->quirks;
++		master->adap.algo = &cci_algo;
++		master->adap.dev.parent = dev;
++		master->adap.dev.of_node = of_node_get(child);
++		master->master = idx;
++		master->cci = cci;
+ 
+-		i2c_set_adapdata(&cci->master[idx].adap, &cci->master[idx]);
+-		snprintf(cci->master[idx].adap.name,
+-			 sizeof(cci->master[idx].adap.name), "Qualcomm-CCI");
++		i2c_set_adapdata(&master->adap, master);
++		snprintf(master->adap.name, sizeof(master->adap.name),
++			 "Qualcomm-CCI");
+ 
+-		cci->master[idx].mode = I2C_MODE_STANDARD;
++		master->mode = I2C_MODE_STANDARD;
+ 		ret = of_property_read_u32(child, "clock-frequency", &val);
+ 		if (!ret) {
+ 			if (val == I2C_MAX_FAST_MODE_FREQ)
+-				cci->master[idx].mode = I2C_MODE_FAST;
++				master->mode = I2C_MODE_FAST;
+ 			else if (val == I2C_MAX_FAST_MODE_PLUS_FREQ)
+-				cci->master[idx].mode = I2C_MODE_FAST_PLUS;
++				master->mode = I2C_MODE_FAST_PLUS;
+ 		}
+ 
+-		init_completion(&cci->master[idx].irq_complete);
++		init_completion(&master->irq_complete);
+ 	}
+ 
+ 	/* Memory */
+-- 
+2.33.0
+
