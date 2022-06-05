@@ -2,109 +2,1502 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA7053D91D
-	for <lists+linux-i2c@lfdr.de>; Sun,  5 Jun 2022 03:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16A153D93F
+	for <lists+linux-i2c@lfdr.de>; Sun,  5 Jun 2022 04:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243275AbiFEB7C (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 4 Jun 2022 21:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33974 "EHLO
+        id S1345826AbiFECSD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 4 Jun 2022 22:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243048AbiFEB7A (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 4 Jun 2022 21:59:00 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751AC2CCBA
-        for <linux-i2c@vger.kernel.org>; Sat,  4 Jun 2022 18:58:57 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id f34so20029322ybj.6
-        for <linux-i2c@vger.kernel.org>; Sat, 04 Jun 2022 18:58:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=sLlIiVjOIj+IrlayL6I/MZBzwRGIE1mUMEt33xJvxRY=;
-        b=VrXTauZcG2ZxwBFo5wG3mGng0I+REWSJoYjeIjBMVS1zD1AKTagmktMv3g8f3jRjEJ
-         SZ00RFrhWLA4EAVOgU6zWCp0qxRkf7uoxhtbWj3N/rehz8LJiJlzB4Az6dOuTXZPs1Bn
-         DiHQOuagF540epTqYE6F/JpNBfCyvMbV8Ke3xaHjRaEB3qnevkXVU9hsU2XWfuiBGDr/
-         e3RCUg3bkcep3KXpAvQitLwWz1f1eSdrnqCc96xfbp7+hBd33uSbEs47twmyKV4epfnp
-         33tb2a8aS8naNSqztxvTXCRZNVDehTpvJRf3c17tRgxwu0YXRhrzQAuKSVWcXKS3icwN
-         PUhQ==
+        with ESMTP id S1345022AbiFECR6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 4 Jun 2022 22:17:58 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3D31AD96;
+        Sat,  4 Jun 2022 19:17:55 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-f314077115so15296350fac.1;
+        Sat, 04 Jun 2022 19:17:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=sLlIiVjOIj+IrlayL6I/MZBzwRGIE1mUMEt33xJvxRY=;
-        b=3LzD2yENsD+QH+cC7BXqSE0AycZxYtn7Cd66ihuzLCJwE7l0W5pfzz/gjV1dVrwOa3
-         aM/VHLScP6GywgZxoi8YW9LwcFNAez55I10YtmsY/+wOvZUm0aTzOSfKmQV+dTqd/4NT
-         5U6qRgj3yGGp47s482Pj3lBtMyz1Hf9q2OIu6HXqEggTmquppdgObIVOjx3tsJlB0BpH
-         ppn/JBm2w5xLZ2Mm1TVo8enoDkemDQdfhR652Ifb8q4dJVuRLWj8FIkX9Wny9yq3qHWM
-         VW/B3C1jRsBXyasWKQ2A0BiBjkS+t21yr6+PETJ5guhoO1tYfIrEy72aPVbsoUWdOhKU
-         xZ3Q==
-X-Gm-Message-State: AOAM531fZWf1jBXmAzGWCXBxUo4yXL1YYulxwUTIR+z3vvwAFao2cjra
-        TP0aHQo1nkTn7WlIZ5822xAggzrwcwi7WMbHIvk=
-X-Google-Smtp-Source: ABdhPJxrggaEFhLzcFaHvKCF+5+Dc20iDCUL0rcMV2WFM2tYeUAy4E4UqEC7ZXjqjSFaeZhA1Ma0KV8Venc2A4H5qbU=
-X-Received: by 2002:a25:dc92:0:b0:659:fcb9:4ab4 with SMTP id
- y140-20020a25dc92000000b00659fcb94ab4mr18391285ybe.320.1654394336514; Sat, 04
- Jun 2022 18:58:56 -0700 (PDT)
-MIME-Version: 1.0
-Sender: drfranksaxxxx2@gmail.com
-Received: by 2002:a05:7108:298d:0:0:0:0 with HTTP; Sat, 4 Jun 2022 18:58:56
- -0700 (PDT)
-From:   MRS HANNAH VANDRAD <h.vandrad@gmail.com>
-Date:   Sat, 4 Jun 2022 18:58:56 -0700
-X-Google-Sender-Auth: P9upt7AOMkTpweaHFS0KZC55RlQ
-Message-ID: <CAGnkwZ5CF++sK1Ti8bzvUe1JP0LS0yksfbJ0=U2xPj5MFO6qxw@mail.gmail.com>
-Subject: Greetings dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.9 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=2WrT3yztTmyTQzV9RNzcb9LE01+Gfq0lD9KrLbgTKOk=;
+        b=viHgyFjAPGygvMyUCGOSCogwKCFFtotNHPCIutJ5h7dhzLR1D+qZTTK8753Oo3/Fl2
+         d/JKPahh1ptwx5oWocNtuiYZ9HH1OM/r8sEcoszcjW+5tsJBL5rcTb1gIQnx/2dSicMJ
+         Z8KWm/VHabC9hHpp6qwMQei8r4c7jy8hHz++ooRHpJ+VF+RzP9dDjqWribju1gf2JXBZ
+         V/jcXd4VZFUBD9bty6xynUcQ9cX7rExJ49x1ElaYVeulqPYTj/d3357O2RGCBU1F3k/e
+         X8+RHq0AGIjWpWm4O/u4kwQJ+UcNEs5SlsBjF4nkS8g5cr85EX0Ep82T7zv148+i9mj9
+         qO2A==
+X-Gm-Message-State: AOAM5319fJZaGn6Fg+N8uN23sReFsRqANg37eh9FwbU0S2/U80hP217r
+        sx/2VYaRSetkNHAebhrZpA==
+X-Google-Smtp-Source: ABdhPJxcWFc2CDpdB3ro/W1dlm8UuyAjctKwYQPD/CtpnQG4KmyCX5ZUFNyTZucF/d5QkCIeCRVNEg==
+X-Received: by 2002:a05:6870:42c5:b0:e6:25a1:a954 with SMTP id z5-20020a05687042c500b000e625a1a954mr25080374oah.240.1654395474091;
+        Sat, 04 Jun 2022 19:17:54 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j95-20020a9d17e8000000b0060b81d4ec89sm5939061otj.59.2022.06.04.19.17.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Jun 2022 19:17:53 -0700 (PDT)
+Received: (nullmailer pid 3371069 invoked by uid 1000);
+        Sun, 05 Jun 2022 02:17:50 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     robh+dt@kernel.org, bjorn.andersson@linaro.org,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220604164653.79284-1-robimarko@gmail.com>
+References: <20220604164653.79284-1-robimarko@gmail.com>
+Subject: Re: [PATCH] dt-bindings: i2c: qcom,i2c-qup: convert to dtschema
+Date:   Sat, 04 Jun 2022 21:17:50 -0500
+Message-Id: <1654395470.158643.3371068.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Greetings dear
+On Sat, 04 Jun 2022 18:46:53 +0200, Robert Marko wrote:
+> Convert DT bindings for Qualcomm QUP I2C controller to DT schema format.
+> 
+> Old text bindings were missing usage of DMA so that was documented, as
+> well as the max clock-frequency.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+>  .../devicetree/bindings/i2c/qcom,i2c-qup.txt  | 40 ---------
+>  .../devicetree/bindings/i2c/qcom,i2c-qup.yaml | 83 +++++++++++++++++++
+>  2 files changed, 83 insertions(+), 40 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-qup.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-qup.yaml
+> 
+
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
+
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
+
+Full log is available here: https://patchwork.ozlabs.org/patch/
 
 
-   This letter might be a surprise to you, But I believe that you will
-be honest to fulfill my final wish. I bring peace and love to you. It
-is by the grace of god, I had no choice than to do what is lawful and
-right in the sight of God for eternal life and in the sight of man for
-witness of god=E2=80=99s mercy and glory upon my life. My dear, I sent this
-mail praying it will find you in a good condition, since I myself am
-in a very critical health condition in which I sleep every night
-without knowing if I may be alive to see the next day. I am Mrs.Hannah
-Vandrad, a widow suffering from a long time illness. I have some
-funds I inherited from my late husband, the sum of ($11,000,000.00,)
-my Doctor told me recently that I have serious
-sickness which is a cancer problem. What disturbs me most is my stroke
-sickness. Having known my condition, I decided to donate this fund to
-a good person that will utilize it the way I am going to instruct
-herein. I need a very honest and God fearing person who can claim this
-money and use it for Charity works, for orphanages and gives justice
-and help to the poor, needy and widows says The Lord." Jeremiah
-22:15-16.=E2=80=9C and also build schools for less privilege that will be
-named after my late husband if possible and to promote the word of god
-and the effort that the house of god is maintained.
+i2c@16380000: '#address-cells' is a required property
+	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
 
- I do not want a situation where this money will be used in an ungodly
-manner. That's why I'm taking this decision. I'm not afraid of death,
-so I know where I'm going. I accept this decision because I do not
-have any child who will inherit this money after I die. Please I want
-your sincere and urgent answer to know if you will be able to execute
-this project, and I will give you more information on how the fund
-will be transferred to your bank account. May the grace, peace, love
-and the truth in the Word of god be with you and all those that you
-love and  care for.
+i2c@16380000: '#size-cells' is a required property
+	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
 
-I am waiting for your reply.
+i2c@7577000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
 
-May God Bless you,
+i2c@7577000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
 
- Mrs. Hannah Vandrad
+i2c@7577000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@7577000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75b5000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75b5000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75b5000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75b5000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75b6000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75b6000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75b6000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75b6000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75b7000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75b7000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75b7000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75b7000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75b9000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75b9000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75b9000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75b9000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75ba000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75ba000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75ba000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@75ba000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+i2c@78b5000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
+	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dtb
+	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dtb
+	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dtb
+	arch/arm64/boot/dts/qcom/msm8916-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dtb
+	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
+	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dtb
+
+i2c@78b5000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
+	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dtb
+	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dtb
+	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dtb
+	arch/arm64/boot/dts/qcom/msm8916-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dtb
+	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
+	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dtb
+
+i2c@78b6000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
+	arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c2.dtb
+	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dtb
+	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dtb
+	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dtb
+	arch/arm64/boot/dts/qcom/msm8916-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dtb
+	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
+	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dtb
+
+i2c@78b6000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
+	arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c2.dtb
+	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dtb
+	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dtb
+	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dtb
+	arch/arm64/boot/dts/qcom/msm8916-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dtb
+	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
+	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dtb
+
+i2c@78b7000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
+	arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c2.dtb
+	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dtb
+	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dtb
+	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dtb
+	arch/arm64/boot/dts/qcom/msm8916-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dtb
+	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtb
+	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c3.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c2.dtb
+	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dtb
+
+i2c@78b7000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
+	arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c2.dtb
+	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dtb
+	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dtb
+	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dtb
+	arch/arm64/boot/dts/qcom/msm8916-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dtb
+	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtb
+	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c3.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c2.dtb
+	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dtb
+
+i2c@78b8000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
+	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dtb
+	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dtb
+	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dtb
+	arch/arm64/boot/dts/qcom/msm8916-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dtb
+	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtb
+	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c3.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c2.dtb
+	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dtb
+
+i2c@78b8000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
+	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dtb
+	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dtb
+	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dtb
+	arch/arm64/boot/dts/qcom/msm8916-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dtb
+	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtb
+	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c3.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c2.dtb
+	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dtb
+
+i2c@78b9000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c2.dtb
+	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dtb
+	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dtb
+	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dtb
+	arch/arm64/boot/dts/qcom/msm8916-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dtb
+	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
+	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dtb
+
+i2c@78b9000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c2.dtb
+	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dtb
+	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dtb
+	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dtb
+	arch/arm64/boot/dts/qcom/msm8916-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dtb
+	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
+	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dtb
+
+i2c@78ba000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c2.dtb
+	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dtb
+	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dtb
+	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dtb
+	arch/arm64/boot/dts/qcom/msm8916-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dtb
+	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
+	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
+	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dtb
+
+i2c@78ba000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c2.dtb
+	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dtb
+	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dtb
+	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dtb
+	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dtb
+	arch/arm64/boot/dts/qcom/msm8916-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dtb
+	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dtb
+	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
+	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
+	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dtb
+
+i2c@7af5000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+
+i2c@7af5000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+
+i2c@7af6000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+
+i2c@7af6000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+
+i2c@7af7000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+
+i2c@7af7000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+
+i2c@7af8000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+
+i2c@7af8000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dtb
+
+i2c@c175000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+i2c@c175000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+i2c@c176000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+i2c@c176000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+i2c@c177000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+i2c@c177000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+i2c@c178000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+i2c@c178000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+i2c@c179000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+
+i2c@c179000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+
+i2c@c17a000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+
+i2c@c17a000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+
+i2c@c1b5000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+i2c@c1b5000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+i2c@c1b6000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+i2c@c1b6000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+i2c@c1b7000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+i2c@c1b7000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+i2c@c1b8000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+i2c@c1b8000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
+	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
+	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
+	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+
+i2c@c1b9000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+
+i2c@c1b9000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+
+i2c@c1ba000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+
+i2c@c1ba000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+
+i2c@f9923000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9923000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9923000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9923000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9924000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9924000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9924000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9924000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9926000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9926000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9926000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9926000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9927000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9927000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9927000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9927000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9928000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9928000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9928000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9928000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9963000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9963000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9963000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9963000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9967000: clock-names:0: 'core' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9967000: clock-names:1: 'iface' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+
+i2c@f9967000: dma-names:0: 'rx' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+	arch/arm/boot/dts/qcom-apq8074-dragonboard.dtb
+	arch/arm/boot/dts/qcom-msm8974-fairphone-fp2.dtb
+	arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dtb
+	arch/arm/boot/dts/qcom-msm8974-samsung-klte.dtb
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-amami.dtb
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-castor.dtb
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-honami.dtb
+
+i2c@f9967000: dma-names:1: 'tx' was expected
+	arch/arm64/boot/dts/qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
+	arch/arm64/boot/dts/qcom/msm8992-msft-lumia-octagon-talkman.dtb
+	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
+	arch/arm64/boot/dts/qcom/msm8994-huawei-angler-rev-101.dtb
+	arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-ivy.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-karin.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-satsuki.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dtb
+	arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-suzuran.dtb
+	arch/arm/boot/dts/qcom-apq8074-dragonboard.dtb
+	arch/arm/boot/dts/qcom-msm8974-fairphone-fp2.dtb
+	arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dtb
+	arch/arm/boot/dts/qcom-msm8974-samsung-klte.dtb
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-amami.dtb
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-castor.dtb
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-honami.dtb
+
