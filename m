@@ -2,51 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D868453EABB
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jun 2022 19:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3CE453E8CA
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jun 2022 19:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240746AbiFFP0X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Jun 2022 11:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49048 "EHLO
+        id S240728AbiFFP0Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Jun 2022 11:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240722AbiFFP0S (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Jun 2022 11:26:18 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56B0328EE6
-        for <linux-i2c@vger.kernel.org>; Mon,  6 Jun 2022 08:26:13 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id t13so20332755wrg.9
-        for <linux-i2c@vger.kernel.org>; Mon, 06 Jun 2022 08:26:13 -0700 (PDT)
+        with ESMTP id S240718AbiFFP0W (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Jun 2022 11:26:22 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADAA328ED0
+        for <linux-i2c@vger.kernel.org>; Mon,  6 Jun 2022 08:26:15 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id q15so12296018wrc.11
+        for <linux-i2c@vger.kernel.org>; Mon, 06 Jun 2022 08:26:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=conchuod.ie; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=x/f1FaPzTGDLsr/DiTII6oEYQHceD1qu+Bo5bSZju/M=;
-        b=e9T05yHPz6TascNJEXfj2bG3nUrDj112EH4rcBcG6wiVBOtMHFuPNpmmyGyldu3Lih
-         VSK3wAqAL996cyT61h1McpAqnhkkKKLcwmTigut8hUrtDBY0re/ynVtd/Yni8ASpqdef
-         VhNoG5I5yEb6PU3D9swh2278LAvqE2WasoDPCuc9C4s7KJnQQNEtne6ha809RF5UV1Hi
-         yNeUH/epC/fuMj3krROewpoFobsCi/WlZQHwExzGZIZhKccmVumCjNVBrVWon4m1XvHS
-         gUxQIlQ5EGVWw+j0i06DVVwXkh2QrPCm7eePNhbtAbdgpntwaSKSkthK/KOLai7yZMfA
-         xATw==
+        bh=z2mKX+kU+0IXP/mFpleoQum6Bqhsq7l65uSh5/bTW4g=;
+        b=HMwGyp6CzEvlRC14FS57rwtanxig4GLA0FRKh8Ap4Kl+5s5sAb7edQyqJx/6zxLgRl
+         Ny1LZC+rCwH8uQsmSyoQ3zaSrJaoLCzV2pCnJ6htCk/SyrRL2RW+9oaO9wAE091+lhte
+         VbdkoDYOgTzaeDP8W32qHJorSUSW22c6eS1fvuxUinvAJPezQO6/id98yPoeIrq3jZhM
+         dgvvJQBpDsfl5OGNogPTcDByqCTGADB54X0LVtftiotrgVK0F4j2MbH8GOCwZienUlDm
+         aAaAC8PlzTvymW3kNrRwXFqIMNZ1D45n7/zIonpOec/LbgD+0R+4irBKn+sw/+v21pdZ
+         ohOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=x/f1FaPzTGDLsr/DiTII6oEYQHceD1qu+Bo5bSZju/M=;
-        b=7tH4S82PQAVjtSZpx6mEXbdDRPuwE95A8ECPjt03zQT24a0k3SUL8zci03Jp80ayjL
-         JFzsZrKCsBPhzQ8kEc7aCkwYGIZGH79gq10L01MOv8WAE+ZtAqkii77sNDja9CDaqnbm
-         oFFH9AY50iZyz07csc/Yw9kCSPXV0ebTA07XRbCwDxLsImYbP+ehAE5AJLP69Ko2yVFq
-         aqS381an5RIdU4I9QISZ8eBUODk+AoUiwci59JMYYpRElCD+GvXYHFZT9Bjneub3M/r1
-         +CsX7ye9TLTnj5LPNwhiZptf34luyxhcQw6gv8TYHeaq+GhulKfXeFtHzWHqJYPySRUw
-         q10g==
-X-Gm-Message-State: AOAM533ah0hWYn4LP4vOBtjrotfgk2TOy2N1o8zmSfOgP7FimGbYyMj7
-        uUG1IuWTy1kUzea5MkG/t57R0w==
-X-Google-Smtp-Source: ABdhPJzVN2kv17X6adk/UC8LHcWJ90WyNDYqXo34cL9iDJALH5HczjnpDFV2nYexah8I+mkleqkqmw==
-X-Received: by 2002:a5d:4290:0:b0:213:badd:abc5 with SMTP id k16-20020a5d4290000000b00213baddabc5mr17323489wrq.54.1654529171903;
-        Mon, 06 Jun 2022 08:26:11 -0700 (PDT)
+        bh=z2mKX+kU+0IXP/mFpleoQum6Bqhsq7l65uSh5/bTW4g=;
+        b=Zj2ufbeTJfU58dqNT8N8tJnM08V3hTxdSo4R+QpqLz5EBszk2RTFqgJ9+hERkhF0PN
+         FQOEa2TL7Y3MPAkdNd+TXM7rAU47xuyapDYIk9ThzxEjFsumsA5ZKdlD9iYxYWRZkRhw
+         1zzpcIGEiLOpka3tPrrpF+XAwLsG7fSzJ2gOumSM5VDk+PAlFqSxvijSxbUHUEI9WoLO
+         Js86MGpnTCvrzfJ8WxJY1VY4dsIGo0Lllc+uNdM0arctC1Pw1b5hfMA5JBeojQinn521
+         X8h+hr/13M2mXsDFrCJ8ienkA+oTxBRreJ6j/gIhVSwQDqZcKPE+IY96bn2qLJmxthKM
+         jsUw==
+X-Gm-Message-State: AOAM531UiuRsRTOnZJOPOyS6YxT4HQoDS9C4oYmsZ/Phbm6kqPMs3LsV
+        iFtRmIylYXcYKGytVIULgkk2rQ==
+X-Google-Smtp-Source: ABdhPJwxneQK3qa97OwL1W+PfqxqssVm1NE2jPe1s3DSYbSYAVD7FYprnFkal9IGgv+FhvsBTVndUw==
+X-Received: by 2002:a5d:458e:0:b0:216:9e07:ceb1 with SMTP id p14-20020a5d458e000000b002169e07ceb1mr11170467wrq.21.1654529173436;
+        Mon, 06 Jun 2022 08:26:13 -0700 (PDT)
 Received: from henark71.. ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id h1-20020adffd41000000b002103aebe8absm15623944wrs.93.2022.06.06.08.26.10
+        by smtp.gmail.com with ESMTPSA id h1-20020adffd41000000b002103aebe8absm15623944wrs.93.2022.06.06.08.26.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 08:26:11 -0700 (PDT)
+        Mon, 06 Jun 2022 08:26:12 -0700 (PDT)
 From:   Conor Dooley <mail@conchuod.ie>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -63,9 +63,9 @@ Cc:     Conor Dooley <conor.dooley@microchip.com>,
         linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-riscv@lists.infradead.org,
         Atul Khare <atulkhare@rivosinc.com>
-Subject: [PATCH v2 2/4] dt-bindings: i2c: convert ocores binding to yaml
-Date:   Mon,  6 Jun 2022 16:25:56 +0100
-Message-Id: <20220606152557.438771-3-mail@conchuod.ie>
+Subject: [PATCH v2 3/4] dt-bindings: mfd: convert da9063 to yaml
+Date:   Mon,  6 Jun 2022 16:25:57 +0100
+Message-Id: <20220606152557.438771-4-mail@conchuod.ie>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220606152557.438771-1-mail@conchuod.ie>
 References: <20220606152557.438771-1-mail@conchuod.ie>
@@ -83,133 +83,164 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-Convert the open cores i2c controller binding from text to yaml.
+Convert the dt binding for the da9063/da9063l to yaml.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- .../devicetree/bindings/i2c/i2c-ocores.txt    |  78 -----------
- .../bindings/i2c/opencores,i2c-ocores.yaml    | 123 ++++++++++++++++++
- MAINTAINERS                                   |   2 +-
- 3 files changed, 124 insertions(+), 79 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-ocores.txt
- create mode 100644 Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml
+ .../devicetree/bindings/mfd/da9063.txt        | 114 ---------------
+ .../devicetree/bindings/mfd/dlg,da9063.yaml   | 132 ++++++++++++++++++
+ .../devicetree/bindings/trivial-devices.yaml  |   2 -
+ MAINTAINERS                                   |   1 +
+ 4 files changed, 133 insertions(+), 116 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mfd/da9063.txt
+ create mode 100644 Documentation/devicetree/bindings/mfd/dlg,da9063.yaml
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+diff --git a/Documentation/devicetree/bindings/mfd/da9063.txt b/Documentation/devicetree/bindings/mfd/da9063.txt
 deleted file mode 100644
-index a37c9455b244..000000000000
---- a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+index aa8b800cc4ad..000000000000
+--- a/Documentation/devicetree/bindings/mfd/da9063.txt
 +++ /dev/null
-@@ -1,78 +0,0 @@
--Device tree configuration for i2c-ocores
+@@ -1,114 +0,0 @@
+-* Dialog DA9063/DA9063L Power Management Integrated Circuit (PMIC)
+-
+-DA9063 consists of a large and varied group of sub-devices (I2C Only):
+-
+-Device                   Supply Names    Description
+-------                   ------------    -----------
+-da9063-regulator        :               : LDOs & BUCKs
+-da9063-onkey            :               : On Key
+-da9063-rtc              :               : Real-Time Clock (DA9063 only)
+-da9063-watchdog         :               : Watchdog
+-
+-======
 -
 -Required properties:
--- compatible      : "opencores,i2c-ocores"
--                    "aeroflexgaisler,i2cmst"
--                    "sifive,fu540-c000-i2c", "sifive,i2c0"
--                    For Opencore based I2C IP block reimplemented in
--                    FU540-C000 SoC.
--                    "sifive,fu740-c000-i2c", "sifive,i2c0"
--                    For Opencore based I2C IP block reimplemented in
--                    FU740-C000 SoC.
--                    Please refer to sifive-blocks-ip-versioning.txt for
--                    additional details.
--- reg             : bus address start and address range size of device
--- clocks          : handle to the controller clock; see the note below.
--                    Mutually exclusive with opencores,ip-clock-frequency
--- opencores,ip-clock-frequency: frequency of the controller clock in Hz;
--                    see the note below. Mutually exclusive with clocks
--- #address-cells  : should be <1>
--- #size-cells     : should be <0>
 -
--Optional properties:
--- interrupts      : interrupt number.
--- clock-frequency : frequency of bus clock in Hz; see the note below.
--                    Defaults to 100 KHz when the property is not specified
--- reg-shift       : device register offsets are shifted by this value
--- reg-io-width    : io register width in bytes (1, 2 or 4)
--- regstep         : deprecated, use reg-shift above
+-- compatible : Should be "dlg,da9063" or "dlg,da9063l"
+-- reg : Specifies the I2C slave address (this defaults to 0x58 but it can be
+-  modified to match the chip's OTP settings).
+-- interrupts : IRQ line information.
+-- interrupt-controller
 -
--Note
--clock-frequency property is meant to control the bus frequency for i2c bus
--drivers, but it was incorrectly used to specify i2c controller input clock
--frequency. So the following rules are set to fix this situation:
--- if clock-frequency is present and neither opencores,ip-clock-frequency nor
--  clocks are, then clock-frequency specifies i2c controller clock frequency.
--  This is to keep backwards compatibility with setups using old DTB. i2c bus
--  frequency is fixed at 100 KHz.
--- if clocks is present it specifies i2c controller clock. clock-frequency
--  property specifies i2c bus frequency.
--- if opencores,ip-clock-frequency is present it specifies i2c controller
--  clock frequency. clock-frequency property specifies i2c bus frequency.
+-Sub-nodes:
 -
--Examples:
+-- regulators : This node defines the settings for the LDOs and BUCKs.
+-  The DA9063(L) regulators are bound using their names listed below:
 -
--	i2c0: ocores@a0000000 {
--		#address-cells = <1>;
--		#size-cells = <0>;
--		compatible = "opencores,i2c-ocores";
--		reg = <0xa0000000 0x8>;
--		interrupts = <10>;
--		opencores,ip-clock-frequency = <20000000>;
+-    bcore1    : BUCK CORE1
+-    bcore2    : BUCK CORE2
+-    bpro      : BUCK PRO
+-    bmem      : BUCK MEM
+-    bio       : BUCK IO
+-    bperi     : BUCK PERI
+-    ldo1      : LDO_1	(DA9063 only)
+-    ldo2      : LDO_2	(DA9063 only)
+-    ldo3      : LDO_3
+-    ldo4      : LDO_4	(DA9063 only)
+-    ldo5      : LDO_5	(DA9063 only)
+-    ldo6      : LDO_6	(DA9063 only)
+-    ldo7      : LDO_7
+-    ldo8      : LDO_8
+-    ldo9      : LDO_9
+-    ldo10     : LDO_10	(DA9063 only)
+-    ldo11     : LDO_11
 -
--		reg-shift = <0>;	/* 8 bit registers */
--		reg-io-width = <1>;	/* 8 bit read/write */
+-  The component follows the standard regulator framework and the bindings
+-  details of individual regulator device can be found in:
+-  Documentation/devicetree/bindings/regulator/regulator.txt
 -
--		dummy@60 {
--			compatible = "dummy";
--			reg = <0x60>;
+-- rtc : This node defines settings for the Real-Time Clock associated with
+-  the DA9063 only. The RTC is not present in DA9063L. There are currently
+-  no entries in this binding, however compatible = "dlg,da9063-rtc" should
+-  be added if a node is created.
+-
+-- onkey : This node defines the OnKey settings for controlling the key
+-  functionality of the device. The node should contain the compatible property
+-  with the value "dlg,da9063-onkey".
+-
+-  Optional onkey properties:
+-
+-  - dlg,disable-key-power : Disable power-down using a long key-press. If this
+-    entry exists the OnKey driver will remove support for the KEY_POWER key
+-    press. If this entry does not exist then by default the key-press
+-    triggered power down is enabled and the OnKey will support both KEY_POWER
+-    and KEY_SLEEP.
+-
+-- watchdog : This node defines settings for the Watchdog timer associated
+-  with the DA9063 and DA9063L. The node should contain the compatible property
+-  with the value "dlg,da9063-watchdog".
+-
+-  Optional watchdog properties:
+-  - dlg,use-sw-pm: Add this property to disable the watchdog during suspend.
+-  Only use this option if you can't use the watchdog automatic suspend
+-  function during a suspend (see register CONTROL_B).
+-
+-Example:
+-
+-	pmic0: da9063@58 {
+-		compatible = "dlg,da9063"
+-		reg = <0x58>;
+-		interrupt-parent = <&gpio6>;
+-		interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
+-		interrupt-controller;
+-
+-		rtc {
+-			compatible = "dlg,da9063-rtc";
+-		};
+-
+-		wdt {
+-			compatible = "dlg,da9063-watchdog";
+-		};
+-
+-		onkey {
+-			compatible = "dlg,da9063-onkey";
+-			dlg,disable-key-power;
+-		};
+-
+-		regulators {
+-			DA9063_BCORE1: bcore1 {
+-				regulator-name = "BCORE1";
+-				regulator-min-microvolt = <300000>;
+-				regulator-max-microvolt = <1570000>;
+-				regulator-min-microamp = <500000>;
+-				regulator-max-microamp = <2000000>;
+-				regulator-boot-on;
+-			};
+-			DA9063_LDO11: ldo11 {
+-				regulator-name = "LDO_11";
+-				regulator-min-microvolt = <900000>;
+-				regulator-max-microvolt = <3600000>;
+-				regulator-boot-on;
+-			};
 -		};
 -	};
--or
--	i2c0: ocores@a0000000 {
--		#address-cells = <1>;
--		#size-cells = <0>;
--		compatible = "opencores,i2c-ocores";
--		reg = <0xa0000000 0x8>;
--		interrupts = <10>;
--		clocks = <&osc>;
--		clock-frequency = <400000>; /* i2c bus frequency 400 KHz */
 -
--		reg-shift = <0>;	/* 8 bit registers */
--		reg-io-width = <1>;	/* 8 bit read/write */
--
--		dummy@60 {
--			compatible = "dummy";
--			reg = <0x60>;
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml b/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml
+diff --git a/Documentation/devicetree/bindings/mfd/dlg,da9063.yaml b/Documentation/devicetree/bindings/mfd/dlg,da9063.yaml
 new file mode 100644
-index 000000000000..7074f019d94f
+index 000000000000..d71933460e90
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml
-@@ -0,0 +1,123 @@
++++ b/Documentation/devicetree/bindings/mfd/dlg,da9063.yaml
+@@ -0,0 +1,132 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/i2c/opencores,i2c-ocores.yaml#
++$id: http://devicetree.org/schemas/mfd/dlg,da9063.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: OpenCores I2C controller
++title: Dialog DA9063/DA9063L Power Management Integrated Circuit (PMIC)
 +
 +maintainers:
-+  - Peter Korsgaard <peter@korsgaard.com>
-+  - Andrew Lunn <andrew@lunn.ch>
++  - Steve Twiss <stwiss.opensource@diasemi.com>
 +
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
++description: |
++  For device-tree bindings of other sub-modules refer to the binding documents
++  under the respective sub-system directories.
 +
 +properties:
 +  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - sifive,fu740-c000-i2c # Opencore based IP block FU740-C000 SoC
-+              - sifive,fu540-c000-i2c # Opencore based IP block FU540-C000 SoC
-+          - const: sifive,i2c0
-+      - enum:
-+          - opencores,i2c-ocores
-+          - aeroflexgaisler,i2cmst
++    enum:
++      - dlg,da9063
++      - dlg,da9063l
 +
 +  reg:
 +    maxItems: 1
@@ -217,109 +248,136 @@ index 000000000000..7074f019d94f
 +  interrupts:
 +    maxItems: 1
 +
-+  clocks:
-+    maxItems: 1
++  interrupt-controller: true
 +
-+  "#address-cells":
-+    const: 1
++  "#interrupt-cells":
++    const: 2
 +
-+  "#size-cells":
-+    const: 0
++  dlg,use-sw-pm:
++    type: boolean
++    description:
++      Disable the watchdog during suspend.
++      Only use this option if you can't use the watchdog automatic suspend
++      function during a suspend (see register CONTROL_B).
 +
-+  clock-frequency:
-+    description: |
-+      Desired I2C bus clock frequency in Hz. As only Standard and Fast
-+      modes are supported, possible values are 100000 and 400000.
-+      Note:
-+      clock-frequency property is meant to control the bus frequency for i2c bus
-+      drivers, but it was incorrectly used to specify i2c controller input clock
-+      frequency. So the following rules are set to fix this situation:
-+      - if clock-frequency is present and neither opencores,ip-clock-frequency nor
-+        clocks are, then clock-frequency specifies i2c controller clock frequency.
-+        This is to keep backwards compatibility with setups using old DTB. i2c bus
-+        frequency is fixed at 100 KHz.
-+      - if clocks is present it specifies i2c controller clock. clock-frequency
-+        property specifies i2c bus frequency.
-+      - if opencores,ip-clock-frequency is present it specifies i2c controller
-+        clock frequency. clock-frequency property specifies i2c bus frequency.
-+    enum: [100000, 400000]
-+    default: 100000
++  watchdog:
++    type: object
++    $ref: /schemas/watchdog/watchdog.yaml#
++    unevaluatedProperties: false
++    properties:
++      compatible:
++        const: dlg,da9063-watchdog
 +
-+  reg-io-width:
-+    description: |
-+      io register width in bytes
-+    enum: [1, 2, 4]
++  rtc:
++    type: object
++    $ref: /schemas/rtc/rtc.yaml#
++    unevaluatedProperties: false
++    properties:
++      compatible:
++        const: dlg,da9063-rtc
 +
-+  reg-shift:
-+    description: |
-+      device register offsets are shifted by this value
-+    default: 0
++  onkey:
++    type: object
++    $ref: /schemas/input/input.yaml#
++    unevaluatedProperties: false
++    properties:
++      compatible:
++        const: dlg,da9063-onkey
 +
-+  regstep:
-+    description: |
-+      deprecated, use reg-shift above
-+    deprecated: true
++      dlg,disable-key-power:
++        type: boolean
++        description: |
++          Disable power-down using a long key-press.
++          If this entry does not exist then by default the key-press triggered
++          power down is enabled and the OnKey will support both KEY_POWER and
++          KEY_SLEEP.
 +
-+  opencores,ip-clock-frequency:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Frequency of the controller clock in Hz. Mutually exclusive with clocks.
-+      See the note above.
++  regulators:
++    type: object
++    patternProperties:
++      "^(ldo[1-11]|bcore[1-2]|bpro|bmem|bio|bperi)$":
++        $ref: /schemas/regulator/regulator.yaml
++        unevaluatedProperties: false
 +
 +required:
 +  - compatible
 +  - reg
-+  - "#address-cells"
-+  - "#size-cells"
++  - interrupts
++  - interrupt-controller
 +
-+oneOf:
-+  - required:
-+      - opencores,ip-clock-frequency
-+  - required:
-+      - clocks
-+
-+unevaluatedProperties: false
++additionalProperties: false
 +
 +examples:
 +  - |
-+    i2c@a0000000 {
-+      compatible = "opencores,i2c-ocores";
-+      reg = <0xa0000000 0x8>;
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
 +      #address-cells = <1>;
 +      #size-cells = <0>;
-+      interrupts = <10>;
-+      opencores,ip-clock-frequency = <20000000>;
++      pmic@58 {
++        compatible = "dlg,da9063";
++        reg = <0x58>;
++        #interrupt-cells = <2>;
++        interrupt-parent = <&gpio6>;
++        interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
++        interrupt-controller;
 +
-+      reg-shift = <0>;	/* 8 bit registers */
-+      reg-io-width = <1>;	/* 8 bit read/write */
-+    };
++        rtc {
++          compatible = "dlg,da9063-rtc";
++        };
 +
-+    i2c@b0000000 {
-+      compatible = "opencores,i2c-ocores";
-+      reg = <0xa0000000 0x8>;
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      interrupts = <10>;
-+      clocks = <&osc>;
-+      clock-frequency = <400000>; /* i2c bus frequency 400 KHz */
++        watchdog {
++          compatible = "dlg,da9063-watchdog";
++        };
 +
-+      reg-shift = <0>;	/* 8 bit registers */
-+      reg-io-width = <1>;	/* 8 bit read/write */
++        onkey {
++          compatible = "dlg,da9063-onkey";
++          dlg,disable-key-power;
++        };
++
++        regulators {
++          regulator-bcore1 {
++            regulator-name = "BCORE1";
++            regulator-min-microvolt = <300000>;
++            regulator-max-microvolt = <1570000>;
++            regulator-min-microamp = <500000>;
++            regulator-max-microamp = <2000000>;
++            regulator-boot-on;
++          };
++          regulator-ldo11 {
++            regulator-name = "LDO_11";
++            regulator-min-microvolt = <900000>;
++            regulator-max-microvolt = <3600000>;
++            regulator-boot-on;
++          };
++        };
++      };
 +    };
 +...
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 6aafa71806a3..00acb9078cc0 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -93,8 +93,6 @@ properties:
+           - dh,dhcom-board
+             # DA9053: flexible system level PMIC with multicore support
+           - dlg,da9053
+-            # DA9063: system PMIC for quad-core application processors
+-          - dlg,da9063
+             # DMARD05: 3-axis I2C Accelerometer
+           - domintech,dmard05
+             # DMARD06: 3-axis I2C Accelerometer
 diff --git a/MAINTAINERS b/MAINTAINERS
-index a6d3bd9d2a8d..cfaf02fc9191 100644
+index cfaf02fc9191..777b453593ad 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -14869,7 +14869,7 @@ M:	Peter Korsgaard <peter@korsgaard.com>
- M:	Andrew Lunn <andrew@lunn.ch>
- L:	linux-i2c@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-+F:	Documentation/devicetree/bindings/i2c/i2c-ocores.yaml
- F:	Documentation/i2c/busses/i2c-ocores.rst
- F:	drivers/i2c/busses/i2c-ocores.c
- F:	include/linux/platform_data/i2c-ocores.h
+@@ -5831,6 +5831,7 @@ W:	http://www.dialog-semiconductor.com/products
+ F:	Documentation/devicetree/bindings/input/da90??-onkey.txt
+ F:	Documentation/devicetree/bindings/input/dlg,da72??.txt
+ F:	Documentation/devicetree/bindings/mfd/da90*.txt
++F:	Documentation/devicetree/bindings/mfd/da90*.yaml
+ F:	Documentation/devicetree/bindings/regulator/dlg,da9*.yaml
+ F:	Documentation/devicetree/bindings/regulator/da92*.txt
+ F:	Documentation/devicetree/bindings/regulator/slg51000.txt
 -- 
 2.36.1
 
