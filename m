@@ -2,51 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FA353EE06
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jun 2022 20:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2F153EE9C
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jun 2022 21:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbiFFSoD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Jun 2022 14:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
+        id S232350AbiFFTam (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Jun 2022 15:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbiFFSoC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Jun 2022 14:44:02 -0400
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFE12DD56;
-        Mon,  6 Jun 2022 11:44:02 -0700 (PDT)
-Received: by mail-io1-f45.google.com with SMTP id a10so13131883ioe.9;
-        Mon, 06 Jun 2022 11:44:02 -0700 (PDT)
+        with ESMTP id S232349AbiFFTal (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Jun 2022 15:30:41 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020BCC38;
+        Mon,  6 Jun 2022 12:30:39 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id d7so6741556iof.10;
+        Mon, 06 Jun 2022 12:30:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4mg14PQUB0NRNPUP48ZZmOWq8GxI88Pp1N6oKyXh8xY=;
-        b=L0iIE3urXL/pWmh5JM4pqNGtrnOtnifI9XIo8nfVKoQgX4hGZg32205PaENRYEWZMH
-         vXr34JN4s5Lp8m9bHCtyQgfScEUhvRUDHK4oHtNngnwsFNpSyddc6uDxE3PIw+yJsaAu
-         Dn2NrZ7woUP+UjQ4xquCRY8WK7Ts+ysBRMyGpIXo41P0B0PGELLx8RVvGLabFWrvlYY3
-         9GCIHpktADNq2hebceErGql/IHIV4tNX4Uqdb5hft2MOi+r/DrivFw80oRs+U5VMwRxq
-         PsYmcVAtS3yi+NZnsx3fCjsDXXYxcGY2pmo+/s4z/AHLNqzLCjzT6ZaLdvDQOR8MWjn5
-         OElg==
-X-Gm-Message-State: AOAM5307q591onmKo/DojUZsbKFRlh/JOwmgPMmaB9A/owqQVfddlVwo
-        Jlx+vL8QBJbiiFljvR5df+Jjo+yMIw==
-X-Google-Smtp-Source: ABdhPJxMVe/Xc7siiCt1gNczRdXAABgZ6GHHgoHZNpaiksIDCW+LDDjUyBg5NHaG3n6BIjR7xTNjrA==
-X-Received: by 2002:a5d:9543:0:b0:668:7deb:ee4d with SMTP id a3-20020a5d9543000000b006687debee4dmr12104417ios.181.1654541041439;
-        Mon, 06 Jun 2022 11:44:01 -0700 (PDT)
-Received: from xps15.herring.priv ([64.188.179.251])
-        by smtp.googlemail.com with ESMTPSA id j21-20020a5e9b15000000b006657621fecesm5736115iok.55.2022.06.06.11.44.00
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+NnQO5+cskfKn+MffQu/wn5Q8O9B9/0RnxbWNMjwh3s=;
+        b=202Lw5CNLLFQyuzLDSVaPrpYvdt1ss7URm+NNIj7mnDnE9NjYUpoomqXLRGRvWiJwR
+         9KnQkYePbdRgaKr6WsIQrw+PO2V2B3ASYIJmKWSskasw+rQ/AiXMqwntUxY0MEx6vVkU
+         A4RKSZxM9cu4grg2/wKOrX5jaG6qphNWjCai6djVMDvhembXGcm65/iyPCK6qtDQ9VMS
+         gV8RlnT+LKsACCLfHI06OCXiueikHwhHF1ynICedSUTF5HnkxaHjoBkWWHQmaaoWuR1Z
+         UGH/btoKYqR2z1kqhc4muSG/nHl719T/x/eBADqzfaod4E0Wmr7O9VhBQpezdATKUBPE
+         MY+Q==
+X-Gm-Message-State: AOAM532NBdb9woU+n84j5ErDeNbJPSsuwUjiVVAyjTRsBPmAb6WXeiPA
+        Rl6R/rqTuNPTSozPresgRg==
+X-Google-Smtp-Source: ABdhPJzCfMy93UMW/jDkEJ/kOCS4HxRKuVX5fFmoggqvvpWGhoHJDgzPeJqFrjjUAQwqzWwguBH+bw==
+X-Received: by 2002:a05:6602:1541:b0:669:2580:c5de with SMTP id h1-20020a056602154100b006692580c5demr8357148iow.3.1654543839160;
+        Mon, 06 Jun 2022 12:30:39 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id n9-20020a027149000000b0032b5e4281d3sm5882945jaf.62.2022.06.06.12.30.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 11:44:01 -0700 (PDT)
+        Mon, 06 Jun 2022 12:30:38 -0700 (PDT)
+Received: (nullmailer pid 1123877 invoked by uid 1000);
+        Mon, 06 Jun 2022 19:30:36 -0000
+Date:   Mon, 6 Jun 2022 14:30:36 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: i2c: Convert arm,i2c-versatile to DT schema
-Date:   Mon,  6 Jun 2022 13:43:39 -0500
-Message-Id: <20220606184339.1058557-1-robh@kernel.org>
-X-Mailer: git-send-email 2.34.1
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Steve Twiss <stwiss.opensource@diasemi.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Atul Khare <atulkhare@rivosinc.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: mmc: convert mmc-spi-slot to yaml
+Message-ID: <20220606193036.GA1119654-robh@kernel.org>
+References: <20220606152557.438771-1-mail@conchuod.ie>
+ <20220606152557.438771-2-mail@conchuod.ie>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220606152557.438771-2-mail@conchuod.ie>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -58,81 +74,149 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Convert the arm,i2c-versatile binding to DT schema format.
+On Mon, Jun 06, 2022 at 04:25:55PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Convert the mmc-spi-slot text based binding doc to yaml,
+> with the side effect of cleaning up some of the riscv
+> dtbs_check warnings.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../devicetree/bindings/mmc/mmc-spi-slot.txt  | 29 -------
+>  .../devicetree/bindings/mmc/mmc-spi-slot.yaml | 79 +++++++++++++++++++
+>  2 files changed, 79 insertions(+), 29 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mmc/mmc-spi-slot.txt
+>  create mode 100644 Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mmc/mmc-spi-slot.txt b/Documentation/devicetree/bindings/mmc/mmc-spi-slot.txt
+> deleted file mode 100644
+> index 5e74db69f581..000000000000
+> --- a/Documentation/devicetree/bindings/mmc/mmc-spi-slot.txt
+> +++ /dev/null
+> @@ -1,29 +0,0 @@
+> -MMC/SD/SDIO slot directly connected to a SPI bus
+> -
+> -This file documents differences between the core properties described
+> -by mmc.txt and the properties used by the mmc_spi driver.
+> -
+> -Required properties:
+> -- spi-max-frequency : maximum frequency for this device (Hz).
+> -
+> -Optional properties:
+> -- voltage-ranges : two cells are required, first cell specifies minimum
+> -  slot voltage (mV), second cell specifies maximum slot voltage (mV).
+> -  Several ranges could be specified. If not provided, 3.2v..3.4v is assumed.
+> -- gpios : may specify GPIOs in this order: Card-Detect GPIO,
+> -  Write-Protect GPIO. Note that this does not follow the
+> -  binding from mmc.txt, for historical reasons.
+> -
+> -Example:
+> -
+> -	mmc-slot@0 {
+> -		compatible = "fsl,mpc8323rdb-mmc-slot",
+> -			     "mmc-spi-slot";
+> -		reg = <0>;
+> -		gpios = <&qe_pio_d 14 1
+> -			 &qe_pio_d 15 0>;
+> -		voltage-ranges = <3300 3300>;
+> -		spi-max-frequency = <50000000>;
+> -		interrupts = <42>;
+> -		interrupt-parent = <&PIC>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml b/Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml
+> new file mode 100644
+> index 000000000000..cf79092de8fe
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml
+> @@ -0,0 +1,79 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mmc/mmc-spi-slot.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MMC/SD/SDIO slot directly connected to a SPI bus
+> +
+> +maintainers:
+> +  - Ulf Hansson <ulf.hansson@linaro.org>
+> +
+> +allOf:
+> +  - $ref: "mmc-controller.yaml"
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml
+> +
+> +description: |
+> +  The extra properties used by an mmc connected via SPI.
+> +
+> +properties:
+> +  compatible:
+> +    const: mmc-spi-slot
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  spi-max-frequency: true
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  voltage-ranges:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../bindings/i2c/arm,i2c-versatile.yaml       | 29 +++++++++++++++++++
- .../devicetree/bindings/i2c/i2c-versatile.txt | 10 -------
- MAINTAINERS                                   |  2 +-
- 3 files changed, 30 insertions(+), 11 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/i2c/arm,i2c-versatile.yaml
- delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-versatile.txt
+Looks more like an array to me.
 
-diff --git a/Documentation/devicetree/bindings/i2c/arm,i2c-versatile.yaml b/Documentation/devicetree/bindings/i2c/arm,i2c-versatile.yaml
-new file mode 100644
-index 000000000000..e58465d1b0c8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/arm,i2c-versatile.yaml
-@@ -0,0 +1,29 @@
-+# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i2c/arm,i2c-versatile.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: I2C Controller on ARM Ltd development platforms
-+
-+maintainers:
-+  - Linus Walleij <linus.walleij@linaro.org>
-+
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
-+
-+properties:
-+  compatible:
-+    const: arm,versatile-i2c
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+...
-+
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-versatile.txt b/Documentation/devicetree/bindings/i2c/i2c-versatile.txt
-deleted file mode 100644
-index 361d31c51b6f..000000000000
---- a/Documentation/devicetree/bindings/i2c/i2c-versatile.txt
-+++ /dev/null
-@@ -1,10 +0,0 @@
--i2c Controller on ARM Versatile platform:
--
--Required properties:
--- compatible : Must be "arm,versatile-i2c";
--- reg
--- #address-cells = <1>;
--- #size-cells = <0>;
--
--Optional properties:
--- Child nodes conforming to i2c bus binding
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a6d3bd9d2a8d..ecc0907e312a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1520,7 +1520,7 @@ F:	Documentation/devicetree/bindings/arm/arm,versatile.yaml
- F:	Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
- F:	Documentation/devicetree/bindings/auxdisplay/arm,versatile-lcd.yaml
- F:	Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml
--F:	Documentation/devicetree/bindings/i2c/i2c-versatile.txt
-+F:	Documentation/devicetree/bindings/i2c/arn,i2c-versatile.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/arm,versatile-fpga-irq.txt
- F:	Documentation/devicetree/bindings/mtd/mtd-physmap.yaml
- F:	arch/arm/boot/dts/arm-realview-*
--- 
-2.34.1
+Otherwise,
 
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+> +    description: |
+> +      Two cells are required, first cell specifies minimum slot voltage (mV),
+> +      second cell specifies maximum slot voltage (mV).
+> +    items:
+> +      items:
+> +        - description: |
+> +            value for minimum slot voltage
+> +          default: 3200
+> +        - description: |
+> +            value for maximum slot voltage
+> +          default: 3400
+> +    maxItems: 1
+> +
+> +  gpios:
+> +    description: |
+> +      For historical reasons, this does not follow the generic mmc-controller
+> +      binding.
+> +    minItems: 1
+> +    items:
+> +      - description: Card-Detect GPIO
+> +      - description: Write-Protect GPIO
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - spi-max-frequency
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    spi {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      mmc@0 {
+> +        compatible = "mmc-spi-slot";
+> +        reg = <0>;
+> +        gpios = <&gpio 14 GPIO_ACTIVE_LOW>, <&gpio 15 GPIO_ACTIVE_HIGH>;
+> +        voltage-ranges = <3300 3300>;
+> +        spi-max-frequency = <50000000>;
+> +        interrupts = <42>;
+> +        interrupt-parent = <&PIC>;
+> +      };
+> +    };
+> +
+> +...
+> -- 
+> 2.36.1
+> 
+> 
