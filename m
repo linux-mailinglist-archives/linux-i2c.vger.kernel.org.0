@@ -2,51 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8163353EF4C
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jun 2022 22:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F54853EF4F
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jun 2022 22:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbiFFUOH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Jun 2022 16:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
+        id S233136AbiFFUOI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Jun 2022 16:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233134AbiFFUOG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Jun 2022 16:14:06 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1497F139AEA
-        for <linux-i2c@vger.kernel.org>; Mon,  6 Jun 2022 13:14:05 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id m26so9853854wrb.4
-        for <linux-i2c@vger.kernel.org>; Mon, 06 Jun 2022 13:14:05 -0700 (PDT)
+        with ESMTP id S229861AbiFFUOH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Jun 2022 16:14:07 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF4219C2F
+        for <linux-i2c@vger.kernel.org>; Mon,  6 Jun 2022 13:14:06 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id u3so21304106wrg.3
+        for <linux-i2c@vger.kernel.org>; Mon, 06 Jun 2022 13:14:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=conchuod.ie; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7vCPgtA3BbvZtshze5CQUg4kM9ICh/+RTxGA4WD1mf0=;
-        b=LC4gaaoUVgwwaH+unaf96kROWS2r6vondQTIeTrkLXqhEYhHYME9g/jc4nwTRx0x4t
-         EriKh2T7D6lmykbp7aU4rsziWsg8lrjMtj91I4R4MKX0gcnxKajPFaLzqDo2FhJ3sfys
-         bzYrmQZO03q3bcE8oBIYN55C5dDnTZDPPgffqaInr4MxebfJqbHz47SoWMlnCILzyiMK
-         H/eo01OYjK4IETEedcNAXgfOxsKQJVjrm3wKwF4T5X9f/L2RMxnFoF1x27k2l+4lj1LU
-         naZGQOjfzZfXlVKaGjCZuytouGCS0IS0e4aAz/VRjkj7mS3pLA+73ESvNbkf4jNzeJz/
-         eyUA==
+        bh=jeQ0ViwKjg4rIn8dC6mh1AhiPoIbefNYM5vCjdm72pQ=;
+        b=XDLFX0FCh6R8nVkiujqyI4B+6dQOabsvXS68MvFtSzExkuJtOCpnza4M3nUEhJDKNY
+         E/GBHB/fJIVsMmtxggc5sLTzmx6F800cNpbVsxJLbTioDUleQdGEYr7fEdlq9hspODw4
+         OHsau+mt663Gfc6m66ZzdRZFGlAPK50mpMFwdLQzPpUBDpnAOZb9O3JLh/iq4rZSVVhK
+         e4X1uKBD9DQDLePruxUmcmHSLLIj9d+v+HHj6VCNs810/54k6UPwNCe+t/N81vj5XVOc
+         2CwkLVvFYIbTjnSOl1W5cmPulS6H32+dfMRIH/iBzgQQOZH+WmNCUWAGqoq8escnMgtG
+         iMIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7vCPgtA3BbvZtshze5CQUg4kM9ICh/+RTxGA4WD1mf0=;
-        b=44LD7AY1JKZ9nak4MhSgIAHYqhsCO7c6VZduoJmCnpKi3MAwTgpQczyoWL1CL+AmoX
-         W1O2/HtIu+3fcsNeu/OP7zf/0ulR27Yr5cryTKAUbkWKckT3X+Ll+e1vzDVpLm43zYnw
-         WzzdIR6h9GWD8Puq434N3SGx1Ox/i+M3hFR44ueZ7gLYabu4uegsv10xj8aWD3x+DzVK
-         UGaDT62L6d6tpz3naXXUTTe3zY0wbJ+zCiqRv2GugsBtSF1Z1JEEdeycit2w/Rqiq+Fb
-         P/cI3cE28uroJymHy+GNtFkuhHEIvynMqarz8QUBklmOrwD3QnEZhNgJJ571p0+ako3u
-         aD9w==
-X-Gm-Message-State: AOAM533R7uektiqU4CWDl33BISAklxRl85ujWbSikx3+dPLrrVKcgBRN
-        To8/dTn79OVxHtWwo93Ioa20rw==
-X-Google-Smtp-Source: ABdhPJxvgT6fY/VVwTGBW393iUEwu2JtUuZPhYqj8miS4mwpMcsuIC4g/CyKAFrs4/Q3oylmeATaVQ==
-X-Received: by 2002:a5d:67c9:0:b0:218:4a6a:298e with SMTP id n9-20020a5d67c9000000b002184a6a298emr2016266wrw.153.1654546443329;
-        Mon, 06 Jun 2022 13:14:03 -0700 (PDT)
+        bh=jeQ0ViwKjg4rIn8dC6mh1AhiPoIbefNYM5vCjdm72pQ=;
+        b=r+QRgwpEWi7pmDkg97KRi5fOoxPcSFrRzXGI8HSkPTtK6+CBxXiyy1AfbRpKadfOi7
+         Qw2n9G/6+vK73+KquU1gmhR3zeLLR/lMOfgSFB5KBC7MGT6OdamBx4OpCMDLtzdr0mtC
+         Ej78rkmwAK3kIlQhTM4sK5NE8clMcAuvwkPY19wmqf+ae7sLex+6M4B3FWmQiJvQXHUe
+         /1DwWhd6srqYQsHZ1PtrClYU78kbML9Gxa1/85ZlOkILVWIdsjh71fCGDIwYi8tc9bkd
+         1wn4T4yyA/4EN8c8zIl+dOpeQ+zvQYqDVxuPe1wFGbMJdKK8yFbKFhOMk9X+SZ7C/ZzU
+         oByg==
+X-Gm-Message-State: AOAM532QiGD/OUy4fnDmP7YJkcCEE3jEGEe67vKrMJxoYhR90S/l2RQz
+        Yki2LGnCZWwCr26gPgL+CyCSZg==
+X-Google-Smtp-Source: ABdhPJzVg+E47CFTVsH83Jx7lnh0Ve4RW5lbP7VYDud6f2yjG2GigdJpNI/kqgYYsoLdyeO/zc0wgw==
+X-Received: by 2002:a05:6000:18ae:b0:211:40df:c00e with SMTP id b14-20020a05600018ae00b0021140dfc00emr24085870wri.304.1654546444685;
+        Mon, 06 Jun 2022 13:14:04 -0700 (PDT)
 Received: from henark71.. ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id p9-20020a5d4589000000b0020fcf070f61sm16038489wrq.59.2022.06.06.13.14.02
+        by smtp.gmail.com with ESMTPSA id p9-20020a5d4589000000b0020fcf070f61sm16038489wrq.59.2022.06.06.13.14.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 13:14:02 -0700 (PDT)
+        Mon, 06 Jun 2022 13:14:04 -0700 (PDT)
 From:   Conor Dooley <mail@conchuod.ie>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -64,9 +64,9 @@ Cc:     Conor Dooley <conor.dooley@microchip.com>,
         linux-riscv@lists.infradead.org,
         Atul Khare <atulkhare@rivosinc.com>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 1/4] dt-bindings: mmc: convert mmc-spi-slot to yaml
-Date:   Mon,  6 Jun 2022 21:13:41 +0100
-Message-Id: <20220606201343.514391-2-mail@conchuod.ie>
+Subject: [PATCH v3 2/4] dt-bindings: i2c: convert ocores binding to yaml
+Date:   Mon,  6 Jun 2022 21:13:42 +0100
+Message-Id: <20220606201343.514391-3-mail@conchuod.ie>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220606201343.514391-1-mail@conchuod.ie>
 References: <20220606201343.514391-1-mail@conchuod.ie>
@@ -84,137 +84,234 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-Convert the mmc-spi-slot text based binding doc to yaml,
-with the side effect of cleaning up some of the riscv
-dtbs_check warnings.
+Convert the open cores i2c controller binding from text to yaml.
 
 Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- .../devicetree/bindings/mmc/mmc-spi-slot.txt  | 29 -------
- .../devicetree/bindings/mmc/mmc-spi-slot.yaml | 77 +++++++++++++++++++
- 2 files changed, 77 insertions(+), 29 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mmc/mmc-spi-slot.txt
- create mode 100644 Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml
+ .../devicetree/bindings/i2c/i2c-ocores.txt    |  78 ------------
+ .../bindings/i2c/opencores,i2c-ocores.yaml    | 113 ++++++++++++++++++
+ MAINTAINERS                                   |   2 +-
+ 3 files changed, 114 insertions(+), 79 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml
 
-diff --git a/Documentation/devicetree/bindings/mmc/mmc-spi-slot.txt b/Documentation/devicetree/bindings/mmc/mmc-spi-slot.txt
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
 deleted file mode 100644
-index 5e74db69f581..000000000000
---- a/Documentation/devicetree/bindings/mmc/mmc-spi-slot.txt
+index a37c9455b244..000000000000
+--- a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
 +++ /dev/null
-@@ -1,29 +0,0 @@
--MMC/SD/SDIO slot directly connected to a SPI bus
--
--This file documents differences between the core properties described
--by mmc.txt and the properties used by the mmc_spi driver.
+@@ -1,78 +0,0 @@
+-Device tree configuration for i2c-ocores
 -
 -Required properties:
--- spi-max-frequency : maximum frequency for this device (Hz).
+-- compatible      : "opencores,i2c-ocores"
+-                    "aeroflexgaisler,i2cmst"
+-                    "sifive,fu540-c000-i2c", "sifive,i2c0"
+-                    For Opencore based I2C IP block reimplemented in
+-                    FU540-C000 SoC.
+-                    "sifive,fu740-c000-i2c", "sifive,i2c0"
+-                    For Opencore based I2C IP block reimplemented in
+-                    FU740-C000 SoC.
+-                    Please refer to sifive-blocks-ip-versioning.txt for
+-                    additional details.
+-- reg             : bus address start and address range size of device
+-- clocks          : handle to the controller clock; see the note below.
+-                    Mutually exclusive with opencores,ip-clock-frequency
+-- opencores,ip-clock-frequency: frequency of the controller clock in Hz;
+-                    see the note below. Mutually exclusive with clocks
+-- #address-cells  : should be <1>
+-- #size-cells     : should be <0>
 -
 -Optional properties:
--- voltage-ranges : two cells are required, first cell specifies minimum
--  slot voltage (mV), second cell specifies maximum slot voltage (mV).
--  Several ranges could be specified. If not provided, 3.2v..3.4v is assumed.
--- gpios : may specify GPIOs in this order: Card-Detect GPIO,
--  Write-Protect GPIO. Note that this does not follow the
--  binding from mmc.txt, for historical reasons.
+-- interrupts      : interrupt number.
+-- clock-frequency : frequency of bus clock in Hz; see the note below.
+-                    Defaults to 100 KHz when the property is not specified
+-- reg-shift       : device register offsets are shifted by this value
+-- reg-io-width    : io register width in bytes (1, 2 or 4)
+-- regstep         : deprecated, use reg-shift above
 -
--Example:
+-Note
+-clock-frequency property is meant to control the bus frequency for i2c bus
+-drivers, but it was incorrectly used to specify i2c controller input clock
+-frequency. So the following rules are set to fix this situation:
+-- if clock-frequency is present and neither opencores,ip-clock-frequency nor
+-  clocks are, then clock-frequency specifies i2c controller clock frequency.
+-  This is to keep backwards compatibility with setups using old DTB. i2c bus
+-  frequency is fixed at 100 KHz.
+-- if clocks is present it specifies i2c controller clock. clock-frequency
+-  property specifies i2c bus frequency.
+-- if opencores,ip-clock-frequency is present it specifies i2c controller
+-  clock frequency. clock-frequency property specifies i2c bus frequency.
 -
--	mmc-slot@0 {
--		compatible = "fsl,mpc8323rdb-mmc-slot",
--			     "mmc-spi-slot";
--		reg = <0>;
--		gpios = <&qe_pio_d 14 1
--			 &qe_pio_d 15 0>;
--		voltage-ranges = <3300 3300>;
--		spi-max-frequency = <50000000>;
--		interrupts = <42>;
--		interrupt-parent = <&PIC>;
+-Examples:
+-
+-	i2c0: ocores@a0000000 {
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		compatible = "opencores,i2c-ocores";
+-		reg = <0xa0000000 0x8>;
+-		interrupts = <10>;
+-		opencores,ip-clock-frequency = <20000000>;
+-
+-		reg-shift = <0>;	/* 8 bit registers */
+-		reg-io-width = <1>;	/* 8 bit read/write */
+-
+-		dummy@60 {
+-			compatible = "dummy";
+-			reg = <0x60>;
+-		};
 -	};
-diff --git a/Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml b/Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml
+-or
+-	i2c0: ocores@a0000000 {
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		compatible = "opencores,i2c-ocores";
+-		reg = <0xa0000000 0x8>;
+-		interrupts = <10>;
+-		clocks = <&osc>;
+-		clock-frequency = <400000>; /* i2c bus frequency 400 KHz */
+-
+-		reg-shift = <0>;	/* 8 bit registers */
+-		reg-io-width = <1>;	/* 8 bit read/write */
+-
+-		dummy@60 {
+-			compatible = "dummy";
+-			reg = <0x60>;
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml b/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml
 new file mode 100644
-index 000000000000..c45b91099325
+index 000000000000..85d9efb743ee
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml
-@@ -0,0 +1,77 @@
++++ b/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml
+@@ -0,0 +1,113 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/mmc/mmc-spi-slot.yaml#
++$id: http://devicetree.org/schemas/i2c/opencores,i2c-ocores.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: MMC/SD/SDIO slot directly connected to a SPI bus
++title: OpenCores I2C controller
 +
 +maintainers:
-+  - Ulf Hansson <ulf.hansson@linaro.org>
++  - Peter Korsgaard <peter@korsgaard.com>
++  - Andrew Lunn <andrew@lunn.ch>
 +
 +allOf:
-+  - $ref: "mmc-controller.yaml"
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml
-+
-+description: |
-+  The extra properties used by an mmc connected via SPI.
++  - $ref: /schemas/i2c/i2c-controller.yaml#
 +
 +properties:
 +  compatible:
-+    const: mmc-spi-slot
++    oneOf:
++      - items:
++          - enum:
++              - sifive,fu740-c000-i2c # Opencore based IP block FU740-C000 SoC
++              - sifive,fu540-c000-i2c # Opencore based IP block FU540-C000 SoC
++          - const: sifive,i2c0
++      - enum:
++          - opencores,i2c-ocores
++          - aeroflexgaisler,i2cmst
 +
 +  reg:
 +    maxItems: 1
 +
-+  spi-max-frequency: true
-+
 +  interrupts:
 +    maxItems: 1
 +
-+  voltage-ranges:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    description: |
-+      Two cells are required, first cell specifies minimum slot voltage (mV),
-+      second cell specifies maximum slot voltage (mV).
-+    items:
-+      - description: |
-+          value for minimum slot voltage in mV
-+        default: 3200
-+      - description: |
-+          value for maximum slot voltage in mV
-+        default: 3400
++  clocks:
++    maxItems: 1
 +
-+  gpios:
++  clock-frequency:
 +    description: |
-+      For historical reasons, this does not follow the generic mmc-controller
-+      binding.
-+    minItems: 1
-+    items:
-+      - description: Card-Detect GPIO
-+      - description: Write-Protect GPIO
++      clock-frequency property is meant to control the bus frequency for i2c bus
++      drivers, but it was incorrectly used to specify i2c controller input clock
++      frequency. So the following rules are set to fix this situation:
++      - if clock-frequency is present and neither opencores,ip-clock-frequency nor
++        clocks are, then clock-frequency specifies i2c controller clock frequency.
++        This is to keep backwards compatibility with setups using old DTB. i2c bus
++        frequency is fixed at 100 KHz.
++      - if clocks is present it specifies i2c controller clock. clock-frequency
++        property specifies i2c bus frequency.
++      - if opencores,ip-clock-frequency is present it specifies i2c controller
++        clock frequency. clock-frequency property specifies i2c bus frequency.
++    default: 100000
++
++  reg-io-width:
++    description: |
++      io register width in bytes
++    enum: [1, 2, 4]
++
++  reg-shift:
++    description: |
++      device register offsets are shifted by this value
++    default: 0
++
++  regstep:
++    description: |
++      deprecated, use reg-shift above
++    deprecated: true
++
++  opencores,ip-clock-frequency:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Frequency of the controller clock in Hz. Mutually exclusive with clocks.
++      See the note above.
 +
 +required:
 +  - compatible
 +  - reg
-+  - spi-max-frequency
++  - "#address-cells"
++  - "#size-cells"
++
++oneOf:
++  - required:
++      - opencores,ip-clock-frequency
++  - required:
++      - clocks
 +
 +unevaluatedProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    spi {
++    i2c@a0000000 {
++      compatible = "opencores,i2c-ocores";
++      reg = <0xa0000000 0x8>;
 +      #address-cells = <1>;
 +      #size-cells = <0>;
-+      mmc@0 {
-+        compatible = "mmc-spi-slot";
-+        reg = <0>;
-+        gpios = <&gpio 14 GPIO_ACTIVE_LOW>, <&gpio 15 GPIO_ACTIVE_HIGH>;
-+        voltage-ranges = <3300 3300>;
-+        spi-max-frequency = <50000000>;
-+        interrupts = <42>;
-+        interrupt-parent = <&PIC>;
-+      };
++      interrupts = <10>;
++      opencores,ip-clock-frequency = <20000000>;
++
++      reg-shift = <0>;	/* 8 bit registers */
++      reg-io-width = <1>;	/* 8 bit read/write */
 +    };
 +
++    i2c@b0000000 {
++      compatible = "opencores,i2c-ocores";
++      reg = <0xa0000000 0x8>;
++      #address-cells = <1>;
++      #size-cells = <0>;
++      interrupts = <10>;
++      clocks = <&osc>;
++      clock-frequency = <400000>; /* i2c bus frequency 400 KHz */
++
++      reg-shift = <0>;	/* 8 bit registers */
++      reg-io-width = <1>;	/* 8 bit read/write */
++    };
 +...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a6d3bd9d2a8d..cfaf02fc9191 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14869,7 +14869,7 @@ M:	Peter Korsgaard <peter@korsgaard.com>
+ M:	Andrew Lunn <andrew@lunn.ch>
+ L:	linux-i2c@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/i2c/i2c-ocores.txt
++F:	Documentation/devicetree/bindings/i2c/i2c-ocores.yaml
+ F:	Documentation/i2c/busses/i2c-ocores.rst
+ F:	drivers/i2c/busses/i2c-ocores.c
+ F:	include/linux/platform_data/i2c-ocores.h
 -- 
 2.36.1
 
