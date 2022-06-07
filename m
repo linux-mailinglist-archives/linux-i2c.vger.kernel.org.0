@@ -2,100 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38143540149
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jun 2022 16:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59AE45403E6
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jun 2022 18:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245439AbiFGOYq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Jun 2022 10:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
+        id S1344019AbiFGQjg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Jun 2022 12:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235064AbiFGOYq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jun 2022 10:24:46 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A26522BFB
-        for <linux-i2c@vger.kernel.org>; Tue,  7 Jun 2022 07:24:45 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BA8701F916;
-        Tue,  7 Jun 2022 14:24:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1654611883; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6N5hco9Q+MRuxEu4pr8VC8arowNl1Y5z8EmozLafC2o=;
-        b=s1MlmGHqXKMZBeLFu+GHxCC54Da6fQLK3A6gj+ZEhj4qLEHgVIaLKWswLEHmEB30wHlK/i
-        HnD+/5HrOdUxsCDg90Ehx5LXJ1chg3iNUlmiQawoBMM++pVWILGVXWtVAUA4h6HsgeCh69
-        YWsxwEyIlF1/W9gr51YlwKh0sW34fwI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1654611883;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6N5hco9Q+MRuxEu4pr8VC8arowNl1Y5z8EmozLafC2o=;
-        b=WY1DaM5XaeXUgOxCBCljkGJc7piekRrP2/CB2w1JPh5zeGKUwh0og8/2LHS7ZpMMZpXRCk
-        sUeV2l2YS9whi/Dg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9B65213638;
-        Tue,  7 Jun 2022 14:24:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id bCZrJKtfn2J/RAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 07 Jun 2022 14:24:43 +0000
-Date:   Tue, 7 Jun 2022 16:24:42 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 4/8] i2c: i801: enable FEATURE_IRQ and
- FEATURE_I2C_BLOCK_READ on all chip versions
-Message-ID: <20220607162442.7b618cca@endymion.delvare>
-In-Reply-To: <1f81a126-11b4-aa22-1e2c-9824e0ad730c@gmail.com>
-References: <4125f9ce-ce5f-fbcf-7d6f-9bc586ac43e0@gmail.com>
-        <1f81a126-11b4-aa22-1e2c-9824e0ad730c@gmail.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S1345085AbiFGQjf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jun 2022 12:39:35 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB32AC8BD1;
+        Tue,  7 Jun 2022 09:39:34 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id q18so15238708pln.12;
+        Tue, 07 Jun 2022 09:39:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=MMsXwp0wncXVlQhEOdDSIGnh/k5pLZa/8LV3fqGCk4Y=;
+        b=KIKbOB4wieeuMpPaO4+32G+4O/nY09/u19Hqx4jPcpRklBIHv2pGAdhO1sQC919tqD
+         NDH4+9zXCSW0mRmdCh/7PSXshbx4o0PDMEieI3ug6oYly+Y6IHZoreB1ONVcYCRJhWvF
+         SR6PP+uhXWFry/W5JVfWBl5xTF6wXJcMIt76Nt3bkIKvt8VBhN29upjxcjONcAn9QLE+
+         lWjCZ1G826QU7OO3kpgh8vE/sigSZehnXmu/DXLREfk1V5buNv4/PBT35ez61pRAom3D
+         RteKFqjdRcjWzcMLhx2XeHk656GOqb+/22zVFV4ZOfAL82uPf+DTqpzmWMjV7cMNI9p2
+         LJGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=MMsXwp0wncXVlQhEOdDSIGnh/k5pLZa/8LV3fqGCk4Y=;
+        b=dEBIwXPPHY4aRRIKg04ep5vXTBHJkgSZIOS9zYMlAanM1zGcyiPkLBWo7LXc+Tl/Cu
+         8YQJBIBl0SKmNYVCTL6N2Ixor/ie7/RFky+DhpqKuWkeN1gt0g8aZwGOkZdGwr01RgL7
+         gzCY+dkQbXyuNmIF9GETnz1R3Prm8tJs2idkizTvtyYmcxQf4H21Vu8U9EwbmXq3SCVN
+         AQ3FlY1XevRobbOZ6xxMbmmu8Uw4FEgBx5eksrF6103crC/ES4wwvKvL+YLUFHEoLPVs
+         8hVWnIsIKAV7mX8AQ89OaE6lWhte+J+3IBaZhmElzud5Uyxh+Nr3vaTgn/dbbuWyBJAg
+         BZqg==
+X-Gm-Message-State: AOAM530U8z286HPj+/ImUy071JZKGFpHk1o5fCnOBMrvgkcU70TEtvFz
+        b+Hta6iI4g1L/s4QgmYEydc=
+X-Google-Smtp-Source: ABdhPJwNz5IykOxSZ49GvZQ67utgu7Sq19F/1tUevm/gmcskQusvlJdzF1E9V8CoEor0rp7A6HBZsQ==
+X-Received: by 2002:a17:90b:2247:b0:1e8:9f24:269a with SMTP id hk7-20020a17090b224700b001e89f24269amr5405690pjb.14.1654619974077;
+        Tue, 07 Jun 2022 09:39:34 -0700 (PDT)
+Received: from potin-quanta.dhcpserver.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
+        by smtp.gmail.com with ESMTPSA id d15-20020aa797af000000b0051bbc198f3fsm12560272pfq.13.2022.06.07.09.39.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 09:39:33 -0700 (PDT)
+From:   Potin Lai <potin.lai.pt@gmail.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rayn Chen <rayn_chen@aspeedtech.com>
+Cc:     Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai@quantatw.com>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Potin Lai <potin.lai.pt@gmail.com>
+Subject: [PATCH v3 0/2] Add i2c clock duty cycle property for setting minimum persentage of clock high
+Date:   Wed,  8 Jun 2022 00:37:01 +0800
+Message-Id: <20220607163703.26355-1-potin.lai.pt@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Heiner,
+Introducing i2c-clk-duty-cycle-min property for setting minimum persentage
+of clock high. 
 
-On Fri, 15 Apr 2022 18:56:30 +0200, Heiner Kallweit wrote:
-> According to the datasheets interrupt mode and i2c block read are
-> supported on all chip versions. Therefore set both feature flags for
-> all chip versions.
+This driver will go through base clock divisor and calculate a set of
+high/low clock with duty cycle applied. if driver could not find a suit
+high/low clock set, then it will use default duty cycle (50%) recalculate.
 
-While the datasheets do match your claims (I checked the 82801CAM aka
-ICH3-M datasheet), I have a hard time believing we would have made the
-feature device-dependent without a good reason (and I have vague
-memories that there was a problem, although I can't find any proof of
-that).
+LINK: [v1] https://lore.kernel.org/all/20220530114056.8722-1-potin.lai.pt@gmail.com/
+LINK: [v2] https://lore.kernel.org/all/20220601041512.21484-1-potin.lai.pt@gmail.com/
 
-So I'll try to resurrect my old ICH3-M-based laptop and test these
-changes on it. If I manage to get a Linux distribution to install on
-that 20-year-old system...
+changes v2 --> v3:
+* discard the properties for manual setting, use duty cycle to calculate
+  high/low clock.
 
-> Note: Don't remove the two feature flags as such (at least for now),
-> so that in case of a problem users can use the disable_features
-> module parameter to disable a problematic feature.
+changes v1 --> v2:
+* update bt-bindings documentation
+* use meaningful values for properties instead of acture value in register
 
-Agreed.
+Potin Lai (2):
+  aspeed: i2c: add clock duty cycle property
+  dt-bindings: aspeed-i2c: add properties for setting i2c clock duty
+    cycle
+
+ .../devicetree/bindings/i2c/aspeed,i2c.yaml   |  8 +++
+ drivers/i2c/busses/i2c-aspeed.c               | 56 +++++++++++++++----
+ 2 files changed, 53 insertions(+), 11 deletions(-)
 
 -- 
-Jean Delvare
-SUSE L3 Support
+2.17.1
+
