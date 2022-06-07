@@ -2,160 +2,159 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093E153FE93
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jun 2022 14:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC44253FEDC
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jun 2022 14:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242537AbiFGMTs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Jun 2022 08:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
+        id S243780AbiFGMev (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Jun 2022 08:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242463AbiFGMRr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jun 2022 08:17:47 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E5DF8E60
-        for <linux-i2c@vger.kernel.org>; Tue,  7 Jun 2022 05:16:19 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id y19so34795387ejq.6
-        for <linux-i2c@vger.kernel.org>; Tue, 07 Jun 2022 05:16:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=06i39agsU8HuZjR8TtH1PW9licnqFJhwqBG7mgYQgaU=;
-        b=vUX+/ZCQT/Vp1n72imHbSlot9vnnbBJMMjxqrMcq7njwpDdCXU+5WZ65+pOolivfo8
-         STLqF/r0aUY6MD+PKoHssQ85CvsUzNPExIMs2To0iXcko+j7/5DkfNQ/q7g0qSNcr2E0
-         Ap9Pw78QUjRoWgPpSy13R3htRu7KF+kHc0II9266WmTEz3459csi10bOhbliz/G2M0P2
-         DZ+oXbLl+6iVS4afBNtpJRUDb4GuJ1lR5z09PsfmWt39LdbJnKR5YDSdqXiuIJzsar4R
-         GmalyqjG2yp/Y4wMKYM5Nf0baaxZKunN1D6rtg7iFCYzyINze0XMnJYLzmGttAkDLh5w
-         fvIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=06i39agsU8HuZjR8TtH1PW9licnqFJhwqBG7mgYQgaU=;
-        b=EWrX9uXr7eGj/O6CXsIA4H7C0ukDZz8fi0d4QiFKEZ2TSU5S8tX7DvmFdvRMturxzK
-         xBsppeA/4saZ+nlee4k6y6cuthqtCHRcDUCIH50y9s3k5K0jbG8tqrT5jHJ8I0HwpwS0
-         6njC1U2WhyVaSPSijI21c5USTfsEUYmQp6vSw7ssXqYrDW10Siune2NUILFiW/8wyKK2
-         zbm4SMeTK7ODHn8t0DGd01a8mrDSd4e2CHxstdYqYR3bSvRpXVhNNaETLg0Zfzj43pXC
-         bQjMab0rYtCrbXpLNro1sgkMtZdS64QHLi6KJ8G0nWfDTTwITjiF+1iwl+jg+iCmlxa0
-         T0EQ==
-X-Gm-Message-State: AOAM5310ZLk1cjjQbpDwKKb6BPjOAvmPJ/65c3EcpWVsvsd2UaYFliCk
-        39HIPMEA1yr9NUBXaWmJCqKnIg==
-X-Google-Smtp-Source: ABdhPJw9Q1zxLxajWHbMHVWAMN//ho5UJetCvthsIdVimgSkH+1lCvTdz9db4IvCmnSQw9n73jXsdQ==
-X-Received: by 2002:a17:907:9606:b0:70a:e140:6329 with SMTP id gb6-20020a170907960600b0070ae1406329mr24523296ejc.471.1654604174858;
-        Tue, 07 Jun 2022 05:16:14 -0700 (PDT)
-Received: from [192.168.0.183] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u4-20020a170906124400b007105a157706sm4626183eja.82.2022.06.07.05.16.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 05:16:14 -0700 (PDT)
-Message-ID: <3849248a-fe0e-157a-21dc-62c1c91ae204@linaro.org>
-Date:   Tue, 7 Jun 2022 14:16:13 +0200
+        with ESMTP id S243779AbiFGMev (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jun 2022 08:34:51 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90998B0A4F
+        for <linux-i2c@vger.kernel.org>; Tue,  7 Jun 2022 05:34:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3151B21BCA;
+        Tue,  7 Jun 2022 12:34:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1654605288; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0f6JnjTlePvTQac+2xQGciz//fjNBEftVE/KLpcCp90=;
+        b=cT2VZMYNnqQD7q7pt61ip24FYlJbkQdE+U5SUT4b+k0WolDPAgWVFw/Hqsbkg+GfxMpu5g
+        V6Ek/tvH6igEXd5RptzmG25SjOT3qeTf3r4lTrO9h4hrKSlPZLa/82z7jNX2+G/zlSmMKV
+        07yccdROtQX2rrmRdfMQuBIlRTrlKVo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1654605288;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0f6JnjTlePvTQac+2xQGciz//fjNBEftVE/KLpcCp90=;
+        b=19xzphpaavLnMJCa8yUcckJ538d4/dGFC84ZGx6qUxJUZvP1GyVgrt2eTyeNND/Nu+ApMK
+        tLFd6v0x9jbI4PCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 11D6B13A88;
+        Tue,  7 Jun 2022 12:34:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 5ujEAuhFn2KfDQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 07 Jun 2022 12:34:48 +0000
+Date:   Tue, 7 Jun 2022 14:34:47 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 1/8] i2c: i801: improve interrupt handler
+Message-ID: <20220607143447.58058154@endymion.delvare>
+In-Reply-To: <05bec021-6958-0157-b825-619ac21ddd41@gmail.com>
+References: <4125f9ce-ce5f-fbcf-7d6f-9bc586ac43e0@gmail.com>
+        <05bec021-6958-0157-b825-619ac21ddd41@gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] dt-bindings: i2c: Convert arm,i2c-versatile to DT schema
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220606184339.1058557-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220606184339.1058557-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 06/06/2022 20:43, Rob Herring wrote:
-> Convert the arm,i2c-versatile binding to DT schema format.
+Hi Heiner, 
+
+On Fri, 15 Apr 2022 18:54:32 +0200, Heiner Kallweit wrote:
+> Not sure if it can happen, but better play safe: If SMBHSTSTS_BYTE_DONE
+> and an error flag is set, then don't trust the result and skip calling
+> i801_isr_byte_done(). In addition clear status bit SMBHSTSTS_BYTE_DONE
+> in the main interrupt handler, this allows to simplify the code a
+> little.
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 > ---
->  .../bindings/i2c/arm,i2c-versatile.yaml       | 29 +++++++++++++++++++
->  .../devicetree/bindings/i2c/i2c-versatile.txt | 10 -------
->  MAINTAINERS                                   |  2 +-
->  3 files changed, 30 insertions(+), 11 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/i2c/arm,i2c-versatile.yaml
->  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-versatile.txt
+>  drivers/i2c/busses/i2c-i801.c | 25 ++++++++-----------------
+>  1 file changed, 8 insertions(+), 17 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/arm,i2c-versatile.yaml b/Documentation/devicetree/bindings/i2c/arm,i2c-versatile.yaml
-> new file mode 100644
-> index 000000000000..e58465d1b0c8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/arm,i2c-versatile.yaml
-> @@ -0,0 +1,29 @@
-> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/arm,i2c-versatile.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: I2C Controller on ARM Ltd development platforms
-> +
-> +maintainers:
-> +  - Linus Walleij <linus.walleij@linaro.org>
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: arm,versatile-i2c
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +...
-> +
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-versatile.txt b/Documentation/devicetree/bindings/i2c/i2c-versatile.txt
-> deleted file mode 100644
-> index 361d31c51b6f..000000000000
-> --- a/Documentation/devicetree/bindings/i2c/i2c-versatile.txt
-> +++ /dev/null
-> @@ -1,10 +0,0 @@
-> -i2c Controller on ARM Versatile platform:
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index ff706349b..c481f121d 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -556,9 +556,6 @@ static void i801_isr_byte_done(struct i801_priv *priv)
+>  		/* Write next byte, except for IRQ after last byte */
+>  		outb_p(priv->data[++priv->count], SMBBLKDAT(priv));
+>  	}
 > -
-> -Required properties:
-> -- compatible : Must be "arm,versatile-i2c";
-> -- reg
-> -- #address-cells = <1>;
-> -- #size-cells = <0>;
-> -
-> -Optional properties:
-> -- Child nodes conforming to i2c bus binding
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a6d3bd9d2a8d..ecc0907e312a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1520,7 +1520,7 @@ F:	Documentation/devicetree/bindings/arm/arm,versatile.yaml
->  F:	Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
->  F:	Documentation/devicetree/bindings/auxdisplay/arm,versatile-lcd.yaml
->  F:	Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml
-> -F:	Documentation/devicetree/bindings/i2c/i2c-versatile.txt
-> +F:	Documentation/devicetree/bindings/i2c/arn,i2c-versatile.yaml
+> -	/* Clear BYTE_DONE to continue with next byte */
+> -	outb_p(SMBHSTSTS_BYTE_DONE, SMBHSTSTS(priv));
+>  }
+>  
+>  static irqreturn_t i801_host_notify_isr(struct i801_priv *priv)
+> @@ -588,7 +585,6 @@ static irqreturn_t i801_host_notify_isr(struct i801_priv *priv)
+>   *      BUS_ERR - SMI# transaction collision
+>   *      FAILED - transaction was canceled due to a KILL request
+>   *    When any of these occur, update ->status and signal completion.
+> - *    ->status must be cleared before kicking off the next transaction.
+>   *
+>   * 2) For byte-by-byte (I2C read/write) transactions, one BYTE_DONE interrupt
+>   *    occurs for each byte of a byte-by-byte to prepare the next byte.
+> @@ -613,23 +609,18 @@ static irqreturn_t i801_isr(int irq, void *dev_id)
+>  	}
+>  
+>  	status = inb_p(SMBHSTSTS(priv));
+> -	if (status & SMBHSTSTS_BYTE_DONE)
+> +	if ((status & SMBHSTSTS_BYTE_DONE) && !(status & STATUS_ERROR_FLAGS))
 
-typo:
-s/arn/arm/
+Isn't this better written
 
-With that:
+	if ((status & (SMBHSTSTS_BYTE_DONE | STATUS_ERROR_FLAGS)) == SMBHSTSTS_BYTE_DONE)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+? At least my compiler generates smaller binary code.
 
+>  		i801_isr_byte_done(priv);
+>  
+>  	/*
+> -	 * Clear remaining IRQ sources: Completion of last command, errors
+> -	 * and the SMB_ALERT signal. SMB_ALERT status is set after signal
+> -	 * assertion independently of the interrupt generation being blocked
+> -	 * or not so clear it always when the status is set.
+> -	 */
+> -	status &= SMBHSTSTS_INTR | STATUS_ERROR_FLAGS | SMBHSTSTS_SMBALERT_STS;
+> -	if (status)
+> -		outb_p(status, SMBHSTSTS(priv));
+> -	status &= ~SMBHSTSTS_SMBALERT_STS; /* SMB_ALERT not reported */
+> -	/*
+> -	 * Report transaction result.
+> -	 * ->status must be cleared before the next transaction is started.
+> +	 * Clear IRQ sources: SMB_ALERT status is set after signal assertion
+> +	 * independently of the interrupt generation being blocked or not
+> +	 * so clear it always when the status is set.
+>  	 */
+> +	status &= STATUS_FLAGS | SMBHSTSTS_SMBALERT_STS;
+> +	outb_p(status, SMBHSTSTS(priv));
 
-Best regards,
-Krzysztof
+You are making the call to outb_p() unconditional. Is this under the
+assumption that at least one of the bits must be set, so the condition
+was always met?
+
+> +
+> +	status &= STATUS_ERROR_FLAGS | SMBHSTSTS_INTR;
+>  	if (status) {
+>  		priv->status = status;
+>  		complete(&priv->done);
+
+Tested OK on my system, looks good overall, nice simplification.
+
+-- 
+Jean Delvare
+SUSE L3 Support
