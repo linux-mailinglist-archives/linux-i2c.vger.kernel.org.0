@@ -2,62 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C80A6540100
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jun 2022 16:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38143540149
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jun 2022 16:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241035AbiFGON3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Jun 2022 10:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
+        id S245439AbiFGOYq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Jun 2022 10:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243705AbiFGON1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jun 2022 10:13:27 -0400
+        with ESMTP id S235064AbiFGOYq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jun 2022 10:24:46 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5292A21248
-        for <linux-i2c@vger.kernel.org>; Tue,  7 Jun 2022 07:13:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A26522BFB
+        for <linux-i2c@vger.kernel.org>; Tue,  7 Jun 2022 07:24:45 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 750821F9BA;
-        Tue,  7 Jun 2022 14:13:21 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BA8701F916;
+        Tue,  7 Jun 2022 14:24:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1654611201; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1654611883; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=K1UFrLWacvJkw6MScUfl7W5FJUnbgbBAyqpYTgxaIew=;
-        b=RU1yyO49BOqJ9MIbgTHpzSKwzHPo9vo30SL26+vNRabHvMXGyjZ53xZso0TusiF6AUNXD1
-        /h5janxF3AjBnYYU1KqpPBRakdlDO6lVv14D5Fw16Fu66UJMvsyh+M3brSJOGLNSm8zW1W
-        rqM5kAUAkjwXnJilH1Z+PjWpH2riMG8=
+        bh=6N5hco9Q+MRuxEu4pr8VC8arowNl1Y5z8EmozLafC2o=;
+        b=s1MlmGHqXKMZBeLFu+GHxCC54Da6fQLK3A6gj+ZEhj4qLEHgVIaLKWswLEHmEB30wHlK/i
+        HnD+/5HrOdUxsCDg90Ehx5LXJ1chg3iNUlmiQawoBMM++pVWILGVXWtVAUA4h6HsgeCh69
+        YWsxwEyIlF1/W9gr51YlwKh0sW34fwI=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1654611201;
+        s=susede2_ed25519; t=1654611883;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=K1UFrLWacvJkw6MScUfl7W5FJUnbgbBAyqpYTgxaIew=;
-        b=yeFeAxxod7xuFPnkphUIxV/dePT4m3EzRo9sFovTPeM+xO8M9OEB02Tc/0CaTZYWOOi1IH
-        jaDLOBtPC2WqF3Ag==
+        bh=6N5hco9Q+MRuxEu4pr8VC8arowNl1Y5z8EmozLafC2o=;
+        b=WY1DaM5XaeXUgOxCBCljkGJc7piekRrP2/CB2w1JPh5zeGKUwh0og8/2LHS7ZpMMZpXRCk
+        sUeV2l2YS9whi/Dg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 53E7413638;
-        Tue,  7 Jun 2022 14:13:21 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9B65213638;
+        Tue,  7 Jun 2022 14:24:43 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id aQvsEgFdn2I+PwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 07 Jun 2022 14:13:21 +0000
-Date:   Tue, 7 Jun 2022 16:13:20 +0200
+        id bCZrJKtfn2J/RAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 07 Jun 2022 14:24:43 +0000
+Date:   Tue, 7 Jun 2022 16:24:42 +0200
 From:   Jean Delvare <jdelvare@suse.de>
 To:     Heiner Kallweit <hkallweit1@gmail.com>
 Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 3/8] i2c: i801: make FEATURE_BLOCK_PROC dependent on
- FEATURE_BLOCK_BUFFER
-Message-ID: <20220607161320.6ce0db40@endymion.delvare>
-In-Reply-To: <5e5774c2-26a2-dd4b-29ca-e1eca32ef889@gmail.com>
+Subject: Re: [PATCH 4/8] i2c: i801: enable FEATURE_IRQ and
+ FEATURE_I2C_BLOCK_READ on all chip versions
+Message-ID: <20220607162442.7b618cca@endymion.delvare>
+In-Reply-To: <1f81a126-11b4-aa22-1e2c-9824e0ad730c@gmail.com>
 References: <4125f9ce-ce5f-fbcf-7d6f-9bc586ac43e0@gmail.com>
-        <5e5774c2-26a2-dd4b-29ca-e1eca32ef889@gmail.com>
+        <1f81a126-11b4-aa22-1e2c-9824e0ad730c@gmail.com>
 Organization: SUSE Linux
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
@@ -75,50 +75,27 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi Heiner,
 
-On Fri, 15 Apr 2022 18:55:46 +0200, Heiner Kallweit wrote:
-> According to the datasheet the block process call requires block
-> buffer mode. The user may disable block buffer mode by module
-> parameter disable_features, in such a case we have to clear
-> FEATURE_BLOCK_PROC.
+On Fri, 15 Apr 2022 18:56:30 +0200, Heiner Kallweit wrote:
+> According to the datasheets interrupt mode and i2c block read are
+> supported on all chip versions. Therefore set both feature flags for
+> all chip versions.
 
-In which datasheet are you seeing this? Can you point me to the
-specific section and/or quote the statement? I can't find it in the
-datasheet I'm looking at (ICH9, Intel document 316972-002) but it is
-huge and I may just be missing it.
+While the datasheets do match your claims (I checked the 82801CAM aka
+ICH3-M datasheet), I have a hard time believing we would have made the
+feature device-dependent without a good reason (and I have vague
+memories that there was a problem, although I can't find any proof of
+that).
 
-Also, same request as previous patch, I'd like a comment in the code,
-so that developers don't have to read the git log to figure out why this
-piece of code is there.
+So I'll try to resurrect my old ICH3-M-based laptop and test these
+changes on it. If I manage to get a Linux distribution to install on
+that 20-year-old system...
 
-Furthermore, as far as I can see, the FEATURE_BLOCK_PROC flag only
-affects the value returned by i801_func(). i801_access() does not
-verify whether this flag is set before processing a command where size
-== I2C_SMBUS_BLOCK_PROC_CALL. I think it should? Otherwise your fix is
-only partial (will work if the device driver calls .functionality as it
-is supposed to, will fail with - I suppose - unpredictable results if
-the device driver calls .smbus_xfer directly).
+> Note: Don't remove the two feature flags as such (at least for now),
+> so that in case of a problem users can use the disable_features
+> module parameter to disable a problematic feature.
 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->  drivers/i2c/busses/i2c-i801.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index eccdc7035..1d8182901 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -1675,6 +1675,9 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  	}
->  	priv->features &= ~disable_features;
->  
-> +	if (!(priv->features & FEATURE_BLOCK_BUFFER))
-> +		priv->features &= ~FEATURE_BLOCK_PROC;
-> +
->  	err = pcim_enable_device(dev);
->  	if (err) {
->  		dev_err(&dev->dev, "Failed to enable SMBus PCI device (%d)\n",
+Agreed.
 
-Thanks,
 -- 
 Jean Delvare
 SUSE L3 Support
