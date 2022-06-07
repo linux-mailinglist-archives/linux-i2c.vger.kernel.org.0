@@ -2,106 +2,190 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 854895403EB
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jun 2022 18:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F30D540484
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jun 2022 19:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345106AbiFGQjt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Jun 2022 12:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42976 "EHLO
+        id S1345467AbiFGRPk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Jun 2022 13:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345110AbiFGQjk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jun 2022 12:39:40 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4ABAC8BF1;
-        Tue,  7 Jun 2022 09:39:39 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id bo5so15995558pfb.4;
-        Tue, 07 Jun 2022 09:39:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=aawj7hG1Xbc+Qda8TB7Lg5hLA/qmPkKw+fCuOCx3eEw=;
-        b=gj0//NcXWdRESh0slbXEmK4UiYABgxbNpk9xMhOaO6vBUgQcZNsX3t6RJtmh3zCpC8
-         6FxRO9P5loqq+uRE60xUQMNonjzinITqCrsDh5u1pTwvtjTu38ie4+gCe30Daf6DAFqh
-         C299g5Cp9pCnPkJ/aSNCa83Wbo7C5L4oHparszEnh7uGoA2ZRpkUDSvaIizVHuX6h2tJ
-         NoK/95kryoWrZ+p43VHqmTJ55zdsq6HmlUqmOx8h8ZIDnqdAD6/hezEbOW+Xp89H0mYA
-         GibckzYUxy2ilra+pVO6KanBAi4dglRoKVVoE9WPXDB455lK32vKEw4/wgf+m6UmNoZe
-         1Trw==
+        with ESMTP id S1345462AbiFGRPj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jun 2022 13:15:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FDD2104C81
+        for <linux-i2c@vger.kernel.org>; Tue,  7 Jun 2022 10:15:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654622137;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ylQrXRxCE5WefGCA0g7YA7OMYNSZuN3Qp/+5VKhMNKM=;
+        b=CkjcwTVtcxZ570Jt/xZj5ju8FPjAmSyNGqP8Zi+oDTU/i7Z7mwimrd/r5ij869x+QxPIx9
+        2kR0geWQhLnAAby4nsX/7GSnGAPHPgcN0pQcfcScSxjfWcqeZsMOKmJFgSVcy7U7VuKW8a
+        crXSOygLf7zvGojsh7yYBYhOcf6cecg=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-528-NjQVFmHIORSENiRrEHYsOg-1; Tue, 07 Jun 2022 13:15:36 -0400
+X-MC-Unique: NjQVFmHIORSENiRrEHYsOg-1
+Received: by mail-ed1-f69.google.com with SMTP id o17-20020a50fd91000000b0042dbded81deso13072467edt.0
+        for <linux-i2c@vger.kernel.org>; Tue, 07 Jun 2022 10:15:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=aawj7hG1Xbc+Qda8TB7Lg5hLA/qmPkKw+fCuOCx3eEw=;
-        b=t7uNkv2OUfoqdv89XLR1wX1zStobSy0VflXZJwbVfN15bYB9pd76kpNMElDGE5Nl6q
-         elMm1koUBRIunzfUYUvd+s22aLwWAI7XTyVbAzot4kSBzHZGnmRgUBgEvW0Eq59MgQrB
-         NnCQEA5bxs5vKeZ+BTaycXmAaj3OhltZIYmiEzkvAQjHyd8SU4TldkB7uET4XJM8Cezk
-         Jlp4ytVo6gVO9DK/yKu0MEcxEs2tJ1zaE8kOWWRcdcQt20GdWEKtLnnzd9ySgE9rMFsM
-         ogNo+vxSJFLcNJ70MP02//6a/0plftYXRz9xDj2kLNGxCQBEVFnuQsN5s0ABCrPyj6vW
-         dzIg==
-X-Gm-Message-State: AOAM53023JM9XrmibSurD13E/y4A4kj8oUdLBPyYzQ00SGW3KZmwgdA/
-        w4kWtsOV62M9uo0DMhg9aYE=
-X-Google-Smtp-Source: ABdhPJw1wLF5PQnn7vw9tzWD7yWUylInWPqMGKa9/YsNsEWJz7DaizG+XWonJpgcLRvbujhgg2s/VQ==
-X-Received: by 2002:a65:404c:0:b0:3c6:4018:ffbf with SMTP id h12-20020a65404c000000b003c64018ffbfmr26572041pgp.408.1654619979325;
-        Tue, 07 Jun 2022 09:39:39 -0700 (PDT)
-Received: from potin-quanta.dhcpserver.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id d15-20020aa797af000000b0051bbc198f3fsm12560272pfq.13.2022.06.07.09.39.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 09:39:39 -0700 (PDT)
-From:   Potin Lai <potin.lai.pt@gmail.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rayn Chen <rayn_chen@aspeedtech.com>
-Cc:     Patrick Williams <patrick@stwcx.xyz>,
-        Potin Lai <potin.lai@quantatw.com>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Potin Lai <potin.lai.pt@gmail.com>
-Subject: [PATCH v3 2/2] dt-bindings: aspeed-i2c: add properties for setting i2c clock duty cycle
-Date:   Wed,  8 Jun 2022 00:37:03 +0800
-Message-Id: <20220607163703.26355-3-potin.lai.pt@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220607163703.26355-1-potin.lai.pt@gmail.com>
-References: <20220607163703.26355-1-potin.lai.pt@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ylQrXRxCE5WefGCA0g7YA7OMYNSZuN3Qp/+5VKhMNKM=;
+        b=Z1d3MLYubIO8rn3QFcgw0VnBiwe6v3Os3Tm9zeInkBzOrzoWhS9qM2T3gyni7BbLvO
+         AmrDZVX8nSTA0Pz9nY8qflYMOrJczLRtCoVibjJubfiIF5fSV+j05PeGCc7lrazPRnS5
+         GxkHG7EhTAJCbWPSUfW1LW3rX2/KSDOhVVJAEisx+78+S3B3SK2pGtD3+WESPoQoiVJ4
+         N2Bd4jCFyo+Ixtdika8RIBh0InzhZeGEi/mPLpS02PBR5QZgg8WUvVcmyYye3iV0fzQP
+         Kvj72HceF9f4cIk3vPd3pEoUf/o1aFwEKglCBHnCzCCw+aivogsMwyloIc28/NflulLb
+         S5zA==
+X-Gm-Message-State: AOAM532esKHIxM8VM//VO7ikmN9DkCtfrHUEHg2HxwIkaNRB0NinpFcq
+        ocPXdm9XCftt+JHeJ1oTBqATLUvtPu7LInGMeHXF7xMRw4li7z/bF53zbSvYh4boc4gYuSQIyEp
+        7ygzEcOGUhdYShZLqiAHI
+X-Received: by 2002:a05:6402:5114:b0:42f:b5f3:1f96 with SMTP id m20-20020a056402511400b0042fb5f31f96mr23188479edd.260.1654622134905;
+        Tue, 07 Jun 2022 10:15:34 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyzX1Cu3nPKRVmyJ+MDxgaeYIxZau3BfUeQpL7WBwfYfiESgqradh0LlQ1DOcm/hAz2wDsIaw==
+X-Received: by 2002:a05:6402:5114:b0:42f:b5f3:1f96 with SMTP id m20-20020a056402511400b0042fb5f31f96mr23188425edd.260.1654622134615;
+        Tue, 07 Jun 2022 10:15:34 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id b23-20020a17090630d700b0070e1adff390sm5926625ejb.34.2022.06.07.10.15.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 10:15:33 -0700 (PDT)
+Message-ID: <938117aa-001c-9e31-f50c-dbfa2d376d76@redhat.com>
+Date:   Tue, 7 Jun 2022 19:15:32 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v6 11/12] platform/x86: simatic-ipc: drop custom P2SB bar
+ code
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Henning Schild <henning.schild@siemens.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
+ <20220606164138.66535-12-andriy.shevchenko@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220606164138.66535-12-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Introduce a new property for setting a minimum duty cycle for clock high.
+Hi,
 
-* i2c-clk-duty-cycle-min: a minimum percentage of clock high
+On 6/6/22 18:41, Andy Shevchenko wrote:
+> From: Henning Schild <henning.schild@siemens.com>
+> 
+> The two drivers that used to use this have been switched over to the
+> common P2SB accessor, so this code is not needed any longer.
+> 
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
----
- Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Thanks, patch looks good to me:
 
-diff --git a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-index ea643e6c3ef5..af4c49111cc0 100644
---- a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-@@ -49,6 +49,14 @@ properties:
-     description:
-       states that there is another master active on this bus
- 
-+  i2c-clk-duty-cycle-min:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 1
-+    maximum: 100
-+    default: 50
-+    description:
-+      a minimum percentage of clock high
-+
- required:
-   - reg
-   - compatible
--- 
-2.17.1
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Also Ack for merging this through the MFD tree.
+
+Regards,
+
+Hans
+
+> ---
+>  drivers/platform/x86/simatic-ipc.c            | 38 -------------------
+>  .../platform_data/x86/simatic-ipc-base.h      |  2 -
+>  2 files changed, 40 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/simatic-ipc.c b/drivers/platform/x86/simatic-ipc.c
+> index b599cda5ba3c..26c35e1660cb 100644
+> --- a/drivers/platform/x86/simatic-ipc.c
+> +++ b/drivers/platform/x86/simatic-ipc.c
+> @@ -101,44 +101,6 @@ static int register_platform_devices(u32 station_id)
+>  	return 0;
+>  }
+>  
+> -/* FIXME: this should eventually be done with generic P2SB discovery code
+> - * the individual drivers for watchdogs and LEDs access memory that implements
+> - * GPIO, but pinctrl will not come up because of missing ACPI entries
+> - *
+> - * While there is no conflict a cleaner solution would be to somehow bring up
+> - * pinctrl even with these ACPI entries missing, and base the drivers on pinctrl.
+> - * After which the following function could be dropped, together with the code
+> - * poking the memory.
+> - */
+> -/*
+> - * Get membase address from PCI, used in leds and wdt module. Here we read
+> - * the bar0. The final address calculation is done in the appropriate modules
+> - */
+> -u32 simatic_ipc_get_membase0(unsigned int p2sb)
+> -{
+> -	struct pci_bus *bus;
+> -	u32 bar0 = 0;
+> -	/*
+> -	 * The GPIO memory is in bar0 of the hidden P2SB device.
+> -	 * Unhide the device to have a quick look at it, before we hide it
+> -	 * again.
+> -	 * Also grab the pci rescan lock so that device does not get discovered
+> -	 * and remapped while it is visible.
+> -	 * This code is inspired by drivers/mfd/lpc_ich.c
+> -	 */
+> -	bus = pci_find_bus(0, 0);
+> -	pci_lock_rescan_remove();
+> -	pci_bus_write_config_byte(bus, p2sb, 0xE1, 0x0);
+> -	pci_bus_read_config_dword(bus, p2sb, PCI_BASE_ADDRESS_0, &bar0);
+> -
+> -	bar0 &= ~0xf;
+> -	pci_bus_write_config_byte(bus, p2sb, 0xE1, 0x1);
+> -	pci_unlock_rescan_remove();
+> -
+> -	return bar0;
+> -}
+> -EXPORT_SYMBOL(simatic_ipc_get_membase0);
+> -
+>  static int __init simatic_ipc_init_module(void)
+>  {
+>  	const struct dmi_system_id *match;
+> diff --git a/include/linux/platform_data/x86/simatic-ipc-base.h b/include/linux/platform_data/x86/simatic-ipc-base.h
+> index 62d2bc774067..39fefd48cf4d 100644
+> --- a/include/linux/platform_data/x86/simatic-ipc-base.h
+> +++ b/include/linux/platform_data/x86/simatic-ipc-base.h
+> @@ -24,6 +24,4 @@ struct simatic_ipc_platform {
+>  	u8	devmode;
+>  };
+>  
+> -u32 simatic_ipc_get_membase0(unsigned int p2sb);
+> -
+>  #endif /* __PLATFORM_DATA_X86_SIMATIC_IPC_BASE_H */
 
