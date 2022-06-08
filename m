@@ -2,55 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98457542843
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jun 2022 09:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D8654290E
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jun 2022 10:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiFHHqG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Jun 2022 03:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
+        id S231130AbiFHIPV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Jun 2022 04:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240296AbiFHHiR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jun 2022 03:38:17 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9AE1C2D58
-        for <linux-i2c@vger.kernel.org>; Wed,  8 Jun 2022 00:04:23 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nypji-0002oR-6h; Wed, 08 Jun 2022 09:04:14 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nypjh-0078UY-4b; Wed, 08 Jun 2022 09:04:11 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nypje-00EvIo-T1; Wed, 08 Jun 2022 09:04:10 +0200
-Date:   Wed, 8 Jun 2022 09:04:08 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Tudor.Ambarus@microchip.com
-Cc:     alexandre.belloni@bootlin.com, Nicolas.Ferre@microchip.com,
-        linux-crypto@vger.kernel.org, kernel@pengutronix.de,
-        Claudiu.Beznea@microchip.com, linux-arm-kernel@lists.infradead.org,
-        linux-i2c@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH] crypto: atmel-ecc - Remove duplicated error reporting in
- .remove()
-Message-ID: <20220608070408.odie7hrcnfasegbr@pengutronix.de>
-References: <7ffd4d35-938a-3e82-b39b-92e76819fa92@microchip.com>
- <20220520172100.773730-1-u.kleine-koenig@pengutronix.de>
- <fd8d1ca1-b6fa-ecb9-ba71-80449af59a9a@microchip.com>
+        with ESMTP id S232554AbiFHINe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jun 2022 04:13:34 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14353104C5
+        for <linux-i2c@vger.kernel.org>; Wed,  8 Jun 2022 00:42:44 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id m39-20020a05600c3b2700b0039c511ebbacso3881791wms.3
+        for <linux-i2c@vger.kernel.org>; Wed, 08 Jun 2022 00:42:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=pDUMQH/JwikS3dGEuoL+s1rn8CjjChIDmrF7b583qjU=;
+        b=fKa3RQzgR1C9gPuzjlK18lPR2ODRZc9Pj5Y+S/gKLpIzbFKHaf1hSkOcGwqMnNsq9r
+         XMuR0mXisUyo/8tXYSJHQu1AEBby8iCEMYFo9QfFIPo7CeBdgGwt4qVeeX7wVgxf6yLX
+         bw288huVE7wnORJcuCI5o1dxTMI8dpA+TRhyYRY3VuiE+BlZ/D2EkZIJVJKnQEiTN0M4
+         2Tc/6fwu7DLHDdQbhhhmCxEbH3XYI2IzWnO/zUDfPluY0N6BMqQOxDd5pl8kgFNumtlP
+         e0rNv4a89XGj4Yn2zUj5RD1kWvz2pHoia7MKcqd+835Rt8u8iwj82sJeJYf00LEQTTM1
+         RbHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=pDUMQH/JwikS3dGEuoL+s1rn8CjjChIDmrF7b583qjU=;
+        b=ThMNykFRBp10fKCZlAb2SXAqhRdrKsZryhsfJVRbPt1AyBpqV1Og3mHtCX8MFoApmg
+         DIdSSfna8xBemBVzjFEOO476T9qHSabCDGtoDNXYZ6mNtYn8F7XSQsG+RzWtrym+GJsD
+         mv0gIdyE68tKQdspznU4u7slzBghIV5Cdk1XEqdSseLE8iMzxB24/Sv61E1WJ04f0otq
+         cClGjh+1xOHoVCtBBng00QazoG7/P57Hcxa7Dflx5d5DYf+uIqk2GYmnZ2TBj2zmCfZt
+         XuftgxGKNXrIF6dBOhnER6z61G/MiFp/R1BtWUcMYQHwS0Couy+e4bKjjMj9sZNfJVny
+         lCPw==
+X-Gm-Message-State: AOAM533lcMZ8sjb0Dv9mH2P/XkYMUZsDR79ySOaQpxBGammICy1iIh4j
+        /9UecdXGhEnlhlM451OIPCvQug==
+X-Google-Smtp-Source: ABdhPJxfmsfGuJRdtDGKUMYuiYyopBGOApn2Jgo+2/o+D5JV/RRywsnhNTpqwclfgNE8JAcQiqHOkA==
+X-Received: by 2002:a05:600c:5021:b0:39c:6571:e0b0 with SMTP id n33-20020a05600c502100b0039c6571e0b0mr190102wmr.177.1654674163150;
+        Wed, 08 Jun 2022 00:42:43 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id g20-20020a05600c4c9400b0039749b01ea7sm26101954wmp.32.2022.06.08.00.42.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 00:42:42 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 08:42:40 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Henning Schild <henning.schild@siemens.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
+Message-ID: <YqBS8I62YBPFC9iS@google.com>
+References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4gnzjrjot45eo7jj"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <fd8d1ca1-b6fa-ecb9-ba71-80449af59a9a@microchip.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,62 +90,37 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Mon, 06 Jun 2022, Andy Shevchenko wrote:
 
---4gnzjrjot45eo7jj
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> There are a few users that would like to utilize P2SB mechanism of hiding
+> and unhiding a device from the PCI configuration space.
+> 
+> Here is the series to consolidate p2sb handling code for existing users
+> and to provide a generic way for new comer(s).
+> 
+> It also includes a patch to enable GPIO controllers on Apollo Lake
+> when it's used with ABL bootloader w/o ACPI support.
+> 
+> The patch that brings the helper ("platform/x86/intel: Add Primary to
+> Sideband (P2SB) bridge support") has a commit message that sheds a light
+> on what the P2SB is and why this is needed.
+> 
+> I have tested this on Apollo Lake platform (I'm able to see SPI NOR and
+> since we have an ACPI device for GPIO I do not see any attempts to recreate
+> one).
+> 
+> The series is ready to be merged via MFD tree, but see below.
+> 
+> The series also includes updates for Simatic IPC drivers that partially
+> tagged by respective maintainers (the main question is if Pavel is okay
+> with the last three patches, since I believe Hans is okay with removing
+> some code under PDx86). Hence the first 8 patches can be merged right
+> away and the rest when Pavel does his review.
 
-Hello
+Can we just wait for Pavel's review, then merge them all at once?
 
-On Wed, Jun 08, 2022 at 04:33:48AM +0000, Tudor.Ambarus@microchip.com wrote:
-> On 5/20/22 20:21, Uwe Kleine-K=F6nig wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
-the content is safe
-> >=20
-> > Returning an error value in an i2c remove callback results in an error
-> > message being emitted by the i2c core, but otherwise it doesn't make a
-> > difference. The device goes away anyhow and the devm cleanups are
-> > called.
-> >=20
-> > As atmel_ecc_remove() already emits an error message on failure and the
-> > additional error message by the i2c core doesn't add any useful
-> > information, change the return value to zero to suppress this message.
-> >=20
-> > Also make the error message a bit more drastical because when the device
-> > is still busy on remove, it's likely that it will access freed memory
-> > soon.
-> >=20
-> > This patch is a preparation for making i2c remove callbacks return void.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
->=20
-> Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-
-In the past patches were picked up by Herbert. I assume your R-b tag was
-the missing bit to make him pick up this patch? To make a bit more sure
-that will happen, I added him and davem to Cc.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---4gnzjrjot45eo7jj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKgSeUACgkQwfwUeK3K
-7Am/5Af+NIWhwEUYLdsOV0/RIhZ8itERCDfCVrnMb8K5KwOQ+PgWSJiYcj0kSZnM
-tXavBcIqOV94MPWA9ra6PueGGdDHjU5NamPOHSD3c6z9ZWhny96VRIKYonjlG95j
-1Al8wNonhgH4H/qiaFlhoW4QPhZUGQPfHRNqLT0Sql9iT2TYBkGls9sKHPtFMwOn
-QzhM1xCMee5UKWryWf42mhZIA7/GPu131+ZJFBVODXlzYd7krlNuKRegUul8r0pl
-T5F31aLeD+2tjST884EdzsseTSHaH5C0Z4ff8MmUNnd8zezvOZrwtLFaIGrKjSGV
-LLQBHkO2AS1MiUnv0nF110HEPSwpYQ==
-=Tb4p
------END PGP SIGNATURE-----
-
---4gnzjrjot45eo7jj--
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
