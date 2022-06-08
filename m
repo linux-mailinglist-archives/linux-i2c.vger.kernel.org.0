@@ -2,125 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CCA542E60
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jun 2022 12:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2F7543D0E
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jun 2022 21:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236989AbiFHKv0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Jun 2022 06:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
+        id S234521AbiFHTlt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Jun 2022 15:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236971AbiFHKvZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jun 2022 06:51:25 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145041E7AF8;
-        Wed,  8 Jun 2022 03:51:21 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id d14so965517eda.12;
-        Wed, 08 Jun 2022 03:51:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J6hYfUhU7mRYwVUWV1xGzdqXXNAttpIl10AtMQCOSgI=;
-        b=DRmwxIkZoL4DqetzrcoZfZzVNax4JPN3514EUieQo+WYusBkzmwNoM3bIyiy/eO2oD
-         2RPdMoJv5i17WqdhHNx0ygl6WDG0VOkLBNCcVFxlgvFfl9HHDOEl0qtK8cxzKqc0NgxQ
-         MmL5Ijv2vFv/2k3DSxKoPr7l2PZ11uuUTj/O3uWMZN+AYIddD9Sonwc6SgJJV/tqfv05
-         vJMtDRmsgBLpOcO13EL88pFXx+MHFmCowiXkadU/u4fWHcGLmEMvTETyl+ZECY40wF7i
-         VDTndhEBm+eWs9JQfuvWvSQwuPIi1nG0gMZ/5gjKtJJu3IO0leqswYYz8aJ/mTjxiKwj
-         UASQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J6hYfUhU7mRYwVUWV1xGzdqXXNAttpIl10AtMQCOSgI=;
-        b=G7u7CuCglQSdZP6Y5BCrT07j4hKmDuXnYuWaJxmEETh6tA3uujYNTGcvMp4TDDGs56
-         oJSU/ahMpMfguoUboc3FPnNKbdZC18By3Mw3TtqofSQX5VI+gp5nGYT42C6v4U/GVWM1
-         KWdUYkFIJ1YWVq5bhlUvQlC6boarvF89VnA98kP/J4PcmmmCQ9YY7/zg9/41n7kdKNgL
-         CKcgORry5oWYgorcY3WUDYoODRQq0SyleLdkUdjnGVjbGlYsQ0bxb0cYD9eJz84WcZUa
-         cO9TACIxq/V4CocSkwrUpQ6N0RSUSKM0i65Y7zSvPitpf6oe8igdxWD6pvZRDSJvx47s
-         Y5dQ==
-X-Gm-Message-State: AOAM532AhR6SRxkPY39nVxk9sAfPBWK2x79vl8iGB8sx0ZjTWB9HVOo5
-        kZonTd+YUBTm4pi+pi0DFhm2FSYpTtsA4f8THCs=
-X-Google-Smtp-Source: ABdhPJyT27iK6nu3n1SZGfqncYVgcfI2rm+neMbh7OrIHWE8u3KQraEwyLH1GjS9Y+7iJb+hRPt8Qu3n7OBk775xVRw=
-X-Received: by 2002:aa7:c396:0:b0:42d:8b86:a8dc with SMTP id
- k22-20020aa7c396000000b0042d8b86a8dcmr37783861edq.54.1654685480497; Wed, 08
- Jun 2022 03:51:20 -0700 (PDT)
+        with ESMTP id S229908AbiFHTls (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jun 2022 15:41:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACEB1B9;
+        Wed,  8 Jun 2022 12:41:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BFAB61369;
+        Wed,  8 Jun 2022 19:41:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6351C34116;
+        Wed,  8 Jun 2022 19:41:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654717306;
+        bh=9GAynSnsawCwnmUqw7IoWAT2vpCqkUaJCxcBNxSbCJI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RuOwV/2DtYx6MUh2WNc8ugwmhz/cY7WUs12guZyuVz0xDuQn3r64L1e3HweTV114R
+         bbcFAg53qUJHlbSiuhkxHWmBlDiGnz04zR1FWfRj8USDXtjHMlg8QdP+dAkBf05iir
+         +QitD5Rx6ZHR4MGTzbgoYi3gYmsI4Oe5PsxMkJ1oeAj34kJbbNbb0L6vMNKT4WEyaR
+         7PdrJAazUA9q/VGFd4XYAeREZxEgJB5BuVu2wZAWUzLo0AERbC+YCQYx6Rek+CSYEP
+         OlybjU+cgMhPTgHCXLiZYhTDYQnJYaaBk4C+bhbPuiIfIMY839FYbAWnCab0twggBy
+         cLTV4J79pykJA==
+Date:   Wed, 8 Jun 2022 21:41:36 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: i2c: Rewrite Nomadik I2C bindings in YAML
+Message-ID: <YqD7cN7j6qL3QmD+@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220526211046.367938-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com> <YqBS8I62YBPFC9iS@google.com>
-In-Reply-To: <YqBS8I62YBPFC9iS@google.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 8 Jun 2022 12:50:44 +0200
-Message-ID: <CAHp75Ve9Lju8AEQd5huz1aYGg4sOu-ae7tTdyDWCXPCBR=wXbQ@mail.gmail.com>
-Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Henning Schild <henning.schild@siemens.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Upe8hv5tAPvft1GE"
+Content-Disposition: inline
+In-Reply-To: <20220526211046.367938-1-linus.walleij@linaro.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 9:42 AM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Mon, 06 Jun 2022, Andy Shevchenko wrote:
->
-> > There are a few users that would like to utilize P2SB mechanism of hiding
-> > and unhiding a device from the PCI configuration space.
-> >
-> > Here is the series to consolidate p2sb handling code for existing users
-> > and to provide a generic way for new comer(s).
-> >
-> > It also includes a patch to enable GPIO controllers on Apollo Lake
-> > when it's used with ABL bootloader w/o ACPI support.
-> >
-> > The patch that brings the helper ("platform/x86/intel: Add Primary to
-> > Sideband (P2SB) bridge support") has a commit message that sheds a light
-> > on what the P2SB is and why this is needed.
-> >
-> > I have tested this on Apollo Lake platform (I'm able to see SPI NOR and
-> > since we have an ACPI device for GPIO I do not see any attempts to recreate
-> > one).
-> >
-> > The series is ready to be merged via MFD tree, but see below.
-> >
-> > The series also includes updates for Simatic IPC drivers that partially
-> > tagged by respective maintainers (the main question is if Pavel is okay
-> > with the last three patches, since I believe Hans is okay with removing
-> > some code under PDx86). Hence the first 8 patches can be merged right
-> > away and the rest when Pavel does his review.
->
-> Can we just wait for Pavel's review, then merge them all at once?
 
-Sure, it would be the best course of action.
+--Upe8hv5tAPvft1GE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-With Best Regards,
-Andy Shevchenko
+On Thu, May 26, 2022 at 11:10:46PM +0200, Linus Walleij wrote:
+> This rewrites the Nomadik I2C bindings in YAML, some extra
+> tweaks were needed because of the way the original nomadik
+> names the compatible with two compatibles and the DB8500
+> with three, and the two main variants use a different clock
+> name.
+>=20
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+
+Applied to for-next, thanks!
+
+
+--Upe8hv5tAPvft1GE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKg+2wACgkQFA3kzBSg
+KbaNCg//Q7V9llgbW/g+hSGWPDus2htZc5CQ2phlVbovwRmfLpOcTy+5hitlhO+p
+6to4uPVusjUEf0Fh3AhxtD6FFg0+x7wasQ86XrkqRb7kHa/wwlrf0pRzCzoN2JPZ
+FPOH92QvHEQ29+lE7oYVDW1B8FX3UZrsLLnpIl4Zhh2FdSBCgAM5WTF+4oFqV4zX
+6QVnKbYoIr9jRLRelAINRw6VZTEujsEKRt3RxS1OeFyQr8+tGL/0hlsQUPn+qVA7
+Vr5q5YriNTYFAiY6PxBRkuCh7Sc8/a4s+7ylND2c5gNmV7L2dAWlhUfQ4o2W2gCQ
+bFMtDkZ0lwfI9nrfvlCfKpq31FaYZszfCaMFp8aMM52nDHJIZFmW/VmdmZJfZfR+
+jA/iAlQ3l+uHvXtvyHvFpqys1HdBkB8QdhDX0YL6iJlFKngM21FHGHYPZfsDnLMU
++5gCE1Rt/eHbXYq49ux53zqxodoWN6HxdUWTTa/eaHS6VWHNu4ltj60qVZIBonw9
+5PUa8BCtgNL7HuMTAz1pN4XAt+nPGviqxsodmpPmOiZaBLRfy4O14+psRerHV/rl
+rDuzyzpbTFP4zOEdA71T5xPsF6Zr058Cl/E3E4OLsTKbT31fanJ2Nka565Y4rOnI
+0/yDJbDQ77uA3NuOfkqAsBFO76SZewd3gGPprC0NFCEt+i4hAl8=
+=Wm9g
+-----END PGP SIGNATURE-----
+
+--Upe8hv5tAPvft1GE--
