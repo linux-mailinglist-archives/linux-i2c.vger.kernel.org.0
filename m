@@ -2,36 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 979C9543D34
+	by mail.lfdr.de (Postfix) with ESMTP id B00D1543D35
 	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jun 2022 22:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233896AbiFHUEh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Jun 2022 16:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
+        id S235738AbiFHUEi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Jun 2022 16:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235788AbiFHUDt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jun 2022 16:03:49 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32AA302227;
-        Wed,  8 Jun 2022 13:03:47 -0700 (PDT)
+        with ESMTP id S229992AbiFHUEA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jun 2022 16:04:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3E519BC1C;
+        Wed,  8 Jun 2022 13:03:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 24AD4CE2BA8;
-        Wed,  8 Jun 2022 20:03:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80088C34116;
-        Wed,  8 Jun 2022 20:03:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17891B82AC5;
+        Wed,  8 Jun 2022 20:03:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EA1DC34116;
+        Wed,  8 Jun 2022 20:03:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654718624;
-        bh=2YBOOzDcHV9YKatCnZg6tuDE1Z9gZ1Em1HcbE7wFvVQ=;
+        s=k20201202; t=1654718632;
+        bh=wQ4rfPIpVagVQ3QT8pEsLwCxUHgmosnjPiIiTGUJX/s=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TRi+X6ISAS2AYsUquXZb7ZS4tsHenGEw8J86GI+nJR/KEOep44TF2LCctaxL18sUF
-         F8QmqEFVF75ymCbkgzWmj9tdgoufjXusPIdA2iky6WIfhf7OMsqnblWAISYD7mNtXV
-         8GDwq/iOGJxz8AIr/yXRi6kfJ7y6Qut8wW7rM4m8erc9KwMKv3MZdN3Kp6jS+wh9Sb
-         0mP9/nXGJGSrq4zR8DJTO3yo/Qpg6VvuxF0EMCBoVRZhOlaG1jbk3/PcSH7wVZqtRt
-         tgWMnjGf1JgMEj4WbSBdlVG0I3ms0yWK9yeoo0dgus/N8GQfc998WfYVB025Xj50sF
-         UBMP6lGBtG97w==
-Date:   Wed, 8 Jun 2022 22:03:40 +0200
+        b=OMH2DLW58onHtg6XT4XI6AVhrm9/HKYtuzy9jVNgUgXc/hJa0TRxcEBesmDeE0toh
+         RmGCrxE4o2aFz8LhsIHXXCBVT3bVJSk4juEinfMdUDcvjaEE6A2PPPlJsHTTj8x7Ez
+         GE330D5XzW24g0bRl4ZcuqXXARDIOzXxa9MZ4d5jg1+c3zoB4RP2CNMYwCJEhpRVKe
+         RrKzzBzUjszVxVJpAHqI6TbnkhEa+djDreE0lml3SSuHk2eBNNQ2r59+wgCAMwtE8t
+         179pbrkTbzMr9KzCmQKOl2ZcfKikQfREcAcSOnFyXzYVbECi0VLhpNQ4tB5Fp6XzLV
+         1uoN+zszgrrWA==
+Date:   Wed, 8 Jun 2022 22:03:49 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Tyrone Ting <warp5tw@gmail.com>
 Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
@@ -45,8 +45,8 @@ Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         kfting@nuvoton.com, openbmc@lists.ozlabs.org,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 3/5] i2c: npcm: Correct slave role behavior
-Message-ID: <YqEAnMTaHTbIDQq+@kunai>
+Subject: Re: [PATCH v6 4/5] i2c: npcm: Support NPCM845
+Message-ID: <YqEApWattWwRIS2H@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
         tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
@@ -61,12 +61,12 @@ Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20220525032341.3182-1-warp5tw@gmail.com>
- <20220525032341.3182-4-warp5tw@gmail.com>
+ <20220525032341.3182-5-warp5tw@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qo+XL6tbyZ/UK+9f"
+        protocol="application/pgp-signature"; boundary="kPJC/WFnuB86hUei"
 Content-Disposition: inline
-In-Reply-To: <20220525032341.3182-4-warp5tw@gmail.com>
+In-Reply-To: <20220525032341.3182-5-warp5tw@gmail.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -78,43 +78,42 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---qo+XL6tbyZ/UK+9f
+--kPJC/WFnuB86hUei
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 25, 2022 at 11:23:39AM +0800, Tyrone Ting wrote:
-> From: Tali Perry <tali.perry1@gmail.com>
+On Wed, May 25, 2022 at 11:23:40AM +0800, Tyrone Ting wrote:
+> From: Tyrone Ting <kfting@nuvoton.com>
 >=20
-> Correct the slave transaction logic to be compatible with the generic
-> slave backend driver.
+> Add NPCM8XX I2C support.
+> The NPCM8XX uses a similar i2c module as NPCM7XX.
+> The internal HW FIFO is larger in NPCM8XX.
 >=20
-> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller drive=
-r")
-> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
 > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+> Acked-by: Tomer Maimon <tmaimon77@gmail.com>
 
-Much easier to review this way! Applied to for-next, thank you!
+Applied to for-next, thanks!
 
 
---qo+XL6tbyZ/UK+9f
+--kPJC/WFnuB86hUei
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKhAJwACgkQFA3kzBSg
-KbYgkw//faQJRCtPr8Tb8HKWy5/dYrz0v3Qn1W2bFsyOpkiK7ZGaagL1CWrcoA4B
-U/8cC3me3vdBzjcBhgOtOW10Af5Zlwt7TN58x/P6Lsr8fS/I/pGz1dLSo9mHlZuL
-juQY8dI/1GMt1k/AcuriTjclCosUbpAiikNq8iXPDr2xDmUVT+6sI3RsU3CouufJ
-id3tZPx1GKuAVz9tcqzPpEPNdmU/yBmQ6fKKJEWV0a7a/KFmXrjqjvqujhwa8Iwx
-GTXAhyDyfV59pI9fiYkL8E4w8f8HDqMInRyZFS+wPbIczvx69oasHGIdRS8nxQf1
-kSiN+tY58U2ux/ejw9k1xgOTnUgBu0SiF5Oqh2lBPK03MWiO6vIkwYE/k8Dgrwkt
-W2+5uxvH71m25M9SBoZ6sxuA5nzq0aNAqpQbgpZO4FmdTqMeOX0k/XtfiwoXjvTM
-Zw8sAEnSbCp4ekSs5XvP+L+IKvUmllH6rDQ2l1PpF+BvtYNO1Rb8smPTZy/5f2PT
-HW4HcYzzkDvG/qI42bsqNfRXVlrbMA4XRgPofR8Rj6Kty15BRyLwKM6O89nvqgfA
-UaI8CFP+zzIxeBqnKqmdYbOxWKoKLipX0DwegcxwpRm7126R+Ec/k2WinIpK9TyT
-Zbiozv7Nl+LEn63WRxEUONHrob5Vf0ADo5NUmPjoJgkyqKfs5Mk=
-=N9+I
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKhAKUACgkQFA3kzBSg
+KbYQ9w//cBr2k5EfU2chzotArllPjkfze2BvQOoDT/QrNM4SmzFk+6/12/IZq0hA
+ix38ggW1Qaa4HX14GrqqEwHkgI7FRbt8ISrpYOwA6zTZCf8rUAUcmBBM7YT4Ccqm
+HsMVgoJfeWKusIDOFJ44hIcFDc4sN4qIUmCXNk/u6+cIX95TePt1lcx7E2fZo+Bg
+YHFxm759oUTxtfrUYJNMM/F7lP2Zl8qzTHshBoeHwwsGA7o+5h8k8+Kf7gc4UnGf
+m+BOdy8uHEjF0L53nlsj0Acg0eAKUryGwUMYjdZssxmcyR/tgSJrmn5AEG8/YvoD
+OgO53WoPVyVkAa/jWHaPdGT0q8NrK418g4T3dTjWBcq/0fBMe3bDMVzNq0Wohoe1
+sws46hWbBGRLMEAK/Y5tktwqUpvUrUG1mTZZFpEQBJRLuhuTtS3JIljqfgFfwto5
+oeCRs/toZkEjmMNsiAUdNJui999XzwWvwBdEx+DMlkvUmbIBmz5CmyE9qszuVKQa
+pgmJ+ZhcWI2S+dbuoYWapE3voz+uE+6Htq1zH3F8X3hWJ1a1WwTCW6Cvah6CmDVy
+W8WKWdWyMgY32ii8IUC3PqBs4FJj1mgs9ee1cSKaVejh/WH1/qkrfts++nSefiML
+zVZht9FVqq0Oi0rVgN9pZoJACAc9LDuxCf36U9N9mrRJ27OPt1A=
+=FUS2
 -----END PGP SIGNATURE-----
 
---qo+XL6tbyZ/UK+9f--
+--kPJC/WFnuB86hUei--
