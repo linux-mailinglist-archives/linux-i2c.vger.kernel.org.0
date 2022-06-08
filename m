@@ -2,50 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2F7543D0E
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jun 2022 21:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB70543D13
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jun 2022 21:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234521AbiFHTlt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Jun 2022 15:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
+        id S233671AbiFHToI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Jun 2022 15:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiFHTls (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jun 2022 15:41:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACEB1B9;
-        Wed,  8 Jun 2022 12:41:47 -0700 (PDT)
+        with ESMTP id S229908AbiFHToH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jun 2022 15:44:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4191D301;
+        Wed,  8 Jun 2022 12:44:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BFAB61369;
-        Wed,  8 Jun 2022 19:41:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6351C34116;
-        Wed,  8 Jun 2022 19:41:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B9B4B82854;
+        Wed,  8 Jun 2022 19:44:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4DD7C34116;
+        Wed,  8 Jun 2022 19:44:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654717306;
-        bh=9GAynSnsawCwnmUqw7IoWAT2vpCqkUaJCxcBNxSbCJI=;
+        s=k20201202; t=1654717444;
+        bh=Att+LqdhkR6w/JyFVjxPin4t9B1Qqk8zksop2M3yoj8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RuOwV/2DtYx6MUh2WNc8ugwmhz/cY7WUs12guZyuVz0xDuQn3r64L1e3HweTV114R
-         bbcFAg53qUJHlbSiuhkxHWmBlDiGnz04zR1FWfRj8USDXtjHMlg8QdP+dAkBf05iir
-         +QitD5Rx6ZHR4MGTzbgoYi3gYmsI4Oe5PsxMkJ1oeAj34kJbbNbb0L6vMNKT4WEyaR
-         7PdrJAazUA9q/VGFd4XYAeREZxEgJB5BuVu2wZAWUzLo0AERbC+YCQYx6Rek+CSYEP
-         OlybjU+cgMhPTgHCXLiZYhTDYQnJYaaBk4C+bhbPuiIfIMY839FYbAWnCab0twggBy
-         cLTV4J79pykJA==
-Date:   Wed, 8 Jun 2022 21:41:36 +0200
+        b=Nq3SaUPBWVYNiopPrkgm6eDiyhlBOZsSTK/5xx78esOq/woDQckQdcj8P+q6ufBj+
+         7rSsDrEMr+9BSDAarl4LD1DaDJu+3TukkqouN0P9vt1oz5Nq3Sbgh4A/eUfKEY9b2u
+         vXFCftlrH1lGKM6CGqOUArXSc+MS2tmmWrwxhkqtbCZ8x37SkGQAsEczSKxlRhBQ6q
+         qGflCyw3mGK1URxVSRl+fv8zHRNUZIPL9HNXJgjfLNCDiB+MpwbQF9uwLWU/t+Zo4+
+         CBoJVx8ufpjQ94+VDKRxvHEO5kep9XcyodJO67+77gozKDv5Ts/1V4K0AyVVwtjczM
+         ma37tfySR5Czg==
+Date:   Wed, 8 Jun 2022 21:43:59 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: i2c: Rewrite Nomadik I2C bindings in YAML
-Message-ID: <YqD7cN7j6qL3QmD+@kunai>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        dave.hansen@linux.intel.com
+Subject: Re: [PATCH v1 1/1] MAINTAINERS: Update Synopsys DesingWare I2C to
+ Supported
+Message-ID: <YqD7/3e03Us//r9W@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20220526211046.367938-1-linus.walleij@linaro.org>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        dave.hansen@linux.intel.com
+References: <20220530120247.70582-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Upe8hv5tAPvft1GE"
+        protocol="application/pgp-signature"; boundary="njmDEJOs1bnqM/32"
 Content-Disposition: inline
-In-Reply-To: <20220526211046.367938-1-linus.walleij@linaro.org>
+In-Reply-To: <20220530120247.70582-1-andriy.shevchenko@linux.intel.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,42 +64,38 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Upe8hv5tAPvft1GE
+--njmDEJOs1bnqM/32
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 26, 2022 at 11:10:46PM +0200, Linus Walleij wrote:
-> This rewrites the Nomadik I2C bindings in YAML, some extra
-> tweaks were needed because of the way the original nomadik
-> names the compatible with two compatibles and the DB8500
-> with three, and the two main variants use a different clock
-> name.
+On Mon, May 30, 2022 at 03:02:47PM +0300, Andy Shevchenko wrote:
+> The actual status of the code is Supported (from x86 perspective).
 >=20
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> Reported-by: dave.hansen@linux.intel.com
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Applied to for-next, thanks!
+Fixed typo in $subject and applied to for-current, thanks!
 
 
---Upe8hv5tAPvft1GE
+--njmDEJOs1bnqM/32
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKg+2wACgkQFA3kzBSg
-KbaNCg//Q7V9llgbW/g+hSGWPDus2htZc5CQ2phlVbovwRmfLpOcTy+5hitlhO+p
-6to4uPVusjUEf0Fh3AhxtD6FFg0+x7wasQ86XrkqRb7kHa/wwlrf0pRzCzoN2JPZ
-FPOH92QvHEQ29+lE7oYVDW1B8FX3UZrsLLnpIl4Zhh2FdSBCgAM5WTF+4oFqV4zX
-6QVnKbYoIr9jRLRelAINRw6VZTEujsEKRt3RxS1OeFyQr8+tGL/0hlsQUPn+qVA7
-Vr5q5YriNTYFAiY6PxBRkuCh7Sc8/a4s+7ylND2c5gNmV7L2dAWlhUfQ4o2W2gCQ
-bFMtDkZ0lwfI9nrfvlCfKpq31FaYZszfCaMFp8aMM52nDHJIZFmW/VmdmZJfZfR+
-jA/iAlQ3l+uHvXtvyHvFpqys1HdBkB8QdhDX0YL6iJlFKngM21FHGHYPZfsDnLMU
-+5gCE1Rt/eHbXYq49ux53zqxodoWN6HxdUWTTa/eaHS6VWHNu4ltj60qVZIBonw9
-5PUa8BCtgNL7HuMTAz1pN4XAt+nPGviqxsodmpPmOiZaBLRfy4O14+psRerHV/rl
-rDuzyzpbTFP4zOEdA71T5xPsF6Zr058Cl/E3E4OLsTKbT31fanJ2Nka565Y4rOnI
-0/yDJbDQ77uA3NuOfkqAsBFO76SZewd3gGPprC0NFCEt+i4hAl8=
-=Wm9g
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKg+/8ACgkQFA3kzBSg
+KbZacBAAlMZzFnT7WhlvQ4sADHG9K3CvaGswKJQ58EbAvVFiIsvxSLBx6Hpf8WEb
+9ZVhrBiNB87WRx9EvOxyV3t7DuJZBznCUo9RGzQQVOageYz79MdfvLbwpg8sa00Z
+keCkbzYYGQ8gV6wCc+gD34lX6eBvmB/esq39Nep9YXsFhEHLd+BVBUriPkaGWd5t
+Mdu8UuwLR3HvvyG8sUy5rzWIpCbkigDDfIVc7OV8lwNpItjPcVFSvbwzc6g02uvm
+yMxmnLV0bXcTmPMWelMIjHmT8zPtoW/VgAAOa73fjPzdfSCD6jEy5wRrbfHYbj4I
+caPHHgnGfculHnF0wJWVs/FMi+F9F8NspWOe5eHMaATm1uS6Kerpm3iICTDXWIRw
+hWSz9e8pnThIHqsZcLfIgpe/X4hLHKKQlpxtvr1iJ1RQHBJ6Xko3b8HgEnshO1ls
+Cg7XVrSVxyjzTUpgvQ4kB/qh11szghDYsmCT2fj009Rlj6pt3Z4Fertim19p8fR/
+jlwhova2Ydcz61/cbxO1IlppfdfB/Hrtsf6wk/f7jwHiYSw+1WG2snBwRbbElpxp
+jEAGWBTU5pVLgn/ntDbQPmUL4YiR1WMrVp+dUQyhFbNmLsSZDEVHJixeCIygW0y0
+faSLS9p+BZ8KTBdQmsbr17X1fLKkj8ZahsCiTHjDEBqi6AcOn28=
+=1k/a
 -----END PGP SIGNATURE-----
 
---Upe8hv5tAPvft1GE--
+--njmDEJOs1bnqM/32--
