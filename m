@@ -2,168 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E976545159
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jun 2022 17:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E66B954536B
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jun 2022 19:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344449AbiFIPzS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Jun 2022 11:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48410 "EHLO
+        id S1345172AbiFIRvq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Jun 2022 13:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237102AbiFIPzR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Jun 2022 11:55:17 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2076.outbound.protection.outlook.com [40.107.95.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1476732EEE
-        for <linux-i2c@vger.kernel.org>; Thu,  9 Jun 2022 08:55:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UgVc3a1v2rV7TsDN5eAEjn3wixA1oikA4TDNTNDaru0t8WN8R2v7oT8LETpN/Hurx6rqmfeNjqW2OVGlPa0sJhljzVuM2wnc+BnslNAsLeIoSZQuT6Bb/8mg9ixCVfaSg8DmzVpsua/tDRfy+E2FRcjsaJ9AbEgt345OMnzUG2dt+JCJmO53IkC96wHaJS1wlkHe3+tpXBj0BcLTXJhd78YF8/UagJSrPnm7uTGkA6aqU0SefIAs5qwaG1IU9F4keuAtrnSo5pQ8TNnITfV5dWAykIln6jAhcmmNFT3cAwebSNqBvjwWLPXMsbWGd8rS/mwKTGAIEEhs069g5DJxnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rQBjZvVKDByUdlpmceYV3PeFA330HjTbyhTNwhPej+4=;
- b=YsbmqEq/ddwtZjCpXjByF413NVCxfMETJl+zUqtSZpqtDPcax6LnCOm1YtoFXiiQjd70EO5N+qVzcy0yuLbOPOuV+Ki9Gv/FEUsxOmPDkYgnoJpW7Om5z9SvtQiaZFB0ZS/yrUFq8thZAMYCMqBqRQR7bAmiVGTd2yUKieh9l0O5GDlvE0rPaS3fMG9XX4jjkr7/X2XdkqOIJgQuqQNoFrRt7lrXjN15OMLf/a559MSTDW2NJL/2Vk9m7Qz8ntGNKzaRg564lMhOyryOay4fLh8UqAq6IcToDfafbGeJNtV4rYjlw6p99b/8cNBuhHLLo5GcEyJML7zAUkToFZ8WHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
+        with ESMTP id S1345151AbiFIRvn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Jun 2022 13:51:43 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD1C31B7CB
+        for <linux-i2c@vger.kernel.org>; Thu,  9 Jun 2022 10:51:41 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id j8so14946009qtn.13
+        for <linux-i2c@vger.kernel.org>; Thu, 09 Jun 2022 10:51:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rQBjZvVKDByUdlpmceYV3PeFA330HjTbyhTNwhPej+4=;
- b=DZmt4U7r1SlaWAaiaiP7290bUqcwOBLst7acD6IET0pysm3KFb4NZKW+/K4z4GmaVeAalgrzc6UfSpFA+5VYGRAnfZKr43atoWVke6s5auHaqxOGDJdI1G3kGeC2gWdd767ZxHDy3TXOtEi6RTCWzP9GhAFL1/l1PXRchEe2udA=
-Received: from BN0PR04CA0036.namprd04.prod.outlook.com (2603:10b6:408:e8::11)
- by BL0PR02MB4674.namprd02.prod.outlook.com (2603:10b6:208:2b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13; Thu, 9 Jun
- 2022 15:55:12 +0000
-Received: from BN1NAM02FT021.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:e8:cafe::7) by BN0PR04CA0036.outlook.office365.com
- (2603:10b6:408:e8::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.17 via Frontend
- Transport; Thu, 9 Jun 2022 15:55:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT021.mail.protection.outlook.com (10.13.2.73) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5332.12 via Frontend Transport; Thu, 9 Jun 2022 15:55:12 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 9 Jun 2022 08:55:05 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Thu, 9 Jun 2022 08:55:05 -0700
-Envelope-to: git@xilinx.com,
- linux-i2c@vger.kernel.org
-Received: from [10.254.241.50] (port=43394)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1nzKUy-0006z4-S5; Thu, 09 Jun 2022 08:55:05 -0700
-Message-ID: <a184a7c1-c211-c5f3-7d6a-b9770f343459@xilinx.com>
-Date:   Thu, 9 Jun 2022 17:55:03 +0200
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=uETXtarVwZqoq55uxf85U5YgwPdkdqdQ5+5+F1r3C0I=;
+        b=UDGOOky72jyL07Hua5xhTBDqYbAuu1peFfWmRCYXOir+bIonsZfuAJtYNmGWBPdSdp
+         9+moDEFvyipsVEnQMhyLR2GDQcNQLhutuUbMQ+yly/LVK9rgX4enzJxrZCHQPhsyl8b8
+         XtPkLKWrpl2Go8b1xlVRwAcC48jh4xOfXnOqs/cYw0nI/083+8R0YsS4GQRu83zteIIu
+         0xeNCfssicXWd5d6jGS+LPBUYtS14lZLEiqsGgeanGl4xNNu59N1HDpfavzVxG2UMy00
+         ebFyWbpMkyERyTQb2gk3xIsE9mFMTY5QK/EoQbVUUKOsGUZlOx/1yB6zAYhfk4xQD+xl
+         biWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=uETXtarVwZqoq55uxf85U5YgwPdkdqdQ5+5+F1r3C0I=;
+        b=CFICMweoJ5/guIiaD/jiyi6Howi6nBOXQsSpGv3Y8XN1WENptQoKIh24z0fbk42cum
+         JmPaffVEaG3rHGyH+Q1v3bo4ow9woySsjody+29aLvfItf1NxERrhso4SAzlb0PrXkmK
+         GowsZZ9PfEyq7LP4glz3dvPH6B4zhlADNQl60dtiJzZ9y/4lC03N+pRdjLTua+8E0saV
+         S569GMVM9wmqHRqcBRJDwM1DYgJuVg2MPrwt1UlVq85SAFj+hYnxp2R9+/tkteC3MQgU
+         QGbYeHQgeXG/29L9upjV0x7Vu0yScfyNIIAqKE/e0733i8cY/M0KVkqUbKF2/o3SyWlB
+         6eVQ==
+X-Gm-Message-State: AOAM530x/oVdo08wY9i2d6bUC1C6DsbGVfqEa6cxXdnW5Db7Svu9P3Az
+        LXPE3mccUnV+tSSKo1hExPr6O9kGTUSSkeXaQVo=
+X-Google-Smtp-Source: ABdhPJz9uDgn6plhYXX3UPAtsN2aRkEpgFG9wF17ebQAnW1rSRxwm+q4VUzDvYF7wNzUfJzDfqMT80Dv5ctUn8MKmkM=
+X-Received: by 2002:ac8:5e4b:0:b0:304:f179:4e9a with SMTP id
+ i11-20020ac85e4b000000b00304f1794e9amr15839558qtx.490.1654797100197; Thu, 09
+ Jun 2022 10:51:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] i2c-xiic: Fix the type check for xiic_wakeup
-Content-Language: en-US
-To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        <linux-i2c@vger.kernel.org>
-CC:     <michal.simek@xilinx.com>, <git@xilinx.com>
-References: <20220609153738.6557-1-shubhrajyoti.datta@xilinx.com>
-From:   Michal Simek <michal.simek@xilinx.com>
-In-Reply-To: <20220609153738.6557-1-shubhrajyoti.datta@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 141b561d-22c8-4706-3e81-08da4a30700e
-X-MS-TrafficTypeDiagnostic: BL0PR02MB4674:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR02MB46743EBE96517479FDA2DF22C6A79@BL0PR02MB4674.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: t6NuMYV6++7LxgNkKsQDZDXbid25BDuOZr7NFx0liXmjFe6XQ5CPkv5Lwb3M9edxYu8ZK4kRrg9cKPmcRt7j5jgguU58y+XwDgzXEjs9WBWz5y2ODpKN656ZfptGH84pTKlfMOEwjNq0QEFw19GCYGhzmpj/v9m2gJvPa+LXiDw126k/m1L/2OGNjKuOtX7BiSDH1bNsmjKomLPGdX11NgDiz9zxZ9jVdhCT4pBwEtWivDRPnYw14jp/gTr2OF3un51M1yOGAHbZziU9/1qu3n3gFZEfoIgaT+ktMPgdfrMCOPVkh0OPisuBoT7lgCb7DEXuishjUae1W7ZT2ymCK3yFjuEYRlWB9L5dHBc6QeTkPmHIHQhWCJVbimzhKWQDQq4gQsQdOz1vYAQiqKaLCEzzkmghjoWReM/q53SKAky75vWIhhH93ZfBXoDPrPOg4jSqOipeGwrSJoViQ1ITlqqU3mEiy4MIOBqhDv7aKdcRJFU/1SpLOTvc1wI1gSujipI/BunRY/Ph0MzVO5QfN3CuaasABKQyqexubRKZ5+OdFmki8HNa8vi2nHmS2D1cbGphVzNXD5PgZsEiL410tTyRTimhFjeYLvHrbIrhsA3nlXKB1qeo7yG3kX49JC8CJZQylY/4uL18wbFNlHrPgtNBN7H6DaLMRqyzsmw5jAtpBP4rld0M9Cl+ow6AuxPy27tnrTYKnvKv4bljyUyV1S57Uoj44oGKIMbDXGgNdXg=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(110136005)(54906003)(44832011)(186003)(83380400001)(8936002)(31686004)(5660300002)(53546011)(2616005)(47076005)(426003)(336012)(107886003)(36756003)(26005)(356005)(40460700003)(82310400005)(2906002)(31696002)(508600001)(316002)(36860700001)(9786002)(70206006)(70586007)(7636003)(8676002)(4326008)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2022 15:55:12.3807
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 141b561d-22c8-4706-3e81-08da4a30700e
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT021.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB4674
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Reply-To: mihirpat56@gmail.com
+Sender: charlesjuntikka2204@gmail.com
+Received: by 2002:a05:6214:234a:0:0:0:0 with HTTP; Thu, 9 Jun 2022 10:51:39
+ -0700 (PDT)
+From:   "Mr. Mihir Patel" <ij261347@gmail.com>
+Date:   Thu, 9 Jun 2022 10:51:39 -0700
+X-Google-Sender-Auth: vXF71wuuneRQ7eGFZd9OCrfhhkA
+Message-ID: <CAEOqroo9Yhh-4Sw+QQt-ZjL50JQ8nX3Mbji_QpO3Udz_NHdDjA@mail.gmail.com>
+Subject: Greetings to you
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.4 required=5.0 tests=ADVANCE_FEE_5_NEW,BAYES_50,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,HK_SCAM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:82d listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [charlesjuntikka2204[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ij261347[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mihirpat56[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 HK_SCAM No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.4 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Greetings,
 
 
-On 6/9/22 17:37, Shubhrajyoti Datta wrote:
-> Fix the coverity warning
-> mixed_enum_type: enumerated type mixed with another type
-> 
-> We are passing an enum in the xiic_wakeup lets change
-> the function parameters to reflect that.
-> 
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> ---
-> v2:
-> Update the wakeup_code to enum
-> 
->   drivers/i2c/busses/i2c-xiic.c | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-> index 9a1c3f8b7048..ec56b80653d3 100644
-> --- a/drivers/i2c/busses/i2c-xiic.c
-> +++ b/drivers/i2c/busses/i2c-xiic.c
-> @@ -34,9 +34,9 @@
->   #define DRIVER_NAME "xiic-i2c"
->   
->   enum xilinx_i2c_state {
-> -	STATE_DONE,
-> -	STATE_ERROR,
-> -	STATE_START
-> +	STATE_DONE = 0,
-> +	STATE_ERROR = 1,
-> +	STATE_START = 2
->   };
->   
->   enum xiic_endian {
-> @@ -367,7 +367,7 @@ static void xiic_fill_tx_fifo(struct xiic_i2c *i2c)
->   	}
->   }
->   
-> -static void xiic_wakeup(struct xiic_i2c *i2c, int code)
-> +static void xiic_wakeup(struct xiic_i2c *i2c, enum xilinx_i2c_state code)
->   {
->   	i2c->tx_msg = NULL;
->   	i2c->rx_msg = NULL;
-> @@ -383,7 +383,7 @@ static irqreturn_t xiic_process(int irq, void *dev_id)
->   	u32 clr = 0;
->   	int xfer_more = 0;
->   	int wakeup_req = 0;
-> -	int wakeup_code = 0;
-> +	enum xilinx_i2c_state wakeup_code = STATE_DONE;
->   	int ret;
->   
->   	/* Get the interrupt Status from the IPIF. There is no clearing of
+I am contacting you for us to work together on a profitable business
+because you bear the same last name with a late client of our bank. I
+want to present you as his true next of kin to inherit his fund in our
+bank. As his account officer I have some necessary documents in my
+disposal to achieve this.
 
 
-Acked-by: Michal Simek <michal.simek@amd.com>
+I therefore reckoned that you could receive this fund as you are
+qualified by your last name. All the legal papers will be processed in
+your name as the deceased's true next of kin.
 
-Thanks,
-Michal
+Please revert back to me for further details if you can handle this with me.
+
+
+Mr. Mihir Patel
+Customer relation officer
