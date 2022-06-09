@@ -2,49 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17DB254482E
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jun 2022 12:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E3D544CC5
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jun 2022 14:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232285AbiFIKAt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Jun 2022 06:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S242375AbiFIM6u (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Jun 2022 08:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232459AbiFIKAs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Jun 2022 06:00:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F4E196A99
-        for <linux-i2c@vger.kernel.org>; Thu,  9 Jun 2022 03:00:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 88069B82C88
-        for <linux-i2c@vger.kernel.org>; Thu,  9 Jun 2022 10:00:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B601BC34114;
-        Thu,  9 Jun 2022 10:00:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654768844;
-        bh=wtZcywVyXSmXuqhMGn6M67mfvP6l4Xq2Yq+eYTX6618=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C7ScrcM/QAeopfZ6hJD6OJhnQ6CRiZxvjbZpkSOEXz1ZgyRNJ3KReKyrk7aR374MK
-         QuEZXwkkTeLYwc95/hQIbhpjumaxwkrxJKyQovuG72g8sH/d6T0aRjJ06b2oTHCxU+
-         5zlHO5wWSvm9CqO9LtmNf0tAX4vVIawc8Bgm+v7Y=
-Date:   Thu, 9 Jun 2022 12:00:41 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: i2c: Make remove callback return void
-Message-ID: <YqHEyYVYjM8F262P@kroah.com>
-References: <20220609091018.q52fhowlsdbdkct5@pengutronix.de>
+        with ESMTP id S245648AbiFIM60 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Jun 2022 08:58:26 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0B72DCF;
+        Thu,  9 Jun 2022 05:58:24 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3137eb64b67so38556587b3.12;
+        Thu, 09 Jun 2022 05:58:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=iD6McwKwIghg6BHWgeKWaQ5MVkxCurltdSVwKmXM4W0=;
+        b=Ay9wSBt6/1FosjTchjqFRaOXNnxcSgSjhy148/OJkjEi2ezSAJkxy8QBigj35N26KT
+         YrXCPaCXqBdW01cEHCjRZOd3ZrsaVhd9JjOJqXs+3WHog5ILCEewhryknksUqAeLFMzn
+         IGkTdf9foXozaSN0SdrREZd7DLlHGJhC18AFA0nAGhoyZYzASZMHRYOYOmlub34uCcLm
+         qYC7xtX+1SCbhNxTr1NeBDqzT5Is4bzgznpa+KDkJsoG2B8YIgk4etJMkRuazEgV5gYB
+         O8dPFe9/geqE1+3gSInrglUhfwRBjuGNqqakfdZjebuczOFbzlt71nnkCASlYW028yRL
+         Tcww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=iD6McwKwIghg6BHWgeKWaQ5MVkxCurltdSVwKmXM4W0=;
+        b=MDs9KiSaLqC20spg0lL+/X3TzrzDD2Bjl2Hi8PfYdqAb1bzQFbRyC2vkGAB+q00Du4
+         QudUb+Au/DdaiOkixyk067kOvNWCaFyxh7fnyhh27vfPVpJhTl/sbVm4Gzh+MRO/HoAE
+         FJLze9tXo97l7GuIxmCybPTE0evvNYNYM+q11eJOW7N3IP8spS2mQ5WzkRUKSCSUdSlv
+         JmUCql/4Rq37XEaTDt5uu9Z+JDb1jLExsW53TOdSRcRJKRsAz5zjZCaT1fK6terc31Sb
+         2f6AWiauwYLHZk9MWzU2ccGZMuTpQ9AKiVP+TUOlhCtBXw4oJL3mIbbDbfMNi236AcML
+         W+Aw==
+X-Gm-Message-State: AOAM5316XX6WXs9FgeQ9nmNp6WWfgjlX1ryQSZqbjJdIrkKiv6oU1eER
+        SKGD/Ar8ZoPmEfG5kycO1NCsQC6CYfRNaaOq6Q==
+X-Google-Smtp-Source: ABdhPJzHr6p91v8bPwlBk8HOqVwk0g7+lCi/t9+Eyex87Yig6dRIrzVd8Xgn/Htk12Bx8Z1hnf1cz8sjT5E846Mh+ic=
+X-Received: by 2002:a05:690c:58c:b0:30c:1fe9:af8 with SMTP id
+ bo12-20020a05690c058c00b0030c1fe90af8mr44909325ywb.403.1654779503515; Thu, 09
+ Jun 2022 05:58:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220609091018.q52fhowlsdbdkct5@pengutronix.de>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220525032341.3182-1-warp5tw@gmail.com> <20220525032341.3182-2-warp5tw@gmail.com>
+ <YqEAY2jUQC8itp6h@kunai>
+In-Reply-To: <YqEAY2jUQC8itp6h@kunai>
+From:   Tyrone Ting <warp5tw@gmail.com>
+Date:   Thu, 9 Jun 2022 20:58:12 +0800
+Message-ID: <CACD3sJag7h6Xq1Dcy_hZ3XQy2EhKK6DkqADt0__c9X6RqLuy-g@mail.gmail.com>
+Subject: Re: [PATCH v6 1/5] dt-bindings: i2c: npcm: support NPCM845
+To:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <warp5tw@gmail.com>,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
+        semen.protsenko@linaro.org, jsd@semihalf.com, sven@svenpeter.dev,
+        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,59 +76,24 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 11:10:18AM +0200, Uwe Kleine-König wrote:
-> Hello,
-> 
-> I intend to send a patch that does 
-> 
-> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> index fbda5ada2afc..066b541a0d5d 100644
-> --- a/include/linux/i2c.h
-> +++ b/include/linux/i2c.h
-> @@ -273,7 +273,7 @@ struct i2c_driver {
->  
->  	/* Standard driver model interfaces */
->  	int (*probe)(struct i2c_client *client, const struct i2c_device_id *id);
-> -	int (*remove)(struct i2c_client *client);
-> +	void (*remove)(struct i2c_client *client);
->  
->  	/* New driver model interface to aid the seamless removal of the
->  	 * current probe()'s, more commonly unused than used second parameter.
-> 
-> and adapts all users accordingly once 5.20-rc1 (assuming Linus will be
-> able to count to 20 for 5.x :-) is out. The rationale is that returning
-> an error code doesn't make a relevant difference. The only effect is
-> that the i2c core emits a generic error message and still removes the
-> device.
-> 
-> To make this adaption of drivers easily reviewable, I created quite a
-> few patches to make all drivers always return zero in their remove
-> callback---so the adaption just drops "return 0" (or replaces them by
-> "return").
-> Most of them are already in Linus's tree, but some others (currently 18
-> as of next-20220608) are still in next and another bunch wasn't
-> processed by the respective maintainers yet (in a public way at least;
-> currently 15).
-> 
-> The tree with my current work-in-progress is available at
-> 
-> 	https://git.pengutronix.de/git/ukl/linux i2c-remove-void
-> 
-> I intend to rebase that to the following -rc releases and adapt to
-> relevant changes there. Currently this tree is successfully build-tested
-> using allmodconfig on arm64, m68k, powerpc, riscv, s390, sparc64 and
-> x86_64. The current shortstat is:
-> 
-> 	 633 files changed, 732 insertions(+), 1803 deletions(-)
-> 
-> Assuming you agree to this quest, it would be great if you accepted the
-> change (+ the then maybe still non-accepted driver changes) in the i2c
-> tree exposing them early after 5.20-rc1 in next. Maybe it will be
-> sensible to then create a signed tag for these changes to allow other
-> affected maintainers to pull this change into their trees.
-> 
-> For now this is just a note to let you know in advance of my plans. If
-> you have concerns or alternative suggestions for the next steps or their
-> timing, please let me know.
+Hi Wolfram:
 
-No objection from me!
+Thank you for your review and comments.
+
+Wolfram Sang <wsa@kernel.org> =E6=96=BC 2022=E5=B9=B46=E6=9C=889=E6=97=A5 =
+=E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=884:02=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Wed, May 25, 2022 at 11:23:37AM +0800, Tyrone Ting wrote:
+> > From: Tyrone Ting <kfting@nuvoton.com>
+> >
+> > Add compatible and nuvoton,sys-mgr description for NPCM i2c module.
+> >
+> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+>
+> Applied to for-next, thanks!
+>
+
+Best Regards,
+Tyrone
