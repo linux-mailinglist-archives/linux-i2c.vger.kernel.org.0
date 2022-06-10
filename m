@@ -2,105 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A720C5465BA
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Jun 2022 13:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C52546761
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Jun 2022 15:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345336AbiFJLhX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 10 Jun 2022 07:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
+        id S1345932AbiFJNbY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 10 Jun 2022 09:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349403AbiFJLgV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Jun 2022 07:36:21 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3969B7379F;
-        Fri, 10 Jun 2022 04:36:19 -0700 (PDT)
+        with ESMTP id S1343950AbiFJNbY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Jun 2022 09:31:24 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C864822848B;
+        Fri, 10 Jun 2022 06:31:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654860980; x=1686396980;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BaJK94QL2EJ4pVw/Z5IuDzny/xtsePE9Jfqj65UM6Eo=;
-  b=TNnIxDKAY2fRPk7FUz7pvykn8wPdkkZCU8/KhrQgf1jmTOD20DsWXYDJ
-   QPbT6xGpwPlbfxXoquXeyZhTsaZuEGqtcJ/t84XfcZRwxMI6CMRqQzJ6h
-   bmGbNTeu+Tllbg8Pwlc2WnqPbcNOdS9KwwrZdx3IseswwimUKKaryFRyQ
-   wkpSj6IvUo9xzrC69cilxoq5447EpTxNJYvoXgg0J0cOB9PSf/OwoyWLZ
-   6sS4BsIIk6IV7u5AB7nQW4YjQBkyKr5MQUZ4KlK2cB1tfrGxWGEFKsLnl
-   Vrnhiv/BPZ0gN0isW3dZERjukDHJxB2frZGr5enV88XloyvYjDR3mHSQV
+  t=1654867882; x=1686403882;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+sipVNO53rbC/tmwAHMBsRjzosEnmg6fcQiYVVUappM=;
+  b=Rz5tyJexhHOMlIJkJLef2WpiqLI00jnKG+3u362wFbei2MsH2xg+EiJ4
+   eAAhSKKIh9Py7ZN+saeIRHRYjsxt1eMS0oYzDRI+ZF2bjaJklC6cZyNny
+   nGbXZvNgP7H61JzXAPhMpavz4woCCqw3w0dzWPcU7tcqEPBnWGRKJVfL0
+   ZpwluRLk1hObVNtBPx9dUcIhmBCDGElZ+rQbMQ8rop4ZkUCzVR6+yXycR
+   Q7DLf3L+W0TeBnStnD3ht1A1K+eqbHBPtqCDFdUfLiJuCtDiablcQ172/
+   vX1HkIz1nfaMdCqAAA4VjA2uY2x6jJlDl2//4HjaR/Nnxvo5CtXhC9RyW
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="341664632"
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="266395316"
 X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="341664632"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 04:36:19 -0700
+   d="scan'208";a="266395316"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 06:31:22 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="724928331"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 04:36:14 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nzcw0-000YjT-06;
-        Fri, 10 Jun 2022 14:36:12 +0300
-Date:   Fri, 10 Jun 2022 14:36:11 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCHv2 1/2] i2c: designware: introduce a custom scl recovery
- for SoCFPGA platforms
-Message-ID: <YqMsqwLgbI4AuzrE@smile.fi.intel.com>
-References: <20220524135441.420600-1-dinguyen@kernel.org>
- <Yo0LKQchQwitJVHm@smile.fi.intel.com>
- <29521c9c-90d3-03b9-cf6f-8519efcd007e@kernel.org>
+   d="scan'208";a="616483978"
+Received: from mylly.fi.intel.com (HELO [10.237.72.181]) ([10.237.72.181])
+  by orsmga001.jf.intel.com with ESMTP; 10 Jun 2022 06:31:17 -0700
+Message-ID: <c4b34414-cc12-0d0f-49a1-f73c9d17611e@linux.intel.com>
+Date:   Fri, 10 Jun 2022 16:31:16 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <29521c9c-90d3-03b9-cf6f-8519efcd007e@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.0
+Subject: Re: [PATCH] i2c: designware: Use standard optional ref clock
+ implementation
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220610074233.9748-1-Sergey.Semin@baikalelectronics.ru>
+ <YqMovttAaGBw796k@smile.fi.intel.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <YqMovttAaGBw796k@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 08:48:07AM -0500, Dinh Nguyen wrote:
-> On 5/24/22 11:43, Andy Shevchenko wrote:
-> > On Tue, May 24, 2022 at 08:54:40AM -0500, Dinh Nguyen wrote:
-
-...
-
-> > > +	switch (dev->flags & MODEL_MASK) {
-> > > +	case MODEL_SOCFPGA:
-> > > +		rinfo->recover_bus = i2c_socfpga_scl_recovery;
-> > > +		break;
-> > > +	default:
-> > > +		rinfo->recover_bus = i2c_generic_scl_recovery;
-> > > +		break;
-> > > +	}
-> > 
-> > > +	adap->bus_recovery_info = rinfo;
-> > 
-> > Usually we do not assign the pointer while data structure is incomplete.
-> > That's said, please leave this line as it was.
-> > 
-> > On top of that, why you can't move the above switch to the place where old
-> > function was assigned?
+On 6/10/22 14:19, Andy Shevchenko wrote:
+> On Fri, Jun 10, 2022 at 10:42:33AM +0300, Serge Semin wrote:
+>> Even though the DW I2C controller reference clock source is requested by
+>> the method devm_clk_get() with non-optional clock requirement the way the
+>> clock handler is used afterwards has a pure optional clock semantic
+>> (though in some circumstances we can get a warning about the clock missing
+>> printed in the system console). There is no point in reimplementing that
+>> functionality seeing the kernel clock framework already supports the
+>> optional interface from scratch. Thus let's convert the platform driver to
+>> using it.
+>>
+>> Note by providing this commit we get to fix two problems. The first one
+>> was introduced in commit c62ebb3d5f0d ("i2c: designware: Add support for
+>> an interface clock"). It causes not having the interface clock (pclk)
+>> enabled/disabled in case if the reference clock isn't provided. The second
+>> problem was first introduced in commit b33af11de236 ("i2c: designware: Do
+>> not require clock when SSCN and FFCN are provided"). Since that
+>> modification the deferred probe procedure has been unsupported in case if
+>> the interface clock isn't ready.
 > 
-> The reason is the assignment of the recover_bus needs to get done before the
-> call to devm_gpiod_get_optional(), otherwise, the assignment is not taking
-> place because of an error after returning from devm_gpiod_get_optional().
-
-Update commit message accordingly then.
-
-Also consider moving GPIO request part in the code, maybe it will bring better
-looking / grouped code. Try and see, then choose the best one.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> Makes sense,
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
