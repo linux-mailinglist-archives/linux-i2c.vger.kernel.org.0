@@ -2,61 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01E85467BD
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Jun 2022 15:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD32054685C
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Jun 2022 16:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344340AbiFJNxd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 10 Jun 2022 09:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41748 "EHLO
+        id S1349575AbiFJOcP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 10 Jun 2022 10:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349228AbiFJNxE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Jun 2022 09:53:04 -0400
+        with ESMTP id S1349396AbiFJObq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Jun 2022 10:31:46 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D803CA76
-        for <linux-i2c@vger.kernel.org>; Fri, 10 Jun 2022 06:53:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D8F144BD2
+        for <linux-i2c@vger.kernel.org>; Fri, 10 Jun 2022 07:31:13 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DA20C1FE9F;
-        Fri, 10 Jun 2022 13:52:59 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CB2EF1FF3F;
+        Fri, 10 Jun 2022 14:31:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1654869179; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1654871471; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MABp0Hc0ijQaJbSoqpNDjvbZHbcEtWMyWUP1torJYBk=;
-        b=tYu3Bd5XZpmIdLA92t91967WfQsqhufM8nK9lFczB5jTcTdLV0AeEu5Fnsl5gt/d1owdN/
-        GVshKgLUnJujiUXtsXqNCa/cx9KkEBqH7i1Q7mlNgIUwNJU8v3kilNkCKa9HIdoSrC3MF6
-        kft2QUG3JJ4O1B3xc4KARzdNH+M+nCA=
+        bh=dvPCt+5b61k7sd8PG3V71Dx+3cC1XdQbkLWioOdhWhQ=;
+        b=TpiwZtCbCxwcExWlCNn3A4i1ue+bmgNjVkh8Ypw+mcbLSoHz4x0REuUtWOIaceFWGcHcmc
+        LGDglClZpfFw2DmH3zUszFSWdMPLK+0Sx+oPaGoH3ZnUHtoIokJrSeAC1X+4t5vZ3P8qeQ
+        GV3KTjspPkuu9yufJEO8X0tFjJLtQlA=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1654869179;
+        s=susede2_ed25519; t=1654871471;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MABp0Hc0ijQaJbSoqpNDjvbZHbcEtWMyWUP1torJYBk=;
-        b=saUvBpf5frenHfFNSqI/w5uXTVmGBghldyFgwLNJArC4DbfH9sUYEFRPq0YLjS2Qhnlzh7
-        ZCcjMxdLyVgU4AAA==
+        bh=dvPCt+5b61k7sd8PG3V71Dx+3cC1XdQbkLWioOdhWhQ=;
+        b=UNxp8ltHbIfkXaU2p8BobPUCl42uT5CfMqWsQfTi20grirU2dQSVbxh7di6ZVIyjJ0KMg5
+        uNCnMFvyIMjx3pBA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BA661139ED;
-        Fri, 10 Jun 2022 13:52:59 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AC2B1139ED;
+        Fri, 10 Jun 2022 14:31:11 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id Iz7LK7tMo2LCVAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Fri, 10 Jun 2022 13:52:59 +0000
-Date:   Fri, 10 Jun 2022 15:52:58 +0200
+        id T7lhKK9Vo2LWZAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Fri, 10 Jun 2022 14:31:11 +0000
+Date:   Fri, 10 Jun 2022 16:31:10 +0200
 From:   Jean Delvare <jdelvare@suse.de>
 To:     Heiner Kallweit <hkallweit1@gmail.com>
 Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 7/8] i2c: i801: call i801_check_pre() from i801_access()
-Message-ID: <20220610155258.0088dd7d@endymion.delvare>
-In-Reply-To: <261bddb8-1a1e-13e9-8557-e4ad1c7f9826@gmail.com>
+Subject: Re: [PATCH 8/8] i2c: i801: call i801_check_post() from
+ i801_access()
+Message-ID: <20220610163110.28d50ae6@endymion.delvare>
+In-Reply-To: <9103e680-6436-42a3-d4be-39edf851aaf9@gmail.com>
 References: <4125f9ce-ce5f-fbcf-7d6f-9bc586ac43e0@gmail.com>
-        <261bddb8-1a1e-13e9-8557-e4ad1c7f9826@gmail.com>
+        <9103e680-6436-42a3-d4be-39edf851aaf9@gmail.com>
 Organization: SUSE Linux
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
@@ -74,56 +75,37 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi Heiner,
 
-On Fri, 15 Apr 2022 18:58:40 +0200, Heiner Kallweit wrote:
-> This avoids code duplication, in a next step we'll call
-> i801_check_post() from i801_access() as well.
+On Fri, 15 Apr 2022 18:59:46 +0200, Heiner Kallweit wrote:
+> Avoid code duplication by calling i801_check_post() from i801_access().
 > 
 > Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 > ---
->  drivers/i2c/busses/i2c-i801.c | 12 ++++--------
->  1 file changed, 4 insertions(+), 8 deletions(-)
-> 
+>  drivers/i2c/busses/i2c-i801.c | 20 +++++++++-----------
+>  1 file changed, 9 insertions(+), 11 deletions(-)
+
+Overall I like the idea. I only have one question to make sure I'm not
+missing something.
+
 > diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index 8c2245f38..9061333f2 100644
+> index 9061333f2..ecec7a3a8 100644
 > --- a/drivers/i2c/busses/i2c-i801.c
 > +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -460,10 +460,6 @@ static int i801_transaction(struct i801_priv *priv, int xact)
->  	unsigned long result;
->  	const struct i2c_adapter *adap = &priv->adapter;
->  
-> -	status = i801_check_pre(priv);
-> -	if (status < 0)
-> -		return status;
-> -
->  	if (priv->features & FEATURE_IRQ) {
->  		reinit_completion(&priv->done);
->  		outb_p(xact | SMBHSTCNT_INTREN | SMBHSTCNT_START,
-> @@ -647,10 +643,6 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
->  	if (command == I2C_SMBUS_BLOCK_PROC_CALL)
->  		return -EOPNOTSUPP;
->  
-> -	status = i801_check_pre(priv);
-> -	if (status < 0)
-> -		return status;
-> -
->  	len = data->block[0];
->  
->  	if (read_write == I2C_SMBUS_WRITE) {
-> @@ -851,6 +843,10 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
->  
->  	pm_runtime_get_sync(&priv->pci_dev->dev);
->  
-> +	ret = i801_check_pre(priv);
-> +	if (ret)
-> +		goto out;
-> +
->  	hwpec = (priv->features & FEATURE_SMBUS_PEC) && (flags & I2C_CLIENT_PEC)
->  		&& size != I2C_SMBUS_QUICK
->  		&& size != I2C_SMBUS_I2C_BLOCK_DATA;
+> @@ -432,7 +432,7 @@ static int i801_wait_intr(struct i801_priv *priv)
+>  		busy = status & SMBHSTSTS_HOST_BUSY;
+>  		status &= STATUS_ERROR_FLAGS | SMBHSTSTS_INTR;
+>  		if (!busy && status)
+> -			return status;
+> +			return status & STATUS_ERROR_FLAGS;
+>  	} while (time_is_after_eq_jiffies(timeout));
 
-Makes sense, thanks for the clean-up.
+Do I understand correctly that this change isn't really related to the
+rest of the patch, and could have been done independently?
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+You are filtering out SMBHSTSTS_INTR simply because i801_check_post()
+will never check it anyway, right? If so, I wonder if that's really
+something we want to do, as ultimately this adds code with no
+functional benefit just to be "cleaner". But please correct me if I'm
+wrong.
 
 -- 
 Jean Delvare
