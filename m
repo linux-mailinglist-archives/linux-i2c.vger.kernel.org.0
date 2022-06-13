@@ -2,67 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64613549B92
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jun 2022 20:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 247CA549BA3
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jun 2022 20:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245583AbiFMScs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 13 Jun 2022 14:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
+        id S245048AbiFMSgA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 13 Jun 2022 14:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244757AbiFMScV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Jun 2022 14:32:21 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243C6C3D39
-        for <linux-i2c@vger.kernel.org>; Mon, 13 Jun 2022 07:50:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=g2RC1m/mkaeRN82kXC5R7jd2AVs1
-        ntoJQysP2akaihU=; b=0XUHyLz+T+uIgAuJR+jbGhJvVViKWqRK2GG7jfxuNNqw
-        JJjNKA5244GJG920B5S9Ldy++QpX7jynsFuER/+e4b9pmUMVKcZyu7vCk+RUDPCk
-        bEFYQo0E6ehpN2VFXvHf2GrQIPgK7uv0KPlcDFhiZBcT1U+GudpfDVIuFdVXvFY=
-Received: (qmail 1337493 invoked from network); 13 Jun 2022 16:50:37 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Jun 2022 16:50:37 +0200
-X-UD-Smtp-Session: l3s3148p1@YGgvaVXhuDRZD+yY
-Date:   Mon, 13 Jun 2022 16:50:36 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: designware: Use standard optional ref clock
- implementation
-Message-ID: <YqdOvDmixVlDYzjO@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220610074233.9748-1-Sergey.Semin@baikalelectronics.ru>
+        with ESMTP id S245690AbiFMSfh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Jun 2022 14:35:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6EB24BDC
+        for <linux-i2c@vger.kernel.org>; Mon, 13 Jun 2022 07:54:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3CB16B8101C
+        for <linux-i2c@vger.kernel.org>; Mon, 13 Jun 2022 14:54:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B3F3C34114;
+        Mon, 13 Jun 2022 14:54:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655132090;
+        bh=bFwVavaMFKjXTeGA1LhEIfvdIx7yQgzlHpdb9tsTkCA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qcu6zQduS/g/CCRkPhpRqyfKd331GgeAC6MLrZ4rZ8hOGMX/zpy1+UUccNMI3sh9F
+         73ZghFb5u+k+dp+znzzDdXzXgGU9yph7Hm9+E4IlWYQ1Q+JY1zAjkaznPzIvIjDf5u
+         tvpTQHa+ULofHEJcoJGuKazE/GjhEc33hNywK/5f7v5Ji1HhbL2wWDWqzmYlfajtt4
+         j/dRjSFHx7a9CzFKID1EuFt+78FnYlgDkXKiSLvrnY6RtbQeLSaSiO7g08TiD5ZuJY
+         TEQRBkiFGYbG36gSRSnake0FYxEehACaDPIWkQWJil0MOwacVCdMmbdOFbj41Cu0/v
+         Nv3TwlH1TvT3g==
+Date:   Mon, 13 Jun 2022 16:54:45 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Cc:     linux-i2c@vger.kernel.org, michal.simek@xilinx.com, git@xilinx.com
+Subject: Re: [PATCH v2] i2c-xiic: Fix the type check for xiic_wakeup
+Message-ID: <YqdPtexPiukMlUcG@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        linux-i2c@vger.kernel.org, michal.simek@xilinx.com, git@xilinx.com
+References: <20220613043002.28152-1-shubhrajyoti.datta@xilinx.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LpjOMnM5Qxa/KRrW"
+        protocol="application/pgp-signature"; boundary="wlVU0l2cpjd7u0hm"
 Content-Disposition: inline
-In-Reply-To: <20220610074233.9748-1-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220613043002.28152-1-shubhrajyoti.datta@xilinx.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,57 +57,51 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---LpjOMnM5Qxa/KRrW
+--wlVU0l2cpjd7u0hm
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 10, 2022 at 10:42:33AM +0300, Serge Semin wrote:
-> Even though the DW I2C controller reference clock source is requested by
-> the method devm_clk_get() with non-optional clock requirement the way the
-> clock handler is used afterwards has a pure optional clock semantic
-> (though in some circumstances we can get a warning about the clock missing
-> printed in the system console). There is no point in reimplementing that
-> functionality seeing the kernel clock framework already supports the
-> optional interface from scratch. Thus let's convert the platform driver to
-> using it.
+On Mon, Jun 13, 2022 at 10:00:02AM +0530, Shubhrajyoti Datta wrote:
+> Fix the coverity warning
+> mixed_enum_type: enumerated type mixed with another type
 >=20
-> Note by providing this commit we get to fix two problems. The first one
-> was introduced in commit c62ebb3d5f0d ("i2c: designware: Add support for
-> an interface clock"). It causes not having the interface clock (pclk)
-> enabled/disabled in case if the reference clock isn't provided. The second
-> problem was first introduced in commit b33af11de236 ("i2c: designware: Do
-> not require clock when SSCN and FFCN are provided"). Since that
-> modification the deferred probe procedure has been unsupported in case if
-> the interface clock isn't ready.
+> We are passing an enum in the xiic_wakeup lets change
+> the function parameters to reflect that.
 >=20
-> Fixes: c62ebb3d5f0d ("i2c: designware: Add support for an interface clock=
-")
-> Fixes: b33af11de236 ("i2c: designware: Do not require clock when SSCN and=
- FFCN are provided")
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 
-Applied to for-current, thanks!
+What is the difference to the V2 you sent 4 days earlier?
+
+>  enum xilinx_i2c_state {
+> -	STATE_DONE,
+> -	STATE_ERROR,
+> -	STATE_START
+> +	STATE_DONE =3D 0,
+> +	STATE_ERROR =3D 1,
+> +	STATE_START =3D 2
+
+No need for initializers.
 
 
---LpjOMnM5Qxa/KRrW
+--wlVU0l2cpjd7u0hm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKnTrwACgkQFA3kzBSg
-KbahQg//bJVwpD7dUJbwrkCJR/R4p9wzcrnlm3kpsprd/tRq8WSb87PkDFRIP9oN
-13zkFyCOfsYb0OCY8+QwprKEV8BJN9irSQHOukm2bN5ShkZpY2CBxfiScDe757F8
-Nla7I6ez3EBQeKYV1QF0GW1K1Es5+1nqcU+9DKRA/uYzVQmkJ9bMr4mGTotMJzIS
-ey5b7JkDMzIxp/4BLXxdOz0To00WtTVqb/1vSiK7NwCw5ovTdbXlt4o8cL9+G2s7
-NmwQaqvOSlyvEny7+nRDitZZKB+zXF8BPSPWCRUJBmToU1jfzWJzfUJMWnkkpXGX
-BhDXmAsUrVT/JyfzqGAywxywpphrOqbU9IpXS+8I1LU6qCMN9rizfyjbyGcLnldN
-x9HoVQe7vEOUTcEoEQiDbauO6uxnWrHRNFo8ud7KgDECRwJ0ta04vH2UOKCchw7c
-yXxCSob3hP8ew+fg5hwlFUhHRQvuRTnm30WaxE/iIxzTyOSCKtLCnAOmOZg0f9zk
-ZpA/pRDVaVXRTKuesjwU5SKDOm8JFP3wi8IHX/iMMxlJXek3w89NprAdj2SqWdA6
-cI93dQ7Nn/39KyNU+GNp+n+wTzPIRB+cwKFbQ7r8tgMlxmRCZYOGRv4L0q+VDWWG
-nzT6jbHlb622SOIfdm45ZWSVrDh5ZjRMqjeBzjGzFcIMSKEwe+w=
-=unAQ
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKnT7UACgkQFA3kzBSg
+KbbO/w//SaBNhjFkSuqJpOd9XvGLzznReZXyLOhFsPBvMtrT5k8Z7DYDbD2hCB0c
+SGtQo242seB1AlsMkZJp1BJfnV1bQSSw6adrLW8meXDxD56H4c3VCjoZk1eguC2m
+yiI8hu1DvHvnD62lP4KbA0usmzE7Wa4x3heYiAaxZqf8WiRvi8xNM4jmgZ9jKkWo
+CAQBsLlj8IgtHemXNSS2oaWl7M8pG3tTZj3e68vfEBe8GmyYJMnhbMU8LqHl+2Op
+wJtAmNkKXnpw/97UitMEjEnxh96pTOZCbq5zGZDr4gN/6/e+EAdUw5864rrABgZ5
+FK23wpF4FoSeQmX3JZ9fYGZwp+vveUP1wEw/t5vQU0jsAt2tNgYDS7ej+Lxz8oW+
+Q3lVq/TlDOPMdsdMk1MJkQbCFrHG0yfUdQ6/BaoDatKh/hSSHsd8F/r9fQtWKRU/
+0xcaFmHH6b1MmAw9nzSLKpGFqedmkC/PinRF5TtTRWF4qTFGlCL33mivaFOKD1hG
+2UlqX0BW9B5XIFFAxCkAEsuwXLJgInisxfufJWEfMAqs4CqEhngu2odNsyqrQrFz
+Nu7p/lx8f+djXDtpWpWVOk67MUcAFZ1oiLOfZZP3vNzAGbIZX9X1q/eLdp5ZS+Js
+6PItUviC/PhBtsE8zUVB4//GHaRHtrcqlGws0x/k4QS1e2ovZGU=
+=J3I/
 -----END PGP SIGNATURE-----
 
---LpjOMnM5Qxa/KRrW--
+--wlVU0l2cpjd7u0hm--
