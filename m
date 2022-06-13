@@ -2,122 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC02549CFF
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jun 2022 21:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0950C54A01E
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jun 2022 22:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348473AbiFMTKt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 13 Jun 2022 15:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56976 "EHLO
+        id S1346839AbiFMUs7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 13 Jun 2022 16:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351557AbiFMTKJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Jun 2022 15:10:09 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A699C95B4
-        for <linux-i2c@vger.kernel.org>; Mon, 13 Jun 2022 10:08:45 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S1348989AbiFMUsV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Jun 2022 16:48:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD921038;
+        Mon, 13 Jun 2022 13:06:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 677271F8FA;
-        Mon, 13 Jun 2022 17:08:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1655140124; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SfZX2FHGKi9VSNT0iKL2Q5zQqSswNSWEESfWx2oGllQ=;
-        b=Cug00id4eAwOFvwDhHzgQxID9X+3ACBlpT2Q8zZEH69itK63b8asltJeequJSHNnDmpNYa
-        EG9ZjgCq5ZiXw5Kr9Qz2P1Yk3ZiXDT2bK3Z2KRUqngxzpvEAHNAgO2GsdMcGik+MYSgmCR
-        SDsa7slL3W2Ld/xeUoCl0jzgI1eDCP8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1655140124;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SfZX2FHGKi9VSNT0iKL2Q5zQqSswNSWEESfWx2oGllQ=;
-        b=SeABXjvYEBxG+PW7tEewvfGqafsdFbXYhc74gX+v537cmIMGFMsciZKN7xxZCiMncsHFZt
-        QD+ezZ/NR1ivMWBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 44EA413443;
-        Mon, 13 Jun 2022 17:08:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6K/sDhxvp2LmAgAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Mon, 13 Jun 2022 17:08:44 +0000
-Date:   Mon, 13 Jun 2022 19:08:41 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 4/8] i2c: i801: enable FEATURE_IRQ and
- FEATURE_I2C_BLOCK_READ on all chip versions
-Message-ID: <20220613190841.653709e7@endymion.delvare>
-In-Reply-To: <20220607162442.7b618cca@endymion.delvare>
-References: <4125f9ce-ce5f-fbcf-7d6f-9bc586ac43e0@gmail.com>
-        <1f81a126-11b4-aa22-1e2c-9824e0ad730c@gmail.com>
-        <20220607162442.7b618cca@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 142FC61571;
+        Mon, 13 Jun 2022 20:06:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4B61C34114;
+        Mon, 13 Jun 2022 20:06:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655150772;
+        bh=shKSr/RiV2YcabImw7K3ffFlzf7xs/cPOaAF6/t5ZCY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H6L7u8jMeuHogNoG/VW04jHZnGwXKCZBPaTJGxSSqpB0MMqThvHKRUfAgUAse7XMi
+         Fq9RKmJsGedh9kVH4+rJBcqEKiGRR+Fe/JTZIWXbpG8slKGaFz4kPODA8XySEx/67p
+         n+0uVqzRAMWG9d4fFJqZA4fGynEycyzh2VFZBrkYZvWf4BgPHVCxm0NKCmOvEXMOlt
+         YcWcJZDR21nkVN1hJdZHNDAUXXpx4sUkMRraL62CEKWXw7PIoK7BL9bxlwjO1/QwN4
+         EkynUGfbS3HuQDo8J0t9AE175CXIA13cUq3ChEUnymiyQDH96C3SjpWgo+FlzTJ+P3
+         o/XGffJtFCgXA==
+Date:   Mon, 13 Jun 2022 22:06:07 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Codrin.Ciubotariu@microchip.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Ludovic.Desroches@microchip.com,
+        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, kamel.bouhara@bootlin.com
+Subject: Re: Regression: at24 eeprom writing times out on sama5d3
+Message-ID: <YqeYr6b2k0rXsvIv@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Peter Rosin <peda@axentia.se>, Codrin.Ciubotariu@microchip.com,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Ludovic.Desroches@microchip.com, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
+        kamel.bouhara@bootlin.com
+References: <074b39c5-55fc-2bc1-072d-aef1070e284d@axentia.se>
+ <2bb4868b-90ab-887e-bf13-9de8b79231bd@microchip.com>
+ <YqdQoJbsgwjQ9PYh@shikoro>
+ <0ce8b9d7-8a9e-cded-1762-71e230f4246c@axentia.se>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ogV34CoYxK6HOSzb"
+Content-Disposition: inline
+In-Reply-To: <0ce8b9d7-8a9e-cded-1762-71e230f4246c@axentia.se>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Heiner,
 
-I was able to resurrect my Sony Vaio GR214EP laptop to test this patch
-on an Intel 82801CAM (ICH3-M) chipset. And as I suspected, it does not
-work. I get the following error in the kernel log:
-
-[13563.411101] i801_smbus 0000:00:1f.3: SMBus using PCI interrupt
-[13565.434712] irq 9: nobody cared (try booting with the "irqpoll" option)
-[13565.434728] Pid: 321, comm: udevd Tainted: G           O 3.4.63-2.44-default #1
-[13565.434734] Call Trace:
-[13565.434773]  [<c0205349>] try_stack_unwind+0x199/0x1b0
-[13565.434793]  [<c02041c7>] dump_trace+0x47/0xf0
-[13565.434808]  [<c02053ab>] show_trace_log_lvl+0x4b/0x60
-[13565.434820]  [<c02053d8>] show_trace+0x18/0x20
-[13565.434837]  [<c0682e81>] dump_stack+0x6d/0x72
-[13565.434855]  [<c02adad1>] __report_bad_irq+0x21/0xc0
-[13565.434870]  [<c02adef1>] note_interrupt+0x181/0x1d0
-[13565.434887]  [<c02abe9e>] handle_irq_event_percpu+0x9e/0x1d0
-[13565.434901]  [<c02abffe>] handle_irq_event+0x2e/0x50
-[13565.434915]  [<c02ae3e6>] handle_level_irq+0x56/0x90
-[13565.434928]  [<c0204168>] handle_irq+0x88/0xa0
-[13565.434939] handlers:
-[13565.434949] [<c04bbf6c>] acpi_irq
-[13565.435027] [<e0baad00>] usb_hcd_irq
-[13565.435054] [<e0baad00>] usb_hcd_irq
-[13565.435079] [<e0baad00>] usb_hcd_irq
-[13565.435193] [<e0d6fb80>] radeon_driver_irq_handler_kms
-[13565.435206] [<e0af5c60>] yenta_interrupt
-[13565.435214] [<e0af5c60>] yenta_interrupt
-[13565.435227] [<e0b514c0>] irq_handler
-[13565.435238] [<e0aeec90>] snd_intel8x0m_interrupt
-[13565.435251] [<e0c514a0>] snd_intel8x0_interrupt
-[13565.435264] [<e0ab4060>] e100_intr
-[13565.435278] [<e09465d0>] i801_isr
-[13565.435283] Disabling IRQ #9
-[13565.437114] i801_smbus 0000:00:1f.3: Transaction timeout
-[13565.437125] i801_smbus 0000:00:1f.3: Terminating the current operation
-[13565.439189] i801_smbus 0000:00:1f.3: Failed terminating the transaction
-
-If it matters, and as seen in the list of handlers above, IRQ9 is
-heavily shared on this laptop (ACPI, USB, graphics, PCMCIA, sound,
-network and SMBus).
+--ogV34CoYxK6HOSzb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 
--- 
-Jean Delvare
-SUSE L3 Support
+> I replied to patch 1/3 and 2/3 but have not seen them on the lists and
+> patchwork also appears to be in the dark.
+> Did the replies make it anywhere? Should I resend?
+
+I didn't get them. Yeah, maybe a resend will help?
+
+
+--ogV34CoYxK6HOSzb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKnmK8ACgkQFA3kzBSg
+KbbJWBAAlS8SaQDw0SsR0R3wckRC2LN0TZ1ehFWsm9akX38NgWXfprCt5Y1HcKsu
+DcyHwWdwVKoT6lCPkAKeZsfF+3ipoKBf4CedKk5zYwL/3o/I80S3+sYSw+akUV05
+X3HWMjpCRlWAqGRod4TWafawWqEA1U4GlDmApYl3TB7PWEk27lJp+3BgwBgnSs0l
+9dT7CnfeqkeIVZ8LapGQksqwC/fKMsa4dVNyluCDHHm9DlsDHFgW4fYzWJgg8WlS
+rhTC2QnXYmcRS0uWQR7W+FNnHjRK2ARyP+So2rzbes7/tqBBMAMWlvMzpNHd3ucb
+ZkQWVxRs4cXcpprtyuhA0axvAGfYCc4lvGr8IdRoFyPnDSv8U3hUZ4ZU2bH8C//2
+CbyRTFGBu7C1UV5YwjswBkAmvUeFrnM6gSH+/ZcZcOQlQ23RHG4TFMCe93MPJPv4
+RbKLzX/WhBnzY+b7Vk0Y+lGgM1QX5CsEiL8S82dpxhylypGXv9GX8d0F2sXP/lXT
+hNJ0BqA1Tp7umUUom7ZTM0h8IZnEWn8k0RRr7XMTvKQOA4cIhVccBHRCJHIrfMm0
+qsJp7dJpm6nuCfipS3yW1UXZjhq1NRKRNLQrt+aQPwYZVHvdPBq9di6uqmQdOnHg
+7gB1dExjEtarnUpcMfsABDJ/jz1nL0fZRZLKPoM6HGiisxfQKD8=
+=Rl7P
+-----END PGP SIGNATURE-----
+
+--ogV34CoYxK6HOSzb--
