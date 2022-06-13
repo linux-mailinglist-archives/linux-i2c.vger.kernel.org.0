@@ -2,61 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0950C54A01E
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jun 2022 22:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB88554A131
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jun 2022 23:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346839AbiFMUs7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 13 Jun 2022 16:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
+        id S1351929AbiFMVS5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 13 Jun 2022 17:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348989AbiFMUsV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Jun 2022 16:48:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD921038;
-        Mon, 13 Jun 2022 13:06:13 -0700 (PDT)
+        with ESMTP id S244742AbiFMVSL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Jun 2022 17:18:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C70309;
+        Mon, 13 Jun 2022 14:00:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 142FC61571;
-        Mon, 13 Jun 2022 20:06:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4B61C34114;
-        Mon, 13 Jun 2022 20:06:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5657CB81598;
+        Mon, 13 Jun 2022 21:00:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B58AFC34114;
+        Mon, 13 Jun 2022 21:00:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655150772;
-        bh=shKSr/RiV2YcabImw7K3ffFlzf7xs/cPOaAF6/t5ZCY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H6L7u8jMeuHogNoG/VW04jHZnGwXKCZBPaTJGxSSqpB0MMqThvHKRUfAgUAse7XMi
-         Fq9RKmJsGedh9kVH4+rJBcqEKiGRR+Fe/JTZIWXbpG8slKGaFz4kPODA8XySEx/67p
-         n+0uVqzRAMWG9d4fFJqZA4fGynEycyzh2VFZBrkYZvWf4BgPHVCxm0NKCmOvEXMOlt
-         YcWcJZDR21nkVN1hJdZHNDAUXXpx4sUkMRraL62CEKWXw7PIoK7BL9bxlwjO1/QwN4
-         EkynUGfbS3HuQDo8J0t9AE175CXIA13cUq3ChEUnymiyQDH96C3SjpWgo+FlzTJ+P3
-         o/XGffJtFCgXA==
-Date:   Mon, 13 Jun 2022 22:06:07 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Codrin.Ciubotariu@microchip.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Ludovic.Desroches@microchip.com,
-        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
-        robh+dt@kernel.org, kamel.bouhara@bootlin.com
-Subject: Re: Regression: at24 eeprom writing times out on sama5d3
-Message-ID: <YqeYr6b2k0rXsvIv@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Peter Rosin <peda@axentia.se>, Codrin.Ciubotariu@microchip.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Ludovic.Desroches@microchip.com, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
-        kamel.bouhara@bootlin.com
-References: <074b39c5-55fc-2bc1-072d-aef1070e284d@axentia.se>
- <2bb4868b-90ab-887e-bf13-9de8b79231bd@microchip.com>
- <YqdQoJbsgwjQ9PYh@shikoro>
- <0ce8b9d7-8a9e-cded-1762-71e230f4246c@axentia.se>
+        s=k20201202; t=1655154046;
+        bh=qeRciMZ8+GN9aRNLiPL16tbvkPgNHQGPPX68ZXr0H8w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cH1HY1ZeheBnhLELtecwl/zbtYzor0+cS4PRydzC//tiN73QIqC7IaEcv0V1qlLwa
+         kOsPiLYqj3HI6gDgH0wjH2yYuYPwVXUgFIWoP97ObQ7RwjPMKDc7D5SuJQShAdnL1j
+         MI6YJijlZ0vZhX4/Uuik9iSmaxq/1ihMlbraEdHgxVaazktGGuPrSiJjbwwY6YaiFS
+         wMYDiWJ6Wppeb5549QR00Ib1DfjpoCPlQ6mvI2YbuxkL5rKlYLV4BufVaNf3POQ3WH
+         zFw66jdNs99nwWtNBnogZ5g6zFdVgklR9diVJoJ/0GIi8r5SWt24tR9GCbTXvb7KTJ
+         HxOWrCeG9+KsQ==
+From:   Dinh Nguyen <dinguyen@kernel.org>
+To:     jarkko.nikula@linux.intel.com
+Cc:     dinguyen@kernel.org, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, robh+dt@kernel.org,
+        krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCHv3 1/2] i2c: designware: introduce a custom scl recovery for SoCFPGA platforms
+Date:   Mon, 13 Jun 2022 16:00:31 -0500
+Message-Id: <20220613210032.773826-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ogV34CoYxK6HOSzb"
-Content-Disposition: inline
-In-Reply-To: <0ce8b9d7-8a9e-cded-1762-71e230f4246c@axentia.se>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,37 +53,79 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+The I2C pins on the SoCFPGA platforms do not go through a GPIO module,
+thus cannot be recovered by the default method of by doing a GPIO access.
+Only a reset of the I2C IP block can a recovery be successful.
 
---ogV34CoYxK6HOSzb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The assignment of the recover_bus needs to get done before the call to
+devm_gpiod_get_optional(), otherwise, the assignment is not taking place
+because of an error after returning from devm_gpiod_get_optional().
 
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+---
+v3: simplify the function
+    update commit message
+v2: remove change to MODEL_MASK
+    s/i2c_custom_scl_recovery/i2c_socfpga_scl_recovery
+---
+ drivers/i2c/busses/i2c-designware-core.h    |  1 +
+ drivers/i2c/busses/i2c-designware-master.c  | 12 ++++++++++++
+ drivers/i2c/busses/i2c-designware-platdrv.c |  1 +
+ 3 files changed, 14 insertions(+)
 
-> I replied to patch 1/3 and 2/3 but have not seen them on the lists and
-> patchwork also appears to be in the dark.
-> Did the replies make it anywhere? Should I resend?
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index 70b80e710990..7b22ec1d6a96 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -303,6 +303,7 @@ struct dw_i2c_dev {
+ #define MODEL_MSCC_OCELOT	BIT(8)
+ #define MODEL_BAIKAL_BT1	BIT(9)
+ #define MODEL_AMD_NAVI_GPU	BIT(10)
++#define MODEL_SOCFPGA		BIT(11)
+ #define MODEL_MASK		GENMASK(11, 8)
+ 
+ /*
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index 44a94b225ed8..502820b812a5 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -813,12 +813,24 @@ static void i2c_dw_unprepare_recovery(struct i2c_adapter *adap)
+ 	i2c_dw_init_master(dev);
+ }
+ 
++static int i2c_socfpga_scl_recovery(struct i2c_adapter *adap)
++{
++	i2c_dw_prepare_recovery(adap);
++	i2c_dw_unprepare_recovery(adap);
++	return 0;
++}
++
+ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
+ {
+ 	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
+ 	struct i2c_adapter *adap = &dev->adapter;
+ 	struct gpio_desc *gpio;
+ 
++	if ((dev->flags & MODEL_MASK) == MODEL_SOCFPGA) {
++		rinfo->recover_bus = i2c_socfpga_scl_recovery;
++		adap->bus_recovery_info = rinfo;
++	}
++
+ 	gpio = devm_gpiod_get_optional(dev->dev, "scl", GPIOD_OUT_HIGH);
+ 	if (IS_ERR_OR_NULL(gpio))
+ 		return PTR_ERR_OR_ZERO(gpio);
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index 70ade5306e45..b33e015e6732 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -153,6 +153,7 @@ static const struct of_device_id dw_i2c_of_match[] = {
+ 	{ .compatible = "snps,designware-i2c", },
+ 	{ .compatible = "mscc,ocelot-i2c", .data = (void *)MODEL_MSCC_OCELOT },
+ 	{ .compatible = "baikal,bt1-sys-i2c", .data = (void *)MODEL_BAIKAL_BT1 },
++	{ .compatible = "intel,socfpga-i2c", .data = (void *)MODEL_SOCFPGA },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, dw_i2c_of_match);
+-- 
+2.25.1
 
-I didn't get them. Yeah, maybe a resend will help?
-
-
---ogV34CoYxK6HOSzb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKnmK8ACgkQFA3kzBSg
-KbbJWBAAlS8SaQDw0SsR0R3wckRC2LN0TZ1ehFWsm9akX38NgWXfprCt5Y1HcKsu
-DcyHwWdwVKoT6lCPkAKeZsfF+3ipoKBf4CedKk5zYwL/3o/I80S3+sYSw+akUV05
-X3HWMjpCRlWAqGRod4TWafawWqEA1U4GlDmApYl3TB7PWEk27lJp+3BgwBgnSs0l
-9dT7CnfeqkeIVZ8LapGQksqwC/fKMsa4dVNyluCDHHm9DlsDHFgW4fYzWJgg8WlS
-rhTC2QnXYmcRS0uWQR7W+FNnHjRK2ARyP+So2rzbes7/tqBBMAMWlvMzpNHd3ucb
-ZkQWVxRs4cXcpprtyuhA0axvAGfYCc4lvGr8IdRoFyPnDSv8U3hUZ4ZU2bH8C//2
-CbyRTFGBu7C1UV5YwjswBkAmvUeFrnM6gSH+/ZcZcOQlQ23RHG4TFMCe93MPJPv4
-RbKLzX/WhBnzY+b7Vk0Y+lGgM1QX5CsEiL8S82dpxhylypGXv9GX8d0F2sXP/lXT
-hNJ0BqA1Tp7umUUom7ZTM0h8IZnEWn8k0RRr7XMTvKQOA4cIhVccBHRCJHIrfMm0
-qsJp7dJpm6nuCfipS3yW1UXZjhq1NRKRNLQrt+aQPwYZVHvdPBq9di6uqmQdOnHg
-7gB1dExjEtarnUpcMfsABDJ/jz1nL0fZRZLKPoM6HGiisxfQKD8=
-=Rl7P
------END PGP SIGNATURE-----
-
---ogV34CoYxK6HOSzb--
