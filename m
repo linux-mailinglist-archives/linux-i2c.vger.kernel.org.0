@@ -2,49 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70EC654BAFF
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jun 2022 21:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA54E54BB04
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jun 2022 22:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238477AbiFNT5R (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 14 Jun 2022 15:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
+        id S232105AbiFNUAi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 14 Jun 2022 16:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237013AbiFNT5Q (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Jun 2022 15:57:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406F436312
-        for <linux-i2c@vger.kernel.org>; Tue, 14 Jun 2022 12:57:16 -0700 (PDT)
+        with ESMTP id S231928AbiFNUAi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Jun 2022 16:00:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CAE4AE33
+        for <linux-i2c@vger.kernel.org>; Tue, 14 Jun 2022 13:00:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1ADC60A50
-        for <linux-i2c@vger.kernel.org>; Tue, 14 Jun 2022 19:57:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1DB6C3411B;
-        Tue, 14 Jun 2022 19:57:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6EBD5B8186A
+        for <linux-i2c@vger.kernel.org>; Tue, 14 Jun 2022 20:00:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85CC1C3411B;
+        Tue, 14 Jun 2022 20:00:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655236635;
-        bh=gNbO3DSHhTmgi3CuStnkanZIacWLd4++mnYRlUmPDWg=;
+        s=k20201202; t=1655236835;
+        bh=sVHi8hNAK5r3oHPlRjZPZNNAL5hp+vGy8qYRFa+2imk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tOQzyaDueoUjp0IaRBdA9w5G7vdG5jmiUpq9/uVMfYZxZOSvF31O23jMReboSrZq/
-         AQcA6GyCWsWnItczGISROVU5y16vd0VS72diqdMB1WWIgXX/6W4Wmmz0dAs9OYsJtS
-         63gfIhKMBOqSrEpWIhKusHtntF9xO7a/9fzsWQHs9rlTNSCCTKl1ZDIAfzz4mRuvBj
-         IfLfJu5FWn+qPuVcQ4xuzN+bHeb/cLwHHRYPQSzITnZHV4NVW9JKvrFq3u4x2awIei
-         AGfZdEe0QA9a7NFT/J78SKtZoEziqTkUO8qo0cGppB+E/d+Q09JQiSOATRMiPNMnoD
-         AerLTXPy6kgow==
-Date:   Tue, 14 Jun 2022 21:57:11 +0200
+        b=kuh/KBCy73cMnunN2MUyXUfyrkI1Xt1WjlrO6tWWTHGnwYnTaqZJKtrCKBtCP9KqL
+         9ZGc2G4tgqxAtrOpVWiKQkL8L4yc8dkLL0N0KhgjfJIBV6wcHOKo8pYgQGgA6ZY2Od
+         qsY9B9AqW5N2Oig0LnATICVXoMXkw36MDabTAx7wq7zj9/DHUIkkD8myDqJgtAVqxk
+         vZaT2BiH89OGqbarN9zVHQJJ84ZpG/i86UJgM1Ir/J67lKcoWliYQLCiFfxksewSRN
+         cIE19lSkMGWNRazQXoB2vvZjl6VEneSJwnhOIbgEb0qDTDkDWFZV1HZYsM4MIOuxzO
+         t+t1JIkLLfWig==
+Date:   Tue, 14 Jun 2022 22:00:31 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     linux-i2c@vger.kernel.org
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: core DT include belongs to core
-Message-ID: <YqjoF4SLu6X09Jh0@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-References: <20220613144713.23501-1-wsa@kernel.org>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-i2c@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: i2c: Make remove callback return void
+Message-ID: <Yqjo397MDTXbwoM+@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        linux-i2c@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20220609091018.q52fhowlsdbdkct5@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pUF1GQ4iKPcN9zaS"
+        protocol="application/pgp-signature"; boundary="+jN84sGF8wbjn9Wv"
 Content-Disposition: inline
-In-Reply-To: <20220613144713.23501-1-wsa@kernel.org>
+In-Reply-To: <20220609091018.q52fhowlsdbdkct5@pengutronix.de>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,34 +61,43 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---pUF1GQ4iKPcN9zaS
+--+jN84sGF8wbjn9Wv
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Jun 13, 2022 at 04:47:13PM +0200, Wolfram Sang wrote:
-> Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Hi UWe,
 
-Applied to for-current, thanks!
+> Assuming you agree to this quest, it would be great if you accepted the
+> change (+ the then maybe still non-accepted driver changes) in the i2c
+> tree exposing them early after 5.20-rc1 in next. Maybe it will be
+> sensible to then create a signed tag for these changes to allow other
+> affected maintainers to pull this change into their trees.
+
+Yes, I can do this. Your proposal makes sense to me.
+
+Thank you for your work!
+
+   Wolfram
 
 
---pUF1GQ4iKPcN9zaS
+--+jN84sGF8wbjn9Wv
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKo6BcACgkQFA3kzBSg
-KbbWmA//S56D7BFOhWayF0v3NRyRC2ETITXT8dwbCxhn1MONgzxw3TTRSxcyi8jB
-wmAikW4A3Xkb4VVWgrv67waCsXAfQWbFU5dKOBT1DX3zJA1wPO18VHXrGEsDLpNd
-qcpd3/I9W8+PqgLfwqz/lt4Pkb7o0qpJru7C6WiuQZ1QFSu1MqeJUW1MVvHQWmz1
-mQFeQsuprWo+ViC3I4nHgaegzGym6ERSSwe1FLp4u0wknZbf28f4zcmW6PUe4dVC
-tuJ5tOYshgIEc7Ylve7YyX4vkH2ObTXmCWy4Y0rvrFCyAQLNT0Wim7o3o5x9MDWX
-cYl3wWbrg8Up7aSsQKbYY+cU/h56OdiYL3VJ/WLzfndKnon4N5zsw+iomw6qibnr
-pdRhQXMAwF8eiuNiQDXVta2NnPaxCVF94jZUObfJcxJN041+Ve6zaHH4h9LAyY/1
-jUE+89dzK3LCIuqOYhbwdvSBRCWV6XnJtJOcnew9tD9H7YdPErLwKvbTkfFM0Hgm
-jAaMfj8kb5PipCQvklsb6eWbtnRaTeL3FmZdy8iuHj0/Ec0HnJreXYoFNNi7cOEZ
-zPqitPNiGfxYLFaBCS7oeyw8e0a+x/QWgLcU5dOoOKaceK+DN2qn3ax7LegvDLR4
-0BXQU6DT+HVReFEw9O/7zslaHMoZ1f6J+s3QuTAtnhhdAEfYUas=
-=yJpv
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKo6N8ACgkQFA3kzBSg
+KbZHdhAArLflDSNVuHqVO0sL9bIIqo1zwneqWY/zQDUg62SWk4PeQILzUnYXnM+m
+/CoRyGeliRPtnKnttbzOSmSyg+6gMoZg5tQ4vW9VBkyqyIWvsTLxavrLfwFpgtsz
+76v6aUM7kmeqv0YXgScAtMmtVtdLTJfIBQI0TH3vLQcHyzLaCNjKhf6cMBjquGJb
+nrCbG2eZX2D748SaNkFKFyCo4QnQAEfPAyzHZ/SwzKTCFlhqUpY2Wwu94qBzaTWK
+h8BjsleFWDoR36ksdjeqCAO1uDAH1TJp+G3aXjS2pOA1P3L21oNWw2ps4pi/SS1q
+vS7V0kbDyAC3gwKhkoUT6Zh38JlmiwN9w8Fy7WYKGhJ2+E6NQVMyAs3uwHQL3JzT
+ecg12GkenKG2lb8TfdyaE//nMbIV8Su3cnTSge86VMt79RnCvNHAe7aapcqbROr1
+mmHZewtIqirVSjPEE7eBLDzPw+mHORDZiVAnzaDdWK9bi35AHyfzbyEu4otx0mKk
+28go5EeweqfMzlFjk5srfuwT7Lq42CXPb6uajZUkaTv24KlQ2JWz/jSkVcM0enAa
+WrDTpGULTB5JQ4Bven/oa+qfJY37P1GlEILttgcmnOFCmqwn8kgfkhftnc+uKd9x
+CZLPtSnrehgsON/5icKKJB8/i5GMPRSx8nPW74m2Ly+eaJNyWCY=
+=iodB
 -----END PGP SIGNATURE-----
 
---pUF1GQ4iKPcN9zaS--
+--+jN84sGF8wbjn9Wv--
