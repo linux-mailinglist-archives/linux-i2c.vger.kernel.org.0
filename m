@@ -2,76 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A10954BB47
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jun 2022 22:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9FEB54BCE6
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jun 2022 23:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357679AbiFNUUj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 14 Jun 2022 16:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
+        id S245417AbiFNVl0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 14 Jun 2022 17:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358064AbiFNUUe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Jun 2022 16:20:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D7BB485;
-        Tue, 14 Jun 2022 13:20:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46B3761560;
-        Tue, 14 Jun 2022 20:20:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA9B1C3411E;
-        Tue, 14 Jun 2022 20:20:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655238031;
-        bh=/YZ/vfdY+LpkLwFedw1kInlGS37UJrgkhllxkJRhf6Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c72bZ+oCNYTvdU0AwQSmlyiTkpM10TAEYMAsZ3JElFrOEGXaMiEWfqn/XXVHWRX9B
-         YiEkV1PUhV8d1tOvMOXuBtfqR78WZH5HWVIP38H13X52lc8LJzFI8nyYd0bv4ZKyw8
-         E0ReS0tedlRIKuTWEHcbnQpXhMhOms9jwRWHDNUXkYrBMez5+akYdBkmrdj0zTbeVm
-         5IeMUNZKH19mqoaRSPVCDm46iUlL7+/SiZMl9Gc5DaOhxs+QKvFgj5HX9FczzshjKg
-         D0HKkHk6FZIA29okuu+DtStfoWifXSKs56G26KXH4aqU4PHWJvBKFS3l6muGeWHt58
-         T+Xe7OO7Rxa7A==
-Date:   Tue, 14 Jun 2022 22:20:27 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        matti.lehtimaki@gmail.com
-Subject: Re: [RFC PATCH 10/14] i2c: qcom-cci: add msm8974 compatible
-Message-ID: <Yqjti8s06LIfTE52@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Todor Tomov <todor.too@gmail.com>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        matti.lehtimaki@gmail.com
-References: <20220522162802.208275-1-luca@z3ntu.xyz>
- <20220522162802.208275-11-luca@z3ntu.xyz>
+        with ESMTP id S232915AbiFNVlZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Jun 2022 17:41:25 -0400
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A6213CDA;
+        Tue, 14 Jun 2022 14:41:24 -0700 (PDT)
+Received: by mail-il1-f176.google.com with SMTP id d6so7560276ilm.4;
+        Tue, 14 Jun 2022 14:41:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P/snQ/WMRmumIJEZaYOGe+qZw9rf1ibk1Zx2Cluh3eE=;
+        b=LyOpdCmhpU59VQp24hsnT3nVwh7XbUhnbADUQD7BzJNhlB2pTjYIXjev622UTWP1uu
+         RAJ2xbLNvtPYPQ1V9yOdAtECPFYV4GtJ5KzJLV1sUcuCa96JHdFfbT4B0UHnUcVfx1m1
+         o+Eu7cOdoRP1UNJn4hvUii6vfeiHbj40c1/53sRwjDBZHAVKRupSswRPAz+WePz+e/B5
+         TckQxmU74ZQ0PhFNcLrF9LQWKZNeIT3/gpaPpIK8cGjQf9UI5SB9Dyxfypxl0EdLxWnG
+         k4BHFVqAOoJRtelpULKZB1n2e3Av/YwalY6UrsINhe77QWlYLtJmRH3MMjXVU0F0/a2Y
+         CKwA==
+X-Gm-Message-State: AJIora9on69fE8BM8PXdVpcWOru0k0S1zLAUNxqkZQWvifBAQa2lFLX1
+        aAWFR4yHOq8cd3vxWpdQ0uK5vcAF6Q==
+X-Google-Smtp-Source: AGRyM1snG5pU4M/G6iIKIUmFJVbwBn2Ae094R8NI4RwTUrqihx5I7ujinRYO6C0+lzgFNAsFXyGYhA==
+X-Received: by 2002:a92:c568:0:b0:2d3:da8d:76cc with SMTP id b8-20020a92c568000000b002d3da8d76ccmr4134740ilj.161.1655242883879;
+        Tue, 14 Jun 2022 14:41:23 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id b3-20020a029a03000000b0032ead96ee5csm5316779jal.165.2022.06.14.14.41.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 14:41:23 -0700 (PDT)
+Received: (nullmailer pid 2706027 invoked by uid 1000);
+        Tue, 14 Jun 2022 21:41:21 -0000
+Date:   Tue, 14 Jun 2022 15:41:21 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Potin Lai <potin.lai.pt@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-i2c@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+        Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai@quantatw.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Rayn Chen <rayn_chen@aspeedtech.com>,
+        linux-aspeed@lists.ozlabs.org, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] dt-bindings: aspeed-i2c: add properties for
+ setting i2c clock duty cycle
+Message-ID: <20220614214121.GA2705772-robh@kernel.org>
+References: <20220610054722.32229-1-potin.lai.pt@gmail.com>
+ <20220610054722.32229-3-potin.lai.pt@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="QLG4RjiqBen7yn3N"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220522162802.208275-11-luca@z3ntu.xyz>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220610054722.32229-3-potin.lai.pt@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,46 +71,15 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
---QLG4RjiqBen7yn3N
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sun, May 22, 2022 at 06:27:58PM +0200, Luca Weiss wrote:
-> From: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
->=20
-> MSM8974 CCI is the same as MSM8916 except it has two masters.
->=20
-> Signed-off-by: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+On Fri, 10 Jun 2022 13:47:22 +0800, Potin Lai wrote:
+> Introduce a new property for setting a minimum duty cycle for clock high.
+> 
+> * i2c-clk-high-min-percent: a minimum percentage of clock high
+> 
+> Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
 > ---
-> To note, the cci_v1_5_data variable name is just a bit arbitrary and
-> isn't meant to reflect IP version "1.5". I'd be happy to change the
-> variable name to something else.
+>  Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
 
-Loic, Robert: I know this series is marked RFC, but the I2C patches
-adding a new SoC to the driver are maybe interesting already?
-
-
---QLG4RjiqBen7yn3N
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKo7YsACgkQFA3kzBSg
-KbbqbRAAoyyAxbFsgQBm8I5Vx+0UoHw0pUnptb52g5CjmSpFUz3rhcc7nFtAGTRq
-4c++op/pMcUHuN53keum60Y0530+cM25HAhvvVY9ggDXuK8Mn2bSHEmC23dHCAX/
-whRjzsH9W2BlOukKhiJyg/EGZgGfeDC2HTcddnzr5WSlZksOcxItocYO4d6rl3xf
-uQLT6cAzCaNtLP1C5KBd2dQb39kdXrrRcNNeWETL8krJHBQjkCWg2guXJDvPnLjE
-b9MvaiZUZ6EMIR+KezE4PFYw6BtlLhH/AeCEgLruK6KlV4muzOIvstnAGGfRgm3u
-+EcGebvT3FgFHlqrNF7exFG3ACWJolAaM8ZyehkOKoyA+J+7AINmoKDrpwa33qIE
-YygWfUbH1tUBxMfxJ4tU/ranCmr5ZnJCCoVY2Pt64M/yOCldnkN55BUKiL1Gg/Uq
-po7+6rbLpWJIlSWeyQWRi9RYDGhA1tc0NI+ptSvrA9e7ewyj9ggVIY7KnnYjXrhE
-7YMDeWyowe925c8BW5+E8vsMfgRA6NyHavPiGr0B+aa5eGYjPvBpCxs95F5Tppom
-MONwVTNhmCxEqVWQTQt3Zil8AikUFUa5dYVSFt2pUuXMfmYU6kkvZ8kSH7tL7ASQ
-uWjlcz4x/fjQZ2Oova/E8UOLv/3eOCu6Zxj/grCDPITArk5ftJA=
-=9e2S
------END PGP SIGNATURE-----
-
---QLG4RjiqBen7yn3N--
+Reviewed-by: Rob Herring <robh@kernel.org>
