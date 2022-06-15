@@ -2,56 +2,80 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B4EC54D1BF
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jun 2022 21:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C7154D29B
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jun 2022 22:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349684AbiFOTi4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Jun 2022 15:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
+        id S235247AbiFOUc7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Jun 2022 16:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244636AbiFOTiz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Jun 2022 15:38:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DB13BBE6;
-        Wed, 15 Jun 2022 12:38:54 -0700 (PDT)
+        with ESMTP id S231149AbiFOUc6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Jun 2022 16:32:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C223DB7EF;
+        Wed, 15 Jun 2022 13:32:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7BFFB81F00;
-        Wed, 15 Jun 2022 19:38:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0171C3411E;
-        Wed, 15 Jun 2022 19:38:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50A796174B;
+        Wed, 15 Jun 2022 20:32:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8E81C3411A;
+        Wed, 15 Jun 2022 20:32:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655321932;
-        bh=8r4cD4LYkuropBC5jhH9yIfHJXDhGCTZ6tTZPJiVzmY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AG5O5ndr4bq6IRx1S/TbkW5g7CAx9ZeCS2dbafIRidLMw/X2lCtA7wcW0MD+6mkGM
-         ok3LJ8OuUlxbO4rP+eHtohbeKSIQeOSo4VtH8p2jVjcer6vg2fl3TyZ+HdI+JeW7YM
-         7En4ewQILS0yE9Dq3LD2SeumP5IZyjqDoRWKQ+g3F9ytWuXZ3Ghds08ATjP2MH7o3e
-         efZTbxuBSbvSyocvX1BQB9XnzmkdeNHcRuWMPYwWRACqqfENO4NT/c9BJW2LJuDDu7
-         XuccQmp5pX1DKDltz7Xvp4yFhtJoI1Uy5gJiWKfxCa7w9xY1Bfgh/o8tPWmEfwPDjL
-         7r3xb3SEbfhHw==
-Message-ID: <4fd5ed33-a92e-71ed-b02c-da6f7c482c0a@kernel.org>
-Date:   Wed, 15 Jun 2022 14:38:47 -0500
+        s=k20201202; t=1655325175;
+        bh=xweyU4/oqSOwHkI/hoomOugSz3ECvQLAuoo5JQYmEfo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TaEB3qqtKQ7sFL15nSzdXBJU4cC65s35LLseLFBizPWZY6R0fkh1UNU118TVUYK1o
+         +RgR2Kb7+JUTTRc6tXQLDV5Yr04FvNjjexnZN+hnW90VBWcBBSmrbQ/DXQNlArTmrO
+         88eeDrMzneYDF4mE5yZwMpYmHLHbGZJzvBkYY1WhFONh3L/S7j8pbx+i3oaleJ/16y
+         srDQGXS6Uj5dnKWP+vtWmZ2wEE+3fMfy6S0WYzEs60VGbb09bKpzasdEvB9av9Kcsp
+         1a9AufleimVC0Yf7ajnDauhN/ir1rOjEJDExZ/LCrCN22uG968pCcUBS8atRmknu0U
+         syD3CL+ZAGM4Q==
+Date:   Wed, 15 Jun 2022 22:32:48 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Quan Nguyen <quan@os.amperecomputing.com>
+Cc:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: Re: [PATCH v7 3/3] i2c: aspeed: Assert NAK when slave is busy
+Message-ID: <YqpB8A2uBi+4epHM@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Quan Nguyen <quan@os.amperecomputing.com>,
+        Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+References: <20220422040803.2524940-1-quan@os.amperecomputing.com>
+ <20220422040803.2524940-4-quan@os.amperecomputing.com>
+ <Yn+9QBoPdH8fMm/m@shikoro>
+ <fc422a06-c035-f6e5-231b-74ea6afe8467@os.amperecomputing.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCHv4 1/2] i2c: designware: introduce a custom scl recovery
- for SoCFPGA platforms
-Content-Language: en-US
-To:     jarkko.nikula@linux.intel.com
-Cc:     andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220615191214.826879-1-dinguyen@kernel.org>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20220615191214.826879-1-dinguyen@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ic1hM2GHeE5Hfcvc"
+Content-Disposition: inline
+In-Reply-To: <fc422a06-c035-f6e5-231b-74ea6afe8467@os.amperecomputing.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,129 +83,76 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
+--ic1hM2GHeE5Hfcvc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 6/15/22 14:12, Dinh Nguyen wrote:
-> The I2C pins on the SoCFPGA platforms do not go through a GPIO module,
-> thus cannot be recovered by the default method of by doing a GPIO access.
-> Only a reset of the I2C IP block can a recovery be successful.
-> 
-> The assignment of the recover_bus needs to get done before the call to
-> devm_gpiod_get_optional(), otherwise, the assignment is not taking place
-> because of an error after returning from devm_gpiod_get_optional().
-> 
-> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-> ---
-> v4: re-arrange code per Andy Shevchenko's recommendation
-> v3: simplify the function
->      update commit message
-> v2: remove change to MODEL_MASK
->      s/i2c_custom_scl_recovery/i2c_socfpga_scl_recovery
-> ---
->   drivers/i2c/busses/i2c-designware-core.h    |  1 +
->   drivers/i2c/busses/i2c-designware-master.c  | 50 ++++++++++++++++++---
->   drivers/i2c/busses/i2c-designware-platdrv.c |  1 +
->   3 files changed, 46 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-> index 70b80e710990..7b22ec1d6a96 100644
-> --- a/drivers/i2c/busses/i2c-designware-core.h
-> +++ b/drivers/i2c/busses/i2c-designware-core.h
-> @@ -303,6 +303,7 @@ struct dw_i2c_dev {
->   #define MODEL_MSCC_OCELOT	BIT(8)
->   #define MODEL_BAIKAL_BT1	BIT(9)
->   #define MODEL_AMD_NAVI_GPU	BIT(10)
-> +#define MODEL_SOCFPGA		BIT(11)
->   #define MODEL_MASK		GENMASK(11, 8)
->   
->   /*
-> diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-> index 44a94b225ed8..6b75a08a1c1f 100644
-> --- a/drivers/i2c/busses/i2c-designware-master.c
-> +++ b/drivers/i2c/busses/i2c-designware-master.c
-> @@ -813,10 +813,26 @@ static void i2c_dw_unprepare_recovery(struct i2c_adapter *adap)
->   	i2c_dw_init_master(dev);
->   }
->   
-> -static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
-> +static int i2c_socfpga_scl_recovery(struct i2c_adapter *adap)
-> +{
-> +	struct i2c_bus_recovery_info *bri = adap->bus_recovery_info;
-> +
-> +	bri->prepare_recovery(adap);
-> +	bri->unprepare_recovery(adap);
-> +
-> +	return 0;
-> +}
-> +
-> +static int i2c_dw_init_socfpga_recovery_info(struct dw_i2c_dev *dev,
-> +					     struct i2c_bus_recovery_info *rinfo)
-> +{
-> +	rinfo->recover_bus = i2c_socfpga_scl_recovery;
-> +	return 1;
-> +}
-> +
-> +static int i2c_dw_init_generic_recovery_info(struct dw_i2c_dev *dev,
-> +					     struct i2c_bus_recovery_info *rinfo)
->   {
-> -	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
-> -	struct i2c_adapter *adap = &dev->adapter;
->   	struct gpio_desc *gpio;
->   
->   	gpio = devm_gpiod_get_optional(dev->dev, "scl", GPIOD_OUT_HIGH);
-> @@ -831,16 +847,38 @@ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
->   	rinfo->sda_gpiod = gpio;
->   
->   	rinfo->recover_bus = i2c_generic_scl_recovery;
-> -	rinfo->prepare_recovery = i2c_dw_prepare_recovery;
-> -	rinfo->unprepare_recovery = i2c_dw_unprepare_recovery;
-> -	adap->bus_recovery_info = rinfo;
->   
->   	dev_info(dev->dev, "running with gpio recovery mode! scl%s",
->   		 rinfo->sda_gpiod ? ",sda" : "");
->   
-> +	return 1;
-> +}
-> +
-> +static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
-> +{
-> +	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
-> +	struct i2c_adapter *adap = &dev->adapter;
-> +	int ret;
-> +
-> +	switch (dev->flags & MODEL_MASK) {
-> +	case MODEL_SOCFPGA:
-> +		ret = i2c_dw_init_socfpga_recovery_info(dev, rinfo);
-> +		break;
-> +	default:
-> +		ret = i2c_dw_init_generic_recovery_info(dev, rinfo);
-> +		break;
-> +	}
-> +	if (ret <= 0)
-> +		return ret;
-> +
-> +	rinfo->prepare_recovery = i2c_dw_prepare_recovery;
-> +	rinfo->unprepare_recovery = i2c_dw_unprepare_recovery;
-> +	adap->bus_recovery_info = rinfo;
-> +
->   	return 0;
->   }
->   
-> +
+Hi Quan,
 
-Sorry for this stray newline, let me if you need me to send a v5?
+> When tested with ast2500, it is observed that there's always a
+> I2C_SLAVE_WRITE_REQUESTED comes first then other I2C_SLAVE_WRITE_RECEIVED=
+'s
+> follow for all transactions.
 
->   static int amd_i2c_adap_quirk(struct dw_i2c_dev *dev)
->   {
->   	struct i2c_adapter *adap = &dev->adapter;
-> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-> index 70ade5306e45..b33e015e6732 100644
-> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
-> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-> @@ -153,6 +153,7 @@ static const struct of_device_id dw_i2c_of_match[] = {
->   	{ .compatible = "snps,designware-i2c", },
->   	{ .compatible = "mscc,ocelot-i2c", .data = (void *)MODEL_MSCC_OCELOT },
->   	{ .compatible = "baikal,bt1-sys-i2c", .data = (void *)MODEL_BAIKAL_BT1 },
-> +	{ .compatible = "intel,socfpga-i2c", .data = (void *)MODEL_SOCFPGA },
->   	{},
->   };
->   MODULE_DEVICE_TABLE(of, dw_i2c_of_match);
+Yes, that's the design of the interface :)
+
+> In case slave is busy, the NAK will be asserted on the first occurrence of
+> I2C_SLAVE_WRITE_REQUESTED make host to stop the current transaction (host
+> later will retry with other transaction) until slave ready.
+>=20
+> This behavior is expected as we want host to drop all transactions while
+> slave is busy on working on the response. That is why we choose to assert
+> NAK on the first I2C_SLAVE_WRITE_REQUESTED of the transaction instead of
+> I2C_SLAVE_WRITE_RECEIVED.
+
+=46rom Documentation/i2c/slave-interface.rst:
+
+=3D=3D=3D
+
+About ACK/NACK
+--------------
+
+It is good behaviour to always ACK the address phase, so the master knows i=
+f a
+device is basically present or if it mysteriously disappeared. Using NACK to
+state being busy is troublesome. SMBus demands to always ACK the address ph=
+ase,
+while the I2C specification is more loose on that. Most I2C controllers also
+automatically ACK when detecting their slave addresses, so there is no opti=
+on
+to NACK them. For those reasons, this API does not support NACK in the addr=
+ess
+phase.
+
+=3D=3D=3D
+
+So, the proper design is to NACK on the first received byte. All EEPROMs
+do it this way when they are busy because of erasing a page.
+
+All the best,
+
+   Wolfram
+
+
+--ic1hM2GHeE5Hfcvc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKqQewACgkQFA3kzBSg
+KbaRvBAAhGHBikwxwBVjvxYQ3WkD53anNZCb8H7DLS+EBHUqZUhE3sB1E0xjhLw9
+/D56GGMOC0z26eO0epBcCjharkSDE5kolGFghi/5ymiKkHoS/wGCHuTr6nJVt0xO
+CXf1YVkIb4I3bHHxgiAPrOc+N6jw5e+Ujao7nOXjpaTuJ84RNT4hHPNKUcJIqZNR
+ciM/xRqC0CslNEW4RH2fapeCw97/HksITYb/1Ix3DabxRnLj6obVmAtuokUr7Tmd
+Aro8RsCKMzkJmknyhX4A/cbVuRKXGiWLthW3srmUKPCgu9dndoBsIoTty+E3vJXY
+QZO0uNLBRydxJOBXT/+skne0wB3xo4RNuAzYXov/RMVkTGO2r3n3Q99wjSyHv7Zh
+BWIy/QnYni2FguU4NtjgBXurWfvqguvLr37+5QMcruMLFsRKkeifb1zfOlVV9RVU
+whpoeJrrFrxE3wI/L4Ol3eBokDneI4Ldo4dUvFv+CQ2GNQgj1qLfZcUnqE/SKNKj
+JhcvsMNszDV7QXk8jIbzdkWbL5zxijQ4y+q+vOou/b3BZTVJ+d+wXXH72LeIxxPY
+JqQD9F2vzrULR55rbXw+ZBU0jESxcBrx3aC54ksz1vIPM7gsuOldNICk00eBI8tD
+HmatAjq9W/yS0VpX7XlTsBwk8w8MXJc2/VXzlJaO4M8yLddwLW0=
+=SfIi
+-----END PGP SIGNATURE-----
+
+--ic1hM2GHeE5Hfcvc--
