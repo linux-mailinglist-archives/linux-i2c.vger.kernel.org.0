@@ -2,100 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2925E54CF81
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jun 2022 19:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C05C54D0AB
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jun 2022 20:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239067AbiFOROG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Jun 2022 13:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
+        id S1357934AbiFOSIp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Jun 2022 14:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357701AbiFORNr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Jun 2022 13:13:47 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3370F25596
-        for <linux-i2c@vger.kernel.org>; Wed, 15 Jun 2022 10:13:46 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id w21so12064467pfc.0
-        for <linux-i2c@vger.kernel.org>; Wed, 15 Jun 2022 10:13:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=2hy2Qkd4xSuW4p+5Dl7PR+SUIjoj02p8RkTpyxOOHqo=;
-        b=MIBH7WuXuo8XsYajlXRYGYomRcjkj6nPW/WNdlCyCciKwmkvzYPIwiUtu3Qe629RgZ
-         cuZ+zyqFYzWMeEFMfJdGt0BHvJjKgqniKy+bjOBj6jDlMyWtrs3W0Kv7ICDIf+bPGVQu
-         YKSqWlun8uCo52RezaVUDBTIzQJ0dRW3jXZr/cRhhFeI3XTfNXAi5Fm4tPE/WNES69zR
-         z81w78Yli3gGEzD34bUQx0paNeHz/lAx8+6t53Y0vstuIrX5MZl1i1yT+KyK+JNu2m9q
-         JCaaGDzWFoBHOjvizAqml7ahRmwIaspthWws+j4MfxDyF8u7+zgD9rKYNV1mLWk2GK6i
-         xkmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=2hy2Qkd4xSuW4p+5Dl7PR+SUIjoj02p8RkTpyxOOHqo=;
-        b=VuHWuJxS/Ov2HQ6nSwF9/YuLDLX1sUuNcChZs2OxUf4CbnD2gj0sSu8LLa9OkYTqi3
-         2yxuNUjX0taZJ5y9mbZLisZBy5K3T5q+IDTX4dnOw3RuWfixQXlPotDVSoqLI3ote3PR
-         y9BRX/J0KWQ/0VDVbV09rj26D5oX48SmuYKWOPFvGTgv7YemPUT3ZvnvbbJ8sFU69qph
-         9sGOKdawVpK1QkcJMYwEN3nGxbHeeUrE7RIfbEf57/FsdkZxgsTJ/XN/OAhI4wcVCqKD
-         epB++Y0JghIiHvhSOdRsxXrk68ArLQjSWqiMiw5828U2LHPafVqQxgjoCUh52424CHpz
-         dnOw==
-X-Gm-Message-State: AJIora9yhFTWl4ZqwL4eVwSwgK97viAPAvAJgFEzLEBy2Sy5J+9hvya3
-        UgarNyCrb/8vyEvJ7bZgmUyFznN3XPlrkXuDi53M0A==
-X-Google-Smtp-Source: AGRyM1uDSl1WVzfzUp2fssJ9HirywV+QKxtYdrezojo5TjTmtib/dvB0jLtBLE0xMnYmMStriT3vSKgQ4Fy4j6rlNt0=
-X-Received: by 2002:a62:7c14:0:b0:51b:9d03:a4c7 with SMTP id
- x20-20020a627c14000000b0051b9d03a4c7mr395031pfc.74.1655313225618; Wed, 15 Jun
- 2022 10:13:45 -0700 (PDT)
+        with ESMTP id S1357824AbiFOSIZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Jun 2022 14:08:25 -0400
+X-Greylist: delayed 392 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Jun 2022 11:08:20 PDT
+Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41C22CDDF;
+        Wed, 15 Jun 2022 11:08:20 -0700 (PDT)
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4LNY612pVczB6;
+        Wed, 15 Jun 2022 20:01:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1655316105; bh=Qlj8vZLxK6jMlUOlp+k6Y3l54kWTL/nElyfzEw7brv8=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=VvFyJEA/pCKMQ4hK9Fktm+97n7S48+Diqj/v6IpTq00nWkdEOw6mfdyKnlecsJD6j
+         jYzFD8s3vVEUihEuGVsw4fqrNGF9KaYemSmRRLFK2ztQsUM6q0IRiO6se0QeBLPYBJ
+         q4c01+aztUsDRFBUa/RBMZxf0mOPddVbIix9X3E7iqa/oO7s1DV2s9Bg5Qb0jFsDUU
+         dqJfRfnkrPczbTdavLgGS+EV2XIQGaEO7AH459cels2qnfovIdtPVWKDCupYDiC6uu
+         gCx/xZvAiIDjL58PNXgWAoG2zHj+vbuRRlRrXcntbT4s1L1rlIsdM9+SlE5VstLMuW
+         c2qkRaYfcSQNA==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.6 at mail
+Date:   Wed, 15 Jun 2022 20:01:41 +0200
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: core: fix potential use-after-free on adapter
+ removal
+Message-ID: <YqoehVjd5qgEYSen@qmqm.qmqm.pl>
+References: <a9dc272e4e06db661125b7b4c330821b532afc4d.1642209079.git.mirq-linux@rere.qmqm.pl>
+ <YqjlZuFGl0dAUZyd@shikoro>
 MIME-Version: 1.0
-References: <20220522162802.208275-1-luca@z3ntu.xyz> <20220522162802.208275-11-luca@z3ntu.xyz>
- <Yqjti8s06LIfTE52@shikoro>
-In-Reply-To: <Yqjti8s06LIfTE52@shikoro>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Wed, 15 Jun 2022 19:13:09 +0200
-Message-ID: <CAMZdPi_c931ejPA2Nkim1cwBS9sdcTNnfUEvUOvFSsfrdN18AQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 10/14] i2c: qcom-cci: add msm8974 compatible
-To:     Wolfram Sang <wsa@kernel.org>, Luca Weiss <luca@z3ntu.xyz>,
-        linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        matti.lehtimaki@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YqjlZuFGl0dAUZyd@shikoro>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 14 Jun 2022 at 22:20, Wolfram Sang <wsa@kernel.org> wrote:
->
-> On Sun, May 22, 2022 at 06:27:58PM +0200, Luca Weiss wrote:
-> > From: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
-> >
-> > MSM8974 CCI is the same as MSM8916 except it has two masters.
-> >
-> > Signed-off-by: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+On Tue, Jun 14, 2022 at 09:45:42PM +0200, Wolfram Sang wrote:
+> Hi Micha³,
+> 
+> I finally had a look at your patch...
+> 
+> > put_device(&adap->dev) might free the memory pointed to by `adap`,
+> > so we shouldn't read adap->owner after that.
+> > 
+> > Fix by saving module pointer before calling put_device().
+> 
+> ... and found a different approach for this problem from 2019:
+> 
+> http://patchwork.ozlabs.org/project/linux-i2c/patch/1577439272-10362-1-git-send-email-vulab@iscas.ac.cn/
+> 
+> I think this is also proper. I found other subsystems in the kernel
+> first putting the module, then the device. Do you see problems with the
+> above patch?
+> 
+> Thanks for looking into the issue!
+
+Hi!
+
+I looked briefly at the kobject machinery and it seems to ignore module
+dependencies. So while both approaches might work, I'd usually reverse
+the order the init code is using: in this case module_get+device_get,
+so on release: device_put+module_put. I don't know what keeps the kernel
+from unloading the module after module_put() and before the function
+returns, but I assume that would blow up for both patches.
+
+Best Regards
+Micha³ Miros³aw
+
+> > 
+> > Signed-off-by: Micha³ Miros³aw <mirq-linux@rere.qmqm.pl>
 > > ---
-> > To note, the cci_v1_5_data variable name is just a bit arbitrary and
-> > isn't meant to reflect IP version "1.5". I'd be happy to change the
-> > variable name to something else.
->
-> Loic, Robert: I know this series is marked RFC, but the I2C patches
-> adding a new SoC to the driver are maybe interesting already?
+> >  drivers/i2c/i2c-core-base.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> > index 2c59dd748a49..5d694f8ce9ef 100644
+> > --- a/drivers/i2c/i2c-core-base.c
+> > +++ b/drivers/i2c/i2c-core-base.c
+> > @@ -2464,11 +2464,14 @@ EXPORT_SYMBOL(i2c_get_adapter);
+> >  
+> >  void i2c_put_adapter(struct i2c_adapter *adap)
+> >  {
+> > +	struct module *owner;
+> > +
+> >  	if (!adap)
+> >  		return;
+> >  
+> > +	owner = adap->owner;
+> >  	put_device(&adap->dev);
+> > -	module_put(adap->owner);
+> > +	module_put(owner);
+> >  }
+> >  EXPORT_SYMBOL(i2c_put_adapter);
+> >  
+> > -- 
+> > 2.30.2
+> > 
 
-Yes I agree, no objection to get them.
 
-Regards,
-Loic
+
+-- 
+Micha³ Miros³aw
