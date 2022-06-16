@@ -2,56 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21C154EA2B
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jun 2022 21:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A7954EA7D
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jun 2022 22:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377403AbiFPTdG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Jun 2022 15:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
+        id S245332AbiFPUFT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Jun 2022 16:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbiFPTdG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Jun 2022 15:33:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDEB2935F;
-        Thu, 16 Jun 2022 12:33:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7702B825AB;
-        Thu, 16 Jun 2022 19:33:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B0ABC34114;
-        Thu, 16 Jun 2022 19:33:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655407982;
-        bh=eG8CVe/IgYT7/YEH84OgJj81/Y8HH9wzHZYp7KUete8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G967x/l4vWZZJUF4E5uTQJktWgodU8Kb5bEo+oQUr3HdQFDDR03A/La5YOnuqlxfh
-         9a0wdhxsYXeKFBeic/1sBXJ6ssGJ0QczHdYhaU2UO2Ifyiw0TrD949wByLgPGdlQh6
-         voFZcdvt3IMZf50r3ECTVMz/n/LWXhebolnzPvFaX28dKx7JgFLYcnvqrcLjeK4qDo
-         TsvjtNy2i5Ibt7JWiA7VJTOsjh87sXX7lzVIgy1HQWHUgnGzEypE3pqssPtRV7kv7m
-         ZkS7Je5sAkL9+cskSlYWyvMyMzFT0rONSTbAu5QZg9BXadah9r25MjM7W/P3oS0pHk
-         E4khgXw8/NTpw==
-Date:   Thu, 16 Jun 2022 21:32:51 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: core: fix potential use-after-free on adapter
- removal
-Message-ID: <YquFY50LfsezqrVn@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <a9dc272e4e06db661125b7b4c330821b532afc4d.1642209079.git.mirq-linux@rere.qmqm.pl>
- <YqjlZuFGl0dAUZyd@shikoro>
- <YqoehVjd5qgEYSen@qmqm.qmqm.pl>
+        with ESMTP id S233061AbiFPUFS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Jun 2022 16:05:18 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250D74E3B9;
+        Thu, 16 Jun 2022 13:05:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655409918; x=1686945918;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v8nKn3u5HYJV1okOhvCdZ6oJQPkGSyi/IKm0G/s0MXY=;
+  b=n1MTvZ9oclK3QvhFS4daltr6uY7xtpB1Ps+yc0WSUMAWNbtsgFqCIKzV
+   eOuQ6a1MMJg70Cp0p0Sf4SafEFcSPJZy8s7tTGrdyTHjmo8z8KBjtuTv0
+   M4YBDnSL77sY+bcH5QVcpPEeM/fMRNLudveAfdKLpfhO5MBAMXJgXdQmS
+   lRElJNdS4YVEY2/4frzDg4Z6TlL1VHwzKlH8sRMHzDd0GD9fXz76dgmNB
+   S6lx9QE9FodGe5tY2aweoaADlDYE3rO06uDOOclij8uDMzirKadQyqgkw
+   5qTpXK5p3LDDBr7Sro+jBjutiIBko0+NzjqcFcqd+aUbtenuj2sCz9geU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="278136270"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="278136270"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 13:05:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="589791945"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 16 Jun 2022 13:05:13 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1vjs-000Oj3-Vy;
+        Thu, 16 Jun 2022 20:05:12 +0000
+Date:   Fri, 17 Jun 2022 04:04:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Quan Nguyen <quan@os.amperecomputing.com>,
+        Corey Minyard <minyard@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Wolfram Sang <wsa-dev@sang-engineering.com>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: Re: [PATCH v8 1/3] ipmi: ssif_bmc: Add SSIF BMC driver
+Message-ID: <202206170337.0kCTfR63-lkp@intel.com>
+References: <20220615090259.1121405-2-quan@os.amperecomputing.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="S2FIYZZN/lYn5+1m"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YqoehVjd5qgEYSen@qmqm.qmqm.pl>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220615090259.1121405-2-quan@os.amperecomputing.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,54 +77,42 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Quan,
 
---S2FIYZZN/lYn5+1m
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I love your patch! Yet something to improve:
 
-Hi Micha=C5=82,
+[auto build test ERROR on cminyard-ipmi/for-next]
+[also build test ERROR on wsa/i2c/for-next v5.19-rc2 next-20220616]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> I looked briefly at the kobject machinery and it seems to ignore module
-> dependencies. So while both approaches might work, I'd usually reverse
+url:    https://github.com/intel-lab-lkp/linux/commits/Quan-Nguyen/Add-SSIF-BMC-driver/20220615-170539
+base:   https://github.com/cminyard/linux-ipmi for-next
+config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220617/202206170337.0kCTfR63-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f0e608de27b3d568000046eebf3712ab542979d6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0feb5f0351d090633e7522dbec22de419a04b85f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Quan-Nguyen/Add-SSIF-BMC-driver/20220615-170539
+        git checkout 0feb5f0351d090633e7522dbec22de419a04b85f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Thanks for checking!
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> the order the init code is using: in this case module_get+device_get,
-> so on release: device_put+module_put. I don't know what keeps the kernel
+All errors (new ones prefixed by >>):
 
-I agree this is good style. I'll add a comment why we reverse the order.
-This will be also good to avoid regressions.
+   In file included from <built-in>:1:
+>> ./usr/include/linux/ipmi_ssif_bmc.h:13:2: error: unknown type name '__u8'
+           __u8    payload[IPMI_SSIF_PAYLOAD_MAX];
+           ^
+   1 error generated.
 
-> from unloading the module after module_put() and before the function
-> returns, but I assume that would blow up for both patches.
-
-Yes. There are other users in the kernel doing it like this (RTC and
-regmap IIRC), so I think problems would have become visible by then.
-
-Thank you for your help!
-
-   Wolfram
-
-
---S2FIYZZN/lYn5+1m
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKrhVsACgkQFA3kzBSg
-KbYEMBAAjjdr/oTw44e/h8NHL8xpV+uGXDahirps/+FNqv+YfyLeTM8RA8MnjtJt
-3NblrlNafxOIhsFSPm0WU2ixoPbD7LAPFabLUFaPaauxTR+d99svkQNpCSvQxK/V
-sE78j7oI8u2wpThfReh1uc4E19rUUAX8AdRVjWW3GOyQXtz5PaVvNUHtoXEt4fc7
-WWX2tSq48j6JYkPELGmF5FtXre/lYGb65KHa6LmJkHTrcLVi30+mtQdmMJm5u3CL
-MXg9HkPiUGhAP1Uo/GzO+6p0MHeDRv+99UOT8Ke8vh3krljsIDEPdXGp2od/r0PV
-l5Of1RBadvIUKs7Ecwf+guYWV+5vOa56lihFP+DmuENhDUyan8X5EDiyP1tU7Y+V
-r0Y8uudCbzPNEUczNfyeNjTUP127uhp6NyuwHRzsnqCpO0fBu9bX1NYlpZWlBZeo
-rc9+pGALzsAT2Pyyqvd8uqn/PyYYNEQN2JyYChAvPz5v1CweWyplxv5bFRuZ6cFa
-BBu26xbD57HIL94s2QaGEtTZ3bBCVUd9LGtobV8T9r3LyI3YOoCR1HzO+5gKDtqB
-NEvMTXYVJW1iBCrqhhfNRRTLZZvP+kOCfOIGA8V3zKal9J7IivNazwt+lHJsNc8X
-9UJ2hEXgr86Z8KXfAN08Iwav0gs/r8rOWJ3WGF/dH49Dmckuoac=
-=0yDV
------END PGP SIGNATURE-----
-
---S2FIYZZN/lYn5+1m--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
