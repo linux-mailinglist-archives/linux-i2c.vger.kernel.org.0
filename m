@@ -2,115 +2,145 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 490F954DFCB
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jun 2022 13:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA83254E0C9
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jun 2022 14:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbiFPLLC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Jun 2022 07:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        id S1376865AbiFPMaK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Jun 2022 08:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiFPLLB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Jun 2022 07:11:01 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3425C86F;
-        Thu, 16 Jun 2022 04:11:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655377860; x=1686913860;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8+NH6Ri5lpQfIS3/RPQfvg5J7ybyzEhikh7up91AaKE=;
-  b=Hc9/BbKXdZTqs7KjqSKu+cGHAYnNeqRGmAC/WxCuLkOEtn1yWfNg5nWZ
-   AF7AY2U73sjHiXx+9/BjdrkgnknAMGqOjNh4DiMMh/iazysoVXB6dwQ3M
-   xQhAn2Ka0zlG+3HVWwX4N6uIRvTQ+wR91FymO4E0jvGJ+lae+NRC/ZMqo
-   lf8cQzkmmjvYAftscTs5Q5DUfprbkFZeiCZSlFZOthoGv2j7byfc03jpZ
-   62tdIvONp72exz+wC+0TPn7dHsiGGCtR5zdDH3/iCvMidUg91IXqRa6cl
-   eLDAieAuNVSAQzZWSUA3WjinqYdfeaQTZiKelhd2HESOfZEQdZYPytEQx
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="262244491"
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="262244491"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 04:11:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="536413410"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 16 Jun 2022 04:10:57 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1nOq-000OJd-Mv;
-        Thu, 16 Jun 2022 11:10:56 +0000
-Date:   Thu, 16 Jun 2022 19:10:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     frank zago <frank@zago.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH v6 3/4] i2c: ch341: add I2C MFD cell driver for the CH341
-Message-ID: <202206161938.BiOHSAOi-lkp@intel.com>
-References: <20220616013747.126051-4-frank@zago.net>
+        with ESMTP id S1376864AbiFPMaJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Jun 2022 08:30:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF894D68E;
+        Thu, 16 Jun 2022 05:30:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A5F9B823A6;
+        Thu, 16 Jun 2022 12:30:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC804C34114;
+        Thu, 16 Jun 2022 12:30:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655382604;
+        bh=7Znl3b92aroi5ubP2QPuFHtUeB1lmREHe3yTZnLMKio=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KMYhbB4MGHuQC7Z7rXOsc2FXhm6jOgJDQRBz44Z8dcYeoscvlfWLHXSfXfOu68EQu
+         BoSKD2hDsNQOQK6jicDyREOSlXJrg6n8CXz79Vc7dXdOtFAU2eRbyR5GbKzsyHxzNi
+         t/Zlz3LGMch7uZaMNxdmHjingGmKLyS9M2YxTemFZBuK4E1zwzbxxiYUWHjcf4liR6
+         3A2ifUFhYkleDyAuQaW685HxWajaIcJ1Vaie+QK/2f68+TECqshItMI7aXiwRlgZTd
+         gl8Sm2UnRnBdg2Q3S5rUd0xAEC37GnKbcZdZRiFXXiRPepFplJ/duGh0Argx9ybpb5
+         L3VcbWVU3R6rQ==
+Date:   Thu, 16 Jun 2022 14:29:57 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Quan Nguyen <quan@os.amperecomputing.com>
+Cc:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: Re: [PATCH v7 3/3] i2c: aspeed: Assert NAK when slave is busy
+Message-ID: <YqsiRW78NAL9rX9S@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Quan Nguyen <quan@os.amperecomputing.com>,
+        Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+References: <20220422040803.2524940-1-quan@os.amperecomputing.com>
+ <20220422040803.2524940-4-quan@os.amperecomputing.com>
+ <Yn+9QBoPdH8fMm/m@shikoro>
+ <fc422a06-c035-f6e5-231b-74ea6afe8467@os.amperecomputing.com>
+ <YqpB8A2uBi+4epHM@shikoro>
+ <bf001ece-e981-3a06-53fe-6a8b637d69fe@os.amperecomputing.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="XXmZpPF7iOB6E+2/"
 Content-Disposition: inline
-In-Reply-To: <20220616013747.126051-4-frank@zago.net>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <bf001ece-e981-3a06-53fe-6a8b637d69fe@os.amperecomputing.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi frank,
 
-Thank you for the patch! Yet something to improve:
+--XXmZpPF7iOB6E+2/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test ERROR on lee-mfd/for-mfd-next]
-[also build test ERROR on brgl/gpio/for-next wsa/i2c/for-next linus/master v5.19-rc2 next-20220616]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Hi Quan,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/frank-zago/add-driver-for-the-WCH-CH341-in-I2C-GPIO-mode/20220616-094113
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-config: arc-buildonly-randconfig-r004-20220616 (https://download.01.org/0day-ci/archive/20220616/202206161938.BiOHSAOi-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/46c68aee86d34ee630272146a73ad7c3147bb094
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review frank-zago/add-driver-for-the-WCH-CH341-in-I2C-GPIO-mode/20220616-094113
-        git checkout 46c68aee86d34ee630272146a73ad7c3147bb094
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+> On the first occurrence of I2C_SLAVE_WRITE_REQUESTED, the address is alre=
+ady
+> received with ACK. So if slave return -EBUSY, the NAK will occur on the n=
+ext
+> Rx byte (on I2C_SLAVE_WRITE_RECEIVED event).
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This is exactly why I2C_SLAVE_WRITE_RECEIVED allows for an error code.
+=46rom the docs:
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+=3D=3D=3D
 
->> ERROR: modpost: "usb_bulk_msg" [drivers/i2c/busses/i2c-ch341.ko] undefined!
->> ERROR: modpost: "usb_deregister" [drivers/mfd/ch341-core.ko] undefined!
->> ERROR: modpost: "usb_register_driver" [drivers/mfd/ch341-core.ko] undefined!
->> ERROR: modpost: "usb_find_common_endpoints" [drivers/mfd/ch341-core.ko] undefined!
+* I2C_SLAVE_WRITE_RECEIVED (mandatory)
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MFD_CH341
-   Depends on HAS_IOMEM && USB
-   Selected by
-   - I2C_CH341 && I2C && HAS_IOMEM
+  'val': bus driver delivers received byte
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+  'ret': 0 if the byte should be acked, some errno if the byte should be na=
+cked
+
+Another I2C master has sent a byte to us which needs to be set in 'val'. If=
+ 'ret'
+is zero, the bus driver should ack this byte. If 'ret' is an errno, then th=
+e byte
+should be nacked.
+
+=3D=3D=3D
+
+'ret' is used to ACK/NACK the current byte in 'val'. That's exactly what
+you need, or? Does the aspeed driver not support acking the current
+byte?
+
+
+--XXmZpPF7iOB6E+2/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKrIkEACgkQFA3kzBSg
+KbasSRAAnlwPKEfQRtRslfq95yxrYXbK6A2BATY1x3Thu50cFfbarxu+e7KMBRtt
+GXFMJrp6wZaXio1xyqtc34OmNOFnZXpPUN6jClpYG04GMaJ4kZCC9F2gNmiTEE0y
+RrL7ujffpI6IP4TGFP8SRuxHCJiNRN8KdGdGepah5J6r+y3AnMoaOFwmD9ha/ItQ
+nhVcPtEPTF/JKbP0st9jr4EIvjLGEi3f+HWuzUwio/MaC/OFRjmzgw9Zwbu0qY1X
+YoqHBh9SmbNwPcI/Enp54kjyWScxnWhtY3SEOY7bsdguBLGL4MWlsYGQOIeDxlen
+Io/4k5V4Iw5S7oBAcN7YLin2knRiTgyY/IHGlA4G+UbDhH7VbCRVgJ+EE9HsaEHy
+iBN/o3YtN6QmmM1DLYrZY3S4JlLFARhNNdCb6Im4+HGMWAP+3t0vBOJEYBH+/0or
+v1Xv3/bzlHkniG0EtOKfVWLCmSLpFA97p2T98KPBFx5K3NTV42+G9hao529crYtD
+JtLUDJYXKYxs5CdmX4tvpQzBET+GB/NbyzMiFOUJzkydVuOBOpMMRN80GTdbJTOc
+9legjiqnXk797FKiB5zhApNH6UQ8HSmsja5Mr+Jhyi5lr52zZCj0bUJD+rP5Nz2c
+SlNDdUkpNr6Pxkklt/bLg8R0L/Y75gQ2PWPWjOJSaK6JM3tdArg=
+=B2+q
+-----END PGP SIGNATURE-----
+
+--XXmZpPF7iOB6E+2/--
