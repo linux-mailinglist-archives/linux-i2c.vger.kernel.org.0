@@ -2,66 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837C154E8FC
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jun 2022 20:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21C154EA2B
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jun 2022 21:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbiFPSA7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Jun 2022 14:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
+        id S1377403AbiFPTdG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Jun 2022 15:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiFPSA6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Jun 2022 14:00:58 -0400
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EFF13F44;
-        Thu, 16 Jun 2022 11:00:57 -0700 (PDT)
-Received: by mail-io1-f53.google.com with SMTP id a10so2249450ioe.9;
-        Thu, 16 Jun 2022 11:00:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fQXZSJhht4X5yNvw03hLRu3BZWLlJCfLhF7rU9SmcRw=;
-        b=SBDuUIjY3V9QWdkZKbh/lMHW/CKxuk9YPjIQ+0wyD0H2Pq3wQA3BIljWG4eU4hU42U
-         vuN1cP6Vge93K9x+1axw9YeKyMz3aOtOtBBbZp39N7xDDsqnZFJ6OJ/XRJqfI7Pgst/K
-         g88Jf5BJyhp0grG+ZP2z6I/mo/lWghnC2C+8n1bF0ogeQ/Gm176HIM47IITFJ7dAje6p
-         7iFOt9OVF1RJ2wpvDU9DP7xMoyBfOhtZ2i9YbMyhdHiWFp4dJ1QJ9ywfP2tgMsoeLIi5
-         4Oa+tTaTHmpXQWx2fytKf5oNYNvSL+5/13Vz0STCiBJOstG4lLaHTTuOI0zJTsyP5Rfl
-         JnYg==
-X-Gm-Message-State: AJIora/JK/aPjNXZfiKvSUxpaeBwUVHWaTWZjlaSeF1VpCkjgCVy9m93
-        UUfj9RKnoSFz+R8+d9t8FQ==
-X-Google-Smtp-Source: AGRyM1spQJ7T8UrCvJ5pQYvBWRSSImqT+IRmKQ5FRE4451GZSxPWdZRJu8178mpfIlKesP0Ydg80uw==
-X-Received: by 2002:a05:6602:2c4c:b0:64f:a897:80cb with SMTP id x12-20020a0566022c4c00b0064fa89780cbmr3138193iov.139.1655402457088;
-        Thu, 16 Jun 2022 11:00:57 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id y203-20020a6bc8d4000000b00669c07fbcb5sm1457589iof.5.2022.06.16.11.00.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 11:00:56 -0700 (PDT)
-Received: (nullmailer pid 3729785 invoked by uid 1000);
-        Thu, 16 Jun 2022 18:00:54 -0000
-Date:   Thu, 16 Jun 2022 12:00:54 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, linux-serial@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-spi@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH] dt-bindings: efm32: remove bindings for deleted platform
-Message-ID: <20220616180054.GA3728782-robh@kernel.org>
-References: <20220615210720.6363-1-wsa@kernel.org>
+        with ESMTP id S229672AbiFPTdG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Jun 2022 15:33:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDEB2935F;
+        Thu, 16 Jun 2022 12:33:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7702B825AB;
+        Thu, 16 Jun 2022 19:33:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B0ABC34114;
+        Thu, 16 Jun 2022 19:33:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655407982;
+        bh=eG8CVe/IgYT7/YEH84OgJj81/Y8HH9wzHZYp7KUete8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G967x/l4vWZZJUF4E5uTQJktWgodU8Kb5bEo+oQUr3HdQFDDR03A/La5YOnuqlxfh
+         9a0wdhxsYXeKFBeic/1sBXJ6ssGJ0QczHdYhaU2UO2Ifyiw0TrD949wByLgPGdlQh6
+         voFZcdvt3IMZf50r3ECTVMz/n/LWXhebolnzPvFaX28dKx7JgFLYcnvqrcLjeK4qDo
+         TsvjtNy2i5Ibt7JWiA7VJTOsjh87sXX7lzVIgy1HQWHUgnGzEypE3pqssPtRV7kv7m
+         ZkS7Je5sAkL9+cskSlYWyvMyMzFT0rONSTbAu5QZg9BXadah9r25MjM7W/P3oS0pHk
+         E4khgXw8/NTpw==
+Date:   Thu, 16 Jun 2022 21:32:51 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: core: fix potential use-after-free on adapter
+ removal
+Message-ID: <YquFY50LfsezqrVn@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <a9dc272e4e06db661125b7b4c330821b532afc4d.1642209079.git.mirq-linux@rere.qmqm.pl>
+ <YqjlZuFGl0dAUZyd@shikoro>
+ <YqoehVjd5qgEYSen@qmqm.qmqm.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="S2FIYZZN/lYn5+1m"
 Content-Disposition: inline
-In-Reply-To: <20220615210720.6363-1-wsa@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <YqoehVjd5qgEYSen@qmqm.qmqm.pl>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,23 +59,54 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 15 Jun 2022 23:07:19 +0200, Wolfram Sang wrote:
-> Commit cc6111375cec ("ARM: drop efm32 platform") removed the platform,
-> so no need to still carry the bindings.
-> 
-> Signed-off-by: Wolfram Sang <wsa@kernel.org>
-> ---
->  .../devicetree/bindings/clock/efm32-clock.txt | 11 -----
->  .../devicetree/bindings/i2c/i2c-efm32.txt     | 33 --------------
->  .../devicetree/bindings/serial/efm32-uart.txt | 20 ---------
->  .../devicetree/bindings/spi/efm32-spi.txt     | 39 -----------------
->  include/dt-bindings/clock/efm32-cmu.h         | 43 -------------------
->  5 files changed, 146 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/clock/efm32-clock.txt
->  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-efm32.txt
->  delete mode 100644 Documentation/devicetree/bindings/serial/efm32-uart.txt
->  delete mode 100644 Documentation/devicetree/bindings/spi/efm32-spi.txt
->  delete mode 100644 include/dt-bindings/clock/efm32-cmu.h
-> 
 
-Deletions are automatically applied, thanks! ;)
+--S2FIYZZN/lYn5+1m
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Micha=C5=82,
+
+> I looked briefly at the kobject machinery and it seems to ignore module
+> dependencies. So while both approaches might work, I'd usually reverse
+
+Thanks for checking!
+
+> the order the init code is using: in this case module_get+device_get,
+> so on release: device_put+module_put. I don't know what keeps the kernel
+
+I agree this is good style. I'll add a comment why we reverse the order.
+This will be also good to avoid regressions.
+
+> from unloading the module after module_put() and before the function
+> returns, but I assume that would blow up for both patches.
+
+Yes. There are other users in the kernel doing it like this (RTC and
+regmap IIRC), so I think problems would have become visible by then.
+
+Thank you for your help!
+
+   Wolfram
+
+
+--S2FIYZZN/lYn5+1m
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKrhVsACgkQFA3kzBSg
+KbYEMBAAjjdr/oTw44e/h8NHL8xpV+uGXDahirps/+FNqv+YfyLeTM8RA8MnjtJt
+3NblrlNafxOIhsFSPm0WU2ixoPbD7LAPFabLUFaPaauxTR+d99svkQNpCSvQxK/V
+sE78j7oI8u2wpThfReh1uc4E19rUUAX8AdRVjWW3GOyQXtz5PaVvNUHtoXEt4fc7
+WWX2tSq48j6JYkPELGmF5FtXre/lYGb65KHa6LmJkHTrcLVi30+mtQdmMJm5u3CL
+MXg9HkPiUGhAP1Uo/GzO+6p0MHeDRv+99UOT8Ke8vh3krljsIDEPdXGp2od/r0PV
+l5Of1RBadvIUKs7Ecwf+guYWV+5vOa56lihFP+DmuENhDUyan8X5EDiyP1tU7Y+V
+r0Y8uudCbzPNEUczNfyeNjTUP127uhp6NyuwHRzsnqCpO0fBu9bX1NYlpZWlBZeo
+rc9+pGALzsAT2Pyyqvd8uqn/PyYYNEQN2JyYChAvPz5v1CweWyplxv5bFRuZ6cFa
+BBu26xbD57HIL94s2QaGEtTZ3bBCVUd9LGtobV8T9r3LyI3YOoCR1HzO+5gKDtqB
+NEvMTXYVJW1iBCrqhhfNRRTLZZvP+kOCfOIGA8V3zKal9J7IivNazwt+lHJsNc8X
+9UJ2hEXgr86Z8KXfAN08Iwav0gs/r8rOWJ3WGF/dH49Dmckuoac=
+=0yDV
+-----END PGP SIGNATURE-----
+
+--S2FIYZZN/lYn5+1m--
