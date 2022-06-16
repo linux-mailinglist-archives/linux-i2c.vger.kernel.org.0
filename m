@@ -2,51 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC0F54EB73
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jun 2022 22:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3704354EBC5
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jun 2022 23:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378527AbiFPUrv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Jun 2022 16:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60266 "EHLO
+        id S1378315AbiFPVA3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Jun 2022 17:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378350AbiFPUrs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Jun 2022 16:47:48 -0400
-Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B180413F3E
-        for <linux-i2c@vger.kernel.org>; Thu, 16 Jun 2022 13:47:46 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 1wOxofIO0IaWO1wOxo5r6G; Thu, 16 Jun 2022 22:47:44 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 16 Jun 2022 22:47:44 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <7b9923c0-50f0-556a-657c-9cf0ef9af5aa@wanadoo.fr>
-Date:   Thu, 16 Jun 2022 22:47:39 +0200
+        with ESMTP id S233525AbiFPVA3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Jun 2022 17:00:29 -0400
+Received: from pokefinder.org (sauhun.de [88.99.104.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6ADA960062;
+        Thu, 16 Jun 2022 14:00:26 -0700 (PDT)
+Received: from localhost (dynamic-089-015-239-099.89.15.239.pool.telefonica.de [89.15.239.99])
+        by pokefinder.org (Postfix) with ESMTPSA id 4AD7F2C009E;
+        Thu, 16 Jun 2022 23:00:24 +0200 (CEST)
+Date:   Thu, 16 Jun 2022 23:00:22 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Xu Wang <vulab@iscas.ac.cn>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] i2c: Fix a potential use after free
+Message-ID: <YquZ5iADDamgQ+9w@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
+        Xu Wang <vulab@iscas.ac.cn>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1577439272-10362-1-git-send-email-vulab@iscas.ac.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v8 1/3] ipmi: ssif_bmc: Add SSIF BMC driver
-Content-Language: fr
-To:     quan@os.amperecomputing.com
-Cc:     andrew@aj.id.au, benh@kernel.crashing.org,
-        brendanhiggins@google.com, devicetree@vger.kernel.org,
-        joel@jms.id.au, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, minyard@acm.org,
-        openbmc@lists.ozlabs.org, openipmi-developer@lists.sourceforge.net,
-        patches@amperecomputing.com, phong@os.amperecomputing.com,
-        robh+dt@kernel.org, thang@os.amperecomputing.com, wsa@kernel.org
-References: <20220615090259.1121405-1-quan@os.amperecomputing.com>
- <20220615090259.1121405-2-quan@os.amperecomputing.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220615090259.1121405-2-quan@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rYtBd5w2y9ac+Wjk"
+Content-Disposition: inline
+In-Reply-To: <1577439272-10362-1-git-send-email-vulab@iscas.ac.cn>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,162 +41,43 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Le 15/06/2022 à 11:02, Quan Nguyen a écrit :
-> The SMBus system interface (SSIF) IPMI BMC driver can be used to perform
-> in-band IPMI communication with their host in management (BMC) side.
-> 
-> Thanks Dan for the copy_from_user() fix in the link below.
-> 
-> Link: https://lore.kernel.org/linux-arm-kernel/20220310114119.13736-4-quan-shex6MNQR2J/SfDzf78azzKzEDxYleXD@public.gmane.org/
-> Signed-off-by: Quan Nguyen <quan-shex6MNQR2J/SfDzf78azzKzEDxYleXD@public.gmane.org>
-> ---
 
-Hi,
+--rYtBd5w2y9ac+Wjk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-a few nitpick below
+On Fri, Dec 27, 2019 at 09:34:32AM +0000, Xu Wang wrote:
+> Free the adap structure only after we are done using it.
+> This patch just moves the put_device() down a bit to avoid the
+> use after free.
+>=20
+> Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
 
-[...]
-
-> diff --git a/drivers/char/ipmi/ssif_bmc.c b/drivers/char/ipmi/ssif_bmc.c
-> new file mode 100644
-> index 000000000000..0bfd4b9bbaf1
-> --- /dev/null
-> +++ b/drivers/char/ipmi/ssif_bmc.c
-> @@ -0,0 +1,880 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * The driver for BMC side of SSIF interface
-> + *
-> + * Copyright (c) 2022, Ampere Computing LLC
-> + *
-> + */
-> +
-> +#include <linux/i2c.h>
-> +#include <linux/miscdevice.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/poll.h>
-> +#include <linux/sched.h>
-> +#include <linux/mutex.h>
-> +#include <linux/spinlock.h>
-> +#include <linux/timer.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/ipmi_ssif_bmc.h>
-> +
-> +#define DEVICE_NAME                             "ipmi-ssif-host"
-> +
-> +#define GET_8BIT_ADDR(addr_7bit)                (((addr_7bit) << 1) & 0xff)
-> +
-> +/* A standard SMBus Transaction is limited to 32 data bytes */
-> +#define MAX_PAYLOAD_PER_TRANSACTION             32
-> +/* Transaction includes the address, the command, the length and the PEC byte */
-> +#define MAX_TRANSACTION                         (MAX_PAYLOAD_PER_TRANSACTION + 4)
-> +
-> +#define MAX_IPMI_DATA_PER_START_TRANSACTION     30
-> +#define MAX_IPMI_DATA_PER_MIDDLE_TRANSACTION    31
-> +
-> +#define SSIF_IPMI_SINGLEPART_WRITE              0x2
-> +#define SSIF_IPMI_SINGLEPART_READ               0x3
-> +#define SSIF_IPMI_MULTIPART_WRITE_START         0x6
-> +#define SSIF_IPMI_MULTIPART_WRITE_MIDDLE        0x7
-> +#define SSIF_IPMI_MULTIPART_WRITE_END           0x8
-> +#define SSIF_IPMI_MULTIPART_READ_START          0x3
-> +#define SSIF_IPMI_MULTIPART_READ_MIDDLE         0x9
-> +
-> +/*
-> + * IPMI 2.0 Spec, section 12.7 SSIF Timing,
-> + * Request-to-Response Time is T6max(250ms) - T1max(20ms) - 3ms = 227ms
-> + * Recover ssif_bmc from busy state if it takes up to 500ms
-> + */
-> +#define RESPONSE_TIMEOUT                        500 /* ms */
-> +
-> +struct ssif_part_buffer {
-> +	u8 address;
-> +	u8 smbus_cmd;
-> +	u8 length;
-> +	u8 payload[MAX_PAYLOAD_PER_TRANSACTION];
-> +	u8 pec;
-> +	u8 index;
-> +};
-> +
-> +/*
-> + * SSIF internal states:
-> + *   SSIF_READY         0x00 : Ready state
-> + *   SSIF_START         0x01 : Start smbus transaction
-> + *   SSIF_SMBUS_CMD     0x02 : Received SMBus command
-> + *   SSIF_REQ_RECVING   0x03 : Receiving request
-> + *   SSIF_RES_SENDING   0x04 : Sending response
-> + *   SSIF_BAD_SMBUS     0x05 : Bad SMbus transaction
-
-If these states are related to the enum just below, 
-s/SSIF_BAD_SMBUS/SSIF_ABORTING/ + description update?
-
-> + */
-> +enum ssif_state {
-> +	SSIF_READY,
-> +	SSIF_START,
-> +	SSIF_SMBUS_CMD,
-> +	SSIF_REQ_RECVING,
-> +	SSIF_RES_SENDING,
-> +	SSIF_ABORTING,
-> +	SSIF_STATE_MAX
-> +};
-> +
-
-[...]
-
-> +static int ssif_bmc_probe(struct i2c_client *client, const struct i2c_device_id *id)
-> +{
-> +	struct ssif_bmc_ctx *ssif_bmc;
-> +	int ret;
-> +
-> +	ssif_bmc = devm_kzalloc(&client->dev, sizeof(*ssif_bmc), GFP_KERNEL);
-> +	if (!ssif_bmc)
-> +		return -ENOMEM;
-> +
-> +	spin_lock_init(&ssif_bmc->lock);
-> +
-> +	init_waitqueue_head(&ssif_bmc->wait_queue);
-> +	ssif_bmc->request_available = false;
-> +	ssif_bmc->response_in_progress = false;
-> +	ssif_bmc->busy = false;
-> +	ssif_bmc->response_timer_inited = false;
-> +
-> +	/* Register misc device interface */
-> +	ssif_bmc->miscdev.minor = MISC_DYNAMIC_MINOR;
-> +	ssif_bmc->miscdev.name = DEVICE_NAME;
-> +	ssif_bmc->miscdev.fops = &ssif_bmc_fops;
-> +	ssif_bmc->miscdev.parent = &client->dev;
-> +	ret = misc_register(&ssif_bmc->miscdev);
-> +	if (ret)
-> +		goto out;
-
-Could be "return ret;"
-(see below)
-
-> +
-> +	ssif_bmc->client = client;
-> +	ssif_bmc->client->flags |= I2C_CLIENT_SLAVE;
-> +
-> +	/* Register I2C slave */
-> +	i2c_set_clientdata(client, ssif_bmc);
-> +	ret = i2c_slave_register(client, ssif_bmc_cb);
-> +	if (ret) {
-> +		misc_deregister(&ssif_bmc->miscdev);
-> +		goto out;
-> +	}
-> +
-> +	return 0;
-> +out:
-> +	devm_kfree(&client->dev, ssif_bmc);
-
-This looks useless to me. The whole error handling path could be 
-removed, or updated to only have the "misc_deregister()" above.
-
-CJ
-
-> +	return ret;
-> +}
+Added a comment why we reverse the order for putting our stuff and
+applied to for-next, thanks! This way, we get more testing until it hits
+upstream. Still, stable tag added because we want it to be backported if
+all is well.
 
 
+--rYtBd5w2y9ac+Wjk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKrmeIACgkQFA3kzBSg
+KbaRUA/8CQ5A2iiywZCEDARYlutF420XPsrdYgQmCh49Gy2UN8PpMOuIDoX10xa6
+sf+llbsSQvmPKkeRxnyH51Ctm9gPN8xtVlCFpcZ9+8g6WbhXz0j++i0PUP4YAsW8
+0n1MBzxHEuBVRsqJyhZ/JxyR1yjiR6N6RrywsgEty9AYfn9XbXuUz3xlIGd3G5Yj
+vQQeC+5a8znfHcfr8MOudpMBb3gaAHF/IvqOuiT6y5gSB6d6QqlC8OeQJ/tCkEgk
+FtdVYRPf43mdZBAH4Kl+uneULnBhIx4YVuUlt1doG+N8szUiSXcCuWfGNwXh9Ta8
+s1CaGzG4qXCBjCSl+e2bX1hFr787ZFiyyNRaC8iQ6Eauy6dA7ZWEzz9I2wQgHkhg
+ALqADG+YENA90QKsGLdDMzkZH3c6udQXt3qnn+TEuN89x8KTIJFuExZGM97EsHNW
+1SgFuV56iCYdgWocuD2cdD6Om6bR0q75LlcuWM76w5JBZ6JenPutQbCc6uJ9PZoN
+CvDfm043rzsbtCbX1E8OMFPeXmnrF7OSDYrJXWXHflBP34wTcz8dqdJY2gOp31mv
+WvPGa36x4swQdKJg2qdenJG5HljDQISVbI1K/OESYMQoOWOVTf8F4T58HsQGjQ/r
+1ssEIHcr/sGaiqL/v4nsatV4EQNwnJuIWDwXBXG+AX/3Yor60Rw=
+=t3S7
+-----END PGP SIGNATURE-----
+
+--rYtBd5w2y9ac+Wjk--
