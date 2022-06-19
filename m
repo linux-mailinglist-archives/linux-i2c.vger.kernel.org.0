@@ -2,136 +2,137 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE5555095F
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 Jun 2022 10:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC90550964
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 Jun 2022 10:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233907AbiFSIcT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 19 Jun 2022 04:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
+        id S231596AbiFSIk6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 19 Jun 2022 04:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233655AbiFSIcS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 19 Jun 2022 04:32:18 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1461181B;
-        Sun, 19 Jun 2022 01:32:16 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id u37so7717723pfg.3;
-        Sun, 19 Jun 2022 01:32:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SBTUv4o8XV3U+5AHPeniUbupyDLFCaEm7X67rKDOZUI=;
-        b=J5XFxhrsgGEkx8zin0vpEAl/LJ1cTtO70iW+/LBitKblSb1rT/po8hVwLE7pFHg4KG
-         UsbW2TGLgThNmF2GsECc3EPc2uvDupjIf7RfJavDSRLGxdH7ayLxFHoLZ2BDgE7OpDE8
-         M3s1XB73pWossWXwGfR1sAxPPsdRe5dsmmsLPxNdPVZCKhAI0kFf1iPEGmqzna3nXftr
-         ZXq70wziuB2GYwH0IugqjaFFGtR9nexorOLosZ9JuUN9pRhFiK0FDgoQxYW0AVYW4C+z
-         vzbJPftP5ptjXiTQWZ6ulSFmCEqcs/ISJD3hr5g3xjnDCNkJ1KwUgPwRvRJkaqBGxGOh
-         vbWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SBTUv4o8XV3U+5AHPeniUbupyDLFCaEm7X67rKDOZUI=;
-        b=1vjhNhIMk9BbDFCHEXhv3qg6Q9baXikycLEP/c3HHVr3VFwhWrciCnmotw61GQ/GJd
-         X6afnOdaskJ8tVOyrwULsR7yJDjC/gMVdHTJRY3y7WT53OmV1Bptb43pNb1/EDp8xaFA
-         Mr7VHervpKcmtnGR3AnfW88PzVmvZT1jOlqP5pVoQTJD0KTCJ5di9HWA3j26cHQojzQo
-         RKB26bfVWIt8fBfBthusxyzW+T4kHW5LtONTqfobBgR6olHh1UdXQWawscGvSX3ypAPw
-         TW+LjHiObb8pDAQL+7ETlbDfP1zzEwq0PM9ym7rzxFpN5mX+InIQr13WQtKFrZmVO2Tc
-         2mbQ==
-X-Gm-Message-State: AJIora/jmMzaKv1RLZ3FMs4RF9ypE8PelsPOeQ3XXI8sLnX7qrH08me/
-        4wnrnazuV0595Y0qVsrUaaM=
-X-Google-Smtp-Source: AGRyM1sOWfZKJgKybRGzpExEbxpCy3FcGK8vLF0W5sannEVQsx620HnqhVvinbu31iX6TA+hJeh3Og==
-X-Received: by 2002:aa7:900a:0:b0:525:1e54:e64e with SMTP id m10-20020aa7900a000000b005251e54e64emr1354797pfo.35.1655627535697;
-        Sun, 19 Jun 2022 01:32:15 -0700 (PDT)
-Received: from LAPTOP-706CEGJT.localdomain ([113.116.119.185])
-        by smtp.gmail.com with ESMTPSA id bd15-20020a056a00278f00b0050dc7628182sm6704543pfb.92.2022.06.19.01.32.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 01:32:15 -0700 (PDT)
-From:   root <lijessen2016@gmail.com>
-X-Google-Original-From: root <root@LAPTOP-706CEGJT.localdomain>
-To:     wsa@kernel.org
+        with ESMTP id S229777AbiFSIk6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 19 Jun 2022 04:40:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7D163A2;
+        Sun, 19 Jun 2022 01:40:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C805960FD0;
+        Sun, 19 Jun 2022 08:40:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 697C1C34114;
+        Sun, 19 Jun 2022 08:40:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655628056;
+        bh=QmXFtycrCbfBmrXZnhK+ptOa35gEtx2Chm9E61iE/+A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=pKrFv5GZQtyVgeiWSIf1cgP+k6JgWXS+77ZuT3UlnrhLPajxSfBZje/ZWYBb7pz5f
+         LiMlvofwXC8j9QYAmNkNHckysMbnbK28bjqw4LMu108aeeEMEMhKjwIPUK0R2gxZYI
+         fzwBSibPPhpEXZqTNxeuSFOnJYWytbBGhYFrjTpjsjuTKfchulxUClrh5NoO1Wskid
+         DDtlblnDal1dX95L/fRJwP1a4pCVlq6I7NlcohTE2FxR6lF9EitTXzPBwAZ7BGMogv
+         PmD2u+5KedKqmLHmyfyNZxr9YUaJVb64FSVrPAr6mY4kedb3q1b0HNgVOvlKbOERur
+         piaskGUCHi1Og==
+Date:   Sun, 19 Jun 2022 10:40:46 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        root <root@LAPTOP-706CEGJT.localdomain>
-Subject: [PATCH] Print some info into ring-buffer during loading
-Date:   Sun, 19 Jun 2022 16:32:07 +0800
-Message-Id: <20220619083207.749-1-root@LAPTOP-706CEGJT.localdomain>
-X-Mailer: git-send-email 2.25.1
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c-for-5.19-rc3
+Message-ID: <Yq7hDqjsFlxifNIl@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ZiReLyznSM3ThwxX"
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
----
- drivers/i2c/i2c-core-base.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index d43db2c3876e..8e127ff3e32e 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -469,6 +469,8 @@ static int i2c_device_probe(struct device *dev)
- 	struct i2c_driver	*driver;
- 	int status;
- 
-+	pr_info("I have changed i2c device driver\n");
-+
- 	if (!client)
- 		return 0;
- 
-@@ -1829,6 +1831,7 @@ int i2c_for_each_dev(void *data, int (*fn)(struct device *dev, void *data))
- 	int res;
- 
- 	mutex_lock(&core_lock);
-+	pr_info("i2c_for_each_dev: before bus_for_each_dev\n");
- 	res = bus_for_each_dev(&i2c_bus_type, NULL, data, fn);
- 	mutex_unlock(&core_lock);
- 
-@@ -1838,8 +1841,10 @@ EXPORT_SYMBOL_GPL(i2c_for_each_dev);
- 
- static int __process_new_driver(struct device *dev, void *data)
- {
-+	pr_info("Enter process_new_driver\n");
- 	if (dev->type != &i2c_adapter_type)
- 		return 0;
-+	pr_info("__process_new_driver, before i2c_do_add_adapter\n");
- 	return i2c_do_add_adapter(data, to_i2c_adapter(dev));
- }
- 
-@@ -1860,13 +1865,16 @@ int i2c_register_driver(struct module *owner, struct i2c_driver *driver)
- 	driver->driver.owner = owner;
- 	driver->driver.bus = &i2c_bus_type;
- 	INIT_LIST_HEAD(&driver->clients);
--
-+	pr_info("i2c driver name is [%s] before driver_register\n", driver->driver.name);
- 	/* When registration returns, the driver core
- 	 * will have called probe() for all matching-but-unbound devices.
- 	 */
- 	res = driver_register(&driver->driver);
--	if (res)
-+	if (res){
-+		pr_info("i2c driver name is [%s], res is [%d]\n", driver->driver.name, res);
- 		return res;
-+	}
-+	pr_info("i2c driver name is [%s], after driver_register\n", driver->driver.name);
- 
- 	pr_debug("driver [%s] registered\n", driver->driver.name);
- 
-@@ -1933,7 +1941,7 @@ EXPORT_SYMBOL(i2c_clients_command);
- static int __init i2c_init(void)
- {
- 	int retval;
--
-+	pr_info("Jason-Lee: Entering i2c_init\n");
- 	retval = of_alias_get_highest_id("i2c");
- 
- 	down_write(&__i2c_board_lock);
--- 
-2.25.1
+--ZiReLyznSM3ThwxX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-5.19-rc3
+
+for you to fetch changes up to de87b603b0919e31578c8fa312a3541f1fb37e1c:
+
+  i2c: mediatek: Fix an error handling path in mtk_i2c_probe() (2022-06-14 22:11:54 +0200)
+
+----------------------------------------------------------------
+MAINTAINERS rectifications and a few minor driver fixes
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      MAINTAINERS: Update Synopsys DesignWare I2C to Supported
+
+Christophe JAILLET (1):
+      i2c: mediatek: Fix an error handling path in mtk_i2c_probe()
+
+Jiasheng Jiang (1):
+      i2c: npcm7xx: Add check for platform_driver_register
+
+Lukas Bulwahn (1):
+      MAINTAINERS: add include/dt-bindings/i2c to I2C SUBSYSTEM HOST DRIVERS
+
+Serge Semin (1):
+      i2c: designware: Use standard optional ref clock implementation
+
+Wolfram Sang (1):
+      MAINTAINERS: core DT include belongs to core
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      (Rev.) i2c: designware: Use standard optional ref clock implementation
+
+AngeloGioacchino Del Regno (1):
+      (Rev.) i2c: mediatek: Fix an error handling path in mtk_i2c_probe()
+
+Qii Wang (1):
+      (Rev.) i2c: mediatek: Fix an error handling path in mtk_i2c_probe()
+
+ MAINTAINERS                                 |  4 +++-
+ drivers/i2c/busses/i2c-designware-common.c  |  3 ---
+ drivers/i2c/busses/i2c-designware-platdrv.c | 13 +++++++++++--
+ drivers/i2c/busses/i2c-mt65xx.c             |  9 +++++++--
+ drivers/i2c/busses/i2c-npcm7xx.c            |  3 +--
+ 5 files changed, 22 insertions(+), 10 deletions(-)
+
+--ZiReLyznSM3ThwxX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKu4Q4ACgkQFA3kzBSg
+KbZ+HBAAsF1TnjkQkfNkhbkx1TUdmrQbPD2bAywZHORtjnthhAvdPVPaOe7266we
++We6rtvBk8VW5jftlnOfykpqXrl7fE7KkQukbiTEMRAq5o65emXmoDQ3yWvmR3Rx
+8q2iDvjezn+zfHs3CGTO6CxM9JXapjMpuD1pgnXEP622s8pPG5UA0NwhqolMceV3
+wMp6o9q+qzIQEP9VwzN0F8MJVyoRkA/RYEEk3A5V2reyCuaXeJr/r5OM0GpQAwJK
+Jizm2SZzuOlIDTeve4HNuj32vMO7l/e2BotrRatGQXF0Sf2GtgWkeEQnSGHxLtaK
+oBQIn+Nhr4mjDK0FNfnu2cJm3SVwlFpGTJGAOwz1d1VYYxl4kpfpi5raK7PQwkCc
+9PlOZ5NzUQtgCPreQ3MK0XLmDfRX9hm09aZoqzScnoszOBgcWfldYcYD/RcHHZPs
+Z3Lpi3wV450nDk1wKBKJU0XTQuly/LcauNX1gVRke23QvOf39mAiVAebz5ofi5e5
+ue7gVmTpW7Uu79oZQf+vz3eWowTpGbQEecQDC9zF876uSL+JOZZg6/lqDLhbpf6c
+I2WQ8czzxvc+RYoN3MRpVJSkV4sIbZYh0rO/T4Gt/hty6QBAdcKFMy3wgSXZ4TvB
+3VU8B2rcFwNdi3bjgUyi/ICd7I//iiDIEq1f4B48PfN1zlKa1UI=
+=Knx9
+-----END PGP SIGNATURE-----
+
+--ZiReLyznSM3ThwxX--
