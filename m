@@ -2,93 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B5B5521DE
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Jun 2022 18:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A73B552241
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Jun 2022 18:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242269AbiFTQI7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 20 Jun 2022 12:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
+        id S236396AbiFTQ2x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 20 Jun 2022 12:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiFTQI7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 Jun 2022 12:08:59 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B971F2F4;
-        Mon, 20 Jun 2022 09:08:58 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id h23so22042147ejj.12;
-        Mon, 20 Jun 2022 09:08:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7UqePF8/+Hm2P7IqihZhJWfNdv8VurIs2DoJU0Nq/ug=;
-        b=gdiuOE4+sAK5ES+HTqlkH6Cvtnoa7ihSsTn1ww3qCwEw6uIoQ9mUTBdui5+3b7gi09
-         +rfa9fZ4L02hJzLOhWXgTH0Qwzu9VoxoyFelAqMdISKvUekTKUXfUmEUggZZrUsApD86
-         4xC6i4iMmzfPmTsZXUw0NPjjiYakpntnDZh2BJbrCOldiHGOJAyrr2OoZg5whjPJKKkA
-         aAISw3j5iCY4NWCiZScodSRVhPRvufdRc23n/4ch3+ts7pz5grQadriMuYBZXYGpo+k3
-         mkKtMf3OWQJddP6/5/qrAVYEVRHoCY+E8GEv+j0WG52iwwiyxzNBf8GQqytQPJv4cRaH
-         sPpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7UqePF8/+Hm2P7IqihZhJWfNdv8VurIs2DoJU0Nq/ug=;
-        b=iRFj+tiQH5rL6wXx7uP/1HRWs1XaNaM6F+bopWSITfQxOXs0I+b0u+ZafJX1M8RNZ2
-         qXG1CCGQejlUSJ5/wndcbD9PRTknJN01X+Vatlb6/mYrHAjGLj6RU6b4eOuzzpiXUtCm
-         Yz+foTmdjuX0Z+R5PUV108NZov173bXyeGsxp6oG0wUlzjqxo7Nw6qFUYOpT0KMo7gAJ
-         /nYMqdZeG9xUHGCvEASEwZQ+q65QGbr86l6s07bViGiIR5jw4Nxbvw86m9FAE+FjJS6m
-         1VbDiGzHIxXWfxbzK9uJ3/gh/WFPEij9LxJvr08OqnGRsX119PofyfOpp40mtzUKtNTn
-         KFmA==
-X-Gm-Message-State: AJIora+nrEFz6enwqU6B1PkrcPybUdkBXynJqw9+JKR2LIHwxDTW4VVl
-        sKVINYuK1mVlkVg5Ijm6DKmc9ZITPi1NpEOs/hg=
-X-Google-Smtp-Source: AGRyM1vAB1akKJku/tYgE+WIdkNWNY2d0+86sCNsvo9KYRmVgXbSC+Z4rKhkKLeo8rmcO+b4zqeThedxboQH3ilnjik=
-X-Received: by 2002:a17:907:9721:b0:70c:65e7:2aa5 with SMTP id
- jg33-20020a170907972100b0070c65e72aa5mr21552291ejc.132.1655741336829; Mon, 20
- Jun 2022 09:08:56 -0700 (PDT)
+        with ESMTP id S244553AbiFTQ2u (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 Jun 2022 12:28:50 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBB9BE0C;
+        Mon, 20 Jun 2022 09:28:50 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25KDDo2h010544;
+        Mon, 20 Jun 2022 16:28:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2021-07-09; bh=UPuXuwaATnCiD95hRgHKAmygUc1xM5cEW1R932PHfNc=;
+ b=dg7RELv6yPPnxOGDkTR5jTbbt/a4uBWvKqvW6rVBDSmyfiYqNcxvJ6hbGeK5fSQW87I4
+ aYhAOH7NvJxVs/sZYDrjPyFXRf5ifmiit0SjiJvrCTQCkKrzVdtwpPJV1PIktm75QrFd
+ pcScMHs3Ez6s+nMaB8Of+ioRXmijOHKKdBKbCI2vOmdjrL6gujVzusIthL9WQ2TJAiZS
+ gc8gm8sEUYtERkHexZGWR8I5TGuvfOWRMnFk2rmZq0OVU23VMGOFBSH6eFJuEQbR36vS
+ 4lEhgX2BV/sk37X9JmtDmVb2bKLZTCWLZSYwGTMvsfoMkbiktPiAqAT03bkdPn5jBur5 dA== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gs78tunpu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Jun 2022 16:28:43 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25KGKfjN000850;
+        Mon, 20 Jun 2022 16:28:42 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gtg5tjd40-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Jun 2022 16:28:42 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 25KGSf6Y019345;
+        Mon, 20 Jun 2022 16:28:41 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.147.25.63])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gtg5tjd3a-1;
+        Mon, 20 Jun 2022 16:28:41 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@oracle.com, dan.carpenter@oracle.com,
+        Rishi Gupta <gupt21@gmail.com>, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] HID: mcp2221: prevent a buffer overflow in mcp_smbus_write()
+Date:   Mon, 20 Jun 2022 09:28:24 -0700
+Message-Id: <20220620162824.58937-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220616013747.126051-1-frank@zago.net> <20220616013747.126051-3-frank@zago.net>
- <YrBLGMD/Gzfv0W6F@hovoldconsulting.com>
-In-Reply-To: <YrBLGMD/Gzfv0W6F@hovoldconsulting.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 20 Jun 2022 18:08:19 +0200
-Message-ID: <CAHp75VfWbC2fbKenuzx6LXjUTApcUKyX6gXd-3Pe31cvrbT7kQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/4] gpio: ch341: add GPIO MFD cell driver for the CH341
-To:     Johan Hovold <johan@kernel.org>
-Cc:     frank zago <frank@zago.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, USB <linux-usb@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: m7rxXkTFRvbfervoWggKeeMRoHZOjazw
+X-Proofpoint-ORIG-GUID: m7rxXkTFRvbfervoWggKeeMRoHZOjazw
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 12:26 PM Johan Hovold <johan@kernel.org> wrote:
-> On Wed, Jun 15, 2022 at 08:37:45PM -0500, frank zago wrote:
+Smatch Warning:
+drivers/hid/hid-mcp2221.c:388 mcp_smbus_write() error: __memcpy()
+'&mcp->txbuf[5]' too small (59 vs 255)
+drivers/hid/hid-mcp2221.c:388 mcp_smbus_write() error: __memcpy() 'buf'
+too small (34 vs 255)
 
-...
+The 'len' variable can take a value between 0-255 as it can come from
+data->block[0] and it is user data. So add an bound check to prevent a
+buffer overflow in memcpy().
 
-> > +     /* Create an URB for handling interrupt */
-> > +     dev->irq_urb = usb_alloc_urb(0, GFP_KERNEL);
-> > +     if (!dev->irq_urb)
-> > +             return dev_err_probe(&pdev->dev, -ENOMEM, "Cannot allocate the int URB\n");
->
-> This isn't how dev_err_probe() is used.
+Fixes: 67a95c21463d ("HID: mcp2221: add usb to i2c-smbus host bridge")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+I believe I2C_SMBUS_BLOCK_MAX (32) is the appropriate limit to use here
+but the &mcp->txbuf[5] array could actually fit 59 bytes which is the
+destination in this case. I don't know why the buffer is larger than
+expected.
 
-While I agree on the below comment, what does this imply?
+ drivers/hid/hid-mcp2221.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> And allocation failures are already logged so just return -ENOMEM here.
-
+diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
+index 4211b9839209..de52e9f7bb8c 100644
+--- a/drivers/hid/hid-mcp2221.c
++++ b/drivers/hid/hid-mcp2221.c
+@@ -385,6 +385,9 @@ static int mcp_smbus_write(struct mcp2221 *mcp, u16 addr,
+ 		data_len = 7;
+ 		break;
+ 	default:
++		if (len > I2C_SMBUS_BLOCK_MAX)
++			return -EINVAL;
++
+ 		memcpy(&mcp->txbuf[5], buf, len);
+ 		data_len = len + 5;
+ 	}
 -- 
-With Best Regards,
-Andy Shevchenko
+2.31.1
+
