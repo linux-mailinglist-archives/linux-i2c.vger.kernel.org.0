@@ -2,180 +2,161 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB1055489F
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Jun 2022 14:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ACA0554B89
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Jun 2022 15:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355474AbiFVLOw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 Jun 2022 07:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54584 "EHLO
+        id S241717AbiFVNmD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 Jun 2022 09:42:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357125AbiFVLOt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Jun 2022 07:14:49 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333A83A1A6
-        for <linux-i2c@vger.kernel.org>; Wed, 22 Jun 2022 04:14:46 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id j24so2194175wrb.11
-        for <linux-i2c@vger.kernel.org>; Wed, 22 Jun 2022 04:14:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=PUdU9WfpnqAsGBFkVc2KUHImdcpkKUBXRwogLKDyHSY=;
-        b=z/ocsiUElwq2Ol2fF5l1HRqMMaNGMSC1/+8oQHLpQWLu429YrVBR/tnvq7KNWtwIO1
-         vKJqA7rgUAiiGOKNdlwMjFurZAQLeqniaiGR74ASbDLlSriMOOzxItVhWE0QSvWSDF1z
-         wnPR/hU6q/nU74KNLjXg2X84SJR1U2jxSqWO8a/x7jRbPZXjDqGeLFevtBezqUe56R1a
-         7f0rlv+IRmpyGwRbiZXR3FrVvja2Yq3MOLg0mNs6za1kfz0V4uxdyGWKXZaA8ELytILx
-         BDkiRFg7pp2SBYMObq/aoJYfogEZJWR+YhfycgXRStqMXxha87O37ft3cnQe33+/4mvE
-         LISg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=PUdU9WfpnqAsGBFkVc2KUHImdcpkKUBXRwogLKDyHSY=;
-        b=z9cYq7he0x5Dc4NTHyA1VOa7V/YOlMKPENMLqE9Mcm74VkW2tRXxMbDwR5ZU4gmjZk
-         jrvRRqn1YSseHiL+Zhr9x8vECYL8PE22zH6f9tZfWlEsslNcgs5e8NImoRm7PZjv6PmL
-         1I07Fw4r+2AK+x4Oc7kEaiq8D455dHIlnRN1oWckC/PNwqI16Ljz2PnOXwurSURu8FU6
-         CR1VzN6CRIwRRiiCWxiVLgHKOVbcz8ZBuxH6x1VKxgBtv/2rGsCOS226GB+erzrRw9y6
-         4GrjnSx724MNlaNfQcBnCgyuam1WhC7kG4WiAgC9e73gSB/uBHJVOhh7W6a8yM+KVt2B
-         MveA==
-X-Gm-Message-State: AJIora/KITnHtFBf74qYzS9VDFYHCJtlTTj9Hna2epldH2F7Oo+npvOF
-        sjjd8ic+Tjdy8lMRPakC8Hy/gQ==
-X-Google-Smtp-Source: AGRyM1v8ZhY0hH8c8n7TvnmAfbU48Dyk1bFg4uJSDokafOQgQ79E0o3w+OeeG5ifCToe2pBEDS6Ykw==
-X-Received: by 2002:adf:fe81:0:b0:21a:3574:ec8e with SMTP id l1-20020adffe81000000b0021a3574ec8emr2726909wrr.410.1655896484628;
-        Wed, 22 Jun 2022 04:14:44 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:1a3a:95bd:5b55:a798? ([2001:861:44c0:66c0:1a3a:95bd:5b55:a798])
-        by smtp.gmail.com with ESMTPSA id e16-20020adfdbd0000000b0021b91ec8f6esm7841714wrj.67.2022.06.22.04.14.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 04:14:43 -0700 (PDT)
-Message-ID: <d57a6c52-a9e1-5660-cd47-6f9ba2389d86@baylibre.com>
-Date:   Wed, 22 Jun 2022 13:14:40 +0200
-MIME-Version: 1.0
+        with ESMTP id S235799AbiFVNmC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Jun 2022 09:42:02 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2069.outbound.protection.outlook.com [40.107.243.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8293F21816
+        for <linux-i2c@vger.kernel.org>; Wed, 22 Jun 2022 06:42:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gqQ6f9WgXRxWgnExb2V/NLGTUM5PoevlrgUB5vhaC5xlIT3pKvNZzkg+ypObDu2d5Ju33zohyH0qLbnvYuUeHO4KE4aclq7r2rMJpEj8Ll2FONGehyqdk3b54VEckmTEuSEQP3TVdjCv9gMs6ZiR5cOFkBXqmje6F0896qdG//BfNU8LA64kkn1Jyo065dHx2gftsa3TNk6E+noiDV1xmSbuOzB/Dudc+6TVjRlpwT9PxXzxbizjRheCeKCV03upgcoG+R9Fpz5B4yaxxwtcDYrMmbnZHaKphx7d/bb0NRc/LniaJkuHcIMI8XnYj5YPpuvxoklFgJL41sZktrdSUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oTXEf12VB+m1pauUc45I63NUXM+uzhRWHp+qKaqN/dc=;
+ b=Zq3AN+4XCkFm28oQuu8JmusaYk0aeHWKOcjky4QKZl1dgXuGseG5mACuBM2msrcC6tVcoPmZsDUpUr1SCg0IlHcPz2APG9H1DPe8ciQ5Nl73D8ZQk5TVxShtxH3L61caaB5zqE6hsbgp7dEv8jKmeDESloNgyhBaz1dH4j+fDlKLYpq8a+KRcoptzPtN5Xr+l0FDUwSEQ3UqK5cu3m51ZaHjY+FDKH8XaNOcDs6Z8RUnlVA5nK4weDPyq4NfU8DDd71u/DraDQXnvyrB1hL6m6ke27kWBDE1wkMGxtu+MdQSG5zguhyKHzyxUWfuwsTW0Ck/JflnvSydZ7KavARIqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oTXEf12VB+m1pauUc45I63NUXM+uzhRWHp+qKaqN/dc=;
+ b=Hq/K+ATyTKwX9yQHNlIEmhUGj87KfgEOKKXqK9rh2yqTcyecmTscAbcPd43cwphSxGCfbCdsmuTLfz4fXnmbZPt45flNPx6tIAoTVEOqn4CjRPZRTfHHJA2f4UWCLAMPkQAHARmh8SR+/n2t4qCiANVNB2B6BYiqeg20ceHTik0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS0PR12MB6390.namprd12.prod.outlook.com (2603:10b6:8:ce::7) by
+ BN7PR12MB2722.namprd12.prod.outlook.com (2603:10b6:408:2e::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5373.15; Wed, 22 Jun 2022 13:41:39 +0000
+Received: from DS0PR12MB6390.namprd12.prod.outlook.com
+ ([fe80::ed55:e138:4e33:611e]) by DS0PR12MB6390.namprd12.prod.outlook.com
+ ([fe80::ed55:e138:4e33:611e%6]) with mapi id 15.20.5353.022; Wed, 22 Jun 2022
+ 13:41:39 +0000
+Message-ID: <7c892381-153e-3dac-1b0c-fecbc09acc64@amd.com>
+Date:   Wed, 22 Jun 2022 08:41:37 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v8 01/16] clk: generalize devm_clk_get() a bit
+ Thunderbird/91.9.1
+Subject: Re: [bug report] kmemleak from driver i2c_piix4
 Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Jon Hunter <jonathanh@nvidia.com>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        linux-hwmon@vger.kernel.org,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Tomislav Denis <tomislav.denis@avl.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Andy Gross <agross@kernel.org>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        linux-pwm@vger.kernel.org, Sascha Hauer <kernel@pengutronix.de>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        =?UTF-8?Q?Andr=c3=a9_Gustavo_Nakagomi_Lopez?= <andregnl@usp.br>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        linux-amlogic <linux-amlogic@lists.infradead.org>,
-        Amireddy Mallikarjuna reddy 
-        <mallikarjunax.reddy@linux.intel.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        linux-crypto <linux-crypto@vger.kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        dmaengine <dmaengine@vger.kernel.org>
-References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
- <20220314141643.22184-2-u.kleine-koenig@pengutronix.de>
- <d6b890c8-bfb5-cfa5-c6d8-ee245701c077@nvidia.com>
- <20220621204914.byokkrxiznvod7vq@pengutronix.de>
- <CAHp75VcBEpLo+pYy+RG3O2BbePJbGEQ89jxi-oG1W6=+2hgXrQ@mail.gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <CAHp75VcBEpLo+pYy+RG3O2BbePJbGEQ89jxi-oG1W6=+2hgXrQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Yi Zhang <yi.zhang@redhat.com>, linux-i2c@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>
+References: <CAHj4cs_NnJLYwhxPvDGnu4QFwS_XbgeJ7b2jOcDvBM3F+w7z0w@mail.gmail.com>
+ <20220617093818.37a721a3@endymion.delvare>
+ <CAHj4cs9d+j-Dc+wKK-gat3E0McZ5+2DqQhESYitSrS8Wr4s2YA@mail.gmail.com>
+ <20220621144822.1d9228de@endymion.delvare>
+ <0ce578ba-cdc7-6084-6119-10170d5e80a1@amd.com>
+ <20220622083921.69c9f359@endymion.delvare>
+From:   Terry Bowman <Terry.Bowman@amd.com>
+In-Reply-To: <20220622083921.69c9f359@endymion.delvare>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR02CA0010.namprd02.prod.outlook.com
+ (2603:10b6:610:4e::20) To DS0PR12MB6390.namprd12.prod.outlook.com
+ (2603:10b6:8:ce::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 67e99eff-6e9f-4630-a02b-08da5454ef20
+X-MS-TrafficTypeDiagnostic: BN7PR12MB2722:EE_
+X-Microsoft-Antispam-PRVS: <BN7PR12MB2722303C38E53B531B63B87383B29@BN7PR12MB2722.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7NzRHCcchnhVLWdQ4xRzU6ZxmdRnQANFDWk6QXlrr86ZxaUqqmX4/amj3+SRh7F85ALwL0s9EsItoB3URRWlbJ9eii4Za93+dd8tR/Tn+WhU5kBJgnAt0uHAzWbojdIxjH1nIQQcNfqgB9rLdrtPwaNGuZZVpno2JlX3kj3RMkShUa4z0X2fUvQFVzIwQw0b97SlPwsSOFZ/LR8Pq3RxKO/Zfwb2P2RWtREyqTHyO0ONeGzMLEFvF3uMEuYYD/AWPSRj4H8HMIaDyibCN3xGplhh291ofzGjtnlzMxYi0uFettKGSBOo4UqEDw/Heiq44jERgxrLQM3SK+EkmtGDRJ3faLqqIwjSKqWDEbwLcOXWpg1WEYuCgoOkgWuhzNsPZvn581BL+En1hbuUW6X4GAr6e3sEcModArboK0XmQIZO+QvZotFdDFmmIcRoPZ9ZDozJM4qhz3MB5Z6KSphJU9Bvfxj3R4GocFiUGWLPbYvMAHLumav8fdxNCEukqrgiH4qmcRXpKpkfZSTChn6I/40nkE25uZT8x1LaXM+FsoNjWda5Dd8ajiHUTflOprUgTaN7Y8pU1NPunI+VtVu6dRwDlFQajld52PhzJpa3WKqlgewtQb8S1gbPQN6w0aZpqAWtwkQAc11+G424dwkC18Ywyrk7KjxFF2LumE5wCeixtr3HfrHUImNDlTC2RweyITOoLvWQFeypPnkqT0OCgELHZIhx3WnBuYI1Zi/Xud5g6E6Pr2EujVNSmstREtDhU7QUXgjaG12+Kpvtc5zLTy0aI0aOnLoZ4fi+i4UHGOk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6390.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(39860400002)(396003)(376002)(136003)(4744005)(478600001)(6486002)(8936002)(5660300002)(83380400001)(186003)(41300700001)(2616005)(8676002)(6512007)(2906002)(316002)(31696002)(26005)(53546011)(6506007)(86362001)(6916009)(4326008)(54906003)(38100700002)(31686004)(66556008)(66476007)(66946007)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VVZNWG1XbFBYUWtkeCtYb2FYdXlTU2d0WHZDc2R0ZERNQitHWDNNNTRiV25h?=
+ =?utf-8?B?eENVbGNBSlVnM0hRVnhTSkpYVmV4MTlvZExRU2dQVWFPcTZvNStBdXliNWpy?=
+ =?utf-8?B?MUFUVTJCMlRsMmF4cVduM1BQV2drdjdJQ0ozaXRuVlVzVnl5b25xdDJmN1NF?=
+ =?utf-8?B?eFNMY2VyL1dpQklhZndTU0s3NzBKczdvejliYTAvUGVKajhaTEsxL2NwaWxh?=
+ =?utf-8?B?cDRIWThYVHpIaXFzNnZlY0xCOGVBcE9BQ2doUm1VNng0VFhZdXZFOWpMZ3F1?=
+ =?utf-8?B?amtYaHZMTGJMNkV4M1BrMUtlMm95VlVMbGJ2a1BXKy9RSEgzVVJrUHBXbndl?=
+ =?utf-8?B?WmNWUDhFUlBhTWxqbTdTRUtxWlpyUjBLR0xONTF0RjNDVzBQTGx1YjJMdUFF?=
+ =?utf-8?B?cFh3RWRoRldFdkpnZ1RmM3J1VnVyTHFCcDF5NXQrUm5TQTF4b1YySVUxV3Iw?=
+ =?utf-8?B?MDNzRG9DR3dtdTRTb0szSU04aTZFbWNOWk9TelJUL2Jaa2xtanEvbXRhbWF2?=
+ =?utf-8?B?Q1JIVEhJczd2NC9TUzM0R3dPcGc4akZ4LzZUaTZmRXJPRHp2ZlkxYmRHaXJi?=
+ =?utf-8?B?VFQzbUJRTTlXbzR2bWFudDhERVlzekhxaHltTy90MFFubnJOV29UWDBVUG1y?=
+ =?utf-8?B?M25FRGFGdnJmNkdCS1FFSnNsd25TSE1XUEpOUlhoT0huakxROVl1VGxzaFRw?=
+ =?utf-8?B?WGc0WUFMclJEdTZmbCtibGRjZ0V4VXFidE5xNjBYODVDQnVKSUh2M0VHZXZh?=
+ =?utf-8?B?Zy8wd1pyV2dzRE5CL3ZjNEtsdUlmYUIrZFdYVERGLy9GSkJhQjN3MjA1RnI5?=
+ =?utf-8?B?L2dUTFovN0d0T3RWa0x1V1ZYdkdKbE12YkRSSXRlZ0VyYURZMFk3aysxTUhC?=
+ =?utf-8?B?NUwvdU00N3V5cnNGYkdibE5mTjAyMW1VYndreStYR1lDcStRSkJobEJLdG5Z?=
+ =?utf-8?B?LzlyOW41TzY2RGYzc2ZLaUtCWUQrcG9aamdtU3hSdkUyUkRVa1ZrcmQ1UXVv?=
+ =?utf-8?B?RHFMSUphVC9qZldEUUU2L2tJUkxOVFVKaVRYWS9aa0g3RWJsSlQvaEtvVXJh?=
+ =?utf-8?B?UmdOa29BR2tOTi8zMllCd1gvemNHblJ5b3NmT29PRlpiZXI0SFlPQUx6bnRI?=
+ =?utf-8?B?RkdjdjN3N2RRenZWVkZhR2dWWStXQTUxOG9wNmVZYVNHTGJyb2Rnek11b3Nv?=
+ =?utf-8?B?bFZUTTdxaTE5SzdtTnJlYTRhSU9hcXk4N21EbUt5NUpscEcwdWcwbFRhNmln?=
+ =?utf-8?B?NndHOFNibVBQckducHZ3cVg4Wk00c0pkSWltRGM5aCtmTXlqLzV3OVNFR201?=
+ =?utf-8?B?SW1Za2hOd2xiaG1WanlkMHNFYjloa3dZWTkzNmhxRCtocnFlZVI0TEFsajUw?=
+ =?utf-8?B?dzhoK2hEL1o2RGUxWndyT21FM1NIbUt4TzJkYVBncm9Na1ZKUFdnejlYdDdt?=
+ =?utf-8?B?aWZKWTk3NWhDR1M5Qk5MeFp0U3RUS0ZMUVhibWJTT1VjQ3RhRTJBdjFCa2hU?=
+ =?utf-8?B?RXNXcFFUTmNYK0VnczBzVHlMd0hmQkpyU3R3QjBTL3oxa1BZei9XZFRhN1BU?=
+ =?utf-8?B?V2djOUIxd0RWRnRXQ0hOcWZ1NnVKN2JaUlVtVkNTL3pONVo2ZThxbjhwTG1q?=
+ =?utf-8?B?OEFEMkN6QkVtK0ZRRWwxdEM1TTFDM3hCWTJ2aTVtTTNWQnJubWZadGJIWks3?=
+ =?utf-8?B?QmNvdml5SXVUOUZZZ0FWUHhjMUxpYkloQ1BxeFZCZkRMU2JlOHZYK2ZINXFw?=
+ =?utf-8?B?c3ZJZUpodWZsazl0QTVMUmRSOVJQYldGMzFRQU9mMHR5bmI1d3IzVHpiZ2R0?=
+ =?utf-8?B?eXJKQmJhVDBxZDlIOElSQ1RjWEEvdnMwZVplNVIxNEo3Q2RBN3NseUZPalI0?=
+ =?utf-8?B?aGZpVDNQc2tiL0ZRNm11WFVQek43MDFiOU5yVTBsUmtoSjhEY0g2SDFLMWJM?=
+ =?utf-8?B?N0lrUmc1Z0QwYjdjaWlscnlWMkN4OTVaVTl6OG13dmpNNy9GN1pVaXN5SUR2?=
+ =?utf-8?B?NFRDa2NjdDROd1pBMUtJR0UvMWpLMnpKUEpTTzJSVE9HeFJ3ZDU0NjJ1MG9w?=
+ =?utf-8?B?eGx4Q0ZNa1FpY2tac096T3lST1NaVzlsS2ROL2o4TUs4NUp2ekhCYTllcGc0?=
+ =?utf-8?B?WXRHVGd3R3NoN2poMHcrbHZLb2NwdjVrR29EemNLMytZMER3OFpPQlpFcXJV?=
+ =?utf-8?B?S3E2ZHhMaVdseWpVY2NId0hUbDVwVmd6NXd2eWF4VFBFNUhENDU5MzNjN2lT?=
+ =?utf-8?B?UFcvdTNCL1JtTld4bElUYUx3Tjg1WlI1NDJ5cFJrajUyRXFpT0VPQXcxbFFI?=
+ =?utf-8?B?UkwwWGVpT29ob3BhdGNPK2d0b3ZGZHFzUU1iMWdrcXBGREl1L2pHdz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 67e99eff-6e9f-4630-a02b-08da5454ef20
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6390.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2022 13:41:39.3331
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iUxXoaILv3SzdFnrtrGYpj8gSZSsYZ2ZRmczj+hb4eTUPL08rLyzUfTt42qrMCwW6TeVkXw0l2kxd8k7AqQC0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2722
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 22/06/2022 12:36, Andy Shevchenko wrote:
-> On Tue, Jun 21, 2022 at 11:01 PM Uwe Kleine-König
-> <u.kleine-koenig@pengutronix.de> wrote:
->> On Tue, Jun 21, 2022 at 08:57:00PM +0100, Jon Hunter wrote:
-> 
-> ...
-> 
->> (Pro tipp: The commit in next has a Link: footer. If you follow the
->> link, you find the thread that was actually applied (i.e. v9) and where
->> the fix is also contained.)
-> 
-> Even easier, you may take a message-id from the Link and supply to `b4`:
-> 
->    b4 mbox ${message-id}
->    mutt -f ${message-id}.mbx # or whatever MUA that handles mboxes
-> 
-> 
-> Dunno if `b4` has capability to parse Link instead of message-id.
-> 
+Hi Jean,
 
-It does:
+Yes, I'll respond with a tested-by and reviewed-by later this morning.
 
+Regards,
+Terry
 
-$ b4 mbox https://lore.kernel.org/r/20220616144915.3988071-1-windhl@126.com
-Looking up https://lore.kernel.org/r/20220616144915.3988071-1-windhl%40126.com
-Grabbing thread from lore.kernel.org/all/20220616144915.3988071-1-windhl%40126.com/t.mbox.gz
-5 messages in the thread
-Saved ./20220616144915.3988071-1-windhl@126.com.mbx
-
-Neil
+On 6/22/22 01:39, Jean Delvare wrote:
+> Hi Terry,
+> 
+> On Tue, 21 Jun 2022 09:29:44 -0500, Terry Bowman wrote:
+>> On 6/21/22 07:48, Jean Delvare wrote:
+>>
+>>> Yi Zhang, can you please test this patch and confirm that it solves the
+>>> memory leak?
+>>>
+>>> Terry, please review/comment.
+>>>
+>>> If my analysis is correct then the sp5100_wdt and thinkpad_acpi drivers
+>>> suffer from a similar leak and need to be fixed the same way.
+>>
+>> Your analysis is correct. The kfree() call is missing during the release in i2c-piix4 and 
+>> sp5100_tco driver patches. Let me know if there is anything I can do.
+> 
+> I've submitted patches for the 3 drivers. They are pretty
+> straightforward, but anything you'd be able to review or test would be
+> welcome.
+> 
+> Thanks,
