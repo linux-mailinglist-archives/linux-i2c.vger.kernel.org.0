@@ -2,156 +2,181 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF2D559AD3
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Jun 2022 16:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BBB55ACA6
+	for <lists+linux-i2c@lfdr.de>; Sat, 25 Jun 2022 22:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbiFXOAm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Jun 2022 10:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56366 "EHLO
+        id S233469AbiFYUnS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 25 Jun 2022 16:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiFXOAl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Jun 2022 10:00:41 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2121.outbound.protection.outlook.com [40.107.114.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D4C4DF4A;
-        Fri, 24 Jun 2022 07:00:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LaXsUK6atNcwnfEm7Vi0a1QpLMEJ6ZutezH8UiL1ExkJpfHLuE+IZ9SFEVdWA+U12CRvD1utVuCLXBl8nWiTDe8CTn3IWPm6sLLRaaB4J3tsE9n7t06Xz6VWR+9BXPh1VC7TVXVvQEeEow9gd1MqvN5081syePmcAwfutiUIkAq0zFITJmS9Y9X1dvQ2XK4V9/5fjTNl0mZNWD1cTOkAII3qC2mG2JN8h9gnBt+Cc1rYeoVaE1vslnDh82RkgR2IZa6iKO+0DEUWmRRgnRq21eHbuazJUxoXwDgnCeSVvuYXWuyMP5BUnByXnOegK2LN4If0YvxlazAXVY/31DBHPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3JCPqKwdu5gvzP4o2chFhmf5gzpX6/ZmGV22+TpfmZk=;
- b=Uu+oCWAyit9AryG3ykYejnkDNpqfsh1EcJ9zYZUlDBQiLqM1nIYymTIvhu1hizyutsUteJRqSn37e/49rPY5F5ieGupideUQwLNXzfnRjPrjSD8hbw7mNQAg90IHaQq+bwSbADMXdxoTfDEMY3M1DxE3w+SKqGJ+XOs+ku3XSz+uWT0zHu7fYZ7G0YsAM0CW/qkdZNuobiZrEHtX96DRtAdBmE680IBDeEa7sQwUWfcGpMViTD+IUhJ/S02B+A0lZ7b+9dKos5FarOdjCYjdzjX9KCdR4csiPRoJ7rxftqPv56KtGBWKuarxy6mBT9czO8BDqdH9rQwk/EUGCEwoxw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3JCPqKwdu5gvzP4o2chFhmf5gzpX6/ZmGV22+TpfmZk=;
- b=jvUaYf11YlETHj4D44pLtdPUpSdTyWuSz9P6RqaV+GK1kdVKRVAX2f42XDpaVw5XxB4RDb0FHo9Vqxtzj6Teo2ASSFIDtpze2jPJ+nB76pJayTy4+1YR07Qrlgwx7StoVlexA1Ll34qgduJLggthGWGt+kJbTBd9lpiqQPzAF5Y=
-Received: from TYYPR01MB7086.jpnprd01.prod.outlook.com (2603:1096:400:de::11)
- by TYCPR01MB9466.jpnprd01.prod.outlook.com (2603:1096:400:193::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Fri, 24 Jun
- 2022 14:00:37 +0000
-Received: from TYYPR01MB7086.jpnprd01.prod.outlook.com
- ([fe80::3c36:680f:3292:4a79]) by TYYPR01MB7086.jpnprd01.prod.outlook.com
- ([fe80::3c36:680f:3292:4a79%7]) with mapi id 15.20.5373.017; Fri, 24 Jun 2022
- 14:00:37 +0000
-From:   Phil Edworthy <phil.edworthy@renesas.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh@kernel.org>, Sven Peter <sven@svenpeter.dev>,
-        Jie Deng <jie.deng@intel.com>, Jan Dabros <jsd@semihalf.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Olof Johansson <olof@lixom.net>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH 2/2] i2c: Add Renesas RZ/V2M controller
-Thread-Topic: [PATCH 2/2] i2c: Add Renesas RZ/V2M controller
-Thread-Index: AQHYh7O5Gmbz6jaenU+JJ4T6rEztn61ea16AgAAqjFA=
-Date:   Fri, 24 Jun 2022 14:00:37 +0000
-Message-ID: <TYYPR01MB7086629BBB3EAD51AC364925F5B49@TYYPR01MB7086.jpnprd01.prod.outlook.com>
-References: <20220624101736.27217-1-phil.edworthy@renesas.com>
- <20220624101736.27217-3-phil.edworthy@renesas.com>
- <CAK8P3a085ZuyTXAWupo56wwfKdkM9EFnkPHXzxTxwTUUR5ee9Q@mail.gmail.com>
-In-Reply-To: <CAK8P3a085ZuyTXAWupo56wwfKdkM9EFnkPHXzxTxwTUUR5ee9Q@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 16c6b6db-00de-4b39-079e-08da55e9ea5a
-x-ms-traffictypediagnostic: TYCPR01MB9466:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BB+duxR09fps4xO/Am6/AONOLvpNivcnXT65XzZIL2mI/IQAVackKhCy2aPO0xJTh3giQ/6RTyZZAgv8Q5v014c99rkO+M4cD2LeYbzMLIb+Bvnwb+GHyxwsGahoyFfvEbkHgJSFMTfXWai+c/lTX582PzSEag8STTqhRgnzMExkYycI5FDKfB+IVkxtCPmsyMrRgZLfThdl4yfMSr66dLq5uwuoDpMlKbkLn5id7vLCM1J4umRGnALXJSvE/8TkXpGeWJhz3zEP0WKaIsp5gxN3PSp2lTgj/RW7vk5nhudJNIpHOJrLd/AeDnCZjMFg2sx9LClyUjS8xL0VN9RYyTQFRtUL4JImPBId63npLurB06D7tyZJtL2wLmYJfMr3uWxYqV8jYAM02gYbSUmnSDVr8WCxgYBVY1h7C8kNkbi095UVR1HmKvZHqd24hVX9aCmc+TDnrMn//GoYTfIufW3j4w6PlheywJn8Xvs4WzSJ6vNY7ZwF5ksNpox1l0irCN7stpgMR3dEWyU4hJWv3EQm7y8nYvakOrALG03sDOdHZtR0qt6WX5KmveDIhaTjca1OM0dUeVj+YLE0j4uVOBRrp1atuyLuPEI45tYqm6GWvAE4I6NZjDmwjH7YiMteZ/4aYck3zfyo0k3SAsVUKMXG8PrUXKYBlzFhpFlBmkMA90T5RVPJzkAKlhWGXIJ8sXgJg29Me91TnTzk+lD8gzURazt/XnCfYlEY4oZEXrtObgsCLf4rVUehLEoSGXXQ49rniw5Swhb/aIwQyF3GjO8caEx1/Jo7vmjsJbPCPC8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYYPR01MB7086.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(396003)(39860400002)(136003)(376002)(52536014)(5660300002)(7416002)(4744005)(76116006)(186003)(64756008)(44832011)(41300700001)(2906002)(9686003)(53546011)(6506007)(33656002)(71200400001)(7696005)(478600001)(83380400001)(8936002)(26005)(86362001)(54906003)(122000001)(6916009)(55016003)(66556008)(316002)(38100700002)(8676002)(66446008)(4326008)(38070700005)(66946007)(66476007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Ylc3RlJudVloeHB2MTU5R2NjSzNWWGVENnNsZjR2SVllN00rSVBxL3pHdXc2?=
- =?utf-8?B?VVZNR1gyZ0ZJUGNRSzFDdmhKTlJvd28rZ0ZSV3ExVHdPcHdkWUxNVHFIQTF0?=
- =?utf-8?B?Y202emJHZFA1ZEJZT1RTMVd0QTB1SDB3M3NML2RBdE5kU2dtUWw4SnpMMXlK?=
- =?utf-8?B?QXJQWStvNExvcmZhTlcyMXZpTytEd2k5Qks1N05qVFAzMzZIc3FhWG0wcnJk?=
- =?utf-8?B?RFEzQm00ZFN5NFYzVzdodkVwdVpzNE9PbU9rMmlkTWNCeFlFdmtWeHBUVmdj?=
- =?utf-8?B?Um50Q0JtQWVQUU1oS215RVFveG1ncktTRUxaTUNzOHJwOGhaMkpBTUZkelJK?=
- =?utf-8?B?RDFwM0pwZk5TUm1qVUF2RE1qQVgzdGRBTlYxUTk2b0lCWEt4Z25EWHpucU5o?=
- =?utf-8?B?Rm1tcnhRYlF3M0I5M2Mrd1JuRGcxS2JtSmFIVlpjakdvakFOREpNTDI0RjE5?=
- =?utf-8?B?RFN0bklIaGVoclJDM3hMb0tUNHE3bmlqd1hZTTBtaG5WcVVid1F0aWFaQ0p5?=
- =?utf-8?B?QUtLRnhBUHVJdTN3aFZJREgyTTR0YzVudFNnVkhLUFQ5ckNid3o0RHNNTHpy?=
- =?utf-8?B?ZmE5bjZYa1FPNHFrY0Q5SDU5YUlOU1pGV0NNM3IvQ3UwdjhQWWZOeVZ6SVpr?=
- =?utf-8?B?aVNsbGY5WGVZWkwxZnRLUmFTQ0c4S0QvRG1uS0tHTjh6NkZoNFJCblhuT1hm?=
- =?utf-8?B?ak1yM081VEZNTzNnR0dsMUwrb3ZZTlAvKzRhTDZheVZrVHB0ZWRnSkNBcWJV?=
- =?utf-8?B?Q0g0TUsyYWF6eWp0NGFEQzVhWmRRNTNpWDVlQk5uQ1ZVNFlBbU80L2FkQUZm?=
- =?utf-8?B?eDRqeFUvVngwMC9iRmhpZktYYXV6YmxhWTZpV3Jhc2p2OHZLRzRnRVhTbjhV?=
- =?utf-8?B?cjRxbFAvU3pvOHRzZDdKWHA5eG91WW8rTlp1eFpkSTBJMzJyMWFodDJJWFcx?=
- =?utf-8?B?ZlQzTXVRQklUa1FpYUNpOEdsYi9wanJEbGp4SCtmdzR5V2ZlVzdOZnNmeVhJ?=
- =?utf-8?B?ek9jTFlGV0s5N2VRWGZuOUV6ZXhwRVFHQW1OQ3BGZ0dXODFPei9sT0dTOCtv?=
- =?utf-8?B?aUFldldHVDFTbTFkaWVTY0o3YnhoczI0RjNjQnp3NWs5RExhWlhyeDI2YVdx?=
- =?utf-8?B?OHQxbGdneG93MEROVTY1bjd1ekNJY0sxZVoxbmNrUTgxV3VwdG50bWJRYVMz?=
- =?utf-8?B?Zlp0Qm5JckNLNFVocUVGWHpoQTd3bk9CQVMvU25RQzRENXJaZ0hZQWxGUjlw?=
- =?utf-8?B?YXdWZ0c4Y1pYcFI4K2svTkNHMi9sYVhNalJHem5HQkhHMnNLVm96WDQ1ZkRm?=
- =?utf-8?B?VFVUT0VkNE9ZMEFiRk1DSWNpeEVaU1lFUnlBVGorRXpueVE1VE9tSjVXUjY5?=
- =?utf-8?B?dmRhOEtnSFNZQUVMM0hVMW1MRGZpYVE2Tk5UWUVzQncrSXgzc3JZNXRZeko0?=
- =?utf-8?B?NVJnOEhONGlNL0NwdloxSTlDKys0QnkyY1pCMXh3YmFlYjZIT2M2bHFBQm1u?=
- =?utf-8?B?bnRyeGpMTEZVN3hQRWt5QjVKT1RXcnJVS05waHBhbk8vd0huWHZLbzhEV0lE?=
- =?utf-8?B?aFV3L0J0OU9UdFRzSTh2TTFGU1NDd1BqTkUzazhLMEJsZUIydUxHY25XdTVi?=
- =?utf-8?B?T3plZHNlT1NYRXF4UGxOWnZQMzdZTytHOU1aM1BzUng4VW5QM3R5RU1jaFpJ?=
- =?utf-8?B?VEUyanhQWWtJSktyc0Q4K3JMS2NTVHBPaDgzQ3dJOTFMeW5ibURhS0ZHbmt3?=
- =?utf-8?B?SEszaUhPWWdIMis0M1VpdjVSMTliWnpGNFZrUjhGN2pXWTBMMjVwc2MvYTY1?=
- =?utf-8?B?RFdkZXBWYzAwTjE3eUZ0NWJWTkNWeWFjRU1WM3pFUk1LREZLL1h6UVlJZ0h0?=
- =?utf-8?B?dmQxb24rUmhIbElpbjRLVTlWN0psTGVZa2F2c1dLR0tycnI4ZjQwcHNsU3BQ?=
- =?utf-8?B?T1k4M3Ntb00rcmsxZDlNZmdiTVNsUVAxTHJxb0JoaDhmNit6Q1ZVbVo2RzE4?=
- =?utf-8?B?M0U3L1hhZzQ3TzVCL3YzUnRnU2d1WGR1VXdIQ2xkL2lhMDg0cXdqVzQvWkFG?=
- =?utf-8?B?cGkxSHV5eVlGVFBwais0dW9yUHhER1BzSjZGdUdPQy93enU2b0N6MGFwcm8y?=
- =?utf-8?B?b0kwZHFvMVJkZVJBSERkak8xVFovbkV6Q1BUb3Nkc1NtZUZ0a3VFRXVUWDFB?=
- =?utf-8?B?OUE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S230116AbiFYUnR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 25 Jun 2022 16:43:17 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5766D65C9
+        for <linux-i2c@vger.kernel.org>; Sat, 25 Jun 2022 13:43:16 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id t5so11395648eje.1
+        for <linux-i2c@vger.kernel.org>; Sat, 25 Jun 2022 13:43:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iFd1veKfhTMGQGljEN9uvXrZe1abjjQ/8ra6X7ZXp/A=;
+        b=Q7zhM31lwwRJmmE86uF2FZdYeGJWH8clPbsigWZbDLOJkiq5xQB4H51dgNqn2WCHnx
+         yUXJzBRWoVFajl57tWs4A69Wbki0B8V6iPIANs+sUlfUDigI0GlifsugGjE5wqOMd+/y
+         3CpLaWbqBcZr37Ce7sSFjjD7xg1mqyT69ipPkjCsv48oCysOCsktRsLZtjVgT497qpu5
+         DcAvK9SrwWTCZO9i+rwbxJ16hZqYBo02WvDH26todecvwLGQfVRcLMTNMPFHBJoqb6Wc
+         75Xbhv36Ay184RbeLY8M/ygMw1D3mXj5nHzu+9iKS2YnB3+L4/fqYfrHAu+Ie1/0gzhZ
+         ls3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iFd1veKfhTMGQGljEN9uvXrZe1abjjQ/8ra6X7ZXp/A=;
+        b=axd9ki2IUfZBXmkW81EW4QV94WtNyoqetp4TCGPrMthMZdLM7lHLfUgR8qmrWPUiD9
+         kePw9SttoAroyAVlV0yjAXSiDGC+L1QcbGWlxy2nOna2f/vQeZQlBYi1Im7DUJsP1zb1
+         TTk0yhveLsV6KNkUO3byWZ0KmkE6lUj5WkjM95uUeeK2ZXwf1Br1oD+nEORLLaBwDv86
+         hk30oWUJwwxdBvp1tx43vy+CdnrO7hU1WPylqb7aopzFT7eZxA2dDf1zvEkwajXfMuVL
+         +oCI1cpalCT42uH/479ucvIAUCuN2yHKX8Lp6z18363J+TDS1+H7ORl6rBvsFdDSy6eT
+         FCAA==
+X-Gm-Message-State: AJIora+R2yKvfrw9eCH8aqbE3CgujGiVd626ViTHC7zqecuLWdxMTt6G
+        le5qZFpHrtrEhHvxQO/6zk4JXC3SEelBhg==
+X-Google-Smtp-Source: AGRyM1ubzxZPS0hDWjk/Wtmb8RnNWKmiyIjbS5HD1t1lVciAej4xtBFwV019ReryeNb/GjF5I2Bz9Q==
+X-Received: by 2002:a17:907:2ce4:b0:722:df67:12cc with SMTP id hz4-20020a1709072ce400b00722df6712ccmr5399009ejc.715.1656189794930;
+        Sat, 25 Jun 2022 13:43:14 -0700 (PDT)
+Received: from [192.168.0.239] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id g26-20020a170906199a00b00724ff3251c4sm3019630ejd.26.2022.06.25.13.43.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Jun 2022 13:43:14 -0700 (PDT)
+Message-ID: <2f2b2544-9c53-3a6a-d9c9-375e75b112f3@linaro.org>
+Date:   Sat, 25 Jun 2022 22:43:13 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYYPR01MB7086.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 16c6b6db-00de-4b39-079e-08da55e9ea5a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jun 2022 14:00:37.3699
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5cUQnRBM7ZiqL85ppS/UQcRyylt/wtY7SyamrGDLWpEgvzN/g/RookOVUoWilC/seCd5xHc58qK0fwlTJppcWTOavaZ7tNxafl9gc2WXY9o=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB9466
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/2] dt-bindings: i2c: Document RZ/V2M I2C controller
+Content-Language: en-US
+To:     Phil Edworthy <phil.edworthy@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org
+References: <20220624101736.27217-1-phil.edworthy@renesas.com>
+ <20220624101736.27217-2-phil.edworthy@renesas.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220624101736.27217-2-phil.edworthy@renesas.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGkgQXJuZCwNCg0KT24gMjQgSnVuZSAyMDIyIDEyOjI3IEFybmQgQmVyZ21hbm4gd3JvdGU6DQo+
-IE9uIEZyaSwgSnVuIDI0LCAyMDIyIGF0IDEyOjE3IFBNIFBoaWwgRWR3b3J0aHkgd3JvdGU6DQo+
-ID4NCj4gPiBZZXQgYW5vdGhlciBpMmMgY29udHJvbGxlciBmcm9tIFJlbmVzYXMgdGhhdCBpcyBm
-b3VuZCBvbiB0aGUgUlovVjJNDQo+ID4gKHI5YTA5ZzAxMSkgU29DLiBJdCBjYW4gc3VwcG9ydCBv
-bmx5IDEwMGtIeiBhbmQgNDAwS0h6IG9wZXJhdGlvbi4NCj4gDQo+IEkgc2VlIG5vdGhpbmcgd3Jv
-bmcgd2l0aCB0aGlzLCBqdXN0IG9uZSBzdWdnZXN0aW9uIGZvciBhIGNsZWFudXA6DQo+IA0KPiA+
-ICsjaWZkZWYgQ09ORklHX1BNX1NMRUVQDQo+ID4gK3N0YXRpYyBpbnQgcnp2Mm1faTJjX3N1c3Bl
-bmQoc3RydWN0IGRldmljZSAqZGV2KQ0KPiAuLi4+ICtzdGF0aWMgY29uc3Qgc3RydWN0IGRldl9w
-bV9vcHMgcnp2Mm1faTJjX3BtX29wcyA9IHsNCj4gPiArICAgICAgIFNFVF9OT0lSUV9TWVNURU1f
-U0xFRVBfUE1fT1BTKHJ6djJtX2kyY19zdXNwZW5kLA0KPiByenYybV9pMmNfcmVzdW1lKQ0KPiA+
-ICt9Ow0KPiA+ICsNCj4gPiArI2RlZmluZSBERVZfUE1fT1BTICgmcnp2Mm1faTJjX3BtX29wcykN
-Cj4gPiArI2Vsc2UNCj4gPiArI2RlZmluZSBERVZfUE1fT1BTIE5VTEwNCj4gPiArI2VuZGlmIC8q
-IENPTkZJR19QTV9TTEVFUCAqLw0KPiANCj4gUmVtb3ZlIHRoZSAjaWZkZWYgaGVyZSwgYW5kIHVz
-ZSB0aGUgbmV3IE5PSVJRX1NZU1RFTV9TTEVFUF9QTV9PUFMoKQ0KPiBpbiBwbGFjZSBvZiBTRVRf
-Tk9JUlFfU1lTVEVNX1NMRUVQX1BNX09QUygpLg0KV2lsbCBkbyENCg0KVGhhbmtzDQpQaGlsDQo=
+On 24/06/2022 12:17, Phil Edworthy wrote:
+> Document Renesas RZ/V2M (r9a09g011) I2C controller bindings.
+> 
+> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+>  .../bindings/i2c/renesas,rzv2m.yaml           | 76 +++++++++++++++++++
+>  1 file changed, 76 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml b/Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
+> new file mode 100644
+> index 000000000000..9049461ad2f4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
+> @@ -0,0 +1,76 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/renesas,rzv2m.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas RZ/V2M I2C Bus Interface
+> +
+> +maintainers:
+> +  - Phil Edworthy <phil.edworthy@renesas.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - renesas,i2c-r9a09g011  # RZ/V2M
+> +      - const: renesas,rzv2m-i2c
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    items:
+> +      - description: Data transmission/reception interrupt
+> +      - description: Status interrupt
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: tia
+> +      - const: tis
+> +
+> +  clock-frequency:
+> +    description:
+> +      Desired I2C bus clock frequency in Hz. The absence of this property
+> +      indicates the default frequency 100 kHz.
+
+Instead of last sentence, just add "default: 100000".
+
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-names
+> +  - clocks
+> +  - power-domains
+> +  - resets
+
+This was not mentioned in properties. Why?
+
+> +  - '#address-cells'
+> +  - '#size-cells'
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/r9a09g011-cpg.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    i2c0: i2c@a4030000 {
+> +            compatible = "renesas,i2c-r9a09g011", "renesas,rzv2m-i2c";
+> +            reg = <0xa4030000 0x80>;
+> +            interrupts = <GIC_SPI 232 IRQ_TYPE_EDGE_RISING>,
+> +                         <GIC_SPI 236 IRQ_TYPE_EDGE_RISING>;
+> +            interrupt-names = "tia", "tis";
+> +            clocks = <&cpg CPG_MOD R9A09G011_IIC_PCLK0>;
+> +            resets = <&cpg R9A09G011_IIC_GPA_PRESETN>;
+> +            power-domains = <&cpg>;
+> +            clock-frequency = <100000>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +    };
+
+
+Best regards,
+Krzysztof
