@@ -2,76 +2,160 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CE7155CB47
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jun 2022 14:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9925655C222
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jun 2022 14:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237574AbiF0OnY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Jun 2022 10:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
+        id S238677AbiF0P7A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Jun 2022 11:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237506AbiF0OnX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Jun 2022 10:43:23 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5863A634E
-        for <linux-i2c@vger.kernel.org>; Mon, 27 Jun 2022 07:43:22 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id d17so7763644wrc.10
-        for <linux-i2c@vger.kernel.org>; Mon, 27 Jun 2022 07:43:22 -0700 (PDT)
+        with ESMTP id S237989AbiF0P67 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Jun 2022 11:58:59 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7FAD79;
+        Mon, 27 Jun 2022 08:58:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656345536; x=1687881536;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=ZlpdHq241mLJEz8rw3ymS24Qz2G4YYyFVs7JbaiUFBE=;
+  b=cGq/Sv3dvCWWyE3e0rIPWZuf6DpuKCsx2RZPD5vpPPlH9k5PVDdO4AGN
+   yZPh2QuVLe7i4Fvyy5vb5UunKBfiYl7wswtmHa44KpP01kzVIRofo8YYo
+   SrWih6luR6M9N7mDQli1BwPHOpVt4e1WI/CW8UczA4y8EKeWcmgqXtLQD
+   hShoRimwgFEHhNkTUipSOG8vsTqLAhBVmR5uFX7qMJyJt7CGUK/GSHN9X
+   xUzRzfQSHtz6nhGV/NkMhzPY+YPdZ5BXe6fzyHb55Gs5ihmNzJHnWgApi
+   7XN1QYzMRVDSnC4Hr8SzEHBdnyf0syj0OTMJhpv48ckFbfGAF6kfJakgG
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="165277493"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Jun 2022 08:58:52 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 27 Jun 2022 08:58:52 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Mon, 27 Jun 2022 08:58:51 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MQOdPDlJuv2Qxqjq/N5L1dUEOmil1RITJUa2a1pdlLBW98QU24sSofMWiShomgLLPBOK4Q4Hfe516cM5YNF3us7tbQHLknQ189HPUfhEpU3a4gNzSsXwXcVuxSNiIReMF1k7cobge0Z6j33FO18C0cAqvDGDj7Mdc/IJdnB2DSg6KCdaCF8Cr/JdnRQpwA1IFXOVh5tdXCStJPQnaqw3AhFiEV+VsAHVX0qLrxGV9yoK/E3Ul5CblwNMaVvKpp7BbGau8qkN3/LSjvOv+CTsve2vmMUsgjLegP6l+KZMmBEzjxqs/xH/hQIbNSRRnRK/2t2AvCpyGbT8YuX0xaDIVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZlpdHq241mLJEz8rw3ymS24Qz2G4YYyFVs7JbaiUFBE=;
+ b=fnMXIU5g/NuDFNM1W2eBtOobiLRtL2adpC2zYVP25bih4RQjkqnA5JUjlWh4cs7g6COfg2kEMStulM8lfYfqU9HYxNGZOwbYX530FPwcpfjeBYKoJX/s9ruVemXGK94Ob9j9IeiW1ejbAjO8e5J4evOA4U/Z8Q/9ZfiuWrPXpw85KdaBKaWPLBxCxXSE54U5TTbewUzJXMjmSQ5wMUd7sQUDDwP3bzXeJYmJWj6ZeZebqtlvAXmnqqtYIKMkwYN28tu+vtRI2ePWBMxcz4z8wXfifAl1Pkokr20EttfQPo+II/8fk7Ne5V2FT38E7b73y8imeLYiie/ThxxXPuozMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=I3nC8B6be2rJKcDVylzZNDnz/D1EgBd9lnRAuMjTZ0A=;
-        b=OflRcSKTk5KJCsJhl/OOpbqhK8lJUAG5ameoeZ6v2VCXjDvoRSiavCQ3R1SeKuwP7R
-         KbeemSWZj0FBD0BGYqlJ9zS8r30ytnBo+ZfnhbBnEGCCqGR3VFgmCBFbM2Ri1w9nKmD3
-         Puk4NGy6VbGJKlsvbgETb7enuUR4hHJxrlL9u/Sn+TdoGHt16rM9rdRt04CQ42UTxvO6
-         Kzxmo/2csAxoA6QVmMiAYzHNH4FzLTzgjs6VRdFBeRRrEEdOz6cKDRINsq4la0W19ECu
-         u9sf6CUJIC8M2wLb+kZTBI0plSWsnXdcymHtHQ14ks2Lqp8b0msjqo9WP4H8G6nqd6wR
-         LRdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=I3nC8B6be2rJKcDVylzZNDnz/D1EgBd9lnRAuMjTZ0A=;
-        b=InEaqZD6vFbimUwaaaH+E9ipm3jrmP97RJYjY4nnJvLVyIbuDMOQVsYgFOD+gbKWhh
-         DMoceXVtKPaGsIsL7E9e9pIxkMEWDdZ88A3FTmJh24SkkjRz9HJZpBqBCAqrCQB+KyfN
-         rwRa/V+jt0EL7vevAZ8P47lqXBz/bIWslPq+vS1GgetVHNckOetfRjTrJNnHhJkrP3bP
-         U5p8ZLf3pVCUw0eYqTYgtvL6UPJgUqrGyFUJSgSDYXhzm7ymR88V2UMF+0Hsnn8FsPJg
-         qlWHWjFTHMh8TyF8UOjUGvDY89W+D6/v1VvyKVgB2oLSnQ/eM19sz1FIQkjX1hWomwxJ
-         ckQg==
-X-Gm-Message-State: AJIora8c1+6MKxUc8UQWGxvrxjzoGMau1ly5kJb0IdknRb0ejrZ+6SdD
-        EMjRWaIcX5PdZCjuNlHJi4s7Dw==
-X-Google-Smtp-Source: AGRyM1tP0/3e0jF/X+My1isKflET6012raahzAfSWgsOfNodPOmlFfVxCEOpkadCal8x3313vLkjhQ==
-X-Received: by 2002:a5d:5a19:0:b0:21b:8eb8:f54b with SMTP id bq25-20020a5d5a19000000b0021b8eb8f54bmr12266223wrb.663.1656341000915;
-        Mon, 27 Jun 2022 07:43:20 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id e7-20020adfe7c7000000b0021b9100b844sm10943277wrn.91.2022.06.27.07.43.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 07:43:20 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 15:43:18 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     frank zago <frank@zago.net>, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
-        linux-usb@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v6 1/4] mfd: ch341: add core driver for the WCH CH341 in
- I2C/SPI/GPIO mode
-Message-ID: <YrnCBpvA8/y38Brg@google.com>
-References: <20220616013747.126051-1-frank@zago.net>
- <20220616013747.126051-2-frank@zago.net>
- <Yrm48AYxkmoUgdwr@google.com>
- <Yrm+kH6NvTy5A9WO@kroah.com>
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZlpdHq241mLJEz8rw3ymS24Qz2G4YYyFVs7JbaiUFBE=;
+ b=tR//rGBlkbDYYBkQ1GQy8CYU3pnbHfPevEN/hUtiF4/yCS3YMsNn34C5nLzfpyYgKN2kB1EimxcNQZRocY9PcYRIKX+pOIofqCYdTj+KrHS9OVlQTIeXOb3+NYFn7PRrp0YLxPTcijLksBqwLBLXMogntKO6liAk/0aynVCSP58=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by CH0PR11MB5722.namprd11.prod.outlook.com (2603:10b6:610:113::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Mon, 27 Jun
+ 2022 15:58:47 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::699b:5c23:de4f:2bfa]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::699b:5c23:de4f:2bfa%4]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
+ 15:58:47 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <palmer@dabbelt.com>, <palmer@rivosinc.com>
+CC:     <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <lee.jones@linaro.org>,
+        <robh+dt@kernel.org>, <linux-mmc@vger.kernel.org>,
+        <paul.walmsley@sifive.com>, <linux-riscv@lists.infradead.org>,
+        <atulkhare@rivosinc.com>, <support.opensource@diasemi.com>,
+        <andrew@lunn.ch>, <heiko@sntech.de>,
+        <krzysztof.kozlowski@linaro.org>, <stwiss.opensource@diasemi.com>,
+        <aou@eecs.berkeley.edu>, <ulf.hansson@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH v3 4/4] riscv: dts: sifive: "fix" pmic watchdog node name
+Thread-Topic: [PATCH v3 4/4] riscv: dts: sifive: "fix" pmic watchdog node name
+Thread-Index: AQHYeeIGXs9WOWYBI0qGmFVsFT4u2a1NYDuAgAAJMwCAFiBfgA==
+Date:   Mon, 27 Jun 2022 15:58:47 +0000
+Message-ID: <737ca8a9-1403-e594-b466-d652536e482e@microchip.com>
+References: <20220606201343.514391-1-mail@conchuod.ie>
+ <20220606201343.514391-5-mail@conchuod.ie>
+ <ee29eefa-9206-b84a-e27c-4e4388865db0@microchip.com>
+ <2247394.ElGaqSPkdT@diego>
+In-Reply-To: <2247394.ElGaqSPkdT@diego>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 97618203-8d80-41a9-4d9a-08da5855eba2
+x-ms-traffictypediagnostic: CH0PR11MB5722:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: vK88hJVvq+sg2lHaatmmWKE7WeR0F8gyzWlr239tSjIxyxElcp7KBS/kvoSGqsVs4tPvapXYoUbdabtW4ztq73lb9NVt4p8Slzfjpm5gtCmcHiGfDJFDZrB9teCvQHLiykKv2ynNq56uqWwaRAbZfhrah56eAmrMgb2sGkwxyAihVtvHR4CgA/SHtD6STzqgnrPhJKumwPFlChU+51tLx044J1rSqcSYFVTh5TI/79Uj4y6b/UiU/FzowUpLXxOKpWW8r022uQtf6M3jT1TuP2YS45HxkENob8/hGCZ7PXAYleyiibqIoXrSSV2o/Rh9aZ+DVF4VQ8fH5Bdq6GR1FNZQymIymM1g1EzwB0wDL0H7/0DYJEsoLwM/IW0BnGkomE/sCFomRgWG66Q6uwRbVxmtxES7QB4L5T3IkZDLu/dS2ogZ0jW8DgPRHDeWa+aKrkcAb3PvuYREZmue+JSgyUcthuE2bCWte8ldyFOVmOxLEZdxbg959/gSIt0wiOt6M5xWO0pau9ntWI/fYE0jQiSlZToYeQbu6d8FCBccMltVsbi8DOu7uBPHbR1h0srgoN6cacvJ0lb3cT5t3oHnfQv4o0RamKxMBFbUcAxa3B/cZCfm95IA3y6kuDF4nsmtU199ICWAJ3LBuCuW1rt6Ok2NjbnAjTo30Sj1a5zSp2CKAltgCnJCSHldTLkrldQnq33mfTzN3JItW5sZn7Q7TiIv7jtcovoErrgoDaab/1RBHX1ocIxmCZowfJUbBmSuOemZ/LI9g90PivJpkw7IgCP10vsqH7X3lPpziynN3pCL1Zzhhg+O2wJkugLe1zRc6XOwJQCc5lFlntubhJHJxBJDby5Gk3/X2xxmaREp+8ngZVWBELKXDYJ4ZsVh1F2kNF5hBQVp6E0Gj9nvZw0gsg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(346002)(396003)(136003)(39860400002)(366004)(54906003)(31686004)(2906002)(966005)(53546011)(36756003)(38100700002)(5660300002)(122000001)(316002)(110136005)(41300700001)(86362001)(83380400001)(2616005)(6512007)(8676002)(66946007)(66446008)(66476007)(91956017)(4326008)(66574015)(64756008)(76116006)(66556008)(6506007)(71200400001)(186003)(8936002)(26005)(478600001)(7416002)(6486002)(38070700005)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MXU5T0FvT01MNmY4a2FRZ2FvSDVDV3FvMlBBWWJIUVJ6dEhsQjlHajVGSFdM?=
+ =?utf-8?B?VXFkWjBIcXdIYmRvQTBhbWVhK3lvTjcwcHAyMmlVNWlneEcyZ04wUitSZFZM?=
+ =?utf-8?B?MTVZTEJBVlcrUWNtOGQydkJteXBINGZvYWJwVTJyZUtrRXduem02R3gyTk9q?=
+ =?utf-8?B?cjRUd2J5azF2bjBFaFVCR1lneC9Ca29uT1ZjOXNJQWZCYjFDRVFneVhtTUUr?=
+ =?utf-8?B?aTRsQXVGWXdlcnZSVnNxa3hISnMyMUFvOGErenRyb2xDa3JQR1VBRi83ZWg1?=
+ =?utf-8?B?VVJ1QzlnRzBFSXhvbHIySHNSTmo1N2szQU51WEQwS1RlZ3pJSW16ME1BcXpj?=
+ =?utf-8?B?dXZLSk8rZWJCVHNwNi9WamtMM0ErN2IwZ0tUZDNmRDA2RVdCcWhMSzFhdXBE?=
+ =?utf-8?B?MHpIbzh0eGNuQW9sTGEwUUg3cFFGMDV6SS9CWFRzVVpNc1JjYng2M2N0RFZ3?=
+ =?utf-8?B?dDZPRlFLcmVuU2k0UWhtYk1kaHc2eXdEeGIvNGxZaFZTTnBIMEkzTXFMSlF0?=
+ =?utf-8?B?eC9rVFhWM044Yk1EZWFhZ0tsNi84dVkvb1czajVGZHl3M09oWk9yTlE5V2Uw?=
+ =?utf-8?B?TXRNY0ZMQ09VT1N5bUNHb3VHY0JCUHlJS0ZKOFZFUjNJeU1ZSjB1RnByTkVQ?=
+ =?utf-8?B?Z3d3SXNiQldmaFFVTWpJaUJoU3RGNTVWTkI4aS9RaGpWZVpQYVZwMkRMNlc3?=
+ =?utf-8?B?MG94Wmt6VE45Wi9lakhaTi9UUS9OY2p5dEJrVFRNbXVwY1E2TWNYUjlNWENS?=
+ =?utf-8?B?TWlyZFhoYXFjMllaQXd4OHhLRUlPc0hjU3hucGN0UGJOa3lEWHVDR0dnSWlt?=
+ =?utf-8?B?T0dJb00zSDBOTEtkcWVtT2w4cWhDM09GS1kvYjFuMDJjUXpBd0RkU1B4REw1?=
+ =?utf-8?B?b0I3MWk2Q1NzNkp3VXpMdnIvMmRmcU1OWDZvZ01NQjdGQnJQcGhwY2RqanhN?=
+ =?utf-8?B?Z1Q5SC95dkV0ZmRJem9YNm1GMzMwTUlCbEdJQ0dHdHZ6UnhrcTNCZXlOYlZ0?=
+ =?utf-8?B?QnJoSzdvWENpL3YxTzhjdHhnK2V5RTNPcVNPYWVuNk8xTElvUStXelQ4U200?=
+ =?utf-8?B?Mm42RTl1VUNFbjVUaUt1YlptWDZyQldESUNqUEc2Y0szQTZOVUFENlh5N2FY?=
+ =?utf-8?B?ejRmSCtBUHJYNXhEb2ZNbEVrcTBkaW1NY2lJYmRtYlRlU0VJVlNrSXk5R1U0?=
+ =?utf-8?B?T3paSk1FcHVWeVpKKzBKMm1kaVFvRnhFMjF4MGwyQ1lDOW1kdUJqOElBMGg1?=
+ =?utf-8?B?TFhMUXkvNDFlMHg5dW5SKzExaTVxWEVaQzcyVmIrSDVnOWNnWHQwbWdHSlFT?=
+ =?utf-8?B?SHl0eEZ6NGM3bmgvNXdTT2ZBUzIxdkJzNmNYV2laczlXSjNXM0tmaHVNYUlV?=
+ =?utf-8?B?MTlnSmJZdXo0ZjF5aDdhYlk0NVBoRWQxelBCUm1MbmE0RElWY0ZlTDFIV2lx?=
+ =?utf-8?B?NGdka01kZHZBT2RTQ1RDMXhkOGN2OWJkN1lhWDM5WmxUeUxQamZYQmwzNHZ4?=
+ =?utf-8?B?UHQxVEFGNzV2OGNlR1RXdHBHK1RPcXQ4bC9hM3p5SmMrU0ZlMjNBYlR3bGNi?=
+ =?utf-8?B?cjJUejBKeGdjbkhNVVJCTENvQ0V0ZUtQSXlhUzJ4UDlnaUlNUzBuQ3poVkdn?=
+ =?utf-8?B?SVFkM0pkdDJHNGlVVE1YMlAwVXNkam50TnRjSytvTE9jdjJvVWpjSjhBRGFE?=
+ =?utf-8?B?dDlVaFIyem0xcHNqTnY1VEhKeXRuSW1ZZWd2Y2o4U1dkdWl6NnU0b2RTVVR4?=
+ =?utf-8?B?ays1cHNXSE5PMSt2MjhRK1BKeVFUU25UUC9uRVlUT0JHWWliUWFDU3p5bG5t?=
+ =?utf-8?B?a1g3RENFaWIzWVdmMXVYck9pZzkxU0RCTkc3TThtVHJJS2dCQ1FNU2srWVBC?=
+ =?utf-8?B?UEpPalRGZDI0SEsyZ0lvb1I1ZW1MZ0YwVHJ3Z2VKZnZ2YjViTWY3VzdscC9O?=
+ =?utf-8?B?eGFDbW9PZW5FNTZYK29ZeEFZZFNOTmtDdFRCYnRrUGo4TUN3TkNrTFhqb2FM?=
+ =?utf-8?B?eCthMWRUYWJxS2xSK09zcDRoZmhiL3BjK2V6T2RVbFdQZ0xXWW11QjVJSmtz?=
+ =?utf-8?B?N3dQZERNNllRVkxSMjFUbStZdTd0VjlvaDlLSk9kNTYwQytPNWFHY0lmYXlm?=
+ =?utf-8?Q?N3SNscQG0tMc4w1G19h0x/yl9?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6CE78646FA60AE4CB0A497294B7F63CD@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yrm+kH6NvTy5A9WO@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97618203-8d80-41a9-4d9a-08da5855eba2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2022 15:58:47.4780
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MA5xkgnIdpVin6/sMDPPW3yaDcaHv/KXYPKoqDIVAnruv4zWMsSBPMBwTsSXUWDHreu3MRlXWNYEXQYqtDa6a/ePdXgLFxppo8YbYsWhrFU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5722
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,222 +163,41 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 27 Jun 2022, Greg Kroah-Hartman wrote:
-
-> On Mon, Jun 27, 2022 at 03:04:32PM +0100, Lee Jones wrote:
-> > USB review please.
-> > 
-> > > The CH341 is a multifunction chip, presenting 3 different USB PID. One
-> > > 
-> > > of these functions is for I2C/SPI/GPIO. This new set of drivers will
-> > > manage I2C and GPIO.
-> > > 
-> > > Signed-off-by: frank zago <frank@zago.net>
-> > > ---
-> > >  MAINTAINERS               |  7 +++
-> > >  drivers/mfd/Kconfig       | 10 +++++
-> > >  drivers/mfd/Makefile      |  1 +
-> > >  drivers/mfd/ch341-core.c  | 90 +++++++++++++++++++++++++++++++++++++++
-> > >  include/linux/mfd/ch341.h | 18 ++++++++
-> > >  5 files changed, 126 insertions(+)
-> > >  create mode 100644 drivers/mfd/ch341-core.c
-> > >  create mode 100644 include/linux/mfd/ch341.h
-> > > 
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index 43d3d07afccd..628eeaa9bf68 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -21475,6 +21475,13 @@ M:	David Härdeman <david@hardeman.nu>
-> > >  S:	Maintained
-> > >  F:	drivers/media/rc/winbond-cir.c
-> > >  
-> > > +WINCHIPHEAD CH341 I2C/GPIO MFD DRIVER
-> > > +M:	Frank Zago <frank@zago.net>
-> > > +L:	linux-usb@vger.kernel.org
-> > > +S:	Maintained
-> > > +F:	drivers/mfd/ch341-core.c
-> > > +F:	include/linux/mfd/ch341.h
-> > > +
-> > >  WINSYSTEMS EBC-C384 WATCHDOG DRIVER
-> > >  M:	William Breathitt Gray <vilhelm.gray@gmail.com>
-> > >  L:	linux-watchdog@vger.kernel.org
-> > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > > index 3b59456f5545..893acc821a42 100644
-> > > --- a/drivers/mfd/Kconfig
-> > > +++ b/drivers/mfd/Kconfig
-> > > @@ -1784,6 +1784,16 @@ config MFD_LOCHNAGAR
-> > >  	help
-> > >  	  Support for Cirrus Logic Lochnagar audio development board.
-> > >  
-> > > +config MFD_CH341
-> > > +	tristate "WinChipHead CH341 in I2C/SPI/GPIO mode"
-> > > +	depends on USB
-> > > +	help
-> > > +	  If you say yes to this option, support for the CH341 series
-> > > +	  of chips, running in I2C/SPI/GPIO mode will be included.
-> > > +
-> > > +	  This driver can also be built as a module.  If so, the
-> > > +	  module will be called ch341-core.
-> > > +
-> > >  config MFD_ARIZONA
-> > >  	select REGMAP
-> > >  	select REGMAP_IRQ
-> > > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> > > index 858cacf659d6..fd615ab3929f 100644
-> > > --- a/drivers/mfd/Makefile
-> > > +++ b/drivers/mfd/Makefile
-> > > @@ -13,6 +13,7 @@ obj-$(CONFIG_MFD_ASIC3)		+= asic3.o tmio_core.o
-> > >  obj-$(CONFIG_ARCH_BCM2835)	+= bcm2835-pm.o
-> > >  obj-$(CONFIG_MFD_BCM590XX)	+= bcm590xx.o
-> > >  obj-$(CONFIG_MFD_BD9571MWV)	+= bd9571mwv.o
-> > > +obj-$(CONFIG_MFD_CH341)		+= ch341-core.o
-> > >  obj-$(CONFIG_MFD_CROS_EC_DEV)	+= cros_ec_dev.o
-> > >  obj-$(CONFIG_MFD_ENE_KB3930)	+= ene-kb3930.o
-> > >  obj-$(CONFIG_MFD_EXYNOS_LPASS)	+= exynos-lpass.o
-> > > diff --git a/drivers/mfd/ch341-core.c b/drivers/mfd/ch341-core.c
-> > > new file mode 100644
-> > > index 000000000000..f08a67dd6074
-> > > --- /dev/null
-> > > +++ b/drivers/mfd/ch341-core.c
-> > > @@ -0,0 +1,90 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Core driver for the CH341A, CH341B and CH341T in I2C/SPI/GPIO
-> > > + * mode. There are cell drivers available for I2C and GPIO. SPI is not
-> > > + * yet supported.
-> > > + *
-> > > + * Copyright 2022, Frank Zago
-> > > + * Copyright (c) 2017 Gunar Schorcht (gunar@schorcht.net)
-> > > + * Copyright (c) 2016 Tse Lun Bien
-> > > + * Copyright (c) 2014 Marco Gittler
-> > > + * Copyright (c) 2006-2007 Till Harbaum (Till@Harbaum.org)
-> > > + */
-> > > +
-> > > +#include <linux/kernel.h>
-> > > +#include <linux/mfd/ch341.h>
-> > > +#include <linux/mfd/core.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/slab.h>
-> > > +#include <linux/usb.h>
-> > > +
-> > > +static const struct mfd_cell ch341_devs[] = {
-> > > +	{
-> > > +		.name = "ch341-gpio",
-> > > +	},
-> > > +	{
-> > > +		.name = "ch341-i2c",
-> > > +	},
-> > > +};
-> > > +
-> > > +static int ch341_usb_probe(struct usb_interface *iface,
-> > > +			   const struct usb_device_id *usb_id)
-> > > +{
-> > > +	struct usb_endpoint_descriptor *bulk_out;
-> > > +	struct usb_endpoint_descriptor *bulk_in;
-> > > +	struct usb_endpoint_descriptor *intr_in;
-> > > +	struct ch341_ddata *ddata;
-> > > +	int ret;
-> > > +
-> > > +	ddata = devm_kzalloc(&iface->dev, sizeof(*ddata), GFP_KERNEL);
-> > > +	if (!ddata)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	ddata->usb_dev = interface_to_usbdev(iface);
-> > > +	mutex_init(&ddata->usb_lock);
-> > > +
-> > > +	ret = usb_find_common_endpoints(iface->cur_altsetting, &bulk_in,
-> > > +					&bulk_out, &intr_in, NULL);
-> > > +	if (ret) {
-> > > +		dev_err(&iface->dev, "Could not find all endpoints\n");
-> > > +		return -ENODEV;
-> > > +	}
-> > > +
-> > > +	ddata->ep_in = bulk_in->bEndpointAddress;
-> > > +	ddata->ep_out = bulk_out->bEndpointAddress;
-> > > +	ddata->ep_intr = intr_in->bEndpointAddress;
-> > > +	ddata->ep_intr_interval = intr_in->bInterval;
-> > > +
-> > > +	usb_set_intfdata(iface, ddata);
-> > > +
-> > > +	ret = mfd_add_devices(&iface->dev, PLATFORM_DEVID_AUTO, ch341_devs,
-> > > +			      ARRAY_SIZE(ch341_devs), NULL, 0, NULL);
-> > > +	if (ret)
-> > > +		return dev_err_probe(&iface->dev, ret,
-> > > +				     "Failed to register child devices\n");
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static void ch341_usb_disconnect(struct usb_interface *usb_if)
-> > > +{
-> > > +	mfd_remove_devices(&usb_if->dev);
-> > > +}
-> > > +
-> > > +static const struct usb_device_id ch341_usb_table[] = {
-> > > +	{ USB_DEVICE(0x1a86, 0x5512) },
-> > > +	{ }
-> > > +};
-> > > +MODULE_DEVICE_TABLE(usb, ch341_usb_table);
-> > > +
-> > > +static struct usb_driver ch341_usb_driver = {
-> > > +	.name       = "ch341-mfd",
-> > > +	.id_table   = ch341_usb_table,
-> > > +	.probe      = ch341_usb_probe,
-> > > +	.disconnect = ch341_usb_disconnect,
-> > > +};
-> > > +module_usb_driver(ch341_usb_driver);
-> > > +
-> > > +MODULE_AUTHOR("Frank Zago <frank@zago.net>");
-> > > +MODULE_DESCRIPTION("CH341 USB to I2C/SPI/GPIO adapter");
-> > > +MODULE_LICENSE("GPL");
-> > > diff --git a/include/linux/mfd/ch341.h b/include/linux/mfd/ch341.h
-> > > new file mode 100644
-> > > index 000000000000..44f5da0720bd
-> > > --- /dev/null
-> > > +++ b/include/linux/mfd/ch341.h
-> > > @@ -0,0 +1,18 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +/* Definitions for the CH341 driver */
-> > > +
-> > > +#include <linux/mutex.h>
-> > > +#include <linux/types.h>
-> > > +
-> > > +struct usb_device;
-> > > +struct usb_interface;
-> > > +
-> > > +struct ch341_ddata {
-> > > +	struct usb_device *usb_dev;
-> > > +	struct mutex usb_lock;
-> > > +
-> > > +	int ep_in;
-> > > +	int ep_out;
-> > > +	int ep_intr;
-> > > +	u8 ep_intr_interval;
-> > > +};
-> 
-> 
-> Looks sane enough, but doesn't actually do any USB data transfers, maybe
-> that happens somewhere else...
-
-I expect those to happen in *both* of these:
-
-  static const struct mfd_cell ch341_devs[] = {
-	{
-		.name = "ch341-gpio",
-	},
-	{
-		.name = "ch341-i2c",
-	},
-  };
-
-Is that correct Frank?
-
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Thanks.
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+QSBwaW5nIGFuZCBhbiBvZmZlcjoNCg0KUGFsbWVyLCBkbyB5b3Ugd2FudCBtZSB0byB0YWtlIHRo
+ZSByYW5kb20gZHQgY2xlYW51cHMgdGhyb3VnaA0KbXkgdHJlZSAmIHNhdmUgeW91IHRoZSBoYXNz
+bGUgb2YgZm9sbG93aW5nIGFsb25nIHdpdGggdGhlbT8NCg0KVGhhbmtzLA0KQ29ub3IuDQoNCk9u
+IDEzLzA2LzIwMjIgMTU6MDUsIEhlaWtvIFN0w7xibmVyIHdyb3RlOg0KPiBFWFRFUk5BTCBFTUFJ
+TDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSBrbm93
+IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IEFtIE1vbnRhZywgMTMuIEp1bmkgMjAyMiwgMTU6
+MzM6NDkgQ0VTVCBzY2hyaWViIENvbm9yLkRvb2xleUBtaWNyb2NoaXAuY29tOg0KPj4NCj4+IE9u
+IDA2LzA2LzIwMjIgMjE6MTMsIENvbm9yIERvb2xleSB3cm90ZToNCj4+PiBGcm9tOiBDb25vciBE
+b29sZXkgPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAuY29tPg0KPj4+DQo+Pj4gQWZ0ZXIgY29udmVy
+dGluZyB0aGUgcG1pYyB3YXRjaGRvZyBiaW5kaW5nIHRvIHlhbWwsIGR0YnNfY2hlY2sgY29tcGxh
+aW5zDQo+Pj4gdGhhdCB0aGUgbm9kZSBuYW1lIGRvZXNuJ3QgbWF0Y2ggdGhlIGJpbmRpbmcuICJG
+aXgiIGl0Lg0KPj4NCj4+IEhleSBQYWxtZXIsDQo+PiBUaGUgdGhyZWUgZHQtYmluZGluZyBjaGFu
+Z2VzIHdlcmUgYWNjZXB0ZWQgLSBkbyBJIG5lZWQgdG8gcG9rZSBTaUZpdmUgdG8NCj4+IGFjayB0
+aGUgZHRzIGNoYW5nZSBvciBhcmUgeW91IGZpbmUganVzdCB0YWtpbmcgaXQ/DQo+IA0KPiBJIGRv
+bid0IHRoaW5rIGEgbm9kZS1uYW1lIGhhcyByZWxldmFuY2UgdG8gdmVuZG9yIGRlY2lzaW9ucyA7
+LSkgLg0KPiANCj4gTG9va2luZyBhdCBiaW5kaW5ncy93YXRjaGRvZy93YXRjaGRvZy55YW1sIHdl
+IGNsZWFybHkgc2VlIHRoYXQNCj4gdGhlIG5vZGUgbmFtZSBpcyBhbHdheXMgd2F0Y2hkb2cgb3Ig
+d2F0Y2hkb2dAZm9vLCBzbyB0aGlzIGNoYW5nZQ0KPiBpcyBjbGVhcmx5IGNvcnJlY3QuDQo+IA0K
+PiBSZXZpZXdlZC1ieTogSGVpa28gU3R1ZWJuZXIgPGhlaWtvQHNudGVjaC5kZT4NCj4gDQo+IA0K
+Pj4gVGhhbmtzLA0KPj4gQ29ub3IuDQo+Pg0KPj4+DQo+Pj4gUmV2aWV3ZWQtYnk6IEtyenlzenRv
+ZiBLb3psb3dza2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4NCj4+PiBTaWduZWQt
+b2ZmLWJ5OiBDb25vciBEb29sZXkgPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAuY29tPg0KPj4+IC0t
+LQ0KPj4+ICAgYXJjaC9yaXNjdi9ib290L2R0cy9zaWZpdmUvaGlmaXZlLXVubWF0Y2hlZC1hMDAu
+ZHRzIHwgMiArLQ0KPj4+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0
+aW9uKC0pDQo+Pj4NCj4+PiBkaWZmIC0tZ2l0IGEvYXJjaC9yaXNjdi9ib290L2R0cy9zaWZpdmUv
+aGlmaXZlLXVubWF0Y2hlZC1hMDAuZHRzIGIvYXJjaC9yaXNjdi9ib290L2R0cy9zaWZpdmUvaGlm
+aXZlLXVubWF0Y2hlZC1hMDAuZHRzDQo+Pj4gaW5kZXggYzRlZDllZmRmZjAzLi4xZjM4NmIwN2E4
+MzIgMTAwNjQ0DQo+Pj4gLS0tIGEvYXJjaC9yaXNjdi9ib290L2R0cy9zaWZpdmUvaGlmaXZlLXVu
+bWF0Y2hlZC1hMDAuZHRzDQo+Pj4gKysrIGIvYXJjaC9yaXNjdi9ib290L2R0cy9zaWZpdmUvaGlm
+aXZlLXVubWF0Y2hlZC1hMDAuZHRzDQo+Pj4gQEAgLTkwLDcgKzkwLDcgQEAgcnRjIHsNCj4+PiAg
+ICAgICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAiZGxnLGRhOTA2My1ydGMiOw0KPj4+ICAg
+ICAgICAgICAgIH07DQo+Pj4NCj4+PiAtICAgICAgICAgICB3ZHQgew0KPj4+ICsgICAgICAgICAg
+IHdhdGNoZG9nIHsNCj4+PiAgICAgICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAiZGxnLGRh
+OTA2My13YXRjaGRvZyI7DQo+Pj4gICAgICAgICAgICAgfTsNCj4+Pg0KPj4gX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18NCj4+IGxpbnV4LXJpc2N2IG1haWxp
+bmcgbGlzdA0KPj4gbGludXgtcmlzY3ZAbGlzdHMuaW5mcmFkZWFkLm9yZw0KPj4gaHR0cDovL2xp
+c3RzLmluZnJhZGVhZC5vcmcvbWFpbG1hbi9saXN0aW5mby9saW51eC1yaXNjdg0KPj4NCj4gDQo+
+IA0KPiANCj4gDQoNCg==
