@@ -2,205 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7260255EDA2
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jun 2022 21:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0221855EDAE
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jun 2022 21:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235003AbiF1TJy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Jun 2022 15:09:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
+        id S232109AbiF1TPZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Jun 2022 15:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236068AbiF1TJu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Jun 2022 15:09:50 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACCC192B2;
-        Tue, 28 Jun 2022 12:09:49 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-3176b6ed923so126830847b3.11;
-        Tue, 28 Jun 2022 12:09:49 -0700 (PDT)
+        with ESMTP id S237413AbiF1TOZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Jun 2022 15:14:25 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7CE366AA
+        for <linux-i2c@vger.kernel.org>; Tue, 28 Jun 2022 12:12:53 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id b12-20020a17090a6acc00b001ec2b181c98so16914417pjm.4
+        for <linux-i2c@vger.kernel.org>; Tue, 28 Jun 2022 12:12:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Df+MKXJfNDPG+S9kvWPeYAx6XZpxE7WPz2ahAfIBELQ=;
-        b=pm/CU9ccX46GwxUJNxGvRTMDaiONUskg50NFy9k6irBkgRKofkyc6ddePCEDw3hp/D
-         YUNclZZG1b0PGUW5ktGHPaluX0gZX3ouDXNnNk17kL7G9DAJaSoKAE/u5aieZ99bpoat
-         o9MZCnagpwdR6CJEt+GXTI0/iMSRU7hTqCYCVv0yIB2PkugqcBkmMzdxudzbuXuleZN6
-         zyrL31ToCzBXN99LUZqT79PzJOD0+mmhhryKp75gePf38PodiDcoDenGzGyEHCes/zRE
-         unNmXiH32sp9QN/g8JaseaG9ef4D+J5vrxXfUthTp7fX8PJw7NwQKNJHjCe9sARr5gg5
-         tZWQ==
+        d=getcruise.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZxCPE0B5f3Bac55W0MZntTn0q8GmAKl08WmW5xL6H1g=;
+        b=LiKgaFcZpBhB0XVa5KRvk2DxLBrqjdvNnMkA9fIajsFma9ZC7TY7BqcbVV17A/45EB
+         6Fqtp+smqXhgaXlYHcSTnhORJMx2uOZAKfxwaSfOx/hs9cS6wQRlJhSfgG0RnuYqsXWN
+         NEyX4JoHTw+JNo/R5tPOquF3SP9VnrOaS4VvfPZ2dreeGg6v9nsFLYgQth+k0SqX125W
+         Ns8+rbNp4WZfSc0UURcGbycGgL1ZlXVOmGRyZwzWus19p/8TjUZbRUAjUGHTkWl25xrP
+         leB51BYqAxZg5sR5FUrBYzPrDHs/8E7zr6s0eYm1agCC1zUYFbMHbj9BtgVd/NhQkILM
+         LMNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Df+MKXJfNDPG+S9kvWPeYAx6XZpxE7WPz2ahAfIBELQ=;
-        b=dEv6zL8U8soL0h0frb3laR38/AMwYPwmJs/jY9A6DRYtIL9zsPxYa2Pml2bghueYCD
-         zJ6bCyVdHiynHbwNAFKn+D3K6kHiJlvRVKyaJ+lYsFwgWqk1eQ/ffTWwhyxvLPMCnS31
-         DXfvTkxvs5QFdbySms6o68Dw1eqo+kHhgi2vFg0L55lBaKg+/lPX04/hKYqN9oWsKnFD
-         MExcjY3w/rjE9/j/WQCTw7B5dhsLNE6hqC+OmvU0qKVs/UdxLg44jx59yxCmC6PuX7GV
-         rQ5yHJBOXnW91xtgDvybBpqWh+nmrHvV4LPbQwsYrnYBIbjkg9bPTOO5aC92tR5bP5Xi
-         NleQ==
-X-Gm-Message-State: AJIora+yT87CmGKj4Xsd1aa8PzYIqvP6RPqyouQtYbMNPejavcoaazFd
-        Dha1ZHKN4ViJXNwnqRzWy6tIiZBhmrxUPdoFepo=
-X-Google-Smtp-Source: AGRyM1vUp1dBPu4iDpJJOmQhrlwsWm72LE+ItI0NXjClMBY6C43R8UMBqnE261JrKVtOs4rDzv0NkQvPJIUx7WwNpR8=
-X-Received: by 2002:a81:5d88:0:b0:318:31c1:56f3 with SMTP id
- r130-20020a815d88000000b0031831c156f3mr23363889ywb.18.1656443388713; Tue, 28
- Jun 2022 12:09:48 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZxCPE0B5f3Bac55W0MZntTn0q8GmAKl08WmW5xL6H1g=;
+        b=ytTJT2c5irY6RYeZ7vXPIqoTy+F7ssEx6lSKAnCZU44n/0BXacdsginMsxsHyEGuTp
+         gBeESOm97SjNHO3bEosSKK/9mG0druTycmZK2taVKBPLeZj0rshjXSbe1tmcYIm2s8Md
+         sHlSWTH7ZNIvtftCVsXiolRLgS+672EyOpJDgVpmne3atZU/adIZWSBbyMME7SMngsf/
+         RkDB4TFm/he+YLUmAGW0+k6JO/frOyktLOuzv8ru/0yngDlEX9T2uSOe9kj5IxONs1zM
+         7CGJQpbm9zXVIZPu3qUEsL+30V2NdzOgmk5Mr4v5HWN425abdySo4EeI8MYkB9hTb1Gg
+         SRPA==
+X-Gm-Message-State: AJIora9BK9w9SpVWd9UJpB2aFYB/ojvk/C+MQI4R5zDkfYhxXoQGBcXS
+        48uWbyrqvdowqJB9kciwTe1YpA==
+X-Google-Smtp-Source: AGRyM1t1MLy7fhAwHac9zOZIhses1FLTKxC4bxEkQuzxievZCNPR/1rumBzvz7D6Lktak5zXwc6GEA==
+X-Received: by 2002:a17:90b:4acd:b0:1ed:55f:3ba3 with SMTP id mh13-20020a17090b4acd00b001ed055f3ba3mr1301263pjb.10.1656443564679;
+        Tue, 28 Jun 2022 12:12:44 -0700 (PDT)
+Received: from 6SRZ2L3-DT.corp.robot.car ([199.73.125.240])
+        by smtp.gmail.com with ESMTPSA id d21-20020a63d715000000b00408a81ea6basm9545197pgg.21.2022.06.28.12.12.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 12:12:43 -0700 (PDT)
+From:   Satish Nagireddy <satish.nagireddy@getcruise.com>
+To:     wsa@kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        michal.simek@xilinx.com, lars@metafoo.de,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+Subject: [PATCH] i2c: cadence: Unregister the clk notifier in error path
+Date:   Tue, 28 Jun 2022 12:12:16 -0700
+Message-Id: <20220628191216.39459-1-satish.nagireddy@getcruise.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de> <20220628140313.74984-6-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20220628140313.74984-6-u.kleine-koenig@pengutronix.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 28 Jun 2022 21:09:09 +0200
-Message-ID: <CAHp75VeqAxPjL9vhY9nL5U0Np=+Ysq2E-fQEdgUgrd-_6jcHVQ@mail.gmail.com>
-Subject: Re: [PATCH 5/6] gpio: pca953x: Make platform teardown callback return void
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        linux-i2c <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 4:04 PM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> All platforms that provide a teardown callback return 0. New users are
-> supposed to not make use of platform support, so there is no
-> functionality lost.
->
-> This patch is a preparation for making i2c remove callbacks return void.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> Forwarded: id:20220502170555.51183-1-u.kleine-koenig@pengutronix.de
+This patch ensures that the clock notifier is unregistered
+when driver probe is returning error.
 
-What is this tag for? Has it been documented?
+Signed-off-by: Satish Nagireddy <satish.nagireddy@getcruise.com>
+---
+ drivers/i2c/busses/i2c-cadence.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-(Linus recently was ranting against homegrown custom (read:
-non-documented) tags)
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+index b4c1ad19cdae..3d6f8ee355bf 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -1338,6 +1338,7 @@ static int cdns_i2c_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ err_clk_dis:
++	clk_notifier_unregister(id->clk, &id->clk_rate_change_nb);
+ 	clk_disable_unprepare(id->clk);
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_set_suspended(&pdev->dev);
+-- 
+2.36.1
 
-For now the code looks good,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-However, I prefer to see dropping those callbacks altogether (find the
-way how to use GPIO descriptors / GPIO table / etc instead of ugly
-custom callbacks).
-
-> ---
->  arch/arm/mach-davinci/board-da850-evm.c | 12 ++++--------
->  drivers/gpio/gpio-pca953x.c             | 11 +++--------
->  include/linux/platform_data/pca953x.h   |  2 +-
->  3 files changed, 8 insertions(+), 17 deletions(-)
->
-> diff --git a/arch/arm/mach-davinci/board-da850-evm.c b/arch/arm/mach-davi=
-nci/board-da850-evm.c
-> index efc26b472ef8..09253e70d0dc 100644
-> --- a/arch/arm/mach-davinci/board-da850-evm.c
-> +++ b/arch/arm/mach-davinci/board-da850-evm.c
-> @@ -518,8 +518,8 @@ static int da850_evm_ui_expander_setup(struct i2c_cli=
-ent *client, unsigned gpio,
->         return ret;
->  }
->
-> -static int da850_evm_ui_expander_teardown(struct i2c_client *client,
-> -                                       unsigned gpio, unsigned ngpio, vo=
-id *c)
-> +static void da850_evm_ui_expander_teardown(struct i2c_client *client,
-> +                                          unsigned gpio, unsigned ngpio,=
- void *c)
->  {
->         platform_device_unregister(&da850_evm_ui_keys_device);
->
-> @@ -531,8 +531,6 @@ static int da850_evm_ui_expander_teardown(struct i2c_=
-client *client,
->         gpio_free(gpio + DA850_EVM_UI_EXP_SEL_C);
->         gpio_free(gpio + DA850_EVM_UI_EXP_SEL_B);
->         gpio_free(gpio + DA850_EVM_UI_EXP_SEL_A);
-> -
-> -       return 0;
->  }
->
->  /* assign the baseboard expander's GPIOs after the UI board's */
-> @@ -699,13 +697,11 @@ static int da850_evm_bb_expander_setup(struct i2c_c=
-lient *client,
->         return ret;
->  }
->
-> -static int da850_evm_bb_expander_teardown(struct i2c_client *client,
-> -                                       unsigned gpio, unsigned ngpio, vo=
-id *c)
-> +static void da850_evm_bb_expander_teardown(struct i2c_client *client,
-> +                                          unsigned gpio, unsigned ngpio,=
- void *c)
->  {
->         platform_device_unregister(&da850_evm_bb_leds_device);
->         platform_device_unregister(&da850_evm_bb_keys_device);
-> -
-> -       return 0;
->  }
->
->  static struct pca953x_platform_data da850_evm_ui_expander_info =3D {
-> diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-> index 08bc52c3cdcb..3eedeac9ec8d 100644
-> --- a/drivers/gpio/gpio-pca953x.c
-> +++ b/drivers/gpio/gpio-pca953x.c
-> @@ -1099,20 +1099,15 @@ static int pca953x_remove(struct i2c_client *clie=
-nt)
->  {
->         struct pca953x_platform_data *pdata =3D dev_get_platdata(&client-=
->dev);
->         struct pca953x_chip *chip =3D i2c_get_clientdata(client);
-> -       int ret;
->
->         if (pdata && pdata->teardown) {
-> -               ret =3D pdata->teardown(client, chip->gpio_chip.base,
-> -                                     chip->gpio_chip.ngpio, pdata->conte=
-xt);
-> -               if (ret < 0)
-> -                       dev_err(&client->dev, "teardown failed, %d\n", re=
-t);
-> -       } else {
-> -               ret =3D 0;
-> +               pdata->teardown(client, chip->gpio_chip.base,
-> +                               chip->gpio_chip.ngpio, pdata->context);
->         }
->
->         regulator_disable(chip->regulator);
->
-> -       return ret;
-> +       return 0;
->  }
->
->  #ifdef CONFIG_PM_SLEEP
-> diff --git a/include/linux/platform_data/pca953x.h b/include/linux/platfo=
-rm_data/pca953x.h
-> index 4eb53e023997..96c1a14ab365 100644
-> --- a/include/linux/platform_data/pca953x.h
-> +++ b/include/linux/platform_data/pca953x.h
-> @@ -22,7 +22,7 @@ struct pca953x_platform_data {
->         int             (*setup)(struct i2c_client *client,
->                                 unsigned gpio, unsigned ngpio,
->                                 void *context);
-> -       int             (*teardown)(struct i2c_client *client,
-> +       void            (*teardown)(struct i2c_client *client,
->                                 unsigned gpio, unsigned ngpio,
->                                 void *context);
->         const char      *const *names;
-> --
-> 2.36.1
->
-
-
---=20
-With Best Regards,
-Andy Shevchenko
