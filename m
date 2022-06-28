@@ -2,46 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 995A555EE18
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jun 2022 21:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B495755EE1B
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jun 2022 21:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbiF1Ttp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Jun 2022 15:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
+        id S231159AbiF1Ttt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Jun 2022 15:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiF1Tt0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Jun 2022 15:49:26 -0400
+        with ESMTP id S231221AbiF1Tte (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Jun 2022 15:49:34 -0400
 Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62D282F38C;
-        Tue, 28 Jun 2022 12:45:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 748BA38DB2;
+        Tue, 28 Jun 2022 12:46:04 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="5.92,229,1650898800"; 
-   d="scan'208";a="125967111"
+   d="scan'208";a="125967119"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 29 Jun 2022 04:45:49 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 29 Jun 2022 04:46:03 +0900
 Received: from localhost.localdomain (unknown [10.226.92.14])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 2ADFC400D4E5;
-        Wed, 29 Jun 2022 04:45:43 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 535B1400D4E5;
+        Wed, 29 Jun 2022 04:46:01 +0900 (JST)
 From:   Phil Edworthy <phil.edworthy@renesas.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Sven Peter <sven@svenpeter.dev>, Jan Dabros <jsd@semihalf.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 0/2] i2c: Add new driver for Renesas RZ/V2M controller
-Date:   Tue, 28 Jun 2022 20:45:24 +0100
-Message-Id: <20220628194526.111501-1-phil.edworthy@renesas.com>
+Subject: [PATCH v2 1/2] dt-bindings: i2c: Document RZ/V2M I2C controller
+Date:   Tue, 28 Jun 2022 20:45:25 +0100
+Message-Id: <20220628194526.111501-2-phil.edworthy@renesas.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220628194526.111501-1-phil.edworthy@renesas.com>
+References: <20220628194526.111501-1-phil.edworthy@renesas.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -53,34 +46,105 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Document Renesas RZ/V2M (r9a09g011) I2C controller bindings.
 
-The Renesas RZ/V2M SoC (r9a09g011) has a new i2c controller. This series
-add the driver. One annoying problem is that the SoC uses a single reset
-line for two i2c controllers, and unfortunately one of the controllers
-is managed by some firmware, not by Linux. Therefore, the driver just
-deasserts the reset.
-
+Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
 v2:
-  dt-binding:
-  - Use an enum and set the default for clock-frequency
-  - Add resets property
-  driver:
-  - Use the new NOIRQ_SYSTEM_SLEEP_PM_OPS() as suggested by Arnd
-  - Lots of small fixes based on Geert's review
-
-Phil Edworthy (2):
-  dt-bindings: i2c: Document RZ/V2M I2C controller
-  i2c: Add Renesas RZ/V2M controller
-
- .../bindings/i2c/renesas,rzv2m.yaml           |  80 +++
- drivers/i2c/busses/Kconfig                    |  10 +
- drivers/i2c/busses/Makefile                   |   1 +
- drivers/i2c/busses/i2c-rzv2m.c                | 530 ++++++++++++++++++
- 4 files changed, 621 insertions(+)
+ - Use an enum and set the default for clock-frequency
+ - Add resets property
+---
+ .../bindings/i2c/renesas,rzv2m.yaml           | 80 +++++++++++++++++++
+ 1 file changed, 80 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
- create mode 100644 drivers/i2c/busses/i2c-rzv2m.c
 
+diff --git a/Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml b/Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
+new file mode 100644
+index 000000000000..7f6d2bb4ecb3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
+@@ -0,0 +1,80 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/i2c/renesas,rzv2m.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Renesas RZ/V2M I2C Bus Interface
++
++maintainers:
++  - Phil Edworthy <phil.edworthy@renesas.com>
++
++allOf:
++  - $ref: /schemas/i2c/i2c-controller.yaml#
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - renesas,i2c-r9a09g011  # RZ/V2M
++      - const: renesas,rzv2m-i2c
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    items:
++      - description: Data transmission/reception interrupt
++      - description: Status interrupt
++
++  interrupt-names:
++    items:
++      - const: tia
++      - const: tis
++
++  clock-frequency:
++    default: 100000
++    enum: [ 100000, 400000 ]
++    description:
++      Desired I2C bus clock frequency in Hz.
++
++  clocks:
++    maxItems: 1
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-names
++  - clocks
++  - power-domains
++  - resets
++  - '#address-cells'
++  - '#size-cells'
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/r9a09g011-cpg.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    i2c0: i2c@a4030000 {
++            compatible = "renesas,i2c-r9a09g011", "renesas,rzv2m-i2c";
++            reg = <0xa4030000 0x80>;
++            interrupts = <GIC_SPI 232 IRQ_TYPE_EDGE_RISING>,
++                         <GIC_SPI 236 IRQ_TYPE_EDGE_RISING>;
++            interrupt-names = "tia", "tis";
++            clocks = <&cpg CPG_MOD R9A09G011_IIC_PCLK0>;
++            resets = <&cpg R9A09G011_IIC_GPA_PRESETN>;
++            power-domains = <&cpg>;
++            clock-frequency = <100000>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++    };
 -- 
 2.34.1
 
