@@ -2,36 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B495755EE1B
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jun 2022 21:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A36A355EE1E
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jun 2022 21:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbiF1Ttt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Jun 2022 15:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45052 "EHLO
+        id S231919AbiF1TuC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Jun 2022 15:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbiF1Tte (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Jun 2022 15:49:34 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 748BA38DB2;
-        Tue, 28 Jun 2022 12:46:04 -0700 (PDT)
+        with ESMTP id S232191AbiF1Tts (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Jun 2022 15:49:48 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 476E1396BC;
+        Tue, 28 Jun 2022 12:46:22 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="5.92,229,1650898800"; 
-   d="scan'208";a="125967119"
+   d="scan'208";a="124410371"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 29 Jun 2022 04:46:03 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 29 Jun 2022 04:46:21 +0900
 Received: from localhost.localdomain (unknown [10.226.92.14])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 535B1400D4E5;
-        Wed, 29 Jun 2022 04:46:01 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 258E1400D4E5;
+        Wed, 29 Jun 2022 04:46:15 +0900 (JST)
 From:   Phil Edworthy <phil.edworthy@renesas.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To:     Philipp Zabel <p.zabel@pengutronix.de>
 Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Rob Herring <robh@kernel.org>, Sven Peter <sven@svenpeter.dev>,
+        Jan Dabros <jsd@semihalf.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 1/2] dt-bindings: i2c: Document RZ/V2M I2C controller
-Date:   Tue, 28 Jun 2022 20:45:25 +0100
-Message-Id: <20220628194526.111501-2-phil.edworthy@renesas.com>
+        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v2 2/2] i2c: Add Renesas RZ/V2M controller
+Date:   Tue, 28 Jun 2022 20:45:26 +0100
+Message-Id: <20220628194526.111501-3-phil.edworthy@renesas.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220628194526.111501-1-phil.edworthy@renesas.com>
 References: <20220628194526.111501-1-phil.edworthy@renesas.com>
@@ -46,105 +54,591 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Document Renesas RZ/V2M (r9a09g011) I2C controller bindings.
+Yet another i2c controller from Renesas that is found on the RZ/V2M
+(r9a09g011) SoC. It can support only 100kHz and 400KHz operation.
 
 Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
 Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
 v2:
- - Use an enum and set the default for clock-frequency
- - Add resets property
+ - Use the new NOIRQ_SYSTEM_SLEEP_PM_OPS() as suggested by Arnd
+ - Lots of small fixes based on Geert's review
 ---
- .../bindings/i2c/renesas,rzv2m.yaml           | 80 +++++++++++++++++++
- 1 file changed, 80 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
+ drivers/i2c/busses/Kconfig     |  10 +
+ drivers/i2c/busses/Makefile    |   1 +
+ drivers/i2c/busses/i2c-rzv2m.c | 530 +++++++++++++++++++++++++++++++++
+ 3 files changed, 541 insertions(+)
+ create mode 100644 drivers/i2c/busses/i2c-rzv2m.c
 
-diff --git a/Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml b/Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index b1d7069dd377..9e3f9eb1ea3c 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -984,6 +984,16 @@ config I2C_RK3X
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called i2c-rk3x.
+ 
++config I2C_RZV2M
++	tristate "Renesas RZ/V2M adapter"
++	depends on ARCH_RENESAS || COMPILE_TEST
++	help
++	  If you say yes to this option, support will be included for the
++	  Renesas RZ/V2M  I2C interface.
++
++	  This driver can also be built as a module.  If so, the module
++	  will be called i2c-rzv2m.
++
+ config I2C_S3C2410
+ 	tristate "S3C/Exynos I2C Driver"
+ 	depends on ARCH_EXYNOS || ARCH_S3C24XX || ARCH_S3C64XX || \
+diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
+index b0a10e5d9ee9..7792ffc591f0 100644
+--- a/drivers/i2c/busses/Makefile
++++ b/drivers/i2c/busses/Makefile
+@@ -101,6 +101,7 @@ obj-$(CONFIG_I2C_QCOM_GENI)	+= i2c-qcom-geni.o
+ obj-$(CONFIG_I2C_QUP)		+= i2c-qup.o
+ obj-$(CONFIG_I2C_RIIC)		+= i2c-riic.o
+ obj-$(CONFIG_I2C_RK3X)		+= i2c-rk3x.o
++obj-$(CONFIG_I2C_RZV2M)		+= i2c-rzv2m.o
+ obj-$(CONFIG_I2C_S3C2410)	+= i2c-s3c2410.o
+ obj-$(CONFIG_I2C_SH7760)	+= i2c-sh7760.o
+ obj-$(CONFIG_I2C_SH_MOBILE)	+= i2c-sh_mobile.o
+diff --git a/drivers/i2c/busses/i2c-rzv2m.c b/drivers/i2c/busses/i2c-rzv2m.c
 new file mode 100644
-index 000000000000..7f6d2bb4ecb3
+index 000000000000..ab326d557dc5
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
-@@ -0,0 +1,80 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i2c/renesas,rzv2m.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/i2c/busses/i2c-rzv2m.c
+@@ -0,0 +1,530 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Driver for the Renesas RZ/V2M I2C unit
++ *
++ * Copyright (C) 2016-2022 Renesas Electronics Corporation
++ */
 +
-+title: Renesas RZ/V2M I2C Bus Interface
++#include <linux/clk.h>
++#include <linux/err.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/iopoll.h>
++#include <linux/i2c.h>
++#include <linux/jiffies.h>
++#include <linux/kernel.h>
++#include <linux/math64.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
++#include <linux/reset.h>
 +
-+maintainers:
-+  - Phil Edworthy <phil.edworthy@renesas.com>
++/* Register offsets */
++#define IICB0DAT	0x00		/* Data Register */
++#define IICB0CTL0	0x08		/* Control Register 0 */
++#define IICB0TRG	0x0C		/* Trigger Register */
++#define IICB0STR0	0x10		/* Status Register 0 */
++#define IICB0CTL1	0x20		/* Control Register 1 */
++#define IICB0WL		0x24		/* Low Level Width Setting Reg */
++#define IICB0WH		0x28		/* How Level Width Setting Reg */
 +
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
++/* IICB0CTL0 */
++#define IICB0IICE	BIT(7)		/* I2C Enable */
++#define IICB0SLWT	BIT(1)		/* Interrupt Request Timing */
++#define IICB0SLAC	BIT(0)		/* Acknowledge */
 +
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - renesas,i2c-r9a09g011  # RZ/V2M
-+      - const: renesas,rzv2m-i2c
++/* IICB0TRG */
++#define IICB0WRET	BIT(2)		/* Quit Wait Trigger */
++#define IICB0STT	BIT(1)		/* Create Start Condition Trigger */
++#define IICB0SPT	BIT(0)		/* Create Stop Condition Trigger */
 +
-+  reg:
-+    maxItems: 1
++/* IICB0STR0 */
++#define IICB0SSAC	BIT(8)		/* Ack Flag */
++#define IICB0SSBS	BIT(6)		/* Bus Flag */
++#define IICB0SSSP	BIT(4)		/* Stop Condition Flag */
 +
-+  interrupts:
-+    items:
-+      - description: Data transmission/reception interrupt
-+      - description: Status interrupt
++/* IICB0CTL1 */
++#define IICB0MDSC	BIT(7)		/* Bus Mode */
++#define IICB0SLSE	BIT(1)		/* Start condition output */
 +
-+  interrupt-names:
-+    items:
-+      - const: tia
-+      - const: tis
++#define rzv2m_i2c_priv_to_dev(p)	((p)->adap.dev.parent)
 +
-+  clock-frequency:
-+    default: 100000
-+    enum: [ 100000, 400000 ]
-+    description:
-+      Desired I2C bus clock frequency in Hz.
++#define bit_setl(addr, val)		writel(readl(addr) | (val), (addr))
++#define bit_clrl(addr, val)		writel(readl(addr) & ~(val), (addr))
 +
-+  clocks:
-+    maxItems: 1
++struct rzv2m_i2c_priv {
++	void __iomem *base;
++	struct i2c_adapter adap;
++	struct clk *clk;
++	int bus_mode;
++	struct completion msg_tia_done;
++	u32 iicb0wl;
++	u32 iicb0wh;
++};
 +
-+  power-domains:
-+    maxItems: 1
++enum bcr_index {
++	RZV2M_I2C_100K = 0,
++	RZV2M_I2C_400K,
++};
 +
-+  resets:
-+    maxItems: 1
++struct bitrate_config {
++	unsigned int percent_low;
++	unsigned int min_hold_time_ns;
++};
 +
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-names
-+  - clocks
-+  - power-domains
-+  - resets
-+  - '#address-cells'
-+  - '#size-cells'
++static const struct bitrate_config bitrate_configs[] = {
++	[RZV2M_I2C_100K] = { 47, 3450 },
++	[RZV2M_I2C_400K] = { 52, 900},
++};
 +
-+unevaluatedProperties: false
++static irqreturn_t rzv2m_i2c_tia_irq_handler(int this_irq, void *dev_id)
++{
++	struct rzv2m_i2c_priv *priv = dev_id;
 +
-+examples:
-+  - |
-+    #include <dt-bindings/clock/r9a09g011-cpg.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
++	complete(&priv->msg_tia_done);
 +
-+    i2c0: i2c@a4030000 {
-+            compatible = "renesas,i2c-r9a09g011", "renesas,rzv2m-i2c";
-+            reg = <0xa4030000 0x80>;
-+            interrupts = <GIC_SPI 232 IRQ_TYPE_EDGE_RISING>,
-+                         <GIC_SPI 236 IRQ_TYPE_EDGE_RISING>;
-+            interrupt-names = "tia", "tis";
-+            clocks = <&cpg CPG_MOD R9A09G011_IIC_PCLK0>;
-+            resets = <&cpg R9A09G011_IIC_GPA_PRESETN>;
-+            power-domains = <&cpg>;
-+            clock-frequency = <100000>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+    };
++	return IRQ_HANDLED;
++}
++
++/* Calculate IICB0WL and IICB0WH */
++static int rzv2m_i2c_clock_calculate(struct device *dev,
++				     struct rzv2m_i2c_priv *priv)
++{
++	const struct bitrate_config *config;
++	unsigned int hold_time_ns;
++	unsigned int total_pclks;
++	unsigned int trf_pclks;
++	unsigned long pclk_hz;
++	struct i2c_timings t;
++	u32 trf_ns;
++
++	i2c_parse_fw_timings(dev, &t, true);
++
++	pclk_hz = clk_get_rate(priv->clk);
++	total_pclks = pclk_hz / t.bus_freq_hz;
++
++	trf_ns = t.scl_rise_ns + t.scl_fall_ns;
++	trf_pclks = mul_u64_u32_div(pclk_hz, trf_ns, NSEC_PER_SEC);
++
++	/* Config setting */
++	switch (t.bus_freq_hz) {
++	case I2C_MAX_FAST_MODE_FREQ:
++		priv->bus_mode = RZV2M_I2C_400K;
++		break;
++	case I2C_MAX_STANDARD_MODE_FREQ:
++		priv->bus_mode = RZV2M_I2C_100K;
++		break;
++	default:
++		dev_err(dev, "transfer speed is invalid\n");
++		return -EINVAL;
++	}
++	config = &bitrate_configs[priv->bus_mode];
++
++	/* IICB0WL = (percent_low / Transfer clock) x PCLK */
++	priv->iicb0wl = total_pclks * config->percent_low / 100;
++	if (priv->iicb0wl > 0x3ff)
++		return -EINVAL;
++
++	/* IICB0WH = ((percent_high / Transfer clock) x PCLK) - (tR + tF) */
++	priv->iicb0wh = total_pclks - priv->iicb0wl - trf_pclks;
++	if (priv->iicb0wh > 0x3ff)
++		return -EINVAL;
++
++	/*
++	 * Data hold time must be less than 0.9us in fast mode and
++	 * 3.45us in standard mode.
++	 * Data hold time = IICB0WL[9:2] / PCLK
++	 */
++	hold_time_ns = div64_ul((u64)(priv->iicb0wl >> 2) * NSEC_PER_SEC, pclk_hz);
++	if (hold_time_ns > config->min_hold_time_ns) {
++		dev_err(dev, "data hold time %dns is over %dns\n",
++			hold_time_ns, config->min_hold_time_ns);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static void rzv2m_i2c_init(struct rzv2m_i2c_priv *priv)
++{
++	u32 i2c_ctl0;
++	u32 i2c_ctl1;
++
++	/* i2c disable */
++	writel(0, priv->base + IICB0CTL0);
++
++	/* IICB0CTL1 setting */
++	i2c_ctl1 = IICB0SLSE;
++	if (priv->bus_mode == RZV2M_I2C_400K)
++		i2c_ctl1 |= IICB0MDSC;
++	writel(i2c_ctl1, priv->base + IICB0CTL1);
++
++	/* IICB0WL IICB0WH setting */
++	writel(priv->iicb0wl, priv->base + IICB0WL);
++	writel(priv->iicb0wh, priv->base + IICB0WH);
++
++	/* i2c enable after setting */
++	i2c_ctl0 = IICB0SLWT | IICB0SLAC | IICB0IICE;
++	writel(i2c_ctl0, priv->base + IICB0CTL0);
++}
++
++static int rzv2m_i2c_write_with_ack(struct rzv2m_i2c_priv *priv, u32 data)
++{
++	unsigned long time_left;
++
++	reinit_completion(&priv->msg_tia_done);
++
++	writel(data, priv->base + IICB0DAT);
++
++	time_left = wait_for_completion_timeout(&priv->msg_tia_done,
++						priv->adap.timeout);
++	if (!time_left)
++		return -ETIMEDOUT;
++
++	/* Confirm ACK */
++	if ((readl(priv->base + IICB0STR0) & IICB0SSAC) != IICB0SSAC)
++		return -ENXIO;
++
++	return 0;
++}
++
++static int rzv2m_i2c_read_with_ACK(struct rzv2m_i2c_priv *priv, u8 *data,
++				   bool last)
++{
++	unsigned long time_left;
++	u32 data_tmp;
++
++	reinit_completion(&priv->msg_tia_done);
++
++	/* Interrupt request timing : 8th clock */
++	bit_clrl(priv->base + IICB0CTL0, IICB0SLWT);
++
++	/* Exit the wait state */
++	writel(IICB0WRET, priv->base + IICB0TRG);
++
++	/* Wait for transaction */
++	time_left = wait_for_completion_timeout(&priv->msg_tia_done,
++						priv->adap.timeout);
++	if (!time_left)
++		return -ETIMEDOUT;
++
++	if (!last) {
++		/* Read data */
++		data_tmp = readl(priv->base + IICB0DAT);
++	} else {
++		/* Disable ACK */
++		bit_clrl(priv->base + IICB0CTL0, IICB0SLAC);
++
++		/* Read data*/
++		data_tmp = readl(priv->base + IICB0DAT);
++
++		/* Interrupt request timing : 9th clock */
++		bit_setl(priv->base + IICB0CTL0, IICB0SLWT);
++
++		/* Exit the wait state */
++		writel(IICB0WRET, priv->base + IICB0TRG);
++
++		/* Wait for transaction */
++		time_left = wait_for_completion_timeout(&priv->msg_tia_done,
++							priv->adap.timeout);
++		if (!time_left)
++			return -ETIMEDOUT;
++
++		/* Enable ACK */
++		bit_setl(priv->base + IICB0CTL0, IICB0SLAC);
++	}
++
++	*data = data_tmp;
++
++	return 0;
++}
++
++static int rzv2m_i2c_send(struct rzv2m_i2c_priv *priv, struct i2c_msg *msg,
++			  unsigned int *count)
++{
++	unsigned int i;
++	int ret = 0;
++
++	for (i = 0; i < msg->len; i++) {
++		ret = rzv2m_i2c_write_with_ack(priv, msg->buf[i]);
++		if (ret < 0)
++			return ret;
++	}
++	*count = i;
++
++	return ret;
++}
++
++static int rzv2m_i2c_receive(struct rzv2m_i2c_priv *priv, struct i2c_msg *msg,
++			     unsigned int *count)
++{
++	unsigned int i;
++	int ret = 0;
++
++	for (i = 0; i < msg->len; i++) {
++		ret = rzv2m_i2c_read_with_ACK(priv, &msg->buf[i],
++					      ((msg->len - 1) == i));
++		if (ret < 0)
++			return ret;
++	}
++	*count = i;
++
++	return ret;
++}
++
++static int rzv2m_i2c_send_address(struct rzv2m_i2c_priv *priv,
++				  struct i2c_msg *msg)
++{
++	u32 addr;
++	int ret;
++
++	if (msg->flags & I2C_M_TEN) {
++		/* 10-bit address
++		 *   addr_1: 5'b11110 | addr[9:8] | (R/nW)
++		 *   addr_2: addr[7:0]
++		 */
++		addr = 0xf0 | ((msg->addr >> 7) & 0x06);
++		addr |= !!(msg->flags & I2C_M_RD);
++		/* Send 1st address(extend code) */
++		ret = rzv2m_i2c_write_with_ack(priv, addr);
++		if (ret == 0) {
++			/* Send 2nd address */
++			ret = rzv2m_i2c_write_with_ack(priv, msg->addr & 0xff);
++		}
++	} else {
++		/* 7-bit address */
++		addr = i2c_8bit_addr_from_msg(msg);
++		ret = rzv2m_i2c_write_with_ack(priv, addr);
++	}
++
++	return ret;
++}
++
++static int rzv2m_i2c_stop_condition(struct rzv2m_i2c_priv *priv)
++{
++	u32 value;
++
++	/* Send stop condition */
++	writel(IICB0SPT, priv->base + IICB0TRG);
++	return readl_poll_timeout(priv->base + IICB0STR0,
++				  value, value & IICB0SSSP,
++				  100, jiffies_to_usecs(priv->adap.timeout));
++}
++
++static int rzv2m_i2c_master_xfer1(struct rzv2m_i2c_priv *priv,
++				  struct i2c_msg *msg, int stop)
++{
++	unsigned int count = 0;
++	int ret, read = !!(msg->flags & I2C_M_RD);
++
++	/* Send start condition */
++	writel(IICB0STT, priv->base + IICB0TRG);
++
++	ret = rzv2m_i2c_send_address(priv, msg);
++	if (ret == 0) {
++		if (read)
++			ret = rzv2m_i2c_receive(priv, msg, &count);
++		else
++			ret = rzv2m_i2c_send(priv, msg, &count);
++
++		if ((ret == 0) && stop)
++			ret = rzv2m_i2c_stop_condition(priv);
++	}
++
++	if (ret == -ENXIO)
++		rzv2m_i2c_stop_condition(priv);
++	else if (ret < 0)
++		rzv2m_i2c_init(priv);
++	else
++		ret = count;
++
++	return ret;
++}
++
++static int rzv2m_i2c_master_xfer(struct i2c_adapter *adap,
++				 struct i2c_msg *msgs, int num)
++{
++	struct rzv2m_i2c_priv *priv = i2c_get_adapdata(adap);
++	struct device *dev = rzv2m_i2c_priv_to_dev(priv);
++	unsigned int i;
++	int ret;
++
++	ret = pm_runtime_resume_and_get(dev);
++	if (ret < 0)
++		return ret;
++
++	if (readl(priv->base + IICB0STR0) & IICB0SSBS) {
++		ret = -EAGAIN;
++		goto out;
++	}
++
++	/* I2C main transfer */
++	for (i = 0; i < num; i++) {
++		ret = rzv2m_i2c_master_xfer1(priv, &msgs[i], (i == (num - 1)));
++		if (ret < 0)
++			goto out;
++	}
++	ret = num;
++
++out:
++	pm_runtime_mark_last_busy(dev);
++	pm_runtime_put_autosuspend(dev);
++
++	return ret;
++}
++
++static u32 rzv2m_i2c_func(struct i2c_adapter *adap)
++{
++	return I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK) |
++	       I2C_FUNC_10BIT_ADDR;
++}
++
++static const struct i2c_adapter_quirks rzv2m_i2c_quirks = {
++	.flags = I2C_AQ_NO_ZERO_LEN,
++};
++
++static struct i2c_algorithm rzv2m_i2c_algo = {
++	.master_xfer = rzv2m_i2c_master_xfer,
++	.functionality = rzv2m_i2c_func,
++};
++
++static const struct of_device_id rzv2m_i2c_ids[] = {
++	{ .compatible = "renesas,rzv2m-i2c", },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, rzv2m_i2c_ids);
++
++static int rzv2m_i2c_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct rzv2m_i2c_priv *priv;
++	struct reset_control *rstc;
++	struct i2c_adapter *adap;
++	struct resource *res;
++	int irq, ret;
++
++	priv = devm_kzalloc(dev, sizeof(struct rzv2m_i2c_priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
++	if (IS_ERR(priv->base))
++		return PTR_ERR(priv->base);
++
++	priv->clk = devm_clk_get(dev, NULL);
++	if (IS_ERR(priv->clk)) {
++		dev_err_probe(dev, PTR_ERR(priv->clk), "Can't get clock\n");
++		return PTR_ERR(priv->clk);
++	}
++
++	rstc = devm_reset_control_get(dev, NULL);
++	if (IS_ERR(rstc)) {
++		dev_err_probe(dev, PTR_ERR(rstc), "Missing reset ctrl\n");
++		return PTR_ERR(rstc);
++	}
++	/*
++	 * The reset also affects other HW that is not under the control
++	 * of Linux. Therefore, all we can do is deassert the reset.
++	 */
++	reset_control_deassert(rstc);
++
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
++
++	ret = devm_request_irq(dev, irq, rzv2m_i2c_tia_irq_handler, 0,
++			       dev_name(dev), priv);
++	if (ret < 0) {
++		dev_err_probe(dev, ret, "Unable to request irq %d\n", irq);
++		return ret;
++	}
++
++	adap = &priv->adap;
++	adap->nr = pdev->id;
++	adap->algo = &rzv2m_i2c_algo;
++	adap->quirks = &rzv2m_i2c_quirks;
++	adap->class = I2C_CLASS_DEPRECATED;
++	adap->dev.parent = dev;
++	adap->dev.of_node = dev->of_node;
++	adap->owner = THIS_MODULE;
++	i2c_set_adapdata(adap, priv);
++	strscpy(adap->name, pdev->name, sizeof(adap->name));
++	init_completion(&priv->msg_tia_done);
++
++	ret = rzv2m_i2c_clock_calculate(dev, priv);
++	if (ret < 0)
++		return ret;
++
++	pm_runtime_enable(dev);
++
++	pm_runtime_get_sync(dev);
++	rzv2m_i2c_init(priv);
++	pm_runtime_put(dev);
++
++	platform_set_drvdata(pdev, priv);
++
++	ret = i2c_add_numbered_adapter(adap);
++	if (ret < 0)
++		pm_runtime_disable(dev);
++
++	return ret;
++}
++
++static int rzv2m_i2c_remove(struct platform_device *pdev)
++{
++	struct rzv2m_i2c_priv *priv = platform_get_drvdata(pdev);
++	struct device *dev = rzv2m_i2c_priv_to_dev(priv);
++
++	i2c_del_adapter(&priv->adap);
++	bit_clrl(priv->base + IICB0CTL0, IICB0IICE);
++	pm_runtime_disable(dev);
++
++	return 0;
++}
++
++static int rzv2m_i2c_suspend(struct device *dev)
++{
++	struct rzv2m_i2c_priv *priv = dev_get_drvdata(dev);
++
++	pm_runtime_get_sync(dev);
++	bit_clrl(priv->base + IICB0CTL0, IICB0IICE);
++	pm_runtime_put(dev);
++
++	return 0;
++}
++
++static int rzv2m_i2c_resume(struct device *dev)
++{
++	struct rzv2m_i2c_priv *priv = dev_get_drvdata(dev);
++	int ret;
++
++	ret = rzv2m_i2c_clock_calculate(dev, priv);
++	if (ret < 0)
++		return ret;
++
++	pm_runtime_get_sync(dev);
++	rzv2m_i2c_init(priv);
++	pm_runtime_put(dev);
++
++	return 0;
++}
++
++static const struct dev_pm_ops rzv2m_i2c_pm_ops = {
++	NOIRQ_SYSTEM_SLEEP_PM_OPS(rzv2m_i2c_suspend, rzv2m_i2c_resume)
++};
++
++static struct platform_driver rzv2m_i2c_driver = {
++	.driver = {
++		.name = "rzv2m-i2c",
++		.of_match_table = rzv2m_i2c_ids,
++		.pm = pm_sleep_ptr(&rzv2m_i2c_pm_ops),
++	},
++	.probe	= rzv2m_i2c_probe,
++	.remove	= rzv2m_i2c_remove,
++};
++module_platform_driver(rzv2m_i2c_driver);
++
++MODULE_DESCRIPTION("RZ/V2M I2C bus driver");
++MODULE_AUTHOR("Renesas Electronics Corporation");
++MODULE_LICENSE("GPL");
 -- 
 2.34.1
 
