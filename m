@@ -2,111 +2,124 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CEE560A91
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jun 2022 21:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC2D560BA1
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jun 2022 23:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiF2Tqh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Jun 2022 15:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
+        id S230072AbiF2VUb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 29 Jun 2022 17:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiF2Tqg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jun 2022 15:46:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E882137A82;
-        Wed, 29 Jun 2022 12:46:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9DF7B826BE;
-        Wed, 29 Jun 2022 19:46:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D50A9C34114;
-        Wed, 29 Jun 2022 19:46:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656531993;
-        bh=I3rRA2ivIk2lSakF7rm0zAlvjPJfLVr51rUs2HmOnfE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NptgRT1U3j1lvqVyA+erDG4RqOSE/A+Y48K25gloXmSMky7zZ1Al1NCrCW363wG8P
-         X+1oYkgOfmD884iexn9uX9ee8a0QmNurTrWHOMrL1lcZfoQLbw93OhftHrEAtEVwtg
-         p7imWVOtTkoyjJaZwgJ0dRVIipRcBGR+pWvGa33OlTv1DL7LhdI1x6dOeTMlFU7aKx
-         QTl9x3IM0FRrB83YAOudUOpyfx1o3GQqzBhlVDVjZdDpZU7CZBq0q70/2AfPeyf7k3
-         Xaz8dx7rUaTV8mfO6A0qW3YAUeiozxwIMm0mQ80iuFf52D5KCT1KfMFm6pZ0cI6097
-         24pcD2i4MiTiQ==
-Date:   Wed, 29 Jun 2022 21:46:29 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
-        andrew@sanpeople.com, mhoffman@lightlink.com, khali@linux-fr.org,
-        peda@axentia.se
-Subject: Re: [RESEND 0/3] i2c: at91: Fixes and updates
-Message-ID: <YrysFU0fP7X1wkBd@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
-        andrew@sanpeople.com, mhoffman@lightlink.com, khali@linux-fr.org,
-        peda@axentia.se
-References: <20220614101347.16910-1-codrin.ciubotariu@microchip.com>
+        with ESMTP id S229741AbiF2VU3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jun 2022 17:20:29 -0400
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C99113F79;
+        Wed, 29 Jun 2022 14:20:28 -0700 (PDT)
+Received: from [37.161.29.0] (port=43545 helo=[192.168.131.30])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1o6f6m-000BzC-Qd;
+        Wed, 29 Jun 2022 23:20:25 +0200
+Message-ID: <d682fb60-c254-f89e-5d6d-cdf7aa752939@lucaceresoli.net>
+Date:   Wed, 29 Jun 2022 23:20:04 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PO1fX2YbNUKV/P3U"
-Content-Disposition: inline
-In-Reply-To: <20220614101347.16910-1-codrin.ciubotariu@microchip.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-integrity@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, chrome-platform@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-mediatek@lists.infradead.org
+References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
+ <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
+Content-Language: en-US
+In-Reply-To: <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi,
 
---PO1fX2YbNUKV/P3U
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[keeping only individuals and lists in Cc to avoid bounces]
 
-On Tue, Jun 14, 2022 at 01:13:44PM +0300, Codrin Ciubotariu wrote:
-> Resend due to the fact that the i2c list no longer accepts replys on the
-> old patch-set. Comments not addressed yet.
->=20
-> The first patch is mostly a prerequisite for the second one. It only
-> moves the i2c_recover_bus() out of the actual transfer function. This
-> helps the second patch disable the controller before using GPIO
-> recovery. The second patch will keep the controller enabled when a
-> transfer occurs. Before using GPIO recovery, the controller must be
-> disabled, to ignore potential glitches. However, the controller must be
-> enabled for HW recovery (bus CLEAR command). The third and last patch
-> adds advanced digital filtering support for SAMA5D4. The TWI IP found in
-> SAMA5D4 supports advanced digital filtering, even if, at the moment of
-> this patch, the SAMA5D4 datasheet does not mention it.
+On 28/06/22 16:03, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <uwe@kleine-koenig.org>
+> 
+> The value returned by an i2c driver's remove function is mostly ignored.
+> (Only an error message is printed if the value is non-zero that the
+> error is ignored.)
+> 
+> So change the prototype of the remove function to return no value. This
+> way driver authors are not tempted to assume that passing an error to
+> the upper layer is a good idea. All drivers are adapted accordingly.
+> There is no intended change of behaviour, all callbacks were prepared to
+> return 0 before.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-So, can you guys read this mail? It should be possible somehow that I
-can read your remarks to my remarks, no?
+For versaclock:
 
+> diff --git a/drivers/clk/clk-versaclock5.c b/drivers/clk/clk-versaclock5.c
+> index e7be3e54b9be..657493ecce4c 100644
+> --- a/drivers/clk/clk-versaclock5.c
+> +++ b/drivers/clk/clk-versaclock5.c
+> @@ -1138,7 +1138,7 @@ static int vc5_probe(struct i2c_client *client)
+>  	return ret;
+>  }
+>  
+> -static int vc5_remove(struct i2c_client *client)
+> +static void vc5_remove(struct i2c_client *client)
+>  {
+>  	struct vc5_driver_data *vc5 = i2c_get_clientdata(client);
+>  
+> @@ -1146,8 +1146,6 @@ static int vc5_remove(struct i2c_client *client)
+>  
+>  	if (vc5->chip_info->flags & VC5_HAS_INTERNAL_XTAL)
+>  		clk_unregister_fixed_rate(vc5->pin_xin);
+> -
+> -	return 0;
+>  }
+>  
+>  static int __maybe_unused vc5_suspend(struct device *dev)
 
---PO1fX2YbNUKV/P3U
-Content-Type: application/pgp-signature; name="signature.asc"
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmK8rBUACgkQFA3kzBSg
-Kba4jQ//ZOvHvEFqvfQQSpnokDAdiAwhM5eD3J2oFwTCIQb9iCt0lVxXranvIHpX
-wxX06lTnl1drrUQdKanseT2hylhqPeam0pJi6LHi9Q1l9n0EHaPpctJJ46ovtXEG
-frGuV8tIHdr9/H7G/nW+PtJpDcSxpOmOR0KsLSVSTn6el7LOA8EjhOHMRCMBeFfg
-UeHnmfGCI5GZrGcFqkxHRX/CwFFZCAsCyW3+1Kkk/WMVK1ims8IZpgRD01mvQERf
-X4LbSexcyC702lvgyGGKNsph83J/qT3EAUHQvzc2+LtkmQkYk12yFXqzzI67QQDu
-uDd8w7qKi0/r56hXP9DSSoPDvzt1edj9xlj3jdaFQL/9lxlx4+OYeeAsaUo2qOJT
-wko7aadFMPG49N5Qp5s/Je0vu+uCf7rLg1J6WB/nSpVMuon/4dZEtP/QsBm86bi1
-WG/NdwJgxPOg8T/PnbILEaRzcvYCM8yVCn3O6WBt8h2NBrjykIp0A+baHBzuN+sF
-VGxYzlR7hDzzZOXz7PZoVxtt3nozGwmnknQyttRHGEiz6OrNqkZezykuU3mlzXhT
-ncRpLwHXWEt4idvFPM0gkUk8StWC/6puUNF5Doy9wmVliS+7d7PQ5VE1v0/2cQn2
-6pXGHbda705qIxBTZ9n1yIWqKtw1OIijv+CNNwkCOd8iQIxYFBk=
-=Pigm
------END PGP SIGNATURE-----
-
---PO1fX2YbNUKV/P3U--
+-- 
+Luca
