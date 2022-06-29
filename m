@@ -2,53 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B722560A69
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jun 2022 21:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8013560A89
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jun 2022 21:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiF2Thn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Jun 2022 15:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S230439AbiF2Top (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Jun 2022 15:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiF2Thm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jun 2022 15:37:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD8C2A974
-        for <linux-i2c@vger.kernel.org>; Wed, 29 Jun 2022 12:37:42 -0700 (PDT)
+        with ESMTP id S229864AbiF2Too (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jun 2022 15:44:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019E1255B4;
+        Wed, 29 Jun 2022 12:44:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B8BB6207B
-        for <linux-i2c@vger.kernel.org>; Wed, 29 Jun 2022 19:37:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F77CC34114;
-        Wed, 29 Jun 2022 19:37:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0C1EB826BA;
+        Wed, 29 Jun 2022 19:44:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88BB8C34114;
+        Wed, 29 Jun 2022 19:44:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656531461;
-        bh=fSuv51qtKlgkQ+F6mU/Bw5DnaXdbb+IjuQToftn94W8=;
+        s=k20201202; t=1656531881;
+        bh=zcGOsPeA4W/M19Cgq+IwJ/rAzjsEafamsLVcy7I5yLQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PBfwJjVzMK5lm2h6U6DQ+Rg45u2rE3L6eOIS/yYRJLtXvlAK4qikU7PQ+jqx1c2g3
-         fiChmO3sZUO80TWvKWuONPyZ0RhkskhKim5kIiGXn1YLJPOIYqIulCZDF3zpnjdVFm
-         PgvxkAtIG5ZTCvcaw2PyIS3PQB3JpukiH04A0CR2mTfWvDBODLjGhf1P5P7MMNXhTM
-         eWpUzv4Cxlt9H8WGZglXyjJT61j0GDnozdQlRtogq/zJyv5youlj5IM2XsPXd409pX
-         qpj9Vj1TuCceI+4KGWdLmSqR6ZNmWP/G28P8uFmOYz9lE5kvJA/oglQ+ZPZSHf1Zy/
-         4deqfxOHuGdEg==
-Date:   Wed, 29 Jun 2022 21:37:36 +0200
+        b=cPWGo7pLf0mgj/MNOxCOX27vIibuw8MAfmAJGIPv9XA9WtnMF6wC5ApvhPADMtQIT
+         q6tiqC2dOi7OySO8mwFMx0iHgrAggfdzVxRCeAdaNutMWVbj7oiMveT/d9rkvhrkw1
+         1Ll7kkDmOwtrK3BMYVa+1jNisHMsVVult2XM9mj1T8XWwHu4EiMrVRCzbKSMl3JR6S
+         XuUF3eznTOr6zK6XyPE5dI0nRHESP6AEQl11at1U9hddcXNTnXFbIbRba+rG9y+bsq
+         pens3xirkM/Vq9F2yCQ/qHSMxXKCqHa0wZ6scAPpA6r30VkWa8tccw5w14QmasyBe9
+         QWrhyxI4DqVvQ==
+Date:   Wed, 29 Jun 2022 21:44:37 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
-        Yi Zhang <yi.zhang@redhat.com>,
-        Terry Bowman <terry.bowman@amd.com>
-Subject: Re: [PATCH v2] i2c: piix4: Fix a memory leak in the EFCH MMIO support
-Message-ID: <YryqAEfeLpKf9iBf@shikoro>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Alain Volmat <alain.volmat@foss.st.com>, mark.rutland@arm.com,
+        pierre-yves.mordret@foss.st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
+Subject: Re: [PATCH 1/4] dt-bindings: i2c: st,stm32-i2c: don't mandate a
+ reset line
+Message-ID: <YryrpbBKsAKcL865@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Yi Zhang <yi.zhang@redhat.com>, Terry Bowman <terry.bowman@amd.com>
-References: <20220622083743.65e057dd@endymion.delvare>
+        Rob Herring <robh@kernel.org>,
+        Alain Volmat <alain.volmat@foss.st.com>, mark.rutland@arm.com,
+        pierre-yves.mordret@foss.st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
+References: <20220620105405.145959-1-alain.volmat@foss.st.com>
+ <20220620105405.145959-2-alain.volmat@foss.st.com>
+ <20220628134115.GA345270-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jNtlQxFZmARviAGK"
+        protocol="application/pgp-signature"; boundary="ekIVSbt5ZRWqdhEl"
 Content-Disposition: inline
-In-Reply-To: <20220622083743.65e057dd@endymion.delvare>
+In-Reply-To: <20220628134115.GA345270-robh@kernel.org>
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,47 +72,66 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---jNtlQxFZmARviAGK
+--ekIVSbt5ZRWqdhEl
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 22, 2022 at 08:37:43AM +0200, Jean Delvare wrote:
-> The recently added support for EFCH MMIO regions introduced a memory
-> leak in that code path. The leak is caused by the fact that
-> release_resource() merely removes the resource from the tree but does
-> not free its memory. We need to call release_mem_region() instead,
-> which does free the memory. As a nice side effect, this brings back
-> some symmetry between the legacy and MMIO paths.
+On Tue, Jun 28, 2022 at 07:41:15AM -0600, Rob Herring wrote:
+> On Mon, Jun 20, 2022 at 12:54:02PM +0200, Alain Volmat wrote:
+> > Update the dt-bindings of the i2c-stm32 drivers to avoid the
+> > needs for a reset property in the device-tree.
 >=20
-> Signed-off-by: Jean Delvare <jdelvare@suse.de>
-> Reported-by: Yi Zhang <yi.zhang@redhat.com>
-> Tested-by: Yi Zhang <yi.zhang@redhat.com>
-> Fixes: 7c148722d074 ("i2c: piix4: Add EFCH MMIO support to region request=
- and release")
-> Cc: Terry Bowman <terry.bowman@amd.com>
+> That is clear from the diff, but why. Some chips don't have a reset?=20
+> If so, this should be combined with patch 2 as part of changes needed=20
+> for a new version.
 
-Applied to for-current with Terry's tags given to v1, thanks!
+What do you mean? Patches 1+2 should be squashed together? I can do this
+when applying. Or do you mean something else?
 
+>=20
+> >=20
+> > Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+> > ---
+> >  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 1 -
+> >  1 file changed, 1 deletion(-)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/=
+Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+> > index dccbb18b6dc0..8879144fbbfb 100644
+> > --- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+> > +++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+> > @@ -94,7 +94,6 @@ required:
+> >    - compatible
+> >    - reg
+> >    - interrupts
+> > -  - resets
+> >    - clocks
+> > =20
+> >  unevaluatedProperties: false
+> > --=20
+> > 2.25.1
+> >=20
+> >=20
 
---jNtlQxFZmARviAGK
+--ekIVSbt5ZRWqdhEl
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmK8qgAACgkQFA3kzBSg
-KbZOFxAAo760+LCUQnHHi1wJA0cDueBECRLkCkfUZP1dd8gghhAcTz7OVXMcCBtJ
-1PuvXCtBdp5ATVxT7UjgNONjgES08a4lBrVD/gOsp1iSPkQnkrYCojHTSSSERHVO
-UeCbub7A+hfYPkImkOa7ffG2n97JzHQW9jAtIVAQ+LpTcc5fWW6aYzMDsijpzPiX
-2nDcIVdKjhlZeBVnbdI0tJBkoJ4JR9URQt+lnlS43bS951ETqrzb4w7EtMAcJNNU
-vh+COQq5a+Gd4vbsQRRwLt6iYI3NydrAKTq/seBz3IPWsPgmusCdBihiKV1Dx/dR
-t3pQkxgoANwmXUQYxJlpHmjbzAYegeNUNn0nDJT9ZMpH8kF5zhf/d5HFbRrHeQ1Z
-2NSN722gXK8561RayxTvRMjukca77hy0qYnD40sZNkSWyCKz2BHS971o24a4BMrc
-ycPfrP3mHltBTWnbTE3EVPLEN/GxPD9JeqvS0ltlDdVMT794PlQNLnolpmzD6tvy
-R9pqOEcusyPXBBcN15QnaJ+gvGvV50YpghuhhDSjU0GoHb/a1fbHD/M7tvFWMg59
-HbxWWoCbW5j2lYbg0XSc/PkVJE4oQVifK5ubMU0t7kRGOkTrJV6pyk3mI5FwZxq2
-k6WnNS6w0Ecz/hG8uAukE9jy6a8CQxLEEEC/9FZfO8Xf4IXdSsI=
-=NdU/
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmK8q6QACgkQFA3kzBSg
+Kba/dw/9HiqC7hJIBjmzkeSy2RQELIZxZbWbGpNm2r2PFwEhYqgVfFYAXgAm+YB7
+zXYq6y1hi+DdkIInEftxL6y32UoEJ5Lh4BKBgPskMOyb/3/sdtZAc/FGUMBAhOXy
+pgtnuoYhDYTXL9ztsyzzML1pfm/tjgQPItYdByQWFOYpDh5mIQeGrwbFZhSfoQRQ
+Jo9MKsOdRr0OoGpmP4001aIjWRzU8v8tqqKi+C5JyBqQFZH8bvNg8j8CDZro+hCk
+8M4g4ri23oxozlJ4ZUiWga9U5uBuVThfAlbHuT8nnvZQWJYhpNHjFiG3W+Qt1JiF
+DeEEPKEA8fvbMdK5Wv0dSDbMBdAYvabiTVmLzPolcEiHcHkdMMfxLc6QVnmKD1l+
+g392htFKjRQgMbzDWnDbuELiIVksqhyGeJZAvYqO2igbvncsrGNCs/sVu7vg5Mrk
+ySfMvobGm1RRbcz8CUVFd6Xmb+C4EOHY6WzVW6bPlkoiJZzm602C8a0lODXg03YG
+gYZH4odaoPbYaOrC56DriIxtZpSsr6+LHns6GQyU0B+RlPnYd0X5VQOiXI7Z6MSd
+I3DXom1RV0uUiK8jpy0Upiv/PnEk/soU4mc1SNypY9BLnP1Oy78mhxpPuzVF8Sso
+xGgKBPJYlJKKo72hqTwyOvIPEjfMgAmxUiy6o8izpq2WIvG9Tvc=
+=aKQP
 -----END PGP SIGNATURE-----
 
---jNtlQxFZmARviAGK--
+--ekIVSbt5ZRWqdhEl--
