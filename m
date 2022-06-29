@@ -2,255 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DEF55F030
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jun 2022 23:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A9755F32F
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jun 2022 04:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbiF1VI2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Jun 2022 17:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        id S230517AbiF2CJz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Jun 2022 22:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiF1VI1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Jun 2022 17:08:27 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C620E22B12;
-        Tue, 28 Jun 2022 14:08:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656450506; x=1687986506;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hbAuSvqmvICPt1eUjjwOf8UfFYjtvV+WwRG6YwRZ9+0=;
-  b=gSYo3aLZbmhmd6ujfvrCY68VF5GGfubdoU8+TgzJqvpAaS6gJzdP+Oa2
-   r8NaPLCGTIH8C22jHxu7gsFH7Y8fpI9raYkmzYUCGeNUXn6dg0/WCcmQf
-   k0NlUfIIGRQ/VlLPj5XWg5p5aj7GV0MVQEfcCnsLXHIgZF/Ol4Zndk7LV
-   dVep5wcS9z6kayyuC7fedLQFDd/6gLpMKQhH5PCGXBAN7DfuPKhb0pht/
-   k8TLtWCK46fPYJbljeonsenWwAhV7N2lU4bV/r8fZdfCMlZKl+DMaz81n
-   IcofJf302aqKp2/epL9mb1oUfaBo/Qi6h7mTmzJYF+q+aE09I/YbHtg/h
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="264888331"
-X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="264888331"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 14:08:26 -0700
-X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="732904960"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 14:08:22 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o6IRW-000x9d-Fc;
-        Wed, 29 Jun 2022 00:08:18 +0300
-Date:   Wed, 29 Jun 2022 00:08:18 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        with ESMTP id S230494AbiF2CJy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Jun 2022 22:09:54 -0400
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FD82F035;
+        Tue, 28 Jun 2022 19:09:52 -0700 (PDT)
+Received: by mail-il1-f169.google.com with SMTP id p14so9388890ile.1;
+        Tue, 28 Jun 2022 19:09:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=KRTT6Azh9uxqOFNuSyZW507CLCYjuVxnJ4RN/7AtHio=;
+        b=49f/e4pzqHX5s25pRq6HKRfoYO+hbA2T45feRHFVoX+2meOHsu3io0dIUk9ONukLcT
+         S2u2Xgywx4lBuWe6LIfoT77EguWT55WN1N5jOYXtr+XLZihyVsITljEMzESAMa55OjsM
+         XDhJsXRpZLygWyMa0BBoqmEYPHhoQiWGmeht49BFGmY76mu3cLZrONFUBejxIi5THzA/
+         UhF7MIHC55xnvs3Mk70ZtvNd1WjdYaIw8e9/wGseqzBWuRXxQCzXKpJgy6uamIMhUQkY
+         Vin0XtORKBr01m7n8huwulrhAjTDMlHWYJD0nJR5FF8QkVXcXheoVFuj5N4kYV5R9QrG
+         LqGw==
+X-Gm-Message-State: AJIora/cSUHhvYpjbOeUzE8pz8J0WZWvQbQri5y6qS+iob2u+mo+G0sZ
+        a/rh1g5yAIwszbwW0AZKlpgCMPBIbA==
+X-Google-Smtp-Source: AGRyM1vm/3awWZKf90R45i7ajA8U/kHl44mlIm8F1PM0xFI/hAAsHVC/ESKDGC20/Lctak5l6wnN8A==
+X-Received: by 2002:a05:6e02:10cf:b0:2d9:2310:e6b3 with SMTP id s15-20020a056e0210cf00b002d92310e6b3mr596558ilj.212.1656468591269;
+        Tue, 28 Jun 2022 19:09:51 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id m9-20020a02cdc9000000b00331fdc68ccesm6573548jap.140.2022.06.28.19.09.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 19:09:50 -0700 (PDT)
+Received: (nullmailer pid 1403682 invoked by uid 1000);
+        Wed, 29 Jun 2022 02:09:39 -0000
+From:   Rob Herring <robh@kernel.org>
 To:     Phil Edworthy <phil.edworthy@renesas.com>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh@kernel.org>, Sven Peter <sven@svenpeter.dev>,
-        Jan Dabros <jsd@semihalf.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>, devicetree@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] i2c: Add Renesas RZ/V2M controller
-Message-ID: <YrttwplV9zEgCFji@smile.fi.intel.com>
-References: <20220628194526.111501-1-phil.edworthy@renesas.com>
- <20220628194526.111501-3-phil.edworthy@renesas.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628194526.111501-3-phil.edworthy@renesas.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        linux-renesas-soc@vger.kernel.org
+In-Reply-To: <20220628194526.111501-2-phil.edworthy@renesas.com>
+References: <20220628194526.111501-1-phil.edworthy@renesas.com> <20220628194526.111501-2-phil.edworthy@renesas.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: Document RZ/V2M I2C controller
+Date:   Tue, 28 Jun 2022 20:09:39 -0600
+Message-Id: <1656468579.925440.1403681.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 08:45:26PM +0100, Phil Edworthy wrote:
-> Yet another i2c controller from Renesas that is found on the RZ/V2M
-> (r9a09g011) SoC. It can support only 100kHz and 400KHz operation.
+On Tue, 28 Jun 2022 20:45:25 +0100, Phil Edworthy wrote:
+> Document Renesas RZ/V2M (r9a09g011) I2C controller bindings.
+> 
+> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+> v2:
+>  - Use an enum and set the default for clock-frequency
+>  - Add resets property
+> ---
+>  .../bindings/i2c/renesas,rzv2m.yaml           | 80 +++++++++++++++++++
+>  1 file changed, 80 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
+> 
 
-...
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> +#include <linux/of_device.h>
+yamllint warnings/errors:
 
-No user of this header.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml: patternProperties:^thermistor@:properties:adi,excitation-current-nanoamp: '$ref' should not be valid under {'const': '$ref'}
+	hint: Standard unit suffix properties don't need a type $ref
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml: ignoring, error in schema: patternProperties: ^thermistor@: properties: adi,excitation-current-nanoamp
+Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.example.dtb:0:0: /example-0/spi/ltc2983@0: failed to match any schema with compatible: ['adi,ltc2983']
 
-But missed mod_devicetable.h (Okay, for I2C drivers we usually rely on i2c.h to
-include it for us, but it's cleaner to include directly).
+doc reference errors (make refcheckdocs):
 
-...
+See https://patchwork.ozlabs.org/patch/
 
-> +#define rzv2m_i2c_priv_to_dev(p)	((p)->adap.dev.parent)
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-It's longer than the actual expression. Why do you need this?!
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-...
+pip3 install dtschema --upgrade
 
-> +static const struct bitrate_config bitrate_configs[] = {
-> +	[RZV2M_I2C_100K] = { 47, 3450 },
-> +	[RZV2M_I2C_400K] = { 52, 900},
-
-Missed space.
-
-> +};
-
-...
-
-> +	if (priv->iicb0wl > 0x3ff)
-
-GENMASK() ?
-Or (BIT(x) - 1) in case to tell that there is an HW limitation of x bits?
-
-> +		return -EINVAL;
-
-...
-
-> +	if (priv->iicb0wh > 0x3ff)
-
-Ditto.
-
-> +		return -EINVAL;
-
-...
-
-> +	if (!last) {
-
-Why not positive conditional?
-
-> +	} else {
-
-> +	}
-
-...
-
-> +static int rzv2m_i2c_send(struct rzv2m_i2c_priv *priv, struct i2c_msg *msg,
-> +			  unsigned int *count)
-> +{
-> +	unsigned int i;
-> +	int ret = 0;
-
-Redundant assignment, you may return 0 directly.
-Ditto for other similar cases in other functions.
-
-> +	for (i = 0; i < msg->len; i++) {
-> +		ret = rzv2m_i2c_write_with_ack(priv, msg->buf[i]);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +	*count = i;
-> +
-> +	return ret;
-> +}
-
-...
-
-> +		ret = rzv2m_i2c_read_with_ACK(priv, &msg->buf[i],
-> +					      ((msg->len - 1) == i));
-
-Too many parentheses.
-
-> +		if (ret < 0)
-> +			return ret;
-
-...
-
-> +static int rzv2m_i2c_send_address(struct rzv2m_i2c_priv *priv,
-> +				  struct i2c_msg *msg)
-> +{
-> +	u32 addr;
-> +	int ret;
-> +
-> +	if (msg->flags & I2C_M_TEN) {
-> +		/* 10-bit address
-> +		 *   addr_1: 5'b11110 | addr[9:8] | (R/nW)
-> +		 *   addr_2: addr[7:0]
-> +		 */
-> +		addr = 0xf0 | ((msg->addr >> 7) & 0x06);
-> +		addr |= !!(msg->flags & I2C_M_RD);
-> +		/* Send 1st address(extend code) */
-> +		ret = rzv2m_i2c_write_with_ack(priv, addr);
-
-	if (ret)
-		return ret;
-
-> +		if (ret == 0) {
-> +			/* Send 2nd address */
-> +			ret = rzv2m_i2c_write_with_ack(priv, msg->addr & 0xff);
-> +		}
-> +	} else {
-> +		/* 7-bit address */
-> +		addr = i2c_8bit_addr_from_msg(msg);
-> +		ret = rzv2m_i2c_write_with_ack(priv, addr);
-> +	}
-> +
-> +	return ret;
-> +}
-
-...
-
-> +	ret = rzv2m_i2c_send_address(priv, msg);
-> +	if (ret == 0) {
-
-This is a bit confusing if it's only comparison with "no error code" condition.
-Use if (!ret) if there is no meaning of positive value. Same applies to other
-cases in the code.
-
-> +		if (read)
-> +			ret = rzv2m_i2c_receive(priv, msg, &count);
-> +		else
-> +			ret = rzv2m_i2c_send(priv, msg, &count);
-> +
-> +		if ((ret == 0) && stop)
-
-Like here.
-
-> +			ret = rzv2m_i2c_stop_condition(priv);
-> +	}
-
-...
-
-> +static const struct of_device_id rzv2m_i2c_ids[] = {
-> +	{ .compatible = "renesas,rzv2m-i2c", },
-
-Inner comma is not needed.
-
-> +	{ }
-> +};
-
-...
-
-> +	priv->clk = devm_clk_get(dev, NULL);
-> +	if (IS_ERR(priv->clk)) {
-> +		dev_err_probe(dev, PTR_ERR(priv->clk), "Can't get clock\n");
-> +		return PTR_ERR(priv->clk);
-> +	}
-
-Why not
-
-	return dev_err_probe(...);
-
-?
-
-Ditto for the rest cases like this.
-
-...
-
-> +	adap->dev.of_node = dev->of_node;
-
-device_set_node()
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Please check and re-submit.
 
