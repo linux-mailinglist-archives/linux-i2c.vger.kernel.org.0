@@ -2,363 +2,202 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404EB55F95D
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jun 2022 09:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A50B55F9A4
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jun 2022 09:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232227AbiF2Hlx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Jun 2022 03:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
+        id S232488AbiF2Hzr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Jun 2022 03:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbiF2Hlv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jun 2022 03:41:51 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F1236B42;
-        Wed, 29 Jun 2022 00:41:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656488510; x=1688024510;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=hRLWAheTUgpMqJ+CTyhb8q72eqCf5jXCD+qdlPmQdX8=;
-  b=V7EsYYr9EIij1ip70+OQMY/gzrh5wyGiKcYp8AWCHb25bOJrQa8ldVVA
-   WjfiGM9RSi7+O2v6aTzjnGFtciC06e+wwz660J8d1fRqDhDUuFa+GCisT
-   rKUaoFvcqeLu972MEnNCCaodyFq5KFw65hrEObpxXK1USTMOqGTNjghk1
-   M6eAb7r6RhwTd49jKSf+itMDaZ5Gu/jHoVMqNBN++BYhLvCzxTurIoN9M
-   /3H0k+pz3CbrRrMwvdgEhSQ7BUW5H6fpDqV6CtG6BHjQGM7QYyLOK833q
-   sD1PkwJUKQH1n3D/+a5t4ubmQSAULxHZs8gKZv4cjGcBr80q05Z6ghIMA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="307444900"
-X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="307444900"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 00:41:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="733074160"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 29 Jun 2022 00:40:24 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 29 Jun 2022 10:40:23 +0300
-Date:   Wed, 29 Jun 2022 10:40:23 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Russell King <linux@armlinux.org.uk>,
-        Scott Wood <oss@buserror.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Corey Minyard <minyard@acm.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Phong LE <ple@baylibre.com>,
-        Adrien Grassein <adrien.grassein@gmail.com>,
-        Peter Senna Tschudin <peter.senna@gmail.com>,
-        Martin Donnelly <martin.donnelly@ge.com>,
-        Martyn Welch <martyn.welch@collabora.co.uk>,
-        Douglas Anderson <dianders@chromium.org>,
-        Stefan Mavrodiev <stefan@olimex.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Florian Fainelli <f.fainelli@gmail.com>, Broad@vger.kernel.org
+        with ESMTP id S232508AbiF2Hzn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jun 2022 03:55:43 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120044.outbound.protection.outlook.com [40.107.12.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0F1B7F0;
+        Wed, 29 Jun 2022 00:55:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZGmPgwn0dfRTUbpxSxzAW31yflWGkYQTMUHL+mHscfZOv4cD5DcMjTsyAjaP5L4EUUXDybYpwvUqeEqVB6A8UNfkqEpwH3MX6d0XtlNHtSiPU3ZT5QdshH2FoRYw/YaeZgg+xKITEbKn1ro56ZH6ADm/mZSLNr/kwOvFJl3qf9VygHfnoY0IkJ4BxS2gNSfBwysp35LuHn3E8eOHroUNpJeZzYF3Wmw0qfVAkwHizcetpT5rraO7y7XsXSSFGbnOwmhBZuntkmuwClV/afiiQvPX9A0Ec5afM/Bz2eewEdqpR42vr1qJD26sttMOqYVqOOf20cLo7pd6AKUyLkNazA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SiZWd74AOsn2ljeL5I4/vl9Bsa5oSL1qa4Ot50Pwl9I=;
+ b=jJHiDYl6vlPoASrQak392AHepuEzgOUkOkgIYeVRO5z7sORcit1x2BcGYQ1Mk2TNKi2grkfbUBHbWgsdmPfqMZcvqCnIiGzz3+/FZUMyauUrJBwgIIfmL2CtXyRZcRgxUUa16ziYlshpd1anjx7Vu4SJYtQSgbNu4aQpsr6Vkt+t4OApvf7A4uTN1e7Y3auqnM80mxJhF9/9Bz0Bx5PErBBHEmm6Q/F1xjraIxAq+OKMdQxNKziS/l6F+YFz38fx3lVfqLfBYa2Hd2XkizN6Wtrk72l/moe7dS2JAo7x80LDnGYaZLaSCQdPntkiK0dcyT+dJYESlGlemri1y4Tl9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SiZWd74AOsn2ljeL5I4/vl9Bsa5oSL1qa4Ot50Pwl9I=;
+ b=B6GdPV/k3v2tvsVJLBCIylo1pc8/FvtHnb0GXD67d3AURcDrZww0C3G0CVdehIMgRUwmJjwVraZgv1BUc8NcjhmDPVelKVMUNLg3NFa1HPpd2KfTNrpg2w7I7ECf13XvD+zDq+STDygxGdnUXRtYHT+jkvPIUIp0AcmRcM8g4YOKjCc5aVHnKoZwIun0Jb+nIdHkmEangvsXIq8cXh7eVNPuWDSEhU0WZ47EURJCKNr26gN34Fgc/jdZm/xHcSBFaOp1/EVpBAQyjC2V870Ghfui4oUcSCEwAu4djpn347TP4eb4xEP0/ftt/9RQlKegOmaYN8GzMmNM4EuH6WyB1Q==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MRZP264MB2426.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:7::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Wed, 29 Jun
+ 2022 07:55:38 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::e10e:bd98:2143:4d44]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::e10e:bd98:2143:4d44%3]) with mapi id 15.20.5373.022; Wed, 29 Jun 2022
+ 07:55:38 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Jeremy Kerr <jk@codeconstruct.com.au>
+CC:     "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "chrome-platform@lists.linux.dev" <chrome-platform@lists.linux.dev>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "acpi4asus-user@lists.sourceforge.net" 
+        <acpi4asus-user@lists.sourceforge.net>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-rpi-kernel@lists.infradead.org" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "openipmi-developer@lists.sourceforge.net" 
+        <openipmi-developer@lists.sourceforge.net>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
 Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
-Message-ID: <YrwB5xPKZmHlXzrC@kuha.fi.intel.com>
+Thread-Topic: [PATCH 6/6] i2c: Make remove callback return void
+Thread-Index: AQHYivfzv66d74QuGEeH1kE1xo+T/61l9tkAgAAFWwCAAAkYgA==
+Date:   Wed, 29 Jun 2022 07:55:38 +0000
+Message-ID: <5517f329-b6ba-efbd-ccab-3d5caa658b80@csgroup.eu>
 References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
  <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
+ <60cc6796236f23c028a9ae76dbe00d1917df82a5.camel@codeconstruct.com.au>
+ <20220629072304.qazmloqdi5h5kdre@pengutronix.de>
+In-Reply-To: <20220629072304.qazmloqdi5h5kdre@pengutronix.de>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 846fb32b-6214-4099-d82e-08da59a4c1d0
+x-ms-traffictypediagnostic: MRZP264MB2426:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: CYomIx3nRK8MHvVOXFC46FqFYoYkf0bo/4h3Xkh9Q/zEx3vOhDgZ4cTm3BEjRMmtkQXvfxQ0QICVEnuVjNPfYX+EAm5xa0NkomLw7YuakKBsrjyUyfpuWuLZYPf0bHUOibAae716Ak0WNzG9ENkL2e1byLDGyP+HBIGTl0jL6XUqwTxIWvlOhEftjZZJMHrV2JWIb6cJEU58HycXD/rAb/MuIc0RQ89wGfOyWrWvWXiaGGedWX+f3R3RB4sjGn5mbRYpp0AkhnSQCfxccZ+/mXAPu1Om8Fa3N/fnfnIEuwnxZONOoM09FcsH5osILf6O7zPnmeazl5oXapgCqkbkVxcUt+nrqH1mTaD5+m+CNJ2kPOUmjnwE/TNTj3i4TNmoG/TQgaMaBvLShDQFmx87mtOIHmGZOn9MUL5s+zZn2+edT4C6ac4wrf2/li2YBGpl/rQ1kvqJwUmybFobso9lp14gb1cVisBaeRTT+mLc0DesSbqEVRXmac69TDbimKbh7Mxm3Sxt67Ty/oGO0ONlkyIKuawb4OBrD5Y3d4DjbfGTfuE+CEyQX6nup6VVdawF7JaBAdCX14tzoeEc3ul2n9DmVuWT6FjYwM4Uy9zevwNpaH1jtQAMJszRPoByTDpForTQR4pZKXlvZYrFVT3sW+ZAWeKK+YMqBVA4QBxXo5NAA0+9+gP5qfEuKq6Xt6zeFSc492B3XuTRDBijLpI9XDYdq7y5PL7qDLBifuBOE6mebafV0nGOaeMUtj67vgCTazq9OpTHlpU03MBeOWb+UVXD0PLvdyKbDbPTNtzKXKX1L9h44EJIAEUA+zC/lOYE/44v0R2q1FXEC7JgEP2vimbIS7DAbjk7UokWPkTZcqv7GDADALn60d3P96JesSu0N140vDdyP79s/lcWn+e5gQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(136003)(346002)(39850400004)(376002)(6486002)(966005)(8676002)(2906002)(7416002)(7406005)(71200400001)(44832011)(5660300002)(478600001)(122000001)(38070700005)(110136005)(91956017)(31696002)(86362001)(316002)(54906003)(64756008)(66946007)(66446008)(8936002)(76116006)(4326008)(66556008)(66476007)(186003)(83380400001)(66574015)(26005)(6512007)(41300700001)(2616005)(6506007)(38100700002)(31686004)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cXJYTXlTcHk0UTNxalNEMlNPL3h1K2F1M3dNc2Y1cUVqV0sxbVgwSVZSNGZu?=
+ =?utf-8?B?a2J1VWlLWEl2cStZSC9ZaTBXRHJXK2UyTTZoM0ZjWVRRN2tTVForSnA3Y1Zt?=
+ =?utf-8?B?a1dwVzJ5VTVZdytoL3h4UHExaGgrbkkwQlQ0T2E3YWNOVUY3YkM1dW5kcDk5?=
+ =?utf-8?B?blRDMHRGeU0rQ0JST1FIYnRQZVJ1NkdaYjNpOXVTNHp6NjVJUEo2YUlGRmlk?=
+ =?utf-8?B?cU1NVEQzTjZWY09JWjBIUFl5d2JrNmtZRVRObGtKSzlWeno4aHZNY0UvQnI2?=
+ =?utf-8?B?cTB0R0JqYTdNOFJYZXF5b3UvTXMrVTdFRUI4Ky9YT2p5VUxjZXJKekJBOHNx?=
+ =?utf-8?B?bHdyWUhBNFo1RE56RUVSczVYUWxZUWZORGVrdTBON3ZjSzNYRFdOeG00UjV0?=
+ =?utf-8?B?clVhK25yZHVBMTdpcHpiQTh4cUFQSE5vakhXL2tWU0xpUHRjZ0g2L2t3TURj?=
+ =?utf-8?B?elB3Smp3bGl6L0drU0NUN1E0Yklad0V5VkxxMmFZbGpNTkdhb1plNnJrLzRO?=
+ =?utf-8?B?SENQOWhYQSt1RXhUM3gyczZVaDFOR2ZGclF5RnpqbjRYR1hBclJzUXNsR0wr?=
+ =?utf-8?B?ZHQ0V2EyRE1EZlBSRUxIQ1VuUEFnRmpOK21nWmRHZGJwejNUbUR6VW54TVJT?=
+ =?utf-8?B?RWx6YjR1SEpDUXZCZjFnd0FDZndhV1dDMFRBd0NnTFhIVWpMTmo2bXNydWlG?=
+ =?utf-8?B?M3dkVlQzQmJXNkh0SjJncVkzSit0Q0lQRkg5Q25tL082cWVSVy9QdldBK0RG?=
+ =?utf-8?B?YVNoL3E0TDR2aGxxeVFlaGFocjUvWmdqWXFjQzA1eit1U0pNQkNpV2hjV1Nz?=
+ =?utf-8?B?RDJxbnQvREZkNGNDeUhZZVhHbkNNQmV2YytzWkZEUEFhTndtbndQYURwaXFE?=
+ =?utf-8?B?cVJ6bk8wdjFtNTVhMnVLcG83Rlo0QnJ3VWN0RzlOUmVQRG9XVEQ2NW0wdVh1?=
+ =?utf-8?B?QjhxTmVoTlByMXMrOUJCN3gzd1NqTE1xSEtiNXIvVjFTdzdJbFIzOUwrbnBP?=
+ =?utf-8?B?aWtIVndJMHJVaTUrTGxwRDUyQ2l0YU12d3lMeWVDYTEwTkFCN0VaQjlhNUN6?=
+ =?utf-8?B?T2J6cG5sL0xrWkEyNTcvMnY3d05Bc20yWmFDcWtudzdmV0tmS1BDZUFrZEsr?=
+ =?utf-8?B?d3FUMWlFVXJ3bUh5VWZOUS9yOWp6OGIxRkNBbkQvZnpzTnRtSURYNzAzMTN6?=
+ =?utf-8?B?ZG5kaDMvTThYaStQZHRNV3JPeVBSSDRaVDVtNkU3Y1NwWHJjMmpzSHNzNHJl?=
+ =?utf-8?B?Zlk2MklyNm9pSFhhY25FcVhlYndDRnBUblBkTVBCODd2NDNqWTJNTWFwT29X?=
+ =?utf-8?B?KzZBVEdENzdVZUV1NklWV1Vhd3pnM05IUnZtUCtQMXFoa0F5dHA2TEswUEgy?=
+ =?utf-8?B?ZkVubElpN3RWbXczR1ExNEt5V1d4YjRnNjJFS0FSYkNkK0hFQjlJaG0wT3NY?=
+ =?utf-8?B?eC9DNERnK1dNblExb3paOERSMTUvOFNDM0xCTGhBSlFYY3phWjJrdC9MS1ow?=
+ =?utf-8?B?bGVTQTJYcGFoVUxuUTJhRXBzZThHeFR0MFJvaGRZcVZvRlVZdUpYZStHYTFj?=
+ =?utf-8?B?YWN6Q2M2My83ZmdUME1qTE42UGpKdWpRY05CbHdzOGVFK3dsaTVRNzFBSkQy?=
+ =?utf-8?B?RW41cnp5ZUZETURlOHpscGo0a1ZlMlZYYUgways1dDZvR2R2UlNRdUhTc1JR?=
+ =?utf-8?B?aFF1aVJRdjNjaWhBbmN0RFZiNHBHSzN4dUtzUXJjeGxNZnBRMXZ4N2FTMjln?=
+ =?utf-8?B?c2M2Q0tNVUI0YnhCYXR4Zml2cDBoYkEreVFjbXNHOEE0WGZhMkNZRlU5b211?=
+ =?utf-8?B?TVBMQmVCN3FSVGZxQ1E5b2ROOFNQQ0tMc1FUUmx2aU1qWVNoaHN5dG02SlZw?=
+ =?utf-8?B?UWlPbGhPYmRqMHlRYm5YeEdZVk8vNkF6RVB2NVhzd2N3cm9Talo3M09CbEZW?=
+ =?utf-8?B?clVXelZaT2xrTGF3YkMrQjJRYWpMVkkrTTFaQjFDOUkzNDRmRllRaU53TlVO?=
+ =?utf-8?B?RXQ4UTU4ZHJORExrVEZKNjBoZDNGNnc2bWJtZlZDLzYrS040ZEpiRC9oOUtH?=
+ =?utf-8?B?VjNRQko3MzlTZjhZT0xPTllvNUpaUnFxTTNiZW5ZR3BacTVmeU1odWwwM0NS?=
+ =?utf-8?B?RlFiTE05b3Fqd3o5YTlyNXVLeHdZR25BVE9zOE11QXphNjRqWTF6V3RnVW1M?=
+ =?utf-8?Q?u+Wy+mgQrCfCDZS1C1j43WI=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <39828658DC65DC4C831FDA136BD44EB9@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 846fb32b-6214-4099-d82e-08da59a4c1d0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2022 07:55:38.7075
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jWJw5Q3ejJJE6olRWuuRrdOPzCjdRptR0XegOyT8t8a3QdfUnesEWOYx/mHkRkwOXeYBol3k++f1J5K5J5cUoH+SRpzbNEynWupEewBpo9A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2426
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 04:03:12PM +0200, Uwe Kleine-König wrote:
-> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-> index cd47c3597e19..2a58185fb14c 100644
-> --- a/drivers/usb/typec/hd3ss3220.c
-> +++ b/drivers/usb/typec/hd3ss3220.c
-> @@ -245,14 +245,12 @@ static int hd3ss3220_probe(struct i2c_client *client,
->  	return ret;
->  }
->  
-> -static int hd3ss3220_remove(struct i2c_client *client)
-> +static void hd3ss3220_remove(struct i2c_client *client)
->  {
->  	struct hd3ss3220 *hd3ss3220 = i2c_get_clientdata(client);
->  
->  	typec_unregister_port(hd3ss3220->port);
->  	usb_role_switch_put(hd3ss3220->role_sw);
-> -
-> -	return 0;
->  }
->  
->  static const struct of_device_id dev_ids[] = {
-> diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
-> index 6184f5367190..d6495e533e58 100644
-> --- a/drivers/usb/typec/mux/fsa4480.c
-> +++ b/drivers/usb/typec/mux/fsa4480.c
-> @@ -181,14 +181,12 @@ static int fsa4480_probe(struct i2c_client *client)
->  	return 0;
->  }
->  
-> -static int fsa4480_remove(struct i2c_client *client)
-> +static void fsa4480_remove(struct i2c_client *client)
->  {
->  	struct fsa4480 *fsa = i2c_get_clientdata(client);
->  
->  	typec_mux_unregister(fsa->mux);
->  	typec_switch_unregister(fsa->sw);
-> -
-> -	return 0;
->  }
->  
->  static const struct i2c_device_id fsa4480_table[] = {
-> diff --git a/drivers/usb/typec/mux/pi3usb30532.c b/drivers/usb/typec/mux/pi3usb30532.c
-> index 6ce9f282594e..1cd388b55c30 100644
-> --- a/drivers/usb/typec/mux/pi3usb30532.c
-> +++ b/drivers/usb/typec/mux/pi3usb30532.c
-> @@ -160,13 +160,12 @@ static int pi3usb30532_probe(struct i2c_client *client)
->  	return 0;
->  }
->  
-> -static int pi3usb30532_remove(struct i2c_client *client)
-> +static void pi3usb30532_remove(struct i2c_client *client)
->  {
->  	struct pi3usb30532 *pi = i2c_get_clientdata(client);
->  
->  	typec_mux_unregister(pi->mux);
->  	typec_switch_unregister(pi->sw);
-> -	return 0;
->  }
->  
->  static const struct i2c_device_id pi3usb30532_table[] = {
-> diff --git a/drivers/usb/typec/rt1719.c b/drivers/usb/typec/rt1719.c
-> index f1b698edd7eb..ea8b700b0ceb 100644
-> --- a/drivers/usb/typec/rt1719.c
-> +++ b/drivers/usb/typec/rt1719.c
-> @@ -930,14 +930,12 @@ static int rt1719_probe(struct i2c_client *i2c)
->  	return ret;
->  }
->  
-> -static int rt1719_remove(struct i2c_client *i2c)
-> +static void rt1719_remove(struct i2c_client *i2c)
->  {
->  	struct rt1719_data *data = i2c_get_clientdata(i2c);
->  
->  	typec_unregister_port(data->port);
->  	usb_role_switch_put(data->role_sw);
-> -
-> -	return 0;
->  }
->  
->  static const struct of_device_id __maybe_unused rt1719_device_table[] = {
-> diff --git a/drivers/usb/typec/stusb160x.c b/drivers/usb/typec/stusb160x.c
-> index e7745d1c2a5c..8638f1d39896 100644
-> --- a/drivers/usb/typec/stusb160x.c
-> +++ b/drivers/usb/typec/stusb160x.c
-> @@ -801,7 +801,7 @@ static int stusb160x_probe(struct i2c_client *client)
->  	return ret;
->  }
->  
-> -static int stusb160x_remove(struct i2c_client *client)
-> +static void stusb160x_remove(struct i2c_client *client)
->  {
->  	struct stusb160x *chip = i2c_get_clientdata(client);
->  
-> @@ -823,8 +823,6 @@ static int stusb160x_remove(struct i2c_client *client)
->  
->  	if (chip->main_supply)
->  		regulator_disable(chip->main_supply);
-> -
-> -	return 0;
->  }
->  
->  static int __maybe_unused stusb160x_suspend(struct device *dev)
-> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-> index 96c55eaf3f80..5e9348f28d50 100644
-> --- a/drivers/usb/typec/tcpm/fusb302.c
-> +++ b/drivers/usb/typec/tcpm/fusb302.c
-> @@ -1771,7 +1771,7 @@ static int fusb302_probe(struct i2c_client *client,
->  	return ret;
->  }
->  
-> -static int fusb302_remove(struct i2c_client *client)
-> +static void fusb302_remove(struct i2c_client *client)
->  {
->  	struct fusb302_chip *chip = i2c_get_clientdata(client);
->  
-> @@ -1783,8 +1783,6 @@ static int fusb302_remove(struct i2c_client *client)
->  	fwnode_handle_put(chip->tcpc_dev.fwnode);
->  	destroy_workqueue(chip->wq);
->  	fusb302_debugfs_exit(chip);
-> -
-> -	return 0;
->  }
->  
->  static int fusb302_pm_suspend(struct device *dev)
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index f33e08eb7670..c48fca60bb06 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -869,7 +869,7 @@ static int tcpci_probe(struct i2c_client *client,
->  	return 0;
->  }
->  
-> -static int tcpci_remove(struct i2c_client *client)
-> +static void tcpci_remove(struct i2c_client *client)
->  {
->  	struct tcpci_chip *chip = i2c_get_clientdata(client);
->  	int err;
-> @@ -880,8 +880,6 @@ static int tcpci_remove(struct i2c_client *client)
->  		dev_warn(&client->dev, "Failed to disable irqs (%pe)\n", ERR_PTR(err));
->  
->  	tcpci_unregister_port(chip->tcpci);
-> -
-> -	return 0;
->  }
->  
->  static const struct i2c_device_id tcpci_id[] = {
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> index df2505570f07..a11be5754128 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> @@ -493,14 +493,12 @@ static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id
->  	return ret;
->  }
->  
-> -static int max_tcpci_remove(struct i2c_client *client)
-> +static void max_tcpci_remove(struct i2c_client *client)
->  {
->  	struct max_tcpci_chip *chip = i2c_get_clientdata(client);
->  
->  	if (!IS_ERR_OR_NULL(chip->tcpci))
->  		tcpci_unregister_port(chip->tcpci);
-> -
-> -	return 0;
->  }
->  
->  static const struct i2c_device_id max_tcpci_id[] = {
-> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> index b56a0880a044..9ad4924b4ba7 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> @@ -263,12 +263,11 @@ static int rt1711h_probe(struct i2c_client *client,
->  	return 0;
->  }
->  
-> -static int rt1711h_remove(struct i2c_client *client)
-> +static void rt1711h_remove(struct i2c_client *client)
->  {
->  	struct rt1711h_chip *chip = i2c_get_clientdata(client);
->  
->  	tcpci_unregister_port(chip->tcpci);
-> -	return 0;
->  }
->  
->  static const struct i2c_device_id rt1711h_id[] = {
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index dfbba5ae9487..b637e8b378b3 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -857,15 +857,13 @@ static int tps6598x_probe(struct i2c_client *client)
->  	return ret;
->  }
->  
-> -static int tps6598x_remove(struct i2c_client *client)
-> +static void tps6598x_remove(struct i2c_client *client)
->  {
->  	struct tps6598x *tps = i2c_get_clientdata(client);
->  
->  	tps6598x_disconnect(tps, 0);
->  	typec_unregister_port(tps->port);
->  	usb_role_switch_put(tps->role_sw);
-> -
-> -	return 0;
->  }
->  
->  static const struct of_device_id tps6598x_of_match[] = {
-> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> index 6db7c8ddd51c..920b7e743f56 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> @@ -1398,7 +1398,7 @@ static int ucsi_ccg_probe(struct i2c_client *client,
->  	return status;
->  }
->  
-> -static int ucsi_ccg_remove(struct i2c_client *client)
-> +static void ucsi_ccg_remove(struct i2c_client *client)
->  {
->  	struct ucsi_ccg *uc = i2c_get_clientdata(client);
->  
-> @@ -1408,8 +1408,6 @@ static int ucsi_ccg_remove(struct i2c_client *client)
->  	ucsi_unregister(uc->ucsi);
->  	ucsi_destroy(uc->ucsi);
->  	free_irq(uc->irq, uc);
-> -
-> -	return 0;
->  }
->  
->  static const struct i2c_device_id ucsi_ccg_device_id[] = {
-> diff --git a/drivers/usb/typec/wusb3801.c b/drivers/usb/typec/wusb3801.c
-> index e63509f8b01e..3cc7a15ecbd3 100644
-> --- a/drivers/usb/typec/wusb3801.c
-> +++ b/drivers/usb/typec/wusb3801.c
-> @@ -399,7 +399,7 @@ static int wusb3801_probe(struct i2c_client *client)
->  	return ret;
->  }
->  
-> -static int wusb3801_remove(struct i2c_client *client)
-> +static void wusb3801_remove(struct i2c_client *client)
->  {
->  	struct wusb3801 *wusb3801 = i2c_get_clientdata(client);
->  
-> @@ -411,8 +411,6 @@ static int wusb3801_remove(struct i2c_client *client)
->  
->  	if (wusb3801->vbus_on)
->  		regulator_disable(wusb3801->vbus_supply);
-> -
-> -	return 0;
->  }
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
--- 
-heikki
+DQoNCkxlIDI5LzA2LzIwMjIgw6AgMDk6MjMsIFV3ZSBLbGVpbmUtS8O2bmlnIGEgw6ljcml0wqA6
+DQo+IEhlbGxvLA0KPiANCj4gW0kgZHJvcHBlZCBuZWFybHkgYWxsIGluZGl2aWR1YWxzIGZyb20g
+dGhlIENjOiBsaXN0IGJlY2F1c2UgdmFyaW91cw0KPiBib3VuY2VzIHJlcG9ydGVkIHRvIGJlIHVu
+aGFwcHkgYWJvdXQgdGhlIGxvbmcgKGxvZ2ljYWwpIGxpbmUuXQ0KDQpHb29kIGlkZWEsIGV2ZW4g
+cGF0Y2h3b3JrIG1hZGUgYSBtZXNzIG9mIGl0LCBzZWUgDQpodHRwczovL3BhdGNod29yay5vemxh
+YnMub3JnL3Byb2plY3QvbGludXhwcGMtZGV2L3BhdGNoLzIwMjIwNjI4MTQwMzEzLjc0OTg0LTct
+dS5rbGVpbmUta29lbmlnQHBlbmd1dHJvbml4LmRlLw0KDQo+IA0KPiBPbiBXZWQsIEp1biAyOSwg
+MjAyMiBhdCAwMzowMzo1NFBNICswODAwLCBKZXJlbXkgS2VyciB3cm90ZToNCj4+IExvb2tzIGdv
+b2QgLSBqdXN0IG9uZSBtaW5vciBjaGFuZ2UgZm9yIHRoZSBtY3RwLWkyYyBkcml2ZXIsIGJ1dCBv
+bmx5DQo+PiB3b3J0aHdoaWxlIGlmIHlvdSBlbmQgdXAgcmUtcm9sbGluZyB0aGlzIHNlcmllcyBm
+b3Igb3RoZXIgcmVhc29uczoNCj4+DQo+Pj4gLXN0YXRpYyBpbnQgbWN0cF9pMmNfcmVtb3ZlKHN0
+cnVjdCBpMmNfY2xpZW50ICpjbGllbnQpDQo+Pj4gK3N0YXRpYyB2b2lkIG1jdHBfaTJjX3JlbW92
+ZShzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50KQ0KPj4+ICDCoHsNCj4+PiAgwqDCoMKgwqDCoMKg
+wqDCoHN0cnVjdCBtY3RwX2kyY19jbGllbnQgKm1jbGkgPSBpMmNfZ2V0X2NsaWVudGRhdGEoY2xp
+ZW50KTsNCj4+PiAgwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCBtY3RwX2kyY19kZXYgKm1pZGV2ID0g
+TlVMTCwgKnRtcCA9IE5VTEw7DQo+Pj4gQEAgLTEwMDAsNyArMTAwMCw2IEBAIHN0YXRpYyBpbnQg
+bWN0cF9pMmNfcmVtb3ZlKHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQpDQo+Pj4gIMKgwqDCoMKg
+wqDCoMKgwqBtY3RwX2kyY19mcmVlX2NsaWVudChtY2xpKTsNCj4+PiAgwqDCoMKgwqDCoMKgwqDC
+oG11dGV4X3VubG9jaygmZHJpdmVyX2NsaWVudHNfbG9jayk7DQo+Pj4gIMKgwqDCoMKgwqDCoMKg
+wqAvKiBDYWxsZXJzIGlnbm9yZSByZXR1cm4gY29kZSAqLw0KPj4+IC3CoMKgwqDCoMKgwqDCoHJl
+dHVybiAwOw0KPj4+ICDCoH0NCj4+DQo+PiBUaGUgY29tbWVudCB0aGVyZSBubyBsb25nZXIgbWFr
+ZXMgbXVjaCBzZW5zZSwgSSdkIHN1Z2dlc3QgcmVtb3ZpbmcgdGhhdA0KPj4gdG9vLg0KPiANCj4g
+WWVhaCwgdGhhdCB3YXMgYWxyZWFkeSBwb2ludGVkIG91dCB0byBtZSBpbiBhIHByaXZhdGUgcmVw
+bHkuIEl0J3MNCj4gYWxyZWFkeSBmaXhlZCBpbg0KPiANCj4gCWh0dHBzOi8vZ2l0LnBlbmd1dHJv
+bml4LmRlL2NnaXQvdWtsL2xpbnV4L2xvZy8/aD1pMmMtcmVtb3ZlLXZvaWQNCj4gDQo+PiBFaXRo
+ZXIgd2F5Og0KPj4NCj4+IFJldmlld2VkLWJ5OiBKZXJlbXkgS2VyciA8amtAY29kZWNvbnN0cnVj
+dC5jb20uYXU+DQo+IA0KPiBBZGRlZCB0byBteSB0cmVlLCB0b28uDQo+IA0KPiBUaGFua3MNCj4g
+VXdlDQo+IA==
