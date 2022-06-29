@@ -2,72 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8DC56016B
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jun 2022 15:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 688F85601B5
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jun 2022 15:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233583AbiF2Nfw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Jun 2022 09:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
+        id S229609AbiF2Nuf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Jun 2022 09:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233380AbiF2Nfv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jun 2022 09:35:51 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955922AC7A
-        for <linux-i2c@vger.kernel.org>; Wed, 29 Jun 2022 06:35:50 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o6Xqa-0006SP-06; Wed, 29 Jun 2022 15:35:12 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o6XqQ-003PNQ-Vz; Wed, 29 Jun 2022 15:35:06 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o6XqT-001txR-NY; Wed, 29 Jun 2022 15:35:05 +0200
-Date:   Wed, 29 Jun 2022 15:35:04 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, dri-devel@lists.freedesktop.org,
-        linux-omap@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-leds@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-crypto@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-clk@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-watchdog@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-usb@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, netdev@vger.kernel.org,
-        chrome-platform@lists.linux.dev, linux-input@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-hwmon@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        patches@opensource.cirrus.com, UNGLinuxDriver@microchip.com,
-        linux-pwm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
-Message-ID: <20220629133504.syc6x4ptia3mnof5@pengutronix.de>
-References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
- <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
- <CAPAsAGwP4Mw_CJfsi7oapABdTBwO1HfiQux6X4UahspU74VjtQ@mail.gmail.com>
+        with ESMTP id S229525AbiF2Nue (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jun 2022 09:50:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AC6DFE0;
+        Wed, 29 Jun 2022 06:50:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CDB261E88;
+        Wed, 29 Jun 2022 13:50:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBB75C341C8;
+        Wed, 29 Jun 2022 13:50:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656510632;
+        bh=VMfYKMWvhAYlNBRE5+J2Dkfi0eUU5Q30vFi/V4AWzHU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GETHWCkoSunTjq5u/0ujktPGg6qtbdHdVHdWoYf1iSUuprFkUAPWvwpaMVasEEMgH
+         ck4EhHotuESssRD0XtA51/KmRvIz0Px+QWuMvmoyKKYZ7hphq4EOup14rzDny0ltYu
+         qfrWbQWPN67T9bwHwCuJBB6twuWGKP1l9vg4itG6tBtpw6jkIHx+P6DiidGOfUdoYs
+         ZTyTEkTORxkaxp/voyd8v8VBgVa8bFQVCz9Vk7Qnd4T/zdUniGqYmL56VwEJ8ccG4C
+         fwwFdGiUcdcHjhdjM53dP+qF+OhNT1zPeDjL8HTEZLX4UoMnHLP1aY/cT7OKYT7KNV
+         e5EgHi251y34g==
+Received: by mail-ua1-f47.google.com with SMTP id s4so2632872uad.0;
+        Wed, 29 Jun 2022 06:50:32 -0700 (PDT)
+X-Gm-Message-State: AJIora9+FZiZJjDZeswQMYWNyHlRN/KUpbm1x36djzlRZAJKtbTwegXO
+        Va12xI6cOCW3eNNCEdUS5XPWOBcHMp7jLDVnmQ==
+X-Google-Smtp-Source: AGRyM1vKGXqFayysL8pEeROfaIV0o7ghK/bslJjjPn8tNlKPkGvn1x3tqB9tWvX/xYVyIkhnRX8ry8eIzxcL8s3QRD4=
+X-Received: by 2002:a05:6130:3aa:b0:37f:26c0:e196 with SMTP id
+ az42-20020a05613003aa00b0037f26c0e196mr1628527uab.43.1656510631830; Wed, 29
+ Jun 2022 06:50:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5z6hgi6euioj5d47"
-Content-Disposition: inline
-In-Reply-To: <CAPAsAGwP4Mw_CJfsi7oapABdTBwO1HfiQux6X4UahspU74VjtQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220628194526.111501-1-phil.edworthy@renesas.com>
+ <20220628194526.111501-2-phil.edworthy@renesas.com> <1656468579.925440.1403681.nullmailer@robh.at.kernel.org>
+ <CAMuHMdVsdh1YpVtq7570_kNOWUm5sMb=Fm=Dv_8qOS=hg3iuKA@mail.gmail.com> <43a19f7f-016a-0820-adf1-41419fe82d28@linaro.org>
+In-Reply-To: <43a19f7f-016a-0820-adf1-41419fe82d28@linaro.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 29 Jun 2022 07:50:20 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJfrqPbu3RZ0wuY9GiiJ6tNmOSqdmdjRHXOYqoL=xUE9w@mail.gmail.com>
+Message-ID: <CAL_JsqJfrqPbu3RZ0wuY9GiiJ6tNmOSqdmdjRHXOYqoL=xUE9w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: Document RZ/V2M I2C controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,76 +70,46 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
---5z6hgi6euioj5d47
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-[Dropped most people from Cc, keeping only lists]
-
-On Wed, Jun 29, 2022 at 04:11:26PM +0300, Andrey Ryabinin wrote:
-> On 6/28/22 17:03, Uwe Kleine-K=F6nig wrote:
-> > From: Uwe Kleine-K=F6nig <uwe@kleine-koenig.org>
+On Wed, Jun 29, 2022 at 2:15 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 29/06/2022 08:53, Geert Uytterhoeven wrote:
+> > Hi Rob,
 > >
-> > The value returned by an i2c driver's remove function is mostly ignored.
-> > (Only an error message is printed if the value is non-zero that the
-> > error is ignored.)
+> > On Wed, Jun 29, 2022 at 4:09 AM Rob Herring <robh@kernel.org> wrote:
+> >> On Tue, 28 Jun 2022 20:45:25 +0100, Phil Edworthy wrote:
+> >>> Document Renesas RZ/V2M (r9a09g011) I2C controller bindings.
+> >>>
+> >>> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+> >>> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> >>> ---
+> >>> v2:
+> >>>  - Use an enum and set the default for clock-frequency
+> >>>  - Add resets property
+> >>> ---
+> >>>  .../bindings/i2c/renesas,rzv2m.yaml           | 80 +++++++++++++++++++
+> >>>  1 file changed, 80 insertions(+)
+> >>>  create mode 100644 Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
+> >>>
+> >>
+> >> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> >> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> >>
+> >> yamllint warnings/errors:
+> >>
+> >> dtschema/dtc warnings/errors:
+> >> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml: patternProperties:^thermistor@:properties:adi,excitation-current-nanoamp: '$ref' should not be valid under {'const': '$ref'}
+> >>         hint: Standard unit suffix properties don't need a type $ref
+> >>         from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+> >> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml: ignoring, error in schema: patternProperties: ^thermistor@: properties: adi,excitation-current-nanoamp
+> >> Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.example.dtb:0:0: /example-0/spi/ltc2983@0: failed to match any schema with compatible: ['adi,ltc2983']
 > >
-> > So change the prototype of the remove function to return no value. This
-> > way driver authors are not tempted to assume that passing an error to
-> > the upper layer is a good idea. All drivers are adapted accordingly.
-> > There is no intended change of behaviour, all callbacks were prepared to
-> > return 0 before.
-> >
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
->                                     | 2 +-
-> >  lib/Kconfig.kasan                                         | 1 +
->=20
-> > diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-> > index f0973da583e0..366e61639cb2 100644
-> > --- a/lib/Kconfig.kasan
-> > +++ b/lib/Kconfig.kasan
-> > @@ -149,6 +149,7 @@ config KASAN_STACK
-> >       depends on KASAN_GENERIC || KASAN_SW_TAGS
-> >       depends on !ARCH_DISABLE_KASAN_INLINE
-> >       default y if CC_IS_GCC
-> > +     depends on !ARM
-> >       help
-> >         Disables stack instrumentation and thus KASAN's ability to dete=
-ct
-> >         out-of-bounds bugs in stack variables.
->=20
->=20
-> What is this doing here?
+> > All of these look like false-positives, i.e. not related to this patch?
+>
+> Few other patches also got it, I think the bot got some problem.
 
-Huh, that is wrong. I needed that for build testing, but it shouldn't
-have been added to the patch. I'm dropping that for the final
-submission.
+Yes, and the bot's overlord failed to see that too. A change yesterday
+in dtschema main branch introduced a new warning and that requires
+clearing the CI cache which I didn't do til now.
 
-Thanks for spotting.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---5z6hgi6euioj5d47
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmK8VQUACgkQwfwUeK3K
-7AkL0wf/Ra+JtsXozoGjhV4ADtJcJAo/mOIZQ6qOdPZGqHYkMvBmkEJ9zbvY4Edk
-SwYoapiHgVT4tDX56ekEGnm/x3udNUt5wugpsqDm4oAgYtbBCMEVtHbp3t/AqMp2
-sZcn0JsvUs6FVWSTomD396Pt10x0r+JrPTJVY2pwj1nUUV63/25oIT/4I77IughK
-LvQBMIesHK9damtObmRGqI5Ljz1L6SP7WgiLSEq1R/LjSeEwbURT3ijca95YO2Jv
-YyxoC7TiNJj2uJiisjl/r1T/LdGF6RpMN197XQjcvaZ0sbTZRF2vXlqp3cSyXrCG
-BbT2nohQYXjznouz9TIuBFtA0iX7SA==
-=YEZr
------END PGP SIGNATURE-----
-
---5z6hgi6euioj5d47--
+Rob
