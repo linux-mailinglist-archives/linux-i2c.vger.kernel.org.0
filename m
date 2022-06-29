@@ -2,69 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6198855F806
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jun 2022 09:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A2755F72E
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jun 2022 08:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbiF2G7F (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Jun 2022 02:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
+        id S232145AbiF2GyN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Jun 2022 02:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232016AbiF2G6M (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jun 2022 02:58:12 -0400
+        with ESMTP id S230088AbiF2GyM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jun 2022 02:54:12 -0400
 Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10E533890;
-        Tue, 28 Jun 2022 23:57:49 -0700 (PDT)
-Received: by mail-qv1-f41.google.com with SMTP id 2so8563906qvc.0;
-        Tue, 28 Jun 2022 23:57:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5EF2A247;
+        Tue, 28 Jun 2022 23:54:11 -0700 (PDT)
+Received: by mail-qv1-f41.google.com with SMTP id q4so23457060qvq.8;
+        Tue, 28 Jun 2022 23:54:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ZAl0DXeEP1iLPwgoXgupmgF0KTbHxLpZfpaYD3ShJsE=;
-        b=OTxVhQ/ZEvmc31F6e1vp0os8oMrLc60IMhgr21uxW+1GEg3U8S4ZcMaDu+6JxmCWXU
-         At4JDqbcjeP+wS2xjcVqaM8bG6FUloFe6yjGarcf739UUvVexWjCmhzbLBx+JGyAnh8v
-         fjXt30Rv7VzP2q9i7hMVLM+y5OY9RALts9xPmnl4TEirFXfroFjNUivUS/xjC7UupKhd
-         DQ4mbKpd+/B/xWIX1crGbmXshqcVfkLKegSEr72+SFf7OtvsaLGdU/VZkutMJQ4ZnC1L
-         s11GlmU55Jm209HqPuLh48426gjM+cYXWczL2sM8OaKaEdkfQIvszscMF8ADZkEnbmNp
-         qKPA==
-X-Gm-Message-State: AJIora8Y9dmDWARgXmpovCgLl/D5bWl7YHGd70sbUv/5my4/ZGqal3tG
-        puTLJwE/zF1FDpKu4Vi0vopvx/mfzRwwgQ==
-X-Google-Smtp-Source: AGRyM1u1RVeuTga1wg8IdQGfk9J+YZtYhxkRrNqimPW/6kREgHPaRqBzykiMYturPbUOesG62dL8+Q==
-X-Received: by 2002:a05:6214:410c:b0:470:46e6:bbbf with SMTP id kc12-20020a056214410c00b0047046e6bbbfmr6609302qvb.42.1656485868593;
-        Tue, 28 Jun 2022 23:57:48 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id a20-20020ac84d94000000b0030515120916sm10149793qtw.44.2022.06.28.23.57.48
+        bh=PpuEtshrQZzm75lWu/UuoW2nHSJByVf/uoUWMyeBAMw=;
+        b=7iSyfDBfVp5ma4BxAW4Lfr6rivish4kK7/Vo8uZ+umBZe3Pa6nP73UGR8XdiDNqQY/
+         1BlGxCE/HNyVurynmRa6xvtmjr2U3n5PAv6cWFLnp7CBgM7Xi4qwEB/W0fRAm2SWxIAJ
+         F0RiGUz7MBg3uCLwYyVCzTTICy49SH4ERxbST7BKrLnyofHTMos0uoCyXIiKRvjjHjQ5
+         J7lSpnslb/Izr8iSrW69A0bXNj4nUWdjucmAPSPJNBx6GjsvSejBRIfzURB4+kHo7I01
+         N/N3hIKBx/AdoVfLVI0oOJS0AbUQJzzc0dDhsqc/c6A38lL6mHRZyGYikyjfQk+1LAnn
+         NPpQ==
+X-Gm-Message-State: AJIora/H5bdqMqSAiioa+CVrOBt2wIR2IuYcmxj/z07aFVkH9PuhQZFm
+        UXn/54KTo3jXiUZzay2MS2pmQwXMpt6e9w==
+X-Google-Smtp-Source: AGRyM1s5qZzR84urO5FpKepSH/mHpp2Fyt2U0ZcuYBfPXOxqd2Oaiv+4OXKgKtV2zSoGzAC72XH/Tg==
+X-Received: by 2002:ac8:7fc6:0:b0:31b:940a:fb02 with SMTP id b6-20020ac87fc6000000b0031b940afb02mr1192834qtk.663.1656485650681;
+        Tue, 28 Jun 2022 23:54:10 -0700 (PDT)
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
+        by smtp.gmail.com with ESMTPSA id bz19-20020a05622a1e9300b0031bba2e05aesm3721424qtb.58.2022.06.28.23.54.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 23:57:48 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id i15so26355535ybp.1;
-        Tue, 28 Jun 2022 23:57:48 -0700 (PDT)
-X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
- bu5-20020a056902090500b0064a2089f487mr1809912ybb.202.1656485560287; Tue, 28
- Jun 2022 23:52:40 -0700 (PDT)
+        Tue, 28 Jun 2022 23:54:09 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id q132so26219774ybg.10;
+        Tue, 28 Jun 2022 23:54:09 -0700 (PDT)
+X-Received: by 2002:a25:2b48:0:b0:668:3b7d:326c with SMTP id
+ r69-20020a252b48000000b006683b7d326cmr1695809ybr.380.1656485649369; Tue, 28
+ Jun 2022 23:54:09 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220628194526.111501-1-phil.edworthy@renesas.com>
- <20220628194526.111501-3-phil.edworthy@renesas.com> <YrttwplV9zEgCFji@smile.fi.intel.com>
-In-Reply-To: <YrttwplV9zEgCFji@smile.fi.intel.com>
+ <20220628194526.111501-2-phil.edworthy@renesas.com> <1656468579.925440.1403681.nullmailer@robh.at.kernel.org>
+In-Reply-To: <1656468579.925440.1403681.nullmailer@robh.at.kernel.org>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 29 Jun 2022 08:52:27 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV1xkCvico_f359xBzkwU5pG3VVJV7O3dHRyy5a9QvyGw@mail.gmail.com>
-Message-ID: <CAMuHMdV1xkCvico_f359xBzkwU5pG3VVJV7O3dHRyy5a9QvyGw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] i2c: Add Renesas RZ/V2M controller
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date:   Wed, 29 Jun 2022 08:53:57 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVsdh1YpVtq7570_kNOWUm5sMb=Fm=Dv_8qOS=hg3iuKA@mail.gmail.com>
+Message-ID: <CAMuHMdVsdh1YpVtq7570_kNOWUm5sMb=Fm=Dv_8qOS=hg3iuKA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: Document RZ/V2M I2C controller
+To:     Rob Herring <robh@kernel.org>
 Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh@kernel.org>, Sven Peter <sven@svenpeter.dev>,
-        Jan Dabros <jsd@semihalf.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
         Linux I2C <linux-i2c@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -77,37 +71,37 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andy,
+Hi Rob,
 
-On Tue, Jun 28, 2022 at 11:08 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> On Tue, Jun 28, 2022 at 08:45:26PM +0100, Phil Edworthy wrote:
-> > Yet another i2c controller from Renesas that is found on the RZ/V2M
-> > (r9a09g011) SoC. It can support only 100kHz and 400KHz operation.
-
-> > +static int rzv2m_i2c_send(struct rzv2m_i2c_priv *priv, struct i2c_msg *msg,
-> > +                       unsigned int *count)
-> > +{
-> > +     unsigned int i;
-> > +     int ret = 0;
+On Wed, Jun 29, 2022 at 4:09 AM Rob Herring <robh@kernel.org> wrote:
+> On Tue, 28 Jun 2022 20:45:25 +0100, Phil Edworthy wrote:
+> > Document Renesas RZ/V2M (r9a09g011) I2C controller bindings.
+> >
+> > Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+> > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> > ---
+> > v2:
+> >  - Use an enum and set the default for clock-frequency
+> >  - Add resets property
+> > ---
+> >  .../bindings/i2c/renesas,rzv2m.yaml           | 80 +++++++++++++++++++
+> >  1 file changed, 80 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
+> >
 >
-> Redundant assignment, you may return 0 directly.
-
-Can you prove msg->len is never zero, and the loop below is always
-executed at least once?
-The driver does set I2C_AQ_NO_ZERO_LEN, but I don't think the static
-checkers know ;-)
-
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
 >
-> > +     for (i = 0; i < msg->len; i++) {
-> > +             ret = rzv2m_i2c_write_with_ack(priv, msg->buf[i]);
-> > +             if (ret < 0)
-> > +                     return ret;
-> > +     }
-> > +     *count = i;
-> > +
-> > +     return ret;
-> > +}
+> yamllint warnings/errors:
+>
+> dtschema/dtc warnings/errors:
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml: patternProperties:^thermistor@:properties:adi,excitation-current-nanoamp: '$ref' should not be valid under {'const': '$ref'}
+>         hint: Standard unit suffix properties don't need a type $ref
+>         from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml: ignoring, error in schema: patternProperties: ^thermistor@: properties: adi,excitation-current-nanoamp
+> Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.example.dtb:0:0: /example-0/spi/ltc2983@0: failed to match any schema with compatible: ['adi,ltc2983']
+
+All of these look like false-positives, i.e. not related to this patch?
 
 Gr{oetje,eeting}s,
 
