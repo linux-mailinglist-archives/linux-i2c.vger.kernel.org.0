@@ -2,159 +2,149 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0FF560106
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jun 2022 15:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8DC56016B
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jun 2022 15:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233253AbiF2NOB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Jun 2022 09:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47436 "EHLO
+        id S233583AbiF2Nfw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Jun 2022 09:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233762AbiF2NOA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jun 2022 09:14:00 -0400
-Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50101.outbound.protection.outlook.com [40.107.5.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AA519C22;
-        Wed, 29 Jun 2022 06:13:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c3l0dLxi2Ox6gpWYY7fr7fasGIVgSbCKteij3RPGTZ9BNqB81NavCpC7NHjsY0Q2M8+pu2O2dPnIxFAMuhzJn77F9s/dUaC5is7vyMO9QiTgEuVYN8FmdVVEohzFI3YOdXdezwA5hagumcqFETMysgRBFBPk3N5sZLXvlFGgK9JOIsb9MXB5jaiMRAYOhh9W+oxU2nA2LCuHws+3a5PYmO/jDf1pA26l9bNmVYP1u25sZszmakTMwB5yojF57fhHtCaPfSFfgQzosV8EkuHnjzcFY52nDHdjZW8YqjDHQZVXIiZDXmI6v/aUYEiSHin9NfnTHhpCbmEFs3tLz2iyGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IVPMPKGY9YALVzy3/Fuf92Yn/eT1QDdy2XEyZ/avEek=;
- b=jNWtu6ImvVknsEyIZjEgDk9peshoXKFGV56M1KSZzL6cMgRYBtlFTPuhAu3jsz227tAOLrPlzF74ofAo3f5jDndhzqWDG9QtG4/MAqCUHk3xz9qw04JEu7gBqcz+fyaqRCqbp0aAuynkQVbY5ebQmEcqckUihrsXyl0be2YWAX36sVueNPs3itbOHNJpZd5VxACg9S7yJyfhlPTMydUk+xxcXa+nitFbGngZzsOd2AGMcTeOm3i9cYpeGfTge2m6wEjcJTJgDMBoXLI+Mlg/RMEoJrYwJYkzodS1mfYutk5laGqdluoJJM8Ix0gYs0BYU+sy8EoQtjMv0I0PTHJh+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IVPMPKGY9YALVzy3/Fuf92Yn/eT1QDdy2XEyZ/avEek=;
- b=Dm6OGJiZ+lSXOMIDqtCr2jGrUCe5pgyMtV64Xo8fB9kMgGWLGsd9DAjdM0dlYHXaq1YvtCePqMhbJYx0W1FPNH+p1KTPbGcXLx5XJDvCR44HWOcG3qT1L3nH2250kyJF3pluJvMcHxB9nmdS8CKdcNOQfSds3fjqz2jB+qquABw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia.com;
-Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
- by AM8PR07MB7665.eurprd07.prod.outlook.com (2603:10a6:20b:247::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.11; Wed, 29 Jun
- 2022 13:13:50 +0000
-Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
- ([fe80::8885:ac49:4a47:2293]) by DU2PR07MB8110.eurprd07.prod.outlook.com
- ([fe80::8885:ac49:4a47:2293%9]) with mapi id 15.20.5395.014; Wed, 29 Jun 2022
- 13:13:50 +0000
-Message-ID: <6a0df607-3d60-fd8d-54d1-3eb849d9c035@nokia.com>
-Date:   Wed, 29 Jun 2022 15:13:46 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 12/12] i2c: xiic: Correct the BNB interrupt enable
- sequence
-Content-Language: en-US
-To:     Manikanta Guntupalli <manikanta.guntupalli@xilinx.com>,
-        michal.simek@xilinx.com, michal.simek@amd.com,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, git@amd.com
-Cc:     Srinivas Goud <srinivas.goud@xilinx.com>
-References: <1656072327-13628-1-git-send-email-manikanta.guntupalli@xilinx.com>
- <1656072327-13628-13-git-send-email-manikanta.guntupalli@xilinx.com>
-From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
-In-Reply-To: <1656072327-13628-13-git-send-email-manikanta.guntupalli@xilinx.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: HE1PR05CA0239.eurprd05.prod.outlook.com
- (2603:10a6:3:fb::15) To DU2PR07MB8110.eurprd07.prod.outlook.com
- (2603:10a6:10:239::15)
+        with ESMTP id S233380AbiF2Nfv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jun 2022 09:35:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955922AC7A
+        for <linux-i2c@vger.kernel.org>; Wed, 29 Jun 2022 06:35:50 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o6Xqa-0006SP-06; Wed, 29 Jun 2022 15:35:12 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o6XqQ-003PNQ-Vz; Wed, 29 Jun 2022 15:35:06 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o6XqT-001txR-NY; Wed, 29 Jun 2022 15:35:05 +0200
+Date:   Wed, 29 Jun 2022 15:35:04 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, dri-devel@lists.freedesktop.org,
+        linux-omap@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-leds@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-crypto@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-clk@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-watchdog@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-usb@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, netdev@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-input@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-hwmon@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        patches@opensource.cirrus.com, UNGLinuxDriver@microchip.com,
+        linux-pwm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
+Message-ID: <20220629133504.syc6x4ptia3mnof5@pengutronix.de>
+References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
+ <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
+ <CAPAsAGwP4Mw_CJfsi7oapABdTBwO1HfiQux6X4UahspU74VjtQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6a500a2e-e794-4349-1308-08da59d13513
-X-MS-TrafficTypeDiagnostic: AM8PR07MB7665:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RsXS15lFSqT4Z60FMo6+tIMaYDyeT0sgXkePAiMgQ2vbJ/w/Wp6dcwv+2u8fddRcDrc6sR0XOFxT0zkO19YayZCE6HSClj6AUwD5fT6WaLGLHUkvKiK2ORi9RqP25+EUEN4r+xyvOwxvQj+nRjBhBqETBfuSYueLoZBc8gQcr/KZieV25lOTdZU5aJrBccwJBeb74KCiVntVnY18eXMi87WO4MNNkyimMqKE8pas6TdMYYer4PmfJvbUZmHvnjFDZZmbwhPxjKIsdJtbk0CQrgJI9lF57/7ZMLLYzLrencvoyh45FYza+ktki+qFBYm7/8eZtP9zwLcZ950z2h1A+qcrJWOR13kzOgnQ37yDrB7UrUQHYJqS0qdAjxnHSS6isDP8NV8YX/iDYwIjSkdiIZRJYy5RQq3pgaON6cX+kj/RSht8mxn/TcQaBRpYcNEk2RjD7kw8y4H6+ZvcCsCDpbVFJZpbxf43z8tQP1PSddCyFmsaCqHNrpO5cN4Ufw+oKo43SI9XG8bnZ476c2KCA0RJM2cGeW27APLH++JfSdcfn+sR7qRa+3+uzm48awUIK2ok7Qcl7cLXVkNuVfvIPFh4k2jP97cA0kJPIom5OnIOjEnAeRDnAwyEHl6wxGH33eBQOQRZrqxLH7Z/ByMOzYHH6wMLVjL4IAvwJDgHIcirBuzDoCsrxTIMOu/ZeDfPJ3JzvXHx2BZDorDxUDmkl1a1UXI2N3aOuti1hln2yGkeiF/AGWMHWemLEathzdeVp75cibVWalpDk1v+d0d1QCqYshhvHzamiLZzlIUMfDkudCYRA1x8GKOTLt1X6b/MQ0pocAkzSU3ECts1Op/AiA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(136003)(39860400002)(396003)(376002)(2906002)(82960400001)(8936002)(4326008)(8676002)(316002)(31696002)(86362001)(38100700002)(66556008)(5660300002)(66946007)(44832011)(66476007)(2616005)(6666004)(186003)(41300700001)(6486002)(478600001)(26005)(6512007)(6506007)(83380400001)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q3ZJUHp4SUF2aTJiZ0pkL2Z4cUZGZUtlbzNpcXQ5Qi9uOFdnZDBrR283dG43?=
- =?utf-8?B?eXZhRDR6M0RiQjQzbDN2ckJuU21kTmhFSVlZelNFaUM4bWFuOWNZK1IwNnFC?=
- =?utf-8?B?cVViUzYwTElDSHhPSmlBTThHNEl4TFpmV09sMUU3ZzhCWVRGb21sNVc3Zm16?=
- =?utf-8?B?K3RTa2NzZXMybkIrQi80SWI2Y1B0dmVWMTVBMnhnSVlDcEhpS0dFSVBwVFVB?=
- =?utf-8?B?elkzWjA2YVVnWGZvOEpKMk9lQ0Iwb284MjdvWVhsZ0NGOTZrck02YXlaZkht?=
- =?utf-8?B?V01paUVvYUVXQVlqK3hHSk1NOEhsYkxQR21WWFZsbHRhTVplWENzUXN0N0U4?=
- =?utf-8?B?aUpTYURKY2twY1NJOXdZR0xtZDAzS2o2QVdjMWtmNFVBWHNBRVBiNFBGeW9P?=
- =?utf-8?B?QU41TTBneXJrRi9IRWFWYnpxZEZGa2ZUcG5Vckh1S25qSk1YWkREd1g0dm9z?=
- =?utf-8?B?a1hSMnViWGNRQUdqazFBT1psa0cyTmhTZ2FEdmxiRzQzYUErUVBpZ0M5ZStR?=
- =?utf-8?B?cnZQWHhVbStQVUpVaTRxbFU3SjYwZ3U5ajVoc1ZTd0RHNnRXQm94RU15Q1Zu?=
- =?utf-8?B?Z2k1RnRBQlpoeUhxcGR6QlJHT3FkR1QrMWFqc29OK1Qrbm5TRVVmY0s3aU5i?=
- =?utf-8?B?UXBHM29Jb3dUbWRBWHpIakk1bU5LSHM1WVppdUxmREppbW5ualpUd3JZZWh1?=
- =?utf-8?B?UUR3Z0drWXgybjVKUEl3MTRSYUN3Z0hqa3preVBZUnpMWVQ0U3o1ZEsrZlVt?=
- =?utf-8?B?TUhaSThkMlNqMEZYNkJJV2Y5RFdQOXgxb2h3TDlJcEtjS2JxdUNWbVYwUFVU?=
- =?utf-8?B?TDVwRU1pMTlKTGREaytSSHM1YWYwY0dLV2QyOGRaTjBLdUs3NjZsMy9qMUNn?=
- =?utf-8?B?bFd3ODYyZkd1czg5ZDBpamQ4V1M1NzJzd2x3TTlEbmtLYVVzMjhXa0UreHBJ?=
- =?utf-8?B?Y1VXbE9wSG1La3lRUm55RkR2VFJHN3JhUUZqZXVCWU1reWhYKzJpUHNVSUpC?=
- =?utf-8?B?UW56d1NidVQ4MitiZEJGZ2RGQWhBQXc1YktzRFNwcWpQaW96MGlZd3p2S2hx?=
- =?utf-8?B?YjJwVW9FUkx2TUU5K09aM0h4S1Z3a21TcHRGS2c3SVVXaHlaNXVESS9acFZU?=
- =?utf-8?B?VXlOUjMvQTVpNVFEYWJ0S3lRSUIrTUs1Y1JFa0VIZllqRzlzWVA0ZnhwUDVh?=
- =?utf-8?B?RmRnTURNOEhJV1k2akFsTUpUL04vK0RmZ1Y2U2lRYVAzZUdiU2NKaHdLSjRN?=
- =?utf-8?B?NXFueXlQY1VKVlplV0QreTBvTS9PdDBRVFJwOHc2ay8xVmF2K1RTZ1dvU2tE?=
- =?utf-8?B?RTBrVUNTMTJGbm1TaXFuMHgyRlRXYWh6UHpiSXA2RTFyYnJzdE4xUWlsU1Fj?=
- =?utf-8?B?cVJiRGc1ejZDekQvd0xzWG5LZlkwQk9ab3dGUTI0bkdoU0xXeTlYbWl5V0p6?=
- =?utf-8?B?VEFYaVBQQnpVRWxyc1VKY0JTNzEvcnFJc3g5MzNxK0JDRUR6blFxMTZuRWty?=
- =?utf-8?B?ZkYzUEgvR254cVUzZHJIb1I1TDRtaUlwdUxsMXhmcThBZngwd3owZk9mcGJn?=
- =?utf-8?B?eCszclBjSU0wSU8vcHlsSzE2VWNWLzE0MVEycEF1eE9IMGpHRXV4azJtV0NB?=
- =?utf-8?B?S0s4RjZ1Uy9KUVRLTUJNd0VFakR1VjhZZDVjeWxLNk9JL0RyWWh3c1FwWHU3?=
- =?utf-8?B?OGNYcnZYS2Jjd0d4ZlprTkxxUGpmK2wrL3hFZ2xWV3ZLT2JXVTJFUm5pclNz?=
- =?utf-8?B?ZUdqUXFJd2FqOVNYWTJ1N0FkWDVCbnV2WVRHbHJIdmVUVkhKLzZ5SDN4c0hD?=
- =?utf-8?B?eWFKWFhmY1ZmcUVVWGZCbk9EeDBEb0ZROThSU1lpbDNqUWZLY2x6bGNWeFpt?=
- =?utf-8?B?ZXRSVUVhSmRpbmpmNHJxYVdVNWNFeWdrOCtxNzhmK2tiL3U5ZjQ1ckVSb29W?=
- =?utf-8?B?c1ZmU3lUaHNTTFVmek15aTZhNXFabDBudERodm5LK1Z0eTExRU0xdUN1RXNk?=
- =?utf-8?B?cFdpUGhYekFIcW5KeU5hVU1vWC9zM081Nnc1WGc3TjRRbGc3NWl6RUNDOHpX?=
- =?utf-8?B?enZsRkMrQ3VUcWJaR2JXcnpkU0tRUTFIWEsxOWdCdUpPRXkvWi9wV0ZkUEM1?=
- =?utf-8?B?aHdpU05rWUFURjlialN1eWtzR0FVbC9BTXJKTmU2RHJpSysxQ2VtU2lPK3J0?=
- =?utf-8?B?Y3c9PQ==?=
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a500a2e-e794-4349-1308-08da59d13513
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2022 13:13:50.1856
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: X021zS5Y9Q5aA7244UV8dqHIP2/lPBSOi0v56K+emmwRTxrUtef26vwdvxLuoP1vqIm21Lxl/pBZXqjI/ThLAvunr/jRVK+16rE6ohx/Pwk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR07MB7665
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,FORGED_SPF_HELO,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5z6hgi6euioj5d47"
+Content-Disposition: inline
+In-Reply-To: <CAPAsAGwP4Mw_CJfsi7oapABdTBwO1HfiQux6X4UahspU74VjtQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-W dniu 24.06.2022 o 14:05, Manikanta Guntupalli pisze:
-> From: Srinivas Goud <srinivas.goud@xilinx.com>
->
-> With updated AXI IIC IP core(v2.1)there is change in IP behavior
-> in dynamic mode, where controller initiate read transfer on IIC
-> bus only after getting the value for the number of bytes to receive.
->
-> In the existing xiic_start_recv function Bus Not Busy(BNB)
-> interrupt is enabled just after "slave address + start"
-> write to FIFO and before the "count + stop"write to FIFO.
-> Since IIC controller drives the start address of a transaction
-> on the bus only after it has received the byte count information
-> the above sequence can lead to spurious BNB interrupt in case
-> there is any delay after "slave address + start" write to FIFO.
->
-> This is fixed by ensuring that BNB interrupt is enabled only
-> after "count + stop" has been written to FIFO.
->
-> Signed-off-by: Srinivas Goud <srinivas.goud@xilinx.com>
-> Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@xilinx.com>
-> ---
 
-[...]
+--5z6hgi6euioj5d47
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Does this spurious interrupt cause any trouble or it is just ignored and 
-the only problem is unneeded extra CPU load?
+[Dropped most people from Cc, keeping only lists]
 
-Krzysztof
+On Wed, Jun 29, 2022 at 04:11:26PM +0300, Andrey Ryabinin wrote:
+> On 6/28/22 17:03, Uwe Kleine-K=F6nig wrote:
+> > From: Uwe Kleine-K=F6nig <uwe@kleine-koenig.org>
+> >
+> > The value returned by an i2c driver's remove function is mostly ignored.
+> > (Only an error message is printed if the value is non-zero that the
+> > error is ignored.)
+> >
+> > So change the prototype of the remove function to return no value. This
+> > way driver authors are not tempted to assume that passing an error to
+> > the upper layer is a good idea. All drivers are adapted accordingly.
+> > There is no intended change of behaviour, all callbacks were prepared to
+> > return 0 before.
+> >
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > ---
+>                                     | 2 +-
+> >  lib/Kconfig.kasan                                         | 1 +
+>=20
+> > diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
+> > index f0973da583e0..366e61639cb2 100644
+> > --- a/lib/Kconfig.kasan
+> > +++ b/lib/Kconfig.kasan
+> > @@ -149,6 +149,7 @@ config KASAN_STACK
+> >       depends on KASAN_GENERIC || KASAN_SW_TAGS
+> >       depends on !ARCH_DISABLE_KASAN_INLINE
+> >       default y if CC_IS_GCC
+> > +     depends on !ARM
+> >       help
+> >         Disables stack instrumentation and thus KASAN's ability to dete=
+ct
+> >         out-of-bounds bugs in stack variables.
+>=20
+>=20
+> What is this doing here?
 
+Huh, that is wrong. I needed that for build testing, but it shouldn't
+have been added to the patch. I'm dropping that for the final
+submission.
+
+Thanks for spotting.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--5z6hgi6euioj5d47
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmK8VQUACgkQwfwUeK3K
+7AkL0wf/Ra+JtsXozoGjhV4ADtJcJAo/mOIZQ6qOdPZGqHYkMvBmkEJ9zbvY4Edk
+SwYoapiHgVT4tDX56ekEGnm/x3udNUt5wugpsqDm4oAgYtbBCMEVtHbp3t/AqMp2
+sZcn0JsvUs6FVWSTomD396Pt10x0r+JrPTJVY2pwj1nUUV63/25oIT/4I77IughK
+LvQBMIesHK9damtObmRGqI5Ljz1L6SP7WgiLSEq1R/LjSeEwbURT3ijca95YO2Jv
+YyxoC7TiNJj2uJiisjl/r1T/LdGF6RpMN197XQjcvaZ0sbTZRF2vXlqp3cSyXrCG
+BbT2nohQYXjznouz9TIuBFtA0iX7SA==
+=YEZr
+-----END PGP SIGNATURE-----
+
+--5z6hgi6euioj5d47--
