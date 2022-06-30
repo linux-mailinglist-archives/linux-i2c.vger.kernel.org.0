@@ -2,55 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75DC56239D
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jun 2022 21:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54959562534
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jun 2022 23:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbiF3T4M (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 30 Jun 2022 15:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
+        id S237535AbiF3V3G (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 30 Jun 2022 17:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiF3T4M (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 Jun 2022 15:56:12 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566D544760;
-        Thu, 30 Jun 2022 12:56:11 -0700 (PDT)
+        with ESMTP id S237582AbiF3V2k (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 Jun 2022 17:28:40 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164843700E;
+        Thu, 30 Jun 2022 14:28:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656618971; x=1688154971;
+  t=1656624520; x=1688160520;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=9bDKDU8l215gnZyJhkGFvAKmvgqtGJH9XwdqGBQl7BU=;
-  b=G53+EcSzk1a9R0pPplebcW+rQRG60QcMNK6oec2wJ2xBconVTnL4aIPd
-   IeWCWF9LmIBMgxwYzOpilh4NPIGiJP+fJ8nZUjMjo0lSkfNsnLnF5PY7P
-   JUBSryAosUZeavfzqaSvQIfi6wqJX0ziD1VighA+NTj20lODoAh7RTFXs
-   SndoM30UUrlbW0+z+Gxo5HxRM7qZyChQtYJLZP3G4DYkFezn0HoGoUfMT
-   tyPrV0cKK1saL5SOP1iQlMPNoR0MlttMxK+4IxIai76vKB9VOPBrLtT1x
-   67FrxI/GEDWKIhWEJHAqbjFDqeeyp5s/ejsTWutDVHvVFDzYMviggroOY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="344137990"
+  bh=vov2D8XGLh7l4fzlqjW0FYaJ1gTowtT9oIai97+IhHY=;
+  b=lqc0a5cbBr/XdEfiZALSXhOhQpaT3KpFm4M8usVu2M16Y3M59+x7Ix6f
+   WvD4pWHxR/xWnm3VylAAlPYLTR+4Vptd+CydB0+GPSXPc1hSTuURp8kjR
+   qI56do2P/aC2Mjwgc1dkPG6UNnAjKQDN6YKv0S33VlUIzwd4UMU84c71T
+   c4hGz4GF17AC/sZwUi3c2/BLkI9kPRQQgqUs36ZLq2cMrx2H+UC9k6287
+   mMzAZlsPnZgw5Z3EoNOJXMhuiVdlb1as5JnbXf6zxLJimB7xLBkXV+TyQ
+   k33omhVDZcebYMs+EQxMu+7EarIHZIWtAIO/I8sGRtGqL5DQqE8XpsLrJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="280021839"
 X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
-   d="scan'208";a="344137990"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 12:55:40 -0700
+   d="scan'208";a="280021839"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 14:28:29 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
-   d="scan'208";a="591376536"
+   d="scan'208";a="588945471"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 30 Jun 2022 12:55:38 -0700
+  by orsmga007.jf.intel.com with ESMTP; 30 Jun 2022 14:28:24 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 39B2911E; Thu, 30 Jun 2022 22:55:43 +0300 (EEST)
+        id 0B8D111E; Fri,  1 Jul 2022 00:28:30 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH v1 1/1] i2c: scmi: Replace open coded acpi_match_device()
-Date:   Thu, 30 Jun 2022 22:55:41 +0300
-Message-Id: <20220630195541.4368-1-andriy.shevchenko@linux.intel.com>
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Mark Gross <markgross@kernel.org>
+Subject: [PATCH v1 1/5] ACPI: utils: Introduce acpi_match_video_device_handle() helper
+Date:   Fri,  1 Jul 2022 00:28:15 +0300
+Message-Id: <20220630212819.42958-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,31 +69,60 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Replace open coded acpi_match_device() in acpi_smbus_cmi_add().
+There are a couple of users that open code functionality of matching
+a given handle against ACPI video device IDs. The current approach
+duplicates ID table along with the matching code. Consolidate it
+under the acpi_match_video_device_handle() helper's hood.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/i2c/busses/i2c-scmi.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/acpi/utils.c | 19 +++++++++++++++++++
+ include/linux/acpi.h |  2 ++
+ 2 files changed, 21 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-scmi.c b/drivers/i2c/busses/i2c-scmi.c
-index 6746aa46d96c..ba20f6c60e06 100644
---- a/drivers/i2c/busses/i2c-scmi.c
-+++ b/drivers/i2c/busses/i2c-scmi.c
-@@ -376,10 +376,9 @@ static int acpi_smbus_cmi_add(struct acpi_device *device)
- 	smbus_cmi->cap_read = 0;
- 	smbus_cmi->cap_write = 0;
+diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
+index 3a9773a09e19..4800aba3b99c 100644
+--- a/drivers/acpi/utils.c
++++ b/drivers/acpi/utils.c
+@@ -929,6 +929,25 @@ static int __init acpi_backlight(char *str)
+ }
+ __setup("acpi_backlight=", acpi_backlight);
  
--	for (id = acpi_smbus_cmi_ids; id->id[0]; id++)
--		if (!strcmp(id->id, acpi_device_hid(device)))
--			smbus_cmi->methods =
--				(struct smbus_methods_t *) id->driver_data;
-+	id = acpi_match_device(device, acpi_smbus_cmi_ids);
-+	if (id)
-+		smbus_cmi->methods = (struct smbus_methods_t *)id->driver_data;
++static const struct acpi_device_id video_device_ids[] = {
++	{ACPI_VIDEO_HID, 0},
++	{}
++};
++
++/**
++ * acpi_match_video_device_handle - match handle against ACPI video device IDs
++ * @handle: ACPI handle to match
++ *
++ * Return: true when matches, otherwise false.
++ */
++bool acpi_match_video_device_handle(acpi_handle handle)
++{
++	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
++
++	return adev && !acpi_match_device_ids(adev, video_device_ids);
++}
++EXPORT_SYMBOL(acpi_match_video_device_handle);
++
+ /**
+  * acpi_match_platform_list - Check if the system matches with a given list
+  * @plat: pointer to acpi_platform_list table terminated by a NULL entry
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index 7b96a8bff6d2..c48e8a0df0cc 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -439,6 +439,8 @@ extern char *wmi_get_acpi_device_uid(const char *guid);
  
- 	acpi_walk_namespace(ACPI_TYPE_METHOD, smbus_cmi->handle, 1,
- 			    acpi_smbus_cmi_query_methods, NULL, smbus_cmi, NULL);
+ extern char acpi_video_backlight_string[];
+ extern long acpi_is_video_device(acpi_handle handle);
++extern bool acpi_match_video_device_handle(acpi_handle handle);
++
+ extern int acpi_blacklisted(void);
+ extern void acpi_osi_setup(char *str);
+ extern bool acpi_osi_is_win8(void);
 -- 
 2.35.1
 
