@@ -2,127 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F4188561FBE
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jun 2022 17:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75DC56239D
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jun 2022 21:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236154AbiF3PzP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 30 Jun 2022 11:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
+        id S230362AbiF3T4M (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 30 Jun 2022 15:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235669AbiF3PzN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 Jun 2022 11:55:13 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEA437AA2
-        for <linux-i2c@vger.kernel.org>; Thu, 30 Jun 2022 08:55:12 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-31780ad7535so183486377b3.8
-        for <linux-i2c@vger.kernel.org>; Thu, 30 Jun 2022 08:55:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9MsOAXMM8WKUtsVZMX5faoN+Hi36yJwlfFDIhg/V434=;
-        b=hVorlyqC4Gg6wtlkefwenISG3UysivY4rAI4vG2zTgsoRqJBoxbkg7fPZGE1KdNPTK
-         xUy09dtkRe1inmjdXPDfgKvgdaypXxHGGxlR+VRdB7TZoc2A1NkGZ5Hr1kpzRr6/6B7q
-         JBloQzKkNbKx5rVzjaPGNbDa2byu2wVVP9VTMctgGbD40soOfNzPsD4hTcWkj3zio9LH
-         UHtI0WgJH+1LO8KZy1zkKiO4l65Ey3CRF07/dTcs7dZm9ApHI2zDn4SNltnbyCdnARl2
-         ck3dMOBKMaxOh18WnHPhv7JhcbuJBB8iq0VausjHMcrp7PITeW5f6oTrtGJVfNzW3q7y
-         M5AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9MsOAXMM8WKUtsVZMX5faoN+Hi36yJwlfFDIhg/V434=;
-        b=GSeqy9KRYdBxJ9BqnYYTKEXEHl5Ok5S1He7tftXUn7c/ozyjfwz6Zt26bkTFecara3
-         ceBod5BihDHv9+SbvHbLB4po0Dylu2yZG+RgV4RCZfp6hFnx0vFgRO5ICcsavw5ou6q5
-         yd5pZkXrgglZr+JIFpZRQ1CAQW8YK+rxg0nq8ghCGFOxbK1oVthYKkNd9xR1JI5dG9fH
-         RC63Eza8FvYneJOhl3s0hBGpCaQcxMS8lF5szFnzaKSNZ17An6Hs1lW7aTGZvSf2q3jn
-         Na/Je9HIrg///WljECIDoxMsRQYmzMTBf5EtWnrQ/8X/loteellt1FC0/dU4nnp3vzRG
-         QoJQ==
-X-Gm-Message-State: AJIora9qi172Yt9cAyGOzdxMoyAgaBpEzlDdHz0bT2CukOevTRd/CPiO
-        WTrrVZWA9nlxPAqpY0s3ouyNgRoKb+cB4A/4ziDzwg==
-X-Google-Smtp-Source: AGRyM1vyLbutq6DGhdX0e5gvJO0C7mY5yjShHPVn67Um7bh+PIAJZJxEV/hYLdXcWOGcHyRKWKCJ+ZG6S5VqhOiAuYM=
-X-Received: by 2002:a81:68d7:0:b0:318:11df:a40d with SMTP id
- d206-20020a8168d7000000b0031811dfa40dmr11273981ywc.196.1656604511584; Thu, 30
- Jun 2022 08:55:11 -0700 (PDT)
+        with ESMTP id S230148AbiF3T4M (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 Jun 2022 15:56:12 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566D544760;
+        Thu, 30 Jun 2022 12:56:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656618971; x=1688154971;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9bDKDU8l215gnZyJhkGFvAKmvgqtGJH9XwdqGBQl7BU=;
+  b=G53+EcSzk1a9R0pPplebcW+rQRG60QcMNK6oec2wJ2xBconVTnL4aIPd
+   IeWCWF9LmIBMgxwYzOpilh4NPIGiJP+fJ8nZUjMjo0lSkfNsnLnF5PY7P
+   JUBSryAosUZeavfzqaSvQIfi6wqJX0ziD1VighA+NTj20lODoAh7RTFXs
+   SndoM30UUrlbW0+z+Gxo5HxRM7qZyChQtYJLZP3G4DYkFezn0HoGoUfMT
+   tyPrV0cKK1saL5SOP1iQlMPNoR0MlttMxK+4IxIai76vKB9VOPBrLtT1x
+   67FrxI/GEDWKIhWEJHAqbjFDqeeyp5s/ejsTWutDVHvVFDzYMviggroOY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="344137990"
+X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
+   d="scan'208";a="344137990"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 12:55:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
+   d="scan'208";a="591376536"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 30 Jun 2022 12:55:38 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 39B2911E; Thu, 30 Jun 2022 22:55:43 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH v1 1/1] i2c: scmi: Replace open coded acpi_match_device()
+Date:   Thu, 30 Jun 2022 22:55:41 +0300
+Message-Id: <20220630195541.4368-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220628024155.2135990-1-zhipeng.wang_1@nxp.com> <Yryn8PdQIH7RaUwO@shikoro>
-In-Reply-To: <Yryn8PdQIH7RaUwO@shikoro>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Thu, 30 Jun 2022 08:54:35 -0700
-Message-ID: <CABCJKud+iQ=Mo_-78hh-KsPAe9gtjqR0kxCTc3GOhkQd_F0GHA@mail.gmail.com>
-Subject: Re: [PATCH] i2c: core: Disable i2c_generic_scl_recovery callback
- checks with CFI
-To:     Wolfram Sang <wsa@kernel.org>,
-        Zhipeng Wang <zhipeng.wang_1@nxp.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     linux-i2c@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 12:29 PM Wolfram Sang <wsa@kernel.org> wrote:
->
-> On Tue, Jun 28, 2022 at 10:41:55AM +0800, Zhipeng Wang wrote:
-> > CONFIG_CFI_CLANG breaks cross-module function address equality, which
-> > breaks i2c_generic_scl_recovery as it compares a locally taken function
-> > address to a one passed from a different module. Remove these sanity
-> > checks for now.
->
-> Can't we better fix a) the code or b) CFI?
+Replace open coded acpi_match_device() in acpi_smbus_cmi_add().
 
-Yes, we're working on fixing CFI:
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-scmi.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-https://lore.kernel.org/lkml/20220610233513.1798771-1-samitolvanen@google.com/
+diff --git a/drivers/i2c/busses/i2c-scmi.c b/drivers/i2c/busses/i2c-scmi.c
+index 6746aa46d96c..ba20f6c60e06 100644
+--- a/drivers/i2c/busses/i2c-scmi.c
++++ b/drivers/i2c/busses/i2c-scmi.c
+@@ -376,10 +376,9 @@ static int acpi_smbus_cmi_add(struct acpi_device *device)
+ 	smbus_cmi->cap_read = 0;
+ 	smbus_cmi->cap_write = 0;
+ 
+-	for (id = acpi_smbus_cmi_ids; id->id[0]; id++)
+-		if (!strcmp(id->id, acpi_device_hid(device)))
+-			smbus_cmi->methods =
+-				(struct smbus_methods_t *) id->driver_data;
++	id = acpi_match_device(device, acpi_smbus_cmi_ids);
++	if (id)
++		smbus_cmi->methods = (struct smbus_methods_t *)id->driver_data;
+ 
+ 	acpi_walk_namespace(ACPI_TYPE_METHOD, smbus_cmi->handle, 1,
+ 			    acpi_smbus_cmi_query_methods, NULL, smbus_cmi, NULL);
+-- 
+2.35.1
 
-In the meantime, the possible workarounds are all more or less hacky.
-Perhaps a slightly less intrusive alternative would be to add a
-__cficanonical attribute to i2c_generic_scl_recovery and use the
-function_nocfi() macro when referencing it elsewhere?
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index d43db2c3876e..dda93c5471f0 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -197,6 +197,11 @@ static int i2c_generic_bus_free(struct i2c_adapter *adap)
- #define RECOVERY_NDELAY                5000
- #define RECOVERY_CLK_CNT       9
-
-+#ifdef CONFIG_CFI_CLANG
-+#undef i2c_generic_scl_recovery
-+#endif
-+
-+__cficanonical
- int i2c_generic_scl_recovery(struct i2c_adapter *adap)
- {
-        struct i2c_bus_recovery_info *bri = adap->bus_recovery_info;
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index fbda5ada2afc..7310cbdbd940 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -663,6 +663,10 @@ int i2c_recover_bus(struct i2c_adapter *adap);
- /* Generic recovery routines */
- int i2c_generic_scl_recovery(struct i2c_adapter *adap);
-
-+#ifdef CONFIG_CFI_CLANG
-+#define i2c_generic_scl_recovery function_nocfi(i2c_generic_scl_recovery)
-+#endif
-+
- /**
-  * struct i2c_adapter_quirks - describe flaws of an i2c adapter
-  * @flags: see I2C_AQ_* for possible flags and read below
-
-Kees, any thoughts on the least terrible path forward here?
-
-Zhipeng, if you want to test this on an older kernel, please note that
-you'll also need to cherry-pick commit
-e6f3b3c9c109ed57230996cf4a4c1b8ae7e36a81.
-
-Sami
