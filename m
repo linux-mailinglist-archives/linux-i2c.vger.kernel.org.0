@@ -2,36 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A941C563710
+	by mail.lfdr.de (Postfix) with ESMTP id F220E563711
 	for <lists+linux-i2c@lfdr.de>; Fri,  1 Jul 2022 17:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiGAPks convert rfc822-to-8bit (ORCPT
+        id S229620AbiGAPks convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-i2c@lfdr.de>); Fri, 1 Jul 2022 11:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiGAPkr (ORCPT
+        with ESMTP id S229491AbiGAPkr (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Fri, 1 Jul 2022 11:40:47 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFD03FBF7
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB8D3FBDA
         for <linux-i2c@vger.kernel.org>; Fri,  1 Jul 2022 08:40:46 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1o7Ikf-00006u-HT; Fri, 01 Jul 2022 17:40:13 +0200
+        id 1o7Ikg-00007D-92; Fri, 01 Jul 2022 17:40:14 +0200
 Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1o7IkZ-003oKw-3y; Fri, 01 Jul 2022 17:40:10 +0200
+        id 1o7Ikb-003oL0-QT; Fri, 01 Jul 2022 17:40:13 +0200
 Received: from pza by lupine with local (Exim 4.94.2)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1o7Ikb-000AJF-Sx; Fri, 01 Jul 2022 17:40:09 +0200
-Message-ID: <2d0f161e879175dea310ed77797f83f29c2b9503.camel@pengutronix.de>
+        id 1o7Ike-000AJX-H5; Fri, 01 Jul 2022 17:40:12 +0200
+Message-ID: <eb92e73d1fdbdc7e056173526b54d2d6417dff9e.camel@pengutronix.de>
 Subject: Re: [PATCH v2 0/2] i2c: Add new driver for Renesas RZ/V2M controller
 From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
-        Rob Herring <robh@kernel.org>,
+To:     Phil Edworthy <phil.edworthy@renesas.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Wolfram Sang <wsa@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -47,11 +47,14 @@ Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
         <devicetree@vger.kernel.org>,
         Linux I2C <linux-i2c@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Date:   Fri, 01 Jul 2022 17:40:09 +0200
-In-Reply-To: <CAMuHMdXV72_BWOpU=O13Fa3-t001YSRdsFePSHBS=Xvh1jY1EQ@mail.gmail.com>
+Date:   Fri, 01 Jul 2022 17:40:12 +0200
+In-Reply-To: <TYYPR01MB70864F60A6F0ED029045E071F5BA9@TYYPR01MB7086.jpnprd01.prod.outlook.com>
 References: <20220628194526.111501-1-phil.edworthy@renesas.com>
          <c168df990e1187bf44a5c46be53aa6b20d30d14d.camel@pengutronix.de>
          <CAMuHMdXV72_BWOpU=O13Fa3-t001YSRdsFePSHBS=Xvh1jY1EQ@mail.gmail.com>
+         <TYYPR01MB7086706381CDCEF4F582690CF5BA9@TYYPR01MB7086.jpnprd01.prod.outlook.com>
+         <be61be2446998c40b51a33453dda4d0b5f1518c3.camel@pengutronix.de>
+         <TYYPR01MB70864F60A6F0ED029045E071F5BA9@TYYPR01MB7086.jpnprd01.prod.outlook.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 User-Agent: Evolution 3.38.3-1 
@@ -69,34 +72,38 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Geert,
+On Do, 2022-06-30 at 15:16 +0000, Phil Edworthy wrote:
+[...]
+> > Which reset driver is handling the reset for this i2c module?
+> drivers/clk/renesas/rzg2l-cpg.c 
+> See rzg2l_cpg_assert() and rzg2l_cpg_deassert()
+> Note this driver handles a few different SoCs, the SoC using this i2c
+> driver is specified in drivers/clk/renesas/r9a09g011-cpg.c
 
-On Mi, 2022-06-29 at 19:18 +0200, Geert Uytterhoeven wrote:
-> Hi Philipp,
-> 
-> On Wed, Jun 29, 2022 at 6:21 PM Philipp Zabel <p.zabel@pengutronix.de> wrote:
-> > On Di, 2022-06-28 at 20:45 +0100, Phil Edworthy wrote:
-> > > The Renesas RZ/V2M SoC (r9a09g011) has a new i2c controller. This series
-> > > add the driver. One annoying problem is that the SoC uses a single reset
-> > > line for two i2c controllers, and unfortunately one of the controllers
-> > > is managed by some firmware, not by Linux. Therefore, the driver just
-> > > deasserts the reset.
-> > 
-> > This sounds scary. If the driver is never loaded, and the reset is
-> > never deasserted, what happens to the firmware trying to access the
-> > other i2c controller? Does it hang? Or write to the reset controller
-> > registers to deassert the reset? If so, is there any protection against
-> > concurrent access from firmware and reset controller driver?
-> 
-> In response to v1, I wrote
-> 
-> > That is actually an integration issue, not an i2c controller issue.
-> > 
-> > Perhaps we need a RESET_IS_CRITICAL flag, cfr. CLK_IS_CRITICAL,
-> > to be set by the reset provider?
+Thank you.
 
-I would just let the reset controller driver implement this by
-disabling _assert and _reset for those firmware-shared resets.
+[...]
+> 
+> 
+> In order for drivers to work on lots of platforms, should all drivers
+> use devm_reset_control_get_shared() instead of devm_reset_control_get(),
+> unless there is a need to reset the hardware at a specific time after
+> boot (e.g. watchdog with no way out)?
+
+Nobody should use devm_reset_control_get(). Those drivers that require
+direct control should use devm_reset_control_get_exclusive(). All
+others probably should use the _shared() variant, if it works for them.
+
+> So where do we go with this for this i2c driver?
+
+In this specific case letting the driver deassert the reset seems to be
+safe, so I'm fine with the way it is.
+
+You could also let the i2c driver call reset_control_assert() during
+remove() and modify the rzg2l-cpg.c driver to ignore it. That doesn't
+seem very useful on its own, but it would have the positive effect of
+documenting the shared-with-firmware reset in the reset controller
+driver.
 
 regards
 Philipp
