@@ -2,58 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98074563C74
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Jul 2022 00:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4097563C9E
+	for <lists+linux-i2c@lfdr.de>; Sat,  2 Jul 2022 00:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbiGAWns (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 1 Jul 2022 18:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
+        id S231148AbiGAWzJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 1 Jul 2022 18:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiGAWnr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 1 Jul 2022 18:43:47 -0400
+        with ESMTP id S230438AbiGAWzJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 1 Jul 2022 18:55:09 -0400
 Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0033A733
-        for <linux-i2c@vger.kernel.org>; Fri,  1 Jul 2022 15:43:46 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id t24so6129630lfr.4
-        for <linux-i2c@vger.kernel.org>; Fri, 01 Jul 2022 15:43:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB8A59257
+        for <linux-i2c@vger.kernel.org>; Fri,  1 Jul 2022 15:55:08 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id e12so6138985lfr.6
+        for <linux-i2c@vger.kernel.org>; Fri, 01 Jul 2022 15:55:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=5c6Bd7wOMhGjYwTIFZ4ddcT+zxuo4R5A80uRvI59m7k=;
-        b=l8xtFeB3oHG7LlmKTVaYJMDTEY7gIxgNzS0Ow4y+hwoQiDCmibUBm68k3hqco7Q5J6
-         tmQIFVb8hW+cQgnrMTOFpDkI3cZEEtwAVFCoRzWPKkwQom1sb26ePgupZ/PK97nmmxth
-         VsfdX8kVHAaUZg+8UwvZG3MgY+OqesR9ieXIJ2+pw0gUlD7bC972l+3MF19bwGJCm+5Q
-         P8Nbaq+UydzWc4GbWRf3r0PmiC9F8MkdstcZrdJVutQHHXqqhOWqSlowcKzNKLrornSd
-         qGvjG3IKsdS0oRxnt+kjXqCDzX1EpPr4AIcpyH7Ojs5sFiJVFR8cIpN6P1SbQhx5T0YV
-         xj8A==
+        bh=Sibl1Y9gMtcNPO1NV41AlirNzs/0+ErrpX8oT6iT1Qo=;
+        b=Fpg08CaSIO0UO1TMdUxmQksK7Z8AMxSA86SFmvOL1LwEddCPRiZ4/2qYpMF6tw/rqx
+         AQjkDg5Oy4vKiVKhxsfr92HD48GAK/b3KvbXL5kxY+V/n4GAiJ48axmOe01Ph7kmqr4U
+         y97XevwNrYyh55vriLkKMwhhfljmzUfL8UltmL78q9LlYLmQNnp9ZhltaGgIs4xLrhbG
+         ZSd5mw8iJlkdBUaak8JrA8Kapb5/7G18XekwLq0pAP9uZMDkGofW/GoJ1C8bkj82FQ26
+         acfpKgsGLE3DK1no8Cw05TtRBk6tOYCDIMbJ1egfTk1nXHlr6VpxIjB0F+iJdxMcWtwQ
+         jyeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=5c6Bd7wOMhGjYwTIFZ4ddcT+zxuo4R5A80uRvI59m7k=;
-        b=vB1LHCxaYe61ZqiR0EcyhQxXv/M+u1Ndr4LWK7K2G3odivZzRTJX5POLuiKGjVdFdw
-         Z9UoFtCkJvNu2N10aOhRUm4EaiULSmn7RcUmLCbHCvUJdeZNDfojNXxMxKJWan8zPEiD
-         OcmWmNk7PNmyFz1iFCuuWoW0cmKnl+fTBlDl2MBCDr8eJGFEClzGIyUg+gSkdMQRAVK5
-         7ddoZu9Cf/2FyL4ShrRYHSsHiQ/0lgbRIdhlAeULlrOR3kBeyCiI2mbF9wJWynMsGK6Z
-         Cj8UZLSNxvFAo0N2FNJFnEX5oEN7wQRawngGlXNO8e2YiPo3I1zFVT4T4JdwzKZ52OSe
-         15qQ==
-X-Gm-Message-State: AJIora/PRa/XOoPeshZEEIL7bTyZdIxO1FiYH8Kk8FbE3bYbKJyqoBTD
-        L892T2xfIGbyEl2mBSPTzV6anDKTX2Wsog==
-X-Google-Smtp-Source: AGRyM1uhGB79A/jRJW6AE0rWsCbCJViPRCi2qE5wABhQCy1i22Xrrcu7Yin04Qc5F5FsAszAeNDyDw==
-X-Received: by 2002:a05:6512:3b2:b0:47f:9ffb:e7a0 with SMTP id v18-20020a05651203b200b0047f9ffbe7a0mr10321923lfp.208.1656715424754;
-        Fri, 01 Jul 2022 15:43:44 -0700 (PDT)
+        bh=Sibl1Y9gMtcNPO1NV41AlirNzs/0+ErrpX8oT6iT1Qo=;
+        b=FxfhZ4cXp+60evUIjpOca21jaNe9OATv7kiVq291ZdaVrIvTo++qZiOqDOELJMF6KK
+         O72EiHjYvQNSYHxwI1n8aJx1geKX56LmEZjq3CBbo7eGHCwFBcYdCirGRn7lSMi9edhr
+         TmXZ/6NOZPgQMDgJlq3GW6P9aqaMxVoQwOvMR9xFeKEi/zSn68E12aKiXC8L0NFgtzKY
+         tyghyp5XcudOzJ8czZXELZ5hLov1ggqMhlpg4vgA8MqAxa7/xJDL/eYTCk+/QMkunfHF
+         afTclrFnH7UJHMjAR5Y+SrAhKvBdIajBzFQaFzaxKdwn5lC7rypcQbEp/pWWSQaJT/0C
+         hOXQ==
+X-Gm-Message-State: AJIora8X6eXfRGULljRkojNFOK2ARiPtHjrj9UQA50akwFEAY/9HmyDK
+        OcVytnxuikOemZ1eiV2aQg5wqQo6cLHEOA==
+X-Google-Smtp-Source: AGRyM1tTjcyTboI0at9NKBnxACdD4ShwS8pg1HrDt8wgkC7MVWfxUQME3DDg0nJTIdzRhCv3brgOWA==
+X-Received: by 2002:a05:6512:234b:b0:47f:62aa:5771 with SMTP id p11-20020a056512234b00b0047f62aa5771mr10496619lfu.405.1656716106494;
+        Fri, 01 Jul 2022 15:55:06 -0700 (PDT)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id r7-20020ac25f87000000b00479307e4a1bsm3782658lfe.135.2022.07.01.15.43.42
+        by smtp.gmail.com with ESMTPSA id k10-20020a2ea26a000000b0025bbf597b8asm2517406ljm.71.2022.07.01.15.55.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 15:43:43 -0700 (PDT)
+        Fri, 01 Jul 2022 15:55:05 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH] dt-bindings: i2c: Drop unused voltage supply from example
-Date:   Sat,  2 Jul 2022 00:41:36 +0200
-Message-Id: <20220701224136.808991-1-linus.walleij@linaro.org>
+Subject: [PATCH] dt-bindings: i2c: Add power domain to binding
+Date:   Sat,  2 Jul 2022 00:53:03 +0200
+Message-Id: <20220701225303.814888-1-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -67,32 +67,29 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This drops the pointless v-i2c-supply from the Nomadik I2C
-example. This is a leftover from before the use of power
-domains when the power domain voltage was attached to a
-regulator.
-
-The unused property in the device trees will be removed
-in a separate patch.
+The power domain is used in the example and in the device trees
+for this IP block. Add it.
 
 Reported-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml | 1 -
- 1 file changed, 1 deletion(-)
+ Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml
-index eec502c57047..41623bd0306c 100644
+index 41623bd0306c..42c5974ec7b0 100644
 --- a/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml
 +++ b/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml
-@@ -89,7 +89,6 @@ examples:
+@@ -60,6 +60,9 @@ properties:
+           - const: i2cclk
+           - const: apb_pclk
  
-       #address-cells = <1>;
-       #size-cells = <0>;
--      v-i2c-supply = <&db8500_vape_reg>;
++  power-domains:
++    maxItems: 1
++
+   resets:
+     maxItems: 1
  
-       clock-frequency = <400000>;
-       clocks = <&prcc_kclk 3 3>, <&prcc_pclk 3 3>;
 -- 
 2.36.1
 
