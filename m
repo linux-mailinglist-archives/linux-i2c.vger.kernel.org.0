@@ -2,184 +2,213 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABFE562BD6
-	for <lists+linux-i2c@lfdr.de>; Fri,  1 Jul 2022 08:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1278562C2D
+	for <lists+linux-i2c@lfdr.de>; Fri,  1 Jul 2022 09:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235097AbiGAGcd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 1 Jul 2022 02:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
+        id S234876AbiGAHB6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 1 Jul 2022 03:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234844AbiGAGcc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 1 Jul 2022 02:32:32 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60060.outbound.protection.outlook.com [40.107.6.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7048E13F8A;
-        Thu, 30 Jun 2022 23:32:31 -0700 (PDT)
+        with ESMTP id S232553AbiGAHB5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 1 Jul 2022 03:01:57 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2128.outbound.protection.outlook.com [40.107.21.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1797C675B8;
+        Fri,  1 Jul 2022 00:01:56 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OXL4JQvI/ME5MBIsupCHG+63Ia3/Kx7jxrNMop54F+CaP6i186E81bSyeFX4uqqRz4n3rWZXnSXaPMISLQ5jC53f2E84kyB20ZW8iEvLPG7DX2iYJIeDR81w1W8jK5ETVdm8qd2LEBYlanFsNS96+3nH9tYBL2vud+23ZJjPOzgSxNyz01DLkb3X0GZ2KztMjme8pqcFez17KwT9USWzAYS6LB637INn9oWV/V+kOCsz6ES2dxiS9Nxjx9FmHWalqNeMOTu8Y74OB7bU5orCSq7oqcgj/EmBQBF45Loyk/EtPey2i8aQL5lllBLl+xnUh2PeujCuxdsFZ7ekpF1BjQ==
+ b=hbqGFW2205wBSNlSy5eXKUgb5Xj1h7ezjBB38rt9mAje6pmkhZPaIjDHtXOfPXRxMt9if/UW58u5YkSQFsm0+CiBsinhmJ5j1oh5VAeGxd+d2S1vE0EQkF3sGGJs6+ayO2f1+IXYJ/tSi2DwDfL48cfmjPTkg2evPBF4wEMXKMHOhhkMPIKdu16La+nKyXLqL0zYED1zGaSldYmG/CD83QrSQ4qix10tx9k1IgxD63YK+iy/XlXw575OJe4XQCr1O4MZfp/wexeSsl8l5PBQlCWaeyHy07Owk3Co2cze0akqkhfInJ75DGfYT7OVppgnk5BobKC88+iXVP8sqx0Y8Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pdLil5lCGYN5mbO0eAxBDpBC9HbtJa0frYjWZWy+ca4=;
- b=Ja08vwj1IxVhyQtJGutJVHWdYKkFXUr8i3ABLDerIjnXGUoLrEVVWuvZaTObSa6L9Id8PqSa3vfvEwwjjqbqmXTVI5ETdbkQUgPCa5NNnoN9vQPDp6F+GIvlNvPbB8+Sord3Wp/qJtuXkNjJKOCTEjYqxs9vtOVW1naAUoFGpW1bUmZIG0or1nUV5PbnJft7rjg/m38DrIe3ohtPmhf8ChijO1QfoTtWzCbS+dLlYcHpvwaV4q7ut/1R/FpuqZkPl32wTkUPGhJRsfQyx0wNZW867AKJNZy7JH3ThC0IpWxY3AcuTJtoKIIYDqoBffQejjasdeaB+rZei+EIA7FMSQ==
+ bh=rB+FiTOENfUWn0CU9kzoga2zA54Iy0ofYJTpsQTvXZg=;
+ b=Ge8SQDbdemW1xbKHnLeFsT4Ofe2PAubD1kn/WrGjJ3palA5QkXpceEhZJsDX2gL17yrddYb+Mk6R1DUvsYsp4MFKpdyAlvuQxY4kekuV9I0MKw5hIwYimeLVfgVtw4qoemXeTFO0skfKwOC5OWDFcRwbpTS0RQP42QvHYSOFy+F6Oa85dtbmw5/rPXkAq6/dTtF6MyBy6JIyEMaESbO69+dKlt1qEoFdvxUZJVqP/B0bNekJKn0HHPZUFckhRIGxI9dBzSU6LZsCE7vMrjQmIxciPlUM7HbPwYH+pMtPDq2zarWilAsJIKx17oSwaokqJGYT1+zePsRTJ37UnMQpMQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pdLil5lCGYN5mbO0eAxBDpBC9HbtJa0frYjWZWy+ca4=;
- b=ahljCPV4d8wh7m25DzHE/Vfe1E6vmDYuax6Bzte5yXLNEXlAoXBnyKUnuDgAa7ULt3TjxVWy6YIK4ygLKb4VTDmIZ0cT+QJrR3LeIXtMxjiI11Wan2we++O6Qw4AE3B3GN6Aml2SnU2+NuN9LjHh9YK8b9zff7q5ekQiZ95r2ew=
-Received: from PAXPR04MB8304.eurprd04.prod.outlook.com (2603:10a6:102:1bc::10)
- by DBBPR04MB7577.eurprd04.prod.outlook.com (2603:10a6:10:206::10) with
+ bh=rB+FiTOENfUWn0CU9kzoga2zA54Iy0ofYJTpsQTvXZg=;
+ b=wvze3NCxdTpZCCmUsU8/ROoSHWxGBh26iNrBFBP9Yt28W9c3pmPU4ipwEB4klE0eIpop+W+9sAF4itFPPnedsNBHwZS2NToQc+RG4KXsfCrdbq45R+KcZI4acOar/IBMeIhSoIDZWlF1h5ZELtldKXBf6oXbaTJhkhIb054w+g4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia.com;
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
+ by AM6PR07MB5768.eurprd07.prod.outlook.com (2603:10a6:20b:94::33) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Fri, 1 Jul
- 2022 06:32:29 +0000
-Received: from PAXPR04MB8304.eurprd04.prod.outlook.com
- ([fe80::6c24:a20:26bd:60df]) by PAXPR04MB8304.eurprd04.prod.outlook.com
- ([fe80::6c24:a20:26bd:60df%2]) with mapi id 15.20.5395.015; Fri, 1 Jul 2022
- 06:32:29 +0000
-From:   Zhipeng Wang <zhipeng.wang_1@nxp.com>
-To:     Sami Tolvanen <samitolvanen@google.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: RE: [EXT] Re: [PATCH] i2c: core: Disable i2c_generic_scl_recovery
- callback checks with CFI
-Thread-Topic: [EXT] Re: [PATCH] i2c: core: Disable i2c_generic_scl_recovery
- callback checks with CFI
-Thread-Index: AQHYipisQEgXaD6RFU2HjOnVd/mFf61mx7cAgAFWe4CAAPK9YA==
-Date:   Fri, 1 Jul 2022 06:32:29 +0000
-Message-ID: <PAXPR04MB83042668CE3A29542EF18657EBBD9@PAXPR04MB8304.eurprd04.prod.outlook.com>
-References: <20220628024155.2135990-1-zhipeng.wang_1@nxp.com>
- <Yryn8PdQIH7RaUwO@shikoro>
- <CABCJKud+iQ=Mo_-78hh-KsPAe9gtjqR0kxCTc3GOhkQd_F0GHA@mail.gmail.com>
-In-Reply-To: <CABCJKud+iQ=Mo_-78hh-KsPAe9gtjqR0kxCTc3GOhkQd_F0GHA@mail.gmail.com>
-Accept-Language: zh-CN, en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.6; Fri, 1 Jul
+ 2022 07:01:53 +0000
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::8885:ac49:4a47:2293]) by DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::8885:ac49:4a47:2293%9]) with mapi id 15.20.5417.008; Fri, 1 Jul 2022
+ 07:01:53 +0000
+Message-ID: <1c944d68-a950-1069-40dd-7f5ebdc395f5@nokia.com>
+Date:   Fri, 1 Jul 2022 09:01:46 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 03/10] i2c: xiic: Switch to Xiic standard mode for
+ i2c-read
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4176aa1c-1584-4e2b-b3df-08da5b2b78b0
-x-ms-traffictypediagnostic: DBBPR04MB7577:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6Q64k7BuqytmkwZwxvCaboO2NlfSAes04jWWXWk/xQ6+VRiK2zxjxSiCYuIE6PqS5XixJVb8ucWL6HO7OjtkbLsoZspPXnC2oQyfSEj/Jlm/DlfYiAI3lJi7gjZyQqpVJL5pCHvhlcp2mG8W4J3hj9StzaCXyd9UwfBIUaNi8JEefNFpQVdGDeL1WPQSb5ChNomPiFTWoMa6GsYf8ipo9tOw++GWE1ri8gZ6jysa4BejXYLO9yua6LHGeBgLRl3BswEi+tckf1clx5aRX+Q9ZqkQTfQl1in5GcT6wsAiqhuvtmczxhlVN+kjun1g+mDssUoMv3q2rOZVdwr579U9V2vIil+v7HlhRfp3t0lAwIfFp8kuFBeNSNfk7C8LUIkCO2TALbFuEOgmUou/B44G7Tw6rTFmAeOJ+t8H0TBqAd8YkJIY/mydmuT8vIJjSxDmdWOE3Fm+RuxSi7EwvwZvIV7qpQjbSMNeoj5Fh5Wh1XC1r7agTXhC6vf7Mxtj38edQFTASS7NuByGP1R0t2gnMJEfzCm2JcPpXPhd95pFW7Y8mtdNyw3j1Cl3vhr2TSHd52PKp6ELlPaFenixFGAc2R27ib7lIzdDXFHpU1EfhqUMGZaZuDTfrmOjxMyBeFwJ05b8FQp+BHwKunLJBK81y+PGxj8SoS9CvOAt0hvZ0IJ9N6d/+RkVqeXkD5f0anCDuqS7I0//cYjLNySUbPkJM0ms1SXYYXFYsVrY4ZGlNbLr50UpTqOmorNPGOKz9U9Y+5HoJXejug5wn8xaK4j7ZwbOhWsKLLwnMuQtQVJYCWg1iji8ws3WfjhfjQZUSpuvYF7rcMj0o0OjZNavOX7q3flsm6AT6weYosdjsDgNVygP9c6YCPQcwXz7qjORs4DN
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8304.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(39860400002)(346002)(366004)(376002)(54906003)(122000001)(38070700005)(316002)(8676002)(38100700002)(66556008)(86362001)(66476007)(4326008)(66946007)(66446008)(64756008)(76116006)(55016003)(110136005)(2906002)(8936002)(5660300002)(52536014)(186003)(83380400001)(45080400002)(53546011)(966005)(9686003)(478600001)(26005)(71200400001)(6506007)(33656002)(41300700001)(7696005)(41533002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?dEVNblllYTNlUFp0UEdRTEQvcGo0dDk1ZXc3TUE1MWpkWG9ON05hUTI4L1BC?=
- =?gb2312?B?d25SRnNDWVpEMkc4ZFFtWm1wZGlBeTBaQmtuQTlqVVlpVW92UzcvVFZGajFV?=
- =?gb2312?B?SFh6QzNjaThEd2lxb1NkdjlRWVJJeHVWT08rYmg3NEg4Y2pCdTlOd3NTQ3o3?=
- =?gb2312?B?UTY4c3RWcUpBcThQaEpqK3NRMmdNZ3VrN1REQXdVeXFabFN1RXUxMUZCSzd1?=
- =?gb2312?B?amE4b3lKUjJaYldIQnlubld5d3JlUnB2dEZNSEt1NFlKOERXRUlaY0NMcStl?=
- =?gb2312?B?VlV5Qy9tTWVXTlVnVTMrNFVLeS8xTGdxb2R1WmtaalFlbWswSDZpTzdsWkdl?=
- =?gb2312?B?dytwVG9zbmFJNVp0UURpanFidzh4ZVo3R2o1a00yV0plTisvUVlJWHFJVjg4?=
- =?gb2312?B?YkpFRHZ0WTJkc2ZmbUhlWEFqR1ZRblJNOEhyWDEyNzRwNjFpbUhBclpnQUdT?=
- =?gb2312?B?UzM0QW0vUVZHTnlNRi94Vy9mSTNYQXZKdXdsa1kzSDByZFQ3WVoxZWhGajJO?=
- =?gb2312?B?SEZDaWQ4RjV2YWJGNm5BS2NzTWk5MDNiZWMwZERnK1NEQUZ5YlFtN3lLL3Fv?=
- =?gb2312?B?M1krQmVLb29hRlRvOFNuVlA0aGxGUll1MWNVRHhHV3Nybks5Vm4vRXRVMnRH?=
- =?gb2312?B?eHJoQUZKV1hpL0lDWU9pTkpzNVlmekVuMGMvaG4zM3FhNWR5YlREWjE1c2Fo?=
- =?gb2312?B?NVhML3ZQSW00VFY5c0had3VUWnlHNjhJbzNCbEZqUHlXdjhkL2NhMHFtZWdP?=
- =?gb2312?B?aDRENmo2c3VNaXc5VmVJUmtjR2VtTlllMXJzR2Z0S2RlZ2p4cnVHNmRIMU1i?=
- =?gb2312?B?N0FTdzV1N3FVU1VlcUdNdFNEeS93K083K0FjT1VmWWYwNGt5RmE1aXhIVjQ3?=
- =?gb2312?B?RjVCSWxncDVpbmh1aXBGZjI1UVpYWjg3b3hHYlFYSWxwSFNaM3hvUFNreDd4?=
- =?gb2312?B?SmoyRGNPZHhDL0FEWFdpa3V3eGt4eWRubGt6WWc5dlVCeXVONkQyZHlxYk5H?=
- =?gb2312?B?bWZPYmdCZHZXN0kwM0xsN0h2MFdCU1Y4YlpGQlpTS3UrZCtaYW1qbjc0bERK?=
- =?gb2312?B?NDZMRTJKSkQ3R2tNK2VJMkplcTZkZ0g4MEdKN0Rxcnl0WUMvQzhtUjg1eUJZ?=
- =?gb2312?B?NzR4aDcvZ2Uvd0E3bnV2WktZeVBXdWpFRXFvVTZOdUhCQnpUaTl2WDVPbkkr?=
- =?gb2312?B?V1owVVloSnBNcDlDRGtQeU54TUIrY2h6a0pEV255K2F1NHRreXdReWlINTcv?=
- =?gb2312?B?VWxleU0yVzgxdk11RStrTW01SEZQSjN5V2I4Szc4djhIOUpSOXVnRTJwTG9a?=
- =?gb2312?B?VHcwZUJsa3NCbnM4aThLVnVVeUM3WXZpaVgrbWE2SW5KQzNSNW8vbmtVa1Az?=
- =?gb2312?B?SEdadW4zbHhSQmZjSEVTbkVwSGpiZ0haUXZCajUwSE1JQTBlajZEK3p5clZh?=
- =?gb2312?B?OXM5MW0zREw3czVSWXV4RXM3MnJQanNCSGRFM1BkeHdsK01hamVNSW5oSlpp?=
- =?gb2312?B?RTF0bzhDZkptZGMyVXpJbHVHTVhXRUQ2TTlwakhxTkFuU0pUVjRxTFpydWJ3?=
- =?gb2312?B?ZDQzdkZQdjBiNit0Ym5IYzR5V1lqdUNDRUFUTVdQNU56dEVqcWVSbWdnSHJC?=
- =?gb2312?B?RGozR3JTejduTjlSMGhTZ0VJVkZIOW1Zam15aFlDeGZYN1ExVzQ2MWtmczAx?=
- =?gb2312?B?OWVteE10NVZNbzdnNThveGFQY1N3ZUpWOCtsZzdLb2oyamZJWHEvWkZDZndV?=
- =?gb2312?B?ZEh0OHJmYStVU2YvNWNiVzVjbFVkdmFKKzgyN0R1VmQ4Sm1KZEtEVGxqWGZs?=
- =?gb2312?B?SWJBTmcxQk5EdFBWVnVMSGRNUmc4SjA4clMyWG04Z2FIV2ppa29OdVJLd2pX?=
- =?gb2312?B?eit1L3RKbFJXM2tqaFZVY3MxdHB6Z3NHUUg4Qm15VVRydEJ3NkJ3a2pHYitF?=
- =?gb2312?B?TWNoODZzUWJJQVJ4ckkxY3czbDRLVG9ubFc3WHMyRjNScjFJVUJZS1IwYXNH?=
- =?gb2312?B?R3lyMUJKYll6OWZHTENRRERoVnlWNDBYUVdkUTM2YjFzV2RGREtuc0YySGNh?=
- =?gb2312?B?M2xRNFZ2RStPOGZITEFmc0xyL3M2OU9peWFocWVtRy9MVEd0Ujk1UGxSVS9o?=
- =?gb2312?Q?ymRHJwzZmNbwL8qjZKjrLxost?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+To:     "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>,
+        Marek Vasut <marex@denx.de>,
+        Raviteja Narayanam <raviteja.narayanam@xilinx.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "git@xilinx.com" <git@xilinx.com>,
+        "joe@perches.com" <joe@perches.com>
+References: <20210626102806.15402-1-raviteja.narayanam@xilinx.com>
+ <20210626102806.15402-4-raviteja.narayanam@xilinx.com>
+ <ad7626bd-bcbb-48fc-5e32-bc95fafcb917@nokia.com>
+ <80c524c3-8c31-346d-2691-48f93fa6001f@denx.de>
+ <6cf9647e-10dd-8523-962d-a7c40b532fe2@nokia.com>
+ <BY5PR12MB4902D6BAA8D1035BEF022D8E81BA9@BY5PR12MB4902.namprd12.prod.outlook.com>
+From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
+In-Reply-To: <BY5PR12MB4902D6BAA8D1035BEF022D8E81BA9@BY5PR12MB4902.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: HE1PR05CA0251.eurprd05.prod.outlook.com
+ (2603:10a6:3:fb::27) To DU2PR07MB8110.eurprd07.prod.outlook.com
+ (2603:10a6:10:239::15)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cf0c3f87-a93c-4b35-110c-08da5b2f9220
+X-MS-TrafficTypeDiagnostic: AM6PR07MB5768:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W6T8Y//fQhqzKFvUFjfb0jAGHS13RUKoJRWbk6TswcaMs++M9yBxG7SqJmETQDYTUiyTydZMs23OhoZUnrXK7pmtogSkb33N+mXXG+YWZsS3eG8x9g6afKp49zgHtRmh6QOmu8YGX2SqwFk0tMUXssmjhDCYj+LAOhXOJUYy3msH+INyH0ybqvisCImaNUcQVaMdnR+LeuG/ZxdO2TW1XsEUdIvm6RJu3Jze8LalzwWTkeT6iR3a28+R/whskvsNG1qYT5opScdckoTF4L0HLm3WwuSTKPWszeP7wusEd3rFwsNjDStSH7kpkIgNgBui1OJ8e2ma0feLY6ew+kpi2AdA/D7FPc8I2lESRGvOrjqaqc6dLYl+3V35JRHOx28meeKlydHV1BrI+blLZGFnbMHq3NeDINAtnZxCJnRVaMFnac4rhVb46ln5xKzwMmMDH7fJme1n0cbYm6yLvAh3sJD23nyphE3amuHxZrgZD4l54LEHX1FUzs8n3tuhLB7xSEPDeyvkG7pjgnzMp6yxN240nNIJW7WgYopTpF9a4CQEb3o7V5nTmjN3FsviBPLOnF5Y+rZxTFIiYW4XD8j2V5Ov8f1eQLaoFxtgmXYoLErWm4WdvunrCnrBLLNe1egRUT0cdc2gk4qtrDKVRpfTIh7E9Lm7KCE5cLdLgICUn8NXydeRB98G1E6TV1C/e8v7J224eg6DZF98aYh8+0itv4ERRLL7veu5w1VPUKuK6TLTUNev4nxPWun5VdxU1BHMrYRbSydYfUUbaEOdM10sKaEXD+3yHP5eotdxdzh9+EPq/bJ4QUyRDJ8Y8Br9tgmtyxL8MWbYAdrfjYAtRiZjLdXRfl9FkATVFic/ev2zaNqUzXestwTr8MlaK4kUQ5u53kIaPRL5JCGXKQvTsfO61g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(366004)(396003)(39860400002)(376002)(26005)(6512007)(8936002)(6506007)(53546011)(5660300002)(44832011)(66476007)(54906003)(66556008)(8676002)(66946007)(110136005)(478600001)(4326008)(6666004)(82960400001)(86362001)(316002)(31696002)(6486002)(186003)(83380400001)(36756003)(38100700002)(31686004)(41300700001)(2616005)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aTVsUktYaUdjQmR4cGo4K1NtamxlbGpBNjdBNFVhWC9jVHpFejl1U1ZDSHJG?=
+ =?utf-8?B?bFkwQzljakFzQkpNRWNwNElrcVN5aW53cnRmSFVWNWI2VVZqU0M0UzYxL1pB?=
+ =?utf-8?B?NkZUeWljS1ZkM09QbmxYb2t0eUlKcHlGOUFjKy82Zk1aV25FSDRHdEhYTWlm?=
+ =?utf-8?B?YXFFZVNMZFpPaUQ4M3MzNnBxN213dkNvNGdNV2xkQVZmbzRQRGdqcHo2VVZw?=
+ =?utf-8?B?a2VnMW5VWXNLSkxVNzExWTg3NUJ4QkpGMDdEZmdSQ3NvN25VK0JnRVRkaFpI?=
+ =?utf-8?B?Q0tRUDRET29aTDdtUVNMQWVuUlJuLy9yYmdwQTR3L3NKci9hMXdlZDRrKzRx?=
+ =?utf-8?B?MVFGcDJ3WGl0OEU2QVpsaEFjN09JdnRpSktmbkhQNlFwOTNDQjRvT2l4dTBZ?=
+ =?utf-8?B?d1lnZHo2d3REVHFoa3dVZFpvN1piUlFZN201QlBxL3FWaW1BUjBTYjZVZGNt?=
+ =?utf-8?B?bGtkTC9LaHltcHZmT1dMdnZMdEVhMS9abHRMY1JvZ0grZ2dsRTBxTlkvL1l0?=
+ =?utf-8?B?ZzN4RklUTW1jVjl3NSsvRzFCTW1ZZER5aTNLWFN1L083blh4aG0zQ3hDblZp?=
+ =?utf-8?B?NmdtUHRaZnI0dE9jWjZGQllWTGhtRFRmWUtaR05wR1R0dnlvVFkyL0RBcVpO?=
+ =?utf-8?B?RUhDSjBmTGdrVEptb2pyeERwdDVaS1ljSW85S21vODk1MGZRNlRYLzJKYW43?=
+ =?utf-8?B?elNZbG1UNTlObEJMWmFGeDd1TWYvS0pUSm1OcUwvNk4vNUFuR3hHZ2h0M0c4?=
+ =?utf-8?B?bkNrV2tzN2pCYUNHaTlpUjNaOFVyRXJYZG41Yno2YThaRWZwd3BiZ2Y0R3p0?=
+ =?utf-8?B?alAxMTROd0Z3T3hCZ3A1REZVME5ldlVneDNCNGFETDZJSCtVRGY4c0FjSjZr?=
+ =?utf-8?B?MENsZ0dsQUwzaEY2UXM1Qjc2KzZoVnUrRmJNRStZMFJ4QWJIU0VzZ05mckhO?=
+ =?utf-8?B?WFplc09YeGdIL1RiNm1CRlQ5SHV3NE1tMktZUW5zWk9vZGY4VlRmT0JYVmtM?=
+ =?utf-8?B?L3pxTU1lSEhMNGZIdXlmZlpNdHNncGxYUndDTFppQjB2aDQ1RFZiZ2tWcTgy?=
+ =?utf-8?B?UzY3biszMklNblVlWEtKSDRwNWNBZEpRek1uRlVEcjRpNmRYbWJVZDkraW54?=
+ =?utf-8?B?OFBKcVJIcEdPSzhDcWx1dVgydi8zYnp4TjFzUU5JU05SR2VDMWFiNFc1cTdv?=
+ =?utf-8?B?M3JydDVZMGJIQ3Y5aE5EbzR0M1FFWFNXblllOFhsb2xoTjkwNXV5bStQbVV1?=
+ =?utf-8?B?OStzSGNYVmsvUFpvcUtXMVorSWVvRHd5ano3V1phd0RsQ1VyOFF4anRuUVUr?=
+ =?utf-8?B?d2xJWTkrSnh5SXVUZUpZbmtFZWRTc280MlFWeGdLZHFjS2g0L0NIT2s4Q0tt?=
+ =?utf-8?B?aWZZTnFjN3dZdGpPMVVnV3Rvd3ErSTRhU1dKdkJUb1RBMDhweFNONE5mMnFn?=
+ =?utf-8?B?QU5NNkJqZDBUN1p6V0VmUEdydStkeklEeWhTeDdiY0F2dk5MUUFDQUNVNG0y?=
+ =?utf-8?B?NHE0ZS9SK1V1cWZ3N1JpaG5ETE1KalRPOVFKNG11WjVTUHNTcW1TbTBPT2RH?=
+ =?utf-8?B?cWJPa2NzM2FCOWFBYXJGNVdLTklWN0J2b2F2cVcyS0kwMjZWS2xoeHNCaCs2?=
+ =?utf-8?B?QVZIcEFzUkJLVFlXS3JPTmVlUm04Q1N0c0ZuYURUSkhZL0dxbHVaRTloeVJn?=
+ =?utf-8?B?R0Z2Y2UycEVtbHRwVjhCc0svaTVKeDk4Ty9WdVpTUlU1cUNNNjlqcXRDN0xh?=
+ =?utf-8?B?dDArSkZRdWpOd2kvLzZ5VlI0UWVreDIrbU9qVzRoUFc5OTQ0VDJaMC9pTkVq?=
+ =?utf-8?B?aHM1LzY1RHVlVURUTC9MSWRrS3hFTWV5SzR2Y2RLc1MzZzdLano4Qy9pSmRv?=
+ =?utf-8?B?bmRyN1hmZzA5a1VZcXhWd3ZERVFXSWZxU0pobzN0VkRISlUva3pDM3RMVGh1?=
+ =?utf-8?B?QVJNQUFxV1ZBYVFkc1BOZittQVpJMkh3WVFlNjBxYkdBNTZ6dGM2WW5EL2dj?=
+ =?utf-8?B?VmppUjdtMlZGT3pZVWxJeUFTblMvOGk3bEhsSTVvdEVNeDJ4UTAzb3FzMHJJ?=
+ =?utf-8?B?aytpclVVODllUWdCN1E5MHpMdTBxTnhFelFlQ0VNRDFpcllKcVEwRFRFb3Fq?=
+ =?utf-8?B?QW1BWHNvNk1kSFN5QlRGTHY4K3dBZ3dmWnMyMFdqemx2R1V3aFNaMDBkbzZB?=
+ =?utf-8?B?cWc9PQ==?=
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cf0c3f87-a93c-4b35-110c-08da5b2f9220
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8304.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4176aa1c-1584-4e2b-b3df-08da5b2b78b0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2022 06:32:29.2289
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2022 07:01:51.5928
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AXADTxw9l7hqtYHYpUh9nqE30dfzwzX74+F+PWHR5kuEtQjmMGkhQm6JelCS7rL1jOFUPVboMG+KJjEvTjf/kw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7577
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6U/sYv8rXTJoZD1md9YA4Y2Ujg0VjsBgYU/GERzEyczShTShLBOQktDGXjLAlswd+DGAP/hgC/99W9PS4xJn8b+kqUde73cgSD80q5H3mQY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR07MB5768
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,FORGED_SPF_HELO,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGksDQoNCkkgdGVzdGVkIHRoaXMgY2hhbmdlIG9uIGtlcm5lbCA1LjE1IGFuZCBpdCB3b3Jrcy4g
-VGhhbmtzLg0KDQpCUnMsDQpaaGlwZW5nDQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQpG
-cm9tOiBTYW1pIFRvbHZhbmVuIDxzYW1pdG9sdmFuZW5AZ29vZ2xlLmNvbT4gDQpTZW50OiAyMDIy
-xOo21MIzMMjVIDIzOjU1DQpUbzogV29sZnJhbSBTYW5nIDx3c2FAa2VybmVsLm9yZz47IFpoaXBl
-bmcgV2FuZyA8emhpcGVuZy53YW5nXzFAbnhwLmNvbT47IEtlZXMgQ29vayA8a2Vlc2Nvb2tAY2hy
-b21pdW0ub3JnPg0KQ2M6IGxpbnV4LWkyY0B2Z2VyLmtlcm5lbC5vcmc7IExLTUwgPGxpbnV4LWtl
-cm5lbEB2Z2VyLmtlcm5lbC5vcmc+DQpTdWJqZWN0OiBbRVhUXSBSZTogW1BBVENIXSBpMmM6IGNv
-cmU6IERpc2FibGUgaTJjX2dlbmVyaWNfc2NsX3JlY292ZXJ5IGNhbGxiYWNrIGNoZWNrcyB3aXRo
-IENGSQ0KDQpDYXV0aW9uOiBFWFQgRW1haWwNCg0KT24gV2VkLCBKdW4gMjksIDIwMjIgYXQgMTI6
-MjkgUE0gV29sZnJhbSBTYW5nIDx3c2FAa2VybmVsLm9yZz4gd3JvdGU6DQo+DQo+IE9uIFR1ZSwg
-SnVuIDI4LCAyMDIyIGF0IDEwOjQxOjU1QU0gKzA4MDAsIFpoaXBlbmcgV2FuZyB3cm90ZToNCj4g
-PiBDT05GSUdfQ0ZJX0NMQU5HIGJyZWFrcyBjcm9zcy1tb2R1bGUgZnVuY3Rpb24gYWRkcmVzcyBl
-cXVhbGl0eSwgDQo+ID4gd2hpY2ggYnJlYWtzIGkyY19nZW5lcmljX3NjbF9yZWNvdmVyeSBhcyBp
-dCBjb21wYXJlcyBhIGxvY2FsbHkgdGFrZW4gDQo+ID4gZnVuY3Rpb24gYWRkcmVzcyB0byBhIG9u
-ZSBwYXNzZWQgZnJvbSBhIGRpZmZlcmVudCBtb2R1bGUuIFJlbW92ZSANCj4gPiB0aGVzZSBzYW5p
-dHkgY2hlY2tzIGZvciBub3cuDQo+DQo+IENhbid0IHdlIGJldHRlciBmaXggYSkgdGhlIGNvZGUg
-b3IgYikgQ0ZJPw0KDQpZZXMsIHdlJ3JlIHdvcmtpbmcgb24gZml4aW5nIENGSToNCg0KaHR0cHM6
-Ly9ldXIwMS5zYWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWh0dHBzJTNBJTJG
-JTJGbG9yZS5rZXJuZWwub3JnJTJGbGttbCUyRjIwMjIwNjEwMjMzNTEzLjE3OTg3NzEtMS1zYW1p
-dG9sdmFuZW4lNDBnb29nbGUuY29tJTJGJmFtcDtkYXRhPTA1JTdDMDElN0N6aGlwZW5nLndhbmdf
-MSU0MG54cC5jb20lN0NjOTU5OTY1N2M5ZDY0YWU0M2JkMTA4ZGE1YWIwZWIwYSU3QzY4NmVhMWQz
-YmMyYjRjNmZhOTJjZDk5YzVjMzAxNjM1JTdDMCU3QzAlN0M2Mzc5MjIwMTMxNTEzMTIzMzAlN0NV
-bmtub3duJTdDVFdGcGJHWnNiM2Q4ZXlKV0lqb2lNQzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklp
-TENKQlRpSTZJazFoYVd3aUxDSlhWQ0k2TW4wJTNEJTdDMzAwMCU3QyU3QyU3QyZhbXA7c2RhdGE9
-ZGpEWjhnTlBHbklLejdEZlg0dzNwc1pmNDR6SG5waDdGZmxPTGElMkY0UW5rJTNEJmFtcDtyZXNl
-cnZlZD0wDQoNCkluIHRoZSBtZWFudGltZSwgdGhlIHBvc3NpYmxlIHdvcmthcm91bmRzIGFyZSBh
-bGwgbW9yZSBvciBsZXNzIGhhY2t5Lg0KUGVyaGFwcyBhIHNsaWdodGx5IGxlc3MgaW50cnVzaXZl
-IGFsdGVybmF0aXZlIHdvdWxkIGJlIHRvIGFkZCBhIF9fY2ZpY2Fub25pY2FsIGF0dHJpYnV0ZSB0
-byBpMmNfZ2VuZXJpY19zY2xfcmVjb3ZlcnkgYW5kIHVzZSB0aGUNCmZ1bmN0aW9uX25vY2ZpKCkg
-bWFjcm8gd2hlbiByZWZlcmVuY2luZyBpdCBlbHNld2hlcmU/DQoNCmRpZmYgLS1naXQgYS9kcml2
-ZXJzL2kyYy9pMmMtY29yZS1iYXNlLmMgYi9kcml2ZXJzL2kyYy9pMmMtY29yZS1iYXNlLmMgaW5k
-ZXggZDQzZGIyYzM4NzZlLi5kZGE5M2M1NDcxZjAgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL2kyYy9p
-MmMtY29yZS1iYXNlLmMNCisrKyBiL2RyaXZlcnMvaTJjL2kyYy1jb3JlLWJhc2UuYw0KQEAgLTE5
-Nyw2ICsxOTcsMTEgQEAgc3RhdGljIGludCBpMmNfZ2VuZXJpY19idXNfZnJlZShzdHJ1Y3QgaTJj
-X2FkYXB0ZXIgKmFkYXApDQogI2RlZmluZSBSRUNPVkVSWV9OREVMQVkgICAgICAgICAgICAgICAg
-NTAwMA0KICNkZWZpbmUgUkVDT1ZFUllfQ0xLX0NOVCAgICAgICA5DQoNCisjaWZkZWYgQ09ORklH
-X0NGSV9DTEFORw0KKyN1bmRlZiBpMmNfZ2VuZXJpY19zY2xfcmVjb3ZlcnkNCisjZW5kaWYNCisN
-CitfX2NmaWNhbm9uaWNhbA0KIGludCBpMmNfZ2VuZXJpY19zY2xfcmVjb3Zlcnkoc3RydWN0IGky
-Y19hZGFwdGVyICphZGFwKSAgew0KICAgICAgICBzdHJ1Y3QgaTJjX2J1c19yZWNvdmVyeV9pbmZv
-ICpicmkgPSBhZGFwLT5idXNfcmVjb3ZlcnlfaW5mbzsgZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGlu
-dXgvaTJjLmggYi9pbmNsdWRlL2xpbnV4L2kyYy5oIGluZGV4IGZiZGE1YWRhMmFmYy4uNzMxMGNi
-ZGJkOTQwIDEwMDY0NA0KLS0tIGEvaW5jbHVkZS9saW51eC9pMmMuaA0KKysrIGIvaW5jbHVkZS9s
-aW51eC9pMmMuaA0KQEAgLTY2Myw2ICs2NjMsMTAgQEAgaW50IGkyY19yZWNvdmVyX2J1cyhzdHJ1
-Y3QgaTJjX2FkYXB0ZXIgKmFkYXApOw0KIC8qIEdlbmVyaWMgcmVjb3Zlcnkgcm91dGluZXMgKi8N
-CiBpbnQgaTJjX2dlbmVyaWNfc2NsX3JlY292ZXJ5KHN0cnVjdCBpMmNfYWRhcHRlciAqYWRhcCk7
-DQoNCisjaWZkZWYgQ09ORklHX0NGSV9DTEFORw0KKyNkZWZpbmUgaTJjX2dlbmVyaWNfc2NsX3Jl
-Y292ZXJ5IA0KK2Z1bmN0aW9uX25vY2ZpKGkyY19nZW5lcmljX3NjbF9yZWNvdmVyeSkNCisjZW5k
-aWYNCisNCiAvKioNCiAgKiBzdHJ1Y3QgaTJjX2FkYXB0ZXJfcXVpcmtzIC0gZGVzY3JpYmUgZmxh
-d3Mgb2YgYW4gaTJjIGFkYXB0ZXINCiAgKiBAZmxhZ3M6IHNlZSBJMkNfQVFfKiBmb3IgcG9zc2li
-bGUgZmxhZ3MgYW5kIHJlYWQgYmVsb3cNCg0KS2VlcywgYW55IHRob3VnaHRzIG9uIHRoZSBsZWFz
-dCB0ZXJyaWJsZSBwYXRoIGZvcndhcmQgaGVyZT8NCg0KWmhpcGVuZywgaWYgeW91IHdhbnQgdG8g
-dGVzdCB0aGlzIG9uIGFuIG9sZGVyIGtlcm5lbCwgcGxlYXNlIG5vdGUgdGhhdCB5b3UnbGwgYWxz
-byBuZWVkIHRvIGNoZXJyeS1waWNrIGNvbW1pdCBlNmYzYjNjOWMxMDllZDU3MjMwOTk2Y2Y0YTRj
-MWI4YWU3ZTM2YTgxLg0KDQpTYW1pDQo=
+
+W dniu 30.06.2022 o 10:23, Datta, Shubhrajyoti pisze:
+> [AMD Official Use Only - General]
+>
+> Hi Krzysztof,
+>
+>> -----Original Message-----
+>> From: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+>> Sent: Wednesday, June 29, 2022 7:40 PM
+>> To: Marek Vasut <marex@denx.de>; Raviteja Narayanam
+>> <raviteja.narayanam@xilinx.com>; linux-i2c@vger.kernel.org;
+>> michal.simek@xilinx.com
+>> Cc: linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
+>> git@xilinx.com; joe@perches.com
+>> Subject: Re: [PATCH v2 03/10] i2c: xiic: Switch to Xiic standard mode for i2c-
+>> read
+>>
+>> [CAUTION: External Email]
+>>
+>> CAUTION: This message has originated from an External Source. Please use
+>> proper judgment and caution when opening attachments, clicking links, or
+>> responding to this email.
+>>
+>>
+>> Hi Marek,
+>>
+>> W dniu 29.06.2022 o 16:05, Marek Vasut pisze:
+>>>> [...]
+>>>>
+>>>> If those two modes only differ in software complexity but we are not
+>>>> able to support only the simpler one and we have support for the more
+>>>> complicated (standard mode) anyways, we know that standard mode can
+>>>> handle or the cases while dynamic mode cannot, we also know that
+>>>> dynamic mode is broken on some versions of the core, why do we
+>>>> actually keep support for dynamic mode?
+>>> If I recall it right, the dynamic mode was supposed to handle
+>>> transfers longer than 255 Bytes, which the core cannot do in Standard
+>>> mode. It is needed e.g. by Atmel MXT touch controller. I spent a lot
+>>> of time debugging the race conditions in the XIIC, which I ultimately
+>>> fixed (the patches are upstream), but the long transfers I rather
+>>> fixed in the MXT driver instead.
+>>>
+>>> I also recall there was supposed to be some update for the XIIC core
+>>> coming with newer vivado, but I might be wrong about that.
+>> It seems to be the other way around - dynamic mode is limited to 255 bytes -
+>> when you trigger dynamic mode you first write the address of the slave to
+>> the FIFO, then you write the length as one byte so you can't request more
+>> than 255 bytes. So *standard* mode is used for those messages. In other
+>> words - dynamic mode is the one that is more limited
+>> - everything that you can do in dynamic mode you can also do in standard
+>> mode. So why don't we use standard mode always for everything?
+> However  the current mode is dynamic mode so for less than 255 we can use dynamic mode.(the current behavior will not change)
+> Also the dynamic mode  is  nicer on the processor resources. We set the bytes and the controller takes care of
+> transferring.
+>
+> However do not have any strong views open to suggestions.
+
+All I'm saying is that before this patchset, the dynamic mode was used 
+in all cases and it made sense - it is easier to work with. But it 
+turned out it has its limitations and support for standard mode was 
+added with several cases that switch to that mode. The commit message 
+suggests that the only difference is in how complicated the code for 
+handling them is, does not say why dynamic mode might still be 
+preferred. And supporting both of them complicates the code noticeably. 
+My understanding now is that the code struggles to use the dynamic mode 
+in all cases that it can because that produces less interrupts and so it 
+is slightly lighter on resources. So it is a code complication vs 
+effectiveness tradeoff. Since this is I2C - a slow bus, I'm not sure it 
+is worth it but also don't have strong opinion on that. If nothing else, 
+I think it would make sense to update the commit message a little bit to 
+better explain why it is worth keeping both modes.
+
+Krzysztof
+
