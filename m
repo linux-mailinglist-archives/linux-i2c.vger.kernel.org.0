@@ -2,79 +2,128 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC878563CA0
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Jul 2022 00:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 968A9563EA9
+	for <lists+linux-i2c@lfdr.de>; Sat,  2 Jul 2022 07:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbiGAW7V (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 1 Jul 2022 18:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52898 "EHLO
+        id S231393AbiGBFZu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 2 Jul 2022 01:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbiGAW7U (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 1 Jul 2022 18:59:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FCA58FF5
-        for <linux-i2c@vger.kernel.org>; Fri,  1 Jul 2022 15:59:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17F1BB831B6
-        for <linux-i2c@vger.kernel.org>; Fri,  1 Jul 2022 22:59:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F42C341C8
-        for <linux-i2c@vger.kernel.org>; Fri,  1 Jul 2022 22:59:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656716356;
-        bh=ujexMdQJeifFAfBRhBPKzOTtcnFOXQij8737R3MpRQo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=oM/to4+BtIonCyowHdmiwvAJ+W5MXWPny4oieNqZY2HAKm+Ertg69fgUNutt6hnwR
-         dZNUxnA1t8MBJZLmyQwJ71e6kZ+0G0QRh2/drZ3o6xX4gTY1+8B4mqKBKFBgEAS2NO
-         m6tjdT4rRw4wVnFRFtaq96DVbjtzt73jVCDB2Dvs8r4xiBzhwrcfPJAjQqKatRWcQM
-         uu47WXXOUYwrAMolWUmqI9hatOEXOLLQfbOgJ8YmzvMuDjxe6OwCHCASvqaX0V4Iq/
-         oVienLkCWafQtcBoA4bp4T25lngF+S8AtEpC6WvdUCUVkzyZSV/zs7PxD/jjnazOu4
-         5R2F5RLzwMEhQ==
-Received: by mail-ua1-f54.google.com with SMTP id t21so1338865uaq.3
-        for <linux-i2c@vger.kernel.org>; Fri, 01 Jul 2022 15:59:16 -0700 (PDT)
-X-Gm-Message-State: AJIora8w3ZXMHKuOEDZ8f/ppajuq6TJmIqNEmk26kMTGluKOcRIS5lwk
-        jbCzOt61DJl+DeWVh3D2m5mX3v429yFSeQm3+A==
-X-Google-Smtp-Source: AGRyM1vB6crzdzX224a4sGrIMy3A81UkbxRvze5iYBIuY6NgPEFlHmofJQFZMGqHiPf0GmL4hE/lsGzCD4W0CsuMR+A=
-X-Received: by 2002:ab0:2705:0:b0:379:7378:3c75 with SMTP id
- s5-20020ab02705000000b0037973783c75mr9249967uao.77.1656716355778; Fri, 01 Jul
- 2022 15:59:15 -0700 (PDT)
+        with ESMTP id S229951AbiGBFZt (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 2 Jul 2022 01:25:49 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2452C673;
+        Fri,  1 Jul 2022 22:25:48 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0AA685C0195;
+        Sat,  2 Jul 2022 01:25:46 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sat, 02 Jul 2022 01:25:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1656739546; x=1656825946; bh=ZDVhLQRWt4nVJ5OST5kNBSRBh
+        F8l/TWZdl9kfqTRWzI=; b=mIbeZnXFq0Rs6r+UoMXOGz25PnMMgtnD8SvbMSpBB
+        aGWj8+hY6AD9fRzW3cl0iqrLhGC3k0+DiILkLuzB3VJ3quyitNDNIPfUR1Op9U3r
+        C0sjBHqG2z3FEL6zVX4X/AE13KiNPf4wI4RfaX29ckzu6ox4Ib9nMP+6ajfnteSZ
+        hKHbd/N90oho/qgBmqkCjcjCQvIAKvPF5H139EQq5EkNODFVkQW3lGNIravAOKEd
+        hTHjCDyh6DtJDuU/AqkYEQK+FjrNCte4VxrcBJ1ihAJFnOfxk5LfXb2uHUy9nupJ
+        ckLLVq4AADxJBvKmDpFD8ugr2FlvLNo+qZnYqHUJqzy1A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1656739546; x=1656825946; bh=ZDVhLQRWt4nVJ5OST5kNBSRBhF8l/TWZdl9
+        kfqTRWzI=; b=l4sZcQ2rtRuAky8TOo1V5MnEsIFU4de9DrmGsml10Gd3V3cJziF
+        IKRWJPLZhhj+8rvUfzaLSfXjZ8MQOvEpzrFz3hGSyvpU99ysPKhLHDqt0O7Go3wc
+        hAG0FSAPabdOkj85H+OMgkL1EFyG3bZaoApKAOaNKcWNzEWQqU9vUuig7QEDSn30
+        iIozUddiIMQ7ImxbGzR9HaeQKs+8Qq3dMs8NJRZRdU4BATIi8CMJhbhHzMGgMaQq
+        myjt/137qpudzM8zJC8WMZugUhCcMtNtRLUB4/+1e3VKM+RN+llfWXv7BD10EsTx
+        +3w3WAQwib9E63qHa0KCZCbSLe9E+6gS3Fw==
+X-ME-Sender: <xms:2da_YnbURUi1iyulsI8R0PTakitGEyWvGJ5VL7jpU3-TqnJfJma9hQ>
+    <xme:2da_YmaWW_sAX8EWpqY1XyzrnGB4Rkp3w5ceJ3Nd2zeX1NdX476kGk4AFdTQruqcC
+    y2lUdYHqbBGkkJjBg>
+X-ME-Received: <xmr:2da_Yp8Fh2A6eh2pUIFds3kLes4VWHCfQeRmg-bOvdVk4Eg6bH4rzcR0nb97wOn6idcsiASChG0EEh7SkWqrDQYD6mf5asASuJLEuZSshfCa1ClJmRpX7UbcjIbbbkLRp8pDvw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehgedgleehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
+    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
+    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
+    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:2da_YtqqAb7OH2GygbqbbuYrhsN7f6TAXTXsUqpFwrpc2jzKSlVDDw>
+    <xmx:2da_YipfcS8qtiuoqxbzBkqb3mza8GJiVFVZphrIZOj_1ETiNMAbHQ>
+    <xmx:2da_YjTdY7aNktkzFgJkuTSKSwVRPdoJLB4GJhfPwimtCTC9eov32g>
+    <xmx:2ta_Yh02n4mcx_MbuXT0oJAIF8cfWaTEr5LHHgEsYOKWSl1jB3j89Q>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 2 Jul 2022 01:25:45 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: i2c: mv64xxx: Add variants with offload support
+Date:   Sat,  2 Jul 2022 00:25:42 -0500
+Message-Id: <20220702052544.31443-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220701224136.808991-1-linus.walleij@linaro.org>
-In-Reply-To: <20220701224136.808991-1-linus.walleij@linaro.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 1 Jul 2022 16:59:04 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL6mZbESXybZp=gL2JtnGsW79Z5LYJESEK3E=cAfCFKQw@mail.gmail.com>
-Message-ID: <CAL_JsqL6mZbESXybZp=gL2JtnGsW79Z5LYJESEK3E=cAfCFKQw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: i2c: Drop unused voltage supply from example
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 4:43 PM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> This drops the pointless v-i2c-supply from the Nomadik I2C
-> example. This is a leftover from before the use of power
-> domains when the power domain voltage was attached to a
-> regulator.
->
-> The unused property in the device trees will be removed
-> in a separate patch.
->
-> Reported-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->  Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml | 1 -
->  1 file changed, 1 deletion(-)
+V536 and newer Allwinner SoCs contain an updated I2C controller which
+includes an offload engine for master mode. The controller retains the
+existing register interface, so the A31 compatible still applies.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Add the V536 compatible and use it as a fallback for other SoCs with the
+updated hardware. This includes two SoCs that were already documented
+(H616 and A100) and two new SoCs (R329 and D1).
+
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
+
+ .../devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml   | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
+index f771c09aabfc..0ec033e48830 100644
+--- a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
++++ b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
+@@ -21,10 +21,18 @@ properties:
+           - enum:
+               - allwinner,sun8i-a23-i2c
+               - allwinner,sun8i-a83t-i2c
++              - allwinner,sun8i-v536-i2c
+               - allwinner,sun50i-a64-i2c
+-              - allwinner,sun50i-a100-i2c
+               - allwinner,sun50i-h6-i2c
++          - const: allwinner,sun6i-a31-i2c
++      - description: Allwinner SoCs with offload support
++        items:
++          - enum:
++              - allwinner,sun20i-d1-i2c
++              - allwinner,sun50i-a100-i2c
+               - allwinner,sun50i-h616-i2c
++              - allwinner,sun50i-r329-i2c
++          - const: allwinner,sun8i-v536-i2c
+           - const: allwinner,sun6i-a31-i2c
+       - const: marvell,mv64xxx-i2c
+       - const: marvell,mv78230-i2c
+-- 
+2.35.1
+
