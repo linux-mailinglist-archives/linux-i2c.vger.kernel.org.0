@@ -2,46 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A09564078
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Jul 2022 15:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26682564129
+	for <lists+linux-i2c@lfdr.de>; Sat,  2 Jul 2022 17:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbiGBN7g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 2 Jul 2022 09:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
+        id S232221AbiGBPmH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 2 Jul 2022 11:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbiGBN7f (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 2 Jul 2022 09:59:35 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52635BE25;
-        Sat,  2 Jul 2022 06:59:34 -0700 (PDT)
+        with ESMTP id S230429AbiGBPmE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 2 Jul 2022 11:42:04 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35AC9DF73;
+        Sat,  2 Jul 2022 08:42:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656770374; x=1688306374;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aum+UD8Fi4aVMEBrhQK8X7w7WaoAtKiqdmgIuZeVwUo=;
-  b=PIrk/bJjf6+ae68kZEPN1VAGROmmTsFGae831yz/ODg1TOdwgbuJ+bL+
-   76R+almwfRdN3Lkh8Eu6mw22KaJIrhpk7ceFZ8bthbsEbyV3foNSCFTFV
-   eMv2XwQdNnUkz37AssNBspitl5La5qy5Uc4t3d83lj8VrmyJyr0Tt2J+l
-   BHq8M+CqzgzePbeYQPppbPQk+tB/n7nKTWD5flkt7AQhq1EdJeERpNESb
-   qZimkuhIAjY/0jJLgGsp6NARTZDgw8+vUJqCedX65OoV1T+GjoCDx6/29
-   wVa9Y0WDMIhJqj2SurwUm3ZXbX+Rnw5PcN6YI3AH63KkkLijQWiwOvyzI
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="265865078"
+  t=1656776524; x=1688312524;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RJFVLls1EjQPmPr7lVOwXw4XeaewzMH8z3gqTFR/nI4=;
+  b=I6R0MrrGBH+aqiJZdi2wVeGIZhFF0QE7M1bvbotTz2vJMeO2LP96EDF+
+   WoU1E9AFwkIc5QW+72ktt0hwp8MaVu3oV6eiUfRPa0+y4GwLo51vJ/GgF
+   gpwnjsG6vP2ovpgkq1+5GXPf7nLQn2ZeuPSxvWmETmhIPdtPjqA9s/yHm
+   ph8sPJlEJd36CuJU4413O1/Ll4a1YfXvsjAF2bz6omvOpm611Tr0xGSJy
+   FsMOkgxDE++09fc4cBW3hK66auh+djBY+RSva0maTMEk9u4ddA/WmWbsv
+   7TxKvYL4Wzc7P9qApPvVYddlnSAgT7xZ4EaXkA3Kr0WZRkVGop3m9LMMf
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="282875420"
 X-IronPort-AV: E=Sophos;i="5.92,240,1650956400"; 
-   d="scan'208";a="265865078"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 06:59:33 -0700
+   d="scan'208";a="282875420"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 08:42:03 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,240,1650956400"; 
-   d="scan'208";a="718918065"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 02 Jul 2022 06:59:29 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id A59A2D9; Sat,  2 Jul 2022 16:59:35 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+   d="scan'208";a="624590982"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 02 Jul 2022 08:41:59 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o7fFu-000FN5-H6;
+        Sat, 02 Jul 2022 15:41:58 +0000
+Date:   Sat, 2 Jul 2022 23:41:33 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Wolfram Sang <wsa-dev@sang-engineering.com>,
         Michael Walle <michael@walle.cc>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Sam Protsenko <semen.protsenko@linaro.org>,
@@ -50,224 +53,133 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org
-Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Alim Akhtar <alim.akhtar@samsung.com>,
-        Till Harbaum <till@harbaum.org>, Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH v1 2/2] i2c: Introduce i2c_str_read_write() and make use of it
-Date:   Sat,  2 Jul 2022 16:59:25 +0300
-Message-Id: <20220702135925.73406-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220702135925.73406-1-andriy.shevchenko@linux.intel.com>
-References: <20220702135925.73406-1-andriy.shevchenko@linux.intel.com>
+        Till Harbaum <till@harbaum.org>
+Subject: Re: [PATCH v1 2/2] i2c: Introduce i2c_str_read_write() and make use
+ of it
+Message-ID: <202207022332.6xTWZbw8-lkp@intel.com>
+References: <20220702135925.73406-2-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220702135925.73406-2-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-str_read_write() returns a string literal "read" or "write" based
-on the value. It also allows to unify usage of a such in the kernel.
+Hi Andy,
 
-For i2c case introduce a wrapper that takes struct i2c_msg as parameter.
+I love your patch! Yet something to improve:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/i2c/algos/i2c-algo-pca.c     | 3 +--
- drivers/i2c/algos/i2c-algo-pcf.c     | 3 +--
- drivers/i2c/busses/i2c-at91-master.c | 3 +--
- drivers/i2c/busses/i2c-exynos5.c     | 3 +--
- drivers/i2c/busses/i2c-hix5hd2.c     | 3 +--
- drivers/i2c/busses/i2c-img-scb.c     | 5 ++---
- drivers/i2c/busses/i2c-sh_mobile.c   | 3 +--
- drivers/i2c/busses/i2c-tiny-usb.c    | 6 ++----
- drivers/i2c/busses/i2c-viperboard.c  | 6 ++----
- drivers/i2c/i2c-core-base.c          | 3 +--
- include/linux/i2c.h                  | 7 +++++++
- 11 files changed, 20 insertions(+), 25 deletions(-)
+[auto build test ERROR on wsa/i2c/for-next]
+[also build test ERROR on linus/master v5.19-rc4 next-20220701]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-diff --git a/drivers/i2c/algos/i2c-algo-pca.c b/drivers/i2c/algos/i2c-algo-pca.c
-index 384af88e58ad..e5ac3eee7a99 100644
---- a/drivers/i2c/algos/i2c-algo-pca.c
-+++ b/drivers/i2c/algos/i2c-algo-pca.c
-@@ -119,8 +119,7 @@ static int pca_address(struct i2c_algo_pca_data *adap,
- 	int sta = pca_get_con(adap);
- 	int addr = i2c_8bit_addr_from_msg(msg);
- 
--	DEB2("=== SLAVE ADDRESS %#04x+%c=%#04x\n",
--	     msg->addr, msg->flags & I2C_M_RD ? 'R' : 'W', addr);
-+	DEB2("=== SLAVE ADDRESS %#04x+%s=%#04x\n", msg->addr, i2c_str_read_write(msg), addr);
- 
- 	pca_outw(adap, I2C_PCA_DAT, addr);
- 
-diff --git a/drivers/i2c/algos/i2c-algo-pcf.c b/drivers/i2c/algos/i2c-algo-pcf.c
-index 7a01f2687b4c..232224bbd670 100644
---- a/drivers/i2c/algos/i2c-algo-pcf.c
-+++ b/drivers/i2c/algos/i2c-algo-pcf.c
-@@ -316,8 +316,7 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
- 		pmsg = &msgs[i];
- 
- 		DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: Doing %s %d bytes to 0x%02x - %d of %d messages\n",
--		     pmsg->flags & I2C_M_RD ? "read" : "write",
--		     pmsg->len, pmsg->addr, i + 1, num);)
-+		     i2c_str_read_write(pmsg), pmsg->len, pmsg->addr, i + 1, num);)
- 
- 		ret = pcf_doAddress(adap, pmsg);
- 
-diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
-index c0c35785a0dc..3761a6cb320f 100644
---- a/drivers/i2c/busses/i2c-at91-master.c
-+++ b/drivers/i2c/busses/i2c-at91-master.c
-@@ -523,8 +523,7 @@ static int at91_do_twi_transfer(struct at91_twi_dev *dev)
- 	 * writing the corresponding bit into the Control Register.
- 	 */
- 
--	dev_dbg(dev->dev, "transfer: %s %zu bytes.\n",
--		(dev->msg->flags & I2C_M_RD) ? "read" : "write", dev->buf_len);
-+	dev_dbg(dev->dev, "transfer: %s %zu bytes.\n", i2c_str_read_write(dev->msg), dev->buf_len);
- 
- 	reinit_completion(&dev->cmd_complete);
- 	dev->transfer_status = 0;
-diff --git a/drivers/i2c/busses/i2c-exynos5.c b/drivers/i2c/busses/i2c-exynos5.c
-index b812d1090c0f..cbac64042760 100644
---- a/drivers/i2c/busses/i2c-exynos5.c
-+++ b/drivers/i2c/busses/i2c-exynos5.c
-@@ -744,8 +744,7 @@ static int exynos5_i2c_xfer_msg(struct exynos5_i2c *i2c,
- 	if (ret < 0) {
- 		exynos5_i2c_reset(i2c);
- 		if (ret == -ETIMEDOUT)
--			dev_warn(i2c->dev, "%s timeout\n",
--				 (msgs->flags & I2C_M_RD) ? "rx" : "tx");
-+			dev_warn(i2c->dev, "%s timeout\n", i2c_str_read_write(msgs);
- 	}
- 
- 	/* Return the state as in interrupt routine */
-diff --git a/drivers/i2c/busses/i2c-hix5hd2.c b/drivers/i2c/busses/i2c-hix5hd2.c
-index 61ae58f57047..fefa5db52138 100644
---- a/drivers/i2c/busses/i2c-hix5hd2.c
-+++ b/drivers/i2c/busses/i2c-hix5hd2.c
-@@ -332,8 +332,7 @@ static int hix5hd2_i2c_xfer_msg(struct hix5hd2_i2c_priv *priv,
- 	if (timeout == 0) {
- 		priv->state = HIX5I2C_STAT_RW_ERR;
- 		priv->err = -ETIMEDOUT;
--		dev_warn(priv->dev, "%s timeout=%d\n",
--			 msgs->flags & I2C_M_RD ? "rx" : "tx",
-+		dev_warn(priv->dev, "%s timeout=%d\n", i2c_str_read_write(msgs),
- 			 priv->adap.timeout);
- 	}
- 	ret = priv->state;
-diff --git a/drivers/i2c/busses/i2c-img-scb.c b/drivers/i2c/busses/i2c-img-scb.c
-index 8e987945ed45..772443059f49 100644
---- a/drivers/i2c/busses/i2c-img-scb.c
-+++ b/drivers/i2c/busses/i2c-img-scb.c
-@@ -950,9 +950,8 @@ static irqreturn_t img_i2c_isr(int irq, void *dev_id)
- 			    INT_FIFO_EMPTY |
- 			    INT_FIFO_FULL))) {
- 		dev_crit(i2c->adap.dev.parent,
--			 "fatal: clock low timeout occurred %s addr 0x%02x\n",
--			 (i2c->msg.flags & I2C_M_RD) ? "reading" : "writing",
--			 i2c->msg.addr);
-+			 "fatal: clock low timeout occurred when %s addr 0x%02x\n",
-+			 i2c_str_read_write(&i2c->msg), i2c->msg.addr);
- 		hret = ISR_FATAL(EIO);
- 		goto out;
- 	}
-diff --git a/drivers/i2c/busses/i2c-sh_mobile.c b/drivers/i2c/busses/i2c-sh_mobile.c
-index 72f024a0c363..2b569403ce71 100644
---- a/drivers/i2c/busses/i2c-sh_mobile.c
-+++ b/drivers/i2c/busses/i2c-sh_mobile.c
-@@ -409,8 +409,7 @@ static irqreturn_t sh_mobile_i2c_isr(int irq, void *dev_id)
- 	pd->sr |= sr; /* remember state */
- 
- 	dev_dbg(pd->dev, "i2c_isr 0x%02x 0x%02x %s %d %d!\n", sr, pd->sr,
--	       (pd->msg->flags & I2C_M_RD) ? "read" : "write",
--	       pd->pos, pd->msg->len);
-+		i2c_str_read_write(pd->msg), pd->pos, pd->msg->len);
- 
- 	/* Kick off TxDMA after preface was done */
- 	if (pd->dma_direction == DMA_TO_DEVICE && pd->pos == 0)
-diff --git a/drivers/i2c/busses/i2c-tiny-usb.c b/drivers/i2c/busses/i2c-tiny-usb.c
-index 7279ca0eaa2d..74a435d7c308 100644
---- a/drivers/i2c/busses/i2c-tiny-usb.c
-+++ b/drivers/i2c/busses/i2c-tiny-usb.c
-@@ -71,10 +71,8 @@ static int usb_xfer(struct i2c_adapter *adapter, struct i2c_msg *msgs, int num)
- 
- 		pmsg = &msgs[i];
- 
--		dev_dbg(&adapter->dev,
--			"  %d: %s (flags %d) %d bytes to 0x%02x\n",
--			i, pmsg->flags & I2C_M_RD ? "read" : "write",
--			pmsg->flags, pmsg->len, pmsg->addr);
-+		dev_dbg(&adapter->dev, "  %d: %s (flags %d) %d bytes to 0x%02x\n",
-+			i, i2c_str_read_write(pmsg), pmsg->flags, pmsg->len, pmsg->addr);
- 
- 		/* and directly send the message */
- 		if (pmsg->flags & I2C_M_RD) {
-diff --git a/drivers/i2c/busses/i2c-viperboard.c b/drivers/i2c/busses/i2c-viperboard.c
-index 8b5322c3bce0..dec12e904aca 100644
---- a/drivers/i2c/busses/i2c-viperboard.c
-+++ b/drivers/i2c/busses/i2c-viperboard.c
-@@ -278,10 +278,8 @@ static int vprbrd_i2c_xfer(struct i2c_adapter *i2c, struct i2c_msg *msgs,
- 	for (i = 0 ; i < num ; i++) {
- 		pmsg = &msgs[i];
- 
--		dev_dbg(&i2c->dev,
--			"  %d: %s (flags %d) %d bytes to 0x%02x\n",
--			i, pmsg->flags & I2C_M_RD ? "read" : "write",
--			pmsg->flags, pmsg->len, pmsg->addr);
-+		dev_dbg(&i2c->dev, "  %d: %s (flags %d) %d bytes to 0x%02x\n",
-+			i, i2c_str_read_write(pmsg), pmsg->flags, pmsg->len, pmsg->addr);
- 
- 		mutex_lock(&vb->lock);
- 		/* directly send the message */
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 94c0663a39a6..9811bb44a2e0 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -2004,8 +2004,7 @@ module_exit(i2c_exit);
- static int i2c_quirk_error(struct i2c_adapter *adap, struct i2c_msg *msg, char *err_msg)
- {
- 	dev_err_ratelimited(&adap->dev, "adapter quirk: %s (addr 0x%04x, size %u, %s)\n",
--			    err_msg, msg->addr, msg->len,
--			    msg->flags & I2C_M_RD ? "read" : "write");
-+			    err_msg, msg->addr, msg->len, i2c_str_read_write(msg));
- 	return -EOPNOTSUPP;
- }
- 
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index fbda5ada2afc..3cfaad39cc24 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -20,7 +20,9 @@
- #include <linux/rtmutex.h>
- #include <linux/irqdomain.h>		/* for Host Notify IRQ */
- #include <linux/of.h>		/* for struct device_node */
-+#include <linux/string_helpers.h>	/* for str_read_write() */
- #include <linux/swab.h>		/* for swab16 */
-+
- #include <uapi/linux/i2c.h>
- 
- extern struct bus_type i2c_bus_type;
-@@ -934,6 +936,11 @@ static inline u8 i2c_8bit_addr_from_msg(const struct i2c_msg *msg)
- 	return (msg->addr << 1) | (msg->flags & I2C_M_RD ? 1 : 0);
- }
- 
-+static inline const char *i2c_str_read_write(const struct i2c_msg *msg)
-+{
-+	return str_read_write(msg->flags & I2C_M_RD);
-+}
-+
- u8 *i2c_get_dma_safe_msg_buf(struct i2c_msg *msg, unsigned int threshold);
- void i2c_put_dma_safe_msg_buf(u8 *buf, struct i2c_msg *msg, bool xferred);
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/lib-string_helpers-Add-str_read_write-helper/20220702-215944
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+config: mips-buildonly-randconfig-r002-20220702 (https://download.01.org/0day-ci/archive/20220702/202207022332.6xTWZbw8-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bcd153485ebf07fe79e2b843ed5f1cb74997df1b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/c9ef15ef6b2b2b51d33d68a8b92beb05771cc8c2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/lib-string_helpers-Add-str_read_write-helper/20220702-215944
+        git checkout c9ef15ef6b2b2b51d33d68a8b92beb05771cc8c2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/i2c/busses/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/i2c/busses/i2c-exynos5.c:747:4: error: unterminated function-like macro invocation
+                           dev_warn(i2c->dev, "%s timeout\n", i2c_str_read_write(msgs);
+                           ^
+   include/linux/dev_printk.h:145:9: note: macro 'dev_warn' defined here
+   #define dev_warn(dev, fmt, ...) \
+           ^
+>> drivers/i2c/busses/i2c-exynos5.c:960:26: error: expected expression
+   MODULE_LICENSE("GPL v2");
+                            ^
+>> drivers/i2c/busses/i2c-exynos5.c:960:26: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+   drivers/i2c/busses/i2c-exynos5.c:746:3: note: previous statement is here
+                   if (ret == -ETIMEDOUT)
+                   ^
+>> drivers/i2c/busses/i2c-exynos5.c:960:26: error: expected '}'
+   MODULE_LICENSE("GPL v2");
+                            ^
+   drivers/i2c/busses/i2c-exynos5.c:744:15: note: to match this '{'
+           if (ret < 0) {
+                        ^
+>> drivers/i2c/busses/i2c-exynos5.c:960:26: error: expected '}'
+   MODULE_LICENSE("GPL v2");
+                            ^
+   drivers/i2c/busses/i2c-exynos5.c:718:1: note: to match this '{'
+   {
+   ^
+   1 warning and 4 errors generated.
+
+
+vim +747 drivers/i2c/busses/i2c-exynos5.c
+
+   715	
+   716	static int exynos5_i2c_xfer_msg(struct exynos5_i2c *i2c,
+   717				      struct i2c_msg *msgs, int stop)
+   718	{
+   719		unsigned long timeout;
+   720		int ret;
+   721	
+   722		i2c->msg = msgs;
+   723		i2c->msg_ptr = 0;
+   724		i2c->trans_done = 0;
+   725	
+   726		reinit_completion(&i2c->msg_complete);
+   727	
+   728		exynos5_i2c_message_start(i2c, stop);
+   729	
+   730		timeout = wait_for_completion_timeout(&i2c->msg_complete,
+   731						      EXYNOS5_I2C_TIMEOUT);
+   732		if (timeout == 0)
+   733			ret = -ETIMEDOUT;
+   734		else
+   735			ret = i2c->state;
+   736	
+   737		/*
+   738		 * If this is the last message to be transfered (stop == 1)
+   739		 * Then check if the bus can be brought back to idle.
+   740		 */
+   741		if (ret == 0 && stop)
+   742			ret = exynos5_i2c_wait_bus_idle(i2c);
+   743	
+   744		if (ret < 0) {
+   745			exynos5_i2c_reset(i2c);
+   746			if (ret == -ETIMEDOUT)
+ > 747				dev_warn(i2c->dev, "%s timeout\n", i2c_str_read_write(msgs);
+   748		}
+   749	
+   750		/* Return the state as in interrupt routine */
+   751		return ret;
+   752	}
+   753	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
