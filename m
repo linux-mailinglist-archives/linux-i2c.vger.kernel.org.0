@@ -2,76 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90524564153
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Jul 2022 18:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0335645DF
+	for <lists+linux-i2c@lfdr.de>; Sun,  3 Jul 2022 10:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbiGBQNG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 2 Jul 2022 12:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        id S231169AbiGCImB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 3 Jul 2022 04:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231243AbiGBQNG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 2 Jul 2022 12:13:06 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C04EE0A;
-        Sat,  2 Jul 2022 09:13:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656778385; x=1688314385;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oLFv5d9cpgU3oUv0ZYDAaDF+gUv+7iXr9g5H3SS0Y7o=;
-  b=TWFdxaFPL0CrywNFO7fnngdl8LzxMkffxlGC6zr3ynZBK9Meb8uQV+lK
-   h5yyFBv2ljcdtq+EAGcg7H3jwCxoOPyws/DefDvgrsGUVAAfbHZWZQsBi
-   ++FmxRI5HepUr9IH4ed75vPV5iKE+QHBPRiOLaHKkxqBUOGGJpRqSd876
-   jGYni1E55W92F/FtH/yER+cfOjjtbirbO/7c0plWW2Gd/0EnwV3F5mv0f
-   5fPMAG28v/PaMmV+FiGuZis5lSuhPnMZJC2j269AZSZhB6FevtFD5+DbF
-   soHst6Hl6VDIUWsuh2GBgTux7cNFMBSTJh8PAQySvY6LmKGNXfifPpBNG
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="344530083"
-X-IronPort-AV: E=Sophos;i="5.92,240,1650956400"; 
-   d="scan'208";a="344530083"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 09:13:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,240,1650956400"; 
-   d="scan'208";a="624596293"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 02 Jul 2022 09:13:00 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o7fjv-000FOZ-Qi;
-        Sat, 02 Jul 2022 16:12:59 +0000
-Date:   Sun, 3 Jul 2022 00:12:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        Michael Walle <michael@walle.cc>,
+        with ESMTP id S229942AbiGCImA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 3 Jul 2022 04:42:00 -0400
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3D1AE41;
+        Sun,  3 Jul 2022 01:41:59 -0700 (PDT)
+Received: by mail-qt1-f175.google.com with SMTP id c13so5839877qtq.10;
+        Sun, 03 Jul 2022 01:41:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yvorIwcrFiiLPdtmHyBlDuVBktLBtWZmiJ053uS1/Og=;
+        b=ql460vhTGtv4f4974UZugoYrvGoQ/P26iBR+zZARnAaKGRaTnxlMfnkqeFMgUwSO7c
+         Ao76ql6fr4ibrz5f8tovxl/7ghtTmehgWGtOLgGxKpynKdxSCwFBr2BLjjvNBsqnERtK
+         gwyTb3Lvih8K014wYsXMt67NmqDwNSYOElljxC2Dz22kJhIjQP24TJQuByX1l50itbqZ
+         ma8VJYBNuR5b0orjSGROTqIzuPj0ypX2ZlziAk2YV93vUTdd5hjQ2FG0BuYog5U3m/BJ
+         DRISTmVun0YTlT35axGp6aT0+v8MLF8oNlqrccgwoH5pqFa87AOWiUo5kgmjlG+WLOrk
+         p4ig==
+X-Gm-Message-State: AJIora+ODmI1UBCQ0kvkA8biyfYqRoQe2myphBYEYfMTxO/jN7HKe8Pe
+        rzLefBhFXdDZAz9g/wSCeBuXQWk1MUa7mg==
+X-Google-Smtp-Source: AGRyM1tfx7bCw4z86QFqFNfVOL0YX6u3BzYGrSZnNJEFqfS8ZjiVsmtBw+BlwbeCyCzL5dDERWE2Vg==
+X-Received: by 2002:ac8:7dd4:0:b0:31b:f083:1ef2 with SMTP id c20-20020ac87dd4000000b0031bf0831ef2mr20165056qte.270.1656837718448;
+        Sun, 03 Jul 2022 01:41:58 -0700 (PDT)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id ea23-20020a05620a489700b006af33e58b42sm14689844qkb.43.2022.07.03.01.41.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Jul 2022 01:41:57 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-31bf3656517so57417127b3.12;
+        Sun, 03 Jul 2022 01:41:56 -0700 (PDT)
+X-Received: by 2002:a0d:ead0:0:b0:31c:63c3:e615 with SMTP id
+ t199-20020a0dead0000000b0031c63c3e615mr12540850ywe.384.1656837716530; Sun, 03
+ Jul 2022 01:41:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220701163916.111435-1-phil.edworthy@renesas.com>
+ <20220701163916.111435-3-phil.edworthy@renesas.com> <YsAxSrcAk4jtRYx4@smile.fi.intel.com>
+In-Reply-To: <YsAxSrcAk4jtRYx4@smile.fi.intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 3 Jul 2022 10:41:45 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU1-LQJUCsDAfaC4OhRW7ijcpAG9VEUHu_Gu1qE7LdweA@mail.gmail.com>
+Message-ID: <CAMuHMdU1-LQJUCsDAfaC4OhRW7ijcpAG9VEUHu_Gu1qE7LdweA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] i2c: Add Renesas RZ/V2M controller
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wolfram Sang <wsa@kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Sam Protsenko <semen.protsenko@linaro.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Till Harbaum <till@harbaum.org>
-Subject: Re: [PATCH v1 2/2] i2c: Introduce i2c_str_read_write() and make use
- of it
-Message-ID: <202207030039.I3q472GJ-lkp@intel.com>
-References: <20220702135925.73406-2-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220702135925.73406-2-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Rob Herring <robh@kernel.org>, Sven Peter <sven@svenpeter.dev>,
+        Jan Dabros <jsd@semihalf.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,78 +79,68 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi Andy,
 
-I love your patch! Yet something to improve:
+On Sat, Jul 2, 2022 at 1:51 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> On Fri, Jul 01, 2022 at 05:39:16PM +0100, Phil Edworthy wrote:
+> > Yet another i2c controller from Renesas that is found on the RZ/V2M
+> > (r9a09g011) SoC. It can support only 100kHz and 400KHz operation.
 
-[auto build test ERROR on wsa/i2c/for-next]
-[also build test ERROR on linus/master v5.19-rc4 next-20220701]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+>
+> > +static int rzv2m_i2c_suspend(struct device *dev)
+> > +{
+> > +     struct rzv2m_i2c_priv *priv = dev_get_drvdata(dev);
+>
+> > +     pm_runtime_get_sync(dev);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/lib-string_helpers-Add-str_read_write-helper/20220702-215944
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-config: arc-randconfig-r043-20220702 (https://download.01.org/0day-ci/archive/20220703/202207030039.I3q472GJ-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c9ef15ef6b2b2b51d33d68a8b92beb05771cc8c2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/lib-string_helpers-Add-str_read_write-helper/20220702-215944
-        git checkout c9ef15ef6b2b2b51d33d68a8b92beb05771cc8c2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/i2c/busses/
+pm_runtime_resume_and_get() ;-)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+>
+> Isn't guaranteed by the runtime PM that device is runtime powered on the system
+> suspend?
 
-All errors (new ones prefixed by >>):
+No, as this is a system sleep callback.
 
-   drivers/i2c/busses/i2c-exynos5.c: In function 'exynos5_i2c_xfer_msg':
->> drivers/i2c/busses/i2c-exynos5.c:960:26: error: unterminated argument list invoking macro "dev_warn"
-     960 | MODULE_LICENSE("GPL v2");
-         |                          ^
->> drivers/i2c/busses/i2c-exynos5.c:747:25: error: 'dev_warn' undeclared (first use in this function); did you mean '_dev_warn'?
-     747 |                         dev_warn(i2c->dev, "%s timeout\n", i2c_str_read_write(msgs);
-         |                         ^~~~~~~~
-         |                         _dev_warn
-   drivers/i2c/busses/i2c-exynos5.c:747:25: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/i2c/busses/i2c-exynos5.c:747:33: error: expected ';' at end of input
-     747 |                         dev_warn(i2c->dev, "%s timeout\n", i2c_str_read_write(msgs);
-         |                                 ^
-         |                                 ;
-   ......
-   drivers/i2c/busses/i2c-exynos5.c:746:17: note: '-Wmisleading-indentation' is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers
-     746 |                 if (ret == -ETIMEDOUT)
-         |                 ^~
-   drivers/i2c/busses/i2c-exynos5.c:746:17: note: adding '-flarge-source-files' will allow for more column-tracking support, at the expense of compilation time and memory
->> drivers/i2c/busses/i2c-exynos5.c:747:25: error: expected declaration or statement at end of input
-     747 |                         dev_warn(i2c->dev, "%s timeout\n", i2c_str_read_write(msgs);
-         |                         ^~~~~~~~
->> drivers/i2c/busses/i2c-exynos5.c:747:25: error: expected declaration or statement at end of input
-   drivers/i2c/busses/i2c-exynos5.c:747:25: error: no return statement in function returning non-void [-Werror=return-type]
-   At top level:
-   drivers/i2c/busses/i2c-exynos5.c:716:12: warning: 'exynos5_i2c_xfer_msg' defined but not used [-Wunused-function]
-     716 | static int exynos5_i2c_xfer_msg(struct exynos5_i2c *i2c,
-         |            ^~~~~~~~~~~~~~~~~~~~
-   drivers/i2c/busses/i2c-exynos5.c:445:20: warning: 'exynos5_i2c_irq' defined but not used [-Wunused-function]
-     445 | static irqreturn_t exynos5_i2c_irq(int irqno, void *dev_id)
-         |                    ^~~~~~~~~~~~~~~
-   drivers/i2c/busses/i2c-exynos5.c:240:34: warning: 'exynos5_i2c_match' defined but not used [-Wunused-const-variable=]
-     240 | static const struct of_device_id exynos5_i2c_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+>
+> > +     bit_clrl(priv->base + IICB0CTL0, IICB0IICE);
+> > +     pm_runtime_put(dev);
+> > +
+> > +     return 0;
+> > +}
+>
+> ...
+>
+> > +static int rzv2m_i2c_resume(struct device *dev)
+> > +{
+> > +     struct rzv2m_i2c_priv *priv = dev_get_drvdata(dev);
+> > +     int ret;
+> > +
+> > +     ret = rzv2m_i2c_clock_calculate(dev, priv);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     pm_runtime_get_sync(dev);
 
+pm_runtime_resume_and_get() ;-)
 
-vim +/dev_warn +960 drivers/i2c/busses/i2c-exynos5.c
+>
+> I'm not sure how it's suppose to work. Isn't it a no-op here?
 
-8a73cd4cfa1599 Naveen Krishna Ch 2013-10-16  956  
-8a73cd4cfa1599 Naveen Krishna Ch 2013-10-16  957  MODULE_DESCRIPTION("Exynos5 HS-I2C Bus driver");
-d790eeb3db6aef Jean Delvare      2020-06-11  958  MODULE_AUTHOR("Naveen Krishna Chatradhi <ch.naveen@samsung.com>");
-d790eeb3db6aef Jean Delvare      2020-06-11  959  MODULE_AUTHOR("Taekgyun Ko <taeggyun.ko@samsung.com>");
-8a73cd4cfa1599 Naveen Krishna Ch 2013-10-16 @960  MODULE_LICENSE("GPL v2");
+No, as this is a system sleep callback.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> > +     rzv2m_i2c_init(priv);
+> > +     pm_runtime_put(dev);
+> > +
+> > +     return 0;
+> > +}
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
