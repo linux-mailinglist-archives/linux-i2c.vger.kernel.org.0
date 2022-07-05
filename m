@@ -2,252 +2,148 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49238566163
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Jul 2022 04:45:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6565566761
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Jul 2022 12:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234507AbiGECpc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 4 Jul 2022 22:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
+        id S231280AbiGEKJA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 Jul 2022 06:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233239AbiGECpb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 4 Jul 2022 22:45:31 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2119.outbound.protection.outlook.com [40.107.92.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0C012AA1;
-        Mon,  4 Jul 2022 19:45:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CK06wdyCPte0TULSDHW2NT/O827cNRMOLkTpoeDtVFkgjm8U1cealTnapCNlgGQqsLI6AYL20CdfpcbCW80l77j+GeC8j93V5Y5LSV2Whc0balCJYrl/e0+l3x+MzunFnG5XIT6axud/j6uMB/5EFWaUAV0vdU+Nu2Tq5Y2DPt3QqjPOpBDC2GqdlS2q0SBbv5jLLX1px5Tu8sOBbxZjS9SvBUDmPMtqKa9fvfXVO7qcN962H4ya+KVQsqe9Ns0nWBWusYpjG5jEZARKj8o4WroieBdcQLUj5c+WviwLdBqncyGzrepO50LFdGp7b5PWAeV7EJchsQPW3w2HVRmoLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D2wQKYfGYj0Z1ot2IY13ErX0c3h6VTsplYzGatKRLSQ=;
- b=aqItT83KW0Malv8PbvXj4GcJcXvz5Y3ybaPM8jrhuqUXIPzaHEJd0pcLNoPpEQLe0XN22ET7G13feDTgVb674kQ621BB8c0xudL6foPOs4RPMYkrBMBHt01LGrxEHxbsjEGBsdvYEw4ybCBBrZQwDHYAwRmZ0nZVhxeJiWACOY3nkGQGku7uUrvuPX/jyQjsTeoJ/Kd6VMtjBmIQa8IzyBr6V0S2FwhEphpaACVpT8CaTGNd+LvNCRXd8rNJ2SU56dLm6kgZZFaMhaz3GM/z8EnSv25axuiqBMG2x1UrSCguFu+yP0jt/+1i8XqBocMo09v73mB6d+SLdRe09FW+gA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D2wQKYfGYj0Z1ot2IY13ErX0c3h6VTsplYzGatKRLSQ=;
- b=GumkVZdpruzWQbyu7YwYuDsbfzVKgGZf+QKeWc73mW7fRKwss63Pa6XfVEV2E/A+QsVEbjdm/xPMORL1D10LO1P7xIYucg4jc4bw4VlH99wIp5cpgFuD5YkegZPWx5PsUXUdRySWTXCTgCf4l0YzcG4Q868yvJ9BR16mYCKhOXE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
- MW2PR0102MB3404.prod.exchangelabs.com (2603:10b6:302:3::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5395.18; Tue, 5 Jul 2022 02:45:24 +0000
-Received: from SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::7535:773:f979:893e]) by SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::7535:773:f979:893e%8]) with mapi id 15.20.5395.021; Tue, 5 Jul 2022
- 02:45:24 +0000
-Message-ID: <556fa9e1-c54b-8370-4de7-c2d3ec7d6906@os.amperecomputing.com>
-Date:   Tue, 5 Jul 2022 09:45:11 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0
-Subject: Re: [PATCH v7 3/3] i2c: aspeed: Assert NAK when slave is busy
-Content-Language: en-CA
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-To:     Wolfram Sang <wsa@kernel.org>, Corey Minyard <minyard@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        with ESMTP id S229885AbiGEKI6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Jul 2022 06:08:58 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9546613F56;
+        Tue,  5 Jul 2022 03:08:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4BB4A1F91F;
+        Tue,  5 Jul 2022 10:08:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657015735; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qvMJ4J1/LuqJ2bm7BlZIoOLJOYmWh+4Rpvkk33SZGOA=;
+        b=eByb4sSPqg6rRuVWR7Uyol2qkXUh2FlAJZJl6kQB2+c8EEhcdaxtq/jkX0dVzdvL/5s6D3
+        /efNTsY/bdasP3pVQxu6qP4nvHO+zcS4O9fblGgs1NR89rSYgTvYETM292rGHy3CrhOSj+
+        qGcOFU+GGl+mKHAF54mbZA9ZrTUJOaY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657015735;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qvMJ4J1/LuqJ2bm7BlZIoOLJOYmWh+4Rpvkk33SZGOA=;
+        b=jKWTp5GMggeoLloojImrUvPvKkYL+8GQzQSR8Qi8VzqCYEK46zUKh7GMjl/cO3qvfPDiP7
+        DHXFfHIde+vxx5CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2E2AF1339A;
+        Tue,  5 Jul 2022 10:08:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VBGsCbYNxGK1BQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 05 Jul 2022 10:08:54 +0000
+Date:   Tue, 5 Jul 2022 12:08:52 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Wolfram Sang <wsa@kernel.org>, Guenter Roeck <groeck@chromium.org>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org,
         openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220422040803.2524940-1-quan@os.amperecomputing.com>
- <20220422040803.2524940-4-quan@os.amperecomputing.com>
- <Yn+9QBoPdH8fMm/m@shikoro>
- <fc422a06-c035-f6e5-231b-74ea6afe8467@os.amperecomputing.com>
- <YqpB8A2uBi+4epHM@shikoro>
- <bf001ece-e981-3a06-53fe-6a8b637d69fe@os.amperecomputing.com>
- <YqsiRW78NAL9rX9S@shikoro>
- <27f5999e-40a6-311f-20f1-331a0f4447da@os.amperecomputing.com>
-In-Reply-To: <27f5999e-40a6-311f-20f1-331a0f4447da@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SG2PR04CA0173.apcprd04.prod.outlook.com (2603:1096:4::35)
- To SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24)
+        linux-integrity@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, chrome-platform@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
+Message-ID: <20220705120852.049dc235@endymion.delvare>
+In-Reply-To: <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
+References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
+        <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1bcd87bc-17ef-4c12-d6a5-08da5e306900
-X-MS-TrafficTypeDiagnostic: MW2PR0102MB3404:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tFN+cysuqhLkWHManmgIliKSssTIjLkO0zTDOp6RirCXwcMvjM7rwAn8No48XP+UKuGbqUN7vUNafAyuJYDAfsvRGHEMgE+vF9wJknOqJpI1W7Soi39Zps+rJNi3HDgj8+WRgPzE9+QXa9CJuqMScPJB6ed2Al40VxX1m0QVdvup2PsHLa7gQG196Eeb6GQsu/GxGMk18VDvSeS8GziOh/xIL6O7K3yVMsQW6LqSlmjGIXauM9iH4d6FOBIIDgB4qptxiuu4pK8dDnrzMl/BfLxqtFEJ47Qdl/Ad4wMNT8AuLETjkpaqGAhcy+PBFIUyI+J6LU0viXgGMaMjLphwV6UjZOE7OU1+oaHQkMKezfY5hRmXQahmzNhRX3smQD0OAiPX04GwdN7sHYHisONycvR5lkeu0on15dcEgVBvgUzHYuxWXUbzL0QFaywsTUL1AxE6Ouf6SlN6/wRDiBE0nc4dCyjb3855eMC9St/EYc0q3IuQPCA5QsqE91KVuQk11IsieZRm4SlCXYzYKhnF7Cg+inj/IWwfLFtOr0iwIle8OCzj5+QkbRFISQ8mCl4aY1yvQ8I0vGTObpd5ff26HZIZLnviJCuGT3FlDNhSIfT+ol522yTmL+culngQX+/ZBASAXXeT01I3L7J9yAHpOp5v9Z7TH/eLK9CWePAUpIEYCkrn47/DbdWLcbHmLBt9BjQQGg4SQlWXF4YIc9u+MGVQ69txdCMx7GhKCYe+rOGz97tSBlNH7jno8LkLVc6SK6P4lvGL14n1tuDMP0Ad7UfaIh2T1NBbMVSUC+tzmjSNJlSBnzETSY/PGc0PQY8eqk6Y3wTcprviH4bzzEChiO1FZGOMX5KaRPYAVnhZ3uc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(346002)(376002)(136003)(39840400004)(8676002)(66946007)(66556008)(66476007)(2906002)(86362001)(31696002)(38100700002)(38350700002)(5660300002)(921005)(7416002)(8936002)(41300700001)(83380400001)(26005)(53546011)(52116002)(2616005)(6512007)(186003)(6666004)(6506007)(316002)(110136005)(6486002)(478600001)(31686004)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aUZkMU1tbVkvWHBMa2lKdElPN3dDTEpyV08zanlLNjkwcTVGeHFQSkEvbHhO?=
- =?utf-8?B?bXlLM00wSXJicjNEdU5XRzRPWm9ETXE1SzdmUVlNbG5FaW1KVGUrcDRnNHRF?=
- =?utf-8?B?QjdvQVZkcWRYTWVMNDg0SUZsV1dLU0RFbGNiOWVnYnhHVjdIajBaVjNaZHZB?=
- =?utf-8?B?RUwrVjFwYWd3aEJuSi8vdVc4ejBKckNLZ3ZVVVV4a3kvL1lBOG84a1dBc0Vx?=
- =?utf-8?B?Y2Y4UURGNjgzYWNtSDllTTBqQ2RRRGpnMVdNWDhnYlExcFdzeVBUVTk1Z1M4?=
- =?utf-8?B?U3RQTG0xeE1Bb2tXY1FKK2RuT3hzMWxzVnZHZ3ZMY3E5Yi9laXNxeER6VWhS?=
- =?utf-8?B?eDFBZ0ZrZzcxMkpQNDFpTnpmbEVTWGtNbVBqRmZlVzBDUGtHdk1PSTRvVjNP?=
- =?utf-8?B?SWZBQ3ZxZmtCQzloeHFkVndicnMrTituaVA5d1Nja2RheTlFL3FlZEV1cUp5?=
- =?utf-8?B?ZGwzdXNhOEUyeGtzc0FYTkdQMlJZSjd0cGlxaUQrZ3NydDlLTHJmWjBpYUFr?=
- =?utf-8?B?RFVsT0luYTZaOEFwR0JMaTJkbmdEdktUeHVRU1RQUkVsY1hCTWdHRTA3UTdY?=
- =?utf-8?B?Z01WTVR3Ymk3NmMyaThXdzhiWUJnRzhQUjVEeWdGRS9aV0xHM3dIWlpPNndo?=
- =?utf-8?B?dGdYRlRJV2FONXhsa1pJZEo3bURvMGovK2J4UjQrdFNSWktyTkxJaGZQSitP?=
- =?utf-8?B?b0pYNFgzYUxYMjJUbmF2YSs1dDg4K05tc1N3SndySmNoSXpVU2JiUHo5Lzhw?=
- =?utf-8?B?YzdaMklSOXhFTVRjbGoya3NwbFRlZ2ZvQ2R0U2ZBOTJSY3dqbEIxV1FrSHNt?=
- =?utf-8?B?WTRlSW4weko5c2UrRjBzUUdSdENFU0FKQ2dFMFJGVXVDeDJwTDFuZWJ4OTc1?=
- =?utf-8?B?MEc0U2F6bmlTWlY5VExJdkdONUtPTzJHdHgzK3lNNktCckttZ3ZnVVpJcHVE?=
- =?utf-8?B?YWFUQWpKeWdubGJkdk1XdCtuMFRtMWhIcGNoT1djc2dhb0xtMXp0MTJaaXZZ?=
- =?utf-8?B?UGZoenB5OU1UWW5aVW0xSHJ5azAyc0hrRnBadWhLU2lVaHVCcUcvZ2tnNG9K?=
- =?utf-8?B?c2REUU0vaFRiVm5nUi9qUXpkV2FRNVpQNlRIL1F0TUg4TERaZ1I3Kzk5M3pD?=
- =?utf-8?B?K1lwNHBKTnlWdVo1N0ZVVlVieFlrcDhCbGEzRThJVUlOMVdDcmwrQXdwa25S?=
- =?utf-8?B?bTBKR3B6T1NoM0lyODVHMWdTWFpicjFTWEFFeEx2V1JaaTk5S05HY1c1c1hp?=
- =?utf-8?B?cnpIUEI5RTh4VnhSYmgxK0kvK2F6SWFRbjR4ckpsZjhHWmdraUJaMHZ6TDgw?=
- =?utf-8?B?QU4vdXNFUklEQ3BTaVBqblRYYUdFaHhKY05UWi9nUjFvOUNBRjR6SEhBNzky?=
- =?utf-8?B?T25mTXVGZUlqbzBOTFZpNFVzRWt3TC93bHQ4YmRKQ3dNZ1VsVzVMTE44T3FM?=
- =?utf-8?B?ZHI0MUI3WEN1SlhXYjVDV2JRVnFFaXhNMTB1aUlvcUFDMnVvY2JkMURTZHVv?=
- =?utf-8?B?dkVreFlPN3ZnNk1sOFdPZnVHUU5WQU1KSFZ1RHB3Nno2VHBZMTQ3NDllODRW?=
- =?utf-8?B?SlZlWE9PMUZ0S1htY0xoY0ZrdVBtaWV6cEIrdThMdjJjUzl4YzhNZG8yenIr?=
- =?utf-8?B?Y3ZaK0tLTFVrL204MGd2YzVDNmxIbmF2WlVHQkd4NmVaK1JaUWRjRGpDcEEx?=
- =?utf-8?B?R0FmaTZkZzZ2VzN5UVZQQm4xdVZDWDRvek5VV0ZJUjJaS0hDKzdaLzJpQWtO?=
- =?utf-8?B?VWpITFI0MGlnN1A4NUlWUGlSY29UMWFWQmtic1M3MTNBdDlQZXplR0YvL1Vu?=
- =?utf-8?B?ZDVzOEZ4aTZzTDYyNHFjZGxMS2wvbVFnVVFFRVFOMHY5dXdkME1sV1Y2djBR?=
- =?utf-8?B?WkJWNHVoOUxUQU5ESGl4SzcwUU5SRVFSSElqQUFtc1pZMGFpek9pdlFZME9J?=
- =?utf-8?B?SUVpUEJwNTRIM2ErQlcrZEZzMm5sbTh2clN4RXBqU1M4a0tDNzB5Y0ZIN0ht?=
- =?utf-8?B?a2FvS2pKOHh2MUJ4MkVndlJ3NXU2MzUvaEo0VGR6T3pYYWJBcnQzWTIwaks1?=
- =?utf-8?B?eGRVSWtjN25tUUZ3RUUrOWRyU2FPZkpyQWV6eWpQWFJrSWZCMUdHMGVvM3Ay?=
- =?utf-8?B?Sy9mT2JyS1Nxdm5PM1dkWEVCeU0wN1cvVVZxanpxWEhqeHIydGliMzdseHhi?=
- =?utf-8?Q?Qdhc8kzdS5XhQiH7bic7Xto=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1bcd87bc-17ef-4c12-d6a5-08da5e306900
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2022 02:45:24.6011
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AalGmpKBciwJEVkesT3Il4zEyKMBLEygIqbaFPR0QJXzYUdZR9uhY+natSI5rlGvhugbHcZFLlrh8Ktc27wR2Rc2WEJJlHgfGC46JXryrVU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR0102MB3404
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, 28 Jun 2022 16:03:12 +0200, Uwe Kleine-K=C3=B6nig wrote:
+> From: Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.org>
+>=20
+> The value returned by an i2c driver's remove function is mostly ignored.
+> (Only an error message is printed if the value is non-zero that the
+> error is ignored.)
+>=20
+> So change the prototype of the remove function to return no value. This
+> way driver authors are not tempted to assume that passing an error to
+> the upper layer is a good idea. All drivers are adapted accordingly.
+> There is no intended change of behaviour, all callbacks were prepared to
+> return 0 before.
+>=20
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
 
+That's a huge change for a relatively small benefit, but if this is
+approved by the I2C core maintainer then fine with me. For:
 
-On 17/06/2022 14:08, Quan Nguyen wrote:
-> On 16/06/2022 19:29, Wolfram Sang wrote:
->> Hi Quan,
->>
->>> On the first occurrence of I2C_SLAVE_WRITE_REQUESTED, the address is 
->>> already
->>> received with ACK. So if slave return -EBUSY, the NAK will occur on 
->>> the next
->>> Rx byte (on I2C_SLAVE_WRITE_RECEIVED event).
->>
->> This is exactly why I2C_SLAVE_WRITE_RECEIVED allows for an error code.
->>  From the docs:
->>
->> ===
->>
->> * I2C_SLAVE_WRITE_RECEIVED (mandatory)
->>
->>    'val': bus driver delivers received byte
->>
->>    'ret': 0 if the byte should be acked, some errno if the byte should 
->> be nacked
->>
->> Another I2C master has sent a byte to us which needs to be set in 
->> 'val'. If 'ret'
->> is zero, the bus driver should ack this byte. If 'ret' is an errno, 
->> then the byte
->> should be nacked.
->>
->> ===
->>
->> 'ret' is used to ACK/NACK the current byte in 'val'. That's exactly what
->> you need, or? Does the aspeed driver not support acking the current
->> byte?
->>
-> 
-> It is true that aspeed driver does not support acking the current byte. 
-> Setting ASPEED_I2CD_M_S_RX_CMD_LAST will take effect on the next Rx byte 
-> as per my observation.
-> 
-> S-> Aw(ACK)-> RxD(ACK)-> Sr-> Ar-> TxD(ACK)-> ... -> TxD(NAK)-> P
->       (1)        (2)
-> 
-> Currently, setting ASPEED_I2CD_M_S_RX_CMD_LAST in (1), on 
-> I2C_SLAVE_WRITE_REQUESTED event, will make the NAK happen in (2) and 
-> make the read stop.
-> 
-> If setting ASPEED_I2CD_M_S_RX_CMD_LAST on (2), ie: on 
-> I2C_SLAVE_WRITE_RECEIVED event, the read from Master is never NAK 
-> because there is no next Rx byte and Master is already switch to read 
-> from Slave.
-> 
-> I understands that the return of
-> i2c_slave_event(slave, I2C_SLAVE_WRITE_REQUESTED, &value) is always 0 as 
-> in Documentation/i2c/slave-interface.rst. But with this case, this is 
-> the way to NAK on the first byte and I'm wonder if this particular case 
-> would be supported somehow.
-> 
+>  drivers/hwmon/adc128d818.c                                | 4 +---
+>  drivers/hwmon/adt7470.c                                   | 3 +--
+>  drivers/hwmon/asb100.c                                    | 6 ++----
+>  drivers/hwmon/asc7621.c                                   | 4 +---
+>  drivers/hwmon/dme1737.c                                   | 4 +---
+>  drivers/hwmon/f75375s.c                                   | 5 ++---
+>  drivers/hwmon/fschmd.c                                    | 6 ++----
+>  drivers/hwmon/ftsteutates.c                               | 3 +--
+>  drivers/hwmon/ina209.c                                    | 4 +---
+>  drivers/hwmon/ina3221.c                                   | 4 +---
+>  drivers/hwmon/jc42.c                                      | 3 +--
+>  drivers/hwmon/mcp3021.c                                   | 4 +---
+>  drivers/hwmon/occ/p8_i2c.c                                | 4 +---
+>  drivers/hwmon/pcf8591.c                                   | 3 +--
+>  drivers/hwmon/smm665.c                                    | 3 +--
+>  drivers/hwmon/tps23861.c                                  | 4 +---
+>  drivers/hwmon/w83781d.c                                   | 4 +---
+>  drivers/hwmon/w83791d.c                                   | 6 ++----
+>  drivers/hwmon/w83792d.c                                   | 6 ++----
+>  drivers/hwmon/w83793.c                                    | 6 ++----
+>  drivers/hwmon/w83795.c                                    | 4 +---
+>  drivers/hwmon/w83l785ts.c                                 | 6 ++----
+>  drivers/i2c/i2c-core-base.c                               | 6 +-----
+>  drivers/i2c/i2c-slave-eeprom.c                            | 4 +---
+>  drivers/i2c/i2c-slave-testunit.c                          | 3 +--
+>  drivers/i2c/i2c-smbus.c                                   | 3 +--
+>  drivers/i2c/muxes/i2c-mux-ltc4306.c                       | 4 +---
+>  drivers/i2c/muxes/i2c-mux-pca9541.c                       | 3 +--
+>  drivers/i2c/muxes/i2c-mux-pca954x.c                       | 3 +--
 
-Dear Wolfram,
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
- From my particular case, as it seems not to be able to nak on the 
-current byte on I2C_SLAVE_WRITE_RECEIVED event (i2c-aspeed), is it 
-possible to somehow allow slave to return some errno on the 
-I2C_SLAVE_WRITE_REQUESTED event so that bus driver knows what to do for 
-the next incoming byte if slave is busy?
-
-As from the docs:
-
-===
-
-* I2C_SLAVE_WRITE_REQUESTED (mandatory)
-
-   'val': unused
-
-   'ret': always 0
-
-Another I2C master wants to write data to us. This event should be sent once
-our own address and the write bit was detected. The data did not arrive 
-yet, so
-there is nothing to process or return. Wakeup or initialization probably 
-needs
-to be done, though.
-
-===
-
-As the "Wakeup or initialization probably needs to be done" in the slave 
-side, in case slave is fail to either wake up or initialization or busy 
-in this particular case, there is no way for slave to let the bus driver 
-know the status if the 'ret' is always 0.
-
-I'm also agree that it should be always ack on I2C_SLAVE_WRITE_REQUESTED 
-event (when the slave address matched and the write bit detected). But 
-if slave know it is fail to either wakeup or initialization or busy, the 
-bus driver should be able to automatically to nak on the first write 
-incoming byte.
-
-Hence, my thinking is to change the above:
-
-   'ret': always 0
-
-to:
-
-   'ret': 0 otherwise some errno if slave is busy or fail to wakeup or 
-initialization
-
-Thank you and best regards,
-- Quan
+--=20
+Jean Delvare
+SUSE L3 Support
