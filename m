@@ -2,51 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066845692A2
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Jul 2022 21:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8F35692A9
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Jul 2022 21:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233921AbiGFTcN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Jul 2022 15:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58952 "EHLO
+        id S230472AbiGFTeN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Jul 2022 15:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbiGFTcM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Jul 2022 15:32:12 -0400
+        with ESMTP id S229854AbiGFTeN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Jul 2022 15:34:13 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FBF1D31C;
-        Wed,  6 Jul 2022 12:32:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93764275D2;
+        Wed,  6 Jul 2022 12:34:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB419B810B2;
-        Wed,  6 Jul 2022 19:32:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2EB8C3411C;
-        Wed,  6 Jul 2022 19:32:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E055B81E82;
+        Wed,  6 Jul 2022 19:34:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40DF4C3411C;
+        Wed,  6 Jul 2022 19:34:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657135929;
-        bh=afvzmovXiqWI9n8eFTh9LyptvwDchAs9Ecj3Cw3y+Bs=;
+        s=k20201202; t=1657136050;
+        bh=Lc9Jtxr6bDh1AkEa/bqDJMUiPw2aZdu0IbhKtcXXdI8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jWEuo4vphWS4McLLBNdh5U/iRQlwNE2XEpkXQsOSPfYood83zay4eTKLnqgWyYHT7
-         VmpHN+eYjB9PS3KbxiW3SeareAbIHi+ZmD/Pd9QNctmDbdbN7p3d21VrJTc/hQF0CJ
-         alDVy4XK9VGhm6U31dClRunYpi53Aqah11+rUFh0BE4ny0xbXi7bGXe0SmflTwYony
-         TfdTFLUn41sh2tcIYCQw661SFGiG4eQLvpeBlyCwe8Jjd8/HkQqT/Ks9laAe1nVU7R
-         gBL05VsxUZr0S/l45KJ1NyYn1CObEAUMQ7AAX2gt36a5IHTJm55aQjtofC3lDw3h+V
-         oHp0IO54SuHOg==
-Date:   Wed, 6 Jul 2022 21:32:05 +0200
+        b=eaQDJmx6+VBKcGT5zmT9gIJqcW2st61A9wKBlljjA5HHKiVGhY/gZrrBz0HuYD4iQ
+         tdNXQMBHCWviExLbW2FNt0/FzHC9uyc/lF6baCDfK5YW+khJtxMW0IDGwVgHt4OB9i
+         7coiLW6xxxubluDE4WAa7LxJpwbW+bhuRJXF0fzdsFoBrgO2KGZSv0kwxFLsvnJbDK
+         W3sWLNmLueR9y1SFYj5qN+KrSpoxRjn8Y1bTCqRQXWAaxpwQJqjYlLhtHkgh5JYeIO
+         q3cXqp/YieNQH/YpDuuA2Q46ASuEGidnE5WNOC2amHQnKcPgobXhvaV6QjbamCwayV
+         Ssh0oPzQif2+A==
+Date:   Wed, 6 Jul 2022 21:34:05 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] i2c: scmi: Replace open coded acpi_match_device()
-Message-ID: <YsXjNd4qnopeo2rV@shikoro>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-i2c@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH 1/1] dt-bindings: i2c: i2c-rk3x: add rk3588 compatible
+Message-ID: <YsXjrUVbGIObUroU@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220630195541.4368-1-andriy.shevchenko@linux.intel.com>
- <Yr7fuWADLhJSeYdZ@smile.fi.intel.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        kernel@collabora.com
+References: <20220623163136.246404-1-sebastian.reichel@collabora.com>
+ <2664d6a7-ee4b-9cfa-800e-e97522e3986c@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5EO46Sifs0ie7T/r"
+        protocol="application/pgp-signature"; boundary="yrcvWxnffJQLM1lM"
 Content-Disposition: inline
-In-Reply-To: <Yr7fuWADLhJSeYdZ@smile.fi.intel.com>
+In-Reply-To: <2664d6a7-ee4b-9cfa-800e-e97522e3986c@linaro.org>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,34 +67,43 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---5EO46Sifs0ie7T/r
+--yrcvWxnffJQLM1lM
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sun, Jun 26, 2022 at 10:22:09PM +0200, Krzysztof Kozlowski wrote:
+> On 23/06/2022 18:31, Sebastian Reichel wrote:
+> > Just like RK356x, RK3588 is compatible to the existing rk3399 binding.
+> >=20
+> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > ---
+> >  Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
+>=20
+> That's still some old tree you are based on...
+
+What do you mean by that?
 
 
-> Discard this, a last minute change that makes it not buildable.
-
-Do you plan to send an update?
-
-
---5EO46Sifs0ie7T/r
+--yrcvWxnffJQLM1lM
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLF4zUACgkQFA3kzBSg
-KbYAoA/+MxBNDBn7zOdk0m/CCFYMUjSLsgiFzNfb6fwc6x7ys/A6a2wBb7nygNMA
-ktKNtYK1xyzz5lc0xfGba2aoRKMGpnVDEsWbCi1M8TwrKODseeNCOOPUAf3PYtJi
-X2E2iV/8KtOdF9O7nKrrWELnSnk6buWQX5ZzO9cW9Ic2/zrm788lZfZ3uIBmQ9eJ
-wsW9e4bTNczPhUc1YW0QoMOESJ3NLKkutK8DxC1Qq2rDA3BMiDwZaiwgP95TFRc4
-jNmkzWiuzr156cRHpGgvfumEKpPylb1DS/fnLdMmqIkdDKmnTby1+ajYwXI6NRug
-ORd8+LXOxkm1t39FzStgZXJft+qQMF3DEGpl9PdbBkwgpBxNhqZfaNkElW0lV32o
-Gb1yHyrDis/+oxGTdZDd+fZ1qcG2TrElEVs2j46AlMOUyyRmZv0Yk9KEUldM1OwB
-WeMDu+8xUYWiOG1367aAvtl26vUzPX19ShELhbvwpHdLaWJ+0ncVlSCd55ccTNG5
-cpDboH2TfsQmp8+lFEDA1yiw8zmEvabTD2iLgLuOP5gvOFOu1d+jW+p+7InmsWzk
-h2fnqkoLQT68oVO4LD2sC1PYM1Q7Y1C+xMBhiJalINKVHwUYHgZHVq7nhxaAMpPL
-/hYjHMpu9PIJ4w7agNr7XKFVoK0wad2aAgDfvXuoqKT26iirbt8=
-=yE5b
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLF460ACgkQFA3kzBSg
+KbacmQ/9F97K+u7lxzj+N15bKY8tT6XwlYdmyDUyAt7ZvamCPpmpGwf+r/mGi4DK
+OIptUkAkheShb2e8NH475CQM+og3EQXu8DWD2aq5bkVslmndWGmXXKfsFraA20Lv
+gKwQr/uWPWmv+1de/iOkTAnr83UmbSEFfBUjZhsKTBaH2ikp5cMC3ugGeA0WaULH
+49VveqT395CU+pgHsSEsdx1830GN3UaVpaEviHiEp1ofZJBZB8mz5XZeM1KNuee0
+d+JZY3sajEHA+XFWnDH9x88UuqG3PH9Qche8FxuyENgQUBjV+aPaJyCy4oFxkIEX
+NLwrRUjMaAG9g21x+bnDcvpgt5tIzpk/EYdN6C84lrj0H8Oe4GCqKxxB7qQAqDvw
+Z6lmioUC3Q28/MnbIQqkgLov53ECYp1wlDgLHoZrLKbcbBzfgDBeSSb8YNqtFHGo
+3rE5e0O8j4QITfo6CvLzSDy5dwfk+T1/duo2LGkonWFWNCXf2s4QUkmQVyKrtbPE
+d6tjj0rIR4/8B779a5MG8KtNWabAIYHCDAo2d2w12r5yQM0qmrKbKaXCxK5qka+Z
+WdwYJQbvXh0j9fN7/g1lViiWHL6JI6vyq6iGUByR/duUbrPME1tG9LyZ+0bq/vjU
+npSKQrGotMl2GVVpET1/3W9TcJG8cOYqcHJAMHKlFw+jDjikklU=
+=gEdT
 -----END PGP SIGNATURE-----
 
---5EO46Sifs0ie7T/r--
+--yrcvWxnffJQLM1lM--
