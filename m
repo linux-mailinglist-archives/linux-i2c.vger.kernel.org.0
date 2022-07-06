@@ -2,62 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8F35692A9
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Jul 2022 21:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 520725692E6
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Jul 2022 21:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbiGFTeN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Jul 2022 15:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S233409AbiGFTzd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Jul 2022 15:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiGFTeN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Jul 2022 15:34:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93764275D2;
-        Wed,  6 Jul 2022 12:34:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E055B81E82;
-        Wed,  6 Jul 2022 19:34:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40DF4C3411C;
-        Wed,  6 Jul 2022 19:34:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657136050;
-        bh=Lc9Jtxr6bDh1AkEa/bqDJMUiPw2aZdu0IbhKtcXXdI8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eaQDJmx6+VBKcGT5zmT9gIJqcW2st61A9wKBlljjA5HHKiVGhY/gZrrBz0HuYD4iQ
-         tdNXQMBHCWviExLbW2FNt0/FzHC9uyc/lF6baCDfK5YW+khJtxMW0IDGwVgHt4OB9i
-         7coiLW6xxxubluDE4WAa7LxJpwbW+bhuRJXF0fzdsFoBrgO2KGZSv0kwxFLsvnJbDK
-         W3sWLNmLueR9y1SFYj5qN+KrSpoxRjn8Y1bTCqRQXWAaxpwQJqjYlLhtHkgh5JYeIO
-         q3cXqp/YieNQH/YpDuuA2Q46ASuEGidnE5WNOC2amHQnKcPgobXhvaV6QjbamCwayV
-         Ssh0oPzQif2+A==
-Date:   Wed, 6 Jul 2022 21:34:05 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        with ESMTP id S230285AbiGFTzb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Jul 2022 15:55:31 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2ED017594
+        for <linux-i2c@vger.kernel.org>; Wed,  6 Jul 2022 12:55:30 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id u14so19774091ljh.2
+        for <linux-i2c@vger.kernel.org>; Wed, 06 Jul 2022 12:55:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=1cggqdheLf5tx5a4RWqD6gQP3vfX6AayXoHRI5JqNGE=;
+        b=mxx0NhRQGF1roPP4zUR+jS909if3vve2lCYvqaCEj0o8N8iN2WWvFZrCj72oW4VAJl
+         4A4EHkuGXvb/iMt+FKYOYSXXnkfZB7wk/vxowFPjLKoFPuJkBcoqSykKDWFYoC6gtITD
+         +lMVqMSTotP+JkO8YToXGVnCZEcFtpp0R0HeHuy8ZLpnv3m/QlxJ9/CSQhJ+19e5gptB
+         nUU6Al/QL71JK8UOiq5xICi46Qv/8rYBqAHS7HWJc3qqeGhjpu7qdMJROatRzOxrZYyr
+         MoebsfkQ8tAE90yRHltpvsxyIYZ+TK7Gkv9Dv8Mkmf6H2nllsdO/KwBY9AYisOcj4KMW
+         xJyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1cggqdheLf5tx5a4RWqD6gQP3vfX6AayXoHRI5JqNGE=;
+        b=1BFRfRrKcWNNNadOM9SoLdGMa8eNoKsLlSu4ecJIntgz0xsDf0JiN1/ixIyAmGaU/j
+         ckFDk8KsVVeK87ND0htZVebUYnx2dsk5t1Se7nSOlTxpgP00f18cRqsel7TBWFpIAjwf
+         yvvAf0FLH5uld1bq2dX+yqk3S3u8Rue+VxrJ2SQzYHSLK8806qf3cWEwWCPT3s0/nk9g
+         8vMzTJPHfhpY0JwbCTm/sALrp44DQYnnuxo3PPAphNO7aqNuYA9fHXPCfS507w6ewwkh
+         MkGefTQSHZyMNdQ52dZ/q65CRW2r7K8A+kUVaxqMz4V4hxdpGIBBpLEhaxhy0Q9xSAaV
+         SCDg==
+X-Gm-Message-State: AJIora8oe+xDJ2XJynnQKJbRe+bqMb1/f8yRQTcmC5zj9TioIJ7Qjtz6
+        GOGesG+/Y86XTa1SHdGhsQ9LQg==
+X-Google-Smtp-Source: AGRyM1vnBn9IH/IF7sLcDzjlPr71ImIMk5XqA2RucdlxyWgmXqAt0KV2/I5NtaX1BUqu46ajylefPg==
+X-Received: by 2002:a05:651c:2317:b0:25b:fc32:906a with SMTP id bi23-20020a05651c231700b0025bfc32906amr19597103ljb.445.1657137329221;
+        Wed, 06 Jul 2022 12:55:29 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id p11-20020a056512234b00b0047f6b4a53cdsm6413232lfu.172.2022.07.06.12.55.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 12:55:28 -0700 (PDT)
+Message-ID: <a965913e-39ba-640a-0d36-2bf7ecc10e94@linaro.org>
+Date:   Wed, 6 Jul 2022 21:55:27 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/1] dt-bindings: i2c: i2c-rk3x: add rk3588 compatible
+Content-Language: en-US
+To:     Wolfram Sang <wsa@kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
         Heiko Stuebner <heiko@sntech.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         linux-i2c@vger.kernel.org, linux-rockchip@lists.infradead.org,
         devicetree@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH 1/1] dt-bindings: i2c: i2c-rk3x: add rk3588 compatible
-Message-ID: <YsXjrUVbGIObUroU@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
 References: <20220623163136.246404-1-sebastian.reichel@collabora.com>
- <2664d6a7-ee4b-9cfa-800e-e97522e3986c@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yrcvWxnffJQLM1lM"
-Content-Disposition: inline
-In-Reply-To: <2664d6a7-ee4b-9cfa-800e-e97522e3986c@linaro.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+ <2664d6a7-ee4b-9cfa-800e-e97522e3986c@linaro.org> <YsXjrUVbGIObUroU@shikoro>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YsXjrUVbGIObUroU@shikoro>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,44 +78,23 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 06/07/2022 21:34, Wolfram Sang wrote:
+> On Sun, Jun 26, 2022 at 10:22:09PM +0200, Krzysztof Kozlowski wrote:
+>> On 23/06/2022 18:31, Sebastian Reichel wrote:
+>>> Just like RK356x, RK3588 is compatible to the existing rk3399 binding.
+>>>
+>>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml | 1 +
+>>>  1 file changed, 1 insertion(+)
+>>
+>> That's still some old tree you are based on...
+> 
+> What do you mean by that?
 
---yrcvWxnffJQLM1lM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The patch was sent to not updated email, so I assume it was based on
+something before v5.18. Could be relevant, could be not, but it raises a
+question what was a base this (and other Rockchip) series. :)
 
-On Sun, Jun 26, 2022 at 10:22:09PM +0200, Krzysztof Kozlowski wrote:
-> On 23/06/2022 18:31, Sebastian Reichel wrote:
-> > Just like RK356x, RK3588 is compatible to the existing rk3399 binding.
-> >=20
-> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > ---
-> >  Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml | 1 +
-> >  1 file changed, 1 insertion(+)
->=20
-> That's still some old tree you are based on...
-
-What do you mean by that?
-
-
---yrcvWxnffJQLM1lM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLF460ACgkQFA3kzBSg
-KbacmQ/9F97K+u7lxzj+N15bKY8tT6XwlYdmyDUyAt7ZvamCPpmpGwf+r/mGi4DK
-OIptUkAkheShb2e8NH475CQM+og3EQXu8DWD2aq5bkVslmndWGmXXKfsFraA20Lv
-gKwQr/uWPWmv+1de/iOkTAnr83UmbSEFfBUjZhsKTBaH2ikp5cMC3ugGeA0WaULH
-49VveqT395CU+pgHsSEsdx1830GN3UaVpaEviHiEp1ofZJBZB8mz5XZeM1KNuee0
-d+JZY3sajEHA+XFWnDH9x88UuqG3PH9Qche8FxuyENgQUBjV+aPaJyCy4oFxkIEX
-NLwrRUjMaAG9g21x+bnDcvpgt5tIzpk/EYdN6C84lrj0H8Oe4GCqKxxB7qQAqDvw
-Z6lmioUC3Q28/MnbIQqkgLov53ECYp1wlDgLHoZrLKbcbBzfgDBeSSb8YNqtFHGo
-3rE5e0O8j4QITfo6CvLzSDy5dwfk+T1/duo2LGkonWFWNCXf2s4QUkmQVyKrtbPE
-d6tjj0rIR4/8B779a5MG8KtNWabAIYHCDAo2d2w12r5yQM0qmrKbKaXCxK5qka+Z
-WdwYJQbvXh0j9fN7/g1lViiWHL6JI6vyq6iGUByR/duUbrPME1tG9LyZ+0bq/vjU
-npSKQrGotMl2GVVpET1/3W9TcJG8cOYqcHJAMHKlFw+jDjikklU=
-=gEdT
------END PGP SIGNATURE-----
-
---yrcvWxnffJQLM1lM--
+Best regards,
+Krzysztof
