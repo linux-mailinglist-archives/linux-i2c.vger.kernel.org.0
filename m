@@ -2,110 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D40569086
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Jul 2022 19:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 850A5569296
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Jul 2022 21:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233722AbiGFRVV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Jul 2022 13:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42316 "EHLO
+        id S231147AbiGFT0K (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Jul 2022 15:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233475AbiGFRVU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Jul 2022 13:21:20 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A771D326;
-        Wed,  6 Jul 2022 10:21:19 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id q82so7342806pgq.6;
-        Wed, 06 Jul 2022 10:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iQ5noOvGBeEdUsZZU3bl5ZMukN/7ulkT0cDCAalkyJg=;
-        b=IGb49zmS+Sa2ncGd5HLtS7vDXnDSEBOfwavtDQ5eh0Uikr4GMhDpaDg0ML0YSrqgSq
-         ZfNpElMTMwlSwAjCFuuWcEWrNZCCHLUnJFrboD+PC4IU625a9ixYg9vPbiVlqWnoGD0X
-         yoxXQbe0yfEtuZ5f7YBjv1Spki8+7U5kJmx8kz9iSTyufD+FdHMjaOoBq9Y1NO2XpfuW
-         oVQlS7SBI9EUC2F3Ls0ehAdTMHasul2l4SkDElcI7ozow78tFDyub0Z03LlopSYd/xOq
-         NNBnxc7cXDMehUznO2Jr106dp0hiCkE+JF1ixdsogh730neb4NaHM6I1QjuIYCgGlFx6
-         eEOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iQ5noOvGBeEdUsZZU3bl5ZMukN/7ulkT0cDCAalkyJg=;
-        b=IZPJ/WhyDnJAyy9yVhJJ0Y5jw8ZCYd7wTqcYcv4DixwQIXXI9KN8Ee7PVOMTOm47dz
-         4t4qkP8la6Vw3q9RA+J/VhZNCQuoadQaMBUvU2xRhohU7LHkKM2Jho3zhmIsKBh5EEb9
-         1plqsAyPGqCxXVIR5oU5/ewbL50sbuHxwsYJm/Wmu++pRk884SpiHwVeDj5lN3XJYiR/
-         k+Ge8cOYcb3ftb5kncJFmNiPJ4xCEBdHxVbxqBEVZy9wyZRXn5eSL3W4zgpyOaBo/b4n
-         vL7PXrEYy+X7WQMdiDZgn8zvx0bcOYq4zfWvLfylVB89Hu4wWUd4sUY2btwj7lpoWdkC
-         8ckg==
-X-Gm-Message-State: AJIora9RARe7VXkKQjlhQlbzQQ0YVr4iq7Qw+JCpZa9gHtd+VT218Xzm
-        SYeNcICRCzKfEIdp6Ns/lRqxuAMFOKo=
-X-Google-Smtp-Source: AGRyM1sngHdZngEJQqUY76AjUmgw2ddwaF7gm4SgEXnx0rqBNMDKYZcBMJq0E2JPQtYYTSzJ1CodJg==
-X-Received: by 2002:a65:6bc8:0:b0:412:9b2c:1700 with SMTP id e8-20020a656bc8000000b004129b2c1700mr3114873pgw.8.1657128078922;
-        Wed, 06 Jul 2022 10:21:18 -0700 (PDT)
-Received: from localhost.localdomain (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id cd21-20020a056a00421500b0051b32c2a5a7sm24710409pfb.138.2022.07.06.10.21.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 10:21:18 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        linux-i2c@vger.kernel.org (open list:BROADCOM BRCMSTB I2C DRIVER),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
-        ARM ARCHITECTURE)
-Subject: [PATCH] i2c: brcmstb: Fixed adapter named with optional interrupts
-Date:   Wed,  6 Jul 2022 10:21:15 -0700
-Message-Id: <20220706172115.224240-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231397AbiGFT0K (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Jul 2022 15:26:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A7E28E20;
+        Wed,  6 Jul 2022 12:26:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F89062072;
+        Wed,  6 Jul 2022 19:26:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFDEAC3411C;
+        Wed,  6 Jul 2022 19:26:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657135568;
+        bh=B7KWI+zxs/Q0rPLko0afLemZyMmjeukiI8Nhzv0WVnc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PoosFBY5mA6HuAoVuuVa3eADaT24dr8FOlzQ3uiq2V7JbvufXQXgc6b5DYFzXAixk
+         KI0qXCYKEzhTobeEFQ7tmcVEyQjXdKE7r5EcWHYIorhqGXOXA6DI9MVSCJ5cxnklLT
+         WC9jUlxO1Tg3HL5MYm2wE3XFcr4UJh4iK+bWxm1nS9q6/jHj181LOKhxaXRG+2Tx3i
+         L/y+O3ngdLToGFKigz0aNi2vWNlEEkIue5UUwcA45R+30UtQwJ1CRXjT5SPtqjx3qc
+         tDoip3gRLC4jlzH7xk7Wxe8w3weMb5Ndf1gERxxaQoe7GAlTN/tlpCQFW6T7zENuzb
+         K2+E/hkMJGOKQ==
+Date:   Wed, 6 Jul 2022 21:26:00 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux-i2c@vger.kernel.org, ben.dooks@codethink.co.uk,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        daire.mcnamara@microchip.com
+Subject: Re: [PATCH v7 1/2] i2c: add support for microchip fpga i2c
+ controllers
+Message-ID: <YsXhyB9GrfUQjy4n@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-i2c@vger.kernel.org, ben.dooks@codethink.co.uk,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        daire.mcnamara@microchip.com
+References: <20220706141313.2504237-1-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3FVpZi6DzgGOTZib"
+Content-Disposition: inline
+In-Reply-To: <20220706141313.2504237-1-conor.dooley@microchip.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-When the adapter is registered without interrupts, we would be showing
-the following:
 
-  # i2cdetect -l
-  i2c-3   i2c             Broadcom STB :                          I2C adapter
+--3FVpZi6DzgGOTZib
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-which is visually disturbing, only add the separator if we do have an
-interrupt.
+On Wed, Jul 06, 2022 at 03:13:13PM +0100, Conor Dooley wrote:
+> Add Microchip CoreI2C i2c controller support. This driver supports the
+> "hard" i2c controller on the Microchip PolarFire SoC & the basic feature
+> set for "soft" i2c controller implemtations in the FPGA fabric.
+>=20
+> Co-developed-by: Daire McNamara <daire.mcnamara@microchip.com>
+> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-Fixes: dd1aa2524bc5 ("i2c: brcmstb: Add Broadcom settop SoC i2c controller driver")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/i2c/busses/i2c-brcmstb.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Driver looks good, but what about the bindings? I shall not merge the
+driver without these.
 
-diff --git a/drivers/i2c/busses/i2c-brcmstb.c b/drivers/i2c/busses/i2c-brcmstb.c
-index b00f35c0b066..538a51299e04 100644
---- a/drivers/i2c/busses/i2c-brcmstb.c
-+++ b/drivers/i2c/busses/i2c-brcmstb.c
-@@ -684,9 +684,11 @@ static int brcmstb_i2c_probe(struct platform_device *pdev)
- 	adap = &dev->adapter;
- 	i2c_set_adapdata(adap, dev);
- 	adap->owner = THIS_MODULE;
--	strlcpy(adap->name, "Broadcom STB : ", sizeof(adap->name));
--	if (int_name)
-+	strlcpy(adap->name, "Broadcom STB", sizeof(adap->name));
-+	if (int_name) {
-+		strlcat(adap->name, ": ", sizeof(adap->name));
- 		strlcat(adap->name, int_name, sizeof(adap->name));
-+	}
- 	adap->algo = &brcmstb_i2c_algo;
- 	adap->dev.parent = &pdev->dev;
- 	adap->dev.of_node = pdev->dev.of_node;
--- 
-2.25.1
 
+--3FVpZi6DzgGOTZib
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLF4cQACgkQFA3kzBSg
+Kbantg/7BJmcaf7bvoLocUXjekKA9gxizf3QtabqYBIeWT7MBMc7uhgMfPGAEUl0
+MDuwfoopJsEdBsCV+OcCoL37T/7J+rJXFDoHbuDm6Uet7UkfMB7Am1IS+bl+EV+a
+TvTdxUhGSg3fwHORjaa9xiTxdzCPxn80NjRDXvjH9T7ej33xcgKQAY+Vtg16HTNV
+HMaJzrVt0cJf1P3wZQhGnKwK2mB4dYuvMB/5M18s0Lh9k847U+yWpqzJwo64Hn02
+SRqAQAfEZJ/fPjWehvxOjL3gKR1d+HbSLMxE2xEn+Mt9qsncqtkIXD9BHGfyc2cZ
+KkilV9WzKqsdEjWIlGav3NdLqL8eDfWbH8t3CmWxQ57+tNX2aZARqUMys7u3Elaf
+gTq3uF4oysBijmwx2ngQHEORzb07B+X07NUZtisBSlV4gcGiQOQdIUpX8XE2MpV5
+45nE8ymUeehSHG4rjB5Ez/fNl5pwUDmgDEn4OuJF6kCXn45PT0di96yBQBIfBefQ
+rHzJ0afvMha7R8W46RcMjr90c9B5Qll4vqJIoiBXRkBwLbtvrAiQBwcArZMx1zHd
+VPvy9TWx5G5+3M7MDMpni+Jy8XoxjGhLs7trtJ9Jhs5UUWkF8HPrZpInDhDlw9Hl
+pQ4wxcOGb53jXtHlBqEi5xYeIz2RosRmVkQT8Si5fwW4OFe+ZUY=
+=N2GO
+-----END PGP SIGNATURE-----
+
+--3FVpZi6DzgGOTZib--
