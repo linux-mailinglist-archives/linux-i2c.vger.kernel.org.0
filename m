@@ -2,55 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850A5569296
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Jul 2022 21:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD6C56929E
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Jul 2022 21:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbiGFT0K (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Jul 2022 15:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
+        id S233910AbiGFT2m (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Jul 2022 15:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbiGFT0K (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Jul 2022 15:26:10 -0400
+        with ESMTP id S231397AbiGFT2l (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Jul 2022 15:28:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A7E28E20;
-        Wed,  6 Jul 2022 12:26:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D637E1C926;
+        Wed,  6 Jul 2022 12:28:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F89062072;
-        Wed,  6 Jul 2022 19:26:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFDEAC3411C;
-        Wed,  6 Jul 2022 19:26:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72E3262095;
+        Wed,  6 Jul 2022 19:28:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11E76C3411C;
+        Wed,  6 Jul 2022 19:28:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657135568;
-        bh=B7KWI+zxs/Q0rPLko0afLemZyMmjeukiI8Nhzv0WVnc=;
+        s=k20201202; t=1657135719;
+        bh=uwG+1CitE2piA97muv9vt6iTl0bsdOymgXHEbkJNXow=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PoosFBY5mA6HuAoVuuVa3eADaT24dr8FOlzQ3uiq2V7JbvufXQXgc6b5DYFzXAixk
-         KI0qXCYKEzhTobeEFQ7tmcVEyQjXdKE7r5EcWHYIorhqGXOXA6DI9MVSCJ5cxnklLT
-         WC9jUlxO1Tg3HL5MYm2wE3XFcr4UJh4iK+bWxm1nS9q6/jHj181LOKhxaXRG+2Tx3i
-         L/y+O3ngdLToGFKigz0aNi2vWNlEEkIue5UUwcA45R+30UtQwJ1CRXjT5SPtqjx3qc
-         tDoip3gRLC4jlzH7xk7Wxe8w3weMb5Ndf1gERxxaQoe7GAlTN/tlpCQFW6T7zENuzb
-         K2+E/hkMJGOKQ==
-Date:   Wed, 6 Jul 2022 21:26:00 +0200
+        b=R/K5znm4it0BtlyD7fV+8uAfk79vFS9nve2y21ZzBAysD/xiw5IsrMmqRTN/rSL4p
+         jAhsc0C8RzavTe4Rx5gxLvZSe1yX+K0roBUfalliLpLqeByxa5LGYc8U5YhzddaXQX
+         EThbaxpTgCv3+UCEQA9X0PzBW+FDMxZ9XiBpOage4luZ0i3TUilPSwDpsr60ua0KtU
+         fRCX94jEROBmV6AqoirjuPmJqQbVbAuAX9Sh/Jt8v22JgLWEi6fRNsPiPhwxnjv9Jp
+         aTNFdKYouR/ZMqEF+MHlJruNubIlfLmq9X0Kc+fix1UEPDjpi35R3drAMj/Iiy+LQy
+         5Dr6gS3+8sFzQ==
+Date:   Wed, 6 Jul 2022 21:28:35 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-i2c@vger.kernel.org, ben.dooks@codethink.co.uk,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        daire.mcnamara@microchip.com
-Subject: Re: [PATCH v7 1/2] i2c: add support for microchip fpga i2c
- controllers
-Message-ID: <YsXhyB9GrfUQjy4n@shikoro>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: i2c: mv64xxx: Add variants with offload
+ support
+Message-ID: <YsXiY7aT4X/m2nWP@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-i2c@vger.kernel.org, ben.dooks@codethink.co.uk,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        daire.mcnamara@microchip.com
-References: <20220706141313.2504237-1-conor.dooley@microchip.com>
+        Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220702052544.31443-1-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3FVpZi6DzgGOTZib"
+        protocol="application/pgp-signature"; boundary="W7otrsCSuiGI17/i"
 Content-Disposition: inline
-In-Reply-To: <20220706141313.2504237-1-conor.dooley@microchip.com>
+In-Reply-To: <20220702052544.31443-1-samuel@sholland.org>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,42 +69,43 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---3FVpZi6DzgGOTZib
+--W7otrsCSuiGI17/i
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 06, 2022 at 03:13:13PM +0100, Conor Dooley wrote:
-> Add Microchip CoreI2C i2c controller support. This driver supports the
-> "hard" i2c controller on the Microchip PolarFire SoC & the basic feature
-> set for "soft" i2c controller implemtations in the FPGA fabric.
+On Sat, Jul 02, 2022 at 12:25:42AM -0500, Samuel Holland wrote:
+> V536 and newer Allwinner SoCs contain an updated I2C controller which
+> includes an offload engine for master mode. The controller retains the
+> existing register interface, so the A31 compatible still applies.
 >=20
-> Co-developed-by: Daire McNamara <daire.mcnamara@microchip.com>
-> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Add the V536 compatible and use it as a fallback for other SoCs with the
+> updated hardware. This includes two SoCs that were already documented
+> (H616 and A100) and two new SoCs (R329 and D1).
+>=20
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-Driver looks good, but what about the bindings? I shall not merge the
-driver without these.
+Acked-by: Wolfram Sang <wsa@kernel.org>
 
 
---3FVpZi6DzgGOTZib
+--W7otrsCSuiGI17/i
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLF4cQACgkQFA3kzBSg
-Kbantg/7BJmcaf7bvoLocUXjekKA9gxizf3QtabqYBIeWT7MBMc7uhgMfPGAEUl0
-MDuwfoopJsEdBsCV+OcCoL37T/7J+rJXFDoHbuDm6Uet7UkfMB7Am1IS+bl+EV+a
-TvTdxUhGSg3fwHORjaa9xiTxdzCPxn80NjRDXvjH9T7ej33xcgKQAY+Vtg16HTNV
-HMaJzrVt0cJf1P3wZQhGnKwK2mB4dYuvMB/5M18s0Lh9k847U+yWpqzJwo64Hn02
-SRqAQAfEZJ/fPjWehvxOjL3gKR1d+HbSLMxE2xEn+Mt9qsncqtkIXD9BHGfyc2cZ
-KkilV9WzKqsdEjWIlGav3NdLqL8eDfWbH8t3CmWxQ57+tNX2aZARqUMys7u3Elaf
-gTq3uF4oysBijmwx2ngQHEORzb07B+X07NUZtisBSlV4gcGiQOQdIUpX8XE2MpV5
-45nE8ymUeehSHG4rjB5Ez/fNl5pwUDmgDEn4OuJF6kCXn45PT0di96yBQBIfBefQ
-rHzJ0afvMha7R8W46RcMjr90c9B5Qll4vqJIoiBXRkBwLbtvrAiQBwcArZMx1zHd
-VPvy9TWx5G5+3M7MDMpni+Jy8XoxjGhLs7trtJ9Jhs5UUWkF8HPrZpInDhDlw9Hl
-pQ4wxcOGb53jXtHlBqEi5xYeIz2RosRmVkQT8Si5fwW4OFe+ZUY=
-=N2GO
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLF4mMACgkQFA3kzBSg
+KbbL0w//VAuq1mehyF2EBqeOXhdhsb4yiKfwBRHPAq43PVdwECXbcDCBEo2XZT2T
+4BxhF7I7MJ/TIvau2shw3az7kBGac+ZweyxDFMrC/1NjJG0ytvmBHH2xZEZFDjCh
+S255kBLsnMNuq27+SHhO2qVGMHOKU/Qp311jd6zMK7twOFBmEZIuTDHOqS6fHQat
+uIiIrqcOb5bRrVGPzosql5DR+0KoJ1J9ses0AhK6UeKGSlqPz94GzeKFQn5k5S3L
+IA5E+q2J2K6IMq5sX+rEVBm+Tmojb17ZNhwY1yXpoJEBx1Gbo8fTZosUfeent3yW
+uvabaks07g2YBr0YiBC64XIWYs4OmH9spaSN1rUhh6IpUWgOA9j5ZlKVUqpUcIZB
+VG8RIzDpZnp7SSOVWKKvXCMTO6u6fEAlt31ly9U1T2BzXP4k28skd1W4YVKppLD/
+LeZX4NxDpN0mTNYBlUlEfXbWlo9iMRNMk94QGC6JRmVHEl6Lvo25jtwlk9i/o8n5
+hEMETlTL+wIKEdiES1U8fRkZjkOkBmCZl2xMEJXSlwmaxTyJgznSmNvca+HKU94C
+aAzAM0R5/VVuzGemtfHZpbfwtyUQ+eNosZp2EaOzeiaMYi1hS5VVIFcJx0zm1J8l
+lGuz+D7qx5FfNuoTUbGHGZfa4MlAFDklYmdDMzOUeGXpmwd4AC4=
+=y2UY
 -----END PGP SIGNATURE-----
 
---3FVpZi6DzgGOTZib--
+--W7otrsCSuiGI17/i--
