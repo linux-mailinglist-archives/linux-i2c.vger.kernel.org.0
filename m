@@ -2,59 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB2E568B07
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Jul 2022 16:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72604568FBC
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Jul 2022 18:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232241AbiGFONw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Jul 2022 10:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S233905AbiGFQxD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Jul 2022 12:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231927AbiGFONv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Jul 2022 10:13:51 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBC61AF29;
-        Wed,  6 Jul 2022 07:13:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657116830; x=1688652830;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=GLIOOdGeVnPQ6/dJKcYgkaTGFXv/BDSQ4KyNFEOI2kc=;
-  b=dRKQ49ApIkhGoEYdq7XXjsHJib8hFNFX27+sathEhMKYKlJrijmrzIjH
-   dirJVmE0vo1YUQSAUIoU0BOmDfaSoHb9s2RGRpkGqM7kVzP6yLlyUdNjT
-   e4oUX9rneuXygMfdz4z6r/yp561OcCzJ/ZmVQ3Kxhu2E4dG5TrC9xV1Dx
-   zzmcJVn70b7GGmdOV4E0Z6Gt3CbGNI7Svq+Y7opBS8VgTfW7YGFwW8QoR
-   KerH/0P7VzfGheYjxnz6ZXNgTqi1YWD/sLyL26O7IB5MecJYgBMMDGzmC
-   pXfJU5KIcSHTXtd3cF6RStsTW16wlvcdTzHzoFuPwcD/7spWlLZ1i+89u
-   A==;
-X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
-   d="scan'208";a="180992568"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jul 2022 07:13:49 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 6 Jul 2022 07:13:49 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Wed, 6 Jul 2022 07:13:47 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <wsa@kernel.org>, <linux-i2c@vger.kernel.org>
-CC:     <ben.dooks@codethink.co.uk>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <daire.mcnamara@microchip.com>,
-        <conor.dooley@microchip.com>
-Subject: [PATCH v7 2/2] MAINTAINERS: add the polarfire soc's i2c driver
-Date:   Wed, 6 Jul 2022 15:13:15 +0100
-Message-ID: <20220706141313.2504237-2-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220706141313.2504237-1-conor.dooley@microchip.com>
-References: <20220706141313.2504237-1-conor.dooley@microchip.com>
+        with ESMTP id S232574AbiGFQxC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Jul 2022 12:53:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFCF2A42D;
+        Wed,  6 Jul 2022 09:53:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1188CB81E32;
+        Wed,  6 Jul 2022 16:53:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB5BC3411C;
+        Wed,  6 Jul 2022 16:52:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657126378;
+        bh=p9+EIYiQFsEijWg7qUqn4ryIqQU2p1/cxe9Pq3LUI5I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VaUuO1RwaFm+0u5ev1dM72McKyCsJgUoMfeulJYPkHososvaV+WDRIKh2rSmPq/5I
+         ycOK+fXQFhN0cAzIGuEIRUGAc72n1Dg8BvFGxp45CG3JXMdbYTikfi2jlnQVeNoBij
+         r2zfhkuKbEGjlN+md/SkAdY1aYaN4T4QB9EM0K5JZp4RG2Q+wkmpDBNq3N+VeK0/PO
+         qidIwXyZj01SxZRRmEYAqsn075IAurVDuHlFh+oh0YwLTG7MhXCwpEFRQBF5dKSyW9
+         ciX4ZrYzhQCwlQ0ADndLsxjzn5lmyyRbMban5DzpUIt/qICAYJNnuSF7Qx6E13IbEF
+         uVl1lLdxPW9uA==
+Date:   Wed, 6 Jul 2022 22:22:55 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        joel.peshkin@broadcom.com, kursad.oney@broadcom.com,
+        f.fainelli@gmail.com, anand.gore@broadcom.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        philippe.reynes@softathome.com, dan.beygelman@broadcom.com,
+        Al Cooper <alcooperx@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jan Dabros <jsd@semihalf.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jie Deng <jie.deng@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matt Mackall <mpm@selenic.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Rob Herring <robh@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-clk@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH 5/9] arm: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
+Message-ID: <YsW95wP010g9z1P7@matsya>
+References: <20220705172613.21152-1-william.zhang@broadcom.com>
+ <20220705172613.21152-6-william.zhang@broadcom.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705172613.21152-6-william.zhang@broadcom.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,36 +96,22 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add the newly added i2c controller driver to the existing entry for
-PolarFire SoC.
+On 05-07-22, 10:26, William Zhang wrote:
+> Update ARCH_BCM_63XX in all sources to use ARCHB_BCMBCA instead.
+> 
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> ---
+> 
+>  arch/arm/Kconfig.debug         | 2 +-
+>  drivers/ata/Kconfig            | 2 +-
+>  drivers/char/hw_random/Kconfig | 2 +-
+>  drivers/clk/bcm/Kconfig        | 4 ++--
+>  drivers/i2c/busses/Kconfig     | 2 +-
+>  drivers/phy/broadcom/Kconfig   | 2 +-
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
-Changes since v6:
-I rebased this on next-20220706 & it went through without a
-conflict. I'll bump it after mw1.
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
-New in v6.
-FYI: I have several maintainers updates in flight - usb, pwm, spi
-of which some will be in 5.20 & clk/hwrng/pci that are likely to
-go into 5.19-rcN.
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d64d79eb36a2..3286b727c90b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17428,6 +17428,7 @@ M:	Conor Dooley <conor.dooley@microchip.com>
- L:	linux-riscv@lists.infradead.org
- S:	Supported
- F:	arch/riscv/boot/dts/microchip/
-+F:	drivers/i2c/busses/i2c-microchip-core.c
- F:	drivers/mailbox/mailbox-mpfs.c
- F:	drivers/rtc/rtc-mpfs.c
- F:	drivers/soc/microchip/
+
 -- 
-2.36.1
-
+~Vinod
