@@ -2,193 +2,175 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F1C569B25
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Jul 2022 09:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDA4569B6C
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 Jul 2022 09:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235041AbiGGG7n (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 7 Jul 2022 02:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
+        id S231600AbiGGHVG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 7 Jul 2022 03:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235043AbiGGG7K (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 7 Jul 2022 02:59:10 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA1331936
-        for <linux-i2c@vger.kernel.org>; Wed,  6 Jul 2022 23:58:39 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id x184so4167598pfx.2
-        for <linux-i2c@vger.kernel.org>; Wed, 06 Jul 2022 23:58:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version;
-        bh=RKyGA5ZP7ORgrmGyhN5n4SnY3xo+sbJ142nxCW0i+JU=;
-        b=iMjktcE9weKa8BAenZ8TjWCbsXjQAyeMYyfD6R8Eb+eImCWc5+P1EMtwQRu708XesF
-         V30j+5+2g73nEZNx3yb7k0wyzu6Kak7Y9k084x9OPcM4O/bPK+IPR0bcgEH5Hp9oNiqO
-         NSUW5FkG1kC7QFmCOpYgUujpstpdyc32V5n2w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version;
-        bh=RKyGA5ZP7ORgrmGyhN5n4SnY3xo+sbJ142nxCW0i+JU=;
-        b=YjIPr3WOXS8yJ4g/Nf6n8HstztCwvyQOMB96rYQQUimyAlSy9IVoRm9ZzvHl0GlhnP
-         IvF/Wj1fr/wAXPd+lxlXZQQrfNFBJUNUAo/BzHNR9nQR7LYTCqY3P1wlilg3mxc6pVDF
-         lR7/gp/eTwYZgL0LIqKGp39qMB9BRPohU42p0AOcPBQXZ0DVkfp05fwsgyq4ZsGKvINy
-         ZXa2eTXUiYm4r4sI5Jzx5m4qRbXbem/4aZwNIBMu7jEyQFHwOMTOL54HK3azggZTjQzD
-         C8px76Eo/nCTSMvNFEi5CJJPFLtgEt2HCMVkdfQscqpDvZLqUPKD2XT7JQ+f+pQe859u
-         Y1SQ==
-X-Gm-Message-State: AJIora/6hkYk9zMcIwG8IxpprsPKr55xKg9nKFg69gdk8WpnX1dHkYcd
-        D77THfKXJyJ9+p4AcRfDmzJM6A==
-X-Google-Smtp-Source: AGRyM1thGJcX85NEU+0My65Pao9oE6J0kP1WWN9Hhr+6qJSj5M4YYuHc4rJCDseCPYAFyE7KYn1aTA==
-X-Received: by 2002:a17:902:e948:b0:16b:9263:b6d6 with SMTP id b8-20020a170902e94800b0016b9263b6d6mr49066766pll.34.1657177119284;
-        Wed, 06 Jul 2022 23:58:39 -0700 (PDT)
-Received: from ubuntu-22.localdomain ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170903230c00b0016bdd80a31bsm9104697plh.218.2022.07.06.23.58.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 23:58:38 -0700 (PDT)
-From:   William Zhang <william.zhang@broadcom.com>
-To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     anand.gore@broadcom.com, dan.beygelman@broadcom.com,
-        kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, William Zhang <william.zhang@broadcom.com>,
+        with ESMTP id S230334AbiGGHVE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 7 Jul 2022 03:21:04 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2123.outbound.protection.outlook.com [40.107.113.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FE220F78;
+        Thu,  7 Jul 2022 00:21:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=czM1sV2WVOcekCRZKYtr0mWpZ5hy2QyCmFHigfs6jNJk5e58mikLdOQ+W6Pv6iru61q7DNHclkncbCTW83n+MFz15kkSXFTVqKfFotDQK59WXBFlkajxfTEsi9N4Wr1gUTeymNQl+t7FY1Y1GxG5ptd6VkSUwpdRff8OrE9PGeS88w/Td8UwkvU97serzLXFihl4BKUF4hiP3V7TsiDm8I+4fCOa2Zgo/mZtbiizQG6joaOAJnUJn4LWB651o5J3CVkDfuOLVIcrto7BsooauAtQgQtg1RPrUkOauaKdhX2rUJGkdEHVkNdOdHiSm4JYFXujygfRyozwcgJxYhZ90w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nGG+Er5EPd/I2YXTwBOasM3tDfrasRghcAvDLZrE2s8=;
+ b=kDnbSGpXc7uNPkVfXPD0WvtbPgTVjgFEgtkCPBgobG7UkwKHPUHC5JB3CA8NdE/LODTMYcbN2kSUUoWEQeStQyIvPeGn6rAmRVOs8kGmByvbr02hvnIfzZiVpGdPDGggeJGV5QF0YX1ANksVCvFQq7cDr7BANRFGNCZ/uljiacr7za46eCg0cM89gPiD9l8smYTLJhWcwZhZK6EA6noABza80fRU4t/V8e/ykHXcHaAjoe7CADah+rnKZHijNeEpKHda0iaA12qXVNAAZpSgoTFywHVphZpEfOe9HYtg+AyioarWLC06oTjWe6L1HiSd8BsyAaXDeft9qOOrgymoSQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nGG+Er5EPd/I2YXTwBOasM3tDfrasRghcAvDLZrE2s8=;
+ b=Q1Akg/zMS2cht2e8gG4nLLWvl2vtkDCixq5F/sY4QBi8RBr7oucBE9IcNNROaJ3G6Jc5QnjI9KpdEw+05lWOR86c+omFDlNkKumT3Rsw3xnXFP4bctGZEAtENrHA3p1kN3/pHA4OCwyQdolvofLJH3/uvlByDiH02S64pYHjvY4=
+Received: from TYYPR01MB7086.jpnprd01.prod.outlook.com (2603:1096:400:de::11)
+ by OSBPR01MB4246.jpnprd01.prod.outlook.com (2603:1096:604:4c::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Thu, 7 Jul
+ 2022 07:21:00 +0000
+Received: from TYYPR01MB7086.jpnprd01.prod.outlook.com
+ ([fe80::3c36:680f:3292:4a79]) by TYYPR01MB7086.jpnprd01.prod.outlook.com
+ ([fe80::3c36:680f:3292:4a79%9]) with mapi id 15.20.5395.021; Thu, 7 Jul 2022
+ 07:21:00 +0000
+From:   Phil Edworthy <phil.edworthy@renesas.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Philipp Zabel <p.zabel@pengutronix.de>,
         Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jie Deng <jie.deng@intel.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Rob Herring <robh@kernel.org>,
         Sam Protsenko <semen.protsenko@linaro.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Tyrone Ting <kfting@nuvoton.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH 5/8] i2c: brcmstb: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
-Date:   Wed,  6 Jul 2022 23:57:56 -0700
-Message-Id: <20220707065800.261269-5-william.zhang@broadcom.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220707065800.261269-1-william.zhang@broadcom.com>
-References: <20220707065800.261269-1-william.zhang@broadcom.com>
+        Rob Herring <robh@kernel.org>, Sven Peter <sven@svenpeter.dev>,
+        Jan Dabros <jsd@semihalf.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH v3 2/2] i2c: Add Renesas RZ/V2M controller
+Thread-Topic: [PATCH v3 2/2] i2c: Add Renesas RZ/V2M controller
+Thread-Index: AQHYjWkxMg1ZnbISoEmC77vxSwmcoq1q+VkAgAFdSICAAG5ZAIABgxGw
+Date:   Thu, 7 Jul 2022 07:21:00 +0000
+Message-ID: <TYYPR01MB7086921244A6D1B764368A54F5839@TYYPR01MB7086.jpnprd01.prod.outlook.com>
+References: <20220701163916.111435-1-phil.edworthy@renesas.com>
+ <20220701163916.111435-3-phil.edworthy@renesas.com>
+ <YsAxSrcAk4jtRYx4@smile.fi.intel.com>
+ <CAMuHMdU1-LQJUCsDAfaC4OhRW7ijcpAG9VEUHu_Gu1qE7LdweA@mail.gmail.com>
+ <YsGy2rqk1tKQJJ/b@smile.fi.intel.com>
+In-Reply-To: <YsGy2rqk1tKQJJ/b@smile.fi.intel.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b22f2318-4f67-4d65-0d4f-08da5fe93e29
+x-ms-traffictypediagnostic: OSBPR01MB4246:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 9dE0smCJnRwTI/aD+r2QteR1JlTkbEjHlY+GudbPDHYrQbON4Y62/wzOMxlqEOUvdxMBiYRTUY2O8u0qukyUhVzep1UtdyXPkEPntgfRxkx/W/Ad5ha7XArDQ5M+7BzpesyTw5Bk2RePGoWlnv3NHwnYTPJitTQ1rNhpt64DhqDPzqkC4pp+Kz2HBUrCnN2haxQ2PQP1hHlPObBLw5mBjUyS4KRBfKuXlojXtUqRs7FzLfom2d1CaxjBJ8ZeBbjcX3df8dxV3ubTyriI0WpB4Qk/rgNpYeECxVOvvwflHM33YBeRp9twPfUDf8heF5BoE+Pkep1jXuDrDavNMrrSdEqeVHgKegeNqIJ8fHZfIKu3G/uHasJBr4cdSsLDr7QxBGIjPCvWLA8PwaJQn4XqzBygBzJpQG32nApLeiqH8dNMCPNppMYsoMrSPOZOGmcd2Bfyq2T2FthSR8TkNoUYI/8Soeoat345X1HE0We7td7uHcvEh46tRfCEFflTPcB4ThnQzbc+Rol+tZAR9W18RPNYTb/8X54Vf8eXjKQAIRvGRsO8jTfhJOizHVtPoUONBV2DDReg7kxE02Zmb0842Pis7MSo8t3is5BGSehHKBh6rEExfSiRJiEycnE/zTGrQfeUEvQFrOuizIFS2Sq5pHXrsCXKvbX/+fLP1XX9AsOru+8SuwB9JrcLfQt2oYbUISGnlY3xXV41RIR494ASlIemkmjWqGa+os1xGObRA/GlSIO+jbNkSM6h8OGhDAZ3m878HjvF75lTHzEM5hiqoeti5z7jW/K9mkDtBwVmenElcKDUuVRjmuTpzNwbsrsikO2YJVmZALm9U9Kd0wjopQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYYPR01MB7086.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(346002)(376002)(39860400002)(366004)(478600001)(71200400001)(64756008)(966005)(38100700002)(7696005)(26005)(41300700001)(316002)(9686003)(8676002)(38070700005)(76116006)(66946007)(54906003)(66556008)(66446008)(186003)(66476007)(110136005)(86362001)(33656002)(52536014)(2906002)(7416002)(6506007)(5660300002)(44832011)(55016003)(8936002)(83380400001)(53546011)(122000001)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?IoBN/qicXMLhwVuASJUV7ossI3Rc7ssfh8M7QHRcHYpPkS2uBkzdMWgkDO6w?=
+ =?us-ascii?Q?3YYsa7DSyuS2OINMxhA48qC0PU03GlBg/9Rj63sein52vvykLEkWEjKfNCcJ?=
+ =?us-ascii?Q?xUexzLg5E2VvvA1QV+25yXXQUSUdTGj7Taq7oMc/TFK3pcvx1Tns24+SMhhs?=
+ =?us-ascii?Q?UC3zPdReN7/OuoprsPyUX69oY21RRngm+HbvsMlPlsV2bEI9Zh3pEWhoRhYX?=
+ =?us-ascii?Q?H0cY8VPFMUSR3slG6TA9hMlPuBQCPpDA9agMGlms1JqbwF/P9UyZwDo6nH2R?=
+ =?us-ascii?Q?Ixq1RxETNpbEGCw3mIzOJbh0B5EWH31o/za3N6w5f1Jq2SV86Iwxqzq6v4Uf?=
+ =?us-ascii?Q?ytshTYwuLYiA9Vh0D1iFPBjcpUqSPtaYmbvS0DoQRUbjEmU/ZzSuoyVK6Mwb?=
+ =?us-ascii?Q?n5xVVjW01cl9yTQOALAyv8YwWRohbUwqSt94NMjDrwm1m5+wDK5dnGO/Vp3j?=
+ =?us-ascii?Q?AL8SzrAjF0k/20EYTxZaFjdvvqxlI/miD/yu/bESpIHDQi4T6pfprnwz6Cnk?=
+ =?us-ascii?Q?pTSwO5BWD25LfudwnfOXCCspA/+dtJJf0N6kDkdcDO20sWFDBqA+QVP0w0uW?=
+ =?us-ascii?Q?tFWHniB25rlprsawMJ+Zv2HMFlstSraFRF0l0i2HcyXlFXMAF2txlzLbtPsx?=
+ =?us-ascii?Q?GPosVGdbZ5YusY6NeXq8qWbE4OCGp9cSY93kxh7dA1AhgunkDzWl1eTWHHx+?=
+ =?us-ascii?Q?ZLupZLQ0nZQY/CmLy4Bg478MZ3lxMchf6Juga37aD77/aS5J9FMbZMgEos6r?=
+ =?us-ascii?Q?wwmK+wB8nrcdu+1loCd1/zIkowbOzoCeDYQygUkA+ZmT2nOK7MUQLAldQ6hH?=
+ =?us-ascii?Q?KKyyLEks3ZVml1FtuyS2Ex4zrrf1f/FM8IzQ7G+V0Cl8gKDf4fQMhHeJz7Ri?=
+ =?us-ascii?Q?bQEsc/jc/d98BNc6AVm6INBP/uWF5I+b1nky+4bMPUsCmlijofrGJFWOmXoJ?=
+ =?us-ascii?Q?KqL6oHmnxCykttX3avr0NaiEOnIqymZHRbj27bWegxWq3mtTobnDiPBg9Nx/?=
+ =?us-ascii?Q?6p8JFnlC+dpokSkqwIQVyoo9W7EmLWW0ln0XcZ5oDfxSRIPYlR8smzWnToam?=
+ =?us-ascii?Q?m6FPnatsepVt9oOvtzyK3KV3bauagLL8K3GbXwPS+4h9X7kgtYQlMWZf6t5m?=
+ =?us-ascii?Q?GfCZXd4tviM+ChIqAoAnYh/SplqaUYqxMEVjpZILJYsQqkyMHdsh+UN7Wlb9?=
+ =?us-ascii?Q?9mmpNUI6O3IOw16kcsppMOPZvTNjVUKbt4sT/ut7C7u3DEVhfxfQfJJ0nLIF?=
+ =?us-ascii?Q?/LZKCTJkguUOx4Eh3rI/9UZeYLg3AILvHePc4AYt61LfxfpYsp6Q1+FGdA6x?=
+ =?us-ascii?Q?XC+k+pnLs21AiKhkSJ2E+NPEqVP8KPMxsFaOYiUT1k683RrCSknIajpe9xAA?=
+ =?us-ascii?Q?hTIjUVMfiFEsyZ1+HNC19hI/2Es1KgY8Li5bc8n07ovliNgGcZVHv8vHEUrg?=
+ =?us-ascii?Q?KTlcGSwTehN3030Yta7GlTwF1k5Wz48yDP/bXqC3C3eYIDRuE6GuoKxFEJM3?=
+ =?us-ascii?Q?6uNF98FHns44bil3sE/V3gLtDG9Le4108+Z4u+E0QAzKsjSoMRxy6vmsRq6k?=
+ =?us-ascii?Q?f1dOr0aIfTxyrcmDlg40pJbXEpJsHZXgxycyoBc//NOY8gjI12ceCDgpdHLs?=
+ =?us-ascii?Q?Kw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000008af69005e3319d0b"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYYPR01MB7086.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b22f2318-4f67-4d65-0d4f-08da5fe93e29
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2022 07:21:00.0774
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: T+aHjyxAUU6nTG7NTVCOq2pZwBdImXxD48L3IKVHs/K0uB+k1ITW0OqjHtmtw+vxYJpWyxcKmI/mdlkXtx1kCzxRpQvNkrwK2BMuh+jPZEU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB4246
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---0000000000008af69005e3319d0b
-Content-Transfer-Encoding: 8bit
+Hi Andy,
 
-Prepare for the BCM63138 ARCH_BCM_63XX migration to ARCH_BCMBCA. Make
-I2C_BRCMSTB depending on ARCH_BCMBCA.
-
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
-Acked-by: Wolfram Sang <wsa@kernel.org>
----
-
- drivers/i2c/busses/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index b1d7069dd377..acf2a393bd56 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -486,7 +486,7 @@ config I2C_BCM_KONA
- 
- config I2C_BRCMSTB
- 	tristate "BRCM Settop/DSL I2C controller"
--	depends on ARCH_BCM2835 || ARCH_BCM4908 || ARCH_BCM_63XX || \
-+	depends on ARCH_BCM2835 || ARCH_BCM4908 || ARCH_BCMBCA || \
- 		   ARCH_BRCMSTB || BMIPS_GENERIC || COMPILE_TEST
- 	default y
- 	help
--- 
-2.34.1
+On 03 July 2022 16:17 Andy Shevchenko wrote:
+> On Sun, Jul 03, 2022 at 10:41:45AM +0200, Geert Uytterhoeven wrote:
+> > On Sat, Jul 2, 2022 at 1:51 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Fri, Jul 01, 2022 at 05:39:16PM +0100, Phil Edworthy wrote:
+> > > > Yet another i2c controller from Renesas that is found on the RZ/V2M
+> > > > (r9a09g011) SoC. It can support only 100kHz and 400KHz operation.
+>=20
+> ...
+All other suggested changes are ok.
 
 
---0000000000008af69005e3319d0b
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+> > > > +     pm_runtime_get_sync(dev);
+> >
+> > pm_runtime_resume_and_get() ;-)
+>=20
+> This makes sense only if we test for error. Otherwise the put might
+> imbalance
+> counter.
+I added code to check the return value and to my surprise it returned
+-EACCES.
+Some digging later, this only happens when I have an i2c controller
+enabled that doesn't have any children.
 
-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
-TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
-fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
-+EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
-abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
-ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
-W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
-1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBqbmOQZpgyM1trphvM7K6zi5Xfv
-HllD29igp2bGatiVMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDcwNzA2NTgzOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQAE3XS8Utd1bHzCXqXckeY+2s8VY9L1Of5eLNFPpDzPnkxH
-25jXEYgw7EyW+swDIwlzEBFSuo+HbJ1IL4+tm+9vgbn+FPs8dIi6PolK7N76ivcUR0XqfvEhSuQv
-GaiVlYWR7IPr7taqULTNsvJEMH1PnteBjCfFrxaSbQEfRs3M9W1ULEzaz/YC+YQCFNXaDQT6qma9
-OztmHOc2cqje5/4D6VXhMQsRy8Og9rbsSuESDMM4sVmlaM6aytC+RkfdVCBtCpCLhCl7aMP4p60+
-7wr0j5gySLYX0mSEecdd5IxQrCEJWj+T3kQ7rxJb12V/Pu/cYiAzD0/VlNnb3nHdKidh
---0000000000008af69005e3319d0b--
+rpm_resume() returns -EACCES [1] because runtime_status and last_status
+are set to RPM_SUSPENDED.
+
+The i2c controller that does have a child has runtime_status =3D RPM_ACTIVE
+as there is a call to pm_runtime_resume_and_get() on it due to the i2c
+controller performing an i2c transfer for the slave device.
+
+I am currently struggling to work out why this is happening...
+
+Thanks
+Phil
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/drivers/base/power/runtime.c?h=3Dv5.19-rc5#n773
+
