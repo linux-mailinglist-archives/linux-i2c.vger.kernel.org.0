@@ -2,61 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 393E756B636
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Jul 2022 12:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C350056B68D
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Jul 2022 12:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237264AbiGHKCa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 8 Jul 2022 06:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47862 "EHLO
+        id S237498AbiGHKEL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 8 Jul 2022 06:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237206AbiGHKC3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Jul 2022 06:02:29 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F50183F21;
-        Fri,  8 Jul 2022 03:02:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657274548; x=1688810548;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=EjsGyq7lBhFJhuDcCb83ax8lTh/YEIc9jr/nHR/gFQw=;
-  b=Pz8YNt24LuuFv8d/ojIRLG3IVZaZxqvUnP0aUoNGLpGLtA7n4Pul7yVU
-   vokHt/Q+xjA19LcDdNa/LFjfKGLizRVe64USX9AMiclNsF4YtMA/3v8pV
-   K6ahPxE16jtB63CKuq0dEx0lrEVt2OBejihZVVurfHQuHFTYf658FpvAk
-   HhjOUguZGIU4HX1OcNGMcx9dAnfzwk7nf9lmhBhi6I8xBAEY9rYRfQ/Ki
-   U2AIv1CS15rpTevNS+2a9R1vWYHim+PsMScCoUQQmPlGRSZx6QyA0XaxZ
-   /h3JkfntC9mPsoG9H+LgHjnpfbB/ypIB7lP4/6qGDFh/JDZ8ma6t/Xc6O
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="281796207"
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="281796207"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 03:02:28 -0700
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="651510381"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 03:02:27 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o9koa-0017xl-2z;
-        Fri, 08 Jul 2022 13:02:24 +0300
-Date:   Fri, 8 Jul 2022 13:02:24 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] i2c: scmi: Replace open coded acpi_match_device()
-Message-ID: <YsgAsJzerWxWW65n@smile.fi.intel.com>
-References: <20220630195541.4368-1-andriy.shevchenko@linux.intel.com>
- <Yr7fuWADLhJSeYdZ@smile.fi.intel.com>
- <YsXjNd4qnopeo2rV@shikoro>
+        with ESMTP id S237443AbiGHKEF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Jul 2022 06:04:05 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5537321E13;
+        Fri,  8 Jul 2022 03:04:03 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.92,255,1650898800"; 
+   d="scan'208";a="125552159"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 08 Jul 2022 19:04:02 +0900
+Received: from localhost.localdomain (unknown [10.226.92.28])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id C3DA54003EB2;
+        Fri,  8 Jul 2022 19:03:56 +0900 (JST)
+From:   Phil Edworthy <phil.edworthy@renesas.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Sven Peter <sven@svenpeter.dev>, Jan Dabros <jsd@semihalf.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v4 0/2] i2c: Add new driver for Renesas RZ/V2M controller
+Date:   Fri,  8 Jul 2022 11:03:48 +0100
+Message-Id: <20220708100350.12523-1-phil.edworthy@renesas.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsXjNd4qnopeo2rV@shikoro>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,16 +53,49 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 09:32:05PM +0200, Wolfram Sang wrote:
-> 
-> > Discard this, a last minute change that makes it not buildable.
-> 
-> Do you plan to send an update?
+Hi,
 
-Just did it.
+The Renesas RZ/V2M SoC (r9a09g011) has a new i2c controller. This series
+add the driver. One annoying problem is that the SoC uses a single reset
+line for two i2c controllers, and unfortunately one of the controllers
+is managed by some firmware, not by Linux. Therefore, the driver just
+deasserts the reset.
+
+v4:
+ - Multiline comment fix
+ - Use GENMASK
+ - Fix too many parentheses
+ - Better use of sizeof()
+ - Move MODULE_DEVICE_TABLE close to use
+ - Use pm_runtime_resume_and_get() and check return val
+ - Replace NOIRQ_SYSTEM_SLEEP_PM_OPS with SYSTEM_SLEEP_PM_OPS
+   so we can use runtime PM in suspend and resume.
+v3:
+  - dt-binding: Fix example indentation
+  driver:
+  - Lots of small fixes based on Andy Shevchenko's review
+  - Use devm_reset_control_get_shared() instead of devm_reset_control_get() 
+
+v2:
+  dt-binding:
+  - Use an enum and set the default for clock-frequency
+  - Add resets property
+  driver:
+  - Use the new NOIRQ_SYSTEM_SLEEP_PM_OPS() as suggested by Arnd
+  - Lots of small fixes based on Geert's review
+
+Phil Edworthy (2):
+  dt-bindings: i2c: Document RZ/V2M I2C controller
+  i2c: Add Renesas RZ/V2M controller
+
+ .../bindings/i2c/renesas,rzv2m.yaml           |  80 +++
+ drivers/i2c/busses/Kconfig                    |  10 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-rzv2m.c                | 533 ++++++++++++++++++
+ 4 files changed, 624 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
+ create mode 100644 drivers/i2c/busses/i2c-rzv2m.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
