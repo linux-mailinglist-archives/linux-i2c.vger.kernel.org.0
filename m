@@ -2,113 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D7656B975
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Jul 2022 14:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C20356BB5A
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Jul 2022 16:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237610AbiGHMKN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 8 Jul 2022 08:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
+        id S238386AbiGHN6M (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 8 Jul 2022 09:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238201AbiGHMKC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Jul 2022 08:10:02 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347B79FE21;
-        Fri,  8 Jul 2022 05:09:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657282198; x=1688818198;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YvldKyFbhk7lRJkx7aYJWJ92+gC0um2AaK4no4SFWt8=;
-  b=bzrEhu8pF1smgh3ERxuJDLAnHMbEaFPLgNWcfufTDrpruVS4pVEL4J5j
-   KK7Z42lnK2FgwN9Tpw3tor8h6riy8pFbIoI8rMGIB1aWcZMlw9JxZr9z7
-   SFxeKXtbjB6JKWUnp5QgK1ImZw1RNHvSFjOz+FatUshgR0+3uBy5ij/LS
-   YlkPdHntudVJts3LUPlVw/He7p7j/S4LIGFnV7ba7I+EFZe0sEclbsiPu
-   xIoFBcCbpx5SttKYROLAxBNGD7ubRTvMKEBTvsP2XmHkMwtqnhUwl+vXn
-   AGTQ4sdfmszBFqdFfYLXt6PesOLHNULJMGhji7bleav3A+RuwVE48gJxQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="348250665"
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="348250665"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 05:09:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="591550541"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 08 Jul 2022 05:09:53 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 49DE3CE; Fri,  8 Jul 2022 15:10:00 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH v3 1/1] i2c: scmi: Replace open coded device_get_match_data()
-Date:   Fri,  8 Jul 2022 15:09:58 +0300
-Message-Id: <20220708120958.74034-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S237952AbiGHN6L (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Jul 2022 09:58:11 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE902B247;
+        Fri,  8 Jul 2022 06:58:10 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2ef5380669cso199056537b3.9;
+        Fri, 08 Jul 2022 06:58:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=FUz8/yJUz+qn4Uf/z4NBXBGwU75NgPGiABFdlcSojCA=;
+        b=X0pbz0twx8kLnN2lUJQac2lR4EBwUesQsyXmnEIueFsVg+j46XQHKbm9NWP3ymAPCl
+         I43FjFEH7w3AiEovkimFDWxpjPbHzvcX5bIa4KBgkge7NDaWqW9LPSyHXcJeWIziXD1u
+         ioKSus2AMAJYoDVWjV+35AmKMK4iik0+ObKcbhg+4/2x5g617DKFT2khuW6WO69SvfhH
+         urencUsetiqamq/oRmJ/ORuKhxEUyyeRDhorv61Jk+7HQo8OgVSd9wJtFDbHOODjgNQG
+         aX4phLmr7BST/JKpFc3+odf9ZAjqWhVbg3VA/l5KOREL2rTR1Du9ZyWRFv50sERc5QaJ
+         bMTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=FUz8/yJUz+qn4Uf/z4NBXBGwU75NgPGiABFdlcSojCA=;
+        b=PXl0Bx5emarHMHEgL50UNaaGK/5ZuYHW66JP7XI5+hsp3yMZKSZkmirD7ECbiD17p8
+         N6vxgy3nyxz4JnyIxYZl5j2I55ws9ytQfEqIddQGcumtug8Qz7PlgZYgIXJeyknvKdsz
+         vHAtiWjF9YnVT9CMzsjR3D5OC3GH3OjlVz0/vYO+DQM3FdoOITJI42eWnJjeAmmXhark
+         7uMSDdgMCU/saM7uJI4hqwSKhAHglt7e14l1ELd+b2OI3E3BsfVKxKg+ypIV/+IzKFe6
+         /eO4ikq6HVHfBfFHu0rOCZQon3TkuYtFKPwikDj7tvhXbqCeeWSbcSKfT45V1tJ2F4/2
+         ygPA==
+X-Gm-Message-State: AJIora8vqttyPOGI47E/4ouLj7jlLfnuadM++pEE55q9gdH9E/BZPaA7
+        IcBA9PhUob134OCHE2U7xJ2N59VLUrN/2ZmCi2E=
+X-Google-Smtp-Source: AGRyM1vZRR8ZOgXXAF5lBhSJnVLuxlnAx6cylO2Gyq4BOmheXbnYK3VvKHI7PC6eIF01/yn2EYtBHPsfcQMJNcEYqac=
+X-Received: by 2002:a81:13cc:0:b0:31c:ad64:352c with SMTP id
+ 195-20020a8113cc000000b0031cad64352cmr3980020ywt.185.1657288690118; Fri, 08
+ Jul 2022 06:58:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220703154232.55549-1-andriy.shevchenko@linux.intel.com>
+ <20220703154232.55549-2-andriy.shevchenko@linux.intel.com>
+ <YsWI4nzQa9gmqKdw@shikoro> <YsgBkDeq/KeQ15HU@smile.fi.intel.com> <YsgcZHzjzqyJjKqQ@shikoro>
+In-Reply-To: <YsgcZHzjzqyJjKqQ@shikoro>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 8 Jul 2022 15:57:29 +0200
+Message-ID: <CAHp75VdJ2AT30md_nR3a_hY6L511w+4oqsAJ-CoE2gXitXCrNw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] i2c: Introduce i2c_str_read_write() and make use
+ of it
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Michael Walle <michael@walle.cc>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Till Harbaum <till@harbaum.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Replace open coded device_get_match_data() in acpi_smbus_cmi_add().
+On Fri, Jul 8, 2022 at 2:07 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+>
+> > Just noticed yet another (but not in the category of the above) debug message
+> > [1]. Would it be acceptable to use patch 1 from this series and its use in (a
+> > completely new) patch 2?
+>
+> Well, it falls into the first category because we also have a tracepoint
+> for smbus_xfer :)
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: used device_get_match_data()
-v3: fixed couple of warnings (LKP)
- drivers/i2c/busses/i2c-scmi.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+Ah, indeed.
 
-diff --git a/drivers/i2c/busses/i2c-scmi.c b/drivers/i2c/busses/i2c-scmi.c
-index 6746aa46d96c..79798fc7462a 100644
---- a/drivers/i2c/busses/i2c-scmi.c
-+++ b/drivers/i2c/busses/i2c-scmi.c
-@@ -30,7 +30,7 @@ struct acpi_smbus_cmi {
- 	u8 cap_info:1;
- 	u8 cap_read:1;
- 	u8 cap_write:1;
--	struct smbus_methods_t *methods;
-+	const struct smbus_methods_t *methods;
- };
- 
- static const struct smbus_methods_t smbus_methods = {
-@@ -361,7 +361,6 @@ static acpi_status acpi_smbus_cmi_query_methods(acpi_handle handle, u32 level,
- static int acpi_smbus_cmi_add(struct acpi_device *device)
- {
- 	struct acpi_smbus_cmi *smbus_cmi;
--	const struct acpi_device_id *id;
- 	int ret;
- 
- 	smbus_cmi = kzalloc(sizeof(struct acpi_smbus_cmi), GFP_KERNEL);
-@@ -369,6 +368,7 @@ static int acpi_smbus_cmi_add(struct acpi_device *device)
- 		return -ENOMEM;
- 
- 	smbus_cmi->handle = device->handle;
-+	smbus_cmi->methods = device_get_match_data(&device->dev);
- 	strcpy(acpi_device_name(device), ACPI_SMBUS_HC_DEVICE_NAME);
- 	strcpy(acpi_device_class(device), ACPI_SMBUS_HC_CLASS);
- 	device->driver_data = smbus_cmi;
-@@ -376,11 +376,6 @@ static int acpi_smbus_cmi_add(struct acpi_device *device)
- 	smbus_cmi->cap_read = 0;
- 	smbus_cmi->cap_write = 0;
- 
--	for (id = acpi_smbus_cmi_ids; id->id[0]; id++)
--		if (!strcmp(id->id, acpi_device_hid(device)))
--			smbus_cmi->methods =
--				(struct smbus_methods_t *) id->driver_data;
--
- 	acpi_walk_namespace(ACPI_TYPE_METHOD, smbus_cmi->handle, 1,
- 			    acpi_smbus_cmi_query_methods, NULL, smbus_cmi, NULL);
- 
+Okay, let me find another subsystem where this will be more useful. Do
+yuo have any wiki page about TODO in i2c subsys for kernel newbies (it
+would be good task to add)?
+
+
 -- 
-2.35.1
-
+With Best Regards,
+Andy Shevchenko
