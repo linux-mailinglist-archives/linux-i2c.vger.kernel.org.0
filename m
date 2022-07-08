@@ -2,95 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC7456C344
-	for <lists+linux-i2c@lfdr.de>; Sat,  9 Jul 2022 01:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC32E56C38A
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Jul 2022 01:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240151AbiGHVJs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 8 Jul 2022 17:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60660 "EHLO
+        id S240135AbiGHV1S (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 8 Jul 2022 17:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240062AbiGHVJr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Jul 2022 17:09:47 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568B019C39;
-        Fri,  8 Jul 2022 14:09:46 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso3124815pjc.1;
-        Fri, 08 Jul 2022 14:09:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5p+PR5ptOVcK72SzQs+cEHkIkQJ2Wi18+TxTVP867P0=;
-        b=Ciy82PPD5pO7IB93XpAY0+w/SZ6155loOCl+FBCBlfF/G7PepX1j0A+xPLdF6ZGX7u
-         zzUaCvn5NsP1xyHvefzvwcO9nUkyErnsnsh2PMJUITTRLANHwe+sBc1K2AjLrvI+I4FA
-         mJtDO24h3N6eYk+A/nLyyHPA+hJ5eANWBQM3kLMtsKguKIR5OQSSvyXFi11ZQaCJMlyy
-         iIpvu8AIERAdTe7vEtAbpxbvkdT8eP4xNnOctuum2rZdZH3o65+PodN94bBm+hiZQ3E4
-         SdIVuZUbCWUzW3//azmW3wL7cL5FmmXRNIQAbx73lNh1gieCci3TbH/hoDPBYXvdrj23
-         mWVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5p+PR5ptOVcK72SzQs+cEHkIkQJ2Wi18+TxTVP867P0=;
-        b=mH1Sps45GV8K+yxW3FejVUcFaAJCtRPxRCWwtjupll71yI13srXuOjwWYvsC3WIiWI
-         qZ05Z+cExV+01lp+5eVlcOgMsDvJ7fkB7kmQH8GP3i2uyXgHbcko/DbRfuDTJ2tNQFKQ
-         Wq+mq6oLPCLCNylgSpZ13wcxhjN705AyTvX9NGneskdIBI++5uUeyyNu7kJJFDu4OXAL
-         R9d/fkfYhihoP9obcguqNmPc9PVha+wz9wsvUb8RIbPTqhnBDm/NhtLYNKBia/59RMBq
-         5UEiHHramGlPCSg6I2s3z5EuZMiq2uRFjsfZbBebt9JFWez6ZaKxUiSg4b2nk/kDpgRZ
-         ncgw==
-X-Gm-Message-State: AJIora/INhsWnxZXNI4oM2q2rErpawOr+G/ERBUvDAhHOekZiwe/+sMl
-        j4DCuSlL/ki25ahymQZ+ATA=
-X-Google-Smtp-Source: AGRyM1t+7r6V/rHlf4Jgeo5aDKtFc+InAKxp4/GZS52cmp0hOAcY7ZN91tQLhT5vfYhpZvYZjHGOiQ==
-X-Received: by 2002:a17:903:2447:b0:16a:3b58:48c1 with SMTP id l7-20020a170903244700b0016a3b5848c1mr5938675pls.44.1657314585831;
-        Fri, 08 Jul 2022 14:09:45 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id r3-20020a170903020300b0016a11b7472csm30251495plh.166.2022.07.08.14.09.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 14:09:45 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     anand.gore@broadcom.com, dan.beygelman@broadcom.com,
-        kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
+        with ESMTP id S238520AbiGHV1R (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Jul 2022 17:27:17 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D33B24BC4;
+        Fri,  8 Jul 2022 14:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657315636; x=1688851636;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/g4mtROTOBVuUxZNYOgmva+gD7qdsf4Jg2P69fXsDec=;
+  b=M1ZCE2/41095iMdCGB+qtTtwJmEvIE90JT0VBh7nTGb5ayHJoNZ+IobB
+   /rhVt5IEEoloysOLJo2HEYmT+mBDGZf9sLVzr+RzOyV1JOVtn8SeVeTf4
+   rQaoZpcE4j0TCb0asZuAxucRlIjS4DrIiag1nkuCYaE47twJSWM7kHUEb
+   trRSMlUvvqtq+DiaiNcX84BFjGv1sjyU9xBCA7mTpV+W0SWAgaB+dA1Qe
+   kqDxGu19QmqgT+WbkDRDI6qEdwxuLo6gEYhXhGhqaliUq8wa09n0eFj2R
+   o73rKS5x+5znCXhonBfsNrDuxvn6i1ELVAixYFX/KekhQQbCks4VDvE2g
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="285109709"
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="285109709"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 14:27:15 -0700
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="661902889"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 14:27:12 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o9vVF-0018q7-0K;
+        Sat, 09 Jul 2022 00:27:09 +0300
+Date:   Sat, 9 Jul 2022 00:27:08 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jie Deng <jie.deng@intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Tyrone Ting <kfting@nuvoton.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH 5/8] i2c: brcmstb: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
-Date:   Fri,  8 Jul 2022 14:09:43 -0700
-Message-Id: <20220708210943.2660952-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220707065800.261269-5-william.zhang@broadcom.com>
-References: <20220707065800.261269-1-william.zhang@broadcom.com> <20220707065800.261269-5-william.zhang@broadcom.com>
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        ibm-acpi-devel@lists.sourceforge.net,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH v1 1/5] ACPI: utils: Introduce
+ acpi_match_video_device_handle() helper
+Message-ID: <YsihLEX3At421cAK@smile.fi.intel.com>
+References: <20220630212819.42958-1-andriy.shevchenko@linux.intel.com>
+ <Yr6KcPlC/3rYAtKE@lahna>
+ <CAJZ5v0ht6hfaBsifhr=M_htHh6uHohwgcab2dFR5hqq4rO+xFQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0ht6hfaBsifhr=M_htHh6uHohwgcab2dFR5hqq4rO+xFQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed,  6 Jul 2022 23:57:56 -0700, William Zhang <william.zhang@broadcom.com> wrote:
-> Prepare for the BCM63138 ARCH_BCM_63XX migration to ARCH_BCMBCA. Make
-> I2C_BRCMSTB depending on ARCH_BCMBCA.
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> Acked-by: Wolfram Sang <wsa@kernel.org>
-> ---
+On Tue, Jul 05, 2022 at 08:40:30PM +0200, Rafael J. Wysocki wrote:
+> On Fri, Jul 1, 2022 at 7:47 AM Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+> > On Fri, Jul 01, 2022 at 12:28:15AM +0300, Andy Shevchenko wrote:
+> > >  extern long acpi_is_video_device(acpi_handle handle);
+> > > +extern bool acpi_match_video_device_handle(acpi_handle handle);
+> >
+> > I think we can do slightly better here. The only caller of
+> > acpi_is_video_device() is in drivers/acpi/video_detect.c so we can move
+> > it there and make it static (is_video_device()).
 
-Applied to https://github.com/Broadcom/stblinux/commits/drivers/next, thanks!
---
-Florian
+AFAICS, the scan.c is user of it as well.
+
+> > Then we can name this one acpi_is_video_device() instead and in addition
+> > make it take struct acpi_device as parameter instead of acpi_handle (I
+> > think we should not use acpi_handles in drivers if possible).
+> 
+> Agreed.
+
+Not sure it will help to have acpi device since most of the callers asks for
+handle to be checked.
+
+Taking into account above, what we can do is to rename it to
+
+	acpi_handle_is_video_device()
+
+which should be clearer than initial proposal.
+
+Thoughts?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
