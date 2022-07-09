@@ -2,105 +2,126 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 061E556CAFD
-	for <lists+linux-i2c@lfdr.de>; Sat,  9 Jul 2022 20:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655A556CB00
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Jul 2022 20:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbiGISE2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 9 Jul 2022 14:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40628 "EHLO
+        id S229503AbiGISEl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 9 Jul 2022 14:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGISE1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 9 Jul 2022 14:04:27 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8EC15801;
-        Sat,  9 Jul 2022 11:04:26 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3137316bb69so14648027b3.10;
-        Sat, 09 Jul 2022 11:04:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=dZb0z9oQGjeGeVmJPdpy5L//+nMPYZT6cUKj4IQueRw=;
-        b=EeKIKeabZt2DEwx/zEOB1h23sJtPXlCNiPhSK0haoxJcQgKHysEpGqfO6EMyRzE1QS
-         7sjgvBoe6Xbvfw3qfcGuUAgEIMUEVWLtQPWlBEzFrFPbGa43OdwWpVEExgCg2B5fHTTa
-         OXznYfDSZBHVkEQi1mH84pAp2DHu62QgMp7Lwou5Tn9VUa6gLw6h+z5FjJv8D3W2awzO
-         2uVdzI/AFE4bQlo5T0dTvtOpr5Yyp9G37IX/eA3i2BmbaLJFC8jorXNxAMNjTiZLKX3E
-         8EXpsGMt2pLI2uzZQyLmPsv2/XcfeRj8IDTlq7LUl9/zm3w783cRg/3lO5B2CPcxmS/T
-         eViQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=dZb0z9oQGjeGeVmJPdpy5L//+nMPYZT6cUKj4IQueRw=;
-        b=caGLqVFc2B1hSRmDLtq0nVYnouv/6VySxttGxdG0ybH/Qs2Way0TVqq/gYrGsA4Y8L
-         rU/VaQf3bY7u0WpdlRV4LhHhzFre5QzGLlKmE7LAlny3sOGClrKq5p+f5P8yZxaz47Ax
-         OGHnNHHIjG3tvd4LJWZeHZN9l9w+FyVyjkfQr8KULJlbq74s+sGIAHZ3JCeo1fQvOB28
-         f82i51X14a+f2kiPapay+4WQo7rrmxROyOd6T130Gqw13qiggHjJ6r19Zc5qQwAHLVw3
-         EHFXANZxSYcvzjUuSikhIK09s7uWD/a4J2e1S3El128AD/m1syQlRf6q5qrN7hkwqHWT
-         uPag==
-X-Gm-Message-State: AJIora9Hu8EcD0CxvJ6QScfPNNMP2370h8aXPkPhX/+EYLWGJqp7D+pv
-        /jr7m556aYf1rBd+s0JEDZhVmTwe+zCcStMvsGGec4m9J2uS7g==
-X-Google-Smtp-Source: AGRyM1tpt9b06DebOPL+shjB/ySoyuMlM8pCnKlYf6dzx4Vkl46SEo1fYMDg5lGPMsPyqTIZDJ/rA3jMROq3HQPbEpA=
-X-Received: by 2002:a81:108f:0:b0:31c:d7ae:9ff1 with SMTP id
- 137-20020a81108f000000b0031cd7ae9ff1mr10604838ywq.18.1657389865584; Sat, 09
- Jul 2022 11:04:25 -0700 (PDT)
+        with ESMTP id S229481AbiGISEl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 9 Jul 2022 14:04:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0C415FC8;
+        Sat,  9 Jul 2022 11:04:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC716B802C8;
+        Sat,  9 Jul 2022 18:04:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E73BAC3411C;
+        Sat,  9 Jul 2022 18:04:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657389877;
+        bh=dmcRENbX3SD+tyNzNV8F9NilX0Wb2fPp67H8wEd2Wxw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BQDoG9rF23dTPGjI3CgLt4sEw+wyhJRSfWWwnWQa7yuJZkATa2BPI3L+V2GaKrhHz
+         iaMgxhRXTzGWFGpoZCJnvmAi2EE8pMPXkB+aYkXFW1DluJ0ybW60jJF/Ju6OZlUIbb
+         Ca8yTxMSmo9q4Y17ziEMTWFo1ZmO7q4o3C99NOFYMTqy0wpqJnoG2tD1DBqH0xV67q
+         fTTvEE0b8rH/z8PBX3Zi9nHKV2nFFaL3FMp2jCXFWcZcInPMjIFh9Vik5FaZMm/snE
+         v2udjIaBY62nkt3mSkU4v3C7maX1NjQR78J0Qwh0zkVtmFl9jxoH5GSWWdnVpsLwYY
+         VtPe3Ae+Ypd2A==
+Date:   Sat, 9 Jul 2022 20:04:33 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c-for-5.19-rc6
+Message-ID: <YsnDMSqbVygxidsL@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-References: <20220703154232.55549-1-andriy.shevchenko@linux.intel.com>
- <20220703154232.55549-2-andriy.shevchenko@linux.intel.com>
- <YsWI4nzQa9gmqKdw@shikoro> <YsgBkDeq/KeQ15HU@smile.fi.intel.com>
- <YsgcZHzjzqyJjKqQ@shikoro> <CAHp75VdJ2AT30md_nR3a_hY6L511w+4oqsAJ-CoE2gXitXCrNw@mail.gmail.com>
- <YsmneQ1VAKXMU7eP@shikoro>
-In-Reply-To: <YsmneQ1VAKXMU7eP@shikoro>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 9 Jul 2022 20:03:46 +0200
-Message-ID: <CAHp75VdkJP+5Lbr=E5s1-cX5ALVAXaVeatr_0KqiCU88h3wHTQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] i2c: Introduce i2c_str_read_write() and make use
- of it
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michael Walle <michael@walle.cc>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Till Harbaum <till@harbaum.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qnaKXHxQagW37kkc"
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Jul 9, 2022 at 6:06 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
-> > Okay, let me find another subsystem where this will be more useful. Do
->
-> Yes :)
->
-> > yuo have any wiki page about TODO in i2c subsys for kernel newbies (it
-> > would be good task to add)?
->
-> There is https://i2c.wiki.kernel.org/index.php/Main_Page but it is not
-> kept up to date. Do you mean "cleaning drivers from dbg messages"?
 
-Yes.
+--qnaKXHxQagW37kkc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
+
+  Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-5.19-rc6
+
+for you to fetch changes up to 3501f0c663063513ad604fb1b3f06af637d3396d:
+
+  i2c: cadence: Unregister the clk notifier in error path (2022-07-07 23:06:34 +0200)
+
+----------------------------------------------------------------
+Two I2C driver bugfixes preventing resource leaks
+
+----------------------------------------------------------------
+Jean Delvare (1):
+      i2c: piix4: Fix a memory leak in the EFCH MMIO support
+
+Satish Nagireddy (1):
+      i2c: cadence: Unregister the clk notifier in error path
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Lars-Peter Clausen (1):
+      (Test) i2c: cadence: Unregister the clk notifier in error path
+
+Michal Simek (1):
+      (Rev.) i2c: cadence: Unregister the clk notifier in error path
+
+Terry Bowman (2):
+      (Rev.) i2c: piix4: Fix a memory leak in the EFCH MMIO support
+      (Test) i2c: piix4: Fix a memory leak in the EFCH MMIO support
+
+Yi Zhang (1):
+      (Test) i2c: piix4: Fix a memory leak in the EFCH MMIO support
+
+ drivers/i2c/busses/i2c-cadence.c |  1 +
+ drivers/i2c/busses/i2c-piix4.c   | 16 +++++++---------
+ 2 files changed, 8 insertions(+), 9 deletions(-)
+
+--qnaKXHxQagW37kkc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLJwzEACgkQFA3kzBSg
+Kbb1TBAAsL4ACz9hRTZmbKQLNLPDMpZKLVUEiAgsJPsE7keIlbX9A2UBtw4SctCm
+R4kHPR7woI4qwisx2cniOhwRRCS7TJhYBK+twAVPaqxRnabXwMISYXm1Rj+dIvmR
+wtCHHmfd1uFycW52nq/BerH5uFKbgtQzxLnE7neWRw2aAjB1TALwYmLJG1eKNHQp
+YM/3lWDbEWGk3R0R3G+bopZCqwzLY9a8ZUq5jBYCxegPesiu4jpVzyuJIGBiPBgG
+U5RtwpFhLXjTuNyFymAgAGVFwSqvOac7M+nL1dU4XLqhXT/5OMGW5/lFnp4jSZt1
+w1Ef1wxuIWomv9owpdYvfLIGmSAr9NXSxtCdslVBRhsbMxQsf+0RPi2DQcxyAqsN
+qpa7biqi0eC4fQo0uv9qMbo3X6Ul5oAFicuRL35IG+WWoucmmZ6lsploSQMgbVb1
+p3QtGsIzyPDvSIHC8Fwwy5nGQ4ogQaq3trg73WoByiUhNUWVeFUzhd5eTE+fZAfm
+3owHEemRRg6IYVf7V4z+8UrIXzFPGjpt4ORdwSnQwB/OrDebCCSn/gVarKTwTc1w
+trmRQBDdEDBhX6mg4202AUKwnPT4P/M8m/FSn/dF1rICCvBvkCUE8PaG0dOKzOnh
+QuRqTjMN8ejNC12DTTEuw0p55ET8E4HeorWlM+DNtqLf5b8BAG0=
+=xkY4
+-----END PGP SIGNATURE-----
+
+--qnaKXHxQagW37kkc--
