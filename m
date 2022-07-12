@@ -2,36 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DFD857156F
-	for <lists+linux-i2c@lfdr.de>; Tue, 12 Jul 2022 11:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDB6571685
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 Jul 2022 12:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232474AbiGLJOm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 12 Jul 2022 05:14:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
+        id S232570AbiGLKFV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 12 Jul 2022 06:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232386AbiGLJOj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 Jul 2022 05:14:39 -0400
+        with ESMTP id S232351AbiGLKFU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 Jul 2022 06:05:20 -0400
 Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDC1437F82
-        for <linux-i2c@vger.kernel.org>; Tue, 12 Jul 2022 02:14:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F34BAAB15
+        for <linux-i2c@vger.kernel.org>; Tue, 12 Jul 2022 03:05:18 -0700 (PDT)
 Received: from CHE01-GV0-obe.outbound.protection.outlook.com
- (mail-gv0che01lp2040.outbound.protection.outlook.com [104.47.22.40]) by
+ (mail-gv0che01lp2044.outbound.protection.outlook.com [104.47.22.44]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-33-8nJAhFWCOiipo5K9uTdyiA-1; Tue, 12 Jul 2022 11:14:35 +0200
-X-MC-Unique: 8nJAhFWCOiipo5K9uTdyiA-1
+ de-mta-45-w1sGumuEPnayMx7-E4MR_A-2; Tue, 12 Jul 2022 12:05:13 +0200
+X-MC-Unique: w1sGumuEPnayMx7-E4MR_A-2
 Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
- GVAP278MB0456.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:39::5) with Microsoft
+ ZRAP278MB0399.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:1f::14) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5417.20; Tue, 12 Jul 2022 09:14:33 +0000
+ 15.20.5417.16; Tue, 12 Jul 2022 10:05:11 +0000
 Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
  ([fe80::3d:ca30:8c24:1a95]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
  ([fe80::3d:ca30:8c24:1a95%7]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
- 09:14:33 +0000
-Date:   Tue, 12 Jul 2022 11:14:32 +0200
+ 10:05:11 +0000
+Date:   Tue, 12 Jul 2022 12:05:04 +0200
 From:   Francesco Dolcini <francesco.dolcini@toradex.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+CC:     Francesco Dolcini <francesco.dolcini@toradex.com>,
         Oleksij Rempel <linux@rempel-privat.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>,
@@ -41,61 +42,62 @@ Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
         Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
         linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Subject: Re: [PATCH v1] i2c: imx: Retry transfer on transient failure
-Message-ID: <20220712091432.GA319880@francesco-nb.int.toradex.com>
+Message-ID: <20220712100504.GB319880@francesco-nb.int.toradex.com>
 References: <20220712082415.319738-1-francesco.dolcini@toradex.com>
- <20220712084716.bw626gt7cwcjt3wq@pengutronix.de>
-In-Reply-To: <20220712084716.bw626gt7cwcjt3wq@pengutronix.de>
-X-ClientProxiedBy: MR2P264CA0034.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500::22)
- To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8)
+ <20220712090514.lt4r4dvlkn55jf2o@pengutronix.de>
+In-Reply-To: <20220712090514.lt4r4dvlkn55jf2o@pengutronix.de>
+X-ClientProxiedBy: MR1P264CA0145.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:501:54::10) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:2e::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: aea6aae6-0099-44bb-666e-08da63e6ef26
-X-MS-TrafficTypeDiagnostic: GVAP278MB0456:EE_
+X-MS-Office365-Filtering-Correlation-Id: e065a925-bfad-4f82-5bf0-08da63ee0223
+X-MS-TrafficTypeDiagnostic: ZRAP278MB0399:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0
-X-Microsoft-Antispam-Message-Info: W4iI01/Xq5dhV+QLNzpDrwYtuUZ+0ovo1r/HgPSSOk93HTqzEDDV3323U+rerZbn4TIO14YqdWTuFNmy/4ueeW7RNXzGPn5dovYLvOoel60yW1PaGePBf/jBLDabqiIgqqXvIrOoKt+BwlIOlAGm6CGntFjrh1CyIjJW4bEdPBrk9T6VPHaa0ZGRL0zrUle7RY64AsdSvD1KS3IuFJQkzl6Gay99zeUJf7FyG8LiWzbcbnk3zGBUNmx200Xzq31RaFc2H9aILHhDPT5is9Y/S7G3TP0tE8Scc52y0QYyXnnM9SAUGOyk4lulXkuqU0o5LqqzdxtOOGszIzQQ28R9QcV6ZwNV0KaNDYVymkI82ssg4gWgGsHSGdn7KJNLXo4abgygKKZ9i8cggyMS5B2GCqtjQtde+QWWn6aSHorLW/RNnsEgcwkRadom/ifdgkYedF5DvKJIvIUnnXupoMUZyCDWkJdstc0LdQAh3U7Gf6BXQTPKxPCNsPgzXl0sV0fh4xLo22nuSgjkQSkMk+4DBVBhuZGXb3zIa8mVBE/KBlWPeN74xdWQyontpXq5m96o2HHMGQPijkpcqtq/cAXipkFfew3Qj/tvzdQchTxaX6tH2j7FPDI6ddCwNVHseGYXxZeCbyRJd8eRAexnlJTKMb9Hfdgsg1I9CK6jEcpzByXVxTJHxJq2dWJwkwVV5+gUCvdyrEh+te6Dy7DLalzjhZqON3v6B03rvAVqDu5S5/Xbxv1UNaa6aI6wE7H2s5tZYo38KZ2fwjLQ3VgxW/R0iNr/tXPsycPhHfFrFCFevvcbKhu5B1g0vDmMTU7hbEX4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(366004)(39840400004)(376002)(136003)(41300700001)(6486002)(86362001)(6506007)(2906002)(6512007)(478600001)(8936002)(52116002)(44832011)(54906003)(26005)(1076003)(33656002)(83380400001)(6916009)(4326008)(38350700002)(38100700002)(186003)(316002)(8676002)(66946007)(66556008)(5660300002)(66476007);DIR:OUT;SFP:1102
+X-Microsoft-Antispam-Message-Info: 1wznW6f02aXWG/5upAzOoAW8LB+nJse6TNozZS0sM8D3ccHMSmLN/p30czNL4KhqWeoGcAdC3VJWTEEHNSTwtBfQZ3uM2MFCnEqDX3nJIuSs401xg3kjM1d8S5HpF4g/okn5EaRo8tUc8vEl6YYRS5SEBdtJkoKEUuBxCXjfHdKkVP/qPULECdKUa4BE3DHKW/Xm9CTOoXyk4zJsqagGnkgjSBGxHhFy/UQeLQ37iuv4gwy9cY80kdUrmv+nOcta+TThzL1FzfU8Rxj/1rwMDIFPvnhNLEARyP86T082FZrdVn3DkhSKfEDEQRkiFtncQM81oKcXXp0WdCU/4MNfioKJpqhD5IV3kC6UofmAGQDeKvlQ1nMEep++Zcb5pA3p/9Xs67M3/jLkEkvk15+lLhgbh/AXx8aCx+GLXx+tMBhTsipF8zIulyxH7G3t05vuBThKJ/fdQNFr6DBjfjK/G445mJ7M0futhO0ZJXswC2Rq0QB0TfWH+pWD4Zx0ifLBNQ+VNnY5ZI2RVj5HP4DtzNS/4Ea+7/7zZth/DX6HAme6I6VeIoDoPOnjLAkR1cKPbVAJtUtAqlbNBX26CEye+3vw2KXxqWtLOJJp5FR4sczZDEhRdCBuXlATt/rjqQSnutyNBb3VQ/4nf0RY80IEn/8T5Dj8/K1RuVAEtIvHNtFoxYSw7tcLKHq4s3d1tq37Gctec3+F0jUwcnoXCxEo5L26p+413gxp+iHyfvVh+pC394bhqXoffR84FB8WgWOy3bz8hOfNWosq7veZVGVzInkQC2MMdSWL9rafwNZZovLWQhXXNns695hTwbDsYey4
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(366004)(346002)(136003)(396003)(376002)(4744005)(44832011)(8936002)(5660300002)(41300700001)(2906002)(6666004)(6512007)(86362001)(1076003)(6506007)(38100700002)(6486002)(478600001)(6916009)(33656002)(66946007)(54906003)(4326008)(66476007)(186003)(52116002)(316002)(8676002)(66556008)(38350700002)(26005);DIR:OUT;SFP:1102
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IzZp6QJcHIQyZga95Ja5wQoKr4Cu/vkFlstTzDGiCJcmCkPFpHmAFKcoOzAz?=
- =?us-ascii?Q?lsLWWgIB9jwxrRC1DF2zh0hFINoOl5g909BkEfSoduXiRKA/86gN2+xe33dj?=
- =?us-ascii?Q?wtRsHaEw9RVMAIg4yjgRMWY2K8rypXOO2DL/3bPZM4hes/s1caOkDt4iw7Fv?=
- =?us-ascii?Q?RdobIE5mXAPAQcab5P0opYbhWCDVWl/GNx1EeRV61Asf8BfAovQaVvtjT2TF?=
- =?us-ascii?Q?vyPLIb0hzHAnTkb+vI4ULQugcmp40+gjyH5psBfkZa4IuDHM57YL7qXCx5AX?=
- =?us-ascii?Q?PX/j3mPF9V9AIymCR7d5tAYMcv4ObBBoyOHPdxdeBqwggqbnMNIvGzNPbJjB?=
- =?us-ascii?Q?Pt1AIk/DvUZeyh5COpx60kj+hv8VB/7zmWtEoHx0mmRPvRF3lboi3l9EDvzF?=
- =?us-ascii?Q?fTpuKANSq77vda/tfr005y8CH2feG6CFijxkZg4Xp0Nk7LJd48LmDVWDb6ux?=
- =?us-ascii?Q?6ka5B3immL0zJUigXRIqmLPZUlfoFMzxkwA0Kr5jeIk6c+4T5i8imAcVeTDj?=
- =?us-ascii?Q?xRoZK0j9OYbyVdOoiC+7iBWKtO9URhQ5hHwU2R+L0mHJbKqUdRvW2G/gi72I?=
- =?us-ascii?Q?sfq3VBKSfUc2fgFsuFNPMwie7yx8SHUGOci6uLCk0pIiFUJBSQLqpSOVmgzW?=
- =?us-ascii?Q?Zl2H8gVlrHTPyyx5JT+Fj7IVPOubh2P7VZmNzj02Ci1WFv6dtUk+jHPzE0vI?=
- =?us-ascii?Q?u7f4nptkSg4Kvc+gaymDGJQpyy4zqK0EkwD8nOkMw+uzgwgNRymr5mpewfUm?=
- =?us-ascii?Q?flqfISG4CWfILxWk5eicYpW7dLat2XxlPCtV/C189la9ZgeNzQ1IKt5rm3mr?=
- =?us-ascii?Q?/jKfQoiXqMls5Mnan2MQu7bf9ejR7WWPXg9Ytqw4MfMJlc1w32OwTc+TDJOB?=
- =?us-ascii?Q?42ghsuNGbFXdVu1cJ6PZNqnDs9XijTw08MRqc6SxYIvuRgk0lXg0bLkog8Nj?=
- =?us-ascii?Q?jH5gl2CMb1ZIqIQqmk1rgs0ltFxS0+8nlWKnC/HxNB/XBgXQg8iPIkjOi/IL?=
- =?us-ascii?Q?v6KGHLfnPHT9NF8XZYFKF2DERKGd4k9mEnIwhO88EBvSZ1oECFtxKjPmsg4W?=
- =?us-ascii?Q?881OhvyRxVh6O52y250S7/hMmgwohQnIpzR9BUi7tqxmSK3CBdMk8KZfNiFv?=
- =?us-ascii?Q?e5OFQaybz4/KEc3HLRlTYU6/9KImVfOJc6n2XTX2hLm/m0VRfoOy9Su7NOJy?=
- =?us-ascii?Q?i3oGR+hJhA2ZO8DyxYiUaUlc0QQTVeYI7bJ0XpvFBrApdqMci0G8Qr/t9BMd?=
- =?us-ascii?Q?QIizBoIrBoEd8EGEYxLkh+JsoyZYwxu0g1c6ObMunf48zUuWe4FfITymX5qm?=
- =?us-ascii?Q?JxyU8eEwJUt4WGZv36KuLBnCp9jBMOQ3G0jLHmhRSVVmRdRFZ/sPhXADGVt4?=
- =?us-ascii?Q?ysTqFSucm8uzq7bdCoc/LYhJ2guGLL03eBpMUDmIPcjauuIU23mWk0kZabbT?=
- =?us-ascii?Q?P8sMgbsEy07Qmyt+IWFVxXDreSMqHHC1TVopktHHZ7h2Yx0XhgnlC2FQwVUy?=
- =?us-ascii?Q?Byl2ebwPDHzi6CMHzlyAi04rIU5JXY/JY3KMfa6jITfBK/yYqJ8I0yxZ2iIi?=
- =?us-ascii?Q?3fLEJHn2O03oo3LrIzc0XqyrFauR6ZeQJ82i0UeaT6k4xANZfKnGKh7J7ETa?=
- =?us-ascii?Q?hQ=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Cb6R2sfvAuwKmnBWUxJPmdZeoPpXYBPOUI88Aeu/DQsDQRveP4xtIV+qC6+i?=
+ =?us-ascii?Q?Dxa/ZcfyvxNVw+5z5+UmyjIIyzsU1SK1z56KrhnTlxo980zi3KPuHKjLkSzu?=
+ =?us-ascii?Q?K1Iqbotb0h+kEKl6Id3TzLnd4eQFTJSEbvW7lScMRwJFDQtj3kZ7eoCMCI9W?=
+ =?us-ascii?Q?ZFROZAY5yn4GCJ1njIO5toQmctnzZliF7ErC77RdRLFf2NjMyrqxGMZ+mige?=
+ =?us-ascii?Q?bHT+Jkkm1wecvnb+W2D06E6U3cl1VU/L3YFKN35YDorUj2pgDoyafzONtJre?=
+ =?us-ascii?Q?uyFyecEvmh/b+rCbrfqt1PMvcIG4qdNDiNVDwwSH7bGSsQfElYMgZcqvI3Ix?=
+ =?us-ascii?Q?1FkErdXCrHGRioYg99ZVSp1CX2Umq0wIVMCJ0MVRdGVWCSvIiqJMUxOjl2RA?=
+ =?us-ascii?Q?O5pBvaaBjPwADcix0sMcjk52KFZmVpXMG+C7tDuHIR6V7WYfriwmuGY4ISBG?=
+ =?us-ascii?Q?bn8Odm/Jt0yffTRA0TZLTV9ddOtZafCLFR0mNQwS5pf1VCwh5MotuLPe/kBT?=
+ =?us-ascii?Q?Ij/VCAmmthJTnDAWCBl1mM3cgOHn6XNzxFD1au3qAwdvIbCtw7unLqh4D1mg?=
+ =?us-ascii?Q?k6mqf3u5nMIJD7YrU03jKdGFo4b+GGV9R5eFkJ1rYF425ZgvhLeKO31S/PMs?=
+ =?us-ascii?Q?yZnzoDqdsybl6GA7vruedZLMZPGzoSCfq/TP+K6TB+bWahhfRnGTnTOv1RLM?=
+ =?us-ascii?Q?lTaS6jfH9b1oJ0KML5+mCCQoEvsaC4jL5KKojqIiv+J47eyoIWf7AELKemzW?=
+ =?us-ascii?Q?xPOWtfvvLJZmCGCRep7D5RTEtROj7mcQoVeKrCpb2hI+cTZs5Xxn7X7h9quf?=
+ =?us-ascii?Q?TwrqtSd8WRJbqqsHBwyaWasI/hgAe4HZ6c7PSJhvQoyhJrVNOuWlZsrTGxHS?=
+ =?us-ascii?Q?mpoOc+8vAX1as0YgY0tSlg8+OZt5kNwxyPajx46t0UP1Dp9qvhSezWC9T0ZD?=
+ =?us-ascii?Q?54Nc8IoiPCK389xXVaqAnHJYUEVTiQgmvgsB7ObBt06hKoztLWBG6OCtYQ1S?=
+ =?us-ascii?Q?YTvv7MOjdoCEc3L59Bo322CMICEc4oKEo6ZzMvBX0jr+cDWNzsTEdrOBEoz1?=
+ =?us-ascii?Q?4kBFdxVFj3RKlmIYBxanaInr2XL2Kg4GnV7KNbivQZq8UsFaOwnqVzsBG9tx?=
+ =?us-ascii?Q?X9OSK8TkOQbRTrEqvo160/aoJWV1LyBGP7Wquw7d9qLlInH/r8S5YnUbTvBv?=
+ =?us-ascii?Q?qOBJSYk6y4Acn0KqIDDtLcPjTTl3oj8gKUpB4l8QbmoOjbzoIRS+d4MEPYln?=
+ =?us-ascii?Q?GZGYZq5alGzV6ut5NnoT5s/pz7Bm3l3nAj3atLV6s56/UuP1h/kcuY3bxwrC?=
+ =?us-ascii?Q?1rSC2P7yF0o6SAKCtrMjyj49w5ucf7P3YLR201/6lzKBBCYZnlxuGeOvcWUR?=
+ =?us-ascii?Q?2d/DfKZYryJDXezcoUbynkISOXMh66YAwTHh72GSwePaqD13t1weQjtgikhR?=
+ =?us-ascii?Q?h87royf2E0lmOuBmKOY7SxLH6S3qpxz6iYInXcFJvAl380Miqv09Jmm9Hhwo?=
+ =?us-ascii?Q?tzlitgkY6pIBDxnR25c2lLNxri8P9aOARe9LyeyW4vdBKKapkX/Sxx7oNUOj?=
+ =?us-ascii?Q?uUNDOIs8fNJfKDibo3ZVU14aV58kDuqNMJGA8Vd3Rq9XIWuaEfvleQ/E6EQu?=
+ =?us-ascii?Q?/w=3D=3D?=
 X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aea6aae6-0099-44bb-666e-08da63e6ef26
+X-MS-Exchange-CrossTenant-Network-Message-Id: e065a925-bfad-4f82-5bf0-08da63ee0223
 X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 09:14:33.2870
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 10:05:11.6365
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Dj4Z7pvQfunoW5W3PE9nhoinPn2XpG+noGBrgGEiIOk6IhLT6cE/KADbYvYY3C2Aci3OTFm5KMyVpdBDEltixqZwTKpgr3V+jm70/Va7QEQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0456
+X-MS-Exchange-CrossTenant-UserPrincipalName: GZHysr1N4Mdw6Wy5B84Gh51ezPPeueB77gSrtodR6d4q84sTErEqFY22JuJLNWQ2+3Yit9/tXGElG6lT2ydAE4RbMN/mn8v6tuMt8XggNRE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0399
 Authentication-Results: relay.mimecast.com;
         auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
 X-Mimecast-Spam-Score: 0
@@ -112,40 +114,16 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello Marco
+On Tue, Jul 12, 2022 at 11:05:14AM +0200, Uwe Kleine-König wrote:
+>  - I wouldn't have added a define for the constant as IMHO
+> 	i2c_imx->adapter.retries = 3;
+>    is expressive enough. Thoughts?
+Fine for me
 
-On Tue, Jul 12, 2022 at 10:47:16AM +0200, Marco Felsch wrote:
-> On 22-07-12, Francesco Dolcini wrote:
-> > From: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
-> > 
-> > Set the i2c_adapter retries field to a sensible value. This allows
-> > the i2c core to retry master_xfer()/master_xfer_atomic() when it
-> > returns -EAGAIN. Currently the i2c-imx driver returns -EAGAIN only
-> > on Tx arbitration failure (I2SR_IAL).
-> > 
-> > Signed-off-by: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
-> > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> > ---
-> >  drivers/i2c/busses/i2c-imx.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> > index e9e2db68b9fb..26738e713c94 100644
-> > --- a/drivers/i2c/busses/i2c-imx.c
-> > +++ b/drivers/i2c/busses/i2c-imx.c
-> > @@ -54,6 +54,7 @@
-> >  #define DRIVER_NAME "imx-i2c"
-> >  
-> >  #define I2C_IMX_CHECK_DELAY 30000 /* Time to check for bus idle, in NS */
-> > +#define I2C_IMX_MAX_RETRIES 3     /* Retries on arbitration loss */
-> 
-> Just one question: Why 3 and should we document this within the commit
-> message?
-
-In our tests 3 seems big enough to solve some sporadic failure we
-experienced, and small enough to not have any kind of drawback. This is
-the meaning of "sensible" value I have in the commit message, other
-drivers use the same value.
+>  - In which situations does this help? Please mention these in the
+>    commit log.
+I'll do
 
 Francesco
+
 
