@@ -2,124 +2,149 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43021573230
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Jul 2022 11:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5EF5735E4
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Jul 2022 13:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235461AbiGMJOc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 13 Jul 2022 05:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
+        id S234850AbiGML6C convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 13 Jul 2022 07:58:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235118AbiGMJO2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Jul 2022 05:14:28 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2057.outbound.protection.outlook.com [40.107.244.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2410E0F47
-        for <linux-i2c@vger.kernel.org>; Wed, 13 Jul 2022 02:14:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=brSYippr/PjPuh2a9t/eUSrnqA6kWyqnqPmCyR8krYpNnugV+4h+fptUTBYVvkZsPsEVxM2iHPaTeURMUF8tfCFdGoeuDfFNVFkU+8N+V5gwZvSj4Hr/bvlZxchc7w6BQK363KljeTlelq2pTcIwpBLXCBQdgaBqt6HkcOr7ZrW0+49IJz3Xc1vfOSdKLKsXAa5XuSto/GMhBEVfl++sEwG5UPgoABQhlt7v0tby7O5sw1D8O+/eMg4PW42OFYmcB2Juvwry+FPLeidlw016oK0Zs5X2RJ75GguybavvK07lQtVlfKIwrnAu5RgPROycy5YtuR8xM/ucP4/x3oPMBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b+6PU9M8N4JFK/phIxWjCI5OyCe8hgb8YQoEE+cCbFQ=;
- b=MxDmSOthIyCFOTkfr6xLqbk7FY+0PfeLz4T0dmgDJgeQJnUvWRyI7mrnnN+oZZuQnBYHrUvcrybVzxg+6jPMY5GQywNGjwHfjvK2f0UAhB6FnVySjtQlf6jYaMydvBOWgO2vkCjOfjys3LfEUVE79mEllVd1za3wnJXzHPeJcT2+1dvZj3vTCdJMq12QOKQGCOWSysfMhWyhcaAc4D9ypQ/1eFgsm0lPaCW3eUk/I4cfW7GVL4YOBP7UcAXuj/BTLyL9gdDXGid7Vb6E4FPcDlDjnNZNLJmAuDWPbIVI/4spFVtdAL+yNz9CTZuIRsag7yc5cntTB8k/fQt1cBKcZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b+6PU9M8N4JFK/phIxWjCI5OyCe8hgb8YQoEE+cCbFQ=;
- b=g6MA9y+OvbSVA9ihU0WY/kB7AF++xRkpaI126kNlmPxiKQM/jIUakypjjQsz+Pys2irt22smqhjl+iw0RRuQtFKBF9YcZ9lUB8knC48LcP/AmxF2+xXuiWqGarA4s6u2unmv0AnrXJcQppY5jT5LO9jBAxO46Nel1UubZvJco1SFd6GXsmTEWYId94a+JmDvpHWn8cmF2dk5Ds/zK47FK1zDhE0w2aoSuWyaaxaGECdF8HT6VHduD8sHMjpR+0QUSPtXim2OkgtO5zVc2Dv3N/1r0JNyvUWs+qzvrvJeSe/eCTW+LpZrY1G8F5jQDKX5uNfl91xoKESoXXf88HEEEA==
-Received: from DM6PR02CA0126.namprd02.prod.outlook.com (2603:10b6:5:1b4::28)
- by DM4PR12MB5278.namprd12.prod.outlook.com (2603:10b6:5:39e::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20; Wed, 13 Jul
- 2022 09:14:27 +0000
-Received: from DM6NAM11FT066.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1b4:cafe::10) by DM6PR02CA0126.outlook.office365.com
- (2603:10b6:5:1b4::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.17 via Frontend
- Transport; Wed, 13 Jul 2022 09:14:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.235) by
- DM6NAM11FT066.mail.protection.outlook.com (10.13.173.179) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5438.12 via Frontend Transport; Wed, 13 Jul 2022 09:14:26 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 13 Jul
- 2022 09:14:26 +0000
-Received: from r-build-bsp-02.mtr.labs.mlnx (10.126.231.35) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.26; Wed, 13 Jul 2022 02:14:24 -0700
-From:   Vadim Pasternak <vadimp@nvidia.com>
-To:     <wsa@the-dreams.de>
-CC:     <linux-i2c@vger.kernel.org>, Vadim Pasternak <vadimp@nvidia.com>
-Subject: [PATCH i2c 1/1] i2c: mlxcpld: Fix register setting for 400KHz frequency
-Date:   Wed, 13 Jul 2022 12:14:05 +0300
-Message-ID: <20220713091405.909-1-vadimp@nvidia.com>
-X-Mailer: git-send-email 2.20.1
+        with ESMTP id S230223AbiGML57 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Jul 2022 07:57:59 -0400
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADB6310400E
+        for <linux-i2c@vger.kernel.org>; Wed, 13 Jul 2022 04:57:57 -0700 (PDT)
+Received: from CHE01-GV0-obe.outbound.protection.outlook.com
+ (mail-gv0che01lp2046.outbound.protection.outlook.com [104.47.22.46]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-15-eQbbW67-NHqOrrFxCSbT3A-1; Wed, 13 Jul 2022 13:57:53 +0200
+X-MC-Unique: eQbbW67-NHqOrrFxCSbT3A-1
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
+ GVAP278MB0422.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:36::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5417.17; Wed, 13 Jul 2022 11:57:51 +0000
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::3d:ca30:8c24:1a95]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::3d:ca30:8c24:1a95%7]) with mapi id 15.20.5417.026; Wed, 13 Jul 2022
+ 11:57:51 +0000
+Date:   Wed, 13 Jul 2022 13:57:50 +0200
+From:   Francesco Dolcini <francesco.dolcini@toradex.com>
+To:     Oleksandr Suvorov <oleksandr.suvorov@foundries.io>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Wolfram Sang <wsa@kernel.org>,
+        Marco Felsch <m.felsch@pengutronix.de>
+CC:     Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1] i2c: imx: Retry transfer on transient failure
+Message-ID: <20220713115750.GA504159@francesco-nb.int.toradex.com>
+References: <20220712082415.319738-1-francesco.dolcini@toradex.com>
+ <20220712090514.lt4r4dvlkn55jf2o@pengutronix.de>
+ <20220712100504.GB319880@francesco-nb.int.toradex.com>
+In-Reply-To: <20220712100504.GB319880@francesco-nb.int.toradex.com>
+X-ClientProxiedBy: MR1P264CA0100.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:501:50::24) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:2e::8)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fef5b785-3fa6-477d-174d-08da64b015d4
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5278:EE_
+X-MS-Office365-Filtering-Correlation-Id: f1b02298-4af0-4635-e82e-08da64c6e9f1
+X-MS-TrafficTypeDiagnostic: GVAP278MB0422:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hB4NGgVSoH7kjSKc7kt0zTc05q+W+Gxg9wBSum3LI/jQiJ1YQb3DrvIT2WJV8i1VAc9Z7vMqeqA+gke6wo5tHCqgA+Gcjyl9JiXBmdsZmcq0NM7W57679F4dmLLRWLn3cFwxgUSEp3UiYi/ezGKeL8KjVlFwVHQsqMrl0sbzfFc/ckSplFyk8mRrbB4Sy3/+u8YXtb7f7evh/pdJQr+Vdq7tdpflc3j6cNPSarOYU666JVMeXZf8x/CJzYL/HsnXOIqSePPVCbSCm7bSbqhQ/cHuWHfG27g7zCjOogY1FU8NEz1vY4ki4cTszgnSrcj1lFMsB2J+4dEH9VEEfa0vUG+k/GTDBGB4NuxxAR6c39ZPEwKs/3kCaFe+5PAf1bs+O2DVCOwjqSF2UOo4dyCi8Z9OGOXj97IQLxERuh4jj34yb9qAVS0yq4Vrqniji0Alo2FEsjwRLJcsWrec23sfqzEeJ+BtF/k27RSl2kJDMUdsmW7hy+Pzq4QAiZ5e2ioh+fFrtgD/0eGAxGfENy71amOggjv2L2z9dgfmq+1I5RG8Y1ST2jgsH/92FursRhpds4PRTWfNWlQex2cxw1hvQ/Hnx96snA3hp22YNNxYJp5ymMMqL3vzBmjp9jT2ssDo+5wKloP8r5xxB1S32hWJOJGbBC6AOL96zOe/zKX7y+21kOfpMnWGZubXXzS0dJOAIap3hpAxmc1TaKlumnzRuD4LAOAwf+meWGQNyxFGtaxr7TiUhhTVFaypfSBVNQlFojPJm7oAMM1QaJZJf6SZp4ZwMflh204hFcbP7iYyD7wq5ChjwBVgTjZfQVxNSE5rvEjVrkv/5cFltWyed88fSxwmycDWK5+Gx94Gfq/OBiBFKwYMO3MTltKa/k9KJDiB
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(396003)(346002)(39860400002)(46966006)(40470700004)(36840700001)(336012)(6916009)(82740400003)(81166007)(16526019)(47076005)(316002)(40480700001)(186003)(36860700001)(70206006)(426003)(5660300002)(4326008)(36756003)(83380400001)(8676002)(356005)(82310400005)(26005)(8936002)(478600001)(4744005)(6666004)(40460700003)(2906002)(54906003)(86362001)(70586007)(1076003)(2616005)(107886003)(41300700001)(133343001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 09:14:26.8339
+X-Microsoft-Antispam: BCL:0
+X-Microsoft-Antispam-Message-Info: czcahOpdf2fJaZ29Yhz3UtgRiVQpifS9dmQo1pe/y2jdTqzKLKrMFTEiMCuWmbzOFZpHRelOGsFw3ZDGeq9aWPn8tQUypKvfusJZMekrEEp7eNLO04dR7Mwman4+qAP4CNw2pQpwq35lPSPCuaKY6BLppFO8Ncor+20YTnZ0ueZJV81Nl2AUe1YDkN3nFzwpDid7GunHufKKIB80tQf3JbXr+ZLnO6pOmR4h0jpU0vNXRWpjukaf6gc1D5fRgc24Iehphci8qB/bSu3ISTHwxyUs38jvGn39cwOiOX2kpHg5j1FPdFGmVNO1+dFb/zlYR9DLdl/NGhbHIP8qBRrtFsVEXTaxfcipQTDl6OeanqAccqPrJp6+pKllPJVuhFjBaTIrxqxwA/XUBKxscTDuHBwH8dW9OVQb4cHkvvPqdPsxq5YRB2nMHDrFv7KvSURwtpUOEk4t7ovVxiKqWJfU9ivp9iWgc65Vw0AEkOjQeZJ9Ir5VruFdNmHOUBCo7x1oRXK8oGUOFosxRG5ydYWfdjnLQtz47SabDVWBU36fj9RjSfGBc5EzlQcQR5pp9A1o2Pk7x4dUjuI/qNpTdOtIxpYdtCPipKB79JFOVDt3w59p5swmrrDDYAKOy/3r1CkRoVW4LjtqrAIkekvmUBxs+9jGxVKwbjc/aRB1Vmi3628YhT/azmTyUpP0GWJ6a+OF9rLi0pbe05pRKiK4KS1NEU/aFE5CGnBtY6/hoAL9YDOCrp+5FEHXwRzDE/xpWP7ekkuSFtTcoO5jLpqy/KbSUN+0OIA049H8+DqCH2+x7X5jXAY7gbDDGbcuuL+U2dYV
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(396003)(366004)(39850400004)(66556008)(41300700001)(478600001)(8676002)(54906003)(4326008)(2906002)(6486002)(110136005)(6512007)(66476007)(52116002)(6506007)(26005)(86362001)(186003)(316002)(8936002)(38350700002)(83380400001)(38100700002)(66946007)(5660300002)(44832011)(33656002)(7416002)(1076003);DIR:OUT;SFP:1102
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oID/HT0rD15U+bnsTmKEyLBCPDRs0yUrNR8N0y2ZTs8Kayd73kWTRSVQcyCx?=
+ =?us-ascii?Q?fVgrp/PiyKMLSXmJFVA2aSm72MZZRwJWTTg+y2yT2t9EBN+wnIMD3safxAWw?=
+ =?us-ascii?Q?EMKLPv2TrmPFip5Qrl1UlVACw5KGCjY8nt+ZhbNkbsBzig1wbRW+WZqN1RMB?=
+ =?us-ascii?Q?Dojy9webvDEuURjfBin4JgZkLB7yeYWRG5A9fg6nNhLSiHSDSA2+yb1lFlV6?=
+ =?us-ascii?Q?k8ULHTGQQti+4+Y7vMbMThmHz2ZPPQRQZbxD1azgOu3v55Netu7E6Rg28iOt?=
+ =?us-ascii?Q?IcZ97V4YmJfXZpAtrxCNOPX4rd9xKP6OVdx9Bjxpo/G9Two9arE4jnaX+mm1?=
+ =?us-ascii?Q?IE+1sSXFtcXkTz1DX+OP2OaG65H0fgOiO1oXD6UcAzx9rTtO0HETv5fu//yb?=
+ =?us-ascii?Q?emh59YFeAul6lj5lJP+cdZpPCxjMsGmNH+qPBt2nhEC9hiEEPLDGGAwxCOLZ?=
+ =?us-ascii?Q?bYVeAo5o+3SLh0kGrvtDlDOwzXk0FZNXCfCZAOZdNHVdLXRO0kn7N5dH2piH?=
+ =?us-ascii?Q?O42FLsLctqHYyuSd2o+MFPqu8oLmtAG02vIwyZEq/Trf1wIdsQ+1n2kDnrK0?=
+ =?us-ascii?Q?TbkyohZy/me0O5WoGJrN+9pafizmXLwzdHxwfFoeab5zhFVm67rypp54jVuX?=
+ =?us-ascii?Q?e+iRm+s4Sj5/nll8s++8aS7QEuyUcV/3RKaC0FyYHt6SzLSuTKdkoubMhMQ5?=
+ =?us-ascii?Q?smA9TeBtKXx5dLwUrSv/z7tQjGMrq33F8PgSxQHq4wtwpMqGjMYG9/MQtTyS?=
+ =?us-ascii?Q?NFXouYq5FlF9F0GdzYzQH4FhgXMR2HSXMDvNshwrIZ6MkkPOjLIzU7UYQgwn?=
+ =?us-ascii?Q?r3f+71uZMbdgFMdlxg55OKTc6MVfEMw+L6LsMMi6r+hb5o/b91BoORMtdVMF?=
+ =?us-ascii?Q?Y6Z8G3m8TqxrPowjKP+7tnzZpijMp7DOfULhGeomnkuX9plAD2j0ngCMUA+J?=
+ =?us-ascii?Q?UsxiWdfQjHMyaA9aFVsylu13VjLpqpTY/fHs4pC6fJ/51DGqGVO6Mt3nCYhh?=
+ =?us-ascii?Q?q7I1tLrQs61ULIwJ/uAfBk2az+i3eP/pH+Un7BphhylXk5wk9B+GbImLokjC?=
+ =?us-ascii?Q?Zs4eOmGR3NL4PW9/mGACOXy+jjXztFLLoPDy2BzDK+qu5cnmNugJre2YH52Q?=
+ =?us-ascii?Q?tDD4Tm4D4mvAr8ktmx26uQQh/ddqTRA3p6JoUTLI2PYpILeo6om5C6ueQNR4?=
+ =?us-ascii?Q?bz4MAHTATnIKcgS5cXZ0tXagQdWHmT/scvFMC+ZvPvAb4afuexdIewQI8Tej?=
+ =?us-ascii?Q?MMjLjqiVg61CDjR530EyIJylEQX7IkEWMOyVF0OgAROu/BBUqpJMO7dsdCQq?=
+ =?us-ascii?Q?zdUCfRV+MEU0ZyJTRru9OnvoL7F9ZvT5KzvpnGikHJbgVwtHUMQ5ZR8KQyGm?=
+ =?us-ascii?Q?lTe1WTiF5qC9J4lejIZGCg4n8rR8+MP9jPYAxH4FDcf3RBLcEzCkCleBCjh8?=
+ =?us-ascii?Q?IM4cVuRfoL+qrEjWTOLrx9U3s+/ikUhZagFUOUquapTjy8YpKTcGolxpXe1Y?=
+ =?us-ascii?Q?EPE5Y8iZ3Mz6NZPq2mMSeL2q9MxL0UcUoYcdmrZqJ8aI5tg21U6Bdq8y4v34?=
+ =?us-ascii?Q?iz4FyNk8pP5O/jQ806RS4yU1LE3Dol4QXb3rzG0TmrwpPalH20gp2BNdgAa7?=
+ =?us-ascii?Q?TQ=3D=3D?=
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1b02298-4af0-4635-e82e-08da64c6e9f1
+X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 11:57:51.8530
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fef5b785-3fa6-477d-174d-08da64b015d4
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT066.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5278
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rzfoStCNFR2sXkX6cd/241jjVbyiBMT7BHpkGSLDKJXKyRhtBnWbpbUZI8OoZckodu1O5WrpkDtE24yfHOP3TFzI6yn7oZ06sM4bCnLR4BY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0422
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Fix setting of 'Half Cycle' register for 400KHz frequency.
++ oleksandr.suvorov@foundries.io
 
-Fixes: fa1049135c15 ("i2c: mlxcpld: Modify register setting for 400KHz frequency")
-Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
----
- drivers/i2c/busses/i2c-mlxcpld.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello all,
 
-diff --git a/drivers/i2c/busses/i2c-mlxcpld.c b/drivers/i2c/busses/i2c-mlxcpld.c
-index 363ea9fd66c4..72fcfb17dd67 100644
---- a/drivers/i2c/busses/i2c-mlxcpld.c
-+++ b/drivers/i2c/busses/i2c-mlxcpld.c
-@@ -49,7 +49,7 @@
- #define MLXCPLD_LPCI2C_NACK_IND		2
- 
- #define MLXCPLD_I2C_FREQ_1000KHZ_SET	0x04
--#define MLXCPLD_I2C_FREQ_400KHZ_SET	0x0c
-+#define MLXCPLD_I2C_FREQ_400KHZ_SET	0x0e
- #define MLXCPLD_I2C_FREQ_100KHZ_SET	0x42
- 
- enum mlxcpld_i2c_frequency {
--- 
-2.20.1
+On Tue, Jul 12, 2022 at 12:05:04PM +0200, Francesco Dolcini wrote:
+> On Tue, Jul 12, 2022 at 11:05:14AM +0200, Uwe Kleine-König wrote:
+> > In which situations does this help? Please mention these in the
+> > commit log.
+> I'll do
+
+I did some investigation on this, unfortunately we have this change
+laying around since 1 year, it was written by Oleksandr, and in the
+meantime he moved to a new company. I added him to this email thread, so
+he can comment in case he remembers more.
+
+We introduced this change while working on OV5640 camera sensor on an
+apalis-imx6q evaluation board, without this change we had some sporadic
+i2c communication issues. Unfortunately I do not have any better
+details.
+
+To me looks like having some (3? 5?) retry as a default is somehow
+more reasonable than to never retry, not sure if this should be
+implemented as a default for all the i2c adapters. From what I was able
+to see that would not be a trivial change (the retry parameter is coming
+from the i2c_imx driver, there is no obvious way to have a default in
+the i2c core).
+
+Would it work for you to keep the change as it is (just getting rid
+of the useless define) and add a little bit more blurb to the commit
+message to include the various comments collected so far?
+
+Francesco
 
