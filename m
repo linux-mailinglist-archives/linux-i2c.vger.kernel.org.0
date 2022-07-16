@@ -2,62 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3D8576DE5
-	for <lists+linux-i2c@lfdr.de>; Sat, 16 Jul 2022 14:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DBDE576DEA
+	for <lists+linux-i2c@lfdr.de>; Sat, 16 Jul 2022 14:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbiGPMZU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 16 Jul 2022 08:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
+        id S229502AbiGPMaU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 16 Jul 2022 08:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231952AbiGPMZT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 16 Jul 2022 08:25:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228601C926;
-        Sat, 16 Jul 2022 05:25:18 -0700 (PDT)
+        with ESMTP id S229479AbiGPMaT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 16 Jul 2022 08:30:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA511EC48;
+        Sat, 16 Jul 2022 05:30:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B47DAB80171;
-        Sat, 16 Jul 2022 12:25:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAD92C34114;
-        Sat, 16 Jul 2022 12:25:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E50CD60FEF;
+        Sat, 16 Jul 2022 12:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93421C34114;
+        Sat, 16 Jul 2022 12:30:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657974315;
-        bh=4Hh0Hb1VmNIO85liwlyCNlhINhQwN+E6mmhpqNPCkg8=;
+        s=k20201202; t=1657974618;
+        bh=LnUHuOaNQ5KqAKAllWWoZ6SXQjJBD+lBOGMjjEHXNxM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q4RNjKn423TevH0wC1Iieib6bDyZsDEvoDRnm9+rlqi/l/QieimSfxvC60Ej/m2P9
-         niEDaooV5IeLikFGm9A0dJfi6R375PyvThdgmpMp3vtlAe/bpMjHpwAQKJmqSEEC9c
-         Gi6CitLuaDIciPK6ZpsNeaK8fbE/qmn7G321iXd0Qw3pGAqk4x8N3m//wSJv7ze5PC
-         EtmbTaadkpBxnMDFlNIU+iOOzUHatpOHKgCti4gqyDGOoqF/lgM3Umv5lHFItMwmXJ
-         sSKM4D4VSXQczgWwSikQd5XZlms6xEBn1dir5sfQ5iAvhu9YHiksd2eLonGsUkHq87
-         t67V+3zqH90aA==
-Date:   Sat, 16 Jul 2022 14:25:11 +0200
+        b=lKdioBztS5V9tonS5DE9kY5op86kZ38N82srNWZdQ24Ko80HEBsscngI6cqvOKxEy
+         vUdR8Z1Ph1+Zi+7z/W5h9j5j48/Mc0yKJ7aXjwMY90utvHupCn2Bl6Fh7nt3rv5/mz
+         LEybawNgDPylQ3DJNcAtZZmadoW0tSf3YGWtAa7r9aPgrBKC2/GBuvN/glpwn6zhBT
+         5J+4powA0N5jlXXuF9kDEZHigLt2+lcl4UmNYAkPkRQ0bf54zmhdOrMEES591Ss6Aw
+         rsRShZKeFS3fxp3up9PZxlcej2PWwF+XkOKxRulQ6mEj8tDL5eKXwBMUdBdf3NYVlR
+         kitBL7HjO/qkA==
+Date:   Sat, 16 Jul 2022 14:30:13 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Alain Volmat <alain.volmat@foss.st.com>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
-        pierre-yves.mordret@foss.st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-Subject: Re: [PATCH v2 2/2] i2c: stm32: add support for the STM32MP13 soc
-Message-ID: <YtKuJ6YFQtMFi5jD@shikoro>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/1] i2c: scmi: Replace open coded
+ device_get_match_data()
+Message-ID: <YtKvVc6lxmo1yk6O@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Alain Volmat <alain.volmat@foss.st.com>, robh+dt@kernel.org,
-        mark.rutland@arm.com, pierre-yves.mordret@foss.st.com,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-References: <20220707074402.2429786-1-alain.volmat@foss.st.com>
- <20220707074402.2429786-3-alain.volmat@foss.st.com>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220708120958.74034-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UmV9tOl/xeljXOjt"
+        protocol="application/pgp-signature"; boundary="Sblb2DLXLMvW8rmG"
 Content-Disposition: inline
-In-Reply-To: <20220707074402.2429786-3-alain.volmat@foss.st.com>
+In-Reply-To: <20220708120958.74034-1-andriy.shevchenko@linux.intel.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,39 +57,37 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---UmV9tOl/xeljXOjt
+--Sblb2DLXLMvW8rmG
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 07, 2022 at 09:44:02AM +0200, Alain Volmat wrote:
-> Add a new compatible for the stm32mp13.  Fast Mode Plus control
-> register address differ from the one for STM32MP15.
+On Fri, Jul 08, 2022 at 03:09:58PM +0300, Andy Shevchenko wrote:
+> Replace open coded device_get_match_data() in acpi_smbus_cmi_add().
 >=20
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-> Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 Applied to for-next, thanks!
 
 
---UmV9tOl/xeljXOjt
+--Sblb2DLXLMvW8rmG
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLSricACgkQFA3kzBSg
-KbY79Q//a303XMkTPCd5Gq21pbNS57rqo0RkC0kqvj6VCM7IhAeJbX6Acuy9+0Hv
-TuBYxWFkBFiF5sMqGmz7ouhYpo0faNHNkN+8Mrg9VHyUjS5B4S2ke3FeRki7pwiq
-X+D2Or++MGSYatoXlM/D2quG9fie4KxZG7B3c6+oNbm6UkPMDiER+KciC+TMssJP
-RDWpDFkoi0pXUHkhb66LwioccIQd1BFChQWDzINz/c6D0oqITN1zgt4tV+42WTYn
-H+xq+qaoRg73Pdnf1MlS9Zdh32Dh5qFKXz+iFK7dBbGmNWKl1a4DSEniusBbWQY2
-3PDxNSM6tIyVcfqNqrjoqkm1knYRx9UInuiX7Xy93nAp9vDM6+zV1l/PXfumYooL
-FX6Rm2duQd5NlBtXW/kq/130o/NEzZn7P6y2iAOaVjCUqxc3okxRotTNXxmbiq87
-oaqs0uz5svq8+EpbhzSfrbWtgqL11dzEkZaeQFqDwKAFI07p55H4JBl4FzTmh3sK
-nQcBln2qKeSNZA6wWaBSeQOBb/6qwi7CnIPMeBnKkPHjBV5O7w2d4ofM6nhypkFM
-SIy0MtJZnOFi7Iio5Rq9YGr9SDanq6U9Cqg0T2/AApKJYTvqK35Xynxk0iPT8sBv
-gRGkEI+I13AEI83RDCU7AkNcSPUmpeqjzLUlw2snZaukyParbMI=
-=BHXX
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLSr1UACgkQFA3kzBSg
+Kbb4WA//XKtPMKHNyUVQAG6T/Bb2TeL1TU0f4R6inGJgy1q4ycJrQqWny2TLvSUJ
+cY/0Mbp3NCJPY9xU1Sa+ef6jXNSnEm4SZXeorrQFJ6PLRpaOQtK7jQBqaL55W6x2
+u9kGeEv43f0Ugx2zu79uYGM6ZZj0OZzuXsv+VesBAlhtymC/e03A8NN0/POXB16B
+ES/tLnvh09EcC4WlB0lampBtwuk4JbMraOTFznetWlfDh2/unTnfHzL4J6sMkdeB
+zfjnhBbKBJfqset1MNLp0tZPSVD8udE+0Pcoek+o0J+4d91+AYGzoaOZtn1CeQuI
+bkc2+jDxga+xaUGqmRjG3tw4KFBGQ3uwwSrrbWKs89Tu64hKa+7j3zOU3f6NJphd
+0v/Jskpsw8751043lx0cEVtsnZU2ZVCIO54zMdI3y7AyA8LAChwH2oGbFsGVE33E
+9w+Z+gA2Ib9hJngY99/pAUiXoYfquSiwRdDRfAaXhiZWHSfzixIeUmKsD+bfcddt
+j8DcH9z92UAds1x+aJlN6W97EFwfDiD3JLvyYLlvtzd+ii+FiFEOY1HATvV+BnKI
+vNLQZBvQ9uySBXcNK5gzPj47Io3Wf4CnRrnZJLGA4Ili3rQkkaTP94WqCR61BgGX
+RHlPH4A66CWOt/dUqrFf3xsP4+VGbRTt0nOnbv6GFsddpZ7wFxA=
+=si1x
 -----END PGP SIGNATURE-----
 
---UmV9tOl/xeljXOjt--
+--Sblb2DLXLMvW8rmG--
