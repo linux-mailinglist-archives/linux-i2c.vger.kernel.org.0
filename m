@@ -2,98 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C10E5773E2
-	for <lists+linux-i2c@lfdr.de>; Sun, 17 Jul 2022 05:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4D75775BD
+	for <lists+linux-i2c@lfdr.de>; Sun, 17 Jul 2022 12:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbiGQDsR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 16 Jul 2022 23:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58948 "EHLO
+        id S229836AbiGQK1t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 17 Jul 2022 06:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232844AbiGQDsL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 16 Jul 2022 23:48:11 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC5217E37
-        for <linux-i2c@vger.kernel.org>; Sat, 16 Jul 2022 20:48:09 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id a14-20020a0568300b8e00b0061c4e3eb52aso6683120otv.3
-        for <linux-i2c@vger.kernel.org>; Sat, 16 Jul 2022 20:48:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9yMrdTNz9TTOLl7s7jHHhG7B/YYZk6CJYXUwzk1dI3M=;
-        b=ojxV7iM7RNRpmnF4Ddf3tRMA1d3afYJgBfK4CQcHVm151J/5qSdRUhgeia5Y37HgpO
-         7C8Ut3XvMa80UdS9jOM/9WM9KRJJCoA+YI3PM0vZMlQYLlci1exQS9pwLtXnaeZFimk3
-         6xd6MDz/nFA84xmZSZdxKqp0diYVF48+bxdLeUgnXowp/Z4w1N6CG9DxlL3Z1MYyXRhp
-         zEtsOYro6cjT06H6vLkzKlTdvzK/Bm1qVXjcbrwGJi4mZVQDh3QO6euzx2TDkJ+zzNtz
-         F8snJuW98CVRqUzXcM67xfDmQmN0yoptX29ZSRDZyENwXsOrWnl2EOsJdtowtXw4HoZP
-         QriQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9yMrdTNz9TTOLl7s7jHHhG7B/YYZk6CJYXUwzk1dI3M=;
-        b=GpBK6XB9ubMpac8juazTBJsxZv5BfdD1lUkk03CYfjdLXQ5+8ilFGz+LMXg1/aZYqr
-         LAcn+CDcM4R2IM1E9lDO/DbfXnAr80zMI22WbCUHzYqtzHOsJ2B2LdloObD6NOHa3MVI
-         kGFTDH8pMZRiGh+75ZOrx7IHTbKAew1ikPwJE48CsWoSwGmVnQe+qlfe3wROD7rxOZnk
-         cbrgoGJzOb1tXMPYeuO0KP9KzhwWNDVD0kDEuZ5m132pgPCLuVjLd9Gkryubtvj9Y2fY
-         XfyoSBYSDzkidZb0jhCuBUQ/qR2Go0oAxGbQdRAQTAN+ECoxMGihM3yOVBpiaosInkcs
-         Z1hw==
-X-Gm-Message-State: AJIora/6LrTnHJxcCYjwp2QJagjRde8h1LZMYX7mhXewTj4zf7ad1Dt/
-        IBEffI22rWnkxAECz+88ZEdE1g==
-X-Google-Smtp-Source: AGRyM1sgyhUmhZEF6CCSDj84K5hnyMkfRoi9L85LXbJYYnWZwIhGZwDNCqTTANv1CNtXtXju7yL0iw==
-X-Received: by 2002:a9d:2602:0:b0:61c:30c1:fa03 with SMTP id a2-20020a9d2602000000b0061c30c1fa03mr8841527otb.86.1658029689329;
-        Sat, 16 Jul 2022 20:48:09 -0700 (PDT)
-Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id e65-20020aca3744000000b0033a169f9282sm3004515oia.52.2022.07.16.20.48.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Jul 2022 20:48:08 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>, Wolfram Sang <wsa@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] i2c: qcom-geni: Silence NACK and GENI_TIMEOUT
-Date:   Sat, 16 Jul 2022 20:50:27 -0700
-Message-Id: <20220717035027.2135106-4-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220717035027.2135106-1-bjorn.andersson@linaro.org>
-References: <20220717035027.2135106-1-bjorn.andersson@linaro.org>
+        with ESMTP id S229731AbiGQK1s (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 17 Jul 2022 06:27:48 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29E013F6C;
+        Sun, 17 Jul 2022 03:27:46 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 7278C1C0003; Sun, 17 Jul 2022 12:27:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1658053665;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3MVHf1qHPbwU04QPrugrK9rKDYYcr5uqSuRuIBZh6RU=;
+        b=E1wd2mR5U0P3hGWzxsehSHmMQgRyWJTSAWmvHc26G/G5mkxAEtvEy4BVpQYub/YXK0hYbL
+        gmW9mhrDbGEHoVivVOofSu0a+HUqTkuMdgM76XcH8SZq2pXnNX8d9RZSiwmbZcTmslAn0D
+        KJbRBbX8TLTBo1MJdd6AFEC9ra/P6L0=
+Date:   Sun, 17 Jul 2022 12:27:44 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Henning Schild <henning.schild@siemens.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
+Message-ID: <20220717102744.GD14285@duo.ucw.cz>
+References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
+ <YqBS8I62YBPFC9iS@google.com>
+ <20220714112656.GB16407@duo.ucw.cz>
+ <YtAHyZ5WHDRbgOZe@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="ZARJHfwaSJQLOEUz"
+Content-Disposition: inline
+In-Reply-To: <YtAHyZ5WHDRbgOZe@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Turn NACK and GENI_TIMEOUT into debug prints to silence the kernel log
-when running things such as i2cdetect to scan the bus.
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- drivers/i2c/busses/i2c-qcom-geni.c | 4 ++++
- 1 file changed, 4 insertions(+)
+--ZARJHfwaSJQLOEUz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index e212e7ae7ad2..6ac179a373ff 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -208,6 +208,10 @@ static void geni_i2c_err(struct geni_i2c_dev *gi2c, int err)
- 	case GENI_ABORT_DONE:
- 		gi2c->abort_done = true;
- 		break;
-+	case NACK:
-+	case GENI_TIMEOUT:
-+		dev_dbg(gi2c->se.dev, "%s\n", gi2c_log[err].msg);
-+		break;
- 	default:
- 		dev_err(gi2c->se.dev, "%s\n", gi2c_log[err].msg);
- 		geni_i2c_err_misc(gi2c);
--- 
-2.35.1
+Hi!
 
+> > > Can we just wait for Pavel's review, then merge them all at once?
+> >=20
+> > 10,12: Acked-by: Pavel Machek <pavel@ucw.cz>
+>=20
+> Thanks Pavel.  I'll get that added.
+
+Thank you, sorry for the delays.
+
+Best regards,
+							Pavel
+
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--ZARJHfwaSJQLOEUz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYtPkIAAKCRAw5/Bqldv6
+8shAAJ9XaR038+0wsZQKvKNF4Tgr3zzktwCcCU+9rZjRQhe2EMoVQr1ueJ71gO0=
+=4aTK
+-----END PGP SIGNATURE-----
+
+--ZARJHfwaSJQLOEUz--
