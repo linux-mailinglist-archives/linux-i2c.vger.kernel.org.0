@@ -2,99 +2,120 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D64E157919F
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Jul 2022 06:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3CA5795AD
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Jul 2022 10:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235670AbiGSEHC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Jul 2022 00:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
+        id S236614AbiGSI5H (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 Jul 2022 04:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235123AbiGSEHC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Jul 2022 00:07:02 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8594C2F028;
-        Mon, 18 Jul 2022 21:07:01 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id x21so10853322plb.3;
-        Mon, 18 Jul 2022 21:07:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=b5C7S83LBN0Mb/XqzIaN+HXOmTIU+sTTk/HlHbA/cf8=;
-        b=e+nvavFelvtf9mw5zW/PUJdv/ajQZY2dDNTRnTvLW3hbAjW0CFWY3ic2J9NlePDzwl
-         0yKHSraowgnyzCiA86ZeQCxZA9aGvboqXA5O8IKlbrVtqYdRk9aRD1KYwg2ohmcLKSfi
-         jUm5Ulhi+tIUwiKl0HggOKvHXc71qNleK6HaNIGY6FuWJzCLWDh2s7xma4c8r7FY4sP4
-         zYJ+uX1OtGPpwIzBuqFn7MzbbHmzjxLfm6cAwi1hWCg9wWVl8NDIM5xi/xi1O5QabsHO
-         RNub80uRU20xPSeSqLuwxW3tg77+wEKPGRq71y3Cey/wWGky2kF0d7fvgA5uth/2+YSF
-         oDUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=b5C7S83LBN0Mb/XqzIaN+HXOmTIU+sTTk/HlHbA/cf8=;
-        b=kOlXP3ER1Fqfml6AqoJ4QojeEq6sb1NYb0FosPJCZY4wS+vffSkijvf0q5MZ6cwQ9+
-         nkq8pozynp/VI58k0RsnwbeWTXI8QC7NTD26pikLRjyPhRbt652Cx0saOyzt5QMVxzcN
-         g7mg14n0RiZKRs0j8A94TzdvUi5dBEm9tgtrgg/wwCME47ALqfmI04Q417bjtQDVOnjX
-         JIlIgRnmhzhwsNPePRNAAxKSwldLSBVqB9z0qEJmVe1i8cfI1iQlZBA42JMk3msEutO9
-         S3cd7W0x4CAutyazQE4XhYZXCHaPfydpJpY+4gblJPAsTH7VC/1rA200jzadH+W3KAeY
-         Ar9w==
-X-Gm-Message-State: AJIora8SvP9f/3czIWIHMSMZiWbUuEwwi93KTMwQ507CeZEjajAMw1XT
-        UE4zEYabafBh4WuA2VcH6WA=
-X-Google-Smtp-Source: AGRyM1vopXYjYWjtSk9JWUOj7czx5xa8slpPVSkutgIztzs29VFNW8c3XWSFAgJyawy46h+34AS6Jg==
-X-Received: by 2002:a17:90b:4d01:b0:1ef:d39b:b140 with SMTP id mw1-20020a17090b4d0100b001efd39bb140mr36005500pjb.82.1658203621019;
-        Mon, 18 Jul 2022 21:07:01 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id j24-20020a63cf18000000b0041975999455sm8995706pgg.75.2022.07.18.21.07.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 21:07:00 -0700 (PDT)
-Message-ID: <f77038b5-93f5-1a06-c433-2086df8c3f3d@gmail.com>
-Date:   Mon, 18 Jul 2022 21:06:59 -0700
+        with ESMTP id S230263AbiGSI5H (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Jul 2022 04:57:07 -0400
+Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654F41F603
+        for <linux-i2c@vger.kernel.org>; Tue, 19 Jul 2022 01:57:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
+         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=Cu01Vg/dPrN6s3KAyngzKf1u6/mHgU32NkWcBVxKytY=; b=Vl5TMQvTpbNkGVi63pwZIIau0f
+        iS7Pe9RQ1Vc0jdJvUTXsBluMmwHOyiE3H/5PGgAol6+bOJx29pQHq0f3CLUoM7r9TUyb+OOiDYI1E
+        Y3yZ5CEibEJ+B5u8p4JZRnxmkySladcuwadqSHXTGKTpGZS9drKwCkEGB7wF0Kn4Pp+505PcHmCYn
+        byx+cxyfOksaK7Lxg6tYcLrVReJmBmMZkIai9DRiR+DfbuP5a3frEw0QuVeS9H+jfiE1B1a12oDcr
+        2Oz6tb2cdACPU2yWi7+sL8i67I98lzNlRUtP5dCz0+ksubB3b03GnJQtFb0K7Qst9ypgkzn5SsG1n
+        ktI3SVvA==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www381.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <lars@metafoo.de>)
+        id 1oDj2O-000Av1-D8; Tue, 19 Jul 2022 10:57:04 +0200
+Received: from [2001:a61:2a04:b01:9e5c:8eff:fe01:8578]
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lars@metafoo.de>)
+        id 1oDj2O-00012g-8I; Tue, 19 Jul 2022 10:57:04 +0200
+Message-ID: <e5a63b48-5a09-cbe8-b173-a9c7b7abedc7@metafoo.de>
+Date:   Tue, 19 Jul 2022 10:57:03 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH] i2c: brcmstb: Fixed adapter named with optional
- interrupts
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] i2c: cadence: Support PEC for SMBus block read
 Content-Language: en-US
-To:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:BROADCOM BRCMSTB I2C DRIVER" <linux-i2c@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220706172115.224240-1-f.fainelli@gmail.com>
- <YtKxpz7kiER8ydcj@shikoro> <03065912-a9f0-6380-6f19-9db2f43be589@gmail.com>
- <YtYrnlmpfRxcWMga@shikoro>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <YtYrnlmpfRxcWMga@shikoro>
+To:     Michal Simek <michal.simek@amd.com>, Wolfram Sang <wsa@kernel.org>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+Cc:     linux-i2c@vger.kernel.org, git <git@xilinx.com>
+References: <20220717145244.652278-1-lars@metafoo.de>
+ <768b56a8-df1c-e24d-7879-328512598549@amd.com>
+From:   Lars-Peter Clausen <lars@metafoo.de>
+In-Reply-To: <768b56a8-df1c-e24d-7879-328512598549@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: lars@metafoo.de
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26606/Tue Jul 19 09:57:30 2022)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 7/18/22 11:25, Michal Simek wrote:
+>
+>
+> On 7/17/22 16:52, Lars-Peter Clausen wrote:
+>> SMBus packet error checking (PEC) is implemented by appending one
+>> additional byte of checksum data at the end of the message. This 
+>> provides
+>> additional protection and allows to detect data corruption on the I2C 
+>> bus.
+>>
+>> SMBus block reads support variable length reads. The first byte in 
+>> the read
+>> message is the number of available data bytes.
+>>
+>> The combination of PEC and block read is currently not supported by the
+>> Cadence I2C driver.
+>>   * When PEC is enabled the maximum transfer length for block reads
+>>     increases from 33 to 34 bytes.
+>>   * The I2C core smbus emulation layer relies on the driver updating the
+>>     `i2c_msg` `len` field with the number of received bytes. The updated
+>>     length is used when checking the PEC.
+>>
+>> Add support to the Cadence I2C driver for handling SMBus block reads 
+>> with
+>> PEC. To determine the maximum transfer length uses the initial `len` 
+>> value
+>> of the `i2c_msg`. When PEC is enabled this will be 2, when it is 
+>> disabled
+>> it will be 1.
+>>
+>> Once a read transfer is done also increment the `len` field by the 
+>> amount
+>> of received data bytes.
+>>
+>> This change has been tested with a UCM90320 PMBus power monitor, which
+>> requires block reads to access certain data fields, but also has PEC
+>> enabled by default.
+>>
+>> Fixes: df8eb5691c48 ("i2c: Add driver for Cadence I2C controller")
+>
+> Subject is saying that you adding support for PEC and here you are 
+> saying that it is fixing initial commit.
+>
+> If this is adding new support I think Fixes tag shouldn't be here.
+>
+> If it is fixing issue subject should be updated and this Fixes tag 
+> kept here.
 
+I added it because I was afraid Wolfram would ask where is the fixes tag.
 
-On 7/18/2022 8:57 PM, Wolfram Sang wrote:
-> 
->> I was not sure if we could change the adapter name reported as one could
->> argue this is now ABI, but if we can, then using dev_name() is probably
->> better. You are the maintainer you so know the rules on what is considered
->> stable ABI and what is not :)
-> 
-> Well, then even removing ":" would break the ABI :)
-> 
-> Please use dev_name. Other drivers changed that string, too. We never
-> gave guarantees for that one.
-> 
+This change arguably somewhere between new feature and fix. The driver 
+reports that it supports SMBus block read, but it does not work under 
+the case that PEC is enabled. You can argue that it is a new feature 
+because it never worked, but you can also argue it is a fix because the 
+current implementation is broken. I'm fine either way with or without 
+Fixes tag. I'll let Wolfram make the decision what he prefers.
 
-Fair enough, sent a v2 using dev_name(), thanks!
--- 
-Florian
