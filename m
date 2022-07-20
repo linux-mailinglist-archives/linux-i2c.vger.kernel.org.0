@@ -2,95 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 266C057B71C
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Jul 2022 15:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E16A057B932
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Jul 2022 17:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234317AbiGTNNG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 20 Jul 2022 09:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
+        id S229532AbiGTPJt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 20 Jul 2022 11:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239822AbiGTNND (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 20 Jul 2022 09:13:03 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C762C5B7AD
-        for <linux-i2c@vger.kernel.org>; Wed, 20 Jul 2022 06:13:00 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id b21-20020a05600c4e1500b003a32bc8612fso742525wmq.3
-        for <linux-i2c@vger.kernel.org>; Wed, 20 Jul 2022 06:13:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9LgN/S0aDXYI9VGCuWlvvgvQnGpuTnnqHsiuzMd2wxQ=;
-        b=hZDBwVWDP5UPXoM/26p/r+j251hc2vAqDOCERxSqp1n7sS06JhTWTNUFrAn/iDVTDd
-         sk1s9gAeT8g6iMlidLoC2ByWsp6jDzKjyGiwTrHFM+kSqmhnpOGy27aGmIOCRSPQXtjU
-         iuHcWvpuEBu/GQL3HjFfyH38HWdcfRwpw/QCs8xRs37MzT7Ik+pcHBHS4PQz7Y7kmEGs
-         2zEZT/L22GV5s5xGf/GZOt2FikEOhhfo8etSuo2R+s9KR06g6oLOKoKJ9cp2Devph4aN
-         HYnuH9yadQ7mkeUaGKIxYyw+FFFXzGLODhmRa8DXLmg2/yBLqQ88/ndcWxmAnabBH3H2
-         gPtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9LgN/S0aDXYI9VGCuWlvvgvQnGpuTnnqHsiuzMd2wxQ=;
-        b=fVzwh61SYvjD1/FcOqEnp69cSWVaWs6DO4WtlBDwQvUgFVhBnhEwazwwBiNbgtkla6
-         Djm3d0ZMWbSG/Zy+tscOiOGmCpB7Lwkc+iz7bWTC9LiVahEzEDe9uDGnzes3NUxPx1m1
-         fadyoG8cDQ99vwt2qq2zkknJdH2qGQh9IhuStB1EWA2rAP163JraLSZqFmb7hagDK3dW
-         8M7a5go93Kz/NzaJKVeOsOEwE8h2CfaRAq2tYNQXs3IM50wCs1nIMRjkgVTVvMtvmPbe
-         9ujNEh3T29gu/STPomilErHDbk4Jhk/0q9nftKwJg0rWXUZ/Sn4RRZMDnRIqqQz/Ee/t
-         MARQ==
-X-Gm-Message-State: AJIora9OjQIYZzoRyVGb/koXUoy1PIKp9Ivirxexm22stZdHzi83awrs
-        eDmi0zxKsFITSP2RA/is+qFqoA==
-X-Google-Smtp-Source: AGRyM1tHJE+D+NzsNowU+goDfK+LE01p5AmV4nGBMM9nPZVjT15IP9nJaaafPk1bF4qVs2pE8TNv1A==
-X-Received: by 2002:a05:600c:3b91:b0:3a3:1cbe:d531 with SMTP id n17-20020a05600c3b9100b003a31cbed531mr3812400wms.159.1658322779330;
-        Wed, 20 Jul 2022 06:12:59 -0700 (PDT)
-Received: from amjad-ThinkPad-T490.home (2a01cb040613180084408ac44a1fa242.ipv6.abo.wanadoo.fr. [2a01:cb04:613:1800:8440:8ac4:4a1f:a242])
-        by smtp.googlemail.com with ESMTPSA id y11-20020adfc7cb000000b0021d6924b777sm16853316wrg.115.2022.07.20.06.12.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 06:12:58 -0700 (PDT)
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-To:     fparent@baylibre.com
-Cc:     broonie@kernel.org, chaotian.jing@mediatek.com,
-        chunfeng.yun@mediatek.com, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, jic23@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux@roeck-us.net,
-        matthias.bgg@gmail.com, qii.wang@mediatek.com, robh+dt@kernel.org,
-        srinivas.kandagatla@linaro.org, ulf.hansson@linaro.org,
-        vkoul@kernel.org, wim@linux-watchdog.org
-Subject: Re: [PATCH 16/17] arm64: dts: mediatek: add mt8365 device-tree
-Date:   Wed, 20 Jul 2022 15:12:57 +0200
-Message-Id: <20220720131257.530168-1-aouledameur@baylibre.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220531135026.238475-17-fparent@baylibre.com>
-References: <20220531135026.238475-17-fparent@baylibre.com>
+        with ESMTP id S229686AbiGTPJt (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 20 Jul 2022 11:09:49 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7379D54670
+        for <linux-i2c@vger.kernel.org>; Wed, 20 Jul 2022 08:09:48 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oEBKY-00009P-Oy; Wed, 20 Jul 2022 17:09:42 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oEBKV-0028SP-2z; Wed, 20 Jul 2022 17:09:39 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oEBKU-006P3n-EA; Wed, 20 Jul 2022 17:09:38 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Oleksij Rempel <linux@rempel-privat.de>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] i2c: imx: Make sure to unregister adapter on remove()
+Date:   Wed, 20 Jul 2022 17:09:33 +0200
+Message-Id: <20220720150933.239956-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2197; h=from:subject; bh=D53yrOkFjbAEZBhDnqY5wtX50VwFqGjNL3/Eewx49sM=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBi2BqqmZ3HFnOV4ZmJydnCSnIkxijbk3/pXYs133nj LxF2M42JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYtgaqgAKCRDB/BR4rcrsCfecB/ 9PHR7xCiLJujsWtBtPp5ekbEE0iVQm4W44NffjfRN9ynoYnP9aT3sUPSuJcJonp4Ndu5XAJDWYjszv hlFyLSy9nwXpVZPMLU6U0DyKvXvml+tAoQQokzHipyhqLDLACxEWvmhh6gaWp8GiZlAFtR4p5Y6Y09 8KnlRowS4ZXQXZJ3QLPdtVJBJlEM/nUPsj+JrzKfjz/xgnZMuk8Fw4yh7b3MQ8DNgBdzQ8TFzG6YsD 6ZRbdC7+sQrkKRT2spqguY52NBeddTVMxwH/ckD6FdpZ8HecJn0WUiY+Zh9npeWTJFy8lyc190KErO cSUHcadGxISmlpY51zZpiFqtzOcAKD
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Fabien,
+If for whatever reasons pm_runtime_resume_and_get() fails and .remove() is
+exited early, the i2c adapter stays around and the irq still calls its
+handler, while the driver data and the register mapping go away. So if
+later the i2c adapter is accessed or the irq triggers this results in
+havoc accessing freed memory and unmapped registers.
 
-> +		tzts4: tzts4-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&thermal 4>;
-> +			trips {};
-> +			cooling-maps {};
-> +		};
+So unregister the software resources even if resume failed, and only skip
+the hardware access in that case.
 
-AFAIK mt8365 has only 3 thermal sensors, therefore tzts4 should not be
-added.
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/i2c/busses/i2c-imx.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
-Regards,
-Amjad
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index e9e2db68b9fb..7395560c13d0 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -1572,9 +1572,7 @@ static int i2c_imx_remove(struct platform_device *pdev)
+ 	struct imx_i2c_struct *i2c_imx = platform_get_drvdata(pdev);
+ 	int irq, ret;
+ 
+-	ret = pm_runtime_resume_and_get(&pdev->dev);
+-	if (ret < 0)
+-		return ret;
++	ret = pm_runtime_get_sync(&pdev->dev);
+ 
+ 	hrtimer_cancel(&i2c_imx->slave_timer);
+ 
+@@ -1585,17 +1583,21 @@ static int i2c_imx_remove(struct platform_device *pdev)
+ 	if (i2c_imx->dma)
+ 		i2c_imx_dma_free(i2c_imx);
+ 
+-	/* setup chip registers to defaults */
+-	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IADR);
+-	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IFDR);
+-	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2CR);
+-	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2SR);
++	if (ret == 0) {
++		/* setup chip registers to defaults */
++		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IADR);
++		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IFDR);
++		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2CR);
++		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2SR);
++		clk_disable(i2c_imx->clk);
++	}
+ 
+ 	clk_notifier_unregister(i2c_imx->clk, &i2c_imx->clk_change_nb);
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq >= 0)
+ 		free_irq(irq, i2c_imx);
+-	clk_disable_unprepare(i2c_imx->clk);
++
++	clk_unprepare(i2c_imx->clk);
+ 
+ 	pm_runtime_put_noidle(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+
+base-commit: 6014cfa5bf32cf8c5c58b3cfd5ee0e1542c8a825
+-- 
+2.36.1
+
