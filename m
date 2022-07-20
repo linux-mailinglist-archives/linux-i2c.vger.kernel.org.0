@@ -2,65 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F42B57BE2F
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Jul 2022 21:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F22B57BE54
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Jul 2022 21:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbiGTTBf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 20 Jul 2022 15:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
+        id S230442AbiGTTV0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 20 Jul 2022 15:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbiGTTBe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 20 Jul 2022 15:01:34 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6104D52459;
-        Wed, 20 Jul 2022 12:01:32 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 75so33717115ybf.4;
-        Wed, 20 Jul 2022 12:01:32 -0700 (PDT)
+        with ESMTP id S229551AbiGTTVZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 20 Jul 2022 15:21:25 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5293313D1F;
+        Wed, 20 Jul 2022 12:21:23 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id e15so22259289wro.5;
+        Wed, 20 Jul 2022 12:21:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=58fU8wz/MRnYVvG9hVkJSefKiSbVO5jpOlOekUHdxyg=;
-        b=h7nZiQLWtuuGLQegQZonr3M3nE9fcED2laPjzMO5ZELylj09nTCLfzfRjGYHCOt7dx
-         qbn2/HRiFKBqFhcoTNaM0C1B6wpD13nMZuP0sFbi5cVYDnHI0igdex6RCFQVCa7hj0B8
-         02M4oGZuTCcdXUM2UbXHSmUvRjoByDJCUxUUNEVncCQDNEZCMIOul7fCctFS1LOhUGqf
-         ShGgbAgEll+kQCf5R4Dpqlma0/aJsmheI8bWXiqJvQsjcmiM8wFdmxxq9dQe6na8Ahyc
-         un2XyyIksiw+B/VU8MtYatjEoN8ksuRUpRkx1QFzJPHV972Sipa+urv96R6qOYN+rR+T
-         6uxg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Pba4QV+WDlzTnMlWTveIRFdhe+8O4jwO+FIoxf/iMRQ=;
+        b=K6/DVHdPticHrv3jCWtIj2BapqRP3uF8GYSfm12e7xSUMzoKgsMV51zpC4DV3Riuow
+         0HYpqe2W/mDGhA5TC7T1PWsUL6AGMQN5kNDHFqVA3eDpL6ouczora+b5TcA//cbZmurE
+         mJeeKmmISoWCXHtrYYk6Z5pux8oU5NvYtZ9iD5gDSZ4xGggmpGwk5HU8fpney8J3h88L
+         DHU68uIz5TDNmCtlfhxcDYEunZhoIocRdQS9ATaOlW9zn94sX/OqsFARuYjJEWAimSos
+         3IpCv96AFt21OIdNmnyL+yUfryx4QKUye1UV1vhmzuhSQv3QJ6qj5TJIQUHiHj+s5qgc
+         18+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=58fU8wz/MRnYVvG9hVkJSefKiSbVO5jpOlOekUHdxyg=;
-        b=OIkOUC6LPjoCJMcd4DpD6co9hC6JJIpfn35reS8dgoIFX4XLH1hQg+js6WIvddbrCc
-         2FAMfzRPU+QMLAQ4KpTfimMKmzeE6WuavToggIvzWFseYWbERXdQkga/zw0ncmGao0WF
-         KOt4m0rws8TYxo0g4OTMP9OgKoq/1p0AWeV34kFsroy8dLHNBwmlriRfU1/lpdlGA0aJ
-         FuS0sbnqOueuOMIcw428SDdaWyoZwMAXs8n4ARPBkZdTsbCo2Aju9h2IvH+fK3t/lUmF
-         UBS1P72BabtHGD4+iLDXo39NQdlrTKchDrt0oZiXMla6XNdJM0XCNbpbrN73lsArZB0X
-         BZxw==
-X-Gm-Message-State: AJIora+8At1LmOXN9YP/8hhUOYBf4qdqMAwbmE3t4CXYJBQM/nURpl1j
-        FlhsHYR+TEt+/p+nr5dS8Z+q7UOAGw7S7P3fzF8=
-X-Google-Smtp-Source: AGRyM1uVeEJi1uHSegCvL2QEAIGtzs0Hkr4/MDo5cVfn1Gk7cXF30CvO11Cp6R8nVAll9uv7Of/9yA1x+AmmeaeMnag=
-X-Received: by 2002:a05:6902:38a:b0:670:aa12:8908 with SMTP id
- f10-20020a056902038a00b00670aa128908mr2463061ybs.446.1658343691973; Wed, 20
- Jul 2022 12:01:31 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Pba4QV+WDlzTnMlWTveIRFdhe+8O4jwO+FIoxf/iMRQ=;
+        b=A/95ImZNPVV/uSAg8dXf0TR+LWY6/YJhW1qrbqhMR/A/3ZgRXTz3pMK1DuEkVjEvey
+         f8lHGPjMA/5BcKTyBkb9p/FgL8CtLqpBMgTTUB7TPspNSc6ExpGFnPX+ESfXfNT2pe5h
+         cm0BzY1Pn9Q/hTgBzNvD1h4YISjJYOyZIGMLar7ZqoYGGcv8pNHhc0G4FpNibw4d/ZAK
+         Lce4Q6tIXFgK+Uc37IEM0l6sy6ldpsNs4goXSIaTnxtYIEvt5LPVDuv1OsI7APEFGeHe
+         +jtZEu/XjhaQE97RiOEjeNQy1C7uFVRUsgEmLQM9IJ6FDOaK3WsuZQXKuxaqsMVK4EIk
+         ux5Q==
+X-Gm-Message-State: AJIora/kP0fYbulg3U6kSxLFEqCj93v8WjU7Db5TrUcMuu0ZAJYI8siK
+        T/kR+XrWNzkfzxj5oleKdAYXApDc7QCp7Fqm
+X-Google-Smtp-Source: AGRyM1uLOgnKXZMHCumB7qyLZW7GisJxZ81IMG3yvrEQ8OJV0MtLnu23rAmH5wRc3knjXga+LevNxg==
+X-Received: by 2002:a05:6000:1f0b:b0:21d:6dae:7d04 with SMTP id bv11-20020a0560001f0b00b0021d6dae7d04mr31987220wrb.414.1658344881418;
+        Wed, 20 Jul 2022 12:21:21 -0700 (PDT)
+Received: from X1C7EK5 (joshua.media.unisi.it. [192.167.124.137])
+        by smtp.gmail.com with ESMTPSA id ay1-20020a05600c1e0100b003a03ae64f57sm3530678wmb.8.2022.07.20.12.21.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 12:21:20 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 21:21:18 +0200
+From:   Ettore Chimenti <ek5.chimenti@gmail.com>
+To:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Hector Martin <marcan@marcan.st>, Jean Delvare <jdelvare@suse.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Marco Sogli <marco.sogli@seco.com>
+Subject: Re: [PATCH v3] i2c: i801: Safely share SMBus with BIOS/ACPI
+Message-ID: <20220720192118.x6ayiar7zmavhauu@X1C7EK5>
+References: <20210626054113.246309-1-marcan@marcan.st>
 MIME-Version: 1.0
-References: <202207190634.ToyhlXSz-lkp@intel.com> <0551a3ad-8c42-78fe-5b50-ebbc003e55e6@intel.com>
-In-Reply-To: <0551a3ad-8c42-78fe-5b50-ebbc003e55e6@intel.com>
-From:   Jason Gerecke <killertofu@gmail.com>
-Date:   Wed, 20 Jul 2022 12:01:35 -0700
-Message-ID: <CANRwn3R48rvwnygdyKhmFE8wD+BCCHrTWa-M=uTvpnK5Jo3vww@mail.gmail.com>
-Subject: Re: [PATCH] i2c: Use u8 type in i2c transfer calls
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, Ping Cheng <pinglinux@gmail.com>,
-        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-iio@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210626054113.246309-1-marcan@marcan.st>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -71,74 +72,14 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 5:21 PM kernel test robot <rong.a.chen@intel.com> w=
-rote:
->
->
-> Hi Jason,
->
-> I love your patch! Yet something to improve:
->
-> [auto build test ERROR on wsa/i2c/for-next]
-> [also build test ERROR on linus/master v5.19-rc7 next-20220718]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:
-> https://github.com/intel-lab-lkp/linux/commits/Jason-Gerecke/i2c-Use-u8-t=
-ype-in-i2c-transfer-calls/20220718-233658
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git
-> i2c/for-next
-> config: hexagon-randconfig-r026-20220718
-> (https://download.01.org/0day-ci/archive/20220719/202207190634.ToyhlXSz-l=
-kp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project
-> d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
-> reproduce (this is a W=3D1 build):
->          wget
-> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
-> -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          #
-> https://github.com/intel-lab-lkp/linux/commit/9732240c23a365c0590f05ce831=
-96869235a2ea7
->          git remote add linux-review https://github.com/intel-lab-lkp/lin=
-ux
->          git fetch --no-tags linux-review
-> Jason-Gerecke/i2c-Use-u8-type-in-i2c-transfer-calls/20220718-233658
->          git checkout 9732240c23a365c0590f05ce83196869235a2ea7
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1
-> O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/iio/adc/
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
-> >> drivers/iio/adc/max1363.c:1645:12: error: incompatible function pointe=
-r types assigning to 'int (*)(const struct i2c_client *, const char *, int)=
-' from 'int (const struct i2c_client *, const u8 *, int)' (aka 'int (const =
-struct i2c_client *, const unsigned char *, int)') [-Werror,-Wincompatible-=
-function-pointer-types]
->                     st->send =3D i2c_master_send;
->                              ^ ~~~~~~~~~~~~~~~
-> >> drivers/iio/adc/max1363.c:1646:12: error: incompatible function pointe=
-r types assigning to 'int (*)(const struct i2c_client *, char *, int)' from=
- 'int (const struct i2c_client *, u8 *, int)' (aka 'int (const struct i2c_c=
-lient *, unsigned char *, int)') [-Werror,-Wincompatible-function-pointer-t=
-ypes]
->                     st->recv =3D i2c_master_recv;
->                              ^ ~~~~~~~~~~~~~~~
->     2 errors generated.
+Tested on a SECO SBC-B68 and a UDOO X86.
+The BIOS AML code queries the Embedded Controller over SMBus, 
+respecting the hardware semaphore implementation.
 
-Wolfram and Jonathan,
+I get this line on kernel log and everything works as expected.
+[    7.270172] i801_smbus 0000:00:1f.3: SMBus controller is shared with ACPI AML. This seems safe so far.
 
-Writing a patch to fix the new warnings generated by my I2C patch is
-simple enough, but I'd like some help coordinating getting both
-patches landed. Should I wait for the I2C patch to land in "for-next"
-before sending the IIO fix, or would it be preferred to send the IIO
-fix right now so that both patches can be reviewed simultaneously?
+Tested with continous use of i2c-tools (i2cdump) with temperature reads
+in thermal_zone (that triggers AML code).
+
+Tested-by: Ettore Chimenti <ek5.chimenti@gmail.com>
