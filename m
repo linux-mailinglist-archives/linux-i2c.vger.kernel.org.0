@@ -2,154 +2,130 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8FD57D8E8
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Jul 2022 05:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C7657E33A
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Jul 2022 16:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234151AbiGVDPx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 21 Jul 2022 23:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
+        id S229654AbiGVOsi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 Jul 2022 10:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbiGVDPr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Jul 2022 23:15:47 -0400
-X-Greylist: delayed 436 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Jul 2022 20:15:45 PDT
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0982AE0A;
-        Thu, 21 Jul 2022 20:15:44 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 412B2580E19;
-        Thu, 21 Jul 2022 23:08:28 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 21 Jul 2022 23:08:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pjd.dev; h=cc:cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1658459308; x=1658462908; bh=uG2Rb1C0Ih
-        Z7yNKCi2bEM3jWfHG2vQqfIOk05YbeD9M=; b=ogDLl2oDCCPHk3XNtlhynR8Zjk
-        TDPmvhYleBdslcmUW/nckL9llYKjnYFGMPaWypTc5FNV6yurPxvTAEvqdC//bmtL
-        z39ubYj+NoYOqP5Li6Xz8CTOP852Rf/8vVpMgHJEskQMpKxDb54vA4KeiqRoZXE4
-        HI0ShzQYBdYlhxEzWdq3lsOToCBL0SI0OTnJCdhLm7uwaJzZWAmM8ltySw6eQH+5
-        1CVy+YK29/M+u2plbMR8irXREM6sNgjYcZyQQsGl8uvoP0qtAyOHg0jZAmb3U4QW
-        Kf4rbd5b+CAQ+ksp1pDEatCFLC51H7wibEdJLDkvz0povmJYV2rXV6FiEFqQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1658459308; x=1658462908; bh=uG2Rb1C0IhZ7yNKCi2bEM3jWfHG2
-        vQqfIOk05YbeD9M=; b=MolbHctsNv9+0mlUjQfoD9ynCHqeDnP1/IY1PIt31Rb4
-        VNqFSWAqbmldv57MoU2na54NhgE0Ci4GsUUBGxZBZN602VYdcJCKKYDNOyZgDZP+
-        ZSQ2D7IRtw6/JaBZxMd1nLV0eUdW6wMminPPBvAeC210pIKQFuWCi1Rv5qTMsjt7
-        DSrnaNkrHlsWpDWfxKr5ZF3T5gqVihuJ9xJMInQyjgzVDngdwRbGYCAD6WPXJm4U
-        2UyvTWVzTVX/YAqXPCtRtE9G1ENOwYnnk0WW8mdK11/iMHVDe/b84VE3io/l7oU+
-        t1TkIAdqSTJXxDEGRNkwvzjECfLr1p/xSrOtUh48AQ==
-X-ME-Sender: <xms:qxTaYuT3ELuogtUlMWehkn7wiokqvJR0eq8qIan_AB77XF-QufXeZA>
-    <xme:qxTaYjyAFms7oc4WejYcPugxA2a5aaom-4ihM7xLDoZIz6Vk8ZSJdoCrRtHoomcSA
-    jr0t5l6RyC38AAmDxk>
-X-ME-Received: <xmr:qxTaYr3ZegZfhPf4nQXK_A3KSYGMPAGKhW10MMQvTLsMmx2UqbdS1xxYJg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddtuddgjedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
-    ertddttddvnecuhfhrohhmpefrvghtvghrucffvghlvghvohhrhigrshcuoehpvghtvghr
-    sehpjhgurdguvghvqeenucggtffrrghtthgvrhhnpeduteeihfffleeuveekgedugfeffe
-    ehtdeguefffffhleehgfduueejjeekfeeukeenucevlhhushhtvghrufhiiigvpedtnecu
-    rfgrrhgrmhepmhgrihhlfhhrohhmpehpvghtvghrsehpjhgurdguvghv
-X-ME-Proxy: <xmx:qxTaYqDvDQcx5MFaWwBennRuNTDQC3CzvRDK2OAj_wD_inTErMdRRQ>
-    <xmx:qxTaYniL_GlzhC6WZ9lz_bobQ5iVDstqi1EivBClVJbJmd7LCeJOkg>
-    <xmx:qxTaYmrOWymW8h5IpOXYCiVeNW4NermOusi1M-KSAxMpxxj8LR7yRw>
-    <xmx:rBTaYoWrN1zmWnQBKL2krLcIkgqjlktgel9L6_pN9WDjHEDXhnkZQ_AH_G4>
-Feedback-ID: i9e814621:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 21 Jul 2022 23:08:26 -0400 (EDT)
-Date:   Thu, 21 Jul 2022 20:08:24 -0700
-From:   Peter Delevoryas <peter@pjd.dev>
-To:     ryan_chen <ryan_chen@aspeedtech.com>
-Cc:     brendanhiggins@google.com, benh@kernel.crashing.org,
-        joel@jms.id.au, andrew@aj.id.au, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: aspeed: Fix slave mode unexpected irq handler
-Message-ID: <YtoUqH6uSNEKBbt5@pdel-mbp>
-References: <20220531093140.28770-1-ryan_chen@aspeedtech.com>
+        with ESMTP id S229519AbiGVOsh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Jul 2022 10:48:37 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD89E3CBE7
+        for <linux-i2c@vger.kernel.org>; Fri, 22 Jul 2022 07:48:32 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 75so8395802ybf.4
+        for <linux-i2c@vger.kernel.org>; Fri, 22 Jul 2022 07:48:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=dN4DaXINwUuu8qgKP9HnTLibNL5Ov83yt7X47s4+YRc=;
+        b=CpMAeqX4sD+w5j2s3phaapf38AXWiSjUok4+aHsLsaIVT7OyE20WctckBUacOv8xSk
+         q/1zF6ep/8cHkqN2He+PhliV9dIqKynZ879pTuFlNuwaoxJmvdpreCY5RXic4Y2q/Vs6
+         OdPP7UXn6WQYpLUvYG5xMQIQUjQZFj16mgQNr+OfQR0Z9Dqke6VrM83r4xpQweW002/t
+         sBBsjPSSrGviMadmZ2iR6gDMa7kNcjeKCHjFtpJTmrJSnR9++j6aS4pqDwiPjcPDUL6u
+         CFb0+ojOwJSqtb6Fwh6bsLfnQYvbnErD71bxP9o5kh1gRXU6LIBWiyTmiBIHk/tHttod
+         du3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=dN4DaXINwUuu8qgKP9HnTLibNL5Ov83yt7X47s4+YRc=;
+        b=fBfAmx8jnIwoIxdOsungR18zsiKVJaf39AVRV4zz1TGmDY/CyV68E+8PYyvZo5d7SR
+         /FKlr7n0+nmHLDL2edUS/bKIdGFcqs2oh5+Ae2TGE64h64hhx9+qabEUZFQ0N7bzNfyd
+         yD3xsaKJxB/m2RqfHcIYbIJtLJ055Mz0WzydH9HuztbzTnIZ13xhMhHD2ongmLubUCqU
+         65+hmDeyLKpSZZUEyybVTBX82gZRzIzHaZByv6ZmQNtOR0JVOQ/Mnmbjix1mbAZa3Kzz
+         +cJ50SVDE+LE2DOoQY7WHMQo2Kbj/cDPh9TuDSQIa6vxM/d1oaBgyqLo5Z29ruVKuTe1
+         FOzQ==
+X-Gm-Message-State: AJIora+qR17zSl/c3DCNWCvteF7IjnDDbafyzBlDak+qofy9l535E1xN
+        gm9hNpFHA5AOWk13dZDuf1gnpc2dQXqdrLwGsoo=
+X-Google-Smtp-Source: AGRyM1tLyTTzuKlv0TnpZz010oay0C8/41dsI+rrSHZFpHhYj3TqAVTt3CHlitAksLgLZ7VCpEKPjU7ldu2Yp+w2msU=
+X-Received: by 2002:a25:d614:0:b0:670:9ea2:e6c1 with SMTP id
+ n20-20020a25d614000000b006709ea2e6c1mr297861ybg.379.1658501311681; Fri, 22
+ Jul 2022 07:48:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531093140.28770-1-ryan_chen@aspeedtech.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Sender: klin.mlin122@gmail.com
+Received: by 2002:a05:7000:ba9f:0:0:0:0 with HTTP; Fri, 22 Jul 2022 07:48:31
+ -0700 (PDT)
+From:   Sophia Erick <sdltdkggl3455@gmail.com>
+Date:   Fri, 22 Jul 2022 16:48:31 +0200
+X-Google-Sender-Auth: ZGe8jcs6EEgLS5HKaTLu4aimx_g
+Message-ID: <CAMwUt-p_zinFVjOSyF2brGUa=kwYXz+zOUJGLP5FfQohv3+9_A@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.9 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,
+        HK_RANDOM_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_MONEY_PERCENT,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b2a listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5004]
+        *  1.0 HK_RANDOM_FROM From username looks random
+        *  0.5 FROM_LOCAL_NOVOWEL From: localpart has series of non-vowel
+        *      letters
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [sdltdkggl3455[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [klin.mlin122[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, May 31, 2022 at 05:31:40PM +0800, ryan_chen wrote:
-> When i2c master send the new i2c transfer immediately
-> after stop. the i2c slave will see the stop and new
-> address match stage together. And it needs handle the
-> stop first. otherwise will occur unexpected handle
-> isr.
+Hello Dear
 
-I think it would be helpful if you could include some driver trace messages to
-indicate the sequence of events that lead you to make this change, like an
-example of the problem happening.
+I am glad to know you, but God knows you better and he knows why he
+has directed me to you at this point in time so do not be surprised at
+all. My name is Mrs.Sophia Erick, a widow, i have been suffering from
+ovarian cancer disease. At this moment i am about to end the race like
+this because the illness has gotten to a very bad stage, without any
+family members and no child. I hope that you will not expose or betray
+this trust and confidence that I am about to entrust to you for the
+mutual benefit of the orphans and the less privileged ones. I have
+some funds I inherited from my late husband,the sum of ($11.000.000 )
+deposited in the Bank. Having known my present health status, I
+decided to entrust this fund to you believing that you will utilize it
+the way i am going to instruct herein.Therefore I need you to assist
+me and reclaim this money and use it for Charity works, for orphanages
+and giving justice and help to the poor, needy and to promote the
+words of God and the effort that the house of God will be maintained
+says The Lord." Jeremiah 22:15-16.=E2=80=9C
 
-> 
-> Fixes: f327c686d3ba ("i2c: aspeed: added drover for Aspeed I2C)
+It will be my great pleasure to compensate you with 35 % percent of
+the total money for your personal use, 5 % percent for any expenses
+that may occur during the international transfer process while 60% of
+the money will go to the charity project. All I require from you is
+sincerity and the ability to complete God's task without any failure.
+It will be my pleasure to see that the bank has finally released and
+transferred the fund into your bank account therein your country even
+before I die here in the hospital, because of my present health status
+everything needs to be processed rapidly as soon as possible. Please
+kindly respond quickly. Thanks and God bless you,
 
-Typo on "drover"? Actually, slave support wasn't included in this commit. I
-think it should be:
-
-Fixes: f9eb91350bb2 ("i2c: aspeed: added slave support for Aspeed I2C driver")
-
-> Signed-off-by: ryan_chen <ryan_chen@aspeedtech.com>
-> ---
->  drivers/i2c/busses/i2c-aspeed.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-> index 771e53d3d197..9f21e090ce47 100644
-> --- a/drivers/i2c/busses/i2c-aspeed.c
-> +++ b/drivers/i2c/busses/i2c-aspeed.c
-> @@ -252,6 +252,12 @@ static u32 aspeed_i2c_slave_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
->  
->  	/* Slave was requested, restart state machine. */
->  	if (irq_status & ASPEED_I2CD_INTR_SLAVE_MATCH) {
-> +		if (irq_status & ASPEED_I2CD_INTR_NORMAL_STOP &&
-> +			bus->slave_state == ASPEED_I2C_SLAVE_WRITE_RECEIVED) {
-> +			irq_handled |= ASPEED_I2CD_INTR_NORMAL_STOP;
-> +			irq_status &= ~ASPEED_I2CD_INTR_NORMAL_STOP;
-> +			i2c_slave_event(slave, I2C_SLAVE_STOP, &value);
-> +		}
-
-Ok, we might receive the STOP and START signals at the same time.
-
-So, we need to make sure that we handle the STOP first. [1]
-
-Why is this within the START case then? Can't we untangle this from the START
-handling?
-
-irq_status & ASPEED_I2CD_INTR_SLAVE_MATCH means SLAVE START, right?
-
-We know we're in slave mode already because this is the slave IRQ handler.
-
-And we can access the state of the bus through bus->slave_state, to see if it's
-a spurious STOP or an expected one.
-
-It would also be nice to unify the STOP handling code too, to make sure this
-matches the normal STOP path that already exists below here.
-
-[1] Although if that's the case, it seems like we might need to handle the
-START first sometimes, depending on the current state, right?
-
-Can we have the reverse case, where we see a START and the matching STOP
-simultaneously? Perhaps that's already handled properly by the code since
-it's structured chronologically.
-
->  		irq_handled |= ASPEED_I2CD_INTR_SLAVE_MATCH;
->  		bus->slave_state = ASPEED_I2C_SLAVE_START;
->  	}
-> -- 
-> 2.17.1
-> 
+Yours sincerely sister Mrs. Sophia Erick.
