@@ -2,75 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 993C557E4A2
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Jul 2022 18:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38BE957E4E9
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Jul 2022 18:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234456AbiGVQqJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 Jul 2022 12:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
+        id S230501AbiGVQ5h (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 Jul 2022 12:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiGVQqJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Jul 2022 12:46:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5129913D1A;
-        Fri, 22 Jul 2022 09:46:08 -0700 (PDT)
+        with ESMTP id S229839AbiGVQ5g (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Jul 2022 12:57:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440FA2ED4A;
+        Fri, 22 Jul 2022 09:57:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E205C62205;
-        Fri, 22 Jul 2022 16:46:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD6ABC341C6;
-        Fri, 22 Jul 2022 16:46:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE3FDB82916;
+        Fri, 22 Jul 2022 16:57:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D42CEC341C6;
+        Fri, 22 Jul 2022 16:57:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658508367;
-        bh=HXv9UCF+o9QZ6ULY0LQsO7G0clvbn5zX2Qa/L2xwrY0=;
+        s=k20201202; t=1658509053;
+        bh=2JPvXW4Xs4y082sNgh7Jgp6vGpJzfM0B/xZSitHtnnE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GljYDYHOjqC2eeEHmB90vEMfSDs44VRfP6rWdT0owoSaIedhlKJDZ8aMSizXzM584
-         SQrbY335PU2UCBKqsJ1OlepQxxS9cofLG6uiQRdDFaINb9DDgpGBjHt2WSzNpH0o15
-         ikh4+CyHN+MjFB1Q4G+Dto5hs9JXk4lJJAcptuONrYHjgxezPqR2einyKez/4QjBfv
-         cPrTz1QDc3NetQIJRS5usKAqmKH9TB6/4uAgcX/D3qZEiEEFmojrEbFlX4v+w8iLoL
-         Aod0IvJPayV0aRscp+5uu2X++Nalfg7I0TjxvRA6/AxCSnMGTGSDtMuzIaLWjYvjPA
-         J31vPWgXNPAtA==
-Date:   Fri, 22 Jul 2022 18:45:56 +0200
+        b=KrfcOJ0bCYkOI/T5eju1dyjyQuhaCVKs9rz2XK2Gj98yTr7Ne/svMoJWcFvmCdypN
+         2xR3KCs0UCn99fXyo8Ydvtk+EiLc4F9TmuGzDL4MOl+5kRv1W2A6H1hZMFhhfwu9wV
+         ZCy2UddFbpfe+pbeQMw0sN7voWUPhW/sWqQOkvxffBIqfy6cvC8EDa7cPIfet1//aL
+         dIrwn5stol3VkKgG1Lfs5sDlJnk66EPyarE5b9N5KgIB+4YUgRHdtxepmFm1qw5M8s
+         XavS12IHX2/uHTrHwxKMz2x9XW/EXe/XUSDwtD6DL0YpqNrmxTkaOJTiGZ2yBlt4hR
+         f/iIVQNxl/IEw==
+Date:   Fri, 22 Jul 2022 18:57:25 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Phil Edworthy <phil.edworthy@renesas.com>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh@kernel.org>, Sven Peter <sven@svenpeter.dev>,
-        Jan Dabros <jsd@semihalf.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] i2c: Add Renesas RZ/V2M controller
-Message-ID: <YtrURCS/7qiI5ump@shikoro>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:BROADCOM BRCMSTB I2C DRIVER" <linux-i2c@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] i2c: brcmstb: Use dev_name() for adapter name
+Message-ID: <YtrW9aT3loXCRPDq@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh@kernel.org>, Sven Peter <sven@svenpeter.dev>,
-        Jan Dabros <jsd@semihalf.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Tyrone Ting <kfting@nuvoton.com>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-References: <20220708100350.12523-1-phil.edworthy@renesas.com>
- <20220708100350.12523-3-phil.edworthy@renesas.com>
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:BROADCOM BRCMSTB I2C DRIVER" <linux-i2c@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>
+References: <20220719040611.13979-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="OzXLR+nkf6QnDA0R"
+        protocol="application/pgp-signature"; boundary="cayvkFeF54kDgeU+"
 Content-Disposition: inline
-In-Reply-To: <20220708100350.12523-3-phil.edworthy@renesas.com>
+In-Reply-To: <20220719040611.13979-1-f.fainelli@gmail.com>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -81,42 +64,39 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---OzXLR+nkf6QnDA0R
+--cayvkFeF54kDgeU+
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 08, 2022 at 11:03:50AM +0100, Phil Edworthy wrote:
-> Yet another i2c controller from Renesas that is found on the RZ/V2M
-> (r9a09g011) SoC. It can support only 100kHz and 400KHz operation.
+On Mon, Jul 18, 2022 at 09:06:10PM -0700, Florian Fainelli wrote:
+> This make it easier to disambiguate the different i2c controllers
+> present in a system, and then correlating with /proc/interrupts allows
+> to know which instance is interrupt driven and which one is not.
 >=20
-> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Applied to for-next with the minor fixes I mentioned, thanks!
-
-If you want to maintain the driver further, could you send an addition
-to the MAINTAINES file, too?
+Applied to for-next, thanks!
 
 
---OzXLR+nkf6QnDA0R
+--cayvkFeF54kDgeU+
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLa1EMACgkQFA3kzBSg
-KbbUxBAAhw6lzaWsn2+3rIKBYxzjME9H6jTGB3f0WiZv5TEVkQ8TSKKygH56yiZl
-kr3o+cM4RGo+6TqLTkLi+ZWHiKwzi5qIaEWOnFq7qe7t9Ghr2SRN6vwu1S2UlCbc
-a1vMhakVoILQdafiDjoZ0O2ckCuQjWrZac56TlD4XpC3Wqs1bFKgWYhQnczRcgqu
-PfRKY38YbqHFwFcajcGd8e38ZoH9/5XHJeUJI177NjWxfrIv20p82BucVPFG3ap5
-ZyjAJFYyziWI/FCCcyNRzZC0f++6OW/76jFuvceCgbXIPyrRuCweBvFJmSmEW7ay
-SbvpMRy2HAujAdZjbEr1PDdUfz1veBdyHXcKXlesFbyg5IYhnl9ycV2TQdK3is/r
-Ze+9A3LIlSV127xFuINk0Dc19q8fsEH/eem9TdgSKTUAz6jffiJLDIkF9WaNHPB/
-UeR/Djfze82gugikhTbFsqURVkmS9Svhjz2Ig3Tzki+mheY4wMLUWOz4NV1xgl3o
-ITXTCztwzCfFiLD62lVeFstwzk3Fkq/CQXN6ESB+iuJX4BLB0XASU+ooF3AgHJaL
-HHgAIeT98ryeNl09Bx2SH4doSnu3kd6Q8HRPWML47ChCMUA6LCALe7OAYDGaQYdT
-BAQAlrOrQpCyUISWiarN65a2N3ThyAwbf2sQoAL7ezxoGt/p9rE=
-=4/V8
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLa1vUACgkQFA3kzBSg
+KbYWIw/7BCfCCQ1Jb9DYSQ6jhixPh0Onwd5mRIIgb5BNl5AA7UU9RiQcVTvRH7wv
+29zxqYBBo8UGGJMJpAbiijpXgxiZHvDk97INvVuTGRKe2uUbMLC+HrJyb8hdtUgB
+8Xs6FHv32rvVQ1buKt0Chww6RFd/jwQnUfWojwiKSsjbVHvlZ7WYv/++gDZnQomO
+MwyJhp4NVNEJAw3b6WZXnjZgI9LXuYlgS4ClSZ3Bfj6n3TiuEB3+wVUloX4yAtkX
+1AfcUqlnQgUYs3lThVrDgMML+uHPTuXZT6ebQD1/7KRBRDxsQnHAioiE8yBuQLVZ
+3xi/J3IKwtwF9FWOfUdLuf/PGgASC+hCscvDFhBjlu6mcTpZfGZ5COh8IeWPKdKp
+ck0pXPQ52DDlL7BJuTa7MQ5w97rWjbUpuxFYfURvz2nShwLxaPiKLWd/I0LTfZCG
+J2B+/tygDlzg5KcJXMYZ82clRHcj/WePzXU9qiNcEpsgdDbr0vEt8ezgyEdJAJ71
+iit5yZ7SEBoHQu/4igvMY4kXv+I8RgoH8UBri613E8lgSuhqj7LzrVGMQXDiT9CC
+4+nicHb3N1VKm7q8kJXeoYOpB7bjfVNK2q0dxsmWOnGjsUqFm/K+8HLKMf9iibWm
+Cek7CMNlVOM7nwiG3xQcL6OKJ10e6O8+qaQp7OLUPCKjkOxFKjY=
+=XECj
 -----END PGP SIGNATURE-----
 
---OzXLR+nkf6QnDA0R--
+--cayvkFeF54kDgeU+--
