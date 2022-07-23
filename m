@@ -2,48 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B1857EC18
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 Jul 2022 06:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3482157F172
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 Jul 2022 22:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233283AbiGWEd2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 23 Jul 2022 00:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
+        id S237033AbiGWUo7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 23 Jul 2022 16:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGWEd2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 23 Jul 2022 00:33:28 -0400
-Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17D3BBA4F0;
-        Fri, 22 Jul 2022 21:33:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=uXlb1
-        r3BbJdtgryVnq7yMNYfh6mt8p4E1um7vBRzrRs=; b=jrVHDzAIIIvcEoC6nuvpW
-        4jmC5YBYAG4erNe21gAUefQ2zG9mcO5scJz6oqgUc0Kx9SXlj/1opoDJg8KLelcX
-        4ERMHuZk9HObyYWKTAmM3wepaB/ypsCQGsePLtkDIOFCeatPQx+HnfND/4iXbp4w
-        Ko7y4mrxujgKcQn5hj7WBU=
-Received: from localhost.localdomain (unknown [123.58.221.99])
-        by smtp3 (Coremail) with SMTP id G9xpCgBnBZfeedtiEC0yQw--.2963S2;
-        Sat, 23 Jul 2022 12:32:32 +0800 (CST)
-From:   williamsukatube@163.com
-To:     bence98@sch.bme.hu, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     William Dean <williamsukatube@gmail.com>,
-        Hacash Robot <hacashRobot@santino.com>
-Subject: [PATCH] i2c: cp2615: check the return value of kzalloc()
-Date:   Sat, 23 Jul 2022 12:32:29 +0800
-Message-Id: <20220723043229.2953386-1-williamsukatube@163.com>
+        with ESMTP id S231489AbiGWUo6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 23 Jul 2022 16:44:58 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC681BE85
+        for <linux-i2c@vger.kernel.org>; Sat, 23 Jul 2022 13:44:58 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id r186so7104211pgr.2
+        for <linux-i2c@vger.kernel.org>; Sat, 23 Jul 2022 13:44:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=7eM4jUkfktuT5M1WMi6xPgusq5fBgvijCriihADNRlU=;
+        b=XNgux7NibW6l+k+soMUxRk1449I89tQesJuUCeKUQyJ9eyRDLcaRW5BjqBcvmqJ/Ea
+         8lwgjQqckmmQAWN1s+Nuz5vhOOPdH8VypcPyHmn6hWt2XxeRzVYEsUVBKRhDPe8QxB0Q
+         cQx2ymo910wmu/NY/mM8ddsIWd8z5t3Q0lNeWmhwn60DsNfOVS/CgafaIBkrULMZmcXY
+         1AE9cfi+Q0TX46sI+I1pwBxwU79FAqJU2LmiVkOFoikciOYF4/WOPX5WpSlU0vNZxh+2
+         dXnwczfChXp7IPzCBXTEJIo02xOP8WUGeyEsN8ccVVFpEMZHm6zHa1tjvonnyomgCkQo
+         Nwbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=7eM4jUkfktuT5M1WMi6xPgusq5fBgvijCriihADNRlU=;
+        b=FoHgvR9XRidn0QtfpqCEYkhb/BtEjz6D9Mn+bK+huC1D32lS5wT1zuoaJ/sBE2N6F3
+         g5taWYVBTQnsBtrhA56ftsCUbk1br98+maWrwTrPEZXCI8eQ/iFq9RxcKyLhiC1Z9IbD
+         Vyzqy7HVRLiPb11kQQ2dfaqFwqAA2dHkya1bLYRTL3aHxlTpXxlqHwJ6UpBajmKbxCiN
+         i+NGZqxPxWUW1bp4cewLPdXNZNDW/Io1x5euE87/Xao+76ohMWUhomvPHSlVFAN72Aqu
+         wXuNL4V9G/j3BQgldcJr+biGMREkhgrW/BkpXHm0CVgBQ1XkMJgKIoNwyQ0ZbzrOkzrC
+         KWsw==
+X-Gm-Message-State: AJIora8IbOj3YGg8cyBRDLUOF4CXvRYs8WajxmUYsadGsl+8Pc8bfJlm
+        zZlFfJsd/nq0GKsvI16w8hoOzw==
+X-Google-Smtp-Source: AGRyM1ueXm2pxfwiKc+qxbMnUUopd/zRMsPaSqHr6H9jJQXOsji2e/Lzx82z/R7NeBX661YP0niB/w==
+X-Received: by 2002:a05:6a00:b4d:b0:52b:1eb1:218e with SMTP id p13-20020a056a000b4d00b0052b1eb1218emr6027702pfo.33.1658609097752;
+        Sat, 23 Jul 2022 13:44:57 -0700 (PDT)
+Received: from localhost.localdomain ([2405:201:c00a:a073:a406:cc30:f4ec:f10a])
+        by smtp.gmail.com with ESMTPSA id u14-20020a170902e80e00b0016a6caacaefsm6187950plg.103.2022.07.23.13.44.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Jul 2022 13:44:57 -0700 (PDT)
+From:   Jagan Teki <jagan@edgeble.ai>
+To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kever Yang <kever.yang@rock-chips.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        Jagan Teki <jagan@edgeble.ai>, linux-i2c@vger.kernel.org
+Subject: [PATCH 13/22] dt-bindings: i2c: i2c-rk3x: Document Rockchip RV1126
+Date:   Sun, 24 Jul 2022 02:13:26 +0530
+Message-Id: <20220723204335.750095-14-jagan@edgeble.ai>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220723204335.750095-1-jagan@edgeble.ai>
+References: <20220723204335.750095-1-jagan@edgeble.ai>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: G9xpCgBnBZfeedtiEC0yQw--.2963S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WF48Kr1xXr47uF47Gry7trb_yoW8Ww13pF
-        1fCF4DCr4Uta42gr4DZry8XFySgw1rGF9rJrW7tasxZryxZr95Jw1jgr1rZFWrAFWUKr12
-        qayDt3WxuF1kur7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bwT5LUUUUU=
-X-Originating-IP: [123.58.221.99]
-X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/1tbiNwBHg1WBo2wCAQAAsr
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,45 +71,26 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: William Dean <williamsukatube@gmail.com>
+Document compatible string for Rockchip RV1126 SoC.
 
-kzalloc() is a memory allocation function which can return NULL when
-some internal memory errors happen. So it is better to check the
-return value of it to prevent potential wrong memory access or
-memory leak.
-
-Fixes: 4a7695429eade ("i2c: cp2615: add i2c driver for Silicon Labs' CP2615 Digital Audio Bridge")
-Reported-by: Hacash Robot <hacashRobot@santino.com>
-Signed-off-by: William Dean <williamsukatube@gmail.com>
+Cc: linux-i2c@vger.kernel.org
+Signed-off-by: Jagan Teki <jagan@edgeble.ai>
 ---
- drivers/i2c/busses/i2c-cp2615.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/i2c/busses/i2c-cp2615.c b/drivers/i2c/busses/i2c-cp2615.c
-index 3ded28632e4c..7c9403346615 100644
---- a/drivers/i2c/busses/i2c-cp2615.c
-+++ b/drivers/i2c/busses/i2c-cp2615.c
-@@ -171,11 +171,17 @@ cp2615_i2c_recv(struct usb_interface *usbif, unsigned char tag, void *buf)
- /* Checks if the IOP is functional by querying the part's ID */
- static int cp2615_check_iop(struct usb_interface *usbif)
- {
--	struct cp2615_iop_msg *msg = kzalloc(sizeof(*msg), GFP_KERNEL);
--	struct cp2615_iop_accessory_info *info = (struct cp2615_iop_accessory_info *)&msg->data;
-+	struct cp2615_iop_msg *msg;
-+	struct cp2615_iop_accessory_info *info;
- 	struct usb_device *usbdev = interface_to_usbdev(usbif);
--	int res = cp2615_init_iop_msg(msg, iop_GetAccessoryInfo, NULL, 0);
-+	int res;
-+
-+	msg = kzalloc(sizeof(*msg), GFP_KERNEL);
-+	if (!msg)
-+		return -ENOMEM;
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml b/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
+index 5339dd4fc370..f350b7a0b991 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
+@@ -37,6 +37,7 @@ properties:
+               - rockchip,rk3308-i2c
+               - rockchip,rk3328-i2c
+               - rockchip,rk3568-i2c
++              - rockchip,rv1126-i2c
+           - const: rockchip,rk3399-i2c
  
-+	info = (struct cp2615_iop_accessory_info *)&msg->data;
-+	res = cp2615_init_iop_msg(msg, iop_GetAccessoryInfo, NULL, 0);
- 	if (res)
- 		goto out;
- 
+   reg:
 -- 
 2.25.1
 
