@@ -2,60 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E96957F365
-	for <lists+linux-i2c@lfdr.de>; Sun, 24 Jul 2022 07:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D798657F366
+	for <lists+linux-i2c@lfdr.de>; Sun, 24 Jul 2022 07:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232311AbiGXFqy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 24 Jul 2022 01:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
+        id S235202AbiGXFrS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 24 Jul 2022 01:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiGXFqx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 24 Jul 2022 01:46:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E8713F28
-        for <linux-i2c@vger.kernel.org>; Sat, 23 Jul 2022 22:46:52 -0700 (PDT)
+        with ESMTP id S229618AbiGXFrS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 24 Jul 2022 01:47:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFA213F35
+        for <linux-i2c@vger.kernel.org>; Sat, 23 Jul 2022 22:47:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DDF4D60EE0
-        for <linux-i2c@vger.kernel.org>; Sun, 24 Jul 2022 05:46:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB0BDC3411E;
-        Sun, 24 Jul 2022 05:46:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37CB8B80D32
+        for <linux-i2c@vger.kernel.org>; Sun, 24 Jul 2022 05:47:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16FCCC3411E;
+        Sun, 24 Jul 2022 05:47:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658641611;
-        bh=hTNBWb+Dffg9B/QRwBaACp6phE5MrdQaoQHPWTZV8vI=;
+        s=k20201202; t=1658641634;
+        bh=3hQZ9iJjULkCTgF4RtXrGSsZYxuYTHDpaRonXEQtaXs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NbOe1UzhIzOQ6PTqNXQYQXAdHfmA4TWfKn4FBJ4WW7LCZ+VQ+7jjpKW94oIsIwxP2
-         arOAjRPe7278JmyKcjir9uPjhJfsZ72SCUh7a+2wpvyIeqijN3v2V+MPHOlqAOKpNf
-         c9581+XIk2K3ZjJsX0AjsbwV9IyCitpGRu136Z/OyVOIwKvanJ71Ekmiv/Udk3Vjv7
-         FEZeWQiEhW0Gs9Odp/FbD7KP2tYWmDrzQ6ahtl7CGZ1KbStSnwTnnWpNwA0IHUfjsY
-         98qW0koDt6xwvfR2McnhaiWXUYyVVRwAd2X9IeDdojWu8Htt5IcC+q9PNHRbIxlS6B
-         qZE2f2VHQWdHw==
-Date:   Sun, 24 Jul 2022 07:46:46 +0200
+        b=VKcc4S25vByy/6CPwVodSmKEpNHWOqDXyrcECOhWg9H9q6rEmzHSyaUL9ehwIzsr0
+         MyHtCa/iEnWF9pFleZg6tpyjWwDZra48gSXpbv+fwWz+TVOy8fkGmKr0AM09VBZ1OL
+         fGnARayTUJj4XXT9kxMTU70EmjYhifbagsQjPh7wAXkByQ+0xOWNZQuTzTt0iTARKT
+         7ZZU5tQpPBFLUa4wk9RVr5GZ1vqlqDRJ7AKoaGbg6EHYLd4anMqjGVTr8nTyWHRYfj
+         TaZWzZOwtdoVHjScs/Z81IVlwevtlGbKZNSTPpRQ//59kFzpLfZzqglELqvUe5smEc
+         RfgG+Nz6iWpWA==
+Date:   Sun, 24 Jul 2022 07:47:10 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>
-Cc:     "Simek, Michal" <michal.simek@amd.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        git <git@xilinx.com>
+To:     Lars-Peter Clausen <lars@metafoo.de>
+Cc:     Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
+        Michal Simek <michal.simek@amd.com>, linux-i2c@vger.kernel.org
 Subject: Re: [PATCH] i2c: cadence: Support PEC for SMBus block read
-Message-ID: <Ytzcxr2zp5ULnzGb@shikoro>
+Message-ID: <Ytzc3sGzcZ3eqsTG@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        git <git@xilinx.com>
+        Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
+        Michal Simek <michal.simek@amd.com>, linux-i2c@vger.kernel.org
 References: <20220717145244.652278-1-lars@metafoo.de>
- <768b56a8-df1c-e24d-7879-328512598549@amd.com>
- <BY5PR12MB4902D36D299948DE036AC0BF818C9@BY5PR12MB4902.namprd12.prod.outlook.com>
- <51fcbbf2-c490-4b2b-fde5-df1dfce7e677@amd.com>
- <BY5PR12MB4902C7B4F8516D15718AE900818C9@BY5PR12MB4902.namprd12.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DHNvZmbws76/V7Np"
+        protocol="application/pgp-signature"; boundary="MtK0BqFOxcDoyQGI"
 Content-Disposition: inline
-In-Reply-To: <BY5PR12MB4902C7B4F8516D15718AE900818C9@BY5PR12MB4902.namprd12.prod.outlook.com>
+In-Reply-To: <20220717145244.652278-1-lars@metafoo.de>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,44 +58,64 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---DHNvZmbws76/V7Np
+--MtK0BqFOxcDoyQGI
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
+On Sun, Jul 17, 2022 at 04:52:44PM +0200, Lars-Peter Clausen wrote:
+> SMBus packet error checking (PEC) is implemented by appending one
+> additional byte of checksum data at the end of the message. This provides
+> additional protection and allows to detect data corruption on the I2C bus.
+>=20
+> SMBus block reads support variable length reads. The first byte in the re=
+ad
+> message is the number of available data bytes.
+>=20
+> The combination of PEC and block read is currently not supported by the
+> Cadence I2C driver.
+>  * When PEC is enabled the maximum transfer length for block reads
+>    increases from 33 to 34 bytes.
+>  * The I2C core smbus emulation layer relies on the driver updating the
+>    `i2c_msg` `len` field with the number of received bytes. The updated
+>    length is used when checking the PEC.
+>=20
+> Add support to the Cadence I2C driver for handling SMBus block reads with
+> PEC. To determine the maximum transfer length uses the initial `len` value
+> of the `i2c_msg`. When PEC is enabled this will be 2, when it is disabled
+> it will be 1.
+>=20
+> Once a read transfer is done also increment the `len` field by the amount
+> of received data bytes.
+>=20
+> This change has been tested with a UCM90320 PMBus power monitor, which
+> requires block reads to access certain data fields, but also has PEC
+> enabled by default.
+>=20
+> Fixes: df8eb5691c48 ("i2c: Add driver for Cadence I2C controller")
+> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
 
-> Tested-by:  Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com >
-
-WARNING: Use a single space after Tested-by:
-#30:=20
-Tested-by:  Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com >
-
-ERROR: Unrecognized email address: 'Shubhrajyoti Datta <Shubhrajyoti.datta@=
-amd.com >'
-#30:=20
-Tested-by:  Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com >
-
-Please start using macros. You never got it right so far :(
+Applied to for-next with the Fixes tag, thanks!
 
 
---DHNvZmbws76/V7Np
+--MtK0BqFOxcDoyQGI
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLc3MYACgkQFA3kzBSg
-KbYwRA//WL7OKgtvHi8vB0wR2Fmda4UQZSx5KVtv+ZLwC9fzy4UM2igIoHH2SDhz
-P4X5yEB/LxowPFiYj4Wo+93octnHB14fm9kueUthdnHIKuxNSkzJU9E9yxfBX2Mz
-9mPzVQWozw7s6yp4KmK6ln16Pdh70+s2dSpmRmM7EqbjAX/mF9BMsbp8jU6Znk9y
-ZQ/1dbQbN4Y70hbQ1MpnKa6EzbcC0kqiI5bvljIcNvM9cU++uNzMfxaNmB+1cYIn
-Ap/cdlgkKG8Z4ISKQWmdecJTiXmLxBI0xvziogA9FJXnUhEllD0PpDm57QmsZMuw
-ugnvn9hDI2hxRrgDKA6QaERy8Jq3n+A2PK8KQkFe8OLHyiv/t4R9JvVSzxJS7M6E
-MhcTE/ujqNQtiUMbot8T/P0h1fe0OnswRLWiFxsLgg478a2v48B7L+nPieFPBMCt
-KbnBApbErtQ7ZLmzc7ZlYfwvvuvzjx4wQZigcF/l0+JO+y+xUrilGvHTURd91NDC
-O/hvfeNl30UvGax3smwKgv38v9VmlhKImnI8bXGECR+aICR/W6mlqHjzQdBn/pII
-w1zqDolADsUEEzXn+U9iZnDPh0UMfuKYRa9w5IL25b6hAkZCh8auGCMcK82kxTBC
-goo87rum7tpL3aaQt4Mm3TmKtqQc23j7vRilDtZnIM4+MBuagqE=
-=rdvY
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLc3N4ACgkQFA3kzBSg
+KbZpWxAAkKw2Woj6ppRJu2jeAZ/14b/gihFQBEpo7ACNE2scUODjqYTROb3tCCUu
+dQtrB5pOYPod82kPdA7FHW+a+kaesJHmAD1HIxmCH4Aou4jMggCUTLGedKUKG9rN
+lRXijH41yGEnb1yAOhmqrW9TQ6BKH3Osuc6d44l0DK7XyKWTj1H+L1kfWQp3iyl/
+jm4o4+PEGzXhsJrJIdFXB4YCaGBu8D8MiAa9umaS87IZjMPKFrh0FBIMl2vKnrVX
+urqngI5jKtvGdkCtQQ4uY89PP5nnJ1DUmQLdev6U42RiWu+IKP1pVqOBAT6f2bgU
+6EG6EuczH8uAKKDRTK2qxnA0H+ComLtZaxTLNcToSRexfUusP2pC4PxAxF4x8rwG
+215GzV7KySnlUXhQvchM8RV6NVEVi2lzXuXRVJ0HuULhXSmmdnAF/H6YRciq61Vr
+zevpsPWX1D9MTbVNHKEbL5aPqs1m1iqz98VJz9cnChK0DtFELoZ5990ZMtju0Amd
+u4LwATuolrHsdBEObOHQpkGGAU4PG8KXFBGUVnldOR4fUD61Ow0TSFf6mUJWmOcl
+9dCCt+QRJFotpZjdjK5mqzU+iNTSCWGCOgc1sgi1CIaIOSSyXam2Zq/HsRDzmtfR
+HVhht0Zt3VG3o151HR4UicKPECdv4yAsQX96U1GnFXbNTrwVZ7w=
+=yDie
 -----END PGP SIGNATURE-----
 
---DHNvZmbws76/V7Np--
+--MtK0BqFOxcDoyQGI--
