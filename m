@@ -2,78 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7B6580825
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 Jul 2022 01:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D25EA580ED2
+	for <lists+linux-i2c@lfdr.de>; Tue, 26 Jul 2022 10:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236893AbiGYX0U (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 Jul 2022 19:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
+        id S237797AbiGZIYF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 26 Jul 2022 04:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiGYX0T (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Jul 2022 19:26:19 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BAD25EBA;
-        Mon, 25 Jul 2022 16:26:19 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id r13so14965435oie.1;
-        Mon, 25 Jul 2022 16:26:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zMYKmg3DAgHswSnZfMr2gBGIoygNaDxX5GR31HzIjN8=;
-        b=vBLgSNXsyqUpq2IMKPz9S4e7VVnIyOFXj55Dbv0CRiR+ppeLMHVQSj9MvlBIsPIMge
-         DsMANFQqgrS7xRvn33HFmIH0zIjo67w2ay3hWp+n505PxO2vo0d/nZMyzLikSM9AbbhN
-         dngfqQ0FBYa2wGc+7QB3cvkTL2kvfcY7DXQHjb8h8sjrXpXOR2NcfpgwH42I9iDI8hxV
-         /vWxsNwm700Pps8zHXKx8zUjcrW6jMtJ8rcIaKXFo7zuiJgo674X6pEajiRuR9Yodn3R
-         ja9patK4B9/4PDN0TdaK3mp4nRw9eVR6nGK6MQj79Ta3YBCTFPHG9eTYeys0vhW5fTjw
-         PIpw==
-X-Gm-Message-State: AJIora/2wwOSp8kxSlLA/qIjtYhPlLyWAQYO/QW0f3KkkmW6AHpPZepY
-        VTDptuv+ywQFOhmHRsUV7A==
-X-Google-Smtp-Source: AGRyM1tlZY1uWwUwZ760qz8S55x8WYR+KBfAL60hoioz/HxI3kq4KzVtzg4bKTPvkbNFz2wI8WkEjg==
-X-Received: by 2002:a05:6808:d47:b0:33a:ef87:9271 with SMTP id w7-20020a0568080d4700b0033aef879271mr1812047oik.6.1658791578678;
-        Mon, 25 Jul 2022 16:26:18 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id l7-20020a9d4c07000000b0061c4c925c87sm5554686otf.78.2022.07.25.16.26.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 16:26:18 -0700 (PDT)
-Received: (nullmailer pid 2952618 invoked by uid 1000);
-        Mon, 25 Jul 2022 23:26:16 -0000
-Date:   Mon, 25 Jul 2022 17:26:16 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jagan Teki <jagan@edgeble.ai>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-rockchip@lists.infradead.org,
-        Kever Yang <kever.yang@rock-chips.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-i2c@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>
-Subject: Re: [PATCH 13/22] dt-bindings: i2c: i2c-rk3x: Document Rockchip
- RV1126
-Message-ID: <20220725232616.GA2952569-robh@kernel.org>
-References: <20220723204335.750095-1-jagan@edgeble.ai>
- <20220723204335.750095-14-jagan@edgeble.ai>
+        with ESMTP id S232313AbiGZIYE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 26 Jul 2022 04:24:04 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9661F2E69A
+        for <linux-i2c@vger.kernel.org>; Tue, 26 Jul 2022 01:24:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 48F4D1FA7D;
+        Tue, 26 Jul 2022 08:24:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658823842; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i5ObdC8Erj/Ebl1j6V9Lb3HmD2tbN4I+gg58DNbTRG0=;
+        b=NbLTjXRPG8wFlh3OCMor2kOHXn0shA/OvKfc6xW6MbNdxstYyKySgWyXf1gVTdKN1nvhol
+        aO0u0y9oUANahrpzsyPqXPkeaZczxoTOQBp4v731HHkaiurh5h9KoOZBRsUPBN1tgPZiX+
+        yIQemIP0xM2wEL4atJ4D1EVsZPG4BMo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658823842;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i5ObdC8Erj/Ebl1j6V9Lb3HmD2tbN4I+gg58DNbTRG0=;
+        b=37Cg1ArVRQmXoNtCwASEK/6/C6/pDNasXtgmXrFax2YQtqdTzNZm7o8SVDFF/ZwvX1Tked
+        MW0kCdN0J5IC8pCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 292B113A7C;
+        Tue, 26 Jul 2022 08:24:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BqliCKKk32IWBgAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 26 Jul 2022 08:24:02 +0000
+Date:   Tue, 26 Jul 2022 10:23:58 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Tommy Lee <tommyclee101908sun@gmail.com>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: gather_i2c_busses()
+Message-ID: <20220726102358.3236e000@endymion.delvare>
+In-Reply-To: <CAGJPcGaO1j57dZvRGR789m5HZ5s5tUaSomxKVGuhFhimQhGC5Q@mail.gmail.com>
+References: <CAGJPcGaO1j57dZvRGR789m5HZ5s5tUaSomxKVGuhFhimQhGC5Q@mail.gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220723204335.750095-14-jagan@edgeble.ai>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, 24 Jul 2022 02:13:26 +0530, Jagan Teki wrote:
-> Document compatible string for Rockchip RV1126 SoC.
-> 
-> Cc: linux-i2c@vger.kernel.org
-> Signed-off-by: Jagan Teki <jagan@edgeble.ai>
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Hi Tommy,
 
-Acked-by: Rob Herring <robh@kernel.org>
+On Mon, 25 Jul 2022 18:00:55 -0700, Tommy Lee wrote:
+> Hi Linux-i2c,
+
+You got the list address wrong, I'm fixing it (it's a dash, not an
+underscore).
+
+> My platform is ASUS Vivobook e203 running Ubuntu 22.04 LTS. The i2c-tools
+> src package I installed is 3.1.2. The make command works. But the
+> "i2cdetect -l" execution gave me the following alert. I discovered that
+> the /proc/bus/i2c used by the 3.1.2 gather_i2c_busses() has been moved
+> to /sys/bus/i2c in Ubuntu22.04 LTS.
+
+/proc/bus/i2c has not been replaced by /sys/bus/i2c in Ubuntu 22.04.
+It's a changed that happened almost 2 decades ago. Even kernel 2.6.0
+had it already.
+
+> I replaced /proc/bus/i2c with
+> /sys/bus/i2c in gather_i2c_busses() and replaced adapters[count].name with
+> adapters->nr.  Running tools/i2cdetect shows 0 on adapters->nr.
+
+That change makes no sense at all, so it's not surprising it doesn't
+work.
+
+The problem is that you are using i2c-tools-3.1 which is a legacy
+branch that can only work with very old kernels. It is in maintenance
+mode, hasn't received any development since 8 years and really nobody
+should be using it any longer.
+
+Why don't you just use i2c-tools version 4.3 which is already packaged
+in your distribution?
+
+-- 
+Jean Delvare
+SUSE L3 Support
