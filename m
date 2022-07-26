@@ -2,107 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D25EA580ED2
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 Jul 2022 10:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3235F580EFC
+	for <lists+linux-i2c@lfdr.de>; Tue, 26 Jul 2022 10:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237797AbiGZIYF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 26 Jul 2022 04:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
+        id S238503AbiGZI27 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 26 Jul 2022 04:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232313AbiGZIYE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 26 Jul 2022 04:24:04 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9661F2E69A
-        for <linux-i2c@vger.kernel.org>; Tue, 26 Jul 2022 01:24:03 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 48F4D1FA7D;
-        Tue, 26 Jul 2022 08:24:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1658823842; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i5ObdC8Erj/Ebl1j6V9Lb3HmD2tbN4I+gg58DNbTRG0=;
-        b=NbLTjXRPG8wFlh3OCMor2kOHXn0shA/OvKfc6xW6MbNdxstYyKySgWyXf1gVTdKN1nvhol
-        aO0u0y9oUANahrpzsyPqXPkeaZczxoTOQBp4v731HHkaiurh5h9KoOZBRsUPBN1tgPZiX+
-        yIQemIP0xM2wEL4atJ4D1EVsZPG4BMo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1658823842;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i5ObdC8Erj/Ebl1j6V9Lb3HmD2tbN4I+gg58DNbTRG0=;
-        b=37Cg1ArVRQmXoNtCwASEK/6/C6/pDNasXtgmXrFax2YQtqdTzNZm7o8SVDFF/ZwvX1Tked
-        MW0kCdN0J5IC8pCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 292B113A7C;
-        Tue, 26 Jul 2022 08:24:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BqliCKKk32IWBgAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 26 Jul 2022 08:24:02 +0000
-Date:   Tue, 26 Jul 2022 10:23:58 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Tommy Lee <tommyclee101908sun@gmail.com>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: gather_i2c_busses()
-Message-ID: <20220726102358.3236e000@endymion.delvare>
-In-Reply-To: <CAGJPcGaO1j57dZvRGR789m5HZ5s5tUaSomxKVGuhFhimQhGC5Q@mail.gmail.com>
-References: <CAGJPcGaO1j57dZvRGR789m5HZ5s5tUaSomxKVGuhFhimQhGC5Q@mail.gmail.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        with ESMTP id S238429AbiGZI24 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 26 Jul 2022 04:28:56 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8B030561
+        for <linux-i2c@vger.kernel.org>; Tue, 26 Jul 2022 01:28:54 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oGFvQ-0006c7-GN; Tue, 26 Jul 2022 10:28:20 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oGFvJ-003HT4-4w; Tue, 26 Jul 2022 10:28:13 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oGFvI-0003CM-92; Tue, 26 Jul 2022 10:28:12 +0200
+Message-ID: <55668d62aad8feedb7fa78f410f4f71ecfce8c98.camel@pengutronix.de>
+Subject: Re: [PATCH v2 6/9] arm64: bcmbca: Make BCM4908 drivers depend on
+ ARCH_BCMBCA
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     joel.peshkin@broadcom.com, f.fainelli@gmail.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        dan.beygelman@broadcom.com, anand.gore@broadcom.com,
+        kursad.oney@broadcom.com, rafal@milecki.pl,
+        krzysztof.kozlowski@linaro.org, Guenter Roeck <linux@roeck-us.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MEMORY TECHNOLOGY DEVICES (MTD)" 
+        <linux-mtd@lists.infradead.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        "open list:PIN CONTROL SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
+        <linux-mips@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>
+Date:   Tue, 26 Jul 2022 10:28:12 +0200
+In-Reply-To: <20220725055402.6013-7-william.zhang@broadcom.com>
+References: <20220725055402.6013-1-william.zhang@broadcom.com>
+         <20220725055402.6013-7-william.zhang@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Tommy,
+On So, 2022-07-24 at 22:53 -0700, William Zhang wrote:
+> With Broadcom Broadband arch ARCH_BCMBCA supported in the kernel, this
+> patch series migrate the ARCH_BCM4908 symbol to ARCH_BCMBCA. Hence
+> replace ARCH_BCM4908 with ARCH_BCMBCA in subsystem Kconfig files.
+> 
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> Acked-by: Guenter Roeck <linux@roeck-us.net> (for watchdog)
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com> (for drivers/pci)
 
-On Mon, 25 Jul 2022 18:00:55 -0700, Tommy Lee wrote:
-> Hi Linux-i2c,
+Acked-by: Philipp Zabel <p.zabel@pengutronix.de> (for reset)
 
-You got the list address wrong, I'm fixing it (it's a dash, not an
-underscore).
-
-> My platform is ASUS Vivobook e203 running Ubuntu 22.04 LTS. The i2c-tools
-> src package I installed is 3.1.2. The make command works. But the
-> "i2cdetect -l" execution gave me the following alert. I discovered that
-> the /proc/bus/i2c used by the 3.1.2 gather_i2c_busses() has been moved
-> to /sys/bus/i2c in Ubuntu22.04 LTS.
-
-/proc/bus/i2c has not been replaced by /sys/bus/i2c in Ubuntu 22.04.
-It's a changed that happened almost 2 decades ago. Even kernel 2.6.0
-had it already.
-
-> I replaced /proc/bus/i2c with
-> /sys/bus/i2c in gather_i2c_busses() and replaced adapters[count].name with
-> adapters->nr.  Running tools/i2cdetect shows 0 on adapters->nr.
-
-That change makes no sense at all, so it's not surprising it doesn't
-work.
-
-The problem is that you are using i2c-tools-3.1 which is a legacy
-branch that can only work with very old kernels. It is in maintenance
-mode, hasn't received any development since 8 years and really nobody
-should be using it any longer.
-
-Why don't you just use i2c-tools version 4.3 which is already packaged
-in your distribution?
-
--- 
-Jean Delvare
-SUSE L3 Support
+regards
+Philipp
