@@ -2,285 +2,201 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E34A5827FD
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Jul 2022 15:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6465B583846
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Jul 2022 07:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbiG0Nu4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 27 Jul 2022 09:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
+        id S230127AbiG1FwC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 28 Jul 2022 01:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbiG0Nuz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 Jul 2022 09:50:55 -0400
-X-Greylist: delayed 4201 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 Jul 2022 06:50:54 PDT
-Received: from 19.mo561.mail-out.ovh.net (19.mo561.mail-out.ovh.net [178.32.98.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162AE30F70
-        for <linux-i2c@vger.kernel.org>; Wed, 27 Jul 2022 06:50:54 -0700 (PDT)
-Received: from player692.ha.ovh.net (unknown [10.111.172.29])
-        by mo561.mail-out.ovh.net (Postfix) with ESMTP id 5B551246F3
-        for <linux-i2c@vger.kernel.org>; Wed, 27 Jul 2022 12:32:16 +0000 (UTC)
-Received: from RCM-web1.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player692.ha.ovh.net (Postfix) with ESMTPSA id 08DA82CE188E7;
-        Wed, 27 Jul 2022 12:31:45 +0000 (UTC)
+        with ESMTP id S229975AbiG1FwB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 Jul 2022 01:52:01 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2048.outbound.protection.outlook.com [40.107.93.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA72056BBA
+        for <linux-i2c@vger.kernel.org>; Wed, 27 Jul 2022 22:51:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kvh50BQEZlnBAKKdZg/cJptMFjecyheAjFGROthKQ0Yt7mwtWieOaiI5B0aaA31gpyj2X0ryIF0wabq/FBeuVZAYqwGPYRoJuA37Q3vjy4jqJsXo3jVsGLKgdSLIYoRNDXel0IakmjCc4D0zaqpJftOqbjuoG6t+0YL04dzOsF9i7aEC2yzB1yBM1VldxFGxhul2fcGn0G2wWRuDogKoGJUuBlm0FhqnR7MfthvBRhDcnKJMgbwnPtVBD7lpts9LDaJHnCLkTErNiyj+T0fxKQ3cyh2qNiVKpZzGpWFPAflXz0O1XxSfy6d+Q9OHsH8bDR15gsPhQgbzTwfdtnDXhQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2MTJprcKE57tIOr28KNQz3xaaYDI3khZsAZKXcv2m2o=;
+ b=ejnCzhwojzhYqZ0UO8TxocITntTUpERs29iSJmehNjsMKQjOOIqzw3aTd+8WpgqSStlXnp6cUkJRADhaR95/NkIDHBlUeBnU1mDUbni1/HxpWd8uXaESgPLo8ZjYbQBYYz7v4LTqSH7KHwyYCeiwNbwOfqDXowfJ4xDhPfh+wI3RFMcSpRkg6N8eK5yg5FcZL1j3UaHH6kl1JY+oAGe8YMx4epKGo85GfnoctUem3BIh2QodPAOprxqPPDqpBoaobATyNS0rmKzL1ARxVcMb9Mwh0oQw7Pm3w+YtJOUKX0IpE+f1ReeGO+G1kByJfu/OfZlganzOYeaeVK9aGIi3ww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2MTJprcKE57tIOr28KNQz3xaaYDI3khZsAZKXcv2m2o=;
+ b=fwYINDRhNfpckdDANyP49Uv5NaB7DA9LyWVKsfyYl/u6MH/DVYuAhz2S7kSJizsd5rvjXQrhXGHUNjN4lhPcN+R7pUGrUkmCuiUpcZ83UCrdEov27Y3m6ZMgxUO28LxWRp1Z2w9SpNTQxkAYkgYMdmUdtafxhaiOyZsNML195Gk=
+Received: from DM6PR11CA0023.namprd11.prod.outlook.com (2603:10b6:5:190::36)
+ by MWHPR02MB2302.namprd02.prod.outlook.com (2603:10b6:300:5b::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Thu, 28 Jul
+ 2022 05:51:57 +0000
+Received: from DM3NAM02FT060.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:190:cafe::7) by DM6PR11CA0023.outlook.office365.com
+ (2603:10b6:5:190::36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.20 via Frontend
+ Transport; Thu, 28 Jul 2022 05:51:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT060.mail.protection.outlook.com (10.13.4.87) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5482.10 via Frontend Transport; Thu, 28 Jul 2022 05:51:57 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Wed, 27 Jul 2022 22:51:56 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Wed, 27 Jul 2022 22:51:56 -0700
+Envelope-to: linux-i2c@vger.kernel.org,
+ git-dev@amd.com,
+ robert.hancock@calian.com
+Received: from [10.140.6.59] (port=47326 helo=xhdshubhraj40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <shubhrajyoti.datta@xilinx.com>)
+        id 1oGwRA-0005Ts-9y; Wed, 27 Jul 2022 22:51:56 -0700
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To:     <linux-i2c@vger.kernel.org>
+CC:     <michal.simek@xilinx.com>, <git-dev@amd.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        Chirag Parekh <chiragp@xilinx.com>,
+        Robert Hancock <robert.hancock@calian.com>
+Subject: [PATCH v3] i2c: cadence: Add standard bus recovery support
+Date:   Thu, 28 Jul 2022 11:21:50 +0530
+Message-ID: <20220728055150.18368-1-shubhrajyoti.datta@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Date:   Wed, 27 Jul 2022 14:31:45 +0200
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        joel.peshkin@broadcom.com, f.fainelli@gmail.com,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        dan.beygelman@broadcom.com, anand.gore@broadcom.com,
-        kursad.oney@broadcom.com, krzysztof.kozlowski@linaro.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v2 6/9] arm64: bcmbca: Make BCM4908 drivers depend on
- ARCH_BCMBCA
-In-Reply-To: <20220725055402.6013-7-william.zhang@broadcom.com>
-References: <20220725055402.6013-1-william.zhang@broadcom.com>
- <20220725055402.6013-7-william.zhang@broadcom.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <63797827553783061a0ad5e897ed6538@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 3481282513174571860
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduvddgheefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvvefujghffgfkgihitgfgsehtjehjtddtredvnecuhfhrohhmpeftrghfrghlpgfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeetgfekfeduveehuedvgeefhffhieevhfejteeggfefieevffdtueeukedugeelieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedtrddtrddtrddtpdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrieelvddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehrrghfrghlsehmihhlvggtkhhirdhplhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehiedu
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 12e49f58-1a55-4553-b94c-08da705d4861
+X-MS-TrafficTypeDiagnostic: MWHPR02MB2302:EE_
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6PzbKXXvYQam9GkRF/J7vd/++1J4EQuYCQlF6/IHlhYJdWRqnnrHZ1s6WuOIZQY7Z/9kb2ZuZs6WfU1wUCIYU0ppb0eQHJ5UEyDEIR049gsX1eLMxcZMD7wZf27MgdaZCdlany/TN/yLRQvcnLS4vO4W3cgnPNfQE55lsQ1AOD3wQmI7NunfcymVNoWRWcROFIx3rgCY8p0tyPsmjXZO5CfkQ76CchQvIHCWMIycYEAUy3r43fib6p2N1LPlhGdmhSI0wmDbXN9K4i+4gZGn30gfrwNjw+FRddX6Cbc8Uo/BIkxmY9LRDV5F13kYuEm1LxUp4vkBhoxtYYV74hioCUogPvgXqGJkBFnOzms/5jLG0TvjjWB6Fg3zhCro4Bck3EdVoquprOhrmyPrEwJkdFZMpXho51bImLSNBI4u+fRUAyH9p7sPMsuFy6ahvUXvtMxbTPuEBzmPnQxQERfFQ+V15HP18pgRzA7bOSREZk5QxKtSLpVBwmgbkC7ihVqlrFp5CmQTmTAQEZDTQJZURRVRQAM0A/DYXikJW2p5bIktD3NID/GtAimGnIsTDKnBqqhriqZ0tOJ8N9hGNQH3pmvadCHVHOZvP1u6vLuuqeFZE/t/cxnB4y7xHAqu030QAe/ZkToSSUnyJgLCtgUMf11uDk0/8uk5Xj38iPRCGDcZVeWE7wZV20qr0N2wj8kbZj4Gj4L00oAu8drEAgnFcZAyW/dJIpsrW7oL1LrlaeaoQNvna2RBkjdE+FDOWbtNUi5oYalEnnkoYap1gT1EDf2In0RpTTZFW79dtLVCdMAJosgKCArbS/MapY+1QGAyyUzGJmEECEnQ5kq0WoEjuA==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(39860400002)(396003)(346002)(40470700004)(46966006)(36840700001)(7696005)(6916009)(44832011)(82740400003)(2616005)(2906002)(82310400005)(40480700001)(316002)(54906003)(8676002)(70586007)(70206006)(6666004)(41300700001)(4326008)(26005)(356005)(47076005)(83380400001)(186003)(7636003)(40460700003)(478600001)(8936002)(336012)(36756003)(1076003)(426003)(36860700001)(5660300002)(9786002)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2022 05:51:57.3729
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12e49f58-1a55-4553-b94c-08da705d4861
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT060.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2302
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 2022-07-25 07:53, William Zhang wrote:
-> With Broadcom Broadband arch ARCH_BCMBCA supported in the kernel, this
-> patch series migrate the ARCH_BCM4908 symbol to ARCH_BCMBCA. Hence
-> replace ARCH_BCM4908 with ARCH_BCMBCA in subsystem Kconfig files.
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> Acked-by: Guenter Roeck <linux@roeck-us.net> (for watchdog)
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com> (for drivers/pci)
+Hook up the standard GPIO/pinctrl-based recovery support.
+We are doing the recovery at the beginning on a timeout.
 
-I still think it may be a bad idea for all below drivers. Please see my
-previous e-mail:
-Re: [RESEND PATCH 6/9] arm64: bcmbca: Make BCM4908 drivers depend on 
-ARCH_BCMBCA
-https://lore.kernel.org/linux-arm-kernel/eee8c85652e6dac69420a876d03f67c4@milecki.pl/
+Multiple people have contributed to the series.
+Original patch from Cirag and another one from Robert.
 
-I think we should:
-1. Keep ARCH_BCM4908 for 4908 specific drivers (e.g. mtd, pinctrl, net)
-2. Use ARCH_BCMBCA for more generic drivers (e.g. I2C, PCI,serial, WD)
+Cc: Chirag Parekh <chiragp@xilinx.com>
+Cc: Robert Hancock <robert.hancock@calian.com>
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+---
+ v2:
+Updated the busbusy check on a timeout
+v3:
+Added pinctrl_get
+
+Did unit testing and probed the scl to see the clock pulses.
 
 
-> Changes in v2:
-> - Add Acked-by tags
-> - Update commit message with more details
-> 
->  drivers/i2c/busses/Kconfig            | 4 ++--
->  drivers/mtd/parsers/Kconfig           | 6 +++---
->  drivers/net/ethernet/broadcom/Kconfig | 4 ++--
->  drivers/pci/controller/Kconfig        | 2 +-
->  drivers/phy/broadcom/Kconfig          | 4 ++--
->  drivers/pinctrl/bcm/Kconfig           | 4 ++--
->  drivers/reset/Kconfig                 | 2 +-
->  drivers/soc/bcm/bcm63xx/Kconfig       | 4 ++--
->  drivers/tty/serial/Kconfig            | 4 ++--
->  drivers/watchdog/Kconfig              | 2 +-
->  10 files changed, 18 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-> index 45a4e9f1b639..fd9a4dd01997 100644
-> --- a/drivers/i2c/busses/Kconfig
-> +++ b/drivers/i2c/busses/Kconfig
-> @@ -487,8 +487,8 @@ config I2C_BCM_KONA
-> 
->  config I2C_BRCMSTB
->  	tristate "BRCM Settop/DSL I2C controller"
-> -	depends on ARCH_BCM2835 || ARCH_BCM4908 || ARCH_BCMBCA || \
-> -		   ARCH_BRCMSTB || BMIPS_GENERIC || COMPILE_TEST
-> +	depends on ARCH_BCM2835 || ARCH_BCMBCA || ARCH_BRCMSTB || \
-> +		   BMIPS_GENERIC || COMPILE_TEST
->  	default y
->  	help
->  	  If you say yes to this option, support will be included for the
-> diff --git a/drivers/mtd/parsers/Kconfig b/drivers/mtd/parsers/Kconfig
-> index b43df73927a0..d6db655a1d24 100644
-> --- a/drivers/mtd/parsers/Kconfig
-> +++ b/drivers/mtd/parsers/Kconfig
-> @@ -69,8 +69,8 @@ config MTD_OF_PARTS
-> 
->  config MTD_OF_PARTS_BCM4908
->  	bool "BCM4908 partitioning support"
-> -	depends on MTD_OF_PARTS && (ARCH_BCM4908 || COMPILE_TEST)
-> -	default ARCH_BCM4908
-> +	depends on MTD_OF_PARTS && (ARCH_BCMBCA || COMPILE_TEST)
-> +	default ARCH_BCMBCA
->  	help
->  	  This provides partitions parser for BCM4908 family devices
->  	  that can have multiple "firmware" partitions. It takes care of
-> @@ -78,7 +78,7 @@ config MTD_OF_PARTS_BCM4908
-> 
->  config MTD_OF_PARTS_LINKSYS_NS
->  	bool "Linksys Northstar partitioning support"
-> -	depends on MTD_OF_PARTS && (ARCH_BCM_5301X || ARCH_BCM4908 || 
-> COMPILE_TEST)
-> +	depends on MTD_OF_PARTS && (ARCH_BCM_5301X || ARCH_BCMBCA || 
-> COMPILE_TEST)
->  	default ARCH_BCM_5301X
->  	help
->  	  This provides partitions parser for Linksys devices based on 
-> Broadcom
-> diff --git a/drivers/net/ethernet/broadcom/Kconfig
-> b/drivers/net/ethernet/broadcom/Kconfig
-> index 56e0fb07aec7..f4e1ca68d831 100644
-> --- a/drivers/net/ethernet/broadcom/Kconfig
-> +++ b/drivers/net/ethernet/broadcom/Kconfig
-> @@ -53,8 +53,8 @@ config B44_PCI
-> 
->  config BCM4908_ENET
->  	tristate "Broadcom BCM4908 internal mac support"
-> -	depends on ARCH_BCM4908 || COMPILE_TEST
-> -	default y if ARCH_BCM4908
-> +	depends on ARCH_BCMBCA || COMPILE_TEST
-> +	default y if ARCH_BCMBCA
->  	help
->  	  This driver supports Ethernet controller integrated into Broadcom
->  	  BCM4908 family SoCs.
-> diff --git a/drivers/pci/controller/Kconfig 
-> b/drivers/pci/controller/Kconfig
-> index d1c5fcf00a8a..bfd9bac37e24 100644
-> --- a/drivers/pci/controller/Kconfig
-> +++ b/drivers/pci/controller/Kconfig
-> @@ -274,7 +274,7 @@ config VMD
-> 
->  config PCIE_BRCMSTB
->  	tristate "Broadcom Brcmstb PCIe host controller"
-> -	depends on ARCH_BRCMSTB || ARCH_BCM2835 || ARCH_BCM4908 || \
-> +	depends on ARCH_BRCMSTB || ARCH_BCM2835 || ARCH_BCMBCA || \
->  		   BMIPS_GENERIC || COMPILE_TEST
->  	depends on OF
->  	depends on PCI_MSI_IRQ_DOMAIN
-> diff --git a/drivers/phy/broadcom/Kconfig 
-> b/drivers/phy/broadcom/Kconfig
-> index 93a6a8ee4716..1d89a2fd9b79 100644
-> --- a/drivers/phy/broadcom/Kconfig
-> +++ b/drivers/phy/broadcom/Kconfig
-> @@ -93,11 +93,11 @@ config PHY_BRCM_SATA
-> 
->  config PHY_BRCM_USB
->  	tristate "Broadcom STB USB PHY driver"
-> -	depends on ARCH_BCM4908 || ARCH_BRCMSTB || COMPILE_TEST
-> +	depends on ARCH_BCMBCA || ARCH_BRCMSTB || COMPILE_TEST
->  	depends on OF
->  	select GENERIC_PHY
->  	select SOC_BRCMSTB if ARCH_BRCMSTB
-> -	default ARCH_BCM4908 || ARCH_BRCMSTB
-> +	default ARCH_BCMBCA || ARCH_BRCMSTB
->  	help
->  	  Enable this to support the Broadcom STB USB PHY.
->  	  This driver is required by the USB XHCI, EHCI and OHCI
-> diff --git a/drivers/pinctrl/bcm/Kconfig b/drivers/pinctrl/bcm/Kconfig
-> index 8f4d89806fcb..35b51ce4298e 100644
-> --- a/drivers/pinctrl/bcm/Kconfig
-> +++ b/drivers/pinctrl/bcm/Kconfig
-> @@ -31,13 +31,13 @@ config PINCTRL_BCM2835
-> 
->  config PINCTRL_BCM4908
->  	tristate "Broadcom BCM4908 pinmux driver"
-> -	depends on OF && (ARCH_BCM4908 || COMPILE_TEST)
-> +	depends on OF && (ARCH_BCMBCA || COMPILE_TEST)
->  	select PINMUX
->  	select PINCONF
->  	select GENERIC_PINCONF
->  	select GENERIC_PINCTRL_GROUPS
->  	select GENERIC_PINMUX_FUNCTIONS
-> -	default ARCH_BCM4908
-> +	default ARCH_BCMBCA
->  	help
->  	  Driver for BCM4908 family SoCs with integrated pin controller.
-> 
-> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-> index f9a7cee01659..7ae71535fe2a 100644
-> --- a/drivers/reset/Kconfig
-> +++ b/drivers/reset/Kconfig
-> @@ -201,7 +201,7 @@ config RESET_SCMI
-> 
->  config RESET_SIMPLE
->  	bool "Simple Reset Controller Driver" if COMPILE_TEST || EXPERT
-> -	default ARCH_ASPEED || ARCH_BCM4908 || ARCH_BITMAIN || ARCH_REALTEK
-> || ARCH_STM32 || (ARCH_INTEL_SOCFPGA && ARM64) || ARCH_SUNXI || ARC
-> +	default ARCH_ASPEED || ARCH_BCMBCA || ARCH_BITMAIN || ARCH_REALTEK
-> || ARCH_STM32 || (ARCH_INTEL_SOCFPGA && ARM64) || ARCH_SUNXI || ARC
->  	help
->  	  This enables a simple reset controller driver for reset lines that
->  	  that can be asserted and deasserted by toggling bits in a 
-> contiguous,
-> diff --git a/drivers/soc/bcm/bcm63xx/Kconfig 
-> b/drivers/soc/bcm/bcm63xx/Kconfig
-> index 9e501c8ac5ce..355c34482076 100644
-> --- a/drivers/soc/bcm/bcm63xx/Kconfig
-> +++ b/drivers/soc/bcm/bcm63xx/Kconfig
-> @@ -13,8 +13,8 @@ endif # SOC_BCM63XX
-> 
->  config BCM_PMB
->  	bool "Broadcom PMB (Power Management Bus) driver"
-> -	depends on ARCH_BCM4908 || (COMPILE_TEST && OF)
-> -	default ARCH_BCM4908
-> +	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
-> +	default ARCH_BCMBCA
->  	select PM_GENERIC_DOMAINS if PM
->  	help
->  	  This enables support for the Broadcom's PMB (Power Management Bus) 
-> that
-> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-> index e3279544b03c..f32bb01c3feb 100644
-> --- a/drivers/tty/serial/Kconfig
-> +++ b/drivers/tty/serial/Kconfig
-> @@ -1100,8 +1100,8 @@ config SERIAL_TIMBERDALE
->  config SERIAL_BCM63XX
->  	tristate "Broadcom BCM63xx/BCM33xx UART support"
->  	select SERIAL_CORE
-> -	depends on ARCH_BCM4908 || ARCH_BCMBCA || BCM63XX || BMIPS_GENERIC
-> || COMPILE_TEST
-> -	default ARCH_BCM4908 || ARCH_BCMBCA || BCM63XX || BMIPS_GENERIC
-> +	depends on ARCH_BCMBCA || BCM63XX || BMIPS_GENERIC || COMPILE_TEST
-> +	default ARCH_BCMBCA || BCM63XX || BMIPS_GENERIC
->  	help
->  	  This enables the driver for the onchip UART core found on
->  	  the following chipsets:
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 32fd37698932..1f85ec8a4b3b 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1798,7 +1798,7 @@ config BCM7038_WDT
->  	tristate "BCM63xx/BCM7038 Watchdog"
->  	select WATCHDOG_CORE
->  	depends on HAS_IOMEM
-> -	depends on ARCH_BCM4908 || ARCH_BRCMSTB || BMIPS_GENERIC || BCM63XX
-> || COMPILE_TEST
-> +	depends on ARCH_BCMBCA || ARCH_BRCMSTB || BMIPS_GENERIC || BCM63XX
-> || COMPILE_TEST
->  	help
->  	  Watchdog driver for the built-in hardware in Broadcom 7038 and
->  	  later SoCs used in set-top boxes.  BCM7038 was made public
+ drivers/i2c/busses/i2c-cadence.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+index 630cfa4ddd46..c9a10d4297a9 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -10,10 +10,12 @@
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
++#include <linux/iopoll.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/of.h>
+ #include <linux/pm_runtime.h>
++#include <linux/pinctrl/consumer.h>
+ 
+ /* Register offsets for the I2C device. */
+ #define CDNS_I2C_CR_OFFSET		0x00 /* Control Register, RW */
+@@ -127,6 +129,8 @@
+ #define CDNS_I2C_TIMEOUT_MAX	0xFF
+ 
+ #define CDNS_I2C_BROKEN_HOLD_BIT	BIT(0)
++#define CDNS_I2C_POLL_US	100000
++#define CDNS_I2C_TIMEOUT_US	500000
+ 
+ #define cdns_i2c_readreg(offset)       readl_relaxed(id->membase + offset)
+ #define cdns_i2c_writereg(val, offset) writel_relaxed(val, id->membase + offset)
+@@ -204,6 +208,7 @@ struct cdns_i2c {
+ 	struct notifier_block clk_rate_change_nb;
+ 	u32 quirks;
+ 	u32 ctrl_reg;
++	struct i2c_bus_recovery_info rinfo;
+ #if IS_ENABLED(CONFIG_I2C_SLAVE)
+ 	u16 ctrl_reg_diva_divb;
+ 	struct i2c_client *slave;
+@@ -832,8 +837,14 @@ static int cdns_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+ #endif
+ 
+ 	/* Check if the bus is free */
+-	if (cdns_i2c_readreg(CDNS_I2C_SR_OFFSET) & CDNS_I2C_SR_BA) {
++
++	ret = readl_relaxed_poll_timeout(id->membase + CDNS_I2C_SR_OFFSET,
++					 reg,
++					 !(reg & CDNS_I2C_SR_BA),
++					 CDNS_I2C_POLL_US, CDNS_I2C_TIMEOUT_US);
++	if (ret) {
+ 		ret = -EAGAIN;
++		i2c_recover_bus(adap);
+ 		goto out;
+ 	}
+ 
+@@ -1242,6 +1253,12 @@ static int cdns_i2c_probe(struct platform_device *pdev)
+ 		id->quirks = data->quirks;
+ 	}
+ 
++	id->rinfo.pinctrl = devm_pinctrl_get(&pdev->dev);
++	if (IS_ERR(id->rinfo.pinctrl)) {
++		dev_info(&pdev->dev, "can't get pinctrl, bus recovery not supported\n");
++		return PTR_ERR(id->rinfo.pinctrl);
++	}
++
+ 	id->membase = devm_platform_get_and_ioremap_resource(pdev, 0, &r_mem);
+ 	if (IS_ERR(id->membase))
+ 		return PTR_ERR(id->membase);
+@@ -1258,6 +1275,7 @@ static int cdns_i2c_probe(struct platform_device *pdev)
+ 	id->adap.retries = 3;		/* Default retry value. */
+ 	id->adap.algo_data = id;
+ 	id->adap.dev.parent = &pdev->dev;
++	id->adap.bus_recovery_info = &id->rinfo;
+ 	init_completion(&id->xfer_done);
+ 	snprintf(id->adap.name, sizeof(id->adap.name),
+ 		 "Cadence I2C at %08lx", (unsigned long)r_mem->start);
+-- 
+2.17.1
+
