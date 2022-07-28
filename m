@@ -2,201 +2,153 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6465B583846
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Jul 2022 07:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97A2158410B
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Jul 2022 16:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiG1FwC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 28 Jul 2022 01:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
+        id S229604AbiG1OZr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 28 Jul 2022 10:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiG1FwB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 Jul 2022 01:52:01 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2048.outbound.protection.outlook.com [40.107.93.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA72056BBA
-        for <linux-i2c@vger.kernel.org>; Wed, 27 Jul 2022 22:51:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kvh50BQEZlnBAKKdZg/cJptMFjecyheAjFGROthKQ0Yt7mwtWieOaiI5B0aaA31gpyj2X0ryIF0wabq/FBeuVZAYqwGPYRoJuA37Q3vjy4jqJsXo3jVsGLKgdSLIYoRNDXel0IakmjCc4D0zaqpJftOqbjuoG6t+0YL04dzOsF9i7aEC2yzB1yBM1VldxFGxhul2fcGn0G2wWRuDogKoGJUuBlm0FhqnR7MfthvBRhDcnKJMgbwnPtVBD7lpts9LDaJHnCLkTErNiyj+T0fxKQ3cyh2qNiVKpZzGpWFPAflXz0O1XxSfy6d+Q9OHsH8bDR15gsPhQgbzTwfdtnDXhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2MTJprcKE57tIOr28KNQz3xaaYDI3khZsAZKXcv2m2o=;
- b=ejnCzhwojzhYqZ0UO8TxocITntTUpERs29iSJmehNjsMKQjOOIqzw3aTd+8WpgqSStlXnp6cUkJRADhaR95/NkIDHBlUeBnU1mDUbni1/HxpWd8uXaESgPLo8ZjYbQBYYz7v4LTqSH7KHwyYCeiwNbwOfqDXowfJ4xDhPfh+wI3RFMcSpRkg6N8eK5yg5FcZL1j3UaHH6kl1JY+oAGe8YMx4epKGo85GfnoctUem3BIh2QodPAOprxqPPDqpBoaobATyNS0rmKzL1ARxVcMb9Mwh0oQw7Pm3w+YtJOUKX0IpE+f1ReeGO+G1kByJfu/OfZlganzOYeaeVK9aGIi3ww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
+        with ESMTP id S231786AbiG1OZq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 Jul 2022 10:25:46 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CBC3C144;
+        Thu, 28 Jul 2022 07:25:45 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 141so3518302ybn.4;
+        Thu, 28 Jul 2022 07:25:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2MTJprcKE57tIOr28KNQz3xaaYDI3khZsAZKXcv2m2o=;
- b=fwYINDRhNfpckdDANyP49Uv5NaB7DA9LyWVKsfyYl/u6MH/DVYuAhz2S7kSJizsd5rvjXQrhXGHUNjN4lhPcN+R7pUGrUkmCuiUpcZ83UCrdEov27Y3m6ZMgxUO28LxWRp1Z2w9SpNTQxkAYkgYMdmUdtafxhaiOyZsNML195Gk=
-Received: from DM6PR11CA0023.namprd11.prod.outlook.com (2603:10b6:5:190::36)
- by MWHPR02MB2302.namprd02.prod.outlook.com (2603:10b6:300:5b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Thu, 28 Jul
- 2022 05:51:57 +0000
-Received: from DM3NAM02FT060.eop-nam02.prod.protection.outlook.com
- (2603:10b6:5:190:cafe::7) by DM6PR11CA0023.outlook.office365.com
- (2603:10b6:5:190::36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.20 via Frontend
- Transport; Thu, 28 Jul 2022 05:51:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT060.mail.protection.outlook.com (10.13.4.87) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5482.10 via Frontend Transport; Thu, 28 Jul 2022 05:51:57 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Wed, 27 Jul 2022 22:51:56 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Wed, 27 Jul 2022 22:51:56 -0700
-Envelope-to: linux-i2c@vger.kernel.org,
- git-dev@amd.com,
- robert.hancock@calian.com
-Received: from [10.140.6.59] (port=47326 helo=xhdshubhraj40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <shubhrajyoti.datta@xilinx.com>)
-        id 1oGwRA-0005Ts-9y; Wed, 27 Jul 2022 22:51:56 -0700
-From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-To:     <linux-i2c@vger.kernel.org>
-CC:     <michal.simek@xilinx.com>, <git-dev@amd.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Chirag Parekh <chiragp@xilinx.com>,
-        Robert Hancock <robert.hancock@calian.com>
-Subject: [PATCH v3] i2c: cadence: Add standard bus recovery support
-Date:   Thu, 28 Jul 2022 11:21:50 +0530
-Message-ID: <20220728055150.18368-1-shubhrajyoti.datta@xilinx.com>
-X-Mailer: git-send-email 2.17.1
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=p3LundJe/B7kP70p/sHLOn4E+FS4l10QjqFmK00htFE=;
+        b=A1npVQRsIIGhqrLf8k1afl0RnpwTJqtndWJ9zwwdiHBec1qyAdFLwzqHsOSEz3tCvV
+         J33JylIt6+Pd/jdRlsNR8UNmRloDG3G3NH8SDxk+u/mKNySVTad5ytB99iquy75NDEmJ
+         4mWC5CLDqVkcs4L2XoIG3yXXPEAHHG/8Tcg/Dvv9GYAPEUkBT69Sf5SENvQPZzOzH0sX
+         rfGEF5dzUYaNlMOHu9Bo+MhNb46gjzqbFsnt6Os5CtChAsnh8Oe9HHUf8ZzIl+foGeav
+         4tev6dNQXoIBnvQvDpzSxoDwu4FxCVkjoAtNixqsdq3d7+awDvcxDaofyreOs9jcFNbc
+         pM7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=p3LundJe/B7kP70p/sHLOn4E+FS4l10QjqFmK00htFE=;
+        b=6RF8NVyqer2ry7KkMbl4IGe3s466k9oAtT8aexLm+GyWJ8LGxFSmOwyN77/S38+3c1
+         fKKwh2CnoBJL8cg15hV7rxdNiwuSvH+rPXrZGZntlbgnmWQ4y7yi4yAx5kFspcdVe0pr
+         +pByPs6GHVdjawPpGZV0FuOoHi0L5tU0q2NfKxxMibBhfWpUr5HDe5XVX9U5lF6ZadYw
+         /qHuBuHuM2yrtiLfokOHvCGQXCqontHwfRxWYG/FcKKacSIVP9tleGsyDrOCvm/DeoYR
+         b+ucXBpRe03WGawwrsk6EXEOzdEoKDGs0tPFSDZgFbEIq6qDVPpJrJBzhBd4JliSP5kO
+         CUjA==
+X-Gm-Message-State: AJIora9AUiv+GEFNUaem3B7qlfBZvrywD5GTOgrdxToXQkTak2+zIN/G
+        dB1ZendnebimntracZRkcoXk8sTco+kdtkssDs0=
+X-Google-Smtp-Source: AGRyM1tCj4kGBTNXRwFwSGAlKun9Kno3+3NAkIfxjL5nye0CiOrWdeD4Is2ry7fRDFK14XMZzZ9IWnwfFJOA1A028zM=
+X-Received: by 2002:a25:e401:0:b0:66e:280a:98cd with SMTP id
+ b1-20020a25e401000000b0066e280a98cdmr20245601ybh.540.1659018344244; Thu, 28
+ Jul 2022 07:25:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 12e49f58-1a55-4553-b94c-08da705d4861
-X-MS-TrafficTypeDiagnostic: MWHPR02MB2302:EE_
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6PzbKXXvYQam9GkRF/J7vd/++1J4EQuYCQlF6/IHlhYJdWRqnnrHZ1s6WuOIZQY7Z/9kb2ZuZs6WfU1wUCIYU0ppb0eQHJ5UEyDEIR049gsX1eLMxcZMD7wZf27MgdaZCdlany/TN/yLRQvcnLS4vO4W3cgnPNfQE55lsQ1AOD3wQmI7NunfcymVNoWRWcROFIx3rgCY8p0tyPsmjXZO5CfkQ76CchQvIHCWMIycYEAUy3r43fib6p2N1LPlhGdmhSI0wmDbXN9K4i+4gZGn30gfrwNjw+FRddX6Cbc8Uo/BIkxmY9LRDV5F13kYuEm1LxUp4vkBhoxtYYV74hioCUogPvgXqGJkBFnOzms/5jLG0TvjjWB6Fg3zhCro4Bck3EdVoquprOhrmyPrEwJkdFZMpXho51bImLSNBI4u+fRUAyH9p7sPMsuFy6ahvUXvtMxbTPuEBzmPnQxQERfFQ+V15HP18pgRzA7bOSREZk5QxKtSLpVBwmgbkC7ihVqlrFp5CmQTmTAQEZDTQJZURRVRQAM0A/DYXikJW2p5bIktD3NID/GtAimGnIsTDKnBqqhriqZ0tOJ8N9hGNQH3pmvadCHVHOZvP1u6vLuuqeFZE/t/cxnB4y7xHAqu030QAe/ZkToSSUnyJgLCtgUMf11uDk0/8uk5Xj38iPRCGDcZVeWE7wZV20qr0N2wj8kbZj4Gj4L00oAu8drEAgnFcZAyW/dJIpsrW7oL1LrlaeaoQNvna2RBkjdE+FDOWbtNUi5oYalEnnkoYap1gT1EDf2In0RpTTZFW79dtLVCdMAJosgKCArbS/MapY+1QGAyyUzGJmEECEnQ5kq0WoEjuA==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(39860400002)(396003)(346002)(40470700004)(46966006)(36840700001)(7696005)(6916009)(44832011)(82740400003)(2616005)(2906002)(82310400005)(40480700001)(316002)(54906003)(8676002)(70586007)(70206006)(6666004)(41300700001)(4326008)(26005)(356005)(47076005)(83380400001)(186003)(7636003)(40460700003)(478600001)(8936002)(336012)(36756003)(1076003)(426003)(36860700001)(5660300002)(9786002)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2022 05:51:57.3729
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12e49f58-1a55-4553-b94c-08da705d4861
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT060.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2302
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <202207190634.ToyhlXSz-lkp@intel.com> <0551a3ad-8c42-78fe-5b50-ebbc003e55e6@intel.com>
+ <CANRwn3R48rvwnygdyKhmFE8wD+BCCHrTWa-M=uTvpnK5Jo3vww@mail.gmail.com>
+In-Reply-To: <CANRwn3R48rvwnygdyKhmFE8wD+BCCHrTWa-M=uTvpnK5Jo3vww@mail.gmail.com>
+From:   Jason Gerecke <killertofu@gmail.com>
+Date:   Thu, 28 Jul 2022 07:26:00 -0700
+Message-ID: <CANRwn3Tgumg-mZ9sV=8AXevag9z2s=mTF4qqZW2KenDmc9b1wQ@mail.gmail.com>
+Subject: Re: [PATCH] i2c: Use u8 type in i2c transfer calls
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Wolfram Sang <wsa-dev@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, Ping Cheng <pinglinux@gmail.com>,
+        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-iio@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hook up the standard GPIO/pinctrl-based recovery support.
-We are doing the recovery at the beginning on a timeout.
+On Wed, Jul 20, 2022 at 12:01 PM Jason Gerecke <killertofu@gmail.com> wrote=
+:
+>
+> On Tue, Jul 19, 2022 at 5:21 PM kernel test robot <rong.a.chen@intel.com>=
+ wrote:
+> >
+> >
+> > Hi Jason,
+> >
+> > I love your patch! Yet something to improve:
+> >
+> > [auto build test ERROR on wsa/i2c/for-next]
+> > [also build test ERROR on linus/master v5.19-rc7 next-20220718]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >
+> > url:
+> > https://github.com/intel-lab-lkp/linux/commits/Jason-Gerecke/i2c-Use-u8=
+-type-in-i2c-transfer-calls/20220718-233658
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git
+> > i2c/for-next
+> > config: hexagon-randconfig-r026-20220718
+> > (https://download.01.org/0day-ci/archive/20220719/202207190634.ToyhlXSz=
+-lkp@intel.com/config)
+> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project
+> > d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
+> > reproduce (this is a W=3D1 build):
+> >          wget
+> > https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cros=
+s
+> > -O ~/bin/make.cross
+> >          chmod +x ~/bin/make.cross
+> >          #
+> > https://github.com/intel-lab-lkp/linux/commit/9732240c23a365c0590f05ce8=
+3196869235a2ea7
+> >          git remote add linux-review https://github.com/intel-lab-lkp/l=
+inux
+> >          git fetch --no-tags linux-review
+> > Jason-Gerecke/i2c-Use-u8-type-in-i2c-transfer-calls/20220718-233658
+> >          git checkout 9732240c23a365c0590f05ce83196869235a2ea7
+> >          # save the config file
+> >          mkdir build_dir && cp config build_dir/.config
+> >          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross=
+ W=3D1
+> > O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/iio/adc/
+> >
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> > >> drivers/iio/adc/max1363.c:1645:12: error: incompatible function poin=
+ter types assigning to 'int (*)(const struct i2c_client *, const char *, in=
+t)' from 'int (const struct i2c_client *, const u8 *, int)' (aka 'int (cons=
+t struct i2c_client *, const unsigned char *, int)') [-Werror,-Wincompatibl=
+e-function-pointer-types]
+> >                     st->send =3D i2c_master_send;
+> >                              ^ ~~~~~~~~~~~~~~~
+> > >> drivers/iio/adc/max1363.c:1646:12: error: incompatible function poin=
+ter types assigning to 'int (*)(const struct i2c_client *, char *, int)' fr=
+om 'int (const struct i2c_client *, u8 *, int)' (aka 'int (const struct i2c=
+_client *, unsigned char *, int)') [-Werror,-Wincompatible-function-pointer=
+-types]
+> >                     st->recv =3D i2c_master_recv;
+> >                              ^ ~~~~~~~~~~~~~~~
+> >     2 errors generated.
+>
+> Wolfram and Jonathan,
+>
+> Writing a patch to fix the new warnings generated by my I2C patch is
+> simple enough, but I'd like some help coordinating getting both
+> patches landed. Should I wait for the I2C patch to land in "for-next"
+> before sending the IIO fix, or would it be preferred to send the IIO
+> fix right now so that both patches can be reviewed simultaneously?
 
-Multiple people have contributed to the series.
-Original patch from Cirag and another one from Robert.
+It's been pretty quiet, so asking again for any thoughts on how to
+best address this tangle...
 
-Cc: Chirag Parekh <chiragp@xilinx.com>
-Cc: Robert Hancock <robert.hancock@calian.com>
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
----
- v2:
-Updated the busbusy check on a timeout
-v3:
-Added pinctrl_get
-
-Did unit testing and probed the scl to see the clock pulses.
-
-
- drivers/i2c/busses/i2c-cadence.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index 630cfa4ddd46..c9a10d4297a9 100644
---- a/drivers/i2c/busses/i2c-cadence.c
-+++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -10,10 +10,12 @@
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
-+#include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/of.h>
- #include <linux/pm_runtime.h>
-+#include <linux/pinctrl/consumer.h>
- 
- /* Register offsets for the I2C device. */
- #define CDNS_I2C_CR_OFFSET		0x00 /* Control Register, RW */
-@@ -127,6 +129,8 @@
- #define CDNS_I2C_TIMEOUT_MAX	0xFF
- 
- #define CDNS_I2C_BROKEN_HOLD_BIT	BIT(0)
-+#define CDNS_I2C_POLL_US	100000
-+#define CDNS_I2C_TIMEOUT_US	500000
- 
- #define cdns_i2c_readreg(offset)       readl_relaxed(id->membase + offset)
- #define cdns_i2c_writereg(val, offset) writel_relaxed(val, id->membase + offset)
-@@ -204,6 +208,7 @@ struct cdns_i2c {
- 	struct notifier_block clk_rate_change_nb;
- 	u32 quirks;
- 	u32 ctrl_reg;
-+	struct i2c_bus_recovery_info rinfo;
- #if IS_ENABLED(CONFIG_I2C_SLAVE)
- 	u16 ctrl_reg_diva_divb;
- 	struct i2c_client *slave;
-@@ -832,8 +837,14 @@ static int cdns_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
- #endif
- 
- 	/* Check if the bus is free */
--	if (cdns_i2c_readreg(CDNS_I2C_SR_OFFSET) & CDNS_I2C_SR_BA) {
-+
-+	ret = readl_relaxed_poll_timeout(id->membase + CDNS_I2C_SR_OFFSET,
-+					 reg,
-+					 !(reg & CDNS_I2C_SR_BA),
-+					 CDNS_I2C_POLL_US, CDNS_I2C_TIMEOUT_US);
-+	if (ret) {
- 		ret = -EAGAIN;
-+		i2c_recover_bus(adap);
- 		goto out;
- 	}
- 
-@@ -1242,6 +1253,12 @@ static int cdns_i2c_probe(struct platform_device *pdev)
- 		id->quirks = data->quirks;
- 	}
- 
-+	id->rinfo.pinctrl = devm_pinctrl_get(&pdev->dev);
-+	if (IS_ERR(id->rinfo.pinctrl)) {
-+		dev_info(&pdev->dev, "can't get pinctrl, bus recovery not supported\n");
-+		return PTR_ERR(id->rinfo.pinctrl);
-+	}
-+
- 	id->membase = devm_platform_get_and_ioremap_resource(pdev, 0, &r_mem);
- 	if (IS_ERR(id->membase))
- 		return PTR_ERR(id->membase);
-@@ -1258,6 +1275,7 @@ static int cdns_i2c_probe(struct platform_device *pdev)
- 	id->adap.retries = 3;		/* Default retry value. */
- 	id->adap.algo_data = id;
- 	id->adap.dev.parent = &pdev->dev;
-+	id->adap.bus_recovery_info = &id->rinfo;
- 	init_completion(&id->xfer_done);
- 	snprintf(id->adap.name, sizeof(id->adap.name),
- 		 "Cadence I2C at %08lx", (unsigned long)r_mem->start);
--- 
-2.17.1
-
+Jason
