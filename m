@@ -2,68 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A2158410B
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Jul 2022 16:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0508258467C
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Jul 2022 21:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiG1OZr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 28 Jul 2022 10:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
+        id S232578AbiG1TWV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 28 Jul 2022 15:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbiG1OZq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 Jul 2022 10:25:46 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CBC3C144;
-        Thu, 28 Jul 2022 07:25:45 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 141so3518302ybn.4;
-        Thu, 28 Jul 2022 07:25:45 -0700 (PDT)
+        with ESMTP id S229570AbiG1TWU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 Jul 2022 15:22:20 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DBA1A05E;
+        Thu, 28 Jul 2022 12:22:19 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 6so2256476pgb.13;
+        Thu, 28 Jul 2022 12:22:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=p3LundJe/B7kP70p/sHLOn4E+FS4l10QjqFmK00htFE=;
-        b=A1npVQRsIIGhqrLf8k1afl0RnpwTJqtndWJ9zwwdiHBec1qyAdFLwzqHsOSEz3tCvV
-         J33JylIt6+Pd/jdRlsNR8UNmRloDG3G3NH8SDxk+u/mKNySVTad5ytB99iquy75NDEmJ
-         4mWC5CLDqVkcs4L2XoIG3yXXPEAHHG/8Tcg/Dvv9GYAPEUkBT69Sf5SENvQPZzOzH0sX
-         rfGEF5dzUYaNlMOHu9Bo+MhNb46gjzqbFsnt6Os5CtChAsnh8Oe9HHUf8ZzIl+foGeav
-         4tev6dNQXoIBnvQvDpzSxoDwu4FxCVkjoAtNixqsdq3d7+awDvcxDaofyreOs9jcFNbc
-         pM7w==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=EFOAo/QdtEPRv+rmfrGIwUMKLAu+6hzcQDL1f3TAQNM=;
+        b=lB+pWhhlv93nZ1uF9MlIOnX5O59BjNqfBlzyuwaJ9IcEqZIikDytWL8FxK9mRR7bGC
+         CP0N3vcVC4GRQyBqp/aXDsHM+Rp/kL+AcBtbGgawHiyB0n2SQ/S9YTLhVKYgLJzYvnfa
+         DRgHjFYGggf4djkLYGpyCKIAfFc4nCcIoEjsFfGVMZ1/sB2/Jgb8jz20AGsMwpQd4Rhb
+         5lHHgqgPkKGl66JAg/+e1Wkvj9UiHeRANwaOr3+bwehcQ5WJ52Rwi+bf7sjW1dQxqAEB
+         0wInCPsCu9FBE5kiqsjVn81pQZUQnEayOJ4Rp+zGMKxlzT+3V1MGecumxQBkOPnllvzK
+         p+iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=p3LundJe/B7kP70p/sHLOn4E+FS4l10QjqFmK00htFE=;
-        b=6RF8NVyqer2ry7KkMbl4IGe3s466k9oAtT8aexLm+GyWJ8LGxFSmOwyN77/S38+3c1
-         fKKwh2CnoBJL8cg15hV7rxdNiwuSvH+rPXrZGZntlbgnmWQ4y7yi4yAx5kFspcdVe0pr
-         +pByPs6GHVdjawPpGZV0FuOoHi0L5tU0q2NfKxxMibBhfWpUr5HDe5XVX9U5lF6ZadYw
-         /qHuBuHuM2yrtiLfokOHvCGQXCqontHwfRxWYG/FcKKacSIVP9tleGsyDrOCvm/DeoYR
-         b+ucXBpRe03WGawwrsk6EXEOzdEoKDGs0tPFSDZgFbEIq6qDVPpJrJBzhBd4JliSP5kO
-         CUjA==
-X-Gm-Message-State: AJIora9AUiv+GEFNUaem3B7qlfBZvrywD5GTOgrdxToXQkTak2+zIN/G
-        dB1ZendnebimntracZRkcoXk8sTco+kdtkssDs0=
-X-Google-Smtp-Source: AGRyM1tCj4kGBTNXRwFwSGAlKun9Kno3+3NAkIfxjL5nye0CiOrWdeD4Is2ry7fRDFK14XMZzZ9IWnwfFJOA1A028zM=
-X-Received: by 2002:a25:e401:0:b0:66e:280a:98cd with SMTP id
- b1-20020a25e401000000b0066e280a98cdmr20245601ybh.540.1659018344244; Thu, 28
- Jul 2022 07:25:44 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=EFOAo/QdtEPRv+rmfrGIwUMKLAu+6hzcQDL1f3TAQNM=;
+        b=irglV27uulHB7xGlavq7wJq+OWG1Pi6Aw9k9FKOFJIio3ETkwpBw5qFVt7bbmNwKOw
+         TH/ON1/OYg+Us/xaO0vhBaIxyfbP7BpbGTIAL0qZTDHb2xBEeUj7E40VDt7T5T52W0Vy
+         u+tbtfA9XkbkCiL5nWaXAIoyzmwAtdDWPl+xvQrlHOB1cjN+xVaRxVoMpW9iw3oP5bDx
+         0UZvB2cVuzafW0Uuf6UxC5LKRROo/pujw6NV4LKVFu4dz4WJMfxIqezIrV2g24OVcstg
+         9U2NPvkEQmS/YHSetnMDgOGEZ1juTFEhSBCYR9VGI1DyWjZ+EgkFYiiEg6ItedX4RV1G
+         aOhA==
+X-Gm-Message-State: AJIora8+ABlM6yjJXM2FAwHDWGyDzeLeYqPgJAiXgl2znlIaaqu8Dml8
+        juVaIkI+9S2i0adDs/H8kY0=
+X-Google-Smtp-Source: AGRyM1tj9cuz/W4LAd9BMq4WIOZkxkrW2UJLCS/AeNw+AhegYlhfdsgfmykyQIPR9LbFViQAWRDZ3w==
+X-Received: by 2002:a63:ce0f:0:b0:41a:f0ee:c28e with SMTP id y15-20020a63ce0f000000b0041af0eec28emr190116pgf.43.1659036138925;
+        Thu, 28 Jul 2022 12:22:18 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id m8-20020a654c88000000b0040cfb5151fcsm1282985pgt.74.2022.07.28.12.22.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 12:22:18 -0700 (PDT)
+Message-ID: <db9560c1-7fc7-405e-bee1-3827a943b712@gmail.com>
+Date:   Thu, 28 Jul 2022 12:22:12 -0700
 MIME-Version: 1.0
-References: <202207190634.ToyhlXSz-lkp@intel.com> <0551a3ad-8c42-78fe-5b50-ebbc003e55e6@intel.com>
- <CANRwn3R48rvwnygdyKhmFE8wD+BCCHrTWa-M=uTvpnK5Jo3vww@mail.gmail.com>
-In-Reply-To: <CANRwn3R48rvwnygdyKhmFE8wD+BCCHrTWa-M=uTvpnK5Jo3vww@mail.gmail.com>
-From:   Jason Gerecke <killertofu@gmail.com>
-Date:   Thu, 28 Jul 2022 07:26:00 -0700
-Message-ID: <CANRwn3Tgumg-mZ9sV=8AXevag9z2s=mTF4qqZW2KenDmc9b1wQ@mail.gmail.com>
-Subject: Re: [PATCH] i2c: Use u8 type in i2c transfer calls
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, Ping Cheng <pinglinux@gmail.com>,
-        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-iio@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 6/9] arm64: bcmbca: Make BCM4908 drivers depend on
+ ARCH_BCMBCA
+Content-Language: en-US
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        William Zhang <william.zhang@broadcom.com>
+Cc:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        joel.peshkin@broadcom.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        dan.beygelman@broadcom.com, anand.gore@broadcom.com,
+        kursad.oney@broadcom.com, krzysztof.kozlowski@linaro.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20220725055402.6013-1-william.zhang@broadcom.com>
+ <20220725055402.6013-7-william.zhang@broadcom.com>
+ <63797827553783061a0ad5e897ed6538@milecki.pl>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <63797827553783061a0ad5e897ed6538@milecki.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,83 +97,29 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 12:01 PM Jason Gerecke <killertofu@gmail.com> wrote=
-:
->
-> On Tue, Jul 19, 2022 at 5:21 PM kernel test robot <rong.a.chen@intel.com>=
- wrote:
-> >
-> >
-> > Hi Jason,
-> >
-> > I love your patch! Yet something to improve:
-> >
-> > [auto build test ERROR on wsa/i2c/for-next]
-> > [also build test ERROR on linus/master v5.19-rc7 next-20220718]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >
-> > url:
-> > https://github.com/intel-lab-lkp/linux/commits/Jason-Gerecke/i2c-Use-u8=
--type-in-i2c-transfer-calls/20220718-233658
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git
-> > i2c/for-next
-> > config: hexagon-randconfig-r026-20220718
-> > (https://download.01.org/0day-ci/archive/20220719/202207190634.ToyhlXSz=
--lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project
-> > d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
-> > reproduce (this is a W=3D1 build):
-> >          wget
-> > https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cros=
-s
-> > -O ~/bin/make.cross
-> >          chmod +x ~/bin/make.cross
-> >          #
-> > https://github.com/intel-lab-lkp/linux/commit/9732240c23a365c0590f05ce8=
-3196869235a2ea7
-> >          git remote add linux-review https://github.com/intel-lab-lkp/l=
-inux
-> >          git fetch --no-tags linux-review
-> > Jason-Gerecke/i2c-Use-u8-type-in-i2c-transfer-calls/20220718-233658
-> >          git checkout 9732240c23a365c0590f05ce83196869235a2ea7
-> >          # save the config file
-> >          mkdir build_dir && cp config build_dir/.config
-> >          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross=
- W=3D1
-> > O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/iio/adc/
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> drivers/iio/adc/max1363.c:1645:12: error: incompatible function poin=
-ter types assigning to 'int (*)(const struct i2c_client *, const char *, in=
-t)' from 'int (const struct i2c_client *, const u8 *, int)' (aka 'int (cons=
-t struct i2c_client *, const unsigned char *, int)') [-Werror,-Wincompatibl=
-e-function-pointer-types]
-> >                     st->send =3D i2c_master_send;
-> >                              ^ ~~~~~~~~~~~~~~~
-> > >> drivers/iio/adc/max1363.c:1646:12: error: incompatible function poin=
-ter types assigning to 'int (*)(const struct i2c_client *, char *, int)' fr=
-om 'int (const struct i2c_client *, u8 *, int)' (aka 'int (const struct i2c=
-_client *, unsigned char *, int)') [-Werror,-Wincompatible-function-pointer=
--types]
-> >                     st->recv =3D i2c_master_recv;
-> >                              ^ ~~~~~~~~~~~~~~~
-> >     2 errors generated.
->
-> Wolfram and Jonathan,
->
-> Writing a patch to fix the new warnings generated by my I2C patch is
-> simple enough, but I'd like some help coordinating getting both
-> patches landed. Should I wait for the I2C patch to land in "for-next"
-> before sending the IIO fix, or would it be preferred to send the IIO
-> fix right now so that both patches can be reviewed simultaneously?
+On 7/27/22 05:31, Rafał Miłecki wrote:
+> On 2022-07-25 07:53, William Zhang wrote:
+>> With Broadcom Broadband arch ARCH_BCMBCA supported in the kernel, this
+>> patch series migrate the ARCH_BCM4908 symbol to ARCH_BCMBCA. Hence
+>> replace ARCH_BCM4908 with ARCH_BCMBCA in subsystem Kconfig files.
+>>
+>> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+>> Acked-by: Guenter Roeck <linux@roeck-us.net> (for watchdog)
+>> Acked-by: Bjorn Helgaas <bhelgaas@google.com> (for drivers/pci)
+> 
+> I still think it may be a bad idea for all below drivers. Please see my
+> previous e-mail:
+> Re: [RESEND PATCH 6/9] arm64: bcmbca: Make BCM4908 drivers depend on ARCH_BCMBCA
+> https://lore.kernel.org/linux-arm-kernel/eee8c85652e6dac69420a876d03f67c4@milecki.pl/
+> 
+> I think we should:
+> 1. Keep ARCH_BCM4908 for 4908 specific drivers (e.g. mtd, pinctrl, net)
+> 2. Use ARCH_BCMBCA for more generic drivers (e.g. I2C, PCI,serial, WD)
 
-It's been pretty quiet, so asking again for any thoughts on how to
-best address this tangle...
+IMHO here is no point in keeping an ARCH_BCM4908 anymore when the whole point of the patch series is to do a broad conversion of ARCH_BCM4908 into ARCH_BCMBCA. Even if some of the drivers are considered or thought to be 4908-specific, this is not going to be an issue in practice because there ought to be appropriate compatible strings such that even if you built a 4908-specific driver into a generic ARCH_BCMCA kernel, the actual probing would only happen on 4908.
 
-Jason
+Now let us flip it the other way round, let's say we keep ARCH_BCM4908 as a sub-arch of ARCH_BCMBCA, then this sets a precedent for adding more and more of those ARCH_BCM4906, ARCH_BCM4912 etc. etc to future kernels under the same reasons that we might want to gate certain drivers to certain sub-arches. But what good does that do?
+
+At some point we got to make it simple for the users, and the simplest way is to have ARCH_BCMBCA only and let DT dictate the device specific probing.
+-- 
+Florian
