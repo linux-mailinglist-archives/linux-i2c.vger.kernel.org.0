@@ -2,108 +2,140 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1469584866
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Jul 2022 00:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7835584AC0
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Jul 2022 06:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbiG1Wss (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 28 Jul 2022 18:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
+        id S232910AbiG2E3c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 29 Jul 2022 00:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiG1Wsr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 Jul 2022 18:48:47 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBAA51A05;
-        Thu, 28 Jul 2022 15:48:45 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-31e47ac84daso34837127b3.0;
-        Thu, 28 Jul 2022 15:48:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IbbIwNHYA5fQMBY7syKbTH1UwgoGIprYwzTKm582+h0=;
-        b=TlEJ6Ruu4n0OcOMH/kNl+yUxKyVkTDjntX+0bKHpRUyDzlHVanmpZP2JTZRyjeGbqr
-         h9QMOT35fNBH+EMy/HUeZF/EYb/TPovcKSOB3q0fqXWtjfp4HnJBw2F9CY+eon8eV1Jf
-         Ul6t5tPQP5QhXYftUWF/0hEO56pz1fsppXMMQzfap0hWGCOHLOy3SISAioovIqtlS8Fw
-         cLvI+Az7YceG8PAEoYenIsVreiAh1MMlBTJbFMaaSTIX3RWAoKJztTvbH95/F1XhRnC5
-         vTSc6F1r88SyDur7K7AQ7tbFy6kfE/9PQqBOQAj+muPHKdenSqBYss/jb2kYj+Pgv//N
-         GAFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IbbIwNHYA5fQMBY7syKbTH1UwgoGIprYwzTKm582+h0=;
-        b=y6kLpoOQK2+yXoeA6/aJteNg2sC3+zj3XJPhvGlBs1QGZnK89lInckF0vqUsvAhm0S
-         yhKsQ1kvHzygyQGPm21xvk1r1fYN7+CBo6NPXdyufYgQRUolV8f+FvZNNG6aE/lh4bBP
-         3kupS4Uz3LaBGFPqgMZUCrXeqQIPY4LzjaCWSrlryrVLZ1f9UFEScfqu/T2QLxrP4baf
-         sQ5KD17RosvWkztAwwMsxZdGOR9O/PtLjx999VAz/XiLdV/zH89Otdi4FlduGYz/AOnK
-         5/4ZtUCDFBS/6IHGLokulCXbL1XIUHm3wmYlZJqDhV3JY5WhK+FgaAGoQ8kgeDa8pvQH
-         vUjg==
-X-Gm-Message-State: ACgBeo36ujnK17gK/lvyNzrzBEM2ZYVsRgAzwmNpoLB5AIoBVoGPPgeT
-        w1mFehvprOMNg+p/k0i+jVEqVHS4a7OomFSXyQs=
-X-Google-Smtp-Source: AA6agR6/s/iZvfkJGZABz6Eu7j8VuDO5qbShjSiqVGx4ORVST12Al5dEVLSCk1fAyA9mOHgfJmwp/hWxQOFxJ5Kew9k=
-X-Received: by 2002:a81:85c5:0:b0:31c:1f50:1bbb with SMTP id
- v188-20020a8185c5000000b0031c1f501bbbmr819183ywf.3.1659048524769; Thu, 28 Jul
- 2022 15:48:44 -0700 (PDT)
+        with ESMTP id S229973AbiG2E3c (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 29 Jul 2022 00:29:32 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585C277A74
+        for <linux-i2c@vger.kernel.org>; Thu, 28 Jul 2022 21:29:31 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oHHcp-00024n-Cr; Fri, 29 Jul 2022 06:29:23 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oHHco-0002nN-7x; Fri, 29 Jul 2022 06:29:22 +0200
+Date:   Fri, 29 Jul 2022 06:29:22 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: imx: Make sure to unregister adapter on remove()
+Message-ID: <20220729042922.GD30201@pengutronix.de>
+References: <20220720150933.239956-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-References: <202207190634.ToyhlXSz-lkp@intel.com> <0551a3ad-8c42-78fe-5b50-ebbc003e55e6@intel.com>
- <CANRwn3R48rvwnygdyKhmFE8wD+BCCHrTWa-M=uTvpnK5Jo3vww@mail.gmail.com>
- <CANRwn3Tgumg-mZ9sV=8AXevag9z2s=mTF4qqZW2KenDmc9b1wQ@mail.gmail.com> <CAHp75VfFrkDLOC2+5WUmVGBLfoxVbDzJKyLN0+Z+XrZzpkYDkQ@mail.gmail.com>
-In-Reply-To: <CAHp75VfFrkDLOC2+5WUmVGBLfoxVbDzJKyLN0+Z+XrZzpkYDkQ@mail.gmail.com>
-From:   Jason Gerecke <killertofu@gmail.com>
-Date:   Thu, 28 Jul 2022 15:48:59 -0700
-Message-ID: <CANRwn3SH2Z5n5so4FcymzgN-KAciHGo=tuXUheVttc2+vQeRqg@mail.gmail.com>
-Subject: Re: [PATCH] i2c: Use u8 type in i2c transfer calls
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Ping Cheng <pinglinux@gmail.com>,
-        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-iio <linux-iio@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220720150933.239956-1-u.kleine-koenig@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 1:48 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Thu, Jul 28, 2022 at 4:30 PM Jason Gerecke <killertofu@gmail.com> wrote:
-> > On Wed, Jul 20, 2022 at 12:01 PM Jason Gerecke <killertofu@gmail.com> wrote:
-> > > On Tue, Jul 19, 2022 at 5:21 PM kernel test robot <rong.a.chen@intel.com> wrote:
->
-> > > Writing a patch to fix the new warnings generated by my I2C patch is
-> > > simple enough, but I'd like some help coordinating getting both
-> > > patches landed. Should I wait for the I2C patch to land in "for-next"
-> > > before sending the IIO fix, or would it be preferred to send the IIO
-> > > fix right now so that both patches can be reviewed simultaneously?
-> >
-> > It's been pretty quiet, so asking again for any thoughts on how to
-> > best address this tangle...
->
-> The rule of thumb is not to introduce an additional warning or compile error.
-> I haven't looked deeply into this case, but it smells to me as if you need a new
-> version of your initial patch that includes a fix to IIO.
->
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+Hi Uwe,
 
-Thanks! Since the patch would touch both IIO and I2C I assume I would
-submit it to both mailinglists. And that whichever maintainer gets to
-it first would just give their Reviewed-by (if all looks good) and the
-second applies the Signed-off-by and handles the merge?
+thank you for your work.
 
-I'll work on the updated combined patch...
+On Wed, Jul 20, 2022 at 05:09:33PM +0200, Uwe Kleine-König wrote:
+> If for whatever reasons pm_runtime_resume_and_get() fails and .remove() is
+> exited early, the i2c adapter stays around and the irq still calls its
+> handler, while the driver data and the register mapping go away. So if
+> later the i2c adapter is accessed or the irq triggers this results in
+> havoc accessing freed memory and unmapped registers.
+> 
+> So unregister the software resources even if resume failed, and only skip
+> the hardware access in that case.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Jason
+Can you please add Fixes tag. I assume this patch can got to stable
+kernel version too.
+
+Otherwise:
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+
+> ---
+>  drivers/i2c/busses/i2c-imx.c | 20 +++++++++++---------
+>  1 file changed, 11 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index e9e2db68b9fb..7395560c13d0 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -1572,9 +1572,7 @@ static int i2c_imx_remove(struct platform_device *pdev)
+>  	struct imx_i2c_struct *i2c_imx = platform_get_drvdata(pdev);
+>  	int irq, ret;
+>  
+> -	ret = pm_runtime_resume_and_get(&pdev->dev);
+> -	if (ret < 0)
+> -		return ret;
+> +	ret = pm_runtime_get_sync(&pdev->dev);
+>  
+>  	hrtimer_cancel(&i2c_imx->slave_timer);
+>  
+> @@ -1585,17 +1583,21 @@ static int i2c_imx_remove(struct platform_device *pdev)
+>  	if (i2c_imx->dma)
+>  		i2c_imx_dma_free(i2c_imx);
+>  
+> -	/* setup chip registers to defaults */
+> -	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IADR);
+> -	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IFDR);
+> -	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2CR);
+> -	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2SR);
+> +	if (ret == 0) {
+> +		/* setup chip registers to defaults */
+> +		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IADR);
+> +		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IFDR);
+> +		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2CR);
+> +		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2SR);
+> +		clk_disable(i2c_imx->clk);
+> +	}
+>  
+>  	clk_notifier_unregister(i2c_imx->clk, &i2c_imx->clk_change_nb);
+>  	irq = platform_get_irq(pdev, 0);
+>  	if (irq >= 0)
+>  		free_irq(irq, i2c_imx);
+> -	clk_disable_unprepare(i2c_imx->clk);
+> +
+> +	clk_unprepare(i2c_imx->clk);
+>  
+>  	pm_runtime_put_noidle(&pdev->dev);
+>  	pm_runtime_disable(&pdev->dev);
+> 
+> base-commit: 6014cfa5bf32cf8c5c58b3cfd5ee0e1542c8a825
+> -- 
+> 2.36.1
+> 
+> 
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
