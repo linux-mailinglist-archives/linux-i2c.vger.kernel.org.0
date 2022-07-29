@@ -2,127 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A38584F42
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Jul 2022 12:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942F8584F4F
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Jul 2022 13:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiG2K4V (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 29 Jul 2022 06:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
+        id S234954AbiG2LC3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 29 Jul 2022 07:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiG2K4U (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 29 Jul 2022 06:56:20 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on20615.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::615])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764464BD05
-        for <linux-i2c@vger.kernel.org>; Fri, 29 Jul 2022 03:56:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dwOMnOPzcsJmLrxUBhOJmCTM0M45vmBOwYRymNWHYXAPZsvYvt7cQf/73Q7o5/lu1TuGc966xq4fOu8a388DB34fftCqmM7612YGJ3pqwHVvu132ppshy/tdr+d8pUiF1jKveUtKMWf5L1a5MFdEWAw7l9KZo/Ta+mc75CVKESCrvxDmgBb3E79izHsgv4odr2qKJ7Sv+PQZN3Kr7uSmxW1JtD/U8eAw8oPY+swZBqN1bVML7kormZBysXejUt5YyO+zGGW/zR2TM6ahiMqlAf2ngzNZgR125o73go36fghbjoE88w7wifXkINwwMMe0opoh7asQc/5XfCUmps+AcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jvz3wFmuyzUj+R5C1S/tRYOjFotIsCCbKA//kVTQSII=;
- b=KQftwxpiVjaCnwWw0Dw4BtJRdRA4fAOC4MA3IbqTkYFbm5neVwyIZtHP8J6r2GUouvDPjdbhf2rhn3sT33+yjLtZ+qWo3QpuZv07D3y8WZ6lZGMyAwyM2n2i0JQjqBFUsAau8Wg2pMixqkGn0XSwAAgTVaqTJNXwhpKEwN6no6t17yytVJc+8J6rYGlzpaEITawbTB8fTcxVe2+mfyC/RC2Esw7gVUi6KTrX5b/ln68H48ChBZxz/+yQLY4hTOFTqcS6babKnDrEmxnbzWW+D1PKJ/tlHEr0tqW/6mEhjYSmxdQiPmO9GGj6LTWCnLey1mTACp2TSl7XBUqYr0ABYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=xilinx.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jvz3wFmuyzUj+R5C1S/tRYOjFotIsCCbKA//kVTQSII=;
- b=ujF7VLWpsZINlsmMYUblmpaLAW08FLmw8H/jN9QIY31YIHnbHqbmj4RuM2t5dMG7DmhsljpEj/TruReFm7LAc7bPVLccd92cqL4reWu/LnwvdqMuanu6vRjau3tbidQc3MXUYH+d3vk+/yq0eV0rylckBzOAbe1IiMJ+COwPmKU=
-Received: from MW4PR04CA0255.namprd04.prod.outlook.com (2603:10b6:303:88::20)
- by LV2PR12MB5894.namprd12.prod.outlook.com (2603:10b6:408:174::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Fri, 29 Jul
- 2022 10:56:16 +0000
-Received: from CO1NAM11FT050.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:88:cafe::d0) by MW4PR04CA0255.outlook.office365.com
- (2603:10b6:303:88::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.24 via Frontend
- Transport; Fri, 29 Jul 2022 10:56:16 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT050.mail.protection.outlook.com (10.13.174.79) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5482.10 via Frontend Transport; Fri, 29 Jul 2022 10:56:16 +0000
-Received: from [10.254.241.52] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 29 Jul
- 2022 05:56:09 -0500
-Message-ID: <920041df-0ac2-7298-4568-c8bba4a2838c@amd.com>
-Date:   Fri, 29 Jul 2022 12:56:07 +0200
+        with ESMTP id S234581AbiG2LC2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 29 Jul 2022 07:02:28 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EBF2AE34;
+        Fri, 29 Jul 2022 04:02:27 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id b10so4338902pjq.5;
+        Fri, 29 Jul 2022 04:02:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OVF3y7QB8gY+KNNuUfkiCKf/IXKM8mP2Ri70A+tABKc=;
+        b=S0P3lwD3l+s1lvJSF8eRq3gpfq+aLEn+6Uni+I1V2pnk87kzSgK1TAq/curq5Br3hi
+         DPtB7ok6on/MXaVwyQtsCeYiio9MBIBcSigERU5ltfpgHJQg6QqP1mdNhahTQXmHcgvi
+         JoIQbv4Cg7ZhMLAKvlNso2MdGec/dJtdKCn6qL0834rIp5AVvrxiY5TdoFrxE4iFOEga
+         jBVxSYTOwi3m0EQxUsaV22LL1jBXtapC76kmkKNDCVJCYqYdbD3pPfQ6vXPmgr4fqgMe
+         nflkgeFdIhsxO4sV5j/LKGBcmkYX0IV0WvCcMK/vzmvlIvxSEqqmDELPdjUXBRll6sFD
+         6nLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OVF3y7QB8gY+KNNuUfkiCKf/IXKM8mP2Ri70A+tABKc=;
+        b=cP2s3BXdOiZVDYivd0shs+dCdeUh3/ZAG+4RZ+C9lbZ07/x2KipXO02XYFmBnifKtx
+         n/k+6FEhE/+y3BNiTwWzUOzrKGHl4HzX5aZxLSvFaLQ8Z055LgA0aq8exCDG/V21vfeh
+         tHApCTSX4EPVl3xpZGPBQ+M/vBL9re24XWJR4PTQf/s1JS9k0218Ao6BKXrclKY2g5pR
+         HJiWAKmddLqRTy1koTytrwywqiISbyUkGI7AZgjRnCGxz+3ATmg85+PchU9qpuiArejK
+         ryLY4I3tHZAo3m9zLUSjGa8MK4qBWJX3125w8fM0j5rAbIB6RdPMT528oqWEBs1LMs2L
+         Opgw==
+X-Gm-Message-State: ACgBeo32GeLnTb2NRK4I9YqOxJUN7GURj/bMPaTetjuUQrdDUG856y5U
+        XM5tzub3A8F4Jl3qeEWx0g==
+X-Google-Smtp-Source: AA6agR6d/pXnMP5TH+WsFQflyu0AQvjGgMEEWwl8xZsEdBNSNUeR1i+IJtLFZ/mKEa1Apnu9uDWqPA==
+X-Received: by 2002:a17:90a:65cb:b0:1f2:4c5a:93e1 with SMTP id i11-20020a17090a65cb00b001f24c5a93e1mr3525406pjs.188.1659092547156;
+        Fri, 29 Jul 2022 04:02:27 -0700 (PDT)
+Received: from localhost.localdomain ([166.111.133.51])
+        by smtp.gmail.com with ESMTPSA id t2-20020a17090a4e4200b001f22647cb56sm5528851pjl.27.2022.07.29.04.02.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 04:02:26 -0700 (PDT)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     Seth Heasley <seth.heasley@intel.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Jean Delvare <khali@linux-fr.org>,
+        Bill Brown <bill.e.brown@intel.com>,
+        Wolfram Sang <wolfram@the-dreams.de>
+Cc:     Zheyu Ma <zheyuma97@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: ismt: Fix an out-of-bounds bug in ismt_access()
+Date:   Fri, 29 Jul 2022 19:02:16 +0800
+Message-Id: <20220729110216.557010-1-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] i2c: cadence: Add standard bus recovery support
-Content-Language: en-US
-To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        <linux-i2c@vger.kernel.org>
-CC:     <michal.simek@xilinx.com>, <git-dev@amd.com>,
-        Chirag Parekh <chiragp@xilinx.com>,
-        Robert Hancock <robert.hancock@calian.com>
-References: <20220728055150.18368-1-shubhrajyoti.datta@xilinx.com>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <20220728055150.18368-1-shubhrajyoti.datta@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a2dfc57b-6961-43d0-d374-08da7150f5fa
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5894:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RVK2wkc5+ZuKVSbukq1iES4xhnK1wZiFT9Gn54s0mHVaim9pqpxyw6C0NYWwxCfLJ5/J1B6CnopX0ZdpP/qStsKn7LBvbNowFLnLZnDtE/pN9fuNG2GXIV4F9eKBPbas+xPnTEDtMF87zu3U+f8ROGslYQxC7LkRLtX48IDbLUUaf0WS9OF9+dxE8d6H5SFGHqf5rm4KU0AuTTij6gLtN8yMupS4XkA4ccwDvq5gj1Ko3xizqxuQU/6NvSX23eKZI0/DaYRMRTsIv+AyEvsp4nuHvS77Qo8XrVkvhQbix+QGXi0Bjvs6bn+z8E1h6rWE3UaQcWqPoPUy3PWKJPIJMAE0CBI6mJDvRXZtKevCm0UP5AfPjCSlqm6uDdA6ioeiGHMd+myj6Kx6PAFsFximGKFYFMIi7gx6tDO+vzdaa3hmS4zWH3SscCRVfwKLgrnbdhpKuGXzewSBe8D9xn6XsX3B8rS9pT+30cIE1ZV3ilFG00RQo1bMAg2vyEy4CsCH8VEXn358Jqs2ROnNg8vygBAxSwWJ7oAPprr98SrY7eJoASRizcGTzBJ4uPMcxOyvVcWZFxSNZ5YEjSJocvOU7QXot8Wl8cjaH7V5N6YxBb7cvT9e6/3mJX9v9XZ2y5QXEQp8V7W6gEVyyoMgG+l59+MErRW6R9wM1K5u1pgTNsbuwIOAWDfs3pvB+AMSNgP5ZyE2dxMbq/ikM5PpsQVuFc1xKfISJwsDemTVqby9/Q9OtvQqOwUmgFcqA+i7I1qVDTz0yUb1vpH15ipNI95Q4Xdqk5KHNzsU4CuU3e9GCjLKRg6QRKzhlwo4T+ki0wsBir216V3oGTrINm8Y4YptsaHFyv4V7hIYWLdEwMS2B3eMxcStYOSdgs9rcSPquWki
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(396003)(376002)(346002)(36840700001)(40470700004)(46966006)(44832011)(186003)(336012)(2616005)(47076005)(16526019)(31696002)(53546011)(2906002)(26005)(426003)(82310400005)(83380400001)(36860700001)(82740400003)(40460700003)(356005)(54906003)(40480700001)(41300700001)(81166007)(86362001)(5660300002)(110136005)(8936002)(316002)(31686004)(4326008)(8676002)(478600001)(70206006)(70586007)(4744005)(16576012)(36756003)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2022 10:56:16.2650
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a2dfc57b-6961-43d0-d374-08da7150f5fa
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT050.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5894
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+When the driver does not check the data from the user, the variable
+'data->block[0]' may be very large to cause an out-of-bounds bug.
 
+The following log can reveal it:
 
-On 7/28/22 07:51, Shubhrajyoti Datta wrote:
-> Hook up the standard GPIO/pinctrl-based recovery support.
-> We are doing the recovery at the beginning on a timeout.
-> 
-> Multiple people have contributed to the series.
-> Original patch from Cirag and another one from Robert.
-> 
-> Cc: Chirag Parekh <chiragp@xilinx.com>
-> Cc: Robert Hancock <robert.hancock@calian.com>
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> ---
->   v2:
-> Updated the busbusy check on a timeout
-> v3:
-> Added pinctrl_get
-> 
-> Did unit testing and probed the scl to see the clock pulses.
+[   33.995542] i2c i2c-1: ioctl, cmd=0x720, arg=0x7ffcb3dc3a20
+[   33.995978] ismt_smbus 0000:00:05.0: I2C_SMBUS_BLOCK_DATA:  WRITE
+[   33.996475] ==================================================================
+[   33.996995] BUG: KASAN: out-of-bounds in ismt_access.cold+0x374/0x214b
+[   33.997473] Read of size 18446744073709551615 at addr ffff88810efcfdb1 by task ismt_poc/485
+[   33.999450] Call Trace:
+[   34.001849]  memcpy+0x20/0x60
+[   34.002077]  ismt_access.cold+0x374/0x214b
+[   34.003382]  __i2c_smbus_xfer+0x44f/0xfb0
+[   34.004007]  i2c_smbus_xfer+0x10a/0x390
+[   34.004291]  i2cdev_ioctl_smbus+0x2c8/0x710
+[   34.005196]  i2cdev_ioctl+0x5ec/0x74c
 
-Can you please describe testing procedure? What board did you use?
-What was the hardware configuration?
+Fix this bug by checking the size of 'data->block[0]' first.
 
-Thanks,
-Michal
+Fixes: 13f35ac14cd0 ("i2c: Adding support for Intel iSMT SMBus 2.0 host controller")
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+---
+ drivers/i2c/busses/i2c-ismt.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/i2c/busses/i2c-ismt.c b/drivers/i2c/busses/i2c-ismt.c
+index 6078fa0c0d48..63120c41354c 100644
+--- a/drivers/i2c/busses/i2c-ismt.c
++++ b/drivers/i2c/busses/i2c-ismt.c
+@@ -509,6 +509,9 @@ static int ismt_access(struct i2c_adapter *adap, u16 addr,
+ 		if (read_write == I2C_SMBUS_WRITE) {
+ 			/* Block Write */
+ 			dev_dbg(dev, "I2C_SMBUS_BLOCK_DATA:  WRITE\n");
++			if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX)
++				return -EINVAL;
++
+ 			dma_size = data->block[0] + 1;
+ 			dma_direction = DMA_TO_DEVICE;
+ 			desc->wr_len_cmd = dma_size;
+-- 
+2.25.1
+
