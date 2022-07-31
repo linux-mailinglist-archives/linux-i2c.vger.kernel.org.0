@@ -2,118 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60AAC585E93
-	for <lists+linux-i2c@lfdr.de>; Sun, 31 Jul 2022 12:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF1A585EE1
+	for <lists+linux-i2c@lfdr.de>; Sun, 31 Jul 2022 14:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbiGaKzv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 31 Jul 2022 06:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
+        id S233044AbiGaMdk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 31 Jul 2022 08:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiGaKzu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 31 Jul 2022 06:55:50 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54AB4D7A
-        for <linux-i2c@vger.kernel.org>; Sun, 31 Jul 2022 03:55:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S229745AbiGaMdj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 31 Jul 2022 08:33:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB993BE30;
+        Sun, 31 Jul 2022 05:33:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 02EB15CB51;
-        Sun, 31 Jul 2022 10:55:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1659264949; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=GUSeKXGPI8rlPBa7IDeW9UYCuRWEQwk6iIALEn6J3yg=;
-        b=ZrXZyEdLb7Zg9NMM+zj6g2tZn/NxWy5MuHY1CnYrcopcNpc/ms4ndjq7RGxA9Teu9X0jVU
-        U/u0fxn8DGG9vlTIkbqHaS5veRE5xKMmWr7coF+R47vLzisgxCnELcUVKoXQrE0L8GVCnd
-        DkakEnr32cN3tapq3vVRn4gUmPEtlb0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1659264949;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=GUSeKXGPI8rlPBa7IDeW9UYCuRWEQwk6iIALEn6J3yg=;
-        b=rsXe7sMP5CgBMHqa9uNCtvSXIoC6KYxHHD7dG3DwJCAGBFwxVORb5hyo54IsgN3NHRTO+Y
-        gG+lZgnn3eHIZBDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D058113754;
-        Sun, 31 Jul 2022 10:55:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zalCMbRf5mJ1QQAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Sun, 31 Jul 2022 10:55:48 +0000
-Date:   Sun, 31 Jul 2022 12:55:47 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Linux I2C <linux-i2c@vger.kernel.org>
-Cc:     Peter Rosin <peda@axentia.se>
-Subject: [PATCH] i2c: muxes: Drop obsolete dependency on COMPILE_TEST
-Message-ID: <20220731125547.358ec18e@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75829B80D12;
+        Sun, 31 Jul 2022 12:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02166C433D6;
+        Sun, 31 Jul 2022 12:33:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659270816;
+        bh=Cae8WTn1U5ue2ZooK/ujvkkFamJx/qU5ivCeIdOAFOA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JWfDw6CcxwDzOUPkOLDtFJayTcqjmPA1ymQBktM/jTno3PKJ1N2ys17Wl/kgJBKyK
+         k0CIG1LG2vTzXUKSng2Bykzj/9vpWSALZ8CKRXq0rbpZwQzfj3RuMeKBNWYzwloYnS
+         mRqkwdIOxBrAbQvlxsZu48HSsQMsvQeEmzSrg+vkDVFnTtZJ+HkeKGX6VoR+VVkNVu
+         BI1Whrh4dV5xKZeJ6QunNXScIGY/GocujEaM1e5y+e2MAext1JM+fCmDkc1RMAB5kp
+         UYQJezSmib3Xwp7dCWCD7S829x/7csMbOoZBq4VDzH2teh+6yT+kU5lwjN/AXki0MX
+         /1+Bzm6baJ8fg==
+Date:   Sun, 31 Jul 2022 13:43:47 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Jason Gerecke <killertofu@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Wolfram Sang <wsa-dev@sang-engineering.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Ping Cheng <pinglinux@gmail.com>,
+        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-iio <linux-iio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] i2c: Use u8 type in i2c transfer calls
+Message-ID: <20220731134347.19fcfbe7@jic23-huawei>
+In-Reply-To: <CANRwn3SH2Z5n5so4FcymzgN-KAciHGo=tuXUheVttc2+vQeRqg@mail.gmail.com>
+References: <202207190634.ToyhlXSz-lkp@intel.com>
+        <0551a3ad-8c42-78fe-5b50-ebbc003e55e6@intel.com>
+        <CANRwn3R48rvwnygdyKhmFE8wD+BCCHrTWa-M=uTvpnK5Jo3vww@mail.gmail.com>
+        <CANRwn3Tgumg-mZ9sV=8AXevag9z2s=mTF4qqZW2KenDmc9b1wQ@mail.gmail.com>
+        <CAHp75VfFrkDLOC2+5WUmVGBLfoxVbDzJKyLN0+Z+XrZzpkYDkQ@mail.gmail.com>
+        <CANRwn3SH2Z5n5so4FcymzgN-KAciHGo=tuXUheVttc2+vQeRqg@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
-is possible to test-build any driver which depends on OF on any
-architecture by explicitly selecting OF. Therefore depending on
-COMPILE_TEST as an alternative is no longer needed.
+On Thu, 28 Jul 2022 15:48:59 -0700
+Jason Gerecke <killertofu@gmail.com> wrote:
 
-It is actually better to always build such drivers with OF enabled,
-so that the test builds are closer to how each driver will actually be
-built on its intended target. Building them without OF may not test
-much as the compiler will optimize out potentially large parts of the
-code. In the worst case, this could even pop false positive warnings.
-Dropping COMPILE_TEST here improves the quality of our testing and
-avoids wasting time on non-existent issues.
+> On Thu, Jul 28, 2022 at 1:48 PM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> >
+> > On Thu, Jul 28, 2022 at 4:30 PM Jason Gerecke <killertofu@gmail.com> wrote:  
+> > > On Wed, Jul 20, 2022 at 12:01 PM Jason Gerecke <killertofu@gmail.com> wrote:  
+> > > > On Tue, Jul 19, 2022 at 5:21 PM kernel test robot <rong.a.chen@intel.com> wrote:  
+> >  
+> > > > Writing a patch to fix the new warnings generated by my I2C patch is
+> > > > simple enough, but I'd like some help coordinating getting both
+> > > > patches landed. Should I wait for the I2C patch to land in "for-next"
+> > > > before sending the IIO fix, or would it be preferred to send the IIO
+> > > > fix right now so that both patches can be reviewed simultaneously?  
+> > >
+> > > It's been pretty quiet, so asking again for any thoughts on how to
+> > > best address this tangle...  
+> >
+> > The rule of thumb is not to introduce an additional warning or compile error.
+> > I haven't looked deeply into this case, but it smells to me as if you need a new
+> > version of your initial patch that includes a fix to IIO.
+> >
+> >
+> > --
+> > With Best Regards,
+> > Andy Shevchenko  
+> 
+> Thanks! Since the patch would touch both IIO and I2C I assume I would
+> submit it to both mailinglists. And that whichever maintainer gets to
+> it first would just give their Reviewed-by (if all looks good) and the
+> second applies the Signed-off-by and handles the merge?
+> 
+> I'll work on the updated combined patch...
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Cc: Peter Rosin <peda@axentia.se>
----
- drivers/i2c/muxes/Kconfig |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I suspect this will be likely to create merge conflicts, so submit it like
+that and I'll probably ask Wolfram to do an immutable branch that I can
+then pull into IIO.  Hence we'll have exactly the same commits (IDs and all)
+in both IIO and I2C trees.
 
---- linux-5.18.orig/drivers/i2c/muxes/Kconfig	2022-05-22 21:52:31.000000000 +0200
-+++ linux-5.18/drivers/i2c/muxes/Kconfig	2022-07-31 12:21:32.776100442 +0200
-@@ -9,7 +9,7 @@ menu "Multiplexer I2C Chip support"
- config I2C_ARB_GPIO_CHALLENGE
- 	tristate "GPIO-based I2C arbitration"
- 	depends on GPIOLIB || COMPILE_TEST
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	help
- 	  If you say yes to this option, support will be included for an
- 	  I2C multimaster arbitration scheme using GPIOs and a challenge &
-@@ -34,7 +34,7 @@ config I2C_MUX_GPIO
- config I2C_MUX_GPMUX
- 	tristate "General Purpose I2C multiplexer"
- 	select MULTIPLEXER
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	help
- 	  If you say yes to this option, support will be included for a
- 	  general purpose I2C multiplexer. This driver provides access to
-@@ -77,7 +77,7 @@ config I2C_MUX_PCA954x
- config I2C_MUX_PINCTRL
- 	tristate "pinctrl-based I2C multiplexer"
- 	depends on PINCTRL
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	help
- 	  If you say yes to this option, support will be included for an I2C
- 	  multiplexer that uses the pinctrl subsystem, i.e. pin multiplexing.
--- 
-Jean Delvare
-SUSE L3 Support
+Jonathan
+
+> 
+> Jason
+
