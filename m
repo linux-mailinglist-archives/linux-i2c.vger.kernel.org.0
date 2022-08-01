@@ -2,111 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF1A585EE1
-	for <lists+linux-i2c@lfdr.de>; Sun, 31 Jul 2022 14:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF31586233
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Aug 2022 03:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233044AbiGaMdk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 31 Jul 2022 08:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
+        id S238743AbiHABdk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 31 Jul 2022 21:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiGaMdj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 31 Jul 2022 08:33:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB993BE30;
-        Sun, 31 Jul 2022 05:33:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75829B80D12;
-        Sun, 31 Jul 2022 12:33:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02166C433D6;
-        Sun, 31 Jul 2022 12:33:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659270816;
-        bh=Cae8WTn1U5ue2ZooK/ujvkkFamJx/qU5ivCeIdOAFOA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JWfDw6CcxwDzOUPkOLDtFJayTcqjmPA1ymQBktM/jTno3PKJ1N2ys17Wl/kgJBKyK
-         k0CIG1LG2vTzXUKSng2Bykzj/9vpWSALZ8CKRXq0rbpZwQzfj3RuMeKBNWYzwloYnS
-         mRqkwdIOxBrAbQvlxsZu48HSsQMsvQeEmzSrg+vkDVFnTtZJ+HkeKGX6VoR+VVkNVu
-         BI1Whrh4dV5xKZeJ6QunNXScIGY/GocujEaM1e5y+e2MAext1JM+fCmDkc1RMAB5kp
-         UYQJezSmib3Xwp7dCWCD7S829x/7csMbOoZBq4VDzH2teh+6yT+kU5lwjN/AXki0MX
-         /1+Bzm6baJ8fg==
-Date:   Sun, 31 Jul 2022 13:43:47 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Jason Gerecke <killertofu@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Ping Cheng <pinglinux@gmail.com>,
-        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-iio <linux-iio@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] i2c: Use u8 type in i2c transfer calls
-Message-ID: <20220731134347.19fcfbe7@jic23-huawei>
-In-Reply-To: <CANRwn3SH2Z5n5so4FcymzgN-KAciHGo=tuXUheVttc2+vQeRqg@mail.gmail.com>
-References: <202207190634.ToyhlXSz-lkp@intel.com>
-        <0551a3ad-8c42-78fe-5b50-ebbc003e55e6@intel.com>
-        <CANRwn3R48rvwnygdyKhmFE8wD+BCCHrTWa-M=uTvpnK5Jo3vww@mail.gmail.com>
-        <CANRwn3Tgumg-mZ9sV=8AXevag9z2s=mTF4qqZW2KenDmc9b1wQ@mail.gmail.com>
-        <CAHp75VfFrkDLOC2+5WUmVGBLfoxVbDzJKyLN0+Z+XrZzpkYDkQ@mail.gmail.com>
-        <CANRwn3SH2Z5n5so4FcymzgN-KAciHGo=tuXUheVttc2+vQeRqg@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232372AbiHABdj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 31 Jul 2022 21:33:39 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AB68B868;
+        Sun, 31 Jul 2022 18:33:38 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 7C5041E80D57;
+        Mon,  1 Aug 2022 09:33:06 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id yKNpttcoC4Bh; Mon,  1 Aug 2022 09:33:03 +0800 (CST)
+Received: from localhost.localdomain.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: xupengfei@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id C9A511E80CEA;
+        Mon,  1 Aug 2022 09:33:03 +0800 (CST)
+From:   XU pengfei <xupengfei@nfschina.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, XU pengfei <xupengfei@nfschina.com>
+Subject: [PATCH 1/1] i2c: busses: i2c-img-scb: remove unnecessary (void*) conversions
+Date:   Mon,  1 Aug 2022 09:33:20 +0800
+Message-Id: <20220801013319.3299-1-xupengfei@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 28 Jul 2022 15:48:59 -0700
-Jason Gerecke <killertofu@gmail.com> wrote:
+remove unnecessary void* type casting.
 
-> On Thu, Jul 28, 2022 at 1:48 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> >
-> > On Thu, Jul 28, 2022 at 4:30 PM Jason Gerecke <killertofu@gmail.com> wrote:  
-> > > On Wed, Jul 20, 2022 at 12:01 PM Jason Gerecke <killertofu@gmail.com> wrote:  
-> > > > On Tue, Jul 19, 2022 at 5:21 PM kernel test robot <rong.a.chen@intel.com> wrote:  
-> >  
-> > > > Writing a patch to fix the new warnings generated by my I2C patch is
-> > > > simple enough, but I'd like some help coordinating getting both
-> > > > patches landed. Should I wait for the I2C patch to land in "for-next"
-> > > > before sending the IIO fix, or would it be preferred to send the IIO
-> > > > fix right now so that both patches can be reviewed simultaneously?  
-> > >
-> > > It's been pretty quiet, so asking again for any thoughts on how to
-> > > best address this tangle...  
-> >
-> > The rule of thumb is not to introduce an additional warning or compile error.
-> > I haven't looked deeply into this case, but it smells to me as if you need a new
-> > version of your initial patch that includes a fix to IIO.
-> >
-> >
-> > --
-> > With Best Regards,
-> > Andy Shevchenko  
-> 
-> Thanks! Since the patch would touch both IIO and I2C I assume I would
-> submit it to both mailinglists. And that whichever maintainer gets to
-> it first would just give their Reviewed-by (if all looks good) and the
-> second applies the Signed-off-by and handles the merge?
-> 
-> I'll work on the updated combined patch...
+Signed-off-by: XU pengfei <xupengfei@nfschina.com>
+---
+ drivers/i2c/busses/i2c-img-scb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I suspect this will be likely to create merge conflicts, so submit it like
-that and I'll probably ask Wolfram to do an immutable branch that I can
-then pull into IIO.  Hence we'll have exactly the same commits (IDs and all)
-in both IIO and I2C trees.
-
-Jonathan
-
-> 
-> Jason
+diff --git a/drivers/i2c/busses/i2c-img-scb.c b/drivers/i2c/busses/i2c-img-scb.c
+index 8e987945ed45..d72211cfda03 100644
+--- a/drivers/i2c/busses/i2c-img-scb.c
++++ b/drivers/i2c/busses/i2c-img-scb.c
+@@ -913,7 +913,7 @@ static unsigned int img_i2c_auto(struct img_i2c *i2c,
+ 
+ static irqreturn_t img_i2c_isr(int irq, void *dev_id)
+ {
+-	struct img_i2c *i2c = (struct img_i2c *)dev_id;
++	struct img_i2c *i2c = dev_id;
+ 	u32 int_status, line_status;
+ 	/* We handle transaction completion AFTER accessing registers */
+ 	unsigned int hret;
+-- 
+2.18.2
 
