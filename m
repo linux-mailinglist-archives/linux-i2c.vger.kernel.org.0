@@ -2,159 +2,238 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDB8586555
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Aug 2022 08:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4301586592
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Aug 2022 09:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232786AbiHAGsB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 1 Aug 2022 02:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S229483AbiHAHR2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 1 Aug 2022 03:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234168AbiHAGro (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Aug 2022 02:47:44 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2114.outbound.protection.outlook.com [40.107.114.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D2C2F0;
-        Sun, 31 Jul 2022 23:46:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F2tC/pcF89p1JXNqkEg9fcy4H/MKoP1OGMSpkLVdAPCNaODt39M/NDyMZKpfDsIzoWsij7Jbe8LvPEBtbglM91m5KZjlBVB0sxThLkAc90V6061x3EnY/Y7U+teJpJk6Eb21u3Ryiov49XManqlFhK1Y1AUDv9tro1n7VEWDxUUA+lOeKiXH9X6xjjSyHP7SrdnXQDiaUrwaCPqEFKYgeqnhrrBpB1J4lMirS8sP/jPK+KBxLgIAxA+iJ2GXCaR8YrA0rhJIvqPYIcOWtnc0MzXLDpLSQZs3hkbtOL7O3+TzzZHViGH3CV3lGeQ6d+uhXOgMSJIIWbdjJjvnq3/61g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=elIFEItIBmU2krBl++PDGS2GBlLgksq1oD99aNOKPjg=;
- b=cA0KUJnA9EwrVWY+dvMBmbANfyViX41pEdYpevIA1IRHaap+QI22XF6k4hME4s7T6Wgt8PGXxEDtnGlBrZhiDxuIJyeeBLoxGTeVInJSY8t6eLFUQS5UiE1zbfjPS0dTP+f1g9WN/TdwNeAa2rQYB15lJnb4axc0l+ETZnHPLlcTSf+/FJFPvF61JWKzB+5ubJTGDq01ARS7XkgZUhPOOOlsVRot5BcZhnMRMsYXbvApKGQKK66gBtW0Lphk3Tv9uuMoKoN70nl5YKnEYZe8R/1ywiFHhqcIWpHcHw+T148LYGpNGX89u4ogPfwci/7ajQ4cLNRfzCcQkpqPhrbTSg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=elIFEItIBmU2krBl++PDGS2GBlLgksq1oD99aNOKPjg=;
- b=jRapAlkQzmgq5Cik853/ENspuEEcuF5IDAvbYxib3oAByOcz00hT5bDzRpC17PceWvoaTG9+oVwVBjiRyaTggn+ZT96rDfTP20Pgy2POalUHj15bT7ZYiZW38TFrjc4aA4IJkRMcu/CaiyH7mO9tlcT/WX87pjVleQEp54x9gzU=
-Received: from TYYPR01MB7086.jpnprd01.prod.outlook.com (2603:1096:400:de::11)
- by TYWPR01MB10050.jpnprd01.prod.outlook.com (2603:1096:400:1e2::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Mon, 1 Aug
- 2022 06:46:30 +0000
-Received: from TYYPR01MB7086.jpnprd01.prod.outlook.com
- ([fe80::3c36:680f:3292:4a79]) by TYYPR01MB7086.jpnprd01.prod.outlook.com
- ([fe80::3c36:680f:3292:4a79%9]) with mapi id 15.20.5482.016; Mon, 1 Aug 2022
- 06:46:30 +0000
-From:   Phil Edworthy <phil.edworthy@renesas.com>
-To:     Wolfram Sang <wsa@kernel.org>
-CC:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh@kernel.org>, Sven Peter <sven@svenpeter.dev>,
-        Jan Dabros <jsd@semihalf.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH v4 2/2] i2c: Add Renesas RZ/V2M controller
-Thread-Topic: [PATCH v4 2/2] i2c: Add Renesas RZ/V2M controller
-Thread-Index: AQHYkrIekRAyYe1iI0Gxw58L1NF9oq2KpNIAgA8Z4aA=
-Date:   Mon, 1 Aug 2022 06:46:30 +0000
-Message-ID: <TYYPR01MB708624E928ED88663EB847C8F59A9@TYYPR01MB7086.jpnprd01.prod.outlook.com>
-References: <20220708100350.12523-1-phil.edworthy@renesas.com>
- <20220708100350.12523-3-phil.edworthy@renesas.com> <YtrLMr0UeSSKxTFP@shikoro>
-In-Reply-To: <YtrLMr0UeSSKxTFP@shikoro>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 713e6b7d-a73c-4b88-0609-08da7389910e
-x-ms-traffictypediagnostic: TYWPR01MB10050:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mX8yUv+9t910Ilz3xBv5k/uLd3VnwzCm+ayjO6jSn94zDI7L1DmXIvF2J1XmdvX6l4i5aWQ09l431Z/7d/ocmzt5020Vebv1j6PL3iN/jWDzt25mzt4CEouYOthOiXU6ag6fcACYtJsBMIBa8ugffG0QaGNA8chMbfWgd2N62MkKp7IjkrveCZs9ftOFex1nYL15eBG7Y1r0FnR/zxAW+WTkpWjC082w/LEDoS1fYFJr3voJ5YjAoYw0RhRoGbIRnKIE1crVS9rwiFAJf2/f2UMmkQX6q1N0DRsJC1eBa/6TlB+4rn/kdvycqcXV7z/CJHP6iS+HF7ZbWuvAb9r/MkRC+sUZUHJ5oSB7wXxfm7L2I72k6Lm/SmTJX80UT/L69O++/7KtbbPqVlK6E1ZkIqBXVMLsTh4vkp6QTK4riqg9NIaTxXerwegdHbRyNH3O8JjNNhDAmpQMSTP9IqhzfT3H/GmjV0PfjFWqGYjEw4HHlsH48fcc5mHuxplgXHExGspWjNnvvCW/JUBtmlJneWTdl/ExajzYjA7iEZVzc7CV0vF1Yc0UqyK36zaaDZZztLivRHXhuiY18dC73cSmyCZ+5NpXzXPrP6+R2TAiA3wUg6ItVZqmyeLK5JuaVTLYgumZUV/+Hhdv/73ALcKURGWFgwraI5dyhGiQoRvLNwI/ml0J3F5Px837qIE0Z9i1H44Nu/0EAcwUTdCjxpqL+oVWOmVXJ8I5Rww8gJIR/wrkrKOUfYceoBSQEXbwg3VhPjLgA6bfsKqgXVrCNZYffnItNIODTALL6PfNgBYa/b+ZdJFlpw4FlGvWfl75GQ2F
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYYPR01MB7086.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(366004)(346002)(376002)(39860400002)(9686003)(7696005)(26005)(6506007)(38070700005)(186003)(86362001)(122000001)(38100700002)(44832011)(8936002)(52536014)(4744005)(5660300002)(7416002)(8676002)(4326008)(55016003)(2906002)(71200400001)(66446008)(41300700001)(478600001)(76116006)(66946007)(66556008)(66476007)(64756008)(54906003)(6916009)(316002)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?dJpHDqLtDuEi/y52OW5hNkKZtU2l5TVSWBwawRhPJQfbRYlOiykpmg2Hf/t3?=
- =?us-ascii?Q?IuRRQWAy+Axhua+/bJisbWL89FDWYfETdoxY+joh6Elx57zCXNs+ThDW1/Sf?=
- =?us-ascii?Q?ab9vOVBSVI8/JIyPWbItI5wFk4b6+RUBw77/g21Q7UulHi5H/nJ5QSERnVAe?=
- =?us-ascii?Q?fFx0wXI/UzdOA/VJ7W59QstooNJz92uBriIXsoRONcDlkHAy6wAuxL/LpJ6P?=
- =?us-ascii?Q?PxwbYNE/aqGo3JuKmdfDA4Lnd8ZpV9Mwq6cTb+2N6jB+LUjZYycqefhclEGB?=
- =?us-ascii?Q?udW8R2RAZQZsVs74Io3O5vepTZwfyr1RqjXIA1+jKqK+h8BQKb7djO80XB0T?=
- =?us-ascii?Q?0yTFhHKnO6zLvEwA39u2KUttpDiDbvJHJt/wy8BSmPXLWQcwWpqHovLqcOOF?=
- =?us-ascii?Q?Si/7rY6ujAYON0CGP+lBN+lMlcK0nJVg8kl8FoZhh2l87feg421ArhkNKA46?=
- =?us-ascii?Q?vPCYJvRqWwOt6NNI62DEe26ue5bq8I+t5YEGhUzpo3A3hbiRg0dnLcviW6Ze?=
- =?us-ascii?Q?qzjx1CImela402ApKJqsyxCjdSRw5SdSEUXC99qurMz1ItWUzjDpNaZVnWCx?=
- =?us-ascii?Q?plzcSKd88iF5LEHul4bB/y9wP+bneCdLqUYwGLCEInMH/GftHUL2xhOTXMFu?=
- =?us-ascii?Q?f0R7OvgN4YTtO/TThNbcCo8QHxNtYmqdvkfiiGKhQKdolvKZiMi7XkujgSO3?=
- =?us-ascii?Q?lF655oY0IMQNIpJf4ztsv5QelVAU70rM3lkvxPFbNfWsGNT+sRjPaaV8Tmxi?=
- =?us-ascii?Q?9JT7Bdpt6/vMrckIOx5JSreDUtmqXJlPZBcOXS+PbDQvbXp4RHCm8+pBHGrw?=
- =?us-ascii?Q?JUsezimbTfgHTt8N2cfKxsrqMcellRNiNBzB6E3NY0W0go2N7BbgXSvPjHjZ?=
- =?us-ascii?Q?KgeO3RvaoFzjlz86hA83W3vjxf6Rw4SQjJsa6OhjpHdDgr4c4BbJQUydr073?=
- =?us-ascii?Q?SNgj+pqyBtsq23v+L5dKloMpKU/Zodf57yYCGiHGzldaS4GWGJwHkj8bFF5m?=
- =?us-ascii?Q?Pnr0ytP1QO9972Rg+Qpz6uXI0UCrTP2jIAETI+HjyT1Jk7Yz6FuKQ29fuR0u?=
- =?us-ascii?Q?DdnPYL65ftlrhb3kftTLv063rfvonT+GMoKDV95YksNl60QEEEi6+p2ctypB?=
- =?us-ascii?Q?wVkHbAjBanCg7GJRYIl1NqGP5jVgrxQMDts6ywJqg0h6fRBrsAjexXq0mpwa?=
- =?us-ascii?Q?LtTCAJoaapLaXh6mUouKn1M31LZQvidLahJDdtbB3W1wXjGlaOggAqjSRxmE?=
- =?us-ascii?Q?X94dtmgObDJFdlK2Qf/BOLRHJLafdLQqCiUO1lbb0qkDsN3Yu/LGJZ2nPZmk?=
- =?us-ascii?Q?ik4RbUnlbClGVQ/bAPqIo8E+sbOrDn/V0qdFFVYanjaSXygz5yaCuG230P+I?=
- =?us-ascii?Q?dSgJi5mB4Boi2nA3rrcnYhBcguBYcyvNXY/UWbU6DW4V5pFEqb4Cexqii3zV?=
- =?us-ascii?Q?ajsFBqP8OU7xwb9UVtnnNS7IUUDvz/DSRrBvM2qoCzsx0u1o5aRNVTreqePD?=
- =?us-ascii?Q?oNK1NNjREA/1ZIXRGlsp2MnzUaMQEm6RN0xPISt0SBcCMI3etPko0GsSeY6d?=
- =?us-ascii?Q?MIrSWM8HW/ZuOvPCiIkjaJJpWLuuBNPGMq1wnNpVGgiOtJVPFZgOFdaKleTJ?=
- =?us-ascii?Q?qA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229452AbiHAHR1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Aug 2022 03:17:27 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354863AB2E
+        for <linux-i2c@vger.kernel.org>; Mon,  1 Aug 2022 00:17:26 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id c20so7409609qtw.8
+        for <linux-i2c@vger.kernel.org>; Mon, 01 Aug 2022 00:17:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=1uS6E7ZkRa/baG5pTg79vAqfBuGnhvLh8VZy1wWJZEc=;
+        b=kYzh7dP8lUBSGmUhcjMxp7hP9XAYdopEURRCzi9HAiLo0czTrc1L98p5+v8d8P0G4K
+         M1MiCpX1s6n9xvbZ32X2kORjCmVKdbw0ByP+cM/C6auLETpOJ82dm7CzwH0nj2635TfU
+         nO6F+7GmaDY3aaEaKglchBGx2jrvKz5ZEJ0BU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=1uS6E7ZkRa/baG5pTg79vAqfBuGnhvLh8VZy1wWJZEc=;
+        b=oUOJh8VKLHA6QEjaRNLLw4DJXhgB1xCJbt8zhP/79M4Kvla7y9DLUprK9msNX7ixk3
+         L8tWOZ8TxAOjwgT9CktvjWmDa2NrhuhRik9q3fFbyZS1Kbhgtsn3RoqxzYYNrmlWQDas
+         iSdhOp/a0wBMll72A4VzkiuOBpPRB/1bnqNZB7w2DTGYopBEVr80Xl/DV2P/OQdJnswl
+         xjIKUMzuGJq7KTcwOw47R4AX3xR/xIFDQHdI/RY7Y74T/qZrHYrmAsmqRFx+Tulec3qI
+         i285Fqj96seoqccPXdeOqazaO/1PMpjSOvztFtf9mIBDWj35UHYVn0Bw6mu3GejZDq+I
+         UNww==
+X-Gm-Message-State: AJIora9hiF7oTzHytruSGXF5mVeO8KMbrSJqh3xLHcUfwQspR9GlrG3b
+        YIpHvbWTt0qxa7Saf3g7+JabY9ma5OOCEg==
+X-Google-Smtp-Source: AGRyM1tgLJ7QsAPlpPjakQMqIhHqClYIZPSjYcCRm2sffQbfVBDTgFPt0F1wpOTIY9LCO7t/npE6Qg==
+X-Received: by 2002:ac8:5e09:0:b0:31f:44f5:5331 with SMTP id h9-20020ac85e09000000b0031f44f55331mr13118955qtx.66.1659338245113;
+        Mon, 01 Aug 2022 00:17:25 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id bs21-20020ac86f15000000b0031f4007dd92sm6891753qtb.89.2022.08.01.00.17.24
+        for <linux-i2c@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Aug 2022 00:17:24 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id j195so17556410ybj.11
+        for <linux-i2c@vger.kernel.org>; Mon, 01 Aug 2022 00:17:24 -0700 (PDT)
+X-Received: by 2002:a25:abc6:0:b0:674:2b0c:5a88 with SMTP id
+ v64-20020a25abc6000000b006742b0c5a88mr11146946ybi.296.1659338232719; Mon, 01
+ Aug 2022 00:17:12 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYYPR01MB7086.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 713e6b7d-a73c-4b88-0609-08da7389910e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2022 06:46:30.6589
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 62URer3a3y0s1IvwQSs+qEIG/ipfG7fMdIshRn8ET9AS/T76JW+G/mCB+sY63CFHXuBo80l7udXcDeTsvP2BAOTA0O1mm7RgbXO02Rv7g8E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB10050
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YitLit9LC2zlOfdh@paasikivi.fi.intel.com> <YitMt7hVA2okuQ8x@pendragon.ideasonboard.com>
+ <YitPaq2yYnrKsq4f@paasikivi.fi.intel.com> <Yi3rQGmeXQD70Tkh@pendragon.ideasonboard.com>
+ <Yi3z2nR8j+ee4E4m@paasikivi.fi.intel.com> <Yi38zOHsh68FrrKK@pendragon.ideasonboard.com>
+ <Yi+e/IK+eVpKit/F@paasikivi.fi.intel.com> <Yi+gEVB0FuOcY5qn@pendragon.ideasonboard.com>
+ <Yi+vdvMeXqb/BvKo@paasikivi.fi.intel.com> <YkMDfvuhAvsrjbON@pendragon.ideasonboard.com>
+ <YlfplRQYDYhFvc5U@paasikivi.fi.intel.com>
+In-Reply-To: <YlfplRQYDYhFvc5U@paasikivi.fi.intel.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Mon, 1 Aug 2022 16:17:01 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5C7-OuNpnduwKpZXFUPQKDeqkz2xkvP+JBBs+aNjB87FQ@mail.gmail.com>
+Message-ID: <CAAFQd5C7-OuNpnduwKpZXFUPQKDeqkz2xkvP+JBBs+aNjB87FQ@mail.gmail.com>
+Subject: Re: [PATCH v2] media: ov5640: Use runtime PM
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Paul Elder <paul.elder@ideasonboard.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Paul J. Murphy" <paul.j.murphy@intel.com>,
+        Martina Krasteva <martinax.krasteva@intel.com>,
+        Shawn Tu <shawnx.tu@intel.com>, Arec Kao <arec.kao@intel.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jimmy Su <jimmy.su@intel.com>,
+        Martin Kepplinger <martink@posteo.de>,
+        Daniel Scally <djrscally@gmail.com>,
+        Jacopo Mondi <jmondi@jmondi.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-media@vger.kernel.org, rafael@kernel.org,
+        linux-acpi@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        bingbu.cao@intel.com, andriy.shevchenko@intel.com,
+        "hidenorik@chromium.org" <hidenorik@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+On Thu, Apr 14, 2022 at 6:30 PM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
+>
+> Hi Laurent,
+>
+> On Tue, Mar 29, 2022 at 04:02:54PM +0300, Laurent Pinchart wrote:
+> > Hi Sakari,
+> >
+> > On Mon, Mar 14, 2022 at 11:11:18PM +0200, Sakari Ailus wrote:
+> > > On Mon, Mar 14, 2022 at 10:05:37PM +0200, Laurent Pinchart wrote:
+> > > ...
+> > > > > > Yes, after reading the version register (or doing any other har=
+ware
+> > > > > > access). Actually the full code would be
+> > > > > >
+> > > > > >
+> > > > > >       pm_runtime_enable(dev);
+> > > > > >       pm_runtime_resume_and_get(dev);
+> > > > > >
+> > > > > >       /* Hardware access */
+> > > > > >
+> > > > > >       pm_runtime_set_autosuspend_delay(dev, 1000);
+> > > > > >       pm_runtime_use_autosuspend(dev);
+> > > > > >       pm_runtime_put_autosuspend(dev);
+> > > > > >
+> > > > > > (plus error handling).
+> > > > > >
+> > > > > > If the probe function doesn't need to access the hardware, then
+> > > > > > the above becomes
+> > > > > >
+> > > > > >       pm_runtime_enable(dev);
+> > > > > >       pm_runtime_set_autosuspend_delay(dev, 1000);
+> > > > > >       pm_runtime_use_autosuspend(dev);
+> > > > > >
+> > > > > > instead of having to power up the device just in case !PM.
+> > > > > >
+> > > > > > > Also the latter only works on DT-based systems so it's not an=
+ option for
+> > > > > > > most of the drivers.
+> >
+> > Does the former work on ACPI systems ?
+>
+> Yes (i.e. the one that was above the quoted text).
+>
+> >
+> > > > > > How so, what's wrong with the above for ACPI-based system ?
+> > > > >
+> > > > > I=E6=B6=8E devices are already powered on for probe on ACPI based=
+ systems.
+> > > >
+> > > > Not through RPM I suppose ?
+> > >
+> > > Runtime PM isn't involved, this takes place in the ACPI framework (vi=
+a
+> > > dev_pm_domain_attach() called in i2c_device_probe()).
+> >
+> > How can we fix this ? It may have made sense a long time ago, but it's
+> > making RPM handling way too difficult in I2C drivers now. We need
+> > something better instead of continuing to rely on cargo-cult for probe
+> > functions. Most drivers are broken.
+>
+> Some could be broken, there's no question of that. A lot of drivers suppo=
+rt
+> either ACPI or DT, too, so not _that_ many need to work with both. Albeit
+> that number is probably increasing constantly for the same devices are us=
+ed
+> on both.
+>
+> Then there are drivers that prefer not powering on the device in probe (s=
+ee
+> <URL:https://lore.kernel.org/linux-acpi/20210210230800.30291-2-sakari.ail=
+us@linux.intel.com/T/>),
+> it gets complicated to support all the combinatios of DT/ACPI (with or
+> without the flag / property for waiving powering device on for probe) and
+> CONFIG_PM enabled/disabled.
+>
+> What I think could be done to add a flag for drivers that handle power on
+> their own, or perhaps rather change how I2C_DRV_ACPI_WAIVE_D0_PROBE flag
+> works. Right now it expects a property on the device but that check could
+> be moved to existing drivers using the flag. Not many drivers are current=
+ly
+> using the flag. I think this would simplify driver implementation as both
+> firmware interfaces would work the same way in this respect.
+>
+> You'd have to change one driver at a time, and people should be encourage=
+d
+> to write new drivers with that flag. Or add the flag to all existing
+> drivers and not accept new ones with it.
+>
+> These devices I think are all I=E6=B6=8E but my understanding is that suc=
+h
+> differences exist elsewhere in the kernel, too. If they are to be
+> addressed, it would probably be best to have a unified approach towards i=
+t.
+>
+> Added a few more people and lists to cc.
 
-On 22 July 2022 17:07 Wolfram Sang wrote
-> > Yet another i2c controller from Renesas that is found on the RZ/V2M
-> > (r9a09g011) SoC. It can support only 100kHz and 400KHz operation.
->=20
-> Geez, you are right with "yet another". One wonders why the 5 others are
-> not enough?
-Quite...
++ Hidenori from my team for visibility.
 
-> > +static int rzv2m_i2c_master_xfer1(struct rzv2m_i2c_priv *priv,
-> > +				  struct i2c_msg *msg, int stop)
->=20
-> I'd prefer "rzv2m_i2c_master_xfer_msg" for this function.s
->=20
-> > +	adap->class =3D I2C_CLASS_DEPRECATED;
->=20
-> You don't need to set the class to deprecated because there can't be a
-> previous version which now loses this functionality and needs to inform
-> userspace about it. .class can be 0 here.
-Ok
-=20
-> Reset looks looks, good thanks!
->=20
-> I can fix up these minor things when applying if you don't mind.
-Thanks!
+I think we may want to take a step back and first define the problem
+itself. To do that, let's take a look separately at DT and ACPI cases
+(is platform data still relevant? are there any other firmware
+interfaces that deal with I2C devices?).
+For simplicity, let's forget about the ACPI waived power on in probe.
 
-Phil
+DT:
+ 1) hardware state unknown when probe is called
+ 2) claim any independently managed resources (e.g. GPIOs)
+ 3) enable runtime PM
+ 4) if driver wants to access the hardware:
+    a) runtime PM get
+    b) enable any independently controlled resources (e.g. reset GPIO)
+    c) [do access]
+    d) disable any independently controlled resources
+    e) runtime PM put
+ 5) after probe returns, regulators, clocks (and other similarly
+managed resources) would be force disabled if their enable count is 0
+ 6) hardware state is off (after the runtime PM state settles)
+
+ACPI:
+ 1) hardware state is active when probe is called
+ 2) [n/a]
+ 3) tell runtime PM framework that the state is active and then enable
+runtime PM
+ 4) if driver wants to access the hardware:
+    a) runtime PM get
+    b) [n/a]
+    c) [do access]
+    d) [n/a]
+    e) runtime PM put
+ 5) [n/a]
+ 6) hardware state is off (after the runtime PM state settles)
+
+It seems like the relevant difference here is that for ACPI, the
+driver needs to know that the initial state is active and also relay
+this knowledge to the runtime PM subsystem. If we could make the ACPI
+PM domain work the same way as regulators and clocks and eventually
+power off some time later when the enable count is 0, then perhaps we
+could avoid the problem in the first place?
+
+Best regards,
+Tomasz
