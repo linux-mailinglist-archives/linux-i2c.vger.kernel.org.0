@@ -2,207 +2,177 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B143588F03
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Aug 2022 16:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ADB6588F98
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Aug 2022 17:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236242AbiHCO7L (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 3 Aug 2022 10:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
+        id S238169AbiHCPoS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 3 Aug 2022 11:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236097AbiHCO7K (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 3 Aug 2022 10:59:10 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DE32B638;
-        Wed,  3 Aug 2022 07:59:08 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id y11so13096192qvn.3;
-        Wed, 03 Aug 2022 07:59:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5jqs8AHhBgImGBIE7SxgFEppiaXm4rdOvSDueZDLtEQ=;
-        b=J7iFFApEpmH/XmKfNn8NMMjeGffryiPx4XCa/yydrPs8YUy4GrSvGHHWWOl/8rJU3t
-         eJZIbrlmWFExYI4atGPR4oBVnSE5tUHTQQ/hBc0U002MlGFZisjcj9DU8JbNw+wZXtPn
-         x8eVaESQRCH0pSHTO5iSGIa/JLD3TQ7t/lBUa8LVsJA0nL7X6ICCo9rR8ZvH3k4GJJ6+
-         bicrLg9PQsgAnAyWxthKeGIW37GKLMKuf9k/efiwxhfAS6OGzpM/k3UTJPv8cw9tu2i2
-         /2geaj7Xy2EUrj7esWKiHsrFvkAX80QhPrhDyCV4XZVtifeRskgjrNNkXDY6agJRjMsb
-         uvog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5jqs8AHhBgImGBIE7SxgFEppiaXm4rdOvSDueZDLtEQ=;
-        b=IA6ctcPa7yMQzdKtMDmXjWLtOQyLPN5NyV9jNsJONYPsMG5RPu3LerQqtPXpznAa3B
-         Kh7Yq87ocQjaysC0Veri+8bDCelB6hppZQd7SiZ27Fp+smZhJ4bbgqMURJ82rWRsCeTy
-         LQx38XapCqk4Nj42r1uiGgagtYzdGOzLWa1wfIucwDc9WzOZSOx168R056zJfI8g8/0x
-         SbxlUaS+0tBTkqTqMGEMvzQAVbnbr6rHhrPkXYr6twKDNHu9RCU1ECqnKNnf7h8Q+AqN
-         gl7Qz8YFATGM4J9FwB0BLVQIH0tCYxz5TMcM8LsrzuSS8zk1FvjgWgbuEPdk+T1WG8Kh
-         wybg==
-X-Gm-Message-State: ACgBeo3Je3SEXpsIijdrTRKN6AQ1uh0FQzfa1LYHWOmjM+t3N7AtVHJG
-        I6nY4eQ+hBvuozO/Lf3Yka0345BzqAKtBQ==
-X-Google-Smtp-Source: AA6agR7lzgeVNFNaoBp35EMn0KFGA+BHcAQt5MkpfwMV1EzlLpl5AVjMEAylWuOjApBxSUAcBUHYzQ==
-X-Received: by 2002:a05:6214:20a2:b0:476:9071:2e60 with SMTP id 2-20020a05621420a200b0047690712e60mr12245740qvd.110.1659538747629;
-        Wed, 03 Aug 2022 07:59:07 -0700 (PDT)
-Received: from horus.lan (75-164-204-71.ptld.qwest.net. [75.164.204.71])
-        by smtp.gmail.com with ESMTPSA id ey19-20020a05622a4c1300b0031efc91644fsm11114114qtb.33.2022.08.03.07.59.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 07:59:07 -0700 (PDT)
-From:   Jason Gerecke <killertofu@gmail.com>
-X-Google-Original-From: Jason Gerecke <jason.gerecke@wacom.com>
-To:     linux-i2c@vger.kernel.org, linux-iio <linux-iio@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ping Cheng <pinglinux@gmail.com>,
-        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>,
-        Ping Cheng <ping.cheng@wacom.com>
-Subject: [PATCH v2] i2c: Use u8 type in i2c transfer calls
-Date:   Wed,  3 Aug 2022 07:59:37 -0700
-Message-Id: <20220803145937.698603-1-jason.gerecke@wacom.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220718153448.173652-1-jason.gerecke@wacom.com>
-References: <20220718153448.173652-1-jason.gerecke@wacom.com>
+        with ESMTP id S238176AbiHCPoS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 3 Aug 2022 11:44:18 -0400
+X-Greylist: delayed 514 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 03 Aug 2022 08:44:16 PDT
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08A33E767
+        for <linux-i2c@vger.kernel.org>; Wed,  3 Aug 2022 08:44:16 -0700 (PDT)
+Received: from [192.168.1.101] (abxi232.neoplus.adsl.tpnet.pl [83.9.2.232])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id E29413F751;
+        Wed,  3 Aug 2022 17:35:39 +0200 (CEST)
+Message-ID: <e53cee9d-8eb8-6f8c-4b88-5dedb394a758@somainline.org>
+Date:   Wed, 3 Aug 2022 17:35:39 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 4/5] ARM: dts: qcom: use GPIO flags for tlmm
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     corbet@lwn.net
+References: <20220802153947.44457-1-krzysztof.kozlowski@linaro.org>
+ <20220802153947.44457-5-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220802153947.44457-5-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The 'i2c_transfer_buffer_flags' function (and related inlines) defines its
-'buf' argument to be of type 'char*'. This is a poor choice of type given
-that most callers actually pass a 'u8*' and that the function itself ends
-up just storing the variable to a 'u8*'-typed member of 'struct i2c_msg'
-anyway.
 
-Changing the type of the 'buf' argument to 'u8*' vastly reduces the number
-of (admittedly usually-silent) Wpointer-sign warnings that are generated
-as the types get needlessly juggled back and forth.
 
-At the same time, update the max1363 driver to match the new interface so
-we don't introduce a new Wincompatible-function-pointer-types warning.
+On 2.08.2022 17:39, Krzysztof Kozlowski wrote:
+> Use respective GPIO_ACTIVE_LOW/HIGH flags for tlmm GPIOs.  Include
+> gpio.h header if this is first usage of that flag.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-Signed-off-by: Jason Gerecke <jason.gerecke@wacom.com>
-Reviewed-by: Ping Cheng <ping.cheng@wacom.com>
----
-Changes in v2:
-  - Added modifications to the max1363 driver required to avoid warnings
-
- drivers/i2c/i2c-core-base.c |  2 +-
- drivers/iio/adc/max1363.c   |  8 ++++----
- include/linux/i2c.h         | 14 +++++++-------
- 3 files changed, 12 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 10f35f942066a..2925507e8626d 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -2184,7 +2184,7 @@ EXPORT_SYMBOL(i2c_transfer);
-  *
-  * Returns negative errno, or else the number of bytes transferred.
-  */
--int i2c_transfer_buffer_flags(const struct i2c_client *client, char *buf,
-+int i2c_transfer_buffer_flags(const struct i2c_client *client, u8 *buf,
- 			      int count, u16 flags)
- {
- 	int ret;
-diff --git a/drivers/iio/adc/max1363.c b/drivers/iio/adc/max1363.c
-index eef55ed4814a6..ebe6eb99583da 100644
---- a/drivers/iio/adc/max1363.c
-+++ b/drivers/iio/adc/max1363.c
-@@ -184,9 +184,9 @@ struct max1363_state {
- 	struct regulator		*vref;
- 	u32				vref_uv;
- 	int				(*send)(const struct i2c_client *client,
--						const char *buf, int count);
-+						const u8 *buf, int count);
- 	int				(*recv)(const struct i2c_client *client,
--						char *buf, int count);
-+						u8 *buf, int count);
- };
- 
- #define MAX1363_MODE_SINGLE(_num, _mask) {				\
-@@ -312,7 +312,7 @@ static const struct max1363_mode
- 	return NULL;
- }
- 
--static int max1363_smbus_send(const struct i2c_client *client, const char *buf,
-+static int max1363_smbus_send(const struct i2c_client *client, const u8 *buf,
- 		int count)
- {
- 	int i, err;
-@@ -323,7 +323,7 @@ static int max1363_smbus_send(const struct i2c_client *client, const char *buf,
- 	return err ? err : count;
- }
- 
--static int max1363_smbus_recv(const struct i2c_client *client, char *buf,
-+static int max1363_smbus_recv(const struct i2c_client *client, u8 *buf,
- 		int count)
- {
- 	int i, ret;
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 8eab5017bff30..3a94385f4642c 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -64,7 +64,7 @@ const char *i2c_freq_mode_string(u32 bus_freq_hz);
-  * @count must be less than 64k since msg.len is u16.
-  */
- int i2c_transfer_buffer_flags(const struct i2c_client *client,
--			      char *buf, int count, u16 flags);
-+			      u8 *buf, int count, u16 flags);
- 
- /**
-  * i2c_master_recv - issue a single I2C message in master receive mode
-@@ -75,7 +75,7 @@ int i2c_transfer_buffer_flags(const struct i2c_client *client,
-  * Returns negative errno, or else the number of bytes read.
-  */
- static inline int i2c_master_recv(const struct i2c_client *client,
--				  char *buf, int count)
-+				  u8 *buf, int count)
- {
- 	return i2c_transfer_buffer_flags(client, buf, count, I2C_M_RD);
- };
-@@ -90,7 +90,7 @@ static inline int i2c_master_recv(const struct i2c_client *client,
-  * Returns negative errno, or else the number of bytes read.
-  */
- static inline int i2c_master_recv_dmasafe(const struct i2c_client *client,
--					  char *buf, int count)
-+					  u8 *buf, int count)
- {
- 	return i2c_transfer_buffer_flags(client, buf, count,
- 					 I2C_M_RD | I2C_M_DMA_SAFE);
-@@ -105,9 +105,9 @@ static inline int i2c_master_recv_dmasafe(const struct i2c_client *client,
-  * Returns negative errno, or else the number of bytes written.
-  */
- static inline int i2c_master_send(const struct i2c_client *client,
--				  const char *buf, int count)
-+				  const u8 *buf, int count)
- {
--	return i2c_transfer_buffer_flags(client, (char *)buf, count, 0);
-+	return i2c_transfer_buffer_flags(client, (u8 *)buf, count, 0);
- };
- 
- /**
-@@ -120,9 +120,9 @@ static inline int i2c_master_send(const struct i2c_client *client,
-  * Returns negative errno, or else the number of bytes written.
-  */
- static inline int i2c_master_send_dmasafe(const struct i2c_client *client,
--					  const char *buf, int count)
-+					  const u8 *buf, int count)
- {
--	return i2c_transfer_buffer_flags(client, (char *)buf, count,
-+	return i2c_transfer_buffer_flags(client, (u8 *)buf, count,
- 					 I2C_M_DMA_SAFE);
- };
- 
--- 
-2.37.1
-
+Konrad
+>  arch/arm/boot/dts/qcom-apq8074-dragonboard.dts           | 3 ++-
+>  arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi            | 3 ++-
+>  arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi            | 4 ++--
+>  arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts          | 5 +++--
+>  arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts | 2 +-
+>  5 files changed, 10 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
+> index 3051a861ff0c..91716298ec5e 100644
+> --- a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
+> +++ b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
+> @@ -1,4 +1,5 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> +#include <dt-bindings/gpio/gpio.h>
+>  #include "qcom-msm8974.dtsi"
+>  #include "qcom-pm8841.dtsi"
+>  #include "qcom-pm8941.dtsi"
+> @@ -261,7 +262,7 @@ &sdhc_1 {
+>  &sdhc_2 {
+>  	status = "okay";
+>  
+> -	cd-gpios = <&tlmm 62 0x1>;
+> +	cd-gpios = <&tlmm 62 GPIO_ACTIVE_LOW>;
+>  	vmmc-supply = <&pm8941_l21>;
+>  	vqmmc-supply = <&pm8941_l13>;
+>  
+> diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi b/arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi
+> index 03bb9e1768c4..0505270cf508 100644
+> --- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi
+> +++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi
+> @@ -14,6 +14,7 @@
+>   *
+>   */
+>  
+> +#include <dt-bindings/gpio/gpio.h>
+>  #include "qcom-ipq4019.dtsi"
+>  
+>  / {
+> @@ -72,7 +73,7 @@ spi@78b5000 {
+>  			pinctrl-0 = <&spi_0_pins>;
+>  			pinctrl-names = "default";
+>  			status = "okay";
+> -			cs-gpios = <&tlmm 54 0>;
+> +			cs-gpios = <&tlmm 54 GPIO_ACTIVE_HIGH>;
+>  
+>  			mx25l25635e@0 {
+>  				#address-cells = <1>;
+> diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi b/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
+> index 44a9597d8bfd..c2f5222e72de 100644
+> --- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
+> +++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
+> @@ -87,7 +87,7 @@ spi@78b5000 { /* BLSP1 QUP1 */
+>  			pinctrl-0 = <&spi_0_pins>;
+>  			pinctrl-names = "default";
+>  			status = "okay";
+> -			cs-gpios = <&tlmm 12 0>;
+> +			cs-gpios = <&tlmm 12 GPIO_ACTIVE_HIGH>;
+>  
+>  			flash@0 {
+>  				#address-cells = <1>;
+> @@ -100,7 +100,7 @@ flash@0 {
+>  
+>  		pci@40000000 {
+>  			status = "okay";
+> -			perst-gpio = <&tlmm 38 0x1>;
+> +			perst-gpio = <&tlmm 38 GPIO_ACTIVE_LOW>;
+>  		};
+>  
+>  		qpic-nand@79b0000 {
+> diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts b/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts
+> index c7a6e77da272..7fc33149060c 100644
+> --- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts
+> +++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  // Copyright (c) 2018, The Linux Foundation. All rights reserved.
+>  
+> +#include <dt-bindings/gpio/gpio.h>
+>  #include "qcom-ipq4019-ap.dk07.1.dtsi"
+>  
+>  / {
+> @@ -10,7 +11,7 @@ / {
+>  	soc {
+>  		pci@40000000 {
+>  			status = "okay";
+> -			perst-gpio = <&tlmm 38 0x1>;
+> +			perst-gpio = <&tlmm 38 GPIO_ACTIVE_LOW>;
+>  		};
+>  
+>  		spi@78b6000 {
+> @@ -50,7 +51,7 @@ spi@78b5000 {
+>  			pinctrl-0 = <&spi_0_pins>;
+>  			pinctrl-names = "default";
+>  			status = "okay";
+> -			cs-gpios = <&tlmm 12 0>;
+> +			cs-gpios = <&tlmm 12 GPIO_ACTIVE_HIGH>;
+>  
+>  			flash@0 {
+>  				#address-cells = <1>;
+> diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
+> index ec5d340562b6..6daceaa87802 100644
+> --- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
+> +++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
+> @@ -175,7 +175,7 @@ i2c-gate {
+>  			ak8963@f {
+>  				compatible = "asahi-kasei,ak8963";
+>  				reg = <0x0f>;
+> -				gpios = <&tlmm 67 0>;
+> +				gpios = <&tlmm 67 GPIO_ACTIVE_HIGH>;
+>  				vid-supply = <&pm8941_lvs1>;
+>  				vdd-supply = <&pm8941_l17>;
+>  			};
