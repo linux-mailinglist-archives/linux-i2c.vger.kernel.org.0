@@ -2,42 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9053258CA5E
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Aug 2022 16:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD7D58CA60
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Aug 2022 16:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243482AbiHHOR4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 Aug 2022 10:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
+        id S243534AbiHHOR5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Aug 2022 10:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231898AbiHHORt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Aug 2022 10:17:49 -0400
+        with ESMTP id S243477AbiHHORy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Aug 2022 10:17:54 -0400
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38047F2D;
-        Mon,  8 Aug 2022 07:17:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7977E2185;
+        Mon,  8 Aug 2022 07:17:48 -0700 (PDT)
 Received: from booty.fritz.box (unknown [77.244.183.192])
         (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id F07CC4001D;
-        Mon,  8 Aug 2022 14:17:44 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPA id D91B840021;
+        Mon,  8 Aug 2022 14:17:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1659968265;
+        t=1659968266;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gE5Me+n3eT2J+SCi3DhEyKj3QomarnaCcuG786z1UJY=;
-        b=WugxYO1UCudpSAwWVAgC333QyRN5xz7NFOoSEkhS21hEaAShzSNQc7J76a21hSio7CW//6
-        7zfrEOcyIFAlJqP21cJXb8xgWwZ27VUmesT/JRXQWHLWkXlYlipvSA6bzrovP8CO3CPe1q
-        eQj56hpN2GTPaAYgEzLwWQu5VpjvFba1+ADQ2tAC/1S/qWX08ZmMxRQhkrHVfCjFoUDI6o
-        E4tLJ+n+Hh/7DMZvjT/GV5+n5s+6qivrU6pMRB29Bs4cZHbTdU8YhXFp8XWRZKk/FSTS2e
-        ILgbTTI7vzEb5f8CER9QIJb5N0L40CwFLcpL4afiqCE4W4Yu8cMSwk1itLOFdw==
+        bh=Vse0PXbfgREFWzjPw765Sr7JMn/or8fQexoNuL2Z1o0=;
+        b=JvAV4ABjljWyPhGQmfuWo0DDdGgRa7hTwWhoRFvR8yOJ/F4s2ObP8kRPNGMdQNXlMs0XAn
+        HxjqQXzBDPg0hUQvu73Rc6XnEl+bOZ62B5LrGVbnOXSkt+u72GojJd9un6W/f3D5nlSkVW
+        XJRbYOoxl5FAEvlhucoTh7sQQAQmctzDTvzZsMo6aYoJ3oW9HoqYeaXlX8wToM7toTa2rH
+        6jaZWtBT1khCKHLqRGCNZv60HcPT7IFWLNuXFzSxhM0MuRb6CKZJnaW/UtLVFdlBuOC1BQ
+        AHMasrELZKsw1Mi0XTBmjgbTNgozw+a78W+x3I55y0EVFOOSVjkcJCKmTPG5Eg==
 From:   luca.ceresoli@bootlin.com
 To:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
 Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
         Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 7/9] docs: i2c: i2c-topology: reorder sections more logically
-Date:   Mon,  8 Aug 2022 16:17:06 +0200
-Message-Id: <20220808141708.1021103-8-luca.ceresoli@bootlin.com>
+Subject: [PATCH 8/9] docs: i2c: i2c-sysfs: improve wording
+Date:   Mon,  8 Aug 2022 16:17:07 +0200
+Message-Id: <20220808141708.1021103-9-luca.ceresoli@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220808141708.1021103-1-luca.ceresoli@bootlin.com>
 References: <20220808141708.1021103-1-luca.ceresoli@bootlin.com>
@@ -55,309 +55,41 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-The sequence of sections is a bit confusing here:
-
- * we list the mux locking scheme for existing drivers before introducing
-   what mux locking schemes are
- * we list the caveats for each locking scheme (which are tricky) before
-   the example of the simple use case
-
-Restructure it entirely with the following logic:
-
- * Intro ("I2C muxes and complex topologies")
- * Locking
-   - mux-locked
-     - example
-     - caveats
-   - parent-locked
-     - example
-     - caveats
- * Complex examples
- * Mux type of existing device drivers
-
-While there, also apply some other improvements:
-
- * convert the caveat list from a table (with only one column carrying
-   content) to a bullet list.
- * add a small introductory text to bridge the gap from listing the use
-   cases to telling about the hardware components to handle them and then
-   the device drivers that implement those.
- * make empty lines usage more uniform
+Improve wording in a couple sentences.
 
 Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
- Documentation/i2c/i2c-topology.rst | 206 +++++++++++++++--------------
- 1 file changed, 109 insertions(+), 97 deletions(-)
+ Documentation/i2c/i2c-sysfs.rst | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/i2c/i2c-topology.rst b/Documentation/i2c/i2c-topology.rst
-index 1b11535c8946..6f2da7f386fd 100644
---- a/Documentation/i2c/i2c-topology.rst
-+++ b/Documentation/i2c/i2c-topology.rst
-@@ -16,7 +16,10 @@ Some example use cases are:
-    from the I2C bus, at least most of the time, and sits behind a gate
-    that has to be operated before the device can be accessed.
+diff --git a/Documentation/i2c/i2c-sysfs.rst b/Documentation/i2c/i2c-sysfs.rst
+index 6b68b95cd427..d816a23b80f2 100644
+--- a/Documentation/i2c/i2c-sysfs.rst
++++ b/Documentation/i2c/i2c-sysfs.rst
+@@ -51,11 +51,10 @@ Google Pixel 3 phone for example::
+ ``i2c-2`` is an I2C bus whose number is 2, and ``2-0049`` is an I2C device
+ on bus 2 address 0x49 bound with a kernel driver.
  
--These constructs are represented as I2C adapter trees by Linux, where
-+Several types of hardware components such as I2C muxes, I2C gates and I2C
-+arbitrators allow to handle such needs.
-+
-+These components are represented as I2C adapter trees by Linux, where
- each adapter has a parent adapter (except the root adapter) and zero or
- more child adapters. The root adapter is the actual adapter that issues
- I2C transfers, and all adapters with a parent are part of an "i2c-mux"
-@@ -34,46 +37,7 @@ Locking
- =======
+-Terminologies
+-=============
++Terminology
++===========
  
- There are two variants of locking available to I2C muxes, they can be
--mux-locked or parent-locked muxes. As is evident from below, it can be
--useful to know if a mux is mux-locked or if it is parent-locked. The
--following list was correct at the time of writing:
--
--In drivers/i2c/muxes/:
--
--======================    =============================================
--i2c-arb-gpio-challenge    Parent-locked
--i2c-mux-gpio              Normally parent-locked, mux-locked iff
--                          all involved gpio pins are controlled by the
--                          same I2C root adapter that they mux.
--i2c-mux-gpmux             Normally parent-locked, mux-locked iff
--                          specified in device-tree.
--i2c-mux-ltc4306           Mux-locked
--i2c-mux-mlxcpld           Parent-locked
--i2c-mux-pca9541           Parent-locked
--i2c-mux-pca954x           Parent-locked
--i2c-mux-pinctrl           Normally parent-locked, mux-locked iff
--                          all involved pinctrl devices are controlled
--                          by the same I2C root adapter that they mux.
--i2c-mux-reg               Parent-locked
--======================    =============================================
--
--In drivers/iio/:
--
--======================    =============================================
--gyro/mpu3050              Mux-locked
--imu/inv_mpu6050/          Mux-locked
--======================    =============================================
--
--In drivers/media/:
--
--=======================   =============================================
--dvb-frontends/lgdt3306a   Mux-locked
--dvb-frontends/m88ds3103   Parent-locked
--dvb-frontends/rtl2830     Parent-locked
--dvb-frontends/rtl2832     Mux-locked
--dvb-frontends/si2168      Mux-locked
--usb/cx231xx/              Parent-locked
--=======================   =============================================
-+mux-locked or parent-locked muxes.
+-First, let us define a couple of terminologies to avoid confusions in the later
+-sections.
++First, let us define some terms to avoid confusions in the later sections.
  
+ (Physical) I2C Bus Controller
+ -----------------------------
+@@ -117,7 +116,7 @@ Walk through Logical I2C Bus
  
- Mux-locked muxes
-@@ -88,40 +52,8 @@ full transaction, unrelated I2C transfers may interleave the different
- stages of the transaction. This has the benefit that the mux driver
- may be easier and cleaner to implement, but it has some caveats.
- 
--==== =====================================================================
--ML1. If you build a topology with a mux-locked mux being the parent
--     of a parent-locked mux, this might break the expectation from the
--     parent-locked mux that the root adapter is locked during the
--     transaction.
--
--ML2. It is not safe to build arbitrary topologies with two (or more)
--     mux-locked muxes that are not siblings, when there are address
--     collisions between the devices on the child adapters of these
--     non-sibling muxes.
--
--     I.e. the select-transfer-deselect transaction targeting e.g. device
--     address 0x42 behind mux-one may be interleaved with a similar
--     operation targeting device address 0x42 behind mux-two. The
--     intension with such a topology would in this hypothetical example
--     be that mux-one and mux-two should not be selected simultaneously,
--     but mux-locked muxes do not guarantee that in all topologies.
--
--ML3. A mux-locked mux cannot be used by a driver for auto-closing
--     gates/muxes, i.e. something that closes automatically after a given
--     number (one, in most cases) of I2C transfers. Unrelated I2C transfers
--     may creep in and close prematurely.
--
--ML4. If any non-I2C operation in the mux driver changes the I2C mux state,
--     the driver has to lock the root adapter during that operation.
--     Otherwise garbage may appear on the bus as seen from devices
--     behind the mux, when an unrelated I2C transfer is in flight during
--     the non-I2C mux-changing operation.
--==== =====================================================================
--
--
- Mux-locked Example
--------------------
--
-+~~~~~~~~~~~~~~~~~~
+ For the following content, we will use a more complex I2C topology as an
+ example. Here is a brief graph for the I2C topology. If you do not understand
+-this graph at the first glance, do not be afraid to continue reading this doc
++this graph at first glance, do not be afraid to continue reading this doc
+ and review it when you finish reading.
  
  ::
- 
-@@ -152,6 +84,39 @@ This means that accesses to D2 are lockout out for the full duration
- of the entire operation. But accesses to D3 are possibly interleaved
- at any point.
- 
-+Mux-locked caveats
-+~~~~~~~~~~~~~~~~~~
-+
-+When using a mux-locked mux, be aware of the following restrictions:
-+
-+* If you build a topology with a mux-locked mux being the parent
-+  of a parent-locked mux, this might break the expectation from the
-+  parent-locked mux that the root adapter is locked during the
-+  transaction.
-+
-+* It is not safe to build arbitrary topologies with two (or more)
-+  mux-locked muxes that are not siblings, when there are address
-+  collisions between the devices on the child adapters of these
-+  non-sibling muxes.
-+
-+  I.e. the select-transfer-deselect transaction targeting e.g. device
-+  address 0x42 behind mux-one may be interleaved with a similar
-+  operation targeting device address 0x42 behind mux-two. The
-+  intension with such a topology would in this hypothetical example
-+  be that mux-one and mux-two should not be selected simultaneously,
-+  but mux-locked muxes do not guarantee that in all topologies.
-+
-+* A mux-locked mux cannot be used by a driver for auto-closing
-+  gates/muxes, i.e. something that closes automatically after a given
-+  number (one, in most cases) of I2C transfers. Unrelated I2C transfers
-+  may creep in and close prematurely.
-+
-+* If any non-I2C operation in the mux driver changes the I2C mux state,
-+  the driver has to lock the root adapter during that operation.
-+  Otherwise garbage may appear on the bus as seen from devices
-+  behind the mux, when an unrelated I2C transfer is in flight during
-+  the non-I2C mux-changing operation.
-+
- 
- Parent-locked muxes
- -------------------
-@@ -160,28 +125,10 @@ Parent-locked muxes lock the parent adapter during the full select-
- transfer-deselect transaction. The implication is that the mux driver
- has to ensure that any and all I2C transfers through that parent
- adapter during the transaction are unlocked I2C transfers (using e.g.
--__i2c_transfer), or a deadlock will follow. There are a couple of
--caveats.
--
--==== ====================================================================
--PL1. If you build a topology with a parent-locked mux being the child
--     of another mux, this might break a possible assumption from the
--     child mux that the root adapter is unused between its select op
--     and the actual transfer (e.g. if the child mux is auto-closing
--     and the parent mux issues I2C transfers as part of its select).
--     This is especially the case if the parent mux is mux-locked, but
--     it may also happen if the parent mux is parent-locked.
--
--PL2. If select/deselect calls out to other subsystems such as gpio,
--     pinctrl, regmap or iio, it is essential that any I2C transfers
--     caused by these subsystems are unlocked. This can be convoluted to
--     accomplish, maybe even impossible if an acceptably clean solution
--     is sought.
--==== ====================================================================
--
-+__i2c_transfer), or a deadlock will follow.
- 
- Parent-locked Example
-----------------------
-+~~~~~~~~~~~~~~~~~~~~~
- 
- ::
- 
-@@ -211,10 +158,29 @@ When there is an access to D1, this happens:
-  9.  M1 unlocks its parent adapter.
-  10. M1 unlocks muxes on its parent.
- 
--
- This means that accesses to both D2 and D3 are locked out for the full
- duration of the entire operation.
- 
-+Parent-locked Caveats
-+~~~~~~~~~~~~~~~~~~~~~
-+
-+When using a parent-locked mux, be aware of the following restrictions:
-+
-+* If you build a topology with a parent-locked mux being the child
-+  of another mux, this might break a possible assumption from the
-+  child mux that the root adapter is unused between its select op
-+  and the actual transfer (e.g. if the child mux is auto-closing
-+  and the parent mux issues I2C transfers as part of its select).
-+  This is especially the case if the parent mux is mux-locked, but
-+  it may also happen if the parent mux is parent-locked.
-+
-+* If select/deselect calls out to other subsystems such as gpio,
-+  pinctrl, regmap or iio, it is essential that any I2C transfers
-+  caused by these subsystems are unlocked. This can be convoluted to
-+  accomplish, maybe even impossible if an acceptably clean solution
-+  is sought.
-+
-+
- 
- Complex Examples
- ================
-@@ -260,8 +226,10 @@ This is a good topology::
- When device D1 is accessed, accesses to D2 are locked out for the
- full duration of the operation (muxes on the top child adapter of M1
- are locked). But accesses to D3 and D4 are possibly interleaved at
--any point. Accesses to D3 locks out D1 and D2, but accesses to D4
--are still possibly interleaved.
-+any point.
-+
-+Accesses to D3 locks out D1 and D2, but accesses to D4 are still possibly
-+interleaved.
- 
- 
- Mux-locked mux as parent of parent-locked mux
-@@ -393,3 +361,47 @@ This is a good topology::
- When D1 or D2 are accessed, accesses to D3 and D4 are locked out while
- accesses to D5 may interleave. When D3 or D4 are accessed, accesses to
- all other devices are locked out.
-+
-+
-+Mux type of existing device drivers
-+===================================
-+
-+Whether a device is mux-locked or parent-locked depends on its
-+implementation. The following list was correct at the time of writing:
-+
-+In drivers/i2c/muxes/:
-+
-+======================    =============================================
-+i2c-arb-gpio-challenge    Parent-locked
-+i2c-mux-gpio              Normally parent-locked, mux-locked iff
-+                          all involved gpio pins are controlled by the
-+                          same I2C root adapter that they mux.
-+i2c-mux-gpmux             Normally parent-locked, mux-locked iff
-+                          specified in device-tree.
-+i2c-mux-ltc4306           Mux-locked
-+i2c-mux-mlxcpld           Parent-locked
-+i2c-mux-pca9541           Parent-locked
-+i2c-mux-pca954x           Parent-locked
-+i2c-mux-pinctrl           Normally parent-locked, mux-locked iff
-+                          all involved pinctrl devices are controlled
-+                          by the same I2C root adapter that they mux.
-+i2c-mux-reg               Parent-locked
-+======================    =============================================
-+
-+In drivers/iio/:
-+
-+======================    =============================================
-+gyro/mpu3050              Mux-locked
-+imu/inv_mpu6050/          Mux-locked
-+======================    =============================================
-+
-+In drivers/media/:
-+
-+=======================   =============================================
-+dvb-frontends/lgdt3306a   Mux-locked
-+dvb-frontends/m88ds3103   Parent-locked
-+dvb-frontends/rtl2830     Parent-locked
-+dvb-frontends/rtl2832     Mux-locked
-+dvb-frontends/si2168      Mux-locked
-+usb/cx231xx/              Parent-locked
-+=======================   =============================================
 -- 
 2.34.1
 
