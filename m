@@ -2,123 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE7458D892
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Aug 2022 14:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77AD658E2E2
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Aug 2022 00:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237277AbiHIMFJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 Aug 2022 08:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
+        id S229756AbiHIWQV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 9 Aug 2022 18:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236564AbiHIMFI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Aug 2022 08:05:08 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34A51EEC3;
-        Tue,  9 Aug 2022 05:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660046704; x=1691582704;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=rIJtg6N3ukhnUG2gqKWmREiUxHfYT175zglEAUmnV9E=;
-  b=AH7ui4fF4hCupigWHipG7d3CSEb5mbTh6SWBddTm2f9W+Tw8uX73YJ4w
-   P4/M8PrJ5guQOcY5iM1u9/UIxx/KkHuVmy0dQ6fi/Jlabq/YuiQv0jDiW
-   aQWPccRK6PN/RriletX0Dmb8D+paUYYSEyGIYNUA4WYG8tcFkl4Za0U5n
-   Dnt2i7j3bv9ezUXhIaGl8PkE6F1pLqGevQO8Oi9iUXYsCK85DkmNeLvNj
-   hMB2b+m8DeewU0MdETmb/3JUDfM8lnzkqSn68VsvLtn+cPkFqPF5RjlU+
-   t8UkUjcyHL3BbZkZwXw6D0KJ+ambputnA1NrCxU4o7F+dp46JmWIuvFmF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="291603911"
-X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="291603911"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 05:05:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="633300813"
-Received: from mylly.fi.intel.com (HELO [10.237.72.177]) ([10.237.72.177])
-  by orsmga008.jf.intel.com with ESMTP; 09 Aug 2022 05:05:01 -0700
-Message-ID: <d2be49af-71e4-978b-fe00-8b8fca6f80b5@linux.intel.com>
-Date:   Tue, 9 Aug 2022 15:05:01 +0300
+        with ESMTP id S229861AbiHIWPR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Aug 2022 18:15:17 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B519D201A1
+        for <linux-i2c@vger.kernel.org>; Tue,  9 Aug 2022 15:15:14 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id y82so3923668iof.7
+        for <linux-i2c@vger.kernel.org>; Tue, 09 Aug 2022 15:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=GI1h58u9NHz7rI/vIwOU5DkUcoHPmL+b4tk5i/xxv5Y=;
+        b=QTP95oQi+RYhXbI8sz4RyTZp0RSE4jP48cyyUmWbTiK1ItvOHbADVtjkGHK/8zFbqv
+         EIzUG3d4HgG5eAQxnVHuBpH33ycuIiNpMEXk8S0LHARhhQGb6AufQVVn/40aQfLvP77W
+         778oK7qnpGZXO0Q2aGCYT4Mad4FGDHlh1br3s7D4D+9Vr7gPQrhXDR8bwR1fyz6kQ1n2
+         /mI7/+oIm6xqfpBjeRephfywWnzvzUcqvvdKwYuFsxmTm/GRVEQb9jKfBsLPvHEPeyBR
+         SLk52BQ10Zm7GZ4Mv5gugSKJZhGFXVOipaGDVsAOq6ABLyMrmGMv+5RYTjL3cqduwO+M
+         O1Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=GI1h58u9NHz7rI/vIwOU5DkUcoHPmL+b4tk5i/xxv5Y=;
+        b=mSxwjhQvcd0fPPP7hYq8A0q6uHJbap8Q8If7fNo4e0V4dPJ1hgFs2t9l5Pv5yQHuv9
+         NQm7VDAACj+UTtQx+fAVqDU3RDDi5r+6/mcStDVuxiOhyP+QzQ2zAYMlHX3XUWenx5PO
+         CzqJoDtFedS53ZgFTxa9yV/OZPgTqRZeNQOckpEa9I4MqOzCkFC7HSWN0lFAhM9NrH7s
+         GSj3hgCsfEMoc4AMjdB5JHPxkCF7+bQCAuZPDwG/IwypwwwHpPN2nzs0B0hrsrhatJpJ
+         Af2yvP1yKmBfEj04B0a+epzQw8IOjHdpBLB5GKEuw3Yv0VzaNTfwDL7o3mFWLvIFoyc+
+         8Uig==
+X-Gm-Message-State: ACgBeo3rBrnXZs4JBDhDbnC7yRC08YjBm6nawJ9VMLB9B66cCZ5aUqIZ
+        wNaY6OSydzMgVWmEUGeKrTw2LWoxVQKwTIHoW9fsONxUWkDe/w==
+X-Google-Smtp-Source: AA6agR7pJ6r7fhR2kV9XLe+oV3h+/ej1weqLnpTQS1YP5ule1vsDwGSNCnOW6LlEIY2xTapZFY+hu5KXPqSjTYpoaJM=
+X-Received: by 2002:a63:4642:0:b0:41b:d353:c5c7 with SMTP id
+ v2-20020a634642000000b0041bd353c5c7mr20359415pgk.568.1660083303718; Tue, 09
+ Aug 2022 15:15:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.10.0
-Subject: Re: [PATCH] i2c: designware: Introduce cooldown timer to AMDPSP
- driver
-Content-Language: en-US
-To:     Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, andriy.shevchenko@linux.intel.com
-Cc:     mika.westerberg@linux.intel.com, wsa@kernel.org,
-        rrangel@chromium.org, mw@semihalf.com, upstream@semihalf.com
-References: <20220725080240.106619-1-jsd@semihalf.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20220725080240.106619-1-jsd@semihalf.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a10:e8a6:b0:2d4:fb1c:cc5e with HTTP; Tue, 9 Aug 2022
+ 15:15:03 -0700 (PDT)
+Reply-To: wijh555@gmail.com
+From:   "Dr. Ali Moses" <alimoses07@gmail.com>
+Date:   Tue, 9 Aug 2022 15:15:03 -0700
+Message-ID: <CADWzZe65tcOX2+bMZfMLLauGpHEQ9Cdv814nLU=uQvKzDFrEVg@mail.gmail.com>
+Subject: Good Day,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d2e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [alimoses07[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [wijh555[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [alimoses07[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi
+-- 
+Hello,
+We the Board Directors believe you are in good health, doing great and
+with the hope that this mail will meet you in good condition, We are
+privileged and delighted to reach you via email" And we are urgently
+waiting to hear from you. and again your number is not connecting.
 
-Sorry the delay, this slipped through my eyes during vacation. Couple 
-minor comments below.
+My regards,
+Dr. Ali Moses..
 
-On 7/25/22 11:02, Jan Dabros wrote:
-> In order to optimize performance, limit amount of back and forth
-> transactions between x86 and PSP. This is done by introduction of
-> cooldown period - that is window in which x86 isn't releasing the bus
-> immediately after each I2C transaction.
-> 
-> In order to protect PSP from being starved while waiting for
-> arbitration, after a programmed time bus is automatically released by a
-> deferred function.
-> 
-> Signed-off-by: Jan Dabros <jsd@semihalf.com>
-> ---
->   drivers/i2c/busses/i2c-designware-amdpsp.c | 68 +++++++++++++++++-----
->   1 file changed, 53 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
-> index b624356c945f..2e1bb5ae72c3 100644
-> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
-> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-> @@ -6,6 +6,7 @@
->   #include <linux/io-64-nonatomic-lo-hi.h>
->   #include <linux/psp-sev.h>
->   #include <linux/types.h>
-> +#include <linux/workqueue.h>
->   
->   #include <asm/msr.h>
->   
-> @@ -15,6 +16,8 @@
->   #define PSP_MBOX_OFFSET		0x10570
->   #define PSP_CMD_TIMEOUT_US	(500 * USEC_PER_MSEC)
->   
-> +#define PSP_I2C_COOLDOWN_TIME_MS 100
-> +
-
-"cooldown" distract me thinking thermal management. Would semaphore 
-reservation time/timer fit better?
-
-> +static void release_bus_now(void)
-> +static void psp_release_i2c_bus_deferred(struct work_struct *work)
-> +static DECLARE_DELAYED_WORK(release_queue, psp_release_i2c_bus_deferred);
-> +
-
-I'd use the same namespace here. Perhaps _now can be dropped from the 
-name since the release_bus and release_bus_deferred are near to each 
-other and _deferred variant implies it's called after timeout.
-
-> +	/*
-> +	 * Send a release command to PSP if the cooldown timeout elapsed but x86 still
-> +	 * owns the ctrlr.
-> +	 */
-
-Replace "ctrlr" -> "control" here since then it doesn't lead to think 
-is't some technical object like register etc.
+Sincerely,
+Prof. Chin Guang
