@@ -2,53 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65635907AE
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Aug 2022 23:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33F75907AF
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Aug 2022 23:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236171AbiHKVDo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 11 Aug 2022 17:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37078 "EHLO
+        id S236217AbiHKVDz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 11 Aug 2022 17:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbiHKVDk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 Aug 2022 17:03:40 -0400
+        with ESMTP id S236209AbiHKVDx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 Aug 2022 17:03:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7055C95E62;
-        Thu, 11 Aug 2022 14:03:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558A585AB2;
+        Thu, 11 Aug 2022 14:03:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E36D861387;
-        Thu, 11 Aug 2022 21:03:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BCF6C433C1;
-        Thu, 11 Aug 2022 21:03:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D61661387;
+        Thu, 11 Aug 2022 21:03:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA5B4C433C1;
+        Thu, 11 Aug 2022 21:03:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660251818;
-        bh=DqZcGDQnWzKqa+ZcFIEEitS40tBZWe72ieH30nM3oeY=;
+        s=k20201202; t=1660251827;
+        bh=Hsjt89sNQ7GT6CvwIdO7n9B2eYysYbi45avieRmPzL8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kOUlM+tiWDVF9Y3rB/TokCyrbTe6EEhsWvYfQ7wzDL22jLkHg9sZH1zUEoBb9PCU8
-         YNYnX8Q8eHQxL/BSZX6IXP/VT8xrx3bFq3cwXTP3dXEeWyuSn5CrmXlOkK+8GEtc7R
-         /s3g/86voNICgU6aNVXOI6ydH10CCOyKwhSj0prxIRYrxPiAimnRRs9myt4fuqgnwP
-         o0fKk5DE43C1t6H9cem/beV8Ed9t7mqKuKDCXtk07n3EzHmDhnmEPoP2r+L8lya9Bh
-         FGNaoFHXExp9bkgqKy0pWruRDKCsZ48dgB9TFdQQyucC86F6lJg5TMzbOaA9m0FF3a
-         Otn0BDsfPB3hw==
-Date:   Thu, 11 Aug 2022 23:03:34 +0200
+        b=It85k03fS2C8yhnDGJ+ZqqaLor+ETa7NSAjlJ4iOHZgy2O6rBhGPDMYFsOZhKkZ6Y
+         NEzB+rSSXdkXwSlxYfDNycIYQCOfPmwVYyavE20bV5Opwu/vgmzr/HJNcPdVcIS8ty
+         6e7KFQcsuUyZUcIbmoW6G9A9BmG2V0m0N4EgUGc9uCTcOyQCvUl6rkHldfCpjZ0Vi1
+         5wcsy2rea0ZB++k+FkH7dW7dn21zCG5UG7sgb4l412wgW9AbPgjiXddEoIfTjXCC48
+         V4RtYf50juhWWxDOanL/rrmeG29doObBRG1jnbmcI4aGXsBgvTqeDG455Q44M0qQcF
+         DTofQ1sE6UKwQ==
+Date:   Thu, 11 Aug 2022 23:03:43 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     luca.ceresoli@bootlin.com
 Cc:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
         Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/9] docs: i2c: i2c-protocol: update introductory
- paragraph
-Message-ID: <YvVupvQOKsPoIQww@shikoro>
+Subject: Re: [PATCH 2/9] docs: i2c: i2c-protocol,smbus-protocol: remove
+ nonsense words
+Message-ID: <YvVur/FAlLejcUPG@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, luca.ceresoli@bootlin.com,
         linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
         Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org
 References: <20220808141708.1021103-1-luca.ceresoli@bootlin.com>
- <20220808141708.1021103-2-luca.ceresoli@bootlin.com>
+ <20220808141708.1021103-3-luca.ceresoli@bootlin.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uW2Kpmrpl4CvCdf8"
+        protocol="application/pgp-signature"; boundary="Bws3kkdI+cN4ry6k"
 Content-Disposition: inline
-In-Reply-To: <20220808141708.1021103-2-luca.ceresoli@bootlin.com>
+In-Reply-To: <20220808141708.1021103-3-luca.ceresoli@bootlin.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,43 +60,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---uW2Kpmrpl4CvCdf8
+--Bws3kkdI+cN4ry6k
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 08, 2022 at 04:17:00PM +0200, luca.ceresoli@bootlin.com wrote:
+On Mon, Aug 08, 2022 at 04:17:01PM +0200, luca.ceresoli@bootlin.com wrote:
 > From: Luca Ceresoli <luca.ceresoli@bootlin.com>
 >=20
-> This sentence dates back to the pre-git era and it does not look very
-> prefessional... As there is no clear definition of "finished", and given
-> this page is already a pretty good overview, not to mention it is not the
-> kernel responsibility to document the protocol in detail, let's update the
-> text accordingly.
+> "as usual" does not mean much here, especially as these are introductory
+> sections and 10-bit addressing hasn't been introduced yet.
 >=20
 > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
 Applied to for-current, thanks!
 
 
---uW2Kpmrpl4CvCdf8
+--Bws3kkdI+cN4ry6k
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmL1bqYACgkQFA3kzBSg
-KbbGlw/+J0cpJnYM4ob1tyQt5RMUtturBqg6DJN00oheAlaGI4Hrw0aJ0QIClOHh
-IHUhT97H1AGTBNTLXbsKAyCtQ9Paf5uP3ZehMX9L8k0NYbbxuqSKtBgYHo9GugDU
-20Cx0Zdcqc6o7nrAVF9ut92I7QDFCQQgZwCasjey6qPqaFJut7nEf7EPdMHWdFd0
-s282Wgf2bAmVcuBav34jEx8+nGcXBI4ELCM8XHj1FLBJrb5KTjBh7CCh/q29J0hX
-cr2cUGFGVkh472z5/GTQiEXn0iF3d3SYC5bIvMiy5iIQoudzi2XLuwvqC9K9iXph
-HswVUoqXj4CVe8+19cIay5Kpyx6gLpby0I6S+mYzz/mS3zSR8NuGV55F/A0b5tVD
-nsF+zYu12OOT1X9mlZHQisYGbqVes6rnARsI3fm8Cfb2UL4bYGD9Rgzk2DoKTggY
-CxaZAjJLXOswhfI/+ibqmt0OogZq/W2KML0LVf2YR2YjEUQ/RNBPV8FaYgA/VtKZ
-NDceOqJotDVjlFsTyTCKpBHQurwgbfi/FsjbkOey711F4Bh3/zRYwd/iOgRH1x/Z
-CDsDZHTCgHVcAf/DX2dW9+/UdarEuDpJvsdo44zzM+LyMzFyhHoiMq1RLJ7F2aEs
-jECS1jiN9cfoO+1lAc312RxyrWaMdgK+qse7178MdmGJ0CcRU4o=
-=NpZb
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmL1bq8ACgkQFA3kzBSg
+KbbUyA//f8/3kSCrChkgR9iPRNDGVHU87zZUq+cnTATo0Bv9MZeTnhtU5BZ7R0N+
+vaspEW0uZKBh4mcq+IBFWsO+pOd4AbxJqQ1LmAq+X7q4piqRql4SBruTwqmtK0vk
+P3yd0NHfuj4kB8jR7uz5ibW3Xlcw0sJ0tRiIAGGpcQPjWQMibHwi2xUi4g7+B0HU
+3BR7fyBvWs2kw4Sb9LBcuZPoTQ+5yVBLM9846lOhvCAuevuceeAA9fb1fbQTcpUY
+aA1GfC0Vwef/cmq0fXnMHjoB6DcfqahDO9LskUZADM0ls/H1niSjLSOU4mPusmuY
+g/5ThgA/BHJSNBvJPNX8JV+G/JvYhNf2b29ICQJkxJsCivjbEgVYKQWXg52U3MIM
+1/YRiOXGKo7DcF3Uj8zCmfGPygCrmpq9Ds1ti6l0/LQIIYu/Jf0Bsk/R52O414gO
+TFn4KRb/gzKe6FzGOK8rrfs/P7FrLy/fJKIwNUE6fao2k89sjfbm0PTrRz/isd5l
+fA+xGo1TzyrDiFMtIty3sxs995U1teJJbFyLa/TKRaavEpKXq6xxPmZT3xgeQQTS
+BYVwRuvZnz5QwBspE4SKWzh4/NvNoJSbiJfq12zjZtQbIzrryov4k2xWqdWTm9mG
+/A3PEPDpQtMqnIwfODlNdl6tvoVg6lUKLcAVllwbvw8tOXYd2Eo=
+=/DDw
 -----END PGP SIGNATURE-----
 
---uW2Kpmrpl4CvCdf8--
+--Bws3kkdI+cN4ry6k--
