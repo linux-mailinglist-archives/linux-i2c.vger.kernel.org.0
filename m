@@ -2,225 +2,147 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263F7590B3A
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Aug 2022 06:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23029590BD2
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Aug 2022 08:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237071AbiHLEdp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 12 Aug 2022 00:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
+        id S235958AbiHLGIm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 12 Aug 2022 02:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237065AbiHLEdb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 Aug 2022 00:33:31 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2083.outbound.protection.outlook.com [40.107.21.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338B5A2871;
-        Thu, 11 Aug 2022 21:33:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bzkIfnof+ZM5tUQhlc/Lu3r1cp/6N7jUIN0jKtcK++BRTob8Yp+aM2QzXqN6MVDRUIpEAlThL9H9tM/Mz/Q5GTafH60yMe/E9D0bw6+RaSrjfWqMZcw4iH+f9cr1Cf0d+LirHrZ0Sr3cRH07+e5U0Lo1vgQRporM6J5sL6bUVw6Xj5ltgb6rxv4LzoxZ38V9Hjf6ZGplhnKneg/+zgo4B7+vBYj0Bh85UvTQGfRFzBTUZrJN8UdVviH2mF3pxnl2BU/GHh1mG6XnXVIf2EjsFcyUcMO6hFWjRzYJ4x/EYorhL5idG8DCVOaIWKGAi2wcSf1h2iotLMftLvzIET6KmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/NL3F2pwfKdpu8rKDnLmLcR8vUOc9Hl0GL+ZVmalzps=;
- b=htQf7ma3a3/XmqvfPkbiZhy+GksVkgy7w4rjj7V6DuE1mStsmoqk+kA8ixgk6ptWskrY/JOKz8ahPChJCYgKN/79SEoI4Qs/VGThcwxe9Y5ZY8WXEZeaKeujFlM70fcQkcpmO/O6F2RXkn3QAWd89pbHJrT/ddWPEPpIoZL2J5DDiRYeO3p7fdFOJEDt0AIk99uJxLIQsRQTgktDKV0kecA6Anr69ZW+kWNCCuqKx795hlmkUWOdcyJMdnrnm4D1kegpzJeuPEsT16ysu9nh0C6OxV63UW8v0Hgm+dC80FROZCJXpoonPsTUhsGBfuHOZhNaDvEGjyuQl77BZ7LVWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/NL3F2pwfKdpu8rKDnLmLcR8vUOc9Hl0GL+ZVmalzps=;
- b=cdH+q2OkC14BDDpFn3bX++baxCPM1Wf2VqgwpvHb0rkPDltiWnSolNqZbmO/qAPEeOdk06j1ctUNioXH75Hhqj0cOWrDSqEzwJ/iKtwY20SeNQZykNf6mNQJaHAVHRlcCCaMSLpH2P9KLziPphJAY6dSAGTZ5nPYSrdUHyh5pK4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM0PR04MB6243.eurprd04.prod.outlook.com (2603:10a6:208:13b::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Fri, 12 Aug
- 2022 04:33:13 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::3c6c:b7e6:a93d:d442]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::3c6c:b7e6:a93d:d442%4]) with mapi id 15.20.5525.011; Fri, 12 Aug 2022
- 04:33:13 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     aisheng.dong@nxp.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        xiaoning.wang@nxp.com, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH 6/6] i2c: imx-lpi2c: handle IPG clock
-Date:   Fri, 12 Aug 2022 12:34:24 +0800
-Message-Id: <20220812043424.4078034-7-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220812043424.4078034-1-peng.fan@oss.nxp.com>
-References: <20220812043424.4078034-1-peng.fan@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0019.apcprd01.prod.exchangelabs.com
- (2603:1096:4:192::12) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        with ESMTP id S236234AbiHLGIl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 Aug 2022 02:08:41 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98EBA4B34
+        for <linux-i2c@vger.kernel.org>; Thu, 11 Aug 2022 23:08:39 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id 13so17387455plo.12
+        for <linux-i2c@vger.kernel.org>; Thu, 11 Aug 2022 23:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=NCnhv/pEtaSBg9KIMYsJIwv7lSODCZztiNlzGMGUZ8Y=;
+        b=aDS02WJdXoQC143tgj0melrqXUgyvbrHHE4veytzxZcs6hJWZ4p74lpt8BUNbfJycM
+         GM0SbqBvEQ+MocPZbYHzAmOM7uMpdDtfx7B7gshPpYRo7BSX6QeBbxXH/F6tRzstoXOP
+         Hq4YqwHMXAN3y7YN81WjpiH4XShsd0D+4ncyGd5jdK8rawjojFI1G1FkxH/bPy+WuZI0
+         3orDNesOSve0KTyzbJZ0m9wTPCS8SQLVoBNGZSRlDfp9qeLTdtqkGr8JVPChRNlh1ysn
+         UtLQBAgFp1AvLbElP1y8UwT6Jt8J3bvSMIfo4BG8RQ8TdMM4qq6kTHc1KGbXVGpWmh/E
+         MNKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=NCnhv/pEtaSBg9KIMYsJIwv7lSODCZztiNlzGMGUZ8Y=;
+        b=B2GnT5QDbphgSjR/1vmA3ouXuYHHiBfvtDbuHUGQ/Zo00IVYZeZu/nTWk5xqgwUQg+
+         O/pIHzZkpkUz+Ynab+yzwlnHA/Vp8Eou8Cvh3ZJ3lYakYgMlYu8wNY8A8X0jOBNctZgU
+         HCYASKZU9gsrhRKf2dJIxAW/LYCJtxAB6EtEqYtb76FusJJlopAu2frUDjDHvGg1R9R0
+         DhvQ8SEtuqOb9WteWS/YwC4ARhcMpC6zQjkdhRZRPD/u9IMWpMoRyu1PZ++dojG/n7vt
+         V80ZBly2JzJ+jSQHKY0JQ8G5CUTEj5q1KQcR7QgCE5xWZ3/dOq6m5HcJeDaEdraxzXZb
+         53AQ==
+X-Gm-Message-State: ACgBeo16CxYjBiOT9lVLq+4vd9vGgOe0sKna0prue1paB3nmbGLHawAL
+        RS89AK/O6bWK1Z+91AAEGrfsGP4nBbMGD2RITHBPtA==
+X-Google-Smtp-Source: AA6agR7Xt4qn1yBLEPFZTYt/U7/0q/yFxy7kIlS7Q+rgxokejkk2oPVoC6/9viPfXENo6HDPfVYCT4phxhutqB/fmNE=
+X-Received: by 2002:a17:90b:1d86:b0:1f7:31c6:1cce with SMTP id
+ pf6-20020a17090b1d8600b001f731c61ccemr2595669pjb.192.1660284519440; Thu, 11
+ Aug 2022 23:08:39 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e08faad9-f9ec-41cb-ee26-08da7c1bc48d
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6243:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CcZ+Z5AO+qnybkAlWgzsGsGPnmB5sHyVj/FDz54C7h823aBcKzESA7AFwwuGOMDT/WuyoIoH0XWcErwQoEzMIZFTgi6c6IC1cfBNq1pbxiDQluCJXjQJGKyTmzPWCjmH4xMO/6+WoxDT0NUR2W41aMyg26wJC3iPQsl8fucxdHIrqdTtdZuTB1QKVITJmnk4IiTO+U+CgHt9F6/ZoN8QxARqjRqdT/B1joGht+F9cy81gB3cF8XVZe1uD9xhzbleDG10vpnoLmq130O8nTm5y/GTjI4mgZl9Z60KV3JrCPhp2NTURtVY1imT1Z5p26orBSIjsE5gPPneXfmqzM5ao+/aT+v3L9GPLe5r59IpcJm6TInEX2N/R9QipoW6pc00xsAdeHB5Tl9eQN/xnThrxyIKkP8d7EVjrFFzLd3uQoa5zN4N15qgLAvnofLnoKQmKJVUsB4ZXjVYUqZJ7lUuq32Bt3dQAu3lW3Oavqd30zpEGcO32r8TQofFWmMNVtvHcmEKbLUMXY1jXrqkIQwb17dfD+eZUjzT/rYgCrxoIra+ndTqCPM1BKpsQGb0YrixvzLqokGBy9CIS0MVVyGxfDgrQzG6QhkStauywVxwN5UfS13uD40Xns/zg5qXqhjPKvi7n57vr+vKUznMuKyu7h2nG48Cq9/RzAdsylmDIma1h+yZfbWLw/FvZ+4qcOLfCVrsZ5Bf5SstK6DZ5RsZwfrURMozK8iLByzryMcjmOv7YZa6Q64QtSmK07ijwbskPSITkiT5kHaZEAf+pMkQr/0HBeJDdO1QK026GOs1zfqxLXtJFz5CcNcW0dZeNksm
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(136003)(366004)(346002)(396003)(86362001)(52116002)(6666004)(83380400001)(6512007)(1076003)(186003)(2616005)(6506007)(26005)(478600001)(38350700002)(316002)(41300700001)(6486002)(66946007)(66556008)(38100700002)(8676002)(8936002)(5660300002)(7416002)(66476007)(4326008)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xAwyyvB137CKe8bFAZqLU0ywlXvF/Ej3QMVUGgZ/Rl7UEKzkTo/uwJm4/F4g?=
- =?us-ascii?Q?Goz/psov1+xtb0BzaPyJ/9Zs1qmH5BU7VhmvlktbhI/wOv1iXiQfy2YpFYWp?=
- =?us-ascii?Q?944jQc8UHNsal9O7fCdHv+s72aq2nJbfcmoNhytBC+lAunfMbRYQDInxro/t?=
- =?us-ascii?Q?X6xE6qZYkOF7WNypUkht0kIuBaEbHucASZL2x6VGEnO4KZJKeTZPVX7MsMPV?=
- =?us-ascii?Q?XtwujcNlS7aTHMNlEvv5sdScLSxrkGiDSX8bfOSxK47yO8NuURSYgXN38r0V?=
- =?us-ascii?Q?Sb/2cTKPt1gsIvMP/Xl9VliFIZlZ05ljLKS5gqfLXEoQuYlLpP++r2kAoA3s?=
- =?us-ascii?Q?KdSDSK6WqIPmGco+Jdg2Z/Mre1qOosxRwgDezcKobL3M3H0I7lFbNlEXDPd4?=
- =?us-ascii?Q?y9bCEgX1OCTER1q8xovN9q1KxsLgaZYqbktJaedKyao18SSLXsfespfvGbtQ?=
- =?us-ascii?Q?/dNHJPcRItSyP42WmjXLfc2H5ajKENSRMs7ixF65qrZCfrDDPQr0O0cLTdCq?=
- =?us-ascii?Q?Dd1xrI509lwHUP/YXF0W616yt7MGjPPilmvkcPUoxpG1mGhP5Ii3Yu1KVRJL?=
- =?us-ascii?Q?/DCXSn6e/1BYKPVL1wHI6z8EtfMtV+Sx4W2wpMtnk+LYF7g0tjBH8KuIKBKk?=
- =?us-ascii?Q?A6X6L5SIfouPFxyP8bVUuB7zHP4p2C7iZ5au6ws9pHEakNgje7G1YyheZM4/?=
- =?us-ascii?Q?TY868HGT9v6CEUwHj53kyiI/E3XaboqFjmSyA7QPU1zrlSzjDfyvSx5Z0BJr?=
- =?us-ascii?Q?AHWW0DijZgMr6XBWE5y6zg5IfFv8P8MFRegdjChs3fMD10caBRcSZ3I9zb5O?=
- =?us-ascii?Q?lALNzFGF+d905/2FNVnS+S3YhnfUUcofHDv57Jrlrqt0WLboDI/tV/xDYLeq?=
- =?us-ascii?Q?2QHdaDx592+W0HM94HAC0ZSTO0O5ScuO1PhT1cvF0WPhcuU8W/l2ZCKS2p0a?=
- =?us-ascii?Q?rSMcNaNLML8YjiVV2J4CNf/knWcRXQ9UGx1SKtCpVSfg0RqYOAcYTCgWyHGZ?=
- =?us-ascii?Q?GID+4vaBPftdl9N1tctb5XR4jk3tt0rANi+ABHfT55fKCwOS+LorIjOIa5DZ?=
- =?us-ascii?Q?8WaHFZ2y6ssqTQhdIPy9oS2aD8RgOFz4sDFwHv1GPNmg1AmS0j6LBHRoQZnO?=
- =?us-ascii?Q?pRwHIezjqv8/wVE4vDDLO8mr+13+925NwyoqMuVdM3HE15Ounf6EY2SJD/Mx?=
- =?us-ascii?Q?vdqo+BrDtSyJpZB2Y4VbQGfVU3VVGeVHC1HQCIWZ0RDRl6347TYiw7QT///R?=
- =?us-ascii?Q?0Ct55Y9OUO1lczYUoh23ojcUUvQLj0B9oNK+nznWiO+wNyeD4MWVU17vVfKw?=
- =?us-ascii?Q?Vi2qVxxpHKAqDZktwTeprwWSGe4dxdVuU3aGQ5mZZtqmbF/IxuJ1IvACkAx/?=
- =?us-ascii?Q?ZSULQv7JYJTP0jGHHGwteFLqU0J7O2FPnNSPsFvLnSaOm2DqjkC0f4XZMO5u?=
- =?us-ascii?Q?+WezxcNWnz9My/um/IL2W0XdORLBjS1vA5AAdOJvfK+PuAYU5xGeChfBOcoq?=
- =?us-ascii?Q?NQNcL1x2qmxKQUac7vSSj4y4DyADmYr1o9R+SFbonJu2YvtkM46xZtAsMXI7?=
- =?us-ascii?Q?LTMslfsR+4sE6+rQihdKN8Nur680gqLse2Quexp5?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e08faad9-f9ec-41cb-ee26-08da7c1bc48d
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2022 04:33:13.2755
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ir0HwSUkAad5aMjWdw3UQb1dgHGBwgojBclM7UIBqavjJJF/6MsYH+dAP1O1WgSP/9oR5bGVJqJqwPHEY35Ugg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6243
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220725080240.106619-1-jsd@semihalf.com> <d2be49af-71e4-978b-fe00-8b8fca6f80b5@linux.intel.com>
+In-Reply-To: <d2be49af-71e4-978b-fe00-8b8fca6f80b5@linux.intel.com>
+From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
+Date:   Fri, 12 Aug 2022 08:08:28 +0200
+Message-ID: <CAOtMz3OR7LspGvXUo-KWNk=1+nYXDAPZy1YV-WtCOL_ihaVyEw@mail.gmail.com>
+Subject: Re: [PATCH] i2c: designware: Introduce cooldown timer to AMDPSP driver
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        wsa@kernel.org, rrangel@chromium.org, mw@semihalf.com,
+        upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+wt., 9 sie 2022 o 14:05 Jarkko Nikula <jarkko.nikula@linux.intel.com>
+napisa=C5=82(a):
+>
+> Hi
+>
+> Sorry the delay, this slipped through my eyes during vacation. Couple
+> minor comments below.
+>
+> On 7/25/22 11:02, Jan Dabros wrote:
+> > In order to optimize performance, limit amount of back and forth
+> > transactions between x86 and PSP. This is done by introduction of
+> > cooldown period - that is window in which x86 isn't releasing the bus
+> > immediately after each I2C transaction.
+> >
+> > In order to protect PSP from being starved while waiting for
+> > arbitration, after a programmed time bus is automatically released by a
+> > deferred function.
+> >
+> > Signed-off-by: Jan Dabros <jsd@semihalf.com>
+> > ---
+> >   drivers/i2c/busses/i2c-designware-amdpsp.c | 68 +++++++++++++++++----=
+-
+> >   1 file changed, 53 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/b=
+usses/i2c-designware-amdpsp.c
+> > index b624356c945f..2e1bb5ae72c3 100644
+> > --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
+> > +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> > @@ -6,6 +6,7 @@
+> >   #include <linux/io-64-nonatomic-lo-hi.h>
+> >   #include <linux/psp-sev.h>
+> >   #include <linux/types.h>
+> > +#include <linux/workqueue.h>
+> >
+> >   #include <asm/msr.h>
+> >
+> > @@ -15,6 +16,8 @@
+> >   #define PSP_MBOX_OFFSET             0x10570
+> >   #define PSP_CMD_TIMEOUT_US  (500 * USEC_PER_MSEC)
+> >
+> > +#define PSP_I2C_COOLDOWN_TIME_MS 100
+> > +
+>
+> "cooldown" distract me thinking thermal management. Would semaphore
+> reservation time/timer fit better?
 
-The LPI2C controller needs both PER and IPG clock to work, but current
-driver only supports PER clock. This patch add IPG clock.
+Yes, it makes sense. I will change this here and in the commit message
+to "semaphore reservation timer".
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/i2c/busses/i2c-imx-lpi2c.c | 41 ++++++++++++++++++++++--------
- 1 file changed, 31 insertions(+), 10 deletions(-)
+>
+> > +static void release_bus_now(void)
+> > +static void psp_release_i2c_bus_deferred(struct work_struct *work)
+> > +static DECLARE_DELAYED_WORK(release_queue, psp_release_i2c_bus_deferre=
+d);
+> > +
+>
+> I'd use the same namespace here. Perhaps _now can be dropped from the
+> name since the release_bus and release_bus_deferred are near to each
+> other and _deferred variant implies it's called after timeout.
 
-diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
-index 8b9ba055c418..f43ad1ae8627 100644
---- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-+++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-@@ -94,7 +94,8 @@ enum lpi2c_imx_pincfg {
- 
- struct lpi2c_imx_struct {
- 	struct i2c_adapter	adapter;
--	struct clk		*clk;
-+	struct clk		*clk_per;
-+	struct clk		*clk_ipg;
- 	void __iomem		*base;
- 	__u8			*rx_buf;
- 	__u8			*tx_buf;
-@@ -207,7 +208,7 @@ static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
- 
- 	lpi2c_imx_set_mode(lpi2c_imx);
- 
--	clk_rate = clk_get_rate(lpi2c_imx->clk);
-+	clk_rate = clk_get_rate(lpi2c_imx->clk_per);
- 	if (lpi2c_imx->mode == HS || lpi2c_imx->mode == ULTRA_FAST)
- 		filt = 0;
- 	else
-@@ -561,10 +562,16 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
- 	strlcpy(lpi2c_imx->adapter.name, pdev->name,
- 		sizeof(lpi2c_imx->adapter.name));
- 
--	lpi2c_imx->clk = devm_clk_get(&pdev->dev, NULL);
--	if (IS_ERR(lpi2c_imx->clk)) {
-+	lpi2c_imx->clk_per = devm_clk_get(&pdev->dev, "per");
-+	if (IS_ERR(lpi2c_imx->clk_per)) {
- 		dev_err(&pdev->dev, "can't get I2C peripheral clock\n");
--		return PTR_ERR(lpi2c_imx->clk);
-+		return PTR_ERR(lpi2c_imx->clk_per);
-+	}
-+
-+	lpi2c_imx->clk_ipg = devm_clk_get(&pdev->dev, "ipg");
-+	if (IS_ERR(lpi2c_imx->clk_ipg)) {
-+		dev_err(&pdev->dev, "can't get I2C ipg clock\n");
-+		return PTR_ERR(lpi2c_imx->clk_ipg);
- 	}
- 
- 	ret = of_property_read_u32(pdev->dev.of_node,
-@@ -582,9 +589,15 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
- 	i2c_set_adapdata(&lpi2c_imx->adapter, lpi2c_imx);
- 	platform_set_drvdata(pdev, lpi2c_imx);
- 
--	ret = clk_prepare_enable(lpi2c_imx->clk);
-+	ret = clk_prepare_enable(lpi2c_imx->clk_per);
-+	if (ret) {
-+		dev_err(&pdev->dev, "per clk enable failed %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = clk_prepare_enable(lpi2c_imx->clk_ipg);
- 	if (ret) {
--		dev_err(&pdev->dev, "clk enable failed %d\n", ret);
-+		dev_err(&pdev->dev, "ipg clk enable failed %d\n", ret);
- 		return ret;
- 	}
- 
-@@ -633,7 +646,8 @@ static int __maybe_unused lpi2c_runtime_suspend(struct device *dev)
- {
- 	struct lpi2c_imx_struct *lpi2c_imx = dev_get_drvdata(dev);
- 
--	clk_disable_unprepare(lpi2c_imx->clk);
-+	clk_disable_unprepare(lpi2c_imx->clk_ipg);
-+	clk_disable_unprepare(lpi2c_imx->clk_per);
- 	pinctrl_pm_select_sleep_state(dev);
- 
- 	return 0;
-@@ -645,12 +659,19 @@ static int __maybe_unused lpi2c_runtime_resume(struct device *dev)
- 	int ret;
- 
- 	pinctrl_pm_select_default_state(dev);
--	ret = clk_prepare_enable(lpi2c_imx->clk);
-+	ret = clk_prepare_enable(lpi2c_imx->clk_per);
- 	if (ret) {
--		dev_err(dev, "failed to enable I2C clock, ret=%d\n", ret);
-+		dev_err(dev, "failed to enable I2C per clock, ret=%d\n", ret);
- 		return ret;
- 	}
- 
-+	ret = clk_prepare_enable(lpi2c_imx->clk_ipg);
-+	if (ret) {
-+		clk_disable_unprepare(lpi2c_imx->clk_per);
-+		dev_err(dev, "failed to enable I2C ipg clock, ret=%d\n", ret);
-+	}
-+
-+
- 	return 0;
- }
- 
--- 
-2.37.1
+Right, release_bus_now -> release_bus.
 
+>
+> > +     /*
+> > +      * Send a release command to PSP if the cooldown timeout elapsed =
+but x86 still
+> > +      * owns the ctrlr.
+> > +      */
+>
+> Replace "ctrlr" -> "control" here since then it doesn't lead to think
+> is't some technical object like register etc.
+
+This is about "controller" not "control", but I think your comment is
+still applicable.
+
+Best Regards,
+Jan
