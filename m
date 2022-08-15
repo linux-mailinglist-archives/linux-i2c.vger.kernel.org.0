@@ -2,44 +2,46 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15CD5592A9E
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Aug 2022 10:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 192FA592AB1
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Aug 2022 10:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241541AbiHOIDI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Aug 2022 04:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
+        id S241548AbiHOIDH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 Aug 2022 04:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiHOICv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Aug 2022 04:02:51 -0400
+        with ESMTP id S241332AbiHOICw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Aug 2022 04:02:52 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D610D1DA5F
-        for <linux-i2c@vger.kernel.org>; Mon, 15 Aug 2022 01:02:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E21E1E3CE
+        for <linux-i2c@vger.kernel.org>; Mon, 15 Aug 2022 01:02:51 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1oNV3h-0001xG-5I; Mon, 15 Aug 2022 10:02:49 +0200
+        id 1oNV3h-0001xT-NB; Mon, 15 Aug 2022 10:02:49 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1oNV3e-003sPA-32; Mon, 15 Aug 2022 10:02:48 +0200
+        id 1oNV3e-003sPE-Fz; Mon, 15 Aug 2022 10:02:48 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1oNV3f-00BoQu-JR; Mon, 15 Aug 2022 10:02:47 +0200
+        id 1oNV3f-00BoQx-PH; Mon, 15 Aug 2022 10:02:47 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Wolfram Sang <wsa@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Pavel Machek <pavel@ucw.cz>
-Subject: [PATCH v2 4/6] leds: lm3601x: Improve error reporting for problems during .remove()
-Date:   Mon, 15 Aug 2022 10:02:28 +0200
-Message-Id: <20220815080230.37408-5-u.kleine-koenig@pengutronix.de>
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH v2 5/6] gpio: pca953x: Make platform teardown callback return void
+Date:   Mon, 15 Aug 2022 10:02:29 +0200
+Message-Id: <20220815080230.37408-6-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220815080230.37408-1-u.kleine-koenig@pengutronix.de>
 References: <20220815080230.37408-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1510; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=4k2owBO1cbWNWEMGwdulDbEaUhh8fVNgqezhIxzQZ0g=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBi+f2J695EeOWJc7NO9VeCaLoF3LXndQHTr4YiriR7 /q5YMMWJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYvn9iQAKCRDB/BR4rcrsCfUwCA CeXQYsAnUbAbMm/4OawOw2G7fo92RQfwf4YgPTijiK7RYjjOM9SxrH56zq9bpkHPOw66bZMKW02Gom h6lqh3sHZLJKYLR7f61IfX8863SlwBmv8a3i+eLdLEUdq/Jf6hzlOXPSQ3jjOJJHeUMTZegg81EoAD VbmQn7TM7kHjBa4ZWqmtJa0slczDhqwMCDU7/6TzTVWk4R+jSJltPn9ZV2lrFBlPLOlvlO+UrJ9kg4 y0iNZlc47DLSFaCS77J2lcXxQ55lPIo2hBP9JjKmP3OA+VrYjzGwYlvJ+7Gsfa0pIzOQSEzRRYP7rY 47T0MfQMhovPHURVzulpWAmJgtpr68
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3557; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=cAjt1YY9jC8jFw9Ej2dl2N46JscHeTjH9B9Lc5ZNKaQ=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBi+f2NlKyaAbWssz8ux6GT4UNHgVKigAb6rmeSQ8eT txI0p12JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYvn9jQAKCRDB/BR4rcrsCXANB/ 4sge+PVwj0m1Dm2szTy/wCLnPucXN1kHyqT1O+AFUkwIRYXLYTzkS3QJOFiWMzNMmvdZyUxnTTjVu2 Eq8BUbV4qjyXqrAWzH1wi6ECcrd0A4Ef9fPHzZYp4673guoQzEYyC37UZ4mK9fqOaUf/VrsKdQnCGd 6sbOZ6Rv5J/f0c7nhlqZFU81bCQtaOvvE/wI13A9aEcnr+d7DQwpVEx+e6sW9Aky+0EZB15mGbGcPa jkuAApkYR2yPnrdo7ZZ1vKrJvmMqfyRxU6zdijW8/L2tSciTxyHNW7RFZ+HjlM+vnIXNW3m4i2y4GA xhhoZ4Jd1Vsn0hmS2X61HE55UmIQiP
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -55,46 +57,101 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Returning an error value in an i2c remove callback results in a generic
-error message being emitted by the i2c core, but otherwise it doesn't
-make a difference. The device goes away anyhow and the devm cleanups are
-called.
-
-So instead of triggering the generic i2c error message, emit a more
-helpful message if a problem occurs and return 0 to suppress the generic
-message.
+All platforms that provide a teardown callback return 0. New users are
+supposed to not make use of platform support, so there is no
+functionality lost.
 
 This patch is a preparation for making i2c remove callbacks return void.
 
-Acked-by: Pavel Machek <pavel@ucw.cz>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/leds/flash/leds-lm3601x.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ arch/arm/mach-davinci/board-da850-evm.c | 12 ++++--------
+ drivers/gpio/gpio-pca953x.c             | 11 +++--------
+ include/linux/platform_data/pca953x.h   |  2 +-
+ 3 files changed, 8 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/leds/flash/leds-lm3601x.c b/drivers/leds/flash/leds-lm3601x.c
-index 3d1272748201..37e1d6e68687 100644
---- a/drivers/leds/flash/leds-lm3601x.c
-+++ b/drivers/leds/flash/leds-lm3601x.c
-@@ -443,10 +443,15 @@ static int lm3601x_probe(struct i2c_client *client)
- static int lm3601x_remove(struct i2c_client *client)
- {
- 	struct lm3601x_led *led = i2c_get_clientdata(client);
-+	int ret;
+diff --git a/arch/arm/mach-davinci/board-da850-evm.c b/arch/arm/mach-davinci/board-da850-evm.c
+index 92d74bc71967..d752ee2b30ff 100644
+--- a/arch/arm/mach-davinci/board-da850-evm.c
++++ b/arch/arm/mach-davinci/board-da850-evm.c
+@@ -516,8 +516,8 @@ static int da850_evm_ui_expander_setup(struct i2c_client *client, unsigned gpio,
+ 	return ret;
+ }
  
--	return regmap_update_bits(led->regmap, LM3601X_ENABLE_REG,
--			   LM3601X_ENABLE_MASK,
--			   LM3601X_MODE_STANDBY);
-+	ret = regmap_update_bits(led->regmap, LM3601X_ENABLE_REG,
-+				 LM3601X_ENABLE_MASK, LM3601X_MODE_STANDBY);
-+	if (ret)
-+		dev_warn(&client->dev,
-+			 "Failed to put into standby (%pe)\n", ERR_PTR(ret));
-+
+-static int da850_evm_ui_expander_teardown(struct i2c_client *client,
+-					unsigned gpio, unsigned ngpio, void *c)
++static void da850_evm_ui_expander_teardown(struct i2c_client *client,
++					   unsigned gpio, unsigned ngpio, void *c)
+ {
+ 	platform_device_unregister(&da850_evm_ui_keys_device);
+ 
+@@ -529,8 +529,6 @@ static int da850_evm_ui_expander_teardown(struct i2c_client *client,
+ 	gpio_free(gpio + DA850_EVM_UI_EXP_SEL_C);
+ 	gpio_free(gpio + DA850_EVM_UI_EXP_SEL_B);
+ 	gpio_free(gpio + DA850_EVM_UI_EXP_SEL_A);
+-
+-	return 0;
+ }
+ 
+ /* assign the baseboard expander's GPIOs after the UI board's */
+@@ -697,13 +695,11 @@ static int da850_evm_bb_expander_setup(struct i2c_client *client,
+ 	return ret;
+ }
+ 
+-static int da850_evm_bb_expander_teardown(struct i2c_client *client,
+-					unsigned gpio, unsigned ngpio, void *c)
++static void da850_evm_bb_expander_teardown(struct i2c_client *client,
++					   unsigned gpio, unsigned ngpio, void *c)
+ {
+ 	platform_device_unregister(&da850_evm_bb_leds_device);
+ 	platform_device_unregister(&da850_evm_bb_keys_device);
+-
+-	return 0;
+ }
+ 
+ static struct pca953x_platform_data da850_evm_ui_expander_info = {
+diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
+index ecd7d169470b..1860e566eb94 100644
+--- a/drivers/gpio/gpio-pca953x.c
++++ b/drivers/gpio/gpio-pca953x.c
+@@ -1105,20 +1105,15 @@ static int pca953x_remove(struct i2c_client *client)
+ {
+ 	struct pca953x_platform_data *pdata = dev_get_platdata(&client->dev);
+ 	struct pca953x_chip *chip = i2c_get_clientdata(client);
+-	int ret;
+ 
+ 	if (pdata && pdata->teardown) {
+-		ret = pdata->teardown(client, chip->gpio_chip.base,
+-				      chip->gpio_chip.ngpio, pdata->context);
+-		if (ret < 0)
+-			dev_err(&client->dev, "teardown failed, %d\n", ret);
+-	} else {
+-		ret = 0;
++		pdata->teardown(client, chip->gpio_chip.base,
++				chip->gpio_chip.ngpio, pdata->context);
+ 	}
+ 
+ 	regulator_disable(chip->regulator);
+ 
+-	return ret;
 +	return 0;
  }
  
- static const struct i2c_device_id lm3601x_id[] = {
+ #ifdef CONFIG_PM_SLEEP
+diff --git a/include/linux/platform_data/pca953x.h b/include/linux/platform_data/pca953x.h
+index 4eb53e023997..96c1a14ab365 100644
+--- a/include/linux/platform_data/pca953x.h
++++ b/include/linux/platform_data/pca953x.h
+@@ -22,7 +22,7 @@ struct pca953x_platform_data {
+ 	int		(*setup)(struct i2c_client *client,
+ 				unsigned gpio, unsigned ngpio,
+ 				void *context);
+-	int		(*teardown)(struct i2c_client *client,
++	void		(*teardown)(struct i2c_client *client,
+ 				unsigned gpio, unsigned ngpio,
+ 				void *context);
+ 	const char	*const *names;
 -- 
 2.36.1
 
