@@ -2,48 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192FA592AB1
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Aug 2022 10:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 974A6592BE8
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Aug 2022 12:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241548AbiHOIDH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Aug 2022 04:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
+        id S229695AbiHOIus (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 Aug 2022 04:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241332AbiHOICw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Aug 2022 04:02:52 -0400
+        with ESMTP id S231140AbiHOIun (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Aug 2022 04:50:43 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E21E1E3CE
-        for <linux-i2c@vger.kernel.org>; Mon, 15 Aug 2022 01:02:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD107679
+        for <linux-i2c@vger.kernel.org>; Mon, 15 Aug 2022 01:50:41 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1oNV3h-0001xT-NB; Mon, 15 Aug 2022 10:02:49 +0200
+        id 1oNVny-0001cz-M4; Mon, 15 Aug 2022 10:50:38 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1oNV3e-003sPE-Fz; Mon, 15 Aug 2022 10:02:48 +0200
+        id 1oNVno-003stj-7e; Mon, 15 Aug 2022 10:50:30 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1oNV3f-00BoQx-PH; Mon, 15 Aug 2022 10:02:47 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
+        id 1oNVnp-00Bozk-H7; Mon, 15 Aug 2022 10:50:29 +0200
+Date:   Mon, 15 Aug 2022 10:50:29 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To:     Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v2 5/6] gpio: pca953x: Make platform teardown callback return void
-Date:   Mon, 15 Aug 2022 10:02:29 +0200
-Message-Id: <20220815080230.37408-6-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220815080230.37408-1-u.kleine-koenig@pengutronix.de>
+Cc:     Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Crt Mori <cmo@melexis.com>, Ajay Gupta <ajayg@nvidia.com>,
+        Peter Senna Tschudin <peter.senna@gmail.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        linux-i2c@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Corey Minyard <cninyard@mvista.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Adrien Grassein <adrien.grassein@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        kernel@pengutronix.de, Luca Ceresoli <luca@lucaceresoli.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Peter Rosin <peda@axentia.se>
+Subject: Re: [PATCH v2 6/6] i2c: Make remove callback return void
+Message-ID: <20220815085029.y7k3e5yg22dby2c7@pengutronix.de>
 References: <20220815080230.37408-1-u.kleine-koenig@pengutronix.de>
+ <20220815080230.37408-7-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3557; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=cAjt1YY9jC8jFw9Ej2dl2N46JscHeTjH9B9Lc5ZNKaQ=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBi+f2NlKyaAbWssz8ux6GT4UNHgVKigAb6rmeSQ8eT txI0p12JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYvn9jQAKCRDB/BR4rcrsCXANB/ 4sge+PVwj0m1Dm2szTy/wCLnPucXN1kHyqT1O+AFUkwIRYXLYTzkS3QJOFiWMzNMmvdZyUxnTTjVu2 Eq8BUbV4qjyXqrAWzH1wi6ECcrd0A4Ef9fPHzZYp4673guoQzEYyC37UZ4mK9fqOaUf/VrsKdQnCGd 6sbOZ6Rv5J/f0c7nhlqZFU81bCQtaOvvE/wI13A9aEcnr+d7DQwpVEx+e6sW9Aky+0EZB15mGbGcPa jkuAApkYR2yPnrdo7ZZ1vKrJvmMqfyRxU6zdijW8/L2tSciTxyHNW7RFZ+HjlM+vnIXNW3m4i2y4GA xhhoZ4Jd1Vsn0hmS2X61HE55UmIQiP
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="t6mwomgobwe3vpbz"
+Content-Disposition: inline
+In-Reply-To: <20220815080230.37408-7-u.kleine-koenig@pengutronix.de>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -57,101 +82,63 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-All platforms that provide a teardown callback return 0. New users are
-supposed to not make use of platform support, so there is no
-functionality lost.
 
-This patch is a preparation for making i2c remove callbacks return void.
+--t6mwomgobwe3vpbz
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- arch/arm/mach-davinci/board-da850-evm.c | 12 ++++--------
- drivers/gpio/gpio-pca953x.c             | 11 +++--------
- include/linux/platform_data/pca953x.h   |  2 +-
- 3 files changed, 8 insertions(+), 17 deletions(-)
+Hello,
 
-diff --git a/arch/arm/mach-davinci/board-da850-evm.c b/arch/arm/mach-davinci/board-da850-evm.c
-index 92d74bc71967..d752ee2b30ff 100644
---- a/arch/arm/mach-davinci/board-da850-evm.c
-+++ b/arch/arm/mach-davinci/board-da850-evm.c
-@@ -516,8 +516,8 @@ static int da850_evm_ui_expander_setup(struct i2c_client *client, unsigned gpio,
- 	return ret;
- }
- 
--static int da850_evm_ui_expander_teardown(struct i2c_client *client,
--					unsigned gpio, unsigned ngpio, void *c)
-+static void da850_evm_ui_expander_teardown(struct i2c_client *client,
-+					   unsigned gpio, unsigned ngpio, void *c)
- {
- 	platform_device_unregister(&da850_evm_ui_keys_device);
- 
-@@ -529,8 +529,6 @@ static int da850_evm_ui_expander_teardown(struct i2c_client *client,
- 	gpio_free(gpio + DA850_EVM_UI_EXP_SEL_C);
- 	gpio_free(gpio + DA850_EVM_UI_EXP_SEL_B);
- 	gpio_free(gpio + DA850_EVM_UI_EXP_SEL_A);
--
--	return 0;
- }
- 
- /* assign the baseboard expander's GPIOs after the UI board's */
-@@ -697,13 +695,11 @@ static int da850_evm_bb_expander_setup(struct i2c_client *client,
- 	return ret;
- }
- 
--static int da850_evm_bb_expander_teardown(struct i2c_client *client,
--					unsigned gpio, unsigned ngpio, void *c)
-+static void da850_evm_bb_expander_teardown(struct i2c_client *client,
-+					   unsigned gpio, unsigned ngpio, void *c)
- {
- 	platform_device_unregister(&da850_evm_bb_leds_device);
- 	platform_device_unregister(&da850_evm_bb_keys_device);
--
--	return 0;
- }
- 
- static struct pca953x_platform_data da850_evm_ui_expander_info = {
-diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-index ecd7d169470b..1860e566eb94 100644
---- a/drivers/gpio/gpio-pca953x.c
-+++ b/drivers/gpio/gpio-pca953x.c
-@@ -1105,20 +1105,15 @@ static int pca953x_remove(struct i2c_client *client)
- {
- 	struct pca953x_platform_data *pdata = dev_get_platdata(&client->dev);
- 	struct pca953x_chip *chip = i2c_get_clientdata(client);
--	int ret;
- 
- 	if (pdata && pdata->teardown) {
--		ret = pdata->teardown(client, chip->gpio_chip.base,
--				      chip->gpio_chip.ngpio, pdata->context);
--		if (ret < 0)
--			dev_err(&client->dev, "teardown failed, %d\n", ret);
--	} else {
--		ret = 0;
-+		pdata->teardown(client, chip->gpio_chip.base,
-+				chip->gpio_chip.ngpio, pdata->context);
- 	}
- 
- 	regulator_disable(chip->regulator);
- 
--	return ret;
-+	return 0;
- }
- 
- #ifdef CONFIG_PM_SLEEP
-diff --git a/include/linux/platform_data/pca953x.h b/include/linux/platform_data/pca953x.h
-index 4eb53e023997..96c1a14ab365 100644
---- a/include/linux/platform_data/pca953x.h
-+++ b/include/linux/platform_data/pca953x.h
-@@ -22,7 +22,7 @@ struct pca953x_platform_data {
- 	int		(*setup)(struct i2c_client *client,
- 				unsigned gpio, unsigned ngpio,
- 				void *context);
--	int		(*teardown)(struct i2c_client *client,
-+	void		(*teardown)(struct i2c_client *client,
- 				unsigned gpio, unsigned ngpio,
- 				void *context);
- 	const char	*const *names;
--- 
-2.36.1
+On Mon, Aug 15, 2022 at 10:02:30AM +0200, Uwe Kleine-K=F6nig wrote:
+> The value returned by an i2c driver's remove function is mostly ignored.
+> (Only an error message is printed if the value is non-zero that the
+> error is ignored.)
+>=20
+> So change the prototype of the remove function to return no value. This
+> way driver authors are not tempted to assume that passing an error to
+> the upper layer is a good idea. All drivers are adapted accordingly.
+> There is no intended change of behaviour, all callbacks were prepared to
+> return 0 before.
+>=20
+> [...]
+> ---
+> [...]
+>  619 files changed, 646 insertions(+), 1733 deletions(-)
 
+There seems to be a 300k limit for mails on vger.kernel.org, so this
+patch didn't make it to the list. Please get it from
+
+	https://git.pengutronix.de/git/ukl/linux i2c-remove-void
+
+or
+
+	https://git.pengutronix.de/cgit/ukl/linux/commit/?h=3Di2c-remove-void
+
+or send me a (private) mail, then I can bounce you the message to
+properly reply to it. (Or if that is enough for you: The Message-Id is
+<20220815080230.37408-7-u.kleine-koenig@pengutronix.de>.)
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--t6mwomgobwe3vpbz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmL6CNIACgkQwfwUeK3K
+7AmEHQf8D1V+sYnTezbvOibSuKcnpG16rCu3Jb78ZoqmCgUovjeS9QULOFtAIP3j
+RNGJi5Fb/N965oDqcqkPyf+c2yUtn0incUIS+eg7ab5QbLFcszgyU9iK3DGZOw3J
+pvh8laNPFXhWpYnRemFSeRt4PiT2SXFCV3mGcxrNGRC5YydAN+MpYD0jJaxKCDco
+IsIw39rOOb9/jZuNBi9qVBDxBW8lrYd7JanO0vCosGJOytN2E5r8pPj/T6GZse35
+tbd1kZ3tci8n/mTtIhKfdtqVjI17BhgK+0Wm64zMRivOknePZ32YV76MWvV9eBHy
+3lgu1TqF+y4JexBUwUfe7P8vbeuMgg==
+=1poy
+-----END PGP SIGNATURE-----
+
+--t6mwomgobwe3vpbz--
