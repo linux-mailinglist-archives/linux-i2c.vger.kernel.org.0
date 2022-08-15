@@ -2,148 +2,157 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2609592674
-	for <lists+linux-i2c@lfdr.de>; Sun, 14 Aug 2022 23:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205A0592722
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Aug 2022 02:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236704AbiHNVGf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 14 Aug 2022 17:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
+        id S229463AbiHOAxG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 14 Aug 2022 20:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbiHNVGc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 14 Aug 2022 17:06:32 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C157F640C;
-        Sun, 14 Aug 2022 14:06:30 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id r4so7435312edi.8;
-        Sun, 14 Aug 2022 14:06:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc;
-        bh=U9zu/JtT0d8b3qRvVOQocUaAbgnWxV8K6AQ9ZDWSs+4=;
-        b=IuVLFuDAzjNugdsduyZIXzAv+kSZrBleD/CaOhKMh90xCCkqL9C4pEZ76NFCqO5Rwx
-         i5O57epZnfLeEQEme6TWgj/hEWZIuVPzRIn6JyCMlEWt6oq6H21LcWe+C5Kx+K5tdMmd
-         1AC5MVxoEEipxlCx543cNaFEDb0/Q4oTE5n8ODmcPumt1nFe1yThnioxI3h4IKi60L1f
-         LkW95Xo3veRSOgd1QjVShmVtdqZ2+A2lVmRXjlvbGr6l2Ywokolu9+herto+zTW4CV3F
-         cgTFuh2ttpG+4f+4sxg/m7IkabqMNzLPbbu3WdxKSdMCBJYleuks0T0h5o4K7/eEKPoM
-         79fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=U9zu/JtT0d8b3qRvVOQocUaAbgnWxV8K6AQ9ZDWSs+4=;
-        b=lW38npwfiBvuoydtJATEnoSGuKZd/p1tioVhokyU6qi6TU7My7TZlDlW4QCxWp7+/i
-         ni3+SylN7pmhmUK8vIut9S1FK6hb0/pAWEvWFBFerGjpL09rPFxtNjlMJ26DgKNNrIf7
-         vjLrAx5UuOYzVczIR2vCaadNCmto/OCzd/8MizOyjv/MhIekdHbeXKizzYe6g9mkjBVy
-         ZyXaHqKKOEbkqREdSwJNo6+Ayu7sL1m9hBc/ceheDjBcr1uNxD6O8Xfjh0XUy58/tBzZ
-         mm7Lpo19cNU7HfhcdB/QYt6qD55haQ9xLBOXItHYYoM2QMxcUnZzUc67svvxMhTzIkbB
-         x7uw==
-X-Gm-Message-State: ACgBeo20/lRMvtIX8B+TSL5LylfWCJPRUiOzPTXjsEuUBMqP992QHDVu
-        U+er58gQ2oJUvhXt3TwgMXI=
-X-Google-Smtp-Source: AA6agR40E7soW7BH8KRzi+LNAv2/doovv1eAaH4VG6rbnTVqIayfAzXV7eg3lVpQJVFIaOBuNpqPhw==
-X-Received: by 2002:aa7:c946:0:b0:43d:3038:1381 with SMTP id h6-20020aa7c946000000b0043d30381381mr12130254edt.354.1660511188967;
-        Sun, 14 Aug 2022 14:06:28 -0700 (PDT)
-Received: from ?IPV6:2a01:c23:c1a2:1a00:2049:10ba:dbb:6620? (dynamic-2a01-0c23-c1a2-1a00-2049-10ba-0dbb-6620.c23.pool.telefonica.de. [2a01:c23:c1a2:1a00:2049:10ba:dbb:6620])
-        by smtp.googlemail.com with ESMTPSA id bk19-20020a170906b0d300b0072a881b21d8sm3310789ejb.119.2022.08.14.14.06.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Aug 2022 14:06:28 -0700 (PDT)
-Message-ID: <7a15288c-20df-5873-e982-28d200a2b471@gmail.com>
-Date:   Sun, 14 Aug 2022 23:06:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        with ESMTP id S229379AbiHOAxF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 14 Aug 2022 20:53:05 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2052.outbound.protection.outlook.com [40.107.21.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1AD7658;
+        Sun, 14 Aug 2022 17:53:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z3/IfWOnb2IuSen1huy6y9LQhFrI9L/wGdVnbHuITSNBUfgL+h/9TuyD4kyVR2GnfWZTHL9E3EERydSrxB6yePpctF8VMKGXBCln0AprkUIOQ0+5j9wnEQBUdMXJFEqbwn9kozX6KWi+svfBuntyjYOIhZ2Hh51xZYj4nv3sWmDgOGCb1BASySSv+kLobrDO7blS+igZtEOsHjb7ta2mQSdAhz63GamSmIdcyhxlR5FzKfXP0BLPOIAzNa021Y5Ljvkczr9S6xxpRV0oVLYVj+6nks1CM+pG8wzpOftaritwcYra0oEqu+UFo2EIJkg012gi/dRAy4gQO2DHvDu2Hw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2lhOkmiDSNNqmDpqXPnq3vW2l0RSLX+ukVDjXQd8Mlo=;
+ b=J9AGBJBShE5Fezd0QaIIBrZ0bnwH13VHJVtqAFbeUABfDW+a5MpyRQmANOoiW1LQCmHz6H5dCugUgr/pE4b0c/1qskcmJLlWYZVzK6eTLK8U2hmEIb33ErpzygDHFxCJaoqk5ufn4wzs8DrUNcGcL40zp0mFGE1ooMSSGji1Qhsqc2pNXjWDw88Yzm+7vNXQ+qUK04e7iljP21G37Cl3CvHH0TzwRtNoUDK71sUe8JfxUgYcNC8lZ4OEP9GtVQNIzn8gGEURwFdL69EJADevHyMiJuaFOeQ/0SK87Hg0d1AVhLHjfMxYVTVPKcYAo5k/b+dIGODdLek55eMajPODmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2lhOkmiDSNNqmDpqXPnq3vW2l0RSLX+ukVDjXQd8Mlo=;
+ b=Vx/NNh94UBppgP1kaukldiSL6FM5VDyE6mPPAq07zJEKiWg0Dr1NjGe88p8LyAWFaw2jzjoYj/tw1fTpI39+jjy96yCjK6kWX2C4+5YUEU8ggLAQL+KO9+mH59uZZ2w4tlNBc+KBSpE5q7r3Kg6dcdLptSw0VMq+TsvR+du2+k0=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by VE1PR04MB6365.eurprd04.prod.outlook.com (2603:10a6:803:120::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Mon, 15 Aug
+ 2022 00:52:58 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::3c6c:b7e6:a93d:d442]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::3c6c:b7e6:a93d:d442%4]) with mapi id 15.20.5525.011; Mon, 15 Aug 2022
+ 00:52:58 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <3e6c934e-5298-42c5-c346-31b1acaa06ba@gmail.com>
- <2adcd797-f3cc-c8c7-c18c-d3726b2db4c0@gmail.com> <YoKmmIz7qJbD+hPY@kunai>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v2 2/3] i2c: algo: bit: allow getsda to be NULL
-In-Reply-To: <YoKmmIz7qJbD+hPY@kunai>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Clark Wang <xiaoning.wang@nxp.com>
+Subject: RE: [PATCH 0/6] i2c-imx-lpi2c: add IPG clock
+Thread-Topic: [PATCH 0/6] i2c-imx-lpi2c: add IPG clock
+Thread-Index: AQHYrgSSA2Yxdic4lUaQqa4Ze2PTqa2rDHsAgAQXC0A=
+Date:   Mon, 15 Aug 2022 00:52:58 +0000
+Message-ID: <DU0PR04MB9417D62230578AC8CA4234F288689@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20220812043424.4078034-1-peng.fan@oss.nxp.com>
+ <f1add9c7-fc2e-a600-49a6-a6579f17db1b@linaro.org>
+In-Reply-To: <f1add9c7-fc2e-a600-49a6-a6579f17db1b@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: eb8c1e92-6ead-427b-a044-08da7e587f3a
+x-ms-traffictypediagnostic: VE1PR04MB6365:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: gjAqj8z9tHs9XLoE+JKmPZVojeXGxhFe4utFfx2OB1q52E61SYK9Lt2+FhpePSErJTuNzaQhKqgo8lK53hWDb6aMyI62gEnBOwVCQ/dVkUlPKA7tThpIwx7QVpXgBiiT0u/LyuLZ/us661tqs0ITSOYdEB6BXEVXV1YnesoMAUzeSIkPk/LyKwPq4IYExMRmKFIO44D+5nS0DUQS4JzeVeXO/tOMo8Bwn8FwTxp98ccNjQ1iOObn1SDZfEnp9t0zlalS67OzJxVqNy7/FubP6aPIbQneuDn4eWYss1y7ojwIlLm+ZtjFdot64vFkx7917aRkNqz9RT64EqRE2bd4hIWt7NPhPwJB7zmzKVFSMp7nBr7W1O2PGd+zVmRGL8CdSJ/ZQ8mJtbirFmePS1/l5utyDexk+kpMpDfBqn5zI+SA6i73xlCmi+w6O9iHMRBucliyRSeJHHg0KDTS0OfMrC5OIX4hicS+/ZDWfwHRgXfsnjgfdUDWbETiTX/TGRnsJrsIBiaJpdCD4v8/QUun86mvQX3t1wF45Jux/zk2XOmIYM3GXHyymmg3HKIwCJ6WbMDOI72+NmeZIiNghv+ST9NNO6H1teCywQD+FclDuu9582bOP6uVPNWN4weQdAkwiumJ3dNY8ODaXKLvGpDrsNIJL8ueptZ/qtTuQdK1VGnZJv1l5F3DDbJsb0gobumfVo8UxiyB8bhIoRU9l2qHaEQd00+TbCRxNiqzkVMjQZAt9F3zMxJ4EAvJPZOViNDB9zDH45jxMKuQwg5WaeYz/EMgm04YVepdVgAdFirnCt4boZDRi/8Kq/4PcgqFT+YO
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(366004)(376002)(39850400004)(136003)(4326008)(5660300002)(64756008)(55016003)(54906003)(76116006)(110136005)(66446008)(316002)(66476007)(8676002)(66556008)(52536014)(8936002)(7416002)(44832011)(4744005)(2906002)(38100700002)(66946007)(122000001)(7696005)(33656002)(38070700005)(86362001)(186003)(478600001)(41300700001)(26005)(71200400001)(9686003)(83380400001)(6506007)(53546011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NVAwcDZOazN4dE5wcjd2MG5hN3ZjM3NIY3lvN1NNcm5LZmlqTjgzTDYzTmFq?=
+ =?utf-8?B?TFl0TTdNTDIxUWhwZUFJNmZ3RitxRjl2T0QxbDREd0hvcWlFSy9hZVcrc1ds?=
+ =?utf-8?B?dTBoN3RzNTBycUFUNTVzeERWeGJoSWRFZERUSTUvZnhueW9HZEdSYnFNaGcz?=
+ =?utf-8?B?eGdORmsyclE3TG1KZksvR1FVcVFxL2tNSzIvRnVRYWhSZDhoK0prNUliU2hi?=
+ =?utf-8?B?ZURCNXRkQXNyVkdwNGpoN3NtK1lQeElxNTRZYmNFaS9ST3liSEtpcVhSSTRH?=
+ =?utf-8?B?TkM4VHJrbmtBcm5KeFd3U2dxcDYwV0RWVFYyWXVoUGg5emJXcmoyQ0xoUFpz?=
+ =?utf-8?B?WWJlNngxbzBvUVBHRUNkWS9QNzNXcGFiWGM3VXhKeHRwR3JwU0ZuMFNmM0VY?=
+ =?utf-8?B?OWdqVURtb0crRG9nM1IzUkJWYlJZcHVyQjRjdzE2L2lKb0xQU0haU0FrQktx?=
+ =?utf-8?B?T1NwanZFK21UWjFtd3Z2RnYwRTU0TUk1MS9VOHdGdEpuVmJ6eWc1M1lZaVBx?=
+ =?utf-8?B?aTRXUTBoRnlzTUVJalYrOStQdkFqZkYxZU4rcDlKa1JJQmpzeVYzVmhoWlhp?=
+ =?utf-8?B?NEhKY2RXSDNnaHNMSXF4bWoyS2haNjI0cDFmWW1aN2N0cDluUnRlOUhKcTJ4?=
+ =?utf-8?B?eE9rZ016NjBlRTl4aTY0TVBNVlc0dlhnd0ZrK2JTSzBTdnNMWVZPOS9KNnVo?=
+ =?utf-8?B?N0hUY05MZi9GZ2tSMk5KU1Y1S1YrZ2pCSTdWQldlN2hzSTVVVzNKMzN6UFRG?=
+ =?utf-8?B?TmhXK3ZpSnR0TzZiMjF5SjM2VSs0N3U3VXRhbFpHV2VpUlpWN1hFeW9HeVdn?=
+ =?utf-8?B?Rm1LSjBZenlqL1FCNU8wckl5am9ERUNubTlvTS8zN0c2dnpHT01MU0U4cW9x?=
+ =?utf-8?B?Q0xOU3VVRjF1cDhvTWtHUDBEWkZINlpvTlE1U3J3endWb2lKRVdnZEZkVHZq?=
+ =?utf-8?B?b3JmWTUrbjRBdXRxNmdHb0VYVDBNd01MLzBtbGErWGs2bzJOYXpYMHJPMmly?=
+ =?utf-8?B?VU9aVkNiN1lBVnN6MVArOFZzLzVwVmowclFVcTFzYUlzcm84NTYyR3ZQZGZ2?=
+ =?utf-8?B?MnRqa3hLWUN0ZEdQWVAyWnpSaW56MjR1MkVpQTU4c1FQaG9qL2pMVnRZMXZS?=
+ =?utf-8?B?QkQ1YlJhODVXVjVnc2p0dzlLS0lOdG1PZ0hTVUFyUTZMT05ORHU0VW85dnU4?=
+ =?utf-8?B?d2JBdlRtRGI3MjhkTXd3eUM3V0NLQnN5ZjBTak0reWxUZ0c3QnpiYUlwM2hZ?=
+ =?utf-8?B?a1czclppczVLeGFrNkd5aTE0MWxJUkJISE1OUVpjM2c1dFlidGJETXI2aHk1?=
+ =?utf-8?B?ZHRXeENadGpvMlJhYnBma3cveFkzZHNXZnNuYUpVY3ZSWGVTOHpXUUJ6dTVl?=
+ =?utf-8?B?S1hJWXh2a1pEUkowQ3lQeWxGbkFBbXhjaGV4bFpkR255elZnSFhuTG5uQ3JJ?=
+ =?utf-8?B?NTNVRnYwYVhaTTMzc2V4YzRyZlNJNUgxcFZuWGkxWk9qdlBxRDRtMjFJb1RU?=
+ =?utf-8?B?L0lYalRYZld3djRZZ0U5WDBZRHlVRVN3eGFjc3dRSXd2TFpldmU0UVhra2dk?=
+ =?utf-8?B?YURxYXVLSWx3dzlRUEJnU0lVek1yZERVNWxPNC9KdWR0T3N3dERibWFaN2ZD?=
+ =?utf-8?B?TzZxdCtqNG9CNGp0V21mTi9OdnRNQnQ3Vys5a3BwMHZZYnZGNHF3NmUxaHRY?=
+ =?utf-8?B?TXVORFNmd0VhTEMxQ3k5QWF0dnd0UWtvU0VYUFdUMUIyT2lsNjUranhXZlBx?=
+ =?utf-8?B?ZHExT3dFWHBjNUlhdlR4Q3NOSXhtSVo5bmVRS1o4bkdjYmtWU3NSOFN4Unho?=
+ =?utf-8?B?RDJBRXBiOHN0YlJLOVdIK29JeVVvRlAwK1F4MzByYWxkZ1MyU0NaLzV1UzJn?=
+ =?utf-8?B?UVlhOW11cjRtdC9zV1NxNHBVTjRxbmNRRit6Nnlmakppbm5Oa05DeFpzcHhR?=
+ =?utf-8?B?VnEyTUJubVZFbmhmaEU3dzJ1RlpBcm9rMEIrUVgzUmRFeUY0R2ZteWw3MVU1?=
+ =?utf-8?B?c0NlZ3huQ000Ky80UWlrRFQ4YkpyOVVtTDR1YmN6ZGlnL1Q1SFJ1bGVlN0Fr?=
+ =?utf-8?B?ODhwanBWcGdlUTB6cHVrN1c2ekhVdEozeFlPN01lRk9DcWtjMWdTTGg4bk5n?=
+ =?utf-8?Q?jZ5w=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb8c1e92-6ead-427b-a044-08da7e587f3a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Aug 2022 00:52:58.2648
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +1MzpTsUdsaYfhjse2Yuup4FYvDg7wBA48TfhhqyIGAPl4aCPG5DAYqJTzxJ6AKW0FIY5dhKBRLq8kYjg7NStg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6365
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 16.05.2022 21:31, Wolfram Sang wrote:
-> Hi Heiner,
-> 
-Hi Wolfram,
-
-sorry for answering quite late ..
-
->>  	/* read ack: SDA should be pulled down by slave, or it may
->>  	 * NAK (usually to report problems with the data we wrote).
->> +	 * Report ACK if SDA is write-only.
-> 
-> Minor nit: On first read, I didn't understand. "Always report ACK..." is
-> maybe a tad clearer.
-> 
-
-OK
-
->>  	 */
->> @@ -203,6 +204,9 @@ static int i2c_inb(struct i2c_adapter *i2c_adap)
->>  	unsigned char indata = 0;
->>  	struct i2c_algo_bit_data *adap = i2c_adap->algo_data;
->>  
->> +	if (!adap->getsda)
->> +		return -EOPNOTSUPP;
-> 
-> Wouldn't it be better in 'readbytes' returning an errno there?
-> 
-
-I think that's something we can do in addition. We have other users of i2c_inb()
-than readbytes() (in i2c_algo_pcf), therefore I'd prefer to let i2c_inb()
-return an error instead of relying on upper layers only.
-
->> -	/* Complain if SCL can't be read */
->> -	if (bit_adap->getscl == NULL) {
->> +	if (bit_adap->getscl == NULL && bit_adap->getsda == NULL)
->> +		dev_info(&adap->dev, "I2C-like interface, SDA and SCL are write-only\n");
->> +	else if (bit_adap->getscl == NULL) {
->> +		/* Complain if SCL can't be read */
->>  		dev_warn(&adap->dev, "Not I2C compliant: can't read SCL\n");
->>  		dev_warn(&adap->dev, "Bus may be unreliable\n");
-> 
-> Hmm, this is a bit inconsistent with dev_warn and dev_info. How about
-> this?
-> 
-Right, it would be a bit inconsistent. My thought was:
-If both getscl and getsda are NULL, then the driver is intentionally used this way
-and it reflects the design of the respective system.
-It's expected that both are NULL and there's nothing wrong with it.
-At least to me a warning means: Something isn't ok and requires an action.
-
-However I could also understand the point of view that everything not being really
-I2C-compliant should trigger a warning.
-
-I'm fine with both options, please advise.
-
->  	if (bit_adap->getscl == NULL)
->   		dev_warn(&adap->dev, "Not I2C compliant: can't read SCL\n");
-> 
->  	if (bit_adap->getsda == NULL)
->   		dev_warn(&adap->dev, "Not I2C compliant: can't read SDA\n");
-> 
->  	if (bit_adap->getscl == NULL || bit_adap->getsda == NULL)
->   		dev_warn(&adap->dev, "Bus may be unreliable\n");
-> 
-> The above code can surely be simplified. I just wanted to show this
-> simple approach so we can discuss my suggestion.
-> 
-> All the best,
-> 
->    Wolfram
-> 
-
+SGkgS3J6eXN6dG9mLA0KDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMC82XSBpMmMtaW14LWxwaTJj
+OiBhZGQgSVBHIGNsb2NrDQo+IA0KPiBPbiAxMi8wOC8yMDIyIDA3OjM0LCBQZW5nIEZhbiAoT1NT
+KSB3cm90ZToNCj4gPiBGcm9tOiBQZW5nIEZhbiA8cGVuZy5mYW5AbnhwLmNvbT4NCj4gPg0KPiA+
+IFRoZSBpLk1YIExQSTJDIG5lZWRzIFBFUiBhbmQgSVBHIGNsb2NrLCBub3QganVzdCBQRVIgb3Ig
+SVBHIGNsb2NrLg0KPiA+IFRoaXMgcGF0Y2ggaXMgdG8gZW5hYmxlIGJvdGggUEVSIGFuZCBJUEcg
+Y2xvY2sgZm9yIGlteC1pMmMtbHBpMmMuDQo+IA0KPiBUaGlzIHBhdGNoc2V0IGJyZWFrcyB0aGUg
+QUJJIGFuZCBpcyBub3QgYmlzZWN0YWJsZS4gVGhlIGp1c3RpZmljYXRpb24gaXMgdmVyeQ0KPiBs
+aW1pdGVkIChvbmUgc2VudGVuY2UpLCBzbyBub3QgcmVhbGx5IGVub3VnaC4NCg0KQVJNMzIgaS5N
+WDdVTFAgYW5kIEFSTTY0IGkuTVg4UVhQL2kuTVg4VUxQIGFsbCBuZWVkIHRvIHVzZSB0d28NCmNs
+b2NrcywgUEVSIGFuZCBJUEcuIEJ1dCBjdXJyZW50IGR0LWJpbmRpbmdzIGFuZCBkdHMsIHVzZSBv
+bmUgY2xvY2suDQoNClRoaXMgcGF0Y2hzZXQgaW5jbHVkZXMgZHRzIGNoYW5nZXMgcGF0Y2ggNCBh
+bmQgcGF0Y2ggNS4NClBhdGNoIDYgaXMgdG8gdXBkYXRlIGRyaXZlciB1c2UgdHdvIGNsb2Nrcy4N
+Cg0KSSB0aGluayB0aGUgcGF0Y2ggb3JkZXIgaW4gdGhpcyBwYXRjaHNldCB3b3VsZCBub3QgYnJl
+YWsgZ2l0IGJpc2VjdCwgaXQNCmp1c3QgYnJlYWsgQUJJLiBCdXQgSSBub3QgZmluZCBnb29kIHdh
+eSBob3cgY291bGQgbm90IGJyZWFrIEFCSSwNCmJlY2F1c2Ugb25seSB1c2Ugb25lIGNsb2NrIGlz
+IHdyb25nIHdoZXRoZXIgaW4gZHQtYmluZGluZ3Mgb3IgZHRicy4NCg0KU2hvdWxkIEkgdXNlIGEg
+Zml4ZXMgdGFnIHRvIGR0LWJpbmRpbmdzLCB0aGVuIGJyZWFrIEFCSSBpcyBhbGxvd2VkPw0KDQpU
+aGFua3MsDQpQZW5nLg0KDQo+IA0KPiBCZXN0IHJlZ2FyZHMsDQo+IEtyenlzenRvZg0K
