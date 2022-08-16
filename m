@@ -2,54 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752DC595807
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Aug 2022 12:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556D2595821
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Aug 2022 12:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbiHPKVW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 16 Aug 2022 06:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58532 "EHLO
+        id S234487AbiHPK0J (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 Aug 2022 06:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232916AbiHPKUR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Aug 2022 06:20:17 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75FDD5EB1
-        for <linux-i2c@vger.kernel.org>; Tue, 16 Aug 2022 01:17:17 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id ct13so7347531qvb.9
-        for <linux-i2c@vger.kernel.org>; Tue, 16 Aug 2022 01:17:17 -0700 (PDT)
+        with ESMTP id S234665AbiHPKZs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Aug 2022 06:25:48 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F27BA1
+        for <linux-i2c@vger.kernel.org>; Tue, 16 Aug 2022 01:18:48 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id j17so7582884qtp.12
+        for <linux-i2c@vger.kernel.org>; Tue, 16 Aug 2022 01:18:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc;
-        bh=Pehfh1RqfJn2kVULtrCPrBrMAB+7O/oyc0bYZHQhlEE=;
-        b=XfcibtteH5N/ef55/yCOAnRJG1j3nvuNDdy/GKw7e5TnFH6HGS7G/xT3Dkd2PCYsSv
-         2H+xMunR2EbcIZ8IVun75PNOrK+0reM2RHv8y/G/29kNZtkHEoxY0VOoqIx+W8SsFJ5L
-         qcNwZhdwIv+ssOCZ2gXGNpbBopOlO93b9vkyt0vA+okJidn9VsCfrWxJoj6w/xpd0Pkb
-         Sletm7OShBBXdymgmGtbkrySbZWven8O8L3OUZzXydRcFrDjFQNKXAznBZbsDMQgo2+m
-         JpxHRxDeT+RVIi9hhQ9fH+lcWPInBMwmXEyO1Q61JrPTIUgOH75mr9qHr1sbJt8un+MV
-         91wg==
+        bh=tpdPEcmpqlEkmQWon6OiNCbPhXTlF0ahHHE7RDXl2Cg=;
+        b=Ex51sKiadx0Xa5JQLGQ1/Y5ZIyCCkLpnP0j1mcO3dj9dz/izOKYktcGM46rKycGTgm
+         J7nIDbuns25W48+/gWJG69R7ZmYnJMg73YhGcqfy1MEcIYoR5JyJ/SgH5arw/km5bA8q
+         +lMtx8D5wEw4IuQP7SAlO1qCS2iv2i6p+hDw+u94cH/U0DUPehOR8gT1RlBuTCegVxxB
+         HUmrvTTaWld9M0Bg6gBFxZlIJhW3in3xSnRTR7VLZ6rLZUCiCQP2rb3KLFaewl6Y2wkH
+         97T1jaF/zmiXihb40rbIemjXRcYkfhNfGp6rW64TnGTaBEBUiR2xyUgRLkwqFaaA0b3Q
+         9e3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=Pehfh1RqfJn2kVULtrCPrBrMAB+7O/oyc0bYZHQhlEE=;
-        b=OcEBgiVKYJAlXR2Ap2pf8TrkInNUWNpcuIJ+ShNiAO15xKQ8cQB6016Tix0ci43lZA
-         3zBTHWu1cCUTnsu1ITKYCNMAlHP5kZqXAFUwpVoN99hdWqXBBSJ1M40LmE3DGt0iY5Wc
-         MkfbazpFX1dHNu7pihqCFC6AXVlkH3K4h2XkIwMuq926ZOqqeFFP1s3hL9Os2xp01uhl
-         hCa1W0+7gTj0E51pPZF9sNTOPM4i+NMdmi41lGsJdgLX/WBuaWXAIt+GZyhyxdHGwF1X
-         /CxPW8jjZ0ZqubxnYYXZduraU4mDIpyoHZheFFSFZMq3gONUmdPEAYwQg4bxyG4XaqQj
-         20Xg==
-X-Gm-Message-State: ACgBeo1y4b12smqf1PBw1j3/QxZNhDrbApFJ+m3iUpdW4MWWabnwJo+F
-        OUFynQB2+1tM0TtfMxNv2cQ256OYUBpJsIied8g=
-X-Google-Smtp-Source: AA6agR7ogDTBHljac9/7FrrpT7xDc5h8jxTfZc2nYvdhEOujrNsFS/KsEq8iuLPNnQFWdxNdXE+311ZiRVK9VznD3YE=
-X-Received: by 2002:a05:6214:d07:b0:476:c32f:f4f4 with SMTP id
- 7-20020a0562140d0700b00476c32ff4f4mr16814950qvh.11.1660637836822; Tue, 16 Aug
- 2022 01:17:16 -0700 (PDT)
+        bh=tpdPEcmpqlEkmQWon6OiNCbPhXTlF0ahHHE7RDXl2Cg=;
+        b=Let/IWNuiRosjcELRYo76Vpn5uSDxqcJrTSjiNXQJ4TaWz3KKCq2SRpw3Ow8XaaHkj
+         IbL3n6tUARm2ZzcNKLD/utr5dEovB6Py0GRdb/bRSui5YPbYmtMNsAi+dBnYD5P2ij0z
+         VEqQlYIBJTSodsazmcDpLeJBKD2g1S786UJBuqwoGOD80Qen1QLcgJyiI+RHM3Wn1ab+
+         guIduZ4e3llxGMbcwXJ89CKd/adHeaGwYZJUjpYPzfb5JI6kLsSy2UQJkkKV6U8RZ0qu
+         DQcj47fY93EMkO5kJrHwFt1I2P3eowTlmrULeCtMl2RTMvf68tlcn5Rv6brbUs4hyXuK
+         FdDg==
+X-Gm-Message-State: ACgBeo0Yl1U6/NytvmXtElorVywf55/Gi/yl7rtDFoWXyryzjHSKAQ7p
+        q/fqfIDK5G9RhlcphWgx5C0mZJs9RMhjSTs1e/8=
+X-Google-Smtp-Source: AA6agR798MTrowPBHNnyyBk2PCklVmEgEavff3t6PlfyNDZ8Qe9h7aIvOjevEK1aclmwC3nwOr/8vJqIRKZND22RNqY=
+X-Received: by 2002:a05:622a:48f:b0:343:463:351a with SMTP id
+ p15-20020a05622a048f00b003430463351amr17057555qtx.61.1660637927255; Tue, 16
+ Aug 2022 01:18:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220815080230.37408-1-u.kleine-koenig@pengutronix.de> <20220815080230.37408-6-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20220815080230.37408-6-u.kleine-koenig@pengutronix.de>
+References: <20220815080230.37408-1-u.kleine-koenig@pengutronix.de>
+ <20220815080230.37408-6-u.kleine-koenig@pengutronix.de> <CAHp75Vd16FcVrCEcg41vwRQLxnt82shsQmXpyJTnOejFquhWhw@mail.gmail.com>
+In-Reply-To: <CAHp75Vd16FcVrCEcg41vwRQLxnt82shsQmXpyJTnOejFquhWhw@mail.gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 16 Aug 2022 11:16:40 +0300
-Message-ID: <CAHp75Vd16FcVrCEcg41vwRQLxnt82shsQmXpyJTnOejFquhWhw@mail.gmail.com>
+Date:   Tue, 16 Aug 2022 11:18:11 +0300
+Message-ID: <CAHp75VeB_t1MTwvRS6UF=tCRmnBEw3UwTnZJTtVsyRfvgVAJLA@mail.gmail.com>
 Subject: Re: [PATCH v2 5/6] gpio: pca953x: Make platform teardown callback
  return void
 To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
@@ -71,41 +72,45 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 11:02 AM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
+On Tue, Aug 16, 2022 at 11:16 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Mon, Aug 15, 2022 at 11:02 AM Uwe Kleine-K=C3=B6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> >
+> > All platforms that provide a teardown callback return 0. New users are
+> > supposed to not make use of platform support, so there is no
+> > functionality lost.
+> >
+> > This patch is a preparation for making i2c remove callbacks return void=
+.
 >
-> All platforms that provide a teardown callback return 0. New users are
-> supposed to not make use of platform support, so there is no
-> functionality lost.
+> In case you need to send another version, consider below...
+
+(forgot to add) otherwise it can be a follow up.
+
+> >         if (pdata && pdata->teardown) {
+> > -               ret =3D pdata->teardown(client, chip->gpio_chip.base,
+> > -                                     chip->gpio_chip.ngpio, pdata->con=
+text);
+> > -               if (ret < 0)
+> > -                       dev_err(&client->dev, "teardown failed, %d\n", =
+ret);
+> > -       } else {
+> > -               ret =3D 0;
+> > +               pdata->teardown(client, chip->gpio_chip.base,
+> > +                               chip->gpio_chip.ngpio, pdata->context);
+> >         }
 >
-> This patch is a preparation for making i2c remove callbacks return void.
+> First of all, after this change the {} should not be needed.
+> Second, with a temporary variable
+>
+>   struct gpio_chip *gc =3D &chip->gpio_chip;
+>
+> this becomes a one liner like
+>
+>   pdata->teardown(client, gc->base, gc->ngpio, pdata->context);
 
-In case you need to send another version, consider below...
 
-...
-
->         if (pdata && pdata->teardown) {
-> -               ret =3D pdata->teardown(client, chip->gpio_chip.base,
-> -                                     chip->gpio_chip.ngpio, pdata->conte=
-xt);
-> -               if (ret < 0)
-> -                       dev_err(&client->dev, "teardown failed, %d\n", re=
-t);
-> -       } else {
-> -               ret =3D 0;
-> +               pdata->teardown(client, chip->gpio_chip.base,
-> +                               chip->gpio_chip.ngpio, pdata->context);
->         }
-
-First of all, after this change the {} should not be needed.
-Second, with a temporary variable
-
-  struct gpio_chip *gc =3D &chip->gpio_chip;
-
-this becomes a one liner like
-
-  pdata->teardown(client, gc->base, gc->ngpio, pdata->context);
-
---=20
+--
 With Best Regards,
 Andy Shevchenko
