@@ -2,112 +2,173 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FDE59864C
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Aug 2022 16:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8874D598702
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Aug 2022 17:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245389AbiHROr3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 18 Aug 2022 10:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
+        id S1344113AbiHRPMG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 18 Aug 2022 11:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245520AbiHROrX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 Aug 2022 10:47:23 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69885BBA43;
-        Thu, 18 Aug 2022 07:47:21 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id b9so1263559qka.2;
-        Thu, 18 Aug 2022 07:47:21 -0700 (PDT)
+        with ESMTP id S1344118AbiHRPL6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 Aug 2022 11:11:58 -0400
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E65BFA8B;
+        Thu, 18 Aug 2022 08:11:53 -0700 (PDT)
+Received: by mail-ot1-f53.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso1276800otb.6;
+        Thu, 18 Aug 2022 08:11:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=gdljhD4izytPCTwhmdt8DBVVfc0NydPAltPgDipKvog=;
-        b=z21x2EFoAdNeIjrz68Au7PO2e9cPtW0hiwQpPagWD378YKOU24Kiv1WLGGLpLtisUR
-         qBk1cmhmh7sPvwMU6eHzIXmgq+kg2d4NgE7GPDq+clkNTZWsKVrEkvZHry8FMONDW8J9
-         4iyi6nFbvprD/o0eEeck5HAahW/0disiGm6noXG21VzPGXb/RMwxvQ7/uVMkG85ronW6
-         8XN593sIqFSPghnVuC1jOYMbZZrT5j9/A1BN7SBDsaej93rC4JGzkUNA0qsKEi6pxiij
-         YjLgrpuureSyFZwfk1xtddwhKp4WQvLJWgZc1C3Pikmm1CUdimKmpKPNKsCyl+whQ5nd
-         Lipg==
-X-Gm-Message-State: ACgBeo3Lvc0nxCHMN1kJlXgiwEYJAiFy5FrXDoCOIJu4RxxQJadrpjOJ
-        xCzgVISjm1KCKluhLunPMw==
-X-Google-Smtp-Source: AA6agR6os7Il7llhYeMa4bR2kBtfZkcv6PCsh86UdfBNsIhRKKgO+IREW4lBHpdZzuhJU3WR6VLMIQ==
-X-Received: by 2002:a05:620a:2286:b0:6bb:5fa4:58 with SMTP id o6-20020a05620a228600b006bb5fa40058mr2241995qkh.202.1660834040446;
-        Thu, 18 Aug 2022 07:47:20 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:25d2:ea0d:b91c:d10a:6423:3870])
-        by smtp.gmail.com with ESMTPSA id n1-20020ac86741000000b0031eebfcb369sm1049301qtp.97.2022.08.18.07.47.14
+        bh=WfG6z66abqmikTTPic3DpB5e3H4wBaNLiClJ/rnvyVc=;
+        b=pucIdsytBnSNMGKOlVgFv3STr5Snk0UhtGcRmUKRjc4bdrWWDQYhYVXjamSzRZHy6p
+         hPF1R5isHYgas+hSi2WZl4QgedPu6Kp48hmz7IWIQunNfS8XRX0jIY3t3Vfr/BISj/4D
+         npF2cw4mBemgkzafMr46F/RWnNvw6Au4Rhu06XdB//41cwfliJf3IsUNP8wJrcm/oIxh
+         BEKFrqvhlnUifiZX5zWWM+QOCKhcccWunvY5HADyYp8f3/123vdVYnxXgF/o4Zpy77/W
+         vPkNtfL87m1QzHboXV89XKdbP3ZBbThaxJpnA0J7OmXJ2OwOecoojVRsTzQ4sSZW2EII
+         Fh4g==
+X-Gm-Message-State: ACgBeo3WjPRZ1gVa9FVCzsFga6v1TJc8UPHSZ+dafCHl1n80UyR/y1aQ
+        Y2qupVrEIpXtPrjRzXYfywk2oACb3g==
+X-Google-Smtp-Source: AA6agR6o7rSkFIPBKN9it7S6e36TvpRIoeN+/X1zhFrbsie8UcZ/YzC4dQpBxe2obE3oQFSaW2ODvA==
+X-Received: by 2002:a9d:12a2:0:b0:638:937a:f620 with SMTP id g31-20020a9d12a2000000b00638937af620mr1239118otg.29.1660835512452;
+        Thu, 18 Aug 2022 08:11:52 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:5fe0:b4f5:6e22:4704:df60:73a3])
+        by smtp.gmail.com with ESMTPSA id v43-20020a056870b52b00b00116d5103487sm493752oap.31.2022.08.18.08.11.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 07:47:20 -0700 (PDT)
-Received: (nullmailer pid 1843176 invoked by uid 1000);
-        Thu, 18 Aug 2022 14:47:13 -0000
-Date:   Thu, 18 Aug 2022 08:47:13 -0600
+        Thu, 18 Aug 2022 08:11:52 -0700 (PDT)
+Received: (nullmailer pid 1877668 invoked by uid 1000);
+        Thu, 18 Aug 2022 15:11:50 -0000
+Date:   Thu, 18 Aug 2022 09:11:50 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        linux-i2c@vger.kernel.org, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH] MAINTAINERS: Update email of Neil Armstrong
-Message-ID: <20220818144713.GC1829017-robh@kernel.org>
-References: <20220816095617.948678-1-narmstrong@baylibre.com>
+To:     Asmaa Mnebhi <asmaa@nvidia.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Khalil Blaiech <kblaiech@nvidia.com>
+Subject: Re: [PATCH v1 6/7] i2c-mlxbf.c: support BlueField-3 SoC
+Message-ID: <20220818151150.GK1829017-robh@kernel.org>
+References: <20220816225412.9095-1-asmaa@nvidia.com>
+ <20220816225412.9095-7-asmaa@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220816095617.948678-1-narmstrong@baylibre.com>
+In-Reply-To: <20220816225412.9095-7-asmaa@nvidia.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 11:56:17AM +0200, Neil Armstrong wrote:
-> From: Neil Armstrong <neil.armstrong@linaro.org>
+On Tue, Aug 16, 2022 at 06:54:11PM -0400, Asmaa Mnebhi wrote:
+> BlueField-3 SoC has the same I2C IP logic as previous
+> BlueField-1 and 2 SoCs but it has different registers' addresses.
+> This is an effort to keep this driver generic accross all
+> BlueField generations.
+> This patch breaks down the "smbus" resource into 3 separate
+> resources to enable us to use common registers' offsets for all
+> BlueField SoCs:
+> struct mlxbf_i2c_resource *timer;
+> struct mlxbf_i2c_resource *mst;
+> struct mlxbf_i2c_resource *slv;
 > 
-> My professional e-mail will change and the BayLibre one will
-> bounce after mid-september of 2022.
+> Of course, all offsets had to be adjusted accordingly, and we took
+> this chance to reorganize the macros depending on the register block
+> they target.
 > 
-> This updates the MAINTAINERS file, the YAML bindings and adds an
-> entry in the .mailmap file.
+> There are only 2 registers' offsets that do not fit within this
+> schema so their offsets are passed as SoC-specific parameters:
+> smbus_master_rs_bytes_off
+> smbus_master_fsm_off
 > 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
+> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
 > ---
->  .mailmap                                      |  1 +
->  .../amlogic/amlogic,meson-gx-ao-secure.yaml   |  2 +-
->  .../display/amlogic,meson-dw-hdmi.yaml        |  2 +-
->  .../bindings/display/amlogic,meson-vpu.yaml   |  2 +-
->  .../display/bridge/analogix,anx7814.yaml      |  2 +-
->  .../bindings/display/bridge/ite,it66121.yaml  |  2 +-
->  .../display/panel/sgd,gktw70sdae4se.yaml      |  2 +-
->  .../bindings/i2c/amlogic,meson6-i2c.yaml      |  2 +-
->  .../mailbox/amlogic,meson-gxbb-mhu.yaml       |  2 +-
->  .../bindings/media/amlogic,axg-ge2d.yaml      |  2 +-
->  .../bindings/media/amlogic,gx-vdec.yaml       |  2 +-
->  .../media/amlogic,meson-gx-ao-cec.yaml        |  2 +-
->  .../devicetree/bindings/mfd/khadas,mcu.yaml   |  2 +-
->  .../bindings/net/amlogic,meson-dwmac.yaml     |  2 +-
->  .../bindings/phy/amlogic,axg-mipi-dphy.yaml   |  2 +-
->  .../phy/amlogic,meson-g12a-usb2-phy.yaml      |  2 +-
->  .../phy/amlogic,meson-g12a-usb3-pcie-phy.yaml |  2 +-
->  .../bindings/power/amlogic,meson-ee-pwrc.yaml |  2 +-
->  .../bindings/reset/amlogic,meson-reset.yaml   |  2 +-
->  .../bindings/rng/amlogic,meson-rng.yaml       |  2 +-
->  .../bindings/serial/amlogic,meson-uart.yaml   |  2 +-
->  .../bindings/soc/amlogic/amlogic,canvas.yaml  |  2 +-
->  .../bindings/spi/amlogic,meson-gx-spicc.yaml  |  2 +-
->  .../bindings/spi/amlogic,meson6-spifc.yaml    |  2 +-
->  .../usb/amlogic,meson-g12a-usb-ctrl.yaml      |  2 +-
->  .../watchdog/amlogic,meson-gxbb-wdt.yaml      |  2 +-
->  MAINTAINERS                                   | 20 +++++++++----------
->  27 files changed, 36 insertions(+), 35 deletions(-)
+>  .../bindings/i2c/mellanox,i2c-mlxbf.yaml      |  30 +-
 
-Applied, thanks!
+Bindings go in a separate patch.
 
-Rob
+>  MAINTAINERS                                   |   1 +
+>  drivers/i2c/busses/i2c-mlxbf.c                | 397 ++++++++++--------
+>  3 files changed, 258 insertions(+), 170 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
+> index 93198d5d43a6..cb3a012914e0 100644
+> --- a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
+> @@ -8,6 +8,7 @@ title: Mellanox I2C SMBus on BlueField SoCs
+>  
+>  maintainers:
+>    - Khalil Blaiech <kblaiech@nvidia.com>
+> +  - Asmaa Mnebhi <asmaa@nvidia.com>
+>  
+>  allOf:
+>    - $ref: /schemas/i2c/i2c-controller.yaml#
+> @@ -17,11 +18,15 @@ properties:
+>      enum:
+>        - mellanox,i2c-mlxbf1
+>        - mellanox,i2c-mlxbf2
+> +      - mellanox,i2c-mlxbf3
+>  
+>    reg:
+> -    minItems: 3
+> +    minItems: 5
+
+You just broke platforms with 3 entries.
+
+> +    maxItems: 6
+>      items:
+> -      - description: Smbus block registers
+> +      - description: Smbus timer registers
+> +      - description: Smbus master registers
+> +      - description: Smbus slave registers
+
+You can't add new registers at the beginning of the list for existing 
+users.
+
+Either add to the end or it has to be conditional (if/then schema).
+
+>        - description: Cause master registers
+>        - description: Cause slave registers
+>        - description: Cause coalesce registers
+> @@ -58,7 +63,9 @@ examples:
+>    - |
+>      i2c@2804000 {
+>          compatible = "mellanox,i2c-mlxbf1";
+> -        reg = <0x02804000 0x800>,
+> +        reg = <0x02804000 0x40>,
+> +              <0x02804200 0x200>,
+> +              <0x02804400 0x200>,
+>                <0x02801200 0x020>,
+>                <0x02801260 0x020>;
+>          interrupts = <57>;
+> @@ -68,10 +75,25 @@ examples:
+>    - |
+>      i2c@2808800 {
+>          compatible = "mellanox,i2c-mlxbf2";
+> -        reg = <0x02808800 0x600>,
+> +        reg = <0x02808800 0x40>,
+> +              <0x02808a00 0x200>,
+> +              <0x02808c00 0x200>,
+>                <0x02808e00 0x020>,
+>                <0x02808e20 0x020>,
+>                <0x02808e40 0x010>;
+>          interrupts = <57>;
+>          clock-frequency = <400000>;
+>      };
+> +
+> +  - |
+> +    i2c@2808800 {
+> +        compatible = "mellanox,i2c-mlxbf3";
+> +        reg = <0x13404480 0x40>,
+> +              <0x13404200 0x200>,
+> +              <0x13404000 0x200>,
+> +              <0x13404400 0x020>,
+> +              <0x13404420 0x020>,
+> +              <0x13404440 0x010>;
+> +        interrupts = <35>;
+> +        clock-frequency = <400000>;
+> +    };
