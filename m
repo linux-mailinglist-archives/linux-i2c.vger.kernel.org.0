@@ -2,52 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35BF59ABB7
-	for <lists+linux-i2c@lfdr.de>; Sat, 20 Aug 2022 08:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 857B759ABC1
+	for <lists+linux-i2c@lfdr.de>; Sat, 20 Aug 2022 08:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232636AbiHTGWj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 20 Aug 2022 02:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
+        id S244095AbiHTGaJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 20 Aug 2022 02:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiHTGWj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 20 Aug 2022 02:22:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBB29AFAC
-        for <linux-i2c@vger.kernel.org>; Fri, 19 Aug 2022 23:22:38 -0700 (PDT)
+        with ESMTP id S229458AbiHTGaJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 20 Aug 2022 02:30:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16671B07D5;
+        Fri, 19 Aug 2022 23:30:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02A24B81F18
-        for <linux-i2c@vger.kernel.org>; Sat, 20 Aug 2022 06:22:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED7A7C433D6;
-        Sat, 20 Aug 2022 06:22:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8DB20B816D8;
+        Sat, 20 Aug 2022 06:30:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93670C433D6;
+        Sat, 20 Aug 2022 06:30:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660976555;
-        bh=1DwHVgvxf+u+H10tm3jo06swxdTIt6r5JADU34LNPaQ=;
+        s=k20201202; t=1660977005;
+        bh=exw9SaJCeUBSW+rAlqqy1BP9+7K2rYOmxA+Xh9R+Nq0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dLujTLP20QKvuMVUN9MPAH1PlTVbYYf7sSgTQ/CTGJ0Qsw8I132OodJ5tO4cP2utF
-         cdsv6BY1thL/feEWLENhVWEo3JUh7vOFiWUIS0o+r4gTWt/3+LgeQWVtBgBsJikwys
-         PHrl6bdEwvQf9Xaf/7kJmCPqtGDMKyUbh9eVrfAz87c1xL39OxuMZ2GHMkBVM9k+2d
-         O7nC4ttv4oWraFX5w2X4wUGOWuZXRNr1fULdkvoQHtFw+sGsBUBE75ehsxzQz5P2Wc
-         BOHDyBIeBXthzsw0ybpCZJVyTRX8oRqfw9ZPnWB218V9YqtRfI8kSozIQPs9vVY9Z7
-         1t0TLJ5dIW0wg==
-Date:   Sat, 20 Aug 2022 08:22:31 +0200
+        b=b5NT79YbNyPjFdB4bBd8t4YdMnsd1MPYnXk/VkXf0a87BMDe8xt9nONiAGBoQpO+x
+         gWkIHPzAUqqRUw4iLgLeIoCBY8nuG5L8EQYRzfiDFG0cRnhHaU/PIF1zgYwyRJ2aml
+         dlg2Z/ZuvyGKYVkiqA4mbt1Y7f/LTRn00JkPUwnugRVvb++KVf+oJRdPmePwAHP+v2
+         x7WT9nhLq/ONVNJrvWTW8EoddcY+x0VHIk/SWujf1slF7cI/QYrMeVbSxawDu2uP8z
+         0CQJRssrI7/0yOdvo1umy0pJozI5fe+MI0nhA56yBt6qgkqCd3jQzMDGBKgzxqpW+b
+         uTqfzavu573qA==
+Date:   Sat, 20 Aug 2022 08:30:01 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     linux-i2c@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Josef Johansson <josef@oderland.se>
-Subject: Re: [PATCH] Revert "i2c: scmi: Replace open coded
- device_get_match_data()"
-Message-ID: <YwB9p+q6rllB9KFF@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Josef Johansson <josef@oderland.se>
-References: <20220818203113.1745-1-wsa@kernel.org>
+To:     Jan Dabros <jsd@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, rrangel@chromium.org,
+        mw@semihalf.com, upstream@semihalf.com
+Subject: Re: [PATCH v2] i2c: designware: Introduce semaphore reservation
+ timer to AMDPSP driver
+Message-ID: <YwB/aWRxyemPay58@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        rrangel@chromium.org, mw@semihalf.com, upstream@semihalf.com
+References: <20220812071526.414285-1-jsd@semihalf.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TvvHuSoloqMdkg5x"
+        protocol="application/pgp-signature"; boundary="tK4/di2mPXFHr9ge"
 Content-Disposition: inline
-In-Reply-To: <20220818203113.1745-1-wsa@kernel.org>
+In-Reply-To: <20220812071526.414285-1-jsd@semihalf.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,41 +63,49 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---TvvHuSoloqMdkg5x
+--tK4/di2mPXFHr9ge
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 18, 2022 at 10:31:13PM +0200, Wolfram Sang wrote:
-> This reverts commit 9ae551ded5ba55f96a83cd0811f7ef8c2f329d0c. We got a
-> regression report, so ensure this machine boots again. We will come back
-> with a better version hopefully.
+On Fri, Aug 12, 2022 at 09:15:26AM +0200, Jan Dabros wrote:
+> In order to optimize performance, limit amount of back and forth
+> transactions between x86 and PSP. This is done by introduction of
+> semaphore reservation period - that is window in which x86 isn't
+> releasing the bus immediately after each I2C transaction.
 >=20
-> Link: https://lore.kernel.org/r/4d2d5b04-0b6c-1cb1-a63f-dc06dfe1b5da@oder=
-land.se
-> Signed-off-by: Wolfram Sang <wsa@kernel.org>
+> In order to protect PSP from being starved while waiting for
+> arbitration, after a programmed time bus is automatically released by a
+> deferred function.
+>=20
+> Signed-off-by: Jan Dabros <jsd@semihalf.com>
 
-Applied to for-current, thanks!
+Fixed this checkpatch check:
+
+CHECK: Blank lines aren't necessary after an open brace '{'
+#60: FILE: drivers/i2c/busses/i2c-designware-amdpsp.c:265:
+
+and applied to for-next, thanks!
 
 
---TvvHuSoloqMdkg5x
+--tK4/di2mPXFHr9ge
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMAfaMACgkQFA3kzBSg
-KbYu7g/9FSaPLWzZ4MVbq9X1rWlUwsxR8RJd0yHGhMD6obg08ekEHBF7eh3FAlCs
-qgY/GXaT5MGbuPqQihwHrpi7AWEGvZxh7lUNJes1ema4GKkJ8kC5jq3hO9meyTf9
-8+78I7xi6mG+uc4w+n2494fZRIu0Dwp584I0Vwr04vCyJhBi4VW1UwgmIZsxmOva
-j1X27ArShtjXviDXReAM5nd+9f82Wq3h99jpFu40sFMMh96Wq4MND81Z9+U5oeFr
-ISn2N/4o/z7hR8PHmfTKpfxD6jbIk2+x6Vre/xtSDmfkttzD0/2aAlRCRXJfKzH1
-GWkNPo474kx6nYj9USWOabAYIjPh/3njNVxv0qu9bzelO6Hft4PHdcACdLhrNVOq
-+MJwRADvIwOFoAtIKrugD1hqqcJcAjf5bg7jD96Jocg56gGG7O935sOGbJxfDaR2
-lLX1zkEv82slXl+SlUBJDiaWGoPpR+c7XDyuBmgT9l6aiYN5DPxi1PxiczGWNGMQ
-g2k7tFf/B763sNQmYpM4kTRot2lmjfdap+VhPQgUG3D75lLuYcFOmtYoaL4o/CUy
-mg3NmUwqi9XrVjl0WrseRCWgqyVFypG5AFaBCv/g5rOQA+tLHjFkr3yB2yiM5sZN
-guUD9qIp9dONGLh3eW1siz6/+TUToUTQYdXOxnzeRQND/IJzPcA=
-=1yps
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMAf2kACgkQFA3kzBSg
+KbYzCQ//VDhWJ7L1FK7lI9PMNeLt++3U7DLDOvK9Uf9aKHfEBwItpIahAiPW3TMv
+dk/kMaQ5sylz71wLuGPUJs/6dgpqh15GgkCEoGQXGzBdx/NcHny4Injov6kSm8Yp
+OKDDlEiBk92uWg0w+CVTbxE2uZQLJAFWuW/rTCeYzhAwvPiC+HtoEVEaU75hdvA2
+hLShevvFllZfclONwxF0dg5uVBPukQ4HJowSMG2qzo7IdLdBjqIcF7drD2/o57rR
+ldtnKk0ozrn1s/qmnsZKtLJdf22BEpxtdKhSfxTkN/hOIZ6V+bBlO841sPlOM/Xl
+SpT+iqapG7G0sP2gOY0SyGI/b1Pk4bbMs0Gx3EOmedFy8FANKlBvh1Xl6jMfkizy
+gvSJmuZ0VeSa+HSr3LNdAhEVGIYAF7EsQykaUt+GHRG2cUr39/RFlW59eYIEe4RO
+fVoJdFS+zDu/K5xOsSsevgcOORc2OTtjiEl8aAeCAogOmiHmeQCoESlswe2S4Yih
+NxX3ANwuR+CD5mLVIJkPoBmeVyLA+pvoiKHTQWkD0g6iO0ecs13t+GY6TaEzHN/t
+qsHBdec/LDxmyBOHrLIKekJ4/G8rpFsQAvSymQA95OsQWV9lapp0VEACOd3ADCmL
+ba/Fq6IyTAm2TPHz8qnidAtr7+EvsnfvQA2fkWCBtMaO17oFymY=
+=P1Al
 -----END PGP SIGNATURE-----
 
---TvvHuSoloqMdkg5x--
+--tK4/di2mPXFHr9ge--
