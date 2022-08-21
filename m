@@ -2,66 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36EF559B2CF
-	for <lists+linux-i2c@lfdr.de>; Sun, 21 Aug 2022 10:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97C859B2D1
+	for <lists+linux-i2c@lfdr.de>; Sun, 21 Aug 2022 10:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiHUIlM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 21 Aug 2022 04:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
+        id S229460AbiHUInq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 21 Aug 2022 04:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiHUIlM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 21 Aug 2022 04:41:12 -0400
+        with ESMTP id S229436AbiHUInp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 21 Aug 2022 04:43:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2A2220CD
-        for <linux-i2c@vger.kernel.org>; Sun, 21 Aug 2022 01:41:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852B61A05D;
+        Sun, 21 Aug 2022 01:43:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E989B60CF2
-        for <linux-i2c@vger.kernel.org>; Sun, 21 Aug 2022 08:41:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 844D7C433C1;
-        Sun, 21 Aug 2022 08:41:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02F1860DD1;
+        Sun, 21 Aug 2022 08:43:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9A10C433D6;
+        Sun, 21 Aug 2022 08:43:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661071270;
-        bh=U8y+cTgjFBPx8VFz01DC09GZ4QzDqKsT/XxObF6K9hs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rskmP4Wvw3IYBHSc3WLOyZGvCSjzPYc0aRwKi7Kv2R4zxF6yGtuZ2onapy7MZPQ2e
-         KKPQOFsrNNntbIQs0ubAvmMiZDtMH2gxgCTkcSeyz5+WVLQCP1iSxTSnlxseMa/IUD
-         mWU99Nu+0dJ7libPnSelaQ3MqKKIUGKWDCD4fLCfmnP65sh+4ECK2mvxk3F6WxJC7h
-         de/7ysu4XUxvTlbdcRHv+qp4aJZoCLfbgeTABe+aUXg/HWik8BS4WbeTaj97CSnwad
-         lgvtd7hdlR2mPdTlbMwzFkkXT9ck+krt80a9AQFIYzC8C0g/A0rBVitHq7xL8OAvoH
-         I1zJg6F7ZZ7TQ==
-Date:   Sun, 21 Aug 2022 10:41:06 +0200
+        s=k20201202; t=1661071423;
+        bh=4ow+87klzjK1s/ZPzynCOL4sSJYQb/HTm8PrOxl9BkE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rXjcbp199xnGbQfM/i1rvABsQl2S08RjdSV+MY9PpOU8/kvjWRBnEioz30Y6+dVrZ
+         2Y+/vii3uNu9cW7z3Ni+CR81+3K/5ZkLIRAnMFEYEdV/PRFJAwFA4fgdZRMIXwMUsu
+         Xewlok0ZGWB3Ortj1PjCnPO+UZ2uhP4OSCPtBqmkO4Lg37C/lp3BUx4M5oDM8qeIXW
+         srxPSm0QaYqMvZlUUk/X3XDkRdOpgVd2TUnDM8pPMHsQ+ZyJrOO6zeBERTRitMJgBG
+         mZtgW8AKorJLFXdmrlZ8OspHmxkgG6TiSJBUDx1dShYcYqNI63g0aj6VPAm2ksZRmp
+         AFvTNbvLTLFFg==
+Date:   Sun, 21 Aug 2022 10:43:39 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: imx: Make sure to unregister adapter on remove()
-Message-ID: <YwHvop0MH8BTjw4f@shikoro>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c-for-6.0-rc2
+Message-ID: <YwHwOwkBOAeoRuci@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-References: <20220720150933.239956-1-u.kleine-koenig@pengutronix.de>
- <20220729042922.GD30201@pengutronix.de>
- <20220730231335.xwm3e5nbojztcpcw@pengutronix.de>
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kxHRf+/ex58x/pmg"
+        protocol="application/pgp-signature"; boundary="peF6uqEsAHXhFynL"
 Content-Disposition: inline
-In-Reply-To: <20220730231335.xwm3e5nbojztcpcw@pengutronix.de>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -73,39 +58,70 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---kxHRf+/ex58x/pmg
-Content-Type: text/plain; charset=us-ascii
+--peF6uqEsAHXhFynL
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
+Linus,
 
-> That would be:
->=20
-> Fixes: 588eb93ea49f ("i2c: imx: add runtime pm support to improve the per=
-formance")
+there have been some last minute changes to the commits which only
+affect the commit messages (added tags). The code changes have been
+tested by buildbots before.
 
-FTR, I added the Fixes tag because I think this is a real bug despite
-being unlikely to happen.
+Please pull.
+
+   Wolfram
 
 
---kxHRf+/ex58x/pmg
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-=
+6.0-rc2
+
+for you to fetch changes up to d98bdd3a5b50446d8e010be5b04ce81c4eabf728:
+
+  i2c: imx: Make sure to unregister adapter on remove() (2022-08-21 10:27:3=
+3 +0200)
+
+----------------------------------------------------------------
+This pull request includes a revert to fix a regression introduced this
+merge window and a fix for proper error handling in the remove path of
+the iMX driver.
+
+----------------------------------------------------------------
+Uwe Kleine-K=C3=B6nig (1):
+      i2c: imx: Make sure to unregister adapter on remove()
+
+Wolfram Sang (1):
+      Revert "i2c: scmi: Replace open coded device_get_match_data()"
+
+ drivers/i2c/busses/i2c-imx.c  | 20 +++++++++++---------
+ drivers/i2c/busses/i2c-scmi.c |  9 +++++++--
+ 2 files changed, 18 insertions(+), 11 deletions(-)
+
+--peF6uqEsAHXhFynL
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMB76IACgkQFA3kzBSg
-KbbtCQ//Trj2HLiA3bD5B5R+p6s6Y7AJGbyicJRd7Y1U3YZUfTLaBtBMV16SuwCz
-FkA87qFksQL29Z0rWn5Kkm1bICtvivvNoyLpS9SYMMIvyyYOFVZTU45JKkNsPCeS
-kmHIOh4T3f/+154gn1+tccJ2n+1roFleoN6EA/+laWju3kWqjy0Xh53POS1r5xlz
-XnthTP+vbGrPOcIm5KzfWlgydDm37HUglGuumDFLTjgk5fH61/liZEXUBKNo0rYM
-QBsNXzoH0VNqQG4ePgFdcrVqcRpTikzBkRSkd3o4VeX9t4369ar+bJ/LbtHcYUQR
-SwcEupzSqstcADy1mrq0ww3gysANojgolpAsibyRfANidOpOp1uPPJiAIaN0ki3m
-0j/LgfCgMLiqSPJilJx/8B3qJJJKr0njGyHfVs/tKrx0jamOiJzlO2YrE6ElNqFI
-w/sFzhudUrHUgyn6j/3u6BDoOP3q77WMBcQ2Qxk2Sm7Z3Hxe/qpokFtgY8+jlHPo
-pBOqslWqN2SDeYlpjkHGzGd56jGYK6xmPwxignxVDOTqcCo2ESYs/kEzAhfxVxrj
-nNsRVavSJF8oZg16LtwsR8lcXnYGLrRAQ6ws6mjTwzY4QB/Y+xIYmJL0wPPFbV59
-mW6KL1QxH+iaRVFO9DVQKC217Ep1STADT95zJN7cu1STGo7uwis=
-=n0dD
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMB8DsACgkQFA3kzBSg
+Kba4MhAAm48sdzNwnxjHa0TEBMbQQkrvFqPk8YYVVN0BRuxNU7hDPzuBD7qWLB5x
+brslm7BLRSOcKDw3QgMkq476lYKGVv0AcCAgE52Y48FM7xAJe8yWLFDZsLbnSq/9
+nIjx1TNQMULuK1WTFq967VZXlR5HkS0apeRr94vkG6PD8rHVOjvFrStM4Ao8c0S+
+Mvtf/rYu3+6iLGAHaCYTPBb6ad4grJGjXVaiqdPbXPYwMq6IP1CmGAsTNRkftqaT
+bToBpLipGjDUZwNVnmZkM/WPRF9QMpSGOxTMB0DR5Ky5TnxBPvIO4v9lzIUHApCe
+xQUA39HUAAKEvmDKLgDWOBrEqTIGObPh8kv06Wgyl9JQbszkfgRiiTbU1rjNmjJa
+bP1BVQgoNjad+5b/V01TSTVA2o9TPvOTOPpt7AweX/2NZAYG4BZUaJK9KvVfMN+N
+nW7YcVyttiPpWTbxahMRnoftNTcaFtPEiBr39HDzy6n2LmMjZTTqZpbZvBniBzCg
+SSSKcQZbqrNQFUkF1u6McaqqPD+nggVRMfON3YSFf+05HhBu3tVIt8KwWIV8lb9v
++WTSdxjkjHevb+uENyKJhczI4jEbHYF9/dk37oUCtw+11o0TpSLO3FAsQgGhWMu0
+GqX15OFRaP1kLVuuRbX/po20TxsZRRLJ17InlhFPcsfcb4/G8gw=
+=rTY2
 -----END PGP SIGNATURE-----
 
---kxHRf+/ex58x/pmg--
+--peF6uqEsAHXhFynL--
