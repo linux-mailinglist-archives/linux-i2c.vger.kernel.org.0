@@ -2,60 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C6E959BD97
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Aug 2022 12:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3888A59BDA7
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Aug 2022 12:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232536AbiHVKbn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 Aug 2022 06:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
+        id S233217AbiHVKgF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 Aug 2022 06:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbiHVKbm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Aug 2022 06:31:42 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22782F02F
-        for <linux-i2c@vger.kernel.org>; Mon, 22 Aug 2022 03:31:41 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id s206so9001138pgs.3
-        for <linux-i2c@vger.kernel.org>; Mon, 22 Aug 2022 03:31:41 -0700 (PDT)
+        with ESMTP id S230414AbiHVKgE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Aug 2022 06:36:04 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1C230F73
+        for <linux-i2c@vger.kernel.org>; Mon, 22 Aug 2022 03:36:01 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id x63-20020a17090a6c4500b001fabbf8debfso10780412pjj.4
+        for <linux-i2c@vger.kernel.org>; Mon, 22 Aug 2022 03:36:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=semihalf.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+        h=content-transfer-encoding:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc;
-        bh=KvLVHIy7zFmD92aZ72OpIyLKeAlx3Wy2AZD7ansT0hI=;
-        b=uRjb+mCzNE70MMOwkG1xm8XLINlTbDkVtFqyTMQP45dT6ADUDma5G/UjvHJapmVm3e
-         Yd0J94dERpRzHrFPIGIXL16T63choHaKDPsZpuMB9ruiATjU1SOMK+mUfsV2bEx9GPVc
-         PHbZhc6tXUD/L6m7nlBT8jfNRsqInjSDtRccPdG6QIq1gGAHlJgeYyT/ABdPVC1llSXh
-         ZJqBi/ieOvLak0ErKyhg+IX6a90rtonqtdOva+e3O53ser83AcWhhLNDbx+KJZgak0gV
-         OSHQFIOE8q9AxVHsadaoONziCY7jXocYXYe3gvAl90uOl7wMBmPbj7PrAUCxPXcfObWE
-         Ziig==
+        bh=nG5cok1QPdhwgOd/fGPOrpOpdg7Z3WhBB1mOKBv5Fpo=;
+        b=quXugk55Ne0wGuoSR333VhDnDjpLcGold1fym5jNCA/m8WAQoA2xpBORPVWTju6Jhl
+         i8UlH+ao2OtrGRQH97FtoVBurfanJl9J0twl2f/ovvD2iC7SlmWVIp3PFz32CXTWu43f
+         vaprIWzWj6d/ZRkwOIR6hADB2HFRH/G7aitNAmdC3Xcx8khePprrAwRbFIg2LycAy31Z
+         VK9+ZaDk6lCQm5oHTVwLjR3e4SFLOS1Tq/Ujz479LTWCgYNTASuLzOZVt1Uq4Y2v3+rX
+         MMQ2KrvIF/BnMwjXUyqLTKrxzSA/o99Z2uaBVbg9/IKOF5DKPB6e9LeKyO7JBknu1NvS
+         RRbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+        h=content-transfer-encoding:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=KvLVHIy7zFmD92aZ72OpIyLKeAlx3Wy2AZD7ansT0hI=;
-        b=xgcQArfFnf161GrO0que6MpaHxl3zqxjoUgC+zoqtHs2tz1o55GucvvdDdjH3CaN4w
-         RM6ciQ4SGIy8jid+9XKL3HaBXIb7HEJff2Ouda9JQWa/4Ywx5F8hFQW7Tgh7xz/1baOd
-         wuKjaUEJz0fTdDiBf5hE7aDI4hc87kgeuPUC+RCUGG+tnovegnq7lDkV5xp0B/bspdhg
-         nuu/gSSolToBLlRFQhoYurEll/Sq+dmlF4BPI4Yy0sFtx7pGGyBrNxk/khJd/56zhdZ9
-         Y9T8gHJR2I7CvNeuZ2vmqrMIqlDLeVC/671B+TkAFHtCGP+o1wegYIrf+NkLi48i6mFz
-         pUgg==
-X-Gm-Message-State: ACgBeo302gLqVdHLMTurEMdnvsYiOWzc5C/nXxQQ5xOk7xwN7tHkqdYW
-        F9DjGoycSYiWd+2kIs9aBqIwUZ3zrG69Y5x1U/E0Gg==
-X-Google-Smtp-Source: AA6agR5XofIXPXZ4LEElDr9w/G89kUmRcY6qMj6MV1zWn56gcU6Qdn13Sw7kEPRLbozr1pg3nNWrORVLo40ygh5EkAU=
-X-Received: by 2002:a63:2c6:0:b0:41d:9a04:c227 with SMTP id
- 189-20020a6302c6000000b0041d9a04c227mr16202348pgc.167.1661164301179; Mon, 22
- Aug 2022 03:31:41 -0700 (PDT)
+        bh=nG5cok1QPdhwgOd/fGPOrpOpdg7Z3WhBB1mOKBv5Fpo=;
+        b=To2RDUgruTELoZseXLIDE6YxYUJz4zmej/5uQ3ADNuGbJ+cqf1iobiUSHpzrsOiHZ1
+         bY7bVQ3bipBj91HM+4u3QAOJhSYPuJALZU/5BSBt+8BCGaXDpZIsVejXbhzvSOTQNTN/
+         QzLMDP2LlfSkwqHWgFMgeftq4xnDktnDJKxe7gQ4VIaCwqJ6VBjt0MGwdCvRD/6VKO9D
+         fDKmoyRbT1OSi70OtZA92LgZhPcPLgB5TCbLMRw802jblyMvrDTfbNVdWbTWzOBzgOiP
+         BSaKvgJspeu05vEh4n8JVpqA5zkTffbrnkWRQFnmWOrZNTZjIEJnRD+bGbb25Rb7taET
+         pxXw==
+X-Gm-Message-State: ACgBeo11wHGPVaRJiJIIj9Vtz1VU/1syHsfTYJSRbwE63SwjrrGEOwg7
+        z9f4VMGIh/geZXDAIcwVb46rRHlrsh+3brPGhm4dDIRC6C8=
+X-Google-Smtp-Source: AA6agR7BxTBuWzfu3tg263op/3bMmcPuFH4fqcAvnn05v7nq16Dw+WAx7QuiyNFiCFQaO8KLW+YvxUt+NWpsPB7N2j8=
+X-Received: by 2002:a17:90a:4e07:b0:1fb:1253:475b with SMTP id
+ n7-20020a17090a4e0700b001fb1253475bmr9006629pjh.0.1661164560580; Mon, 22 Aug
+ 2022 03:36:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220812071526.414285-1-jsd@semihalf.com> <a6e5b123-91da-b32d-be40-d88a82e4374e@linux.intel.com>
-In-Reply-To: <a6e5b123-91da-b32d-be40-d88a82e4374e@linux.intel.com>
+References: <20220812071526.414285-1-jsd@semihalf.com> <YwB/aWRxyemPay58@shikoro>
+In-Reply-To: <YwB/aWRxyemPay58@shikoro>
 From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Mon, 22 Aug 2022 12:31:30 +0200
-Message-ID: <CAOtMz3Nt15089MrvKAzgoviY1P4B=5v08c5-8qt3=f7RhPb8BA@mail.gmail.com>
+Date:   Mon, 22 Aug 2022 12:35:49 +0200
+Message-ID: <CAOtMz3Ptx-xoGUUtAbssJsggmKrD+rX3nv6KMo3LJOE3ip0RYw@mail.gmail.com>
 Subject: Re: [PATCH v2] i2c: designware: Introduce semaphore reservation timer
  to AMDPSP driver
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        rrangel@chromium.org, mw@semihalf.com, upstream@semihalf.com
+To:     Wolfram Sang <wsa@kernel.org>, Jan Dabros <jsd@semihalf.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, rrangel@chromium.org,
+        mw@semihalf.com, upstream@semihalf.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,10 +69,9 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-pon., 15 sie 2022 o 13:17 Jarkko Nikula
-<jarkko.nikula@linux.intel.com> napisa=C5=82(a):
+sob., 20 sie 2022 o 08:30 Wolfram Sang <wsa@kernel.org> napisa=C5=82(a):
 >
-> On 8/12/22 10:15, Jan Dabros wrote:
+> On Fri, Aug 12, 2022 at 09:15:26AM +0200, Jan Dabros wrote:
 > > In order to optimize performance, limit amount of back and forth
 > > transactions between x86 and PSP. This is done by introduction of
 > > semaphore reservation period - that is window in which x86 isn't
@@ -82,12 +82,18 @@ pon., 15 sie 2022 o 13:17 Jarkko Nikula
 > > deferred function.
 > >
 > > Signed-off-by: Jan Dabros <jsd@semihalf.com>
-> > ---
-> >   drivers/i2c/busses/i2c-designware-amdpsp.c | 68 +++++++++++++++++----=
--
-> >   1 file changed, 53 insertions(+), 15 deletions(-)
-> >
-> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+>
+> Fixed this checkpatch check:
+>
+> CHECK: Blank lines aren't necessary after an open brace '{'
+> #60: FILE: drivers/i2c/busses/i2c-designware-amdpsp.c:265:
+
+Are you using the default checkpatch.pl script available on the top of
+tree kernel baseline? For some reason my checkpatch.pl hasn't reported
+this, but (due to operational error) I used the version of script from
+5.10 stabilize branch..
+
+> and applied to for-next, thanks!
 
 Thanks!
 
