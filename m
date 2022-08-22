@@ -2,100 +2,133 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3910659BE10
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Aug 2022 13:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015D259BE72
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Aug 2022 13:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234237AbiHVLCp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 Aug 2022 07:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52058 "EHLO
+        id S234174AbiHVL2r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 Aug 2022 07:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234284AbiHVLCo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Aug 2022 07:02:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3439332071;
-        Mon, 22 Aug 2022 04:02:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1FFB60FF9;
-        Mon, 22 Aug 2022 11:02:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5A4FC433C1;
-        Mon, 22 Aug 2022 11:02:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661166163;
-        bh=m+ZMpxsNeNvW9siwBQLP54G38rMpvfF7BKiiR4KlvbY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qPcTJ25n6UY55oo5evrEd5jcIFPrxseEuuweRZxznTg1KY/zRYW+B1+u2W2Z+zxmR
-         nW6weTaGAqXI43lsLnPXxTmuiZN/tKd/dE4EL+ovoKSthU2nUznxnbsHTKdHCIWPJl
-         HlAivGwMDubsfClGlZZWJzoS8gi/xa/9CVqzMgozQeZ6LpXkrYMKnmSlhGD0mR3KXf
-         kHD/DMgcrPJXAMVKDIAKMrQJQY+0ccRED/YS3x/b5XJuPDIMdfVIEVumWhBguo7lpj
-         Og8fNgioPqZ59jI7Ik9Hp8uPBNL8Uf9vgjwhqPywR2fGHG/Pdo2ht1MFtU5QCevzrg
-         FDB09qIXOhFKg==
-Date:   Mon, 22 Aug 2022 13:02:40 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, rrangel@chromium.org,
-        mw@semihalf.com, upstream@semihalf.com
-Subject: Re: [PATCH v2] i2c: designware: Introduce semaphore reservation
- timer to AMDPSP driver
-Message-ID: <YwNiUILH+mou1Ao5@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, rrangel@chromium.org,
-        mw@semihalf.com, upstream@semihalf.com
-References: <20220812071526.414285-1-jsd@semihalf.com>
- <YwB/aWRxyemPay58@shikoro>
- <CAOtMz3Ptx-xoGUUtAbssJsggmKrD+rX3nv6KMo3LJOE3ip0RYw@mail.gmail.com>
+        with ESMTP id S234170AbiHVL2q (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Aug 2022 07:28:46 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDC113DD3;
+        Mon, 22 Aug 2022 04:28:44 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MB96T0mQVznTgw;
+        Mon, 22 Aug 2022 19:26:25 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 22 Aug 2022 19:28:42 +0800
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>, <xuwei5@huawei.com>
+Subject: Re: [PATCH next] i2c: i2c-hisi: Add support for initializing control
+ module via DT
+To:     Weilong Chen <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
+        <wsa@kernel.org>
+References: <20220822010031.97769-1-chenweilong@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <614d97d1-fee7-d8c8-761f-52e7d5d5c42b@huawei.com>
+Date:   Mon, 22 Aug 2022 19:28:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MfQrOj6WdXou/nPB"
-Content-Disposition: inline
-In-Reply-To: <CAOtMz3Ptx-xoGUUtAbssJsggmKrD+rX3nv6KMo3LJOE3ip0RYw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220822010031.97769-1-chenweilong@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Weilong,
 
---MfQrOj6WdXou/nPB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks for the patch.
 
+It'll be more straightforward for me to make the subject as
+"[PATCH] i2c: hisi: Add initial device tree support".
 
-> Are you using the default checkpatch.pl script available on the top of
-> tree kernel baseline?
+On 2022/8/22 9:00, Weilong Chen wrote:
+> The HiSilicon I2C controller can be used on embedded platform, which
+> boot from devicetree.
+> 
+> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+> ---
+>  drivers/i2c/busses/Kconfig    |  2 +-
+>  drivers/i2c/busses/i2c-hisi.c | 13 ++++++++++++-
+>  2 files changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 7284206b278b..6d0fdf48e97d 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -673,7 +673,7 @@ config I2C_HIGHLANDER
+>  
+>  config I2C_HISI
+>  	tristate "HiSilicon I2C controller"
+> -	depends on (ARM64 && ACPI) || COMPILE_TEST
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Say Y here if you want to have Hisilicon I2C controller support
+>  	  available on the Kunpeng Server.
+> diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
+> index 76c3d8f6fc3c..cba9a6830b23 100644
+> --- a/drivers/i2c/busses/i2c-hisi.c
+> +++ b/drivers/i2c/busses/i2c-hisi.c
+> @@ -16,6 +16,8 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/property.h>
+>  #include <linux/units.h>
+> +#include <linux/acpi.h>
+> +#include <linux/of.h>
+>  
 
-Well, the one from what I base my branches on. Currently, this is
-v6.0-rc1.
+The headers should be in alphabetical order.
 
+>  #define HISI_I2C_FRAME_CTRL		0x0000
+>  #define   HISI_I2C_FRAME_CTRL_SPEED_MODE	GENMASK(1, 0)
+> @@ -483,17 +485,26 @@ static int hisi_i2c_probe(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> +#ifdef CONFIG_ACPI
+>  static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
+>  	{ "HISI03D1", 0 },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
+> +#endif
+> +
+> +static const struct of_device_id hisi_i2c_dts_ids[] = {
+> +	{ .compatible = "hisilicon,hisi-i2c", },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
+>  
 
---MfQrOj6WdXou/nPB
-Content-Type: application/pgp-signature; name="signature.asc"
+This should be protected by CONFIG_OF as well, just like ACPI ids.
+hisi_i2c_of_ids should be better according to the convention.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Yicong
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMDYkwACgkQFA3kzBSg
-KbbkwQ/+KE+NGIVWHo4erKISEA/TuOhY5xkrPhmBCx7ZCpg1UxpyP3MZh9jHYmLO
-K0SfsFk8MQJIzr6d2V7PUnzTZmTTbPES/1W+p+mxg9OpYNjIFklXiC8jxNFzDv2d
-MXMaQbB3o8VN0Er/yShyAtLOrLun6ZTBq2V1mLV1djcShyXs7ZyiLP7vP+7wFRmv
-aA90p0NIhKI0+tJJT5GHpMqSAe6tbPSJh9MS3J3mMaQQrtYT32enf4P7kIVbnEZa
-l09Ffp+5cfL7MvGm3wGh8zBp8FWdFL6t8xI/F8p9aBfveRURMUiqIdJxc7OayDS6
-abCqTzvXYEXFUwkn5V+3kmuq2Gv19gRtUSgWAM2rITby5oOlyGzZ635CVhgDsenn
-SPTlNb0G1+H1wXmHObFDjVcjjFi0jqiRB2Ytxw2i4j99sgizCPju3XS54aLLL9we
-S9AJVRyZtAa89NXYMfMOXLCk/kvd1Z9HWFVW5yT359qmXeLyIFttvEznhDXxK59V
-nm4A6eTR1SJqf5XSJEI5U+cp7W7DPuTN7KpOrdWGjqq2IO2SlCv3FcXpA4DZrBgv
-0SfUsLr1/AsJcduguhwHu7wZ+wElsC/tZjNKJF+gEPNVfJ/wUMM5Vk/gkuLAzBEf
-2lsY8uMEelc9xu+4cSBodWvIMBP9Q3qNzdBBOYS4a05DII1BZD0=
-=aT4r
------END PGP SIGNATURE-----
-
---MfQrOj6WdXou/nPB--
+>  static struct platform_driver hisi_i2c_driver = {
+>  	.probe		= hisi_i2c_probe,
+>  	.driver		= {
+>  		.name	= "hisi-i2c",
+> -		.acpi_match_table = hisi_i2c_acpi_ids,
+> +		.acpi_match_table = ACPI_PTR(hisi_i2c_acpi_ids),
+> +		.of_match_table = of_match_ptr(hisi_i2c_dts_ids),
+>  	},
+>  };
+>  module_platform_driver(hisi_i2c_driver);
+> 
