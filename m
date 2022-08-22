@@ -2,58 +2,41 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA47C59B60D
-	for <lists+linux-i2c@lfdr.de>; Sun, 21 Aug 2022 20:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F92259B710
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Aug 2022 02:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbiHUSmm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 21 Aug 2022 14:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
+        id S232097AbiHVAjI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 21 Aug 2022 20:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbiHUSml (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 21 Aug 2022 14:42:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17839175BE;
-        Sun, 21 Aug 2022 11:42:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A203160DF3;
-        Sun, 21 Aug 2022 18:42:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 07481C433D6;
-        Sun, 21 Aug 2022 18:42:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661107360;
-        bh=+PQLsyDAXob1E15XmCv0ecOQSqFl3hmGib3vQGqXXOU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=jzCvomzFdG4K/4fw3DlkSaam866hrcQTb3CO+NB54w1dW6POBOR4Ct6FWcjbgb1SG
-         GXzAuELItXNEXyOdOtJyKTt+Q1a2qx8OFBHgfbiKQrxtp2YlwqAiQ/2rTEWH8nyqgw
-         H6K15EBctIHUOdewycVHGYFMco1uzucfStLLZFUf7+wubKhgYYc5V6S8uJHpCbHqcJ
-         psG3wfhygvGvw9vE9c2Igvzcqq/Lsrf4yZwU0vp6IxYEbbXqJwosXuTeHxHNA9ukKd
-         sXNpprigZ39ioMW+OV6rXE3mu79iV7dU5VEumlp7eBDiHCbMp1g8qdxu7PDZkLYw+w
-         +JmZDzeoDEBFQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E94D9C43142;
-        Sun, 21 Aug 2022 18:42:39 +0000 (UTC)
-Subject: Re: [PULL REQUEST] i2c-for-6.0-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YwHwOwkBOAeoRuci@shikoro>
-References: <YwHwOwkBOAeoRuci@shikoro>
-X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YwHwOwkBOAeoRuci@shikoro>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.0-rc2
-X-PR-Tracked-Commit-Id: d98bdd3a5b50446d8e010be5b04ce81c4eabf728
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e3f259d33c0ebae1b6e4922c7cdb50e864c81928
-Message-Id: <166110735994.1794.8763061236101520717.pr-tracker-bot@kernel.org>
-Date:   Sun, 21 Aug 2022 18:42:39 +0000
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        with ESMTP id S232088AbiHVAjH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 21 Aug 2022 20:39:07 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0054312A9A;
+        Sun, 21 Aug 2022 17:39:04 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M9tht1h7bznTgT;
+        Mon, 22 Aug 2022 08:36:46 +0800 (CST)
+Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
+ (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 22 Aug
+ 2022 08:39:02 +0800
+From:   Weilong Chen <chenweilong@huawei.com>
+To:     <yangyicong@hisilicon.com>, <wsa@kernel.org>,
+        <chenweilong@huawei.com>
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/2] i2c: i2c-hisi: Add support for initializing control module via DT
+Date:   Mon, 22 Aug 2022 08:41:57 +0800
+Message-ID: <20220822004157.90548-1-chenweilong@huawei.com>
+X-Mailer: git-send-email 2.31.GIT
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,15 +45,69 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pull request you sent on Sun, 21 Aug 2022 10:43:39 +0200:
+The HiSilicon I2C controller can be used on embedded platform, which
+boot from devicetree.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.0-rc2
+Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+---
+ drivers/i2c/busses/Kconfig    |  2 +-
+ drivers/i2c/busses/i2c-hisi.c | 13 ++++++++++++-
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e3f259d33c0ebae1b6e4922c7cdb50e864c81928
-
-Thank you!
-
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 7284206b278b..6d0fdf48e97d 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -673,7 +673,7 @@ config I2C_HIGHLANDER
+ 
+ config I2C_HISI
+ 	tristate "HiSilicon I2C controller"
+-	depends on (ARM64 && ACPI) || COMPILE_TEST
++	depends on ARM64 || COMPILE_TEST
+ 	help
+ 	  Say Y here if you want to have Hisilicon I2C controller support
+ 	  available on the Kunpeng Server.
+diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
+index 76c3d8f6fc3c..cba9a6830b23 100644
+--- a/drivers/i2c/busses/i2c-hisi.c
++++ b/drivers/i2c/busses/i2c-hisi.c
+@@ -16,6 +16,8 @@
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+ #include <linux/units.h>
++#include <linux/acpi.h>
++#include <linux/of.h>
+ 
+ #define HISI_I2C_FRAME_CTRL		0x0000
+ #define   HISI_I2C_FRAME_CTRL_SPEED_MODE	GENMASK(1, 0)
+@@ -483,17 +485,26 @@ static int hisi_i2c_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_ACPI
+ static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
+ 	{ "HISI03D1", 0 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
++#endif
++
++static const struct of_device_id hisi_i2c_dts_ids[] = {
++	{ .compatible = "hisilicon,hisi-i2c", },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
+ 
+ static struct platform_driver hisi_i2c_driver = {
+ 	.probe		= hisi_i2c_probe,
+ 	.driver		= {
+ 		.name	= "hisi-i2c",
+-		.acpi_match_table = hisi_i2c_acpi_ids,
++		.acpi_match_table = ACPI_PTR(hisi_i2c_acpi_ids),
++		.of_match_table = of_match_ptr(hisi_i2c_dts_ids),
+ 	},
+ };
+ module_platform_driver(hisi_i2c_driver);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.31.GIT
+
