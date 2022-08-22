@@ -2,147 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B79E759BBE9
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Aug 2022 10:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E49159BBEB
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Aug 2022 10:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233538AbiHVIqK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 Aug 2022 04:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
+        id S233393AbiHVIqj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 Aug 2022 04:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiHVIqI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Aug 2022 04:46:08 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04AE2A25A;
-        Mon, 22 Aug 2022 01:46:07 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27M8K0DV002427;
-        Mon, 22 Aug 2022 08:45:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : in-reply-to : mime-version;
- s=corp-2022-7-12; bh=bXtP+jhWSI9YtQAoJBzNA8U3hurwyUDO2JnRtT/cKg4=;
- b=cotfquOtZVOxnC1l1aj/Kza+SEP+D6oTrAN4YuYdD/E8yDThwV5tHJfrHIVuvvLXIe2i
- zX53yeA5N7cFtjcfXs4T8LzFtD79DRY5vg+QDNLxAzLtPLHXei5KhgnkV5nIZ8pSwngQ
- oXaCS6OWRL/dh1J0PvHj0dBJPy2hgpxaWbfVqOWmokfWZsqwNalFzPgJHCU9ZGjJm1VL
- ilRfyt7bWSSKzqHW7vFqcojw6DyF1zNWkgcS5DRbbgfncP5cAwYdUqDjGIeK+kzjbhrk
- rTsGTPJKOjQjBnRoWEoru8uvyPam85tHIlNGx6i/R5utoXgEtJ7pg6zvwRjQUOAROF3l 3A== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j466h02kh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Aug 2022 08:45:03 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27M8Z7AW038204;
-        Mon, 22 Aug 2022 08:45:02 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2046.outbound.protection.outlook.com [104.47.57.46])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j3mkfs9cx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Aug 2022 08:45:01 +0000
+        with ESMTP id S229565AbiHVIqg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Aug 2022 04:46:36 -0400
+Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50074.outbound.protection.outlook.com [40.107.5.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1156A2D1C6;
+        Mon, 22 Aug 2022 01:46:35 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R5jfvuxjg6SFv6Z8LvcH0sJ5bBlM4VKrbHroCwPJEPPIYb44WSNPQByKnJlo/DD7bG5jDI9cks1fxXjFAKV6O+5RgmTqP+83z7ON9xlwxvZl4deGsveA4tPTBecXIsv/aMAYbDc3WANdkOg9pClBctC6KtigQizndgDHcg789I5P7xi5gZq65BQxZvjvRUsUL7TRv63xGRsXR5bZgCSXN4w+annwpI4Cjr5WCFQocS/Fwa4JA37McfMRZBkAovHULp60lLP9QsgwEfDpFxiCmN78gCuFitqSIU0lPT9fSTCieXXScsfIt+NqMFLZyf+GHF9w7M87/Tr5X2bZvwcAkA==
+ b=meHW75pgDDp5Ed0NgqvagnHuyObdcsR43PX+8dYl6E823n7vWgw8PVI/q1mGDjaA+Z5hTfz874EG6QN73eyEFXDBB156lkMqATf37K73oozmPgVqAFJJSnZxFDnDc/ODnN6R4vIEStd1gF0FKC/G9IQhY5vI0SupQDLpI7SFX3s7Py8RnYGUcbeFyoWrQw9UnD53detEO1KqcxKhItRON6cY2ZJx/AX3Kz+3oK8k3YwZchag8gRxDz4oPPSsA6pYtI88uyVxKzK32cCphV/lgZhH/fxWe/EPnpEdRdeesQQlsaLuAgF+NFli3tM8a1Vw8gzZlTGNCbxPGs9Xns7j5A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bXtP+jhWSI9YtQAoJBzNA8U3hurwyUDO2JnRtT/cKg4=;
- b=QPwuochC4RqzZWJFLJn2w6TmBQVTeySnN90ygXGlhRM7+gVyuEzdfXUXLuNVCj8lObFNOQgs7RIXtdWN9o9EWyiQHzC5e6yZkffcebez7VmBByvny9kugaKAaZROCN08/SluB1UycdgR8q9gTvMVo+55c4u4Wkpvwvg4L9sf6jL9sRVP2wOyPPnZEyqi1MP5Mp5LdOjHP+wJUeC5L01oSW63tdyYsnq57eNA/iUQZPcDa++ma4o73iPLZukj13DmbmXiFMVfPF5zReZIHnkYpsXgFKgKSnXfGCZdfIOEE8XrdvA3EiMC20tJQcH8TgketpSXKDeyi8ur/D+YZJkxog==
+ bh=ptK3mEjOqJ00oM8iZrBShJOi7SVjZAlRqIvlnaa2AOY=;
+ b=gsc9Yfy3XNWPoCbadrhnABEYXUEb8b3ij4/nUnK5Tr3FNKFXSG46vdu2OXtybXPgadUl52IWYU760k1cJpcSg+moeVYcuMeDRe4TuvJCcb3VCx2zyIoJGszfu9BeB7QIIxBfPJUWV7HNbY6TbTEU8zYXp4jaODmROFVg6XTzx+3EIRkgXnJj7gO16PXN57gqYj6xo/7VmgohfzYszhRRAf7kROhqMOw861jt9KOOt4khaQvR43m8lvySUUm5YyFXk7Jkyrj50V0QXbHQiGdw+OyawIsrrW2HwSf9pQv24GShEx2F5MeyCRmYe/Tpx0HIQFanrhyaHe66hTdkiu4YVw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bXtP+jhWSI9YtQAoJBzNA8U3hurwyUDO2JnRtT/cKg4=;
- b=Mgzo53ZKxpcvmlX056OOLL+/RgzbK84DRtonAgtgjA3a4Gkak24J1ZvqodEcwW2ED9I8kw5KgYm/EJmY9EZV1IE/UsQOlUXZq/ocibBftQQ6M4LnLcdNy3x+JKOqN4pSrfqfTHbTm3TYbI/LrjjcTuLJcv5MEFBF8DvhIOON5Kc=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by BN7PR10MB2561.namprd10.prod.outlook.com
- (2603:10b6:406:c9::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.19; Mon, 22 Aug
- 2022 08:44:54 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::209e:de4d:68ea:c026]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::209e:de4d:68ea:c026%3]) with mapi id 15.20.5546.022; Mon, 22 Aug 2022
- 08:44:54 +0000
-Date:   Mon, 22 Aug 2022 11:44:30 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     kbuild@lists.01.org, Arminder Singh <arminders208@outlook.com>,
-        linux-kernel@vger.kernel.org
-Cc:     lkp@intel.com, kbuild-all@lists.01.org,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Hector Martin <marcan@marcan.st>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        Arminder Singh <arminders208@outlook.com>
-Subject: Re: [PATCH] i2c: pasemi: Add IRQ support for Apple Silicon
-Message-ID: <202208220231.f88sizqa-lkp@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MN2PR01MB535838492432C910F2381F929F6F9@MN2PR01MB5358.prod.exchangelabs.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0072.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4f::23)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+ bh=ptK3mEjOqJ00oM8iZrBShJOi7SVjZAlRqIvlnaa2AOY=;
+ b=VWksD7X5gfA53Ift+ehcnj0PeU5/snDsFMzyqlOgoTHT/kKmv1Yh/I7gpopwF5nY0Upp/mcIl/NJ124VZQwaDzUaNTU5N3sEQrE+vBut7YKbdMSNiVLlU+rDLFFh151/bMV6FL7maFgcxpWWtDvmPjFrvVOnNSRx6vdjbFSdQ+8=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DB7PR04MB4171.eurprd04.prod.outlook.com (2603:10a6:5:26::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.22; Mon, 22 Aug
+ 2022 08:46:32 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::3c6c:b7e6:a93d:d442]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::3c6c:b7e6:a93d:d442%6]) with mapi id 15.20.5546.021; Mon, 22 Aug 2022
+ 08:46:31 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "wsa@kernel.org" <wsa@kernel.org>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Clark Wang <xiaoning.wang@nxp.com>
+Subject: RE: [PATCH V2 0/7] i2c-imx-lpi2c: add IPG clock
+Thread-Topic: [PATCH V2 0/7] i2c-imx-lpi2c: add IPG clock
+Thread-Index: AQHYsW876SxYc4rxXUGbKvyYc8nHU626pHbA
+Date:   Mon, 22 Aug 2022 08:46:31 +0000
+Message-ID: <DU0PR04MB9417E7BD5F1FB7A8E00BAA3F88719@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20220816125526.2978895-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20220816125526.2978895-1-peng.fan@oss.nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: df147d29-8199-4150-122d-08da841acfd7
+x-ms-traffictypediagnostic: DB7PR04MB4171:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: UTyWrX+oGzkJp8sETypcdGQ2ECRJW4YUWXZc7VONg9EX6mQmlKd2arfVyMpnf7TKWkT+aTi3nJtIOaS7BeqFC1QEVWmqi0q1zM+mS7KQJm7fcq6AywEwpobhir6gPE/+NhtOhc5S/GENONnw2a5ItXJpzDYCIkIwFFbvPdz4YxJP4/Zmnxfj3fuN7mvcRxPn4J9UiKRjm3WMr/EjRTpUzfkuOMq3gKVIiaWObhd+6ulj6+hdgGo4jQco6xnjr30vQ5iynRbeaOrha8gMg1zyXjXuGrT7cPlOVB3Q7W1u1Zj1BU4+m5nDtVuIkCGDf8Rntw9pwplfbkMyQR2t96nD2QbH9eyYI6mHIQEgFWeoqKPnu52Jt5mWWLz/do0j3Ok/FHnCPfKT+Fy3ufGsVKlRtBRct+pLYcU3/IZZNuTeANrdR/hJsxfQco97bEUgfkiDMWXv0NTYg6ukEBemYHjUznpLQWxdIDo5v0tJlJcBTKGz6NwDYWCiS1oMGpRJpVnWyvqF3ucIvqobi291eHaDNeNA576pSjIpW8kSkOD82UP34abmhm7R7INeWiv4ywGZGGNWyFPNChsm+ilhksusnuFbcVOaOecbuv1ZVqF/oQne3Wri44n4sZJNWt3GXwqYWSy2k9tVH5RfDAFEk+dyIbV3Jb/VXrh4bOLZw0Nrx/NkGz+PmqwXxDjo3C6ZKIJc3IyoGZH9FgnVZD04l0w3aKDMzpn6ej7zL/iJXBO2aJkQxWuEgQ6bRrUqu+8UcZ7MOPGVpJEmvp7YOuX2S8gItA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(39860400002)(366004)(396003)(136003)(66476007)(76116006)(8676002)(64756008)(4326008)(66556008)(66446008)(66946007)(86362001)(110136005)(54906003)(33656002)(122000001)(38100700002)(38070700005)(83380400001)(186003)(8936002)(26005)(9686003)(7696005)(6506007)(71200400001)(41300700001)(478600001)(7416002)(316002)(55016003)(2906002)(52536014)(44832011)(5660300002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?eSzAauO7FAqf5pJk8O9yTh4lerqZcR1O5vYL77GEy1cVwOK8Qy1BAv4k2W+l?=
+ =?us-ascii?Q?Q6zMh+lQ6HpvmYT4MQpBu8u4JgjTomAod5cqEgqd2biy21t+jdcLPSKG0EoK?=
+ =?us-ascii?Q?un6WNoXn7GCVkIU4ju2esiBXs4grzUBddjlKPYAOWOuuN1k/6osrkv16SasR?=
+ =?us-ascii?Q?wU1pxA7cNxnoG99R0KjS6gztfGqSJzOusFHR0Sd13EuYHC/amWJ4tHM0HJuH?=
+ =?us-ascii?Q?ItEfzS3tzNmdTRi4EaytP3C1T++JYMHk/KyceCswdJYA9b7bzKQ8de97C+vt?=
+ =?us-ascii?Q?DZd6L1XNkoDesZNjNUz5NMaWZ9MujyMsdkWa4/P3Z7xN0tkgBx/0emZB7JzG?=
+ =?us-ascii?Q?8PoKN52SvesgYfKRt/B5xiH8lfOP7xxC3iL6CBmcohnsuHfa99yELHSDIoZC?=
+ =?us-ascii?Q?4le7Z3YV9avCDDMxiQ9Cj2cf8B+ccCLOu8k8JwN+0E8G1wCL2i/BWlE0XT8F?=
+ =?us-ascii?Q?O7xnYuf93Lxq+9nwbEiaSbJEKnYBnKk21V32kyKJLdMMzmEEAe8D45Tw+vCc?=
+ =?us-ascii?Q?re1KnN5EfRnHUey1cwYYd62zOhxU6DwHcagloEicTvWtCmwt2wfkDtLMTrGK?=
+ =?us-ascii?Q?3sm0nKq6Cuh/FlFjSjrHWoAMlglOJ3r1gHvIfkTwmWHuKZ5TZQ1wohsVjgaz?=
+ =?us-ascii?Q?Y09RxgxVCcZxL5c31My9OkswTj1kAiTU7U4qaHObwDwwelK0c4W5Mvp42dpC?=
+ =?us-ascii?Q?HLNDzZNlQ0WxjZ0rBZvnF6hTrz41JSiRma3wp9Tox8l+i3Xe0AqZnWMRCWQy?=
+ =?us-ascii?Q?1B1YcSwP/GOWz3rMqORXshOdgTGw/CFLZMrTAfiTJ8qeRHjmnxsWEoEkaOIV?=
+ =?us-ascii?Q?80h3oZ7OiyIV+TfYuS7Ta1UjSVfZ6JAu+LUqiHxFGkvrG3orKCbb6JfOzc1O?=
+ =?us-ascii?Q?HwjwnJTsk2JD/IPLwSmkUYBsGzrsNcaZRpQ1oMXxI29jArr8/onymZdYTWoa?=
+ =?us-ascii?Q?Vj4aK2mvl3zJ0EsZdftKz+FXMiUgc1AeMFUyY4FhDQ6fH2zOTPi5VubSuasZ?=
+ =?us-ascii?Q?k260aipntdXZC63G+IAahE5U4FkW2DPGI1fUWtLxhXxHb26+t2U113P5lv5O?=
+ =?us-ascii?Q?+zPb1zhSq90HF6HwDlGi/PRq/aTb7llx2QDhI/PVwmXJzhOGAaLVoBCVsWf+?=
+ =?us-ascii?Q?BJxiIuHpTn+P4NqBiugLJCLyPWrL/vypjexjaOUgFU7y2AVVRUwQI83LNyIm?=
+ =?us-ascii?Q?F6xDmL3J9yMzqTqixlEmLJZ6LdKlD407KOlS1ICTaLdgYhpSba0jkmcQWznh?=
+ =?us-ascii?Q?U7JAGM748nGcSSW40d6WMxNv/Ad7xz5T1ggKEAiJcUKgYjnnNy8MviDEYhKX?=
+ =?us-ascii?Q?0fO1M6doXZbuc5YA1nt84x0cLKxHtgvkHWpISJhqXH0UKniv3hX5apqG8kmE?=
+ =?us-ascii?Q?ViQiKG9HM+TG2wtBjIpG15d7x0mzDsCSzEdXrhHn6jF+K3e2NNrs3qLRO2mQ?=
+ =?us-ascii?Q?MFwi7M4qE2a4DfwwVgll9EsYnZaXSX+ehykaTP9H3RZVX+S/IUS69SWnSuiY?=
+ =?us-ascii?Q?tyuGXsSfQXlVa6IfckiLzxWdoYQ5NLeI1eO3b8Xkg7OX8tOqdEr7VQYjPKH0?=
+ =?us-ascii?Q?bdRv0I35HMpL07nTOI++AQcK3B9CrFD8QcfGbrG6?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0010a8e1-c469-4fd1-eaef-08da841a95a5
-X-MS-TrafficTypeDiagnostic: BN7PR10MB2561:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iiURD78QU1subsP24s7NcyY3JaRsuqmagOI+Q9ZwTVRjgnxMoD5ua/9SBIaDFhR6TUAMhNcZmPu51UlcyzZ8oY+SfAWURTdxDbQ6aSndLIRXd5/UgV9Nr2WCIsdKgespnGzBj1PvoeOHglDlxKCSBquXdvQj0OdkGS/KBZR17RVojlQrckzwYhs74TQW76ilIKcamoHnT86XwjKqbOIn2AKtUT7EzxwRq4m+xmiSZfKigwZDoZAQtBC0WDdqvfOj5J7cG58KSu+2cuoP+NP5JKHOFmQxGafR5rvqj3+WadY4i4SUZF75t35uMm7/4EQoWzG2LGRiCq5uLOZkpUr6qECQe0/wvJCbgdgS5Ab8c5f9NhZ4MLxlivKUO6ZP2beheo2P/cZ/nlV8QavETqyWw15wiepMRLz5hdqCdEucSo8G05u0+celEFgU632ASqCNbSun7kKuxXXD963EEKrxsZJ3dnQIzb5B3moF6kGSvzpsp209Ly083f9EZjAZAEC6gMbTctJDEcl93Wnksqb/NyOONjufMAyDnA7asacn+uYR5q5xh5b7B0cemkQYVrkvBY7kltHFCR5EqjkamFQhCR644MFb/Rcxisr0VMfd68pBsj8Km6AOQ2emYUgeAWjLpZpferv0ecN7pmMYhBQm90cYACvCD7af++uwW1ieJt9tTNxIO/JOeV7pe8CfXp/YVDrNlj/QnW5grUwAetiNowoSdBOfRl9o6dnHPwStudAGT2MTZVS6Am/Z9SX2W7CJ0qN1X8Zc4vSdzt0ag7C1zW0m/YDLn3VbWiDcLirMtHQnNYokjvqPyMW4lqmGh0WQmWTBPT82Mm1eJph43EC3E3PbSwfbbNX54PCs+AEGNEOE9Kpk+Dh48ic5I6xHS+04
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(366004)(376002)(39860400002)(346002)(47660400002)(6666004)(52116002)(6506007)(26005)(6512007)(9686003)(478600001)(966005)(6486002)(41300700001)(83380400001)(2906002)(186003)(1076003)(4326008)(7416002)(8676002)(66946007)(66476007)(66556008)(5660300002)(8936002)(44832011)(316002)(54906003)(36756003)(38100700002)(38350700002)(86362001)(46800400005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xPFz5KsjcasP9sQUZVT7bRmNJTGj/xq9+GceR9KxlL/UZBQUVkW7NUIWL7G7?=
- =?us-ascii?Q?L+tyM5RNsWzVqSbH7R58xJomo7FGDPK+WJL7bpuHqCrk9WXSecciuIl7G/rv?=
- =?us-ascii?Q?XPhA6BXQuXt66JhkrdoHcr6bABxyY6LcYTi4tk8J7YJyxkANGIrrSpZQ1sKO?=
- =?us-ascii?Q?CJO7uhYD4SeosswAX0o2aROqEH7MBzeEbrbK8GdLc487PTlnvYKfsZbnnKLS?=
- =?us-ascii?Q?mLrGL8BnTdSdi+F5JKRdIuvmxue7iLTyuoAUHT76rftkyAgCNxVSY7HRuBxh?=
- =?us-ascii?Q?G+CBMd/6qviB7p6fclyAaAGaBOFZ6HLjI2aTpSDiutoi/O0AbDwAv8FtNy0O?=
- =?us-ascii?Q?7MZ46gujLoAvGFaVudBLC412U56qkgHGjMF/zxKgrFhev3vN556+T+r6UqDs?=
- =?us-ascii?Q?Nd+hrTdJOVbLA+Gk7mZTrfSwmjK6OudV3BHr+ueqkly7g97rFYOmnShR83ur?=
- =?us-ascii?Q?Q6W6idF1HTF88YvGgIp+zBd9gGzrQO7SkOplIWIZlF6aweGpfQqmzCO7aogP?=
- =?us-ascii?Q?JI5kFYKMwy6kbDxePTD2U9suuWPtrnfwrLn55VZwNhgJ5J9jDU4m2u+3wXGh?=
- =?us-ascii?Q?zyu9BGUKIpMw4Kn8/NiWXJkadg3/Lxu3uZGLcl9+S/M3qDrBfZtGKNtwg5JK?=
- =?us-ascii?Q?ktqYLMCTJaYVBMVTBVTZBvmMvWVMMbeiaBvEjdmTxC0n5t9fBkzV9Nsui/Ak?=
- =?us-ascii?Q?zrz4m2Rgr1Vxqpmy4/2sFi3EOKrN/CtHMpzWWuY/P2S06X5WNiu7vavGn8PC?=
- =?us-ascii?Q?B/Ma+XFzQxou0fdPsaip6IsB+T3tFe4jaZ5BPUrNzjalW6qeGvY+1Bxrwrra?=
- =?us-ascii?Q?PJOm/xEVXEBO9/Im4mH1A9JuWW4Iz7SMMGj+hOyCxch5l5zqb9HZEGBoFLtK?=
- =?us-ascii?Q?OHZW0OwNzrFgRmcRG2KOpjRaiq2IIp6swC46rZrZNpcNEKJ/PPT7Wv8oIsgC?=
- =?us-ascii?Q?LCuM0+SZlH4cB6WknSeEwu2rL+bo43ACdjHmbT9aCsnXXfKWmvnNvi03HXWw?=
- =?us-ascii?Q?+v655VJJyktKyaGNJIWYJIaKz402U9nrMuRzF2Stcf9zueV/Z2Pw+cLz8qvG?=
- =?us-ascii?Q?X0GXll3gooVeL/4JHtTe7UYzKb0dS5sP+iwrXuNxeKlW6uEFceThD169qx89?=
- =?us-ascii?Q?8c8C/y9G43nhrIgZuqg6x5q/iRcoUbVm+OucjuPRu0VAVz/idswVhCxLB6fr?=
- =?us-ascii?Q?UOFlRTw4ag7XXh6oRRooX/rF0TF5pPYX6ZnIzo5VLE6ExBQwoqFZfZ/ryLul?=
- =?us-ascii?Q?ct40bc516/zLvvGClAcHLLlq+Hj8RxQFb4gWOTZW0SNth+OIRDUQG+FLit31?=
- =?us-ascii?Q?o21cQNYnO9DuchZ4C7zmBg6KJNvazROqNVVxRDvTVXNoSmDuOUSLvQqJad25?=
- =?us-ascii?Q?dhFsraLePaKcM6pg7xkP8i5oEIw5dLqyGo2Wsbq8FL1kd27rnGqA8k+RWrJe?=
- =?us-ascii?Q?xApTh6lefJuDMoRQ7mjZrqIUW4PTIc40D48C5JqcySz30m8r2akJRhtbUBQi?=
- =?us-ascii?Q?yvfwFkv6P3lOJskw+7932SN5eDLjAnY1/AvR/3GVfT51Dphhlk8CAftswPot?=
- =?us-ascii?Q?G4D1eCehp+6RYCq/YKjj6Udcs1eycsC5xFJpNNKC9YJQzbooTkcGRm7H+ChM?=
- =?us-ascii?Q?ZA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0010a8e1-c469-4fd1-eaef-08da841a95a5
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 08:44:54.4634
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: df147d29-8199-4150-122d-08da841acfd7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Aug 2022 08:46:31.6560
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Gmc6v4bhU6YCUKriKuCbh4v3B8qbNi4HHsiknHZaFu23KVauWpBad/cnhNBHirrewMc7+SYxzWsjuNl/NubW1j2CyPVmBRtQByYy2ujFuAU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR10MB2561
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-22_04,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
- phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208220037
-X-Proofpoint-ORIG-GUID: yWtAwSOKStO3TcI33We8aUeZakfhGg-6
-X-Proofpoint-GUID: yWtAwSOKStO3TcI33We8aUeZakfhGg-6
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FAKE_REPLY_C,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 8YA09tBAlprHfHBvaamhFO4Cf570/pf2UD3plEESWscJERPjVOOmlerm0ut1IqTY1qOF4/B20CRHALeE+xHquw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4171
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -150,63 +128,53 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Arminder,
+> Subject: [PATCH V2 0/7] i2c-imx-lpi2c: add IPG clock
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
++ Wolfram Sang I2C maintainer.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Arminder-Singh/i2c-pasemi-Add-IRQ-support-for-Apple-Silicon/20220821-034703
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-config: parisc-randconfig-m031-20220821 (https://download.01.org/0day-ci/archive/20220822/202208220231.f88sizqa-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 12.1.0
+Krzysztof,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Do you have time to give a look whether this patchset is ok for you?
+Please forgive if this is too early ping. Some i.MX93 dts update pending
 
-smatch warnings:
-drivers/i2c/busses/i2c-pasemi-core.c:92 pasemi_smb_waitready() error: uninitialized symbol 'status'.
+Thanks,
+Peng.
 
-vim +/status +92 drivers/i2c/busses/i2c-pasemi-core.c
-
-8032214346c0c8 drivers/i2c/busses/i2c-pasemi.c      Julia Lawall   2010-09-05   80  static int pasemi_smb_waitready(struct pasemi_smbus *smbus)
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   81  {
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   82  	int timeout = 10;
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   83  	unsigned int status;
-98584b2b51d808 drivers/i2c/busses/i2c-pasemi-core.c Arminder Singh 2022-08-20   84  	unsigned int bitmask = SMSTA_XEN | SMSTA_MTN;
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   85  
-98584b2b51d808 drivers/i2c/busses/i2c-pasemi-core.c Arminder Singh 2022-08-20   86  	if (smbus->use_irq) {
-98584b2b51d808 drivers/i2c/busses/i2c-pasemi-core.c Arminder Singh 2022-08-20   87  		reinit_completion(&smbus->irq_completion);
-98584b2b51d808 drivers/i2c/busses/i2c-pasemi-core.c Arminder Singh 2022-08-20   88  		reg_write(smbus, REG_IMASK, bitmask);
-98584b2b51d808 drivers/i2c/busses/i2c-pasemi-core.c Arminder Singh 2022-08-20   89  		wait_for_completion_timeout(&smbus->irq_completion, msecs_to_jiffies(10));
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   90  		status = reg_read(smbus, REG_SMSTA);
-98584b2b51d808 drivers/i2c/busses/i2c-pasemi-core.c Arminder Singh 2022-08-20   91  	} else {
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  @92  		while (!(status & SMSTA_XEN) && timeout--) {
-
-"status" not intialized.
-
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   93  			msleep(1);
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   94  			status = reg_read(smbus, REG_SMSTA);
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   95  		}
-98584b2b51d808 drivers/i2c/busses/i2c-pasemi-core.c Arminder Singh 2022-08-20   96  	}
-98584b2b51d808 drivers/i2c/busses/i2c-pasemi-core.c Arminder Singh 2022-08-20   97  
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   98  
-be8a1f7cd4501c drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-11-15   99  	/* Got NACK? */
-be8a1f7cd4501c drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-11-15  100  	if (status & SMSTA_MTN)
-be8a1f7cd4501c drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-11-15  101  		return -ENXIO;
-be8a1f7cd4501c drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-11-15  102  
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  103  	if (timeout < 0) {
-c06f50ed36cc0a drivers/i2c/busses/i2c-pasemi.c      Sven Peter     2021-10-08  104  		dev_warn(smbus->dev, "Timeout, status 0x%08x\n", status);
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  105  		reg_write(smbus, REG_SMSTA, status);
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  106  		return -ETIME;
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  107  	}
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  108  
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  109  	/* Clear XEN */
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  110  	reg_write(smbus, REG_SMSTA, SMSTA_XEN);
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  111  
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  112  	return 0;
-beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  113  }
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>=20
+> From: Peng Fan <peng.fan@nxp.com>
+>=20
+> V2:
+>  use clk bulk API in driver to support backward compatibility.
+>  Include a new patch, patch 1.
+>=20
+> The i.MX LPI2C needs PER and IPG clock, not just PER or IPG clock.
+> The current driver/dts/bindings use one CLK. Although it works with with
+> upstream kernel, but it not match the hardware design. If IPG clock is
+> disabled, the LPI2C will not work.
+>=20
+> There are changes made to ARM32 i.MX7ULP dts, ARM64 i.MX8 dts, dt-
+> bindings, and the lpi2c driver.
+>=20
+> The driver is updated to use bulk clk API to avoid break backward
+> compatibility. But it is hard to avoid dtbs_check pass, because the dts a=
+nd
+> binding update are in separate patches.
+>=20
+> Peng Fan (7):
+>   ARM: dts: imx7ulp: update the LPI2C clock-names
+>   dt-bindings: i2c: i2c-imx-lpi2c: add ipg clk
+>   dt-bindings: i2c: i2c-imx-lpi2c: add dmas property
+>   dt-bindings: i2c: i2c-imx-lpi2c: add i.MX93
+>   arm64: dts: imx8-ss-dma: add IPG clock for i2c
+>   ARM: dts: imx7ulp: Add IPG clock for lpi2c
+>   i2c: imx-lpi2c: use bulk clk API
+>=20
+>  .../bindings/i2c/i2c-imx-lpi2c.yaml           | 20 +++++++++++++---
+>  arch/arm/boot/dts/imx7ulp.dtsi                | 10 ++++----
+>  .../arm64/boot/dts/freescale/imx8-ss-dma.dtsi | 20 +++++++++-------
+>  drivers/i2c/busses/i2c-imx-lpi2c.c            | 24 +++++++++----------
+>  4 files changed, 47 insertions(+), 27 deletions(-)
+>=20
+> --
+> 2.37.1
 
