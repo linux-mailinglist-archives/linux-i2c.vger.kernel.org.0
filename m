@@ -2,204 +2,178 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2156E59D865
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Aug 2022 12:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6AD59DD9A
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Aug 2022 14:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241973AbiHWJlv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Aug 2022 05:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
+        id S242042AbiHWLRt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Aug 2022 07:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351651AbiHWJj6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Aug 2022 05:39:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC6C42AE7;
-        Tue, 23 Aug 2022 01:41:23 -0700 (PDT)
-Received: from [10.3.2.13] (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9A9CB660035D;
-        Tue, 23 Aug 2022 09:40:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661244002;
-        bh=ZlOOvApFGOMbPEfDLhpmrwlUuzkzliB2kc8cG9m2hAg=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=GGpm6cPToGVjt2TGPzDVJggwpmq33yQmIW/tSS7VUXeTRxiX7iAGnXdAP7p8t7v2k
-         AU1lXN3llCeQoREhm59iyYyL25HiRUsz1EUv3K/0/1DkHpgIrG+qvOZkIYpLv7u16F
-         NcbfYIiuU/Y+oGUiEGPLqoM5bgT1IaHbczVevsOvMyh1in620AwNkB2FXKOHaI7T2W
-         VY073ruGl62M7bSH/m1bgLwpxeFDX8y1/CFpO+zczh0adSWeGSMVaGlmBu4hCabqrw
-         oBzARqDj9ActJfLP1p0A+K7+A6avRKpOytE6V6k9/3WA8R4nhJ5C6g/0IPEYGkXDPh
-         3J8NJFPvjGj1w==
-Message-ID: <a7ba27c4-992b-28d1-f6c2-3937b4f275ce@collabora.com>
-Date:   Tue, 23 Aug 2022 11:39:56 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+        with ESMTP id S1357792AbiHWLQk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Aug 2022 07:16:40 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70113.outbound.protection.outlook.com [40.107.7.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B7DBD1DF;
+        Tue, 23 Aug 2022 02:20:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ROCPDGpmkeXDTW9U5NE8aPMBz1vVTx1NR+A7+IYI4bd36l1ZZ+OHCP2A6+do8dGk5qT0oD63KKD21vYdjKnUG2NP5bcgBdAWR1u+d7aA9UBSdVX3q8qubiemhUCMxh3jMbaoYytyOGt/2AV9oNbiTOiUHJNrTsLCyqvBbyy+kGbb0FRJcMUn+VeaWrLFNBh186JBUL/PbwxIQnJEVHnaS9qPSlWn6izRlT52pjip/39XZNCPNFi1CVu+o1FLPczuK81im7anS5HQm1aFAKRaMGfwgCktXepmPZy47BNwhkjH36E6X/BOjOUjPIRYdq5YRUsYkV5mMnkKb+4SJWSxUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=87yKDbYUF6l1HuPdbQ0/CgLflPaZLVl+ZfK5v2ZoLtU=;
+ b=WbPL5KJuYjjtcDSIF6FrixaMrj0xAwmaxJ1tFvPJ2TNvFPSMo0tunb5Ox3nAKdJSJCZFurneuo8DSH3QDtIusO2D/5gX4hARlYKSncA391j+wmmhTeb9JleaGX8OSxeUl0iJznrCpgVkbwtYjgHevoXOpbxQqNuyjMgWS1JiVs+iO9RfuyAe7OztvSfmDYJDE17ja60lCQoOaTfM8ua7WlEHkP7KYDizzORsMBgw2jChDyh4NVbOBdsvi1UKNpXc3/uU6GpSYQnKjiYAk0fX+3PXNfSJIFHKXR6aoT8ZdgtoEV8ihn0JLG1e4PY/CFrJ6exxmpeW4haOecgGypU1Tw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
+ dkim=pass header.d=axentia.se; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=87yKDbYUF6l1HuPdbQ0/CgLflPaZLVl+ZfK5v2ZoLtU=;
+ b=lqUx8sEQy/NRlqYyEUukGcWR66PISBhBj6IYnGXsvkVX+uH20pp9MYCbUdm2/gCpBc16yJuHRu4+Z0QyOuiDboXELJPDQPjDhwhWOUWG2KG9bqxwj0WYcNHHy3rNyxEL2q/n+zAZ9sGHMwHCmxedhldlJJo1fwbmnaQBi1Wb9Vo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axentia.se;
+Received: from AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
+ by PA4PR02MB7101.eurprd02.prod.outlook.com (2603:10a6:102:bd::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.24; Tue, 23 Aug
+ 2022 09:19:47 +0000
+Received: from AM0PR02MB4436.eurprd02.prod.outlook.com
+ ([fe80::1d88:3306:c280:3179]) by AM0PR02MB4436.eurprd02.prod.outlook.com
+ ([fe80::1d88:3306:c280:3179%6]) with mapi id 15.20.5546.022; Tue, 23 Aug 2022
+ 09:19:47 +0000
+Message-ID: <66c525ff-1835-b4c7-c7ee-469060826ad6@axentia.se>
+Date:   Tue, 23 Aug 2022 11:19:45 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH RESEND 1/2] i2c: tegra: Add GPCDMA support
+Subject: Re: [PATCH v2 1/3] docs: i2c: i2c-topology: fix incorrect heading
 Content-Language: en-US
-To:     Akhil R <akhilrajeev@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "wsa@kernel.org" <wsa@kernel.org>
-References: <20220819122313.40445-1-akhilrajeev@nvidia.com>
- <20220819122313.40445-2-akhilrajeev@nvidia.com>
- <20281ca7-e597-7030-4861-5f9a3594726d@gmail.com>
- <89a746fd-a98e-3147-7811-33c5051c2b6d@gmail.com>
- <SJ1PR12MB6339FC1F82EB1BB7417E533BC0719@SJ1PR12MB6339.namprd12.prod.outlook.com>
- <ebb0764f-db92-d69d-49ac-151f4e3e0b8a@collabora.com>
- <SJ1PR12MB63396DC508F63807F1CE9901C0719@SJ1PR12MB6339.namprd12.prod.outlook.com>
- <fac10841-1682-845f-3e4a-5668f59caed0@gmail.com>
- <cd0374f1-2c05-7e61-7187-cfc9c42edf63@gmail.com>
- <SJ1PR12MB63397BBD4EF314A742680F2CC0709@SJ1PR12MB6339.namprd12.prod.outlook.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <SJ1PR12MB63397BBD4EF314A742680F2CC0709@SJ1PR12MB6339.namprd12.prod.outlook.com>
+To:     luca.ceresoli@bootlin.com, linux-doc@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org
+References: <20220822091050.47099-1-luca.ceresoli@bootlin.com>
+ <20220822091050.47099-2-luca.ceresoli@bootlin.com>
+From:   Peter Rosin <peda@axentia.se>
+In-Reply-To: <20220822091050.47099-2-luca.ceresoli@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: GV3P280CA0008.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:b::9)
+ To AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 37ced4d5-4839-42d5-93c6-08da84e89f81
+X-MS-TrafficTypeDiagnostic: PA4PR02MB7101:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qIWzwS/2lbz3SultEIK2wnijoM0KATCjhG/n5+/q6brZjhc2QnVPjy5EVCCQ4pq8FftTHhmaBafBwxNt/lSFtNRcx/TsJZlBLh95x35Ws18rPfo7TzxkoP2fePkxfTa7+ifvZ2rd1YbcZdFP7we/y73qk6K0Ky6iV+EO/XiE/8ofY6U9OliPXI+2r9X/FqIO9XSLlP7MFeFII8YIWt31pyn957vvcH14Y7Duzy3AkG5/IZRDSLpg1HJpMYM8+l0gboJG3ZxTXRN0jpq67rc5gY+OHtdA9MLwmeycqGaU4WJicKRJv2BMuzZlRqHSX7LMeVTOfEHVJltf+0y8UrV2DrVrQuhFStcs2/GBOLwMzY7ZISyDslzKsWMrVmgisnHN+STlRerswzz4LbsMhekesfAW2L83GL4bdrk4TpPWXceYCJT1pJgjWwWmvAwsEChBsR9iKk7cs/+2UxGVE5by06jGfbL8AJYeH8AOA3etf4tG0lkXZ/TPhrZSIiMz1HRRwQTk1EF+EpXJwtIZckFXcJpOcB50ntgWbk03uyBz4uJzz6p/2G5EMiIKnEVFm+EZ0oArv4bW2uEgAFzy800hkaIFArUwjQGlQ4kRtYqHiKDY+bd0FA+L+sueCKzIxz7Z4Q4ik3Jmk9Tbk1zJQCakCybyop5RlVVlML9/ZgKQwtLbZLjbONiiH1HZ8dSf6LOyd7DdmCh2IVEoYDf5Z7fDfOh/k9nnBmgI2oshkFddQo6gR/8agbntDS4yA01BmKJMydeqFCLs7KiTYfisEuYqT//CNtJ1DWq2Xv4KVNsKvVg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB4436.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(366004)(346002)(376002)(39840400004)(5660300002)(31686004)(41300700001)(8936002)(316002)(478600001)(38100700002)(66476007)(6486002)(36756003)(66946007)(66556008)(8676002)(4326008)(6506007)(6512007)(2906002)(26005)(186003)(83380400001)(86362001)(2616005)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S3prdURrTTZuWDg0SWZQVUI3UzJKN05lUWZsa0l5NmpXZ3VEbHdzNzZPajdJ?=
+ =?utf-8?B?RXA1Q3krQ2FXZUwrKzlQNGtjRmlZOE9ibTZQVldHWXRJMEhDSHVkWFExdVNa?=
+ =?utf-8?B?MURNWEw1anF6NjZKdXpwNXFiWlVPOVdqd0hURC9NV2JBbnNsaElGeHY0aUNw?=
+ =?utf-8?B?N1N4UnBqaWM5bllObXBhQ1lLNmdiUjVVanViZ1RtbklKaGdZZUVPM0lVbFNN?=
+ =?utf-8?B?T1A1Zmw3ZkpPQVBnaXdSQ0QwUWFJc3Y1RnFoTzRLeGVEVHBPQ2FiaHhtUlA0?=
+ =?utf-8?B?SXBrYjMrOVNmMVpJVTRtc1BqdXpUQzZVUmdjVDAzbldzb2FCdVRtaEVQRkVa?=
+ =?utf-8?B?K3lNZ1ZhVUVFMm9veVlRcGlzRytvRjJuOWdJdHAxSkFFQzB6Tko5anY4bEtq?=
+ =?utf-8?B?OFdmR2xvRWgrclpzNHIxSDBBVjludDdkMEsxVmpXWE5sZ1RsSHRyWWl2VDdi?=
+ =?utf-8?B?MmV3aURXamtuL29iSkt3ZXpxdzkyS3JvWTBrVE1BSEE5cStCT2ZCMVhpaTVt?=
+ =?utf-8?B?YUd6WGJJRm9zTEJFMDJ1akoyS3FiaXFGTWYvampFZUxWeWwyVjlhSGJUNHZK?=
+ =?utf-8?B?SVhVYXc5UzBGRVhmenBEc2FJTWU5ZlVxVzZUbThSa2hBeU5mdGo5SUVQQmY2?=
+ =?utf-8?B?UHFRZE9hd21tWDJYR1B3RzhibVZ0VHJscjVtL3Q0NXJvckVKeEVQNm9RV0JK?=
+ =?utf-8?B?SlArc3NDbUswUmlFTDN5N1ZCNFlnd1lhWUhSS0lWUWUrZFVEZ3V2V3c3eWxa?=
+ =?utf-8?B?QS9IWmR0NXNnc0JQVHZIWVduQWVwTjJCVWVFbDU2RFdKNFlrSFBvdld0c3lM?=
+ =?utf-8?B?cndTTy91OUlNVlhWNjA2Qjc3SGtldEpxRWRPbldvOGtxakEyb2wzQUxzRVRW?=
+ =?utf-8?B?KzlRRGdzaHhDc1hnektHdXlZY0c3ekRLNjZFZnUvSkl3MEowaWIyakRoY0xN?=
+ =?utf-8?B?c2ZmOHZrc0U2NnJZQUgzeG0vUDdtNHRORmd1SE1jMzZFN1E2M3E2VEdTN2pM?=
+ =?utf-8?B?MUlCemlteFZTMXZZVGhwR2JxUWNVWXVoejBvWEtjMjNZNmIvbFhKZThSeG5v?=
+ =?utf-8?B?RmlzQ1ZpTjdxNldGQXFNa0V1UTljTGRuWVJEYUtTQ0xLdzMrVlJqd2I1Z1E0?=
+ =?utf-8?B?SGo4NGJkR3h3b2NBaWI2OEJFaHRNTWRZSDY0dm5Sb2JkYWw1ZmRSVCtGUjN4?=
+ =?utf-8?B?WFVCVUhGcTZRNDMxMGhVV2FremxBbHFoZEZLUE55a3BtWVhZSTRPZkZuYXJx?=
+ =?utf-8?B?UTgyNFlHRmN6aWpzZkN6ay9Bd1Y3MHpsb0NkSTF5eDAwT09UN09uNTRHTmRr?=
+ =?utf-8?B?V2o2WHdaOC9yZlFjemRIbkFZeEFLY1BGTG94cDIvZi9NeVNOOXQ5TE0vVjJu?=
+ =?utf-8?B?ZmV0dFdSN2VOZ2pRV1V6NmM1akxKRVIzOHE0eENkQ0I0UEdkZHVBbnFvV1Q5?=
+ =?utf-8?B?ZjhRNkt6d1ZvaHlvS2pyL08yRmNFRnhxMWwrRjltSjRLamwzYy9ZQ0JJRzRX?=
+ =?utf-8?B?SStNYy9WRG8wZ3FXOXkrVTRWVnA2RTlwaGhqcWhqMXMwamRXNWV5UVJuUDlj?=
+ =?utf-8?B?d1VxTVJqajYvMnRQVG43SFBMM09OY1NzRmhoQzFUSHkyQjFXV0ZPWXphQ1po?=
+ =?utf-8?B?enA3VlFFM2lSM1BNL1VyejdLOTJzZHJCYW9SWjRMYnF3cUlhcWVXSWpKSDJS?=
+ =?utf-8?B?U3JhbmxXTlpZTU9YMHp1blZsaWplaWt4ZGs0WFJ5TGRjb3lrUlZmSXdjRVdB?=
+ =?utf-8?B?NksydnFOd2dWTHEvNGJvbm9nd25PVVVRWmpsSWptWWJvNlQzNUFvb1NaRGdD?=
+ =?utf-8?B?MksydnExcnYzRUdsRWRxRFpROTZRT0c3TGM1TzZZcjR2bXUwU2lXb1RvaklS?=
+ =?utf-8?B?bjJuWEFMbEROSXExVHdJYnBIM2FLSlNCSlh5M0Z4NUltZHRUZ0dtckVQendY?=
+ =?utf-8?B?TDRmRzJOMitsZGFCeGtwZE1nc2FVc0xuMUQzT1pvd04wWUdMNzlMQXdkOSs2?=
+ =?utf-8?B?ZG1ObnRSa0ZMUWJjVnJRU1gvU04yMG9JYTVuVXdKSjFCeHlwSU0zUXlVU1FK?=
+ =?utf-8?B?emNqTkxTWWpLeVNwVzdOaEJMZ0FFVWhBM0V2THFFWXc2NXgrT001VHBLU2tR?=
+ =?utf-8?Q?ytDkNL1uAF0TlMzInrhnnxpEp?=
+X-OriginatorOrg: axentia.se
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37ced4d5-4839-42d5-93c6-08da84e89f81
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB4436.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 09:19:47.1726
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kJ81qy5Y3asHssOOVr/ETUY9m4AZ52Ji2oNQF+qBOxgZg71S1iBebjc+j05xLJDy
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR02MB7101
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 8/23/22 08:17, Akhil R wrote:
->> 22.08.2022 23:33, Dmitry Osipenko пишет:
->>> 22.08.2022 13:29, Akhil R пишет:
->>>>> On 8/22/22 09:56, Akhil R wrote:
->>>>>>> 19.08.2022 18:15, Dmitry Osipenko пишет:
->>>>>>>> 19.08.2022 15:23, Akhil R пишет:
->>>>>>>>>      if (of_device_is_compatible(np, "nvidia,tegra210-i2c-vi"))
->>>>>>>>>              i2c_dev->is_vi = true;
->>>>>>>>> +    else
->>>>>>>>> +            i2c_dev->dma_support = !!(of_find_property(np, "dmas",
->>>>>>>>> + NULL));
->>>>>>>>
->>>>>>>> 1. You leak the np returned by of_find_property().
->>>>>>>>
->>>>>>>> 2. There is device_property_read_bool() for this kind of
->>>>>>>> property-exists checks.
->>>>>> Okay. I went by the implementation in of_dma_request_slave_channel() to
->>>>>> check 'dmas'.
->>>>>>
->>>>>>>>
->>>>>>>> 3. If "dmas" is missing in DT, then dma_request_chan() should return
->>>>>>>> NULL and everything will work fine. I suppose you haven't tried to
->>>>>>>> test this code.
->>>>>>>
->>>>>>> Although, no. It should return ERR_PTR(-ENODEV) and then you should
->> check
->>>>>>> the return code.
->>>>>> Yes. Agree that it is more agnostic to check for ERR_PTR(-ENODEV). But
->> since I
->>>>>> call tegra_init_dma() for every large transfer until DMA is initialized,
->> wouldn't
->>>>>> it be better to have a flag inside the driver so that we do not have to go
->>>>> through
->>>>>> so many functions for every attempted DMA transaction to find out that
->> the
->>>>> DT
->>>>>> properties don't exist?
->>>>>>
->>>>>> Shall I just put i2c_dev->dma_support = true here since DMA is supported
->> by
->>>>>> hardware? It would turn false if dma_request_chan() returns something
->> other
->>>>>> than -EPROBE_DEFER.
->>>>>>
->>>>>>       if (of_device_is_compatible(np, "nvidia,tegra210-i2c-vi"))
->>>>>>               i2c_dev->is_vi = true;
->>>>>>  +    else
->>>>>>  +            i2c_dev->dma_support = true;
->>>>>
->>>>> The code already has dma_mode for that. I don't see why another variable
->>>>> is needed.
->>>>>
->>>>> Either add new generic dma_request_chan_optional() that will return NULL
->>>>> if channel is not available and make Tegra I2C driver to use it, or
->>>>> handle the error code returned by dma_request_chan().
->>>>
->>>> Let me elaborate my thoughts.
->>>>
->>>> The function tegra_i2c_init_dma() is also called inside tegra_i2c_xfer_msg() if
->>>> DMA is not initialized before, i.e. if (!i2c_dev->dma_buf).
->>>
->>> This is not true
->>>
->>> i2c_dev->dma_mode=false if !i2c_dev->dma_buf and that's it
->>>
->>> https://elixir.bootlin.com/linux/v6.0-rc2/source/drivers/i2c/busses/i2c-
->> tegra.c#L1253
->>>
->>> tegra_i2c_init_dma() is invoked only during probe
->>>
->>>> So, if suppose there is no DT entry for dmas, the driver would have to go take
->> the
->>>> path tegra_i2c_init_dma() -> dma_request_chan() -> of_*() apis -> ... and
->> then figure
->>>> out that DMA is not supported. This would happen for each transfer of size
->> larger than
->>>> I2C_PIO_MODE_PREFERRED_LEN.
->>>>
->>>> To avoid this, I am looking for a variable/flag which can indicate if the driver
->> should attempt
->>>> to configure DMA or not. I didn't quite get the idea if dma_mode can be
->> extended to support
->>>> this, because it is updated based on xfer_size on each transfer. My idea of
->> i2c_dev->dma_support
->>>> is that it will be constant after the probe().
->>
->> I see now that it's you added tegra_i2c_init_dma() to
->> tegra_i2c_xfer_msg(). And tegra_i2c_init_dma() already falls back to PIO
->> if DMA is unavailable.
->>
->> I don't remember why !IS_ENABLED(CONFIG_TEGRA20_APB_DMA) was added
->> to
->> tegra_i2c_init_dma(), but if dma_request_chan() returns -EPROBE_DEFER
->> when there is no DMA channel available at all, then you should fix it.
->>
->> Trying to initialize DMA during transfer if it failed to initialize
->> during probe is a wrong approach. DMA must be initialized only once
->> during probe. Please make the probe to work properly.
+Hi!
+
+[sorry for not responding to v1]
+
+2022-08-22 at 11:10, luca.ceresoli@bootlin.com wrote:
+> From: Luca Ceresoli <luca.ceresoli@bootlin.com>
 > 
-> What I am trying for is to have a mechanism that doesn't halt the i2c transfers
-> till DMA is available. Also, I do not want to drop DMA because it was unavailable
-> during probe().
+> "Etc" here was never meant to be a heading, it became one while converting
+> to ReST.
+> 
+> It would be easy to just convert it to plain text, but rather remove it and
+> add an introductory text before the list that conveys the same meaning but
+> with a better reading flow.
+> 
+> Fixes: ccf988b66d69 ("docs: i2c: convert to ReST and add to driver-api bookset")
+> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-Why is it unavailable? Sounds like you're not packaging kernel properly.
+Acked-by: Peter Rosin <peda@axentia.se>
 
-> This situation is sure to hit if we have I2C driver as built in and DMA driver as a 
-> module. In such cases, I2C will never be able to use the DMA.
+Cheers,
+Peter
 
-For Tegra I2C built-in + DMA driver module you should add the dma.ko to
-initramfs and then it will work. This is a common practice for many
-kernel drivers.
-
-It's also similar to a problem with firmware files that must be
-available to drivers during boot,
-
-> Another option I thought about was to request and free DMA channel for each
-> transfer, which many serial drivers already do. But I am a bit anxious if that will
-> increase the latency of transfer.
-
-Perhaps all you need to do is to add MODULE_SOFTDEP to Tegra I2C driver
-like we did it for the EMC driver [1].
-
-[1]
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=14b43c20c283de36131da0cb44f3170b9ffa7630
-
--- 
-Best regards,
-Dmitry
+> 
+> ---
+> 
+> Changed in v2: none
+> ---
+>  Documentation/i2c/i2c-topology.rst | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/i2c/i2c-topology.rst b/Documentation/i2c/i2c-topology.rst
+> index 7cb53819778e..1b11535c8946 100644
+> --- a/Documentation/i2c/i2c-topology.rst
+> +++ b/Documentation/i2c/i2c-topology.rst
+> @@ -5,6 +5,8 @@ I2C muxes and complex topologies
+>  There are a couple of reasons for building more complex I2C topologies
+>  than a straight-forward I2C bus with one adapter and one or more devices.
+>  
+> +Some example use cases are:
+> +
+>  1. A mux may be needed on the bus to prevent address collisions.
+>  
+>  2. The bus may be accessible from some external bus master, and arbitration
+> @@ -14,9 +16,6 @@ than a straight-forward I2C bus with one adapter and one or more devices.
+>     from the I2C bus, at least most of the time, and sits behind a gate
+>     that has to be operated before the device can be accessed.
+>  
+> -Etc
+> -===
+> -
+>  These constructs are represented as I2C adapter trees by Linux, where
+>  each adapter has a parent adapter (except the root adapter) and zero or
+>  more child adapters. The root adapter is the actual adapter that issues
