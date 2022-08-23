@@ -2,107 +2,156 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A16E59E4EB
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Aug 2022 16:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8DE59E568
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Aug 2022 16:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242187AbiHWOKI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Aug 2022 10:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
+        id S240407AbiHWOzS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Aug 2022 10:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242200AbiHWOJz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Aug 2022 10:09:55 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2952D8B9B8
-        for <linux-i2c@vger.kernel.org>; Tue, 23 Aug 2022 04:21:07 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id z6so19209700lfu.9
-        for <linux-i2c@vger.kernel.org>; Tue, 23 Aug 2022 04:21:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=WYHoBScee445mxmLl1VcAvUkOgEjYvy5gr7hD7QRLm0=;
-        b=YtQIolGISeqSFordzcUfxNogHpxa4lLa5Wx4A7dpUHNV5xYw/hBM9462ca68gYp7t+
-         XzKZg/iLeNjB10ghdeyFyO5jzB94qyAw8AY4hda5fXigTpdB653AHAg7mo47sApfk/H8
-         WQVZyAJQf/SMZP7TdbtapR8lYla+bavWpw2/F6uxXx9CEaBvcYvso5MlXWi7a5I84D9B
-         X6VN4vXSDBVgCtoe1p0RsejKbqZZAgOTvr110PAipdJFn0m2gPQPzvmphtHLB/ETk2Q6
-         3lWVPDAK+vRekX/3+02RrknSBlU1AOgnHPJgnQjfTjYW73uBd34VHY6CGU/MS5wSIKRf
-         QUgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=WYHoBScee445mxmLl1VcAvUkOgEjYvy5gr7hD7QRLm0=;
-        b=YchbhzfPWyw4IzA4jMYDGnH6DbXLhDETHy92AC/tYL1+BjOjgNl+Z2e+KHLM9vbpMJ
-         Kp6FtS+ZNMqJ4gawxF+1ZkTiyeMPSYFMrK6iii+9Q7qCinVMbdRMGW7EYe2nwxXAb66p
-         8+DwcralorhI6zxJ/Pg+oUBHTBKT13RrWCDTbNDot5RUGNha3hGaC+0ZQ0nS7a43ETQg
-         uvYPzE/KU+5ZV9jmfwbFJ606c8A2Eo5mkt+BeR5ZZARhIuh54jX7UzS0a+7LQgRiqZdz
-         JLET3BBvfJuCVKfUq/6xXYI+3at0X5dg1VX88oyP/1jBq3tazl179HMm94KadrqUpYAk
-         YYCQ==
-X-Gm-Message-State: ACgBeo3cXqO4wOxq3N1PmDv3bN0HdqLKHZyNRR6s04jbAy5+yk4prLYx
-        /GiwmGW5s64UPr2S2n8Gb7/h2Q==
-X-Google-Smtp-Source: AA6agR49R+6ju3SqvyM60OHEOqpf0+kU3Sl2+pRQacsafWqTW5kLXaINbzSO8R4frpFjkJfJfkfl7Q==
-X-Received: by 2002:a05:6512:402a:b0:492:f879:e7b0 with SMTP id br42-20020a056512402a00b00492f879e7b0mr745797lfb.353.1661253637245;
-        Tue, 23 Aug 2022 04:20:37 -0700 (PDT)
-Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
-        by smtp.gmail.com with ESMTPSA id m21-20020a2e97d5000000b00261b21ea8a6sm2308242ljj.99.2022.08.23.04.20.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 04:20:36 -0700 (PDT)
-Message-ID: <7eb3cca0-1be6-8f7f-a7bf-f0c9478e7080@linaro.org>
-Date:   Tue, 23 Aug 2022 14:20:34 +0300
+        with ESMTP id S241119AbiHWOzA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Aug 2022 10:55:00 -0400
+Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2EEB30092F
+        for <linux-i2c@vger.kernel.org>; Tue, 23 Aug 2022 05:20:04 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id QSOUozmIH9qatQSOUobcah; Tue, 23 Aug 2022 13:48:33 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 23 Aug 2022 13:48:33 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <667f1658-cf29-6b19-fd57-0c62f625d536@wanadoo.fr>
+Date:   Tue, 23 Aug 2022 13:48:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH V2 0/7] i2c-imx-lpi2c: add IPG clock
-Content-Language: en-US
-To:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "wsa@kernel.org" <wsa@kernel.org>
-Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Clark Wang <xiaoning.wang@nxp.com>
-References: <20220816125526.2978895-1-peng.fan@oss.nxp.com>
- <DU0PR04MB9417E7BD5F1FB7A8E00BAA3F88719@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <DU0PR04MB9417E7BD5F1FB7A8E00BAA3F88719@DU0PR04MB9417.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+ Thunderbird/91.11.0
+Subject: Re: [PATCH RFC i2c-master] i2c: microchip: pci1xxxx: Add driver for
+ I2C host controller in multifunction endpoint of pci1xxxx switch
+Content-Language: fr
+To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wsa@kernel.org
+Cc:     andriy.shevchenko@linux.intel.com, krzk@kernel.org,
+        jarkko.nikula@linux.intel.com, robh@kernel.org,
+        semen.protsenko@linaro.org, sven@svenpeter.dev, jsd@semihalf.com,
+        rafal@milecki.pl, olof@lixom.net, arnd@arndb.de,
+        UNGLinuxDriver@microchip.com
+References: <20220823145603.2606475-1-tharunkumar.pasumarthi@microchip.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220823145603.2606475-1-tharunkumar.pasumarthi@microchip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 22/08/2022 11:46, Peng Fan wrote:
->> Subject: [PATCH V2 0/7] i2c-imx-lpi2c: add IPG clock
+Le 23/08/2022 à 16:56, Tharun Kumar P a écrit :
+> Microchip PCI1XXXX is an unmanaged PCIe3.1a Switch for Consumer,
+> Industrial and Automotive applications. This switch has multiple
+> downstream ports. In one of the Switch's Downstream port, there
+> is a multifunction endpoint for peripherals which includes an I2C
+> host controller. The I2C function in the endpoint operates at 100KHz,
+> 400KHz and 1 MHz and has buffer depth of 128 bytes.
+> This patch provides the I2C controller driver for the I2C endpoint
+> of the switch.
 > 
-> + Wolfram Sang I2C maintainer.
-> 
-> Krzysztof,
-> 
-> Do you have time to give a look whether this patchset is ok for you?
-> Please forgive if this is too early ping. Some i.MX93 dts update pending
-> 
+> Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+> ---
+>   MAINTAINERS                            |    8 +
+>   drivers/i2c/busses/Kconfig             |   10 +
+>   drivers/i2c/busses/Makefile            |    1 +
+>   drivers/i2c/busses/i2c-mchp-pci1xxxx.c | 1123 ++++++++++++++++++++++++
+>   4 files changed, 1142 insertions(+)
+>   create mode 100644 drivers/i2c/busses/i2c-mchp-pci1xxxx.c
 
-I don't understand the ping. You got everything needed from us, why
-still pinging? What that DTS has anything to do with us?
 
-Best regards,
-Krzysztof
+> +static int pci1xxxx_i2c_probe_pci(struct pci_dev *pdev,
+> +				  const struct pci_device_id *ent)
+> +{
+> +	struct pci1xxxx_i2c *i2c;
+> +	int ret;
+> +
+> +	i2c = devm_kzalloc(&pdev->dev, sizeof(*i2c), GFP_KERNEL);
+> +	if (!i2c)
+> +		return -ENOMEM;
+> +
+> +	pci_set_drvdata(pdev, i2c);
+> +
+> +	i2c->i2c_xfer_in_progress = false;
+> +
+> +	ret = pcim_enable_device(pdev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	pci_set_master(pdev);
+> +
+> +	/* we are getting the base address of the SMB core. SMB core uses
+> +	 * BAR0 and 32K is the size here pci_resource_len returns 32K by
+> +	 * reading BAR0
+> +	 */
+> +
+> +	ret = pcim_iomap_regions(pdev, BIT(0), pci_name(pdev));
+> +	if (ret < 0)
+> +		return -ENOMEM;
+> +
+> +	i2c->i2c_base =	pcim_iomap_table(pdev)[0];
+> +
+> +	init_completion(&i2c->i2c_xfer_done);
+> +
+> +	pci1xxxx_i2c_init(i2c);
+> +
+> +	dev_info(&pdev->dev, "i2c clock freq: %d\n", i2c->freq);
+> +
+> +	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/*Register the isr. we are not using any isr flags here.*/
+> +	ret = devm_request_irq(&pdev->dev, pci_irq_vector(pdev, 0),
+> +			       pci1xxxx_i2c_isr, PCI1XXXX_IRQ_FLAGS,
+> +			       pci_name(pdev), i2c);
+> +	if (ret)
+> +		goto err_free_region;
+> +
+> +	i2c->adap = pci1xxxx_i2c_ops;
+> +	i2c->adap.class = I2C_CLASS_SPD;
+> +	i2c->adap.dev.parent = &pdev->dev;
+> +
+> +	snprintf(i2c->adap.name, sizeof(i2c->adap.name),
+> +		 "MCHP PCI1xxxx i2c adapter at %s", pci_name(pdev));
+> +
+> +	i2c_set_adapdata(&i2c->adap, i2c);
+> +
+> +	ret = i2c_add_adapter(&i2c->adap);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "i2c add adapter failed = %d\n", ret);
+> +		pci1xxxx_i2c_shutdown(i2c);
+> +		goto err_free_region;
+> +	}
+> +
+> +	return 0;
+> +
+> +err_free_region:
+> +	pci_free_irq_vectors(pdev);
+
+Should this also be part of the .remove function?
+
+CJ
+
+> +	return ret;
+> +}
+> +
+> +static void pci1xxxx_i2c_remove_pci(struct pci_dev *pdev)
+> +{
+> +	struct pci1xxxx_i2c *i2c = pci_get_drvdata(pdev);
+> +
+> +	i2c_del_adapter(&i2c->adap);
+> +	pci1xxxx_i2c_shutdown(i2c);
+> +}
+> +
