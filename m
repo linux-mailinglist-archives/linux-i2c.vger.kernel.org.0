@@ -2,140 +2,135 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE80759EDEB
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Aug 2022 23:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7254B59F31D
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Aug 2022 07:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbiHWVBS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Aug 2022 17:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
+        id S229949AbiHXFre (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 24 Aug 2022 01:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiHWVBR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Aug 2022 17:01:17 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F597C741;
-        Tue, 23 Aug 2022 14:01:14 -0700 (PDT)
-Received: from booty (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id BE551E0006;
-        Tue, 23 Aug 2022 21:01:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1661288473;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uw23ZoP4oRVNIqUUbuxky1/ZKiVgZT6Zum30X3pKMxM=;
-        b=FELmDJgeYbw0KO2g4ykO3AGxnJ02o2MIf4t0E5/eZU0QyjyNgyf76zB9WEZLRuDb5JhB5e
-        wPHDHyuWia2G5Zhgkbx6v0sO68rUOloj06XhyvxgtivILokTnd9hZhQsiP+YHqcSgdydZq
-        HLrvjmeWgB95UTTvJnsSPz5/4VuOAEAklqqR7cNDs7qx5SuJB5yipcqriTnPPCGG//XKO2
-        UwZKYhlrppF36Q+Nn5j7Wu8lx7VcNW8DNPhlC6O1WSJRNlLHLitm/bpCE26BcH2wJB2fT3
-        EOPSKjqZh4vg+fq5Bco4U5zNDq+et62qA1BJ3YCsFgOREJQMhPG/0ECsyLqRTw==
-Date:   Tue, 23 Aug 2022 23:01:10 +0200
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] docs: i2c: i2c-topology: reorder sections more
- logically
-Message-ID: <20220823230110.115a3fc5@booty>
-In-Reply-To: <19a22449-c9fb-1eba-9a47-3e3d340a13a1@axentia.se>
-References: <20220822091050.47099-1-luca.ceresoli@bootlin.com>
-        <20220822091050.47099-3-luca.ceresoli@bootlin.com>
-        <19a22449-c9fb-1eba-9a47-3e3d340a13a1@axentia.se>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S229446AbiHXFrd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 Aug 2022 01:47:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0896F560;
+        Tue, 23 Aug 2022 22:47:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E52FB822F0;
+        Wed, 24 Aug 2022 05:47:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A7D1C433D6;
+        Wed, 24 Aug 2022 05:47:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661320048;
+        bh=hqmLRG66G3VXJWEyh+sdnePdhDkvWz1Hi3kb7meLWhg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b6QVN48Yf5S4EjQ+KiI48QiRIjg4xzhfg53IIp8nUdtxPHLEpMDZk5qm58+ASKYHD
+         DJvyUVRdNBl6ilHxmQnifA6bsvuWNks4UBd7Gt63PVilZ3rznsPnKV3c/t975jvQFv
+         WZLyW622S6prMpxWMB50IzC9XoS2dogMKt36HzNaZj7Gm68Cxzy7Z63saXwafmrL99
+         TCFuBrEHR4LssGh0Z9ezs94SuPd4C3hVgrX1vCEut20YDaUpckSByzrLtsvEjBABgF
+         Jg2Ljx7KctDhphAJZIwb1BWezzh4ajrHid0wob4YXnIPsJCfOCz4ZyuoTRzVoHEdzh
+         7T2RCthA6sPkg==
+Date:   Wed, 24 Aug 2022 07:47:21 +0200
+From:   "wsa@kernel.org" <wsa@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Clark Wang <xiaoning.wang@nxp.com>
+Subject: Re: [PATCH V2 0/7] i2c-imx-lpi2c: add IPG clock
+Message-ID: <YwW7aROy3kSkumKQ@shikoro>
+Mail-Followup-To: "wsa@kernel.org" <wsa@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Clark Wang <xiaoning.wang@nxp.com>
+References: <20220816125526.2978895-1-peng.fan@oss.nxp.com>
+ <DU0PR04MB9417E7BD5F1FB7A8E00BAA3F88719@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <7eb3cca0-1be6-8f7f-a7bf-f0c9478e7080@linaro.org>
+ <DU0PR04MB9417CA946AD601F900500A5488709@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <15fdd5c2-9c01-ee4e-98f9-559e926d9925@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="25+iC2upX42eIGGl"
+Content-Disposition: inline
+In-Reply-To: <15fdd5c2-9c01-ee4e-98f9-559e926d9925@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Peter,
 
-On Tue, 23 Aug 2022 11:26:51 +0200
-Peter Rosin <peda@axentia.se> wrote:
+--25+iC2upX42eIGGl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 2022-08-22 at 11:10, luca.ceresoli@bootlin.com wrote:
-> > From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> > 
-> > The sequence of sections is a bit confusing here:
-> > 
-> >  * we list the mux locking scheme for existing drivers before introducing
-> >    what mux locking schemes are
-> >  * we list the caveats for each locking scheme (which are tricky) before
-> >    the example of the simple use case
-> > 
-> > Restructure it entirely with the following logic:
-> > 
-> >  * Intro ("I2C muxes and complex topologies")
-> >  * Locking
-> >    - mux-locked
-> >      - example
-> >      - caveats
-> >    - parent-locked
-> >      - example
-> >      - caveats
-> >  * Complex examples
-> >  * Mux type of existing device drivers
-> > 
-> > While there, also apply some other improvements:
-> > 
-> >  * convert the caveat list from a table (with only one column carrying
-> >    content) to a bullet list.  
-> 
-> I want to be able to refer to a specific caveat if/when someone has
-> questions, so I prefer to have the caveats "named". Not that this is
-> very frequent, but if we do remove the tags now I'm sure I'm going
-> to need them a few minutes later...
+Hi Krzysztof,
 
-Now I realize the reason for those labels. Thank you for taking time to
-explain!
+> Awesome! But you don't need my ack after such update. The ack or review
+> is expected from maintainers and I am not the maintainer of IMX I2C
+> driver or IMX platform/DTS.
 
-What about this one:
+Despite the fact that the ping was in deed too early, I think Peng Fan
+has a point. If you suggest a change (Thanks a ton for that!), a quick
+comment on the new version if the change reflects what you had in mind,
+is fair, I'd say. Something like "Yeah, looks basically good, but the
+maintainers have to check the details." I understand the "all too busy"
+part, of course...
 
-  [ML1]
-    If you build a topology with ...
+Thanks,
 
-It's a definition list, and the [ML1] gets rendered in bold.
+   Wolfram
 
-The advantage is the text is still rendered as a regular paragraph,
-with the same font etc, except the left margin is increased.
 
-> > +Parent-locked Caveats
-> > +~~~~~~~~~~~~~~~~~~~~~
-> > +
-> > +When using a parent-locked mux, be aware of the following restrictions:
-> > +
-> > +* If you build a topology with a parent-locked mux being the child
-> > +  of another mux, this might break a possible assumption from the
-> > +  child mux that the root adapter is unused between its select op
-> > +  and the actual transfer (e.g. if the child mux is auto-closing
-> > +  and the parent mux issues I2C transfers as part of its select).
-> > +  This is especially the case if the parent mux is mux-locked, but
-> > +  it may also happen if the parent mux is parent-locked.
-> > +
-> > +* If select/deselect calls out to other subsystems such as gpio,
-> > +  pinctrl, regmap or iio, it is essential that any I2C transfers
-> > +  caused by these subsystems are unlocked. This can be convoluted to
-> > +  accomplish, maybe even impossible if an acceptably clean solution
-> > +  is sought.
-> > +
-> > +
-> >    
-> 
-> Three empty lines is excessive and inconsistent with the other two
-> ===-headers.
+--25+iC2upX42eIGGl
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Indeed! Fix ready for v3, waiting on the above proposal.
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMFu2UACgkQFA3kzBSg
+KbaLrg//ZQR1by58/D+EoZeqOxURRxLGkgjcTZZU7BS4AarhtiVtSlIs3AhTPL6V
+aG7JJECEhe7LOtCNAYrh/+ZINPsB9OLsMgCWGFssntZuMXiKpB8p9sbfa+4zZkA1
+xjCc3vNbHUq4gdZSrPzGT6RY3VrDHSgwYBnoGic2o8MSQb/Ih+E/5+wNdBPwTeKy
+ky52exNTSzolgUGJsJPmiCK2QYMHysKNLDV7o/jJWkpPBAqtAE+N2il7hjSBGdTZ
+IhBneFnJ/0C1kVBUoR75z+p0ShQpuTkqIc6S/DQ5+sayHJZfovEBf33VKS+XIm/o
+PdP6Whp0SNQBveB9r8y7RznSIHd3X+vnwn5fV7rvcCRzi7f7NqHz4Pfu67G4NUkm
+VpByVnyEN7yOXnSyb1gxgKPPLyujBd89MIH1OxCWY1zqmgjuJvkGnnMI9gnVqGkX
+NfyFWXM9zqtbHzNZUi7o4Y5XiwvP3nqSaMT5JP9pIRrR460eEDpkMgAVmoh3dOd6
+7qOQUDdwdaqu67eViXrVhMsBLHinUkY8wuEAHU71Wf6JeQhH4MmXsJi+ziZfCHQs
+6rV++bDOrtK/sUt4xTdpBJ5Bfk0PbXi+wTCheF6+dto/CByht+zkZRkUjh61WLta
+DqeLd7iI7vL+lGlhXLeCs8qenOIZWaKxRe/3qUMZejdF369/6SA=
+=CThz
+-----END PGP SIGNATURE-----
+
+--25+iC2upX42eIGGl--
