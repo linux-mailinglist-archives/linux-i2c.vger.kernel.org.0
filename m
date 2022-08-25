@@ -2,116 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D05F5A14C4
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Aug 2022 16:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBD85A156E
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Aug 2022 17:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233563AbiHYOqs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 25 Aug 2022 10:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
+        id S241032AbiHYPQ7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 25 Aug 2022 11:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241414AbiHYOqr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Aug 2022 10:46:47 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D1BB274B;
-        Thu, 25 Aug 2022 07:46:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1661438748;
-    s=strato-dkim-0002; d=xenosoft.de;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=TGjpNc9Iuyfn98dr3RH7hoDzKwuTCfRh4C04vBts5Fg=;
-    b=dtZq+0iKVkD6TINHagtmuY0Xt7XGDXBcC07Ws3w6KwMSuhBIch7u07xyjVOPrzftki
-    bEGma4xfVi3495mJITB6dNpH8hsS2ThJC2+seu3ewKmEVSoNV/0sNl2EJnRO4oP+jVlL
-    4zvpYjjfSO/J4+H2tjmWYaS2SfwLM13hDoAnABwGOklfxPH8H+1vWcgN0eznKvFY0c2W
-    2hNQjuvaSPBEEyZ2dV5ACpSKIM+Vc95E46lkInsu5i9tI8oEW5xb+nYzCzHMiwY+4I6T
-    R3rz9zUWwryNRdg67isdNzS7/uA0J1w85EN6QrDVOjan1+5vESxMwsHzHHNpp/AlK7kS
-    pEkA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGM4l4Hio94KKxRySfLxnHfJ+Dkjp5DdBfio0Gngadwjc4Jbqft7lQCs4naYEQyjFZmg7Rw=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a02:8109:8980:4474:9977:7bf7:b1d0:60a2]
-    by smtp.strato.de (RZmta 47.47.0 AUTH)
-    with ESMTPSA id f01469y7PEjjWeZ
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 25 Aug 2022 16:45:45 +0200 (CEST)
-Message-ID: <d0ecd68c-e786-625e-47ac-cee3e13e6bec@xenosoft.de>
-Date:   Thu, 25 Aug 2022 16:45:45 +0200
+        with ESMTP id S233165AbiHYPQx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Aug 2022 11:16:53 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B82A69F5E
+        for <linux-i2c@vger.kernel.org>; Thu, 25 Aug 2022 08:16:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661440611; x=1692976611;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p6Jaa1YXhABsS3rxmlQZBaAAhbytC6nykMY3Ksai7X4=;
+  b=BX1E9nOnQNH3is7hAfI0BqYlWoh0FCjVNbUXLc0V3sPoaCyafuZfRc6D
+   47VApC2t1y4YZ26MrkvWRMk/HAIrWgudJGDSO0TZbgNK5GrnlZakbmRkc
+   uwmUkl2i1tTJ3KZSgZe/bb1ZubtD4JPBMy7hNHQLW0c7CY88xMorY9oiE
+   NJNO7jslydkie2USQfMET46XkSCoAAgRP9sDw75Q5Wjcmr4agqekZ1SIB
+   fse4TC0RLwnXQQQvsQnm5C2S01B11U0zQZV4btDjJaujx3pA34IF55SL/
+   X8ThPJuGLwypzDbpJvGN024fOwlm1B4d7B7ue0/7amHgm0O7fxY1nUWXA
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="358232717"
+X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
+   d="scan'208";a="358232717"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 08:14:18 -0700
+X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
+   d="scan'208";a="639633798"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 08:14:17 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oREYg-003RdV-33;
+        Thu, 25 Aug 2022 18:14:14 +0300
+Date:   Thu, 25 Aug 2022 18:14:14 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Josef Johansson <josef@oderland.se>
+Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
+Subject: Re: [PATCH v3 1/1] i2c: scmi: Replace open coded
+ device_get_match_data()
+Message-ID: <YweRxiJl5zzufXUl@smile.fi.intel.com>
+References: <20220708120958.74034-1-andriy.shevchenkolinux!intel!com>
+ <4d2d5b04-0b6c-1cb1-a63f-dc06dfe1b5da@oderland.se>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.0
-Subject: Re: [PATCH] i2c: pasemi: Add IRQ support for Apple Silicon
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Arminder Singh <arminders208@outlook.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Hector Martin <marcan@marcan.st>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        Darren Stevens <darren@stevens-zone.net>,
-        "R.T.Dickinson" <rtd2@xtra.co.nz>,
-        Christian Zigotzky <info@xenosoft.de>
-References: <MN2PR01MB535838492432C910F2381F929F6F9@MN2PR01MB5358.prod.exchangelabs.com>
- <87h723lodh.fsf@mpe.ellerman.id.au>
-From:   Christian Zigotzky <chzigotzky@xenosoft.de>
-In-Reply-To: <87h723lodh.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4d2d5b04-0b6c-1cb1-a63f-dc06dfe1b5da@oderland.se>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 23 August 2022 at 03:50 am, Michael Ellerman wrote:
-> Arminder Singh <arminders208@outlook.com> writes:
->> This is the first time I'm interacting with the Linux mailing lists, so
->> please don't eviscerate me *too much* if I get the formatting wrong.
->> Of course I'm always willing to take criticism and improve my formatting
->> in the future.
->>
->> This patch adds support for IRQs to the PASemi I2C controller driver.
->> This will allow for faster performing I2C transactions on Apple Silicon
->> hardware, as previously, the driver was forced to poll the SMSTA register
->> for a set amount of time.
->>
->> With this patchset the driver on Apple silicon hardware will instead wait
->> for an interrupt which will signal the completion of the I2C transaction.
->> The timeout value for this completion will be the same as the current
->> amount of time the I2C driver polls for.
->>
->> This will result in some performance improvement since the driver will be
->> waiting for less time than it does right now on Apple Silicon hardware.
->>
->> The patch right now will only enable IRQs for Apple Silicon I2C chips,
->> and only if it's able to successfully request the IRQ from the kernel.
->>
->> === Testing ===
->>
->> This patch has been tested on both the mainline Linux kernel tree and
->> the Asahi branch (https://github.com/AsahiLinux/linux.git) on both an
->> M1 and M2 MacBook Air, and it compiles successfully as both a module and
->> built-in to the kernel itself. The patch in both trees successfully boots
->> to userspace without any hitch.
->>
->> I do not have PASemi hardware on hand unfortunately, so I'm unable to test
->> the impact of this patch on old PASemi hardware. This is also why I've
->> elected to do the IRQ request and enablement on the Apple platform driver
->> and not in the common file, as I'm not sure if PASemi hardware supports
->> IRQs.
-> I've added Darren and Christian to Cc, they have helped with PASemi
-> development and testing in the past, and may be able to help test this
-> series on PASemi hardware.
->
-> cheers
+On Tue, Aug 16, 2022 at 08:03:33AM +0200, Josef Johansson wrote:
+> On 7/8/22 14:09, Andy Shevchenko wrote:
 
-Tested-by: Christian Zigotzky <chzigotzky at xenosoft.de>
+> I tried build Linux 6.0 and run under Xen 4.14.5. I got a kernel null pointer dereferenced while booting. Reverting this commit allowed the system to boot.
+> 
+> Since I do not have any way of capturing the error except camera (it's a long message), here's my best try.
+> 
+> BUG: kernel NULL pointer dereference, address: 0000000000000000
 
-on an A-EON AmigaOne X1000 with a PASemi PWRficient PA6T-1682 processor.
+I think I know what happens there. Can you test a hackpatch (below)
+with my patch _not being reverted_?
+
+diff --git a/drivers/i2c/busses/i2c-scmi.c b/drivers/i2c/busses/i2c-scmi.c
+index 79798fc7462a..3ed1758706b0 100644
+--- a/drivers/i2c/busses/i2c-scmi.c
++++ b/drivers/i2c/busses/i2c-scmi.c
+@@ -426,6 +426,9 @@ static struct acpi_driver acpi_smbus_cmi_driver = {
+ 		.add = acpi_smbus_cmi_add,
+ 		.remove = acpi_smbus_cmi_remove,
+ 	},
++	.drv = {
++		.acpi_match_table = acpi_smbus_cmi_ids,
++	},
+ };
+ module_acpi_driver(acpi_smbus_cmi_driver);
+ 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
