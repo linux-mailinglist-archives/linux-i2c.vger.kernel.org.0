@@ -2,56 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05BC5A136B
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Aug 2022 16:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D05F5A14C4
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Aug 2022 16:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235500AbiHYOXN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 25 Aug 2022 10:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38074 "EHLO
+        id S233563AbiHYOqs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 25 Aug 2022 10:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240597AbiHYOW5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Aug 2022 10:22:57 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DC1B6002;
-        Thu, 25 Aug 2022 07:22:54 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="294250050"
-X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
-   d="scan'208";a="294250050"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 07:22:53 -0700
-X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
-   d="scan'208";a="678478234"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 07:22:50 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1oRDks-003QS2-37;
-        Thu, 25 Aug 2022 17:22:46 +0300
-Date:   Thu, 25 Aug 2022 17:22:46 +0300
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Tharunkumar.Pasumarthi@microchip.com
-Cc:     jsd@semihalf.com, wsa@kernel.org, krzk@kernel.org,
-        sven@svenpeter.dev, linux-kernel@vger.kernel.org,
-        semen.protsenko@linaro.org, robh@kernel.org, olof@lixom.net,
-        UNGLinuxDriver@microchip.com, jarkko.nikula@linux.intel.com,
-        arnd@arndb.de, linux-i2c@vger.kernel.org, rafal@milecki.pl
-Subject: Re: [PATCH RFC i2c-master] i2c: microchip: pci1xxxx: Add driver for
- I2C host controller in multifunction endpoint of pci1xxxx switch
-Message-ID: <YweFttaSE2GOoW83@smile.fi.intel.com>
-References: <20220823145603.2606475-1-tharunkumar.pasumarthi@microchip.com>
- <YwTsnCdxM5I6BoJu@smile.fi.intel.com>
- <80debd4bbf819cbfa16681172919436df476558a.camel@microchip.com>
- <CAHp75VevAifCp_Bz5HN1MmGm7UEJWFR017kngzARfBh+Z8aAAA@mail.gmail.com>
- <787644272b3b260980ff8b9efc317ce3194b0acc.camel@microchip.com>
+        with ESMTP id S241414AbiHYOqr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Aug 2022 10:46:47 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D1BB274B;
+        Thu, 25 Aug 2022 07:46:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1661438748;
+    s=strato-dkim-0002; d=xenosoft.de;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=TGjpNc9Iuyfn98dr3RH7hoDzKwuTCfRh4C04vBts5Fg=;
+    b=dtZq+0iKVkD6TINHagtmuY0Xt7XGDXBcC07Ws3w6KwMSuhBIch7u07xyjVOPrzftki
+    bEGma4xfVi3495mJITB6dNpH8hsS2ThJC2+seu3ewKmEVSoNV/0sNl2EJnRO4oP+jVlL
+    4zvpYjjfSO/J4+H2tjmWYaS2SfwLM13hDoAnABwGOklfxPH8H+1vWcgN0eznKvFY0c2W
+    2hNQjuvaSPBEEyZ2dV5ACpSKIM+Vc95E46lkInsu5i9tI8oEW5xb+nYzCzHMiwY+4I6T
+    R3rz9zUWwryNRdg67isdNzS7/uA0J1w85EN6QrDVOjan1+5vESxMwsHzHHNpp/AlK7kS
+    pEkA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGM4l4Hio94KKxRySfLxnHfJ+Dkjp5DdBfio0Gngadwjc4Jbqft7lQCs4naYEQyjFZmg7Rw=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a02:8109:8980:4474:9977:7bf7:b1d0:60a2]
+    by smtp.strato.de (RZmta 47.47.0 AUTH)
+    with ESMTPSA id f01469y7PEjjWeZ
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 25 Aug 2022 16:45:45 +0200 (CEST)
+Message-ID: <d0ecd68c-e786-625e-47ac-cee3e13e6bec@xenosoft.de>
+Date:   Thu, 25 Aug 2022 16:45:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <787644272b3b260980ff8b9efc317ce3194b0acc.camel@microchip.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.0
+Subject: Re: [PATCH] i2c: pasemi: Add IRQ support for Apple Silicon
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Arminder Singh <arminders208@outlook.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        Darren Stevens <darren@stevens-zone.net>,
+        "R.T.Dickinson" <rtd2@xtra.co.nz>,
+        Christian Zigotzky <info@xenosoft.de>
+References: <MN2PR01MB535838492432C910F2381F929F6F9@MN2PR01MB5358.prod.exchangelabs.com>
+ <87h723lodh.fsf@mpe.ellerman.id.au>
+From:   Christian Zigotzky <chzigotzky@xenosoft.de>
+In-Reply-To: <87h723lodh.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,63 +70,48 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 01:15:42PM +0000, Tharunkumar.Pasumarthi@microchip.com wrote:
-> On Wed, 2022-08-24 at 21:31 +0300, Andy Shevchenko wrote:
-> > On Wed, Aug 24, 2022 at 6:04 PM <Tharunkumar.Pasumarthi@microchip.com> wrote:
-> > > On Tue, 2022-08-23 at 18:05 +0300, Andy Shevchenko wrote:
-> > > > On Tue, Aug 23, 2022 at 08:26:03PM +0530, Tharun Kumar P wrote:
+On 23 August 2022 at 03:50 am, Michael Ellerman wrote:
+> Arminder Singh <arminders208@outlook.com> writes:
+>> This is the first time I'm interacting with the Linux mailing lists, so
+>> please don't eviscerate me *too much* if I get the formatting wrong.
+>> Of course I'm always willing to take criticism and improve my formatting
+>> in the future.
+>>
+>> This patch adds support for IRQs to the PASemi I2C controller driver.
+>> This will allow for faster performing I2C transactions on Apple Silicon
+>> hardware, as previously, the driver was forced to poll the SMSTA register
+>> for a set amount of time.
+>>
+>> With this patchset the driver on Apple silicon hardware will instead wait
+>> for an interrupt which will signal the completion of the I2C transaction.
+>> The timeout value for this completion will be the same as the current
+>> amount of time the I2C driver polls for.
+>>
+>> This will result in some performance improvement since the driver will be
+>> waiting for less time than it does right now on Apple Silicon hardware.
+>>
+>> The patch right now will only enable IRQs for Apple Silicon I2C chips,
+>> and only if it's able to successfully request the IRQ from the kernel.
+>>
+>> === Testing ===
+>>
+>> This patch has been tested on both the mainline Linux kernel tree and
+>> the Asahi branch (https://github.com/AsahiLinux/linux.git) on both an
+>> M1 and M2 MacBook Air, and it compiles successfully as both a module and
+>> built-in to the kernel itself. The patch in both trees successfully boots
+>> to userspace without any hitch.
+>>
+>> I do not have PASemi hardware on hand unfortunately, so I'm unable to test
+>> the impact of this patch on old PASemi hardware. This is also why I've
+>> elected to do the IRQ request and enablement on the Apple platform driver
+>> and not in the common file, as I'm not sure if PASemi hardware supports
+>> IRQs.
+> I've added Darren and Christian to Cc, they have helped with PASemi
+> development and testing in the past, and may be able to help test this
+> series on PASemi hardware.
+>
+> cheers
 
-...
+Tested-by: Christian Zigotzky <chzigotzky at xenosoft.de>
 
-> > > > > +#define SMB_IDLE_SCALING_100KHZ              0x03E803C9
-> > > > > +#define SMB_IDLE_SCALING_400KHZ              0x01F4009D
-> > > > > +#define SMB_IDLE_SCALING_1000KHZ     0x01F4009D
-> > > > 
-> > > > Shouldn't these magics be decimals?
-> > 
-> > This Q seems unanswered.
-> 
-> These magic numbers need not be decimals. Configuring registers with these
-> values in driver will set the time in device. However, these values do not
-> convey any meaning when represented in decimals.
-
-Hmm... Maybe you don't see this, but I see the following:
-
-0x03E803C9 = 65536 (i.e. 2^16) * 1000 + 969
-0x01F4009D = 32768 (i.e. 2^15) * 1000 + 157
-
-Pretty much sounds like a bit 15 for standard mode and bit 16 for fast modes
-shifted by 1000 to have a room for the time in presumably nanoseconds up to 1
-us.
-
-Please, dig up into the documentation, vendor chat, etc to get more information
-on these values.
-
-> > > > Ditto for the rest similar stuff.
-> > > 
-> > > There is no direct correlation between the hex value and time. Configuring
-> > > registers with these values in driver will set the time in device.
-
-...
-
-> > > > > +#define I2C_DIR_WRITE                0
-> > > > > +#define I2C_DIR_READ         1
-> > 
-> > https://elixir.bootlin.com/linux/v6.0-rc2/source/include/uapi/linux/i2c.h#L24
-> 
-> I2C_M_RD is used in driver. But the purpose of these MACROs is different.
-> I2C_DIR_WRITE is used inside both pci1xxxx_i2c_write as well as in
-> pci1xxxx_i2c_read (for sending slave address). Thus these MACROs are required
-
-OK. Name collision still stays.
-
-> > > > Namespace collision. Doesn't I²C core provide these?
-> > > 
-> > > I am unable to find any existing MACROs for WRITE and READ in I2C core.
-> > > Kindly let me know the MACROs
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+on an A-EON AmigaOne X1000 with a PASemi PWRficient PA6T-1682 processor.
