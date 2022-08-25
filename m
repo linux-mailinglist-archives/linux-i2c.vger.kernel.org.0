@@ -2,123 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9175A1076
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Aug 2022 14:30:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A981D5A110C
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Aug 2022 14:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241607AbiHYM3w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 25 Aug 2022 08:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
+        id S241998AbiHYMuh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 25 Aug 2022 08:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241687AbiHYM3t (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Aug 2022 08:29:49 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A006B2D9F;
-        Thu, 25 Aug 2022 05:29:42 -0700 (PDT)
-Received: from mail-ed1-f50.google.com ([209.85.208.50]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MJEtx-1ok5OA0BXX-00KkXr; Thu, 25 Aug 2022 14:29:41 +0200
-Received: by mail-ed1-f50.google.com with SMTP id z2so25904378edc.1;
-        Thu, 25 Aug 2022 05:29:40 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0LSyn14gF097vrNh3SQOMtuu9lYgzAfAI49h+16QRrqEdypkty
-        bOPjpK9K5L2vLBXG7CsqzpRIr7XUTWXtVNoRyxk=
-X-Google-Smtp-Source: AA6agR7KLEkAM4h39WPvK1n/vrpN5oyAY305pogjb5TjxCoIxGhtM1grQtWxFDj0eVYDz8/thf8BgPF1EzfN/sp1J84=
-X-Received: by 2002:a05:6402:5241:b0:447:47:5bf1 with SMTP id
- t1-20020a056402524100b0044700475bf1mr3109096edd.227.1661430580695; Thu, 25
- Aug 2022 05:29:40 -0700 (PDT)
+        with ESMTP id S241080AbiHYMug (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Aug 2022 08:50:36 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546EC5247E
+        for <linux-i2c@vger.kernel.org>; Thu, 25 Aug 2022 05:50:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C0A502077F;
+        Thu, 25 Aug 2022 12:50:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1661431833; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KcA/zNX9sPWwpscfitXTQjUWSdFZ0kAgwzTPBQGbbwk=;
+        b=xAA50yWjwO30bJwvkdpwh02RFE8KHGLwKnmU9oDB+hag06XLXtuNLOBbqNReVMB+/UYqJw
+        gJKRgeRBpw3x5RZkSHtbjT0fNH9SaeMuqa/ShD939R9rzn1pAKR8s+QZ1Q54VR2uYvWOPj
+        mEjgp4wIakVcgfCraCrHH72J6kpSGNM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1661431833;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KcA/zNX9sPWwpscfitXTQjUWSdFZ0kAgwzTPBQGbbwk=;
+        b=/B/pjUt+MZIQNUzw0pghglHJfc4JNWZWbJO/4jfaUyEfyN62r6cl1rTqXZYMJ+x6eqiaux
+        WqYUf2uu1RFJTwDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8154C13A8E;
+        Thu, 25 Aug 2022 12:50:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id os3oHRlwB2N1IAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Thu, 25 Aug 2022 12:50:33 +0000
+Date:   Thu, 25 Aug 2022 14:50:32 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Bruce Duncan <bwduncan@gmail.com>, linux-i2c@vger.kernel.org,
+        trivial@kernel.org
+Subject: Re: [PATCH] Fix typo, add markup, fix URL in i2c-piix4 docs
+Message-ID: <20220825145032.7ab0b3ab@endymion.delvare>
+In-Reply-To: <Yd3mypbrlKk/nc0e@ninjato>
+References: <20211215113356.62982-1-bwduncan@gmail.com>
+        <Yd3mypbrlKk/nc0e@ninjato>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <MN2PR01MB535838492432C910F2381F929F6F9@MN2PR01MB5358.prod.exchangelabs.com>
-In-Reply-To: <MN2PR01MB535838492432C910F2381F929F6F9@MN2PR01MB5358.prod.exchangelabs.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 25 Aug 2022 14:29:21 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3rteX8N2A-K-8bmvWaUhLJjXLV_8JNLCY0ezBzkQODUg@mail.gmail.com>
-Message-ID: <CAK8P3a3rteX8N2A-K-8bmvWaUhLJjXLV_8JNLCY0ezBzkQODUg@mail.gmail.com>
-Subject: Re: [PATCH] i2c: pasemi: Add IRQ support for Apple Silicon
-To:     Arminder Singh <arminders208@outlook.com>
-Cc:     linux-kernel@vger.kernel.org, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Hector Martin <marcan@marcan.st>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:qvPLYgiha1jlBb0JrK6hiHWGeSURlujUywUeocgI9ZEDAtJYvGr
- wVB1YHXLUgPgdOxl0e2hFuHetCzWp4mgjPAZajlxfxEIW41JEMAjCi/oALI82XmS2/dqdSy
- acD3ogFEdkhoEs3OM4HaJqsRh9LCDxBmm5PVWk5ywbZn0SIhkRqXRYHDffDNvF6T/eyS2er
- k+Pql3k9Mq1L8nvcSrH0Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qZTU8vXY4lc=:sQ+HRRq0VCpNFsqrcu+2SF
- 22HwveonHAxEDBDAKM3M1avy3tQF+gwf1H81eCWlyjAgJA7/q8mqioynq6eq1FKhYZnXcByD/
- nPPrRaVBAGiHyN5H02PWGThDLxcZpNjuhdWAqkeB0DV39QY9fmcdKWq6rPUlx8wnr9SHUJ74J
- NToXw2SlpO/eyvitO0SnDIdthLVDXOGz0a3aJqFJSKluTwbzYIWYLJLypaGKi5HBJnRpimH4n
- CWfLZkHtaqjnnBz0CBOK6N1mrFHtbW1jd4/W9tz2t3rhUPZGt2iP3NxEC+Bi76rvPQL6ttKII
- 1Ym54Bg0xosj+jT89ZD8+y/SYEBsS/FgFhwSgZwDj/43tMn+GBNZoHUGOn2Yujm8PKjmViyzt
- e2OzRMNRUTYabIYHPAa88iQAQhovzNzirSqncusdohlf8FnDw/klfH3f0nui+d42FRQlAfqps
- mhuyQlMJRH6Nd5uamvqBDRDqCbnEiaSJTMrG3rmBLLJjEICmPNcXl6CtPICibiUUgM2zOSICs
- b6THRbirHH5EMOPr78Z3DB4uC0PQDGcpC8e6HDr6ZqLDgPHqo+jiRwn1soLWDxMxoLzoMayei
- 0K73jIN3NnA8/3kKdzaTDM6K5J5Kjv3cC/JolI3k8nf3WANLj0BH56vKIbRK/ocuu38oloYHS
- yj0B3zyUthTPaSkABN11lHZQr+C65Kole1DEnFNP/kg8OB8wCLoQ3MIZuTEyqrVsByPwgV6Hu
- gPx/+27MF0FE5S44YS1pg/k5KA4mnBEHRgWIng==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Aug 20, 2022 at 9:45 PM Arminder Singh <arminders208@outlook.com> wrote:
->
-> I also fixed a quick checkpatch warning on line 303. "i ++" is now "i++".
+Hi Wolfram,
 
-In general, anything that is mentioned in the changelog as "also done this"
-is worth splitting into a separate patch, or dropping from the patch, to
-make reviewing easier.
+On Tue, 11 Jan 2022 21:21:30 +0100, Wolfram Sang wrote:
+> >  For additional information, read:
+> > -http://www.lm-sensors.org/browser/lm-sensors/trunk/README
+> > +https://hwmon.wiki.kernel.org  
+> 
+> I think the proper replacement is:
+> 
+> https://github.com/lm-sensors/lm-sensors/blob/master/README
+> 
+> ?
 
-In this case, I would just not do the trivial change. Alternatively you
-can consider doing a larger patch for coding style cleanup on the
-patch, as there are possibly other issues as well. Usually it's not worth
-changing things unless they hurt readability.
+Yes, but I'd rather remove the pointer completely than update it.
+There's nothing specific to the i2c-piix4 driver in that file, so I
+can't see any value in mentioning it here.
 
-> @@ -80,14 +81,21 @@ static int pasemi_smb_waitready(struct pasemi_smbus *smbus)
->  {
->         int timeout = 10;
->         unsigned int status;
-> +       unsigned int bitmask = SMSTA_XEN | SMSTA_MTN;
->
-> +       if (smbus->use_irq) {
-> +               reinit_completion(&smbus->irq_completion);
-> +               reg_write(smbus, REG_IMASK, bitmask);
-> +               wait_for_completion_timeout(&smbus->irq_completion, msecs_to_jiffies(10));
->                 status = reg_read(smbus, REG_SMSTA);
->         }
->
-> +
->         /* Got NACK? */
->         if (status & SMSTA_MTN)
->                 return -ENXIO;
-...
-> @@ -356,3 +366,12 @@ int pasemi_i2c_common_probe(struct pasemi_smbus *smbus)
->
->         return 0;
->  }
-> +
-> +irqreturn_t pasemi_irq_handler(int irq, void *dev_id)
-> +{
-> +       struct pasemi_smbus *smbus = (struct pasemi_smbus *)dev_id;
-> +
-> +       reg_write(smbus, REG_IMASK, 0);
-> +       complete(&smbus->irq_completion);
-> +       return IRQ_HANDLED;
-> +}
+As Bruce appears to have vanished meanwhile, I'll post an updated
+version of the patch shortly myself, including another typo fix.
 
-I think the completion structure gets out of sync if you run into a
-timeout here,
-so a subsequent wait_for_completion will never complete after we missed one
-interrupt.
-
-Since this already causes a bus reset, I think you can just do
-reinit_completion() at the end of pasemi_reset() to avoid this.
-
-        Arnd
+-- 
+Jean Delvare
+SUSE L3 Support
