@@ -2,62 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A981D5A110C
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Aug 2022 14:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFDFF5A114F
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Aug 2022 15:01:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241998AbiHYMuh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 25 Aug 2022 08:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48358 "EHLO
+        id S233371AbiHYNBr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 25 Aug 2022 09:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241080AbiHYMug (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Aug 2022 08:50:36 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546EC5247E
-        for <linux-i2c@vger.kernel.org>; Thu, 25 Aug 2022 05:50:35 -0700 (PDT)
+        with ESMTP id S241725AbiHYNBq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Aug 2022 09:01:46 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4952D559D
+        for <linux-i2c@vger.kernel.org>; Thu, 25 Aug 2022 06:01:45 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C0A502077F;
-        Thu, 25 Aug 2022 12:50:33 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DDEDB343C3;
+        Thu, 25 Aug 2022 13:01:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1661431833; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1661432503; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KcA/zNX9sPWwpscfitXTQjUWSdFZ0kAgwzTPBQGbbwk=;
-        b=xAA50yWjwO30bJwvkdpwh02RFE8KHGLwKnmU9oDB+hag06XLXtuNLOBbqNReVMB+/UYqJw
-        gJKRgeRBpw3x5RZkSHtbjT0fNH9SaeMuqa/ShD939R9rzn1pAKR8s+QZ1Q54VR2uYvWOPj
-        mEjgp4wIakVcgfCraCrHH72J6kpSGNM=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zqbc25/Uwm9pn+HrQOUvvAFsD0tA0TSsxUGE+iUZcj4=;
+        b=N06cnGJUn2j+RH3oC9EVtGZQBFVmEK9xdupcqW+IdkVvXqsjGq2JhVqHLOXtXIQRW/S35q
+        zV01GahQbojO4i7Yxs4vDPx4XyhU2/jGQgt9ZQGQdBLLSK1EonVI2weDczwbC0lltFIpcE
+        GPf3hafAuXJpA+n4lRZRnQOrXHqMBL0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1661431833;
+        s=susede2_ed25519; t=1661432503;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KcA/zNX9sPWwpscfitXTQjUWSdFZ0kAgwzTPBQGbbwk=;
-        b=/B/pjUt+MZIQNUzw0pghglHJfc4JNWZWbJO/4jfaUyEfyN62r6cl1rTqXZYMJ+x6eqiaux
-        WqYUf2uu1RFJTwDg==
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zqbc25/Uwm9pn+HrQOUvvAFsD0tA0TSsxUGE+iUZcj4=;
+        b=tUnJy+c4otikDfUSJw0euxBRSegM7Rfpp66RvdPh3IdrdaHhvNv/Q0EgzGhAaSCyQdp4o4
+        VjeIz5xzkUI8UBBA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8154C13A8E;
-        Thu, 25 Aug 2022 12:50:33 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9ADCE13A8E;
+        Thu, 25 Aug 2022 13:01:43 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id os3oHRlwB2N1IAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Thu, 25 Aug 2022 12:50:33 +0000
-Date:   Thu, 25 Aug 2022 14:50:32 +0200
+        id eUz7I7dyB2OTJQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Thu, 25 Aug 2022 13:01:43 +0000
+Date:   Thu, 25 Aug 2022 15:01:41 +0200
 From:   Jean Delvare <jdelvare@suse.de>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Bruce Duncan <bwduncan@gmail.com>, linux-i2c@vger.kernel.org,
+To:     Linux I2C <linux-i2c@vger.kernel.org>
+Cc:     Bruce Duncan <bwduncan@gmail.com>, Wolfram Sang <wsa@kernel.org>,
         trivial@kernel.org
-Subject: Re: [PATCH] Fix typo, add markup, fix URL in i2c-piix4 docs
-Message-ID: <20220825145032.7ab0b3ab@endymion.delvare>
-In-Reply-To: <Yd3mypbrlKk/nc0e@ninjato>
-References: <20211215113356.62982-1-bwduncan@gmail.com>
-        <Yd3mypbrlKk/nc0e@ninjato>
+Subject: [PATCH v2] docs: i2c: piix4: Fix typos, add markup, drop link
+Message-ID: <20220825150141.1f5558c6@endymion.delvare>
 Organization: SUSE Linux
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
@@ -73,25 +68,57 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+From: Bruce Duncan <bwduncan@gmail.com>
 
-On Tue, 11 Jan 2022 21:21:30 +0100, Wolfram Sang wrote:
-> >  For additional information, read:
-> > -http://www.lm-sensors.org/browser/lm-sensors/trunk/README
-> > +https://hwmon.wiki.kernel.org  
-> 
-> I think the proper replacement is:
-> 
-> https://github.com/lm-sensors/lm-sensors/blob/master/README
-> 
-> ?
+[JD: Update the subject
+     One more typo fixed
+     Drop the link to lm-sensors' README, it's irrelevant]
 
-Yes, but I'd rather remove the pointer completely than update it.
-There's nothing specific to the i2c-piix4 driver in that file, so I
-can't see any value in mentioning it here.
+Signed-off-by: Bruce Duncan <bwduncan@gmail.com>
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+---
+ Documentation/i2c/busses/i2c-piix4.rst |   13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-As Bruce appears to have vanished meanwhile, I'll post an updated
-version of the patch shortly myself, including another typo fix.
+--- linux-5.19.orig/Documentation/i2c/busses/i2c-piix4.rst	2022-07-31 23:03:01.000000000 +0200
++++ linux-5.19/Documentation/i2c/busses/i2c-piix4.rst	2022-08-25 14:58:36.733243769 +0200
+@@ -64,7 +64,7 @@ try to enable it. THIS IS VERY DANGEROUS
+ crashes, data corruption, etc.). Try this only as a last resort (try BIOS
+ updates first, for example), and backup first! An even more dangerous
+ option is 'force_addr=<IOPORT>'. This will not only enable the PIIX4 like
+-'force' foes, but it will also set a new base I/O port address. The SMBus
++'force' does, but it will also set a new base I/O port address. The SMBus
+ parts of the PIIX4 needs a range of 8 of these addresses to function
+ correctly. If these addresses are already reserved by some other device,
+ you will get into big trouble! DON'T USE THIS IF YOU ARE NOT VERY SURE
+@@ -86,15 +86,15 @@ If you own Force CPCI735 motherboard or
+ to change the SMBus Interrupt Select register so the SMBus controller uses
+ the SMI mode.
+ 
+-1) Use lspci command and locate the PCI device with the SMBus controller:
++1) Use ``lspci`` command and locate the PCI device with the SMBus controller:
+    00:0f.0 ISA bridge: ServerWorks OSB4 South Bridge (rev 4f)
+    The line may vary for different chipsets. Please consult the driver source
+-   for all possible PCI ids (and lspci -n to match them). Lets assume the
++   for all possible PCI ids (and ``lspci -n`` to match them). Let's assume the
+    device is located at 00:0f.0.
+ 2) Now you just need to change the value in 0xD2 register. Get it first with
+-   command: lspci -xxx -s 00:0f.0
++   command: ``lspci -xxx -s 00:0f.0``
+    If the value is 0x3 then you need to change it to 0x1:
+-   setpci  -s 00:0f.0 d2.b=1
++   ``setpci  -s 00:0f.0 d2.b=1``
+ 
+ Please note that you don't need to do that in all cases, just when the SMBus is
+ not working properly.
+@@ -109,6 +109,3 @@ which can easily get corrupted due to a
+ Thinkpad laptops, but desktop systems may also be affected. We have no list
+ of all affected systems, so the only safe solution was to prevent access to
+ the SMBus on all IBM systems (detected using DMI data.)
+-
+-For additional information, read:
+-http://www.lm-sensors.org/browser/lm-sensors/trunk/README
+
 
 -- 
 Jean Delvare
