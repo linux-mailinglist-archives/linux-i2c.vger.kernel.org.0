@@ -2,68 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3635A606B
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Aug 2022 12:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 173E55A6074
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Aug 2022 12:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbiH3KNO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Aug 2022 06:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40964 "EHLO
+        id S229510AbiH3KN7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 Aug 2022 06:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiH3KMK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Aug 2022 06:12:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C273AF2D77;
-        Tue, 30 Aug 2022 03:08:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 822BEB811B3;
-        Tue, 30 Aug 2022 10:08:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7313C433D6;
-        Tue, 30 Aug 2022 10:07:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661854080;
-        bh=LOI8kTNIv2SOZJIBZSHky+JNOg4JVcm+RhNRayoiQ+g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BEtaJ1arelV/0cHnhRoF+OJWXpIp0TRBT1u5G60ZHrzUA+RfHRYPeHXmiXKJN0Q0F
-         p911fb4jNWTuUznfO+xfX0XSxmPNU9lnyuNqth5m2McFCMTRTeyXki9OgGu/lSHtif
-         5LYYe+z4z5YhALlEAMeFnhX7MNS9S+JT/jlvsUMGX6aS2I1bj6LL+J1QRxbpN+CYBN
-         pL60R8i0hOs94sAGrOKysQFxcKAzg1uUmztCcKynVuVS7K5iv5FsdpR+mJ5D2Tgv4s
-         SbMy5gyZEdD5JatMyYh3T54hCCrS9Voqhu6kirpSOa3KB3LAKTkfyHR4+1g+N+Lfha
-         goOGJin68XseA==
-Date:   Tue, 30 Aug 2022 12:07:57 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     aisheng.dong@nxp.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, xiaoning.wang@nxp.com,
-        Peng Fan <peng.fan@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH V3 4/7] dt-bindings: i2c: i2c-imx-lpi2c: add i.MX93
-Message-ID: <Yw3hfcQ2JV248GIo@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, aisheng.dong@nxp.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, xiaoning.wang@nxp.com,
-        Peng Fan <peng.fan@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20220823030215.870414-1-peng.fan@oss.nxp.com>
- <20220823030215.870414-5-peng.fan@oss.nxp.com>
+        with ESMTP id S230049AbiH3KN1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Aug 2022 06:13:27 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34B86588
+        for <linux-i2c@vger.kernel.org>; Tue, 30 Aug 2022 03:10:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=8XjgrmpmbPsbV1sHUjOhGMM5UKY4
+        NHoGPlZbLi/czoo=; b=NcdmYPZ5h0NKc359TAHxi6WBpIiqkflAyxuIj+IdA83Z
+        q23q+yfr5CXyqDS5fllrA7a9Pxh1UjBCYRz7/Qm1AMSqSJ4YlXme/UNTk5oeG4Zz
+        TTWPlnbputzjAIlxdod/DPLvC5VbSYVes4XTYyb50TTwZ+MeBncwoTEf0xJ7SmY=
+Received: (qmail 226316 invoked from network); 30 Aug 2022 12:10:03 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 30 Aug 2022 12:10:03 +0200
+X-UD-Smtp-Session: l3s3148p1@szRwlXLnztIgAwDPXyz6AKlRFcsoQyrD
+Date:   Tue, 30 Aug 2022 12:10:02 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Chris Brandt <chris.brandt@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH] dt-bindings: i2c: renesas,riic: Fix
+ 'unevaluatedProperties' warnings
+Message-ID: <Yw3h+onH9ValyKGJ@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220829214730.5752-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xUxSXNz0vdoLzOY3"
+        protocol="application/pgp-signature"; boundary="OdPSzfltkbbAJOzj"
 Content-Disposition: inline
-In-Reply-To: <20220823030215.870414-5-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220829214730.5752-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,41 +64,47 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---xUxSXNz0vdoLzOY3
+--OdPSzfltkbbAJOzj
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 23, 2022 at 11:02:12AM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Mon, Aug 29, 2022 at 10:47:30PM +0100, Lad Prabhakar wrote:
+> With 'unevaluatedProperties' support implemented, there's a number of
+> warnings when running dtbs_check:
 >=20
-> Add i.MX93 LPI2C compatible string.
+> arch/arm64/boot/dts/renesas/r9a07g043u11-smarc.dtb: i2c@10058000: Unevalu=
+ated properties are not allowed ('resets' was unexpected)
+> 	From schema: Documentation/devicetree/bindings/i2c/renesas,riic.yaml
 >=20
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> The main problem is that bindings schema marks resets as a required
+> property for RZ/G2L (and alike) SoC's but resets property is not part
+> of schema. So to fix this just add a resets property with maxItems
+> set to 1.
+>=20
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Applied to for-next, thanks!
+Applied to for-current, thanks!
 
 
---xUxSXNz0vdoLzOY3
+--OdPSzfltkbbAJOzj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMN4X0ACgkQFA3kzBSg
-KbbSug//ZYjv5tR/kp3u5tX8260/ttMj25CXfjEUCayqidPgQ+4GqgdWQJR87d3T
-vwdlXiOeiSkVpJCbhGsl4RC3fqhmoxG/2j3pHV7/PfNq5wpT4f5lniyvgbUG8z+X
-D8DD8ipW2E5phVJF6681bggloodKIiO/b9ULVNhHPIiGOiVyejIzEc7dePBnrNkq
-4qTJLuCZimfdZykoxV8Cbe0EgAN/72ZeIQZLYIOwQJAm47vdMJ8N9GsDD4g9OcXr
-XxZnUSi0VVOiTlk9DOhdPYuJJLAdb7/+ZObuLmWLMtVnFY1L5K74lQ7gOtYHddVk
-ciQtCSd25OKFQyZ5OrOZkiSgPuEaLQOsIoa1nVP7dhJ9uGIXWtm8lKHJUZegKmi0
-IQJ0IsmZpQXul1pjfklpdOlzbHczeCwEStWcX8mf2FAAtKH+TOKpu10ZRW/0OOLQ
-6GMfKRvs4DRM4B/6mxIW2YKlOlqvvyED/IY7zIMTGkw68uZenyaLaRMc0Xciqyck
-t6R2cVUoYnW4H50JND+glU3Cis59ot2RcZ+onCRJ5kdcSlQBLTmPXBeTOUWeWQqy
-dRtwKOxlkC0b7cYWmrw/VmJJvwQsJ0qL6VL459Dx7A8ZfA6omjZX8W2kdTXMEYnr
-LCqJgz91myUKXzfjUbKOcKiEBzpotNHz0ZRkVzUINmHzBu0LfEM=
-=8wZe
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMN4foACgkQFA3kzBSg
+Kbav+g//UDcPtTrUKRiBvZLuos4JnS5tSqRj1j8O+YnHgwcmHr8Wcqw2gDFFbdXP
+RWqapxgZ/a8murGzEjobJRy7Z9/5UQoufHc8JLWjvlVqm2xyNwNd++5vpq1sYAZJ
+ikM0W3uDLhRYrmrLSKWZDsL48TawHXCerKJbfCCw2yabadCSp3Pe116lQtTM3jwy
+nOywncnlPBperr4iDNYhFcm6tGZcHFi6ZtbBz+zKFnCAsIFRtwqK5STS/4/ixOIJ
+oaDBskRewfugq8qZbW4mTH+NJW/gqDRdcrEGKgCXgEN9w0fYq6YwW6NJSNffqBBY
+7j0wPRrZCRdL33mEXWddjHynZR4ruuF/yriEdYfxGDtur9FqUf6dQS4hmgKeVIpD
+eEfYCbB6eCbFCPn0UyACVx2lYj/Q4+YbC88PVxWQWqH06rB+X4CUwgCc8ZlClYsC
+V5x2OjfS2gpuhtJpqmix8n21M6LVDaAKDPgzZR8dbqnJmd7ahgUsNfSnbWzuCcZh
+ODov7ojennrZJVOkKFGhFm7WYc6eCuew5CJ46AzYYmOLZWlY6Z8cDN57dPwnbhup
+ysAgJsF6WU5EI5bSOetiKA3hmy7WLc7x9UPdf/gj+3VE8o0xNZ8jlRMfvQYuVFo7
+0F2mpZPGYgCx94Y9Xuo4fICtdA12NYwakwb0FUY6dcz4wB6yvOo=
+=ur4c
 -----END PGP SIGNATURE-----
 
---xUxSXNz0vdoLzOY3--
+--OdPSzfltkbbAJOzj--
