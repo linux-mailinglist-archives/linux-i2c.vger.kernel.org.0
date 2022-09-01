@@ -2,250 +2,343 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6BF5A9AA3
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Sep 2022 16:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D625C5A9F5F
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Sep 2022 20:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234888AbiIAOlA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 1 Sep 2022 10:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
+        id S231668AbiIASrn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 1 Sep 2022 14:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234982AbiIAOkk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Sep 2022 10:40:40 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40E1286F9;
-        Thu,  1 Sep 2022 07:40:25 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id bj12so35118782ejb.13;
-        Thu, 01 Sep 2022 07:40:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=oGpl7pItr3EHWOEnJY9fD38ZGuHllIQRNMyk8Qf83dw=;
-        b=N1FwxgN9415RIK+wBsTxPPtNnGwIPbgqlexuoTp0gTyyukByY5D4/sBDFaGeTlPYxR
-         lOOhvFtuA+XrSCqIdLuIy948cFPddOMSkwMeeySAYhUbhZOYMWnbYCwysHXk0JsuG2oe
-         bjiJho+SAZ15MgrYG5g3xdxtjaCgG/2UGqF6XNbKrQD4GvPoKKyNEYrLLaWypSs0tE2c
-         6ydDKOelKqv/oB1+eC29Wr1gXl+d06QkhCbIv4bPGwda2G7FaME+L7l7Genx+GWwSw3h
-         l3GEL4XWP0aCHEeKT/IBP3Qa5ke3lC+4Te207qzJd7aFeuQLm3AZOZSHKDdOl8DN3yIV
-         DSvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=oGpl7pItr3EHWOEnJY9fD38ZGuHllIQRNMyk8Qf83dw=;
-        b=bRzLrkGeILM7oQ3pAPiChf6QXT+BUm0Iwa5u0bEVBdi/OUa7lnYQ34YisCg2c+jRyM
-         BCSDjZreGFTAu/SuKyEdo21hr8MsER8YWW7GzsVhXzcH03chpNGIOT5QHqH4p+IjuZ7K
-         7nIHbXUfYig8RVOgNduMdeo4xhQuzl5PoL3XcRUhLGoE3OMInNAh9iDJx+0E13Qa2VWO
-         kPqRuLa9XHJcizqVzfrJz3jGEb0aBZvqkKoUAHwFZ1qPCvuBZCCCP7bZUxRGMVEsHHtt
-         mSLLwqGvrUkfHrHZRpupsAl9bGeiqNQEEDaNWB9D/F66pWF+Vt9q5qg0C06Fh1blU17s
-         C1eA==
-X-Gm-Message-State: ACgBeo0YiVuBVXSEpw+mXueC0AGteJvsf/njzXuj8mA5c+sApWAQsV4b
-        b+I4KNdN77enzaO2tZ7nOAo=
-X-Google-Smtp-Source: AA6agR6vUjQ/0PGeVFFQqXilMO5abv4F+H//fFBMRDUOkeFHP0ANy2GnhjFcuD7PPmwTjhM6SNM+6w==
-X-Received: by 2002:a17:907:2cea:b0:741:6251:3a22 with SMTP id hz10-20020a1709072cea00b0074162513a22mr15534680ejc.6.1662043223741;
-        Thu, 01 Sep 2022 07:40:23 -0700 (PDT)
-Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id kx3-20020a170907774300b0073d9630cbafsm8045006ejc.126.2022.09.01.07.40.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 07:40:22 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 16:40:21 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Akhil R <akhilrajeev@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "Kartik ." <kkartik@nvidia.com>
-Subject: Re: [PATCH RESEND 1/2] i2c: tegra: Add GPCDMA support
-Message-ID: <YxDEVUq3jbjnOmnI@orome>
-References: <SJ1PR12MB6339FC1F82EB1BB7417E533BC0719@SJ1PR12MB6339.namprd12.prod.outlook.com>
- <ebb0764f-db92-d69d-49ac-151f4e3e0b8a@collabora.com>
- <SJ1PR12MB63396DC508F63807F1CE9901C0719@SJ1PR12MB6339.namprd12.prod.outlook.com>
- <fac10841-1682-845f-3e4a-5668f59caed0@gmail.com>
- <cd0374f1-2c05-7e61-7187-cfc9c42edf63@gmail.com>
- <SJ1PR12MB63397BBD4EF314A742680F2CC0709@SJ1PR12MB6339.namprd12.prod.outlook.com>
- <a7ba27c4-992b-28d1-f6c2-3937b4f275ce@collabora.com>
- <c9ba2629-fc81-cefd-0d6d-991084781ec3@collabora.com>
- <SJ1PR12MB63393F51E29BA1F85AD249DBC0709@SJ1PR12MB6339.namprd12.prod.outlook.com>
- <4f791065-e0dd-6ed5-f152-86d7be683490@collabora.com>
+        with ESMTP id S234057AbiIASrh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Sep 2022 14:47:37 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB2A7F0B8;
+        Thu,  1 Sep 2022 11:47:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662058045; x=1693594045;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1WMCjEyHaC+wtyRq4u2T3mWuHuAU/JtguUjyVOcbWWc=;
+  b=BxAYypORPz0scx/pgHudlGHAdOvdMdvLKw5CBbNQfhtjE+QHEQK/JW30
+   ZLoKVdvIS3sYJfDvFxvfUVU6KACC1gLcBlDVXhIM4WMwzLtLtv6gg2BA3
+   AftDJUE0AYBG0GPSLtQXuUhDORtSrJag0GHUujUfnHFGw0bNNLLLrWK1Z
+   tacCeA9SS9J+psLM1CtiU5tlBWAOHZIeJx605aJ7HOpUJ/Vl1/yXmMluF
+   44lMiXQZs0lsuiOF99gFol10P/Uwlt4YIoXI8kgxWDy+R9Z1NnCZwKarS
+   qLOoaD1e5Hf75//hwCRRaeyU0jRmaljd3lIhMVk3IoOKoyKjM3aeqFila
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="359758947"
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="359758947"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 11:47:25 -0700
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="563576409"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 11:47:21 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oTpDi-00708r-0C;
+        Thu, 01 Sep 2022 21:47:18 +0300
+Date:   Thu, 1 Sep 2022 21:47:17 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wsa@kernel.org, krzk@kernel.org, jarkko.nikula@linux.intel.com,
+        robh@kernel.org, semen.protsenko@linaro.org, sven@svenpeter.dev,
+        jsd@semihalf.com, rafal@milecki.pl, olof@lixom.net, arnd@arndb.de,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v2 i2c-master] i2c: microchip: pci1xxxx: Add driver for
+ I2C host controller in multifunction endpoint of pci1xxxx switch
+Message-ID: <YxD+NTWok2vkYos/@smile.fi.intel.com>
+References: <20220901013626.2213100-1-tharunkumar.pasumarthi@microchip.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="6EXBlDW1rh4vcfOw"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4f791065-e0dd-6ed5-f152-86d7be683490@collabora.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220901013626.2213100-1-tharunkumar.pasumarthi@microchip.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Thu, Sep 01, 2022 at 07:06:26AM +0530, Tharun Kumar P wrote:
+> Microchip pci1xxxx is an unmanaged PCIe3.1a Switch for Consumer,
+> Industrial and Automotive applications. This switch has multiple
+> downstream ports. In one of the Switch's Downstream port, there
+> is a multifunction endpoint for peripherals which includes an I2C
+> host controller. The I2C function in the endpoint operates at 100KHz,
+> 400KHz and 1 MHz and has buffer depth of 128 bytes.
+> This patch provides the I2C controller driver for the I2C function
+> of the switch.
 
---6EXBlDW1rh4vcfOw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-On Tue, Aug 23, 2022 at 04:32:11PM +0300, Dmitry Osipenko wrote:
-> On 8/23/22 15:55, Akhil R wrote:
-> ...
-> >>>> What I am trying for is to have a mechanism that doesn't halt the i2c
-> >> transfers
-> >>>> till DMA is available. Also, I do not want to drop DMA because it was
-> >> unavailable
-> >>>> during probe().
-> >>>
-> >>> Why is it unavailable? Sounds like you're not packaging kernel proper=
-ly.
-> > Unavailable until initramfs or systemd is started since the module has =
-to be
-> > loaded from either of it.
-> >=20
-> >>>
-> >>>> This situation is sure to hit if we have I2C driver as built in and =
-DMA driver as a
-> >>>> module. In such cases, I2C will never be able to use the DMA.
-> >>>
-> >>> For Tegra I2C built-in + DMA driver module you should add the dma.ko =
-to
-> >>> initramfs and then it will work. This is a common practice for many
-> >>> kernel drivers.
-> >>>
-> >>> It's also similar to a problem with firmware files that must be
-> >>> available to drivers during boot,
-> >=20
-> > Isn't the initramfs loaded after the driver initcalls? Wasn't very much=
- clear for me
-> > from the code and docs. We did try adding the module in initramfs initi=
-ally, but
-> > couldn't find much of a difference from when it is loaded by systemd in=
- rootfs.
-> > Will explore more on this if this really helps.
->=20
-> It doesn't matter when initramfs is loaded. Tegra I2C should be
-> re-probed once DMA driver is ready, that's the point of deferred
-> probing. I'd assume that your DMA driver module isn't loading.
+> +#define SMB_IDLE_SCALING_100KHZ		((FAIR_IDLE_DELAY_100KHZ_TICKS << 16) | \
+> +					FAIR_BUS_IDLE_MIN_100KHZ_TICKS)
 
-One problem we have with this, and it's another part of the reason why
-we have the TEGRA20_APB_DMA conditional in there, is that if no DMA
-driver is enabled, then the I2C driver will essentially defer probe
-indefinitely.
+This kind of indentation harder to read than
 
-The same would happen if for whatever reason someone was to disable the
-DMA engine via status =3D "disabled" in device tree. And that's not
-something we can easily discover, as far as I can tell. Although perhaps
-code could be added to discover these kinds of situations.
+#define SMB_IDLE_SCALING_100KHZ		\
+	((FAIR_IDLE_DELAY_100KHZ_TICKS << 16) | FAIR_BUS_IDLE_MIN_100KHZ_TICKS)
 
-Both of the above scenarios could also be considered as bugs, I suppose,
-and in that case the fix would be to update the configuration and/or the
-device tree.
+Ditto for other similar cases.
 
-> >>>> Another option I thought about was to request and free DMA channel f=
-or
-> >> each
-> >>>> transfer, which many serial drivers already do. But I am a bit anxio=
-us if that
-> >> will
-> >>>> increase the latency of transfer.
-> >>>
-> >>> Perhaps all you need to do is to add MODULE_SOFTDEP to Tegra I2C driv=
-er
-> >>> like we did it for the EMC driver [1].
-> >>>
-> >>> [1]
-> >>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-
-> >> next.git/commit/?id=3D14b43c20c283de36131da0cb44f3170b9ffa7630
-> >>>
-> >>
-> >> Although, probably MODULE_SOFTDEP won't work for a built-in driver. In
-> >> that case, change Tegra I2C kconfig to depend on the DMA driver.
-> >=20
-> > Since I2C can work without DMA, wouldn't it limit the flexibility of I2=
-C driver.
->=20
-> There are kernel configurations that are not worthwhile to support
-> because nobody use them in practice. I think this is exactly the case
-> here. The TEGRA20_APB_DMA driver dependency created troubles for a long
-> time.
->=20
-> If DMA driver is enabled in kernel config, then you should provide the
-> driver module to kernel and it will work.
->=20
-> If DMA driver is disabled in kernel config, then Tegra I2C driver should
-> take that into account. I'm now recalling that this was the reason of
-> "!IS_ENABLED(CONFIG_TEGRA20_APB_DMA)" in the code.
->=20
-> Since all h/w gens now provide DMA support for Tegra I2C, then should be
-> better and easier to make DMA a dependency for Tegra I2C and don't
-> maintain kernel build configurations that nobody cares about.
+...
 
-This is a suboptimal solution because we have APB DMA for Tegra20
-through Tegra210 and GPC DMA for Tegra186 and later. So we'd need to
-depend on two drivers and that would then pull in GPC DMA basically on
-all generations.
+> +/*
 
-One potential workaround would be to have a fairly elaborate check in
-the driver to make sure that for SoC generations that support APB DMA
-that that driver is enabled, and for SoC generations that have GPC DMA
-that the corresponding driver is enabled. That's quite ugly and it
-doesn't solve the status =3D "disabled" problem, so we'd need that as
-well.
+If it's a kernel doc, make it kernel doc.
 
-Another thing that I've been thinking about is to use the deferred probe
-timeout to remedy this. driver_deferred_probe_check_state() can be used
-by subsystems to help figure out these kinds of situations. Basically if
-we integrated that into dma_request_channel(), this would at some point
-(fairly) late into boot return -ETIMEDOUT (or -ENODEV if modules are
-disabled). So this would help with status =3D "disabled" and allow us to
-avoid Kconfig dependencies/conditionals. Unfortunately it seems like
-that is in the process of being removed, so not sure if that's a long-
-term option.
+> + * struct pci1xxxx_i2c - private structure for the I2C controller
+> + * @i2c_xfer_done: used for synchronisation between foreground & isr
+> + * @i2c_xfer_in_progress: boolean to indicate whether a transfer is in
+> + *				progress or not
+> + * @adap: I2C adapter instance
+> + * @i2c_base: pci base address of the I2C controller
+> + * @freq: frequency of I2C transfer
+> + * @flags: internal flags to store transfer conditions
+> + */
 
-What that doesn't help with is the potentially long delay that probe
-deferral can cause, so it means that all I2C devices may not get a
-chance to probe until very late into the boot process. We may need to
-survey what exactly that means to better judge what to do about it. I
-do agree that probe deferral is the right tool for the job, but it may
-be prohibitively slow to get I2C working with that.
+...
 
-Another mitigation would be for the driver to keep probing for the DMA
-channels in the background. Sort of like an asynchronous probe deferral
-of that subset. Similar things were discussed at some point when the
-whole fw_devlink and such were hashed out, though at the time I think
-the preferred proposal was a notification mechanism.
+> +static int set_sys_lock(void __iomem *addr)
 
-Thierry
+Why not to take pointer to your private structure and offset instead of address
+and calc the address here?
 
---6EXBlDW1rh4vcfOw
-Content-Type: application/pgp-signature; name="signature.asc"
+...
 
------BEGIN PGP SIGNATURE-----
+> +static int release_sys_lock(void __iomem *addr)
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMQxFIACgkQ3SOs138+
-s6FH5xAAqTlqEFg0v+RseYBA6ke9pT/l555czmR5Tgl7x8KBcPhZEzL/SXIW8JLL
-45No62nZBKM6Wk5WmXhbaq3xrH4xj339PKYg2gN2ZJ+E/eMDsF/ruFZK5LGpQ7vs
-DQI2vK1ER1ms2vVTdRjIceW0X9IfkLsgP8Xk97yPY2s7sABMYoaxjjD98GFXyInn
-6ZjiPKJlDLH2PZI7WQmGMGpd5ct1m29xyO2G7unVeHONavngBtA3nzTx4RadK/CK
-sKaH3Ixy8MpnFvncSrSF+Wp4B7u+TDdVybB3GdLhn6P85IfuVPYw1UJp0XdgnkNH
-viJ9Mbond5VOOy+5zv/wrA29i8xQZt/4Fym/pmyDjgbSNw3qhN2XV3nn//W+0c26
-Vgyti6rZDW6O6W1SXKHjAL2CG2cnJorv3nYPnF4eiPzPikWdq2m6YD3hxb2eHl8G
-DaPsDpd+1eagoYgewipROyIcaY4w+OygphDUXYQkz76pTOOh90RruQ5wvgUSOUyX
-ENxJpku0xO/MQv+Nt6LlxzcW8WiY4nltpDljFXzqDCXIiShfAXYrlKO3nIajMvyi
-7Rtul601MsvO+h6jCXFo2GayPHWntY4kLXt2NnAnUDgEZbqadO/72vphKJ0RsST+
-fHH8Y1KC62G+O0Et4GAbUX4gGJ4PTQGAkEl4VeHyyoqUTR8pqp0=
-=hUEH
------END PGP SIGNATURE-----
+Ditto.
 
---6EXBlDW1rh4vcfOw--
+...
+
+> +static void pci1xxxx_i2c_buffer_write(struct pci1xxxx_i2c *i2c, u8 slaveaddr,
+> +				      u8 transferlen, unsigned char *buf)
+> +{
+> +	if (slaveaddr) {
+> +		writeb(slaveaddr, i2c->i2c_base + SMBUS_MST_BUF);
+> +		if (buf)
+> +			memcpy_toio((i2c->i2c_base + SMBUS_MST_BUF + 1), buf, transferlen);
+> +	} else {
+> +		if (buf)
+> +			memcpy_toio((i2c->i2c_base + SMBUS_MST_BUF), buf, transferlen);
+> +	}
+
+Why do you need buf checks? Is your code can shoot itself in the foot?
+
+> +}
+
+...
+
+> +		regval &= ~(intr_msk);
+
+> +		regval |= (I2C_INPUT_EN | I2C_OUTPUT_EN);
+
+> +		regval |= (I2C_INPUT_EN | I2C_OUTPUT_EN);
+
+And in a plenty places you add extra parentheses. Reread your code and drop
+them and in some cases (I will show below an example) move code to shorter
+amount of LoCs.
+
+...
+
+> +		regval &=  ~(I2C_INPUT_EN | I2C_OUTPUT_EN);
+
+Extra space.
+
+...
+
+> +	pci1xxxx_i2c_config_high_level_intr(i2c, (I2C_BUF_MSTR_INTR_MASK),
+> +					    true);
+
+Why parentheses? Why it can't be one line?
+There are more examples like this. Fix them all.
+
+...
+
+> +			if (i2c->flags & I2C_FLAGS_SMB_BLK_READ)
+> +				pci1xxxx_i2c_set_readm(i2c, true);
+
+> +
+
+We don't need useless blank lines.
+
+> +		} else {
+> +			pci1xxxx_i2c_set_count(i2c, 0, 0, transferlen);
+> +
+> +			pci1xxxx_i2c_config_asr(i2c, false);
+> +
+> +			pci1xxxx_i2c_clear_flags(i2c);
+> +
+> +			pci1xxxx_i2c_set_transfer_dir(i2c, I2C_DIRN_READ);
+> +		}
+
+...
+
+> +		if (i2c->flags & I2C_FLAGS_SMB_BLK_READ) {
+
+> +			buf[0] = readb(i2c->i2c_base +
+> +				      SMBUS_MST_BUF);
+
+Why not on one line?
+
+> +			read_count = buf[0];
+> +			memcpy_fromio(&buf[1], (i2c->i2c_base +
+> +						SMBUS_MST_BUF + 1),
+> +						read_count);
+> +		} else {
+> +			memcpy_fromio(&buf[count], (i2c->i2c_base +
+> +						SMBUS_MST_BUF), transferlen);
+> +		}
+
+These accessors may copy from 1 to 4 bytes at a time. Does your hardware
+supports this kind of accesses?
+
+
+...
+
+> +static int pci1xxxx_i2c_suspend(struct device *dev)
+> +{
+> +	struct pci1xxxx_i2c *i2c = dev_get_drvdata(dev);
+> +	struct pci_dev *pdev = to_pci_dev(dev);
+> +	u32 regval;
+> +
+> +	i2c_mark_adapter_suspended(&i2c->adap);
+> +
+> +	while ((i2c->i2c_xfer_in_progress))
+> +		msleep(20);
+
+Each long sleep (20 ms is quite long) has to be explained. But this entire loop
+looks like a band-aid of lack of IRQ or so. Why do you need to poll?
+
+> +	pci1xxxx_i2c_config_high_level_intr(i2c,
+> +					    SMBALERT_WAKE_INTR_MASK,
+> +					    true);
+> +
+> +	/*
+> +	 * Enable the PERST_DIS bit to mask the PERST from
+> +	 * resetting the core registers
+> +	 */
+> +	regval = readl(i2c->i2c_base + SMBUS_RESET_REG);
+> +	regval |= PERI_SMBUS_D3_RESET_DIS;
+> +	writel(regval, i2c->i2c_base + SMBUS_RESET_REG);
+> +	/* Enable PCI wake in the PMCSR register */
+> +	device_set_wakeup_enable(dev, TRUE);
+> +	pci_wake_from_d3(pdev, TRUE);
+> +
+> +	return 0;
+> +}
+
+...
+
+> +	pci_wake_from_d3(pdev, FALSE);
+
+What's FALSE and why false can't be used?
+
+...
+
+> +static SIMPLE_DEV_PM_OPS(pci1xxxx_i2c_pm_ops, pci1xxxx_i2c_suspend,
+> +			 pci1xxxx_i2c_resume);
+
+Use new macro which starts with DEFINE prefix.
+
+...
+
+> +	/*
+> +	 * We are getting the base address of the SMB core. SMB core uses
+> +	 * BAR0 and size is 32K
+
+Missed period.
+
+> +	 */
+
+> +
+
+Useless blank line.
+
+> +	ret = pcim_iomap_regions(pdev, BIT(0), pci_name(pdev));
+> +	if (ret < 0)
+> +		return -ENOMEM;
+
+> +	i2c->i2c_base =	pcim_iomap_table(pdev)[0];
+> +
+> +	init_completion(&i2c->i2c_xfer_done);
+> +
+> +	pci1xxxx_i2c_init(i2c);
+
+Here you need to wrap pci1xxxx_i2c_shutdown() to be devm_. See below.
+
+> +	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
+> +	if (ret < 0) {
+> +		pci1xxxx_i2c_shutdown(i2c);
+> +		return ret;
+> +	}
+> +
+> +	/* Register the isr. We are not using any isr flags here. */
+> +	ret = devm_request_irq(&pdev->dev, pci_irq_vector(pdev, 0),
+
+With
+
+	struct device *dev = &pdev->dev;
+
+you may have some lines of code neater and shorter.
+
+> +			       pci1xxxx_i2c_isr, PCI1XXXX_IRQ_FLAGS,
+> +			       pci_name(pdev), i2c);
+> +	if (ret) {
+> +		pci1xxxx_i2c_shutdown(i2c);
+> +		return ret;
+> +	}
+> +
+> +	i2c->adap = pci1xxxx_i2c_ops;
+> +	i2c->adap.class = I2C_CLASS_SPD;
+> +	i2c->adap.dev.parent = &pdev->dev;
+> +
+> +	snprintf(i2c->adap.name, sizeof(i2c->adap.name),
+> +		 "MCHP PCI1xxxx i2c adapter at %s", pci_name(pdev));
+> +
+> +	i2c_set_adapdata(&i2c->adap, i2c);
+> +
+> +	ret = devm_i2c_add_adapter(&pdev->dev, &i2c->adap);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "i2c add adapter failed = %d\n", ret);
+
+> +		pci1xxxx_i2c_shutdown(i2c);
+
+You can't mix devm_ and non-devm_ in such manner. It's asking for troubles at
+->remove() or unbind stages.
+
+> +		return ret;
+
+After fixing above, convert the error messages to use
+
+	return dev_err_probe(...);
+
+pattern.
+
+> +	}
+
+...
+
+> +static void pci1xxxx_i2c_remove_pci(struct pci_dev *pdev)
+> +{
+> +	struct pci1xxxx_i2c *i2c = pci_get_drvdata(pdev);
+> +
+> +	pci1xxxx_i2c_shutdown(i2c);
+> +}
+
+This will be gone.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
