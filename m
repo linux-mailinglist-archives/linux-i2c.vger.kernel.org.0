@@ -2,162 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A795AB403
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Sep 2022 16:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 344265ABA07
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 Sep 2022 23:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236943AbiIBOsW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 2 Sep 2022 10:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
+        id S230362AbiIBVaE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 2 Sep 2022 17:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236498AbiIBOr7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 2 Sep 2022 10:47:59 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1497AA9243;
-        Fri,  2 Sep 2022 07:08:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662127713; x=1693663713;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=c7Z/N5tHcfEnQNOU6Imm0br8Q97DRPhQZDzGctYv+DQ=;
-  b=XqE66Wpxhv7zBkkePnlarzFIqXXZgA9jMgXOw4zjxbAU9Ilw4MlBT8Ee
-   CEXaL83yfLinFbvIv5Hw2/aa9VzUU/O61Q9+8f5raQrS1SyJ+gVRAWFFM
-   ptg+cVDH+aKQFU4bl/PfsSq8xOuEaeC3UoJ3d1nyBANrN1LkKn2YohUWe
-   g8568kW7mOUcRSyWbnbFWtpbE4VD8hRMDn6o2dKNWX4kozB/syffuRJYa
-   9hXbJbSCNryjqwZ8/UcswtBq1h2ftB3keGt0KuxNCJ7N4M+cA05sAkw5z
-   URLLrUTAyG3g+MCIWYeBQSz7ur7h63u+f5qGZTBdo3pEaPaJNkPRo41IY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="293565038"
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="293565038"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 07:08:32 -0700
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="613046760"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 07:08:28 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oU7LN-007Pvx-0U;
-        Fri, 02 Sep 2022 17:08:25 +0300
-Date:   Fri, 2 Sep 2022 17:08:24 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tharunkumar.Pasumarthi@microchip.com
-Cc:     UNGLinuxDriver@microchip.com, wsa@kernel.org, krzk@kernel.org,
-        sven@svenpeter.dev, robh@kernel.org, semen.protsenko@linaro.org,
-        linux-kernel@vger.kernel.org, jarkko.nikula@linux.intel.com,
-        olof@lixom.net, linux-i2c@vger.kernel.org, jsd@semihalf.com,
-        arnd@arndb.de, rafal@milecki.pl
-Subject: Re: [PATCH v2 i2c-master] i2c: microchip: pci1xxxx: Add driver for
- I2C host controller in multifunction endpoint of pci1xxxx switch
-Message-ID: <YxIOWMqjP2+k7MPi@smile.fi.intel.com>
-References: <20220901013626.2213100-1-tharunkumar.pasumarthi@microchip.com>
- <YxD+NTWok2vkYos/@smile.fi.intel.com>
- <2345b4bcd0c529878307b2a84364ea849005eed9.camel@microchip.com>
+        with ESMTP id S229917AbiIBVaC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 2 Sep 2022 17:30:02 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F825A15C;
+        Fri,  2 Sep 2022 14:30:02 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-11eb44f520dso7852175fac.10;
+        Fri, 02 Sep 2022 14:30:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=gOAzsL9bsAt7jlkpt+vaf6xyvNBMEcyrbnj+YjtEFYc=;
+        b=5fDAY4x2dMqzPEgQUedR8J7stknjQuZ70tT/QFejKOgrcfOCeiWTTaGNVc19filzOq
+         ctpYMN8D5bXF8/zBD6aEsr9d5PGJ+vyQzGNsOKxpDLN6++FvlMX1NJdvrpTX4QVMCt8T
+         Sw+J3GRV85TU9H6ornGH/WqREHzhUsKJ4LX6yw6hTVzwM1rHa//YhQ1ockzkxX0LO/nA
+         sS7GMLAKs+aweWxHm+Uwbes4snTgN74xzvQAWzZgZ1dtMj3o32uEzZJrGSSeGwxz8rOf
+         g3zgwpDzikUfx+l5KEELPH4kY/cBRK22XyzfnunyGfsxmD4CM3vNSACPtatsXzAxKkWT
+         VZkQ==
+X-Gm-Message-State: ACgBeo2ti5+ghXwAoYZhEkSekCRsrP9FnFQ8DRP5vewHwBIAPPZ7HG80
+        JU7kTePiA1oNzH6OwhFq/A==
+X-Google-Smtp-Source: AA6agR5FyIT3medZqlb0ztfVLiAWmg0Ir31ztuO4VBzvFV7cYnSkWqB9g9H+Fvmqw+fsq/JV6Chk/Q==
+X-Received: by 2002:a05:6870:b3aa:b0:11f:5995:8e2e with SMTP id w42-20020a056870b3aa00b0011f59958e2emr3398439oap.204.1662154201303;
+        Fri, 02 Sep 2022 14:30:01 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r33-20020a05687108a100b0011e37fb5493sm1684953oaq.30.2022.09.02.14.30.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 14:30:00 -0700 (PDT)
+Received: (nullmailer pid 447636 invoked by uid 1000);
+        Fri, 02 Sep 2022 21:29:59 -0000
+Date:   Fri, 2 Sep 2022 16:29:59 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     devicetree@vger.kernel.org, Loic Poulain <loic.poulain@linaro.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-i2c@vger.kernel.org,
+        Robert Foss <robert.foss@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH] dt-bindings: i2c: qcom,i2c-cci: specify SM8450 CCI clocks
+Message-ID: <20220902212959.GA447603-robh@kernel.org>
+References: <20220901074218.21108-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2345b4bcd0c529878307b2a84364ea849005eed9.camel@microchip.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220901074218.21108-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 11:31:11AM +0000, Tharunkumar.Pasumarthi@microchip.com wrote:
-> On Thu, 2022-09-01 at 21:47 +0300, Andy Shevchenko wrote:
-
-...
-
-> > > +             if (buf)
-> > > +                     memcpy_toio((i2c->i2c_base + SMBUS_MST_BUF), buf,
-> > > transferlen);
-> > 
-> > Why do you need buf checks? Is your code can shoot itself in the foot?
+On Thu, 01 Sep 2022 10:42:18 +0300, Krzysztof Kozlowski wrote:
+> Document clocks for SM8450 Camera Control Interface I2C controller.
 > 
-> Yes, buf will be passed as NULL in some cases. So, this check is required.
-
-Can you show an excerpt of the caller which passes NULL?
-
-...
-
-> > Each long sleep (20 ms is quite long) has to be explained. But this entire
-> > loop
-> > looks like a band-aid of lack of IRQ or so. Why do you need to poll?
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> This handling takes care of special case when system is put to suspend when i2c
-> transfer is progress in driver. We will wait until transfer completes.
-
-This should be at least a comment in the code.
-
-...
-
-> > > +     pci1xxxx_i2c_init(i2c);
-> > 
-> > Here you need to wrap pci1xxxx_i2c_shutdown() to be devm_. See below.
-> > 
-> > > +     ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
-> > > +     if (ret < 0) {
-> > > +             pci1xxxx_i2c_shutdown(i2c);
+> ---
 > 
-> I am not getting. Are you suggesting to change API name to
-> devm_pci1xxxx_i2c_shutdown?
+> Based on:
+> 1. https://lore.kernel.org/all/20220901073504.3077363-1-vladimir.zapolskiy@linaro.org/
+> ---
+>  Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> > > +
-> > > +     ret = devm_i2c_add_adapter(&pdev->dev, &i2c->adap);
-> > > +     if (ret) {
-> > > +             dev_err(&pdev->dev, "i2c add adapter failed = %d\n", ret);
-> > 
-> > > +             pci1xxxx_i2c_shutdown(i2c);
-> > 
-> > You can't mix devm_ and non-devm_ in such manner. It's asking for troubles at
-> > ->remove() or unbind stages.
-> 
-> I am not getting this comment. Can you kindly explain more.
-> 
-> > > +             return ret;
 
-Explanations [1] & [2]. Example how to workaround [3].
-
-[1]: https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1949091.html
-[2]: https://lore.kernel.org/all/YXktrG1LhK5tj2uF@smile.fi.intel.com/
-[3]: https://www.spinics.net/lists/kernel/msg4433985.html
-
-...
-
-> > After fixing above, convert the error messages to use
-> > 
-> >         return dev_err_probe(...);
-> > 
-> > pattern.
-> 
-> Okay.
-
-Will be result of above fix.
-
-...
-
-> > > +static void pci1xxxx_i2c_remove_pci(struct pci_dev *pdev)
-> > > +{
-> > > +     struct pci1xxxx_i2c *i2c = pci_get_drvdata(pdev);
-> > > +
-> > > +     pci1xxxx_i2c_shutdown(i2c);
-> > > +}
-> > 
-> > This will be gone.
-> 
-> I am not getting this comment also.
-
-See above.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Acked-by: Rob Herring <robh@kernel.org>
