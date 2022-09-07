@@ -2,180 +2,186 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FFF5AFEA4
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Sep 2022 10:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36AD25B05BE
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Sep 2022 15:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiIGIM6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Sep 2022 04:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43928 "EHLO
+        id S229782AbiIGNx4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Sep 2022 09:53:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbiIGIM5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Sep 2022 04:12:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB07A9C37
-        for <linux-i2c@vger.kernel.org>; Wed,  7 Sep 2022 01:12:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662538372;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G7JSisCjfZkuxA0PRfAg5vFvEX0TLAd+IEtq8gNC3kc=;
-        b=V/8BHPSNINTKaZlHcBc5xLh1zrMS1xW0ibF8dhlZVyqGkzK2OAWEQTRtE8ufvmmmJlInRu
-        HIG3TxYF9BR4EZqW13mBC3DUkNBtN5xIym7w5dBt6XCIuoZd/7UNBViVOnyulQWIQdrl24
-        dwWsLTo2VVDwtF09SYEabHJVroMddUE=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-211-RtVIPdfhPOeRM7IaoS9mnA-1; Wed, 07 Sep 2022 04:12:51 -0400
-X-MC-Unique: RtVIPdfhPOeRM7IaoS9mnA-1
-Received: by mail-ej1-f69.google.com with SMTP id ho13-20020a1709070e8d00b00730a655e173so4547172ejc.8
-        for <linux-i2c@vger.kernel.org>; Wed, 07 Sep 2022 01:12:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=G7JSisCjfZkuxA0PRfAg5vFvEX0TLAd+IEtq8gNC3kc=;
-        b=MOtBvQ8AsmrMeLfwHkGWIbdDAmb1i7Zjby8SRdqmKbs6X3mVNaz+6AQJYoiFIqTxLf
-         RL1O5sli1Tx+4zWQ+s1i+svgYCNUFh0MXB7tZeIEerOj25JA8sdZH6xALaC7W74ldAxK
-         ym8lSC6IquVTio42KRL/IznpxPVOVk50K2jkkXQ/OgTaDV2+4o9ChZk6G5ePOeETF6tL
-         zckQMdrQ6E1o+pWRMSWTwKCjw7vxZfmugVrceqCdkVEnha5/s8jRm2tIyfvLUIru260Z
-         k7z6xp2mS2fS2Cd1QyVzZ5M+eNXlmtLeLeQh572626ivDRYSTjraTCJA7sUL1xMJOUS4
-         Hhzg==
-X-Gm-Message-State: ACgBeo2UF1PldBGK119Bs0fInO8ChV6GtHk45Zn8jx44ku/OdeR1+Pey
-        p0p86M3CXbYP0s4aG7PHyw4uXP5zBLbvx5AaDFNiegbU7kPbinHp6rX31tuyl68gRbUlGZuWhcV
-        Wv+xrXrg2K0zzD97UKgpc
-X-Received: by 2002:a17:907:86a9:b0:741:79ed:63c5 with SMTP id qa41-20020a17090786a900b0074179ed63c5mr1540650ejc.672.1662538369562;
-        Wed, 07 Sep 2022 01:12:49 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6E7X+C9AseYow/fk8IncNlnPrHRbuIQLWSexVQ0dpu7EwNQeTbL7l1XmIgxgTUySZsotEezQ==
-X-Received: by 2002:a17:907:86a9:b0:741:79ed:63c5 with SMTP id qa41-20020a17090786a900b0074179ed63c5mr1540637ejc.672.1662538369275;
-        Wed, 07 Sep 2022 01:12:49 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id m2-20020a170906848200b007707ab1139csm1071181ejx.75.2022.09.07.01.12.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 01:12:48 -0700 (PDT)
-Message-ID: <98559c23-cc22-3b85-2102-0cc760240804@redhat.com>
-Date:   Wed, 7 Sep 2022 10:12:47 +0200
-MIME-Version: 1.0
+        with ESMTP id S229673AbiIGNxs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Sep 2022 09:53:48 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DDDA220A;
+        Wed,  7 Sep 2022 06:53:47 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 287DgB8n020297;
+        Wed, 7 Sep 2022 13:53:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=Yyrc9saJQYLT5TPC1+9QpzBLh2OKqdf5lWreXjgpJus=;
+ b=buECoyK/d5S/taJ0Fud/O917MQmdI4xxzK5nMce9iT/blhItkELeAlhSLwp8lPZDrJTa
+ KoRH3qaHSiIK0t6Dj/5ZyEF7i2CfYwcszSpJPgSqZ6Y6w6zvKiGcXIoJrnwi+8D7qLco
+ n+6EhmNZOnPk24dBp26LTEItqxRbnu26WQjhB120c2iE1oKEkzHtx/VqPo15XrwdGgPo
+ BbuP1zWgkXpWfPr8fGIuMmU/lYPsC3TNrtJNKod14KHh8q/3P6Baa+yVLvFZQ3xP9D/p
+ 2eNkfQa6KezOudsrQ0W9H9nXbH/LvgUsrD6XDA3j1Z5nLul+zE4YcI9LCiZoHB2emydE Wg== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jevdrghqw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 13:53:23 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 287DpVgn012030;
+        Wed, 7 Sep 2022 13:53:22 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma01wdc.us.ibm.com with ESMTP id 3jbxj9j4sj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 13:53:22 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 287DrLpg15139558
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 7 Sep 2022 13:53:21 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DEA8D7805F;
+        Wed,  7 Sep 2022 14:03:36 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EB53A7805C;
+        Wed,  7 Sep 2022 14:03:35 +0000 (GMT)
+Received: from [9.65.226.72] (unknown [9.65.226.72])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed,  7 Sep 2022 14:03:35 +0000 (GMT)
+Message-ID: <c7f6baa3-8181-a612-72cc-23f570f31ab3@linux.ibm.com>
+Date:   Wed, 7 Sep 2022 08:53:20 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 4/8] i2c: acpi: Use ACPI GPIO wake capability bit to set
- wake_irq
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 2/2] iio: si7020: Lock root adapter to wait for reset
 Content-Language: en-US
-To:     Raul Rangel <rrangel@chromium.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Tim Van Patten <timvp@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20220830231541.1135813-1-rrangel@chromium.org>
- <20220830171332.4.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
- <YxftNQrRx3fwsobk@google.com>
- <CAHQZ30DPmn1hN+xfck7CgOGLcze0jtHxxWnq7yVVL0Q_DzG6UQ@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHQZ30DPmn1hN+xfck7CgOGLcze0jtHxxWnq7yVVL0Q_DzG6UQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org
+Cc:     linux-iio@vger.kernel.org, wsa@kernel.org, jic23@kernel.org,
+        lars@metafoo.de, miltonm@us.ibm.com, joel@jms.id.au,
+        linux-kernel@vger.kernel.org
+References: <20220906202829.1921114-1-eajames@linux.ibm.com>
+ <20220906202829.1921114-3-eajames@linux.ibm.com>
+ <31b44b63-4cf3-6fdd-b2b8-6f00070af89a@axentia.se>
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <31b44b63-4cf3-6fdd-b2b8-6f00070af89a@axentia.se>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Ep4vgc5fXUvuSZaTcdXfT71WQ6UXbzmU
+X-Proofpoint-ORIG-GUID: Ep4vgc5fXUvuSZaTcdXfT71WQ6UXbzmU
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-07_08,2022-09-07_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 bulkscore=0 priorityscore=1501 spamscore=0 mlxlogscore=999
+ adultscore=0 lowpriorityscore=0 phishscore=0 clxscore=1015 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209070053
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
 
-On 9/7/22 04:00, Raul Rangel wrote:
-> On Tue, Sep 6, 2022 at 7:00 PM Dmitry Torokhov
-> <dmitry.torokhov@gmail.com> wrote:
+On 9/7/22 02:10, Peter Rosin wrote:
+> Hi!
+>
+> First off, I'm very sorry for being too busy and too unresponsive.
+>
+> 2022-09-06 at 22:28, Eddie James wrote:
+>> Use the new mux root operations to lock the root adapter while waiting for
+>> the reset to complete. I2C commands issued after the SI7020 is starting up
+>> or after reset can potentially upset the startup sequence. Therefore, the
+>> host needs to wait for the startup sequence to finish before issuing
+>> further I2C commands.
 >>
->> On Tue, Aug 30, 2022 at 05:15:37PM -0600, Raul E Rangel wrote:
->>> Device tree already has a mechanism to pass the wake_irq. It does this
->>> by looking for the wakeup-source property and setting the
->>> I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses at the
->>> ACPI GpioInt wake flag to determine if the interrupt can be used to wake
->>> the system. Previously the i2c drivers had to make assumptions and
->>> blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
->>> If there is a device with an Active Low interrupt and the device gets
->>> powered off while suspending, the interrupt line will go low since it's
->>> no longer powered and wake the system. For this reason we should respect
->>> the board designers wishes and honor the wake bit defined on the
->>> GpioInt.
->>>
->>> This change does not cover the ACPI Interrupt or IRQ resources.
->>>
->>> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
->>> ---
->>>
->>>  drivers/i2c/i2c-core-acpi.c |  8 ++++++--
->>>  drivers/i2c/i2c-core-base.c | 17 +++++++++++------
->>>  drivers/i2c/i2c-core.h      |  4 ++--
->>>  3 files changed, 19 insertions(+), 10 deletions(-)
->>>
->>> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
->>> index c762a879c4cc6b..cfe82a6ba3ef28 100644
->>> --- a/drivers/i2c/i2c-core-acpi.c
->>> +++ b/drivers/i2c/i2c-core-acpi.c
->>> @@ -182,12 +182,13 @@ static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
->>>  /**
->>>   * i2c_acpi_get_irq - get device IRQ number from ACPI
->>>   * @client: Pointer to the I2C client device
->>> + * @wake_capable: Set to 1 if the IRQ is wake capable
->>>   *
->>>   * Find the IRQ number used by a specific client device.
->>>   *
->>>   * Return: The IRQ number or an error code.
->>>   */
->>> -int i2c_acpi_get_irq(struct i2c_client *client)
->>> +int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
->>>  {
->>>       struct acpi_device *adev = ACPI_COMPANION(&client->dev);
->>>       struct list_head resource_list;
->>> @@ -196,6 +197,9 @@ int i2c_acpi_get_irq(struct i2c_client *client)
->>>
->>>       INIT_LIST_HEAD(&resource_list);
->>>
->>> +     if (wake_capable)
->>> +             *wake_capable = 0;
->>> +
->>>       ret = acpi_dev_get_resources(adev, &resource_list,
->>>                                    i2c_acpi_add_resource, &irq);
+>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+>> ---
+>>   drivers/iio/humidity/si7020.c | 16 ++++++++++++++--
+>>   1 file changed, 14 insertions(+), 2 deletions(-)
 >>
-> 
-> 
->> You also need to handle "Interrupt(..., ...AndWake)" case here. I would
->> look into maybe defining
->>
->> #define IORESOURCE_IRQ_WAKECAPABLE      (1<<6)
->>
->> in include/linux/ioport.h and plumbing it through from ACPI layer.
->>
->> Thanks.
-> 
-> AFAIK the Intel (Not 100% certain) and AMD IO-APIC's can't actually
-> wake a system from suspend/suspend-to-idle.
+>> diff --git a/drivers/iio/humidity/si7020.c b/drivers/iio/humidity/si7020.c
+>> index ab6537f136ba..76ca7863f35b 100644
+>> --- a/drivers/iio/humidity/si7020.c
+>> +++ b/drivers/iio/humidity/si7020.c
+>> @@ -106,6 +106,7 @@ static const struct iio_info si7020_info = {
+>>   static int si7020_probe(struct i2c_client *client,
+>>   			const struct i2c_device_id *id)
+>>   {
+>> +	struct i2c_adapter *root;
+>>   	struct iio_dev *indio_dev;
+>>   	struct i2c_client **data;
+>>   	int ret;
+>> @@ -115,13 +116,24 @@ static int si7020_probe(struct i2c_client *client,
+>>   				     I2C_FUNC_SMBUS_READ_WORD_DATA))
+>>   		return -EOPNOTSUPP;
+>>   
+>> +	root = i2c_lock_select_bus(client->adapter);
+>> +	if (IS_ERR(root))
+>> +		return PTR_ERR(root);
+>> +
+>>   	/* Reset device, loads default settings. */
+>> -	ret = i2c_smbus_write_byte(client, SI7020CMD_RESET);
+>> -	if (ret < 0)
+>> +	ret = __i2c_smbus_xfer(root, client->addr, client->flags,
+>> +			       I2C_SMBUS_WRITE, SI7020CMD_RESET,
+>> +			       I2C_SMBUS_BYTE, NULL);
+> I'd say that this is too ugly. We should not add stuff that basically
+> hides the actual xfer from the mux like this. That is too much of a
+> break in the abstraction.
 
-That may be true for S3 suspend (it sounds about right) there
-certainly is no way to "arm for wakeup" on the APIC, but with
-s2idle all IRQs which are not explicitly disabled by the OS
-still function normally so there any IRQ can be a wakeup
-source (AFAIK).
 
-And even with S3 suspend I think some IRQs can act as wakeup,
-but that is configured by the BIOS then and not something which
-linux can enable/disable. E.g IIRC the parent IRQ of the GPIO
-controllers on x86 is an APIC IRQ ...
+Hm, I guess I'm not sure I follow - I see several drivers that use the 
+raw __i2c_smbus_xfer or __i2c_transfer, some without a lock in sight. If 
+it's not acceptable to use the unlocked versions in some cases, why are 
+they exported in the header file?
 
-Regards,
 
-Hans
+>
+> Looking back, expanding on the previous series [1] so that it installs
+> the hook on the root adapter, handles smbus xfers and clears out the
+> callback afterwards is much more sensible. No?
 
+
+Maybe so, though adding the callback is a more intrusive change, in my 
+opinion, since every transfer has to check if the pointer is null.
+
+
+Thanks for your feedback!
+
+Eddie
+
+
+
+>
+> Maybe the callback in that series should also include a reference to
+> the xfer that has just been done, so that the hook can potentially
+> discriminate and only do the delay for the key xfer. But maybe that's
+> overkill?
+>
+> Cheers,
+> Peter
+>
+> [1] https://lore.kernel.org/lkml/20220518204119.38943-1-eajames@linux.ibm.com/
+>
+>> +	if (ret < 0) {
+>> +		i2c_unlock_deselect_bus(client->adapter);
+>>   		return ret;
+>> +	}
+>> +
+>>   	/* Wait the maximum power-up time after software reset. */
+>>   	msleep(15);
+>>   
+>> +	i2c_unlock_deselect_bus(client->adapter);
+>> +
+>>   	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
+>>   	if (!indio_dev)
+>>   		return -ENOMEM;
