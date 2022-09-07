@@ -2,55 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCD25B0D82
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Sep 2022 21:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 104E05B0D91
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Sep 2022 21:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiIGTxc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Sep 2022 15:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
+        id S229566AbiIGT5n (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Sep 2022 15:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiIGTxa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Sep 2022 15:53:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF02A223B;
-        Wed,  7 Sep 2022 12:53:29 -0700 (PDT)
+        with ESMTP id S229445AbiIGT5m (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Sep 2022 15:57:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5DDA2204;
+        Wed,  7 Sep 2022 12:57:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DCB4DB81E82;
-        Wed,  7 Sep 2022 19:53:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED88EC433D6;
-        Wed,  7 Sep 2022 19:53:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BE7B61A43;
+        Wed,  7 Sep 2022 19:57:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B27A9C433D6;
+        Wed,  7 Sep 2022 19:57:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662580406;
-        bh=uJDGsijOfLFRzMAftrgEfAwsjhjht2GzpAmXnTWJ/dM=;
+        s=k20201202; t=1662580660;
+        bh=TnY+Y3ebzbfWHSwTLQu3Yoal7MoTYcO8OjpkAcZ1PkU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WbcHwS3qDsm0f124PorbTqSiDXola/BsZK/P8369UZ7h2JdHZtGtWgRki7RbZl+Wb
-         jUcL+uO8c6YxPFYSiTtfwPJnj71+pqsHJToL0vC9OAFjPoS2+jfmIY4PLK5xvD4Cvv
-         NEnJxUHLiVGunUMdrSiiALRFy3kN8iO4gMu7x26QWkYGBPVrshU+1Z6ISmVFi08e4U
-         7kCZK5pYPoGfzfUswuUwfA9AOi0YVSP4n99Pqqi6wJzkba8jMWS6NITokhztteKspc
-         MP5w4UW0Vtcq0Vzc518Uje2xl5SP3JDp6XAqbDE5/WWoju1ASvVelQiCez+fM/T4oh
-         jI2X7K8O+c8Tw==
-Date:   Wed, 7 Sep 2022 21:53:22 +0200
+        b=XUUkJb9zVlddJ7b9OoYydbtWSahmi+hxl1X6/K0ymbsu1LPCCyBN2PtuQ3i1rGPWW
+         H9QF4Xsfwe56KjMs1k5cDcR1y0hCWbOWBC8GfT66unf7ZhVGvKk4D13F8DwNmFGFLV
+         l7H6szBuCqqewKB3pyzWUewGg1qJf4ok9QLI4EXHymp/8pWTQbu3SKBTIfxpTBm0FV
+         30m7cbKOuOsAt3g8UfgKweda/L7aO3R8PVkE25t4aLIqDaDYlUzUGEFkh5TtMqChau
+         2fMaeClwvVSV07Ohq0ljRGhRMup8Ye5glz3AWNlphsy+FTEPAXxTPr49VHC6nDDGIb
+         GFJwCzSl2R6wg==
+Date:   Wed, 7 Sep 2022 21:57:36 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Sudarshan Ravula <sudarshan.ravula@intel.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
-        pandith.n@intel.com, lakshmi.sowjanya.d@intel.com
-Subject: Re: [PATCH v1] i2c: designware: Add support to get I2C related
- timing parameters from firmware.
-Message-ID: <Yxj2sokHOo40wUOR@shikoro>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Subject: Re: [PATCH] dt-bindings: i2c: qcom,i2c-cci: specify SM8450 CCI clocks
+Message-ID: <Yxj3sP6xi7RyCKvP@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Sudarshan Ravula <sudarshan.ravula@intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
-        pandith.n@intel.com, lakshmi.sowjanya.d@intel.com
-References: <20220907160920.22006-1-sudarshan.ravula@intel.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+References: <20220901074218.21108-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wbtFfviCAIt2jkAf"
+        protocol="application/pgp-signature"; boundary="0/dDp7V2egPoGTKs"
 Content-Disposition: inline
-In-Reply-To: <20220907160920.22006-1-sudarshan.ravula@intel.com>
+In-Reply-To: <20220901074218.21108-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,40 +75,38 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---wbtFfviCAIt2jkAf
+--0/dDp7V2egPoGTKs
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 07, 2022 at 09:39:20PM +0530, Sudarshan Ravula wrote:
-> Similar to I2C designware platform driver add i2c_parse_fw_timings() in
-> PCI driver, to get I2C related timing parameters from firmware.
+On Thu, Sep 01, 2022 at 10:42:18AM +0300, Krzysztof Kozlowski wrote:
+> Document clocks for SM8450 Camera Control Interface I2C controller.
 >=20
-> Signed-off-by: Sudarshan Ravula <sudarshan.ravula@intel.com>
-> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>=20
 
 Applied to for-next, thanks!
 
 
---wbtFfviCAIt2jkAf
+--0/dDp7V2egPoGTKs
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMY9rIACgkQFA3kzBSg
-KbZw8Q/+LVnohFY4CEL7hca2NVfA/cE6rgN3mImsnUDONZBj02E2R46uxzUwIhhE
-1+pewITtVuBp8l6v+ecTWUabeE3cZfJxHc+kpAC71pIrnLc/4xy9oPfgjccrfyM4
-c3bvS2nOUQeK7GYN/GJQEs4UMM8nA5hmbKiFucLpfWceqg6PuRt0WFRhOuqkIXy2
-qnM4REhtTMsjPsOTYftwZxsCEiZYmM2npyIpJwYjThryS/A4boi/h7SV1c5OUp72
-89XkHkNbI0+ZCPLDZQPnM0DVq+dizsl7ML5t3phvy5e7VkZ4PiIfAkMrqw3bN0jK
-Z+xjnz6R/hLphXmHjLXoRr/gl2vgEBQlpTeBZUFNLe27wqaCzqyZaa+OzuZOQ1VS
-l1YWlsCMCX+JRWWKndBiZTZ9tKtBIxlAp7UIVz2QyGgN+gnd+4Rmw6ZhHSRu8COO
-rbtECDI5EVq3APB577rnWz6gaOGZR9KRUppNOikxhXkaUet0TeK8yi70EBfDCu46
-zgFza4vQZ6bdHmYhLQ+Lg/gnzD6RvuQARejjZcs/sbkjYE/QwDhvpDQ25+2kyc3s
-tUaTnLpl9MhtHfBVeQjy1a3XD8SNX1htxM4LnR4emf/St+ouKrm4oAq7LKWQGpiE
-+YDQ8bYq3Fs+M621EU+UlufrGvH6XKeCfF5i+srqcm/y+UzX7vo=
-=k9DQ
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMY96oACgkQFA3kzBSg
+KbYuGg//YX0JNOT1kilO+XDej6NJxgxJ/yjygJv+iFgDfJLgxVms8jf8WrJc75/B
+ckI3XOmV2fVXay0pzs+Kp4zuYGMkXOvHaHnfdhcjWN9DR7k2ZClc3aosh+fhh5qC
+bRELl7lRgzJnuYH4SkSWFhJZNMQaxqlq9AmxSqo1ajg7bkc9wMg0q/9KIv5ZXeAU
+atw6QDhv5+JJo1v3gWqhkrSqWGxZG0pdLc5Uddd5ENLYCDPQgfAb8ySWjc7TcohR
+s7X7tw5/jJARgcjZE99+a5zsFbZlaw/d9vXGV5HJLWTEtwSeVR33zhYAKoQFJlwQ
+A02yy86QY6pj8jiCBq6jpdX1puEKnKRjuEQe3Pdr23G+fE3KCSUvl8wCdDCtFTGa
+foKO4GHIE8yQBEyCzYdik8P13/8XeCfyw95dvVOQeJEZV79Q0lYX4aEppeaMYLUV
+0HNvWVUJ1VZ1Wn0ibzTDBcJVPbGxyTPNM8CK81xRENGvgU/eesZgoevJmCsFtd6K
+4vNL3Uz7S/NWnyQRtQeGszPKunqrgahZNl4kXSR9s3b/TfPOlcYYafn1d8vqTrwR
+IieGsX91cKv0xKplG6T4f26tltoG/w7m5SvUByv9/1V1xSmXlhaXdcF7fJmwOknn
+x6Uy7OxPhH7yHp/c/y0Zc23tPVzIh/Ks+GTFmHlULMJhaTk4/jI=
+=3pQC
 -----END PGP SIGNATURE-----
 
---wbtFfviCAIt2jkAf--
+--0/dDp7V2egPoGTKs--
