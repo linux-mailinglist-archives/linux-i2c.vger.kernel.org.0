@@ -2,113 +2,116 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D86F5B06A8
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Sep 2022 16:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC0D5B098E
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Sep 2022 18:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiIGObw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Sep 2022 10:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
+        id S230226AbiIGQEa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Sep 2022 12:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbiIGOba (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Sep 2022 10:31:30 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6574DAA349
-        for <linux-i2c@vger.kernel.org>; Wed,  7 Sep 2022 07:31:16 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id nc14so30786854ejc.4
-        for <linux-i2c@vger.kernel.org>; Wed, 07 Sep 2022 07:31:16 -0700 (PDT)
+        with ESMTP id S230242AbiIGQEB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Sep 2022 12:04:01 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1D0BC112
+        for <linux-i2c@vger.kernel.org>; Wed,  7 Sep 2022 09:02:42 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso10346907pjd.4
+        for <linux-i2c@vger.kernel.org>; Wed, 07 Sep 2022 09:02:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
-        b=boA3graP4wtJe8cwRxkMJy5rso3t9xyj4fxUFsG0Fez1aWDY0C6gZpYPvm/Hxa5tX5
-         Zk+XDE4h4sSr3Kc7gAmKt5OJ7AP3AEEipJ5m7D7tQ5BTHkXWMmIdiC/g3MqGg04yG8Wz
-         mFTYUlKwIYoLI0bvi9Q3MSV1athb174l2Ms/7z+L0TzD2CQLBWt0bOa5Jg9CBAeygplA
-         zqROn488xUY/B608ffA8/XOsolF390gA0UeCbMrgWX87LxLuf34XOCHn+1VgcYnMY7Sr
-         klavsMj/u/K0iLTegE+9syCXTdcAl7jimLLfNxQJoiGWtjh15Idxzz9bfpV/1Jhy4Wly
-         oLRA==
+        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=afSHfpUxnx3q9ntKQjr5xt/kVuSAfsXr+C9GfFVRDd4=;
+        b=sseBowAH5ISZmkxAYb24ceYU3uCJmbJT+Fk6bT8rILtssfyoK9sUWy46GJR0Scyl70
+         ojH3VejTvM81sbYXTiXGfxT9Z6qbzK/Z41l9gnZuwm6RmWsnDg6tUIgLXHUc4CjY9Fov
+         BGxojsGeaNTzBZYDBAfY4S4ElY2Eimf1YztfHgNEs1qdelfX0/JK1uq5kCXWSoBZYHYO
+         ZcWvGq17DeS1nmU1SYd3U04WTIsHjYSj4tYMIruH7RdfG3dv/2xiBkZORgZ8mRvpmKTG
+         p++sAb/6EYe78tMkhtlMJIh9MoBRGOwC/aeY4r3WJbOnsZICNMGm3rWY2nAL8mR5uE7g
+         gmdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
-        b=2FuA79iF/SIfhwNAJ+0kRHPt8Nj3oLwsjmWNff/7SrnQW68bUVCqLcu6gt/TVhlST7
-         B0nDYWztyN5+4bubI/op2h9YZbHpsJwqCsZTZU/n+d4NXpzOH7uvtHYkXr9cmFhv06zo
-         QGOsWGwkevGDxLn9uJvY+Nz7TK91r42kUzPfmk3Ik3OK8pCvhbjZUuHWhXqR5QL6hMIF
-         NpXPeTXXltgHKzeDI6ITapjKgMcfcZ1O3cbgBZ8dK9p+n1qjoGXET/3UHs/Li/CSqAj5
-         NzO3c1YbwW+yY29FM/mcqRZ/dIx3/oR51WQQfUAXYPIdpwRUhhf4ePCqohT5MaBeXlFF
-         QcWg==
-X-Gm-Message-State: ACgBeo0jbP2zEpBbrblqEQETC4lir45Uq7oE3By3Z7HPFIxBXFw+xBWp
-        p2dZ2MSRNqOlQ8b16JePanwq9V5iZfJee+Tou6M=
-X-Google-Smtp-Source: AA6agR7OKiKkSx+MbdKnn4tKaQhdmVzFj2krU0Vhk4MjDetoGwDDBbw+8TT3Fj+g2bgbPAiBcK/73KQpnrd5Cpv4s3c=
-X-Received: by 2002:a17:907:75ec:b0:741:484b:3ca4 with SMTP id
- jz12-20020a17090775ec00b00741484b3ca4mr2508106ejc.316.1662561074796; Wed, 07
- Sep 2022 07:31:14 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=afSHfpUxnx3q9ntKQjr5xt/kVuSAfsXr+C9GfFVRDd4=;
+        b=RvCxJib+gFB/3rFnQb2RDOfxFToSX4qK1qpo0IuQVBK83ORqHnotThhheT9KzjISju
+         VuQPeRfZOEJSJIa+AcjaU0nss+jgWhXib3D2B+jTObhrbrcN5fjjJwcK2WHD8OcMzeED
+         aqA0jc9PvgwCCnONhBNuQR9tF/4Qm1DPbeFDfAOV6Pe8HgXpcYfiknz4f1hTRT5Bv/1L
+         XN0gX+7fb1+sS49yxjdnQ7w7xplG7xXnkTh47trxJweLxrj8NYoDg8rYYMbgeazqPjWa
+         Jd6pXddx3WJCPQD3rvdBrCydXMgM+w5uEMWp77S7WNDa8XXoLbfR+BJxNmzaZD8TcYRF
+         DCOQ==
+X-Gm-Message-State: ACgBeo1YMB0AKmxRhb/WQQuWfWuawmemdoYjyc3E9HXHEdsz9dYsRlfT
+        xZw0X5wfcir2aIlioki0pcxiEQ==
+X-Google-Smtp-Source: AA6agR4EQG/wNWPdbtT/ZZVcElmxLEu6XFTylREBCm9ZmDxny83+bS3kcd0dOR35qD7faC4NwOGf9Q==
+X-Received: by 2002:a17:903:2309:b0:176:de48:e940 with SMTP id d9-20020a170903230900b00176de48e940mr4528698plh.15.1662566548714;
+        Wed, 07 Sep 2022 09:02:28 -0700 (PDT)
+Received: from localhost.localdomain ([23.27.44.184])
+        by smtp.gmail.com with ESMTPSA id x13-20020a17090a1f8d00b001f510175984sm14919719pja.41.2022.09.07.09.02.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 09:02:28 -0700 (PDT)
+From:   Jagan Teki <jagan@edgeble.ai>
+To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kever Yang <kever.yang@rock-chips.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        Jagan Teki <jagan@edgeble.ai>, linux-i2c@vger.kernel.org,
+        David Wu <david.wu@rock-chips.com>
+Subject: [PATCH v4 01/13] i2c: rk3x: Add rv1126 support
+Date:   Wed,  7 Sep 2022 21:31:55 +0530
+Message-Id: <20220907160207.3845791-2-jagan@edgeble.ai>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220907160207.3845791-1-jagan@edgeble.ai>
+References: <20220907160207.3845791-1-jagan@edgeble.ai>
 MIME-Version: 1.0
-Received: by 2002:a54:3fc4:0:0:0:0:0 with HTTP; Wed, 7 Sep 2022 07:31:14 -0700 (PDT)
-Reply-To: lumar.casey@outlook.com
-From:   LUMAR CASEY <miriankushrat@gmail.com>
-Date:   Wed, 7 Sep 2022 16:31:14 +0200
-Message-ID: <CAO4StN0fh9iLpvL71MAvphxmFm4ur7+Op=qm5oJuhdRZZPJ3cA@mail.gmail.com>
-Subject: ATTENTION/PROPOSAL
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.8 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UNDISC_MONEY,UPPERCASE_75_100 autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:641 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5049]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [miriankushrat[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 UPPERCASE_75_100 message body is 75-100% uppercase
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_4_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-ATTENTION
+Add i2c support for Rockchip RV1126 SoC.
 
-BUSINESS PARTNER,
+Cc: linux-i2c@vger.kernel.org
+Signed-off-by: David Wu <david.wu@rock-chips.com>
+Signed-off-by: Jagan Teki <jagan@edgeble.ai>
+---
+Changes for v4:
+- new patch
 
-I AM LUMAR CASEY WORKING WITH AN INSURANCE FINANCIAL INSTITUTE, WITH
-MY POSITION AND PRIVILEGES I WAS ABLE TO SOURCE OUT AN OVER DUE
-PAYMENT OF 12.8 MILLION POUNDS THAT IS NOW SECURED WITH A SHIPPING
-DIPLOMATIC OUTLET.
+ drivers/i2c/busses/i2c-rk3x.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-I AM SEEKING YOUR PARTNERSHIP TO RECEIVE THIS CONSIGNMENT AS AS MY
-PARTNER TO INVEST THIS FUND INTO A PROSPEROUS INVESTMENT VENTURE IN
-YOUR COUNTRY.
+diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
+index 2e98e7793bba..d1658ed76562 100644
+--- a/drivers/i2c/busses/i2c-rk3x.c
++++ b/drivers/i2c/busses/i2c-rk3x.c
+@@ -1165,6 +1165,11 @@ static const struct rk3x_i2c_soc_data rv1108_soc_data = {
+ 	.calc_timings = rk3x_i2c_v1_calc_timings,
+ };
+ 
++static const struct rk3x_i2c_soc_data rv1126_soc_data = {
++	.grf_offset = 0x118,
++	.calc_timings = rk3x_i2c_v1_calc_timings,
++};
++
+ static const struct rk3x_i2c_soc_data rk3066_soc_data = {
+ 	.grf_offset = 0x154,
+ 	.calc_timings = rk3x_i2c_v0_calc_timings,
+@@ -1195,6 +1200,10 @@ static const struct of_device_id rk3x_i2c_match[] = {
+ 		.compatible = "rockchip,rv1108-i2c",
+ 		.data = &rv1108_soc_data
+ 	},
++	{
++		.compatible = "rockchip,rv1126-i2c",
++		.data = &rv1126_soc_data
++	},
+ 	{
+ 		.compatible = "rockchip,rk3066-i2c",
+ 		.data = &rk3066_soc_data
+-- 
+2.25.1
 
-I AWAIT YOUR REPLY TO ENABLE US PROCEED WITH THIS BUSINESS PARTNERSHIP TOGETHER.
-
-REGARDS,
-
-LUMAR CASEY
