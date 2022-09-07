@@ -2,52 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CD85B0D6C
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Sep 2022 21:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FCD25B0D82
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Sep 2022 21:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiIGTr6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Sep 2022 15:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
+        id S229895AbiIGTxc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Sep 2022 15:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiIGTr5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Sep 2022 15:47:57 -0400
+        with ESMTP id S229884AbiIGTxa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Sep 2022 15:53:30 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F30A345E;
-        Wed,  7 Sep 2022 12:47:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF02A223B;
+        Wed,  7 Sep 2022 12:53:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 690F0B81E77;
-        Wed,  7 Sep 2022 19:47:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 488E8C433C1;
-        Wed,  7 Sep 2022 19:47:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DCB4DB81E82;
+        Wed,  7 Sep 2022 19:53:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED88EC433D6;
+        Wed,  7 Sep 2022 19:53:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662580074;
-        bh=2m8bQOz6CPem+JfZFDVne0K71gnYpKvVLgIRrmDybdQ=;
+        s=k20201202; t=1662580406;
+        bh=uJDGsijOfLFRzMAftrgEfAwsjhjht2GzpAmXnTWJ/dM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gUZXYOCjOlaeDblqkN3vqocij75zRoua+//wm1T5ZzDD0pBG+VKSRqzKNQulS81kz
-         gqL9i682Pa3Uf6oh7GxZL6bgI4PVSLMdbrMlrg/qpE8SgqeIbjjgkDhFt+ur7/8l8B
-         4tZP1mdDg0bCEfLUoQlxcCp1H82KSgoJGfgjd/Y7jh5xQ/iCaUGeY8t58gddY3T7bD
-         Ee3Wm4LNYMxms5czvn+WOl+uaaz6PI/BV++XACIR77ZQP4Sus+ncrCZ28IdQz7/ILq
-         uOOu+eGb/UufY8tq9zjvihownF7gkSALd9TDJw4dLyP7CtaU7Uk8Kg7wBQtjkhW9c+
-         iZ4ebkEdl+/DQ==
-Date:   Wed, 7 Sep 2022 21:47:49 +0200
+        b=WbcHwS3qDsm0f124PorbTqSiDXola/BsZK/P8369UZ7h2JdHZtGtWgRki7RbZl+Wb
+         jUcL+uO8c6YxPFYSiTtfwPJnj71+pqsHJToL0vC9OAFjPoS2+jfmIY4PLK5xvD4Cvv
+         NEnJxUHLiVGunUMdrSiiALRFy3kN8iO4gMu7x26QWkYGBPVrshU+1Z6ISmVFi08e4U
+         7kCZK5pYPoGfzfUswuUwfA9AOi0YVSP4n99Pqqi6wJzkba8jMWS6NITokhztteKspc
+         MP5w4UW0Vtcq0Vzc518Uje2xl5SP3JDp6XAqbDE5/WWoju1ASvVelQiCez+fM/T4oh
+         jI2X7K8O+c8Tw==
+Date:   Wed, 7 Sep 2022 21:53:22 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sudarshan Ravula <sudarshan.ravula@intel.com>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Josef Johansson <josef@oderland.se>
-Subject: Re: [PATCH v1 1/1] i2c: scmi: Convert to be a platform driver
-Message-ID: <Yxj1ZQjBfdG1u93d@shikoro>
+        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
+        pandith.n@intel.com, lakshmi.sowjanya.d@intel.com
+Subject: Re: [PATCH v1] i2c: designware: Add support to get I2C related
+ timing parameters from firmware.
+Message-ID: <Yxj2sokHOo40wUOR@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sudarshan Ravula <sudarshan.ravula@intel.com>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Josef Johansson <josef@oderland.se>
-References: <20220906155507.39483-1-andriy.shevchenko@linux.intel.com>
+        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
+        pandith.n@intel.com, lakshmi.sowjanya.d@intel.com
+References: <20220907160920.22006-1-sudarshan.ravula@intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t4qTkcah3Kmi0e32"
+        protocol="application/pgp-signature"; boundary="wbtFfviCAIt2jkAf"
 Content-Disposition: inline
-In-Reply-To: <20220906155507.39483-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220907160920.22006-1-sudarshan.ravula@intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,39 +62,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---t4qTkcah3Kmi0e32
+--wbtFfviCAIt2jkAf
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 06, 2022 at 06:55:07PM +0300, Andy Shevchenko wrote:
-> ACPI core in conjunction with platform driver core provides
-> an infrastructure to enumerate ACPI devices. Use it in order
-> to remove a lot of boilerplate code.
+On Wed, Sep 07, 2022 at 09:39:20PM +0530, Sudarshan Ravula wrote:
+> Similar to I2C designware platform driver add i2c_parse_fw_timings() in
+> PCI driver, to get I2C related timing parameters from firmware.
 >=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Sudarshan Ravula <sudarshan.ravula@intel.com>
+> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Josef, do you have resources to test this patch before I apply it?
+Applied to for-next, thanks!
 
 
---t4qTkcah3Kmi0e32
+--wbtFfviCAIt2jkAf
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIyBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMY9WUACgkQFA3kzBSg
-KbZgRA/zB5zY6AwlqRdSxEQrw3ZcMMFggkIbmhIQ9NAJFW4J/gyVxoWQnWsLAIqk
-Z9SNO1/3Og+errV48b0/qgkYusdkfvt7JqsBjLpaHmuV1QBJr+BfIuXJgBCjeiyN
-WlAYbGSUWNb6gqxl+aoxmgM4waMvE7OA6JelR2G8zkzWxcBg8SpuB6mPHO8v4RrL
-TMSKodQzkfjIDGaDbsYRE9OJWZ8pCoJOGTl401Hsi3fZNL61oAb9/6fgUMQuP9hl
-nVvNIbRcnXv83vbrZseEswipa9pdiAG45que5OfOVlm6CuWe9d1/7nqYgk4tiCio
-gczA5ys+wIPlWsxBTYmmd/poXTiVnqbH9exFPpSZjYke+En/r2vTIhdgEcpFo2eM
-wYhDelFVD6u8Gkj3AOQUdFrDph5srO4SG44lgvVljS9pBReMKUmAoU7bIjfArOSf
-UPPe7joYFVsiD3BIkQjLMjwphJHl8f/m3odLDwFJRLFpRmJcV3VA4QBVH60T7iTY
-p84nmPSW4H3NT9GJ+TF83M2gqP0FeLO+vfQaKWnBqH/DSmsN3nl72ULe5VVg8gGv
-kSSCwFBylk5qtX5EbU/LwSMICDC8exYGQFyHGtgbYhypJV1lN4wWwEHV+eDcKxHz
-M2G/yVoH3aI8B3KGC7YiXgtTX/CYvFk99ZUuUT5ClfYEWgREcg==
-=nSs7
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMY9rIACgkQFA3kzBSg
+KbZw8Q/+LVnohFY4CEL7hca2NVfA/cE6rgN3mImsnUDONZBj02E2R46uxzUwIhhE
+1+pewITtVuBp8l6v+ecTWUabeE3cZfJxHc+kpAC71pIrnLc/4xy9oPfgjccrfyM4
+c3bvS2nOUQeK7GYN/GJQEs4UMM8nA5hmbKiFucLpfWceqg6PuRt0WFRhOuqkIXy2
+qnM4REhtTMsjPsOTYftwZxsCEiZYmM2npyIpJwYjThryS/A4boi/h7SV1c5OUp72
+89XkHkNbI0+ZCPLDZQPnM0DVq+dizsl7ML5t3phvy5e7VkZ4PiIfAkMrqw3bN0jK
+Z+xjnz6R/hLphXmHjLXoRr/gl2vgEBQlpTeBZUFNLe27wqaCzqyZaa+OzuZOQ1VS
+l1YWlsCMCX+JRWWKndBiZTZ9tKtBIxlAp7UIVz2QyGgN+gnd+4Rmw6ZhHSRu8COO
+rbtECDI5EVq3APB577rnWz6gaOGZR9KRUppNOikxhXkaUet0TeK8yi70EBfDCu46
+zgFza4vQZ6bdHmYhLQ+Lg/gnzD6RvuQARejjZcs/sbkjYE/QwDhvpDQ25+2kyc3s
+tUaTnLpl9MhtHfBVeQjy1a3XD8SNX1htxM4LnR4emf/St+ouKrm4oAq7LKWQGpiE
++YDQ8bYq3Fs+M621EU+UlufrGvH6XKeCfF5i+srqcm/y+UzX7vo=
+=k9DQ
 -----END PGP SIGNATURE-----
 
---t4qTkcah3Kmi0e32--
+--wbtFfviCAIt2jkAf--
