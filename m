@@ -2,44 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23DFF5B12B1
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Sep 2022 04:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A08095B1464
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Sep 2022 08:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiIHCy4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Sep 2022 22:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
+        id S229624AbiIHGHp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Sep 2022 02:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiIHCyz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Sep 2022 22:54:55 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9D8474E2;
-        Wed,  7 Sep 2022 19:54:53 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MNNsy0gmMz14QNY;
-        Thu,  8 Sep 2022 10:51:02 +0800 (CST)
-Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
- (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 8 Sep
- 2022 10:54:51 +0800
-From:   Weilong Chen <chenweilong@huawei.com>
-To:     <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
-        <xuwei5@huawei.com>, <wsa@kernel.org>, <robh+dt@kernel.org>
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: [PATCH next v3 2/2] dt-bindings: i2c: add entry for hisilicon,hisi-i2c
-Date:   Thu, 8 Sep 2022 10:57:01 +0800
-Message-ID: <20220908025701.330210-2-chenweilong@huawei.com>
-X-Mailer: git-send-email 2.31.GIT
-In-Reply-To: <20220908025701.330210-1-chenweilong@huawei.com>
-References: <20220908025701.330210-1-chenweilong@huawei.com>
+        with ESMTP id S229490AbiIHGHo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Sep 2022 02:07:44 -0400
+Received: from vsp02-out.oderland.com (vsp02-out.oderland.com [IPv6:2a02:28f0::26:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9D3A7221
+        for <linux-i2c@vger.kernel.org>; Wed,  7 Sep 2022 23:07:41 -0700 (PDT)
+X-Scanned-Cookie: 267db6f8f9a97f6a9e31a6b4b0d50f1894f1cfd3
+Received: from office.oderland.com (office.oderland.com [91.201.60.5])
+        by vsp-out.oderland.com (Halon) with ESMTPSA
+        id 8aa1c8a6-2f3c-11ed-896b-b78c77300f9c;
+        Thu, 08 Sep 2022 08:07:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=oderland.se
+        ; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:Cc:
+        References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+        :List-Post:List-Owner:List-Archive;
+        bh=7JqDpecRODlTuakjMauVpsCN7cmSweX5A+Tuq3G622o=; b=KU0yVNqMlg0plNl8/TAr/32za8
+        Byl78iUSpA/VCl3dwojDCv5b/YvLlpbOmd0GPvPtQDU0r9WREaVzJYfKm14t7i1grFe3OnEVpkTIh
+        iwhUrgQdupU7XwtKMM0WgLbSL0ypi5pgPrIG9s14KXBFAJZRJA4r3rnKjq9sMYAaBWTpV/8cxRO5K
+        OIBy/uo0X3VE9jJF0G6WiuGW3erOYxxU8bi4UNkZa+U1Z5s18neWIdyaqZ+MaPIAgiw4fKmLxHu3r
+        QlayX26IxftDFJbFd3ER33OBtRtZox/eJtYGq2ZcZy1saq1jQtfHtTIXT/lC954NX+sGDm3AdJJyd
+        7xeKSGOQ==;
+Received: from 160.193-180-18.r.oderland.com ([193.180.18.160]:47584 helo=[10.137.0.14])
+        by office.oderland.com with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <josef@oderland.se>)
+        id 1oWAhQ-00FjFi-LF;
+        Thu, 08 Sep 2022 08:07:38 +0200
+Message-ID: <23c8fafe-af56-afb0-1257-222705bc36f3@oderland.se>
+Date:   Thu, 8 Sep 2022 08:07:37 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:104.0) Gecko/20100101
+ Thunderbird/104.0
+Subject: Re: [PATCH v1 1/1] i2c: scmi: Convert to be a platform driver
+To:     Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20220906155507.39483-1-andriy.shevchenko@linux.intel.com>
+ <Yxj1ZQjBfdG1u93d@shikoro>
+Content-Language: en-US
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Josef Johansson <josef@oderland.se>
+In-Reply-To: <Yxj1ZQjBfdG1u93d@shikoro>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+x-oderland-domain-valid: yes
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,88 +64,13 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add the new compatible for HiSilicon common i2c.
-
-Signed-off-by: Weilong Chen <chenweilong@huawei.com>
----
- .../bindings/i2c/hisilicon,hisi-i2c.yaml      | 68 +++++++++++++++++++
- 1 file changed, 68 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-
-diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-new file mode 100644
-index 000000000000..19d535f4a79e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-@@ -0,0 +1,68 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/i2c/hisilicon,hisi-i2c.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: HiSilicon common IIC controller Device Tree Bindings
-+
-+maintainers:
-+  - yangyicong@huawei.com
-+
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
-+
-+properties:
-+  compatible:
-+    const: hisilicon,hisi-i2c
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clk_rate:
-+    default: 0xEE6B280
-+
-+  clock-frequency:
-+    default: 400000
-+
-+  i2c-sda-falling-time-ns:
-+    default: 343
-+
-+  i2c-scl-falling-time-ns:
-+    default: 203
-+
-+  i2c-sda-hold-time-ns:
-+    default: 0x33E
-+
-+  i2c-scl-rising-time-ns:
-+    default: 365
-+
-+  i2c-digital-filter-width-ns:
-+    default: 0
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    i2c1: i2c@5038B0000{
-+      compatible = "hisilicon,hisi-i2c";
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      reg = <0x5 0x038B0000 0 0x10000>;
-+      interrupts = <0x0 120 0x4>;
-+      i2c-sda-falling-time-ns = <56>;
-+      i2c-scl-falling-time-ns = <56>;
-+      i2c-sda-hold-time-ns = <56>;
-+      i2c-scl-rising-time-ns = <56>;
-+      i2c-digital-filter-width-ns = <0x0>;
-+      clk_rate = <0x0 0xEE6B280>;
-+      clock-frequency = <400000>;
-+    };
--- 
-2.31.GIT
-
+On 9/7/22 21:47, Wolfram Sang wrote:
+> On Tue, Sep 06, 2022 at 06:55:07PM +0300, Andy Shevchenko wrote:
+>> ACPI core in conjunction with platform driver core provides
+>> an infrastructure to enumerate ACPI devices. Use it in order
+>> to remove a lot of boilerplate code.
+>>
+>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Josef, do you have resources to test this patch before I apply it?
+>
+Yes, I'll make that happen today.
