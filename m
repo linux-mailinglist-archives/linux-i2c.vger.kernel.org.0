@@ -2,121 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED605B1FA2
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Sep 2022 15:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB845B1FEA
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Sep 2022 16:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbiIHNwH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Sep 2022 09:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
+        id S232397AbiIHOA2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Sep 2022 10:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbiIHNv6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Sep 2022 09:51:58 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2134.outbound.protection.outlook.com [40.107.105.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3076BF6B81;
-        Thu,  8 Sep 2022 06:51:56 -0700 (PDT)
+        with ESMTP id S232623AbiIHN74 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Sep 2022 09:59:56 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2124.outbound.protection.outlook.com [40.107.22.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB12A114A61;
+        Thu,  8 Sep 2022 06:59:15 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ikm9CZL/TYDRuINr0DdX7nWbDlvoMnYOmnI10Z1afgwnPLQTAv405JaJ9UcPSJQzQF4KWSKYISRzdBCcwxXXRps+fs6t27lc12QBW/2YwB0Ot/Mz2mRUyPJcENEW1dtVHwS3nBTY9YIQ+SR90z69DXfRZ94lyXzUELmjuG1lSf9aW/v9iHsbM4aJyT5AGjg3hH8Wi3oxXFpO+tfpylklY/huU/wJwkugQGW0qx6u24uqxnNAfug+K7H1fFyfUE1uy/QHA5TS+yWJ/GMvPlavJRmEP57HaesH15x/rmyrsR7RpG+R5m/IqVqCBWIGghFbmLKr6LpYOQTpN5zxpptXEA==
+ b=mUAxGkV0QP4LPF4oAqtpCANzZXaTG2BNRyZHeawnCV6Oei6EM+2/MUFY5/XX1kFjveYc4gGH1USeLQU8DDoZoxi9wbrjBG8sYMI8DdAJpEInirgQ1Xv1UO5qTD+3eYzB5TXmfASVbBu9m6m7XRfM+8mYB2eJMfrSoGKG7EWAFuBFi3fZlwd9QPq8x4as7HrAufhQyJQAh0YtF0hP/DKQTIpibrqd+6Xg4jv9kSI5d/8kcDc2Z3WCragl4PQ7aZ07Q2j2UU43y6ll0FSjRRcigYXLSr/cBCogUdE8UN1K0B8+BJv73IUZ8DDM21RbCZ/Xy+cjND8AKaUsJ1wQiIVPaA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jNzlC/Z3nSBhKCLeuNgRAsjqefRVsiEXMFxlPws2rKY=;
- b=UaHWT4AmCW4lTkuRrmitTZ9ERlNhgpqFnVHO3pHwXYMufeaNxnPJXvPGNsRG0ocCgF5aDs0HPOyvoMiOw2URmiH0HrvMx/1wj5ZPwhOtkpmItiwHg1lEPAKynH2mvCUSwcybMONd/ZIwCZhIevl+bIfLVNks7RcmpQj7v+Xu9AI77idPOT1/u3bpF7gUcGGykK7OY1JXtVt1Wb92JU/SEsdnv4xD7fF7TuZmqpnDfdjCzN3B43N49ZmN2N4Xkb7o8ECAYayxdvCj1QA2xS3fHdmtq6kH+rktWBCgelQmmk1HdG3iG1tZsczcsyUYO0d7E78rqN1ZERnL5xQD2AMbXw==
+ bh=tStOBjTcpl5Hulh7e4gavb7/7SJYX8gp0jZFOo6D5sE=;
+ b=m5c/49DY9t2cyDonM4e2ApUzQdGjRuklNE8rQBtxnvDAJCyc6uJsgJFzb8WSuySuobww2D9xEPPaRIkIEFlsSjqIZFqBYzrh9E6uRqsExe2Mwgha89cWgC8Als50g2ntGQuTDCkztA6+/Mqx5eWpN7JAoYgM6b2yQvpnm42ExL/6q2H4Q8YZE3NIAE0t/dgxUbQzOX/qlPJ9LES8v+xAX0b/fcBmcJKs77+x5uTGFRtXSdrJUhmpRUdhJusIBG8bapQTb9/qRF8DPlA+0cPxF2svrTgY4p9rLQx4vdyttNnMK9a9g4WqR2tbL6dEzD40wQbxsPKAf2B/MNvVFGwxNQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
  dkim=pass header.d=axentia.se; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jNzlC/Z3nSBhKCLeuNgRAsjqefRVsiEXMFxlPws2rKY=;
- b=g2hnIkJiRpgq8RzBYrlA7yqFVGONuY6nSxhkWbz51gjDT6Kjz0R4VXRaAj8SJlhbX9HZWTseGrQ5rCgBXq1hEUWlGkTLRfWBBP2mzzHY/XK5doGgxGJnJMQG6mNrLjlCT/lSGbtJgQJsaS5M9mDMNlL4ZGfgFIcfX8M2dwJTyFE=
+ bh=tStOBjTcpl5Hulh7e4gavb7/7SJYX8gp0jZFOo6D5sE=;
+ b=Lbt+9d1THJqNGvPqb2/SZ4NO0ECImMn38ClzlLvcZJAWenpca87MQBh42H/CmVY2z6MKNxpMr84X2Geyt4fmHCoK0u6afLmPOWKSg4ImCM2FcAV+ZpLvrrnmRfgq869cpHOlzRml4zdniMK5b+SGtQlJwwj+Yb4GzH3d6/eG95A=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=axentia.se;
 Received: from AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
- by AM9PR02MB6674.eurprd02.prod.outlook.com (2603:10a6:20b:2cd::20) with
+ by DU0PR02MB9295.eurprd02.prod.outlook.com (2603:10a6:10:470::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Thu, 8 Sep
- 2022 13:51:53 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.15; Thu, 8 Sep
+ 2022 13:59:12 +0000
 Received: from AM0PR02MB4436.eurprd02.prod.outlook.com
  ([fe80::1d88:3306:c280:3179]) by AM0PR02MB4436.eurprd02.prod.outlook.com
  ([fe80::1d88:3306:c280:3179%6]) with mapi id 15.20.5588.018; Thu, 8 Sep 2022
- 13:51:53 +0000
-Message-ID: <a7e51c63-a7c1-9acd-128e-02942737e726@axentia.se>
-Date:   Thu, 8 Sep 2022 15:51:51 +0200
+ 13:59:12 +0000
+Message-ID: <2fcfa811-ce5c-9fc8-9837-753299794560@axentia.se>
+Date:   Thu, 8 Sep 2022 15:59:10 +0200
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
-Subject: Re: [PATCH] i2c/busses: fix repeated words in comments
+Subject: Re: Regression: at24 eeprom writing times out on sama5d3
 Content-Language: en-US
-To:     wangjianli <wangjianli@cdjrlc.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220908132148.42995-1-wangjianli@cdjrlc.com>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Codrin.Ciubotariu@microchip.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Ludovic.Desroches@microchip.com, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, robh+dt@kernel.org, wsa@kernel.org,
+        kamel.bouhara@bootlin.com
+References: <074b39c5-55fc-2bc1-072d-aef1070e284d@axentia.se>
+ <2bb4868b-90ab-887e-bf13-9de8b79231bd@microchip.com>
+ <38dedc92-62a2-7365-6fda-95d6404be749@axentia.se>
+ <3503471d-2d5e-572b-39e7-d715a909749d@axentia.se>
+ <5800be99-3569-6edd-5c71-9e6f1498dc3b@leemhuis.info>
 From:   Peter Rosin <peda@axentia.se>
-In-Reply-To: <20220908132148.42995-1-wangjianli@cdjrlc.com>
+In-Reply-To: <5800be99-3569-6edd-5c71-9e6f1498dc3b@leemhuis.info>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MM0P280CA0011.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:190:a::33) To AM0PR02MB4436.eurprd02.prod.outlook.com
- (2603:10a6:208:ed::15)
+X-ClientProxiedBy: GV3P280CA0103.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:8::8)
+ To AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 587f2cf1-3c00-47b9-7a98-08da91a1496b
-X-MS-TrafficTypeDiagnostic: AM9PR02MB6674:EE_
+X-MS-Office365-Filtering-Correlation-Id: cb19ef4f-5856-40cd-622c-08da91a24f46
+X-MS-TrafficTypeDiagnostic: DU0PR02MB9295:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oO+u48PdzJE7VbVqQ6TrvNfkXIt5JO0zjCURvGuc1DOBldbXBNT+MWV+xmmhdwTP9q8OxoooCEM4q13TdTvbE+fnDLFglsT7L7C0s65ua/IK5q9dvY8NrZbWZSSWo7grOwaggm8me+LYhhi5pLFG6rFwSR/svoNnhoaEXtY8lIe1xAgJjRy5UAH7+r/uxSF+X/CWyIgjHV8icIDlqJawdg5/IuLioE6ApjkYPxjUOszWmYaZZOZpR+UpWsmKUVXouwvP3vhP3slZhtVFjksVDUgz3nh0SFOLHIPqpyADljM8g1Wk1fWmYRh8MwsZTYhl5HICnVaFT+R0zKxxiFJUkK74WD+sADgYN2lgA883fau0ZSBAG2KYCXWuHYyyOrGoaaUI0BNrZwj0J+enZL2Z/ypS28MMLedLudpssCQcAmqL0XD6sxgzWTAEcff88bJCuZ+5QyhWBWp462iRESn4dWbAc0/ZXtA1//DI4CichbqNV+S0kiKhyieBWw36uIOlmH3vQqWMmvniz1/xVjPkU9LzlqPX3Woj0P3PwtbPZrH+793aEfXNl3h2cShIv8CZuJ1AJJkEy1oBVX4mqStqiRa+EvNILT81L0+PBu2M5M6RkBCbIrs9Z193mK/gHdGncCRB/S4uPI7fE7iaMhqoph071aWgihj1MWly3tr/9NE4SgTJHreJ8ld9iXtbH4YEZXQD/tquzQ5XH8mGfIREpDIfYSlW/Ko0r94oyqPhg+NT15dOidTbU0KrxZxP4no/wPwohKr/smvA7AzHShRwU1j2gV/dZvXqsAi0JzoJiTA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB4436.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(366004)(376002)(39840400004)(396003)(346002)(2616005)(5660300002)(66556008)(8676002)(66946007)(4326008)(2906002)(66476007)(8936002)(36756003)(478600001)(31686004)(6512007)(41300700001)(316002)(31696002)(26005)(86362001)(6916009)(38100700002)(186003)(83380400001)(6486002)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: ycFt3PlywY3nr5wRPvBewzWG6Wz72mmTv71FRzoV1T/wYfpzaeTsYa/HMrAxKf7LQXJR3ow3a+34oILo9OK/+QyBWB3y0e/zRP4ot0DbkAEA2siOhdRX54yr1wQ3aC8fZlBk24REavpu1gu4fV/jgh2abkmiAGJrYBO2PaW4Y8crMSJncIVxTC4TijPzHRZpH7QfhnUH+/5atSH0dnaQe4P6KQa3NcXwb75RM/K+9Cgxzp8dRLnmx0sMCvLVTogidoLTbUp6I1X+TGc6F06pOUQL6cC2XI8prJGBi/7YZjlJRRC9y/ZA8ubz3L0EUTxlT/SE+hHBgjR8nA5RquLGEY3CRUI3S8d6cyHnsnOpZtEkFQMpooJFCww65VnBBEBzvIxBHJ3aeMPV+1jplD2kFVxSfcd6QVA2/H85eaRamNFG/ruQfqeGM3TAQ5E+YFgu1oEKfbDYzAvA5DiUxwhX1dBx9cVf3oFLVA0brGTNMwFJm9A8dub/mom9sG6V5UFbaMj/IYUoTwFvMrx4wcT6wC3UGGKZEo3fCjTCD7U1pjXECokM7lp8GKqo+I74jVC8RfTFvHbfULmSg8u5Vb81rq6iBSKCXKVvf+EHR9okB9qno4Et8aEK4UQoH9fBdXrwnta6JjMMA6IX/aPgw/UniwaHkIi89q8UB6VvrSSzNCs/Swmu2fW9yPRc5SKV1M64T5WidEd0AyNvqDYKWQpqmjdapQGtStxmAVNtB/RgC+wx+qefTmV+5pwomoaurolDOnEq/BTSjCMnuANgSZLsdDJEEO3Z5BPi3L86NN6lqcArcvVqElsfgUmLsx2iuG0k4Itt1S1EAwAWFN586GfhyA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB4436.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(376002)(346002)(396003)(39840400004)(136003)(186003)(966005)(478600001)(53546011)(83380400001)(6506007)(26005)(6512007)(41300700001)(38100700002)(6486002)(2616005)(8936002)(7416002)(30864003)(5660300002)(8676002)(316002)(86362001)(31686004)(4326008)(66476007)(66556008)(31696002)(66946007)(36756003)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q2VkcGVadkVVUmpzcXJ2RTVIZHFkWUVSYTFMbThENWVua05sL3kvdXNLTlZN?=
- =?utf-8?B?dUpnZEV6aEFDc29nNzU4TkgxSVRKVjAzZTUwYmhqQmFWOW1mSzF5V3VHbWVK?=
- =?utf-8?B?bEhoNTVmVVQrWFE5V3hqdUkrNXBja2ltVy9UcmdTZVRRN2c4K2lTUlBOYjFC?=
- =?utf-8?B?Qk9UMk90eU5mS3NkQVJCSGlQaldlV1RhUHlwMGJoWVprTGo4c3hBNmYyYUtj?=
- =?utf-8?B?TUR0aVh6S01qRWdjdXByaTVpQWdoVjA4Njkya2hTeTFJdWJNT2d0c3graTho?=
- =?utf-8?B?aytLSE5nVm1WRUJEQ0FDcmtwVWw3bEtoSVJDd3kxVWdHQVVzS0doNElBbkpo?=
- =?utf-8?B?d3ZsUm5ua3ZteDVSUUIwd2xVT0pFOGtNTmRHbVRRSTlNcFkrVGxuMWtIeWJS?=
- =?utf-8?B?ZmZJZU1yYkJJYXI5endCSUtIckUrVlh2SHVScThJQUZmMVkwOGdVeUlDeGdH?=
- =?utf-8?B?ank5M1k1WVV5UkQybHQzYWMwVXlYSW5xbTVWbjZUMkVmZkpiTW5WQ3RDdE03?=
- =?utf-8?B?OGVkK2xtV2s0V0FxL2c0cHRHakZPOSt4OWFNaHY1SGFEc2Q2U1EvaWFKMWw1?=
- =?utf-8?B?NDlRN09PT3A2L3IwRmUxSlYyQldNMmI3K2NQOVEzQVQ1N2FGTVhvdVRSYlVW?=
- =?utf-8?B?OXdaeXliZFdJd2pmd0FwdVF6Y1lISzhuVHNpZndwbHBodzNJNzFnZ29vWWE0?=
- =?utf-8?B?SjhGS1lVSFV6UFZWb2dZMjkrRWljZjBiWUo1Y3lBSWtnY05MdkZYSTVKNnZL?=
- =?utf-8?B?ckN1ZmN5SXdRRDdxWVZzYUhEOVdIRkRLN2w2b2k0c1FSRitXaHM4R21kZDU5?=
- =?utf-8?B?SThQUjE1S3FiUHRlTTVOLzhqbzY4ZTRobW1Vc242UGlsSGRaTUhwOFkyUTBQ?=
- =?utf-8?B?YW9udGZWOXNWS1NuVG9LN3RMSEdSZTNJMVR5aEdwaFd6bzJlL2FiQ1lGcnN3?=
- =?utf-8?B?eWJXNnhoWUV6Qkp1OXUzWENoa2xFTk12NFhTeHo5QW5oREVWanpSd05sU0lE?=
- =?utf-8?B?QmV2SDRwT25nWjMzYkkxQWxWRm1McUxNODNhdkdMWnJrdTYvU2hJU1c1OVFI?=
- =?utf-8?B?VUMwMjVuaS9zT3ZTU2tFUFhNbUJ6alg4cmlWdzBOdzJTaUdyOXpZcmRzOG15?=
- =?utf-8?B?cGFhT0tremZ3VDI0Qi9KcFdCL2l5T2g2UG9JMHc1VmQ3NVlSbU0vN3RYUnlG?=
- =?utf-8?B?d09uNjVKa1p4UHExTUtZdFNJRDhySENtTjBqSyt6N1JYaDFjS3VMdmlXV3NR?=
- =?utf-8?B?OGxjODVRNmJ0YXZiWGpoeDMwQ0ZhT2lBRFlGL2Iwd2ZqS3J3Vzl1TDYxWFMw?=
- =?utf-8?B?Z2hWa3EyV0RwQ2VIejFtSHhRNHB6VThBcFlqWmJQN1FidFh2dkF1Q3VtazBX?=
- =?utf-8?B?NHo0OCtuMnJyVmZSUEhLenZSaU1JUlIzU1RMWDdSWG80N1ZoVVkvZzNKZmJG?=
- =?utf-8?B?UWE4YVk4eCsrMXBzZTZyeDQrdjVJaTMvYVpqRGtLL3ZsRXNKNGZjUjZkbXNt?=
- =?utf-8?B?c2tqbUY1Y3M1WnJoemVUalNvZjNReHU1ZXNseU9xb1FkcHJwTFhlTzlxQkpk?=
- =?utf-8?B?a1h6QnJhdzA1bjV1ejlXSUxwNzVrNlNsZmtDZ0xaaVRzZHpzWmtFejhrTlo3?=
- =?utf-8?B?bkZLYklmbnhEc2NXNVkwMXVYR08rNUdTSUNSRlVtanhKMWo3eFNYWGcrR0Mw?=
- =?utf-8?B?Q2ZpUVhQcmV5T1hFRld0aHhVeUpMZHE3b0FoZmp6end1T3BXY2lVWU42Rm1S?=
- =?utf-8?B?QjVKQW0vdXdNOHcyeWJSUlRzMUVHWUh4TTRTUEkrSDExNVhNVlUvV3hwd01o?=
- =?utf-8?B?anBlTWVvcDNRaUxjTURJZWtFQjI2WVdYVzYrTjE3aWNYdGowUDFLVC9IaDNH?=
- =?utf-8?B?b2FGT21oWml1NW1vMjZkU1lneSt2T3IvcTJOV3g1T2tuYTFlS2NBZk0vV1V4?=
- =?utf-8?B?WDdmTFYwMW8vRGdxYWcvMXFxaHBGcXFoTjhCK2pVRURGNDQxUVBhODJrMVJt?=
- =?utf-8?B?djV0ZnVvQTV6d2RBR3g1cExNV2szYmlvUURmSkhsVXh6Z2JsZWtaaVF4Vlph?=
- =?utf-8?B?dERXbll0RmpSOWU5UXFKWWxCRFQzdWdEcHlrM0E4WXN1dDVzWFRCRWU2ZnUw?=
- =?utf-8?Q?x7divzGqBACIVkdmaD2hI8Wtu?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MXlCRCtxa09JRlpoUTg1ODB6blRLdG8rWTYxMzEyMVRSYXRkN0NZQU5BSXQy?=
+ =?utf-8?B?SmZVQTk3NjczdkJ4cDJ0cG9XVFQ4UjRMQll0VUNha2tVcW5vQWRySzBuV3J2?=
+ =?utf-8?B?SFBwYnM1OGYraFp4YkdFRmpoMnFnWkV1aE15dHR1VjVseDBSN0ZwS3lEaEU1?=
+ =?utf-8?B?ZU5vSTBuZzRRYTFIVkNic0VUM1M3SXkvS0VkWTZ4TU15NTh6SjVkcG1XY2ZX?=
+ =?utf-8?B?RmZzektrVTREWEgyRHpwa3hGV3FPeDhVcVEzVVZhZ1RxZ1g2VnBuMnQwejRj?=
+ =?utf-8?B?cGV4L1JHYmhIcWZ1V280QXpVemFjbFAyTHBVanpvcUhIVDZwUzE2M3RSa1ZB?=
+ =?utf-8?B?VWZvVkNhdWZJQXN3SkV2dHExZkY0ZjhBQVJvdzU1c1ErdkNkRnFyYXo3eUsw?=
+ =?utf-8?B?S3Y5NFE3bXhiYzFPaFhrK1ZINzIwcm9hMzE3S2tVVm9FbjBzMVdlcFJmS3M2?=
+ =?utf-8?B?MjdHRUM4WEFJd3VvRFJPUWxtSnlGNHV0c1ErYlFvaHBnMW5jdzJyL3BLUDZS?=
+ =?utf-8?B?VGU3R24yK3RuNFd4cGJqZVB3Y2JURlRiTFJpZ2lZQ2NFMFB4VGRZc3B4S0kw?=
+ =?utf-8?B?WGVHWkZVb0JhRDkzRFVONzZLYXRpQVRPTzVvZERJR1EwNjRiYzYrVENyMVdU?=
+ =?utf-8?B?NVltdDlLY3ZWbkJ4ZFA4SktvU2EzK0Q5Q0FuT3ZTbEUzU081WkRtYTdoWVVN?=
+ =?utf-8?B?Nkc5enZFbWc4VGZVTVJLN1MzWGtnL0JNcUFlazJsQVpCd2tEQjJ3R2pSRlhq?=
+ =?utf-8?B?UFdIVXpDcHpQTG8wS1NHQjVaVHN2Vmw2YUlDSCtKNmRCdkQ4cklibVlxb1BC?=
+ =?utf-8?B?aWtjdmwvdE5uRGZ4V2lEYTAzdG91OHJzM0huWW1zazRGTUFHS2NxTlJtSDVt?=
+ =?utf-8?B?NXh2bThRN2k5eExBVDlrdjNPTHZ3cEdmUG92YWMvcVdLTHVIZXhPc2NEZzRJ?=
+ =?utf-8?B?UXpZcTZnbWhSQWJnellLakVoeWZtUVpDcUx5bVE4UXpnQ1RmUVB3NlJ4dGx6?=
+ =?utf-8?B?Q3UwS29WRWhSOFVkSFJVZk9Qby8rMloxOTM2ZmE0R2NaTHAvcHVjV0t4YWNE?=
+ =?utf-8?B?YWx4WjlNUXJXQ2p4NkFHM3d0VjBPcENab2lZKy9vaklDdGo3YlF6Qm1CcXJt?=
+ =?utf-8?B?dW5UTjdZZ2d1VjdZdDRiY2NGYmdzUTBlQjFZT2sxRzJrQmFzZnJKOWhCWFc3?=
+ =?utf-8?B?MTNGQ3Q4NEV3RnVyTytyTWFUdVhKajBCQlBpRXkxc2FXeTVRaDVlU2ljU2tu?=
+ =?utf-8?B?RkNFam1FOWwzOFh1Zmk3TjAzZUdkdDludnVrRE9icmJnTmZNNVJzMW92KzVy?=
+ =?utf-8?B?UDJheVgvdjBRMnZIVERuZ29oc1N2UmpuNjMvOXZQeEkySjlzd050TkdvUDlD?=
+ =?utf-8?B?Z283UGpEVnhvRDc1RjBwdnpHdkJxNTNkNXZnME95ZzFob2lOZzI1WStZL0dJ?=
+ =?utf-8?B?WklMeitXVDhxbVA3RCsyRFZrOVNxYk1NYThLZUtmSVpYQVdQQWVHbzZmSHpE?=
+ =?utf-8?B?Vm1SdU0zSUxqdFZRcWJrR0Q1UndhcDAzQnBuSWpEenE1MmpsTEpLc0tza0VT?=
+ =?utf-8?B?Vk11UVpwT2h6OVNMbTBPL0tWZ1Y1MmVmdVlTT1VyWHc0MU1Ibmh6UzYzNE12?=
+ =?utf-8?B?SUlWT3Q0TDNWb25QbjlXY3R1NHVJMXJ4QkoyaFBaUlRUVXJabGNBNFZENjl0?=
+ =?utf-8?B?eG5oZnZ1TmpsL2wwTHZoa0NsZXovN3pNcllUUHRpNXloYmk3SFVCeHdxNkdC?=
+ =?utf-8?B?eWY2VjUxc1ZBVGJncElnUmd5Q3BFL0lldXVnMWpFdHZpTkJBaWVyZ2oyS1Y2?=
+ =?utf-8?B?cFNoUHhvek1NWEVMYWUwVFR1V2d4aXE1U2lheW0zVjhnR3VlQ0tibFoxVDFP?=
+ =?utf-8?B?Qm9aQWNOdW9vK1pldlI5UmdIMERWNGNpM1FXcy9SNGNkWWsvMW1DRWFKWmdN?=
+ =?utf-8?B?SGVBenNuZGhRa1N5am5Kd1VsUmRWNkpMaTMrSitJU3Jlb0FBSEJDUFNXSVVU?=
+ =?utf-8?B?M3BMbkNRb3pyZDFHTlR0THBGMEVQK0dSQXlteFBzbExOTy9VVFFENldEVTdS?=
+ =?utf-8?B?YTBzV2VaeTg1djZPaDRNWTJoZTd1dXVucjMxcG9USXdRM21XbTJ0VHkrYWk4?=
+ =?utf-8?Q?OBpOk4aT8LKd5WSsla4pYCRi/?=
 X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 587f2cf1-3c00-47b9-7a98-08da91a1496b
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb19ef4f-5856-40cd-622c-08da91a24f46
 X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB4436.eurprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 13:51:53.7951
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 13:59:12.8338
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dGhkTsgXVO/MUEXLWGAjL9tTv48zQEfhXcoD4Opncohu0Akrd0b5owt++jstPmdh
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR02MB6674
+X-MS-Exchange-CrossTenant-UserPrincipalName: R8bsItRrKMHdYD9CLAIoff+PnSqAd6qY2XN/x7GMaNw5iShKcFzOiAZkASwUZKz4
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR02MB9295
 X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -125,34 +133,221 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi!
 
-The subject is the wrong, you are only fixing one comment and
-you are only fixing one driver so you could just as well mention
-that driver explicitly in the prefix with "i2c: viperboard: ...".
-
-2022-09-08 at 15:21, wangjianli wrote:
-> Delete the redundant word 'to'.
+2022-09-08 at 14:06, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker. Top-posting for once,
+> to make this easily accessible to everyone.
 > 
-> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
-> ---
->  drivers/i2c/busses/i2c-viperboard.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-viperboard.c b/drivers/i2c/busses/i2c-viperboard.c
-> index 8b5322c3bce0..8f87394abbcf 100644
-> --- a/drivers/i2c/busses/i2c-viperboard.c
-> +++ b/drivers/i2c/busses/i2c-viperboard.c
-> @@ -318,7 +318,7 @@ static int vprbrd_i2c_xfer(struct i2c_adapter *i2c, struct i2c_msg *msgs,
->  			amsg->addr = pmsg->addr;
->  			amsg->unknown1 = 0x00;
->  			amsg->len = cpu_to_le16(pmsg->len);
-> -			/* send the addr, the data goes to to board */
-> +			/* send the addr, the data goes to board */
+> Peter, Codrin, could you help me out here please: I still have the
+> regression report from Peter that started this thread in the list of
+> tracked issues. From Peter's last msg quoted below it seems the thread
+> just faded out without the regression being fixed. Or was it? If not:
+> what can we do to finally get this resolved?
 
-I'd change it to "goes to the board" instead. 
+No, it is not resolved that I know of. We are only writing during
+production, but are working around it by verifying and looping back.
+Sometimes it takes surprisingly long for the loop to finish, but
+it's not a huge deal. But it is of course not completely satisfying
+either...
+
+Reading is never a problem, so post-production behavior is sane.
 
 Cheers,
 Peter
 
->  			ret = vprbrd_i2c_addr(vb->usb_dev, amsg);
->  			if (ret < 0)
->  				error = ret;
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> 
+> P.S.: As the Linux kernel's regression tracker I deal with a lot of
+> reports and sometimes miss something important when writing mails like
+> this. If that's the case here, don't hesitate to tell me in a public
+> reply, it's in everyone's interest to set the public record straight.
+> 
+> On 30.06.22 09:44, Peter Rosin wrote:
+>> 2022-06-10 at 22:51, Peter Rosin wrote:
+>>> 2022-06-10 at 09:35, Codrin.Ciubotariu@microchip.com wrote:
+>>>> On 09.06.2022 17:28, Peter Rosin wrote:
+>>>>>
+>>>>> I have not actually bisected this issue but reverting the effects of
+>>>>> patch a4bd8da893a3 ("ARM: dts: at91: sama5d3: add i2c gpio pinctrl")
+>>>>> makes the problem go away.
+>>>>>
+>>>>> I.e. I need something like this in my dts
+>>>>>
+>>>>> &i2c2 {
+>>>>>          status = "okay";
+>>>>>
+>>>>>          pinctrl-names = "default";
+>>>>>          /delete-property/ pinctrl-1;
+>>>>>          /delete-property/ sda-gpios;
+>>>>>          /delete-property/ scl-gpios;
+>>>>>
+>>>>>          eeprom@50 {
+>>>>>                  compatible = "st,24c64", "atmel,24c64";
+>>>>>                  reg = <0x50>;
+>>>>>                  wp-gpios = <&filter_gpio 7 GPIO_ACTIVE_HIGH>;
+>>>>>          };
+>>>>> };
+>>>>>
+>>>>> for multi-page eeprom writes to not time out (a page is 32 bytes on this
+>>>>> eeprom).
+>>>>>
+>>>>> For reference, the current defaults for this SoC/I2C-bus, that I modify,
+>>>>> are:
+>>>>>
+>>>>>          pinctrl-names = "default", "gpio";
+>>>>>          pinctrl-0 = <&pinctrl_i2c2>;
+>>>>>          pinctrl-1 = <&pinctrl_i2c2_gpio>;
+>>>>>          sda-gpios = <&pioA 18 GPIO_ACTIVE_HIGH>;
+>>>>>          scl-gpios = <&pioA 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>>>>>
+>>>>> I suspect that the underlying reason is that the bus recovery takes
+>>>>> too long and that the at24 eeprom driver gives up prematurely. I doubt
+>>>>> that this is chip specific, but I don't know that.
+>>>>>
+>>>>> I can work around the issue in user space with by writing in 4 byte
+>>>>> chunks, like so
+>>>>>
+>>>>> dd if=source.file of=/sys/bus/i2c/devices/2-0050/eeprom obs=4
+>>>>>
+>>>>> but that is really ugly and gets slow too, about 20 seconds to program
+>>>>> the full 8kB eeprom. With the above in my dts it takes a second or
+>>>>> so (a bit more with dynamic debug active).
+>>>>>
+>>>>>
+>>>>> If I run
+>>>>>
+>>>>> dd if=source.file of=/sys/bus/i2c/devices/2-0050/eeprom
+>>>>>
+>>>>> with a source.file of 8kB and the upstream dts properties in place, I can
+>>>>> collect the following debug output from at24, i2c-core and i2c-at91:
+>>>>>
+>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@0 --> 0 (-23170)
+>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@32 --> -121 (-23169)
+>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@32 --> 0 (-23168)
+>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@64 --> -121 (-23168)
+>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@64 --> 0 (-23167)
+>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -121 (-23167)
+>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: controller timed out
+>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -110 (-23155)
+>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: controller timed out
+>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -110 (-23143)
+>>>>>
+>>>>> And then there is no more action. I.e. only a couple of 32 byte pages
+>>>>> are written.
+>>>>>
+>>>>> With the above mentioned dts override in place I instead get this, which is
+>>>>> a lot more sensible:
+>>>>>
+>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@0 --> 0 (753629)
+>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@32 --> -121 (753629)
+>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@32 --> 0 (753630)
+>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@64 --> -121 (753630)
+>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@64 --> 0 (753631)
+>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@96 --> -121 (753631)
+>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@96 --> 0 (753632)
+>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@128 --> -121 (753632)
+>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@128 --> 0 (753633)
+>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@160 --> -121 (753633)
+>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@160 --> 0 (753634)
+>>>>> ... snip ...
+>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8128 --> -121 (753883)
+>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8128 --> 0 (753884)
+>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8160 --> -121 (753884)
+>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8160 --> 0 (753885)
+>>>>
+>>>> could you please apply this patch-set [1] and let us know if it 
+>>>> addresses your issue?
+>>>>
+>>>> Thanks and best regards,
+>>>> Codrin
+>>>>
+>>>> https://patchwork.ozlabs.org/project/linux-i2c/list/?series=255408
+>>>
+>>> That series does indeed help! I'll reply with a tested-by etc on the
+>>> first two patches, I can't test patch 3/3 with my sama5d3 board...
+>>>
+>>> Thank you very much!
+>>
+>> Since replying to the actual patches do not work for me, I'm writing here
+>> instead. Sorry about that. As stated above, it /seems/ to work much better
+>> with these patches. But I fooled myself and there is still some remaining
+>> trouble. It is not uncommon that the second (32-byte) page in the eeprom
+>> is not written correctly for whatever reason. I do not know why it's
+>> always the second page that gets corrupted, but this is a bad problem since
+>> the failure is completely silent.
+>>
+>> Cheers,
+>> Peter
+> 
+> #regzbot poke
