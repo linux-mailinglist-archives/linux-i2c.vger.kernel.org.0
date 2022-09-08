@@ -2,92 +2,123 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48CCD5B0F9A
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Sep 2022 23:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AD95B12AF
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Sep 2022 04:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiIGV4l (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Sep 2022 17:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58326 "EHLO
+        id S229838AbiIHCyz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Sep 2022 22:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbiIGV4k (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Sep 2022 17:56:40 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BDF167EF
-        for <linux-i2c@vger.kernel.org>; Wed,  7 Sep 2022 14:56:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=nbIPgz2/mbzDJkH4gApsZZdgWIL1
-        qFJqywpG4Baw9E0=; b=ULvVoE/rxfExDIes7i4B+5SU5MBC8cTlMJhYktpwNft6
-        qt9ItXKu6vjeWfOxOY2rz0E4alqr4necOzpsUp9EI2nRX6hl04ntr1T0K7oVHuch
-        FqRzaZr7JvyplzkKmiJQj0qVbiiUxByse7zAuah3sV977T2g2U7ZaJ6EJHtlxIA=
-Received: (qmail 3900094 invoked from network); 7 Sep 2022 23:56:37 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Sep 2022 23:56:37 +0200
-X-UD-Smtp-Session: l3s3148p1@W6YKYx3os60ucrBp
-Date:   Wed, 7 Sep 2022 23:56:36 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     "robh@kernel.org" <robh@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/9] i2c-mlxbf.c: bug fixes and new feature support
-Message-ID: <YxkTlIJFczsEaL4w@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220822195725.12656-1-asmaa@nvidia.com>
- <Yw0fNuOWtJbe/OT1@shikoro>
- <CH2PR12MB38951B9B8F189E1B991A7950D7769@CH2PR12MB3895.namprd12.prod.outlook.com>
- <YxkPKpPNXg8wEIDf@shikoro>
- <CH2PR12MB38951D3E64BCF82A2A0F3FFBD7419@CH2PR12MB3895.namprd12.prod.outlook.com>
+        with ESMTP id S229477AbiIHCyz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Sep 2022 22:54:55 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DB845F6E;
+        Wed,  7 Sep 2022 19:54:52 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MNNsx0lTZzkWr9;
+        Thu,  8 Sep 2022 10:51:01 +0800 (CST)
+Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
+ (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 8 Sep
+ 2022 10:54:50 +0800
+From:   Weilong Chen <chenweilong@huawei.com>
+To:     <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
+        <xuwei5@huawei.com>, <wsa@kernel.org>, <robh+dt@kernel.org>
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: [PATCH next v3 1/2] i2c: hisi: Add initial device tree support
+Date:   Thu, 8 Sep 2022 10:57:00 +0800
+Message-ID: <20220908025701.330210-1-chenweilong@huawei.com>
+X-Mailer: git-send-email 2.31.GIT
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tl9O591Jt5BkV7w6"
-Content-Disposition: inline
-In-Reply-To: <CH2PR12MB38951D3E64BCF82A2A0F3FFBD7419@CH2PR12MB3895.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+The HiSilicon I2C controller can be used on embedded platform, which
+boot from devicetree.
 
---tl9O591Jt5BkV7w6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+---
+ drivers/i2c/busses/Kconfig    |  2 +-
+ drivers/i2c/busses/i2c-hisi.c | 16 +++++++++++++++-
+ 2 files changed, 16 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 7284206b278b..6d0fdf48e97d 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -673,7 +673,7 @@ config I2C_HIGHLANDER
+ 
+ config I2C_HISI
+ 	tristate "HiSilicon I2C controller"
+-	depends on (ARM64 && ACPI) || COMPILE_TEST
++	depends on ARM64 || COMPILE_TEST
+ 	help
+ 	  Say Y here if you want to have Hisilicon I2C controller support
+ 	  available on the Kunpeng Server.
+diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
+index 76c3d8f6fc3c..4501be4d9eb7 100644
+--- a/drivers/i2c/busses/i2c-hisi.c
++++ b/drivers/i2c/busses/i2c-hisi.c
+@@ -5,6 +5,7 @@
+  * Copyright (c) 2021 HiSilicon Technologies Co., Ltd.
+  */
+ 
++#include <linux/acpi.h>
+ #include <linux/bits.h>
+ #include <linux/bitfield.h>
+ #include <linux/completion.h>
+@@ -13,6 +14,7 @@
+ #include <linux/io.h>
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+ #include <linux/units.h>
+@@ -483,17 +485,29 @@ static int hisi_i2c_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_ACPI
+ static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
+ 	{ "HISI03D1", 0 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
++#endif
++
++#ifdef CONFIG_OF
++static const struct of_device_id hisi_i2c_dts_ids[] = {
++	{ .compatible = "hisilicon,hisi-i2c", },
++	{ }
++};
++#endif
++
++MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
+ 
+ static struct platform_driver hisi_i2c_driver = {
+ 	.probe		= hisi_i2c_probe,
+ 	.driver		= {
+ 		.name	= "hisi-i2c",
+-		.acpi_match_table = hisi_i2c_acpi_ids,
++		.acpi_match_table = ACPI_PTR(hisi_i2c_acpi_ids),
++		.of_match_table = of_match_ptr(hisi_i2c_dts_ids),
+ 	},
+ };
+ module_platform_driver(hisi_i2c_driver);
+-- 
+2.31.GIT
 
-> I was going to send a v3 patch after I get some feedback on the other
-> patches unless you'd prefer I send it now?=20
-
-Your choice. You can wait for some more comments if you want. But
-frankly, I don't really expect more comments.
-
-
---tl9O591Jt5BkV7w6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMZE5QACgkQFA3kzBSg
-KbaZdw//VkXXGWtwaekWQebeEEenKeCD8uKXwbrb4PP9/dorRZ0uipc+Vbe+9euH
-pOENKA5+9puynutplbGVABYAWkam3u76gzLxWzPlad3f7wofd9hZCq9TMFAWv38n
-RK0qc4vlXv8uxYKo2WZbBmdaokveBZ0yvv1u0mHtnQ047OnZr8MQTKcVlpbBJTvT
-VtaAfz8JY4sH1UuBY8VX1CE1uvlPmwEVe8RGwxPJru/6jeB9iCKy3U+y6nQiRW3Y
-oF1BYCYPd5qAySNFbTESddFc90ZnwZS5vHL2c0N5hK6DZW1tmLvSicvqhxzGJd76
-dFrZLnSMf/N7fjaiGrRw9fCccvU5qDxuJ+uNLGRoSbcnP0A3gj43JRDPplm/qucn
-jRRfAidq2mB08X05dSdByPSRCB5p2arCiimC+vZ3pcGe3dYtUgZyotzYAJHJltnr
-4lZUzwNNnVns1k75WKMEC+k+pFSepSLGqDuanX1RXedVnMxBbIjk9m4UusmWJ9dW
-fc+f7t92cKOds8B8iUB2rbqPFGRcil10ccO8azfGmqo8GYnioOUyh8OP9nbvNqYz
-r+U7z5vK3k2R0qxyGIKZGxFDnux4ttEzt9dUmrB6PMx8D5nhvEJKLHkuQgUcDIdY
-LwLwex7+osztY1jSBeSReKosO8bu1aT9E4T0eVjyrQcMKuV6+A4=
-=JxYk
------END PGP SIGNATURE-----
-
---tl9O591Jt5BkV7w6--
