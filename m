@@ -2,71 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 676F35B1EA5
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Sep 2022 15:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AFF5B1EF6
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Sep 2022 15:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbiIHNWL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Sep 2022 09:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
+        id S232494AbiIHN3b (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Sep 2022 09:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232442AbiIHNWB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Sep 2022 09:22:01 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE1EDEAB;
-        Thu,  8 Sep 2022 06:21:59 -0700 (PDT)
-X-QQ-mid: bizesmtp81t1662643315tab8ymgc
-Received: from localhost.localdomain ( [182.148.14.0])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 08 Sep 2022 21:21:54 +0800 (CST)
-X-QQ-SSF: 01000000002000B0C000B00A0000000
-X-QQ-FEAT: xqT8U4SkSphChMcRjDeTUTfb1FnuAqPwtVCFh/ImXYNkoPONLbnBuW4izTcJe
-        igGcVHBn8mYmK4ez2cKlQbachpcb0A86qOUdr4Vzmq6dG+12ls2diCGDsmdnRavYSBaFXhV
-        M5859I4GejJhTqYjpN+UmMqsid39CrIHgysB69wu7wP2H0qZcNbKQoJWlZsCozulli5+sHG
-        ifXcRtgo7a4vYrxigPd1WmkwxEC35kcjFHj3s0qGml3/HBKpvH5ffbLYO5otb3iiQU3pbrC
-        JoTvgyk4BTYTbLhAtDxsc2MyVm33qjampBW9pjfk5rqqaUXAm4bYpUHfm3y22mNEBCKZNYZ
-        HCAG87IGMuPDyEzWorl+IJh1zOHmZgOWTN4ZNAGZ0oQqzmOWTo=
-X-QQ-GoodBg: 0
-From:   wangjianli <wangjianli@cdjrlc.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] i2c/busses: fix repeated words in comments
-Date:   Thu,  8 Sep 2022 21:21:48 +0800
-Message-Id: <20220908132148.42995-1-wangjianli@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S232545AbiIHN3H (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Sep 2022 09:29:07 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A59129526;
+        Thu,  8 Sep 2022 06:29:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662643744; x=1694179744;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cb/38D5XgcJUt79hNwgcMMzRjj8ed28v6JTWv2P9Fig=;
+  b=ffm5Ke5mTn4foac7NX99JA/F6oZ1MVEWVQQ2eztpYs5my0LPLbocS4R4
+   9sBHSVuvRTF1jVoZd3nf6TpVhjDEdJWbn+0KzNZRmMAQeT4utvRHLqKUI
+   taJT3I6+UbIOj5oSnL0Wu+Y94t4Fi3rN+7r/1+YIPQQcxxf1HQh6qHISK
+   5QOLm3K57SdApa7Jb45FFtc4XVsl2yl9AbpLenKhQejfSCuvGWzqivZn2
+   O5/SYLFv3tt5Vh4ukwVUqoItSf7EE56ojdKsxxOVzqnKl44Is7n5aTduW
+   yB2Lru7rKB9hTISFMBvRaUaiwCxzA+RVU6xzywuwFm+sNjBvJU+Kxz70u
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="361130140"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="361130140"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 06:29:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="740671478"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 08 Sep 2022 06:28:56 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id A4E43235; Thu,  8 Sep 2022 16:29:12 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Brown <broonie@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        devel@acpica.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Elie Morisse <syniurge@gmail.com>,
+        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Robert Moore <robert.moore@intel.com>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH v2 0/8] ACPI: unify _UID handling as integer
+Date:   Thu,  8 Sep 2022 16:29:02 +0300
+Message-Id: <20220908132910.62122-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
+X-Mailer: git-send-email 2.35.1
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Delete the redundant word 'to'.
+This series is about unification on how we handle ACPI _UID when
+it's known to be an integer-in-the-string.
 
-Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
----
- drivers/i2c/busses/i2c-viperboard.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The idea of merging either all via ACPI tree, or taking ACPI stuff
+for the v6.1 while the rest may be picked up later on by respective
+maintainers separately (currently all depends on Wolfram, other
+patches have got the tags from the maintainers).
 
-diff --git a/drivers/i2c/busses/i2c-viperboard.c b/drivers/i2c/busses/i2c-viperboard.c
-index 8b5322c3bce0..8f87394abbcf 100644
---- a/drivers/i2c/busses/i2c-viperboard.c
-+++ b/drivers/i2c/busses/i2c-viperboard.c
-@@ -318,7 +318,7 @@ static int vprbrd_i2c_xfer(struct i2c_adapter *i2c, struct i2c_msg *msgs,
- 			amsg->addr = pmsg->addr;
- 			amsg->unknown1 = 0x00;
- 			amsg->len = cpu_to_le16(pmsg->len);
--			/* send the addr, the data goes to to board */
-+			/* send the addr, the data goes to board */
- 			ret = vprbrd_i2c_addr(vb->usb_dev, amsg);
- 			if (ret < 0)
- 				error = ret;
+Partially compile-tested (x86-64).
+
+Changelog v2:
+- rebased pxa2xx patch to be applied against current Linux kernel code
+- fixed uninitialized variable adev in use (mlxbf)
+- dropped unneeded temporary variable adev (qcom_l2_pmu)
+- changed type for ret in patch 8 (Hans)
+- swapped conditions to check ret == 0 first (Ard)
+- added tags (Mark, Ard, Hans)
+
+Andy Shevchenko (8):
+  ACPI: utils: Add acpi_dev_uid_to_integer() helper to get _UID as
+    integer
+  ACPI: LPSS: Refactor _UID handling to use acpi_dev_uid_to_integer()
+  ACPI: x86: Refactor _UID handling to use acpi_dev_uid_to_integer()
+  i2c: amd-mp2-plat: Refactor _UID handling to use
+    acpi_dev_uid_to_integer()
+  i2c: mlxbf: Refactor _UID handling to use acpi_dev_uid_to_integer()
+  perf: qcom_l2_pmu: Refactor _UID handling to use
+    acpi_dev_uid_to_integer()
+  spi: pxa2xx: Refactor _UID handling to use acpi_dev_uid_to_integer()
+  efi/dev-path-parser: Refactor _UID handling to use
+    acpi_dev_uid_to_integer()
+
+ drivers/acpi/acpi_lpss.c               | 15 ++++++-----
+ drivers/acpi/utils.c                   | 24 ++++++++++++++++++
+ drivers/acpi/x86/utils.c               | 14 ++++++++---
+ drivers/firmware/efi/dev-path-parser.c | 10 +++++---
+ drivers/i2c/busses/i2c-amd-mp2-plat.c  | 27 +++++++-------------
+ drivers/i2c/busses/i2c-mlxbf.c         | 20 +++++----------
+ drivers/perf/qcom_l2_pmu.c             |  8 +++---
+ drivers/spi/spi-pxa2xx.c               | 35 +++++++-------------------
+ include/acpi/acpi_bus.h                |  1 +
+ include/linux/acpi.h                   |  5 ++++
+ 10 files changed, 81 insertions(+), 78 deletions(-)
+
 -- 
-2.36.1
+2.35.1
 
