@@ -2,140 +2,256 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2455B19A1
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Sep 2022 12:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B185B1C29
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Sep 2022 14:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbiIHKHH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Sep 2022 06:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
+        id S231446AbiIHMG2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Sep 2022 08:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbiIHKHG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Sep 2022 06:07:06 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE68C6FD7;
-        Thu,  8 Sep 2022 03:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662631625; x=1694167625;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NCMYuaghCCLYiVfbRGO7/C8mw8n6/gmcgPBD0pal7aY=;
-  b=CqJiWelJBoB3UOW6tUdDXngLqmeMyX+frhWw1BQ5DINhGQWvox/ZyP2I
-   ns99I1qGS6+AznXxeyGrMgMY/W/ZzG6QpgAxGVnmJWroR9C0KStdaSbF8
-   L1fxu5pmEUo2b0tHiP8CzaZnTiF3qh8Mu0+vjJTy9IJmvDoLyeu4fEStS
-   2aF7PIcFshDgtoPbbI54f6zw1mXT0Iskx7ZfBEI+Rd5kRF2GPtEExLla/
-   TNSYcmMUKEv7zgC8PiHmSsXlftkZuKX/yx+kmcgBB1w/ylSD+514ufaCt
-   7VXFG4g5Egol0njhpchtQ6e+3vH1D2SuTEQBDeo74FVIiSQBqsUJ9WU3O
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="323321525"
-X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
-   d="scan'208";a="323321525"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 03:07:05 -0700
-X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
-   d="scan'208";a="610639513"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 03:06:58 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oWEQw-00A4Ra-1f;
-        Thu, 08 Sep 2022 13:06:54 +0300
-Date:   Thu, 8 Sep 2022 13:06:54 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        devel@acpica.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Elie Morisse <syniurge@gmail.com>,
-        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Mark Brown <broonie@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH v1 0/8] ACPI: unify _UID handling as integer
-Message-ID: <Yxm+vkO31ip16+q0@smile.fi.intel.com>
-References: <20220907164606.65742-1-andriy.shevchenko@linux.intel.com>
- <fd1c459c-0c49-8fee-f71e-b2756aad84e9@redhat.com>
+        with ESMTP id S231391AbiIHMG1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Sep 2022 08:06:27 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FC6F56EF;
+        Thu,  8 Sep 2022 05:06:25 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oWGIZ-0001fE-Gl; Thu, 08 Sep 2022 14:06:23 +0200
+Message-ID: <5800be99-3569-6edd-5c71-9e6f1498dc3b@leemhuis.info>
+Date:   Thu, 8 Sep 2022 14:06:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fd1c459c-0c49-8fee-f71e-b2756aad84e9@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: Regression: at24 eeprom writing times out on sama5d3
+Content-Language: en-US, de-DE
+To:     Peter Rosin <peda@axentia.se>, Codrin.Ciubotariu@microchip.com,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Ludovic.Desroches@microchip.com, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, robh+dt@kernel.org, wsa@kernel.org,
+        kamel.bouhara@bootlin.com
+References: <074b39c5-55fc-2bc1-072d-aef1070e284d@axentia.se>
+ <2bb4868b-90ab-887e-bf13-9de8b79231bd@microchip.com>
+ <38dedc92-62a2-7365-6fda-95d6404be749@axentia.se>
+ <3503471d-2d5e-572b-39e7-d715a909749d@axentia.se>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <3503471d-2d5e-572b-39e7-d715a909749d@axentia.se>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1662638785;cd525cd0;
+X-HE-SMSGID: 1oWGIZ-0001fE-Gl
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 11:28:48AM +0200, Hans de Goede wrote:
-> On 9/7/22 18:45, Andy Shevchenko wrote:
-> > This series is about unification on how we handle ACPI _UID when
-> > it's known to be an integer-in-the-string.
-> > 
-> > The idea of merging either all via ACPI tree, or (which I prefer)
-> > taking ACPI stuff for v6.1 while the rest may be picked up later
-> > on by respective maintainers separately.
-> > 
-> > Partially compile-tested (x86-64).
-> > 
-> > Andy Shevchenko (8):
-> >   ACPI: utils: Add acpi_dev_uid_to_integer() helper to get _UID as
-> >     integer
-> >   ACPI: LPSS: Refactor _UID handling to use acpi_dev_uid_to_integer()
-> >   ACPI: x86: Refactor _UID handling to use acpi_dev_uid_to_integer()
-> >   i2c: amd-mp2-plat: Refactor _UID handling to use
-> >     acpi_dev_uid_to_integer()
-> >   i2c: mlxbf: Refactor _UID handling to use acpi_dev_uid_to_integer()
-> >   perf: qcom_l2_pmu: Refactor _UID handling to use
-> >     acpi_dev_uid_to_integer()
-> >   spi: pxa2xx: Refactor _UID handling to use acpi_dev_uid_to_integer()
-> >   efi/dev-path-parser: Refactor _UID handling to use
-> >     acpi_dev_uid_to_integer()
-> > 
-> >  drivers/acpi/acpi_lpss.c               | 15 ++++++------
-> >  drivers/acpi/utils.c                   | 24 ++++++++++++++++++
-> >  drivers/acpi/x86/utils.c               | 14 ++++++++---
-> >  drivers/firmware/efi/dev-path-parser.c | 10 +++++---
-> >  drivers/i2c/busses/i2c-amd-mp2-plat.c  | 27 +++++++-------------
-> >  drivers/i2c/busses/i2c-mlxbf.c         | 19 +++++---------
-> >  drivers/perf/qcom_l2_pmu.c             |  7 +++---
-> >  drivers/spi/spi-pxa2xx.c               | 34 +++++++-------------------
-> >  include/acpi/acpi_bus.h                |  1 +
-> >  include/linux/acpi.h                   |  5 ++++
-> >  10 files changed, 81 insertions(+), 75 deletions(-)
-> > 
-> 
-> Thanks, patches 1-7 look good to me:
-> 
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> 
-> for patches 1-7.
-> 
-> I have one small remark for patch 8, which I will send in
-> a reply to patch 8.
+Hi, this is your Linux kernel regression tracker. Top-posting for once,
+to make this easily accessible to everyone.
 
-Thanks for review!
+Peter, Codrin, could you help me out here please: I still have the
+regression report from Peter that started this thread in the list of
+tracked issues. From Peter's last msg quoted below it seems the thread
+just faded out without the regression being fixed. Or was it? If not:
+what can we do to finally get this resolved?
 
--- 
-With Best Regards,
-Andy Shevchenko
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
 
+On 30.06.22 09:44, Peter Rosin wrote:
+> 2022-06-10 at 22:51, Peter Rosin wrote:
+>> 2022-06-10 at 09:35, Codrin.Ciubotariu@microchip.com wrote:
+>>> On 09.06.2022 17:28, Peter Rosin wrote:
+>>>>
+>>>> I have not actually bisected this issue but reverting the effects of
+>>>> patch a4bd8da893a3 ("ARM: dts: at91: sama5d3: add i2c gpio pinctrl")
+>>>> makes the problem go away.
+>>>>
+>>>> I.e. I need something like this in my dts
+>>>>
+>>>> &i2c2 {
+>>>>          status = "okay";
+>>>>
+>>>>          pinctrl-names = "default";
+>>>>          /delete-property/ pinctrl-1;
+>>>>          /delete-property/ sda-gpios;
+>>>>          /delete-property/ scl-gpios;
+>>>>
+>>>>          eeprom@50 {
+>>>>                  compatible = "st,24c64", "atmel,24c64";
+>>>>                  reg = <0x50>;
+>>>>                  wp-gpios = <&filter_gpio 7 GPIO_ACTIVE_HIGH>;
+>>>>          };
+>>>> };
+>>>>
+>>>> for multi-page eeprom writes to not time out (a page is 32 bytes on this
+>>>> eeprom).
+>>>>
+>>>> For reference, the current defaults for this SoC/I2C-bus, that I modify,
+>>>> are:
+>>>>
+>>>>          pinctrl-names = "default", "gpio";
+>>>>          pinctrl-0 = <&pinctrl_i2c2>;
+>>>>          pinctrl-1 = <&pinctrl_i2c2_gpio>;
+>>>>          sda-gpios = <&pioA 18 GPIO_ACTIVE_HIGH>;
+>>>>          scl-gpios = <&pioA 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>>>>
+>>>> I suspect that the underlying reason is that the bus recovery takes
+>>>> too long and that the at24 eeprom driver gives up prematurely. I doubt
+>>>> that this is chip specific, but I don't know that.
+>>>>
+>>>> I can work around the issue in user space with by writing in 4 byte
+>>>> chunks, like so
+>>>>
+>>>> dd if=source.file of=/sys/bus/i2c/devices/2-0050/eeprom obs=4
+>>>>
+>>>> but that is really ugly and gets slow too, about 20 seconds to program
+>>>> the full 8kB eeprom. With the above in my dts it takes a second or
+>>>> so (a bit more with dynamic debug active).
+>>>>
+>>>>
+>>>> If I run
+>>>>
+>>>> dd if=source.file of=/sys/bus/i2c/devices/2-0050/eeprom
+>>>>
+>>>> with a source.file of 8kB and the upstream dts properties in place, I can
+>>>> collect the following debug output from at24, i2c-core and i2c-at91:
+>>>>
+>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@0 --> 0 (-23170)
+>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@32 --> -121 (-23169)
+>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@32 --> 0 (-23168)
+>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@64 --> -121 (-23168)
+>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@64 --> 0 (-23167)
+>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -121 (-23167)
+>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: controller timed out
+>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -110 (-23155)
+>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: controller timed out
+>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -110 (-23143)
+>>>>
+>>>> And then there is no more action. I.e. only a couple of 32 byte pages
+>>>> are written.
+>>>>
+>>>> With the above mentioned dts override in place I instead get this, which is
+>>>> a lot more sensible:
+>>>>
+>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@0 --> 0 (753629)
+>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@32 --> -121 (753629)
+>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@32 --> 0 (753630)
+>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@64 --> -121 (753630)
+>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@64 --> 0 (753631)
+>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@96 --> -121 (753631)
+>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@96 --> 0 (753632)
+>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@128 --> -121 (753632)
+>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@128 --> 0 (753633)
+>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@160 --> -121 (753633)
+>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@160 --> 0 (753634)
+>>>> ... snip ...
+>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8128 --> -121 (753883)
+>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8128 --> 0 (753884)
+>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8160 --> -121 (753884)
+>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8160 --> 0 (753885)
+>>>
+>>> could you please apply this patch-set [1] and let us know if it 
+>>> addresses your issue?
+>>>
+>>> Thanks and best regards,
+>>> Codrin
+>>>
+>>> https://patchwork.ozlabs.org/project/linux-i2c/list/?series=255408
+>>
+>> That series does indeed help! I'll reply with a tested-by etc on the
+>> first two patches, I can't test patch 3/3 with my sama5d3 board...
+>>
+>> Thank you very much!
+> 
+> Since replying to the actual patches do not work for me, I'm writing here
+> instead. Sorry about that. As stated above, it /seems/ to work much better
+> with these patches. But I fooled myself and there is still some remaining
+> trouble. It is not uncommon that the second (32-byte) page in the eeprom
+> is not written correctly for whatever reason. I do not know why it's
+> always the second page that gets corrupted, but this is a bad problem since
+> the failure is completely silent.
+> 
+> Cheers,
+> Peter
+
+#regzbot poke
