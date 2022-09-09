@@ -2,61 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0EC5B4227
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 Sep 2022 00:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3A75B4220
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 Sep 2022 00:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232075AbiIIWCB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Sep 2022 18:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
+        id S232042AbiIIWCL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 9 Sep 2022 18:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbiIIWBs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Sep 2022 18:01:48 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810C01451DB;
-        Fri,  9 Sep 2022 15:01:42 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id nc14so7167084ejc.4;
-        Fri, 09 Sep 2022 15:01:42 -0700 (PDT)
+        with ESMTP id S229751AbiIIWBu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Sep 2022 18:01:50 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C141449C7;
+        Fri,  9 Sep 2022 15:01:49 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id lz22so7157464ejb.3;
+        Fri, 09 Sep 2022 15:01:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
          :cc:subject:date;
-        bh=/Iy585fR3X6UvC3KDzJ3yTvDIvdDJpLP2lUgFyTemrQ=;
-        b=SObLg3/vIipr/q+a7GFlW/5snMqk+u7gFyCIEYk1QhzSHWzvRy+8ZXztMfCpQg8JSm
-         24inwyaHPI9Yb1t63xDhrnbjMEcQAVeyUZ1WApa/r8rvPzOTZ6diu0S3y9Ihs1LMK8Ug
-         LdxtiRdDozexZneI5mFLycdvXR0sTIuqW/05aXwfvCIBdGO4RbcEp/LDrXdq83ETso6n
-         hyhuV+Y19Xpvulk3D6Q9nDhto/1lXn8OgEFwTvMo0KvGk3IemELvnXIlFu7bwzU+Rpbc
-         V1XUgHKOeuPuozwh/frmFeIDkq6bFmNCtm6LBitqZKKeb696g/3AiLkOnq4PTD26EyHy
-         q15w==
+        bh=qFqPSvBGjdUsVcV5ZS+65QeMy/XEKV7OnAaz6pLKOfw=;
+        b=Aq5Txh40RV1S3WvnnQtQzYz5b6rkZkPkiAyjnO9W76im/RXn3A2CAdtcAYKu0saeBm
+         64v/qE8X8Gr28VFWaGyrnaU13aylc0AlCIa/ukAeLVpbxe074XQLC9kLGoV77aTfl+CJ
+         M9abehot3L1NFJHP3YN6hiUlPZdXzgkLtTIrvTfCqFPBtbHbtuXaiGqBmXAjaf5S0iHT
+         FUTDEWefWwxLWd3rRFj7YNuOXV88AEIhmvwwNwJ+tGhJL6ty5kHxYymOVbIZnLHlF2uv
+         lyVsuD/BFZVmnEYsIZMQF3+j6XJMo/0NbGfN83pAbkfMGStus+ceoL5jyjbcnddIegbZ
+         vr3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=/Iy585fR3X6UvC3KDzJ3yTvDIvdDJpLP2lUgFyTemrQ=;
-        b=XtkhqomWam18uI8RgoL3wFboQzPp3bDea2r8W9o8txyLcWlZ8uT5aHqXuHvhbBVqmj
-         diG/5p463/ta3WoNFGmSTGv6uG2h7ujvg5Z5+YPIu0+HeydaV0ipfKskMQg6c55IFxLD
-         Bs028yqleabKUft83Lo+69VpfMA74NwCAZyT85L4PAsbLg5Ls0O8R9cKecCs8MO2Li/8
-         OPoEns0FtyPm3u83V9C54e8zlWY021n//3nOb//kU7obkF5AIXSma+h4hFfUjPI0DO9F
-         1jXuxJDD4+HFCh+SlDrbp+gPa3OumrOS6IJyhprLxpNUDGCHK+Nqy3cji2nRdLuJ9LzN
-         3B2A==
-X-Gm-Message-State: ACgBeo1s+W1YcHHSpvBIgNej1NzR7S6QpZWoRz+/NWRpynVSAQWE36yI
-        +aS1DXGgDSotSQ8ngqJEu7g=
-X-Google-Smtp-Source: AA6agR5P9E5vqAGDDOsYqL8PtNRRaRQx2Dg4tkI6iIxekx/dkEqXrSPGKyrP3NMOo3ogKmfDUT2kDQ==
-X-Received: by 2002:a17:906:4fc4:b0:73d:d4e9:2d6e with SMTP id i4-20020a1709064fc400b0073dd4e92d6emr11327995ejw.165.1662760901076;
-        Fri, 09 Sep 2022 15:01:41 -0700 (PDT)
+        bh=qFqPSvBGjdUsVcV5ZS+65QeMy/XEKV7OnAaz6pLKOfw=;
+        b=co5dwoLkXryG185Txyu94R22Qo/v4rCqCT7t682SBK5RZHGyIAnsgEbsMRz5495XC4
+         yuXwnkmWZeUAXvMNa8Sydx7FjDOB6/7YULuZy9KMqjTxp3C70FP8sJchXGuAHFKbs+Ym
+         02/489ge6rY61we6lzJUAMI1FJMQxWKGz0Uy9ULLFe4z/2ii/qPDUAiF2WkCnzxTdp0E
+         g7krDR6SrEhteg3Y6GelnUVVqD2GhAovo3aNSJXphAx02PnTiceS8TaJxSZco97SJhE3
+         D6nhcpImA/mruqfrlKE1+XSdF6+7MoshS4mVwvrbim98JRKZo3RK3lbGh/2SCCEDbs7E
+         T4iA==
+X-Gm-Message-State: ACgBeo1kGBXx+OV/rIR24B3D3VVlAuoBdfAodykZYgRAl+R6xdtIIHHi
+        EqwC8Dv6xv3vnlQ67mVZPHU=
+X-Google-Smtp-Source: AA6agR6kays4kR8/EPe2OVFsWoVLEdWSsiVS+SIhxyvMVF8om26ABaEGzg1Jko+NH6t0J2E828rBUw==
+X-Received: by 2002:a17:907:7242:b0:742:7c5:46b5 with SMTP id ds2-20020a170907724200b0074207c546b5mr11460741ejc.274.1662760907774;
+        Fri, 09 Sep 2022 15:01:47 -0700 (PDT)
 Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id a18-20020a170906275200b0073dd0b0ba67sm776683ejd.200.2022.09.09.15.01.39
+        by smtp.gmail.com with ESMTPSA id 17-20020a170906329100b007742cf42836sm812553ejw.144.2022.09.09.15.01.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 15:01:40 -0700 (PDT)
-Message-ID: <fddc23ff-0c87-4998-1bdf-4dbfa4c74046@gmail.com>
-Date:   Sat, 10 Sep 2022 00:01:39 +0200
+        Fri, 09 Sep 2022 15:01:47 -0700 (PDT)
+Message-ID: <d477a077-a68f-e752-5192-807db80a9e68@gmail.com>
+Date:   Sat, 10 Sep 2022 00:01:45 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
 From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v1 10/11] dt-bindings: soc: rockchip: grf: add
- rockchip,rk3128-grf
+Subject: [PATCH v1 09/11] dt-bindings: phy: phy-rockchip-inno-usb2: add
+ rockchip,rk3128-usb2phy
 To:     kever.yang@rock-chips.com
 Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
@@ -88,33 +88,25 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add rockchip,rk3128-grf compatible string.
+Add rockchip,rk3128-usb2phy compatible string.
 
 Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
- Documentation/devicetree/bindings/soc/rockchip/grf.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml          | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-index 75a2b8bb2..08d705ab4 100644
---- a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-+++ b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-@@ -28,6 +28,7 @@ properties:
-               - rockchip,px30-usb2phy-grf
-               - rockchip,rk3036-grf
-               - rockchip,rk3066-grf
-+              - rockchip,rk3128-grf
-               - rockchip,rk3188-grf
-               - rockchip,rk3228-grf
-               - rockchip,rk3288-grf
-@@ -178,6 +179,7 @@ allOf:
-           contains:
-             enum:
-               - rockchip,px30-usb2phy-grf
-+              - rockchip,rk3128-grf
-               - rockchip,rk3228-grf
-               - rockchip,rk3308-usb2phy-grf
-               - rockchip,rk3328-usb2phy-grf
+diff --git a/Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml b/Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml
+index 4b7528973..f71920082 100644
+--- a/Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml
++++ b/Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml
+@@ -13,6 +13,7 @@ properties:
+   compatible:
+     enum:
+       - rockchip,px30-usb2phy
++      - rockchip,rk3128-usb2phy
+       - rockchip,rk3228-usb2phy
+       - rockchip,rk3308-usb2phy
+       - rockchip,rk3328-usb2phy
 -- 
 2.20.1
 
