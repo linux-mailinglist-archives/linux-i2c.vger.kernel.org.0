@@ -2,100 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A7C5B4752
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 Sep 2022 17:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2296F5B4780
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 Sep 2022 18:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiIJPmo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 10 Sep 2022 11:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
+        id S229561AbiIJQcZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 10 Sep 2022 12:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiIJPmn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 10 Sep 2022 11:42:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398E614D26;
-        Sat, 10 Sep 2022 08:42:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA13EB8010F;
-        Sat, 10 Sep 2022 15:42:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49F99C433C1;
-        Sat, 10 Sep 2022 15:42:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662824560;
-        bh=luECLScAoXW4trye3u3QR5BAVG50o9WKq4LURxl0cWE=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=OglzfM37e36vzr8RIz38aKNhfmFgibKtibSrXPxPXQxdygFx+atkOZh3JNt71PUY6
-         2S0Eip2IqnsZuGY7oggCvdwm42lV9aRNn7Dn9nUzGuh/E4BcZYjwkAAn+a+jtNxp+8
-         FOXE46EQA4dSN2Km2LXB6ukzhgc7QWaVgmbUb4i2klVbVrzmJNvLapw+jTc4WgP8Sn
-         gT6sTIx/QE1RnpSC++ABbUzSwSDvU1GBgjd7UB997SV46FyILWCbmjKFFIh1JSPvq0
-         8RJ0TU+fU8kaAQVZSguBGoaIlIokY7BL2FEZpfhephsISRy9GGuv5q5iKanIgYycUH
-         ILd1FW78uL9qw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>, kever.yang@rock-chips.com
-Cc:     linux@roeck-us.net, vigneshr@ti.com, sjg@chromium.org,
-        miquel.raynal@bootlin.com, gregkh@linuxfoundation.org,
-        linux-pwm@vger.kernel.org, richard@nod.at, heiko@sntech.de,
-        robh+dt@kernel.org, jamie@jamieiles.com,
-        u.kleine-koenig@pengutronix.de, linux-mtd@lists.infradead.org,
-        philipp.tomsich@vrull.eu, ulf.hansson@linaro.org,
-        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
-        thierry.reding@gmail.com, linux-arm-kernel@lists.infradead.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
-        vkoul@kernel.org, zhangqing@rock-chips.com,
-        linux-rockchip@lists.infradead.org, linux-phy@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, kishon@ti.com,
-        linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-In-Reply-To: <4f283231-2ed4-202b-0c23-157bce0841ee@gmail.com>
-References: <20220909212543.17428-1-jbx6244@gmail.com> <4f283231-2ed4-202b-0c23-157bce0841ee@gmail.com>
-Subject: Re: (subset) [PATCH v1 01/11] dt-bindings: serial: rockchip: add rockchip,rk3128-uart
-Message-Id: <166282455399.474671.11726724099870642599.b4-ty@kernel.org>
-Date:   Sat, 10 Sep 2022 16:42:33 +0100
+        with ESMTP id S229527AbiIJQcX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 10 Sep 2022 12:32:23 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD624A83E;
+        Sat, 10 Sep 2022 09:32:22 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id f131so6899551ybf.7;
+        Sat, 10 Sep 2022 09:32:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=GkMFjVtDr0W10OJLyjB1PHKjRI7ZFioNTd0VYLRMl94=;
+        b=ThoRLvkIbjrCWL0q+TFVOHf3eGbii09QgZZ8+fnloYa65GmvZoYZxXRfi4dIf/o3/X
+         CHxXNCVetlaCzlNPH7RHeluIxXBW9UaWGxJbq44/RtWKjnWMdCJeIjeGpTxtZk7sC3XY
+         FC1+bATa/yirJyG/f0TfPtNbPuBdAW51Y4xNJXJOabOT0rud7KCnxWelfVT3WcqdnVvi
+         S/MvEcHpaC+v+YF47p1//uEddmEbtpH4EW44HoPAx6nua0qW6qe+AO4eBtEhW/IhMKDt
+         EtzYW5sIUxU/qV5nqC5OKkZTZ9vMESj0n6S0HZwEROc08lB3wnnH38cngZo5+KpEIQns
+         iUaQ==
+X-Gm-Message-State: ACgBeo09Bstel6aHIS4x5EoDtJZ7DCW8jizVZ0Jd0dyvtaTwHiRyqD8t
+        l7KDxBTL2gsd8LWoF2CLf5zUIJz+v4ZKxTCZ4bs=
+X-Google-Smtp-Source: AA6agR4n7pXTzaWGoZwbXMPbML7j3aWjxBABW4Ue2CuqwFbK1YnZzMiGo3Y8jNXuTBWAX9gMGWr6mCabLDZaslxS/Ik=
+X-Received: by 2002:a25:2f0c:0:b0:6a8:f230:12ed with SMTP id
+ v12-20020a252f0c000000b006a8f23012edmr15745127ybv.633.1662827541557; Sat, 10
+ Sep 2022 09:32:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220908132910.62122-1-andriy.shevchenko@linux.intel.com> <YxnwMLvgQAPOkeeK@smile.fi.intel.com>
+In-Reply-To: <YxnwMLvgQAPOkeeK@smile.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 10 Sep 2022 18:32:10 +0200
+Message-ID: <CAJZ5v0j5FO+OcX6VdiR-tuDCrHFwErquxzZGUu3ZLQ1G57T-+Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/8] ACPI: unify _UID handling as integer
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Elie Morisse <syniurge@gmail.com>,
+        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Robert Moore <robert.moore@intel.com>,
+        Wolfram Sang <wsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, 10 Sep 2022 00:01:28 +0200, Johan Jonker wrote:
-> Add rockchip,rk3128-uart compatible string.
-> 
-> 
+On Thu, Sep 8, 2022 at 3:38 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Sep 08, 2022 at 04:29:02PM +0300, Andy Shevchenko wrote:
+> > This series is about unification on how we handle ACPI _UID when
+> > it's known to be an integer-in-the-string.
+> >
+> > The idea of merging either all via ACPI tree, or taking ACPI stuff
+> > for the v6.1 while the rest may be picked up later on by respective
+> > maintainers separately
+>
+> >(currently all depends on Wolfram, other
+> > patches have got the tags from the maintainers).
+>
+> I stand corrected, the perf patch is not tagged yet.
+>
+> > Partially compile-tested (x86-64).
 
-Applied to
+Tentatively applied as 6.1 material.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+If there are updates, we'll make changes as they go.
 
 Thanks!
-
-[05/11] dt-bindings: spi: rockchip: add rockchip,rk3128-spi
-        commit: 14c3ffd7947ef3623682148be07b9c0bb8737f37
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
