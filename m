@@ -2,105 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1F05B439F
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 Sep 2022 03:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9230B5B44F1
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 Sep 2022 09:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiIJBZ2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Sep 2022 21:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
+        id S229480AbiIJHqb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 10 Sep 2022 03:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiIJBZ1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Sep 2022 21:25:27 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CDED51C2;
-        Fri,  9 Sep 2022 18:25:25 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id p18so3315007plr.8;
-        Fri, 09 Sep 2022 18:25:25 -0700 (PDT)
+        with ESMTP id S229502AbiIJHq2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 10 Sep 2022 03:46:28 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7521D72681
+        for <linux-i2c@vger.kernel.org>; Sat, 10 Sep 2022 00:46:25 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id f14so5526484lfg.5
+        for <linux-i2c@vger.kernel.org>; Sat, 10 Sep 2022 00:46:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=WPkdHl1yt9PzJcQYT1ZlcZpPo36zcYv9PzIsB0gZJUc=;
-        b=mnLaMergEj/Tsg89pTKXLV9RqD764uz6uc0EeOe+iu+xOVi1jazKd6H641oL7BrTco
-         1HWi643ndEzW4+GdadNt/x6DVVFszhgGgwjqf3+YP9tWZsWOPGiPMwr4pDrdXizc/qsq
-         jIsjBkA99OJW/TXF9cA6OwBLJAOzsGOj2+JOVTAJVshU5LPIsjFlvoBvQo9UpTOxTGJt
-         MFFvVHS2PJQ0XbXpywKc14SnZjB0v+BB+CrL7FSSGcvL+TM+RSvUWtDtckvjA6/KWXrG
-         zk9T+kf1iVIz/Acv8Ovqdb6lsZbJV0McP3btvh90VJcDX0amgFd7zuGGpsH4MJRBkOMo
-         KMYQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Xc325GZc+vxzGRAdvA0vChIvJkypnglJvofgNCbWMR4=;
+        b=CPmvcoQIYyMAF4zt3FXqNSoDD7DiPiOGlYdVcymhCh+IKdlIs7rTLSuAVlx/fnmLcu
+         96NZnumm1CF84Z+2pYGPbjiWAkif5ly3iN0Kwrq0KeWNsLda90xz+GV8V1yK9ItJ4vG2
+         B1EJuY2n5/0kLF9US3rV3/w1AZwY4XPQxshrXFoNm8pI/hSdNgeek9/L11NVXvSYTWgU
+         2fK6mTHrRrlrabBghWT0dudUvkei0lR0po0ax3jU4MditiLLlY72FydbDtgkVbMNSil7
+         27Nm3kr9NLe4oefhueLn2QCXYfMY0dphxyDHblNj7RHUwh5Jd3gLvlwaOrkHot8uTUZQ
+         Yt0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=WPkdHl1yt9PzJcQYT1ZlcZpPo36zcYv9PzIsB0gZJUc=;
-        b=Hk9KNUQ0Q4iFYo3a2EtyhTXgX+i4j8R6A7OEZYP7FDIUQTgMJKZJkaRutZP72CRKpW
-         GkWErhrhX0MCz86eeVjk6jR7VnICbJfM769eXTs4EIh4gKrANwgXq+fhcYGUHYm2jzvi
-         iTNuFdG5BA+PgZ1Bfky4ktBmpJfGLuXdL0RCcs3o22AWwzc3uSnrjcmY5MjcSJtmHVTj
-         xzw7wjShpWn1jITJ8L47Z0kXLpeqcRHOMwFLWBEgehzaI/nnW4AtrFvER79PYkxqC0ER
-         FLC63p6KFxtuTRx0pZhRsHJ9x3qWBlRAPiFIgb7EWIFaHCVxSswMOnIyOOvw0feCRASD
-         mYdQ==
-X-Gm-Message-State: ACgBeo1x74OKfFlR5xxpQ4t8dmV9+DrVyuyIQXhZWfRJ43tDZcyeqi1I
-        otDJ7PU10WW2Kf8Lg4/Q+Nw=
-X-Google-Smtp-Source: AA6agR45zQhDWAvjo+d4QWTBsluXtwX82Rdp/aHlqLZpPuD1QSJ9LXKlEY0VZgpwxXoEVpyqwpLzww==
-X-Received: by 2002:a17:902:b684:b0:172:d9f4:e511 with SMTP id c4-20020a170902b68400b00172d9f4e511mr16193726pls.107.1662773124387;
-        Fri, 09 Sep 2022 18:25:24 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:42:358d:7d2e:b1e])
-        by smtp.gmail.com with ESMTPSA id c12-20020aa7952c000000b0052e987c64efsm386644pfp.174.2022.09.09.18.25.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 18:25:23 -0700 (PDT)
-Date:   Fri, 9 Sep 2022 18:25:20 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Raul Rangel <rrangel@chromium.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Tim Van Patten <timvp@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/8] i2c: acpi: Use ACPI GPIO wake capability bit to set
- wake_irq
-Message-ID: <YxvngIKCXUieZfxC@google.com>
-References: <20220830231541.1135813-1-rrangel@chromium.org>
- <20220830171332.4.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
- <YxftNQrRx3fwsobk@google.com>
- <CAHQZ30DPmn1hN+xfck7CgOGLcze0jtHxxWnq7yVVL0Q_DzG6UQ@mail.gmail.com>
- <98559c23-cc22-3b85-2102-0cc760240804@redhat.com>
- <CAHQZ30ACZ-1UtgbXwEc+tFRvW-KpDg87Q4nj5Dwysz2BB26yiQ@mail.gmail.com>
- <CAJZ5v0iyF98fBgGFyvj_huVkyKvn4O0_WhA=-wC2VCG6A4DdjQ@mail.gmail.com>
- <CAHQZ30DY9aYBoW303qW+hkegYV0BbKFO6LkCuHKnHNxZ3QoLYw@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Xc325GZc+vxzGRAdvA0vChIvJkypnglJvofgNCbWMR4=;
+        b=vMITZDai9TmvwPkQv/QPyGGXZyDpd6EM/F8afDuEKTgoD8kdcPjwGFaDii+X9twCvB
+         X7L1bLUYT7f18vKB2FfHJmSlLruPr+wsrNcZUhpYm6zl2pmtBarnrIr0GoRlIOX7RkaY
+         akmwkOIfe9YBR3M+hKVfP/U4XpgrPb+UkWqG3OVpVDNIfH2L/LyfXmI031G4abIiIo9/
+         4guQeE0O2VZX3vouYA7/uD9GRupu9TDvtimviqMmWwnNmcJlmO6L5IAjMk7dhttLsncB
+         t+6i5B++orOrHN1VSQYIzzjy9yiSYpEqKPWoco77dUTkCy0Mp8iIEsChsQ9b+gsHEMuc
+         5BKw==
+X-Gm-Message-State: ACgBeo3u75P+OjqsAFE3XYxiqvnleAlN00b5fSTlXT/pgcYP+qbwt+Dr
+        elW6jZMbk8M5KlVjnqzajbcscA==
+X-Google-Smtp-Source: AA6agR75ZEPrL/yKL8ezMsVKnuKBIXSz81lwLCFZHWoLKO6Bsf7yB53ADVYs4VBVxujyrIqJgj0K/g==
+X-Received: by 2002:ac2:4f03:0:b0:496:272:625d with SMTP id k3-20020ac24f03000000b004960272625dmr5369172lfr.303.1662795983686;
+        Sat, 10 Sep 2022 00:46:23 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id h12-20020a05651c124c00b0026bda31c10fsm201998ljh.61.2022.09.10.00.46.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Sep 2022 00:46:23 -0700 (PDT)
+Message-ID: <e8b33710-db07-bde4-e1d1-d42c05b87d6b@linaro.org>
+Date:   Sat, 10 Sep 2022 09:46:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHQZ30DY9aYBoW303qW+hkegYV0BbKFO6LkCuHKnHNxZ3QoLYw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v1 11/11] dt-bindings: mtd: rockchip: add
+ rockchip,rk3128-nfc
+Content-Language: en-US
+To:     Johan Jonker <jbx6244@gmail.com>, kever.yang@rock-chips.com
+Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        ulf.hansson@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, kishon@ti.com, vkoul@kernel.org,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        gregkh@linuxfoundation.org, broonie@kernel.org,
+        wim@linux-watchdog.org, linux@roeck-us.net,
+        zhangqing@rock-chips.com, jamie@jamieiles.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+References: <20220909212543.17428-1-jbx6244@gmail.com>
+ <f09665c1-9938-38c1-9a31-f196a3ef9cf0@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <f09665c1-9938-38c1-9a31-f196a3ef9cf0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 12:47:11PM -0600, Raul Rangel wrote:
-> It looks like `i2c_acpi_get_irq` and `platform_get_irq_optional` are
-> doing pretty much the same thing. Can we replace `i2c_acpi_get_irq`
-> and switch over to `platform_get_irq_optional`? Is it possible to get
-> a `platform_device` from an `i2c_client`?
-
-No, they are completely different objects.
+On 10/09/2022 00:01, Johan Jonker wrote:
+> Add rockchip,rk3128-nfc compatible string.
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 
 
-		struct device
-	/		|		\
-platform_device		i2c_client	spi_device ...
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Also, please no top-posting on kernel mailing lists.
 
-Thanks.
-
--- 
-Dmitry
+Best regards,
+Krzysztof
