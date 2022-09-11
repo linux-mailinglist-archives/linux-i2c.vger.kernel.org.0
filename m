@@ -2,56 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B455B4B39
-	for <lists+linux-i2c@lfdr.de>; Sun, 11 Sep 2022 03:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA6E5B4B3B
+	for <lists+linux-i2c@lfdr.de>; Sun, 11 Sep 2022 03:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiIKBlM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 10 Sep 2022 21:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44108 "EHLO
+        id S229718AbiIKBlN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 10 Sep 2022 21:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiIKBlK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 10 Sep 2022 21:41:10 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5847E33368
-        for <linux-i2c@vger.kernel.org>; Sat, 10 Sep 2022 18:41:09 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id s13so4233136qvq.10
-        for <linux-i2c@vger.kernel.org>; Sat, 10 Sep 2022 18:41:09 -0700 (PDT)
+        with ESMTP id S229862AbiIKBlL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 10 Sep 2022 21:41:11 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C609B31341
+        for <linux-i2c@vger.kernel.org>; Sat, 10 Sep 2022 18:41:10 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id u28so927572qku.2
+        for <linux-i2c@vger.kernel.org>; Sat, 10 Sep 2022 18:41:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=konsulko.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=YEluTMkVQhnCulwc8lwLW2vyLgQvDTIQ3djmLSBHRwA=;
-        b=PGqMJMAvDWyttgnWm0pTyDnKcUYAigL+jt5p10BN4nhxbUYKdD0mM5Sx9Rb9coaNMp
-         GKCLFsWg9iZYxt9eHTvm4Y2SLxZH+N1+wqPM103T6qU3fZ9nBxLqeUYBfT3iOV2exiTm
-         Y2O2bNywBgw1+A6PD5S/PmdQEw8xmt+iLK36Q=
+        bh=wUfUODMZKfU/KRMGIPcJ/EprHfUIajE7CfzqJDq54Sc=;
+        b=X/wGV2VLKPM41GBNPVmj/Ik9dl6bKc59iC9TiPfHcpc9QgI8SbLKntgeQCqoA7MqgV
+         g1zOHz7umwNdtI6zKQiKh8JOftpweA418DhQmaGp5+OPfME2mCYYl7B9fwE2iNnud3vl
+         XYdECviAx0Nci2jpYOOCS8wnuD4vYFRXSz3ZA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=YEluTMkVQhnCulwc8lwLW2vyLgQvDTIQ3djmLSBHRwA=;
-        b=cKw7RfE1FmcyDqU/o1UZl9TyYrpN09UTQc/wRxiJ45VKGYX2gO3FuTw8USnzkG2Nw4
-         MfSml1LmNyYHLZsr3SCoVR5owDkSOK3/88DITq9RVUV/OoOLfOfmXjOJgCe1LA/2olL3
-         tcowIj9XX7DihY2+Npu8jspe+1YHWY5p1K4DSzeTOVGqO4RJKZiQlhMSWnVVmXNaqlnf
-         JWjCTU5d27SH+At+ALNkRNGTpaOBG7dnZh3/YN6DBbOJhXjC8Snws7baPOjkqNcVOEjV
-         QeqTmlRU0gg6J0KCGiGe2Ki0NqoYAGOxq2oRQ9a2Pc1DstgIFAHBp4J1U8F7lM9LiYNA
-         yiwA==
-X-Gm-Message-State: ACgBeo1TnTYnRIBrKXJAmtom2+kWWpLFaZpWRoM+QNriYxLcmK050RoC
-        0z4pNWba6Ixqbg2YIEyxrRF2xw==
-X-Google-Smtp-Source: AA6agR49EZ9pGn5pO7p824CWVfWBv3bH2r7zOT5v+m9hhUjZTTPRCXQBLcb0Ut+1YsJi8/fnL/E4fA==
-X-Received: by 2002:a05:6214:2588:b0:49e:5dea:8e66 with SMTP id fq8-20020a056214258800b0049e5dea8e66mr17942488qvb.21.1662860468523;
-        Sat, 10 Sep 2022 18:41:08 -0700 (PDT)
+        bh=wUfUODMZKfU/KRMGIPcJ/EprHfUIajE7CfzqJDq54Sc=;
+        b=EW0JlH/Ec88zDomPDKPTR+mASRFC3Hx+yDMiU8KdPJIz5Z7gvKYg7kWJIhXkLprAa2
+         zLICjAG++iLf6cRosFM/s0KT9Bknw0pf8uD9fpTjbNLahu8WT1nw31clFYGHuWw/HRVa
+         93Xhx2ERp9Y4gBvRVGICQZE6Gzfy+yiOUBw6SsENA7jtMRKl3iRNMOKOHQnq/p4fKTlo
+         t5osR+eWdBcEutY287//wfdzek5eMeQ/pp7BvcF+7nOPmEujCgRes79i6loCCeJJIlIa
+         3xEnOPiuFzpnxbaZatBv23KyfcqOVUa0DPNB7CzTmCGBMrByqvrZAcdZMUsEJzqA12G2
+         212Q==
+X-Gm-Message-State: ACgBeo0Qui38sAK/mTlAbITHziUWrY96rS4RqpwW/NtS1BQxkVoaqNXc
+        qt97IZdR2BZunR4kM+O5qkKl0KQmbxF4STx0Cjg=
+X-Google-Smtp-Source: AA6agR7gtrVhQaNCx+8D8JtPVoCa7mQHb9j8E6uOWozp39f7/GAVTA8jFLa/bqQYpCgkpB1zm3OQWw==
+X-Received: by 2002:a37:68c6:0:b0:6cd:e798:f07c with SMTP id d189-20020a3768c6000000b006cde798f07cmr5503925qkc.596.1662860469940;
+        Sat, 10 Sep 2022 18:41:09 -0700 (PDT)
 Received: from localhost.localdomain ([159.65.38.31])
-        by smtp.gmail.com with ESMTPSA id q26-20020ac8451a000000b003438a8e842fsm3542973qtn.44.2022.09.10.18.41.07
+        by smtp.gmail.com with ESMTPSA id q26-20020ac8451a000000b003438a8e842fsm3542973qtn.44.2022.09.10.18.41.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Sep 2022 18:41:08 -0700 (PDT)
+        Sat, 10 Sep 2022 18:41:09 -0700 (PDT)
 From:   Matt Ranostay <matt.ranostay@konsulko.com>
 To:     jic23@kernel.org, gupt21@gmail.com
 Cc:     linux-input@vger.kernel.org, linux-i2c@vger.kernel.org,
         Matt Ranostay <matt.ranostay@konsulko.com>
-Subject: [PATCH v2 2/5] iio: addac: stx104: fix future recursive dependencies
-Date:   Sat, 10 Sep 2022 18:40:45 -0700
-Message-Id: <20220911014048.64235-3-matt.ranostay@konsulko.com>
+Subject: [PATCH v2 3/5] iio: dac: fix future recursive dependencies
+Date:   Sat, 10 Sep 2022 18:40:46 -0700
+Message-Id: <20220911014048.64235-4-matt.ranostay@konsulko.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220911014048.64235-1-matt.ranostay@konsulko.com>
 References: <20220911014048.64235-1-matt.ranostay@konsulko.com>
@@ -68,37 +68,46 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 When using 'imply IIO' for other configurations which have 'select GPIOLIB'
-the following recursive dependency detected happens for STX1040
+the following recursive dependency detected happens for AD5592R and AD5593R.
 
 Switch from 'select GPIOLIB' to 'depends on GPIOLIB' to avoid this per
 recommendation in kconfig-language.rst
 
 drivers/gpio/Kconfig:14:error: recursive dependency detected!
-drivers/gpio/Kconfig:14:        symbol GPIOLIB is selected by STX104
-drivers/iio/addac/Kconfig:20:   symbol STX104 depends on IIO
+drivers/gpio/Kconfig:14:        symbol GPIOLIB is selected by AD5592R
+drivers/iio/dac/Kconfig:93:     symbol AD5592R depends on IIO
 drivers/iio/Kconfig:6:  symbol IIO is implied by HID_MCP2221
 drivers/hid/Kconfig:1227:       symbol HID_MCP2221 depends on GPIOLIB
 
 Signed-off-by: Matt Ranostay <matt.ranostay@konsulko.com>
 ---
- drivers/iio/addac/Kconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/iio/dac/Kconfig | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/iio/addac/Kconfig b/drivers/iio/addac/Kconfig
-index fcf6d2269bfc..494790816ac7 100644
---- a/drivers/iio/addac/Kconfig
-+++ b/drivers/iio/addac/Kconfig
-@@ -19,9 +19,8 @@ config AD74413R
+diff --git a/drivers/iio/dac/Kconfig b/drivers/iio/dac/Kconfig
+index 80521bd28d0f..b93003e80b70 100644
+--- a/drivers/iio/dac/Kconfig
++++ b/drivers/iio/dac/Kconfig
+@@ -92,8 +92,7 @@ config AD5592R_BASE
  
- config STX104
- 	tristate "Apex Embedded Systems STX104 driver"
--	depends on PC104 && X86
-+	depends on PC104 && X86 && GPIOLIB
- 	select ISA_BUS_API
+ config AD5592R
+ 	tristate "Analog Devices AD5592R ADC/DAC driver"
+-	depends on SPI_MASTER
 -	select GPIOLIB
++	depends on SPI_MASTER && GPIOLIB
+ 	select AD5592R_BASE
  	help
- 	  Say yes here to build support for the Apex Embedded Systems STX104
- 	  integrated analog PC/104 card.
+ 	  Say yes here to build support for Analog Devices AD5592R
+@@ -104,8 +103,7 @@ config AD5592R
+ 
+ config AD5593R
+ 	tristate "Analog Devices AD5593R ADC/DAC driver"
+-	depends on I2C
+-	select GPIOLIB
++	depends on I2C && GPIOLIB
+ 	select AD5592R_BASE
+ 	help
+ 	  Say yes here to build support for Analog Devices AD5593R
 -- 
 2.37.2
 
