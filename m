@@ -2,111 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B9C5B588A
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Sep 2022 12:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEE65B5B0B
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Sep 2022 15:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiILKjN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 12 Sep 2022 06:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
+        id S229828AbiILNVL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 12 Sep 2022 09:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiILKjL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Sep 2022 06:39:11 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAED21241;
-        Mon, 12 Sep 2022 03:39:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662979151; x=1694515151;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w3vFwdYLxWsQ9bEvrr+2hHC3zOoyKWcZ+8GtDAo7dCU=;
-  b=FUx8SQDi+VRECKMNKEnrPkpJ8h77lUkDB8/1EhzRLRgCAce1DSqj4Ind
-   BPryJaJGJCURHbm3FycsO0pHttBthL2JYA3Gc3pyWRDDVwFzFM057WQ/0
-   q5e6cwGM4zx5BpkcOPdjxOeoA9PF0iigpQA+r5z5sc18qGcSg7Yxi+Lvs
-   02wmm6NEf9vXY/qVbeDUhq6JUtaIxBdRlMjKO2DYAH3LZfb+aLw9OE1B8
-   xcOSLczz7hBLTMW+a9Akn5SICrseaiOI62IR4CP3zubvMvh3b6Qoh2Ku7
-   M2uIDcFwt2hl7feJvxAJDH/pr7tI4wMYII6D4GU7+zKl+blDsBia4UnCg
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="359558492"
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="359558492"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 03:39:10 -0700
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="719712154"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 03:39:04 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oXgqC-001Irg-2C;
-        Mon, 12 Sep 2022 13:39:00 +0300
-Date:   Mon, 12 Sep 2022 13:39:00 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Len Brown <lenb@kernel.org>, Elie Morisse <syniurge@gmail.com>,
-        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Robert Moore <robert.moore@intel.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH v2 0/8] ACPI: unify _UID handling as integer
-Message-ID: <Yx8MRPxPrNG1XRqV@smile.fi.intel.com>
-References: <20220908132910.62122-1-andriy.shevchenko@linux.intel.com>
- <YxnwMLvgQAPOkeeK@smile.fi.intel.com>
- <CAJZ5v0j5FO+OcX6VdiR-tuDCrHFwErquxzZGUu3ZLQ1G57T-+Q@mail.gmail.com>
+        with ESMTP id S229652AbiILNVH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Sep 2022 09:21:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DE822B39
+        for <linux-i2c@vger.kernel.org>; Mon, 12 Sep 2022 06:21:04 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oXjMv-0000gS-Fo; Mon, 12 Sep 2022 15:20:57 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oXjMs-000JMe-QK; Mon, 12 Sep 2022 15:20:53 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oXjMq-000Nt3-Mp; Mon, 12 Sep 2022 15:20:52 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>, Wolfram Sang <wsa@kernel.org>
+Cc:     NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH] i2c: imx: If pm_runtime_get_sync() returned 1 device access is possible
+Date:   Mon, 12 Sep 2022 15:20:40 +0200
+Message-Id: <20220912132040.156713-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0j5FO+OcX6VdiR-tuDCrHFwErquxzZGUu3ZLQ1G57T-+Q@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=957; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Y/i9di6EUGrIrJK5ZlpRf6vNXTuLye3r7vhLl00CDmg=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjHzIko61J3bgPoYvStyMRJi/0Ir8KTq2/Dz5vXNTx OSs0vN2JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYx8yJAAKCRDB/BR4rcrsCQQtB/ 9yTZHJpcxxEcUZPFCmP+KE9p7ID//CFQnWy1AksaEMBYjMMMxvYH9roreN34vQnu7bE0fosX8JC+o2 npuaPbIXR2mpw0xRY0sa1cM9d3mCjhRIB6MaIpfjwDpeeumu/LYUlX+QYKi6eW+RrEJ6QfzxeU0fR3 6qyRk5wUlxTIiyLC+OUfHbItUhU6b2lBUbSV3TQddbzeCAv5eCnCj8lekEtkvvwpI1fJ/5QaCCeIvq o3VPgYcZsbK3nCo7FOqMQ4VN78z5joXSthFosdqKITq2qOa1r2F9ickOI0zUzigyGuf9oemQWz1k4a Jc8aEInx0eeY5OylaasRbCoURziB7C
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Sep 10, 2022 at 06:32:10PM +0200, Rafael J. Wysocki wrote:
-> On Thu, Sep 8, 2022 at 3:38 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
+pm_runtime_get_sync() returning 1 also means the device is powered. So
+resetting the chip registers in .remove() is possible and should be
+done.
 
-...
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Fixes: d98bdd3a5b50 ("i2c: imx: Make sure to unregister adapter on remove()")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/i2c/busses/i2c-imx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Tentatively applied as 6.1 material.
-
-Thanks!
-
-> If there are updates, we'll make changes as they go.
-
-There is one at least to fix a warning in the perf patch. Should I resend
-a fixed patch, just a fix, or entire series with a fixed patch?
-
-
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index e47fa3465671..3082183bd66a 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -1583,7 +1583,7 @@ static int i2c_imx_remove(struct platform_device *pdev)
+ 	if (i2c_imx->dma)
+ 		i2c_imx_dma_free(i2c_imx);
+ 
+-	if (ret == 0) {
++	if (ret >= 0) {
+ 		/* setup chip registers to defaults */
+ 		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IADR);
+ 		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IFDR);
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.37.2
 
