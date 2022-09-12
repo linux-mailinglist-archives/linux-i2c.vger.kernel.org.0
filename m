@@ -2,81 +2,135 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F019B5B6198
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Sep 2022 21:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 469065B6256
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Sep 2022 22:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiILTW0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 12 Sep 2022 15:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
+        id S229809AbiILUtr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 12 Sep 2022 16:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbiILTWW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Sep 2022 15:22:22 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A4B44576
-        for <linux-i2c@vger.kernel.org>; Mon, 12 Sep 2022 12:22:19 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so9146613pjh.3
-        for <linux-i2c@vger.kernel.org>; Mon, 12 Sep 2022 12:22:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ssS5zdl8ImzFpzzUh/59HsD/G3hcv1J/zHJhsPeEVKI=;
-        b=QTNd0+iDH81yMYKwvCkapX347WklRs1UjNbmqjqu+SixUF/dyK2U/L25vDmJoSKOi3
-         cldUN75Qt3pWVPV4ItiOTKw3QmVbfx2t9fO+kOp/uR+OVGSNK84/CGvdkYW2B6CYdcFW
-         Wq+yE+ym4VzTjz6ZEaev54lNyuvfsYAMRbx9WBKIbKDfFApLXXh7HCbQDbOWXbuV7e/Z
-         p4ZYhleNdJoMyxd/UMk4saHWkZIy8ocYbb+uic0g2UPbXa2o3re6fnkS/4PFf64IzvLj
-         h5/aLBm5eprqh9XYSKn6YxzUzZrJc1ikkmR4FgUwPDRheKWQz3X4hv09w283fMWLjILy
-         yfaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ssS5zdl8ImzFpzzUh/59HsD/G3hcv1J/zHJhsPeEVKI=;
-        b=ykj4gZXqjgeiwzz5hY+UmzdgvuylrEjwz7WTFJHzv+9NP6OR0V2QTn+DtwGENPdlUA
-         IvqcCNmq0YhKRCmjwcnKekvjD28vWdiGjUR002ydPCs6qhdTBhysKzQsbVz55OZlULEk
-         1jFT8JO1D+vGzpNQOSY9L8VCQyoMWEwlHf82Z0hOVTrmvRGSqY6UxoIhBIuPgx7ZoPtd
-         d4oPU6jpc/b6uNRp2R6nJOd5OXqvQXqLZEErPLOnszNJ3ajHmJEp0AOE2tCAN1vGr6kh
-         b2zkl8bhZoqzkik6pHat043t8w5zfExz1z3xBK0gpx684JbXoT6RhOw7YyRNu77LI0J6
-         Mb2A==
-X-Gm-Message-State: ACgBeo1YB2YztLh3YlUAL820z4KQ9N7BlQf8JvFXejUDBGWQhaWHEEpV
-        LqHjrcr2HG5//IC3CCVLKbOqd5BvS0oAiS+sA6iWUg==
-X-Google-Smtp-Source: AA6agR7HIYkNnScIvRpJFZ0Oo8uVvzZR00lzwcMhNhL2BpnUIm/nvmgBF7LUeuTXgD11N++k7tQH3Pa9XHu01N2sGa8=
-X-Received: by 2002:a17:90b:4f8d:b0:202:dd39:c03a with SMTP id
- qe13-20020a17090b4f8d00b00202dd39c03amr5104418pjb.71.1663010538983; Mon, 12
- Sep 2022 12:22:18 -0700 (PDT)
+        with ESMTP id S229610AbiILUtq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Sep 2022 16:49:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C3BAE72;
+        Mon, 12 Sep 2022 13:49:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E6C961251;
+        Mon, 12 Sep 2022 20:49:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8B1CC433C1;
+        Mon, 12 Sep 2022 20:49:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663015780;
+        bh=6Fjw6Ql7mmqXkbJehMTFK14pZmNsuXqsCwyUTi8gFfM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BcmzkH3VZeu+vcCV3jE2FAUs7FFXjtw26g1osYrRXVetuIOuCk3Q/Ktyp9F9BPRKE
+         LmS/P+XAriOWGiu1V/lS6ylkx9hfjkSetlQVf2nstvXNpoyF3OuZdRJoD1JEFWmekR
+         I75WTAygor23nOe40a7/ymJ1KMqyairdrYTXgkY6yJJqj1JhihU61PtFFS5p95RqKC
+         oiPcF9TzRi5PayPLvM97oHIO4wMatDgGXrpGLXSz614qMHdKG9fLKqQ8hRVEcaP6XQ
+         YuXPbsJH5dEqD9oNsPMbi6+5QN0cliQsLHN0OZEpj1SBciqI9f1VEfejokNNp/WnVA
+         N/LsG9emnnNpg==
+Date:   Mon, 12 Sep 2022 21:49:34 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Brown <broonie@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        devel@acpica.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Elie Morisse <syniurge@gmail.com>,
+        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Robert Moore <robert.moore@intel.com>
+Subject: Re: [PATCH v2 4/8] i2c: amd-mp2-plat: Refactor _UID handling to use
+ acpi_dev_uid_to_integer()
+Message-ID: <Yx+bXht7BPDJ0e7x@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Mark Brown <broonie@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-spi@vger.kernel.org, devel@acpica.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Elie Morisse <syniurge@gmail.com>,
+        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Robert Moore <robert.moore@intel.com>
+References: <20220908132910.62122-1-andriy.shevchenko@linux.intel.com>
+ <20220908132910.62122-5-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20220907160207.3845791-1-jagan@edgeble.ai> <20220907160207.3845791-2-jagan@edgeble.ai>
- <6158946.mvXUDI8C0e@phil>
-In-Reply-To: <6158946.mvXUDI8C0e@phil>
-From:   Jagan Teki <jagan@edgeble.ai>
-Date:   Tue, 13 Sep 2022 00:52:08 +0530
-Message-ID: <CA+VMnFz3+vx4b3H=v7g1q-ytKLRjohs2tGmeuA6sRfWA8J6BRw@mail.gmail.com>
-Subject: Re: [PATCH v4 01/13] i2c: rk3x: Add rv1126 support
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-i2c@vger.kernel.org, David Wu <david.wu@rock-chips.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sUAXZs/SIFegtpQk"
+Content-Disposition: inline
+In-Reply-To: <20220908132910.62122-5-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Heiko,
 
-On Fri, 9 Sept 2022 at 22:58, Heiko Stuebner <heiko@sntech.de> wrote:
->
-> Hi Jagan,
->
-> it looks like this is missing Wolfram Sang, the i2c maintainer?
+--sUAXZs/SIFegtpQk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-My bad. I will add him in the next version. Thanks.
+On Thu, Sep 08, 2022 at 04:29:06PM +0300, Andy Shevchenko wrote:
+> ACPI utils provide acpi_dev_uid_to_integer() helper to extract _UID as
+> an integer. Use it instead of custom approach.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-Jagan.
+Acked-by: Wolfram Sang <wsa@kernel.org>
+
+
+--sUAXZs/SIFegtpQk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMfm1oACgkQFA3kzBSg
+KbZOvxAAlXmFeqXkCJJ0tSAv+ILY540Lq7bsjWcq5ojbGK5UK53ituzoHRL/6H0s
+PhB+A5LEUea5sUZwQfQdhLPWPIy8Mu5hwAiIZinq7ebTtMcw8tte44ki2a3HG5OV
+H3Kbt9oX3c3ToVuB2dDsY+Wn0MOcgVw1i7wYNx85JpKpmXatOUcs7A55yz6gF+bF
+1Eg7kwUiMroaBDyL1HhiVMIW8c96lyyYEGJLbY0kT/jAUVWzlI4YjeGow7cNCjwI
+gJkfKGxiFz1fZdfJ7+LJTchunMJrH4sWRgEIoLFAKhaav7MspxNTTnc7W/HqKHYV
+LgzUhyxBZA8OxTt36bYTY9DJjKlr1kmN2YF3i5gn68j7gkuzBPIwGatcddHC8v2C
+zG6UB30INc7wtOtU2lxAQhJhcJOSZvHbLlsjPisuYwBg8x6hXuB/DREv8GzN1c5E
+MG1kpb/d0+237zy9b6/ZNxANz56fLN56Sg7gMl3NHLQIXfb9fwpYec1z6i8vuOVS
+OUdzUKAfuCBxIUZwPFoX5oesGRX2YlmQiPxvVZSlFBNkDz979ciTriA2xfN+OJ6e
+8KjDhD4HB0pIPhRVK2WID7RgT5rra57FA0bqiIzro24WSZo/kmzKBHnkc/P3Vq3o
+7bTW3f07rs+u55/hwAiOJicYm/DLw7uECO+q1FxIW1Rgl6VIZiQ=
+=ivoN
+-----END PGP SIGNATURE-----
+
+--sUAXZs/SIFegtpQk--
