@@ -2,47 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FEE65B5B0B
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Sep 2022 15:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0DD15B5B17
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Sep 2022 15:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiILNVL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 12 Sep 2022 09:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
+        id S229614AbiILNYi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 12 Sep 2022 09:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiILNVH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Sep 2022 09:21:07 -0400
+        with ESMTP id S229539AbiILNYg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Sep 2022 09:24:36 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DE822B39
-        for <linux-i2c@vger.kernel.org>; Mon, 12 Sep 2022 06:21:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C3F60D6
+        for <linux-i2c@vger.kernel.org>; Mon, 12 Sep 2022 06:24:35 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1oXjMv-0000gS-Fo; Mon, 12 Sep 2022 15:20:57 +0200
+        id 1oXjQO-00014f-ES; Mon, 12 Sep 2022 15:24:32 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1oXjMs-000JMe-QK; Mon, 12 Sep 2022 15:20:53 +0200
+        id 1oXjQO-000JN6-K1; Mon, 12 Sep 2022 15:24:31 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1oXjMq-000Nt3-Mp; Mon, 12 Sep 2022 15:20:52 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Oleksij Rempel <linux@rempel-privat.de>,
-        Shawn Guo <shawnguo@kernel.org>, Wolfram Sang <wsa@kernel.org>
-Cc:     NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH] i2c: imx: If pm_runtime_get_sync() returned 1 device access is possible
-Date:   Mon, 12 Sep 2022 15:20:40 +0200
-Message-Id: <20220912132040.156713-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.37.2
+        id 1oXjQM-000Ntt-E1; Mon, 12 Sep 2022 15:24:30 +0200
+Date:   Mon, 12 Sep 2022 15:24:28 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     NXP Linux Team <linux-imx@nxp.com>, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [bug report] i2c: imx: Make sure to unregister adapter on
+ remove()
+Message-ID: <20220912132428.j5gnwmpz3yr7twru@pengutronix.de>
+References: <Ywd48/BdaB0Tcwpg@kili>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=957; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Y/i9di6EUGrIrJK5ZlpRf6vNXTuLye3r7vhLl00CDmg=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjHzIko61J3bgPoYvStyMRJi/0Ir8KTq2/Dz5vXNTx OSs0vN2JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYx8yJAAKCRDB/BR4rcrsCQQtB/ 9yTZHJpcxxEcUZPFCmP+KE9p7ID//CFQnWy1AksaEMBYjMMMxvYH9roreN34vQnu7bE0fosX8JC+o2 npuaPbIXR2mpw0xRY0sa1cM9d3mCjhRIB6MaIpfjwDpeeumu/LYUlX+QYKi6eW+RrEJ6QfzxeU0fR3 6qyRk5wUlxTIiyLC+OUfHbItUhU6b2lBUbSV3TQddbzeCAv5eCnCj8lekEtkvvwpI1fJ/5QaCCeIvq o3VPgYcZsbK3nCo7FOqMQ4VN78z5joXSthFosdqKITq2qOa1r2F9ickOI0zUzigyGuf9oemQWz1k4a Jc8aEInx0eeY5OylaasRbCoURziB7C
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="o6xbrc4lu6ex3ayt"
+Content-Disposition: inline
+In-Reply-To: <Ywd48/BdaB0Tcwpg@kili>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -56,30 +53,94 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-pm_runtime_get_sync() returning 1 also means the device is powered. So
-resetting the chip registers in .remove() is possible and should be
-done.
 
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Fixes: d98bdd3a5b50 ("i2c: imx: Make sure to unregister adapter on remove()")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/i2c/busses/i2c-imx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--o6xbrc4lu6ex3ayt
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index e47fa3465671..3082183bd66a 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -1583,7 +1583,7 @@ static int i2c_imx_remove(struct platform_device *pdev)
- 	if (i2c_imx->dma)
- 		i2c_imx_dma_free(i2c_imx);
- 
--	if (ret == 0) {
-+	if (ret >= 0) {
- 		/* setup chip registers to defaults */
- 		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IADR);
- 		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IFDR);
--- 
-2.37.2
+Hello Dan,
 
+On Thu, Aug 25, 2022 at 04:28:19PM +0300, Dan Carpenter wrote:
+> The patch d98bdd3a5b50: "i2c: imx: Make sure to unregister adapter on
+> remove()" from Jul 20, 2022, leads to the following Smatch static
+> checker warning:
+>=20
+> 	drivers/i2c/busses/i2c-imx.c:1586 i2c_imx_remove()
+> 	warn: pm_runtime_get_sync() also returns 1 on success
+>=20
+> drivers/i2c/busses/i2c-imx.c
+>     1570 static int i2c_imx_remove(struct platform_device *pdev)
+>     1571 {
+>     1572         struct imx_i2c_struct *i2c_imx =3D platform_get_drvdata(=
+pdev);
+>     1573         int irq, ret;
+>     1574=20
+>     1575         ret =3D pm_runtime_get_sync(&pdev->dev);
+>     1576=20
+>     1577         hrtimer_cancel(&i2c_imx->slave_timer);
+>     1578=20
+>     1579         /* remove adapter */
+>     1580         dev_dbg(&i2c_imx->adapter.dev, "adapter removed\n");
+>     1581         i2c_del_adapter(&i2c_imx->adapter);
+>     1582=20
+>     1583         if (i2c_imx->dma)
+>     1584                 i2c_imx_dma_free(i2c_imx);
+>     1585=20
+> --> 1586         if (ret =3D=3D 0) {
+>=20
+> Probably this should be ret >=3D 0?
+>=20
+>     1587                 /* setup chip registers to defaults */
+>     1588                 imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IADR);
+>     1589                 imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IFDR);
+>     1590                 imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2CR);
+>     1591                 imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2SR);
+>     1592                 clk_disable(i2c_imx->clk);
+>     1593         }
+>     1594=20
+>     1595         clk_notifier_unregister(i2c_imx->clk, &i2c_imx->clk_chan=
+ge_nb);
+>     1596         irq =3D platform_get_irq(pdev, 0);
+>     1597         if (irq >=3D 0)
+>     1598                 free_irq(irq, i2c_imx);
+>     1599=20
+>     1600         clk_unprepare(i2c_imx->clk);
+>     1601=20
+>     1602         pm_runtime_put_noidle(&pdev->dev);
+>     1603         pm_runtime_disable(&pdev->dev);
+>     1604=20
+>     1605         return 0;
+>     1606 }
+
+I don't know how automatic you send these reports, but I wonder why you
+Cc:d the NXP Linux Team, but not Oleksij (i.e. the maintainer of the
+driver, who also Acked the blamed commit) and the Pengutronix Kernel
+team (which is included in the driver's MAINTAINER entry).
+
+Apart from that, I just sent a patch for that issue, thanks for your
+report.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--o6xbrc4lu6ex3ayt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMfMwkACgkQwfwUeK3K
+7AkrUwf/Sl6+v6L/ADMI+TF5CCgWf64Bu7l4z5RMi3vmtaJdZDgrU6uNuDWNa4d7
+R/fs3SavzDTK11uLj3YPLVx4zpb3/UBetaCG1mynS7yrXd+nh/rcWS93EnY5wLRX
+tDpjynQxWSM+PaEYXUAfn/VlTpvQVbTKZaO391pgxj4OQvhk8AWzxECCpkZNxfHN
+AklO8DEvDS6mZfl0hiPO0nd1uriSqVY3mpsnWXIDTLK9xjqJlfTJ2xdtu3FkY8gm
++InTww3gauphz0LBvPx2Pm+bk4UOn3Aja8Ml5OKT4sK+3J6HUON5S/b9/bIeRSpk
+ZdOso+nfd7vpyYVugEIOrrqC6y37VQ==
+=QkdJ
+-----END PGP SIGNATURE-----
+
+--o6xbrc4lu6ex3ayt--
