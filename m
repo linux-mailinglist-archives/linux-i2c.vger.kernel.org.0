@@ -2,167 +2,221 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F8B5B6D12
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Sep 2022 14:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 622D75B6DBA
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Sep 2022 14:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiIMMWL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Sep 2022 08:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
+        id S231469AbiIMMyL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Sep 2022 08:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231849AbiIMMWI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Sep 2022 08:22:08 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985E043E57;
-        Tue, 13 Sep 2022 05:22:05 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso7943296otb.6;
-        Tue, 13 Sep 2022 05:22:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=hD+/5DE8NOemSNCJ30BEmA9AOrYqx/O7A0+pY0Ckx+A=;
-        b=7UlQRsPneP+IK2OI2ggGC6tpd+BKjALePuEqnAivU+++YJ8Ttaec6Yy6QvXHMq7AE9
-         VNYHovJeV+yO03asVLKz/qi0/RePctkXpwjKJ5A+urmHV65mJDAw5MgFXvNg5ADHd5SR
-         v24Hpzeo4CGOSqUcTn+EutwRG/dmD2JGV+5YZ7mjmGGfzXtrnl/ugtuCRcZAVjK3o6mX
-         DeKpTzNSNQQAw8igXGjWQt08vN78BzhFjs2m3Qy/+74bhZJw4pzyvgmTa5SMU2EAIbuV
-         Bpbe0R/tOtcDglHYzvHBH4PGte1ulXPmIbvR+0hpRYuw1BrmqYQifXrusB10voox5gai
-         nCwQ==
-X-Gm-Message-State: ACgBeo3CwEAfwsBLVgRYcpdNCrLiybprF0W+stMe8dFADVTKbdhoa5Ba
-        Ewzu+kDanXBZ4vYWQrXp+A==
-X-Google-Smtp-Source: AA6agR7cEIsiIBAIhpGD3+Wm/i+AEEDZzS7LxsqzGC+62Vo+hOx9HR+92vNjvrIHtbBNwbzT4ZZc+Q==
-X-Received: by 2002:a9d:7cc9:0:b0:655:b6e0:a855 with SMTP id r9-20020a9d7cc9000000b00655b6e0a855mr7401159otn.121.1663071724731;
-        Tue, 13 Sep 2022 05:22:04 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f19-20020a056870899300b0011f400edb17sm7066358oaq.4.2022.09.13.05.22.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 05:22:04 -0700 (PDT)
-Received: (nullmailer pid 3428702 invoked by uid 1000);
-        Tue, 13 Sep 2022 12:22:03 -0000
-Date:   Tue, 13 Sep 2022 07:22:03 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Weilong Chen <chenweilong@huawei.com>
-Cc:     yangyicong@hisilicon.com, xuwei5@huawei.com, wsa@kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH next v4 2/2] dt-bindings: i2c: add entry for
- hisilicon,hisi-i2c
-Message-ID: <20220913122203.GA3413501-robh@kernel.org>
-References: <20220909074842.281232-1-chenweilong@huawei.com>
- <20220909074842.281232-2-chenweilong@huawei.com>
+        with ESMTP id S231841AbiIMMyD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Sep 2022 08:54:03 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3375F3340E;
+        Tue, 13 Sep 2022 05:54:00 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MRjx01V4KzmVRK;
+        Tue, 13 Sep 2022 20:50:12 +0800 (CST)
+Received: from localhost.localdomain (10.157.217.52) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 13 Sep 2022 20:53:55 +0800
+From:   Tao Lan <taolan@huawei.com>
+To:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     taolan <taolan@huawei.com>
+Subject: [PATCH] i2c: hix5hd2: Add some debug enhancement for register access
+Date:   Tue, 13 Sep 2022 12:48:20 +0000
+Message-ID: <20220913124820.48715-1-taolan@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909074842.281232-2-chenweilong@huawei.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.157.217.52]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 03:48:42PM +0800, Weilong Chen wrote:
-> Add the new compatible for HiSilicon common i2c.
-> 
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
-> ---
->  .../bindings/i2c/hisilicon,hisi-i2c.yaml      | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-> new file mode 100644
-> index 000000000000..f1cb6a4c70d1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-> @@ -0,0 +1,67 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/i2c/hisilicon,hisi-i2c.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: HiSilicon common IIC controller Device Tree Bindings
-> +
-> +maintainers:
-> +  - yangyicong@huawei.com
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: hisilicon,hisi-i2c
+From: taolan <taolan@huawei.com>
 
-You need SoC specific compatibles.
+Sometimes, to locate a fault, we need to know how the register is
+configured and whether the configuration is incorrect. Currently, no
+better method is available for analysis.
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clk_rate:
-> +    default: 0xEE6B280
+This patch tries to solve the problem by naming the registers and
+printing the accessed values.
 
-What is this property for? Use the clock binding.
+Signed-off-by: taolan <taolan@huawei.com>
+---
+ drivers/i2c/busses/i2c-hix5hd2.c | 80 +++++++++++++++++++++++++-------
+ 1 file changed, 62 insertions(+), 18 deletions(-)
 
-> +
-> +  clock-frequency:
-> +    default: 400000
-> +
-> +  i2c-sda-falling-time-ns:
-> +    default: 343
-> +
-> +  i2c-scl-falling-time-ns:
-> +    default: 203
-> +
-> +  i2c-sda-hold-time-ns:
-> +    default: 0x33E
+diff --git a/drivers/i2c/busses/i2c-hix5hd2.c b/drivers/i2c/busses/i2c-hix5hd2.c
+index 61ae58f57047..9ebbad8701f4 100644
+--- a/drivers/i2c/busses/i2c-hix5hd2.c
++++ b/drivers/i2c/busses/i2c-hix5hd2.c
+@@ -92,28 +92,72 @@ struct hix5hd2_i2c_priv {
+ 	enum hix5hd2_i2c_state state;
+ };
+ 
++#define i2c_readl readl_relaxed
++#define i2c_writel writel_relaxed
++
++#ifdef I2C_REG_DUMP
++
++#undef i2c_readl
++#undef i2c_writel
++
++struct i2c_reg_name {
++	u32 reg;
++	char *name;
++} g_i2c_reg_name[] = {
++	{0x00, "CTRL"},
++	{0x04, "COM"},
++	{0x08, "ICR"},
++	{0x0c, "SR"},
++	{0x10, "SCL_H"},
++	{0x14, "SCL_L"},
++	{0x18, "TXR"},
++	{0x1c, "RXR"},
++};
++static void i2c_writel(u32 val, void *reg)
++{
++	unsigned long idx = (unsigned long)reg & 0x00FF;
++
++	if (idx <= 0x1C)
++		pr_notice("write 0x%04x to %s\n", val, g_i2c_reg_name[idx >> 0x2].name);
++
++	i2c_writel(val, reg);
++}
++
++static u32 i2c_readl(void *reg)
++{
++	u32 val = i2c_readl(reg);
++	unsigned long idx = (unsigned long)reg & 0x00FF;
++
++	if (idx <= 0x1C)
++		pr_notice("read 0x%04x from %s\n", val, g_i2c_reg_name[idx >> 0x2].name);
++
++	return val;
++}
++#endif
++
++
+ static u32 hix5hd2_i2c_clr_pend_irq(struct hix5hd2_i2c_priv *priv)
+ {
+-	u32 val = readl_relaxed(priv->regs + HIX5I2C_SR);
++	u32 val = i2c_readl(priv->regs + HIX5I2C_SR);
+ 
+-	writel_relaxed(val, priv->regs + HIX5I2C_ICR);
++	i2c_writel(val, priv->regs + HIX5I2C_ICR);
+ 
+ 	return val;
+ }
+ 
+ static void hix5hd2_i2c_clr_all_irq(struct hix5hd2_i2c_priv *priv)
+ {
+-	writel_relaxed(I2C_CLEAR_ALL, priv->regs + HIX5I2C_ICR);
++	i2c_writel(I2C_CLEAR_ALL, priv->regs + HIX5I2C_ICR);
+ }
+ 
+ static void hix5hd2_i2c_disable_irq(struct hix5hd2_i2c_priv *priv)
+ {
+-	writel_relaxed(0, priv->regs + HIX5I2C_CTRL);
++	i2c_writel(0, priv->regs + HIX5I2C_CTRL);
+ }
+ 
+ static void hix5hd2_i2c_enable_irq(struct hix5hd2_i2c_priv *priv)
+ {
+-	writel_relaxed(I2C_ENABLE | I2C_UNMASK_TOTAL | I2C_UNMASK_ALL,
++	i2c_writel(I2C_ENABLE | I2C_UNMASK_TOTAL | I2C_UNMASK_ALL,
+ 		       priv->regs + HIX5I2C_CTRL);
+ }
+ 
+@@ -123,17 +167,17 @@ static void hix5hd2_i2c_drv_setrate(struct hix5hd2_i2c_priv *priv)
+ 	u32 scl, sysclock;
+ 
+ 	/* close all i2c interrupt */
+-	val = readl_relaxed(priv->regs + HIX5I2C_CTRL);
+-	writel_relaxed(val & (~I2C_UNMASK_TOTAL), priv->regs + HIX5I2C_CTRL);
++	val = i2c_readl(priv->regs + HIX5I2C_CTRL);
++	i2c_writel(val & (~I2C_UNMASK_TOTAL), priv->regs + HIX5I2C_CTRL);
+ 
+ 	rate = priv->freq;
+ 	sysclock = clk_get_rate(priv->clk);
+ 	scl = (sysclock / (rate * 2)) / 2 - 1;
+-	writel_relaxed(scl, priv->regs + HIX5I2C_SCL_H);
+-	writel_relaxed(scl, priv->regs + HIX5I2C_SCL_L);
++	i2c_writel(scl, priv->regs + HIX5I2C_SCL_H);
++	i2c_writel(scl, priv->regs + HIX5I2C_SCL_L);
+ 
+ 	/* restore original interrupt*/
+-	writel_relaxed(val, priv->regs + HIX5I2C_CTRL);
++	i2c_writel(val, priv->regs + HIX5I2C_CTRL);
+ 
+ 	dev_dbg(priv->dev, "%s: sysclock=%d, rate=%d, scl=%d\n",
+ 		__func__, sysclock, rate, scl);
+@@ -188,7 +232,7 @@ static void hix5hd2_rw_handle_stop(struct hix5hd2_i2c_priv *priv)
+ {
+ 	if (priv->stop) {
+ 		priv->state = HIX5I2C_STAT_SND_STOP;
+-		writel_relaxed(I2C_STOP, priv->regs + HIX5I2C_COM);
++		i2c_writel(I2C_STOP, priv->regs + HIX5I2C_COM);
+ 	} else {
+ 		hix5hd2_rw_over(priv);
+ 	}
+@@ -198,10 +242,10 @@ static void hix5hd2_read_handle(struct hix5hd2_i2c_priv *priv)
+ {
+ 	if (priv->msg_len == 1) {
+ 		/* the last byte don't need send ACK */
+-		writel_relaxed(I2C_READ | I2C_NO_ACK, priv->regs + HIX5I2C_COM);
++		i2c_writel(I2C_READ | I2C_NO_ACK, priv->regs + HIX5I2C_COM);
+ 	} else if (priv->msg_len > 1) {
+ 		/* if i2c master receive data will send ACK */
+-		writel_relaxed(I2C_READ, priv->regs + HIX5I2C_COM);
++		i2c_writel(I2C_READ, priv->regs + HIX5I2C_COM);
+ 	} else {
+ 		hix5hd2_rw_handle_stop(priv);
+ 	}
+@@ -213,8 +257,8 @@ static void hix5hd2_write_handle(struct hix5hd2_i2c_priv *priv)
+ 
+ 	if (priv->msg_len > 0) {
+ 		data = priv->msg->buf[priv->msg_idx++];
+-		writel_relaxed(data, priv->regs + HIX5I2C_TXR);
+-		writel_relaxed(I2C_WRITE, priv->regs + HIX5I2C_COM);
++		i2c_writel(data, priv->regs + HIX5I2C_TXR);
++		i2c_writel(I2C_WRITE, priv->regs + HIX5I2C_COM);
+ 	} else {
+ 		hix5hd2_rw_handle_stop(priv);
+ 	}
+@@ -228,7 +272,7 @@ static int hix5hd2_rw_preprocess(struct hix5hd2_i2c_priv *priv)
+ 		priv->state = HIX5I2C_STAT_RW;
+ 	} else if (priv->state == HIX5I2C_STAT_RW) {
+ 		if (priv->msg->flags & I2C_M_RD) {
+-			data = readl_relaxed(priv->regs + HIX5I2C_RXR);
++			data = i2c_readl(priv->regs + HIX5I2C_RXR);
+ 			priv->msg->buf[priv->msg_idx++] = data;
+ 		}
+ 		priv->msg_len--;
+@@ -304,10 +348,10 @@ static void hix5hd2_i2c_message_start(struct hix5hd2_i2c_priv *priv, int stop)
+ 	hix5hd2_i2c_clr_all_irq(priv);
+ 	hix5hd2_i2c_enable_irq(priv);
+ 
+-	writel_relaxed(i2c_8bit_addr_from_msg(priv->msg),
++	i2c_writel(i2c_8bit_addr_from_msg(priv->msg),
+ 		       priv->regs + HIX5I2C_TXR);
+ 
+-	writel_relaxed(I2C_WRITE | I2C_START, priv->regs + HIX5I2C_COM);
++	i2c_writel(I2C_WRITE | I2C_START, priv->regs + HIX5I2C_COM);
+ 	spin_unlock_irqrestore(&priv->lock, flags);
+ }
+ 
+-- 
+2.17.1
 
-The rest are in decimal. Be consistent.
-
-> +
-> +  i2c-scl-rising-time-ns:
-> +    default: 365
-> +
-> +  i2c-digital-filter-width-ns:
-> +    default: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c1: i2c@5038B0000{
-
-Space needed              ^
-
-Use lowercase hex.
-
-Drop unused labels.
-  
-> +      compatible = "hisilicon,hisi-i2c";
-> +      reg = <0x38B0000 0x10000>;
-> +      interrupts = <0x0 120 0x4>;
-> +      i2c-sda-falling-time-ns = <56>;
-> +      i2c-scl-falling-time-ns = <56>;
-> +      i2c-sda-hold-time-ns = <56>;
-> +      i2c-scl-rising-time-ns = <56>;
-> +      i2c-digital-filter;
-> +      i2c-digital-filter-width-ns = <0x0>;
-> +      clk_rate = <0x0 0xEE6B280>;
-> +      clock-frequency = <400000>;
-> +    };
-> -- 
-> 2.31.GIT
-> 
-> 
