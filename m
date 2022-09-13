@@ -2,69 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 267625B6375
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Sep 2022 00:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1F25B64DB
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Sep 2022 03:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbiILWO7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 12 Sep 2022 18:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
+        id S229722AbiIMBAz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 12 Sep 2022 21:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbiILWOI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Sep 2022 18:14:08 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C15B4E632
-        for <linux-i2c@vger.kernel.org>; Mon, 12 Sep 2022 15:13:56 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id 62so8153547iov.5
-        for <linux-i2c@vger.kernel.org>; Mon, 12 Sep 2022 15:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=RNx37yKQbZV3YwKmbwhHH3b5iEfqDIvtsv7is9A0p3M=;
-        b=i2PeBm5KHM44vDseOJdiQmCvkbrFjxDot/fbuwa5w9tjLRwombOzQRSZ9w6JSw8QW+
-         qTwFakJ9vmCBQkST+yMSEpDr5q5dSSxgsrEuPekdTCr99XN0iB+iVWDfk0viCYwkX5Oe
-         dRQDZrxkjBjaczzhGfceMC3D2h6kIRImMSO2A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=RNx37yKQbZV3YwKmbwhHH3b5iEfqDIvtsv7is9A0p3M=;
-        b=mhzvWIjDcWqGJYrB0UiTY9qAsDlyKJeSeBm9Dk62M0U9l+Me7z6WbRmaT3hy3TeeZW
-         +3fRWhByuh58Q8514yVZraUQpROO/ZtxMi06lW1bfxSLk7QdpIrhM2vxVcvfb70VfALn
-         fNyZug8DSr613RDhfgXiXcnHjv02rddZFjlyodA86B4YWjhi0Iz+z6IZiLQZYSdE4EU+
-         eBm9/zdzbcF8Q+e3Wqfe8c+Ib7GbyKfKtL+24BXRN3m9tmWqaPglS1j3+TrVEOaRCStw
-         YlS//2hkwJJjenVeVTUI/eUF2uAoU6b2rqQfl3kf8N8844nKrP0xE72IYQImmUYAm8tu
-         omNg==
-X-Gm-Message-State: ACgBeo3cLZJSKHPpdcIKwIAmRhKoFPmU/tdgT8w+H5lRJjv9Fh6AeSAs
-        LljPsNhf8C14IQhiW8UAaHYS3Q==
-X-Google-Smtp-Source: AA6agR5vMYNcU9Q6AtJghvz6j5UO+YRrBxglU//jxaDXv0cAUvLfabcSA9mP6kDU3lOkDAd0jhndfA==
-X-Received: by 2002:a05:6638:13c4:b0:35a:55df:29b2 with SMTP id i4-20020a05663813c400b0035a55df29b2mr295524jaj.85.1663020835825;
-        Mon, 12 Sep 2022 15:13:55 -0700 (PDT)
-Received: from rrangel920.bld.corp.google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
-        by smtp.gmail.com with ESMTPSA id 18-20020a056e020cb200b002f16e7021f6sm4077334ilg.22.2022.09.12.15.13.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 15:13:55 -0700 (PDT)
-From:   Raul E Rangel <rrangel@chromium.org>
-To:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org
-Cc:     andriy.shevchenko@linux.intel.com, jingle.wu@emc.com.tw,
-        mario.limonciello@amd.com, timvp@google.com,
-        linus.walleij@linaro.org, hdegoede@redhat.com, rafael@kernel.org,
-        Raul E Rangel <rrangel@chromium.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 07/13] i2c: acpi: Use ACPI wake capability bit to set wake_irq
-Date:   Mon, 12 Sep 2022 16:13:11 -0600
-Message-Id: <20220912160931.v2.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-In-Reply-To: <20220912221317.2775651-1-rrangel@chromium.org>
-References: <20220912221317.2775651-1-rrangel@chromium.org>
+        with ESMTP id S229771AbiIMBAw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Sep 2022 21:00:52 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2542C51A20;
+        Mon, 12 Sep 2022 18:00:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663030849; x=1694566849;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ezLCKwkUBdNCoq39097eIEjcGDCqTdmZcynP14rPVWY=;
+  b=dEAsdcvPNpQnWlRIacB/K+Ish63Hwzc3uOPqw54D5l+2Hpq2w8a6uRU3
+   mIt1DW7bC4Sgrn32G4BMTPRzJX8nDHxR+EszpK0cllfbGUkU4RNf1tMqO
+   oyoTas/j/9HT1Raj786tHjOG9b5IQG1GO8c6UR+2acY6G/Q7XG4SDFENH
+   MUm/WZT843ua1pMq2pjBaNgOTahL57FMZ0ERB5Dt7xionALlzeIHj77cQ
+   W06+Uk7tjtpOAT0d5DIXmMBJ04unf20N8k509cYn3kwTjA5U7YS1A21gi
+   LwXW1Lbi29X0fSuEgcBMgDQtrPiGWpwtj4DpRUhVJILhT+0/YH5xp2Jce
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="299345081"
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="299345081"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 18:00:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="684652243"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 12 Sep 2022 18:00:38 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXuI1-00032x-2a;
+        Tue, 13 Sep 2022 01:00:37 +0000
+Date:   Tue, 13 Sep 2022 09:00:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Brown <broonie@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        devel@acpica.org
+Cc:     kbuild-all@lists.01.org, Len Brown <lenb@kernel.org>,
+        Elie Morisse <syniurge@gmail.com>,
+        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Robert Moore <robert.moore@intel.com>,
+        Wolfram Sang <wsa-dev@sang-engineering.com>
+Subject: Re: [PATCH v2 7/8] spi: pxa2xx: Refactor _UID handling to use
+ acpi_dev_uid_to_integer()
+Message-ID: <202209130810.dgrshDMB-lkp@intel.com>
+References: <20220908132910.62122-8-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908132910.62122-8-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,154 +85,83 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Device tree already has a mechanism to pass the wake_irq. It does this
-by looking for the wakeup-source property and setting the
-I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses the
-ACPI interrupt wake flag to determine if the interrupt can be used to
-wake the system. Previously the i2c drivers had to make assumptions and
-blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
-If there is a device with an Active Low interrupt and the device gets
-powered off while suspending, the interrupt line will go low since it's
-no longer powered and wakes the system. For this reason we should
-respect the board designers wishes and honor the wake bit defined on the
-interrupt.
+Hi Andy,
 
-Signed-off-by: Raul E Rangel <rrangel@chromium.org>
----
+I love your patch! Perhaps something to improve:
 
-Changes in v2:
-- Look at wake_cabple bit for IRQ/Interrupt resources
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on wsa/i2c/for-next broonie-spi/for-next efi/next linus/master v6.0-rc5 next-20220912]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
- drivers/i2c/i2c-core-acpi.c | 37 ++++++++++++++++++++++++++++---------
- drivers/i2c/i2c-core-base.c |  6 +++++-
- drivers/i2c/i2c-core.h      |  4 ++--
- 3 files changed, 35 insertions(+), 12 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/ACPI-unify-_UID-handling-as-integer/20220908-213543
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: x86_64-buildonly-randconfig-r006-20220912 (https://download.01.org/0day-ci/archive/20220913/202209130810.dgrshDMB-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/ea7999676bc9f75bb4165358cda640b340fe34d0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/ACPI-unify-_UID-handling-as-integer/20220908-213543
+        git checkout ea7999676bc9f75bb4165358cda640b340fe34d0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/spi/
 
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index c762a879c4cc6b..c3d69b287df824 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -137,6 +137,11 @@ static const struct acpi_device_id i2c_acpi_ignored_device_ids[] = {
- 	{}
- };
- 
-+struct i2c_acpi_irq_context {
-+	int irq;
-+	int wake_capable;
-+};
-+
- static int i2c_acpi_do_lookup(struct acpi_device *adev,
- 			      struct i2c_acpi_lookup *lookup)
- {
-@@ -170,11 +175,14 @@ static int i2c_acpi_do_lookup(struct acpi_device *adev,
- 
- static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
- {
--	int *irq = data;
-+	struct i2c_acpi_irq_context *irq_ctx = data;
- 	struct resource r;
- 
--	if (*irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r))
--		*irq = i2c_dev_irq_from_resources(&r, 1);
-+	if (irq_ctx->irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r)) {
-+		irq_ctx->irq = i2c_dev_irq_from_resources(&r, 1);
-+		irq_ctx->wake_capable =
-+			r.flags & IORESOURCE_IRQ_WAKECAPABLE ? 1 : 0;
-+	}
- 
- 	return 1; /* No need to add resource to the list */
- }
-@@ -182,31 +190,42 @@ static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
- /**
-  * i2c_acpi_get_irq - get device IRQ number from ACPI
-  * @client: Pointer to the I2C client device
-+ * @wake_capable: Set to 1 if the IRQ is wake capable
-  *
-  * Find the IRQ number used by a specific client device.
-  *
-  * Return: The IRQ number or an error code.
-  */
--int i2c_acpi_get_irq(struct i2c_client *client)
-+int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
- {
- 	struct acpi_device *adev = ACPI_COMPANION(&client->dev);
- 	struct list_head resource_list;
--	int irq = -ENOENT;
-+	struct i2c_acpi_irq_context irq_ctx = {
-+		.irq = -ENOENT,
-+		.wake_capable = 0,
-+	};
- 	int ret;
- 
- 	INIT_LIST_HEAD(&resource_list);
- 
-+	if (wake_capable)
-+		*wake_capable = 0;
-+
- 	ret = acpi_dev_get_resources(adev, &resource_list,
--				     i2c_acpi_add_resource, &irq);
-+				     i2c_acpi_add_resource, &irq_ctx);
- 	if (ret < 0)
- 		return ret;
- 
- 	acpi_dev_free_resource_list(&resource_list);
- 
--	if (irq == -ENOENT)
--		irq = acpi_dev_gpio_irq_get(adev, 0);
-+	if (irq_ctx.irq == -ENOENT)
-+		irq_ctx.irq = acpi_dev_gpio_irq_get_wake(
-+			adev, 0, &irq_ctx.wake_capable);
-+
-+	if (wake_capable)
-+		*wake_capable = irq_ctx.wake_capable;
- 
--	return irq;
-+	return irq_ctx.irq;
- }
- 
- static int i2c_acpi_get_info(struct acpi_device *adev,
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 91007558bcb260..97315b41550213 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -468,6 +468,7 @@ static int i2c_device_probe(struct device *dev)
- 	struct i2c_client	*client = i2c_verify_client(dev);
- 	struct i2c_driver	*driver;
- 	int status;
-+	int acpi_wake_capable = 0;
- 
- 	if (!client)
- 		return 0;
-@@ -487,7 +488,10 @@ static int i2c_device_probe(struct device *dev)
- 			if (irq == -EINVAL || irq == -ENODATA)
- 				irq = of_irq_get(dev->of_node, 0);
- 		} else if (ACPI_COMPANION(dev)) {
--			irq = i2c_acpi_get_irq(client);
-+			irq = i2c_acpi_get_irq(client, &acpi_wake_capable);
-+
-+			if (irq > 0 && acpi_wake_capable)
-+				client->flags |= I2C_CLIENT_WAKE;
- 		}
- 		if (irq == -EPROBE_DEFER) {
- 			status = irq;
-diff --git a/drivers/i2c/i2c-core.h b/drivers/i2c/i2c-core.h
-index 87e2c914f1c57b..8e336638a0cd2e 100644
---- a/drivers/i2c/i2c-core.h
-+++ b/drivers/i2c/i2c-core.h
-@@ -61,11 +61,11 @@ static inline int __i2c_check_suspended(struct i2c_adapter *adap)
- #ifdef CONFIG_ACPI
- void i2c_acpi_register_devices(struct i2c_adapter *adap);
- 
--int i2c_acpi_get_irq(struct i2c_client *client);
-+int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable);
- #else /* CONFIG_ACPI */
- static inline void i2c_acpi_register_devices(struct i2c_adapter *adap) { }
- 
--static inline int i2c_acpi_get_irq(struct i2c_client *client)
-+static inline int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
- {
- 	return 0;
- }
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/spi/spi-pxa2xx.c: In function 'pxa2xx_spi_init_pdata':
+>> drivers/spi/spi-pxa2xx.c:1457:24: warning: unused variable 'dev' [-Wunused-variable]
+    1457 |         struct device *dev = &pdev->dev;
+         |                        ^~~
+
+
+vim +/dev +1457 drivers/spi/spi-pxa2xx.c
+
+  1452	
+  1453	static struct pxa2xx_spi_controller *
+  1454	pxa2xx_spi_init_pdata(struct platform_device *pdev)
+  1455	{
+  1456		struct pxa2xx_spi_controller *pdata;
+> 1457		struct device *dev = &pdev->dev;
+  1458		struct ssp_device *ssp;
+  1459		struct resource *res;
+  1460		struct device *parent = pdev->dev.parent;
+  1461		struct pci_dev *pcidev = dev_is_pci(parent) ? to_pci_dev(parent) : NULL;
+  1462		const struct pci_device_id *pcidev_id = NULL;
+  1463		enum pxa_ssp_type type;
+  1464		const void *match;
+  1465		int status;
+  1466		u64 uid;
+  1467	
+  1468		if (pcidev)
+  1469			pcidev_id = pci_match_id(pxa2xx_spi_pci_compound_match, pcidev);
+  1470	
+  1471		match = device_get_match_data(&pdev->dev);
+  1472		if (match)
+  1473			type = (enum pxa_ssp_type)match;
+  1474		else if (pcidev_id)
+  1475			type = (enum pxa_ssp_type)pcidev_id->driver_data;
+  1476		else
+  1477			return ERR_PTR(-EINVAL);
+  1478	
+  1479		pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
+  1480		if (!pdata)
+  1481			return ERR_PTR(-ENOMEM);
+  1482	
+  1483		ssp = &pdata->ssp;
+  1484	
+  1485		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+  1486		ssp->mmio_base = devm_ioremap_resource(&pdev->dev, res);
+  1487		if (IS_ERR(ssp->mmio_base))
+  1488			return ERR_CAST(ssp->mmio_base);
+  1489	
+  1490		ssp->phys_base = res->start;
+  1491	
+
 -- 
-2.37.2.789.g6183377224-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
