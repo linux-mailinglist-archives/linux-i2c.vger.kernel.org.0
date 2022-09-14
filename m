@@ -2,110 +2,147 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C474A5B89C0
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Sep 2022 16:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 289D65B8AEB
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Sep 2022 16:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiINOCh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Sep 2022 10:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51602 "EHLO
+        id S229632AbiINOpw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Sep 2022 10:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiINOCC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Sep 2022 10:02:02 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5708978BFA
-        for <linux-i2c@vger.kernel.org>; Wed, 14 Sep 2022 07:01:17 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id p5so18375832ljc.13
-        for <linux-i2c@vger.kernel.org>; Wed, 14 Sep 2022 07:01:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=4I1nWuKw3OANLT7/DYo/zylVSp6G+u/GpJfP6xzHR3E=;
-        b=brLbhteVZvljyIvgq/BZuRLdaBrU3dauTxDoV0afpm3D8G8eC+PzDhihujize4u5bY
-         xgox21O6n2RkerLtHPJSxFlI9Ypd4EaaCMtXQ7yq5LZNyMV3rxWn43mV+DL93secxJ35
-         4Mo/5OnJiR6EUaDKMTG+vYej6lxDoTN17UAF7qfMYvtkuVe2JYPn54zshCzOug6c4hnm
-         0PMtdZptGI+KTwKQPmr17gsklS46PN+JxnAiFa0Kz1YXmHRDDEHnUiBiga5Vbxp6gH4i
-         w0hl0XbK0nFJOe2yMuLg3FVQgvh34lleAXvP2oQC+kW2m8mmi10ye76Qq7J6zmCtULXy
-         wI1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=4I1nWuKw3OANLT7/DYo/zylVSp6G+u/GpJfP6xzHR3E=;
-        b=x9EkHEXjmkKX5FxUhfcHUagcgo1Lc07t9hCzf/h44dDfdaU36LEU9rsi+kwfhnAcMQ
-         6neS9WBmbMGEQSspAhwUuUvKJ9KPVO4n7q7TLTji/xfl2/asf7R07qiOS+78tyGxx1J7
-         XYEiNqNuprJDZYpHH4YOQaNZu+XAbxjT+tRCDIOyMkwOOp2GHFmHy5jKVgybifUVJ0aZ
-         x84lZTsoXmlUtsVa+TDLxsWLVSk/fcsnVoM0kpIDV9Gzu+cRIfsypVFwYRUqcxz+am06
-         hFXWYm0ZLUePGcbnVseANbhkn2GXxUqox5sjnqavy0BLu8ANUYZbrz21pHUp0hg/ozQ/
-         h6Tw==
-X-Gm-Message-State: ACgBeo39vDimUxGz3PbUKQvggWPO53o1VSnazDg0E2MeTA7Pws8yFahJ
-        3H3cfiLT2eLS+L+bQBjVXn0+IY0l/kSJTgDsJCRpMw==
-X-Google-Smtp-Source: AA6agR6JkJbCqyE2gTrtp6CclhDjtY75sWE4XsKvRX/lZhn/DSwVZZASJB/yTmhXGA6tUkOdrnfrqI0qNyYf9XVzF8k=
-X-Received: by 2002:a05:651c:214:b0:26a:b03b:9e0c with SMTP id
- y20-20020a05651c021400b0026ab03b9e0cmr10198201ljn.463.1663164075540; Wed, 14
- Sep 2022 07:01:15 -0700 (PDT)
+        with ESMTP id S229915AbiINOpq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Sep 2022 10:45:46 -0400
+X-Greylist: delayed 1429 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Sep 2022 07:45:44 PDT
+Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.146.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D40286DA
+        for <linux-i2c@vger.kernel.org>; Wed, 14 Sep 2022 07:45:44 -0700 (PDT)
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway33.websitewelcome.com (Postfix) with ESMTP id 4816733990
+        for <linux-i2c@vger.kernel.org>; Wed, 14 Sep 2022 09:21:55 -0500 (CDT)
+Received: from 162-215-252-169.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id YTH0ofhxj3RgQYTH1o0d9S; Wed, 14 Sep 2022 09:21:55 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=rUdLFHX1mYAXkQlt7ztJE1RiYb3g0U1jBXFOBL0FRDA=; b=ooTvrjtNA5VYXh45ZTEW6RUY/g
+        iix7zlnKlPpCfmkRZwtr5UnPX1mrUvM2DklkS+TUa91AGRj5xJD0D54C8DidiuxyFJUKJVwritFRg
+        mROlWPwD1xH+/L9BWADfPHD38Bg9UxW7mNtEYBnFZKTTAjLYmUNJ1kOiqiKec2BApqAJ/O67p4cdH
+        tWHk6gTCYCPOEG/lr4HMR/Ug/Rb99R6pTga82nS1VZfVZLd46eVVdf5OUzTz4jxuEjfZmV/g6iZTS
+        l9EJEVQuwrP0EcLl4/OTCXxWqTGRGlpbdKwz38izSDURj7+NhS/kxqphukJ6at3ZeasS+T3klPyDL
+        TpmgllVQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54310 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <linux@roeck-us.net>)
+        id 1oYTH0-002OkX-6z;
+        Wed, 14 Sep 2022 14:21:54 +0000
+Date:   Wed, 14 Sep 2022 07:21:50 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Adam Honse <calcprogrammer1@gmail.com>, linux-i2c@vger.kernel.org,
+        Zev Weiss <zev@bewilderbeest.net>
+Subject: Re: [PATCH v2] i2c: New driver for Nuvoton SMBus adapters
+Message-ID: <20220914142150.GA4181124@roeck-us.net>
+References: <20220907020651.2309354-1-calcprogrammer1@gmail.com>
+ <20220914153424.63c957f4@endymion.delvare>
 MIME-Version: 1.0
-References: <20220909212543.17428-1-jbx6244@gmail.com> <f2cb42c8-3664-a2d5-074d-5c9a10c693e8@gmail.com>
-In-Reply-To: <f2cb42c8-3664-a2d5-074d-5c9a10c693e8@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 14 Sep 2022 16:00:38 +0200
-Message-ID: <CAPDyKFrF5Tn9a_hqp7mrp14YCrcX4LV6Y5qNxOz2ZSRJJuMmCA@mail.gmail.com>
-Subject: Re: [PATCH v1 04/11] dt-bindings: mmc: rockchip: add rockchip,rk3128-dw-mshc
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     kever.yang@rock-chips.com, sjg@chromium.org,
-        philipp.tomsich@vrull.eu, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        kishon@ti.com, vkoul@kernel.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
-        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
-        zhangqing@rock-chips.com, jamie@jamieiles.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914153424.63c957f4@endymion.delvare>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1oYTH0-002OkX-6z
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:54310
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 3
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, 10 Sept 2022 at 00:02, Johan Jonker <jbx6244@gmail.com> wrote:
->
-> Add rockchip,rk3128-dw-mshc compatible string.
->
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+On Wed, Sep 14, 2022 at 03:34:24PM +0200, Jean Delvare wrote:
+> Hi Adam,
+> 
+> On Wed,  7 Sep 2022 02:06:51 +0000, Adam Honse wrote:
+> > This patch introduces a new driver for the SMBus adapter that is built in
+> > to most Nuvoton Super-IO chips.  This SMBus adapter is used for RGB
+> > lighting control on some ASUS motherboards with Intel chipsets.
+> > 
+> > The interface's register description is available in the supported
+> > devices' datasheets.  Operation of this interface has been verified
+> > with OpenRGB on an ASUS PRIME Z270-A motherboard.
+> 
+> Care to point me to one such datasheet?
+> 
+> The following errors are reported by ./scripts/checkpatch.pl (which I
+> invite you to run before posting any patch):
+> 
+> RROR: "foo * bar" should be "foo *bar"
+> #452: FILE: drivers/i2c/busses/i2c-nct6793.c:295:
+> +static struct i2c_adapter * nct6793_add_adapter(unsigned short smba, const char *name)
+> 
+> ERROR: trailing whitespace
+> #526: FILE: drivers/i2c/busses/i2c-nct6793.c:369:
+> +^I^I$
+> 
+> ERROR: space required before the open parenthesis '('
+> #527: FILE: drivers/i2c/busses/i2c-nct6793.c:370:
+> +		if(IS_ERR(sio_data->adapter))
+> 
+> Please fix before resubmitting.
+> 
+> Also, would you consider declaring yourself the maintainer of this new
+> driver? If so, please add a new entry in MAINTAINERS and add yourself
+> there. You can use the "I2C/SMBUS ISMT DRIVER" entry as an example.
+> 
+> If not, no worry, I'll add the driver to my own list.
+> 
+> I see that there already seem to be a driver for the SMBus interface of
+> Novoton Super-I/O chipsets:
+> 
+> drivers/hwmon/nct6775-i2c.c
+> 
+> However that driver seems to be fairly limited in capabilities (on
+> purpose). I'm adding the author of this driver and the maintainer of the
+> hwmon subsystem to Cc. How do the two drivers relate to each other? Are
+> they for the same, or different interfaces? If different, we need to
+> come up with names to designate them unambiguously. If the same, then
+> I'm afraid both drivers will step on each other's toes?
+> 
 
-Applied for next, thanks!
+That driver connects to the I2C slave interface on Nuvoton chips.
+The driver here implements support for its I2C master. The driver here
+talks to the master interface on the chip through superio, and is
+typically connected to the main processor on a system. The other driver
+is an I2C slave driver. The slave interface on NCT chips is normally
+connected to a BMC.
 
-Kind regards
-Uffe
+The i/o address by this driver uses a different base address register
+than its hwmon platform driver (which also connects to the chip
+through superio), so this driver should hopefully be able to
+interoperate with that driver. It would be desirable to confirm that
+the two drivers do not step on each other, though (especially since the
+sio register page is the same).
 
-
-> ---
->  Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
-> index bad28bc74..95f59a5e3 100644
-> --- a/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
-> @@ -32,6 +32,7 @@ properties:
->                - rockchip,px30-dw-mshc
->                - rockchip,rk1808-dw-mshc
->                - rockchip,rk3036-dw-mshc
-> +              - rockchip,rk3128-dw-mshc
->                - rockchip,rk3228-dw-mshc
->                - rockchip,rk3308-dw-mshc
->                - rockchip,rk3328-dw-mshc
-> --
-> 2.20.1
->
+Thanks,
+Guenter
