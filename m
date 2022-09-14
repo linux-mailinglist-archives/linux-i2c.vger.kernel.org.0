@@ -2,76 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AC15B8EE9
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Sep 2022 20:33:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BC45B8FDB
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Sep 2022 23:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbiINSdi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Sep 2022 14:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
+        id S229495AbiINVA4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Sep 2022 17:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiINSdf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Sep 2022 14:33:35 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8DD786CD
-        for <linux-i2c@vger.kernel.org>; Wed, 14 Sep 2022 11:33:34 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id s11so8438666ilt.7
-        for <linux-i2c@vger.kernel.org>; Wed, 14 Sep 2022 11:33:34 -0700 (PDT)
+        with ESMTP id S229480AbiINVAw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Sep 2022 17:00:52 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204D72DAA6
+        for <linux-i2c@vger.kernel.org>; Wed, 14 Sep 2022 14:00:49 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id l6so8640304ilk.13
+        for <linux-i2c@vger.kernel.org>; Wed, 14 Sep 2022 14:00:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=vSj623uSHxO0oVI/Q9wO/OKZArt2x1BaVoPyjdenhVw=;
-        b=be+8kTLNJULJ2PK8PDlYNxkvOH9mMmtB2rahv3H4TKnEDphAAkmXCOE/IJeod6Hn7s
-         5bfrqzY55uo+WMDgfUuRTLnl3LQV0KqxaKo9Hoaec6URvxcr4+Uuej3n9eNHdHp4OrQy
-         hhupSd3M3qkMCC7pUEhaLICCpyPOIsfS/nENA=
+        bh=F0XVjfoKHP+OTYQ82bFgm1NTW9Uts87VD6ivnlOEVVk=;
+        b=T828Zm1P4W0m3y/FZrxNIRdJ04GyBvfBtyrjBpQ6PS3iRh4EoUYJ33eF85iXwdakkb
+         Lor83qEZOLy8+rL0dFH3dXrcjWptShSbcG1g4/T30sJkXkwoNkZshdhhgXfX38SzxOea
+         /nl5dOJNmmr4aBteO5lEgPZaqG+rXsJ7HEOmU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=vSj623uSHxO0oVI/Q9wO/OKZArt2x1BaVoPyjdenhVw=;
-        b=EL0LZyq77p9RMolkv8B6SW2pK/b6e3NJ9/ul/iHC2Cx1JGRNjx+9FUE8nh1e49KbJK
-         Bwx25kp4WFz0QIl7GtmJO+wHcQRzI6xnYnraSpQApjmFjx+fovD78vZADYUrdSOfQNY4
-         TYK95yhD3Yyb1qbPCMgpc82d3SrLt+1rv5GX7NspEisMwfDPDZnwGFwifJdMCrb07n04
-         FxKiBfbHkraACL+S2W3vNCUmJaPUy/YpJYtH1jItrdCK0J+Uchnopc2ftCpfac3VIBx/
-         FIRcIIhQwcosCP+Yqc2VJGFZqWla9CjotsPzmNmdmjY0PLdN8rhAQ2pMQALDPVhtvqgb
-         3aIw==
-X-Gm-Message-State: ACgBeo0erMqs3cC47gDZ8Tu813iWpxDAzS15NR+B5sU2h/NY9nohVZlk
-        5hn0Mkvyp1we8cea6dzsLr9UaUQ4KvVIKg==
-X-Google-Smtp-Source: AA6agR4myZoMp8U/zmy53QmDor9P6JLqzM9FWDauBKK8Yv19sFLQFygrEaLJk6VGbQhaEYWWGYAiew==
-X-Received: by 2002:a05:6e02:1ba8:b0:2eb:7d50:5fb8 with SMTP id n8-20020a056e021ba800b002eb7d505fb8mr15609228ili.296.1663180413692;
-        Wed, 14 Sep 2022 11:33:33 -0700 (PDT)
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com. [209.85.166.178])
-        by smtp.gmail.com with ESMTPSA id p20-20020a056e02105400b002dcfbf36438sm6911611ilj.12.2022.09.14.11.33.29
+        bh=F0XVjfoKHP+OTYQ82bFgm1NTW9Uts87VD6ivnlOEVVk=;
+        b=XLrpiyPEuok4giCkShEHVvT7ATnz8y742olnS2W7o6rUrnYu288hRkg4AQohp7SBSL
+         E5MbJJ9EcOvA1IsHfZNODEQYfdq6zHk5l9vgBd8yCgjoUTTxUZ+zMQZoM6oR/V2v9e0l
+         EQADJSea6EUMJDdYVmSmkOfp7GXutj/f+/qQdofmXgq5c3Whkm3tVobxa4pHFhfW3wba
+         khF2P6onUyCJrTs4aUN0ihrNLTCJ1Y68JSvhPwX1qgPAKjay40+1ssVTuD2Rb9cLL/VD
+         z0pmfmnwg/bUlaDVGkIaVLrmsNiizz8b8ARLeevqlCFUELn8F5yW+aRq//31MmAyCbqH
+         IY5Q==
+X-Gm-Message-State: ACgBeo0+m4gLb5ReGBx4aaUDMW2ciSPPr7e2OnhwiGdpzkjsTl+5l7Ve
+        tcfNeDk7LXC0+iKl+xJVV1P04Bgd070/WA==
+X-Google-Smtp-Source: AA6agR4zbSQvEPAktUzdibjH0AW0qBqcWv0xBTzjjGRj5bdDpyfHGpJmge9A4Yz6Cjb5QlUujluQwA==
+X-Received: by 2002:a05:6e02:eea:b0:2eb:37a4:26d1 with SMTP id j10-20020a056e020eea00b002eb37a426d1mr15254026ilk.288.1663189248094;
+        Wed, 14 Sep 2022 14:00:48 -0700 (PDT)
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com. [209.85.166.49])
+        by smtp.gmail.com with ESMTPSA id q14-20020a02a98e000000b0035883545473sm149233jam.2.2022.09.14.14.00.45
         for <linux-i2c@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Sep 2022 11:33:30 -0700 (PDT)
-Received: by mail-il1-f178.google.com with SMTP id k13so6769227ilc.11
-        for <linux-i2c@vger.kernel.org>; Wed, 14 Sep 2022 11:33:29 -0700 (PDT)
-X-Received: by 2002:a05:6e02:2189:b0:2f1:92d4:6b22 with SMTP id
- j9-20020a056e02218900b002f192d46b22mr14224475ila.210.1663180409089; Wed, 14
- Sep 2022 11:33:29 -0700 (PDT)
+        Wed, 14 Sep 2022 14:00:45 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id g8so10709471iob.0
+        for <linux-i2c@vger.kernel.org>; Wed, 14 Sep 2022 14:00:45 -0700 (PDT)
+X-Received: by 2002:a05:6638:4110:b0:35a:6d6b:57f7 with SMTP id
+ ay16-20020a056638411000b0035a6d6b57f7mr1984073jab.134.1663189244533; Wed, 14
+ Sep 2022 14:00:44 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220912221317.2775651-1-rrangel@chromium.org>
- <20220912160931.v2.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
- <YyC9N62JaMGaeanf@smile.fi.intel.com> <CAHQZ30DAr_BwH03=bG9tfCSGW+-he-c-4PPeJMOqH28cVcKDoA@mail.gmail.com>
- <YyDNAw+ur177ayY0@smile.fi.intel.com> <CAHQZ30DP1asiMj7hoebQQvGqE36sBDjaFmp3ju3eUEF1PruFeg@mail.gmail.com>
- <YyGh6Yjbb/5rkh35@smile.fi.intel.com>
-In-Reply-To: <YyGh6Yjbb/5rkh35@smile.fi.intel.com>
+ <20220912160931.v2.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid> <YyFslxMchzntebVb@black.fi.intel.com>
+In-Reply-To: <YyFslxMchzntebVb@black.fi.intel.com>
 From:   Raul Rangel <rrangel@chromium.org>
-Date:   Wed, 14 Sep 2022 12:33:17 -0600
-X-Gmail-Original-Message-ID: <CAHQZ30Dsk2ikhctYSk_eP=1qcOOn_tjgtCftPOqQFkHNfQwBsg@mail.gmail.com>
-Message-ID: <CAHQZ30Dsk2ikhctYSk_eP=1qcOOn_tjgtCftPOqQFkHNfQwBsg@mail.gmail.com>
+Date:   Wed, 14 Sep 2022 15:00:20 -0600
+X-Gmail-Original-Message-ID: <CAHQZ30AhQOxUBtbs8enUnGkBbtPYAN=_6vDV-9CcuMLMypZhtg@mail.gmail.com>
+Message-ID: <CAHQZ30AhQOxUBtbs8enUnGkBbtPYAN=_6vDV-9CcuMLMypZhtg@mail.gmail.com>
 Subject: Re: [PATCH v2 07/13] i2c: acpi: Use ACPI wake capability bit to set wake_irq
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
 Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
         linux-input <linux-input@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         "jingle.wu" <jingle.wu@emc.com.tw>,
         "Limonciello, Mario" <mario.limonciello@amd.com>,
         Tim Van Patten <timvp@google.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Hans de Goede <hdegoede@redhat.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Wolfram Sang <wsa@kernel.org>,
         "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
@@ -86,47 +83,196 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-> > > This is similar to what of_i2c_get_board_info() does, no?
-> > > Note: _get_ there.
+On Tue, Sep 13, 2022 at 11:54 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> Hi,
+>
+> On Mon, Sep 12, 2022 at 04:13:11PM -0600, Raul E Rangel wrote:
+> > Device tree already has a mechanism to pass the wake_irq. It does this
+> > by looking for the wakeup-source property and setting the
+> > I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses the
+> > ACPI interrupt wake flag to determine if the interrupt can be used to
+> > wake the system. Previously the i2c drivers had to make assumptions and
+> > blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
+> > If there is a device with an Active Low interrupt and the device gets
+> > powered off while suspending, the interrupt line will go low since it's
+> > no longer powered and wakes the system. For this reason we should
+> > respect the board designers wishes and honor the wake bit defined on the
+> > interrupt.
 > >
-> > `*info` is an out parameter in that case. Ideally I would have
-> > `i2c_acpi_get_irq`, `acpi_dev_gpio_irq_get_wake`,
-> > `platform_get_irq_optional`, and `i2c_dev_irq_from_resources` all
-> > return a `struct irq_info {int irq; bool wake_capable;}`. This would
-> > be a larger change though.
+> > Signed-off-by: Raul E Rangel <rrangel@chromium.org>
+> > ---
+> >
+> > Changes in v2:
+> > - Look at wake_cabple bit for IRQ/Interrupt resources
+> >
+> >  drivers/i2c/i2c-core-acpi.c | 37 ++++++++++++++++++++++++++++---------
+> >  drivers/i2c/i2c-core-base.c |  6 +++++-
+> >  drivers/i2c/i2c-core.h      |  4 ++--
+> >  3 files changed, 35 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+> > index c762a879c4cc6b..c3d69b287df824 100644
+> > --- a/drivers/i2c/i2c-core-acpi.c
+> > +++ b/drivers/i2c/i2c-core-acpi.c
+> > @@ -137,6 +137,11 @@ static const struct acpi_device_id i2c_acpi_ignored_device_ids[] = {
+> >       {}
+> >  };
+> >
+
+> > +struct i2c_acpi_irq_context {
+> > +     int irq;
+> > +     int wake_capable;
 >
-> Seems the ACPI analogue is i2c_acpi_fill_info(). Can we do it there?
+> Why not bool?
+>
+SGTM
+
+
+> Also perhaps 'wakeable'?
 >
 
-So I originally had that thought, but decided against it to avoid
-changing too many things,
-but since you brought it up, I thought I would try it.
+I kept it as wake_capable since I want to keep some consistency with
+the ACPI nodes.
 
-So I moved the GPIO lookup into `i2c_acpi_do_lookup`, but it failed
-spectacularly.
-I've linked some logs of both cases. grep for `RX:` to see my logging messages.
+> > +};
+> > +
+> >  static int i2c_acpi_do_lookup(struct acpi_device *adev,
+> >                             struct i2c_acpi_lookup *lookup)
+> >  {
+> > @@ -170,11 +175,14 @@ static int i2c_acpi_do_lookup(struct acpi_device *adev,
+> >
+> >  static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
+> >  {
+> > -     int *irq = data;
+> > +     struct i2c_acpi_irq_context *irq_ctx = data;
+> >       struct resource r;
+> >
+> > -     if (*irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r))
+> > -             *irq = i2c_dev_irq_from_resources(&r, 1);
+> > +     if (irq_ctx->irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r)) {
+> > +             irq_ctx->irq = i2c_dev_irq_from_resources(&r, 1);
+> > +             irq_ctx->wake_capable =
+> > +                     r.flags & IORESOURCE_IRQ_WAKECAPABLE ? 1 : 0;
+>
+> Then you can just do this:
+>
+>                 irq_ctx->wakeable = r.flags & IORESOURCE_IRQ_WAKECAPABLE;
+>
+> > +     }
+> >
+> >       return 1; /* No need to add resource to the list */
+> >  }
+> > @@ -182,31 +190,42 @@ static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
+> >  /**
+> >   * i2c_acpi_get_irq - get device IRQ number from ACPI
+> >   * @client: Pointer to the I2C client device
+> > + * @wake_capable: Set to 1 if the IRQ is wake capable
+> >   *
+> >   * Find the IRQ number used by a specific client device.
+> >   *
+> >   * Return: The IRQ number or an error code.
+> >   */
+> > -int i2c_acpi_get_irq(struct i2c_client *client)
+> > +int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
+>
+> bool here too
+>
+> >  {
+> >       struct acpi_device *adev = ACPI_COMPANION(&client->dev);
+> >       struct list_head resource_list;
+> > -     int irq = -ENOENT;
+> > +     struct i2c_acpi_irq_context irq_ctx = {
+> > +             .irq = -ENOENT,
+> > +             .wake_capable = 0,
+> > +     };
+> >       int ret;
+> >
+> >       INIT_LIST_HEAD(&resource_list);
+> >
+> > +     if (wake_capable)
+> > +             *wake_capable = 0;
+>
+> I think it is better to touch this only after the function succeeds so..
+>
+> > +
+> >       ret = acpi_dev_get_resources(adev, &resource_list,
+> > -                                  i2c_acpi_add_resource, &irq);
+> > +                                  i2c_acpi_add_resource, &irq_ctx);
+> >       if (ret < 0)
+> >               return ret;
+> >
+> >       acpi_dev_free_resource_list(&resource_list);
+> >
+> > -     if (irq == -ENOENT)
+> > -             irq = acpi_dev_gpio_irq_get(adev, 0);
+> > +     if (irq_ctx.irq == -ENOENT)
+> > +             irq_ctx.irq = acpi_dev_gpio_irq_get_wake(
+> > +                     adev, 0, &irq_ctx.wake_capable);
+> > +
+> > +     if (wake_capable)
+> > +             *wake_capable = irq_ctx.wake_capable;
+>
+> ... here only.
+>
+> >
+> > -     return irq;
+> > +     return irq_ctx.irq;
+> >  }
+> >
+> >  static int i2c_acpi_get_info(struct acpi_device *adev,
+> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> > index 91007558bcb260..97315b41550213 100644
+> > --- a/drivers/i2c/i2c-core-base.c
+> > +++ b/drivers/i2c/i2c-core-base.c
+> > @@ -468,6 +468,7 @@ static int i2c_device_probe(struct device *dev)
+> >       struct i2c_client       *client = i2c_verify_client(dev);
+> >       struct i2c_driver       *driver;
+> >       int status;
+> > +     int acpi_wake_capable = 0;
+>
+> You can declare this in the below block instead.
+>
+> >
+> >       if (!client)
+> >               return 0;
+> > @@ -487,7 +488,10 @@ static int i2c_device_probe(struct device *dev)
+> >                       if (irq == -EINVAL || irq == -ENODATA)
+> >                               irq = of_irq_get(dev->of_node, 0);
+> >               } else if (ACPI_COMPANION(dev)) {
+>
+>                         bool wakeable;
+>
+> > -                     irq = i2c_acpi_get_irq(client);
+> > +                     irq = i2c_acpi_get_irq(client, &acpi_wake_capable);
+> > +
+>                         if (irq > 0 && wakeable)
+>                                 client->flags |= I2C_CLIENT_WAKE;
+> >               }
+> >               if (irq == -EPROBE_DEFER) {
+> >                       status = irq;
+> > diff --git a/drivers/i2c/i2c-core.h b/drivers/i2c/i2c-core.h
+> > index 87e2c914f1c57b..8e336638a0cd2e 100644
+> > --- a/drivers/i2c/i2c-core.h
+> > +++ b/drivers/i2c/i2c-core.h
+> > @@ -61,11 +61,11 @@ static inline int __i2c_check_suspended(struct i2c_adapter *adap)
+> >  #ifdef CONFIG_ACPI
+> >  void i2c_acpi_register_devices(struct i2c_adapter *adap);
+> >
+> > -int i2c_acpi_get_irq(struct i2c_client *client);
+> > +int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable);
+> >  #else /* CONFIG_ACPI */
+> >  static inline void i2c_acpi_register_devices(struct i2c_adapter *adap) { }
+> >
+> > -static inline int i2c_acpi_get_irq(struct i2c_client *client)
+> > +static inline int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
+> >  {
+> >       return 0;
+> >  }
+> > --
+> > 2.37.2.789.g6183377224-goog
 
-* https://0paste.com/393416 - Logs with IRQ lookup happening in
-`i2c_acpi_do_lookup`
-    * We can see that `i2c_acpi_do_lookup` gets called in three cases
-         1) Early on from i2c_acpi_notify when the I2C ACPI nodes are
-first created
-         2) From `i2c_dw_adjust_bus_speed` as part of `dw_i2c_plat_probe`
-         3) From `i2c_register_adapter` as part of `i2c_dw_probe_master`.
-    * What happens is that all of these calls happen before the GPIO
-chip has been registered.
-      This means that `acpi_dev_gpio_irq_get` will return `-EPROBE_DEFER`. This
-      messes something up in the i2c init sequence and the devices are never
-      probed again.
-    * You can see the `amd gpio driver loaded` message after all the
-i2c probing.
-* https://0paste.com/393420 - Logs of a normal boot
-    * Here we can see the GPIO controller registers early
-    * We can see the i2c devices being probed by `__driver_attach_async_helper`.
-      I'm guessing the device was enqueued as part of `i2c_acpi_register_device`
-      early on and it gets probed later.
+I'll push out another patch series with all the latest changes.
 
-I could try moving the gpio lookup into `i2c_acpi_get_info`, but I
-think that suffers from the
-same problem, the stack can't handle a PROBE_DEFER. So I think we need to keep
-the lookup in `i2c_device_probe` for the PROBE_DEFER logic to work correctly.
+Thanks for the reviews everyone.
