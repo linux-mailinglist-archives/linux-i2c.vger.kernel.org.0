@@ -2,206 +2,177 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F995B9909
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Sep 2022 12:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 901EB5B99A0
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Sep 2022 13:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiIOKp5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 15 Sep 2022 06:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
+        id S229612AbiIOLbk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 15 Sep 2022 07:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiIOKp4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 15 Sep 2022 06:45:56 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DF76B8EB;
-        Thu, 15 Sep 2022 03:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663238755; x=1694774755;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iS7c7k70jjt4AO2BjhynK1wja9yk06pd1HXHiGqzGLQ=;
-  b=gxUQipR19bTm838qtyUPTa8JmRNloyLfwd+OgFlrjQWz9nqPH1r4MyRG
-   OiaPBcphLMJqora8QzCk+W4tBubq/vbC0lM+ywqyDpewaEvSeWpGAykFP
-   7ld+49sjxPie+IUIF1SYTte1gEUy0/uFwlezAC71MrUPCV/dZ/Fo3ryc1
-   /Vdhs0Jp0/1sfsKs2vv3DcEjfOqtaCHcaUJcASTSpknTPWzOYb8VBPtG3
-   l2Ow21KEU28ls2UHMxQnml+as4alMWxGvIKQqqlOUHotpuFSspOgIo3je
-   m9n7X3buc5n5kj6DXmwjRLPVvtxmS+yQuhMxIeTTSef/D560Zbst4huBu
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="297405352"
-X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
-   d="scan'208";a="297405352"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 03:45:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
-   d="scan'208";a="706304573"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Sep 2022 03:45:51 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 86F0C235; Thu, 15 Sep 2022 13:46:08 +0300 (EEST)
-Date:   Thu, 15 Sep 2022 13:46:08 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Raul E Rangel <rrangel@chromium.org>
-Cc:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org,
-        jingle.wu@emc.com.tw, rafael@kernel.org,
-        andriy.shevchenko@linux.intel.com, mario.limonciello@amd.com,
-        hdegoede@redhat.com, linus.walleij@linaro.org, timvp@google.com,
-        dmitry.torokhov@gmail.com, Wolfram Sang <wsa@kernel.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 07/13] i2c: acpi: Use ACPI wake capability bit to set
- wake_irq
-Message-ID: <YyMCcNl2zU4/xEHN@black.fi.intel.com>
-References: <20220914235801.1731478-1-rrangel@chromium.org>
- <20220914155914.v3.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
-MIME-Version: 1.0
+        with ESMTP id S229487AbiIOLbh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 15 Sep 2022 07:31:37 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FE92FFDF;
+        Thu, 15 Sep 2022 04:31:34 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28FB4MKC000834;
+        Thu, 15 Sep 2022 11:31:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2022-7-12;
+ bh=OooRjHDb7kbQ3CtOkDzOZ0m637wojHuM+Yp6+7oTL+w=;
+ b=rNWxyw5Sm8qFVUg0TTkIgZhg4b0W4aNabEQghVeAG1W9As3hrI2RiPvGnNGP7tUxIcSv
+ C7DvpP0IYyXKlttj+mlEinoAcOAcJzbnAieuBjVC0i4IITwc6t/GK83Y8AwbPtQSGV/w
+ we37ItWRwvQwHH2TG7thqsPdy4eWlt0VXintxLGeMGMV1DsDQghPPYyjvmS3HDRugxI3
+ jaaQ1jKjdnUHKwXKLMPEPL1xiIoQdhzFx1qNv5UkVMHg7k0hYGP2sR/x6x757ABhHpFN
+ BYQaGKliYHZSdmMm0zK+quptshmbofJcoFS1qC0gr50Fp5baFirWEeQ4i4qIIUpjhhtx 9A== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jjxyf4tdh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Sep 2022 11:31:08 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28FBUUYq004553;
+        Thu, 15 Sep 2022 11:31:07 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2172.outbound.protection.outlook.com [104.47.55.172])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3jjym11m8m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Sep 2022 11:31:07 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ebqiJEEELXR+SU0sFibCdux8R0luj9Z83JXmIKGoqajlY5V3/xKfLPc2Itz3sk8asP7XMM6BpQKfz/N54JF85uLdt329A7EcRFfpt8II9tmk/Ntlvo0lLL4/PKBopie5gkIAwo0w2JWDLfNforipVpcOMHGi3LanEZDSSTDIw6hhxqRhYj/bHgyz0ZqAshKrqDj3oSR09bPKe6+S5Ha/SM0bwQKfHSJeCEueJkk7xJrIxHAFOaBfe+zq1emBPI8Yam5t/udO1YPyf21RzylCJntfyeYHoYXdVXUPLvcnDeKnhF+VeakNNIrrlgPPfkIT0zSTBM8XRJGLTdRULfcf8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OooRjHDb7kbQ3CtOkDzOZ0m637wojHuM+Yp6+7oTL+w=;
+ b=nrFmjplujpFhPjntUdT0HumEFZAYpfFBdgoQAmEo2Vs7JEb1tvDxlnO32CioZNeHpDaXEYBvhzSsU/rLVimD4LuLAPNjBKAXad8iEVjheA6BXIVmz4fn3DhLFr5hP50PunO7KNBBEdCxZVdTy1/nVl9ipG8DRfLrMPLKANDM7P++KoKWftK9W09FcG3S/fVROoEB+uvMUyp2GfitX0RAS4VbqPm64a9KuFg36BJCteo5qMSGC8/WlqkAkm53KS+TGtkovThTt2UeCSyhfviVPMeIYBhVsdEDKZ6mVlaY01vuCJc0CeZfw+rUkVHsVF8QA/5UW2qrQ2RGsnbvxggv+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OooRjHDb7kbQ3CtOkDzOZ0m637wojHuM+Yp6+7oTL+w=;
+ b=evEc1bFyWcnyvahHBKJNIA7vRTVRnpfMFJcAdQIRTys6wG59tFZGyfJ3if18XvEAraqayoK+z1+JUgAGV52sdWBR3wPd3eiMihSH72nY1loA72QlRXiIbtgzPS9KnfOM3XEoH07sXjnbInuWOQmiK0i9+CU/ZLVVjQgAj4L+6o8=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by PH0PR10MB5707.namprd10.prod.outlook.com
+ (2603:10b6:510:149::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Thu, 15 Sep
+ 2022 11:31:05 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::a493:38d9:86ee:73d6]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::a493:38d9:86ee:73d6%6]) with mapi id 15.20.5632.015; Thu, 15 Sep 2022
+ 11:31:05 +0000
+Date:   Thu, 15 Sep 2022 14:30:58 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] i2c: mux: harden i2c_mux_alloc() against integer overflows
+Message-ID: <YyMM8iVSHJ4ammsg@kili>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220914155914.v3.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: git-send-email haha only kidding
+X-ClientProxiedBy: ZR0P278CA0178.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:45::22) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2365:EE_|PH0PR10MB5707:EE_
+X-MS-Office365-Filtering-Correlation-Id: d1893769-611a-44f1-5f86-08da970dc6ab
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pDtff4V/NAb6t8CVkVFyK2aXb6yCKTA0s43AWCf3yWB+a2rdnkNOJ/AusoIEwwvplFldySrnJqoWxVQ9IVIxBaNTuUv843UFnm8ZgXX0piiVdaSXhmcCch7IUj+NAh7Bpzu+3GjQibqUwmb5ZwDPHEwrh25jwbTGIIxRnB6gSZrP+o0YhiygREWpG1JJbE+Gd85gB+I20vavDaQwxK8e3yZGcX7FH3juzah3OfLCksoONuQ7/G4ltAN4gxhjCrs1xiDbO5vcAsMbqZbWSvtngHR12rsoZDIW7S3ptZjT6myeTFZ/piJSUqW7WwHMWZBzdCIA+7glYfURme5Zqsy+eXBbxaqxg6miG6w3ETpw2gWz7+i7gD+5+OwGOajlABwqFZcaYLeuPHyAxA+Uv4qNXfRZdDlVb++WcmTiSO589NVRcfhFebANWens1MuFByomuG8zUCOL31Y2qcWlULdOhEQkT1YdusNK0yZHha6JZN8bTSa4OzZP0GI5fIMXE19c1131KJwDkjNChQs38+iBknpsDRfMir4q7cqPF8nxL7BCiWhk64UHDxoKgQ0Arpi4uzndrYGmpoQybnAf06g1HqKJahkOBx97XgXtKcr3hMXuuF19xYvrVPsWUoOTqS95HQ3VsMm4oWG4BHt3ysHvO3YZvuo6lVZqAn47a0R635sIF77J7fgHGEsBssKUSrt9Sl2HANP4PMi+pGtV2iolug==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(136003)(366004)(346002)(39860400002)(376002)(451199015)(5660300002)(316002)(186003)(38100700002)(478600001)(6486002)(2906002)(8936002)(41300700001)(86362001)(6916009)(26005)(6512007)(54906003)(6506007)(6666004)(9686003)(44832011)(33716001)(66476007)(66556008)(4326008)(8676002)(83380400001)(66946007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rGLP/stdEDUn+cndcm/abh6MPdY9XrdBw+lhCrTJbVNDPgw1l4kqHQt4h7jy?=
+ =?us-ascii?Q?QYAGsv+THcHlVNx6m7vP9JoVrsLegddsLHnru9fLYDSsFrM6hboUDPX9paNe?=
+ =?us-ascii?Q?7n5aZSZt/QfemdaDleZqlNv+PPxTRsQ+fYmRQO8old9odoErPuzrZGiCQMO/?=
+ =?us-ascii?Q?9E7kXmTnxlXQ449xyiRvzQkJooALMAt5PaZ/M1yRY4tWXMexI3RvnzqWiIbW?=
+ =?us-ascii?Q?FFj1+BbOZbD7U1E2Yqv/0MeoYjiZParvRwcBkjFWmHLk9ntq9FXgDI/TMToK?=
+ =?us-ascii?Q?WcOv1rwnXIHr4pcMvBBppWsYK7noE2mdTH/HYGBTnY5J0oVYvgxy95PurN+H?=
+ =?us-ascii?Q?MO5YFs/5m1IivJNzvhTC0F0XrGhgSgSVLEIrmW7OuKK0We2QGjXUmi6iLEwu?=
+ =?us-ascii?Q?oUDkUMAaOgWgWn4Lsdiq2+CNhfYbPCVwWAuVEY+pP0cXxlFzWNCwsX9Y0udL?=
+ =?us-ascii?Q?ckzDHjSVcqnAFhVSaBnHI/lyyEzksMtMegriWpehz2UNSFycUZjWrbqZ6fjk?=
+ =?us-ascii?Q?KLQxSCTs6CvFwEn+/nFrxcc/VUhusNSl68DkA04HnEZ6rdwTa7E9MOGR0Ryk?=
+ =?us-ascii?Q?nEJxwFV7ORN1xUNbt115jvvIh6FtWp8f1Ub4fMI8ScnLg//hKzyqLy4IOAtw?=
+ =?us-ascii?Q?hR0tOSYo1HaxYgtQ3T6wDnCJX4ujJmqctzVTOV0558pysdZJt6ogIVVf2Arz?=
+ =?us-ascii?Q?ZxAATY9vQfK5/xaIGRokZa5OrlInuRyioLygnHJ15zJP989AKRrR4PzerfNL?=
+ =?us-ascii?Q?P8/7ahnFSpDCHNZOIiWtl0RaTVWnlKYbBqLrAi+CSkEjwEByd5nXVXUcyj3v?=
+ =?us-ascii?Q?2BdC8iFZsTzoK/VEZeZiRbcmD0FCUE2M1lP+9G4OgnHL5Q9IFe5S1mRHVqF+?=
+ =?us-ascii?Q?t8PJ5OkyMorUsWjOENA9Uok1KD6cwYHdFNxTvj5brq2AgHTB10suWSmxpxWS?=
+ =?us-ascii?Q?Wcrx6XNW5chLxZx33QtxtM+ZJ/uNHPcj3wMZbBVj6Cc+pch/1FYz6JU77ymb?=
+ =?us-ascii?Q?oMZWgftRIouK98dUNj655ryc23OdFxDj1v8tuI9qSoMrRjCMfrASGIgKKCIL?=
+ =?us-ascii?Q?CquSUIizw6//UVx5ERgZ2dJgeVvJ4jTWnttIFevIcNiuDGzcW1ViGR/Ncde6?=
+ =?us-ascii?Q?3qYCT+QarrnKE3fkPGFi/z949pDXVLlWH/T62JBCFBRF8E8W0rnL2jFg6G/K?=
+ =?us-ascii?Q?fhdMjJOCfBAV7Y/rvqpj/TI6J1Cnr6UmHwN+RiWfMaGmISjapbLdEFw3f3jj?=
+ =?us-ascii?Q?EIFjWc4D8+K5wAmlJ5bYil5T/heNirx6Ojn4vE4EpyuqG70IKVscOtWTEgn2?=
+ =?us-ascii?Q?oWcBbvGVBCwWkln+TEJB0VHCjtKy5aT1bGqYgnD1ZvoS04ZAcgU5XByhJQeO?=
+ =?us-ascii?Q?a6PFRJm+51HwhM47B4Dw6gEfu9GsY6g7u+sgY0DqWgLN90CrFNapxc9T74zf?=
+ =?us-ascii?Q?g4aZbd+44lo+DcuUMr5CD2oTNFhECJmQJjHgQ/RIZbVYENnGhWDt11Nucj/w?=
+ =?us-ascii?Q?EP1ivdqtPGlgs/TGPlvcgDxmGcmUxos2FmdGc/mAcI7JIwUHV2ruHGjBcnSd?=
+ =?us-ascii?Q?UTrel9bCJx5WdqHpPuIlfuQu4eGrbWNpKT0S0hoBtQvryBiCzrmgI10k+cee?=
+ =?us-ascii?Q?EQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1893769-611a-44f1-5f86-08da970dc6ab
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2022 11:31:05.1085
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NF7YC5kStTEJTsDWyY3ocGLH1fmuyyU6JxwtH3Zam5czcAZYRe5fxnWe9bQ1RvJ7kSNAxQU7ADU+lpUak5sYHv/WzT9AniWcMM/quWagOE0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5707
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-15_06,2022-09-14_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 adultscore=0
+ malwarescore=0 suspectscore=0 bulkscore=0 mlxlogscore=999 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2208220000
+ definitions=main-2209150064
+X-Proofpoint-GUID: 1FtHd-3_0eJYiQGsH6BsvS_sfkZMSzkP
+X-Proofpoint-ORIG-GUID: 1FtHd-3_0eJYiQGsH6BsvS_sfkZMSzkP
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 05:57:55PM -0600, Raul E Rangel wrote:
-> Device tree already has a mechanism to pass the wake_irq. It does this
-> by looking for the wakeup-source property and setting the
-> I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses the
-> ACPI interrupt wake flag to determine if the interrupt can be used to
-> wake the system. Previously the i2c drivers had to make assumptions and
-> blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
-> If there is a device with an Active Low interrupt and the device gets
-> powered off while suspending, the interrupt line will go low since it's
-> no longer powered and wakes the system. For this reason we should
-> respect the board designers wishes and honor the wake bit defined on the
-> interrupt.
-> 
-> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-> ---
-> 
-> Changes in v3:
-> - Convert wake_capable to bool
-> - Only update wake_capable pointer once
-> - Move wake_capable local into local block
-> 
-> Changes in v2:
-> - Look at wake_cabple bit for IRQ/Interrupt resources
-> 
->  drivers/i2c/i2c-core-acpi.c | 33 ++++++++++++++++++++++++---------
->  drivers/i2c/i2c-core-base.c |  8 +++++++-
->  drivers/i2c/i2c-core.h      |  4 ++--
->  3 files changed, 33 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-> index c762a879c4cc6b..b3d68a9659ff4f 100644
-> --- a/drivers/i2c/i2c-core-acpi.c
-> +++ b/drivers/i2c/i2c-core-acpi.c
-> @@ -137,6 +137,11 @@ static const struct acpi_device_id i2c_acpi_ignored_device_ids[] = {
->  	{}
->  };
->  
-> +struct i2c_acpi_irq_context {
-> +	int irq;
-> +	bool wake_capable;
-> +};
-> +
->  static int i2c_acpi_do_lookup(struct acpi_device *adev,
->  			      struct i2c_acpi_lookup *lookup)
->  {
-> @@ -170,11 +175,14 @@ static int i2c_acpi_do_lookup(struct acpi_device *adev,
->  
->  static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
->  {
-> -	int *irq = data;
-> +	struct i2c_acpi_irq_context *irq_ctx = data;
->  	struct resource r;
->  
-> -	if (*irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r))
-> -		*irq = i2c_dev_irq_from_resources(&r, 1);
-> +	if (irq_ctx->irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r)) {
-> +		irq_ctx->irq = i2c_dev_irq_from_resources(&r, 1);
-> +		irq_ctx->wake_capable =
-> +			!!(r.flags & IORESOURCE_IRQ_WAKECAPABLE);
+A couple years back we went through the kernel an automatically
+converted size calculations to use struct_size() instead.  The
+struct_size() calculation is protected against integer overflows.
 
-You don't need the !!() here. Just
+However it does not make sense to use the result from struct_size()
+for additional math operations as that would negate any safeness.
 
-		irq_ctx->wake_capable = r.flags & IORESOURCE_IRQ_WAKECAPABLE;
+Fixes: 1f3b69b6b939 ("i2c: mux: Use struct_size() in devm_kzalloc()")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/i2c/i2c-mux.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> +	}
->  
->  	return 1; /* No need to add resource to the list */
->  }
-> @@ -182,31 +190,38 @@ static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
->  /**
->   * i2c_acpi_get_irq - get device IRQ number from ACPI
->   * @client: Pointer to the I2C client device
-> + * @wake_capable: Set to true if the IRQ is wake capable
->   *
->   * Find the IRQ number used by a specific client device.
->   *
->   * Return: The IRQ number or an error code.
->   */
-> -int i2c_acpi_get_irq(struct i2c_client *client)
-> +int i2c_acpi_get_irq(struct i2c_client *client, bool *wake_capable)
->  {
->  	struct acpi_device *adev = ACPI_COMPANION(&client->dev);
->  	struct list_head resource_list;
-> -	int irq = -ENOENT;
-> +	struct i2c_acpi_irq_context irq_ctx = {
-> +		.irq = -ENOENT,
-> +	};
->  	int ret;
->  
->  	INIT_LIST_HEAD(&resource_list);
->  
->  	ret = acpi_dev_get_resources(adev, &resource_list,
-> -				     i2c_acpi_add_resource, &irq);
-> +				     i2c_acpi_add_resource, &irq_ctx);
->  	if (ret < 0)
->  		return ret;
->  
->  	acpi_dev_free_resource_list(&resource_list);
->  
-> -	if (irq == -ENOENT)
-> -		irq = acpi_dev_gpio_irq_get(adev, 0);
-> +	if (irq_ctx.irq == -ENOENT)
-> +		irq_ctx.irq = acpi_dev_gpio_irq_wake_get(adev, 0,
-> +							 &irq_ctx.wake_capable);
-> +
-> +	if (wake_capable)
-> +		*wake_capable = irq_ctx.wake_capable;
->  
-> -	return irq;
-> +	return irq_ctx.irq;
->  }
->  
->  static int i2c_acpi_get_info(struct acpi_device *adev,
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index 91007558bcb260..c4debd46c6340f 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -487,8 +487,14 @@ static int i2c_device_probe(struct device *dev)
->  			if (irq == -EINVAL || irq == -ENODATA)
->  				irq = of_irq_get(dev->of_node, 0);
->  		} else if (ACPI_COMPANION(dev)) {
-> -			irq = i2c_acpi_get_irq(client);
-> +			bool wake_capable;
-> +
-> +			irq = i2c_acpi_get_irq(client, &wake_capable);
-> +
+diff --git a/drivers/i2c/i2c-mux.c b/drivers/i2c/i2c-mux.c
+index 774507b54b57..313904be5f3b 100644
+--- a/drivers/i2c/i2c-mux.c
++++ b/drivers/i2c/i2c-mux.c
+@@ -243,9 +243,10 @@ struct i2c_mux_core *i2c_mux_alloc(struct i2c_adapter *parent,
+ 				   int (*deselect)(struct i2c_mux_core *, u32))
+ {
+ 	struct i2c_mux_core *muxc;
++	size_t mux_size;
+ 
+-	muxc = devm_kzalloc(dev, struct_size(muxc, adapter, max_adapters)
+-			    + sizeof_priv, GFP_KERNEL);
++	mux_size = struct_size(muxc, adapter, max_adapters);
++	muxc = devm_kzalloc(dev, size_add(mux_size, sizeof_priv), GFP_KERNEL);
+ 	if (!muxc)
+ 		return NULL;
+ 	if (sizeof_priv)
+-- 
+2.35.1
 
-Drop the empty line here.
-
-> +			if (irq > 0 && wake_capable)
-> +				client->flags |= I2C_CLIENT_WAKE;
->  		}
-> +
-
-Unrelated whitespace change.
-
-With those fixed feel free to add,
-
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
