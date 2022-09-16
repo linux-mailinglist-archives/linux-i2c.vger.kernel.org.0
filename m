@@ -2,60 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE705BB2DF
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Sep 2022 21:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0D05BB2E0
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Sep 2022 21:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiIPTi1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 16 Sep 2022 15:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
+        id S229570AbiIPTjp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 16 Sep 2022 15:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiIPTi0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Sep 2022 15:38:26 -0400
+        with ESMTP id S229507AbiIPTjn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Sep 2022 15:39:43 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D543ABD4F
-        for <linux-i2c@vger.kernel.org>; Fri, 16 Sep 2022 12:38:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E7A17E06
+        for <linux-i2c@vger.kernel.org>; Fri, 16 Sep 2022 12:39:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32189B82925
-        for <linux-i2c@vger.kernel.org>; Fri, 16 Sep 2022 19:38:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E52C433C1;
-        Fri, 16 Sep 2022 19:38:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7859B828DE
+        for <linux-i2c@vger.kernel.org>; Fri, 16 Sep 2022 19:39:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAD67C433C1;
+        Fri, 16 Sep 2022 19:39:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663357102;
-        bh=sOJGIpU8E4nzMRiWC7rH6cKW40/l+skAf/83T1XoyHA=;
+        s=k20201202; t=1663357177;
+        bh=ijT8/PQ0ZyYIvvO8aB4i1OGUhUzBqgBRVOqMuARMGn0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fv890tBEpeBFsWBp/Pq3Q7hp5Li3atYz/0OUVgSj5n9mWygznJPe3R3SeX864k9wT
-         tGxXXWA5evCHqZw+BvE90p1i5zSRRS6h5PsNZzgqKNNBj1sSA/A4Yhn4LHT35NEaui
-         51ldIXn9mngn0OsoiJKiOAreBL80o+5ZaeJk+sGIHkJ6Lcn8PZgMf3ZHW6hI+vBhna
-         a6E8JGpfxhjDqzUA4For1lxTyMyj9UqLJ0u6evN2AEw8+nLjQ0lHgZ4RxP8kmAXyXO
-         qN9LUAXW+FNGX7t/xo3izpCER6FGToshYAijJHFzptLoUowACu2lDpdr1yfGCRvrc/
-         7cvn52FX54WyA==
-Date:   Fri, 16 Sep 2022 20:38:18 +0100
+        b=gfJS7zskWsR4q0uiA4C+lF7NJKzbujCxSVpYgUMF2WlV/I/clpFI0kiZ63v1rzDfr
+         DBLM0nF3VPjl4kOpeoN4sCAblaqRv1ds5yDIuTj3Ii+vFDvPrjAuGCBUAE4De76ce4
+         b9iB2f2HZxf+rambCns0xo2gmabaQrYNLqYcVWW+jyycPH35KFuCJm6s7u9Vq7LSDV
+         HQFge8RJypdFLfmTVlqf/+5bc3ORl91uHBM3z020+5WhBleg9pVPZxcF/9wdEHz0/T
+         NdAfxiWq/BmZ5XnxAFPm5eDMGXOlHBNnkR+NUGZPNzJSxUk2udnPuu3F/tZSu0+hO1
+         85u2pXtXLyVMQ==
+Date:   Fri, 16 Sep 2022 20:39:33 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Oleksij Rempel <linux@rempel-privat.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: Re: [PATCH] i2c: imx: If pm_runtime_get_sync() returned 1 device
- access is possible
-Message-ID: <YyTQqlNJCZOJ1BFp@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Shawn Guo <shawnguo@kernel.org>, NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <20220912132040.156713-1-u.kleine-koenig@pengutronix.de>
+To:     linux-i2c@vger.kernel.org
+Cc:     Shyam Sundar S K <shyam-sundar.s-k@amd.com>
+Subject: Re: [PATCH] MAINTAINERS: remove Nehal Shah from AMD MP2 I2C DRIVER
+Message-ID: <YyTQ9Z0yz7CrDPMD@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>
+References: <20220912205843.3343-1-wsa@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XoJISzSBsNyo1TzX"
+        protocol="application/pgp-signature"; boundary="I/KWcu6Gn3tAytaJ"
 Content-Disposition: inline
-In-Reply-To: <20220912132040.156713-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20220912205843.3343-1-wsa@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,42 +55,39 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---XoJISzSBsNyo1TzX
-Content-Type: text/plain; charset=utf-8
+--I/KWcu6Gn3tAytaJ
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 12, 2022 at 03:20:40PM +0200, Uwe Kleine-K=C3=B6nig wrote:
-> pm_runtime_get_sync() returning 1 also means the device is powered. So
-> resetting the chip registers in .remove() is possible and should be
-> done.
+On Mon, Sep 12, 2022 at 09:58:43PM +0100, Wolfram Sang wrote:
+> His email bounced and given commit 88115ea6308d ("HID: amd_sfh: Remove
+> name from maintainers list"), I assume he is no longer available as a
+> maintainer.
 >=20
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Fixes: d98bdd3a5b50 ("i2c: imx: Make sure to unregister adapter on remove=
-()")
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Wolfram Sang <wsa@kernel.org>
 
 Applied to for-current, thanks!
 
 
---XoJISzSBsNyo1TzX
+--I/KWcu6Gn3tAytaJ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMk0KoACgkQFA3kzBSg
-KbbpDA//XxAonRT1FsT3QNEgecXm7kGUV8Ark0NnesMJMmHzqLer5fKD3nvz5Cky
-s5VZoXxT9LSR9KY3t9qVNmyagfg/Oy49HgbvwfMvc56VYxiCYnOfhl3sFa2d6wId
-xa97f6Jrzqa2XOcfg/QOFxHjo28Rv9hhBFecukgtuoCo4pWJORJLwg1LPcRE27lJ
-eNv01oYML70pUDbkzSh1uMW7RISeyT0Hc74DDF/botG1SrdZTZmPSz9Kt7ky04Vv
-BrL5BgqMA9gPDzUF2v2eITOr3a2DiWU70zthg76iNkoLtPknKtHtYG18+g0mHH71
-cSKjcPKGSohIZrKOoVMhxRMoGCIPKSq4wXNuKHGJo46BVrU/s+sx4zuh4C3s/Cv3
-y308VOHu1w3NjWgyEYUZ+DeAPFLqyOFPOSklzSnwX1CsLNKr3sxB5beEoLNEUf1g
-4g3kaW+G/QzvcQ1BHrDX5mMAjJp/K5328jVGhBzP28OAJGody22SU+3aD6Q4mW5W
-kmMoKw5jn4fYxIEWXcOMYyPK4kmA4/yn6IMY1w9nfx5h65Wm4DpDryYv+whvdjL7
-81zD7n0iRQ9V5Nh9iqFgJHpeoUrUJDSQVZvJLhN76p1L6DC1LpMtuWBO+rqBLKWB
-zMV1vMYTP5lLzwm+z+1Hr8pX3ohtDc4SZi+lY09vmgN4wJyUbks=
-=FvQM
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMk0PQACgkQFA3kzBSg
+KbZf9g//Yx5GnOQvh/wPiQFj1Tej3P6t/IM2ZJsDPBNoA3Cssze8HD6a7g44mxbg
+PlhxiimVF3ObAfnZhaIIz0BpvcailFaoBwBD4Y6y3p28fy/H/Dx04PU/Dshg/DZn
+YmeKH3iGB2MKLQ93RTSo1HRF0K7kGmo2on04ajoz4U745+zTeUVAOR5TS+lrbr2d
+zxrbXpzuVqIHHYKuS1Jm807M1Kz/fbLY18cBDX0e6mQWWi3G19KIEzIeHNVw5ORU
+wnhEZgHtUmX7Q7tbzfWSMv1LCAV0K/MQOc7r7MmPVxTJd1Eir747N5+IWDA8llZp
+UypHt8ibR/JS8PfujlclkoyImMVSJZcCm8MsE+UGtf7T/XcitgzPF5W4JjFg3yus
+t01G2oFW1QJo3p+s1PKv3M65kbEBhGM9nlvbP2VLIBKqUmLA/AbFsGngTubUabvO
+lyJ7W3cIujo2TRqv2PjStbNhWscjEtIk/2VF9u03AqpwK9rzevTNHcOtB8ajeWgP
+odavEq/pDSHUuJCaFDnvUFuFzxM+FP+TSKz/6qYlylV8Jycl0ywqeqyPIThiPKfi
+ICnZg0hqpCXpUGppKpYmTXjknM4hw7Sk3xOSsuR7jWMrrnxsODOGCqf4jcNaN+5N
+kNdnhyObVj8ckwBI2wvCFF2TrVgg6uD0YlTHYetLk93Pzl4sMC0=
+=wbzR
 -----END PGP SIGNATURE-----
 
---XoJISzSBsNyo1TzX--
+--I/KWcu6Gn3tAytaJ--
