@@ -2,60 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC9E5BADF7
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Sep 2022 15:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1595BADFA
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Sep 2022 15:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbiIPNTf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 16 Sep 2022 09:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
+        id S231588AbiIPNTi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 16 Sep 2022 09:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbiIPNTd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Sep 2022 09:19:33 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EA2FCC
-        for <linux-i2c@vger.kernel.org>; Fri, 16 Sep 2022 06:19:30 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id u18so35532674lfo.8
-        for <linux-i2c@vger.kernel.org>; Fri, 16 Sep 2022 06:19:30 -0700 (PDT)
+        with ESMTP id S231557AbiIPNTh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Sep 2022 09:19:37 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86022617
+        for <linux-i2c@vger.kernel.org>; Fri, 16 Sep 2022 06:19:32 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id f9so34835082lfr.3
+        for <linux-i2c@vger.kernel.org>; Fri, 16 Sep 2022 06:19:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=semihalf.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=ybiSkSsXxKh5zmJ7zBCznaoXv4yD91pfOMCQNft68K4=;
-        b=DBL69cHVAeNVBRivuPH58SOhZWWSMo6WrNzIzURY5uDEb3dTUm2X7uZbNEzOP8IvwB
-         SBiAACSVAe4b6u5SNqWfVP/uIfOQmyQXWwSHV95DBAMXO248aJze2yEyngH8mvaMTqAl
-         Bm/61H5UjBQAIECu+ikxJoiFrLtvXakaWOWAIPr+stuAvC4xH0vOocPhADbONOLUtF5h
-         BUAGQKstlNdZCYLj9e+5TpOKvVahCGzVctoQp+ftAvjf23a/C10FuJ8ItVNV1xVoUU55
-         l24T6GiI1nItgVdDm3UeifAFv10yZbBZlz0D2zddmP0c9HEVqhBUY5SkVe/5LpgVLdu8
-         jdmQ==
+        bh=EQ9/p3lJwci77ftCdqtq0O5QcfX0Mc1jziB3F9PSJEI=;
+        b=Hb69zvadMagHI6Rmr8J94YmyJGlj3RJiSLbUJDAgtRs5nlghIMcztyCqjgg2Ig0/XK
+         /d4PPdExghd4DUvS4vtwcoNZQCIaI1co85ms9tX2JRN1W1/tc2sH0OB7uOId4vAACkLr
+         /jPogKEvu7YIp6ewOC7oUmmbe6cRrVWWC7aqh+fqm0Lk57ywqoeQHApIo+mLAQ2j67q8
+         oWzvCROmfS4kw8KCniRWS7BKuJ7uZItKKda+twqiQv+jqG3x+a/85odDLSFoNOv4o/6d
+         5MMjI75rVRcRBweY5bZIdAAljRKHDpj1tUTa5h9GW9ozj+MhW3eIPV0cpVAFSsD+mm5+
+         435A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=ybiSkSsXxKh5zmJ7zBCznaoXv4yD91pfOMCQNft68K4=;
-        b=yJ7WscWyafujrbcogaf1WV5Qbfbby5cgQxxlZmSIhJsLQYwKbe2o72tJG/5vHv2fk6
-         UryiqDmQtkZUqRtFXF+bS4ny48daqtVf59WJ98dSvnQoytrPwQmky46SH/1IEXSZtRp8
-         tiJ3N1qzJpejrtJb0QtfN9LjmfSL0sFkYC+uQjolfLyPn3pWdaTHrtSbHGOFtD2mvAta
-         K5lr345kJ49vq9rVPD5NiJzf+KIZ8KOLaSuv95f60UOmxitSwTYBjyZ5wZwyhvT+L+PV
-         I/o+6MnCUb/688tAkhVYJSFKMKLn07Z6l5MAr/wHn9BxpDpS54Yy+HiZacdFp/+u201V
-         ZOPg==
-X-Gm-Message-State: ACrzQf3tap8z5tyYThscuaHJReWEGlnM0F+hXeGmtbaC3JZyrFrKdYks
-        f1c7pa/jL0Pry5/x9khp0+rPTA==
-X-Google-Smtp-Source: AMsMyM5rFiEMYK2R141xzGmpOW9yrmpZvNxQ21qW05oh+DYNIg3rG+U5PNaMgnA54ySb8XUaXyLWiQ==
-X-Received: by 2002:ac2:4c50:0:b0:49a:3768:da81 with SMTP id o16-20020ac24c50000000b0049a3768da81mr1530182lfk.247.1663334368937;
-        Fri, 16 Sep 2022 06:19:28 -0700 (PDT)
+        bh=EQ9/p3lJwci77ftCdqtq0O5QcfX0Mc1jziB3F9PSJEI=;
+        b=QX+o7tYBn4l1MGqJZvYIGK5IPvfV6TltyvU7cc+BJQLzijbyfcsyd7//ZXpfPFJa+Z
+         hzLsGs9XcV4jAfIT3pI/bd4MB2ovGTEyXXiRumyeEvhvtkRuEAmZ0QARhFvitdbGu2IU
+         tt+zyW/Fd+WwAt99KmkU42YJFE12jKGOgZXSgjk9M1H6qRYkcD92nq7M9FhFvnR8jbCS
+         UN6o+dc4YGAYr/Zo7Crqe/9qulmVDGS998gji8YDSOBISPIgHNcADez0g7rWHCxrbIDM
+         mfEh+K5y+e96l2WcJi4+NDBfWI9dUvA0ZL9vA1b/GjfSyBMqgs/U856s9lK7xWZ8fifG
+         VvfQ==
+X-Gm-Message-State: ACrzQf0lC86xeUqxVA7ouAgxrQAZ6jC5Bq8Z7DJ5HBQou9WRSEjou9zz
+        5tVvdmJECRdFtQxG23o8iBpnvQ==
+X-Google-Smtp-Source: AMsMyM5N5LQf4ychHaDbBThx4GDmr3IOssq3QwqQ2E8d30ZgLuG8liE/GeH1rjLEuC86l/yFS5t6MA==
+X-Received: by 2002:a05:6512:b81:b0:494:78cc:ca9c with SMTP id b1-20020a0565120b8100b0049478ccca9cmr1605663lfv.564.1663334370150;
+        Fri, 16 Sep 2022 06:19:30 -0700 (PDT)
 Received: from dabros-l.wifi.semihalf.net ([185.157.14.92])
-        by smtp.gmail.com with ESMTPSA id f3-20020a05651c02c300b0025fdf1af42asm3650847ljo.78.2022.09.16.06.19.27
+        by smtp.gmail.com with ESMTPSA id f3-20020a05651c02c300b0025fdf1af42asm3650847ljo.78.2022.09.16.06.19.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 06:19:28 -0700 (PDT)
+        Fri, 16 Sep 2022 06:19:29 -0700 (PDT)
 From:   Jan Dabros <jsd@semihalf.com>
 To:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com
 Cc:     wsa@kernel.org, rrangel@chromium.org, upstream@semihalf.com,
         mario.limonciello@amd.com, jsd@semihalf.com
-Subject: [PATCH -next 1/2] i2c: designware: Switch from using MMIO access to SMN access
-Date:   Fri, 16 Sep 2022 15:18:53 +0200
-Message-Id: <20220916131854.687371-2-jsd@semihalf.com>
+Subject: [PATCH -next 2/2] i2c: designware: Add support for new SoCs in AMDPSP driver
+Date:   Fri, 16 Sep 2022 15:18:54 +0200
+Message-Id: <20220916131854.687371-3-jsd@semihalf.com>
 X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
 In-Reply-To: <20220916131854.687371-1-jsd@semihalf.com>
 References: <20220916131854.687371-1-jsd@semihalf.com>
@@ -63,304 +63,314 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Due to a change in silicon compared to Cezanne, in future revisions MSR
-access can't be used to get the base address of the PSP MMIO region that
-contains the PSP mailbox interface.
+New AMD SoCs are using different algorithm for x86-PSP communication,
+thus need to modify I2C arbitration driver. Since possible future
+revisions should have follow new approach, mark functions used only for
+Cezanne with "czn_" prefix.
 
-Modify driver to use SMN access also for Cezanne platforms (it is
-working there) in order to simplify codebase when adding support for new
-SoC versions.
-
-Export amd_cache_northbridges() which was unexported by
-
-e1907d3: "x86/amd_nb: Unexport amd_cache_northbridges()"
-
-since function which registers i2c-designware-platdrv is a
-subsys_initcall that is executed before fs_initcall (when enumeration of
-NB descriptors occurs). Thus in order to use SMN accesses it's necessary
-to explicitly call amd_cache_northrbidges() from within this driver.
+While at it, remove redundant check by modifying psp_wait_cmd() to only
+check for MBOX_READY bit, since MBOX_CMD field being zero is verified by
+czn_psp_check_mbox_sts() later on in the sequence.
 
 Signed-off-by: Jan Dabros <jsd@semihalf.com>
 ---
- arch/x86/include/asm/amd_nb.h               |   1 +
- arch/x86/kernel/amd_nb.c                    |   3 +-
- drivers/i2c/busses/i2c-designware-amdpsp.c  | 112 +++++++++++---------
- drivers/i2c/busses/i2c-designware-core.h    |   1 -
- drivers/i2c/busses/i2c-designware-platdrv.c |   1 -
- 5 files changed, 66 insertions(+), 52 deletions(-)
+ drivers/i2c/busses/i2c-designware-amdpsp.c | 145 ++++++++++++++-------
+ 1 file changed, 97 insertions(+), 48 deletions(-)
 
-diff --git a/arch/x86/include/asm/amd_nb.h b/arch/x86/include/asm/amd_nb.h
-index ed0eaf65c437..00d1a400b7a1 100644
---- a/arch/x86/include/asm/amd_nb.h
-+++ b/arch/x86/include/asm/amd_nb.h
-@@ -16,6 +16,7 @@ extern const struct amd_nb_bus_dev_range amd_nb_bus_dev_ranges[];
- 
- extern bool early_is_amd_nb(u32 value);
- extern struct resource *amd_get_mmconfig_range(struct resource *res);
-+extern int amd_cache_northbridges(void);
- extern void amd_flush_garts(void);
- extern int amd_numa_init(void);
- extern int amd_get_subcaches(int);
-diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-index 4266b64631a4..2077b6cfa8ad 100644
---- a/arch/x86/kernel/amd_nb.c
-+++ b/arch/x86/kernel/amd_nb.c
-@@ -201,7 +201,7 @@ int amd_smn_write(u16 node, u32 address, u32 value)
- EXPORT_SYMBOL_GPL(amd_smn_write);
- 
- 
--static int amd_cache_northbridges(void)
-+int amd_cache_northbridges(void)
- {
- 	const struct pci_device_id *misc_ids = amd_nb_misc_ids;
- 	const struct pci_device_id *link_ids = amd_nb_link_ids;
-@@ -303,6 +303,7 @@ static int amd_cache_northbridges(void)
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(amd_cache_northbridges);
- 
- /*
-  * Ignores subdevice/subvendor but as far as I can figure out
 diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
-index 8f36167bce62..1d467fc83f59 100644
+index 1d467fc83f59..4395a2ae960a 100644
 --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
 +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-@@ -8,12 +8,11 @@
+@@ -4,6 +4,7 @@
+ #include <linux/bits.h>
+ #include <linux/i2c.h>
+ #include <linux/io-64-nonatomic-lo-hi.h>
++#include <linux/pci.h>
+ #include <linux/psp-sev.h>
  #include <linux/types.h>
  #include <linux/workqueue.h>
- 
-+#include <asm/amd_nb.h>
- #include <asm/msr.h>
- 
- #include "i2c-designware-core.h"
- 
--#define MSR_AMD_PSP_ADDR	0xc00110a2
--#define PSP_MBOX_OFFSET		0x10570
- #define PSP_CMD_TIMEOUT_US	(500 * USEC_PER_MSEC)
- 
- #define PSP_I2C_RESERVATION_TIME_MS 100
-@@ -31,6 +30,10 @@
+@@ -30,9 +31,13 @@
  #define PSP_MBOX_FIELDS_RECOVERY	BIT(30)
  #define PSP_MBOX_FIELDS_READY		BIT(31)
  
-+#define PSP_MBOX_CMD_OFFSET		0x3810570
-+#define PSP_MBOX_BUFFER_L_OFFSET	0x3810574
-+#define PSP_MBOX_BUFFER_H_OFFSET	0x3810578
+-#define PSP_MBOX_CMD_OFFSET		0x3810570
+-#define PSP_MBOX_BUFFER_L_OFFSET	0x3810574
+-#define PSP_MBOX_BUFFER_H_OFFSET	0x3810578
++#define CZN_PSP_MBOX_CMD_OFFSET		0x3810570
++#define CZN_PSP_MBOX_BUFFER_L_OFFSET	0x3810574
++#define CZN_PSP_MBOX_BUFFER_H_OFFSET	0x3810578
++#define PSP_MBOX_CMD_OFFSET		0x3810A40
++#define PSP_MBOX_DOORBELL_OFFSET	0x3810A24
 +
++#define AMD_CPU_ID_CZN			0x1630
+ 
  struct psp_req_buffer_hdr {
  	u32 total_size;
- 	u32 status;
-@@ -47,14 +50,8 @@ struct psp_i2c_req {
- 	enum psp_i2c_req_type type;
- };
- 
--struct psp_mbox {
--	u32 cmd_fields;
--	u64 i2c_req_addr;
--} __packed;
--
- static DEFINE_MUTEX(psp_i2c_access_mutex);
- static unsigned long psp_i2c_sem_acquired;
--static void __iomem *mbox_iomem;
+@@ -55,6 +60,7 @@ static unsigned long psp_i2c_sem_acquired;
  static u32 psp_i2c_access_count;
  static bool psp_i2c_mbox_fail;
  static struct device *psp_i2c_dev;
-@@ -64,47 +61,43 @@ static struct device *psp_i2c_dev;
-  * family of SoCs.
-  */
++static unsigned short cpu_id;
  
--static int psp_get_mbox_addr(unsigned long *mbox_addr)
-+static int psp_mbox_probe(void)
+ /*
+  * Implementation of PSP-x86 i2c-arbitration mailbox introduced for AMD Cezanne
+@@ -63,6 +69,17 @@ static struct device *psp_i2c_dev;
+ 
+ static int psp_mbox_probe(void)
  {
--	unsigned long long psp_mmio;
--
--	if (rdmsrl_safe(MSR_AMD_PSP_ADDR, &psp_mmio))
--		return -EIO;
--
--	*mbox_addr = (unsigned long)(psp_mmio + PSP_MBOX_OFFSET);
--
--	return 0;
-+	/*
-+	 * Explicitly initialize system management network interface here, since
-+	 * usual init happens only after PCI subsystem is ready. This is too late
-+	 * for I2C controller driver which may be executed earlier.
-+	 */
-+	return amd_cache_northbridges();
++	struct pci_dev *rdev;
++
++	rdev = pci_get_domain_bus_and_slot(0, 0, PCI_DEVFN(0, 0));
++	if (!rdev) {
++		dev_err(psp_i2c_dev, "Failed to get host bridge device\n");
++		return -ENODEV;
++	}
++
++	cpu_id = rdev->device;
++	pci_dev_put(rdev);
++
+ 	/*
+ 	 * Explicitly initialize system management network interface here, since
+ 	 * usual init happens only after PCI subsystem is ready. This is too late
+@@ -81,80 +98,76 @@ static int psp_smn_read(u32 smn_addr, u32 *value)
+ 	return amd_smn_read(0, smn_addr, value);
  }
  
--static int psp_mbox_probe(void)
-+static int psp_smn_write(u32 smn_addr, u32 value)
- {
--	unsigned long mbox_addr;
--	int ret;
--
--	ret = psp_get_mbox_addr(&mbox_addr);
--	if (ret)
--		return ret;
--
--	mbox_iomem = ioremap(mbox_addr, sizeof(struct psp_mbox));
--	if (!mbox_iomem)
--		return -ENOMEM;
-+	return amd_smn_write(0, smn_addr, value);
-+}
- 
--	return 0;
-+static int psp_smn_read(u32 smn_addr, u32 *value)
-+{
-+	return amd_smn_read(0, smn_addr, value);
- }
- 
- /* Recovery field should be equal 0 to start sending commands */
--static int psp_check_mbox_recovery(struct psp_mbox __iomem *mbox)
-+static int psp_check_mbox_recovery(void)
+-/* Recovery field should be equal 0 to start sending commands */
+-static int psp_check_mbox_recovery(void)
++static int psp_mbox_ready(u32 smn_addr)
  {
  	u32 tmp;
-+	int status;
+-	int status;
+-
+-	status = psp_smn_read(PSP_MBOX_CMD_OFFSET, &tmp);
+-	if (status)
+-		return status;
+-
+-	return FIELD_GET(PSP_MBOX_FIELDS_RECOVERY, tmp);
+-}
+-
+-static int psp_wait_cmd(void)
+-{
+-	u32 tmp, expected;
+ 	int ret, status;
  
--	tmp = readl(&mbox->cmd_fields);
-+	status = psp_smn_read(PSP_MBOX_CMD_OFFSET, &tmp);
-+	if (status)
-+		return status;
- 
- 	return FIELD_GET(PSP_MBOX_FIELDS_RECOVERY, tmp);
- }
- 
--static int psp_wait_cmd(struct psp_mbox __iomem *mbox)
-+static int psp_wait_cmd(void)
- {
- 	u32 tmp, expected;
-+	int ret, status;
- 
- 	/* Expect mbox_cmd to be cleared and ready bit to be set by PSP */
- 	expected = FIELD_PREP(PSP_MBOX_FIELDS_READY, 1);
-@@ -113,30 +106,55 @@ static int psp_wait_cmd(struct psp_mbox __iomem *mbox)
+-	/* Expect mbox_cmd to be cleared and ready bit to be set by PSP */
+-	expected = FIELD_PREP(PSP_MBOX_FIELDS_READY, 1);
+-
+ 	/*
  	 * Check for readiness of PSP mailbox in a tight loop in order to
  	 * process further as soon as command was consumed.
  	 */
--	return readl_poll_timeout(&mbox->cmd_fields, tmp, (tmp == expected),
--				  0, PSP_CMD_TIMEOUT_US);
-+	ret = read_poll_timeout(psp_smn_read, status,
-+				(status < 0) || (tmp == expected), 0,
-+				PSP_CMD_TIMEOUT_US, 0, PSP_MBOX_CMD_OFFSET,
-+				&tmp);
-+	if (status)
-+		ret = status;
-+
-+	return ret;
+ 	ret = read_poll_timeout(psp_smn_read, status,
+-				(status < 0) || (tmp == expected), 0,
+-				PSP_CMD_TIMEOUT_US, 0, PSP_MBOX_CMD_OFFSET,
+-				&tmp);
++				(status < 0) || (tmp & PSP_MBOX_FIELDS_READY),
++				0, PSP_CMD_TIMEOUT_US, 0, smn_addr, &tmp);
+ 	if (status)
+ 		ret = status;
+ 
+ 	return ret;
  }
  
- /* Status equal to 0 means that PSP succeed processing command */
--static u32 psp_check_mbox_sts(struct psp_mbox __iomem *mbox)
-+static int psp_check_mbox_sts(void)
- {
- 	u32 cmd_reg;
++/* Recovery field should be equal 0 to start sending commands */
++static int czn_psp_check_mbox_recovery(void)
++{
++	u32 tmp;
 +	int status;
- 
--	cmd_reg = readl(&mbox->cmd_fields);
-+	status = psp_smn_read(PSP_MBOX_CMD_OFFSET, &cmd_reg);
++
++	status = psp_smn_read(CZN_PSP_MBOX_CMD_OFFSET, &tmp);
 +	if (status)
 +		return status;
++
++	return FIELD_GET(PSP_MBOX_FIELDS_RECOVERY, tmp);
++}
++
+ /* Status equal to 0 means that PSP succeed processing command */
+-static int psp_check_mbox_sts(void)
++static u32 czn_psp_check_mbox_sts(void)
+ {
+ 	u32 cmd_reg;
+ 	int status;
+ 
+-	status = psp_smn_read(PSP_MBOX_CMD_OFFSET, &cmd_reg);
++	status = psp_smn_read(CZN_PSP_MBOX_CMD_OFFSET, &cmd_reg);
+ 	if (status)
+ 		return status;
  
  	return FIELD_GET(PSP_MBOX_FIELDS_STS, cmd_reg);
  }
  
-+static int psp_wr_mbox_buffer(phys_addr_t buf)
+-static int psp_wr_mbox_buffer(phys_addr_t buf)
++static int czn_psp_wr_mbox_buffer(phys_addr_t buf)
+ {
+ 	u32 buf_addr_h = upper_32_bits(buf);
+ 	u32 buf_addr_l = lower_32_bits(buf);
+ 	int status;
+ 
+-	status = psp_smn_write(PSP_MBOX_BUFFER_H_OFFSET, buf_addr_h);
++	status = psp_smn_write(CZN_PSP_MBOX_BUFFER_H_OFFSET, buf_addr_h);
+ 	if (status)
+ 		return status;
+ 
+-	status = psp_smn_write(PSP_MBOX_BUFFER_L_OFFSET, buf_addr_l);
++	status = psp_smn_write(CZN_PSP_MBOX_BUFFER_L_OFFSET, buf_addr_l);
+ 	if (status)
+ 		return status;
+ 
+ 	return 0;
+ }
+ 
+-static int psp_send_cmd(struct psp_i2c_req *req)
++static int czn_psp_send_cmd(struct psp_i2c_req *req)
+ {
+ 	phys_addr_t req_addr;
+ 	u32 cmd_reg;
+ 
+-	if (psp_check_mbox_recovery())
++	if (czn_psp_check_mbox_recovery())
+ 		return -EIO;
+ 
+-	if (psp_wait_cmd())
++	if (psp_mbox_ready(CZN_PSP_MBOX_CMD_OFFSET))
+ 		return -EBUSY;
+ 
+ 	/*
+@@ -163,18 +176,18 @@ static int psp_send_cmd(struct psp_i2c_req *req)
+ 	 * PSP. Use physical address of buffer, since PSP will map this region.
+ 	 */
+ 	req_addr = __psp_pa((void *)req);
+-	if (psp_wr_mbox_buffer(req_addr))
++	if (czn_psp_wr_mbox_buffer(req_addr))
+ 		return -EIO;
+ 
+ 	/* Write command register to trigger processing */
+ 	cmd_reg = FIELD_PREP(PSP_MBOX_FIELDS_CMD, PSP_I2C_REQ_BUS_CMD);
+-	if (psp_smn_write(PSP_MBOX_CMD_OFFSET, cmd_reg))
++	if (psp_smn_write(CZN_PSP_MBOX_CMD_OFFSET, cmd_reg))
+ 		return -EIO;
+ 
+-	if (psp_wait_cmd())
++	if (psp_mbox_ready(CZN_PSP_MBOX_CMD_OFFSET))
+ 		return -ETIMEDOUT;
+ 
+-	if (psp_check_mbox_sts())
++	if (czn_psp_check_mbox_sts())
+ 		return -EIO;
+ 
+ 	return 0;
+@@ -185,8 +198,13 @@ static int check_i2c_req_sts(struct psp_i2c_req *req)
+ {
+ 	u32 status;
+ 
+-	/* Status field in command-response buffer is updated by PSP */
+-	status = READ_ONCE(req->hdr.status);
++	if (req) {
++		/* Status field in command-response buffer is updated by PSP */
++		status = READ_ONCE(req->hdr.status);
++	} else {
++		status = psp_smn_read(PSP_MBOX_CMD_OFFSET, &status);
++		status &= ~PSP_MBOX_FIELDS_READY;
++	}
+ 
+ 	switch (status) {
+ 	case PSP_I2C_REQ_STS_OK:
+@@ -199,8 +217,31 @@ static int check_i2c_req_sts(struct psp_i2c_req *req)
+ 	}
+ }
+ 
+-static int psp_send_check_i2c_req(struct psp_i2c_req *req)
++static int psp_send_cmd(enum psp_i2c_req_type i2c_req_type)
 +{
-+	u32 buf_addr_h = upper_32_bits(buf);
-+	u32 buf_addr_l = lower_32_bits(buf);
-+	int status;
++	int ret;
 +
-+	status = psp_smn_write(PSP_MBOX_BUFFER_H_OFFSET, buf_addr_h);
-+	if (status)
-+		return status;
++	ret = psp_mbox_ready(PSP_MBOX_CMD_OFFSET);
++	if (ret)
++		return ret;
 +
-+	status = psp_smn_write(PSP_MBOX_BUFFER_L_OFFSET, buf_addr_l);
-+	if (status)
-+		return status;
++	psp_smn_write(PSP_MBOX_CMD_OFFSET, i2c_req_type);
++
++	/* Ring the Doorbell for PSP by writing a non-zero value */
++	psp_smn_write(PSP_MBOX_DOORBELL_OFFSET, 0x1);
++
++	ret = psp_mbox_ready(PSP_MBOX_CMD_OFFSET);
++	if (ret)
++		return ret;
 +
 +	return 0;
 +}
 +
- static int psp_send_cmd(struct psp_i2c_req *req)
++static int psp_send_check_i2c_req(struct psp_i2c_req *req,
++				  enum psp_i2c_req_type i2c_req_type)
  {
--	struct psp_mbox __iomem *mbox = mbox_iomem;
- 	phys_addr_t req_addr;
- 	u32 cmd_reg;
- 
--	if (psp_check_mbox_recovery(mbox))
-+	if (psp_check_mbox_recovery())
- 		return -EIO;
- 
--	if (psp_wait_cmd(mbox))
-+	if (psp_wait_cmd())
- 		return -EBUSY;
- 
++	int ret;
++
  	/*
-@@ -145,16 +163,18 @@ static int psp_send_cmd(struct psp_i2c_req *req)
- 	 * PSP. Use physical address of buffer, since PSP will map this region.
+ 	 * Errors in x86-PSP i2c-arbitration protocol may occur at two levels:
+ 	 * 1. mailbox communication - PSP is not operational or some IO errors
+@@ -208,10 +249,15 @@ static int psp_send_check_i2c_req(struct psp_i2c_req *req)
+ 	 * 2. i2c-requests - PSP refuses to grant i2c arbitration to x86 for too
+ 	 * long.
+ 	 * In order to distinguish between these two in error handling code, all
+-	 * errors on the first level (returned by psp_send_cmd) are shadowed by
++	 * errors on the first level (returned by *psp_send_cmd) are shadowed by
+ 	 * -EIO.
  	 */
- 	req_addr = __psp_pa((void *)req);
--	writeq(req_addr, &mbox->i2c_req_addr);
-+	if (psp_wr_mbox_buffer(req_addr))
-+		return -EIO;
- 
- 	/* Write command register to trigger processing */
- 	cmd_reg = FIELD_PREP(PSP_MBOX_FIELDS_CMD, PSP_I2C_REQ_BUS_CMD);
--	writel(cmd_reg, &mbox->cmd_fields);
-+	if (psp_smn_write(PSP_MBOX_CMD_OFFSET, cmd_reg))
-+		return -EIO;
- 
--	if (psp_wait_cmd(mbox))
-+	if (psp_wait_cmd())
- 		return -ETIMEDOUT;
- 
--	if (psp_check_mbox_sts(mbox))
-+	if (psp_check_mbox_sts())
+-	if (psp_send_cmd(req))
++	if (req)
++		ret = czn_psp_send_cmd(req);
++	else
++		ret = psp_send_cmd(i2c_req_type);
++
++	if (ret)
  		return -EIO;
  
- 	return 0;
-@@ -417,9 +437,3 @@ int i2c_dw_amdpsp_probe_lock_support(struct dw_i2c_dev *dev)
+ 	return check_i2c_req_sts(req);
+@@ -219,24 +265,27 @@ static int psp_send_check_i2c_req(struct psp_i2c_req *req)
  
- 	return 0;
- }
--
--/* Unmap area used as a mailbox with PSP */
--void i2c_dw_amdpsp_remove_lock_support(struct dw_i2c_dev *dev)
--{
--	iounmap(mbox_iomem);
--}
-diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-index 70b80e710990..80dad6c8f321 100644
---- a/drivers/i2c/busses/i2c-designware-core.h
-+++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -382,7 +382,6 @@ int i2c_dw_baytrail_probe_lock_support(struct dw_i2c_dev *dev);
+ static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
+ {
+-	struct psp_i2c_req *req;
++	struct psp_i2c_req *req = NULL;
+ 	unsigned long start;
+ 	int status, ret;
  
- #if IS_ENABLED(CONFIG_I2C_DESIGNWARE_AMDPSP)
- int i2c_dw_amdpsp_probe_lock_support(struct dw_i2c_dev *dev);
--void i2c_dw_amdpsp_remove_lock_support(struct dw_i2c_dev *dev);
- #endif
+-	/* Allocate command-response buffer */
+-	req = kzalloc(sizeof(*req), GFP_KERNEL);
+-	if (!req)
+-		return -ENOMEM;
++	/* Allocate command-response buffer for Cezanne platforms */
++	if (cpu_id == AMD_CPU_ID_CZN) {
++		req = kzalloc(sizeof(*req), GFP_KERNEL);
++		if (!req)
++			return -ENOMEM;
  
- int i2c_dw_validate_speed(struct dw_i2c_dev *dev);
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index ba043b547393..99f54fe583e1 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -214,7 +214,6 @@ static const struct i2c_dw_semaphore_callbacks i2c_dw_semaphore_cb_table[] = {
- #ifdef CONFIG_I2C_DESIGNWARE_AMDPSP
- 	{
- 		.probe = i2c_dw_amdpsp_probe_lock_support,
--		.remove = i2c_dw_amdpsp_remove_lock_support,
- 	},
- #endif
- 	{}
+-	req->hdr.total_size = sizeof(*req);
+-	req->type = i2c_req_type;
++		req->hdr.total_size = sizeof(*req);
++		req->type = i2c_req_type;
++	}
+ 
+ 	start = jiffies;
+ 	ret = read_poll_timeout(psp_send_check_i2c_req, status,
+ 				(status != -EBUSY),
+ 				PSP_I2C_REQ_RETRY_DELAY_US,
+ 				PSP_I2C_REQ_RETRY_CNT * PSP_I2C_REQ_RETRY_DELAY_US,
+-				0, req);
++				0, req, i2c_req_type);
++
+ 	if (ret) {
+ 		dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C bus\n",
+ 			(i2c_req_type == PSP_I2C_REQ_ACQUIRE) ?
 -- 
 2.37.3.968.ga6b4b080e4-goog
 
