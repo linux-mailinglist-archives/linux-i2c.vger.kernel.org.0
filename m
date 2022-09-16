@@ -2,53 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18795BB2F2
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Sep 2022 21:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4846C5BB302
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Sep 2022 21:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbiIPTnn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 16 Sep 2022 15:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60256 "EHLO
+        id S229743AbiIPTsE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 16 Sep 2022 15:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiIPTnm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Sep 2022 15:43:42 -0400
+        with ESMTP id S229604AbiIPTsD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Sep 2022 15:48:03 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297BDB3B18;
-        Fri, 16 Sep 2022 12:43:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511F7B56F9;
+        Fri, 16 Sep 2022 12:48:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C82FCB828DE;
-        Fri, 16 Sep 2022 19:43:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1B3BC433C1;
-        Fri, 16 Sep 2022 19:43:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01C4CB828DE;
+        Fri, 16 Sep 2022 19:48:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFC5DC433D6;
+        Fri, 16 Sep 2022 19:47:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663357419;
-        bh=oAadqbAlspzk85K4mBPCdBFr+j5F/tmHHXVk2Ke47kU=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=V7g+v/vYWeHPLW+P8OxK8BBJ8TDhC48S7q1yYvCwS7NNULlUuJVtZXmSoqzBOW3nS
-         tVLP65d2xss1n1rJXe2GQiz0KbnQIkJb9suCKeaisPTEN9aWLzhlOpw3A6+t36I4Ko
-         UjcajKIZ04mYc3QQ6oQlv/V3B3BKslYsk7TPIPZUfQv1BZsZgGeKiOUC5aSFaB4xvo
-         D0ppUd8+BfoUepz+FR0eJT2ldtGK67FawDKkvDVQajSlXlBAQnB5fYAq3fMGzcnJHa
-         H68UOmEPDeS2z3dGNrbc9NV4eHt/Q81PHbV/XstkdmpAJp3CExBdW85s/EBw6WBeXc
-         yMZF0kqrPhzbQ==
-Date:   Fri, 16 Sep 2022 20:43:35 +0100
+        s=k20201202; t=1663357679;
+        bh=ETttYxa/4Oa67rJ8c8c04bzWUxymRvJ/KwEDM2mNqDM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l3lEPPk+0Ydl1GhdM+1o2t9KbsPrivCzjlS9cG5oCs3foSKLf275LNq0D7qElFeRb
+         vhFND3xL2NvwHfssdAALmjrXrGfzLi5xdckoY5dvG1tR7G75TaawUJhDpPHUkhdO8B
+         8Ku24EjyeL3rDdHMDnivqpPN+P2fs88ltijo9CfB39tBjLhIsGLdpDOaUbR4S3nFwk
+         Yyz8b385PFGDuCTvtMmYvYtNMZeVnkC3z7C4hn6dbwu+UKKv7cqqmNqk53z5eSTQ7q
+         zDtSQbedcafwWwQA+rjLu7kkygUCtALF7ZKJJsb8phoELIspN01YCTJAuaki+IAWBH
+         h4ATPJFHIiCIA==
+Date:   Fri, 16 Sep 2022 20:47:56 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     christian.koenig@amd.com, devicetree@vger.kernel.org,
+        digetx@gmail.com, jonathanh@nvidia.com, ldewangan@nvidia.com,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Josef Johansson <josef@oderland.se>
-Subject: Re: [PATCH v1 1/1] i2c: scmi: Convert to be a platform driver
-Message-ID: <YyTR56LL6VvRU2Rf@shikoro>
+        linux-tegra@vger.kernel.org, robh+dt@kernel.org,
+        sumit.semwal@linaro.org, thierry.reding@gmail.com
+Subject: Re: [PATCH v2 1/3] i2c: tegra: Add GPCDMA support
+Message-ID: <YyTS7MWbaIS4gAMj@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Josef Johansson <josef@oderland.se>
-References: <20220906155507.39483-1-andriy.shevchenko@linux.intel.com>
- <YyTP555S2/irq/U0@shikoro>
+        Akhil R <akhilrajeev@nvidia.com>, christian.koenig@amd.com,
+        devicetree@vger.kernel.org, digetx@gmail.com, jonathanh@nvidia.com,
+        ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        robh+dt@kernel.org, sumit.semwal@linaro.org,
+        thierry.reding@gmail.com
+References: <20220906144716.16274-1-akhilrajeev@nvidia.com>
+ <20220906144716.16274-2-akhilrajeev@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="KCIuZviv5sP7BZND"
+        protocol="application/pgp-signature"; boundary="32nmFRQp6N3nwb33"
 Content-Disposition: inline
-In-Reply-To: <YyTP555S2/irq/U0@shikoro>
+In-Reply-To: <20220906144716.16274-2-akhilrajeev@nvidia.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,39 +65,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---KCIuZviv5sP7BZND
+--32nmFRQp6N3nwb33
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Tue, Sep 06, 2022 at 08:17:14PM +0530, Akhil R wrote:
+> Enable support for GPCDMA, which is used in I2C controllers
+> in Tegra 186 and above. The chips before that used APB DMA.
+> This change works under the presumption that all chips apart from
+> those supporting APB DMA is using GPCDMA.
 >=20
-> Doesn't apply anymore after the revert. Could you respin this?
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
 
-Sorry, my fault. It was the other way around. I missed the revert in
-the for-mergewindow branch.
-
+Applied to for-next, thanks!
 
 
---KCIuZviv5sP7BZND
+--32nmFRQp6N3nwb33
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMk0ecACgkQFA3kzBSg
-KbYXGg/7B1bP144AQASaSU1yPowl0ojkjiBqVG58mQQS7Ooh5N2U7EMZq8o8SJ+W
-CA4K+krhN5uAeQtv5b/luW6oBpdcCJBUUhgIyPmsIrW3UgcWk4CD8Vd4hPUIDDm1
-b9zXEQ/pdLl4slZ2hit71qKKIwAWgJm5fZUgrIUIwg1rdomdbMBBxJtd5vUs0R1W
-kYmSdCEZOQ4YsvaRQyN1Y8117z4xvHbspaWb8SDYcWmIC8kHeRkKiSJV7kK/bqVD
-A6YXUeNN+dDzo+I091OF2U2D/HUkcUdknbesnuQRojAETSgFWuBlE2h+l9Vk1s5L
-m/vctAfd2bDVSK5wYAxonA8uZhFhvqLYsDxbV8YyH9qBZwm+AAgdmEk0lRSON3Mm
-hjQHOnrT63MuInMm+zM81vfWq69Fb2ZSQvLM0dgAH9eK1a3eoObM+w9mWUpgoovf
-E14HPm0oPjsOzVDhB1JEe1gf0CHXmUN0Wor4N6UrC0/k2Pt3FaX2zdvLDgoVv6/T
-Mr0oblCK5QBWKForq+XYCWcE1JGsn0YOl5IV4SrUbTjzDn+0qTx9ezGstB7i57Tj
-sS/DkmZziEnwk0SS3vyxz97YbB57LLFlDXTW0XVX7o+v6C7BK6dx/QM8hAahKWbO
-oDkxt6ZklX0f/uFv7jfFJXUXfWzkACMxoouXVBgXEnh/080JIM4=
-=LTRX
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMk0uwACgkQFA3kzBSg
+KbbFUhAAl9xFQ0ZgJ5/N9JeaN9q8LBM6DrXhdNPIua4yd0+9grTUWYIT+vpvJ24V
+34YS3014fjvw5H7JF43Vi6Vc8IZrxKHW7bQ5qZcuymc1b8nuMZIBIWoCUSBzFbK0
+u30i+DeoJSHY3A0AzJHLOz1e7D3NscVpKVBUxhJDfDLX1kb8Yj/cX+9D6mH/efZw
+va6KW2xnI970fgltMS98Lmvg4yxdVH4Cyeum3t2g/T5XffPxD5Env/5vFKn/OdCZ
+/rB+qNC6I7aeq55YrO+VADc0/4NrctbV+360/nhEEyXNiqS+CPzGa1ah6krlskqP
+KrwNdiPutENb6SRmS11hCso0Wv7LaiwE3qXoSwIwILugXZv8sD3Ynu1m3kYqGMTS
+TudfbbOhjsDSBbgGlrN+/lAkoXi8GeQyDMHAfYHEyTk3xEP8s8gpP7Tzix4yJHro
+JzfvcW62cYecsRRuUqDmUk8VKIwMuFfXVJ0ANeafS7+FA49BgZcI1HTtwKYkMlIO
+3sJNrcS/z+cinVI2HcAdTE/0hoVGQr6ejxWg1O/OKWMqVATHXfIlxskAF8ff6MLB
+NMRM7tax+2hIRWabmcEdBdUFU6cJrl0QeKYp2CcxW2AQoXcA9FP4QetKmtTseZMW
+U+lARi9QF0lXXwmMGhNdLitRTf4PVT0Gde6f7s+YMBCjov3uhIo=
+=JyGY
 -----END PGP SIGNATURE-----
 
---KCIuZviv5sP7BZND--
+--32nmFRQp6N3nwb33--
