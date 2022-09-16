@@ -2,49 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0D05BB2E0
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Sep 2022 21:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F18795BB2F2
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Sep 2022 21:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbiIPTjp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 16 Sep 2022 15:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
+        id S229581AbiIPTnn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 16 Sep 2022 15:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiIPTjn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Sep 2022 15:39:43 -0400
+        with ESMTP id S229765AbiIPTnm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Sep 2022 15:43:42 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E7A17E06
-        for <linux-i2c@vger.kernel.org>; Fri, 16 Sep 2022 12:39:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297BDB3B18;
+        Fri, 16 Sep 2022 12:43:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7859B828DE
-        for <linux-i2c@vger.kernel.org>; Fri, 16 Sep 2022 19:39:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAD67C433C1;
-        Fri, 16 Sep 2022 19:39:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C82FCB828DE;
+        Fri, 16 Sep 2022 19:43:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1B3BC433C1;
+        Fri, 16 Sep 2022 19:43:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663357177;
-        bh=ijT8/PQ0ZyYIvvO8aB4i1OGUhUzBqgBRVOqMuARMGn0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gfJS7zskWsR4q0uiA4C+lF7NJKzbujCxSVpYgUMF2WlV/I/clpFI0kiZ63v1rzDfr
-         DBLM0nF3VPjl4kOpeoN4sCAblaqRv1ds5yDIuTj3Ii+vFDvPrjAuGCBUAE4De76ce4
-         b9iB2f2HZxf+rambCns0xo2gmabaQrYNLqYcVWW+jyycPH35KFuCJm6s7u9Vq7LSDV
-         HQFge8RJypdFLfmTVlqf/+5bc3ORl91uHBM3z020+5WhBleg9pVPZxcF/9wdEHz0/T
-         NdAfxiWq/BmZ5XnxAFPm5eDMGXOlHBNnkR+NUGZPNzJSxUk2udnPuu3F/tZSu0+hO1
-         85u2pXtXLyVMQ==
-Date:   Fri, 16 Sep 2022 20:39:33 +0100
+        s=k20201202; t=1663357419;
+        bh=oAadqbAlspzk85K4mBPCdBFr+j5F/tmHHXVk2Ke47kU=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=V7g+v/vYWeHPLW+P8OxK8BBJ8TDhC48S7q1yYvCwS7NNULlUuJVtZXmSoqzBOW3nS
+         tVLP65d2xss1n1rJXe2GQiz0KbnQIkJb9suCKeaisPTEN9aWLzhlOpw3A6+t36I4Ko
+         UjcajKIZ04mYc3QQ6oQlv/V3B3BKslYsk7TPIPZUfQv1BZsZgGeKiOUC5aSFaB4xvo
+         D0ppUd8+BfoUepz+FR0eJT2ldtGK67FawDKkvDVQajSlXlBAQnB5fYAq3fMGzcnJHa
+         H68UOmEPDeS2z3dGNrbc9NV4eHt/Q81PHbV/XstkdmpAJp3CExBdW85s/EBw6WBeXc
+         yMZF0kqrPhzbQ==
+Date:   Fri, 16 Sep 2022 20:43:35 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     linux-i2c@vger.kernel.org
-Cc:     Shyam Sundar S K <shyam-sundar.s-k@amd.com>
-Subject: Re: [PATCH] MAINTAINERS: remove Nehal Shah from AMD MP2 I2C DRIVER
-Message-ID: <YyTQ9Z0yz7CrDPMD@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>
-References: <20220912205843.3343-1-wsa@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Josef Johansson <josef@oderland.se>
+Subject: Re: [PATCH v1 1/1] i2c: scmi: Convert to be a platform driver
+Message-ID: <YyTR56LL6VvRU2Rf@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Josef Johansson <josef@oderland.se>
+References: <20220906155507.39483-1-andriy.shevchenko@linux.intel.com>
+ <YyTP555S2/irq/U0@shikoro>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="I/KWcu6Gn3tAytaJ"
+        protocol="application/pgp-signature"; boundary="KCIuZviv5sP7BZND"
 Content-Disposition: inline
-In-Reply-To: <20220912205843.3343-1-wsa@kernel.org>
+In-Reply-To: <YyTP555S2/irq/U0@shikoro>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,39 +59,39 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---I/KWcu6Gn3tAytaJ
+--KCIuZviv5sP7BZND
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 12, 2022 at 09:58:43PM +0100, Wolfram Sang wrote:
-> His email bounced and given commit 88115ea6308d ("HID: amd_sfh: Remove
-> name from maintainers list"), I assume he is no longer available as a
-> maintainer.
+
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 >=20
-> Signed-off-by: Wolfram Sang <wsa@kernel.org>
+> Doesn't apply anymore after the revert. Could you respin this?
 
-Applied to for-current, thanks!
+Sorry, my fault. It was the other way around. I missed the revert in
+the for-mergewindow branch.
 
 
---I/KWcu6Gn3tAytaJ
+
+--KCIuZviv5sP7BZND
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMk0PQACgkQFA3kzBSg
-KbZf9g//Yx5GnOQvh/wPiQFj1Tej3P6t/IM2ZJsDPBNoA3Cssze8HD6a7g44mxbg
-PlhxiimVF3ObAfnZhaIIz0BpvcailFaoBwBD4Y6y3p28fy/H/Dx04PU/Dshg/DZn
-YmeKH3iGB2MKLQ93RTSo1HRF0K7kGmo2on04ajoz4U745+zTeUVAOR5TS+lrbr2d
-zxrbXpzuVqIHHYKuS1Jm807M1Kz/fbLY18cBDX0e6mQWWi3G19KIEzIeHNVw5ORU
-wnhEZgHtUmX7Q7tbzfWSMv1LCAV0K/MQOc7r7MmPVxTJd1Eir747N5+IWDA8llZp
-UypHt8ibR/JS8PfujlclkoyImMVSJZcCm8MsE+UGtf7T/XcitgzPF5W4JjFg3yus
-t01G2oFW1QJo3p+s1PKv3M65kbEBhGM9nlvbP2VLIBKqUmLA/AbFsGngTubUabvO
-lyJ7W3cIujo2TRqv2PjStbNhWscjEtIk/2VF9u03AqpwK9rzevTNHcOtB8ajeWgP
-odavEq/pDSHUuJCaFDnvUFuFzxM+FP+TSKz/6qYlylV8Jycl0ywqeqyPIThiPKfi
-ICnZg0hqpCXpUGppKpYmTXjknM4hw7Sk3xOSsuR7jWMrrnxsODOGCqf4jcNaN+5N
-kNdnhyObVj8ckwBI2wvCFF2TrVgg6uD0YlTHYetLk93Pzl4sMC0=
-=wbzR
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMk0ecACgkQFA3kzBSg
+KbYXGg/7B1bP144AQASaSU1yPowl0ojkjiBqVG58mQQS7Ooh5N2U7EMZq8o8SJ+W
+CA4K+krhN5uAeQtv5b/luW6oBpdcCJBUUhgIyPmsIrW3UgcWk4CD8Vd4hPUIDDm1
+b9zXEQ/pdLl4slZ2hit71qKKIwAWgJm5fZUgrIUIwg1rdomdbMBBxJtd5vUs0R1W
+kYmSdCEZOQ4YsvaRQyN1Y8117z4xvHbspaWb8SDYcWmIC8kHeRkKiSJV7kK/bqVD
+A6YXUeNN+dDzo+I091OF2U2D/HUkcUdknbesnuQRojAETSgFWuBlE2h+l9Vk1s5L
+m/vctAfd2bDVSK5wYAxonA8uZhFhvqLYsDxbV8YyH9qBZwm+AAgdmEk0lRSON3Mm
+hjQHOnrT63MuInMm+zM81vfWq69Fb2ZSQvLM0dgAH9eK1a3eoObM+w9mWUpgoovf
+E14HPm0oPjsOzVDhB1JEe1gf0CHXmUN0Wor4N6UrC0/k2Pt3FaX2zdvLDgoVv6/T
+Mr0oblCK5QBWKForq+XYCWcE1JGsn0YOl5IV4SrUbTjzDn+0qTx9ezGstB7i57Tj
+sS/DkmZziEnwk0SS3vyxz97YbB57LLFlDXTW0XVX7o+v6C7BK6dx/QM8hAahKWbO
+oDkxt6ZklX0f/uFv7jfFJXUXfWzkACMxoouXVBgXEnh/080JIM4=
+=LTRX
 -----END PGP SIGNATURE-----
 
---I/KWcu6Gn3tAytaJ--
+--KCIuZviv5sP7BZND--
