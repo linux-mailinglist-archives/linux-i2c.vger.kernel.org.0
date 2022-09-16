@@ -2,50 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404D15BA904
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Sep 2022 11:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 137C65BADF8
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Sep 2022 15:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiIPJIc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 16 Sep 2022 05:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
+        id S231267AbiIPNTg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 16 Sep 2022 09:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiIPJIa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Sep 2022 05:08:30 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821CD29C96
-        for <linux-i2c@vger.kernel.org>; Fri, 16 Sep 2022 02:08:29 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oZ7Ka-0007Zx-QB; Fri, 16 Sep 2022 11:08:16 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oZ7KW-00138f-QS; Fri, 16 Sep 2022 11:08:11 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oZ7KU-001Fs9-JN; Fri, 16 Sep 2022 11:08:10 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de, kernel test robot <lkp@intel.com>
-Subject: [PATCH] macintosh/ams: Adapt declaration of ams_i2c_remove() to earlier change
-Date:   Fri, 16 Sep 2022 11:08:02 +0200
-Message-Id: <20220916090802.261279-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.37.2
+        with ESMTP id S231341AbiIPNTd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Sep 2022 09:19:33 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5386DDB7
+        for <linux-i2c@vger.kernel.org>; Fri, 16 Sep 2022 06:19:29 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id z25so35590033lfr.2
+        for <linux-i2c@vger.kernel.org>; Fri, 16 Sep 2022 06:19:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=OaypWP/IxlHhG1Kx4aDr1Q5K0a9Anqf01PLYalSrVCo=;
+        b=mq3JbMh11ee0Td9M2zQC6K//p9ytv7XheGu/zc/RTSsxwG05ni+X18R4SVKDSxecV9
+         qjfi8hTwyS1KV0MutpqHstd6CbHSgNcgK2pSiHhgOWIsMc5mEVmtI6rlSOKrqz7HC9YU
+         KxtBUj5mhgOT73/hF4H8RxwzWdj2yZx0IoumQ5d7lVIgcZGVzQdmaDh0Cd9xHj39tF6E
+         e4HX3U5bk28EwhKfRA5shj3qaZRb30J5mBvfiuu3Y02Y7SbBEFmoTwkeuheRvbApJpU2
+         TQ3cOvdj01JuerO1qKMk0t5GGwiuCXV5ai2PuG0Vzo2biI2IOp5f5GDpGoaWl8H/jDaH
+         M3Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=OaypWP/IxlHhG1Kx4aDr1Q5K0a9Anqf01PLYalSrVCo=;
+        b=6OsDr4otienThkBfyW/7+qPw08mqUjqL/VsxUZt+ziWe9JAUK3MpxQvh/BU+I8kz2e
+         qPEWG+QuLIMSeqlSTVj5Ny5kUAaz290JKefdjqV/rJQipCd3Z3bHoOBcoUJwsmeVcww+
+         kA+pgcgLGGL8f/FtBDOifWZwLB6aKxjYQQniogYR+3CXCTnzluCVpJPqL6JiqPabJXsH
+         dffMokcWogDepYJYaRiizGQqFbU8R6u8/WM1gUPMRZl0svBUfJ5I1qTmS9W9B3fn5fVf
+         PcYTK4zN0Sut5UR3rTyH68hnT7+DLWRFC39uJWHvZU6V7Sb20XRJO+xzKGdLmYVxIEsp
+         zfcA==
+X-Gm-Message-State: ACrzQf0w9EFnhA4/xieLQUA31y8LUHQxhsCk/qovCmIoUaNphsKxcoTv
+        rz9HI4lioAcpqHwQWzN3k4ytBg==
+X-Google-Smtp-Source: AMsMyM6uah9ha3qExCMZeorZmSh0Jd6ZlB8Vni6OkPnTZNHGOGWV8wlQpL0aCQj6UWpc52FxE9ISaw==
+X-Received: by 2002:ac2:5d25:0:b0:497:a280:9825 with SMTP id i5-20020ac25d25000000b00497a2809825mr1630139lfb.409.1663334367682;
+        Fri, 16 Sep 2022 06:19:27 -0700 (PDT)
+Received: from dabros-l.wifi.semihalf.net ([185.157.14.92])
+        by smtp.gmail.com with ESMTPSA id f3-20020a05651c02c300b0025fdf1af42asm3650847ljo.78.2022.09.16.06.19.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 06:19:27 -0700 (PDT)
+From:   Jan Dabros <jsd@semihalf.com>
+To:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com
+Cc:     wsa@kernel.org, rrangel@chromium.org, upstream@semihalf.com,
+        mario.limonciello@amd.com, jsd@semihalf.com
+Subject: [PATCH -next 0/2] Add i2c arbitration support for new SoCs
+Date:   Fri, 16 Sep 2022 15:18:52 +0200
+Message-Id: <20220916131854.687371-1-jsd@semihalf.com>
+X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1428; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=do/Kw3ytksfrqQaGzU6ZIwCzEv3D5tV24+6WnpVw9pc=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjJDzutBJxZZLlx5FgG4dttMsbGJHJGQGjkSlGv9F+ 7SD8JbuJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYyQ87gAKCRDB/BR4rcrsCXMIB/ 9qMjSb53PiWux7vmHgutZ4Jd3Y5FiJjKKNgEhcd5hoo+CN7n7KhV3sT2sZIGxTcY3qmou30sfntP47 fuG7Z3dByG/++hQOzRFR4yyYHGIzefKuJEvXBjJVT6tFVRWYVviGPMEcXRX0Nni66SYNeWeYBpWBNO MfDRAQ3MtW4NHpRXmQUo9sqzaeGvJ8mpoASYnLwpbo954WaJXg3X16hYiBB2OjJCAVxdSG8tcQfoKd E6ilWWDpHqA/sGLWAITKpJR40r2xFErK7KVcad2nrV+d59kWM97b0bYofEVrUSN5SJukWB9uNLYTLW Z5CmNrDHFfTRH4suRzhLbOn6YrxhPN
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,43 +67,25 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Commit ed5c2f5fd10d ("i2c: Make remove callback return void") changed
-the prototype of ams_i2c_remove() but failed to adapt the declaration.
-Catch up and fix the declaration accordingly.
+This patchset comprises changes into i2c-designware-amdpsp.c module
+which aims to add support for new SoCs, while keep backward
+compatibility with Cezanne platforms.
 
-Fixes: ed5c2f5fd10d ("i2c: Make remove callback return void")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
-Hello,
+Beside new algorithm introduced for the PSP-x86 communication, it also
+switches from MSR/MMIO access to SMN (System Management Network) since
+only the latter is working on both old new revisions of SoCs.
 
-the kernel test robot found a regression. I checked the kernel tree and
-(assuming I did it correctly) there are no other instances where I
-missed to adapt a declaration.
+Jan Dabros (2):
+  i2c: designware: Switch from using MMIO access to SMN access
+  i2c: designware: Add support for new SoCs in AMDPSP driver
 
-I don't know how to proceed with this fix. Squashing into the broken
-commit is out of the game as the commit is on a stable branch that is
-already merged in a few trees. Maybe let it go in via the i2c tree?
+ arch/x86/include/asm/amd_nb.h               |   1 +
+ arch/x86/kernel/amd_nb.c                    |   3 +-
+ drivers/i2c/busses/i2c-designware-amdpsp.c  | 199 +++++++++++++-------
+ drivers/i2c/busses/i2c-designware-core.h    |   1 -
+ drivers/i2c/busses/i2c-designware-platdrv.c |   1 -
+ 5 files changed, 134 insertions(+), 71 deletions(-)
 
-Best regards
-Uwe
-
- drivers/macintosh/ams/ams-i2c.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/macintosh/ams/ams-i2c.c b/drivers/macintosh/ams/ams-i2c.c
-index 362fc56b69dc..3ded340699fb 100644
---- a/drivers/macintosh/ams/ams-i2c.c
-+++ b/drivers/macintosh/ams/ams-i2c.c
-@@ -58,7 +58,7 @@ enum ams_i2c_cmd {
- 
- static int ams_i2c_probe(struct i2c_client *client,
- 			 const struct i2c_device_id *id);
--static int ams_i2c_remove(struct i2c_client *client);
-+static void ams_i2c_remove(struct i2c_client *client);
- 
- static const struct i2c_device_id ams_id[] = {
- 	{ "MAC,accelerometer_1", 0 },
 -- 
-2.37.2
+2.37.3.968.ga6b4b080e4-goog
 
