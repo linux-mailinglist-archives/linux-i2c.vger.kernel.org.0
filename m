@@ -2,55 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9994D5BB262
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Sep 2022 20:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA505BB2C8
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Sep 2022 21:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiIPSqk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 16 Sep 2022 14:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
+        id S229570AbiIPT3d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 16 Sep 2022 15:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiIPSqj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Sep 2022 14:46:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A47B81F6
-        for <linux-i2c@vger.kernel.org>; Fri, 16 Sep 2022 11:46:38 -0700 (PDT)
+        with ESMTP id S229457AbiIPT3c (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Sep 2022 15:29:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFE3111A;
+        Fri, 16 Sep 2022 12:29:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BD0A62CAB
-        for <linux-i2c@vger.kernel.org>; Fri, 16 Sep 2022 18:46:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 621DAC433C1;
-        Fri, 16 Sep 2022 18:46:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6605B8289A;
+        Fri, 16 Sep 2022 19:29:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0E12C433D6;
+        Fri, 16 Sep 2022 19:29:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663353997;
-        bh=s8H0mbCOoxWJxlX2PHemiIQiWrgd61D1tG/eIoN8YR0=;
+        s=k20201202; t=1663356568;
+        bh=tzk3t7V8ttjBET+05bB6lS+OgI6VS5dvuGoiNpicLww=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z5FlntAT4bQSIfhiVts6TL6AUEmXFSlBkWwDrLq9ZnZf4y8gxWOhmOsanutWLgQOD
-         XjV1KPyCatrcVdZ7ADg2cXR49SlHgCPqnzwXs9cMBYX9pev0BqrIkmzERnlDObdTCH
-         f5UYqgNANj0VlymLbVKzS/XoJbj7+5gzqmX/UovafJW5ER+14vOYAJBR15oJipraUM
-         C7sIT2YdtW25zxyjrwCa2TqrQMIoIP3ZDK921vcKaUhJ8aGYxpbmMx8IpqF1PVRLa4
-         /zcnq32VeHiXd1u05CRwXE4hAcrQ1woG+JMIEQoSmcXIQP/u5/QggyZSJH2Ick2FMn
-         RvRfBFEeyXCDg==
-Date:   Fri, 16 Sep 2022 19:46:35 +0100
+        b=RzbbWAXJW7SXapU3aGxzwC7Sa8pTk/Vea6SsDBwP4M97X8gqO9KDphV0fKC5AJ3Wl
+         vjx690OkvIPiDHppuBWeAYYLBTjPddbvzwg6KI2NEBwmLYYgzg0e6OIw17ZO7A3G+k
+         Goe3nbhelxdw9W9Z6/NrLurRpLUnEJnVmhoIrFfgnfI9HwbEUW8n3FpfiVQEcjDtJd
+         ekxEFMcWS+v/W6PgUYLAu4V3tBLFiK7s5OjNCj22YN2z/uKrmfbtM12srhG7LCzXbi
+         /TEdu6ILDL7j5aXufhxCgaon7RVMmIvJp6zS8nk76/4iAuqzwCoAJGZmTUzmOl05H+
+         GB2K5Ntnw82nQ==
+Date:   Fri, 16 Sep 2022 20:29:08 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] macintosh/ams: Adapt declaration of ams_i2c_remove() to
- earlier change
-Message-ID: <YyTEi++70eURjXpQ@shikoro>
+To:     Jagan Teki <jagan@edgeble.ai>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-i2c@vger.kernel.org, David Wu <david.wu@rock-chips.com>
+Subject: Re: [PATCH v5 1/6] i2c: rk3x: Add rv1126 support
+Message-ID: <YyTOhBJdK8l2ZTVQ@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de, kernel test robot <lkp@intel.com>
-References: <20220916090802.261279-1-u.kleine-koenig@pengutronix.de>
+        Jagan Teki <jagan@edgeble.ai>, Heiko Stuebner <heiko@sntech.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-i2c@vger.kernel.org, David Wu <david.wu@rock-chips.com>
+References: <20220915163947.1922183-1-jagan@edgeble.ai>
+ <20220915163947.1922183-2-jagan@edgeble.ai>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HMFOUFa8uBGlWQEH"
+        protocol="application/pgp-signature"; boundary="F0ZKK/iF5YjAHD4y"
 Content-Disposition: inline
-In-Reply-To: <20220916090802.261279-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20220915163947.1922183-2-jagan@edgeble.ai>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,41 +67,41 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---HMFOUFa8uBGlWQEH
+--F0ZKK/iF5YjAHD4y
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Sep 15, 2022 at 10:09:42PM +0530, Jagan Teki wrote:
+> Add i2c support for Rockchip RV1126 SoC.
+>=20
+> Cc: linux-i2c@vger.kernel.org
+> Cc: Wolfram Sang <wsa@kernel.org>
+> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+> Signed-off-by: David Wu <david.wu@rock-chips.com>
+> Signed-off-by: Jagan Teki <jagan@edgeble.ai>
+
+Applied to for-next, thanks!
 
 
-> I don't know how to proceed with this fix. Squashing into the broken
-> commit is out of the game as the commit is on a stable branch that is
-> already merged in a few trees. Maybe let it go in via the i2c tree?
-
-I think it would be simplest if I put it on top of my for-next branch.
-The other option is that PPC pulls the immutable branch
-
-git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/make_remove_callback_void-immutable
-
-and then applies this patch on top. I don't mind.
-
-
---HMFOUFa8uBGlWQEH
+--F0ZKK/iF5YjAHD4y
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMkxIsACgkQFA3kzBSg
-KbZlvxAAhZqN3GOBpS7hgdIQxyAJByYhb2PxVRswFqOF3n8dea9B0ozujTY6Bd3l
-5AJYWlBSIwPvte8bzVfQXXnhSu8otXkUwUViNZ9d4/xO9dSQLoc1PrWVE61Uz192
-/5g5+CMKgZful3LIt7WuclHFVt3Zd/jdYtKaqIC5dSLh57xFARekHp2PXWhRgDnS
-OI+2xWBsR5spjlKgo8zQWwUpmBMjrXrfwT54RHpl8QNux7oh6snVdEjB5qBZVnN8
-1OMWFpAWxbR0YhYLRm+5vaJDYn7xaZqcX0Pg1WHnS3v7wTBnS79uRGS0pEcKEiHT
-b9f4Lm0++zZiXo1nwFNacZL6nkmC49TreRv14y4me4ZbGiT+zUlqMkDgmVzI/f+k
-BnHlhzLk2ZMIJZoxLHl/lite01y58kIsED3ZzRtCrr17ATQpPxx8KP9Ru83Cl9aD
-q/PjW0P6fRdew4WvlbXF5rWSsoUyxklMYw5Aq5Rlp/374gKdl2uBBodZnAqQNX3s
-UBwAkWoBJBOuHtwRq4nwBisHkSx+USRoPprg/MDwdL25mMsGHDbWd46aN/XhHPH5
-f3jo2wmCt19ctmtZ7MiBN2xnIjSViPLpPJB9M1xhW2oKq+Rsw/bpyhENeGNwWDPP
-Q2UKNiLZtxuWbnRNpi6VIlHCpJcTz/hsWBRg3BAogCGinRYHBrk=
-=VQUK
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMkzoAACgkQFA3kzBSg
+KbZf2g//QOd14HvALQA/110/bhCs/fkCXunLYK8UNZnXsYR3gC1SFnK0uDv2ftAu
+L3fbFWEP9Us9KOcFK9VgQhc9sAEtU3lii8YUkaFd3GC7cAOi7p7zEaYSVQDdfs95
+IBlHYHC1AbiS8znPoH6arF1nqT9oz9qqlf94rIhnALlasOeErE4XcycottveI4sy
+F9upSlApWK1h1sVhYqT+FikVx7L4IxRk7RLbedngeaISQpcT29zsbCmFFkAwET/2
+jWcD1X5SVDD5u+iHYc4zrxKEWHWzngDBdt5+0GDPMg62hV/FtMu7ZAPpEuPsQ56s
+beDsOcj6Tm90G+pL5/0iXal/nw64YLFHVgzOeBPh3kznID+TBRr4dcxQekp7fz8T
+uL0San1A+Oy+E0qgqI+IOvb3tO0UWWwQznYGEw12Uh7dunF04MP/rA3tnyX9yvRR
++nhd0fP6z6Uw3nSaX5ZwR+8pgM3tyBFAmk0O97iprY3yA3rvF3E4+f+rko9L4TKm
+e4z2WApfGFO2jwXtYRJ1vl0Bpoy/yibLvqibV8l2ugsboubBl3uvc3r+FOC4oox2
+RWtAbv4o86gJVEQPpXCKgDBYXUBYgnNVxEyotl1OEDe6MKAI8NLJkMy19xtwPZHI
+/KaBbvaGdDPpinc8FU4Th0jcHLbJTUkLL+eSVLsj8M1gaBzslaQ=
+=K0E9
 -----END PGP SIGNATURE-----
 
---HMFOUFa8uBGlWQEH--
+--F0ZKK/iF5YjAHD4y--
