@@ -2,142 +2,136 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 500B05BD251
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Sep 2022 18:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B73A65BD3D8
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Sep 2022 19:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiISQh2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Mon, 19 Sep 2022 12:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
+        id S230025AbiISRgA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 19 Sep 2022 13:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiISQh1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Sep 2022 12:37:27 -0400
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9A837FB8;
-        Mon, 19 Sep 2022 09:37:26 -0700 (PDT)
-Received: by mail-qt1-f181.google.com with SMTP id r20so20281449qtn.12;
-        Mon, 19 Sep 2022 09:37:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=6fQ+1twC0Ji8Gsk3L6i3tph/pC38VH4wEOFGFdDw050=;
-        b=Mmr7bRrel8/ocNZnroABkTKsQvtzI/A+XjVlKf4dB+F4JziCKqx3RYhb+xpvYOWrY4
-         DTJc8O26uemqlYgwZ/dYblrzVdpXamOqBGJMqheWYs0nGZMJRxWZe/8TBcPLDg3/A+1G
-         LR2fRbJaTB6L7+G9R471Jhp59Qs/zT7h+2DKbHusFxGgnJRUJST/vb14DqLZjqSdPRnQ
-         bYen9qJXycNNZ88J+zgxobw+CfCsTWJk7rn0latnKc3GU822GWa1+5x6ssA6RbQjh/qX
-         cZbjl2FzlvB89R1MYGvSEAklM8ALVqi5u2lZHL9+CE9s4O8tagyRZO7xke7X2GjT43Ea
-         m02w==
-X-Gm-Message-State: ACrzQf17fZvKBjdwCqwKUN1Ik2yP/E5SShAYEB9y2FgeWM7c2rWjIskl
-        /zWcoFB3UUmP1G5W+QFKHBQjuCW/kS6r1wo1znA=
-X-Google-Smtp-Source: AMsMyM7blqbSOQF2Eb+/gT/WjwNk4M3+7d9RSV0hwBTX8X90/fo4L+7TFwDreiiSDssZGSjBiZZcyiQJ08xH1VjMZaU=
-X-Received: by 2002:a05:622a:104:b0:35c:cb31:c0d9 with SMTP id
- u4-20020a05622a010400b0035ccb31c0d9mr15708109qtw.49.1663605445534; Mon, 19
- Sep 2022 09:37:25 -0700 (PDT)
+        with ESMTP id S231245AbiISRfw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Sep 2022 13:35:52 -0400
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F1663AB0F;
+        Mon, 19 Sep 2022 10:35:49 -0700 (PDT)
+Received: from mgb4.digiteq.red (unknown [62.77.71.229])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id 1550745125;
+        Mon, 19 Sep 2022 18:56:19 +0200 (CEST)
+From:   tumic@gpxsee.org
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        =?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
+Subject: [PATCH v2 0/3] Digiteq Automotive MGB4 driver
+Date:   Mon, 19 Sep 2022 20:55:53 +0200
+Message-Id: <20220919185556.5215-1-tumic@gpxsee.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220913163147.24258-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220913163147.24258-1-andriy.shevchenko@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 19 Sep 2022 18:37:14 +0200
-Message-ID: <CAJZ5v0hC5Tif=nR2CjDcStUp+SZx3v7d7RCykzcYGYDHsNcYsg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/8] ACPI: unify _UID handling as integer
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Mark Brown <broonie@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Elie Morisse <syniurge@gmail.com>,
-        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Robert Moore <robert.moore@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 6:32 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> This series is about unification on how we handle ACPI _UID when
-> it's known to be an integer-in-the-string.
->
-> The idea of merging either all via ACPI tree, or taking ACPI stuff
-> for the v6.1 while the rest may be picked up later on by respective
-> maintainers separately (currently only perf patch is not tagged).
->
-> Partially compile-tested (x86-64).
->
-> Changelog v3:
-> - fixed dev_dbg() specifier to be in align with the variable type (LKP)
-> - made use of temporary dev variable beyond the ACPI scope (LKP)
-> - added tags to I²C patches (Wolfram)
+From: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-I've replaced the previous version of this patch series in my tree
-with this one.
+Hi,
+This series of patches adds a driver for the Digiteq Automotive MGB4 grabber
+card. MGB4 is a modular frame grabber PCIe card for automotive video interfaces
+(FPD-Link and GMSL for now). It is based on a Xilinx FPGA and uses their
+XDMA IP core for DMA transfers. Additionally, Xilinx I2C and SPI IP cores
+which already have drivers in linux are used in the design.
 
-Thanks!
+Except of the required xiic driver alias, the patches are split into two parts:
+the XDMA driver and a "standard" v4l2 device driver. The XDMA driver is
+originally based on Xilinx's sample code that can be found at:
+https://github.com/Xilinx/dma_ip_drivers
 
+The rest is a quite standard v4l2 driver, with one exception - there are
+a lot of sysfs options that may/must be set before opening the v4l2 device
+to adapt the card on a specific signal (see mgb4-sysfs.rst for details)
+as the card must be able to work with various signal sources (or displays)
+that can not be auto-detected.
 
-> Changelog v2:
-> - rebased pxa2xx patch to be applied against current Linux kernel code
-> - fixed uninitialized variable adev in use (mlxbf)
-> - dropped unneeded temporary variable adev (qcom_l2_pmu)
-> - changed type for ret in patch 8 (Hans)
-> - swapped conditions to check ret == 0 first (Ard)
-> - added tags (Mark, Ard, Hans)
->
-> Andy Shevchenko (8):
->   ACPI: utils: Add acpi_dev_uid_to_integer() helper to get _UID as
->     integer
->   ACPI: LPSS: Refactor _UID handling to use acpi_dev_uid_to_integer()
->   ACPI: x86: Refactor _UID handling to use acpi_dev_uid_to_integer()
->   i2c: amd-mp2-plat: Refactor _UID handling to use
->     acpi_dev_uid_to_integer()
->   i2c: mlxbf: Refactor _UID handling to use acpi_dev_uid_to_integer()
->   perf: qcom_l2_pmu: Refactor _UID handling to use
->     acpi_dev_uid_to_integer()
->   spi: pxa2xx: Refactor _UID handling to use acpi_dev_uid_to_integer()
->   efi/dev-path-parser: Refactor _UID handling to use
->     acpi_dev_uid_to_integer()
->
->  drivers/acpi/acpi_lpss.c               | 15 +++++------
->  drivers/acpi/utils.c                   | 24 +++++++++++++++++
->  drivers/acpi/x86/utils.c               | 14 +++++++---
->  drivers/firmware/efi/dev-path-parser.c | 10 ++++---
->  drivers/i2c/busses/i2c-amd-mp2-plat.c  | 27 +++++++------------
->  drivers/i2c/busses/i2c-mlxbf.c         | 20 +++++---------
->  drivers/perf/qcom_l2_pmu.c             | 10 +++----
->  drivers/spi/spi-pxa2xx.c               | 37 +++++++-------------------
->  include/acpi/acpi_bus.h                |  1 +
->  include/linux/acpi.h                   |  5 ++++
->  10 files changed, 83 insertions(+), 80 deletions(-)
->
-> --
-> 2.35.1
->
+I have run the driver through the v4l2-compliance test suite for both the
+input and the output and the results look fine to me (I can provide the
+output if required).
+
+Changes in v2:
+* Completely rewritten the original Xilinx's XDMA driver to meet kernel code
+  standards.
+* Added all required "to" and "cc" mail addresses.
+
+Martin Tůma (3):
+  Added platform module alias for the xiic I2C driver
+  Added Xilinx XDMA IP core driver
+  Added Digiteq Automotive MGB4 driver
+
+ Documentation/admin-guide/media/mgb4-iio.rst  |   30 +
+ Documentation/admin-guide/media/mgb4-mtd.rst  |   16 +
+ .../admin-guide/media/mgb4-sysfs.rst          |  297 +++
+ drivers/dma/Kconfig                           |    7 +
+ drivers/dma/xilinx/Makefile                   |    1 +
+ drivers/dma/xilinx/xilinx_xdma.c              | 2042 +++++++++++++++++
+ drivers/i2c/busses/i2c-xiic.c                 |    1 +
+ drivers/media/pci/Kconfig                     |    1 +
+ drivers/media/pci/Makefile                    |    1 +
+ drivers/media/pci/mgb4/Kconfig                |   17 +
+ drivers/media/pci/mgb4/Makefile               |    6 +
+ drivers/media/pci/mgb4/mgb4_cmt.c             |  243 ++
+ drivers/media/pci/mgb4/mgb4_cmt.h             |   16 +
+ drivers/media/pci/mgb4/mgb4_core.c            |  554 +++++
+ drivers/media/pci/mgb4/mgb4_core.h            |   58 +
+ drivers/media/pci/mgb4/mgb4_i2c.c             |  139 ++
+ drivers/media/pci/mgb4/mgb4_i2c.h             |   35 +
+ drivers/media/pci/mgb4/mgb4_io.h              |   36 +
+ drivers/media/pci/mgb4/mgb4_regs.c            |   30 +
+ drivers/media/pci/mgb4/mgb4_regs.h            |   35 +
+ drivers/media/pci/mgb4/mgb4_sysfs.h           |   18 +
+ drivers/media/pci/mgb4/mgb4_sysfs_in.c        |  750 ++++++
+ drivers/media/pci/mgb4/mgb4_sysfs_out.c       |  734 ++++++
+ drivers/media/pci/mgb4/mgb4_sysfs_pci.c       |   83 +
+ drivers/media/pci/mgb4/mgb4_trigger.c         |  202 ++
+ drivers/media/pci/mgb4/mgb4_trigger.h         |    8 +
+ drivers/media/pci/mgb4/mgb4_vin.c             |  656 ++++++
+ drivers/media/pci/mgb4/mgb4_vin.h             |   64 +
+ drivers/media/pci/mgb4/mgb4_vout.c            |  502 ++++
+ drivers/media/pci/mgb4/mgb4_vout.h            |   58 +
+ include/linux/dma/xilinx_xdma.h               |   44 +
+ 31 files changed, 6684 insertions(+)
+ create mode 100644 Documentation/admin-guide/media/mgb4-iio.rst
+ create mode 100644 Documentation/admin-guide/media/mgb4-mtd.rst
+ create mode 100644 Documentation/admin-guide/media/mgb4-sysfs.rst
+ create mode 100644 drivers/dma/xilinx/xilinx_xdma.c
+ create mode 100644 drivers/media/pci/mgb4/Kconfig
+ create mode 100644 drivers/media/pci/mgb4/Makefile
+ create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_core.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_core.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_io.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_regs.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_regs.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_in.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_out.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_pci.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vin.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vin.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vout.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vout.h
+ create mode 100644 include/linux/dma/xilinx_xdma.h
+
+-- 
+2.37.2
+
