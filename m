@@ -2,109 +2,126 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5DC5BDD09
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Sep 2022 08:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94485BDE07
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Sep 2022 09:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiITGWk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 20 Sep 2022 02:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
+        id S229670AbiITHUi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 20 Sep 2022 03:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiITGWh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 20 Sep 2022 02:22:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B405D11C
-        for <linux-i2c@vger.kernel.org>; Mon, 19 Sep 2022 23:22:36 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oaWds-0002p0-9V; Tue, 20 Sep 2022 08:22:00 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oaWdm-001o8d-IJ; Tue, 20 Sep 2022 08:21:53 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oaWdk-0028nS-97; Tue, 20 Sep 2022 08:21:52 +0200
-Date:   Tue, 20 Sep 2022 08:21:49 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     kever.yang@rock-chips.com, sjg@chromium.org,
-        philipp.tomsich@vrull.eu, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        ulf.hansson@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, kishon@ti.com, vkoul@kernel.org,
-        thierry.reding@gmail.com, gregkh@linuxfoundation.org,
-        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
-        zhangqing@rock-chips.com, jamie@jamieiles.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v1 03/11] dt-bindings: pwm: rockchip: add
- rockchip,rk3128-pwm
-Message-ID: <20220920062149.o6gdhsh7bk5rl4ah@pengutronix.de>
-References: <20220909212543.17428-1-jbx6244@gmail.com>
- <f5dd0ee4-d97e-d878-ffde-c06e9b233e38@gmail.com>
+        with ESMTP id S229568AbiITHUi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 20 Sep 2022 03:20:38 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6054DF37;
+        Tue, 20 Sep 2022 00:20:36 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MWtBx2H3CzmVZ7;
+        Tue, 20 Sep 2022 15:16:41 +0800 (CST)
+Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
+ (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 20 Sep
+ 2022 15:20:35 +0800
+From:   Weilong Chen <chenweilong@huawei.com>
+To:     <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
+        <xuwei5@huawei.com>, <wsa@kernel.org>, <robh+dt@kernel.org>,
+        <robh@kernel.org>
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: [PATCH next v5 1/2] i2c: hisi: Add initial device tree support
+Date:   Tue, 20 Sep 2022 15:22:14 +0800
+Message-ID: <20220920072215.161331-1-chenweilong@huawei.com>
+X-Mailer: git-send-email 2.31.GIT
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kd7xret2mae2a4ju"
-Content-Disposition: inline
-In-Reply-To: <f5dd0ee4-d97e-d878-ffde-c06e9b233e38@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+The HiSilicon I2C controller can be used on embedded platform, which
+boot from devicetree.
 
---kd7xret2mae2a4ju
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+---
+Change since v4:
+- Remove the protection for the headers for ACPI/OF
+Link: https://lore.kernel.org/lkml/20220909074842.281232-1-chenweilong@huawei.com/T/
 
-Hello,
+ drivers/i2c/busses/Kconfig    |  2 +-
+ drivers/i2c/busses/i2c-hisi.c | 15 ++++++++++++++-
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
-On Sat, Sep 10, 2022 at 12:02:22AM +0200, Johan Jonker wrote:
-> Add rockchip,rk3128-pwm compatible string.
->=20
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 0c48d8a9f44a..81f6936c312f 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -673,7 +673,7 @@ config I2C_HIGHLANDER
+ 
+ config I2C_HISI
+ 	tristate "HiSilicon I2C controller"
+-	depends on (ARM64 && ACPI) || COMPILE_TEST
++	depends on ARM64 || COMPILE_TEST
+ 	help
+ 	  Say Y here if you want to have Hisilicon I2C controller support
+ 	  available on the Kunpeng Server.
+diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
+index 76c3d8f6fc3c..67031024217c 100644
+--- a/drivers/i2c/busses/i2c-hisi.c
++++ b/drivers/i2c/busses/i2c-hisi.c
+@@ -5,6 +5,7 @@
+  * Copyright (c) 2021 HiSilicon Technologies Co., Ltd.
+  */
+ 
++#include <linux/acpi.h>
+ #include <linux/bits.h>
+ #include <linux/bitfield.h>
+ #include <linux/completion.h>
+@@ -13,6 +14,7 @@
+ #include <linux/io.h>
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+ #include <linux/units.h>
+@@ -483,17 +485,28 @@ static int hisi_i2c_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_ACPI
+ static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
+ 	{ "HISI03D1", 0 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
++#endif
++
++#ifdef CONFIG_OF
++static const struct of_device_id hisi_i2c_dts_ids[] = {
++	{ .compatible = "hisilicon,hisi-i2c", },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
++#endif
+ 
+ static struct platform_driver hisi_i2c_driver = {
+ 	.probe		= hisi_i2c_probe,
+ 	.driver		= {
+ 		.name	= "hisi-i2c",
+-		.acpi_match_table = hisi_i2c_acpi_ids,
++		.acpi_match_table = ACPI_PTR(hisi_i2c_acpi_ids),
++		.of_match_table = of_match_ptr(hisi_i2c_dts_ids),
+ 	},
+ };
+ module_platform_driver(hisi_i2c_driver);
+-- 
+2.31.GIT
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-Is the expectation that this goes in via PWM, or together with the other
-patches via the rockchip maintainers?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---kd7xret2mae2a4ju
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMpW/oACgkQwfwUeK3K
-7Ak6lQf+JJwJnr0ZyiY3Or6brzs797WF7GXUAFlXmkUFkhGzHm5kW2EBe5r0eYXK
-6JDJ9MIUXRJvfRMXB0q1REypyJTbfcS78DyhtcyYM89rpXqxBp76jgDUf9Rs2H+z
-fwUffgfMkkQk6ojMNmH6zeOALRizKrYFAmvWQAWndiOJLNeOAtcDF5PnfM+i2xer
-mPTOt7VjkfcG8CKYIp12F7V/aizP9olhrAvGVZKk+bkLNUfSGmkqQcYCaHr7xDaj
-aXtjRhrJzjBtQrq55OSMM5moBXnlWsTQGRxSeNpQO3wHAIbLadUooB4E717L9fut
-q4vUk4zN179x3cEVOMDAV6ZtGl0BIQ==
-=pI/x
------END PGP SIGNATURE-----
-
---kd7xret2mae2a4ju--
