@@ -2,115 +2,157 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDE45BDFD8
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Sep 2022 10:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB32D5BE2B1
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Sep 2022 12:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbiITIV2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 20 Sep 2022 04:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
+        id S230086AbiITKHU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 20 Sep 2022 06:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiITIUQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 20 Sep 2022 04:20:16 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22AEDBCB3
-        for <linux-i2c@vger.kernel.org>; Tue, 20 Sep 2022 01:18:44 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id c7so2016638ljm.12
-        for <linux-i2c@vger.kernel.org>; Tue, 20 Sep 2022 01:18:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=VgLmEzPIecZSC3MjYpPVUH86WqTbJd8woh8yOpcfqDU=;
-        b=AT31RTdDAle87hJvO/3kTcU9kt9Lkl1u97mOBIhexbOrbmSq8D8sS2QeNLxbw/mhEd
-         3dLdonv/6owGqgz70lzL4ciz8RwBIqC4TsGBN9WbwvqYx3DbzOoHPLETd3/BHapHOCwq
-         vrzG128qYXTDJnbu/J0WuKhbmXDy9BxRKQ3BrOr6nV0kK0fKEDy/ldbKoW5wK0/jiy8x
-         gJK/Se0YMqWjiPWJa8RiQPVl6na9R8VKCqodtVj4ykcaZbtGgDa+hPJ1qA4ULwxC0pGg
-         iIV9a/yKOhqMOTf/G5KqVwcUMbza9u/lEz/R2MuC3mjfkIDAT2E7cVilCBP6Yat/0uhN
-         Bfbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=VgLmEzPIecZSC3MjYpPVUH86WqTbJd8woh8yOpcfqDU=;
-        b=xrhiErZJS2igp15stIOOzwIMBpvzkfc2faMVvtdE842o5i416l2Kstn3hhDnjsbvJu
-         0cs35ypaJjgWCcfQVE1KYe5X48KJz5colIjOtIg9DngX4aAJhJBBVjtkNcoTN+pQTdDp
-         hnHlHAW9PKB3GwtXEZ+s1pbl0qd6n4eue1cbtEqigGCw3asRwe5Iv41j0SOrNrv9JTWF
-         Arb3LywngdjsOln9BtEUmWE88AWJMU4eWbI0hUeqQwmhtrrsUaCGf/oPuHRNXaxoLtN3
-         LLwWc61VJS9T1C8tTnKcnpPElaXlUUQSkOXewqrCpWDSQOhxGuux0Wy2gswl9PlWhSsN
-         vXmQ==
-X-Gm-Message-State: ACrzQf1F9NqPlr0lwHqr5lcY1gO2nXZqs/8BXXss2jow9IJREE4zamNj
-        Y6bZq+hxglmOwsLh783OXA6aSg==
-X-Google-Smtp-Source: AMsMyM5zRjJJPYotMEvfsPRUR4vDhywoNUaKPLs5B7eMo1tU6DOqqU7rZDZOmHR+OcqE93aw/KaECQ==
-X-Received: by 2002:a2e:2e0b:0:b0:26b:f760:1c51 with SMTP id u11-20020a2e2e0b000000b0026bf7601c51mr6335172lju.494.1663661922472;
-        Tue, 20 Sep 2022 01:18:42 -0700 (PDT)
-Received: from krzk-bin (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b4-20020a056512070400b0049464d89e40sm197345lfs.72.2022.09.20.01.18.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 01:18:42 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 10:18:39 +0200
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     Khalil Blaiech <kblaiech@nvidia.com>, robh@kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH v4 8/8] i2c: i2c-mlxbf.c: Update binding devicetree
-Message-ID: <20220920081839.2wq2h2vsodphaqh7@krzk-bin>
-References: <20220919213431.8045-1-asmaa@nvidia.com>
- <20220919213431.8045-9-asmaa@nvidia.com>
+        with ESMTP id S229561AbiITKHM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 20 Sep 2022 06:07:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D20361138;
+        Tue, 20 Sep 2022 03:07:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6FCC4169C;
+        Tue, 20 Sep 2022 03:07:16 -0700 (PDT)
+Received: from [10.57.18.118] (unknown [10.57.18.118])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53F333F73B;
+        Tue, 20 Sep 2022 03:07:07 -0700 (PDT)
+Message-ID: <5ef51421-e6b0-edd5-6b6e-439b47b794a8@arm.com>
+Date:   Tue, 20 Sep 2022 11:07:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220919213431.8045-9-asmaa@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [BUG] ls1046a: eDMA does not transfer data from I2C
+Content-Language: en-GB
+To:     Sean Anderson <sean.anderson@seco.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
+Cc:     Li Yang <leoyang.li@nxp.com>, Peng Ma <peng.ma@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        linaro-mm-sig@lists.linaro.org, Robin Gong <yibin.gong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Joy Zou <joy.zou@nxp.com>, linux-media@vger.kernel.org
+References: <38974aab-06d0-f5ff-d359-5eedd2f3bb3e@seco.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <38974aab-06d0-f5ff-d359-5eedd2f3bb3e@seco.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 19 Sep 2022 17:34:31 -0400, Asmaa Mnebhi wrote:
-> In the latest version of the i2c-mlxbf.c driver, the "Smbus block"
-> resource was broken down to 3 separate resources "Smbus timer",
-> "Smbus master" and "Smbus slave" to accommodate for BlueField-3
-> SoC registers' changes.
+On 2022-09-19 23:24, Sean Anderson wrote:
+> Hi all,
 > 
-> Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
-> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
-> ---
->  .../bindings/i2c/mellanox,i2c-mlxbf.yaml      | 49 ++++++++++++++-----
->  1 file changed, 37 insertions(+), 12 deletions(-)
+> I discovered a bug in either imx_i2c or fsl-edma on the LS1046A where no
+> data is read in i2c_imx_dma_read except for the last two bytes (which
+> are not read using DMA). This is perhaps best illustrated with the
+> following example:
 > 
+> # hexdump -C /sys/bus/nvmem/devices/0-00540/nvmem
+> [  308.914884] i2c i2c-0: ffff000809380000 0x0000000889380000 0x00000000f5401000 ffff000075401000
+> [  308.923529] src= 2180004 dst=f5401000 attr=   0 soff=   0 nbytes=1 slast=       0
+> [  308.923529] citer=  7e biter=  7e doff=   1 dlast_sga=       0
+> [  308.923529] major_int=1 disable_req=1 enable_sg=0
+> [  308.942113] fsl-edma 2c00000.edma: vchan 000000001b4371fc: txd 00000000d9dd26c5[4]: submitted
+> [  308.974049] fsl-edma 2c00000.edma: txd 00000000d9dd26c5[4]: marked complete
+> [  308.981339] i2c i2c-0: ffff000809380000 = [2e 2e 2f 2e 2e 2f 2e 2e 2f 64 65 76 69 63 65 73 2f 70 6c 61 74 66 6f 72 6d 2f 73 6f 63 2f 32 31 38 30 30 30 30 2e 69 32 63 2f 69 32 63 2d 30 2f 30 2d 30 30 35 34 2f 30 2d 30 30 35 34 30 00 00]
+> [  309.002226] i2c i2c-0: ffff000075401000 = [2e 2e 2f 2e 2e 2f 2e 2e 2f 64 65 76 69 63 65 73 2f 70 6c 61 74 66 6f 72 6d 2f 73 6f 63 2f 32 31 38 30 30 30 30 2e 69 32 63 2f 69 32 63 2d 30 2f 30 2d 30 30 35 34 2f 30 2d 30 30 35 34 30 00 00]
+> [  309.024649] i2c i2c-0: ffff000809380080 0x0000000889380080 0x00000000f5401800 ffff000075401800
+> [  309.033270] src= 2180004 dst=f5401800 attr=   0 soff=   0 nbytes=1 slast=       0
+> [  309.033270] citer=  7e biter=  7e doff=   1 dlast_sga=       0
+> [  309.033270] major_int=1 disable_req=1 enable_sg=0
+> [  309.051633] fsl-edma 2c00000.edma: vchan 000000001b4371fc: txd 00000000d9dd26c5[5]: submitted
+> [  309.083526] fsl-edma 2c00000.edma: txd 00000000d9dd26c5[5]: marked complete
+> [  309.090807] i2c i2c-0: ffff000809380080 = [00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00]
+> [  309.111694] i2c i2c-0: ffff000075401800 = [00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00]
+> 00000000  2e 2e 2f 2e 2e 2f 2e 2e  2f 64 65 76 69 63 65 73  |../../../devices|
+> 00000010  2f 70 6c 61 74 66 6f 72  6d 2f 73 6f 63 2f 32 31  |/platform/soc/21|
+> 00000020  38 30 30 30 30 2e 69 32  63 2f 69 32 63 2d 30 2f  |80000.i2c/i2c-0/|
+> 00000030  30 2d 30 30 35 34 2f 30  2d 30 30 35 34 30 00 00  |0-0054/0-00540..|
+> 00000040  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+> *
+> 00000070  00 00 00 00 00 00 00 00  00 00 00 00 00 00 ff ff  |................|
+> 00000080  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+> *
+> 000000f0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 ff 5b  |...............[|
+> 00000100
+> 
+> (patch with my debug prints appended below)
+> 
+> Despite the DMA completing successfully, no data was copied into the
+> buffer, leaving the original (now junk) contents. I probed the I2C bus
+> with an oscilloscope, and I verified that the transfer did indeed occur.
+> The timing between submission and completion seems reasonable for the
+> bus speed (50 kHz for whatever reason).
+> 
+> I had a look over the I2C driver, and nothing looked obviously
+> incorrect. If anyone has ideas on what to try, I'm more than willing.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Is the DMA controller cache-coherent? I see the mainline LS1046A DT 
+doesn't have a "dma-coherent" property for it, but the behaviour is 
+entirely consistent with that being wrong - dma_map_single() cleans the 
+cache, coherent DMA write hits the still-present cache lines, 
+dma_unmap_single() invalidates the cache, and boom, the data is gone and 
+you read back the previous content of the buffer that was cleaned out to 
+DRAM beforehand.
 
-yamllint warnings/errors:
+Robin.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml: properties:reg: {'minItems': 3, 'maxItems': 6, 'items': [{'description': 'Smbus block registers'}, {'description': 'Cause master registers'}, {'description': 'Cause slave registers'}, {'description': 'Cause coalesce registers'}, {'description': 'Smbus timer registers'}, {'description': 'Smbus master registers'}, {'description': 'Smbus slave registers'}]} should not be valid under {'required': ['maxItems']}
-	hint: "maxItems" is not needed with an "items" list
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml: ignoring, error in schema: properties: reg
-Error: Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.example.dts:26.19-20 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:384: Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1420: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+> --Sean
+> 
+> diff --git a/drivers/dma/fsl-edma-common.c b/drivers/dma/fsl-edma-common.c
+> index 15896e2413c4..1d9d4a55d2af 100644
+> --- a/drivers/dma/fsl-edma-common.c
+> +++ b/drivers/dma/fsl-edma-common.c
+> @@ -391,6 +391,12 @@ void fsl_edma_fill_tcd(struct fsl_edma_hw_tcd *tcd, u32 src, u32 dst,
+>   {
+>          u16 csr = 0;
+>   
+> +       pr_info("src=%8x dst=%8x attr=%4x soff=%4x nbytes=%u slast=%8x\n"
+> +               "citer=%4x biter=%4x doff=%4x dlast_sga=%8x\n"
+> +               "major_int=%d disable_req=%d enable_sg=%d\n",
+> +               src, dst, attr, soff, nbytes, slast, citer, biter, doff,
+> +               dlast_sga, major_int, disable_req, enable_sg);
+> +
+>          /*
+>           * eDMA hardware SGs require the TCDs to be stored in little
+>           * endian format irrespective of the register endian model.
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index 3576b63a6c03..0217f0cb1331 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -402,6 +402,9 @@ static int i2c_imx_dma_xfer(struct imx_i2c_struct *i2c_imx,
+>                  dev_err(dev, "DMA mapping failed\n");
+>                  goto err_map;
+>          }
+> +       phys_addr_t bufp = virt_to_phys(msgs->buf);
+> +       dev_info(dev, "%px %pap %pad %px\n", msgs->buf, &bufp,
+> +                &dma->dma_buf, phys_to_virt(dma->dma_buf));
+>   
+>          txdesc = dmaengine_prep_slave_single(dma->chan_using, dma->dma_buf,
+>                                          dma->dma_len, dma->dma_transfer_dir,
+> @@ -965,6 +968,9 @@ static int i2c_imx_dma_read(struct imx_i2c_struct *i2c_imx,
+>                  }
+>                  schedule();
+>          }
+> +       dev_info(dev, "%px = [%*ph]\n", msgs->buf, msgs->len, msgs->buf);
+> +       dev_info(dev, "%px = [%*ph]\n", phys_to_virt(dma->dma_buf), msgs->len,
+> +                phys_to_virt(dma->dma_buf));
+>   
+>          temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
+>          temp &= ~I2CR_DMAEN;
