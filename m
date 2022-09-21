@@ -1,227 +1,95 @@
 Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C14D25D0221
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Sep 2022 20:00:27 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 794045E53EB
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Sep 2022 21:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbiIUR5c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 21 Sep 2022 13:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
+        id S229638AbiIUTor (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 21 Sep 2022 15:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiIUR5b (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Sep 2022 13:57:31 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D789D9082F
-        for <linux-i2c@vger.kernel.org>; Wed, 21 Sep 2022 10:57:29 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id c4so5713894iof.3
-        for <linux-i2c@vger.kernel.org>; Wed, 21 Sep 2022 10:57:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=lWz9vmTktmlnF8P5ct/IitkPDKwxx7s+v31tQx0NTfE=;
-        b=hPwgMa4Vzn+dr/R9yowxrWVRYm8GRaOYX2QoyN8KqjKAruRAR8nNeUXwTE8lnoP0Ri
-         UDKRiMuYU5L6x/cudqgLDdfD0EH/YL4CBP0B+PQHMz1Rbhy633LVkXBMEBO+nks+xWeP
-         WzDL/YlaWVONcpKPFD5/SY7FFqH99eKHZw8X8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=lWz9vmTktmlnF8P5ct/IitkPDKwxx7s+v31tQx0NTfE=;
-        b=otdHQdWKrrI8a1ZG0zKnd7nGDaBztZc+JFqWUIdXvsBU6tmlw2VISbaASo0WFNGldp
-         RVSkLfnkmh6BVTfAnPWTRDAcLmYAjCNL1PAhQhA4kcuSVrkF2+S1YuNfqtppfiWI29Aj
-         PaQzIaBEUry1ABtq+BBRS+R0qcod3hhJAavsyBNSJze1GABhxJ62y3ZEMl0C6F1CzFyP
-         LHwV8VUtp8LjA496fH8Glv3tDsjYg+dxPZqnOtT2q99qXL8hp+NTOuRxa3JendU+Xzko
-         dL1/wEX09Z7woc0GGBZ4z/Bxw0XVycwPHXsIOwg3vSItJ0A204XsVbG/+q1LaOeLIMuX
-         XItA==
-X-Gm-Message-State: ACrzQf3Mtl7vBh0hnm3NOxkwPnJEAdvL2beAC4Jh08S94YSmMALO8icM
-        mMeETbZvOARJzJWqOrUA/3DhU3nTgaZYo0zF7MlrYLuDYSBYWzTS
-X-Google-Smtp-Source: AMsMyM57bNVpIjGiIB5AzUj9jqWSl+gKbWzjqH3/K8KuyS1WQHhDHUSCV967QoGMG6sBH4ZRz7Psmf7S6Nv8biJzb6I=
-X-Received: by 2002:a05:6638:3818:b0:35a:8cf5:e007 with SMTP id
- i24-20020a056638381800b0035a8cf5e007mr12843820jav.227.1663783049239; Wed, 21
- Sep 2022 10:57:29 -0700 (PDT)
+        with ESMTP id S229472AbiIUTor (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Sep 2022 15:44:47 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23E9205D9
+        for <linux-i2c@vger.kernel.org>; Wed, 21 Sep 2022 12:44:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=w7Jz7/VDSsr+SsQrXK7cOIx370sW
+        OKMeCPTSlhrhFlw=; b=3Ar+4IImnhbXjhqG3o0toAna9ImYlBOzXHgVm2SgPnIc
+        4u46S/lZLx4iaLI+ClNhhePAnNbVxh+iuy4CRTKYl/3P3dO6LVOuA79dKzUyN32o
+        FHmpUFt7qaI0SVJPoYdCQFonBAa1ActmizNlnAXr225rfM7rUruohrWFk7R+/18=
+Received: (qmail 1343371 invoked from network); 21 Sep 2022 21:44:39 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Sep 2022 21:44:39 +0200
+X-UD-Smtp-Session: l3s3148p1@wAXnLDXpHu0gAwDtxwncAPgJb5TsabMI
+Date:   Wed, 21 Sep 2022 21:44:39 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Asmaa Mnebhi <asmaa@nvidia.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Khalil Blaiech <kblaiech@nvidia.com>
+Subject: Re: [PATCH v5 1/8] i2c: i2c-mlxbf.c: Fix frequency calculation
+Message-ID: <Yytpp4c9Brcnx5s3@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Khalil Blaiech <kblaiech@nvidia.com>
+References: <20220920174736.9766-1-asmaa@nvidia.com>
+ <20220920174736.9766-2-asmaa@nvidia.com>
 MIME-Version: 1.0
-References: <20220921063026.89619-1-matt.ranostay@konsulko.com>
- <20220921063026.89619-5-matt.ranostay@konsulko.com> <20220921080458.3uue5ooc3svcbmxp@mail.corp.redhat.com>
-In-Reply-To: <20220921080458.3uue5ooc3svcbmxp@mail.corp.redhat.com>
-From:   Matt Ranostay <matt.ranostay@konsulko.com>
-Date:   Wed, 21 Sep 2022 10:57:18 -0700
-Message-ID: <CAJCx=gn0bZp3fToF+LZE+evR2m4nWMueusjysxcrvimH0wRhaA@mail.gmail.com>
-Subject: Re: [PATCH v4 4/5] HID: mcp2221: switch i2c registration to devm functions
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     gupt21@gmail.com, jic23@kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        Jiri Kosina <jikos@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kEdobICLCmpuclNb"
+Content-Disposition: inline
+In-Reply-To: <20220920174736.9766-2-asmaa@nvidia.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 1:05 AM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> [foreword: please keep Jiri and myself (the HID maintainers) CC-ed to
-> the series, as you will need ack from us and we don't necessarily monitor
-> every single message on linux-input]
->
-> On Sep 20 2022, Matt Ranostay wrote:
-> > Switch from i2c_add_adapter() to resource managed devm_i2c_add_adapter()
-> > for matching rest of driver initialization, and more concise code.
-> >
-> > Signed-off-by: Matt Ranostay <matt.ranostay@konsulko.com>
-> > ---
-> >  drivers/hid/hid-mcp2221.c | 45 +++++++++++++++++----------------------
-> >  1 file changed, 19 insertions(+), 26 deletions(-)
-> >
-> > diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
-> > index de52e9f7bb8c..7ba63bcd66de 100644
-> > --- a/drivers/hid/hid-mcp2221.c
-> > +++ b/drivers/hid/hid-mcp2221.c
-> > @@ -824,6 +824,14 @@ static int mcp2221_raw_event(struct hid_device *hdev,
-> >       return 1;
-> >  }
-> >
-> > +static void mcp2221_hid_remove(void *ptr)
-> > +{
-> > +     struct hid_device *hdev = ptr;
-> > +
-> > +     hid_hw_close(hdev);
-> > +     hid_hw_stop(hdev);
->
-> By default, if you remove the .remove() callback, hid_hw_stop() will get
-> automatically called by hid-core.c. So we are now calling it twice,
-> which, in a way is not a big deal but it might be an issue in the long
-> run.
->
-> Generally speaking, in the HID subsystem, that situation doesn't happen
-> a lot because hid_hw_start() is usually the last command of probe, and
-> we don't need to open the device in the driver itself.
->
-> Here, I guess as soon as you add the i2c adapter, you might want to have
-> the communication channels ready, and thus you need to have it open
-> *before* i2c_add_adapter.
->
-> I would suggest the following if you want to keep the devm release of
-> stop and close: please put a big fat warning before mcp2221_hid_remove()
-> explaining that this is called in devm management, *and* add a function
-> that would just return 0 as the .remove() callback with another big fat
-> warning explaining that we don't want hid-core.c to call hid_hw_stop()
-> because we are doing it ourself through devres.
->
 
-Yeah maybe best to keep the non-devres if it isn't going to affect how the last
-change in this series is trying to implement with iio.
+--kEdobICLCmpuclNb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'll wait for Jonathan to chime in on this thread.
+On Tue, Sep 20, 2022 at 01:47:29PM -0400, Asmaa Mnebhi wrote:
+> The i2c-mlxbf.c driver is currently broken because there is a bug
+> in the calculation of the frequency. core_f, core_r and core_od
+> are components read from hardware registers and are used to
+> compute the frequency used to compute different timing parameters.
+> The shifting mechanism used to get core_f, core_r and core_od is
+> wrong. Use FIELD_GET to mask and shift the bitfields properly.
+>=20
+> Fixes: b5b5b32081cd206b (i2c: mlxbf: I2C SMBus driver for Mellanox BlueFi=
+eld SoC)
+> Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
+> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
 
-> Last, in the HID subsystem, we often interleave non devres with devres
-> for resource allocation, given that .remove() will be called before any
-> devres release. But that is assuming this ordering is OK, which doesn't
-> seem to be the case here. We first need to unregister the i2c adapter
-> and then close/stop the HID device.
+Applied to for-current, thanks!
 
-Noted.
 
--  Matt
+--kEdobICLCmpuclNb
+Content-Type: application/pgp-signature; name="signature.asc"
 
->
-> > +}
-> > +
-> >  static int mcp2221_probe(struct hid_device *hdev,
-> >                                       const struct hid_device_id *id)
-> >  {
-> > @@ -849,7 +857,8 @@ static int mcp2221_probe(struct hid_device *hdev,
-> >       ret = hid_hw_open(hdev);
-> >       if (ret) {
-> >               hid_err(hdev, "can't open device\n");
-> > -             goto err_hstop;
-> > +             hid_hw_stop(hdev);
-> > +             return ret;
-> >       }
-> >
-> >       mutex_init(&mcp->lock);
-> > @@ -857,6 +866,10 @@ static int mcp2221_probe(struct hid_device *hdev,
-> >       hid_set_drvdata(hdev, mcp);
-> >       mcp->hdev = hdev;
-> >
-> > +     ret = devm_add_action_or_reset(&hdev->dev, mcp2221_hid_remove, hdev);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> >       /* Set I2C bus clock diviser */
-> >       if (i2c_clk_freq > 400)
-> >               i2c_clk_freq = 400;
-> > @@ -873,19 +886,17 @@ static int mcp2221_probe(struct hid_device *hdev,
-> >                       "MCP2221 usb-i2c bridge on hidraw%d",
-> >                       ((struct hidraw *)hdev->hidraw)->minor);
-> >
-> > -     ret = i2c_add_adapter(&mcp->adapter);
-> > +     ret = devm_i2c_add_adapter(&hdev->dev, &mcp->adapter);
-> >       if (ret) {
-> >               hid_err(hdev, "can't add usb-i2c adapter: %d\n", ret);
-> > -             goto err_i2c;
-> > +             return ret;
-> >       }
-> >       i2c_set_adapdata(&mcp->adapter, mcp);
-> >
-> >       /* Setup GPIO chip */
-> >       mcp->gc = devm_kzalloc(&hdev->dev, sizeof(*mcp->gc), GFP_KERNEL);
-> > -     if (!mcp->gc) {
-> > -             ret = -ENOMEM;
-> > -             goto err_gc;
-> > -     }
-> > +     if (!mcp->gc)
-> > +             return -ENOMEM;
-> >
-> >       mcp->gc->label = "mcp2221_gpio";
-> >       mcp->gc->direction_input = mcp_gpio_direction_input;
-> > @@ -900,26 +911,9 @@ static int mcp2221_probe(struct hid_device *hdev,
-> >
-> >       ret = devm_gpiochip_add_data(&hdev->dev, mcp->gc, mcp);
-> >       if (ret)
-> > -             goto err_gc;
-> > +             return ret;
-> >
-> >       return 0;
-> > -
-> > -err_gc:
-> > -     i2c_del_adapter(&mcp->adapter);
-> > -err_i2c:
-> > -     hid_hw_close(mcp->hdev);
-> > -err_hstop:
-> > -     hid_hw_stop(mcp->hdev);
-> > -     return ret;
-> > -}
-> > -
-> > -static void mcp2221_remove(struct hid_device *hdev)
-> > -{
-> > -     struct mcp2221 *mcp = hid_get_drvdata(hdev);
-> > -
-> > -     i2c_del_adapter(&mcp->adapter);
-> > -     hid_hw_close(mcp->hdev);
-> > -     hid_hw_stop(mcp->hdev);
-> >  }
-> >
-> >  static const struct hid_device_id mcp2221_devices[] = {
-> > @@ -932,7 +926,6 @@ static struct hid_driver mcp2221_driver = {
-> >       .name           = "mcp2221",
-> >       .id_table       = mcp2221_devices,
-> >       .probe          = mcp2221_probe,
-> > -     .remove         = mcp2221_remove,
-> >       .raw_event      = mcp2221_raw_event,
-> >  };
-> >
-> > --
-> > 2.37.2
-> >
->
-> Cheers,
-> Benjamin
->
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMraaMACgkQFA3kzBSg
+KbaDyxAArpwpuUrb/wfiY+JkxPCflO3ZZlFXlWe5Uw0RjM6gYUcE/xyZ3ulYi7sE
+Gm0dcxcvB70a4PJod3w3/z0ELyUbS7pbnvIDpO7FUeJeG7bodeXbnLSFpN4rwOLv
+ftNrs1KZMxJXr4/fzYUz5Kg7kCXr1GLstUwEbAfUoWmAyL7skW+FITPvY0mg7F+0
+PmAOwUkRABB1WWGeioAK/ryHjOvyI0zmT0/8MV3K+1EHfTQVGIW8Nlr+BqOjhQqs
+eQmgkbLuNaN4vUHVDfxXQ5Beuf/fP1HgdOqlL4ZhRWi2DG6Snx03GEoBgGMVgQda
+sCx/QuhardNmBjCqhQA/GChxapHTpGf4y54o7t1kNUhIyUJwlSfPmbYLWxdFFK5j
+hPo3/dXsrVRjM3YfJbbL3YA9TzGHO+9fRDFSQ/998wz5hvIRHgZOS6gGs9Wf8KWM
+8vIxY5V6GDTMZ0gtalmHV6vFSB+lDkyJIoB5UBwQa5BzUBj405r4yh5sJUdFFx1C
+5d08fLfn8VFxTgtJhP5VcCfgc1ND96lZ8dPWHIZN4DT5l2XxWzndHPTDoHE6m7tT
+iEm6yRvjGI3k4/ra8nceCUSHlnslHaFmAA7HErQBCW05YP146bzM6eW8JrP49oAa
+2CozuN86wKvK776hszp5z1w53xLCfyQ/VNj2N3DmSQb5M84J3Wc=
+=UQHf
+-----END PGP SIGNATURE-----
+
+--kEdobICLCmpuclNb--
