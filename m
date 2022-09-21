@@ -2,57 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3938C5BF658
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Sep 2022 08:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 979E85BF65D
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Sep 2022 08:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiIUGbD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 21 Sep 2022 02:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S229791AbiIUGbE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 21 Sep 2022 02:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiIUGav (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Sep 2022 02:30:51 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1A22AC5F
-        for <linux-i2c@vger.kernel.org>; Tue, 20 Sep 2022 23:30:49 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id h28so3379434qka.0
-        for <linux-i2c@vger.kernel.org>; Tue, 20 Sep 2022 23:30:49 -0700 (PDT)
+        with ESMTP id S229831AbiIUGaw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Sep 2022 02:30:52 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E4032D8D
+        for <linux-i2c@vger.kernel.org>; Tue, 20 Sep 2022 23:30:51 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id m9so3769049qvv.7
+        for <linux-i2c@vger.kernel.org>; Tue, 20 Sep 2022 23:30:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=konsulko.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=/093o1NxENUaTouo0Mdw75upRRId/THkS7GyiJgLLTE=;
-        b=FgUmzi1dfdXBxW+EWGXKjLCCuHAwhBsR5vQEA9muOyMr3dKPjhQ2mBAg9784oU0vcW
-         QOuE694beWFUhq9p6GmdXGsPjvjTIQJTbxYECtkIYuUDiq6qZBgne0upMcPEUNhDym1E
-         XX6BATaZn61RKYAd5Gzu/uG0Z07kB76Sgdx3I=
+        bh=EEEIkVBJ75c1He7ol3L/GMy6O2j7bpfcaiLKZ3AKsE0=;
+        b=ZJDah8N78ksArxAT6Gozi9vW0xRjIitzUcmHaXdaTbK3H/Wx4Aesa5+XuZ+rkXBofR
+         I1VJveiMvxCLoCLCCHKrHF4U3TBbStkfwx127M/5S5vPrYdkSCMnpwHTxWYufGDhoUz1
+         +HOYLpeGcNuRmzR0wS9wLvdxwtSjqq9/GgShU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=/093o1NxENUaTouo0Mdw75upRRId/THkS7GyiJgLLTE=;
-        b=KFdeCQGHcx9+AW3PH8r72Dgp46PtZw8SSO1k9hZW0mP9DDPBv7hTs/KECUIdC7o98V
-         sebfv97K/rZTRPHMUlhZ1TyIH9nleMBkmpn60poR76mooDuh6hwhrm7aigHGNoFNM8cy
-         eQvWRgVgtJRQbV8KjZK3h+QrpKT45qBQKmJ57+5NoE8AmO2SrRewk13CwFSeP92G7aAH
-         gZlTSpKa1iTyJ6LyxnvQSoObRlD12RvOkMnX5HjGdF8HAzYQKJkXGq64STVW4tY+vMcS
-         93yC3X/7hEZTRHKtatFl5fmI+BlWV27UUVgzsEJZ/pLI5vDhUQ9d4pmQMLShtN2OND0c
-         Y+zA==
-X-Gm-Message-State: ACrzQf2+PjEbJz9HXh9lvY3BZjc7lAoKjHSnGmye41DAMrfdLwzsPJky
-        yTJHDB+DmS9Z8fIk5SlPcN2ehw==
-X-Google-Smtp-Source: AMsMyM7VVlNQFM2jb19B9vU1xma0PWwNFZ9Hwj6vv6nqxc1WcJIo9JThqwHvdsmROp7UflCFr+TP6w==
-X-Received: by 2002:a05:620a:4809:b0:6ce:496c:7e78 with SMTP id eb9-20020a05620a480900b006ce496c7e78mr18631613qkb.470.1663741848731;
-        Tue, 20 Sep 2022 23:30:48 -0700 (PDT)
+        bh=EEEIkVBJ75c1He7ol3L/GMy6O2j7bpfcaiLKZ3AKsE0=;
+        b=XaAKsy/XCGLbbACLcq5j9m2X8Tlvr7pzKAXIcsi7mjL3uU9aAbpqKpvuCoQIm5/Dsa
+         eS3/32bt4AZdxPhmAws/T3dFrbtBPLwyvYU13hHJioHZO3uLmDUrEEE6yy9F1QTqP0N+
+         UYuZqO8EoD3gkJhJlxbbmES751/V16ParTCwaSpQUXhM37dgntV9LeqFeqfsHEUxeIfO
+         +LSQDWMXHVaNOoI+dpw5Uu6gRsazageHAA+pO837MxRpxJ6YNy6IPYYrjrUuMUnC48tB
+         zPtMNmpQPWGftaS/CM1NbPO8tWohVmCycI8+Yry4IJFsbKDu9gfSO2bFoOqGNrgLTL23
+         X9CQ==
+X-Gm-Message-State: ACrzQf2J++CO3qOODJsbHW0ILQBh7Ik+5bOk+k1wD9oakGiyXyATjDJu
+        HUzWQGUFqJVv9orEjwA1oC2hNA==
+X-Google-Smtp-Source: AMsMyM7+rfhHP0WFlK4pb4y4HRfC9wcWDXLEEq2JWTqgV/VHCrznChHrIGbQHc54zQmtykzCJZDJKA==
+X-Received: by 2002:a05:6214:2468:b0:4ac:8786:f20e with SMTP id im8-20020a056214246800b004ac8786f20emr21853047qvb.50.1663741850700;
+        Tue, 20 Sep 2022 23:30:50 -0700 (PDT)
 Received: from localhost.localdomain ([164.92.70.235])
-        by smtp.gmail.com with ESMTPSA id m10-20020ac807ca000000b00342f05defd1sm1060855qth.66.2022.09.20.23.30.47
+        by smtp.gmail.com with ESMTPSA id m10-20020ac807ca000000b00342f05defd1sm1060855qth.66.2022.09.20.23.30.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 23:30:48 -0700 (PDT)
+        Tue, 20 Sep 2022 23:30:50 -0700 (PDT)
 From:   Matt Ranostay <matt.ranostay@konsulko.com>
 To:     gupt21@gmail.com, jic23@kernel.org
 Cc:     linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
         linux-input@vger.kernel.org,
         Matt Ranostay <matt.ranostay@konsulko.com>
-Subject: [PATCH v4 1/5] i2c: muxes: ltc4306: fix future recursive dependencies
-Date:   Tue, 20 Sep 2022 23:30:22 -0700
-Message-Id: <20220921063026.89619-2-matt.ranostay@konsulko.com>
+Subject: [PATCH v4 2/5] iio: addac: stx104: fix future recursive dependencies
+Date:   Tue, 20 Sep 2022 23:30:23 -0700
+Message-Id: <20220921063026.89619-3-matt.ranostay@konsulko.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220921063026.89619-1-matt.ranostay@konsulko.com>
 References: <20220921063026.89619-1-matt.ranostay@konsulko.com>
@@ -60,8 +60,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,37 +68,37 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 When using 'imply IIO' for other configurations which have 'select GPIOLIB'
-the following recursive dependency is detected for I2C_MUX_LTC4306
+the following recursive dependency is detected for STX1040
 
 Switch from 'select GPIOLIB' to 'depends on GPIOLIB' to avoid this per
 recommendation in kconfig-language.rst
 
 drivers/gpio/Kconfig:14:error: recursive dependency detected!
-drivers/gpio/Kconfig:14:        symbol GPIOLIB is selected by I2C_MUX_LTC4306
-drivers/i2c/muxes/Kconfig:47:   symbol I2C_MUX_LTC4306 depends on I2C_MUX
-drivers/i2c/Kconfig:62: symbol I2C_MUX is selected by MPU3050_I2C
-drivers/iio/gyro/Kconfig:127:   symbol MPU3050_I2C depends on IIO
+drivers/gpio/Kconfig:14:        symbol GPIOLIB is selected by STX104
+drivers/iio/addac/Kconfig:20:   symbol STX104 depends on IIO
 drivers/iio/Kconfig:6:  symbol IIO is implied by HID_MCP2221
 drivers/hid/Kconfig:1227:       symbol HID_MCP2221 depends on GPIOLIB
 
 Signed-off-by: Matt Ranostay <matt.ranostay@konsulko.com>
 ---
- drivers/i2c/muxes/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iio/addac/Kconfig | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/muxes/Kconfig b/drivers/i2c/muxes/Kconfig
-index ea838dbae32e..7b6a68df4a39 100644
---- a/drivers/i2c/muxes/Kconfig
-+++ b/drivers/i2c/muxes/Kconfig
-@@ -46,7 +46,7 @@ config I2C_MUX_GPMUX
+diff --git a/drivers/iio/addac/Kconfig b/drivers/iio/addac/Kconfig
+index fcf6d2269bfc..494790816ac7 100644
+--- a/drivers/iio/addac/Kconfig
++++ b/drivers/iio/addac/Kconfig
+@@ -19,9 +19,8 @@ config AD74413R
  
- config I2C_MUX_LTC4306
- 	tristate "LTC LTC4306/5 I2C multiplexer"
+ config STX104
+ 	tristate "Apex Embedded Systems STX104 driver"
+-	depends on PC104 && X86
++	depends on PC104 && X86 && GPIOLIB
+ 	select ISA_BUS_API
 -	select GPIOLIB
-+	depends on GPIOLIB
- 	select REGMAP_I2C
  	help
- 	  If you say yes here you get support for the Analog Devices
+ 	  Say yes here to build support for the Apex Embedded Systems STX104
+ 	  integrated analog PC/104 card.
 -- 
 2.37.2
 
