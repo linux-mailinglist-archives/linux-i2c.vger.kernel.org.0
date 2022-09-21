@@ -2,130 +2,142 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48225C00DC
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Sep 2022 17:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFC35C019E
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Sep 2022 17:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiIUPPa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 21 Sep 2022 11:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
+        id S231639AbiIUPa4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 21 Sep 2022 11:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiIUPP3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Sep 2022 11:15:29 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2074.outbound.protection.outlook.com [40.107.244.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A0E844CA;
-        Wed, 21 Sep 2022 08:15:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CtcYpEuNwdMoGiB9OVi5ZmqPyZRZswmOM/vbr/U/bRxW1UcAW0TKHk/TDdt+Fqoegy/P5o1o83pIxNx7BX9rL0aFk2ZntA7LIigyeY+7/VXzoN6+pwJTArn9ZwSuZ7mL8L6OhLcl5bsFcBbPHzdKNK4ZF7e+ovIY7tQDzZ+6LZtfRQF/RSKUPni/Oeugd/kka2Pn0M/gJNH6V1X6fbAjhq0s4Y/QTAsYLaPXJEYPTDslZbaWoXDBTO9vjD8beCiSFJxmDAxdIJq5lkgK++6hsMJzkm12q2C90Yg2XNX1cwjkEKKlxRxrwE21N48T2xeDT7OAHrEHsI2qSsyFR/M0KQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Pf9cAmzo/bcul0mmrP6iLRrx67ENy1ea4l7jcDkrOJ8=;
- b=ne+qTECYIWLYXu9TzkUT0iy/20Rbc2IAtB68anVoqtKh1fLvy5ttoKzl9UWh3MVMUqpXZvCbQxsqzFD1CEKpma+QSx+SlvWmTcyDufYgibw0CSKtniY91pFoHJ/r5pENqUL/HwnjS2aRpJHcNTLlStufn/tWQyXJDh4EktqsNPJQWyk/ng/WStR7uqekwQ87igszTTge0cCkw4CoD9gKf4kEjVie+nxvYXxS3q8xTOVra1KGkQKp8KC3tKQKKsD7pv9UEM3v47n8YT9LAU4q12WetsHMqKMGTGVKXoDyu4qVGUFhKwkesx/pG4X20Zqm0uz5KdpGT10xHIP5AFPHFw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gpxsee.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Pf9cAmzo/bcul0mmrP6iLRrx67ENy1ea4l7jcDkrOJ8=;
- b=fWiEuvz/f7brarK64UJeg7nD9wJx63MTdpnpI//+h8vVNfnEIMUvibUfPA4jNrLkXGBhT/SM4UOEcVWlisj0kfC9I9JpNsgL3850GFAmSRG69oyckxGOBc4W4Q8aQ1LV1YqLVcH6+ZLH1Gt350Y0vmtgXGwq2SxFP2+ywvvRERQ=
-Received: from MN2PR16CA0050.namprd16.prod.outlook.com (2603:10b6:208:234::19)
- by BY5PR12MB4885.namprd12.prod.outlook.com (2603:10b6:a03:1de::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.14; Wed, 21 Sep
- 2022 15:15:26 +0000
-Received: from BL02EPF0000C402.namprd05.prod.outlook.com
- (2603:10b6:208:234:cafe::25) by MN2PR16CA0050.outlook.office365.com
- (2603:10b6:208:234::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.17 via Frontend
- Transport; Wed, 21 Sep 2022 15:15:25 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BL02EPF0000C402.mail.protection.outlook.com (10.167.241.4) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5654.11 via Frontend Transport; Wed, 21 Sep 2022 15:15:25 +0000
-Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 21 Sep
- 2022 10:15:21 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB07.amd.com
- (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 21 Sep
- 2022 08:15:13 -0700
-Received: from [172.19.74.144] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Wed, 21 Sep 2022 10:15:12 -0500
-Message-ID: <921a1da6-e378-2632-7b68-ac59e3c24f68@amd.com>
-Date:   Wed, 21 Sep 2022 08:15:07 -0700
+        with ESMTP id S231445AbiIUPad (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Sep 2022 11:30:33 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259C39AFFA
+        for <linux-i2c@vger.kernel.org>; Wed, 21 Sep 2022 08:27:22 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id c24so6037603plo.3
+        for <linux-i2c@vger.kernel.org>; Wed, 21 Sep 2022 08:27:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=KLCmAE9UlNDGgLGs2ArJ00VmIdhhVt7eh934lDS0138=;
+        b=JURosBZkyeDvy/vyZPMqlVgB6IuAkyD75OrRJfNUt8s3w3vxLN7VamcPkqlyzdXLxr
+         6swKXk3vZvHZYdWG8NrSs5fqQ4zSAGVnpshII0vyAtAUYXty40xxoz50U7xZkAXpCBnl
+         B3sxf5HQVWZvvDPtd3cWBMqGFvqnM1X5cb4es=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=KLCmAE9UlNDGgLGs2ArJ00VmIdhhVt7eh934lDS0138=;
+        b=VLDQba0mjfn5L9VJVFEOONK8XtRwzEzjmd6O6PbnooPOmKqnlDxetw7wxGzXoGyyih
+         XUabFfklQLhcykOhnkIetuZu4KMurbxvSiDKL00LqVvrrb0N0EsOMS4j1T+HgcgcWrHQ
+         3FjiDeVRkhaK7EtfcNdINndQYgxZgYDC9bY/5/h1KGeErxN0gUZN9eVt0KqE6bDoyBmC
+         Ho8CCUC25t9Dx7qYhxAjSy2VR6hMfx56LwPp5kAz6svznPkegPgdhbdcmmSQj7BQfDIH
+         3Q5WfdOlQE6gr2a7O4TvjO417/I54eTuRc3Ea6ssyToevn3d50DsnrVGz1MEOJ1jceCg
+         nFiA==
+X-Gm-Message-State: ACrzQf0qzna4vfC70JBOwFuFe/zalAWc9Ewi++kp0VFv82z4TXD0P10+
+        j9aymxVvr3yGno3FOqu7qu/GHubUMf6Q/g==
+X-Google-Smtp-Source: AMsMyM6hxAWVH0kosJdcTrm1Pnk37m2yT9W6AuT4w1ro6YguJIZu4O+/LExzdXDkhubwOeerumB5yA==
+X-Received: by 2002:a17:90b:4b43:b0:202:e09c:664d with SMTP id mi3-20020a17090b4b4300b00202e09c664dmr10010376pjb.120.1663774021678;
+        Wed, 21 Sep 2022 08:27:01 -0700 (PDT)
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com. [209.85.215.180])
+        by smtp.gmail.com with ESMTPSA id a202-20020a621ad3000000b005380c555ba1sm2347526pfa.13.2022.09.21.08.27.01
+        for <linux-i2c@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 08:27:01 -0700 (PDT)
+Received: by mail-pg1-f180.google.com with SMTP id 78so6248012pgb.13
+        for <linux-i2c@vger.kernel.org>; Wed, 21 Sep 2022 08:27:01 -0700 (PDT)
+X-Received: by 2002:a92:c569:0:b0:2f5:927d:b61a with SMTP id
+ b9-20020a92c569000000b002f5927db61amr7672947ilj.151.1663773525104; Wed, 21
+ Sep 2022 08:18:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/3] Added Xilinx XDMA IP core driver
-Content-Language: en-US
-To:     =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>
-CC:     <dmaengine@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <martin.tuma@digiteqautomotive.com>, <mchehab@kernel.org>,
-        <michal.simek@xilinx.com>, <vkoul@kernel.org>
-References: <19bd8ce4-2dde-e985-00f4-09b48decd3dc@amd.com>
- <e084352e-a784-accd-f267-9e0c30c7a92b@gpxsee.org>
-From:   Lizhi Hou <lizhi.hou@amd.com>
-In-Reply-To: <e084352e-a784-accd-f267-9e0c30c7a92b@gpxsee.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0000C402:EE_|BY5PR12MB4885:EE_
-X-MS-Office365-Filtering-Correlation-Id: a8a9f76d-0bc3-4ead-1ec0-08da9be41c3b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: X0NyuZ10YnPfO65ndzUCnFKaXE2RyXRSNJbUYkS7iloTN5RdVPIRDdJ2aKX7AnFvcHSaIJu3OfcfUoZ0eNFJNvpCsZf2JZWfEA8z8RvKhDvMnxg12vMFLjf/jWgvk6WKRvlE+CKo7E09tUCpKuvUkz0BKfiuW4Nf9s+Lcd6FviulPKa/D8g+ueeh0tO6UZqq6nA8UMRGL1BGRvpUaqzuh1FmD5w5EsaVhooT2rG1wmayMLSMKOy1dUK3djBoWrvmeAWlN4dV11vP2CYGezhUDtzbf0cSO+ipiQcBAA/vxvKhCdZN9Dz7WiS7IvjIGb/RoyYct2T5cBLID1oo7HID5w+AIiRY5BP4j5f4gdtZbhISfdEE5gxqtkZMExhXeMK2QWsci1A1mLrTDzDCzrIIKOehzn6ItK/K8cW0HXn7Y0otDu1dphd3v7xBZlMDOkzyfsRCOwLDLvGKVvkx+f6bJU6IKi9Omod4U9PVK6tRYBWvcXGqJ1hHcBP7L4WtI8tvrM7noqdQR3laNm4QvEY4EbZ0SXXx3ScqMOizq94rVCqRiZi971Up/FkCDtWuWuftXFECzovPuStlnm55oynx3l8MP2TtI5UQPdiX8e1rR9YVCqixJZcKUB4+pMF2v0jEvtHtgksr+yCnEpSLbEx5rVNSOvuKUMt55bLSYVTwdZgLqOQKaFMR7vAzW6nuupkbiJV9GHutUwPhShNY+jvY9PnJ3dIiO4d3RqUftn1WRKiZzr7dcyxU8mjpeN9S1ZhIdb8BoXjHBMiqrqZmg6Mkoik/dUloQ253sTDqvKY3NIY9nmcRMze3HzYnVDzMMjTvtivaQgAgnD7FLYrzSvrvWw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(376002)(39860400002)(136003)(451199015)(46966006)(40470700004)(36840700001)(2906002)(8936002)(4744005)(5660300002)(70586007)(82310400005)(4326008)(8676002)(36756003)(70206006)(44832011)(41300700001)(6916009)(54906003)(36860700001)(40460700003)(478600001)(26005)(356005)(6666004)(53546011)(16576012)(86362001)(316002)(81166007)(31686004)(82740400003)(66574015)(2616005)(31696002)(186003)(426003)(336012)(40480700001)(47076005)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2022 15:15:25.4207
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8a9f76d-0bc3-4ead-1ec0-08da9be41c3b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000C402.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4885
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220919155916.1044219-1-rrangel@chromium.org>
+ <20220919095504.v4.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid> <Yymyzcfp7gqdTYam@smile.fi.intel.com>
+In-Reply-To: <Yymyzcfp7gqdTYam@smile.fi.intel.com>
+From:   Raul Rangel <rrangel@chromium.org>
+Date:   Wed, 21 Sep 2022 09:18:34 -0600
+X-Gmail-Original-Message-ID: <CAHQZ30C3Wsqbwnpn+9tP2DCDdtMGOqOZ8di77agDcLM7idWxuQ@mail.gmail.com>
+Message-ID: <CAHQZ30C3Wsqbwnpn+9tP2DCDdtMGOqOZ8di77agDcLM7idWxuQ@mail.gmail.com>
+Subject: Re: [PATCH v4 07/13] i2c: acpi: Use ACPI wake capability bit to set wake_irq
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        Tim Van Patten <timvp@google.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        "jingle.wu" <jingle.wu@emc.com.tw>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
-On 9/21/22 02:25, Martin Tůma wrote:
-> > Currently, the V3 patch series does not support register user logic
-> > interrupt yet.
+On Tue, Sep 20, 2022 at 6:32 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> This is a showstopper for almost every XDMA based PCIe card. As the 
-> driver "consumes" the whole register space (including the user IRQs 
-> enable/disable registers), there is AFAIK no way how to enable the 
-> user IRQs when this driver is loaded.
+> On Mon, Sep 19, 2022 at 09:59:09AM -0600, Raul E Rangel wrote:
+> > Device tree already has a mechanism to pass the wake_irq. It does this
+> > by looking for the wakeup-source property and setting the
+> > I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses the
+> > ACPI interrupt wake flag to determine if the interrupt can be used to
+> > wake the system. Previously the i2c drivers had to make assumptions and
+> > blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
+> > If there is a device with an Active Low interrupt and the device gets
+> > powered off while suspending, the interrupt line will go low since it's
+> > no longer powered and wakes the system. For this reason we should
+> > respect the board designers wishes and honor the wake bit defined on the
+> > interrupt.
 >
-> > Could you convert your driver to use this?
+> ...
 >
-> Not without the user IRQs.
-
-I provided the patch link for user logic IRQ support in previous reply. 
-You may pull it and patch it on top of the V3 patch series.
-
-
-Lizhi
-
+> > +     if (irq_ctx.irq == -ENOENT)
+> > +             irq_ctx.irq = acpi_dev_gpio_irq_wake_get(adev, 0, &irq_ctx.wake_capable);
 >
-> M.
+> I just realized, that there is an inconsistency on how we fill the wake_capable
+> parameter. In some cases we check for IRQ for an error condition (IRQ not found)
+> and in some the wake_capable still be filled.
+>
+> Here the best approach I believe is to add
+>
+>         if (irq_ctx.irq < 0)
+>                 return irq_ctx.irq;
+>
+> I.o.w. we apply the rule "do not fill the output parameters when it's known
+> to be an error condition".
+>
+> > +     if (wake_capable)
+> > +             *wake_capable = irq_ctx.wake_capable;
+>
+> > +     return irq_ctx.irq;
+>
+
+I applied the following:
+diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+index ba64e505183595..1618f5619d5ed9 100644
+--- a/drivers/i2c/i2c-core-acpi.c
++++ b/drivers/i2c/i2c-core-acpi.c
+@@ -220,7 +220,7 @@ int i2c_acpi_get_irq(struct i2c_client *client,
+bool *wake_capable)
+        if (irq_ctx.irq == -ENOENT)
+                irq_ctx.irq = acpi_dev_gpio_irq_wake_get(adev, 0,
+&irq_ctx.wake_capable);
+
+-       if (wake_capable)
++       if (irq_ctx.irq > 0 && wake_capable)
+                *wake_capable = irq_ctx.wake_capable;
+
+        return irq_ctx.irq;
+
+Thanks!
