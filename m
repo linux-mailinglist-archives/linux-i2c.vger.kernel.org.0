@@ -2,65 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C544E5E5436
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Sep 2022 22:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0743C5E543E
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Sep 2022 22:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbiIUUKx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 21 Sep 2022 16:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
+        id S230325AbiIUUMl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 21 Sep 2022 16:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiIUUKw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Sep 2022 16:10:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185ED9C2C6;
-        Wed, 21 Sep 2022 13:10:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230292AbiIUUMk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Sep 2022 16:12:40 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069A0A4043;
+        Wed, 21 Sep 2022 13:12:39 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D0741B81F90;
-        Wed, 21 Sep 2022 20:10:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F1FDC433D6;
-        Wed, 21 Sep 2022 20:10:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663791048;
-        bh=rv29LAUUGzQp6QdV7CsyD9nRXhzFSX+5EI3EqTFY//0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sOJ5Ar1d9F/nJocBjvVLGXQp5u56v5HPdEXmqyScEbkEqDaUmWmyarqyW0fCarpru
-         RcPvnInLNbdcBSriYEt+P1wp+9K9B6dpLLcYPwdXd7oUl9GpGqRBNUPY0vKemZ/Sjh
-         0CAR6Bse4zciv2/CbLrnq901bfgXQooSlkrJZ3ZmqvBhcmSU4y66s+AsULFzdqVC+5
-         HfA/vkBPgY6+x1vxGOPxMXlH92N7/T1UfetyhKPxtnj3OeIiFzGY+CtUQQ6UM7YhTT
-         CcJ3XUcU+NVtug2zgPKLQbm5wW4Oz541VcFfOxs8iZBYBNAE+OXxq1SBRmBVoqHb+m
-         PoAOvMMd/zI6Q==
-Date:   Wed, 21 Sep 2022 22:10:45 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Raul E Rangel <rrangel@chromium.org>
-Cc:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org,
-        rafael@kernel.org, timvp@google.com,
-        mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        dmitry.torokhov@gmail.com, jingle.wu@emc.com.tw,
-        hdegoede@redhat.com, mario.limonciello@amd.com,
-        linus.walleij@linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 07/13] i2c: acpi: Use ACPI wake capability bit to set
- wake_irq
-Message-ID: <YytvxVs7g5vx8AAM@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Raul E Rangel <rrangel@chromium.org>, linux-acpi@vger.kernel.org,
-        linux-input@vger.kernel.org, rafael@kernel.org, timvp@google.com,
-        mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        dmitry.torokhov@gmail.com, jingle.wu@emc.com.tw,
-        hdegoede@redhat.com, mario.limonciello@amd.com,
-        linus.walleij@linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220921155205.1332614-1-rrangel@chromium.org>
- <20220921094736.v5.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 911AC21AD1;
+        Wed, 21 Sep 2022 20:12:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663791158; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sVAnArdXy3VOpvaRjysTIUckxIMGCOeYnd8hokW+7m8=;
+        b=Ex/ob4kUMGYwnu9Kup31js+dMKExi4A1KuwPacTeaSJAU6GbdJ6CFEuNfgRuERwAuidLF2
+        6Lp6ow8iIM1PFm292F2Yp00YFhpdhS70r1cNpWAZns0WuRvsHL/5yHIrwzpeE1ryOOmKId
+        GbFIMKb0Iu/FYmPSXKxnm654OlofDdA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663791158;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sVAnArdXy3VOpvaRjysTIUckxIMGCOeYnd8hokW+7m8=;
+        b=pUcCWsFvpFUsQkTqSXgYX9UR/b1DHebNWyp04ydzLVi5Fd/3ZpfOsBnCo5zrkM39iZwOpo
+        GZy0J6jTVLGmNtBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8314413A00;
+        Wed, 21 Sep 2022 20:12:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id zXb5HzZwK2MWXQAAMHmgww
+        (envelope-from <bp@suse.de>); Wed, 21 Sep 2022 20:12:38 +0000
+Date:   Wed, 21 Sep 2022 22:12:38 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>
+Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        wsa@kernel.org, rrangel@chromium.org, upstream@semihalf.com,
+        Muralidhara M K <muralimk@amd.com>,
+        Naveen Krishna Chatradhi <nchatrad@amd.com>
+Subject: Re: [PATCH -next 1/2] i2c: designware: Switch from using MMIO access
+ to SMN access
+Message-ID: <YytwNvSyhq380YNT@zn.tnic>
+References: <20220916131854.687371-1-jsd@semihalf.com>
+ <20220916131854.687371-2-jsd@semihalf.com>
+ <eafc7bb5-a406-132b-4b7d-167917cdab05@amd.com>
+ <CAOtMz3Pgh+cERiXVetDZJrQa9C0kUUbZ9dRRhdghgm5Or8kwhg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="I1sEXZoSjXGGazpV"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220921094736.v5.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOtMz3Pgh+cERiXVetDZJrQa9C0kUUbZ9dRRhdghgm5Or8kwhg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,51 +78,17 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, Sep 20, 2022 at 06:24:39PM +0200, Jan Dąbroś wrote:
+> > > +EXPORT_SYMBOL_GPL(amd_cache_northbridges);
 
---I1sEXZoSjXGGazpV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Why is this being exported again?
 
-On Wed, Sep 21, 2022 at 09:51:59AM -0600, Raul E Rangel wrote:
-> Device tree already has a mechanism to pass the wake_irq. It does this
-> by looking for the wakeup-source property and setting the
-> I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses the
-> ACPI interrupt wake flag to determine if the interrupt can be used to
-> wake the system. Previously the i2c drivers had to make assumptions and
-> blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
-> If there is a device with an Active Low interrupt and the device gets
-> powered off while suspending, the interrupt line will go low since it's
-> no longer powered and wakes the system. For this reason we should
-> respect the board designers wishes and honor the wake bit defined on the
-> interrupt.
->=20
-> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->=20
+It is called unconditionally as a fs_initcall()...
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
+-- 
+Regards/Gruss,
+    Boris.
 
-
---I1sEXZoSjXGGazpV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMrb8QACgkQFA3kzBSg
-KbatIQ/+IyW1ZAyHqbyjAHsEBC9key1KUPhiobZS22Yxc2Q/c0MpSccz/wTjHC+5
-daB76MkxT2eneJRlL7QhDB9Hrh4o5s3+knCKjjPjg6MddrOxpSK+OGz3Ec+FaUNX
-K/tnd1aXprE1iClRyluzfs4c8wmR2QATMY1d9+foBjZhPwNhyL4GnEoDV3SbctAA
-7iGOMayy0VjRB7BbGk1RjNY9EFV91NlgI4wijFhKG8u1X5x1ePfJOK+MFcWrZy/P
-HI8b11gZ5WDCh+hOb0f453cU+DQB20ZEzkiF0mIZGabzlhCJf98yYbbxmsEGhVX8
-OCIlDgxf+5LDQy8DqCRiLqOTVZvqZQNqBEG7871Xwj/m3ST7LtaXqAMHyMqM9z4G
-JWco49ygFV5M3XSn/zEml4Fv0WhUTccVxbGOy4ehDmMLkhZQzNLZnMfu3MNITURK
-4YcQy0t/MrvYRUuSscpiRXzx2kHGaW+L+eEOriJ2JIl/q6y5RsCV58xapoj35Mxn
-SuQm8yh4+i7IogqfA1zX2W6e1e161nfOHDyqFDciP17zTa29k2oSFu7VM/tlOzHO
-oxbu9O6pnEZveGR2QAEodH2sDaEW+Tme5RejJostHh+NHbl/DGh4dIbwP3gcOdIX
-tF0MQ0Ef9QQHodTQcu8w0jblwR4pPQkS6X2uLNKBNv5G4whvNgU=
-=2Tdp
------END PGP SIGNATURE-----
-
---I1sEXZoSjXGGazpV--
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)
