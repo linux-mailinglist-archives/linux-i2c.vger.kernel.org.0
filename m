@@ -1,227 +1,227 @@
 Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9D45C03D0
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Sep 2022 18:13:05 +0200 (CEST)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id C14D25D0221
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Sep 2022 20:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbiIUQNE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 21 Sep 2022 12:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
+        id S229499AbiIUR5c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 21 Sep 2022 13:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbiIUQMs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Sep 2022 12:12:48 -0400
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5CAA0277
-        for <linux-i2c@vger.kernel.org>; Wed, 21 Sep 2022 08:59:05 -0700 (PDT)
-Received: by mail-io1-f45.google.com with SMTP id y141so5385279iof.5
-        for <linux-i2c@vger.kernel.org>; Wed, 21 Sep 2022 08:59:04 -0700 (PDT)
+        with ESMTP id S229729AbiIUR5b (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Sep 2022 13:57:31 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D789D9082F
+        for <linux-i2c@vger.kernel.org>; Wed, 21 Sep 2022 10:57:29 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id c4so5713894iof.3
+        for <linux-i2c@vger.kernel.org>; Wed, 21 Sep 2022 10:57:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=vFfZ46BAlS2mrmHtxO9f2+ksmeW+dh4CW9ZrkmAoMVE=;
-        b=J5/8BzJUlnacb2H1rFZLj2klzGFpS6qJKCKVKP/i6jvw7xmTCQJOr/1aFThUVVavfp
-         Q8LStW9lN5fL/vgVVyznP2h5ZgBtxJMUJazImGQSqJzR3+SfDGGdlz3+zMUv7QEDIhad
-         dn0a9v48vi1yxoO4YupuYlq5PBGzfjLbQEqmY=
+        d=konsulko.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=lWz9vmTktmlnF8P5ct/IitkPDKwxx7s+v31tQx0NTfE=;
+        b=hPwgMa4Vzn+dr/R9yowxrWVRYm8GRaOYX2QoyN8KqjKAruRAR8nNeUXwTE8lnoP0Ri
+         UDKRiMuYU5L6x/cudqgLDdfD0EH/YL4CBP0B+PQHMz1Rbhy633LVkXBMEBO+nks+xWeP
+         WzDL/YlaWVONcpKPFD5/SY7FFqH99eKHZw8X8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=vFfZ46BAlS2mrmHtxO9f2+ksmeW+dh4CW9ZrkmAoMVE=;
-        b=XTClS0cYnIw6PWZgFHjqUoYc4/RxfGaLll/t4wa9WSFCT66Pq7zXcLnRwGba4mYdN1
-         tgYm6LGjDcmtPnFFtfbcw1ukhjV5w9yDJe6a1lQ0AqdNm8QFy3w1vhvZ6oVwBhBjKN81
-         y8nYuWVVOatRfdo6h3jwKOWjBEimQUWOsjgCaHmEfOHfSXKwCZb3Z/uKP1P8QKKYaEpX
-         cLPG+a2ZuSlYcFx4SG9/bDvRPbiZoasDzR3hCmLaFqiFFGiCiSkfq7kncGigxemn/Al+
-         cDSihQtkmLeQvnoCIwn8WqiG6BLxTo8MURyx4pKX2EAFRlRq5JDktF8WCB5BgDAKHCe3
-         PiXg==
-X-Gm-Message-State: ACrzQf1HwQ5S8eqkDUJqvsG80ZxCdwL68l6U8N2qSLhwnomSuc5X8S1T
-        ghOFRnzQM24locggpywqtBEDjA==
-X-Google-Smtp-Source: AMsMyM4ISli9TA3C7UOIK0GjjNAWrdkb983+P541Y7CYiZUG6lQazCLOX49TxNI1VLG+x9KN4b2uWQ==
-X-Received: by 2002:a05:6638:3821:b0:35a:1973:ae9 with SMTP id i33-20020a056638382100b0035a19730ae9mr12758575jav.313.1663775529063;
-        Wed, 21 Sep 2022 08:52:09 -0700 (PDT)
-Received: from rrangel920.bld.corp.google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
-        by smtp.gmail.com with ESMTPSA id c14-20020a023b0e000000b0035a8d644a31sm1148061jaa.117.2022.09.21.08.52.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 08:52:08 -0700 (PDT)
-From:   Raul E Rangel <rrangel@chromium.org>
-To:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org
-Cc:     rafael@kernel.org, timvp@google.com,
-        mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        dmitry.torokhov@gmail.com, jingle.wu@emc.com.tw,
-        hdegoede@redhat.com, mario.limonciello@amd.com,
-        linus.walleij@linaro.org, Raul E Rangel <rrangel@chromium.org>,
-        Alistair Francis <alistair@alistair23.me>,
-        Angela Czubak <acz@semihalf.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bartosz Szczepanek <bsz@semihalf.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Johnny Chuang <johnny.chuang.emc@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Len Brown <lenb@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Rob Herring <robh@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH v5 00/13] acpi: i2c: Use SharedAndWake and ExclusiveAndWake to enable wake irq
-Date:   Wed, 21 Sep 2022 09:51:52 -0600
-Message-Id: <20220921155205.1332614-1-rrangel@chromium.org>
-X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=lWz9vmTktmlnF8P5ct/IitkPDKwxx7s+v31tQx0NTfE=;
+        b=otdHQdWKrrI8a1ZG0zKnd7nGDaBztZc+JFqWUIdXvsBU6tmlw2VISbaASo0WFNGldp
+         RVSkLfnkmh6BVTfAnPWTRDAcLmYAjCNL1PAhQhA4kcuSVrkF2+S1YuNfqtppfiWI29Aj
+         PaQzIaBEUry1ABtq+BBRS+R0qcod3hhJAavsyBNSJze1GABhxJ62y3ZEMl0C6F1CzFyP
+         LHwV8VUtp8LjA496fH8Glv3tDsjYg+dxPZqnOtT2q99qXL8hp+NTOuRxa3JendU+Xzko
+         dL1/wEX09Z7woc0GGBZ4z/Bxw0XVycwPHXsIOwg3vSItJ0A204XsVbG/+q1LaOeLIMuX
+         XItA==
+X-Gm-Message-State: ACrzQf3Mtl7vBh0hnm3NOxkwPnJEAdvL2beAC4Jh08S94YSmMALO8icM
+        mMeETbZvOARJzJWqOrUA/3DhU3nTgaZYo0zF7MlrYLuDYSBYWzTS
+X-Google-Smtp-Source: AMsMyM57bNVpIjGiIB5AzUj9jqWSl+gKbWzjqH3/K8KuyS1WQHhDHUSCV967QoGMG6sBH4ZRz7Psmf7S6Nv8biJzb6I=
+X-Received: by 2002:a05:6638:3818:b0:35a:8cf5:e007 with SMTP id
+ i24-20020a056638381800b0035a8cf5e007mr12843820jav.227.1663783049239; Wed, 21
+ Sep 2022 10:57:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220921063026.89619-1-matt.ranostay@konsulko.com>
+ <20220921063026.89619-5-matt.ranostay@konsulko.com> <20220921080458.3uue5ooc3svcbmxp@mail.corp.redhat.com>
+In-Reply-To: <20220921080458.3uue5ooc3svcbmxp@mail.corp.redhat.com>
+From:   Matt Ranostay <matt.ranostay@konsulko.com>
+Date:   Wed, 21 Sep 2022 10:57:18 -0700
+Message-ID: <CAJCx=gn0bZp3fToF+LZE+evR2m4nWMueusjysxcrvimH0wRhaA@mail.gmail.com>
+Subject: Re: [PATCH v4 4/5] HID: mcp2221: switch i2c registration to devm functions
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     gupt21@gmail.com, jic23@kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        Jiri Kosina <jikos@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Today, i2c drivers are making the assumption that their IRQs can also
-be used as wake IRQs. This isn't always the case and it can lead to
-spurious wakes. This has recently started to affect AMD Chromebooks.
-With the introduction of
-d62bd5ce12d7 ("pinctrl: amd: Implement irq_set_wake"), the AMD GPIO
-controller gained the capability to set the wake bit on each GPIO. The
-ACPI specification defines two ways to inform the system if a device is
-wake capable:
-1) The _PRW object defines the GPE that can be used to wake the system.
-2) Setting ExclusiveAndWake or SharedAndWake in the _CRS GpioInt.
+On Wed, Sep 21, 2022 at 1:05 AM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> [foreword: please keep Jiri and myself (the HID maintainers) CC-ed to
+> the series, as you will need ack from us and we don't necessarily monitor
+> every single message on linux-input]
+>
+> On Sep 20 2022, Matt Ranostay wrote:
+> > Switch from i2c_add_adapter() to resource managed devm_i2c_add_adapter()
+> > for matching rest of driver initialization, and more concise code.
+> >
+> > Signed-off-by: Matt Ranostay <matt.ranostay@konsulko.com>
+> > ---
+> >  drivers/hid/hid-mcp2221.c | 45 +++++++++++++++++----------------------
+> >  1 file changed, 19 insertions(+), 26 deletions(-)
+> >
+> > diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
+> > index de52e9f7bb8c..7ba63bcd66de 100644
+> > --- a/drivers/hid/hid-mcp2221.c
+> > +++ b/drivers/hid/hid-mcp2221.c
+> > @@ -824,6 +824,14 @@ static int mcp2221_raw_event(struct hid_device *hdev,
+> >       return 1;
+> >  }
+> >
+> > +static void mcp2221_hid_remove(void *ptr)
+> > +{
+> > +     struct hid_device *hdev = ptr;
+> > +
+> > +     hid_hw_close(hdev);
+> > +     hid_hw_stop(hdev);
+>
+> By default, if you remove the .remove() callback, hid_hw_stop() will get
+> automatically called by hid-core.c. So we are now calling it twice,
+> which, in a way is not a big deal but it might be an issue in the long
+> run.
+>
+> Generally speaking, in the HID subsystem, that situation doesn't happen
+> a lot because hid_hw_start() is usually the last command of probe, and
+> we don't need to open the device in the driver itself.
+>
+> Here, I guess as soon as you add the i2c adapter, you might want to have
+> the communication channels ready, and thus you need to have it open
+> *before* i2c_add_adapter.
+>
+> I would suggest the following if you want to keep the devm release of
+> stop and close: please put a big fat warning before mcp2221_hid_remove()
+> explaining that this is called in devm management, *and* add a function
+> that would just return 0 as the .remove() callback with another big fat
+> warning explaining that we don't want hid-core.c to call hid_hw_stop()
+> because we are doing it ourself through devres.
+>
 
-Currently only the first method is supported. The i2c drivers don't have
-any indication that the IRQ is wake capable, so they guess. This causes
-spurious interrupts, for example:
-* We have an ACPI HID device that has `_PR0` and `_PR3`. It doesn't have
-  `_PRW` or `ExclusiveAndWake` so that means the device can't wake the
-  system.
-* The IRQ line is active level low for this device and is pulled up by
-  the power resource defined in `_PR0`/`_PR3`.
-* The i2c driver will (incorrectly) arm the GPIO for wake by calling
-  `enable_irq_wake` as part of its suspend hook.
-* ACPI will power down the device since it doesn't have a wake GPE
-  associated with it.
-* When the device is powered down, the IRQ line will drop, and it will
-  trigger a wake event.
+Yeah maybe best to keep the non-devres if it isn't going to affect how the last
+change in this series is trying to implement with iio.
 
-See the following debug log:
-[   42.335804] PM: Suspending system (s2idle)
-[   42.340186] amd_gpio AMD0030:00: RX: Setting wake for pin 89 to enable
-[   42.467736]     power-0416 __acpi_power_off      : Power resource [PR00] turned off
-[   42.467739] device_pm-0280 device_set_power      : Device [H05D] transitioned to D3cold
-[   42.475210] PM: pm_system_irq_wakeup: 11 triggered pinctrl_amd
-[   42.535293] PM: Wakeup unrelated to ACPI SCI
-[   42.535294] PM: resume from suspend-to-idle
+I'll wait for Jonathan to chime in on this thread.
 
-In order to fix this, we need to take into account the wake capable bit
-defined on the Interrupt/GpioInt. This is accomplished by:
-* Migrating some of the i2c drivers over to using the PM subsystem to
-  manage the wake IRQ.
-* Expose the wake_capable bit from the ACPI Interrupt/GpioInt resource
-  to the  i2c core.
-* Use the wake_capable bit in the i2c core to call
-  `dev_pm_set_wake_irq`. This reuses the existing device tree flow.
-* Make the i2c drivers stop calling `dev_pm_set_wake_irq` since it's now
-  handled by the i2c core.
-* Make the ACPI device PM system aware of the wake_irq. This is
-  necessary so the device doesn't incorrectly get powered down when a
-  wake_irq is enabled.
+> Last, in the HID subsystem, we often interleave non devres with devres
+> for resource allocation, given that .remove() will be called before any
+> devres release. But that is assuming this ordering is OK, which doesn't
+> seem to be the case here. We first need to unregister the i2c adapter
+> and then close/stop the HID device.
 
-I've tested this code with various combinations of having _PRW,
-ExclusiveAndWake and power resources all defined or not defined, but it
-would be great if others could test this out on their hardware.
+Noted.
 
-I'm sure this will surface some devices where the IRQs were not
-correctly marked as wake capable. Ideally the firmware can be fixed, but
-if not we can work around this in the kernel by providing a board
-specific `struct i2c_board_info` with the `I2C_CLIENT_WAKE` flag set.
-See `chromeos_laptop.c` for an example of matching DMI properties and
-setting the `I2C_CLIENT_WAKE` override.
+-  Matt
 
-Thanks,
-Raul
-
-Changes in v5:
-- Added Acked-by: Benjamin Tissoires
-- Removed clang-format white space changes
-- Check irq return value before updating wake_capable pointer
-- Go back to using adev->wakeup.flags.valid to keep the diff cleaner
-- Fix a typo in comment
-
-Changes in v4:
-- Added Reviewed-by
-- Reformatted with 96 char limit
-- Added Reviewed-by
-- Reformatted with 96 char limit
-- Removed unnecessary !!
-- Removed unrelated whitespace change
-- Added Reviewed-by
-- Renamed i2c_acpi_add_resource to i2c_acpi_add_irq_resource
-- Expanded logic in i2c_acpi_add_i2c_resource to make it easier to read
-
-Changes in v3:
-- Kept `acpi_dev_gpio_irq_get_by` unchanged to avoid having to touch
-  unrelated drivers.
-- Converted wake_capable parameter to bool.
-- Fixed bad indent
-- Convert wake_capable to bool
-- Only update wake_capable pointer once
-- Move wake_capable local into local block
-
-Changes in v2:
-- Added elants_i2c to series
-- Added raydium_ts_i2c to series
-- Fixed call site in mlxbf_gige_probe
-- Added ability to extract wake bit from Interrupt/IRQ resources
-- Look at wake_cabple bit for IRQ/Interrupt resources
-- I chose not to keep the legacy code around since systems without DT or ACPI should be rare.
-
-Raul E Rangel (13):
-  HID: i2c-hid: Use PM subsystem to manage wake irq
-  Input: elan_i2c - Use PM subsystem to manage wake irq
-  Input: elants_i2c - Use PM subsystem to manage wake irq
-  Input: raydium_ts_i2c - Use PM subsystem to manage wake irq
-  gpiolib: acpi: Add wake_capable variants of acpi_dev_gpio_irq_get
-  ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
-  i2c: acpi: Use ACPI wake capability bit to set wake_irq
-  ACPI: PM: Take wake IRQ into consideration when entering
-    suspend-to-idle
-  HID: i2c-hid: acpi: Stop setting wakeup_capable
-  HID: i2c-hid: Don't set wake_capable and wake_irq
-  Input: elan_i2c - Don't set wake_capable and wake_irq
-  Input: elants_i2c - Don't set wake_capable and wake_irq
-  Input: raydium_ts_i2c - Don't set wake_capable and wake_irq
-
- drivers/acpi/device_pm.c                   | 19 +++++++++--
- drivers/acpi/irq.c                         |  8 +++--
- drivers/acpi/resource.c                    | 16 +++++++---
- drivers/gpio/gpiolib-acpi.c                | 15 +++++++--
- drivers/gpio/gpiolib-acpi.h                |  2 ++
- drivers/hid/i2c-hid/i2c-hid-acpi.c         |  5 ---
- drivers/hid/i2c-hid/i2c-hid-core.c         | 24 ++------------
- drivers/i2c/i2c-core-acpi.c                | 37 ++++++++++++++++------
- drivers/i2c/i2c-core-base.c                |  6 +++-
- drivers/i2c/i2c-core.h                     |  4 +--
- drivers/input/mouse/elan_i2c_core.c        | 15 +--------
- drivers/input/touchscreen/elants_i2c.c     | 13 ++------
- drivers/input/touchscreen/raydium_i2c_ts.c |  7 +---
- drivers/pnp/pnpacpi/rsparser.c             |  7 ++--
- include/linux/acpi.h                       | 23 +++++++++++---
- include/linux/ioport.h                     |  3 +-
- 16 files changed, 112 insertions(+), 92 deletions(-)
-
--- 
-2.37.3.968.ga6b4b080e4-goog
-
+>
+> > +}
+> > +
+> >  static int mcp2221_probe(struct hid_device *hdev,
+> >                                       const struct hid_device_id *id)
+> >  {
+> > @@ -849,7 +857,8 @@ static int mcp2221_probe(struct hid_device *hdev,
+> >       ret = hid_hw_open(hdev);
+> >       if (ret) {
+> >               hid_err(hdev, "can't open device\n");
+> > -             goto err_hstop;
+> > +             hid_hw_stop(hdev);
+> > +             return ret;
+> >       }
+> >
+> >       mutex_init(&mcp->lock);
+> > @@ -857,6 +866,10 @@ static int mcp2221_probe(struct hid_device *hdev,
+> >       hid_set_drvdata(hdev, mcp);
+> >       mcp->hdev = hdev;
+> >
+> > +     ret = devm_add_action_or_reset(&hdev->dev, mcp2221_hid_remove, hdev);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> >       /* Set I2C bus clock diviser */
+> >       if (i2c_clk_freq > 400)
+> >               i2c_clk_freq = 400;
+> > @@ -873,19 +886,17 @@ static int mcp2221_probe(struct hid_device *hdev,
+> >                       "MCP2221 usb-i2c bridge on hidraw%d",
+> >                       ((struct hidraw *)hdev->hidraw)->minor);
+> >
+> > -     ret = i2c_add_adapter(&mcp->adapter);
+> > +     ret = devm_i2c_add_adapter(&hdev->dev, &mcp->adapter);
+> >       if (ret) {
+> >               hid_err(hdev, "can't add usb-i2c adapter: %d\n", ret);
+> > -             goto err_i2c;
+> > +             return ret;
+> >       }
+> >       i2c_set_adapdata(&mcp->adapter, mcp);
+> >
+> >       /* Setup GPIO chip */
+> >       mcp->gc = devm_kzalloc(&hdev->dev, sizeof(*mcp->gc), GFP_KERNEL);
+> > -     if (!mcp->gc) {
+> > -             ret = -ENOMEM;
+> > -             goto err_gc;
+> > -     }
+> > +     if (!mcp->gc)
+> > +             return -ENOMEM;
+> >
+> >       mcp->gc->label = "mcp2221_gpio";
+> >       mcp->gc->direction_input = mcp_gpio_direction_input;
+> > @@ -900,26 +911,9 @@ static int mcp2221_probe(struct hid_device *hdev,
+> >
+> >       ret = devm_gpiochip_add_data(&hdev->dev, mcp->gc, mcp);
+> >       if (ret)
+> > -             goto err_gc;
+> > +             return ret;
+> >
+> >       return 0;
+> > -
+> > -err_gc:
+> > -     i2c_del_adapter(&mcp->adapter);
+> > -err_i2c:
+> > -     hid_hw_close(mcp->hdev);
+> > -err_hstop:
+> > -     hid_hw_stop(mcp->hdev);
+> > -     return ret;
+> > -}
+> > -
+> > -static void mcp2221_remove(struct hid_device *hdev)
+> > -{
+> > -     struct mcp2221 *mcp = hid_get_drvdata(hdev);
+> > -
+> > -     i2c_del_adapter(&mcp->adapter);
+> > -     hid_hw_close(mcp->hdev);
+> > -     hid_hw_stop(mcp->hdev);
+> >  }
+> >
+> >  static const struct hid_device_id mcp2221_devices[] = {
+> > @@ -932,7 +926,6 @@ static struct hid_driver mcp2221_driver = {
+> >       .name           = "mcp2221",
+> >       .id_table       = mcp2221_devices,
+> >       .probe          = mcp2221_probe,
+> > -     .remove         = mcp2221_remove,
+> >       .raw_event      = mcp2221_raw_event,
+> >  };
+> >
+> > --
+> > 2.37.2
+> >
+>
+> Cheers,
+> Benjamin
+>
