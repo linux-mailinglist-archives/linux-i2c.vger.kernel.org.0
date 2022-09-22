@@ -2,42 +2,46 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81C95E58DA
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Sep 2022 04:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 673AE5E58E9
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Sep 2022 04:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbiIVCuA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 21 Sep 2022 22:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S230116AbiIVCzN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 21 Sep 2022 22:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiIVCt4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Sep 2022 22:49:56 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964DF4F69F;
-        Wed, 21 Sep 2022 19:49:42 -0700 (PDT)
-X-UUID: 189d6c43c8494fe890acc18304e82a1a-20220922
+        with ESMTP id S230196AbiIVCzL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Sep 2022 22:55:11 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A6A91D07;
+        Wed, 21 Sep 2022 19:55:02 -0700 (PDT)
+X-UUID: 08085e4667a44ab3a023f733840a6e52-20220922
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=DpTSK5SS4krC5ZA5jk8bVYHaXm11gbUBm2uTg+nL/zU=;
-        b=QvAb29qpVxETnJROhdpuOdF3XSohGsytis0lROG20g7eEfTLnKVtlnO1BkX924RpzP6AWoRjwvc98Bzz7+pPAqMzXCcB+0RmZxZT8w5nvFh7QaZ9aQ6cACqmDd0uHfTL1vu7OC4uH0yOxlzkyAASBj1QKC0qVs/oRMLZq0znpZo=;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=J5p/NkZZmAcJPUDdgOfQ/KK1LndazcyxsU89WPvsiWc=;
+        b=A+sJs/zGWgQ6ZetAC8Lp/Gj1uDyr2TKrfoTE7/K1N4NLNeAGpuGSojLYKry3uHlAlK/sctE1kJDJtyqkxvUUH7gLHZDK1ufxMgDdMYGjOQZjf4dO+/FQoRJbNjgobRAmZ4HINFZGP9HeJ6MFNh9Au6+i+LWf7uIxG7ugEdWvCeo=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:059ba611-0651-4942-b40a-bfe7cd55069f,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:178ec7af-12a8-4d8e-859c-1b6ce09c0eab,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 189d6c43c8494fe890acc18304e82a1a-20220922
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.11,REQID:15a62324-c35c-4919-8d99-05074fb70b2e,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:45
+X-CID-INFO: VERSION:1.1.11,REQID:15a62324-c35c-4919-8d99-05074fb70b2e,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:45
+X-CID-META: VersionHash:39a5ff1,CLOUDID:a52c3bf7-6e85-48d9-afd8-0504bbfe04cb,B
+        ulkID:220922105007OVC7092V,BulkQuantity:5,Recheck:0,SF:28|17|19|48|823|824
+        ,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:40,QS:nil,BEC:nil,COL:
+        0
+X-UUID: 08085e4667a44ab3a023f733840a6e52-20220922
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
         (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1415799916; Thu, 22 Sep 2022 10:49:37 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 756909543; Thu, 22 Sep 2022 10:54:57 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 22 Sep 2022 10:49:36 +0800
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 22 Sep 2022 10:54:55 +0800
 Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 22 Sep 2022 10:49:33 +0800
-Message-ID: <770b0999ae25008cdb63a1eca283cfc2167a6695.camel@mediatek.com>
+ Transport; Thu, 22 Sep 2022 10:54:53 +0800
+Message-ID: <6eec220b1894859211e45a90491fe1718838404f.camel@mediatek.com>
 Subject: Re: [PATCH 16/17] arm64: dts: mediatek: add mt8365 device-tree
 From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
@@ -55,7 +59,7 @@ CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-mmc@vger.kernel.org>, <linux-phy@lists.infradead.org>,
         <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <linux-usb@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
-Date:   Thu, 22 Sep 2022 10:49:32 +0800
+Date:   Thu, 22 Sep 2022 10:54:53 +0800
 In-Reply-To: <2f7be7c4-9e61-7285-803b-979af6d28c11@linaro.org>
 References: <20220531135026.238475-1-fparent@baylibre.com>
          <20220531135026.238475-17-fparent@baylibre.com>
@@ -65,9 +69,9 @@ X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-MTK:  N
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY,URIBL_CSS autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,6 +102,8 @@ On Wed, 2022-06-01 at 12:37 +0200, Krzysztof Kozlowski wrote:
 > > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 > > +/*
 > > + * Copyright (c) 2018 MediaTek Inc.
+2022?
+
 > > + */
 > > +
 > > +#include <dt-bindings/clock/mediatek,mt8365-clk.h>
@@ -955,18 +961,20 @@ On Wed, 2022-06-01 at 12:37 +0200, Krzysztof Kozlowski wrote:
 > > +		u3phy: t-phy@11cc0000 {
 > 
 > s/t-phy/phy/
-can't use phy here, if will cause dt-binding check fail.
-
 > 
 > > +			compatible = "mediatek,mt8365-tphy",
 > > +				     "mediatek,generic-tphy-v2";
 > > +			#address-cells = <2>;
 > > +			#phy-cells = <1>;
+remove #phy-cells, it's only used in subnode;
+
 > 
 > address-cells, then size, then phy
 > 
 > > +			#size-cells = <2>;
 > > +			ranges;
+Prefer to use ranges with value
+
 > > +			status = "okay";
 > 
 > No need for status ok.
