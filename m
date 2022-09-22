@@ -2,58 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4B15E6B62
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Sep 2022 21:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C645E6B71
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Sep 2022 21:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231392AbiIVTCZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 22 Sep 2022 15:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
+        id S232197AbiIVTFc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 22 Sep 2022 15:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiIVTCX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Sep 2022 15:02:23 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAE5F9630;
-        Thu, 22 Sep 2022 12:02:22 -0700 (PDT)
+        with ESMTP id S232256AbiIVTFa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Sep 2022 15:05:30 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFB7C9949;
+        Thu, 22 Sep 2022 12:05:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663873342; x=1695409342;
+  t=1663873525; x=1695409525;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=K91cFaaVpeaE0ZmJxi/NGwqsumkKWIZFucMXaH09Bk4=;
-  b=ZUjA4AcqX2/tVXGJOHxtAlQZu+xAkF2KFT5x2RBxdJWBzgTmpoXKuX3W
-   wVzhKT/Ys9QMMut1gIdobeg9sSSigsGONsGp510L3YYpExYW4yYErIuR/
-   qCUZTJg0BWQb7jAkDgb5lgg3ecGdWd/mV1yRAVGLO0AxskDhPc5YWDozS
-   /EO/hmuv3QvIPRRmOPk8WKItnHafljCeRM0LqZK4/IvvRjDEiKbEbYzBc
-   b8ndo8zZ2zMtyEXyVXEEUeQlZZ4ZreXhgfWAzZRyNfmMJDrUFIxbu4oSH
-   dlX2fzuRF1x7AemtAwHWgvG54slNj8rHokrhbRr6CpKfOTJVUliszvfhv
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="301835126"
+  bh=9hTR12KVYSG4WSUvy2XMfzfpJCVSwEHiEJ4NpOyo/so=;
+  b=dDoRlO8vZN5kXxAtZpOonOAGwVHBQRd3GKsHYHLe49AUTS2heFqKgp8A
+   1K2qr7Zgi6E68f7a49Q68kBwo48BInLRlg49GI5E0tSqX5faS33w2LgjE
+   uKffByCwwfvhNV9HxMCzloTKzQnUCubTDGL/ZSZqEMaIP99kEC0iMb6Up
+   TfeKws9vJDbFPfptxsPJgKaiWJPkZ+08iJQ2ZbwJJgysp246BLLIcMFgV
+   BAUlqkaKZAoTc1CfHFHpmUdCz5y6B1SHVToH2xPcHN4nPyzloOsvy+M9c
+   d7YG5U5XlUOTOI+5xw+mPzqiWGvomi4Vk3NPCEtSX8TEM/4YDjq5FM9kx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="364410518"
 X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="301835126"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 11:49:39 -0700
+   d="scan'208";a="364410518"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 11:59:38 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="650651297"
+   d="scan'208";a="597568053"
 Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 22 Sep 2022 11:49:36 -0700
+  by orsmga006.jf.intel.com with ESMTP; 22 Sep 2022 11:59:36 -0700
 Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1obRGR-0004sY-28;
-        Thu, 22 Sep 2022 18:49:35 +0000
-Date:   Fri, 23 Sep 2022 02:48:37 +0800
+        id 1obRQ7-0004sq-2c;
+        Thu, 22 Sep 2022 18:59:35 +0000
+Date:   Fri, 23 Sep 2022 02:58:59 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Binbin Zhou <zhoubinbin@loongson.cn>,
         Wolfram Sang <wsa-dev@sang-engineering.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         linux-i2c@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, loongarch@lists.linux.dev,
-        linux-acpi@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+        WANG Xuerui <kernel@xen0n.name>,
         Jianmin Lv <lvjianmin@loongson.cn>,
         Binbin Zhou <zhoubinbin@loongson.cn>,
         Huacai Chen <chenhuacai@loongson.cn>
 Subject: Re: [PATCH 1/5] i2c: core: Pick i2c bus number from ACPI if present
-Message-ID: <202209230216.faCwluIB-lkp@intel.com>
+Message-ID: <202209230228.LIiHRmuw-lkp@intel.com>
 References: <be5cd69c7c58d44ca119d4ca692d95a2ae924533.1663835855.git.zhoubinbin@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -80,8 +81,8 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Binbin-Zhou/i2c-ls2x-Add-support-for-the-Loongson-2K-LS7A-I2C/20220922-194252
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-config: arc-randconfig-r043-20220922 (https://download.01.org/0day-ci/archive/20220923/202209230216.faCwluIB-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
+config: hexagon-randconfig-r041-20220922 (https://download.01.org/0day-ci/archive/20220923/202209230228.LIiHRmuw-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -91,22 +92,27 @@ reproduce (this is a W=1 build):
         git checkout 749fc796eb66dc42c209c6a5808c6b2a5e47fbb6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/i2c/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   drivers/i2c/i2c-core-base.c: In function 'i2c_add_adapter':
->> drivers/i2c/i2c-core-base.c:1568:26: error: implicit declaration of function 'acpi_evaluate_integer'; did you mean 'acpi_evaluate_object'? [-Werror=implicit-function-declaration]
-    1568 |                 status = acpi_evaluate_integer(ACPI_HANDLE(dev->parent),
-         |                          ^~~~~~~~~~~~~~~~~~~~~
-         |                          acpi_evaluate_object
-   cc1: some warnings being treated as errors
+>> drivers/i2c/i2c-core-base.c:1568:12: error: call to undeclared function 'acpi_evaluate_integer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   status = acpi_evaluate_integer(ACPI_HANDLE(dev->parent),
+                            ^
+   drivers/i2c/i2c-core-base.c:1568:12: note: did you mean 'acpi_evaluate_object'?
+   include/acpi/acpixf.h:550:8: note: 'acpi_evaluate_object' declared here
+                               acpi_evaluate_object(acpi_handle object,
+                               ^
+   include/acpi/platform/aclinux.h:93:21: note: expanded from macro 'ACPI_EXTERNAL_RETURN_STATUS'
+           static ACPI_INLINE prototype {return(AE_NOT_CONFIGURED);}
+                              ^
+   1 error generated.
 
 
-vim +1568 drivers/i2c/i2c-core-base.c
+vim +/acpi_evaluate_integer +1568 drivers/i2c/i2c-core-base.c
 
   1540	
   1541	/**
