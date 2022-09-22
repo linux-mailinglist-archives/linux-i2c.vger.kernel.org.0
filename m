@@ -2,84 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7832D5E6161
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Sep 2022 13:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FAE65E61B6
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Sep 2022 13:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiIVLli (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 22 Sep 2022 07:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
+        id S229907AbiIVLtS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 22 Sep 2022 07:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbiIVLle (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Sep 2022 07:41:34 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92E91D6913;
-        Thu, 22 Sep 2022 04:41:30 -0700 (PDT)
-Received: from localhost.localdomain (unknown [112.20.112.163])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxFeLhSSxjyhYgAA--.56317S7;
-        Thu, 22 Sep 2022 19:41:25 +0800 (CST)
-From:   Binbin Zhou <zhoubinbin@loongson.cn>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org
-Cc:     loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH 5/5] LoongArch: Enable LS2X I2C in loongson3_defconfig
-Date:   Thu, 22 Sep 2022 19:39:58 +0800
-Message-Id: <24b28af969f43cb139e35775e3de2b7cf3b3249e.1663835855.git.zhoubinbin@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1663835855.git.zhoubinbin@loongson.cn>
-References: <cover.1663835855.git.zhoubinbin@loongson.cn>
+        with ESMTP id S229448AbiIVLtR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Sep 2022 07:49:17 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A525929817;
+        Thu, 22 Sep 2022 04:49:15 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MYD3h6lQXzlXLk;
+        Thu, 22 Sep 2022 19:45:04 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 19:49:13 +0800
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] i2c: hisi: Add support to get clock frequency from clock
+ property
+To:     Weilong Chen <chenweilong@huawei.com>, <yangyicong@hisilicon.com>
+References: <20220921101540.352553-1-chenweilong@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <739d95c7-28f3-5294-c3db-5acaa7d50823@huawei.com>
+Date:   Thu, 22 Sep 2022 19:49:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxFeLhSSxjyhYgAA--.56317S7
-X-Coremail-Antispam: 1UD129KBjvdXoW7JF17Kr43Xr47Aw1UCr17Wrg_yoWxKFc_JF
-        y7Kw1kWr48JFZ7W3WIqw4rGw4DA3W7XF1SyFnrZw1xX3Wagr13trWDC3W3Cwn09ayDWr43
-        ZaykAF9F9r18tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbhAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
-        IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
-        F7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr
-        1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0D
-        M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjx
-        v20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1l
-        F7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8KwCF04
-        k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
-        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr4
-        1lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1U
-        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I
-        8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU00PSDUUUU
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220921101540.352553-1-chenweilong@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This is now supported, enable for Loongson-3 systems. Other systems are
-affected.
+Hi Weilong,
 
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
----
- arch/loongarch/configs/loongson3_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+On 2022/9/21 18:15, Weilong Chen wrote:
+> Support the driver to obtain clock information by clk_rate or
+> clock property. Find clock first, if not, fall back to clk_rate.
+> 
+> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+> ---
+>  drivers/i2c/busses/i2c-hisi.c | 25 ++++++++++++++++++++-----
+>  1 file changed, 20 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
+> index 67031024217c..5e48d4ee0c6d 100644
+> --- a/drivers/i2c/busses/i2c-hisi.c
+> +++ b/drivers/i2c/busses/i2c-hisi.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/acpi.h>
+>  #include <linux/bits.h>
+>  #include <linux/bitfield.h>
+> +#include <linux/clk.h>
+>  #include <linux/completion.h>
+>  #include <linux/i2c.h>
+>  #include <linux/interrupt.h>
+> @@ -91,6 +92,7 @@ struct hisi_i2c_controller {
+>  	void __iomem *iobase;
+>  	struct device *dev;
+>  	int irq;
+> +	struct clk *clk;
+>  
 
-diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-index 4083d3051109..7910adf20887 100644
---- a/arch/loongarch/configs/loongson3_defconfig
-+++ b/arch/loongarch/configs/loongson3_defconfig
-@@ -558,6 +558,7 @@ CONFIG_HW_RANDOM_VIRTIO=m
- CONFIG_I2C_CHARDEV=y
- CONFIG_I2C_PIIX4=y
- CONFIG_I2C_GPIO=y
-+CONFIG_I2C_LS2X=y
- CONFIG_SPI=y
- CONFIG_GPIO_SYSFS=y
- CONFIG_GPIO_LOONGSON=y
--- 
-2.31.1
+Prefer to make this field between @irq and @dev, to make these fields ordered
+in an inverted triangle.
 
+>  	/* Intermediates for recording the transfer process */
+>  	struct completion *completion;
+> @@ -456,10 +458,21 @@ static int hisi_i2c_probe(struct platform_device *pdev)
+>  		return ret;
+>  	}
+>  
+> -	ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
+> -	if (ret) {
+> -		dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
+> -		return ret;
+> +	ctlr->clk = devm_clk_get_optional(&pdev->dev, NULL);
+> +	if (IS_ERR(ctlr->clk)) {
+
+Use IS_ERR_OR_NULL(), otherwise we cannot get the clock rate.
+
+> +		ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
+> +		if (ret) {
+> +			dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
+> +			return ret;
+> +		}
+> +	} else {
+> +		ret = clk_prepare_enable(ctlr->clk);
+
+You didn't disable and unprepare the clock on removal.
+
+Use devm_clk_get_optional_enabled() instead then it's managed by devres and the error path
+below is unnecessary as well.
+
+BTW, do we really need to prepare and enable the clock? I checked designware-i2c seems it only
+gets the clock rate and don't do the prepare and enable operations. I may miss something but
+please have a check.
+
+Thanks,
+Yicong
+
+> +		if (ret) {
+> +			dev_err(dev, "failed to enable clock, ret = %d\n", ret);
+> +			return ret;
+> +		}
+> +
+> +		clk_rate_hz = clk_get_rate(ctlr->clk);
+>  	}
+>  
+>  	ctlr->clk_rate_khz = DIV_ROUND_UP_ULL(clk_rate_hz, HZ_PER_KHZ);
+> @@ -475,8 +488,10 @@ static int hisi_i2c_probe(struct platform_device *pdev)
+>  	i2c_set_adapdata(adapter, ctlr);
+>  
+>  	ret = devm_i2c_add_adapter(dev, adapter);
+> -	if (ret)
+> +	if (ret) {
+> +		clk_disable_unprepare(ctlr->clk);
+>  		return ret;
+> +	}
+>  
+>  	hw_version = readl(ctlr->iobase + HISI_I2C_VERSION);
+>  	dev_info(ctlr->dev, "speed mode is %s. hw version 0x%x\n",
+> 
