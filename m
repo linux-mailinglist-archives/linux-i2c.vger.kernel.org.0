@@ -2,102 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FF85E713D
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Sep 2022 03:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2303B5E71DF
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Sep 2022 04:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiIWBM5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 22 Sep 2022 21:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
+        id S231650AbiIWC1b (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 22 Sep 2022 22:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbiIWBMs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Sep 2022 21:12:48 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF3FD11E;
-        Thu, 22 Sep 2022 18:12:46 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MYYx52FqDzHqFv;
-        Fri, 23 Sep 2022 09:10:33 +0800 (CST)
-Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
- (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 23 Sep
- 2022 09:12:44 +0800
-From:   Weilong Chen <chenweilong@huawei.com>
-To:     <chenweilong@huawei.com>, <yangyicong@hisilicon.com>
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH next v2] i2c: hisi: Add support to get clock frequency from clock property
-Date:   Fri, 23 Sep 2022 09:14:17 +0800
-Message-ID: <20220923011417.78994-1-chenweilong@huawei.com>
-X-Mailer: git-send-email 2.31.GIT
+        with ESMTP id S229522AbiIWC13 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Sep 2022 22:27:29 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E9D1181E1;
+        Thu, 22 Sep 2022 19:27:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663900048; x=1695436048;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EeOgxiuny3VNGnlzzeQqLXhBftKvebsU3Y2OekHhnE4=;
+  b=Fbo+jCVoH7tKUooDMIqEUcEzMOWr2080v2DjVudLMOYgIpXqHL0ZwZ1y
+   oKNsVhOE/glUk2jZD0/UKYeln1E1eNQ+xmEAQ7FDpp+A/WBvxsdxMz8Hy
+   z2LibwYAIVvpCfSX4n+e+tXA4xjMbhuZY9lJaL5fqXU5udvC9zfzmEeNV
+   hWRI1BUQvgddgET1e0pWClRt6rdecZwIruQX/uRVz/mRYk7Ifuhue7IHf
+   Lu0rESZPk7sYES+BkVAxNceWVVBadnR7aWmS01TpcOwxPU6Dj7QwyA5mz
+   oIfzBv/Q1Aa2LGTnGW5zie3H2Vkl+MWiEyNEyfbkfjGkhh/ZGM14TIFeI
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="362296217"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="362296217"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 19:27:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="709136697"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Sep 2022 19:27:25 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obYPU-0005DO-33;
+        Fri, 23 Sep 2022 02:27:24 +0000
+Date:   Fri, 23 Sep 2022 10:26:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Wolfram Sang <wsa-dev@sang-engineering.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, loongarch@lists.linux.dev,
+        linux-acpi@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH 4/5] i2c: Add driver for Loongson-2K/LS7A I2C controller
+Message-ID: <202209231036.KnY4wKcL-lkp@intel.com>
+References: <ba10e9fd6deb70a2c59d5c02f30a8abbe8aa825e.1663835855.git.zhoubinbin@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ba10e9fd6deb70a2c59d5c02f30a8abbe8aa825e.1663835855.git.zhoubinbin@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Support the driver to obtain clock information by clk_rate or
-clock property. Find clock first, if not, fall back to clk_rate.
+Hi Binbin,
 
-Signed-off-by: Weilong Chen <chenweilong@huawei.com>
----
-Change since v1:
-- Ordered struct field to inverted triangle.
-- Use devm_clk_get_optional_enabled().
-- Use IS_ERR_OR_NULL.
-Link: https://lore.kernel.org/lkml/20220921101540.352553-1-chenweilong@huawei.com/
+Thank you for the patch! Yet something to improve:
 
- drivers/i2c/busses/i2c-hisi.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+[auto build test ERROR on wsa/i2c/for-next]
+[also build test ERROR on linus/master v6.0-rc6 next-20220921]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
-index 67031024217c..b3bcce71dd2c 100644
---- a/drivers/i2c/busses/i2c-hisi.c
-+++ b/drivers/i2c/busses/i2c-hisi.c
-@@ -8,6 +8,7 @@
- #include <linux/acpi.h>
- #include <linux/bits.h>
- #include <linux/bitfield.h>
-+#include <linux/clk.h>
- #include <linux/completion.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
-@@ -90,6 +91,7 @@ struct hisi_i2c_controller {
- 	struct i2c_adapter adapter;
- 	void __iomem *iobase;
- 	struct device *dev;
-+	struct clk *clk;
- 	int irq;
- 
- 	/* Intermediates for recording the transfer process */
-@@ -456,10 +458,16 @@ static int hisi_i2c_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
--	if (ret) {
--		dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
--		return ret;
-+	ctlr->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
-+	if (IS_ERR_OR_NULL(ctlr->clk)) {
-+		ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
-+		if (ret) {
-+			dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
-+			return ret;
-+		}
-+	} else {
-+
-+		clk_rate_hz = clk_get_rate(ctlr->clk);
- 	}
- 
- 	ctlr->clk_rate_khz = DIV_ROUND_UP_ULL(clk_rate_hz, HZ_PER_KHZ);
+url:    https://github.com/intel-lab-lkp/linux/commits/Binbin-Zhou/i2c-ls2x-Add-support-for-the-Loongson-2K-LS7A-I2C/20220922-194252
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20220923/202209231036.KnY4wKcL-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/df754cf9cc58fc815223d6126fa1c86717cd3465
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Binbin-Zhou/i2c-ls2x-Add-support-for-the-Loongson-2K-LS7A-I2C/20220922-194252
+        git checkout df754cf9cc58fc815223d6126fa1c86717cd3465
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/i2c/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/i2c/busses/i2c-ls2x.c: In function 'i2c_stop':
+>> drivers/i2c/busses/i2c-ls2x.c:45:33: error: implicit declaration of function 'writeb' [-Werror=implicit-function-declaration]
+      45 | #define i2c_writeb(val, addr)   writeb(val, dev->base + addr)
+         |                                 ^~~~~~
+   drivers/i2c/busses/i2c-ls2x.c:60:9: note: in expansion of macro 'i2c_writeb'
+      60 |         i2c_writeb(LS2X_I2C_CMD_STOP, LS2X_I2C_CR_REG);
+         |         ^~~~~~~~~~
+>> drivers/i2c/busses/i2c-ls2x.c:44:33: error: implicit declaration of function 'readb' [-Werror=implicit-function-declaration]
+      44 | #define i2c_readb(addr)         readb(dev->base + addr)
+         |                                 ^~~~~
+   drivers/i2c/busses/i2c-ls2x.c:63:9: note: in expansion of macro 'i2c_readb'
+      63 |         i2c_readb(LS2X_I2C_SR_REG);
+         |         ^~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/writeb +45 drivers/i2c/busses/i2c-ls2x.c
+
+    43	
+  > 44	#define i2c_readb(addr)		readb(dev->base + addr)
+  > 45	#define i2c_writeb(val, addr)	writeb(val, dev->base + addr)
+    46	
+
 -- 
-2.31.GIT
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
