@@ -2,175 +2,259 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC055E7C51
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Sep 2022 15:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EAC35E7E87
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Sep 2022 17:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbiIWNwE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 23 Sep 2022 09:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
+        id S232684AbiIWPha (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 23 Sep 2022 11:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbiIWNwA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Sep 2022 09:52:00 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014E011DFE3;
-        Fri, 23 Sep 2022 06:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663941119; x=1695477119;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=Y5WRQ42/zYKj57q3m6I7CLbth4/3sZGXcG85ETMbOE4=;
-  b=np+mIl3S2rUdMuGh0mBNRNUHmfkNftXdnI8kKTYQR+pRNUVmqod54153
-   h9sYg0B5PgaQT3FSc0ZAha4+v1QEPM1Zx/ttK73o8pDLtkUoq1dz4CAsj
-   F0lVCRjkoWnut0iIE73oaQSNsGB/jS9d9nHj2twCFa/4BrXEeNL1wFZ75
-   TXNc91zlIMBsXkZ+8UZHcp57IZCF5fZCjaBDlDoF/bpKjnBh4rYmkDkN2
-   NcH65Cb5KhHWLeyD6HSiJViAJ377WZYm7kz4N3h2AAjg7HgCNTewjBys+
-   q83/jvF/XfLlFKRc1h4xUnyFn2mCqP53xbetivCVEoCxHWTehHiD4xsmF
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="115110731"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Sep 2022 06:51:56 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 23 Sep 2022 06:51:55 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12 via Frontend Transport; Fri, 23 Sep 2022 06:51:55 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dGIxPmn/jroOJ/8G642B7ZhtNkq8VCmVb1W1Ib0xcBWrf7+x/O1s/shDQK6wXwNqEfxxdwouSuPPSVZ13t0UxGXX0Ry/8JjnUdKQ9joYP1kNN45AFo6FI6kzCKRwcZ8EWjBMSXaDSKqpWwNYFwBN8j+yGM9lCh+bipe7cyygwRzQZnJ3em806PIyGlb8wtKA2r1z0yXLI5hp4RtyZyNg/vjt4OCUmA1hltm0gIz+9Novqh72vcYBo8ZaCDFWr235Wv+RBiNWm3+IabzJ4IKlVPMzosm/eoi2TIoPNi39DGp0ftmZx7ZAXPMCTFWYEMLhY6ZyI+pw8xaCxas5prmczQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y5WRQ42/zYKj57q3m6I7CLbth4/3sZGXcG85ETMbOE4=;
- b=hEFhYLn9nVMI1agX8mYg0MubqwBXLCR2SaoA2QMp+jUkMhb3MjycpyYSDL/PjaNuPLXd78VrEHGvd1waVM81T8imhL7U7nrZGEtRvgrU3pqcI1ytKshB/b3mOtcZwDfJOe3qjUPuGUmcggn/uiHIEq9MWGhH4NIgrl1clABZ/YTIVBtYG974Mx8NeRqWCcrBSxHdd3gZRoRQWae+lpuosDWfPgHgZoYZibLEETPdX2UoaDDEfrJabfHRKkc3QYlhvOUu+Kc/gc1aQfjveNhvZzLnL6H2cJXmSk/bBNGZrk4F1udCD/aCVoOB3JBeRl3ju6xu7ZEQoLYS0Wc1OPddxw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        with ESMTP id S232677AbiIWPh3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Sep 2022 11:37:29 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FF0145959
+        for <linux-i2c@vger.kernel.org>; Fri, 23 Sep 2022 08:37:28 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id a3so856408lfk.9
+        for <linux-i2c@vger.kernel.org>; Fri, 23 Sep 2022 08:37:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y5WRQ42/zYKj57q3m6I7CLbth4/3sZGXcG85ETMbOE4=;
- b=dThzu306aC6HqDV+x8aYaoTtOpqoNycGW7omA0G5KKmrOMqPPbzLNmXeQ8tEHHkt0KhEg/3C35msom2PdrTmh5Xr0cMNUtGpaETAX73ZazoS9ZZjCrmPTXJtcwT/T+Bkl3VbbWYYKHmUQq414xi2nFNsBqjogATZrstXK2iWa2M=
-Received: from PH0PR11MB5096.namprd11.prod.outlook.com (2603:10b6:510:3c::5)
- by SJ0PR11MB6624.namprd11.prod.outlook.com (2603:10b6:a03:47a::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.20; Fri, 23 Sep
- 2022 13:51:52 +0000
-Received: from PH0PR11MB5096.namprd11.prod.outlook.com
- ([fe80::61bf:18d5:c7e7:f89c]) by PH0PR11MB5096.namprd11.prod.outlook.com
- ([fe80::61bf:18d5:c7e7:f89c%4]) with mapi id 15.20.5632.021; Fri, 23 Sep 2022
- 13:51:52 +0000
-From:   <Tharunkumar.Pasumarthi@microchip.com>
-To:     <wsa@kernel.org>
-CC:     <UNGLinuxDriver@microchip.com>, <krzk@kernel.org>, <arnd@arndb.de>,
-        <andriy.shevchenko@linux.intel.com>, <robh@kernel.org>,
-        <semen.protsenko@linaro.org>, <sven@svenpeter.dev>,
-        <jarkko.nikula@linux.intel.com>, <linux-kernel@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <jsd@semihalf.com>, <olof@lixom.net>,
-        <rafal@milecki.pl>
-Subject: Re: [PATCH v4 i2c-master] i2c: microchip: pci1xxxx: Add driver for
- I2C host controller in multifunction endpoint of pci1xxxx switch
-Thread-Topic: [PATCH v4 i2c-master] i2c: microchip: pci1xxxx: Add driver for
- I2C host controller in multifunction endpoint of pci1xxxx switch
-Thread-Index: AQHYwtRuLt6yI1LWVkm57IwqsE/vHa3kK74AgAj2UAA=
-Date:   Fri, 23 Sep 2022 13:51:52 +0000
-Message-ID: <55e6769b1d7e890f4211b44f821b11654a5b9f4d.camel@microchip.com>
-References: <20220907161143.897289-1-tharunkumar.pasumarthi@microchip.com>
-         <YyY1vESf5JalT6GR@shikoro>
-In-Reply-To: <YyY1vESf5JalT6GR@shikoro>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR11MB5096:EE_|SJ0PR11MB6624:EE_
-x-ms-office365-filtering-correlation-id: 79fc1db8-3b98-4f98-f8c1-08da9d6ac52f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NyirQbmBlD9dagOkem2oXhU1Av6gg6+LrOENzOayDOwjMEtbIUbC27lbegMH5bX6JHjmdoehovTSL+Mpm51VR8gc2a8unDJgt6FCuCGtw9SUl6onEsrRqLHIQTHPl4/GtCulD6gVvB0Mn8Q4/4Mv6D4OYQCwMirojB2bjH2tBKr7Xgq0kFARDUUCgolLFM+CoIF/ijX2TOTyrousvZJwmxhGPpKllSnxvQghYExiOq9HVz7tfNzYM0GFUAs8VbekxCdGkaAu2lYNXZT7jkj/m4b2GDNxfsEz0ynoQM6B+FaRmqY2qqM3m2aI9D+oZMgJJZ7bAJ21KBp9vBrhGszTMh6lxMgYsyQ6GB8xaXHeLqLvk0XQ/Enz/1nI2UeFKxmKY09e2Q1LfwAwZWZHJtukLMl6nsDPbvwkQ7X5IRK2sIH6jcvLa22/fFMgZEM05ZgJv3E20eGCvcRE02O50N8D3zttA2nLtYYwHfIapilMoYVCrJ0uPejA3+gP2mETql9phZHpBKNtAQaDEViVp7376nSyJRauXdq4dWURbf8Sr9W7NBvavZxYsyWAWGpV7j7KGSzm/5RvfRqmzXZVB7gYmFS7oWgBs1E9npwHIPN/uFvfGhYSYiLZj2VyT1kw87E7purrMbwnGF5ELK/w3EWtj7BgqKPYBm2Pq//Y6BlEZXVHlaroOVr4SNVzM/GTWNRSBb6qzXeJerZrgeG8M2BmFddIfvWxvswW6eFD2jsSZ4ER0hHmYUZKjqKtbU7OziNACp7lNJS9NEsgT8cazfJ0ZSIxGnXH9hqlifV5T6e81yw=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5096.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(366004)(396003)(376002)(346002)(136003)(451199015)(91956017)(2616005)(71200400001)(8676002)(4326008)(186003)(41300700001)(38070700005)(76116006)(66556008)(86362001)(64756008)(66446008)(66476007)(36756003)(4744005)(66946007)(38100700002)(6506007)(5660300002)(6916009)(7416002)(478600001)(54906003)(122000001)(6486002)(8936002)(83380400001)(316002)(26005)(6512007)(2906002)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Q01WSHFsSUFaMzFSOFVEcVkrUytqT3pwNG83UHAxb2lkM3NIU0tGUzVPWDZM?=
- =?utf-8?B?M1dFa0o2eDlaSExMcm4rL3VOZjA0OU5NMlJkQS92anZ6Snh0K0tSWUZkSUli?=
- =?utf-8?B?TnJPM1E4cWZMcC9MeUVZRk5qeDBrNW9aYTdtaXhWNGg0QUlndFhicVFPRlg4?=
- =?utf-8?B?dEFydk9QQTFzcUM1OUEyb2FMeEc0WExEbFFQc0NlWExIYzNGMWs2d05vVWtO?=
- =?utf-8?B?WGJhM3lFVVFzTWFKc2tQTDI3QWgxYW5mQUR0cTYwYjYwblBYWTJQblRUSnhC?=
- =?utf-8?B?T0lDVWJpZ2RMQWw3QmtVQ2E4SGNEcGFkUHE0dmpPS1FKOThNYUpZeWdzTGhM?=
- =?utf-8?B?aTNycFhmbmM4WXJRUnp2Q00xblFsaC9vdDhiTmxadkFZcDA2MXFTbzI0T1FV?=
- =?utf-8?B?N29GWGl2aC9DblM5ckorWmY1SkVQWGtnaGRYTEJDM3RFUks5OEJ1MkR1RzdD?=
- =?utf-8?B?aUljejJNYTloVFpMdUg5TVNIZkEyNkN3czZrcXhiQUp2TkJQdVM2S1gvcDNk?=
- =?utf-8?B?R3c4RitkOHR3YzYxL2Y1bHZ4UmRleUhlSTBkTFEyME1nbGkwREFGYVRxMkps?=
- =?utf-8?B?aTQrb3g3K2s3RWYrMTEyWkczdUpKWUhFL3ErWGdTT2tlNXUzMFRXeTVocDcv?=
- =?utf-8?B?RTlvK2ErcTlIdEdpcGg1QVdLeTl6Qzk4U3Q2WmR5TUtnR2ZvV0lyVnFhdzJ3?=
- =?utf-8?B?NkJZVDBROGJtZXNOdStLQ0s5ZjV6RFNpdHVtZEFoa29qcUFYSUF0VlNlNDZK?=
- =?utf-8?B?R2dKOUZVdmdMZjFFRTJDYWJtaktKczZ4dFdkdzVnVlF0aFBQT3RObVgrRkk4?=
- =?utf-8?B?Yk5FYkRWeVBUaTBTY2h1ZVNxaWtTWWFwQWJaUkdvK1VCbm5xMVZvRkhwdGFK?=
- =?utf-8?B?NmxZV0lORkZwQUprejBQQ1ZjS1pGUlBaSVBmVWJwTWlHRS8xaFBxU0RJL2tS?=
- =?utf-8?B?bnBsOU8zdlRKKzdlQ3BKdWgzbmVNS3MyRWQ2Rkg3ZkVKR3ZoUTEySkFKaTl5?=
- =?utf-8?B?aG9pSFptenFZMnNXbDlFQnliNkZIUUxrbEVCWTFYb1EwZWxmaGhpU2ljYUNu?=
- =?utf-8?B?eFY4YWVDaWJDNndtVnI2c0hoQXcvVmtpVlpNSGJydk5iZ3hpR2xBNVJlZG16?=
- =?utf-8?B?b1BtNlFRWWgzc2VMSFRXZ3VydnY4NmlCNmFObEtKNjJHYkJwTEFEeUJoTCtY?=
- =?utf-8?B?S09SZ1RrQjdwVFNIdXFJV2FKdFpkazRaRVdFNmQwYSs0RitqNTNqTWJPdjVT?=
- =?utf-8?B?eVlEcEVnUHhkN3cydnlXd3B5Wlp0RC9tTTJ0bklGQy9PT3hNK2YxdG42OFZj?=
- =?utf-8?B?eWY5VE9zNHN6UzJQbVcwaEw1ZmVNMlBncFBFcVFLL1RGSzRqU1pIS3hSU2l0?=
- =?utf-8?B?OWloTFh5UFBQWXpWZURTSDRMdk5QcXFRaVgyWjdLSVlBSFJ4OTlrY3FLR2o1?=
- =?utf-8?B?Z3lwOFBzbHV0MERVeGpVRFc1Y0pXQWdvdlBVN1dKeUhhTkRmRkUzQ3QrNzRO?=
- =?utf-8?B?Yi9vRlNvMlJITk5yMS8rSDh2NS9aWStsSXhDckt3d1piWmpySnlSc2hMM3E0?=
- =?utf-8?B?Y2dzK3AvS2RkRVJUc3ZVUXlVSXZDenFlWXd3TklYeEIwSVJIU2phSnV6dDJ3?=
- =?utf-8?B?eVZkTzlIbEkrNFBIZlF2Y3hZSFZzajBwa24rUThMUnpuYXFRUTJXeG9BNjlB?=
- =?utf-8?B?U0kvSDVrRUpVVWJrM1h4ZlEwU3RLaEpKMW12K0Rnd1R4dE40enM2U3RxT3J1?=
- =?utf-8?B?QkZJeEJ6UTR5WnV4OHhLTFY0Ny9KdmFVc3RuZTdzaVFjUzhpVDlQMWxwaUd1?=
- =?utf-8?B?VVNvbDBpbHhDNndmYWN4L1RkY2lnWDQrbFJTWkp0T3lKS056dXRWS1hTdjRU?=
- =?utf-8?B?dmM0V3NFZVJFUU1aRjRzR3RnSE5Ca1FDV000bXMvYzNwdWJMSS91RlJEU1l5?=
- =?utf-8?B?QXVqWTVRM0Z2YmJZVFNaaWFvYlpIdmcrZCtEeWdRUjBwOUJ6ZXFFUTI0YkVR?=
- =?utf-8?B?bXFETHpHOTV1cWhGd0Y5MlowV2dGZnJzYzBHUU0xa2diRFZmODY4RWpMNllr?=
- =?utf-8?B?ZUV0NVMzZmx2eU1PUklmUVZqL0hZVkgxTkJoK0FjNkZCZ3NRY1g4aksrMVhG?=
- =?utf-8?B?UHhaRWtRY2NzeGFjU0dFb0FyK09HNS93Y0o5K1pVbk1BVjZzRU9MNHNKS3NG?=
- =?utf-8?Q?QE+YdtA9+l9ZoqpOCdLOps3hPwnBE62E8OYFtn4Q78hA?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8D883A1622322448A735D5E5D43E871D@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=OgoaLpQ3yLM8sL8g85b58XwiPLmA9EGQIhDG7GYJi/Y=;
+        b=U/jIWxOgoFz/4fL9IY1kUApVA9JT478amyvIMeWn+/9l5MAalm8L5UP7GL2AGnSeMl
+         7CBbhsMsGSptl1Oun9YGw0Zmrf99ZTtyT5p8SyCAZBw6AOWz30Jk92GSJSruLxlFcDdc
+         xUL80VdSuztcNx/54xsQrJ46sp580eOx6lIpE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=OgoaLpQ3yLM8sL8g85b58XwiPLmA9EGQIhDG7GYJi/Y=;
+        b=IPG4HV2ukNomXIXFjyJcHLjvy+z8p6zYB0WjopVXhZ7711kMuXx4j8CW+CxHpdGVuo
+         7X6TUdz9l5DHimEXzPpv3p4x2L7sJpJDTszjJNK7wd0CpHX35lp/QJ/tJrfQOzc3kKDK
+         O8HjKQvzzydM0b6YzW7F426NCzlVyIBXm6n4g44UjPE8icxQODAS7+mIhmAg3+qe8Np7
+         UVnedhdhW66WuwTVVtc0HM9ii3PizRvarDu8hj08MaUSeahNXZOumhVfFtV4vJX3LqI8
+         fRCa1K4rqU1EMr3N+CCGUaAS3K/LCJydzBVyHJJrwNHp0Lpsf6+Pwo6EQlagjXK61K5B
+         XCmQ==
+X-Gm-Message-State: ACrzQf2CZzD0A4ZIFPmhlF+M7eGZiHEkT8whR93aSN194FJhLB+6lFk7
+        kZd4Yyhj7B9BcPgH/BtGBASXEIw8AWdBhAMv
+X-Google-Smtp-Source: AMsMyM4q/HhcObCXjtkfxjD5nQbJbc1FQmX5L2ujoIMgalu01KHLunEeTp3sLBLTE/EmQD2dGcIFFw==
+X-Received: by 2002:a05:6512:2210:b0:499:d710:9c0d with SMTP id h16-20020a056512221000b00499d7109c0dmr3815118lfu.325.1663947446204;
+        Fri, 23 Sep 2022 08:37:26 -0700 (PDT)
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
+        by smtp.gmail.com with ESMTPSA id p10-20020ac246ca000000b0049f54a976e3sm1509270lfo.58.2022.09.23.08.37.25
+        for <linux-i2c@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 08:37:25 -0700 (PDT)
+Received: by mail-lj1-f181.google.com with SMTP id g20so482422ljg.7
+        for <linux-i2c@vger.kernel.org>; Fri, 23 Sep 2022 08:37:25 -0700 (PDT)
+X-Received: by 2002:a05:6512:ba1:b0:498:9890:1bb4 with SMTP id
+ b33-20020a0565120ba100b0049898901bb4mr3294634lfv.122.1663947434871; Fri, 23
+ Sep 2022 08:37:14 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5096.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 79fc1db8-3b98-4f98-f8c1-08da9d6ac52f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2022 13:51:52.6384
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 34E9XZlW22tTlKmXkDxwo123tnAf7zanOVU6SXQUx9Ki2cOS1eiV/5gPjEtVc1aYoeY5i3+pdB/gWan/ThLmDXNBNInWRrZ8Y8CFOOWZ89OLK+DKKGB4MvZVwY7PBI/A
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB6624
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220921155205.1332614-1-rrangel@chromium.org> <Yyw12S3pstNrbGFO@smile.fi.intel.com>
+In-Reply-To: <Yyw12S3pstNrbGFO@smile.fi.intel.com>
+From:   Raul Rangel <rrangel@chromium.org>
+Date:   Fri, 23 Sep 2022 09:37:03 -0600
+X-Gmail-Original-Message-ID: <CAHQZ30BpkQ4R-Wh_9zaUeFWVSJm79ebu5Lp4Xx=R6RUx_KYrrg@mail.gmail.com>
+Message-ID: <CAHQZ30BpkQ4R-Wh_9zaUeFWVSJm79ebu5Lp4Xx=R6RUx_KYrrg@mail.gmail.com>
+Subject: Re: [PATCH v5 00/13] acpi: i2c: Use SharedAndWake and
+ ExclusiveAndWake to enable wake irq
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Tim Van Patten <timvp@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "jingle.wu" <jingle.wu@emc.com.tw>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alistair Francis <alistair@alistair23.me>,
+        Angela Czubak <acz@semihalf.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bartosz Szczepanek <bsz@semihalf.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Johnny Chuang <johnny.chuang.emc@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Len Brown <lenb@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gU2F0LCAyMDIyLTA5LTE3IGF0IDIzOjAxICswMjAwLCBXb2xmcmFtIFNhbmcgd3JvdGU6DQo+
-IEVYVEVSTkFMIEVNQUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1
-bmxlc3MgeW91IGtub3cgdGhlDQo+IGNvbnRlbnQgaXMgc2FmZQ0KPiBJZiB5b3UgY2FuJ3QgZG8g
-STJDX0ZVTkNfU01CVVNfUVVJQ0ssIHRoZW4geW91IG5lZWQgYW4gaTJjX2FkYXB0ZXJfcXVpcmsN
-Cj4gc3RydWN0IHNheWluZyB0aGF0IHlvdXIgSFcgY2Fubm90IGRvIDAgYnl0ZSBsZW5ndGggdHJh
-bnNmZXJzLg0KPg0KPiBBbHNvLCBhIGxvdCBjYW4gYmUgc2ltcGxpZmllZCBoZXJlLCBlLmcuIEky
-Q19GVU5DX1NNQlVTX0JZVEUgY292ZXJzIGJvdGgNCj4gY2FzZXMsIHJlYWQgYW5kIHdyaXRlLg0K
-DQpPa2F5LiBJIHdpbGwgdXBkYXRlIGNvZGUuDQoNCj4gV2h5IG5vdCB1c2UgdGhlbiBzaW1wbHkg
-MCBpbnN0ZWFkIG9mIGEgZGVmaW5lIGFuZCBhIGNvbW1lbnQ/DQoNCk9rYXksIEkgd2lsbCB1cGRh
-dGUuDQoNCj4gSSBuZWVkIHRvIG1ha2Ugc3VyZTogZG8geW91IGludGVudGlvbmFsbHkgd2FudCBh
-dXRvcHJvYmluZyBmb3IgU1BEPyBJDQo+IGFzayBiZWNhdXNlIGl0IGNvdWxkIGJlIG5lZWRlZCBi
-dXQgaXQgY29zdHMgYm9vdHRpbWUgd2hlbiBub3QgbmVlZGVkLg0KPiBBbmQgY2hhbmdpbmcgdGhl
-IGNsYXNzIG9uY2UgZXhwb3NlZCBpcyB0cm91Ymxlc29tZS4NCg0KQXV0b3Byb2JpbmcgaXMgbm90
-IHJlcXVpcmVkLiBJIGNhbiBtb2RpZnkgY29kZS4gDQoNCkFsbCB0aGVzZSBjb21tZW50cyBuZWVk
-IHRvIGJlIGFkZHJlc3NlZCBub3cgb3IgY2FuIGJlIGZpeGVkIGxhdGVyIGFmdGVyIHRoZQ0KcGF0
-Y2ggaXMgYXBwbGllZD8NCg0KDQpUaGFua3MsDQpUaGFydW4gS3VtYXIgUA0K
+On Thu, Sep 22, 2022 at 4:16 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Wed, Sep 21, 2022 at 09:51:52AM -0600, Raul E Rangel wrote:
+> > Today, i2c drivers are making the assumption that their IRQs can also
+> > be used as wake IRQs. This isn't always the case and it can lead to
+> > spurious wakes. This has recently started to affect AMD Chromebooks.
+> > With the introduction of
+> > d62bd5ce12d7 ("pinctrl: amd: Implement irq_set_wake"), the AMD GPIO
+> > controller gained the capability to set the wake bit on each GPIO. The
+> > ACPI specification defines two ways to inform the system if a device is
+> > wake capable:
+> > 1) The _PRW object defines the GPE that can be used to wake the system.
+> > 2) Setting ExclusiveAndWake or SharedAndWake in the _CRS GpioInt.
+> >
+> > Currently only the first method is supported. The i2c drivers don't have
+> > any indication that the IRQ is wake capable, so they guess. This causes
+> > spurious interrupts, for example:
+> > * We have an ACPI HID device that has `_PR0` and `_PR3`. It doesn't have
+> >   `_PRW` or `ExclusiveAndWake` so that means the device can't wake the
+> >   system.
+> > * The IRQ line is active level low for this device and is pulled up by
+> >   the power resource defined in `_PR0`/`_PR3`.
+> > * The i2c driver will (incorrectly) arm the GPIO for wake by calling
+> >   `enable_irq_wake` as part of its suspend hook.
+> > * ACPI will power down the device since it doesn't have a wake GPE
+> >   associated with it.
+> > * When the device is powered down, the IRQ line will drop, and it will
+> >   trigger a wake event.
+> >
+> > See the following debug log:
+> > [   42.335804] PM: Suspending system (s2idle)
+> > [   42.340186] amd_gpio AMD0030:00: RX: Setting wake for pin 89 to enable
+> > [   42.467736]     power-0416 __acpi_power_off      : Power resource [PR00] turned off
+> > [   42.467739] device_pm-0280 device_set_power      : Device [H05D] transitioned to D3cold
+> > [   42.475210] PM: pm_system_irq_wakeup: 11 triggered pinctrl_amd
+> > [   42.535293] PM: Wakeup unrelated to ACPI SCI
+> > [   42.535294] PM: resume from suspend-to-idle
+> >
+> > In order to fix this, we need to take into account the wake capable bit
+> > defined on the Interrupt/GpioInt. This is accomplished by:
+> > * Migrating some of the i2c drivers over to using the PM subsystem to
+> >   manage the wake IRQ.
+> > * Expose the wake_capable bit from the ACPI Interrupt/GpioInt resource
+> >   to the  i2c core.
+> > * Use the wake_capable bit in the i2c core to call
+> >   `dev_pm_set_wake_irq`. This reuses the existing device tree flow.
+> > * Make the i2c drivers stop calling `dev_pm_set_wake_irq` since it's now
+> >   handled by the i2c core.
+> > * Make the ACPI device PM system aware of the wake_irq. This is
+> >   necessary so the device doesn't incorrectly get powered down when a
+> >   wake_irq is enabled.
+> >
+> > I've tested this code with various combinations of having _PRW,
+> > ExclusiveAndWake and power resources all defined or not defined, but it
+> > would be great if others could test this out on their hardware.
+> >
+> > I'm sure this will surface some devices where the IRQs were not
+> > correctly marked as wake capable. Ideally the firmware can be fixed, but
+> > if not we can work around this in the kernel by providing a board
+> > specific `struct i2c_board_info` with the `I2C_CLIENT_WAKE` flag set.
+> > See `chromeos_laptop.c` for an example of matching DMI properties and
+> > setting the `I2C_CLIENT_WAKE` override.
+> >
+> > Thanks,
+> > Raul
+> >
+> > Changes in v5:
+> > - Added Acked-by: Benjamin Tissoires
+> > - Removed clang-format white space changes
+> > - Check irq return value before updating wake_capable pointer
+>
+
+> You are too fast with a new versions... I have comment on the v4 and I believe
+> it applicable here (not settled yet).
+>
+
+I'll send out a new series with the change.
+
+> > - Go back to using adev->wakeup.flags.valid to keep the diff cleaner
+> > - Fix a typo in comment
+> >
+> > Changes in v4:
+> > - Added Reviewed-by
+> > - Reformatted with 96 char limit
+> > - Added Reviewed-by
+> > - Reformatted with 96 char limit
+> > - Removed unnecessary !!
+> > - Removed unrelated whitespace change
+> > - Added Reviewed-by
+> > - Renamed i2c_acpi_add_resource to i2c_acpi_add_irq_resource
+> > - Expanded logic in i2c_acpi_add_i2c_resource to make it easier to read
+> >
+> > Changes in v3:
+> > - Kept `acpi_dev_gpio_irq_get_by` unchanged to avoid having to touch
+> >   unrelated drivers.
+> > - Converted wake_capable parameter to bool.
+> > - Fixed bad indent
+> > - Convert wake_capable to bool
+> > - Only update wake_capable pointer once
+> > - Move wake_capable local into local block
+> >
+> > Changes in v2:
+> > - Added elants_i2c to series
+> > - Added raydium_ts_i2c to series
+> > - Fixed call site in mlxbf_gige_probe
+> > - Added ability to extract wake bit from Interrupt/IRQ resources
+> > - Look at wake_cabple bit for IRQ/Interrupt resources
+> > - I chose not to keep the legacy code around since systems without DT or ACPI should be rare.
+> >
+> > Raul E Rangel (13):
+> >   HID: i2c-hid: Use PM subsystem to manage wake irq
+> >   Input: elan_i2c - Use PM subsystem to manage wake irq
+> >   Input: elants_i2c - Use PM subsystem to manage wake irq
+> >   Input: raydium_ts_i2c - Use PM subsystem to manage wake irq
+> >   gpiolib: acpi: Add wake_capable variants of acpi_dev_gpio_irq_get
+> >   ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
+> >   i2c: acpi: Use ACPI wake capability bit to set wake_irq
+> >   ACPI: PM: Take wake IRQ into consideration when entering
+> >     suspend-to-idle
+> >   HID: i2c-hid: acpi: Stop setting wakeup_capable
+> >   HID: i2c-hid: Don't set wake_capable and wake_irq
+> >   Input: elan_i2c - Don't set wake_capable and wake_irq
+> >   Input: elants_i2c - Don't set wake_capable and wake_irq
+> >   Input: raydium_ts_i2c - Don't set wake_capable and wake_irq
+> >
+> >  drivers/acpi/device_pm.c                   | 19 +++++++++--
+> >  drivers/acpi/irq.c                         |  8 +++--
+> >  drivers/acpi/resource.c                    | 16 +++++++---
+> >  drivers/gpio/gpiolib-acpi.c                | 15 +++++++--
+> >  drivers/gpio/gpiolib-acpi.h                |  2 ++
+> >  drivers/hid/i2c-hid/i2c-hid-acpi.c         |  5 ---
+> >  drivers/hid/i2c-hid/i2c-hid-core.c         | 24 ++------------
+> >  drivers/i2c/i2c-core-acpi.c                | 37 ++++++++++++++++------
+> >  drivers/i2c/i2c-core-base.c                |  6 +++-
+> >  drivers/i2c/i2c-core.h                     |  4 +--
+> >  drivers/input/mouse/elan_i2c_core.c        | 15 +--------
+> >  drivers/input/touchscreen/elants_i2c.c     | 13 ++------
+> >  drivers/input/touchscreen/raydium_i2c_ts.c |  7 +---
+> >  drivers/pnp/pnpacpi/rsparser.c             |  7 ++--
+> >  include/linux/acpi.h                       | 23 +++++++++++---
+> >  include/linux/ioport.h                     |  3 +-
+> >  16 files changed, 112 insertions(+), 92 deletions(-)
+> >
+> > --
+> > 2.37.3.968.ga6b4b080e4-goog
+> >
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
