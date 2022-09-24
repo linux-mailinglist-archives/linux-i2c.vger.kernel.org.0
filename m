@@ -2,100 +2,146 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946435E8EF5
-	for <lists+linux-i2c@lfdr.de>; Sat, 24 Sep 2022 19:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5BA5E8FB9
+	for <lists+linux-i2c@lfdr.de>; Sat, 24 Sep 2022 22:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbiIXRb2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 24 Sep 2022 13:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
+        id S229458AbiIXUpp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 24 Sep 2022 16:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiIXRb1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 24 Sep 2022 13:31:27 -0400
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84C03868E;
-        Sat, 24 Sep 2022 10:31:26 -0700 (PDT)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-127ba06d03fso4254271fac.3;
-        Sat, 24 Sep 2022 10:31:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=jdt37FqOHKoNX5KKgEN9cN6IwsGzfTtbkKEvY7gE7kU=;
-        b=F7toIBGF8mlAGDT8J5by0s34w7yzH1UVYeD4Bmj7D+K1+jFjRj75dFwe1IkMYhcQ9n
-         qg1UWL8M8KwF9z4xT1hE6FMNp0NtokSLc4YC5UFmhDcXms8MHoTW8pZ2837zSFrSVaru
-         ALnd1PWltqdIgCfexrD3ZoTmRnqJmEXKH1UcPquoYw/TPnf2M4+YJWFiYgSBRShD565/
-         uX9Ww/PjqRFf2Ma0bp/4dPzpvysUyYln+Naq+kd3dlCNFYCpk+ncna8xsciAtySPcQ6a
-         CfIfqkHrNEPYYCbvJphBFmFp+lwQFYq6WtNQAo6FHvreVV0Ufp4BPV1Mcd+RwUVM58Ib
-         oTrw==
-X-Gm-Message-State: ACrzQf3KJcGqossJR1PzWYMltYhINO/G8xQtCqKZlhQV67v5yO+GGLJ/
-        YoYpfXNWs3nZorVMZoevTlyl/0uqCwB7
-X-Google-Smtp-Source: AMsMyM6pfeK8XxwoPfZmh1rxKATls+nfuJRqCQzPH+cb9SjggXj79qeP6d9n6/XnejpYON6Qs1odqw==
-X-Received: by 2002:a05:6870:b68d:b0:12d:484a:2643 with SMTP id cy13-20020a056870b68d00b0012d484a2643mr14780018oab.105.1664040686123;
-        Sat, 24 Sep 2022 10:31:26 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p6-20020a9d76c6000000b00616e2d2204csm5589976otl.21.2022.09.24.10.31.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 10:31:25 -0700 (PDT)
-Received: (nullmailer pid 1008225 invoked by uid 1000);
-        Sat, 24 Sep 2022 17:31:25 -0000
-Date:   Sat, 24 Sep 2022 12:31:25 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Khalil Blaiech <kblaiech@nvidia.com>
-Subject: Re: How to remove DT support from a driver? (was Re: [PATCH v5 8/8]
- i2c: i2c-mlxbf.c: Update binding devicetree)
-Message-ID: <20220924173125.GA989070-robh@kernel.org>
-References: <20220920174736.9766-1-asmaa@nvidia.com>
- <20220920174736.9766-9-asmaa@nvidia.com>
- <20220921065506.6cu6p2cpu3zfhtie@krzk-bin>
- <CH2PR12MB3895572575B5BED5DAFFAA29D74F9@CH2PR12MB3895.namprd12.prod.outlook.com>
- <Yyttt3DiQpMZYejA@shikoro>
+        with ESMTP id S229502AbiIXUpo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 24 Sep 2022 16:45:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFB031EFC;
+        Sat, 24 Sep 2022 13:45:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6ECEFB80E93;
+        Sat, 24 Sep 2022 20:45:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 682E3C433D6;
+        Sat, 24 Sep 2022 20:45:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664052339;
+        bh=O4PbDKTtpy6qRBsB+BHtbJmVM+QtJb6NDgwWW8WotYo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kBc37i8aL3fstiHYnKPQciBNgD2LhPKHukDRAhkmjmvC6yv7mfAeiG5g9LSTtEMlJ
+         Io+N1LA1Wzl67/FJKnDquKb/zOq5uHgrpn4GOmNYkkPDtjXveK55jSgd3uThuf3tis
+         lMQ4nUb9FLwZT3t0tufI12Y61rewxqiHqXKL4YRTU3eNW4qPRCL4WrHwUc4AhdNcLC
+         y9T9GsweyMDJN1JF7zQI8oO6qSgIfZdjD4UF+/2rN8bfMSJxVUtKY91vxiYK+p1Izg
+         LEP3Hiw5rYji9hGKJuZWXeixUOSB7fNeaOLswcNwooKzuZec4J8PuZTdPmNbUngjSX
+         x1ISqhgoQ6YbQ==
+Date:   Sat, 24 Sep 2022 22:45:35 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c-for-6.0-rc7
+Message-ID: <Yy9sbyqEvO8OqESO@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="UkGlNBYXi8k9VDno"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yyttt3DiQpMZYejA@shikoro>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 10:01:59PM +0200, Wolfram Sang wrote:
-> Hi,
-> 
-> > I have a question for you and Wolfram, we don’t use device trees and
-> > are not planning to use device trees; we only use ACPI tables. But I
-> > think when Khalil submitted the first version of the i2c-mlxbf.c
-> > driver, it was requested from him to add devicetree support. Do you
-> > know why? Is it possible to remove the device tree support and so this
-> > doc? or is devicetree support a requirement regardless of the actual
-> > implementation? 
-> 
-> The first version sent from Khalil to the public I2C mailing list already
-> had DT bindings [1]. I don't see a sign of someone of the public list
-> requesting DT bindings. Maybe it was company internal?
-> 
-> Technically, there is no requirement to support DT, especially since you
-> have working ACPI. I don't know the process, though, of removing DT
-> support. You would basically need to be sure that no user made use of
-> the DT bindings introduced before. I don't know to what degree you can
-> assume that.
 
-There's the whole using DT bindings in ACPI bindings thing, but I have 
-little interest (or time) in supporting that. Maybe that's what's 
-happening here? I haven't looked. The whole concept is flawed IMO. It 
-may work for simple cases of key/value device properties, but the ACPI 
-model is quite different in how resources are described and managed.
+--UkGlNBYXi8k9VDno
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Rob
+The following changes since commit 80e78fcce86de0288793a0ef0f6acf37656ee4cf:
+
+  Linux 6.0-rc5 (2022-09-11 16:22:01 -0400)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-=
+6.0-rc7
+
+for you to fetch changes up to b7af938f4379a884f15713319648a7653497a907:
+
+  i2c: mux: harden i2c_mux_alloc() against integer overflows (2022-09-21 22=
+:12:06 +0200)
+
+----------------------------------------------------------------
+I2C driver bugfixes for mlxbf and imx, a few documentation fixes after
+the rework this cycle, and one hardening for the i2c-mux core
+
+----------------------------------------------------------------
+Asmaa Mnebhi (3):
+      i2c: mlxbf: incorrect base address passed during io write
+      i2c: mlxbf: prevent stack overflow in mlxbf_i2c_smbus_start_transacti=
+on()
+      i2c: mlxbf: Fix frequency calculation
+
+Dan Carpenter (1):
+      i2c: mux: harden i2c_mux_alloc() against integer overflows
+
+Uwe Kleine-K=C3=B6nig (1):
+      i2c: imx: If pm_runtime_get_sync() returned 1 device access is possib=
+le
+
+Wolfram Sang (2):
+      MAINTAINERS: remove Nehal Shah from AMD MP2 I2C DRIVER
+      Documentation: i2c: fix references to other documents
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Gustavo A. R. Silva (1):
+      (Rev.) i2c: mux: harden i2c_mux_alloc() against integer overflows
+
+Khalil Blaiech (3):
+      (Rev.) i2c: mlxbf: Fix frequency calculation
+      (Rev.) i2c: mlxbf: prevent stack overflow in mlxbf_i2c_smbus_start_tr=
+ansaction()
+      (Rev.) i2c: mlxbf: incorrect base address passed during io write
+
+Luca Ceresoli (2):
+      (Rev.) Documentation: i2c: fix references to other documents
+      (Test) Documentation: i2c: fix references to other documents
+
+ Documentation/i2c/dev-interface.rst   |  2 +-
+ Documentation/i2c/slave-interface.rst |  6 ++--
+ Documentation/i2c/writing-clients.rst |  4 +--
+ MAINTAINERS                           |  1 -
+ drivers/i2c/busses/i2c-imx.c          |  2 +-
+ drivers/i2c/busses/i2c-mlxbf.c        | 68 ++++++++++++++-----------------=
+----
+ drivers/i2c/i2c-mux.c                 |  5 +--
+ 7 files changed, 37 insertions(+), 51 deletions(-)
+
+--UkGlNBYXi8k9VDno
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMvbG8ACgkQFA3kzBSg
+KbZ5rhAAm9WUfoJEFjFfc5lrJx52WqxIqb9hL6HKcseMe/sxozVgO3XexZ9aZrVN
+LvqZz7z1gil3kHJvDEQ0qHKpsCJDvLU/LdDLJV6u8tqPvFj8hB5nlF7mvOA3Lu0U
+BxQT049uePB70JvTjYI8wW9QeAiNZsqBWK6m6CLo7jv2s4yzPDnOKS+AwDHPQWBX
+g9YO60IEIE15ouu+XjpV/1601YDi1ZHcPyGeszHTd0cOYNPAxjj88mA5kGvEC9Rh
+lXVAlm3kIGucz4MLP4b29RTZFH0pNnXJrZBkt1cHjpn0AYcarmnZydlo211wDUyv
+u2AHFPSngX5CwgKzUfe+pvvZ/Lqia5NSwKLLYWVxdh7W5CWpYoabmLxMsx9dJDQ4
+Xq7qcNEnX+9HxmLqfvQnXjKjPVtKKaxXIwqU7eu0WVjjgPhST41qOy7SUk5b4Jam
+4P5uu01ymlvtbVhaFNQNlDqc2uVEQn6Xrk+31m/UpVaNlZrJpN1YmS9CHW5DfXvR
+dynWtme2vEreHgnVK6xLr5cy1NYGTtbU1yxqvrt8AkGATSRC8vOtLtt0wboMrwPJ
+eUSi7socSdK600HJ+U9bT7hU6mcDGPOQXVXePX+4VzENYJAKyMg9mr8qxNd/CvnB
+33cjJJnvOlwUd/PDBFdWZDjNwW9eEKC1LIHyMGbpxA/xWxYc5j4=
+=9PQi
+-----END PGP SIGNATURE-----
+
+--UkGlNBYXi8k9VDno--
