@@ -2,55 +2,46 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 975AC5E8E67
-	for <lists+linux-i2c@lfdr.de>; Sat, 24 Sep 2022 18:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 975F05E8E73
+	for <lists+linux-i2c@lfdr.de>; Sat, 24 Sep 2022 18:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233405AbiIXQQi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 24 Sep 2022 12:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50058 "EHLO
+        id S230044AbiIXQZY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 24 Sep 2022 12:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiIXQQg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 24 Sep 2022 12:16:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98523AB1F;
-        Sat, 24 Sep 2022 09:16:35 -0700 (PDT)
+        with ESMTP id S229497AbiIXQZW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 24 Sep 2022 12:25:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE361BCB7;
+        Sat, 24 Sep 2022 09:25:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 758B061087;
-        Sat, 24 Sep 2022 16:16:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C82EC433D6;
-        Sat, 24 Sep 2022 16:16:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 70410B8094F;
+        Sat, 24 Sep 2022 16:25:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E740AC433C1;
+        Sat, 24 Sep 2022 16:25:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664036194;
-        bh=F5sTtpXXqvLfdqHDWhNG3r1/iSI3pt4pOqQI17I6R3Q=;
+        s=k20201202; t=1664036718;
+        bh=IABSAfDOB7bySjgixAr3OpImNc/FNR3Nhzr3L3Ft4/4=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OL+hqvXW69liJ659R68sL1mKcJ7SJXOT6tWv8C/yJmFSu3gvw19Zl696z03DJf0kT
-         +S2MI8kgi4wYln0X1QU0tpmRYW1PGLVdJVEFtxqG/vwSdEiS6T62kbZVOdwQ0hpFhL
-         IUBCNKpCrguGEfC1uffuCN7flUW3lniej6JKmpE9SgXel/p8X317UGtRwWBudfAR5L
-         aD3PJrG1o/jC/L2bRkQpUq5cJbnGk9vyFbcjyhxvVroTv9a5JeyRvBk4mhKtw+yl6P
-         W+llsXXGiGpGK3xOcb2bxUTWdSV3NR92Guv+c0LU87KQWvBnDJR136d6BtBD7VjfMP
-         9LuvR2qiDrc3A==
-Date:   Sat, 24 Sep 2022 17:16:42 +0100
+        b=dpSZFi+UQFwXKNkW8VnmxaQF4oPZqT2akYZt1NM0Ap+JMVqgT7ue868W9dqm1V6Ky
+         W3ugmO+jP9P2Ad2hLRF8E6qrG5TWvXlvVwIN0V/dPOo0Y73MCKzbiiijI3Gw3J/5TM
+         rlqzMfu8Ut6beU6g4dZANf73p8VjW/BQuYTqyYRKgXsKBJGxF9futagKNTEoofAZSY
+         BSaLAyjEHhYtbIXVYaVtV5bOx8qK323UyGe/mPCc1X05/VocFnKNnVbo0Uifq9RRiI
+         IqRDBSuERGarnCkcnL7OL2WGJNMLRkgZPbROkXBCuynJOllEDWbzVqIpatafCp5mMl
+         m9n/Abi4Vaf/w==
+Date:   Sat, 24 Sep 2022 17:25:25 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Matt Ranostay <matt.ranostay@konsulko.com>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Rishi Gupta <gupt21@gmail.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Jiri Kosina <jikos@kernel.org>
-Subject: Re: [PATCH v4 4/5] HID: mcp2221: switch i2c registration to devm
- functions
-Message-ID: <20220924171642.38541c78@jic23-huawei>
-In-Reply-To: <CAJCx=g=bcZe5RUWZTqmz_2=Q1sDmbwGB8Rd8F47eVkz7e2Zz2A@mail.gmail.com>
+Cc:     gupt21@gmail.com, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org
+Subject: Re: [PATCH v4 5/5] HID: mcp2221: add ADC/DAC support via iio
+ subsystem
+Message-ID: <20220924172525.3940df72@jic23-huawei>
+In-Reply-To: <20220921063026.89619-6-matt.ranostay@konsulko.com>
 References: <20220921063026.89619-1-matt.ranostay@konsulko.com>
-        <20220921063026.89619-5-matt.ranostay@konsulko.com>
-        <20220921080458.3uue5ooc3svcbmxp@mail.corp.redhat.com>
-        <CAJCx=gn0bZp3fToF+LZE+evR2m4nWMueusjysxcrvimH0wRhaA@mail.gmail.com>
-        <CAJCx=gmAyae-_VmYpVw=q4+34zraxQ4d2E3DTjjRX4OWqaWwHg@mail.gmail.com>
-        <CAO-hwJJrgb+ncG9mSiE4zZ32oRc_vD0OcrsTa+uXBCTBGRL+nw@mail.gmail.com>
-        <CAJCx=g=bcZe5RUWZTqmz_2=Q1sDmbwGB8Rd8F47eVkz7e2Zz2A@mail.gmail.com>
+        <20220921063026.89619-6-matt.ranostay@konsulko.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -64,88 +55,143 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 23 Sep 2022 14:22:18 -0700
+On Tue, 20 Sep 2022 23:30:26 -0700
 Matt Ranostay <matt.ranostay@konsulko.com> wrote:
 
-> On Fri, Sep 23, 2022 at 12:03 AM Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
-> >
-> > On Fri, Sep 23, 2022 at 1:45 AM Matt Ranostay
-> > <matt.ranostay@konsulko.com> wrote:  
-> > >
-> > > On Wed, Sep 21, 2022 at 10:57 AM Matt Ranostay
-> > > <matt.ranostay@konsulko.com> wrote:  
-> > > >
-> > > > On Wed, Sep 21, 2022 at 1:05 AM Benjamin Tissoires
-> > > > <benjamin.tissoires@redhat.com> wrote:  
-> > > > >
-> > > > > [foreword: please keep Jiri and myself (the HID maintainers) CC-ed to
-> > > > > the series, as you will need ack from us and we don't necessarily monitor
-> > > > > every single message on linux-input]
-> > > > >
-> > > > > On Sep 20 2022, Matt Ranostay wrote:  
-> > > > > > Switch from i2c_add_adapter() to resource managed devm_i2c_add_adapter()
-> > > > > > for matching rest of driver initialization, and more concise code.
-> > > > > >
-> > > > > > Signed-off-by: Matt Ranostay <matt.ranostay@konsulko.com>
-> > > > > > ---
-> > > > > >  drivers/hid/hid-mcp2221.c | 45 +++++++++++++++++----------------------
-> > > > > >  1 file changed, 19 insertions(+), 26 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
-> > > > > > index de52e9f7bb8c..7ba63bcd66de 100644
-> > > > > > --- a/drivers/hid/hid-mcp2221.c
-> > > > > > +++ b/drivers/hid/hid-mcp2221.c
-> > > > > > @@ -824,6 +824,14 @@ static int mcp2221_raw_event(struct hid_device *hdev,
-> > > > > >       return 1;
-> > > > > >  }
-> > > > > >
-> > > > > > +static void mcp2221_hid_remove(void *ptr)
-> > > > > > +{
-> > > > > > +     struct hid_device *hdev = ptr;
-> > > > > > +
-> > > > > > +     hid_hw_close(hdev);
-> > > > > > +     hid_hw_stop(hdev);  
-> > > > >
-> > > > > By default, if you remove the .remove() callback, hid_hw_stop() will get
-> > > > > automatically called by hid-core.c. So we are now calling it twice,
-> > > > > which, in a way is not a big deal but it might be an issue in the long
-> > > > > run.
-> > > > >
-> > > > > Generally speaking, in the HID subsystem, that situation doesn't happen
-> > > > > a lot because hid_hw_start() is usually the last command of probe, and
-> > > > > we don't need to open the device in the driver itself.
-> > > > >
-> > > > > Here, I guess as soon as you add the i2c adapter, you might want to have
-> > > > > the communication channels ready, and thus you need to have it open
-> > > > > *before* i2c_add_adapter.
-> > > > >
-> > > > > I would suggest the following if you want to keep the devm release of
-> > > > > stop and close: please put a big fat warning before mcp2221_hid_remove()
-> > > > > explaining that this is called in devm management, *and* add a function
-> > > > > that would just return 0 as the .remove() callback with another big fat
-> > > > > warning explaining that we don't want hid-core.c to call hid_hw_stop()
-> > > > > because we are doing it ourself through devres.
-> > > > >  
-> > > >
-> > > > Yeah maybe best to keep the non-devres if it isn't going to affect how the last
-> > > > change in this series is trying to implement with iio.
-> > > >
-> > > > I'll wait for Jonathan to chime in on this thread.
+> Add support for 3x 10-bit ADC and 1x DAC channels registered via the iio
+> subsystem.
+> 
+> To prevent breakage and unexpected dependencies this support only is
+> only built if CONFIG_IIO is enabled, and is only weakly referenced by
+> 'imply IIO' within the respective Kconfig.
+> 
+> Additionally the iio device only gets registered if at least one channel
+> is enabled in the power-on configuration read from SRAM.
+> 
+> Signed-off-by: Matt Ranostay <matt.ranostay@konsulko.com>
+> ---
+A few comments inline.
+> +
+> +	case MCP2221_READ_FLASH_DATA:
+> +		switch (data[1]) {
+> +		case MCP2221_SUCCESS:
+> +			mcp->status = 0;
+> +
+> +			/* Only handles CHIP SETTINGS subpage currently */
+> +			if (mcp->txbuf[1] != 0) {
+> +				mcp->status = -EIO;
+> +				break;
+> +			}
+> +
+> +			/* DAC scale value */
+> +			tmp = (data[6] >> 6) & 0x3;
 
-Not my subsystem, so I'm happy if others have to take the headaches that
-mixing and matching causes :)  Personally I'd rather not!
-Whilst devm_ brings it's own issues (the plumbers session on this was as
-ever fun) the particular fun set of bugs that turn up because of mixing
-it in probe() with manual removal in remove() was one where I've never
-heard a good argument against using devm_ until the first thing in probe() where
-you decide not to then not using devm_ calls after that. I have seen
-a handful of cases where a different order was needed, but far more bugs
-and / or difficult to reason out flows as a result of mixing them up.
+Perhaps use FIELD_GET() and a suitably defined mask?
 
-Obviously straight forward allocations are fine as freeing them late doesn't
-matter. Registration / consumer requests not so much.
+> +			if ((data[6] & BIT(5)) && tmp)
+> +				mcp->dac_scale = tmp + 4;
+> +			else
+> +				mcp->dac_scale = 5;
+> +
+> +			/* ADC scale value */
+> +			tmp = (data[7] >> 3) & 0x3;
+> +			if ((data[7] & BIT(2)) && tmp)
+> +				mcp->adc_scale = tmp - 1;
+> +			else
+> +				mcp->adc_scale = 0;
+> +
+> +			break;
+> +		default:
+> +			mcp->status = -EAGAIN;
+> +		}
+> +		complete(&mcp->wait_in_report);
+> +		break;
+> +
+>
 
-Jonathan
+...
 
+> +
+> +static void mcp_init_work(struct work_struct *work)
+> +{
+> +	struct iio_dev *indio_dev;
+> +	struct mcp2221 *mcp = container_of(work, struct mcp2221, init_work.work);
+> +	struct mcp2221_iio *data;
+> +	int ret, num_channels;
+> +
+> +	hid_hw_power(mcp->hdev, PM_HINT_FULLON);
+> +	mutex_lock(&mcp->lock);
+> +
+> +	mcp->txbuf[0] = MCP2221_GET_SRAM_SETTINGS;
+> +	ret = mcp_send_data_req_status(mcp, mcp->txbuf, 1);
+> +
+
+No blank line between a call and it's error handlers. Better
+to visually group them together.
+
+> +	if (ret == -EAGAIN)
+> +		goto reschedule_task;
+> +
+> +	num_channels = mcp_iio_channels(mcp);
+> +	if (!num_channels)
+> +		goto unlock;
+> +
+> +	mcp->txbuf[0] = MCP2221_READ_FLASH_DATA;
+> +	mcp->txbuf[1] = 0;
+> +	ret = mcp_send_data_req_status(mcp, mcp->txbuf, 2);
+> +
+> +	if (ret == -EAGAIN)
+> +		goto reschedule_task;
+> +
+> +	indio_dev = devm_iio_device_alloc(&mcp->hdev->dev, sizeof(*data));
+> +	if (!indio_dev)
+> +		goto unlock;
+> +
+> +	data = iio_priv(indio_dev);
+> +	data->mcp = mcp;
+> +
+> +	indio_dev->name = "mcp2221";
+> +	indio_dev->modes = INDIO_DIRECT_MODE;
+> +	indio_dev->info = &mcp2221_info;
+> +	indio_dev->channels = mcp->iio_channels;
+> +	indio_dev->num_channels = num_channels;
+> +
+> +	devm_iio_device_register(&mcp->hdev->dev, indio_dev);
+
+If you aren't going full devm, I'd keep this as an iio_device_alloc() and
+release it by hand in remove.
+
+> +
+> +unlock:
+> +	mutex_unlock(&mcp->lock);
+> +	hid_hw_power(mcp->hdev, PM_HINT_NORMAL);
+> +
+> +	return;
+> +
+> +reschedule_task:
+> +	mutex_unlock(&mcp->lock);
+> +	hid_hw_power(mcp->hdev, PM_HINT_NORMAL);
+> +
+> +	/* Device is not ready to read SRAM or FLASH data, try again */
+> +	schedule_delayed_work(&mcp->init_work, msecs_to_jiffies(100));
+Add a count.  If we end up here lots of times, probably want to give up!
+
+> +}
+> +#endif
+> +
+>  static int mcp2221_probe(struct hid_device *hdev,
+>  					const struct hid_device_id *id)
+>  {
+> @@ -913,6 +1158,11 @@ static int mcp2221_probe(struct hid_device *hdev,
+>  	if (ret)
+>  		return ret;
+>  
+> +#if IS_REACHABLE(CONFIG_IIO)
+> +	INIT_DELAYED_WORK(&mcp->init_work, mcp_init_work);
+> +	schedule_delayed_work(&mcp->init_work, msecs_to_jiffies(100));
+> +#endif
+> +
+>  	return 0;
+>  }
+>  
 
