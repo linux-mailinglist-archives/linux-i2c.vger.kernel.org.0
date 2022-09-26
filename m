@@ -2,93 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 354A85EB290
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Sep 2022 22:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9605EB379
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Sep 2022 23:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiIZUq7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Sep 2022 16:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
+        id S230121AbiIZVrk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Sep 2022 17:47:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiIZUq6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Sep 2022 16:46:58 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962939FA9E;
-        Mon, 26 Sep 2022 13:46:57 -0700 (PDT)
-Received: from tr.lan (ip-86-49-12-201.bb.vodafone.cz [86.49.12.201])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        with ESMTP id S230055AbiIZVri (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Sep 2022 17:47:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A21AE9DE;
+        Mon, 26 Sep 2022 14:47:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id CF13784DD8;
-        Mon, 26 Sep 2022 22:46:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1664225216;
-        bh=bytvNaBMLeIzSt7wgun++4S3YDzieYxFdobxwsXK7UA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lltB2zsLDvZ5w3z0GFJ0DhaORd4kefYqzwq8tiXhgFeGUlXFV35V07RvcpQEbywGx
-         O2zePGTI555z8EN8M5ifHe42hhfD6PDTN/nIevopIIk+v1OJdqxQFV+yBajEVKcQ9r
-         WxPUmpCj9w+eB1QlytsxVCQZXs/olhPiedUth6rJGhdqoD+nvabFwgeJGwxJaK7zgY
-         iSI6K2bfiiu6oUBiqX02+XVaodiMz2MB8A14te9E/pNAU8gCeY14PjP7n/Wz60ISvI
-         b9VjBIBnBh5xs8VqVJi8WclQWX5nU9D1jxR1EfHuHIe5AAkzvkGE/62L35xFD9H64I
-         rZjpMEPmF1Ndw==
-From:   Marek Vasut <marex@denx.de>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marek Vasut <marex@denx.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH] dt-bindings: i2c: st,stm32-i2c: Document wakeup-source property
-Date:   Mon, 26 Sep 2022 22:46:53 +0200
-Message-Id: <20220926204653.381722-1-marex@denx.de>
-X-Mailer: git-send-email 2.35.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0824E6147F;
+        Mon, 26 Sep 2022 21:47:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43234C433D7;
+        Mon, 26 Sep 2022 21:47:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664228856;
+        bh=ctLhJppD55XlU1Ayb1sGbBYR3KPeJbjfX6+6mVLpJxQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aF/iIgO7J82RcvVzbgUbO0FpQSzhrLOg/7udOApBEKaNNWwwzx9bswLeVpFfNxMYv
+         +AQ7B/md82Yl27QCLLB5WtkToCPhIjbLBkRoohXNfRjIi+7ZspXouIU6rXD1XblOOk
+         wTG8E3HKa3wNDeP1sXBMEGvD6CV4Ik5wfAzGZqNOD+cltJaJwJ1KoosievRFzB94S/
+         /d9SOpFaIb9C9TAjSz8iYrppLnXUwHGlEdqWniZYZiPQMhvrtDfImLwFEd3nMeijFS
+         1UluPBtf9ExYtcj610paZk/68Cl4sOZ+nzGIaagGJtkEktug3QwV45oBPeNOoVNyeV
+         TI/9/F8YS0hHw==
+Date:   Mon, 26 Sep 2022 16:47:25 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] i2c: acpi: Replace zero-length array with
+ DECLARE_FLEX_ARRAY() helper
+Message-ID: <YzId7dQGWxMyXHEU@work>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Document wakeup-source property. This fixes dtbs_check warnings
-when building current Linux DTs:
+Zero-length arrays are deprecated and we are moving towards adopting
+C99 flexible-array members, instead. So, replace zero-length arrays
+declarations in anonymous union with the new DECLARE_FLEX_ARRAY()
+helper macro.
 
-"
-arch/arm/boot/dts/stm32mp153c-dhcom-drc02.dtb: i2c@40015000: Unevaluated properties are not allowed ('wakeup-source' was unexpected)
-"
+This helper allows for flexible-array members in unions.
 
-Signed-off-by: Marek Vasut <marex@denx.de>
+Link: https://github.com/KSPP/linux/issues/193
+Link: https://github.com/KSPP/linux/issues/218
+Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Alain Volmat <alain.volmat@foss.st.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Wolfram Sang <wsa@kernel.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-i2c@vger.kernel.org
-Cc: linux-stm32@st-md-mailman.stormreply.com
-To: linux-arm-kernel@lists.infradead.org
----
- Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/i2c/i2c-core-acpi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-index 63958cac339b7..bf396e9466aaf 100644
---- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-@@ -97,6 +97,8 @@ properties:
-           - description: register offset within syscfg
-           - description: register bitmask for FMP bit
+diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+index 08b561f0709d..da6568a20177 100644
+--- a/drivers/i2c/i2c-core-acpi.c
++++ b/drivers/i2c/i2c-core-acpi.c
+@@ -26,7 +26,7 @@ struct gsb_buffer {
+ 	union {
+ 		u16	wdata;
+ 		u8	bdata;
+-		u8	data[0];
++		DECLARE_FLEX_ARRAY(u8, data);
+ 	};
+ } __packed;
  
-+  wakeup-source: true
-+
- required:
-   - compatible
-   - reg
 -- 
-2.35.1
+2.34.1
 
