@@ -2,100 +2,181 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0A35EB097
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Sep 2022 20:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 860A55EB173
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Sep 2022 21:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbiIZS5U (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Sep 2022 14:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
+        id S229612AbiIZTms (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Sep 2022 15:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbiIZS5T (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Sep 2022 14:57:19 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF2A63F02
-        for <linux-i2c@vger.kernel.org>; Mon, 26 Sep 2022 11:57:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=2FR425MnpFbRcS4Wkg44QJv+M5yF
-        ttiCMas2rQtol/c=; b=uEAAYXYt+DPZy/t4lkxwXOzciGjnDSFQ7KJkgwwRLxNi
-        KJBj5ZAzZP78uaZwVxwWqTr7b0O2Ga6XdtT4lLAEJpVYKghM+9KNCzuKnaSIlP9k
-        qBxU5eh+WDkXlsXQCtOEmpaCub0veh6WQhGisrNeLXgwwF4QD0xJLZxVHQTvkMM=
-Received: (qmail 3230396 invoked from network); 26 Sep 2022 20:57:13 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Sep 2022 20:57:13 +0200
-X-UD-Smtp-Session: l3s3148p1@9ChGGJnpSqQgAwDtxwncAPgJb5TsabMI
-Date:   Mon, 26 Sep 2022 20:57:09 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Khalil Blaiech <kblaiech@nvidia.com>
-Subject: Re: How to remove DT support from a driver? (was Re: [PATCH v5 8/8]
- i2c: i2c-mlxbf.c: Update binding devicetree)
-Message-ID: <YzH2BQkbqBfOEk7O@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Khalil Blaiech <kblaiech@nvidia.com>
-References: <20220920174736.9766-1-asmaa@nvidia.com>
- <20220920174736.9766-9-asmaa@nvidia.com>
- <20220921065506.6cu6p2cpu3zfhtie@krzk-bin>
- <CH2PR12MB3895572575B5BED5DAFFAA29D74F9@CH2PR12MB3895.namprd12.prod.outlook.com>
- <Yyttt3DiQpMZYejA@shikoro>
- <20220924173125.GA989070-robh@kernel.org>
- <CH2PR12MB3895753865DC9318CE61A131D7529@CH2PR12MB3895.namprd12.prod.outlook.com>
+        with ESMTP id S229585AbiIZTms (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Sep 2022 15:42:48 -0400
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D1B9F8EF;
+        Mon, 26 Sep 2022 12:42:46 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id s125so9550073oie.4;
+        Mon, 26 Sep 2022 12:42:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Yaz9xN1wZ8PegBFKrxXCCeI1yx7ipjAsWW+pfBTAo9s=;
+        b=6NcTgJ1Z1XXC4FEqysMyMWw2YD/le9U0nx3f7Ttwaet2iFFuTL8Eai4XmS6agku0/g
+         thk+19RaM/84lYEKVR41+eJ3lu+L0KW0NBXOgyFkiw5TGS7iKWL9qWFOVdmTZTmEw3Fq
+         2GLGxLA5SO+SD3rMu+pmsOw7JmcatM+Ii5yvPW7EB6N9E7nMXK5IsnQomAK/kl5BbuDh
+         lJurLTH6aW/kcYxLNJzd/GNsdw/AuE03Szw+VC8apGAkYv2N3JWd5yP60aWgUO6rkivq
+         roIU+FZd24dEAAcbkOGa6oaeC/0/+bDllnxNAeAClLQWU+uVTGNBB6HiZu7WjupJJkM2
+         /U+A==
+X-Gm-Message-State: ACrzQf3AEJ031ugz1wbaEAu71487s4qyYzSy1qhY6Wnlj/JO5MJ33opf
+        S2IaMTTf4g2gegICZvxs8Gchyd3L/g==
+X-Google-Smtp-Source: AMsMyM4db/y8w0UoKENez3vnKZltGLbqZyh9D8qL7qFoW0zRnJ5s/K7BcLnbvzy42QUlrQJVLg64uw==
+X-Received: by 2002:aca:5d07:0:b0:351:27ee:1fc4 with SMTP id r7-20020aca5d07000000b0035127ee1fc4mr167898oib.157.1664221364837;
+        Mon, 26 Sep 2022 12:42:44 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f11-20020a056870548b00b001278611f0f6sm9263689oan.32.2022.09.26.12.42.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 12:42:44 -0700 (PDT)
+Received: (nullmailer pid 2667512 invoked by uid 1000);
+        Mon, 26 Sep 2022 19:42:43 -0000
+Date:   Mon, 26 Sep 2022 14:42:43 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Weilong Chen <chenweilong@huawei.com>
+Cc:     yangyicong@hisilicon.com, xuwei5@huawei.com, wsa@kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH next v5 2/2] dt-bindings: i2c: add entry for
+ hisilicon,hisi-i2c
+Message-ID: <20220926194243.GA2650435-robh@kernel.org>
+References: <20220920072215.161331-1-chenweilong@huawei.com>
+ <20220920072215.161331-2-chenweilong@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0euI4NmuGxy/13VU"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CH2PR12MB3895753865DC9318CE61A131D7529@CH2PR12MB3895.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220920072215.161331-2-chenweilong@huawei.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, Sep 20, 2022 at 03:22:15PM +0800, Weilong Chen wrote:
+> Add the new compatible for HiSilicon common i2c.
+> 
+> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+> ---
+> Change since v4:
+> - Add description for SoC specific compatibles.
 
---0euI4NmuGxy/13VU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+A description is not sufficient. A single compatible is saying all SoCs 
+have exactly the same features and bugs.
 
+> - Use the clock binding.
+> - Fix decimal, space, case, unused labels.
+> Link: https://lore.kernel.org/lkml/20220909074842.281232-1-chenweilong@huawei.com/T/#m4e1c915ead04f4e2e48d69131053a966801625db
+> 
+>  .../bindings/i2c/hisilicon,hisi-i2c.yaml      | 72 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 73 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
+> new file mode 100644
+> index 000000000000..b06eb8cb88bc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
+> @@ -0,0 +1,72 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/i2c/hisilicon,hisi-i2c.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: HiSilicon common IIC controller Device Tree Bindings
+> +
+> +maintainers:
+> +  - yangyicong@huawei.com
 
-> i2c drivers (even if we have no support for it and all our customers
-> have to use our firmware including UEFI ACPI tables). So it is
+Needs to be a name and email.
 
-Because of the "custom firmware is needed and it is only ACPI" fact, I
-think this is one of the rare cases where we can actually remove DT
-support.
-
-
---0euI4NmuGxy/13VU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMx9gEACgkQFA3kzBSg
-Kbasrw//e8SOujrbaKHOJRSmvN2FSCzkmKrYNL7CY0N8XlS/gVpEKTJmkBYBx6rU
-ErxwNe/64nAF3bZ1hwCApfd+2p7T4dLLc+AjGqRiDv6H8XnZ4y0qCoXw+dGu4cPw
-t5YZmm2SIntvqIiIEbFjcGkw39mbdQfYrNS+3pT1SplhEJFkwyI75cZ63f9GIXC0
-dEK6CXcXbVQ22p76MhAN762T5Jp5i0H/HDxDqLhfJLnNomaIfB22X2rBf/VTDEr6
-5t1JwmCmjy2NatH4NuwywzSt2mE74zi0/iWA3QyKhDaTWK525syKZgXaJKdOIGXT
-y8nH6qg8e5Nxpsy8DunNCfciCqtB0Uwe2sh1AgqGDDIbpdXc4tW/2SxC6XbIvUD0
-DX+bwb+rqtTD27DYpfSdqt0kDcrkGGgSx4fUtw7GRzQT4XwryCAZKi/C1WQKIc4M
-AaukjNjQuemW/29e96wzBqXpLqJkW6z3BW8ghdsrPlPiYo1HvOSBLE1HLVolOpE5
-7kg7XrgAM4rW8FoZLPP0KZkzJT5PWQ++fkPdsK/pdzgHqp8gw7YNbovseOlOnlzB
-ez1MDo44Xdo+fXBqLhhuHDPl+9+tWxJbRyWvOQtmkVeuPWVedBcWLBVS6JgIsf7G
-HxB2g+fIbm0/ePYVoYc4O+VgPzAICLx525vecwymoqsXUHeA9JM=
-=+KGh
------END PGP SIGNATURE-----
-
---0euI4NmuGxy/13VU--
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: hisilicon,hisi-i2c
+> +    description:
+> +      The HiSilicon common IIC controller can be used for many different
+> +      types of SoC such as Huawei Ascend AI series chips. We use the common
+> +      string (hisi) for specific compatibles to avoid confusion caused by a
+> +      lot of different names.
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-frequency:
+> +    default: 400000
+> +
+> +  i2c-sda-falling-time-ns:
+> +    default: 343
+> +
+> +  i2c-scl-falling-time-ns:
+> +    default: 203
+> +
+> +  i2c-sda-hold-time-ns:
+> +    default: 830
+> +
+> +  i2c-scl-rising-time-ns:
+> +    default: 365
+> +
+> +  i2c-digital-filter-width-ns:
+> +    default: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c@5038b0000 {
+> +      compatible = "hisilicon,hisi-i2c";
+> +      reg = <0x38b0000 0x10000>;
+> +      interrupts = <0x0 120 0x4>;
+> +      i2c-sda-falling-time-ns = <56>;
+> +      i2c-scl-falling-time-ns = <56>;
+> +      i2c-sda-hold-time-ns = <56>;
+> +      i2c-scl-rising-time-ns = <56>;
+> +      i2c-digital-filter;
+> +      i2c-digital-filter-width-ns = <0x0>;
+> +      clocks = <&alg_clk>;
+> +      clock-frequency = <400000>;
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index d213a831133f..4c928a444e4b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9155,6 +9155,7 @@ L:	linux-i2c@vger.kernel.org
+>  S:	Maintained
+>  W:	https://www.hisilicon.com
+>  F:	drivers/i2c/busses/i2c-hisi.c
+> +F:	Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
+>  
+>  HISILICON LPC BUS DRIVER
+>  M:	john.garry@huawei.com
+> -- 
+> 2.31.GIT
+> 
+> 
