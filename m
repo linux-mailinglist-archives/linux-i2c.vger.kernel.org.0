@@ -2,42 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 239375E9C65
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Sep 2022 10:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3F25E9CAF
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Sep 2022 10:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234523AbiIZIsT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Sep 2022 04:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
+        id S234356AbiIZI7U (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Sep 2022 04:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234586AbiIZIsH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Sep 2022 04:48:07 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B7C1E735;
-        Mon, 26 Sep 2022 01:48:05 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mbbrk59gnz1P6qF;
-        Mon, 26 Sep 2022 16:43:50 +0800 (CST)
+        with ESMTP id S234594AbiIZI7R (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Sep 2022 04:59:17 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA5D3DBE0;
+        Mon, 26 Sep 2022 01:59:15 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mbc5q017czWhBL;
+        Mon, 26 Sep 2022 16:55:10 +0800 (CST)
 Received: from [10.67.102.169] (10.67.102.169) by
  canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 16:48:03 +0800
+ 15.1.2375.31; Mon, 26 Sep 2022 16:59:13 +0800
 CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yangyicong@hisilicon.com>
-Subject: Re: [PATCH next v2] i2c: hisi: Add support to get clock frequency
- from clock property
-To:     Weilong Chen <chenweilong@huawei.com>
-References: <20220923011417.78994-1-chenweilong@huawei.com>
+        <devicetree@vger.kernel.org>, <robh+dt@kernel.org>,
+        <yangyicong@hisilicon.com>, <wsa@kernel.org>, <robh@kernel.org>
+Subject: Re: [PATCH next v5 1/2] i2c: hisi: Add initial device tree support
+To:     Weilong Chen <chenweilong@huawei.com>, <xuwei5@huawei.com>
+References: <20220920072215.161331-1-chenweilong@huawei.com>
 From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <36c1742f-f0a5-84e9-15af-07c888058759@huawei.com>
-Date:   Mon, 26 Sep 2022 16:48:03 +0800
+Message-ID: <5629396c-a964-c2ba-8f8b-8bb6c4c78939@huawei.com>
+Date:   Mon, 26 Sep 2022 16:59:13 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.5.1
 MIME-Version: 1.0
-In-Reply-To: <20220923011417.78994-1-chenweilong@huawei.com>
+In-Reply-To: <20220920072215.161331-1-chenweilong@huawei.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  canpemm500009.china.huawei.com (7.192.105.203)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -49,65 +49,90 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 2022/9/23 9:14, Weilong Chen wrote:
-> Support the driver to obtain clock information by clk_rate or
-> clock property. Find clock first, if not, fall back to clk_rate.
+On 2022/9/20 15:22, Weilong Chen wrote:
+> The HiSilicon I2C controller can be used on embedded platform, which
+> boot from devicetree.
 > 
 > Signed-off-by: Weilong Chen <chenweilong@huawei.com>
 > ---
-> Change since v1:
-> - Ordered struct field to inverted triangle.
-> - Use devm_clk_get_optional_enabled().
-> - Use IS_ERR_OR_NULL.
-> Link: https://lore.kernel.org/lkml/20220921101540.352553-1-chenweilong@huawei.com/
+> Change since v4:
+> - Remove the protection for the headers for ACPI/OF
+> Link: https://lore.kernel.org/lkml/20220909074842.281232-1-chenweilong@huawei.com/T/
 > 
->  drivers/i2c/busses/i2c-hisi.c | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
+>  drivers/i2c/busses/Kconfig    |  2 +-
+>  drivers/i2c/busses/i2c-hisi.c | 15 ++++++++++++++-
+>  2 files changed, 15 insertions(+), 2 deletions(-)
 > 
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 0c48d8a9f44a..81f6936c312f 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -673,7 +673,7 @@ config I2C_HIGHLANDER
+>  
+>  config I2C_HISI
+>  	tristate "HiSilicon I2C controller"
+> -	depends on (ARM64 && ACPI) || COMPILE_TEST
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Say Y here if you want to have Hisilicon I2C controller support
+>  	  available on the Kunpeng Server.
 > diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
-> index 67031024217c..b3bcce71dd2c 100644
+> index 76c3d8f6fc3c..67031024217c 100644
 > --- a/drivers/i2c/busses/i2c-hisi.c
 > +++ b/drivers/i2c/busses/i2c-hisi.c
-> @@ -8,6 +8,7 @@
->  #include <linux/acpi.h>
+> @@ -5,6 +5,7 @@
+>   * Copyright (c) 2021 HiSilicon Technologies Co., Ltd.
+>   */
+>  
+> +#include <linux/acpi.h>
 >  #include <linux/bits.h>
 >  #include <linux/bitfield.h>
-> +#include <linux/clk.h>
 >  #include <linux/completion.h>
->  #include <linux/i2c.h>
->  #include <linux/interrupt.h>
-> @@ -90,6 +91,7 @@ struct hisi_i2c_controller {
->  	struct i2c_adapter adapter;
->  	void __iomem *iobase;
->  	struct device *dev;
-> +	struct clk *clk;
->  	int irq;
+> @@ -13,6 +14,7 @@
+>  #include <linux/io.h>
+>  #include <linux/module.h>
+>  #include <linux/mod_devicetable.h>
+> +#include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/property.h>
+>  #include <linux/units.h>
+> @@ -483,17 +485,28 @@ static int hisi_i2c_probe(struct platform_device *pdev)
+>  	return 0;
+>  }
 >  
->  	/* Intermediates for recording the transfer process */
-> @@ -456,10 +458,16 @@ static int hisi_i2c_probe(struct platform_device *pdev)
->  		return ret;
->  	}
->  
-> -	ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
-> -	if (ret) {
-> -		dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
-> -		return ret;
-> +	ctlr->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
-> +	if (IS_ERR_OR_NULL(ctlr->clk)) {
-> +		ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
-> +		if (ret) {
-> +			dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
-> +			return ret;
-> +		}
-> +	} else {
+> +#ifdef CONFIG_ACPI
+>  static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
+>  	{ "HISI03D1", 0 },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
+> +#endif
 > +
+> +#ifdef CONFIG_OF
+> +static const struct of_device_id hisi_i2c_dts_ids[] = {
+> +	{ .compatible = "hisilicon,hisi-i2c", },
 
-redundant blank line? with this addressed:
+The patch itself looks good to me:
 
 Acked-by: Yicong Yang <yangyicong@hisilicon.com>
 
-> +		clk_rate_hz = clk_get_rate(ctlr->clk);
->  	}
+It's better to have a tag from xuwei for HiSilicon's DTS stuff.
+
+Thanks.
+
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
+> +#endif
 >  
->  	ctlr->clk_rate_khz = DIV_ROUND_UP_ULL(clk_rate_hz, HZ_PER_KHZ);
+>  static struct platform_driver hisi_i2c_driver = {
+>  	.probe		= hisi_i2c_probe,
+>  	.driver		= {
+>  		.name	= "hisi-i2c",
+> -		.acpi_match_table = hisi_i2c_acpi_ids,
+> +		.acpi_match_table = ACPI_PTR(hisi_i2c_acpi_ids),
+> +		.of_match_table = of_match_ptr(hisi_i2c_dts_ids),
+>  	},
+>  };
+>  module_platform_driver(hisi_i2c_driver);
 > 
