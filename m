@@ -2,1265 +2,165 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03CA5E9BF5
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Sep 2022 10:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A265E9C3B
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Sep 2022 10:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233404AbiIZI0r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Sep 2022 04:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
+        id S234367AbiIZImN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Sep 2022 04:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiIZI0q (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Sep 2022 04:26:46 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1267B26562;
-        Mon, 26 Sep 2022 01:26:43 -0700 (PDT)
+        with ESMTP id S233137AbiIZImM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Sep 2022 04:42:12 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A482612C;
+        Mon, 26 Sep 2022 01:42:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1664180801; x=1695716801;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=6y0awQdtOeFWM57iDx5BpFaZDfZljhQaD5OnKAdju58=;
-  b=MvHNTNP9gCKEikWrvEqLGZEpfYoWxErKqsLl8NwZHiCbIz7gcfaq/Z/G
-   W5+jTFktF6W2hbHCTChlfBNKKue34NaV3ebi/NZoyCdAXhxeSbaTvHCWZ
-   l8gVJ6ZFwvA1TQ/DF7ipFBKdganpPZ08yZll/Wx5NUobcAOriI46xFijW
-   pEDUvzH7V+dzmVZiw0YueASXytMRlq4kIzJk+w80kiv+l9hiYj6oPsrdT
-   xKZmVrug3TrcJOCaraNwwYTpc/IRLrbnpX8sY2grA11ZaFX6Pdp8hwOK4
-   7j5GDJoLqhigW7vkxjEcnmmOsB/Hh09PVpvGJvqv4yu2xOw67y2rdsfq1
-   Q==;
+  t=1664181731; x=1695717731;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=eMsuOwMppO6t22ABdZr64RtR/zPgZqxZU8keSBKKavA=;
+  b=JvYNQJbgMhmXQIRSTOq29D5G9bjxAGYFwMMdMDKNo1HKal9FYbAAPGHh
+   yFHTCD1dtaVs//1UwcUBvyIXErVYWhpn2MjUEVOguNeuiXnoijhc9QjbZ
+   Qu3IizVjR+O+wSF2J87XZbRzDytS73FB3ZiYNZt1mRjhXWkE+Bbifo7il
+   4PIvFnYL9ILNRoKRSYttKVdw9tDO5ga4DEWG/F67ekwyhJA6/joXjGqfH
+   lQ3s4SJIkxtZrhJ3F1wAIlqoRor6Y6YloCpe0deeZC4wuB/aeC9W1VcZk
+   d3KNx38sos8SU5a/17oYKZL1ixsetqDHQJIWQ6qArqC+OuvZ6H0hctkIG
+   w==;
 X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
-   d="scan'208";a="192455737"
+   d="scan'208";a="175555915"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Sep 2022 01:26:40 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Sep 2022 01:42:10 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 26 Sep 2022 01:26:40 -0700
-Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Mon, 26 Sep 2022 01:26:36 -0700
-From:   Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+ 15.1.2507.12; Mon, 26 Sep 2022 01:42:09 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Mon, 26 Sep 2022 01:42:08 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=atk8rlvtAzfG3v6v9IW2E4EHsBqpKhfsuM4c0O51yejaUMiYGFKBLOjQ0fC+MiIBK99MOMOSVUgBOUwT8ZoXsqnymYzep864dxddfGY95Ki/vYSWs48aaXdf5tyV+HT+ZFWxuOfyUdBofqFaVk4l/vnHBtI9sfdnZEvr31IvHKQoF6CoRwAbYcULrUhNHm/UPQcM9uAgYXdPUAsutunyhtzpZ5dzVnox6va1JoZJHtG/VTXrS2AbDtDlDeVbMQxkhHwlyQt9E4GATwB9vB9vkfi1bzOmEZqupB1mUuJfhrm1YWwvgQU13aV2fvCOFgO2L5OpsDsveUrR1ldz4psr7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eMsuOwMppO6t22ABdZr64RtR/zPgZqxZU8keSBKKavA=;
+ b=UZjaMWoVHvgBYZpvMu9/WfiC21XFRrvfYKbLza0WwJQh6E8fd7CDXBhU2lV/nV9k039bHM09dZMknZmVSafu0TQkPtncumxANYAIjlEonLI/RmveU2KXY4KIG49ZvLFBX802D24vLfqNcK1DZCoSW6Bo78JZmCuQCnI3hZ4oiv6XLBa/yiwgzIMiYKpuPe5JnQoGmldmwIiCzlmeUpnkSiGRrUNWCEs5a46XCykQ8n3PxccTQQlsA98U+YHHIVGbmU9EblS/XjjQoNmoU4BX6S0lE5wu4TSgsQzmtYAm1RQ2yCbeBTDStdR5SRykp6Im/tXdfPZ9iuCQtnXfq3z3KA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eMsuOwMppO6t22ABdZr64RtR/zPgZqxZU8keSBKKavA=;
+ b=FQWzr/kQevC+DqM2CoMX6B01K4KmuhYOhWTaEnOyT392M+DdMvd6AIUWKoNpyAE7q6CRuSK9kq0IEQRO2+T3FbnbhlLrgRR4Hb5dq87/uaMne8NalgrpEG3DyK99fO8C6mEUyEP2yQqdcDJHzefrKmEjeEIbdwbvBdNe6p+XqH4=
+Received: from PH0PR11MB5096.namprd11.prod.outlook.com (2603:10b6:510:3c::5)
+ by BL1PR11MB5318.namprd11.prod.outlook.com (2603:10b6:208:312::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Mon, 26 Sep
+ 2022 08:42:07 +0000
+Received: from PH0PR11MB5096.namprd11.prod.outlook.com
+ ([fe80::3c5c:7050:7ea3:6ac]) by PH0PR11MB5096.namprd11.prod.outlook.com
+ ([fe80::3c5c:7050:7ea3:6ac%6]) with mapi id 15.20.5654.025; Mon, 26 Sep 2022
+ 08:42:07 +0000
+From:   <Tharunkumar.Pasumarthi@microchip.com>
 To:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <wsa@kernel.org>
-CC:     <andriy.shevchenko@linux.intel.com>, <krzk@kernel.org>,
-        <jarkko.nikula@linux.intel.com>, <robh@kernel.org>,
-        <semen.protsenko@linaro.org>, <sven@svenpeter.dev>,
-        <jsd@semihalf.com>, <rafal@milecki.pl>, <olof@lixom.net>,
-        <arnd@arndb.de>, <UNGLinuxDriver@microchip.com>
-Subject: [PATCH RFC i2c-master] i2c: microchip: pci1xxxx: Load I2C driver for I2C endpoint of pci1xxxx switch
-Date:   Mon, 26 Sep 2022 13:56:42 +0530
-Message-ID: <20220926082642.2578447-1-tharunkumar.pasumarthi@microchip.com>
-X-Mailer: git-send-email 2.25.1
+CC:     <krzk@kernel.org>, <andriy.shevchenko@linux.intel.com>,
+        <robh@kernel.org>, <jarkko.nikula@linux.intel.com>,
+        <sven@svenpeter.dev>, <jsd@semihalf.com>,
+        <semen.protsenko@linaro.org>, <rafal@milecki.pl>,
+        <UNGLinuxDriver@microchip.com>, <olof@lixom.net>, <arnd@arndb.de>
+Subject: Re: [PATCH RFC i2c-master] i2c: microchip: pci1xxxx: Load I2C driver
+ for I2C endpoint of pci1xxxx switch
+Thread-Topic: [PATCH RFC i2c-master] i2c: microchip: pci1xxxx: Load I2C driver
+ for I2C endpoint of pci1xxxx switch
+Thread-Index: AQHY0YG97H7zYf3Z90CqJz+W0vX2fq3xZSgA
+Date:   Mon, 26 Sep 2022 08:42:07 +0000
+Message-ID: <f06a5f0e54bbe41208c1aaec275c2c9a2245c1c0.camel@microchip.com>
+References: <20220926082642.2578447-1-tharunkumar.pasumarthi@microchip.com>
+In-Reply-To: <20220926082642.2578447-1-tharunkumar.pasumarthi@microchip.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR11MB5096:EE_|BL1PR11MB5318:EE_
+x-ms-office365-filtering-correlation-id: 2c6bf035-e981-4a10-f92e-08da9f9afeb3
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8KmoyZvE6H5GtdUx+p5PeAqU/zhhpA1sYWS2Tl9dK2yNxOCWPP4uJE2V1jWLzf657bDGxkMcNY6FDiIiOi4GCLtn/8/X1oOzD+j+O6k1VSFsKSI20qPU9ht/GMjPrzoZMZBsCiSPX05Ait8MSB9JY+xNKbLhDuC0Vf5+Kb3rUSbPmWOnBL/CHoBjHA5to7L/7I7K4sHn6vCRrBPlqrII6aijI34kUGXJj1B+4EAl7ZTNV7YkjnxsO7gmHB8Y2uBK6FUzXu9e69ENq0TkhCEXr5+EvjWyYURXmTQGbeDpRyIQILDlAqukWtjyLlnFOKahOCLmtAoR6vAlL+zQ3d+9QEb3/FPMdNhsItfrmNVHONJ5YL8gFOOtxF9aKzZiKl8Ca15hVvjSR+57QMXyV55IijweCFVppSgdB54bKohmW+BFTZKUbr2my7Rh8VD+rT0cp+Uy12Moy3WrmB3XdzCucH8BxbqGceDiEJOaaLeEXqWjMOW3rgKAl5fnnm0v6G3++YTaaFe4j0LSdM5JSpAFT2MZtfDXZKIAK2YwgUUWWV581BBpon0BwlB2NTnmVQCtAfYL0tNDOMtGkLHgtF9sPahON0Ljb1Bo9VexAovXs3ZtoSIe9u7Lp8m9Kp3C+5dDDP41kaCCxmxs5K7xKfZ9B8FZRoIQTO9bJeebP7UJwAi1xeOtqGkxHXpW/+suNuru8WSQsiNLA30hEHYiKrt6nDL/fqO86KCezOCrYvpY4uFU2L6fcOtRzSq6Mdch2mZhxpPSwC4yWhHUPityQjsq2GQChvjYOKdSOp3I8ozlznFq+CbvClltY7GrDPotN2M3Dsm06GZFyxOoPJOqRbKsmg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5096.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(366004)(136003)(39860400002)(396003)(451199015)(36756003)(558084003)(71200400001)(41300700001)(6512007)(26005)(186003)(38070700005)(8936002)(86362001)(5660300002)(7416002)(2906002)(54906003)(110136005)(122000001)(64756008)(66476007)(38100700002)(66556008)(8676002)(66446008)(316002)(2616005)(6506007)(478600001)(6486002)(76116006)(66946007)(91956017)(4326008)(32563001)(473944003)(414714003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WDRJbUxvZU1GU2FpTUhtODg1S201MXVhb2UzeEZqY3pMV2lOOVMxbDJXeklq?=
+ =?utf-8?B?cW1lek96eE5sQjArdmpFU0c1QlJIa1lxbjFMNlYzRWovVmFpVjhPS3pZNDQ5?=
+ =?utf-8?B?Ym4reW1lQ2R4NTRKc2crNmc0S2s1aHhtOWFkWVhCMUhnQld1dVhTdExrVWdG?=
+ =?utf-8?B?S1hqMEI3Sk1HdlBndFJLaEppcyswMnlpVjMvQVVhUE1MeUZVcW9jeDJ3VGFj?=
+ =?utf-8?B?a04zcUtRZmJkWjVpaUJZM2hOcTVzUnFQMDVjZ2dXNnYvTWQ3UTQ4MU9Rajly?=
+ =?utf-8?B?bnliNVBHRlNDaHBjWnQ1b0I4dmdUWXl5OXZvZFhQQjMvekE2NDdhQWxHSFd1?=
+ =?utf-8?B?YnU3dUZqamZHVm1VcEdKOXE5REhSMkJpcjZROTNDcng0SlpTTFMzeWRjRkN1?=
+ =?utf-8?B?ZFJqaC82UVFpZnlvcXloZkJHNFR1dXBmTGtyenNpM01MWlRFSjJaUWhxVThk?=
+ =?utf-8?B?N0hMMEI3QnZXUWhDRlc3UHplaHFYREVrYUFXQ01IWTkzWGpLVS9RWndDYVlG?=
+ =?utf-8?B?d0x1dXM4cjN1VEVObzd4K3hyR1dCUkFRWVpZa2dGd2FLbXZIRkJWdlVWOWdY?=
+ =?utf-8?B?Q1hON0pUMGdYbmFCK2RJRk01WEtGc29LdUlXNEdQdzR1M2Z2c2d4cHZWVGNF?=
+ =?utf-8?B?UUc5aUhnL1hIZFRac281WEo0V0tqNHBDUlNnT0EvTVVITzIwZkZmekExVXI1?=
+ =?utf-8?B?b0RySWFnRk5XZmh6Qll2dE9lL0Z5MFNZbVZ4SVlpazNmRjI4Z05LYnozbFls?=
+ =?utf-8?B?eDVTenBlZ1MrRmJ0dmF4TzZRS0RHME9vb2NldHNaK2NWKytreE1IeStnSG9i?=
+ =?utf-8?B?M2pYOGtMcWgwSkpxQ2pYeTFGcWlYUUtWMGQ2aFJFMVB5N1EzLzgxMFcxWEhr?=
+ =?utf-8?B?S1JSSU5RVHZjTVl6OFVLS20wY1JlVHRSM0l2Q1RUOEw5L3JGSzJMenkrQlJ3?=
+ =?utf-8?B?QlJwSzc3dllCQVV5RU1HbnI4RXhmLzlWNUwvL1J0S21TTmFTN1c3QkNHdmJr?=
+ =?utf-8?B?RlV6Vm4yU2w2b1VSdzZQUGZ3bUJ1d0p6L3psNHdIa0lMSjh6QTJDcDdJN1FO?=
+ =?utf-8?B?ODZoV2hQcFpQM2wxWjdhNkx0bUFaYTQ1c1pxNHlTcldtYTJtWmkwSGRPTnBt?=
+ =?utf-8?B?NjNoV3dEdUtadmRNY2VWYks4R0VVSUNSMVBxUFRMMGlSajlYV0ZwUWU1aUFE?=
+ =?utf-8?B?K2FLMm9YQ1hrT0wrN0ptUHgvZTFiQ1VtcTZLUllmdjZrNGM5OXowVGp2czIz?=
+ =?utf-8?B?Z1RDMXo1NmxlNlhtQkw5OHBDY3dkTFZGUXpYVDd6OXFydXJyK09zeHRlb0xG?=
+ =?utf-8?B?ZFcrQXZ2NHFTMlhRcHB0TGtkWFI3ek1zUGZ3NzN2aXJDcU9QL1Z0TlZrcnV0?=
+ =?utf-8?B?bTcxNWhoVHloZTdjdTdCSy9zZUErNWZoQWpzTFZNR3NGUjk4VDFmNGxFeFdZ?=
+ =?utf-8?B?NURHYVh5NTZsSjdmZ2k1RXBOQnhnSkJndGs5T1htcUJGQmRCaGNIK2RnamJ5?=
+ =?utf-8?B?ajNEK2czZUhSeVVIUGpNZjZ6Y1p0NjZzNXRuaFp4WENaVGFUZ0YrK3F2Wndl?=
+ =?utf-8?B?WlJ3NFFvdG1oRWdFWWNzWCtkdzhEYzZIM2FZaDl6NEJacnQ4RzcrNzNuOC9t?=
+ =?utf-8?B?Y3hCcW50MUZqeGIrS2FlY1pPTDVVK21FaGNVOUptYlRWdUxyU2E5ZndhSXMw?=
+ =?utf-8?B?V3BhVXFtRjhCT2xuazFLblZpTUxQSm1LcE4vSUU1dVFhTTdhcXZqUnVqR2VU?=
+ =?utf-8?B?aHlrTFFTYlYyZkFMVnZDcDh0b2VwZjE4a2Z1VlM3UitiYjdpWHJReitZdit3?=
+ =?utf-8?B?aC9tMmpXMWhGamJ5Uno4Qm1CYXd1QXhlbzlidXNyS3FINndwbDhDV2JsL3k2?=
+ =?utf-8?B?UXVBb1N6bllCdVlZZiticFVUWnZOOVFrR0oySk5CeWhHYU9YY3JEL080dnFE?=
+ =?utf-8?B?M1B5SElaOGhnL0FEYVlKWldwVGhkQXlaNVFKb3d1MkRkSTZPUWNPVllpSnEz?=
+ =?utf-8?B?MlJnRW1XMWdUa01TL1kxTG0vQ3JsenpGRGdFZ0lxdVNyeHRObytHbVk4eU5p?=
+ =?utf-8?B?UHVzaUEyRHJRN2Fxd1dxTVVZQ2RqNFBmVE1PbmVZbUoyUnlPSzk5c0ZBWVY3?=
+ =?utf-8?B?Rzk0NEMvcndPUUFoZmV6bjlsdVFWOUhFRVUrUHdsMURUOHFRNDh4K0ZSV2x0?=
+ =?utf-8?Q?OETnW+241rf6yW3VmJO1Ow3/SA9UZk82M+JWt7GGJll+?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8CFD417B2AAA3D4CA231109655A487B2@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5096.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2c6bf035-e981-4a10-f92e-08da9f9afeb3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Sep 2022 08:42:07.3022
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /vWg1SvDUn5BsyLiJpr2X4XslqBVCJH/djimZAJsSTgYOjIxu2i/RxjsjdF4h4yRAeoRyjgWc76AYNsdvfgpzpPcMaXbpEdkOSM/zW5V9ZQxOyOaJQr2D29rD50LfFUZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5318
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Microchip PCI1XXXX is an unmanaged PCIe3.1a Switch for Consumer,
-Industrial and Automotive applications. This switch has multiple
-downstream ports. In one of the Switch's Downstream port, there
-is a peripheral endpoint which supports I2C functionality. The I2C
-function in the endpoint operates at 100KHz, 400KHz and 1 MHz and
-has buffer depth of 128 bytes.
-This series of patches provides the I2C controller driver for the
-I2C endpoint of the switch.
-
-Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
----
- MAINTAINERS                            |    8 +
- drivers/i2c/busses/Kconfig             |   10 +
- drivers/i2c/busses/Makefile            |    1 +
- drivers/i2c/busses/i2c-mchp-pci1xxxx.c | 1123 ++++++++++++++++++++++++
- 4 files changed, 1142 insertions(+)
- create mode 100644 drivers/i2c/busses/i2c-mchp-pci1xxxx.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3cf9842d9233..204885ab5200 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13110,6 +13110,14 @@ S:	Supported
- F:	Documentation/devicetree/bindings/mtd/atmel-nand.txt
- F:	drivers/mtd/nand/raw/atmel/*
- 
-+MICROCHIP PCI1XXXX I2C DRIVER
-+M:	Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-+M:	Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-+M:	Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
-+L:	linux-i2c@vger.kernel.org
-+S:	Maintained
-+F:	drivers/i2c/busses/i2c-mchp-pci1xxxx.c
-+
- MICROCHIP PWM DRIVER
- M:	Claudiu Beznea <claudiu.beznea@microchip.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index a1bae59208e3..2baeb1bf05e8 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -1290,6 +1290,16 @@ config I2C_VIPERBOARD
- 	  River Tech's viperboard.h for detailed meaning
- 	  of the module parameters.
- 
-+config I2C_PCI1XXXX
-+	tristate "PCI1XXXX I2C Host Adapter support"
-+	depends on PCI
-+	help
-+	  Say yes here to enable the I2C Host adapter support for the PCI1xxxx card
-+	  This is a PCI to I2C adapter
-+
-+	  This driver can be built as a module. If so, the module will be
-+	  called as i2c-mchp-pci1xxxx
-+
- comment "Other I2C/SMBus bus drivers"
- 
- config I2C_ACORN
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index 479f60e4ee3d..f5eaa737d8ee 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -135,6 +135,7 @@ obj-$(CONFIG_I2C_ROBOTFUZZ_OSIF)	+= i2c-robotfuzz-osif.o
- obj-$(CONFIG_I2C_TAOS_EVM)	+= i2c-taos-evm.o
- obj-$(CONFIG_I2C_TINY_USB)	+= i2c-tiny-usb.o
- obj-$(CONFIG_I2C_VIPERBOARD)	+= i2c-viperboard.o
-+obj-$(CONFIG_I2C_PCI1XXXX)	+= i2c-mchp-pci1xxxx.o
- 
- # Other I2C/SMBus bus drivers
- obj-$(CONFIG_I2C_ACORN)		+= i2c-acorn.o
-diff --git a/drivers/i2c/busses/i2c-mchp-pci1xxxx.c b/drivers/i2c/busses/i2c-mchp-pci1xxxx.c
-new file mode 100644
-index 000000000000..8168ef2f0bf8
---- /dev/null
-+++ b/drivers/i2c/busses/i2c-mchp-pci1xxxx.c
-@@ -0,0 +1,1123 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Microchip PCI1XXXX I2C adapter driver for PCIe Switch
-+ * which has I2C controller in one of its downstream functions
-+ *
-+ * Copyright (C) 2021 - 2022 Microchip Technology Inc.
-+ *
-+ * Author: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-+ *         Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/i2c.h>
-+#include <linux/i2c-smbus.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/pci.h>
-+
-+#define SMBUS_MAST_CORE_ADDR_BASE		0x00000
-+#define SMBUS_MAST_SYS_REG_ADDR_BASE	0x01000
-+
-+#define PCI1XXXX_IRQ_FLAGS 0
-+
-+/*SMB register space*/
-+#define SMB_CORE_CTRL_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x00)
-+
-+#define SMB_CORE_CTRL_ESO	0x40
-+#define SMB_CORE_CTRL_FW_ACK	0x10
-+
-+#define SMB_CORE_CMD_REG_OFF3	(SMBUS_MAST_CORE_ADDR_BASE + 0x0F)
-+#define SMB_CORE_CMD_REG_OFF2	(SMBUS_MAST_CORE_ADDR_BASE + 0x0E)
-+#define SMB_CORE_CMD_REG_OFF1	(SMBUS_MAST_CORE_ADDR_BASE + 0x0D)
-+
-+#define SMB_CORE_CMD_READM		0x10
-+#define SMB_CORE_CMD_STOP		0x04
-+#define SMB_CORE_CMD_START		0x01
-+
-+#define SMB_CORE_CMD_REG_OFF0	(SMBUS_MAST_CORE_ADDR_BASE + 0x0C)
-+
-+#define SMB_CORE_CMD_M_PROCEED	0x02
-+#define SMB_CORE_CMD_M_RUN		0x01
-+
-+#define SMB_CORE_SR_HOLD_TIME_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x18)
-+
-+#define SR_HOLD_TIME_100KHZ		0x85
-+#define SR_HOLD_TIME_400KHZ		0x14
-+#define SR_HOLD_TIME_1000KHZ	0x0B
-+
-+#define SMB_CORE_COMPLETION_REG_OFF3	(SMBUS_MAST_CORE_ADDR_BASE + 0x23)
-+
-+#define COMPLETION_MDONE	0x40
-+#define COMPLETION_IDLE		0x20
-+#define COMPLETION_MNAKX	0x01
-+
-+#define SMB_CORE_IDLE_SCALING_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x24)
-+
-+#define SMB_IDLE_SCALING_100KHZ		0x03E803C9
-+#define SMB_IDLE_SCALING_400KHZ		0x01F4009D
-+#define SMB_IDLE_SCALING_1000KHZ	0x01F4009D
-+
-+#define SMB_CORE_CONFIG_REG3		(SMBUS_MAST_CORE_ADDR_BASE + 0x2B)
-+
-+#define SMB_CONFIG3_ENMI	0x40
-+#define SMB_CONFIG3_ENIDI	0x20
-+
-+#define SMB_CORE_CONFIG_REG2		(SMBUS_MAST_CORE_ADDR_BASE + 0x2A)
-+#define SMB_CORE_CONFIG_REG1		(SMBUS_MAST_CORE_ADDR_BASE + 0x29)
-+
-+#define SMB_CONFIG1_ASR		0x80
-+#define SMB_CONFIG1_ENAB	0x04
-+#define SMB_CONFIG1_RESET	0x02
-+#define SMB_CONFIG1_FEN		0x01
-+
-+#define SMB_CORE_BUS_CLK_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x2C)
-+
-+#define BUS_CLK_100KHZ		0x9A9C
-+#define BUS_CLK_400KHZ		0x2329
-+#define BUS_CLK_1000KHZ		0x0E0F
-+
-+#define SMB_CORE_CLK_SYNC_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x3C)
-+
-+#define CLK_SYNC_100KHZ		0x04
-+#define CLK_SYNC_400KHZ		0x04
-+#define CLK_SYNC_1000KHZ	0x04
-+
-+#define SMB_CORE_DATA_TIMING_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x40)
-+
-+#define DATA_TIMING_100KHZ	0x169D9D01
-+#define DATA_TIMING_400KHZ	0x10141401
-+#define DATA_TIMING_1000KHZ	0x060C0C01
-+
-+#define SMB_CORE_TO_SCALING_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x44)
-+
-+#define TO_SCALING_100KHZ	0xA79FC7CC
-+#define TO_SCALING_400KHZ	0x8B9FC7CC
-+#define TO_SCALING_1000KHZ	0x859FC7CC
-+
-+#define I2C_SCL_PAD_CTRL_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x100)
-+#define I2C_SDA_PAD_CTRL_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x101)
-+
-+#define I2C_FOD_EN		0x10
-+#define I2C_PULL_UP_EN		0x08
-+#define I2C_PULL_DOWN_EN	0x04
-+#define I2C_INPUT_EN		0x02
-+#define I2C_OUTPUT_EN		0x01
-+
-+#define SMBUS_CONTROL_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x200)
-+
-+#define CTL_RESET_COUNTERS	0x08
-+#define CTL_TRANSFER_DIR	0x04
-+#define CTL_HOST_FIFO_ENTRY	0x02
-+#define CTL_RUN			0x01
-+
-+#define I2C_DIR_WRITE		0
-+#define I2C_DIR_READ		1
-+
-+#define SMBUS_STATUS_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x204)
-+
-+#define STA_DMA_TERM	0x80
-+#define STA_DMA_REQ		0x40
-+#define STA_THRESHOLD	0x04
-+#define STA_BUF_FULL	0x02
-+#define STA_BUF_EMPTY	0x01
-+
-+#define SMBUS_INTR_STAT_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x208)
-+
-+#define INTR_STAT_DMA_TERM	0x80
-+#define INTR_STAT_THRESHOLD	0x04
-+#define INTR_STAT_BUF_FULL	0x02
-+#define INTR_STAT_BUF_EMPTY	0x01
-+
-+#define SMBUS_INTR_MSK_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x20C)
-+
-+#define INTR_MSK_DMA_TERM	0x80
-+#define INTR_MSK_THRESHOLD	0x04
-+#define INTR_MSK_BUF_FULL	0x02
-+#define INTR_MSK_BUF_EMPTY	0x01
-+
-+#define ALL_NW_LAYER_INTERRUPTS  (INTR_MSK_DMA_TERM | INTR_MSK_THRESHOLD |\
-+				INTR_MSK_BUF_FULL | INTR_MSK_BUF_EMPTY)
-+
-+#define SMBUS_MCU_COUNTER_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x214)
-+
-+#define SMBALERT_MST_PAD_CTRL_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x230)
-+
-+#define SMBALERT_MST_PU		0x01
-+
-+#define SMBUS_GEN_INT_STAT_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x23C)
-+
-+#define SMBUS_GEN_INT_MASK_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x240)
-+
-+#define SMBALERT_INTR_MASK		0x0400
-+#define I2C_BUF_MSTR_INTR_MASK	0x0200
-+#define I2C_INTR_MASK			0x0100
-+#define SMBALERT_WAKE_INTR_MASK	0x0004
-+#define I2C_BUF_MSTR_WAKE_INTR_MASK	0x0002
-+#define I2C_WAKE_INTR_MASK		0x0001
-+
-+#define ALL_HIGH_LAYER_INTR     (SMBALERT_INTR_MASK | I2C_BUF_MSTR_INTR_MASK | \
-+				I2C_INTR_MASK | SMBALERT_WAKE_INTR_MASK | \
-+				I2C_BUF_MSTR_WAKE_INTR_MASK | \
-+				I2C_WAKE_INTR_MASK)
-+
-+#define SMBUS_RESET_REG		(SMBUS_MAST_CORE_ADDR_BASE + 0x248)
-+
-+#define PERI_SMBUS_D3_RESET_DIS	0x10000
-+
-+#define SMBUS_MST_BUF		(SMBUS_MAST_CORE_ADDR_BASE + 0x280)
-+
-+#define SMBUS_MAST_BUF_MAX_SIZE	0x80
-+
-+#define I2C_FLAGS_DIRECT_MODE	0x80
-+#define I2C_FLAGS_POLLING_MODE	0x40
-+#define I2C_FLAGS_STOP			0x20
-+#define I2C_FLAGS_SMB_BLK_READ	0x10
-+
-+#define PCI1XXXX_I2C_TIMEOUT	1000
-+
-+/* General Purpose Register */
-+#define SMB_GPR_REG		(SMBUS_MAST_CORE_ADDR_BASE + 0x1000 + 0x0c00 + 0x00)
-+
-+/* Lock Register */
-+#define SMB_GPR_LOCK_REG	(SMBUS_MAST_CORE_ADDR_BASE + 0x1000 + 0x0000 + 0x00A0)
-+
-+#define SMBUS_PERI_LOCK		BIT(3)
-+
-+/*
-+ * struct pci1xxxx_i2c - private structure for the I2C controller
-+ *
-+ * @adap:	I2C adapter instance
-+ * @dev:	pointer to device struct
-+ * @i2c_base:	pci base address of the I2C ctrler
-+ * @i2c_xfer_done: used for synchronisation between foreground & isr
-+ * @freq:	frequency of I2C transfer
-+ * @flags:	internal flags to store transfer conditions
-+ * @irq:	irq number
-+ */
-+
-+struct pci1xxxx_i2c {
-+	struct completion i2c_xfer_done;
-+	bool i2c_xfer_in_progress;
-+	struct i2c_adapter adap;
-+	void __iomem *i2c_base;
-+	u32 freq;
-+	u32 flags;
-+};
-+
-+static int set_sys_lock(void __iomem *addr)
-+{
-+	u8 data;
-+
-+	writel(SMBUS_PERI_LOCK, addr);
-+	data = readl(addr);
-+	if (data != SMBUS_PERI_LOCK)
-+		return -EPERM;
-+
-+	return 0;
-+}
-+
-+static int release_sys_lock(void __iomem *addr)
-+{
-+	u8 data;
-+
-+	data = readl(addr);
-+	if (data != SMBUS_PERI_LOCK)
-+		return 0;
-+
-+	writel(0, addr);
-+	data = readl(addr);
-+	if (data & SMBUS_PERI_LOCK)
-+		return -EPERM;
-+
-+	return 0;
-+}
-+
-+static void pci1xxxx_ack_high_level_intr(struct pci1xxxx_i2c *i2c, u16 intr_msk)
-+{
-+	writew(intr_msk, i2c->i2c_base + SMBUS_GEN_INT_STAT_REG_OFF);
-+}
-+
-+static void pci1xxxx_i2c_configure_smbalert_pin(struct pci1xxxx_i2c *i2c,
-+						bool enable)
-+{
-+	u8 regval;
-+
-+	regval = readb(i2c->i2c_base + SMBALERT_MST_PAD_CTRL_REG_OFF);
-+
-+	if (enable)
-+		regval |= SMBALERT_MST_PU;
-+	else
-+		regval &= ~SMBALERT_MST_PU;
-+
-+	writeb(regval, i2c->i2c_base + SMBALERT_MST_PAD_CTRL_REG_OFF);
-+}
-+
-+static void pci1xxxx_i2c_send_start_stop(struct pci1xxxx_i2c *i2c, bool start)
-+{
-+	u8 regval;
-+
-+	regval = readb(i2c->i2c_base + SMB_CORE_CMD_REG_OFF1);
-+
-+	if (start)
-+		regval |= SMB_CORE_CMD_START;
-+	else
-+		regval |= SMB_CORE_CMD_STOP;
-+
-+	writeb(regval, i2c->i2c_base + SMB_CORE_CMD_REG_OFF1);
-+}
-+
-+/*when accessing the core control reg, we should not do a read modified write
-+ * as there are write '1' to clear bits. Hence do a write with the specific
-+ * bits that needs to be set
-+ */
-+static void pci1xxxx_i2c_set_clear_FW_ACK(struct pci1xxxx_i2c *i2c, bool set)
-+{
-+	u8 regval;
-+
-+	if (set)
-+		regval = SMB_CORE_CTRL_FW_ACK | SMB_CORE_CTRL_ESO;
-+	else
-+		regval = SMB_CORE_CTRL_ESO;
-+
-+	writeb(regval, i2c->i2c_base + SMB_CORE_CTRL_REG_OFF);
-+}
-+
-+static void pci1xxxx_i2c_buffer_write(struct pci1xxxx_i2c *i2c, u8 slaveaddr,
-+				      u8 transferlen, unsigned char *buf)
-+{
-+	if (slaveaddr) {
-+		writeb(slaveaddr, i2c->i2c_base + SMBUS_MST_BUF);
-+		if (buf)
-+			memcpy_toio((i2c->i2c_base + SMBUS_MST_BUF + 1), buf, transferlen);
-+	} else {
-+		if (buf)
-+			memcpy_toio((i2c->i2c_base + SMBUS_MST_BUF), buf, transferlen);
-+	}
-+}
-+
-+/*
-+ *when accessing the core control reg, we should not do a read modified write
-+ *as there are write '1' to clear bits. Hence do a write with the
-+ *specific bits that needs to be set
-+ */
-+static void pci1xxxx_i2c_enable_ESO(struct pci1xxxx_i2c *i2c)
-+{
-+	writeb(SMB_CORE_CTRL_ESO, i2c->i2c_base + SMB_CORE_CTRL_REG_OFF);
-+}
-+
-+static void pci1xxxx_i2c_reset_counters(struct pci1xxxx_i2c *i2c)
-+{
-+	u8 regval;
-+
-+	regval = readb(i2c->i2c_base + SMBUS_CONTROL_REG_OFF);
-+	regval |= CTL_RESET_COUNTERS;
-+	writeb(regval, i2c->i2c_base + SMBUS_CONTROL_REG_OFF);
-+}
-+
-+static void pci1xxxx_i2c_set_transfer_dir(struct pci1xxxx_i2c *i2c, u8 direction)
-+{
-+	u8 regval;
-+
-+	regval = readb(i2c->i2c_base + SMBUS_CONTROL_REG_OFF);
-+	if (direction == I2C_DIR_WRITE)
-+		regval &= ~CTL_TRANSFER_DIR;
-+	else
-+		regval |= CTL_TRANSFER_DIR;
-+
-+	writeb(regval, i2c->i2c_base + SMBUS_CONTROL_REG_OFF);
-+}
-+
-+static void pci1xxxx_i2c_set_mcu_count(struct pci1xxxx_i2c *i2c, u8 count)
-+{
-+	writeb(count, i2c->i2c_base + SMBUS_MCU_COUNTER_REG_OFF);
-+}
-+
-+static void pci1xxxx_i2c_set_read_count(struct pci1xxxx_i2c *i2c, u8 readcount)
-+{
-+	writeb(readcount, i2c->i2c_base + SMB_CORE_CMD_REG_OFF3);
-+}
-+
-+static void pci1xxxx_i2c_set_write_count(struct pci1xxxx_i2c *i2c, u8 writecount)
-+{
-+	writeb(writecount, i2c->i2c_base + SMB_CORE_CMD_REG_OFF2);
-+}
-+
-+static void pci1xxxx_i2c_set_DMA_run(struct pci1xxxx_i2c *i2c)
-+{
-+	u8 regval;
-+
-+	regval = readb(i2c->i2c_base + SMBUS_CONTROL_REG_OFF);
-+	regval |= CTL_RUN;
-+	writeb(regval, i2c->i2c_base + SMBUS_CONTROL_REG_OFF);
-+}
-+
-+static void pci1xxxx_i2c_set_mrun_proceed(struct pci1xxxx_i2c *i2c)
-+{
-+	u8 regval;
-+
-+	regval = readb(i2c->i2c_base + SMB_CORE_CMD_REG_OFF0);
-+	regval |= SMB_CORE_CMD_M_RUN;
-+	regval |= SMB_CORE_CMD_M_PROCEED;
-+	writeb(regval, i2c->i2c_base + SMB_CORE_CMD_REG_OFF0);
-+}
-+
-+static void pci1xxxx_i2c_start_DMA(struct pci1xxxx_i2c *i2c)
-+{
-+	pci1xxxx_i2c_set_DMA_run(i2c);
-+	pci1xxxx_i2c_set_mrun_proceed(i2c);
-+}
-+
-+static void pci1xxxx_i2c_config_asr(struct pci1xxxx_i2c *i2c, bool enable)
-+{
-+	u8 regval;
-+
-+	regval = readb(i2c->i2c_base + SMB_CORE_CONFIG_REG1);
-+	if (enable)
-+		regval |= SMB_CONFIG1_ASR;
-+	else
-+		regval &= ~SMB_CONFIG1_ASR;
-+	writeb(regval, i2c->i2c_base + SMB_CORE_CONFIG_REG1);
-+}
-+
-+static irqreturn_t pci1xxxx_i2c_isr(int irq, void *dev)
-+{
-+	irqreturn_t intr_handled = IRQ_NONE;
-+	struct pci1xxxx_i2c *i2c = dev;
-+	u16 reg1;
-+	u8 reg3;
-+
-+	/*  Read the SMBus interrupt status register to see if the
-+	 *  DMA_TERM interrupt has caused this callback
-+	 */
-+	reg1 = readw(i2c->i2c_base + SMBUS_GEN_INT_STAT_REG_OFF);
-+
-+	if (reg1 & I2C_BUF_MSTR_INTR_MASK) {
-+		reg3 = readb(i2c->i2c_base + SMBUS_INTR_STAT_REG_OFF);
-+		if (reg3 & INTR_STAT_DMA_TERM) {
-+			complete(&i2c->i2c_xfer_done);
-+			intr_handled = IRQ_HANDLED;
-+			writeb(INTR_STAT_DMA_TERM,
-+			       i2c->i2c_base + SMBUS_INTR_STAT_REG_OFF);
-+		}
-+		pci1xxxx_ack_high_level_intr(i2c, I2C_BUF_MSTR_INTR_MASK);
-+	}
-+
-+	if (reg1 & SMBALERT_INTR_MASK) {
-+		intr_handled = IRQ_HANDLED;
-+		/*ACK the interrupt*/
-+		pci1xxxx_ack_high_level_intr(i2c, SMBALERT_INTR_MASK);
-+	}
-+
-+	return intr_handled;
-+}
-+
-+static void pci1xxxx_i2c_set_count(struct pci1xxxx_i2c *i2c, u8 mcucount,
-+				   u8 writecount, u8 readcount)
-+{
-+	pci1xxxx_i2c_set_mcu_count(i2c, mcucount);
-+	pci1xxxx_i2c_set_write_count(i2c, writecount);
-+	pci1xxxx_i2c_set_read_count(i2c, readcount);
-+}
-+
-+static void pci1xxxx_i2c_set_readm(struct pci1xxxx_i2c *i2c, bool enable)
-+{
-+	u8 regval;
-+
-+	regval = readb(i2c->i2c_base + SMB_CORE_CMD_REG_OFF1);
-+	if (enable)
-+		regval |= SMB_CORE_CMD_READM;
-+	else
-+		regval &= ~SMB_CORE_CMD_READM;
-+
-+	writeb(regval, i2c->i2c_base + SMB_CORE_CMD_REG_OFF1);
-+}
-+
-+static void pci1xxxx_ack_nw_layer_intr(struct pci1xxxx_i2c *i2c,
-+				       u8 ack_intr_msk)
-+{
-+	writeb(ack_intr_msk, i2c->i2c_base + SMBUS_INTR_STAT_REG_OFF);
-+}
-+
-+static void pci1xxxx_config_nw_layer_intr(struct pci1xxxx_i2c *i2c,
-+					  u8 intr_msk, bool enable)
-+{
-+	u8 regval;
-+
-+	regval = readb(i2c->i2c_base + SMBUS_INTR_MSK_REG_OFF);
-+	if (enable)
-+		regval &= ~(intr_msk);
-+	else
-+		regval |= intr_msk;
-+
-+	writeb(regval, i2c->i2c_base + SMBUS_INTR_MSK_REG_OFF);
-+}
-+
-+static void pci1xxxx_i2c_config_padctrl(struct pci1xxxx_i2c *i2c, bool enable)
-+{
-+	u8 regval;
-+
-+	regval = readb(i2c->i2c_base + I2C_SCL_PAD_CTRL_REG_OFF);
-+	if (enable)
-+		regval |= (I2C_INPUT_EN | I2C_OUTPUT_EN);
-+	else
-+		regval &=  ~(I2C_INPUT_EN | I2C_OUTPUT_EN);
-+
-+	writeb(regval, i2c->i2c_base + I2C_SCL_PAD_CTRL_REG_OFF);
-+
-+	regval = readb(i2c->i2c_base + I2C_SDA_PAD_CTRL_REG_OFF);
-+	if (enable)
-+		regval |= (I2C_INPUT_EN | I2C_OUTPUT_EN);
-+	else
-+		regval &=  ~(I2C_INPUT_EN | I2C_OUTPUT_EN);
-+
-+	writeb(regval, i2c->i2c_base + I2C_SDA_PAD_CTRL_REG_OFF);
-+}
-+
-+static void pci1xxxx_i2c_set_mode(struct pci1xxxx_i2c *i2c)
-+{
-+	u8 regval;
-+
-+	regval = readb(i2c->i2c_base + SMBUS_CONTROL_REG_OFF);
-+	if (i2c->flags & I2C_FLAGS_DIRECT_MODE)
-+		regval &= ~CTL_HOST_FIFO_ENTRY;
-+	else
-+		regval |= CTL_HOST_FIFO_ENTRY;
-+
-+	writeb(regval, i2c->i2c_base + SMBUS_CONTROL_REG_OFF);
-+}
-+
-+static void pci1xxxx_i2c_config_high_level_intr(struct pci1xxxx_i2c *i2c,
-+						u16 intr_msk, bool enable)
-+{
-+	u16 regval;
-+
-+	regval = readw(i2c->i2c_base + SMBUS_GEN_INT_MASK_REG_OFF);
-+	if (enable)
-+		regval &= ~(intr_msk);
-+	else
-+		regval |= intr_msk;
-+	writew(regval, i2c->i2c_base + SMBUS_GEN_INT_MASK_REG_OFF);
-+}
-+
-+static void pci1xxxx_i2c_configure_core_reg(struct pci1xxxx_i2c *i2c, bool enable)
-+{
-+	u8 reg1;
-+	u8 reg3;
-+
-+	reg1 = readb(i2c->i2c_base + SMB_CORE_CONFIG_REG1);
-+	reg3 = readb(i2c->i2c_base + SMB_CORE_CONFIG_REG3);
-+	if (enable) {
-+		reg1 |= (SMB_CONFIG1_ENAB | SMB_CONFIG1_FEN);
-+		reg3 |= (SMB_CONFIG3_ENMI | SMB_CONFIG3_ENIDI);
-+	} else {
-+		reg1 &= ~(SMB_CONFIG1_ENAB | SMB_CONFIG1_FEN);
-+		reg3 &= ~(SMB_CONFIG3_ENMI | SMB_CONFIG3_ENIDI);
-+	}
-+
-+	writeb(reg1, i2c->i2c_base + SMB_CORE_CONFIG_REG1);
-+	writeb(reg3, i2c->i2c_base + SMB_CORE_CONFIG_REG3);
-+}
-+
-+static void pci1xxxx_i2c_set_freq(struct pci1xxxx_i2c *i2c)
-+{
-+	/* The SMB core needs specific values to be set in the BUS_CLK register for the
-+	 * corresponding frequency
-+	 */
-+	switch (i2c->freq) {
-+	case I2C_MAX_STANDARD_MODE_FREQ:
-+		writeb(SR_HOLD_TIME_100KHZ,
-+		       i2c->i2c_base + SMB_CORE_SR_HOLD_TIME_REG_OFF);
-+		writel(SMB_IDLE_SCALING_100KHZ,
-+		       i2c->i2c_base + SMB_CORE_IDLE_SCALING_REG_OFF);
-+		writew(BUS_CLK_100KHZ,
-+		       i2c->i2c_base + SMB_CORE_BUS_CLK_REG_OFF);
-+		writel(CLK_SYNC_100KHZ,
-+		       i2c->i2c_base + SMB_CORE_CLK_SYNC_REG_OFF);
-+		writel(DATA_TIMING_100KHZ,
-+		       i2c->i2c_base + SMB_CORE_DATA_TIMING_REG_OFF);
-+		writel(TO_SCALING_100KHZ,
-+		       i2c->i2c_base + SMB_CORE_TO_SCALING_REG_OFF);
-+		break;
-+
-+	case I2C_MAX_FAST_MODE_PLUS_FREQ:
-+		writeb(SR_HOLD_TIME_1000KHZ,
-+		       i2c->i2c_base + SMB_CORE_SR_HOLD_TIME_REG_OFF);
-+		writel(SMB_IDLE_SCALING_1000KHZ,
-+		       i2c->i2c_base + SMB_CORE_IDLE_SCALING_REG_OFF);
-+		writew(BUS_CLK_1000KHZ,
-+		       i2c->i2c_base + SMB_CORE_BUS_CLK_REG_OFF);
-+		writel(CLK_SYNC_1000KHZ,
-+		       i2c->i2c_base + SMB_CORE_CLK_SYNC_REG_OFF);
-+		writel(DATA_TIMING_1000KHZ,
-+		       i2c->i2c_base + SMB_CORE_DATA_TIMING_REG_OFF);
-+		writel(TO_SCALING_1000KHZ,
-+		       i2c->i2c_base + SMB_CORE_TO_SCALING_REG_OFF);
-+		break;
-+
-+	case I2C_MAX_FAST_MODE_FREQ:
-+	default:
-+		writeb(SR_HOLD_TIME_400KHZ,
-+		       i2c->i2c_base + SMB_CORE_SR_HOLD_TIME_REG_OFF);
-+		writel(SMB_IDLE_SCALING_400KHZ,
-+		       i2c->i2c_base + SMB_CORE_IDLE_SCALING_REG_OFF);
-+		writew(BUS_CLK_400KHZ,
-+		       i2c->i2c_base + SMB_CORE_BUS_CLK_REG_OFF);
-+		writel(CLK_SYNC_400KHZ,
-+		       i2c->i2c_base + SMB_CORE_CLK_SYNC_REG_OFF);
-+		writel(DATA_TIMING_400KHZ,
-+		       i2c->i2c_base + SMB_CORE_DATA_TIMING_REG_OFF);
-+		writel(TO_SCALING_400KHZ,
-+		       i2c->i2c_base + SMB_CORE_TO_SCALING_REG_OFF);
-+		break;
-+	}
-+}
-+
-+static void pci1xxxx_i2c_init(struct pci1xxxx_i2c *i2c)
-+{
-+	u8 regval;
-+	u8 ret;
-+
-+	ret = set_sys_lock(i2c->i2c_base + SMB_GPR_LOCK_REG);
-+	if (ret != -EPERM) {
-+		regval = readl(i2c->i2c_base + SMB_GPR_REG);
-+		release_sys_lock(i2c->i2c_base + SMB_GPR_LOCK_REG);
-+	} else {
-+		/*
-+		 * Configure I2C Fast Mode as default frequency if unable
-+		 * to acquire sys lock
-+		 */
-+		regval = 0;
-+	}
-+
-+	switch (regval) {
-+	case 0:
-+		i2c->freq = I2C_MAX_FAST_MODE_FREQ;
-+		pci1xxxx_i2c_set_freq(i2c);
-+		break;
-+	case 1:
-+		i2c->freq = I2C_MAX_STANDARD_MODE_FREQ;
-+		pci1xxxx_i2c_set_freq(i2c);
-+		break;
-+	case 2:
-+		i2c->freq = I2C_MAX_FAST_MODE_PLUS_FREQ;
-+		pci1xxxx_i2c_set_freq(i2c);
-+		break;
-+	case 3:
-+	default:
-+		break;
-+	}
-+
-+	pci1xxxx_i2c_config_padctrl(i2c, true);
-+	i2c->flags |= I2C_FLAGS_DIRECT_MODE;
-+	pci1xxxx_i2c_set_mode(i2c);
-+
-+	/*added as a precaution since BUF_EMPTY in status register
-+	 *also trigered an Interrupt
-+	 */
-+	writeb(STA_BUF_EMPTY, i2c->i2c_base + SMBUS_STATUS_REG_OFF);
-+
-+	/*Configure core I2c control registers*/
-+	pci1xxxx_i2c_configure_core_reg(i2c, true);
-+
-+	/*Enable Pullup for the SMB alert pin which is just used for
-+	 *wakeup right now
-+	 */
-+	pci1xxxx_i2c_configure_smbalert_pin(i2c, true);
-+}
-+
-+static void pci1xxxx_i2c_clear_flags(struct pci1xxxx_i2c *i2c)
-+{
-+	u8 regval;
-+
-+	/*Reset the internal buffer counters*/
-+	pci1xxxx_i2c_reset_counters(i2c);
-+
-+	/*Clear low level interrupts*/
-+	regval = (COMPLETION_MNAKX | COMPLETION_IDLE | COMPLETION_MDONE);
-+	writeb(regval, i2c->i2c_base + SMB_CORE_COMPLETION_REG_OFF3);
-+
-+	reinit_completion(&i2c->i2c_xfer_done);
-+	pci1xxxx_ack_nw_layer_intr(i2c, ALL_NW_LAYER_INTERRUPTS);
-+
-+	pci1xxxx_ack_high_level_intr(i2c, ALL_HIGH_LAYER_INTR);
-+}
-+
-+static int pci1xxxx_i2c_read(struct pci1xxxx_i2c *i2c, u8 slaveaddr,
-+			     unsigned char *buf, u16 total_len)
-+{
-+	unsigned long time_left;
-+	u16 remainingbytes;
-+	u8 transferlen;
-+	int retval = 0;
-+	u8 read_count;
-+	u32 regval;
-+	u16 count;
-+
-+	/*Enable I2C host controller by setting the ESO bit in the CONTROL REG*/
-+	pci1xxxx_i2c_enable_ESO(i2c);
-+
-+	pci1xxxx_i2c_clear_flags(i2c);
-+
-+	pci1xxxx_config_nw_layer_intr(i2c, INTR_MSK_DMA_TERM, true);
-+
-+	pci1xxxx_i2c_config_high_level_intr(i2c, (I2C_BUF_MSTR_INTR_MASK),
-+					    true);
-+
-+	/* The i2c transfer could be for more than 128 bytes. Our Core is
-+	 * capable of only sending 128 at a time.
-+	 * As for as the I2C read is concerned, initailly send the
-+	 * read slave address along with the number of bytes to read in
-+	 * ReadCount. After sending the slave address the interrupt
-+	 * is generated. On seeing the ACK for the slave address, reverse the
-+	 * buffer direction and run the DMA to initiate Read from slave
-+	 */
-+	for (count = 0; count < total_len; count += transferlen) {
-+		/*before start of any transaction clear the existing
-+		 * START/STOP conditions
-+		 */
-+		writeb(0x00, i2c->i2c_base + SMB_CORE_CMD_REG_OFF1);
-+
-+		remainingbytes = total_len - count;
-+
-+		transferlen = min(remainingbytes, (u16)(SMBUS_MAST_BUF_MAX_SIZE));
-+
-+		/* See if this is last chunk in the transaction. IN that case
-+		 * send a STOP at the end.
-+		 * Also in case of reads > BUF_SIZE, for the first read,
-+		 * we should not send NACK for the last byte.
-+		 * Hence a bit FW_ACK is set for those.
-+		 * For the last chunk NACK should be sent.
-+		 * Hence FW_ACK is cleared for that.
-+		 * Send STOP only when I2C_FLAGS_STOP bit is set in the flags
-+		 * and  only for the last transaction.
-+		 */
-+
-+		if ((count + transferlen >= total_len) && (i2c->flags & I2C_FLAGS_STOP)) {
-+			pci1xxxx_i2c_set_clear_FW_ACK(i2c, false);
-+			pci1xxxx_i2c_send_start_stop(i2c, 0);
-+		} else {
-+			pci1xxxx_i2c_set_clear_FW_ACK(i2c, true);
-+		}
-+
-+		/*if it is the starting of the transaction send START*/
-+		if (count == 0) {
-+			pci1xxxx_i2c_set_transfer_dir(i2c, I2C_DIR_WRITE);
-+
-+			pci1xxxx_i2c_send_start_stop(i2c, 1);
-+
-+			/*write I2c buffer with just the slave addr*/
-+			pci1xxxx_i2c_buffer_write(i2c, slaveaddr, 0, NULL);
-+
-+			/*Set the count. Readcount is the transfer bytes*/
-+			pci1xxxx_i2c_set_count(i2c, 1, 1, transferlen);
-+
-+			/*Set the Auto_start_read bit so that the HW itself
-+			 *will take care of the read phase.
-+			 */
-+
-+			pci1xxxx_i2c_config_asr(i2c, true);
-+
-+			if (i2c->flags & I2C_FLAGS_SMB_BLK_READ)
-+				pci1xxxx_i2c_set_readm(i2c, true);
-+
-+		} else {
-+			pci1xxxx_i2c_set_count(i2c, 0, 0, transferlen);
-+
-+			pci1xxxx_i2c_config_asr(i2c, false);
-+
-+			pci1xxxx_i2c_clear_flags(i2c);
-+
-+			pci1xxxx_i2c_set_transfer_dir(i2c, I2C_DIR_READ);
-+		}
-+
-+		/*Start the DMA*/
-+		pci1xxxx_i2c_start_DMA(i2c);
-+
-+		/*wait for the DMA_TERM interrupt*/
-+		time_left = wait_for_completion_timeout
-+				(&i2c->i2c_xfer_done,
-+				msecs_to_jiffies(PCI1XXXX_I2C_TIMEOUT));
-+		if (time_left == 0) {
-+			/*Reset the I2C core to release the bus lock*/
-+			pci1xxxx_i2c_init(i2c);
-+			retval = -ETIMEDOUT;
-+			goto cleanup;
-+		}
-+
-+		/*Read the completion reg to know the reason for DMA_TERM*/
-+		regval = readb(i2c->i2c_base + SMB_CORE_COMPLETION_REG_OFF3);
-+		/*Slave did not respond*/
-+		if (regval & COMPLETION_MNAKX) {
-+			writeb(COMPLETION_MNAKX, i2c->i2c_base +
-+					SMB_CORE_COMPLETION_REG_OFF3);
-+			retval = -ETIMEDOUT;
-+			goto cleanup;
-+		}
-+
-+		if (i2c->flags & I2C_FLAGS_SMB_BLK_READ) {
-+			buf[0] = readb(i2c->i2c_base +
-+				      SMBUS_MST_BUF);
-+			read_count = buf[0];
-+			memcpy_fromio(&buf[1], (i2c->i2c_base +
-+						SMBUS_MST_BUF + 1),
-+						read_count);
-+		} else {
-+			memcpy_fromio(&buf[count], (i2c->i2c_base +
-+						SMBUS_MST_BUF), transferlen);
-+		}
-+	}
-+
-+cleanup:
-+	/*Disable all the interrupts*/
-+	pci1xxxx_config_nw_layer_intr(i2c, INTR_MSK_DMA_TERM, false);
-+	pci1xxxx_i2c_config_high_level_intr(i2c, (I2C_BUF_MSTR_INTR_MASK),
-+					    false);
-+	pci1xxxx_i2c_config_asr(i2c, false);
-+	return retval;
-+}
-+
-+static int pci1xxxx_i2c_write(struct pci1xxxx_i2c *i2c, u8 slaveaddr,
-+			      unsigned char *buf, u16 total_len)
-+{
-+	unsigned long time_left;
-+	u16 remainingbytes;
-+	u8 actualwritelen;
-+	u8 transferlen;
-+	int retval = 0;
-+	u32 regval;
-+	u16 count;
-+
-+	/*Enable I2C host controller by setting the ESO bit in the CONTROL REG*/
-+	pci1xxxx_i2c_enable_ESO(i2c);
-+
-+	/*Set the Buffer direction.*/
-+	pci1xxxx_i2c_set_transfer_dir(i2c, I2C_DIR_WRITE);
-+
-+	pci1xxxx_config_nw_layer_intr(i2c, INTR_MSK_DMA_TERM, true);
-+
-+	pci1xxxx_i2c_config_high_level_intr(i2c, (I2C_BUF_MSTR_INTR_MASK),
-+					    true);
-+
-+	/*The i2c transfer could be for more thatn 128 bytes. Our Core is
-+	 * capable of only sending 128 at a time.
-+	 */
-+	for (count = 0; count < total_len; count += transferlen) {
-+		/*before start of any transaction clear the existing
-+		 *START/STOP conditions
-+		 */
-+		writeb(0x00, i2c->i2c_base + SMB_CORE_CMD_REG_OFF1);
-+
-+		pci1xxxx_i2c_clear_flags(i2c);
-+
-+		remainingbytes = total_len - count;
-+		/*if it is the starting of the transaction send START*/
-+		if (count == 0) {
-+			pci1xxxx_i2c_send_start_stop(i2c, 1);
-+
-+			/* -1 for the slave address.*/
-+			transferlen = min((u16)(SMBUS_MAST_BUF_MAX_SIZE - 1),
-+					  remainingbytes);
-+			pci1xxxx_i2c_buffer_write(i2c, slaveaddr,
-+						  transferlen, &buf[count]);
-+
-+			/* the actual number of bytes written on the I2C bus
-+			 * is including the slave address
-+			 */
-+			actualwritelen = transferlen + 1;
-+
-+		} else {
-+			transferlen = min((u16)(SMBUS_MAST_BUF_MAX_SIZE),
-+					  remainingbytes);
-+			pci1xxxx_i2c_buffer_write(i2c, 0x00, transferlen,
-+						  &buf[count]);
-+			actualwritelen = transferlen;
-+		}
-+
-+		pci1xxxx_i2c_set_count(i2c, actualwritelen,
-+				       actualwritelen, 0x00);
-+
-+		/*
-+		 * Send STOP only when I2C_FLAGS_STOP bit is set in the flags and
-+		 * only for the last transaction.
-+		 */
-+
-+		if (remainingbytes <= transferlen && (i2c->flags &
-+							I2C_FLAGS_STOP))
-+			pci1xxxx_i2c_send_start_stop(i2c, 0);
-+
-+		pci1xxxx_i2c_start_DMA(i2c);
-+
-+		/*
-+		 * wait for the DMA_TERM interrupt and if the timer expires, it means
-+		 * the transaction has failed due to some bus lock as we dint get
-+		 * the interrupt
-+		 */
-+		time_left = wait_for_completion_timeout
-+				(&i2c->i2c_xfer_done, msecs_to_jiffies(PCI1XXXX_I2C_TIMEOUT));
-+
-+		if (time_left == 0) {
-+			/*Reset the I2C core to release the bus lock */
-+			pci1xxxx_i2c_init(i2c);
-+			retval = -ETIMEDOUT;
-+			goto cleanup;
-+		}
-+
-+		regval = readb(i2c->i2c_base + SMB_CORE_COMPLETION_REG_OFF3);
-+		if (regval & COMPLETION_MNAKX) {
-+			writeb(COMPLETION_MNAKX, i2c->i2c_base +
-+						SMB_CORE_COMPLETION_REG_OFF3);
-+			retval = -ETIMEDOUT;
-+			goto cleanup;
-+		}
-+	}
-+cleanup:
-+	/*Disable all the interrupts*/
-+	pci1xxxx_config_nw_layer_intr(i2c, INTR_MSK_DMA_TERM, false);
-+	pci1xxxx_i2c_config_high_level_intr(i2c, (I2C_BUF_MSTR_INTR_MASK),
-+					    false);
-+
-+	return retval;
-+}
-+
-+static int pci1xxxx_i2c_xfer(struct i2c_adapter *adap,
-+			     struct i2c_msg *msgs, int num)
-+{
-+	struct pci1xxxx_i2c *i2c = i2c_get_adapdata(adap);
-+	u8 slaveaddr;
-+	int retval;
-+	u32 i;
-+
-+	i2c->i2c_xfer_in_progress = true;
-+	for (i = 0; i < num; i++) {
-+		slaveaddr = i2c_8bit_addr_from_msg(&msgs[i]);
-+
-+		/*Send STOP if it is the Last of the transfer or
-+		 *if the I2C_M_STOP flag is set
-+		 */
-+		if ((i == (num - 1)) || (msgs[i].flags & I2C_M_STOP))
-+			i2c->flags |= I2C_FLAGS_STOP;
-+		else
-+			i2c->flags &= ~I2C_FLAGS_STOP;
-+
-+		/*When the command is a block read command*/
-+		if (msgs[i].flags & I2C_M_RECV_LEN)
-+			i2c->flags |= I2C_FLAGS_SMB_BLK_READ;
-+		else
-+			i2c->flags &= ~I2C_FLAGS_SMB_BLK_READ;
-+
-+		if (msgs[i].flags & I2C_M_RD)
-+			retval = pci1xxxx_i2c_read(i2c, slaveaddr,
-+						   msgs[i].buf, msgs[i].len);
-+		else
-+			retval = pci1xxxx_i2c_write(i2c, slaveaddr,
-+						    msgs[i].buf, msgs[i].len);
-+
-+		if (retval < 0)
-+			break;
-+	}
-+	i2c->i2c_xfer_in_progress = false;
-+
-+	if (retval < 0)
-+		return retval;
-+
-+	return num;
-+}
-+
-+/*
-+ * We could have used I2C_FUNC_SMBUS_EMUL but that includes
-+ * SMBUS_QUICK as well.We dnt support SMBUS_QUICK hence the
-+ * need for a lengthy funcs callback
-+ */
-+
-+static u32 pci1xxxx_i2c_get_funcs(struct i2c_adapter *adap)
-+{
-+	return I2C_FUNC_I2C | I2C_FUNC_PROTOCOL_MANGLING |
-+		I2C_FUNC_SMBUS_BLOCK_PROC_CALL |
-+		I2C_FUNC_SMBUS_READ_BYTE | I2C_FUNC_SMBUS_WRITE_BYTE |
-+		I2C_FUNC_SMBUS_READ_BYTE_DATA |
-+		I2C_FUNC_SMBUS_WRITE_BYTE_DATA |
-+		I2C_FUNC_SMBUS_READ_WORD_DATA |
-+		I2C_FUNC_SMBUS_WRITE_WORD_DATA |
-+		I2C_FUNC_SMBUS_PROC_CALL | I2C_FUNC_SMBUS_READ_BLOCK_DATA |
-+		I2C_FUNC_SMBUS_WRITE_BLOCK_DATA;
-+}
-+
-+static const struct i2c_algorithm pci1xxxx_i2c_algo = {
-+	.master_xfer = pci1xxxx_i2c_xfer,
-+	.functionality = pci1xxxx_i2c_get_funcs,
-+};
-+
-+static const struct i2c_adapter pci1xxxx_i2c_ops = {
-+	.owner	= THIS_MODULE,
-+	.name	= "Pci1xxxx I2C Adapter",
-+	.algo	= &pci1xxxx_i2c_algo,
-+};
-+
-+static int pci1xxxx_i2c_suspend(struct device *dev)
-+{
-+	struct pci1xxxx_i2c *i2c = dev_get_drvdata(dev);
-+	struct pci_dev *pdev = to_pci_dev(dev);
-+	u32 regval;
-+
-+	i2c_mark_adapter_suspended(&i2c->adap);
-+
-+	while ((i2c->i2c_xfer_in_progress))
-+		msleep(20);
-+
-+	pci1xxxx_i2c_config_high_level_intr(i2c,
-+					    SMBALERT_WAKE_INTR_MASK,
-+					    true);
-+
-+	/*Enable the PERST_DIS bit to mask the PERST from
-+	 *resetting the core regs
-+	 */
-+	regval = readl(i2c->i2c_base + SMBUS_RESET_REG);
-+	regval |= PERI_SMBUS_D3_RESET_DIS;
-+	writel(regval, i2c->i2c_base + SMBUS_RESET_REG);
-+	/*Enable PCI wake in the PMCSR register*/
-+	device_set_wakeup_enable(dev, TRUE);
-+	pci_wake_from_d3(pdev, TRUE);
-+
-+	return 0;
-+}
-+
-+static int pci1xxxx_i2c_resume(struct device *dev)
-+{
-+	struct pci1xxxx_i2c *i2c = dev_get_drvdata(dev);
-+	struct pci_dev *pdev = to_pci_dev(dev);
-+	u32 regval;
-+
-+	/* Read the Interrupt register to know if the wakeup is due to the
-+	 * SMB_ALERT pin being pulled low. If that's the case then handle that.
-+	 * else this could be a wakeup due to system wide event
-+	 */
-+
-+	regval = readw(i2c->i2c_base + SMBUS_GEN_INT_STAT_REG_OFF);
-+	writew(regval, i2c->i2c_base + SMBUS_GEN_INT_STAT_REG_OFF);
-+	pci1xxxx_i2c_config_high_level_intr(i2c, SMBALERT_WAKE_INTR_MASK,
-+					    false);
-+	regval = readl(i2c->i2c_base + SMBUS_RESET_REG);
-+	regval &= ~PERI_SMBUS_D3_RESET_DIS;
-+	writel(regval, i2c->i2c_base + SMBUS_RESET_REG);
-+
-+	i2c_mark_adapter_resumed(&i2c->adap);
-+
-+	pci_wake_from_d3(pdev, FALSE);
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(pci1xxxx_i2c_pm_ops, pci1xxxx_i2c_suspend,
-+			 pci1xxxx_i2c_resume);
-+
-+static void pci1xxxx_i2c_shutdown(struct pci1xxxx_i2c *i2c)
-+{
-+	pci1xxxx_i2c_config_padctrl(i2c, false);
-+	pci1xxxx_i2c_configure_core_reg(i2c, false);
-+}
-+
-+static int pci1xxxx_i2c_probe_pci(struct pci_dev *pdev,
-+				  const struct pci_device_id *ent)
-+{
-+	struct pci1xxxx_i2c *i2c;
-+	int ret;
-+
-+	i2c = devm_kzalloc(&pdev->dev, sizeof(*i2c), GFP_KERNEL);
-+	if (!i2c)
-+		return -ENOMEM;
-+
-+	pci_set_drvdata(pdev, i2c);
-+
-+	i2c->i2c_xfer_in_progress = false;
-+
-+	ret = pcim_enable_device(pdev);
-+	if (ret)
-+		return ret;
-+
-+	pci_set_master(pdev);
-+
-+	/* we are getting the base address of the SMB core. SMB core uses
-+	 * BAR0 and 32K is the size here pci_resource_len returns 32K by
-+	 * reading BAR0
-+	 */
-+
-+	ret = pcim_iomap_regions(pdev, BIT(0), pci_name(pdev));
-+	if (ret < 0)
-+		return -ENOMEM;
-+
-+	i2c->i2c_base =	pcim_iomap_table(pdev)[0];
-+
-+	init_completion(&i2c->i2c_xfer_done);
-+
-+	pci1xxxx_i2c_init(i2c);
-+
-+	dev_info(&pdev->dev, "i2c clock freq: %d\n", i2c->freq);
-+
-+	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
-+	if (ret < 0)
-+		return ret;
-+
-+	/*Register the isr. we are not using any isr flags here.*/
-+	ret = devm_request_irq(&pdev->dev, pci_irq_vector(pdev, 0),
-+			       pci1xxxx_i2c_isr, PCI1XXXX_IRQ_FLAGS,
-+			       pci_name(pdev), i2c);
-+	if (ret)
-+		goto err_free_region;
-+
-+	i2c->adap = pci1xxxx_i2c_ops;
-+	i2c->adap.class = I2C_CLASS_SPD;
-+	i2c->adap.dev.parent = &pdev->dev;
-+
-+	snprintf(i2c->adap.name, sizeof(i2c->adap.name),
-+		 "MCHP PCI1xxxx i2c adapter at %s", pci_name(pdev));
-+
-+	i2c_set_adapdata(&i2c->adap, i2c);
-+
-+	ret = i2c_add_adapter(&i2c->adap);
-+	if (ret) {
-+		dev_err(&pdev->dev, "i2c add adapter failed = %d\n", ret);
-+		pci1xxxx_i2c_shutdown(i2c);
-+		goto err_free_region;
-+	}
-+
-+	return 0;
-+
-+err_free_region:
-+	pci_free_irq_vectors(pdev);
-+	return ret;
-+}
-+
-+static void pci1xxxx_i2c_remove_pci(struct pci_dev *pdev)
-+{
-+	struct pci1xxxx_i2c *i2c = pci_get_drvdata(pdev);
-+
-+	i2c_del_adapter(&i2c->adap);
-+	pci1xxxx_i2c_shutdown(i2c);
-+}
-+
-+static const struct pci_device_id pci1xxxx_i2c_pci_id_table[] = {
-+	{ PCI_VDEVICE(EFAR, 0xA003) },
-+	{ PCI_VDEVICE(EFAR, 0xA013) },
-+	{ PCI_VDEVICE(EFAR, 0xA023) },
-+	{ PCI_VDEVICE(EFAR, 0xA033) },
-+	{ PCI_VDEVICE(EFAR, 0xA043) },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(pci, pci1xxxx_i2c_pci_id_table);
-+
-+static struct pci_driver pci1xxxx_i2c_pci_driver = {
-+	.name		= "i2c-mchp-pci1xxxx",
-+	.id_table	= pci1xxxx_i2c_pci_id_table,
-+	.probe		= pci1xxxx_i2c_probe_pci,
-+	.remove		= pci1xxxx_i2c_remove_pci,
-+	.driver = {
-+		.pm = &pci1xxxx_i2c_pm_ops,
-+	},
-+};
-+module_pci_driver(pci1xxxx_i2c_pci_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Tharun Kumar P<tharunkumar.pasumarthi@microchip.com>");
-+MODULE_AUTHOR("Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>");
-+MODULE_DESCRIPTION("Microchip Technology Inc. pci1xxxx I2C bus driver");
--- 
-2.25.1
-
+T24gTW9uLCAyMDIyLTA5LTI2IGF0IDEzOjU2ICswNTMwLCBUaGFydW4gS3VtYXIgUCB3cm90ZToN
+Cj4gK01PRFVMRV9BVVRIT1IoIkt1bWFyYXZlbCBUaGlhZ2FyYWphbiA8a3VtYXJhdmVsLnRoaWFn
+YXJhamFuQG1pY3JvY2hpcC5jb20+Iik7DQo+ICtNT0RVTEVfREVTQ1JJUFRJT04oIk1pY3JvY2hp
+cCBUZWNobm9sb2d5IEluYy4gcGNpMXh4eHggSTJDIGJ1cyBkcml2ZXIiKTsNCg0KSGkgQWxsLA0K
+DQpLaW5kbHkgaWdub3JlIHRoaXMgcGF0Y2guIFRoaXMgaXMgdGhlIG9sZGVyIHZlcnNpb24gb2Yg
+dGhlIGVtYWlsIHdoaWNoIHdhcw0KcmVzZW50IGJ5IG1pc3Rha2UuDQoNClRoYW5rcywNClRoYXJ1
+biBLdW1hciBQDQo=
