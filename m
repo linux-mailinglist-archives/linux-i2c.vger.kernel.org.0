@@ -2,86 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9605EB379
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Sep 2022 23:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3625EB40F
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Sep 2022 00:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbiIZVrk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Sep 2022 17:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
+        id S231424AbiIZWCe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Sep 2022 18:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiIZVri (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Sep 2022 17:47:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A21AE9DE;
-        Mon, 26 Sep 2022 14:47:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0824E6147F;
-        Mon, 26 Sep 2022 21:47:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43234C433D7;
-        Mon, 26 Sep 2022 21:47:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664228856;
-        bh=ctLhJppD55XlU1Ayb1sGbBYR3KPeJbjfX6+6mVLpJxQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=aF/iIgO7J82RcvVzbgUbO0FpQSzhrLOg/7udOApBEKaNNWwwzx9bswLeVpFfNxMYv
-         +AQ7B/md82Yl27QCLLB5WtkToCPhIjbLBkRoohXNfRjIi+7ZspXouIU6rXD1XblOOk
-         wTG8E3HKa3wNDeP1sXBMEGvD6CV4Ik5wfAzGZqNOD+cltJaJwJ1KoosievRFzB94S/
-         /d9SOpFaIb9C9TAjSz8iYrppLnXUwHGlEdqWniZYZiPQMhvrtDfImLwFEd3nMeijFS
-         1UluPBtf9ExYtcj610paZk/68Cl4sOZ+nzGIaagGJtkEktug3QwV45oBPeNOoVNyeV
-         TI/9/F8YS0hHw==
-Date:   Mon, 26 Sep 2022 16:47:25 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] i2c: acpi: Replace zero-length array with
+        with ESMTP id S231246AbiIZWCM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Sep 2022 18:02:12 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58176E6DF5
+        for <linux-i2c@vger.kernel.org>; Mon, 26 Sep 2022 15:02:05 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id e68so8045949pfe.1
+        for <linux-i2c@vger.kernel.org>; Mon, 26 Sep 2022 15:02:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=UWb8wOcddtfIJyUFHBW5IFK0MRMvmDGvIdsfGhwq6fs=;
+        b=dC8LNQiZOc8Y9cleQx7I90Ilxgksx1StItiDqfDAw5kcu+wbT6Svs4BKe6de3VBEa8
+         2Vz0EVtEAeXZQrz5wyhwgRc1V1hk3ZBnZN5xcRPZGY/PEC3WDGhqxxwUHRJQdJVtRYP3
+         f+4j6TzqwFY0fyt3pnKplYB3IrwAqWudnuM18=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=UWb8wOcddtfIJyUFHBW5IFK0MRMvmDGvIdsfGhwq6fs=;
+        b=glVjgwy2Y1oWr2rRg2muMGSn2gxPuckxBDTyP2sCiz/KMVQdoaUx6EQP8dKoqxsmmn
+         umW9LC3IdA0u+ZcAj1p0s1T1iEtReXQhy3jT5QmlY3UzfgL6R2bFLJ7geng7CgOF09Uf
+         h0bJ1K+a68kzm1/fU78Hu4XhlDpwNcVwDmuI0HYgH4ONMJ0TrkA3pIf6K4JH2JcBf4ID
+         9wFo3e4gKV35eRefsh2c5ZCuOl/k0lhf6+PweT4rohyhgqIyx6m7xNV903njw04HnzYz
+         nL0m45bJvHs4AXaDoz9kAihktdmBU400h/sVlThtKY4D2cXQO3ECFExmEXoSQf+Q1U8x
+         Xo+w==
+X-Gm-Message-State: ACrzQf1Unr4nhxE2I27r08fT4z3plcA1VrOFcz1gCw3WZc2QFAcLZv3w
+        73mdYpit8kntgLMK27RYL0T6TmiUVghheg==
+X-Google-Smtp-Source: AMsMyM7++pwLxo9jbIU4Zan+KiWB3G+z82cHwCpvQIpOj2QII3T8ZRtHBoCOWvcGBn2icNismTMwTA==
+X-Received: by 2002:a63:3348:0:b0:439:db24:8b02 with SMTP id z69-20020a633348000000b00439db248b02mr21383347pgz.425.1664229724728;
+        Mon, 26 Sep 2022 15:02:04 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t15-20020a17090340cf00b001754a3c5404sm11444207pld.212.2022.09.26.15.02.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 15:02:04 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 15:02:03 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] i2c: acpi: Replace zero-length array with
  DECLARE_FLEX_ARRAY() helper
-Message-ID: <YzId7dQGWxMyXHEU@work>
+Message-ID: <202209261502.AA269D2@keescook>
+References: <YzId7dQGWxMyXHEU@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YzId7dQGWxMyXHEU@work>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Zero-length arrays are deprecated and we are moving towards adopting
-C99 flexible-array members, instead. So, replace zero-length arrays
-declarations in anonymous union with the new DECLARE_FLEX_ARRAY()
-helper macro.
+On Mon, Sep 26, 2022 at 04:47:25PM -0500, Gustavo A. R. Silva wrote:
+> Zero-length arrays are deprecated and we are moving towards adopting
+> C99 flexible-array members, instead. So, replace zero-length arrays
+> declarations in anonymous union with the new DECLARE_FLEX_ARRAY()
+> helper macro.
+> 
+> This helper allows for flexible-array members in unions.
+> 
+> Link: https://github.com/KSPP/linux/issues/193
+> Link: https://github.com/KSPP/linux/issues/218
+> Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-This helper allows for flexible-array members in unions.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Link: https://github.com/KSPP/linux/issues/193
-Link: https://github.com/KSPP/linux/issues/218
-Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/i2c/i2c-core-acpi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index 08b561f0709d..da6568a20177 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -26,7 +26,7 @@ struct gsb_buffer {
- 	union {
- 		u16	wdata;
- 		u8	bdata;
--		u8	data[0];
-+		DECLARE_FLEX_ARRAY(u8, data);
- 	};
- } __packed;
- 
 -- 
-2.34.1
-
+Kees Cook
