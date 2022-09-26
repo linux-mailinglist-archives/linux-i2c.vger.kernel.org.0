@@ -2,181 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A12CF5EB302
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Sep 2022 23:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C217D5EB28D
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Sep 2022 22:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbiIZVUg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Sep 2022 17:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
+        id S229621AbiIZUqr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Sep 2022 16:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiIZVUf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Sep 2022 17:20:35 -0400
-Received: from mail.inka.de (mail.inka.de [IPv6:2a04:c9c7:0:1073:217:a4ff:fe3b:e77c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6B772B70;
-        Mon, 26 Sep 2022 14:20:33 -0700 (PDT)
-Received: from mail3.berkhan-weisser.de ([2a03:4000:54:b9a::4])
-        by mail.inka.de with esmtpsa 
-        id 1ocudL-003t12-Fi; Mon, 26 Sep 2022 22:23:19 +0200
-Received: from 127.0.0.1 (helo=localhost.localdomain)
-        by mail3.berkhan-weisser.de with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.94.2)
-        (envelope-from <Enrik.Berkhan@inka.de>)
-        id 1ocudL-007Trr-3k; Mon, 26 Sep 2022 22:23:19 +0200
-From:   Enrik Berkhan <Enrik.Berkhan@inka.de>
-To:     linux-input@vger.kernel.org
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rishi Gupta <gupt21@gmail.com>,
-        Enrik Berkhan <Enrik.Berkhan@inka.de>
-Subject: [PATCH v1 4/4] HID: mcp2221: avoid stale rxbuf pointer
-Date:   Mon, 26 Sep 2022 22:22:39 +0200
-Message-Id: <20220926202239.16379-5-Enrik.Berkhan@inka.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220926202239.16379-1-Enrik.Berkhan@inka.de>
-References: <20220926202239.16379-1-Enrik.Berkhan@inka.de>
+        with ESMTP id S229458AbiIZUqr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Sep 2022 16:46:47 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA699FA9E;
+        Mon, 26 Sep 2022 13:46:44 -0700 (PDT)
+Received: from tr.lan (ip-86-49-12-201.bb.vodafone.cz [86.49.12.201])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 7949884DD8;
+        Mon, 26 Sep 2022 22:46:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1664225202;
+        bh=CBDilgeWFIDHqedtyjY50ZN3XapKiimiMO9OJg6Q+28=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T83novwM6PTG/jvVJJhYrArLVrcLJXDh/qzWYn63hIiDWw9csIVqxWpCEoBeZ6oG0
+         FtGwM+ErywZGC8FGZ61kFMWPM06joOYtOWhQB79AlSeiVDwXWDuQFPhy/sjIN+RQaD
+         bteL/IYz3iDQXSrIJB/vmNwRykB0iaT/Li7duvyVbilO5+w3DzoMFYklYAU1YT8xdB
+         uYLBebNbY99xeYMvt3reH0bsedAq6rDA16Mcgdf2Lrt+gDbGAqKQYIhaqrn2hjZ7A0
+         s5Y5XQ8Ld7cuQCEEf0/nDB/3zizB+jBtNTB4jgZpQsS7GIC79lP26LQdaJZLndKDiW
+         1+EozeJauaKcw==
+From:   Marek Vasut <marex@denx.de>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Marek Vasut <marex@denx.de>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH] dt-bindings: i2c: st,stm32-i2c: Document interrupt-names property
+Date:   Mon, 26 Sep 2022 22:46:31 +0200
+Message-Id: <20220926204631.381702-1-marex@denx.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In case the MCP2221 driver receives an unexpected read complete report
-from the device, the data should not be copied to mcp->rxbuf. The
-pointer might be NULL or even stale, having been set during an earlier
-transaction.
+Document interrupt-names property with "event" and "error" interrupt names.
+This fixes dtbs_check warnings when building current Linux DTs:
 
-Further, some bounds checking has been added.
+"
+arch/arm/boot/dts/stm32mp153c-dhcom-drc02.dtb: i2c@40015000: Unevaluated properties are not allowed ('interrupt-names' was unexpected)
+"
 
-Signed-off-by: Enrik Berkhan <Enrik.Berkhan@inka.de>
+Signed-off-by: Marek Vasut <marex@denx.de>
 ---
- drivers/hid/hid-mcp2221.c | 44 +++++++++++++++++++++++++++++++--------
- 1 file changed, 35 insertions(+), 9 deletions(-)
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Alain Volmat <alain.volmat@foss.st.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Wolfram Sang <wsa@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+---
+ Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
-index d17839e09ebc..faccb3c03d33 100644
---- a/drivers/hid/hid-mcp2221.c
-+++ b/drivers/hid/hid-mcp2221.c
-@@ -94,6 +94,7 @@ struct mcp2221 {
- 	u8 *rxbuf;
- 	u8 txbuf[64];
- 	int rxbuf_idx;
-+	int rxbuf_len;
- 	int status;
- 	u8 cur_i2c_clk_div;
- 	struct gpio_chip *gc;
-@@ -286,15 +287,13 @@ static int mcp_i2c_smbus_read(struct mcp2221 *mcp,
- 		total_len = smbus_len;
- 		mcp->rxbuf = smbus_buf;
- 	}
-+	mcp->rxbuf_len = total_len;
-+	mcp->rxbuf_idx = 0;
- 	spin_unlock_bh(&mcp->raw_event_lock);
+diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+index a415887637862..63958cac339b7 100644
+--- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
++++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+@@ -57,6 +57,11 @@ properties:
+       - description: interrupt ID for I2C event
+       - description: interrupt ID for I2C error
  
- 	ret = mcp_send_data_req_status(mcp, mcp->txbuf, 4);
- 	if (ret)
--		return ret;
--
--	spin_lock_bh(&mcp->raw_event_lock);
--	mcp->rxbuf_idx = 0;
--	spin_unlock_bh(&mcp->raw_event_lock);
-+		goto out_invalidate_rxbuf;
- 
- 	do {
- 		spin_lock_bh(&mcp->raw_event_lock);
-@@ -304,15 +303,22 @@ static int mcp_i2c_smbus_read(struct mcp2221 *mcp,
- 
- 		ret = mcp_send_data_req_status(mcp, mcp->txbuf, 1);
- 		if (ret)
--			return ret;
-+			goto out_invalidate_rxbuf;
- 
- 		ret = mcp_chk_last_cmd_status(mcp);
- 		if (ret)
--			return ret;
-+			goto out_invalidate_rxbuf;
- 
- 		usleep_range(980, 1000);
- 	} while (mcp->rxbuf_idx < total_len);
- 
-+out_invalidate_rxbuf:
-+	spin_lock_bh(&mcp->raw_event_lock);
-+	mcp->rxbuf = NULL;
-+	mcp->rxbuf_len = 0;
-+	mcp->rxbuf_idx = 0;
-+	spin_unlock_bh(&mcp->raw_event_lock);
++  interrupt-names:
++    items:
++      - const: event
++      - const: error
 +
- 	return ret;
- }
+   resets:
+     maxItems: 1
  
-@@ -500,9 +506,15 @@ static int mcp_smbus_xfer(struct i2c_adapter *adapter, u16 addr,
- 			spin_lock_bh(&mcp->raw_event_lock);
- 			mcp->rxbuf_idx = 0;
- 			mcp->rxbuf = data->block;
-+			mcp->rxbuf_len = sizeof(data->block);
- 			mcp->txbuf[0] = MCP2221_I2C_GET_DATA;
- 			spin_unlock_bh(&mcp->raw_event_lock);
- 			ret = mcp_send_data_req_status(mcp, mcp->txbuf, 1);
-+			spin_lock_bh(&mcp->raw_event_lock);
-+			mcp->rxbuf_idx = 0;
-+			mcp->rxbuf = NULL;
-+			mcp->rxbuf_len = 0;
-+			spin_unlock_bh(&mcp->raw_event_lock);
- 			if (ret)
- 				goto exit;
- 		} else {
-@@ -525,9 +537,15 @@ static int mcp_smbus_xfer(struct i2c_adapter *adapter, u16 addr,
- 			spin_lock_bh(&mcp->raw_event_lock);
- 			mcp->rxbuf_idx = 0;
- 			mcp->rxbuf = data->block;
-+			mcp->rxbuf_len = sizeof(data->block);
- 			mcp->txbuf[0] = MCP2221_I2C_GET_DATA;
- 			spin_unlock_bh(&mcp->raw_event_lock);
- 			ret = mcp_send_data_req_status(mcp, mcp->txbuf, 1);
-+			spin_lock_bh(&mcp->raw_event_lock);
-+			mcp->rxbuf_idx = 0;
-+			mcp->rxbuf = NULL;
-+			mcp->rxbuf_len = 0;
-+			spin_unlock_bh(&mcp->raw_event_lock);
- 			if (ret)
- 				goto exit;
- 		} else {
-@@ -756,6 +774,7 @@ static int mcp2221_raw_event(struct hid_device *hdev,
- 				struct hid_report *report, u8 *data, int size)
- {
- 	u8 *buf;
-+	int len;
- 	struct mcp2221 *mcp = hid_get_drvdata(hdev);
- 
- 	spin_lock_bh(&mcp->raw_event_lock);
-@@ -813,9 +832,15 @@ static int mcp2221_raw_event(struct hid_device *hdev,
- 				break;
- 			}
- 			if (data[2] == MCP2221_I2C_READ_COMPL) {
-+				if (mcp->rxbuf == NULL || mcp->rxbuf_idx >= mcp->rxbuf_len)
-+					goto out; /* no complete() in this case */
-+
- 				buf = mcp->rxbuf;
--				memcpy(&buf[mcp->rxbuf_idx], &data[4], data[3]);
--				mcp->rxbuf_idx = mcp->rxbuf_idx + data[3];
-+				len = data[3];
-+				if (len > mcp->rxbuf_len - mcp->rxbuf_idx)
-+					len = mcp->rxbuf_len - mcp->rxbuf_idx;
-+				memcpy(&buf[mcp->rxbuf_idx], &data[4], len);
-+				mcp->rxbuf_idx = mcp->rxbuf_idx + len;
- 				mcp->status = 0;
- 				break;
- 			}
-@@ -865,6 +890,7 @@ static int mcp2221_raw_event(struct hid_device *hdev,
- 		complete(&mcp->wait_in_report);
- 	}
- 
-+out:
- 	spin_unlock_bh(&mcp->raw_event_lock);
- 
- 	return 1;
 -- 
-2.34.1
+2.35.1
 
