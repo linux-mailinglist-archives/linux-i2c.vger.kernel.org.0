@@ -2,167 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 328415E9DAF
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Sep 2022 11:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5369B5E9EA0
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Sep 2022 12:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234929AbiIZJbu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Sep 2022 05:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59416 "EHLO
+        id S234239AbiIZKIG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Sep 2022 06:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235022AbiIZJb2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Sep 2022 05:31:28 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9B8DED8;
-        Mon, 26 Sep 2022 02:30:17 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mbcpx50wVzpVWD;
-        Mon, 26 Sep 2022 17:27:21 +0800 (CST)
-Received: from [10.174.179.106] (10.174.179.106) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 17:30:15 +0800
-Subject: Re: [PATCH next v4 2/2] dt-bindings: i2c: add entry for
- hisilicon,hisi-i2c
-To:     Rob Herring <robh@kernel.org>
-CC:     <yangyicong@hisilicon.com>, <xuwei5@huawei.com>, <wsa@kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <20220909074842.281232-1-chenweilong@huawei.com>
- <20220909074842.281232-2-chenweilong@huawei.com>
- <20220913122203.GA3413501-robh@kernel.org>
-From:   chenweilong <chenweilong@huawei.com>
-Message-ID: <e4f3011a-5577-aa0d-2f39-a3cb6d1d8142@huawei.com>
-Date:   Mon, 26 Sep 2022 17:30:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        with ESMTP id S234960AbiIZKHk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Sep 2022 06:07:40 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB36439B96;
+        Mon, 26 Sep 2022 03:07:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664186859; x=1695722859;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lhSJ6B97wE17BYE7duhPk1D95O/aSsVTRXqSPsbRYK0=;
+  b=Be8/pPkuGp4HgIoPynyR4ecg89ozXkYsweKh7a7Tv/kTNXMgXizDy7mY
+   qIBvIPISLLCO+OffplqLFQ1PmINqefEKgHD9+t92vJBBPl/OCm6lEa+s2
+   SoaoDLRlL3wgarGqsUecu3vYO/t25Y/RGABXd2tKZ0aNQVk6T1AY0E1sL
+   PFvtZVpeN2vgOZlIRAHcv5Qal/RWhB0NEmiOO8v9RU3JhlucDXSgslzlV
+   iLxi89mXXeawrobzDFXIQ2A4hXC3nSZHU586LFptcsuhjwEpyv/GGmL/O
+   4Y0891KalmmcuSFPZwu+6B5aePvW3+IoY1VXsd9Yf+o/OW2CzIBUMN2ge
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="327334603"
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="327334603"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 03:07:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="710065907"
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="710065907"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Sep 2022 03:07:36 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ocl1S-007k9e-00;
+        Mon, 26 Sep 2022 13:07:34 +0300
+Date:   Mon, 26 Sep 2022 13:07:33 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wsa@kernel.org, krzk@kernel.org, jarkko.nikula@linux.intel.com,
+        robh@kernel.org, semen.protsenko@linaro.org, sven@svenpeter.dev,
+        jsd@semihalf.com, rafal@milecki.pl, olof@lixom.net, arnd@arndb.de,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v5 i2c-master] i2c: microchip: pci1xxxx: Add driver for
+ I2C host controller in multifunction endpoint of pci1xxxx switch
+Message-ID: <YzF55ckrtsNaxZUq@smile.fi.intel.com>
+References: <20220926084654.2580827-1-tharunkumar.pasumarthi@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <20220913122203.GA3413501-robh@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.179.106]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220926084654.2580827-1-tharunkumar.pasumarthi@microchip.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 2022/9/13 20:22, Rob Herring wrote:
-> On Fri, Sep 09, 2022 at 03:48:42PM +0800, Weilong Chen wrote:
->> Add the new compatible for HiSilicon common i2c.
->>
->> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
->> ---
->>  .../bindings/i2c/hisilicon,hisi-i2c.yaml      | 67 +++++++++++++++++++
->>  1 file changed, 67 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
->> new file mode 100644
->> index 000000000000..f1cb6a4c70d1
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
->> @@ -0,0 +1,67 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: "http://devicetree.org/schemas/i2c/hisilicon,hisi-i2c.yaml#"
->> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->> +
->> +title: HiSilicon common IIC controller Device Tree Bindings
->> +
->> +maintainers:
->> +  - yangyicong@huawei.com
->> +
->> +allOf:
->> +  - $ref: /schemas/i2c/i2c-controller.yaml#
->> +
->> +properties:
->> +  compatible:
->> +    const: hisilicon,hisi-i2c
-> You need SoC specific compatibles.
+On Mon, Sep 26, 2022 at 02:16:54PM +0530, Tharun Kumar P wrote:
+> Microchip pci1xxxx is an unmanaged PCIe3.1a Switch for Consumer,
+> Industrial and Automotive applications. This switch has multiple
+> downstream ports. In one of the Switch's Downstream port, there
+> is a multifunction endpoint for peripherals which includes an I2C
+> host controller. The I2C function in the endpoint operates at 100KHz,
+> 400KHz and 1 MHz and has buffer depth of 128 bytes.
+> This patch provides the I2C controller driver for the I2C function
+> of the switch.
 
-Hi Rob,
+> ---
+> V4 -> V5:
+> 1. Removed autoprobe
+> ---
+> V3 -> V4:
+> 1. Removed typecasting for fields of min_t
+> 2. Replaced TRUE with true
+> ---
+> V2 -> V3:
+> 1. Replaced SIMPLE_DEV_PM_OPS with DEFINE_SIMPLE_DEV_PM_OPS
+> 2. Used devm_add_action API to avoid mixing devm and non-devm APIs
+> ---
+> RFC -> V2:
+> 1. Removed pci_free_irq_vectors API in code since pcim_enable_device
+> is used
+> 2. Added pci1xxxx_i2c_shutdown API in failure case of
+> pci_alloc_irq_vectors and devm_request_irq
+> 3. Used devm variant of i2c_add_adapter
+> 4. Resolved name collision and fixed styling issues in comments
+> ---
 
-I add a description for specific compatibles in the next version:
 
-https://lore.kernel.org/lkml/20220920072215.161331-2-chenweilong@huawei.com/T/
 
-Please take a look, Do you think that's OK?
+> Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
 
-Thank you.
+There is no SoB tag in your message. Homework: to understand what went wrong
+and fix in v6. Without SoB tag this may not be considered at all.
 
->
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  clk_rate:
->> +    default: 0xEE6B280
-> What is this property for? Use the clock binding.
->
->> +
->> +  clock-frequency:
->> +    default: 400000
->> +
->> +  i2c-sda-falling-time-ns:
->> +    default: 343
->> +
->> +  i2c-scl-falling-time-ns:
->> +    default: 203
->> +
->> +  i2c-sda-hold-time-ns:
->> +    default: 0x33E
-> The rest are in decimal. Be consistent.
->
->> +
->> +  i2c-scl-rising-time-ns:
->> +    default: 365
->> +
->> +  i2c-digital-filter-width-ns:
->> +    default: 0
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +
->> +unevaluatedProperties: false
->> +
->> +examples:
->> +  - |
->> +    i2c1: i2c@5038B0000{
-> Space needed              ^
->
-> Use lowercase hex.
->
-> Drop unused labels.
->   
->> +      compatible = "hisilicon,hisi-i2c";
->> +      reg = <0x38B0000 0x10000>;
->> +      interrupts = <0x0 120 0x4>;
->> +      i2c-sda-falling-time-ns = <56>;
->> +      i2c-scl-falling-time-ns = <56>;
->> +      i2c-sda-hold-time-ns = <56>;
->> +      i2c-scl-rising-time-ns = <56>;
->> +      i2c-digital-filter;
->> +      i2c-digital-filter-width-ns = <0x0>;
->> +      clk_rate = <0x0 0xEE6B280>;
->> +      clock-frequency = <400000>;
->> +    };
->> -- 
->> 2.31.GIT
->>
->>
-> .
+Also, if somebody gave you a tag (reviewers/maintainers) in the previous
+versions, it's your as a contributor responsibility to bear those tags with
+new versions in case there were no drastic functional changes. Otherwise
+there is no point to review your changes.
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
