@@ -2,42 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED5A5ECEC3
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Sep 2022 22:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9094C5ECEEC
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Sep 2022 22:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbiI0Ujk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 27 Sep 2022 16:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
+        id S232160AbiI0UrV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 27 Sep 2022 16:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232201AbiI0Uji (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 27 Sep 2022 16:39:38 -0400
-Received: from mellanox.co.il (mail-il-dmz.mellanox.com [193.47.165.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F407EBCAD
-        for <linux-i2c@vger.kernel.org>; Tue, 27 Sep 2022 13:39:34 -0700 (PDT)
-Received: from Internal Mail-Server by MTLPINE1 (envelope-from asmaa@mellanox.com)
-        with SMTP; 27 Sep 2022 23:39:29 +0300
-Received: from bu-vnc02.mtbu.labs.mlnx (bu-vnc02.mtbu.labs.mlnx [10.15.2.65])
-        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 28RKdS3O026482;
-        Tue, 27 Sep 2022 16:39:28 -0400
-Received: (from asmaa@localhost)
-        by bu-vnc02.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 28RKdSe1022719;
-        Tue, 27 Sep 2022 16:39:28 -0400
-From:   Asmaa Mnebhi <asmaa@nvidia.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh@kernel.org
-Cc:     Asmaa Mnebhi <asmaa@nvidia.com>,
+        with ESMTP id S231627AbiI0Uq7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 27 Sep 2022 16:46:59 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C33D10D657
+        for <linux-i2c@vger.kernel.org>; Tue, 27 Sep 2022 13:46:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=wfbFlT7Fnw4rxLDLwyq17dXmR0gJ
+        5Qam1ux0R1lQHWc=; b=MIczD5cJT39tZ9klkaFPGmkFWRtPRbLdqC1B0jE3X4cr
+        UJXn4FxraA5YYt3iQ/ms8B42g3v9Ty0VpDEUZjXZzvvI12mbfx5GkWXcpNZxabUx
+        3w6lKWBM46Gn2y8dovBBGn4XGAHfqSGG1P/YfC6mqKsHS1T6NSvGvyR2fomiygw=
+Received: (qmail 3715985 invoked from network); 27 Sep 2022 22:46:53 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Sep 2022 22:46:53 +0200
+X-UD-Smtp-Session: l3s3148p1@SoqBvq7padUucrEr
+Date:   Tue, 27 Sep 2022 22:46:52 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Asmaa Mnebhi <asmaa@nvidia.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Khalil Blaiech <kblaiech@nvidia.com>
-Subject: [PATCH v7 2/2] i2c: mlxbf: remove device tree support
-Date:   Tue, 27 Sep 2022 16:39:24 -0400
-Message-Id: <20220927203924.22644-3-asmaa@nvidia.com>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20220927203924.22644-1-asmaa@nvidia.com>
+Subject: Re: [PATCH v7 1/2] i2c: mlxbf: support BlueField-3 SoC
+Message-ID: <YzNhPL0lUeqjCymv@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Khalil Blaiech <kblaiech@nvidia.com>
 References: <20220927203924.22644-1-asmaa@nvidia.com>
+ <20220927203924.22644-2-asmaa@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qVngq7oWP5SexGFa"
+Content-Disposition: inline
+In-Reply-To: <20220927203924.22644-2-asmaa@nvidia.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,200 +50,57 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-BlueField customers have to use the the BlueField firmware with
-UEFI ACPI tables so there is no need to have device tree
-support in the i2c-mlxbf.c driver. Remove the device tree
-binding documentation as well.
 
-Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
-Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
----
- .../bindings/i2c/mellanox,i2c-mlxbf.yaml      | 77 -------------------
- MAINTAINERS                                   |  1 -
- drivers/i2c/busses/i2c-mlxbf.c                | 49 +-----------
- 3 files changed, 1 insertion(+), 126 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
+--qVngq7oWP5SexGFa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-deleted file mode 100644
-index 93198d5d43a6..000000000000
---- a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-+++ /dev/null
-@@ -1,77 +0,0 @@
--# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/i2c/mellanox,i2c-mlxbf.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: Mellanox I2C SMBus on BlueField SoCs
--
--maintainers:
--  - Khalil Blaiech <kblaiech@nvidia.com>
--
--allOf:
--  - $ref: /schemas/i2c/i2c-controller.yaml#
--
--properties:
--  compatible:
--    enum:
--      - mellanox,i2c-mlxbf1
--      - mellanox,i2c-mlxbf2
--
--  reg:
--    minItems: 3
--    items:
--      - description: Smbus block registers
--      - description: Cause master registers
--      - description: Cause slave registers
--      - description: Cause coalesce registers
--
--  interrupts:
--    maxItems: 1
--
--  clock-frequency:
--    enum: [ 100000, 400000, 1000000 ]
--    description:
--      bus frequency used to configure timing registers;
--      The frequency is expressed in Hz. Default is 100000.
--
--required:
--  - compatible
--  - reg
--  - interrupts
--
--unevaluatedProperties: false
--
--if:
--  properties:
--    compatible:
--      contains:
--        enum:
--          - mellanox,i2c-mlxbf1
--
--then:
--  properties:
--    reg:
--      maxItems: 3
--
--examples:
--  - |
--    i2c@2804000 {
--        compatible = "mellanox,i2c-mlxbf1";
--        reg = <0x02804000 0x800>,
--              <0x02801200 0x020>,
--              <0x02801260 0x020>;
--        interrupts = <57>;
--        clock-frequency = <100000>;
--    };
--
--  - |
--    i2c@2808800 {
--        compatible = "mellanox,i2c-mlxbf2";
--        reg = <0x02808800 0x600>,
--              <0x02808e00 0x020>,
--              <0x02808e20 0x020>,
--              <0x02808e40 0x010>;
--        interrupts = <57>;
--        clock-frequency = <400000>;
--    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 74af5b789d45..a3f380f15ff5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12987,7 +12987,6 @@ M:	Khalil Blaiech <kblaiech@nvidia.com>
- M:	Asmaa Mnebhi <asmaa@nvidia.com>
- L:	linux-i2c@vger.kernel.org
- S:	Supported
--F:	Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
- F:	drivers/i2c/busses/i2c-mlxbf.c
- 
- MELLANOX ETHERNET DRIVER (mlx4_en)
-diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
-index db65d4235658..cb91a38cfebf 100644
---- a/drivers/i2c/busses/i2c-mlxbf.c
-+++ b/drivers/i2c/busses/i2c-mlxbf.c
-@@ -2247,24 +2247,6 @@ static struct i2c_adapter_quirks mlxbf_i2c_quirks = {
- 	.max_write_len = MLXBF_I2C_MASTER_DATA_W_LENGTH,
- };
- 
--static const struct of_device_id mlxbf_i2c_dt_ids[] = {
--	{
--		.compatible = "mellanox,i2c-mlxbf1",
--		.data = &mlxbf_i2c_chip[MLXBF_I2C_CHIP_TYPE_1]
--	},
--	{
--		.compatible = "mellanox,i2c-mlxbf2",
--		.data = &mlxbf_i2c_chip[MLXBF_I2C_CHIP_TYPE_2]
--	},
--	{
--		.compatible = "mellanox,i2c-mlxbf3",
--		.data = &mlxbf_i2c_chip[MLXBF_I2C_CHIP_TYPE_3]
--	},
--	{},
--};
--
--MODULE_DEVICE_TABLE(of, mlxbf_i2c_dt_ids);
--
- #ifdef CONFIG_ACPI
- static const struct acpi_device_id mlxbf_i2c_acpi_ids[] = {
- 	{ "MLNXBF03", (kernel_ulong_t)&mlxbf_i2c_chip[MLXBF_I2C_CHIP_TYPE_1] },
-@@ -2315,31 +2297,6 @@ static int mlxbf_i2c_acpi_probe(struct device *dev, struct mlxbf_i2c_priv *priv)
- }
- #endif /* CONFIG_ACPI */
- 
--static int mlxbf_i2c_of_probe(struct device *dev, struct mlxbf_i2c_priv *priv)
--{
--	const struct of_device_id *oid;
--	int bus_id = -1;
--
--	if (IS_ENABLED(CONFIG_OF) && dev->of_node) {
--		oid = of_match_node(mlxbf_i2c_dt_ids, dev->of_node);
--		if (!oid)
--			return -ENODEV;
--
--		priv->chip = oid->data;
--
--		bus_id = of_alias_get_id(dev->of_node, "i2c");
--		if (bus_id >= 0)
--			priv->bus = bus_id;
--	}
--
--	if (bus_id < 0) {
--		dev_err(dev, "Cannot get bus id");
--		return bus_id;
--	}
--
--	return 0;
--}
--
- static int mlxbf_i2c_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -2353,14 +2310,11 @@ static int mlxbf_i2c_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	ret = mlxbf_i2c_acpi_probe(dev, priv);
--	if (ret < 0 && ret != -ENOENT && ret != -ENXIO)
--		ret = mlxbf_i2c_of_probe(dev, priv);
--
- 	if (ret < 0)
- 		return ret;
- 
- 	/* This property allows the driver to stay backward compatible with older
--	 * ACPI table and device trees versions.
-+	 * ACPI tables.
- 	 * Starting BlueField-3 SoC, the "smbus" resource was broken down into 3
- 	 * separate resources "timer", "master" and "slave".
- 	 */
-@@ -2544,7 +2498,6 @@ static struct platform_driver mlxbf_i2c_driver = {
- 	.remove = mlxbf_i2c_remove,
- 	.driver = {
- 		.name = "i2c-mlxbf",
--		.of_match_table = mlxbf_i2c_dt_ids,
- #ifdef CONFIG_ACPI
- 		.acpi_match_table = ACPI_PTR(mlxbf_i2c_acpi_ids),
- #endif /* CONFIG_ACPI  */
--- 
-2.30.1
+On Tue, Sep 27, 2022 at 04:39:23PM -0400, Asmaa Mnebhi wrote:
+> BlueField-3 SoC has the same I2C IP logic as previous
+> BlueField-1 and 2 SoCs but it has different registers' addresses.
+> This is an effort to keep this driver generic accross all
+> BlueField generations.
+> This patch breaks down the "smbus" resource into 3 separate
+> resources to enable us to use common registers' offsets for all
+> BlueField SoCs:
+> struct mlxbf_i2c_resource *timer;
+> struct mlxbf_i2c_resource *mst;
+> struct mlxbf_i2c_resource *slv;
+>=20
+> Of course, all offsets had to be adjusted accordingly, and we took
+> this chance to reorganize the macros depending on the register block
+> they target.
+>=20
+> There are only 2 registers' offsets that do not fit within this
+> schema so their offsets are passed as SoC-specific parameters:
+> smbus_master_rs_bytes_off
+> smbus_master_fsm_off
+>=20
+> Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
+> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
 
+Applied to for-next, thanks!
+
+
+--qVngq7oWP5SexGFa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMzYTwACgkQFA3kzBSg
+KbaqWw//YiVATDdKJKtgq28rIlc01pCVSOtVA5ytf+MSSmE/FCScYbjwEWIdq4nW
+4IQRbWU4u41FQUVyjMmX6PZUl7mFL86jqLzZjtyVu0I0oMF+Tk3pK6G8tlazuU/1
+YZ1dtJG+A8Ooo84sh2pykPKAG3ONlat8zzWBu3Vvliki2owcLFPN+27ZyyJp0iqn
+IftCw5D20BCix5nPWj+PgabZacGl51U/3J9CHxs87Q8LvaVF54DlGCgtZ11oXJG5
+rohxVtpItFzjJfANWiY79XMVFqyoCLWr0UXq1V5W5lgr7XFtvZRTyUBLYhXt1w+R
+8vfTTz+v+WqAsZuGZnbHjImC+nssLYA6ddSnKniPEsD/O0scQWPBgVyXEPzYhVam
+sdqOAa4fuHXMw8FcbLbq86n7FMOyiS5AgDneJFUDp8y/JvML6bP1rkLFi4az+/kc
+m4VaSN8ROJ/m0vR8YXBRXZ0LLya4CKAL/vZ6MbAF9fnbnjZSEiuEvahSnKzvDOOr
+Fl0pNJ8Y5EdjVeojuHWXd5x/f+8mw7g5c8iH2phcZNzIrKYrfvqhuv3ueF7EqwyR
+2STFyJNzT5kk0NRv7DQJtD0Y9bLovCE51lY3Gro0WsAiogr+jOUiKyXE7KtfJXjR
+3i79ubMCJ8KpprPluemEgNd0a7Mg6qAHnmr3F4FVHTSMhhF0xrg=
+=9tLB
+-----END PGP SIGNATURE-----
+
+--qVngq7oWP5SexGFa--
