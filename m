@@ -2,1377 +2,179 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166F35EBDEB
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Sep 2022 11:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F425EC517
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Sep 2022 15:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbiI0JAC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 27 Sep 2022 05:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
+        id S231827AbiI0N44 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 27 Sep 2022 09:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbiI0I7x (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 27 Sep 2022 04:59:53 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DE56CD10;
-        Tue, 27 Sep 2022 01:59:49 -0700 (PDT)
+        with ESMTP id S232058AbiI0N44 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 27 Sep 2022 09:56:56 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9EE13F284;
+        Tue, 27 Sep 2022 06:56:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1664269189; x=1695805189;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664287014; x=1695823014;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=ZQGBvdAnnFjCrfTxKHSyOTcDb4EBLLC+j25i0nBgKhE=;
-  b=RPq+UfQ4MMg0NetoXMufDGEm3nfEcV/cTj5XLbhpQ7kkxigAoH8oybZ+
-   br79T2MWLXiIHZGcnFblOymCKtv/aGirHJLs0bV+eNDF1UpT9YZbOMeyC
-   2yRlK1JGJAZI9NRj/51c/ZlyqLFWkgebwz82zeg/SzP2rYRZ7nhZaFCtW
-   UqCLdatfyG1UU0maK6n4CrjQ72QKLUkB24N0ekf8vNjDrId2buGUTne/z
-   kf7hJF5hCJznNDbb0+aoMhLxz9Njbavw+CLAfvjso3hBkZjzDr1DE8clK
-   rSrrmLMcIttOg7ntBkIyTWInImypJTel0uBy5B4ntrThW9p589bIx5MkC
+  bh=SDMxe83gnt58tmE+Iut0WAx9U5SvA9TL7jaqPINFCTU=;
+  b=BPpZ0bVkxz7V3iuGeLOVRm9MJk/ADTIKiex9pMdwwTP4YpP+sQkA1ijB
+   46m+rzDqPtLSaT3hDVjn7vVXVHEELvjXftqlz2p3UsII2QhaaxJ+trZ/u
+   DSbp6bVY+rskMLEUrF5giu7ZrsMUL/t40QHgh2IYDETdffyqXw9m/7lBM
+   i0+w4sL1mVn+DCEq4XBef5duVjYtJZgz+0WKVFcB9N2vcsRYTqAi1e5zC
+   xetbW6m4dT6JPKgjZes6LGNOIbCJQ9Qp9g9y6a9KaYhKt9hzgok4Py0X5
+   awey0pM9QYpK8x6Zk5Ji/GDN9ZHg1U/rbFsq1+oAac3gBPYqf/iFgP7o0
    Q==;
-X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
-   d="scan'208";a="115581055"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Sep 2022 01:59:48 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 27 Sep 2022 01:59:48 -0700
-Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Tue, 27 Sep 2022 01:59:43 -0700
-From:   Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-To:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <wsa@kernel.org>
-CC:     <andriy.shevchenko@linux.intel.com>, <krzk@kernel.org>,
-        <jarkko.nikula@linux.intel.com>, <robh@kernel.org>,
-        <semen.protsenko@linaro.org>, <sven@svenpeter.dev>,
-        <jsd@semihalf.com>, <rafal@milecki.pl>, <olof@lixom.net>,
-        <arnd@arndb.de>, <UNGLinuxDriver@microchip.com>
-Subject: [PATCH v6 i2c-master] i2c: microchip: pci1xxxx: Add driver for I2C host controller in multifunction endpoint of pci1xxxx switch
-Date:   Tue, 27 Sep 2022 14:29:49 +0530
-Message-ID: <20220927085949.2800504-1-tharunkumar.pasumarthi@microchip.com>
-X-Mailer: git-send-email 2.25.1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="387607861"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="387607861"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 06:56:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="654732513"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="654732513"
+Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.51])
+  by orsmga001.jf.intel.com with ESMTP; 27 Sep 2022 06:56:51 -0700
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Samuel Clark <slc2015@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH] i2c: designware: Fix handling of real but unexpected device interrupts
+Date:   Tue, 27 Sep 2022 16:56:44 +0300
+Message-Id: <20220927135644.1656369-1-jarkko.nikula@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Microchip pci1xxxx is an unmanaged PCIe3.1a Switch for Consumer,
-Industrial and Automotive applications. This switch has multiple
-downstream ports. In one of the Switch's Downstream port, there
-is a multifunction endpoint for peripherals which includes an I2C
-host controller. The I2C function in the endpoint operates at 100KHz,
-400KHz and 1 MHz and has buffer depth of 128 bytes.
-This patch provides the I2C controller driver for the I2C function
-of the switch.
+Commit c7b79a752871 ("mfd: intel-lpss: Add Intel Alder Lake PCH-S PCI
+IDs") caused a regression on certain Gigabyte motherboards for Intel
+Alder Lake-S where system crashes to NULL pointer dereference in
+i2c_dw_xfer_msg() when system resumes from S3 sleep state ("deep").
 
-Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-V5 -> V6:
-1. Added Signed-Off-by and Reviewed-by tags
----
-V4 -> V5:
-1. Removed autoprobe
-2. Added quirk flag
----
-V3 -> V4:
-1. Removed typecasting for fields of min_t
-2. Replaced TRUE with true
----
-V2 -> V3:
-1. Replaced SIMPLE_DEV_PM_OPS with DEFINE_SIMPLE_DEV_PM_OPS
-2. Used devm_add_action API to avoid mixing devm and non-devm APIs
----
-RFC -> V2:
-1. Removed pci_free_irq_vectors API in code since pcim_enable_device
-is used
-2. Added pci1xxxx_i2c_shutdown API in failure case of
-pci_alloc_irq_vectors and devm_request_irq
-3. Used devm variant of i2c_add_adapter
-4. Resolved name collision and fixed styling issues in comments
+I was able to debug the issue on Gigabyte Z690 AORUS ELITE and made
+following notes:
 
----
- MAINTAINERS                            |    8 +
- drivers/i2c/busses/Kconfig             |   10 +
- drivers/i2c/busses/Makefile            |    1 +
- drivers/i2c/busses/i2c-mchp-pci1xxxx.c | 1210 ++++++++++++++++++++++++
- 4 files changed, 1229 insertions(+)
- create mode 100644 drivers/i2c/busses/i2c-mchp-pci1xxxx.c
+- Issue happens when resuming from S3 but not when resuming from
+  "s2idle"
+- PCI device 00:15.0 == i2c_designware.0 is already in D0 state when
+  system enters into pci_pm_resume_noirq() while all other i2c_designware
+  PCI devices are in D3. Devices were runtime suspended and in D3 prior
+  entering into suspend
+- Interrupt comes after pci_pm_resume_noirq() when device interrupts are
+  re-enabled
+- According to register dump the interrupt really comes from the
+  i2c_designware.0. Controller is enabled, I2C target address register
+  points to a one detectable I2C device address 0x60 and the
+  DW_IC_RAW_INTR_STAT register START_DET, STOP_DET, ACTIVITY and
+  TX_EMPTY bits are set indicating completed I2C transaction.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3cf9842d9233..204885ab5200 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13110,6 +13110,14 @@ S:	Supported
- F:	Documentation/devicetree/bindings/mtd/atmel-nand.txt
- F:	drivers/mtd/nand/raw/atmel/*
+My guess is that the firmware uses this controller to communicate with
+an on-board I2C device during resume but does not disable the controller
+before giving control to an operating system.
+
+I was told the UEFI update fixes this but never the less it revealed the
+driver is not ready to handle TX_EMPTY (or RX_FULL) interrupt when device
+is supposed to be idle and state variables are not set (especially the
+dev->msgs pointer which may point to NULL or stale old data).
+
+Introduce a new software status flag STATUS_ACTIVE indicating when the
+controller is active in driver point of view. Now treat all interrupts
+that occur when is not set as unexpected and mask all interrupts from
+the controller.
+
+Fixes: c7b79a752871 ("mfd: intel-lpss: Add Intel Alder Lake PCH-S PCI IDs")
+Reported-by: Samuel Clark <slc2015@gmail.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215907
+Cc: stable@vger.kernel.org # v5.12+
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+---
+Hans: Are you able to test this on your Baytrail collection with shared
+I2C controller and PUNIT so that patch doesn't break anything? I believe
+even if the Linux interrupt for such shared I2C controller is shared e.g.
+with the i2c-i801 the PUNIT access should not get affected by this
+interrupt masking. I think PUNIT access won't use interrupts but you
+never know... We have a MRD7 that has shared I2C controller with PUNIT
+but Linux interrupt is not shared. I.e. unexpected interrupt case and
+masking doesn't get hit.
+i2c-designware-slave.c is not fully in sync with this new status flag since
+STATUS_ACTIVE gets overwritten there and unexpected interrupt case is
+needlessly hit in case of shared interrupt and this controller is
+suspended but both of those can go to an another patchset.
+---
+ drivers/i2c/busses/i2c-designware-core.h   |  7 +++++--
+ drivers/i2c/busses/i2c-designware-master.c | 13 +++++++++++++
+ 2 files changed, 18 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index 70b80e710990..4d3a3b464ecd 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -126,8 +126,9 @@
+  * status codes
+  */
+ #define STATUS_IDLE			0x0
+-#define STATUS_WRITE_IN_PROGRESS	0x1
+-#define STATUS_READ_IN_PROGRESS		0x2
++#define STATUS_ACTIVE			0x1
++#define STATUS_WRITE_IN_PROGRESS	0x2
++#define STATUS_READ_IN_PROGRESS		0x4
  
-+MICROCHIP PCI1XXXX I2C DRIVER
-+M:	Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-+M:	Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-+M:	Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
-+L:	linux-i2c@vger.kernel.org
-+S:	Maintained
-+F:	drivers/i2c/busses/i2c-mchp-pci1xxxx.c
-+
- MICROCHIP PWM DRIVER
- M:	Claudiu Beznea <claudiu.beznea@microchip.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index a1bae59208e3..7e967d87dc04 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -1244,6 +1244,16 @@ config I2C_PARPORT
- 	  This support is also available as a module.  If so, the module
- 	  will be called i2c-parport.
+ /*
+  * operation modes
+@@ -334,12 +335,14 @@ void i2c_dw_disable_int(struct dw_i2c_dev *dev);
  
-+config I2C_PCI1XXXX
-+	tristate "PCI1XXXX I2C Host Adapter"
-+	depends on PCI
-+	help
-+	  If you say yes to this option, support will be included for
-+	  Microchip PCI1XXXX's I2C interface.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called i2c-mchp-pci1xxxx.
-+
- config I2C_ROBOTFUZZ_OSIF
- 	tristate "RobotFuzz Open Source InterFace USB adapter"
- 	depends on USB
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index 479f60e4ee3d..2372ed91e7ad 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -131,6 +131,7 @@ obj-$(CONFIG_I2C_DIOLAN_U2C)	+= i2c-diolan-u2c.o
- obj-$(CONFIG_I2C_DLN2)		+= i2c-dln2.o
- obj-$(CONFIG_I2C_CP2615) += i2c-cp2615.o
- obj-$(CONFIG_I2C_PARPORT)	+= i2c-parport.o
-+obj-$(CONFIG_I2C_PCI1XXXX)	+= i2c-mchp-pci1xxxx.o
- obj-$(CONFIG_I2C_ROBOTFUZZ_OSIF)	+= i2c-robotfuzz-osif.o
- obj-$(CONFIG_I2C_TAOS_EVM)	+= i2c-taos-evm.o
- obj-$(CONFIG_I2C_TINY_USB)	+= i2c-tiny-usb.o
-diff --git a/drivers/i2c/busses/i2c-mchp-pci1xxxx.c b/drivers/i2c/busses/i2c-mchp-pci1xxxx.c
-new file mode 100644
-index 000000000000..b2b7dbff5ef4
---- /dev/null
-+++ b/drivers/i2c/busses/i2c-mchp-pci1xxxx.c
-@@ -0,0 +1,1210 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Microchip PCI1XXXX I2C adapter driver for PCIe Switch
-+ * which has I2C controller in one of its downstream functions
-+ *
-+ * Copyright (C) 2021 - 2022 Microchip Technology Inc.
-+ *
-+ * Authors: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-+ *          Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-+ */
-+
-+#include <linux/bits.h>
-+#include <linux/delay.h>
-+#include <linux/i2c.h>
-+#include <linux/i2c-smbus.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/pci.h>
-+#include <linux/types.h>
-+
-+#define SMBUS_MAST_CORE_ADDR_BASE		0x00000
-+#define SMBUS_MAST_SYS_REG_ADDR_BASE		0x01000
-+
-+/* SMB register space. */
-+#define SMB_CORE_CTRL_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x00)
-+
-+#define SMB_CORE_CTRL_ESO		BIT(6)
-+#define SMB_CORE_CTRL_FW_ACK		BIT(4)
-+#define SMB_CORE_CTRL_ACK		BIT(0)
-+
-+#define SMB_CORE_CMD_REG_OFF3	(SMBUS_MAST_CORE_ADDR_BASE + 0x0F)
-+#define SMB_CORE_CMD_REG_OFF2	(SMBUS_MAST_CORE_ADDR_BASE + 0x0E)
-+#define SMB_CORE_CMD_REG_OFF1	(SMBUS_MAST_CORE_ADDR_BASE + 0x0D)
-+
-+#define SMB_CORE_CMD_READM		BIT(4)
-+#define SMB_CORE_CMD_STOP		BIT(2)
-+#define SMB_CORE_CMD_START		BIT(0)
-+
-+#define SMB_CORE_CMD_REG_OFF0	(SMBUS_MAST_CORE_ADDR_BASE + 0x0C)
-+
-+#define SMB_CORE_CMD_M_PROCEED		BIT(1)
-+#define SMB_CORE_CMD_M_RUN		BIT(0)
-+
-+#define SMB_CORE_SR_HOLD_TIME_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x18)
-+
-+/*
-+ * SR_HOLD_TIME_XK_TICKS field will indicate the number of ticks of the
-+ * baud clock required to program 'Hold Time' at X KHz.
-+ */
-+#define SR_HOLD_TIME_100K_TICKS	133
-+#define SR_HOLD_TIME_400K_TICKS	20
-+#define SR_HOLD_TIME_1000K_TICKS	11
-+
-+#define SMB_CORE_COMPLETION_REG_OFF3	(SMBUS_MAST_CORE_ADDR_BASE + 0x23)
-+
-+#define COMPLETION_MDONE		BIT(6)
-+#define COMPLETION_IDLE			BIT(5)
-+#define COMPLETION_MNAKX		BIT(0)
-+
-+#define SMB_CORE_IDLE_SCALING_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x24)
-+
-+/*
-+ * FAIR_BUS_IDLE_MIN_XK_TICKS field will indicate the number of ticks of
-+ * the baud clock required to program 'fair idle delay' at X KHz. Fair idle
-+ * delay establishes the MCTP T(IDLE_DELAY) period.
-+ */
-+#define FAIR_BUS_IDLE_MIN_100K_TICKS		969
-+#define FAIR_BUS_IDLE_MIN_400K_TICKS		157
-+#define FAIR_BUS_IDLE_MIN_1000K_TICKS		157
-+
-+/*
-+ * FAIR_IDLE_DELAY_XK_TICKS field will indicate the number of ticks of the
-+ * baud clock required to satisfy the fairness protocol at X KHz.
-+ */
-+#define FAIR_IDLE_DELAY_100K_TICKS	1000
-+#define FAIR_IDLE_DELAY_400K_TICKS	500
-+#define FAIR_IDLE_DELAY_1000K_TICKS	500
-+
-+#define SMB_IDLE_SCALING_100K		\
-+	((FAIR_IDLE_DELAY_100K_TICKS << 16) | FAIR_BUS_IDLE_MIN_100K_TICKS)
-+#define SMB_IDLE_SCALING_400K		\
-+	((FAIR_IDLE_DELAY_400K_TICKS << 16) | FAIR_BUS_IDLE_MIN_400K_TICKS)
-+#define SMB_IDLE_SCALING_1000K	\
-+	((FAIR_IDLE_DELAY_1000K_TICKS << 16) | FAIR_BUS_IDLE_MIN_1000K_TICKS)
-+
-+#define SMB_CORE_CONFIG_REG3		(SMBUS_MAST_CORE_ADDR_BASE + 0x2B)
-+
-+#define SMB_CONFIG3_ENMI		BIT(6)
-+#define SMB_CONFIG3_ENIDI		BIT(5)
-+
-+#define SMB_CORE_CONFIG_REG2		(SMBUS_MAST_CORE_ADDR_BASE + 0x2A)
-+#define SMB_CORE_CONFIG_REG1		(SMBUS_MAST_CORE_ADDR_BASE + 0x29)
-+
-+#define SMB_CONFIG1_ASR			BIT(7)
-+#define SMB_CONFIG1_ENAB		BIT(2)
-+#define SMB_CONFIG1_RESET		BIT(1)
-+#define SMB_CONFIG1_FEN			BIT(0)
-+
-+#define SMB_CORE_BUS_CLK_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x2C)
-+
-+/*
-+ * BUS_CLK_XK_LOW_PERIOD_TICKS field defines the number of I2C Baud Clock
-+ * periods that make up the low phase of the I2C/SMBus bus clock at X KHz.
-+ */
-+#define BUS_CLK_100K_LOW_PERIOD_TICKS		156
-+#define BUS_CLK_400K_LOW_PERIOD_TICKS		41
-+#define BUS_CLK_1000K_LOW_PERIOD_TICKS	15
-+
-+/*
-+ * BUS_CLK_XK_HIGH_PERIOD_TICKS field defines the number of I2C Baud Clock
-+ * periods that make up the high phase of the I2C/SMBus bus clock at X KHz.
-+ */
-+#define BUS_CLK_100K_HIGH_PERIOD_TICKS	154
-+#define BUS_CLK_400K_HIGH_PERIOD_TICKS	35
-+#define BUS_CLK_1000K_HIGH_PERIOD_TICKS	14
-+
-+#define BUS_CLK_100K			\
-+	((BUS_CLK_100K_HIGH_PERIOD_TICKS << 8) | BUS_CLK_100K_LOW_PERIOD_TICKS)
-+#define BUS_CLK_400K			\
-+	((BUS_CLK_400K_HIGH_PERIOD_TICKS << 8) | BUS_CLK_400K_LOW_PERIOD_TICKS)
-+#define BUS_CLK_1000K			\
-+	((BUS_CLK_1000K_HIGH_PERIOD_TICKS << 8) | BUS_CLK_1000K_LOW_PERIOD_TICKS)
-+
-+#define SMB_CORE_CLK_SYNC_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x3C)
-+
-+/*
-+ * CLK_SYNC_XK defines the number of clock cycles to sync up to the external
-+ * clock before comparing the internal and external clocks for clock stretching
-+ * at X KHz.
-+ */
-+#define CLK_SYNC_100K			4
-+#define CLK_SYNC_400K			4
-+#define CLK_SYNC_1000K		4
-+
-+#define SMB_CORE_DATA_TIMING_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x40)
-+
-+/*
-+ *
-+ * FIRST_START_HOLD_XK_TICKS will indicate the number of ticks of the baud
-+ * clock required to program 'FIRST_START_HOLD' timer at X KHz. This timer
-+ * determines the SCLK hold time following SDAT driven low during the first
-+ * START bit in a transfer.
-+ */
-+#define FIRST_START_HOLD_100K_TICKS	22
-+#define FIRST_START_HOLD_400K_TICKS	16
-+#define FIRST_START_HOLD_1000K_TICKS	6
-+
-+/*
-+ * STOP_SETUP_XK_TICKS will indicate the number of ticks of the baud clock
-+ * required to program 'STOP_SETUP' timer at X KHz. This timer determines the
-+ * SDAT setup time from the rising edge of SCLK for a STOP condition.
-+ */
-+#define STOP_SETUP_100K_TICKS		157
-+#define STOP_SETUP_400K_TICKS		20
-+#define STOP_SETUP_1000K_TICKS	12
-+
-+/*
-+ * RESTART_SETUP_XK_TICKS will indicate the number of ticks of the baud clock
-+ * required to program 'RESTART_SETUP' timer at X KHz. This timer determines the
-+ * SDAT setup time from the rising edge of SCLK for a repeated START condition.
-+ */
-+#define RESTART_SETUP_100K_TICKS	157
-+#define RESTART_SETUP_400K_TICKS	20
-+#define RESTART_SETUP_1000K_TICKS	12
-+
-+/*
-+ * DATA_HOLD_XK_TICKS will indicate the number of ticks of the baud clock
-+ * required to program 'DATA_HOLD' timer at X KHz. This timer determines the
-+ * SDAT hold time following SCLK driven low.
-+ */
-+#define DATA_HOLD_100K_TICKS		2
-+#define DATA_HOLD_400K_TICKS		2
-+#define DATA_HOLD_1000K_TICKS		2
-+
-+#define DATA_TIMING_100K		\
-+	((FIRST_START_HOLD_100K_TICKS << 24) | (STOP_SETUP_100K_TICKS << 16) | \
-+	(RESTART_SETUP_100K_TICKS << 8) | DATA_HOLD_100K_TICKS)
-+#define DATA_TIMING_400K		\
-+	((FIRST_START_HOLD_400K_TICKS << 24) | (STOP_SETUP_400K_TICKS << 16) | \
-+	(RESTART_SETUP_400K_TICKS << 8) | DATA_HOLD_400K_TICKS)
-+#define DATA_TIMING_1000K		\
-+	((FIRST_START_HOLD_1000K_TICKS << 24) | (STOP_SETUP_1000K_TICKS << 16) | \
-+	(RESTART_SETUP_1000K_TICKS << 8) | DATA_HOLD_1000K_TICKS)
-+
-+#define SMB_CORE_TO_SCALING_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x44)
-+
-+/*
-+ * BUS_IDLE_MIN_XK_TICKS defines Bus Idle Minimum Time.
-+ * Bus Idle Minimum time = BUS_IDLE_MIN[7:0] x Baud_Clock_Period x
-+ * (BUS_IDLE_MIN_XK_TICKS[7] ? 4,1)
-+ */
-+#define BUS_IDLE_MIN_100K_TICKS		167
-+#define BUS_IDLE_MIN_400K_TICKS		139
-+#define BUS_IDLE_MIN_1000K_TICKS		133
-+
-+/*
-+ * CTRL_CUM_TIME_OUT_XK_TICKS defines SMBus Controller Cumulative Time-Out.
-+ * SMBus Controller Cumulative Time-Out duration =
-+ * CTRL_CUM_TIME_OUT_XK_TICKS[7:0] x Baud_Clock_Period x 2048
-+ */
-+#define CTRL_CUM_TIME_OUT_100K_TICKS		159
-+#define CTRL_CUM_TIME_OUT_400K_TICKS		159
-+#define CTRL_CUM_TIME_OUT_1000K_TICKS		159
-+
-+/*
-+ * TARGET_CUM_TIME_OUT_XK_TICKS defines SMBus Target Cumulative Time-Out duration.
-+ * SMBus Target Cumulative Time-Out duration = TARGET_CUM_TIME_OUT_XK_TICKS[7:0] x
-+ * Baud_Clock_Period x 4096
-+ */
-+#define TARGET_CUM_TIME_OUT_100K_TICKS	199
-+#define TARGET_CUM_TIME_OUT_400K_TICKS	199
-+#define TARGET_CUM_TIME_OUT_1000K_TICKS	199
-+
-+/*
-+ * CLOCK_HIGH_TIME_OUT_XK defines Clock High time out period.
-+ * Clock High time out period = CLOCK_HIGH_TIME_OUT_XK[7:0] x Baud_Clock_Period x 8
-+ */
-+#define CLOCK_HIGH_TIME_OUT_100K_TICKS	204
-+#define CLOCK_HIGH_TIME_OUT_400K_TICKS	204
-+#define CLOCK_HIGH_TIME_OUT_1000K_TICKS	204
-+
-+#define TO_SCALING_100K		\
-+	((BUS_IDLE_MIN_100K_TICKS << 24) | (CTRL_CUM_TIME_OUT_100K_TICKS << 16) | \
-+	(TARGET_CUM_TIME_OUT_100K_TICKS << 8) | CLOCK_HIGH_TIME_OUT_100K_TICKS)
-+#define TO_SCALING_400K		\
-+	((BUS_IDLE_MIN_400K_TICKS << 24) | (CTRL_CUM_TIME_OUT_400K_TICKS << 16) | \
-+	(TARGET_CUM_TIME_OUT_400K_TICKS << 8) | CLOCK_HIGH_TIME_OUT_400K_TICKS)
-+#define TO_SCALING_1000K		\
-+	((BUS_IDLE_MIN_1000K_TICKS << 24) | (CTRL_CUM_TIME_OUT_1000K_TICKS << 16) | \
-+	(TARGET_CUM_TIME_OUT_1000K_TICKS << 8) | CLOCK_HIGH_TIME_OUT_1000K_TICKS)
-+
-+#define I2C_SCL_PAD_CTRL_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x100)
-+#define I2C_SDA_PAD_CTRL_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x101)
-+
-+#define I2C_FOD_EN			BIT(4)
-+#define I2C_PULL_UP_EN			BIT(3)
-+#define I2C_PULL_DOWN_EN		BIT(2)
-+#define I2C_INPUT_EN			BIT(1)
-+#define I2C_OUTPUT_EN			BIT(0)
-+
-+#define SMBUS_CONTROL_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x200)
-+
-+#define CTL_RESET_COUNTERS		BIT(3)
-+#define CTL_TRANSFER_DIR		BIT(2)
-+#define CTL_HOST_FIFO_ENTRY		BIT(1)
-+#define CTL_RUN				BIT(0)
-+
-+#define I2C_DIRN_WRITE			0
-+#define I2C_DIRN_READ			1
-+
-+#define SMBUS_STATUS_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x204)
-+
-+#define STA_DMA_TERM			BIT(7)
-+#define STA_DMA_REQ			BIT(6)
-+#define STA_THRESHOLD			BIT(2)
-+#define STA_BUF_FULL			BIT(1)
-+#define STA_BUF_EMPTY			BIT(0)
-+
-+#define SMBUS_INTR_STAT_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x208)
-+
-+#define INTR_STAT_DMA_TERM		BIT(7)
-+#define INTR_STAT_THRESHOLD		BIT(2)
-+#define INTR_STAT_BUF_FULL		BIT(1)
-+#define INTR_STAT_BUF_EMPTY		BIT(0)
-+
-+#define SMBUS_INTR_MSK_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x20C)
-+
-+#define INTR_MSK_DMA_TERM		BIT(7)
-+#define INTR_MSK_THRESHOLD		BIT(2)
-+#define INTR_MSK_BUF_FULL		BIT(1)
-+#define INTR_MSK_BUF_EMPTY		BIT(0)
-+
-+#define ALL_NW_LAYER_INTERRUPTS  \
-+	(INTR_MSK_DMA_TERM | INTR_MSK_THRESHOLD | INTR_MSK_BUF_FULL | \
-+	 INTR_MSK_BUF_EMPTY)
-+
-+#define SMBUS_MCU_COUNTER_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x214)
-+
-+#define SMBALERT_MST_PAD_CTRL_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x230)
-+
-+#define SMBALERT_MST_PU			BIT(0)
-+
-+#define SMBUS_GEN_INT_STAT_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x23C)
-+
-+#define SMBUS_GEN_INT_MASK_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x240)
-+
-+#define SMBALERT_INTR_MASK		BIT(10)
-+#define I2C_BUF_MSTR_INTR_MASK		BIT(9)
-+#define I2C_INTR_MASK			BIT(8)
-+#define SMBALERT_WAKE_INTR_MASK		BIT(2)
-+#define I2C_BUF_MSTR_WAKE_INTR_MASK	BIT(1)
-+#define I2C_WAKE_INTR_MASK		BIT(0)
-+
-+#define ALL_HIGH_LAYER_INTR     \
-+	(SMBALERT_INTR_MASK | I2C_BUF_MSTR_INTR_MASK | I2C_INTR_MASK | \
-+	SMBALERT_WAKE_INTR_MASK | I2C_BUF_MSTR_WAKE_INTR_MASK | \
-+	I2C_WAKE_INTR_MASK)
-+
-+#define SMBUS_RESET_REG		(SMBUS_MAST_CORE_ADDR_BASE + 0x248)
-+
-+#define PERI_SMBUS_D3_RESET_DIS		BIT(16)
-+
-+#define SMBUS_MST_BUF		(SMBUS_MAST_CORE_ADDR_BASE + 0x280)
-+
-+#define SMBUS_BUF_MAX_SIZE		0x80
-+
-+#define I2C_FLAGS_DIRECT_MODE		BIT(7)
-+#define I2C_FLAGS_POLLING_MODE		BIT(6)
-+#define I2C_FLAGS_STOP			BIT(5)
-+#define I2C_FLAGS_SMB_BLK_READ		BIT(4)
-+
-+#define PCI1XXXX_I2C_TIMEOUT_MS		1000
-+
-+/* General Purpose Register. */
-+#define SMB_GPR_REG		(SMBUS_MAST_CORE_ADDR_BASE + 0x1000 + 0x0c00 + \
-+				0x00)
-+
-+/* Lock Register. */
-+#define SMB_GPR_LOCK_REG	(SMBUS_MAST_CORE_ADDR_BASE + 0x1000 + 0x0000 + \
-+				0x00A0)
-+
-+#define SMBUS_PERI_LOCK		BIT(3)
-+
-+struct pci1xxxx_i2c {
-+	struct completion i2c_xfer_done;
-+	bool i2c_xfer_in_progress;
-+	struct i2c_adapter adap;
-+	void __iomem *i2c_base;
-+	u32 freq;
-+	u32 flags;
-+};
-+
-+static int set_sys_lock(struct pci1xxxx_i2c *i2c)
-+{
-+	void __iomem *p = i2c->i2c_base + SMB_GPR_LOCK_REG;
-+	u8 data;
-+
-+	writel(SMBUS_PERI_LOCK, p);
-+	data = readl(p);
-+	if (data != SMBUS_PERI_LOCK)
-+		return -EPERM;
-+
-+	return 0;
-+}
-+
-+static int release_sys_lock(struct pci1xxxx_i2c *i2c)
-+{
-+	void __iomem *p = i2c->i2c_base + SMB_GPR_LOCK_REG;
-+	u8 data;
-+
-+	data = readl(p);
-+	if (data != SMBUS_PERI_LOCK)
+ static inline void __i2c_dw_enable(struct dw_i2c_dev *dev)
+ {
++	dev->status |= STATUS_ACTIVE;
+ 	regmap_write(dev->map, DW_IC_ENABLE, 1);
+ }
+ 
+ static inline void __i2c_dw_disable_nowait(struct dw_i2c_dev *dev)
+ {
+ 	regmap_write(dev->map, DW_IC_ENABLE, 0);
++	dev->status &= ~STATUS_ACTIVE;
+ }
+ 
+ void __i2c_dw_disable(struct dw_i2c_dev *dev);
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index 44a94b225ed8..dc3c5a15a95b 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -716,6 +716,19 @@ static int i2c_dw_irq_handler_master(struct dw_i2c_dev *dev)
+ 	u32 stat;
+ 
+ 	stat = i2c_dw_read_clear_intrbits(dev);
++
++	if (!(dev->status & STATUS_ACTIVE)) {
++		/*
++		 * Unexpected interrupt in driver point of view. State
++		 * variables are either unset or stale so acknowledge and
++		 * disable interrupts for suppressing further interrupts if
++		 * interrupt really came from this HW (E.g. firmware has left
++		 * the HW active).
++		 */
++		regmap_write(dev->map, DW_IC_INTR_MASK, 0);
 +		return 0;
-+
-+	writel(0, p);
-+	data = readl(p);
-+	if (data & SMBUS_PERI_LOCK)
-+		return -EPERM;
-+
-+	return 0;
-+}
-+
-+static void pci1xxxx_ack_high_level_intr(struct pci1xxxx_i2c *i2c, u16 intr_msk)
-+{
-+	writew(intr_msk, i2c->i2c_base + SMBUS_GEN_INT_STAT_REG_OFF);
-+}
-+
-+static void pci1xxxx_i2c_configure_smbalert_pin(struct pci1xxxx_i2c *i2c,
-+						bool enable)
-+{
-+	void __iomem *p = i2c->i2c_base + SMBALERT_MST_PAD_CTRL_REG_OFF;
-+	u8 regval;
-+
-+	regval = readb(p);
-+
-+	if (enable)
-+		regval |= SMBALERT_MST_PU;
-+	else
-+		regval &= ~SMBALERT_MST_PU;
-+
-+	writeb(regval, p);
-+}
-+
-+static void pci1xxxx_i2c_send_start_stop(struct pci1xxxx_i2c *i2c, bool start)
-+{
-+	void __iomem *p = i2c->i2c_base + SMB_CORE_CMD_REG_OFF1;
-+	u8 regval;
-+
-+	regval = readb(p);
-+
-+	if (start)
-+		regval |= SMB_CORE_CMD_START;
-+	else
-+		regval |= SMB_CORE_CMD_STOP;
-+
-+	writeb(regval, p);
-+}
-+
-+/*
-+ * When accessing the core control reg, we should not do a read modified write
-+ * as they are write '1' to clear bits. Instead we need to write with the
-+ * specific bits that needs to be set.
-+ */
-+static void pci1xxxx_i2c_set_clear_FW_ACK(struct pci1xxxx_i2c *i2c, bool set)
-+{
-+	u8 regval;
-+
-+	if (set)
-+		regval = SMB_CORE_CTRL_FW_ACK | SMB_CORE_CTRL_ESO | SMB_CORE_CTRL_ACK;
-+	else
-+		regval = SMB_CORE_CTRL_ESO | SMB_CORE_CTRL_ACK;
-+
-+	writeb(regval, i2c->i2c_base + SMB_CORE_CTRL_REG_OFF);
-+}
-+
-+static void pci1xxxx_i2c_buffer_write(struct pci1xxxx_i2c *i2c, u8 slaveaddr,
-+				      u8 transferlen, unsigned char *buf)
-+{
-+	void __iomem *p = i2c->i2c_base + SMBUS_MST_BUF;
-+
-+	if (slaveaddr)
-+		writeb(slaveaddr, p++);
-+
-+	if (buf)
-+		memcpy_toio(p, buf, transferlen);
-+}
-+
-+/*
-+ * When accessing the core control reg, we should not do a read modified write
-+ * as there are write '1' to clear bits. Instead we need to write with the
-+ * specific bits that needs to be set.
-+ */
-+static void pci1xxxx_i2c_enable_ESO(struct pci1xxxx_i2c *i2c)
-+{
-+	writeb(SMB_CORE_CTRL_ESO, i2c->i2c_base + SMB_CORE_CTRL_REG_OFF);
-+}
-+
-+static void pci1xxxx_i2c_reset_counters(struct pci1xxxx_i2c *i2c)
-+{
-+	void __iomem *p = i2c->i2c_base + SMBUS_CONTROL_REG_OFF;
-+	u8 regval;
-+
-+	regval = readb(p);
-+	regval |= CTL_RESET_COUNTERS;
-+	writeb(regval, p);
-+}
-+
-+static void pci1xxxx_i2c_set_transfer_dir(struct pci1xxxx_i2c *i2c, u8 direction)
-+{
-+	void __iomem *p = i2c->i2c_base + SMBUS_CONTROL_REG_OFF;
-+	u8 regval;
-+
-+	regval = readb(p);
-+	if (direction == I2C_DIRN_WRITE)
-+		regval &= ~CTL_TRANSFER_DIR;
-+	else
-+		regval |= CTL_TRANSFER_DIR;
-+
-+	writeb(regval, p);
-+}
-+
-+static void pci1xxxx_i2c_set_mcu_count(struct pci1xxxx_i2c *i2c, u8 count)
-+{
-+	writeb(count, i2c->i2c_base + SMBUS_MCU_COUNTER_REG_OFF);
-+}
-+
-+static void pci1xxxx_i2c_set_read_count(struct pci1xxxx_i2c *i2c, u8 readcount)
-+{
-+	writeb(readcount, i2c->i2c_base + SMB_CORE_CMD_REG_OFF3);
-+}
-+
-+static void pci1xxxx_i2c_set_write_count(struct pci1xxxx_i2c *i2c, u8 writecount)
-+{
-+	writeb(writecount, i2c->i2c_base + SMB_CORE_CMD_REG_OFF2);
-+}
-+
-+static void pci1xxxx_i2c_set_DMA_run(struct pci1xxxx_i2c *i2c)
-+{
-+	void __iomem *p = i2c->i2c_base + SMBUS_CONTROL_REG_OFF;
-+	u8 regval;
-+
-+	regval = readb(p);
-+	regval |= CTL_RUN;
-+	writeb(regval, p);
-+}
-+
-+static void pci1xxxx_i2c_set_mrun_proceed(struct pci1xxxx_i2c *i2c)
-+{
-+	void __iomem *p = i2c->i2c_base + SMB_CORE_CMD_REG_OFF0;
-+	u8 regval;
-+
-+	regval = readb(p);
-+	regval |= SMB_CORE_CMD_M_RUN;
-+	regval |= SMB_CORE_CMD_M_PROCEED;
-+	writeb(regval, p);
-+}
-+
-+static void pci1xxxx_i2c_start_DMA(struct pci1xxxx_i2c *i2c)
-+{
-+	pci1xxxx_i2c_set_DMA_run(i2c);
-+	pci1xxxx_i2c_set_mrun_proceed(i2c);
-+}
-+
-+static void pci1xxxx_i2c_config_asr(struct pci1xxxx_i2c *i2c, bool enable)
-+{
-+	void __iomem *p = i2c->i2c_base + SMB_CORE_CONFIG_REG1;
-+	u8 regval;
-+
-+	regval = readb(p);
-+	if (enable)
-+		regval |= SMB_CONFIG1_ASR;
-+	else
-+		regval &= ~SMB_CONFIG1_ASR;
-+	writeb(regval, p);
-+}
-+
-+static irqreturn_t pci1xxxx_i2c_isr(int irq, void *dev)
-+{
-+	struct pci1xxxx_i2c *i2c = dev;
-+	void __iomem *p1 = i2c->i2c_base + SMBUS_GEN_INT_STAT_REG_OFF;
-+	void __iomem *p2 = i2c->i2c_base + SMBUS_INTR_STAT_REG_OFF;
-+	irqreturn_t intr_handled = IRQ_NONE;
-+	u16 reg1;
-+	u8 reg3;
-+
-+	/*
-+	 *  Read the SMBus interrupt status register to see if the
-+	 *  DMA_TERM interrupt has caused this callback.
-+	 */
-+	reg1 = readw(p1);
-+
-+	if (reg1 & I2C_BUF_MSTR_INTR_MASK) {
-+		reg3 = readb(p2);
-+		if (reg3 & INTR_STAT_DMA_TERM) {
-+			complete(&i2c->i2c_xfer_done);
-+			intr_handled = IRQ_HANDLED;
-+			writeb(INTR_STAT_DMA_TERM, p2);
-+		}
-+		pci1xxxx_ack_high_level_intr(i2c, I2C_BUF_MSTR_INTR_MASK);
 +	}
 +
-+	if (reg1 & SMBALERT_INTR_MASK) {
-+		intr_handled = IRQ_HANDLED;
-+		pci1xxxx_ack_high_level_intr(i2c, SMBALERT_INTR_MASK);
-+	}
-+
-+	return intr_handled;
-+}
-+
-+static void pci1xxxx_i2c_set_count(struct pci1xxxx_i2c *i2c, u8 mcucount,
-+				   u8 writecount, u8 readcount)
-+{
-+	pci1xxxx_i2c_set_mcu_count(i2c, mcucount);
-+	pci1xxxx_i2c_set_write_count(i2c, writecount);
-+	pci1xxxx_i2c_set_read_count(i2c, readcount);
-+}
-+
-+static void pci1xxxx_i2c_set_readm(struct pci1xxxx_i2c *i2c, bool enable)
-+{
-+	void __iomem *p = i2c->i2c_base + SMB_CORE_CMD_REG_OFF1;
-+	u8 regval;
-+
-+	regval = readb(p);
-+	if (enable)
-+		regval |= SMB_CORE_CMD_READM;
-+	else
-+		regval &= ~SMB_CORE_CMD_READM;
-+
-+	writeb(regval, p);
-+}
-+
-+static void pci1xxxx_ack_nw_layer_intr(struct pci1xxxx_i2c *i2c, u8 ack_intr_msk)
-+{
-+	writeb(ack_intr_msk, i2c->i2c_base + SMBUS_INTR_STAT_REG_OFF);
-+}
-+
-+static void pci1xxxx_config_nw_layer_intr(struct pci1xxxx_i2c *i2c,
-+					  u8 intr_msk, bool enable)
-+{
-+	void __iomem *p = i2c->i2c_base + SMBUS_INTR_MSK_REG_OFF;
-+	u8 regval;
-+
-+	regval = readb(p);
-+	if (enable)
-+		regval &= ~intr_msk;
-+	else
-+		regval |= intr_msk;
-+
-+	writeb(regval, p);
-+}
-+
-+static void pci1xxxx_i2c_config_padctrl(struct pci1xxxx_i2c *i2c, bool enable)
-+{
-+	void __iomem *p1 = i2c->i2c_base + I2C_SCL_PAD_CTRL_REG_OFF;
-+	void __iomem *p2 = i2c->i2c_base + I2C_SDA_PAD_CTRL_REG_OFF;
-+	u8 regval;
-+
-+	regval = readb(p1);
-+	if (enable)
-+		regval |= I2C_INPUT_EN | I2C_OUTPUT_EN;
-+	else
-+		regval &= ~(I2C_INPUT_EN | I2C_OUTPUT_EN);
-+
-+	writeb(regval, p1);
-+
-+	regval = readb(p2);
-+	if (enable)
-+		regval |= I2C_INPUT_EN | I2C_OUTPUT_EN;
-+	else
-+		regval &= ~(I2C_INPUT_EN | I2C_OUTPUT_EN);
-+
-+	writeb(regval, p2);
-+}
-+
-+static void pci1xxxx_i2c_set_mode(struct pci1xxxx_i2c *i2c)
-+{
-+	void __iomem *p = i2c->i2c_base + SMBUS_CONTROL_REG_OFF;
-+	u8 regval;
-+
-+	regval = readb(p);
-+	if (i2c->flags & I2C_FLAGS_DIRECT_MODE)
-+		regval &= ~CTL_HOST_FIFO_ENTRY;
-+	else
-+		regval |= CTL_HOST_FIFO_ENTRY;
-+
-+	writeb(regval, p);
-+}
-+
-+static void pci1xxxx_i2c_config_high_level_intr(struct pci1xxxx_i2c *i2c,
-+						u16 intr_msk, bool enable)
-+{
-+	void __iomem *p = i2c->i2c_base + SMBUS_GEN_INT_MASK_REG_OFF;
-+	u16 regval;
-+
-+	regval = readw(p);
-+	if (enable)
-+		regval &= ~intr_msk;
-+	else
-+		regval |= intr_msk;
-+	writew(regval, p);
-+}
-+
-+static void pci1xxxx_i2c_configure_core_reg(struct pci1xxxx_i2c *i2c, bool enable)
-+{
-+	void __iomem *p1 = i2c->i2c_base + SMB_CORE_CONFIG_REG1;
-+	void __iomem *p3 = i2c->i2c_base + SMB_CORE_CONFIG_REG3;
-+	u8 reg1;
-+	u8 reg3;
-+
-+	reg1 = readb(p1);
-+	reg3 = readb(p3);
-+	if (enable) {
-+		reg1 |= SMB_CONFIG1_ENAB | SMB_CONFIG1_FEN;
-+		reg3 |= SMB_CONFIG3_ENMI | SMB_CONFIG3_ENIDI;
-+	} else {
-+		reg1 &= ~(SMB_CONFIG1_ENAB | SMB_CONFIG1_FEN);
-+		reg3 &= ~(SMB_CONFIG3_ENMI | SMB_CONFIG3_ENIDI);
-+	}
-+
-+	writeb(reg1, p1);
-+	writeb(reg3, p3);
-+}
-+
-+static void pci1xxxx_i2c_set_freq(struct pci1xxxx_i2c *i2c)
-+{
-+	void __iomem *bp = i2c->i2c_base;
-+	void __iomem *p_idle_scaling = bp + SMB_CORE_IDLE_SCALING_REG_OFF;
-+	void __iomem *p_data_timing = bp + SMB_CORE_DATA_TIMING_REG_OFF;
-+	void __iomem *p_hold_time = bp + SMB_CORE_SR_HOLD_TIME_REG_OFF;
-+	void __iomem *p_to_scaling = bp + SMB_CORE_TO_SCALING_REG_OFF;
-+	void __iomem *p_clk_sync = bp + SMB_CORE_CLK_SYNC_REG_OFF;
-+	void __iomem *p_clk_reg = bp + SMB_CORE_BUS_CLK_REG_OFF;
-+
-+	switch (i2c->freq) {
-+	case I2C_MAX_STANDARD_MODE_FREQ:
-+		writeb(SR_HOLD_TIME_100K_TICKS, p_hold_time);
-+		writel(SMB_IDLE_SCALING_100K, p_idle_scaling);
-+		writew(BUS_CLK_100K, p_clk_reg);
-+		writel(CLK_SYNC_100K, p_clk_sync);
-+		writel(DATA_TIMING_100K, p_data_timing);
-+		writel(TO_SCALING_100K, p_to_scaling);
-+		break;
-+
-+	case I2C_MAX_FAST_MODE_PLUS_FREQ:
-+		writeb(SR_HOLD_TIME_1000K_TICKS, p_hold_time);
-+		writel(SMB_IDLE_SCALING_1000K, p_idle_scaling);
-+		writew(BUS_CLK_1000K, p_clk_reg);
-+		writel(CLK_SYNC_1000K, p_clk_sync);
-+		writel(DATA_TIMING_1000K, p_data_timing);
-+		writel(TO_SCALING_1000K, p_to_scaling);
-+		break;
-+
-+	case I2C_MAX_FAST_MODE_FREQ:
-+	default:
-+		writeb(SR_HOLD_TIME_400K_TICKS, p_hold_time);
-+		writel(SMB_IDLE_SCALING_400K, p_idle_scaling);
-+		writew(BUS_CLK_400K, p_clk_reg);
-+		writel(CLK_SYNC_400K, p_clk_sync);
-+		writel(DATA_TIMING_400K, p_data_timing);
-+		writel(TO_SCALING_400K, p_to_scaling);
-+		break;
-+	}
-+}
-+
-+static void pci1xxxx_i2c_init(struct pci1xxxx_i2c *i2c)
-+{
-+	void __iomem *p2 = i2c->i2c_base + SMBUS_STATUS_REG_OFF;
-+	void __iomem *p1 = i2c->i2c_base + SMB_GPR_REG;
-+	u8 regval;
-+	u8 ret;
-+
-+	ret = set_sys_lock(i2c);
-+	if (ret == -EPERM) {
-+		/*
-+		 * Configure I2C Fast Mode as default frequency if unable
-+		 * to acquire sys lock.
-+		 */
-+		regval = 0;
-+	} else {
-+		regval = readl(p1);
-+		release_sys_lock(i2c);
-+	}
-+
-+	switch (regval) {
-+	case 0:
-+		i2c->freq = I2C_MAX_FAST_MODE_FREQ;
-+		pci1xxxx_i2c_set_freq(i2c);
-+		break;
-+	case 1:
-+		i2c->freq = I2C_MAX_STANDARD_MODE_FREQ;
-+		pci1xxxx_i2c_set_freq(i2c);
-+		break;
-+	case 2:
-+		i2c->freq = I2C_MAX_FAST_MODE_PLUS_FREQ;
-+		pci1xxxx_i2c_set_freq(i2c);
-+		break;
-+	case 3:
-+	default:
-+		break;
-+	}
-+
-+	pci1xxxx_i2c_config_padctrl(i2c, true);
-+	i2c->flags |= I2C_FLAGS_DIRECT_MODE;
-+	pci1xxxx_i2c_set_mode(i2c);
-+
-+	/*
-+	 * Added as a precaution since BUF_EMPTY in status register
-+	 * also trigered an Interrupt.
-+	 */
-+	writeb(STA_BUF_EMPTY, p2);
-+
-+	/* Configure core I2c control registers. */
-+	pci1xxxx_i2c_configure_core_reg(i2c, true);
-+
-+	/*
-+	 * Enable pull-up for the SMB alert pin which is just used for
-+	 * wakeup right now.
-+	 */
-+	pci1xxxx_i2c_configure_smbalert_pin(i2c, true);
-+}
-+
-+static void pci1xxxx_i2c_clear_flags(struct pci1xxxx_i2c *i2c)
-+{
-+	u8 regval;
-+
-+	/* Reset the internal buffer counters. */
-+	pci1xxxx_i2c_reset_counters(i2c);
-+
-+	/* Clear low level interrupts. */
-+	regval = COMPLETION_MNAKX | COMPLETION_IDLE | COMPLETION_MDONE;
-+	writeb(regval, i2c->i2c_base + SMB_CORE_COMPLETION_REG_OFF3);
-+	reinit_completion(&i2c->i2c_xfer_done);
-+	pci1xxxx_ack_nw_layer_intr(i2c, ALL_NW_LAYER_INTERRUPTS);
-+	pci1xxxx_ack_high_level_intr(i2c, ALL_HIGH_LAYER_INTR);
-+}
-+
-+static int pci1xxxx_i2c_read(struct pci1xxxx_i2c *i2c, u8 slaveaddr,
-+			     unsigned char *buf, u16 total_len)
-+{
-+	void __iomem *p2 = i2c->i2c_base + SMB_CORE_COMPLETION_REG_OFF3;
-+	void __iomem *p1 = i2c->i2c_base + SMB_CORE_CMD_REG_OFF1;
-+	void __iomem *p3 = i2c->i2c_base + SMBUS_MST_BUF;
-+	unsigned long time_left;
-+	u16 remainingbytes;
-+	u8 transferlen;
-+	int retval = 0;
-+	u8 read_count;
-+	u32 regval;
-+	u16 count;
-+
-+	/* Enable I2C host controller by setting the ESO bit in the CONTROL REG. */
-+	pci1xxxx_i2c_enable_ESO(i2c);
-+	pci1xxxx_i2c_clear_flags(i2c);
-+	pci1xxxx_config_nw_layer_intr(i2c, INTR_MSK_DMA_TERM, true);
-+	pci1xxxx_i2c_config_high_level_intr(i2c, I2C_BUF_MSTR_INTR_MASK, true);
-+
-+	/*
-+	 * The I2C transfer could be more than 128 bytes. Our Core is
-+	 * capable of only sending 128 at a time.
-+	 * As far as the I2C read is concerned, initailly send the
-+	 * read slave address along with the number of bytes to read in
-+	 * ReadCount. After sending the slave address the interrupt
-+	 * is generated. On seeing the ACK for the slave address, reverse the
-+	 * buffer direction and run the DMA to initiate Read from slave.
-+	 */
-+	for (count = 0; count < total_len; count += transferlen) {
-+
-+		/*
-+		 * Before start of any transaction clear the existing
-+		 * START/STOP conditions.
-+		 */
-+		writeb(0, p1);
-+		remainingbytes = total_len - count;
-+		transferlen = min_t(u16, remainingbytes, SMBUS_BUF_MAX_SIZE);
-+
-+		/*
-+		 * Send STOP bit for the last chunk in the transaction.
-+		 * For I2C read transaction of more than BUF_SIZE, NACK should
-+		 * only be sent for the last read.
-+		 * Hence a bit FW_ACK is set for all the read chunks except for
-+		 * the last chunk. For the last chunk NACK should be sent and
-+		 * FW_ACK is cleared Send STOP only when I2C_FLAGS_STOP bit is
-+		 * set in the flags and only for the last transaction.
-+		 */
-+		if ((count + transferlen >= total_len) &&
-+		    (i2c->flags & I2C_FLAGS_STOP)) {
-+			pci1xxxx_i2c_set_clear_FW_ACK(i2c, false);
-+			pci1xxxx_i2c_send_start_stop(i2c, 0);
-+		} else {
-+			pci1xxxx_i2c_set_clear_FW_ACK(i2c, true);
-+		}
-+
-+		/* Send START bit for the first transaction. */
-+		if (count == 0) {
-+			pci1xxxx_i2c_set_transfer_dir(i2c, I2C_DIRN_WRITE);
-+			pci1xxxx_i2c_send_start_stop(i2c, 1);
-+
-+			/* Write I2c buffer with just the slave addr. */
-+			pci1xxxx_i2c_buffer_write(i2c, slaveaddr, 0, NULL);
-+
-+			/* Set the count. Readcount is the transfer bytes. */
-+			pci1xxxx_i2c_set_count(i2c, 1, 1, transferlen);
-+
-+			/*
-+			 * Set the Auto_start_read bit so that the HW itself
-+			 * will take care of the read phase.
-+			 */
-+			pci1xxxx_i2c_config_asr(i2c, true);
-+			if (i2c->flags & I2C_FLAGS_SMB_BLK_READ)
-+				pci1xxxx_i2c_set_readm(i2c, true);
-+		} else {
-+			pci1xxxx_i2c_set_count(i2c, 0, 0, transferlen);
-+			pci1xxxx_i2c_config_asr(i2c, false);
-+			pci1xxxx_i2c_clear_flags(i2c);
-+			pci1xxxx_i2c_set_transfer_dir(i2c, I2C_DIRN_READ);
-+		}
-+
-+		/* Start the DMA. */
-+		pci1xxxx_i2c_start_DMA(i2c);
-+
-+		/* Wait for the DMA_TERM interrupt. */
-+		time_left = wait_for_completion_timeout(&i2c->i2c_xfer_done,
-+			    msecs_to_jiffies(PCI1XXXX_I2C_TIMEOUT_MS));
-+		if (time_left == 0) {
-+			/* Reset the I2C core to release the bus lock. */
-+			pci1xxxx_i2c_init(i2c);
-+			retval = -ETIMEDOUT;
-+			goto cleanup;
-+		}
-+
-+		/* Read the completion reg to know the reason for DMA_TERM. */
-+		regval = readb(p2);
-+
-+		/* Slave did not respond. */
-+		if (regval & COMPLETION_MNAKX) {
-+			writeb(COMPLETION_MNAKX, p2);
-+			retval = -ETIMEDOUT;
-+			goto cleanup;
-+		}
-+
-+		if (i2c->flags & I2C_FLAGS_SMB_BLK_READ) {
-+			buf[0] = readb(p3);
-+			read_count = buf[0];
-+			memcpy_fromio(&buf[1], p3 + 1, read_count);
-+		} else {
-+			memcpy_fromio(&buf[count], p3, transferlen);
-+		}
-+	}
-+
-+cleanup:
-+	/* Disable all the interrupts. */
-+	pci1xxxx_config_nw_layer_intr(i2c, INTR_MSK_DMA_TERM, false);
-+	pci1xxxx_i2c_config_high_level_intr(i2c, I2C_BUF_MSTR_INTR_MASK, false);
-+	pci1xxxx_i2c_config_asr(i2c, false);
-+	return retval;
-+}
-+
-+static int pci1xxxx_i2c_write(struct pci1xxxx_i2c *i2c, u8 slaveaddr,
-+			      unsigned char *buf, u16 total_len)
-+{
-+	void __iomem *p2 = i2c->i2c_base + SMB_CORE_COMPLETION_REG_OFF3;
-+	void __iomem *p1 = i2c->i2c_base + SMB_CORE_CMD_REG_OFF1;
-+	unsigned long time_left;
-+	u16 remainingbytes;
-+	u8 actualwritelen;
-+	u8 transferlen;
-+	int retval = 0;
-+	u32 regval;
-+	u16 count;
-+
-+	/* Enable I2C host controller by setting the ESO bit in the CONTROL REG. */
-+	pci1xxxx_i2c_enable_ESO(i2c);
-+
-+	/* Set the Buffer direction. */
-+	pci1xxxx_i2c_set_transfer_dir(i2c, I2C_DIRN_WRITE);
-+	pci1xxxx_config_nw_layer_intr(i2c, INTR_MSK_DMA_TERM, true);
-+	pci1xxxx_i2c_config_high_level_intr(i2c, I2C_BUF_MSTR_INTR_MASK, true);
-+
-+	/*
-+	 * The i2c transfer could be more than 128 bytes. Our Core is
-+	 * capable of only sending 128 at a time.
-+	 */
-+	for (count = 0; count < total_len; count += transferlen) {
-+		/*
-+		 * Before start of any transaction clear the existing
-+		 * START/STOP conditions.
-+		 */
-+		writeb(0, p1);
-+		pci1xxxx_i2c_clear_flags(i2c);
-+		remainingbytes = total_len - count;
-+
-+		/* If it is the starting of the transaction send START. */
-+		if (count == 0) {
-+			pci1xxxx_i2c_send_start_stop(i2c, 1);
-+
-+			/* -1 for the slave address. */
-+			transferlen = min_t(u16, SMBUS_BUF_MAX_SIZE - 1,
-+					    remainingbytes);
-+			pci1xxxx_i2c_buffer_write(i2c, slaveaddr,
-+						  transferlen, &buf[count]);
-+			/*
-+			 * The actual number of bytes written on the I2C bus
-+			 * is including the slave address.
-+			 */
-+			actualwritelen = transferlen + 1;
-+		} else {
-+			transferlen = min_t(u16, SMBUS_BUF_MAX_SIZE, remainingbytes);
-+			pci1xxxx_i2c_buffer_write(i2c, 0, transferlen, &buf[count]);
-+			actualwritelen = transferlen;
-+		}
-+
-+		pci1xxxx_i2c_set_count(i2c, actualwritelen, actualwritelen, 0);
-+
-+		/*
-+		 * Send STOP only when I2C_FLAGS_STOP bit is set in the flags and
-+		 * only for the last transaction.
-+		 */
-+		if (remainingbytes <= transferlen &&
-+		   (i2c->flags & I2C_FLAGS_STOP))
-+			pci1xxxx_i2c_send_start_stop(i2c, 0);
-+
-+		pci1xxxx_i2c_start_DMA(i2c);
-+
-+		/*
-+		 * Wait for the DMA_TERM interrupt.
-+		 */
-+		time_left = wait_for_completion_timeout(&i2c->i2c_xfer_done,
-+			    msecs_to_jiffies(PCI1XXXX_I2C_TIMEOUT_MS));
-+		if (time_left == 0) {
-+			/* Reset the I2C core to release the bus lock. */
-+			pci1xxxx_i2c_init(i2c);
-+			retval = -ETIMEDOUT;
-+			goto cleanup;
-+		}
-+
-+		regval = readb(p2);
-+		if (regval & COMPLETION_MNAKX) {
-+			writeb(COMPLETION_MNAKX, p2);
-+			retval = -ETIMEDOUT;
-+			goto cleanup;
-+		}
-+	}
-+cleanup:
-+	/* Disable all the interrupts. */
-+	pci1xxxx_config_nw_layer_intr(i2c, INTR_MSK_DMA_TERM, false);
-+	pci1xxxx_i2c_config_high_level_intr(i2c, I2C_BUF_MSTR_INTR_MASK, false);
-+
-+	return retval;
-+}
-+
-+static int pci1xxxx_i2c_xfer(struct i2c_adapter *adap,
-+			     struct i2c_msg *msgs, int num)
-+{
-+	struct pci1xxxx_i2c *i2c = i2c_get_adapdata(adap);
-+	u8 slaveaddr;
-+	int retval;
-+	u32 i;
-+
-+	i2c->i2c_xfer_in_progress = true;
-+	for (i = 0; i < num; i++) {
-+		slaveaddr = i2c_8bit_addr_from_msg(&msgs[i]);
-+
-+		/*
-+		 * Send the STOP bit if the transfer is the final one or
-+		 * if the I2C_M_STOP flag is set.
-+		 */
-+		if ((i == num - 1) || (msgs[i].flags & I2C_M_STOP))
-+			i2c->flags |= I2C_FLAGS_STOP;
-+		else
-+			i2c->flags &= ~I2C_FLAGS_STOP;
-+
-+		if (msgs[i].flags & I2C_M_RECV_LEN)
-+			i2c->flags |= I2C_FLAGS_SMB_BLK_READ;
-+		else
-+			i2c->flags &= ~I2C_FLAGS_SMB_BLK_READ;
-+
-+		if (msgs[i].flags & I2C_M_RD)
-+			retval = pci1xxxx_i2c_read(i2c, slaveaddr,
-+						   msgs[i].buf, msgs[i].len);
-+		else
-+			retval = pci1xxxx_i2c_write(i2c, slaveaddr,
-+						    msgs[i].buf, msgs[i].len);
-+
-+		if (retval < 0)
-+			break;
-+	}
-+	i2c->i2c_xfer_in_progress = false;
-+
-+	if (retval < 0)
-+		return retval;
-+
-+	return num;
-+}
-+
-+/*
-+ * List of supported functions by the driver.
-+ */
-+static u32 pci1xxxx_i2c_get_funcs(struct i2c_adapter *adap)
-+{
-+	return I2C_FUNC_I2C | I2C_FUNC_PROTOCOL_MANGLING |
-+		I2C_FUNC_SMBUS_BLOCK_PROC_CALL |
-+		I2C_FUNC_SMBUS_BYTE |
-+		I2C_FUNC_SMBUS_BYTE_DATA |
-+		I2C_FUNC_SMBUS_WORD_DATA |
-+		I2C_FUNC_SMBUS_PROC_CALL |
-+		I2C_FUNC_SMBUS_BLOCK_DATA;
-+}
-+
-+static const struct i2c_algorithm pci1xxxx_i2c_algo = {
-+	.master_xfer = pci1xxxx_i2c_xfer,
-+	.functionality = pci1xxxx_i2c_get_funcs,
-+};
-+
-+static const struct i2c_adapter_quirks pci1xxxx_i2c_quirks = {
-+	.flags = I2C_AQ_NO_ZERO_LEN,
-+};
-+
-+static const struct i2c_adapter pci1xxxx_i2c_ops = {
-+	.owner	= THIS_MODULE,
-+	.name	= "PCI1xxxx I2C Adapter",
-+	.algo	= &pci1xxxx_i2c_algo,
-+	.quirks = &pci1xxxx_i2c_quirks,
-+};
-+
-+static int pci1xxxx_i2c_suspend(struct device *dev)
-+{
-+	struct pci1xxxx_i2c *i2c = dev_get_drvdata(dev);
-+	void __iomem *p = i2c->i2c_base + SMBUS_RESET_REG;
-+	struct pci_dev *pdev = to_pci_dev(dev);
-+	u32 regval;
-+
-+	i2c_mark_adapter_suspended(&i2c->adap);
-+
-+	/*
-+	 * If the system is put into 'suspend' state when the I2C transfer is in
-+	 * progress, wait until the transfer completes.
-+	 */
-+	while (i2c->i2c_xfer_in_progress)
-+		msleep(20);
-+
-+	pci1xxxx_i2c_config_high_level_intr(i2c, SMBALERT_WAKE_INTR_MASK, true);
-+
-+	/*
-+	 * Enable the PERST_DIS bit to mask the PERST from resetting the core
-+	 * registers.
-+	 */
-+	regval = readl(p);
-+	regval |= PERI_SMBUS_D3_RESET_DIS;
-+	writel(regval, p);
-+
-+	/* Enable PCI wake in the PMCSR register. */
-+	device_set_wakeup_enable(dev, true);
-+	pci_wake_from_d3(pdev, true);
-+
-+	return 0;
-+}
-+
-+static int pci1xxxx_i2c_resume(struct device *dev)
-+{
-+	struct pci1xxxx_i2c *i2c = dev_get_drvdata(dev);
-+	void __iomem *p1 = i2c->i2c_base + SMBUS_GEN_INT_STAT_REG_OFF;
-+	void __iomem *p2 = i2c->i2c_base + SMBUS_RESET_REG;
-+	struct pci_dev *pdev = to_pci_dev(dev);
-+	u32 regval;
-+
-+	regval = readw(p1);
-+	writew(regval, p1);
-+	pci1xxxx_i2c_config_high_level_intr(i2c, SMBALERT_WAKE_INTR_MASK, false);
-+	regval = readl(p2);
-+	regval &= ~PERI_SMBUS_D3_RESET_DIS;
-+	writel(regval, p2);
-+	i2c_mark_adapter_resumed(&i2c->adap);
-+	pci_wake_from_d3(pdev, false);
-+	return 0;
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(pci1xxxx_i2c_pm_ops, pci1xxxx_i2c_suspend,
-+			 pci1xxxx_i2c_resume);
-+
-+static void pci1xxxx_i2c_shutdown(struct pci1xxxx_i2c *i2c)
-+{
-+	pci1xxxx_i2c_config_padctrl(i2c, false);
-+	pci1xxxx_i2c_configure_core_reg(i2c, false);
-+}
-+
-+static int pci1xxxx_i2c_probe_pci(struct pci_dev *pdev,
-+				  const struct pci_device_id *ent)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct pci1xxxx_i2c *i2c;
-+	int ret;
-+
-+	i2c = devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
-+	if (!i2c)
-+		return -ENOMEM;
-+
-+	pci_set_drvdata(pdev, i2c);
-+	i2c->i2c_xfer_in_progress = false;
-+
-+	ret = pcim_enable_device(pdev);
-+	if (ret)
-+		return ret;
-+
-+	pci_set_master(pdev);
-+
-+	/*
-+	 * We are getting the base address of the SMB core. SMB core uses
-+	 * BAR0 and size is 32K.
-+	 */
-+	ret = pcim_iomap_regions(pdev, BIT(0), pci_name(pdev));
-+	if (ret < 0)
-+		return ret;
-+
-+	i2c->i2c_base =	pcim_iomap_table(pdev)[0];
-+	init_completion(&i2c->i2c_xfer_done);
-+	pci1xxxx_i2c_init(i2c);
-+
-+	ret = devm_add_action(dev, (void (*)(void *))pci1xxxx_i2c_shutdown, i2c);
-+	if (ret)
-+		return ret;
-+
-+	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = devm_request_irq(dev, pci_irq_vector(pdev, 0), pci1xxxx_i2c_isr,
-+			       0, pci_name(pdev), i2c);
-+	if (ret)
-+		return ret;
-+
-+	i2c->adap = pci1xxxx_i2c_ops;
-+	i2c->adap.dev.parent = dev;
-+
-+	snprintf(i2c->adap.name, sizeof(i2c->adap.name),
-+		 "MCHP PCI1xxxx i2c adapter at %s", pci_name(pdev));
-+
-+	i2c_set_adapdata(&i2c->adap, i2c);
-+
-+	ret = devm_i2c_add_adapter(dev, &i2c->adap);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "i2c add adapter failed\n");
-+
-+	return 0;
-+}
-+
-+static const struct pci_device_id pci1xxxx_i2c_pci_id_table[] = {
-+	{ PCI_VDEVICE(EFAR, 0xA003) },
-+	{ PCI_VDEVICE(EFAR, 0xA013) },
-+	{ PCI_VDEVICE(EFAR, 0xA023) },
-+	{ PCI_VDEVICE(EFAR, 0xA033) },
-+	{ PCI_VDEVICE(EFAR, 0xA043) },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(pci, pci1xxxx_i2c_pci_id_table);
-+
-+static struct pci_driver pci1xxxx_i2c_pci_driver = {
-+	.name		= "i2c-mchp-pci1xxxx",
-+	.id_table	= pci1xxxx_i2c_pci_id_table,
-+	.probe		= pci1xxxx_i2c_probe_pci,
-+	.driver = {
-+		.pm = pm_sleep_ptr(&pci1xxxx_i2c_pm_ops),
-+	},
-+};
-+module_pci_driver(pci1xxxx_i2c_pci_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Tharun Kumar P<tharunkumar.pasumarthi@microchip.com>");
-+MODULE_AUTHOR("Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>");
-+MODULE_DESCRIPTION("Microchip Technology Inc. pci1xxxx I2C bus driver");
+ 	if (stat & DW_IC_INTR_TX_ABRT) {
+ 		dev->cmd_err |= DW_IC_ERR_TX_ABRT;
+ 		dev->status = STATUS_IDLE;
 -- 
-2.25.1
+2.35.1
 
