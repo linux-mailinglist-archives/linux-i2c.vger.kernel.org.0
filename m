@@ -2,115 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A0895EEE73
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Sep 2022 09:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3AA5EEF00
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Sep 2022 09:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234300AbiI2HHv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 29 Sep 2022 03:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
+        id S232519AbiI2H3s (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 29 Sep 2022 03:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232380AbiI2HHf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 29 Sep 2022 03:07:35 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196E611A0D;
-        Thu, 29 Sep 2022 00:07:34 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MdPTH0W25z1P6vt;
-        Thu, 29 Sep 2022 15:03:15 +0800 (CST)
-Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
- (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 29 Sep
- 2022 15:07:32 +0800
-From:   Weilong Chen <chenweilong@huawei.com>
-To:     <wsa@kernel.org>, <chenweilong@huawei.com>,
-        <yangyicong@hisilicon.com>
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH next v4] i2c: hisi: Add support to get clock frequency from clock property
-Date:   Thu, 29 Sep 2022 15:15:47 +0800
-Message-ID: <20220929071547.135913-1-chenweilong@huawei.com>
-X-Mailer: git-send-email 2.31.GIT
+        with ESMTP id S233931AbiI2H3p (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 29 Sep 2022 03:29:45 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC47117884
+        for <linux-i2c@vger.kernel.org>; Thu, 29 Sep 2022 00:29:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UFZzNfAIX2R8zXSC4I+hI/wWOtpRjUEK934oPT84Pccp/3/SLXTcZmW3jCPBEsfFfAcB5TAJtXQ2ZqL0kI3MZ56VxU9mptWfmPtt3nE5X0zDmEiTLS1pokhqXrmkaHq4ez0/B3JCr3CJB8tz/p73syOhPhh91sScDs9lktlOSf1vP9NrXlE+F3ITOYL8XeJ2dETNqpKPgdlELF0iX26b/yPXPZ3hlPy6b565/OsOorpLxWUxP6X5UK66ELWCp1PiF5eX8PKnBnsLI/mIdQUtpGAxDbYio6PkF8k5yGPnWELghpoV5SeEXIMOdhotyyk+gGrEi34hYGI4jQGXJUrtAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hgyxBCf64F7Qx8uPy/JpNbuA/1uccD8jPt8dA/Fl0dk=;
+ b=NHzbM78/PaDHiv8YVuGf/9D4q55sBgoU2kHRJ+MOHQ1Lg5hxsx2jbjjVdc9V6XaY29FnG/UQ7WEfOXh1cFjZi9xJOvh08OESepulAYk6ZWk2lxNxrM58TOUnqxkwei78QjpUx/v7QfpH1D+zzxatyjd84h/06IGCVFUes2nEUet3x+7Is5ZJWdz0k1XRcdLPRfEi74zQJ8SV1MDRrAmjfIPCW7R+xUlvEGXxu9BHRDjzDcdBdURrly/T0TbaTSml24J9n56/rWetHhFH33+C2AA71+bGgwL62+O4Jnp5JE5y8D4kjhGKr812Qgb0CsPos0x9o6skTI/P4L2JcutrSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hgyxBCf64F7Qx8uPy/JpNbuA/1uccD8jPt8dA/Fl0dk=;
+ b=2GNXBNM1xfhFOHaLus7YujtJGu25WloOMw8SDnmuLlZNyV0SB4vOhQLsaz/OIsMDo2p3jQkm745Ng+eb3kCreZI1vesjjzmFH4HUZ6C7nm49d4jSGu5qkhCxqL/0hb4uGNM4xnfVDT/nfGjzzMTcoSNETbDWShdvzhBcjE7/BAw=
+Received: from BN9PR03CA0416.namprd03.prod.outlook.com (2603:10b6:408:111::31)
+ by PH8PR12MB7207.namprd12.prod.outlook.com (2603:10b6:510:225::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.15; Thu, 29 Sep
+ 2022 07:29:40 +0000
+Received: from BN8NAM11FT029.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:111:cafe::ae) by BN9PR03CA0416.outlook.office365.com
+ (2603:10b6:408:111::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17 via Frontend
+ Transport; Thu, 29 Sep 2022 07:29:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT029.mail.protection.outlook.com (10.13.177.68) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5676.17 via Frontend Transport; Thu, 29 Sep 2022 07:29:39 +0000
+Received: from [10.254.241.52] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 29 Sep
+ 2022 02:29:33 -0500
+Message-ID: <6112f323-63d2-f698-43aa-deed8aa6616c@amd.com>
+Date:   Thu, 29 Sep 2022 09:29:29 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v3] i2c: cadence: Add standard bus recovery support
+Content-Language: en-US
+To:     Wolfram Sang <wsa@kernel.org>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        <linux-i2c@vger.kernel.org>, <michal.simek@xilinx.com>,
+        <git-dev@amd.com>, Chirag Parekh <chiragp@xilinx.com>,
+        Robert Hancock <robert.hancock@calian.com>
+References: <20220728055150.18368-1-shubhrajyoti.datta@xilinx.com>
+ <YzNdytanT3dO1eai@shikoro> <YzNei/DBUohqYlX1@shikoro>
+From:   Michal Simek <michal.simek@amd.com>
+In-Reply-To: <YzNei/DBUohqYlX1@shikoro>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT029:EE_|PH8PR12MB7207:EE_
+X-MS-Office365-Filtering-Correlation-Id: 95323494-8cc9-4fbc-2d79-08daa1ec5ea7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qjv7xAn69iD5omK5ivW1JukeK4jlSBzWqkZ9nIE6VZrEQPn0gAXBslydIAvvaT80e7fElWAdzUFj7Ipb/gkIDB87QsuW6rtCjvRj/oYXDnmuR+feEnLD0TSNq18BeV6k/BZl/GRaggJicRQ3/Y+q6oQptTdkeQe9C0dDbTLKpRMfJfi2RmsRE6Lg1ylu7TPy0rBJF9fFLrZT7epnYDGX35ry6V0HtuvNTodZK8e5L2KKAgk6SnPPuTJ9St6Snw8IF7h8MlJ3YivUvszogETsh3C2fXYyj1AqSEAxutnfr0B4ndJcG/RFzWusMubGM1XD4j051vUizv6I7rIDxKRwCO+GU1c7Z5pADzA7QZI4EwWBPf738uzNrD43NBiHGpyvuHpmZSkay5CK/xikAtlwNA0GqgRMR+KxdT83XXz/22ds5TFiNN3N8m5WlbgO7zh4llVA0acxPCXi1SyA+JBRGKBfTI0tKbGARKeag0/G5l4cUuAZwuZTHrMZTQJogbyCicuW5RC+/ltTRllp2I4bPX6IxxGDT4LjD87yMjBreIqRmWC0q62rJ6VpmD5FvMiK5hIvbPvejUwewi0esphgRtzWxTUSqh4kBdR8aBfA8EfbVWKKguTa/bhrNM3Uw8/ot4gzpZe5pajGA2mVLb4yqpBNYCCKOHHGHq23DOXmh/kpBl9F+AZBnyyTsTt7c5ybPjrAhDwvbOAuTx33fkwxDK7dlmxcsHjTdOJInQv3lpuUBv2hmuM+gat/Vj5xXSdXv/C27UEREldDro6FUmweOCk73B1p1SkWfxhelqX2qxerSiNGtnF/CSKfLHjn3NPRK+1WVzl87bETuZ1vE0280w==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(39860400002)(376002)(136003)(451199015)(36840700001)(46966006)(40470700004)(47076005)(336012)(36860700001)(83380400001)(16526019)(186003)(40480700001)(426003)(110136005)(316002)(8676002)(86362001)(41300700001)(8936002)(70586007)(53546011)(36756003)(26005)(2616005)(31696002)(16576012)(2906002)(31686004)(4744005)(81166007)(478600001)(40460700003)(70206006)(44832011)(6666004)(5660300002)(82310400005)(356005)(82740400003)(36900700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 07:29:39.8089
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95323494-8cc9-4fbc-2d79-08daa1ec5ea7
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT029.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7207
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The clk_rate attribute is not generic device tree bindings for I2C
-busses described in Documentation/devicetree/bindings/i2c/i2c.txt.
-It can be managed by clock binding.
+Hi Wolfram,
 
-Support the driver to obtain clock information by clk_rate or
-clock property. Find clock first, if not, fall back to clk_rate.
+On 9/27/22 22:35, Wolfram Sang wrote:
+> 
+>> Applied to for-next, thanks!
+> 
+> Unrelated to this patch, but cppcheck found this issue:
+> 
+> drivers/i2c/busses/i2c-cadence.c:1038:33: warning: Condition 'actual_fscl>fscl' is always false [knownConditionTrueFalse]
+>    current_error = ((actual_fscl > fscl) ? (actual_fscl - fscl) :
+>                                  ^
+> drivers/i2c/busses/i2c-cadence.c:1035:19: note: Assuming that condition 'actual_fscl>fscl' is not redundant
+>    if (actual_fscl > fscl)
+>                    ^
+> drivers/i2c/busses/i2c-cadence.c:1038:33: note: Condition 'actual_fscl>fscl' is always false
+>    current_error = ((actual_fscl > fscl) ? (actual_fscl - fscl) :
+> 
+> I had a glimpse and I think the checker is correct...
 
-Signed-off-by: Weilong Chen <chenweilong@huawei.com>
-Acked-by: Yicong Yang <yangyicong@hisilicon.com>
----
-Change since v1:
-- Ordered struct field to inverted triangle.
-- Use devm_clk_get_optional_enabled().
-- Use IS_ERR_OR_NULL.
-Link: https://lore.kernel.org/lkml/20220921101540.352553-1-chenweilong@huawei.com/
+Are you still using your ninja-check script?
+Can you please share your latest version?
 
-Change since v2:
-- Remove redundant blank line
-Link: https://lore.kernel.org/all/20220923011417.78994-1-chenweilong@huawei.com/
-
-Change since v3:
-- Commit message update
-Link: https://lore.kernel.org/lkml/20220926091503.199474-1-chenweilong@huawei.com/T/
-
- drivers/i2c/busses/i2c-hisi.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
-index 67031024217c..e4b0ebe54f6f 100644
---- a/drivers/i2c/busses/i2c-hisi.c
-+++ b/drivers/i2c/busses/i2c-hisi.c
-@@ -8,6 +8,7 @@
- #include <linux/acpi.h>
- #include <linux/bits.h>
- #include <linux/bitfield.h>
-+#include <linux/clk.h>
- #include <linux/completion.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
-@@ -90,6 +91,7 @@ struct hisi_i2c_controller {
- 	struct i2c_adapter adapter;
- 	void __iomem *iobase;
- 	struct device *dev;
-+	struct clk *clk;
- 	int irq;
- 
- 	/* Intermediates for recording the transfer process */
-@@ -456,10 +458,15 @@ static int hisi_i2c_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
--	if (ret) {
--		dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
--		return ret;
-+	ctlr->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
-+	if (IS_ERR_OR_NULL(ctlr->clk)) {
-+		ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
-+		if (ret) {
-+			dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
-+			return ret;
-+		}
-+	} else {
-+		clk_rate_hz = clk_get_rate(ctlr->clk);
- 	}
- 
- 	ctlr->clk_rate_khz = DIV_ROUND_UP_ULL(clk_rate_hz, HZ_PER_KHZ);
--- 
-2.31.GIT
+Thanks,
+Michal
 
