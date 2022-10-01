@@ -2,58 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C89885F205E
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Oct 2022 00:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6625F2063
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Oct 2022 00:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiJAWfm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 1 Oct 2022 18:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
+        id S229577AbiJAWkb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 1 Oct 2022 18:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiJAWfl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 1 Oct 2022 18:35:41 -0400
+        with ESMTP id S229568AbiJAWka (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 1 Oct 2022 18:40:30 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B44E00F;
-        Sat,  1 Oct 2022 15:35:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE212AE3E;
+        Sat,  1 Oct 2022 15:40:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C82CB60CEC;
-        Sat,  1 Oct 2022 22:35:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0C7CC433D6;
-        Sat,  1 Oct 2022 22:35:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB78960DD1;
+        Sat,  1 Oct 2022 22:40:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B644C43470;
+        Sat,  1 Oct 2022 22:40:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664663738;
-        bh=swneQQXOQAQ0Wdj3JPZ6GWV3p1eHW3tC1dAEqKMmuaU=;
+        s=k20201202; t=1664664029;
+        bh=SDeUau1NRrwHVnkDKLEDKqadUV11vVH8rM3Ts1FOf/8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FN/w/UsqTzHQtetSNGrpk0tLzpOf9UiAqYXiiR4dlVu+HdPvOUEbPXos9PGL1bZrq
-         OutAiAOS2TOpjU5kkOqjlEtJgAz/oEOyO33vrfYYezkqy6IKEoaBn6cCkHllhyY1Cn
-         5mEpI5G4Cjs2BEY1ZFatmbEwgUDV0Z3Qbkn+RuLk3InW/y3Ou3sqAgFcoQOXTQaK3d
-         J6x/GYkm3iZxbXBqDfO8Jk1DxUQ6BlE6QK6iHA/YXN5tgRhDq3oe57SOQQD++I+Uvv
-         JV4mxkxUZWIdgJhVC7em4JMNIJqHyEaL8GZKefL83VxHEoaOB126Jq/VZap4Yi5k+9
-         O8rha9OCDcQzg==
-Date:   Sun, 2 Oct 2022 00:35:34 +0200
+        b=C3DyGo20v4EL1/tSzgwddRYDMIVY6HC1KLAD+UuK2/wmBIF1WzJDfzo5faYlFIr1q
+         sbPl5T6SuuhVFvuBqOHXRu+B6sXKlKza2fZvO6kuW/YGHIqNYJNlgSBsCQbK3B7ZDc
+         66hZqDJQkXI7A7dTWcxVs1Kx92OrOs6gW9fzJTTXsn/mN4ay+LAmkQC8F60Or63gUQ
+         z95IL/maox2CP/18vSoTeyh5UKIH1JBEof76LwBom8bNTsm5wdTxRrR915Tm3q6VnO
+         UQTI8GW3T/wPrGcrZK8NK3KpUIfB6lFLZSrGmpNsEsPGw8NofdmEGdfJl6jr9oTdfs
+         S2rCHFMkZ+XiA==
+Date:   Sun, 2 Oct 2022 00:40:25 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Marek Vasut <marex@denx.de>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH] dt-bindings: i2c: st,stm32-i2c: Document wakeup-source
- property
-Message-ID: <YzjAtpv+DEuN0cn3@shikoro>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Samuel Clark <slc2015@gmail.com>, stable@vger.kernel.org
+Subject: Re: [PATCH] i2c: designware: Fix handling of real but unexpected
+ device interrupts
+Message-ID: <YzjB2WSQfL7i4Teo@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Marek Vasut <marex@denx.de>, linux-arm-kernel@lists.infradead.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
-References: <20220926204653.381722-1-marex@denx.de>
+        Hans de Goede <hdegoede@redhat.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>, Samuel Clark <slc2015@gmail.com>,
+        stable@vger.kernel.org
+References: <20220927135644.1656369-1-jarkko.nikula@linux.intel.com>
+ <YzMKHf+aNKiGVkyn@smile.fi.intel.com>
+ <31477388-b57b-5383-9c6a-18905c28253e@linux.intel.com>
+ <5b8a4060-b800-6701-e0c9-cc8dfa0e6b67@redhat.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ix0A9gtV74R/Odxm"
+        protocol="application/pgp-signature"; boundary="CLyLKKq1hI7ip7Vj"
 Content-Disposition: inline
-In-Reply-To: <20220926204653.381722-1-marex@denx.de>
+In-Reply-To: <5b8a4060-b800-6701-e0c9-cc8dfa0e6b67@redhat.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,43 +70,35 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Ix0A9gtV74R/Odxm
+--CLyLKKq1hI7ip7Vj
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Sep 26, 2022 at 10:46:53PM +0200, Marek Vasut wrote:
-> Document wakeup-source property. This fixes dtbs_check warnings
-> when building current Linux DTs:
->=20
-> "
-> arch/arm/boot/dts/stm32mp153c-dhcom-drc02.dtb: i2c@40015000: Unevaluated =
-properties are not allowed ('wakeup-source' was unexpected)
-> "
->=20
-> Signed-off-by: Marek Vasut <marex@denx.de>
-
-Applied to for-current, thanks!
 
 
---Ix0A9gtV74R/Odxm
+> I will let you know if I hit any issues, if you don't hear anything from
+> me then you can assume I have not hit any issues :)
+
+Ehrm, how long should I wait before applying the patch?
+
+
+--CLyLKKq1hI7ip7Vj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmM4wLYACgkQFA3kzBSg
-KbZL1BAAjZo6/BDX8hm/eD9r6tlV4/e5VpfdUTfSK6gQtW1EXGzyfXzWjrh160S/
-+VIejBWXHeB/XPuvSVfrbnJ+a5hV8HkjPKXMit49CoEYjtik1N9RPppxlzSoLofP
-b1WAoGkO9g2oViNroZZMLSZnr6LJ+z0XZd8+SVpr0ocpyJFa+wzVxTFNUYfT/59b
-iXyuiO6ze+HaAsYNq9UeWeXwyi7fmZaDGCRuMuUqUcxG2M8zCPTMzSdboAVwGLj7
-wKfHRp+oYbJO4eSSg7lQ6pj9psSxgO4GBY9tUXQb2WaZr0P4hgk4HEjiaXo1FAyy
-JKXOx7C5kGWEiFCSa+2moH8DzcWzbHhhRo7IEGHoFqFGWeeTGQNlJwASSQ9tdrYm
-zt0t1fMbd/VZr7wsGLkDZ83cdqiZD0t4bPoZOhqJvhEvhwzWJ++V9H+ctjoX9F3h
-US2YPc2B6ERQ/kFWPOcXiV4JXhXAjc9l0ryHfES/rtTfnIwPx9+4Nu4ETwaRbiWa
-MIzRCrAapWn9qEyhO8EAQP3djyR5bt+AQipZk1ugr0pWERiRLzbOpQfWxDgZFpFP
-6VzhcdJxrO9AyecojWhHnlkOtqbVchU8pUBtZKPobMCSFcU8OFzP5BryvLt6X2Pi
-Lf2p38U5K4fhQ0S7ECX5hEKMUN5mfvXCnplTKGCGB0xAebJMc0o=
-=YoX9
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmM4wdkACgkQFA3kzBSg
+KbaGTA/+LjVJeCfOL9M037XFqvz6Z139BdGtnbvQDTPmNscohm4o4LQx5PuK7a8D
+d1/ht1flvKW7mFfGrmJc6nP42wETNhCfRpvHCqsHNBjH+WTWjJS1hWOVw1eUoIxk
+vn2phrKETo9pBFatXhuJWRVZ2KsdIOgtF7siEOmXA1qi20b8VtAQm8S6RqqslpCv
+tQfvy4p4quZJqW4SYlQQuP/WBRA12NOKi06yeWkSTvJ2Vk23owICsCWgZfUM2pPa
+bNy8lacY6wbU86EdeIq/KnI2ZAJf4ZMozpF3QxMLWPirocSnnPAVzssPRQaIU6M2
+Dv8bwY1rZ4qAU6OLUN4yKOHxWTrOVFGuTcXnFOc8QPjZnFrm1RYOd3Y8v4SaG9/+
+HWQ5SQPqmdWhxaKKWpR35JrGCFV0PdwqGPpVAkgmpwWotHQqkm7TV4akMIh5UP9t
+mNbixPdx0YWPt0xAixH9o3QOaxQZbg2VSUKezDRhAURCKVyx+1BV4CEhO50ZHIx6
+EJzyTVWTpX8YOx3L6HJXEpc74wX6543n5XnaAebFO2/Fy57kBVCGnCbiIBrnqi/O
+nT9+A21SvYMf3R7FiaulppAv7I1mD34b4pQ1GRVf2kvNu27+iYyTLsuax+yodfHx
+J7eIXbjEAeJcneYeExOdneR5/8VCxwYM0k8q0qcTwwKKRwbsfkk=
+=y/YH
 -----END PGP SIGNATURE-----
 
---Ix0A9gtV74R/Odxm--
+--CLyLKKq1hI7ip7Vj--
