@@ -2,64 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6625F2063
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Oct 2022 00:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A5E5F2065
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Oct 2022 00:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbiJAWkb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 1 Oct 2022 18:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
+        id S229568AbiJAWnu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 1 Oct 2022 18:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiJAWka (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 1 Oct 2022 18:40:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE212AE3E;
-        Sat,  1 Oct 2022 15:40:30 -0700 (PDT)
+        with ESMTP id S229592AbiJAWnt (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 1 Oct 2022 18:43:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D71A3AB04;
+        Sat,  1 Oct 2022 15:43:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB78960DD1;
-        Sat,  1 Oct 2022 22:40:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B644C43470;
-        Sat,  1 Oct 2022 22:40:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2DACCB80B04;
+        Sat,  1 Oct 2022 22:43:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7096DC433D6;
+        Sat,  1 Oct 2022 22:43:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664664029;
-        bh=SDeUau1NRrwHVnkDKLEDKqadUV11vVH8rM3Ts1FOf/8=;
+        s=k20201202; t=1664664223;
+        bh=ZH+MM/G5aPTtEgmWD3DknvkKViOX8C2PARyh+5t9aEo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C3DyGo20v4EL1/tSzgwddRYDMIVY6HC1KLAD+UuK2/wmBIF1WzJDfzo5faYlFIr1q
-         sbPl5T6SuuhVFvuBqOHXRu+B6sXKlKza2fZvO6kuW/YGHIqNYJNlgSBsCQbK3B7ZDc
-         66hZqDJQkXI7A7dTWcxVs1Kx92OrOs6gW9fzJTTXsn/mN4ay+LAmkQC8F60Or63gUQ
-         z95IL/maox2CP/18vSoTeyh5UKIH1JBEof76LwBom8bNTsm5wdTxRrR915Tm3q6VnO
-         UQTI8GW3T/wPrGcrZK8NK3KpUIfB6lFLZSrGmpNsEsPGw8NofdmEGdfJl6jr9oTdfs
-         S2rCHFMkZ+XiA==
-Date:   Sun, 2 Oct 2022 00:40:25 +0200
+        b=u3XZ5ZaK5z8bbJUSWKl2YMmjFIGRHb263MMuT5uOr4dmXd7KtUbU7km2NCa9dzjnB
+         vDsu9garKYlOa/qbWsOZGD+jUOISakw8ua3mXKTmoWz3OmnH49ryxI5CEGZnvJUIo3
+         ycVkeGZ4AyaTZEnLt1vxgKLZ5TWATBzSzP90PPgYSHLMixHsbZ/XgK9YjrDQzzadjG
+         a6g4Dvghw6JRhvI60Md1N6RDLWgFw369HESj8HtPFov1mb/UzTjmBaT4cji1+Kyhj0
+         MUZ5udqteAHNvvHjWlunfxeEIBfjqj/HgBezpvx/4KxNAWtrD6szgXDkoHmiYz5qEX
+         Mw592vKhAkppQ==
+Date:   Sun, 2 Oct 2022 00:43:40 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Samuel Clark <slc2015@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] i2c: designware: Fix handling of real but unexpected
- device interrupts
-Message-ID: <YzjB2WSQfL7i4Teo@shikoro>
+        Jan Dabros <jsd@semihalf.com>
+Subject: Re: [PATCH v2 1/2] i2c: designware-pci: Group AMD NAVI quirk parts
+ together
+Message-ID: <YzjCnJRJXXZHNHn0@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>, Samuel Clark <slc2015@gmail.com>,
-        stable@vger.kernel.org
-References: <20220927135644.1656369-1-jarkko.nikula@linux.intel.com>
- <YzMKHf+aNKiGVkyn@smile.fi.intel.com>
- <31477388-b57b-5383-9c6a-18905c28253e@linux.intel.com>
- <5b8a4060-b800-6701-e0c9-cc8dfa0e6b67@redhat.com>
+        Jan Dabros <jsd@semihalf.com>
+References: <20220929094215.76236-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CLyLKKq1hI7ip7Vj"
+        protocol="application/pgp-signature"; boundary="yKlnirQlFZYTgFWp"
 Content-Disposition: inline
-In-Reply-To: <5b8a4060-b800-6701-e0c9-cc8dfa0e6b67@redhat.com>
+In-Reply-To: <20220929094215.76236-1-andriy.shevchenko@linux.intel.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,35 +63,44 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---CLyLKKq1hI7ip7Vj
+--yKlnirQlFZYTgFWp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Sep 29, 2022 at 12:42:14PM +0300, Andy Shevchenko wrote:
+> The code is ogranized in a way that all related parts
+> to the certain platform quirk go together. This is not
+> the case for AMD NAVI. Shuffle code to make it happen.
+>=20
+> While at it, drop the frequency definition and use
+> hard coded value as it's done for other platforms and
+> add a comment to the PCI ID list.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+
+Applied to for-next, thanks!
 
 
-> I will let you know if I hit any issues, if you don't hear anything from
-> me then you can assume I have not hit any issues :)
-
-Ehrm, how long should I wait before applying the patch?
-
-
---CLyLKKq1hI7ip7Vj
+--yKlnirQlFZYTgFWp
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmM4wdkACgkQFA3kzBSg
-KbaGTA/+LjVJeCfOL9M037XFqvz6Z139BdGtnbvQDTPmNscohm4o4LQx5PuK7a8D
-d1/ht1flvKW7mFfGrmJc6nP42wETNhCfRpvHCqsHNBjH+WTWjJS1hWOVw1eUoIxk
-vn2phrKETo9pBFatXhuJWRVZ2KsdIOgtF7siEOmXA1qi20b8VtAQm8S6RqqslpCv
-tQfvy4p4quZJqW4SYlQQuP/WBRA12NOKi06yeWkSTvJ2Vk23owICsCWgZfUM2pPa
-bNy8lacY6wbU86EdeIq/KnI2ZAJf4ZMozpF3QxMLWPirocSnnPAVzssPRQaIU6M2
-Dv8bwY1rZ4qAU6OLUN4yKOHxWTrOVFGuTcXnFOc8QPjZnFrm1RYOd3Y8v4SaG9/+
-HWQ5SQPqmdWhxaKKWpR35JrGCFV0PdwqGPpVAkgmpwWotHQqkm7TV4akMIh5UP9t
-mNbixPdx0YWPt0xAixH9o3QOaxQZbg2VSUKezDRhAURCKVyx+1BV4CEhO50ZHIx6
-EJzyTVWTpX8YOx3L6HJXEpc74wX6543n5XnaAebFO2/Fy57kBVCGnCbiIBrnqi/O
-nT9+A21SvYMf3R7FiaulppAv7I1mD34b4pQ1GRVf2kvNu27+iYyTLsuax+yodfHx
-J7eIXbjEAeJcneYeExOdneR5/8VCxwYM0k8q0qcTwwKKRwbsfkk=
-=y/YH
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmM4wpwACgkQFA3kzBSg
+KbbIrg//RUnc+A8nHg7SK+Y4aurBE1x0x2hrmbGlbUxKphb0zX6WQ2Fj/MoJsGjT
+OPr8AvkMyfIcjXvtByvMcR3zuMoS5w6pAyJUqnYb9BQHihSMIk3YPYwxc18JWZKu
+rNt9XMaHKxDBe/NIPzU0q4KUJJPTENRMWnjZL+6XhfJtxMs1rtnunbf88zryPDQn
+gJuzo5cw0wklLYIaqQacHpIn1J63N7/3qB+epvSMKXNaI3WdKqdY3W3RwMdIS213
+fmX06wynmKuPo1TUUYZT5XGLeLU5Mf10AF5zyd6mDdjU2rnAK5iWFDDcLmNLMeNs
+qv5k5TQMaKyHiZWFQEs34f2NlNhHMRafT4VXkmCJ8RJ3eYKn1lHzPAzY3hNaMt+v
+by8hGHz56ifDgYeEMZ7TvuIBrLb3VVp/xngghB6jH1QeTfEXcHMnAGsb+hQoFWpW
+kw9Ol2Q6Fh6C0AmJZkawGzFbQ5B2kuXNvz1apHsRrCwMrudAHAbzkTwsCqutehCX
+VNrm+Juh4AX49JGkgoAKnuo++bfAxCG9VA+KJsMloJjCijI9+IEtnM3H1kjSLoR7
+Vl3iGioEuCRZ6mrxdCktgDAKNmETPQWSVk8LFzJtJ/TgW4uJnHL/aoQYPoPQKgFk
+PAIsEsjElezlDBfZnb63vF1xzfkVa0p2MeQloBPqr0I1Xxg1JWM=
+=3nYH
 -----END PGP SIGNATURE-----
 
---CLyLKKq1hI7ip7Vj--
+--yKlnirQlFZYTgFWp--
