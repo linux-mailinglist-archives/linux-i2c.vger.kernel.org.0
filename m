@@ -2,68 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9FD5F2320
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Oct 2022 14:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 767F65F2322
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Oct 2022 14:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiJBM3j (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 2 Oct 2022 08:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36258 "EHLO
+        id S229987AbiJBM35 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 2 Oct 2022 08:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiJBM3g (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 2 Oct 2022 08:29:36 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C77BB4D;
-        Sun,  2 Oct 2022 05:29:33 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id bs18so7622427ljb.1;
-        Sun, 02 Oct 2022 05:29:33 -0700 (PDT)
+        with ESMTP id S229958AbiJBM3o (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 2 Oct 2022 08:29:44 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CEDA47D;
+        Sun,  2 Oct 2022 05:29:40 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id a8so13058812lff.13;
+        Sun, 02 Oct 2022 05:29:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Dk2IiPh91fpjlWFjrDYlxIa3PQhf+qigCe0+xfWcs5Y=;
-        b=Z1UdzRub1K/IsYPk0DWGdeKpM4wePalnZDcwubIykYdW3wEI3+9fP5VRVU75nn+nrC
-         FO8H8NInzut1UqtVYjiWfciNDZ++PVZFFGpMLmVt9ZjUSyVoIEZtkUiSAODvgzX7p4zS
-         7Xm1+54vYMsYf6N4My0mkm2DjayWPN8y+vrZH0VK+GFZnycYkl+SJmG/25BrOVqt3IO+
-         vXzhs9CjY8zwYP7ku5HehEW27si7kfLKZCelIXTsqMa1C0f6G+FKRHUeYJVA5QGrSv+0
-         Yvh8UGmbuiMKp4aHNyITptvmjc+zBj6EYSEnGrqq1LftfbwdFB/0VkH5Ox3gD/SkHvr9
-         tAag==
+        bh=JGB1ZM5jp4Wd/f3Soa04BQKNJMQfCr+/ee6e5E0crXc=;
+        b=ENOZ6YJ9ZYuRybN/zwcRCY5qToCf532j5Zwc/ouZR6722Ooci195qg0ieJD2agRn8p
+         zb6aYOlUz3xehzr79dbXJl9yVt1HW7AqM9njEL6zCi4ewiyMFUhQ5XTRfqQVE2YhF+VU
+         k1k6bd//xQxQeqboMT+bUXkQgGHAe9y2gQUmKUa/yGxGk5tVR64rAP2Hnag1FnGvPT8c
+         Fv77Bq0puOlYg6zlI0OjbrUldhxNguPc9PixtHrVcjKUhAugNrG7V3xH232+11TXsN1y
+         JZdU3yZ3xQ1UI2AUBBrlcqx/L2R8r3QqwUJhJ/YcmIOVv5do751Vw5D8MF6M3IWKpvj6
+         fhmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=Dk2IiPh91fpjlWFjrDYlxIa3PQhf+qigCe0+xfWcs5Y=;
-        b=vv55sHAlU/cV+VanYg4Pjiqll1GozbDii/Ipzvz/RVPk7M7ptOl5cx2eFPfcyi6UF5
-         NeIMXL6ZpkMTA/kasmbswFnwR6Ffkrqat1K1UJ6M4y28NpHQxqk2+qI6xkqQmolWkbrR
-         dovFHvURi+2tLT6YssKq5S/7qXpMy27a6GRkpEac1k8OqVCedJegCnU1YqY8o0ovWOXX
-         5twI40/q2kFyYNAzmNnu3WSJzRT/jqSTtpL1Wc2RxGgnWusBi4Z40NRwT5vLMGEpa6Pk
-         2kHsjsblRuxyTjHdUqH+MRI9hjn8HgH11tfwNZ0y/aI34IYKYzvW5HTDxqxQt0T1JT9Y
-         Ur5A==
-X-Gm-Message-State: ACrzQf10HIUZeJTplK0179m6TLE6oIhIB92x8wHP70UyDEAefaw1jmjH
-        vfqgOD+2zk4ibi8VQzKRFzM22WO2IEGLtw==
-X-Google-Smtp-Source: AMsMyM60RL/C3BusedRRuYpGyHN89K8qweOFvJl0+NfITULqA/KF6e1N8U78PTUUzq/WahYj84bQpQ==
-X-Received: by 2002:a2e:b5d7:0:b0:26d:98c2:6ad2 with SMTP id g23-20020a2eb5d7000000b0026d98c26ad2mr5331750ljn.215.1664713771648;
-        Sun, 02 Oct 2022 05:29:31 -0700 (PDT)
+        bh=JGB1ZM5jp4Wd/f3Soa04BQKNJMQfCr+/ee6e5E0crXc=;
+        b=WhenlK5U4X74s2W7mHonKOsmHxp36nA7RNjzJjTeCpTyXdKVZf/22P5kRjNwA0z3Jz
+         NcJ1n//wsjVdcqUZcyTElbyq1S9cQpOF+aFOmjYK3b3TEyfBk2CRm+HRLuFUIZxunJh0
+         lwkjAb8Il1wPJJddYquImT45V8bm6f8NSfCGARssliIgoI5GHfBs5tUXRfCB/hZCHyf2
+         GHaFwAV9a2gMPaOaaRjsAqvfnINHly8cfl4i5vC/DU+xJ6LVCkCBaE0tB0qzDuglJCon
+         rPttrclp4cl3TCQwXMcUvIIe8BQukqQukBSLvmVevQa7gmvc8ZjmmiqCjVu2yVI6nEl5
+         ryvw==
+X-Gm-Message-State: ACrzQf1tjSugZVJNDjUJm1ETKXAl9qZRLVDtxKorwWtLrZZqqtHXg68P
+        RcT2OIdHIvJsENguc7oBz1dfz0MDmd/+qg==
+X-Google-Smtp-Source: AMsMyM6zup3t+cumnpI0YlukJ9eWABiBU3LJsEf237ETLlnSQf1NUeqxLfYMMjIgwNersBXsWZ0Ejw==
+X-Received: by 2002:a05:6512:290:b0:4a2:209a:a11f with SMTP id j16-20020a056512029000b004a2209aa11fmr2285753lfp.413.1664713778871;
+        Sun, 02 Oct 2022 05:29:38 -0700 (PDT)
 Received: from i-vetokaappi.home.lan (dsl-hkibng42-5673c7-93.dhcp.inet.fi. [86.115.199.93])
-        by smtp.gmail.com with ESMTPSA id v18-20020a197412000000b0049493c14b17sm1064948lfe.181.2022.10.02.05.29.31
+        by smtp.gmail.com with ESMTPSA id v18-20020a197412000000b0049493c14b17sm1064948lfe.181.2022.10.02.05.29.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Oct 2022 05:29:31 -0700 (PDT)
+        Sun, 02 Oct 2022 05:29:38 -0700 (PDT)
 From:   =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Rayyan Ansari <rayyan@ansari.sh>,
         =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
         Loic Poulain <loic.poulain@linaro.org>,
         Robert Foss <robert.foss@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/6] dt-bindings: i2c: qcom,i2c-cci: Document clocks for MSM8974
-Date:   Sun,  2 Oct 2022 15:28:55 +0300
-Message-Id: <20221002122859.75525-4-matti.lehtimaki@gmail.com>
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 4/6] i2c: qcom-cci: Add MSM8226 compatible
+Date:   Sun,  2 Oct 2022 15:28:56 +0300
+Message-Id: <20221002122859.75525-5-matti.lehtimaki@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221002122859.75525-1-matti.lehtimaki@gmail.com>
 References: <20221002122859.75525-1-matti.lehtimaki@gmail.com>
@@ -80,25 +75,29 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Uses same clocks as MSM8226.
+From: Rayyan Ansari <rayyan@ansari.sh>
 
+Add a compatible for MSM8226's Camera Control Interface, which is
+similar to the one used on MSM8916.
+
+Signed-off-by: Rayyan Ansari <rayyan@ansari.sh>
 Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
 ---
- Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml | 1 +
+ drivers/i2c/busses/i2c-qcom-cci.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-index c0f9537a4bb1..cf9f8fda595f 100644
---- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-+++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-@@ -91,6 +91,7 @@ allOf:
-           contains:
-             enum:
-               - qcom,msm8226-cci
-+              - qcom,msm8974-cci
-     then:
-       properties:
-         clocks:
+diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
+index ea48e6a9cfca..87739fb4388b 100644
+--- a/drivers/i2c/busses/i2c-qcom-cci.c
++++ b/drivers/i2c/busses/i2c-qcom-cci.c
+@@ -807,6 +807,7 @@ static const struct cci_data cci_v2_data = {
+ };
+ 
+ static const struct of_device_id cci_dt_match[] = {
++	{ .compatible = "qcom,msm8226-cci", .data = &cci_v1_data},
+ 	{ .compatible = "qcom,msm8916-cci", .data = &cci_v1_data},
+ 	{ .compatible = "qcom,msm8974-cci", .data = &cci_v1_5_data},
+ 	{ .compatible = "qcom,msm8996-cci", .data = &cci_v2_data},
 -- 
 2.34.1
 
