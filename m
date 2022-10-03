@@ -2,100 +2,127 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A9A5F2B64
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Oct 2022 10:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B23155F2C98
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Oct 2022 10:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbiJCIEj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Oct 2022 04:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
+        id S230334AbiJCI7B (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Oct 2022 04:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbiJCIEI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Oct 2022 04:04:08 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8E0286EA
-        for <linux-i2c@vger.kernel.org>; Mon,  3 Oct 2022 00:40:08 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id hy2so20260523ejc.8
-        for <linux-i2c@vger.kernel.org>; Mon, 03 Oct 2022 00:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Ua3/Yq6pE+E6VT066jpB76qJ00RlV5Rf+my1G3LOuw8=;
-        b=NnAGWf0fgEthCAU1J7h0H6oBj4jtdnSVSxUs9RsOK7nxkcEjVus6mDRXoEKHDuJElP
-         KOJ91f/rZwSo30DKuqCR4uZRjKzY+JhfpXvndGYE7FnRojh0BqlvQEUNGF6oS3q980uR
-         5lT2VjcsbRuFJfO7cwRUvRcuMqTcec0pEL0wCP5qF5mmsz8zSiAGihntt2lsX3v/yoLd
-         W9NhdfyVl0lsAX5RS+oHTz44oTBs50jL0ybGzravM+/uOAZ60/67ol9LW3cKxn87jTJ/
-         L4zRHQPM+Iy/t+NiXvaYdQSqhXW8C8liG2PowgI1ZPoru9YostcDUoNS7BfNnCo+OQzh
-         rQ8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Ua3/Yq6pE+E6VT066jpB76qJ00RlV5Rf+my1G3LOuw8=;
-        b=abZ3hQwLu9Mmz/zpl7J3/L1Rv+Ae32KZFWUeOgptEdXGXtd0bPGKD5Nd8GU68Z6fC/
-         ObfXn6rJZMdkVFNH4Pg4VEo+NQNCF/izI6paCuBh0RkDooxYAtIyUkD4JUSdsAIYF4QK
-         QgUboRXNbMkvnpJco3poa27lIbY2MmyFqf6pkX6r5by8F1UbWkgTBVOSsekoRaOKaWR6
-         n5o++bJbL/+gsdkv9xeUb7K8V1/uA53bxJUtC9TchipeGOTgleBPgLkdMvvy1+8/atew
-         hNTPGvYAFbMtUFK3ilMBVLds2zUqej5RJCWCgHTsrLbflxfJ0/Ex0mn1Cm05FucpcHp8
-         WqMw==
-X-Gm-Message-State: ACrzQf1cwWtytTS4gW47c/Ss2P1uI0kTQ+LjsDIL2Li+0c4JFL2Mpnu/
-        AL2koyoTNx+UhwI9BERxQ+7l+0kp/Q+aRQ==
-X-Google-Smtp-Source: AMsMyM4kUIkDgRtU08BCBHxyQw19PsWsHSzVj2+D9Dyfae9PXxMLabP6hVXquujn84cf0DteJirSAA==
-X-Received: by 2002:a05:6512:11e9:b0:49d:7909:ff9b with SMTP id p9-20020a05651211e900b0049d7909ff9bmr6530866lfs.568.1664781928013;
-        Mon, 03 Oct 2022 00:25:28 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id f5-20020a056512228500b00492e570e036sm1347482lfu.54.2022.10.03.00.25.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Oct 2022 00:25:27 -0700 (PDT)
-Message-ID: <b20c81a6-42fc-cdcd-80da-7aa2e574c318@linaro.org>
-Date:   Mon, 3 Oct 2022 09:25:25 +0200
+        with ESMTP id S231329AbiJCI6m (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Oct 2022 04:58:42 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFC72AC3;
+        Mon,  3 Oct 2022 01:44:09 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2936iMQA015401;
+        Mon, 3 Oct 2022 08:44:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=corp-2022-7-12;
+ bh=IQ8rghEJ8YiuYGyXSLHV54jhIFml8XNUB/YL71WrwyA=;
+ b=zzbdbL7UkVc3QLn+kl7gqFuMKchou3I16m/7n0sAi4JyNLRASfJdvrmHByAtSd3zSDJ8
+ aY3FHH7iVV+KDSUBhnir+o/+rLSQshPfoA4Pw2woMtmbpBW+er/t0Z3hpWPpE0Vg9sID
+ pFCxAtqKofAV6Zgp8L7Ypu8Yqf1kGAeOLB/q2N86b3rqzUv7W2YkzDq3+gWATEziOkAs
+ yCwmt4kjxnhv2zCNwZdWMzV3JuxT3U/wg5146zBI7YZ4cWJi4ynM7YCW1SrYPmVRRJhy
+ n+NPcYwlf7jZ/edGl25ao3rkWknI+/KCHtngU4WJwDXfstiZpGoBVRbADN3GT50CUIrV vw== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jxc51txqw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 03 Oct 2022 08:44:05 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2937tuSh016479;
+        Mon, 3 Oct 2022 08:44:04 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jxc02wyue-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 03 Oct 2022 08:44:04 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2938i4Wu013971;
+        Mon, 3 Oct 2022 08:44:04 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.147.25.63])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3jxc02wytx-1;
+        Mon, 03 Oct 2022 08:44:03 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@oracle.com, george.kennedy@oracle.com,
+        darren.kenny@oracle.com, vegard.nossum@oracle.com,
+        stable@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 4.14 0/1] Fix NULL dereference in i2cdev_ioctl_rdwr()
+Date:   Mon,  3 Oct 2022 01:43:45 -0700
+Message-Id: <20221003084346.4652-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v1 2/6] dt-bindings: i2c: qcom,i2c-cci: Document MSM8226
- compatible
-Content-Language: en-US
-To:     =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221002122859.75525-1-matti.lehtimaki@gmail.com>
- <20221002122859.75525-3-matti.lehtimaki@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221002122859.75525-3-matti.lehtimaki@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-03_02,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0 bulkscore=0
+ suspectscore=0 mlxlogscore=776 mlxscore=0 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210030052
+X-Proofpoint-GUID: kENcoY2An1Y55vdBb9SCfC8VpkVPBugo
+X-Proofpoint-ORIG-GUID: kENcoY2An1Y55vdBb9SCfC8VpkVPBugo
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 02/10/2022 14:28, Matti Lehtimäki wrote:
-> MSM8226's Camera Control Interface has one master and 3 clocks.
-> 
-> Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
-> ---
->  .../devicetree/bindings/i2c/qcom,i2c-cci.yaml | 22 +++++++++++++++++--
->  1 file changed, 20 insertions(+), 2 deletions(-)
-> 
+This backport patch addresses a NULL pointer dereference bug in 4.14.y
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+BUG: unable to handle kernel NULL pointer dereference at 0000000000000010
+IP: i2cdev_ioctl_rdwr.isra.2+0xe4/0x360
+PGD 13af50067 P4D 13af50067 PUD 13504c067 PMD 0
+Oops: 0000 [#1] PREEMPT SMP
+Dumping ftrace buffer:
+  (ftrace buffer empty)
+Modules linked in:
+CPU: 1 PID: 17421 Comm: rep Not tainted 4.14.295 #7
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.11.0-2.el7 04/01/2014
+task: ffff88807c43a080 task.stack: ffffc90000d0c000
+RIP: 0010:i2cdev_ioctl_rdwr.isra.2+0xe4/0x360
+RSP: 0018:ffffc90000d0fdf0 EFLAGS: 00010297
+RAX: ffff88807c43a080 RBX: 0000000000000000 RCX: 0000000000000000
+....
+Call Trace:
+  i2cdev_ioctl+0x1a5/0x2a0
+  ? i2cdev_ioctl_rdwr.isra.2+0x360/0x360
+  do_vfs_ioctl+0xac/0x840
+  ? syscall_trace_enter+0x159/0x4a0
+  SyS_ioctl+0x7e/0xb0
+  do_syscall_64+0x8d/0x220
+....
+ RIP: i2cdev_ioctl_rdwr.isra.2+0xe4/0x360 RSP: ffffc90000d0fdf0
+....
+ Kernel panic - not syncing: Fatal exception
+ Rebooting in 86400 seconds..
 
-Best regards,
-Krzysztof
+rdwr_pa[i].buf[0] is a NULL dereference when len=0, so to avoid
+dereferencing zero-length buffer we add a check on len before
+dereferencing.
+
+I have tested only with the reproducer and the bug doesnot occur
+after this patch.
+
+This patch is only made for 4.14.y as other higher LTS branches
+(>=4.19.y) already have the fix.
+
+Thanks,
+Harshit
+
+Alexander Popov (1):
+  i2c: dev: prevent ZERO_SIZE_PTR deref in i2cdev_ioctl_rdwr()
+
+ drivers/i2c/i2c-dev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+-- 
+2.37.1
 
