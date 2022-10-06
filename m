@@ -2,98 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D445F6A0F
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Oct 2022 16:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75A715F6AA9
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Oct 2022 17:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbiJFOzD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Oct 2022 10:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
+        id S231801AbiJFPdS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Oct 2022 11:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiJFOy6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Oct 2022 10:54:58 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3E31D65A;
-        Thu,  6 Oct 2022 07:54:55 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id y100so3200641ede.6;
-        Thu, 06 Oct 2022 07:54:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=OcCFlsb0UPx35nzupcdQ+Jsu6S5hmDruOOCDGL2tRQU=;
-        b=LcRWZUjkVaSzP+xw32qY5UviScr9vgmwxKrpmL6rXsiGeRGuK/+g14ELWGxCZGrORm
-         qJQyhwScy4Th0H0aVlk809B5IzEBbOCmLeZrOu1R+4sBTjdFmzynVe0RrHAbWHP3Qaso
-         q+T9yYaigi7Kt+kKlkmQ2hxeH+rchg1Vaj0qSdQS9+PNaI2k3k9WEQNWxXOHP1AhlRdk
-         JKchX4Zqv234hqNXB9SjiKxKRRugT+Kir8XFBrqnpx80CBJX3PM9ES67z9/SsjXDgn4O
-         vVjQB1DNCpVKkfJUYaav9xL/U/Eo4R9GWJ3zj5cpYyypEf8HmdBabdhiW5Bg/4MrT/jy
-         /lKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=OcCFlsb0UPx35nzupcdQ+Jsu6S5hmDruOOCDGL2tRQU=;
-        b=59iETLQzjYaVp/rV1EuU0Y0y8dGBehMuj93euF4CP2TelMEm660pqOdJiAmen0sZKp
-         64+EIHGRzDlS0LvmLCXidm9jQsp3llL1M412qldukCBWQYK/DeNhBK1V6qa6bEN81XBk
-         Ldf/ieNeZALNsTA8JILIylGJLhJSxpfWyC+IDWDKdFn1yUhEexo2FqnBlnMYYOEvlLPp
-         x2Pc6/FDz28W8l7pi0OwwVQrATbJ8bRoDOTbqE5RSLS4oVHR1ESZY5CZcCVLfVlAV8vl
-         r171hVcyXNaf7zqWMthWGy2wfX0rGlg9FvbUiSmnM0pMWo5qwmZdOGRYdKat87W69mkE
-         6pVQ==
-X-Gm-Message-State: ACrzQf0MSba2vEwxfrdAGmH45LYbiLDguX2gnFLX1CvmBm1Zgqya8w5u
-        Op0eW0bgPo03CIfBya/IFKPVr9fuDt8=
-X-Google-Smtp-Source: AMsMyM7tAxRlst56qjcRjNPVAyBRK+EA8IHGDVRjg4uDfYiWRqaFMqbCok7sOPDfm7TIJjWbJl0I4w==
-X-Received: by 2002:a05:6402:2804:b0:439:83c2:8be2 with SMTP id h4-20020a056402280400b0043983c28be2mr161904ede.292.1665068093904;
-        Thu, 06 Oct 2022 07:54:53 -0700 (PDT)
-Received: from localhost.localdomain (wlan-247051.nbw.tue.nl. [131.155.247.51])
-        by smtp.gmail.com with ESMTPSA id i15-20020aa7dd0f000000b00457c321454asm5957591edv.37.2022.10.06.07.54.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 07:54:53 -0700 (PDT)
-From:   Nam Cao <namcaov@gmail.com>
-To:     jdelvare@suse.com
-Cc:     namcaov@gmail.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: i801: add lis3lv02d's I2C address for Vostro 5568
-Date:   Thu,  6 Oct 2022 16:54:40 +0200
-Message-Id: <20221006145440.10281-1-namcaov@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231784AbiJFPdQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Oct 2022 11:33:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07243B2751;
+        Thu,  6 Oct 2022 08:33:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6CF8B820E1;
+        Thu,  6 Oct 2022 15:33:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2208C433D7;
+        Thu,  6 Oct 2022 15:33:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665070393;
+        bh=b5fz2Faps9g6VlZUHemqmOjeGlkHE/XuO+Ju+7K214A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dqylxaX+JXllTIj8yLEPkVZBqPOA8RVrx3AnU9xEinCebuNlOnMyggpT2Y80GCOKD
+         jn8iiFVa+0tWfLJIarZ3gsc9/5t0tmhNFVpZDSmYTxEm3+VkTnm0l0SUpgjsEB63l2
+         CggpubewSFAbm+eamVnZO4CyMN9gRy+UD59XmmVr4BYO4qxyiS9KmAjYRaSobvpfXz
+         DnSX30IFKdyjSNgEeCssZktyaIUkNxCpFB7k0Lc+SXVgkoMAgW8m2BDe1NFSnP52GJ
+         X4HbSOH8Yj7yBUvZLDbotfkDUcHGpOI7PFo5Ulpg6CEjrH0C7sa5mARjW+j67nRLWp
+         XjHxO0UAdVaJw==
+Date:   Thu, 6 Oct 2022 17:33:10 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Quan Nguyen <quan@os.amperecomputing.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Corey Minyard <minyard@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        thang@os.amperecomputing.com
+Subject: Re: [PATCH v10 3/3] i2c: aspeed: Assert NAK when slave is busy
+Message-ID: <Yz71NjbmLZeRpmM2@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Quan Nguyen <quan@os.amperecomputing.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        thang@os.amperecomputing.com
+References: <20221004093106.1653317-1-quan@os.amperecomputing.com>
+ <20221004093106.1653317-4-quan@os.amperecomputing.com>
+ <Yz3VmWCqdolKg5sm@shikoro>
+ <c8c774c5-b274-a6f9-303b-e84c50800b5c@os.amperecomputing.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+SCqpgtCPKo+UDYP"
+Content-Disposition: inline
+In-Reply-To: <c8c774c5-b274-a6f9-303b-e84c50800b5c@os.amperecomputing.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Dell Vostro 5568 laptop has lis3lv02d, but its i2c address is not known
-to the kernel. Add this address.
 
-Output of "cat /sys/devices/platform/lis3lv02d/position" on Dell Vostro
-5568 laptop:
-    - Horizontal: (-18,0,1044)
-    - Front elevated: (522,-18,1080)
-    - Left elevated: (-18,-360,1080)
-    - Upside down: (36,108,-1134)
+--+SCqpgtCPKo+UDYP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Nam Cao <namcaov@gmail.com>
----
- drivers/i2c/busses/i2c-i801.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index a176296f4fff..e46561e095c6 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1243,6 +1243,7 @@ static const struct {
- 	 */
- 	{ "Latitude 5480",      0x29 },
- 	{ "Vostro V131",        0x1d },
-+	{ "Vostro 5568",        0x29 },
- };
- 
- static void register_dell_lis3lv02d_i2c_device(struct i801_priv *priv)
--- 
-2.25.1
+> Thank you for your patience with me through many versions.
 
+You are welcome. In the end, I think the update of the target interface
+is an improvement, in deed. So, thank you for that!
+
+
+--+SCqpgtCPKo+UDYP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmM+9TYACgkQFA3kzBSg
+KbYACw/9E3V2Y6ViQwRZW439rY0GLtJGPos89UPLB3b8h2XUl/8KWQBrU4MDD46d
+6VEho+Ae8+5OHpqczwMiXkgc+Z/Yc0OtfOUXCqEr339KH09Z2k930RdTb20dZf6t
+UZbq+wAaD9xn4nXBMEBM3YoBDbncbhTEamK0mKkh5lHmD2fZqXXRqpbBtwSZXN5s
+Y+Oshsl9cuGEkqde5gVhRR1DWJrOesWHmg51VhBvq0E74sSlWc3D4ByKYJ2K95qw
+w0gd48NMY5vtSvM8e2X2SqA/1rwYYi91bn5xFCM0hSXWmAU+hKhEW6O0rQrbZPu1
+9mwoOHEvTanaLpYiWCsnevEgEsLifpiKMlojSmQZIQLeFLTg69K36Gdyb57mNzD1
+4+Mb5QP4yjHkjA9uwr03qJv08xDKmQtnQhO/dkjz0iAE3uxdpGYb3XB0chL+YI7p
+rJV9CIETC+HFpzrKiOu9XGRNnLzu7dJ6Jx489UKzS+d2cofL+gZMTsAkeu1WXBEj
+UY8cqIm1rxaOJgy8SBotNJssqRS7TGL/TYtXFgFtQIJ2pISQHB1Yc9FdZSRdXHLF
+5wRpQZlTnIS9/wL/K29aAvePtLJHbDhUgaDIqU0JgNEdA1wA9wUj0RK0FrQyHBP0
+W96sDicwz7oVBGNZuX1lQHtfYGZqdBPIllgG8XaGlwNlwgRCiyg=
+=WHBN
+-----END PGP SIGNATURE-----
+
+--+SCqpgtCPKo+UDYP--
