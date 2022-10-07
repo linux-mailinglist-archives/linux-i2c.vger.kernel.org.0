@@ -2,178 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4385F74F5
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Oct 2022 09:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF255F78CE
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Oct 2022 15:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiJGHzf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 Oct 2022 03:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
+        id S229812AbiJGNUp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 Oct 2022 09:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiJGHzd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Oct 2022 03:55:33 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C0E48EBD
-        for <linux-i2c@vger.kernel.org>; Fri,  7 Oct 2022 00:55:24 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id l22so5921546edj.5
-        for <linux-i2c@vger.kernel.org>; Fri, 07 Oct 2022 00:55:23 -0700 (PDT)
+        with ESMTP id S229721AbiJGNUo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Oct 2022 09:20:44 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EF87EFDA;
+        Fri,  7 Oct 2022 06:20:42 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id bj12so11193722ejb.13;
+        Fri, 07 Oct 2022 06:20:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BYnWsZ0o5AknCBOblpHFLOK7lMI23PzUmjP6lQfCMsQ=;
-        b=avOmEXJ6cStT+owLJndU87sr6b/pMzEYqRcsQYA1o7N41r1bLRrsz2hPfaDds2s52w
-         KgywaP3cKvGgE/wamq8qicWJQ2H2nuif8Ust4HTrnG4dFeFQsBN3kYsjnfWxioE1bhSs
-         8sROmt2UKBsJvVylcN/VyLHpH3lurz8h3PwJX9oj2GbCWuPkVL/IX/Mm7T/spKAYxUR/
-         SIulbdY5vb/5JdfOhEAOK8QYQVl7SWqdx+dvj3zxIGK6VMy63AjFJsjhjH2Hdt4vtOdS
-         q8QbdmAHGcSXD+unGR/ZJLH+UCS0rcaAJkFyJ60HtLNNyrdGG+YorbMvo8HlSynZi/rk
-         ZPaA==
+        bh=yN1ILS/XaAxkmv7Qr0HgSkKZ/T+I7TUvBhKMzgNmA/Q=;
+        b=HQToq95gCwSLDQbIkWdRsIH8yaWacVN8QRzXc/0CuCt0rQGSXtL1O8rArUko2jFJNG
+         Xj/0LcjRwJn7Fx6N++EtObGFD9TmLaTduJGPa0JW6QcWarm34wi4CakC372ueT8V4CBX
+         1Dc7AYKMJlZfLezzvZ07zRIhpbJHj+A+vLhxxa3/ew9Co2HcRwxgflKaSNP1HU9FBKXa
+         4d2VQgzo9eBb/NcnWKq58RQL7S4THHiZpVz5zQ4RfadaDWHyl7PDlfetJR9+3mnBU11S
+         qMjbJ+WGUiqldhgnWucTz51zbv2+eMVj0V2crWXdPNUoNDxtI7Sw3vl6MRH85yQv+rxz
+         SGKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BYnWsZ0o5AknCBOblpHFLOK7lMI23PzUmjP6lQfCMsQ=;
-        b=RVhCvIqQQ+PQLapw5MQCOJF3eqaYeSBNBJhoLxfKO9Wko01l7VGEKJecc5cjg3wP3g
-         vOBsuHUV5S3Gmyo+gSZD7VMBo/XQbJ1ljo3vidZfmEL43xwtnFw0zyymatJIl+hu0qSS
-         o3qQWz52ajlGnjTcTN7wEgyId5nXKTQ5X7zK47EtlZzopqdYXRn9n+TwubfcHavlmpg4
-         iZ/lGGnNVPU07PrvvoaSrk2THOWpG5TAGjLGpzlntMQpF46IFB458Hk+ezULyYmkCARj
-         270IT9Hl21TnznyGY63R1siWhaiUApK7VejENNk3EaTrc0hee6HKY9ADGq67lK1W4ROa
-         +cZA==
-X-Gm-Message-State: ACrzQf0bGOENlUEc7qDrsj+EqgTm5PjPr6LIwLd0HryB+GzInj7wrm2f
-        fdetkc241mLDKzAfd8heXw76MQ==
-X-Google-Smtp-Source: AMsMyM68rpMJy/RPe5slntPvR0+sj6c9rJWQ/6TZKc+/UJZagyRK49iVg8RHaE+sI1eBsinloVuF5Q==
-X-Received: by 2002:a05:6402:1d55:b0:459:9dc3:85cb with SMTP id dz21-20020a0564021d5500b004599dc385cbmr3383488edb.353.1665129322550;
-        Fri, 07 Oct 2022 00:55:22 -0700 (PDT)
-Received: from fedora.sec.9e.network (ip-094-114-232-236.um31.pools.vodafone-ip.de. [94.114.232.236])
-        by smtp.gmail.com with ESMTPSA id hv13-20020a17090760cd00b00741a0c3f4cdsm782281ejc.189.2022.10.07.00.55.21
+        bh=yN1ILS/XaAxkmv7Qr0HgSkKZ/T+I7TUvBhKMzgNmA/Q=;
+        b=CfqRcAncz4CQtNnmVNsWxypSgGH+a50/mf6o5t7pLLpM91wSAht0U+m6fGs8T7069M
+         U4HkIx6HIxDvIMJIoatB7IQuqLQ8RJS46x/c1znuq4LpabZcnM1SPAs/Q32uUdE598Tb
+         eo4/Ut8aGmXzBnJVrqM3iud/gr6Hue5fu35zgjlNBbDWa43AOMFUsPLJQB3rkYzNQcxf
+         u5t6IyH4ZE0hCuBssbkvXph7mHbyXqU37kM7aJTen0a1byffkso9F75GRifotZXpBaTK
+         lqStKEutG3mbdvH1b7IYznTp9AYZLdqZ7r2sQEzQCylverbrk+EFqlFmC4tGNoESKoUQ
+         W0aQ==
+X-Gm-Message-State: ACrzQf21CqOtK5BZvtWsi7yTLVo1vNf6mnE8cBv9xReTU+ObXwCoIPZk
+        60xt9Uj/xnZp3KNxUWIy+Ds=
+X-Google-Smtp-Source: AMsMyM4Ub5PwdR3ymkjLuRW2b3AXvLb/WJb1xCbD7ZN8+5Ch8dgi/bOegSQ1xQVmt1i0nEDsb018WQ==
+X-Received: by 2002:a17:907:7203:b0:783:6e65:c0c3 with SMTP id dr3-20020a170907720300b007836e65c0c3mr4085765ejc.227.1665148840549;
+        Fri, 07 Oct 2022 06:20:40 -0700 (PDT)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id l10-20020a1709060cca00b007402796f065sm1207664ejh.132.2022.10.07.06.20.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 00:55:22 -0700 (PDT)
-From:   Patrick Rudolph <patrick.rudolph@9elements.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     robh@kernel.org, laurent.pinchart@ideasonboard.com, wsa@kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [v9 4/4] i2c: muxes: pca954x: Add regulator support
-Date:   Fri,  7 Oct 2022 09:53:53 +0200
-Message-Id: <20221007075354.568752-5-patrick.rudolph@9elements.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221007075354.568752-1-patrick.rudolph@9elements.com>
-References: <20221007075354.568752-1-patrick.rudolph@9elements.com>
+        Fri, 07 Oct 2022 06:20:39 -0700 (PDT)
+Date:   Fri, 7 Oct 2022 15:20:37 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     christian.koenig@amd.com, devicetree@vger.kernel.org,
+        digetx@gmail.com, jonathanh@nvidia.com, ldewangan@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, robh+dt@kernel.org,
+        sumit.semwal@linaro.org, wsa@kernel.org
+Subject: Re: [PATCH v2 2/3] arm64: tegra: Add GPCDMA support for Tegra I2C
+Message-ID: <Y0AnpYeECoyQchmY@orome>
+References: <20220906144716.16274-1-akhilrajeev@nvidia.com>
+ <20220906144716.16274-3-akhilrajeev@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2nh9Rh/eMLM33gB/"
+Content-Disposition: inline
+In-Reply-To: <20220906144716.16274-3-akhilrajeev@nvidia.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add a vdd regulator and enable it for boards that have the
-mux powered off by default.
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Reviewed-by: Peter Rosin <peda@axentia.se>
----
- drivers/i2c/muxes/i2c-mux-pca954x.c | 34 ++++++++++++++++++++++++-----
- 1 file changed, 29 insertions(+), 5 deletions(-)
+--2nh9Rh/eMLM33gB/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-index 992976fa6798..857a4ec387be 100644
---- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-+++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-@@ -49,6 +49,7 @@
- #include <linux/module.h>
- #include <linux/pm.h>
- #include <linux/property.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <dt-bindings/mux/mux.h>
-@@ -133,6 +134,7 @@ struct pca954x {
- 	struct irq_domain *irq;
- 	unsigned int irq_mask;
- 	raw_spinlock_t lock;
-+	struct regulator *supply;
- };
- 
- /* Provide specs for the MAX735x, PCA954x and PCA984x types we know about */
-@@ -473,6 +475,9 @@ static void pca954x_cleanup(struct i2c_mux_core *muxc)
- 	struct pca954x *data = i2c_mux_priv(muxc);
- 	int c, irq;
- 
-+	if (!IS_ERR_OR_NULL(data->supply))
-+		regulator_disable(data->supply);
-+
- 	if (data->irq) {
- 		for (c = 0; c < data->chip->nchans; c++) {
- 			irq = irq_find_mapping(data->irq, c);
-@@ -531,15 +536,32 @@ static int pca954x_probe(struct i2c_client *client,
- 			     pca954x_select_chan, pca954x_deselect_mux);
- 	if (!muxc)
- 		return -ENOMEM;
-+
- 	data = i2c_mux_priv(muxc);
- 
- 	i2c_set_clientdata(client, muxc);
- 	data->client = client;
- 
-+	data->supply = devm_regulator_get(dev, "vdd");
-+	if (IS_ERR(data->supply)) {
-+		ret = PTR_ERR(data->supply);
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(dev, "Failed to request regulator: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = regulator_enable(data->supply);
-+	if (ret) {
-+		dev_err(dev, "Failed to enable regulator: %d\n", ret);
-+		return ret;
-+	}
-+
- 	/* Reset the mux if a reset GPIO is specified. */
- 	gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
--	if (IS_ERR(gpio))
--		return PTR_ERR(gpio);
-+	if (IS_ERR(gpio)) {
-+		ret = PTR_ERR(gpio);
-+		goto fail_cleanup;
-+	}
- 	if (gpio) {
- 		udelay(1);
- 		gpiod_set_value_cansleep(gpio, 0);
-@@ -556,7 +578,7 @@ static int pca954x_probe(struct i2c_client *client,
- 
- 		ret = i2c_get_device_id(client, &id);
- 		if (ret && ret != -EOPNOTSUPP)
--			return ret;
-+			goto fail_cleanup;
- 
- 		if (!ret &&
- 		    (id.manufacturer_id != data->chip->id.manufacturer_id ||
-@@ -564,7 +586,8 @@ static int pca954x_probe(struct i2c_client *client,
- 			dev_warn(dev, "unexpected device id %03x-%03x-%x\n",
- 				 id.manufacturer_id, id.part_id,
- 				 id.die_revision);
--			return -ENODEV;
-+			ret = -ENODEV;
-+			goto fail_cleanup;
- 		}
- 	}
- 
-@@ -583,7 +606,8 @@ static int pca954x_probe(struct i2c_client *client,
- 	ret = pca954x_init(client, data);
- 	if (ret < 0) {
- 		dev_warn(dev, "probe failed\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto fail_cleanup;
- 	}
- 
- 	ret = pca954x_irq_setup(muxc);
--- 
-2.37.3
+On Tue, Sep 06, 2022 at 08:17:15PM +0530, Akhil R wrote:
+> Add dma properties to support GPCDMA for I2C in Tegra 186 and later
+> chips
+>=20
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+>  arch/arm64/boot/dts/nvidia/tegra186.dtsi | 32 ++++++++++++++++++++++++
+>  arch/arm64/boot/dts/nvidia/tegra194.dtsi | 32 ++++++++++++++++++++++++
+>  arch/arm64/boot/dts/nvidia/tegra234.dtsi | 32 ++++++++++++++++++++++++
+>  3 files changed, 96 insertions(+)
+>=20
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra186.dtsi b/arch/arm64/boot/d=
+ts/nvidia/tegra186.dtsi
+> index 59a10fb184f8..3580fbf99091 100644
+> --- a/arch/arm64/boot/dts/nvidia/tegra186.dtsi
+> +++ b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
+> @@ -672,6 +672,10 @@
+>  		clock-names =3D "div-clk";
+>  		resets =3D <&bpmp TEGRA186_RESET_I2C1>;
+>  		reset-names =3D "i2c";
+> +		iommus =3D <&smmu TEGRA186_SID_GPCDMA_0>;
+> +		dma-coherent;
 
+I wonder: why do we need the iommus and dma-coherent properties here?
+The I2C controllers are not directly accessing memory, instead it's the
+GPCDMA via the dmas/dma-names properties. The GPCDMA already has these
+properties set, so they seem to be useless here.
+
+I'm asking because they cause a lot of warnings from the DT validators,
+so we either need to remove them (if they are not necessary) or add the
+DT binding documentation for them.
+
+Thierry
+
+--2nh9Rh/eMLM33gB/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNAJ6MACgkQ3SOs138+
+s6FrCBAAo6+7wV1IijPKmArINgF4BAJvTVLS3ZBnbDY6Wujxrg2cxqmwk0ey9+sU
+RhmaOy6rQi6l3AVfURxyHbwybwRpRL4fAuaxE8pxND8YqIYxGa8kBu536DuhfxxC
+WARBhPMSrxTqnTq8bw0BzD64PV99kpR79eiwblns44XjsC3HMObcFzCG8/zIVmyb
+QL0cNVHK+hI3SJDLaLfdY+8X8gaVoJi2jF8xJ1+hcBHlZDTLbCIGiY2hBzX8Z4EL
+8uteO/Q9QP7qk5pJ0K5hE/LrB4jHEbxDLwnoumeQLHzxh/LNkn138mIis2KrEBW+
+aN7IZyglYu2gOpi4MPWGPTs9LebQpnB+G6aRI5XqnraNuOOkkaK7FldrU8Fa/xzy
+aABT2fxDA6JiuBpUfFXZVlvj7btlB12CKAwXd8jux8sqn1YpuZVV4aTQSTAKZuBT
+HKbAJrCeTKq8ek/ykjk6kk48RB4PV/JkKwD3XxzbZNhRj+SngT2Ami/r/DvGtYKZ
+T6J6QG9nHAYKpvk+G3uNHGrlJZmsKjvuoMHTnCkfEJPqPCw/ScZgAsk7Bj0Ib/0t
+i+8VEJVVM+PHtM4JTWNdc4UWRdA8bBMa4+quSbnZNv16pHq8BLV+dAEtUL3ZTbr0
+851rF9dc4pfIIl6XodDNem1N4bHNdPDvGmk6/EbPsIriFhDKflg=
+=ENWq
+-----END PGP SIGNATURE-----
+
+--2nh9Rh/eMLM33gB/--
