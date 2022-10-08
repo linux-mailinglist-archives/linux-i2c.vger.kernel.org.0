@@ -2,308 +2,189 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE11C5F84A3
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Oct 2022 11:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D91ED5F851D
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Oct 2022 13:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiJHJtS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 Oct 2022 05:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
+        id S229379AbiJHLu0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 8 Oct 2022 07:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiJHJtR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Oct 2022 05:49:17 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FB31A201;
-        Sat,  8 Oct 2022 02:49:15 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 663295C0050;
-        Sat,  8 Oct 2022 05:49:15 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Sat, 08 Oct 2022 05:49:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1665222555; x=
-        1665308955; bh=uVFJ/ixFTuJnrPpiJX6LTMPl44z8m+rvMsabaV3ZgAc=; b=O
-        ghPHC9z0ghD0VkEkl8iG4dY+2QNDwjO10Q1Hpe1rOIrEAv9mK/A4M+kp538aSLAR
-        5ozhbtz+ZgI0IyohsvGY7FCRfeFIsV4rGmZ3xmquheDgmaWRKLzdDs46vYiPLGps
-        CJG8ZSGkPYqKH5zKV/rdXDOcA73L4DAbv4TvHhNyAxpxMbCYinwIN/APhOzWNK8v
-        U7Up73CoV3ZmJYjVYrVTmCe7qeb5tb3DftB5BwePZNdEApMC96LGqAe4NTjg2Csm
-        K8R3Fs2YOkSkgHTlPH/3nRawT2MSjKdwCaL4rECj42wxNECQN61NVkuO5x6XM5ED
-        ydZ5Oqu0a2h4+lbvClQ/A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665222555; x=
-        1665308955; bh=uVFJ/ixFTuJnrPpiJX6LTMPl44z8m+rvMsabaV3ZgAc=; b=O
-        xZUcRRG6CuHz40Ik0Oh2py6Z3KNeNlrX7gOx+fx2ajE8ZJF4whTQkSfHIKMRknCl
-        gloqnYKIVGOTtZpLAnyhvGtj4Td7yLVFivuo6ujEP4x3M0KfgcKXO8oV04hPHv3T
-        EvJPeaMmz2de0HGf3KnrgJv8XLX/pFiWfWV/FUw6KJ4KtmXQl7Hyl7cHEF2Ikg2T
-        v98RywUfLr1rQAjxgpxgRNzFK5o0JWqRB8WELoUgc4KUhOcGYkTEi2qOmoHEk7FR
-        Z0ZH7fmrEKvqKwISHCKi+eAKc0atBQoyomNkIR28VeCLleboqXMdknruEVuFTkkF
-        9RwOkolCtcNUgnpOLh+rQ==
-X-ME-Sender: <xms:mkdBY2csKk4dWgRzzMCiAYzpTpTQuwavSpLNvj5IqG3Jk2g_a7C0JQ>
-    <xme:mkdBYwOOw7QyPEFxhrnW1IIcUl_VqEemqI9mpi-GADdrT29ffa4OgBbSXEvboQs9T
-    I_qlw2zd_kB-x78yZg>
-X-ME-Received: <xmr:mkdBY3iB_iSfoX-w5HxF8uTrARZt64JIqNtqseAmtl-nLtZr5f0WSlmVvvXR8HHIku3NTVbdhUKW_3_6XqUN1SxuAWfqLScYtki03aLp63o-2aMCO060Al8AireyLA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeiledgudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurheptgfghfggufffkfhfvegjvffosehtqhhmtdhhtdejnecuhfhrohhmpefuvhgv
-    nhcurfgvthgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrth
-    htvghrnhepffdvueeggeffieelgeeitdekteejkeehhefhheduledvueduvdelffeiveel
-    teeknecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhesshhvvghnphgvthgvrhdruggv
-    vh
-X-ME-Proxy: <xmx:mkdBYz9cMhi2VMI_HwJyTOrHl8m5-Mc7qWqP6NdfdnVE5b2mFFGvJg>
-    <xmx:mkdBYyulqXQyO6biOiXHkhTQKUfr9zdvX7VfpeM4_YHbEsHx2FfSug>
-    <xmx:mkdBY6GRKiXirMwbybVRoJtuWp43MPA0NJTLP5DfjagZeG-TF4eyag>
-    <xmx:m0dBY8IKIxMzynN_XVgkRTjRWgvWQqzsb6PDFUnKJa-pnb7BmkycsQ>
-Feedback-ID: i51094778:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 8 Oct 2022 05:49:03 -0400 (EDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Sven Peter <sven@svenpeter.dev>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v3] i2c/pasemi: PASemi I2C controller IRQ enablement
-Date:   Sat, 8 Oct 2022 11:48:42 +0200
-Message-Id: <A0B81E7F-BF26-424D-B9E5-5647323B24EC@svenpeter.dev>
-References: <MN2PR01MB5358ED8FC32C0CFAEBD4A0E19F5F9@MN2PR01MB5358.prod.exchangelabs.com>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Hector Martin <marcan@marcan.st>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-In-Reply-To: <MN2PR01MB5358ED8FC32C0CFAEBD4A0E19F5F9@MN2PR01MB5358.prod.exchangelabs.com>
-To:     Arminder Singh <arminders208@outlook.com>
-X-Mailer: iPhone Mail (20A362)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229547AbiJHLuZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Oct 2022 07:50:25 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770551C117;
+        Sat,  8 Oct 2022 04:50:24 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id b1so5632723lfs.7;
+        Sat, 08 Oct 2022 04:50:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dji2Yw3SxEqIXHoPCkkOxGjvaONXRxPb3yOPhNs389g=;
+        b=pcr8plzA5CjmEreaQB9NbfeIgWGA26IPHwvzgpWz8IqLAM8QW4AfwD7/PpJq8geUsw
+         PFfuJp8MAM1B180Rrt8Hp4MXNa8G0QPTN2/EFHVN5yxhxedf8VHY0m+bUlkrNY0g2Y5s
+         8ppvQvzGIP1TcpMXT1mIv8LCd9XaPxsh8eiSqJ+x8lP7JIsq0K8GAVjj80QI6/dtOVPp
+         FWGJfnbpn0e+jRi5v6qPC2NxzDcsCuw1miGB3po+adJ4HTpe2y/kY/GRToshN9E/Y4+V
+         5WYiwvN+BWPNjtkvmjXN7v4D3WI0bkqsWKu6coU73BEkqSB9dHG6tjMR/gy41cPHoCfg
+         LqBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dji2Yw3SxEqIXHoPCkkOxGjvaONXRxPb3yOPhNs389g=;
+        b=Pa3Qxqntl8pxSbop8HZEs8dWjK2pTJPFZQLNhHha//3Yzzn0kuCR2ARSK2gyFMmzbD
+         leKrHuGaLNg8YEF+EjiHAbcCth7WbMcw5+OYLWrOht4qA7LBmNlp2Gp4sreLIqcjtzOO
+         D7vPW98Zj4mcz00b/JKmF5xafMKL7TcWLnKqmUKA6BWpWYPsxXxoJbY5VCy7hxstB+Dk
+         Ac0+KT+DOwsZV2SycfyJlVSsvDG5mgrM5s9CjTbBviqHDJ2CI3ti3qc1ubty+BjVpAXb
+         BfNAoHLGwzqAknfTelhM5QWCl8Y+6C/u2cCBmupxV/rH37gOIKlFVerrFdZzlWITRa77
+         qZtQ==
+X-Gm-Message-State: ACrzQf0n3OIlQQGOHoYkZTHL3nt7ADRBlkkvlickUScK9ndbDoLLAP51
+        s5W5+zP3EqRW9tJbxpit33E=
+X-Google-Smtp-Source: AMsMyM6Nil25Amkth0D58wMtsIVBBye5sPIdEv2BPNWT4MRn2Fzuyxvfn6ISWfxb1bacB6OckC6fKA==
+X-Received: by 2002:a05:6512:224d:b0:4a2:7710:9b8b with SMTP id i13-20020a056512224d00b004a277109b8bmr3137394lfu.128.1665229822628;
+        Sat, 08 Oct 2022 04:50:22 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id v18-20020a05651203b200b00494813c689dsm657418lfp.219.2022.10.08.04.50.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Oct 2022 04:50:21 -0700 (PDT)
+Date:   Sat, 8 Oct 2022 14:50:19 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Peter Rosin <peda@axentia.se>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        robh@kernel.org, wsa@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [v9 1/4] dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
+Message-ID: <20221008115019.6jxsbawtye7cdkfh@mobilestation>
+References: <20221007075354.568752-1-patrick.rudolph@9elements.com>
+ <20221007075354.568752-2-patrick.rudolph@9elements.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221007075354.568752-2-patrick.rudolph@9elements.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
-
-> On 7. Oct 2022, at 02:43, Arminder Singh <arminders208@outlook.com> wrote:=
-
->=20
-> =EF=BB=BFThis patch adds IRQ support to the PASemi I2C controller driver t=
-o=20
-> increase the performace of I2C transactions on platforms with PASemi I2C=20=
-
-> controllers. While primarily intended for Apple silicon platforms, this=20=
-
-> patch should also help in enabling IRQ support for older PASemi hardware=20=
-
-> as well should the need arise.
->=20
-> Signed-off-by: Arminder Singh <arminders208@outlook.com>
+On Fri, Oct 07, 2022 at 09:53:50AM +0200, Patrick Rudolph wrote:
+> Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
+> chips. The functionality will be provided by the exisintg pca954x driver.
+> 
+> While on it make the interrupts support conditionally as not all of the
+> existing chips have interrupts.
+> 
+> For chips that are powered off by default add an optional regulator
+> called vdd-supply.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 > ---
-> This version of the patch has been tested on an M1 Ultra Mac Studio,
-> as well as an M1 MacBook Pro, and userspace launches successfully
-> while using the IRQ path for I2C transactions.
-
-I think Wolfram suggested to keep this in the commit message. If in doubt li=
-sten to him and not me because he=E2=80=99s much more experienced with the k=
-ernel than I am ;)
-
->=20
-> This version of the patch only contains fixes to the whitespace and
-> alignment issues found in v2 of the patch, and as such the testing that
-> Christian Zigotsky did on PASemi hardware for v2 of the patch also applies=
-
-> to this version of the patch as well.
-> (See v2 patch email thread for the "Tested-by" tag)
-
-You can just collect and keep those tags above your signed off by if you onl=
-y change things like whitespaces.
-
->=20
-> v2 to v3 changes:
-> - Fixed some whitespace and alignment issues found in v2 of the patch
->=20
-> v1 to v2 changes:
-> - moved completion setup from pasemi_platform_i2c_probe to
->   pasemi_i2c_common_probe to allow PASemi and Apple platforms to share
->   common completion setup code in case PASemi hardware gets IRQ support
->   added
-> - initialized the status variable in pasemi_smb_waitready when going down
->   the non-IRQ path
-> - removed an unnecessary cast of dev_id in the IRQ handler
-> - fixed alignment of struct member names in i2c-pasemi-core.h
->   (addresses Christophe's feedback in the original submission)
-> - IRQs are now disabled after the wait_for_completion_timeout call
->   instead of inside the IRQ handler
->   (prevents the IRQ from going off after the completion times out)
-> - changed the request_irq call to a devm_request_irq call to obviate
->   the need for a remove function and a free_irq call
->   (thanks to Sven for pointing this out in the original submission)
-> - added a reinit_completion call to pasemi_reset=20
->   as a failsafe to prevent missed interrupts from causing the completion
->   to never complete (thanks to Arnd Bergmann for pointing this out)
-> - removed the bitmask variable in favor of just using the value
->   directly (it wasn't used anywhere else)
->=20
-> v2 linked here: https://lore.kernel.org/linux-i2c/MN2PR01MB535821C8058C781=
-4B2F8EEDF9F599@MN2PR01MB5358.prod.exchangelabs.com/
-> v1 linked here: https://lore.kernel.org/linux-i2c/MN2PR01MB535838492432C91=
-0F2381F929F6F9@MN2PR01MB5358.prod.exchangelabs.com/T/#m11b3504c2667517aad752=
-1514c99ca0e07a9381f
->=20
-> Hopefully the patch is good to go this time around!
->=20
-> drivers/i2c/busses/i2c-pasemi-core.c     | 29 ++++++++++++++++++++----
-> drivers/i2c/busses/i2c-pasemi-core.h     |  5 ++++
-> drivers/i2c/busses/i2c-pasemi-platform.c |  6 +++++
-> 3 files changed, 36 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-pasemi-core.c b/drivers/i2c/busses/i2c=
--pasemi-core.c
-> index 9028ffb58cc0..4855144b370e 100644
-> --- a/drivers/i2c/busses/i2c-pasemi-core.c
-> +++ b/drivers/i2c/busses/i2c-pasemi-core.c
-> @@ -21,6 +21,7 @@
-> #define REG_MTXFIFO    0x00
-> #define REG_MRXFIFO    0x04
-> #define REG_SMSTA    0x14
-> +#define REG_IMASK    0x18
-> #define REG_CTL        0x1c
-> #define REG_REV        0x28
->=20
-> @@ -66,6 +67,7 @@ static void pasemi_reset(struct pasemi_smbus *smbus)
->        val |=3D CTL_EN;
->=20
->    reg_write(smbus, REG_CTL, val);
-> +    reinit_completion(&smbus->irq_completion);
-> }
->=20
-> static void pasemi_smb_clear(struct pasemi_smbus *smbus)
-> @@ -81,11 +83,18 @@ static int pasemi_smb_waitready(struct pasemi_smbus *s=
-mbus)
->    int timeout =3D 10;
->    unsigned int status;
->=20
-> -    status =3D reg_read(smbus, REG_SMSTA);
+>  .../bindings/i2c/i2c-mux-pca954x.yaml         | 39 ++++++++++++++++---
+>  1 file changed, 34 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> index 9f1726d0356b..efad0a95806f 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> @@ -4,21 +4,25 @@
+>  $id: http://devicetree.org/schemas/i2c/i2c-mux-pca954x.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: NXP PCA954x I2C bus switch
+> +title: NXP PCA954x I2C and compatible bus switches
+>  
+>  maintainers:
+>    - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>  
+>  description:
+> -  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
 > -
-> -    while (!(status & SMSTA_XEN) && timeout--) {
-> -        msleep(1);
-> +    if (smbus->use_irq) {
-> +        reinit_completion(&smbus->irq_completion);
-> +        reg_write(smbus, REG_IMASK, SMSTA_XEN | SMSTA_MTN);
-> +        wait_for_completion_timeout(&smbus->irq_completion, msecs_to_jiff=
-ies(10));
-> +        reg_write(smbus, REG_IMASK, 0);
->        status =3D reg_read(smbus, REG_SMSTA);
-> +    } else {
-> +        status =3D reg_read(smbus, REG_SMSTA);
-> +        while (!(status & SMSTA_XEN) && timeout--) {
-> +            msleep(1);
-> +            status =3D reg_read(smbus, REG_SMSTA);
-> +        }
->    }
->=20
->    /* Got NACK? */
-> @@ -344,10 +353,14 @@ int pasemi_i2c_common_probe(struct pasemi_smbus *smb=
-us)
->=20
->    /* set up the sysfs linkage to our parent device */
->    smbus->adapter.dev.parent =3D smbus->dev;
-> +    smbus->use_irq =3D 0;
-> +    init_completion(&smbus->irq_completion);
->=20
->    if (smbus->hw_rev !=3D PASEMI_HW_REV_PCI)
->        smbus->hw_rev =3D reg_read(smbus, REG_REV);
->=20
-> +    reg_write(smbus, REG_IMASK, 0);
-> +
->    pasemi_reset(smbus);
->=20
->    error =3D devm_i2c_add_adapter(smbus->dev, &smbus->adapter);
-> @@ -356,3 +369,11 @@ int pasemi_i2c_common_probe(struct pasemi_smbus *smbu=
-s)
->=20
->    return 0;
-> }
-> +
-> +irqreturn_t pasemi_irq_handler(int irq, void *dev_id)
-> +{
-> +    struct pasemi_smbus *smbus =3D dev_id;
-> +
-> +    complete(&smbus->irq_completion);
 
-I only realized just now that you also want to disable the interrupt right h=
-ere by writing to IMASK. This is a level sensitive interrupt at AIC level so=
- the moment this handler returns it will fire again until you reach the writ=
-e above after the completion wait a bit later.
+> -allOf:
+> -  - $ref: /schemas/i2c/i2c-mux.yaml#
 
+Why do you move the allOf statement to the bottom of the schema?
 
-> +    return IRQ_HANDLED;
-> +}
-> diff --git a/drivers/i2c/busses/i2c-pasemi-core.h b/drivers/i2c/busses/i2c=
--pasemi-core.h
-> index 4655124a37f3..88821f4e8a9f 100644
-> --- a/drivers/i2c/busses/i2c-pasemi-core.h
-> +++ b/drivers/i2c/busses/i2c-pasemi-core.h
-> @@ -7,6 +7,7 @@
-> #include <linux/i2c-smbus.h>
-> #include <linux/io.h>
-> #include <linux/kernel.h>
-> +#include <linux/completion.h>
->=20
-> #define PASEMI_HW_REV_PCI -1
->=20
-> @@ -16,6 +17,10 @@ struct pasemi_smbus {
->    void __iomem        *ioaddr;
->    unsigned int         clk_div;
->    int             hw_rev;
-> +    int             use_irq;
-> +    struct completion     irq_completion;
-> };
->=20
-> int pasemi_i2c_common_probe(struct pasemi_smbus *smbus);
+> +  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices,
+> +  and the Maxim MAX735x and MAX736x I2C mux/switch devices.
+
+What about combining the sentence: "The binding supports NXP
+PCA954x/PCA984x and Maxim MAX735x/MAX736x I2C mux/switch devices." ?
+Currently it does look a bit bulky.
+
+>  
+>  properties:
+>    compatible:
+>      oneOf:
+>        - enum:
+> +          - maxim,max7356
+> +          - maxim,max7357
+> +          - maxim,max7358
+> +          - maxim,max7367
+> +          - maxim,max7368
+> +          - maxim,max7369
+>            - nxp,pca9540
+>            - nxp,pca9542
+>            - nxp,pca9543
+> @@ -59,10 +63,33 @@ properties:
+>      description: if present, overrides i2c-mux-idle-disconnect
+>      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
+>  
+> +  vdd-supply:
+> +    description: A voltage regulator supplying power to the chip.
 > +
-> +irqreturn_t pasemi_irq_handler(int irq, void *dev_id);
-> diff --git a/drivers/i2c/busses/i2c-pasemi-platform.c b/drivers/i2c/busses=
-/i2c-pasemi-platform.c
-> index 88a54aaf7e3c..e35945a91dbe 100644
-> --- a/drivers/i2c/busses/i2c-pasemi-platform.c
-> +++ b/drivers/i2c/busses/i2c-pasemi-platform.c
-> @@ -49,6 +49,7 @@ static int pasemi_platform_i2c_probe(struct platform_dev=
-ice *pdev)
->    struct pasemi_smbus *smbus;
->    u32 frequency;
->    int error;
-> +    int irq_num;
->=20
->    data =3D devm_kzalloc(dev, sizeof(struct pasemi_platform_i2c_data),
->                GFP_KERNEL);
-> @@ -82,6 +83,11 @@ static int pasemi_platform_i2c_probe(struct platform_de=
-vice *pdev)
->    if (error)
->        goto out_clk_disable;
->=20
-> +    irq_num =3D platform_get_irq(pdev, 0);
-> +    error =3D devm_request_irq(smbus->dev, irq_num, pasemi_irq_handler, 0=
-, "pasemi_apple_i2c", (void *)smbus);
+>  required:
+>    - compatible
+>    - reg
+>  
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-mux.yaml#
+> +  - if:
+> +      not:
+> +        properties:
+> +          compatible:
+> +            contains:
+> +              enum:
+> +                - maxim,max7367
+> +                - maxim,max7369
+> +                - nxp,pca9542
+> +                - nxp,pca9543
+> +                - nxp,pca9544
+> +                - nxp,pca9545
+> +    then:
+
+> +      properties:
+> +        interrupts: false
+> +        "#interrupt-cells": false
+> +        interrupt-controller: false
+
+I'd suggest to add an opposite definition. Evaluate the properties for
+the devices which expect them being evaluated instead of falsing their
+existence for the devices which don't support the interrupts.
+
+-Sergey
+
 > +
-> +    if (!error)
-> +        smbus->use_irq =3D 1;
->    platform_set_drvdata(pdev, data);
->=20
->    return 0;
-> --=20
-> 2.34.1
->=20
-
-Sven=20=
-
+>  unevaluatedProperties: false
+>  
+>  examples:
+> @@ -79,6 +106,8 @@ examples:
+>              #size-cells = <0>;
+>              reg = <0x74>;
+>  
+> +            vdd-supply = <&p3v3>;
+> +
+>              interrupt-parent = <&ipic>;
+>              interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
+>              interrupt-controller;
+> -- 
+> 2.37.3
+> 
