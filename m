@@ -2,69 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D91ED5F851D
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Oct 2022 13:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 933635F8543
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Oct 2022 14:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229379AbiJHLu0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 Oct 2022 07:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
+        id S229544AbiJHMyn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 8 Oct 2022 08:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiJHLuZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Oct 2022 07:50:25 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770551C117;
-        Sat,  8 Oct 2022 04:50:24 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id b1so5632723lfs.7;
-        Sat, 08 Oct 2022 04:50:24 -0700 (PDT)
+        with ESMTP id S229531AbiJHMym (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Oct 2022 08:54:42 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3E5641B;
+        Sat,  8 Oct 2022 05:54:40 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id j4so10861696lfk.0;
+        Sat, 08 Oct 2022 05:54:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dji2Yw3SxEqIXHoPCkkOxGjvaONXRxPb3yOPhNs389g=;
-        b=pcr8plzA5CjmEreaQB9NbfeIgWGA26IPHwvzgpWz8IqLAM8QW4AfwD7/PpJq8geUsw
-         PFfuJp8MAM1B180Rrt8Hp4MXNa8G0QPTN2/EFHVN5yxhxedf8VHY0m+bUlkrNY0g2Y5s
-         8ppvQvzGIP1TcpMXT1mIv8LCd9XaPxsh8eiSqJ+x8lP7JIsq0K8GAVjj80QI6/dtOVPp
-         FWGJfnbpn0e+jRi5v6qPC2NxzDcsCuw1miGB3po+adJ4HTpe2y/kY/GRToshN9E/Y4+V
-         5WYiwvN+BWPNjtkvmjXN7v4D3WI0bkqsWKu6coU73BEkqSB9dHG6tjMR/gy41cPHoCfg
-         LqBQ==
+        bh=yDaaA48MR+K0ruKf3R4hni5Yg3sJUKd+v6qHUZKDWPg=;
+        b=V3JzrVqCVGajxPlAANU5+j5Pt1SoJ4zZeeIZOQe91MXJ5d67QaeGNoWeLf7y68JbsD
+         Z0uefgWaw0ykzXYJ/j5e/vw+GI+BtJ4cqlv1Cr15H8LZ1OXOAYvPZBpr7NKzcSFSK7HJ
+         UcLBFfMC0cRmG04kRLG064hdrazENbUV4YJANAhHdsJLaj61xSxQRkHZYFHmEGAs2ypU
+         aF/E/1EfRALYPD7k4ynGtqwwmxl0Cb1+QILQX6jzezZxCxwenru1A9E/OVv8Nc459lN5
+         4Ik0DMZTkTBL0dduCnGcuomc5IfiRLqu8bVQPxdwS3bsNyICQdvDSqy41+mfRRLolfDs
+         T/MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Dji2Yw3SxEqIXHoPCkkOxGjvaONXRxPb3yOPhNs389g=;
-        b=Pa3Qxqntl8pxSbop8HZEs8dWjK2pTJPFZQLNhHha//3Yzzn0kuCR2ARSK2gyFMmzbD
-         leKrHuGaLNg8YEF+EjiHAbcCth7WbMcw5+OYLWrOht4qA7LBmNlp2Gp4sreLIqcjtzOO
-         D7vPW98Zj4mcz00b/JKmF5xafMKL7TcWLnKqmUKA6BWpWYPsxXxoJbY5VCy7hxstB+Dk
-         Ac0+KT+DOwsZV2SycfyJlVSsvDG5mgrM5s9CjTbBviqHDJ2CI3ti3qc1ubty+BjVpAXb
-         BfNAoHLGwzqAknfTelhM5QWCl8Y+6C/u2cCBmupxV/rH37gOIKlFVerrFdZzlWITRa77
-         qZtQ==
-X-Gm-Message-State: ACrzQf0n3OIlQQGOHoYkZTHL3nt7ADRBlkkvlickUScK9ndbDoLLAP51
-        s5W5+zP3EqRW9tJbxpit33E=
-X-Google-Smtp-Source: AMsMyM6Nil25Amkth0D58wMtsIVBBye5sPIdEv2BPNWT4MRn2Fzuyxvfn6ISWfxb1bacB6OckC6fKA==
-X-Received: by 2002:a05:6512:224d:b0:4a2:7710:9b8b with SMTP id i13-20020a056512224d00b004a277109b8bmr3137394lfu.128.1665229822628;
-        Sat, 08 Oct 2022 04:50:22 -0700 (PDT)
+        bh=yDaaA48MR+K0ruKf3R4hni5Yg3sJUKd+v6qHUZKDWPg=;
+        b=eAxB5K01wdg+JiUS7KJq0aRpWyj+oNv01DBxZBKhA8P0RdK3yfFcb3DZF6KS1fqPCY
+         vHAr/+6tBN7aSNaxRyOTouoSAZaTI6Fw1hYeFcoEjS8uvwbLIr61CahLJr10O4z06ewg
+         kTZWKYg69kuE2/wu6URSrLntpzqld56ATiIEJGlRmI5b5C5a612JNV3x9g69+qYi2V4T
+         nUqROLVzghcb4H5wFpt7gT+qgkEdgOLT20HDfBqFHL459YND1ECa9MHUFH9vlsQpPxH6
+         q5s1ML+gsmZaOCRIMZAlhyDlJhzorp2gNva+oovv9zXinsHtCKji0if1L8jDGfEmBG58
+         kOrg==
+X-Gm-Message-State: ACrzQf3LxvaRfLqi1CcE5ImNo8GbIKwzKUdWfh5xPiZTPcvGLCMu9z3F
+        HkaC44+B24b5xXmB100X3unZIuhMCf+0Aw==
+X-Google-Smtp-Source: AMsMyM7dlzFSEaKZ05RDwrVRLuR7IOvtEyvGmMRTIjzZ5YlpOh0hvwr2/k/Uw/rTpoMNK+u3eCUx/w==
+X-Received: by 2002:ac2:5a5d:0:b0:4a2:3d64:8ad3 with SMTP id r29-20020ac25a5d000000b004a23d648ad3mr3518644lfn.530.1665233678990;
+        Sat, 08 Oct 2022 05:54:38 -0700 (PDT)
 Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id v18-20020a05651203b200b00494813c689dsm657418lfp.219.2022.10.08.04.50.21
+        by smtp.gmail.com with ESMTPSA id u24-20020a2eb818000000b0026dce212f24sm714260ljo.98.2022.10.08.05.54.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 04:50:21 -0700 (PDT)
-Date:   Sat, 8 Oct 2022 14:50:19 +0300
+        Sat, 08 Oct 2022 05:54:38 -0700 (PDT)
+Date:   Sat, 8 Oct 2022 15:54:36 +0300
 From:   Serge Semin <fancer.lancer@gmail.com>
 To:     Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Peter Rosin <peda@axentia.se>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        robh@kernel.org, wsa@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v9 1/4] dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
-Message-ID: <20221008115019.6jxsbawtye7cdkfh@mobilestation>
+Cc:     Peter Rosin <peda@axentia.se>, robh@kernel.org,
+        laurent.pinchart@ideasonboard.com, wsa@kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [v9 3/4] i2c: muxes: pca954x: Configure MAX7357 in enhanced mode
+Message-ID: <20221008125436.ndj2nwesx5lgppsf@mobilestation>
 References: <20221007075354.568752-1-patrick.rudolph@9elements.com>
- <20221007075354.568752-2-patrick.rudolph@9elements.com>
+ <20221007075354.568752-4-patrick.rudolph@9elements.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221007075354.568752-2-patrick.rudolph@9elements.com>
+In-Reply-To: <20221007075354.568752-4-patrick.rudolph@9elements.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -75,116 +72,151 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 09:53:50AM +0200, Patrick Rudolph wrote:
-> Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
-> chips. The functionality will be provided by the exisintg pca954x driver.
+On Fri, Oct 07, 2022 at 09:53:52AM +0200, Patrick Rudolph wrote:
+> The MAX7357 and MAX7358 have 6 additional registers called enhanced mode
+> in the following paragraphs. While the MAX7357 exposes those registers
+> without a special sequence, the MAX7358 requires an unlock sequence.
+> The enhanced mode allows to configure optional features which are nice to
+> have on an I2C mux, but are not mandatory for it's general operation.
 > 
-> While on it make the interrupts support conditionally as not all of the
-> existing chips have interrupts.
+
+> As I don't have a MAX7358 for testing the special unlock sequence the
+> enhanced mode isn't used on the MAX7358, but it could be added later
+> if required.
+
+Not that hard to do. Just place four I2C_SMBUS_QUICK messages in a
+single transfer:
+S Addr Wr [A] Sr Addr Rd [A] Sr Addr Wr [A] Sr Addr Rd [A] P
+it can be easily done by means of the i2c_transfer() method called
+with four i2c_msg instances (Wr/Rd/Wr/Rd with zero length) passed.
+See the way the quicks smbus-messages are implemented in
+i2c_smbus_xfer_emulated((). Just place four if them in single array
+and pass to the i2c_transfer() method.
+
+Note some drivers may unsupport the I2C-level transfers. Also note
+some adapters may unsupport the zero-length I2C-transfers. AFAIR we
+had such problem with the Synopsys DW I2C controller.
+
 > 
-> For chips that are powered off by default add an optional regulator
-> called vdd-supply.
+> The MAX7357 enhanced mode is used to configure the chip to
+>  - Disable interrupts on bus locked up detection
+>  - Enable bus locked-up clearing
+>  - Disconnect only locked bus instead of all channels
+> 
+> This configuration protects the I2C tree from total failure and attempts
+> to unbrick the faulty bus. It's unclear why this isn't the default
+> configuration.
+> 
+> Tested using the MAX7357 and verified that the stalled bus is disconnected
+> while the other channels remain operational.
 > 
 > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 > ---
->  .../bindings/i2c/i2c-mux-pca954x.yaml         | 39 ++++++++++++++++---
->  1 file changed, 34 insertions(+), 5 deletions(-)
+>  drivers/i2c/muxes/i2c-mux-pca954x.c | 46 ++++++++++++++++++++++++++++-
+>  1 file changed, 45 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> index 9f1726d0356b..efad0a95806f 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> @@ -4,21 +4,25 @@
->  $id: http://devicetree.org/schemas/i2c/i2c-mux-pca954x.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> index 4b63b1eb669e..992976fa6798 100644
+> --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
+> +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> @@ -57,6 +57,37 @@
 >  
-> -title: NXP PCA954x I2C bus switch
-> +title: NXP PCA954x I2C and compatible bus switches
+>  #define PCA954X_IRQ_OFFSET 4
 >  
->  maintainers:
->    - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->  
->  description:
-> -  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
-> -
-
-> -allOf:
-> -  - $ref: /schemas/i2c/i2c-mux.yaml#
-
-Why do you move the allOf statement to the bottom of the schema?
-
-> +  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices,
-> +  and the Maxim MAX735x and MAX736x I2C mux/switch devices.
-
-What about combining the sentence: "The binding supports NXP
-PCA954x/PCA984x and Maxim MAX735x/MAX736x I2C mux/switch devices." ?
-Currently it does look a bit bulky.
-
->  
->  properties:
->    compatible:
->      oneOf:
->        - enum:
-> +          - maxim,max7356
-> +          - maxim,max7357
-> +          - maxim,max7358
-> +          - maxim,max7367
-> +          - maxim,max7368
-> +          - maxim,max7369
->            - nxp,pca9540
->            - nxp,pca9542
->            - nxp,pca9543
-> @@ -59,10 +63,33 @@ properties:
->      description: if present, overrides i2c-mux-idle-disconnect
->      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
->  
-> +  vdd-supply:
-> +    description: A voltage regulator supplying power to the chip.
+> +/*
+> + * The MAX7357 and MAX7358 have 6 additional registers called enhanced mode
+> + * in the following paragraphs. While the MAX7357 exposes those registers
+> + * without a special sequence, the MAX7358 requires an unlock sequence.
+> + *
+> + * The first enhanced mode register called CONF allows to configure
+> + * additional features.
+> + */
+> +#define MAX7357_REG_SWITCH				0
+> +#define MAX7357_REG_CONF				1
+> +#define  MAX7357_CONF_INT_ENABLE			BIT(0)
+> +#define  MAX7357_CONF_FLUSH_OUT				BIT(1)
+> +#define  MAX7357_CONF_RELEASE_INT			BIT(2)
+> +#define  MAX7357_CONF_LOCK_UP_CLEAR_ON_READ		BIT(3)
+> +#define  MAX7357_CONF_DISCON_SINGLE_CHAN		BIT(4)
+> +#define  MAX7357_CONF_BUS_LOCKUP_DETECTION_DISABLE	BIT(5)
+> +#define  MAX7357_CONF_ENABLE_BASIC_MODE			BIT(6)
+> +#define  MAX7357_CONF_PRECONNECT_TEST			BIT(7)
 > +
->  required:
->    - compatible
->    - reg
->  
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-mux.yaml#
-> +  - if:
-> +      not:
-> +        properties:
-> +          compatible:
-> +            contains:
-> +              enum:
-> +                - maxim,max7367
-> +                - maxim,max7369
-> +                - nxp,pca9542
-> +                - nxp,pca9543
-> +                - nxp,pca9544
-> +                - nxp,pca9545
-> +    then:
+> +/*
+> + * On boot the MAX735x behave like a regular MUX. Apply a fixed
+> + * default configuration on MAX7357 that:
+> + * - disables interrupts
+> + * - sents automatically flush-out sequence on locked-up channels
+> +     when a lock-up condition is detected
+> + * - isolates only the locked channel instead of all channels
+> + * - doesn't disable bus lock-up detection.
+> + */
 
-> +      properties:
-> +        interrupts: false
-> +        "#interrupt-cells": false
-> +        interrupt-controller: false
+> +#define MAX7357_CONF_DEFAULTS (MAX7357_CONF_FLUSH_OUT | \
+> +	 MAX7357_CONF_DISCON_SINGLE_CHAN)
 
-I'd suggest to add an opposite definition. Evaluate the properties for
-the devices which expect them being evaluated instead of falsing their
-existence for the devices which don't support the interrupts.
+Moving the macro definition fully to the new line might look a bit
+nicer:
+
++#define MAX7357_CONF_DEFAULTS \
+	(MAX7357_CONF_FLUSH_OUT | MAX7357_CONF_DISCON_SINGLE_CHAN)
+
+> +
+>  enum pca_type {
+>  	max_7367,
+>  	max_7368,
+> @@ -82,6 +113,7 @@ struct chip_desc {
+>  	u8 nchans;
+>  	u8 enable;	/* used for muxes only */
+>  	u8 has_irq;
+
+> +	u8 maxim_enhanced_mode;
+
+So long name.( What about a shorter version, i.e. max(im)?_enh ?
+
+BTW how to differentiate the devices with the enhanced mode
+enabled/disabled by default?
 
 -Sergey
 
-> +
->  unevaluatedProperties: false
+>  	enum muxtype {
+>  		pca954x_ismux = 0,
+>  		pca954x_isswi
+> @@ -113,6 +145,7 @@ static const struct chip_desc chips[] = {
+>  	[max_7357] = {
+>  		.nchans = 8,
+>  		.muxtype = pca954x_isswi,
+> +		.maxim_enhanced_mode = 1,
+>  		.id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
+>  	},
+>  	[max_7358] = {
+> @@ -452,6 +485,7 @@ static void pca954x_cleanup(struct i2c_mux_core *muxc)
 >  
->  examples:
-> @@ -79,6 +106,8 @@ examples:
->              #size-cells = <0>;
->              reg = <0x74>;
+>  static int pca954x_init(struct i2c_client *client, struct pca954x *data)
+>  {
+> +	struct i2c_adapter *adap = client->adapter;
+>  	int ret;
 >  
-> +            vdd-supply = <&p3v3>;
-> +
->              interrupt-parent = <&ipic>;
->              interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
->              interrupt-controller;
+>  	if (data->idle_state >= 0)
+> @@ -459,7 +493,17 @@ static int pca954x_init(struct i2c_client *client, struct pca954x *data)
+>  	else
+>  		data->last_chan = 0; /* Disconnect multiplexer */
+>  
+> -	ret = i2c_smbus_write_byte(client, data->last_chan);
+> +	if (data->chip->maxim_enhanced_mode) {
+> +		if (i2c_check_functionality(adap, I2C_FUNC_SMBUS_WRITE_BYTE_DATA)) {
+> +			ret = i2c_smbus_write_byte_data(client, data->last_chan,
+> +							MAX7357_CONF_DEFAULTS);
+> +		} else {
+> +			dev_warn(&client->dev, "Didn't configure enhanced defaults\n");
+> +			ret = i2c_smbus_write_byte(client, data->last_chan);
+> +		}
+> +	} else {
+> +		ret = i2c_smbus_write_byte(client, data->last_chan);
+> +	}
+>  	if (ret < 0)
+>  		data->last_chan = 0;
+>  
 > -- 
 > 2.37.3
 > 
