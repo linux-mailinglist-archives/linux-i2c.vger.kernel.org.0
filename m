@@ -2,144 +2,308 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6805F7C61
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Oct 2022 19:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE11C5F84A3
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Oct 2022 11:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiJGRkX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 Oct 2022 13:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49004 "EHLO
+        id S229607AbiJHJtS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 8 Oct 2022 05:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiJGRkW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Oct 2022 13:40:22 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFD3E28700;
-        Fri,  7 Oct 2022 10:40:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D6867106F;
-        Fri,  7 Oct 2022 10:40:25 -0700 (PDT)
-Received: from [10.57.65.170] (unknown [10.57.65.170])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3683C3F792;
-        Fri,  7 Oct 2022 10:40:17 -0700 (PDT)
-Message-ID: <acdbf49c-1a73-a0b9-a10d-42d544be3117@arm.com>
-Date:   Fri, 7 Oct 2022 18:40:12 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 2/3] arm64: tegra: Add GPCDMA support for Tegra I2C
-Content-Language: en-GB
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Will Deacon <will@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Akhil R <akhilrajeev@nvidia.com>, christian.koenig@amd.com,
-        devicetree@vger.kernel.org, digetx@gmail.com, jonathanh@nvidia.com,
-        ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        sumit.semwal@linaro.org, wsa@kernel.org
-References: <20220906144716.16274-1-akhilrajeev@nvidia.com>
- <20220906144716.16274-3-akhilrajeev@nvidia.com> <Y0AnpYeECoyQchmY@orome>
- <Y0A44EIF74bri/uu@orome> <d95eb458-151b-0a31-0aa6-4073ea962d2c@arm.com>
- <Y0BDB2lz4PHUwE8L@orome>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <Y0BDB2lz4PHUwE8L@orome>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229586AbiJHJtR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Oct 2022 05:49:17 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FB31A201;
+        Sat,  8 Oct 2022 02:49:15 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 663295C0050;
+        Sat,  8 Oct 2022 05:49:15 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Sat, 08 Oct 2022 05:49:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1665222555; x=
+        1665308955; bh=uVFJ/ixFTuJnrPpiJX6LTMPl44z8m+rvMsabaV3ZgAc=; b=O
+        ghPHC9z0ghD0VkEkl8iG4dY+2QNDwjO10Q1Hpe1rOIrEAv9mK/A4M+kp538aSLAR
+        5ozhbtz+ZgI0IyohsvGY7FCRfeFIsV4rGmZ3xmquheDgmaWRKLzdDs46vYiPLGps
+        CJG8ZSGkPYqKH5zKV/rdXDOcA73L4DAbv4TvHhNyAxpxMbCYinwIN/APhOzWNK8v
+        U7Up73CoV3ZmJYjVYrVTmCe7qeb5tb3DftB5BwePZNdEApMC96LGqAe4NTjg2Csm
+        K8R3Fs2YOkSkgHTlPH/3nRawT2MSjKdwCaL4rECj42wxNECQN61NVkuO5x6XM5ED
+        ydZ5Oqu0a2h4+lbvClQ/A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665222555; x=
+        1665308955; bh=uVFJ/ixFTuJnrPpiJX6LTMPl44z8m+rvMsabaV3ZgAc=; b=O
+        xZUcRRG6CuHz40Ik0Oh2py6Z3KNeNlrX7gOx+fx2ajE8ZJF4whTQkSfHIKMRknCl
+        gloqnYKIVGOTtZpLAnyhvGtj4Td7yLVFivuo6ujEP4x3M0KfgcKXO8oV04hPHv3T
+        EvJPeaMmz2de0HGf3KnrgJv8XLX/pFiWfWV/FUw6KJ4KtmXQl7Hyl7cHEF2Ikg2T
+        v98RywUfLr1rQAjxgpxgRNzFK5o0JWqRB8WELoUgc4KUhOcGYkTEi2qOmoHEk7FR
+        Z0ZH7fmrEKvqKwISHCKi+eAKc0atBQoyomNkIR28VeCLleboqXMdknruEVuFTkkF
+        9RwOkolCtcNUgnpOLh+rQ==
+X-ME-Sender: <xms:mkdBY2csKk4dWgRzzMCiAYzpTpTQuwavSpLNvj5IqG3Jk2g_a7C0JQ>
+    <xme:mkdBYwOOw7QyPEFxhrnW1IIcUl_VqEemqI9mpi-GADdrT29ffa4OgBbSXEvboQs9T
+    I_qlw2zd_kB-x78yZg>
+X-ME-Received: <xmr:mkdBY3iB_iSfoX-w5HxF8uTrARZt64JIqNtqseAmtl-nLtZr5f0WSlmVvvXR8HHIku3NTVbdhUKW_3_6XqUN1SxuAWfqLScYtki03aLp63o-2aMCO060Al8AireyLA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeiledgudekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptgfghfggufffkfhfvegjvffosehtqhhmtdhhtdejnecuhfhrohhmpefuvhgv
+    nhcurfgvthgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrth
+    htvghrnhepffdvueeggeffieelgeeitdekteejkeehhefhheduledvueduvdelffeiveel
+    teeknecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhesshhvvghnphgvthgvrhdruggv
+    vh
+X-ME-Proxy: <xmx:mkdBYz9cMhi2VMI_HwJyTOrHl8m5-Mc7qWqP6NdfdnVE5b2mFFGvJg>
+    <xmx:mkdBYyulqXQyO6biOiXHkhTQKUfr9zdvX7VfpeM4_YHbEsHx2FfSug>
+    <xmx:mkdBY6GRKiXirMwbybVRoJtuWp43MPA0NJTLP5DfjagZeG-TF4eyag>
+    <xmx:m0dBY8IKIxMzynN_XVgkRTjRWgvWQqzsb6PDFUnKJa-pnb7BmkycsQ>
+Feedback-ID: i51094778:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 8 Oct 2022 05:49:03 -0400 (EDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Sven Peter <sven@svenpeter.dev>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v3] i2c/pasemi: PASemi I2C controller IRQ enablement
+Date:   Sat, 8 Oct 2022 11:48:42 +0200
+Message-Id: <A0B81E7F-BF26-424D-B9E5-5647323B24EC@svenpeter.dev>
+References: <MN2PR01MB5358ED8FC32C0CFAEBD4A0E19F5F9@MN2PR01MB5358.prod.exchangelabs.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+In-Reply-To: <MN2PR01MB5358ED8FC32C0CFAEBD4A0E19F5F9@MN2PR01MB5358.prod.exchangelabs.com>
+To:     Arminder Singh <arminders208@outlook.com>
+X-Mailer: iPhone Mail (20A362)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 2022-10-07 16:17, Thierry Reding wrote:
-> On Fri, Oct 07, 2022 at 03:53:21PM +0100, Robin Murphy wrote:
->> On 2022-10-07 15:34, Thierry Reding wrote:
->>> On Fri, Oct 07, 2022 at 03:20:37PM +0200, Thierry Reding wrote:
->>>> On Tue, Sep 06, 2022 at 08:17:15PM +0530, Akhil R wrote:
->>>>> Add dma properties to support GPCDMA for I2C in Tegra 186 and later
->>>>> chips
->>>>>
->>>>> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
->>>>> ---
->>>>>    arch/arm64/boot/dts/nvidia/tegra186.dtsi | 32 ++++++++++++++++++++++++
->>>>>    arch/arm64/boot/dts/nvidia/tegra194.dtsi | 32 ++++++++++++++++++++++++
->>>>>    arch/arm64/boot/dts/nvidia/tegra234.dtsi | 32 ++++++++++++++++++++++++
->>>>>    3 files changed, 96 insertions(+)
->>>>>
->>>>> diff --git a/arch/arm64/boot/dts/nvidia/tegra186.dtsi b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
->>>>> index 59a10fb184f8..3580fbf99091 100644
->>>>> --- a/arch/arm64/boot/dts/nvidia/tegra186.dtsi
->>>>> +++ b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
->>>>> @@ -672,6 +672,10 @@
->>>>>    		clock-names = "div-clk";
->>>>>    		resets = <&bpmp TEGRA186_RESET_I2C1>;
->>>>>    		reset-names = "i2c";
->>>>> +		iommus = <&smmu TEGRA186_SID_GPCDMA_0>;
->>>>> +		dma-coherent;
->>>>
->>>> I wonder: why do we need the iommus and dma-coherent properties here?
->>>> The I2C controllers are not directly accessing memory, instead it's the
->>>> GPCDMA via the dmas/dma-names properties. The GPCDMA already has these
->>>> properties set, so they seem to be useless here.
->>>
->>> Looking at this some more, the reason why we need these is so that the
->>> struct device backing these I2C controllers is attached to an IOMMU and
->>> the DMA ops are set up correspondingly. Without these, the DMA memory
->>> allocated by the I2C controllers will not be mapped through the IOMMU
->>> and cause faults because the GPCDMA is the one that needs to access
->>> those.
->>>
->>> I do recall that we have a similar case for audio where the "sound card"
->>> needs to have an iommus property to make sure it allocates memory
->>> through the same IOMMU domain as the ADMA, which is the device that ends
->>> up doing the actual memory accesses.
->>>
->>> Rob, Robin, Will, do you know of a good way other than the DT workaround
->>> here to address this? I think ideally we would want to obtain the "DMA
->>> parent" of these devices so that we allocate memory for that parent
->>> instead of the child. We do have some existing infrastructure for this
->>> type of relationship with the __of_get_dma_parent() function as well as
->>> the interconnects property, but I wonder if that's really the right way
->>> to represent this.
->>>
->>> Adding "interconnects" properties would also duplicate the "dmas"
->>> properties we already use to obtain the TX and RX DMA channels. One
->>> simple way to more accurately do this would be to reach into the DMA
->>> engine internals (dma_chan->device->dev) and pass that to dma_alloc_*()
->>> to make sure we allocate for the correct device. For audio that could be
->>> a bit complicated because most of that code is shared across multiple
->>> vendors. I couldn't find any examples where a driver would reach into
->>> DMA channels to allocate for the parent, so I'm wondering what other
->>> people do to solve this issue. Or if anyone else even has the same
->>> issue.
->>
->> As far as I'm aware that's the correct approach, i.e. if a driver is using
->> an external dmaengine then it's responsible for making DMA mappings for the
->> correct DMA channel device. We ended up being a bit asymmetrical in that the
->> dmaengine driver itself has to take care of its own mapping for the
->> non-memory end of a transfer when an IOMMU is involved - that's what
->> dma_map_resource() was created for, see pl330 and rcar-dmac for examples.
->>
->> The only driver I have first-hand experience with in this context is
->> amba-pl011, using pl330 through an SMMU on the Arm Juno board, but that
->> definitely works fine without DT hacks.
-> 
-> Oh yeah, I see. That's exactly what I had in mind. And now that I'm
-> using the right regex I can also find more occurrences of this. Thanks
-> for those pointers. Looks like that's the right approach then. I'll try
-> to make corresponding changes and see if there's any fallout.
+Hi,
 
-Eww, from a quick look the DMA API usage in i2c-tegra is worse than just 
-this. Calling dma_sync_* on a buffer from dma_alloc_coherent() is both 
-egregiously wrong and semantically pointless - the fundamental purpose 
-of a coherent allocation is that both CPU and device can access it at 
-any time without any explicit synchronisation. If the driver's doing its 
-own bounce-buffering for reasons of data alignment then the syncs should 
-just go; otherwise get rid of the coherent buffer and replace the syncs 
-with proper map/unmap. Either way, be sure to throw CONFIG_DMA_API_DEBUG 
-at it, hard.
+> On 7. Oct 2022, at 02:43, Arminder Singh <arminders208@outlook.com> wrote:=
 
-Cheers,
-Robin.
+>=20
+> =EF=BB=BFThis patch adds IRQ support to the PASemi I2C controller driver t=
+o=20
+> increase the performace of I2C transactions on platforms with PASemi I2C=20=
+
+> controllers. While primarily intended for Apple silicon platforms, this=20=
+
+> patch should also help in enabling IRQ support for older PASemi hardware=20=
+
+> as well should the need arise.
+>=20
+> Signed-off-by: Arminder Singh <arminders208@outlook.com>
+> ---
+> This version of the patch has been tested on an M1 Ultra Mac Studio,
+> as well as an M1 MacBook Pro, and userspace launches successfully
+> while using the IRQ path for I2C transactions.
+
+I think Wolfram suggested to keep this in the commit message. If in doubt li=
+sten to him and not me because he=E2=80=99s much more experienced with the k=
+ernel than I am ;)
+
+>=20
+> This version of the patch only contains fixes to the whitespace and
+> alignment issues found in v2 of the patch, and as such the testing that
+> Christian Zigotsky did on PASemi hardware for v2 of the patch also applies=
+
+> to this version of the patch as well.
+> (See v2 patch email thread for the "Tested-by" tag)
+
+You can just collect and keep those tags above your signed off by if you onl=
+y change things like whitespaces.
+
+>=20
+> v2 to v3 changes:
+> - Fixed some whitespace and alignment issues found in v2 of the patch
+>=20
+> v1 to v2 changes:
+> - moved completion setup from pasemi_platform_i2c_probe to
+>   pasemi_i2c_common_probe to allow PASemi and Apple platforms to share
+>   common completion setup code in case PASemi hardware gets IRQ support
+>   added
+> - initialized the status variable in pasemi_smb_waitready when going down
+>   the non-IRQ path
+> - removed an unnecessary cast of dev_id in the IRQ handler
+> - fixed alignment of struct member names in i2c-pasemi-core.h
+>   (addresses Christophe's feedback in the original submission)
+> - IRQs are now disabled after the wait_for_completion_timeout call
+>   instead of inside the IRQ handler
+>   (prevents the IRQ from going off after the completion times out)
+> - changed the request_irq call to a devm_request_irq call to obviate
+>   the need for a remove function and a free_irq call
+>   (thanks to Sven for pointing this out in the original submission)
+> - added a reinit_completion call to pasemi_reset=20
+>   as a failsafe to prevent missed interrupts from causing the completion
+>   to never complete (thanks to Arnd Bergmann for pointing this out)
+> - removed the bitmask variable in favor of just using the value
+>   directly (it wasn't used anywhere else)
+>=20
+> v2 linked here: https://lore.kernel.org/linux-i2c/MN2PR01MB535821C8058C781=
+4B2F8EEDF9F599@MN2PR01MB5358.prod.exchangelabs.com/
+> v1 linked here: https://lore.kernel.org/linux-i2c/MN2PR01MB535838492432C91=
+0F2381F929F6F9@MN2PR01MB5358.prod.exchangelabs.com/T/#m11b3504c2667517aad752=
+1514c99ca0e07a9381f
+>=20
+> Hopefully the patch is good to go this time around!
+>=20
+> drivers/i2c/busses/i2c-pasemi-core.c     | 29 ++++++++++++++++++++----
+> drivers/i2c/busses/i2c-pasemi-core.h     |  5 ++++
+> drivers/i2c/busses/i2c-pasemi-platform.c |  6 +++++
+> 3 files changed, 36 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-pasemi-core.c b/drivers/i2c/busses/i2c=
+-pasemi-core.c
+> index 9028ffb58cc0..4855144b370e 100644
+> --- a/drivers/i2c/busses/i2c-pasemi-core.c
+> +++ b/drivers/i2c/busses/i2c-pasemi-core.c
+> @@ -21,6 +21,7 @@
+> #define REG_MTXFIFO    0x00
+> #define REG_MRXFIFO    0x04
+> #define REG_SMSTA    0x14
+> +#define REG_IMASK    0x18
+> #define REG_CTL        0x1c
+> #define REG_REV        0x28
+>=20
+> @@ -66,6 +67,7 @@ static void pasemi_reset(struct pasemi_smbus *smbus)
+>        val |=3D CTL_EN;
+>=20
+>    reg_write(smbus, REG_CTL, val);
+> +    reinit_completion(&smbus->irq_completion);
+> }
+>=20
+> static void pasemi_smb_clear(struct pasemi_smbus *smbus)
+> @@ -81,11 +83,18 @@ static int pasemi_smb_waitready(struct pasemi_smbus *s=
+mbus)
+>    int timeout =3D 10;
+>    unsigned int status;
+>=20
+> -    status =3D reg_read(smbus, REG_SMSTA);
+> -
+> -    while (!(status & SMSTA_XEN) && timeout--) {
+> -        msleep(1);
+> +    if (smbus->use_irq) {
+> +        reinit_completion(&smbus->irq_completion);
+> +        reg_write(smbus, REG_IMASK, SMSTA_XEN | SMSTA_MTN);
+> +        wait_for_completion_timeout(&smbus->irq_completion, msecs_to_jiff=
+ies(10));
+> +        reg_write(smbus, REG_IMASK, 0);
+>        status =3D reg_read(smbus, REG_SMSTA);
+> +    } else {
+> +        status =3D reg_read(smbus, REG_SMSTA);
+> +        while (!(status & SMSTA_XEN) && timeout--) {
+> +            msleep(1);
+> +            status =3D reg_read(smbus, REG_SMSTA);
+> +        }
+>    }
+>=20
+>    /* Got NACK? */
+> @@ -344,10 +353,14 @@ int pasemi_i2c_common_probe(struct pasemi_smbus *smb=
+us)
+>=20
+>    /* set up the sysfs linkage to our parent device */
+>    smbus->adapter.dev.parent =3D smbus->dev;
+> +    smbus->use_irq =3D 0;
+> +    init_completion(&smbus->irq_completion);
+>=20
+>    if (smbus->hw_rev !=3D PASEMI_HW_REV_PCI)
+>        smbus->hw_rev =3D reg_read(smbus, REG_REV);
+>=20
+> +    reg_write(smbus, REG_IMASK, 0);
+> +
+>    pasemi_reset(smbus);
+>=20
+>    error =3D devm_i2c_add_adapter(smbus->dev, &smbus->adapter);
+> @@ -356,3 +369,11 @@ int pasemi_i2c_common_probe(struct pasemi_smbus *smbu=
+s)
+>=20
+>    return 0;
+> }
+> +
+> +irqreturn_t pasemi_irq_handler(int irq, void *dev_id)
+> +{
+> +    struct pasemi_smbus *smbus =3D dev_id;
+> +
+> +    complete(&smbus->irq_completion);
+
+I only realized just now that you also want to disable the interrupt right h=
+ere by writing to IMASK. This is a level sensitive interrupt at AIC level so=
+ the moment this handler returns it will fire again until you reach the writ=
+e above after the completion wait a bit later.
+
+
+> +    return IRQ_HANDLED;
+> +}
+> diff --git a/drivers/i2c/busses/i2c-pasemi-core.h b/drivers/i2c/busses/i2c=
+-pasemi-core.h
+> index 4655124a37f3..88821f4e8a9f 100644
+> --- a/drivers/i2c/busses/i2c-pasemi-core.h
+> +++ b/drivers/i2c/busses/i2c-pasemi-core.h
+> @@ -7,6 +7,7 @@
+> #include <linux/i2c-smbus.h>
+> #include <linux/io.h>
+> #include <linux/kernel.h>
+> +#include <linux/completion.h>
+>=20
+> #define PASEMI_HW_REV_PCI -1
+>=20
+> @@ -16,6 +17,10 @@ struct pasemi_smbus {
+>    void __iomem        *ioaddr;
+>    unsigned int         clk_div;
+>    int             hw_rev;
+> +    int             use_irq;
+> +    struct completion     irq_completion;
+> };
+>=20
+> int pasemi_i2c_common_probe(struct pasemi_smbus *smbus);
+> +
+> +irqreturn_t pasemi_irq_handler(int irq, void *dev_id);
+> diff --git a/drivers/i2c/busses/i2c-pasemi-platform.c b/drivers/i2c/busses=
+/i2c-pasemi-platform.c
+> index 88a54aaf7e3c..e35945a91dbe 100644
+> --- a/drivers/i2c/busses/i2c-pasemi-platform.c
+> +++ b/drivers/i2c/busses/i2c-pasemi-platform.c
+> @@ -49,6 +49,7 @@ static int pasemi_platform_i2c_probe(struct platform_dev=
+ice *pdev)
+>    struct pasemi_smbus *smbus;
+>    u32 frequency;
+>    int error;
+> +    int irq_num;
+>=20
+>    data =3D devm_kzalloc(dev, sizeof(struct pasemi_platform_i2c_data),
+>                GFP_KERNEL);
+> @@ -82,6 +83,11 @@ static int pasemi_platform_i2c_probe(struct platform_de=
+vice *pdev)
+>    if (error)
+>        goto out_clk_disable;
+>=20
+> +    irq_num =3D platform_get_irq(pdev, 0);
+> +    error =3D devm_request_irq(smbus->dev, irq_num, pasemi_irq_handler, 0=
+, "pasemi_apple_i2c", (void *)smbus);
+> +
+> +    if (!error)
+> +        smbus->use_irq =3D 1;
+>    platform_set_drvdata(pdev, data);
+>=20
+>    return 0;
+> --=20
+> 2.34.1
+>=20
+
+Sven=20=
+
