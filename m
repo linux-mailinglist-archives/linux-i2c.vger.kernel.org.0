@@ -2,145 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75405F8CC5
-	for <lists+linux-i2c@lfdr.de>; Sun,  9 Oct 2022 20:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E72815F8CC7
+	for <lists+linux-i2c@lfdr.de>; Sun,  9 Oct 2022 20:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbiJISNm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 9 Oct 2022 14:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
+        id S230208AbiJISNv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 9 Oct 2022 14:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiJISNl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 9 Oct 2022 14:13:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B60023BF4;
-        Sun,  9 Oct 2022 11:13:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66AD760C38;
-        Sun,  9 Oct 2022 18:13:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11CD3C433D6;
-        Sun,  9 Oct 2022 18:13:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665339219;
-        bh=GQErVvLD+yTmsxHoJjsw2fsJ8p3oi70DsLzpF/U9rBM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BZ7soU0Ul+4LmuAFEufAvMqTyV44vzFaHEMLctzrZZApuIySJSli2RZmwSnJqKvFq
-         toZV6V3+cQI297dtpGMLTk+RnXbWsSSMpE5fo3Hj+dj3Q2oDff/SusUqWVvcB4ZaWY
-         iJ6Mwe2WYPEn25F085AVMOuK0D8QyfysB3xHMeK8G6h6jXdzWWLXgx8N2mCIKLmVY+
-         DNC+ZYou661ZGgMYG2AH8sPf3wxmkldq3N3F25SvbRWy8bLe2nyyZk1Iw6GKtt040j
-         EAk3Mas69AQynhRmWoS/U4JCH5jlemOG8tDfFt7qeQuhGXaG0wVMYrjMy3QoC9BjI8
-         79FegUVsWeSaQ==
-Date:   Sun, 9 Oct 2022 20:13:35 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c-for-6.1-rc1-batch2
-Message-ID: <Y0MPT6Mso6cD0mfN@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
+        with ESMTP id S230156AbiJISNs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 9 Oct 2022 14:13:48 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767CB248C4;
+        Sun,  9 Oct 2022 11:13:46 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id bu25so13776881lfb.3;
+        Sun, 09 Oct 2022 11:13:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=64cKJ1bXkuhfZtUIYbnBluC3FPEMFT8rqd0uaD8eans=;
+        b=K4cQq6cyD+k42i7tzU0BYFT0WMpfPUjVqKnUynBg9KgsCylBM17N0rzP7qscv9J1GM
+         n3hh23N7SR474rk3VT9NtA/UtXxjYD+H00vuJKRGjYvokiZBzkToJXOAcg/9h5UDkI4L
+         zEaSJWY7VpjsqKu5Jsq1xlzRbVAcx6QqkELhuwIpgBm8kNR6HfgWEpVyyjs6gJ0oLvWk
+         69erTDwe/yZD3YeA6uEY4wwiE93MVpd6b58S9bS0Lsa6wz6+h8KF/F91BB61QxjfhPmB
+         O/LtbNgVSKqprSu+6T3Xn8tXIM4lgd+FhKd/ZBBuRvUqjhTuh2MZJslq2umrxBOIN3qu
+         hZmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=64cKJ1bXkuhfZtUIYbnBluC3FPEMFT8rqd0uaD8eans=;
+        b=a5/zmd7/ZssqLLtaJrFu3yHuQn2DeGGOkqpfi5yP0kf6p1Z+0LTtV5jr9GUjsVJCXU
+         rvUyQmy6fFJ4HrKduaudyihyGzuhlnTR71+pxe9dilNNLLM/84Lj2v2P79f2R6i4Db50
+         cVyxO8V4MnVL/HckHsn5IpOszr9xTG21plciK0aojv+N4DyA3ZpVVXlLPK9XlRbBVWGY
+         +r1/xovH15jx2gI6rSDLkLW+ZYfr9Z2yOIFJTl2KCTyIsH7LS9GEHjpeYZ3havlSdFXu
+         Zo2xafc7nLnz0uWLF6a+6moxKN7MshNRgbUOboO30ilcow6M0mFyu8k1AFrNy99+x+IY
+         aDGQ==
+X-Gm-Message-State: ACrzQf3/yyk6ppweRXqLhWl+cQ6q4Y5RjuwERRUUV57HdFpxtnT/26RS
+        Ipp0mL1ojX/Pu3o6H0ZefpHZpVM/tww=
+X-Google-Smtp-Source: AMsMyM6L/q++zCXe4GWeBrAPIwqG39fFbfBAIKnPh6MuiuyxdztOz8g4AVli9P9bJHXVMfV/21m3+g==
+X-Received: by 2002:a05:6512:1309:b0:492:e273:d800 with SMTP id x9-20020a056512130900b00492e273d800mr5018765lfu.93.1665339224546;
+        Sun, 09 Oct 2022 11:13:44 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id s1-20020a056512314100b00494a27500c1sm1101006lfi.163.2022.10.09.11.13.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Oct 2022 11:13:43 -0700 (PDT)
+Date:   Sun, 9 Oct 2022 21:13:41 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>, robh@kernel.org,
+        laurent.pinchart@ideasonboard.com, wsa@kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [v9 3/4] i2c: muxes: pca954x: Configure MAX7357 in enhanced mode
+Message-ID: <20221009181341.z4j6vcf3ncwi7q5i@mobilestation>
+References: <20221007075354.568752-1-patrick.rudolph@9elements.com>
+ <20221007075354.568752-4-patrick.rudolph@9elements.com>
+ <20221008125436.ndj2nwesx5lgppsf@mobilestation>
+ <386fe4ae-0fae-0822-f86d-f5903369b424@axentia.se>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ru4GaAzhnxfo7JvS"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <386fe4ae-0fae-0822-f86d-f5903369b424@axentia.se>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Sun, Oct 09, 2022 at 06:36:52PM +0200, Peter Rosin wrote:
+> 2022-10-08 at 14:54, Serge Semin wrote:
+> > On Fri, Oct 07, 2022 at 09:53:52AM +0200, Patrick Rudolph wrote:
+> >> +	u8 maxim_enhanced_mode;
+> > 
 
---Ru4GaAzhnxfo7JvS
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> > So long name.( What about a shorter version, i.e. max(im)?_enh ?
+> 
+> No thank you, please keep the long name as is. This is a corner
+> case and the name is not repeated that many times. Spelling it
+> out makes the code more readable.
 
-The following changes since commit 2bca25eaeba6190efbfcb38ed169bd7ee43b5aaf:
+I don't insist. It was just a suggestion.
 
-  Merge tag 'spi-v6.1' of git://git.kernel.org/pub/scm/linux/kernel/git/bro=
-onie/spi (2022-10-04 19:36:53 -0700)
+Anyway seeing there are going to be two variables with the flag
+semantic (has_irq and maxim_enhanced_mode) it would be better to
+convert them to a single quirk field. Moreover it will be useful
+taking into account that a single maxim_enhanced_mode flag can't be
+used to distinguish the Maxim I2C-muxes with the enhanced mode
+disabled by default. Thus another flag will be needed for such
+devices.
 
-are available in the Git repository at:
+One more thing. Using u8 type for the flag variables isn't that
+descriptive. It should be of the boolean type.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-=
-6.1-rc1-batch2
+-Sergey
 
-for you to fetch changes up to fd66bd74afe880de4f008f96a795fedee887ff44:
-
-  i2c: aspeed: Assert NAK when slave is busy (2022-10-05 21:06:46 +0200)
-
-----------------------------------------------------------------
-- correct a variable type in the new pci1xxxx driver
-- add a new SoC to the qcom-cci driver
-- fix an issue with the designware driver which now got enough testing
-- the aspeed driver handles now busy target backends better
-
-----------------------------------------------------------------
-Colin Ian King (1):
-      i2c: microchip: pci1xxxx: Fix comparison of -EPERM against an unsigne=
-d variable
-
-Jarkko Nikula (1):
-      i2c: designware: Fix handling of real but unexpected device interrupts
-
-Matti Lehtim=C3=A4ki (2):
-      dt-bindings: i2c: qcom,i2c-cci: Document MSM8226 compatible
-      dt-bindings: i2c: qcom,i2c-cci: Document clocks for MSM8974
-
-Quan Nguyen (1):
-      i2c: aspeed: Assert NAK when slave is busy
-
-Rayyan Ansari (1):
-      i2c: qcom-cci: Add MSM8226 compatible
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      (Rev.) i2c: designware: Fix handling of real but unexpected device in=
-terrupts
-
-Krzysztof Kozlowski (2):
-      (Rev.) dt-bindings: i2c: qcom,i2c-cci: Document clocks for MSM8974
-      (Rev.) dt-bindings: i2c: qcom,i2c-cci: Document MSM8226 compatible
-
-Loic Poulain (1):
-      (Rev.) i2c: qcom-cci: Add MSM8226 compatible
-
- .../devicetree/bindings/i2c/qcom,i2c-cci.yaml      | 23 ++++++++++++++++++=
-++--
- drivers/i2c/busses/i2c-aspeed.c                    |  9 ++++++++-
- drivers/i2c/busses/i2c-designware-core.h           |  7 +++++--
- drivers/i2c/busses/i2c-designware-master.c         | 13 ++++++++++++
- drivers/i2c/busses/i2c-mchp-pci1xxxx.c             |  2 +-
- drivers/i2c/busses/i2c-qcom-cci.c                  |  1 +
- 6 files changed, 49 insertions(+), 6 deletions(-)
-
---Ru4GaAzhnxfo7JvS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNDD0sACgkQFA3kzBSg
-KbY3yA/+Kf9xLzPPyXq63N4x/FcmGGarGV+acLY2wC/Gn8bZO275VXbx8JpmqY61
-XzyUhr3enJp9SAlBo2e2oFJz+9wGissvqa6lmKuLH4XrnI837s92DtiLyT+9GZnP
-EuzILJ6m9Fh5fmK4RskMiakg4ksnqbwNDLJ/aDTac8QTrjH2PtPPwVR5WkFY01HQ
-ezUrb1UPvFiDvuCVFhRpJEKlAX+Cj5E2LgJocqSYp0Mb4xjr2IPXhlJMDgXkLJ7m
-maOe3hi8AOlvo8KWTl+CaH/8KRXIb0DmDsPVL4Xm+FBF+RM3TQkDByqAxpBS2ZDx
-S0LlyiigDXkb56iTouyCHsA8yRWGMVD6mcHzoR6O9LiqW88d0o2CZWBCt1AtUeIF
-hf5gPfaDb/+Ygpks4UUUQvZrHuA8hzYRRom8J4/f0UwQtIEMRuN8xPy0d+Ud4cc7
-UmRCnrLSw2lK86AuAw4XuonZbjiLtO7mV6YVQS3q25mx3y00iJrSzeVGHPdm3eXV
-9ITCfEaMmgQXTEvkXaYfbClcK4F8FEB0UnC5qfhneKng8/9JpTe5T/z6ziQgdkcA
-Qam5n9yOLP+o6X1uBjTxD0s+76/UUHxi6ZESJdB6EniU9Ntu1bq8XBmchjiiKZby
-JpAwZhP3RhuiLub3FWT/c9uWPgmyYdocg5wdqdvoGntl5lH60OM=
-=aCZx
------END PGP SIGNATURE-----
-
---Ru4GaAzhnxfo7JvS--
+> 
+> Cheers,
+> Peter
