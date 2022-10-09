@@ -2,79 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6C65F8A01
-	for <lists+linux-i2c@lfdr.de>; Sun,  9 Oct 2022 09:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EDA5F8A8D
+	for <lists+linux-i2c@lfdr.de>; Sun,  9 Oct 2022 12:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbiJIH2T (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 9 Oct 2022 03:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S229970AbiJIKYS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 9 Oct 2022 06:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiJIH2T (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 9 Oct 2022 03:28:19 -0400
-Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9E2F32BB8;
-        Sun,  9 Oct 2022 00:28:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=gZLx7
-        JO3Vsm9hHDGDlzYQeEVv56/GNN07dbSXBKYJyM=; b=MsyXWucgV/AKVErcE6mBF
-        6q5JWsB0Al5nw7mmilum/LzjwCWOMgi8eonQaO3+CAg0XcOXen64Zda02qF1KLlM
-        mhWOnXJsSmNENxGauoTI/dqYiEWiqPTXEuV7Rl0ag/Hx36ixWODDG5lUtT2O49hY
-        GgJuzCAeQMF+H1/GDQBJmw=
-Received: from localhost.localdomain (unknown [111.48.58.12])
-        by smtp7 (Coremail) with SMTP id C8CowAAnmyAGeEJjNgiNJw--.23039S2;
-        Sun, 09 Oct 2022 15:28:07 +0800 (CST)
-From:   Jiangshan Yi <13667453960@163.com>
-To:     jdelvare@suse.com
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH] i2c: sis630: fix spelling typo in comment
-Date:   Sun,  9 Oct 2022 15:28:02 +0800
-Message-Id: <20221009072802.2638945-1-13667453960@163.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229788AbiJIKYR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 9 Oct 2022 06:24:17 -0400
+Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4822D764
+        for <linux-i2c@vger.kernel.org>; Sun,  9 Oct 2022 03:24:15 -0700 (PDT)
+Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
+        by mxout2.routing.net (Postfix) with ESMTP id B83A75FCE7;
+        Sun,  9 Oct 2022 10:16:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1665310599;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AQcp51uRXNcfooZTEfbZbxQLHbIh+KufIsSkzNM91/U=;
+        b=vcRGXu57F0J/7EXjfbzQdp6vRzWkXWyxefuNjO8/eLdfMiDRylZOLUQcN+r7d6KyN1s120
+        OZaFLTfm9f2SgTgghlZvsEY6gt1tYzxMm49tDEhdRNBGGr71+nsDfUfWsixnBC9nOxGIss
+        PWp4/qdiVh19DT8PHdEfurYUtC7xI9w=
+Received: from frank-G5.. (fttx-pool-217.61.145.235.bambit.de [217.61.145.235])
+        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id E44EC1005FA;
+        Sun,  9 Oct 2022 10:16:38 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] Add mt7986 i2c support
+Date:   Sun,  9 Oct 2022 12:16:29 +0200
+Message-Id: <20221009101631.82380-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: C8CowAAnmyAGeEJjNgiNJw--.23039S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5JFW5trWfGrg_yoW3Arc_Kw
-        18Gan7Zr1qk3Z5t3WFqaySvr109r4F9ry8C3Z2v3yYk3y3Zw1DGFWkZw4Sqw4Dur1jgF1Y
-        ga1jgF4xCwnrtjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU0La93UUUUU==
-X-Originating-IP: [111.48.58.12]
-X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbi8AiV+1uoiZpzmwAAse
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Mail-ID: 6f6f32f3-2929-45fb-a491-600517718096
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
+From: Frank Wunderlich <frank-w@public-files.de>
 
-Fix spelling typo in comment.
+This series changes binding and driver for supporting i2c on mt7986.
 
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
----
- drivers/i2c/busses/i2c-sis630.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Frank Wunderlich (2):
+  dt-bindings: i2c: update bindings for mt7986 soc
+  i2c: mediatek: add mt7986 support
 
-diff --git a/drivers/i2c/busses/i2c-sis630.c b/drivers/i2c/busses/i2c-sis630.c
-index cfb8e04a2a83..87d56250d78a 100644
---- a/drivers/i2c/busses/i2c-sis630.c
-+++ b/drivers/i2c/busses/i2c-sis630.c
-@@ -97,7 +97,7 @@ MODULE_PARM_DESC(high_clock,
- module_param(force, bool, 0);
- MODULE_PARM_DESC(force, "Forcibly enable the SIS630. DANGEROUS!");
- 
--/* SMBus base adress */
-+/* SMBus base address */
- static unsigned short smbus_base;
- 
- /* supported chips */
+ .../devicetree/bindings/i2c/i2c-mt65xx.yaml        |  1 +
+ drivers/i2c/busses/i2c-mt65xx.c                    | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+)
+
 -- 
-2.25.1
+2.34.1
 
