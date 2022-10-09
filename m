@@ -2,105 +2,149 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E72815F8CC7
-	for <lists+linux-i2c@lfdr.de>; Sun,  9 Oct 2022 20:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 151ED5F9087
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Oct 2022 00:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbiJISNv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 9 Oct 2022 14:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
+        id S231871AbiJIWZ5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 9 Oct 2022 18:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbiJISNs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 9 Oct 2022 14:13:48 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767CB248C4;
-        Sun,  9 Oct 2022 11:13:46 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id bu25so13776881lfb.3;
-        Sun, 09 Oct 2022 11:13:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=64cKJ1bXkuhfZtUIYbnBluC3FPEMFT8rqd0uaD8eans=;
-        b=K4cQq6cyD+k42i7tzU0BYFT0WMpfPUjVqKnUynBg9KgsCylBM17N0rzP7qscv9J1GM
-         n3hh23N7SR474rk3VT9NtA/UtXxjYD+H00vuJKRGjYvokiZBzkToJXOAcg/9h5UDkI4L
-         zEaSJWY7VpjsqKu5Jsq1xlzRbVAcx6QqkELhuwIpgBm8kNR6HfgWEpVyyjs6gJ0oLvWk
-         69erTDwe/yZD3YeA6uEY4wwiE93MVpd6b58S9bS0Lsa6wz6+h8KF/F91BB61QxjfhPmB
-         O/LtbNgVSKqprSu+6T3Xn8tXIM4lgd+FhKd/ZBBuRvUqjhTuh2MZJslq2umrxBOIN3qu
-         hZmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=64cKJ1bXkuhfZtUIYbnBluC3FPEMFT8rqd0uaD8eans=;
-        b=a5/zmd7/ZssqLLtaJrFu3yHuQn2DeGGOkqpfi5yP0kf6p1Z+0LTtV5jr9GUjsVJCXU
-         rvUyQmy6fFJ4HrKduaudyihyGzuhlnTR71+pxe9dilNNLLM/84Lj2v2P79f2R6i4Db50
-         cVyxO8V4MnVL/HckHsn5IpOszr9xTG21plciK0aojv+N4DyA3ZpVVXlLPK9XlRbBVWGY
-         +r1/xovH15jx2gI6rSDLkLW+ZYfr9Z2yOIFJTl2KCTyIsH7LS9GEHjpeYZ3havlSdFXu
-         Zo2xafc7nLnz0uWLF6a+6moxKN7MshNRgbUOboO30ilcow6M0mFyu8k1AFrNy99+x+IY
-         aDGQ==
-X-Gm-Message-State: ACrzQf3/yyk6ppweRXqLhWl+cQ6q4Y5RjuwERRUUV57HdFpxtnT/26RS
-        Ipp0mL1ojX/Pu3o6H0ZefpHZpVM/tww=
-X-Google-Smtp-Source: AMsMyM6L/q++zCXe4GWeBrAPIwqG39fFbfBAIKnPh6MuiuyxdztOz8g4AVli9P9bJHXVMfV/21m3+g==
-X-Received: by 2002:a05:6512:1309:b0:492:e273:d800 with SMTP id x9-20020a056512130900b00492e273d800mr5018765lfu.93.1665339224546;
-        Sun, 09 Oct 2022 11:13:44 -0700 (PDT)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id s1-20020a056512314100b00494a27500c1sm1101006lfi.163.2022.10.09.11.13.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 11:13:43 -0700 (PDT)
-Date:   Sun, 9 Oct 2022 21:13:41 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>, robh@kernel.org,
-        laurent.pinchart@ideasonboard.com, wsa@kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [v9 3/4] i2c: muxes: pca954x: Configure MAX7357 in enhanced mode
-Message-ID: <20221009181341.z4j6vcf3ncwi7q5i@mobilestation>
-References: <20221007075354.568752-1-patrick.rudolph@9elements.com>
- <20221007075354.568752-4-patrick.rudolph@9elements.com>
- <20221008125436.ndj2nwesx5lgppsf@mobilestation>
- <386fe4ae-0fae-0822-f86d-f5903369b424@axentia.se>
+        with ESMTP id S231873AbiJIWX4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 9 Oct 2022 18:23:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0953C164;
+        Sun,  9 Oct 2022 15:18:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C10D7B80DE2;
+        Sun,  9 Oct 2022 22:14:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A843AC433C1;
+        Sun,  9 Oct 2022 22:14:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665353648;
+        bh=6I0oFww5l0V1IzzU+8y7drAJe30wzaT6tIKTcnOoUOg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PyAlKiCw+0n3cmNf5R9fMhwW89zySgAAwKzrzbD+I+/jadNa6BN+mmMZDgEiABfL5
+         607EQ48RhMxrOaqAYKFvbQFoas4LH+gJmNMjuKG3LuC9BdugWbzQkD7gtwnlhh6V5C
+         Vp0DIyavOl3aexUoJWKUFfBy5NCA4CroYLAKCbeZeutLJLC48F/T13u4MCsEs2PQN8
+         ZAlFMuvCst+8YdfUnJ6SNdR9aZQsok6ZJgplZHzVLS6Tn8vo0xhbDVX1GiE3MrZYXz
+         3U9ugCv2vp64B3es3l9M9HOeha0ZQ5R7jzrHJGYrKwdiq/kknuz5SfFGLNvlQQyMN7
+         rfy1JQ1ffAIug==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.0 74/77] i2c: designware-pci: Group AMD NAVI quirk parts together
+Date:   Sun,  9 Oct 2022 18:07:51 -0400
+Message-Id: <20221009220754.1214186-74-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221009220754.1214186-1-sashal@kernel.org>
+References: <20221009220754.1214186-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <386fe4ae-0fae-0822-f86d-f5903369b424@axentia.se>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 06:36:52PM +0200, Peter Rosin wrote:
-> 2022-10-08 at 14:54, Serge Semin wrote:
-> > On Fri, Oct 07, 2022 at 09:53:52AM +0200, Patrick Rudolph wrote:
-> >> +	u8 maxim_enhanced_mode;
-> > 
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> > So long name.( What about a shorter version, i.e. max(im)?_enh ?
-> 
-> No thank you, please keep the long name as is. This is a corner
-> case and the name is not repeated that many times. Spelling it
-> out makes the code more readable.
+[ Upstream commit 65769162ae4b7f2d82e54998be446226b05fcd8f ]
 
-I don't insist. It was just a suggestion.
+The code is ogranized in a way that all related parts
+to the certain platform quirk go together. This is not
+the case for AMD NAVI. Shuffle code to make it happen.
 
-Anyway seeing there are going to be two variables with the flag
-semantic (has_irq and maxim_enhanced_mode) it would be better to
-convert them to a single quirk field. Moreover it will be useful
-taking into account that a single maxim_enhanced_mode flag can't be
-used to distinguish the Maxim I2C-muxes with the enhanced mode
-disabled by default. Thus another flag will be needed for such
-devices.
+While at it, drop the frequency definition and use
+hard coded value as it's done for other platforms and
+add a comment to the PCI ID list.
 
-One more thing. Using u8 type for the flag variables isn't that
-descriptive. It should be of the boolean type.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/i2c/busses/i2c-designware-pcidrv.c | 30 +++++++++++-----------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
--Sergey
+diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+index 608e61209455..ca368482b246 100644
+--- a/drivers/i2c/busses/i2c-designware-pcidrv.c
++++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+@@ -27,7 +27,6 @@
+ #include "i2c-ccgx-ucsi.h"
+ 
+ #define DRIVER_NAME "i2c-designware-pci"
+-#define AMD_CLK_RATE_HZ	100000
+ 
+ enum dw_pci_ctl_id_t {
+ 	medfield,
+@@ -100,11 +99,6 @@ static u32 mfld_get_clk_rate_khz(struct dw_i2c_dev *dev)
+ 	return 25000;
+ }
+ 
+-static u32 navi_amd_get_clk_rate_khz(struct dw_i2c_dev *dev)
+-{
+-	return AMD_CLK_RATE_HZ;
+-}
+-
+ static int mfld_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
+ {
+ 	struct dw_i2c_dev *dev = dev_get_drvdata(&pdev->dev);
+@@ -126,15 +120,6 @@ static int mfld_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
+ 	return -ENODEV;
+ }
+ 
+-static int navi_amd_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
+-{
+-	struct dw_i2c_dev *dev = dev_get_drvdata(&pdev->dev);
+-
+-	dev->flags |= MODEL_AMD_NAVI_GPU;
+-	dev->timings.bus_freq_hz = I2C_MAX_STANDARD_MODE_FREQ;
+-	return 0;
+-}
+-
+ static int mrfld_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
+ {
+ 	/*
+@@ -159,6 +144,20 @@ static u32 ehl_get_clk_rate_khz(struct dw_i2c_dev *dev)
+ 	return 100000;
+ }
+ 
++static u32 navi_amd_get_clk_rate_khz(struct dw_i2c_dev *dev)
++{
++	return 100000;
++}
++
++static int navi_amd_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
++{
++	struct dw_i2c_dev *dev = dev_get_drvdata(&pdev->dev);
++
++	dev->flags |= MODEL_AMD_NAVI_GPU;
++	dev->timings.bus_freq_hz = I2C_MAX_STANDARD_MODE_FREQ;
++	return 0;
++}
++
+ static struct dw_pci_controller dw_pci_controllers[] = {
+ 	[medfield] = {
+ 		.bus_num = -1,
+@@ -389,6 +388,7 @@ static const struct pci_device_id i2_designware_pci_ids[] = {
+ 	{ PCI_VDEVICE(INTEL, 0x4bbe), elkhartlake },
+ 	{ PCI_VDEVICE(INTEL, 0x4bbf), elkhartlake },
+ 	{ PCI_VDEVICE(INTEL, 0x4bc0), elkhartlake },
++	/* AMD NAVI */
+ 	{ PCI_VDEVICE(ATI,  0x7314), navi_amd },
+ 	{ PCI_VDEVICE(ATI,  0x73a4), navi_amd },
+ 	{ PCI_VDEVICE(ATI,  0x73e4), navi_amd },
+-- 
+2.35.1
 
-> 
-> Cheers,
-> Peter
