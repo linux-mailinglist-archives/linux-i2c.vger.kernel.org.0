@@ -2,123 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F9E6068FA
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Oct 2022 21:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 447DD606B7E
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Oct 2022 00:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiJTTfV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 Oct 2022 15:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
+        id S229897AbiJTWqk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Oct 2022 18:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiJTTfU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Oct 2022 15:35:20 -0400
-X-Greylist: delayed 94770 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Oct 2022 12:35:16 PDT
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE25612976B
-        for <linux-i2c@vger.kernel.org>; Thu, 20 Oct 2022 12:35:16 -0700 (PDT)
-Received: from t60.musicnaut.iki.fi (85-76-8-144-nat.elisa-mobile.fi [85.76.8.144])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: aaro.koskinen)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id CE44D1B001A3;
-        Thu, 20 Oct 2022 22:35:12 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1666294513;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iDvU3Oc2f/QHiT2VDqeJIzu0pLTa7SFrJfK0tw4pkR4=;
-        b=CtXAPho/8wXRfk+qDJKIoC6KYH+1stwwfLzjVRMs0F+xM+grEwFCOEnyHRY+ycw0phLrqA
-        dmxyo/lUkHIoc+6F7XZdm8QtRdpHYiq7POVNvy1hDDl8kZiaVzMRDVzCEvk5FKlLNJxM5Z
-        mIuzt6KGgMCHzIT9QAism4yT1QbepNWk+y8d8m1PE8h++XvCco1QZhPAh8kq+Eo6ZTq5+d
-        cxUaNZ5CDcDg2Jy6l0M31unoiNvCZ5XNaWr90DnEvhNeNZt53FaJvXJjRNgRz6OkolDyPR
-        gBA5Yui/EzWoDAsho3j99NrX8ZZvV0QVIX9keqeXgnlPd9S1ycI/FSQDcseG6A==
-Date:   Thu, 20 Oct 2022 22:35:11 +0300
-From:   Aaro Koskinen <aaro.koskinen@iki.fi>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-i2c@vger.kernel.org,
-        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 13/17] ARM: omap1: remove unused board files
-Message-ID: <20221020193511.GB3019@t60.musicnaut.iki.fi>
-References: <20221019144119.3848027-1-arnd@kernel.org>
- <20221019150410.3851944-1-arnd@kernel.org>
- <20221019150410.3851944-13-arnd@kernel.org>
- <20221019171541.GA41568@darkstar.musicnaut.iki.fi>
- <1b632df1-7e3c-456d-8629-dc36efd9fe15@app.fastmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1b632df1-7e3c-456d-8629-dc36efd9fe15@app.fastmail.com>
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1666294513;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iDvU3Oc2f/QHiT2VDqeJIzu0pLTa7SFrJfK0tw4pkR4=;
-        b=rrXIBB6/cLwcvSTbEB1/WW+rnYGa9ozsO5IdoYj3F2Tc0TW94d0WCRxZw+oVInIGIuGmi/
-        Fn4crbmRrkd4rYxH/6t7yq6momM+CRZGi2uizH4Ur7IhP2jvLxH9tzSSU/1YRI21RewhwQ
-        aHMqhLrunMNefiRfte6YeX06eLw0mN7NJzgJQG/q7JdfNeSWW1EdkdYVm+QNayDOuaibS5
-        v7WxJeHeg7FweWu51kNUvacMvxxr3ieXXGjBqJSqhy0ebzHA4EaI8qVdJxzFimETZn2/7E
-        sm3qW1quOEJkBeo0d6IoFMMDJddWkChnaFOjuljaoPOeWchojPLOM/uZrLpgAA==
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1666294513; a=rsa-sha256;
-        cv=none;
-        b=WUmMZDsubTKiseV7lrBxLDtKPP7bk5IK0PgUldYgmWXY9HIxdL6tqW3Z9paPz9wsGxxw/7
-        qiZq7tRSmcBLf1iSebg5+iozzfUSRLJJyBKYAC99IzxzRlCx007xRt2Gh+o2HxKEAuuK+0
-        c5vr7CRlti+oE9AvJOYIWhHO914VDrnfwuQZ3KsinukOg5gKGADyJD8nzLi3lwK+qqXCD/
-        wEi5VAbEF3fP8wtz7LdjIY8ps9E81YQ2gfzJUgwLWjpJsLuSqeRJRYYR8IAJcKtSSON30O
-        R7UGOfwvglPEdSBo1w8IgrWN3B20dElKAOe5hN5vH1XDL9eAOTRF/kJnZijzTw==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230166AbiJTWqV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Oct 2022 18:46:21 -0400
+Received: from tartarus.angband.pl (tartarus.angband.pl [51.83.246.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F270139C16;
+        Thu, 20 Oct 2022 15:46:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=angband.pl;
+        s=tartarus; h=In-Reply-To:Subject:Date:To:From:Resent-To:Resent-Message-ID:
+        Resent-Date:Resent-From:Sender:Reply-To:Message-ID:Cc:MIME-Version:
+        Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
+        Resent-Sender:Resent-Cc:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=5HLtj6M5N8x5SCdnb3ABMngx/UZALXblAVL++swe094=; b=eutvSdRkC+80sIpaXSyOkRBg9Y
+        DXIqVrzREhej/NOftb2AAYNc2wRlx6CpqzMEYRG17Hck7T1nz/EJoImtJbfGGQ4jOrgp0fROEYr8X
+        mnIQaimqtEUvAHuEzwlUkxmAM+7e1ORKhGJnkv9Gq0arPNaTEuEGFCOoCZEd3dnNIEbA=;
+Received: from kilobyte by tartarus.angband.pl with local (Exim 4.94.2)
+        (envelope-from <kilobyte@angband.pl>)
+        id 1oleIs-009ObH-2C; Fri, 21 Oct 2022 00:46:18 +0200
+From:   Adam Borowski <kilobyte@angband.pl>
+To:     Khalil Blaiech <kblaiech@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 10 Oct 2022 20:33:51 +0200
+Subject: [PATCH 5/6] i2c: mlxbf: depend on ACPI; clean away ifdeffage
+In-Reply-To: <S229853AbiJTWkg/20221020224036Z+12888@vger.kernel.org>
+X-SA-Exim-Connect-IP: <locally generated>
+X-SA-Exim-Mail-From: kilobyte@angband.pl
+X-SA-Exim-Scanned: No (on tartarus.angband.pl); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_MID,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
+Message-Id: <S229897AbiJTWqk/20221020224640Z+957@vger.kernel.org>
 
-Hi,
+This fixes maybe_unused warnings/errors.
 
-On Thu, Oct 20, 2022 at 09:11:11AM +0200, Arnd Bergmann wrote:
-> On Wed, Oct 19, 2022, at 19:15, Aaro Koskinen wrote:
-> > On Wed, Oct 19, 2022 at 05:03:35PM +0200, Arnd Bergmann wrote:
-> >> All board support that was marked as 'unused' earlier can
-> >> now be removed, leaving the five machines that that still
-> >> had someone using them in 2022, or that are supported in
-> >> qemu.
-> > [...]
-> >>  config OMAP_OSK_MISTRAL
-> >>  	bool "Mistral QVGA board Support"
-> >>  	depends on MACH_OMAP_OSK
-> >> -	depends on UNUSED_BOARD_FILES
-> >>  	help
-> >>  	  The OSK supports an optional add-on board with a Quarter-VGA
-> >>  	  touchscreen, PDA-ish buttons, a resume button, bicolor LED,
-> >>  	  and camera connector.  Say Y here if you have this board.
-> >
-> > Shouldn't this go away as well?
-> 
-> No, this one was incorrectly annotated, it's not actually
-> a board but it's an option for the OSK board that is not
-> getting removed. I considered making a separate patch
-> for removing the dependency, but that didn't seem worth it.
+According to a comment during device tree removal, only ACPI is supported,
+thus let's actually require it.
 
-OK. For the record, I don't think anyone has this add-on board anymore,
-and it has probably never been tested with the mainline kernel, so
-it's likely in the "dead code" category... Maybe it could be changed to
-"BROKEN", then the related OSK LCD panel stuff could be deleted later
-on too.
+Fixes: be18c5ede25da39a0eda541f6de3620a30cf731f
+Signed-off-by: Adam Borowski <kilobyte@angband.pl>
+---
+ drivers/i2c/busses/Kconfig     | 1 +
+ drivers/i2c/busses/i2c-mlxbf.c | 9 ---------
+ 2 files changed, 1 insertion(+), 9 deletions(-)
 
-A.
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 264e780ae32e..e50f9603d189 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -764,6 +764,7 @@ config I2C_LPC2K
+ config I2C_MLXBF
+         tristate "Mellanox BlueField I2C controller"
+         depends on MELLANOX_PLATFORM && ARM64
++	depends on ACPI
+ 	select I2C_SLAVE
+         help
+           Enabling this option will add I2C SMBus support for Mellanox BlueField
+diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
+index e68e775f187e..1810d5791b3d 100644
+--- a/drivers/i2c/busses/i2c-mlxbf.c
++++ b/drivers/i2c/busses/i2c-mlxbf.c
+@@ -2247,7 +2247,6 @@ static struct i2c_adapter_quirks mlxbf_i2c_quirks = {
+ 	.max_write_len = MLXBF_I2C_MASTER_DATA_W_LENGTH,
+ };
+ 
+-#ifdef CONFIG_ACPI
+ static const struct acpi_device_id mlxbf_i2c_acpi_ids[] = {
+ 	{ "MLNXBF03", (kernel_ulong_t)&mlxbf_i2c_chip[MLXBF_I2C_CHIP_TYPE_1] },
+ 	{ "MLNXBF23", (kernel_ulong_t)&mlxbf_i2c_chip[MLXBF_I2C_CHIP_TYPE_2] },
+@@ -2282,12 +2281,6 @@ static int mlxbf_i2c_acpi_probe(struct device *dev, struct mlxbf_i2c_priv *priv)
+ 
+ 	return 0;
+ }
+-#else
+-static int mlxbf_i2c_acpi_probe(struct device *dev, struct mlxbf_i2c_priv *priv)
+-{
+-	return -ENOENT;
+-}
+-#endif /* CONFIG_ACPI */
+ 
+ static int mlxbf_i2c_probe(struct platform_device *pdev)
+ {
+@@ -2490,9 +2483,7 @@ static struct platform_driver mlxbf_i2c_driver = {
+ 	.remove = mlxbf_i2c_remove,
+ 	.driver = {
+ 		.name = "i2c-mlxbf",
+-#ifdef CONFIG_ACPI
+ 		.acpi_match_table = ACPI_PTR(mlxbf_i2c_acpi_ids),
+-#endif /* CONFIG_ACPI  */
+ 	},
+ };
+ 
+-- 
+2.37.2.609.g9ff673ca1a
+
