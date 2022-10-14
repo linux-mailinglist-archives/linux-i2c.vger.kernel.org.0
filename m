@@ -2,167 +2,196 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05D15FEE5D
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Oct 2022 15:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A24D5FF058
+	for <lists+linux-i2c@lfdr.de>; Fri, 14 Oct 2022 16:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiJNNIr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 14 Oct 2022 09:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
+        id S229866AbiJNO34 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 14 Oct 2022 10:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiJNNIq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Oct 2022 09:08:46 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5311CBAAD;
-        Fri, 14 Oct 2022 06:08:45 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29E8xCev031628;
-        Fri, 14 Oct 2022 13:07:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=L4qGYHDlMyemRnk6qneB5Mk1RKKg2MqEDpuZh5iMKjk=;
- b=lNQ1DdUvAy+iUmzajdiLGMDPb+LxCM/5ZDwO+te98TCqyHTYfATE+IvtqKGWzTr/5l2F
- 5uM4xtAyQSPJPctDeulUfjR+I2YkaqMGea6ZA2uT0xe9nOWyCa378/HhofJA7nnNc0te
- bFH/b9QNUd9emLzPpvFOvIXrwjZkk7AUCrOIbJeVPU981I4WRH748nqvLwwTcVBPR9IN
- PoHELHWLtYUJKUpuIdOlC6C3Fx+K34azO5qsujr96BE0ygbK0Z1ncnNHldIdO2z6lfia
- kUKVSeuo7aMa4cynD9qfYjUE0Q13DHkKZlGzcyGs3sRpDZg8rvY7BQeTvaLd/9QBf1ri 9g== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k73h6gyx6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Oct 2022 13:07:53 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29ED7qhv012825
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Oct 2022 13:07:52 GMT
-Received: from quicinc.com (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 14 Oct
- 2022 06:07:52 -0700
-Date:   Fri, 14 Oct 2022 14:05:17 +0100
-From:   Graeme Gregory <quic_ggregory@quicinc.com>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-CC:     <devicetree@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, Corey Minyard <minyard@acm.org>,
-        Andrew Jeffery <andrew@aj.id.au>, <openbmc@lists.ozlabs.org>,
-        <thang@os.amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        <linux-kernel@vger.kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <openipmi-developer@lists.sourceforge.net>,
-        Open Source Submission <patches@amperecomputing.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v10 1/3] ipmi: ssif_bmc: Add SSIF BMC driver
-Message-ID: <20221014130517.y4mdinylnwfrg6u2@ggregory-linuxws>
-References: <20221004093106.1653317-1-quan@os.amperecomputing.com>
- <20221004093106.1653317-2-quan@os.amperecomputing.com>
- <5fbc5a54-60f2-fc0d-a4a1-839f28a4d8ba@quicinc.com>
- <48a5e252-9a1e-65e6-e8bf-add3d39a0286@os.amperecomputing.com>
- <72c8a5bc-830d-25a9-0528-5d428dd9f163@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+        with ESMTP id S229774AbiJNO3z (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Oct 2022 10:29:55 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AD12BB09;
+        Fri, 14 Oct 2022 07:29:54 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29ECPoMx017618;
+        Fri, 14 Oct 2022 14:29:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type :
+ content-transfer-encoding : in-reply-to : mime-version; s=corp-2022-7-12;
+ bh=57YsQ/Tgba1xRE2uvCIaPDudqkaJij99hFAVJ69iVZo=;
+ b=E4u6qiLVhF0aLnMJYP5M4UnRcVSSpIRQS/9cw0aHQaujavNggO/ZSIf0sPL3bwsswVrR
+ yRLZuZj7pU4wGL5ZAVWl+pdv9zh3k4xiQKXwQNVgnCMzZ7JAHyXJx0KsrCJjavmX0IIj
+ GhFWCN0Q8eZkrN30jtKBfqerVgZ7+4RmQIjITiIfzUJuKj462wBsh/i1qjZUvBA20rXX
+ g1H3VJTFAHQpS9yKF00xLUgtywt5WKlRyul3MJutZk/eA3lUqklmL5NkgAZOybj/8U1E
+ UHQQQCn9lOqOqPKv9xuTLq4qdwomBmzQRPB3TlhYG0hha2ftcW2GKOI2ZDjKqKXOkUJO Tg== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k6mswjxtj-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 14 Oct 2022 14:29:40 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29EDjQHp003895;
+        Fri, 14 Oct 2022 14:23:47 GMT
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2040.outbound.protection.outlook.com [104.47.56.40])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3k2yndqxy0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 14 Oct 2022 14:23:44 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JKcZdoe60dYvQ+ec6bPSSskb7ZOnaMYWW32/WRMYdcG4LMtXcaiOoL68OJ3l7yPS3Gape57cSj9ZTNlNk7wv0adIZ2UeQckznBpQFsVdcQOXUHY2o0xBRiHtJYakRXM7NIKXRb1IP5SpSpaC1xwVGtI8VFsO6LusRaNz1eWGrXRSj9Y/ZtnZ/6UvPL+md4Egr9ug9ev2X4n5kuX8I+Fyhw4/ljtn2LiZWg7FXDaeCVT3xHIL9qBAVPOPUsWHIXOYYJZoc92rGT+XQ/i+7NbT203VbKdpOuAmW6lBeIXEbWfxXJbflzOJgNWZKV4xI/IiqSulUbEa1CkcMH98sb37lA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=57YsQ/Tgba1xRE2uvCIaPDudqkaJij99hFAVJ69iVZo=;
+ b=aJWH3cYMJDslflVAR6qbhVb0qH5vV+NGe/p00j7xv4gGc4xikT0M9a3ZdzutUZeNvLx0eUQkLsZVf6LNJCQJtoPLfX9LcrjZ5A7j+lQFJ2KAHFDsbFluRTL/QLvp9pv02zVESr5bwruUmlAZqJY+zSo7SpXCr0Ccu0zkT8IwMMUeHP7BFgJ9v3D1OwORS/ZgpPcjJpnz0z0vKN5unBkLpssJES4CRbtsz/GLOPHL1teBDH4YdkpXo38kk0oveu0SxmoPJ5Oy0ppA2poLPGqGQ/wnQd9uoTnEVO2rXjXjzLhXsKtZQ7+J4F+DdtM4iAvDa88O62KcS8xS0yCxG56pYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=57YsQ/Tgba1xRE2uvCIaPDudqkaJij99hFAVJ69iVZo=;
+ b=O2vcx5ePq+9n7iB8Yco/DJk4ci3BzSfRq4VudwDxvlaviLF16ChQOjQFSnIgdjliiE8vBW34e5eZxKj0zxFzYjRj0vMTOnOU4WFcD0IsAbL0EYBPCVLrs10Rus5w7hUbqBeTLwPyffhHGPtYaH/EcOQhToF2bAdSGdHgCBHeTzY=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by CY8PR10MB6612.namprd10.prod.outlook.com
+ (2603:10b6:930:54::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Fri, 14 Oct
+ 2022 14:23:36 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::1b8e:540e:10f0:9aec]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::1b8e:540e:10f0:9aec%4]) with mapi id 15.20.5676.031; Fri, 14 Oct 2022
+ 14:23:36 +0000
+Date:   Fri, 14 Oct 2022 17:23:24 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Bence =?iso-8859-1?B?Q3Pza+Fz?= <bence98@sch.bme.hu>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Subject: Re: [PATCH] i2c: cp2615: prevent buffer overflow in
+ cp2615_i2c_master_xfer()
+Message-ID: <Y0lw3ERnwRMaHjb0@kadam>
+References: <Y0bUdt73moVmaajb@kili>
+ <CACCVKEEWr-ko9yuZZnzW6icnDesdhajKbb+KWOaVyGDPy9D4Cg@mail.gmail.com>
+ <Y0kJrSozgFotrWVt@kadam>
+ <CACCVKEFxFmJBKwrq_wjEbh0tqxUyT9KuSU6RQk+rGqqTvRvmNw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <72c8a5bc-830d-25a9-0528-5d428dd9f163@quicinc.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: GhBJVq-FaNrcr7G3ZBgPGC6CUcLwXHeR
-X-Proofpoint-GUID: GhBJVq-FaNrcr7G3ZBgPGC6CUcLwXHeR
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACCVKEFxFmJBKwrq_wjEbh0tqxUyT9KuSU6RQk+rGqqTvRvmNw@mail.gmail.com>
+X-ClientProxiedBy: JNXP275CA0002.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:19::14)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2365:EE_|CY8PR10MB6612:EE_
+X-MS-Office365-Filtering-Correlation-Id: 233abb75-9ea8-4a31-90ad-08daadefae1a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4RwckUrj6Cqxf/+aVU649ttTLoVLDY4R/UmVrwOWxQ0VKfGqoyh6z7ymPvK4lNHHj7bNr6U+LoPUCg1PwBuxXrYc2tIkoZufCmweRZm47qcXOR5yddDU7x34QGNb8mv64/irFBXOcEme+yY/Js9VBeHqROLcdGwNDH3HArbnXGuZuN9+F3z2ssHLtr4QnCGKJrVPj5VpABvIyo2dpWqV9RTbheS4Eq5eL2bCF5kahbTy4+y9y0j6zyBVl41Oe1L9oo12PaHbCZ4TsuJ+efsG6TYWfb4/YdgWeR9u3LST01Q/mG5ljUeM+Q4E10VWweOzbIjc7A0QEg5SHVc9pQw9+tohp2bA9OOI34vQkXI/e1/c6DHxzfOc9b0IrjcLNgWbKR8pni0h3ZCcCKU/c1cLbYbVqKt8pjq05FqkpomoetYRqIrVMpv7Sp8KGbzX9QaiO/3EAmC648OKGvz3PB0UYa+zfWllX4x04zo90Wy9BCOqo2xzRawl9dbdiEeq7bun+VkMndtMQ8r+LAckgLry2FM3/3wV4MaBE2xYT5hKRpIDGdO/DnxNfgokyP8BUHNYpDUqYyVT8pciSxAf/X77au1+LsQmGIJ45hIjW3RUK4hNu47zcXTuK3Oq4ykWLtOgYgvYoTV1YBtJEUlyI3qtLE9CeCV1K9xD8kAHGqoSPBfnT9COgCDFpIbdUFag/C+MzDfM0XfgK+fNSKgQBKpligpz/wkvTGJlpZ8+8Ljc+TlVSnk3Sk7yJB5bXYu/gXXO
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(39860400002)(366004)(136003)(376002)(346002)(451199015)(8936002)(5660300002)(44832011)(186003)(2906002)(41300700001)(6506007)(26005)(6512007)(9686003)(33716001)(86362001)(38100700002)(316002)(6916009)(54906003)(6486002)(478600001)(107886003)(6666004)(66946007)(66556008)(8676002)(4326008)(66476007)(70780200001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eFR3WXAxSjVGVHdERmNGdWx1Q2tDS21VV3ZmL0pvUmJTTUpTaVQwK3lSMC9j?=
+ =?utf-8?B?QTJ2M1JGblB6OVRaYytpWnIrV05Lem9SL1ZJYVRFRkhoWWY1VUxmQzZtRGlS?=
+ =?utf-8?B?SGk4Vks5VmNUVzhoYy8rSXJqdUN6eWFHdWt0cGZtTlk3N0R2YVAzR1p5Yks4?=
+ =?utf-8?B?SmRVNUdmNEsrZ1VXSitsTHVMWlU4N2J5alRoUjhtc0JReEtRRzhJaVBubU9j?=
+ =?utf-8?B?YTZITzh4Q0o0bE51MWNrMGxGU3gyQTNaeDBRSndMSkFFUVplMmtGTFFENHZT?=
+ =?utf-8?B?OEQvMFBPRVdmZG94Nmh5VVNZV2drbkptSGt3NkNvYjVsQWJCM2RURkJtQldl?=
+ =?utf-8?B?eHhoNkVHR3EzOWZYcEFQWnNxSW11YmNQOUVOUzF1YmNmN2tSWGZObWVaVzNo?=
+ =?utf-8?B?Q1RKNmFSMWNvRXR6blU2RWxiUUtleEgyY3pKbkUxQjJ2WTBiMkRxUnhOalN5?=
+ =?utf-8?B?eXBXM1hDaitZY2dUUzE1QUEvQWtqNmkzek40UmsxL2hBbjVyTUMxOGpkbmlk?=
+ =?utf-8?B?enFtSUEvcXhhK0xyWlNSbEZ4ZzZqQ3dLU2w5bG84K29LS1MwZDB3QitLK213?=
+ =?utf-8?B?ZGxKY0c4M0p1anVtSDl0ekM1dlNRN2tWZXRUQXpXZ0pwUmVhRm5rdEhCMDk2?=
+ =?utf-8?B?dXRMRW53Z0xQamoyemJKd1MydllnSEFXbzRHelFzdEE3MFQ1cmNhRm1IVWkw?=
+ =?utf-8?B?ZnFHcUtLamhDVEU1cUswMkMyTm9SdDFuWndPRVA4VC8vSkQ0ZUN3KzlLSjhT?=
+ =?utf-8?B?MUZrTis5N2RBMzV5ZWlCdzVLTzlTYUgyQ2VIczN4R1p6MnlkTUQ3ZEF2NHV5?=
+ =?utf-8?B?ZnJENXdNS3BFQng2VmNJZGFTOTMwcVNnT2VsVTBFdmJDZGRVd21YdFhKd0Uy?=
+ =?utf-8?B?L2hhNnowUGJWbUpxdVNIbGlUV3J3VmNYazZsOG8zWG5WY3ZWMjFxVHFvbzlV?=
+ =?utf-8?B?THBKdnlDTkdOeUFSczU1Wk1mNkpqNnlzR0Y2c3h4T1FsemVLK0VxN2tWdkJV?=
+ =?utf-8?B?M09wanZMTTBaNTFxNy9mbk1wYVl0SHBQSS9VRVEzbkZ2RTRjOHlDQmtvdjVF?=
+ =?utf-8?B?TkVyeWpHWlFZUm1UcllaVnVTMmEzRVFUM1FqODF2NldyOWM5WFJDSExKRDND?=
+ =?utf-8?B?VlkyTVZoME01ajlBMEV5dWNmRExhWkZ0WDFzcndmbEk4Y2RuTWowVXpYZ2lT?=
+ =?utf-8?B?QWJxVjRFZGZPK3pha1hqMHJXeHZtaGtmQ2hsR1RnaVZPNnlyYmxMR3NUeGxR?=
+ =?utf-8?B?Q1Z1VVBkYzRwaE1BNXJyK1hkL3prcHBsRFdBZW9UemhPMHhGY0dOS2pyK0tN?=
+ =?utf-8?B?TkoxNnB6Y1JEN1c3dFJaTFpEWk9iWG5sbXhsZFNHUHBIRTBMNCtWWDJta3pS?=
+ =?utf-8?B?TXFvdWVFc0M3UlJVQUIxUWlnbnk3ZzYyNjRuZG0zczRFYisrTU83Tk0rL2p1?=
+ =?utf-8?B?M0x0eHEvd1dSanNtQi9zd2x3R29BN2hIU3JxL0twamlWUnhtODlpSXBGZW1O?=
+ =?utf-8?B?VUg0cDE2cEN3ajc0VGd0Vm1FdUN3QVVYM250K3NYUG9MZTMvVnZIZWdlZzlW?=
+ =?utf-8?B?WjVYMmxCbjkxaDZkYVduNTN3S2tjdHp2enpXWjlScDhnM3pRRTJibEU0K0dk?=
+ =?utf-8?B?NnVGUHlWb1hHMUJKQ0JxUU53cjA2aGpFNmtCTmpVbjViblp1bWFTemRCR08y?=
+ =?utf-8?B?dVhQMWc2RnRWenVLd3JQL3V1cWVvb1JxeHZhYkUrODZYVGV6eUpVUFI0M2RW?=
+ =?utf-8?B?M05ySDlURVFuM2MwTjJjSEdDU3VWR0w2WkczeDU3UUlVaEdTblNKa0NmUlZo?=
+ =?utf-8?B?aWdRZmdtTTFuaEFqQzlJSU5qd2RjSjVrdWI0dGUwV0hHRjBIK2xTUDZzMFBr?=
+ =?utf-8?B?N0hEdS9LbXVwNmdTTUlHdDFEdUtBSHVNUlJOZHl6WXRoanVuRWRGRkw1cHp0?=
+ =?utf-8?B?am5OWGpncHZ3eGg4NVBOUTlGWk9qYmczVWE3RTVvZXFGbnJ1UTZYaExOeGxa?=
+ =?utf-8?B?aDZuR3haMFhJQkR6VWNUN2VaV1hGeWlLeDBhR0NBZ1Q4Umd3dDliM3V4Y1ZM?=
+ =?utf-8?B?MzJsRE9ualhmRlBEdWpGYnBaVlhGMFozUDlMVVN1N2Ixd0s0TlFGU095d3N6?=
+ =?utf-8?B?cmNrN2RnZDI0OE9aOFJUa2tEV3JBdzRvbDV1TjFTTFZTVC9mL2hkV2FWc1hm?=
+ =?utf-8?B?OEE9PQ==?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 233abb75-9ea8-4a31-90ad-08daadefae1a
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2022 14:23:36.3142
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Qr3qNiWxWiPJf7Pf5l9qcW73y93QHCVrg6jEoYJEvIkqLQPBATYGBorOOgrbnDYLaVzIgaKesLFJ+txYSlTcLJqarXVdaNEL1nI0KKzzxWU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR10MB6612
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-14_06,2022-10-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- suspectscore=0 mlxscore=0 impostorscore=0 spamscore=0 mlxlogscore=894
- lowpriorityscore=0 phishscore=0 priorityscore=1501 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210140075
+ definitions=2022-10-14_08,2022-10-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+ adultscore=0 mlxscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210140081
+X-Proofpoint-ORIG-GUID: TVtYpqUwuZBTuxdRS3aPNKgKfRFS86H5
+X-Proofpoint-GUID: TVtYpqUwuZBTuxdRS3aPNKgKfRFS86H5
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 12:08:24PM +0100, Graeme Gregory wrote:
+On Fri, Oct 14, 2022 at 01:17:32PM +0200, Bence Csókás wrote:
+> Dan Carpenter <dan.carpenter@oracle.com> ezt írta (időpont: 2022. okt.
+> 14., P, 9:03):
+> > > >  drivers/i2c/busses/i2c-cp2615.c | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > > >
+> > > > diff --git a/drivers/i2c/busses/i2c-cp2615.c b/drivers/i2c/busses/i2c-cp2615.c
+> > > > index 3ded28632e4c..ad1d6e548503 100644
+> > > > --- a/drivers/i2c/busses/i2c-cp2615.c
+> > > > +++ b/drivers/i2c/busses/i2c-cp2615.c
+> > > > @@ -231,6 +231,8 @@ cp2615_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
+> > > >                 } else {
+> > > >                         i2c_w.read_len = 0;
+> > > >                         i2c_w.write_len = msg->len;
+> > > > +                       if (msg->len > sizeof(i2c_w.data))
+> > > > +                               return -EINVAL;
+> > >
+> > > Please move this up to line 225, as an invalid `read_len` is also an
+> > > error and should bail out accordingly.
+> > >
+> >
+> > I don't see the bug.  Is that something that requires knowledge of the
+> > hardware?
 > 
-> On 10/10/2022 02:28, Quan Nguyen wrote:
-> > 
-> > 
-> > On 07/10/2022 20:26, Graeme Gregory wrote:
-> > >
-> > > On 04/10/2022 10:31, Quan Nguyen wrote:
-> > > > The SMBus system interface (SSIF) IPMI BMC driver can be used to
-> > > > perform
-> > > > in-band IPMI communication with their host in management (BMC) side.
-> > > >
-> > > > Thanks Dan for the copy_from_user() fix in the link below.
-> > > >
-> > > > Link: https://lore.kernel.org/linux-arm-kernel/20220310114119.13736-4-quan@os.amperecomputing.com/
-> > > > Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-> > >
-> > > I have been testing this on our hardware and I don't seem to be able
-> > > to get this driver working. I was using an older version.
-> > >
-> > > I have hacked ssifbridged to deal with the change in len from u8 to
-> > > unsigned int.
-> > >
-> > > It works as long as I only ever send SSIF commands, any attempt to
-> > > read a response crashes the state machine and the driver never
-> > > recovers. No further SSIF comms is possible! (slave doesnt even ACK
-> > > writes).
-> > >
-> > > A couple of comments below on possible state machine errors.
-> > >
-> > > Its possible I am doing something wrong!
-> > >
-> >
-> > Thanks Graeme for the test and the comments.
-> >
-> > What's your testing hardware?
-> >
-> > This was tested with Aspeed ast2500 and ast2600 with the patch series
-> > [1] below applied.
-> >
-> > If you use the same hw, could you pick the series and see if any thing
-> > improve ?
-> >
-> > [1] https://lore.kernel.org/all/20210616031046.2317-1-quan@os.amperecomputing.com/
-> >
-> Thanks, that patch series does stop the state machine crashing.
->
-> I am testing on AST2600EVB with A1 rev, but we also have our own DC-SCM with
-> A3 chip.
->
-> Responses are still not working for me, but I think that may be an error in
-> my ssifbridged hacks.
->
-> Oct 10 10:54:55 qcom-evb-proto-ccf37d18ea0c ssifbridged[335]: Read ssif
-> request message with len=13 netfn=44 lun=0 cmd=2
->
-> Oct 10 10:54:55 qcom-evb-proto-ccf37d18ea0c ipmid[312]: BootCode:
-> 000000000000000000
->
-> Oct 10 10:54:55 qcom-evb-proto-ccf37d18ea0c ssifbridged[335]: Send ssif
-> respond message with len=4 netfn=45 lun=0 cmd=2 cc=0
->
-> Oct 10 10:54:55 qcom-evb-proto-ccf37d18ea0c kernel: ipmi-ssif-host 0-0010:
-> Warn: on_read_requested_event unexpected READ REQUESTED in state=SSIF_READY
->
-> Oct 10 10:54:55 qcom-evb-proto-ccf37d18ea0c kernel: ipmi-ssif-host 0-0010:
-> Warn: on_stop_event unexpected SLAVE STOP in state=SSIF_ABORTING
->
-Just to close the loop on this, I have now fully tested this driver on
-our setup internally.
+> No, what I mean is that you put the check in the else clause of
+> > if (msg->flags & I2C_M_RD) {
+> But a `msg->len > MAX_I2C_SIZE` is invalid, regardless of `msg->flags`.
+> So the check should be outside if the `if`.
+> 
 
-Final hitch turned out to be an aardvark not issuing STOP events between
-reads/writes.
+Hm...  I was looking at how that could be added at a lower level and
+actually the quirks code you mentioned earlier takes care of this in
+i2c_check_for_quirks().
 
-Thanks for the work.
+So this patch is not required.  Please drop it.  Sorry for the noise.
 
-Graeme
-
+regards,
+dan carpenter
