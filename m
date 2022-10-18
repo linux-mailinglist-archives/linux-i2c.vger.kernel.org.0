@@ -2,105 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A4C602E2F
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Oct 2022 16:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B736B6031AD
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Oct 2022 19:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbiJROUE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Oct 2022 10:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
+        id S229544AbiJRRkA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Oct 2022 13:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231182AbiJROT6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Oct 2022 10:19:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AED34721;
-        Tue, 18 Oct 2022 07:19:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229917AbiJRRj7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Oct 2022 13:39:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9232727FF3;
+        Tue, 18 Oct 2022 10:39:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45F91615B7;
-        Tue, 18 Oct 2022 14:19:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29293C433D7;
-        Tue, 18 Oct 2022 14:19:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666102787;
-        bh=UwmPyOiwydUIdoR7qtf/m6yxy1stYEPyZMeeo4TZY14=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R036K5fJI9bW6k3F8MXTK0o6oXd0L9l0JJIuXDgvJRQ+DpELLMrnQaskuGzQ3PNpl
-         5SrOaU0RImyCgy32sfxC5eRRZkNEp6CCLBW25aO6x1Bkln65rxCmf2mpg9TCz8kk9K
-         49nf3vSPxpB+mdHV2ZtAVD3BEBnCBh7pwwRRqLSzYJO7BjyixoCxxzoTaYPiDq+78S
-         iXL/ctAVdWpKPxyEKulq9MR5haIiI0mMw/eriYtqI2GRCtgocVOI8ygVejKRrEr0CY
-         G18dGkYqF/f23stp1lqmkQTbEwj7EgOANQq23OrqgNibEnsHfKKVxnzI31IUVj6WEO
-         H7UcJvj2YRQqw==
-Date:   Tue, 18 Oct 2022 16:19:44 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     tumic@gpxsee.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Lizhi Hou <lizhi.hou@amd.com>,
-        Martin =?utf-8?B?VMWvbWE=?= <martin.tuma@digiteqautomotive.com>
-Subject: Re: [PATCH v3 1/2] i2c: xiic: Added platform module alias for the
- xiic I2C driver
-Message-ID: <Y062ANTWvCy4e4XT@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Michal Simek <michal.simek@amd.com>, tumic@gpxsee.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Lizhi Hou <lizhi.hou@amd.com>,
-        Martin =?utf-8?B?VMWvbWE=?= <martin.tuma@digiteqautomotive.com>
-References: <20221018140338.7080-1-tumic@gpxsee.org>
- <20221018140338.7080-2-tumic@gpxsee.org>
- <611cd6ff-e6f1-ceed-b2eb-7dcbbf18b36b@amd.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3A5B11FBA9;
+        Tue, 18 Oct 2022 17:39:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1666114792; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oOxaBIBN/0IDpvkVnRKGxynpe2/tl8CVR54+1XSWLSo=;
+        b=Hi1FZSHxs7is/xzUg/KXNlIz3Ujbl2LzdZ3G/TZNi6iY50y+RIqcbRBQtFbAkeofXaS91+
+        LKFZjJIadoU4wYz+HN7cWlvws0/XbIlwrN8V7xRdiqxMVTN46NvjEHBCkNPMY2QVkW6t0A
+        7FNm77af/qNjyiEPdtsK4R0LF7r5erk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1666114792;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oOxaBIBN/0IDpvkVnRKGxynpe2/tl8CVR54+1XSWLSo=;
+        b=Z+8vjvYSPo8MjLAKSqCNY48yEQJy96AnlVXJGKR6ch5P4BK3C9dss7IuKem0I3ExjyFaq4
+        2MiHzcgTXtfZjUCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 07AEB139D2;
+        Tue, 18 Oct 2022 17:39:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id O1QTO+fkTmMmHwAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 18 Oct 2022 17:39:51 +0000
+Date:   Tue, 18 Oct 2022 19:39:51 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Nam Cao <namcaov@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
+Subject: Re: [PATCH] i2c: i801: add lis3lv02d's I2C address for Vostro 5568
+Message-ID: <20221018193951.40787445@endymion.delvare>
+In-Reply-To: <20221006145440.10281-1-namcaov@gmail.com>
+References: <20221006145440.10281-1-namcaov@gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Dgrm/z4i6fDpduV7"
-Content-Disposition: inline
-In-Reply-To: <611cd6ff-e6f1-ceed-b2eb-7dcbbf18b36b@amd.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Thu, 06 Oct 2022 16:54:40 +0200, Nam Cao wrote:
+> Dell Vostro 5568 laptop has lis3lv02d, but its i2c address is not known
+> to the kernel. Add this address.
+> 
+> Output of "cat /sys/devices/platform/lis3lv02d/position" on Dell Vostro
+> 5568 laptop:
+>     - Horizontal: (-18,0,1044)
+>     - Front elevated: (522,-18,1080)
+>     - Left elevated: (-18,-360,1080)
+>     - Upside down: (36,108,-1134)
+> 
+> Signed-off-by: Nam Cao <namcaov@gmail.com>
+> ---
+>  drivers/i2c/busses/i2c-i801.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index a176296f4fff..e46561e095c6 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -1243,6 +1243,7 @@ static const struct {
+>  	 */
+>  	{ "Latitude 5480",      0x29 },
+>  	{ "Vostro V131",        0x1d },
+> +	{ "Vostro 5568",        0x29 },
+>  };
+>  
+>  static void register_dell_lis3lv02d_i2c_device(struct i801_priv *priv)
 
---Dgrm/z4i6fDpduV7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fine with me.
 
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
-> You should likely send it separately because this will go via different
-> maintainer tree.
->=20
-> Not a problem with this patch.
->=20
-> Acked-by: Michal Simek <michal.simek@amd.com>
+Pali, OK with you?
 
-I'll pick it, no problems.
-
-
---Dgrm/z4i6fDpduV7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNOtfwACgkQFA3kzBSg
-Kba/nA//bRwF+nTsr5x6lTTadUjNVu/UZ30i4nbf4nmtXG6YyQIkO8uQctkW0x7B
-DD7Cquhh+7Ub6L0PQm/L1L4eaevdtpo/5mMzrbSO4pNkzkyBtTSGYYTxlJJtE+Tk
-APLHphVmBeMcObGyP/MElkjUMPCjyTcBHiKKljMa0M4Uqn0K3vPmJbppGVVAb00W
-U6AksjJbjVJGX+1TqhW/I6/+oZ+GXmtd03MUfxh17bkw0ZU1HGnQwex+0FcypFur
-32mlhl3M5ASMr/xe2kjA+2UPfaRXAWBlT+mX20bWcel70kIYMFX1LF/B4kntR3HY
-xaLd3qnbwez/hfGNukcScXIgZEOZEPSDbAB9rxZAlfUOsJIMtmy4f+ijDJiy2ddZ
-FOawoo09Hxyucu9GnzYeOajAXIWP52wsBzBNYuC3QVfCC4cGtKQ9NzxcpsoReAZw
-D3FJAQ/U5Ty6OnQ2IyLOm+TigJ67w0eEV4xOXl89z6Rznd8WpbYraoVgxrktTZ5a
-2O6jwZyklrZNZ9oRny1WYsgZ6jRiU9ZkNZYfLer9+EN1FA0rmGaIo3hNtZAjaSNK
-icr9shXMj5bs/azDko7ZgRO7TTcIuVluypfZz9Q2XZIjfUlR84adH8BEKsz90xGw
-ZLfH6atu+u4M5FoZ+KelDHwQ98c7qmHeqUqTIHNrD0mHDcgW8oE=
-=vNmL
------END PGP SIGNATURE-----
-
---Dgrm/z4i6fDpduV7--
+-- 
+Jean Delvare
+SUSE L3 Support
