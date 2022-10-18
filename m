@@ -2,103 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A9A6031B7
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Oct 2022 19:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA5E6031E6
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Oct 2022 20:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiJRRmA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Oct 2022 13:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54136 "EHLO
+        id S229936AbiJRSA7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Oct 2022 14:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbiJRRl7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Oct 2022 13:41:59 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D6EDAC48;
-        Tue, 18 Oct 2022 10:41:57 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S229914AbiJRSA6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Oct 2022 14:00:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E1D1147;
+        Tue, 18 Oct 2022 11:00:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 70D6E1FBB2;
-        Tue, 18 Oct 2022 17:41:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1666114916; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4p3VO3zt15ZuqFBtPT6ti1fzWjkAxD2YPTFZH5ianxU=;
-        b=NTMgUwUE5P9CTuFhEZw/j93N/hNW0vN3Dtr582N1Cpf49gfk9vafRomh1vtFyIOU3HSsXZ
-        cmE6U2bqC0J9fB4QR+SsLokhchSgkT2Z+89H/XCVcXCI3jLsf10JQTTQGGI7Y3V7hQm6x6
-        bOviXckMlrn0twvcGqkWvgqrsv8yjH0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1666114916;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4p3VO3zt15ZuqFBtPT6ti1fzWjkAxD2YPTFZH5ianxU=;
-        b=63OfFXm7cO9Ufehc9lzbgLUgWYbAjCOtleUnS4JePEm5yL1+lNf/lKO84elSeHYWTRM6dr
-        7CszzgkrOBFsS8Aw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3E547139D2;
-        Tue, 18 Oct 2022 17:41:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KY2nDWTlTmP1HwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 18 Oct 2022 17:41:56 +0000
-Date:   Tue, 18 Oct 2022 19:41:55 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Jiangshan Yi <13667453960@163.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: Re: [PATCH] i2c: sis630: fix spelling typo in comment
-Message-ID: <20221018194155.5e04fd8f@endymion.delvare>
-In-Reply-To: <20221009072802.2638945-1-13667453960@163.com>
-References: <20221009072802.2638945-1-13667453960@163.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B67DB8207D;
+        Tue, 18 Oct 2022 18:00:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E46F6C433C1;
+        Tue, 18 Oct 2022 18:00:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666116055;
+        bh=3T28Y+zOxmUbU8OV16B+xWWanpzLbMaHuPZMIF80EN8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KBmlmwt0ZvXgt16D8nxRoISWImyUZW+gDM0QFdUMNw/wwih2r4GVJ1GTM2PN/9omw
+         wmid0NRPvJ70AlvPxjghdQhGRd6Klqs8lpb7Q+N687iDgPX46RCzx2fV9Q1kCUP0T0
+         n4W6ySZpg1VTUoFTEHkSaaaDnw9d9bCSai5wH4Fd5ehZZ+MJFbsOJAJbl0E1I7FDIw
+         qMxOX1nlVgvMRnihHtMBraFpA4JQgDvnn4riFhGG197fDKnJkvChH72GL0sYNT6Dqv
+         /lpo+2QIEkT17sMYIlV/xZ3qkYdH2AIIzfIvXKOEM/fDXrdt0EI9auqMzBeJNpfQye
+         QLERzYkv3+H/A==
+Received: by pali.im (Postfix)
+        id D84D476B; Tue, 18 Oct 2022 20:00:51 +0200 (CEST)
+Date:   Tue, 18 Oct 2022 20:00:51 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Nam Cao <namcaov@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: i801: add lis3lv02d's I2C address for Vostro 5568
+Message-ID: <20221018180051.236tz4yxsdzrgguq@pali>
+References: <20221006145440.10281-1-namcaov@gmail.com>
+ <20221018193951.40787445@endymion.delvare>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221018193951.40787445@endymion.delvare>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, 09 Oct 2022 15:28:02 +0800, Jiangshan Yi wrote:
-> From: Jiangshan Yi <yijiangshan@kylinos.cn>
+On Tuesday 18 October 2022 19:39:51 Jean Delvare wrote:
+> On Thu, 06 Oct 2022 16:54:40 +0200, Nam Cao wrote:
+> > Dell Vostro 5568 laptop has lis3lv02d, but its i2c address is not known
+> > to the kernel. Add this address.
+> > 
+> > Output of "cat /sys/devices/platform/lis3lv02d/position" on Dell Vostro
+> > 5568 laptop:
+> >     - Horizontal: (-18,0,1044)
+> >     - Front elevated: (522,-18,1080)
+> >     - Left elevated: (-18,-360,1080)
+> >     - Upside down: (36,108,-1134)
+> > 
+> > Signed-off-by: Nam Cao <namcaov@gmail.com>
+> > ---
+> >  drivers/i2c/busses/i2c-i801.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> > index a176296f4fff..e46561e095c6 100644
+> > --- a/drivers/i2c/busses/i2c-i801.c
+> > +++ b/drivers/i2c/busses/i2c-i801.c
+> > @@ -1243,6 +1243,7 @@ static const struct {
+> >  	 */
+> >  	{ "Latitude 5480",      0x29 },
+> >  	{ "Vostro V131",        0x1d },
+> > +	{ "Vostro 5568",        0x29 },
+> >  };
+> >  
+> >  static void register_dell_lis3lv02d_i2c_device(struct i801_priv *priv)
 > 
-> Fix spelling typo in comment.
+> Fine with me.
 > 
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
-> ---
->  drivers/i2c/busses/i2c-sis630.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Reviewed-by: Jean Delvare <jdelvare@suse.de>
 > 
-> diff --git a/drivers/i2c/busses/i2c-sis630.c b/drivers/i2c/busses/i2c-sis630.c
-> index cfb8e04a2a83..87d56250d78a 100644
-> --- a/drivers/i2c/busses/i2c-sis630.c
-> +++ b/drivers/i2c/busses/i2c-sis630.c
-> @@ -97,7 +97,7 @@ MODULE_PARM_DESC(high_clock,
->  module_param(force, bool, 0);
->  MODULE_PARM_DESC(force, "Forcibly enable the SIS630. DANGEROUS!");
->  
-> -/* SMBus base adress */
-> +/* SMBus base address */
->  static unsigned short smbus_base;
->  
->  /* supported chips */
+> Pali, OK with you?
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Yes, nice to see that other people discovered another hidden hardware
+devices in their own laptops :-)
 
--- 
-Jean Delvare
-SUSE L3 Support
+Reviewed-by: Pali Rohár <pali@kernel.org>
+
+
+Nam Cao, could you check your ACPI DSDT table if there is not specified
+this smbus/i2c address 0x29? Autodiscovery would be better than
+hardcoding. At least for E6440 I was told that BIOS does not provide it.
+
+> -- 
+> Jean Delvare
+> SUSE L3 Support
