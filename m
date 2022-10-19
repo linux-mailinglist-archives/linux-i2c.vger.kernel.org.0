@@ -2,67 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1E1605113
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Oct 2022 22:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F9D605140
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Oct 2022 22:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiJSULf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Oct 2022 16:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33782 "EHLO
+        id S231344AbiJSUYL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Oct 2022 16:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbiJSULe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Oct 2022 16:11:34 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B1C1B6C91
-        for <linux-i2c@vger.kernel.org>; Wed, 19 Oct 2022 13:11:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=jP23/8oNXZDtmh00ufdfE7zkPkL/
-        ikPEzUVgX0EP4hU=; b=a8a161dB1G12z3w3RCsuDs9SiOc5nZsIoFMIBZqJcx0q
-        /4wWw0OViHWEhkTL6psCGGIoFkkG8IPWEPB9S7J1UszIvaViRsKKA5oUgA+hQglc
-        VzNNsDaHf5ZgEGrNCGEMek4aIMNkGZxI5patPQq0yR0olzW0MeaLSPNyPlOg7a0=
-Received: (qmail 804148 invoked from network); 19 Oct 2022 22:11:29 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Oct 2022 22:11:29 +0200
-X-UD-Smtp-Session: l3s3148p1@KwRf0GjrluQgAwDtxwGnANC4y/SuZCIq
-Date:   Wed, 19 Oct 2022 22:11:28 +0200
-From:   Wolfram Sang <wsa-dev@sang-engineering.com>
-To:     Jason Gerecke <killertofu@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ping Cheng <pinglinux@gmail.com>,
-        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>,
-        Ping Cheng <ping.cheng@wacom.com>
-Subject: Re: [PATCH v2] i2c: Use u8 type in i2c transfer calls
-Message-ID: <Y1BZ8CjSnrKi+Yos@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa-dev@sang-engineering.com>,
-        Jason Gerecke <killertofu@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ping Cheng <pinglinux@gmail.com>,
-        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>,
-        Ping Cheng <ping.cheng@wacom.com>
-References: <20220718153448.173652-1-jason.gerecke@wacom.com>
- <20220803145937.698603-1-jason.gerecke@wacom.com>
- <CAHp75Vd6yEctJoNT6TpJ1+h4ZQckyLsaUSeSCV4MHqg+LUDkcg@mail.gmail.com>
- <CANRwn3TutF6skHQHk08dFUa8gLMVGxui_QN7YK6nDacSpRHtLg@mail.gmail.com>
+        with ESMTP id S231324AbiJSUYH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Oct 2022 16:24:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA801C25FF;
+        Wed, 19 Oct 2022 13:24:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E7FCB825E4;
+        Wed, 19 Oct 2022 20:24:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88748C433D6;
+        Wed, 19 Oct 2022 20:24:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666211044;
+        bh=cCILwvDcwIgTYkwNHwES8Ev68kTYaFfHYaLNe158ib4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WMnsLSrsZtYj0BS6fy7F2r7AeJJsG0EY+x4g2B3ZxvFABxNmeDXYMk2NIHno5odJM
+         85qPOzpUef011xb/ept6SDNpII5Wlv4FnGvAdPSJKcQE04K9QUPDIb7XVbmLS9D4VX
+         gHRgKKvQYUXyG5WDSA3i9w4r+8ya/ruzDajHaFi/rFuwd+EiIudSP2nlDfx/Kvl8dW
+         nfma2XdwQOAEK8Iuf4NNd9Sp1rI+9eZQp/F7DZYQ7MkVUmY0Q9BpwdE2scU2+VjI05
+         4Cf6NswUegMUhYSYds5/TVBjkPOsrqatnL41233vHCcjdB9P/1fAyRSvDKxh3tY5bH
+         Ghp7ut5JQ3vNA==
+Date:   Wed, 19 Oct 2022 22:24:00 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     kernel@axis.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/1] i2c: core: support no-detect property
+Message-ID: <Y1Bc4AjlZPs512Ao@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>, kernel@axis.com,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220429130749.3032462-1-vincent.whitchurch@axis.com>
+ <20220429130749.3032462-2-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BGtONydHGv42/zAu"
+        protocol="application/pgp-signature"; boundary="jGRgju90hTLJOk0F"
 Content-Disposition: inline
-In-Reply-To: <CANRwn3TutF6skHQHk08dFUa8gLMVGxui_QN7YK6nDacSpRHtLg@mail.gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220429130749.3032462-2-vincent.whitchurch@axis.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,45 +59,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---BGtONydHGv42/zAu
+--jGRgju90hTLJOk0F
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+
+On Fri, Apr 29, 2022 at 03:07:49PM +0200, Vincent Whitchurch wrote:
+> If the devicetree specifies the no-detect property (documented in
+> dt-schema [0]) for the I2C bus, we know that there are no other devices
+> on the bus other than the ones listed in the devicetree, so avoid
+> calling drivers' detect callbacks and wasting time looking for devices
+> which do not exist.
+
+Setting 'classes' in the adapter struct to 0 (actually to
+'I2C_CLASS_DEPRECATED' for a while) is not good enough? Or do you need
+class based instantiation on some busses?
 
 
-> > I believe you need to create a coccinelle script and run it over the
-> > kernel source tree and then create a patch out of it.
->=20
-> This would definitely be necessary to unify all callers to using
-> unsigned variables rather than just swapping which callers generate
-> the pointer-sign warnings.
-
-I am all for using u8 because this is the proper type.
-
-Yet, if we touch this function argument, I'd also like to remove all
-inconsistencies once and for all. Removing some warnings here and add
-some there is not a good choice IMO. However, how to do this switch of
-types cleanly without too much churn, I sadly have no good idea yet.
-
-
---BGtONydHGv42/zAu
+--jGRgju90hTLJOk0F
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNQWewACgkQFA3kzBSg
-KbZ3Gw//crNGkl16EK/1GS4zVfBem5hUueVH2xbQhi5++pK1z+ykw7ap2dqC5WC6
-kOJjK8nXpGaQJS4wPatM8jYP0uosEd9fpoZG3ULYnnzH6BYdzk/BPgpPQ/0nUaXp
-I63fhBeafHComQkTzfqTZo//qWQkp3DVtyBrA6rfiQyVz8afJOer/n2T772pA3SP
-kYTGL+A6KZQSztTkezKOJYWGPoUXupCLzVgPzonALtiZivgkiGS+OT40JHmPk6GA
-IkvuqE6DlUw5qMx3rTz+oYBO7mijCVms4eBjlzh88vEjmq/UdLh+3RQl3gaps6fh
-iNa2F+BJCQwMJt9NDvvLYeDa68VXNbcSvLkDIJXXP4WzBgkaW3wMJ++sl+f7Q+hB
-/jjkiSOLf4HkJl4ocbWkZwRrqJzuqQWJezkdyleK7rREQ14uSEDoyT66znrmQapF
-maiyP+cv1903PnVdKCq2fwg3q8gS827DI2zmXWFKdPAfT4e0Uvggb4Wa7icJqR1B
-18As6Aews6zo3Dr9cJXgQE7oXz2r0NHQok1+pmXPaMmhGBlFvAoxEO0Ir72uK898
-C6dC1qdBtD9ET9JIL16R5N0oaIWfksXlosPp323Y5J5k1dBKAk6emsNKnNYpdJCw
-bH/876TSZ98j2PHNJUY4MJzneKEs3zNAAw6ZBQRFoNRf93n4rrM=
-=gNnd
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNQXOAACgkQFA3kzBSg
+KbYcjA/+POKwJXKclHSpoOvafCd+yQvQU3RAwBHUJmcLftsHxdkub0FOH/g/bECi
+J3jr1SkKGA3Fgt9lNkfmuZbO5Z3DFIwevneGWL1ftWomspQGhFvzlcCvScSJCQkO
+TJzB2+bHIoQrwTG/IJuPNrKRTlA5JgkXZVqIcMtp0Al3KatT2vi4yeays8jTQPU5
+RWfb19E2SvVOEBkUxWzd9Y76yrtQIuFxLhyLXT3FEa1Q5Gd5/HC51vcGZoM6uzL4
+erGgaSZ7Hm1IcOC+MMKu5dLePpIflbOghMwTGfxtlpJR5SNtKF1RTxJk2u9dIPCt
+3Ycoc9Wpk1TOM9VNN386GvCVg8CL2Mzen3nveCHs+32IX0N1Ab1JrnaP6V4gq52t
+7fnAdAbhv/fvtmckc6DS0KdhSDMtaCA6fQ+tzRs6HlQ70RG3ml+Y+ffhYny40RLI
+Njpz8rrCPw6dbkGpekZFgB3J34iNO4twHKr2imvBPw+hqGrRHIMwZXzwihHAiSoS
+NgYcYqxWCj9oPLuP7iWZHj59a1J++3LWsueoiV+kIPhRsoFE2mqijGkUNGFOda0j
+1ZydqXUCJ+PPceGY28ABuBhmtIUmkRbgCfD6cp0LqJyCDthez4vsOA7bEPQm8kPW
+SlGGY1Tc/FacQ+Yzf1jeHeVfqxe2tzybSFQzEc8l4Bm2jSSVIR8=
+=401U
 -----END PGP SIGNATURE-----
 
---BGtONydHGv42/zAu--
+--jGRgju90hTLJOk0F--
