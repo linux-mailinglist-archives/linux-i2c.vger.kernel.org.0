@@ -2,55 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F9D605140
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Oct 2022 22:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F16E560514A
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Oct 2022 22:28:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiJSUYL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Oct 2022 16:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
+        id S229674AbiJSU2X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Oct 2022 16:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiJSUYH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Oct 2022 16:24:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA801C25FF;
-        Wed, 19 Oct 2022 13:24:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E7FCB825E4;
-        Wed, 19 Oct 2022 20:24:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88748C433D6;
-        Wed, 19 Oct 2022 20:24:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666211044;
-        bh=cCILwvDcwIgTYkwNHwES8Ev68kTYaFfHYaLNe158ib4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WMnsLSrsZtYj0BS6fy7F2r7AeJJsG0EY+x4g2B3ZxvFABxNmeDXYMk2NIHno5odJM
-         85qPOzpUef011xb/ept6SDNpII5Wlv4FnGvAdPSJKcQE04K9QUPDIb7XVbmLS9D4VX
-         gHRgKKvQYUXyG5WDSA3i9w4r+8ya/ruzDajHaFi/rFuwd+EiIudSP2nlDfx/Kvl8dW
-         nfma2XdwQOAEK8Iuf4NNd9Sp1rI+9eZQp/F7DZYQ7MkVUmY0Q9BpwdE2scU2+VjI05
-         4Cf6NswUegMUhYSYds5/TVBjkPOsrqatnL41233vHCcjdB9P/1fAyRSvDKxh3tY5bH
-         Ghp7ut5JQ3vNA==
-Date:   Wed, 19 Oct 2022 22:24:00 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     kernel@axis.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] i2c: core: support no-detect property
-Message-ID: <Y1Bc4AjlZPs512Ao@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>, kernel@axis.com,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220429130749.3032462-1-vincent.whitchurch@axis.com>
- <20220429130749.3032462-2-vincent.whitchurch@axis.com>
+        with ESMTP id S229977AbiJSU2W (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Oct 2022 16:28:22 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CB61C7D71
+        for <linux-i2c@vger.kernel.org>; Wed, 19 Oct 2022 13:28:21 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1olFfl-0006NL-Ai; Wed, 19 Oct 2022 22:28:17 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1olFfk-000C5o-Cx; Wed, 19 Oct 2022 22:28:16 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1olFfj-009A2Q-Mi; Wed, 19 Oct 2022 22:28:15 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH] i2c: xiic: Make sure to disable clock on .remove()
+Date:   Wed, 19 Oct 2022 22:28:08 +0200
+Message-Id: <20221019202808.88779-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jGRgju90hTLJOk0F"
-Content-Disposition: inline
-In-Reply-To: <20220429130749.3032462-2-vincent.whitchurch@axis.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1320; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=45GzRRjuX/VSl9LLmeognLTfDYmQ86edRtzvlckpPuk=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjUF3VyZIX2MufSq5wpnebZ7jowbSxcqUaakjRMWTv 1R677biJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY1Bd1QAKCRDB/BR4rcrsCcuDB/ wPMRVWiOXLqWxjil+sR30icwbEaP8wjgktuMmFtXqee9kTnBsl1821V3NYcURPPoC1VizmTx5ph9UA rzi7v0QuJWu1chMA4St5hTFGX/w46jRJCo00tKwaEc+bWZCdxYDTku5Vm5k2yMaq/8z/EB30GfY/Dv /V2ELDi5+/DZR6UJZxaDGNUnNAmFFj6S0MQ5+FjQW6OZaZk27EWYyFTjCQlQgRng3ftakh9a2wmLKV qDeQaLJJlimiRZ0gmayRybU9pzkk97+10gNHafP3M1WzIcCKjwp5VqwKH9hw4hNfTwpMNnP8qHmWiT qHHpf0c5VBYpXJENPcWRSlwRUfZp2A
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,41 +52,42 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+If for whatever reasons pm_runtime_resume_and_get() failed, .remove() is
+exited early, the clock isn't freed and runtime PM state isn't reset.
 
---jGRgju90hTLJOk0F
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The right thing to do however is to free all resources that don't need
+HW access after a problem with runtime PM. Also issue a warning in that
+case and return 0 to suppress a less helpful warning by the driver core.
 
-On Fri, Apr 29, 2022 at 03:07:49PM +0200, Vincent Whitchurch wrote:
-> If the devicetree specifies the no-detect property (documented in
-> dt-schema [0]) for the I2C bus, we know that there are no other devices
-> on the bus other than the ones listed in the devicetree, so avoid
-> calling drivers' detect callbacks and wasting time looking for devices
-> which do not exist.
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/i2c/busses/i2c-xiic.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-Setting 'classes' in the adapter struct to 0 (actually to
-'I2C_CLASS_DEPRECATED' for a while) is not good enough? Or do you need
-class based instantiation on some busses?
+diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
+index b3fe6b2aa3ca..809d6eadae2d 100644
+--- a/drivers/i2c/busses/i2c-xiic.c
++++ b/drivers/i2c/busses/i2c-xiic.c
+@@ -858,11 +858,14 @@ static int xiic_i2c_remove(struct platform_device *pdev)
+ 	/* remove adapter & data */
+ 	i2c_del_adapter(&i2c->adap);
+ 
+-	ret = pm_runtime_resume_and_get(i2c->dev);
++	ret = pm_runtime_get_sync(i2c->dev);
++
+ 	if (ret < 0)
+-		return ret;
++		dev_warn(&pdev->dev, "Failed to activate device for removal (%pe)\n",
++			 ERR_PTR(ret));
++	else
++		xiic_deinit(i2c);
+ 
+-	xiic_deinit(i2c);
+ 	pm_runtime_put_sync(i2c->dev);
+ 	clk_disable_unprepare(i2c->clk);
+ 	pm_runtime_disable(&pdev->dev);
 
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+-- 
+2.37.2
 
---jGRgju90hTLJOk0F
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNQXOAACgkQFA3kzBSg
-KbYcjA/+POKwJXKclHSpoOvafCd+yQvQU3RAwBHUJmcLftsHxdkub0FOH/g/bECi
-J3jr1SkKGA3Fgt9lNkfmuZbO5Z3DFIwevneGWL1ftWomspQGhFvzlcCvScSJCQkO
-TJzB2+bHIoQrwTG/IJuPNrKRTlA5JgkXZVqIcMtp0Al3KatT2vi4yeays8jTQPU5
-RWfb19E2SvVOEBkUxWzd9Y76yrtQIuFxLhyLXT3FEa1Q5Gd5/HC51vcGZoM6uzL4
-erGgaSZ7Hm1IcOC+MMKu5dLePpIflbOghMwTGfxtlpJR5SNtKF1RTxJk2u9dIPCt
-3Ycoc9Wpk1TOM9VNN386GvCVg8CL2Mzen3nveCHs+32IX0N1Ab1JrnaP6V4gq52t
-7fnAdAbhv/fvtmckc6DS0KdhSDMtaCA6fQ+tzRs6HlQ70RG3ml+Y+ffhYny40RLI
-Njpz8rrCPw6dbkGpekZFgB3J34iNO4twHKr2imvBPw+hqGrRHIMwZXzwihHAiSoS
-NgYcYqxWCj9oPLuP7iWZHj59a1J++3LWsueoiV+kIPhRsoFE2mqijGkUNGFOda0j
-1ZydqXUCJ+PPceGY28ABuBhmtIUmkRbgCfD6cp0LqJyCDthez4vsOA7bEPQm8kPW
-SlGGY1Tc/FacQ+Yzf1jeHeVfqxe2tzybSFQzEc8l4Bm2jSSVIR8=
-=401U
------END PGP SIGNATURE-----
-
---jGRgju90hTLJOk0F--
