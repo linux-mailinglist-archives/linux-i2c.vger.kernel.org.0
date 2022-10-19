@@ -2,57 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA7A6050C2
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Oct 2022 21:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1E1605113
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Oct 2022 22:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiJSTv7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Oct 2022 15:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
+        id S229822AbiJSULf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Oct 2022 16:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbiJSTv5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Oct 2022 15:51:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7806A1D5E0B;
-        Wed, 19 Oct 2022 12:51:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56A39B825C0;
-        Wed, 19 Oct 2022 19:51:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73C3DC433C1;
-        Wed, 19 Oct 2022 19:51:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666209109;
-        bh=9MMnJZ8RVykqDN4Q9olrkhBbfU73G37kA+f3xinyUm4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NmVtvRWW2kjjIOeS7v7ov8xqJWMC2U2RuTMlsSrA8LR2iuRQ3iD77Dyf+jM5HaxAz
-         1DYJo6L/2Qg4p37RfvkovpCq8tLiztf1Jumq6KEO79adngURCw2nuXdMdXNgj+MIeM
-         OHcVl13WXrfCHZyQ/dGGDSVgqQLPqBlROj2aKELmg0PGjjRFyG/DtihuC+CGKBE9/i
-         dMMC6Tj/NpeXB8RPbBuBM4Y09jehl3wYQLrNG6ZuY12rhwof/OR2hU/q2glz035rte
-         SUlsAX+elwCW0e2lszXJ1nXoxNWXgynU0S/iNZ0UMIzTixs/EnZoyxO4nDgPfd4AM0
-         /nibkhREU/DkA==
-Date:   Wed, 19 Oct 2022 21:51:45 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Jiangshan Yi <13667453960@163.com>
-Cc:     jdelvare@suse.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: Re: [PATCH] i2c: sis630: fix spelling typo in comment
-Message-ID: <Y1BVUSIoz7yEhIzp@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jiangshan Yi <13667453960@163.com>, jdelvare@suse.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>, k2ci <kernel-bot@kylinos.cn>
-References: <20221009072802.2638945-1-13667453960@163.com>
+        with ESMTP id S230475AbiJSULe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Oct 2022 16:11:34 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B1C1B6C91
+        for <linux-i2c@vger.kernel.org>; Wed, 19 Oct 2022 13:11:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=jP23/8oNXZDtmh00ufdfE7zkPkL/
+        ikPEzUVgX0EP4hU=; b=a8a161dB1G12z3w3RCsuDs9SiOc5nZsIoFMIBZqJcx0q
+        /4wWw0OViHWEhkTL6psCGGIoFkkG8IPWEPB9S7J1UszIvaViRsKKA5oUgA+hQglc
+        VzNNsDaHf5ZgEGrNCGEMek4aIMNkGZxI5patPQq0yR0olzW0MeaLSPNyPlOg7a0=
+Received: (qmail 804148 invoked from network); 19 Oct 2022 22:11:29 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Oct 2022 22:11:29 +0200
+X-UD-Smtp-Session: l3s3148p1@KwRf0GjrluQgAwDtxwGnANC4y/SuZCIq
+Date:   Wed, 19 Oct 2022 22:11:28 +0200
+From:   Wolfram Sang <wsa-dev@sang-engineering.com>
+To:     Jason Gerecke <killertofu@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ping Cheng <pinglinux@gmail.com>,
+        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>,
+        Ping Cheng <ping.cheng@wacom.com>
+Subject: Re: [PATCH v2] i2c: Use u8 type in i2c transfer calls
+Message-ID: <Y1BZ8CjSnrKi+Yos@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa-dev@sang-engineering.com>,
+        Jason Gerecke <killertofu@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ping Cheng <pinglinux@gmail.com>,
+        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>,
+        Ping Cheng <ping.cheng@wacom.com>
+References: <20220718153448.173652-1-jason.gerecke@wacom.com>
+ <20220803145937.698603-1-jason.gerecke@wacom.com>
+ <CAHp75Vd6yEctJoNT6TpJ1+h4ZQckyLsaUSeSCV4MHqg+LUDkcg@mail.gmail.com>
+ <CANRwn3TutF6skHQHk08dFUa8gLMVGxui_QN7YK6nDacSpRHtLg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g4Vulk95lpdhDVTk"
+        protocol="application/pgp-signature"; boundary="BGtONydHGv42/zAu"
 Content-Disposition: inline
-In-Reply-To: <20221009072802.2638945-1-13667453960@163.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CANRwn3TutF6skHQHk08dFUa8gLMVGxui_QN7YK6nDacSpRHtLg@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,40 +70,45 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---g4Vulk95lpdhDVTk
+--BGtONydHGv42/zAu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Oct 09, 2022 at 03:28:02PM +0800, Jiangshan Yi wrote:
-> From: Jiangshan Yi <yijiangshan@kylinos.cn>
+
+> > I believe you need to create a coccinelle script and run it over the
+> > kernel source tree and then create a patch out of it.
 >=20
-> Fix spelling typo in comment.
->=20
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+> This would definitely be necessary to unify all callers to using
+> unsigned variables rather than just swapping which callers generate
+> the pointer-sign warnings.
 
-Squashed with previous patch and also applied to for-current, thanks!
+I am all for using u8 because this is the proper type.
+
+Yet, if we touch this function argument, I'd also like to remove all
+inconsistencies once and for all. Removing some warnings here and add
+some there is not a good choice IMO. However, how to do this switch of
+types cleanly without too much churn, I sadly have no good idea yet.
 
 
---g4Vulk95lpdhDVTk
+--BGtONydHGv42/zAu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNQVVEACgkQFA3kzBSg
-KbZa+A//Xasn2NUdkAJrbd/lD0NAE/B/HMDxLvw/uLz4ZlyFfXSZIIwS+7v5DjBB
-PoCg25qDlF8tkiU5D6w+XuehJObLeQHUagbo42gHWjw5xRHQB9F73A8BIidQHiJD
-zQoqFC7jhAG8NQy0J2zpDcXoNLaFTojGUTbjX/OZ++hGqgGyPvdyNfdSJpZwxGhR
-0TnZRHgCLiT6304r5uEyK9/1uLx7YopX6LPAw8wwM+Ioqw/vrhYrXxAMj4zcEPu7
-B2CtTsLRzhyJVniMPTxBIKTTvxhxTmdPd3pxitZdxH3Thil0zyjhFSwCR7IdElQj
-nQiIY4nFVUXkqv6yvYSVZ9kUhpxUW1Y1GMbbjQvhiTgJly058dQafAWgqzi+TX4c
-j85+fE4gw1z/WqsYvgsALARnpMy7glVYRSEzCfiYyPrHeZDf6fD4dJ8UXwb63rtl
-F2CxGNXFBjKH9NvAzp9m6IMh6Lf4D0KaVIwtHqnFk43Mk3rIXQIB2h19xh7kreD+
-ctx+97r4RlafRSq4Q+nCV8TknRPTri2WON3kPwx2DqTQg/uQZfzs/z3qBHwA3OTH
-Jgdkdz42KLdNWhUSnwsPF+rnCEos0mnujFRNn5mjZYZxuUjoZSKOA6gdJzJ+kdCl
-vmzQMa9BSYZQ4nMDN24lOSda8WNNfLcAYs4G0M783QV1wFjZDv4=
-=k7ri
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNQWewACgkQFA3kzBSg
+KbZ3Gw//crNGkl16EK/1GS4zVfBem5hUueVH2xbQhi5++pK1z+ykw7ap2dqC5WC6
+kOJjK8nXpGaQJS4wPatM8jYP0uosEd9fpoZG3ULYnnzH6BYdzk/BPgpPQ/0nUaXp
+I63fhBeafHComQkTzfqTZo//qWQkp3DVtyBrA6rfiQyVz8afJOer/n2T772pA3SP
+kYTGL+A6KZQSztTkezKOJYWGPoUXupCLzVgPzonALtiZivgkiGS+OT40JHmPk6GA
+IkvuqE6DlUw5qMx3rTz+oYBO7mijCVms4eBjlzh88vEjmq/UdLh+3RQl3gaps6fh
+iNa2F+BJCQwMJt9NDvvLYeDa68VXNbcSvLkDIJXXP4WzBgkaW3wMJ++sl+f7Q+hB
+/jjkiSOLf4HkJl4ocbWkZwRrqJzuqQWJezkdyleK7rREQ14uSEDoyT66znrmQapF
+maiyP+cv1903PnVdKCq2fwg3q8gS827DI2zmXWFKdPAfT4e0Uvggb4Wa7icJqR1B
+18As6Aews6zo3Dr9cJXgQE7oXz2r0NHQok1+pmXPaMmhGBlFvAoxEO0Ir72uK898
+C6dC1qdBtD9ET9JIL16R5N0oaIWfksXlosPp323Y5J5k1dBKAk6emsNKnNYpdJCw
+bH/876TSZ98j2PHNJUY4MJzneKEs3zNAAw6ZBQRFoNRf93n4rrM=
+=gNnd
 -----END PGP SIGNATURE-----
 
---g4Vulk95lpdhDVTk--
+--BGtONydHGv42/zAu--
