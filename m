@@ -2,128 +2,113 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E9960519C
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Oct 2022 22:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95191605217
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Oct 2022 23:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbiJSUwq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Oct 2022 16:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
+        id S231201AbiJSVh7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Oct 2022 17:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbiJSUwp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Oct 2022 16:52:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291F48B2EC;
-        Wed, 19 Oct 2022 13:52:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8AD3619A9;
-        Wed, 19 Oct 2022 20:52:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAEA9C433D7;
-        Wed, 19 Oct 2022 20:52:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666212763;
-        bh=vUMA+KIEyk/mYPhfmyufPAgBG9tekFxdVUbAeXTernc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p172OvXvWm/p6RKTQNulUGe+kEr9zh/MoX+B0PaLbFGYaCtEweB95zPuTVG2Dib1l
-         3eFX65O9mcEtg8K+ZGAP095XFU0sXw8WRMWUB1ahMLe9bQd30eACPNLy1SGojiJ6bx
-         2StzfEOxWFj/VapNszY8oJR1iiJPt3PHwx2aWbocpq77QdoMKxwwEFwaP8jdMHxKFW
-         BLIMJ0d2sj7YrHYnxwofGtxSkWk12SozvzcJoSBDOoKNbhjPQ+Fn4L2r5tOLk3vRor
-         wJzNnjI+xMcY8a4H4hUgt1TzUcJMmSSPrjaYmE/uZPclQaORMCIQ6T1/DwThLhI9xM
-         QLVU4ggVcN+MQ==
-Received: by pali.im (Postfix)
-        id 07FC13AC; Wed, 19 Oct 2022 22:52:39 +0200 (CEST)
-Date:   Wed, 19 Oct 2022 22:52:39 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Nam Cao <namcaov@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: i801: add lis3lv02d's I2C address for Vostro 5568
-Message-ID: <20221019205239.6n5sfqejtljlpyci@pali>
-References: <20221006145440.10281-1-namcaov@gmail.com>
- <20221018193951.40787445@endymion.delvare>
- <20221018180051.236tz4yxsdzrgguq@pali>
- <20221019203403.GA149239@nam-dell>
+        with ESMTP id S231150AbiJSVh6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Oct 2022 17:37:58 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD3A1958E6
+        for <linux-i2c@vger.kernel.org>; Wed, 19 Oct 2022 14:37:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=9dYSSSWUYKNvzYBVm8ifN/l5JnAV
+        A/EUrrEOnFuDA2k=; b=dKbW57vfKrFSVoR2wZnQWmkSUp+3QAJ8nlYJk2kqpu1O
+        2qVNVq9V5/AJYu7XfWFotfpmRUvNFgP7JBLcLcBYQumfMX4OL5Bs1KkGjdSUZJUo
+        xZEjUnEGl29LSqJZlDSIO1bTQvMXsb/Yn2HJzMCMwxtCpOPUN2mEhvWJVOFlRvw=
+Received: (qmail 821590 invoked from network); 19 Oct 2022 23:37:51 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Oct 2022 23:37:51 +0200
+X-UD-Smtp-Session: l3s3148p1@j7BMBWrr6sYgAwDtxwGnANC4y/SuZCIq
+Date:   Wed, 19 Oct 2022 23:37:51 +0200
+From:   Wolfram Sang <wsa-dev@sang-engineering.com>
+To:     Jason Gerecke <killertofu@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ping Cheng <pinglinux@gmail.com>,
+        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>,
+        Ping Cheng <ping.cheng@wacom.com>
+Subject: Re: [PATCH v2] i2c: Use u8 type in i2c transfer calls
+Message-ID: <Y1BuLyxEKLIAgF+5@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa-dev@sang-engineering.com>,
+        Jason Gerecke <killertofu@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ping Cheng <pinglinux@gmail.com>,
+        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>,
+        Ping Cheng <ping.cheng@wacom.com>
+References: <20220718153448.173652-1-jason.gerecke@wacom.com>
+ <20220803145937.698603-1-jason.gerecke@wacom.com>
+ <CAHp75Vd6yEctJoNT6TpJ1+h4ZQckyLsaUSeSCV4MHqg+LUDkcg@mail.gmail.com>
+ <CANRwn3TutF6skHQHk08dFUa8gLMVGxui_QN7YK6nDacSpRHtLg@mail.gmail.com>
+ <Y1BZ8CjSnrKi+Yos@shikoro>
+ <CANRwn3SmrGX2-cqMK=dDTJR=OaxoVM9C+fsaa8jz96ADtH02DA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="z9tlMrGQdpWoo8J3"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221019203403.GA149239@nam-dell>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CANRwn3SmrGX2-cqMK=dDTJR=OaxoVM9C+fsaa8jz96ADtH02DA@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wednesday 19 October 2022 22:34:03 Nam Cao wrote:
-> On Tue, Oct 18, 2022 at 08:00:51PM +0200, Pali Rohár wrote:
-> > On Tuesday 18 October 2022 19:39:51 Jean Delvare wrote:
-> > > On Thu, 06 Oct 2022 16:54:40 +0200, Nam Cao wrote:
-> > > > Dell Vostro 5568 laptop has lis3lv02d, but its i2c address is not known
-> > > > to the kernel. Add this address.
-> > > > 
-> > > > Output of "cat /sys/devices/platform/lis3lv02d/position" on Dell Vostro
-> > > > 5568 laptop:
-> > > >     - Horizontal: (-18,0,1044)
-> > > >     - Front elevated: (522,-18,1080)
-> > > >     - Left elevated: (-18,-360,1080)
-> > > >     - Upside down: (36,108,-1134)
-> > > > 
-> > > > Signed-off-by: Nam Cao <namcaov@gmail.com>
-> > > > ---
-> > > >  drivers/i2c/busses/i2c-i801.c | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > > 
-> > > > diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> > > > index a176296f4fff..e46561e095c6 100644
-> > > > --- a/drivers/i2c/busses/i2c-i801.c
-> > > > +++ b/drivers/i2c/busses/i2c-i801.c
-> > > > @@ -1243,6 +1243,7 @@ static const struct {
-> > > >  	 */
-> > > >  	{ "Latitude 5480",      0x29 },
-> > > >  	{ "Vostro V131",        0x1d },
-> > > > +	{ "Vostro 5568",        0x29 },
-> > > >  };
-> > > >  
-> > > >  static void register_dell_lis3lv02d_i2c_device(struct i801_priv *priv)
-> > > 
-> > > Fine with me.
-> > > 
-> > > Reviewed-by: Jean Delvare <jdelvare@suse.de>
-> > > 
-> > > Pali, OK with you?
-> > 
-> > Yes, nice to see that other people discovered another hidden hardware
-> > devices in their own laptops :-)
-> > 
-> > Reviewed-by: Pali Rohár <pali@kernel.org>
-> > 
-> > 
-> > Nam Cao, could you check your ACPI DSDT table if there is not specified
-> > this smbus/i2c address 0x29? Autodiscovery would be better than
-> > hardcoding. At least for E6440 I was told that BIOS does not provide it.
-> 
-> My reply got rejected by mailing list because the attachment was too big.
-> So I re-send this without the attachment, so that everyone can see.
-> 
-> I searched the DSDT table for "29", but none of them looks like an i2c
-> address.
-> 
-> But this is the first time I hear about ACPI DSDT table, so I may did
-> something incorrectly. I did:
->         - cp /sys/firmware/acpi/tables/DSDT table
->         - iasl -d table
->         - Search through table.dsl
-> 
-> Best regards,
-> Nam
 
-You did it correctly. I'm not surprised that you have not found
-anything. When I did experiments in the past, I was not able too...
-That is why there is that harcoded table...
+--z9tlMrGQdpWoo8J3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-It just means that Dell did not fixed it or they perfectly hidden it.
+
+> I spent a little time trying to put together a Coccinelle script to
+> take care of everything but I eventually realized the size of the task
+> was larger than I was comfortable with. In particular, even though I
+> might be able to put together a script, I worry I don't have a good
+> way to test the resulting treewide changes to avoid regression.
+
+The coccinelle scripts are one thing. I am quite familiar with it, so I
+regard this as "work but doable". My main headache is that I am not sure
+about the best way to upstream the result. I'd like to avoid a flag-day
+where all drivers across all subsystems need to be converted, but I
+don't really see a way around it. Preparing such a branch and make sure
+it does not regress is quite some work on a moving target.
+
+
+--z9tlMrGQdpWoo8J3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNQbisACgkQFA3kzBSg
+KbbnHhAAkfWpRLGRDmdzv1HH4XrQUaAFabR25IsltjhcTRbwlGpM9QJDDkxdpvy+
+GUODP8ft0wFdgTRsh6pOfWkK02DvwUAQYTQRCF/ZVJFebqhK8lYhWDLOcTDLQp/d
+xCit/4z48BckEbxqBqUyLO8bfm2MbcoIS4WxG+DEZqjhzKcZdf6+qE7ZsgLYIMmK
+lClROZhZusKNwTynTFRaXixMIcKkGzentVnJRHjaCjYIhUMc8uVEM01T8Q3JuHyR
+7Xci7qsn/6R+zQoApv8LW4Fx1K3YdCcv3iHNRcKT2sYyMNqJOxqSAF5xGFRWIExR
+zEHZ1QdeEWi5MjwamGufBmj54M9V0c0J4IdQTaB4zLNYG1bGo7TCxZ08vHDBQpsL
+3UMmQYwDq6PWmu94duTJHGfUPgh5HGr+BjdQdJ9PSNuaAAAkyIUH1Oov4H8KHDzR
+WS3611NFgWx8zzjF4uKLc3V8qV0Im9QiOpTtoOpwQqCRxIK+EPaeWcpl9LutPFQI
+tSqxqeDZVtQLObUSg5RoAZQT/hDqvqverD4Kq0d6Dow102UJt8j9qJftccpzi1Ky
+Rtbh+xpsdevjPBD0/ks2jW0KWT2ohNpz4Nc04TmnkrJ+xn7LRM84AlGSX7i/3Tuc
+U/DBjmN3vNi8eoWlyKGYsS6RFUf3nDGaTbXIjf81SqM3Tq6Usaw=
+=nOXa
+-----END PGP SIGNATURE-----
+
+--z9tlMrGQdpWoo8J3--
