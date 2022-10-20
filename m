@@ -2,168 +2,123 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C337605538
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Oct 2022 03:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D566057F5
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Oct 2022 09:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbiJTBxH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Oct 2022 21:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
+        id S229956AbiJTHLg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Oct 2022 03:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbiJTBxF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Oct 2022 21:53:05 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523F91958F5;
-        Wed, 19 Oct 2022 18:53:03 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mt9VH5KL9zVj0L;
-        Thu, 20 Oct 2022 09:48:23 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 20 Oct 2022 09:52:30 +0800
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <yangyicong@hisilicon.com>,
-        <wsa@kernel.org>, <robh@kernel.org>, <robh+dt@kernel.org>,
-        <xuwei5@huawei.com>
-Subject: Re: [PATCH next v6 2/2] dt-bindings: i2c: add entry for
- hisilicon,i2c-ascend910
-To:     Weilong Chen <chenweilong@huawei.com>
-References: <20221018073012.309355-1-chenweilong@huawei.com>
- <20221018073012.309355-2-chenweilong@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <7520818b-de40-7f2a-1b03-b1dcd29a2023@huawei.com>
-Date:   Thu, 20 Oct 2022 09:52:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
-MIME-Version: 1.0
-In-Reply-To: <20221018073012.309355-2-chenweilong@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S230060AbiJTHLf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Oct 2022 03:11:35 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA65153814;
+        Thu, 20 Oct 2022 00:11:33 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 39D925C0118;
+        Thu, 20 Oct 2022 03:11:32 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 20 Oct 2022 03:11:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1666249892; x=1666336292; bh=VKnxMFhTQ2
+        bD9dGwCnO8mk5gYoCFAkEbzjlFbm9rovY=; b=mx0RguBAra0abQu7M4Y1+MUi33
+        KMNn/vZOiCggNhPBxxFZUy2NzCTRt5cfJi6DqRtGr0aU8kyjB0FuCWdRE1ESSVfO
+        sIFWbYRFVHB+W0CzZqepqCpzSWp1QUBRE8IEt1rnmVnhXu1i1lVReTstddxV6b8O
+        mnXzD7xtSvK91uJ3//4bI5OJDkxANxoYGFvZEBO+ozuHvP/Jfc9yHUqhQfuaKKyL
+        MTdJkm9dzDJGKelIfVHqklogaMsblFo0pnIQi+ajn//A85+RCtzTt+vTTBEY4rzx
+        XPT6s1r2QRz8Qyh+sjpqXq+mV4rIoew/aoTklNlH8vDPJEqKjY8naO6n9RZg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666249892; x=1666336292; bh=VKnxMFhTQ2bD9dGwCnO8mk5gYoCF
+        AkEbzjlFbm9rovY=; b=CIlSjHmAXwsx/YWjLQ/Wzj/EjQQQxjDG1krSeXGRKQ0l
+        BSSuMXZWkLWWl7uwBhn/gjcYkKWK6/rvHTI7T5FHSHCD971EEB6UplprIf90tSFm
+        WNnkRj3o+wv3B1uGjGFuBsulNxGuYML4VylSUo8WeMzmheUc5pnoEcIDBtPvdkmA
+        H73zV8CAS27N2P8LoV1SaKHIweN+ah5O7VHk9yXVWs04Fb9GpTqiiGBkklghLxDP
+        wremdM+FfvBpDZLpyTSo/OrDw4lajm+h4MQzyeEXgpyb+MLq0V6V5xN+rivG6bY0
+        MJDWUFiUsxltMj2RO6z2zxsEU51kdKDnfHl4LsMM8A==
+X-ME-Sender: <xms:o_RQY-ZLJTRzMXsItyMbHQlmCV04T7mk8EY3alVsMM_cMrwQdVSm2A>
+    <xme:o_RQYxYREGqXTgQVjaqvE0I02peT7IFLWfJRdxD6hF03QwzitqrVZlUg6yJ16IM2U
+    jfrYF4erALQtkFXX2w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelhedguddujecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:o_RQY49i2WOHU2ZiybVKJPOyczK_wN43XuENDHBGLcGzpojd6SVoTQ>
+    <xmx:o_RQYwrd0vSjaZX8pHoF2YxiJMRG2qB6V3yzlszB_e4pPqDNXA74Bg>
+    <xmx:o_RQY5rd2l0cCOIvWxxOLlYhaVvDMXoXGOvG6_UDlyPiJcNBXWEQnw>
+    <xmx:pPRQY6Tmh5Y_tereJiQL4ZAD0PAJQTUsYaXFKet4i3vvMsv2uSsTJA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 588A1B60086; Thu, 20 Oct 2022 03:11:31 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <1b632df1-7e3c-456d-8629-dc36efd9fe15@app.fastmail.com>
+In-Reply-To: <20221019171541.GA41568@darkstar.musicnaut.iki.fi>
+References: <20221019144119.3848027-1-arnd@kernel.org>
+ <20221019150410.3851944-1-arnd@kernel.org>
+ <20221019150410.3851944-13-arnd@kernel.org>
+ <20221019171541.GA41568@darkstar.musicnaut.iki.fi>
+Date:   Thu, 20 Oct 2022 09:11:11 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Aaro Koskinen" <aaro.koskinen@iki.fi>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        "Janusz Krzysztofik" <jmkrzyszt@gmail.com>,
+        "Tony Lindgren" <tony@atomide.com>, linux-kernel@vger.kernel.org,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        "Lee Jones" <lee@kernel.org>,
+        "Ulf Hansson" <ulf.hansson@linaro.org>,
+        "Felipe Balbi" <balbi@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        linux-i2c@vger.kernel.org,
+        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 13/17] ARM: omap1: remove unused board files
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 2022/10/18 15:30, Weilong Chen wrote:
-> Add the new compatible for HiSilicon i2c.
-> 
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
-> ---
-> Change since v5:
-> - Use hisilicon,i2c-ascend910 as compatible string. For more information about
->   the SoC at https://e.huawei.com/en/products/cloud-computing-dc/atlas/ascend-910
-> - Alphabetic order the MAINTAINERS
-> 
-> Change since v4:
-> - Add description for SoC specific compatibles.
-> - Use the clock binding.
-> - Fix decimal, space, case, unused labels.
-> Link: https://lore.kernel.org/lkml/20220909074842.281232-1-chenweilong@huawei.com/T/#m4e1c915ead04f4e2e48d69131053a966801625db
-> 
->  .../bindings/i2c/hisilicon,i2c-xxx.yaml       | 70 +++++++++++++++++++
+On Wed, Oct 19, 2022, at 19:15, Aaro Koskinen wrote:
+> Hi,
+>
+> On Wed, Oct 19, 2022 at 05:03:35PM +0200, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> All board support that was marked as 'unused' earlier can
+>> now be removed, leaving the five machines that that still
+>> had someone using them in 2022, or that are supported in
+>> qemu.
+> [...]
+>>  config OMAP_OSK_MISTRAL
+>>  	bool "Mistral QVGA board Support"
+>>  	depends on MACH_OMAP_OSK
+>> -	depends on UNUSED_BOARD_FILES
+>>  	help
+>>  	  The OSK supports an optional add-on board with a Quarter-VGA
+>>  	  touchscreen, PDA-ish buttons, a resume button, bicolor LED,
+>>  	  and camera connector.  Say Y here if you have this board.
+>
+> Shouldn't this go away as well?
 
-The file name may look a bit strange, but anyway the doc itself looks good to me.
+No, this one was incorrectly annotated, it's not actually
+a board but it's an option for the OSK board that is not
+getting removed. I considered making a separate patch
+for removing the dependency, but that didn't seem worth it.
 
-Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
-
->  MAINTAINERS                                   |  1 +
->  2 files changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,i2c-xxx.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,i2c-xxx.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,i2c-xxx.yaml
-> new file mode 100644
-> index 000000000000..a7285ddc260d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/hisilicon,i2c-xxx.yaml
-> @@ -0,0 +1,70 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/i2c/hisilicon,i2c-xxx.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: HiSilicon common IIC controller Device Tree Bindings
-> +
-> +maintainers:
-> +  - yangyicong@huawei.com
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: hisilicon,i2c-ascend910
-> +    description:
-> +      The HiSilicon common IIC controller can be used for many different
-> +      types of SoC such as Huawei Ascend AI series chips.
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-frequency:
-> +    default: 400000
-> +
-> +  i2c-sda-falling-time-ns:
-> +    default: 343
-> +
-> +  i2c-scl-falling-time-ns:
-> +    default: 203
-> +
-> +  i2c-sda-hold-time-ns:
-> +    default: 830
-> +
-> +  i2c-scl-rising-time-ns:
-> +    default: 365
-> +
-> +  i2c-digital-filter-width-ns:
-> +    default: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c@5038b0000 {
-> +      compatible = "hisilicon,i2c-ascend910";
-> +      reg = <0x38b0000 0x10000>;
-> +      interrupts = <0x0 120 0x4>;
-> +      i2c-sda-falling-time-ns = <56>;
-> +      i2c-scl-falling-time-ns = <56>;
-> +      i2c-sda-hold-time-ns = <56>;
-> +      i2c-scl-rising-time-ns = <56>;
-> +      i2c-digital-filter;
-> +      i2c-digital-filter-width-ns = <0x0>;
-> +      clocks = <&alg_clk>;
-> +      clock-frequency = <400000>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ad32dc9c4822..961e4442fb08 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9211,6 +9211,7 @@ M:	Yicong Yang <yangyicong@hisilicon.com>
->  L:	linux-i2c@vger.kernel.org
->  S:	Maintained
->  W:	https://www.hisilicon.com
-> +F:	Documentation/devicetree/bindings/i2c/hisilicon,i2c-xxx.yaml
->  F:	drivers/i2c/busses/i2c-hisi.c
->  
->  HISILICON LPC BUS DRIVER
-> 
+    Arnd
