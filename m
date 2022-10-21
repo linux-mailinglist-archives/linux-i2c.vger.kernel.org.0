@@ -2,55 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC8C607040
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Oct 2022 08:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC3F607045
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Oct 2022 08:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiJUGnv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Oct 2022 02:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
+        id S229667AbiJUGov (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Oct 2022 02:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiJUGns (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Oct 2022 02:43:48 -0400
+        with ESMTP id S229585AbiJUGou (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Oct 2022 02:44:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAF62413CD;
-        Thu, 20 Oct 2022 23:43:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05AC357ED;
+        Thu, 20 Oct 2022 23:44:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB41961DD2;
-        Fri, 21 Oct 2022 06:43:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2CC2C433D6;
-        Fri, 21 Oct 2022 06:43:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C6E861B39;
+        Fri, 21 Oct 2022 06:44:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBC4FC433D7;
+        Fri, 21 Oct 2022 06:44:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666334625;
-        bh=sEwMq2j5fjO07u3xyI2MdfOg2PhiXrflPNSl+1UnYnQ=;
+        s=k20201202; t=1666334687;
+        bh=dg+igT/kH5vNLile/55ugMghQ6bHOl5tdBoCQSBXYac=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p35BnNfZPMnmjAztGM+SVzJPSQLvzbn4xPbC/SN4po2T9VkG2rTnk+kmA0AlVvMoa
-         OZJQ5iwoswxe5tWoHusob88QqBXioMBVWB5RcbY6e39dv7zWqslEHVzy0oGlobvJiG
-         RFbeSWjIe9n3yOguBmIO4jzeFqd0ZbPPZYS8hW9jqCI00juDwYj0u5UQ57a7JL0Uxp
-         WPyDBY8oEaLI4MQsQKVzyn0lWUENtw2mYsCxtkm2JVDAShlvxWgB1B7jjkiFWTxFbN
-         9ds+LgrUpoV6/ObsCWhfVPBvHm5fGG5NIfX0D8HCakUn1R5s03ZlYJ8yoVSyeKpEau
-         ZhNzmEt01Qnvg==
-Date:   Fri, 21 Oct 2022 08:43:17 +0200
+        b=AGeMyJeg87UlxSe5k2XIw2g27XDq3ZEoGhJylOgn/Pc+deCE0ymZDPF3pyhTXbf62
+         BkfHG3/Jo3vHInZD0+8lFJ/J32KahCu6OAm/wJgPFxd9F/HemwazCjH13UA8hJ60mM
+         b7/YE//cHLp3hSWuNDGNIrsZr73GEPOrbsw5jMJf/PXtSzJrG6IggCpuVSgIjAuv7T
+         mkRnUX2cWBckGEDpW/KQuEh4jbsZI+7HVNHZJlkU6jCmsTyk4td814k6t0S+O3WWSh
+         8xaaW5CBclarLFx8oWJMBlgIHD63a03DVy9s1ojqs8YIrBNztmRJ02YHmW3QFs0F8Q
+         AkwK4fKzudFJw==
+Date:   Fri, 21 Oct 2022 08:44:44 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Adam Borowski <kilobyte@angband.pl>
-Cc:     Khalil Blaiech <kblaiech@nvidia.com>,
+Cc:     linux-kernel@lists.debian.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org, alsa-devel@alsa-project.org,
+        David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        Yong Zhi <yong.zhi@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Dan Scally <djrscally@gmail.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, Khalil Blaiech <kblaiech@nvidia.com>,
         Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] i2c: mlxbf: depend on ACPI; clean away ifdeffage
-Message-ID: <Y1I/hRG9XGTFDTr3@shikoro>
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Brent Lu <brent.lu@intel.com>
+Subject: Re: [PATCH 0/6] a pile of randconfig fixes
+Message-ID: <Y1I/3KPxSI1voRHh@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Adam Borowski <kilobyte@angband.pl>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
+        Adam Borowski <kilobyte@angband.pl>, linux-kernel@lists.debian.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org, alsa-devel@alsa-project.org,
+        David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        Yong Zhi <yong.zhi@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>, Dan Scally <djrscally@gmail.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, Khalil Blaiech <kblaiech@nvidia.com>,
         Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <S229853AbiJTWkg/20221020224036Z+12888@vger.kernel.org>
- <S229897AbiJTWqk/20221020224640Z+957@vger.kernel.org>
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Brent Lu <brent.lu@intel.com>
+References: <20221020221749.33746-1-kilobyte@angband.pl>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iApmyqhp3K52o8pq"
+        protocol="application/pgp-signature"; boundary="ASNnxeSggHlth0r3"
 Content-Disposition: inline
-In-Reply-To: <S229897AbiJTWqk/20221020224640Z+957@vger.kernel.org>
+In-Reply-To: <20221020221749.33746-1-kilobyte@angband.pl>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,46 +116,36 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---iApmyqhp3K52o8pq
+--ASNnxeSggHlth0r3
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Oct 10, 2022 at 08:33:51PM +0200, Adam Borowski wrote:
-> This fixes maybe_unused warnings/errors.
->=20
-> According to a comment during device tree removal, only ACPI is supported,
-> thus let's actually require it.
->=20
-> Fixes: be18c5ede25da39a0eda541f6de3620a30cf731f
-> Signed-off-by: Adam Borowski <kilobyte@angband.pl>
-
-Applied to for-current, thanks!
-
-@Asmaa, @Khalil: normally, I will not skip the driver maintainer's ack
-but wait for it. I'd like to make an exception this time because I don't
-want to get another dozen of patches fixing this build warning. Since
-Asmaa already acked a similar patch, I hope this is okay with you.
 
 
---iApmyqhp3K52o8pq
+> I've been doing randconfig build tests for quite a while, here's a pile of
+> fixes.  I'm not sure what's the best way to submit these: do you folks
+> prefer a series like this, or a number of individual submissions?
+
+You sent the one for i2c-mlxbf seperately, which I applied now.
+
+
+--ASNnxeSggHlth0r3
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNSP4EACgkQFA3kzBSg
-KbaKpA//UbFxu/KCQ6nmi/cix+XNC2Jodbf/CpEn81lRISMmrLzIe78d35NXtgq+
-qY8Yq3F7sm9a4eyklMQlAX8qLRr6XggCEltkI+ZcvshnvMg4rpNEzwFu2s+7YtwU
-+S7julqS0h8AWUze4f3nGtM3w/hBSuj2tclZ0shKZX64COCBho2FmIQrDJbZu5um
-hmB5R7Gis9c853pOGf0rdINA2x3Uod9tV+RddnBhmiq2ATkP0SBA1xXZ3/XbM3On
-nrMtvMvJp0C8KTgwJF+2IovW95OQamCG/9/tgqt1/7N4Y6sdXwBQ8G6YtneqWunR
-jmoaNbTUSulLM3imHqgyA2wyE1Heao3WyAOwusLVXepUHcEKALGlZEaVtPp15CvD
-ICbMviweiENLD9RfSHmSaORlsRIiJevlNY2rq8omzRVP4NEDXUZiHEydjLay5jU1
-pjWi1iRKtraDWr3T5/zalNuhKLLFBZjZboTDm2TdQoYj0aAzS96LSDmt4m8d7D0W
-BMPqLFSMBlLNJvmuSE2w4j4RjW+r9vLn0kYeJqWAonjqITiMLoY4Vpl8452vTvXL
-KuA5jDZSJl0KIlikXZ+Fd1+6GEuX2QxAbrF9FVvI1wJAxzcKYR6M7T66As1LfJ6t
-aYqL9JJ+YSL0oMbIBwUeH0HnYW5/RSTojOl82KW+7/8nrgJlhDM=
-=Bmm/
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNSP9wACgkQFA3kzBSg
+KbbjSg//Qpjk7lLoKdOzvsdmL0Mq2o5hT22qP9eF8TiQ3pE1B3B9C9AsdWQ7FjOB
+ClXU5SlQmHPj//fgEfmr9Vj2bKBssiA4QkjiF/fcjthcBqG2j3tLeQPRmFr6qcd7
+a873ogKipCuWcb7wHngTM9a7820xTtzm6AUCGCfWQHKiXjdCWsSdBoSEyHDocLiz
+CVpTOsOeH+pC5Sa1WwXdONrrOMoA1Cttpxu8Y/ZCLzyqQ4M+WL5j17g/jMihywZ3
+hg4uduAbJ9Oq2gWXAi8JvnNLPYE5RdYjk3d0j4jFxyxSD8DeIOjp1tw/UT6VSoWK
+n+ygnkytK+33BTuEoIKKEfl3O5XTYtERfroHf3trO+xaIMKqa06p3+qPM5+2Rnqx
+cZ9cfqYqw+vCs/zkbtzWArA81N4O/QBDhNe4ktHyFkChCAN8dJSf0Yx5QM1oY50f
+Vkj0kWe6nA34LURe2MazhrLSQP7ht/8WkC1l1efH+2gHOdNBmxsr3fqOvYznCziB
+BWT40k8BRRdByRFICeSeS001FW+AUlbpE8q637iYCR8sGyqxJmCCb541W35o2gdT
+5ciiIlzkqA3NudtWem09SR8UuBv9wXaiLx8qQXd72b/Na86U8dT3Bc8DKthJFWn6
+59ubRiZuumctWs6sE7kZ9aPXpPpci4isfJAhNOCtgJ7+pC+g65E=
+=s3Uy
 -----END PGP SIGNATURE-----
 
---iApmyqhp3K52o8pq--
+--ASNnxeSggHlth0r3--
