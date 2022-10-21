@@ -2,61 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88EF2607FA4
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Oct 2022 22:23:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C91060801A
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Oct 2022 22:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiJUUXT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Oct 2022 16:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40420 "EHLO
+        id S230143AbiJUUrJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Oct 2022 16:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiJUUXS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Oct 2022 16:23:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A5027B09F;
-        Fri, 21 Oct 2022 13:23:15 -0700 (PDT)
+        with ESMTP id S230153AbiJUUqr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Oct 2022 16:46:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5359B106A62;
+        Fri, 21 Oct 2022 13:46:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61AFE61E8F;
-        Fri, 21 Oct 2022 20:23:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C5A6C433C1;
-        Fri, 21 Oct 2022 20:23:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00E36B82CB6;
+        Fri, 21 Oct 2022 20:37:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35804C433C1;
+        Fri, 21 Oct 2022 20:37:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666383794;
-        bh=g7A2VpgVEu9eNaRIdcG9Vj9IMR86Ju3eo5pz21hUM5Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=vPIc8HmOB3nx3BuAxPiTQsbGmA0strzuRTCtYL8tHK9+eCm0Pi7KrxGmQ9EzU6jzj
-         KA+QQDEa/qw1Md0nvIW2IfkYdxeHPuNT5if5eZZa9ZYoV+Y0O4UgqOx3rGlzMrrDe0
-         VuqL1VxSL5A5EvQZO+DblzRfqACvwh2KOe0bu44M4OHV3QeUArcvdTza7t2wyYjD8c
-         8VI7KpPx5fmefpcUuqkHUhqiBX6YZ173dnyyXvJVO2g3kkINEKlONH8ZdZW8MtQyAw
-         VS007jMGGZcXas6GJNA8aypbPv6RJ/7hGZ8OQ7+04hoUfsW7TUbpqbgjxnVsQtDgN+
-         0JzvjAggCY+5w==
+        s=k20201202; t=1666384648;
+        bh=aV2DNv9TC49AxiQN7ZdNvm+XVqbKUgRMSoHbvcGOrm0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=NmDWEhvtqquG+L6M1Me7YJVuv+tIA+pXcFLQmwStJ3Q/0e9MYossQ/Q1hjv7d1MX9
+         p2mtMQbUGfZP2XbWhg9aIZeq7KbMJADx6Exbk1tFfmznuKnLrZM6bykbx60EqJtnsm
+         63OCri2Fp7Xa8o+958+QZauaRPEi1Lka9EDloIeBt5jY/xX82RG5aI5WtdbCx1VNyE
+         8LEodglv60eQIlAL4goLUJuHfxNR0Islq3SDJzU7zQQVa6c/ioQOivdlcTt82pAuZ0
+         FMlwp3dcBnHN0xXpfLRbPyQ4S6kQHv612rmceDqXH1ucWeHtpBMpnNU69r+63HEJN7
+         ZwL8RuOiXoiSg==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
         Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
         linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
         linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-pwm@vger.kernel.org
-Subject: [PATCH 00/21] ARM: s3c: clean out obsolete platforms
-Date:   Fri, 21 Oct 2022 22:22:28 +0200
-Message-Id: <20221021202254.4142411-1-arnd@kernel.org>
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH 02/21] ARM: s3c: remove s3c24xx specific hacks
+Date:   Fri, 21 Oct 2022 22:27:35 +0200
+Message-Id: <20221021203329.4143397-2-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20221021202254.4142411-1-arnd@kernel.org>
+References: <20221021202254.4142411-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -69,608 +82,1134 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The s3c24xx platform was marked as deprecated a while ago,
-and for the s3c64xx platform, we marked all except one legacy
-board file as unused.
+A number of device drivers reference CONFIG_ARM_S3C24XX_CPUFREQ or
+similar symbols that are no longer available with the platform gone,
+though the drivers themselves are still used on newer platforms,
+so remove these hacks.
 
-This series removes all of those, leaving only s3c64xx support
-for DT based boots as well as the cragg6410 board file.
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/arm/include/debug/s3c24xx.S              |  10 -
+ arch/arm/mach-s3c/Makefile                    |   2 -
+ arch/arm/mach-s3c/devs.c                      |   1 -
+ arch/arm/mach-s3c/dma.h                       |   7 -
+ arch/arm/mach-s3c/gpio-samsung.h              |   7 -
+ arch/arm/mach-s3c/irqs.h                      |   7 -
+ arch/arm/mach-s3c/map.h                       |   7 -
+ arch/arm/mach-s3c/pm-core.h                   |   7 -
+ arch/arm/mach-s3c/regs-clock.h                |   7 -
+ arch/arm/mach-s3c/regs-gpio.h                 |   7 -
+ arch/arm/mach-s3c/regs-irq.h                  |   7 -
+ drivers/clocksource/Kconfig                   |   2 +-
+ drivers/i2c/busses/Kconfig                    |   3 +-
+ drivers/i2c/busses/i2c-s3c2410.c              |  72 -------
+ drivers/iio/adc/Kconfig                       |   6 +-
+ .../media/platform/samsung/s3c-camif/Kconfig  |   8 +-
+ drivers/mmc/host/Kconfig                      |   5 +-
+ drivers/mtd/nand/raw/Kconfig                  |   2 +-
+ drivers/mtd/nand/raw/s3c2410.c                |  60 ------
+ drivers/pinctrl/samsung/pinctrl-samsung.c     |  10 -
+ drivers/rtc/Kconfig                           |   8 +-
+ drivers/tty/serial/Kconfig                    |   8 +-
+ drivers/tty/serial/samsung_tty.c              | 199 ------------------
+ drivers/usb/host/Kconfig                      |   8 +-
+ drivers/watchdog/Kconfig                      |   9 +-
+ drivers/watchdog/s3c2410_wdt.c                |  84 +-------
+ include/linux/clk/samsung.h                   |  32 ---
+ include/linux/soc/samsung/s3c-pm.h            |  58 -----
+ 28 files changed, 29 insertions(+), 614 deletions(-)
 
-About half of the s3c specific drivers were only used on
-the now removed machines, so these drivers can be retired
-as well. I can either merge the driver removal patches through
-the soc tree along with the board file patches, or subsystem
-maintainers can pick them up into their own trees, whichever
-they prefer.
-
-Arnd Bergmann (21):
-  ARM: s3c: remove all s3c24xx support
-  ARM: s3c: remove s3c24xx specific hacks
-  ARM: s3c: remove most s3c64xx board support
-  ARM: s3c: remove adc.c
-  ARM: s3c: simplify platform code
-  ARM: s3c: remove s3c6400 support
-  power: remove s3c adc battery driver
-  hwmon: remove s3c driver
-  pata: remove samsung_cf driver
-  mmc: remove s3cmci driver
-  clk: remove s3c24xx driver
-  leds: remove s3c24xx driver
-  usb: gadget: remove s3c24xx drivers
-  dmaengine: remove s3c24xx driver
-  cpufreq: remove s3c24xx drivers
-  fbdev: remove s3c2410 framebuffer
-  input: remove s3c24xx touchscreen driver
-  pinctrl: remove s3c24xx driver
-  spi: remove s3c24xx driver
-  soc: s3c: remove pm-debug hack
-  ASoC: samsung: remove unused drivers
-
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Ben Dooks <ben-linux@fluff.org>
-Cc: Simtec Linux Team <linux@simtec.co.uk>
-Bcc: Alim Akhtar <alim.akhtar@samsung.com>
-Bcc: Rob Herring <robh+dt@kernel.org>
-Bcc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Bcc: Sergey Shtylyov <s.shtylyov@omp.ru>
-Bcc: Sylwester Nawrocki <s.nawrocki@samsung.com>
-Bcc: Tomasz Figa <tomasz.figa@gmail.com>
-Bcc: Chanwoo Choi <cw00.choi@samsung.com>
-Bcc: Michael Turquette <mturquette@baylibre.com>
-Bcc: Stephen Boyd <sboyd@kernel.org>
-Bcc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Bcc: Thomas Gleixner <tglx@linutronix.de>
-Bcc: "Rafael J. Wysocki" <rafael@kernel.org>
-Bcc: Viresh Kumar <viresh.kumar@linaro.org>
-Bcc: Vinod Koul <vkoul@kernel.org>
-Bcc: Jean Delvare <jdelvare@suse.com>
-Bcc: Guenter Roeck <linux@roeck-us.net>
-Bcc: Jonathan Cameron <jic23@kernel.org>
-Bcc: Lars-Peter Clausen <lars@metafoo.de>
-Bcc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Bcc: Pavel Machek <pavel@ucw.cz>
-Bcc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Bcc: Ulf Hansson <ulf.hansson@linaro.org>
-Bcc: Miquel Raynal <miquel.raynal@bootlin.com>
-Bcc: Richard Weinberger <richard@nod.at>
-Bcc: Vignesh Raghavendra <vigneshr@ti.com>
-Bcc: Linus Walleij <linus.walleij@linaro.org>
-Bcc: Sebastian Reichel <sre@kernel.org>
-Bcc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Bcc: Mark Brown <broonie@kernel.org>
-Bcc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Bcc: Jiri Slaby <jirislaby@kernel.org>
-Bcc: Felipe Balbi <balbi@kernel.org>
-Bcc: Helge Deller <deller@gmx.de>
-Bcc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Bcc: Liam Girdwood <lgirdwood@gmail.com>
-Bcc: Thierry Reding <thierry.reding@gmail.com>
-Bcc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
-Cc: linux-doc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-samsung-soc@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: patches@opensource.cirrus.com
-Cc: linux-stm32@st-md-mailman.stormreply.com
-Cc: linux-ide@vger.kernel.org
-Cc: linux-clk@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Cc: dmaengine@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-i2c@vger.kernel.org
-Cc: linux-iio@vger.kernel.org
-Cc: linux-input@vger.kernel.org
-Cc: linux-leds@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Cc: linux-mmc@vger.kernel.org
-Cc: linux-mtd@lists.infradead.org
-Cc: linux-gpio@vger.kernel.org
-Cc: linux-rtc@vger.kernel.org
-Cc: linux-spi@vger.kernel.org
-Cc: linux-serial@vger.kernel.org
-Cc: linux-usb@vger.kernel.org
-Cc: linux-fbdev@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-watchdog@vger.kernel.org
-Cc: alsa-devel@alsa-project.org
-Cc: linux-pwm@vger.kernel.org
-
- Documentation/arm/index.rst                   |    1 -
- Documentation/arm/samsung-s3c24xx/cpufreq.rst |   77 -
- .../arm/samsung-s3c24xx/eb2410itx.rst         |   59 -
- Documentation/arm/samsung-s3c24xx/gpio.rst    |  172 --
- Documentation/arm/samsung-s3c24xx/h1940.rst   |   41 -
- Documentation/arm/samsung-s3c24xx/index.rst   |   20 -
- Documentation/arm/samsung-s3c24xx/nand.rst    |   30 -
- .../arm/samsung-s3c24xx/overview.rst          |  311 ---
- Documentation/arm/samsung-s3c24xx/s3c2412.rst |  121 -
- Documentation/arm/samsung-s3c24xx/s3c2413.rst |   22 -
- .../arm/samsung-s3c24xx/smdk2440.rst          |   57 -
- Documentation/arm/samsung-s3c24xx/suspend.rst |  137 --
- .../arm/samsung-s3c24xx/usb-host.rst          |   91 -
- Documentation/arm/samsung/overview.rst        |   13 -
- MAINTAINERS                                   |   31 -
- arch/arm/Kconfig                              |    3 +-
- arch/arm/Kconfig.debug                        |   58 +-
- arch/arm/Makefile                             |    2 -
- arch/arm/boot/dts/Makefile                    |    2 -
- arch/arm/boot/dts/s3c2410-pinctrl.h           |   19 -
- arch/arm/boot/dts/s3c2416-pinctrl.dtsi        |  172 --
- arch/arm/boot/dts/s3c2416-smdk2416.dts        |   77 -
- arch/arm/boot/dts/s3c2416.dtsi                |  124 --
- arch/arm/boot/dts/s3c24xx.dtsi                |   92 -
- arch/arm/configs/mini2440_defconfig           |  338 ---
- arch/arm/configs/s3c2410_defconfig            |  437 ----
- arch/arm/configs/tct_hammer_defconfig         |   58 -
- arch/arm/include/debug/s3c24xx.S              |   10 -
- arch/arm/mach-s3c/Kconfig                     |   92 +-
- arch/arm/mach-s3c/Kconfig.s3c24xx             |  604 -----
- arch/arm/mach-s3c/Kconfig.s3c64xx             |  212 --
- arch/arm/mach-s3c/Makefile                    |   12 -
- arch/arm/mach-s3c/Makefile.s3c24xx            |  102 -
- arch/arm/mach-s3c/Makefile.s3c64xx            |   15 -
- arch/arm/mach-s3c/adc-core.h                  |   24 -
- arch/arm/mach-s3c/adc.c                       |  510 -----
- arch/arm/mach-s3c/anubis.h                    |   50 -
- arch/arm/mach-s3c/ata-core-s3c64xx.h          |   24 -
- arch/arm/mach-s3c/backlight-s3c64xx.h         |   22 -
- arch/arm/mach-s3c/bast-ide.c                  |   82 -
- arch/arm/mach-s3c/bast-irq.c                  |  137 --
- arch/arm/mach-s3c/bast.h                      |  194 --
- arch/arm/mach-s3c/common-smdk-s3c24xx.c       |  228 --
- arch/arm/mach-s3c/common-smdk-s3c24xx.h       |   11 -
- arch/arm/mach-s3c/cpu.h                       |   47 -
- arch/arm/mach-s3c/cpufreq-utils-s3c24xx.c     |   94 -
- arch/arm/mach-s3c/dev-audio-s3c64xx.c         |  127 --
- arch/arm/mach-s3c/dev-backlight-s3c64xx.c     |  137 --
- arch/arm/mach-s3c/devs.c                      |  726 ------
- arch/arm/mach-s3c/devs.h                      |   37 -
- arch/arm/mach-s3c/dma-s3c24xx.h               |   51 -
- arch/arm/mach-s3c/dma-s3c64xx.h               |   57 -
- arch/arm/mach-s3c/dma.h                       |    9 -
- arch/arm/mach-s3c/fb-core-s3c24xx.h           |   24 -
- arch/arm/mach-s3c/gpio-cfg-helpers.h          |  124 --
- arch/arm/mach-s3c/gpio-cfg.h                  |   19 -
- arch/arm/mach-s3c/gpio-core.h                 |    3 -
- arch/arm/mach-s3c/gpio-samsung-s3c24xx.h      |  103 -
- arch/arm/mach-s3c/gpio-samsung.c              |  443 +---
- arch/arm/mach-s3c/gpio-samsung.h              |    7 -
- arch/arm/mach-s3c/gta02.h                     |   20 -
- arch/arm/mach-s3c/h1940-bluetooth.c           |  140 --
- arch/arm/mach-s3c/h1940.h                     |   52 -
- arch/arm/mach-s3c/hardware-s3c24xx.h          |   14 -
- arch/arm/mach-s3c/iic-core.h                  |    7 -
- arch/arm/mach-s3c/init.c                      |   26 +-
- arch/arm/mach-s3c/iotiming-s3c2410.c          |  472 ----
- arch/arm/mach-s3c/iotiming-s3c2412.c          |  278 ---
- arch/arm/mach-s3c/irq-pm-s3c24xx.c            |  115 -
- arch/arm/mach-s3c/irq-s3c24xx-fiq-exports.c   |    9 -
- arch/arm/mach-s3c/irq-s3c24xx-fiq.S           |  112 -
- arch/arm/mach-s3c/irq-s3c24xx.c               | 1352 -----------
- arch/arm/mach-s3c/irqs-s3c24xx.h              |  219 --
- arch/arm/mach-s3c/irqs.h                      |    7 -
- arch/arm/mach-s3c/mach-amlm5900.c             |  248 ---
- arch/arm/mach-s3c/mach-anubis.c               |  422 ----
- arch/arm/mach-s3c/mach-anw6410.c              |  230 --
- arch/arm/mach-s3c/mach-at2440evb.c            |  233 --
- arch/arm/mach-s3c/mach-bast.c                 |  583 -----
- arch/arm/mach-s3c/mach-crag6410.c             |    1 -
- arch/arm/mach-s3c/mach-gta02.c                |  588 -----
- arch/arm/mach-s3c/mach-h1940.c                |  809 -------
- arch/arm/mach-s3c/mach-hmt.c                  |  282 ---
- arch/arm/mach-s3c/mach-jive.c                 |  693 ------
- arch/arm/mach-s3c/mach-mini2440.c             |  804 -------
- arch/arm/mach-s3c/mach-mini6410.c             |  365 ---
- arch/arm/mach-s3c/mach-n30.c                  |  682 ------
- arch/arm/mach-s3c/mach-ncp.c                  |  100 -
- arch/arm/mach-s3c/mach-nexcoder.c             |  162 --
- arch/arm/mach-s3c/mach-osiris-dvs.c           |  178 --
- arch/arm/mach-s3c/mach-osiris.c               |  405 ----
- arch/arm/mach-s3c/mach-otom.c                 |  124 --
- arch/arm/mach-s3c/mach-qt2410.c               |  375 ----
- arch/arm/mach-s3c/mach-real6410.c             |  333 ---
- arch/arm/mach-s3c/mach-rx1950.c               |  884 --------
- arch/arm/mach-s3c/mach-rx3715.c               |  213 --
- arch/arm/mach-s3c/mach-s3c2416-dt.c           |   48 -
- arch/arm/mach-s3c/mach-smartq.c               |  424 ----
- arch/arm/mach-s3c/mach-smartq.h               |   16 -
- arch/arm/mach-s3c/mach-smartq5.c              |  154 --
- arch/arm/mach-s3c/mach-smartq7.c              |  170 --
- arch/arm/mach-s3c/mach-smdk2410.c             |  112 -
- arch/arm/mach-s3c/mach-smdk2413.c             |  169 --
- arch/arm/mach-s3c/mach-smdk2416.c             |  248 ---
- arch/arm/mach-s3c/mach-smdk2440.c             |  180 --
- arch/arm/mach-s3c/mach-smdk2443.c             |  126 --
- arch/arm/mach-s3c/mach-smdk6400.c             |   90 -
- arch/arm/mach-s3c/mach-smdk6410.c             |  706 ------
- arch/arm/mach-s3c/mach-tct_hammer.c           |  157 --
- arch/arm/mach-s3c/mach-vr1000.c               |  364 ---
- arch/arm/mach-s3c/mach-vstms.c                |  166 --
- arch/arm/mach-s3c/map-s3c.h                   |   37 -
- arch/arm/mach-s3c/map-s3c24xx.h               |  159 --
- arch/arm/mach-s3c/map.h                       |    7 -
- arch/arm/mach-s3c/nand-core-s3c24xx.h         |   24 -
- arch/arm/mach-s3c/onenand-core-s3c64xx.h      |   32 -
- arch/arm/mach-s3c/osiris.h                    |   50 -
- arch/arm/mach-s3c/otom.h                      |   25 -
- arch/arm/mach-s3c/pll-s3c2410.c               |   83 -
- arch/arm/mach-s3c/pll-s3c2440-12000000.c      |   95 -
- arch/arm/mach-s3c/pll-s3c2440-16934400.c      |  122 -
- arch/arm/mach-s3c/pm-core-s3c24xx.h           |   96 -
- arch/arm/mach-s3c/pm-core-s3c64xx.h           |   17 -
- arch/arm/mach-s3c/pm-core.h                   |    7 -
- arch/arm/mach-s3c/pm-h1940.S                  |   19 -
- arch/arm/mach-s3c/pm-s3c2410.c                |  170 --
- arch/arm/mach-s3c/pm-s3c2412.c                |  126 --
- arch/arm/mach-s3c/pm-s3c2416.c                |   81 -
- arch/arm/mach-s3c/pm-s3c24xx.c                |  121 -
- arch/arm/mach-s3c/pm-s3c64xx.c                |   83 -
- arch/arm/mach-s3c/pm.c                        |    7 +-
- arch/arm/mach-s3c/pm.h                        |   12 -
- arch/arm/mach-s3c/regs-adc.h                  |   64 -
- arch/arm/mach-s3c/regs-clock-s3c24xx.h        |  146 --
- arch/arm/mach-s3c/regs-clock.h                |    7 -
- arch/arm/mach-s3c/regs-dsc-s3c24xx.h          |   22 -
- arch/arm/mach-s3c/regs-gpio-s3c24xx.h         |  608 -----
- arch/arm/mach-s3c/regs-gpio.h                 |    7 -
- arch/arm/mach-s3c/regs-irq-s3c24xx.h          |   51 -
- arch/arm/mach-s3c/regs-irq.h                  |    7 -
- arch/arm/mach-s3c/regs-mem-s3c24xx.h          |   53 -
- arch/arm/mach-s3c/regs-s3c2443-clock.h        |  238 --
- arch/arm/mach-s3c/regs-srom-s3c64xx.h         |   55 -
- arch/arm/mach-s3c/rtc-core-s3c24xx.h          |   23 -
- arch/arm/mach-s3c/s3c2410.c                   |  130 --
- arch/arm/mach-s3c/s3c2412-power.h             |   34 -
- arch/arm/mach-s3c/s3c2412.c                   |  175 --
- arch/arm/mach-s3c/s3c2412.h                   |   25 -
- arch/arm/mach-s3c/s3c2416.c                   |  132 --
- arch/arm/mach-s3c/s3c2440.c                   |   71 -
- arch/arm/mach-s3c/s3c2442.c                   |   62 -
- arch/arm/mach-s3c/s3c2443.c                   |  112 -
- arch/arm/mach-s3c/s3c244x.c                   |  128 --
- arch/arm/mach-s3c/s3c24xx.c                   |  687 ------
- arch/arm/mach-s3c/s3c24xx.h                   |  124 --
- arch/arm/mach-s3c/s3c6400.c                   |   90 -
- arch/arm/mach-s3c/s3c6410.c                   |    9 -
- arch/arm/mach-s3c/s3c64xx.c                   |    8 -
- arch/arm/mach-s3c/sdhci.h                     |   25 -
- arch/arm/mach-s3c/setup-i2c-s3c24xx.c         |   23 -
- arch/arm/mach-s3c/setup-ide-s3c64xx.c         |   40 -
- arch/arm/mach-s3c/setup-sdhci-gpio-s3c24xx.c  |   31 -
- arch/arm/mach-s3c/setup-spi-s3c24xx.c         |   27 -
- arch/arm/mach-s3c/setup-ts-s3c24xx.c          |   29 -
- arch/arm/mach-s3c/simtec-audio.c              |   76 -
- arch/arm/mach-s3c/simtec-nor.c                |   74 -
- arch/arm/mach-s3c/simtec-pm.c                 |   60 -
- arch/arm/mach-s3c/simtec-usb.c                |  125 --
- arch/arm/mach-s3c/simtec.h                    |   17 -
- arch/arm/mach-s3c/sleep-s3c2410.S             |   54 -
- arch/arm/mach-s3c/sleep-s3c2412.S             |   53 -
- arch/arm/mach-s3c/sleep-s3c24xx.S             |   69 -
- arch/arm/mach-s3c/sleep-s3c64xx.S             |   27 -
- arch/arm/mach-s3c/spi-core-s3c24xx.h          |   21 -
- arch/arm/mach-s3c/vr1000.h                    |  113 -
- drivers/ata/Kconfig                           |   10 -
- drivers/ata/Makefile                          |    1 -
- drivers/ata/pata_samsung_cf.c                 |  662 ------
- drivers/clk/samsung/Kconfig                   |   32 -
- drivers/clk/samsung/Makefile                  |    4 -
- drivers/clk/samsung/clk-s3c2410-dclk.c        |  440 ----
- drivers/clk/samsung/clk-s3c2410.c             |  446 ----
- drivers/clk/samsung/clk-s3c2412.c             |  254 ---
- drivers/clk/samsung/clk-s3c2443.c             |  438 ----
- drivers/clocksource/Kconfig                   |    2 +-
- drivers/cpufreq/Kconfig.arm                   |   78 -
- drivers/cpufreq/Makefile                      |    6 -
- drivers/cpufreq/s3c2410-cpufreq.c             |  155 --
- drivers/cpufreq/s3c2412-cpufreq.c             |  240 --
- drivers/cpufreq/s3c2416-cpufreq.c             |  492 ----
- drivers/cpufreq/s3c2440-cpufreq.c             |  321 ---
- drivers/cpufreq/s3c24xx-cpufreq-debugfs.c     |  163 --
- drivers/cpufreq/s3c24xx-cpufreq.c             |  648 ------
- drivers/dma/Kconfig                           |   12 -
- drivers/dma/Makefile                          |    1 -
- drivers/dma/s3c24xx-dma.c                     | 1428 ------------
- drivers/hwmon/Kconfig                         |   17 -
- drivers/hwmon/Makefile                        |    1 -
- drivers/hwmon/s3c-hwmon.c                     |  379 ----
- drivers/i2c/busses/Kconfig                    |    3 +-
- drivers/i2c/busses/i2c-s3c2410.c              |   72 -
- drivers/iio/adc/Kconfig                       |    6 +-
- drivers/input/touchscreen/Kconfig             |   12 -
- drivers/input/touchscreen/Makefile            |    1 -
- drivers/input/touchscreen/s3c2410_ts.c        |  464 ----
- drivers/leds/Kconfig                          |    8 -
- drivers/leds/Makefile                         |    1 -
- drivers/leds/leds-s3c24xx.c                   |   83 -
- .../media/platform/samsung/s3c-camif/Kconfig  |    8 +-
- drivers/mmc/host/Kconfig                      |   48 +-
- drivers/mmc/host/Makefile                     |    1 -
- drivers/mmc/host/s3cmci.c                     | 1777 ---------------
- drivers/mmc/host/s3cmci.h                     |   75 -
- drivers/mtd/nand/raw/Kconfig                  |    2 +-
- drivers/mtd/nand/raw/s3c2410.c                |   60 -
- drivers/pinctrl/samsung/Kconfig               |    5 -
- drivers/pinctrl/samsung/Makefile              |    1 -
- drivers/pinctrl/samsung/pinctrl-s3c24xx.c     |  653 ------
- drivers/pinctrl/samsung/pinctrl-samsung.c     |   10 -
- drivers/power/supply/Kconfig                  |    6 -
- drivers/power/supply/Makefile                 |    1 -
- drivers/power/supply/s3c_adc_battery.c        |  453 ----
- drivers/rtc/Kconfig                           |    8 +-
- drivers/soc/samsung/Kconfig                   |   26 +-
- drivers/soc/samsung/Makefile                  |    1 -
- drivers/soc/samsung/s3c-pm-debug.c            |   79 -
- drivers/spi/Kconfig                           |   18 -
- drivers/spi/Makefile                          |    2 -
- drivers/spi/spi-s3c24xx-regs.h                |   41 -
- drivers/spi/spi-s3c24xx.c                     |  596 -----
- drivers/tty/serial/Kconfig                    |    8 +-
- drivers/tty/serial/samsung_tty.c              |  199 --
- drivers/usb/gadget/udc/Kconfig                |   25 -
- drivers/usb/gadget/udc/Makefile               |    2 -
- drivers/usb/gadget/udc/s3c-hsudc.c            | 1319 -----------
- drivers/usb/gadget/udc/s3c2410_udc.c          | 1980 -----------------
- drivers/usb/gadget/udc/s3c2410_udc.h          |   99 -
- drivers/usb/gadget/udc/s3c2410_udc_regs.h     |  146 --
- drivers/usb/host/Kconfig                      |    8 +-
- drivers/video/fbdev/Kconfig                   |   33 +-
- drivers/video/fbdev/Makefile                  |    1 -
- drivers/video/fbdev/s3c2410fb-regs-lcd.h      |  143 --
- drivers/video/fbdev/s3c2410fb.c               | 1142 ----------
- drivers/video/fbdev/s3c2410fb.h               |   48 -
- drivers/watchdog/Kconfig                      |    9 +-
- drivers/watchdog/s3c2410_wdt.c                |   84 +-
- include/dt-bindings/clock/s3c2410.h           |   59 -
- include/dt-bindings/clock/s3c2412.h           |   70 -
- include/dt-bindings/clock/s3c2443.h           |   91 -
- include/linux/amba/pl093.h                    |   77 -
- include/linux/clk/samsung.h                   |   32 -
- .../linux/platform_data/asoc-s3c24xx_simtec.h |   30 -
- include/linux/platform_data/ata-samsung_cf.h  |   31 -
- include/linux/platform_data/clk-s3c2410.h     |   19 -
- include/linux/platform_data/dma-s3c24xx.h     |   48 -
- include/linux/platform_data/fb-s3c2410.h      |   99 -
- include/linux/platform_data/leds-s3c24xx.h    |   18 -
- include/linux/platform_data/media/s5p_hdmi.h  |   32 -
- include/linux/platform_data/mmc-s3cmci.h      |   51 -
- include/linux/platform_data/s3c-hsudc.h       |   33 -
- include/linux/platform_data/usb-s3c2410_udc.h |   33 -
- include/linux/s3c_adc_battery.h               |   39 -
- include/linux/soc/samsung/s3c-adc.h           |   32 -
- include/linux/soc/samsung/s3c-cpufreq-core.h  |  299 ---
- include/linux/soc/samsung/s3c-pm.h            |   58 -
- include/linux/spi/s3c24xx-fiq.h               |   33 -
- include/linux/spi/s3c24xx.h                   |   20 -
- include/sound/s3c24xx_uda134x.h               |   14 -
- sound/soc/samsung/Kconfig                     |   93 -
- sound/soc/samsung/Makefile                    |   26 -
- sound/soc/samsung/h1940_uda1380.c             |  224 --
- sound/soc/samsung/jive_wm8750.c               |  143 --
- sound/soc/samsung/neo1973_wm8753.c            |  360 ---
- sound/soc/samsung/regs-i2s-v2.h               |  111 -
- sound/soc/samsung/regs-iis.h                  |   66 -
- sound/soc/samsung/rx1950_uda1380.c            |  245 --
- sound/soc/samsung/s3c-i2s-v2.c                |  670 ------
- sound/soc/samsung/s3c-i2s-v2.h                |  108 -
- sound/soc/samsung/s3c2412-i2s.c               |  251 ---
- sound/soc/samsung/s3c2412-i2s.h               |   22 -
- sound/soc/samsung/s3c24xx-i2s.c               |  463 ----
- sound/soc/samsung/s3c24xx-i2s.h               |   31 -
- sound/soc/samsung/s3c24xx_simtec.c            |  372 ----
- sound/soc/samsung/s3c24xx_simtec.h            |   18 -
- sound/soc/samsung/s3c24xx_simtec_hermes.c     |  112 -
- .../soc/samsung/s3c24xx_simtec_tlv320aic23.c  |  100 -
- sound/soc/samsung/s3c24xx_uda134x.c           |  257 ---
- sound/soc/samsung/smartq_wm8987.c             |  224 --
- sound/soc/samsung/smdk_wm8580.c               |  211 --
- 289 files changed, 48 insertions(+), 48148 deletions(-)
- delete mode 100644 Documentation/arm/samsung-s3c24xx/cpufreq.rst
- delete mode 100644 Documentation/arm/samsung-s3c24xx/eb2410itx.rst
- delete mode 100644 Documentation/arm/samsung-s3c24xx/gpio.rst
- delete mode 100644 Documentation/arm/samsung-s3c24xx/h1940.rst
- delete mode 100644 Documentation/arm/samsung-s3c24xx/index.rst
- delete mode 100644 Documentation/arm/samsung-s3c24xx/nand.rst
- delete mode 100644 Documentation/arm/samsung-s3c24xx/overview.rst
- delete mode 100644 Documentation/arm/samsung-s3c24xx/s3c2412.rst
- delete mode 100644 Documentation/arm/samsung-s3c24xx/s3c2413.rst
- delete mode 100644 Documentation/arm/samsung-s3c24xx/smdk2440.rst
- delete mode 100644 Documentation/arm/samsung-s3c24xx/suspend.rst
- delete mode 100644 Documentation/arm/samsung-s3c24xx/usb-host.rst
- delete mode 100644 arch/arm/boot/dts/s3c2410-pinctrl.h
- delete mode 100644 arch/arm/boot/dts/s3c2416-pinctrl.dtsi
- delete mode 100644 arch/arm/boot/dts/s3c2416-smdk2416.dts
- delete mode 100644 arch/arm/boot/dts/s3c2416.dtsi
- delete mode 100644 arch/arm/boot/dts/s3c24xx.dtsi
- delete mode 100644 arch/arm/configs/mini2440_defconfig
- delete mode 100644 arch/arm/configs/s3c2410_defconfig
- delete mode 100644 arch/arm/configs/tct_hammer_defconfig
- delete mode 100644 arch/arm/mach-s3c/Kconfig.s3c24xx
- delete mode 100644 arch/arm/mach-s3c/Makefile.s3c24xx
- delete mode 100644 arch/arm/mach-s3c/adc-core.h
- delete mode 100644 arch/arm/mach-s3c/adc.c
- delete mode 100644 arch/arm/mach-s3c/anubis.h
- delete mode 100644 arch/arm/mach-s3c/ata-core-s3c64xx.h
- delete mode 100644 arch/arm/mach-s3c/backlight-s3c64xx.h
- delete mode 100644 arch/arm/mach-s3c/bast-ide.c
- delete mode 100644 arch/arm/mach-s3c/bast-irq.c
- delete mode 100644 arch/arm/mach-s3c/bast.h
- delete mode 100644 arch/arm/mach-s3c/common-smdk-s3c24xx.c
- delete mode 100644 arch/arm/mach-s3c/common-smdk-s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/cpufreq-utils-s3c24xx.c
- delete mode 100644 arch/arm/mach-s3c/dev-backlight-s3c64xx.c
- delete mode 100644 arch/arm/mach-s3c/dma-s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/dma-s3c64xx.h
- delete mode 100644 arch/arm/mach-s3c/dma.h
- delete mode 100644 arch/arm/mach-s3c/fb-core-s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/gpio-samsung-s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/gta02.h
- delete mode 100644 arch/arm/mach-s3c/h1940-bluetooth.c
- delete mode 100644 arch/arm/mach-s3c/h1940.h
- delete mode 100644 arch/arm/mach-s3c/hardware-s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/iotiming-s3c2410.c
- delete mode 100644 arch/arm/mach-s3c/iotiming-s3c2412.c
- delete mode 100644 arch/arm/mach-s3c/irq-pm-s3c24xx.c
- delete mode 100644 arch/arm/mach-s3c/irq-s3c24xx-fiq-exports.c
- delete mode 100644 arch/arm/mach-s3c/irq-s3c24xx-fiq.S
- delete mode 100644 arch/arm/mach-s3c/irq-s3c24xx.c
- delete mode 100644 arch/arm/mach-s3c/irqs-s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/mach-amlm5900.c
- delete mode 100644 arch/arm/mach-s3c/mach-anubis.c
- delete mode 100644 arch/arm/mach-s3c/mach-anw6410.c
- delete mode 100644 arch/arm/mach-s3c/mach-at2440evb.c
- delete mode 100644 arch/arm/mach-s3c/mach-bast.c
- delete mode 100644 arch/arm/mach-s3c/mach-gta02.c
- delete mode 100644 arch/arm/mach-s3c/mach-h1940.c
- delete mode 100644 arch/arm/mach-s3c/mach-hmt.c
- delete mode 100644 arch/arm/mach-s3c/mach-jive.c
- delete mode 100644 arch/arm/mach-s3c/mach-mini2440.c
- delete mode 100644 arch/arm/mach-s3c/mach-mini6410.c
- delete mode 100644 arch/arm/mach-s3c/mach-n30.c
- delete mode 100644 arch/arm/mach-s3c/mach-ncp.c
- delete mode 100644 arch/arm/mach-s3c/mach-nexcoder.c
- delete mode 100644 arch/arm/mach-s3c/mach-osiris-dvs.c
- delete mode 100644 arch/arm/mach-s3c/mach-osiris.c
- delete mode 100644 arch/arm/mach-s3c/mach-otom.c
- delete mode 100644 arch/arm/mach-s3c/mach-qt2410.c
- delete mode 100644 arch/arm/mach-s3c/mach-real6410.c
- delete mode 100644 arch/arm/mach-s3c/mach-rx1950.c
- delete mode 100644 arch/arm/mach-s3c/mach-rx3715.c
- delete mode 100644 arch/arm/mach-s3c/mach-s3c2416-dt.c
- delete mode 100644 arch/arm/mach-s3c/mach-smartq.c
- delete mode 100644 arch/arm/mach-s3c/mach-smartq.h
- delete mode 100644 arch/arm/mach-s3c/mach-smartq5.c
- delete mode 100644 arch/arm/mach-s3c/mach-smartq7.c
- delete mode 100644 arch/arm/mach-s3c/mach-smdk2410.c
- delete mode 100644 arch/arm/mach-s3c/mach-smdk2413.c
- delete mode 100644 arch/arm/mach-s3c/mach-smdk2416.c
- delete mode 100644 arch/arm/mach-s3c/mach-smdk2440.c
- delete mode 100644 arch/arm/mach-s3c/mach-smdk2443.c
- delete mode 100644 arch/arm/mach-s3c/mach-smdk6400.c
- delete mode 100644 arch/arm/mach-s3c/mach-smdk6410.c
- delete mode 100644 arch/arm/mach-s3c/mach-tct_hammer.c
- delete mode 100644 arch/arm/mach-s3c/mach-vr1000.c
- delete mode 100644 arch/arm/mach-s3c/mach-vstms.c
- delete mode 100644 arch/arm/mach-s3c/map-s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/nand-core-s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/onenand-core-s3c64xx.h
- delete mode 100644 arch/arm/mach-s3c/osiris.h
- delete mode 100644 arch/arm/mach-s3c/otom.h
- delete mode 100644 arch/arm/mach-s3c/pll-s3c2410.c
- delete mode 100644 arch/arm/mach-s3c/pll-s3c2440-12000000.c
- delete mode 100644 arch/arm/mach-s3c/pll-s3c2440-16934400.c
- delete mode 100644 arch/arm/mach-s3c/pm-core-s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/pm-h1940.S
- delete mode 100644 arch/arm/mach-s3c/pm-s3c2410.c
- delete mode 100644 arch/arm/mach-s3c/pm-s3c2412.c
- delete mode 100644 arch/arm/mach-s3c/pm-s3c2416.c
- delete mode 100644 arch/arm/mach-s3c/pm-s3c24xx.c
- delete mode 100644 arch/arm/mach-s3c/regs-adc.h
- delete mode 100644 arch/arm/mach-s3c/regs-clock-s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/regs-dsc-s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/regs-gpio-s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/regs-irq-s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/regs-mem-s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/regs-s3c2443-clock.h
- delete mode 100644 arch/arm/mach-s3c/regs-srom-s3c64xx.h
- delete mode 100644 arch/arm/mach-s3c/rtc-core-s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/s3c2410.c
- delete mode 100644 arch/arm/mach-s3c/s3c2412-power.h
- delete mode 100644 arch/arm/mach-s3c/s3c2412.c
- delete mode 100644 arch/arm/mach-s3c/s3c2412.h
- delete mode 100644 arch/arm/mach-s3c/s3c2416.c
- delete mode 100644 arch/arm/mach-s3c/s3c2440.c
- delete mode 100644 arch/arm/mach-s3c/s3c2442.c
- delete mode 100644 arch/arm/mach-s3c/s3c2443.c
- delete mode 100644 arch/arm/mach-s3c/s3c244x.c
- delete mode 100644 arch/arm/mach-s3c/s3c24xx.c
- delete mode 100644 arch/arm/mach-s3c/s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/s3c6400.c
- delete mode 100644 arch/arm/mach-s3c/setup-i2c-s3c24xx.c
- delete mode 100644 arch/arm/mach-s3c/setup-ide-s3c64xx.c
- delete mode 100644 arch/arm/mach-s3c/setup-sdhci-gpio-s3c24xx.c
- delete mode 100644 arch/arm/mach-s3c/setup-spi-s3c24xx.c
- delete mode 100644 arch/arm/mach-s3c/setup-ts-s3c24xx.c
- delete mode 100644 arch/arm/mach-s3c/simtec-audio.c
- delete mode 100644 arch/arm/mach-s3c/simtec-nor.c
- delete mode 100644 arch/arm/mach-s3c/simtec-pm.c
- delete mode 100644 arch/arm/mach-s3c/simtec-usb.c
- delete mode 100644 arch/arm/mach-s3c/simtec.h
- delete mode 100644 arch/arm/mach-s3c/sleep-s3c2410.S
- delete mode 100644 arch/arm/mach-s3c/sleep-s3c2412.S
- delete mode 100644 arch/arm/mach-s3c/sleep-s3c24xx.S
- delete mode 100644 arch/arm/mach-s3c/spi-core-s3c24xx.h
- delete mode 100644 arch/arm/mach-s3c/vr1000.h
- delete mode 100644 drivers/ata/pata_samsung_cf.c
- delete mode 100644 drivers/clk/samsung/clk-s3c2410-dclk.c
- delete mode 100644 drivers/clk/samsung/clk-s3c2410.c
- delete mode 100644 drivers/clk/samsung/clk-s3c2412.c
- delete mode 100644 drivers/clk/samsung/clk-s3c2443.c
- delete mode 100644 drivers/cpufreq/s3c2410-cpufreq.c
- delete mode 100644 drivers/cpufreq/s3c2412-cpufreq.c
- delete mode 100644 drivers/cpufreq/s3c2416-cpufreq.c
- delete mode 100644 drivers/cpufreq/s3c2440-cpufreq.c
- delete mode 100644 drivers/cpufreq/s3c24xx-cpufreq-debugfs.c
- delete mode 100644 drivers/cpufreq/s3c24xx-cpufreq.c
- delete mode 100644 drivers/dma/s3c24xx-dma.c
- delete mode 100644 drivers/hwmon/s3c-hwmon.c
- delete mode 100644 drivers/input/touchscreen/s3c2410_ts.c
- delete mode 100644 drivers/leds/leds-s3c24xx.c
- delete mode 100644 drivers/mmc/host/s3cmci.c
- delete mode 100644 drivers/mmc/host/s3cmci.h
- delete mode 100644 drivers/pinctrl/samsung/pinctrl-s3c24xx.c
- delete mode 100644 drivers/power/supply/s3c_adc_battery.c
- delete mode 100644 drivers/soc/samsung/s3c-pm-debug.c
- delete mode 100644 drivers/spi/spi-s3c24xx-regs.h
- delete mode 100644 drivers/spi/spi-s3c24xx.c
- delete mode 100644 drivers/usb/gadget/udc/s3c-hsudc.c
- delete mode 100644 drivers/usb/gadget/udc/s3c2410_udc.c
- delete mode 100644 drivers/usb/gadget/udc/s3c2410_udc.h
- delete mode 100644 drivers/usb/gadget/udc/s3c2410_udc_regs.h
- delete mode 100644 drivers/video/fbdev/s3c2410fb-regs-lcd.h
- delete mode 100644 drivers/video/fbdev/s3c2410fb.c
- delete mode 100644 drivers/video/fbdev/s3c2410fb.h
- delete mode 100644 include/dt-bindings/clock/s3c2410.h
- delete mode 100644 include/dt-bindings/clock/s3c2412.h
- delete mode 100644 include/dt-bindings/clock/s3c2443.h
- delete mode 100644 include/linux/amba/pl093.h
- delete mode 100644 include/linux/platform_data/asoc-s3c24xx_simtec.h
- delete mode 100644 include/linux/platform_data/ata-samsung_cf.h
- delete mode 100644 include/linux/platform_data/clk-s3c2410.h
- delete mode 100644 include/linux/platform_data/dma-s3c24xx.h
- delete mode 100644 include/linux/platform_data/fb-s3c2410.h
- delete mode 100644 include/linux/platform_data/leds-s3c24xx.h
- delete mode 100644 include/linux/platform_data/media/s5p_hdmi.h
- delete mode 100644 include/linux/platform_data/mmc-s3cmci.h
- delete mode 100644 include/linux/platform_data/s3c-hsudc.h
- delete mode 100644 include/linux/platform_data/usb-s3c2410_udc.h
- delete mode 100644 include/linux/s3c_adc_battery.h
- delete mode 100644 include/linux/soc/samsung/s3c-adc.h
- delete mode 100644 include/linux/soc/samsung/s3c-cpufreq-core.h
- delete mode 100644 include/linux/spi/s3c24xx-fiq.h
- delete mode 100644 include/linux/spi/s3c24xx.h
- delete mode 100644 include/sound/s3c24xx_uda134x.h
- delete mode 100644 sound/soc/samsung/h1940_uda1380.c
- delete mode 100644 sound/soc/samsung/jive_wm8750.c
- delete mode 100644 sound/soc/samsung/neo1973_wm8753.c
- delete mode 100644 sound/soc/samsung/regs-i2s-v2.h
- delete mode 100644 sound/soc/samsung/regs-iis.h
- delete mode 100644 sound/soc/samsung/rx1950_uda1380.c
- delete mode 100644 sound/soc/samsung/s3c-i2s-v2.c
- delete mode 100644 sound/soc/samsung/s3c-i2s-v2.h
- delete mode 100644 sound/soc/samsung/s3c2412-i2s.c
- delete mode 100644 sound/soc/samsung/s3c2412-i2s.h
- delete mode 100644 sound/soc/samsung/s3c24xx-i2s.c
- delete mode 100644 sound/soc/samsung/s3c24xx-i2s.h
- delete mode 100644 sound/soc/samsung/s3c24xx_simtec.c
- delete mode 100644 sound/soc/samsung/s3c24xx_simtec.h
- delete mode 100644 sound/soc/samsung/s3c24xx_simtec_hermes.c
- delete mode 100644 sound/soc/samsung/s3c24xx_simtec_tlv320aic23.c
- delete mode 100644 sound/soc/samsung/s3c24xx_uda134x.c
- delete mode 100644 sound/soc/samsung/smartq_wm8987.c
- delete mode 100644 sound/soc/samsung/smdk_wm8580.c
-
+diff --git a/arch/arm/include/debug/s3c24xx.S b/arch/arm/include/debug/s3c24xx.S
+index af873b526677..7ab5e577cd42 100644
+--- a/arch/arm/include/debug/s3c24xx.S
++++ b/arch/arm/include/debug/s3c24xx.S
+@@ -28,16 +28,6 @@
+ 		and	\rd, \rd, #S3C2410_UFSTAT_TXMASK
+ 	.endm
+ 
+-/* Select the correct implementation depending on the configuration. The
+- * S3C2440 will get selected by default, as these are the most widely
+- * used variants of these
+-*/
+-
+-#if defined(CONFIG_DEBUG_S3C2410_UART)
+-#define fifo_full  fifo_full_s3c2410
+-#define fifo_level fifo_level_s3c2410
+-#endif
+-
+ /* include the reset of the code which will do the work */
+ 
+ #include <debug/samsung.S>
+diff --git a/arch/arm/mach-s3c/Makefile b/arch/arm/mach-s3c/Makefile
+index e7f18039b149..a5135137e648 100644
+--- a/arch/arm/mach-s3c/Makefile
++++ b/arch/arm/mach-s3c/Makefile
+@@ -2,9 +2,7 @@
+ #
+ # Copyright 2009 Simtec Electronics
+ 
+-ifdef CONFIG_ARCH_S3C64XX
+ include $(src)/Makefile.s3c64xx
+-endif
+ 
+ # Objects we always build independent of SoC choice
+ 
+diff --git a/arch/arm/mach-s3c/devs.c b/arch/arm/mach-s3c/devs.c
+index 9ac07c023adf..a31d1c3038e8 100644
+--- a/arch/arm/mach-s3c/devs.c
++++ b/arch/arm/mach-s3c/devs.c
+@@ -29,7 +29,6 @@
+ #include <linux/sizes.h>
+ #include <linux/platform_data/s3c-hsudc.h>
+ #include <linux/platform_data/s3c-hsotg.h>
+-#include <linux/platform_data/dma-s3c24xx.h>
+ 
+ #include <linux/platform_data/media/s5p_hdmi.h>
+ 
+diff --git a/arch/arm/mach-s3c/dma.h b/arch/arm/mach-s3c/dma.h
+index 59a4578c5f00..48057cb90070 100644
+--- a/arch/arm/mach-s3c/dma.h
++++ b/arch/arm/mach-s3c/dma.h
+@@ -1,9 +1,2 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-
+-#ifdef CONFIG_ARCH_S3C24XX
+-#include "dma-s3c24xx.h"
+-#endif
+-
+-#ifdef CONFIG_ARCH_S3C64XX
+ #include "dma-s3c64xx.h"
+-#endif
+diff --git a/arch/arm/mach-s3c/gpio-samsung.h b/arch/arm/mach-s3c/gpio-samsung.h
+index 02f6f4a96862..4233515eddaa 100644
+--- a/arch/arm/mach-s3c/gpio-samsung.h
++++ b/arch/arm/mach-s3c/gpio-samsung.h
+@@ -1,9 +1,2 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-
+-#ifdef CONFIG_ARCH_S3C24XX
+-#include "gpio-samsung-s3c24xx.h"
+-#endif
+-
+-#ifdef CONFIG_ARCH_S3C64XX
+ #include "gpio-samsung-s3c64xx.h"
+-#endif
+diff --git a/arch/arm/mach-s3c/irqs.h b/arch/arm/mach-s3c/irqs.h
+index 0bff1c1c8eb0..3ff0e0963080 100644
+--- a/arch/arm/mach-s3c/irqs.h
++++ b/arch/arm/mach-s3c/irqs.h
+@@ -1,9 +1,2 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-
+-#ifdef CONFIG_ARCH_S3C24XX
+-#include "irqs-s3c24xx.h"
+-#endif
+-
+-#ifdef CONFIG_ARCH_S3C64XX
+ #include "irqs-s3c64xx.h"
+-#endif
+diff --git a/arch/arm/mach-s3c/map.h b/arch/arm/mach-s3c/map.h
+index 7cfb517d4886..778d6f81cb2b 100644
+--- a/arch/arm/mach-s3c/map.h
++++ b/arch/arm/mach-s3c/map.h
+@@ -1,9 +1,2 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-
+-#ifdef CONFIG_ARCH_S3C24XX
+-#include "map-s3c24xx.h"
+-#endif
+-
+-#ifdef CONFIG_ARCH_S3C64XX
+ #include "map-s3c64xx.h"
+-#endif
+diff --git a/arch/arm/mach-s3c/pm-core.h b/arch/arm/mach-s3c/pm-core.h
+index b0e1d277f599..3e0c2df79120 100644
+--- a/arch/arm/mach-s3c/pm-core.h
++++ b/arch/arm/mach-s3c/pm-core.h
+@@ -1,9 +1,2 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-
+-#ifdef CONFIG_ARCH_S3C24XX
+-#include "pm-core-s3c24xx.h"
+-#endif
+-
+-#ifdef CONFIG_ARCH_S3C64XX
+ #include "pm-core-s3c64xx.h"
+-#endif
+diff --git a/arch/arm/mach-s3c/regs-clock.h b/arch/arm/mach-s3c/regs-clock.h
+index 7df31f203d28..fc7e3886b07c 100644
+--- a/arch/arm/mach-s3c/regs-clock.h
++++ b/arch/arm/mach-s3c/regs-clock.h
+@@ -1,9 +1,2 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-
+-#ifdef CONFIG_ARCH_S3C24XX
+-#include "regs-clock-s3c24xx.h"
+-#endif
+-
+-#ifdef CONFIG_ARCH_S3C64XX
+ #include "regs-clock-s3c64xx.h"
+-#endif
+diff --git a/arch/arm/mach-s3c/regs-gpio.h b/arch/arm/mach-s3c/regs-gpio.h
+index 0d41cb76d440..4e08e8609663 100644
+--- a/arch/arm/mach-s3c/regs-gpio.h
++++ b/arch/arm/mach-s3c/regs-gpio.h
+@@ -1,9 +1,2 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-
+-#ifdef CONFIG_ARCH_S3C24XX
+-#include "regs-gpio-s3c24xx.h"
+-#endif
+-
+-#ifdef CONFIG_ARCH_S3C64XX
+ #include "regs-gpio-s3c64xx.h"
+-#endif
+diff --git a/arch/arm/mach-s3c/regs-irq.h b/arch/arm/mach-s3c/regs-irq.h
+index 57f0dda8dbf5..4243daa54bd1 100644
+--- a/arch/arm/mach-s3c/regs-irq.h
++++ b/arch/arm/mach-s3c/regs-irq.h
+@@ -1,9 +1,2 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-
+-#ifdef CONFIG_ARCH_S3C24XX
+-#include "regs-irq-s3c24xx.h"
+-#endif
+-
+-#ifdef CONFIG_ARCH_S3C64XX
+ #include "regs-irq-s3c64xx.h"
+-#endif
+diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+index 4469e7f555e9..fc10ecc3602d 100644
+--- a/drivers/clocksource/Kconfig
++++ b/drivers/clocksource/Kconfig
+@@ -441,7 +441,7 @@ config CLKSRC_EXYNOS_MCT
+ config CLKSRC_SAMSUNG_PWM
+ 	bool "PWM timer driver for Samsung S3C, S5P" if COMPILE_TEST
+ 	depends on HAS_IOMEM
+-	depends on ARCH_EXYNOS || ARCH_S3C24XX || ARCH_S3C64XX || ARCH_S5PV210 || COMPILE_TEST
++	depends on ARCH_EXYNOS || ARCH_S3C64XX || ARCH_S5PV210 || COMPILE_TEST
+ 	help
+ 	  This is a new clocksource driver for the PWM timer found in
+ 	  Samsung S3C, S5P and Exynos SoCs, replacing an earlier driver
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index f427c8ea5c7b..84d21e0a7cdf 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -1009,8 +1009,7 @@ config I2C_RZV2M
+ 
+ config I2C_S3C2410
+ 	tristate "S3C/Exynos I2C Driver"
+-	depends on ARCH_EXYNOS || ARCH_S3C24XX || ARCH_S3C64XX || \
+-		   ARCH_S5PV210 || COMPILE_TEST
++	depends on ARCH_EXYNOS || ARCH_S3C64XX || ARCH_S5PV210 || COMPILE_TEST
+ 	help
+ 	  Say Y here to include support for I2C controller in the
+ 	  Samsung SoCs (S3C, S5Pv210, Exynos).
+diff --git a/drivers/i2c/busses/i2c-s3c2410.c b/drivers/i2c/busses/i2c-s3c2410.c
+index 36dab9cd208c..45e9df81345a 100644
+--- a/drivers/i2c/busses/i2c-s3c2410.c
++++ b/drivers/i2c/busses/i2c-s3c2410.c
+@@ -116,9 +116,6 @@ struct s3c24xx_i2c {
+ 	struct s3c2410_platform_i2c	*pdata;
+ 	struct gpio_desc	*gpios[2];
+ 	struct pinctrl          *pctrl;
+-#if defined(CONFIG_ARM_S3C24XX_CPUFREQ)
+-	struct notifier_block	freq_transition;
+-#endif
+ 	struct regmap		*sysreg;
+ 	unsigned int		sys_i2c_cfg;
+ };
+@@ -885,65 +882,6 @@ static int s3c24xx_i2c_clockrate(struct s3c24xx_i2c *i2c, unsigned int *got)
+ 	return 0;
+ }
+ 
+-#if defined(CONFIG_ARM_S3C24XX_CPUFREQ)
+-
+-#define freq_to_i2c(_n) container_of(_n, struct s3c24xx_i2c, freq_transition)
+-
+-static int s3c24xx_i2c_cpufreq_transition(struct notifier_block *nb,
+-					  unsigned long val, void *data)
+-{
+-	struct s3c24xx_i2c *i2c = freq_to_i2c(nb);
+-	unsigned int got;
+-	int delta_f;
+-	int ret;
+-
+-	delta_f = clk_get_rate(i2c->clk) - i2c->clkrate;
+-
+-	/* if we're post-change and the input clock has slowed down
+-	 * or at pre-change and the clock is about to speed up, then
+-	 * adjust our clock rate. <0 is slow, >0 speedup.
+-	 */
+-
+-	if ((val == CPUFREQ_POSTCHANGE && delta_f < 0) ||
+-	    (val == CPUFREQ_PRECHANGE && delta_f > 0)) {
+-		i2c_lock_bus(&i2c->adap, I2C_LOCK_ROOT_ADAPTER);
+-		ret = s3c24xx_i2c_clockrate(i2c, &got);
+-		i2c_unlock_bus(&i2c->adap, I2C_LOCK_ROOT_ADAPTER);
+-
+-		if (ret < 0)
+-			dev_err(i2c->dev, "cannot find frequency (%d)\n", ret);
+-		else
+-			dev_info(i2c->dev, "setting freq %d\n", got);
+-	}
+-
+-	return 0;
+-}
+-
+-static inline int s3c24xx_i2c_register_cpufreq(struct s3c24xx_i2c *i2c)
+-{
+-	i2c->freq_transition.notifier_call = s3c24xx_i2c_cpufreq_transition;
+-
+-	return cpufreq_register_notifier(&i2c->freq_transition,
+-					 CPUFREQ_TRANSITION_NOTIFIER);
+-}
+-
+-static inline void s3c24xx_i2c_deregister_cpufreq(struct s3c24xx_i2c *i2c)
+-{
+-	cpufreq_unregister_notifier(&i2c->freq_transition,
+-				    CPUFREQ_TRANSITION_NOTIFIER);
+-}
+-
+-#else
+-static inline int s3c24xx_i2c_register_cpufreq(struct s3c24xx_i2c *i2c)
+-{
+-	return 0;
+-}
+-
+-static inline void s3c24xx_i2c_deregister_cpufreq(struct s3c24xx_i2c *i2c)
+-{
+-}
+-#endif
+-
+ #ifdef CONFIG_OF
+ static int s3c24xx_i2c_parse_dt_gpio(struct s3c24xx_i2c *i2c)
+ {
+@@ -1152,13 +1090,6 @@ static int s3c24xx_i2c_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	ret = s3c24xx_i2c_register_cpufreq(i2c);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "failed to register cpufreq notifier\n");
+-		clk_unprepare(i2c->clk);
+-		return ret;
+-	}
+-
+ 	/*
+ 	 * Note, previous versions of the driver used i2c_add_adapter()
+ 	 * to add the bus at any number. We now pass the bus number via
+@@ -1175,7 +1106,6 @@ static int s3c24xx_i2c_probe(struct platform_device *pdev)
+ 	ret = i2c_add_numbered_adapter(&i2c->adap);
+ 	if (ret < 0) {
+ 		pm_runtime_disable(&pdev->dev);
+-		s3c24xx_i2c_deregister_cpufreq(i2c);
+ 		clk_unprepare(i2c->clk);
+ 		return ret;
+ 	}
+@@ -1192,8 +1122,6 @@ static int s3c24xx_i2c_remove(struct platform_device *pdev)
+ 
+ 	pm_runtime_disable(&pdev->dev);
+ 
+-	s3c24xx_i2c_deregister_cpufreq(i2c);
+-
+ 	i2c_del_adapter(&i2c->adap);
+ 
+ 	return 0;
+diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+index 791612ca6012..9de7f05d40e2 100644
+--- a/drivers/iio/adc/Kconfig
++++ b/drivers/iio/adc/Kconfig
+@@ -437,11 +437,11 @@ config EP93XX_ADC
+ 
+ config EXYNOS_ADC
+ 	tristate "Exynos ADC driver support"
+-	depends on ARCH_EXYNOS || ARCH_S3C24XX || ARCH_S3C64XX || ARCH_S5PV210 || (OF && COMPILE_TEST)
++	depends on ARCH_EXYNOS || ARCH_S3C64XX || ARCH_S5PV210 || (OF && COMPILE_TEST)
+ 	depends on HAS_IOMEM
+ 	help
+-	  Driver for the ADC block found in the Samsung S3C (S3C2410, S3C2416,
+-	  S3C2440, S3C2443, S3C6410), S5Pv210 and Exynos SoCs.
++	  Driver for the ADC block found in the Samsung S3C6410, S5Pv210 and
++	  Exynos SoCs.
+ 	  Choose Y here only if you build for such Samsung SoC.
+ 
+ 	  To compile this driver as a module, choose M here: the module will be
+diff --git a/drivers/media/platform/samsung/s3c-camif/Kconfig b/drivers/media/platform/samsung/s3c-camif/Kconfig
+index 8cb8d1ac3edc..f359f6382fff 100644
+--- a/drivers/media/platform/samsung/s3c-camif/Kconfig
++++ b/drivers/media/platform/samsung/s3c-camif/Kconfig
+@@ -1,15 +1,15 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config VIDEO_S3C_CAMIF
+-	tristate "Samsung S3C24XX/S3C64XX SoC Camera Interface driver"
++	tristate "Samsung 3C64XX SoC Camera Interface driver"
+ 	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_DEV && I2C && PM
+-	depends on ARCH_S3C64XX || PLAT_S3C24XX || COMPILE_TEST
++	depends on ARCH_S3C64XX || COMPILE_TEST
+ 	select MEDIA_CONTROLLER
+ 	select VIDEO_V4L2_SUBDEV_API
+ 	select VIDEOBUF2_DMA_CONTIG
+ 	help
+-	  This is a v4l2 driver for s3c24xx and s3c64xx SoC series camera
+-	  host interface (CAMIF).
++	  This is a v4l2 driver for s3c64xx SoC series camera host interface
++	  (CAMIF).
+ 
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called s3c-camif.
+diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+index 84dd37ff2735..79d8ddf1f616 100644
+--- a/drivers/mmc/host/Kconfig
++++ b/drivers/mmc/host/Kconfig
+@@ -312,9 +312,8 @@ config MMC_SDHCI_S3C
+ 	depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
+ 	help
+ 	  This selects the Secure Digital Host Controller Interface (SDHCI)
+-	  often referrered to as the HSMMC block in some of the Samsung S3C
+-	  (S3C2416, S3C2443, S3C6410), S5Pv210 and Exynos (Exynso4210,
+-	  Exynos4412) SoCs.
++	  often referrered to as the HSMMC block in some of the Samsung
++	  S3C6410, S5Pv210 and Exynos (Exynso4210, Exynos4412) SoCs.
+ 
+ 	  If you have a controller with this interface (thereforeyou build for
+ 	  such Samsung SoC), say Y or M here.
+diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
+index 280a55139387..a347833b8f29 100644
+--- a/drivers/mtd/nand/raw/Kconfig
++++ b/drivers/mtd/nand/raw/Kconfig
+@@ -79,7 +79,7 @@ config MTD_NAND_NDFC
+ 
+ config MTD_NAND_S3C2410
+ 	tristate "Samsung S3C NAND controller"
+-	depends on ARCH_S3C24XX || ARCH_S3C64XX
++	depends on ARCH_S3C64XX
+ 	help
+ 	  This enables the NAND flash controller on the S3C24xx and S3C64xx
+ 	  SoCs
+diff --git a/drivers/mtd/nand/raw/s3c2410.c b/drivers/mtd/nand/raw/s3c2410.c
+index f0a4535c812a..80d96f94d6cb 100644
+--- a/drivers/mtd/nand/raw/s3c2410.c
++++ b/drivers/mtd/nand/raw/s3c2410.c
+@@ -166,10 +166,6 @@ struct s3c2410_nand_info {
+ 	enum s3c_nand_clk_state		clk_state;
+ 
+ 	enum s3c_cpu_type		cpu_type;
+-
+-#ifdef CONFIG_ARM_S3C24XX_CPUFREQ
+-	struct notifier_block	freq_transition;
+-#endif
+ };
+ 
+ struct s3c24XX_nand_devtype_data {
+@@ -711,54 +707,6 @@ static void s3c2440_nand_write_buf(struct nand_chip *this, const u_char *buf,
+ 	}
+ }
+ 
+-/* cpufreq driver support */
+-
+-#ifdef CONFIG_ARM_S3C24XX_CPUFREQ
+-
+-static int s3c2410_nand_cpufreq_transition(struct notifier_block *nb,
+-					  unsigned long val, void *data)
+-{
+-	struct s3c2410_nand_info *info;
+-	unsigned long newclk;
+-
+-	info = container_of(nb, struct s3c2410_nand_info, freq_transition);
+-	newclk = clk_get_rate(info->clk);
+-
+-	if ((val == CPUFREQ_POSTCHANGE && newclk < info->clk_rate) ||
+-	    (val == CPUFREQ_PRECHANGE && newclk > info->clk_rate)) {
+-		s3c2410_nand_setrate(info);
+-	}
+-
+-	return 0;
+-}
+-
+-static inline int s3c2410_nand_cpufreq_register(struct s3c2410_nand_info *info)
+-{
+-	info->freq_transition.notifier_call = s3c2410_nand_cpufreq_transition;
+-
+-	return cpufreq_register_notifier(&info->freq_transition,
+-					 CPUFREQ_TRANSITION_NOTIFIER);
+-}
+-
+-static inline void
+-s3c2410_nand_cpufreq_deregister(struct s3c2410_nand_info *info)
+-{
+-	cpufreq_unregister_notifier(&info->freq_transition,
+-				    CPUFREQ_TRANSITION_NOTIFIER);
+-}
+-
+-#else
+-static inline int s3c2410_nand_cpufreq_register(struct s3c2410_nand_info *info)
+-{
+-	return 0;
+-}
+-
+-static inline void
+-s3c2410_nand_cpufreq_deregister(struct s3c2410_nand_info *info)
+-{
+-}
+-#endif
+-
+ /* device management functions */
+ 
+ static int s3c24xx_nand_remove(struct platform_device *pdev)
+@@ -768,8 +716,6 @@ static int s3c24xx_nand_remove(struct platform_device *pdev)
+ 	if (info == NULL)
+ 		return 0;
+ 
+-	s3c2410_nand_cpufreq_deregister(info);
+-
+ 	/* Release all our mtds  and their partitions, then go through
+ 	 * freeing the resources used
+ 	 */
+@@ -1184,12 +1130,6 @@ static int s3c24xx_nand_probe(struct platform_device *pdev)
+ 	if (err != 0)
+ 		goto exit_error;
+ 
+-	err = s3c2410_nand_cpufreq_register(info);
+-	if (err < 0) {
+-		dev_err(&pdev->dev, "failed to init cpufreq support\n");
+-		goto exit_error;
+-	}
+-
+ 	if (allow_clk_suspend(info)) {
+ 		dev_info(&pdev->dev, "clock idle support enabled\n");
+ 		s3c2410_nand_clk_set_state(info, CLOCK_SUSPEND);
+diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
+index bd13b5ef246d..1a478854293f 100644
+--- a/drivers/pinctrl/samsung/pinctrl-samsung.c
++++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
+@@ -1322,16 +1322,6 @@ static const struct of_device_id samsung_pinctrl_dt_match[] = {
+ #ifdef CONFIG_PINCTRL_S3C64XX
+ 	{ .compatible = "samsung,s3c64xx-pinctrl",
+ 		.data = &s3c64xx_of_data },
+-#endif
+-#ifdef CONFIG_PINCTRL_S3C24XX
+-	{ .compatible = "samsung,s3c2412-pinctrl",
+-		.data = &s3c2412_of_data },
+-	{ .compatible = "samsung,s3c2416-pinctrl",
+-		.data = &s3c2416_of_data },
+-	{ .compatible = "samsung,s3c2440-pinctrl",
+-		.data = &s3c2440_of_data },
+-	{ .compatible = "samsung,s3c2450-pinctrl",
+-		.data = &s3c2450_of_data },
+ #endif
+ 	{},
+ };
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 312dccfa3f18..d13ca620ea5d 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -1406,18 +1406,14 @@ config RTC_DRV_OMAP
+ 
+ config RTC_DRV_S3C
+ 	tristate "Samsung S3C series SoC RTC"
+-	depends on ARCH_EXYNOS || ARCH_S3C64XX || ARCH_S3C24XX || ARCH_S5PV210 || \
++	depends on ARCH_EXYNOS || ARCH_S3C64XX || ARCH_S5PV210 || \
+ 		   COMPILE_TEST
+ 	help
+ 	  RTC (Realtime Clock) driver for the clock inbuilt into the
+-	  Samsung S3C24XX series of SoCs. This can provide periodic
++	  Samsung S3C64XX series of SoCs. This can provide periodic
+ 	  interrupt rates from 1Hz to 64Hz for user programs, and
+ 	  wakeup from Alarm.
+ 
+-	  The driver currently supports the common features on all the
+-	  S3C24XX range, such as the S3C2410, S3C2412, S3C2413, S3C2440
+-	  and S3C2442.
+-
+ 	  This driver can also be build as a module. If so, the module
+ 	  will be called rtc-s3c.
+ 
+diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+index 434f83168546..3ba8a39655a3 100644
+--- a/drivers/tty/serial/Kconfig
++++ b/drivers/tty/serial/Kconfig
+@@ -242,23 +242,23 @@ config SERIAL_SAMSUNG
+ 	select SERIAL_CORE
+ 	help
+ 	  Support for the on-chip UARTs on the Samsung
+-	  S3C24xx/S3C64xx/S5Pv210/Exynos and Apple M1 SoCs, providing
++	  S3C64xx/S5Pv210/Exynos and Apple M1 SoCs, providing
+ 	  /dev/ttySAC0, 1 and 2 (note, some machines may not provide all of
+ 	  these ports, depending on how the serial port pins are configured.
++
+ 	  Choose Y/M here only if you build for such SoC.
+ 
+ config SERIAL_SAMSUNG_UARTS_4
+ 	bool
+ 	depends on SERIAL_SAMSUNG
+-	default y if !(CPU_S3C2410 || CPU_S3C2412 || CPU_S3C2440 || CPU_S3C2442)
++	default y
+ 	help
+ 	  Internal node for the common case of 4 Samsung compatible UARTs
+ 
+ config SERIAL_SAMSUNG_UARTS
+ 	int
+ 	depends on SERIAL_SAMSUNG
+-	default 4 if SERIAL_SAMSUNG_UARTS_4 || CPU_S3C2416
+-	default 3
++	default 4
+ 	help
+ 	  Select the number of available UART ports for the Samsung S3C
+ 	  serial driver
+diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+index 77d1363029f5..5adf3963b2f6 100644
+--- a/drivers/tty/serial/samsung_tty.c
++++ b/drivers/tty/serial/samsung_tty.c
+@@ -152,10 +152,6 @@ struct s3c24xx_uart_port {
+ 	const struct s3c2410_uartcfg	*cfg;
+ 
+ 	struct s3c24xx_uart_dma		*dma;
+-
+-#ifdef CONFIG_ARM_S3C24XX_CPUFREQ
+-	struct notifier_block		freq_transition;
+-#endif
+ };
+ 
+ static void s3c24xx_serial_tx_chars(struct s3c24xx_uart_port *ourport);
+@@ -1859,93 +1855,6 @@ static void s3c24xx_serial_resetport(struct uart_port *port,
+ 	udelay(1);
+ }
+ 
+-#ifdef CONFIG_ARM_S3C24XX_CPUFREQ
+-
+-static int s3c24xx_serial_cpufreq_transition(struct notifier_block *nb,
+-					     unsigned long val, void *data)
+-{
+-	struct s3c24xx_uart_port *port;
+-	struct uart_port *uport;
+-
+-	port = container_of(nb, struct s3c24xx_uart_port, freq_transition);
+-	uport = &port->port;
+-
+-	/* check to see if port is enabled */
+-
+-	if (port->pm_level != 0)
+-		return 0;
+-
+-	/* try and work out if the baudrate is changing, we can detect
+-	 * a change in rate, but we do not have support for detecting
+-	 * a disturbance in the clock-rate over the change.
+-	 */
+-
+-	if (IS_ERR(port->baudclk))
+-		goto exit;
+-
+-	if (port->baudclk_rate == clk_get_rate(port->baudclk))
+-		goto exit;
+-
+-	if (val == CPUFREQ_PRECHANGE) {
+-		/* we should really shut the port down whilst the
+-		 * frequency change is in progress.
+-		 */
+-
+-	} else if (val == CPUFREQ_POSTCHANGE) {
+-		struct ktermios *termios;
+-		struct tty_struct *tty;
+-
+-		if (uport->state == NULL)
+-			goto exit;
+-
+-		tty = uport->state->port.tty;
+-
+-		if (tty == NULL)
+-			goto exit;
+-
+-		termios = &tty->termios;
+-
+-		if (termios == NULL) {
+-			dev_warn(uport->dev, "%s: no termios?\n", __func__);
+-			goto exit;
+-		}
+-
+-		s3c24xx_serial_set_termios(uport, termios, NULL);
+-	}
+-
+-exit:
+-	return 0;
+-}
+-
+-static inline int
+-s3c24xx_serial_cpufreq_register(struct s3c24xx_uart_port *port)
+-{
+-	port->freq_transition.notifier_call = s3c24xx_serial_cpufreq_transition;
+-
+-	return cpufreq_register_notifier(&port->freq_transition,
+-					 CPUFREQ_TRANSITION_NOTIFIER);
+-}
+-
+-static inline void
+-s3c24xx_serial_cpufreq_deregister(struct s3c24xx_uart_port *port)
+-{
+-	cpufreq_unregister_notifier(&port->freq_transition,
+-				    CPUFREQ_TRANSITION_NOTIFIER);
+-}
+-
+-#else
+-static inline int
+-s3c24xx_serial_cpufreq_register(struct s3c24xx_uart_port *port)
+-{
+-	return 0;
+-}
+-
+-static inline void
+-s3c24xx_serial_cpufreq_deregister(struct s3c24xx_uart_port *port)
+-{
+-}
+-#endif
+-
+ static int s3c24xx_serial_enable_baudclk(struct s3c24xx_uart_port *ourport)
+ {
+ 	struct device *dev = ourport->port.dev;
+@@ -2237,10 +2146,6 @@ static int s3c24xx_serial_probe(struct platform_device *pdev)
+ 	if (!IS_ERR(ourport->baudclk))
+ 		clk_disable_unprepare(ourport->baudclk);
+ 
+-	ret = s3c24xx_serial_cpufreq_register(ourport);
+-	if (ret < 0)
+-		dev_err(&pdev->dev, "failed to add cpufreq notifier\n");
+-
+ 	probe_index++;
+ 
+ 	return 0;
+@@ -2251,7 +2156,6 @@ static int s3c24xx_serial_remove(struct platform_device *dev)
+ 	struct uart_port *port = s3c24xx_dev_to_port(&dev->dev);
+ 
+ 	if (port) {
+-		s3c24xx_serial_cpufreq_deregister(to_ourport(port));
+ 		uart_remove_one_port(&s3c24xx_uart_drv, port);
+ 	}
+ 
+@@ -2589,94 +2493,6 @@ static struct console s3c24xx_serial_console = {
+ };
+ #endif /* CONFIG_SERIAL_SAMSUNG_CONSOLE */
+ 
+-#ifdef CONFIG_CPU_S3C2410
+-static const struct s3c24xx_serial_drv_data s3c2410_serial_drv_data = {
+-	.info = {
+-		.name		= "Samsung S3C2410 UART",
+-		.type		= TYPE_S3C24XX,
+-		.port_type	= PORT_S3C2410,
+-		.fifosize	= 16,
+-		.rx_fifomask	= S3C2410_UFSTAT_RXMASK,
+-		.rx_fifoshift	= S3C2410_UFSTAT_RXSHIFT,
+-		.rx_fifofull	= S3C2410_UFSTAT_RXFULL,
+-		.tx_fifofull	= S3C2410_UFSTAT_TXFULL,
+-		.tx_fifomask	= S3C2410_UFSTAT_TXMASK,
+-		.tx_fifoshift	= S3C2410_UFSTAT_TXSHIFT,
+-		.def_clk_sel	= S3C2410_UCON_CLKSEL0,
+-		.num_clks	= 2,
+-		.clksel_mask	= S3C2410_UCON_CLKMASK,
+-		.clksel_shift	= S3C2410_UCON_CLKSHIFT,
+-	},
+-	.def_cfg = {
+-		.ucon		= S3C2410_UCON_DEFAULT,
+-		.ufcon		= S3C2410_UFCON_DEFAULT,
+-	},
+-};
+-#define S3C2410_SERIAL_DRV_DATA (&s3c2410_serial_drv_data)
+-#else
+-#define S3C2410_SERIAL_DRV_DATA NULL
+-#endif
+-
+-#ifdef CONFIG_CPU_S3C2412
+-static const struct s3c24xx_serial_drv_data s3c2412_serial_drv_data = {
+-	.info = {
+-		.name		= "Samsung S3C2412 UART",
+-		.type		= TYPE_S3C24XX,
+-		.port_type	= PORT_S3C2412,
+-		.fifosize	= 64,
+-		.has_divslot	= 1,
+-		.rx_fifomask	= S3C2440_UFSTAT_RXMASK,
+-		.rx_fifoshift	= S3C2440_UFSTAT_RXSHIFT,
+-		.rx_fifofull	= S3C2440_UFSTAT_RXFULL,
+-		.tx_fifofull	= S3C2440_UFSTAT_TXFULL,
+-		.tx_fifomask	= S3C2440_UFSTAT_TXMASK,
+-		.tx_fifoshift	= S3C2440_UFSTAT_TXSHIFT,
+-		.def_clk_sel	= S3C2410_UCON_CLKSEL2,
+-		.num_clks	= 4,
+-		.clksel_mask	= S3C2412_UCON_CLKMASK,
+-		.clksel_shift	= S3C2412_UCON_CLKSHIFT,
+-	},
+-	.def_cfg = {
+-		.ucon		= S3C2410_UCON_DEFAULT,
+-		.ufcon		= S3C2410_UFCON_DEFAULT,
+-	},
+-};
+-#define S3C2412_SERIAL_DRV_DATA (&s3c2412_serial_drv_data)
+-#else
+-#define S3C2412_SERIAL_DRV_DATA NULL
+-#endif
+-
+-#if defined(CONFIG_CPU_S3C2440) || defined(CONFIG_CPU_S3C2416) || \
+-	defined(CONFIG_CPU_S3C2443) || defined(CONFIG_CPU_S3C2442)
+-static const struct s3c24xx_serial_drv_data s3c2440_serial_drv_data = {
+-	.info = {
+-		.name		= "Samsung S3C2440 UART",
+-		.type		= TYPE_S3C24XX,
+-		.port_type	= PORT_S3C2440,
+-		.fifosize	= 64,
+-		.has_divslot	= 1,
+-		.rx_fifomask	= S3C2440_UFSTAT_RXMASK,
+-		.rx_fifoshift	= S3C2440_UFSTAT_RXSHIFT,
+-		.rx_fifofull	= S3C2440_UFSTAT_RXFULL,
+-		.tx_fifofull	= S3C2440_UFSTAT_TXFULL,
+-		.tx_fifomask	= S3C2440_UFSTAT_TXMASK,
+-		.tx_fifoshift	= S3C2440_UFSTAT_TXSHIFT,
+-		.def_clk_sel	= S3C2410_UCON_CLKSEL2,
+-		.num_clks	= 4,
+-		.clksel_mask	= S3C2412_UCON_CLKMASK,
+-		.clksel_shift	= S3C2412_UCON_CLKSHIFT,
+-		.ucon_mask	= S3C2440_UCON0_DIVMASK,
+-	},
+-	.def_cfg = {
+-		.ucon		= S3C2410_UCON_DEFAULT,
+-		.ufcon		= S3C2410_UFCON_DEFAULT,
+-	},
+-};
+-#define S3C2440_SERIAL_DRV_DATA (&s3c2440_serial_drv_data)
+-#else
+-#define S3C2440_SERIAL_DRV_DATA NULL
+-#endif
+-
+ #if defined(CONFIG_CPU_S3C6400) || defined(CONFIG_CPU_S3C6410)
+ static const struct s3c24xx_serial_drv_data s3c6400_serial_drv_data = {
+ 	.info = {
+@@ -2845,15 +2661,6 @@ static const struct s3c24xx_serial_drv_data artpec8_serial_drv_data = {
+ 
+ static const struct platform_device_id s3c24xx_serial_driver_ids[] = {
+ 	{
+-		.name		= "s3c2410-uart",
+-		.driver_data	= (kernel_ulong_t)S3C2410_SERIAL_DRV_DATA,
+-	}, {
+-		.name		= "s3c2412-uart",
+-		.driver_data	= (kernel_ulong_t)S3C2412_SERIAL_DRV_DATA,
+-	}, {
+-		.name		= "s3c2440-uart",
+-		.driver_data	= (kernel_ulong_t)S3C2440_SERIAL_DRV_DATA,
+-	}, {
+ 		.name		= "s3c6400-uart",
+ 		.driver_data	= (kernel_ulong_t)S3C6400_SERIAL_DRV_DATA,
+ 	}, {
+@@ -2881,12 +2688,6 @@ MODULE_DEVICE_TABLE(platform, s3c24xx_serial_driver_ids);
+ 
+ #ifdef CONFIG_OF
+ static const struct of_device_id s3c24xx_uart_dt_match[] = {
+-	{ .compatible = "samsung,s3c2410-uart",
+-		.data = S3C2410_SERIAL_DRV_DATA },
+-	{ .compatible = "samsung,s3c2412-uart",
+-		.data = S3C2412_SERIAL_DRV_DATA },
+-	{ .compatible = "samsung,s3c2440-uart",
+-		.data = S3C2440_SERIAL_DRV_DATA },
+ 	{ .compatible = "samsung,s3c6400-uart",
+ 		.data = S3C6400_SERIAL_DRV_DATA },
+ 	{ .compatible = "samsung,s5pv210-uart",
+diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+index fb7b603dddf8..8ba4fe9364b1 100644
+--- a/drivers/usb/host/Kconfig
++++ b/drivers/usb/host/Kconfig
+@@ -443,12 +443,12 @@ config USB_OHCI_HCD_STI
+ 	  STMicroelectronics consumer electronics SoC's.
+ 
+ config USB_OHCI_HCD_S3C2410
+-	tristate "OHCI support for Samsung S3C24xx/S3C64xx SoC series"
+-	depends on USB_OHCI_HCD && (ARCH_S3C24XX || ARCH_S3C64XX || COMPILE_TEST)
+-	default y if (ARCH_S3C24XX || ARCH_S3C64XX)
++	tristate "OHCI support for Samsung S3C64xx SoC series"
++	depends on USB_OHCI_HCD && (ARCH_S3C64XX || COMPILE_TEST)
++	default ARCH_S3C64XX
+ 	help
+ 	  Enables support for the on-chip OHCI controller on
+-	  S3C24xx/S3C64xx chips.
++	  S3C64xx chips.
+ 
+ config USB_OHCI_HCD_LPC32XX
+ 	tristate "Support for LPC on-chip OHCI USB controller"
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index b64bc49c7f30..eee7df45347a 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -491,14 +491,13 @@ config IXP4XX_WATCHDOG
+ 	  Say N if you are unsure.
+ 
+ config S3C2410_WATCHDOG
+-	tristate "S3C2410 Watchdog"
+-	depends on ARCH_S3C24XX || ARCH_S3C64XX || ARCH_S5PV210 || ARCH_EXYNOS || \
+-		   COMPILE_TEST
++	tristate "S3C6410/S5Pv210/Exynos Watchdog"
++	depends on ARCH_S3C64XX || ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
+ 	select WATCHDOG_CORE
+ 	select MFD_SYSCON if ARCH_EXYNOS
+ 	help
+-	  Watchdog timer block in the Samsung S3C24xx, S3C64xx, S5Pv210 and
+-	  Exynos SoCs. This will reboot the system when the timer expires with
++	  Watchdog timer block in the Samsung S3C64xx, S5Pv210 and Exynos
++	  SoCs. This will reboot the system when the timer expires with
+ 	  the watchdog enabled.
+ 
+ 	  The driver is limited by the speed of the system's PCLK
+diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+index d3fc8ed886ff..200ba236a72e 100644
+--- a/drivers/watchdog/s3c2410_wdt.c
++++ b/drivers/watchdog/s3c2410_wdt.c
+@@ -562,73 +562,6 @@ static irqreturn_t s3c2410wdt_irq(int irqno, void *param)
+ 	return IRQ_HANDLED;
+ }
+ 
+-#ifdef CONFIG_ARM_S3C24XX_CPUFREQ
+-
+-static int s3c2410wdt_cpufreq_transition(struct notifier_block *nb,
+-					  unsigned long val, void *data)
+-{
+-	int ret;
+-	struct s3c2410_wdt *wdt = freq_to_wdt(nb);
+-
+-	if (!s3c2410wdt_is_running(wdt))
+-		goto done;
+-
+-	if (val == CPUFREQ_PRECHANGE) {
+-		/* To ensure that over the change we don't cause the
+-		 * watchdog to trigger, we perform an keep-alive if
+-		 * the watchdog is running.
+-		 */
+-
+-		s3c2410wdt_keepalive(&wdt->wdt_device);
+-	} else if (val == CPUFREQ_POSTCHANGE) {
+-		s3c2410wdt_stop(&wdt->wdt_device);
+-
+-		ret = s3c2410wdt_set_heartbeat(&wdt->wdt_device,
+-						wdt->wdt_device.timeout);
+-
+-		if (ret >= 0)
+-			s3c2410wdt_start(&wdt->wdt_device);
+-		else
+-			goto err;
+-	}
+-
+-done:
+-	return 0;
+-
+- err:
+-	dev_err(wdt->dev, "cannot set new value for timeout %d\n",
+-				wdt->wdt_device.timeout);
+-	return ret;
+-}
+-
+-static inline int s3c2410wdt_cpufreq_register(struct s3c2410_wdt *wdt)
+-{
+-	wdt->freq_transition.notifier_call = s3c2410wdt_cpufreq_transition;
+-
+-	return cpufreq_register_notifier(&wdt->freq_transition,
+-					 CPUFREQ_TRANSITION_NOTIFIER);
+-}
+-
+-static inline void s3c2410wdt_cpufreq_deregister(struct s3c2410_wdt *wdt)
+-{
+-	wdt->freq_transition.notifier_call = s3c2410wdt_cpufreq_transition;
+-
+-	cpufreq_unregister_notifier(&wdt->freq_transition,
+-				    CPUFREQ_TRANSITION_NOTIFIER);
+-}
+-
+-#else
+-
+-static inline int s3c2410wdt_cpufreq_register(struct s3c2410_wdt *wdt)
+-{
+-	return 0;
+-}
+-
+-static inline void s3c2410wdt_cpufreq_deregister(struct s3c2410_wdt *wdt)
+-{
+-}
+-#endif
+-
+ static inline unsigned int s3c2410wdt_get_bootstatus(struct s3c2410_wdt *wdt)
+ {
+ 	unsigned int rst_stat;
+@@ -761,12 +694,6 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+ 	wdt->wdt_device.min_timeout = 1;
+ 	wdt->wdt_device.max_timeout = s3c2410wdt_max_timeout(wdt);
+ 
+-	ret = s3c2410wdt_cpufreq_register(wdt);
+-	if (ret < 0) {
+-		dev_err(dev, "failed to register cpufreq\n");
+-		goto err_src_clk;
+-	}
+-
+ 	watchdog_set_drvdata(&wdt->wdt_device, wdt);
+ 
+ 	/* see if we can actually set the requested timer margin, and if
+@@ -783,7 +710,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+ 				 S3C2410_WATCHDOG_DEFAULT_TIME);
+ 		} else {
+ 			dev_err(dev, "failed to use default timeout\n");
+-			goto err_cpufreq;
++			goto err_src_clk;
+ 		}
+ 	}
+ 
+@@ -791,7 +718,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+ 			       pdev->name, pdev);
+ 	if (ret != 0) {
+ 		dev_err(dev, "failed to install irq (%d)\n", ret);
+-		goto err_cpufreq;
++		goto err_src_clk;
+ 	}
+ 
+ 	watchdog_set_nowayout(&wdt->wdt_device, nowayout);
+@@ -817,7 +744,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+ 
+ 	ret = watchdog_register_device(&wdt->wdt_device);
+ 	if (ret)
+-		goto err_cpufreq;
++		goto err_src_clk;
+ 
+ 	ret = s3c2410wdt_enable(wdt, true);
+ 	if (ret < 0)
+@@ -839,9 +766,6 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+  err_unregister:
+ 	watchdog_unregister_device(&wdt->wdt_device);
+ 
+- err_cpufreq:
+-	s3c2410wdt_cpufreq_deregister(wdt);
+-
+  err_src_clk:
+ 	clk_disable_unprepare(wdt->src_clk);
+ 
+@@ -862,8 +786,6 @@ static int s3c2410wdt_remove(struct platform_device *dev)
+ 
+ 	watchdog_unregister_device(&wdt->wdt_device);
+ 
+-	s3c2410wdt_cpufreq_deregister(wdt);
+-
+ 	clk_disable_unprepare(wdt->src_clk);
+ 	clk_disable_unprepare(wdt->bus_clk);
+ 
+diff --git a/include/linux/clk/samsung.h b/include/linux/clk/samsung.h
+index 38b774001712..0cf7aac83439 100644
+--- a/include/linux/clk/samsung.h
++++ b/include/linux/clk/samsung.h
+@@ -21,36 +21,4 @@ static inline void s3c64xx_clk_init(struct device_node *np,
+ 				    bool s3c6400, void __iomem *base) { }
+ #endif /* CONFIG_S3C64XX_COMMON_CLK */
+ 
+-#ifdef CONFIG_S3C2410_COMMON_CLK
+-void s3c2410_common_clk_init(struct device_node *np, unsigned long xti_f,
+-			     int current_soc,
+-			     void __iomem *reg_base);
+-#else
+-static inline void s3c2410_common_clk_init(struct device_node *np,
+-					   unsigned long xti_f,
+-					   int current_soc,
+-					   void __iomem *reg_base) { }
+-#endif /* CONFIG_S3C2410_COMMON_CLK */
+-
+-#ifdef CONFIG_S3C2412_COMMON_CLK
+-void s3c2412_common_clk_init(struct device_node *np, unsigned long xti_f,
+-			     unsigned long ext_f, void __iomem *reg_base);
+-#else
+-static inline void s3c2412_common_clk_init(struct device_node *np,
+-					   unsigned long xti_f,
+-					   unsigned long ext_f,
+-					   void __iomem *reg_base) { }
+-#endif /* CONFIG_S3C2412_COMMON_CLK */
+-
+-#ifdef CONFIG_S3C2443_COMMON_CLK
+-void s3c2443_common_clk_init(struct device_node *np, unsigned long xti_f,
+-			     int current_soc,
+-			     void __iomem *reg_base);
+-#else
+-static inline void s3c2443_common_clk_init(struct device_node *np,
+-					   unsigned long xti_f,
+-					   int current_soc,
+-					   void __iomem *reg_base) { }
+-#endif /* CONFIG_S3C2443_COMMON_CLK */
+-
+ #endif /* __LINUX_CLK_SAMSUNG_H_ */
+diff --git a/include/linux/soc/samsung/s3c-pm.h b/include/linux/soc/samsung/s3c-pm.h
+index f9164559c99f..5b23d85d20ab 100644
+--- a/include/linux/soc/samsung/s3c-pm.h
++++ b/include/linux/soc/samsung/s3c-pm.h
+@@ -14,58 +14,10 @@
+ 
+ /* PM debug functions */
+ 
+-/**
+- * struct pm_uart_save - save block for core UART
+- * @ulcon: Save value for S3C2410_ULCON
+- * @ucon: Save value for S3C2410_UCON
+- * @ufcon: Save value for S3C2410_UFCON
+- * @umcon: Save value for S3C2410_UMCON
+- * @ubrdiv: Save value for S3C2410_UBRDIV
+- *
+- * Save block for UART registers to be held over sleep and restored if they
+- * are needed (say by debug).
+-*/
+-struct pm_uart_save {
+-	u32	ulcon;
+-	u32	ucon;
+-	u32	ufcon;
+-	u32	umcon;
+-	u32	ubrdiv;
+-	u32	udivslot;
+-};
+-
+-#ifdef CONFIG_SAMSUNG_PM_DEBUG
+-/**
+- * s3c_pm_dbg() - low level debug function for use in suspend/resume.
+- * @msg: The message to print.
+- *
+- * This function is used mainly to debug the resume process before the system
+- * can rely on printk/console output. It uses the low-level debugging output
+- * routine printascii() to do its work.
+- */
+-extern void s3c_pm_dbg(const char *msg, ...);
+-
+-#define S3C_PMDBG(fmt...) s3c_pm_dbg(fmt)
+-
+-extern void s3c_pm_save_uarts(bool is_s3c24xx);
+-extern void s3c_pm_restore_uarts(bool is_s3c24xx);
+-
+-#ifdef CONFIG_ARCH_S3C64XX
+-extern void s3c_pm_arch_update_uart(void __iomem *regs,
+-				    struct pm_uart_save *save);
+-#else
+-static inline void
+-s3c_pm_arch_update_uart(void __iomem *regs, struct pm_uart_save *save)
+-{
+-}
+-#endif
+-
+-#else
+ #define S3C_PMDBG(fmt...) pr_debug(fmt)
+ 
+ static inline void s3c_pm_save_uarts(bool is_s3c24xx) { }
+ static inline void s3c_pm_restore_uarts(bool is_s3c24xx) { }
+-#endif
+ 
+ /* suspend memory checking */
+ 
+@@ -81,14 +33,4 @@ extern void s3c_pm_check_store(void);
+ #define s3c_pm_check_store()   do { } while (0)
+ #endif
+ 
+-/* system device subsystems */
+-
+-extern struct bus_type s3c2410_subsys;
+-extern struct bus_type s3c2410a_subsys;
+-extern struct bus_type s3c2412_subsys;
+-extern struct bus_type s3c2416_subsys;
+-extern struct bus_type s3c2440_subsys;
+-extern struct bus_type s3c2442_subsys;
+-extern struct bus_type s3c2443_subsys;
+-
+ #endif
 -- 
 2.29.2
 
