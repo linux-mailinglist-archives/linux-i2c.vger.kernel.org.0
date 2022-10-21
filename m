@@ -2,156 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B84D9606E84
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Oct 2022 05:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC8C607040
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Oct 2022 08:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiJUDsy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 Oct 2022 23:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
+        id S230162AbiJUGnv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Oct 2022 02:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbiJUDss (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Oct 2022 23:48:48 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D47D1D79A1;
-        Thu, 20 Oct 2022 20:48:47 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mtr2s1DskzpVVw;
-        Fri, 21 Oct 2022 11:45:25 +0800 (CST)
-Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
- (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 21 Oct
- 2022 11:48:45 +0800
-From:   Weilong Chen <chenweilong@huawei.com>
-To:     <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
-        <xuwei5@huawei.com>, <wsa@kernel.org>, <robh+dt@kernel.org>,
-        <robh@kernel.org>
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: [PATCH next v7 2/2] dt-bindings: i2c: add entry for hisilicon,i2c-ascend910
-Date:   Fri, 21 Oct 2022 11:56:38 +0800
-Message-ID: <20221021035638.203929-2-chenweilong@huawei.com>
-X-Mailer: git-send-email 2.31.GIT
-In-Reply-To: <20221021035638.203929-1-chenweilong@huawei.com>
-References: <20221021035638.203929-1-chenweilong@huawei.com>
+        with ESMTP id S230030AbiJUGns (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Oct 2022 02:43:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAF62413CD;
+        Thu, 20 Oct 2022 23:43:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB41961DD2;
+        Fri, 21 Oct 2022 06:43:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2CC2C433D6;
+        Fri, 21 Oct 2022 06:43:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666334625;
+        bh=sEwMq2j5fjO07u3xyI2MdfOg2PhiXrflPNSl+1UnYnQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p35BnNfZPMnmjAztGM+SVzJPSQLvzbn4xPbC/SN4po2T9VkG2rTnk+kmA0AlVvMoa
+         OZJQ5iwoswxe5tWoHusob88QqBXioMBVWB5RcbY6e39dv7zWqslEHVzy0oGlobvJiG
+         RFbeSWjIe9n3yOguBmIO4jzeFqd0ZbPPZYS8hW9jqCI00juDwYj0u5UQ57a7JL0Uxp
+         WPyDBY8oEaLI4MQsQKVzyn0lWUENtw2mYsCxtkm2JVDAShlvxWgB1B7jjkiFWTxFbN
+         9ds+LgrUpoV6/ObsCWhfVPBvHm5fGG5NIfX0D8HCakUn1R5s03ZlYJ8yoVSyeKpEau
+         ZhNzmEt01Qnvg==
+Date:   Fri, 21 Oct 2022 08:43:17 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Adam Borowski <kilobyte@angband.pl>
+Cc:     Khalil Blaiech <kblaiech@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/6] i2c: mlxbf: depend on ACPI; clean away ifdeffage
+Message-ID: <Y1I/hRG9XGTFDTr3@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Adam Borowski <kilobyte@angband.pl>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <S229853AbiJTWkg/20221020224036Z+12888@vger.kernel.org>
+ <S229897AbiJTWqk/20221020224640Z+957@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iApmyqhp3K52o8pq"
+Content-Disposition: inline
+In-Reply-To: <S229897AbiJTWqk/20221020224640Z+957@vger.kernel.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add the new compatible for HiSilicon i2c.
 
-Signed-off-by: Weilong Chen <chenweilong@huawei.com>
----
-Change since v6:
-- Rename to hisilicon,i2c-ascend910.yaml
-- Change all IIC to I2C
-- Add maintainer name
-Link: https://lore.kernel.org/lkml/7520818b-de40-7f2a-1b03-b1dcd29a2023@huawei.com/T/#ma89d78cef45e7ac6f2c6251ed958e8658e5c1eb5
+--iApmyqhp3K52o8pq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- .../bindings/i2c/hisilicon,i2c-ascend910.yaml | 70 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 71 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,i2c-ascend910.yaml
+On Mon, Oct 10, 2022 at 08:33:51PM +0200, Adam Borowski wrote:
+> This fixes maybe_unused warnings/errors.
+>=20
+> According to a comment during device tree removal, only ACPI is supported,
+> thus let's actually require it.
+>=20
+> Fixes: be18c5ede25da39a0eda541f6de3620a30cf731f
+> Signed-off-by: Adam Borowski <kilobyte@angband.pl>
 
-diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,i2c-ascend910.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,i2c-ascend910.yaml
-new file mode 100644
-index 000000000000..f4f532d69670
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/hisilicon,i2c-ascend910.yaml
-@@ -0,0 +1,70 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/i2c/hisilicon,i2c-xxx.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: HiSilicon common I2C controller Device Tree Bindings
-+
-+maintainers:
-+  - Yicong Yang <yangyicong@hisilicon.com>
-+
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
-+
-+properties:
-+  compatible:
-+    const: hisilicon,i2c-ascend910
-+    description:
-+      The HiSilicon common I2C controller can be used for many different
-+      types of SoC such as Huawei Ascend AI series chips.
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-frequency:
-+    default: 400000
-+
-+  i2c-sda-falling-time-ns:
-+    default: 343
-+
-+  i2c-scl-falling-time-ns:
-+    default: 203
-+
-+  i2c-sda-hold-time-ns:
-+    default: 830
-+
-+  i2c-scl-rising-time-ns:
-+    default: 365
-+
-+  i2c-digital-filter-width-ns:
-+    default: 0
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    i2c@5038b0000 {
-+      compatible = "hisilicon,i2c-ascend910";
-+      reg = <0x38b0000 0x10000>;
-+      interrupts = <0x0 120 0x4>;
-+      i2c-sda-falling-time-ns = <56>;
-+      i2c-scl-falling-time-ns = <56>;
-+      i2c-sda-hold-time-ns = <56>;
-+      i2c-scl-rising-time-ns = <56>;
-+      i2c-digital-filter;
-+      i2c-digital-filter-width-ns = <0x0>;
-+      clocks = <&alg_clk>;
-+      clock-frequency = <400000>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ad32dc9c4822..961e4442fb08 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9211,6 +9211,7 @@ M:	Yicong Yang <yangyicong@hisilicon.com>
- L:	linux-i2c@vger.kernel.org
- S:	Maintained
- W:	https://www.hisilicon.com
-+F:	Documentation/devicetree/bindings/i2c/hisilicon,i2c-xxx.yaml
- F:	drivers/i2c/busses/i2c-hisi.c
- 
- HISILICON LPC BUS DRIVER
--- 
-2.31.GIT
+Applied to for-current, thanks!
 
+@Asmaa, @Khalil: normally, I will not skip the driver maintainer's ack
+but wait for it. I'd like to make an exception this time because I don't
+want to get another dozen of patches fixing this build warning. Since
+Asmaa already acked a similar patch, I hope this is okay with you.
+
+
+--iApmyqhp3K52o8pq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNSP4EACgkQFA3kzBSg
+KbaKpA//UbFxu/KCQ6nmi/cix+XNC2Jodbf/CpEn81lRISMmrLzIe78d35NXtgq+
+qY8Yq3F7sm9a4eyklMQlAX8qLRr6XggCEltkI+ZcvshnvMg4rpNEzwFu2s+7YtwU
++S7julqS0h8AWUze4f3nGtM3w/hBSuj2tclZ0shKZX64COCBho2FmIQrDJbZu5um
+hmB5R7Gis9c853pOGf0rdINA2x3Uod9tV+RddnBhmiq2ATkP0SBA1xXZ3/XbM3On
+nrMtvMvJp0C8KTgwJF+2IovW95OQamCG/9/tgqt1/7N4Y6sdXwBQ8G6YtneqWunR
+jmoaNbTUSulLM3imHqgyA2wyE1Heao3WyAOwusLVXepUHcEKALGlZEaVtPp15CvD
+ICbMviweiENLD9RfSHmSaORlsRIiJevlNY2rq8omzRVP4NEDXUZiHEydjLay5jU1
+pjWi1iRKtraDWr3T5/zalNuhKLLFBZjZboTDm2TdQoYj0aAzS96LSDmt4m8d7D0W
+BMPqLFSMBlLNJvmuSE2w4j4RjW+r9vLn0kYeJqWAonjqITiMLoY4Vpl8452vTvXL
+KuA5jDZSJl0KIlikXZ+Fd1+6GEuX2QxAbrF9FVvI1wJAxzcKYR6M7T66As1LfJ6t
+aYqL9JJ+YSL0oMbIBwUeH0HnYW5/RSTojOl82KW+7/8nrgJlhDM=
+=Bmm/
+-----END PGP SIGNATURE-----
+
+--iApmyqhp3K52o8pq--
