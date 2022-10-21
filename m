@@ -2,60 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6CE4607542
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Oct 2022 12:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E78D60756F
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Oct 2022 12:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiJUKnW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Oct 2022 06:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
+        id S230219AbiJUKwq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Oct 2022 06:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbiJUKnT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Oct 2022 06:43:19 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548E02608DE
-        for <linux-i2c@vger.kernel.org>; Fri, 21 Oct 2022 03:43:14 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id a3so4342586wrt.0
-        for <linux-i2c@vger.kernel.org>; Fri, 21 Oct 2022 03:43:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=idi7jPK27aOQx+iUR6FrE1JXHV4RboCem2PMCjpX5oA=;
-        b=I2iQ+wBGOV5CtNEG+KhPkrQIzj7LNvQr7fBBqFKYBdijtK5PgNdpw6O3WBwVY4uJMH
-         Cr4RMiApLuUIy2ePwyA/fsl9SfXoitgP8WPu3pydmLie6H5+Ne4551CG+OFVBwxDnT6z
-         YjAgd7lF6YVrXpxc7GAgnHtqgP/fRu4dnFEmIUigJtBLAuiDMNjPhVo9qLvi5J6bjO1T
-         b6ts/gzoSfS6Q+Ak5+/yw6+rs+Vhtv45YAFpIWKIBqp+hbtK2wNFJOyvtTbeuLQ3j8q5
-         Fq+Uxnpre7CqPw00goayMN1JFyeFpyoNj9qUiEW5pzjLPNeiTUfD2O+dUg70LkDhXmos
-         mJAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=idi7jPK27aOQx+iUR6FrE1JXHV4RboCem2PMCjpX5oA=;
-        b=PE9x3UekjpQb4ZqLJi56pdvikbReBOx1xzvyiE9folbty34o97YgHwYwzlcpl7pb76
-         kCunKbmF1IOv1jerx9bFvPqfDHKpOzmOfl2WRezw3XpTfITGcdxXSAr/z0LdhqQbxq/v
-         1mlTbzXsQKRe2e/sz/1sDzy+aRpMnEjNxcH+DxYsP1Y7Xsh5PkhjX8Gelaf5eFYYtRQH
-         JOrfrmWG9rUR2HiW8PQBUnDIrx1iI5eOWiamulnoatIIyWv/DUDYvmYkrcrdz693iask
-         G62OSltKk8mO9amfiygzDIGYIseMknv74BNez/IAsiGBLeJzwQC6Y8esAdGF3OPopQBm
-         N/8g==
-X-Gm-Message-State: ACrzQf3MoV4O3CMvhENnFszTVLt9K3L15zvxXr8PrpHPGjs7RBs3doc2
-        yyMskMS0BFWID5UiVS7mPMve9rYDi2BVkIqJ7QQ=
-X-Google-Smtp-Source: AMsMyM7t1W3y+KXEcU2nJbiaD/kz8jUbFtIm8fsSUMIScaKPgDFEi+NMkgm/sxzACd5SfTh3r3G9oTvu6rcyChSp5Ec=
-X-Received: by 2002:adf:d23a:0:b0:236:467e:a3bc with SMTP id
- k26-20020adfd23a000000b00236467ea3bcmr4666865wrh.542.1666348992361; Fri, 21
- Oct 2022 03:43:12 -0700 (PDT)
+        with ESMTP id S229711AbiJUKwp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Oct 2022 06:52:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E771885A6;
+        Fri, 21 Oct 2022 03:52:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1B0EB82B8F;
+        Fri, 21 Oct 2022 10:52:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC6DC433D6;
+        Fri, 21 Oct 2022 10:52:33 +0000 (UTC)
+Date:   Fri, 21 Oct 2022 11:52:30 +0100
+From:   Mark Brown <broonie@debian.org>
+To:     Adam Borowski <kilobyte@angband.pl>
+Cc:     linux-kernel@lists.debian.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org, alsa-devel@alsa-project.org,
+        David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        Yong Zhi <yong.zhi@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Dan Scally <djrscally@gmail.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, Khalil Blaiech <kblaiech@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Brent Lu <brent.lu@intel.com>
+Subject: Re: [PATCH 0/6] a pile of randconfig fixes
+Message-ID: <Y1J57jJ1+FTG7U9O@sirena.org.uk>
+References: <20221020221749.33746-1-kilobyte@angband.pl>
 MIME-Version: 1.0
-From:   Emiley Margaret <wwwbizdataservice@gmail.com>
-Date:   Fri, 21 Oct 2022 05:43:01 -0500
-Message-ID: <CAL3_HK9F5GWrJ=-_ccXpvDSWL9sf=QXLk_AGxvKL74P31f21xA@mail.gmail.com>
-Subject: Re: Money20/20 Attendees Data List 2022
-To:     Emiley Margaret <wwwbizdataservice@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wWcrkmaG6Bl+vyW8"
+Content-Disposition: inline
+In-Reply-To: <20221020221749.33746-1-kilobyte@angband.pl>
+X-Cookie: On the eighth day, God created FORTRAN.
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,22 +74,34 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
 
-I hope you are right person to discuss about Money20/20 Attendees Databank?
+--wWcrkmaG6Bl+vyW8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-List Includes:- Org-Name, First Name Last Name, Contact Job
-Title,Verified Email Address, Website URL, Mailing Address, Phone
-Number,Fax Number, Industry and many more=E2=80=A6
+On Fri, Oct 21, 2022 at 12:17:49AM +0200, Adam Borowski wrote:
 
-Number of Contacts  : 11,753 Opt-in Contacts
-Cost                          : $1,576
+> I've been doing randconfig build tests for quite a while, here's a pile of
+> fixes.  I'm not sure what's the best way to submit these: do you folks
+> prefer a series like this, or a number of individual submissions?
 
-Interested? Email me Back, I would love to provide more information on the =
-list.
+Individual submissions would cut down on the noise from the enormous CC
+list.  If you were going to send as a patch series it should be a single
+message per patch as covered in sumbitting-patches.rst.
 
-Kind Regards,
-Emiley Margaret
-Marketing Coordinator
+--wWcrkmaG6Bl+vyW8
+Content-Type: application/pgp-signature; name="signature.asc"
 
-To unsubscribe kindly reply with "Leave Out" in the subject line
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNSee4ACgkQJNaLcl1U
+h9BDwgf+IkbiCFyXzVrO3F8yBx883iUJM3R8A5LPsrxScBUzS3Nu7PgzWmko3Bfa
+wm/rXizNrMQPDqUakrtR8duh+w/eL6Lz3YrZEQEaM2fd8+MayJt9tXB4o/qfcrBc
+B3o7lbqL9Hp0yqRKKG8orcvyiJDpOh2Z+zLAYqy+LuFLuiv6kSKu8h7c2vm7DKCw
++wGkRN5blfrYPHGOoU/r6oqjT2qx6BFUsXpnILPw2XRtXlkYv37BLu4rRgZ7qc+D
+Afo+DwE5y6d9t9ebOL0UjvgveEysSY3VksxCcjtWru+wN/bjPbET1VFJUrfbMyGf
+y+JN6EsaYWeKmGsk5T5pZ5XczMBC+A==
+=kG7z
+-----END PGP SIGNATURE-----
+
+--wWcrkmaG6Bl+vyW8--
