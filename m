@@ -2,89 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 080C4607184
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Oct 2022 09:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 943DF607311
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Oct 2022 10:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiJUH4I (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Oct 2022 03:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
+        id S230378AbiJUI5k (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Oct 2022 04:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiJUH4G (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Oct 2022 03:56:06 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3022198443
-        for <linux-i2c@vger.kernel.org>; Fri, 21 Oct 2022 00:56:05 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1olmsu-0000CN-0E; Fri, 21 Oct 2022 09:56:04 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1olmsr-000TTW-0e; Fri, 21 Oct 2022 09:56:03 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1olmss-009WDY-KA; Fri, 21 Oct 2022 09:56:02 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     linux-pwm@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: [PATCH] pwm: pca9685: Convert to .probe_new()
-Date:   Fri, 21 Oct 2022 09:55:51 +0200
-Message-Id: <20221021075551.168897-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.37.2
+        with ESMTP id S230392AbiJUI5i (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Oct 2022 04:57:38 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B62250EC0;
+        Fri, 21 Oct 2022 01:57:35 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R741e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VSikoqm_1666342652;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VSikoqm_1666342652)
+          by smtp.aliyun-inc.com;
+          Fri, 21 Oct 2022 16:57:33 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     gupt21@gmail.com
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next RESEND] HID: mcp2221: Remove unneeded semicolon
+Date:   Fri, 21 Oct 2022 16:57:27 +0800
+Message-Id: <20221021085727.118133-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1139; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Xk1N0WK9qWt0LwnjhpXwrz4Y6dF05EHtbWaHG1PwhxI=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjUlCE1qhna2aB0I0Icb1AJ2sKSG+OaCF1EqAm7y5p qEN5Q9WJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY1JQhAAKCRDB/BR4rcrsCSN0CA CdoSYjaeYgY6fbSjgTpmoe7Sk4LAfLKNuya5BZxhbUaZBANOlNZvQOS0G/nqblh7KxuGjZSK1KKVNS zRN+6hfBUkHK2SZOdf5WxYwK08joY7WDg0ZZTOFU94MWJqITLJla0rvIjH3vWp53HFqZnvAJY4Q/hF 8p0OM2TCuuub/Y901+8r0dpZfrX7bCU/Iu1ULgULOifqAQlHY8wwkQZvt+Kt7fvaiuCrooQPzk2GgX GmJ3VB0jiMDusO92XA/90ddO/q36AD1V2lFUsS3hGD7GsRNCFWBeQKmQOA+KtpOUrGhE1JLf58Wt9T u6ESV217VzYxTZv3Z26ngK5sCeFoVC
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The probe function doesn't make use of the id parameter, so the driver
-can be converted trivially to .probe_new().
+./drivers/hid/hid-mcp2221.c:1019:3-4: Unneeded semicolon
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2485
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- drivers/pwm/pwm-pca9685.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/hid/hid-mcp2221.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pwm/pwm-pca9685.c b/drivers/pwm/pwm-pca9685.c
-index f230c10d28bb..e00152257cbe 100644
---- a/drivers/pwm/pwm-pca9685.c
-+++ b/drivers/pwm/pwm-pca9685.c
-@@ -513,8 +513,7 @@ static const struct regmap_config pca9685_regmap_i2c_config = {
- 	.cache_type = REGCACHE_NONE,
- };
+diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
+index b3eaf170f0ec..9287730aab27 100644
+--- a/drivers/hid/hid-mcp2221.c
++++ b/drivers/hid/hid-mcp2221.c
+@@ -1019,7 +1019,7 @@ static int mcp_iio_channels(struct mcp2221 *mcp)
+ 			break;
+ 		default:
+ 			continue;
+-		};
++		}
  
--static int pca9685_pwm_probe(struct i2c_client *client,
--				const struct i2c_device_id *id)
-+static int pca9685_pwm_probe(struct i2c_client *client)
- {
- 	struct pca9685 *pca;
- 	unsigned int reg;
-@@ -664,7 +663,7 @@ static struct i2c_driver pca9685_i2c_driver = {
- 		.of_match_table = of_match_ptr(pca9685_dt_ids),
- 		.pm = &pca9685_pwm_pm,
- 	},
--	.probe = pca9685_pwm_probe,
-+	.probe_new = pca9685_pwm_probe,
- 	.remove = pca9685_pwm_remove,
- 	.id_table = pca9685_id,
- };
-
-base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+ 		chan->type = IIO_VOLTAGE;
+ 		chan->indexed = 1;
 -- 
-2.37.2
+2.20.1.7.g153144c
 
