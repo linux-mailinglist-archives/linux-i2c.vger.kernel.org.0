@@ -2,25 +2,25 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44485609B86
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Oct 2022 09:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B771609B8C
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Oct 2022 09:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiJXHl5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Oct 2022 03:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37166 "EHLO
+        id S229950AbiJXHmR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Oct 2022 03:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiJXHlz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Oct 2022 03:41:55 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2047.outbound.protection.outlook.com [40.107.243.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6955BC8A;
-        Mon, 24 Oct 2022 00:41:47 -0700 (PDT)
+        with ESMTP id S229954AbiJXHmJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Oct 2022 03:42:09 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2043.outbound.protection.outlook.com [40.107.212.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C082860E85;
+        Mon, 24 Oct 2022 00:42:03 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZpkZyDrvMCihDsBNx8fU5BPDkrpOcVH5v+W5nyOyD27CUNLDWMJvR+7BFE3t2Z/bBTvocg0epSTyY9QzRvZLFHQfg3a9DFajNT31oLYpcyzoHszYF+lgjoob4fEBNoFh9oSMQTBo+AKAdK4gqVyzkz2G0PrnrOxdTE6QVMkkvZNWtu3O4CWQseVlfybbFS+I8tGmAqCa17GNvQPjTebm2Tm8e4oDEYH3VIeTU7qfiCpfwt+/XeeiYSsIPr4HI0vHsUaUn7mpV1onUFqY8lqOt/mMGAkbkAo2/eTcOjHz8TbE2OEKUPPjSucGM1h9BD5YpTv7TG2MzsOzhLjPsiwyGg==
+ b=F4jcqlz9NFoyEMjER9YqEYaAljRMsfz5qvv1Bcy9rLMNxpoKng8J/i9c1zd36/3A0jRuWb/MEG6Maz71gLQLiBqqlckhEN1eIMI29Hsa03AQa3YgwxsOYLal3ke55IgPu+bx9Jc4VtCfIUnLgruk1t+vFLAv5HysTKO+hrVTkaj0JNr2oCsb76bHD9a1UcrP+YjtW9dOQYR61Y1VWL0548LG02G5tPyIIlPy9XPFA7uQ9TldtLYVVZA16cj4Gmy9addhJe9Q2JVoODfq5VE8o2Rmuuk0u1xF81FmFw78551Irb8AHSdviHeXnX0s3s5qi6H8wamITshBy1MhH5hZ7w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S5qquIuupNl7ZliE5kSBRHSY//1lm/47aCgcaZGAkzo=;
- b=mfI8TgKdn69al75CRG06NmJ3Jocyz6krt2CQc9lziRdEzU40hKy5NvcDHtt/XcA1zxHLELz3K8y/oE+vjQeJzoUAu7xLwZxu7JEQGq4yuDyjcRYwz5IkiQDbp/T70WeRSYw+BWqvPcORDt5tvoXjGD7PlhuNvNYlpCPWZDpxHcvTy58B6pMLKG4km9nvtyoSUCOhjxzcJtuYHlqnQpaf7kYBWuIVPIzhatXNCl0JDo7Y02wX7wyvvIMZXKgKTIn9lxHBsnoxPVDmORpTKxqVPXvBgDhaVnirP2KIwi2mG62oIrJLml711NdthVlSwtaE24EOefu+dDc/UiIfEvXNMg==
+ bh=3P5MLT2jVkkm4pUw4ihlcN391Lg9Qk+F6RA2HSmM1Jo=;
+ b=AWbdUr5hQ2zlCdLWByyy+VFArTuv0ABgOFemgSu1oGSFewokqLkKkMOTdqHF3QqVcn05XY16SdonryYCBYJ3h0W6RdjXTDc4nJD5PgyYMDY96VqSXZ9MDF8RnkSQ9/2dYkMR6vUDFmaRkYoCRIpTORbRY07GNvLhcPNohLs/iETGNgULyWJCUFaScUMMfS3yQGwR1QKydJG5h1nXETmNh9R1vd9pWFcsZcwvirGUrrQ2+pEWBPmz4p3rGW5X+EtVKmi5NHHXmrFhhIAie3QpoCiksLsCwC7xac/HM9fIth8DVtwnG+jPDY6ye8iUHtbXR/AuP/rXt/7XxzRQh8iiGQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.118.233) smtp.rcpttodomain=linuxfoundation.org
  smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
@@ -28,18 +28,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S5qquIuupNl7ZliE5kSBRHSY//1lm/47aCgcaZGAkzo=;
- b=ibKie/gu+cq5Q4IS1p6sqfR2xp9XHFRF/Kw48+5NhBeL2NZ0KK3GGG3MPMX7bYbhD2At8XebnD00SdZ4Qhm76dkPh89KykMnqh4eWJA/9cfDtnNoNM6n4Ou40NCmOmUhuIpXeVAB5bvHEQt+t62OBSZaLjRKdimCz5caLdoqt6V3+xf1snTMJ+rdyn4Jy/2m4rlD4UXl1aXCtRhcyGiS1f89kITKMJ38DgA4uNRg+qJFoMPr7g+kVi1M35Y9ZTT81UalJB9zLid00bRm4U3xGgksyt3ksJF04nu6RpMM916hdi3RBBD+/jox1bOHAWlR2ecS5TrXIrfaWbGWQ3DN+A==
-Received: from DM6PR03CA0098.namprd03.prod.outlook.com (2603:10b6:5:333::31)
- by DM4PR12MB7671.namprd12.prod.outlook.com (2603:10b6:8:104::17) with
+ bh=3P5MLT2jVkkm4pUw4ihlcN391Lg9Qk+F6RA2HSmM1Jo=;
+ b=a9zM8bm6DDIsIoi6j8t4xWS0ahlIxy+IPnp6tj5w3w96TZAlYnNhQAbcs9UUL8GGf+w6SwA4QayjhYxvMir6SdheoCL7WoNFI1oTZf82P11pLUoIA63Cg5K8JxnhGl/aouLjRf2njIgCWUoteP5V+7VxXg48ii4Kzs7HGn8xpGfoEU4KVAGtHDthCfSJlS0g3BiLoF9CeFFyRfV/NilXvRKbizjej6mPw3qBM0LmznpauLs0HGP46LmTujwMOzvL6iph5D0AribCmowyO2fIJbeOyJZNKWBeKEjAiQV3kXLrGWCkwnIshwPEO8qLZZzHPE9++jI920VBNTgN7T6WmQ==
+Received: from DS7PR05CA0011.namprd05.prod.outlook.com (2603:10b6:5:3b9::16)
+ by DS0PR12MB7654.namprd12.prod.outlook.com (2603:10b6:8:11d::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Mon, 24 Oct
- 2022 07:41:45 +0000
-Received: from DM6NAM11FT096.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:333:cafe::16) by DM6PR03CA0098.outlook.office365.com
- (2603:10b6:5:333::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.27 via Frontend
- Transport; Mon, 24 Oct 2022 07:41:45 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Mon, 24 Oct
+ 2022 07:42:01 +0000
+Received: from DM6NAM11FT041.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b9:cafe::1f) by DS7PR05CA0011.outlook.office365.com
+ (2603:10b6:5:3b9::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.8 via Frontend
+ Transport; Mon, 24 Oct 2022 07:42:01 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -47,20 +47,20 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.118.233 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.118.233) by
- DM6NAM11FT096.mail.protection.outlook.com (10.13.173.145) with Microsoft SMTP
+ DM6NAM11FT041.mail.protection.outlook.com (10.13.172.98) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5746.16 via Frontend Transport; Mon, 24 Oct 2022 07:41:45 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ 15.20.5746.16 via Frontend Transport; Mon, 24 Oct 2022 07:42:01 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
  (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 24 Oct
- 2022 00:41:45 -0700
+ 2022 00:41:49 -0700
 Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 24 Oct 2022 00:41:44 -0700
+ 15.2.986.29; Mon, 24 Oct 2022 00:41:48 -0700
 Received: from waynec-Precision-5760.nvidia.com (10.127.8.13) by
  mail.nvidia.com (10.126.190.182) with Microsoft SMTP Server id 15.2.986.29
- via Frontend Transport; Mon, 24 Oct 2022 00:41:41 -0700
+ via Frontend Transport; Mon, 24 Oct 2022 00:41:45 -0700
 From:   Wayne Chang <waynec@nvidia.com>
 To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <treding@nvidia.com>,
@@ -72,9 +72,9 @@ CC:     <waynec@nvidia.com>, <linux-usb@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <singhanc@nvidia.com>, <linux-i2c@vger.kernel.org>,
         <linux-phy@lists.infradead.org>, <linux-tegra@vger.kernel.org>
-Subject: [PATCH 02/11] dt-bindings: usb: Add NVIDIA Tegra XUSB host controller binding
-Date:   Mon, 24 Oct 2022 15:41:19 +0800
-Message-ID: <20221024074128.1113554-3-waynec@nvidia.com>
+Subject: [PATCH 03/11] dt-bindings: usb: Add binding for Cypress cypd4226 I2C driver
+Date:   Mon, 24 Oct 2022 15:41:20 +0800
+Message-ID: <20221024074128.1113554-4-waynec@nvidia.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221024074128.1113554-1-waynec@nvidia.com>
 References: <20221024074128.1113554-1-waynec@nvidia.com>
@@ -84,23 +84,23 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT096:EE_|DM4PR12MB7671:EE_
-X-MS-Office365-Filtering-Correlation-Id: cc1604bd-489e-4d03-4e0c-08dab593338b
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT041:EE_|DS0PR12MB7654:EE_
+X-MS-Office365-Filtering-Correlation-Id: 98d1f769-0bd6-4fc5-c54a-08dab5933d3c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Rg2RqxvjGu8yoMh/rKN8UOwG7vb3j3BnRoRQwjxTk1xh7LWM1RHpmHJwSsPL5l2DUJHgaOlvTMmYru2hF8zuDH1xqiEAN4qiNwjr9E5eQ70PUygP/ygQ9RnOZCo0N+lfd4NOW/arbOFigdpHwQeKHYoM9yw5f/Fo2jttN1tfxzRiG5p8JcoIfshz/uNE4bQXVyXHShrocJf2cGMATcm4ocrHdtcdSiZHEBVvNDL0VcsSpSXQZagxwM4DjbMNrHdBeVhZQHMJtX96NPY2IyArSzf+XC9nHJeE5ab4fyBECP5kwzQ+j1ddb5NMhzFpjynxfVPgfayzEDqHjadFfARFPPA6c/dTJ2XwnjZpLK9vVMWORfQx8cSTSgFlTk3Jd/pSPZ3ttwBJFrYc12ycfyVqoM5lap3rVCEsvYOl6Sxk9GjVv1TBSXdVyzz0eBrgrfvBuAc4gB0xW2tOQ5I8wNvii0yc+F3e9E2hovc0aMuFyfsVVqpNrsF5xiDOelpS6qLGYy04zVO0fWxfs3Ra5KpUMCHbzOc1FO5UpzcjkV30xn1AoQWZC4XDkiw0zJOsP/7G05noLEG5vnjq8/a378MDrzfSyTzdltdJofZq/LOMr2Wg1wVNxjEgWxmwHgGRc5ieUdK7FFqS9YMh39AW26t7jjYQ9BfjAjzdqBjip2M4SfRXRc6cVgQBz/iAPWkZj/3ewjajqKKNuWV0NNfbhEWrimuZfzW0W8hxVBQV9QZwc9c9qLaEty8IMpMGS1pXIV17/S1A75a+LkwuTKKVy8FTH9uLZxmAwClP9HSFajnjITYuU0wv0mbGoblSX/kGEyYNj1qbqlQk+dRhlvL67i8rrSSs4yX0xXT+lYg37KPk8n84D9nENaWVtZrkfiHI9bPK
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(396003)(346002)(39860400002)(451199015)(40470700004)(36840700001)(46966006)(186003)(316002)(426003)(83380400001)(6666004)(47076005)(110136005)(54906003)(86362001)(5660300002)(6636002)(8936002)(70206006)(36756003)(8676002)(7696005)(2616005)(41300700001)(4326008)(70586007)(7416002)(40460700003)(26005)(1076003)(40480700001)(336012)(2906002)(82310400005)(478600001)(356005)(82740400003)(7636003)(921005)(36860700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: sDQWNEgNzwdYkHssKr66W94mQHGJvVUukUXiY3yUlhY6+yj5H3RBPp+9rrt2V9APcNg/Awsvogm+KgbeXXvkSDzjOH/6P8JkTSs5x+SUwXwztQjbRKSKCRCCUizTq+4Gaf6aBWv13ploluu2/D4gd3TUI65Z1HFv2KITffLcTNlzXmIfRI17PbsucgcLN+68Bv+ZdgvjYQIXqugI88/3ekVfLGtABQsNwDlzSZ/+1r7MiX7j3LMy2lwWEjs3fDxnrDdK8gYxvoP2G8UORMLybViY930BjbdvoQ3sH8WfEIl3EQHZVYYTAcKm5tghCrnH+YA8SIToat/HqNjD8W6UpZcbIS3tQ8kCJZDddeS7bE35uFqeI/9alP8NcfcIxxfSYhJ6uU7itjtWpld/Z29CHLsfZqCI/kP07d0XyvJ/PQjPDMxNNIFxSqsw2qY9/NAk4wvbPmXjk6P8xo7wlTTe97301rcF3BSuzRQzbGY+z7hG62rzOeCfX77HgIco8j5io1Y70nn6OYH9hyWiUaJDizip+8KmyZW8VmMlQqhiL3YyJru8XKGJw4F9WMv4wucat4sKeB7JTWwK/pbKzvN2N/TjEA0SvQrk6McUHsN8a8yhCFsQoLj/55/lrivNQCKdy9YHMFs+Deu9ufGnZx3RaJ9eO1dfI6tX41L43B0MlzFN/XapOTLGbFG+r0FjOJaUcw/sYakPbwIViB79e31EXZqLuQdHCobM4u7ABxq3VytAGFEFC6CgDwxGyKpo+Rn8H27ZoLPGgEX3mBVZaTXmg0DdRmiSjUDKUusEcshNRAZ81Gz3pwiMUCUQsamJytx1B0T2pcoVGwJTo9gknqfRitbfQhO1i1w1p0qWnthiAc+rEdhqgHubgjdHDUYnIhi+
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(376002)(136003)(346002)(451199015)(40470700004)(36840700001)(46966006)(36756003)(36860700001)(86362001)(2906002)(82740400003)(336012)(40460700003)(2616005)(47076005)(1076003)(186003)(356005)(7636003)(426003)(921005)(6666004)(7696005)(26005)(966005)(316002)(110136005)(5660300002)(70586007)(54906003)(40480700001)(6636002)(41300700001)(8676002)(70206006)(4326008)(82310400005)(7416002)(8936002)(478600001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 07:41:45.4371
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 07:42:01.7153
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc1604bd-489e-4d03-4e0c-08dab593338b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 98d1f769-0bd6-4fc5-c54a-08dab5933d3c
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT096.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT041.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7671
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7654
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -111,234 +111,107 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add device-tree binding documentation for the XUSB host controller present
-on Tegra194 and Tegra234 SoC. This controller supports the USB 3.1
-specification.
+add device-tree binding documentation for Cypress cypd4226 type-C
+controller's I2C interface. It is a standard i2c slave with GPIO
+input as IRQ interface.
 
 Signed-off-by: Wayne Chang <waynec@nvidia.com>
 ---
- .../bindings/usb/nvidia,tegra-xhci.yaml       | 213 ++++++++++++++++++
- 1 file changed, 213 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xhci.yaml
+ .../bindings/usb/cypress,cypd4226.yaml        | 86 +++++++++++++++++++
+ 1 file changed, 86 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
 
-diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xhci.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra-xhci.yaml
+diff --git a/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
 new file mode 100644
-index 000000000000..d261a419a04f
+index 000000000000..5ac28ab4e7a1
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xhci.yaml
-@@ -0,0 +1,213 @@
++++ b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
+@@ -0,0 +1,86 @@
 +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: "http://devicetree.org/schemas/usb/nvidia,tegra-xhci.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/usb/cypress,cypd4226.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Device tree binding for NVIDIA Tegra XUSB host controller
-+
-+description:
-+  The Tegra XHCI controller supports both USB 2.0 HighSpeed/FullSpeed and
-+  USB 3.1 SuperSpeed protocols.
++title: Cypress cypd4226 UCSI I2C Type-C Controller
 +
 +maintainers:
 +  - Wayne Chang <waynec@nvidia.com>
 +
++description: |
++  The Cypress cypd4226 UCSI I2C type-C controller is a I2C interface type-C
++  controller.
++
 +properties:
 +  compatible:
-+    items:
-+      - enum:
-+          - nvidia,tegra194-xusb # For Tegra194
-+          - nvidia,tegra234-xusb # For Tegra234
++    const: cypress,cypd4226
++
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
 +
 +  reg:
-+    minItems: 2
-+    items:
-+      - description: XUSB host controller registers
-+      - description: XUSB host PCI Config registers
-+      - description: XUSB host bar2 registers
-+
-+  reg-names:
-+    minItems: 2
-+    items:
-+      - const: hcd
-+      - const: fpci
-+      - const: bar2
++    const: 0x08
 +
 +  interrupts:
-+    items:
-+      - description: Must contain the XUSB host interrupt.
-+      - description: Must contain the XUSB mbox interrupt.
-+
-+  clocks:
-+    items:
-+      - description: Clock to enable core XUSB host clock.
-+      - description: Clock to enable XUSB falcon clock.
-+      - description: Clock to enable XUSB super speed clock.
-+      - description: Clock to enable XUSB super speed dev clock.
-+      - description: Clock to enable XUSB high speed dev clock.
-+      - description: Clock to enable XUSB full speed dev clock.
-+      - description: Clock to enable XUSB UTMI PLL clock.
-+      - description: Clock to enable core XUSB dev clock.
-+      - description: Clock to enable XUSB PLLE clock.
-+
-+  clock-names:
-+    items:
-+      - const: xusb_host
-+      - const: xusb_falcon_src
-+      - const: xusb_ss
-+      - const: xusb_ss_src
-+      - const: xusb_hs_src
-+      - const: xusb_fs_src
-+      - const: pll_u_480m
-+      - const: clk_m
-+      - const: pll_e
-+
-+  interconnects:
-+    items:
-+      - description: memory read client
-+      - description: memory write client
-+
-+  interconnect-names:
-+    items:
-+      - const: dma-mem # read
-+      - const: write
-+
-+  iommus:
 +    maxItems: 1
 +
-+  power-domains:
-+    items:
-+      - description: XUSBC(host) power-domain
-+      - description: XUSBA(superspeed) power-domain
++  cypress,firmware-build:
++    enum:
++      - nv
++      - gn
++    description: |
++      the name of the CCGx firmware built for product series.
++      should be set one of following:
++      - "nv" for the RTX product series
++      - "gn" for the Jetson product series
 +
-+  power-domain-names:
-+    items:
-+      - const: xusb_host
-+      - const: xusb_ss
-+
-+  nvidia,xusb-padctl:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      phandle to the XUSB pad controller that is used to configure the USB pads
-+      used by the XUDC controller.
-+
-+  phys:
-+    minItems: 1
-+    maxItems: 8
-+    description:
-+      Must contain an entry for each entry in phy-names.
-+      See ../phy/phy-bindings.txt for details.
-+
-+  phy-names:
-+    minItems: 1
-+    maxItems: 8
-+    items:
-+      anyOf:
-+        - const: usb2-0
-+        - const: usb2-1
-+        - const: usb2-2
-+        - const: usb2-3
-+        - const: usb3-0
-+        - const: usb3-1
-+        - const: usb3-2
-+        - const: usb3-3
-+
-+  dma-coherent:
-+    type: boolean
++patternProperties:
++  '^connector@[0-9a-f]+$':
++    $ref: /schemas/connector/usb-connector.yaml#
++    properties:
++      reg:
++        maxItems: 1
 +
 +required:
 +  - compatible
 +  - reg
-+  - reg-names
 +  - interrupts
-+  - clocks
-+  - clock-names
-+  - power-domains
-+  - power-domain-names
-+  - nvidia,xusb-padctl
-+  - phys
-+  - phy-names
 +
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - nvidia,tegra194-xusb
-+    then:
-+      properties:
-+        reg:
-+          minItems: 2
-+        reg-names:
-+          minItems: 2
-+        clocks:
-+          minItems: 9
-+        clock-names:
-+          minItems: 9
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - nvidia,tegra234-xusb
-+    then:
-+      properties:
-+        reg:
-+          minItems: 3
-+        reg-names:
-+          minItems: 3
-+        clocks:
-+          minItems: 9
-+        clock-names:
-+          minItems: 9
-+
-+additionalProperties: false
++additionalProperties: true
 +
 +examples:
 +  - |
-+    #include <dt-bindings/gpio/tegra234-gpio.h>
-+    #include <dt-bindings/clock/tegra234-clock.h>
-+    #include <dt-bindings/memory/tegra234-mc.h>
-+    #include <dt-bindings/power/tegra234-powergate.h>
++    #include <dt-bindings/gpio/tegra194-gpio.h>
 +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    usb@3610000 {
-+      compatible = "nvidia,tegra234-xusb";
-+      reg = <0x03610000 0x40000>,
-+            <0x03600000 0x10000>,
-+            <0x03650000 0x10000>;
-+      reg-names = "hcd", "fpci", "bar2";
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++      #interrupt-cells = <2>;
 +
-+      interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>,
-+             <GIC_SPI 164 IRQ_TYPE_LEVEL_HIGH>;
-+
-+      clocks = <&bpmp TEGRA234_CLK_XUSB_CORE_HOST>,
-+         <&bpmp TEGRA234_CLK_XUSB_FALCON>,
-+         <&bpmp TEGRA234_CLK_XUSB_CORE_SS>,
-+         <&bpmp TEGRA234_CLK_XUSB_SS>,
-+         <&bpmp TEGRA234_CLK_CLK_M>,
-+         <&bpmp TEGRA234_CLK_XUSB_FS>,
-+         <&bpmp TEGRA234_CLK_UTMIP_PLL>,
-+         <&bpmp TEGRA234_CLK_CLK_M>,
-+         <&bpmp TEGRA234_CLK_PLLE>;
-+      clock-names = "xusb_host", "xusb_falcon_src",
-+              "xusb_ss", "xusb_ss_src", "xusb_hs_src",
-+              "xusb_fs_src", "pll_u_480m", "clk_m",
-+              "pll_e";
-+      interconnects = <&mc TEGRA234_MEMORY_CLIENT_XUSB_HOSTR &emc>,
-+          <&mc TEGRA234_MEMORY_CLIENT_XUSB_HOSTW &emc>;
-+      interconnect-names = "dma-mem", "write";
-+      iommus = <&smmu_niso1 TEGRA234_SID_XUSB_HOST>;
-+
-+      power-domains = <&bpmp TEGRA234_POWER_DOMAIN_XUSBC>,
-+          <&bpmp TEGRA234_POWER_DOMAIN_XUSBA>;
-+      power-domain-names = "xusb_host", "xusb_ss";
-+
-+      nvidia,xusb-padctl = <&xusb_padctl>;
-+
-+      phys =  <&pad_lanes_usb2_0>;
-+      phy-names = "usb2-0";
-+
++      ucsi_ccg: ucsi_ccg@8 {
++        compatible = "cypress,cypd4226";
++        interrupt-parent = <&gpio_aon>;
++        interrupts = <TEGRA194_AON_GPIO(BB, 2) IRQ_TYPE_LEVEL_LOW>;
++        reg = <0x08>;
++        cypress,firmware-build = "gn";
++        status = "okay";
++        #address-cells = <1>;
++        #size-cells = <0>;
++        ccg_typec_con0: connector@0 {
++          compatible = "usb-c-connector";
++          reg = <0>;
++          label = "USB-C";
++          data-role = "dual";
++          port {
++            ucsi_ccg_p0: endpoint {
++              remote-endpoint = <&usb_role_switch0>;
++            };
++          };
++        };
++      };
 +    };
 -- 
 2.25.1
