@@ -2,123 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8926A60ADA4
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Oct 2022 16:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B90160B37B
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Oct 2022 19:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235416AbiJXOaf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Oct 2022 10:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
+        id S235238AbiJXRH0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Oct 2022 13:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234904AbiJXO2v (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Oct 2022 10:28:51 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED92D73C2;
-        Mon, 24 Oct 2022 06:02:17 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-13b23e29e36so10999254fac.8;
-        Mon, 24 Oct 2022 06:02:16 -0700 (PDT)
+        with ESMTP id S233893AbiJXRHJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Oct 2022 13:07:09 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45852D4A3D;
+        Mon, 24 Oct 2022 08:41:50 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id i127so11420106ybc.11;
+        Mon, 24 Oct 2022 08:41:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p+x9joGdXdBFLPPxN1p6d7/jrm+b1E7zu0ZikUl9XbM=;
-        b=kN4xIs/QEGJ+oT9qrn2OjPi/N6FcvGH6BvACP76blbVF103TXYi+7qEU5tINWQ+OJz
-         dApYzrcvxoO2ZIXOFTxb7h3JgOvX67e53Ux9I2wwMvKPIJrbpeDZZobSiNgXQhwqMaF/
-         R3ztR06WTPRqxKei/NzyOWyK9tZuNZ0Cm15uInIPmFb7tUxRSre+3lm52uo1EfezpHK9
-         o9VNCRaweqKifLKL/48NiILy3trNo3072uYGiXhEVisoQwGcZ30ghYt4hAv1vlMBiN/X
-         ltLvQXpHTYGfKkWtuOvorD19U4Zbzkwzp6qZaLG5THbYH133b9fRVRaPubb8xH2WHVbL
-         oPdg==
-X-Gm-Message-State: ACrzQf3i7XkzH7UpZj1xKGIMrADeoCGwSUDmJj0hXhqGuTa4oC2Svjr2
-        vms3XoPp+qtUCiVrBxssV68CXNLJaw==
-X-Google-Smtp-Source: AMsMyM4RB1x55W7tWXLqKMCfn9+yNGKoyP28eeDXqoWuK46CSg7FurAIxSSG6961lNUtLuCZU2W88g==
-X-Received: by 2002:a05:6870:e9a8:b0:133:223f:49a1 with SMTP id r40-20020a056870e9a800b00133223f49a1mr38235091oao.114.1666616434841;
-        Mon, 24 Oct 2022 06:00:34 -0700 (PDT)
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qVg+okVBVsVNqz1/oTqCye1j7oYLVkbnznHF/a3NqAY=;
+        b=5xCgqx5WQQWXYUZHUGbJvoyxaErx/ZXYtkV0+unq/iuGq2mfuzaOgT/y7u8no0dpuc
+         t1zlmiJyH+DAoKbmUaH4YC5/lT8zKupSg8vz+LJj248PZyqMkB+e78A3N2Kd5nQiBqSG
+         jcXChDAcwLc3V8vLrk6zlbluTMKAw5pRbAKPOIl6A6gzEusLaj8POiSFFxhnbvpS9HHp
+         HeEtYBSFHstLYh0OEB/LGjYN6Z7xy666HMlo+1xc2M5tqZOKB8rXALKI6axNuXV6L3su
+         SoOHFleWAZm/lieEpaXob2K/gODQNYNMpnnLG+HeGNuzUFbxvdY1fYUqn1goCrG4CoNP
+         Z6/g==
+X-Gm-Message-State: ACrzQf0gc+mOXSGvMUeW5OBxGyM0JCkBFJ7m4BPXHkjq8FPyx8RfFyNS
+        JFEFeJ7TO2ZwB+KGke5FtyqzRurczg==
+X-Google-Smtp-Source: AMsMyM4AQUZXFNB/vdlLThjKII2zhkC/sXhO+TloBWEatc44pTvPltXHFlhLlkEuJZKFRaMFbLyLtA==
+X-Received: by 2002:a05:6830:4120:b0:661:d839:cc63 with SMTP id w32-20020a056830412000b00661d839cc63mr16898634ott.51.1666618203612;
+        Mon, 24 Oct 2022 06:30:03 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g20-20020a056870c15400b0012796e8033dsm2716705oad.57.2022.10.24.06.00.33
+        by smtp.gmail.com with ESMTPSA id j31-20020a056870051f00b0012c21a64a76sm14191930oao.24.2022.10.24.06.30.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 06:00:34 -0700 (PDT)
-Received: (nullmailer pid 1652638 invoked by uid 1000);
-        Mon, 24 Oct 2022 13:00:35 -0000
-Date:   Mon, 24 Oct 2022 08:00:35 -0500
+        Mon, 24 Oct 2022 06:30:03 -0700 (PDT)
+Received: (nullmailer pid 1686092 invoked by uid 1000);
+        Mon, 24 Oct 2022 13:30:04 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH 00/21] ARM: s3c: clean out obsolete platforms
-Message-ID: <20221024130035.GA1645003-robh@kernel.org>
-References: <20221021202254.4142411-1-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221021202254.4142411-1-arnd@kernel.org>
+To:     Wayne Chang <waynec@nvidia.com>
+Cc:     jonathanh@nvidia.com, linux-phy@lists.infradead.org,
+        robh+dt@kernel.org, gregkh@linuxfoundation.org, kishon@ti.com,
+        vkoul@kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
+        linux-i2c@vger.kernel.org, mathias.nyman@intel.com,
+        heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        thierry.reding@gmail.com, devicetree@vger.kernel.org,
+        treding@nvidia.com, krzysztof.kozlowski+dt@linaro.org,
+        balbi@kernel.org, ajayg@nvidia.com, jckuo@nvidia.com,
+        p.zabel@pengutronix.de
+In-Reply-To: <20221024074128.1113554-3-waynec@nvidia.com>
+References: <20221024074128.1113554-1-waynec@nvidia.com> <20221024074128.1113554-3-waynec@nvidia.com>
+Message-Id: <166661789886.1678573.2345753570567106623.robh@kernel.org>
+Subject: Re: [PATCH 02/11] dt-bindings: usb: Add NVIDIA Tegra XUSB host controller binding
+Date:   Mon, 24 Oct 2022 08:30:04 -0500
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 10:22:28PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Mon, 24 Oct 2022 15:41:19 +0800, Wayne Chang wrote:
+> Add device-tree binding documentation for the XUSB host controller present
+> on Tegra194 and Tegra234 SoC. This controller supports the USB 3.1
+> specification.
 > 
-> The s3c24xx platform was marked as deprecated a while ago,
-> and for the s3c64xx platform, we marked all except one legacy
-> board file as unused.
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> ---
+>  .../bindings/usb/nvidia,tegra-xhci.yaml       | 213 ++++++++++++++++++
+>  1 file changed, 213 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xhci.yaml
 > 
-> This series removes all of those, leaving only s3c64xx support
-> for DT based boots as well as the cragg6410 board file.
-> 
-> About half of the s3c specific drivers were only used on
-> the now removed machines, so these drivers can be retired
-> as well. I can either merge the driver removal patches through
-> the soc tree along with the board file patches, or subsystem
-> maintainers can pick them up into their own trees, whichever
-> they prefer.
 
-[...]
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
->  Documentation/arm/index.rst                   |    1 -
->  Documentation/arm/samsung-s3c24xx/cpufreq.rst |   77 -
->  .../arm/samsung-s3c24xx/eb2410itx.rst         |   59 -
->  Documentation/arm/samsung-s3c24xx/gpio.rst    |  172 --
->  Documentation/arm/samsung-s3c24xx/h1940.rst   |   41 -
->  Documentation/arm/samsung-s3c24xx/index.rst   |   20 -
->  Documentation/arm/samsung-s3c24xx/nand.rst    |   30 -
->  .../arm/samsung-s3c24xx/overview.rst          |  311 ---
->  Documentation/arm/samsung-s3c24xx/s3c2412.rst |  121 -
->  Documentation/arm/samsung-s3c24xx/s3c2413.rst |   22 -
->  .../arm/samsung-s3c24xx/smdk2440.rst          |   57 -
->  Documentation/arm/samsung-s3c24xx/suspend.rst |  137 --
->  .../arm/samsung-s3c24xx/usb-host.rst          |   91 -
->  Documentation/arm/samsung/overview.rst        |   13 -
+yamllint warnings/errors:
 
-What about?:
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/usb/nvidia,tegra-xhci.example.dts:36.27-28 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/usb/nvidia,tegra-xhci.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1492: dt_binding_check] Error 2
 
-Documentation/devicetree/bindings/clock/samsung,s3c2410-clock.txt
-Documentation/devicetree/bindings/interrupt-controller/samsung,s3c24xx-irq.txt
-Documentation/devicetree/bindings/mmc/samsung,s3cmci.txt
-Documentation/devicetree/bindings/mtd/samsung-s3c2410.txt
-Documentation/devicetree/bindings/usb/s3c2410-usb.txt
+doc reference errors (make refcheckdocs):
 
-Rob
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
