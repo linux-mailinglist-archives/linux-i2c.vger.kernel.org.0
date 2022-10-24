@@ -2,132 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5802609CD7
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Oct 2022 10:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D70609CE9
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Oct 2022 10:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiJXIgT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Oct 2022 04:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
+        id S229776AbiJXIik (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Oct 2022 04:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiJXIgS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Oct 2022 04:36:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E9CCE0A;
-        Mon, 24 Oct 2022 01:36:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6313CB80F92;
-        Mon, 24 Oct 2022 08:29:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E641BC433C1;
-        Mon, 24 Oct 2022 08:29:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666600187;
-        bh=3+MFoZ1i8NaN+dGJz+LHBPaBW3YyJRmXeIrLriHr5xQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=RiB8m5v2Qo963Y9TM7sqdS/sz90bczwv0sbW+buMGLeLSyYnI26QbFVsJLaUQydpq
-         toXUpsxA3qVv6X7wPImgP3+x/rFpSwPQBScUGG3wDn6uzYN7gYzjbW/uG08Rj/tX/E
-         MTe0AeHB0nEEHw2+z1ZSfpP9ZeO2mKQSo0cAhmYimHGoTtLFpvSOmid1j/8jxgSm3a
-         X4iQyeOwRcKNkI31Og8/0wBf/OG1S9A9stB0Wg/dGiCC7l/EgK75j/PWg/sBOUZZ5w
-         Rut4rbxkyrgLPqyG4Ymuj9Xp1S8eFdQ/X/yMaq3iloiC8O1jolCJ+iDD3TI1EEah96
-         Sd2JpFcF4JFUg==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Wayne Chang <waynec@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
-        jonathanh@nvidia.com, thierry.reding@gmail.com, ajayg@nvidia.com,
-        kishon@ti.com, vkoul@kernel.org, p.zabel@pengutronix.de,
-        mathias.nyman@intel.com, jckuo@nvidia.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 06/11] usb: typec: ucsi_ccg: Replace ccgx to well-known
- regex
-In-Reply-To: <Y1ZGZ2H0/ug3se6j@kuha.fi.intel.com>
-References: <20221024074128.1113554-1-waynec@nvidia.com>
- <20221024074128.1113554-7-waynec@nvidia.com>
- <Y1ZGZ2H0/ug3se6j@kuha.fi.intel.com>
-Date:   Mon, 24 Oct 2022 11:29:27 +0300
-Message-ID: <87czaheiag.fsf@balbi.sh>
+        with ESMTP id S230158AbiJXIij (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Oct 2022 04:38:39 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDAA6704C
+        for <linux-i2c@vger.kernel.org>; Mon, 24 Oct 2022 01:38:35 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MwpLX5ynxzJn9f;
+        Mon, 24 Oct 2022 16:35:48 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 24 Oct 2022 16:38:33 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 24 Oct 2022 16:38:32 +0800
+Subject: Re: [PATCH v2] i2c: core: Fix possible memleak in
+ i2c_new_client_device()
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-i2c@vger.kernel.org>
+CC:     <yangyingliang@huawei.com>, <wsa@kernel.org>
+References: <20220511012738.3031346-1-yangyingliang@huawei.com>
+Message-ID: <b69133e9-5c36-a6c9-bde5-5844ebd979b0@huawei.com>
+Date:   Mon, 24 Oct 2022 16:38:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220511012738.3031346-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Hi, Sang
 
-Heikki Krogerus <heikki.krogerus@linux.intel.com> writes:
+According the document of device_register(), it shouldn't free @dev after
+calling this function, even if it returned an error, always use 
+put_device() to
+give up the reference initialized in this function instead.
+It will cleanup the name of device. Is this patch good to you ?
 
-> On Mon, Oct 24, 2022 at 03:41:23PM +0800, Wayne Chang wrote:
->> ccgx is refer to the cypress cypd4226 typec controller.
->> Replace ccgx to well-known regex "cypress".
->>=20
->> Signed-off-by: Wayne Chang <waynec@nvidia.com>
->> ---
->>  drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>=20
->> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/=
-ucsi_ccg.c
->> index 139707a2f3d6..5d3099e6eb77 100644
->> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
->> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
->> @@ -1358,7 +1358,7 @@ static int ucsi_ccg_probe(struct i2c_client *clien=
-t,
->>  	INIT_WORK(&uc->pm_work, ccg_pm_workaround_work);
->>=20=20
->>  	/* Only fail FW flashing when FW build information is not provided */
->> -	status =3D device_property_read_u16(dev, "ccgx,firmware-build",
->> +	status =3D device_property_read_u16(dev, "cypress,firmware-build",
->>  					  &uc->fw_build);
->>  	if (status)
->>  		dev_err(uc->dev, "failed to get FW build information\n");
+Thanks,
+Yang
+On 2022/5/11 9:27, Yang Yingliang wrote:
+> I got memory leak as follows when doing fault injection test:
 >
-> This will break bisectability. You need to first add that
-> "cyppress,firmware-build" identifier without removing the old
-> "ccgx,firmware-build" identifier, and then introduce a separate
-> clean-up patch where you remove it when it's safe to remove:
+> unreferenced object 0xffff888014aec078 (size 8):
+>    comm "xrun", pid 356, jiffies 4294910619 (age 16.332s)
+>    hex dump (first 8 bytes):
+>      31 2d 30 30 31 63 00 00                          1-001c..
+>    backtrace:
+>      [<00000000eb56c0a9>] __kmalloc_track_caller+0x1a6/0x300
+>      [<000000000b220ea3>] kvasprintf+0xad/0x140
+>      [<00000000b83203e5>] kvasprintf_const+0x62/0x190
+>      [<000000002a5eab37>] kobject_set_name_vargs+0x56/0x140
+>      [<00000000300ac279>] dev_set_name+0xb0/0xe0
+>      [<00000000b66ebd6f>] i2c_new_client_device+0x7e4/0x9a0
 >
-> 1. Add new - This patch.
-> 2. Modify users - PATCH 7/11.
-> 3. Remove old - *missing*.
-
-will it ever be safe to remove? What about potential products in the
-market with little to no upgrade path? There are likely to be products
-with a DTB that will never be updated, no?
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEEg3wK/NVnD14JZqsmho6y4DXKpEQFAmNWTOcRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQho6y4DXKpETKbhAAg5C1ownOUJ82waG7ngsOPNNJyNnWWzed
-43ejPV1pnND/jUAdJSOrLNCKaz4yp6n53TCnRlbjKxARL1UF7l2RvpsNdBuJ6w66
-xZAuM6N33hL0BC4hwmGb4PLc86qz82FClw15Iz0jHICeMHir2mZ2eOhWVJcnvWLh
-VTwJ3FJiTPcl2LFOzB7aoyYGAEQAYFfIv7fpDLoEawUilglOGWcs3Ltxhs9LswZI
-mwzSjzXrs/vs7iOa4fxhbtO2/ET3DoUUGMTQjXbPg4dsIN7Zw8FElayi+Go9wz5p
-xAoaAVZH8c0U3cKFxjXFRiiZnDIJFnhakyVsju/putdRpqSKYTs7DhmHufbRlFHm
-q2ivC4/fM0ZB8UbdvmVitfIli/caTyETNIpZaMjAPeBTlmqZYjoI+/+IMP/24k53
-GPoGXv0aTGqlcltZdnXw+gK/lSLTv6dNH+uq6WofjMm1f+4eQqnozWhzdC3siVMc
-euVl6PaYndTJT5ZKusWMQF1TBXiskmgD9Ydi6sMz5nQQZruiGq4RFBGIM/Ip/Bp0
-pOwcDgiKiijJ/M88nG6NrEaFEI8HNBRXPO0o11AiehMla/0Qstko5G0fhIlwlFT4
-CHUVsacTMLw1GYNXSIkHqGS5drwOP3SEXSSqOHmAsNpVf/h8TZiE0OCR1My9dRLt
-49hqCxIw+JE=
-=OxAo
------END PGP SIGNATURE-----
---=-=-=--
+> In error path after calling dev_set_name() which called by
+> i2c_dev_set_name(), the put_device() should be used to give up
+> the device reference, then the name allocated in dev_set_name()
+> will be freed in kobject_cleanup().
+> In this patch, I splited device_register() into device_initialize()
+> and device_add() to make the code more clear.
+>
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+> v2:
+>    split device_register() into device_initialize() and device_add()
+> ---
+>   drivers/i2c/i2c-core-base.c | 12 +++++++-----
+>   1 file changed, 7 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index d43db2c3876e..e7dded8b037b 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -928,6 +928,11 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+>   	client->flags = info->flags;
+>   	client->addr = info->addr;
+>   
+> +	client->dev.parent = &client->adapter->dev;
+> +	client->dev.bus = &i2c_bus_type;
+> +	client->dev.type = &i2c_client_type;
+> +	device_initialize(&client->dev);
+> +
+>   	client->init_irq = info->irq;
+>   	if (!client->init_irq)
+>   		client->init_irq = i2c_dev_irq_from_resources(info->resources,
+> @@ -947,9 +952,6 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+>   	if (status)
+>   		goto out_err;
+>   
+> -	client->dev.parent = &client->adapter->dev;
+> -	client->dev.bus = &i2c_bus_type;
+> -	client->dev.type = &i2c_client_type;
+>   	client->dev.of_node = of_node_get(info->of_node);
+>   	client->dev.fwnode = info->fwnode;
+>   
+> @@ -966,7 +968,7 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+>   		}
+>   	}
+>   
+> -	status = device_register(&client->dev);
+> +	status = device_add(&client->dev);
+>   	if (status)
+>   		goto out_remove_swnode;
+>   
+> @@ -984,7 +986,7 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+>   		"Failed to register i2c client %s at 0x%02x (%d)\n",
+>   		client->name, client->addr, status);
+>   out_err_silent:
+> -	kfree(client);
+> +	put_device(&client->dev);
+>   	return ERR_PTR(status);
+>   }
+>   EXPORT_SYMBOL_GPL(i2c_new_client_device);
