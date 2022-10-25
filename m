@@ -2,57 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BD460D010
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Oct 2022 17:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A50E60D189
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Oct 2022 18:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbiJYPMW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Oct 2022 11:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
+        id S231638AbiJYQWA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Oct 2022 12:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232946AbiJYPMU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Oct 2022 11:12:20 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A9740BD9;
-        Tue, 25 Oct 2022 08:12:19 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id u2so8169642ljl.3;
-        Tue, 25 Oct 2022 08:12:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=i3VCaLUSkP0MHn9g1Bdf8SvWr5beC5vVRYzG/hEHOwM=;
-        b=KTXHatYhfbJ2a1sMmM8whproz8b9Ke5Q7Nnzl12OSpOZiXx2lNMEkbn0qSlv0WvCbd
-         7T0E/h+cX2gK+AVbtSMBG/I1CuRTDL1tMME+E5KkPVn+oghs3XSqj+RKpjkBSBxQZbMW
-         94mZIyqeZRnuHH/3uSzyyGuEVGrL77eXiScoBqnSO978mmuxRreEpOIEqnoFXqaCrYxy
-         g5VQLqd6SQoo6P48TPIWMstK2atLw0NASknSIC7DdswGQuZATKNYy7sdqSDg02C+/ZTB
-         KnEmC+dkqLARf7ALRt2jx96PYE9aqWBguXjkGmu19mONskqZDIfC3CcnmI+/PoDOtgdY
-         kMog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i3VCaLUSkP0MHn9g1Bdf8SvWr5beC5vVRYzG/hEHOwM=;
-        b=4g4Y4vgumlDH7SvqBzY64abRzb1C16FTjwCbDLxMe5Cu1o9qmQmfy8tGnVPnENzMRi
-         ogrXUve8ClgJ667S+m6nPTEZy71WbosCBIwZplsY9lQ3Owvp/b14DgdiIm3kBOL5/L1g
-         4iptTQ6rXTVCsyRLlHOlviuQKuaf2rC7s5QEIH5qp9pKlot/Sg7WC+TdzHGinu4Y13aa
-         SaC+IiUXup4G3eR+ateH61nX4BzkfrjGl0ZT0UXrjwXrY356Wr0m2b59eKtIXtpMlGw8
-         CPKM8MvTzv9JiM/hNrey276DdCDGf1LMzxct4xEu+yqi68X5BxvgJ0XNPG+gj7EY+8W5
-         ZpBg==
-X-Gm-Message-State: ACrzQf0ChNU/aeXdPwvb2zTdsHfQEjeLMEPdeq3yj5vLy+1o2xR8LBvf
-        NXQ5siF4r5EnFDbWH3g5pnA=
-X-Google-Smtp-Source: AMsMyM4jlDjlJdOcztU47g3WlSh0KAN2tsPbAB0uuR9Wdc6tOFQwxyKUmQJCshu5WmoQd2gwwryK1A==
-X-Received: by 2002:a05:651c:1241:b0:261:9313:9cb9 with SMTP id h1-20020a05651c124100b0026193139cb9mr14393521ljh.213.1666710737399;
-        Tue, 25 Oct 2022 08:12:17 -0700 (PDT)
-Received: from dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::2])
-        by smtp.gmail.com with ESMTPSA id r7-20020a2eb607000000b0026befa96249sm545053ljn.8.2022.10.25.08.12.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 08:12:16 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 18:12:11 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        with ESMTP id S231693AbiJYQV6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Oct 2022 12:21:58 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4513780EA5;
+        Tue, 25 Oct 2022 09:21:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666714917; x=1698250917;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JIY/0KwS4tqdqoinWPwzk3zy7GThTftpHV5/elSMquw=;
+  b=Bn08f7uxVp4J8F+sc0CO4Uppw6gp1HkYW6f6L/Bl52+17aZXfCyaJPwR
+   a9nTfA9jNoMDH8XdIM7kiS/edrvxDXaGEv1O0YpZWGS4NpOXC+cYKPtxM
+   +tSmaxDq2zcZi7s9oaQVurddRI4HgYQPNq8PlIn8Gd5ohcInI7k8UzkPL
+   e011CTtyR4bumPcSQEH2OxEbOngs86yWh6EUcsjl3HtcMtK6M56JM+8x4
+   hpp0qFk0KFeSneNWDYhEVgr+eQRvDCKvXKIbO2JgSOEnGFx2BOEZJd5uR
+   DEkgYKvd2RazvqAHESPQ5Qg6S3oHnsJ5afVpap7ymsLWlIBkDAsH6wIU0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="371937328"
+X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
+   d="scan'208";a="371937328"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 09:21:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="609628147"
+X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
+   d="scan'208";a="609628147"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 25 Oct 2022 09:21:37 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1onMgI-00267N-32;
+        Tue, 25 Oct 2022 19:21:34 +0300
+Date:   Tue, 25 Oct 2022 19:21:34 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Daniel Scally <djrscally@gmail.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -61,91 +54,61 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Wolfram Sang <wsa@kernel.org>,
         Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: [PATCH v2 2/2] i2c: i2c-smbus: fwnode_irq_get_byname() return value
- fix
-Message-ID: <fbd52f5f5253b382b8d7b3e8046134de29f965b8.1666710197.git.mazziesaccount@gmail.com>
+Subject: Re: [PATCH v2 1/2] drivers: fwnode: fix fwnode_irq_get_byname()
+Message-ID: <Y1gNDtE4dRC4WuP/@smile.fi.intel.com>
 References: <cover.1666710197.git.mazziesaccount@gmail.com>
+ <a3bf7094a9f9ebf114736dc7944553dcc701fe73.1666710197.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="l4NgxrvU12sZ6SXP"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1666710197.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <a3bf7094a9f9ebf114736dc7944553dcc701fe73.1666710197.git.mazziesaccount@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, Oct 25, 2022 at 06:11:49PM +0300, Matti Vaittinen wrote:
+> The fwnode_irq_get_byname() does return 0 upon device-tree IRQ mapping
+> failure. This is contradicting the function documentation and can
+> potentially be a source of errors like:
+> 
+> int probe(...) {
+> 	...
+> 
+> 	irq = fwnode_irq_get_byname();
+> 	if (irq <= 0)
+> 		return irq;
+> 
+> 	...
+> }
+> 
+> Here we do correctly check the return value from fwnode_irq_get_byname()
+> but the driver probe will now return success. (There was already one
+> such user in-tree).
+> 
+> Change the fwnode_irq_get_byname() to work as documented and according to
+> the common convention and abd always return a negative errno upon failure.
 
---l4NgxrvU12sZ6SXP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+and abd ?
 
-The fwnode_irq_get_byname() was changed to not return 0 upon failure so
-return value check can be adjusted to reflect the change.
+...
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> +	ret = fwnode_irq_get(fwnode, index);
+> +	/* We treat mapping errors as invalid case */
+> +	if (ret == 0)
+> +		return -EINVAL;
+> +
+> +	return ret;
 
----
+This looks good.
 
-Depends on the mentioned return value change which is in patch 1/2. The
-return value change does also cause a functional change here. Eg. when
-IRQ mapping fails, the fwnode_irq_get_byname() no longer returns zero.
-This will cause also the probe here to return nonzero failure. I guess
-this is desired behaviour.
----
- drivers/i2c/i2c-smbus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-index 07c92c8495a3..d0cc4b7903ed 100644
---- a/drivers/i2c/i2c-smbus.c
-+++ b/drivers/i2c/i2c-smbus.c
-@@ -130,7 +130,7 @@ static int smbalert_probe(struct i2c_client *ara,
- 	} else {
- 		irq =3D fwnode_irq_get_byname(dev_fwnode(adapter->dev.parent),
- 					    "smbus_alert");
--		if (irq <=3D 0)
-+		if (irq < 0)
- 			return irq;
- 	}
-=20
---=20
-2.37.3
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---l4NgxrvU12sZ6SXP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmNX/MsACgkQeFA3/03a
-ocXWjQf5Ad3uT3IcCKD9oMes2g8FBvhi9jtZG+MiQRlG7SXFk7Nb0B0otsRhUsCL
-J9pHh/ISir/zwemhIHJ+6eJIf4NlOKe5IddaPy9W7CCiEQGIGkeQignTT7AUDlLR
-apayaW6z5rE6le/DDU8VBXB6uNWNypGdWy053Ob6Q40VmN9VYpQU3IO+V4Gueo8y
-dLH7UsQCl8jy/CYMWbNdxp38HsTKH7gvu8nXygA8t4AjeMPgXcF1tVxcX1E3aC6p
-8rMcpMEJDiYy/bC4p4oXv4pV9iuBlPOO6i3okb2vKhKgCUOXDdXaqsb20hHyPdkX
-W6TXLsT7BXgbqdDbquaTm+jcvmLf3w==
-=TFxZ
------END PGP SIGNATURE-----
-
---l4NgxrvU12sZ6SXP--
