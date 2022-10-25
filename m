@@ -2,47 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E32DE60C7ED
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Oct 2022 11:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2CB160C7FB
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Oct 2022 11:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbiJYJXa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Oct 2022 05:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
+        id S231432AbiJYJZe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Oct 2022 05:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbiJYJWu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Oct 2022 05:22:50 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C9D11143;
-        Tue, 25 Oct 2022 02:18:36 -0700 (PDT)
+        with ESMTP id S231742AbiJYJYw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Oct 2022 05:24:52 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155D043E75;
+        Tue, 25 Oct 2022 02:20:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666689516; x=1698225516;
+  t=1666689631; x=1698225631;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=WSlcowHN6Wq7+NjnXUQwOTVXdTNBu8zi0Wfnmzb3i0E=;
-  b=hAEzo6xQholThH5HW9nt0XWzZxqnQpbh60U392Gr7XnkR68DXVsFV5Nj
-   1yFSLUQ/53+QlOhOYGPXf+RZxGQWPlJ5nWzkj2HjnmUE10lYtpsHjmvLc
-   52Xi0N8jGEtc+fY5Wmu/hYlZga7S+DyqYsgZ+RyUgUiKeKOxBLJ74T6vU
-   M3Y5YI9XUkX7CcBSkWfVSMiRqpOl4SxkfqyXXsLb8iOGwysevQSv/4eW4
-   bg+qgezcEr3c8rUVMpWajgrLJKNkmMi2gnQWMWyr77HgmpIMJrCVV9yCw
-   e6eW6Pg5SmsXDvG0FEyuI67fWdnaCkirBg/69YAB6EQbuvrNV/xo18kWp
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="371844818"
+  bh=l4RAmKLBRNslFOm+KFNGMtX8OfMzndTuAtK1gS15Rro=;
+  b=GanJK1/4df3tsoQEL5GB3eUO5MqI3riu4IsSYAxCigooggsn9L2scN0k
+   8HxqSdZFArmcSlfy+i4yFw2GGGzspH1kMzc2vnu8Ktw8g8LaoHtEy4oyw
+   EyjWicN4gq2yEFLJH8YfwolrROTo0XEYNdSlduj/6n3ChmnV/+njgnyun
+   WLi2oK4B5OcB4YTeZh8ox4drni6zQojsInmvTeL7cxNya5C+eCiujcpHM
+   JatsNV2Sl5LWLJ+8vXhHVDUnpXELmaKD+beeOBoTj7IlOgd3NVSO4A0J0
+   8PRtGqhUKpCdGLN0ECfUqQQsNbclDbzP8Q8gjgp1p/H2cYzH9WNS+Gxk/
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="393945858"
 X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
-   d="scan'208";a="371844818"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 02:18:36 -0700
+   d="scan'208";a="393945858"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 02:20:30 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="720786423"
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="694883930"
 X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
-   d="scan'208";a="720786423"
+   d="scan'208";a="694883930"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 25 Oct 2022 02:18:33 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 25 Oct 2022 02:20:27 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1onG4t-001v5D-1l;
-        Tue, 25 Oct 2022 12:18:31 +0300
-Date:   Tue, 25 Oct 2022 12:18:31 +0300
+        id 1onG6j-001v8A-2h;
+        Tue, 25 Oct 2022 12:20:25 +0300
+Date:   Tue, 25 Oct 2022 12:20:25 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>
 Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
@@ -54,14 +54,13 @@ Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Wolfram Sang <wsa@kernel.org>,
         Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 1/2] drivers: fwnode: fix fwnode_irq_get_byname()
-Message-ID: <Y1ep5zN+wifkP7v+@smile.fi.intel.com>
+Subject: Re: [PATCH 0/2] fix fwnode_irq_get_byname() returnvalue
+Message-ID: <Y1eqWbyJLlEW5Mdo@smile.fi.intel.com>
 References: <cover.1666687086.git.mazziesaccount@gmail.com>
- <cc853a7e4b3533585e3641620bf4972663f22edc.1666687086.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cc853a7e4b3533585e3641620bf4972663f22edc.1666687086.git.mazziesaccount@gmail.com>
+In-Reply-To: <cover.1666687086.git.mazziesaccount@gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -72,48 +71,58 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 11:50:59AM +0300, Matti Vaittinen wrote:
-> The fwnode_irq_get_byname() does return 0 upon device-tree IRQ mapping
-> failure. This is contradicting the function documentation and can
-> potentially be a source of errors like:
+On Tue, Oct 25, 2022 at 11:50:24AM +0300, Matti Vaittinen wrote:
+> The fix fwnode_irq_get_byname() may have returned zero if mapping the
+> IRQ fails. This contradicts the documentation. Furthermore, returning
+> zero or errno on error is unepected and can easily lead to problems
+> like:
 > 
-> int probe(...) {
-> 	...
-> 
-> 	irq = fwnode_irq_get_byname();
-> 	if (irq <= 0)
-> 		return irq;
-> 
-> 	...
+> int probe(foo)
+> {
+> ...
+> 	ret = fwnode_irq_get_byname(...);
+> 	if (ret < 0)
+> 		return ret;
+> ...
 > }
 > 
-> Here we do correctly check the return value from fwnode_irq_get_byname()
-> but the driver probe will now return success. (There was already one
-> such user in-tree).
+> or
 > 
-> Change the fwnode_irq_get_byname() to work as documented and according to
-> the common convention and abd always return a negative errno upon failure.
+> int probe(foo)
+> {
+> ...
+> 	ret = fwnode_irq_get_byname(...);
+> 	if (ret <= 0)
+> 		return ret;
+> ...
+> }
+> 
+> which are both likely to be wrong. First treats zero as successful call and
+> misses the IRQ mapping failure. Second returns zero from probe even though
+> it detects the IRQ mapping failure correvtly.
+> 
+> Here we change the fwnode_irq_get_byname() to always return a negative
+> errno upon failure. I have also audited following callers:
+> 
+> drivers/i2c/i2c-smbus.c
+> drivers/iio/accel/adxl355_core.c
+> drivers/iio/gyro/fxas21002c_core.c
+> drivers/iio/imu/adis16480.c
+> drivers/iio/imu/bmi160/bmi160_core.c
+> drivers/iio/imu/bmi160/bmi160_core.c
+> 
+> and it seems to me these calls will be Ok after the change. The
+> i2c-smbus.c will gain a functional change (bugfix?) as after this patch
+> the probe will return -EINVAL should the IRQ mapping fail. The series
+> will also adjust the return value check for zero to be omitted.
 
-...
+Thanks for doing this, no major comments except worrying about fwnode_irq_get()
+which is left untouched an hence different error domain for the same
+family of API.
 
-> +	ret = fwnode_irq_get(fwnode, index);
+For these patches:
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> +
-
-Redundant blank line and better to use traditional pattern:
-
-> +	if (!ret)
-> +		return -EINVAL;
-> +
-> +	return ret;
-
-	if (ret)
-		return ret;
-
-	/* We treat mapping errors as invalid case */
-	return -EINVAL;
-
->  }
 
 -- 
 With Best Regards,
