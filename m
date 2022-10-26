@@ -2,42 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D607A60E107
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Oct 2022 14:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 903E360E109
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Oct 2022 14:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233889AbiJZMkw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 Oct 2022 08:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
+        id S233904AbiJZMk4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 Oct 2022 08:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233155AbiJZMkX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Oct 2022 08:40:23 -0400
+        with ESMTP id S233563AbiJZMkY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Oct 2022 08:40:24 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E2F3C8D3
-        for <linux-i2c@vger.kernel.org>; Wed, 26 Oct 2022 05:39:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308767D1E1
+        for <linux-i2c@vger.kernel.org>; Wed, 26 Oct 2022 05:40:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666788001; x=1698324001;
+  t=1666788002; x=1698324002;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=MdK2vybdUloNnZR4FLdcIAZxYYo1j8ffhaRhjeUegso=;
-  b=W+ehfghCz2ELVNRwmCNZPzCQhYxj4sIAJDSPgRIFl9EywBQL831HgBjO
-   E+2Th+7dnbFjZ5WhrnMndVJ1+C7sTiSTOhFmWNlY5mYoR3Ui/PJAZuvFu
-   wz8/1b4Xzkl4ZtP+KnwCP2QEbSCWwGT+C/WISPcmZSiuE9Xce3WcLFojm
-   p7mmIr8NyYOvg3dkxG4lbJqHOri8FHy8m0i8umG77RY5IqjnB6cia9PBp
-   smTpeGc6Gkki00D3RI09urqdvKLP9Aiux9pBCq29SEJVDtKEG7oeQbrUo
-   U57p1rYK/qxMHKTpLJ/Q+xGNoI9Eow1ol7t4/PUq/OOyphhiNSK1JHaBq
+  bh=lh1vFZwvJQyU9BhLrnyxcTokJp/aUqvdRGb/nkRdFlQ=;
+  b=NcDQg97kCKYKORdhOXBl+M42V3wo7njNKMpCJCxCOaMhHqS40y2A+c6A
+   RprIVJgEhzjd82NkOv34dLaZioCjiToEQjwuEXy5wht3ltzCaT5JasGqM
+   HoS0tEc85r9SBBJa2tKvmQCbKePeqo+xr+ekbsW2oXznwWWKnKj8mVKwn
+   qzTuxAuWWujZi71D2sVxtzfeS0OfeW9DhUL+kvMInazs9hDx6piDfcCXN
+   UKpWTKx44UHsABt9Ac308vVIp4kdE3Nlh84OuDgo+HOtmxelMPIvLCYkQ
+   PynWLbv1VLZlpYSoGpiCDQcV+5TmVoqr7S0yLx7o7xEwV52j7DEB3ZSFf
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="309625092"
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="309625101"
 X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
-   d="scan'208";a="309625092"
+   d="scan'208";a="309625101"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 05:39:58 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 05:40:01 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="700908725"
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="700908759"
 X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
-   d="scan'208";a="700908725"
+   d="scan'208";a="700908759"
 Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.55])
-  by fmsmga004.fm.intel.com with ESMTP; 26 Oct 2022 05:39:56 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 26 Oct 2022 05:39:59 -0700
 From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa@kernel.org>,
@@ -47,9 +47,9 @@ Cc:     Wolfram Sang <wsa@kernel.org>,
         Michael Wu <michael.wu@vatics.com>, Tian Ye <tianye@sugon.com>,
         Luis Oliveira <luis.oliveira@synopsys.com>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: [PATCH 10/11] i2c: designware: Remove common i2c_dw_disable_int()
-Date:   Wed, 26 Oct 2022 15:39:11 +0300
-Message-Id: <20221026123912.2833271-11-jarkko.nikula@linux.intel.com>
+Subject: [PATCH 11/11] i2c: designware: Align defines in i2c-designware-core.h
+Date:   Wed, 26 Oct 2022 15:39:12 +0300
+Message-Id: <20221026123912.2833271-12-jarkko.nikula@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221026123912.2833271-1-jarkko.nikula@linux.intel.com>
 References: <20221026123912.2833271-1-jarkko.nikula@linux.intel.com>
@@ -57,126 +57,311 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE,UPPERCASE_50_75,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-i2c_dw_disable_int() and disable_int pointer in struct dw_i2c_dev were
-introduced by the commit 90312351fd1e ("i2c: designware: MASTER mode as
-separated driver") but it looks i2c_dw_disable_int() was never called
-through the pointer.
-
-Since i2c_dw_disable_int() is just masking interrupts and the direct
-DW_IC_INTR_MASK register write looks more clear in the code use that and
-remove from common code.
+Align all defines to the same column.
 
 Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 ---
- drivers/i2c/busses/i2c-designware-common.c | 5 -----
- drivers/i2c/busses/i2c-designware-core.h   | 1 -
- drivers/i2c/busses/i2c-designware-master.c | 9 ++++-----
- drivers/i2c/busses/i2c-designware-slave.c  | 3 +--
- 4 files changed, 5 insertions(+), 13 deletions(-)
+ drivers/i2c/busses/i2c-designware-core.h | 232 +++++++++++------------
+ 1 file changed, 116 insertions(+), 116 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
-index c023b691441e..a3240ece55b2 100644
---- a/drivers/i2c/busses/i2c-designware-common.c
-+++ b/drivers/i2c/busses/i2c-designware-common.c
-@@ -625,10 +625,5 @@ void i2c_dw_disable(struct dw_i2c_dev *dev)
- 	i2c_dw_release_lock(dev);
- }
- 
--void i2c_dw_disable_int(struct dw_i2c_dev *dev)
--{
--	regmap_write(dev->map, DW_IC_INTR_MASK, 0);
--}
--
- MODULE_DESCRIPTION("Synopsys DesignWare I2C bus adapter core");
- MODULE_LICENSE("GPL");
 diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-index 457e6966f85e..17528a41f1af 100644
+index 17528a41f1af..7db155231cc4 100644
 --- a/drivers/i2c/busses/i2c-designware-core.h
 +++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -290,7 +290,6 @@ struct dw_i2c_dev {
- 	int			semaphore_idx;
- 	bool			shared_with_punit;
- 	void			(*disable)(struct dw_i2c_dev *dev);
--	void			(*disable_int)(struct dw_i2c_dev *dev);
+@@ -18,12 +18,12 @@
+ #include <linux/regmap.h>
+ #include <linux/types.h>
+ 
+-#define DW_IC_DEFAULT_FUNCTIONALITY (I2C_FUNC_I2C |			\
+-					I2C_FUNC_SMBUS_BYTE |		\
+-					I2C_FUNC_SMBUS_BYTE_DATA |	\
+-					I2C_FUNC_SMBUS_WORD_DATA |	\
+-					I2C_FUNC_SMBUS_BLOCK_DATA |	\
+-					I2C_FUNC_SMBUS_I2C_BLOCK)
++#define DW_IC_DEFAULT_FUNCTIONALITY		(I2C_FUNC_I2C | \
++						 I2C_FUNC_SMBUS_BYTE | \
++						 I2C_FUNC_SMBUS_BYTE_DATA | \
++						 I2C_FUNC_SMBUS_WORD_DATA | \
++						 I2C_FUNC_SMBUS_BLOCK_DATA | \
++						 I2C_FUNC_SMBUS_I2C_BLOCK)
+ 
+ #define DW_IC_CON_MASTER			BIT(0)
+ #define DW_IC_CON_SPEED_STD			(1 << 1)
+@@ -43,81 +43,81 @@
+ /*
+  * Registers offset
+  */
+-#define DW_IC_CON		0x00
+-#define DW_IC_TAR		0x04
+-#define DW_IC_SAR		0x08
+-#define DW_IC_DATA_CMD		0x10
+-#define DW_IC_SS_SCL_HCNT	0x14
+-#define DW_IC_SS_SCL_LCNT	0x18
+-#define DW_IC_FS_SCL_HCNT	0x1c
+-#define DW_IC_FS_SCL_LCNT	0x20
+-#define DW_IC_HS_SCL_HCNT	0x24
+-#define DW_IC_HS_SCL_LCNT	0x28
+-#define DW_IC_INTR_STAT		0x2c
+-#define DW_IC_INTR_MASK		0x30
+-#define DW_IC_RAW_INTR_STAT	0x34
+-#define DW_IC_RX_TL		0x38
+-#define DW_IC_TX_TL		0x3c
+-#define DW_IC_CLR_INTR		0x40
+-#define DW_IC_CLR_RX_UNDER	0x44
+-#define DW_IC_CLR_RX_OVER	0x48
+-#define DW_IC_CLR_TX_OVER	0x4c
+-#define DW_IC_CLR_RD_REQ	0x50
+-#define DW_IC_CLR_TX_ABRT	0x54
+-#define DW_IC_CLR_RX_DONE	0x58
+-#define DW_IC_CLR_ACTIVITY	0x5c
+-#define DW_IC_CLR_STOP_DET	0x60
+-#define DW_IC_CLR_START_DET	0x64
+-#define DW_IC_CLR_GEN_CALL	0x68
+-#define DW_IC_ENABLE		0x6c
+-#define DW_IC_STATUS		0x70
+-#define DW_IC_TXFLR		0x74
+-#define DW_IC_RXFLR		0x78
+-#define DW_IC_SDA_HOLD		0x7c
+-#define DW_IC_TX_ABRT_SOURCE	0x80
+-#define DW_IC_ENABLE_STATUS	0x9c
+-#define DW_IC_CLR_RESTART_DET	0xa8
+-#define DW_IC_COMP_PARAM_1	0xf4
+-#define DW_IC_COMP_VERSION	0xf8
+-#define DW_IC_SDA_HOLD_MIN_VERS	0x3131312A
+-#define DW_IC_COMP_TYPE		0xfc
+-#define DW_IC_COMP_TYPE_VALUE	0x44570140
+-
+-#define DW_IC_INTR_RX_UNDER	BIT(0)
+-#define DW_IC_INTR_RX_OVER	BIT(1)
+-#define DW_IC_INTR_RX_FULL	BIT(2)
+-#define DW_IC_INTR_TX_OVER	BIT(3)
+-#define DW_IC_INTR_TX_EMPTY	BIT(4)
+-#define DW_IC_INTR_RD_REQ	BIT(5)
+-#define DW_IC_INTR_TX_ABRT	BIT(6)
+-#define DW_IC_INTR_RX_DONE	BIT(7)
+-#define DW_IC_INTR_ACTIVITY	BIT(8)
+-#define DW_IC_INTR_STOP_DET	BIT(9)
+-#define DW_IC_INTR_START_DET	BIT(10)
+-#define DW_IC_INTR_GEN_CALL	BIT(11)
+-#define DW_IC_INTR_RESTART_DET	BIT(12)
+-
+-#define DW_IC_INTR_DEFAULT_MASK		(DW_IC_INTR_RX_FULL | \
+-					 DW_IC_INTR_TX_ABRT | \
+-					 DW_IC_INTR_STOP_DET)
+-#define DW_IC_INTR_MASTER_MASK		(DW_IC_INTR_DEFAULT_MASK | \
+-					 DW_IC_INTR_TX_EMPTY)
+-#define DW_IC_INTR_SLAVE_MASK		(DW_IC_INTR_DEFAULT_MASK | \
+-					 DW_IC_INTR_RX_UNDER | \
+-					 DW_IC_INTR_RD_REQ)
+-
+-#define DW_IC_STATUS_ACTIVITY		BIT(0)
+-#define DW_IC_STATUS_TFE		BIT(2)
+-#define DW_IC_STATUS_RFNE		BIT(3)
+-#define DW_IC_STATUS_MASTER_ACTIVITY	BIT(5)
+-#define DW_IC_STATUS_SLAVE_ACTIVITY	BIT(6)
+-
+-#define DW_IC_SDA_HOLD_RX_SHIFT		16
+-#define DW_IC_SDA_HOLD_RX_MASK		GENMASK(23, 16)
+-
+-#define DW_IC_ERR_TX_ABRT	0x1
+-
+-#define DW_IC_TAR_10BITADDR_MASTER	BIT(12)
++#define DW_IC_CON				0x00
++#define DW_IC_TAR				0x04
++#define DW_IC_SAR				0x08
++#define DW_IC_DATA_CMD				0x10
++#define DW_IC_SS_SCL_HCNT			0x14
++#define DW_IC_SS_SCL_LCNT			0x18
++#define DW_IC_FS_SCL_HCNT			0x1c
++#define DW_IC_FS_SCL_LCNT			0x20
++#define DW_IC_HS_SCL_HCNT			0x24
++#define DW_IC_HS_SCL_LCNT			0x28
++#define DW_IC_INTR_STAT				0x2c
++#define DW_IC_INTR_MASK				0x30
++#define DW_IC_RAW_INTR_STAT			0x34
++#define DW_IC_RX_TL				0x38
++#define DW_IC_TX_TL				0x3c
++#define DW_IC_CLR_INTR				0x40
++#define DW_IC_CLR_RX_UNDER			0x44
++#define DW_IC_CLR_RX_OVER			0x48
++#define DW_IC_CLR_TX_OVER			0x4c
++#define DW_IC_CLR_RD_REQ			0x50
++#define DW_IC_CLR_TX_ABRT			0x54
++#define DW_IC_CLR_RX_DONE			0x58
++#define DW_IC_CLR_ACTIVITY			0x5c
++#define DW_IC_CLR_STOP_DET			0x60
++#define DW_IC_CLR_START_DET			0x64
++#define DW_IC_CLR_GEN_CALL			0x68
++#define DW_IC_ENABLE				0x6c
++#define DW_IC_STATUS				0x70
++#define DW_IC_TXFLR				0x74
++#define DW_IC_RXFLR				0x78
++#define DW_IC_SDA_HOLD				0x7c
++#define DW_IC_TX_ABRT_SOURCE			0x80
++#define DW_IC_ENABLE_STATUS			0x9c
++#define DW_IC_CLR_RESTART_DET			0xa8
++#define DW_IC_COMP_PARAM_1			0xf4
++#define DW_IC_COMP_VERSION			0xf8
++#define DW_IC_SDA_HOLD_MIN_VERS			0x3131312A
++#define DW_IC_COMP_TYPE				0xfc
++#define DW_IC_COMP_TYPE_VALUE			0x44570140
++
++#define DW_IC_INTR_RX_UNDER			BIT(0)
++#define DW_IC_INTR_RX_OVER			BIT(1)
++#define DW_IC_INTR_RX_FULL			BIT(2)
++#define DW_IC_INTR_TX_OVER			BIT(3)
++#define DW_IC_INTR_TX_EMPTY			BIT(4)
++#define DW_IC_INTR_RD_REQ			BIT(5)
++#define DW_IC_INTR_TX_ABRT			BIT(6)
++#define DW_IC_INTR_RX_DONE			BIT(7)
++#define DW_IC_INTR_ACTIVITY			BIT(8)
++#define DW_IC_INTR_STOP_DET			BIT(9)
++#define DW_IC_INTR_START_DET			BIT(10)
++#define DW_IC_INTR_GEN_CALL			BIT(11)
++#define DW_IC_INTR_RESTART_DET			BIT(12)
++
++#define DW_IC_INTR_DEFAULT_MASK			(DW_IC_INTR_RX_FULL | \
++						 DW_IC_INTR_TX_ABRT | \
++						 DW_IC_INTR_STOP_DET)
++#define DW_IC_INTR_MASTER_MASK			(DW_IC_INTR_DEFAULT_MASK | \
++						 DW_IC_INTR_TX_EMPTY)
++#define DW_IC_INTR_SLAVE_MASK			(DW_IC_INTR_DEFAULT_MASK | \
++						 DW_IC_INTR_RX_UNDER | \
++						 DW_IC_INTR_RD_REQ)
++
++#define DW_IC_STATUS_ACTIVITY			BIT(0)
++#define DW_IC_STATUS_TFE			BIT(2)
++#define DW_IC_STATUS_RFNE			BIT(3)
++#define DW_IC_STATUS_MASTER_ACTIVITY		BIT(5)
++#define DW_IC_STATUS_SLAVE_ACTIVITY		BIT(6)
++
++#define DW_IC_SDA_HOLD_RX_SHIFT			16
++#define DW_IC_SDA_HOLD_RX_MASK			GENMASK(23, 16)
++
++#define DW_IC_ERR_TX_ABRT			0x1
++
++#define DW_IC_TAR_10BITADDR_MASTER		BIT(12)
+ 
+ #define DW_IC_COMP_PARAM_1_SPEED_MODE_HIGH	(BIT(2) | BIT(3))
+ #define DW_IC_COMP_PARAM_1_SPEED_MODE_MASK	GENMASK(3, 2)
+@@ -125,16 +125,16 @@
+ /*
+  * Sofware status flags
+  */
+-#define STATUS_ACTIVE			BIT(0)
+-#define STATUS_WRITE_IN_PROGRESS	BIT(1)
+-#define STATUS_READ_IN_PROGRESS		BIT(2)
+-#define STATUS_MASK			GENMASK(2, 0)
++#define STATUS_ACTIVE				BIT(0)
++#define STATUS_WRITE_IN_PROGRESS		BIT(1)
++#define STATUS_READ_IN_PROGRESS			BIT(2)
++#define STATUS_MASK				GENMASK(2, 0)
+ 
+ /*
+  * operation modes
+  */
+-#define DW_IC_MASTER		0
+-#define DW_IC_SLAVE		1
++#define DW_IC_MASTER				0
++#define DW_IC_SLAVE				1
+ 
+ /*
+  * Hardware abort codes from the DW_IC_TX_ABRT_SOURCE register
+@@ -142,20 +142,20 @@
+  * Only expected abort codes are listed here
+  * refer to the datasheet for the full list
+  */
+-#define ABRT_7B_ADDR_NOACK	0
+-#define ABRT_10ADDR1_NOACK	1
+-#define ABRT_10ADDR2_NOACK	2
+-#define ABRT_TXDATA_NOACK	3
+-#define ABRT_GCALL_NOACK	4
+-#define ABRT_GCALL_READ		5
+-#define ABRT_SBYTE_ACKDET	7
+-#define ABRT_SBYTE_NORSTRT	9
+-#define ABRT_10B_RD_NORSTRT	10
+-#define ABRT_MASTER_DIS		11
+-#define ARB_LOST		12
+-#define ABRT_SLAVE_FLUSH_TXFIFO	13
+-#define ABRT_SLAVE_ARBLOST	14
+-#define ABRT_SLAVE_RD_INTX	15
++#define ABRT_7B_ADDR_NOACK			0
++#define ABRT_10ADDR1_NOACK			1
++#define ABRT_10ADDR2_NOACK			2
++#define ABRT_TXDATA_NOACK			3
++#define ABRT_GCALL_NOACK			4
++#define ABRT_GCALL_READ				5
++#define ABRT_SBYTE_ACKDET			7
++#define ABRT_SBYTE_NORSTRT			9
++#define ABRT_10B_RD_NORSTRT			10
++#define ABRT_MASTER_DIS				11
++#define ARB_LOST				12
++#define ABRT_SLAVE_FLUSH_TXFIFO			13
++#define ABRT_SLAVE_ARBLOST			14
++#define ABRT_SLAVE_RD_INTX			15
+ 
+ #define DW_IC_TX_ABRT_7B_ADDR_NOACK		BIT(ABRT_7B_ADDR_NOACK)
+ #define DW_IC_TX_ABRT_10ADDR1_NOACK		BIT(ABRT_10ADDR1_NOACK)
+@@ -172,11 +172,11 @@
+ #define DW_IC_RX_ABRT_SLAVE_ARBLOST		BIT(ABRT_SLAVE_ARBLOST)
+ #define DW_IC_RX_ABRT_SLAVE_FLUSH_TXFIFO	BIT(ABRT_SLAVE_FLUSH_TXFIFO)
+ 
+-#define DW_IC_TX_ABRT_NOACK		(DW_IC_TX_ABRT_7B_ADDR_NOACK | \
+-					 DW_IC_TX_ABRT_10ADDR1_NOACK | \
+-					 DW_IC_TX_ABRT_10ADDR2_NOACK | \
+-					 DW_IC_TX_ABRT_TXDATA_NOACK | \
+-					 DW_IC_TX_ABRT_GCALL_NOACK)
++#define DW_IC_TX_ABRT_NOACK			(DW_IC_TX_ABRT_7B_ADDR_NOACK | \
++						 DW_IC_TX_ABRT_10ADDR1_NOACK | \
++						 DW_IC_TX_ABRT_10ADDR2_NOACK | \
++						 DW_IC_TX_ABRT_TXDATA_NOACK | \
++						 DW_IC_TX_ABRT_GCALL_NOACK)
+ 
+ struct clk;
+ struct device;
+@@ -293,24 +293,24 @@ struct dw_i2c_dev {
  	int			(*init)(struct dw_i2c_dev *dev);
  	int			(*set_sda_hold_time)(struct dw_i2c_dev *dev);
  	int			mode;
-diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index 5f9b9503441c..a6e5e3773fa7 100644
---- a/drivers/i2c/busses/i2c-designware-master.c
-+++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -239,7 +239,7 @@ static void i2c_dw_xfer_init(struct dw_i2c_dev *dev)
- 		     msgs[dev->msg_write_idx].addr | ic_tar);
+-	struct i2c_bus_recovery_info rinfo;
++	struct			i2c_bus_recovery_info rinfo;
+ };
  
- 	/* Enforce disabled interrupts (due to HW issues) */
--	i2c_dw_disable_int(dev);
-+	regmap_write(dev->map, DW_IC_INTR_MASK, 0);
+-#define ACCESS_INTR_MASK	BIT(0)
+-#define ACCESS_NO_IRQ_SUSPEND	BIT(1)
+-#define ARBITRATION_SEMAPHORE	BIT(2)
++#define ACCESS_INTR_MASK			BIT(0)
++#define ACCESS_NO_IRQ_SUSPEND			BIT(1)
++#define ARBITRATION_SEMAPHORE			BIT(2)
  
- 	/* Enable the adapter */
- 	__i2c_dw_enable(dev);
-@@ -299,7 +299,7 @@ static int amd_i2c_dw_xfer_quirk(struct i2c_adapter *adap, struct i2c_msg *msgs,
- 	dev->msgs = msgs;
- 	dev->msgs_num = num_msgs;
- 	i2c_dw_xfer_init(dev);
--	i2c_dw_disable_int(dev);
-+	regmap_write(dev->map, DW_IC_INTR_MASK, 0);
+-#define MODEL_MSCC_OCELOT	BIT(8)
+-#define MODEL_BAIKAL_BT1	BIT(9)
+-#define MODEL_AMD_NAVI_GPU	BIT(10)
+-#define MODEL_MASK		GENMASK(11, 8)
++#define MODEL_MSCC_OCELOT			BIT(8)
++#define MODEL_BAIKAL_BT1			BIT(9)
++#define MODEL_AMD_NAVI_GPU			BIT(10)
++#define MODEL_MASK				GENMASK(11, 8)
  
- 	/* Initiate messages read/write transaction */
- 	for (msg_wrt_idx = 0; msg_wrt_idx < num_msgs; msg_wrt_idx++) {
-@@ -770,7 +770,7 @@ static irqreturn_t i2c_dw_isr(int this_irq, void *dev_id)
- 	else if (unlikely(dev->flags & ACCESS_INTR_MASK)) {
- 		/* Workaround to trigger pending interrupt */
- 		regmap_read(dev->map, DW_IC_INTR_MASK, &stat);
--		i2c_dw_disable_int(dev);
-+		regmap_write(dev->map, DW_IC_INTR_MASK, 0);
- 		regmap_write(dev->map, DW_IC_INTR_MASK, stat);
- 	}
+ /*
+  * Enable UCSI interrupt by writing 0xd at register
+  * offset 0x474 specified in hardware specification.
+  */
+-#define AMD_UCSI_INTR_REG	0x474
+-#define AMD_UCSI_INTR_EN	0xd
++#define AMD_UCSI_INTR_REG			0x474
++#define AMD_UCSI_INTR_EN			0xd
  
-@@ -871,7 +871,6 @@ int i2c_dw_probe_master(struct dw_i2c_dev *dev)
- 
- 	dev->init = i2c_dw_init_master;
- 	dev->disable = i2c_dw_disable;
--	dev->disable_int = i2c_dw_disable_int;
- 
- 	ret = i2c_dw_init_regmap(dev);
- 	if (ret)
-@@ -910,7 +909,7 @@ int i2c_dw_probe_master(struct dw_i2c_dev *dev)
- 	if (ret)
- 		return ret;
- 
--	i2c_dw_disable_int(dev);
-+	regmap_write(dev->map, DW_IC_INTR_MASK, 0);
- 	i2c_dw_release_lock(dev);
- 
- 	ret = devm_request_irq(dev->dev, dev->irq, i2c_dw_isr, irq_flags,
-diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
-index 3c855cd45c34..c6d2e4c2ac23 100644
---- a/drivers/i2c/busses/i2c-designware-slave.c
-+++ b/drivers/i2c/busses/i2c-designware-slave.c
-@@ -87,7 +87,7 @@ static int i2c_dw_unreg_slave(struct i2c_client *slave)
- {
- 	struct dw_i2c_dev *dev = i2c_get_adapdata(slave->adapter);
- 
--	dev->disable_int(dev);
-+	regmap_write(dev->map, DW_IC_INTR_MASK, 0);
- 	dev->disable(dev);
- 	synchronize_irq(dev->irq);
- 	dev->slave = NULL;
-@@ -232,7 +232,6 @@ int i2c_dw_probe_slave(struct dw_i2c_dev *dev)
- 
- 	dev->init = i2c_dw_init_slave;
- 	dev->disable = i2c_dw_disable;
--	dev->disable_int = i2c_dw_disable_int;
- 
- 	ret = i2c_dw_init_regmap(dev);
- 	if (ret)
+ struct i2c_dw_semaphore_callbacks {
+ 	int	(*probe)(struct dw_i2c_dev *dev);
 -- 
 2.35.1
 
