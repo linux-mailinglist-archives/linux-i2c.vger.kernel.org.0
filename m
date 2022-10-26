@@ -2,366 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 903E360E109
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Oct 2022 14:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 361A260E143
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Oct 2022 14:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233904AbiJZMk4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 Oct 2022 08:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
+        id S231597AbiJZM4P (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 Oct 2022 08:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233563AbiJZMkY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Oct 2022 08:40:24 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308767D1E1
-        for <linux-i2c@vger.kernel.org>; Wed, 26 Oct 2022 05:40:02 -0700 (PDT)
+        with ESMTP id S233367AbiJZM4O (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Oct 2022 08:56:14 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DEFDAC6B
+        for <linux-i2c@vger.kernel.org>; Wed, 26 Oct 2022 05:56:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666788002; x=1698324002;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lh1vFZwvJQyU9BhLrnyxcTokJp/aUqvdRGb/nkRdFlQ=;
-  b=NcDQg97kCKYKORdhOXBl+M42V3wo7njNKMpCJCxCOaMhHqS40y2A+c6A
-   RprIVJgEhzjd82NkOv34dLaZioCjiToEQjwuEXy5wht3ltzCaT5JasGqM
-   HoS0tEc85r9SBBJa2tKvmQCbKePeqo+xr+ekbsW2oXznwWWKnKj8mVKwn
-   qzTuxAuWWujZi71D2sVxtzfeS0OfeW9DhUL+kvMInazs9hDx6piDfcCXN
-   UKpWTKx44UHsABt9Ac308vVIp4kdE3Nlh84OuDgo+HOtmxelMPIvLCYkQ
-   PynWLbv1VLZlpYSoGpiCDQcV+5TmVoqr7S0yLx7o7xEwV52j7DEB3ZSFf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="309625101"
+  t=1666788973; x=1698324973;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kyhpUikuGFLHKo2ioFMlMZ//ZaX8FD0v5Vs7erLnsms=;
+  b=NhWOjYjSk7omqp+jErxRS4r0iTFUx5im7M5FvZPmotJqVp1Rapnl5EIf
+   5QLgrpqwq5GnuNw46e+DARuhEl8i7fw7Gs2BYzEmEGrG7wdl57uP+Z2hK
+   M+FPA0xZkxYo2STu4SB6TliX+R5RnE3VOH38Qr6nKTpxt085zVg4KIjvt
+   7suksGBp531oMGYk349VYl4R/xovB+dwLBbvPE/YVEhW6RCKOdhjvD864
+   Apsq2GQZsIQOlHu8yp+UkkQK5KexWZ+i5t3v9uA8ycPQSJ5ZNzOTJk3nH
+   cc8X1Esn1RqB5WBxQcyp5sjE6Me0XdYLVF5EbUt/2SRGEmouDXNxgpZuN
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="288332731"
 X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
-   d="scan'208";a="309625101"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 05:40:01 -0700
+   d="scan'208";a="288332731"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 05:56:13 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="700908759"
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="631995118"
 X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
-   d="scan'208";a="700908759"
-Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.55])
-  by fmsmga004.fm.intel.com with ESMTP; 26 Oct 2022 05:39:59 -0700
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+   d="scan'208";a="631995118"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 26 Oct 2022 05:56:11 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1onfx3-002eUo-04;
+        Wed, 26 Oct 2022 15:56:09 +0300
+Date:   Wed, 26 Oct 2022 15:56:08 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Jan Dabros <jsd@semihalf.com>,
         Michael Wu <michael.wu@vatics.com>, Tian Ye <tianye@sugon.com>,
-        Luis Oliveira <luis.oliveira@synopsys.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: [PATCH 11/11] i2c: designware: Align defines in i2c-designware-core.h
-Date:   Wed, 26 Oct 2022 15:39:12 +0300
-Message-Id: <20221026123912.2833271-12-jarkko.nikula@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221026123912.2833271-1-jarkko.nikula@linux.intel.com>
+        Luis Oliveira <luis.oliveira@synopsys.com>
+Subject: Re: [PATCH 00/11] i2c: designware: Slave fixes and generic cleanups
+Message-ID: <Y1kuaJhWugXx3nin@smile.fi.intel.com>
 References: <20221026123912.2833271-1-jarkko.nikula@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026123912.2833271-1-jarkko.nikula@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,UPPERCASE_50_75,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Align all defines to the same column.
+On Wed, Oct 26, 2022 at 03:39:01PM +0300, Jarkko Nikula wrote:
+> Hi
+> 
+> I discovered recently while doing other cleanups.that reads and writes
+> from I2C bus to i2c-designware-slave.c don't work correctly.
+> 
+> First two patches are fixes to slave code and meant for normal development
+> cycle since it looks these issues have been always here.
+> 
+> I Cc'ed Michael Wu <michael.wu@vatics.com> who has fixed
+> i2c-designware-slave.c before and Tian Ye <tianye@sugon.com> who recently
+> reported a write issue.
+> 
+> Could you test first two patches (or the whole set) that my patches won't
+> cause regressions to your existing test cases or does the 2nd patch fix
+> the write issue?
+> 
+> Rest of patches are minor changes and cleanups to both master and slave
+> parts.
 
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
----
- drivers/i2c/busses/i2c-designware-core.h | 232 +++++++++++------------
- 1 file changed, 116 insertions(+), 116 deletions(-)
+> Patchset is done on top of commit fd142e074e89 ("Merge branch
+> 'i2c/for-current-fixed' into i2c/for-next") but may apply on top of
+> v6.1-rc1 too.
 
-diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-index 17528a41f1af..7db155231cc4 100644
---- a/drivers/i2c/busses/i2c-designware-core.h
-+++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -18,12 +18,12 @@
- #include <linux/regmap.h>
- #include <linux/types.h>
- 
--#define DW_IC_DEFAULT_FUNCTIONALITY (I2C_FUNC_I2C |			\
--					I2C_FUNC_SMBUS_BYTE |		\
--					I2C_FUNC_SMBUS_BYTE_DATA |	\
--					I2C_FUNC_SMBUS_WORD_DATA |	\
--					I2C_FUNC_SMBUS_BLOCK_DATA |	\
--					I2C_FUNC_SMBUS_I2C_BLOCK)
-+#define DW_IC_DEFAULT_FUNCTIONALITY		(I2C_FUNC_I2C | \
-+						 I2C_FUNC_SMBUS_BYTE | \
-+						 I2C_FUNC_SMBUS_BYTE_DATA | \
-+						 I2C_FUNC_SMBUS_WORD_DATA | \
-+						 I2C_FUNC_SMBUS_BLOCK_DATA | \
-+						 I2C_FUNC_SMBUS_I2C_BLOCK)
- 
- #define DW_IC_CON_MASTER			BIT(0)
- #define DW_IC_CON_SPEED_STD			(1 << 1)
-@@ -43,81 +43,81 @@
- /*
-  * Registers offset
-  */
--#define DW_IC_CON		0x00
--#define DW_IC_TAR		0x04
--#define DW_IC_SAR		0x08
--#define DW_IC_DATA_CMD		0x10
--#define DW_IC_SS_SCL_HCNT	0x14
--#define DW_IC_SS_SCL_LCNT	0x18
--#define DW_IC_FS_SCL_HCNT	0x1c
--#define DW_IC_FS_SCL_LCNT	0x20
--#define DW_IC_HS_SCL_HCNT	0x24
--#define DW_IC_HS_SCL_LCNT	0x28
--#define DW_IC_INTR_STAT		0x2c
--#define DW_IC_INTR_MASK		0x30
--#define DW_IC_RAW_INTR_STAT	0x34
--#define DW_IC_RX_TL		0x38
--#define DW_IC_TX_TL		0x3c
--#define DW_IC_CLR_INTR		0x40
--#define DW_IC_CLR_RX_UNDER	0x44
--#define DW_IC_CLR_RX_OVER	0x48
--#define DW_IC_CLR_TX_OVER	0x4c
--#define DW_IC_CLR_RD_REQ	0x50
--#define DW_IC_CLR_TX_ABRT	0x54
--#define DW_IC_CLR_RX_DONE	0x58
--#define DW_IC_CLR_ACTIVITY	0x5c
--#define DW_IC_CLR_STOP_DET	0x60
--#define DW_IC_CLR_START_DET	0x64
--#define DW_IC_CLR_GEN_CALL	0x68
--#define DW_IC_ENABLE		0x6c
--#define DW_IC_STATUS		0x70
--#define DW_IC_TXFLR		0x74
--#define DW_IC_RXFLR		0x78
--#define DW_IC_SDA_HOLD		0x7c
--#define DW_IC_TX_ABRT_SOURCE	0x80
--#define DW_IC_ENABLE_STATUS	0x9c
--#define DW_IC_CLR_RESTART_DET	0xa8
--#define DW_IC_COMP_PARAM_1	0xf4
--#define DW_IC_COMP_VERSION	0xf8
--#define DW_IC_SDA_HOLD_MIN_VERS	0x3131312A
--#define DW_IC_COMP_TYPE		0xfc
--#define DW_IC_COMP_TYPE_VALUE	0x44570140
--
--#define DW_IC_INTR_RX_UNDER	BIT(0)
--#define DW_IC_INTR_RX_OVER	BIT(1)
--#define DW_IC_INTR_RX_FULL	BIT(2)
--#define DW_IC_INTR_TX_OVER	BIT(3)
--#define DW_IC_INTR_TX_EMPTY	BIT(4)
--#define DW_IC_INTR_RD_REQ	BIT(5)
--#define DW_IC_INTR_TX_ABRT	BIT(6)
--#define DW_IC_INTR_RX_DONE	BIT(7)
--#define DW_IC_INTR_ACTIVITY	BIT(8)
--#define DW_IC_INTR_STOP_DET	BIT(9)
--#define DW_IC_INTR_START_DET	BIT(10)
--#define DW_IC_INTR_GEN_CALL	BIT(11)
--#define DW_IC_INTR_RESTART_DET	BIT(12)
--
--#define DW_IC_INTR_DEFAULT_MASK		(DW_IC_INTR_RX_FULL | \
--					 DW_IC_INTR_TX_ABRT | \
--					 DW_IC_INTR_STOP_DET)
--#define DW_IC_INTR_MASTER_MASK		(DW_IC_INTR_DEFAULT_MASK | \
--					 DW_IC_INTR_TX_EMPTY)
--#define DW_IC_INTR_SLAVE_MASK		(DW_IC_INTR_DEFAULT_MASK | \
--					 DW_IC_INTR_RX_UNDER | \
--					 DW_IC_INTR_RD_REQ)
--
--#define DW_IC_STATUS_ACTIVITY		BIT(0)
--#define DW_IC_STATUS_TFE		BIT(2)
--#define DW_IC_STATUS_RFNE		BIT(3)
--#define DW_IC_STATUS_MASTER_ACTIVITY	BIT(5)
--#define DW_IC_STATUS_SLAVE_ACTIVITY	BIT(6)
--
--#define DW_IC_SDA_HOLD_RX_SHIFT		16
--#define DW_IC_SDA_HOLD_RX_MASK		GENMASK(23, 16)
--
--#define DW_IC_ERR_TX_ABRT	0x1
--
--#define DW_IC_TAR_10BITADDR_MASTER	BIT(12)
-+#define DW_IC_CON				0x00
-+#define DW_IC_TAR				0x04
-+#define DW_IC_SAR				0x08
-+#define DW_IC_DATA_CMD				0x10
-+#define DW_IC_SS_SCL_HCNT			0x14
-+#define DW_IC_SS_SCL_LCNT			0x18
-+#define DW_IC_FS_SCL_HCNT			0x1c
-+#define DW_IC_FS_SCL_LCNT			0x20
-+#define DW_IC_HS_SCL_HCNT			0x24
-+#define DW_IC_HS_SCL_LCNT			0x28
-+#define DW_IC_INTR_STAT				0x2c
-+#define DW_IC_INTR_MASK				0x30
-+#define DW_IC_RAW_INTR_STAT			0x34
-+#define DW_IC_RX_TL				0x38
-+#define DW_IC_TX_TL				0x3c
-+#define DW_IC_CLR_INTR				0x40
-+#define DW_IC_CLR_RX_UNDER			0x44
-+#define DW_IC_CLR_RX_OVER			0x48
-+#define DW_IC_CLR_TX_OVER			0x4c
-+#define DW_IC_CLR_RD_REQ			0x50
-+#define DW_IC_CLR_TX_ABRT			0x54
-+#define DW_IC_CLR_RX_DONE			0x58
-+#define DW_IC_CLR_ACTIVITY			0x5c
-+#define DW_IC_CLR_STOP_DET			0x60
-+#define DW_IC_CLR_START_DET			0x64
-+#define DW_IC_CLR_GEN_CALL			0x68
-+#define DW_IC_ENABLE				0x6c
-+#define DW_IC_STATUS				0x70
-+#define DW_IC_TXFLR				0x74
-+#define DW_IC_RXFLR				0x78
-+#define DW_IC_SDA_HOLD				0x7c
-+#define DW_IC_TX_ABRT_SOURCE			0x80
-+#define DW_IC_ENABLE_STATUS			0x9c
-+#define DW_IC_CLR_RESTART_DET			0xa8
-+#define DW_IC_COMP_PARAM_1			0xf4
-+#define DW_IC_COMP_VERSION			0xf8
-+#define DW_IC_SDA_HOLD_MIN_VERS			0x3131312A
-+#define DW_IC_COMP_TYPE				0xfc
-+#define DW_IC_COMP_TYPE_VALUE			0x44570140
-+
-+#define DW_IC_INTR_RX_UNDER			BIT(0)
-+#define DW_IC_INTR_RX_OVER			BIT(1)
-+#define DW_IC_INTR_RX_FULL			BIT(2)
-+#define DW_IC_INTR_TX_OVER			BIT(3)
-+#define DW_IC_INTR_TX_EMPTY			BIT(4)
-+#define DW_IC_INTR_RD_REQ			BIT(5)
-+#define DW_IC_INTR_TX_ABRT			BIT(6)
-+#define DW_IC_INTR_RX_DONE			BIT(7)
-+#define DW_IC_INTR_ACTIVITY			BIT(8)
-+#define DW_IC_INTR_STOP_DET			BIT(9)
-+#define DW_IC_INTR_START_DET			BIT(10)
-+#define DW_IC_INTR_GEN_CALL			BIT(11)
-+#define DW_IC_INTR_RESTART_DET			BIT(12)
-+
-+#define DW_IC_INTR_DEFAULT_MASK			(DW_IC_INTR_RX_FULL | \
-+						 DW_IC_INTR_TX_ABRT | \
-+						 DW_IC_INTR_STOP_DET)
-+#define DW_IC_INTR_MASTER_MASK			(DW_IC_INTR_DEFAULT_MASK | \
-+						 DW_IC_INTR_TX_EMPTY)
-+#define DW_IC_INTR_SLAVE_MASK			(DW_IC_INTR_DEFAULT_MASK | \
-+						 DW_IC_INTR_RX_UNDER | \
-+						 DW_IC_INTR_RD_REQ)
-+
-+#define DW_IC_STATUS_ACTIVITY			BIT(0)
-+#define DW_IC_STATUS_TFE			BIT(2)
-+#define DW_IC_STATUS_RFNE			BIT(3)
-+#define DW_IC_STATUS_MASTER_ACTIVITY		BIT(5)
-+#define DW_IC_STATUS_SLAVE_ACTIVITY		BIT(6)
-+
-+#define DW_IC_SDA_HOLD_RX_SHIFT			16
-+#define DW_IC_SDA_HOLD_RX_MASK			GENMASK(23, 16)
-+
-+#define DW_IC_ERR_TX_ABRT			0x1
-+
-+#define DW_IC_TAR_10BITADDR_MASTER		BIT(12)
- 
- #define DW_IC_COMP_PARAM_1_SPEED_MODE_HIGH	(BIT(2) | BIT(3))
- #define DW_IC_COMP_PARAM_1_SPEED_MODE_MASK	GENMASK(3, 2)
-@@ -125,16 +125,16 @@
- /*
-  * Sofware status flags
-  */
--#define STATUS_ACTIVE			BIT(0)
--#define STATUS_WRITE_IN_PROGRESS	BIT(1)
--#define STATUS_READ_IN_PROGRESS		BIT(2)
--#define STATUS_MASK			GENMASK(2, 0)
-+#define STATUS_ACTIVE				BIT(0)
-+#define STATUS_WRITE_IN_PROGRESS		BIT(1)
-+#define STATUS_READ_IN_PROGRESS			BIT(2)
-+#define STATUS_MASK				GENMASK(2, 0)
- 
- /*
-  * operation modes
-  */
--#define DW_IC_MASTER		0
--#define DW_IC_SLAVE		1
-+#define DW_IC_MASTER				0
-+#define DW_IC_SLAVE				1
- 
- /*
-  * Hardware abort codes from the DW_IC_TX_ABRT_SOURCE register
-@@ -142,20 +142,20 @@
-  * Only expected abort codes are listed here
-  * refer to the datasheet for the full list
-  */
--#define ABRT_7B_ADDR_NOACK	0
--#define ABRT_10ADDR1_NOACK	1
--#define ABRT_10ADDR2_NOACK	2
--#define ABRT_TXDATA_NOACK	3
--#define ABRT_GCALL_NOACK	4
--#define ABRT_GCALL_READ		5
--#define ABRT_SBYTE_ACKDET	7
--#define ABRT_SBYTE_NORSTRT	9
--#define ABRT_10B_RD_NORSTRT	10
--#define ABRT_MASTER_DIS		11
--#define ARB_LOST		12
--#define ABRT_SLAVE_FLUSH_TXFIFO	13
--#define ABRT_SLAVE_ARBLOST	14
--#define ABRT_SLAVE_RD_INTX	15
-+#define ABRT_7B_ADDR_NOACK			0
-+#define ABRT_10ADDR1_NOACK			1
-+#define ABRT_10ADDR2_NOACK			2
-+#define ABRT_TXDATA_NOACK			3
-+#define ABRT_GCALL_NOACK			4
-+#define ABRT_GCALL_READ				5
-+#define ABRT_SBYTE_ACKDET			7
-+#define ABRT_SBYTE_NORSTRT			9
-+#define ABRT_10B_RD_NORSTRT			10
-+#define ABRT_MASTER_DIS				11
-+#define ARB_LOST				12
-+#define ABRT_SLAVE_FLUSH_TXFIFO			13
-+#define ABRT_SLAVE_ARBLOST			14
-+#define ABRT_SLAVE_RD_INTX			15
- 
- #define DW_IC_TX_ABRT_7B_ADDR_NOACK		BIT(ABRT_7B_ADDR_NOACK)
- #define DW_IC_TX_ABRT_10ADDR1_NOACK		BIT(ABRT_10ADDR1_NOACK)
-@@ -172,11 +172,11 @@
- #define DW_IC_RX_ABRT_SLAVE_ARBLOST		BIT(ABRT_SLAVE_ARBLOST)
- #define DW_IC_RX_ABRT_SLAVE_FLUSH_TXFIFO	BIT(ABRT_SLAVE_FLUSH_TXFIFO)
- 
--#define DW_IC_TX_ABRT_NOACK		(DW_IC_TX_ABRT_7B_ADDR_NOACK | \
--					 DW_IC_TX_ABRT_10ADDR1_NOACK | \
--					 DW_IC_TX_ABRT_10ADDR2_NOACK | \
--					 DW_IC_TX_ABRT_TXDATA_NOACK | \
--					 DW_IC_TX_ABRT_GCALL_NOACK)
-+#define DW_IC_TX_ABRT_NOACK			(DW_IC_TX_ABRT_7B_ADDR_NOACK | \
-+						 DW_IC_TX_ABRT_10ADDR1_NOACK | \
-+						 DW_IC_TX_ABRT_10ADDR2_NOACK | \
-+						 DW_IC_TX_ABRT_TXDATA_NOACK | \
-+						 DW_IC_TX_ABRT_GCALL_NOACK)
- 
- struct clk;
- struct device;
-@@ -293,24 +293,24 @@ struct dw_i2c_dev {
- 	int			(*init)(struct dw_i2c_dev *dev);
- 	int			(*set_sda_hold_time)(struct dw_i2c_dev *dev);
- 	int			mode;
--	struct i2c_bus_recovery_info rinfo;
-+	struct			i2c_bus_recovery_info rinfo;
- };
- 
--#define ACCESS_INTR_MASK	BIT(0)
--#define ACCESS_NO_IRQ_SUSPEND	BIT(1)
--#define ARBITRATION_SEMAPHORE	BIT(2)
-+#define ACCESS_INTR_MASK			BIT(0)
-+#define ACCESS_NO_IRQ_SUSPEND			BIT(1)
-+#define ARBITRATION_SEMAPHORE			BIT(2)
- 
--#define MODEL_MSCC_OCELOT	BIT(8)
--#define MODEL_BAIKAL_BT1	BIT(9)
--#define MODEL_AMD_NAVI_GPU	BIT(10)
--#define MODEL_MASK		GENMASK(11, 8)
-+#define MODEL_MSCC_OCELOT			BIT(8)
-+#define MODEL_BAIKAL_BT1			BIT(9)
-+#define MODEL_AMD_NAVI_GPU			BIT(10)
-+#define MODEL_MASK				GENMASK(11, 8)
- 
- /*
-  * Enable UCSI interrupt by writing 0xd at register
-  * offset 0x474 specified in hardware specification.
-  */
--#define AMD_UCSI_INTR_REG	0x474
--#define AMD_UCSI_INTR_EN	0xd
-+#define AMD_UCSI_INTR_REG			0x474
-+#define AMD_UCSI_INTR_EN			0xd
- 
- struct i2c_dw_semaphore_callbacks {
- 	int	(*probe)(struct dw_i2c_dev *dev);
+Side note, using --base in `git-format-patch --cover-letter` will help a lot
+(esp. CIs that take it into consideration).
+
 -- 
-2.35.1
+With Best Regards,
+Andy Shevchenko
+
 
