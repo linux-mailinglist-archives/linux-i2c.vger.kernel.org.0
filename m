@@ -2,77 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A6761116F
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Oct 2022 14:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA6B6111AD
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Oct 2022 14:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiJ1Mbi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 Oct 2022 08:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
+        id S230093AbiJ1MjA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 Oct 2022 08:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiJ1Mbg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Oct 2022 08:31:36 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC87190E51;
-        Fri, 28 Oct 2022 05:31:34 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id y69so7653067ede.5;
-        Fri, 28 Oct 2022 05:31:34 -0700 (PDT)
+        with ESMTP id S229819AbiJ1Mi7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Oct 2022 08:38:59 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923BF1D52FE;
+        Fri, 28 Oct 2022 05:38:58 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id q9so12724690ejd.0;
+        Fri, 28 Oct 2022 05:38:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N+hgVsFfIHOn2i92zfvFuxronhUcGA0Jyj434tyBrgU=;
-        b=QiRNzg7+FZFB6qrZ5IwQOaSWRlbnwey0IIWL0aK0meEYRhb+D20T+FO65mjI6pFvBZ
-         vZ+41PJz6j+vBQ+UfqV3QIxPlB4BGYIceAjIQfRi2DgXozx/dGPydJZTb6XZ+SEQCNNV
-         3ESHmEbJmYNahV1n6oDm2+DdcsxvJSTrwUCERXwvopR4Au+FASHHVk9NHBLmhllqnvCS
-         kCWZsa3Gjl78Et7VRmVeIRl68wxBL0mYIi7t9rveFn8rnvYNNqV7W2PV/sMu0ai44uyw
-         LhPPefTq/BiJGzQfmyfS3WWn7nSFiN9uo4MJY+IoemZdVL5i+hYCpBCELTMp4LUdm6d8
-         Hg7g==
+        bh=R6b7kwg2WdDmY6cz9AakvTDLGqm+2/XRfuZcHo4JzlI=;
+        b=edsoFRNhow/344HliqnP78Nu6McqtN0HTJNgsIUWyOp7wcqLGZrRmFA0ReEx5yhUOD
+         drAU+pubF3GbxOcNo98+s4tjxNvrZZm3ovUE6xCgNBWKln3d1UggSKFeHG4VnU3n4rPp
+         VAnFdOKGxOPSlLGWHCbkN/9kspeI+K7YWDf2YduR35stoHRzpdmCKjAhG/3Qp/zXSt6K
+         V11AHANMQ7KgC8X81S53RBwF+UcFsGebZSRM+lKbnFxETvh4SX3WxilbhUmeFBBF/+w4
+         A2LEWO/soXzEYGnKYr6HPr4AkTM511tgEyIzHEw2h9Vzf8M48tMVUEOl+JZ9nF3aCvTi
+         +vbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N+hgVsFfIHOn2i92zfvFuxronhUcGA0Jyj434tyBrgU=;
-        b=vjqXz63QR1qCaKP2gfw0VR/0GgozFfWPL9CHjUVK0jOxUdVeXUAH5b/6vxqri37bqh
-         wnxzoNtz2/DOsDSyMFiSnJxW9ErgmN44tc0zhXIPaTQvDdJSA9XOrFP4yU4OrSIMB+D6
-         lFl0wRJXj4GKHJA6Lbem8wLDbXC1K33Q36zKhtq8HGEjY7lHPc0btzRZAhhi+NznS9TM
-         6Fiuiz8WyqKy8sn04A2Mp/HW9I7lFfKXOzx5qQSLPup5BTtVToyf3uDmmEJuKfjNb6vk
-         VBgggx73xbmVRbaDcP/Haw5zagle0i0+TPKO+vEY5KzoZ4EZfaVH1Ea7+RRZe3z45eCT
-         TobQ==
-X-Gm-Message-State: ACrzQf3KvMAot2pSlnaBSZYkKMuC2ztEnboHwA3MIc2kP5g4ic3yIUaO
-        kKfXY5RkdkPovEIXAlTI5B4=
-X-Google-Smtp-Source: AMsMyM6iCHrDVGRWRro91KRlEzXgqCGqlUwxT/cAIMfxY0kwsfsJaBK/myV34+ft4dKYZAo+Ren9dQ==
-X-Received: by 2002:a05:6402:4148:b0:440:cb9f:d10f with SMTP id x8-20020a056402414800b00440cb9fd10fmr50292473eda.77.1666960293282;
-        Fri, 28 Oct 2022 05:31:33 -0700 (PDT)
+        bh=R6b7kwg2WdDmY6cz9AakvTDLGqm+2/XRfuZcHo4JzlI=;
+        b=DUoQ2mHlNpsIIXx5NyaeOoflOE992eSqsa0BQ2nIEqkRA1w1kMlpaGoxCaDZfJlSPF
+         qHqyjrsh1+6HhI5xf18FTjhCgKH5yRGhk4jepEebZu16IaiBgmdplViJaWpBC4UYqjTm
+         uwspRNOXh0nKMZxCYYEjISIYNlNJfHC1qctYbVJM8UPDewIZmMAyhvc+a0iFK8mCIIAU
+         CpuPDs0nqapUJ35CDtGiBz6c4o1ayWTZ1cLQHhVw6EMxXMP1l+EJ5GTriHcN3nzIgKpE
+         LJ2tAWKLSQwdaCtioHFU5QeCIGJeaXK1/5t7KcWWVl8IUhgoEMTAccwHI4CAFvTpWHJ0
+         0n7w==
+X-Gm-Message-State: ACrzQf1M9sh51jgg4zAEwY1oP1s/vW2YSMpQVWiZspVCnqouNcz/mA4o
+        F6yo3g9lciFPQGky6+MWQszQeFdvzrk=
+X-Google-Smtp-Source: AMsMyM5KnL1wkxqYW6p6I6VHF1z1SahRA1W6Hhu9pGmq0/xsQhltyL8KFY/7jc2NLhLwrk9+dKqNrg==
+X-Received: by 2002:a17:907:5ce:b0:730:bae0:deb with SMTP id wg14-20020a17090705ce00b00730bae00debmr48272599ejb.181.1666960726223;
+        Fri, 28 Oct 2022 05:38:46 -0700 (PDT)
 Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id r19-20020aa7cfd3000000b004611c230bd0sm2639373edy.37.2022.10.28.05.31.30
+        by smtp.gmail.com with ESMTPSA id pv3-20020a170907208300b0074134543f82sm2075974ejb.90.2022.10.28.05.38.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 05:31:32 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 14:31:29 +0200
+        Fri, 28 Oct 2022 05:38:45 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 14:38:43 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Jon Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
-        treding@nvidia.com, heikki.krogerus@linux.intel.com,
-        ajayg@nvidia.com, kishon@ti.com, vkoul@kernel.org,
-        p.zabel@pengutronix.de, balbi@kernel.org, mathias.nyman@intel.com,
-        jckuo@nvidia.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        singhanc@nvidia.com, linux-i2c@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 03/11] dt-bindings: usb: Add binding for Cypress cypd4226
- I2C driver
-Message-ID: <Y1vLoT+/dgOgrxjD@orome>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>, Wayne Chang <waynec@nvidia.com>,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
+        heikki.krogerus@linux.intel.com, ajayg@nvidia.com, kishon@ti.com,
+        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
+        mathias.nyman@intel.com, jckuo@nvidia.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 04/11] arm64: tegra: Enable XUSB host and device on
+ Jetson AGX Orin
+Message-ID: <Y1vNU1KeUH8LvG0r@orome>
 References: <20221024074128.1113554-1-waynec@nvidia.com>
- <20221024074128.1113554-4-waynec@nvidia.com>
- <f8eeeebc-e635-9c97-b97b-46df38f06002@nvidia.com>
+ <20221024074128.1113554-5-waynec@nvidia.com>
+ <2059dfe5-b084-42a4-7f35-9da9561fc12b@linaro.org>
+ <b803bcf9-fc47-5239-ffe9-707925f324de@nvidia.com>
+ <5676bcd2-14fc-4e1d-643e-89e575d190c3@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="h3NQArSPnjsazpQi"
+        protocol="application/pgp-signature"; boundary="/hNVoH5xZwyCFIYG"
 Content-Disposition: inline
-In-Reply-To: <f8eeeebc-e635-9c97-b97b-46df38f06002@nvidia.com>
+In-Reply-To: <5676bcd2-14fc-4e1d-643e-89e575d190c3@linaro.org>
 User-Agent: Mutt/2.2.7 (2022-08-07)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -85,141 +87,69 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---h3NQArSPnjsazpQi
+--/hNVoH5xZwyCFIYG
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 26, 2022 at 08:13:57AM +0100, Jon Hunter wrote:
->=20
-> On 24/10/2022 08:41, Wayne Chang wrote:
-> > add device-tree binding documentation for Cypress cypd4226 type-C
-> > controller's I2C interface. It is a standard i2c slave with GPIO
-> > input as IRQ interface.
+On Fri, Oct 28, 2022 at 07:27:09AM -0400, Krzysztof Kozlowski wrote:
+> On 28/10/2022 05:33, Jon Hunter wrote:
+> >>> +			ucsi_ccg: ucsi_ccg@8 {
+> >>
+> >> No underscores in node names.
+> >>
+> >>> +				compatible =3D "cypress,cypd4226";
+> >>> +				cypress,firmware-build =3D "gn";
+> >>> +				interrupt-parent =3D <&gpio>;
+> >>> +				interrupts =3D <TEGRA234_MAIN_GPIO(Y, 4) IRQ_TYPE_LEVEL_LOW>;
+> >>> +				reg =3D <0x08>;
+> >>> +				status =3D "okay";
+> >>
+> >> The pattern of redefining full path in Tegra is confusing - I have no
+> >> clue which of these status=3Dokay are correct which are redundant.
+> >>
+> >> Do you?
 > >=20
-> > Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> > ---
-> >   .../bindings/usb/cypress,cypd4226.yaml        | 86 +++++++++++++++++++
-> >   1 file changed, 86 insertions(+)
-> >   create mode 100644 Documentation/devicetree/bindings/usb/cypress,cypd=
-4226.yaml
+> > I understand you may not like this approach, however, this comment is=
+=20
+> > not really relevant to just this patch, but a general comment. But yes=
+=20
+> > we will ensure that this is correct.
 > >=20
-> > diff --git a/Documentation/devicetree/bindings/usb/cypress,cypd4226.yam=
-l b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> > new file mode 100644
-> > index 000000000000..5ac28ab4e7a1
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> > @@ -0,0 +1,86 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/usb/cypress,cypd4226.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Cypress cypd4226 UCSI I2C Type-C Controller
-> > +
-> > +maintainers:
-> > +  - Wayne Chang <waynec@nvidia.com>
-> > +
-> > +description: |
-> > +  The Cypress cypd4226 UCSI I2C type-C controller is a I2C interface t=
-ype-C
-> > +  controller.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: cypress,cypd4226
-> > +
-> > +  '#address-cells':
-> > +    const: 1
-> > +
-> > +  '#size-cells':
-> > +    const: 0
-> > +
-> > +  reg:
-> > +    const: 0x08
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  cypress,firmware-build:
-> > +    enum:
-> > +      - nv
-> > +      - gn
-> > +    description: |
-> > +      the name of the CCGx firmware built for product series.
-> > +      should be set one of following:
-> > +      - "nv" for the RTX product series
 >=20
-> Please add 'NVIDIA' so that it is 'for the NVIDIA RTX product series'
->=20
-> > +      - "gn" for the Jetson product series
->=20
-> Same here please add 'NVIDIA' so that it is 'for the NVIDIA Jetson product
-> series'.
->=20
-> Rob, any concerns about this property in general? Unfortunately, ACPI cho=
-ose
-> a 16-bit type for this and used 'nv' for the RTX product. I don't find 'g=
-n'
-> for Jetson very descriptive but we need a way to differentiate from RTX.
->=20
-> This is needed in the Cypress CCGX driver for the following ...
->=20
-> https://lore.kernel.org/lkml/20220928150840.3804313-1-waynec@nvidia.com/
->=20
-> Ideally, this should have been included in this series but was sent befor=
-e.
-> We can always re-work/update the above patch even though it has been queu=
-ed
-> up now.
+> Just to clarify - this status looks redundant, but I have no way to tell
+> for sure...
 
-The driver seems to use this 16-bit value only to compare with a
-corresponding field in the firmware headers. How exactly we obtain this
-value is therefore not important. However, since this 16-bit value is
-embedded in firmware images, we also cannot substitute them with
-something more sensible.
+But that's independent of whether we specify this using the full path or
+reference the node by label, isn't it? The only way to make sure that a
+status =3D "okay" is not redundant is by manual inspection. I don't know
+of an automated way to do that. Perhaps it's something that could be
+added as a check to DTC?
 
-However, I'm also a little confused as to the meaning of the property.
-Looking at the driver, the fw_build field is used to check for
-"supported vendors". "nv" and "gn" are clearly the same vendor (NVIDIA),
-so that's at least not 100% accurate. The DT bindings say that this
-denotes the product series, which seems to be more in line with how the
-driver uses it.
-
-The driver also uses it to implement changes in behavior across
-different variants, which is something that we would typically describe
-using compatible strings. So I wonder if we should, at least for device
-tree, switch to using different compatible strings rather than this
-separate matching mechanism. We could then associate a "product series"
-with the compatible string rather than having this extra field.
-
-There's also an argument to be made for keeping the interface the same
-between ACPI and DT.
-
-Rob, Krzysztof?
+In this particular case I don't think the status is needed. As Jon
+mentioned, this device is first defined here and status =3D "okay" is the
+default, so this is redundant.
 
 Thierry
 
---h3NQArSPnjsazpQi
+--/hNVoH5xZwyCFIYG
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIyBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNby54ACgkQ3SOs138+
-s6E4fg/3R0pKH9akh9kvP2t0sZWoPkiERl9cABlNizWtx2cy0gI7OGgZ89iorCa0
-0vJV2G1eOEBkuCCEOd+L8X9C3QaIZV/MF1l1dwnaiZBagtCw6UNE+WkAN+I/ifBx
-ISyjta7Mz94FVzG8lMK+IaVEewvLMXOM4jm32BCtqgveWe6g3FBscC1ugu0po5iJ
-kMDQcrBuaqoZ2gAK1NJdw1vBR2XMfKzwUTS2GcugLUl2ZmzHRGiF8T5+UpagY7Pv
-otwtss8jKnINh8VS7WFGooMMQrB/0C6PnPSqnCf2R7yi/0gFq9wtJ6arBwIkKTI/
-t3XhAN5Fh86GFBCHMbPbT2EO7uC/71jtaaHwXFH3fiqKh91uqDnR1BgvR4bJEUNa
-Xs9LXoVkmJKXro1/3dgr3e6EhwB+mBTRA8WLVS4poR2CAI33ajHzjcvLpnZyltvL
-CeZJF2OfawWMdUWJTcMX23K2xh93q7e5vkveceNX2y15+yV066iOiI9P7GPVKOoJ
-8zbLfOJq6Ds5bW+4FhY81A9R9ib24whF3TNj5XJUy8B1YAjxVdETjxXe4kMnkut6
-4/4klVkO+koS4zU0MwZdg5lL6ZfLbHLQS8okQvtnOEbXsCSKq/aTB4jr0riCyw9o
-zVH7RBtyfYVdaPbItBeVbJPxMxcL9Ex0M/w8LUnbLXD8JZdIAw==
-=Cf+J
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNbzVMACgkQ3SOs138+
+s6E9wRAAvxEstA7fsndJGHjQBJ1VnmgD/ut80RMq/RbIlNqAXTvWdomp7Kg0qf/z
+HicY0UPrvJyw+8gSLQJ6Pi5syvsYlT15ORzmmui1lTylQ37EwD/z+gh1YoW5ajws
+8K/p8ax7ivzd1O1ARWfdP7NCdocn3HJqgrIFvgcYC1wjlf5tqoxklBU3YVqrlTDI
+TeULZVqjsV85W9x7Bi0BSbkRbiHcyCbRMRnlz3rjBynmydO/Um6CDZvpGysukVik
+oz4uS7PGfMm7yDcVSEiVaqXfa551Z3AckA/trp2Py+8/K5qMc5PI58EOzQMQhHF6
+6SNSdmmPhFWK6HcYx6XMB7q7retFEdAJErNXK9ko6izVmXmJ5sPjHCg00vxElGCm
+jnVajKP3Okc59tWcxOauCw5ATbyqsifxF2d5AnPWgflEIpjZuAUWdhYZOich+YcE
+7hyCZaQ73kUhVMJkiTTVaI22Va3Aql7UWoPS2ZfJhV/U0NbMykhG+rlqz+JHGo+o
+ya+3Fp5nStQCGAUyNcsxDsEycsRRwhCKWNvI2EaqrWmMOg+tSfV+AjZVyOcXyPuy
+nqtLr6u+wJ3dob/P9dza5p/RepoeqpxEsaEHa5AUQs32ckFdltiT2pSZT4WxUggA
+dyOMFtaNlN83jb74q22ny7ie3OUSyi1TtmriJRFw19+gnNmCsd4=
+=PpVN
 -----END PGP SIGNATURE-----
 
---h3NQArSPnjsazpQi--
+--/hNVoH5xZwyCFIYG--
