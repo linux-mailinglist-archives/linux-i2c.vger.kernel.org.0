@@ -2,134 +2,148 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D92610D56
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Oct 2022 11:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B72610F5F
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Oct 2022 13:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiJ1JdU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 Oct 2022 05:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57378 "EHLO
+        id S230218AbiJ1LHy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 Oct 2022 07:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiJ1JdS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Oct 2022 05:33:18 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on20621.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::621])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D989EDD3A1;
-        Fri, 28 Oct 2022 02:33:16 -0700 (PDT)
+        with ESMTP id S229750AbiJ1LHx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Oct 2022 07:07:53 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2080.outbound.protection.outlook.com [40.107.92.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D271D0D69;
+        Fri, 28 Oct 2022 04:07:50 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jfr+1XZU/7CcgVXEg5Kf9yRAc070ruCaoO6KlDTY4TBsMxhfWXf90dmwvl9XluNP6Fxq0uM/4XNnNsFh0Y81SKhaLyXpo2bEkypfAHq9yvZLUERgNk4u0Mvr3I+6a0cJcOHar56Xf0PPTBsz7p6MDEwiw9aNYo2x7e1RhZ0JEVmMVAdG/0tZ2z+JezUsx35DwMZz+Y08aDEHsW4x7TRTEyslthmyTtQ0UzMEDLgRYAVDw16iL2MaeD968WRoNJe0yNmhNa32OuCz2emRKByPid21K2xLlnuDUu4F7gqGOHCGF3pYbDnRxpytYyspXGk8025KLtm22SsTJjYgqdnQYQ==
+ b=AZ1zvcIkYBt9w5C9Zy4OvltiR3Gmc1Qav8Y7Kg1s3+r3uXlZ1KU8VdzH+2Rtk9PMQLRFy4Ipto2xJAGct9chj2ejn+YAQwwsvWeP/r+wDYRDoAvTB7hffNzRgc+QnY+RhsB6fM/A8dTM5uiFUYvK3Js+pEOP7yLAiltUxQWvcOkb6wuoU3PcaDgkxw0ad28NurNprppxB1aDZOqyya1iQbnBO1uT1z80jcjxD9lMJlJKOIx7omM6eDqiRWvZ4MCXCdXEl8F+5eJHpnrwOEVntVdcjcNMFCnDy0BtS6E91h7w01I4vgWRVu/plGEGKFDPo23IRI416hnTeS7d8O4gNw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x9PtRBEUXFCulHKYLaqEQSTXH6FXGSGqbMdntqTUeP8=;
- b=oUgJp8IXvMWmfTZxfTlP69iAuossCvLjJuL8bgxbbowVOMGTSiYH00rRuKNN2Uh6kHqimUVFEB3xjRr62bzZs3bej23aQT9bWqzg7Uj93g5EauWfLVejY9DyZgWmxzXZnA+eZ4Iw5Sb24TMgqBchWWD2J6I++zimNZffQmRpXrS73XONOY0KYqITt6POhAYPWySuUOpsST1mK5Vr9VFZvBJCMcy8dgJc2nsmIZyvF/3+8w5IN/JxB1i5nGiOGERu3piUWLrGHg7a4kiV+CjWavy0HnkL2cdxmiItplYH2xrS774Fs0zrogszkhwSz+TkZmPEwzs5HT6gpwwGlkCvKw==
+ bh=lApyejVqt6hHtcvALQK1W3KoOuUJgix1T0U4LEADEic=;
+ b=V7mHueBbs+fA1tZHFSBfL7X0KBdaERm2e4XBNi+DgwKotCmdsVhHvUDvJUYzBelsyU/M+i81AofGeYXMxV3raV/cZSIN5p3uHRcEsaZsU4pztYlUZsS1ghQ61BNAf9Gei8ZeYxpvu/pNldl3HBjUXAuZbJoO+jUQ2lH5hOoBVrMLFwylDQf5TeRAH4y+hRbp82HdcUeeXx7j9pKZIhGUecIVbDo+dw1yBn55STzcNdbCMnayQYzDHZDwG/1Xan/TLIMzZ+zO5K0XMTnjNEdjkFkbvjA0bj8ZexUKk9/6E/u8O8E1UWa/mj0Ooe7gUa8m2tHc1H9gi5EgCz7QMHCmcQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x9PtRBEUXFCulHKYLaqEQSTXH6FXGSGqbMdntqTUeP8=;
- b=YG6jqoxDw22DPjywyg3SPkl8HhHHPrMR3GcT7kyLF5tqqT5r8m1EO4ujr2PCF6Ta6/CcYhpWbrcx1C75sBTgFnzjdxIcWkH4odDgJH1jsKMQVxqYs2jFAH7pE5iAJrbwpsMNgkqLJBUgiaPMyhwTQdd0oj7u2AHzJ54SCmKpzquIswZOPq1buI2A0sIQy6Xxokah7LxxloyjmsFybRI4VV8LShwNrtsfyif3hZPu5XUlwnWY78Y3KeJjw7+TBQ0n5BSUD3zwoalkMfQqnNymVfCttfWh21SsKXq9IexTibvFIlWFH+JwLM9VWlnh7ytA49dBIansx5gARhX8XQBVBg==
+ bh=lApyejVqt6hHtcvALQK1W3KoOuUJgix1T0U4LEADEic=;
+ b=lC6Tccdf6jGfzu3OZqO+J3zfx6oZTjWTnh05Q9B2zOTfPVl6EJlaCHpjSUafP1mJb0kkFkiYu3eBAUUwJZS0VwLJU78wuKi1j9tSz2mr0UTEqPKA2zhV4lZflOmt4tY/sd/qqyteMVzmiK44J4x2FEqE9HQ4Yb3ei900fSPGG5L82I8m7zdEDnv5w1EdQjXpBn2tvs3oHdJjFfnQLbumTqVRH9mV3dVkHOkDhVhhEpzSTZeE5cneVgB6kqwr1sKZwa2+XFhKw0b6q1g0DfVA2rpkAoGKjgReA5Nx6yzbYObnhPARQ/97SUVKHRdpScinuQnTW8GpzCSFRO4hQnPJQg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- CH2PR12MB4940.namprd12.prod.outlook.com (2603:10b6:610:65::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5769.15; Fri, 28 Oct 2022 09:33:12 +0000
+ PH7PR12MB6563.namprd12.prod.outlook.com (2603:10b6:510:211::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Fri, 28 Oct
+ 2022 11:07:48 +0000
 Received: from CO6PR12MB5444.namprd12.prod.outlook.com
  ([fe80::c0e5:f111:3e59:7c66]) by CO6PR12MB5444.namprd12.prod.outlook.com
  ([fe80::c0e5:f111:3e59:7c66%6]) with mapi id 15.20.5769.015; Fri, 28 Oct 2022
- 09:33:12 +0000
-Message-ID: <b803bcf9-fc47-5239-ffe9-707925f324de@nvidia.com>
-Date:   Fri, 28 Oct 2022 10:33:03 +0100
+ 11:07:47 +0000
+Message-ID: <8194796b-9845-cd02-a542-0bc0d66b4617@nvidia.com>
+Date:   Fri, 28 Oct 2022 12:07:38 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH 04/11] arm64: tegra: Enable XUSB host and device on Jetson
- AGX Orin
+Subject: Re: [PATCH 02/11] dt-bindings: usb: Add NVIDIA Tegra XUSB host
+ controller binding
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        treding@nvidia.com, thierry.reding@gmail.com,
-        heikki.krogerus@linux.intel.com, ajayg@nvidia.com, kishon@ti.com,
-        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
-        mathias.nyman@intel.com, jckuo@nvidia.com
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-References: <20221024074128.1113554-1-waynec@nvidia.com>
- <20221024074128.1113554-5-waynec@nvidia.com>
- <2059dfe5-b084-42a4-7f35-9da9561fc12b@linaro.org>
 From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <2059dfe5-b084-42a4-7f35-9da9561fc12b@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wayne Chang <waynec@nvidia.com>, Rob Herring <robh@kernel.org>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <treding@nvidia.com>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        Ajay Gupta <ajayg@nvidia.com>, "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        Jui Chang Kuo <jckuo@nvidia.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sing-Han Chen <singhanc@nvidia.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <20221024074128.1113554-1-waynec@nvidia.com>
+ <20221024074128.1113554-3-waynec@nvidia.com>
+ <20221024145446.GA1763588-robh@kernel.org>
+ <52ae737e-eb4f-9eb7-8b79-d58251062276@nvidia.com>
+ <f5d2c979-a61c-e0d4-7a08-5b6f5b38dffb@linaro.org>
+ <c8039494-9fb7-c72e-a852-8bde13c0a61d@nvidia.com>
+In-Reply-To: <c8039494-9fb7-c72e-a852-8bde13c0a61d@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0090.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:190::23) To CO6PR12MB5444.namprd12.prod.outlook.com
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: LO4P123CA0467.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1aa::22) To CO6PR12MB5444.namprd12.prod.outlook.com
  (2603:10b6:5:35e::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|CH2PR12MB4940:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1e30751c-d6e8-4fb2-408a-08dab8c76e59
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|PH7PR12MB6563:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3fca6933-bc77-483f-0ddb-08dab8d4a559
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: v5dgSzT/SpygCUiuUxFNHLLf6Kwg/jlrP1pzAK9DlaBMNLwvpK2R8z76JjeWmWdObqg25ZbnDDkeNKPkWoQ46dsmwGipMDMsVO2ZiDAm8Y9jecSp7jBUoRkp1KDDKXBtCx3vu/3GfYYESjcBGRRmom0HCqPhRX0DYiK9oykii3bn0XuBKmm8FbxDZpW9VZNl9ADnFxPrMXeM+LlTEDUY2WE4fSGsTzqMAhf+qjBHCRWHDTPQ7YxxthFLZNioJOSxtSKri93l7oBPNEVvip/tpnpHmj3lHawKYfnMpPdXFbMQER6sdf4RXOo1PVqBabKbu52hC/uXnBRsgnaeV1QJlvhO5LgDsP7LgH/K3V8sHR8VHV4ydMdL8BMCAcd8uXt/912kWy51PuSCeLXcVzf4cS6WUvG2dh5kocuZ3LFXLxlL82QjiY5tWahw/J4c2y+fnBmCZNUC6DLisPQiI+bmIk1jkzlWmNt8aCzMj3vLtwINK0lBRdtTFeh17p1OSSIKox5UioiOeJXfVJ2M8UfxE6f/RtLH4j0cGc6Q9/wemWN9eqOBABHTWllE3XKBSWfHHwaPWef73Z8/T0tShshxOThM/HZOhGNWmwvhR4H3xNy8FCdAeCWfyn7wyUOG1m9LNvChelVtqw7v5b2kWbHXrgZnUP9BPJV5hOLjeP0J60y2PkCv4MVONlx5mE0L+Uo4VkvuUPlm30iecOQKkPeYHxOyxwMgnDUgSjZtoM7hBgDdseOdApixZeVAZLOuYwUQhFII2dYTF9uRuKEZj/FoXN2IFKRZYaAXehKDErWxtjsfl0JdF39CCgG64IY0XdGk
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(39860400002)(396003)(366004)(451199015)(36756003)(31686004)(7416002)(86362001)(31696002)(5660300002)(2906002)(38100700002)(83380400001)(921005)(6512007)(186003)(2616005)(6666004)(6636002)(6486002)(478600001)(316002)(53546011)(110136005)(41300700001)(66946007)(8676002)(66476007)(66556008)(4326008)(6506007)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: dQ7VviA+XcIobKl8Ly9omMgTzBgVYY61YiKAezYGgQl1jUUYVTyTdTvwnHrcJiK0V4qmkL119p2sd75Q/EDNBnkhRcN/Dp/sh/6lubGgE1Sdh1yMWCq86OpGQKKqQrk+uwVdqE45af/rzavPytg6IOUcfxlXHIuIEN2T4qPfrBi3Esm0HebVtcjvXyrkRnXLo3zm+8xM9zsa+82DP8H5z57HiAopi9ZrYKV81ro/5GEsyYM12z2OYIisTSQwZGAGvzJT9ZfkmD+1h+lrE+IBEtaXLcN8vs8UHFHllNIWPS6nGn6Vp5Mw0gbSoiubM69dtQvYXmk0ucXbIUKnNc8uBtlBVSKI8+IBSuUGwFX/92W0R1YebA5YEy3NHafMgd9P5U97OhqgodGpkCO8gBB+JeZb1xqCPB/Mzdn4xezdPzM87ZaDYQ0lYY7rEkoI7WYLuxz2fqPYa5isJSCqV3eUivaJ0Lmn/OUc4JW/EpSKEmTigG0oeOd+I6l88PTxw4e6vacbdn5sfuYVVNLWcRyHIoXxLA3r0qB/MuTMTwGy1ob1o1N+Scj0nIn1HFQy9iSawbDhRe06pWjzsIsUBfLoPAoQTP4yWy/vFRbalN6rQz1TcdnMpvuWn96NbuVfycqexNEJqxchq4LFL7zglTAzEeEO2FkouZP9VRGzWOtBqqxpFWC7QTeNnAjmC7Z+tyebcZK6bKzmuFzPQS4A/Qu1GifqjN8kFjWR+safJEyFYKQAH9EXqymLHADOgsbbFh3OxMbSBowxwbzbavuYimsU/OY4sM+5FGhF7jXmPFH0s6clvGZbO2tNT6orJpaWT+oiYj0CcwgtS/VS1ugmG7BLXQbTzjtbHfv8V+dghQF4VKdEsI3KFH77VS0cAz5fGi3f
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(376002)(366004)(39860400002)(136003)(451199015)(4326008)(966005)(8676002)(53546011)(2906002)(41300700001)(66946007)(38100700002)(6666004)(5660300002)(54906003)(6506007)(6486002)(66476007)(110136005)(86362001)(66556008)(316002)(31686004)(36756003)(6512007)(478600001)(2616005)(8936002)(31696002)(7416002)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZzZPT0tCNndMaHZwdWtheFlBQzhmWUpqQUV1OTNuZ3JNcE5yOFkzWmxFRFBG?=
- =?utf-8?B?VGpjb3UwVEpGZWgyWkpld0dISElsQU03MFB3WXh3d205QUZBcTB6Z0NkcU5s?=
- =?utf-8?B?c1QrZC9PWmM3RVRkNnZudVVjV1lqdkwwYUF4aFQvc2FYeDE3Mklqb0NOanQz?=
- =?utf-8?B?K01TeCt3NXNBR1lYcE9Yd1pVWUtUclh2bU0wQThlZHpmYlBRMjlwOXpOUGdU?=
- =?utf-8?B?em9STlZPakQ2amtZeU43NHhHaHJLdDhtRzRpVnJnNXRDTjdySGZaU1N4UlZU?=
- =?utf-8?B?MHB5RitZQXVwNFdFbUh3cjltc3UzbXZpemx4Z1VLQU1DdW1zZElvMGlRcDA4?=
- =?utf-8?B?dU82R3FwTnAzdDl3OW9XMXNTNkJMQnBRdlR2b2psNG8xbVlSazNFdCtJa21R?=
- =?utf-8?B?dFdlNVNRTmg2NVBCOXpGaS9ncmVKVDc2YlAvZDVPZkpzRW1ES2JjaVRObysx?=
- =?utf-8?B?YWNUbWtBNkRMY3J4dDA5UUhXN3FoQVozcmMrOHNabUh6UWZ6MlcrZ2xWcVdV?=
- =?utf-8?B?SGlKUmdQZjRNbndFV1hXZVh0cUU3V0M3UGh0QUlIb3o0dFpaT2VPdUE0bDBs?=
- =?utf-8?B?U2lKVWd4c3kzZEdaSmllcjRFMmlmTnVLaHVrNHppS0MwTmlZMU1uenhvak43?=
- =?utf-8?B?Nm9YYmlkcTRpYUw0MkU4WWc3UkJ5a25wOGsrRFZnWTVVZDFrR0RNT3ZXOE56?=
- =?utf-8?B?dmtJV0pFMlRFNWVhcXlOYkRlWDNoejNjdTdjaEdaMVR1VEtPZmg2VTB4NFNX?=
- =?utf-8?B?dmJjYTFUTHFBQ1h5b3pBTGxmNDRTd3E1OTBLOFI4Q1RKNkZkdXBjQ0FWc3ho?=
- =?utf-8?B?S29nM3RwNis5dTQvTC8waWw3cTd5WHo1ZE5yZnJHT09EbkExNm9ESk9tL2tq?=
- =?utf-8?B?L1UvMnA2NUpjSFdEanYxWHc1dGNYanFnTTQ5K2VMcERiM1BabHgzVFF5Z3NT?=
- =?utf-8?B?OElhcVpQU2M5L0V4MGNFUTJoWmVpWDY0aERsUHJxUU9sWmdydXlVNmI0OWgv?=
- =?utf-8?B?c0RLWjVyakdmemNncGxqaFJjMitsUHFWM1R5aytEdW9SZGlOWDNSSmQ0Kysx?=
- =?utf-8?B?SGJWODZXaXd5U2pQUWkycTRwUHkrL2NZaVdJbXZ4N0hQaHBzM296NEhJeXN5?=
- =?utf-8?B?UEJjdGhnSlJYS0VSMVM2SktwU0QvS1Y5dVFwYTJnbmJwZDBJSkxrRE16c1V1?=
- =?utf-8?B?b2hmZHpxZWJESGM4Z0I5azJFbTlMNXpDNURrRXo4UG5FWGxod01iYjVtWFZj?=
- =?utf-8?B?RVdSVGdqc3QwUjc2dXNsWm5RdkhlSDZLUStzaU5BQmE1OG9uMDcvbG1oYTdT?=
- =?utf-8?B?U0tUZjZieGNlY21LUGJvNzVxVzBCQkZtQTV2a1dXb0lJcTVxSkY5UFRJL0lZ?=
- =?utf-8?B?STJ0MG5UWUtzd3l5WkZrUTkzb1N0Vzd3Q0VneEhBZmhWQ3NjcXpYamVjZ0VQ?=
- =?utf-8?B?VUVsT1BhRmZNRGhvZVBPNGZmREVNSU5hZ3NCLzBQRWJ2SUtEc204WVo5YVph?=
- =?utf-8?B?azB6RjVGcDMwd1dUOStVd3RVSklWRm5WVjhNS01TOUN3b1JIOUFMSzNBUjNU?=
- =?utf-8?B?Y1ZvT0VXME9Jb3MrWUFmUXpwS1FRZ0ZRUmw2MXBWK2dMRldiZitxbTVmd1B3?=
- =?utf-8?B?NEsraHEyMkxxblZEZks1bzBwRVlKVGZBSTlTdW01QUxRcHRtYXFZZkRBVEEr?=
- =?utf-8?B?NS9PNTZzMnl6bVBSUWwxZ3FkQXlJNnpTdGI2RHROd0NyQ2lpNjJqMndTcFFV?=
- =?utf-8?B?aXpueXNGL0w1R3hBRmdwaDUzZFBvNzY4b0EwK2UvTEZBTmRxcERZaG9keUsz?=
- =?utf-8?B?RGF1TzJiSGhNeGR2UndOTzN4Z29QK0NNclNia2VMQXg4WEtvck8reEZiOWVl?=
- =?utf-8?B?S3RrZVhudHk3MmltQTdJYXJCQ3RZYk94WFEzd3dSOXRHdVZBMkFtenBpdDlU?=
- =?utf-8?B?aDF2THNCMVAzMUkyalVzSkVTR2ZzdldHd2JKWlFBNTVTTnQvVDVvYTJteHk4?=
- =?utf-8?B?MGRRL3oxZXdWQU5HUDdKNzFoa0t5enJZN3dwN3VIWXpFOVlyd0FEK2p0MDVN?=
- =?utf-8?B?RzU4Q25kYWk2aW1NZUFuWFBGZ21USzNaSkRWV1h1QmZ4REtVaDdpTmpqVE1n?=
- =?utf-8?B?OHp3ZmZEUUwwcUtUS25rM0xYcVR3ZkRHd1NaTlZ3MlFNalQrMzgyYnBsbGhy?=
- =?utf-8?B?aGhsc2d1S3ljN3JlaGpIOFl2cUhIQk1ON01HeVBYWTAyd3c5b0tvL3JIc29h?=
- =?utf-8?B?VUV1NGhhd1VoV1VjL1lXWmdrZTJ3PT0=?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZFpVVU5NZm4rYXNsTjdIZUZCNktweW5za3h5SDFnQzk1cHp6Ujc3RDk5MUJT?=
+ =?utf-8?B?N1hpMEdKTE1lclYyeUNIYTBaREwvS3Fmd2sxcmdRdE1wZzNqR0haUjFTU3pQ?=
+ =?utf-8?B?aFVUdGZxZDIybk11K0hUTkcyYnUvOGVGYkl1b0lxTXcrT0lORkFKSXg5NzFk?=
+ =?utf-8?B?N2VOSVBUVDFiZTVBb3FocWZ5UllnY1cyWSsrNWh1ZUliM1lyUFNnb1Jzc3Rk?=
+ =?utf-8?B?NWFIeGlPc3lZQ1JFZlJVR0pHdU01K0JIbENsTjgxTFcrRmtYZ3FOTGl1ZVMv?=
+ =?utf-8?B?QXVheU9qZXhWTjYzYU5wc2d0ZmlxczRuVFE0dHNtcUc1dmplWkk3MFdodTQy?=
+ =?utf-8?B?S09teXA1b3M1alVCMncvdFZCRmQxbTViQmpMN0VJWFBKQzUzNUJ6UDgzUmtU?=
+ =?utf-8?B?Ylk3WW9oNDdXeFdjOW5zcXJsdDVnaDhUN21xNnVWOWw0MGZxOGhjZWREdVRN?=
+ =?utf-8?B?YTRSNC81U1h6cjFLT2FTQmI2aDM3dkhvRzRsV1huNFVsRmJrdlRtRlFWcXcx?=
+ =?utf-8?B?ZzNDcmRZaFpGZC90bDl5Zk10WnNLRTVnbmdPZE52VEZQMWp3WCtVejZYZXJO?=
+ =?utf-8?B?VDA1MWlyMU5hckF2Vys4MTFZV0RETlBWUDN2cE1mZThSdXpBN2cxZDNTSW9T?=
+ =?utf-8?B?d0VIQ1pkTzBZVHVzcDF1MXNrYnZYK1ZYZXp2U0t6ZkRvWUxjaXV2TmhEM0pD?=
+ =?utf-8?B?M00veUZ0Q3VOSmY2UDV5ZVMxV1FNMGdmKzNHQ2FUN1I2dHIvSERCSU9DV2Z2?=
+ =?utf-8?B?eVZWR1ZTdjZ3MWJVSmFQTktuS09LaEVWTHJVYko4UUM5enVRclU1MUtJZFdu?=
+ =?utf-8?B?UVFqaGpVR2VhSm5pY0NRRnF2NURnbWpxSDlTTVp3azhvL0c1WTNwUisxS0do?=
+ =?utf-8?B?ZlRhMXdtYlZucCtLbytDd3ExWDl3ZG1TS24zaUtnalBkaXk3aHNWRUFLR2lS?=
+ =?utf-8?B?N254OTFBaUdsZENyaDhvWFBYZTRQTzBZRDhwd3V3Yk9TM1FCRmhGQ2grcG1u?=
+ =?utf-8?B?bnVOY2pWMnphWVVEZXNLc2thTmdSc1NETklIMllTelJHRjJsVlhGT29Dc2tW?=
+ =?utf-8?B?emlOTFdpOTRCZCtRUDd5RmtIak9pYUxUaXRCcGRxYkxpWjN6LzFHUVlVRzhl?=
+ =?utf-8?B?YmNoQmF4S3Jsd0hId25uc2EvTjFob2ZXdFdTNUpiNytLd0J5WURaSDY1M2hh?=
+ =?utf-8?B?UzlLYzdwL1RRMU5ZQ2QrS2p3UVB6YmQ5aENWMzdZOG9zaG5tOGduUGZFQnli?=
+ =?utf-8?B?dElxSEdwMXNBWFlxL3FxQ0ZjdElCVk51dXpwT0FlajlxczRlMFBuNDEzclFl?=
+ =?utf-8?B?LzJMQVJqakNwRWF0RFo1enZEb0I1R0tqK25yOHNpSkM0elA3L09Za0MzV214?=
+ =?utf-8?B?dVBzMG5FYUJqNkVNa2xYbnp1cy9PSEV1QUhDVW9uVmwwSkxXd3psYjlrZEF4?=
+ =?utf-8?B?cEQwZ0VFODR6OWxsUUM4anJoMFBuMU5qSERNSmdqZE05bUtud1lieWV1SUts?=
+ =?utf-8?B?MTgrV29MZ29rRXArcmdOUTc2YWNzYlZ0RkhydGsxOWRTWkE1OGF3aENiVXov?=
+ =?utf-8?B?NE91M2swdkVLeGl2SWdMSkkxZVdXTGNxNjArZkhPakdTdDFOZjlOWjd1Q1FZ?=
+ =?utf-8?B?U2dQUGpQOHBRSlllV3JVU3I4b1V1MVNlTWN4cnZoM0tDUit6VS96OFV0b0ta?=
+ =?utf-8?B?cUI1UGNYckhKb3FVOWdSRlpwanNOdGhnOGsxbTNzNzljV1FsYkkyc0g4cklt?=
+ =?utf-8?B?Z3VUQkZlR2lsa1h0V2laNXBLc1B2U3ZiMU5NcEM1Um5JWUpmbFkwb3NPTW1u?=
+ =?utf-8?B?SXR6UHJ6eVpPdldnV1pFL0dHbzBVS0M5LzBxYldQanpCRFo2TVNaOEUzYld0?=
+ =?utf-8?B?MFM1SkZuL3ZaN2dUSzFDb3ZUY0dsZ2tGMnc3QWxXWm9DL2grc0hqMllvZTVT?=
+ =?utf-8?B?ZWJoWGJGMkM2ZWsrYXVQUThVOUNPS0xsRXZxY0ZNWmhpT3Y0SHo3UC9LYk5y?=
+ =?utf-8?B?dlhXbmFUTHFSaEZVczRxcW9US0ZaWEUzR2ZmQUtERHRzVDFQeThaRUZjOFU2?=
+ =?utf-8?B?dmNneWw5UTR1Q0lsQmZHSzdKb2JaRWdCMDVmTHdnQjVyaDBnYjBsbWRZbFJF?=
+ =?utf-8?B?UUpNTnE3TTc2elUvdmhSSVdrczluRlgzZmpveWpZZEUva1A5RGNmZ1hOOHdz?=
+ =?utf-8?B?L09jS2F6NVdPMFZ4b3lYQ3pWcVhtSm4rWXpHbXZLK3NwR2E0L2pYaWdPYzE5?=
+ =?utf-8?B?clcvMVhHR2RZMFNkbW90ZHlKRmtRPT0=?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e30751c-d6e8-4fb2-408a-08dab8c76e59
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3fca6933-bc77-483f-0ddb-08dab8d4a559
 X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 09:33:11.8191
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 11:07:47.6593
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +qAO5Au59vX9rEXoa9LXVTmXl2VxdR9ch17W5RHZRuGfrQg+4RUVcwD0JYOUcit6B2xCEMDR7/z8YLDkOZECOA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4940
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8S59g0tsClJqUc3Vqw2JsqmOrGaY0PuB5cDGg3fjSQog5FMnTeohEQc5iGa03Vi8GQbdgVfJjwMn8mjeWCcmrQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6563
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -137,260 +151,43 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
-
-On 28/10/2022 03:23, Krzysztof Kozlowski wrote:
-> On 24/10/2022 03:41, Wayne Chang wrote:
->> This commit enables XUSB host, device, and pad controller on
->> Jetson AGX Orin.
+On 28/10/2022 10:25, Jon Hunter wrote:
+> 
+> On 28/10/2022 03:19, Krzysztof Kozlowski wrote:
+>> On 25/10/2022 04:02, Wayne Chang wrote:
+>>>
+>>>>> +  power-domain-names:
+>>>>> +    items:
+>>>>> +      - const: xusb_host
+>>>>> +      - const: xusb_ss
+>>>>
+>>>> Drop 'xusb_'.
+>>>
+>>> The properties are constant and we use the name to get the power domain.
+>>>
+>>>     tegra->genpd_dev_host = dev_pm_domain_attach_by_name(dev, 
+>>> "xusb_host");
+>>>
+>>>     tegra->genpd_dev_ss = dev_pm_domain_attach_by_name(dev, "xusb_ss");
+>>>
+>>> we might not be able to drop the xusb_
 >>
->> Signed-off-by: Wayne Chang <waynec@nvidia.com>
->> ---
->>   .../boot/dts/nvidia/tegra234-p3701-0000.dtsi  |  48 +++++
->>   .../nvidia/tegra234-p3737-0000+p3701-0000.dts | 184 ++++++++++++++++++
->>   arch/arm64/boot/dts/nvidia/tegra234.dtsi      | 170 ++++++++++++++++
->>   3 files changed, 402 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi b/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi
->> index 9e4d72cfa69f..8acef87a5398 100644
->> --- a/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi
->> +++ b/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi
->> @@ -61,6 +61,29 @@ mmc@3460000 {
->>   			non-removable;
->>   		};
->>   
->> +		padctl@3520000 {
->> +			vclamp-usb-supply = <&vdd_ao_1v8>;
->> +			avdd-usb-supply = <&vdd_ao_3v3>;
->> +
->> +			ports {
->> +				usb2-0 {
->> +					vbus-supply = <&vdd_5v0_sys>;
->> +				};
->> +
->> +				usb2-1 {
->> +					vbus-supply = <&vdd_5v0_sys>;
->> +				};
->> +
->> +				usb2-2 {
->> +					vbus-supply = <&vdd_5v0_sys>;
->> +				};
->> +
->> +				usb2-3 {
->> +					vbus-supply = <&vdd_5v0_sys>;
->> +				};
->> +			};
->> +		};
->> +
->>   		rtc@c2a0000 {
->>   			status = "okay";
->>   		};
->> @@ -69,4 +92,29 @@ pmc@c360000 {
->>   			nvidia,invert-interrupt;
->>   		};
->>   	};
->> +
->> +	vdd_5v0_sys: regulator@0 {
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "VIN_SYS_5V0";
->> +		regulator-min-microvolt = <5000000>;
->> +		regulator-max-microvolt = <5000000>;
->> +		regulator-always-on;
->> +		regulator-boot-on;
->> +	};
->> +
->> +	vdd_ao_1v8: regulator@1 {
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "vdd-AO-1v8";
->> +		regulator-min-microvolt = <1800000>;
->> +		regulator-max-microvolt = <1800000>;
->> +		regulator-always-on;
->> +	};
->> +
->> +	vdd_ao_3v3: regulator@2 {
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "vdd-AO-3v3";
->> +		regulator-min-microvolt = <3300000>;
->> +		regulator-max-microvolt = <3300000>;
->> +		regulator-always-on;
->> +	};
->>   };
->> diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
->> index 57ab75328814..b4630280bb32 100644
->> --- a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
->> +++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
->> @@ -2011,6 +2011,190 @@ hda@3510000 {
->>   			nvidia,model = "NVIDIA Jetson AGX Orin HDA";
->>   			status = "okay";
->>   		};
->> +
->> +		padctl@3520000 {
->> +			status = "okay";
->> +
->> +			pads {
->> +				usb2 {
->> +					lanes {
->> +						usb2-0 {
->> +							status = "okay";
->> +						};
->> +
->> +						usb2-1 {
->> +							status = "okay";
->> +						};
->> +
->> +						usb2-2 {
->> +							status = "okay";
->> +						};
->> +
->> +						usb2-3 {
->> +							status = "okay";
->> +						};
->> +					};
->> +				};
->> +
->> +				usb3 {
->> +					lanes {
->> +						usb3-0 {
->> +							status = "okay";
->> +						};
->> +
->> +						usb3-1 {
->> +							status = "okay";
->> +						};
->> +
->> +						usb3-2 {
->> +							status = "okay";
->> +						};
->> +					};
->> +				};
->> +			};
->> +
->> +			ports {
->> +				usb2-0 {
->> +					mode = "otg";
->> +					usb-role-switch;
->> +					status = "okay";
->> +					port {
->> +						hs_typec_p1: endpoint {
->> +							remote-endpoint = <&hs_ucsi_ccg_p1>;
->> +						};
->> +					};
->> +				};
->> +
->> +				usb2-1 {
->> +					mode = "host";
->> +					status = "okay";
->> +					port {
->> +						hs_typec_p0: endpoint {
->> +							remote-endpoint = <&hs_ucsi_ccg_p0>;
->> +						};
->> +					};
->> +				};
->> +
->> +				usb2-2 {
->> +					mode = "host";
->> +					status = "okay";
->> +				};
->> +
->> +				usb2-3 {
->> +					mode = "host";
->> +					status = "okay";
->> +				};
->> +
->> +				usb3-0 {
->> +					nvidia,usb2-companion = <1>;
->> +					status = "okay";
->> +					port {
->> +						ss_typec_p0: endpoint {
->> +							remote-endpoint = <&ss_ucsi_ccg_p0>;
->> +						};
->> +					};
->> +				};
->> +
->> +				usb3-1 {
->> +					nvidia,usb2-companion = <0>;
->> +					status = "okay";
->> +					port {
->> +						ss_typec_p1: endpoint {
->> +							remote-endpoint = <&ss_ucsi_ccg_p1>;
->> +						};
->> +					};
->> +				};
->> +
->> +				usb3-2 {
->> +					nvidia,usb2-companion = <3>;
->> +					status = "okay";
->> +				};
->> +			};
->> +		};
->> +
->> +		usb@3550000 {
->> +			status = "okay";
->> +
->> +			phys = <&{/bus@0/padctl@3520000/pads/usb2/lanes/usb2-0}>,
->> +				<&{/bus@0/padctl@3520000/pads/usb3/lanes/usb3-1}>;
->> +			phy-names = "usb2-0", "usb3-1";
->> +		};
->> +
->> +		usb@3610000 {
->> +			status = "okay";
->> +
->> +			phys =	<&{/bus@0/padctl@3520000/pads/usb2/lanes/usb2-0}>,
->> +				<&{/bus@0/padctl@3520000/pads/usb2/lanes/usb2-1}>,
->> +				<&{/bus@0/padctl@3520000/pads/usb2/lanes/usb2-2}>,
->> +				<&{/bus@0/padctl@3520000/pads/usb2/lanes/usb2-3}>,
->> +				<&{/bus@0/padctl@3520000/pads/usb3/lanes/usb3-0}>,
->> +				<&{/bus@0/padctl@3520000/pads/usb3/lanes/usb3-1}>,
->> +				<&{/bus@0/padctl@3520000/pads/usb3/lanes/usb3-2}>;
->> +			phy-names = "usb2-0", "usb2-1", "usb2-2", "usb2-3",
->> +				"usb3-0", "usb3-1", "usb3-2";
->> +		};
->> +
->> +		i2c@c240000 {
->> +			status = "okay";
->> +			ucsi_ccg: ucsi_ccg@8 {
+>> These are new bindings, so why do say they are "constant"? New bindings
+>> means you did not use them. If you used them before bindings... what can
+>> we say? Don't?
 > 
-> No underscores in node names.
-> 
->> +				compatible = "cypress,cypd4226";
->> +				cypress,firmware-build = "gn";
->> +				interrupt-parent = <&gpio>;
->> +				interrupts = <TEGRA234_MAIN_GPIO(Y, 4) IRQ_TYPE_LEVEL_LOW>;
->> +				reg = <0x08>;
->> +				status = "okay";
-> 
-> The pattern of redefining full path in Tegra is confusing - I have no
-> clue which of these status=okay are correct which are redundant.
-> 
-> Do you?
+> Not exactly. However, what we should do here is convert the legacy 
+> binding doc [0] and replace with this one. But yes we are stuck with the 
+> 'xusb_host' naming.
 
-I understand you may not like this approach, however, this comment is 
-not really relevant to just this patch, but a general comment. But yes 
-we will ensure that this is correct.
 
-> 
-> 
->> +				#address-cells = <1>;
->> +				#size-cells = <0>;
->> +				ccg_typec_con0: connector@0 {
->> +					compatible = "usb-c-connector";
->> +					reg = <0>;
->> +					label = "USB-C";
->> +					data-role = "host";
->> +					#address-cells = <1>;
->> +					#size-cells = <0>;
->> +					port@0 {
->> +						reg = <0>;
->> +						#address-cells = <1>;
->> +						#size-cells = <0>;
-> 
-> Hm, why do you have here cells?
-> 
-> Did you test the DTS with dtbs_check?
+Thierry already has a patch to do this [0]. So we should fix that up and 
+included in this series.
 
-That does not look correct and so we will correct.
-
-Thanks!
 Jon
+
+[0] 
+https://lore.kernel.org/linux-tegra/20211209165339.614498-3-thierry.reding@gmail.com/
 
 -- 
 nvpublic
