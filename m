@@ -2,331 +2,216 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA69B6107E9
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Oct 2022 04:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDF061091C
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Oct 2022 05:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236019AbiJ1CYL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 Oct 2022 22:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58804 "EHLO
+        id S233619AbiJ1D7R (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 Oct 2022 23:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236145AbiJ1CYF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Oct 2022 22:24:05 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF90ABBF03
-        for <linux-i2c@vger.kernel.org>; Thu, 27 Oct 2022 19:24:03 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id bb5so2727282qtb.11
-        for <linux-i2c@vger.kernel.org>; Thu, 27 Oct 2022 19:24:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E6YuEbTvxm7O8eyz47pGuOxddlgQTa4cA4pcPo4hUJI=;
-        b=RvlZ3dTbvauA0B99ZDIDWWl4qM24s6MUS96r7BYXXIAT5tHrm1exYmum8d7Vfm3JOL
-         Jrj5sH/PWSHWpzg57Wfnuha+zWwzfBsFLA0pxjYmnTUAuJrYu6D4u9FLr4Czr+D4W5q8
-         WPQ6e3FtrFB0me3+8x4cmCq1a+RGF6YiHBskpw0gPQWkjSMFNKHZxPOl7JotM72QHQ7a
-         BGYrGphF7UspE8vHDBoHpFHCZZHmExHZKcDyE1MCoK7pvaVZj6gS8rDe3zhURAY90O9q
-         KEIOue7TlunFyK0JhxXrLhCgha6L/iqVxXNC5w1h2q3wCSw8eIfOd9E6SEVyhSdwKyQH
-         QV4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E6YuEbTvxm7O8eyz47pGuOxddlgQTa4cA4pcPo4hUJI=;
-        b=dMAi4PeawJLUEJDIN3mOu702y9BbmfDod20xxIQKl7xkrjj4xLuBbOtcDlKIsD2CVX
-         iHrCn0W/N8GoGHdD0wGkq8uBQtzVjZPCIWSJinVKnhxPlHaBjQE6is7hIiMXU5akW5Ge
-         flMfg/xBPbovZOOTFTQlTlie8+REovWpMvmr3NldRBVdxtKYeZu6cMStKM685HIZiba+
-         gZTQAmMM+6n4vYQ3vkWv4wgNWyXr/PLmFEv5uFhqQgL3AFuX2wDD99JBLVU9Up8hPVJt
-         B+kOF1MGy28pxU0hA08Y+bUNJFtAW2JW5hMDesUZ5Xe15YUtZARP7cuAmFsw5WuV9fl2
-         B3IA==
-X-Gm-Message-State: ACrzQf16U97kbes6BZxiTbW191tS7RKX8iCsmcCWlT0F5oqyDfJyJ2ag
-        2faPj16e7yKOtBK+rxCUKob5UA==
-X-Google-Smtp-Source: AMsMyM5edx+u+jXkjLS022OCRzFXFfJ2caHhvxv7SfETslJUAjLK7INIk8S3YdDxs5ghQZ5SACKP+g==
-X-Received: by 2002:a05:622a:c5:b0:39c:f1c2:6732 with SMTP id p5-20020a05622a00c500b0039cf1c26732mr45199906qtw.588.1666923842972;
-        Thu, 27 Oct 2022 19:24:02 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id c2-20020a05622a024200b0038b684a1642sm1802068qtx.32.2022.10.27.19.24.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 19:24:02 -0700 (PDT)
-Message-ID: <2059dfe5-b084-42a4-7f35-9da9561fc12b@linaro.org>
-Date:   Thu, 27 Oct 2022 22:23:59 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 04/11] arm64: tegra: Enable XUSB host and device on Jetson
- AGX Orin
-Content-Language: en-US
-To:     Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        treding@nvidia.com, jonathanh@nvidia.com, thierry.reding@gmail.com,
-        heikki.krogerus@linux.intel.com, ajayg@nvidia.com, kishon@ti.com,
-        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
-        mathias.nyman@intel.com, jckuo@nvidia.com
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-References: <20221024074128.1113554-1-waynec@nvidia.com>
- <20221024074128.1113554-5-waynec@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221024074128.1113554-5-waynec@nvidia.com>
+        with ESMTP id S229379AbiJ1D7Q (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Oct 2022 23:59:16 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DB2D8EF9;
+        Thu, 27 Oct 2022 20:59:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=K1/gI77txMJLPkROI87IUmxSmbtC8Y01sqPV2sTbDxZgD3oSYL7w5k73DAWoknopYjNnwL7NWdsbDjqIzvtXMYdpr/L+p/yJkOfqqltPBsZtVQoQjL2xduXJ9ZiNJD/HRyw8EDrNtVbfFcguC2usYG5lbFACb2EhuSd5lmnD7HNcbTnRuRWrBJWkk+8iGvHJxU934+UkPZL1EZU2v6xJo8509/nA7pa49Y9xqn9vSl5+csFzd1DJAvqoOAvyQGIbIW88dFUsSaxq8FReRsw9DlhOro9N4FzhJ3GYwysQOaGrILEKGAAM8zY6H9oxhc9I1an/Fli6AOW7puQpi493Lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4CSm36fiStGfSgInpiL5KsSYhlJ4DILXnoqSzThhQ1Q=;
+ b=QogPgitGJ+soTVSJgS6EfIGcADIxXKJnMd70Eq+3Y+pmTjIVavgHvCd7QfTTF0c2+naSdPcJx8uB8f4IAEGUJK6CbRN6nL2WXAh3LaPAKk/TDQRGIIf/fPb5aj+s6gyKVORTLn4dIqFRMzCH0hXqGKVl7zmmzjCjdC55gKGD9kWNT94BFPoxKP+rP7rA0NcYcm1wqSmKIovv5AjqKg3JuldyF8HOuJ3y9CHkcm6XRQx6d6Xbj8hJP3B4i2FQfw4Z/xgucHR/l66Z/9VJ/3fM893pih+dg4aj/CYTsn2L/J6234IBR3CafPxiVOHlXSXvsocHsgmM2JZbf8Lk6SjXxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4CSm36fiStGfSgInpiL5KsSYhlJ4DILXnoqSzThhQ1Q=;
+ b=yf/iOU0O+GvGm6h4mn//YuuQ/3MKlpiql3xMLtpxFfwuINyv9MIg01ZTz/EmCtNCF9bWEepn2yaKXBGErmnpHYqFbFqfmDz9O+6tIPLVZ0rG9zC9uSZ4Js9ikAc0HXkTRJq3t1cojh7/4pQU/Qt7Qc9wj77Z0aZiIdmP7YU3wig=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5176.namprd12.prod.outlook.com (2603:10b6:208:311::19)
+ by CH2PR12MB4152.namprd12.prod.outlook.com (2603:10b6:610:a7::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15; Fri, 28 Oct
+ 2022 03:59:13 +0000
+Received: from BL1PR12MB5176.namprd12.prod.outlook.com
+ ([fe80::5ce0:abf9:fe08:f42e]) by BL1PR12MB5176.namprd12.prod.outlook.com
+ ([fe80::5ce0:abf9:fe08:f42e%4]) with mapi id 15.20.5746.023; Fri, 28 Oct 2022
+ 03:59:12 +0000
+Message-ID: <9b5a3d42-eb98-404a-50be-6112266c978c@amd.com>
+Date:   Fri, 28 Oct 2022 09:28:55 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH] i2c: amd-mp2: use msix/msi if the hardware supports
+To:     Raju Rangoju <Raju.Rangoju@amd.com>, syniurge@gmail.com
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rajesh1.kumar@amd.com,
+        Basavaraj Natikar <basavaraj.natikar@amd.com>
+References: <20221025181124.421628-1-Raju.Rangoju@amd.com>
+From:   Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+In-Reply-To: <20221025181124.421628-1-Raju.Rangoju@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0058.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:99::17) To BL1PR12MB5176.namprd12.prod.outlook.com
+ (2603:10b6:208:311::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5176:EE_|CH2PR12MB4152:EE_
+X-MS-Office365-Filtering-Correlation-Id: b6a8a4c6-223f-4cb9-5629-08dab898c620
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nYVNwJI7H4rSvKhMb7U+CpzvR/Ejt7LnpZLwum5nh2kk3B1Yi1Fl4gsOKMhPJ81z7siJ3+ahUU3M5n0Q2AimeUZCjJ9R+VBleuMvF2VfLgt+OPd5FCcXNsl7Wrr8qUIHUHknUZ7eF5mmyrFum1/Ho1Z2phe3paLEb/oIuyJbD4880ucOgPoF6CWqcUzjfY55TAXtNBcMcb58p1UQsm+N7tZp++bv3CJojobjW3cImpDEafE7ojVY3rt+t1eeh4A2G2xn6IxReRq0wnMajN+yc2kb/7AsyZZLmHhmXF2BFXZ3FAKvvEwIDJh6jAZz19oehxeYmvrrpe3l8whYzC02II87mTmJoYC6AfQYG16yYYHvnXGwtrviX9gRLBORIU1geqYhiEVVuzB70/JaykLDWVLHfEdbKa+vBRbvFshBwSIvuc8qh2RBga7HmTTUeKpXId11kId2CxMKLqQLlOcurQe7JPkhkvyMcIoLJ4ZqFReNmUB+MYYEq/mLZUObsPga5HoJgSznNS41xfPO1ny/MwJWbR5qdu3loRQQEhKRR79SOGFVNCIdtB5NUhbeuazDGF2HjUvRjIIj4ZSSZEceBASxazOmeut6e+LXDqbBxiegm0PMhDfPv4n8Blry+AWoPFu5BdH03Y7UTnF5PkSbMqBrE3G3aOcevOJbDLfFNQj8jUMUzRH/nJbUTHSCUMViVPfI7fDym30UltEiHX9PqShsmjEfXi4USd6ncE0Q+cQC6EPn7J4PSnf/2/3HUIrXBHqsiriM2cnql88bLy996xuBHcsfu+YsV+WyryqbRuM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(396003)(366004)(346002)(451199015)(83380400001)(66556008)(66946007)(66476007)(8676002)(4326008)(186003)(2616005)(316002)(41300700001)(2906002)(6486002)(6666004)(478600001)(38100700002)(8936002)(6512007)(31686004)(26005)(6506007)(53546011)(86362001)(36756003)(5660300002)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WUhWc0hYRG9hbkpXY1cwdUNLZEtkSXhHSXhTM1I3Y2xGSmxqamRuczl0WGFV?=
+ =?utf-8?B?cUVqR2FqNUxwYUE0VEI0V0dPV2ZSSHZPUWprNVZyZUhVQ20xVEVHajhwRGlH?=
+ =?utf-8?B?azVGaERwcnBEN1RyekZ5N3JRNy9MRjBjcUIvVFYzTlE2dTdvOEIyUGVhai8y?=
+ =?utf-8?B?RmNNcHYvOVhhNzFFNzNScmRyZ2V6azI4UlZzT3RLaGQrV29wUGFzT1hMUUNP?=
+ =?utf-8?B?eXZKWllMcWVYLzZLTFF3R05uMklvTDVuTHJHa1hCRGVRSG1VaVhwdWtVOUt0?=
+ =?utf-8?B?OUpRRXdJWlVhd1hqVnhTWEVlSEZQNTdJM3N2M2QvOXJDQWJBUWVPWmJwVSty?=
+ =?utf-8?B?Q20vK1Jmd2VTamFMZTE2dDRkMFBGS2x5VVJwaXF5eGNRSnRFUU01VlBmOTN3?=
+ =?utf-8?B?NjJGOVl6VFJ4cFExODNiUytnSUVMWkk2TCttN2dLR3U3ajNCOVEwL0g5a3Vl?=
+ =?utf-8?B?YmdiNXFUdEZKYUIrNWd4V0YyQ0w0dnBZNGxUZngxbTM3VTVzUlAyaS9LbXVD?=
+ =?utf-8?B?NlR0S0t6cVRoSzN6LzVja2FIVTh3REpKTENjRURaZHJZa0ZJU3YxYk5jeFp6?=
+ =?utf-8?B?RWxSazRJbnZYa1BtZG1GYVJUY2VDN1hkMjFJV3AvVUpWdjZvSmhvQ25mbmwz?=
+ =?utf-8?B?YVFMb29UcFlmcmN2bERManlyVlVlM0lTRVFjdnpxWWFjUzBOWlRsOHRkUGFo?=
+ =?utf-8?B?TmxKYnFwRHlQL2h5cTA3MlF0VCtnZkp6ZnNrR0tIOEpHVHZlMHpPZHo2c24w?=
+ =?utf-8?B?Z0lhdC9tU1VYMnlMaWdkZ1ZkUkxoZitmM0thUG9LNUw2NlI3U2pwYmdmV2tF?=
+ =?utf-8?B?bGZWN1JBTklES0VsOG5vRkltbGtkd1BZMDg3bllXMWxZVU5rRkpJQXYxdm5O?=
+ =?utf-8?B?K0tDV2VNTGxMOEZFZ1N6WlZSVXRiYUxUa3dkOEU2VXRTZDIweVB0ZmtwRGdS?=
+ =?utf-8?B?Rms3UmhUTjBxaHlTbEdIYXpQOGNpdFM4cEhJdkdlT1AzMThieE54MVBYQmla?=
+ =?utf-8?B?T3dpZitXWCtNLzk4ZThFVlo1V0ljRjVXOUp4ZmgvN1RiT21NZzU5dkVPY3JK?=
+ =?utf-8?B?anExVU42NlRtU1QwbStQU1FiVjBPM1RxdzNaVmNYQ0xQSkcrSmc1R2h2T1kw?=
+ =?utf-8?B?VGo3T2dyQzJvdDBUaUN4b1VTcGovSkxjT01pYU5BYW9jUE5tOE41WUdJMk5C?=
+ =?utf-8?B?UE5heCtWY0ZITkxvSVNaTEFSVlRYZWxsTEVCc3ZmWkFSS2tINTJpdnQxS1Mv?=
+ =?utf-8?B?RFV0STlOZW90YnlxcDk2ODE3UmJnZXJlcW9YZGpHRmY0QnMweHhBdCtUTDFq?=
+ =?utf-8?B?QzZBRmpNdnlHdjdOTWVXbzdEUHVlWHluVVF3UEt0elpLUmxHVmNObG4wWjlO?=
+ =?utf-8?B?eExhQnhxOGRJUGZsaGtWM0xjeXVEL2JkSDFKUmd0ZkhVUGhjbkxoV0R4cTRG?=
+ =?utf-8?B?bTRjOWRoNnI0NDJ1ampiTXU3SGtveGkwWEw2Y2ZYTzBXa2czaW10N25ydFQ2?=
+ =?utf-8?B?dXpUV3BGcXlRSVRmSk9BMmxZZWJuQlN2TGZueFRGenMyUk5aZDM1aXNCcG80?=
+ =?utf-8?B?ZjdMRHNWNHZFZUdCdlI0Q0oyZW5Xb1hjMFpseUFHL0ZyVUdMNFdYMHVadTls?=
+ =?utf-8?B?aDBIZExub3hNMWg1UXZiRkM3Ym9hbmlIRkx0MUN3UThhdmQ1UWxMSmhrN1JU?=
+ =?utf-8?B?WmxFTmZrWjJBNHZtVHdpRXRvNjgxUFNWaTE1dzhMWjlCeWVTMEFUWkxEK0lF?=
+ =?utf-8?B?RWh5VG9jRTRVZlhodDB2OURoNEhzZENDeTJGRXdRSlk4OVdXNXJMVmJLbDEv?=
+ =?utf-8?B?Ny96Wk9ONmhmRDZ0Z2pyM0ZOM1EzZFh3SktjQ1JnbllITE1saTRrcGtnbmt5?=
+ =?utf-8?B?L1c4UGhPNDdEY1owOFpXL3BWZHE3cTFRMldmZjY5dGZ2amRybXNzZHRyU2xZ?=
+ =?utf-8?B?TzVXcnJzV3JmR1diWE9hSjlieUR2VmxKdTEwR1pnUlcxaDVFMDJEaFhLOENS?=
+ =?utf-8?B?QnllMFZNTnVEZFZYY2VMRUJTUDNiRmNKTGVJT3paTHJLQ3MwbkJSQ21jbWEx?=
+ =?utf-8?B?ZnRoWVFqWkhNM214OHhXcFdPWmc1eDEySXV3ZUFUM0ZiU3hPUmtJK2pyRUVC?=
+ =?utf-8?Q?yP1fPWZaxKIrgR0OFAwabBGZm?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b6a8a4c6-223f-4cb9-5629-08dab898c620
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 03:59:12.8811
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hrq15w7jRuR4Jt0dzEIRZo+k41OSv1pvzV5ivvtYxk+6uzbA1X57NMWUP5sKypggZL/6UuLqBJgwwHF0Bk+/iQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4152
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 24/10/2022 03:41, Wayne Chang wrote:
-> This commit enables XUSB host, device, and pad controller on
-> Jetson AGX Orin.
+
+
+On 10/25/2022 11:41 PM, Raju Rangoju wrote:
+> Use msix or msi interrupts if the hardware supports it. Else, fallback to
+> legacy interrupts.
 > 
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> Fixes: 529766e0a011 ("i2c: Add drivers for the AMD PCIe MP2 I2C controller")
+> Co-developed-by: Basavaraj Natikar <basavaraj.natikar@amd.com>
+> Signed-off-by: Basavaraj Natikar <basavaraj.natikar@amd.com>
+> Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
+
+Looks good to me.
+
+Acked-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+
 > ---
->  .../boot/dts/nvidia/tegra234-p3701-0000.dtsi  |  48 +++++
->  .../nvidia/tegra234-p3737-0000+p3701-0000.dts | 184 ++++++++++++++++++
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi      | 170 ++++++++++++++++
->  3 files changed, 402 insertions(+)
+>  drivers/i2c/busses/i2c-amd-mp2-pci.c | 30 +++++++++++++++++++---------
+>  drivers/i2c/busses/i2c-amd-mp2.h     |  1 +
+>  2 files changed, 22 insertions(+), 9 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi b/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi
-> index 9e4d72cfa69f..8acef87a5398 100644
-> --- a/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi
-> +++ b/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi
-> @@ -61,6 +61,29 @@ mmc@3460000 {
->  			non-removable;
->  		};
+> diff --git a/drivers/i2c/busses/i2c-amd-mp2-pci.c b/drivers/i2c/busses/i2c-amd-mp2-pci.c
+> index f57077a7448d..143165300949 100644
+> --- a/drivers/i2c/busses/i2c-amd-mp2-pci.c
+> +++ b/drivers/i2c/busses/i2c-amd-mp2-pci.c
+> @@ -288,7 +288,7 @@ static void amd_mp2_clear_reg(struct amd_mp2_dev *privdata)
+>  static int amd_mp2_pci_init(struct amd_mp2_dev *privdata,
+>  			    struct pci_dev *pci_dev)
+>  {
+> -	int rc;
+> +	int irq_flag = 0, rc;
 >  
-> +		padctl@3520000 {
-> +			vclamp-usb-supply = <&vdd_ao_1v8>;
-> +			avdd-usb-supply = <&vdd_ao_3v3>;
+>  	pci_set_drvdata(pci_dev, privdata);
+>  
+> @@ -311,17 +311,29 @@ static int amd_mp2_pci_init(struct amd_mp2_dev *privdata,
+>  	if (rc)
+>  		goto err_dma_mask;
+>  
+> -	/* Set up intx irq */
+> +	/* request and enable interrupt */
+>  	writel(0, privdata->mmio + AMD_P2C_MSG_INTEN);
+> -	pci_intx(pci_dev, 1);
+> -	rc = devm_request_irq(&pci_dev->dev, pci_dev->irq, amd_mp2_irq_isr,
+> -			      IRQF_SHARED, dev_name(&pci_dev->dev), privdata);
+> -	if (rc)
+> -		pci_err(pci_dev, "Failure requesting irq %i: %d\n",
+> -			pci_dev->irq, rc);
+> +	rc = pci_alloc_irq_vectors(pci_dev, 1, 1, PCI_IRQ_ALL_TYPES);
+> +	if (rc < 0) {
+> +		dev_err(&pci_dev->dev, "Failed to allocate single IRQ err=%d\n", rc);
+> +		goto err_dma_mask;
+> +	}
 > +
-> +			ports {
-> +				usb2-0 {
-> +					vbus-supply = <&vdd_5v0_sys>;
-> +				};
+> +	privdata->dev_irq = pci_irq_vector(pci_dev, 0);
+> +	if (!pci_dev->msix_enabled && !pci_dev->msi_enabled)
+> +		irq_flag = IRQF_SHARED;
 > +
-> +				usb2-1 {
-> +					vbus-supply = <&vdd_5v0_sys>;
-> +				};
-> +
-> +				usb2-2 {
-> +					vbus-supply = <&vdd_5v0_sys>;
-> +				};
-> +
-> +				usb2-3 {
-> +					vbus-supply = <&vdd_5v0_sys>;
-> +				};
-> +			};
-> +		};
-> +
->  		rtc@c2a0000 {
->  			status = "okay";
->  		};
-> @@ -69,4 +92,29 @@ pmc@c360000 {
->  			nvidia,invert-interrupt;
->  		};
->  	};
-> +
-> +	vdd_5v0_sys: regulator@0 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "VIN_SYS_5V0";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	vdd_ao_1v8: regulator@1 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vdd-AO-1v8";
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vdd_ao_3v3: regulator@2 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vdd-AO-3v3";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		regulator-always-on;
-> +	};
+> +	rc = devm_request_irq(&pci_dev->dev, privdata->dev_irq,
+> +			      amd_mp2_irq_isr, irq_flag, dev_name(&pci_dev->dev), privdata);
+> +	if (rc) {
+> +		pci_err(pci_dev, "Failure requesting irq %i: %d\n", privdata->dev_irq, rc);
+> +		goto free_irq_vectors;
+> +	}
+>  
+>  	return rc;
+>  
+> +free_irq_vectors:
+> +	free_irq(privdata->dev_irq, privdata);
+>  err_dma_mask:
+>  	pci_clear_master(pci_dev);
+>  err_pci_enable:
+> @@ -364,7 +376,7 @@ static void amd_mp2_pci_remove(struct pci_dev *pci_dev)
+>  	pm_runtime_forbid(&pci_dev->dev);
+>  	pm_runtime_get_noresume(&pci_dev->dev);
+>  
+> -	pci_intx(pci_dev, 0);
+> +	free_irq(privdata->dev_irq, privdata);
+>  	pci_clear_master(pci_dev);
+>  
+>  	amd_mp2_clear_reg(privdata);
+> diff --git a/drivers/i2c/busses/i2c-amd-mp2.h b/drivers/i2c/busses/i2c-amd-mp2.h
+> index ddecd0c88656..018a42de8b1e 100644
+> --- a/drivers/i2c/busses/i2c-amd-mp2.h
+> +++ b/drivers/i2c/busses/i2c-amd-mp2.h
+> @@ -183,6 +183,7 @@ struct amd_mp2_dev {
+>  	struct mutex c2p_lock;
+>  	u8 c2p_lock_busid;
+>  	unsigned int probed;
+> +	int dev_irq;
 >  };
-> diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-> index 57ab75328814..b4630280bb32 100644
-> --- a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-> +++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-> @@ -2011,6 +2011,190 @@ hda@3510000 {
->  			nvidia,model = "NVIDIA Jetson AGX Orin HDA";
->  			status = "okay";
->  		};
-> +
-> +		padctl@3520000 {
-> +			status = "okay";
-> +
-> +			pads {
-> +				usb2 {
-> +					lanes {
-> +						usb2-0 {
-> +							status = "okay";
-> +						};
-> +
-> +						usb2-1 {
-> +							status = "okay";
-> +						};
-> +
-> +						usb2-2 {
-> +							status = "okay";
-> +						};
-> +
-> +						usb2-3 {
-> +							status = "okay";
-> +						};
-> +					};
-> +				};
-> +
-> +				usb3 {
-> +					lanes {
-> +						usb3-0 {
-> +							status = "okay";
-> +						};
-> +
-> +						usb3-1 {
-> +							status = "okay";
-> +						};
-> +
-> +						usb3-2 {
-> +							status = "okay";
-> +						};
-> +					};
-> +				};
-> +			};
-> +
-> +			ports {
-> +				usb2-0 {
-> +					mode = "otg";
-> +					usb-role-switch;
-> +					status = "okay";
-> +					port {
-> +						hs_typec_p1: endpoint {
-> +							remote-endpoint = <&hs_ucsi_ccg_p1>;
-> +						};
-> +					};
-> +				};
-> +
-> +				usb2-1 {
-> +					mode = "host";
-> +					status = "okay";
-> +					port {
-> +						hs_typec_p0: endpoint {
-> +							remote-endpoint = <&hs_ucsi_ccg_p0>;
-> +						};
-> +					};
-> +				};
-> +
-> +				usb2-2 {
-> +					mode = "host";
-> +					status = "okay";
-> +				};
-> +
-> +				usb2-3 {
-> +					mode = "host";
-> +					status = "okay";
-> +				};
-> +
-> +				usb3-0 {
-> +					nvidia,usb2-companion = <1>;
-> +					status = "okay";
-> +					port {
-> +						ss_typec_p0: endpoint {
-> +							remote-endpoint = <&ss_ucsi_ccg_p0>;
-> +						};
-> +					};
-> +				};
-> +
-> +				usb3-1 {
-> +					nvidia,usb2-companion = <0>;
-> +					status = "okay";
-> +					port {
-> +						ss_typec_p1: endpoint {
-> +							remote-endpoint = <&ss_ucsi_ccg_p1>;
-> +						};
-> +					};
-> +				};
-> +
-> +				usb3-2 {
-> +					nvidia,usb2-companion = <3>;
-> +					status = "okay";
-> +				};
-> +			};
-> +		};
-> +
-> +		usb@3550000 {
-> +			status = "okay";
-> +
-> +			phys = <&{/bus@0/padctl@3520000/pads/usb2/lanes/usb2-0}>,
-> +				<&{/bus@0/padctl@3520000/pads/usb3/lanes/usb3-1}>;
-> +			phy-names = "usb2-0", "usb3-1";
-> +		};
-> +
-> +		usb@3610000 {
-> +			status = "okay";
-> +
-> +			phys =	<&{/bus@0/padctl@3520000/pads/usb2/lanes/usb2-0}>,
-> +				<&{/bus@0/padctl@3520000/pads/usb2/lanes/usb2-1}>,
-> +				<&{/bus@0/padctl@3520000/pads/usb2/lanes/usb2-2}>,
-> +				<&{/bus@0/padctl@3520000/pads/usb2/lanes/usb2-3}>,
-> +				<&{/bus@0/padctl@3520000/pads/usb3/lanes/usb3-0}>,
-> +				<&{/bus@0/padctl@3520000/pads/usb3/lanes/usb3-1}>,
-> +				<&{/bus@0/padctl@3520000/pads/usb3/lanes/usb3-2}>;
-> +			phy-names = "usb2-0", "usb2-1", "usb2-2", "usb2-3",
-> +				"usb3-0", "usb3-1", "usb3-2";
-> +		};
-> +
-> +		i2c@c240000 {
-> +			status = "okay";
-> +			ucsi_ccg: ucsi_ccg@8 {
-
-No underscores in node names.
-
-> +				compatible = "cypress,cypd4226";
-> +				cypress,firmware-build = "gn";
-> +				interrupt-parent = <&gpio>;
-> +				interrupts = <TEGRA234_MAIN_GPIO(Y, 4) IRQ_TYPE_LEVEL_LOW>;
-> +				reg = <0x08>;
-> +				status = "okay";
-
-The pattern of redefining full path in Tegra is confusing - I have no
-clue which of these status=okay are correct which are redundant.
-
-Do you?
-
-
-
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				ccg_typec_con0: connector@0 {
-> +					compatible = "usb-c-connector";
-> +					reg = <0>;
-> +					label = "USB-C";
-> +					data-role = "host";
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +					port@0 {
-> +						reg = <0>;
-> +						#address-cells = <1>;
-> +						#size-cells = <0>;
-
-Hm, why do you have here cells?
-
-Did you test the DTS with dtbs_check?
-
-Best regards,
-Krzysztof
-
+>  
+>  /* PCIe communication driver */
+> 
