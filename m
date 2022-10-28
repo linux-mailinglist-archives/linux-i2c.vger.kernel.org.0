@@ -2,134 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C957A6111C1
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Oct 2022 14:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7995D611207
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Oct 2022 14:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbiJ1Mmu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 Oct 2022 08:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40754 "EHLO
+        id S230142AbiJ1M5O (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 Oct 2022 08:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiJ1Mmt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Oct 2022 08:42:49 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2056.outbound.protection.outlook.com [40.107.94.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD8F8B2CC;
-        Fri, 28 Oct 2022 05:42:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bw3qFvODzP8tXlLBdhfocUOPWKafgmB8j+LOCBRkA86ZMl+brg+1em/FbH3lBef6j5c0buuCwN+oXje4OY3jaL4XVq2nLQO0SrgEs1uHIE0X+S/RQWycwyXYxqkLsIR2Iyp5/M3HEh57UqpaUT9OXiJtAGbK5hoBQtdWxoiWhYv1lZeOoyj8P8r3AwckOgGGHPS5UOn+ijK/10YDNkApUtDDv+V0xiW5k148ql2SgVOMGuckIyEEyOYqpVFZqsb24arTOHF2BzKFJAhdt3OKkMEybHAegpfjR+mq+lIVuM9kMKYzQ70qQsq3JkZOvh2h7OZ6uBQ7iFY8MtBjhfK20g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8l/AT5JEa63qiAoVmkQjIXzUJw5yLVku+PgSWRl8Xik=;
- b=bBg+Ww5U6A2fQ9pvqD3DSpNrUgo+zisnM096glAtG4QL/kLgjGlP/dswPZf+puyRdA1YNX+zs94IK29llaUrv/6B9sBEwTFw8pMUTjoTmWrDz+5XrfMUaR8Fj2LZlSKy8+XD9DDHlFNVuQcIkdpeBvmPrXsOwyW8lhhKDXIcpqULwRPqSzs/fpY2JCckUK2XucOBI0dFeTJZ1bKiyZaiBwcDTyB1VfV6GWc628rgJKF5GSSKjFDErNhQDK8kmHYRSkgqNYyjd307RUhIyUGiX1Cowey9lncZXiKLEOsvop8u1tLCZqjo+GtNvBlcqRgpjjHLjO9/1/s803KGWviUng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8l/AT5JEa63qiAoVmkQjIXzUJw5yLVku+PgSWRl8Xik=;
- b=MpD8DINPy9tbFBBsRiiBarvyrkuLCTkqLQwgN30NcY9UlVErFaF8PqHYna5iqYj1fAE9947ZAEhth2sF/OSUG3xDm9yjb3gPHhFiBC4J7lT2sRjxHGINXq3nwLhjEpoVotGtz8mK0JLt/LOh1CmhJwE0IWXNoomU7SKA0+JUAWhgiy8SK3kVdyH7pbkBemcvWvwBUHxYnnNuQxBFuAXeCIcf9rvqeF0dsASYc0kxl88g8DVtqmKQ0jR/u9xNfXd9QHq8RB9k+yU5TWEnZc4xg+IuTK6+zF6QJWEJsYiKG4PdPxZGo5KxSNt9CA663fiVlx+dzMvmczWlpks2mZU3SA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- DM6PR12MB4314.namprd12.prod.outlook.com (2603:10b6:5:211::22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5769.15; Fri, 28 Oct 2022 12:42:45 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::c0e5:f111:3e59:7c66]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::c0e5:f111:3e59:7c66%6]) with mapi id 15.20.5769.015; Fri, 28 Oct 2022
- 12:42:45 +0000
-Message-ID: <7a1c4943-4ae2-cde4-221b-fa972c2baab2@nvidia.com>
-Date:   Fri, 28 Oct 2022 13:42:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 03/11] dt-bindings: usb: Add binding for Cypress cypd4226
- I2C driver
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
-        treding@nvidia.com, heikki.krogerus@linux.intel.com,
+        with ESMTP id S230118AbiJ1M5N (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Oct 2022 08:57:13 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C4A1C2EB9;
+        Fri, 28 Oct 2022 05:57:11 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id p8so8102102lfu.11;
+        Fri, 28 Oct 2022 05:57:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xlgtcNEkHLSQxefrkLYDw2NI8A0VX2rYADSe4gp+IWI=;
+        b=D6FMWgHVGm2MYqfbdj0u7uO5JT3gly5wkvLMYoc6KhZFvUtbMnX5WjaXdFUzqOaXoU
+         YuB+Px71m/4/RzDdCnm6a8ZQXgiyQXYXkqkWZFlXnF5CqOlxR3Zja3XrjiF8B4S5py39
+         b10lnlEbDnaT4cA776AOOUkpzOjD8s6sghfU2bsnLi7+L3WsM78WP6nU7ogn7NxYJ+IS
+         YEREx1IauNmb2f0n/5EKjze2Ryq1aCosxgiAmddNq2BnyyLluONUsey51gzP+VWJbOAA
+         t/uw93tPxSXBBddWx9foO18esl9c1fXG2ZJgD5P/AKdSSveuSRRXSo9wnZ8pXU6BPJSa
+         aW3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xlgtcNEkHLSQxefrkLYDw2NI8A0VX2rYADSe4gp+IWI=;
+        b=aMxoLfo7XpHvRNjHftFYVGetoRcMXY/l99aHvSbpNjojHb+VpztJPDWWNjfMlkr1jK
+         pmhiY1P+nrL0Q8PPa5ZX6GgPmk3XOBmdH2TNwgVERFdsy6+nyVSeVKPv62bM8LCE12Nk
+         fYlcmELk6mlcBqUYmUwfihka5XDE5SgMA32C/F+De9B6/8Y6OkNAyfIBp9AU1KFltxvM
+         zsDN3edrm9D3APWOE7NAfMPndLJ8H5i0ufpY5+qSkk6rpn1jLpTj7AStiH2dP5cz64v+
+         OUxinmzhZyzSfI+OPhL6HmYdPFELqtVvt4SrEI7lElnoOs7AUroEqx34g8yyv3f2lWS3
+         NCPA==
+X-Gm-Message-State: ACrzQf2dyZ7lY9WAmnCuWHcB7uj/TiqLPmUXtIA9mGC+T8rGF5JNLNzu
+        POEzhVbZbaTZOai9yZ36tsaISiqgjYw=
+X-Google-Smtp-Source: AMsMyM5YC5NBUNMVLvqpGOhKxFPABiSIffwZ0JUtOGTuxf/IrQHJu+GkhJXcz7H9cWgYw2s9wH8WPw==
+X-Received: by 2002:a17:907:3f04:b0:741:4bf4:fe42 with SMTP id hq4-20020a1709073f0400b007414bf4fe42mr47994915ejc.664.1666961818654;
+        Fri, 28 Oct 2022 05:56:58 -0700 (PDT)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id oz13-20020a170906cd0d00b007ad2da5668csm2134066ejb.112.2022.10.28.05.56.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 05:56:57 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 14:56:56 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Wayne Chang <waynec@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
+        jonathanh@nvidia.com, heikki.krogerus@linux.intel.com,
         ajayg@nvidia.com, kishon@ti.com, vkoul@kernel.org,
         p.zabel@pengutronix.de, balbi@kernel.org, mathias.nyman@intel.com,
         jckuo@nvidia.com, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         singhanc@nvidia.com, linux-i2c@vger.kernel.org,
         linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 09/11] phy: tegra: xusb: Add Tegra234 support
+Message-ID: <Y1vRmGss43zEcN/I@orome>
 References: <20221024074128.1113554-1-waynec@nvidia.com>
- <20221024074128.1113554-4-waynec@nvidia.com>
- <f8eeeebc-e635-9c97-b97b-46df38f06002@nvidia.com> <Y1vLoT+/dgOgrxjD@orome>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <Y1vLoT+/dgOgrxjD@orome>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0618.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:314::20) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+ <20221024074128.1113554-10-waynec@nvidia.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|DM6PR12MB4314:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8362aff8-f9c9-4bb2-b673-08dab8e1e958
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ds1o1nIKkJcPz7eXGFkPv5rWyqGkp3c9IkmE+ahQBTxOBNnTRC5dltz55f5/8yr24dk6VD4PNbNtXW1f5LCBXTyr/ooRTO7GQy2EbddV/jcaMhpvFTTWRRsv2v6qNjs11eMpp+WWLWEIo7sHjImwPOKIymGqplK5SnYTCl0WPWx31TjiGSFTlqrW4cxqTVj0SzV7VULWhPOQTeb34l7josNiV17tOHvRRDg+KTGvexLF9xRblD7wOJPJVI7MbwvKxg4NSoKGFbKzAf29jsZa3AIGNlREhyOBdm7LWaPtkKn8bnXkj4u6vOUWDjcl+ipa1+hKFLQU5agJI5gtl0boPee4YhoPCBwMF5AKQrLgQdVdrT2oL3KqtPg4Ez+VV35krEQrNbtJzQ4M6cGSeQTM22x0uO2kseLxCc/QunoMD3VGTGYMlU9xLE0Cmwxo8cHqVhN0f9t7Cdsm69Lf8vw/m0dBHFOMavA+lvX8Ud02V8Vu84aPT+wB3zpo4JFqXD5QlGeIO9A+U9P9exMnjeaIqgQCgewGLURtsF4xCgzWecc0i17itepwnWQGcgEBDsD6OPFbuUGiDG9HVPdnuuM+226AHs0cADaX3aTLr/44+03N+jrnRHF34DQOew5qkWu+VdWsDVdMgWbU3O5AW864zSGxlWyxnrpUPwjQ+D2HwcpOmLaS0QLdHxFJMHceWksHB4sQzBVCYIFny2FaFidC8kdD9BI1OwFrpRwOrR+X2+VV42K6mDWoXngDyL9+5YJMKeBLAYagtAshxXBpXHa9Nh4a8GPtiwNRCTO6SnUveIJp8KLb24KPzhb7OvT4RbVol5t1vvFsrdZjfWW+7vu1fpF3AZkAYF+FHYb7QpcEmsPGQaYN/UAgiA/4e0psCDR/dQ20f2Qav/frBq/eqofeB+dutDprzD79WgEmfIFWwFs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(366004)(396003)(39860400002)(376002)(451199015)(6666004)(316002)(110136005)(8936002)(5660300002)(4326008)(2616005)(186003)(7416002)(8676002)(53546011)(36756003)(6506007)(66476007)(66946007)(66556008)(6512007)(41300700001)(83380400001)(86362001)(31696002)(38100700002)(2906002)(6486002)(966005)(478600001)(66899015)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q3hSVlQ5dGFVZjltVWZOOWQySkZmeVM3L2xUS2hDdFNPMWJJdkY5cWZVY242?=
- =?utf-8?B?RDE4Tnl2d2FhVGoxMFQ2WGlRZ25NdWswL0VoTVljTTFtdHpJTFRiVE9GNTBj?=
- =?utf-8?B?Qm1pc2dGaVIzR0RLK1RIalZuZVprT0svMTBLdDBZaU44R01ESFp6elJpcnha?=
- =?utf-8?B?dWh5QWpyQXF1bXY2MlI0ZXI2VndiQVpQS3dwMGUwRHZ4WW5JL2Y3VVlEWWU2?=
- =?utf-8?B?ZUdaS2lBMFVjZzVKaGs5YnU3RHp0QVVMRzcwazlKWG5pOHJ2UWx6NWhzSFli?=
- =?utf-8?B?b2VjZWJIb2VFK0xaZHQxcHp5Qm1KZVRncEhiTmJxbGRsemUrNVptU0xONkZu?=
- =?utf-8?B?NHZjNUE4MVZPcjFJYnZpbmRsUzNyZVJuWVBBTm1HNWJ0c0g2TUh1bHRqQng3?=
- =?utf-8?B?MWJyMkptazlqdTVHWHhSSVhUajVjV1ZFWHRFVktoLzlEOTFsMnQ0Vi84N1FX?=
- =?utf-8?B?KzJrYmJodEtMdXl2VjJCdk9TQ2lxODhOTmxvS084U2E1dVZycHdLQWE2eFRi?=
- =?utf-8?B?cUJuejFyM2NKVVNmUHlCdWdJbDdFRU1OcWNyUGQxOFdBQ0ZCaVBBaGRFck9u?=
- =?utf-8?B?blk4R1E1bkZ5dmhmMWFHZDB6Nlg2ZGJXVkUwbkc3RjlJOEwzTUtmY2xCYjAz?=
- =?utf-8?B?RzgzNVJFeXo5MEhFWU41Vjc5eUZxMHhpZWVMZ1NwdGtDd2llTE0wSU1kWDVF?=
- =?utf-8?B?a0hhWFlIUGUrZE5hN0xwZWQ4WmpEUFpzMHpmTFB3OThDZmN1aVlQenh1Y3B1?=
- =?utf-8?B?N081cW81cmUyM1ZUYWxtcmxOMEMxNjNBekdQRXk3LzVETmRLVVFJeTJuYmJO?=
- =?utf-8?B?SEhCMXhVaWYvVmFKeVBHWmovL3hVT1IwVTIyeEdJMEphbXd5QjJnVE1QMjZN?=
- =?utf-8?B?dmFNSGd6eDd3akpGN1FjUmhWdVlwYUdIcmNYN1llaWxDNHo2NGMvVno4ais4?=
- =?utf-8?B?bDlPQkQvZGk5WU5MYUcyV0YzR0VKM3hsWGZTdTlNby9rT01lbHRQYmlxRTR5?=
- =?utf-8?B?cjVpeVZmdWxGSDdPME83MnBSYlV1Z3gwMldML3hvWEljN1pLQUcyYSt5ZEJl?=
- =?utf-8?B?Z01FVHJQTUswWCt6WjFOaVR4WEc0VHlFaHhiWWNjajA3aUJRMEpuY0FVT2F4?=
- =?utf-8?B?bWdNS3FiTEdHeDdNRjYzT0FoaGQzdUcrS1VaWk5ZYzR0OXlub3hJY29Qempr?=
- =?utf-8?B?RHh2Q25mUW5IMEpLcTBvN3RZc0dJOGYyOGcrUzRxblNaeVprYzVLaTRNQVJX?=
- =?utf-8?B?WXRCUkkyQ3JNRVdWMThjcEVvMW9aN3FURnBuOVhJMkNCK1FYVmJ0S3FnYmdx?=
- =?utf-8?B?VVJLSWxCNlA5SXNWV2ZocnhyNlM2MWxmQVZSa1lJOXY5ZVFsMTVhMm8wSGpw?=
- =?utf-8?B?TjFmWHJScGR3K1JrOUZpeWp6QnpqNTFZbHRxTlFlQk8zUG0zckcvSHZBbm1j?=
- =?utf-8?B?UXNkZHBTMTlBZzBFVkJPQ05mT0NjbE5FZFhBNEVCUXhCZnR2MUpaREJTSkF5?=
- =?utf-8?B?K1FQOGMxNkZ0b3lWdVFaSUZRQWgvTEdiZmpuRzhPM2tQNWtiZEl1azFMRHVw?=
- =?utf-8?B?YWZmZk5KWkZKeitnUjdTS0NQYmovQ3pzZS9yRlQ5RXBsZUVzVHkxUDhtalk3?=
- =?utf-8?B?YUhsVXJ5enN0V1A4WEN1T2hDNmhSK0xUZTdjYXU2NUdKdCtoUVhiYlN0dE1K?=
- =?utf-8?B?ZjNCTE40bEozVlRVdy9JTzEvR0h4aVFrdXI1NUdhd3FvUXYxR3lWdFVyelVY?=
- =?utf-8?B?THgvb3JqaTl4K2pnWTBBY094ZEhJWm5oT2VJRXhycUpuRjk3bHo0RWJOMTBv?=
- =?utf-8?B?dlF0eVR6SkVGWFlraHlNRVA5ZXl4cGlzMS84eDhCMXJwTWFCMndzbm9ScjYv?=
- =?utf-8?B?K3A5M29EMG50eGFpcm1Xck9KS0dLTWlqc0R6WSt2blU0Mm9HUitCcEVHSzdv?=
- =?utf-8?B?R1BTbE1mRHZMUEdxZElaYVVUSkZ6Mzl6dUNkaVEvWG00WW9JVllRWXhzRjh0?=
- =?utf-8?B?STVwaDd4N1BsWEFBV1RISEtVS0k2NC9wQmhQNTN6SFVvRlJVTHFHc1IzcGNs?=
- =?utf-8?B?ZGwwblZJNG5XUjVORlA3MFZqUFd3YjdhUll1dWswQkVrM3BoZmVhNEZmMko2?=
- =?utf-8?B?ekNxWW80SWppS0VKeFJlZ3UvWTFsTTFoWlFkMC9zcDJrQ20rdlRGbG01Z1Jw?=
- =?utf-8?B?Q1RQSWt0cVZNOXNyQkUwVmJmcVE0cW5HeGpNUHBFNEhxdkRvM0JaMWVNMXNV?=
- =?utf-8?B?M01RU0RLRW9veEJRUjdCbFlhTXBnPT0=?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8362aff8-f9c9-4bb2-b673-08dab8e1e958
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 12:42:45.2622
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: X5bMhC/MgPUF2zwa5GNnoFhk07G2FuJT+cy33Z9xtP05fgMvrwZl11iQON1QznGl7SHE+S+rLLYDhYy0lxF8UQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4314
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="EpD9Cm4/iJG55pEf"
+Content-Disposition: inline
+In-Reply-To: <20221024074128.1113554-10-waynec@nvidia.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -137,99 +82,272 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
-On 28/10/2022 13:31, Thierry Reding wrote:
-> On Wed, Oct 26, 2022 at 08:13:57AM +0100, Jon Hunter wrote:
->>
->> On 24/10/2022 08:41, Wayne Chang wrote:
->>> add device-tree binding documentation for Cypress cypd4226 type-C
->>> controller's I2C interface. It is a standard i2c slave with GPIO
->>> input as IRQ interface.
->>>
->>> Signed-off-by: Wayne Chang <waynec@nvidia.com>
->>> ---
->>>    .../bindings/usb/cypress,cypd4226.yaml        | 86 +++++++++++++++++++
->>>    1 file changed, 86 insertions(+)
->>>    create mode 100644 Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
->>> new file mode 100644
->>> index 000000000000..5ac28ab4e7a1
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
->>> @@ -0,0 +1,86 @@
->>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/usb/cypress,cypd4226.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Cypress cypd4226 UCSI I2C Type-C Controller
->>> +
->>> +maintainers:
->>> +  - Wayne Chang <waynec@nvidia.com>
->>> +
->>> +description: |
->>> +  The Cypress cypd4226 UCSI I2C type-C controller is a I2C interface type-C
->>> +  controller.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: cypress,cypd4226
->>> +
->>> +  '#address-cells':
->>> +    const: 1
->>> +
->>> +  '#size-cells':
->>> +    const: 0
->>> +
->>> +  reg:
->>> +    const: 0x08
->>> +
->>> +  interrupts:
->>> +    maxItems: 1
->>> +
->>> +  cypress,firmware-build:
->>> +    enum:
->>> +      - nv
->>> +      - gn
->>> +    description: |
->>> +      the name of the CCGx firmware built for product series.
->>> +      should be set one of following:
->>> +      - "nv" for the RTX product series
->>
->> Please add 'NVIDIA' so that it is 'for the NVIDIA RTX product series'
->>
->>> +      - "gn" for the Jetson product series
->>
->> Same here please add 'NVIDIA' so that it is 'for the NVIDIA Jetson product
->> series'.
->>
->> Rob, any concerns about this property in general? Unfortunately, ACPI choose
->> a 16-bit type for this and used 'nv' for the RTX product. I don't find 'gn'
->> for Jetson very descriptive but we need a way to differentiate from RTX.
->>
->> This is needed in the Cypress CCGX driver for the following ...
->>
->> https://lore.kernel.org/lkml/20220928150840.3804313-1-waynec@nvidia.com/
->>
->> Ideally, this should have been included in this series but was sent before.
->> We can always re-work/update the above patch even though it has been queued
->> up now.
-> 
-> The driver seems to use this 16-bit value only to compare with a
-> corresponding field in the firmware headers. How exactly we obtain this
-> value is therefore not important. However, since this 16-bit value is
-> embedded in firmware images, we also cannot substitute them with
-> something more sensible.
+--EpD9Cm4/iJG55pEf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I am actually wondering if this is actually embedded in any images 
-because I see it populated by the i2c-nvidia-gpu.c driver [0]. So I am 
-wondering if we can use PROPERTY_ENTRY_STRING() for this driver instead 
-and have a more descriptive name such as 'nvidia,rtx'?
+On Mon, Oct 24, 2022 at 03:41:26PM +0800, Wayne Chang wrote:
+> From: Sing-Han Chen <singhanc@nvidia.com>
+>=20
+> Add support for the XUSB pad controller found on Tegra234 SoCs. It is
+> mostly similar to the same IP found on Tegra194, because most of
+> the Tegra234 XUSB PADCTL registers definition and programming sequence
+> are the same as Tegra194, Tegra234 XUSB PADCTL can share the same
+> driver with Tegra186 and Tegra194 XUSB PADCTL.
+>=20
+> Introduce a new feature, USB2 HW tracking, for Tegra234.
+> The feature is to enable HW periodical PAD tracking which measure
+> and capture the electric parameters of USB2.0 PAD.
+>=20
+> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
+> Co-developed-by: Wayne Chang <waynec@nvidia.com>
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> ---
+>  drivers/phy/tegra/Makefile        |  1 +
+>  drivers/phy/tegra/xusb-tegra186.c | 65 +++++++++++++++++++++++++++++--
+>  drivers/phy/tegra/xusb.c          |  6 +++
+>  drivers/phy/tegra/xusb.h          | 23 +++++++++++
+>  4 files changed, 92 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/phy/tegra/Makefile b/drivers/phy/tegra/Makefile
+> index 89b84067cb4c..eeeea72de117 100644
+> --- a/drivers/phy/tegra/Makefile
+> +++ b/drivers/phy/tegra/Makefile
+> @@ -7,4 +7,5 @@ phy-tegra-xusb-$(CONFIG_ARCH_TEGRA_132_SOC) +=3D xusb-teg=
+ra124.o
+>  phy-tegra-xusb-$(CONFIG_ARCH_TEGRA_210_SOC) +=3D xusb-tegra210.o
+>  phy-tegra-xusb-$(CONFIG_ARCH_TEGRA_186_SOC) +=3D xusb-tegra186.o
+>  phy-tegra-xusb-$(CONFIG_ARCH_TEGRA_194_SOC) +=3D xusb-tegra186.o
+> +phy-tegra-xusb-$(CONFIG_ARCH_TEGRA_234_SOC) +=3D xusb-tegra186.o
+>  obj-$(CONFIG_PHY_TEGRA194_P2U) +=3D phy-tegra194-p2u.o
+> diff --git a/drivers/phy/tegra/xusb-tegra186.c b/drivers/phy/tegra/xusb-t=
+egra186.c
+> index f121b4ffbbfd..cc02cea65a21 100644
+> --- a/drivers/phy/tegra/xusb-tegra186.c
+> +++ b/drivers/phy/tegra/xusb-tegra186.c
+> @@ -89,6 +89,11 @@
+>  #define  USB2_TRK_START_TIMER(x)		(((x) & 0x7f) << 12)
+>  #define  USB2_TRK_DONE_RESET_TIMER(x)		(((x) & 0x7f) << 19)
+>  #define  USB2_PD_TRK				BIT(26)
+> +#define  USB2_TRK_COMPLETED			BIT(31)
+> +
+> +#define XUSB_PADCTL_USB2_BIAS_PAD_CTL2		0x28c
+> +#define  USB2_TRK_HW_MODE			BIT(0)
+> +#define  CYA_TRK_CODE_UPDATE_ON_IDLE		BIT(31)
+> =20
+>  #define XUSB_PADCTL_HSIC_PADX_CTL0(x)		(0x300 + (x) * 0x20)
+>  #define  HSIC_PD_TX_DATA0			BIT(1)
+> @@ -609,9 +614,32 @@ static void tegra186_utmi_bias_pad_power_on(struct t=
+egra_xusb_padctl *padctl)
+>  	value &=3D ~USB2_PD_TRK;
+>  	padctl_writel(padctl, value, XUSB_PADCTL_USB2_BIAS_PAD_CTL1);
+> =20
+> -	udelay(100);
+> +	if (padctl->soc->poll_trk_completed) {
+> +		err =3D padctl_readl_poll(padctl, XUSB_PADCTL_USB2_BIAS_PAD_CTL1,
+> +					USB2_TRK_COMPLETED, USB2_TRK_COMPLETED, 100);
+> +		if (err) {
+> +			/* The failure with polling on trk complete will not
+> +			 * cause the failure of powering on the bias pad.
+> +			 */
+> +			dev_warn(dev, "failed to poll USB2 trk completed: %d\n",
+> +				err);
+> +		}
+> =20
+> -	clk_disable_unprepare(priv->usb2_trk_clk);
+> +		value =3D padctl_readl(padctl, XUSB_PADCTL_USB2_BIAS_PAD_CTL1);
+> +		value |=3D USB2_TRK_COMPLETED;
+> +		padctl_writel(padctl, value, XUSB_PADCTL_USB2_BIAS_PAD_CTL1);
+> +	} else {
+> +		udelay(100);
+> +	}
+> +
+> +	if (padctl->soc->trk_hw_mode) {
+> +		value =3D padctl_readl(padctl, XUSB_PADCTL_USB2_BIAS_PAD_CTL2);
+> +		value |=3D USB2_TRK_HW_MODE;
+> +		value &=3D ~CYA_TRK_CODE_UPDATE_ON_IDLE;
+> +		padctl_writel(padctl, value, XUSB_PADCTL_USB2_BIAS_PAD_CTL2);
+> +	} else {
+> +		clk_disable_unprepare(priv->usb2_trk_clk);
+> +	}
+> =20
+>  	mutex_unlock(&padctl->lock);
+>  }
+> @@ -637,6 +665,13 @@ static void tegra186_utmi_bias_pad_power_off(struct =
+tegra_xusb_padctl *padctl)
+>  	value |=3D USB2_PD_TRK;
+>  	padctl_writel(padctl, value, XUSB_PADCTL_USB2_BIAS_PAD_CTL1);
+> =20
+> +	if (padctl->soc->trk_hw_mode) {
+> +		value =3D padctl_readl(padctl, XUSB_PADCTL_USB2_BIAS_PAD_CTL2);
+> +		value &=3D ~USB2_TRK_HW_MODE;
+> +		padctl_writel(padctl, value, XUSB_PADCTL_USB2_BIAS_PAD_CTL2);
+> +		clk_disable_unprepare(priv->usb2_trk_clk);
+> +	}
+> +
+>  	mutex_unlock(&padctl->lock);
+>  }
+> =20
+> @@ -1560,7 +1595,8 @@ const struct tegra_xusb_padctl_soc tegra186_xusb_pa=
+dctl_soc =3D {
+>  EXPORT_SYMBOL_GPL(tegra186_xusb_padctl_soc);
+>  #endif
+> =20
+> -#if IS_ENABLED(CONFIG_ARCH_TEGRA_194_SOC)
+> +#if IS_ENABLED(CONFIG_ARCH_TEGRA_194_SOC) || \
+> +	IS_ENABLED(CONFIG_ARCH_TEGRA_234_SOC)
+>  static const char * const tegra194_xusb_padctl_supply_names[] =3D {
+>  	"avdd-usb",
+>  	"vclamp-usb",
+> @@ -1616,8 +1652,31 @@ const struct tegra_xusb_padctl_soc tegra194_xusb_p=
+adctl_soc =3D {
+>  	.supply_names =3D tegra194_xusb_padctl_supply_names,
+>  	.num_supplies =3D ARRAY_SIZE(tegra194_xusb_padctl_supply_names),
+>  	.supports_gen2 =3D true,
+> +	.poll_trk_completed =3D true,
+>  };
+>  EXPORT_SYMBOL_GPL(tegra194_xusb_padctl_soc);
+> +
+> +const struct tegra_xusb_padctl_soc tegra234_xusb_padctl_soc =3D {
+> +	.num_pads =3D ARRAY_SIZE(tegra194_pads),
+> +	.pads =3D tegra194_pads,
+> +	.ports =3D {
+> +		.usb2 =3D {
+> +			.ops =3D &tegra186_usb2_port_ops,
+> +			.count =3D 4,
+> +		},
+> +		.usb3 =3D {
+> +			.ops =3D &tegra186_usb3_port_ops,
+> +			.count =3D 4,
+> +		},
+> +	},
+> +	.ops =3D &tegra186_xusb_padctl_ops,
+> +	.supply_names =3D tegra194_xusb_padctl_supply_names,
+> +	.num_supplies =3D ARRAY_SIZE(tegra194_xusb_padctl_supply_names),
+> +	.supports_gen2 =3D true,
+> +	.poll_trk_completed =3D true,
+> +	.trk_hw_mode =3D true,
+> +};
+> +EXPORT_SYMBOL_GPL(tegra234_xusb_padctl_soc);
 
-Jon
+I'm beginning to wonder if we perhaps went a bit overboard with this.
+These symbols are used exclusively by drivers/phy/tegra/xusb.c, which
+ends up in the same link unit as xusb-tegra186.c, so the export should
+not be necessary.
 
-[0] 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/i2c/busses/i2c-nvidia-gpu.c#n261
--- 
-nvpublic
+Not necessarily something that needs fixing right now, but certainly
+something to circle back to eventually.
+
+>  #endif
+> =20
+>  MODULE_AUTHOR("JC Kuo <jckuo@nvidia.com>");
+> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
+> index 95091876c422..23d179b1a5b5 100644
+> --- a/drivers/phy/tegra/xusb.c
+> +++ b/drivers/phy/tegra/xusb.c
+> @@ -71,6 +71,12 @@ static const struct of_device_id tegra_xusb_padctl_of_=
+match[] =3D {
+>  		.compatible =3D "nvidia,tegra194-xusb-padctl",
+>  		.data =3D &tegra194_xusb_padctl_soc,
+>  	},
+> +#endif
+> +#if defined(CONFIG_ARCH_TEGRA_234_SOC)
+> +	{
+> +		.compatible =3D "nvidia,tegra234-xusb-padctl",
+> +		.data =3D &tegra234_xusb_padctl_soc,
+> +	},
+>  #endif
+>  	{ }
+>  };
+> diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
+> index 8cfbbdbd6e0c..ec0b5b023ad1 100644
+> --- a/drivers/phy/tegra/xusb.h
+> +++ b/drivers/phy/tegra/xusb.h
+> @@ -8,6 +8,7 @@
+>  #define __PHY_TEGRA_XUSB_H
+> =20
+>  #include <linux/io.h>
+> +#include <linux/iopoll.h>
+>  #include <linux/mutex.h>
+>  #include <linux/workqueue.h>
+> =20
+> @@ -433,6 +434,8 @@ struct tegra_xusb_padctl_soc {
+>  	unsigned int num_supplies;
+>  	bool supports_gen2;
+>  	bool need_fake_usb3_port;
+> +	bool poll_trk_completed;
+> +	bool trk_hw_mode;
+>  };
+> =20
+>  struct tegra_xusb_padctl {
+> @@ -475,6 +478,23 @@ static inline u32 padctl_readl(struct tegra_xusb_pad=
+ctl *padctl,
+>  	return value;
+>  }
+> =20
+> +static inline u32 padctl_readl_poll(struct tegra_xusb_padctl *padctl,
+> +	unsigned long offset, u32 val, u32 mask, int us)
+> +{
+> +	u32 regval;
+> +	int err;
+> +
+> +	err =3D readl_poll_timeout_atomic(padctl->regs + offset, regval,
+> +					 (regval & mask) =3D=3D val, 1, us);
+
+Do we really need the atomic variant here? The function that calls this
+already uses a mutex for protection, so it can already sleep anyway.
+
+Also, do we really need the helper here? We use this exactly once and
+this doesn't make the invocation more readable, either.
+
+Thierry
+
+> +	dev_dbg(padctl->dev, "%08lx poll > %08x\n", offset, regval);
+> +	if (err) {
+> +		dev_err(padctl->dev, "%08lx poll timeout > %08x\n", offset,
+> +			regval);
+> +	}
+> +
+> +	return err;
+> +}
+> +
+>  struct tegra_xusb_lane *tegra_xusb_find_lane(struct tegra_xusb_padctl *p=
+adctl,
+>  					     const char *name,
+>  					     unsigned int index);
+> @@ -491,5 +511,8 @@ extern const struct tegra_xusb_padctl_soc tegra186_xu=
+sb_padctl_soc;
+>  #if defined(CONFIG_ARCH_TEGRA_194_SOC)
+>  extern const struct tegra_xusb_padctl_soc tegra194_xusb_padctl_soc;
+>  #endif
+> +#if defined(CONFIG_ARCH_TEGRA_234_SOC)
+> +extern const struct tegra_xusb_padctl_soc tegra234_xusb_padctl_soc;
+> +#endif
+> =20
+>  #endif /* __PHY_TEGRA_XUSB_H */
+> --=20
+> 2.25.1
+>=20
+
+--EpD9Cm4/iJG55pEf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNb0ZUACgkQ3SOs138+
+s6E1aw//crfqY/5h5onKaE4z03lnf4wf7h/85cKbxHTyLFhR98XdmCX22+FJmwbl
+lXrf5GVPv/GUtdTnUdVs/7wErNgwGpkAPA7w3sIw6e/U1RpGqeLPgU9DB24Kcl6V
+rYa84SwrFtKeVuIEK9jYWUz1GGBP9VNgqclESvxqxtiS483+/tfT8YqB6hZL0SYh
+fqL/Ve6WMSP63YPIDhDRUSSH+UjK8bjbabU0tCPf/bw8nw9Q9/QLv15KCAPhtjAv
+P4UocDKIC5znZWokFn54kaxpBjla6cugK8mym7NISF+WsCptwfnezMs0XGaTlwhN
+0hyiqspCaOKJnZxVD7lEKtIiFZIplY39xQypL2O8KfiKAPL1waPKyypgrUNRM5pe
+oUKOA7FbsZq0fDn2gi6jrIX2jQXPuj8xY5/PWWq5J6ZR1c3KhfSm2s3X6Fu0Amfg
+ielsTghZiaNa8oysxCmh1sLnwwyHx3cfLQjghl8mzW+uqgnDiK3z5WXM2qKmSF6d
+oo/d9srqpcISk+GxyxpOMu8dvxeUv62dVXdtlP3S5ixle+uBD1hf1+dM7QLBbpxU
+OETl2JIw69eqPMJTqLwHsm3t915GkINmSDUk9+HrObSNIO6cuSI+znAprGo+Jvyi
+Jyfa8SFhriQu2MhaRikXVthS7gp33gkqjAyW3qAp/lDcfFFKXtY=
+=W2tL
+-----END PGP SIGNATURE-----
+
+--EpD9Cm4/iJG55pEf--
