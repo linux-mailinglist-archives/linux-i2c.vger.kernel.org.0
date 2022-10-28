@@ -2,136 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB23610FCB
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Oct 2022 13:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A6761116F
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Oct 2022 14:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiJ1Le4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 Oct 2022 07:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
+        id S229739AbiJ1Mbi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 Oct 2022 08:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiJ1Lew (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Oct 2022 07:34:52 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2076.outbound.protection.outlook.com [40.107.244.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51D921E1A;
-        Fri, 28 Oct 2022 04:34:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=faeIDUOb5F7+sk/ZZEabfc1iyYgVMSO7y4/Nheefznj6NQAKD101H2hmX4UmFSaQJSX8j2oVCvFuB4RZhhXLdDmhK8A+1OJl21DJvhldESO5cqCWku26Y0+V1QXokzMI5PNbHr+C4Gdg2gLdyFk+9QiDil1Yjje/7L2pw6wHDiCoT06/b4jJwsVecWXvq+7rXVPamM71mWWOeB4E3GNetFXryTx7D+OtcxByopmMY8gaf7mfhhC3Cwjc2R1tZ0QuXs3fiKxEDzhBJsX1uvtcK1AWvt/4IiQM8orHO4NoqP0NPqlQO6qzJIH/kof5PO8OnCwvmM/F0kFzozrApvTcHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q3aRi6RXwp3xhBI45KkhJjpKzIg61ZpaIBj2sjcm5oo=;
- b=Az46QgxYM3+JgUdA+nMAi8WuLQROt+XzAddg/ZNJRHcedhbcAZauxHSo7NrD8SfvwZp8o0emETp0GNQdjfeSuFACWaa7lKGwi8oIrMyDRHkuu0A9PkX8j8GD1Bc29hRLKVOi1UDQ4CREoXDMUQVg/J38IkAfu/ojhliKd8+EAg6FuaZOtvUXV0mNlQJuzxFgOaWdctkBEF6XDVswAbAnQa5xUGoiyh/7ljRMYgclXB//lJBPEW7Vpjn7O5uOIq5m6JWvej2A9MIeSUimETMYVSxA7qVxBQkBfElWorZyudzuTYXLB7neVv+m4bV1R9wumqdS7Bbl94uS+fW1I1AC4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q3aRi6RXwp3xhBI45KkhJjpKzIg61ZpaIBj2sjcm5oo=;
- b=TCjAhSxK9dYW4gB6aN1wcjSJ4xXZyBU2FPm/DdUHumTD6z52okiz5urFRScVBoDZ/ySxxcUI0Ewkod0p0eCZ8vh7wr15jhr53DNveCDMNkNHG22/Q/FKX2q08xDCpcsUZAIBg0bgWDswl6Y94nguiiGmwopwCrR5sba9soiqOUEyjr17MUbinpQT9xc+opKbDPfVFytxl+dvx8qJwuExyvrocGjm8J0khpA7vJ2yXSgJ62cnBsDx1/Apk1a20kemDKao8A/I5I8s5A14HCLztZ8SP1jJd5xWE5VlCxFyxILlTrEdunX0rC2KRjcukAA8AqcksTrEpmyZKOmms97YKQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- DM6PR12MB4878.namprd12.prod.outlook.com (2603:10b6:5:1b8::24) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5769.15; Fri, 28 Oct 2022 11:34:49 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::c0e5:f111:3e59:7c66]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::c0e5:f111:3e59:7c66%6]) with mapi id 15.20.5769.015; Fri, 28 Oct 2022
- 11:34:49 +0000
-Message-ID: <275e6fe5-80a5-e7be-ddbc-ee298dbcb243@nvidia.com>
-Date:   Fri, 28 Oct 2022 12:34:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 04/11] arm64: tegra: Enable XUSB host and device on Jetson
- AGX Orin
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        treding@nvidia.com, thierry.reding@gmail.com,
-        heikki.krogerus@linux.intel.com, ajayg@nvidia.com, kishon@ti.com,
-        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
-        mathias.nyman@intel.com, jckuo@nvidia.com
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-tegra@vger.kernel.org
+        with ESMTP id S230018AbiJ1Mbg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Oct 2022 08:31:36 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC87190E51;
+        Fri, 28 Oct 2022 05:31:34 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id y69so7653067ede.5;
+        Fri, 28 Oct 2022 05:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N+hgVsFfIHOn2i92zfvFuxronhUcGA0Jyj434tyBrgU=;
+        b=QiRNzg7+FZFB6qrZ5IwQOaSWRlbnwey0IIWL0aK0meEYRhb+D20T+FO65mjI6pFvBZ
+         vZ+41PJz6j+vBQ+UfqV3QIxPlB4BGYIceAjIQfRi2DgXozx/dGPydJZTb6XZ+SEQCNNV
+         3ESHmEbJmYNahV1n6oDm2+DdcsxvJSTrwUCERXwvopR4Au+FASHHVk9NHBLmhllqnvCS
+         kCWZsa3Gjl78Et7VRmVeIRl68wxBL0mYIi7t9rveFn8rnvYNNqV7W2PV/sMu0ai44uyw
+         LhPPefTq/BiJGzQfmyfS3WWn7nSFiN9uo4MJY+IoemZdVL5i+hYCpBCELTMp4LUdm6d8
+         Hg7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N+hgVsFfIHOn2i92zfvFuxronhUcGA0Jyj434tyBrgU=;
+        b=vjqXz63QR1qCaKP2gfw0VR/0GgozFfWPL9CHjUVK0jOxUdVeXUAH5b/6vxqri37bqh
+         wnxzoNtz2/DOsDSyMFiSnJxW9ErgmN44tc0zhXIPaTQvDdJSA9XOrFP4yU4OrSIMB+D6
+         lFl0wRJXj4GKHJA6Lbem8wLDbXC1K33Q36zKhtq8HGEjY7lHPc0btzRZAhhi+NznS9TM
+         6Fiuiz8WyqKy8sn04A2Mp/HW9I7lFfKXOzx5qQSLPup5BTtVToyf3uDmmEJuKfjNb6vk
+         VBgggx73xbmVRbaDcP/Haw5zagle0i0+TPKO+vEY5KzoZ4EZfaVH1Ea7+RRZe3z45eCT
+         TobQ==
+X-Gm-Message-State: ACrzQf3KvMAot2pSlnaBSZYkKMuC2ztEnboHwA3MIc2kP5g4ic3yIUaO
+        kKfXY5RkdkPovEIXAlTI5B4=
+X-Google-Smtp-Source: AMsMyM6iCHrDVGRWRro91KRlEzXgqCGqlUwxT/cAIMfxY0kwsfsJaBK/myV34+ft4dKYZAo+Ren9dQ==
+X-Received: by 2002:a05:6402:4148:b0:440:cb9f:d10f with SMTP id x8-20020a056402414800b00440cb9fd10fmr50292473eda.77.1666960293282;
+        Fri, 28 Oct 2022 05:31:33 -0700 (PDT)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id r19-20020aa7cfd3000000b004611c230bd0sm2639373edy.37.2022.10.28.05.31.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 05:31:32 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 14:31:29 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
+        treding@nvidia.com, heikki.krogerus@linux.intel.com,
+        ajayg@nvidia.com, kishon@ti.com, vkoul@kernel.org,
+        p.zabel@pengutronix.de, balbi@kernel.org, mathias.nyman@intel.com,
+        jckuo@nvidia.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        singhanc@nvidia.com, linux-i2c@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 03/11] dt-bindings: usb: Add binding for Cypress cypd4226
+ I2C driver
+Message-ID: <Y1vLoT+/dgOgrxjD@orome>
 References: <20221024074128.1113554-1-waynec@nvidia.com>
- <20221024074128.1113554-5-waynec@nvidia.com>
- <2059dfe5-b084-42a4-7f35-9da9561fc12b@linaro.org>
- <b803bcf9-fc47-5239-ffe9-707925f324de@nvidia.com>
- <5676bcd2-14fc-4e1d-643e-89e575d190c3@linaro.org>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <5676bcd2-14fc-4e1d-643e-89e575d190c3@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0401.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:189::10) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+ <20221024074128.1113554-4-waynec@nvidia.com>
+ <f8eeeebc-e635-9c97-b97b-46df38f06002@nvidia.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|DM6PR12MB4878:EE_
-X-MS-Office365-Filtering-Correlation-Id: 13b0735d-74a2-41b8-adfb-08dab8d86bb9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Cnh23kCxHlvnWdvY8/VcGqFaMDMNLloth0EfWREZ/3ptVpsEpbbEgmtRHSQYjLTTu6uS2eJU0FQCWHkyka4fAhn5Vs5dFxorVKJiJa8ucktSdpMMIXF9h7wuGa8VDoc+nsokeQXusoQN5zaa+yAnOyJLAXwqUGI1LLNnmEvjAQOpOwkGI5Etjsiqg49uplDeqOKuAHxPSjb+GAY8iQ/bb5xR7cgFr3qwEWmwdg0vPzkX97DUi+rU2ZcdQbLT1F3XzseXEkPudwbF9KrrLdj8IX2jqx+6is/IqB7GE8e7VvG3QXeRd4CWB/mud1DQP7hjlQ5anElhCz87ZRPwIiZYB91xjyuEEiezB7DTJ3Gpnxx8vYbdC4sk97SS5uzM/8AJG715yPwHj2XVhfd3cE+qqbhJN/I6a00D0n2xVrh6LzluSBG9XmS7uq9S5EfE3KmO6vlHtfLpS9YncA3F7YFsGhP9jMCUhfApmX0aq2BAAdKVAIIm8cUjKJ3iQdCIVEx1hm4CJDGZttBAyktQHGDfbCfpohFR8mGDsBWBcYtvCrtmUBFv4HyT4mT0g/BR7jQg5GBHRgZooF7IgukXOIIbRp2QmYmt0FmhjVye1dlO+swjFCsM1zq9F1wwnub9n7icvRX1C417Heoy8cs8BjARJB7OnjWN9o/zDduYEZaTOMIZe2HPitCX4+gv3GiW3ErdHzOA3xfs0W0XPaFieMOY/yG7NKeJL2W4+LFkJfVLPetwSv6pB8InrCP7o52IfwpeOVjGYTOMAhhioozFr+V8H9sdY+RZdTzzy0DlyvqeJqM2zE2GK6kjxWzj54Pp0Zio
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(39860400002)(366004)(346002)(451199015)(6486002)(921005)(478600001)(38100700002)(31696002)(5660300002)(110136005)(66556008)(66476007)(66946007)(8676002)(8936002)(7416002)(4326008)(6636002)(86362001)(2906002)(6506007)(6666004)(186003)(2616005)(31686004)(53546011)(36756003)(6512007)(41300700001)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZExwL1NvOGZtMkxZZkkyNit6T0x5R2JreDlSSHNNaG5ESjNQcHlPNlNjd095?=
- =?utf-8?B?SVV5QkJMRkZoZmJoR3RKNHA3bVJiSTRVYmhPZjN4N1ZTakxYb29yeE1zdWpz?=
- =?utf-8?B?ejJrMUZiQ1lnYldTL1BwSHNrVmtiRUNUa2Z2RXRNUitlR2M5WlZaaWUxODQw?=
- =?utf-8?B?eTZ4dkQ0VUIzL0pHaktiNysvYytQdU0zL1Jvem5Lb2cvMDZDQ2tsRjNkS0dT?=
- =?utf-8?B?b3FKNXByTi85RXdhU3JQLzZhL2xwd0FoMENheTdtMzhLVFV6WkkyNzlQNnJG?=
- =?utf-8?B?U2MyOGFDY0Y5R2VMNnp0S2FkZ1hXM05ua2U3cnpIWTY4VmtOeGZabTE4a2Fp?=
- =?utf-8?B?ZGxnbCtxbTh2L010VnpLVWdSazJzdENoK01CeVF3djF2VzhyV0t1UEtWaWgr?=
- =?utf-8?B?N0pEcngxclVUV0tkTzhLV2lBeVZUQzN1RVZ0S0R2WDNtZWxHWlR4bEtwamZk?=
- =?utf-8?B?TWNvbE1tWC9sQWdMakRtVURiZkVkcFpFTi9xZ2FrUkRZUkZMdzA2ZHBwUGp6?=
- =?utf-8?B?NC8vcFoxUHQ0dDltUEcxTkkzNHcvUEZjcy9hMlJHRWUwL1VvZEJ3eWx1M0Rq?=
- =?utf-8?B?ZCswY20rSEdwTmo5ajdjQW5LbU5QOW11YzRQNEtpbUZlUTE0cldXVU1BajAx?=
- =?utf-8?B?TWcxRlNZb3FhM1FvbjJLMjhuSEtNOXhOOVZsWlltdGtqaWZpWmVSelFWek1k?=
- =?utf-8?B?NStPRzMwbStFdXRSUHVBb2lKaUZNeCtoQVNYQ1BPNkhkTVY1NzVlRWk4OFk5?=
- =?utf-8?B?WUVQa2d0QXY2OHVjd0RQMjdVQjNLbm9BV095YmN5TWlDUm9pemJGemVFWjY1?=
- =?utf-8?B?ZWZsWXA0SDY5SE9zdXVWV09VNFlxRWtnNU9YNThBeFlhcGlBaU9kTGRTa3U0?=
- =?utf-8?B?Vm0rQkZYcU9PbHBoTU91Y0lEdEdROUkxb212UnVuK1FIYzQ4UHlIRFFTNVVV?=
- =?utf-8?B?Si90akJIOUxUT1g0TTFzc09pYVNUaTFmRkgzdDVHWHdOWUNlYkVWTEM5VWEx?=
- =?utf-8?B?MmlVZjM1VU9LeklmV2VzZTMvRWdlQ0lrbzhMcWwybDdsQi9OWnNIR1g1RXl0?=
- =?utf-8?B?MFZxemMwbHg0bytMUFo4ZWtuZTRnN0RDVGxiblFGdGMrRnUwdTNlTEFQKzZD?=
- =?utf-8?B?VEdIdmYxclhQYUN0bmZGTkRNZzRBMWp6ZGZLSFVnUDRwT1JTckdZb2NBd0c5?=
- =?utf-8?B?TFdPRmFxMDRNMnN3UUI5RWkydEVQZkR1U0JOTlFSQm8veDkxZitxanB2ejF5?=
- =?utf-8?B?QTBzMWM3OG9UMDNWOTEybEhCbkszUWVnYlAxV1FXWEJaREZQcHg0QXYxNTNv?=
- =?utf-8?B?OWRmWXFUVGUyV0JlTDF4aXB2Rk5PSWF1MVVtTDRMUmZMYUFxcGZYcGhRL3pl?=
- =?utf-8?B?OHJQbmFwb3o1QXZCelA5cE9iN05TM09lcXErb0VmL3VncWczaEEvcE9hWHZB?=
- =?utf-8?B?MFVlMHkyUzh6SFBTN3JnNWEwWi9EUGFsZ2czRGU3SVByZzBoR09ub1l4N0pV?=
- =?utf-8?B?NWg0dlI1clN6S0VLZ1NrSm9BaU51UjRuSlRHUUVkQlh5OUtTL1lob0hsWFBh?=
- =?utf-8?B?TlNHdVoxd21aZ1RKazIvcklhZjBuR1BvRHpwNjhJQm5YWis3amduSHVpNU9Z?=
- =?utf-8?B?N28vN09xVkVXbjlNZmoya2tFaTVPUFBDeDdXUWNZTVpUcDU1TmdmZk1OSlhD?=
- =?utf-8?B?WjQ2VW0yNmlnbSsvNEtSYlUyVXRhTEJLNU4vY1dHa3BJczN4cTA3U2pWRVhD?=
- =?utf-8?B?Wjl2SGdhSzFIdnpjQVZqekhYczl2akc4T2RrYWg0UWo0UlYwNGJlSzZySEIw?=
- =?utf-8?B?M0xVa1JrZkhRRWxNY2Jlb2M1cTlpTGlWNU1tWXVCczVld3JXbXhxVTYwOUE0?=
- =?utf-8?B?TTRSTkIwaDQrbEM5WisyOEFiaXlyc3RRK01vSXd2ZXR2SW9KNjJtVUZ2RGla?=
- =?utf-8?B?d3NJNjRzd25zTDJaNmt0Vlh4bHc0cWc1RVZVMTVuaW9ER1JPNVhiQnNuWXBh?=
- =?utf-8?B?eis1QUJLejVRTXFxNjlKVlhMMzc5eWlQeVhTbS9Jc0l5aUNia0lzeHFvUkxQ?=
- =?utf-8?B?aWNHMjJ3OE5vWlZyOVFwSzhjTUhKYThMMUZWLy9ocTdjS0pWc0hHbHNNOEM2?=
- =?utf-8?B?M1JpTDFaYXY0bHBzRWl2d1oyekZSYkxsRWlvaFlYTG9lRmZxNTVHbWZNUXBE?=
- =?utf-8?B?ZmN1aU9yYWdIZFJpeFZLMC9TTnh6Qm9UOC83WHpwdnVGWlRiQzlhb2k5T2kr?=
- =?utf-8?B?OGx5MEh4MC9hZSs3ODhMRlRaaUpRPT0=?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 13b0735d-74a2-41b8-adfb-08dab8d86bb9
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 11:34:48.9560
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Qi7jMbQUz8QJ6zENFQqlfxHs+sq2UTQ5WkeyX1PZ+nQY83pIbLbxdi3uIcJyHAT1dFPEyW6C1kauc9/Gd0g3Lg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4878
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="h3NQArSPnjsazpQi"
+Content-Disposition: inline
+In-Reply-To: <f8eeeebc-e635-9c97-b97b-46df38f06002@nvidia.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -139,37 +85,141 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
-On 28/10/2022 12:27, Krzysztof Kozlowski wrote:
-> On 28/10/2022 05:33, Jon Hunter wrote:
->>>> +			ucsi_ccg: ucsi_ccg@8 {
->>>
->>> No underscores in node names.
->>>
->>>> +				compatible = "cypress,cypd4226";
->>>> +				cypress,firmware-build = "gn";
->>>> +				interrupt-parent = <&gpio>;
->>>> +				interrupts = <TEGRA234_MAIN_GPIO(Y, 4) IRQ_TYPE_LEVEL_LOW>;
->>>> +				reg = <0x08>;
->>>> +				status = "okay";
->>>
->>> The pattern of redefining full path in Tegra is confusing - I have no
->>> clue which of these status=okay are correct which are redundant.
->>>
->>> Do you?
->>
->> I understand you may not like this approach, however, this comment is
->> not really relevant to just this patch, but a general comment. But yes
->> we will ensure that this is correct.
->>
-> 
-> Just to clarify - this status looks redundant, but I have no way to tell
-> for sure...
+--h3NQArSPnjsazpQi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I see. This is the only place where this device appears. I always forget 
-if we are meant to explicitly set status to okay or just omit. 
-Personally, I always prefer to be explicit.
+On Wed, Oct 26, 2022 at 08:13:57AM +0100, Jon Hunter wrote:
+>=20
+> On 24/10/2022 08:41, Wayne Chang wrote:
+> > add device-tree binding documentation for Cypress cypd4226 type-C
+> > controller's I2C interface. It is a standard i2c slave with GPIO
+> > input as IRQ interface.
+> >=20
+> > Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> > ---
+> >   .../bindings/usb/cypress,cypd4226.yaml        | 86 +++++++++++++++++++
+> >   1 file changed, 86 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/usb/cypress,cypd=
+4226.yaml
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/usb/cypress,cypd4226.yam=
+l b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
+> > new file mode 100644
+> > index 000000000000..5ac28ab4e7a1
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
+> > @@ -0,0 +1,86 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/usb/cypress,cypd4226.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Cypress cypd4226 UCSI I2C Type-C Controller
+> > +
+> > +maintainers:
+> > +  - Wayne Chang <waynec@nvidia.com>
+> > +
+> > +description: |
+> > +  The Cypress cypd4226 UCSI I2C type-C controller is a I2C interface t=
+ype-C
+> > +  controller.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: cypress,cypd4226
+> > +
+> > +  '#address-cells':
+> > +    const: 1
+> > +
+> > +  '#size-cells':
+> > +    const: 0
+> > +
+> > +  reg:
+> > +    const: 0x08
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  cypress,firmware-build:
+> > +    enum:
+> > +      - nv
+> > +      - gn
+> > +    description: |
+> > +      the name of the CCGx firmware built for product series.
+> > +      should be set one of following:
+> > +      - "nv" for the RTX product series
+>=20
+> Please add 'NVIDIA' so that it is 'for the NVIDIA RTX product series'
+>=20
+> > +      - "gn" for the Jetson product series
+>=20
+> Same here please add 'NVIDIA' so that it is 'for the NVIDIA Jetson product
+> series'.
+>=20
+> Rob, any concerns about this property in general? Unfortunately, ACPI cho=
+ose
+> a 16-bit type for this and used 'nv' for the RTX product. I don't find 'g=
+n'
+> for Jetson very descriptive but we need a way to differentiate from RTX.
+>=20
+> This is needed in the Cypress CCGX driver for the following ...
+>=20
+> https://lore.kernel.org/lkml/20220928150840.3804313-1-waynec@nvidia.com/
+>=20
+> Ideally, this should have been included in this series but was sent befor=
+e.
+> We can always re-work/update the above patch even though it has been queu=
+ed
+> up now.
 
-Jon
+The driver seems to use this 16-bit value only to compare with a
+corresponding field in the firmware headers. How exactly we obtain this
+value is therefore not important. However, since this 16-bit value is
+embedded in firmware images, we also cannot substitute them with
+something more sensible.
 
--- 
-nvpublic
+However, I'm also a little confused as to the meaning of the property.
+Looking at the driver, the fw_build field is used to check for
+"supported vendors". "nv" and "gn" are clearly the same vendor (NVIDIA),
+so that's at least not 100% accurate. The DT bindings say that this
+denotes the product series, which seems to be more in line with how the
+driver uses it.
+
+The driver also uses it to implement changes in behavior across
+different variants, which is something that we would typically describe
+using compatible strings. So I wonder if we should, at least for device
+tree, switch to using different compatible strings rather than this
+separate matching mechanism. We could then associate a "product series"
+with the compatible string rather than having this extra field.
+
+There's also an argument to be made for keeping the interface the same
+between ACPI and DT.
+
+Rob, Krzysztof?
+
+Thierry
+
+--h3NQArSPnjsazpQi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIyBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNby54ACgkQ3SOs138+
+s6E4fg/3R0pKH9akh9kvP2t0sZWoPkiERl9cABlNizWtx2cy0gI7OGgZ89iorCa0
+0vJV2G1eOEBkuCCEOd+L8X9C3QaIZV/MF1l1dwnaiZBagtCw6UNE+WkAN+I/ifBx
+ISyjta7Mz94FVzG8lMK+IaVEewvLMXOM4jm32BCtqgveWe6g3FBscC1ugu0po5iJ
+kMDQcrBuaqoZ2gAK1NJdw1vBR2XMfKzwUTS2GcugLUl2ZmzHRGiF8T5+UpagY7Pv
+otwtss8jKnINh8VS7WFGooMMQrB/0C6PnPSqnCf2R7yi/0gFq9wtJ6arBwIkKTI/
+t3XhAN5Fh86GFBCHMbPbT2EO7uC/71jtaaHwXFH3fiqKh91uqDnR1BgvR4bJEUNa
+Xs9LXoVkmJKXro1/3dgr3e6EhwB+mBTRA8WLVS4poR2CAI33ajHzjcvLpnZyltvL
+CeZJF2OfawWMdUWJTcMX23K2xh93q7e5vkveceNX2y15+yV066iOiI9P7GPVKOoJ
+8zbLfOJq6Ds5bW+4FhY81A9R9ib24whF3TNj5XJUy8B1YAjxVdETjxXe4kMnkut6
+4/4klVkO+koS4zU0MwZdg5lL6ZfLbHLQS8okQvtnOEbXsCSKq/aTB4jr0riCyw9o
+zVH7RBtyfYVdaPbItBeVbJPxMxcL9Ex0M/w8LUnbLXD8JZdIAw==
+=Cf+J
+-----END PGP SIGNATURE-----
+
+--h3NQArSPnjsazpQi--
