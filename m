@@ -2,74 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE66611329
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Oct 2022 15:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3524D611408
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Oct 2022 16:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbiJ1Nlb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 Oct 2022 09:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
+        id S231354AbiJ1OHh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 Oct 2022 10:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbiJ1NlK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Oct 2022 09:41:10 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E71275E0;
-        Fri, 28 Oct 2022 06:39:37 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id f27so13037681eje.1;
-        Fri, 28 Oct 2022 06:39:37 -0700 (PDT)
+        with ESMTP id S230315AbiJ1OHh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Oct 2022 10:07:37 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C591D586A;
+        Fri, 28 Oct 2022 07:07:34 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id y14so13179514ejd.9;
+        Fri, 28 Oct 2022 07:07:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=G4dibky+EpldM0UVD7pV5+/wckEMIzaOQZHu0CZ9KjA=;
-        b=UwU/VcsSY3Jkt0ndF7Zos3fs1bwS776Dl2VOHp5oS/yOtHbAj27YABvJXl1aN8SPE5
-         So8DGxLj+3s4B7xZo0jKHOu/EXEUWsuBRO4zbGraogIbnQ6neXhlsxNarfdOF2/wth7G
-         2iYTft50V8BTMnUlj5L33RlcA8gePJHKtKAvtTpzc55aO9WAkDVN8F6i6WUenBYWdTSY
-         wPcVBfd2mijV0IieJNo0a+5GBJpejUUsl0bHlbDtX6tMm3FKwpAzRceoQyG0PtLtnmPP
-         lXnNddJb0DJhdRiKA5GpUL/F7HDX2nnr4gk9vMxcpcL+jbr2f77xERDWIIMXAuO8W3pw
-         bbyg==
+        bh=TWCvMt3elQQkvkQ/TKdQKZ3J9fekFt08XY7JDczxDLs=;
+        b=S5eY76mlN2tFMg+4pLeThtnQhlp4ocsMO1J3iG4xW0oV/kkyPzOpnEnvV96kPcbAEX
+         pbGUvnoQJIZ95APLSXS4hW6GB5gy94WKMjEToBbUpw4NokE4TqtkSCm9ACSDWfZGnNQD
+         b7wVwNfYnewVRwljr++Ct92/bcHX7eKuqEDn5CnNEZE+7KkxIzNTS8UpVME4hZhTIKZm
+         bzuBhN9OxJ4li3ASyX2rXrq/8f2r3EURY1gPKsL1td0mHbqjux9QNh48qlZfTruxE9sG
+         bAU1D0LXvoFLKp0wN4wQ5wve7qS/mVmphAbQwyoyPxa3aEv55geRY6CSrrb0aneRY0Tl
+         41iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=G4dibky+EpldM0UVD7pV5+/wckEMIzaOQZHu0CZ9KjA=;
-        b=fa23y31hTqZgc9d2GCdyLq8KoEC0gl+rhc3Ij9fu1kX1WeS95dyykparG4nQadqRsN
-         IP2RO9rRKGg/CQn8mDWq5xqnwPlosURv8eftxPlCxRtT5lpiUEveNFqVqfqsoRvyaEos
-         JgrgOfzfBxv3FstvDvkjQY+F3G/JHLRZOVRiQ1bYSaRV6o/IueiM1y0h8mJ43FKQUkFb
-         on9xM5TNbMIyDHsIBlbkj08B/ZzRKN21nZ56jYx1CC65MgDzosSbVv9dQmB1i8LC/ZeR
-         StGH5swCO/nXWt8ZpeL+sfmQa6SBBaBBA38+ZqDql/+AZ8726tJgeMqFmsrsDrJBBVfc
-         ER9A==
-X-Gm-Message-State: ACrzQf3LLRlHno419vbBEAutrY/ugXexWAURT0Xzszqrv6y860UxlMvT
-        g4J/N3pyOYXAksAXMg0o2cI=
-X-Google-Smtp-Source: AMsMyM5+zB9ahEZAx00qJKxi1+WbjtiqFBEfC+Ec/FLowk3R+2Ey6JhYEHGKxEH4UhaHmIbh4nUDog==
-X-Received: by 2002:a17:906:db0c:b0:77b:7d7d:5805 with SMTP id xj12-20020a170906db0c00b0077b7d7d5805mr48761368ejb.726.1666964375220;
-        Fri, 28 Oct 2022 06:39:35 -0700 (PDT)
+        bh=TWCvMt3elQQkvkQ/TKdQKZ3J9fekFt08XY7JDczxDLs=;
+        b=5vfpgsSzEqpxMK6rhzAuSNrqQgApJICrnHEWgRxjKvY0/mtk2zCsBwKWBdaAEbbpQ/
+         a6S9/MEvv6GjbJAJz12rPEa0Z3Ij3qadlOCPeSIZWSwCmO3/vSP4QHAfW8vokZgcXlXm
+         szyEsa6xdYzed3vGKhKJvOrpxGD4P8A8zeKdofWAtn0us8N9aBZ78qBm+RYH8JRZZs8H
+         p6w0guBgCZHGKCKEyD+4O3kF5NoO+n3O7qteC7m86ZDlJaylVCW5hjT4FZgeHm8fv3lb
+         Q0uhoAPoQEuNC4/KhUg+IDtD+/0l/ojccSI/SokhjNnD+awkOIiU9/pA8VpyBvUGxNl9
+         AsQg==
+X-Gm-Message-State: ACrzQf2n5XP2uc33XGMeiSkRDZzn0+Nae79SExJggmPTEpd31Zib/lUP
+        ooWxtz8urvjG67wOUT642vM=
+X-Google-Smtp-Source: AMsMyM7D3twQkFaMfCxUy6j9VvCERfNQOjRgLpCvU6hp4Gwe+FiZ4kg6TX2AcUjBQmTjLeWIeDMKGw==
+X-Received: by 2002:a17:906:846c:b0:7a5:ccb:c174 with SMTP id hx12-20020a170906846c00b007a50ccbc174mr25997482ejc.583.1666966053263;
+        Fri, 28 Oct 2022 07:07:33 -0700 (PDT)
 Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id g11-20020a170906538b00b0078ba492db81sm2195402ejo.9.2022.10.28.06.39.33
+        by smtp.gmail.com with ESMTPSA id cs8-20020a0564020c4800b00461816beef9sm2736314edb.14.2022.10.28.07.07.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 06:39:34 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 15:39:32 +0200
+        Fri, 28 Oct 2022 07:07:32 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 16:07:30 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Wayne Chang <waynec@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
-        jonathanh@nvidia.com, heikki.krogerus@linux.intel.com,
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
+        treding@nvidia.com, heikki.krogerus@linux.intel.com,
         ajayg@nvidia.com, kishon@ti.com, vkoul@kernel.org,
         p.zabel@pengutronix.de, balbi@kernel.org, mathias.nyman@intel.com,
         jckuo@nvidia.com, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         singhanc@nvidia.com, linux-i2c@vger.kernel.org,
         linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 10/11] usb: host: xhci-tegra: Add Tegra234 XHCI support
-Message-ID: <Y1vblCOXOCtX/RTP@orome>
+Subject: Re: [PATCH 03/11] dt-bindings: usb: Add binding for Cypress cypd4226
+ I2C driver
+Message-ID: <Y1viIsL+Nxthc97j@orome>
 References: <20221024074128.1113554-1-waynec@nvidia.com>
- <20221024074128.1113554-11-waynec@nvidia.com>
+ <20221024074128.1113554-4-waynec@nvidia.com>
+ <f8eeeebc-e635-9c97-b97b-46df38f06002@nvidia.com>
+ <Y1vLoT+/dgOgrxjD@orome>
+ <7a1c4943-4ae2-cde4-221b-fa972c2baab2@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Mbj1VkMtzmZhLdX9"
+        protocol="application/pgp-signature"; boundary="QbiyuPHHLdatsw0h"
 Content-Disposition: inline
-In-Reply-To: <20221024074128.1113554-11-waynec@nvidia.com>
+In-Reply-To: <7a1c4943-4ae2-cde4-221b-fa972c2baab2@nvidia.com>
 User-Agent: Mutt/2.2.7 (2022-08-07)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -82,527 +87,173 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Mbj1VkMtzmZhLdX9
+--QbiyuPHHLdatsw0h
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 24, 2022 at 03:41:27PM +0800, Wayne Chang wrote:
-> From: Sing-Han Chen <singhanc@nvidia.com>
+On Fri, Oct 28, 2022 at 01:42:36PM +0100, Jon Hunter wrote:
 >=20
-> This change adds Tegra234 XUSB host mode controller support.
+> On 28/10/2022 13:31, Thierry Reding wrote:
+> > On Wed, Oct 26, 2022 at 08:13:57AM +0100, Jon Hunter wrote:
+> > >=20
+> > > On 24/10/2022 08:41, Wayne Chang wrote:
+> > > > add device-tree binding documentation for Cypress cypd4226 type-C
+> > > > controller's I2C interface. It is a standard i2c slave with GPIO
+> > > > input as IRQ interface.
+> > > >=20
+> > > > Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> > > > ---
+> > > >    .../bindings/usb/cypress,cypd4226.yaml        | 86 +++++++++++++=
+++++++
+> > > >    1 file changed, 86 insertions(+)
+> > > >    create mode 100644 Documentation/devicetree/bindings/usb/cypress=
+,cypd4226.yaml
+> > > >=20
+> > > > diff --git a/Documentation/devicetree/bindings/usb/cypress,cypd4226=
+=2Eyaml b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..5ac28ab4e7a1
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
+> > > > @@ -0,0 +1,86 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/usb/cypress,cypd4226.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: Cypress cypd4226 UCSI I2C Type-C Controller
+> > > > +
+> > > > +maintainers:
+> > > > +  - Wayne Chang <waynec@nvidia.com>
+> > > > +
+> > > > +description: |
+> > > > +  The Cypress cypd4226 UCSI I2C type-C controller is a I2C interfa=
+ce type-C
+> > > > +  controller.
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    const: cypress,cypd4226
+> > > > +
+> > > > +  '#address-cells':
+> > > > +    const: 1
+> > > > +
+> > > > +  '#size-cells':
+> > > > +    const: 0
+> > > > +
+> > > > +  reg:
+> > > > +    const: 0x08
+> > > > +
+> > > > +  interrupts:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  cypress,firmware-build:
+> > > > +    enum:
+> > > > +      - nv
+> > > > +      - gn
+> > > > +    description: |
+> > > > +      the name of the CCGx firmware built for product series.
+> > > > +      should be set one of following:
+> > > > +      - "nv" for the RTX product series
+> > >=20
+> > > Please add 'NVIDIA' so that it is 'for the NVIDIA RTX product series'
+> > >=20
+> > > > +      - "gn" for the Jetson product series
+> > >=20
+> > > Same here please add 'NVIDIA' so that it is 'for the NVIDIA Jetson pr=
+oduct
+> > > series'.
+> > >=20
+> > > Rob, any concerns about this property in general? Unfortunately, ACPI=
+ choose
+> > > a 16-bit type for this and used 'nv' for the RTX product. I don't fin=
+d 'gn'
+> > > for Jetson very descriptive but we need a way to differentiate from R=
+TX.
+> > >=20
+> > > This is needed in the Cypress CCGX driver for the following ...
+> > >=20
+> > > https://lore.kernel.org/lkml/20220928150840.3804313-1-waynec@nvidia.c=
+om/
+> > >=20
+> > > Ideally, this should have been included in this series but was sent b=
+efore.
+> > > We can always re-work/update the above patch even though it has been =
+queued
+> > > up now.
+> >=20
+> > The driver seems to use this 16-bit value only to compare with a
+> > corresponding field in the firmware headers. How exactly we obtain this
+> > value is therefore not important. However, since this 16-bit value is
+> > embedded in firmware images, we also cannot substitute them with
+> > something more sensible.
 >=20
-> In Tegra234, some of the registers have moved to bar2 space.
-> The new soc variable has_bar2 indicates the chip with bar2
-> area. This patch adds new reg helper to let the driver reuse
-> the same code for those chips with bar2 support.
->=20
-> The new soc variables has_ifr indicates the chip with IFR FW
-> loading support. IFR registers would be configured in
-> MB1, and FW loading will be triggered in MB2.
->=20
-> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
-> Co-developed-by: Wayne Chang <waynec@nvidia.com>
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> ---
->  drivers/usb/host/xhci-tegra.c | 277 +++++++++++++++++++++++++++++-----
->  1 file changed, 237 insertions(+), 40 deletions(-)
->=20
-> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-> index bdb776553826..86036eeece43 100644
-> --- a/drivers/usb/host/xhci-tegra.c
-> +++ b/drivers/usb/host/xhci-tegra.c
-> @@ -44,6 +44,9 @@
->  #define XUSB_CFG_4				0x010
->  #define  XUSB_BASE_ADDR_SHIFT			15
->  #define  XUSB_BASE_ADDR_MASK			0x1ffff
-> +#define XUSB_CFG_7				0x01c
-> +#define  XUSB_BASE2_ADDR_SHIFT			16
-> +#define  XUSB_BASE2_ADDR_MASK			0xffff
->  #define XUSB_CFG_16				0x040
->  #define XUSB_CFG_24				0x060
->  #define XUSB_CFG_AXI_CFG			0x0f8
-> @@ -75,6 +78,20 @@
->  #define  MBOX_SMI_INTR_FW_HANG			BIT(1)
->  #define  MBOX_SMI_INTR_EN			BIT(3)
-> =20
-> +/* BAR2 registers */
-> +#define XUSB_BAR2_ARU_MBOX_CMD			0x004
-> +#define XUSB_BAR2_ARU_MBOX_DATA_IN		0x008
-> +#define XUSB_BAR2_ARU_MBOX_DATA_OUT		0x00c
-> +#define XUSB_BAR2_ARU_MBOX_OWNER		0x010
-> +#define XUSB_BAR2_ARU_SMI_INTR			0x014
-> +#define XUSB_BAR2_ARU_SMI_ARU_FW_SCRATCH_DATA0	0x01c
-> +#define XUSB_BAR2_ARU_IFRDMA_CFG0		0x0e0
-> +#define XUSB_BAR2_ARU_IFRDMA_CFG1		0x0e4
-> +#define XUSB_BAR2_ARU_IFRDMA_STREAMID_FIELD	0x0e8
-> +#define XUSB_BAR2_ARU_C11_CSBRANGE		0x9c
-> +#define XUSB_BAR2_ARU_FW_SCRATCH		0x1000
-> +#define XUSB_BAR2_CSB_BASE_ADDR			0x2000
-> +
->  /* IPFS registers */
->  #define IPFS_XUSB_HOST_MSI_BAR_SZ_0		0x0c0
->  #define IPFS_XUSB_HOST_MSI_AXI_BAR_ST_0		0x0c4
-> @@ -111,6 +128,9 @@
->  #define  IMFILLRNG1_TAG_HI_SHIFT		16
->  #define XUSB_FALC_IMFILLCTL			0x158
-> =20
-> +/* CSB ARU  registers */
+> I am actually wondering if this is actually embedded in any images becaus=
+e I
+> see it populated by the i2c-nvidia-gpu.c driver [0]. So I am wondering if=
+ we
+> can use PROPERTY_ENTRY_STRING() for this driver instead and have a more
+> descriptive name such as 'nvidia,rtx'?
 
-Weird double-space between "ARU" and "registers".
+What I mean by "embedded in firmware images" is that the value read from
+the property is compared to values read from a firmware blob (either one
+read back from the chip or one loaded using request_firmware()). See for
+example ccg_check_vendor_version() and ccg_check_fw_version().
 
-> +#define XUSB_CSB_ARU_SCRATCH0			0x100100
-> +
->  /* MP CSB registers */
->  #define XUSB_CSB_MP_ILOAD_ATTR			0x101a00
->  #define XUSB_CSB_MP_ILOAD_BASE_LO		0x101a04
-> @@ -131,6 +151,9 @@
-> =20
->  #define IMEM_BLOCK_SIZE				256
-> =20
-> +#define FW_IOCTL_TYPE_SHIFT             (24)
+So the way that this 16-bit number is used is to define what type of
+vendor firmware we support. So this is also used to avoid trying to load
+a Tegra firmware on a GPU and vice versa.
 
-This should use tabs for spacing, like all the other definitions. Also,
-no need to wrap literal integers in parentheses.
+So yes, we could potentially still make the i2c-nvidia-gpu.c driver add
+a "nvidia,rtx" string to make it more descriptive like DT, but then we'd
+still need to somehow resolve that to the "nv" string for the assignment
+to uc->fw_build.
 
-> +#define FW_IOCTL_CFGTBL_READ		(17)
+Not sure about how that would impact the AMD bits. Another of those CCGX
+UCSI devices is registered by the i2c-designware-pcidrv.c driver, but it
+doesn't pass a software node. From what I can tell that simply means all
+of those checks will work with fw_build =3D=3D 0x00. Primarily I think that
+will cause flashing of the firmware not to be supported.
 
-No need for the parentheses.
-
-> +
->  struct tegra_xusb_fw_header {
->  	__le32 boot_loadaddr_in_imem;
->  	__le32 boot_codedfi_offset;
-> @@ -175,6 +198,7 @@ struct tegra_xusb_mbox_regs {
->  	u16 data_in;
->  	u16 data_out;
->  	u16 owner;
-> +	u16 smi_intr;
->  };
-> =20
->  struct tegra_xusb_context_soc {
-> @@ -189,6 +213,7 @@ struct tegra_xusb_context_soc {
->  	} fpci;
->  };
-> =20
-> +struct tegra_xusb_soc_ops;
-
-Probably better to move the definition of the structure here and instead
-predeclare struct tegra_xusb.
-
->  struct tegra_xusb_soc {
->  	const char *firmware;
->  	const char * const *supply_names;
-> @@ -205,11 +230,15 @@ struct tegra_xusb_soc {
->  	} ports;
-> =20
->  	struct tegra_xusb_mbox_regs mbox;
-> +	struct tegra_xusb_soc_ops *ops;
-
-const please.
-
-> =20
->  	bool scale_ss_clock;
->  	bool has_ipfs;
->  	bool lpm_support;
->  	bool otg_reset_sspi;
-> +
-> +	bool has_bar2;
-> +	bool has_ifr;
->  };
-> =20
->  struct tegra_xusb_context {
-> @@ -230,6 +259,8 @@ struct tegra_xusb {
-> =20
->  	void __iomem *ipfs_base;
->  	void __iomem *fpci_base;
-> +	void __iomem *bar2_base;
-> +	resource_size_t bar2_start;
-
-Maybe just store struct resource *bar2, here.
-
-[...]
-> @@ -664,6 +754,7 @@ static void tegra_xusb_mbox_handle(struct tegra_xusb =
-*tegra,
->  static irqreturn_t tegra_xusb_mbox_thread(int irq, void *data)
->  {
->  	struct tegra_xusb *tegra =3D data;
-> +	struct tegra_xusb_soc_ops *ops =3D tegra->soc->ops;
-
-const
-
-> @@ -709,6 +800,15 @@ static void tegra_xusb_config(struct tegra_xusb *teg=
-ra)
->  	value |=3D regs & (XUSB_BASE_ADDR_MASK << XUSB_BASE_ADDR_SHIFT);
->  	fpci_writel(tegra, value, XUSB_CFG_4);
-> =20
-> +	/* Program BAR2 space */
-> +	if (tegra->soc->has_bar2) {
-
-You could make this depend on tegra->bar2 if you make the change above.
-
-> +		value =3D fpci_readl(tegra, XUSB_CFG_7);
-> +		value &=3D ~(XUSB_BASE2_ADDR_MASK << XUSB_BASE2_ADDR_SHIFT);
-> +		value |=3D tegra->bar2_start &
-> +			(XUSB_BASE2_ADDR_MASK << XUSB_BASE2_ADDR_SHIFT);
-> +		fpci_writel(tegra, value, XUSB_CFG_7);
-> +	}
-> +
->  	usleep_range(100, 200);
-> =20
->  	/* Enable bus master */
-> @@ -881,21 +981,36 @@ static int tegra_xusb_request_firmware(struct tegra=
-_xusb *tegra)
->  	return 0;
->  }
-> =20
-> +static int tegra_xusb_wait_for_falcon(struct tegra_xusb *tegra)
-> +{
-> +	struct xhci_cap_regs __iomem *cap_regs;
-> +	struct xhci_op_regs __iomem *op_regs;
-> +	int ret;
-> +	u32 val;
-
-Use "value" for consistency with the rest of the driver.
-
-> +
-> +	cap_regs =3D tegra->regs;
-> +	op_regs =3D tegra->regs + HC_LENGTH(readl(&cap_regs->hc_capbase));
-> +
-> +	ret =3D readl_poll_timeout(&op_regs->status, val, !(val & STS_CNR), 100=
-0, 200000);
-> +
-> +	if (ret)
-> +		dev_err(tegra->dev, "XHCI Controller not ready. Falcon state: 0x%x\n",
-> +			csb_readl(tegra, XUSB_FALC_CPUCTL));
-> +
-> +	return ret;
-> +}
-
-This refactoring could be a separate patch. It makes the rest of the
-changes harder to review. Not necessarily something that needs to be
-addressed, though.
-
-> +
->  static int tegra_xusb_load_firmware(struct tegra_xusb *tegra)
->  {
->  	unsigned int code_tag_blocks, code_size_blocks, code_blocks;
-> -	struct xhci_cap_regs __iomem *cap =3D tegra->regs;
->  	struct tegra_xusb_fw_header *header;
->  	struct device *dev =3D tegra->dev;
-> -	struct xhci_op_regs __iomem *op;
-> -	unsigned long timeout;
->  	time64_t timestamp;
->  	u64 address;
->  	u32 value;
->  	int err;
-> =20
->  	header =3D (struct tegra_xusb_fw_header *)tegra->fw.virt;
-> -	op =3D tegra->regs + HC_LENGTH(readl(&cap->hc_capbase));
-> =20
->  	if (csb_readl(tegra, XUSB_CSB_MP_ILOAD_BASE_LO) !=3D 0) {
->  		dev_info(dev, "Firmware already loaded, Falcon state %#x\n",
-> @@ -968,26 +1083,43 @@ static int tegra_xusb_load_firmware(struct tegra_x=
-usb *tegra)
->  	/* Boot Falcon CPU and wait for USBSTS_CNR to get cleared. */
->  	csb_writel(tegra, CPUCTL_STARTCPU, XUSB_FALC_CPUCTL);
-> =20
-> -	timeout =3D jiffies + msecs_to_jiffies(200);
-> +	if (tegra_xusb_wait_for_falcon(tegra))
-> +		return -EIO;
-> =20
-> -	do {
-> -		value =3D readl(&op->status);
-> -		if ((value & STS_CNR) =3D=3D 0)
-> -			break;
-> +	timestamp =3D le32_to_cpu(header->fwimg_created_time);
-> =20
-> -		usleep_range(1000, 2000);
-> -	} while (time_is_after_jiffies(timeout));
-> +	dev_info(dev, "Firmware timestamp: %ptTs UTC\n", &timestamp);
-> +
-> +	return 0;
-> +}
-> =20
-> -	value =3D readl(&op->status);
-> -	if (value & STS_CNR) {
-> -		value =3D csb_readl(tegra, XUSB_FALC_CPUCTL);
-> -		dev_err(dev, "XHCI controller not read: %#010x\n", value);
-> +static u32 tegra_xusb_read_firmware_header(struct tegra_xusb *tegra, u32=
- offset)
-> +{
-> +	/*
-> +	 * We only accept reading the firmware config table
-> +	 * The offset should not exceed the fw header structure
-> +	 */
-> +	if (offset >=3D sizeof(struct tegra_xusb_fw_header))
-> +		return 0;
-
-You technically still allow reading 3 bytes past the header structure.
-Or does the firmware's CFGTL_READ IOCTL mask out the lower 2 bits of the
-offset?
-
-> +
-> +	bar2_writel(tegra, (FW_IOCTL_CFGTBL_READ << FW_IOCTL_TYPE_SHIFT) | offs=
-et,
-> +			XUSB_BAR2_ARU_FW_SCRATCH);
-> +	return bar2_readl(tegra, XUSB_BAR2_ARU_SMI_ARU_FW_SCRATCH_DATA0);
-> +}
-> +
-> +static int tegra_xusb_init_ifr_firmware(struct tegra_xusb *tegra)
-> +{
-> +	time64_t timestamp;
-> +
-> +	if (tegra_xusb_wait_for_falcon(tegra))
->  		return -EIO;
-> -	}
-> =20
-> -	timestamp =3D le32_to_cpu(header->fwimg_created_time);
-> +#define offsetof_32(X, Y) ((u8)(offsetof(X, Y) / sizeof(__le32)))
-> +	timestamp =3D tegra_xusb_read_firmware_header(tegra,
-> +			offsetof_32(struct tegra_xusb_fw_header,
-> +				fwimg_created_time) << 2);
-> =20
-> -	dev_info(dev, "Firmware timestamp: %ptTs UTC\n", &timestamp);
-> +	dev_info(tegra->dev, "Firmware timestamp: %ptTs UTC\n", &timestamp);
-> =20
->  	return 0;
->  }
-> @@ -1403,7 +1535,7 @@ static int tegra_xusb_probe(struct platform_device =
-*pdev)
->  	struct of_phandle_args args;
->  	struct tegra_xusb *tegra;
->  	struct device_node *np;
-> -	struct resource *regs;
-> +	struct resource *res, *regs;
->  	struct xhci_hcd *xhci;
->  	unsigned int i, j, k;
->  	struct phy *phy;
-> @@ -1435,6 +1567,11 @@ static int tegra_xusb_probe(struct platform_device=
- *pdev)
->  		tegra->ipfs_base =3D devm_platform_ioremap_resource(pdev, 2);
->  		if (IS_ERR(tegra->ipfs_base))
->  			return PTR_ERR(tegra->ipfs_base);
-> +	} else if (tegra->soc->has_bar2) {
-> +		tegra->bar2_base =3D devm_platform_get_and_ioremap_resource(pdev, 2, &=
-res);
-
-If you store struct resource *bar2 in tegra, you can pass &tegra->bar2
-here and ...
-
-> +		if (IS_ERR(tegra->bar2_base))
-> +			return PTR_ERR(tegra->bar2_base);
-> +		tegra->bar2_start =3D res->start;
-
-=2E.. skip this.
-
->  	}
-> =20
->  	tegra->xhci_irq =3D platform_get_irq(pdev, 0);
-> @@ -1651,10 +1788,13 @@ static int tegra_xusb_probe(struct platform_devic=
-e *pdev)
->  		goto disable_phy;
->  	}
-> =20
-> -	err =3D tegra_xusb_request_firmware(tegra);
-> -	if (err < 0) {
-> -		dev_err(&pdev->dev, "failed to request firmware: %d\n", err);
-> -		goto disable_phy;
-> +	if (!tegra->soc->has_ifr) {
-> +		err =3D tegra_xusb_request_firmware(tegra);
-> +		if (err < 0) {
-> +			dev_err(&pdev->dev,
-> +				"failed to request firmware: %d\n", err);
-> +			goto disable_phy;
-> +		}
->  	}
-> =20
->  	err =3D tegra_xusb_unpowergate_partitions(tegra);
-> @@ -1663,7 +1803,10 @@ static int tegra_xusb_probe(struct platform_device=
- *pdev)
-> =20
->  	tegra_xusb_config(tegra);
-> =20
-> -	err =3D tegra_xusb_load_firmware(tegra);
-> +	if (tegra->soc->has_ifr)
-> +		err =3D tegra_xusb_init_ifr_firmware(tegra);
-> +	else
-> +		err =3D tegra_xusb_load_firmware(tegra);
->  	if (err < 0) {
->  		dev_err(&pdev->dev, "failed to load firmware: %d\n", err);
->  		goto powergate;
-> @@ -2070,7 +2213,10 @@ static int tegra_xusb_exit_elpg(struct tegra_xusb =
-*tegra, bool runtime)
->  	tegra_xusb_config(tegra);
->  	tegra_xusb_restore_context(tegra);
-> =20
-> -	err =3D tegra_xusb_load_firmware(tegra);
-> +	if (tegra->soc->has_ifr)
-> +		err =3D tegra_xusb_init_ifr_firmware(tegra);
-> +	else
-> +		err =3D tegra_xusb_load_firmware(tegra);
-
-Might be worth extracting this into a new function since you use this
-twice now.
-
->  	if (err < 0) {
->  		dev_err(tegra->dev, "failed to load firmware: %d\n", err);
->  		goto disable_phy;
-> @@ -2271,6 +2417,13 @@ static const struct tegra_xusb_context_soc tegra12=
-4_xusb_context =3D {
->  	},
->  };
-> =20
-> +static struct tegra_xusb_soc_ops tegra124_ops =3D {
-
-const
-
-> +	.mbox_reg_readl =3D &fpci_readl,
-> +	.mbox_reg_writel =3D &fpci_writel,
-> +	.csb_reg_readl =3D &fpci_csb_readl,
-> +	.csb_reg_writel =3D &fpci_csb_writel,
-> +};
-> +
->  static const struct tegra_xusb_soc tegra124_soc =3D {
->  	.firmware =3D "nvidia/tegra124/xusb.bin",
->  	.supply_names =3D tegra124_supply_names,
-> @@ -2286,11 +2439,13 @@ static const struct tegra_xusb_soc tegra124_soc =
-=3D {
->  	.scale_ss_clock =3D true,
->  	.has_ipfs =3D true,
->  	.otg_reset_sspi =3D false,
-> +	.ops =3D &tegra124_ops,
->  	.mbox =3D {
->  		.cmd =3D 0xe4,
->  		.data_in =3D 0xe8,
->  		.data_out =3D 0xec,
->  		.owner =3D 0xf0,
-> +		.smi_intr =3D XUSB_CFG_ARU_SMI_INTR,
->  	},
->  };
->  MODULE_FIRMWARE("nvidia/tegra124/xusb.bin");
-> @@ -2322,11 +2477,13 @@ static const struct tegra_xusb_soc tegra210_soc =
-=3D {
->  	.scale_ss_clock =3D false,
->  	.has_ipfs =3D true,
->  	.otg_reset_sspi =3D true,
-> +	.ops =3D &tegra124_ops,
->  	.mbox =3D {
->  		.cmd =3D 0xe4,
->  		.data_in =3D 0xe8,
->  		.data_out =3D 0xec,
->  		.owner =3D 0xf0,
-> +		.smi_intr =3D XUSB_CFG_ARU_SMI_INTR,
->  	},
->  };
->  MODULE_FIRMWARE("nvidia/tegra210/xusb.bin");
-> @@ -2363,11 +2520,13 @@ static const struct tegra_xusb_soc tegra186_soc =
-=3D {
->  	.scale_ss_clock =3D false,
->  	.has_ipfs =3D false,
->  	.otg_reset_sspi =3D false,
-> +	.ops =3D &tegra124_ops,
->  	.mbox =3D {
->  		.cmd =3D 0xe4,
->  		.data_in =3D 0xe8,
->  		.data_out =3D 0xec,
->  		.owner =3D 0xf0,
-> +		.smi_intr =3D XUSB_CFG_ARU_SMI_INTR,
->  	},
->  	.lpm_support =3D true,
->  };
-> @@ -2394,21 +2553,59 @@ static const struct tegra_xusb_soc tegra194_soc =
-=3D {
->  	.scale_ss_clock =3D false,
->  	.has_ipfs =3D false,
->  	.otg_reset_sspi =3D false,
-> +	.ops =3D &tegra124_ops,
->  	.mbox =3D {
->  		.cmd =3D 0x68,
->  		.data_in =3D 0x6c,
->  		.data_out =3D 0x70,
->  		.owner =3D 0x74,
-> +		.smi_intr =3D XUSB_CFG_ARU_SMI_INTR,
->  	},
->  	.lpm_support =3D true,
->  };
->  MODULE_FIRMWARE("nvidia/tegra194/xusb.bin");
-> =20
-> +static struct tegra_xusb_soc_ops tegra234_ops =3D {
-
-const
-
-> +	.mbox_reg_readl =3D &bar2_readl,
-> +	.mbox_reg_writel =3D &bar2_writel,
-> +	.csb_reg_readl =3D &bar2_csb_readl,
-> +	.csb_reg_writel =3D &bar2_csb_writel,
-> +};
-> +
-> +static const struct tegra_xusb_soc tegra234_soc =3D {
-> +	.firmware =3D "nvidia/tegra234/xusb.bin",
-> +	.supply_names =3D tegra194_supply_names,
-> +	.num_supplies =3D ARRAY_SIZE(tegra194_supply_names),
-> +	.phy_types =3D tegra194_phy_types,
-> +	.num_types =3D ARRAY_SIZE(tegra194_phy_types),
-> +	.context =3D &tegra186_xusb_context,
-> +	.ports =3D {
-> +		.usb3 =3D { .offset =3D 0, .count =3D 4, },
-> +		.usb2 =3D { .offset =3D 4, .count =3D 4, },
-> +	},
-> +	.scale_ss_clock =3D false,
-> +	.has_ipfs =3D false,
-> +	.otg_reset_sspi =3D false,
-> +	.ops =3D &tegra234_ops,
-> +	.mbox =3D {
-> +		.cmd =3D XUSB_BAR2_ARU_MBOX_CMD,
-> +		.data_in =3D XUSB_BAR2_ARU_MBOX_DATA_IN,
-> +		.data_out =3D XUSB_BAR2_ARU_MBOX_DATA_OUT,
-> +		.owner =3D XUSB_BAR2_ARU_MBOX_OWNER,
-> +		.smi_intr =3D XUSB_BAR2_ARU_SMI_INTR,
-> +	},
-> +	.lpm_support =3D true,
-> +	.has_bar2 =3D true,
-> +	.has_ifr =3D true,
-> +};
-> +MODULE_FIRMWARE("nvidia/tegra234/xusb.bin");
-
-Can you prepare a patch to add this firmware to the linux-firmware
-repository? I don't see it there yet.
+So yeah, having that string be something else (i.e. more descriptive)
+and then match on that instead would definitely work. After looking at
+this some more, using existing driver-matching may not work after all
+because while there's ACPI matching and with this series DT matching,
+the various GPU I2C instantiations are purely done in software, so they
+have neither and therefore would need a secondary lookup mechanism. We
+may be stuck with that ccgx,firmware-build property, but as you said it
+should be possible to at least sanitize it.
 
 Thierry
 
-> +
->  static const struct of_device_id tegra_xusb_of_match[] =3D {
->  	{ .compatible =3D "nvidia,tegra124-xusb", .data =3D &tegra124_soc },
->  	{ .compatible =3D "nvidia,tegra210-xusb", .data =3D &tegra210_soc },
->  	{ .compatible =3D "nvidia,tegra186-xusb", .data =3D &tegra186_soc },
->  	{ .compatible =3D "nvidia,tegra194-xusb", .data =3D &tegra194_soc },
-> +	{ .compatible =3D "nvidia,tegra234-xusb", .data =3D &tegra234_soc },
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(of, tegra_xusb_of_match);
-> --=20
-> 2.25.1
 >=20
+> Jon
+>=20
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
+ee/drivers/i2c/busses/i2c-nvidia-gpu.c#n261
+> --=20
+> nvpublic
 
---Mbj1VkMtzmZhLdX9
+--QbiyuPHHLdatsw0h
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNb25EACgkQ3SOs138+
-s6F7cw//UeHVl36CYig4HEaNFyNXLFCrs557GkVBx+bcayvmjHalwDjibi/AjNmp
-+J6NsmxD/Jh1NOtq4EIyetWQ0lHKjAAVkb8YJ2CgdKDD1aQLIkceTxHRlKdgrVbh
-dPupJmtiwZf9qodUbwtV/vtuV8B/Xkr+BH5fDvtCNsiRsrdzirxpnti7kAME6v2/
-TFl1nXSKzvQqnLdgOZAuli9KPW9Z91KtsJs2pgnOFREcmkHOqvMlsWCV+xv7uJrz
-tUOwm67ApPdGwlo4MNDtJ4i8jA2enGT9xedhx36YKfYUBnpqEjcLXHxvnHdTXAnD
-ctK1cBLLxWrgaZjmgKmMuL4oo9g3SJI5Mld/Ye4l56bJhEHwBEaXLNnhRxSftiB8
-E/Pfckjjqoi6R0Ph5KT8KPnohGCcA5pPPxkvphCijAtuGP01YkSYVWbN9a5SS8YI
-8khrJXqn3EnOcsf6e5LJxLM6ebTsQQPhgA//nKxR859zI5dL6o2nlNkkkA6BDT6u
-Re0WdJQ34qHv1fWTzIynoi48w8WQDr3ZtnHOMxcW8lLFStMK+1RayB/UUz17Pl5a
-S6UtiaAoRbc9lCXLmeHD4hoQWVSeSsTdhxs3Z7oG9bQ3g+KBrJ89UNL5aCEYpq0l
-iu+VunOevd2YFmqpLVJBi+BVghxIK0N3QUdSRxnunPeVrIRF9S8=
-=6tE+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNb4iAACgkQ3SOs138+
+s6Fb+xAAmX8j8dRwWMQ2s1lwzVNMk1Jcsa77csUwNBOti7FLrLvg8Mlvy2To7Jm8
+TZ9NcUHoe1ox+EMElJpijz0qYsTGLo0tz38HGVdKOQbnASevsZ/1SoFqZebuGzb5
+IqRi35yCKQa9bRdVP1i874yU4eN8HKSFbcU6p4gFIkJ3pCJtvBDbh0fF8E5z94xI
+gmnDehmn7SSBDzZiyTOymRSEktbFxHJo/qutCB38Ev2C2winovtLIqMWLgnKRG86
+M8dyVJE5+FePHdKH3YkcFNDQn7nvA/vEdp+9xn2uTax+Z7rLNccFW1k3eM3aYnoY
+QMhnZdaYI/rf8GUpmih9jeeoNfyG8sidF2oXkRCeA94RWmyoWaoEeh5mQNOSJEq8
+OooqWxiUKPlJMQZ5mksTiFTJcUYg3fRCw1gLzH9h0ojIWBuIGw8CpizTCPLSzBiS
+zmNYm/vCPn6YRawDw3ngtMBGI7oK2+0lqdQNAGhAlBno7TOFKHqiNCdg32gykHYi
+jmBlK3gGuCvHCJzoZl9YGesXLdcHw1xeqpl70suWxmRwcXsPfFMnuWT6lI+zvSqi
+j2JpsXltKEdhbmNsy6v/HzqL5KMZAaG36oxuphUXf4NIaSvtDDgx1/VQbABjA3Lw
+z5g+HW/ArQqDwfBnasDZFURWw1czK8LcD/rse4hQt+zWeZES9Ow=
+=S/4p
 -----END PGP SIGNATURE-----
 
---Mbj1VkMtzmZhLdX9--
+--QbiyuPHHLdatsw0h--
