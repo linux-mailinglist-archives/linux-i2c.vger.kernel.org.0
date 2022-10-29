@@ -2,87 +2,162 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAACC6121EF
-	for <lists+linux-i2c@lfdr.de>; Sat, 29 Oct 2022 11:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B1261229C
+	for <lists+linux-i2c@lfdr.de>; Sat, 29 Oct 2022 13:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbiJ2Jjq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 29 Oct 2022 05:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
+        id S229515AbiJ2Lx3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 29 Oct 2022 07:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ2Jjp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 29 Oct 2022 05:39:45 -0400
+        with ESMTP id S229476AbiJ2Lx2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 29 Oct 2022 07:53:28 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8A6140C1
-        for <linux-i2c@vger.kernel.org>; Sat, 29 Oct 2022 02:39:41 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MzvRt1K6fzpVqQ;
-        Sat, 29 Oct 2022 17:36:10 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B693B6C138;
+        Sat, 29 Oct 2022 04:53:27 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MzyNX6TcgzmVXh;
+        Sat, 29 Oct 2022 19:48:28 +0800 (CST)
+Received: from [10.174.179.106] (10.174.179.106) by
+ canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 17:39:39 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 29 Oct
- 2022 17:39:38 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-i2c@vger.kernel.org>
-CC:     <peda@axentia.se>, <yorksun@freescale.com>,
-        <alexander.sverdlin@nokia.com>, <wsa@kernel.org>,
-        <yangyingliang@huawei.com>
-Subject: [PATCH RESEND] i2c: mux: reg: check return value after calling platform_get_resource()
-Date:   Sat, 29 Oct 2022 17:38:25 +0800
-Message-ID: <20221029093825.3425857-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+ 15.1.2375.31; Sat, 29 Oct 2022 19:53:25 +0800
+Subject: Re: [PATCH next v7 2/2] dt-bindings: i2c: add entry for
+ hisilicon,i2c-ascend910
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <yangyicong@hisilicon.com>, <xuwei5@huawei.com>, <wsa@kernel.org>,
+        <robh+dt@kernel.org>, <robh@kernel.org>
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+References: <20221021035638.203929-1-chenweilong@huawei.com>
+ <20221021035638.203929-2-chenweilong@huawei.com>
+ <491837d1-4e81-496c-8442-7c1cae670907@linaro.org>
+From:   chenweilong <chenweilong@huawei.com>
+Message-ID: <4b6256e6-6f06-5d6e-6cc3-d3f3649f0ac6@huawei.com>
+Date:   Sat, 29 Oct 2022 19:53:25 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500007.china.huawei.com (7.185.36.183)
+In-Reply-To: <491837d1-4e81-496c-8442-7c1cae670907@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.179.106]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500004.china.huawei.com (7.192.104.92)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-It will cause null-ptr-deref in resource_size(), if platform_get_resource()
-returns NULL, move calling resource_size() after devm_ioremap_resource() that
-will check 'res' to avoid null-ptr-deref.
-And use devm_platform_get_and_ioremap_resource() to simplify code.
+On 2022/10/29 7:45, Krzysztof Kozlowski wrote:
+> On 20/10/2022 23:56, Weilong Chen wrote:
+>> Add the new compatible for HiSilicon i2c.
+>>
+>> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+>> ---
+>> Change since v6:
+>> - Rename to hisilicon,i2c-ascend910.yaml
+>> - Change all IIC to I2C
+>> - Add maintainer name
+>> Link: https://lore.kernel.org/lkml/7520818b-de40-7f2a-1b03-b1dcd29a2023@huawei.com/T/#ma89d78cef45e7ac6f2c6251ed958e8658e5c1eb5
+>>
+> Please use scripts/get_maintainers.pl to get a list of necessary people
+> and lists to CC.  It might happen, that command when run on an older
+> kernel, gives you outdated entries.  Therefore please be sure you base
+> your patches on recent Linux kernel.
 
-Fixes: b3fdd32799d8 ("i2c: mux: Add register-based mux i2c-mux-reg")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
-The previous link:
-https://lore.kernel.org/lkml/20220425090509.2524814-1-yangyingliang@huawei.com/
----
- drivers/i2c/muxes/i2c-mux-reg.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Thanks for review, I'll fix this.
 
-diff --git a/drivers/i2c/muxes/i2c-mux-reg.c b/drivers/i2c/muxes/i2c-mux-reg.c
-index 0e0679f65cf7..30a6de1694e0 100644
---- a/drivers/i2c/muxes/i2c-mux-reg.c
-+++ b/drivers/i2c/muxes/i2c-mux-reg.c
-@@ -183,13 +183,12 @@ static int i2c_mux_reg_probe(struct platform_device *pdev)
- 	if (!mux->data.reg) {
- 		dev_info(&pdev->dev,
- 			"Register not set, using platform resource\n");
--		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--		mux->data.reg_size = resource_size(res);
--		mux->data.reg = devm_ioremap_resource(&pdev->dev, res);
-+		mux->data.reg = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 		if (IS_ERR(mux->data.reg)) {
- 			ret = PTR_ERR(mux->data.reg);
- 			goto err_put_parent;
- 		}
-+		mux->data.reg_size = resource_size(res);
- 	}
- 
- 	if (mux->data.reg_size != 4 && mux->data.reg_size != 2 &&
--- 
-2.25.1
+>
+>
+>>  .../bindings/i2c/hisilicon,i2c-ascend910.yaml | 70 +++++++++++++++++++
+>>  MAINTAINERS                                   |  1 +
+>>  2 files changed, 71 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,i2c-ascend910.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,i2c-ascend910.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,i2c-ascend910.yaml
+>> new file mode 100644
+>> index 000000000000..f4f532d69670
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/i2c/hisilicon,i2c-ascend910.yaml
+>> @@ -0,0 +1,70 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/i2c/hisilicon,i2c-xxx.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> Drop quotes
+>
+>> +
+>> +title: HiSilicon common I2C controller Device Tree Bindings
+> Drop "Device Tree bindings"
+>
+>> +
+>> +maintainers:
+>> +  - Yicong Yang <yangyicong@hisilicon.com>
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: hisilicon,i2c-ascend910
+>> +    description:
+>> +      The HiSilicon common I2C controller can be used for many different
+>> +      types of SoC such as Huawei Ascend AI series chips.
+> Description goes to top level description.
+>
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  clock-frequency:
+>> +    default: 400000
+>> +
+>> +  i2c-sda-falling-time-ns:
+>> +    default: 343
+>> +
+>> +  i2c-scl-falling-time-ns:
+>> +    default: 203
+>> +
+>> +  i2c-sda-hold-time-ns:
+>> +    default: 830
+>> +
+>> +  i2c-scl-rising-time-ns:
+>> +    default: 365
+>> +
+>> +  i2c-digital-filter-width-ns:
+>> +    default: 0
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    i2c@5038b0000 {
+>> +      compatible = "hisilicon,i2c-ascend910";
+>> +      reg = <0x38b0000 0x10000>;
+>> +      interrupts = <0x0 120 0x4>;
+> Use defines for constants.
+>
+> Best regards,
+> Krzysztof
+>
+> .
+
 
