@@ -2,63 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3952612CAA
-	for <lists+linux-i2c@lfdr.de>; Sun, 30 Oct 2022 21:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C33B612CAD
+	for <lists+linux-i2c@lfdr.de>; Sun, 30 Oct 2022 21:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbiJ3UeP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 30 Oct 2022 16:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
+        id S229763AbiJ3Ue0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 30 Oct 2022 16:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiJ3UeO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 30 Oct 2022 16:34:14 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B025AA1A9;
-        Sun, 30 Oct 2022 13:34:13 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id y16so13408129wrt.12;
-        Sun, 30 Oct 2022 13:34:13 -0700 (PDT)
+        with ESMTP id S229587AbiJ3UeZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 30 Oct 2022 16:34:25 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F394EB1E8;
+        Sun, 30 Oct 2022 13:34:23 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id l14so13466439wrw.2;
+        Sun, 30 Oct 2022 13:34:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HVWRHFVr2HzqsClJWTzBUugkh8zlIjyMQoH5XdqfGQU=;
-        b=KP2adwlNrFJu3UuQL3mdeb9pnpZ5nQ2Nx/lGpEnh8l/ycUO97D7LgB7FEzl7+NogX2
-         ZTZs0OVTXldQRvxXfbvJMbOa8Nk8IWTXNn6caOCLNcWDg2kQgb+GkV5gXPBRZp1ZSpYi
-         PVVMip6LdgQn6FDadpBwykiumgh1fRXOZFcnFKLySkAMa1rLpZVu14YUvHKgC0D1hVcW
-         bx0hEay2tpqsiFUz4+XYOdQbzCPw1/jlg/G+bScg01U79Gnv1zcGJEkhSnZVH+cHmgmt
-         gWSj7g6eeKDz51sEsVwTlRze9COcO1nWA/qKO5xzKcF9dMoP6xELOP6s0FRHNsx414H1
-         Vu4A==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZSJlpADL6FxqQLVTkCQJu3ikcoUIWPyVlc8ef31tV88=;
+        b=HB38NIcXWQdMiWE5240TE0Z0Eqj+ulKlHtjPFfNZihIzZMBdVTWGNxrTbU6ypSJDDS
+         nkQYRLh11gDbPf4KBA52u+cKFdrXFQR513d6mcCiVV9mGr54FxpjVKaSOmeGKsbQZuhs
+         AbfTzuRXxGPxYDeI89APAN3lu2jDaYxUQ3ROynLvDiIlBj6WppPut4IYEB9Sm/sU+c+w
+         voO1luE48P2vMxEnIRu/0grETuVpUqMsPW1IPnvZ7qpxDTmRSu6QhwkTsye90boPOrtd
+         Gu/+9qaps9itld+YsaR+FbKH7k207UvsL2R34okxJZacZ5eKzfnxHTDo7GqetAgCumwv
+         7VNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HVWRHFVr2HzqsClJWTzBUugkh8zlIjyMQoH5XdqfGQU=;
-        b=b7M+YnDFmKhOHS5i+qXQ7RgZx42gZAWIN6MyprX3cYmQJ7AaYJ+r3x7LJ+U7tZ4Mv/
-         bETFWzkAT47LZxzAloZTEGq8WoWS6pqztLvMQY08PvbdTmr3Oi2TrZ1UISJyPp+XP/L5
-         OP29wqwRoV2ByekMM6dChS4r8q0au086N5SOvM/r/s5uZ0nmRKClce7OFLmC2MuWUnCb
-         NNoyB1viQnbOIwDmQ1iJ5JkTUqhG7KWUCVZFBJGKtWKC6T59vMGMRCEeVw7BSNJX+/LL
-         656OOEe4CalK8XbKALL0xjYT0v0b0O4TdYKuRHVmnmeZ2mZaI53sBiZmb0I8ueTa8cTk
-         8Fgg==
-X-Gm-Message-State: ACrzQf0iKDssdXBSXsdHFCKnEx+HfkSmd/MZGIGtmPLyyfkP2MeCp7Oh
-        J9KAJR/Ex3NFUFbEHI+0QNM=
-X-Google-Smtp-Source: AMsMyM5zya11YZ8L7QokgA1DrRnREsk0/t1gjHvHcHsQcdNYK7edDLPQmlfpCALSKqXzJ+tqm6YKaw==
-X-Received: by 2002:a5d:4604:0:b0:236:cdd4:4cdd with SMTP id t4-20020a5d4604000000b00236cdd44cddmr417731wrq.627.1667162052122;
-        Sun, 30 Oct 2022 13:34:12 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZSJlpADL6FxqQLVTkCQJu3ikcoUIWPyVlc8ef31tV88=;
+        b=sKwve+etjVdEyMxD4+2dyEpn7aN2LGKPeyaFwKj3r9C/5mdc/lYlqn2mAa9J+2KCJm
+         oekjs26narbDIfNkQZZ2qNu3eacxJQWBR+lDqJCxhlNZMfuLUMI9ZRQLuz4Gf0khgSLI
+         KaUiEbPEodQhZm2Vv3vKySmfBrJpN5TcCbR4YNCwiUMnSSt7PWM22I7JfS0xUo43VO68
+         jSm+I/ZclX4tNeURcQaM3bx/KAb4FxaaNrv3j7hVAQR/vqIV8KTDn3MzL78k/4M4JimE
+         ihz565NjleFenWtS9DLa+uM8skZqcVJfhU3tpJSw25enVRg+cQ/xSGCFtPI+5OwvwCkz
+         4ZYA==
+X-Gm-Message-State: ACrzQf1aq1l99NWxxHQiKecQ8vvq8uo2mxZLX2Z+ENoqdTeoGRiHVZBH
+        Z8/Fo4QmORfJeilZHXQ6SDA=
+X-Google-Smtp-Source: AMsMyM7QwNYThr9kT+OgTNBOSKxORRJ5xnHIHt/kXI5crESQlSllpCty1iLxbI5vnOW6ogbIHJtq4g==
+X-Received: by 2002:a05:6000:168f:b0:22e:4c3:de09 with SMTP id y15-20020a056000168f00b0022e04c3de09mr5822079wrd.40.1667162061603;
+        Sun, 30 Oct 2022 13:34:21 -0700 (PDT)
 Received: from michael-VirtualBox.. (89-139-44-91.bb.netvision.net.il. [89.139.44.91])
-        by smtp.googlemail.com with ESMTPSA id n25-20020a05600c181900b003b95ed78275sm4939385wmp.20.2022.10.30.13.34.10
+        by smtp.googlemail.com with ESMTPSA id n25-20020a05600c181900b003b95ed78275sm4939385wmp.20.2022.10.30.13.34.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Oct 2022 13:34:11 -0700 (PDT)
+        Sun, 30 Oct 2022 13:34:21 -0700 (PDT)
 From:   Michael Zaidman <michael.zaidman@gmail.com>
 To:     jikos@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
         linux-i2c@vger.kernel.org, germain.hebert@ca.abb.com,
-        Enrik.Berkhan@inka.de, Michael Zaidman <michael.zaidman@gmail.com>
-Subject: [PATCH v3 00/12] HID: ft260: fixes and performance improvements
-Date:   Sun, 30 Oct 2022 22:33:51 +0200
-Message-Id: <20221030203403.4637-1-michael.zaidman@gmail.com>
+        Enrik.Berkhan@inka.de, Michael Zaidman <michael.zaidman@gmail.com>,
+        Guillaume Champagne <champagne.guillaume.c@gmail.com>
+Subject: [PATCH v3 01/12] HID: ft260: ft260_xfer_status routine cleanup
+Date:   Sun, 30 Oct 2022 22:33:52 +0200
+Message-Id: <20221030203403.4637-2-michael.zaidman@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221030203403.4637-1-michael.zaidman@gmail.com>
+References: <20221030203403.4637-1-michael.zaidman@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -70,38 +73,75 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This patch series is an updated version of this one:
-https://lore.kernel.org/all/20220928144854.5580-1-michael.zaidman@gmail.com/
+After clarifying with FTDI's support, it turned out that the error
+condition (bit 1) in byte 1 of the i2c status HID report is a status
+bit reflecting all error conditions. When bits 2, 3, or 4 are raised
+to 1, bit 1 is set to 1 also. Since the ft260_xfer_status routine tests
+the error condition bit and exits in the case of an error, the program
+flow never reaches the conditional expressions for 2, 3, and 4 bits when
+any of them indicates an error state. Though these expressions are never
+evaluated to true, they are checked several times per IO, increasing the
+ft260_xfer_status polling cycle duration.
 
-Changes since v2:
+The patch removes the conditional expressions for 2, 3, and 4 bits in
+byte 1 of the i2c status HID report.
 
-  - Remove SMBus Quick command support
-  - Missed NACK from big i2c read
-  - Wake up device from power saving mode
-  - Fix a NULL pointer dereference in ft260_i2c_write
-  - Missed NACK from busy device
+Signed-off-by: Michael Zaidman <michael.zaidman@gmail.com>
+Tested-by: Guillaume Champagne <champagne.guillaume.c@gmail.com>
+---
+ drivers/hid/hid-ft260.c | 30 ++++++++++--------------------
+ 1 file changed, 10 insertions(+), 20 deletions(-)
 
-Changes since v1:
-
-  - Do not populate hidraw device
-  - Avoid stale read buffer pointer
-
-Michael Zaidman (12):
-  HID: ft260: ft260_xfer_status routine cleanup
-  HID: ft260: improve i2c write performance
-  HID: ft260: support i2c writes larger than HID report size
-  HID: ft260: support i2c reads greater than HID report size
-  HID: ft260: improve i2c large reads performance
-  HID: ft260: do not populate /dev/hidraw device
-  HID: ft260: skip unexpected HID input reports
-  HID: ft260: remove SMBus Quick command support
-  HID: ft260: missed NACK from big i2c read
-  HID: ft260: wake up device from power saving mode
-  HID: ft260: fix a NULL pointer dereference in ft260_i2c_write
-  HID: ft260: missed NACK from busy device
-
- drivers/hid/hid-ft260.c | 313 ++++++++++++++++++++++++----------------
- 1 file changed, 185 insertions(+), 128 deletions(-)
-
+diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
+index 79505c64dbfe..a35201d68b15 100644
+--- a/drivers/hid/hid-ft260.c
++++ b/drivers/hid/hid-ft260.c
+@@ -313,27 +313,17 @@ static int ft260_xfer_status(struct ft260_device *dev)
+ 	if (report.bus_status & FT260_I2C_STATUS_CTRL_BUSY)
+ 		return -EAGAIN;
+ 
+-	if (report.bus_status & FT260_I2C_STATUS_BUS_BUSY)
+-		return -EBUSY;
+-
+-	if (report.bus_status & FT260_I2C_STATUS_ERROR)
++	/*
++	 * The error condition (bit 1) is a status bit reflecting any
++	 * error conditions. When any of the bits 2, 3, or 4 are raised
++	 * to 1, bit 1 is also set to 1.
++	 */
++	if (report.bus_status & FT260_I2C_STATUS_ERROR) {
++		hid_err(hdev, "i2c bus error: %#02x\n", report.bus_status);
+ 		return -EIO;
++	}
+ 
+-	ret = -EIO;
+-
+-	if (report.bus_status & FT260_I2C_STATUS_ADDR_NO_ACK)
+-		ft260_dbg("unacknowledged address\n");
+-
+-	if (report.bus_status & FT260_I2C_STATUS_DATA_NO_ACK)
+-		ft260_dbg("unacknowledged data\n");
+-
+-	if (report.bus_status & FT260_I2C_STATUS_ARBITR_LOST)
+-		ft260_dbg("arbitration loss\n");
+-
+-	if (report.bus_status & FT260_I2C_STATUS_CTRL_IDLE)
+-		ret = 0;
+-
+-	return ret;
++	return 0;
+ }
+ 
+ static int ft260_hid_output_report(struct hid_device *hdev, u8 *data,
+@@ -376,7 +366,7 @@ static int ft260_hid_output_report_check_status(struct ft260_device *dev,
+ 			break;
+ 	} while (--try);
+ 
+-	if (ret == 0 || ret == -EBUSY)
++	if (ret == 0)
+ 		return 0;
+ 
+ 	ft260_i2c_reset(hdev);
 -- 
 2.34.1
+
