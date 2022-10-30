@@ -2,61 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37046612CB6
-	for <lists+linux-i2c@lfdr.de>; Sun, 30 Oct 2022 21:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1F6612CB9
+	for <lists+linux-i2c@lfdr.de>; Sun, 30 Oct 2022 21:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiJ3Uek (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 30 Oct 2022 16:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45548 "EHLO
+        id S229853AbiJ3Uem (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 30 Oct 2022 16:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbiJ3Uei (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 30 Oct 2022 16:34:38 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA0EB7CF;
-        Sun, 30 Oct 2022 13:34:36 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id g12so13430987wrs.10;
-        Sun, 30 Oct 2022 13:34:36 -0700 (PDT)
+        with ESMTP id S229750AbiJ3Uej (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 30 Oct 2022 16:34:39 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F623A1BB;
+        Sun, 30 Oct 2022 13:34:38 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id m29-20020a05600c3b1d00b003c6bf423c71so9723699wms.0;
+        Sun, 30 Oct 2022 13:34:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=l/pgm5Us2Yq+S8ZFCwq+NZ3vvwHGv8IPDUFxkuklnRI=;
-        b=iW9FK1s7jeYS8FugmovRAodcRRrFtv6uJZOAKP8ZobyyvpnbTmg8lqdrVbkZ9je5i8
-         biqVeGVOseZwJuFgTide2IE67TulaYq6JTFc9YZt/DyLHaB65zhyMaIfXOFfWMJWz28U
-         yE7MelMUVBrnFNBcxPeFt9706lWuXexFLn5kk5kMAWF+4hPjnbIFmDmv0lp0o4BtaC08
-         ZgoucQG0dYA9wSVVlUjl8qPQxTNLGw6GMjePJOZBleFJyUI6loTkSwInQvFItLc6codI
-         /p8wbifXhlWQTYwtsvOihkVCpQolqPfH/CiXqDwHwD0i/oT+iLGp99niK+Bzd96/717H
-         Oytw==
+        bh=47oIaMFA8Eg3AOKmQgHp46WYx0yoJU5i2kodk4hvPko=;
+        b=pilNXscJ9s6usj1pxwynivWIPr7JfKzl/Alrws79R1/YB/vgCLZeb4Y+8htmPlCFiu
+         TR5nOrZEkYU7BcYZoFS6azjAatYPaCfR55USMKczXC+0WLEMxpavLnVLlPjI3UWTbdDH
+         z4wXhmeqGmZjWHezIZllQ1WTNlbaYwUgQWEWqeGsxGlFvzy9rOoD+HHaUOTulGDBH9fN
+         vc5RlkYwfK5F8cXrKpvvAG+tugabhbQBJln2SY2j29hNz+IM8OrGELmGxVGTOR3muba2
+         AmbWITELFnQJc3KB4FXfjvuXs0SQLAtZM9UeBtsV/rpnDmmGQt/GDkjzNrstD2Wn59i3
+         hl6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=l/pgm5Us2Yq+S8ZFCwq+NZ3vvwHGv8IPDUFxkuklnRI=;
-        b=JYDYGijt9mM5c78pqiz+98CSr1W+4Isauc9SRyMrgV0xhCMhxHNq7OxnQm/CUDjvJm
-         MyWc4E2xwWf77bqqmTiDdXKkrOmdHH/r9+CUVMj3fd4OZ6We40IC+S0gTviFXD9E9DMy
-         tlLMWsVta5BAV4+pj77YGW2Uu5j1b57b5ryjHeLMPN0651o5p3seLYHEq8+rNXV578QM
-         pSrdFZ9KTvtmS03xb7LiDRhoVV/4k4ESMoMUD5RSvHbx2YPQqgD7U4MNlerYS1OMZITI
-         H1Q6aJtRB8X0+hiOgnNHpkfr940n+o+xRY66P/jK8tSmNOhriJP58272J8Y5OSFhCC09
-         /xiQ==
-X-Gm-Message-State: ACrzQf2zDgwsutzPB4HR+7RwkPzYKgnpDRKZ9vuGC0GfsROC2lMNqDyV
-        KTeaWgpcD3YOAKeU9utqKW4=
-X-Google-Smtp-Source: AMsMyM5xBmH9rpx2lt8kPqHmeJ3xhg6PE9aOYB2zutgKiILKug3qf76RstBfVmbCoM7DRY5U24cErQ==
-X-Received: by 2002:adf:e54a:0:b0:236:bf8a:4782 with SMTP id z10-20020adfe54a000000b00236bf8a4782mr2733716wrm.442.1667162075367;
-        Sun, 30 Oct 2022 13:34:35 -0700 (PDT)
+        bh=47oIaMFA8Eg3AOKmQgHp46WYx0yoJU5i2kodk4hvPko=;
+        b=uHs3YonakTc2F6PsSeU9+Kv3lzFMf35MHdwbsbEnk4onRbxluPFYukbk2H4mNAQuUr
+         6oMZaJsWA8Bd9vIShN4L/V8uydjqZfUzTS9R7JH5JY/CI56NDg013QkWEH/1X47u/vYl
+         WzvHYhfE71Z3EXq/15otbWh5yefvBcfqkUuEf9HWCpv+rx60DS1mGqS64Kqw8ARAFMq1
+         MbFBO5X7pR5llzFghfdbHrFSW9GkCJP7ANUJm9I+qu/7GVkhIThV4YjuVA2K1vLRsHKy
+         Q+CxglPuToFcYM4Ck3O02PLLKm/x+TThnevy9ejiyNXv/sbIDh1fYBjD8DhLO97FPLIC
+         0FVA==
+X-Gm-Message-State: ACrzQf3WqBxiouWYHnpdaUi5gBCuZaz4mYQCTzkasUQByVwOZ8CHeZJ+
+        bN4XFMd3LC1gYDtoHS9obBo=
+X-Google-Smtp-Source: AMsMyM7xVKy+uRshU7d09XCHKwJzC+eXYxWtE3kvvr/8W6rVgCYH9A/DBRZVkcdxIr6qvZ45rXNcWQ==
+X-Received: by 2002:a05:600c:44d5:b0:3cf:6749:afe3 with SMTP id f21-20020a05600c44d500b003cf6749afe3mr4916090wmo.90.1667162076777;
+        Sun, 30 Oct 2022 13:34:36 -0700 (PDT)
 Received: from michael-VirtualBox.. (89-139-44-91.bb.netvision.net.il. [89.139.44.91])
-        by smtp.googlemail.com with ESMTPSA id n25-20020a05600c181900b003b95ed78275sm4939385wmp.20.2022.10.30.13.34.34
+        by smtp.googlemail.com with ESMTPSA id n25-20020a05600c181900b003b95ed78275sm4939385wmp.20.2022.10.30.13.34.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Oct 2022 13:34:34 -0700 (PDT)
+        Sun, 30 Oct 2022 13:34:36 -0700 (PDT)
 From:   Michael Zaidman <michael.zaidman@gmail.com>
 To:     jikos@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
         linux-i2c@vger.kernel.org, germain.hebert@ca.abb.com,
         Enrik.Berkhan@inka.de, Michael Zaidman <michael.zaidman@gmail.com>
-Subject: [PATCH v3 06/12] HID: ft260: do not populate /dev/hidraw device
-Date:   Sun, 30 Oct 2022 22:33:57 +0200
-Message-Id: <20221030203403.4637-7-michael.zaidman@gmail.com>
+Subject: [PATCH v3 07/12] HID: ft260: skip unexpected HID input reports
+Date:   Sun, 30 Oct 2022 22:33:58 +0200
+Message-Id: <20221030203403.4637-8-michael.zaidman@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221030203403.4637-1-michael.zaidman@gmail.com>
 References: <20221030203403.4637-1-michael.zaidman@gmail.com>
@@ -72,57 +72,120 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Do not populate the /dev/hidraw on ft260 interfaces when the hid-ft260
-driver is loaded.
+The FT260 is not supposed to generate unexpected HID reports. However,
+in theory, the unsolicited HID Input reports can be issued by a specially
+crafted malicious USB device masquerading as FT260 when the attacker has
+physical access to the USB port. In this case, the read_buf pointer points
+to the final data portion of the previous I2C Read transfer, and the memcpy
+invoked in the ft260_raw_event() will try copying the content of the
+unexpected report into the wrong location.
 
-$ sudo insmod hid-ft260.ko
-$ ls /dev/hidraw*
-/dev/hidraw0
-
-$ sudo rmmod hid-ft260.ko
-$ ls /dev/hidraw*
-/dev/hidraw0  /dev/hidraw1  /dev/hidraw2
+This commit sets the Read buffer pointer to NULL on the I2C Read
+transaction completion and checks it in the ft260_raw_event() to detect
+and skip the unsolicited Input report.
 
 Reported-by: Enrik Berkhan <Enrik.Berkhan@inka.de>
 Signed-off-by: Michael Zaidman <michael.zaidman@gmail.com>
 ---
- drivers/hid/hid-ft260.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/hid/hid-ft260.c | 36 ++++++++++++++++++++++++------------
+ 1 file changed, 24 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
-index 91f9087e49dc..8d6d2a19b9ed 100644
+index 8d6d2a19b9ed..8b6ebc5228eb 100644
 --- a/drivers/hid/hid-ft260.c
 +++ b/drivers/hid/hid-ft260.c
-@@ -939,7 +939,7 @@ static int ft260_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		return ret;
- 	}
+@@ -464,7 +464,7 @@ static int ft260_i2c_read(struct ft260_device *dev, u8 addr, u8 *data,
+ 			  u16 len, u8 flag)
+ {
+ 	u16 rd_len;
+-	int timeout, ret;
++	int timeout, ret = 0;
+ 	struct ft260_i2c_read_request_report rep;
+ 	struct hid_device *hdev = dev->hdev;
  
--	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
-+	ret = hid_hw_start(hdev, 0);
- 	if (ret) {
- 		hid_err(hdev, "failed to start HID HW\n");
- 		return ret;
-@@ -966,6 +966,10 @@ static int ft260_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 	if (ret <= 0)
- 		goto err_hid_close;
+@@ -480,10 +480,6 @@ static int ft260_i2c_read(struct ft260_device *dev, u8 addr, u8 *data,
+ 			rd_len = FT260_RD_DATA_MAX;
+ 		}
  
-+	hid_info(hdev, "USB HID v%x.%02x Device [%s] on %s\n",
-+		hdev->version >> 8, hdev->version & 0xff, hdev->name,
-+		hdev->phys);
+-		dev->read_idx = 0;
+-		dev->read_buf = data;
+-		dev->read_len = rd_len;
+-
+ 		rep.report = FT260_I2C_READ_REQ;
+ 		rep.length = cpu_to_le16(rd_len);
+ 		rep.address = addr;
+@@ -494,22 +490,30 @@ static int ft260_i2c_read(struct ft260_device *dev, u8 addr, u8 *data,
+ 
+ 		reinit_completion(&dev->wait);
+ 
++		dev->read_idx = 0;
++		dev->read_buf = data;
++		dev->read_len = rd_len;
 +
- 	hid_set_drvdata(hdev, dev);
- 	dev->hdev = hdev;
- 	dev->adap.owner = THIS_MODULE;
-@@ -974,8 +978,7 @@ static int ft260_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 	dev->adap.quirks = &ft260_i2c_quirks;
- 	dev->adap.dev.parent = &hdev->dev;
- 	snprintf(dev->adap.name, sizeof(dev->adap.name),
--		 "FT260 usb-i2c bridge on hidraw%d",
--		 ((struct hidraw *)hdev->hidraw)->minor);
-+		 "FT260 usb-i2c bridge");
+ 		ret = ft260_hid_output_report(hdev, (u8 *)&rep, sizeof(rep));
+ 		if (ret < 0) {
+ 			hid_err(hdev, "%s: failed with %d\n", __func__, ret);
+-			return ret;
++			goto ft260_i2c_read_exit;
+ 		}
  
- 	mutex_init(&dev->lock);
- 	init_completion(&dev->wait);
+ 		timeout = msecs_to_jiffies(5000);
+ 		if (!wait_for_completion_timeout(&dev->wait, timeout)) {
++			ret = -ETIMEDOUT;
+ 			ft260_i2c_reset(hdev);
+-			return -ETIMEDOUT;
++			goto ft260_i2c_read_exit;
+ 		}
+ 
++		dev->read_buf = NULL;
++
+ 		ret = ft260_xfer_status(dev);
+ 		if (ret < 0) {
++			ret = -EIO;
+ 			ft260_i2c_reset(hdev);
+-			return -EIO;
++			goto ft260_i2c_read_exit;
+ 		}
+ 
+ 		len -= rd_len;
+@@ -518,7 +522,9 @@ static int ft260_i2c_read(struct ft260_device *dev, u8 addr, u8 *data,
+ 
+ 	} while (len > 0);
+ 
+-	return 0;
++ft260_i2c_read_exit:
++	dev->read_buf = NULL;
++	return ret;
+ }
+ 
+ /*
+@@ -1036,6 +1042,13 @@ static int ft260_raw_event(struct hid_device *hdev, struct hid_report *report,
+ 		ft260_dbg("i2c resp: rep %#02x len %d\n", xfer->report,
+ 			  xfer->length);
+ 
++		if ((dev->read_buf == NULL) ||
++		    (xfer->length > dev->read_len - dev->read_idx)) {
++			hid_err(hdev, "unexpected report %#02x, length %d\n",
++				xfer->report, xfer->length);
++			return -1;
++		}
++
+ 		memcpy(&dev->read_buf[dev->read_idx], &xfer->data,
+ 		       xfer->length);
+ 		dev->read_idx += xfer->length;
+@@ -1044,10 +1057,9 @@ static int ft260_raw_event(struct hid_device *hdev, struct hid_report *report,
+ 			complete(&dev->wait);
+ 
+ 	} else {
+-		hid_err(hdev, "unknown report: %#02x\n", xfer->report);
+-		return 0;
++		hid_err(hdev, "unhandled report %#02x\n", xfer->report);
+ 	}
+-	return 1;
++	return 0;
+ }
+ 
+ static struct hid_driver ft260_driver = {
 -- 
 2.34.1
 
