@@ -2,35 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3555C614924
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Nov 2022 12:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B19D61494F
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Nov 2022 12:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiKALdX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Nov 2022 07:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
+        id S231318AbiKALgJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Nov 2022 07:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbiKALdD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Nov 2022 07:33:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C751B9F3;
-        Tue,  1 Nov 2022 04:30:15 -0700 (PDT)
+        with ESMTP id S231250AbiKALfc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Nov 2022 07:35:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A25A1CFCC;
+        Tue,  1 Nov 2022 04:31:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59A55615AC;
-        Tue,  1 Nov 2022 11:30:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3482C433B5;
-        Tue,  1 Nov 2022 11:30:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C4D8615ED;
+        Tue,  1 Nov 2022 11:30:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1C8AC433D7;
+        Tue,  1 Nov 2022 11:30:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302209;
-        bh=NB63cDObVlqxACMDIv5yfytWaUAJOREZeaY8rJxJa04=;
+        s=k20201202; t=1667302256;
+        bh=NBStALmNljR8+uMJV4rH7+lAIwrVfUG1e/uawsZ6k5U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fEB2buiQ2v0fDNJfdY15x+5k+dYnDuGB4BasLVwPIwFQWayqSdx/bl2n64Ftv/QYg
-         1B3vpZyRvXSRhNew45wvE+RZzeSD1q6Eel/6fr8o7euzo+dW3uLdOqfcyUWUniGalz
-         jN9Id6wchwS4qkHqSrVa8BpFmE6mYYx2kFvBjBgoPotgQmmw1TSSzMAI7i+z1io3W1
-         4IC5GgVbuI7R8kG2V8dJug6DgxDiEKjNRir/mbaN90EOPUSRa3mxLeAdED6qspoV1b
-         QrcrYSD0tetY6fNnZnT2As7fjVpSU6HgsaSw2JqUzuh7e/FD0tVgNQd43sUpaym11T
-         EQRlM0834Xphg==
+        b=W6WxZF4jofb45MMjXOVauN1y471ptqyIXFYM2mjE/x3qcbKdtvIoE3jIK+JqOLrRs
+         kj8wpJOyKucQWKYT7RwOAxVNxAf3G0F8Dj/UaZ9x4DaIuGykdE5mGeyjMCLGRJGvXn
+         PYmybh3WKrovE3/V+d2rnuf98WHn4lxo1ntpCCsoMeeOK/ebouMxA4TF7yXGoCY8jH
+         EGvnIuwUpKOaWJJiO4qjV7LwvUrP/r+AYlXewmNEgJ4IhE/fY6MX6mN8DeXzBG4aE1
+         uryBBNr3yEQvdzHiD/T+J+CFwq3CibBtj/L/a+TFpwni3CwLItBNx2FNH3n/qdpQvL
+         iySVQA4gacZrw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>,
@@ -38,12 +38,12 @@ Cc:     =?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>,
         Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
         michal.simek@xilinx.com, linux-arm-kernel@lists.infradead.org,
         linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 19/19] i2c: xiic: Add platform module alias
-Date:   Tue,  1 Nov 2022 07:29:19 -0400
-Message-Id: <20221101112919.799868-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 14/14] i2c: xiic: Add platform module alias
+Date:   Tue,  1 Nov 2022 07:30:10 -0400
+Message-Id: <20221101113012.800271-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221101112919.799868-1-sashal@kernel.org>
-References: <20221101112919.799868-1-sashal@kernel.org>
+In-Reply-To: <20221101113012.800271-1-sashal@kernel.org>
+References: <20221101113012.800271-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -74,10 +74,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-index 612343771ce2..34b8da949462 100644
+index 8dabb6ffb1a4..3b564e68130b 100644
 --- a/drivers/i2c/busses/i2c-xiic.c
 +++ b/drivers/i2c/busses/i2c-xiic.c
-@@ -934,6 +934,7 @@ static struct platform_driver xiic_i2c_driver = {
+@@ -935,6 +935,7 @@ static struct platform_driver xiic_i2c_driver = {
  
  module_platform_driver(xiic_i2c_driver);
  
