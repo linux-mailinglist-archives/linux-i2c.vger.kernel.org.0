@@ -2,104 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA15761544D
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Nov 2022 22:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D400F615646
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Nov 2022 00:54:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbiKAVeM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Nov 2022 17:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
+        id S229887AbiKAXyC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Nov 2022 19:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiKAVeL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Nov 2022 17:34:11 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10olkn2088.outbound.protection.outlook.com [40.92.42.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181141DDF1;
-        Tue,  1 Nov 2022 14:34:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZNliFBMqKURDirtNCWK0c4i9bZTVeNY6Db3uFGTfl95TwiivZGZ0DdZaG8AKzRLpXTADOO7G8PLaG4FdPAoAwnJN36ZDDldsFpAvBWRw3gCkoaKXZpV+OcsD49EVfSsT+WaiwC8kIPuOpli3vwenPWQvvhBk4tHciAKuAdsI3KthSLFP6w+Oy/a/Wd9/v1nOeOPkLzP7NXzzspmuJHPzRBgFnARRaNBYaW5a0mBWH6h4+cX0hrrQjdumr/PsEyZfKMk1qSIgsKjmM+sdl9H1ZiW7C7Dwtemv/P5XIN2s+YnO30k499pAMFLdPB/1w0ksJr3nWnvkZFopG44XOVWqQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pGva5ueQXHXsB2llHO8Tg2WYrlOj7MYMb/QcC+k6XLI=;
- b=XX68pPU4dJXVFSLgSrfS7SZNJ2/Ka3iTrC540YoMlCPVKreyl89KJadOXJIYM5wDPHO4RcXTDPvxD6HUlhGZHBND7LxyCexjohKg6f/Rlk86tsF+OyItQrDdiQ0IDpOcBK6ftUNRsTf7TSwygvXFIxg4nVzVxoDWeTVKt8XMsp+Wgvx2fN6iaY5zLSWDwJLzvJROJdm11fN9xnljt0zFb+f4HJWUY+aBgcMYks3qQqiR/KlbUOsnc2siStMPDwtXtOt7uDVOCxB0Tx0jIHbNn6+3pAanyjVfAOI2+WkMUHQL7a17EJckgXTKUoH4xF5v4gkUzA+G/4HHGPDXf0prqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pGva5ueQXHXsB2llHO8Tg2WYrlOj7MYMb/QcC+k6XLI=;
- b=hl4dNW0JIj5d1XL5sryNUO9EnaQWC0AA5N9KhffHyclK4ifYpmoRO29C7NIj960oJcYjmL78UdFHAVZXHB+C3mtOy450LZuIjCUT5+lURu34ygp+Rhf5SSkpp+benGwgLijT9c1lji7y/wMyk4dHeQ3+WIwWGN5GyJnQUOlCjq9cXnWp7KVaMnQ2pXA9UAswxvXpvXfkjevioSCMhotFRcr4ZLhjhpmjULB/nVcoblmZOTZaDESZBaleI6dpRmbbGtlBbb9LBgCTi3opZ+4q8H+e4g6DShbH+zicAw8LxWlbeuV392ltfAa9dP9NnNLyC7udf1IR/o7A0mETAjXvAw==
-Received: from MN2PR01MB5358.prod.exchangelabs.com (2603:10b6:208:117::26) by
- BYAPR01MB5144.prod.exchangelabs.com (2603:10b6:a03:7e::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5769.19; Tue, 1 Nov 2022 21:34:06 +0000
-Received: from MN2PR01MB5358.prod.exchangelabs.com
- ([fe80::bc9a:11a8:3923:da92]) by MN2PR01MB5358.prod.exchangelabs.com
- ([fe80::bc9a:11a8:3923:da92%4]) with mapi id 15.20.5746.028; Tue, 1 Nov 2022
- 21:34:06 +0000
-From:   Arminder Singh <arminders208@outlook.com>
-To:     marcan@marcan.st
-Cc:     alyssa@rosenzweig.io, arminders208@outlook.com,
-        asahi@lists.linux.dev, christophe.leroy@csgroup.eu,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        mpe@ellerman.id.au, npiggin@gmail.com, sven@svenpeter.dev
-Subject: Re: [PATCH v3] i2c/pasemi: PASemi I2C controller IRQ enablement
-Date:   Tue,  1 Nov 2022 16:06:41 -0400
-Message-ID: <MN2PR01MB5358DC40F0643617AF6BF7A19F369@MN2PR01MB5358.prod.exchangelabs.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <a40dbff1-6aa1-dedf-7eb2-c75d75d808b2@marcan.st>
-References: <a40dbff1-6aa1-dedf-7eb2-c75d75d808b2@marcan.st>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [CVbj5uOjxFV6kAv8RKsYqPoA+xVXHXLY]
-X-ClientProxiedBy: MN2PR14CA0024.namprd14.prod.outlook.com
- (2603:10b6:208:23e::29) To MN2PR01MB5358.prod.exchangelabs.com
- (2603:10b6:208:117::26)
-X-Microsoft-Original-Message-ID: <20221101200641.9300-1-arminders208@outlook.com>
+        with ESMTP id S229517AbiKAXyA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Nov 2022 19:54:00 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79A713DC6;
+        Tue,  1 Nov 2022 16:53:59 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id a14so22267708wru.5;
+        Tue, 01 Nov 2022 16:53:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=z3FRDuuLwsrtOeXY8HtkGnt8wtOUT94ofl0sNB3vcQI=;
+        b=gqKp3LZYwPxJIeLX8gVUpL8ykLCVcRNAnborbEZPNhGocFSNT1rNvacrShoBu2PdFF
+         w1yMXm9voWJM5cT3jp7kELL/BdjEUQ8ZGZrOKzueh91ZcO2hgG0iNHnytAQ0LsuUeE9U
+         3jpVUW3ul3T3ate4IjmDNEwqGakP154inpieEINWycYvpF+om15bbg4aleEd414LhMeW
+         18iN03Zm68Du8ZaQMVJpk5SL1lGRoAhSOyXrLf8k4uJR0tfyjuTcW8Kt8EcWdsLLQXDr
+         dd/hEAg5d8aMEXWyZxe8Pbw9H9bL7E74Mc0b/urnX1zuMo5m7KSJl8esZidDwcNVTgXp
+         zq2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z3FRDuuLwsrtOeXY8HtkGnt8wtOUT94ofl0sNB3vcQI=;
+        b=reF+y5Xq1jr24kszbL9XCC3iZhoQnGMgd4bPjAXQJaI9aG3NwWdLwH/Xnb8EdYHUCg
+         mhUdcW93UwMDuXqoLhzJb+TicAZyuQydHeTfBkF19E7ueuTC7KGF+iz4fav+6nHsg5j7
+         l0oLu48aAiN/kH1vbSCqo2CfA4WgRoZ0g7D9aXMRAQSAmbZOJ9pTN7WfNbPnivHoozu/
+         +P7Y8mz++A0Lhc6+K31UUav/W3qqS+lAwMHQXHbjkow6jh434nzNJHHdmxC1n8L/TUR4
+         y1AhvI048DmERpmBYgzuWzEDn/YwSRR6D6F14am0b7mpKgyv7Nq2nDGfiZVp3nvxTTW+
+         uu7g==
+X-Gm-Message-State: ACrzQf3q71+gCCIKEifvSBOW9hEpke7BERp+bJ1ElrfS9D0JmbzyDGak
+        0nBJUcDK7aodrWhoU/7Eqeo=
+X-Google-Smtp-Source: AMsMyM6S4RYnyr9fA/9Z/Ui+zms2pmGeKvZVTBxyY2J8xgdEBuu/b4yBP1CcYZR6KTyQFGiin2B/Ng==
+X-Received: by 2002:a5d:47a6:0:b0:236:7854:246d with SMTP id 6-20020a5d47a6000000b002367854246dmr12836652wrb.300.1667346838314;
+        Tue, 01 Nov 2022 16:53:58 -0700 (PDT)
+Received: from DreamMachine2.lan (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
+        by smtp.gmail.com with ESMTPSA id f7-20020adff987000000b0022e6178bd84sm11209264wrr.8.2022.11.01.16.53.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 16:53:57 -0700 (PDT)
+Message-ID: <d464a5319e1571613abcd7f0b3120e82a6f62e6e.camel@gmail.com>
+Subject: Re: [RFC PATCH 1/2] i2c: core: Introduce i2c_client_get_device_id
+ helper function
+From:   Angel Iglesias <ang.iglesiasg@gmail.com>
+To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-iio@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 02 Nov 2022 00:53:56 +0100
+In-Reply-To: <20221101145421.jwytax2srno4hhrl@pengutronix.de>
+References: <cover.1667151588.git.ang.iglesiasg@gmail.com>
+         <aeac9f372ffe0013757e261229e6e23f76f2d8f9.1667151588.git.ang.iglesiasg@gmail.com>
+         <20221101145421.jwytax2srno4hhrl@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.1 (by Flathub.org) 
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR01MB5358:EE_|BYAPR01MB5144:EE_
-X-MS-Office365-Filtering-Correlation-Id: 44dc1837-6c2a-4e20-30a0-08dabc50cde2
-X-MS-Exchange-SLBlob-MailProps: BDG1u3cCCl0Dyim5CXX8MiEo25DcAHUeGml6N6JMP7HrJ02izmdMOxS9xconZwMTCbv8NEduY58sEq8iN8nyKHXXrCHvqSR7f9jDapjrnxB2DH2bltRYuxIoDvH+jq2Z4f0IHBuqHPe4x3WSdXcvtnrVtIpdvV6IbWYW+K2Onxz9WlfUK6KU1/BAqFIXr53UpD1bt4Q6K06DgOAAyPpJXQpCwb3OZ5LMS9bh6tbg8ESYSUPaz7djHxNBp0YtrFF2XuGyFUDPtJ758AAfE4q0NRiqnBpV87awhKQ9AQQmwawICQdoY7jwKw4gb5P3L8CQI2HzlgndWQaazno38cbGS+HelavrKSh3tsdrmabKZJtcjKvtAD5VxPOaDjT+tyjPslkINkAd4yk592Qa7PmnXNEbKOax0fdP8hUGtmp4JbryhCWkR+/HrMQKFmVENeFWarSHUqhCzI5PI8/GFo6CjwnYvIZSOs2MqCJjKk/Fe0+qg2QjusScUHb5ULkVB658EgVKLn42YZ1CigWoesLmi+wvmJZHBow2SrhZ1nnc+dtv4wjUEbs43WpfQ/BcZYaC8eYt/87pknZ20ishss7fNTxTZgHc2d0QRb6vU+Ql+0FrQOcgSUUV6UPHd/e6/AJdOIwjB/uHrAJFsN0I87k9LmHR3GkCdYYCk3gtvxqKlujgomcSm6YUmrF4Shtv9nn4cBjtkyp4BLw=
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rxIUQ15VEFBCjYyAMg3Ux6UqpYvfjxmcHdOTsvJEPFLdR49PK6HTrlgmBm55CX4cqV7IQu0JeFHoOfBM3GrTITgFSjcbM2OZSkNVIzklKxHNl/iE1iI/s5eG/UMosyLeiCkuvIlVFNUKhv4oU4EPWt7+NVYHvoFAQ3EuxjsBINwo5d1Oo7Ck0p4AP2f59kitNS/JW0g33qrzsLRKSKibcZnUGJ2c7jwld9X0iBZcZOvymlooDz3nrnkX5iOIgHNYI3E/kVQ+5IPOSMVJfUJccpDdV0RFFZdOrU8FfyukS7l8R1W8D4UDoTzOVCZOQJd3ByuqQtMKWDKmRmP1FF7TuDOkx3LVttkEzYYkxJWD5IyYYi9pt4P9QctnJa2I+BzLZJykWchpq7hSjkMinrfwzoap7Pt4cq1OJ2Dhws8KqUD8x0vZm+MduV3NledPFSnXiHKlnG+JDtrhYsZtJP9NHhd/uCnhZ0CfA9GOMk0c8z7fF5x/wCS04Zl8AymvM0Ow/6Li9RRxIDNo7kdt1K4HeQMwq/5Y4JWxzPVtbu3NqyUpvAP1Wh0TLIkbOU74siAeCN/SMAj7k29ZRS3MMPkw45pZSwlRMHtbQgIZ1yxJ3vm1XQKnGQupp0gUVdyovU3Bk4dCBSWnNwEyqdlNbDWIWqVKvRIOYVh2xrBfa0fWJ2PLJDgKS7yu0PJKT1EHTnBdbpv5viCaRuGlHjIs4OaNsA==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uNHUlyLxDEfs7w1nVZwxHT1anF/OaUWLBV6taeotUmrz5Q2v18JY2PHJ83KV?=
- =?us-ascii?Q?O39WwQCCdOKzndcLHTkLp49vFp0YsST2nOUMRkispXb0J5p6EQaDCkw49HTs?=
- =?us-ascii?Q?MPDrAzAtgq++Z2p6ndlcou6ZHtwhOfgNPvzZT3zLV8AUOYBRcGtizYolXs5y?=
- =?us-ascii?Q?QouoMYSxHpygT3j/B2qYriwU3D6b5ZX6TqEjLbIQcRAsg6qwugX8ESSVgkJv?=
- =?us-ascii?Q?lxZhL/HVBYkgPYdpNwiKf5edKv3XZ0Q8jCjtG1j3q2ZQ+Tzae0On9l+Nr3vC?=
- =?us-ascii?Q?x5tqLqTdluaNzW+ebQs9Ubvzf9BZVrjOvEI7vEWVzuXrqkaux2nnc/lTWRD0?=
- =?us-ascii?Q?9iZKY0sxzIn9UtBVdQo+f86F7qGHLdXzzzNKBk4L4R52bXRsciL0JGBRi4WL?=
- =?us-ascii?Q?XJeyxryvwNgTlgxztUgXg/NwMWnRcEkLeSlQC/eGCUklNEpdZxyzq3FouygD?=
- =?us-ascii?Q?GKmVLj3rH9j4tKOPDui6GwcZX5JEviiKwcULzTLXKi3kdI5y1vNLkjPC0WL5?=
- =?us-ascii?Q?8sIc8JPn2o94nCZRz9xRTTTYs2vnIe31dwnZdxWNaFoNa3bTCQwgoxE1lexh?=
- =?us-ascii?Q?uPiqKRzSKw2Py3aNQM168zUbywj+DlRTIp//h0e3/u2S/poHwL0oTf0TR2fq?=
- =?us-ascii?Q?hTql6pBb8gZ880kLA1igVofui/UQCf/7qLTaWmaO6mYqirQcdxczTroAIS/c?=
- =?us-ascii?Q?tR/bAVDq+AbQ3SSe5nvOWY9iHqAZrS++cathQe34eSQzY8oyh4rHeljH38yv?=
- =?us-ascii?Q?QGc3smYCw/1r7pwvXVP/aFtU7JaSovotZEfHCEbOOg0cK9CBivD7QmaTOMir?=
- =?us-ascii?Q?UPQuMclkfc4Tuls3qxpRjIQNpfC9j4q6io9ZfYwV5dIU4BPaNVg2uY7x2Pa5?=
- =?us-ascii?Q?eQX/S8VWL6MhTehZE3IvExH5Ttdg+rOE8aEmhgGaLBLOzRv/N+x2mm1jZPSF?=
- =?us-ascii?Q?NeXMWg9ZhxAB5U7qshfGLas42fesZlXhJ4W7wTBWr2+WG/DHn7p6wfNNcoQs?=
- =?us-ascii?Q?M6BGUMQ2zeneGNx/lKxGdm+WJpdAbTVAY3Mdq8SaHZMP5rj8MoP6voy8NAc3?=
- =?us-ascii?Q?IoY36PuOpmhRESDVLo7Sk8Csl9v/DpBEXy/gjVthSlx0zvO7lr5/bY7bp0UM?=
- =?us-ascii?Q?CEW3hORlCGmkC+s3YphR4CNYrf+9PxgnrAxtkfi3VnMVO6jk/TZFF+vdD5PT?=
- =?us-ascii?Q?7d1O8F5viknDGFwRWuxW/4ra/qmIL/kDu/a/8X7bNrJoGIAJd8peOWjzPxd0?=
- =?us-ascii?Q?TW/IfCH/hgZDpkNzorW1AMHXiShn8Kzd+UTA6zvWyA=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 44dc1837-6c2a-4e20-30a0-08dabc50cde2
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR01MB5358.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2022 21:34:06.6717
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR01MB5144
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,10 +80,66 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Thanks Hector! Acknowledged the need to change to a 100ms delay, will be
-addressed/changed in v4 of the patch.
+On Tue, 2022-11-01 at 15:54 +0100, Uwe Kleine-K=C3=B6nig wrote:
+> On Sun, Oct 30, 2022 at 06:52:18PM +0100, Angel Iglesias wrote:
+> > Introduces new helper function to aid in .probe_new() refactors. In ord=
+er
+> > to use existing i2c_get_device_id() on the probe callback, the device
+> > match table needs to be accessible in that function, which would requir=
+e
+> > bigger refactors in some drivers using the deprecated .probe callback.
+> >=20
+> > This issue was discussed in more detail in the IIO mailing list.
+> >=20
+> > Link:
+> > https://lore.kernel.org/all/20221023132302.911644-11-u.kleine-koenig@pe=
+ngutronix.de/
+> > Suggested-by: Nuno S=C3=A1 <noname.nuno@gmail.com>
+> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Suggested-by: Jonathan Cameron <jic23@kernel.org>
+> > Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+> > ---
+> > =C2=A0drivers/i2c/i2c-core-base.c | 15 +++++++++++++++
+> > =C2=A0include/linux/i2c.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 |=C2=A0 1 +
+> > =C2=A02 files changed, 16 insertions(+)
+> >=20
+> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> > index b4edf10e8fd0..e6623226e393 100644
+> > --- a/drivers/i2c/i2c-core-base.c
+> > +++ b/drivers/i2c/i2c-core-base.c
+> > @@ -2236,6 +2236,21 @@ int i2c_get_device_id(const struct i2c_client
+> > *client,
+> > =C2=A0}
+> > =C2=A0EXPORT_SYMBOL_GPL(i2c_get_device_id);
+> > =C2=A0
+> > +/**
+> > + * i2c_client_get_device_id - get the driver match table entry of a de=
+vice
+> > + * @client: the device to query
+> > + *
+> > + * Returns a pointer to the matching entry if found, NULL otherwise.
+> > + */
+> > +const struct i2c_device_id *i2c_client_get_device_id(const struct
+> > i2c_client *client)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct i2c_driver *drv=
+ =3D to_i2c_driver(client->dev.driver);
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return i2c_match_id(drv->id_=
+table, client);
+> > +
+>=20
+> I'd drop the empty line after the return. Is it worth to note in a
+> comment that it only works for bound clients? (Oopses otherwise)
 
-Thanks,
-Arminder
+Yup, my bad, that newline shouldn't be there.
+Sure, seems reasonable to leave warn just in case.
 
+Kind regards,
+Angel
+
+> Best regards
+> Uwe
+>=20
 
