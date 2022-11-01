@@ -2,134 +2,134 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A5F614D26
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Nov 2022 15:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB37614D8E
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Nov 2022 15:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiKAOys (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Nov 2022 10:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
+        id S231180AbiKAO7G (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Nov 2022 10:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiKAOym (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Nov 2022 10:54:42 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B476428
-        for <linux-i2c@vger.kernel.org>; Tue,  1 Nov 2022 07:54:40 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1opsel-0008IO-H5; Tue, 01 Nov 2022 15:54:23 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1opsel-001hAV-Lf; Tue, 01 Nov 2022 15:54:22 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1opsej-00DhGO-P9; Tue, 01 Nov 2022 15:54:21 +0100
-Date:   Tue, 1 Nov 2022 15:54:21 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>
-Cc:     linux-iio@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] i2c: core: Introduce i2c_client_get_device_id
- helper function
-Message-ID: <20221101145421.jwytax2srno4hhrl@pengutronix.de>
-References: <cover.1667151588.git.ang.iglesiasg@gmail.com>
- <aeac9f372ffe0013757e261229e6e23f76f2d8f9.1667151588.git.ang.iglesiasg@gmail.com>
+        with ESMTP id S231204AbiKAO63 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Nov 2022 10:58:29 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F9B1D312;
+        Tue,  1 Nov 2022 07:56:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667314584; x=1698850584;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ymj/jOHbE6XLvUeDMy9nMN43LrVvwx6KJLq+fmcPOf0=;
+  b=U1fH3qBfHvfoWwy68Tw8jQDYOyG1PSzPFdGWTKHQTH2/XxVWB/vgbEun
+   31sEBAnI5qZEOZksyN5BKF3Mq+8ef7f5EclN/h6T1utBSjSNoIhYUQ1C1
+   /B9TriiXWhq/l3e4BDBCzRFZe4XcelLWU7MDR/svUJ7X7pjcy5d+8d+jI
+   Mh3ZTl3mzwac/eSeBajTbfb6IomScgsEPOc5yFhrBBaUyiZJTHcm1M74Q
+   W0N1y1IfzGsvgJxuqm4L4EolvU3Yfcx+W1kjL4L18bQ/k9EJq28rLYVv8
+   8pEat5Sbl0hgkZigBoYF4GZVMkkJOAPxhyKp9STHaHECnzrHtgMcywZcy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="310860962"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="310860962"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 07:56:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="636423228"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="636423228"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 01 Nov 2022 07:56:06 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1opsgO-005dZF-04;
+        Tue, 01 Nov 2022 16:56:04 +0200
+Date:   Tue, 1 Nov 2022 16:56:03 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Weilong Chen <chenweilong@huawei.com>
+Cc:     yangyicong@hisilicon.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wsa@kernel.org,
+        f.fainelli@gmail.com, jarkko.nikula@linux.intel.com,
+        jdelvare@suse.de, william.zhang@broadcom.com, jsd@semihalf.com,
+        conor.dooley@microchip.com, phil.edworthy@renesas.com,
+        tharunkumar.pasumarthi@microchip.com, semen.protsenko@linaro.org,
+        kfting@nuvoton.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next v10 1/2] i2c: hisi: Add initial device tree support
+Message-ID: <Y2Ezg2TYeIsxUYxW@smile.fi.intel.com>
+References: <20221101080728.143639-1-chenweilong@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sotept4hn6coqzfv"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aeac9f372ffe0013757e261229e6e23f76f2d8f9.1667151588.git.ang.iglesiasg@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221101080728.143639-1-chenweilong@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, Nov 01, 2022 at 04:07:27PM +0800, Weilong Chen wrote:
+> The HiSilicon I2C controller can be used on embedded platform, which
+> boot from devicetree.
 
---sotept4hn6coqzfv
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks, This version LGTM,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-On Sun, Oct 30, 2022 at 06:52:18PM +0100, Angel Iglesias wrote:
-> Introduces new helper function to aid in .probe_new() refactors. In order
-> to use existing i2c_get_device_id() on the probe callback, the device
-> match table needs to be accessible in that function, which would require
-> bigger refactors in some drivers using the deprecated .probe callback.
->=20
-> This issue was discussed in more detail in the IIO mailing list.
->=20
-> Link: https://lore.kernel.org/all/20221023132302.911644-11-u.kleine-koeni=
-g@pengutronix.de/
-> Suggested-by: Nuno S=E1 <noname.nuno@gmail.com>
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Suggested-by: Jonathan Cameron <jic23@kernel.org>
-> Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+> Acked-by: Yicong Yang <yangyicong@hisilicon.com>
 > ---
->  drivers/i2c/i2c-core-base.c | 15 +++++++++++++++
->  include/linux/i2c.h         |  1 +
->  2 files changed, 16 insertions(+)
->=20
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index b4edf10e8fd0..e6623226e393 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -2236,6 +2236,21 @@ int i2c_get_device_id(const struct i2c_client *cli=
-ent,
->  }
->  EXPORT_SYMBOL_GPL(i2c_get_device_id);
-> =20
-> +/**
-> + * i2c_client_get_device_id - get the driver match table entry of a devi=
-ce
-> + * @client: the device to query
-> + *
-> + * Returns a pointer to the matching entry if found, NULL otherwise.
-> + */
-> +const struct i2c_device_id *i2c_client_get_device_id(const struct i2c_cl=
-ient *client)
-> +{
-> +	const struct i2c_driver *drv =3D to_i2c_driver(client->dev.driver);
+> Change since v9:
+> - Drop wrong use ACPI_PTR/of_match_ptr
+> Link: https://lore.kernel.org/lkml/dfc1c006-61c0-8f28-6164-060347c69d04@huawei.com/T/
+> 
+>  drivers/i2c/busses/Kconfig    | 2 +-
+>  drivers/i2c/busses/i2c-hisi.c | 7 +++++++
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index e50f9603d189..a7bfddf08fa7 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -673,7 +673,7 @@ config I2C_HIGHLANDER
+>  
+>  config I2C_HISI
+>  	tristate "HiSilicon I2C controller"
+> -	depends on (ARM64 && ACPI) || COMPILE_TEST
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Say Y here if you want to have Hisilicon I2C controller support
+>  	  available on the Kunpeng Server.
+> diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
+> index 76c3d8f6fc3c..bcc97e4fcb65 100644
+> --- a/drivers/i2c/busses/i2c-hisi.c
+> +++ b/drivers/i2c/busses/i2c-hisi.c
+> @@ -489,11 +489,18 @@ static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
+>  };
+>  MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
+>  
+> +static const struct of_device_id hisi_i2c_dts_ids[] = {
+> +	{ .compatible = "hisilicon,ascend910-i2c", },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
 > +
-> +	return i2c_match_id(drv->id_table, client);
-> +
+>  static struct platform_driver hisi_i2c_driver = {
+>  	.probe		= hisi_i2c_probe,
+>  	.driver		= {
+>  		.name	= "hisi-i2c",
+>  		.acpi_match_table = hisi_i2c_acpi_ids,
+> +		.of_match_table = hisi_i2c_dts_ids,
+>  	},
+>  };
+>  module_platform_driver(hisi_i2c_driver);
+> -- 
+> 2.31.GIT
+> 
 
-I'd drop the empty line after the return. Is it worth to note in a
-comment that it only works for bound clients? (Oopses otherwise)
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Best regards
-Uwe
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---sotept4hn6coqzfv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNhMxoACgkQwfwUeK3K
-7AnawQgAiVCPA8MToHXg86Pja8R0Ak0Mbzo6HxZefCCg8XC6NrPPwNzxzbly/KHu
-UKf1oJhSMOOpwW+xHmfahfYpteqWPrrq7KqjBXRP/ejg92dLHiG8FmCoGGKtIk8e
-jus2pyIV3xpcO025BBb7eRbPi6oJcNJ7/D+SbiEml1kFZLAnCdKRjpJT/qc8AiP0
-yf/mMzJi5aNNqiCUCLCCPsKD3jMuXu9CvYIgsXSkYat16QwhI7UmtCQBpY8tQLK0
-LMC2qoiXuYpNHPEgpgvXw/Cnltsf9m8mvHKo0saIZ8MGS9oAu4DUr5B5H8ntejTe
-29qKcOd231RP+mWsreyu8v+WTjed3g==
-=cS2k
------END PGP SIGNATURE-----
-
---sotept4hn6coqzfv--
