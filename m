@@ -2,112 +2,178 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAA1614B26
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Nov 2022 13:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98C6E614B3C
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Nov 2022 13:54:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiKAMx1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Nov 2022 08:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
+        id S230019AbiKAMyt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Nov 2022 08:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiKAMx0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Nov 2022 08:53:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9B22BDE;
-        Tue,  1 Nov 2022 05:53:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF9DBB81D1C;
-        Tue,  1 Nov 2022 12:53:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6BCEC433D6;
-        Tue,  1 Nov 2022 12:53:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667307202;
-        bh=//Hxv4m5/4QFRxQRfAon0gk4J4k+/YkMxoNhB+9hSjw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pwFUNTanDEt0f8mjmDDpk4NWrcYo9Qn4x5XD5ockyCaqypHBIdKaVZ+14azUWPgpn
-         hMjvkwEzWCtqs46Aet/E0rWrEjF7iZIc8xCakHca3Qvn+VV0OOmFYGgRWwhaw+69Dg
-         LwmcaI03269wCwnQfr5NQv1sen/dHOnzrSTt7vvccQ57Ewg9/w2GZYTCGADBk4vunj
-         +iIE/iEpKcrcxV7ZklHDvKeVRfM2Eu6EMuCsh3ngxn1hD22d2GM+eXGWuvLumv9/ho
-         V1NAE6YQ8UPSWU9gvgqd4THWN4omXnkkVegA/TzD/3WTw4ppprmal9bSnZEmXbegZw
-         FAJIKc0TpYNFw==
-Date:   Tue, 1 Nov 2022 13:53:18 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Arminder Singh <arminders208@outlook.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Hector Martin <marcan@marcan.st>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: Re: [PATCH v3] i2c/pasemi: PASemi I2C controller IRQ enablement
-Message-ID: <Y2EWvokvkixLucg+@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Arminder Singh <arminders208@outlook.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Hector Martin <marcan@marcan.st>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-References: <MN2PR01MB5358ED8FC32C0CFAEBD4A0E19F5F9@MN2PR01MB5358.prod.exchangelabs.com>
- <A0B81E7F-BF26-424D-B9E5-5647323B24EC@svenpeter.dev>
+        with ESMTP id S230387AbiKAMyi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Nov 2022 08:54:38 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E966CE35;
+        Tue,  1 Nov 2022 05:54:36 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N1qjN5lRtz15MFl;
+        Tue,  1 Nov 2022 20:54:32 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 20:54:34 +0800
+CC:     <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <jdelvare@suse.de>, <semen.protsenko@linaro.org>,
+        <jarkko.nikula@linux.intel.com>,
+        <tharunkumar.pasumarthi@microchip.com>,
+        <linux-kernel@vger.kernel.org>, <f.fainelli@gmail.com>,
+        <yangyicong@hisilicon.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <andriy.shevchenko@linux.intel.com>, <wsa@kernel.org>,
+        <william.zhang@broadcom.com>, <conor.dooley@microchip.com>,
+        <jsd@semihalf.com>, <phil.edworthy@renesas.com>,
+        <kfting@nuvoton.com>
+Subject: Re: [PATCH next v10 2/2] dt-bindings: i2c: add entry for
+ hisilicon,ascend910-i2c
+To:     Weilong Chen <chenweilong@huawei.com>
+References: <20221101080728.143639-1-chenweilong@huawei.com>
+ <20221101080728.143639-2-chenweilong@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <50934335-b088-ae36-490c-e48a74fb755e@huawei.com>
+Date:   Tue, 1 Nov 2022 20:54:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NW2sLPhekt1Tv84F"
-Content-Disposition: inline
-In-Reply-To: <A0B81E7F-BF26-424D-B9E5-5647323B24EC@svenpeter.dev>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221101080728.143639-2-chenweilong@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 2022/11/1 16:07, Weilong Chen wrote:
+> Add the new compatible for HiSilicon i2c.
+> 
 
---NW2sLPhekt1Tv84F
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
 
-
-> > +    complete(&smbus->irq_completion);
->=20
-> I only realized just now that you also want to disable the interrupt
-> right here by writing to IMASK. This is a level sensitive interrupt at
-> AIC level so the moment this handler returns it will fire again until
-> you reach the write above after the completion wait a bit later.
-
-This seems like a valid request. Any chance for a v4? We are so close to
-being good here...
-
-
---NW2sLPhekt1Tv84F
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNhFr4ACgkQFA3kzBSg
-KbZTiw/8Dlg4oKc1MA8MC7mHzNw8On6Tqi9U92KfEJWvk2wK99rdh41lCyBayYdB
-4NCFrJeY+Nqu90Buf4Ui2rVom01pPSd9guyDZ+YAyxd+uLSlfrD8R6vCjLbWbXPo
-V0SSN0+POvYYZ5XLE5ASIU3MlIMCAYV/+ZgOesqjD7LyraOIcSvt+nEVe7y0BDFX
-qDR2LxOZMo512FVzjoloyGicjbhGbbMBm0Xmo4QKWv5RBmxbZIebuEbqnoibtzEe
-VXFGULpQt9wJ+q+Tw1S12uKnrV1ds8qX614A1uILui6he0WaX92mIxiN9FGROGaB
-t/0vqarPj6zTgmD7JhQLDtxqZcxjzJSE2mMX4ied6NC1zi1H6NFatxyIg7gCLS5b
-hlYlhVk2x8IjeCnaeGfrtczmQSSK71xMi34RhS+Ohyic3PG/xWfOUMqDuI2Glfx1
-IwkrTaR+WQwb9TJEnH7peybHATPjmeZHG8mC+VlH9c4vtSRXNq8JYXtH+hLCN8kb
-vJuHvbsXFpe0NZGCm4gT12g4UhJTM/nVwBxO89j7wmETdf9AMxAMStUepUQpxd4w
-M4q0zgnAwT+iSz1qCRO2LT+84J0LH+tV6zfH+NfysoSnjPG+Gi3Ke9RWqJeEME3T
-MzPj6d88/qFAMcwN9L9eewvRncGBSqpqBQcSYEBTnEmrVNSZEto=
-=tAGC
------END PGP SIGNATURE-----
-
---NW2sLPhekt1Tv84F--
+> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+> Change since v9:
+> - No change
+> Link: https://lore.kernel.org/lkml/20221029115937.179788-2-chenweilong@huawei.com/
+> 
+> Change since v8:
+> - Use vendor,soc-ipblock format.
+> - Drop quotes.
+> - Drop "Device Tree bindings".
+> - Description goes to top level description.
+> - Use defines for constants.
+> Link: https://lore.kernel.org/lkml/20221024015151.342651-2-chenweilong@huawei.com/
+> 
+>  .../bindings/i2c/hisilicon,ascend910-i2c.yaml | 73 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,ascend910-i2c.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,ascend910-i2c.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,ascend910-i2c.yaml
+> new file mode 100644
+> index 000000000000..7d7a8de7bcd8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/hisilicon,ascend910-i2c.yaml
+> @@ -0,0 +1,73 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/hisilicon,ascend910-i2c.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: HiSilicon common I2C controller
+> +
+> +maintainers:
+> +  - Yicong Yang <yangyicong@hisilicon.com>
+> +
+> +description:
+> +  The HiSilicon common I2C controller can be used for many different
+> +  types of SoC such as Huawei Ascend AI series chips.
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: hisilicon,ascend910-i2c
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-frequency:
+> +    default: 400000
+> +
+> +  i2c-sda-falling-time-ns:
+> +    default: 343
+> +
+> +  i2c-scl-falling-time-ns:
+> +    default: 203
+> +
+> +  i2c-sda-hold-time-ns:
+> +    default: 830
+> +
+> +  i2c-scl-rising-time-ns:
+> +    default: 365
+> +
+> +  i2c-digital-filter-width-ns:
+> +    default: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    i2c@38b0000 {
+> +      compatible = "hisilicon,ascend910-i2c";
+> +      reg = <0x38b0000 0x10000>;
+> +      interrupts = <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;
+> +      i2c-sda-falling-time-ns = <56>;
+> +      i2c-scl-falling-time-ns = <56>;
+> +      i2c-sda-hold-time-ns = <56>;
+> +      i2c-scl-rising-time-ns = <56>;
+> +      i2c-digital-filter;
+> +      i2c-digital-filter-width-ns = <0x0>;
+> +      clocks = <&alg_clk>;
+> +      clock-frequency = <400000>;
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index d1214d83c2df..d42e34d1e8e2 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9228,6 +9228,7 @@ M:	Yicong Yang <yangyicong@hisilicon.com>
+>  L:	linux-i2c@vger.kernel.org
+>  S:	Maintained
+>  W:	https://www.hisilicon.com
+> +F:	Documentation/devicetree/bindings/i2c/hisilicon,ascend910-i2c.yaml
+>  F:	drivers/i2c/busses/i2c-hisi.c
+>  
+>  HISILICON LPC BUS DRIVER
+> 
