@@ -2,55 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3875E614AF8
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Nov 2022 13:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5B0614B05
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Nov 2022 13:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbiKAMmb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Nov 2022 08:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
+        id S229534AbiKAMpQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Nov 2022 08:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbiKAMm3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Nov 2022 08:42:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150DC1A398;
-        Tue,  1 Nov 2022 05:42:23 -0700 (PDT)
+        with ESMTP id S229511AbiKAMpP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Nov 2022 08:45:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435CB1AF1C;
+        Tue,  1 Nov 2022 05:45:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A61E61092;
-        Tue,  1 Nov 2022 12:42:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EDA0C43149;
-        Tue,  1 Nov 2022 12:42:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F39D5B81C9C;
+        Tue,  1 Nov 2022 12:45:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14D0DC433D6;
+        Tue,  1 Nov 2022 12:45:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667306542;
-        bh=KzGRg5qkuvMpcyZBQVa6HjEtBiE9z54YDbSgDbPAeHg=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=NwPt1aZTBxMYnAZEcLL75Z7eEiL5AOs4Nplj0/gxG+tY641khPpoJ/VSS1BQ8qIP5
-         VvjulI8ipJsBLrUfQLWaPyKnBzXKc0exstJMEj81Smbtl3UqqOcjCX9Dg9jj3Zm0J0
-         Goj3XKLbbnEHK54ia3dMVNobwT4gw/fcvldap2U+r5twYWL1/tQZTUpELqhJwc27IE
-         KnZLbA+A8rbCRI5CESeJT4/wzWnznpR4gEfgomuTQ0+PilMmMl+/TYxixIzTg3qD62
-         XWpLPNcLa4qgTIuYufZ+ZuFa+fr9mORC9y434H0DmUaXCmbnRKGRpoJ7t+mWhsJSDy
-         Ln4QBT5rMkXrQ==
-Date:   Tue, 1 Nov 2022 13:42:18 +0100
+        s=k20201202; t=1667306712;
+        bh=44cQ93c6tk7IF1CBO+5gDPy5bTD1a+eBcb6QrsNdutM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gpyeBIQo2ErA2v7MzdGXIVTZv2uYGXonifv4KEkySlNyGSxu9JMHz+03YNkMydgpb
+         8nVpUnPB11YnlC0I5CckHciGcEIb4GGdE/S/If5nachg7WD2vrp0a2PdZB1VIcfBKm
+         hHW4fhnyk9WVuIBTlxIwhpPnlxeJplc3B3MzdAIcvEtmPC738Y+8pCTHeP7xCKKlQC
+         toSJtTL8FPw+eRtxQR1BC+8/i4TMFeAslfx6yEJaAcusVjQvphy0yxFtIRs8hkOAsB
+         +pp2n0nGn4eFrGr4KqUGADNOVdIj1T4wA13k/V2TwJq8TFVd5nG7Po4gX8jpOErf3g
+         O5PoNHSqZ53dg==
+Date:   Tue, 1 Nov 2022 13:45:09 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Raju Rangoju <Raju.Rangoju@amd.com>, syniurge@gmail.com,
-        shyam-sundar.s-k@amd.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rajesh1.kumar@amd.com,
-        Basavaraj Natikar <basavaraj.natikar@amd.com>
-Subject: Re: [PATCH] i2c: amd-mp2: use msix/msi if the hardware supports
-Message-ID: <Y2EUKpto2ZRZorLd@shikoro>
+To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] i2c: npcm7xx: Group bank 0/1 registers together for
+ readability
+Message-ID: <Y2EU1SbtBwoF24yc@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Raju Rangoju <Raju.Rangoju@amd.com>, syniurge@gmail.com,
-        shyam-sundar.s-k@amd.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rajesh1.kumar@amd.com,
-        Basavaraj Natikar <basavaraj.natikar@amd.com>
-References: <20221025181124.421628-1-Raju.Rangoju@amd.com>
- <Y2ESGbkgfEXsx9es@shikoro>
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        linux-kernel@vger.kernel.org
+References: <20221008125924.1220203-1-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vVNqkArORQcowHZ6"
+        protocol="application/pgp-signature"; boundary="Yyo+CywAAMaOGClx"
 Content-Disposition: inline
-In-Reply-To: <Y2ESGbkgfEXsx9es@shikoro>
+In-Reply-To: <20221008125924.1220203-1-j.neuschaefer@gmx.net>
 X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,34 +70,43 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---vVNqkArORQcowHZ6
-Content-Type: text/plain; charset=us-ascii
+--Yyo+CywAAMaOGClx
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, Oct 08, 2022 at 02:59:23PM +0200, Jonathan Neusch=C3=A4fer wrote:
+> The unlabelled registers NPCM_I2CCTL4 to NPCM_I2CSCLHT overlap with the
+> bank 1 registers below, and they are accessed after selecting bank 0, so
+> they clearly belong to bank 0.
+>=20
+> Move them together with the other bank 0 registers, and move the
+> unrelated definition of npcm_i2caddr down to keep the banked registers
+> in one piece.
+>=20
+> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+
+Applied to for-next, thanks!
 
 
-> > Fixes: 529766e0a011 ("i2c: Add drivers for the AMD PCIe MP2 I2C controller")
-
-I dropped this Fixes tag, though. Looks like a new feature to me.
-
-
---vVNqkArORQcowHZ6
+--Yyo+CywAAMaOGClx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNhFCoACgkQFA3kzBSg
-KbZ/+Q/9HKi/y2D/PRTfhcqwVMgcFygahYoZfMV7bHg5eo0OaByo1J1z8uX5ue6a
-sEl9GL9xuUoN13DZPP11C1TWmAQHs2Xgk3lCxcNW5aP67+9B5VeyEgLzH5K5EEav
-PsKcQPSK96JV2awZzHkarTr/upHVu6TrIKUBGzPkEPn5PGXc2DrUU5LdRqEm8CLw
-QDHYOrMch1THjoPNtuk70mWuhnVZfAhlW/YGotU6GzUrmeE8kx7JdloVwaFtGmUC
-TGTpbXFYvUkCkpCygCMkRjV2KmheP7q/UPXU9nsyVzVv+2s6sraeWM3jZqKx7m/g
-xoWYNfAltDN59O7BAsUEi6njFQ85t4fHUzn5gbvddHjnnwgnGf9f9Wl11+zDNVh/
-cL7TodXRjU0/EKJNkaLNMKuwWvaDoc4Oid/5fy8syGgkhoeVjnG6oVxeKIxC4poh
-u0u/sLo0DqKVyWNcpEX1eDqGzWAiCOuN22C5QPc8qUsucQLgudvoXZsHyXUB90ju
-kBHCAisjdU6m04Iitz48X3LaGZebJvkvrjp88PcSyH/k5ixN2eriJJWO83yDrnsj
-b8B6QkphpL438yTb25JidHeoTScYhvY8gyEIhTmMjOPg54uBeDJsfAyDWB7Kz4kP
-bj5WjYSfi9l3gd/bi0pewqEilXfpVHmGl5dXNib0tqIWFVq2n4w=
-=lbyW
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNhFNUACgkQFA3kzBSg
+KbZ7vA/+NMNAb3/LudrY1sd1RO0JeFXNUeakp4Tw8wnp2nMdolmbLvmMo4qNdaBj
+2JJwTsjlqw8zhBD+/tXbU/5F8UInX8EF7PYIBAM44DYpH/ZeX0SFvjb3/xYYK4+F
+Ooxh4NxjXb40VXeD/8a63FxVVi2EUV8c5nBLAhn40EvIOfoXI+SPL6lHZfY2AJk5
+J1ADPm3kvo11JkP1fNazOOUMD61/HzZ7pSRXSZfpLAF+WT2+btRaL1I9aIB+WQiO
+NUsif/nkrqHHm4uYLYAVDS56fzg/KfdScoEEiPWXAB0dciIL4B3fN9cGwMmRAS0w
+PjzMgYYViZajSzBxcXWzXNbB5+tqVB1NbZCDrzs91nAtaC0kYUc2NByRoAC+iRrv
+uI8fAdNcuy8EmBRG1wP+e/KQUbewNU8Hh5eNkllBakBUfrT3yNl9keUE5Gn63N4B
+hUwWou06sckVlueXk3+FMIlVE5PNlmxrEm58RNkx2+K+KvXHgqpbBiHHPnGuB0/B
+FN8Oio6vYvzepKMs2YfuSo0AvJ+IlEBPFAVhfu7JmnJ6q8QbyNKGa1ZkAhV20RUn
++bUFSUcy9l+TyYvvWMtg92g8lWDzNr27WA9dU/X0Bw+1rHWL8sNUEv468ThDqH2f
+mkF+x3WbjqZe2k/UBahpxEfZWUom5pKlvQiWaxDCg+NwRSwf7Bk=
+=F1sB
 -----END PGP SIGNATURE-----
 
---vVNqkArORQcowHZ6--
+--Yyo+CywAAMaOGClx--
