@@ -2,53 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C93161498D
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Nov 2022 12:38:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D058C614AA9
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Nov 2022 13:29:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbiKALii (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Nov 2022 07:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58978 "EHLO
+        id S230155AbiKAM3d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Nov 2022 08:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231400AbiKALiS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Nov 2022 07:38:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C095C1DF0C;
-        Tue,  1 Nov 2022 04:32:27 -0700 (PDT)
+        with ESMTP id S229996AbiKAM3d (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Nov 2022 08:29:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FB22DE1;
+        Tue,  1 Nov 2022 05:29:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 306C4B81CCD;
-        Tue,  1 Nov 2022 11:31:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0135C43470;
-        Tue,  1 Nov 2022 11:31:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C303B81C89;
+        Tue,  1 Nov 2022 12:29:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F73DC433C1;
+        Tue,  1 Nov 2022 12:29:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302313;
-        bh=8JproDmIxUKonuf1KKRNqVQpO4Bk98mgN8CquEEfLPk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R/6GXtCGWo5zVGxDsGS7bD2rh9SumnrtG+3iQk5G4QtR09Mc2R2XgU/c1peloP8st
-         B4dJK7MgTjHamLaOHDGlTNAmEBj3IYAy2HjQH6jRkAHiRzTKUu5XcYxsL9Q5dZkyaw
-         QpV17EHL11rIJmttE3WDaOanpDxuhcQDHchaWJlmPsmZxRyhm/IE3Q8N2vtpxAWzXK
-         aKajc3uAkjqUlrLNFCHJSfu/gxvXrqofqmPElMmbsjXyZwYdzG4uhZG7SVq4WaAMEo
-         GNTLzcGOToscD8eSN2fBtIZZWqRX2e9jF00bxIdcBaatGEc3UMixoDqzLxNRZ5R7er
-         ++K+5N77VCT7g==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        michal.simek@xilinx.com, linux-arm-kernel@lists.infradead.org,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 3/3] i2c: xiic: Add platform module alias
-Date:   Tue,  1 Nov 2022 07:31:45 -0400
-Message-Id: <20221101113147.801048-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221101113147.801048-1-sashal@kernel.org>
-References: <20221101113147.801048-1-sashal@kernel.org>
+        s=k20201202; t=1667305769;
+        bh=fE/QK2tz0bp4uZzAiCUSbLtHhUCqal1+EorRLas3dn0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Og93aCaKP6Y3Sw1w3Y47CNFasLfm8mO5lerezUgYEZ4QFG1HzEa8bJcMLlV07A3mc
+         rP1PnA5Gh17L+ILoGMk/azbm8TsT28ztYa+dneSVHjJGvMhSjYx9pFIuMUzsbgYML8
+         uW1J63ev4WfMFkY4Ygxt0gopO0RV80cMDL9cK9lxtoCzUGcWXvPxKcsg/kkzj1eZ7t
+         wG/DmMJmVjuxnsr5waFeQb/PgQFyTOyIZYyw3wRh2/ctk0Q9WKYlFYemCziubUR/zh
+         BBMk24nHh6++CsRKO69pMhihvGCav5Eu+5lpx4SpoX1m6BoA1qS8LicRiY7QLlb5Dh
+         OQ4Ds+clrvCmQ==
+Date:   Tue, 1 Nov 2022 13:29:22 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jdelvare@suse.com
+Subject: Re: [PATCH v2] i2c: piix4: Fix adapter not be removed in
+ piix4_remove()
+Message-ID: <Y2ERIsY9/IKLuXoG@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jdelvare@suse.com
+References: <20221027121353.181695-1-chenzhongjin@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="otMN8fDUrbC6X6ca"
+Content-Disposition: inline
+In-Reply-To: <20221027121353.181695-1-chenzhongjin@huawei.com>
 X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,33 +58,78 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-[ Upstream commit b8caf0a0e04583fb71e21495bef84509182227ea ]
+--otMN8fDUrbC6X6ca
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The missing "platform" alias is required for the mgb4 v4l2 driver to load
-the i2c controller driver when probing the HW.
+On Thu, Oct 27, 2022 at 08:13:53PM +0800, Chen Zhongjin wrote:
+> In piix4_probe(), the piix4 adapter will be registered in:
+>=20
+>    piix4_probe()
+>      piix4_add_adapters_sb800() / piix4_add_adapter()
+>        i2c_add_adapter()
+>=20
+> Based on the probed device type, piix4_add_adapters_sb800() or single
+> piix4_add_adapter() will be called.
+> For the former case, piix4_adapter_count is set as the number of adapters,
+> while for antoher case it is not set and kept default *zero*.
+>=20
+> When piix4 is removed, piix4_remove() removes the adapters added in
+> piix4_probe(), basing on the piix4_adapter_count value.
+> Because the count is zero for the single adapter case, the adapter won't
+> be removed and makes the sources allocated for adapter leaked, such as
+> the i2c client and device.
+>=20
+> These sources can still be accessed by i2c or bus and cause problems.
+> An easily reproduced case is that if a new adapter is registered, i2c
+> will get the leaked adapter and try to call smbus_algorithm, which was
+> already freed:
+>=20
+> Triggered by: rmmod i2c_piix4 && modprobe max31730
+>=20
+>  BUG: unable to handle page fault for address: ffffffffc053d860
+>  #PF: supervisor read access in kernel mode
+>  #PF: error_code(0x0000) - not-present page
+>  Oops: 0000 [#1] PREEMPT SMP KASAN
+>  CPU: 0 PID: 3752 Comm: modprobe Tainted: G
+>  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+>  RIP: 0010:i2c_default_probe (drivers/i2c/i2c-core-base.c:2259) i2c_core
+>  RSP: 0018:ffff888107477710 EFLAGS: 00000246
+>  ...
+>  <TASK>
+>   i2c_detect (drivers/i2c/i2c-core-base.c:2302) i2c_core
+>   __process_new_driver (drivers/i2c/i2c-core-base.c:1336) i2c_core
+>   bus_for_each_dev (drivers/base/bus.c:301)
+>   i2c_for_each_dev (drivers/i2c/i2c-core-base.c:1823) i2c_core
+>   i2c_register_driver (drivers/i2c/i2c-core-base.c:1861) i2c_core
+>   do_one_initcall (init/main.c:1296)
+>   do_init_module (kernel/module/main.c:2455)
+>   ...
+>  </TASK>
 
-Signed-off-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
-Acked-by: Michal Simek <michal.simek@amd.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-xiic.c | 1 +
- 1 file changed, 1 insertion(+)
+Applied to for-current, thanks!
 
-diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-index c65a5d0af555..4b750c99819a 100644
---- a/drivers/i2c/busses/i2c-xiic.c
-+++ b/drivers/i2c/busses/i2c-xiic.c
-@@ -897,6 +897,7 @@ static struct platform_driver xiic_i2c_driver = {
- 
- module_platform_driver(xiic_i2c_driver);
- 
-+MODULE_ALIAS("platform:" DRIVER_NAME);
- MODULE_AUTHOR("info@mocean-labs.com");
- MODULE_DESCRIPTION("Xilinx I2C bus driver");
- MODULE_LICENSE("GPL v2");
--- 
-2.35.1
 
+--otMN8fDUrbC6X6ca
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNhEQ4ACgkQFA3kzBSg
+KbauaA/+MW0pMRkolqVq0BcOSMcyMQAPeYd+gJk/+dpqv+/19KY+mtiZWyqlF2D7
+faJTYGU+wvuPzScNrkw5IbWZ48sNA02mvCtnxXZqQJqDP11c70F/qWa3azqMLB0d
+dzdjKs+JagGTY5gDB0il0uuxxjUL0xXQcDJ5ZrOwGaYaZKUZ/ply9C2EK/3XUCvg
+9SzROVLGlpXhcVk16X7yh9YbdtfBQyGuh27HC/WgaCgb3bRmvLwAkOCz+GRGABB+
+QFse8hdYw5qnDaKI5dSumbeOTe+d4TkRKOu+s8d3qr2Cct/f2Hb4avG8FVjOiNms
+lCnUr78siu2CRg95MrCsbPToC9MQrUaXjl9MZmGTAj4oE5kW30x8zgQgu8ZfQ4DU
+KiSYVkA7vKSUgTj8CKQQsrbE2lHLLrfFOWw9VaM4AjEFhGb5YSCTTPnb9hX778lh
+zW5YuCiYJT6j214MrxI1Vd9o0GRSsKCOsIHPPZ7v4ACWLupv4sIz/9G36lzKSHR+
+PhVTonPPDqxvkq4cMXAOEfY7+oCI03Kk0ilx5ndT/mWCNDnSTkRcYmSoZhkJtoRp
+klbjC2YKwlgv4iCKBOHhmjnkDmgeAn8Pa4BJA+Kcio/rxx5L6PIStvJ2BPm+LUn4
+JcIDn7MIW18HK2hPhwYv8xM3KDF9VqYJ/0NqPIXIP8eOuubV2Os=
+=m4QC
+-----END PGP SIGNATURE-----
+
+--otMN8fDUrbC6X6ca--
