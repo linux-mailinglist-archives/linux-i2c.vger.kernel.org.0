@@ -2,88 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9968616AA5
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Nov 2022 18:27:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28962616AAC
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Nov 2022 18:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbiKBR10 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Nov 2022 13:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
+        id S230337AbiKBR2R (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Nov 2022 13:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiKBR1Y (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Nov 2022 13:27:24 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7A42AE3C;
-        Wed,  2 Nov 2022 10:27:24 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id v81so11214581oie.5;
-        Wed, 02 Nov 2022 10:27:24 -0700 (PDT)
+        with ESMTP id S229912AbiKBR2R (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Nov 2022 13:28:17 -0400
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAE32B61C;
+        Wed,  2 Nov 2022 10:28:16 -0700 (PDT)
+Received: by mail-ot1-f42.google.com with SMTP id cn2-20020a056830658200b0066c74617e3dso1705261otb.2;
+        Wed, 02 Nov 2022 10:28:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ifRIrN2+L2LydC7Ca35u4u1RwYmqQ9szqpTS0BaJOwE=;
-        b=wtFreRAwHjMySS8BQTRlqyWWrXtPrfAamO38TbZQOkp27ebHqGJwJyqPUxfTa4/Fa2
-         10YlXhhIR/WgyIDnbRzHHaZaksJDQ/g4PsIE4ImnNo5iNS4KIpvjXrPd9L+MLhbk70Bb
-         P/uqDsUlAp+0yErjJGC5LQbpWELpoNakFUBLODXGhBUcGafFTtJZYfn4f/NVKohPtwhh
-         0OfXIniAUr+/w47VjpRiVbvux1QSAPjVdW3tjfqMqDeEr9BPW2eX5dSDJxhG1xH8WM+r
-         +hrLzjVavHouuVVMVCHYFTOeRfxzwol95TKL21YgDrdDYJqTC69MtwaLEmb8l97NKhKW
-         yijQ==
-X-Gm-Message-State: ACrzQf3LjJVsswsWFs8AmOcBsO4Zt8skGvdFPetjrLJga3UcitAiiE7L
-        eRNrh8hzaH9VxQWH8o9L5w==
-X-Google-Smtp-Source: AMsMyM7xrCBK0w336R2YqOXPF4takiYgAsBY+jVtwpcJgFYPp2ZdiQg4Ai6Rfwwd4fC6K/LGdGt8Eg==
-X-Received: by 2002:a05:6808:308d:b0:355:4f60:c9c6 with SMTP id bl13-20020a056808308d00b003554f60c9c6mr22737474oib.101.1667410043534;
-        Wed, 02 Nov 2022 10:27:23 -0700 (PDT)
+        bh=JqCzEBWHfRJKOVrjvRDrbpehwYKjEu0v5b3GqzN9jbU=;
+        b=1DqiHCessvZuNXokZcHprBNqBeedomKueF6ueAZelHMZIrYBVwziD153/gdBtp4Xgm
+         Kbx74zCcuX/VN2aJ5S2LvCBw4TgbWshSWuDBksyQtTsUNqQOLui3HwB7OU6W05IWvOdF
+         P6B7SSzoToOaD4+0KwUba/eBLlUDOiExhl1IeDQGIVl2jo5kG/sqVriVDAjL/VTMj0qJ
+         qveLC1UQ5GBGRGKwwgpFhDcsKSFay5hYDOigcxaDD998c9IDophnaKU9/OnhfD2/OpMt
+         LZFYBWPQUyaW51haqNPnBmXmiHzvi4WdDgEn0wE9LuzqJvPJUKmuT7y/uBy0bX5qZSxJ
+         7KWQ==
+X-Gm-Message-State: ACrzQf1W6nUGDLh/gynmFKP4f56g9KTMlhAjmcDwBb3wsGExVLnpN2W5
+        DkmUSZIUc11SC41iKPE7jg==
+X-Google-Smtp-Source: AMsMyM6GK0UM0orWhB2cZizHEHkBZ7CzAtASvxOwDdQDkf6h4WUzpMgdMQjvG7jVc/7eozWfC80ggA==
+X-Received: by 2002:a05:6830:1151:b0:66c:64d6:4907 with SMTP id x17-20020a056830115100b0066c64d64907mr6315886otq.43.1667410095758;
+        Wed, 02 Nov 2022 10:28:15 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t24-20020a4ac898000000b0049b17794d19sm3436776ooq.20.2022.11.02.10.27.22
+        by smtp.gmail.com with ESMTPSA id z2-20020a9d65c2000000b00661946468c6sm5169404oth.31.2022.11.02.10.28.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 10:27:23 -0700 (PDT)
-Received: (nullmailer pid 4190109 invoked by uid 1000);
-        Wed, 02 Nov 2022 17:27:24 -0000
-Date:   Wed, 2 Nov 2022 12:27:24 -0500
+        Wed, 02 Nov 2022 10:28:15 -0700 (PDT)
+Received: (nullmailer pid 4191359 invoked by uid 1000);
+        Wed, 02 Nov 2022 17:28:17 -0000
+Date:   Wed, 2 Nov 2022 12:28:17 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        satish.nagireddy@getcruise.com
-Subject: Re: [PATCH v4 4/8] dt-bindings: media: add bindings for TI DS90UB913
-Message-ID: <20221102172724.GA4189270-robh@kernel.org>
-References: <20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com>
- <20221101132032.1542416-5-tomi.valkeinen@ideasonboard.com>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Samuel Holland <samuel@sholland.org>, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Icenowy Zheng <uwu@icenowy.me>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        linux-i2c@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 3/9] dt-bindings: i2c: mv64xxx: Add F1C100s compatible
+ string
+Message-ID: <166741009657.4191304.7658814383312560291.robh@kernel.org>
+References: <20221101141658.3631342-1-andre.przywara@arm.com>
+ <20221101141658.3631342-4-andre.przywara@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221101132032.1542416-5-tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20221101141658.3631342-4-andre.przywara@arm.com>
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 03:20:28PM +0200, Tomi Valkeinen wrote:
-> Add DT bindings for TI DS90UB913 FPDLink-3 Serializer.
+
+On Tue, 01 Nov 2022 14:16:52 +0000, Andre Przywara wrote:
+> The I2C controller IP used in the Allwinner F1C100s series of SoCs is
+> compatible with the ones used in the other Allwinner SoCs.
 > 
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> Add an F1C100s specific compatible string to the list of existing names.
+> 
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 > ---
->  .../bindings/media/i2c/ti,ds90ub913.yaml      | 127 ++++++++++++++++++
->  1 file changed, 127 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
+>  Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Similar comments for this one.
-
-Rob
+Acked-by: Rob Herring <robh@kernel.org>
