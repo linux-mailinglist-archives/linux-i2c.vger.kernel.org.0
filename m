@@ -2,62 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F943616109
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Nov 2022 11:39:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D250616367
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Nov 2022 14:11:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbiKBKjr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Nov 2022 06:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52768 "EHLO
+        id S229962AbiKBNLi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Nov 2022 09:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbiKBKjP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Nov 2022 06:39:15 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB741EEEF
-        for <linux-i2c@vger.kernel.org>; Wed,  2 Nov 2022 03:38:35 -0700 (PDT)
+        with ESMTP id S229531AbiKBNLh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Nov 2022 09:11:37 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04ADC28E1D
+        for <linux-i2c@vger.kernel.org>; Wed,  2 Nov 2022 06:11:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667385515; x=1698921515;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T1pDV4XFUuPAQGKVPw3p7kJlEnGmARJYl4V0o6crXNk=;
-  b=OZyVLAI6/xug1Lu9IlK1pbTG5e9uA7nznZHcLk8kOTdFSFJXrw2ISy89
-   EXGVVHzZrPIa0+TicmWMM3uORDkOTlse5iyDBP0zUFKIg3lu32exMbgPX
-   CKC8ADfuZc+TRofSnNCmf32VS77zkF4rKwiSE5L+qoUxarvI2PG9I4VTK
-   /FkLEQPi74QKbVzDGEK8qbc9nkCPpxR9oTySRyZEbgQRA8bDb/1Av+J8A
-   I283elpM75XI6XQVxMECmVWyvh8z34fvOo3mRkBNQldkYPGwpgA0k4tvz
-   sejdnHDFfA4AQqQvzshdfGTtmHVnx77K+kkPd4SR19X5+n3hKe6z8r6EM
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="292683475"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="292683475"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 03:38:35 -0700
+  t=1667394696; x=1698930696;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TpBSyoB3CzN6KiwqNR1iDCjwnfKSzaaYSJW1935I1kk=;
+  b=JZ3qwO/Croq5aT5Y+TYXE045jhtmzAlAbxOagePqUJMhg3XcGwVbldh9
+   evH0O4eU5fOCGxx5KzGZJdt7hMjzkW4qjwr52kGizRj1gnwNGFA/25IwQ
+   NeurB1Oi8G+7JI/eex9/7Bkd5vqC2HDKq7EIXpjtZba/sQdtNwIpCOKqp
+   jRGV9PzI6U69WK7avBBnhW6H5cMtzqe8jdIR6YGN6wMMNifjlknfyNLNa
+   WZVAhsJ52W2TZHUdyFTkPNGj/F8rEvDC5dBf0A1mSS6oOyQp6RBZKtiiz
+   RP2kQkV9Ob6K+drKDOaTbQmhnTSDLO3nPmVQo2oEpfyZZfCVTa1UvJfGR
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="310507663"
+X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
+   d="scan'208";a="310507663"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 06:11:31 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="667532353"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="667532353"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 02 Nov 2022 03:38:33 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oqB8h-0068FB-2K;
-        Wed, 02 Nov 2022 12:38:31 +0200
-Date:   Wed, 2 Nov 2022 12:38:31 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-i2c@vger.kernel.org, Yicong Yang <yangyicong@hisilicon.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH] Documentation: devres: add missing I2C helper
-Message-ID: <Y2JIpwqDinm5N1T2@smile.fi.intel.com>
-References: <20221102034053.1708845-1-yangyingliang@huawei.com>
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="612234696"
+X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
+   d="scan'208";a="612234696"
+Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.68])
+  by orsmga006.jf.intel.com with ESMTP; 02 Nov 2022 06:11:28 -0700
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Michael Wu <michael.wu@vatics.com>, Tian Ye <tianye@sugon.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: [PATCH v2 00/12] i2c: designware: Slave fixes and generic cleanups
+Date:   Wed,  2 Nov 2022 15:11:13 +0200
+Message-Id: <20221102131125.421512-1-jarkko.nikula@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102034053.1708845-1-yangyingliang@huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,45 +62,45 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 11:40:53AM +0800, Yang Yingliang wrote:
-> Add missing devm_i2c_add_adapter() to devres.rst. It's introduced by
-> commit 07740c92ae57 ("i2c: core: add managed function for adding i2c
-> adapters").
+Hi
 
-Okay,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Version 2 of the patchset I sent last week:
+https://www.spinics.net/lists/linux-i2c/msg58933.html
 
-> Fixes: 07740c92ae57 ("i2c: core: add managed function for adding i2c adapters")
-> Cc: Yicong Yang <yangyicong@hisilicon.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Dmitry Osipenko <digetx@gmail.com>
-> Cc: Wolfram Sang <wsa@kernel.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
+Changes address the comments Andy made and is rebased on top of current
+i2c/for-next.
 
-Next time, please use --cc when sending patches, instead of Cc'ing explicitly
-in the body of the message. The rationale is that we have this email in the
-archives anyway and every additional byte in the commit message is a waste of
-resources (storage, energy and as a result not so environment friendly).
+Luis Oliveira is not Cc'ed since I forgot his address is no longer working.
 
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  Documentation/driver-api/driver-model/devres.rst | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
-> index 853396d19419..ec97261530da 100644
-> --- a/Documentation/driver-api/driver-model/devres.rst
-> +++ b/Documentation/driver-api/driver-model/devres.rst
-> @@ -280,6 +280,7 @@ GPIO
->  
->  I2C
->    devm_i2c_new_dummy_device()
-> +  devm_i2c_add_adapter()
+Changes:
+- Patch 07/12 is using GENMASK(31, 0) instead of ~0
+- Patch 10/12 Two leftovers from v1 removed and updated commit log
+- Patch 11/12 Removed accidental "struct i2c_bus_recovery_info rinfo" missalign
+- Patch 12/12 New patch commenting ASCII values of register value constants
 
-Perhaps keep this list ordered?
+Jarkko Nikula (12):
+  i2c: designware: Fix slave state machine for sequential reads
+  i2c: designware: Empty receive FIFO in slave interrupt handler
+  i2c: designware: Define software status flags with BIT()
+  i2c: designware: Remove needless initializations from
+    i2c_dw_reg_slave()
+  i2c: designware: Remove unused completion code from
+    i2c-designware-slave
+  i2c: designware: Simplify slave interrupt handler nesting
+  i2c: designware: Do not process interrupt when device is suspended
+  i2c: designware: Move debug print in i2c_dw_isr()
+  i2c: designware: Simplify master interrupt handler nesting
+  i2c: designware: Remove common i2c_dw_disable_int()
+  i2c: designware: Align defines in i2c-designware-core.h
+  i2c: designware: Add comment to custom register value constants
 
+ drivers/i2c/busses/i2c-designware-common.c |   5 -
+ drivers/i2c/busses/i2c-designware-core.h   | 235 ++++++++++-----------
+ drivers/i2c/busses/i2c-designware-master.c |  44 ++--
+ drivers/i2c/busses/i2c-designware-slave.c  |  77 +++----
+ 4 files changed, 163 insertions(+), 198 deletions(-)
+
+base-commit: d28187f693ac5222d3b30955415143cd8e3b5edf
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.35.1
 
