@@ -2,125 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E25617C8D
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Nov 2022 13:32:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 280A361827F
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Nov 2022 16:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbiKCMcL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Nov 2022 08:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
+        id S232055AbiKCPWY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 3 Nov 2022 11:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiKCMcK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Nov 2022 08:32:10 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A475D2C2;
-        Thu,  3 Nov 2022 05:32:09 -0700 (PDT)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 52556589;
-        Thu,  3 Nov 2022 13:32:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1667478726;
-        bh=FZxcUfj1FmCWOBQW7K09YPCKFrtHQ2cMQSFNaoj6FhU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fF+7EjKN0Av9s26q97YDm4yoKHJQ/b2KSUv1HNYppzCjQndL7NG8rqpqAbu44t1Eu
-         q77HPEAbiynZzKAeVrrX4kBF8wYC3zJHpBiY2fSno6/UznCwqHDM+wr+tSnLs+mDHl
-         otr+xHruNmFQfH5w/zH+WJtnUsj1nwaiuDD1oYhI=
-Message-ID: <8360ac8f-64aa-9edd-a110-903e734739f3@ideasonboard.com>
-Date:   Thu, 3 Nov 2022 14:32:02 +0200
+        with ESMTP id S231796AbiKCPWX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Nov 2022 11:22:23 -0400
+Received: from mail.inka.de (mail.inka.de [IPv6:2a04:c9c7:0:1073:217:a4ff:fe3b:e77c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3242AD6;
+        Thu,  3 Nov 2022 08:22:22 -0700 (PDT)
+Received: from mail3.berkhan-weisser.de ([2a03:4000:54:b9a::4])
+        by mail.inka.de with esmtpsa 
+        id 1oqc2r-005OkF-4U; Thu, 03 Nov 2022 16:22:17 +0100
+Received: from 127.0.0.1 (helo=localhost.localdomain)
+        by mail3.berkhan-weisser.de with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <Enrik.Berkhan@inka.de>)
+        id 1oqc2q-0056qL-Hz; Thu, 03 Nov 2022 16:22:16 +0100
+Message-ID: <cc8a0aa304a15fbdf2f433f98c645b7e962450f1.camel@inka.de>
+Subject: Re: NULL pointer dereferences in hid-mcp2221
+From:   Enrik Berkhan <Enrik.Berkhan@inka.de>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     Sven =?ISO-8859-1?Q?Z=FChlsdorf?= <sven.zuehlsdorf@vigem.de>,
+        Rishi Gupta <gupt21@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 03 Nov 2022 16:22:15 +0100
+In-Reply-To: <20221103121645.jott66kltaz6bljq@mail.corp.redhat.com>
+References: <79152feb-bcbc-9e3e-e776-13170ae4ef40@vigem.de>
+         <caa425d9-e3a2-3764-6191-b308d94ac549@infradead.org>
+         <20221103121645.jott66kltaz6bljq@mail.corp.redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4 3/8] dt-bindings: media: add bindings for TI DS90UB960
-Content-Language: en-US
-To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        "satish.nagireddy@getcruise.com" <satish.nagireddy@getcruise.com>
-References: <20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com>
- <20221101132032.1542416-4-tomi.valkeinen@ideasonboard.com>
- <20221102172630.GA4140587-robh@kernel.org>
- <6c254d5f-9fa1-b06a-4edb-7e58e4b33101@ideasonboard.com>
- <fb9e9d5e-9c8b-1ce2-5723-efa498d1ba93@fi.rohmeurope.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <fb9e9d5e-9c8b-1ce2-5723-efa498d1ba93@fi.rohmeurope.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 03/11/2022 14:13, Vaittinen, Matti wrote:
-> On 11/3/22 13:50, Tomi Valkeinen wrote:
->> Hi Rob,
->>
->> On 02/11/2022 19:26, Rob Herring wrote:
->>> On Tue, Nov 01, 2022 at 03:20:27PM +0200, Tomi Valkeinen wrote:
->>>> +
->>>> +  i2c-alias-pool:
->>>
->>> Something common or could be? If not, then needs a vendor prefix.
->>
->> I'll have to think about this. It is related to the i2c-atr, so I think
->> it might be a common thing.
+On Thu, 2022-11-03 at 13:16 +0100, Benjamin Tissoires wrote:
+> On Nov 02 2022, Randy Dunlap wrote:
+> > Hi--
+> > 
+> > [adding linux-input mailing list]
+> > 
+> > On 10/25/22 00:39, Sven Zühlsdorf wrote:
+> > > Hi,
+> > > 
+> > > I've run into two NULL pointer dereferences when loading the MCP2221 driver.
+> > > Initially I observed them running the kernel used by yocto kirkstone
+> > > (currently 5.15.68) but can reproduce them with a vanilla 6.1-rc1 as well.
+> > > All line numbers below are for hid-mcp2221.c, taken from 6.1-rc1.
+> > > 
+> > > The first one was easy to identify, in mcp2221_probe line 874 `hdev->hidraw`
+> > > was NULL since I compiled the kernel without CONFIG_HIDRAW enabled. Should
+> > > CONFIG_HID_MCP2221 perhaps depend on or imply CONFIG_HIDRAW?
+> > 
+> > Looks to me like it should. Hopefully the HID people can chime in here.
 > 
-> I'd say this should be common. Where the i2c-atr properties should live
-> is another question though. If the I2C-atr stays as a genericly usable
-> component - then these bindings should be in a file that can be
-> referenced by other I2C-atr users (like the UB960 here).
-
-Yep. All the links, link, serializer and alias nodes/properties are new 
-things here, and I guess these could be used by other deser-ser systems. 
-That said, I don't have any experience with other systems.
-
-> // snip
+> I actually don't see why this driver (and hid-cp2112.c FWIW) should
+> depend on hidraw. To me, the reference to hidraw is just a nicer logging
+> message, but I have a hard time understanding how hidraw should be
+> involved in the driver, and if it were, how it could not break
+> everything.
 > 
->>>> +
->>>> +          i2c-alias:
->>>
->>> Vendor prefix.
->>>
->>>> +            description: |
->>>> +              The i2c address used for the serializer. Transactions
->>>> to this
->>>> +              address on the i2c bus where the deserializer resides are
->>>> +              forwarded to the serializer.
->>>> +
->>>> +          rx-mode:
->>>
->>> Vendor prefix. And so on... >
->> Yes, I totally missed these.
-> 
-> 
-> I think the i2c-alias might need to be common as well?
+> So IMO, we should probably change that line from the 2 drivers and
+> replace the hidraw part with the hid->id number which is unique.
 
-Perhaps...
+Exactly. See also
+https://lore.kernel.org/linux-input/20220926202239.16379-2-Enrik.Berkhan@inka.de/
 
-I was also thinking that the serializer addresses could be taken from 
-the i2c-alias-pool. But maybe that's not a good idea, as the 
-serializer-access and remote-peripheral-access are a bit different (e.g. 
-no ATR when accessing the serializer).
+Cheers,
+Enrik
 
-And I was thinking that, at least here, the alias addresses can be 
-"anything", so they could be reserved dynamically at runtime, without 
-any predefined aliases. But that might be a bit confusing to the user.
 
-  Tomi
 
