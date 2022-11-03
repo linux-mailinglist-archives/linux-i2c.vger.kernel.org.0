@@ -2,91 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4C26178AF
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Nov 2022 09:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2E8617908
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Nov 2022 09:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbiKCI2Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Nov 2022 04:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38938 "EHLO
+        id S229461AbiKCIsl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Nov 2022 04:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiKCI2W (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Nov 2022 04:28:22 -0400
-X-Greylist: delayed 1215 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 03 Nov 2022 01:28:14 PDT
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3653B484;
-        Thu,  3 Nov 2022 01:28:14 -0700 (PDT)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4N2xj73PC0z4xVnd;
-        Thu,  3 Nov 2022 16:28:11 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl1.zte.com.cn with SMTP id 2A38S1gO039712;
-        Thu, 3 Nov 2022 16:28:01 +0800 (+08)
-        (envelope-from zhang.songyi@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 3 Nov 2022 16:28:03 +0800 (CST)
-Date:   Thu, 3 Nov 2022 16:28:03 +0800 (CST)
-X-Zmail-TransId: 2af963637b9327ebcee2
-X-Mailer: Zmail v1.0
-Message-ID: <202211031628039654230@zte.com.cn>
-Mime-Version: 1.0
-From:   <zhang.songyi@zte.com.cn>
-To:     <avifishman70@gmail.com>
-Cc:     <tmaimon77@gmail.com>, <tali.perry1@gmail.com>,
-        <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <openbmc@lists.ozlabs.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zhang.songyi@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIGkyYzogbnBjbTd4eDogcmVtb3ZlIHJlZHVuZGFudCByZXQgdmFyaWFibGU=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2A38S1gO039712
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63637B9B.000 by FangMail milter!
-X-FangMail-Envelope: 1667464091/4N2xj73PC0z4xVnd/63637B9B.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<zhang.songyi@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63637B9B.000/4N2xj73PC0z4xVnd
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S230002AbiKCIsj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Nov 2022 04:48:39 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E492728
+        for <linux-i2c@vger.kernel.org>; Thu,  3 Nov 2022 01:48:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667465319; x=1699001319;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iDXwCFOjmqXnonPIY48ZRzbTIgQFuk3z80KogL6V5wM=;
+  b=UjR6aOCXcIWUosCYFhgXGA6cMbyaKU+1tjOjO/MA4iO33UHN+r4T2Khv
+   R/98rSUDK0M0ZtU8tzwCbq4vLd1kj0QytZ36ZseE97f+cdRUNzHxXGTAw
+   0nfnELeBROXoy2Kz6H9oWgwh8m5QVx4a0FERFUP96IsUsy78CS0zvM9ki
+   YelbhKUtr5cn+2XKa5AUfHO5GtsVgxPmjKWjAMAxNW6jaqWUdmDbwQZq5
+   O/llvNFQDNIDngiqjkoRqJH3YhYO1zfF+2BhaWVmAGzhhU01BidNRT59n
+   ID61nzGu3mC3d0TsmHwq9KKi2gPNMT5QqOBFPitg8rOdHf0fY0uci5RJJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="310740059"
+X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
+   d="scan'208";a="310740059"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 01:48:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="723863591"
+X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
+   d="scan'208";a="723863591"
+Received: from mylly.fi.intel.com (HELO [10.237.72.68]) ([10.237.72.68])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Nov 2022 01:48:36 -0700
+Message-ID: <ba33ef90-fe7b-7553-19ac-d89835ed3583@linux.intel.com>
+Date:   Thu, 3 Nov 2022 10:48:35 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.0
+Subject: Re: [PATCH v2 12/12] i2c: designware: Add comment to custom register
+ value constants
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Michael Wu <michael.wu@vatics.com>, Tian Ye <tianye@sugon.com>
+References: <20221102131125.421512-1-jarkko.nikula@linux.intel.com>
+ <20221102131125.421512-13-jarkko.nikula@linux.intel.com>
+ <Y2KAteiXN87LZ72v@smile.fi.intel.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <Y2KAteiXN87LZ72v@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: zhang songyi <zhang.songyi@zte.com.cn>
+On 11/2/22 16:37, Andy Shevchenko wrote:
+> On Wed, Nov 02, 2022 at 03:11:25PM +0200, Jarkko Nikula wrote:
+>> DW_IC_COMP_VERSION register contains the ASCII representation of the
+>> Synopsys component version followed by '*'. Here 0x3131312A == "111*"
+>> means version 1.11 is required for DW_IC_SDA_HOLD register availability.
+> 
+> The '*' means "any letter, starting from a", so I would put it as 1.11a.
+> And perhaps explain that the fourth character meaning.
+> This will be in align with their datasheets.
+> 
+Sadly a few Synopsys datasheets I have don't much explain this or refer 
+to AMBA release notes so I don't want to carve things I don't know in stone.
 
-Return value from npcm_i2c_get_slave_addr() directly instead of taking
-this in another redundant variable.
+Jarkko
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
----
- drivers/i2c/busses/i2c-npcm7xx.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index bbc7359e67f7..772967862003 100644
---- a/drivers/i2c/busses/i2c-npcm7xx.c
-+++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -858,14 +858,10 @@ static void npcm_i2c_master_abort(struct npcm_i2c *bus)
- #if IS_ENABLED(CONFIG_I2C_SLAVE)
- static u8 npcm_i2c_get_slave_addr(struct npcm_i2c *bus, enum i2c_addr addr_type)
- {
--   u8 slave_add;
--
-    if (addr_type > I2C_SLAVE_ADDR2 && addr_type <= I2C_SLAVE_ADDR10)
-        dev_err(bus->dev, "get slave: try to use more than 2 SA not supported\n");
-
--   slave_add = ioread8(bus->reg + npcm_i2caddr[(int)addr_type]);
--
--   return slave_add;
-+   return ioread8(bus->reg + npcm_i2caddr[(int)addr_type]);
- }
-
- static int npcm_i2c_remove_slave_addr(struct npcm_i2c *bus, u8 slave_add)
---
-2.15.2
