@@ -2,116 +2,132 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF68E619EB4
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Nov 2022 18:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7D861A3F2
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Nov 2022 23:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiKDR13 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Nov 2022 13:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
+        id S229501AbiKDWPF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Nov 2022 18:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbiKDR11 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Nov 2022 13:27:27 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED496330;
-        Fri,  4 Nov 2022 10:27:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667582845; x=1699118845;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dBDcCJRwsummNA5htuNbi6RZrV/KMkAr0IeBNTIJUhs=;
-  b=kYDX2E07rtBsF4y577qydZ5Z34cXtzpyR7oxRMO0QiSxJanVIEuwQBcS
-   hwUMPjuXurljUQnkPqfjg5XlATbypKH7WYw5PHC+4lF/Dn8VOh+UwJHp7
-   4Qg+YP+rDB7+e6cCXrSkmpGa46VaJClwjHu7hB6VXJ5FUmqIcVf6VDoKI
-   KDmoL8yB/KDe/HAlUeP84JXIx8lxumPPXAzhPmt9YwUFhT6yYO0eybd2W
-   NBWXS8GF9iJbiG0QgeU3qglCBP7bJZ5oEs6lW8iAU7h2+/H1cN1RONnvP
-   GoNazdi3uyN8nO1Nr0/goEdmZn+q1+DaGlmc34y+KNCNKqQHujPBhoxkU
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="290412411"
-X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
-   d="scan'208";a="290412411"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 10:27:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="637658417"
-X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
-   d="scan'208";a="637658417"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Nov 2022 10:27:21 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1or0TO-007T4G-0C;
-        Fri, 04 Nov 2022 19:27:18 +0200
-Date:   Fri, 4 Nov 2022 19:27:17 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        with ESMTP id S229471AbiKDWPD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Nov 2022 18:15:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E687429B8;
+        Fri,  4 Nov 2022 15:15:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F17DB82FEE;
+        Fri,  4 Nov 2022 22:15:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 852B9C433D6;
+        Fri,  4 Nov 2022 22:14:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667600099;
+        bh=VW01bpiXVfIVafA9jeg060doi/YZQLDtAjzAykTx6pg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rAVJHTFAB/bRW5KGdrcKyJhDpq2OJOLf3a/niAC7RHG8ybFJlw/2RPnddKcz/gXi+
+         Mn6cHNrUliVeBEf/jcUlbD+f078UrF+Mybvk/bnJCEwNZ10UWBEpfQelIs9ggITPO1
+         JoixC/7hIx6B7KDCap3MbrcMqexCsdjstt5dyfMryTIUL7WnYHYRAak2rj/uWjWrfo
+         Z9b9VrTtNlGVkf0oRar5CWy7DL4BULsCJpKLKkgoA7e/D7tdN0bYs9Q4TcGe8I5rC+
+         EWDr52d2V2/unJ+/pfPAk5razHBRXP6gpHsZmjMtX1/x0sul0FBeK0pPFOkP5uqqIc
+         YRiuVLSvysbyw==
+Date:   Fri, 4 Nov 2022 23:14:46 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Peter Rosin <peda@axentia.se>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        satish.nagireddy@getcruise.com
-Subject: Re: [PATCH v4 2/8] i2c: add I2C Address Translator (ATR) support
-Message-ID: <Y2VLddPpfjJd/yN2@smile.fi.intel.com>
-References: <20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com>
- <20221101132032.1542416-3-tomi.valkeinen@ideasonboard.com>
- <Y2EtnSNqBOfGRDMO@smile.fi.intel.com>
- <cc510516-c961-9efb-bcdf-2abea795433a@ideasonboard.com>
- <Y2UH0Wqp6R52tObC@smile.fi.intel.com>
- <c0f0a5a3-c4bd-97e2-2047-da33bd896310@ideasonboard.com>
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c-for-6.1-rc4
+Message-ID: <Y2WO1gSIY9CjCIU0@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8wePXC1RGaGDKgPM"
 Content-Disposition: inline
-In-Reply-To: <c0f0a5a3-c4bd-97e2-2047-da33bd896310@ideasonboard.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 05:26:24PM +0200, Tomi Valkeinen wrote:
-> On 04/11/2022 14:38, Andy Shevchenko wrote:
-> > On Fri, Nov 04, 2022 at 01:59:06PM +0200, Tomi Valkeinen wrote:
-> > > On 01/11/2022 16:30, Andy Shevchenko wrote:
-> > > > On Tue, Nov 01, 2022 at 03:20:26PM +0200, Tomi Valkeinen wrote:
 
-...
+--8wePXC1RGaGDKgPM
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > > > +	WARN(sysfs_create_link(&chan->adap.dev.kobj, &dev->kobj, "atr_device"),
-> > > > > +	     "can't create symlink to atr device\n");
-> > > > > +	WARN(sysfs_create_link(&dev->kobj, &chan->adap.dev.kobj, symlink_name),
-> > > > > +	     "can't create symlink for channel %u\n", chan_id);
-> > > > 
-> > > > Why WARNs? sysfs has already some in their implementation.
-> > > 
-> > > True, and I can drop these if required. But afaics, sysfs_create_link only
-> > > warns if there's a duplicate entry, not for other errors.
-> > 
-> > The problem with WARN that it can be easily converted to real Oops. Do you
-> > consider other errors are so fatal that machine would need a reboot?
-> 
-> Yes, WARNs are bad, especially as the error here is not critical. I'll
-> change these to dev_warn(). (also, I didn't know WARN could be made to
-> oops).
+The following changes since commit 30a0b95b1335e12efef89dd78518ed3e4a71a763:
 
-panic_on_warn
+  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
 
--- 
-With Best Regards,
-Andy Shevchenko
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-=
+6.1-rc4
+
+for you to fetch changes up to 8e987f1f4da92d9f1dd020418bfab9fe04b1c54c:
+
+  Documentation: devres: add missing I2C helper (2022-11-02 21:16:38 +0100)
+
+----------------------------------------------------------------
+A documentation fix and driver fixes for piix4, tegra, and i801
+
+----------------------------------------------------------------
+Chen Zhongjin (1):
+      i2c: piix4: Fix adapter not be removed in piix4_remove()
+
+Nam Cao (1):
+      i2c: i801: add lis3lv02d's I2C address for Vostro 5568
+
+Thierry Reding (1):
+      i2c: tegra: Allocate DMA memory for DMA engine
+
+Yang Yingliang (1):
+      Documentation: devres: add missing I2C helper
 
 
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      (Rev.) Documentation: devres: add missing I2C helper
+
+Jean Delvare (2):
+      (Rev.) i2c: i801: add lis3lv02d's I2C address for Vostro 5568
+      (Rev.) i2c: piix4: Fix adapter not be removed in piix4_remove()
+
+Pali Roh=C3=A1r (1):
+      (Rev.) i2c: i801: add lis3lv02d's I2C address for Vostro 5568
+
+ Documentation/driver-api/driver-model/devres.rst |  1 +
+ drivers/i2c/busses/i2c-i801.c                    |  1 +
+ drivers/i2c/busses/i2c-piix4.c                   |  1 +
+ drivers/i2c/busses/i2c-tegra.c                   | 16 ++++++++++------
+ 4 files changed, 13 insertions(+), 6 deletions(-)
+
+--8wePXC1RGaGDKgPM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNljtYACgkQFA3kzBSg
+KbZeWQ/8D7f5Ma5DmuMdQwOIf6QpB+nVc/DSb7hW7lXnT1ACyEkbeTQNOMfWBib3
+eq24QwagwG6SRl3IYB7LT2PdKdFJBTP1Hu5khpBfP1d1sYjY56LtwpUOkVFAmWpa
+mUar+eQpZAkgAnetUnUlO+8Hs8E2KyF0UlBBbVC6khbob9dw5Mxp77+gi8OHSoAW
+XP2wvSGSenR+8IRt/QM+CZrWbr1gbFyD02d8HMfy4NRNqeSbxR0ol9JeRGviFjKM
+lFVwdVjAwLqPRKl5bHKoGpzgtE9RLKi/GHw7UAKl5ePUTDOkQBEVShpSnmvKIUci
+3lZuwaYMR84ieavtXcHcTNRw1nMdVA6H5L8PWCOrVOnZtcIKO0kzD0VKu9E2SQFo
+xwVBzZGBZYO2LX1T9XFwo7HEwJ5UtqE1Sw0NnG9EeJ0ZTXaz+9M8lsOjYdzmSty1
+7OjUaOTBBvXOy2WCFJtD2rozO1MQq+GQ4kX99UnB5OzW89KaPXfbRwUVWGcosD6q
+/5+TKgdS62uDItRDWrZdiCPNe2cFfeu/Tr7pKbPlYLBnnfExWf18w7W+sk/PMOPM
+E+bHxTZXVpGRVLyUsiMqfa19Xwevlc/M4kbOBmIvTWGgzOwshuQ0jAMONvikgKO3
+XXaSymMZ06I+sr+75/KjqwFkmpFxQ3jVUk26PkwHTIPmcXVXW/c=
+=uPJy
+-----END PGP SIGNATURE-----
+
+--8wePXC1RGaGDKgPM--
