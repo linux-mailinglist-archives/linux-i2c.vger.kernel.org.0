@@ -2,55 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B27061DB41
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Nov 2022 15:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A9861DB45
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Nov 2022 15:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiKEO5N (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 5 Nov 2022 10:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
+        id S229563AbiKEO6n (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 5 Nov 2022 10:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKEO5K (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Nov 2022 10:57:10 -0400
+        with ESMTP id S229517AbiKEO6l (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Nov 2022 10:58:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFEFFAF8;
-        Sat,  5 Nov 2022 07:57:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CD01055A;
+        Sat,  5 Nov 2022 07:58:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4DD760B4A;
-        Sat,  5 Nov 2022 14:57:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57961C433D6;
-        Sat,  5 Nov 2022 14:57:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2DEA60B4A;
+        Sat,  5 Nov 2022 14:58:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5442AC433D6;
+        Sat,  5 Nov 2022 14:58:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667660229;
-        bh=Fbuihe+e9s4DvLxPwjOmLdWdcE0d20qRMfa+YEg4J1w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Mf9KKQho6QEq9+KQnMW63E5FYIKOG3gj2aKeTKTh50NaF6xOGFbWKK8XQ1Sj93XLj
-         P4eo9ERimzmePpe3zDnIqE2UdNt35AojlmwHYNkYC+nTz1QFUgkkR+QZrJIRIGWSp8
-         1UBXkqKhnULTtpQcPnix5QihQSASTglkB/yhOeiumwbPKqYSUUTyVgTBiWDlaA5k3x
-         CUaH1T/O7mq7COV4sHU5FRCLyRhBHWQCTNPWHPl72ZdJOrXyX7SUapKO7BPmjpa02y
-         x6YM0ngOxWL0DEkEl3FJ2pxam72DJPY3CquUtwdKWrwen9i241enDLvp8C0urS3JLm
-         ZTXh7UMUNmVYA==
-Date:   Sat, 5 Nov 2022 14:56:58 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-iio@vger.kernel.org,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Nuno =?UTF-8?B?U8Oh?= <noname.nuno@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] i2c: core: Introduce i2c_client_get_device_id
- helper
-Message-ID: <20221105145658.45b0e9da@jic23-huawei>
-In-Reply-To: <Y2E0BWyvHjPko2TB@smile.fi.intel.com>
-References: <cover.1667151588.git.ang.iglesiasg@gmail.com>
-        <Y2E0BWyvHjPko2TB@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        s=k20201202; t=1667660320;
+        bh=BKBJM4WxLxtpoTSh2/CeSWgsWM5iS+n0pm4kX6li5xs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=elUfWsElUulpUKUL2DFAnh8XIQtmpACPFi98LDNDtUS3qvfk3HP3gNOhENCVb25ji
+         DecJyr5DRYej95eI6qS7FvlkN+bXXEFJmcXO8PTcPpCo0kjuPfKaTqdYkVoKJGjBd+
+         b3xHnt3iAUrxp/rnyJWyqNVl+jbLXyldbUdXdNBX1wNMwlJpIY9/D49ou7UhLa7P0V
+         HMhjj76kESl8sni5uY4h/yI+TrpWDh1Dp4B1gb0ijvK3oSVIESIdVzRpuMrV0jhUNx
+         QVmaY5LGwCZ06HZUoUXhP4sM35kTxDdhCHzLtFq/sbwONaf3rBa4GgtVHCzlIJEMsm
+         nQref6lhf06/Q==
+Date:   Sat, 5 Nov 2022 20:28:35 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Wayne Chang <waynec@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
+        jonathanh@nvidia.com, thierry.reding@gmail.com,
+        heikki.krogerus@linux.intel.com, ajayg@nvidia.com, kishon@ti.com,
+        p.zabel@pengutronix.de, balbi@kernel.org, mathias.nyman@intel.com,
+        jckuo@nvidia.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        singhanc@nvidia.com, linux-i2c@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 08/11] phy: tegra: xusb: Disable trk clk when not using
+Message-ID: <Y2Z6Gzd3RmmxMaXO@matsya>
+References: <20221024074128.1113554-1-waynec@nvidia.com>
+ <20221024074128.1113554-9-waynec@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024074128.1113554-9-waynec@nvidia.com>
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,55 +60,55 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 1 Nov 2022 16:58:13 +0200
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+On 24-10-22, 15:41, Wayne Chang wrote:
 
-> On Sun, Oct 30, 2022 at 06:51:06PM +0100, Angel Iglesias wrote:
-> > Hello,
-> >=20
-> > I don't want to step anyone's work here, so I'm sending this RFC to the
-> > devs involved in the original discussion. I read on Uwe Kleine-K=C3=B6n=
-ig's
-> > patchset submission thread the necessity for an i2c helper to aid with =
-the
-> > migration to the new i2c_driver .probe_new callback. Following the
-> > suggestions made there, I wrote this small patchset implementing the
-> > suggested helper function and ported the bmp280 IIO i2c probe to the new
-> > probe using that helper. =20
->=20
-> For the entire series (please drop RFC in the next version)
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Consider revision of title to: "Disable trk clk when not in use"
 
-I'm happy to pick up the next version but a question on 'route' in to the k=
-ernel.
+> The change fixes an issue that the pad tracking is a one-time calibration
+> for Tegra186 and Tegra194. We should disable the clk when it is done.
+> The 100us delay is for HW recording the calibration value.
 
-I can do an immutable branch with just the new function call in it if
-that is useful given I assume this is applicable across a bunch of subsyste=
-ms?
+Consider:
 
-Jonathan
+"pad tracking is a one-time calibration for Tegra186 and Tegra194. clk
+should be disabled after calibration.
 
->=20
-> > Thanks for your time!
-> > Angel
-> >=20
-> > Original discussion thread for additional context:
-> > https://lore.kernel.org/all/20221023132302.911644-11-u.kleine-koenig@pe=
-ngutronix.de/
-> >=20
-> > Angel Iglesias (2):
-> >   i2c: core: Introduce i2c_client_get_device_id helper function
-> >   iio: pressure: bmp280: convert to i2c's .probe_new()
-> >=20
-> >  drivers/i2c/i2c-core-base.c       | 15 +++++++++++++++
-> >  drivers/iio/pressure/bmp280-i2c.c |  8 ++++----
-> >  include/linux/i2c.h               |  1 +
-> >  3 files changed, 20 insertions(+), 4 deletions(-)
-> >=20
-> >=20
-> > base-commit: c32793afc6976e170f6ab11ca3750fe94fb3454d
-> > --=20
-> > 2.38.1
-> >  =20
->=20
+Disable clk after claibration.
 
+While at it add 100us delay  HW recording the calibration
+
+> 
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> ---
+>  drivers/phy/tegra/xusb-tegra186.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/phy/tegra/xusb-tegra186.c b/drivers/phy/tegra/xusb-tegra186.c
+> index 0996ede63387..f121b4ffbbfd 100644
+> --- a/drivers/phy/tegra/xusb-tegra186.c
+> +++ b/drivers/phy/tegra/xusb-tegra186.c
+> @@ -609,6 +609,10 @@ static void tegra186_utmi_bias_pad_power_on(struct tegra_xusb_padctl *padctl)
+>  	value &= ~USB2_PD_TRK;
+>  	padctl_writel(padctl, value, XUSB_PADCTL_USB2_BIAS_PAD_CTL1);
+>  
+> +	udelay(100);
+> +
+> +	clk_disable_unprepare(priv->usb2_trk_clk);
+> +
+>  	mutex_unlock(&padctl->lock);
+>  }
+>  
+> @@ -633,8 +637,6 @@ static void tegra186_utmi_bias_pad_power_off(struct tegra_xusb_padctl *padctl)
+>  	value |= USB2_PD_TRK;
+>  	padctl_writel(padctl, value, XUSB_PADCTL_USB2_BIAS_PAD_CTL1);
+>  
+> -	clk_disable_unprepare(priv->usb2_trk_clk);
+> -
+>  	mutex_unlock(&padctl->lock);
+>  }
+>  
+> -- 
+> 2.25.1
+
+-- 
+~Vinod
