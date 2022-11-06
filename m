@@ -2,101 +2,176 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9ECF61DEA0
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Nov 2022 22:34:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B22F61E0CD
+	for <lists+linux-i2c@lfdr.de>; Sun,  6 Nov 2022 09:09:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiKEVe5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 5 Nov 2022 17:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
+        id S229682AbiKFIJ2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 6 Nov 2022 03:09:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKEVe5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Nov 2022 17:34:57 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDE512AD6
-        for <linux-i2c@vger.kernel.org>; Sat,  5 Nov 2022 14:34:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 03F42CE069C
-        for <linux-i2c@vger.kernel.org>; Sat,  5 Nov 2022 21:34:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B67BC433C1;
-        Sat,  5 Nov 2022 21:34:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667684091;
-        bh=PhJ2Z+2481qDm/IulA3p4xG7qykuPuJuxom0/lIcVhw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HPWhuX1eJGA7yY3VJT0pUuU5sLEfKMzpJI24Uxczla6K9F2xDs+sXnrtgnLPlXSHv
-         gv6a3/9gcxr032aJAUjXHW+Y6IyI9mGHyWBY5nynY7/uoYNBB+1gp6ZADwnhXmjgt4
-         GPIblPsN6WLl0wdKnHOmMiHuHuXks+buTsutmUaRcUMLLCMeve3PCf4+QQpKT5qFJK
-         0Zwrp6rsf2J9dSsT3JdKoyqD2emUsip/RAATie8eBskDG7+n9EvjQZP2FOIl1L4f4X
-         MWnu5XM19TN3CXdQt7Cqg5QUl04WopVJuPDaidzd+Th1z0hltLdDy+IG2dw7BWqTs+
-         qSE29tOGqHZJA==
-Date:   Sat, 5 Nov 2022 22:34:43 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
-        shawnguo@kernel.org, s.hauer@pengutronix.de,
-        sumit.semwal@linaro.org, linux-i2c@vger.kernel.org
-Subject: Re: IMX I2C driver and DMA mapping errors
-Message-ID: <Y2bW8+FVc9SaXhUI@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
-        shawnguo@kernel.org, s.hauer@pengutronix.de,
-        sumit.semwal@linaro.org, linux-i2c@vger.kernel.org
-References: <Y2bC2WrixK8EwivW@lunn.ch>
+        with ESMTP id S229737AbiKFIJV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Nov 2022 03:09:21 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFC3EE2A;
+        Sun,  6 Nov 2022 01:09:20 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id bj12so22867170ejb.13;
+        Sun, 06 Nov 2022 01:09:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+pdd8CAL88lzkh5Qvct0XVSbDsIQmPY/9Ujmmsx7WLw=;
+        b=jJ2vI+D6GzRUbKO1+A9EdmeWmj+VTvXG0zWtj5oMtDZjAuHDmet2IUdwRY49GduZhn
+         wgfMg6TOOIdKEnVgv95roCXPG/JVkKvGBIoaogqJhQ+jyatDOCeqJEGifuiOmWY8wdNS
+         xu4HP1Ze42PRAV3ZOJv10o4l3VWBBeygTzVnLfqRW3gOkZN0SLf4QE6ggjCCvmVSPehH
+         B5h5CJyP6KRbCuy9a6piRwMl+4iH315V1v3vTHaVLbpH7yYysSnGRhxltxdDjAsYKeyj
+         9Y2uCmn5kcs3N8us3DjmDrHw0eEEJV2leb3X69VobygyEqm2oXLwjDtxjW+zwa28wBZG
+         nCNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+pdd8CAL88lzkh5Qvct0XVSbDsIQmPY/9Ujmmsx7WLw=;
+        b=bUb2ZeoBuaScJcisLMWt89z9zSwuTOBMcaYdjfPeY4SyhXpBNn+jCG0ldgC4wz926E
+         cjiFwmJ5/FI40eTw0geVCigjvsppamPh6O/fcqkALkjY/L0zMZN9s/PpcyvQ6lTJRghz
+         U9vIBWItNHHoFU4Vxzv32BVWcwPxOr4PLWXjpCkeZ/BO2zAbT6iTbuvORu74rwUG1fOy
+         ODwkYoPb+DBk/qaIkogBl25FzfK95e5v9zv/2rgBFpL8brYCw9cHb0rt9FGyPAlCVRz3
+         YGTxiqhs2VBubItSUU+1W0yAT42FZS64mhZaSVN1nxMr+kEZzz5XfWepdhbzxiahEkSm
+         aPyA==
+X-Gm-Message-State: ACrzQf2HokKCTphzYBFndNkZcYj1j7DdT0tUF69rMZxjkSmV6d1AEKWr
+        ecMjH88qmGNLwwTzUj8wMUI=
+X-Google-Smtp-Source: AMsMyM4aMMJKBTGnjmQIfN3CXpAz5TIsD3tKoMlu9whaRzwl2Mca2l/tdFrbf27c9RaTRmxAXMka/A==
+X-Received: by 2002:a17:907:7e95:b0:78d:e9cf:82c7 with SMTP id qb21-20020a1709077e9500b0078de9cf82c7mr43818369ejc.724.1667722158677;
+        Sun, 06 Nov 2022 01:09:18 -0700 (PDT)
+Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
+        by smtp.gmail.com with ESMTPSA id gv57-20020a1709072bf900b007acd04fcedcsm1835308ejc.46.2022.11.06.01.09.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Nov 2022 01:09:18 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andre Przywara <andre.przywara@arm.com>
+Cc:     devicetree@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        Icenowy Zheng <uwu@icenowy.me>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 4/9] ARM: dts: suniv: f1c100s: add I2C DT nodes
+Date:   Sun, 06 Nov 2022 09:09:17 +0100
+Message-ID: <4223066.ejJDZkT8p0@jernej-laptop>
+In-Reply-To: <20221101141658.3631342-5-andre.przywara@arm.com>
+References: <20221101141658.3631342-1-andre.przywara@arm.com> <20221101141658.3631342-5-andre.przywara@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="AG35fyBHiWXrJVA1"
-Content-Disposition: inline
-In-Reply-To: <Y2bC2WrixK8EwivW@lunn.ch>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Dne torek, 01. november 2022 ob 15:16:53 CET je Andre Przywara napisal(a):
+> The Allwinner F1C100s series of SoCs contain three I2C controllers
+> compatible to the ones used in other Allwinner SoCs.
+> 
+> Add the DT nodes describing the resources of the controllers.
+> I2C1 has only one possible pinmux, so add the pinctrl properties for
+> that already.
+> At least one board connects an on-board I2C chip to PD0/PD12 (I2C0), so
+> include those pins already, to simplify referencing them later.
+> 
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> ---
+>  arch/arm/boot/dts/suniv-f1c100s.dtsi | 50 ++++++++++++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/suniv-f1c100s.dtsi
+> b/arch/arm/boot/dts/suniv-f1c100s.dtsi index d5a6324e76465..2901c586971b4
+> 100644
+> --- a/arch/arm/boot/dts/suniv-f1c100s.dtsi
+> +++ b/arch/arm/boot/dts/suniv-f1c100s.dtsi
+> @@ -166,6 +166,18 @@ mmc0_pins: mmc0-pins {
+>  				drive-strength = <30>;
+>  			};
+> 
+> +			/omit-if-no-ref/
+> +			i2c0_pd_pins: i2c0-pd-pins {
+> +				pins = "PD0", "PD12";
+> +				function = "i2c0";
+> +			};
+> +
+> +			/omit-if-no-ref/
 
---AG35fyBHiWXrJVA1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Above flag is meaningless if i2c1_pins is always referenced by i2c1. Anyway, I 
+see in pinctrl driver that there are actually two possible pin assignments for 
+i2c1. One on port D and another on port B.
+
+Best regards,
+Jernej
+
+> +			i2c1_pins: i2c1-pins {
+> +				pins = "PD5", "PD6";
+> +				function = "i2c1";
+> +			};
+> +
+>  			spi0_pc_pins: spi0-pc-pins {
+>  				pins = "PC0", "PC1", "PC2", 
+"PC3";
+>  				function = "spi0";
+> @@ -177,6 +189,44 @@ uart0_pe_pins: uart0-pe-pins {
+>  			};
+>  		};
+> 
+> +		i2c0: i2c@1c27000 {
+> +			compatible = "allwinner,suniv-f1c100s-i2c",
+> +				     "allwinner,sun6i-a31-i2c";
+> +			reg = <0x01c27000 0x400>;
+> +			interrupts = <7>;
+> +			clocks = <&ccu CLK_BUS_I2C0>;
+> +			resets = <&ccu RST_BUS_I2C0>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		i2c1: i2c@1c27400 {
+> +			compatible = "allwinner,suniv-f1c100s-i2c",
+> +				     "allwinner,sun6i-a31-i2c";
+> +			reg = <0x01c27400 0x400>;
+> +			interrupts = <8>;
+> +			clocks = <&ccu CLK_BUS_I2C1>;
+> +			resets = <&ccu RST_BUS_I2C1>;
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&i2c1_pins>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		i2c2: i2c@1c27800 {
+> +			compatible = "allwinner,suniv-f1c100s-i2c",
+> +				     "allwinner,sun6i-a31-i2c";
+> +			reg = <0x01c27800 0x400>;
+> +			interrupts = <9>;
+> +			clocks = <&ccu CLK_BUS_I2C2>;
+> +			resets = <&ccu RST_BUS_I2C2>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			status = "disabled";
+> +		};
+> +
+>  		timer@1c20c00 {
+>  			compatible = "allwinner,suniv-f1c100s-
+timer";
+>  			reg = <0x01c20c00 0x90>;
 
 
-> I think the I2C client API
-> does not force you to use DMA friendly memory? It is up to the master
-
-Correct, it does not. A lot of drivers do not support DMA still.
-
-> driver to use a bounce buffer if needed?
-
-Exactly.
-
-> https://docs.kernel.org/i2c/dma-considerations.html
-
-This doc mentions I2C core helpers for simple bounce buffers.
 
 
---AG35fyBHiWXrJVA1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNm1vMACgkQFA3kzBSg
-KbbTdw/+MMoAilYRRBYBpKuqOeCFPNH9Dh9nv/otb1Olv/zNir0HUHSM9ws2Z3gl
-wuMSR3HqPWap6UQJ6ncpU7K98cvzE58xIUmFBwojN9eHh9S+kL3jnuQQbTn87+8J
-6Zt7fQJW1azrPZMP8oltqP1IRP0DPsqYPCrQzLPdpAA85NT3TX8imcNKHD4Wfmb4
-ItJzZ1jLhpbLtEt8jahvYOe4iVs8fW8vhoHgRdPVgx1yPExKLGakYSm1Qp2L9uSI
-bNaKtKvhOWWKHA6WDDEZ3EDaM2DB+PQmakYb3ARta+U4o2r8obUKufye2lxwwwE4
-SGzzhGuHEXwtfITsxAGm4c+M7jnNMYZJfWdvlwxEpLCYBTmt566nhMld9o0xr1ce
-A35apagQeBi14MNiNzMTbHXT3nqn+sxFitqQ8Cu5Xb02wLHKdMoLdhD9EfKT9azp
-590LVMR/9W+fZGEMlzlsndiNYkqlBWeBKf8tBo4SfH+GXVyNMEzkG+aKXkN3df2X
-6fb4II7Hc2UPi6QFlkRSDhK2M97OAk6eaFqz0zTv1yZsigHwEEsQCSDuFQoBzAQf
-ZMZpW9LPGqQreYH/DR6D+LXrnZ0S6ILuFhB68DVFfLEn4Tg+ROkTl5zUKF6xbaBs
-uAvqj3ZWHHBMTTwp3apK8S6v3+9uI5YUpEFsODXZ1RDw3qqIn1g=
-=elJl
------END PGP SIGNATURE-----
-
---AG35fyBHiWXrJVA1--
