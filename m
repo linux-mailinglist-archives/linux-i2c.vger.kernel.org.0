@@ -2,162 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F10F61F1FA
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Nov 2022 12:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D54D961F20E
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Nov 2022 12:41:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbiKGLiw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Nov 2022 06:38:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50298 "EHLO
+        id S232042AbiKGLlY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Nov 2022 06:41:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbiKGLiv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Nov 2022 06:38:51 -0500
-Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2086117073;
-        Mon,  7 Nov 2022 03:38:49 -0800 (PST)
-Received: from [192.168.4.25] (unknown [62.77.71.229])
-        by mx.gpxsee.org (Postfix) with ESMTPSA id D938730462;
-        Mon,  7 Nov 2022 12:38:46 +0100 (CET)
-Message-ID: <47e66164-9a41-997d-70eb-59f2650235d6@gpxsee.org>
-Date:   Mon, 7 Nov 2022 12:38:45 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v3 2/2] Added Digiteq Automotive MGB4 driver
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        with ESMTP id S231904AbiKGLlH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Nov 2022 06:41:07 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7B01ADBB;
+        Mon,  7 Nov 2022 03:41:01 -0800 (PST)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id C0F6924000A;
+        Mon,  7 Nov 2022 11:40:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1667821260;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qre1rLeivf2N8z9hTszuSOQhH5gotX01/ktN2uCkQ7k=;
+        b=Ek6wMmTMsc8B1iNQRjQoRFSgj04u32H8jPLnEkyWW/LzsBenyR6EZNCTQPM+Y4sjy+OppM
+        7t821vgQzQY0BbbCgGjdUiikw+Iv8n/VKmgxUcheg2DyR387r5tZNU09VPbuvlpif8wCKf
+        4eT/JTL61eUopreMw9f2kTxA5Nv+/fHt8lt2o4yC+mQMFtdvCSZglYimpQmsTQ5obwgMrN
+        peT0LVR1FlNhRHZzGeyYTby19zcu9ZrE/ta1/3u6geaq+DfleyxGUYTbUJMxnXcqciozMa
+        tMjQ/+KQFJQTA1GG04QbJ7RbSlKvvDuMy9YEPTpASKMv0RzB0lPqoofG6clGCA==
+Date:   Mon, 7 Nov 2022 12:40:55 +0100
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Lizhi Hou <lizhi.hou@amd.com>,
-        =?UTF-8?Q?Martin_T=c5=afma?= <martin.tuma@digiteqautomotive.com>
-References: <20221018140338.7080-1-tumic@gpxsee.org>
- <20221018140338.7080-3-tumic@gpxsee.org>
- <4ec93bdd-8b3d-2e3c-a7d7-7f3cd12520e7@xs4all.nl>
- <8023f2f5-638d-e83f-ea27-d135202725f3@gpxsee.org>
- <66518e88-5193-cf21-f2b9-869ee6a1024f@xs4all.nl>
-Content-Language: en-US
-From:   =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>
-In-Reply-To: <66518e88-5193-cf21-f2b9-869ee6a1024f@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Peter Rosin <peda@axentia.se>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        satish.nagireddy@getcruise.com
+Subject: Re: [PATCH v4 2/8] i2c: add I2C Address Translator (ATR) support
+Message-ID: <20221107124055.0495031f@booty>
+In-Reply-To: <cc510516-c961-9efb-bcdf-2abea795433a@ideasonboard.com>
+References: <20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com>
+        <20221101132032.1542416-3-tomi.valkeinen@ideasonboard.com>
+        <Y2EtnSNqBOfGRDMO@smile.fi.intel.com>
+        <cc510516-c961-9efb-bcdf-2abea795433a@ideasonboard.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 07. 11. 22 10:11, Hans Verkuil wrote:
+On Fri, 4 Nov 2022 13:59:06 +0200
+Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
 
->>>
->>> Erm, what is CMT and where do the values in the tables below come from?
->>>
->>
->> The CMT table is used to set up some FPGA PLL related registers. For different video signal frequencies (FPGA input signal frequencies), the FPGA PLL stuff needs to be adjusted to work properly. The
->> values are precomputed based on some formulas given by Xilinx in their FPGA documentation and those formulas are in turn full of some magic values/tables. So the answer to your question is that no one
->> (not even our HW engineer writing the VHDL code...) really knows where these values exactly come from, but they have to be set for the FPGA to work properly with the given video signal.
+> Hi Andy,
 > 
-> OK, that will be good to document. And what does the abbreviation 'CMT' stand for?
-> 
+> On 01/11/2022 16:30, Andy Shevchenko wrote:
+> > On Tue, Nov 01, 2022 at 03:20:26PM +0200, Tomi Valkeinen wrote:  
+> >> From: Luca Ceresoli <luca@lucaceresoli.net>
+> >>
+> >> An ATR is a device that looks similar to an i2c-mux: it has an I2C
+> >> slave "upstream" port and N master "downstream" ports, and forwards
+> >> transactions from upstream to the appropriate downstream port. But is
+> >> is different in that the forwarded transaction has a different slave
+> >> address. The address used on the upstream bus is called the "alias"
+> >> and is (potentially) different from the physical slave address of the
+> >> downstream chip.
+> >>
+> >> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
+> >> implementing ATR features in a device driver. The helper takes care or
+> >> adapter creation/destruction and translates addresses at each transaction.  
 
-Clock Management Tile, it is commonly used in Xilinx's FPGA documentation
+First of all, thank you for bringing this work on!
 
->>>
->>> I'm pretty certain that you didn't run 'checkpatch.pl --strict' over this patch.
->>> Please do so for v4!
->>>
->>
->> I have run 'checkpatch.pl' without '--strict' over this patch and ignored all the "too long lines" warnings on the tables as I think they are more clear this way, and all the "change name suggestion"
->> warnings as they are IMHO wrong in this case. Other warnings did not come up. I will try it with '--strict' when I post v4 patch.
+> > ...
+> >   
+> >> +I2C ADDRESS TRANSLATOR (ATR)
+> >> +M:	Luca Ceresoli <luca@lucaceresoli.net>  
+> > 
+> > Hmm... Are you going to maintain this? Or Review? Why not?  
 > 
-> Yes please, the media subsystem uses the --strict option.
-> 
+> We haven't discussed with Luca if he wants to maintain this (this is 
+> mostly his code). But, indeed, I should add my name there.
 
-Ok.
+I think at this point you are probably in a better position to be the
+maintainer, but I'm OK with being listed here as reviewer (R:).
 
->>>
->>> This doesn't look right. Just opening a video device shouldn't cause
->>> any state changes, and that's what it looks is happening here.
->>>
->>> I.e., if I just want to query the device (v4l2-ctl --all), then that
->>> shouldn't not change anything.
->>>
->>
->> The MGB4 card is quiet special in this case. Unlike in "normal" cameras, the video signal may change over time as the user can connect different video sources to the card. This is why I set up some
->> video signal related stuff in the open() call. When you open the device, you "configure" it for the current video signal and the signal is then expected not to change until the device is closed (such
->> change will not break the driver, but will break the image). Additionally, the open() call must fail, when there is no signal connected to the card.
->>
->> If you have some suggestions how to handle this "dynamic" behaviour in a different way (properly?) then I'm open to them. But the fact, that even the video resolution can change at any arbitrary time
->> will IMHO always lead to some "workarounds" like this one in the open() call.
-> 
-> This is not special. We support HDMI receivers today as well which have exactly the same behavior.
-> 
-> Typically the way this works is that such drivers support the Digital Video Timings ioctls
-> (VIDIOC_ENUM_DV_TIMINGS, VIDIOC_DV_TIMINGS_CAP, VIDIOC_G/S/QUERY_DV_TIMINGS). The driver
-> stores the current timings as set by userspace (and initialized to something at probe() time
-> by the driver), but typically userspace will query the actual detected timings, then set them.
-> 
-> Next it will allocate buffers, which will fix the timings. E.g. an attempt to set new timings
-> will fail with -EBUSY. If the hardware detects a format change, then it will raise the
-> V4L2_EVENT_SOURCE_CHANGE event and call vb2_queue_error() to stop streaming.
-> 
-> Userspace detects that, stops streaming, frees buffers, and calls QUERY_DV_TIMINGS again to
-> get the new timings.
-> 
-> Key here is that the timings are locked when you allocate buffers (vb2_is_busy() will return
-> true at that time). Buffers are allocated based on the framesize, which is based on the timings,
-> so if timings change, then buffers typically need to be reallocated.
-> 
-> Search for these ioctls to see how other drivers do this.
-> 
+Ah, would you please use my bootlin dot com address here?
 
-Ok, I will look at those ioctls and try to implement this part using those.
-
->>>> +
->>>> +static int vidioc_queryctrl(struct file *file, void *priv,
->>>> +                struct v4l2_queryctrl *qc)
->>>> +{
->>>> +    return -EINVAL;
->>>> +}
->>>
->>> Huh? Why is this needed?
->>>
->>
->> I think this was required to "silence" some v4l2-compliance tool warnings/errors. I will recheck this.
+> I'm not arguing against any of the comments you've made, I think they 
+> are all valid, but I want to point out that many of them are in a code 
+> copied from i2c-mux.
 > 
-> If there are warnings/errors with the latest v4l2-compliance, then let me know.
-> It would be a bug in the compliance tool.
->
+> Whether there's any value in keeping i2c-mux and i2c-atr similar in 
+> design/style... Maybe not.
 
-I'm not sure what version of the v4l2-compliance tool I have used that 
-time, but as I have Arch linux on the devel machine, I suppose it was 
-quiet new. When I get warnings/errors after removing this callback with 
-the 1.22.1 version, I will let you know.
+Tomi is right, when I wrote this initially I tried to keep it as
+similar as possible to i2c-mux.c. No problem in deviating from that
+wherever it makes sense.
 
->>>
->>> Same as for input: opening a video device appears to have a side-effect.
->>>
->>
->> The same reason as in the input case. You can have different displays with completely different video signals (even resolutions) connected to the output at any arbitrary time.
-> 
-> It's similar to the input side: use the DV timings ioctls. Except there won't be a
-> QUERY_DV_TIMINGS, since it is an output.
-> 
-> But how do you know what the display supports? Is it using an EDID? In that case you
-> need to support VIDIOC_G_EDID as well, and probably some of the DV controls:
-> 
-> https://linuxtv.org/downloads/v4l-dvb-apis-new/userspace-api/v4l/ext-ctrls-dv.html
-> 
-
-There is no EDID or another type of autoconfiguration. In the cars, 
-there is simply always the right display connected to the radio 
-(infotainment system) and the values are hardcoded on both sides.
-
-In the mgb4 card (that must support arbitrary size displays) we solve 
-this by the sysfs configuration - see the "Common FPDL3/GMSL output 
-parameters" in the documentation. You set the display properties in 
-sysfs (usualy using some udev rules at boot time) and the v4l2 part of 
-the driver then uses this values.
-
-M.
-
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
