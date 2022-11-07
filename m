@@ -2,77 +2,141 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D49561E95E
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Nov 2022 04:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C882B61EA5A
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Nov 2022 06:14:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbiKGDPC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 6 Nov 2022 22:15:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34918 "EHLO
+        id S229659AbiKGFOo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Nov 2022 00:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbiKGDOX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Nov 2022 22:14:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB3FF001;
-        Sun,  6 Nov 2022 19:13:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229447AbiKGFOn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Nov 2022 00:14:43 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16994B4B1;
+        Sun,  6 Nov 2022 21:14:41 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88DA660E9C;
-        Mon,  7 Nov 2022 03:13:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C109C433C1;
-        Mon,  7 Nov 2022 03:13:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667790793;
-        bh=gqBD7ZtZtS9cif+o5ssR48/e3KLMN7q7ACwTDHCVax0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hLBYLpSqLIU7qXQoCSY92jc/SJ4MODBxnwk0xLY6fNLo4gnlUTJ7SD2K9wuUlLIPZ
-         TlDtqqNxh5fwmZ5hJD1/cRTLT1HBOkXJ+Wld9cVk9CBu4uFOgHuiI9fkCSRsNVG4UO
-         VEqLrx/CAk3n8Qnma7gUmIXBiOwLy5zseZK7Svti1hIXnrA9mvcOBb+y8c3gq7eX/y
-         vMnTmONt5vjDeOSvvBndYIVGOFnlOM3w8F1HPJwHE9lFrmriMolrpmd+ogDS/SwLXm
-         4LDplfQ6mk+hzGOaZ0zBFf7R0+oyxo96eXJ13QsUCCSrrrWRTcW9f6h+QkTXX4DCwm
-         raAPZO+x3lWbg==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     linux-arm-msm@vger.kernel.org, matti.lehtimaki@gmail.com
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, devicetree@vger.kernel.org,
-        loic.poulain@linaro.org, linux-i2c@vger.kernel.org,
-        konrad.dybcio@somainline.org, linux-kernel@vger.kernel.org,
-        robert.foss@linaro.org, phone-devel@vger.kernel.org
-Subject: Re: (subset) [PATCH v1 0/6] Qualcomm CCI for MSM8226 and fix CCI documentation for MSM8974
-Date:   Sun,  6 Nov 2022 21:12:30 -0600
-Message-Id: <166779074257.500303.6728193350503927388.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221002122859.75525-1-matti.lehtimaki@gmail.com>
-References: <20221002122859.75525-1-matti.lehtimaki@gmail.com>
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 923A141EF0;
+        Mon,  7 Nov 2022 05:14:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1667798078; bh=NYmJfcOtDKmddaHWfWTLrq4ChxppgcegnFV/m6Pblq8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=nIN9aYbjQD/ISeQ3F05tSjvX6nclS/rcRpvC23y9cJyLMgTPPb9sLNGLQuDo3nPSD
+         FoFZpppyB0C5ESo6qVFF39In4nzGoAqPvTfe+B9V3Xi44r2TfURPkwLabqzHp05h3d
+         2wSMz7UXnf5JtEd/yuv3tgZkypXF016l1vu7pAbj6NJtk8RIBV2muCNMIeJDro2NEb
+         1LZlZvAK0piikTADwtMXjkPm7kxWVWMratlkaw8bnyGYMy6LhnrntjRZ27LeTtUeZX
+         mYHLmlTacyeA/uJ5mg2xH8xU9YRlo+eeNF/K4wup3BDO+RnJ0POMtta+aiyEt1SCir
+         dhMZcCrDAIsaQ==
+Message-ID: <eec45f54-097b-1f16-f572-44d9499a51c0@marcan.st>
+Date:   Mon, 7 Nov 2022 14:14:32 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4] i2c/pasemi: PASemi I2C controller IRQ enablement
+Content-Language: en-US
+To:     Arminder Singh <arminders208@outlook.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-i2c@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        asahi@lists.linux.dev
+References: <MN2PR01MB5358D35DEBAB82A80629EBB59F3A9@MN2PR01MB5358.prod.exchangelabs.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <MN2PR01MB5358D35DEBAB82A80629EBB59F3A9@MN2PR01MB5358.prod.exchangelabs.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, 2 Oct 2022 15:28:52 +0300, Matti Lehtimäki wrote:
-> This series adds support for Camera Control Interface found on MSM8226
-> and adds missing clock documentation for CCI found on MSM8974. In
-> addition the series adds CCI device tree nodes for both MSM8226 and
-> MSM8974.
+On 05/11/2022 20.56, Arminder Singh wrote:
+> This patch adds IRQ support to the PASemi I2C controller driver to
+> increase the performace of I2C transactions on platforms with PASemi I2C
+> controllers. While primarily intended for Apple silicon platforms, this
+> patch should also help in enabling IRQ support for older PASemi hardware
+> as well should the need arise.
 > 
-> Luca Weiss (1):
->   ARM: dts: qcom: msm8974: Add CCI bus
+> This version of the patch has been tested on an M1 Ultra Mac Studio,
+> as well as an M1 MacBook Pro, and userspace launches successfully
+> while using the IRQ path for I2C transactions.
 > 
-> [...]
+> Signed-off-by: Arminder Singh <arminders208@outlook.com>
+> ---
+> This version of the patch fixes some reliability issues brought up by
+> Hector and Sven in the v3 patch email thread. First, this patch
+> increases the timeout value in pasemi_smb_waitready to 100ms from 10ms,
+> as the original 10ms timeout in the driver was incorrect according to the
+> controller's datasheet as Hector pointed out in the v3 patch email thread.
+> This incorrect timeout had caused some issues with the tps6598x controller
+> on Apple silicon platforms.
+> 
+> This version of the patch also adds a reg_write to REG_IMASK in the IRQ
+> handler, because as Sven pointed out in the previous thread, the I2C
+> transaction interrupt is level sensitive so not masking the interrupt in
+> REG_IMASK will cause the interrupt to trigger again when it leaves the IRQ
+> handler until it reaches the call to reg_write after the completion expires.
+> 
+> Patch changelog:
+> 
+> v3 to v4 changes:
+>  - Increased the timeout value for I2C transactions to 100ms, as the original
+>    10ms timeout in the driver was incorrect according to the I2C chip's
+>    datasheet. Mitigates an issue with the tps6598x controller on Apple
+>    silicon platforms.
+>  - Added a reg_write to REG_IMASK inside the IRQ handler, which prevents
+>    the IRQ from triggering again after leaving the IRQ handler, as the
+>    IRQ is level-sensitive.
+> 
+> v2 to v3 changes:
+>  - Fixed some whitespace and alignment issues found in v2 of the patch
+> 
+> v1 to v2 changes:
+>  - moved completion setup from pasemi_platform_i2c_probe to
+>    pasemi_i2c_common_probe to allow PASemi and Apple platforms to share
+>    common completion setup code in case PASemi hardware gets IRQ support
+>    added
+>  - initialized the status variable in pasemi_smb_waitready when going down
+>    the non-IRQ path
+>  - removed an unnecessary cast of dev_id in the IRQ handler
+>  - fixed alignment of struct member names in i2c-pasemi-core.h
+>    (addresses Christophe's feedback in the original submission)
+>  - IRQs are now disabled after the wait_for_completion_timeout call
+>    instead of inside the IRQ handler
+>    (prevents the IRQ from going off after the completion times out)
+>  - changed the request_irq call to a devm_request_irq call to obviate
+>    the need for a remove function and a free_irq call
+>    (thanks to Sven for pointing this out in the original submission)
+>  - added a reinit_completion call to pasemi_reset 
+>    as a failsafe to prevent missed interrupts from causing the completion
+>    to never complete (thanks to Arnd Bergmann for pointing this out)
+>  - removed the bitmask variable in favor of just using the value
+>    directly (it wasn't used anywhere else)
+> 
+> v3: https://lore.kernel.org/linux-i2c/MN2PR01MB5358ED8FC32C0CFAEBD4A0E19F5F9@MN2PR01MB5358.prod.exchangelabs.com/T/
+> 
+> v2: https://lore.kernel.org/linux-i2c/MN2PR01MB535821C8058C7814B2F8EEDF9F599@MN2PR01MB5358.prod.exchangelabs.com/T/
+> 
+> v1: https://lore.kernel.org/linux-i2c/MN2PR01MB535838492432C910F2381F929F6F9@MN2PR01MB5358.prod.exchangelabs.com/T/
+> 
+>  drivers/i2c/busses/i2c-pasemi-core.c     | 32 ++++++++++++++++++++----
+>  drivers/i2c/busses/i2c-pasemi-core.h     |  5 ++++
+>  drivers/i2c/busses/i2c-pasemi-platform.c |  6 +++++
+>  3 files changed, 38 insertions(+), 5 deletions(-)
+> 
 
-Applied, thanks!
+Reviewed-by: Hector Martin <marcan@marcan.st>
 
-[5/6] ARM: dts: qcom: msm8226: Add CCI bus
-      commit: 4ab2f41b0850768716c446461653178372bcd35c
-[6/6] ARM: dts: qcom: msm8974: Add CCI bus
-      commit: 4dd3949d17b66144fe7c39cf68ff4bedb4154f61
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+- Hector
