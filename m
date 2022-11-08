@@ -2,129 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC47620DB4
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Nov 2022 11:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8453C620EF5
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Nov 2022 12:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233708AbiKHKtg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 8 Nov 2022 05:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
+        id S234127AbiKHLYb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 8 Nov 2022 06:24:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbiKHKs6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Nov 2022 05:48:58 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3EC101FF;
-        Tue,  8 Nov 2022 02:48:54 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7BE911F88B;
-        Tue,  8 Nov 2022 10:48:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1667904533; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zSI2NTbS+XdsimuqF+drbRNdrmDPUdPcKKkDDnTK4+4=;
-        b=fl97OFHmDEqv9FfvncX8vUr17T2NnGUpng/euvxXI7gRYUNN7xR8C2W3uAmUQT0VMZOII2
-        Jey0hR5ZteFUEjkoMPmHMZP0AOidLtDRXUgMmvonpcLOUhxfhukdm6A6CbcEB299gb8wy1
-        jDhApY1kZCf9VK/q++2/PGsWXN057CY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1667904533;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zSI2NTbS+XdsimuqF+drbRNdrmDPUdPcKKkDDnTK4+4=;
-        b=WslxQq9BmflLTOGSUBFqnZzftqqOha2WlhXNYXKV83g0tBUM3TAh64dY5VUHm06PNxIhxF
-        PJpm9ov6pOJPDPCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4F8AD139F1;
-        Tue,  8 Nov 2022 10:48:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FL/JERU0amP8IgAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 08 Nov 2022 10:48:53 +0000
-Date:   Tue, 8 Nov 2022 11:48:51 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: smbus: support new RAM variant for SPD
-Message-ID: <20221108114851.4436c3cb@endymion.delvare>
-In-Reply-To: <20221107160602.1912225-1-clabbe@baylibre.com>
-References: <20221107160602.1912225-1-clabbe@baylibre.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        with ESMTP id S234069AbiKHLYS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Nov 2022 06:24:18 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDF249B7D
+        for <linux-i2c@vger.kernel.org>; Tue,  8 Nov 2022 03:24:14 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id o13so7297582ilq.6
+        for <linux-i2c@vger.kernel.org>; Tue, 08 Nov 2022 03:24:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5B7dfi7xVJ3OslQ0ALi00lhJojz9IHhiYsVHA/RHqOE=;
+        b=LXzLwEfFEIjs9nRQ/0D9sK0UdFF/hcYD1/7lPcxtKxGf+ipiOyxIUkG9FxWjTQwnxI
+         D0k1pcJ4r9HbGweGR8VttiL8E2qc4lcsz3jC3X1z+Myzw30J2a8GCz5AS/bkRvOOAlHD
+         E+tAU65cwh01zP65Dht/AwghXmg8POvqM5wMW+NclASoJJ1M+p89BgFOSDch5BgQ0Avc
+         9JiZIkvYkz5qbwJiVyZnhn8aEs4dsNPEV6aJ60VBa1B1c4nkJvkSo/q1xUjbvGvnQsI2
+         YCKRfjADZRvavXIhrgWVqvohpAMKlTCL5cT3Ex4YqBvyGRv/IX591YGJ8Vqkx1vqKbDZ
+         WAQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5B7dfi7xVJ3OslQ0ALi00lhJojz9IHhiYsVHA/RHqOE=;
+        b=TGrWPsnlKQ6zaOvn3DLBGdBSv6dCs5nOcuCMSLofRLfZm6UA7NF6TjxQhoCghxir/U
+         lbJCOZIhnF5/VGCmOFcN3NDJduy7UaN6Vrjd8SM3KZ5NsArc6RJ2tb7IjdMNHjQ5nph7
+         ga/Q/o3g+6hvbZSuBtlikOFzZ603sPnvOzXkaS5xCiJiX9v3TMnWYlhw4W8Hp6H4meKN
+         RxJJaPqo7OgRagkr6rc+i2jEIiP26SZuZmA7X029RFxyErwPc9gpuoXvxKXO4ufVEDMT
+         sghqTVqpGIqaJdnOjHRx9SoIkWLUPJepNKTVdLO1TOk6D5Aa8R7gEgTrc2+0oIXB8CcY
+         AKOQ==
+X-Gm-Message-State: ACrzQf2kG28UXjwqy+JxEcWBQE4k+k4I4Qxx+/uXQM0YGoT3ch6WlfuO
+        SDOovpTqZQbCFE8oBMZHQ46qjX1way2qlxqfMO8=
+X-Google-Smtp-Source: AMsMyM7l9664LpWj9QcPDmFBWC92J2k8lgTtaMBq0d8Kn2LaY6/WvjL6jmQ58ep7k3CUc1mU0tvXdcs9IQAedNtHTSY=
+X-Received: by 2002:a92:bf0e:0:b0:300:cc8e:fe07 with SMTP id
+ z14-20020a92bf0e000000b00300cc8efe07mr18642833ilh.184.1667906653482; Tue, 08
+ Nov 2022 03:24:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6638:1921:0:0:0:0 with HTTP; Tue, 8 Nov 2022 03:24:13
+ -0800 (PST)
+Reply-To: mrinvest1010@gmail.com
+From:   "K. A. Mr. Kairi" <ctocik10@gmail.com>
+Date:   Tue, 8 Nov 2022 03:24:13 -0800
+Message-ID: <CAEbPynvxfjzGLRVVaaVB9fasgmGPWiH+Ceaj9c3oE5eqT5_+0Q@mail.gmail.com>
+Subject: Re: My Response..
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:131 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrinvest1010[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ctocik10[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ctocik10[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Corentin,
+-- 
+Dear
 
-On Mon,  7 Nov 2022 16:06:02 +0000, Corentin Labbe wrote:
-> On my x05 laptop I got:
-> Memory type 0x12 not supported yet, not instantiating SPD
+How are you, I have a serious client, whom will be interested to
+invest in your country, I got your Details through the Investment
+Network and world Global Business directory.
 
+Let me know if you are interested for more details.....
 
-Oh, that one must be old.
-
-> Adding the 0x12 case lead to a successful instantiated SPD AT24 EEPROM.
-> i801_smbus 0000:00:1f.3: SMBus using polling
-> i2c i2c-6: 2/2 memory slots populated (from DMI)
-> at24 6-0050: 256 byte spd EEPROM, read-only
-> i2c i2c-6: Successfully instantiated SPD at 0x50
-> at24 6-0051: 256 byte spd EEPROM, read-only
-> i2c i2c-6: Successfully instantiated SPD at 0x51
->=20
-> And then, I decoded it successfully via decode-dimms.
->=20
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
-> The result of decode-dimms could be found at http://kernel.montjoie.ovh/z=
-oo/x05/decode-dimms.txt
-> Since RAM is DDR, I wanted to add '/* DDR */' comment, but I didnt find a=
-ny document with
-> proof that this 0x12 is for DDR.
-
-It is. The document you are looking for is:
-https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_3.6.0.=
-pdf
-
-and specifically section 7.18.2 (Memory Device =E2=80=94 Type), table 78
-(Memory Device: Type).
-
->=20
->  drivers/i2c/i2c-smbus.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-> index 07c92c8495a3..6dca19c994db 100644
-> --- a/drivers/i2c/i2c-smbus.c
-> +++ b/drivers/i2c/i2c-smbus.c
-> @@ -362,6 +362,7 @@ void i2c_register_spd(struct i2c_adapter *adap)
->  	}
-> =20
->  	switch (common_mem_type) {
-> +	case 0x12:
->  	case 0x13:	/* DDR2 */
->  	case 0x18:	/* DDR3 */
->  	case 0x1C:	/* LPDDR2 */
-
-Please also add LPDDR (0x1B) for consistency.
-
-Thanks,
---=20
-Jean Delvare
-SUSE L3 Support
+Sincerely,
+Mr. Kairi Andrew
