@@ -2,97 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDF16216CE
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Nov 2022 15:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C995D622A5C
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Nov 2022 12:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbiKHOcV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 8 Nov 2022 09:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37482 "EHLO
+        id S229879AbiKILYc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Nov 2022 06:24:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233808AbiKHObg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Nov 2022 09:31:36 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6AB14D34
-        for <linux-i2c@vger.kernel.org>; Tue,  8 Nov 2022 06:31:15 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id q127so13788138vsa.7
-        for <linux-i2c@vger.kernel.org>; Tue, 08 Nov 2022 06:31:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=plCZMl07mNxOy4FwEnJyPWecERqsJQyrHYHIsHPByWrtU1k24II845ABLvzsZ/utuV
-         xrfZ6D/e/ZRoyRjpbZ5oMDY9h9ndbu6gtWFiQs/CjHcVVSqci/vjYPMMyy1pnVJ69u5N
-         OM2Kwkcs/9db1KNzWi4t4Kki8xmdjDy37F969+9phg4q7Iutyq/zyteGqROU9T6wdO4n
-         lS/c2RFkn8H1h3UlswE5jNY6oMt5wQG8oq965L41J8fDh6fe1zek7KZifUk151Do70De
-         k9oKwcRkEhDvguAg4zcTYagV5rrGsvTLwyNtdWlzI5EY/CPrjAga8S7nNTzf3DHImH9S
-         a/jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=FqG4s3P9fJyKpjIh1rn0330Vv/gsnIsd4Ezclfju2dwlwFeG58nJaUK6ZarARD34mN
-         wbbfg+/ho/D84+r/4PGwdm5qkrvfHDCLt6ihvFyvngYS6otMsRvtp/cHFmoyf0LswVKJ
-         k7fCnQ8jFx7+HNWWUIEM+d4Dx/Z5AyUOY3UEQYeCkUIcJyYNZJJAItC6AwMg+FUV5MTX
-         bR5UtALWCUeNrGcdtuP2dVmw1INhbmDSXMraoTmH2HYj8DVrmF2T0aNbBoqK1X+NAETS
-         jbDFrmX+gBMWFly/Mf00WNy677a0aVyXlHW6fmfduR8hNsoj4bjYpoOOKEFpICkBv/ii
-         te2Q==
-X-Gm-Message-State: ACrzQf0+k5fTG+yQddQ+g9lNI87Z9+CLh+235vVD3sDSgVZWbgPCppv0
-        QZl0JHfjxf3Khs6GrpogZN9c4m1Hq41pRGcaghLRMgf2VGtV6g==
-X-Google-Smtp-Source: AMsMyM5cpw1VKvG8gEasOMmG4UhkblJY7gBReqfbYX80x9OXEWSZokzXOm90JDY4L5h3JbfU+3ckCU+QNWhG8SGrNVo=
-X-Received: by 2002:a05:6a00:1da6:b0:56c:318a:f8ab with SMTP id
- z38-20020a056a001da600b0056c318af8abmr56843835pfw.82.1667917864342; Tue, 08
- Nov 2022 06:31:04 -0800 (PST)
+        with ESMTP id S229666AbiKILY3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Nov 2022 06:24:29 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61BD19021
+        for <linux-i2c@vger.kernel.org>; Wed,  9 Nov 2022 03:24:27 -0800 (PST)
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N6jGC3d78zJnWM;
+        Wed,  9 Nov 2022 19:21:23 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by dggpeml500024.china.huawei.com
+ (7.185.36.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
+ 2022 19:24:24 +0800
+From:   Yuan Can <yuancan@huawei.com>
+To:     <avifishman70@gmail.com>, <tmaimon77@gmail.com>,
+        <tali.perry1@gmail.com>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <wsa@kernel.org>,
+        <andriy.shevchenko@linux.intel.com>, <openbmc@lists.ozlabs.org>,
+        <linux-i2c@vger.kernel.org>
+CC:     <yuancan@huawei.com>
+Subject: [PATCH] i2c: npcm7xx: Fix error handling in npcm_i2c_init()
+Date:   Wed, 9 Nov 2022 11:22:50 +0000
+Message-ID: <20221109112250.124829-1-yuancan@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Received: by 2002:ac4:c8c2:0:b0:56a:d900:eb11 with HTTP; Tue, 8 Nov 2022
- 06:31:03 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidbraddy01@gmail.com>
-Date:   Tue, 8 Nov 2022 14:31:03 +0000
-Message-ID: <CAHGOU4PvdrNhE2KifzdPkFxZTCG5gy+23qf130PwnSmJcLRSew@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e35 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4916]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidbraddy01[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidbraddy01[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500024.china.huawei.com (7.185.36.10)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+A problem about i2c-npcm7xx create debugfs failed is triggered with the
+following log given:
+
+ [  173.827310] debugfs: Directory 'npcm_i2c' with parent '/' already present!
+
+The reason is that npcm_i2c_init() returns platform_driver_register()
+directly without checking its return value, if platform_driver_register()
+failed, it returns without destroy the newly created debugfs, resulting
+the debugfs of npcm_i2c can never be created later.
+
+ npcm_i2c_init()
+   debugfs_create_dir() # create debugfs directory
+   platform_driver_register()
+     driver_register()
+       bus_add_driver()
+         priv = kzalloc(...) # OOM happened
+   # return without destroy debugfs directory
+
+Fix by removing debugfs when platform_driver_register() returns error.
+
+Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
+Signed-off-by: Yuan Can <yuancan@huawei.com>
+---
+ drivers/i2c/busses/i2c-npcm7xx.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
+index 0c365b57d957..83457359ec45 100644
+--- a/drivers/i2c/busses/i2c-npcm7xx.c
++++ b/drivers/i2c/busses/i2c-npcm7xx.c
+@@ -2393,8 +2393,17 @@ static struct platform_driver npcm_i2c_bus_driver = {
+ 
+ static int __init npcm_i2c_init(void)
+ {
++	int ret;
++
+ 	npcm_i2c_debugfs_dir = debugfs_create_dir("npcm_i2c", NULL);
+-	return platform_driver_register(&npcm_i2c_bus_driver);
++
++	ret = platform_driver_register(&npcm_i2c_bus_driver);
++	if (ret) {
++		debugfs_remove_recursive(npcm_i2c_debugfs_dir);
++		return ret;
++	}
++
++	return 0;
+ }
+ module_init(npcm_i2c_init);
+ 
+-- 
+2.17.1
+
