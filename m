@@ -2,127 +2,118 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D376622C73
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Nov 2022 14:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C7A622DF0
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Nov 2022 15:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiKINeY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Nov 2022 08:34:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
+        id S231259AbiKIOaX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Nov 2022 09:30:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiKINeX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Nov 2022 08:34:23 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A932AC6A
-        for <linux-i2c@vger.kernel.org>; Wed,  9 Nov 2022 05:34:23 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id 13so46749184ejn.3
-        for <linux-i2c@vger.kernel.org>; Wed, 09 Nov 2022 05:34:22 -0800 (PST)
+        with ESMTP id S231576AbiKIOaR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Nov 2022 09:30:17 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DA917ABB
+        for <linux-i2c@vger.kernel.org>; Wed,  9 Nov 2022 06:30:16 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id f5so47122263ejc.5
+        for <linux-i2c@vger.kernel.org>; Wed, 09 Nov 2022 06:30:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hRp9ggfrc3pUhH9noDOfG+UiWKthVVd275v3/Gnchcc=;
-        b=aXyU+cQZbjaM3EYAqiUJn3okIvP2e+SODq8aYWqIwzolbE+jBkhydN1zN9gS6J6S2t
-         nJRubFkkS8Z8NTbnp73jQ5IHzVDhViOqJVEr+ydO9TlZEjv19ZBHIzI3nppE8QEizUfE
-         wjMcic7NBViBYAZZ5Bw+j3TMooHCzHTbJY9VArlQ9KMMQSxBUwQYX461AkwiGjzVIX+d
-         6guJ2K6extaSKkB3UyWvJyXx8Gya49h1IlyRPk+jirk4s+1j1IzF8tiqnjlEtY52UKF2
-         93/WoNGhCZaCtFtJbo+F/cYXnYdtHeNIYuVsbC4RQYL7l+uqnalMnxE/7Ds6pVJK8666
-         WUUA==
+        d=chromium.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=N96rWukkzzft84T2ilUpjkniGJmFniZsxB7jb54ifXs=;
+        b=NUQruEBYuKGoATQoEgq8HnQG7zmavO8XD1UrtBSLzg8JU522IgpPOEXmqcF4u0Ez5v
+         FBMEDkmVUu9wjt/3Ew9uAOCPrOlaNYbTsAfsDYXE+SPqBP+oh8kv9+hq7VU9ZZjR7ljQ
+         9rZGRPv6nzYTlfPZ0UlpecP7Lq8FdNJsBerVM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hRp9ggfrc3pUhH9noDOfG+UiWKthVVd275v3/Gnchcc=;
-        b=ofuDOzjVdqDkLc0zGXW5M8KtxA+qevj+AybGhuVP5t5PWDar3/Hnw2qZWiyhGnHJWs
-         Cev2QV7rG3uqkY4d+TYIeFExFSS5eH2yP3THL6r1wpKHsyB9a+qW7AWn8RiQ/bfONZuS
-         Zs87rzLMVkLH0O3HwK8tQuMW4GilhMoNo9OWw+DdXuPmWde+4ffpM0ByUZskWA2tb29l
-         PefooLHpWixue0/ru8d8Y+/CIMPAcBgcJZiiEi+Bqf6umxgcQltNcK4amZzZtmNn3Li3
-         bOnQkT4cMYfO83uslDuAE7U3r7vfOLnfxlhYjtR58SH1g+6kDpHd34CkQeEqdkzvo6Q1
-         EYeQ==
-X-Gm-Message-State: ANoB5pl7ylhYhrEPMVwploy/DoqtUUaaswCIyE2hVAxOsVlH4VYRgdB3
-        fkUoCGwvAEY5dGP0F9oDimLhh//vTL3SPvPJxK0=
-X-Google-Smtp-Source: AA0mqf7tAyXaBYFaB/TMNCyFr5IQym41MY+ujgilkkq1l2YZHn5HWQoqBIZ6Fo+x/si5MfSvowvF2KKje0J6KxLJyz4=
-X-Received: by 2002:a17:906:1458:b0:7ae:4d8c:91fe with SMTP id
- q24-20020a170906145800b007ae4d8c91femr20131187ejc.452.1668000861495; Wed, 09
- Nov 2022 05:34:21 -0800 (PST)
+        bh=N96rWukkzzft84T2ilUpjkniGJmFniZsxB7jb54ifXs=;
+        b=hinc5oJs/uq/6NxVo6he4jpIB2yoi8MAov+jG9gz+YqhBz9o296QjAlZjpy5yQr5Vq
+         pemsx2GD8Gms9NEnCEvOPP+Qs9Y/FpDCGw5JnslewmDt3NxOqbCxwoSoFfnEGR/hdz5x
+         sE5aQ7k/TxmKHYvEiFcWvYGdxhsYPCaucFKh0z9upYyYyVPW4OdteX91BmQ3lVFnpWaG
+         fbvX0PeXgydXwgpjRIcaWP4BNqN4FIWE5z0Jfzr4R8BRHhFEN4WoH6JaRS/bDbzDZFVs
+         /YwuT/aAjwUArpwXzT9JsZ7nGOKQdBWS0lDPvLe5PhFhfxwCBRrVyJuHN9LRpFYLbc9B
+         zaog==
+X-Gm-Message-State: ACrzQf38v435qR8WzCK+yzWJ4KhVVeJvhCE4V0fxmV5o7XXkIGwrlOW0
+        FIj//1hG+a3nCTPRLi+64gnHow==
+X-Google-Smtp-Source: AMsMyM4ljNakYGb8FEwYQ+ua0vOjv8/+n3jDbN6hIZptU4+jxoR/3FXruQkLjWdo4N8Xgm8mp6JuCw==
+X-Received: by 2002:a17:906:6a02:b0:7ae:2793:aa19 with SMTP id qw2-20020a1709066a0200b007ae2793aa19mr29371804ejc.265.1668004214873;
+        Wed, 09 Nov 2022 06:30:14 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:7487:46db:8e12:c768])
+        by smtp.gmail.com with ESMTPSA id d25-20020aa7c1d9000000b0044dbecdcd29sm7020389edp.12.2022.11.09.06.30.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 06:30:14 -0800 (PST)
+Subject: [PATCH v1 0/1] i2c: Restore power status of device if probe fails
 MIME-Version: 1.0
-References: <20221109112250.124829-1-yuancan@huawei.com>
-In-Reply-To: <20221109112250.124829-1-yuancan@huawei.com>
-From:   Tali Perry <tali.perry1@gmail.com>
-Date:   Wed, 9 Nov 2022 15:34:10 +0200
-Message-ID: <CAHb3i=tUA5ai_hVHZYJS9Yo3ihF_TkKxM8wb6SsVBLmae7FwYA@mail.gmail.com>
-Subject: Re: [PATCH] i2c: npcm7xx: Fix error handling in npcm_i2c_init()
-To:     Yuan Can <yuancan@huawei.com>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, wsa@kernel.org,
-        andriy.shevchenko@linux.intel.com, openbmc@lists.ozlabs.org,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAFu5a2MC/w3LQQqAIBBA0avErBtwhAi7zWhjDoiBki2ku+fywf8DmlSVBscyoErXpneZoHWBkL
+ hcgnpOgzXWEhmHagO+rF2Qxe1RmCL5DWbvuQn6yiWkeZQn5+/7Adt+K05gAAAA
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 09 Nov 2022 15:29:47 +0100
+Message-Id: <20221109-i2c-waive-v1-0-ed70a99b990d@chromium.org>
+To:     Tomasz Figa <tfiga@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Hidenori Kobayashi <hidenorik@google.com>,
         linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: b4 0.11.0-dev-d93f8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=961; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=xbF/MIUAKcQD4clS31BaNJtsnvcssnr11NYtRC214vo=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBja7liJtRWY4suMhjLbNI+ldyebAoNrPAn2LUdX8j9
+ Uvtt7lOJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY2u5YgAKCRDRN9E+zzrEiJM4EA
+ CcSqPambhLY9adGX94xkF46+nnAl704+gj6irsEN3zkkNVyfOrjYjxk5pZF0888rRnySyB5SSwxiv2
+ mH6WduT2kfnm1Kb1/CU8XJ+kM5yZJPEEsZJ85ZTQZuuqONVfPaIar7LcfO+MxjHjEOpu00yJ80fClX
+ diCewkAjl18jlmBuIliVjGDHoiQ73ZIVP0laKz7/OcYT9kbAwBpStcHrklzCOyxoxyoRiWi88xuIfp
+ yvKpPUEkyXbk7vvJAXb3uOjFEBoTon9enLRX17HuI6nXrCJc2GjZ3SnJNlQFWsaHPYTUTm2HoydSHW
+ 7AZBLEQvSWY5P2zQJCXSUD4x/fjfuAx3hx8viF0nDm1s83+Z/OeJ+hpop6rSIVmA+vWU3aXM0Z3Tnh
+ 2RD5fH36rK6VFe4pAu2SwUvueSfEIaO8V3nrHpejcHAKnDnU3tTVJRySfq1FeTAGplTJCi575zH2oG
+ 5a9xtXh26OP4zzZG/EWPjEPxBdHqDaJ5kp9jUvPF4Figpt5Z1bfN4bx0PdOA/AnGoCkgwMINgvR8da
+ hYo6+tao7Pcuj9fv2GXO0yQRL1GDuGJ2fketb+bM9L3wuYaKlO1/JqK3Bu8vWbKCNIWYZaII7ZXk6R
+ P+mZbpBId7dnB93XawBMIcjeYjfqD3hq8GuZsJtxDC6flN7ECRdhkKnNeUsQ==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Nov 9, 2022 at 1:24 PM Yuan Can <yuancan@huawei.com> wrote:
->
-> A problem about i2c-npcm7xx create debugfs failed is triggered with the
-> following log given:
->
->  [  173.827310] debugfs: Directory 'npcm_i2c' with parent '/' already present!
->
-> The reason is that npcm_i2c_init() returns platform_driver_register()
-> directly without checking its return value, if platform_driver_register()
-> failed, it returns without destroy the newly created debugfs, resulting
-> the debugfs of npcm_i2c can never be created later.
->
->  npcm_i2c_init()
->    debugfs_create_dir() # create debugfs directory
->    platform_driver_register()
->      driver_register()
->        bus_add_driver()
->          priv = kzalloc(...) # OOM happened
->    # return without destroy debugfs directory
->
-> Fix by removing debugfs when platform_driver_register() returns error.
->
-> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
-> Signed-off-by: Yuan Can <yuancan@huawei.com>
-> ---
->  drivers/i2c/busses/i2c-npcm7xx.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-> index 0c365b57d957..83457359ec45 100644
-> --- a/drivers/i2c/busses/i2c-npcm7xx.c
-> +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-> @@ -2393,8 +2393,17 @@ static struct platform_driver npcm_i2c_bus_driver = {
->
->  static int __init npcm_i2c_init(void)
->  {
-> +       int ret;
-> +
->         npcm_i2c_debugfs_dir = debugfs_create_dir("npcm_i2c", NULL);
-> -       return platform_driver_register(&npcm_i2c_bus_driver);
-> +
-> +       ret = platform_driver_register(&npcm_i2c_bus_driver);
-> +       if (ret) {
-> +               debugfs_remove_recursive(npcm_i2c_debugfs_dir);
-> +               return ret;
-> +       }
-> +
-> +       return 0;
->  }
->  module_init(npcm_i2c_init);
->
-> --
-> 2.17.1
->
+We have discovered that some power lines were always on even if the devices
+on that power line was not used.
 
-Thanks Yuan!
+This happens because we failed to probe a device on the i2c bus, and the
+ACPI Power Resource were never turned off.
 
-Reviewed-by: Tali Perry <tali.perry@nuvoton.com>
+This patch tries to fix this issue.
+
+To: Wolfram Sang <wsa@kernel.org>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Tomasz Figa <tfiga@chromium.org>
+To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc: Hidenori Kobayashi <hidenorik@google.com>
+Cc: linux-i2c@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+
+---
+Ricardo Ribalda (1):
+      i2c: Restore initial power state on probe failure
+
+ drivers/i2c/i2c-core-base.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+---
+base-commit: f141df371335645ce29a87d9683a3f79fba7fd67
+change-id: 20221109-i2c-waive-ae97fea1f1b5
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
