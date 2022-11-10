@@ -2,174 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D49F62467E
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Nov 2022 17:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB746246BF
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Nov 2022 17:20:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbiKJQBU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Nov 2022 11:01:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39550 "EHLO
+        id S230028AbiKJQUz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Nov 2022 11:20:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbiKJQAz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Nov 2022 11:00:55 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CCC31EE1;
-        Thu, 10 Nov 2022 08:00:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668096055; x=1699632055;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dvQpHQoEPiUyh/aikWjsPM6Iyz2edanS8xPnTyIZYho=;
-  b=OH/OVw9NnnPxohhAMzvZMyUa1inaQ080znngsBX8kbUYdWLH1x6DqFNK
-   fuo3EGGBCAp49/hwS/jP8dQw03RewZ8dJ98o3RLBHR917j3hApha21MvF
-   /ZwXowhSVrFMiySQcUnIrwfv51Wfu8NAfE2y2vMfUgXgZ0RdsmKb+yTqJ
-   x+qZZXRkwOpKfgEGVLf6t5OoCeHpmEExnLPn4/Rj8ndyFZRKL/6kCdwQF
-   zwPaNujv7HEW951JnPMojUCFlxkfsMd8vGmF2w1o+eVa+76o/BGfm5emO
-   aK9v+88xAjS7YcAeNw1t+uehQeJsk5T4jvSs1BiXBKr3SyylT746lVpxQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="312482847"
-X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
-   d="scan'208";a="312482847"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 08:00:51 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="812087718"
-X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
-   d="scan'208";a="812087718"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 08:00:48 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 47F2E20187;
-        Thu, 10 Nov 2022 18:00:46 +0200 (EET)
-Date:   Thu, 10 Nov 2022 16:00:46 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Tomasz Figa <tfiga@chromium.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Hidenori Kobayashi <hidenorik@google.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v4 1/1] i2c: Restore initial power state when we are done.
-Message-ID: <Y20gLtU61eFa4LBu@paasikivi.fi.intel.com>
-References: <20221109-i2c-waive-v4-0-e4496462833b@chromium.org>
- <20221109-i2c-waive-v4-1-e4496462833b@chromium.org>
+        with ESMTP id S229559AbiKJQUx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Nov 2022 11:20:53 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9303915825
+        for <linux-i2c@vger.kernel.org>; Thu, 10 Nov 2022 08:20:52 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id ud5so6303287ejc.4
+        for <linux-i2c@vger.kernel.org>; Thu, 10 Nov 2022 08:20:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=DeTQBsnVil4skLVb0JTYA0ze/q8Y7Qzt3eBgeJWs+Xo=;
+        b=GKJkmTIUnrs5ihbdB9mi5Xs1cdxoZafh9Hi5mwHvDqnRpzX1Kv7B2F0E7otQXIbQaw
+         drCybDDsVpM3uH8w2nuxWkc14OrMf1+ciOQQI0ya/CoWunaxOxkN3hPVHCNtlnue2gFk
+         52fMkaORsXWbzseWYaPLOVKIDJcfT2ricES00=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DeTQBsnVil4skLVb0JTYA0ze/q8Y7Qzt3eBgeJWs+Xo=;
+        b=jlONR2Ex1hZvyv8u6aBIG0l3a91Sfn2RCMsqb4FiBnKIYabGJKDnonaPjgOqPBwS7s
+         JQgE5AT4ZhizTdSEgtUlnN13z0Dio902E6JJZlb7ZahLwlGVNFYv7hzEetbrme2MeCzR
+         LwZG+f18PCQ73+rV40KOVmpqwruEzQQ60a0PVNpYcfev2snZjdEMmKS1d62/G0WOu5k/
+         TwYo772ALm2C1xzYVX9JtgpU8EBii7EmsXpF92kpQkW+YMCe1CaPk72d61fIxIisdtNn
+         NOlViFvPSz8OblKx3kKgyluR0AhCVYklD64ZSoy8gg9WxD2Sn6X2qPw9Fp+byV/Cv7y0
+         hMTQ==
+X-Gm-Message-State: ACrzQf13K4DVxi4vKUWOO6ETow8qkWl9l4F78COQPl8Ji0rlTOyTZ7Nh
+        P/eRQ/DVsz2dqCzsoksQELVKAQ==
+X-Google-Smtp-Source: AMsMyM7Dt/Oikt/kQR0FcIfkSY10NFM7DFTTRHXFPDf41TQumRWAX1p856DgQOmzzDxBxwNbjj+v+A==
+X-Received: by 2002:a17:906:8b81:b0:7ad:93d1:5eae with SMTP id nr1-20020a1709068b8100b007ad93d15eaemr62378695ejc.29.1668097251178;
+        Thu, 10 Nov 2022 08:20:51 -0800 (PST)
+Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id e8-20020a170906314800b0077b2b0563f4sm7510193eje.173.2022.11.10.08.20.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 08:20:50 -0800 (PST)
+Subject: [PATCH v5 0/1] i2c: Restore power status of device if probe fail or device is removed
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109-i2c-waive-v4-1-e4496462833b@chromium.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIANYkbWMC/3XOzQ6CMAwH8FcxOzuzjQ2YJ9/DeNhHgSXAkk1mDOHdrR4NnJo2/f3blWRIATK5nl
+ aSoIQc4oyNOp+IG8zcAw0eeyKYEJwzTYNw9GVCAWpANx0Y3nGrCO5bk4HaZGY3oJiXccThEPIzpvcv
+ v3As972owimj4BtmtLZaM39zQ4pTWKZLTD15YFARh1ggZo1SzHbCG+d2cHWIK8S+rRV3Vtq23bssD7 H8vi2lrmUt2qqyf3jbtg/GVtNkYQEAAA==
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Thu, 10 Nov 2022 17:20:38 +0100
+Message-Id: <20221109-i2c-waive-v5-0-2839667f8f6a@chromium.org>
+To:     Wolfram Sang <wsa@kernel.org>, Tomasz Figa <tfiga@chromium.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     Hidenori Kobayashi <hidenorik@google.com>, stable@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-d93f8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1794; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=4clQAZaLvuRcOY86HZLxZyhWxEsEPqsm3+62UqWakNo=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjbSTY+Kf+2Fhq4xTRwy1lq5DVpEm/1XKcBs3SBnbD
+ PPrVTMaJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY20k2AAKCRDRN9E+zzrEiPEZD/
+ 9qBU465i41cAV/uiiHV6bOJFvKo8YJXGpn6qLRZaJFt+tP6IIh1WXuPblF38hOKMfF0V3FE115nk/1
+ 1qUdUX3UdHWsM9mtXdvS9uhoJTTJRC2H/0jSsY3etzA9nGlcRL3thGo5RMW4JsA+3QJhhv5xCshMoZ
+ A6CAJkGJpKnodStNfMO2/WtpsrIeMDMIq3p1cbCosxgvG+D1+upNle++lncnzl2Li5TNT+Zhtd3lmz
+ 9iSjuzMNwICb+15q1SIdhaGLEUQIK/0Gjhsewq8KI9uzaCmYQ852WTmnvKCpxbG0DVAe0ieTKOtBd8
+ OxD0h5zp2B4w7l/fdG+fHIwH62+2c5vO9mdvBFQNR9uKPDhOJ8zN5alyJ+Gn76cMzXGICbw9HkJ9m2
+ Q5Jg6h/8eFj3Fp+1kTZz9nPGi4WjIIS6PP5dWSzkDkxXGaJ+EBo8xeX5DMNo3maBv1xcRzjnxTsXXK
+ 0MYWyxifouuDaOdabiU+mdmLDGfnZsPi+XjKDgJW3qrEmrM7uYNrF2FIpY6hO+pQrs59uz+PFVHlvS
+ Z2yoAxZBjrL0sdahub533nPRvvI/0wXC61UaGwcR9Kj+Rqf3IivTPYE8FzHXXDxKA9nv1+Eu8TlVVq
+ Vv7okpeMb4/zPyQUpG/KoixIyKAL/Qqcffj/GauplsZV5BSSH9v+neknhj6g==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Ricardo,
+We have discovered that some power lines were always on even if the devices
+on that power line was not used.
 
-On Thu, Nov 10, 2022 at 03:11:43PM +0100, Ricardo Ribalda wrote:
-> A driver that supports I2C_DRV_ACPI_WAIVE_D0_PROBE is not expected to
-> power off a device that it has not powered on previously.
-> 
-> For devices operating in "full_power" mode, the first call to
-> `i2c_acpi_waive_d0_probe` will return 0, which means that the device
-> will be turned on with `dev_pm_domain_attach`.
-> 
-> If probe fails or the device is removed the second call to
-> `i2c_acpi_waive_d0_probe` will return 1, which means that the device
-> will not be turned off. This is, it will be left in a different power
-> state. Lets fix it.
+This happens because we failed to probe a device on the i2c bus, and the
+ACPI Power Resource were never turned off.
 
-Good find.
+This patch tries to fix this issue.
 
-I think this deserves to be applied to the stable tree. There are quite a
-few kernel releases with the problem.
+To: Wolfram Sang <wsa@kernel.org>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Tomasz Figa <tfiga@chromium.org>
+To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc: Hidenori Kobayashi <hidenorik@google.com>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: linux-i2c@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+Changes in v5:
+- Add Cc: stable
+- Add Reviewed-by Sakary (Thanks!)
+- Renamed turn-off as power-off, in the name of consistency (Thanks Sergey!)
+- Link to v4: https://lore.kernel.org/r/20221109-i2c-waive-v4-0-e4496462833b@chromium.org
 
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Changes in v4:
+- Rename full_power to do_power_on
+- Link to v3: https://lore.kernel.org/r/20221109-i2c-waive-v3-0-d8651cb4b88d@chromium.org
 
-> 
-> Fixes: b18c1ad685d9 ("i2c: Allow an ACPI driver to manage the device's power state during probe")
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> 
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index b4edf10e8fd0..09a6bb89a352 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -467,6 +467,7 @@ static int i2c_device_probe(struct device *dev)
->  {
->  	struct i2c_client	*client = i2c_verify_client(dev);
->  	struct i2c_driver	*driver;
-> +	bool do_power_on;
->  	int status;
->  
->  	if (!client)
-> @@ -545,8 +546,8 @@ static int i2c_device_probe(struct device *dev)
->  	if (status < 0)
->  		goto err_clear_wakeup_irq;
->  
-> -	status = dev_pm_domain_attach(&client->dev,
-> -				      !i2c_acpi_waive_d0_probe(dev));
-> +	do_power_on = !i2c_acpi_waive_d0_probe(dev);
-> +	status = dev_pm_domain_attach(&client->dev, do_power_on);
->  	if (status)
->  		goto err_clear_wakeup_irq;
->  
-> @@ -580,12 +581,14 @@ static int i2c_device_probe(struct device *dev)
->  	if (status)
->  		goto err_release_driver_resources;
->  
-> +	client->turn_off_on_remove = do_power_on;
-> +
->  	return 0;
->  
->  err_release_driver_resources:
->  	devres_release_group(&client->dev, client->devres_group_id);
->  err_detach_pm_domain:
-> -	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
-> +	dev_pm_domain_detach(&client->dev, do_power_on);
->  err_clear_wakeup_irq:
->  	dev_pm_clear_wake_irq(&client->dev);
->  	device_init_wakeup(&client->dev, false);
-> @@ -610,7 +613,7 @@ static void i2c_device_remove(struct device *dev)
->  
->  	devres_release_group(&client->dev, client->devres_group_id);
->  
-> -	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
-> +	dev_pm_domain_detach(&client->dev, client->turn_off_on_remove);
->  
->  	dev_pm_clear_wake_irq(&client->dev);
->  	device_init_wakeup(&client->dev, false);
-> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> index f7c49bbdb8a1..412ac2b7cb2e 100644
-> --- a/include/linux/i2c.h
-> +++ b/include/linux/i2c.h
-> @@ -326,6 +326,8 @@ struct i2c_driver {
->   *	calls it to pass on slave events to the slave driver.
->   * @devres_group_id: id of the devres group that will be created for resources
->   *	acquired when probing this device.
-> + * @turn_off_on_remove: Record if we have turned on the device before probing
-> + *	so we can turn off the device at removal.
->   *
->   * An i2c_client identifies a single device (i.e. chip) connected to an
->   * i2c bus. The behaviour exposed to Linux is defined by the driver
-> @@ -355,6 +357,8 @@ struct i2c_client {
->  	i2c_slave_cb_t slave_cb;	/* callback for slave mode	*/
->  #endif
->  	void *devres_group_id;		/* ID of probe devres group	*/
-> +	bool turn_off_on_remove;	/* if device needs to be turned	*/
-> +					/* off by framework at removal	*/
+Changes in v3:
+- Introduce full_power variable to make more clear what we are doing.
+- Link to v2: https://lore.kernel.org/r/20221109-i2c-waive-v2-0-07550bf2dacc@chromium.org
 
-I don't know why the fields are documented twice. Someone wrote kerneldoc
-documentation but forgot to remove the old comments? :-) Anyway, not a
-fault of this patch, but these should probaly go.
+Changes in v2:
+- Cover also device remove
+- Link to v1: https://lore.kernel.org/r/20221109-i2c-waive-v1-0-ed70a99b990d@chromium.org
 
->  };
->  #define to_i2c_client(d) container_of(d, struct i2c_client, dev)
->  
-> 
+---
+Ricardo Ribalda (1):
+      i2c: Restore initial power state when we are done.
 
+ drivers/i2c/i2c-core-base.c | 11 +++++++----
+ include/linux/i2c.h         |  4 ++++
+ 2 files changed, 11 insertions(+), 4 deletions(-)
+---
+base-commit: f141df371335645ce29a87d9683a3f79fba7fd67
+change-id: 20221109-i2c-waive-ae97fea1f1b5
+
+Best regards,
 -- 
-Kind regards,
-
-Sakari Ailus
+Ricardo Ribalda <ribalda@chromium.org>
