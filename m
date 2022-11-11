@@ -2,70 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA6C62602D
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Nov 2022 18:13:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9119162606C
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Nov 2022 18:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233776AbiKKRN0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 11 Nov 2022 12:13:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
+        id S233876AbiKKRci (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 11 Nov 2022 12:32:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233762AbiKKRNZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Nov 2022 12:13:25 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828A727D;
-        Fri, 11 Nov 2022 09:13:23 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id r186-20020a1c44c3000000b003cfa97c05cdso88697wma.4;
-        Fri, 11 Nov 2022 09:13:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WR4ZsPco/CVzRRsDXNuvPlkKAJC2kjEvAa/rMERYHO4=;
-        b=M3AEbeqXZHuWqEwxLOhiuRHLEVS/grmK5UD/bw1c3c5u1jSf5cVZkkl9a7x15JGFrp
-         EeOHFz9J+hzamMY6qzAXGQvXU1T21qXVihfY9Mi717h0bnN1aPBdJmtqBzPB7gPdon7c
-         QJ1Wb0YrPNg6Ceiiwvh0TACZfMWy9fffqMGhRGJYRBdrA9smS6FfuFIlhDMhydvaszVz
-         xn5Be5/ZMgtI44TokbRN7I/4WDzs5f6k7u7kalVqdxcXcHKri0gesrf+T6dq/+/tu8d/
-         lX/EnMThYOOhngSscebq+z81kljBCjXpj3OoE2TEcZtrpkQwhc2KXFmzxAXEXhOb87Uc
-         HjQQ==
+        with ESMTP id S233495AbiKKRch (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Nov 2022 12:32:37 -0500
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EADB1A815;
+        Fri, 11 Nov 2022 09:32:36 -0800 (PST)
+Received: by mail-oo1-f46.google.com with SMTP id g15-20020a4a894f000000b0047f8e899623so742090ooi.5;
+        Fri, 11 Nov 2022 09:32:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WR4ZsPco/CVzRRsDXNuvPlkKAJC2kjEvAa/rMERYHO4=;
-        b=Ps4iImRVMLi1Yq5dKNK5lenjrNB7w9BjsycM4Gzb4nk8ua4csvtUQDN/uierVmnOW4
-         xNcB2dTmQEO/YkRp4WlAgg1RLktokqcwYhiunNnbgP3wcoiGpy9MrROf3+m4k1XZf506
-         UYxehqfUdVC0HFOw/mHArHDheZPt5GuUPTz1aMEFY95fSDg/bTCG//g5ryhvPvlN/irV
-         2LnSIwVf0B9GBOeR8x1zP1knHYHUBVO6Rk9ag6Te6nVqjqA3+/JBe8/7Ob7mwKcsMnKV
-         lsFontxOIVyhYTuUIV1TfsqjvES7qCqPtNM+4NsSOKLVqS5eSKN5eZPtnI4kBmqPZ7LJ
-         ZfgQ==
-X-Gm-Message-State: ANoB5pmGtuEQuYJ5kgzCQzyHbKWN6jIVPq73oUO+0T3Pzj1aro7gqrFe
-        aJCGbtidkCJJlf5FGg5cUunvGF5oSRAo6g==
-X-Google-Smtp-Source: AA0mqf4brqlgDjFtqDK/8Sg9349i3GnsKYIQNV5QeNn0nBxE9Gri9+6KjqmRGBXfAF6pA9feV28GvQ==
-X-Received: by 2002:a05:600c:4e4d:b0:3cf:81b1:bc7b with SMTP id e13-20020a05600c4e4d00b003cf81b1bc7bmr1933783wmq.121.1668186801919;
-        Fri, 11 Nov 2022 09:13:21 -0800 (PST)
-Received: from michael-VirtualBox (89-139-102-221.bb.netvision.net.il. [89.139.102.221])
-        by smtp.gmail.com with ESMTPSA id p5-20020a05600c358500b003c6b9749505sm10370124wmq.30.2022.11.11.09.13.20
+        bh=po5PnrsJOrtibdnuIvtZD7NvBSBhlNi4tJ/oxCe6Y54=;
+        b=jmxR6IKM9dqcj9G9TrskMylPFv5RloIgAzl+OCCYtSun8kgucvQcU/F6q3xVBrj3KP
+         GXcYqaeFZYDsBNDtlXZYbSBefSOJdMtZllCtlriashRiT8MhgdYhhJgkmnwj1d+CooKb
+         FELCWilELDlAopGB4emihseZmOmhNL3HojMk0w90b7+BgT359zBiRi01pxLhIGutjCgS
+         BTFFlOOQiDcPwYeMeEr/pvbRDZzGgPkXpWic7X01zoKwHFAO0NENJdMcF/G9IjAUai2Y
+         v5QcJJetEle+LGgric1evzJsPqKe34zgzNXDGWRqsqjFVY3JfUxkwGKsva0A6GTEnSRl
+         A6Jg==
+X-Gm-Message-State: ANoB5pmcE1RgqcE7b2Ic3DueyyuLoiNloxnZSPm3UVWWBP8DdQmX1qDu
+        SkCQKZ4ergOH3EE5XmxLaw==
+X-Google-Smtp-Source: AA0mqf4Z94tBfrdLD8Dbj2VxNYqWTWzdRAPZ/PPQAwiuJKHfq3mYjcMCQnCCnCuCCJIqaSvKoTgpGg==
+X-Received: by 2002:a4a:a78b:0:b0:498:260c:d780 with SMTP id l11-20020a4aa78b000000b00498260cd780mr1380739oom.27.1668187955744;
+        Fri, 11 Nov 2022 09:32:35 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i2-20020a4ac502000000b00480816a5b8csm999120ooq.18.2022.11.11.09.32.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 09:13:21 -0800 (PST)
-Date:   Fri, 11 Nov 2022 19:13:18 +0200
-From:   Michael Zaidman <michael.zaidman@gmail.com>
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Enrik.Berkhan@inka.de,
-        Michael Zaidman <michael.zaidman@gmail.com>,
-        Andrew Robertson <andrew.robertson@ftdichip.com>
-Subject: Re: [PATCH v4 00/13] HID: ft260: fixes and performance improvements
-Message-ID: <Y26CrhASiOuPXOl3@michael-VirtualBox>
-References: <20221105211151.7094-1-michael.zaidman@gmail.com>
- <nycvar.YFH.7.76.2211111109490.6045@cbobk.fhfr.pm>
+        Fri, 11 Nov 2022 09:32:35 -0800 (PST)
+Received: (nullmailer pid 3566720 invoked by uid 1000);
+        Fri, 11 Nov 2022 17:32:36 -0000
+Date:   Fri, 11 Nov 2022 11:32:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Wayne Chang <waynec@nvidia.com>, mathias.nyman@intel.com,
+        p.zabel@pengutronix.de, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-tegra@vger.kernel.org,
+        singhanc@nvidia.com, balbi@kernel.org,
+        linux-phy@lists.infradead.org, vkoul@kernel.org,
+        thierry.reding@gmail.com, ajayg@nvidia.com,
+        heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        treding@nvidia.com, jckuo@nvidia.com, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2 02/13] dt-bindings: usb: Add NVIDIA Tegra234 XUSB host
+ controller binding
+Message-ID: <20221111173236.GA3561612-robh@kernel.org>
+References: <20221111101509.999589-1-waynec@nvidia.com>
+ <20221111101509.999589-3-waynec@nvidia.com>
+ <166817308790.3060162.14990231448404857914.robh@kernel.org>
+ <5782d31a-9a0c-33da-ff84-20cae29f977e@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <nycvar.YFH.7.76.2211111109490.6045@cbobk.fhfr.pm>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <5782d31a-9a0c-33da-ff84-20cae29f977e@nvidia.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,58 +73,40 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 11:19:32AM +0100, Jiri Kosina wrote:
-> On Sat, 5 Nov 2022, Michael Zaidman wrote:
+On Fri, Nov 11, 2022 at 02:38:21PM +0000, Jon Hunter wrote:
 > 
-> > This patch series is an updated version of this one:
-> > https://lore.kernel.org/all/20221030203403.4637-1-michael.zaidman@gmail.com/
+> On 11/11/2022 13:30, Rob Herring wrote:
 > > 
-> > Changes since v3:
-> >   - Fixes for the kernel CI bot warnings
-> >   - We now do not miss NACK on the wakeup from the power saving mode
-> >     on the KVM installation reported by Enrik. For details, see
-> >     https://github.com/MichaelZaidman/hid-ft260/pull/7
+> > On Fri, 11 Nov 2022 18:14:58 +0800, Wayne Chang wrote:
+> > > Add device-tree binding documentation for the XUSB host controller present
+> > > on Tegra234 SoC. This controller supports the USB 3.1 specification.
+> > > 
+> > > Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> > > ---
+> > > V1 -> V2: new change for adding nvidia,tegra234-xusb.yaml
+> > >   .../bindings/usb/nvidia,tegra234-xusb.yaml    | 159 ++++++++++++++++++
+> > >   1 file changed, 159 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.yaml
+> > > 
 > > 
-> > Changes since v2:
+> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
 > > 
-> >   - Remove SMBus Quick command support
-> >   - Missed NACK from big i2c read
-> >   - Wake up device from power saving mode
-> >   - Fix a NULL pointer dereference in ft260_i2c_write
-> >   - Missed NACK from busy device
+> > yamllint warnings/errors:
 > > 
-> > Changes since v1:
-> > 
-> >   - Do not populate hidraw device
-> >   - Avoid stale read buffer pointer
-> > 
-> > Michael Zaidman (13):
-> >   HID: ft260: ft260_xfer_status routine cleanup
-> >   HID: ft260: improve i2c write performance
-> >   HID: ft260: support i2c writes larger than HID report size
-> >   HID: ft260: support i2c reads greater than HID report size
-> >   HID: ft260: improve i2c large reads performance
-> >   HID: ft260: do not populate /dev/hidraw device
-> >   HID: ft260: skip unexpected HID input reports
-> >   HID: ft260: remove SMBus Quick command support
-> >   HID: ft260: missed NACK from big i2c read
-> >   HID: ft260: wake up device from power saving mode
-> >   HID: ft260: fix a NULL pointer dereference in ft260_i2c_write
-> >   HID: ft260: missed NACK from busy device
-> >   HID: ft260: fix sparse warnings
+> > dtschema/dtc warnings/errors:
+> > Error: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.example.dts:36.27-28 syntax error
+> > FATAL ERROR: Unable to parse input tree
+> > make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.example.dtb] Error 1
+> > make[1]: *** Waiting for unfinished jobs....
+> > make: *** [Makefile:1492: dt_binding_check] Error 2
 > 
-> Hi Michael,
-> 
-> this is now queued in hid.git#for-6.2/ft260.
-> 
-> Thanks,
-> 
-> -- 
-> Jiri Kosina
-> SUSE Labs
-> 
+> This compiles fine on top of -next. We are just missing the change that
+> populates the required definitions.
 
-Thanks, Jiri! Much appreciated.
+Where exactly is that mentioned in the commit msg?
 
-Michael
+No maintainer can take patches which apply against linux-next, so not a 
+good dependency to mention either.
 
+Rob
