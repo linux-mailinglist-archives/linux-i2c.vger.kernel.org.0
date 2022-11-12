@@ -2,98 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47AA62678D
-	for <lists+linux-i2c@lfdr.de>; Sat, 12 Nov 2022 07:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 234A0626B88
+	for <lists+linux-i2c@lfdr.de>; Sat, 12 Nov 2022 21:14:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234769AbiKLG5d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 12 Nov 2022 01:57:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
+        id S230147AbiKLUOD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 12 Nov 2022 15:14:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiKLG5c (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 12 Nov 2022 01:57:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F0961BBD
-        for <linux-i2c@vger.kernel.org>; Fri, 11 Nov 2022 22:57:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62ACDB8286F
-        for <linux-i2c@vger.kernel.org>; Sat, 12 Nov 2022 06:57:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D3ECC433D6;
-        Sat, 12 Nov 2022 06:57:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668236249;
-        bh=mEXGeVkGKj/4iSCfDDvuEVU/OxzlB962tiktRQJtuyg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=onsC1+7utSvQ9TMywoypDRwVkPXHCSkL6Gm/njgzlax+0cX9xJ23q87gztGrjd2bz
-         XQ7NE1T0/hncVY5iOFzbnCm88Hoq7LRZVtljO183uJUg19+GK+ziCjPTGpAh6cGj9G
-         ItSOuIIn1YWkhawBWcbLzfo4a9ONmfvlkYf+HfqdzXchZHhON+XL2iI/Zk+ce3U8Gr
-         P90HswsqKbrjz4Vxng+Fpp4m7qeyYmEG64A9uiU0InUFkRtLe8Y22KRuFS1t3vhXTJ
-         PmgnXYByU/9DIzJyEo0pj6Pq12ijXcu953HffpaaSG27+esBvRbmiXx1jhL4iWYTC6
-         XiegGfvvSZsXg==
-Date:   Sat, 12 Nov 2022 07:57:26 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Michael Wu <michael.wu@vatics.com>, Tian Ye <tianye@sugon.com>
-Subject: Re: [PATCH v3 00/12] i2c: designware: Slave fixes and generic
- cleanups
-Message-ID: <Y29D1it8tciozt7x@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>, Michael Wu <michael.wu@vatics.com>,
-        Tian Ye <tianye@sugon.com>
-References: <20221107134248.864890-1-jarkko.nikula@linux.intel.com>
+        with ESMTP id S231252AbiKLUOC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 12 Nov 2022 15:14:02 -0500
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.148])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA05F5A7
+        for <linux-i2c@vger.kernel.org>; Sat, 12 Nov 2022 12:14:00 -0800 (PST)
+Received: (wp-smtpd smtp.tlen.pl 4821 invoked from network); 12 Nov 2022 21:07:16 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1668283636; bh=loH1W2wKycWcNMDjsgektwUyaNDFHlHO5th0/v6bRmw=;
+          h=Subject:To:Cc:From;
+          b=egiq0jsRFmHMDiNfMFvMUBgqj5BDQ5X+lvuVFIyXA5M/rniZMizsr4bhOjx8FAWNN
+           x6aZk2v6sI5h3RYl/cblVuoQhVgCnoq80vOEwkpxVdlz5GoMgtdppIQSjy/eXJTy4a
+           U/sC2ojO2XaPvQnNq/dTUPWoFMxtaGLR3J1wULns=
+Received: from aaey149.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.128.149])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <helgaas@kernel.org>; 12 Nov 2022 21:07:16 +0100
+Message-ID: <35cfe433-bafa-9aeb-20ad-2f275f585b6c@o2.pl>
+Date:   Sat, 12 Nov 2022 21:07:15 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZA1ZVr/fA0QxF7+I"
-Content-Disposition: inline
-In-Reply-To: <20221107134248.864890-1-jarkko.nikula@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] acpi,pci: handle duplicate IRQ routing entries
+ returned from _PRT
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Len Brown <lenb@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org
+References: <20221112002023.GA764787@bhelgaas>
+Content-Language: en-GB
+From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
+In-Reply-To: <20221112002023.GA764787@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: 13e9072270332344864b56994e464f72
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [QbNF]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+W dniu 12.11.2022 o 01:20, Bjorn Helgaas pisze:
+> [+cc Jean, linux-i2c]
+>
+> On Sat, Sep 17, 2022 at 11:09:44AM +0200, Mateusz Jończyk wrote:
+>> On some platforms, the ACPI _PRT function returns duplicate interrupt
+>> routing entries. Linux uses the first matching entry, but sometimes the
+>> second matching entry contains the correct interrupt vector.
+> Rafael, Jean, what do you think about this?  It seems like kind of a
+> lot of infrastructure to deal with this oddness, but I'm not really
+> opposed to it.
+>
+> This is in i2c-i801.c, which seems to have some support for polling;
+> maybe it could make smart enough to complain and automatically switch
+> to polling if a timeout occurs.
+>
+> Or maybe we scan the entire _PRT and let the match win (instead of the
+> first as we do today).
+>
+> Or ...?
+>
+> Google finds a lot of hits for "i801_smbus" "timeout waiting for
+> interrupt", but I can't tell whether they're a similar _PRT issue or
+> something else.
+>
+>> This happens on a Dell Latitude E6500 laptop with the i2c-i801 Intel
+>> SMBus controller. This controller was nonfunctional unless its interrupt
+>> usage was disabled (using the "disable_features=0x10" module parameter).
 
---ZA1ZVr/fA0QxF7+I
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hello,
 
+I have prepared a lean patch that only prints a warning when there are
+two matching entries in the table returned from _PRT (I will send it in the
+next e-mail). Perhaps it could be merged and then after a release or two
+it will be known how widespread this problem is.
 
-> Version 3 of the patchset I sent last week:
-> https://www.spinics.net/lists/linux-i2c/msg59046.html
+Greetings,
 
-Applied to for-next, thanks!
+Mateusz
 
-
---ZA1ZVr/fA0QxF7+I
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNvQ9YACgkQFA3kzBSg
-KbbrQhAAoUGzhU7kh7UfDZXMa0+pOR2cdZ1mH4e27tUEdpPUvk6dsYcCRYvWhDdV
-Yj4gNjpWg+9+E5wYLFDNrPsv7O9DfhB4QMDOry0QHxnyqXBJNMcN08VKWnIbfBuX
-eo5ccZ2m9oy4jei9l3wodOPJNTLagzvBOvsJaNAv+Y/Gg41yyr9oEWMCQV57p+QS
-ooa9YIrnTdYwD+mSnFDEjMwiYv+hwQ8W0hwQd2Hdj435bmXlagw8uRMnUivF63cv
-tJ0R3Ke+yYrW3JqF5cYyBZzSagCJWyC6Jw+zv2eR6rJYKW8ioOQoq94/JqvbGSfd
-fMZB9p2YfePl5LuLqFrjw7d3CN16Ct5nJvq1acQJyPHrcFFhpm+ClxoFMxTWGkvB
-HXdcFImYZe1e+3TRxh1DtNx1dGHUPN1AV/MBgRoH2yBB1fjcl7D1A8PL+mXPCei8
-F85dDhGVJaSHLAWPsMH3qtLJXM8ExyAgVLBEj7tmnn/HjqlPXTqkIrqbFCrLEEwZ
-BuzRqHTAG67DmOMIE6sQZA298IOD21iRgC45Ek5s/Hjd08HWk8Envzc9cSkbIop8
-+Rtsh8iZ5WHEKS245EMla7qQxAUar26qYszGBsysoae925kYFZvNP2pYsgweAs0v
-4ey6G0dD9wbHUMdO2GnD2QWy1VRXZ7M5tVBVXULQmSjn/S+GRjs=
-=CZyR
------END PGP SIGNATURE-----
-
---ZA1ZVr/fA0QxF7+I--
