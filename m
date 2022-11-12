@@ -2,53 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB495626B8F
-	for <lists+linux-i2c@lfdr.de>; Sat, 12 Nov 2022 21:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B04F6626B91
+	for <lists+linux-i2c@lfdr.de>; Sat, 12 Nov 2022 21:27:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231534AbiKLUZh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 12 Nov 2022 15:25:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
+        id S230147AbiKLU1v (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 12 Nov 2022 15:27:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbiKLUZg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 12 Nov 2022 15:25:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8CE14001;
-        Sat, 12 Nov 2022 12:25:35 -0800 (PST)
+        with ESMTP id S229584AbiKLU1t (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 12 Nov 2022 15:27:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754B41401B
+        for <linux-i2c@vger.kernel.org>; Sat, 12 Nov 2022 12:27:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AE9F604EF;
-        Sat, 12 Nov 2022 20:25:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 206D5C433C1;
-        Sat, 12 Nov 2022 20:25:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D2BDB80B09
+        for <linux-i2c@vger.kernel.org>; Sat, 12 Nov 2022 20:27:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B00C433C1;
+        Sat, 12 Nov 2022 20:27:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668284734;
-        bh=7HgMIBK5lenZRAF+PVub2ruILciUpgXIG339ihVq6Vo=;
+        s=k20201202; t=1668284865;
+        bh=qIBLf/JA6a5lFjnekdMjenQSoI1RAJTDYrJXEqDAAEg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QSF+8AA/UP3gPwqFcnKpMSJEoSWGd3aRiavja/B71Gg1puoEs6lEaP4t6kylziuHm
-         uqjP6NFYY1c24pAS8IFPPjiDuMZ/U06EoIRxizn/wX/XLPdjoj9cdI8Q/aokubDyWM
-         JPiPKiVRgC2YxLIn5KLQCPg7DGBXnb/Zi5QPD/2HU04gx1vED7DUfxpr9ncfFQLsse
-         nlvX45m2AWUkWTgMg/Eeplrgl6hxmr5Acu9NeCHo8rlds1hwuJu1mcWrPfta7z0yf3
-         MEdM9gjLQ8Zmf177q3pTZLc2A5hJNL4GjuaHwy7jOGVjiDAuGNT8hpJnAdf5FDzMGv
-         n2nJCg2favBFg==
-Date:   Sat, 12 Nov 2022 21:25:31 +0100
+        b=mJIsCmSjOwb6OqrLO8zMdVtAMFrIBs5PUZ7zen97OjLhozvFBegf9lUFOiui/3hT+
+         Hv1SPGgGq9nar+4AaxeV/zJoSESQ2GA11q9HfzYPieqEnGQfykzAVpT7KMGpAUpGvV
+         9swxaAiQvGttYXkhFlGx/jrxDH2tBy7QwKjMhve4julGkHyU95rINf9nNWLvcr6j7O
+         5Olf5U5YEcK3SfdppYKzw6r+QhWNEpRmyqRuvMR1rJCaFHJ33i/p+D/Shuz/0xYjoq
+         Z7lh6K8ju59Tv0WuH1CX5Q5Br1y7Msx0buCNXL9sjdfLV/9cPetGdjLiRMqC8rbYXB
+         YbTpcFo8+ftnA==
+Date:   Sat, 12 Nov 2022 21:27:42 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     ye.xingchen@zte.com.cn
-Cc:     linux@rempel-privat.de, kernel@pengutronix.de, shawnguo@kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, chi.minghao@zte.com.cn
-Subject: Re: [PATCH] i2c: imx: use devm_platform_get_and_ioremap_resource()
-Message-ID: <Y3ABOwd5Do0oDGMb@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, ye.xingchen@zte.com.cn,
-        linux@rempel-privat.de, kernel@pengutronix.de, shawnguo@kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, chi.minghao@zte.com.cn
-References: <202211101723428058432@zte.com.cn>
+To:     Yuan Can <yuancan@huawei.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        andriy.shevchenko@linux.intel.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: npcm7xx: Fix error handling in npcm_i2c_init()
+Message-ID: <Y3ABviGqOD52gEAC@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Yuan Can <yuancan@huawei.com>, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com,
+        andriy.shevchenko@linux.intel.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org
+References: <20221109112250.124829-1-yuancan@huawei.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CwPPD4IS7RKOIdrh"
+        protocol="application/pgp-signature"; boundary="iGjdv8VDVEVYoVbT"
 Content-Disposition: inline
-In-Reply-To: <202211101723428058432@zte.com.cn>
+In-Reply-To: <20221109112250.124829-1-yuancan@huawei.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,42 +62,58 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---CwPPD4IS7RKOIdrh
+--iGjdv8VDVEVYoVbT
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 10, 2022 at 05:23:42PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On Wed, Nov 09, 2022 at 11:22:50AM +0000, Yuan Can wrote:
+> A problem about i2c-npcm7xx create debugfs failed is triggered with the
+> following log given:
 >=20
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
+>  [  173.827310] debugfs: Directory 'npcm_i2c' with parent '/' already pre=
+sent!
 >=20
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> The reason is that npcm_i2c_init() returns platform_driver_register()
+> directly without checking its return value, if platform_driver_register()
+> failed, it returns without destroy the newly created debugfs, resulting
+> the debugfs of npcm_i2c can never be created later.
+>=20
+>  npcm_i2c_init()
+>    debugfs_create_dir() # create debugfs directory
+>    platform_driver_register()
+>      driver_register()
+>        bus_add_driver()
+>          priv =3D kzalloc(...) # OOM happened
+>    # return without destroy debugfs directory
+>=20
+> Fix by removing debugfs when platform_driver_register() returns error.
+>=20
+> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller drive=
+r")
+> Signed-off-by: Yuan Can <yuancan@huawei.com>
 
-Applied to for-next, thanks!
+Applied to for-current, thanks!
 
 
---CwPPD4IS7RKOIdrh
+--iGjdv8VDVEVYoVbT
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNwATsACgkQFA3kzBSg
-Kbbzsg/+NHAfxvSiQfS8FBLF0Asao4ueaGv6Al6CqNLQqrBJH9Z/fBkftst+Og7G
-p6XEDG6vYZQ7PJpm5cnyz6gGxBmSXnVqLr+0JjI1bMBHe7TQE1jNFXMJRhMD/Zg8
-rMkrywR45v45qg45yVQRhRh12gSkB6rPnc3nnB+u94dkNbgT+ToPB95MHUUvG+NM
-gZT3mwga4qlJWD6F+MS8SIb9sxQYvcprYQdgEmXkufmtWfE8CoyffP+/gdAaZN+l
-PBTj1T90Yeo0xwWvVP/Y1o0zvT8S+Gcb39dWyO+4ySuwwAMhKyMEkNm3IBhcGv+K
-okD1kJVSQU3glCiPXOSwTwjKmXPFxM/h4LzQX3iR4k0neBmb9FzsKKYa6lzxbqr0
-1ggQwdlW0vPdoPpEnEGQP1oaaTLqukjUcX3/T5aD5ub9fmJ4zQEzJqw0HS1FuaRi
-+Iq9pFAMzZ074eIew2eSs3HSti6d0MdO1Lae861DAoOp1jtA1CDLtDPJTfSqHppr
-LEioolMVW4AcHlV5uLzppy/DyAuRXm5H6MordU2+1sNTumnzsz8YSzlzC+HLDA33
-C+rUK2N+sWyCWU+mfnL0eRoHri/xPL7RxUORx/cBpW1lhnqCRKg+mQLx/4AgDMIV
-gI6c/k40ItfxWv1txx54IvKXR1cDbjvNw+BZSCeZOWwe+17dXI8=
-=aqE8
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNwAb4ACgkQFA3kzBSg
+KbYNhg//a/yY8ShxwFy/VziW+s6OFkkpX8yI2FsohwhfES5DNQBZFNE4QP6VRCYG
+eWi3KEWLh4zS8mfFtp/9YUoc0TYkP3w+jKfVzFsTBneBTu61bKD4g9JYfC2BypV8
+slTidPeCKCf1XYZ1lipT71KN77pQzCaC5ByiuysEI2TJ52IOUyyL6yuXPxH8QTGH
+iJ1UJlad+nH92FNFPdac69OslSo+VEDhWYLw+zfsUo5z1LRKMedTpUj40ih9Ltlt
+/BkBPi+KW9k1f7jOQiCAp9wAWxTaBbC60t2UFY87uF7Blbuuu19hs/egWWG6ED8Q
+Dhn4HRhzDu/eyHfOJ2p+BBbWUkcSJvhgAwT8NWUPN73uevOBRnS70O0teUx5+s3b
+qMaiK3LVtxIIYHkLHCYY5GbEOrCQLmdRpOj9pVhMezlW3PAYUDuXBHl9gszFi+Ho
+JG2uVezTLWjNjNnWD9kF4cRGLDONmGViq34TREA6btK8CKoqxlCLmbZCyDnX+ThQ
+vklGXu2R7jR988IL8GcgGA/ib22Dq1xMY14yOoW8rdY4XITT/2sRTua8wpOSAY6W
+xxMz7hh+/rBlobgR7mG4K8UswiSZ78NHhUk4CdSELmUT1WsN/pa1i+0pbnd3sWQ+
+sPxnQsai3ZYhg4AuEZjOLuDjsfrUrhKHsNpz/TAqpIaECL6JJOM=
+=ZkMX
 -----END PGP SIGNATURE-----
 
---CwPPD4IS7RKOIdrh--
+--iGjdv8VDVEVYoVbT--
