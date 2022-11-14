@@ -2,68 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F666289BB
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Nov 2022 20:48:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 296856289DC
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Nov 2022 20:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237390AbiKNTsZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Nov 2022 14:48:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
+        id S237116AbiKNTxa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Nov 2022 14:53:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237393AbiKNTsQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Nov 2022 14:48:16 -0500
+        with ESMTP id S236900AbiKNTx2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Nov 2022 14:53:28 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE6A22503;
-        Mon, 14 Nov 2022 11:47:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44693B49;
+        Mon, 14 Nov 2022 11:53:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82959B8121C;
-        Mon, 14 Nov 2022 19:47:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D2B1C433D6;
-        Mon, 14 Nov 2022 19:47:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6C24B8121B;
+        Mon, 14 Nov 2022 19:53:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D879AC433C1;
+        Mon, 14 Nov 2022 19:53:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668455270;
-        bh=gc9A5nj2R6mNJZ7b2bJwX609pNXszLURKRE2NYuQFt8=;
+        s=k20201202; t=1668455603;
+        bh=USGNMT7eLqrliFumb6hvigVcUYCVRR/D6RMI4vwCgGk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vQuxY3uXHey+wBOxJUaZ9NdOn71uWj81VuEkhVHuiZO4Lxne7uFgFYu2Y2X/s33su
-         gGjJGmACuLypkOM85cmLs3VES85A9gglMIXxlGo4O7rCKZL2X57KUdB1Dk89B9E0bT
-         vnaqrICHk9mS+vX9uS/Ejdpa2H4ZQbEigJxLuJ+Xvd8vohEOE/TybROmx9Vk91lYlm
-         KZjUsg7R1QbDt+DvFcWkutCNml3R4vKhnXpPHPOqgZUd5Hg2k4D7YZjgHW1vb/MR3Q
-         4ct388zDi2owQbqpg91TmpUtaquW0BVEwc4ytilBZhPce5Bwx3XWjKHgd4yKRoEspD
-         9o6lIyp2idQjQ==
-Date:   Mon, 14 Nov 2022 20:47:44 +0100
+        b=ovVbA+b16cn1+LhsXZ392oeDpR88SLThXQzjLKlhIYAyISZ4GICcJZLI5iDKmr8TM
+         7456lyOjZn4eE/RX6OAtWd9Zt7HeZyp8gvLpuDRJsacj1OAOeNq5QGQDnRe0CjAUxD
+         pLlNLa484GnXMDy39eJeD2w53KPFpdwoNle8WfQOA9uI3DaUhwVZ6vMwyIUlF1Q0GB
+         oXK0U+N/1EKk2BRNXjBjWV33E1WbjvouZzLo0JDz8n7wH9f/nR7qurhA2lj+u7kTXh
+         ojEVysFDIgbVqhTn5eDVL8kv5NDUDIHNMYcvzb9OFALlt0rSz21PCsinwHqPhN+UfP
+         mUcxihfUW2V6w==
+Date:   Mon, 14 Nov 2022 20:53:20 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hidenori Kobayashi <hidenorik@chromium.org>,
-        stable@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Hidenori Kobayashi <hidenorik@google.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v6 1/1] i2c: Restore initial power state if probe fails
-Message-ID: <Y3KbYLSFLUuVnSIa@shikoro>
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>
+Cc:     linux-iio@vger.kernel.org,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
+        Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] i2c: core: Introduce i2c_client_get_device_id
+ helper function
+Message-ID: <Y3KcsJbE2bxWBjqF@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hidenori Kobayashi <hidenorik@chromium.org>, stable@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>, linux-iio@vger.kernel.org,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
         linux-kernel@vger.kernel.org,
-        Hidenori Kobayashi <hidenorik@google.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-i2c@vger.kernel.org
-References: <20221109-i2c-waive-v6-0-bc059fb7e8fa@chromium.org>
- <20221109-i2c-waive-v6-1-bc059fb7e8fa@chromium.org>
+        Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>, linux-i2c@vger.kernel.org
+References: <cover.1668361368.git.ang.iglesiasg@gmail.com>
+ <a844cc7c85898b40abbdcb1f068338619c6010eb.1668361368.git.ang.iglesiasg@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qv6denHYt0WD4nxL"
+        protocol="application/pgp-signature"; boundary="wT/OxVyU1qtsOtS5"
 Content-Disposition: inline
-In-Reply-To: <20221109-i2c-waive-v6-1-bc059fb7e8fa@chromium.org>
+In-Reply-To: <a844cc7c85898b40abbdcb1f068338619c6010eb.1668361368.git.ang.iglesiasg@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -74,52 +67,55 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---qv6denHYt0WD4nxL
-Content-Type: text/plain; charset=us-ascii
+--wT/OxVyU1qtsOtS5
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-wOn Mon, Nov 14, 2022 at 01:20:34PM +0100, Ricardo Ribalda wrote:
-> A driver that supports I2C_DRV_ACPI_WAIVE_D0_PROBE is not expected to
-> power off a device that it has not powered on previously.
+On Sun, Nov 13, 2022 at 06:46:30PM +0100, Angel Iglesias wrote:
+> Introduces new helper function to aid in .probe_new() refactors. In order
+> to use existing i2c_get_device_id() on the probe callback, the device
+> match table needs to be accessible in that function, which would require
+> bigger refactors in some drivers using the deprecated .probe callback.
 >=20
-> For devices operating in "full_power" mode, the first call to
-> `i2c_acpi_waive_d0_probe` will return 0, which means that the device
-> will be turned on with `dev_pm_domain_attach`.
+> This issue was discussed in more detail in the IIO mailing list.
 >=20
-> If probe fails the second call to `i2c_acpi_waive_d0_probe` will
-> return 1, which means that the device will not be turned off.
-> This is, it will be left in a different power state. Lets fix it.
->=20
-> Reviewed-by: Hidenori Kobayashi <hidenorik@chromium.org>
-> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Cc: stable@vger.kernel.org
-> Fixes: b18c1ad685d9 ("i2c: Allow an ACPI driver to manage the device's po=
-wer state during probe")
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> Link: https://lore.kernel.org/all/20221023132302.911644-11-u.kleine-koeni=
+g@pengutronix.de/
+> Suggested-by: Nuno S=C3=A1 <noname.nuno@gmail.com>
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Suggested-by: Jonathan Cameron <jic23@kernel.org>
+> Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Applied to for-current, thanks!
+Immutable branch here:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/client_devi=
+ce_id_helper-immutable
+
+I merged this branch also into i2c/for-mergewindow.
+
+Thank you, everyone!
 
 
---qv6denHYt0WD4nxL
+--wT/OxVyU1qtsOtS5
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNym1wACgkQFA3kzBSg
-KbYxLxAAmxOGLCEUVGi4wIh35Mh/wHx3+QiIhPMBmv4OOoAh5iVxbeW01GOdSXYf
-BwuyzxaiuQHsnl1JWnn9RDEnSjeSM2xKIdk3nA9HXpUGt42W5OzV2+HaDOee/7tg
-oWD2gV5ikgNCqvTl8usOgCrxZTW6RFtYPVNFDgI8a38LAPdDfyhda5v1Mq7vGJBi
-RIuNLRbHErZB70X0gzBV6YFbm8LBRHkWRTMQVHoOQgN3208BRtCjlkIafKnDbh6j
-Ws+7l3g83Epe7M+ExEK/RhStAxYmpayTu/Jv52SjHE/i8cUF0ipntrGrnuAmqnxb
-FYExcs9jhCp8AuyN6UwvIlYS4hi0bch/YV9utG4ZMMiBsrvP2z1wjRc+b1mnxhb2
-YjzvLKlzqN84ZtoeqrC7F0wrwR5ZJg781cULsIskEpi7l+2DvbMXCHBpwH+1rwLk
-gKc30l4JsarA6S5eCyA57ESdB5PuQ9w/6c6wD5KSKFVuF5/wksLyVrm3l75Q/HfL
-JCQhUNc9ka4BpFtXpHxHs+UZnYn3aDAobnhzDa0bl1HDS93b1IRr8ETKiMFALgTo
-cTMcajw+JU6BBNnaiRlhVxlfKSb/H/fz632R93slQU7+Av0p9SC5/xnUuvL/BSto
-VpsepytfbcVTUVy4c4Sjk5Ccw0Kb7RF4XeMmowF9fTt3RBt5gUg=
-=wZMu
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNynLAACgkQFA3kzBSg
+KbZjbA/8C3D3AspW3MOT09t4afYUQB0G7EeVSJ2Ixv8xNLt0H0Xbp8mSBHn8E20f
+09R95tXkKzEkU6Cn6ZmDTkcTHGd0knsyPGyy08CFXbdDsQM84+Tx+oVVzB/iqW9S
+SRyRuf9PuF5esCejY4znIccqxN5LaUWWyY5rM4XnOvp2Mcu+V6bsS4EjDPj0zYGe
+o829SfDNwiHjiA7Oqbz4sjbCTCeyYa3emwpZ8xG/LevoiVBh5SRJGaeWgm5W6MjN
+C3uYOjj4MeY2J+AUHtBMMVzaujAaTN9O4fIXuWNJfIQG0mwfLAPfa3yZPsZ4hYB9
+IINBlBM8AWwb74WPX7AEnSnDCuJTyFVtu8ChVqAKXmtVVrpjIhvlucEwNiBUA3et
+pnZZRBeZ1opGrycM9pi4x0OMjYLBJqSGEXCWZcTKVLjQZ0lBM6o6qgRKNQcrpyvx
+uW91mTy9fpqHxw00WmrOnUZCjSkDpVPOb557b0IHo93Rav5gdF16mPX56zfU4jD6
+kQJRR4ktJb5uNQ6yMCM6vyD6ymSJ0tukIs8u2pSpsN/NfrzRIXfnDt8zT0jqVrEE
+1V8zwmK5OzNXSPj0eR8ErGjm25s7adoes3Qzc7/V5WJmH/MTsB/xq/VvVRs3dd/Q
+5ptOAvxgD+e11c2dSLR2iR4rFVOroLdWcaVy3a7k/Ov2AYWuHss=
+=np0W
 -----END PGP SIGNATURE-----
 
---qv6denHYt0WD4nxL--
+--wT/OxVyU1qtsOtS5--
