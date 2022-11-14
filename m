@@ -2,61 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 296856289DC
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Nov 2022 20:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E26628992
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Nov 2022 20:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237116AbiKNTxa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Nov 2022 14:53:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
+        id S235709AbiKNTnL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Nov 2022 14:43:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236900AbiKNTx2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Nov 2022 14:53:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44693B49;
-        Mon, 14 Nov 2022 11:53:26 -0800 (PST)
+        with ESMTP id S230030AbiKNTnK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Nov 2022 14:43:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76FD1C134;
+        Mon, 14 Nov 2022 11:43:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6C24B8121B;
-        Mon, 14 Nov 2022 19:53:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D879AC433C1;
-        Mon, 14 Nov 2022 19:53:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 738C7B81212;
+        Mon, 14 Nov 2022 19:43:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98C1DC433C1;
+        Mon, 14 Nov 2022 19:43:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668455603;
-        bh=USGNMT7eLqrliFumb6hvigVcUYCVRR/D6RMI4vwCgGk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ovVbA+b16cn1+LhsXZ392oeDpR88SLThXQzjLKlhIYAyISZ4GICcJZLI5iDKmr8TM
-         7456lyOjZn4eE/RX6OAtWd9Zt7HeZyp8gvLpuDRJsacj1OAOeNq5QGQDnRe0CjAUxD
-         pLlNLa484GnXMDy39eJeD2w53KPFpdwoNle8WfQOA9uI3DaUhwVZ6vMwyIUlF1Q0GB
-         oXK0U+N/1EKk2BRNXjBjWV33E1WbjvouZzLo0JDz8n7wH9f/nR7qurhA2lj+u7kTXh
-         ojEVysFDIgbVqhTn5eDVL8kv5NDUDIHNMYcvzb9OFALlt0rSz21PCsinwHqPhN+UfP
-         mUcxihfUW2V6w==
-Date:   Mon, 14 Nov 2022 20:53:20 +0100
-From:   Wolfram Sang <wsa@kernel.org>
+        s=k20201202; t=1668454986;
+        bh=URpbibhhEWl0uu+a+Kz/vax545HiRA1R4KMIR2BNtvM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ptPFYoqwflN6Nf+Jm6wAJpK6Fg9uE3Sz9VD3x4oTf2utaJpkBBjZ8FtqE0nenXTO8
+         rrjDQYHC+i139siJ5l60K+D1OUoiYiAeywso+v/AWKIf7nI4D34qrfiF3gG8sJ923O
+         Z8J/5pfaSB0MpX8ZRc45kKu5raiVrbYM32Fx6LLPz2mUcM7bXQ48MhZXC0F0gPlJcu
+         hOrcMifAim5sxqtuu4LQ8CZXkSxOHa7/G1LeI10OzyoS86hCaSokDnCJOjj8xqyInK
+         FTCB4CJfLl8BwqjlRCNbRDrgMt60xNRXfATNwV6UDQcrp4YFmrKkVB62w+PuqNbmo9
+         jZvoddmx0Ii6Q==
+Date:   Mon, 14 Nov 2022 19:55:23 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>
 Cc:     linux-iio@vger.kernel.org,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
         <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
-        Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>,
+        Nuno =?UTF-8?B?U8Oh?= <noname.nuno@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>, linux-i2c@vger.kernel.org
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
 Subject: Re: [PATCH v3 1/2] i2c: core: Introduce i2c_client_get_device_id
  helper function
-Message-ID: <Y3KcsJbE2bxWBjqF@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>, linux-iio@vger.kernel.org,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>, linux-i2c@vger.kernel.org
-References: <cover.1668361368.git.ang.iglesiasg@gmail.com>
- <a844cc7c85898b40abbdcb1f068338619c6010eb.1668361368.git.ang.iglesiasg@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wT/OxVyU1qtsOtS5"
-Content-Disposition: inline
+Message-ID: <20221114195523.6fb2d064@jic23-huawei>
 In-Reply-To: <a844cc7c85898b40abbdcb1f068338619c6010eb.1668361368.git.ang.iglesiasg@gmail.com>
+References: <cover.1668361368.git.ang.iglesiasg@gmail.com>
+        <a844cc7c85898b40abbdcb1f068338619c6010eb.1668361368.git.ang.iglesiasg@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,13 +59,9 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Sun, 13 Nov 2022 18:46:30 +0100
+Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
 
---wT/OxVyU1qtsOtS5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sun, Nov 13, 2022 at 06:46:30PM +0100, Angel Iglesias wrote:
 > Introduces new helper function to aid in .probe_new() refactors. In order
 > to use existing i2c_get_device_id() on the probe callback, the device
 > match table needs to be accessible in that function, which would require
@@ -87,35 +76,49 @@ g@pengutronix.de/
 > Suggested-by: Jonathan Cameron <jic23@kernel.org>
 > Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
 > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Immutable branch here:
+>=20
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index b4edf10e8fd0..9aa7b9d9a485 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -2236,6 +2236,20 @@ int i2c_get_device_id(const struct i2c_client *cli=
+ent,
+>  }
+>  EXPORT_SYMBOL_GPL(i2c_get_device_id);
+> =20
+> +/**
+> + * i2c_client_get_device_id - get the driver match table entry of a devi=
+ce
+> + * @client: the device to query. The device must be bound to a driver
+> + *
+> + * Returns a pointer to the matching entry if found, NULL otherwise.
+> + */
+> +const struct i2c_device_id *i2c_client_get_device_id(const struct i2c_cl=
+ient *client)
+> +{
+> +	const struct i2c_driver *drv =3D to_i2c_driver(client->dev.driver);
+> +
+> +	return i2c_match_id(drv->id_table, client);
+> +}
+> +EXPORT_SYMBOL_GPL(i2c_client_get_device_id);
+> +
+>  /* ----------------------------------------------------
+>   * the i2c address scanning function
+>   * Will not work for 10-bit addresses!
+> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> index f7c49bbdb8a1..d84e0e99f084 100644
+> --- a/include/linux/i2c.h
+> +++ b/include/linux/i2c.h
+> @@ -189,6 +189,7 @@ s32 i2c_smbus_read_i2c_block_data_or_emulated(const s=
+truct i2c_client *client,
+>  					      u8 *values);
+>  int i2c_get_device_id(const struct i2c_client *client,
+>  		      struct i2c_device_identity *id);
+> +const struct i2c_device_id *i2c_client_get_device_id(const struct i2c_cl=
+ient *client);
+>  #endif /* I2C */
+> =20
+>  /**
 
-git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/client_devi=
-ce_id_helper-immutable
-
-I merged this branch also into i2c/for-mergewindow.
-
-Thank you, everyone!
-
-
---wT/OxVyU1qtsOtS5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNynLAACgkQFA3kzBSg
-KbZjbA/8C3D3AspW3MOT09t4afYUQB0G7EeVSJ2Ixv8xNLt0H0Xbp8mSBHn8E20f
-09R95tXkKzEkU6Cn6ZmDTkcTHGd0knsyPGyy08CFXbdDsQM84+Tx+oVVzB/iqW9S
-SRyRuf9PuF5esCejY4znIccqxN5LaUWWyY5rM4XnOvp2Mcu+V6bsS4EjDPj0zYGe
-o829SfDNwiHjiA7Oqbz4sjbCTCeyYa3emwpZ8xG/LevoiVBh5SRJGaeWgm5W6MjN
-C3uYOjj4MeY2J+AUHtBMMVzaujAaTN9O4fIXuWNJfIQG0mwfLAPfa3yZPsZ4hYB9
-IINBlBM8AWwb74WPX7AEnSnDCuJTyFVtu8ChVqAKXmtVVrpjIhvlucEwNiBUA3et
-pnZZRBeZ1opGrycM9pi4x0OMjYLBJqSGEXCWZcTKVLjQZ0lBM6o6qgRKNQcrpyvx
-uW91mTy9fpqHxw00WmrOnUZCjSkDpVPOb557b0IHo93Rav5gdF16mPX56zfU4jD6
-kQJRR4ktJb5uNQ6yMCM6vyD6ymSJ0tukIs8u2pSpsN/NfrzRIXfnDt8zT0jqVrEE
-1V8zwmK5OzNXSPj0eR8ErGjm25s7adoes3Qzc7/V5WJmH/MTsB/xq/VvVRs3dd/Q
-5ptOAvxgD+e11c2dSLR2iR4rFVOroLdWcaVy3a7k/Ov2AYWuHss=
-=np0W
------END PGP SIGNATURE-----
-
---wT/OxVyU1qtsOtS5--
