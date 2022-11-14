@@ -2,163 +2,183 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9028C627A45
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Nov 2022 11:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2A5627A8F
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Nov 2022 11:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236427AbiKNKQn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Nov 2022 05:16:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
+        id S230441AbiKNKdf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Nov 2022 05:33:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235591AbiKNKQQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Nov 2022 05:16:16 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFD91EC65;
-        Mon, 14 Nov 2022 02:15:34 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id k2so27103458ejr.2;
-        Mon, 14 Nov 2022 02:15:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N7U98HqvMeOnm6Eh8maT1EIBJe9LLM6lCpqSN06lRLY=;
-        b=dFK25eTLa0eWqTq1hV4xDddW+/ZFK5/w/Ztv+doP2F4WDUT3jf8llh8klwE/Y8E2ig
-         RDsdFX6YnKJhYxy7ECgmW03rZwxArQNpNNKkBIkUx4jW7TABIWHEkFtW4MzWUrWpCwRU
-         xK40/VNf4ckptopeDK4FkDVOXX6H1iVuXygjbZzfjSmBY62Etib5peawv+huwDUYt+z4
-         1/Tw1xEu18Xx29/sH4DyBDHaDfv5nL7eVoDvborW45TDxohlGejZdsgUieNu02XYlCID
-         oxpu5vhxQFUVUsiOX6B9MS6le+KpUOtmG7u0n58uHzHlgaTnJBhbdL/mEjxY0uJDuvkd
-         53aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N7U98HqvMeOnm6Eh8maT1EIBJe9LLM6lCpqSN06lRLY=;
-        b=LyrQiKN0rn3Vv7sGgiwIimJVEMV0J5nJS2uWYXZa99lDPm5pIeVmrc60R/8BoTaONI
-         lNK/UUvEnk20OYnt3Mri2LZaUYjk2pWwK6Dk4CTGHzRQgJIcLCTrgwzqK1yF2/jCTJDg
-         AHQD3FjzhiXm02DkrDYg/ypSA4Pc/Za0BLCT2jK8rjO1/qu7zHJvG0pdYbJ+57VpQfGs
-         7/j8K6ecppakS+3HzHnLD6SEJGWqIluKOz7qQJnj7clfo879fxkHHPgb9Q8DJ1hBu7kB
-         TZh/0FMlgR/Fqw+u3ZQoq72vnYQgaX53bSHP/vcq5eC7w3EN5AUp4uVwSshgI+hwJAUr
-         kErA==
-X-Gm-Message-State: ANoB5pnmGpjB0VmAvKjkZga3XAQ7gkaTBS57pxJISDi+lZ1hFNEPUuul
-        66+7yfI8/TyVOi/u6mBu3ClJZwx5F/I=
-X-Google-Smtp-Source: AA0mqf5Zqswe5wI3zWZCj5Gwtm8okjT9rxQpGuiMZDc/XmRpoxHc5/yiMagpgyssM4IcKzqjCFvXXw==
-X-Received: by 2002:a17:906:c251:b0:7ae:1874:3e09 with SMTP id bl17-20020a170906c25100b007ae18743e09mr9194067ejb.534.1668420933118;
-        Mon, 14 Nov 2022 02:15:33 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ky14-20020a170907778e00b0078afe360800sm3948522ejc.199.2022.11.14.02.15.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 02:15:31 -0800 (PST)
-Date:   Mon, 14 Nov 2022 11:15:30 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>, Wayne Chang <waynec@nvidia.com>,
-        mathias.nyman@intel.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-tegra@vger.kernel.org, singhanc@nvidia.com, balbi@kernel.org,
-        linux-phy@lists.infradead.org, vkoul@kernel.org, ajayg@nvidia.com,
-        heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-        treding@nvidia.com, jckuo@nvidia.com, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2 02/13] dt-bindings: usb: Add NVIDIA Tegra234 XUSB host
- controller binding
-Message-ID: <Y3IVQtY94GenVpGL@orome>
-References: <20221111101509.999589-1-waynec@nvidia.com>
- <20221111101509.999589-3-waynec@nvidia.com>
- <166817308790.3060162.14990231448404857914.robh@kernel.org>
- <5782d31a-9a0c-33da-ff84-20cae29f977e@nvidia.com>
- <20221111173236.GA3561612-robh@kernel.org>
+        with ESMTP id S230391AbiKNKdK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Nov 2022 05:33:10 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7401BEBE;
+        Mon, 14 Nov 2022 02:33:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668421988; x=1699957988;
+  h=date:from:to:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=Y0WdUR+FeU2C43ZxBmO//rjLti3e/g0n9XgzSjyHz+U=;
+  b=BCoNOUekDCrU3jD7MiC1LDjmda/cdFGRavFxfxrjZ8XMNxg9SQR32Ifg
+   K7Tk9UjBeQZB7xP/v2PBnk9FzbB0Jg4KQDWB7hjOyll2r5GzFGvycxKZ4
+   yE8pP6f14b4DW7cnuE9KsXtaa4cp7/uYf/hjC2j5lB6f9bT+gQKhMw0M4
+   wYqaEzxL/GJXOy3RTcvv4u2aND6yyEIZ+M3OnoD76ot0UIdlJNeO9j5ye
+   oMazl7EAxcGO4ZigUe/PpZVKMzfoTCE8a98HktHqZvJ15rZssmdnkk1qz
+   ba6Q1hcZoPj81lFUAG88QdxKBmpk0z+mESlU07EI+sEnJGgO/BlQephd2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="309563246"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="309563246"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 02:33:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="616256319"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="616256319"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 14 Nov 2022 02:33:02 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id C75CE32E; Mon, 14 Nov 2022 12:33:26 +0200 (EET)
+Date:   Mon, 14 Nov 2022 12:33:26 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Hidenori Kobayashi <hidenorik@google.com>,
+        stable@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/1] i2c: Restore initial power state when we are done.
+Message-ID: <Y3IZdrwwfiolSjB4@black.fi.intel.com>
+References: <20221109-i2c-waive-v5-0-2839667f8f6a@chromium.org>
+ <20221109-i2c-waive-v5-1-2839667f8f6a@chromium.org>
+ <Y3AA7hZFvoI9+2fF@shikoro>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="2hyjIjtsn0nH3kf8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221111173236.GA3561612-robh@kernel.org>
-User-Agent: Mutt/2.2.8 (2022-11-05)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y3AA7hZFvoI9+2fF@shikoro>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi,
 
---2hyjIjtsn0nH3kf8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sat, Nov 12, 2022 at 09:24:14PM +0100, Wolfram Sang wrote:
+> On Thu, Nov 10, 2022 at 05:20:39PM +0100, Ricardo Ribalda wrote:
+> > A driver that supports I2C_DRV_ACPI_WAIVE_D0_PROBE is not expected to
+> > power off a device that it has not powered on previously.
+> > 
+> > For devices operating in "full_power" mode, the first call to
+> > `i2c_acpi_waive_d0_probe` will return 0, which means that the device
+> > will be turned on with `dev_pm_domain_attach`.
+> > 
+> > If probe fails or the device is removed the second call to
+> > `i2c_acpi_waive_d0_probe` will return 1, which means that the device
+> > will not be turned off. This is, it will be left in a different power
+> > state. Lets fix it.
+> > 
+> > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Cc: stable@vger.kernel.org
+> > Fixes: b18c1ad685d9 ("i2c: Allow an ACPI driver to manage the device's power state during probe")
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> 
+> Adding I2C ACPI maintainer to CC. Mika, could you please help
+> reviewing?
 
-On Fri, Nov 11, 2022 at 11:32:36AM -0600, Rob Herring wrote:
-> On Fri, Nov 11, 2022 at 02:38:21PM +0000, Jon Hunter wrote:
-> >=20
-> > On 11/11/2022 13:30, Rob Herring wrote:
-> > >=20
-> > > On Fri, 11 Nov 2022 18:14:58 +0800, Wayne Chang wrote:
-> > > > Add device-tree binding documentation for the XUSB host controller =
-present
-> > > > on Tegra234 SoC. This controller supports the USB 3.1 specification.
-> > > >=20
-> > > > Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> > > > ---
-> > > > V1 -> V2: new change for adding nvidia,tegra234-xusb.yaml
-> > > >   .../bindings/usb/nvidia,tegra234-xusb.yaml    | 159 +++++++++++++=
-+++++
-> > > >   1 file changed, 159 insertions(+)
-> > > >   create mode 100644 Documentation/devicetree/bindings/usb/nvidia,t=
-egra234-xusb.yaml
-> > > >=20
-> > >=20
-> > > My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_ch=
-eck'
-> > > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> > >=20
-> > > yamllint warnings/errors:
-> > >=20
-> > > dtschema/dtc warnings/errors:
-> > > Error: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.exa=
-mple.dts:36.27-28 syntax error
-> > > FATAL ERROR: Unable to parse input tree
-> > > make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bind=
-ings/usb/nvidia,tegra234-xusb.example.dtb] Error 1
-> > > make[1]: *** Waiting for unfinished jobs....
-> > > make: *** [Makefile:1492: dt_binding_check] Error 2
-> >=20
-> > This compiles fine on top of -next. We are just missing the change that
-> > populates the required definitions.
->=20
-> Where exactly is that mentioned in the commit msg?
->=20
-> No maintainer can take patches which apply against linux-next, so not a=
-=20
-> good dependency to mention either.
+Sure.
 
-It would probably be easiest for me to pick this up into the Tegra tree
-since that's where the dt-bindings header file change is that adds these
-symbols. Alternatively we could strip the symbols from the example and
-use literals instead.
+> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> > index b4edf10e8fd0..6f4974c76404 100644
+> > --- a/drivers/i2c/i2c-core-base.c
+> > +++ b/drivers/i2c/i2c-core-base.c
+> > @@ -467,6 +467,7 @@ static int i2c_device_probe(struct device *dev)
+> >  {
+> >  	struct i2c_client	*client = i2c_verify_client(dev);
+> >  	struct i2c_driver	*driver;
+> > +	bool do_power_on;
+> >  	int status;
+> >  
+> >  	if (!client)
+> > @@ -545,8 +546,8 @@ static int i2c_device_probe(struct device *dev)
+> >  	if (status < 0)
+> >  		goto err_clear_wakeup_irq;
+> >  
+> > -	status = dev_pm_domain_attach(&client->dev,
+> > -				      !i2c_acpi_waive_d0_probe(dev));
+> > +	do_power_on = !i2c_acpi_waive_d0_probe(dev);
+> > +	status = dev_pm_domain_attach(&client->dev, do_power_on);
 
-Thierry
+I think this is fine as the driver says it is OK to see the device in
+whatever power state (I assume this is what the
+i2c_acpi_waive_d0_probe() is supposed to be doing but there is no
+kernel-doc, though).
 
---2hyjIjtsn0nH3kf8
-Content-Type: application/pgp-signature; name="signature.asc"
+> >  	if (status)
+> >  		goto err_clear_wakeup_irq;
+> >  
+> > @@ -580,12 +581,14 @@ static int i2c_device_probe(struct device *dev)
+> >  	if (status)
+> >  		goto err_release_driver_resources;
+> >  
+> > +	client->power_off_on_remove = do_power_on;
+> > +
+> >  	return 0;
+> >  
+> >  err_release_driver_resources:
+> >  	devres_release_group(&client->dev, client->devres_group_id);
+> >  err_detach_pm_domain:
+> > -	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
+> > +	dev_pm_domain_detach(&client->dev, do_power_on);
+> >  err_clear_wakeup_irq:
+> >  	dev_pm_clear_wake_irq(&client->dev);
+> >  	device_init_wakeup(&client->dev, false);
+> > @@ -610,7 +613,7 @@ static void i2c_device_remove(struct device *dev)
+> >  
+> >  	devres_release_group(&client->dev, client->devres_group_id);
+> >  
+> > -	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
+> > +	dev_pm_domain_detach(&client->dev, client->power_off_on_remove);
 
------BEGIN PGP SIGNATURE-----
+However, on the remove path I think we should not call
+i2c_acpi_waive_d0_probe() at all as that has nothing to do with remove
+(it is for whether the driver accepts any power state on probe AFAICT)
+so this should stil be "true" here. Unless I'm missing something.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNyFUIACgkQ3SOs138+
-s6H1Uw//WLqL8StUoYtObkq8iiJpsfdxOjQvDdyaW0F4virLoWtaqoLEFVpbja40
-YjX08K9B0iNoo58bTXGyUrgTKPsrj4GxOFqD13ons2T7NkjDGd+k0MHhoe/5dY02
-rshoIdDbqd+ZjQMyrtPCyWgHfgcKeMVd0xmBhJKF7eBUljX6mhZTboCmWTKvFake
-wWCQQs+5m83Zm5oFOQyu2zcl7Y+127zrofOluMv1l5pRYESmmzndykB5ZTGBmWJm
-IE3NExzLNoAjRn0v/0fC9yaPi8GCYVDxmuKYZYuYXKGUioesTOHpeu29iEVcfVLI
-e1+Et89Z+Sot37r4qenXlZmLcXMu29UvC5mrckAGxynu8eB7LgfRUMDoXr+2/teg
-sOUltlxbzw4wdQsh2sf+aRZZdDtFUlpIZpxkijsHsO1Rhz/q8e4kkOab5VUx6jCe
-VmEcjSlsiQkYSNzyFilJhx7t14AIqLIcmW0M9086JbcFulyJdojZjov/9iP9xPZa
-NVVTrlvhskA6ouRJYmtS6bp5/RRfEVMHV+rKjjU+gkWW5mE5gC3uwJWtFR/qDCjq
-nbPXWgj2OOZJVQovD5ahbziAkHKSPcsx8J2dhNnF15S+/dC0LkHdBzNWbVGRnGk5
-bIAhSqcG9BMu2rOmf+L4J5P3dcTSvlOnTnrfgA0RuYby/sbaMDc=
-=QvgG
------END PGP SIGNATURE-----
+> >  
+> >  	dev_pm_clear_wake_irq(&client->dev);
+> >  	device_init_wakeup(&client->dev, false);
+> > diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> > index f7c49bbdb8a1..eba83bc5459e 100644
+> > --- a/include/linux/i2c.h
+> > +++ b/include/linux/i2c.h
+> > @@ -326,6 +326,8 @@ struct i2c_driver {
+> >   *	calls it to pass on slave events to the slave driver.
+> >   * @devres_group_id: id of the devres group that will be created for resources
+> >   *	acquired when probing this device.
+> > + * @power_off_on_remove: Record if we have turned on the device before probing
+> > + *	so we can turn off the device at removal.
+> >   *
+> >   * An i2c_client identifies a single device (i.e. chip) connected to an
+> >   * i2c bus. The behaviour exposed to Linux is defined by the driver
+> > @@ -355,6 +357,8 @@ struct i2c_client {
+> >  	i2c_slave_cb_t slave_cb;	/* callback for slave mode	*/
+> >  #endif
+> >  	void *devres_group_id;		/* ID of probe devres group	*/
+> > +	bool power_off_on_remove;	/* if device needs to be turned	*/
+> > +					/* off by framework at removal	*/
+> >  };
+> >  #define to_i2c_client(d) container_of(d, struct i2c_client, dev)
+> >  
+> > 
+> > -- 
+> > b4 0.11.0-dev-d93f8
 
---2hyjIjtsn0nH3kf8--
+
