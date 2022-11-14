@@ -2,50 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A79962847A
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Nov 2022 16:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5CE62890B
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Nov 2022 20:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237000AbiKNP5M (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Nov 2022 10:57:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42212 "EHLO
+        id S237134AbiKNTQc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Nov 2022 14:16:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237306AbiKNP5E (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Nov 2022 10:57:04 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34F12ED4D
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Nov 2022 07:57:02 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oubpU-0006CS-Vx; Mon, 14 Nov 2022 16:57:00 +0100
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oubpU-0007mA-BH; Mon, 14 Nov 2022 16:57:00 +0100
-Date:   Mon, 14 Nov 2022 16:57:00 +0100
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     linux-i2c@vger.kernel.org
-Cc:     kernel@pengutronix.de, michal.simek@xilinx.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] i2c: cadence: make bus recovery optional
-Message-ID: <20221114155700.GA18924@pengutronix.de>
-References: <20221023215121.221316-1-m.grzeschik@pengutronix.de>
+        with ESMTP id S237049AbiKNTQX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Nov 2022 14:16:23 -0500
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D77626559;
+        Mon, 14 Nov 2022 11:16:22 -0800 (PST)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-13bef14ea06so13609605fac.3;
+        Mon, 14 Nov 2022 11:16:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=I4+f1aO3gmprHFq9BhzibsrK6OYsmewgEJsEFY5Pjy0=;
+        b=HNLEQDwMR/YL7RM1g9H46ywTjLFuGKBC5ddGquiLWBQwV+kYpnnydDx+ugZlU8v6wb
+         kMLdl7e7XBK0/nt8nIRZOjmZtYh2VQqIw2Jz3RP4IOF+bzIhdjlC0wKYL4qbr4Lbo9Vb
+         3ZYquaO5SwXIgIEBCrOg+g6wBVNLom6GMq23Dt9auGVE99SUMH03nK7lw/D2UB9T1AJP
+         +kl1gzgm6QGVRqzi7IV2MmB+XQeYoRPJRkQC+GpVdiTE2f8pCqhe1X3Su6Y5jA8bsRNi
+         dxdg3mk0TssipkwLN93Mdhhqo+X76dGUsFpz/giO8EeKtBsTVaWN0tPF9kCmzDzTGfHJ
+         ApaQ==
+X-Gm-Message-State: ANoB5pnqufqCX7iEkDCeurfMauR0uYw8JKjDhe5/XzjyDIRjESVXoGp7
+        Ubvl+tBVjNMusTZV935tHg==
+X-Google-Smtp-Source: AA0mqf6j7s/VG/hdXgynB9cq6S6yLO1RAvuKf3dvEzuWl+k5KgAmesbYjYIGgadz69prHluNbWTfsQ==
+X-Received: by 2002:a05:6870:9a98:b0:132:a2bd:428b with SMTP id hp24-20020a0568709a9800b00132a2bd428bmr7782000oab.113.1668453381848;
+        Mon, 14 Nov 2022 11:16:21 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id eq23-20020a056870a91700b00132741e966asm5344907oab.51.2022.11.14.11.16.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 11:16:21 -0800 (PST)
+Received: (nullmailer pid 3190194 invoked by uid 1000);
+        Mon, 14 Nov 2022 19:16:23 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gKMricLos+KVdGMg"
-Content-Disposition: inline
-In-Reply-To: <20221023215121.221316-1-m.grzeschik@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Wayne Chang <waynec@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, ajayg@nvidia.com,
+        singhanc@nvidia.com, devicetree@vger.kernel.org,
+        thierry.reding@gmail.com, treding@nvidia.com,
+        linux-tegra@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org, jckuo@nvidia.com,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        jonathanh@nvidia.com, vkoul@kernel.org, balbi@kernel.org,
+        p.zabel@pengutronix.de, mathias.nyman@intel.com
+In-Reply-To: <20221114124053.1873316-3-waynec@nvidia.com>
+References: <20221114124053.1873316-1-waynec@nvidia.com>
+ <20221114124053.1873316-3-waynec@nvidia.com>
+Message-Id: <166845336035.3185553.484885991952704522.robh@kernel.org>
+Subject: Re: [PATCH v3 02/13] dt-bindings: usb: Add NVIDIA Tegra234 XUSB host
+ controller binding
+Date:   Mon, 14 Nov 2022 13:16:23 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,82 +72,45 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---gKMricLos+KVdGMg
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, 14 Nov 2022 20:40:42 +0800, Wayne Chang wrote:
+> Add device-tree binding documentation for the XUSB host controller present
+> on Tegra234 SoC. This controller supports the USB 3.1 specification.
+> 
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> ---
+> depends on the following change
+> https://lore.kernel.org/all/20221003125141.123759-1-jonathanh@nvidia.com/
+> V2 -> V3:nothing has changed but added the dependency here
+> V1 -> V2:new change for adding nvidia,tegra234-xusb.yaml
+>  .../bindings/usb/nvidia,tegra234-xusb.yaml    | 159 ++++++++++++++++++
+>  1 file changed, 159 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.yaml
+> 
 
-On Sun, Oct 23, 2022 at 11:51:21PM +0200, Michael Grzeschik wrote:
->There is no need for the i2c driver to have functional bus recovery to
->probe successfully. We patch this by only adding bus_recovery_info only
->if we get usable pinctrl data.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Gentle Ping!
+yamllint warnings/errors:
 
->Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->---
-> drivers/i2c/busses/i2c-cadence.c | 7 +++----
-> 1 file changed, 3 insertions(+), 4 deletions(-)
->
->diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cad=
-ence.c
->index fe0cd205502de9..cf212b8ffd56af 100644
->--- a/drivers/i2c/busses/i2c-cadence.c
->+++ b/drivers/i2c/busses/i2c-cadence.c
->@@ -1262,10 +1262,10 @@ static int cdns_i2c_probe(struct platform_device *=
-pdev)
-> 	}
->
-> 	id->rinfo.pinctrl =3D devm_pinctrl_get(&pdev->dev);
->-	if (IS_ERR(id->rinfo.pinctrl)) {
->+	if (!IS_ERR(id->rinfo.pinctrl))
->+		id->adap.bus_recovery_info =3D &id->rinfo;
->+	else
-> 		dev_info(&pdev->dev, "can't get pinctrl, bus recovery not supported\n");
->-		return PTR_ERR(id->rinfo.pinctrl);
->-	}
->
-> 	id->membase =3D devm_platform_get_and_ioremap_resource(pdev, 0, &r_mem);
-> 	if (IS_ERR(id->membase))
->@@ -1283,7 +1283,6 @@ static int cdns_i2c_probe(struct platform_device *pd=
-ev)
-> 	id->adap.retries =3D 3;		/* Default retry value. */
-> 	id->adap.algo_data =3D id;
-> 	id->adap.dev.parent =3D &pdev->dev;
->-	id->adap.bus_recovery_info =3D &id->rinfo;
-> 	init_completion(&id->xfer_done);
-> 	snprintf(id->adap.name, sizeof(id->adap.name),
-> 		 "Cadence I2C at %08lx", (unsigned long)r_mem->start);
->--=20
->2.30.2
->
->
->
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.example.dts:36.27-28 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1492: dt_binding_check] Error 2
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+doc reference errors (make refcheckdocs):
 
---gKMricLos+KVdGMg
-Content-Type: application/pgp-signature; name="signature.asc"
+See https://patchwork.ozlabs.org/patch/
 
------BEGIN PGP SIGNATURE-----
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmNyZUkACgkQC+njFXoe
-LGSIaQ//Sqx1NmI1DFBC4qTBWmYuROqJ6bJ6g+9JvpLcGIExKUoOK+cr2yMOB58b
-s43LL289LcGicJnvWtMZidRwd82Iq3/WMiGxJRNkPqNu/aCTCdvFn52oUdVi+wi1
-0xMH7g2A5bkk4eVXUnCDcKJX9cZKV10FquDO5h+fUtSvL4fA0atiTvYm3aFbEbko
-1Z32nLf4s1BhLzApeYM3r2fhin0R/w0TPGxfd5AupId9+4s4B57BT7Sl6FgnzhvG
-1TwARmlWDCNAr6J2nA5GRctJwniYjvQ2I5V+YAXJb9Jy2SuZ/pMatfpoKXY3MQw7
-F902tJ6+mt/wotxS7zzZsHe65KOV0BcMKl15SiDyAfz+5bYdoawqedkbvh8/erqy
-epNZf+erjhE1HMcrvIgjpvTPnhplXTLcMqZemQztDIZfPjXLFKxhsCGsCVlbOpQk
-22447Bqr0FRKVzsLEbC3I62cJsJpqQEgpExMZASIDFbOriISLWbLHNt+NRPxsq/n
-MuDzESD99KD4XlYmOI1YbmnZOWnqH0wtrlze+lyozT+nO4FjUamvG+71U02q7q1Z
-FbdTWJrm+hnk3He9HwBfeOgP93D067MQtxt+x3LPP1ts6a4LJaMJziCTClzvTUGV
-22ZjiJvyyFMQ86H1RTTNXF1zUhAB3Z3+d0XARJDt8nWjiBb6xpU=
-=Gepw
------END PGP SIGNATURE-----
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
---gKMricLos+KVdGMg--
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
