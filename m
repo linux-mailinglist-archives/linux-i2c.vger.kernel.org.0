@@ -2,50 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0300762985E
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Nov 2022 13:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D86C629878
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Nov 2022 13:17:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiKOMPm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Nov 2022 07:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        id S237069AbiKOMRT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Nov 2022 07:17:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238119AbiKOMP0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Nov 2022 07:15:26 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2053.outbound.protection.outlook.com [40.107.244.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D7D22B25;
-        Tue, 15 Nov 2022 04:15:22 -0800 (PST)
+        with ESMTP id S230123AbiKOMRQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Nov 2022 07:17:16 -0500
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2050.outbound.protection.outlook.com [40.107.212.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF2C1FF8E;
+        Tue, 15 Nov 2022 04:17:14 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DHBg9DtURnGQAkg/xnkbBQR8CXwCnohJZ1hQlHoS1tQkZ7G3LEWkbj+IqkIhH/VGmVA1QuGI6pV4i8BjReC9dDGjgqepTVXVe3FCXvBBiTGgKUC/cgad5aB/AZLjr7J8RHKugggcMAz3BlzCu2VjWD/Oeq62AfTW/EM7A454g4Js/fwf7t5i+nTA3L3OkpTa3D1mYQMbhwLXeqixyJh5ROcLYQnHF5kqE23FsNBpO1rx5E4Sz8r/JbRbS+w1s6dIYpLaGCvtzfAa6/sQOvHKTROQ1tsIAxmHs/v+nQSFqQM2YnBGfXgXPEjLcPy8k6UNRFDqx44UVL5WrKn1u4dPRg==
+ b=YfnibN/JTNRddDlFwCGwPr5I6eHPea7LdsnS8LDz3nElsq94X/unDYd1pYXd/uXUAN6gKgPJu4Fx2CBKCjrMsKsw6iX6XOomxaW5yO5eFaBNVdcaBqp+BvGgfdkZzPT/Cc9lzmws97XP4HHTdSlRL+3w0lm6l4mneTUWWAVgySarMtuUs0g/zaiLdVmQfr8+0NVBJVDmiQVDmM/tHgGZytkesI1T436RKgxMLdzJvLPA+k0MRu9Xq1oc+ve2wPSu40JkQoYIwV0PAk/VFI6cEILdLd61t9dGSO9htzthFgJgfRJWiSAtn+jNvvB0LT9dpe9mtR+aOWSb0ylzIHVv1A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CPyvLJoUD2RjryAriVoGjLdEFDQa0oK2qT6jkuESDhY=;
- b=Lw+B88EYv2ostp4SFOEYLG4e8rvUP6dvtxfgQdwEI7Hv8Kv4c1kIWTb6WFL3QhoPpITSLdq1OTh0RC0DzrwbkukzEQgHbUSYXSz5WjqJT3TcXSY1eyT7H4JF/xnv03dq0NzHZTBJh3qNSMr9KFN0H/arsxfAeIjuPAPx8NcvIdxo4yFLP5jrpm3bXVjvXxadkysNZHZI5lS2xlG7YkHfD+w+CqFwXJh/cwgiy8A9HbuYOX2z7UFQK2ZUPdb/KZ49eLltQ2SbW6Hu8DsdSu6NWZZe9GeauZ8TIKMgtBnpa6NtiuQjQOa949VxN+lnNcJLm2lMUK6vwjaq7N/Th3IMMw==
+ bh=HInlLSZY9oPU+oC1UAEiW+CqGfTeT4BaHU5Bh0KFbkw=;
+ b=SDlygoBH7KJNuxdfwDBGTGLbdRRHYSjBq+c6GWAB0bZDLbeBpSYIo7rz5vJ591CqVrEuHTKDLZk7a1YratW+9m9WSkMtHn9Pzkqxidxl+GKr3+KwPcmUFtLnDn0cKmChQT2tHVLyRyHSGdaBHwn3IAFpasTIoK0sF5U4YAWTRL3uBAI0Xuin9CJrbo1noXcINTZpLk2/Ab3c8LyMhsA4/rWAM0BsyEeBmDnBlqr/nii/dBc0DHB+6OB2/yw3LYqB8REUlI3j0SNQgk6b+TQw67ZLS2nWGmTjZzYKWERifz5Pq2oYjIenGovYp/EzvF4sfZ2jzvzxHkAFaXqqPIzmZg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CPyvLJoUD2RjryAriVoGjLdEFDQa0oK2qT6jkuESDhY=;
- b=KdiOVKed6g9F7CguE9iG0GTTGDofWd+bYUxMC6E9C3FOobXFya5RuuvnZBs2fAVdr5sZX93llBr82VDUjg/qLjFvWjt0oVSu2WUocK52TvuAuL3q6n4LSv4vFDOnIC3dz3n97IKdc7AXgQ47FHqSovadnJzQdXgU9NL6b8VS4gYWHR5YH0opsx9+dWm99AAv1s0b202STeXoUUK8SmByAKl2SRVokt4yDJuyhiQvWfpYQu3/PIHyMnZxf6Rf5P+tVOfiGX+B9k6ZqZPh2CoyaDB8QkYidaFfWM9A0N/WsvLIZWCdxK/dFpX3UXjipjclO3bsOd7uV8it9qFD0MY13g==
+ bh=HInlLSZY9oPU+oC1UAEiW+CqGfTeT4BaHU5Bh0KFbkw=;
+ b=sKRYLIM22T5epl9qPFuArta2xea8e3IXywSjyFLkGty4rv99nA3RQH5MtQu2BRXS+7aNDp9YMzNJ6heCxoLkEta8H472ur4xjcmBSo6H1jcDVzsgNdwQDIwFgNPZrJRLZuoL0JRn/X7ToWSPDD0FfuITIrUmKlWMg6dYbU1hXk8hGfMGHn3iWCQyG+0o73qIlcNolFf3N/boXXmNs0hpG9aFaVybGC7dJ2zM1jMaTz99RDpxHsj98CYSqtcJeeOrgkA2qmlOEN2UCiAUuo/rS9oPRP2Wd1Xd1mU1xogiL4NGDb3WY44fITRCY/T6NmxyMxXyEP8gZ4IB5GbkGNmPLQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- SJ0PR12MB7082.namprd12.prod.outlook.com (2603:10b6:a03:4ae::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Tue, 15 Nov
- 2022 12:15:21 +0000
+ BN9PR12MB5036.namprd12.prod.outlook.com (2603:10b6:408:135::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5813.18; Tue, 15 Nov 2022 12:17:11 +0000
 Received: from CO6PR12MB5444.namprd12.prod.outlook.com
  ([fe80::8edd:6269:6f31:779e]) by CO6PR12MB5444.namprd12.prod.outlook.com
  ([fe80::8edd:6269:6f31:779e%5]) with mapi id 15.20.5813.018; Tue, 15 Nov 2022
- 12:15:21 +0000
-Message-ID: <6c1b733e-7926-098d-e852-f2220947979f@nvidia.com>
-Date:   Tue, 15 Nov 2022 12:15:13 +0000
+ 12:17:11 +0000
+Message-ID: <b12b57ba-6b81-792e-cee8-e3e0c6d88066@nvidia.com>
+Date:   Tue, 15 Nov 2022 12:17:03 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v3 03/13] dt-bindings: usb: Add binding for Cypress
- cypd4226 I2C driver
+Subject: Re: [PATCH v3 04/13] arm64: tegra: Enable XUSB host and device on
+ Jetson AGX Orin
 Content-Language: en-US
 To:     Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -58,72 +57,72 @@ Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-tegra@vger.kernel.org
 References: <20221114124053.1873316-1-waynec@nvidia.com>
- <20221114124053.1873316-4-waynec@nvidia.com>
+ <20221114124053.1873316-5-waynec@nvidia.com>
 From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20221114124053.1873316-4-waynec@nvidia.com>
+In-Reply-To: <20221114124053.1873316-5-waynec@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO3P265CA0003.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:bb::8) To CO6PR12MB5444.namprd12.prod.outlook.com
+X-ClientProxiedBy: LO6P123CA0038.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:2fe::15) To CO6PR12MB5444.namprd12.prod.outlook.com
  (2603:10b6:5:35e::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|SJ0PR12MB7082:EE_
-X-MS-Office365-Filtering-Correlation-Id: 36b29302-16dc-4545-fbf1-08dac70310cb
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|BN9PR12MB5036:EE_
+X-MS-Office365-Filtering-Correlation-Id: c39c76a4-219e-48bf-be15-08dac70352cc
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Bq926l1LCuEWDMCdAJHP1E9t1JDXET+oLh/WJQuaqWJHThpGR6P1tYPnFyqlZ9UVZgQSYiIt7fE87K/M+x+C1X8XxCxB9zN/wdZw4kUsFcj+xpBz9JStVGHYoSwPezbix/UBURQfgfX5Wh2aTFKsPYOc4Q/HBei6w3vwjp0d08znwK4rn6APHWptezk5yp2iYnRzFBcgKGCb69YwN/mMzKSKbf5/V+KU8bFJ979NQHfMuC3UNRrYJ6YnUfs+0togdOm4mkj1zwkgFqXNn4qNYzkJ58ww/VZLejapQ4sNXxbEdRxPwm0odxuiohQPS9uD+avYCdVh9GDgF6yJBI5rm5JgSO5rqJHLLPFJadGTaV6OAIJPpMxqR97X1u9vAPH8ffl11h3omyxp72fLQ1+6XcecdnuMH36yqWtmT+lVlyEK0b3ZpyyA44HnNcf+8X0hJNPrTEWe6WyJQalaHAkCBDkuYiI3tv4+SMs6tEXn2ZM6Q3Ofo8eky8MwILL9atLi4s8ihW3qhfwn9ojRpk6t30zXglj0dmcdZKKJwF+npnQmsBkwQkx01xZ8jIDNYyM86dkorzov6VAi6FWmN6kPSQyKAYoJE7neABhTx0nldbhgsK/VwOLALxMaZFJEP9LMLSLA5wQ/BdfJNGvbkhikhWEaRC33Zt77Qmlz1xxHYy4OnAmaAFAxOCz5fiiNI3ESVg8B7EHLPOdfVr3DyAmx/7o6kDFr4gaColuO6C7OCasYUMV5cJEURUOk4ccBbbHX/Y/jQYM1c8JvkpIpx7C8HBBKP4YOTjrITM4i2ttLHtmYNC921uIXTtJWLB/l4bUrSkUuOuwQp23L50LCqhogh8/vIgjNe8HDMx2GMry7R0Fit48uMefSTl3X5gbsiS0oVTRsQ+PBZNcHhYOJxcl63ycOescRCpBPbOynfuIV0cMxKCKlS/POm6XLXIW1824G
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(346002)(396003)(136003)(366004)(451199015)(4326008)(26005)(66476007)(6512007)(66946007)(36756003)(41300700001)(5660300002)(7416002)(186003)(2616005)(8936002)(8676002)(66556008)(316002)(55236004)(31696002)(86362001)(38100700002)(53546011)(83380400001)(2906002)(921005)(6666004)(31686004)(6636002)(6506007)(966005)(6486002)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: zpIHYgSjLDDKafkkPnl+SKfe7cgMn6pRrUk7+xVOTouwj4QnKIpEECzakAgFwWZA0JKlq5EFF8P0tf66OVxsh8hliqNBp/ZLdvHSZ+PFjkrz4HahOhnDVkE1cYqXHRlTjwlC+gZCriTtwSQ0OJdrxLLbNEFDrGvyK3xT6cJNguo94RwWKBHsOOfbyJstxD8bnB/tQpxXpZTTuHF8CH46qNHWecm34sxPWvi4kHwnsSu73IV5KckJMzJqyoiK+hS3wiXgCArt4KfCqCez98Yy4ej4WGmu/iqlvlJqWytHRn4fZJQy5tNdhnE/i6UfcvASv3p/MuGeohdhpSo8Kv6WspusucJtGK0uWs0xOBYrFPhSXp3kRXG678MgTaGh5EHZ2JLovKzwCPZ8uQ3AngTGthFLk1ZAJssx7+qaNqXCYfXgljNQTNPdyiPzNF/jfELO6istRPeBk4Cv1zQk3kn7TIHQyEGcniS38O6ZIbbIUx/8MeT7aJxrgBcnEm8hmCK56tjqnu3OBDhVLyJOIuZoOP+YTCRFheJZJP8L78+3pOZIKRJdz3a3Cpx2mE90iTfgKydOvxj+Y7XZJ/MUH/wfoKiRXmlW8ryYxPvhblgk6T3jxS4Lq2irqEkDU+Kpx64F6CIGRahNG3CM3S7qBcLEiMdgzGN/9JCbWfvwo9wSD9chierwpGM7hyVndc+xs7ssOSAlTd03QkAoWEV7dBsrRs7aH+ay6VV/xrOedQBvsUNWSwmjhfZktsV6iQKSf8PoRKvxUIRjgCNtbEIYpdtei1B+/TEdt1cqZ8FfqCOZ7LDTuzvihgROx6Zv1FfvFwcdX6x3uT0E1A6/rCc1PIVh8XdM13ltVpRvwdoZNB22tvNdrKnAu705YTrWihwcMtacYkWlB5RAmzRcVAp8I0muWg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(136003)(39860400002)(376002)(396003)(451199015)(6666004)(31686004)(966005)(6486002)(478600001)(6636002)(316002)(66946007)(55236004)(66556008)(26005)(53546011)(6512007)(8676002)(66476007)(36756003)(4326008)(41300700001)(2616005)(8936002)(186003)(5660300002)(921005)(38100700002)(7416002)(30864003)(83380400001)(6506007)(86362001)(31696002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b2Z3L0dyWGZyc2NxOENLOHUxWktmaVBLRXd4NHVaL0huM0oxSEx2SWZCdU16?=
- =?utf-8?B?Zi9lbDdTNW1DVkdlcmdIcjJlK3h2bThXUjNyTFNwQ1BaOGt1OGs3bzJ4VGFs?=
- =?utf-8?B?eXFET1BUZ2UwZ1pOd0FIMzlYRWgweGRndFdUK0pLZ0tmM09XNm1xdXk2Tk1T?=
- =?utf-8?B?TnBNclJkOUJNUHZTang2QTJ3bVJYenpjQVluQlB2T0RCM3lmZE5ZcXc3NE1a?=
- =?utf-8?B?UjVyaU1nMEhSOHh1MXNJZnU3blI5dFA3YmJVa0JCWXYyL2Y1M2ZXU0dlSkhu?=
- =?utf-8?B?T2o1Nkdtc2VnZFhiMi9STTJTR3pzN1Y3YWZodWdhdjZDcFA4dm8rRjRZcHNr?=
- =?utf-8?B?UVBmdmkyZml4TWJPNXROQy91ZzVVa1ZnckVoMXJnNFdCeUVKb0ZZK29OTit6?=
- =?utf-8?B?VlQ4RjFpalI1c2VhMmJXdjZOQ295YW5rZmp3TnIvV0tHYWFpRGl6UlpSM3RE?=
- =?utf-8?B?c1lzNzlQdjRzQ1pja25oKzlJTHZGVzJMZXdmN2owTElZbkNNeTRDbmhranBZ?=
- =?utf-8?B?S25rdG16bDJvd3BBd0REN1A3dlBrS0JqK2k5T0RiNmJRRHQ4Zy9JTExWUGFy?=
- =?utf-8?B?Z0dXY1JHY1ZoRjE1ZHVRQkJJQTlzekR0amhDYWwrTUNvb1E1bWlQRkZ6VDYz?=
- =?utf-8?B?Y21QTmVYUDlndHlvcmZiQmNPVEdxa1ZybkM5cFFaaXh0Sm9ZSUc4SlZUUDNU?=
- =?utf-8?B?Y0VINyswUmlLZ25XV3FibTJGSDRFbnJYRUlPa2JNMzB5WllwbS93RG16bTha?=
- =?utf-8?B?MmJsdTNtUWw0Y1hlakJuQ3lZK1FOSE9sZ2F0QldpY0RyZUpkVjNVQmZmYW8w?=
- =?utf-8?B?YmhsbkVxMTNzL0lnLzJxUnRNR3Mwam9CVFUxRmJKTmpZQ3ptNjJDS2pLeFg0?=
- =?utf-8?B?ZVovalpJdElTT1ROWlBicGdpR01VRXNLZk5BUFlYL24xRFFXNGh1N1NnSVM5?=
- =?utf-8?B?NGp2Q1h2d0RxK2JEQXJuRW92eVE0ajBqSUNKRWlxM1BlZUdrVlFaSG5wdHNK?=
- =?utf-8?B?ZXNWUVpHOHJIVWc5LzVKTGd1WTczUTZUUDZHU0FodmQwQ1JTUCs0ajFzRFY1?=
- =?utf-8?B?OHd0VXBweGpjTTJCYTdzcnJncHpDaytLemQ3eHVVQjEyTlNkQUtjQkpZYnNw?=
- =?utf-8?B?UFA0VWRQZzlKemYySm03WmxkTGUrNjN4bDdYY1NnV3FEYldDNk04MEppNG90?=
- =?utf-8?B?ckluZ2pSYk1JWmFHK2VtVnFSRlBkU1c5RDVwK3VlcmQ1eGpwUWJzWHJtUDk5?=
- =?utf-8?B?cEIrbnBSUXlRTzN2cm5Zc3IrQ0x5VG1QM25YK0E0Qk5wbXhYQUQrYUFHNE1N?=
- =?utf-8?B?QW15SGRQZUpoTERuWVFINUtUZjRRelYwQ3pUVmpQanlESFpKcUFueW5Lb1Uv?=
- =?utf-8?B?TlVIZGpSY042eVNhSTlNOWhvQnFSTnNORFVCSmhCL1pWY2pxUUNwOGYyMVdG?=
- =?utf-8?B?cjQwMHNmY0RSdlFIdDd4dW5GZHhLVnhBS3BidzJGM1VPTUVPK0NpR041NGY1?=
- =?utf-8?B?NjhHQStsbUdZNkUzOUhuZE01OFVzc1RhZ0RzWVJuNHMwb2p5WTRwMW9BZEpr?=
- =?utf-8?B?RlRwYkh4djlQZUp1anRSaHRaVHN0dGtjRytxQVR6RWZKYzNFYkNtZG9VQmU0?=
- =?utf-8?B?V0dtOGlDN0xmV28xRTZKNTVzNUhJMDZsbStCR0pCQ3BXbTgreGZvVWY2VzJN?=
- =?utf-8?B?ZHpZT1BhcFNEYXNmZG9TWmJPUDN0dFdFN2dicGlsblZNYVg2QXRVbThYMVpD?=
- =?utf-8?B?T1FTVWdObDdPNTllSzlrN3hDM1lmRVZCMVlJd2NralFXRjJvb05oWWgzS1Fm?=
- =?utf-8?B?b2xMQkplTHR5MWtKUFBXZTlJMGtZME01ZUdXZ0U0bGNPNDF2eUU0WnM0Zk9y?=
- =?utf-8?B?dHU0TTErb0N3ZlpZbTlabHk3c2ZtWldBZ1FXa05iRmUyd1ZsSGd4MTlSeHlN?=
- =?utf-8?B?TUhIL3ZoNXJVVmxSd3Y1ditOYmE5WVhNQ3FyL0sxbldXbGtyS1MyU2pTeUJF?=
- =?utf-8?B?NDh0QjBKN1pjRjZuYkM3UnRpWlhWM25pS3FOOUU2RDZ2cTdwcyt5aFA5L3Fx?=
- =?utf-8?B?YVZ1MmVKSkh0aFFxN01nekQ5bHVLdnI5OEN5ZEdhKzdDbFk1ZFpSaER0NFBj?=
- =?utf-8?B?UWJiQlJGNU5UM2tGcm9SVTBucURabXBQSnYxRkhZNk1MODloY1NXK3R4QUVl?=
- =?utf-8?B?ZGc9PQ==?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Yk9zdDRqdTdFcGVCT3V1STRoSmJuakFGRnhLTzJOWmFEZFVITEFCM24waXpS?=
+ =?utf-8?B?UTlKcXYxQ3J6bERRUnpGUHhMRGtiMkNvZUd0V1dna1FVWGpRK2pJNkdhaUtt?=
+ =?utf-8?B?T3F5ektMYW9UYnBtWWkrU0RpMW5zSW1hWjduZFZsU3NXQXhOVlo5RlNVUW1K?=
+ =?utf-8?B?dFlraC9qeU5uM2oyc2lWWHcyQUVpOXByVnNhYnN1SDJoZ0VvZ2xpTGJTVFEz?=
+ =?utf-8?B?Wk82S2tMNmJVVWNQRmJoOWF2N2ZQNU84TGRPNUR0RVNJVmJhWFhOYmFjcVgv?=
+ =?utf-8?B?YkxzT2Jsd01nbkJQMUNWUW9RSEpLTVlBT3hQWlVibkdPTXllS0FyRmc0YXZX?=
+ =?utf-8?B?Q0ZhbDA2bHk4cG40OFh3blNkT2VkbjNPNk5Pelk4R0RrNUFNaGxxY0dNQUQ3?=
+ =?utf-8?B?YjNYQ21jcmpTWnBINGZkRFFJcTVXTW51WFJoVElzTkpEZzBwOStTQUN3UWF1?=
+ =?utf-8?B?akxhd2xma3RTM01GN2pJajdPM2tRRjg0aEgxNEZmOG1LZk1DS2Z1QVN6Smdx?=
+ =?utf-8?B?c3J1MDhBWmpiMWd4MVVsWHVpMTg1QUlMVG90aVFNd3hUSUlHWjVVWkk2RWVO?=
+ =?utf-8?B?Q1V3TTdONjNYbjhDSjhZS21nVGdGczg1VUtWSHRUUnZzaUJEMWZ4TjFzMitJ?=
+ =?utf-8?B?M0RldW14M1JKeXFSTU0yOHRuNzM0aG1veXA0S0lUUG1KOFE2aGJUdW9pdkhK?=
+ =?utf-8?B?UUtQNXVVa2hRc2oyVGsrMzJNdDdOYW5ZN1ZZQWE1L05SODFmQ2tFUnMydWd3?=
+ =?utf-8?B?K1NuYi94NlY1ZVBSNGZpN1NGT1djRytqbktsdWJUbkNoNFRydEczR1NjQWZD?=
+ =?utf-8?B?RVAxd0l2elptTDVnNEJodUpJVERxSVRobCs2bTByV3Q1Q1lHSzhMeVRyK3Zk?=
+ =?utf-8?B?c28xSFJtK0NTdGRReHRtQWptbkFMeW1MYXZtWkhPRUN5TGt1NTRiLzJ2MG1S?=
+ =?utf-8?B?ODB6N0JYM0FEcjVVMHZLSG1Ick1yY3FNcHRDOG1Jb2czNUQ4Y21lWnRzbjhI?=
+ =?utf-8?B?VzMzdHpZb2kyQXRWeFFjcXkzc2hRcG42S1pIZlZwMXdVd1l3Z3VrUUtYQUEx?=
+ =?utf-8?B?a1lZUW5WTlZDUjVrY1IwSDdLN2ExdlUzREhQSXN2dW9tS0lIQUVnVGVBR1pt?=
+ =?utf-8?B?blc4d0ZpSTRsTXF5WWIyeWdmNjZrdHpwMFh3V1NEdDNkLzhFZzcwMlZFRlVm?=
+ =?utf-8?B?UzBWcjJvY2M3Rm0wTm96OEZDZm9Fd0g2dHpld0s5N25XdVMyejNYY2lJdjJO?=
+ =?utf-8?B?S0NXSThNaTJjTmZVNks4Rk12Q2psc0Z3YUtvZDh1M1NGcEhsdFMybnVKOVJO?=
+ =?utf-8?B?UUlaSUlqT04vRTBrUG44dVVvbS82clBGeEJGTjRwTU5hK1dqMjZiYjBlVXY5?=
+ =?utf-8?B?ZW5uWGhwcmFPUk00NVdaZElvYlFmY1VWL2pvYjlpZG5HTG5qdkNEMFBTVXBl?=
+ =?utf-8?B?ZloydGs2MDBqc3BVT0pic3NuOU9QcFpSZTNYeXUzL3d5VnRqQzUwUnVqbFpx?=
+ =?utf-8?B?d01DRHdMV1ZTWFZIVW1GSEVpbXZjVW5jYnlTc0lvMzlNUFBTTU9RaHVjQ2Rh?=
+ =?utf-8?B?a0p4UmgwdmVQQ1JRL1hkSmtFbFhwV2FvOVRrcXlzRGZPQ1BDTVEvM3I3NzBL?=
+ =?utf-8?B?dHFLMHNXZmVXdUtHN3BxRlVNOVJxc2lsaU9rT1lybU8zV3JVZFhpejFSaSt5?=
+ =?utf-8?B?Z1pVQW0zNkhzeTRVbStkbE1GRTBER200b28zSDRKZ2FWS2cyeFZOWlgvNmZs?=
+ =?utf-8?B?YlZyc252YVBXaGM1TTlNZTZXYlBZdWNiV0RtQStYSCtiTm4rMGdabnVDMFQv?=
+ =?utf-8?B?SlZkR0VGWVhJNHRIVVFGRG5ZYXpsWmFHY1RiQk16eDZiN2lKZHAyRW1FckNu?=
+ =?utf-8?B?NkpwTnRxZmdIR3U2L1gxYjZ5NmhkSE5TQUtreXNLK1JPeGJ5WFNNT1h6dGNy?=
+ =?utf-8?B?K2RabFlxUlMzQWhSNFFFWTI1bm9kRnhDWSs5VkZ3YkUrZTVuMjRGUTBaTVMv?=
+ =?utf-8?B?a2pVckEvWUd1cWFTMFN2aHdFOEJlREZVSnAzc1NHTVFOTWIrYWFPSUkyb0Ru?=
+ =?utf-8?B?QWhySUJ5OUVvS1dXMUkrZ3VjWnRyaFRJTTA4WFhmSjlteGRKd1Y5NDZUMmRF?=
+ =?utf-8?B?dVloM2wrWGpvbytFa3NyWW9ybCs5Q3FTRnhkeWR4bW5yRFV0ZXArNTdsQVhk?=
+ =?utf-8?B?QXc9PQ==?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 36b29302-16dc-4545-fbf1-08dac70310cb
+X-MS-Exchange-CrossTenant-Network-Message-Id: c39c76a4-219e-48bf-be15-08dac70352cc
 X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2022 12:15:20.9791
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2022 12:17:11.7294
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Drh6gvTIdD/d//lLs9ae600jqvH7y9OB88VEa+vMFf/aeeA277zeGqpLLx59TZvA+qkge2DpOoqldRwpgX3mLQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7082
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5NYKKsGWjGC/XfMssDPZeBoqMU9OSEnxDCJ4CmuKFgCwfODsMs0IaPRgTbWom/E6QA4DPhSnWog93+1++ZVcWA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5036
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
@@ -137,112 +136,461 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 
 On 14/11/2022 12:40, Wayne Chang wrote:
-> add device-tree binding documentation for Cypress cypd4226 type-C
-> controller's I2C interface. It is a standard I2C slave with GPIO
-> input as IRQ interface.
+> This commit enables XUSB host, device, and pad controller on
+> Jetson AGX Orin.
 > 
 > Signed-off-by: Wayne Chang <waynec@nvidia.com>
 > ---
-> V2 -> V3:fix additionalProperties warning on new schema
-> V1 -> V2:based on the review comments. Fix some addressed issues on
-> description, interrupts, cypress,firmware-build, connector, and
-> additionalProperties properties. And also remove the status in the example.
->   .../bindings/usb/cypress,cypd4226.yaml        | 86 +++++++++++++++++++
->   1 file changed, 86 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
+> depends on the following change
+> https://lore.kernel.org/all/20221003125141.123759-1-jonathanh@nvidia.com/
+> V2 -> V3:nothing has changed but added the dependency here
+> V1 -> V2:removed the redundant cells and status in ucsi-ccg.
+> Using dash instead of underscore in the ucsi-ccg node name.
+> Using representive name in cypress,firmware-build property.
+>   .../boot/dts/nvidia/tegra234-p3701-0000.dtsi  |  48 +++++
+>   .../nvidia/tegra234-p3737-0000+p3701-0000.dts | 175 ++++++++++++++++++
+>   arch/arm64/boot/dts/nvidia/tegra234.dtsi      | 170 +++++++++++++++++
+>   3 files changed, 393 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> new file mode 100644
-> index 000000000000..854fe2f9181c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> @@ -0,0 +1,86 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/cypress,cypd4226.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi b/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi
+> index 9e4d72cfa69f..8acef87a5398 100644
+> --- a/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi
+> +++ b/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi
+> @@ -61,6 +61,29 @@ mmc@3460000 {
+>   			non-removable;
+>   		};
+>   
+> +		padctl@3520000 {
+> +			vclamp-usb-supply = <&vdd_ao_1v8>;
+> +			avdd-usb-supply = <&vdd_ao_3v3>;
 > +
-> +title: Cypress cypd4226 UCSI I2C Type-C Controller
+> +			ports {
+> +				usb2-0 {
+> +					vbus-supply = <&vdd_5v0_sys>;
+> +				};
 > +
-> +maintainers:
-> +  - Wayne Chang <waynec@nvidia.com>
+> +				usb2-1 {
+> +					vbus-supply = <&vdd_5v0_sys>;
+> +				};
 > +
-> +description:
-> +  The Cypress cypd4226 UCSI I2C type-C controller is a I2C interface type-C
-> +  controller.
+> +				usb2-2 {
+> +					vbus-supply = <&vdd_5v0_sys>;
+> +				};
 > +
-> +properties:
-> +  compatible:
-> +    const: cypress,cypd4226
+> +				usb2-3 {
+> +					vbus-supply = <&vdd_5v0_sys>;
+> +				};
+> +			};
+> +		};
 > +
-> +  '#address-cells':
-> +    const: 1
+>   		rtc@c2a0000 {
+>   			status = "okay";
+>   		};
+> @@ -69,4 +92,29 @@ pmc@c360000 {
+>   			nvidia,invert-interrupt;
+>   		};
+>   	};
 > +
-> +  '#size-cells':
-> +    const: 0
+> +	vdd_5v0_sys: regulator@0 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "VIN_SYS_5V0";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
 > +
-> +  reg:
-> +    const: 0x08
+> +	vdd_ao_1v8: regulator@1 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vdd-AO-1v8";
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +		regulator-always-on;
+> +	};
 > +
-> +  interrupts:
-> +    items:
-> +      - description: cypd4226 I2C interrupt
+> +	vdd_ao_3v3: regulator@2 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vdd-AO-3v3";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-always-on;
+> +	};
+>   };
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> index 57ab75328814..58baedbd0f93 100644
+> --- a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> +++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> @@ -2011,6 +2011,181 @@ hda@3510000 {
+>   			nvidia,model = "NVIDIA Jetson AGX Orin HDA";
+>   			status = "okay";
+>   		};
 > +
-> +  cypress,firmware-build:
-> +    enum:
-> +      - nvidia,gpu
-> +      - nvidia,jetson-agx-xavier
-> +    description: |
-> +      the name of the CCGx firmware built for product series.
-> +      should be set one of following:
-> +      - "nvidia,gpu" for the NVIDIA RTX product series
-> +      - "nvidia,jetson-agx-xavier" for the NVIDIA Jetson product series
+> +		padctl@3520000 {
+> +			status = "okay";
 > +
-> +patternProperties:
-> +  '^connector@[0-1]+$':
-> +    $ref: /schemas/connector/usb-connector.yaml#
-> +    properties:
-> +      reg:
-> +        maxItems: 1
+> +			pads {
+> +				usb2 {
+> +					lanes {
+> +						usb2-0 {
+> +							status = "okay";
+> +						};
 > +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
+> +						usb2-1 {
+> +							status = "okay";
+> +						};
 > +
-> +additionalProperties: false
+> +						usb2-2 {
+> +							status = "okay";
+> +						};
 > +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/tegra194-gpio.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      #interrupt-cells = <2>;
+> +						usb2-3 {
+> +							status = "okay";
+> +						};
+> +					};
+> +				};
 > +
-> +      ucsi-ccg@8 {
-> +        compatible = "cypress,cypd4226";
-> +        interrupt-parent = <&gpio_aon>;
-> +        interrupts = <TEGRA194_AON_GPIO(BB, 2) IRQ_TYPE_LEVEL_LOW>;
-> +        reg = <0x08>;
-> +        cypress,firmware-build = "nvidia,jetson-agx-xavier";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        ccg_typec_con0: connector@0 {
-> +          compatible = "usb-c-connector";
-> +          reg = <0>;
-> +          label = "USB-C";
-> +          data-role = "dual";
-> +          port {
-> +            ucsi_ccg_p0: endpoint {
-> +              remote-endpoint = <&usb_role_switch0>;
-> +            };
-> +          };
-> +        };
-> +      };
-> +    };
+> +				usb3 {
+> +					lanes {
+> +						usb3-0 {
+> +							status = "okay";
+> +						};
+> +
+> +						usb3-1 {
+> +							status = "okay";
+> +						};
+> +
+> +						usb3-2 {
+> +							status = "okay";
+> +						};
+> +					};
+> +				};
+> +			};
+> +
+> +			ports {
+> +				usb2-0 {
+> +					mode = "otg";
+> +					usb-role-switch;
+> +					status = "okay";
+> +					port {
+> +						hs_typec_p1: endpoint {
+> +							remote-endpoint = <&hs_ucsi_ccg_p1>;
+> +						};
+> +					};
+> +				};
+> +
+> +				usb2-1 {
+> +					mode = "host";
+> +					status = "okay";
+> +					port {
+> +						hs_typec_p0: endpoint {
+> +							remote-endpoint = <&hs_ucsi_ccg_p0>;
+> +						};
+> +					};
+> +				};
+> +
+> +				usb2-2 {
+> +					mode = "host";
+> +					status = "okay";
+> +				};
+> +
+> +				usb2-3 {
+> +					mode = "host";
+> +					status = "okay";
+> +				};
+> +
+> +				usb3-0 {
+> +					nvidia,usb2-companion = <1>;
+> +					status = "okay";
+> +					port {
+> +						ss_typec_p0: endpoint {
+> +							remote-endpoint = <&ss_ucsi_ccg_p0>;
+> +						};
+> +					};
+> +				};
+> +
+> +				usb3-1 {
+> +					nvidia,usb2-companion = <0>;
+> +					status = "okay";
+> +					port {
+> +						ss_typec_p1: endpoint {
+> +							remote-endpoint = <&ss_ucsi_ccg_p1>;
+> +						};
+> +					};
+> +				};
+> +
+> +				usb3-2 {
+> +					nvidia,usb2-companion = <3>;
+> +					status = "okay";
+> +				};
+> +			};
+> +		};
+> +
+> +		usb@3550000 {
+> +			status = "okay";
+> +
+> +			phys = <&{/bus@0/padctl@3520000/pads/usb2/lanes/usb2-0}>,
+> +				<&{/bus@0/padctl@3520000/pads/usb3/lanes/usb3-1}>;
+> +			phy-names = "usb2-0", "usb3-1";
+> +		};
+> +
+> +		usb@3610000 {
+> +			status = "okay";
+> +
+> +			phys =	<&{/bus@0/padctl@3520000/pads/usb2/lanes/usb2-0}>,
+> +				<&{/bus@0/padctl@3520000/pads/usb2/lanes/usb2-1}>,
+> +				<&{/bus@0/padctl@3520000/pads/usb2/lanes/usb2-2}>,
+> +				<&{/bus@0/padctl@3520000/pads/usb2/lanes/usb2-3}>,
+> +				<&{/bus@0/padctl@3520000/pads/usb3/lanes/usb3-0}>,
+> +				<&{/bus@0/padctl@3520000/pads/usb3/lanes/usb3-1}>,
+> +				<&{/bus@0/padctl@3520000/pads/usb3/lanes/usb3-2}>;
+> +			phy-names = "usb2-0", "usb2-1", "usb2-2", "usb2-3",
+> +				"usb3-0", "usb3-1", "usb3-2";
+> +		};
+> +
+> +		i2c@c240000 {
+> +			status = "okay";
+> +			ucsi-ccg@8 {
+> +				compatible = "cypress,cypd4226";
+> +				cypress,firmware-build = "nvidia,jetson-agx-xavier";
+> +				interrupt-parent = <&gpio>;
+> +				interrupts = <TEGRA234_MAIN_GPIO(Y, 4) IRQ_TYPE_LEVEL_LOW>;
+> +				reg = <0x08>;
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +				ccg_typec_con0: connector@0 {
+> +					compatible = "usb-c-connector";
+> +					reg = <0>;
+> +					label = "USB-C";
+> +					data-role = "host";
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +					port@0 {
+> +						reg = <0>;
+> +						hs_ucsi_ccg_p0: endpoint {
+> +							remote-endpoint = <&hs_typec_p0>;
+> +						};
+> +					};
+> +					port@1 {
+> +						reg = <1>;
+> +						ss_ucsi_ccg_p0: endpoint {
+> +							remote-endpoint = <&ss_typec_p0>;
+> +						};
+> +					};
+> +				};
+> +				ccg_typec_con1: connector@1 {
+> +					compatible = "usb-c-connector";
+> +					reg = <1>;
+> +					label = "USB-C";
+> +					data-role = "dual";
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +					port@0 {
+> +						reg = <0>;
+> +						hs_ucsi_ccg_p1: endpoint {
+> +							remote-endpoint = <&hs_typec_p1>;
+> +						};
+> +					};
+> +					port@1 {
+> +						reg = <1>;
+> +						ss_ucsi_ccg_p1: endpoint {
+> +							remote-endpoint = <&ss_typec_p1>;
+> +						};
+> +					};
+> +				};
+> +			};
+> +		};
+>   	};
+>   
+>   	chosen {
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+> index 0170bfa8a467..27635d459e4c 100644
+> --- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+> +++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+> @@ -942,6 +942,174 @@ hda@3510000 {
+>   			status = "disabled";
+>   		};
+>   
+> +		xusb_padctl: padctl@3520000 {
+> +			compatible = "nvidia,tegra234-xusb-padctl";
+> +			reg = <0x03520000 0x20000>,
+> +			      <0x03540000 0x10000>;
+> +			reg-names = "padctl", "ao";
+> +			interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +			resets = <&bpmp TEGRA234_RESET_XUSB_PADCTL>;
+> +			reset-names = "padctl";
+> +
+> +			status = "disabled";
+> +
+> +			pads {
+> +				usb2 {
+> +					clocks = <&bpmp TEGRA234_CLK_USB2_TRK>;
+> +					clock-names = "trk";
+> +
+> +					lanes {
+> +						usb2-0 {
+> +							nvidia,function = "xusb";
+> +							status = "disabled";
+> +							#phy-cells = <0>;
+> +						};
+> +
+> +						usb2-1 {
+> +							nvidia,function = "xusb";
+> +							status = "disabled";
+> +							#phy-cells = <0>;
+> +						};
+> +
+> +						usb2-2 {
+> +							nvidia,function = "xusb";
+> +							status = "disabled";
+> +							#phy-cells = <0>;
+> +						};
+> +
+> +						usb2-3 {
+> +							nvidia,function = "xusb";
+> +							status = "disabled";
+> +							#phy-cells = <0>;
+> +						};
+> +					};
+> +				};
+> +
+> +				usb3 {
+> +					lanes {
+> +						usb3-0 {
+> +							nvidia,function = "xusb";
+> +							status = "disabled";
+> +							#phy-cells = <0>;
+> +						};
+> +
+> +						usb3-1 {
+> +							nvidia,function = "xusb";
+> +							status = "disabled";
+> +							#phy-cells = <0>;
+> +						};
+> +
+> +						usb3-2 {
+> +							nvidia,function = "xusb";
+> +							status = "disabled";
+> +							#phy-cells = <0>;
+> +						};
+> +
+> +						usb3-3 {
+> +							nvidia,function = "xusb";
+> +							status = "disabled";
+> +							#phy-cells = <0>;
+> +						};
+> +					};
+> +				};
+> +			};
+> +
+> +			ports {
+> +				usb2-0 {
+> +					status = "disabled";
+> +				};
+> +
+> +				usb2-1 {
+> +					status = "disabled";
+> +				};
+> +
+> +				usb2-2 {
+> +					status = "disabled";
+> +				};
+> +
+> +				usb2-3 {
+> +					status = "disabled";
+> +				};
+> +
+> +				usb3-0 {
+> +					status = "disabled";
+> +				};
+> +
+> +				usb3-1 {
+> +					status = "disabled";
+> +				};
+> +
+> +				usb3-2 {
+> +					status = "disabled";
+> +				};
+> +
+> +				usb3-3 {
+> +					status = "disabled";
+> +				};
+> +			};
+> +		};
+> +
+> +		usb@3550000 {
+> +			compatible = "nvidia,tegra234-xudc";
+> +			reg = <0x03550000 0x8000>,
+> +			      <0x03558000 0x8000>;
+> +			reg-names = "base", "fpci";
+> +			interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&bpmp TEGRA234_CLK_XUSB_CORE_DEV>,
+> +				 <&bpmp TEGRA234_CLK_XUSB_CORE_SS>,
+> +				 <&bpmp TEGRA234_CLK_XUSB_SS>,
+> +				 <&bpmp TEGRA234_CLK_XUSB_FS>;
+> +			clock-names = "dev", "ss", "ss_src", "fs_src";
+> +			interconnects = <&mc TEGRA234_MEMORY_CLIENT_XUSB_DEVR &emc>,
+> +					<&mc TEGRA234_MEMORY_CLIENT_XUSB_DEVW &emc>;
+> +			interconnect-names = "dma-mem", "write";
+> +			iommus = <&smmu_niso1 TEGRA234_SID_XUSB_DEV>;
+> +			power-domains = <&bpmp TEGRA234_POWER_DOMAIN_XUSBB>,
+> +					<&bpmp TEGRA234_POWER_DOMAIN_XUSBA>;
+> +			power-domain-names = "dev", "ss";
+> +			nvidia,xusb-padctl = <&xusb_padctl>;
+> +			dma-coherent;
+> +			status = "disabled";
+> +		};
+> +
+> +		usb@3610000 {
+> +			compatible = "nvidia,tegra234-xusb";
+> +			reg = <0x03610000 0x40000>,
+> +			      <0x03600000 0x10000>,
+> +			      <0x03650000 0x10000>;
+> +			reg-names = "hcd", "fpci", "bar2";
+> +
+> +			interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 164 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +			clocks = <&bpmp TEGRA234_CLK_XUSB_CORE_HOST>,
+> +				 <&bpmp TEGRA234_CLK_XUSB_FALCON>,
+> +				 <&bpmp TEGRA234_CLK_XUSB_CORE_SS>,
+> +				 <&bpmp TEGRA234_CLK_XUSB_SS>,
+> +				 <&bpmp TEGRA234_CLK_CLK_M>,
+> +				 <&bpmp TEGRA234_CLK_XUSB_FS>,
+> +				 <&bpmp TEGRA234_CLK_UTMIP_PLL>,
+> +				 <&bpmp TEGRA234_CLK_CLK_M>,
+> +				 <&bpmp TEGRA234_CLK_PLLE>;
+> +			clock-names = "xusb_host", "xusb_falcon_src",
+> +				      "xusb_ss", "xusb_ss_src", "xusb_hs_src",
+> +				      "xusb_fs_src", "pll_u_480m", "clk_m",
+> +				      "pll_e";
+> +			interconnects = <&mc TEGRA234_MEMORY_CLIENT_XUSB_HOSTR &emc>,
+> +					<&mc TEGRA234_MEMORY_CLIENT_XUSB_HOSTW &emc>;
+> +			interconnect-names = "dma-mem", "write";
+> +			iommus = <&smmu_niso1 TEGRA234_SID_XUSB_HOST>;
+> +
+> +			power-domains = <&bpmp TEGRA234_POWER_DOMAIN_XUSBC>,
+> +					<&bpmp TEGRA234_POWER_DOMAIN_XUSBA>;
+> +			power-domain-names = "xusb_host", "xusb_ss";
+> +
+> +			nvidia,xusb-padctl = <&xusb_padctl>;
+> +			dma-coherent;
+> +			status = "disabled";
+> +		};
+> +
+>   		fuse@3810000 {
+>   			compatible = "nvidia,tegra234-efuse";
+>   			reg = <0x03810000 0x10000>;
+> @@ -1470,6 +1638,8 @@ gen2_i2c: i2c@c240000 {
+>   			compatible = "nvidia,tegra194-i2c";
+>   			reg = <0xc240000 0x100>;
+>   			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+>   			status = "disabled";
+>   			clock-frequency = <100000>;
+>   			clocks = <&bpmp TEGRA234_CLK_I2C2
+
 
 Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
 
