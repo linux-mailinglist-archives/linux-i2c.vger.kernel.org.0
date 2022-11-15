@@ -2,108 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E2A6298E5
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Nov 2022 13:31:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 240D0629997
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Nov 2022 14:06:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiKOMbB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Nov 2022 07:31:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
+        id S232437AbiKONGX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Nov 2022 08:06:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiKOMbA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Nov 2022 07:31:00 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B741C932;
-        Tue, 15 Nov 2022 04:30:59 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id d9so19285766wrm.13;
-        Tue, 15 Nov 2022 04:30:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=heQF+yUf7OPPJ/81qSJZBOwzAZ7P4r5Gfhl736W/C8g=;
-        b=K1O66LkMWAD9+WNZ0lBTjZbkXcOR49TVN2NIpTWnEuiWfpdcEvMtJesFzpvhbdmzT9
-         cd483Meg7hspAAedgrkWvcBT2QkaMgGSToQE0ZhrbmcF8cBTNx6RhoE5OjW8023vaSva
-         hbWALv4lfXfLIXZohAmtC7py2VpAObOGcZ177fcy5DXv36MtgYKqgWxmQjJ7sedxm9ws
-         Ob5cC2sTGU0BmH1vibo4vrpIuGV9o/dkkW6/V2/vGMymnpn+idkHyouRubkum/efn0AK
-         U7hyZmpOovEmZ+CPZGU2W0SpaVmw7JPveFBTLEMs1VhMwXK8btAxFqeFT3bL06f1n57k
-         ugGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=heQF+yUf7OPPJ/81qSJZBOwzAZ7P4r5Gfhl736W/C8g=;
-        b=TsjxO7zP+1LCc2+aqC6GuXVgJwdEeRdzK7GjxhdPVSjH29g8l7Q2/dfY5YqzV05V6F
-         6CYcXG0GIpZVvX83/QGRTnPsKbdUrJVhngek4hxPn+Ba/f8DHeQ2JPU1m82pjY+cgIyo
-         99OJPkH8QhGMWIBOLcRABa7Vwivxg4Mt/OlVmCcasovYt1noXOcvGSCtddG5hXc5VZa+
-         g6lKLKjdPWaBjYZFTn79XnBkJcRdafgWvYrl//dT70eRIMtb7yK8Hzng3WxpN+UcYlUc
-         fxumlZas9x6R/QleqgPc1O+eCdn0Y5g7bRP9E92tvymUMKx3Tk5q6UXB5qJzIBxKI641
-         vNpQ==
-X-Gm-Message-State: ANoB5pn5SBvvn9Q+ieVR4x6Nw4iATWi3fz3i/TTfKlI60F/moBVE8/Pt
-        651tggodmuYxbBQgPSrfXMowJ06mesyW/w==
-X-Google-Smtp-Source: AA0mqf4GuF+RTCpaeuemRjo+R3Hc2FW5+FQYZe5dx99cUQGVlTE3w22izlM+xCGojqtD28L9TirMQA==
-X-Received: by 2002:a5d:6407:0:b0:238:238:cae3 with SMTP id z7-20020a5d6407000000b002380238cae3mr10730999wru.685.1668515458233;
-        Tue, 15 Nov 2022 04:30:58 -0800 (PST)
-Received: from prasmi.home ([2a00:23c8:2501:c701:d94a:6345:c378:e255])
-        by smtp.gmail.com with ESMTPSA id v11-20020a05600c444b00b003c70191f267sm22862614wmn.39.2022.11.15.04.30.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 04:30:57 -0800 (PST)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] dt-bindings: i2c: renesas,riic: Document RZ/Five SoC
-Date:   Tue, 15 Nov 2022 12:30:18 +0000
-Message-Id: <20221115123018.1182324-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229999AbiKONGW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Nov 2022 08:06:22 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD64AE48;
+        Tue, 15 Nov 2022 05:06:21 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8C0922228E;
+        Tue, 15 Nov 2022 13:06:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1668517580; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=abSDNB14ZREuprRrpVDZ2SfZLmE2c2CRnEBuVI2uoe0=;
+        b=R8NwDXCErErXh325pGP86m7n9PjKzllyEg2/jc0O258QbhrV5Gadlve5fq0BfaRKKHYWTp
+        m/FTj3gAPS9fDeuBrG9K8HQIfgGpOQp1rRZ/zGa9lhdvFKt+vqfj3gHdDtz50ZAeZQND2H
+        0bj815krmYiM5qYVcJZghKh69gkXnMg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1668517580;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=abSDNB14ZREuprRrpVDZ2SfZLmE2c2CRnEBuVI2uoe0=;
+        b=2sLqZsZUnnA6rPPHj1v6EBn3e0c+7fa65/XpscbyIjdJ0eP1lWarvAryNS/Gn6jVzEP+fg
+        /wENRt2KczvQ88DQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5F9CB13A91;
+        Tue, 15 Nov 2022 13:06:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TZO/FcyOc2OPWAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 15 Nov 2022 13:06:20 +0000
+Date:   Tue, 15 Nov 2022 14:06:16 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: smbus: add DDR support for SPD
+Message-ID: <20221115140616.555e8331@endymion.delvare>
+In-Reply-To: <20221114115606.1967080-1-clabbe@baylibre.com>
+References: <20221114115606.1967080-1-clabbe@baylibre.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Hi Corentin,
 
-The RIIC block on the RZ/Five SoC is identical to one found on the RZ/G2UL
-SoC. "renesas,riic-r9a07g043" compatible string will be used on the
-RZ/Five SoC so to make this clear, update the comment to include RZ/Five
-SoC.
+On Mon, 14 Nov 2022 11:56:06 +0000, Corentin Labbe wrote:
+> On my x05 laptop I got:
+> Memory type 0x12 not supported yet, not instantiating SPD
+>=20
+> Adding the 0x12 case lead to a successful instantiated SPD AT24 EEPROM.
+> i801_smbus 0000:00:1f.3: SMBus using polling
+> i2c i2c-6: 2/2 memory slots populated (from DMI)
+> at24 6-0050: 256 byte spd EEPROM, read-only
+> i2c i2c-6: Successfully instantiated SPD at 0x50
+> at24 6-0051: 256 byte spd EEPROM, read-only
+>=20
+> And then, I decoded it successfully via decode-dimms.
+>=20
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> ---
+> Changes since v1:
+> - Added memory type document link
+> - Added case for LPDDR
+>=20
+>  drivers/i2c/i2c-smbus.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>=20
+> diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
+> index 07c92c8495a3..c85710ed9548 100644
+> --- a/drivers/i2c/i2c-smbus.c
+> +++ b/drivers/i2c/i2c-smbus.c
+> @@ -361,9 +361,15 @@ void i2c_register_spd(struct i2c_adapter *adap)
+>  		return;
+>  	}
+> =20
+> +	/*
+> +	 * Memory types could be found at section 7.18.2 (Memory Device =E2=80=
+=94 Type), table 78
+> +	 * https://www.dmtf.org/sites/default/files/standards/documents/DSP0134=
+_3.6.0.pdf
+> +	 */
+>  	switch (common_mem_type) {
+> +	case 0x12:	/* DDR */
+>  	case 0x13:	/* DDR2 */
+>  	case 0x18:	/* DDR3 */
+> +	case 0x1B:	/* LPDDR */
+>  	case 0x1C:	/* LPDDR2 */
+>  	case 0x1D:	/* LPDDR3 */
+>  		name =3D "spd";
 
-No driver changes are required as generic compatible string
-"renesas,riic-rz" will be used as a fallback on RZ/Five SoC.
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- Documentation/devicetree/bindings/i2c/renesas,riic.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-index d3c0d5c427ac..2291a7cd619b 100644
---- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-+++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-@@ -19,7 +19,7 @@ properties:
-       - enum:
-           - renesas,riic-r7s72100   # RZ/A1H
-           - renesas,riic-r7s9210    # RZ/A2M
--          - renesas,riic-r9a07g043  # RZ/G2UL
-+          - renesas,riic-r9a07g043  # RZ/G2UL and RZ/Five
-           - renesas,riic-r9a07g044  # RZ/G2{L,LC}
-           - renesas,riic-r9a07g054  # RZ/V2L
-       - const: renesas,riic-rz      # RZ/A or RZ/G2L
--- 
-2.25.1
-
+Thanks,
+--=20
+Jean Delvare
+SUSE L3 Support
