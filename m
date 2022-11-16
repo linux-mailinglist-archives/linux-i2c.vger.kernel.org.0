@@ -2,96 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93D562B514
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Nov 2022 09:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2CF62B5E4
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Nov 2022 10:03:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238839AbiKPIZJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 16 Nov 2022 03:25:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
+        id S229862AbiKPJDa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 16 Nov 2022 04:03:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiKPIYm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Nov 2022 03:24:42 -0500
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12541DDDE;
-        Wed, 16 Nov 2022 00:22:58 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id cg5so10242903qtb.12;
-        Wed, 16 Nov 2022 00:22:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yBnoYcjVURWpX9Daur17Y7+xHtBrI7JK8HkxE9AnM+U=;
-        b=4rU39LTDlMP8jTK/kg7CP0l60OfFdea5ORaNwwVrROMp9XoQrCP0KZmCfXDy0wY9dD
-         8faB/doU4AlhzTYPykyF00iOpQVpkcdG1zVNKu96Pe3vYXl9V6fxTlMGsnHM9ErDKOrs
-         A9j4PTr3jeOBFEeStglHw9hxJeV9KNQlbMRGf1ujlg8AsC52EOJo4+v2qLigWrulQo1u
-         G5XY8NXm9KWPUpQtUso5UDK9c6VP3113dtZAo+rrlLMmc/AUNPgS1cpm0mr71Z3O0GyJ
-         zVvTPGB/t5TKrAf+7huR2hjwWpxfTdxOVM3ILBadYhxpuKQ4itWh6FyUcW1DPDr8NMnp
-         4E1A==
-X-Gm-Message-State: ANoB5pkywQ8d8/rMGPISLlsPcrwhBrWZgTRKO1qVi4QiSQo4+WCoLTWD
-        jS8HFlEhb/LHaxjE+ksMiJzwdvUSUyL/Mw==
-X-Google-Smtp-Source: AA0mqf6YHw+7tHHloEU4iAgb8DTZ/rZ+afDqcfrCJqqokHF1E3HvkdpfB0MAsyM2O2nGjM5MHmSLWg==
-X-Received: by 2002:ac8:5f92:0:b0:3a5:7062:b8a0 with SMTP id j18-20020ac85f92000000b003a57062b8a0mr20317105qta.82.1668586977714;
-        Wed, 16 Nov 2022 00:22:57 -0800 (PST)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id u12-20020a05620a084c00b006bc192d277csm9459327qku.10.2022.11.16.00.22.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 00:22:57 -0800 (PST)
-Received: by mail-yb1-f170.google.com with SMTP id s18so20071643ybe.10;
-        Wed, 16 Nov 2022 00:22:57 -0800 (PST)
-X-Received: by 2002:a25:ad14:0:b0:6ca:e43:d9ff with SMTP id
- y20-20020a25ad14000000b006ca0e43d9ffmr19934559ybi.543.1668586977016; Wed, 16
- Nov 2022 00:22:57 -0800 (PST)
+        with ESMTP id S238832AbiKPJDN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Nov 2022 04:03:13 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A227411C2B
+        for <linux-i2c@vger.kernel.org>; Wed, 16 Nov 2022 01:02:35 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1ovEJV-0000py-NE; Wed, 16 Nov 2022 10:02:33 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1ovEJU-0006vu-KQ; Wed, 16 Nov 2022 10:02:32 +0100
+Date:   Wed, 16 Nov 2022 10:02:32 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     linux-i2c@vger.kernel.org, Oleksij Rempel <linux@rempel-privat.de>,
+        kernel@pengutronix.de, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Subject: Re: [PATCH] i2c: imx: Only DMA messages with I2C_M_DMA_SAFE flag set
+Message-ID: <20221116090232.GA12278@pengutronix.de>
+References: <20221109235902.468723-1-andrew@lunn.ch>
 MIME-Version: 1.0
-References: <20221115123018.1182324-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221115123018.1182324-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 16 Nov 2022 09:22:45 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWKHs5zTmJW8viVyxiMJno+Yn_e2CfhkLxSUtHX4TJo3g@mail.gmail.com>
-Message-ID: <CAMuHMdWKHs5zTmJW8viVyxiMJno+Yn_e2CfhkLxSUtHX4TJo3g@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: i2c: renesas,riic: Document RZ/Five SoC
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Chris Brandt <chris.brandt@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221109235902.468723-1-andrew@lunn.ch>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 1:31 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> The RIIC block on the RZ/Five SoC is identical to one found on the RZ/G2UL
-> SoC. "renesas,riic-r9a07g043" compatible string will be used on the
-> RZ/Five SoC so to make this clear, update the comment to include RZ/Five
-> SoC.
->
-> No driver changes are required as generic compatible string
-> "renesas,riic-rz" will be used as a fallback on RZ/Five SoC.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Thu, Nov 10, 2022 at 12:59:02AM +0100, Andrew Lunn wrote:
+> Recent changes to the DMA code has resulting in the IMX driver failing
+> I2C transfers when the buffer has been vmalloc. Only perform DMA
+> transfers if the message has the I2C_M_DMA_SAFE flag set, indicating
+> the client is providing a buffer which is DMA safe.
+> 
+> This is a minimal fix for stable. The I2C core provides helpers to
+> allocate a bounce buffer. For a fuller fix the master should make use
+> of these helpers.
+> 
+> Fixes: 4544b9f25e70 ("dma-mapping: Add vmap checks to dma_map_single()")
+> Signed-off-by: Andrew Lunn <andrew@lunn.ch>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Gr{oetje,eeting}s,
+> ---
+>  drivers/i2c/busses/i2c-imx.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index 3082183bd66a..fc70920c4dda 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -1132,7 +1132,8 @@ static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs,
+>  	int i, result;
+>  	unsigned int temp;
+>  	int block_data = msgs->flags & I2C_M_RECV_LEN;
+> -	int use_dma = i2c_imx->dma && msgs->len >= DMA_THRESHOLD && !block_data;
+> +	int use_dma = i2c_imx->dma && msgs->flags & I2C_M_DMA_SAFE &&
+> +		msgs->len >= DMA_THRESHOLD && !block_data;
+>  
+>  	dev_dbg(&i2c_imx->adapter.dev,
+>  		"<%s> write slave address: addr=0x%x\n",
+> @@ -1298,7 +1299,8 @@ static int i2c_imx_xfer_common(struct i2c_adapter *adapter,
+>  			result = i2c_imx_read(i2c_imx, &msgs[i], is_lastmsg, atomic);
+>  		} else {
+>  			if (!atomic &&
+> -			    i2c_imx->dma && msgs[i].len >= DMA_THRESHOLD)
+> +			    i2c_imx->dma && msgs[i].len >= DMA_THRESHOLD &&
+> +				msgs[i].flags & I2C_M_DMA_SAFE)
+>  				result = i2c_imx_dma_write(i2c_imx, &msgs[i]);
+>  			else
+>  				result = i2c_imx_write(i2c_imx, &msgs[i], atomic);
+> -- 
+> 2.37.2
+> 
+> 
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
