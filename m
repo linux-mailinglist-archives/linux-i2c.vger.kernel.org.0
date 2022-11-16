@@ -2,40 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2CF62B5E4
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Nov 2022 10:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6A462B5E5
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Nov 2022 10:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiKPJDa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 16 Nov 2022 04:03:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55614 "EHLO
+        id S231640AbiKPJDc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 16 Nov 2022 04:03:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238832AbiKPJDN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Nov 2022 04:03:13 -0500
+        with ESMTP id S238844AbiKPJDO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Nov 2022 04:03:14 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A227411C2B
-        for <linux-i2c@vger.kernel.org>; Wed, 16 Nov 2022 01:02:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF0D1A80B
+        for <linux-i2c@vger.kernel.org>; Wed, 16 Nov 2022 01:02:57 -0800 (PST)
 Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1ovEJV-0000py-NE; Wed, 16 Nov 2022 10:02:33 +0100
+        id 1ovEJm-0000wV-6Z; Wed, 16 Nov 2022 10:02:50 +0100
 Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1ovEJU-0006vu-KQ; Wed, 16 Nov 2022 10:02:32 +0100
-Date:   Wed, 16 Nov 2022 10:02:32 +0100
+        id 1ovEJl-00070t-Qp; Wed, 16 Nov 2022 10:02:49 +0100
+Date:   Wed, 16 Nov 2022 10:02:49 +0100
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     linux-i2c@vger.kernel.org, Oleksij Rempel <linux@rempel-privat.de>,
-        kernel@pengutronix.de, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Subject: Re: [PATCH] i2c: imx: Only DMA messages with I2C_M_DMA_SAFE flag set
-Message-ID: <20221116090232.GA12278@pengutronix.de>
-References: <20221109235902.468723-1-andrew@lunn.ch>
+To:     Clark Wang <xiaoning.wang@nxp.com>
+Cc:     linux@rempel-privat.de, kernel@pengutronix.de, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: imx: add irqf_no_suspend flag
+Message-ID: <20221116090249.GB12278@pengutronix.de>
+References: <20221116074431.513214-1-xiaoning.wang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221109235902.468723-1-andrew@lunn.ch>
+In-Reply-To: <20221116074431.513214-1-xiaoning.wang@nxp.com>
 X-Sent-From: Pengutronix Hildesheim
 X-URL:  http://www.pengutronix.de/
 X-Accept-Language: de,en
@@ -53,51 +53,35 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 12:59:02AM +0100, Andrew Lunn wrote:
-> Recent changes to the DMA code has resulting in the IMX driver failing
-> I2C transfers when the buffer has been vmalloc. Only perform DMA
-> transfers if the message has the I2C_M_DMA_SAFE flag set, indicating
-> the client is providing a buffer which is DMA safe.
+On Wed, Nov 16, 2022 at 03:44:31PM +0800, Clark Wang wrote:
+> The i2c irq is masked when user starts an i2c transfer process
+> during noirq suspend stage. As a result, i2c transfer fails.
+> To solve the problem, IRQF_NO_SUSPEND is added to i2c bus.
 > 
-> This is a minimal fix for stable. The I2C core provides helpers to
-> allocate a bounce buffer. For a fuller fix the master should make use
-> of these helpers.
-> 
-> Fixes: 4544b9f25e70 ("dma-mapping: Add vmap checks to dma_map_single()")
-> Signed-off-by: Andrew Lunn <andrew@lunn.ch>
+> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
 
 Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
 > ---
->  drivers/i2c/busses/i2c-imx.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  drivers/i2c/busses/i2c-imx.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index 3082183bd66a..fc70920c4dda 100644
+> index 1ce0cf7a323f..ba49b2f7a1d1 100644
 > --- a/drivers/i2c/busses/i2c-imx.c
 > +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -1132,7 +1132,8 @@ static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs,
->  	int i, result;
->  	unsigned int temp;
->  	int block_data = msgs->flags & I2C_M_RECV_LEN;
-> -	int use_dma = i2c_imx->dma && msgs->len >= DMA_THRESHOLD && !block_data;
-> +	int use_dma = i2c_imx->dma && msgs->flags & I2C_M_DMA_SAFE &&
-> +		msgs->len >= DMA_THRESHOLD && !block_data;
+> @@ -1510,7 +1510,8 @@ static int i2c_imx_probe(struct platform_device *pdev)
+>  		goto rpm_disable;
 >  
->  	dev_dbg(&i2c_imx->adapter.dev,
->  		"<%s> write slave address: addr=0x%x\n",
-> @@ -1298,7 +1299,8 @@ static int i2c_imx_xfer_common(struct i2c_adapter *adapter,
->  			result = i2c_imx_read(i2c_imx, &msgs[i], is_lastmsg, atomic);
->  		} else {
->  			if (!atomic &&
-> -			    i2c_imx->dma && msgs[i].len >= DMA_THRESHOLD)
-> +			    i2c_imx->dma && msgs[i].len >= DMA_THRESHOLD &&
-> +				msgs[i].flags & I2C_M_DMA_SAFE)
->  				result = i2c_imx_dma_write(i2c_imx, &msgs[i]);
->  			else
->  				result = i2c_imx_write(i2c_imx, &msgs[i], atomic);
+>  	/* Request IRQ */
+> -	ret = request_threaded_irq(irq, i2c_imx_isr, NULL, IRQF_SHARED,
+> +	ret = request_threaded_irq(irq, i2c_imx_isr, NULL,
+> +				   IRQF_SHARED | IRQF_NO_SUSPEND,
+>  				   pdev->name, i2c_imx);
+>  	if (ret) {
+>  		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
 > -- 
-> 2.37.2
+> 2.34.1
 > 
 > 
 
