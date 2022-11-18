@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3A36305C7
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DBBC630392
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236960AbiKRX6t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 18:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
+        id S235970AbiKRXaY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 18:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237238AbiKRX5N (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:57:13 -0500
+        with ESMTP id S235847AbiKRX3Y (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:29:24 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77D0B2219
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:28:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5263FC2842
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:17:44 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9b-00052c-3A; Fri, 18 Nov 2022 23:48:11 +0100
+        id 1owA9a-00052o-Tc; Fri, 18 Nov 2022 23:48:10 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9Y-0058pH-G5; Fri, 18 Nov 2022 23:48:09 +0100
+        id 1owA9Y-0058pK-JC; Fri, 18 Nov 2022 23:48:09 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9Y-0000S2-Gl; Fri, 18 Nov 2022 23:48:08 +0100
+        id 1owA9Y-0000S7-M2; Fri, 18 Nov 2022 23:48:08 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -36,9 +36,9 @@ To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH 542/606] regulator: isl6271a-regulator: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:44:36 +0100
-Message-Id: <20221118224540.619276-543-uwe@kleine-koenig.org>
+Subject: [PATCH 543/606] regulator: lp3972: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:44:37 +0100
+Message-Id: <20221118224540.619276-544-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -51,7 +51,7 @@ X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to f
 X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,37 +60,35 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-.probe_new() doesn't get the i2c_device_id * parameter, so determine
-that explicitly in the probe function.
+The probe function doesn't make use of the i2c_device_id * parameter so it
+can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/regulator/isl6271a-regulator.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/regulator/lp3972.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/regulator/isl6271a-regulator.c b/drivers/regulator/isl6271a-regulator.c
-index 591a64e1ca61..b23b052eab10 100644
---- a/drivers/regulator/isl6271a-regulator.c
-+++ b/drivers/regulator/isl6271a-regulator.c
-@@ -97,9 +97,9 @@ static const struct regulator_desc isl_rd[] = {
- 	},
- };
+diff --git a/drivers/regulator/lp3972.c b/drivers/regulator/lp3972.c
+index 2d276bbeedf2..27b216bf18fc 100644
+--- a/drivers/regulator/lp3972.c
++++ b/drivers/regulator/lp3972.c
+@@ -495,8 +495,7 @@ static int setup_regulators(struct lp3972 *lp3972,
+ 	return 0;
+ }
  
--static int isl6271a_probe(struct i2c_client *i2c,
--				     const struct i2c_device_id *id)
-+static int isl6271a_probe(struct i2c_client *i2c)
+-static int lp3972_i2c_probe(struct i2c_client *i2c,
+-			    const struct i2c_device_id *id)
++static int lp3972_i2c_probe(struct i2c_client *i2c)
  {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(i2c);
- 	struct regulator_dev *rdev;
- 	struct regulator_config config = { };
- 	struct regulator_init_data *init_data	= dev_get_platdata(&i2c->dev);
-@@ -148,7 +148,7 @@ static struct i2c_driver isl6271a_i2c_driver = {
+ 	struct lp3972 *lp3972;
+ 	struct lp3972_platform_data *pdata = dev_get_platdata(&i2c->dev);
+@@ -547,7 +546,7 @@ static struct i2c_driver lp3972_i2c_driver = {
  	.driver = {
- 		.name = "isl6271a",
+ 		.name = "lp3972",
  	},
--	.probe = isl6271a_probe,
-+	.probe_new = isl6271a_probe,
- 	.id_table = isl6271a_id,
+-	.probe    = lp3972_i2c_probe,
++	.probe_new = lp3972_i2c_probe,
+ 	.id_table = lp3972_i2c_id,
  };
  
 -- 
