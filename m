@@ -2,43 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184286303F8
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:34:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E25D8630689
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 01:10:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235906AbiKRXeR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 18:34:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51718 "EHLO
+        id S237668AbiKSAKy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 19:10:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236412AbiKRXcz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:32:55 -0500
+        with ESMTP id S237543AbiKSAJy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 19:09:54 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB781A839
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:20:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497877DEFD
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:33:17 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9U-0004kF-F6; Fri, 18 Nov 2022 23:48:04 +0100
+        id 1owA9V-0004lN-9L; Fri, 18 Nov 2022 23:48:05 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9R-0058mj-PB; Fri, 18 Nov 2022 23:48:02 +0100
+        id 1owA9S-0058mw-AK; Fri, 18 Nov 2022 23:48:03 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9R-0000Q1-SW; Fri, 18 Nov 2022 23:48:01 +0100
+        id 1owA9S-0000Q4-1n; Fri, 18 Nov 2022 23:48:02 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
+        Benson Leung <bleung@chromium.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 511/606] pinctrl: sx150x: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:44:05 +0100
-Message-Id: <20221118224540.619276-512-uwe@kleine-koenig.org>
+        <u.kleine-koenig@pengutronix.de>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 512/606] platform/chrome: cros_ec: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:44:06 +0100
+Message-Id: <20221118224540.619276-513-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -60,39 +61,37 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-.probe_new() doesn't get the i2c_device_id * parameter, so determine
-that explicitly in the probe function.
+The probe function doesn't make use of the i2c_device_id * parameter so it
+can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/pinctrl/pinctrl-sx150x.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/platform/chrome/cros_ec_i2c.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/pinctrl/pinctrl-sx150x.c b/drivers/pinctrl/pinctrl-sx150x.c
-index a87ea3b95cf4..0b5ff99641e1 100644
---- a/drivers/pinctrl/pinctrl-sx150x.c
-+++ b/drivers/pinctrl/pinctrl-sx150x.c
-@@ -1094,9 +1094,9 @@ static const struct regmap_config sx150x_regmap_config = {
- 	.volatile_reg = sx150x_reg_volatile,
- };
+diff --git a/drivers/platform/chrome/cros_ec_i2c.c b/drivers/platform/chrome/cros_ec_i2c.c
+index b6823c654c3f..dbe698f33128 100644
+--- a/drivers/platform/chrome/cros_ec_i2c.c
++++ b/drivers/platform/chrome/cros_ec_i2c.c
+@@ -286,8 +286,7 @@ static int cros_ec_cmd_xfer_i2c(struct cros_ec_device *ec_dev,
+ 	return ret;
+ }
  
--static int sx150x_probe(struct i2c_client *client,
--			const struct i2c_device_id *id)
-+static int sx150x_probe(struct i2c_client *client)
+-static int cros_ec_i2c_probe(struct i2c_client *client,
+-			     const struct i2c_device_id *dev_id)
++static int cros_ec_i2c_probe(struct i2c_client *client)
  {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	static const u32 i2c_funcs = I2C_FUNC_SMBUS_BYTE_DATA |
- 				     I2C_FUNC_SMBUS_WRITE_WORD_DATA;
  	struct device *dev = &client->dev;
-@@ -1252,7 +1252,7 @@ static struct i2c_driver sx150x_driver = {
- 		.name = "sx150x-pinctrl",
- 		.of_match_table = of_match_ptr(sx150x_of_match),
+ 	struct cros_ec_device *ec_dev = NULL;
+@@ -373,7 +372,7 @@ static struct i2c_driver cros_ec_driver = {
+ 		.of_match_table = of_match_ptr(cros_ec_i2c_of_match),
+ 		.pm	= &cros_ec_i2c_pm_ops,
  	},
--	.probe    = sx150x_probe,
-+	.probe_new = sx150x_probe,
- 	.id_table = sx150x_id,
+-	.probe		= cros_ec_i2c_probe,
++	.probe_new	= cros_ec_i2c_probe,
+ 	.remove		= cros_ec_i2c_remove,
+ 	.id_table	= cros_ec_i2c_id,
  };
- 
 -- 
 2.38.1
 
