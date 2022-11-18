@@ -2,44 +2,41 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12569630402
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 273A26303C0
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:33:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236111AbiKRXe2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 18:34:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
+        id S235892AbiKRXd0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 18:33:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236375AbiKRXct (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:32:49 -0500
+        with ESMTP id S236226AbiKRXcS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:32:18 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711641EED7
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:20:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2380322
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:19:59 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9K-0004Hg-1p; Fri, 18 Nov 2022 23:47:54 +0100
+        id 1owA9K-0004Hd-3V; Fri, 18 Nov 2022 23:47:54 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9H-0058iU-Jw; Fri, 18 Nov 2022 23:47:52 +0100
+        id 1owA9H-0058iR-IO; Fri, 18 Nov 2022 23:47:52 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9H-0000MT-DS; Fri, 18 Nov 2022 23:47:51 +0100
+        id 1owA9H-0000MY-J6; Fri, 18 Nov 2022 23:47:51 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Lee Jones <lee@kernel.org>
+        Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 457/606] mfd: sec-core: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:43:11 +0100
-Message-Id: <20221118224540.619276-458-uwe@kleine-koenig.org>
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
+Subject: [PATCH 458/606] mfd: si476x-i2c: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:43:12 +0100
+Message-Id: <20221118224540.619276-459-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -61,37 +58,39 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-The probe function doesn't make use of the i2c_device_id * parameter so it
-can be trivially converted.
+.probe_new() doesn't get the i2c_device_id * parameter, so determine
+that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/mfd/sec-core.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/mfd/si476x-i2c.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mfd/sec-core.c b/drivers/mfd/sec-core.c
-index a467de2b2fea..b03edda56009 100644
---- a/drivers/mfd/sec-core.c
-+++ b/drivers/mfd/sec-core.c
-@@ -305,8 +305,7 @@ sec_pmic_i2c_parse_dt_pdata(struct device *dev)
- 	return pd;
+diff --git a/drivers/mfd/si476x-i2c.c b/drivers/mfd/si476x-i2c.c
+index 8166949b725c..22131cf85e3f 100644
+--- a/drivers/mfd/si476x-i2c.c
++++ b/drivers/mfd/si476x-i2c.c
+@@ -683,9 +683,9 @@ bool si476x_core_is_powered_up(struct si476x_core *core)
  }
+ EXPORT_SYMBOL_GPL(si476x_core_is_powered_up);
  
--static int sec_pmic_probe(struct i2c_client *i2c,
--			    const struct i2c_device_id *id)
-+static int sec_pmic_probe(struct i2c_client *i2c)
+-static int si476x_core_probe(struct i2c_client *client,
+-			     const struct i2c_device_id *id)
++static int si476x_core_probe(struct i2c_client *client)
  {
- 	const struct regmap_config *regmap;
- 	struct sec_platform_data *pdata;
-@@ -497,7 +496,7 @@ static struct i2c_driver sec_pmic_driver = {
- 		   .pm = pm_sleep_ptr(&sec_pmic_pm_ops),
- 		   .of_match_table = sec_dt_match,
++	const struct i2c_device_id *id = i2c_client_get_device_id(client);
+ 	int rval;
+ 	struct si476x_core          *core;
+ 	struct si476x_platform_data *pdata;
+@@ -866,7 +866,7 @@ static struct i2c_driver si476x_core_driver = {
+ 	.driver		= {
+ 		.name	= "si476x-core",
  	},
--	.probe = sec_pmic_probe,
-+	.probe_new = sec_pmic_probe,
- 	.shutdown = sec_pmic_shutdown,
+-	.probe		= si476x_core_probe,
++	.probe_new	= si476x_core_probe,
+ 	.remove         = si476x_core_remove,
+ 	.id_table       = si476x_id,
  };
- module_i2c_driver(sec_pmic_driver);
 -- 
 2.38.1
 
