@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6B263012C
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 23:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AEA1630141
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 23:52:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234031AbiKRWvQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 17:51:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
+        id S233578AbiKRWv6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 17:51:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232884AbiKRWt2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 17:49:28 -0500
+        with ESMTP id S233576AbiKRWvY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 17:51:24 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E0CA3175
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 14:46:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEF1B9BB5
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 14:47:07 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA80-0008UY-9E; Fri, 18 Nov 2022 23:46:32 +0100
+        id 1owA81-0008W4-2E; Fri, 18 Nov 2022 23:46:33 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7v-0058Ee-Bq; Fri, 18 Nov 2022 23:46:28 +0100
+        id 1owA7v-0058F0-U7; Fri, 18 Nov 2022 23:46:28 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7v-00Hb0p-ET; Fri, 18 Nov 2022 23:46:27 +0100
+        id 1owA7v-00Hb0u-Mf; Fri, 18 Nov 2022 23:46:27 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -33,16 +33,16 @@ To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Wolfram Sang <wsa@kernel.org>,
         Jonathan Cameron <jic23@kernel.org>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Adrien Grassein <adrien.grassein@gmail.com>
+        Corey Minyard <cminyard@mvista.com>,
+        =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 093/606] iio: gyro: bmg160_i2c: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:37:07 +0100
-Message-Id: <20221118224540.619276-94-uwe@kleine-koenig.org>
+Subject: [PATCH 094/606] iio: gyro: itg3200_core: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:37:08 +0100
+Message-Id: <20221118224540.619276-95-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -64,39 +64,37 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-.probe_new() doesn't get the i2c_device_id * parameter, so determine
-that explicitly in the probe function.
+The probe function doesn't make use of the i2c_device_id * parameter so it
+can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/iio/gyro/bmg160_i2c.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/iio/gyro/itg3200_core.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/gyro/bmg160_i2c.c b/drivers/iio/gyro/bmg160_i2c.c
-index 908ccc385254..2b019ee5b2eb 100644
---- a/drivers/iio/gyro/bmg160_i2c.c
-+++ b/drivers/iio/gyro/bmg160_i2c.c
-@@ -13,9 +13,9 @@ static const struct regmap_config bmg160_regmap_i2c_conf = {
- 	.max_register = 0x3f
- };
+diff --git a/drivers/iio/gyro/itg3200_core.c b/drivers/iio/gyro/itg3200_core.c
+index 74ca22468496..ceacd863d3ea 100644
+--- a/drivers/iio/gyro/itg3200_core.c
++++ b/drivers/iio/gyro/itg3200_core.c
+@@ -295,8 +295,7 @@ static const struct iio_info itg3200_info = {
  
--static int bmg160_i2c_probe(struct i2c_client *client,
--			    const struct i2c_device_id *id)
-+static int bmg160_i2c_probe(struct i2c_client *client)
+ static const unsigned long itg3200_available_scan_masks[] = { 0xffffffff, 0x0 };
+ 
+-static int itg3200_probe(struct i2c_client *client,
+-		const struct i2c_device_id *id)
++static int itg3200_probe(struct i2c_client *client)
  {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	struct regmap *regmap;
- 	const char *name = NULL;
- 
-@@ -70,7 +70,7 @@ static struct i2c_driver bmg160_i2c_driver = {
- 		.of_match_table = bmg160_of_match,
- 		.pm	= &bmg160_pm_ops,
+ 	int ret;
+ 	struct itg3200 *st;
+@@ -406,7 +405,7 @@ static struct i2c_driver itg3200_driver = {
+ 		.pm	= pm_sleep_ptr(&itg3200_pm_ops),
  	},
--	.probe		= bmg160_i2c_probe,
-+	.probe_new	= bmg160_i2c_probe,
- 	.remove		= bmg160_i2c_remove,
- 	.id_table	= bmg160_i2c_id,
+ 	.id_table	= itg3200_id,
+-	.probe		= itg3200_probe,
++	.probe_new	= itg3200_probe,
+ 	.remove		= itg3200_remove,
  };
+ 
 -- 
 2.38.1
 
