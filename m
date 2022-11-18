@@ -2,43 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0286D6306F6
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 01:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8166263035F
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237667AbiKSAUg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 19:20:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35184 "EHLO
+        id S235765AbiKRX2r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 18:28:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237812AbiKSAUA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 19:20:00 -0500
+        with ESMTP id S235770AbiKRX2N (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:28:13 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1741FF41A
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:36:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF894102E
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:16:08 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9C-0003tc-8T; Fri, 18 Nov 2022 23:47:46 +0100
+        id 1owA9C-0003uf-KL; Fri, 18 Nov 2022 23:47:46 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA99-0058fE-9m; Fri, 18 Nov 2022 23:47:44 +0100
+        id 1owA99-0058fN-N4; Fri, 18 Nov 2022 23:47:44 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA99-0000Jx-Be; Fri, 18 Nov 2022 23:47:43 +0100
+        id 1owA99-0000K0-Hw; Fri, 18 Nov 2022 23:47:43 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Lee Jones <lee@kernel.org>
+        Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH 417/606] mfd: adp5520: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:42:31 +0100
-Message-Id: <20221118224540.619276-418-uwe@kleine-koenig.org>
+        <u.kleine-koenig@pengutronix.de>, patches@opensource.cirrus.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 418/606] mfd: arizona-i2c: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:42:32 +0100
+Message-Id: <20221118224540.619276-419-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -65,34 +64,34 @@ that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/mfd/adp5520.c | 6 +++---
+ drivers/mfd/arizona-i2c.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mfd/adp5520.c b/drivers/mfd/adp5520.c
-index 882eddc32f8e..cb168efdbafe 100644
---- a/drivers/mfd/adp5520.c
-+++ b/drivers/mfd/adp5520.c
-@@ -204,9 +204,9 @@ static int adp5520_remove_subdevs(struct adp5520_chip *chip)
- 	return device_for_each_child(chip->dev, NULL, __remove_subdev);
- }
+diff --git a/drivers/mfd/arizona-i2c.c b/drivers/mfd/arizona-i2c.c
+index 79bda6523cc1..b2301586adbc 100644
+--- a/drivers/mfd/arizona-i2c.c
++++ b/drivers/mfd/arizona-i2c.c
+@@ -20,9 +20,9 @@
  
--static int adp5520_probe(struct i2c_client *client,
--					const struct i2c_device_id *id)
-+static int adp5520_probe(struct i2c_client *client)
+ #include "arizona.h"
+ 
+-static int arizona_i2c_probe(struct i2c_client *i2c,
+-			     const struct i2c_device_id *id)
++static int arizona_i2c_probe(struct i2c_client *i2c)
  {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	struct adp5520_platform_data *pdata = dev_get_platdata(&client->dev);
- 	struct platform_device *pdev;
- 	struct adp5520_chip *chip;
-@@ -340,7 +340,7 @@ static struct i2c_driver adp5520_driver = {
- 		.pm			= pm_sleep_ptr(&adp5520_pm),
- 		.suppress_bind_attrs	= true,
++	const struct i2c_device_id *id = i2c_client_get_device_id(i2c);
+ 	const void *match_data;
+ 	struct arizona *arizona;
+ 	const struct regmap_config *regmap_config = NULL;
+@@ -120,7 +120,7 @@ static struct i2c_driver arizona_i2c_driver = {
+ 		.pm	= pm_ptr(&arizona_pm_ops),
+ 		.of_match_table	= of_match_ptr(arizona_i2c_of_match),
  	},
--	.probe		= adp5520_probe,
-+	.probe_new	= adp5520_probe,
- 	.id_table	= adp5520_id,
+-	.probe		= arizona_i2c_probe,
++	.probe_new	= arizona_i2c_probe,
+ 	.remove		= arizona_i2c_remove,
+ 	.id_table	= arizona_i2c_id,
  };
- builtin_i2c_driver(adp5520_driver);
 -- 
 2.38.1
 
