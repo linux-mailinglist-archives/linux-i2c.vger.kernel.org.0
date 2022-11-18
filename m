@@ -2,50 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91486300D6
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 23:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 942FA630069
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 23:46:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233271AbiKRWsw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 17:48:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
+        id S232231AbiKRWqt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 17:46:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232091AbiKRWqk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 17:46:40 -0500
+        with ESMTP id S231954AbiKRWqb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 17:46:31 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6522B94A53
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 14:46:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6263EA3164
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 14:46:29 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7l-0007gW-Pj; Fri, 18 Nov 2022 23:46:17 +0100
+        id 1owA7n-0007jc-Td; Fri, 18 Nov 2022 23:46:19 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7j-0058AQ-U0; Fri, 18 Nov 2022 23:46:16 +0100
+        id 1owA7m-0058BD-0J; Fri, 18 Nov 2022 23:46:18 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7j-00HaxE-7G; Fri, 18 Nov 2022 23:46:15 +0100
+        id 1owA7j-00HaxI-HI; Fri, 18 Nov 2022 23:46:15 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
         David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 037/606] drm/bridge: tfp410: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:36:11 +0100
-Message-Id: <20221118224540.619276-38-uwe@kleine-koenig.org>
+        <u.kleine-koenig@pengutronix.de>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 039/606] drm/i2c/sil164: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:36:13 +0100
+Message-Id: <20221118224540.619276-40-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -72,32 +66,31 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/gpu/drm/bridge/ti-tfp410.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/i2c/sil164_drv.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/ti-tfp410.c b/drivers/gpu/drm/bridge/ti-tfp410.c
-index b9635abbad16..6db69df0e18b 100644
---- a/drivers/gpu/drm/bridge/ti-tfp410.c
-+++ b/drivers/gpu/drm/bridge/ti-tfp410.c
-@@ -379,8 +379,7 @@ static struct platform_driver tfp410_platform_driver = {
+diff --git a/drivers/gpu/drm/i2c/sil164_drv.c b/drivers/gpu/drm/i2c/sil164_drv.c
+index 1bc0b5de4499..f57f9a807542 100644
+--- a/drivers/gpu/drm/i2c/sil164_drv.c
++++ b/drivers/gpu/drm/i2c/sil164_drv.c
+@@ -350,7 +350,7 @@ static const struct drm_encoder_slave_funcs sil164_encoder_funcs = {
+ /* I2C driver functions */
  
- #if IS_ENABLED(CONFIG_I2C)
- /* There is currently no i2c functionality. */
--static int tfp410_i2c_probe(struct i2c_client *client,
--			    const struct i2c_device_id *id)
-+static int tfp410_i2c_probe(struct i2c_client *client)
+ static int
+-sil164_probe(struct i2c_client *client, const struct i2c_device_id *id)
++sil164_probe(struct i2c_client *client)
  {
- 	int reg;
+ 	int vendor = sil164_read(client, SIL164_VENDOR_HI) << 8 |
+ 		sil164_read(client, SIL164_VENDOR_LO);
+@@ -420,7 +420,7 @@ MODULE_DEVICE_TABLE(i2c, sil164_ids);
  
-@@ -411,7 +410,7 @@ static struct i2c_driver tfp410_i2c_driver = {
- 		.of_match_table = of_match_ptr(tfp410_match),
- 	},
- 	.id_table	= tfp410_i2c_ids,
--	.probe		= tfp410_i2c_probe,
-+	.probe_new	= tfp410_i2c_probe,
- 	.remove		= tfp410_i2c_remove,
- };
- #endif /* IS_ENABLED(CONFIG_I2C) */
+ static struct drm_i2c_encoder_driver sil164_driver = {
+ 	.i2c_driver = {
+-		.probe = sil164_probe,
++		.probe_new = sil164_probe,
+ 		.driver = {
+ 			.name = "sil164",
+ 		},
 -- 
 2.38.1
 
