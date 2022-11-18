@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F4963076E
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 01:35:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 352C16302E1
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236405AbiKSAfk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 19:35:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
+        id S234349AbiKRXVR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 18:21:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236278AbiKSAfJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 19:35:09 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBC78CBB6
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:43:03 -0800 (PST)
+        with ESMTP id S232198AbiKRXU7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:20:59 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBBA4AF34
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:11:38 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9G-000471-6r; Fri, 18 Nov 2022 23:47:50 +0100
+        id 1owA9F-000461-Pi; Fri, 18 Nov 2022 23:47:49 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9D-0058gi-Uk; Fri, 18 Nov 2022 23:47:48 +0100
+        id 1owA9D-0058gX-Lq; Fri, 18 Nov 2022 23:47:48 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9B-0000Ke-PS; Fri, 18 Nov 2022 23:47:45 +0100
+        id 1owA9B-0000Kh-Um; Fri, 18 Nov 2022 23:47:45 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -36,9 +36,9 @@ To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH 429/606] mfd: da9063-i2c: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:42:43 +0100
-Message-Id: <20221118224540.619276-430-uwe@kleine-koenig.org>
+Subject: [PATCH 430/606] mfd: da9150-core: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:42:44 +0100
+Message-Id: <20221118224540.619276-431-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -60,39 +60,37 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-.probe_new() doesn't get the i2c_device_id * parameter, so determine
-that explicitly in the probe function.
+The probe function doesn't make use of the i2c_device_id * parameter so it
+can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/mfd/da9063-i2c.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/mfd/da9150-core.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mfd/da9063-i2c.c b/drivers/mfd/da9063-i2c.c
-index 343ed6e96d87..03f8f95a1d62 100644
---- a/drivers/mfd/da9063-i2c.c
-+++ b/drivers/mfd/da9063-i2c.c
-@@ -351,9 +351,9 @@ static const struct of_device_id da9063_dt_ids[] = {
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, da9063_dt_ids);
--static int da9063_i2c_probe(struct i2c_client *i2c,
--			    const struct i2c_device_id *id)
-+static int da9063_i2c_probe(struct i2c_client *i2c)
- {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(i2c);
- 	struct da9063 *da9063;
- 	int ret;
- 
-@@ -469,7 +469,7 @@ static struct i2c_driver da9063_i2c_driver = {
- 		.name = "da9063",
- 		.of_match_table = da9063_dt_ids,
+diff --git a/drivers/mfd/da9150-core.c b/drivers/mfd/da9150-core.c
+index 6ae56e46d24e..d2c954103b2f 100644
+--- a/drivers/mfd/da9150-core.c
++++ b/drivers/mfd/da9150-core.c
+@@ -392,8 +392,7 @@ static struct mfd_cell da9150_devs[] = {
  	},
--	.probe    = da9063_i2c_probe,
-+	.probe_new = da9063_i2c_probe,
- 	.id_table = da9063_i2c_id,
  };
  
+-static int da9150_probe(struct i2c_client *client,
+-			const struct i2c_device_id *id)
++static int da9150_probe(struct i2c_client *client)
+ {
+ 	struct da9150 *da9150;
+ 	struct da9150_pdata *pdata = dev_get_platdata(&client->dev);
+@@ -511,7 +510,7 @@ static struct i2c_driver da9150_driver = {
+ 		.name	= "da9150",
+ 		.of_match_table = da9150_of_match,
+ 	},
+-	.probe		= da9150_probe,
++	.probe_new	= da9150_probe,
+ 	.remove		= da9150_remove,
+ 	.shutdown	= da9150_shutdown,
+ 	.id_table	= da9150_i2c_id,
 -- 
 2.38.1
 
