@@ -2,47 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45335630534
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A11C963063F
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 01:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236943AbiKRXwg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 18:52:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
+        id S237508AbiKSAJP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 19:09:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237018AbiKRXwF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:52:05 -0500
+        with ESMTP id S237478AbiKSAIs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 19:08:48 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D8BC7591
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:27:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3659E8B852
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:32:37 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9o-0005Y3-5v; Fri, 18 Nov 2022 23:48:24 +0100
+        id 1owA9n-0005X2-23; Fri, 18 Nov 2022 23:48:23 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9l-0058uE-50; Fri, 18 Nov 2022 23:48:22 +0100
+        id 1owA9k-0058tz-Id; Fri, 18 Nov 2022 23:48:21 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9j-0000Vm-40; Fri, 18 Nov 2022 23:48:19 +0100
+        id 1owA9j-0000Vq-CG; Fri, 18 Nov 2022 23:48:19 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        =?utf-8?q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Crt Mori <cmo@melexis.com>,
+        =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
-Subject: [PATCH 599/606] ALSA: hda: cs35l41: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:45:33 +0100
-Message-Id: <20221118224540.619276-600-uwe@kleine-koenig.org>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 600/606] ALSA: ppc: keywest: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:45:34 +0100
+Message-Id: <20221118224540.619276-601-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -69,31 +70,32 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- sound/pci/hda/cs35l41_hda_i2c.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/ppc/keywest.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/sound/pci/hda/cs35l41_hda_i2c.c b/sound/pci/hda/cs35l41_hda_i2c.c
-index 5a6252d9b9e1..7826b1a12d7d 100644
---- a/sound/pci/hda/cs35l41_hda_i2c.c
-+++ b/sound/pci/hda/cs35l41_hda_i2c.c
-@@ -12,7 +12,7 @@
+diff --git a/sound/ppc/keywest.c b/sound/ppc/keywest.c
+index 80e5108157ef..0c4f43963c75 100644
+--- a/sound/ppc/keywest.c
++++ b/sound/ppc/keywest.c
+@@ -16,8 +16,7 @@
+ static struct pmac_keywest *keywest_ctx;
+ static bool keywest_probed;
  
- #include "cs35l41_hda.h"
- 
--static int cs35l41_hda_i2c_probe(struct i2c_client *clt, const struct i2c_device_id *id)
-+static int cs35l41_hda_i2c_probe(struct i2c_client *clt)
+-static int keywest_probe(struct i2c_client *client,
+-			 const struct i2c_device_id *id)
++static int keywest_probe(struct i2c_client *client)
  {
- 	const char *device_name;
- 
-@@ -58,7 +58,7 @@ static struct i2c_driver cs35l41_i2c_driver = {
- 		.pm		= &cs35l41_hda_pm_ops,
+ 	keywest_probed = true;
+ 	/* If instantiated via i2c-powermac, we still need to set the client */
+@@ -91,7 +90,7 @@ static struct i2c_driver keywest_driver = {
+ 	.driver = {
+ 		.name = "PMac Keywest Audio",
  	},
- 	.id_table	= cs35l41_hda_i2c_id,
--	.probe		= cs35l41_hda_i2c_probe,
-+	.probe_new	= cs35l41_hda_i2c_probe,
- 	.remove		= cs35l41_hda_i2c_remove,
+-	.probe = keywest_probe,
++	.probe_new = keywest_probe,
+ 	.remove = keywest_remove,
+ 	.id_table = keywest_i2c_id,
  };
- module_i2c_driver(cs35l41_i2c_driver);
 -- 
 2.38.1
 
