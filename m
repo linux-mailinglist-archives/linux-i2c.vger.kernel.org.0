@@ -2,44 +2,46 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152BA630124
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 23:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D857630163
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 23:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233442AbiKRWu6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 17:50:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
+        id S234153AbiKRWwQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 17:52:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233430AbiKRWtS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 17:49:18 -0500
+        with ESMTP id S233913AbiKRWvq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 17:51:46 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBDDA4145
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 14:46:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FBDBB479
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 14:47:15 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA82-000092-0r; Fri, 18 Nov 2022 23:46:34 +0100
+        id 1owA82-0000Cf-MC; Fri, 18 Nov 2022 23:46:34 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7w-0058FM-VM; Fri, 18 Nov 2022 23:46:29 +0100
+        id 1owA7x-0058Fg-Ii; Fri, 18 Nov 2022 23:46:30 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7x-00Hb1O-1Z; Fri, 18 Nov 2022 23:46:29 +0100
+        id 1owA7x-00Hb1R-85; Fri, 18 Nov 2022 23:46:29 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>
+        Jonathan Cameron <jic23@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 100/606] iio: humidity: am2315: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:37:14 +0100
-Message-Id: <20221118224540.619276-101-uwe@kleine-koenig.org>
+Subject: [PATCH 101/606] iio: humidity: hdc100x: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:37:15 +0100
+Message-Id: <20221118224540.619276-102-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -66,32 +68,32 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/iio/humidity/am2315.c | 5 ++---
+ drivers/iio/humidity/hdc100x.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/humidity/am2315.c b/drivers/iio/humidity/am2315.c
-index 4a39f1019347..f246516bd45e 100644
---- a/drivers/iio/humidity/am2315.c
-+++ b/drivers/iio/humidity/am2315.c
-@@ -218,8 +218,7 @@ static const struct iio_info am2315_info = {
- 	.read_raw		= am2315_read_raw,
+diff --git a/drivers/iio/humidity/hdc100x.c b/drivers/iio/humidity/hdc100x.c
+index 47f8e8ef56d6..49a950d739e4 100644
+--- a/drivers/iio/humidity/hdc100x.c
++++ b/drivers/iio/humidity/hdc100x.c
+@@ -351,8 +351,7 @@ static const struct iio_info hdc100x_info = {
+ 	.attrs = &hdc100x_attribute_group,
  };
  
--static int am2315_probe(struct i2c_client *client,
--			const struct i2c_device_id *id)
-+static int am2315_probe(struct i2c_client *client)
+-static int hdc100x_probe(struct i2c_client *client,
+-			 const struct i2c_device_id *id)
++static int hdc100x_probe(struct i2c_client *client)
  {
- 	int ret;
  	struct iio_dev *indio_dev;
-@@ -263,7 +262,7 @@ static struct i2c_driver am2315_driver = {
- 	.driver = {
- 		.name = "am2315",
+ 	struct hdc100x_data *data;
+@@ -429,7 +428,7 @@ static struct i2c_driver hdc100x_driver = {
+ 		.of_match_table = hdc100x_dt_ids,
+ 		.acpi_match_table = hdc100x_acpi_match,
  	},
--	.probe =            am2315_probe,
-+	.probe_new =        am2315_probe,
- 	.id_table =         am2315_i2c_id,
+-	.probe = hdc100x_probe,
++	.probe_new = hdc100x_probe,
+ 	.id_table = hdc100x_id,
  };
- 
+ module_i2c_driver(hdc100x_driver);
 -- 
 2.38.1
 
