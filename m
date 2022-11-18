@@ -2,45 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6474663011B
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 23:50:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBCD630132
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 23:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233386AbiKRWun (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 17:50:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
+        id S233820AbiKRWva (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 17:51:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232755AbiKRWtB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 17:49:01 -0500
+        with ESMTP id S233846AbiKRWua (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 17:50:30 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33E3B970B
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 14:46:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F08D9E085
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 14:47:01 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7y-0008RU-Qo; Fri, 18 Nov 2022 23:46:30 +0100
+        id 1owA80-0008UZ-4z; Fri, 18 Nov 2022 23:46:32 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7u-0058EN-P4; Fri, 18 Nov 2022 23:46:27 +0100
+        id 1owA7v-0058Eh-ER; Fri, 18 Nov 2022 23:46:28 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7s-00Hazy-Fl; Fri, 18 Nov 2022 23:46:24 +0100
+        id 1owA7s-00Hb02-Mo; Fri, 18 Nov 2022 23:46:24 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Andreas Klinger <ak@it-klinger.de>,
         Jonathan Cameron <jic23@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 080/606] iio: chemical: sgp40: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:36:54 +0100
-Message-Id: <20221118224540.619276-81-uwe@kleine-koenig.org>
+Subject: [PATCH 081/606] iio: chemical: vz89x: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:36:55 +0100
+Message-Id: <20221118224540.619276-82-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -67,34 +66,34 @@ that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/iio/chemical/sgp40.c | 6 +++---
+ drivers/iio/chemical/vz89x.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/chemical/sgp40.c b/drivers/iio/chemical/sgp40.c
-index 8a56394cea4e..c0ea01300908 100644
---- a/drivers/iio/chemical/sgp40.c
-+++ b/drivers/iio/chemical/sgp40.c
-@@ -311,9 +311,9 @@ static const struct iio_info sgp40_info = {
- 	.write_raw	= sgp40_write_raw,
+diff --git a/drivers/iio/chemical/vz89x.c b/drivers/iio/chemical/vz89x.c
+index e7e1c74a351e..d4604f7ccd1e 100644
+--- a/drivers/iio/chemical/vz89x.c
++++ b/drivers/iio/chemical/vz89x.c
+@@ -348,9 +348,9 @@ static const struct of_device_id vz89x_dt_ids[] = {
  };
+ MODULE_DEVICE_TABLE(of, vz89x_dt_ids);
  
--static int sgp40_probe(struct i2c_client *client,
--		     const struct i2c_device_id *id)
-+static int sgp40_probe(struct i2c_client *client)
+-static int vz89x_probe(struct i2c_client *client,
+-		       const struct i2c_device_id *id)
++static int vz89x_probe(struct i2c_client *client)
  {
 +	const struct i2c_device_id *id = i2c_client_get_device_id(client);
  	struct device *dev = &client->dev;
  	struct iio_dev *indio_dev;
- 	struct sgp40_data *data;
-@@ -368,7 +368,7 @@ static struct i2c_driver sgp40_driver = {
- 		.name = "sgp40",
- 		.of_match_table = sgp40_dt_ids,
+ 	struct vz89x_data *data;
+@@ -402,7 +402,7 @@ static struct i2c_driver vz89x_driver = {
+ 		.name	= "vz89x",
+ 		.of_match_table = vz89x_dt_ids,
  	},
--	.probe = sgp40_probe,
-+	.probe_new = sgp40_probe,
- 	.id_table = sgp40_id,
+-	.probe = vz89x_probe,
++	.probe_new = vz89x_probe,
+ 	.id_table = vz89x_id,
  };
- module_i2c_driver(sgp40_driver);
+ module_i2c_driver(vz89x_driver);
 -- 
 2.38.1
 
