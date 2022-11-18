@@ -2,46 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14746303EB
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B416307B1
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 01:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236112AbiKRXd4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 18:33:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
+        id S235961AbiKSAjY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 19:39:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236453AbiKRXdB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:33:01 -0500
+        with ESMTP id S234813AbiKSAij (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 19:38:39 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBA5FD2
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:21:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054001181EC
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:44:13 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8q-00030E-Oi; Fri, 18 Nov 2022 23:47:24 +0100
+        id 1owA8q-0002zN-KR; Fri, 18 Nov 2022 23:47:24 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8o-0058Xm-Dx; Fri, 18 Nov 2022 23:47:23 +0100
+        id 1owA8o-0058Xd-0C; Fri, 18 Nov 2022 23:47:22 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8n-0000CZ-ON; Fri, 18 Nov 2022 23:47:21 +0100
+        id 1owA8o-0000Cj-63; Fri, 18 Nov 2022 23:47:22 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Adrien Grassein <adrien.grassein@gmail.com>
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 322/606] media: dvb-frontends/ts2020: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:40:56 +0100
-Message-Id: <20221118224540.619276-323-uwe@kleine-koenig.org>
+Subject: [PATCH 324/606] media: i2c/ad9389b: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:40:58 +0100
+Message-Id: <20221118224540.619276-325-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -68,31 +66,30 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/dvb-frontends/ts2020.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/media/i2c/ad9389b.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/ts2020.c b/drivers/media/dvb-frontends/ts2020.c
-index 02338256b974..c28fee7509cd 100644
---- a/drivers/media/dvb-frontends/ts2020.c
-+++ b/drivers/media/dvb-frontends/ts2020.c
-@@ -550,8 +550,7 @@ static void ts2020_regmap_unlock(void *__dev)
- 	mutex_unlock(&dev->regmap_mutex);
+diff --git a/drivers/media/i2c/ad9389b.c b/drivers/media/i2c/ad9389b.c
+index 4a255a492918..ad17097a2d25 100644
+--- a/drivers/media/i2c/ad9389b.c
++++ b/drivers/media/i2c/ad9389b.c
+@@ -1080,7 +1080,7 @@ static void ad9389b_init_setup(struct v4l2_subdev *sd)
+ 	ad9389b_set_isr(sd, false);
  }
  
--static int ts2020_probe(struct i2c_client *client,
--		const struct i2c_device_id *id)
-+static int ts2020_probe(struct i2c_client *client)
+-static int ad9389b_probe(struct i2c_client *client, const struct i2c_device_id *id)
++static int ad9389b_probe(struct i2c_client *client)
  {
- 	struct ts2020_config *pdata = client->dev.platform_data;
- 	struct dvb_frontend *fe = pdata->fe;
-@@ -721,7 +720,7 @@ static struct i2c_driver ts2020_driver = {
+ 	const struct v4l2_dv_timings dv1080p60 = V4L2_DV_BT_CEA_1920X1080P60;
+ 	struct ad9389b_state *state;
+@@ -1207,7 +1207,7 @@ static struct i2c_driver ad9389b_driver = {
  	.driver = {
- 		.name	= "ts2020",
+ 		.name = "ad9389b",
  	},
--	.probe		= ts2020_probe,
-+	.probe_new	= ts2020_probe,
- 	.remove		= ts2020_remove,
- 	.id_table	= ts2020_id_table,
+-	.probe = ad9389b_probe,
++	.probe_new = ad9389b_probe,
+ 	.remove = ad9389b_remove,
+ 	.id_table = ad9389b_id,
  };
 -- 
 2.38.1
