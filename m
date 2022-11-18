@@ -2,47 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7738630375
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D5563030A
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:23:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235757AbiKRX33 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 18:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
+        id S233094AbiKRXWz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 18:22:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235801AbiKRX2r (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:28:47 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3848AB9620
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:16:55 -0800 (PST)
+        with ESMTP id S229686AbiKRXVT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:21:19 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F43458BFF
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:12:40 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8u-00039l-KT; Fri, 18 Nov 2022 23:47:28 +0100
+        id 1owA8u-00039E-HB; Fri, 18 Nov 2022 23:47:28 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8s-0058Yz-4p; Fri, 18 Nov 2022 23:47:27 +0100
+        id 1owA8r-0058Yw-VY; Fri, 18 Nov 2022 23:47:26 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8r-0000Eg-Vj; Fri, 18 Nov 2022 23:47:25 +0100
+        id 1owA8s-0000Ej-57; Fri, 18 Nov 2022 23:47:26 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Senna Tschudin <peter.senna@gmail.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Jeremy Kerr <jk@codeconstruct.com.au>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Miguel Ojeda <ojeda@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 339/606] media: i2c/cs5345: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:41:13 +0100
-Message-Id: <20221118224540.619276-340-uwe@kleine-koenig.org>
+Subject: [PATCH 340/606] media: i2c/cs53l32a: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:41:14 +0100
+Message-Id: <20221118224540.619276-341-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -64,36 +64,38 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-The probe function doesn't make use of the i2c_device_id * parameter so it
-can be trivially converted.
+.probe_new() doesn't get the i2c_device_id * parameter, so determine
+that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/i2c/cs5345.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/media/i2c/cs53l32a.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/cs5345.c b/drivers/media/i2c/cs5345.c
-index 591b1e7b24ee..ac4b5632fc46 100644
---- a/drivers/media/i2c/cs5345.c
-+++ b/drivers/media/i2c/cs5345.c
-@@ -136,8 +136,7 @@ static const struct v4l2_subdev_ops cs5345_ops = {
+diff --git a/drivers/media/i2c/cs53l32a.c b/drivers/media/i2c/cs53l32a.c
+index 9461589aea30..670f89de32d4 100644
+--- a/drivers/media/i2c/cs53l32a.c
++++ b/drivers/media/i2c/cs53l32a.c
+@@ -128,9 +128,9 @@ static const struct v4l2_subdev_ops cs53l32a_ops = {
+  * concerning the addresses: i2c wants 7 bit (without the r/w bit), so '>>1'
+  */
  
- /* ----------------------------------------------------------------------- */
- 
--static int cs5345_probe(struct i2c_client *client,
--			const struct i2c_device_id *id)
-+static int cs5345_probe(struct i2c_client *client)
+-static int cs53l32a_probe(struct i2c_client *client,
+-			  const struct i2c_device_id *id)
++static int cs53l32a_probe(struct i2c_client *client)
  {
- 	struct cs5345_state *state;
++	const struct i2c_device_id *id = i2c_client_get_device_id(client);
+ 	struct cs53l32a_state *state;
  	struct v4l2_subdev *sd;
-@@ -199,7 +198,7 @@ static struct i2c_driver cs5345_driver = {
+ 	int i;
+@@ -209,7 +209,7 @@ static struct i2c_driver cs53l32a_driver = {
  	.driver = {
- 		.name	= "cs5345",
+ 		.name	= "cs53l32a",
  	},
--	.probe		= cs5345_probe,
-+	.probe_new	= cs5345_probe,
- 	.remove		= cs5345_remove,
- 	.id_table	= cs5345_id,
+-	.probe		= cs53l32a_probe,
++	.probe_new	= cs53l32a_probe,
+ 	.remove		= cs53l32a_remove,
+ 	.id_table	= cs53l32a_id,
  };
 -- 
 2.38.1
