@@ -2,43 +2,41 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF4A630365
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9160D6304A4
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235766AbiKRX3R (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 18:29:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45454 "EHLO
+        id S236474AbiKRXoq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 18:44:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235774AbiKRX2f (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:28:35 -0500
+        with ESMTP id S236458AbiKRXoW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:44:22 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68CFC0524
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:16:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47A5C768E
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:24:27 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9J-0004HR-TP; Fri, 18 Nov 2022 23:47:53 +0100
+        id 1owA9I-0004Di-Du; Fri, 18 Nov 2022 23:47:52 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9H-0058iL-GI; Fri, 18 Nov 2022 23:47:52 +0100
+        id 1owA9G-0058hi-5c; Fri, 18 Nov 2022 23:47:51 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9F-0000Lv-Nm; Fri, 18 Nov 2022 23:47:49 +0100
+        id 1owA9F-0000Ly-TG; Fri, 18 Nov 2022 23:47:49 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Tony Lindgren <tony@atomide.com>, Lee Jones <lee@kernel.org>
+        Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 449/606] mfd: palmas: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:43:03 +0100
-Message-Id: <20221118224540.619276-450-uwe@kleine-koenig.org>
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
+Subject: [PATCH 450/606] mfd: pcf50633-core: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:43:04 +0100
+Message-Id: <20221118224540.619276-451-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -65,32 +63,32 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/mfd/palmas.c | 5 ++---
+ drivers/mfd/pcf50633-core.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mfd/palmas.c b/drivers/mfd/palmas.c
-index 8b7429bd2e3e..d26d82c85ba8 100644
---- a/drivers/mfd/palmas.c
-+++ b/drivers/mfd/palmas.c
-@@ -502,8 +502,7 @@ static const struct of_device_id of_palmas_match_tbl[] = {
+diff --git a/drivers/mfd/pcf50633-core.c b/drivers/mfd/pcf50633-core.c
+index e7928b8b1188..0e4fc99e9f49 100644
+--- a/drivers/mfd/pcf50633-core.c
++++ b/drivers/mfd/pcf50633-core.c
+@@ -163,8 +163,7 @@ static const struct regmap_config pcf50633_regmap_config = {
+ 	.val_bits = 8,
  };
- MODULE_DEVICE_TABLE(of, of_palmas_match_tbl);
  
--static int palmas_i2c_probe(struct i2c_client *i2c,
--			    const struct i2c_device_id *id)
-+static int palmas_i2c_probe(struct i2c_client *i2c)
+-static int pcf50633_probe(struct i2c_client *client,
+-				const struct i2c_device_id *ids)
++static int pcf50633_probe(struct i2c_client *client)
  {
- 	struct palmas *palmas;
- 	struct palmas_platform_data *pdata;
-@@ -732,7 +731,7 @@ static struct i2c_driver palmas_i2c_driver = {
- 		   .name = "palmas",
- 		   .of_match_table = of_palmas_match_tbl,
+ 	struct pcf50633 *pcf;
+ 	struct platform_device *pdev;
+@@ -283,7 +282,7 @@ static struct i2c_driver pcf50633_driver = {
+ 		.pm	= pm_sleep_ptr(&pcf50633_pm),
  	},
--	.probe = palmas_i2c_probe,
-+	.probe_new = palmas_i2c_probe,
- 	.remove = palmas_i2c_remove,
- 	.id_table = palmas_i2c_id,
+ 	.id_table = pcf50633_id_table,
+-	.probe = pcf50633_probe,
++	.probe_new = pcf50633_probe,
+ 	.remove = pcf50633_remove,
  };
+ 
 -- 
 2.38.1
 
