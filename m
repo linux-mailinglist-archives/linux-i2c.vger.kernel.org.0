@@ -2,61 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21ECD62EFEA
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 09:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D3462EFEC
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 09:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241605AbiKRIpj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S235187AbiKRIpj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Fri, 18 Nov 2022 03:45:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36722 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235187AbiKRIpV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 03:45:21 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C0097AB1
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 00:45:11 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id i12so4309477wrb.0
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 00:45:11 -0800 (PST)
+        with ESMTP id S241609AbiKRIpW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 03:45:22 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8595942D0
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 00:45:12 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id j15so7516802wrq.3
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 00:45:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2ZVI21GiGBb72P+wFA+fb2eiFTOk5Z1sDSldnLU44Cg=;
-        b=B2SPam30PBcRcEgx+uM0RhffnU+8Sb4wu9VwqAiiuxTm8FQMPjFU3TgdBxOB8t3jBd
-         mDgl/Jw7JSSsfhef9JLD6b+VVcdiqtd4DkQ8gi06Pzw7kvfEy24Sk6uVrYZg2Y8daFzw
-         l6X1NS65kb6/tCVfpeR3rmo1ziYS0NBq0/CXMt3OrIF4TRwFnIVpRRWWtBQJ74EPcWxf
-         OPvlQ1hE9PfdNmNiwIJVjwcJEBHxB9ndc7BjLX0QHYaAn6kN0tHXWczO3odmcKI5dgAk
-         O7oL8ArrWWgF4jnoNcE+Sbdla+fwanNoehkcYIdYASd+i9h3vHGl3B8UE/h7YFfxAOTQ
-         /Y+A==
+        bh=IuLuAC3NrQpbK2+5jslVHChdL7XH+Vu6DE07wqFfDkg=;
+        b=hJvwJEBaT5ADDuoRy8Z+xh66Nz3wsxDA5IPXT0SeocxKDV0oBgQrshHmWF+ju8Eo/t
+         fghE5mGFN1gJjE+aLJXIvpWH+pfPBNLRgCYH5VS4ft890UYEt5qTIkXbnO7LsbO/4AXs
+         kiuiNWKfobK5YOS8Sntu9IfuPJD8Ji+5SHj5vK5eCt3UzD4yexJEqdlTXpXRxz2y3FPM
+         n1W+Js9N6DIt/tb8i72T1qnfOa7qcXpxHyMIlHKs19TddmufKLZceKdkByEOzZ/a5A3n
+         D8VEiPoyMcr+nQG8y141gYrtlgc2YiHqvA7nibn0Pnqf6x5Thhgc6XHwB3L6qXmINQBW
+         +i+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2ZVI21GiGBb72P+wFA+fb2eiFTOk5Z1sDSldnLU44Cg=;
-        b=gLCE3l4l1+7bG5DJVMY6D5yO8lIEwdf36x2uNImrRfGHVIWnjC6RiEXkaQgfdpR7nS
-         5VstKRHV6v57ERPYim11CiYrlVdqKWQMxMtBDni5gL5oEVHKWzhO2YSBExpw8rf8YsM6
-         y1fjmcEbNCSI5/S1M67MmXEiKesoYHoD9RanFuTMlTAvq6H8IbnXpKFO42wzlN6Srj1t
-         luxoj/PgxhWMv5WF9vfOI1MbyoRhMRXQ0JSiqj6X4DQiEu4dGFdXIIIzyC2aEFbc/9cj
-         P/daTCgbmKH92Rknma0Zg3i03oWCnXihXIh8vyDDqfYtiphEfI1TzlkXoj+6W3IgGkZG
-         AhfA==
-X-Gm-Message-State: ANoB5pnY8xF8w4OPWDJCOZmxQXDDGcUN2We50b1cuydWHqkIjkudpS8y
-        z6T4LRgVyNtgz8ZtaRyZ7dewMw==
-X-Google-Smtp-Source: AA0mqf6F5wvJNAkTP41X0h1o8u4U6H6RuFoxCS+LjsJ/GxH+ysh/AZB9Ba4UzrHuwvxMLeGS0sNu5Q==
-X-Received: by 2002:adf:f74d:0:b0:236:4e3c:7720 with SMTP id z13-20020adff74d000000b002364e3c7720mr3641986wrp.674.1668761110226;
-        Fri, 18 Nov 2022 00:45:10 -0800 (PST)
+        bh=IuLuAC3NrQpbK2+5jslVHChdL7XH+Vu6DE07wqFfDkg=;
+        b=4DOPSEpCB8LBo1c+GYp0Q3u4GSP4EXSUMve9prVmsfslZbOBU6jYiHsFd+GP+fWAdP
+         /Pu67yhkXzu14lRY+45s4rCHeAf/3gs1NKvuLOHpKXBvj5x8xQ9w8hqiTtOzUeiL5ytS
+         ifm0RUYoVfQTxhrxt2B+T212SzbD3ElyKkEYgyKq6kxPXEkEqX/3VDZ8+tunFehUdWXR
+         t37op14LGcSobZeFEm2TBLKAanWrZ9/bRw5plIVwgQBJ+rklWJIAEBsRsJVoV25KUEkY
+         Tqfzy5i7W7oMLiJjSOjToqIFiTTjuq/+b0aND9yLY2/2JeE6c2rcqHyNLztizBMah5f0
+         hqyA==
+X-Gm-Message-State: ANoB5pkKx/25gtuMrNEB9qCz7ZW50b8PBSMBApcNFQ1FXXkGxqCxcNCc
+        ywE3IrStF62XVUHwvoh/UoNMgw==
+X-Google-Smtp-Source: AA0mqf6spg6w/HXycPDqUbqL9+260sv3/7cncHBFilrQ6109VMs8QHJmWFd5IS1Ir0z8/ogGanlaQg==
+X-Received: by 2002:adf:e0c6:0:b0:22a:34a4:8831 with SMTP id m6-20020adfe0c6000000b0022a34a48831mr3634242wri.199.1668761111025;
+        Fri, 18 Nov 2022 00:45:11 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id v18-20020a5d6112000000b00236e834f050sm2960284wrt.35.2022.11.18.00.45.09
+        by smtp.gmail.com with ESMTPSA id v18-20020a5d6112000000b00236e834f050sm2960284wrt.35.2022.11.18.00.45.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 00:45:09 -0800 (PST)
+        Fri, 18 Nov 2022 00:45:10 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Fri, 18 Nov 2022 09:45:06 +0100
-Subject: [PATCH v2 2/6] dt-bindings: i2c: qcom-geni: document I2C Master Hub serial
- I2C engine
+Date:   Fri, 18 Nov 2022 09:45:07 +0100
+Subject: [PATCH v2 3/6] soc: qcom: geni-se: add desc struct to specify clocks from
+ device match data
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v2-2-aadaa6997b28@linaro.org>
+Message-Id: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v2-3-aadaa6997b28@linaro.org>
 References: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v2-0-aadaa6997b28@linaro.org>
 In-Reply-To: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v2-0-aadaa6997b28@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -84,116 +84,131 @@ The I2C Master Hub is a stripped down version of the GENI Serial Engine
 QUP Wrapper Controller but only supporting I2C serial engines without
 DMA support.
 
-Document the I2C Serial Engine variant used within the I2C Master
-Hub Wrapper.
-
-This serial engine variant lacks DMA support, requires a core clock,
-and since DMA support is lacking the memory interconnect path isn't
-needed.
+Prepare support for the I2C Master Hub variant by moving the required
+clocks list to a new desc struct then passing it through the compatible
+match data.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- .../bindings/i2c/qcom,i2c-geni-qcom.yaml           | 64 ++++++++++++++++++----
- 1 file changed, 54 insertions(+), 10 deletions(-)
+ drivers/soc/qcom/qcom-geni-se.c | 59 +++++++++++++++++++++++++++++++----------
+ 1 file changed, 45 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-index 0e7ed00562e2..f5f7dc8f325c 100644
---- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-+++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-@@ -10,18 +10,19 @@ maintainers:
-   - Andy Gross <agross@kernel.org>
-   - Bjorn Andersson <bjorn.andersson@linaro.org>
+diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+index a0ceeede450f..ced2a2932eda 100644
+--- a/drivers/soc/qcom/qcom-geni-se.c
++++ b/drivers/soc/qcom/qcom-geni-se.c
+@@ -81,19 +81,31 @@
+  */
  
--allOf:
--  - $ref: /schemas/i2c/i2c-controller.yaml#
--
- properties:
-   compatible:
--    const: qcom,geni-i2c
-+    enum:
-+      - qcom,geni-i2c
-+      - qcom,geni-i2c-master-hub
+ #define MAX_CLK_PERF_LEVEL 32
+-#define NUM_AHB_CLKS 2
++#define MAX_CLKS 2
  
-   clocks:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 2
- 
-   clock-names:
--    const: se
-+    minItems: 1
-+    maxItems: 2
- 
-   clock-frequency:
-     default: 100000
-@@ -35,13 +36,12 @@ properties:
-       - const: rx
- 
-   interconnects:
-+    minItems: 2
-     maxItems: 3
- 
-   interconnect-names:
--    items:
--      - const: qup-core
--      - const: qup-config
--      - const: qup-memory
-+    minItems: 2
-+    maxItems: 3
- 
-   interrupts:
-     maxItems: 1
-@@ -71,6 +71,50 @@ required:
-   - clock-names
-   - reg
- 
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: qcom,geni-i2c-master-hub
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 2
+ /**
+  * struct geni_wrapper - Data structure to represent the QUP Wrapper Core
+  * @dev:		Device pointer of the QUP wrapper core
+  * @base:		Base address of this instance of QUP wrapper core
+- * @ahb_clks:		Handle to the primary & secondary AHB clocks
++ * @clks:		Handle to the primary & optional secondary AHB clocks
++ * @num_clks:		Count of clocks
+  * @to_core:		Core ICC path
+  */
+ struct geni_wrapper {
+ 	struct device *dev;
+ 	void __iomem *base;
+-	struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
++	struct clk_bulk_data clks[MAX_CLKS];
++	unsigned int num_clks;
++};
 +
-+        clock-names:
-+          items:
-+            - const: se
-+            - const: core
-+
-+        dmas: false
-+        dma-names: false
-+
-+        interconnects:
-+          maxItems: 2
-+
-+        interconnect-names:
-+          items:
-+            - const: qup-core
-+            - const: qup-config
-+    else:
-+      properties:
-+        clocks:
-+          maxItems: 1
-+
-+        clock-names:
-+          const: se
-+
-+        interconnects:
-+          minItems: 3
-+
-+        interconnect-names:
-+          items:
-+            - const: qup-core
-+            - const: qup-config
-+            - const: qup-memory
-+
- unevaluatedProperties: false
++/**
++ * struct geni_se_desc - Data structure to represent the QUP Wrapper resources
++ * @clks:		Name of the primary & optional secondary AHB clocks
++ * @num_clks:		Count of clock names
++ */
++struct geni_se_desc {
++	unsigned int num_clks;
++	const char * const *clks;
+ };
  
- examples:
+ static const char * const icc_path_names[] = {"qup-core", "qup-config",
+@@ -496,8 +508,7 @@ static void geni_se_clks_off(struct geni_se *se)
+ 	struct geni_wrapper *wrapper = se->wrapper;
+ 
+ 	clk_disable_unprepare(se->clk);
+-	clk_bulk_disable_unprepare(ARRAY_SIZE(wrapper->ahb_clks),
+-						wrapper->ahb_clks);
++	clk_bulk_disable_unprepare(wrapper->num_clks, wrapper->clks);
+ }
+ 
+ /**
+@@ -528,15 +539,13 @@ static int geni_se_clks_on(struct geni_se *se)
+ 	int ret;
+ 	struct geni_wrapper *wrapper = se->wrapper;
+ 
+-	ret = clk_bulk_prepare_enable(ARRAY_SIZE(wrapper->ahb_clks),
+-						wrapper->ahb_clks);
++	ret = clk_bulk_prepare_enable(wrapper->num_clks, wrapper->clks);
+ 	if (ret)
+ 		return ret;
+ 
+ 	ret = clk_prepare_enable(se->clk);
+ 	if (ret)
+-		clk_bulk_disable_unprepare(ARRAY_SIZE(wrapper->ahb_clks),
+-							wrapper->ahb_clks);
++		clk_bulk_disable_unprepare(wrapper->num_clks, wrapper->clks);
+ 	return ret;
+ }
+ 
+@@ -887,11 +896,23 @@ static int geni_se_probe(struct platform_device *pdev)
+ 		return PTR_ERR(wrapper->base);
+ 
+ 	if (!has_acpi_companion(&pdev->dev)) {
+-		wrapper->ahb_clks[0].id = "m-ahb";
+-		wrapper->ahb_clks[1].id = "s-ahb";
+-		ret = devm_clk_bulk_get(dev, NUM_AHB_CLKS, wrapper->ahb_clks);
++		const struct geni_se_desc *desc;
++		int i;
++
++		desc = device_get_match_data(&pdev->dev);
++		if (!desc)
++			return -EINVAL;
++
++		wrapper->num_clks = min_t(unsigned int, desc->num_clks, MAX_CLKS);
++		if (wrapper->num_clks < desc->num_clks)
++			dev_warn(dev, "too much clocks described in DT\n");
++
++		for (i = 0; i < wrapper->num_clks; ++i)
++			wrapper->clks[i].id = desc->clks[i];
++
++		ret = devm_clk_bulk_get(dev, wrapper->num_clks, wrapper->clks);
+ 		if (ret) {
+-			dev_err(dev, "Err getting AHB clks %d\n", ret);
++			dev_err(dev, "Err getting clks %d\n", ret);
+ 			return ret;
+ 		}
+ 	}
+@@ -901,8 +922,18 @@ static int geni_se_probe(struct platform_device *pdev)
+ 	return devm_of_platform_populate(dev);
+ }
+ 
++static const char * const qup_clks[] = {
++	"m-ahb",
++	"s-ahb",
++};
++
++static const struct geni_se_desc qup_desc = {
++	.clks = qup_clks,
++	.num_clks = ARRAY_SIZE(qup_clks),
++};
++
+ static const struct of_device_id geni_se_dt_match[] = {
+-	{ .compatible = "qcom,geni-se-qup", },
++	{ .compatible = "qcom,geni-se-qup", .data = &qup_desc },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, geni_se_dt_match);
 
 -- 
 b4 0.10.1
