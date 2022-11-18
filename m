@@ -2,116 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C07262E7AC
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Nov 2022 23:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C925D62EFE0
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 09:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241193AbiKQWDr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Nov 2022 17:03:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
+        id S241363AbiKRIpf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 03:45:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241199AbiKQWDY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Nov 2022 17:03:24 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026B0898E8;
-        Thu, 17 Nov 2022 14:01:52 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id x102so4658727ede.0;
-        Thu, 17 Nov 2022 14:01:52 -0800 (PST)
+        with ESMTP id S241489AbiKRIpS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 03:45:18 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2964F942F6
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 00:45:10 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id x5so4107555wrt.7
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 00:45:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AbZpZfvfvRImepPng90QD1DqUNkG0pRMbRACnwrWAMM=;
-        b=YEDRLdiDdoPHaATINISDQxWSY3x5BUvGGua6Wu3oIRZ3+mnHLKMb+o99Rp7QMAYZPl
-         +P84jSylMlye79DBKyYsQw7RBEmRftL+/xYJzEe8cuTyrp00TvI/UdjZ7pTxBwKyemGA
-         NvRZ6SVqKu19xYKQHO+jn/RhEoiliRDwSJZWOeFMjHvYWLDUMKkoe0nBLYZpDY2CGYa/
-         QuTSVrQYQBXG82FomtVP96LTNfTT/uZ/vRq7xWJoCzlNZZAMzVXZyK3bZ+na4coa84hp
-         D+A1Wsd7PyqBK5xEDJ10Vq7jpMyQOJW5uIVsHfBIjMpDOjzUfyytMk4+Zxh3imwVK8wb
-         v5zA==
+        d=linaro.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=ora/VunEn0YneVtDdkAbPmkCHMtwr9PRQnKVi+QQtuk=;
+        b=PWKvBm09nWluf8q9xZx5T063ULZCTCSLwTivRmIV5S0KnyAMfLueWTage9HLdTGNpE
+         NZ31+jMT4SZ6ehGHptyA0JqxUwstvDhii2cpOQyashKNJ6P9VgY9JtGt7ob6HIF7Hirq
+         Xr2aYb49CXySFC8LF3YwI6BC8EqFUmeTlJb18c8lsOh+6vNIu6m8D2JRg1KJUkt1w0uE
+         o7Fp5EtGGH7naQRjScYV9uqS17tUy8GFBtpN7P7tYI3BxScD6mq/BjBWCNwEZWPPbWPt
+         fl0sLxBmTDWR2SJRnqp5D4tp8J6vOQesalACJlkG3t2e00cWrImVViLf4nWBdh0mVfCb
+         TGvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AbZpZfvfvRImepPng90QD1DqUNkG0pRMbRACnwrWAMM=;
-        b=hHctPC/+ZQfftsPCqRueomf9WYxQd5Lctrar22SXqv5x9qIwG9VNWJij1zJewPbCZa
-         BQibkvX1OI67WwpC7WMokTuQk5zxvBRsSuHTCTMu08c6mUjmr9QLl6dN7cFW8BJSFSmV
-         HH72I1vGiKmslieHKv2xgmaTnumtxcOji2n6C5nRV68wbhI7D9aEATuz6DbPkndr2bex
-         R6wNk1w5fZXCwd6k4s0BQq8iCjU9v0ZZMrcpjoZxVf70WZUBZ9/fA8IMl06l6q8CJC1N
-         2Ij/1QDjug4uNBFFYmX2Fh5cUCne/6Z6/0jTHGi0KBNcLDEceuMlxGIcqfSCsNd4Xf0w
-         8uZg==
-X-Gm-Message-State: ANoB5pk7ZNUxtsKq8oilddI6UzsekBNfbkAP/B/kRugm7YKo+ACO64WS
-        ydEQp81rrFrz57ZsecZAUpQ=
-X-Google-Smtp-Source: AA0mqf46P8qtAcmbB0hEi6K+/f7igE1ezoYdNaHClTdkK+gsDH+y0VhvhBMta7ktwMB+Tg7uyK2+fw==
-X-Received: by 2002:aa7:cc12:0:b0:462:79ec:55eb with SMTP id q18-20020aa7cc12000000b0046279ec55ebmr3767547edt.151.1668722511424;
-        Thu, 17 Nov 2022 14:01:51 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id bc3-20020a056402204300b00463597d2c25sm1028751edb.74.2022.11.17.14.01.50
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ora/VunEn0YneVtDdkAbPmkCHMtwr9PRQnKVi+QQtuk=;
+        b=yvnIp0Wz+vrI3FBEMn+jqWxARl3xgcUI4udnbJDHFkea3YjEn5iJWVgm7yYK/Njpwt
+         WkDiIcK6epNFxHaWDKK/XSg3MEeamxxxFU5nWRGrAvygSOwsriF7pIB4YK4c7Pv0k9u2
+         zyduaxGRdE+uV+5WdWowwRDTBB0SHJnNQs7+mcyFaBzyJqVIhv/h2XKNL2qLXYNYnncP
+         JI+NV5ltyZyGkFxnHUoD/jVc2doKjr8wbMDaZ9A2FtlIRFoao2kby81bscdpyZG+mVzk
+         c3P6nEf9x4+8kNjtx/RNtcW1ZhIGHbaCLJwatJ1kfuUlAofsoqv7S1zVc92PWcv/J6Bq
+         dcqg==
+X-Gm-Message-State: ANoB5pmm6LNxt5zzXoSNB6Krr6dXhxm355BRR3VR01kXblj0OspMUaST
+        GzhtnJG4469LofXfYKO19+zUBg==
+X-Google-Smtp-Source: AA0mqf6eeEHhhxK6RxscWgzRkeJS+Z73karOL8G1Cll4V/G4ET6dxlzUFdmwBPGLNNNQKDtjBb6y9g==
+X-Received: by 2002:adf:ce0f:0:b0:22e:2e22:6698 with SMTP id p15-20020adfce0f000000b0022e2e226698mr3805864wrn.296.1668761108653;
+        Fri, 18 Nov 2022 00:45:08 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id v18-20020a5d6112000000b00236e834f050sm2960284wrt.35.2022.11.18.00.45.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 14:01:50 -0800 (PST)
-Date:   Thu, 17 Nov 2022 23:01:49 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     christian.koenig@amd.com, digetx@gmail.com, jonathanh@nvidia.com,
-        ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        sumit.semwal@linaro.org, wsa@kernel.org,
-        Zubair Waheed <zwaheed@nvidia.com>
-Subject: Re: [PATCH] i2c: tegra: Set ACPI node as primary fwnode
-Message-ID: <Y3avTc3s+wAMR4IS@orome>
-References: <20221117100415.20457-1-akhilrajeev@nvidia.com>
+        Fri, 18 Nov 2022 00:45:08 -0800 (PST)
+Subject: [PATCH v2 0/6] soc: qcom: add support for the I2C Master Hub
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="KYzKTqeFwuxwrIi9"
-Content-Disposition: inline
-In-Reply-To: <20221117100415.20457-1-akhilrajeev@nvidia.com>
-User-Agent: Mutt/2.2.8 (2022-11-05)
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIABBGd2MC/52NTQrCMBCFryJZO5IJ6Z8r7yEukjo2gSaRTFuQ0rs7eARXj+/B+96umGokVtfTri
+ ptkWPJAuZ8UmNweSKIT2FltDGIaCG7mnipJU/AqW8aDetbmFyCaEZIjheqEFYP1rru5XGwXUNKfN4x
+ ga8uj0GMeZ1nKUPkpdTP739Difs/VxuChtZaO6BuHdr+NkdZl0upk3ocx/EF0WZInegAAAA=
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Fri, 18 Nov 2022 09:45:04 +0100
+Message-Id: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v2-0-aadaa6997b28@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+X-Mailer: b4 0.10.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+The I2C Master Hub is a stripped down version of the GENI Serial Engine
+QUP Wrapper Controller but only supporting I2C serial engines without
+DMA support.
 
---KYzKTqeFwuxwrIi9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The I2C Master Hub only supports a variant of the I2C serial engine with:
+- a separate "core" clock
+- no DMA support
+- non discoverable fixed FIFO size
 
-On Thu, Nov 17, 2022 at 03:34:15PM +0530, Akhil R wrote:
-> Set ACPI node as the primary fwnode of I2C adapter to allow
-> enumeration of child devices from the ACPI table
->=20
-> Signed-off-by: Zubair Waheed <zwaheed@nvidia.com>
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> ---
->  drivers/i2c/busses/i2c-tegra.c | 1 +
->  1 file changed, 1 insertion(+)
+Since DMA isn't supported, the wrapper doesn't need the Master AHB clock
+and the iommus property neither.
 
-Reviewed-by: Thierry Reding <treding@nvidia.com>
+This patchset adds the bindings changes to the QUPv3 wrapper and I2C serial
+element bindings to reflect the different resources requirements.
 
---KYzKTqeFwuxwrIi9
-Content-Type: application/pgp-signature; name="signature.asc"
+In order to reuse the QUPv3 wrapper and I2C serial element driver support,
+the I2C Master Hub requirements are expressed in new desc structs passed
+as device match data.
 
------BEGIN PGP SIGNATURE-----
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@somainline.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmN2r00ACgkQ3SOs138+
-s6H8mBAAmxRq7078F4cXQITxE+/9Ub8lJ7cwoZ4Wj+bwtqCLE87FiUALOKVR5tQA
-BQ1PGs+80K5qZ9O0BeQva6jTx+VDtBFik7wqHUVuozBWSyoxZoEi4DnjojtqhNw7
-NX5n8LPNOwRRQSpv3/mZVceG0aQsDyl3bbzatVU0osNhLNUfr2xI6R67OOp8dJq9
-K/jEILrqcDi2P2dDA3mW7inerYKImrjNctVSHFXMEolnOg4aVWWZlgSOo928BV2O
-BpoRK8IFZlUCNaAW3OrKFgF3ULDTFOUi+vE8c8uytr9q7gsJDJmjTuD/C4CDEr3A
-Lj/HWHAAwJDLpIlNLXE4xq/gE4VgZO86yOY9v0BveealPWyr3Pbb1wMQXpI2ufbv
-u+Qh62lUk9erI3zkIX0IzR4ASz0Hp5Zbr11KTlGGmC9Y9t2h6r9G91568+yLQYr0
-zn4TNEFki19dL1OkRboO+Dida7zDadD+aLxb1uUh6RYFaAhTfhcYaRay5RkJVdN/
-e8m/02GBe7tWXtk1akGamkmQe3sJnhRKJYKYB4riP4guREDcvei5NibCsvAHRgq4
-t+ol7Y+LphanjzIE7F8fYk+0aSK9dNojyNH/Cx/KrS3SeOHXtZukA47ncnQrnQVp
-e9IxwtJHhtUzwMZ94KmTidq+5BgaNzmFd1ghw0PLcC67wRu1Djc=
-=V8HW
------END PGP SIGNATURE-----
+---
+Changes in v2:
+- Fixed all commits messages to remove "This" and fix grammar
+- Fixed the bindings by moving the if in allOf:if
+- Fixed the bindings by adding minItems: & maxItems: instead of true
+- Added a warning about clock count in patch 3
+- Added Reviewed-by from Konrad on patches 3, 4 & 5
+- Link to v1: https://lore.kernel.org/r/20221114-narmstrong-sm8550-upstream-i2c-master-hub-v1-0-64449106a148@linaro.org
 
---KYzKTqeFwuxwrIi9--
+---
+Neil Armstrong (6):
+      dt-bindings: qcom: geni-se: document I2C Master Hub wrapper variant
+      dt-bindings: i2c: qcom-geni: document I2C Master Hub serial I2C engine
+      soc: qcom: geni-se: add desc struct to specify clocks from device match data
+      soc: qcom: geni-se: add support for I2C Master Hub wrapper variant
+      i2c: qcom-geni: add desc struct to prepare support for I2C Master Hub variant
+      i2c: qcom-geni: add support for I2C Master Hub variant
+
+ .../bindings/i2c/qcom,i2c-geni-qcom.yaml           | 64 ++++++++++++++++----
+ .../devicetree/bindings/soc/qcom/qcom,geni-se.yaml | 44 ++++++++++++--
+ drivers/i2c/busses/i2c-qcom-geni.c                 | 58 +++++++++++++++++-
+ drivers/soc/qcom/qcom-geni-se.c                    | 69 +++++++++++++++++-----
+ 4 files changed, 202 insertions(+), 33 deletions(-)
+---
+base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
+change-id: 20221114-narmstrong-sm8550-upstream-i2c-master-hub-44a7fb19475e
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
