@@ -2,45 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F16563075D
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 01:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B356303B3
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbiKSAe1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 19:34:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
+        id S236081AbiKRXbo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 18:31:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234343AbiKSAeG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 19:34:06 -0500
+        with ESMTP id S235577AbiKRXa2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:30:28 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027CD12638
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:42:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4AA75D9E
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:18:23 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8C-0000ua-M9; Fri, 18 Nov 2022 23:46:44 +0100
+        id 1owA8D-0000wj-7e; Fri, 18 Nov 2022 23:46:45 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA88-0058Ja-53; Fri, 18 Nov 2022 23:46:41 +0100
+        id 1owA88-0058Js-Kk; Fri, 18 Nov 2022 23:46:41 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA88-00Hb4k-3T; Fri, 18 Nov 2022 23:46:40 +0100
+        id 1owA88-00Hb4x-RO; Fri, 18 Nov 2022 23:46:40 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>
+        Jonathan Cameron <jic23@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 153/606] iio: magnetometer: ak8974: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:38:07 +0100
-Message-Id: <20221118224540.619276-154-uwe@kleine-koenig.org>
+Subject: [PATCH 156/606] iio: magnetometer: hmc5843: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:38:10 +0100
+Message-Id: <20221118224540.619276-157-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -62,37 +64,39 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-The probe function doesn't make use of the i2c_device_id * parameter so it
-can be trivially converted.
+.probe_new() doesn't get the i2c_device_id * parameter, so determine
+that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/iio/magnetometer/ak8974.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/iio/magnetometer/hmc5843_i2c.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/magnetometer/ak8974.c b/drivers/iio/magnetometer/ak8974.c
-index 7ec9ab3beb45..45abdcce6bc0 100644
---- a/drivers/iio/magnetometer/ak8974.c
-+++ b/drivers/iio/magnetometer/ak8974.c
-@@ -814,8 +814,7 @@ static const struct regmap_config ak8974_regmap_config = {
- 	.precious_reg = ak8974_precious_reg,
+diff --git a/drivers/iio/magnetometer/hmc5843_i2c.c b/drivers/iio/magnetometer/hmc5843_i2c.c
+index 18a13dd51296..7ef2b1d56289 100644
+--- a/drivers/iio/magnetometer/hmc5843_i2c.c
++++ b/drivers/iio/magnetometer/hmc5843_i2c.c
+@@ -52,9 +52,9 @@ static const struct regmap_config hmc5843_i2c_regmap_config = {
+ 	.cache_type = REGCACHE_RBTREE,
  };
  
--static int ak8974_probe(struct i2c_client *i2c,
--			const struct i2c_device_id *id)
-+static int ak8974_probe(struct i2c_client *i2c)
+-static int hmc5843_i2c_probe(struct i2c_client *cli,
+-			     const struct i2c_device_id *id)
++static int hmc5843_i2c_probe(struct i2c_client *cli)
  {
- 	struct iio_dev *indio_dev;
- 	struct ak8974 *ak8974;
-@@ -1047,7 +1046,7 @@ static struct i2c_driver ak8974_driver = {
- 		.pm = pm_ptr(&ak8974_dev_pm_ops),
- 		.of_match_table = ak8974_of_match,
++	const struct i2c_device_id *id = i2c_client_get_device_id(cli);
+ 	struct regmap *regmap = devm_regmap_init_i2c(cli,
+ 			&hmc5843_i2c_regmap_config);
+ 	if (IS_ERR(regmap))
+@@ -95,7 +95,7 @@ static struct i2c_driver hmc5843_driver = {
+ 		.of_match_table = hmc5843_of_match,
  	},
--	.probe	  = ak8974_probe,
-+	.probe_new = ak8974_probe,
- 	.remove	  = ak8974_remove,
- 	.id_table = ak8974_id,
+ 	.id_table	= hmc5843_id,
+-	.probe		= hmc5843_i2c_probe,
++	.probe_new	= hmc5843_i2c_probe,
+ 	.remove		= hmc5843_i2c_remove,
  };
+ module_i2c_driver(hmc5843_driver);
 -- 
 2.38.1
 
