@@ -2,49 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5D9630509
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 018B7630603
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 01:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236902AbiKRXu6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 18:50:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
+        id S232235AbiKSAD7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 19:03:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233927AbiKRXuC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:50:02 -0500
+        with ESMTP id S237746AbiKSADK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 19:03:10 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3AFD08B9
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:26:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B28CCFA4F
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:30:31 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8n-0002g4-Er; Fri, 18 Nov 2022 23:47:21 +0100
+        id 1owA8j-0002fz-Ty; Fri, 18 Nov 2022 23:47:17 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8f-0058Uz-U9; Fri, 18 Nov 2022 23:47:14 +0100
+        id 1owA8f-0058Ux-Ss; Fri, 18 Nov 2022 23:47:14 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8f-0000Ac-VJ; Fri, 18 Nov 2022 23:47:13 +0100
+        id 1owA8g-0000Af-5Z; Fri, 18 Nov 2022 23:47:14 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Ajay Gupta <ajayg@nvidia.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Liang He <windhl@126.com>,
+        Adrien Grassein <adrien.grassein@gmail.com>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 291/606] macintosh: therm_windtunnel: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:40:25 +0100
-Message-Id: <20221118224540.619276-292-uwe@kleine-koenig.org>
+Subject: [PATCH 292/606] macintosh: windfarm_ad7417_sensor: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:40:26 +0100
+Message-Id: <20221118224540.619276-293-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -66,37 +65,36 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-.probe_new() doesn't get the i2c_device_id * parameter, so determine
-that explicitly in the probe function.
+The probe function doesn't make use of the i2c_device_id * parameter so it
+can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/macintosh/therm_windtunnel.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/macintosh/windfarm_ad7417_sensor.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/macintosh/therm_windtunnel.c b/drivers/macintosh/therm_windtunnel.c
-index b8228ca40454..22b15efcc025 100644
---- a/drivers/macintosh/therm_windtunnel.c
-+++ b/drivers/macintosh/therm_windtunnel.c
-@@ -411,8 +411,9 @@ static const struct i2c_device_id therm_windtunnel_id[] = {
- MODULE_DEVICE_TABLE(i2c, therm_windtunnel_id);
+diff --git a/drivers/macintosh/windfarm_ad7417_sensor.c b/drivers/macintosh/windfarm_ad7417_sensor.c
+index c5c54a4ce91f..33b4723d235e 100644
+--- a/drivers/macintosh/windfarm_ad7417_sensor.c
++++ b/drivers/macintosh/windfarm_ad7417_sensor.c
+@@ -229,8 +229,7 @@ static void wf_ad7417_init_chip(struct wf_ad7417_priv *pv)
+ 	pv->config = config;
+ }
  
- static int
--do_probe(struct i2c_client *cl, const struct i2c_device_id *id)
-+do_probe(struct i2c_client *cl)
+-static int wf_ad7417_probe(struct i2c_client *client,
+-			   const struct i2c_device_id *id)
++static int wf_ad7417_probe(struct i2c_client *client)
  {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(cl);
- 	struct i2c_adapter *adapter = cl->adapter;
- 	int ret = 0;
- 
-@@ -441,7 +442,7 @@ static struct i2c_driver g4fan_driver = {
- 	.driver = {
- 		.name	= "therm_windtunnel",
+ 	struct wf_ad7417_priv *pv;
+ 	const struct mpu_data *mpu;
+@@ -321,7 +320,7 @@ static struct i2c_driver wf_ad7417_driver = {
+ 		.name	= "wf_ad7417",
+ 		.of_match_table = wf_ad7417_of_id,
  	},
--	.probe		= do_probe,
-+	.probe_new	= do_probe,
- 	.remove		= do_remove,
- 	.id_table	= therm_windtunnel_id,
+-	.probe		= wf_ad7417_probe,
++	.probe_new	= wf_ad7417_probe,
+ 	.remove		= wf_ad7417_remove,
+ 	.id_table	= wf_ad7417_id,
  };
 -- 
 2.38.1
