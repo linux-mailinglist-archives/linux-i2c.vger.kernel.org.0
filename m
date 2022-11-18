@@ -2,44 +2,45 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739E863056D
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F16563075D
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 01:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236910AbiKRXy6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 18:54:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57114 "EHLO
+        id S231640AbiKSAe1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 19:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237007AbiKRXw4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:52:56 -0500
+        with ESMTP id S234343AbiKSAeG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 19:34:06 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCE8D2DD4
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:27:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027CD12638
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:42:44 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8C-0000v5-Me; Fri, 18 Nov 2022 23:46:44 +0100
+        id 1owA8C-0000ua-M9; Fri, 18 Nov 2022 23:46:44 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA88-0058Jh-8W; Fri, 18 Nov 2022 23:46:41 +0100
+        id 1owA88-0058Ja-53; Fri, 18 Nov 2022 23:46:41 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA87-00Hb4f-So; Fri, 18 Nov 2022 23:46:39 +0100
+        id 1owA88-00Hb4k-3T; Fri, 18 Nov 2022 23:46:40 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Jonathan Cameron <jic23@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 152/606] iio: light: zopt2201: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:38:06 +0100
-Message-Id: <20221118224540.619276-153-uwe@kleine-koenig.org>
+Subject: [PATCH 153/606] iio: magnetometer: ak8974: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:38:07 +0100
+Message-Id: <20221118224540.619276-154-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -66,32 +67,32 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/iio/light/zopt2201.c | 5 ++---
+ drivers/iio/magnetometer/ak8974.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/light/zopt2201.c b/drivers/iio/light/zopt2201.c
-index e0bc9df9c88b..e3bac8b56380 100644
---- a/drivers/iio/light/zopt2201.c
-+++ b/drivers/iio/light/zopt2201.c
-@@ -501,8 +501,7 @@ static const struct iio_info zopt2201_info = {
- 	.attrs = &zopt2201_attribute_group,
+diff --git a/drivers/iio/magnetometer/ak8974.c b/drivers/iio/magnetometer/ak8974.c
+index 7ec9ab3beb45..45abdcce6bc0 100644
+--- a/drivers/iio/magnetometer/ak8974.c
++++ b/drivers/iio/magnetometer/ak8974.c
+@@ -814,8 +814,7 @@ static const struct regmap_config ak8974_regmap_config = {
+ 	.precious_reg = ak8974_precious_reg,
  };
  
--static int zopt2201_probe(struct i2c_client *client,
--			  const struct i2c_device_id *id)
-+static int zopt2201_probe(struct i2c_client *client)
+-static int ak8974_probe(struct i2c_client *i2c,
+-			const struct i2c_device_id *id)
++static int ak8974_probe(struct i2c_client *i2c)
  {
- 	struct zopt2201_data *data;
  	struct iio_dev *indio_dev;
-@@ -555,7 +554,7 @@ static struct i2c_driver zopt2201_driver = {
- 	.driver = {
- 		.name   = ZOPT2201_DRV_NAME,
+ 	struct ak8974 *ak8974;
+@@ -1047,7 +1046,7 @@ static struct i2c_driver ak8974_driver = {
+ 		.pm = pm_ptr(&ak8974_dev_pm_ops),
+ 		.of_match_table = ak8974_of_match,
  	},
--	.probe  = zopt2201_probe,
-+	.probe_new = zopt2201_probe,
- 	.id_table = zopt2201_id,
+-	.probe	  = ak8974_probe,
++	.probe_new = ak8974_probe,
+ 	.remove	  = ak8974_remove,
+ 	.id_table = ak8974_id,
  };
- 
 -- 
 2.38.1
 
