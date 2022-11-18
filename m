@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850CD6305C2
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:58:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0606304C8
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:48:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232516AbiKRX6q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 18:58:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
+        id S232344AbiKRXsG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 18:48:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237394AbiKRX5k (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:57:40 -0500
+        with ESMTP id S236816AbiKRXqx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:46:53 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343ADBFF7B
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:29:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CE4D9BB6
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:25:29 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9Q-0004ZA-Lz; Fri, 18 Nov 2022 23:48:00 +0100
+        id 1owA9Q-0004Yl-Hf; Fri, 18 Nov 2022 23:48:00 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9N-0058lE-Vx; Fri, 18 Nov 2022 23:47:58 +0100
+        id 1owA9N-0058l6-Sh; Fri, 18 Nov 2022 23:47:58 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9N-0000Of-NT; Fri, 18 Nov 2022 23:47:57 +0100
+        id 1owA9N-0000Oj-T0; Fri, 18 Nov 2022 23:47:57 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -35,9 +35,9 @@ To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH 490/606] misc: hmc6352: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:43:44 +0100
-Message-Id: <20221118224540.619276-491-uwe@kleine-koenig.org>
+Subject: [PATCH 491/606] misc: ics932s401: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:43:45 +0100
+Message-Id: <20221118224540.619276-492-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -64,32 +64,42 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/misc/hmc6352.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/misc/ics932s401.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/misc/hmc6352.c b/drivers/misc/hmc6352.c
-index 42b9adef28a3..8967940ecd1e 100644
---- a/drivers/misc/hmc6352.c
-+++ b/drivers/misc/hmc6352.c
-@@ -101,8 +101,7 @@ static const struct attribute_group m_compass_gr = {
- 	.attrs = mid_att_compass
+diff --git a/drivers/misc/ics932s401.c b/drivers/misc/ics932s401.c
+index 1cb71df966a4..12108a7b9b40 100644
+--- a/drivers/misc/ics932s401.c
++++ b/drivers/misc/ics932s401.c
+@@ -89,8 +89,7 @@ struct ics932s401_data {
+ 	u8			regs[NUM_REGS];
  };
  
--static int hmc6352_probe(struct i2c_client *client,
--					const struct i2c_device_id *id)
-+static int hmc6352_probe(struct i2c_client *client)
- {
- 	int res;
- 
-@@ -132,7 +131,7 @@ static struct i2c_driver hmc6352_driver = {
+-static int ics932s401_probe(struct i2c_client *client,
+-			 const struct i2c_device_id *id);
++static int ics932s401_probe(struct i2c_client *client);
+ static int ics932s401_detect(struct i2c_client *client,
+ 			  struct i2c_board_info *info);
+ static void ics932s401_remove(struct i2c_client *client);
+@@ -106,7 +105,7 @@ static struct i2c_driver ics932s401_driver = {
  	.driver = {
- 		.name = "hmc6352",
+ 		.name	= "ics932s401",
  	},
--	.probe = hmc6352_probe,
-+	.probe_new = hmc6352_probe,
- 	.remove = hmc6352_remove,
- 	.id_table = hmc6352_id,
- };
+-	.probe		= ics932s401_probe,
++	.probe_new	= ics932s401_probe,
+ 	.remove		= ics932s401_remove,
+ 	.id_table	= ics932s401_id,
+ 	.detect		= ics932s401_detect,
+@@ -429,8 +428,7 @@ static int ics932s401_detect(struct i2c_client *client,
+ 	return 0;
+ }
+ 
+-static int ics932s401_probe(struct i2c_client *client,
+-			 const struct i2c_device_id *id)
++static int ics932s401_probe(struct i2c_client *client)
+ {
+ 	struct ics932s401_data *data;
+ 	int err;
 -- 
 2.38.1
 
