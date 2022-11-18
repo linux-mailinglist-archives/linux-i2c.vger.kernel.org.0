@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D5463018C
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 23:52:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4C763014E
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 23:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234429AbiKRWw5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 17:52:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
+        id S234313AbiKRWwF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 17:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234443AbiKRWwZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 17:52:25 -0500
+        with ESMTP id S233840AbiKRWve (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 17:51:34 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BB2BCDC5
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 14:47:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3930BB7386
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 14:47:12 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA86-0000Wt-H5; Fri, 18 Nov 2022 23:46:38 +0100
+        id 1owA87-0000aT-8i; Fri, 18 Nov 2022 23:46:39 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA81-0058HA-QD; Fri, 18 Nov 2022 23:46:34 +0100
+        id 1owA82-0058HO-FU; Fri, 18 Nov 2022 23:46:35 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA81-00Hb2h-MK; Fri, 18 Nov 2022 23:46:33 +0100
+        id 1owA81-00Hb2k-Sx; Fri, 18 Nov 2022 23:46:33 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -38,9 +38,9 @@ Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         <u.kleine-koenig@pengutronix.de>,
         Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 121/606] iio: light: cm3323: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:37:35 +0100
-Message-Id: <20221118224540.619276-122-uwe@kleine-koenig.org>
+Subject: [PATCH 122/606] iio: light: cm36651: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:37:36 +0100
+Message-Id: <20221118224540.619276-123-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -62,37 +62,39 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-The probe function doesn't make use of the i2c_device_id * parameter so it
-can be trivially converted.
+.probe_new() doesn't get the i2c_device_id * parameter, so determine
+that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/iio/light/cm3323.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/iio/light/cm36651.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/light/cm3323.c b/drivers/iio/light/cm3323.c
-index fd9a8c27de2e..e5ce7d0fd272 100644
---- a/drivers/iio/light/cm3323.c
-+++ b/drivers/iio/light/cm3323.c
-@@ -214,8 +214,7 @@ static const struct iio_info cm3323_info = {
- 	.attrs		= &cm3323_attribute_group,
+diff --git a/drivers/iio/light/cm36651.c b/drivers/iio/light/cm36651.c
+index 6615c98b601c..1707dbf2ce26 100644
+--- a/drivers/iio/light/cm36651.c
++++ b/drivers/iio/light/cm36651.c
+@@ -618,9 +618,9 @@ static const struct iio_info cm36651_info = {
+ 	.attrs			= &cm36651_attribute_group,
  };
  
--static int cm3323_probe(struct i2c_client *client,
--			const struct i2c_device_id *id)
-+static int cm3323_probe(struct i2c_client *client)
+-static int cm36651_probe(struct i2c_client *client,
+-			     const struct i2c_device_id *id)
++static int cm36651_probe(struct i2c_client *client)
  {
- 	struct cm3323_data *data;
++	const struct i2c_device_id *id = i2c_client_get_device_id(client);
+ 	struct cm36651_data *cm36651;
  	struct iio_dev *indio_dev;
-@@ -267,7 +266,7 @@ static struct i2c_driver cm3323_driver = {
- 		.name = CM3323_DRV_NAME,
- 		.of_match_table = cm3323_of_match,
+ 	int ret;
+@@ -730,7 +730,7 @@ static struct i2c_driver cm36651_driver = {
+ 		.name	= "cm36651",
+ 		.of_match_table = cm36651_of_match,
  	},
--	.probe		= cm3323_probe,
-+	.probe_new	= cm3323_probe,
- 	.id_table	= cm3323_id,
+-	.probe		= cm36651_probe,
++	.probe_new	= cm36651_probe,
+ 	.remove		= cm36651_remove,
+ 	.id_table	= cm36651_id,
  };
- 
 -- 
 2.38.1
 
