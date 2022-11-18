@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE68463065C
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 01:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0314D630379
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237562AbiKSAKD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 19:10:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41264 "EHLO
+        id S235885AbiKRX3m (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 18:29:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237110AbiKSAJi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 19:09:38 -0500
+        with ESMTP id S235812AbiKRX25 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:28:57 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0CB9E97F
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:32:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DDAB9729
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:17:01 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9O-0004Tx-Qy; Fri, 18 Nov 2022 23:47:58 +0100
+        id 1owA9P-0004Vf-EZ; Fri, 18 Nov 2022 23:47:59 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9M-0058kU-4O; Fri, 18 Nov 2022 23:47:57 +0100
+        id 1owA9M-0058kl-QE; Fri, 18 Nov 2022 23:47:57 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9M-0000OH-GF; Fri, 18 Nov 2022 23:47:56 +0100
+        id 1owA9M-0000OK-NP; Fri, 18 Nov 2022 23:47:56 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -35,9 +35,9 @@ To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH 484/606] misc: apds990x: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:43:38 +0100
-Message-Id: <20221118224540.619276-485-uwe@kleine-koenig.org>
+Subject: [PATCH 485/606] misc: bh1770glc: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:43:39 +0100
+Message-Id: <20221118224540.619276-486-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -64,31 +64,31 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/misc/apds990x.c | 5 ++---
+ drivers/misc/bh1770glc.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/misc/apds990x.c b/drivers/misc/apds990x.c
-index e2100cc42ce8..0024503ea6db 100644
---- a/drivers/misc/apds990x.c
-+++ b/drivers/misc/apds990x.c
-@@ -1051,8 +1051,7 @@ static const struct attribute_group apds990x_attribute_group[] = {
- 	{.attrs = sysfs_attrs_ctrl },
+diff --git a/drivers/misc/bh1770glc.c b/drivers/misc/bh1770glc.c
+index d0dfa674414c..bedbe0efb330 100644
+--- a/drivers/misc/bh1770glc.c
++++ b/drivers/misc/bh1770glc.c
+@@ -1162,8 +1162,7 @@ static const struct attribute_group bh1770_attribute_group = {
+ 	.attrs = sysfs_attrs
  };
  
--static int apds990x_probe(struct i2c_client *client,
+-static int bh1770_probe(struct i2c_client *client,
 -				const struct i2c_device_id *id)
-+static int apds990x_probe(struct i2c_client *client)
++static int bh1770_probe(struct i2c_client *client)
  {
- 	struct apds990x_chip *chip;
+ 	struct bh1770_chip *chip;
  	int err;
-@@ -1272,7 +1271,7 @@ static struct i2c_driver apds990x_driver = {
- 		.name	= "apds990x",
- 		.pm	= &apds990x_pm_ops,
+@@ -1379,7 +1378,7 @@ static struct i2c_driver bh1770_driver = {
+ 		.name	= "bh1770glc",
+ 		.pm	= &bh1770_pm_ops,
  	},
--	.probe	  = apds990x_probe,
-+	.probe_new = apds990x_probe,
- 	.remove	  = apds990x_remove,
- 	.id_table = apds990x_id,
+-	.probe	  = bh1770_probe,
++	.probe_new = bh1770_probe,
+ 	.remove	  = bh1770_remove,
+ 	.id_table = bh1770_id,
  };
 -- 
 2.38.1
