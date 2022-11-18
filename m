@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0314D630379
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1AE6302EE
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:21:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235885AbiKRX3m (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 18:29:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
+        id S235466AbiKRXVc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 18:21:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235812AbiKRX25 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:28:57 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DDAB9729
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:17:01 -0800 (PST)
+        with ESMTP id S229993AbiKRXVG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:21:06 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7DA4F1BE
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:12:03 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9P-0004Vf-EZ; Fri, 18 Nov 2022 23:47:59 +0100
+        id 1owA9P-0004VC-5B; Fri, 18 Nov 2022 23:47:59 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9M-0058kl-QE; Fri, 18 Nov 2022 23:47:57 +0100
+        id 1owA9M-0058ke-Ko; Fri, 18 Nov 2022 23:47:57 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9M-0000OK-NP; Fri, 18 Nov 2022 23:47:56 +0100
+        id 1owA9M-0000OP-TF; Fri, 18 Nov 2022 23:47:56 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -35,9 +35,9 @@ To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH 485/606] misc: bh1770glc: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:43:39 +0100
-Message-Id: <20221118224540.619276-486-uwe@kleine-koenig.org>
+Subject: [PATCH 486/606] misc: ds1682: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:43:40 +0100
+Message-Id: <20221118224540.619276-487-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -64,31 +64,31 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/misc/bh1770glc.c | 5 ++---
+ drivers/misc/ds1682.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/misc/bh1770glc.c b/drivers/misc/bh1770glc.c
-index d0dfa674414c..bedbe0efb330 100644
---- a/drivers/misc/bh1770glc.c
-+++ b/drivers/misc/bh1770glc.c
-@@ -1162,8 +1162,7 @@ static const struct attribute_group bh1770_attribute_group = {
- 	.attrs = sysfs_attrs
- };
- 
--static int bh1770_probe(struct i2c_client *client,
--				const struct i2c_device_id *id)
-+static int bh1770_probe(struct i2c_client *client)
+diff --git a/drivers/misc/ds1682.c b/drivers/misc/ds1682.c
+index 0698ddc5f4d5..d517eed32971 100644
+--- a/drivers/misc/ds1682.c
++++ b/drivers/misc/ds1682.c
+@@ -200,8 +200,7 @@ static const struct bin_attribute ds1682_eeprom_attr = {
+ /*
+  * Called when a ds1682 device is matched with this driver
+  */
+-static int ds1682_probe(struct i2c_client *client,
+-			const struct i2c_device_id *id)
++static int ds1682_probe(struct i2c_client *client)
  {
- 	struct bh1770_chip *chip;
- 	int err;
-@@ -1379,7 +1378,7 @@ static struct i2c_driver bh1770_driver = {
- 		.name	= "bh1770glc",
- 		.pm	= &bh1770_pm_ops,
+ 	int rc;
+ 
+@@ -251,7 +250,7 @@ static struct i2c_driver ds1682_driver = {
+ 		.name = "ds1682",
+ 		.of_match_table = ds1682_of_match,
  	},
--	.probe	  = bh1770_probe,
-+	.probe_new = bh1770_probe,
- 	.remove	  = bh1770_remove,
- 	.id_table = bh1770_id,
+-	.probe = ds1682_probe,
++	.probe_new = ds1682_probe,
+ 	.remove = ds1682_remove,
+ 	.id_table = ds1682_id,
  };
 -- 
 2.38.1
