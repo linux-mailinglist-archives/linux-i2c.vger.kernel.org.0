@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E558630537
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93ECC6306A7
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 01:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236920AbiKRXwe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 18:52:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
+        id S237605AbiKSAMe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 19:12:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235148AbiKRXvQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:51:16 -0500
+        with ESMTP id S237531AbiKSAKt (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 19:10:49 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4628182BD0
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:26:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8861DF26
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:33:34 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9f-0005Bs-8L; Fri, 18 Nov 2022 23:48:15 +0100
+        id 1owA9e-0005BJ-U5; Fri, 18 Nov 2022 23:48:14 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9c-0058qs-CO; Fri, 18 Nov 2022 23:48:13 +0100
+        id 1owA9c-0058qm-28; Fri, 18 Nov 2022 23:48:13 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9c-0000TH-6i; Fri, 18 Nov 2022 23:48:12 +0100
+        id 1owA9c-0000TL-CR; Fri, 18 Nov 2022 23:48:12 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -37,9 +37,9 @@ Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-rtc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 561/606] rtc: isl1208: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:44:55 +0100
-Message-Id: <20221118224540.619276-562-uwe@kleine-koenig.org>
+Subject: [PATCH 562/606] rtc: m41t80: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:44:56 +0100
+Message-Id: <20221118224540.619276-563-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -66,21 +66,21 @@ that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/rtc/rtc-isl1208.c | 1 +
+ drivers/rtc/rtc-m41t80.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
-index 73cc6aaf9b8b..fca9cc440296 100644
---- a/drivers/rtc/rtc-isl1208.c
-+++ b/drivers/rtc/rtc-isl1208.c
-@@ -799,6 +799,7 @@ static int isl1208_setup_irq(struct i2c_client *client, int irq)
- static int
- isl1208_probe(struct i2c_client *client)
+diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
+index d3144ffdebb5..d1a6cd9a7074 100644
+--- a/drivers/rtc/rtc-m41t80.c
++++ b/drivers/rtc/rtc-m41t80.c
+@@ -878,6 +878,7 @@ static struct notifier_block wdt_notifier = {
+ 
+ static int m41t80_probe(struct i2c_client *client)
  {
 +	const struct i2c_device_id *id = i2c_client_get_device_id(client);
+ 	struct i2c_adapter *adapter = client->adapter;
  	int rc = 0;
- 	struct isl1208_state *isl1208;
- 	int evdet_irq = -1;
+ 	struct rtc_time tm;
 -- 
 2.38.1
 
