@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48DF163023D
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 23:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B416301F7
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 23:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235264AbiKRW67 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 17:58:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
+        id S234079AbiKRWzR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 17:55:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235521AbiKRW5a (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 17:57:30 -0500
+        with ESMTP id S234761AbiKRWyq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 17:54:46 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E04C68AC
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 14:49:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121F8BFF6D
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 14:48:12 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8l-0002n9-90; Fri, 18 Nov 2022 23:47:19 +0100
+        id 1owA8m-0002pO-Cy; Fri, 18 Nov 2022 23:47:20 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8i-0058Vn-U4; Fri, 18 Nov 2022 23:47:17 +0100
+        id 1owA8j-0058WD-MX; Fri, 18 Nov 2022 23:47:18 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8j-0000BQ-21; Fri, 18 Nov 2022 23:47:17 +0100
+        id 1owA8j-0000BX-JQ; Fri, 18 Nov 2022 23:47:17 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -33,16 +33,16 @@ To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Wolfram Sang <wsa@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Corey Minyard <cminyard@mvista.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Vladimir Oltean <olteanv@gmail.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Jean Delvare <jdelvare@suse.de>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 304/606] media: dvb-frontends/dvb-pll: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:40:38 +0100
-Message-Id: <20221118224540.619276-305-uwe@kleine-koenig.org>
+Subject: [PATCH 306/606] media: dvb-frontends/lgdt3306a: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:40:40 +0100
+Message-Id: <20221118224540.619276-307-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -64,37 +64,36 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-.probe_new() doesn't get the i2c_device_id * parameter, so determine
-that explicitly in the probe function.
+The probe function doesn't make use of the i2c_device_id * parameter so it
+can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/dvb-frontends/dvb-pll.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/dvb-frontends/lgdt3306a.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/dvb-pll.c b/drivers/media/dvb-frontends/dvb-pll.c
-index baf2a378e565..e35e00db7dbb 100644
---- a/drivers/media/dvb-frontends/dvb-pll.c
-+++ b/drivers/media/dvb-frontends/dvb-pll.c
-@@ -870,8 +870,9 @@ EXPORT_SYMBOL(dvb_pll_attach);
+diff --git a/drivers/media/dvb-frontends/lgdt3306a.c b/drivers/media/dvb-frontends/lgdt3306a.c
+index 424311afb2bf..6bf723b5ffad 100644
+--- a/drivers/media/dvb-frontends/lgdt3306a.c
++++ b/drivers/media/dvb-frontends/lgdt3306a.c
+@@ -2169,8 +2169,7 @@ static int lgdt3306a_deselect(struct i2c_mux_core *muxc, u32 chan)
+ 	return lgdt3306a_i2c_gate_ctrl(&state->frontend, 0);
+ }
  
- 
- static int
--dvb_pll_probe(struct i2c_client *client, const struct i2c_device_id *id)
-+dvb_pll_probe(struct i2c_client *client)
+-static int lgdt3306a_probe(struct i2c_client *client,
+-		const struct i2c_device_id *id)
++static int lgdt3306a_probe(struct i2c_client *client)
  {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	struct dvb_pll_config *cfg;
- 	struct dvb_frontend *fe;
- 	unsigned int desc_id;
-@@ -941,7 +942,7 @@ static struct i2c_driver dvb_pll_driver = {
- 	.driver = {
- 		.name = "dvb_pll",
+ 	struct lgdt3306a_config *config;
+ 	struct lgdt3306a_state *state;
+@@ -2250,7 +2249,7 @@ static struct i2c_driver lgdt3306a_driver = {
+ 		.name                = "lgdt3306a",
+ 		.suppress_bind_attrs = true,
  	},
--	.probe    = dvb_pll_probe,
-+	.probe_new = dvb_pll_probe,
- 	.remove   = dvb_pll_remove,
- 	.id_table = dvb_pll_id,
+-	.probe		= lgdt3306a_probe,
++	.probe_new	= lgdt3306a_probe,
+ 	.remove		= lgdt3306a_remove,
+ 	.id_table	= lgdt3306a_id_table,
  };
 -- 
 2.38.1
