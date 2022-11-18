@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6182B63053B
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CBC46305AF
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236918AbiKRXwf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 18:52:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
+        id S233200AbiKRX6g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 18:58:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiKRXvo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:51:44 -0500
+        with ESMTP id S233485AbiKRX4r (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:56:47 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AA4BB9E6
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:27:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4C963ED
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:28:36 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9k-0005O5-9A; Fri, 18 Nov 2022 23:48:20 +0100
+        id 1owA9j-0005LY-CE; Fri, 18 Nov 2022 23:48:19 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9h-0058sr-8A; Fri, 18 Nov 2022 23:48:18 +0100
+        id 1owA9g-0058sY-Gr; Fri, 18 Nov 2022 23:48:17 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9g-0000Ul-7U; Fri, 18 Nov 2022 23:48:16 +0100
+        id 1owA9g-0000Uq-Fk; Fri, 18 Nov 2022 23:48:16 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -33,15 +33,19 @@ To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Wolfram Sang <wsa@kernel.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sing-Han Chen <singhanc@nvidia.com>,
-        Sanket Goswami <Sanket.Goswami@amd.com>
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Corey Minyard <cminyard@mvista.com>,
+        Colin Ian King <colin.i.king@gmail.com>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 583/606] usb: typec: ucsi/ucsi_ccg: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:45:17 +0100
-Message-Id: <20221118224540.619276-584-uwe@kleine-koenig.org>
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 584/606] usb: typec: ucsi: stm32g0: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:45:18 +0100
+Message-Id: <20221118224540.619276-585-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -68,31 +72,30 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/usb/typec/ucsi/ucsi_ccg.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/usb/typec/ucsi/ucsi_stm32g0.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index 835f1c4372ba..46441f1477f2 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -1338,8 +1338,7 @@ static struct attribute *ucsi_ccg_attrs[] = {
- };
- ATTRIBUTE_GROUPS(ucsi_ccg);
+diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+index 7b92f0c8de70..93fead0096b7 100644
+--- a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
++++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+@@ -626,7 +626,7 @@ static int ucsi_stm32g0_probe_bootloader(struct ucsi *ucsi)
+ 	return 0;
+ }
  
--static int ucsi_ccg_probe(struct i2c_client *client,
--			  const struct i2c_device_id *id)
-+static int ucsi_ccg_probe(struct i2c_client *client)
+-static int ucsi_stm32g0_probe(struct i2c_client *client, const struct i2c_device_id *id)
++static int ucsi_stm32g0_probe(struct i2c_client *client)
  {
  	struct device *dev = &client->dev;
- 	struct ucsi_ccg *uc;
-@@ -1482,7 +1481,7 @@ static struct i2c_driver ucsi_ccg_driver = {
- 		.dev_groups = ucsi_ccg_groups,
- 		.acpi_match_table = amd_i2c_ucsi_match,
+ 	struct ucsi_stm32g0 *g0;
+@@ -763,7 +763,7 @@ static struct i2c_driver ucsi_stm32g0_i2c_driver = {
+ 		.of_match_table = of_match_ptr(ucsi_stm32g0_typec_of_match),
+ 		.pm = pm_sleep_ptr(&ucsi_stm32g0_pm_ops),
  	},
--	.probe = ucsi_ccg_probe,
-+	.probe_new = ucsi_ccg_probe,
- 	.remove = ucsi_ccg_remove,
- 	.id_table = ucsi_ccg_device_id,
+-	.probe = ucsi_stm32g0_probe,
++	.probe_new = ucsi_stm32g0_probe,
+ 	.remove = ucsi_stm32g0_remove,
+ 	.id_table = ucsi_stm32g0_typec_i2c_devid
  };
 -- 
 2.38.1
