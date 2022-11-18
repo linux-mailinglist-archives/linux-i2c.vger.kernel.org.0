@@ -2,47 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D4D630714
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 01:24:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C2F6303F1
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237889AbiKSAYk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 19:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45184 "EHLO
+        id S236218AbiKRXeI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 18:34:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236245AbiKSAYS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 19:24:18 -0500
+        with ESMTP id S236122AbiKRXcE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:32:04 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB7E6D96C
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:38:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83B897ED2
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:19:38 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8y-0003Hn-8D; Fri, 18 Nov 2022 23:47:32 +0100
+        id 1owA8y-0003It-HM; Fri, 18 Nov 2022 23:47:32 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8v-0058aI-M2; Fri, 18 Nov 2022 23:47:30 +0100
+        id 1owA8w-0058aO-3q; Fri, 18 Nov 2022 23:47:31 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8v-0000Fk-MX; Fri, 18 Nov 2022 23:47:29 +0100
+        id 1owA8w-0000Fq-1p; Fri, 18 Nov 2022 23:47:30 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Petr Machata <petrm@nvidia.com>,
-        =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        Linus Walleij <linus.walleij@linaro.org>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 356/606] media: i2c/noon010pc30: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:41:30 +0100
-Message-Id: <20221118224540.619276-357-uwe@kleine-koenig.org>
+Subject: [PATCH 357/606] media: i2c/ov13858: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:41:31 +0100
+Message-Id: <20221118224540.619276-358-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -69,31 +66,31 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/i2c/noon010pc30.c | 5 ++---
+ drivers/media/i2c/ov13858.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/noon010pc30.c b/drivers/media/i2c/noon010pc30.c
-index ecaf5e9057f1..144bef2835f7 100644
---- a/drivers/media/i2c/noon010pc30.c
-+++ b/drivers/media/i2c/noon010pc30.c
-@@ -702,8 +702,7 @@ static int noon010_detect(struct i2c_client *client, struct noon010_info *info)
- 	return ret == NOON010PC30_ID ? 0 : -ENODEV;
+diff --git a/drivers/media/i2c/ov13858.c b/drivers/media/i2c/ov13858.c
+index e618b613e078..69a7a2c590db 100644
+--- a/drivers/media/i2c/ov13858.c
++++ b/drivers/media/i2c/ov13858.c
+@@ -1698,8 +1698,7 @@ static void ov13858_free_controls(struct ov13858 *ov13858)
+ 	mutex_destroy(&ov13858->mutex);
  }
  
--static int noon010_probe(struct i2c_client *client,
--			 const struct i2c_device_id *id)
-+static int noon010_probe(struct i2c_client *client)
+-static int ov13858_probe(struct i2c_client *client,
+-			 const struct i2c_device_id *devid)
++static int ov13858_probe(struct i2c_client *client)
  {
- 	struct noon010_info *info;
- 	struct v4l2_subdev *sd;
-@@ -810,7 +809,7 @@ static struct i2c_driver noon010_i2c_driver = {
- 	.driver = {
- 		.name = MODULE_NAME
+ 	struct ov13858 *ov13858;
+ 	int ret;
+@@ -1807,7 +1806,7 @@ static struct i2c_driver ov13858_i2c_driver = {
+ 		.pm = &ov13858_pm_ops,
+ 		.acpi_match_table = ACPI_PTR(ov13858_acpi_ids),
  	},
--	.probe		= noon010_probe,
-+	.probe_new	= noon010_probe,
- 	.remove		= noon010_remove,
- 	.id_table	= noon010_id,
+-	.probe = ov13858_probe,
++	.probe_new = ov13858_probe,
+ 	.remove = ov13858_remove,
+ 	.id_table = ov13858_id_table,
  };
 -- 
 2.38.1
