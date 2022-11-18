@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3097063077F
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 01:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE30C6303B2
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235410AbiKSAgW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 19:36:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
+        id S236077AbiKRXbo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 18:31:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236129AbiKSAfj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 19:35:39 -0500
+        with ESMTP id S235855AbiKRXa2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:30:28 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C59116067
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:43:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042CBD70
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:18:25 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9L-0004Jp-5u; Fri, 18 Nov 2022 23:47:55 +0100
+        id 1owA9L-0004Kq-Ia; Fri, 18 Nov 2022 23:47:55 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9I-0058is-Fd; Fri, 18 Nov 2022 23:47:53 +0100
+        id 1owA9I-0058j4-SZ; Fri, 18 Nov 2022 23:47:53 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9I-0000My-MA; Fri, 18 Nov 2022 23:47:52 +0100
+        id 1owA9I-0000N3-Sf; Fri, 18 Nov 2022 23:47:52 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -34,9 +34,9 @@ To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH 464/606] mfd: tc3589x: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:43:18 +0100
-Message-Id: <20221118224540.619276-465-uwe@kleine-koenig.org>
+Subject: [PATCH 465/606] mfd: ti-lmu: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:43:19 +0100
+Message-Id: <20221118224540.619276-466-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -63,34 +63,33 @@ that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/mfd/tc3589x.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/mfd/ti-lmu.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mfd/tc3589x.c b/drivers/mfd/tc3589x.c
-index 5d932cf3808a..1f6e0d682cd9 100644
---- a/drivers/mfd/tc3589x.c
-+++ b/drivers/mfd/tc3589x.c
-@@ -352,9 +352,9 @@ tc3589x_of_probe(struct device *dev, enum tc3589x_version *version)
- 	return pdata;
- }
+diff --git a/drivers/mfd/ti-lmu.c b/drivers/mfd/ti-lmu.c
+index fd6e8c417baa..9921320be255 100644
+--- a/drivers/mfd/ti-lmu.c
++++ b/drivers/mfd/ti-lmu.c
+@@ -133,8 +133,9 @@ TI_LMU_DATA(lm3633, LM3633_MAX_REG);
+ TI_LMU_DATA(lm3695, LM3695_MAX_REG);
+ TI_LMU_DATA(lm36274, LM36274_MAX_REG);
  
--static int tc3589x_probe(struct i2c_client *i2c,
--				   const struct i2c_device_id *id)
-+static int tc3589x_probe(struct i2c_client *i2c)
+-static int ti_lmu_probe(struct i2c_client *cl, const struct i2c_device_id *id)
++static int ti_lmu_probe(struct i2c_client *cl)
  {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(i2c);
- 	struct device_node *np = i2c->dev.of_node;
- 	struct tc3589x_platform_data *pdata = dev_get_platdata(&i2c->dev);
- 	struct tc3589x *tc3589x;
-@@ -485,7 +485,7 @@ static struct i2c_driver tc3589x_driver = {
- 		.pm	= pm_sleep_ptr(&tc3589x_dev_pm_ops),
- 		.of_match_table = of_match_ptr(tc3589x_match),
- 	},
--	.probe		= tc3589x_probe,
-+	.probe_new	= tc3589x_probe,
- 	.remove		= tc3589x_remove,
- 	.id_table	= tc3589x_id,
- };
++	const struct i2c_device_id *id = i2c_client_get_device_id(cl);
+ 	struct device *dev = &cl->dev;
+ 	const struct ti_lmu_data *data;
+ 	struct regmap_config regmap_cfg;
+@@ -216,7 +217,7 @@ static const struct i2c_device_id ti_lmu_ids[] = {
+ MODULE_DEVICE_TABLE(i2c, ti_lmu_ids);
+ 
+ static struct i2c_driver ti_lmu_driver = {
+-	.probe = ti_lmu_probe,
++	.probe_new = ti_lmu_probe,
+ 	.driver = {
+ 		.name = "ti-lmu",
+ 		.of_match_table = ti_lmu_of_match,
 -- 
 2.38.1
 
