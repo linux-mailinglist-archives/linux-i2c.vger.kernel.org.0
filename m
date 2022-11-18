@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E1A6302E5
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D046303DB
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbiKRXVU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 18:21:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
+        id S236174AbiKRXdh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 18:33:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231940AbiKRXVC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:21:02 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2EE10B4
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:11:52 -0800 (PST)
+        with ESMTP id S236271AbiKRXcY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:32:24 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5574BA2886
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:20:07 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9W-0004ph-Jt; Fri, 18 Nov 2022 23:48:06 +0100
+        id 1owA9X-0004rH-4T; Fri, 18 Nov 2022 23:48:07 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9U-0058na-2O; Fri, 18 Nov 2022 23:48:05 +0100
+        id 1owA9U-0058nj-J4; Fri, 18 Nov 2022 23:48:05 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9U-0000Qh-2J; Fri, 18 Nov 2022 23:48:04 +0100
+        id 1owA9U-0000Qm-IZ; Fri, 18 Nov 2022 23:48:04 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -34,11 +34,12 @@ To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Sebastian Reichel <sre@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 521/606] power: supply: bq25980: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:44:15 +0100
-Message-Id: <20221118224540.619276-522-uwe@kleine-koenig.org>
+        <u.kleine-koenig@pengutronix.de>,
+        =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 522/606] power: supply: bq27xxx: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:44:16 +0100
+Message-Id: <20221118224540.619276-523-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -65,34 +66,34 @@ that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/power/supply/bq25980_charger.c | 6 +++---
+ drivers/power/supply/bq27xxx_battery_i2c.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/supply/bq25980_charger.c b/drivers/power/supply/bq25980_charger.c
-index 9339f5649282..a59d9762bc91 100644
---- a/drivers/power/supply/bq25980_charger.c
-+++ b/drivers/power/supply/bq25980_charger.c
-@@ -1207,9 +1207,9 @@ static int bq25980_parse_dt(struct bq25980_device *bq)
+diff --git a/drivers/power/supply/bq27xxx_battery_i2c.c b/drivers/power/supply/bq27xxx_battery_i2c.c
+index 94b00bb89c17..f8768997333b 100644
+--- a/drivers/power/supply/bq27xxx_battery_i2c.c
++++ b/drivers/power/supply/bq27xxx_battery_i2c.c
+@@ -136,9 +136,9 @@ static int bq27xxx_battery_i2c_bulk_write(struct bq27xxx_device_info *di,
  	return 0;
  }
  
--static int bq25980_probe(struct i2c_client *client,
--			 const struct i2c_device_id *id)
-+static int bq25980_probe(struct i2c_client *client)
+-static int bq27xxx_battery_i2c_probe(struct i2c_client *client,
+-				     const struct i2c_device_id *id)
++static int bq27xxx_battery_i2c_probe(struct i2c_client *client)
  {
 +	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	struct device *dev = &client->dev;
- 	struct bq25980_device *bq;
+ 	struct bq27xxx_device_info *di;
  	int ret;
-@@ -1287,7 +1287,7 @@ static struct i2c_driver bq25980_driver = {
- 		.name = "bq25980-charger",
- 		.of_match_table = bq25980_of_match,
+ 	char *name;
+@@ -295,7 +295,7 @@ static struct i2c_driver bq27xxx_battery_i2c_driver = {
+ 		.name = "bq27xxx-battery",
+ 		.of_match_table = of_match_ptr(bq27xxx_battery_i2c_of_match_table),
  	},
--	.probe = bq25980_probe,
-+	.probe_new = bq25980_probe,
- 	.id_table = bq25980_i2c_ids,
+-	.probe = bq27xxx_battery_i2c_probe,
++	.probe_new = bq27xxx_battery_i2c_probe,
+ 	.remove = bq27xxx_battery_i2c_remove,
+ 	.id_table = bq27xxx_i2c_id_table,
  };
- module_i2c_driver(bq25980_driver);
 -- 
 2.38.1
 
