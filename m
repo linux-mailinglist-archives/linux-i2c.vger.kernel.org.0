@@ -2,55 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6316302B1
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:14:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B326302BF
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbiKRXOP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 18:14:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51150 "EHLO
+        id S235442AbiKRXPE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 18:15:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235383AbiKRXNN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:13:13 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6697C6895;
-        Fri, 18 Nov 2022 14:57:52 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id k2so3164664qvo.1;
-        Fri, 18 Nov 2022 14:57:52 -0800 (PST)
+        with ESMTP id S231891AbiKRXNr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:13:47 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF32FCC167;
+        Fri, 18 Nov 2022 14:57:59 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id mi9so4337397qvb.8;
+        Fri, 18 Nov 2022 14:57:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DRSZ8vz2JBurVDNkllq2zvTvjp7OIMvQxjZt0vDMROI=;
-        b=C/DZRe5LMk3WkU1/CvVvb1esNDyrSTXi7JDlawr6DcPJ9ipIaf+WgOdMEJw1eHT4rs
-         YN5AObOJvCMgiuVlMhiKT6Dx/VrXZg+VNR4vH+dtR5gUUtcFO1xBmG30BJp6emfdeUr9
-         ScvkL44QohpE3xTYPPx0h65LTzW7iQTywq8W8yWFzS6drONh7hMwzWnbyGqqkLj3f6e6
-         FTcnMjvc/6gbBeh+b1qC59a6IsmQZC8bdwcF1SqVtmUh4VqJf612mOHo87rhRWa/LwJn
-         +cPFfTqPQmNgElME7+9H8L7yRSVIwHEGA9788yC61uMP8sFzx05dtHx1YhiVFsC3ooKC
-         DIaA==
+        bh=tT/wzOTMbhvvGHh4sBkzftGUxObb5sHdWneJalNb5T4=;
+        b=RcbGUBg4xbwc3yPt7fsgLY4TJuYFKJQGI2mutEib/SK7cUCQS0BnzsURytWZpeDNNV
+         CHM2mT39PdrBnlawZTvLcMyinVEG4gKgDVG2Ie46fYaDV1kButPPDF82qzoEYawWlGN4
+         lLFPsBvDh2aGRpz/+Qp2+BGLIkp9HN8MbyRP2K8169zHJrrHYP7iYZETLZn0WLyV5kcN
+         dr5sYudFiXfBeGJNZXO5VP+FRWEDW1O3en5Z5uL0PfwHZphYBYlqvNCfN9JTDEoaSWIq
+         GOCeANKOAOlaY6O4ufod+cu3oo4XvLqYr8t5yJS2CMjEwnzNmRhLFFbb+hh0GjazTicH
+         H6ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DRSZ8vz2JBurVDNkllq2zvTvjp7OIMvQxjZt0vDMROI=;
-        b=QHGQ9YljPcKE+Vjb+BNhVyjI9r48RsQslYuWSw77REBMTU9P7hkr2DQKdOnTC11ew4
-         lS3anuUhoPlMxf+G8wXXpQyjQFXA10mhRibvY+svcy/rQ7aKZDlSWfNxyqMiStbo/gD1
-         CYUopQHxfRKa24kDZ75Yjexx+JorNWHjhnyfIuVmLoXo1/INT+wwwfV2F080fitPci+l
-         oIVNwzr8e8g84zTbES4uLtJ1w9FIXExuSD7RCAaITa4ewxicATs6zXBewOy7UlYHMDUF
-         BjTZgiZHDys90kk0xHgLFMBZKfSFPYaQu+3hUCSeMmPx3K27vMDlz3T3y0Co7UrRL8x8
-         yb5g==
-X-Gm-Message-State: ANoB5plF60DdnvVLnbCQvDSqHoS2Ep3w5C0TB0SkRhfvo5kXr9+xJTrm
-        RrN9zxjnEGWsZPUI2k/awbA=
-X-Google-Smtp-Source: AA0mqf5yJgexXVhvlhbcHOy/hCVfY4LRrRXaYMw8m5x5Mx61iqXTq87tsHu8WnvwIp2PwTDX7H48EQ==
-X-Received: by 2002:a0c:c350:0:b0:4b9:59d6:d936 with SMTP id j16-20020a0cc350000000b004b959d6d936mr8624789qvi.14.1668812244360;
-        Fri, 18 Nov 2022 14:57:24 -0800 (PST)
+        bh=tT/wzOTMbhvvGHh4sBkzftGUxObb5sHdWneJalNb5T4=;
+        b=bhe4yVrgWkDCackPnMqUyKvtzoc+MGNriXS70jqpN0I1Q4DlSymdzCc+HWYoMALnzw
+         MAnO8hsWAtCJMB2CBVlArpO2NDz2xjU/8UQP9TIiDrWiUDnk9FHBxi72886rFVy1l5gN
+         WlSSzE4EHF9JaiIeu0iufg01gUR9ziA6xarXxYjrVWsAwlY4FInvGcn1JYhWlO6rRdhV
+         W83oR4O4Cb7fufZHhrCO1I0N/z9lQMUscPKb/CXEGmOoWU/tIP+UzhB8k2MlQ/47phu/
+         1TNfB5Ufekr1ILuZmoY4O7FXKFOgBPIS3g03vQKSIblKAkzuShBFJOABzESm89nPfMR3
+         b6Mw==
+X-Gm-Message-State: ANoB5pmYAEzjcc33lorYL4fIgoV6L6PVwl4K+TrJ7mrs0pnQMU03KUKg
+        WqmTWIOoeIZ50rB7ygIphLI=
+X-Google-Smtp-Source: AA0mqf4vDCu3XP0B4C9zT1Zl8ROTrEgmMWli/FAXN+GcmuInmqXvFTxQEScfE4LB0MYDNHPjJ8fCqw==
+X-Received: by 2002:a05:6214:5984:b0:4c6:9390:983 with SMTP id ll4-20020a056214598400b004c693900983mr4646214qvb.65.1668812255158;
+        Fri, 18 Nov 2022 14:57:35 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l21-20020a37f915000000b006fa7b5ea2d1sm3289379qkj.125.2022.11.18.14.57.23
+        by smtp.gmail.com with ESMTPSA id h9-20020a05620a244900b006fbdeecad51sm822570qkn.48.2022.11.18.14.57.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 14:57:24 -0800 (PST)
+        Fri, 18 Nov 2022 14:57:34 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 18 Nov 2022 14:57:22 -0800
+Date:   Fri, 18 Nov 2022 14:57:33 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
 Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
@@ -63,16 +63,16 @@ Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 581/606] usb: typec: tcpm/tcpci_maxim: Convert to i2c's
+Subject: Re: [PATCH 582/606] usb: typec: tcpm/tcpci_rt1711h: Convert to i2c's
  .probe_new()
-Message-ID: <20221118225722.GD686528@roeck-us.net>
+Message-ID: <20221118225733.GE686528@roeck-us.net>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-582-uwe@kleine-koenig.org>
+ <20221118224540.619276-583-uwe@kleine-koenig.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221118224540.619276-582-uwe@kleine-koenig.org>
+In-Reply-To: <20221118224540.619276-583-uwe@kleine-koenig.org>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -84,7 +84,7 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 11:45:15PM +0100, Uwe Kleine-König wrote:
+On Fri, Nov 18, 2022 at 11:45:16PM +0100, Uwe Kleine-König wrote:
 > From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > 
 > The probe function doesn't make use of the i2c_device_id * parameter so it
@@ -95,30 +95,31 @@ On Fri, Nov 18, 2022 at 11:45:15PM +0100, Uwe Kleine-König wrote:
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/usb/typec/tcpm/tcpci_maxim.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/usb/typec/tcpm/tcpci_rt1711h.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> index 03f89e6f1a78..83e140ffcc3e 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> @@ -438,7 +438,7 @@ static int tcpci_init(struct tcpci *tcpci, struct tcpci_data *data)
->  	return -1;
+> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> index 7b217c712c11..a0e9e3fe8564 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> @@ -327,8 +327,7 @@ static int rt1711h_check_revision(struct i2c_client *i2c, struct rt1711h_chip *c
+>  	return ret;
 >  }
 >  
-> -static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id *i2c_id)
-> +static int max_tcpci_probe(struct i2c_client *client)
+> -static int rt1711h_probe(struct i2c_client *client,
+> -			 const struct i2c_device_id *i2c_id)
+> +static int rt1711h_probe(struct i2c_client *client)
 >  {
 >  	int ret;
->  	struct max_tcpci_chip *chip;
-> @@ -519,7 +519,7 @@ static struct i2c_driver max_tcpci_i2c_driver = {
->  		.name = "maxtcpc",
->  		.of_match_table = of_match_ptr(max_tcpci_of_match),
+>  	struct rt1711h_chip *chip;
+> @@ -413,7 +412,7 @@ static struct i2c_driver rt1711h_i2c_driver = {
+>  		.name = "rt1711h",
+>  		.of_match_table = of_match_ptr(rt1711h_of_match),
 >  	},
-> -	.probe = max_tcpci_probe,
-> +	.probe_new = max_tcpci_probe,
->  	.remove = max_tcpci_remove,
->  	.id_table = max_tcpci_id,
+> -	.probe = rt1711h_probe,
+> +	.probe_new = rt1711h_probe,
+>  	.remove = rt1711h_remove,
+>  	.id_table = rt1711h_id,
 >  };
 > -- 
 > 2.38.1
