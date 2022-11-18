@@ -2,44 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0571F630511
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 00:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 439BE63067C
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 01:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235047AbiKRXvX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 18:51:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
+        id S237641AbiKSAKl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 19:10:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236911AbiKRXuS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 18:50:18 -0500
+        with ESMTP id S237507AbiKSAJu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 19:09:50 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033C457B43
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:26:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED9897ED8
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 15:33:08 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8a-0002M5-Ia; Fri, 18 Nov 2022 23:47:08 +0100
+        id 1owA8b-0002OZ-OK; Fri, 18 Nov 2022 23:47:09 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8X-0058S5-OZ; Fri, 18 Nov 2022 23:47:06 +0100
+        id 1owA8Y-0058Sa-RR; Fri, 18 Nov 2022 23:47:07 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8X-00008K-RJ; Fri, 18 Nov 2022 23:47:05 +0100
+        id 1owA8Y-00008S-9d; Fri, 18 Nov 2022 23:47:06 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-input@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 257/606] Input: silead - Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:39:51 +0100
-Message-Id: <20221118224540.619276-258-uwe@kleine-koenig.org>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 259/606] Input: st1232 - Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:39:53 +0100
+Message-Id: <20221118224540.619276-260-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -66,34 +65,34 @@ that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/input/touchscreen/silead.c | 6 +++---
+ drivers/input/touchscreen/st1232.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/input/touchscreen/silead.c b/drivers/input/touchscreen/silead.c
-index 3eef8c01090f..8a7351c4414c 100644
---- a/drivers/input/touchscreen/silead.c
-+++ b/drivers/input/touchscreen/silead.c
-@@ -652,9 +652,9 @@ static void silead_disable_regulator(void *arg)
- 	regulator_bulk_disable(ARRAY_SIZE(data->regulators), data->regulators);
- }
+diff --git a/drivers/input/touchscreen/st1232.c b/drivers/input/touchscreen/st1232.c
+index e38ba3e4f183..bd68633dc6c0 100644
+--- a/drivers/input/touchscreen/st1232.c
++++ b/drivers/input/touchscreen/st1232.c
+@@ -220,9 +220,9 @@ static const struct st_chip_info st1633_chip_info = {
+ 	.max_fingers	= 5,
+ };
  
--static int silead_ts_probe(struct i2c_client *client,
+-static int st1232_ts_probe(struct i2c_client *client,
 -			   const struct i2c_device_id *id)
-+static int silead_ts_probe(struct i2c_client *client)
++static int st1232_ts_probe(struct i2c_client *client)
  {
 +	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	struct silead_ts_data *data;
- 	struct device *dev = &client->dev;
- 	int error;
-@@ -826,7 +826,7 @@ MODULE_DEVICE_TABLE(of, silead_ts_of_match);
- #endif
+ 	const struct st_chip_info *match;
+ 	struct st1232_ts_data *ts;
+ 	struct input_dev *input_dev;
+@@ -384,7 +384,7 @@ static const struct of_device_id st1232_ts_dt_ids[] = {
+ MODULE_DEVICE_TABLE(of, st1232_ts_dt_ids);
  
- static struct i2c_driver silead_ts_driver = {
--	.probe = silead_ts_probe,
-+	.probe_new = silead_ts_probe,
- 	.id_table = silead_ts_id,
+ static struct i2c_driver st1232_ts_driver = {
+-	.probe		= st1232_ts_probe,
++	.probe_new	= st1232_ts_probe,
+ 	.id_table	= st1232_ts_id,
  	.driver = {
- 		.name = SILEAD_TS_NAME,
+ 		.name	= ST1232_TS_NAME,
 -- 
 2.38.1
 
