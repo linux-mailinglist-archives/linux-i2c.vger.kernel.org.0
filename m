@@ -2,45 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A74F630098
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 23:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6B76300A8
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Nov 2022 23:47:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbiKRWrd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Nov 2022 17:47:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36470 "EHLO
+        id S232402AbiKRWrr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Nov 2022 17:47:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232302AbiKRWqv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 17:46:51 -0500
+        with ESMTP id S232413AbiKRWqx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Nov 2022 17:46:53 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEA79DBA1
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 14:46:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7368FB7EAB
+        for <linux-i2c@vger.kernel.org>; Fri, 18 Nov 2022 14:46:41 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7p-0007qN-U1; Fri, 18 Nov 2022 23:46:21 +0100
+        id 1owA7q-0007o2-63; Fri, 18 Nov 2022 23:46:22 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7n-0058Bi-5h; Fri, 18 Nov 2022 23:46:20 +0100
+        id 1owA7m-0058BW-R2; Fri, 18 Nov 2022 23:46:19 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7l-00Haxx-In; Fri, 18 Nov 2022 23:46:17 +0100
+        id 1owA7l-00Hay0-Q1; Fri, 18 Nov 2022 23:46:17 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jonathan Cameron <jic23@kernel.org>
+        Jonathan Cameron <jic23@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Dmitry Rokosov <DDRokosov@sberdevices.ru>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 049/606] iio: accel: adxl372_i2c: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:36:23 +0100
-Message-Id: <20221118224540.619276-50-uwe@kleine-koenig.org>
+        <u.kleine-koenig@pengutronix.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 050/606] iio: accel: bma180: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:36:24 +0100
+Message-Id: <20221118224540.619276-51-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -67,34 +71,34 @@ that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/iio/accel/adxl372_i2c.c | 6 +++---
+ drivers/iio/accel/bma180.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/accel/adxl372_i2c.c b/drivers/iio/accel/adxl372_i2c.c
-index 4efb70a5fe40..e5f310ea65ff 100644
---- a/drivers/iio/accel/adxl372_i2c.c
-+++ b/drivers/iio/accel/adxl372_i2c.c
-@@ -18,9 +18,9 @@ static const struct regmap_config adxl372_regmap_config = {
- 	.readable_noinc_reg = adxl372_readable_noinc_reg,
+diff --git a/drivers/iio/accel/bma180.c b/drivers/iio/accel/bma180.c
+index d03fc3400f94..eb697eeb4301 100644
+--- a/drivers/iio/accel/bma180.c
++++ b/drivers/iio/accel/bma180.c
+@@ -921,9 +921,9 @@ static const struct iio_trigger_ops bma180_trigger_ops = {
+ 	.reenable = bma180_trig_reen,
  };
  
--static int adxl372_i2c_probe(struct i2c_client *client,
--			     const struct i2c_device_id *id)
-+static int adxl372_i2c_probe(struct i2c_client *client)
+-static int bma180_probe(struct i2c_client *client,
+-		const struct i2c_device_id *id)
++static int bma180_probe(struct i2c_client *client)
  {
 +	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	struct regmap *regmap;
- 	unsigned int regval;
- 	int ret;
-@@ -58,7 +58,7 @@ static struct i2c_driver adxl372_i2c_driver = {
- 		.name = "adxl372_i2c",
- 		.of_match_table = adxl372_of_match,
+ 	struct device *dev = &client->dev;
+ 	struct bma180_data *data;
+ 	struct iio_dev *indio_dev;
+@@ -1134,7 +1134,7 @@ static struct i2c_driver bma180_driver = {
+ 		.pm	= pm_sleep_ptr(&bma180_pm_ops),
+ 		.of_match_table = bma180_of_match,
  	},
--	.probe = adxl372_i2c_probe,
-+	.probe_new = adxl372_i2c_probe,
- 	.id_table = adxl372_i2c_id,
+-	.probe		= bma180_probe,
++	.probe_new	= bma180_probe,
+ 	.remove		= bma180_remove,
+ 	.id_table	= bma180_ids,
  };
- 
 -- 
 2.38.1
 
