@@ -2,75 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A9D630D6A
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 09:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD934630D6D
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 09:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbiKSIpV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 19 Nov 2022 03:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
+        id S231660AbiKSIpg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 19 Nov 2022 03:45:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231660AbiKSIpQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Nov 2022 03:45:16 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA83E7EC94;
-        Sat, 19 Nov 2022 00:45:15 -0800 (PST)
+        with ESMTP id S231548AbiKSIpe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Nov 2022 03:45:34 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE3A18E37;
+        Sat, 19 Nov 2022 00:45:33 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 089961F385;
-        Sat, 19 Nov 2022 08:45:14 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A28672280C;
+        Sat, 19 Nov 2022 08:45:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1668847514; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1668847532; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ixPb2GGjwwq2iLOxiGrX/cgH3fMPF/w/gj5qbX1xtJc=;
-        b=WqTTkMmENVMsQYw7EfCsOYNdf2Jq9ZL+3GJcFJ92cq/ZFKPV3DH98X8uN/0CAXHh4wmmYU
-        BCnjxwP3Oe23dL9nskhJVXodN1xjfFdHz9TkIJzXT6NXfa8edRmOedbRJy2v0/ABBemlly
-        uQbLMt1HlxfaOlQCeosioN3aq3mqn0w=
+        bh=ALiwmxUnKsm9DruBUZitjjcR3t/mZ/TDFueEIrLsOYU=;
+        b=jYaf11VN90rUTu9EwAej7YQhoiazuulivIpB5w05qau8FnuOPaqHDGFogznFdQGhP4xqwo
+        CuXNIvMAvZvHk392w4wIsLhKx2WMGrZzuRRrqNxsSiFvQNpAhRJF59lZYf4nF/8mOm/SMh
+        Rb9WEBOLUpSooUAPLp6XMCRO9hEKPg4=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1668847514;
+        s=susede2_ed25519; t=1668847532;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ixPb2GGjwwq2iLOxiGrX/cgH3fMPF/w/gj5qbX1xtJc=;
-        b=evQkYEWmvafYek4lenRDBVtcDALvbBbXnVUfuQbqYlsEPcmjmVQiOsBew5fxN8mFTxB0iX
-        ej7AeA8PYZD4nlAw==
+        bh=ALiwmxUnKsm9DruBUZitjjcR3t/mZ/TDFueEIrLsOYU=;
+        b=ZpV59Oc4HS5fKVBDSP8wvvksFwJpANNvEvZg2jZjTKirPkhlXmbO4OimSxBumK6UYMy8B7
+        4qxD2bGXT6xj6vDA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BBF731377F;
-        Sat, 19 Nov 2022 08:45:13 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 48A801377F;
+        Sat, 19 Nov 2022 08:45:32 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 1VI8LZmXeGP+BwAAMHmgww
-        (envelope-from <tiwai@suse.de>); Sat, 19 Nov 2022 08:45:13 +0000
-Date:   Sat, 19 Nov 2022 09:45:13 +0100
-Message-ID: <875yfbxrhi.wl-tiwai@suse.de>
+        id Fh+sEKyXeGM5CAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sat, 19 Nov 2022 08:45:32 +0000
+Date:   Sat, 19 Nov 2022 09:45:31 +0100
+Message-ID: <874juvxrh0.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
 Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
+        James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
         Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Krzysztof =?ISO-8859-2?Q?Ha=B3asa?= <khalasa@piap.pl>,
-        Vladimir Oltean <olteanv@gmail.com>, linux-i2c@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.com>, linux-i2c@vger.kernel.org,
         kernel@pengutronix.de,
-        Uwe =?ISO-8859-1?Q?Klei?= =?ISO-8859-1?Q?ne-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linuxppc-dev@lists.ozlabs.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 598/606] ALSA: aoa: tas: Convert to i2c's .probe_new()
-In-Reply-To: <20221118224540.619276-599-uwe@kleine-koenig.org>
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 599/606] ALSA: hda: cs35l41: Convert to i2c's .probe_new()
+In-Reply-To: <20221118224540.619276-600-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
-        <20221118224540.619276-599-uwe@kleine-koenig.org>
+        <20221118224540.619276-600-uwe@kleine-koenig.org>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=ISO-8859-1
@@ -84,7 +83,7 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 18 Nov 2022 23:45:32 +0100,
+On Fri, 18 Nov 2022 23:45:33 +0100,
 Uwe Kleine-König wrote:
 > 
 > From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
