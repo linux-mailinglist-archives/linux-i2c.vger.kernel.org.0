@@ -2,78 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E12631129
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 22:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6186311F9
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Nov 2022 00:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234686AbiKSV5D (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 19 Nov 2022 16:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41582 "EHLO
+        id S233576AbiKSX6u (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 19 Nov 2022 18:58:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234608AbiKSV5C (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Nov 2022 16:57:02 -0500
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2131413DCE
-        for <linux-i2c@vger.kernel.org>; Sat, 19 Nov 2022 13:56:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=fCbTWY3pYrE0/ZwKGY/RnW+Rbnq
-        yZl46OMy/eNyT42s=; b=CcWZ9rLBGyOAsWxs1WS27QAmSH1oBSAj+4aYxP5/lIH
-        2yTEXRka7Jldhz49SufhHNFhqgk6y0MlubWFtjbKQvdcv6CinTaC1xDI18jfhEm3
-        NalM8EtHcSn25yoom05Gw/gKMUQ1qeKw26YrpFIsZEKnD7G2k+TfFNoMSixq9zKc
-        =
-Received: (qmail 2326907 invoked from network); 19 Nov 2022 22:56:56 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Nov 2022 22:56:56 +0100
-X-UD-Smtp-Session: l3s3148p1@Iu9m5tnt1rtehh99
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org, Jean Delvare <jdelvare@suse.de>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH i2c-tools] i2cdetect: display more functionality bits with '-F'
-Date:   Sat, 19 Nov 2022 22:56:46 +0100
-Message-Id: <20221119215646.6818-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S231666AbiKSX6t (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Nov 2022 18:58:49 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BED313DEF;
+        Sat, 19 Nov 2022 15:58:47 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 386471BF207;
+        Sat, 19 Nov 2022 23:58:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668902326;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=17CqComxe+k6h8f0mE/chWaXjRFAVcoSj3D8bZumfx0=;
+        b=akFF+cTrOMDG+B+BpYqPxd+pmuBuDC3i+6oD0CJgq9R0IhWRKIX36egShNIOdpyA/XueLh
+        xGdSUiSocTV1O1UzmNSL7WHeI1bojNgcUILzod+VhYa4ymUMg3fyUTLTS9r4S5oAeAYO+y
+        Tf5cOfyOKlH1WbrIdFptcgjVWprnnDoMIY+XrUoaMk2yzhb51qSJV0LBF/WDa7tXOWzwda
+        TNdfx7Fc1cdZhQg5P0tcnzkHYX49S2r2crrkPPR0uHM1ge3PnlBCjVrPf3RVlFhNtaIyW6
+        H3D5XazNjHRejV+wXtEYXYZhEwmjUniS1nT0j3nCJL+BdaeBhT1Wyc/A6fWMXg==
+Date:   Sun, 20 Nov 2022 00:58:44 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 561/606] rtc: isl1208: Convert to i2c's .probe_new()
+Message-ID: <Y3lttA22QlR46RXz@mail.local>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-562-uwe@kleine-koenig.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221118224540.619276-562-uwe@kleine-koenig.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Original motivation was to add I2C_FUNC_SLAVE, so users can easily
-find out if their hardware supports being a target. While here, add
-HostNotify and 10-bit addressing as well.
+On 18/11/2022 23:44:55+0100, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> 
+> .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> that explicitly in the probe function.
+> 
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+This is already done later on in the function, please check the rtc
+patches as I took your previous series.
 
-Now, we could also add PROTOCOL_MANGLING and NO_START to have them all.
-But I am not sure if they are really helpful for users?
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/rtc/rtc-isl1208.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
+> index 73cc6aaf9b8b..fca9cc440296 100644
+> --- a/drivers/rtc/rtc-isl1208.c
+> +++ b/drivers/rtc/rtc-isl1208.c
+> @@ -799,6 +799,7 @@ static int isl1208_setup_irq(struct i2c_client *client, int irq)
+>  static int
+>  isl1208_probe(struct i2c_client *client)
+>  {
+> +	const struct i2c_device_id *id = i2c_client_get_device_id(client);
+>  	int rc = 0;
+>  	struct isl1208_state *isl1208;
+>  	int evdet_irq = -1;
+> -- 
+> 2.38.1
+> 
 
- tools/i2cdetect.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/tools/i2cdetect.c b/tools/i2cdetect.c
-index 066ec82..54b78e2 100644
---- a/tools/i2cdetect.c
-+++ b/tools/i2cdetect.c
-@@ -160,6 +160,12 @@ static const struct func all_func[] = {
- 	  .name = "I2C Block Write" },
- 	{ .value = I2C_FUNC_SMBUS_READ_I2C_BLOCK,
- 	  .name = "I2C Block Read" },
-+	{ .value = I2C_FUNC_SMBUS_HOST_NOTIFY,
-+	  .name = "SMBus HostNotify" },
-+	{ .value = I2C_FUNC_10BIT_ADDR,
-+	  .name = "10-bit addressing" },
-+	{ .value = I2C_FUNC_SLAVE,
-+	  .name = "Target mode" },
- 	{ .value = 0, .name = "" }
- };
- 
 -- 
-2.35.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
