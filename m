@@ -2,53 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD5E630DF9
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 11:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A4B630E0E
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 11:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234136AbiKSKDD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 19 Nov 2022 05:03:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
+        id S233757AbiKSKQk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 19 Nov 2022 05:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234058AbiKSKDB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Nov 2022 05:03:01 -0500
+        with ESMTP id S229500AbiKSKQf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Nov 2022 05:16:35 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B070082227
-        for <linux-i2c@vger.kernel.org>; Sat, 19 Nov 2022 02:03:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED465D6B0
+        for <linux-i2c@vger.kernel.org>; Sat, 19 Nov 2022 02:16:34 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owKgX-0006qO-42; Sat, 19 Nov 2022 11:02:53 +0100
+        id 1owKtQ-00089M-Nr; Sat, 19 Nov 2022 11:16:12 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owKgU-005EHk-4x; Sat, 19 Nov 2022 11:02:51 +0100
+        id 1owKtG-005EhI-Oa; Sat, 19 Nov 2022 11:16:03 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owKgU-00069v-D0; Sat, 19 Nov 2022 11:02:50 +0100
-Date:   Sat, 19 Nov 2022 11:02:50 +0100
+        id 1owKtG-0006ZF-Ax; Sat, 19 Nov 2022 11:16:02 +0100
+Date:   Sat, 19 Nov 2022 11:16:02 +0100
 From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Crt Mori <cmo@melexis.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>,
         Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Grant Likely <grant.likely@linaro.org>,
         Lee Jones <lee.jones@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH 186/606] iio: temperature: mlx90632: Convert to i2c's
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: Re: [PATCH 289/606] macintosh: ams/ams-i2c: Convert to i2c's
  .probe_new()
-Message-ID: <20221119100250.iw757ovgwjbwr2ho@pengutronix.de>
+Message-ID: <20221119101602.kfreiw4mdbjf7prj@pengutronix.de>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-187-uwe@kleine-koenig.org>
- <CAKv63uvVsLhbt9y0fWxPWp005rnWzCn6Vm0UmOnW08B87fkCzw@mail.gmail.com>
+ <20221118224540.619276-290-uwe@kleine-koenig.org>
+ <1d2ae1bb-d4ba-35cf-63b6-f23a0187a223@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hp5mb2d6k7mrzljq"
+        protocol="application/pgp-signature"; boundary="fhfkp732a2k6imuh"
 Content-Disposition: inline
-In-Reply-To: <CAKv63uvVsLhbt9y0fWxPWp005rnWzCn6Vm0UmOnW08B87fkCzw@mail.gmail.com>
+In-Reply-To: <1d2ae1bb-d4ba-35cf-63b6-f23a0187a223@csgroup.eu>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -63,82 +67,73 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---hp5mb2d6k7mrzljq
+--fhfkp732a2k6imuh
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hello,
+Hello Christophe,
 
-On Sat, Nov 19, 2022 at 12:04:41AM +0100, Crt Mori wrote:
-> On Fri, 18 Nov 2022 at 23:46, Uwe Kleine-K=F6nig <uwe@kleine-koenig.org> =
-wrote:
-> >
+On Sat, Nov 19, 2022 at 07:38:58AM +0000, Christophe Leroy wrote:
+> Le 18/11/2022 =E0 23:40, Uwe Kleine-K=F6nig a =E9crit=A0:
 > > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> >
-> > .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> > that explicitly in the probe function.
-> >
+> >=20
+> > The probe function doesn't make use of the i2c_device_id * parameter so=
+ it
+> > can be trivially converted.
+> >=20
 > > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> >  drivers/iio/temperature/mlx90632.c | 12 ++++++++++--
-> >  1 file changed, 10 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/temperatu=
-re/mlx90632.c
-> > index f1f5ebc145b1..19e30cfca8a7 100644
-> > --- a/drivers/iio/temperature/mlx90632.c
-> > +++ b/drivers/iio/temperature/mlx90632.c
-> > @@ -1168,9 +1168,9 @@ static int mlx90632_enable_regulator(struct mlx90=
-632_data *data)
-> >         return ret;
-> >  }
-> >
-> > -static int mlx90632_probe(struct i2c_client *client,
-> > -                         const struct i2c_device_id *id)
-> > +static int mlx90632_probe(struct i2c_client *client)
-> >  {
-> > +       const struct i2c_device_id *id =3D i2c_client_get_device_id(cli=
-ent);
-> >         struct mlx90632_data *mlx90632;
-> >         struct iio_dev *indio_dev;
-> >         struct regmap *regmap;
-> > @@ -1337,7 +1337,15 @@ static struct i2c_driver mlx90632_driver =3D {
-> >                 .of_match_table =3D mlx90632_of_match,
-> >                 .pm     =3D pm_ptr(&mlx90632_pm_ops),
-> >         },
-> > +<<<<<<< ours
 >=20
-> Maybe some of the merge artifacts left (also below)?
+> The patch itself and the others seems ok. But can you group all=20
+> macintosh changes into a single patch instead of the 9 patches you sent ?
+>=20
+> See the process about submitting patches,=20
+> https://docs.kernel.org/process/submitting-patches.html and especially=20
+> the "NO!!!! No more huge patch bombs to linux-kernel@vger.kernel.org=20
+> people!" and the associated reference=20
+> https://lore.kernel.org/all/20050711.125305.08322243.davem@davemloft.net/=
+ :
+>=20
+> 	If you feel the need to send, say, more than 15 patches at once,=20
+> reconsider.
 
-*groan*, ok, thanks for pointing out the obvious. Fixed in my tree. Ftr,
-the fixup is:
+Thanks for your feedback.
 
-diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/temperature/m=
-lx90632.c
-index 19e30cfca8a7..753b7a4ccfdd 100644
---- a/drivers/iio/temperature/mlx90632.c
-+++ b/drivers/iio/temperature/mlx90632.c
-@@ -1337,15 +1337,7 @@ static struct i2c_driver mlx90632_driver =3D {
- 		.of_match_table =3D mlx90632_of_match,
- 		.pm	=3D pm_ptr(&mlx90632_pm_ops),
- 	},
--<<<<<<< ours
--	.probe =3D mlx90632_probe,
--||||||| base
--	.probe =3D mlx90632_probe,
--	.remove =3D mlx90632_remove,
--=3D=3D=3D=3D=3D=3D=3D
- 	.probe_new =3D mlx90632_probe,
--	.remove =3D mlx90632_remove,
-->>>>>>> theirs
- 	.id_table =3D mlx90632_id,
- };
- module_i2c_driver(mlx90632_driver);
+Let me point out in response to the request to squash patches together
+that this wish doesn't seem to be the universal right thing to do.
 
-When (and if) I'll resend the series, the fixed version will be
-included. (Unless someone picks up the broken patch with the above
-fixup of course :-)
+Last time I did a conversion grouped by subsystem, one of the replies
+was:
+
+	Reviewed-by: ...
+	if you split on per driver basis.
+
+(https://lore.kernel.org/linux-iio/20220808085526.280066-1-u.kleine-koenig@=
+pengutronix.de)
+
+The obvious upside of a split per driver is that the individual bits are
+easier to review, an Ack can be limited to a certain set of drivers, and
+(probably most important): If a driver later gets a commit that needs
+backporting, a patch that only touches this single driver can more
+easily be backported as a dependency.
+
+Also the request to not send everything at once but keep back some
+patches has an obvious downside. I.e. I have to restart yet more often
+to rebase + test to get all patches applied in the end. And you could
+argue that the sum of the work load on the mail servers doesn't get
+smaller in sum if the 600 patches are sent over (say) 2 months.
+(To prevent a flame war here: Yeah, I agree there are downsides of a
+single big series, too.)
+
+All in all my personal opinion is that the advantages of a split per
+driver slightly outweight the disadvantages. But obviously that's
+subjective.
+
+I will wait a while before sending updates to this series, so don't
+expect a new patch very soon. (This has the nice effect that it gives
+you some time to reconsider your argument and maybe apply the patches as
+they are now, preventing another mail to the lists with the cumulated
+macintosh changes ;-)
 
 Best regards
 Uwe
@@ -147,19 +142,19 @@ Uwe
 Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
 Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---hp5mb2d6k7mrzljq
+--fhfkp732a2k6imuh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN4qccACgkQwfwUeK3K
-7AlCtQf8CxtG6vuDNnXN8vBGpjT/PQQsixyChegKXC+2lHfz6/xOl3dekciIonD1
-MN6LBdeVd2qHQgWW4gKxPxvxOPscWj5MF++LvxdSd8EjUgVGdvLB2nC+n6HVATuq
-GMOwkO1X64M7eqvXM+XKCehWVYAx4dKgGYceEeKSWIxLbHr39+Q1mRVvOXyuKobM
-K4c7TCcZXHhwjtMKIqnG9DIpclJ0fTxT0xkgjn2rj3u4oUpQexjaSdIWE2oRzmvA
-lzA2HzdZDEeeNk6bgBnNiCUfVeOcExMkx7LgUOPntH5sj1tPTFYaG0jUGEA42xK2
-afoznodF/Zt4fW1nbJkWJs3tWfyVIw==
-=wkQl
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN4rN8ACgkQwfwUeK3K
+7Al6Vgf8CS2jQ6ydt/mU5uUF2/1EdeFIaEgWWYM8GEO/WO3ITiDMmhcPxvxIiMZ0
+3oK9RQOVW5svEcjiGpenqG2JzVC3qN1g86tlnFlbVnr2fNllDVn+UX4yqQIV/MHM
+uOROopD1mejOWEeuyKGWSFaOJa+ZnQa94AW9NCnTqz9ZCbbtg1/da8nw7okMtupm
+kXwMuuZee0TCK02/9mKYs3H0hWHoTt/2deYHVLrtfNurq5hKPZlqfXSokz1EH19v
+rPmnAsQvxBubGj+6uKtx6bzmG+aNwqJe/3j5UbHGe7eIp1i7q4kXjzpi6ioxZ9ef
+1lRlkwcKHui3hUwv5kuzN6BIi+ZrAQ==
+=vViA
 -----END PGP SIGNATURE-----
 
---hp5mb2d6k7mrzljq--
+--fhfkp732a2k6imuh--
