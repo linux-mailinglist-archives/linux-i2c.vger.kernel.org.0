@@ -2,29 +2,29 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA85630FF7
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 18:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E711630FFA
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Nov 2022 18:35:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234488AbiKSRfT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 19 Nov 2022 12:35:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47140 "EHLO
+        id S234876AbiKSRfZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 19 Nov 2022 12:35:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235083AbiKSRe5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Nov 2022 12:34:57 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4860C17E2E;
-        Sat, 19 Nov 2022 09:34:56 -0800 (PST)
+        with ESMTP id S235047AbiKSRfS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Nov 2022 12:35:18 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C05114D13;
+        Sat, 19 Nov 2022 09:35:17 -0800 (PST)
 Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C82B7749;
-        Sat, 19 Nov 2022 18:34:54 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 20B51749;
+        Sat, 19 Nov 2022 18:35:16 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1668879295;
-        bh=1g/K4Q02GnI/IYZ+h0gHHHav57k1o5cBeGx4EARI3KI=;
+        s=mail; t=1668879316;
+        bh=gNZd6oRdjSF8gl1qxb0SKHdE0YdULnw0sFu+xuUXOu8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OJ1HJmIiA7HrCz6PFVgdYFbVM9QcVLos/nTXDCSmh0OPGVBwdV/jcstBUzsSCUea/
-         jy4EgVYA+wWeb+tHwiQoWYto3qv+vASIDJNVNAr2UCZZl6s962jWW9dNAJEGFR1f69
-         vRuR4Sigzw/1JrvLP0RvoaxzeioWnHH7EXiarPrA=
-Date:   Sat, 19 Nov 2022 19:34:39 +0200
+        b=agMGW9TeKWyqcIA+8ErB6thVoPN2X+MoLY11tdk2DRN+DyLioHaOEARXNPMseOrKY
+         98sjQbE6aG3WbhnBH0Pw94c2oExDnhSMnQWg8Bpyg2blwFG1rO4n+MvBTOVc7csHSp
+         OdcA1+Y7qt5J2VCbdmgCQDWCNScu7ObcCenSc7X4=
+Date:   Sat, 19 Nov 2022 19:35:00 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
@@ -41,16 +41,15 @@ Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         <u.kleine-koenig@pengutronix.de>, Jonas Karlman <jonas@kwiboo.se>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 025/606] drm/bridge: lt9611uxc: Convert to i2c's
- .probe_new()
-Message-ID: <Y3kTr8O9GJybmnWY@pendragon.ideasonboard.com>
+Subject: Re: [PATCH 037/606] drm/bridge: tfp410: Convert to i2c's .probe_new()
+Message-ID: <Y3kTxA+4gUo4x3FC@pendragon.ideasonboard.com>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-26-uwe@kleine-koenig.org>
+ <20221118224540.619276-38-uwe@kleine-koenig.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221118224540.619276-26-uwe@kleine-koenig.org>
+In-Reply-To: <20221118224540.619276-38-uwe@kleine-koenig.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -60,7 +59,7 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 11:35:59PM +0100, Uwe Kleine-König wrote:
+On Fri, Nov 18, 2022 at 11:36:11PM +0100, Uwe Kleine-König wrote:
 > From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > 
 > The probe function doesn't make use of the i2c_device_id * parameter so it
@@ -71,32 +70,32 @@ On Fri, Nov 18, 2022 at 11:35:59PM +0100, Uwe Kleine-König wrote:
 Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
 > ---
->  drivers/gpu/drm/bridge/lontium-lt9611uxc.c | 5 ++---
+>  drivers/gpu/drm/bridge/ti-tfp410.c | 5 ++---
 >  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-> index fa1ee6264d92..583daacf3705 100644
-> --- a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-> +++ b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-> @@ -844,8 +844,7 @@ static const struct attribute_group *lt9611uxc_attr_groups[] = {
->  	NULL,
->  };
+> diff --git a/drivers/gpu/drm/bridge/ti-tfp410.c b/drivers/gpu/drm/bridge/ti-tfp410.c
+> index b9635abbad16..6db69df0e18b 100644
+> --- a/drivers/gpu/drm/bridge/ti-tfp410.c
+> +++ b/drivers/gpu/drm/bridge/ti-tfp410.c
+> @@ -379,8 +379,7 @@ static struct platform_driver tfp410_platform_driver = {
 >  
-> -static int lt9611uxc_probe(struct i2c_client *client,
-> -			   const struct i2c_device_id *id)
-> +static int lt9611uxc_probe(struct i2c_client *client)
+>  #if IS_ENABLED(CONFIG_I2C)
+>  /* There is currently no i2c functionality. */
+> -static int tfp410_i2c_probe(struct i2c_client *client,
+> -			    const struct i2c_device_id *id)
+> +static int tfp410_i2c_probe(struct i2c_client *client)
 >  {
->  	struct lt9611uxc *lt9611uxc;
->  	struct device *dev = &client->dev;
-> @@ -1012,7 +1011,7 @@ static struct i2c_driver lt9611uxc_driver = {
->  		.of_match_table = lt9611uxc_match_table,
->  		.dev_groups = lt9611uxc_attr_groups,
+>  	int reg;
+>  
+> @@ -411,7 +410,7 @@ static struct i2c_driver tfp410_i2c_driver = {
+>  		.of_match_table = of_match_ptr(tfp410_match),
 >  	},
-> -	.probe = lt9611uxc_probe,
-> +	.probe_new = lt9611uxc_probe,
->  	.remove = lt9611uxc_remove,
->  	.id_table = lt9611uxc_id,
+>  	.id_table	= tfp410_i2c_ids,
+> -	.probe		= tfp410_i2c_probe,
+> +	.probe_new	= tfp410_i2c_probe,
+>  	.remove		= tfp410_i2c_remove,
 >  };
+>  #endif /* IS_ENABLED(CONFIG_I2C) */
 > -- 
 > 2.38.1
 > 
