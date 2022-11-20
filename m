@@ -2,162 +2,175 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B809E6315B1
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Nov 2022 19:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AF66315E4
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Nov 2022 20:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiKTSlR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 20 Nov 2022 13:41:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
+        id S229674AbiKTTnt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 20 Nov 2022 14:43:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiKTSlQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 20 Nov 2022 13:41:16 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2084.outbound.protection.outlook.com [40.107.93.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDF424BFA;
-        Sun, 20 Nov 2022 10:41:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IS+w4uQeZQ8hXJ5riYIDPHbtfbypv/oiRor7RQ38RWwn8buWAMx2qwGP3/tnAcbPb/zlXS0Zt++a9X3OE8kvf40FEFcera0YC2+g2Y4U1cHFtVVXauBSeCuGzEUhnFTJJfEUfSQUIM1y2z4rbQelDy9HwOleUEF3z8PoqD5tZEHqeNtzMk7gfG5R33o5VZHHwG/OpYr2I0mSWqEBfgdtDSj/U1lQzBJkFbB/w6aP2VpyjK1wYjM73pgdaBW2TwLuBDOOeMCxKgXrK12eSlJR31WNpRJ15Bvaq1kVZzp5LkRwoM49+f78RAbxG5sqvD0L08HATDCPno5RYPhs3OVL5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4JddZJqfFxE9DKmwTlm5mbrCnBzKKMbnIxbC6Kb1FnI=;
- b=dJfwPNXsGro5HyEhERLzfjS14nyko93vZ8FSDRXW77VQBbg99V8+uS0dyJ/LrWXYdqEcA5x2mezX1Rh7KLdLng5KgUHi9k9+8nO6ct1Bcau9gYAix6bMyRKD8b3YAz/fBM8em3imgI+OPgEhPCGMAgsyiV1nRBAs4AinKQgDCdBOfjdDFbaJ9M9t+jhwkMIAL4ET8YiY3R3icHvt8gVdgQUYcA58BjqkjustnbvXhfT756w5PtdqxDGpQr7cVGeqwxjEw2CkU9l+EkYf2e44ZqhMwpIxKGFkbgwGcbuHTmqkAjCECBnpt7cqmwav+g+Q8E4pROEQtNuWaayVi6B3jQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=labundy.com; dmarc=pass action=none header.from=labundy.com;
- dkim=pass header.d=labundy.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4JddZJqfFxE9DKmwTlm5mbrCnBzKKMbnIxbC6Kb1FnI=;
- b=QLZGRDaZ8ZDHWUi2jUDiaFyamHXevrcL+Z0R7NIurxFtVahgNj4TIOmKjJ8jK5qD8tk4kXJMMVesdKVWuOWII53szx1O0w1jNVsTvi/Sy01pR+mmNwYWphVjj0LaL99C5Vis///FfX01tGClitKrLPN1eou9g2S7RZILNoGklQs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=labundy.com;
-Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
- (2603:10b6:803:43::21) by DM5PR0801MB3830.namprd08.prod.outlook.com
- (2603:10b6:4:7c::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Sun, 20 Nov
- 2022 18:41:12 +0000
-Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
- ([fe80::ea42:ebaf:dd18:6a4c]) by SN4PR0801MB3774.namprd08.prod.outlook.com
- ([fe80::ea42:ebaf:dd18:6a4c%4]) with mapi id 15.20.5813.019; Sun, 20 Nov 2022
- 18:41:12 +0000
-Date:   Sun, 20 Nov 2022 12:41:10 -0600
-From:   Jeff LaBundy <jeff@labundy.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
+        with ESMTP id S229449AbiKTTns (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 20 Nov 2022 14:43:48 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703BD1EC46;
+        Sun, 20 Nov 2022 11:43:47 -0800 (PST)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 981D16602381;
+        Sun, 20 Nov 2022 19:43:45 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1668973425;
+        bh=T3nU7r4TDRBfUE21qBPtx6/vbbqNd5aTZrUhEKVEpe8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eTDOl2wCVRsu/tyZH+YPJZtqzX+lTk+zyDWIOt7B5OERtVQXV05JqgkECzvZaxhvq
+         GWHynwzbAdTGjQc4EiizPb4JzuNJErOOA6MGMcIE1OOBJsR2nJxdyKqik4rZXW8I8S
+         YL9hLYJH9B0qYNlv0ofE25pkedfO3Zr0ukRr6nTWoiYIF0ElBn0uG1ehB/KKpnJkB6
+         LmHZCe95IKsjPugXIHsbUyR3TPbe/Uz/FTgEe5YV5fHfIiRZ+dwYB8lU4/MgAmu4vM
+         BZjO4bgM9A0wAKu6Ub+wy7zE/lgrgtzyeA/1iFwakjmg/vd8UL0auYvToqpQCZqsxv
+         +Bmg67/Ow+Rwg==
+Received: by mercury (Postfix, from userid 1000)
+        id 1C1D2106F223; Sun, 20 Nov 2022 20:43:43 +0100 (CET)
+Date:   Sun, 20 Nov 2022 20:43:43 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 247/606] Input: iqs5xx - Convert to i2c's .probe_new()
-Message-ID: <Y3p0xgsvyWLwzzWb@nixie71>
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-rpi-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-leds@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-media@vger.kernel.org, patches@opensource.cirrus.com,
+        linux-actions@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, alsa-devel@alsa-project.org,
+        linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-pm@vger.kernel.org, Purism Kernel Team <kernel@puri.sm>,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net
+Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
+Message-ID: <20221120194343.nnpzhgjapep7iwqk@mercury.elektranox.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-248-uwe@kleine-koenig.org>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221118224540.619276-248-uwe@kleine-koenig.org>
-X-ClientProxiedBy: SN7PR04CA0003.namprd04.prod.outlook.com
- (2603:10b6:806:f2::8) To SN4PR0801MB3774.namprd08.prod.outlook.com
- (2603:10b6:803:43::21)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN4PR0801MB3774:EE_|DM5PR0801MB3830:EE_
-X-MS-Office365-Filtering-Correlation-Id: 35e4b31e-d9c5-46c7-ac45-08dacb26cc47
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HM2bwf9JLFba9GzRHnmiXDh2B8GA94WHwOOjLlVivH9DLGyrq3yTvHeF2T0l86soCp8ZgOOc9TunDwfaTAGokNDx2EVjGxGYyS+Gkrzh7s6ffAlvY/NWBMjJPsOr2j8CuZ8NhSF2nJDEKS2xLIUWxlUKoT9iIOEHIQwQQv98GnrT+mNA925w2Td+TSzNwqMV5PvWmw72pByUvfScRmowYEaC7TYYDRI3ncrq1d6SUqUGAg9wRbonnbGbyh3ntanSmmIBmkvq7TowYJFKr3GVYEgE3rO7kR7TYda/10WBkgJexKG6l6bmDfwPvomDfcZZzsf9aao39lyVj3R12qyws6nIkwinj3kEGRN78uewh8vhz2BQU/QZSx9/+lZ5KQCuXJjkNYkeYlD+Q+EnZ53KhTsqOUqOuWma8gL5kh49mOJDPEbZpImOef4KaKAcYZslmMUwp4yiW3O6PK3RXv6ZB7lv1zocYJUkI00iGv2ine5kSN/0+fmPMeWjoBfdAFKTltk1oxltkGJkpiJrvD/pQvKTBxPrJ+xHGw9GeAJNHBUl+s+wYLOX/aqUwQSJv8lADDUPwzzDS6aQHMT1zWRquqINkp6d4QzA56Od3nCcmlOc7k/IqOOq4hrL7NgYdjL5Xo3mDRTa2gyj2wpXXCs6WJgEj/u0hJDV27JKMYHQnEiKtWw2dDDUb6EYLqdjsN3Nr6UNbu+olkhQd0v7cE8T9M7oKSHQ4EktqRjJAkEEDLvX4oLKvEoWuveZT9UxFZnS
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0801MB3774.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(136003)(346002)(39830400003)(376002)(366004)(451199015)(2906002)(8936002)(7416002)(316002)(6916009)(5660300002)(41300700001)(54906003)(6486002)(478600001)(66556008)(66946007)(66476007)(4326008)(8676002)(186003)(66574015)(33716001)(6512007)(9686003)(26005)(6506007)(83380400001)(86362001)(38100700002)(42413004)(142923001)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?iDKVO1bfzGnOEpYqCjOGg3dkwCsRrRgHrqp6TCMKBYqrpSW43yJkyaQbOV?=
- =?iso-8859-1?Q?oXErgqJfjHeSVSNiVe7y49OMgBD+I6AUrqh5T2K5Y8wdP5Ou8fBz+nBftD?=
- =?iso-8859-1?Q?Q9Fq7YrvOJBoqdGsPBCrh3I/4oLMr4zTKvDF6NdyPXBqdzltm+HooNfCcc?=
- =?iso-8859-1?Q?WBuJ9Fw+VG83UitbvyP9+TYTplbJQUM/b7P6FPYi98KZs4yyMxfA8M4Wx+?=
- =?iso-8859-1?Q?GPNQ8GzutvaFDxHe95Ix7wj7CtqivMDt1RgbUIiPZSQHqDDZKEvovuPyCr?=
- =?iso-8859-1?Q?SWzbPDO17aEzJjPVujp+g5WriuHNi2xLDa2dRosY2UaUYVv16YZMTeC9gU?=
- =?iso-8859-1?Q?MPOLW2jOglrqKbw3D/cA/EaPGwEHeLeqoRarbGo74lJI2T/cAkXq7mE+Pq?=
- =?iso-8859-1?Q?6hk8xjhe+qzVvuRQjtRCctLkauhPvGfmvp0TKBtzERta2J2oGMQep7uhU+?=
- =?iso-8859-1?Q?cvcBD1X3W6x0LYndT/3oH2iRA1hsA2HnmXAnHw6FP7xPiRfk7sl1qj2BT2?=
- =?iso-8859-1?Q?Q/byhrcZjIKvOCkHoqn4vs6F34A/Jo6ixfkiqOm85/yKQuus1/FobKQ5To?=
- =?iso-8859-1?Q?fTE40ESUPDBE68TMzfS675T3KdRoXIhTMHZDGm2WwlPqwhe0Kakph6ZnqY?=
- =?iso-8859-1?Q?0h9TDcenscbR/4iIHA1guT7ihgS1bhLj1ZPC8kq73k0KWj5xvMEOMcbyPz?=
- =?iso-8859-1?Q?5awFb01h1DfhltMM2CGwyewHf4C3kiduWk94jlOSFFgWtiADS/bqJCS/4c?=
- =?iso-8859-1?Q?Ie9QdxEIjAtwTTNoW1U7kciK4F8Dp1L9aEnbgAsyhwdzRGUpDl5Z/otcvR?=
- =?iso-8859-1?Q?GwcBtouEYJXenFmJdN/bqHECa/EaogjXTgy7ek9y05fNuMj6rjr9o4tVvu?=
- =?iso-8859-1?Q?Xym/u6rzWQ3psrgIe6LcozCY6B2NY5/hHNbYsO5a3ueA6mBdDZbsuJLDWt?=
- =?iso-8859-1?Q?QupN03kdr63XtWu1P1GEvKwZWIDo/AWdnv7eEDjLOoZDfd13Af0IMxhkx0?=
- =?iso-8859-1?Q?hPY/u3zkI+1gO0wmI///zYYvXlqIN8WPCwu7qKYPoSeJDwWQVtsx3mSfvG?=
- =?iso-8859-1?Q?qSoR8Yi+14j/welGSEqio4pJ1+S/x1qAndXgSSLJBssGSn4LrAhhoKm0Mp?=
- =?iso-8859-1?Q?3rCBCMgahyWiBfxWumg6bSObeSYLhlg9sKxmzVooTp8krQqvjVkUy0isCl?=
- =?iso-8859-1?Q?0SdlkxdqslI/ElUrQzQNY2eNOtk0auOz2OqGxhgka+SK/LOKf1zLWK1zn6?=
- =?iso-8859-1?Q?G0NYynxO9zGQZ+9vx+B3PcNGb1Qk9umxo5g5qPBhoN1F5BVLA6udjV9CN3?=
- =?iso-8859-1?Q?gCx3C9Uoe2WNr/9sNKHb7IXqPeAVuPlqSijvJ9Fy3f9zUTsaAXQdoqjj8M?=
- =?iso-8859-1?Q?fliR60P/i/0mfIKwF6qBAWqFIyTVhkDf5TCMZP162MgOH1YvTW9aN0Chsc?=
- =?iso-8859-1?Q?svLOq7JIFehqZXxTm6ip5YyBwEANgksB0ONAAmYIh27wlHncPNaHWNMmqv?=
- =?iso-8859-1?Q?UAPJimsp6sLJWau/EWuQkisqStW8BeAKFejrnv7dhv1aIiG48s0CpxRcBM?=
- =?iso-8859-1?Q?8S6BCxQWoheKwb7fcAyryJOU7aBzfJRj+HfZQCVYaiRs6NTRxq6Jd6dOFh?=
- =?iso-8859-1?Q?YL5xQ5THoC1ITI2RGZM0e0DcryFg/d4y7p?=
-X-OriginatorOrg: labundy.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 35e4b31e-d9c5-46c7-ac45-08dacb26cc47
-X-MS-Exchange-CrossTenant-AuthSource: SN4PR0801MB3774.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2022 18:41:12.5291
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WfcwshEM6qJ3kf9SvAfsBJ1d48w0/CyQfw1hXa7hga6v9Pakb+VRpXCdVpCweWUhn0mu1jCopKszWu3dwW3O8A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR0801MB3830
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wvm2z6appxwdd5fa"
+Content-Disposition: inline
+In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 11:39:41PM +0100, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> 
-> The probe function doesn't make use of the i2c_device_id * parameter so it
-> can be trivially converted.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Acked-by: Jeff LaBundy <jeff@labundy.com>
+--wvm2z6appxwdd5fa
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  drivers/input/touchscreen/iqs5xx.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/input/touchscreen/iqs5xx.c b/drivers/input/touchscreen/iqs5xx.c
-> index 34c4cca57d13..dc3137a34f35 100644
-> --- a/drivers/input/touchscreen/iqs5xx.c
-> +++ b/drivers/input/touchscreen/iqs5xx.c
-> @@ -1019,8 +1019,7 @@ static int __maybe_unused iqs5xx_resume(struct device *dev)
->  
->  static SIMPLE_DEV_PM_OPS(iqs5xx_pm, iqs5xx_suspend, iqs5xx_resume);
->  
-> -static int iqs5xx_probe(struct i2c_client *client,
-> -			const struct i2c_device_id *id)
-> +static int iqs5xx_probe(struct i2c_client *client)
->  {
->  	struct iqs5xx_private *iqs5xx;
->  	int error;
-> @@ -1094,7 +1093,7 @@ static struct i2c_driver iqs5xx_i2c_driver = {
->  		.pm		= &iqs5xx_pm,
->  	},
->  	.id_table	= iqs5xx_id,
-> -	.probe		= iqs5xx_probe,
-> +	.probe_new	= iqs5xx_probe,
->  };
->  module_i2c_driver(iqs5xx_i2c_driver);
->  
-> -- 
-> 2.38.1
-> 
+Hi,
+
+On Fri, Nov 18, 2022 at 11:35:34PM +0100, Uwe Kleine-K=F6nig wrote:
+> Hello,
+>=20
+> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
+> call-back type") from 2016 there is a "temporary" alternative probe
+> callback for i2c drivers.
+>=20
+> This series completes all drivers to this new callback (unless I missed
+> something). It's based on current next/master.
+> A part of the patches depend on commit 662233731d66 ("i2c: core:
+> Introduce i2c_client_get_device_id helper function"), there is a branch t=
+hat
+> you can pull into your tree to get it:
+>=20
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/client=
+_device_id_helper-immutable
+>=20
+> I don't think it's feasable to apply this series in one go, so I ask the
+> maintainers of the changed files to apply via their tree. I guess it
+> will take a few kernel release iterations until all patch are in, but I
+> think a single tree creates too much conflicts.
+>=20
+> The last patch changes i2c_driver::probe, all non-converted drivers will
+> fail to compile then. So I hope the build bots will tell me about any
+> driver I missed to convert. This patch is obviously not for application
+> now.
+>=20
+> I dropped most individuals from the recipents of this mail to not
+> challenge the mail servers and mailing list filters too much. Sorry if
+> you had extra efforts to find this mail.
+>=20
+> Best regards
+> Uwe
+
+=2E..
+
+>   power: supply: adp5061: Convert to i2c's .probe_new()
+>   power: supply: bq2415x: Convert to i2c's .probe_new()
+>   power: supply: bq24190: Convert to i2c's .probe_new()
+>   power: supply: bq24257: Convert to i2c's .probe_new()
+>   power: supply: bq24735: Convert to i2c's .probe_new()
+>   power: supply: bq2515x: Convert to i2c's .probe_new()
+>   power: supply: bq256xx: Convert to i2c's .probe_new()
+>   power: supply: bq25890: Convert to i2c's .probe_new()
+>   power: supply: bq25980: Convert to i2c's .probe_new()
+>   power: supply: bq27xxx: Convert to i2c's .probe_new()
+>   power: supply: ds2782: Convert to i2c's .probe_new()
+>   power: supply: lp8727: Convert to i2c's .probe_new()
+>   power: supply: ltc2941: Convert to i2c's .probe_new()
+>   power: supply: ltc4162-l: Convert to i2c's .probe_new()
+>   power: supply: max14656: Convert to i2c's .probe_new()
+>   power: supply: max17040: Convert to i2c's .probe_new()
+>   power: supply: max17042_battery: Convert to i2c's .probe_new()
+>   power: supply: rt5033_battery: Convert to i2c's .probe_new()
+>   power: supply: rt9455: Convert to i2c's .probe_new()
+>   power: supply: sbs: Convert to i2c's .probe_new()
+>   power: supply: sbs-manager: Convert to i2c's .probe_new()
+>   power: supply: smb347: Convert to i2c's .probe_new()
+>   power: supply: ucs1002: Convert to i2c's .probe_new()
+>   power: supply: z2_battery: Convert to i2c's .probe_new()
+>   [...]
+
+Thanks, I queued patches 513-536 to the power-supply subsystem.
+
+-- Sebastian
+
+--wvm2z6appxwdd5fa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmN6g2YACgkQ2O7X88g7
++pocPA/+MG7rp45xJuAH0zlIFTM8ovBviXnLvra0hpvK+vMB8SVdh4K8vRCAoeoT
+lxML9oRVfhraHzo/3X6+7V87cw+QzEx3GZbYsIasGqic46MoFYkbA2i3Q8s8hS5y
+qpAcKn/efXJaBtdIxWQnOc0xU0YCiteiIik8Idb9MjHFupUspLxtIjCzTAmvKQ0k
+hJ5u5cqv3d/MP6VpsOCUYPDet9nS9ByPeg8Kr9Ux1a0WEldPYUO+dU0ObqRdhliZ
+agftaEtCvFYkfO9k8ubBL/x00gTn002xOB7gp+5s0V0D3wKfT5EPVYOoUZbeYMIu
+QOZaLHkNkBtV85kGm18h7IFdQZQY9ahcaGTYZplyz/YzHlK/AlfjA2umKS1+rs5m
+A+DDqnAkuWw9fLg0MJ4dLSPwOSPX3VfgmVS3By3Do2gotQkCqXsRdhrG1cIoE1aL
+AZYpSwLTn2rAYF59poL3rgSqx/MhgrLwmKQOH3fjwZ3R7PIAWFhYP1We2UtKdCEM
+Gjpr7QfAUiOuXDKi5OrBbWr4m2eX26A4uifwR62OyldwH8pUWAq3umgkw3rotQAA
+hdwOOPM+cHTyLbtP8kaP1XSR6u0ybuTbw8OQE/XPDNVceoMqR4XxUSYbs0Q0UzY6
+fwljGfbakuGbaNlb7s2LBsy0ESZuiz64Za/0gfJhI5rP1eNRR1U=
+=Dh+o
+-----END PGP SIGNATURE-----
+
+--wvm2z6appxwdd5fa--
