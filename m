@@ -2,101 +2,151 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3F663165D
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Nov 2022 21:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7614F63183B
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Nov 2022 02:44:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiKTUhq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 20 Nov 2022 15:37:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36464 "EHLO
+        id S229845AbiKUBoE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 20 Nov 2022 20:44:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiKTUhm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 20 Nov 2022 15:37:42 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D633E0F7
-        for <linux-i2c@vger.kernel.org>; Sun, 20 Nov 2022 12:37:41 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owr4H-0008BO-D6; Sun, 20 Nov 2022 21:37:33 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owr4D-005WVs-Jw; Sun, 20 Nov 2022 21:37:30 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owr4D-000Pot-Ox; Sun, 20 Nov 2022 21:37:29 +0100
-Date:   Sun, 20 Nov 2022 21:37:25 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Petr Machata <petrm@nvidia.com>, netdev@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Grant Likely <grant.likely@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 500/606] net/mlx5: Convert to i2c's .probe_new()
-Message-ID: <20221120203725.je2nozmdq3bp2spi@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-501-uwe@kleine-koenig.org>
- <Y3nSPYlgl89cserh@shredder>
+        with ESMTP id S229551AbiKUBoD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 20 Nov 2022 20:44:03 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DEF2FFEA;
+        Sun, 20 Nov 2022 17:44:02 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id c7so7655622iof.13;
+        Sun, 20 Nov 2022 17:44:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AFSUSUvql41qJvu1hJqhxXyZujdKOKcgnu8Xx4MuSSY=;
+        b=W+a/jKkCnPVewjZySzzR/OX2eDM5AwxfTIA9UvbYpm49r7I2wSxkHiMHQCv7xdA55C
+         BSoCATS65/5t6OuigpXiuDa5RStBOpuNlcQkJsL8RAIzPzSSDa7YPwsPJSqR9GUvnikD
+         9muxWIG9uhZio5ahF14QzZtNJsnTlRqPewwAzc5xt2BojuU5ncA8hDWu5lWKVT4FS/s+
+         o+dIYeuoQH94OtG85/aUzSroAWu8M3MZpErUUY8PNTFIW2tw4q10GOKN9GdCJO9p0ZuV
+         odXfNVmJlQV8bQcu7uyoxRs17Fr3YZe/XEwwy97FfKrRSUPvgT5Uk/uI5SEvXOfkSysy
+         8vpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AFSUSUvql41qJvu1hJqhxXyZujdKOKcgnu8Xx4MuSSY=;
+        b=ccxcUTZwUQdHfFsMZ2vMhQVG/Auwfx9t/QlWEeK+fkmpFYWw9Iexj9dQ+L8ZC+AV8k
+         9mClUDhtc9Epcj00gnpDvB9o0bcL8ZOO7kqYVHWWNGu0Jb4g5+R2McKa2Pfmdv+eyI50
+         saFn6RgDZdaw1q9A0VEzf4zpqNPFZ0Ini9g2fYgVxnA0YgaizTuMrEOX2y2wxNx2E3q2
+         Lb2b9rUq9DRCQBDE6o1KPlYelAklbthJdxUkeWguPRqvR7wjNg5G36aOBcH0xwCdjgH6
+         YeOF7cLdYNhspwuYSHhqruLtt68B6rUskVm4nqEoq4o6T+2F8i3crVQGtJ0VSjQB1M7e
+         oWGA==
+X-Gm-Message-State: ANoB5plmCygGnsU9wHiTojuEa0OUXc9Rl65vn/fRkAoSb4Ti9zrmX2DQ
+        O3CH8DMCJ8g5+19g9AMiw60=
+X-Google-Smtp-Source: AA0mqf4CAtsM+grA5DdNz1sLp5AyX//l7sdL8+uoMBfI2Sx3W5Moeyuz9LiSCIE4JF9D/sb6LNKEmw==
+X-Received: by 2002:a05:6638:60f:b0:373:6578:f8c4 with SMTP id g15-20020a056638060f00b003736578f8c4mr348972jar.242.1668995041760;
+        Sun, 20 Nov 2022 17:44:01 -0800 (PST)
+Received: from ?IPV6:2600:1700:2442:6db0:799e:a547:4c2f:ec44? ([2600:1700:2442:6db0:799e:a547:4c2f:ec44])
+        by smtp.gmail.com with ESMTPSA id m11-20020a0566022e8b00b0068869b84b02sm3866524iow.21.2022.11.20.17.44.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Nov 2022 17:44:01 -0800 (PST)
+Message-ID: <bc312919-26ca-7c15-4a67-6dabd59fe458@gmail.com>
+Date:   Sun, 20 Nov 2022 19:44:00 -0600
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2hrmtg7srutfafrx"
-Content-Disposition: inline
-In-Reply-To: <Y3nSPYlgl89cserh@shredder>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 509/606] of: unittest: Convert to i2c's .probe_new()
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-510-uwe@kleine-koenig.org>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <20221118224540.619276-510-uwe@kleine-koenig.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 11/18/22 16:44, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
---2hrmtg7srutfafrx
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Add a prefix to the existing patch comment:
 
-On Sun, Nov 20, 2022 at 09:07:41AM +0200, Ido Schimmel wrote:
-> In subject: s/mlx5/mlxsw/
+In struct i2c_driver, field new_probe replaces the soon to be deprecated
+field probe.  Update unittest for this change.
 
-Hmm, I wonder how I did that, given I didn't determine the prefix by
-hand. *shrug*
+> 
+> The probe function doesn't make use of the i2c_device_id * parameter so it
+> can be trivially converted.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
 
-Thanks, I fixed that in my tree and added your Reviewed-by tag.
+Rob,
 
-Best regards
-Uwe
+In patch 000/606 Uwe asks maintainers to pick up the individual patches
+in their tree, so please pick up 509/606.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+>  drivers/of/unittest.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+> index 1d810c0e18f8..bc0f1e50a4be 100644
+> --- a/drivers/of/unittest.c
+> +++ b/drivers/of/unittest.c
+> @@ -2508,8 +2508,7 @@ static struct platform_driver unittest_i2c_bus_driver = {
+>  	},
+>  };
+>  
+> -static int unittest_i2c_dev_probe(struct i2c_client *client,
+> -		const struct i2c_device_id *id)
+> +static int unittest_i2c_dev_probe(struct i2c_client *client)
+>  {
+>  	struct device *dev = &client->dev;
+>  	struct device_node *np = client->dev.of_node;
+> @@ -2541,7 +2540,7 @@ static struct i2c_driver unittest_i2c_dev_driver = {
+>  	.driver = {
+>  		.name = "unittest-i2c-dev",
+>  	},
+> -	.probe = unittest_i2c_dev_probe,
+> +	.probe_new = unittest_i2c_dev_probe,
+>  	.remove = unittest_i2c_dev_remove,
+>  	.id_table = unittest_i2c_dev_id,
+>  };
+> @@ -2553,8 +2552,7 @@ static int unittest_i2c_mux_select_chan(struct i2c_mux_core *muxc, u32 chan)
+>  	return 0;
+>  }
+>  
+> -static int unittest_i2c_mux_probe(struct i2c_client *client,
+> -		const struct i2c_device_id *id)
+> +static int unittest_i2c_mux_probe(struct i2c_client *client)
+>  {
+>  	int i, nchans;
+>  	struct device *dev = &client->dev;
+> @@ -2619,7 +2617,7 @@ static struct i2c_driver unittest_i2c_mux_driver = {
+>  	.driver = {
+>  		.name = "unittest-i2c-mux",
+>  	},
+> -	.probe = unittest_i2c_mux_probe,
+> +	.probe_new = unittest_i2c_mux_probe,
+>  	.remove = unittest_i2c_mux_remove,
+>  	.id_table = unittest_i2c_mux_id,
+>  };
 
---2hrmtg7srutfafrx
-Content-Type: application/pgp-signature; name="signature.asc"
+Reviewed by visual inspection.  Did not do my normal build, test, check for
+warnings.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN6kAMACgkQwfwUeK3K
-7AnLDQf/QDgRkygwFrlHH43sRHoAfatIKwkP6WXVxL8ubCCgyO+REzW/pj9yIYQl
-rqjmUANVRXJFbQbi/g1mf8LknpeXGbRtnpnxFGMP+jJVEU/KcpTMSIO/cPncEuDJ
-Higf0lSvUEK5q8ufL+j1cJXUdw9Thil2QLrZJWyt2n3yHCpr1ZFOWT+aqEKhW3qj
-ejsIPiXeeXB3SYaIO63cPS0eZbGK4f/pNX3NTqYosicGDtei/PgTl9g4JakaQpIk
-nLW8VgpBjml8d2mRmfmAKuiAwDsx9Y06xVaXF6egeHaKrC1toB7Xwi/mrzRrwpyS
-ZWhgoOMOwDMp3XoGjFju/T1MPqYtjQ==
-=ppU8
------END PGP SIGNATURE-----
-
---2hrmtg7srutfafrx--
+Reviewed-by: Frank Rowand <frowand.list@gmail.com>
