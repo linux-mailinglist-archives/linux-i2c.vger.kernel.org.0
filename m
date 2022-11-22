@@ -2,70 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1AF6347EA
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Nov 2022 21:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FDB76348ED
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Nov 2022 22:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234772AbiKVURt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Nov 2022 15:17:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57566 "EHLO
+        id S234441AbiKVVJJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Nov 2022 16:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234764AbiKVURs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Nov 2022 15:17:48 -0500
+        with ESMTP id S232626AbiKVVJI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Nov 2022 16:09:08 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3508B1DC
-        for <linux-i2c@vger.kernel.org>; Tue, 22 Nov 2022 12:17:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408635CD3F
+        for <linux-i2c@vger.kernel.org>; Tue, 22 Nov 2022 13:09:07 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1oxZhX-0006Qx-Bo; Tue, 22 Nov 2022 21:17:03 +0100
+        id 1oxaVh-0004KZ-0K; Tue, 22 Nov 2022 22:08:53 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1oxZhR-005v1B-UM; Tue, 22 Nov 2022 21:16:58 +0100
+        id 1oxaVe-005vUt-SJ; Tue, 22 Nov 2022 22:08:51 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1oxZhS-000s7U-3N; Tue, 22 Nov 2022 21:16:58 +0100
-Date:   Tue, 22 Nov 2022 21:16:54 +0100
+        id 1oxaVf-000sEv-38; Tue, 22 Nov 2022 22:08:51 +0100
+Date:   Tue, 22 Nov 2022 22:08:50 +0100
 From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        alsa-devel@alsa-project.org, linux-staging@lists.linux.dev,
-        linux-pwm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
-        Grant Likely <grant.likely@linaro.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-actions@lists.infradead.org, linux-gpio@vger.kernel.org,
+Cc:     Crt Mori <cmo@melexis.com>, Lars-Peter Clausen <lars@metafoo.de>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>,
         Angel Iglesias <ang.iglesiasg@gmail.com>,
-        gregkh@linuxfoundation.org, linux-rpi-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Purism Kernel Team <kernel@puri.sm>,
-        patches@opensource.cirrus.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>, linux-crypto@vger.kernel.org,
-        kernel@pengutronix.de, netdev@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-Message-ID: <20221122201654.5rdaisqho33buibj@pengutronix.de>
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Grant Likely <grant.likely@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH 186/606] iio: temperature: mlx90632: Convert to i2c's
+ .probe_new()
+Message-ID: <20221122210850.kjtildbt5wbpcjes@pengutronix.de>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221122185818.3740200d@jic23-huawei>
+ <20221118224540.619276-187-uwe@kleine-koenig.org>
+ <CAKv63uvVsLhbt9y0fWxPWp005rnWzCn6Vm0UmOnW08B87fkCzw@mail.gmail.com>
+ <20221119100250.iw757ovgwjbwr2ho@pengutronix.de>
+ <CAKv63uti8o2i-SFsJ7iK+R0N1go1tzVKpWZHbaRD3Wta2mXuZQ@mail.gmail.com>
+ <20221122183557.07a9e095@jic23-huawei>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t3mjk627u66tfbb3"
+        protocol="application/pgp-signature"; boundary="5nqu22jwzukrrpph"
 Content-Disposition: inline
-In-Reply-To: <20221122185818.3740200d@jic23-huawei>
+In-Reply-To: <20221122183557.07a9e095@jic23-huawei>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -80,46 +65,101 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---t3mjk627u66tfbb3
+--5nqu22jwzukrrpph
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 22, 2022 at 06:58:18PM +0000, Jonathan Cameron wrote:
+On Tue, Nov 22, 2022 at 06:35:57PM +0000, Jonathan Cameron wrote:
+> On Sun, 20 Nov 2022 10:49:20 +0100
+> Crt Mori <cmo@melexis.com> wrote:
 >=20
-> Queued all of the below:
-> with one tweaked as per your suggestion and the highlighted one dropped o=
-n basis
-> I was already carrying the equivalent - as you pointed out.
+> > Ok. Acked-by: Crt Mori <cmo@melexis.com>
+> > (resending since previous mail was not delivered because it was not pla=
+intext)
+> >=20
+> > On Sat, 19 Nov 2022 at 11:02, Uwe Kleine-K=F6nig
+> > <u.kleine-koenig@pengutronix.de> wrote:
+> > >
+> > > Hello,
+> > >
+> > > On Sat, Nov 19, 2022 at 12:04:41AM +0100, Crt Mori wrote: =20
+> > > > On Fri, 18 Nov 2022 at 23:46, Uwe Kleine-K=F6nig <uwe@kleine-koenig=
+=2Eorg> wrote: =20
+> > > > >
+> > > > > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > > > >
+> > > > > .probe_new() doesn't get the i2c_device_id * parameter, so determ=
+ine
+> > > > > that explicitly in the probe function.
+> > > > >
+> > > > > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > > > > ---
+> > > > >  drivers/iio/temperature/mlx90632.c | 12 ++++++++++--
+> > > > >  1 file changed, 10 insertions(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/tem=
+perature/mlx90632.c
+> > > > > index f1f5ebc145b1..19e30cfca8a7 100644
+> > > > > --- a/drivers/iio/temperature/mlx90632.c
+> > > > > +++ b/drivers/iio/temperature/mlx90632.c
+> > > > > @@ -1168,9 +1168,9 @@ static int mlx90632_enable_regulator(struct=
+ mlx90632_data *data)
+> > > > >         return ret;
+> > > > >  }
+> > > > >
+> > > > > -static int mlx90632_probe(struct i2c_client *client,
+> > > > > -                         const struct i2c_device_id *id)
+> > > > > +static int mlx90632_probe(struct i2c_client *client)
+> > > > >  {
+> > > > > +       const struct i2c_device_id *id =3D i2c_client_get_device_=
+id(client);
+> > > > >         struct mlx90632_data *mlx90632;
+> > > > >         struct iio_dev *indio_dev;
+> > > > >         struct regmap *regmap;
+> > > > > @@ -1337,7 +1337,15 @@ static struct i2c_driver mlx90632_driver =
+=3D {
+> > > > >                 .of_match_table =3D mlx90632_of_match,
+> > > > >                 .pm     =3D pm_ptr(&mlx90632_pm_ops),
+> > > > >         },
+> > > > > +<<<<<<< ours =20
+> > > >
+> > > > Maybe some of the merge artifacts left (also below)? =20
+> > >
+> > > *groan*, ok, thanks for pointing out the obvious. Fixed in my tree. F=
+tr,
+> > > the fixup is:
+> > >
+> > > diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/tempera=
+ture/mlx90632.c
+> > > index 19e30cfca8a7..753b7a4ccfdd 100644
+> > > --- a/drivers/iio/temperature/mlx90632.c
+> > > +++ b/drivers/iio/temperature/mlx90632.c
+> > > @@ -1337,15 +1337,7 @@ static struct i2c_driver mlx90632_driver =3D {
+> > >                 .of_match_table =3D mlx90632_of_match,
+> > >                 .pm     =3D pm_ptr(&mlx90632_pm_ops),
+> > >         },
+> > > -<<<<<<< ours
+> > > -       .probe =3D mlx90632_probe,
+> > > -||||||| base
+> > > -       .probe =3D mlx90632_probe,
+> > > -       .remove =3D mlx90632_remove,
+> > > -=3D=3D=3D=3D=3D=3D=3D
+> > >         .probe_new =3D mlx90632_probe,
+> > > -       .remove =3D mlx90632_remove, =20
+> > > ->>>>>>> theirs =20
+> > >         .id_table =3D mlx90632_id,
+> > >  };
+> > >  module_i2c_driver(mlx90632_driver);
+> > >
+> > > When (and if) I'll resend the series, the fixed version will be
+> > > included. (Unless someone picks up the broken patch with the above
+> > > fixup of course :-)
+> Who would be crazy enough to do that?
 >=20
-> I was already carrying the required dependency.
->=20
-> Includes the IIO ones in staging.
->=20
-> Thanks,
->=20
-> Jonathan
->=20
-> p.s. I perhaps foolishly did this in a highly manual way so as to
-> also pick up Andy's RB.  So might have dropped one...
+> (fixed up whilst applying)
 
-You could have done:
-
-	H=3D$(git rev-parse @)
-	b4 am -P 49-190 20221118224540.619276-1-uwe@kleine-koenig.org
-	git am ...
-	git filter-branch -f --msg-filter "grep -v 'Signed-off-by: Jonathan'; echo=
- 'Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>'; echo '=
-Signed-off-by: Jonathan Cameron <jic23@kernel.org>'" $H..
-
-(untested, but you get the idea).
-
-> Definitely would have been better as one patch per subsystem with
-> a cover letter suitable for replies like Andy's to be picked up
-> by b4.
-
-Next time I will go for one series per subsystem which I like better
-than one patch per subsystem.
+Thanks, people seem really eager to prevent me resending the series :-)
 
 Best regards
 Uwe
@@ -128,19 +168,19 @@ Uwe
 Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
 Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---t3mjk627u66tfbb3
+--5nqu22jwzukrrpph
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN9LjMACgkQwfwUeK3K
-7An96wf/RMtsCSXVJy8BDrXiXMhey9OEm8p08ulRn0lKYlG54KR8nU/s77uuMjGS
-99aUfUU56Abxk02DuBv6N5Bax8nlFyIlUgkfaYPP9iN1TkF5XiucQ0Se4/haYL4A
-q11UqWIcKBS+5BL3K6Bl1Cqv4dPYpRvs99X3jlU6JmhFqJPPhPgAu0p74arSvLie
-kN6wgOGVdCjZTRD+Z7FxfIQPZqvVo7anPAynyk7XfgTXMSAK80JPR2UeMfvQ7yr2
-W28htsacTaJSnPOb1VIrhN8OytpxASYa120EJ8augNmBXC0IzvjosWI0LZnNljAU
-izPd/d6lzDCP0Mz/LU9QCBYUR1jxuQ==
-=KmMu
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN9OmAACgkQwfwUeK3K
+7AkMOwgAmm2WQ+U/T+iTdGY6eO7gSW57L1NjBEcqx0ttNn7Ejr4W9QDI9thb2M2B
+2/veKoZZDv1RmWEOluogOdc2SD1RDcibUzM6l1l7Tq5GpY7BQwMb/FCzQ9WNnR+R
+FVAXqJINljxau605PX1XLeDAFvzWwIbyGcdnApgLrvzqdv11PBUFqc0DE77So5i4
+/KJkuMpZFlK7ugNRi7Rqm8GnHs/EzWQhXy/D3UgDpmZlrc9fCa8TeSWkeThBjbmo
+g+kX+IiCFDRTUIeTa1Bs5QkIDBDg1bcAraq2ogw9pBoVp1G1mmCvC0MuFzaTgNCM
+xY96FY8XwDGRWZr4VVpBEHgVp4kOww==
+=36po
 -----END PGP SIGNATURE-----
 
---t3mjk627u66tfbb3--
+--5nqu22jwzukrrpph--
