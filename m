@@ -2,105 +2,122 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA327635116
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Nov 2022 08:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B70D263582A
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Nov 2022 10:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235505AbiKWH3X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Nov 2022 02:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
+        id S238249AbiKWJv1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Nov 2022 04:51:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235343AbiKWH3W (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Nov 2022 02:29:22 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30476532E3;
-        Tue, 22 Nov 2022 23:29:19 -0800 (PST)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NHCMQ0XB8zqSVt;
-        Wed, 23 Nov 2022 15:25:22 +0800 (CST)
-Received: from huawei.com (10.67.175.21) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 23 Nov
- 2022 15:29:16 +0800
-From:   Li Zetao <lizetao1@huawei.com>
-To:     <wsa@kernel.org>, <gregkh@suse.de>, <khali@linux-fr.org>
-CC:     <lizetao1@huawei.com>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] i2c: core: Fix possible memleak in i2c_register_adapter()
-Date:   Wed, 23 Nov 2022 16:16:43 +0800
-Message-ID: <20221123081643.713184-1-lizetao1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S235796AbiKWJuq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Nov 2022 04:50:46 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AE315719
+        for <linux-i2c@vger.kernel.org>; Wed, 23 Nov 2022 01:47:58 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id v128so2385733vsb.13
+        for <linux-i2c@vger.kernel.org>; Wed, 23 Nov 2022 01:47:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5JJaR5hJvuf5++j5Vl6eoqqI4BspUUmDXkurZukMxZs=;
+        b=xr3ds3O1aP0Cly4A/ysEuxHmVnLvc4eu3PKCZhMWRC/dATnKt6om+vu7ICyQzJJXSI
+         OTsl5/BZ34hGUSpmBWGM/P7E6khc954CTJm3tf176irhtTg04zwszZnTfB+iRCK8kef2
+         9arPJeHjDlVs9gZSBvERiRp/84pe7iyQAFgOoi4JMsYzh05AZ39TwfUSOyjkqSOAGH61
+         EJYN5SG+hFvW0FiBWryiqDHaE+umKTMdQea4Ozb1wKFZCnJ75SOBuQEvjA0eTY13hITr
+         p7Gg3tcgdDk5MkdKmiBCsI1MCiDPMAziWHOlPa6mRMBO6qdkYPuyKMY8T5zrZNmuSMg5
+         Krgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5JJaR5hJvuf5++j5Vl6eoqqI4BspUUmDXkurZukMxZs=;
+        b=vjrCl1iaETqMhaLNR573h1e3IEd0xZHjDgh9cZg7HjJ38yncwILJbzFKmeX6RwhBPx
+         yAPRVitNExpYtVMmGYkq+MthXl4JwnFEkectmkm9g1YXDI9+271GzKkqpZid0l3mAa2l
+         fCkAy5Eei9Yvqdi7tvGzQkfDCdg6elalBwfQDgq3JNbgeo4bHN4nQAN/N8FQHJBLb8lG
+         9XH5DfUZKKPr8THHJ/Mmqw3npnr2iATozGSTYIDZscleKEvZZf0DoVm68oshYdgx7MY1
+         wIxXvYVRFMGvL9RTyollCdx4baYdoTuOUB41GKxMMikGeP8tVKQwL7MmiIHvPclXvj4C
+         sc8Q==
+X-Gm-Message-State: ANoB5pmBYLz+T2jpiEZzqtY5VVt/ojRizWVvs7KDAAEEkr1ynrwMvZh4
+        3D4wS81cbguQMCZfJ1B/yy3YS5nP/AUwp7fsONhWXA==
+X-Google-Smtp-Source: AA0mqf5015brl+4dkPOsvMU6fDCs5ePpm/2PWrYsJ3/czU+9mnWwri4bgOsPFCCNqPICVl/iwJDAGCKE7acVHAduazA=
+X-Received: by 2002:a05:6102:829:b0:3b0:6449:baba with SMTP id
+ k9-20020a056102082900b003b06449babamr3543541vsb.61.1669196877951; Wed, 23 Nov
+ 2022 01:47:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.21]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221118224540.619276-1-uwe@kleine-koenig.org> <20221118224540.619276-12-uwe@kleine-koenig.org>
+In-Reply-To: <20221118224540.619276-12-uwe@kleine-koenig.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 23 Nov 2022 10:47:47 +0100
+Message-ID: <CAMRc=Mfjcs-BBFhr8O1O956f4jdvAzY9ofZs1fme8+Ki=T60JA@mail.gmail.com>
+Subject: Re: [PATCH 011/606] gpio: max732x: Convert to i2c's .probe_new()
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-I got memory leak as follows when doing fault injection test:
+On Fri, Nov 18, 2022 at 11:46 PM Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.o=
+rg> wrote:
+>
+> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+>
+> .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> that explicitly in the probe function.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/gpio/gpio-max732x.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-max732x.c b/drivers/gpio/gpio-max732x.c
+> index da6972117030..68e982cdee73 100644
+> --- a/drivers/gpio/gpio-max732x.c
+> +++ b/drivers/gpio/gpio-max732x.c
+> @@ -608,9 +608,9 @@ static struct max732x_platform_data *of_gpio_max732x(=
+struct device *dev)
+>         return pdata;
+>  }
+>
+> -static int max732x_probe(struct i2c_client *client,
+> -                                  const struct i2c_device_id *id)
+> +static int max732x_probe(struct i2c_client *client)
+>  {
+> +       const struct i2c_device_id *id =3D i2c_client_get_device_id(clien=
+t);
+>         struct max732x_platform_data *pdata;
+>         struct device_node *node;
+>         struct max732x_chip *chip;
+> @@ -707,7 +707,7 @@ static struct i2c_driver max732x_driver =3D {
+>                 .name           =3D "max732x",
+>                 .of_match_table =3D of_match_ptr(max732x_of_table),
+>         },
+> -       .probe          =3D max732x_probe,
+> +       .probe_new      =3D max732x_probe,
+>         .id_table       =3D max732x_id,
+>  };
+>
+> --
+> 2.38.1
+>
 
-unreferenced object 0xffff88818be6dcb8 (size 8):
-  comm "modprobe", pid 1022129, jiffies 4363911608 (age 43.838s)
-    hex dump (first 8 bytes):
-      69 32 63 2d 30 00 6b a5                          i2c-0.k.
-    backtrace:
-      [<ffffffff812f588f>] __kmem_cache_alloc_node+0x2cf/0x4b0
-      [<ffffffff81283c43>] __kmalloc_node_track_caller+0x53/0x140
-      [<ffffffff81604b0a>] kvasprintf+0x6a/0xd0
-      [<ffffffff81604be7>] kvasprintf_const+0x77/0xa0
-      [<ffffffff81a00173>] kobject_set_name_vargs+0x23/0x90
-      [<ffffffff817bf743>] dev_set_name+0x53/0x70
-      [<ffffffffa023ebb2>] i2c_register_adapter+0x112/0x6c0 [i2c_core]
-      [<ffffffffa023f268>] i2c_add_adapter+0x78/0xc0 [i2c_core]
-      [<ffffffffa0300182>] piix4_add_adapter+0x132/0x210 [i2c_piix4]
-      [<ffffffffa0300535>] piix4_probe+0x2d5/0x5f4 [i2c_piix4]
-      [<ffffffff816c5da2>] pci_device_probe+0xb2/0x180
-      [<ffffffff817c769f>] really_probe+0xff/0x380
-      [<ffffffff817c79aa>] __driver_probe_device+0x8a/0x190
-      [<ffffffff817c7b33>] driver_probe_device+0x23/0xb0
-      [<ffffffff817c80a3>] __driver_attach+0xd3/0x1b0
-      [<ffffffff817c4ede>] bus_for_each_dev+0x7e/0xd0
+Applied, thanks!
 
-The root cause was traced to an error handing path in
-i2c_register_adapter() when device_register() fails. After
-calling dev_set_name() which called by i2c_register_adapter(),
-the put_device() should be used to give up the device reference
-in error handling path in order to free "kobj->name" alloced
-in dev_set_name().
-
-Fix it by calling put_device() when device_register() fails in
-i2c_register_adapter(). In addition, when i2c_adapter device
-is released, i2c_adapter_dev_release() is called, in which
-"dev_released" must be initialized, otherwise a kernel bug
-will be triggered.
-
-Fixes: b119c6c952a0 ("i2c: __must_check fixes (core drivers)")
-Signed-off-by: Li Zetao <lizetao1@huawei.com>
----
- drivers/i2c/i2c-core-base.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 5dcea9f1deab..ef85e58533e2 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -1472,6 +1472,9 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
- 	res = device_register(&adap->dev);
- 	if (res) {
- 		pr_err("adapter '%s': can't register device (%d)\n", adap->name, res);
-+		init_completion(&adap->dev_released);
-+		put_device(&adap->dev);
-+		wait_for_completion(&adap->dev_released);
- 		goto out_list;
- 	}
- 
--- 
-2.25.1
-
+Bartosz
