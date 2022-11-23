@@ -2,94 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A9263697E
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Nov 2022 20:06:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 306BE636A86
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Nov 2022 21:09:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239591AbiKWTGZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Nov 2022 14:06:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
+        id S237488AbiKWUIt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Nov 2022 15:08:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236590AbiKWTGY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Nov 2022 14:06:24 -0500
+        with ESMTP id S235952AbiKWUIr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Nov 2022 15:08:47 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC46F922D2;
-        Wed, 23 Nov 2022 11:06:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB1A7C034;
+        Wed, 23 Nov 2022 12:08:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 586E161EBE;
-        Wed, 23 Nov 2022 19:06:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7968C433D6;
-        Wed, 23 Nov 2022 19:06:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669230382;
-        bh=imibZHjJL9cpBpAGiGFcUllw5xFRNIsDuHu6Y+fwag4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V2GZdWHPvr+u9NV42kW3apisS1jk4Cp6h19MZ6qfaWIUGIVJV5gV2ha39zpYgwqP7
-         WIt60wd9b8FvKniDUGYZZUiLCvZQFxPf+YdmrcSFnI46/b/EWX33zlFDz2TQxA125f
-         2aOS9p5Y/Iiz28acyMaujccSu8U/Ol2yQw6Symkw=
-Date:   Wed, 23 Nov 2022 20:06:20 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EF1361EDF;
+        Wed, 23 Nov 2022 20:08:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C98C433C1;
+        Wed, 23 Nov 2022 20:08:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669234123;
+        bh=pMYFCDEnrTaheqJWKdnXehbOr0/Y6jGvgtCVjILFdVQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WDxLTTknA0Pw9PHTOTsHBbF7v2f0vAvXcOgRK7Y5+dIkTut7mYHgf8Jv8fJn7Se3F
+         bIlrC0q7zp9ydlhEmMapJvWNHY7b6DPLiJbh2Rn+vxpXSYwPtehQpLUh2BWDx7+QVf
+         YC4r3y4dooOxRj2Vu/zEHBxiDZ9QrC6s4j7owIMXyL0Wh58nt8+u3WGVAmlY5XY/bt
+         YiHMvHbFSPYFejDyCSzjD39Q18YdcPT3hRtMVboxroiuazO31AfVHqITSkJSEQbotZ
+         nfwCDDpOpZamPCeePaMleNStqZQKoEOh8r/SdX0ptwK6f/UTuSA23GzvmHR/Rbdvt0
+         ZEsGZYZ7PtCQw==
+Date:   Wed, 23 Nov 2022 20:21:15 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
- const *
-Message-ID: <Y35vLAWWfezPvGSm@kroah.com>
-References: <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
- <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
- <Y34zyzdbRUdyOSkA@casper.infradead.org>
- <Y34+V2bCDdqujBDk@kroah.com>
- <Y35JfNJDppRp5bLX@ziepe.ca>
- <Y35R+/eQJYI7VaDS@kroah.com>
- <Y35YlI93UBuTfgYy@ziepe.ca>
- <Y35dMIaNYSE0Cykd@casper.infradead.org>
- <Y35iKfYf3ThdVvaR@kroah.com>
- <Y35lt+0jXrOKynL5@ziepe.ca>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Michael Srba <Michael.Srba@seznam.cz>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Uwe =?UTF-8?B?S2xlaW5l?= =?UTF-8?B?LUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 109/606] iio: imu: inv_mpu6050: Convert to i2c's
+ .probe_new()
+Message-ID: <20221123202115.43162a30@jic23-huawei>
+In-Reply-To: <20221118224540.619276-110-uwe@kleine-koenig.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+        <20221118224540.619276-110-uwe@kleine-koenig.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y35lt+0jXrOKynL5@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -99,51 +66,50 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 02:25:59PM -0400, Jason Gunthorpe wrote:
-> On Wed, Nov 23, 2022 at 07:10:49PM +0100, Greg Kroah-Hartman wrote:
-> > On Wed, Nov 23, 2022 at 05:49:36PM +0000, Matthew Wilcox wrote:
-> > > On Wed, Nov 23, 2022 at 01:29:56PM -0400, Jason Gunthorpe wrote:
-> > > > #define generic_container_of(in_type, in, out_type, out_member) \
-> > > > 	_Generic(in,                                        \
-> > > >                   const in_type *: ((const out_type *)container_of(in, out_type, out_member)),   \
-> > > >                   in_type *: ((out_type *)container_of(in, out_type, out_member)) \
-> > > > 		  )
-> > > 
-> > > There's a neat trick I found in seqlock.h:
-> > > 
-> > > #define generic_container_of(in_t, in, out_t, m)			\
-> > > 	_Generic(*(in),							\
-> > > 		const in_t: ((const out_t *)container_of(in, out_t, m)), \
-> > > 		in_t: ((out_t *)container_of(in, out_type, m))	\
-> > > 	)
-> > > 
-> > > and now it fits in 80 columns ;-)
-> > 
-> > Nice trick!  Dropping the inline functions is a bit different, let me
-> > see if that still gives a sane error if we pass an incorrect type or
-> > mess with the const * the wrong way.  I'll run some tests tomorrow
-> > afternoon...
-> 
-> The errors in some cases are very verbose, but it is somewhat
-> understandable - the worst is when _Generic fails to match anything,
-> but also at least clang partially expanded container_of and it throws
-> other assertions too.
-> 
-> I also wonder if this could just be rolled into the normal
-> container_of.
+On Fri, 18 Nov 2022 23:37:23 +0100
+Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.org> wrote:
 
-I think we might be able to now, my previous attempts with inline
-functions prevented that.  I'll beat on that tomorrow...
+> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> that explicitly in the probe function.
+>=20
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c b/drivers/iio/imu/=
+inv_mpu6050/inv_mpu_i2c.c
+> index 7a8d60a5afa9..70eaa408e388 100644
+> --- a/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c
+> +++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c
+> @@ -95,9 +95,9 @@ static int inv_mpu_i2c_aux_setup(struct iio_dev *indio_=
+dev)
+>   *
+Kernel-doc (no idea why it needs it for a probe function) has
+id documented.  I've fixed up dropping that.
 
-> in_type would have to be derived like:
-> 
->   in_type = typeof((out_type *)NULL)->out_member)
-> 
-> But I don't know if you can use typeof in a generic type matching expression..
+Jonathan
 
-Maybe that is what threw me before, I can't remember.  I do know we
-tried a number of different attempts, can't recall the failed ones...
+>   *  Returns 0 on success, a negative error code otherwise.
+>   */
+> -static int inv_mpu_probe(struct i2c_client *client,
+> -			 const struct i2c_device_id *id)
+> +static int inv_mpu_probe(struct i2c_client *client)
+>  {
+> +	const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
+>  	const void *match;
+>  	struct inv_mpu6050_state *st;
+>  	int result;
+> @@ -260,7 +260,7 @@ static const struct acpi_device_id inv_acpi_match[] =
+=3D {
+>  MODULE_DEVICE_TABLE(acpi, inv_acpi_match);
+> =20
+>  static struct i2c_driver inv_mpu_driver =3D {
+> -	.probe		=3D	inv_mpu_probe,
+> +	.probe_new	=3D	inv_mpu_probe,
+>  	.remove		=3D	inv_mpu_remove,
+>  	.id_table	=3D	inv_mpu_id,
+>  	.driver =3D {
 
-thanks,
-
-greg k-h
