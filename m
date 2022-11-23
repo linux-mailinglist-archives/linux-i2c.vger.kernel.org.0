@@ -2,59 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA756368A9
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Nov 2022 19:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A9263697E
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Nov 2022 20:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239527AbiKWS0H (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Nov 2022 13:26:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54722 "EHLO
+        id S239591AbiKWTGZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Nov 2022 14:06:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237244AbiKWS0G (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Nov 2022 13:26:06 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A2A663FD
-        for <linux-i2c@vger.kernel.org>; Wed, 23 Nov 2022 10:26:01 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id h24so11770549qta.9
-        for <linux-i2c@vger.kernel.org>; Wed, 23 Nov 2022 10:26:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wor3YG1VA6P7o8c/O7L7eJMI/pZ9HPWWwXQft3hmCP0=;
-        b=cedo7ZWSmsuH0XJ4ubpV07F12j6QbWjVQ5/8pLuMpcToghtBSuk56S6MXMX6Qm7WjS
-         1NChO+moKmrDNMneamIggSvWWzwr/T//kN/Kwcj6tkr42ZlPhD/UrODWK93fqzNGGGwJ
-         iaes3XW9eYna/Bw5lL+n4z8tFP5LtgS2cmv98rZ7AlPx3XDSdaiaMvzcA8+djvnqI1Jm
-         kByuaQkEy2IUN0jEoJWE9aJxjegXkz/nFnBqeS7bAW8o6PzzHwTSega1vNzAX6eGe++Z
-         VrL1e2yxkd6Af/0OPW4nuezYyEJvxr1zGiOqJwebNXGUK6ij0o7CaXNXzEmp7wpIRmex
-         6uNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wor3YG1VA6P7o8c/O7L7eJMI/pZ9HPWWwXQft3hmCP0=;
-        b=kSKx6xoeHiGxBVk25O+zqQG3QsNZrHTiB64hQOZHUIW//QqgU/DngC8Bj2CUOlY740
-         3BRDzKiqdDzZqBm1Uz1COIKp6y97D7hTQPCjrHBW5qTHRbsbb0VQdU2nFCWKaDVuXSAQ
-         ylP1B4iVXd7YmIe+BflcfDk8OSMW1ODRvw/a2c5edGods9J6UM7ZaycDDHK1lptRFqOl
-         QZr+J+UnFNXKDFSgVGlIXgBdAa0Yh9jc0cWvUHjy3pabtEek+31HqjSzbYBBVel1tg2p
-         bq6FM5YXgyeXSeL0SPvfft4XWhAfVd0DxZR3UZ6nPRT3gmYpo9Me19Xoph5SHBHcssVu
-         GOJg==
-X-Gm-Message-State: ANoB5pknUxQzvsuxsxzOCwQeboHnuARVhiNfIV5+gybe/YiKNYHx4fPQ
-        k0IURTAF869H1vQep6+kR2YpBw==
-X-Google-Smtp-Source: AA0mqf7b8dECsNl10eMwxdSE/ntYRY0ZHq3jcx6smQ+WjEjXUXHAE2sWPKfXnqS1wuH6GWMgna/H+Q==
-X-Received: by 2002:a05:622a:1f97:b0:3a6:39c4:dc6 with SMTP id cb23-20020a05622a1f9700b003a639c40dc6mr19492448qtb.515.1669227960618;
-        Wed, 23 Nov 2022 10:26:00 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
-        by smtp.gmail.com with ESMTPSA id e9-20020ac81309000000b003a56796a764sm10034417qtj.25.2022.11.23.10.25.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 10:25:59 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1oxuRb-00AgEQ-7R;
-        Wed, 23 Nov 2022 14:25:59 -0400
-Date:   Wed, 23 Nov 2022 14:25:59 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        with ESMTP id S236590AbiKWTGY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Nov 2022 14:06:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC46F922D2;
+        Wed, 23 Nov 2022 11:06:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 586E161EBE;
+        Wed, 23 Nov 2022 19:06:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7968C433D6;
+        Wed, 23 Nov 2022 19:06:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669230382;
+        bh=imibZHjJL9cpBpAGiGFcUllw5xFRNIsDuHu6Y+fwag4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V2GZdWHPvr+u9NV42kW3apisS1jk4Cp6h19MZ6qfaWIUGIVJV5gV2ha39zpYgwqP7
+         WIt60wd9b8FvKniDUGYZZUiLCvZQFxPf+YdmrcSFnI46/b/EWX33zlFDz2TQxA125f
+         2aOS9p5Y/Iiz28acyMaujccSu8U/Ol2yQw6Symkw=
+Date:   Wed, 23 Nov 2022 20:06:20 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
 Cc:     Matthew Wilcox <willy@infradead.org>,
         Maximilian Luz <luzmaximilian@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -99,9 +75,8 @@ Cc:     Matthew Wilcox <willy@infradead.org>,
         platform-driver-x86@vger.kernel.org
 Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
  const *
-Message-ID: <Y35lt+0jXrOKynL5@ziepe.ca>
-References: <711d5275-7e80-c00d-0cdc-0f3d52175361@gmail.com>
- <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
+Message-ID: <Y35vLAWWfezPvGSm@kroah.com>
+References: <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
  <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
  <Y34zyzdbRUdyOSkA@casper.infradead.org>
  <Y34+V2bCDdqujBDk@kroah.com>
@@ -110,56 +85,65 @@ References: <711d5275-7e80-c00d-0cdc-0f3d52175361@gmail.com>
  <Y35YlI93UBuTfgYy@ziepe.ca>
  <Y35dMIaNYSE0Cykd@casper.infradead.org>
  <Y35iKfYf3ThdVvaR@kroah.com>
+ <Y35lt+0jXrOKynL5@ziepe.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y35iKfYf3ThdVvaR@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y35lt+0jXrOKynL5@ziepe.ca>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 07:10:49PM +0100, Greg Kroah-Hartman wrote:
-> On Wed, Nov 23, 2022 at 05:49:36PM +0000, Matthew Wilcox wrote:
-> > On Wed, Nov 23, 2022 at 01:29:56PM -0400, Jason Gunthorpe wrote:
-> > > #define generic_container_of(in_type, in, out_type, out_member) \
-> > > 	_Generic(in,                                        \
-> > >                   const in_type *: ((const out_type *)container_of(in, out_type, out_member)),   \
-> > >                   in_type *: ((out_type *)container_of(in, out_type, out_member)) \
-> > > 		  )
+On Wed, Nov 23, 2022 at 02:25:59PM -0400, Jason Gunthorpe wrote:
+> On Wed, Nov 23, 2022 at 07:10:49PM +0100, Greg Kroah-Hartman wrote:
+> > On Wed, Nov 23, 2022 at 05:49:36PM +0000, Matthew Wilcox wrote:
+> > > On Wed, Nov 23, 2022 at 01:29:56PM -0400, Jason Gunthorpe wrote:
+> > > > #define generic_container_of(in_type, in, out_type, out_member) \
+> > > > 	_Generic(in,                                        \
+> > > >                   const in_type *: ((const out_type *)container_of(in, out_type, out_member)),   \
+> > > >                   in_type *: ((out_type *)container_of(in, out_type, out_member)) \
+> > > > 		  )
+> > > 
+> > > There's a neat trick I found in seqlock.h:
+> > > 
+> > > #define generic_container_of(in_t, in, out_t, m)			\
+> > > 	_Generic(*(in),							\
+> > > 		const in_t: ((const out_t *)container_of(in, out_t, m)), \
+> > > 		in_t: ((out_t *)container_of(in, out_type, m))	\
+> > > 	)
+> > > 
+> > > and now it fits in 80 columns ;-)
 > > 
-> > There's a neat trick I found in seqlock.h:
-> > 
-> > #define generic_container_of(in_t, in, out_t, m)			\
-> > 	_Generic(*(in),							\
-> > 		const in_t: ((const out_t *)container_of(in, out_t, m)), \
-> > 		in_t: ((out_t *)container_of(in, out_type, m))	\
-> > 	)
-> > 
-> > and now it fits in 80 columns ;-)
+> > Nice trick!  Dropping the inline functions is a bit different, let me
+> > see if that still gives a sane error if we pass an incorrect type or
+> > mess with the const * the wrong way.  I'll run some tests tomorrow
+> > afternoon...
 > 
-> Nice trick!  Dropping the inline functions is a bit different, let me
-> see if that still gives a sane error if we pass an incorrect type or
-> mess with the const * the wrong way.  I'll run some tests tomorrow
-> afternoon...
+> The errors in some cases are very verbose, but it is somewhat
+> understandable - the worst is when _Generic fails to match anything,
+> but also at least clang partially expanded container_of and it throws
+> other assertions too.
+> 
+> I also wonder if this could just be rolled into the normal
+> container_of.
 
-The errors in some cases are very verbose, but it is somewhat
-understandable - the worst is when _Generic fails to match anything,
-but also at least clang partially expanded container_of and it throws
-other assertions too.
+I think we might be able to now, my previous attempts with inline
+functions prevented that.  I'll beat on that tomorrow...
 
-I also wonder if this could just be rolled into the normal
-container_of.
+> in_type would have to be derived like:
+> 
+>   in_type = typeof((out_type *)NULL)->out_member)
+> 
+> But I don't know if you can use typeof in a generic type matching expression..
 
-in_type would have to be derived like:
+Maybe that is what threw me before, I can't remember.  I do know we
+tried a number of different attempts, can't recall the failed ones...
 
-  in_type = typeof((out_type *)NULL)->out_member)
+thanks,
 
-But I don't know if you can use typeof in a generic type matching expression..
-
-Jason
+greg k-h
