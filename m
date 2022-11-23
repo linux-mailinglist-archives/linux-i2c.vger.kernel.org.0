@@ -2,218 +2,131 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21ABF636481
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Nov 2022 16:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF9F636498
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Nov 2022 16:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238950AbiKWPtL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Nov 2022 10:49:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
+        id S238794AbiKWPuI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Nov 2022 10:50:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238744AbiKWPss (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Nov 2022 10:48:48 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9033763BB0;
-        Wed, 23 Nov 2022 07:48:47 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id f27so43798192eje.1;
-        Wed, 23 Nov 2022 07:48:47 -0800 (PST)
+        with ESMTP id S238920AbiKWPtk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Nov 2022 10:49:40 -0500
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7F2C689A
+        for <linux-i2c@vger.kernel.org>; Wed, 23 Nov 2022 07:49:17 -0800 (PST)
+Received: by mail-vk1-xa2b.google.com with SMTP id f68so8904272vkc.8
+        for <linux-i2c@vger.kernel.org>; Wed, 23 Nov 2022 07:49:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rWol0vfLar2wlbq1lnLcJmfHTOdUxjebNWwkBKe5szA=;
-        b=a/Mi1ENzdoE9EIvB5Ye2ZQm0JoL4Qwgm366qbxZz3HxkBSOnQFKmyQLhpQAjVgu++T
-         iNr990l84OmsE564r2IQu1CRgoA88Wb/mt2CHH78qJtf4q3nQA3U1QKhyeQuy+Q+SYXE
-         oZhRapBFxOxxnkL23W+rryu0Y+MJLd0y4Fe7TRY0xIfc4q+GYKMDxyonVvL6xJoMSchF
-         jLZRHWdmt7Td106aDj/tE2AbjWoHM4ou1ytNrlgQpiTkFQzZfmYOirqXurIcW94gBPGQ
-         28MGrk0sS5gGlQz9rnrWrp2bEB/SyKW465+JKI8nLKKWqbRcuF/csCfXF+MM71V/+RQ0
-         Lg2g==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jivc45dTXvLm1YRXWATZxQPSyvJMgufwFq3xGWuqv3M=;
+        b=HhGGX95JXkc8p/cmrwB5sqv/RmAgSIe6Y1pIc6pBWtss4VPKEWpXS5pYXhmooshnuM
+         rcTc1CheQ5j1WJBjffdRCu8xo7NIx/+fg90KRf35VV2y45j14D8dcDy9Nxy6HSeMqpnI
+         vw8Bj8w5QAnm7jbG345EfuyFaELsS/TqhxRxtD7+Inj3LuI1wNwYCp4rsksYzFpniw3O
+         kYwVPAfVhwbbGP/Wpll/QJK5hsohJ88WWafxcQRsVQthMkA6/oKK4qQK3FtOsJtZWK6V
+         AN1bYOHyr0OnYpouDiUWTbMLFtpsksrU//fePasFTt1AHx/qfO9FLNoN8US8gPDAORAQ
+         /5HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rWol0vfLar2wlbq1lnLcJmfHTOdUxjebNWwkBKe5szA=;
-        b=130V0IEan4abqUJ7+xsgyUCBkbo5q7AzSYrEkRByz8PVOJMBYF2MFdadaFLfedP3cZ
-         flNS/6UnFWze5kobFwq6qXwpRSmlTCWHaf5xBHWD7nbOcGM3jP0lp5jMIshISOmL+JWF
-         tFPSp1fFIne8C/J5n/aYOten3JmnovzuKV/R/g0q0vJIilef/VTadAGHTz/7VFwk7jeG
-         AHriIncpMZ+Ya76VF1rXLXf9eT+NDDHOvwh+u5ouIMbjjBkTw9rv7ZZzEaeoUjIZde50
-         rHrLgeRPNsRsmGBZ0rmetAlwdxDVoprbdZo36bQ38NRye6omZXp2R8BEd3LTD5tYgeWO
-         2tBg==
-X-Gm-Message-State: ANoB5pmmI7rOfyBHaelpp8XCtIBJPZHCZn0Doxr3T5m80ul1qsORpvAv
-        qg4UvzXPOqw9LZNTOD8XJ8M=
-X-Google-Smtp-Source: AA0mqf4DGaq6LxoFCutoUkFiDXs1R0I6U1M0ITumJqqtc2ke50QNhjcw+Z4GMeoZk1Cs/xwOs0ED4Q==
-X-Received: by 2002:a17:907:c016:b0:7a4:98cc:7c8e with SMTP id ss22-20020a170907c01600b007a498cc7c8emr14564304ejc.48.1669218525781;
-        Wed, 23 Nov 2022 07:48:45 -0800 (PST)
-Received: from [10.20.0.7] ([37.120.217.162])
-        by smtp.gmail.com with ESMTPSA id u2-20020a1709061da200b0073ae9ba9ba8sm7295109ejh.3.2022.11.23.07.48.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 07:48:44 -0800 (PST)
-Message-ID: <b93a9fcd-0d7b-14fd-1018-bba35f961a27@gmail.com>
-Date:   Wed, 23 Nov 2022 16:48:41 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Jivc45dTXvLm1YRXWATZxQPSyvJMgufwFq3xGWuqv3M=;
+        b=BuE6eSvqGlww0rMxXTSJSEpaIoZ317qIeTqgHV2HwqgfainaQ++P/0PRQ3XiZ9LWD2
+         ndtis5zuSzBH3L8+fOwYWOBwTONy6ZMq5r5Gq85cXme6e+HKhsN7nCn/BM44jU2GlTz+
+         /XIgalKJAmIOS9RwZL/rUJ19Ud7BYX1spALehxoRWcaDvmkyNUuC1sJNDHRM5TrMaTfZ
+         SqTN30rD8dZutEC+CQHrvP07YCfkhCIsJA8ou8UPhCjq+6sRAyFwZ4bDNOAeyBfws2pj
+         aSpLNWSW5a2vZ2GRpUx8MNYFV9K+D/fYRDjPZqjM9eHMLxYqqyvQybkL7m9GFjx/e4YC
+         QkKw==
+X-Gm-Message-State: ANoB5pkvCm+5SUex2cJlOY2Y4sFAD4nanv/R9otP2Uyo47h/5n8hsWFh
+        7D2I7+oxrcqgixsaPm2Fh3OBRs7sXUkviS/F7VwLAA==
+X-Google-Smtp-Source: AA0mqf4OTkJmqH0nX+bnMDHlcETQbnZux4XMI/LgC9yc/Mif5H9e9AKyW0o+PZg050EBQBNhpu0Aadhu7D6IO6KKtHE=
+X-Received: by 2002:a1f:54c1:0:b0:3b7:65cc:8ebc with SMTP id
+ i184-20020a1f54c1000000b003b765cc8ebcmr10691674vkb.5.1669218556496; Wed, 23
+ Nov 2022 07:49:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
- const *
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-12-uwe@kleine-koenig.org> <CAMRc=Mfjcs-BBFhr8O1O956f4jdvAzY9ofZs1fme8+Ki=T60JA@mail.gmail.com>
+In-Reply-To: <CAMRc=Mfjcs-BBFhr8O1O956f4jdvAzY9ofZs1fme8+Ki=T60JA@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 23 Nov 2022 16:49:05 +0100
+Message-ID: <CAMRc=MfwSabay==DcyONc4AVgOPETsA5x3wuLX05Ndvfwiv4bg@mail.gmail.com>
+Subject: Re: [PATCH 011/606] gpio: max732x: Convert to i2c's .probe_new()
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
- <20221123122523.1332370-3-gregkh@linuxfoundation.org>
- <711d5275-7e80-c00d-0cdc-0f3d52175361@gmail.com>
- <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
- <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
- <Y34zyzdbRUdyOSkA@casper.infradead.org> <Y34+V2bCDdqujBDk@kroah.com>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <Y34+V2bCDdqujBDk@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 11/23/22 16:37, Greg Kroah-Hartman wrote:
-> On Wed, Nov 23, 2022 at 02:52:59PM +0000, Matthew Wilcox wrote:
->> On Wed, Nov 23, 2022 at 02:59:00PM +0100, Maximilian Luz wrote:
->>> On 11/23/22 14:34, Andy Shevchenko wrote:
->>>> On Wed, Nov 23, 2022 at 02:14:31PM +0100, Maximilian Luz wrote:
->>>>> On 11/23/22 13:25, Greg Kroah-Hartman wrote:
->>>>>> The uevent() callback in struct device_type should not be modifying the
->>>>>> device that is passed into it, so mark it as a const * and propagate the
->>>>>> function signature changes out into all relevant subsystems that use
->>>>>> this callback.
->>>>
->>>> [...]
->>>>
->>>>>> -static inline struct ssam_device *to_ssam_device(struct device *d)
->>>>>> +static inline struct ssam_device *to_ssam_device(const struct device *d)
->>>>>>     {
->>>>>>     	return container_of(d, struct ssam_device, dev);
->>>>>>     }
->>>>>
->>>>> I am slightly conflicted about this change as that now more or less
->>>>> implicitly drops the const. So I'm wondering if it wouldn't be better to
->>>>> either create a function specifically for const pointers or to just
->>>>> open-code it in the instance above.
->>>>>
->>>>> I guess we could also convert this to a macro. Then at least there
->>>>> wouldn't be an explicit and potentially misleading const-conversion
->>>>> indicated in the function signature.
->>>>
->>>> This is an intermediate step as far as I know since moving container_of to
->>>> recognize const is a bit noisy right now. I guess you can find a discussion
->>>> on the topic between Greg and Sakari.
->>>
->>> Thanks! I assume you are referring to the following?
->>>
->>> 	https://lore.kernel.org/lkml/4218173bd72b4f1899d4c41a8e251f0d@AcuMS.aculab.com/T/
->>>
->>> As far as I can tell this is only a warning in documentation, not
->>> compile time (which would probably be impossible?).
->>>
->>> As I've said I'd be fine with converting the function to a macro (and
->>> preferably adding a similar warning like the one proposed in that
->>> thread). The point that irks me up is just that, as proposed, the
->>> function signature would now advertise a conversion that should never be
->>> happening.
->>>
->>> Having two separate functions would create a compile-time guarantee, so
->>> I'd prefer that, but I can understand if that might be considered too
->>> noisy in code. Or if there is a push to make container_of() emit a
->>> compile-time warning I'd also be perfectly happy with converting it to a
->>> macro now as that'd alleviate the need for functions in the future.
->>
->> Can't we do:
->>
->> static inline const struct ssam_device *to_ssam_device(const struct device *d)
->> {
->> 	return container_of(d, const struct ssam_device, dev);
->> }
->>
-> 
-> You could, if you can always handle a const pointer coming out of this
-> function, but I don't think you can.
-> 
-> What you might want to do instead, and I'll be glad to do it for all of
-> the functions like this I change, is to do what we have for struct
-> device now:
-> 
-> static inline struct device *__kobj_to_dev(struct kobject *kobj)
-> {
->          return container_of(kobj, struct device, kobj);
-> }
-> 
-> static inline const struct device *__kobj_to_dev_const(const struct kobject *kobj)
-> {
->          return container_of(kobj, const struct device, kobj);
-> }
-> 
-> /*
->   * container_of() will happily take a const * and spit back a non-const * as it
->   * is just doing pointer math.  But we want to be a bit more careful in the
->   * driver code, so manually force any const * of a kobject to also be a const *
->   * to a device.
->   */
-> #define kobj_to_dev(kobj)                                       \
->          _Generic((kobj),                                        \
->                   const struct kobject *: __kobj_to_dev_const,   \
->                   struct kobject *: __kobj_to_dev)(kobj)
-> 
-> 
-> Want me to do the same thing here as well?
+On Wed, Nov 23, 2022 at 10:47 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> On Fri, Nov 18, 2022 at 11:46 PM Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig=
+.org> wrote:
+> >
+> > From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> >
+> > .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> > that explicitly in the probe function.
+> >
+> > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> > ---
+> >  drivers/gpio/gpio-max732x.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/gpio/gpio-max732x.c b/drivers/gpio/gpio-max732x.c
+> > index da6972117030..68e982cdee73 100644
+> > --- a/drivers/gpio/gpio-max732x.c
+> > +++ b/drivers/gpio/gpio-max732x.c
+> > @@ -608,9 +608,9 @@ static struct max732x_platform_data *of_gpio_max732=
+x(struct device *dev)
+> >         return pdata;
+> >  }
+> >
+> > -static int max732x_probe(struct i2c_client *client,
+> > -                                  const struct i2c_device_id *id)
+> > +static int max732x_probe(struct i2c_client *client)
+> >  {
+> > +       const struct i2c_device_id *id =3D i2c_client_get_device_id(cli=
+ent);
+> >         struct max732x_platform_data *pdata;
+> >         struct device_node *node;
+> >         struct max732x_chip *chip;
+> > @@ -707,7 +707,7 @@ static struct i2c_driver max732x_driver =3D {
+> >                 .name           =3D "max732x",
+> >                 .of_match_table =3D of_match_ptr(max732x_of_table),
+> >         },
+> > -       .probe          =3D max732x_probe,
+> > +       .probe_new      =3D max732x_probe,
+> >         .id_table       =3D max732x_id,
+> >  };
+> >
+> > --
+> > 2.38.1
+> >
+>
+> Applied, thanks!
+>
+> Bartosz
 
-That looks great! Thanks!
+Ugh, backing it out, I thought these patches were independent.
 
-I would very much prefer that.
+In that case:
 
-Regards,
-Max
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
