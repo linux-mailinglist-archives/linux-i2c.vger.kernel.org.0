@@ -2,24 +2,24 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EF86385A8
-	for <lists+linux-i2c@lfdr.de>; Fri, 25 Nov 2022 09:56:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4306385AC
+	for <lists+linux-i2c@lfdr.de>; Fri, 25 Nov 2022 09:57:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiKYI4z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 25 Nov 2022 03:56:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
+        id S229748AbiKYI46 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 25 Nov 2022 03:56:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiKYI4w (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Nov 2022 03:56:52 -0500
+        with ESMTP id S229753AbiKYI4x (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Nov 2022 03:56:53 -0500
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE3D631EFB;
-        Fri, 25 Nov 2022 00:56:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 370D631ED6;
+        Fri, 25 Nov 2022 00:56:52 -0800 (PST)
 Received: from loongson.cn (unknown [112.20.109.110])
-        by gateway (Coremail) with SMTP id _____8AxRPBRg4BjdOIAAA--.2362S3;
-        Fri, 25 Nov 2022 16:56:49 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8AxxvBTg4BjfOIAAA--.2268S3;
+        Fri, 25 Nov 2022 16:56:51 +0800 (CST)
 Received: from localhost.localdomain (unknown [112.20.109.110])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxBldOg4BjghMaAA--.49336S4;
-        Fri, 25 Nov 2022 16:56:49 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxBldOg4BjghMaAA--.49336S5;
+        Fri, 25 Nov 2022 16:56:50 +0800 (CST)
 From:   Binbin Zhou <zhoubinbin@loongson.cn>
 To:     Wolfram Sang <wsa@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
@@ -34,19 +34,19 @@ Cc:     loongarch@lists.linux.dev, devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jianmin Lv <lvjianmin@loongson.cn>,
         Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH V3 2/5] i2c: gpio: Add support on ACPI-based system
-Date:   Fri, 25 Nov 2022 16:54:12 +0800
-Message-Id: <e0ed6dfa3dbf60b58ef4eaeb40ea46d2577a2834.1669359515.git.zhoubinbin@loongson.cn>
+Subject: [PATCH V3 3/5] dt-bindings: i2c: add bindings for Loongson LS2X I2C
+Date:   Fri, 25 Nov 2022 16:54:13 +0800
+Message-Id: <57339e73b6c0bfe446e19a7f55a48b7ca640b9ec.1669359515.git.zhoubinbin@loongson.cn>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1669359515.git.zhoubinbin@loongson.cn>
 References: <cover.1669359515.git.zhoubinbin@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxBldOg4BjghMaAA--.49336S4
+X-CM-TRANSID: AQAAf8AxBldOg4BjghMaAA--.49336S5
 X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxZFW3Ar17Cry5Cr1rZr1DWrg_yoW5Wr18pF
-        y5uFZxtFWjgF42grnrJw1ku34Skwn2qayIgw47G3sY9w4DXrn8XryxtFyI9ryYvFW8G343
-        tw1DtFW3CFsrZ3JanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+X-Coremail-Antispam: 1Uk129KBjvJXoW7WFW5WFW8CFWxXF4xurW3Wrg_yoW8Wr4xp3
+        ZrCr9rGr40vF17u39xGFy8G3W3Zr95AasrGFZFyw1UKFyDG3Wqvw4akr15Xa13WFy0gFW7
+        XFZ29r4jkas7Cr7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
         qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
         bSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
         1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
@@ -69,78 +69,69 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add support for the ACPI-based device registration, so that the driver
-can be also enabled through ACPI table.
+Add device tree bindings for the i2c controller on the Loongson-2K Soc
+or Loongosn LS7A bridge.
 
 Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
 ---
- drivers/i2c/busses/i2c-gpio.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
+ .../bindings/i2c/loongson,ls2x-i2c.yaml       | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/loongson,ls2x-i2c.yaml
 
-diff --git a/drivers/i2c/busses/i2c-gpio.c b/drivers/i2c/busses/i2c-gpio.c
-index 0e4385a9bcf7..652d1f39854e 100644
---- a/drivers/i2c/busses/i2c-gpio.c
-+++ b/drivers/i2c/busses/i2c-gpio.c
-@@ -300,22 +300,23 @@ static inline void i2c_gpio_fault_injector_init(struct platform_device *pdev) {}
- static inline void i2c_gpio_fault_injector_exit(struct platform_device *pdev) {}
- #endif /* CONFIG_I2C_GPIO_FAULT_INJECTOR*/
- 
--static void of_i2c_gpio_get_props(struct device_node *np,
--				  struct i2c_gpio_platform_data *pdata)
-+/* get i2c-gpio props from DT or ACPI table */
-+static void i2c_gpio_get_props(struct device *dev,
-+				struct i2c_gpio_platform_data *pdata)
- {
- 	u32 reg;
- 
--	of_property_read_u32(np, "i2c-gpio,delay-us", &pdata->udelay);
-+	device_property_read_u32(dev, "i2c-gpio,delay-us", &pdata->udelay);
- 
--	if (!of_property_read_u32(np, "i2c-gpio,timeout-ms", &reg))
-+	if (!device_property_read_u32(dev, "i2c-gpio,timeout-ms", &reg))
- 		pdata->timeout = msecs_to_jiffies(reg);
- 
- 	pdata->sda_is_open_drain =
--		of_property_read_bool(np, "i2c-gpio,sda-open-drain");
-+		device_property_read_bool(dev, "i2c-gpio,sda-open-drain");
- 	pdata->scl_is_open_drain =
--		of_property_read_bool(np, "i2c-gpio,scl-open-drain");
-+		device_property_read_bool(dev, "i2c-gpio,scl-open-drain");
- 	pdata->scl_is_output_only =
--		of_property_read_bool(np, "i2c-gpio,scl-output-only");
-+		device_property_read_bool(dev, "i2c-gpio,scl-output-only");
- }
- 
- static struct gpio_desc *i2c_gpio_get_desc(struct device *dev,
-@@ -373,8 +374,8 @@ static int i2c_gpio_probe(struct platform_device *pdev)
- 	bit_data = &priv->bit_data;
- 	pdata = &priv->pdata;
- 
--	if (np) {
--		of_i2c_gpio_get_props(np, pdata);
-+	if (np || has_acpi_companion(dev)) {
-+		i2c_gpio_get_props(dev, pdata);
- 	} else {
- 		/*
- 		 * If all platform data settings are zero it is OK
-@@ -489,10 +490,17 @@ static const struct of_device_id i2c_gpio_dt_ids[] = {
- 
- MODULE_DEVICE_TABLE(of, i2c_gpio_dt_ids);
- 
-+static const struct acpi_device_id i2c_gpio_acpi_match[] = {
-+	{"LOON0005", 0}, /*LoongArch*/
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(acpi, i2c_gpio_acpi_match);
+diff --git a/Documentation/devicetree/bindings/i2c/loongson,ls2x-i2c.yaml b/Documentation/devicetree/bindings/i2c/loongson,ls2x-i2c.yaml
+new file mode 100644
+index 000000000000..8c785f329d2f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/loongson,ls2x-i2c.yaml
+@@ -0,0 +1,48 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/i2c/loongson,ls2x-i2c.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
- static struct platform_driver i2c_gpio_driver = {
- 	.driver		= {
- 		.name	= "i2c-gpio",
- 		.of_match_table	= i2c_gpio_dt_ids,
-+		.acpi_match_table = i2c_gpio_acpi_match,
- 	},
- 	.probe		= i2c_gpio_probe,
- 	.remove		= i2c_gpio_remove,
++title: Loongson LS2X I2C Controller
++
++maintainers:
++  - Binbin Zhou <zhoubinbin@loongson.cn>
++
++allOf:
++  - $ref: /schemas/i2c/i2c-controller.yaml#
++
++properties:
++  compatible:
++    enum:
++      - loongson,ls2k-i2c # Loongson-2K SoCs
++      - loongson,ls7a-i2c # Loongson LS7A Bridge
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c@1fe21000 {
++        compatible = "loongson,ls2k-i2c";
++        reg = <0 0x1fe21000 0 0x8>;
++        interrupts = <22>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        eeprom@57{
++            compatible = "atmel,24c16";
++            reg = <0x57>;
++            pagesize = <16>;
++        };
++    };
 -- 
 2.31.1
 
