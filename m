@@ -2,124 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A84F63749B
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Nov 2022 09:57:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FFC6384C4
+	for <lists+linux-i2c@lfdr.de>; Fri, 25 Nov 2022 08:51:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiKXI5E (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 24 Nov 2022 03:57:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
+        id S229706AbiKYHvN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 25 Nov 2022 02:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiKXI4v (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Nov 2022 03:56:51 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52198756F
-        for <linux-i2c@vger.kernel.org>; Thu, 24 Nov 2022 00:56:49 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NHsGf70JkzJnt1;
-        Thu, 24 Nov 2022 16:53:30 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 24 Nov 2022 16:56:48 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 24 Nov
- 2022 16:56:47 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-i2c@vger.kernel.org>, <wsa@kernel.org>
-CC:     <yangyingliang@huawei.com>
-Subject: [PATCH] i2c: core: Fix possible memleak in i2c_new_client_device()
-Date:   Thu, 24 Nov 2022 16:54:48 +0800
-Message-ID: <20221124085448.3620240-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229498AbiKYHvM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Nov 2022 02:51:12 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEFA2E69D;
+        Thu, 24 Nov 2022 23:51:11 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NJRrF5z5gz5BNS0;
+        Fri, 25 Nov 2022 15:51:09 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2AP7p14o099419;
+        Fri, 25 Nov 2022 15:51:01 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Fri, 25 Nov 2022 15:51:03 +0800 (CST)
+Date:   Fri, 25 Nov 2022 15:51:03 +0800 (CST)
+X-Zmail-TransId: 2afa638073e70889e413
+X-Mailer: Zmail v1.0
+Message-ID: <202211251551030468773@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <wsa@kernel.org>
+Cc:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBpMmM6IFVzZSBkZXZpY2VfbWF0Y2hfb2Zfbm9kZSgp?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2AP7p14o099419
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 638073ED.000 by FangMail milter!
+X-FangMail-Envelope: 1669362669/4NJRrF5z5gz5BNS0/638073ED.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 638073ED.000/4NJRrF5z5gz5BNS0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-I got memory leak as follows when doing fault injection test:
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-unreferenced object 0xffff888014aec078 (size 8):
-  comm "xrun", pid 356, jiffies 4294910619 (age 16.332s)
-  hex dump (first 8 bytes):
-    31 2d 30 30 31 63 00 00                          1-001c..
-  backtrace:
-    [<00000000eb56c0a9>] __kmalloc_track_caller+0x1a6/0x300
-    [<000000000b220ea3>] kvasprintf+0xad/0x140
-    [<00000000b83203e5>] kvasprintf_const+0x62/0x190
-    [<000000002a5eab37>] kobject_set_name_vargs+0x56/0x140
-    [<00000000300ac279>] dev_set_name+0xb0/0xe0
-    [<00000000b66ebd6f>] i2c_new_client_device+0x7e4/0x9a0
+Replace the open-code with device_match_of_node().
 
-If device_register() returns error in i2c_new_client_device(),
-the name allocated by i2c_dev_set_name() need be freed. As
-comment of device_register() says, it should use put_device()
-to give up the reference in the error path.
-
-Moving i2c_dev_set_name() to front of device_register(), so
-it's managed by device core, then call put_device(), when the
-refcount is 0, the name will be freed in kobject_cleanup() and
-the 'client' will be freed in i2c_client_dev_release().
-
-Because the 'client' is freed by calling put_device(), so it
-don't need goto error label, release other resources before
-put_device() and return directly.
-
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- drivers/i2c/i2c-core-base.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/i2c/i2c-core-of.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index b4edf10e8fd0..161bf28f2d87 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -954,7 +954,6 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
- 	client->dev.fwnode = info->fwnode;
- 
- 	device_enable_async_suspend(&client->dev);
--	i2c_dev_set_name(adap, client, info);
- 
- 	if (info->swnode) {
- 		status = device_add_software_node(&client->dev, info->swnode);
-@@ -966,17 +965,23 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
- 		}
- 	}
- 
-+	i2c_dev_set_name(adap, client, info);
- 	status = device_register(&client->dev);
--	if (status)
--		goto out_remove_swnode;
-+	if (status) {
-+		device_remove_software_node(&client->dev);
-+		of_node_put(info->of_node);
-+		dev_err(&adap->dev,
-+			"Failed to register i2c client %s at 0x%02x (%d)\n",
-+			client->name, client->addr, status);
-+		put_device(&client->dev);
-+		return ERR_PTR(status);
-+	}
- 
- 	dev_dbg(&adap->dev, "client [%s] registered with bus id %s\n",
- 		client->name, dev_name(&client->dev));
- 
- 	return client;
- 
--out_remove_swnode:
--	device_remove_software_node(&client->dev);
- out_err_put_of_node:
- 	of_node_put(info->of_node);
- out_err:
+diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+index 3ed74aa4b44b..307a0adf6bc1 100644
+--- a/drivers/i2c/i2c-core-of.c
++++ b/drivers/i2c/i2c-core-of.c
+@@ -115,11 +115,11 @@ void of_i2c_register_devices(struct i2c_adapter *adap)
+
+ static int of_dev_or_parent_node_match(struct device *dev, const void *data)
+ {
+-	if (dev->of_node == data)
++	if (device_match_of_node(dev, data))
+ 		return 1;
+
+ 	if (dev->parent)
+-		return dev->parent->of_node == data;
++		return device_match_of_node(dev->parent, data);
+
+ 	return 0;
+ }
 -- 
 2.25.1
-
