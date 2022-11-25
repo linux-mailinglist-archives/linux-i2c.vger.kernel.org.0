@@ -2,66 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 283056385B6
-	for <lists+linux-i2c@lfdr.de>; Fri, 25 Nov 2022 09:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C74DD6386B7
+	for <lists+linux-i2c@lfdr.de>; Fri, 25 Nov 2022 10:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiKYI6B (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 25 Nov 2022 03:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
+        id S229913AbiKYJtm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 25 Nov 2022 04:49:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiKYI57 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Nov 2022 03:57:59 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66F201D0FF;
-        Fri, 25 Nov 2022 00:57:55 -0800 (PST)
-Received: from loongson.cn (unknown [112.20.109.110])
-        by gateway (Coremail) with SMTP id _____8DxtfCSg4Bj1OIAAA--.2346S3;
-        Fri, 25 Nov 2022 16:57:54 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.20.109.110])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_eGQg4BjEhQaAA--.1503S3;
-        Fri, 25 Nov 2022 16:57:54 +0800 (CST)
-From:   Binbin Zhou <zhoubinbin@loongson.cn>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org
-Cc:     loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH V3 5/5] LoongArch: Enable LS2X I2C in loongson3_defconfig
-Date:   Fri, 25 Nov 2022 16:55:21 +0800
-Message-Id: <d454f02f0baab458a332f7760f9c15c59b7d96eb.1669359515.git.zhoubinbin@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1669359515.git.zhoubinbin@loongson.cn>
-References: <cover.1669359515.git.zhoubinbin@loongson.cn>
+        with ESMTP id S229915AbiKYJsQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Nov 2022 04:48:16 -0500
+Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5D03F042;
+        Fri, 25 Nov 2022 01:46:36 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1oyVHe-000hyz-0F; Fri, 25 Nov 2022 17:46:11 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 25 Nov 2022 17:46:10 +0800
+Date:   Fri, 25 Nov 2022 17:46:09 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-crypto@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 006/606] crypto: atmel-ecc - Convert to i2c's .probe_new()
+Message-ID: <Y4CO4c1vA6UZGnpU@gondor.apana.org.au>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-7-uwe@kleine-koenig.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx_eGQg4BjEhQaAA--.1503S3
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7Jry5XrWkuF48uF15Ww1fXrb_yoWxKFX_Ja
-        47Kw1kWr48JFZ7W3WIqw4rC3yDCa47X3WSkrnrAw1xX3Waqr13trWDA3W7C3Z0ga4DWrW3
-        ZaykJF9F9F18tjkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        u7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26rWY6Fy7McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
-        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
-        O2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
-        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
-        Ar0_tr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj4
-        0_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8
-        JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0_WrPUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+In-Reply-To: <20221118224540.619276-7-uwe@kleine-koenig.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,26 +51,19 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This is now supported, enable for Loongson-3 systems.
-Other systems are unaffected.
+On Fri, Nov 18, 2022 at 11:35:40PM +0100, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> 
+> .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> that explicitly in the probe function.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/crypto/atmel-ecc.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
----
- arch/loongarch/configs/loongson3_defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-index cd8e003d885e..017eb0e36738 100644
---- a/arch/loongarch/configs/loongson3_defconfig
-+++ b/arch/loongarch/configs/loongson3_defconfig
-@@ -600,6 +600,7 @@ CONFIG_HW_RANDOM_VIRTIO=m
- CONFIG_I2C_CHARDEV=y
- CONFIG_I2C_PIIX4=y
- CONFIG_I2C_GPIO=y
-+CONFIG_I2C_LS2X=y
- CONFIG_SPI=y
- CONFIG_GPIO_SYSFS=y
- CONFIG_GPIO_LOONGSON=y
+Patch applied.  Thanks.
 -- 
-2.31.1
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
