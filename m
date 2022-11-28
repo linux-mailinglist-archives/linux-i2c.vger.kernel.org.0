@@ -2,158 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5F863A8D4
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Nov 2022 14:00:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF1063A8EB
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Nov 2022 14:07:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbiK1NAn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Nov 2022 08:00:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
+        id S230247AbiK1NH2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Nov 2022 08:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbiK1NAl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Nov 2022 08:00:41 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4506FD32;
-        Mon, 28 Nov 2022 05:00:37 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8Bxnuv0sIRjgrEBAA--.4245S3;
-        Mon, 28 Nov 2022 21:00:36 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxPuLqsIRjO1kdAA--.9042S3;
-        Mon, 28 Nov 2022 21:00:35 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        William Zhang <william.zhang@broadcom.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 2/2] dt-bindings: i2c: add loongson i2c
-Date:   Mon, 28 Nov 2022 21:00:25 +0800
-Message-Id: <20221128130025.23184-2-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221128130025.23184-1-zhuyinbo@loongson.cn>
-References: <20221128130025.23184-1-zhuyinbo@loongson.cn>
+        with ESMTP id S230224AbiK1NH1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Nov 2022 08:07:27 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D3C16585
+        for <linux-i2c@vger.kernel.org>; Mon, 28 Nov 2022 05:07:26 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1ozdr2-0000BP-Iw; Mon, 28 Nov 2022 14:07:24 +0100
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1ozdr1-0001Dk-TR; Mon, 28 Nov 2022 14:07:23 +0100
+Date:   Mon, 28 Nov 2022 14:07:23 +0100
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        michal.simek@xilinx.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] i2c: cadence: make bus recovery optional
+Message-ID: <20221128130723.GA4576@pengutronix.de>
+References: <20221023215121.221316-1-m.grzeschik@pengutronix.de>
+ <20221114155700.GA18924@pengutronix.de>
+ <ec30bbb7-88f4-f24c-c080-d195d91c2b95@wolfvision.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxPuLqsIRjO1kdAA--.9042S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7uF15Xw48WFy7Jr17Aw45trb_yoW8tr43p3
-        ZrCws8GFyIqF12k39xKFy8CF15Xwn5C3ZruFsFqw1UKFZ8G3Z8Zw4akFn8ZwsxurW8XFW7
-        XF929r4jk3Wvyw7anT9S1TB71UUUUbDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM2
-        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS14v26r1q6r43M2AIxVAIcxkEcVAq
-        07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7
-        xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7V
-        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
-        67AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
-        8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW5JVW7
-        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
-        1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUv
-        cSsGvfC2KfnxnUUI43ZEXa7IU8pHq7UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2fHTh5uZTiUOsy+g"
+Content-Disposition: inline
+In-Reply-To: <ec30bbb7-88f4-f24c-c080-d195d91c2b95@wolfvision.net>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add the Loongson platform i2c binding with DT schema format using
-json-schema.
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
-Change in v2:
-		1. Removed the "#address-cells" and "#size-cells" in requied.
-		2. Add the reviewed-by information.
+--2fHTh5uZTiUOsy+g
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- .../bindings/i2c/loongson,ls-i2c.yaml         | 47 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 48 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
+Hi Michael,
 
-diff --git a/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml b/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
-new file mode 100644
-index 000000000000..0e4aee9146f3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
-@@ -0,0 +1,47 @@
-+# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i2c/loongson,ls-i2c.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson I2C controller
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - loongson,ls2k-i2c
-+      - loongson,ls7a-i2c
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    i2c0: i2c@1fe21000 {
-+        compatible = "loongson,ls2k-i2c";
-+        reg = <0x1fe21000 0x8>;
-+        interrupt-parent = <&liointc0>;
-+        interrupts = <22 IRQ_TYPE_LEVEL_LOW>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&i2c0_pins_default>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 95f26184e17c..9f70f4997afc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12062,6 +12062,7 @@ LOONGSON I2C DRIVER
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-i2c@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
- F:	drivers/i2c/busses/i2c-loongson.c
- 
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
--- 
-2.31.1
+On Mon, Nov 28, 2022 at 12:58:20PM +0100, Michael Riesch wrote:
+>On 11/14/22 16:57, Michael Grzeschik wrote:
+>> On Sun, Oct 23, 2022 at 11:51:21PM +0200, Michael Grzeschik wrote:
+>>> There is no need for the i2c driver to have functional bus recovery to
+>>> probe successfully. We patch this by only adding bus_recovery_info only
+>>> if we get usable pinctrl data.
+>>
+>> Gentle Ping!
+>
+>Thanks for your efforts. I believe this issue is adressed in a more
+>recent patch [0], which seems to be on its way to mainline.
+>
+>Best regards,
+>Michael
+>
+>
+>[0]
+>https://lore.kernel.org/lkml/20221128105158.1536551-1-carsten.haitzler@fos=
+s.arm.com/
 
+I like mine better. :) I think I have to comment on that. But why did I
+not see that one?
+
+However, thanks for the pointer!
+
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--2fHTh5uZTiUOsy+g
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmOEsokACgkQC+njFXoe
+LGSSLg/5AR1mEAJs4xiyle0zJCc8yKTTZzeZ9bjPF/FMAul4/TEdHX7ufYTcoCQK
+xMc9SFDHnewxiyRwsfJIUuQcmwQt6OQHeIvg99pz8v9P8IIJdwt5Djhi9v2bZit/
+h2FfXn6Axm9PKlhimxIf+oodmnlS6V40/UsGmgJoVlz4Xq5aVc0MzxVzgIr9o6Lp
+inZHDur6Jy6LOp8EJ3V5iPjM29jmnAfdocuo1zY5hZT9uHf0+RiM/cu67KuoB11E
+Xevx6GXjEcZn0c5EoNxdma89YxE7RNHm0mbdtAMfSLNoaKw6717H6tfLWuM1ITtO
+xuvk28d1RBnZJdIxj0Kezl+1CEUqHE3tUpm/D60H0aRlSsewBijlvoLItSvX2SyF
+k7GkMZDmnPns9IXUWrPdH/YZYCV5X+kvkawZJBkeOMbbHG+3zchjD4s9ifQ85Ul8
+lWl6S0BiyDeHxxgASy7svSBHQOi4mTA2u+n4ByJpF/U/acZEzFgY6mjfIsNtKl2p
+O+6QyaxL7aK8UvPekZe0OMjPA0uV8qB7f6MPD3cPqlgLoZQpsYmFISEd9wxWtbAi
+26UKIlpDKNtXRBiR2v9H7iEx0MRBL7icq3XWfE0jK1MsIT2DOFEP7A/xW73ttqN1
+A8mzDy+904DxbyYMLHLEVWqa38N4ExWjO3l909xm9/nzHHrXW1k=
+=UBLt
+-----END PGP SIGNATURE-----
+
+--2fHTh5uZTiUOsy+g--
