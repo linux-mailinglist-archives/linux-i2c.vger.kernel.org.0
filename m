@@ -2,196 +2,352 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4C563A778
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Nov 2022 12:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B447263A7F9
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Nov 2022 13:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiK1L61 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Nov 2022 06:58:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
+        id S231696AbiK1MLI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Nov 2022 07:11:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbiK1L6Z (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Nov 2022 06:58:25 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2058.outbound.protection.outlook.com [40.107.22.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C435162CD
-        for <linux-i2c@vger.kernel.org>; Mon, 28 Nov 2022 03:58:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SWnk9haXfvfSN5wXBqTdOkeq3eS3iOk0N7urYNPxTQ+mhNxeWuq1BbkxhXFOJOEmikpf6s4wqkI6tMYHqjseSzvcKus+8mVyLTaB110iqWkULfUiA8+rNCLZzscQ3Jxf4+Atwty/lxaiVm58eZ6V7ptlBQfm5uI9Nt47KLk3Vmsl4nR5A+eYoHXdMBcchYqI3TOi4r1PG97oQEvFTu0dZHNM3tjrl9p6kr7QKo2d+ftBIydUCXBCIaKlo5wgVp9ZfaR5T8xXNFhLQwcjkPudRZvxr5m+usKQ58eeNV+tgoN0nLQcD9bU/lTkvRafqquafHC1j6502G2uD8nb9sof6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=amKG0bTHUUasHOCc7Nshn2n6A1gSBstBuAirbqaeY58=;
- b=Ca5oB2yncFYUSfL4n/sxkME850kYhBPYgiNdwSSyG87toZPpaeguOOWQhdYZPkWzkOuIscxuOv/x729zBFznlKikk7YFa38eV7AcNveDUlgiPI+p3YrOua5PFuGMIIBojuD5bwFtm9zYV+l/n4KvqNU4Mie+XrtlT3kcacxKUFPNnbtiwiF1t3/6JlzXonNKx/oiV8bwsUR47fwrhVgC2zbqS48hL6F4u++umP/e1Y/BCjBjdArPcB1eUmgA/bEMdwuA7q0jt2gtCS5zljA9IDPGouSD5hPlzsCa+uqEkJcS2sr9hbQbNdTNdhLrNA26SUNTMRU+tl/flBnI3VjnHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=amKG0bTHUUasHOCc7Nshn2n6A1gSBstBuAirbqaeY58=;
- b=qA2/gmY3SSdKHaWML4tJYzmItboBACkE/jRRXiGocFNsV9h0/NhKDI7OWLbKKRfFNWWyHliwS8ubFkp47S7daC/PWcndIdDJcTcEGI55IMMeuvB3yJivfR50mohzdMTQsc2FDr+q7cojFdfSeWMfZeEu0O+i/iMSK0pADd8rszc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
- by AM7PR08MB5416.eurprd08.prod.outlook.com (2603:10a6:20b:10e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Mon, 28 Nov
- 2022 11:58:22 +0000
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::3643:6226:28c:e637]) by DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::3643:6226:28c:e637%2]) with mapi id 15.20.5880.008; Mon, 28 Nov 2022
- 11:58:22 +0000
-Message-ID: <ec30bbb7-88f4-f24c-c080-d195d91c2b95@wolfvision.net>
-Date:   Mon, 28 Nov 2022 12:58:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] i2c: cadence: make bus recovery optional
-Content-Language: en-US
-To:     Michael Grzeschik <mgr@pengutronix.de>, linux-i2c@vger.kernel.org
-Cc:     kernel@pengutronix.de, michal.simek@xilinx.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20221023215121.221316-1-m.grzeschik@pengutronix.de>
- <20221114155700.GA18924@pengutronix.de>
-From:   Michael Riesch <michael.riesch@wolfvision.net>
-In-Reply-To: <20221114155700.GA18924@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: VI1P194CA0015.EURP194.PROD.OUTLOOK.COM
- (2603:10a6:800:be::25) To DU0PR08MB9155.eurprd08.prod.outlook.com
- (2603:10a6:10:416::5)
+        with ESMTP id S231698AbiK1MKv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Nov 2022 07:10:51 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FF8E220E3;
+        Mon, 28 Nov 2022 04:04:38 -0800 (PST)
+Received: from loongson.cn (unknown [112.20.109.110])
+        by gateway (Coremail) with SMTP id _____8DxOemeo4RjoKwBAA--.864S3;
+        Mon, 28 Nov 2022 20:03:42 +0800 (CST)
+Received: from [0.0.0.0] (unknown [112.20.109.110])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXuCco4Rj+k0dAA--.8254S3;
+        Mon, 28 Nov 2022 20:03:41 +0800 (CST)
+Message-ID: <8b0e2e61-2e54-127e-7cb8-9e1068dbc390@loongson.cn>
+Date:   Mon, 28 Nov 2022 20:03:40 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|AM7PR08MB5416:EE_
-X-MS-Office365-Filtering-Correlation-Id: 97a2d69a-d8c6-4f97-02af-08dad137d936
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: glzSd74qfMVz7viRk8wK2cV7VP3Fg4e3dkaVU/3qF5ldvr3ttplYip5mxxsUOfHf2lolM2mbbfAzHGGqei+Fa5v+M4nqI62sQrPg4oTH160kfh4cPZikp2gUY8s6C0raD3scWqoOaB5v1/Vsi4iGlr1LAZEJz7hEJCOU4mC+FPf9dJJIpjemzgfQCUTH5bgcOESYXUMiac3UcUqR/Ufx6BQEEowLetRypB9m6tBNPK9sf+is40TLZ/vyLXr99BwZ4NsO2UHccPqN7BsgO6zflj2vcqDIyxd/HDGBvtmHal6z/PfGIRNWhrfWUu/ZAEA9xUnSiAeKGpDEfIWgmb3agjHJQpxVY/85b8iLBLXizGoD37TMfesvD5lw6ALsgFNiQvYQt8ZaHxlK5HJ1MQmkLeAq/TRoJYJ2r1tj3LJf4kBE3ELW+E4k5zFhfUD6C1SXx5UrRuftZopRUkhneuu+w2D2RZM3tciaDwnOn+EC98fH4gVXjjtIa79WHDfdLpoUZ42xGFwIGVMwb7XS2fT2eatCveyuWAg8GOXNCI7Ve50bZ07Qzs4zK7/T7IHQGUsR2cstWYS2NDrRO3l+zV7f7/FgWpzISKJNWOTJWs/lbUaIzumsDHHZkGJVpyePUgX4PNRLA3Rw7VaZasVwur4R20pTbHJlyYmFVC8BaLE3Ix1s2tH0RHgIyZ46tUbIDBDjFKc10lHrDFt+zNtDS/gkJcfpmgYGdY6ND+nF0pP3+zztzXTiqR2SJPQsszyA8EGQ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(136003)(396003)(39830400003)(376002)(451199015)(966005)(316002)(38100700002)(6486002)(86362001)(478600001)(31696002)(5660300002)(44832011)(41300700001)(36756003)(4326008)(66476007)(66556008)(66946007)(8676002)(8936002)(186003)(2616005)(31686004)(83380400001)(52116002)(53546011)(6512007)(6506007)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QWhhUjhXZU5VQlpuaTZQNFg1YnVrMU9YT2Rrb3JnYWF2Tmg5R0xFWllHRmMr?=
- =?utf-8?B?NTFGTUlCemJldWlUdTJEWlMzS2xlSkR2VmhCUGc3KzR2VUpCcXMxTDBBR0ZJ?=
- =?utf-8?B?QlBDWTA1UUtKMDVpQjVKRG1RZ2ZGREFPOTNDZkZNL3lsMjlTUmRRNzluMXhj?=
- =?utf-8?B?c1IzZVhiSTBmNWlabHJ4N0xTMWRmYmN3aDBlcFBKbTN2cmNORGNrZE5tUUhI?=
- =?utf-8?B?TWNKL0xiN2FMZzRWc21SaVJScUdYYUVEbXpHeWVacTFvU2Z3QTNRNlpJWFlC?=
- =?utf-8?B?UUxhakdIS3BiQkZ2d1lMNVBTTE41cUFEbTJSNEhYLzRXNi9QTFhSZXpiMTRI?=
- =?utf-8?B?WXRVZG9XVzQzeTFUdzB0OWwzaVF5Q2MwSVdXY3hUOEprUlRFblN0TTB0OUxj?=
- =?utf-8?B?WW5NWHk1czJOSDM0aFA5OVAwV3BVdUNjanJnQVUya1hRam9IT2Z0L1U2dGpy?=
- =?utf-8?B?TWk5UTFYZTFKZ0l3ckplc3NkUEJ2RjZab245QnZ4aHFsSDFXaHdnK29MRTBi?=
- =?utf-8?B?VmNZcWhTZFpXQjlhd1FPbWt6aXlLU1NwaHBUVTJ6VHNLVW43QXpaWDY3THdr?=
- =?utf-8?B?RjUzN2VoUkVGNzEvcWtrMkJJbWdUdjhoclA0Tm9XRWJxakNzSDBPdHgwdmxk?=
- =?utf-8?B?SlBuK21rTGd5c25XK3hGK3FVaktYS0V4MjN4Qy9XdFhQd1FINFIzT2pxTDhP?=
- =?utf-8?B?aXp6N2JVbU9iQXdCRDRIdFcwaHBlV2RRYS9pK0prbU1ybXlCM2VEbXcwcXVR?=
- =?utf-8?B?ei9DUFNFSWM2bjhGT0QxbG9DL3RVY3VnL2NjdEpER2pIYVpZZFcwZjByZHhs?=
- =?utf-8?B?K3ZwYjVna2lwbUVSTGtxOTQ2L1RnYW9KV3NydjFTcVZkNWpudVI4Y3NDbGRu?=
- =?utf-8?B?aDM1YkRDZCtkWXpwQjFpaEJzZjlQUjFmWDRLTnFmRnNLUktRMU16VWRGMWI0?=
- =?utf-8?B?Z1pqQmc3ODU3a1Z5aFFzVU5DMTVtRnFZK0ZQalNNY25FcVg4aWlQUE5CS3pr?=
- =?utf-8?B?djJOSzlsUkpqbU1FQUJzQ0h1MTNGWVlPd1JzNlhrcVFJbksyVGJuSDdTc0ZT?=
- =?utf-8?B?WlhJRU51Q0pDNUVUZ2I1RFZuVXo4aUxaODd4QjJBeEhDeTZQNVRuTHp1REIw?=
- =?utf-8?B?bjViK0ZNOXN6eTk5UHNyYUxacTBvOUNsaVorWEl0MVIwZnNuODBreVhZLzA2?=
- =?utf-8?B?YU1Ja0Z2b0pqNXVxQmVHZHJFYm5wVDB6WnY1S2tvNXlIajNmM1FqcGNncTVr?=
- =?utf-8?B?TVB3a2hLalZyWUJhZnlhQUMwU0JwNEw1TlBxcnM5UU1FM3FqYlFvYmxtbVMx?=
- =?utf-8?B?ZG5TWjlNbEZObU1teTlpRjRWVnV5RVdSRUJlRXhacDRyR3Z6bzFwRlAyb1F0?=
- =?utf-8?B?VGNPaHF1VUZuOFd5VkN6VlJXN052Z3pGQTVmTVY1VldTK3VoeHZoRzZnQ05N?=
- =?utf-8?B?c3lTdVJNUkVCdG9vdlY2OTV3Y1NTU1dLTlVsN1hLUjBCRkswRVg3Ri9UNC80?=
- =?utf-8?B?VEhtWDB1WlFXWnMvNW5oM3YvemR1clc1RjBUQkJIWVhUaWZEUnU1U3grVGh0?=
- =?utf-8?B?WWl5Rktqc3NBZXEydXdjbGlURGhmVnAxSEpOQkdMR09FRmZ2QUZTbFprVkVr?=
- =?utf-8?B?QVRkY3dPaTJsc1BHK0sxOUhjeHlUZDR2QVhyYVY1VjJEWnFncTNHa25pdCtu?=
- =?utf-8?B?OUJMYWNyNjYzcEc3bGNDc1JWMjg2YlQwNEtxYjN2cUw4dFZXaUd4a1FTVTd3?=
- =?utf-8?B?QWlwWFd5Y0h4NnNaV01FdkdtejgySmp1NmdDYXoxTURXWlB6TTFjQ2FKb082?=
- =?utf-8?B?S2xIZWF3Y3dwc25UV3hiaXdyTHUySG5NeEJTRmZZdFFmN1AyNmVCNFduSUwv?=
- =?utf-8?B?K2o4dW9YRmJvU2dXSWx1T2FVdXROd3VWUWJVbXhyRjJTQ1piWUg4NWVKcDdY?=
- =?utf-8?B?bENuTWJlaDllY1hUNjFrZ0dYRXFmbVFieWU2YzVhK2pmVHRLeEhKaGlsbllk?=
- =?utf-8?B?UnFXNjFQQ3dXempvcFpUQkVIRmEzNlA4aG4wYW5pYVg2QnJub3BobG82WU9B?=
- =?utf-8?B?enBKWnR2WWRMR1pwU1BjcnFCMHdMSXN4M2tpckhyelVFNitQNWFNSisydHFh?=
- =?utf-8?B?cDJMNnp5MzN2TG9mSWt6TEF4VzJCSFNrZUlHWVJXUnJ2KzBXZkpqeEhtRDlC?=
- =?utf-8?B?aXRzYjU0cjdrN3VOQmJnZytxRkg4bW5QSVV4RWpoalZjUFJkd2djQ3BsaTNR?=
- =?utf-8?B?S3ZmNDJZOFd5T0NCbnRnN2M4TDdBPT0=?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97a2d69a-d8c6-4f97-02af-08dad137d936
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 11:58:22.5198
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MvYjNf4HeQyxSO3SKZOx3B+IO/KuUkn7qL3fEeUdsjux6nPikAxgq7OaJnsHGhrfPLq6SQIb1ub0Pa2hFSpcXSobkqIgnH62qHRGiWnos+A=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR08MB5416
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH V3 4/5] i2c: ls2x: Add driver for Loongson-2K/LS7A I2C
+ controller
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, loongarch@lists.linux.dev,
+        devicetree@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+References: <cover.1669359515.git.zhoubinbin@loongson.cn>
+ <822356908305580d601e5b3e424371ed7f220b85.1669359515.git.zhoubinbin@loongson.cn>
+ <Y4Cb19PM97M9HaiB@smile.fi.intel.com>
+From:   Binbin Zhou <zhoubinbin@loongson.cn>
+In-Reply-To: <Y4Cb19PM97M9HaiB@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxXuCco4Rj+k0dAA--.8254S3
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3Jr1xXrW5Xw15Cr4kKr1UGFg_yoW3JFyUpF
+        WkJFy5KFW8Xr10grnrXr1YyFy2qrZ3Jw1xtFWrKFy29r90vwn2vFWrWr1Y9r1kWrWkC3yx
+        Aw4qgr45u3yFgFJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
+        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
+        AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCa
+        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8uc_3UUUUU==
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Michael,
+Hi Andy:
 
-On 11/14/22 16:57, Michael Grzeschik wrote:
-> On Sun, Oct 23, 2022 at 11:51:21PM +0200, Michael Grzeschik wrote:
->> There is no need for the i2c driver to have functional bus recovery to
->> probe successfully. We patch this by only adding bus_recovery_info only
->> if we get usable pinctrl data.
-> 
-> Gentle Ping!
+Firstly, thanks for your careful review.
 
-Thanks for your efforts. I believe this issue is adressed in a more
-recent patch [0], which seems to be on its way to mainline.
+在 2022/11/25 18:41, Andy Shevchenko 写道:
+> On Fri, Nov 25, 2022 at 04:55:20PM +0800, Binbin Zhou wrote:
+>> This I2C module is integrated into the Loongson-2K SoCs and Loongson
+>> LS7A bridge chip.
+> ...
+>
+> Missing bits.h.
 
-Best regards,
-Michael
+Is it needed? I found it already included in I2c.h.
+
+>
+>> +#include <linux/completion.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/device.h>
+>> +#include <linux/i2c.h>
+>> +#include <linux/init.h>
+>> +#include <linux/interrupt.h>
+>> +#include <linux/io.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_device.h>
+> There is no user of this header.
+> Why?
+>
+>> +#include <linux/platform_device.h>
+> ...
+>
+>> +/* LS2X I2C clock frequency 50M */
+>> +#define HZ_PER_MHZ		(50 * 1000000)
+> units.h ?
+I misunderstood your previous comment, and  the HZ_PER_MHZ in units.h 
+will be used.
+>
+> ...
+>
+>> +struct ls2x_i2c_dev {
+>> +	struct device		*dev;
+>> +	void __iomem		*base;
+>> +	int			irq;
+>> +	u32			bus_clk_rate;
+>> +	struct completion	cmd_complete;
+>> +	struct i2c_adapter	adapter;
+> Check if moving this to be the first field makes code generation better
+> (bloat-o-meter is your friend).
+
+vmlinux.old: original order
+
+vmlinux:  adapter to be the first field
+
+[zhoubinbin@kernelserver github]$ scripts/bloat-o-meter vmlinux.old vmlinux
+add/remove: 0/0 grow/shrink: 0/2 up/down: 0/-8 (-8)
+Function                                     old     new   delta
+ls2x_i2c_remove                               36      32      -4
+ls2x_i2c_probe                               424     420      -4
+
+Total: Before=19302026, After=19302018, chg -0.00%
 
 
-[0]
-https://lore.kernel.org/lkml/20221128105158.1536551-1-carsten.haitzler@foss.arm.com/
+>
+>> +	unsigned int		suspended:1;
+>> +};
+>> +	return ls2x_i2c_send_byte(adap, LS2X_CR_STOP);
+>> +}
+> ...
+>
+>> +static int ls2x_i2c_start(struct i2c_adapter *adap, struct i2c_msg *msgs)
+>> +{
+>> +	struct ls2x_i2c_dev *dev = i2c_get_adapdata(adap);
+>> +	unsigned char addr = i2c_8bit_addr_from_msg(msgs);
+>> +
+>> +	reinit_completion(&dev->cmd_complete);
+>> +	addr |= (msgs->flags & I2C_M_RD) ? 1 : 0;
+> Why is this needed?
+In the ls2x I2C controller, the bit 0 of TXR indicates the read/write 
+status when transferring the address.
+>
+>> +	writeb(addr, dev->base + I2C_LS2X_TXR);
+>> +
+>> +	return ls2x_i2c_send_byte(adap, (LS2X_CR_START | LS2X_CR_WRITE));
+>> +}
+> ...
+>
+>> +	while (len--) {
+>> +		if (len == 0)
+>> +			cmd |= LS2X_CR_ACK;
+>> +
+>> +		writeb(cmd, dev->base + I2C_LS2X_CR);
+> Can be written as
+>
+> 		writeb(cmd | (len ? 0 : LS2X_CR_ACK), dev->base + I2C_LS2X_CR);
+>
+> but it's up to you.
+>
+>> +		time_left = wait_for_completion_timeout(&dev->cmd_complete,
+>> +							adap->timeout);
+>> +		if (unlikely(!time_left)) {
+>> +			dev_err(dev->dev, "transaction timeout\n");
+>> +			return -ETIMEDOUT;
+>> +		}
+>> +
+>> +		*buf++ = readb(dev->base + I2C_LS2X_RXR);
+>> +	}
+> ...
+>
+>> +	for (retry = 0; retry < adap->retries; retry++) {
+>> +
+> Unneeded blank line.
+>
+>> +		ret = ls2x_i2c_doxfer(adap, msgs, num);
+>> +		if (ret != -EAGAIN)
+>> +			return ret;
+>> +
+>> +		dev_dbg(dev->dev, "Retrying transmission (%d)\n", retry);
+>> +		udelay(100);
+>> +	}
+> Can something from iopoll.h be utilized here?
+I think udelay() should be suitable because it is just the time interval 
+between two retry.
+>
+> ...
+>
+>> +	if (iflag & LS2X_SR_IF) {
+>> +		writeb(LS2X_CR_IACK, dev->base + I2C_LS2X_CR);
+>> +		complete(&dev->cmd_complete);
+>> +	} else
+>> +		return IRQ_NONE;
+>
+> Use usual pattern: checking for error condition first.
+>
+> 	if (!(iflag & LS2X_SR_IF))
+> 		return IRQ_NONE;
+>
+> 	writeb(LS2X_CR_IACK, dev->base + I2C_LS2X_CR);
+> 	complete(&dev->cmd_complete);
+>
+>> +	return IRQ_HANDLED;
+> ...
+>
+>> +	writeb((val & 0xff00) >> 8, dev->base + I2C_LS2X_PRER_HI);
+>
+> What ' & 0xff00' part is for?
+Emm... I'll use  writel(val, priv->base + I2C_LS2X_PRER_LO); instead.
+> ...
+>
+>> +	dev = devm_kzalloc(&pdev->dev,
+>> +			sizeof(struct ls2x_i2c_dev), GFP_KERNEL);
+> sizeof(*dev) and make it one line.
+>
+>> +	if (unlikely(!dev))
+> Why unlikely()?
+>
+>> +		return -ENOMEM;
+> ...
+>
+>> +	dev->irq = platform_get_irq(pdev, 0);
+>> +	if (unlikely(dev->irq <= 0))
+> Why 'unlikely()'? Why == 0 is here?
+>
+>> +		return -ENODEV;
+> ...
+>
+>> +	r = devm_request_irq(&pdev->dev, dev->irq, ls2x_i2c_isr,
+>> +			      IRQF_SHARED, "ls2x-i2c", dev);
+>> +	if (unlikely(r)) {
+> Why 'unlikely()'? You must explain all likely() / unlikely() use in the code.
+These 'unlikely()' may not be quite right, at that time I just thought 
+these anomalies were infrequent.
+>
+>> +		dev_err(dev->dev, "failure requesting irq %i\n", dev->irq);
+>> +		return r;
+> 	return dev_err_probe(...);
+>
+>> +	}
+> ...
+>
+>> +	/*
+>> +	 * The I2C controller has a fixed I2C bus frequency by default, but to
+>> +	 * be compatible with more client devices, we can obtain the set I2C
+>> +	 * bus frequency from ACPI or FDT.
+>> +	 */
+>> +	dev->bus_clk_rate = i2c_acpi_find_bus_speed(&pdev->dev);
+>> +	if (!dev->bus_clk_rate)
+>> +		device_property_read_u32(&pdev->dev, "clock-frequency",
+>> +					&dev->bus_clk_rate);
+> This should be done via
+>
+>          i2c_parse_fw_timings(&pdev->dev, ...);
+>
+> no?
 
-> 
->> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->> ---
->> drivers/i2c/busses/i2c-cadence.c | 7 +++----
->> 1 file changed, 3 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-cadence.c
->> b/drivers/i2c/busses/i2c-cadence.c
->> index fe0cd205502de9..cf212b8ffd56af 100644
->> --- a/drivers/i2c/busses/i2c-cadence.c
->> +++ b/drivers/i2c/busses/i2c-cadence.c
->> @@ -1262,10 +1262,10 @@ static int cdns_i2c_probe(struct
->> platform_device *pdev)
->>     }
->>
->>     id->rinfo.pinctrl = devm_pinctrl_get(&pdev->dev);
->> -    if (IS_ERR(id->rinfo.pinctrl)) {
->> +    if (!IS_ERR(id->rinfo.pinctrl))
->> +        id->adap.bus_recovery_info = &id->rinfo;
->> +    else
->>         dev_info(&pdev->dev, "can't get pinctrl, bus recovery not
->> supported\n");
->> -        return PTR_ERR(id->rinfo.pinctrl);
->> -    }
->>
->>     id->membase = devm_platform_get_and_ioremap_resource(pdev, 0,
->> &r_mem);
->>     if (IS_ERR(id->membase))
->> @@ -1283,7 +1283,6 @@ static int cdns_i2c_probe(struct platform_device
->> *pdev)
->>     id->adap.retries = 3;        /* Default retry value. */
->>     id->adap.algo_data = id;
->>     id->adap.dev.parent = &pdev->dev;
->> -    id->adap.bus_recovery_info = &id->rinfo;
->>     init_completion(&id->xfer_done);
->>     snprintf(id->adap.name, sizeof(id->adap.name),
->>          "Cadence I2C at %08lx", (unsigned long)r_mem->start);
->> -- 
->> 2.30.2
->>
->>
->>
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Yes, I get it，and the i2c_ls2x_adjust_bus_speed() function will be 
+introduced to calculate i2c bus_freq_hz.
+
+>
+> ...
+>
+>> +	adap->dev.of_node = pdev->dev.of_node;
+>> +	ACPI_COMPANION_SET(&adap->dev, ACPI_COMPANION(&pdev->dev));
+> device_set_node()
+>
+> ...
+>
+>> +	/* i2c device drivers may be active on return from add_adapter() */
+>> +	r = i2c_add_adapter(adap);
+>> +	if (r) {
+>> +		dev_err(dev->dev, "failure adding adapter\n");
+>> +		return r;
+> 	return dev_err_probe(...);
+>
+>> +	}
+> ...
+>
+>> +static int __maybe_unused ls2x_i2c_suspend_noirq(struct device *dev)
+> No __maybe_unused, use proper PM macros and definitions.
+> (look for pm_ptr() / pm_sleep_ptr() and corresponding defines)
+>
+>> +{
+>> +	struct platform_device *pdev = to_platform_device(dev);
+>> +	struct ls2x_i2c_dev *i2c_dev = platform_get_drvdata(pdev);
+>> +
+>> +	i2c_dev->suspended = 1;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int __maybe_unused ls2x_i2c_resume(struct device *dev)
+>> +{
+>> +	struct platform_device *pdev = to_platform_device(dev);
+>> +	struct ls2x_i2c_dev *i2c_dev = platform_get_drvdata(pdev);
+>> +
+>> +	i2c_dev->suspended = 0;
+>> +	ls2x_i2c_reginit(i2c_dev);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct dev_pm_ops ls2x_i2c_dev_pm_ops = {
+>> +	SET_SYSTEM_SLEEP_PM_OPS(ls2x_i2c_suspend_noirq, ls2x_i2c_resume)
+>> +};
+> As per above.
+
+The pm_sleep_ptr(&ls2x_i2c_dev_pm_ops) will be used in ls2x_i2c_driver 
+and drop __maybe_unused.
+
+Binbin
+
+> ...
+>
+>> +static const struct of_device_id ls2x_i2c_id_table[] = {
+>> +	{ .compatible = "loongson,ls2k-i2c" },
+>> +	{ .compatible = "loongson,ls7a-i2c" },
+>> +	{ /* sentinel */ },
+> No comma for terminator entry.
+>
+>> +};
+> ...
+>
+>> +	{ "LOON0004", 0 },
+> ', 0' is redundant.
+>
+> ...
+>
+>> +static struct platform_driver ls2x_i2c_driver = {
+>> +	.probe		= ls2x_i2c_probe,
+>> +	.remove		= ls2x_i2c_remove,
+>> +	.driver		= {
+>> +		.name	= "ls2x-i2c",
+>> +		.owner	= THIS_MODULE,
+> Why?
+>
+>> +		.pm	= &ls2x_i2c_dev_pm_ops,
+>> +		.of_match_table = ls2x_i2c_id_table,
+>> +		.acpi_match_table = ls2x_i2c_acpi_match,
+>> +	},
+>> +};
+
