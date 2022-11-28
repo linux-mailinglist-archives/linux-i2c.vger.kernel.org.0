@@ -2,95 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24E563A684
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Nov 2022 11:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4C563A778
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Nov 2022 12:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiK1K7e (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Nov 2022 05:59:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S229711AbiK1L61 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Nov 2022 06:58:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiK1K7a (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Nov 2022 05:59:30 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2052.outbound.protection.outlook.com [40.107.94.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DE3DF81;
-        Mon, 28 Nov 2022 02:59:29 -0800 (PST)
+        with ESMTP id S231230AbiK1L6Z (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Nov 2022 06:58:25 -0500
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2058.outbound.protection.outlook.com [40.107.22.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C435162CD
+        for <linux-i2c@vger.kernel.org>; Mon, 28 Nov 2022 03:58:24 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MB07fr9Hdw19dON9gPv5os5w3/isXGhLmRR1HMFUEzAmM/BNz1Q1sk1Tu8j3bZOYOOSFFrNmSZs8AURKiJzVQUZo5VNilqVYGJlvrIDA8gZlu6rJt8ei29U2kqE/u7kzDJ7brA8iqy+jF9Cjcuyu4NaYDeUP5ODJAkN0j7FHE6w/tiiqjc5is7dz8zr0tbuC84EEDQPY6ebszSiO1c1naJy9hI9jhXlWe0szvbZAd1pDDmzh6Sqrq19cYMfwky5i9tNSaO5rtFMMAEjDuPcn52faQRljzLUQdY9suIGF1kUcW+TPf6bvSwpnn+S4y2uBAPW9WKjiWsRzmkzytl0iBg==
+ b=SWnk9haXfvfSN5wXBqTdOkeq3eS3iOk0N7urYNPxTQ+mhNxeWuq1BbkxhXFOJOEmikpf6s4wqkI6tMYHqjseSzvcKus+8mVyLTaB110iqWkULfUiA8+rNCLZzscQ3Jxf4+Atwty/lxaiVm58eZ6V7ptlBQfm5uI9Nt47KLk3Vmsl4nR5A+eYoHXdMBcchYqI3TOi4r1PG97oQEvFTu0dZHNM3tjrl9p6kr7QKo2d+ftBIydUCXBCIaKlo5wgVp9ZfaR5T8xXNFhLQwcjkPudRZvxr5m+usKQ58eeNV+tgoN0nLQcD9bU/lTkvRafqquafHC1j6502G2uD8nb9sof6Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AL3p0jBC1PTvUM8neMFN/j8zbiHZz6cBVYB5Zd+FU/Y=;
- b=C/8qOPDV47lEAQmD739HMJTd2CPjzmNFx2LCOl17SzekqvNYn6jOjdnqij8KVJX1GF0PbVb5/1d4jBj4G9dz4tmlJJfL3x+7pahUAlF2XE7I9wwFRbMjDlDiFWcfm9ccCc+Oq4Du8frKFYzK6iRVgngxeZsLsGLFTvPJS2Lo/+/uhPdR5UmubLAsW3D2CZ0KiRJ7RfOIAYmbmtxOYGUN0doaMB2I3K0SA6AvmbesWSIFWm/qRL7B6QqH5J2bYd+cdsXosUVGHPGmpgFl4tA45HAnCsDlDnMdv7BZUxad2Ol0iOCnitEp1agH0nh5Wj7rEsqO4NIbw0EFT27aAePLEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=foss.arm.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=amKG0bTHUUasHOCc7Nshn2n6A1gSBstBuAirbqaeY58=;
+ b=Ca5oB2yncFYUSfL4n/sxkME850kYhBPYgiNdwSSyG87toZPpaeguOOWQhdYZPkWzkOuIscxuOv/x729zBFznlKikk7YFa38eV7AcNveDUlgiPI+p3YrOua5PFuGMIIBojuD5bwFtm9zYV+l/n4KvqNU4Mie+XrtlT3kcacxKUFPNnbtiwiF1t3/6JlzXonNKx/oiV8bwsUR47fwrhVgC2zbqS48hL6F4u++umP/e1Y/BCjBjdArPcB1eUmgA/bEMdwuA7q0jt2gtCS5zljA9IDPGouSD5hPlzsCa+uqEkJcS2sr9hbQbNdTNdhLrNA26SUNTMRU+tl/flBnI3VjnHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AL3p0jBC1PTvUM8neMFN/j8zbiHZz6cBVYB5Zd+FU/Y=;
- b=l5hYiJh7/08m3UmMKuG07q6uX4tr1qHiIqD3EUIwlRewDfHBhhtfKm3D8pqK6o5rxv/3DnXasCa46XXLim9qq0K3hpBfHj8oWxqHnk+IoPpl7/R8wYluw9fyqzYXkbfLI18EbBAXfTg1LErsa98LLNReA5uxJNg+YVVOXezeObc=
-Received: from DM6PR12CA0001.namprd12.prod.outlook.com (2603:10b6:5:1c0::14)
- by DS0PR12MB6557.namprd12.prod.outlook.com (2603:10b6:8:d3::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5857.22; Mon, 28 Nov 2022 10:59:27 +0000
-Received: from DS1PEPF0000B074.namprd05.prod.outlook.com
- (2603:10b6:5:1c0:cafe::49) by DM6PR12CA0001.outlook.office365.com
- (2603:10b6:5:1c0::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23 via Frontend
- Transport; Mon, 28 Nov 2022 10:59:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS1PEPF0000B074.mail.protection.outlook.com (10.167.17.5) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5857.17 via Frontend Transport; Mon, 28 Nov 2022 10:59:27 +0000
-Received: from [10.254.241.50] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 28 Nov
- 2022 04:59:17 -0600
-Message-ID: <a885977a-bfdf-fe1c-8f33-732b18f5abec@amd.com>
-Date:   Mon, 28 Nov 2022 11:59:14 +0100
-MIME-Version: 1.0
+ bh=amKG0bTHUUasHOCc7Nshn2n6A1gSBstBuAirbqaeY58=;
+ b=qA2/gmY3SSdKHaWML4tJYzmItboBACkE/jRRXiGocFNsV9h0/NhKDI7OWLbKKRfFNWWyHliwS8ubFkp47S7daC/PWcndIdDJcTcEGI55IMMeuvB3yJivfR50mohzdMTQsc2FDr+q7cojFdfSeWMfZeEu0O+i/iMSK0pADd8rszc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
+ by AM7PR08MB5416.eurprd08.prod.outlook.com (2603:10a6:20b:10e::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Mon, 28 Nov
+ 2022 11:58:22 +0000
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::3643:6226:28c:e637]) by DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::3643:6226:28c:e637%2]) with mapi id 15.20.5880.008; Mon, 28 Nov 2022
+ 11:58:22 +0000
+Message-ID: <ec30bbb7-88f4-f24c-c080-d195d91c2b95@wolfvision.net>
+Date:   Mon, 28 Nov 2022 12:58:20 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2] i2c: cadence: Fix regression with bus recovery
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] i2c: cadence: make bus recovery optional
 Content-Language: en-US
-To:     <carsten.haitzler@foss.arm.com>, <michal.simek@xilinx.com>,
-        <shubhrajyoti.datta@xilinx.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        'Wolfram Sang' <wsa@kernel.org>
-References: <20221128105158.1536551-1-carsten.haitzler@foss.arm.com>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <20221128105158.1536551-1-carsten.haitzler@foss.arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
+To:     Michael Grzeschik <mgr@pengutronix.de>, linux-i2c@vger.kernel.org
+Cc:     kernel@pengutronix.de, michal.simek@xilinx.com,
+        linux-arm-kernel@lists.infradead.org
+References: <20221023215121.221316-1-m.grzeschik@pengutronix.de>
+ <20221114155700.GA18924@pengutronix.de>
+From:   Michael Riesch <michael.riesch@wolfvision.net>
+In-Reply-To: <20221114155700.GA18924@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: VI1P194CA0015.EURP194.PROD.OUTLOOK.COM
+ (2603:10a6:800:be::25) To DU0PR08MB9155.eurprd08.prod.outlook.com
+ (2603:10a6:10:416::5)
+MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000B074:EE_|DS0PR12MB6557:EE_
-X-MS-Office365-Filtering-Correlation-Id: 03059821-effb-4c08-0371-08dad12f9e1d
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|AM7PR08MB5416:EE_
+X-MS-Office365-Filtering-Correlation-Id: 97a2d69a-d8c6-4f97-02af-08dad137d936
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4Im/sPZcmAna0+ljKr+gXXpX2dmwsERd35snwJiC/0e8sjIdO4RzS3bILPDn84E6Zk9NDQDLt70DOYsfSEs+6wPBaUQmIcUFge6UHlx5uvxrdbfiJsWz1qrkjbcC8iOAh4ZUX2xzKqlYQ9RvxCzd+dmDCu/KI4+7oq/qlrLpK/FMvqWxRSbiLpuGVCAYWDXzIBV3iHyc5XWt65Fx1aaqcTpv1SbFYwiljKz4qE5Nstq4GfqPuzN3n3bnKyrwSdR7iDgmp00qrxE1vAP913H7u9ShTTO3llB+Q5350/l0CUSClIPPTm69CzhcOLtfp67VafQ9SdKeNozOEtYYZJjhLrvX+f5Lml3vR7dpnmYPCf3hKNqClTVfq42XkqpkcXQ689MTY719oK6QzbwJIxoyTo6LYIf44iEawyZLAFdaKDh4BSqy22LESsslGhH2xxfi/moTvE5C11nI9mm+AWOdgDcScG+UTyWKe+MLYGA2mlpjtM80cp//Bdi9hPWNczQ1xRqpOlaN8/1cHwXkKwauoo5oiKwWjzpQUb8e2Urowg0vhM3CBRMSUkH2rSuYlIrd3RZGG5f1GKdXLXTkNqxFk7d/5ikP2C5FvkFBo7K40Zpti6N4QB3yVvYNgrhbBgNar7bkiyO6WxZg1ltXExQCrW8HQbVDEbO2UiIH8LD7P0gG5FDYYmWawrmmxT3TQ+shXMakwYga1wLa0eZVc3LpSrdJv8I3CKpm9q0l/UTyjXKCh5Fit5QpEFTSxmA0xEfkHZEXT4gbyKRgndtjLLH8gizeQfwvvvbpSq3YM9YCtXu4MFMOXymXGcnip2uopOcW
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(396003)(39860400002)(451199015)(40470700004)(46966006)(36840700001)(186003)(81166007)(16526019)(356005)(2616005)(41300700001)(2906002)(966005)(82740400003)(40480700001)(36756003)(8936002)(83380400001)(86362001)(6666004)(31696002)(44832011)(40460700003)(110136005)(426003)(82310400005)(47076005)(336012)(316002)(16576012)(53546011)(31686004)(26005)(8676002)(36860700001)(478600001)(70586007)(5660300002)(70206006)(36900700001)(2101003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 10:59:27.1934
+X-Microsoft-Antispam-Message-Info: glzSd74qfMVz7viRk8wK2cV7VP3Fg4e3dkaVU/3qF5ldvr3ttplYip5mxxsUOfHf2lolM2mbbfAzHGGqei+Fa5v+M4nqI62sQrPg4oTH160kfh4cPZikp2gUY8s6C0raD3scWqoOaB5v1/Vsi4iGlr1LAZEJz7hEJCOU4mC+FPf9dJJIpjemzgfQCUTH5bgcOESYXUMiac3UcUqR/Ufx6BQEEowLetRypB9m6tBNPK9sf+is40TLZ/vyLXr99BwZ4NsO2UHccPqN7BsgO6zflj2vcqDIyxd/HDGBvtmHal6z/PfGIRNWhrfWUu/ZAEA9xUnSiAeKGpDEfIWgmb3agjHJQpxVY/85b8iLBLXizGoD37TMfesvD5lw6ALsgFNiQvYQt8ZaHxlK5HJ1MQmkLeAq/TRoJYJ2r1tj3LJf4kBE3ELW+E4k5zFhfUD6C1SXx5UrRuftZopRUkhneuu+w2D2RZM3tciaDwnOn+EC98fH4gVXjjtIa79WHDfdLpoUZ42xGFwIGVMwb7XS2fT2eatCveyuWAg8GOXNCI7Ve50bZ07Qzs4zK7/T7IHQGUsR2cstWYS2NDrRO3l+zV7f7/FgWpzISKJNWOTJWs/lbUaIzumsDHHZkGJVpyePUgX4PNRLA3Rw7VaZasVwur4R20pTbHJlyYmFVC8BaLE3Ix1s2tH0RHgIyZ46tUbIDBDjFKc10lHrDFt+zNtDS/gkJcfpmgYGdY6ND+nF0pP3+zztzXTiqR2SJPQsszyA8EGQ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(136003)(396003)(39830400003)(376002)(451199015)(966005)(316002)(38100700002)(6486002)(86362001)(478600001)(31696002)(5660300002)(44832011)(41300700001)(36756003)(4326008)(66476007)(66556008)(66946007)(8676002)(8936002)(186003)(2616005)(31686004)(83380400001)(52116002)(53546011)(6512007)(6506007)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QWhhUjhXZU5VQlpuaTZQNFg1YnVrMU9YT2Rrb3JnYWF2Tmg5R0xFWllHRmMr?=
+ =?utf-8?B?NTFGTUlCemJldWlUdTJEWlMzS2xlSkR2VmhCUGc3KzR2VUpCcXMxTDBBR0ZJ?=
+ =?utf-8?B?QlBDWTA1UUtKMDVpQjVKRG1RZ2ZGREFPOTNDZkZNL3lsMjlTUmRRNzluMXhj?=
+ =?utf-8?B?c1IzZVhiSTBmNWlabHJ4N0xTMWRmYmN3aDBlcFBKbTN2cmNORGNrZE5tUUhI?=
+ =?utf-8?B?TWNKL0xiN2FMZzRWc21SaVJScUdYYUVEbXpHeWVacTFvU2Z3QTNRNlpJWFlC?=
+ =?utf-8?B?UUxhakdIS3BiQkZ2d1lMNVBTTE41cUFEbTJSNEhYLzRXNi9QTFhSZXpiMTRI?=
+ =?utf-8?B?WXRVZG9XVzQzeTFUdzB0OWwzaVF5Q2MwSVdXY3hUOEprUlRFblN0TTB0OUxj?=
+ =?utf-8?B?WW5NWHk1czJOSDM0aFA5OVAwV3BVdUNjanJnQVUya1hRam9IT2Z0L1U2dGpy?=
+ =?utf-8?B?TWk5UTFYZTFKZ0l3ckplc3NkUEJ2RjZab245QnZ4aHFsSDFXaHdnK29MRTBi?=
+ =?utf-8?B?VmNZcWhTZFpXQjlhd1FPbWt6aXlLU1NwaHBUVTJ6VHNLVW43QXpaWDY3THdr?=
+ =?utf-8?B?RjUzN2VoUkVGNzEvcWtrMkJJbWdUdjhoclA0Tm9XRWJxakNzSDBPdHgwdmxk?=
+ =?utf-8?B?SlBuK21rTGd5c25XK3hGK3FVaktYS0V4MjN4Qy9XdFhQd1FINFIzT2pxTDhP?=
+ =?utf-8?B?aXp6N2JVbU9iQXdCRDRIdFcwaHBlV2RRYS9pK0prbU1ybXlCM2VEbXcwcXVR?=
+ =?utf-8?B?ei9DUFNFSWM2bjhGT0QxbG9DL3RVY3VnL2NjdEpER2pIYVpZZFcwZjByZHhs?=
+ =?utf-8?B?K3ZwYjVna2lwbUVSTGtxOTQ2L1RnYW9KV3NydjFTcVZkNWpudVI4Y3NDbGRu?=
+ =?utf-8?B?aDM1YkRDZCtkWXpwQjFpaEJzZjlQUjFmWDRLTnFmRnNLUktRMU16VWRGMWI0?=
+ =?utf-8?B?Z1pqQmc3ODU3a1Z5aFFzVU5DMTVtRnFZK0ZQalNNY25FcVg4aWlQUE5CS3pr?=
+ =?utf-8?B?djJOSzlsUkpqbU1FQUJzQ0h1MTNGWVlPd1JzNlhrcVFJbksyVGJuSDdTc0ZT?=
+ =?utf-8?B?WlhJRU51Q0pDNUVUZ2I1RFZuVXo4aUxaODd4QjJBeEhDeTZQNVRuTHp1REIw?=
+ =?utf-8?B?bjViK0ZNOXN6eTk5UHNyYUxacTBvOUNsaVorWEl0MVIwZnNuODBreVhZLzA2?=
+ =?utf-8?B?YU1Ja0Z2b0pqNXVxQmVHZHJFYm5wVDB6WnY1S2tvNXlIajNmM1FqcGNncTVr?=
+ =?utf-8?B?TVB3a2hLalZyWUJhZnlhQUMwU0JwNEw1TlBxcnM5UU1FM3FqYlFvYmxtbVMx?=
+ =?utf-8?B?ZG5TWjlNbEZObU1teTlpRjRWVnV5RVdSRUJlRXhacDRyR3Z6bzFwRlAyb1F0?=
+ =?utf-8?B?VGNPaHF1VUZuOFd5VkN6VlJXN052Z3pGQTVmTVY1VldTK3VoeHZoRzZnQ05N?=
+ =?utf-8?B?c3lTdVJNUkVCdG9vdlY2OTV3Y1NTU1dLTlVsN1hLUjBCRkswRVg3Ri9UNC80?=
+ =?utf-8?B?VEhtWDB1WlFXWnMvNW5oM3YvemR1clc1RjBUQkJIWVhUaWZEUnU1U3grVGh0?=
+ =?utf-8?B?WWl5Rktqc3NBZXEydXdjbGlURGhmVnAxSEpOQkdMR09FRmZ2QUZTbFprVkVr?=
+ =?utf-8?B?QVRkY3dPaTJsc1BHK0sxOUhjeHlUZDR2QVhyYVY1VjJEWnFncTNHa25pdCtu?=
+ =?utf-8?B?OUJMYWNyNjYzcEc3bGNDc1JWMjg2YlQwNEtxYjN2cUw4dFZXaUd4a1FTVTd3?=
+ =?utf-8?B?QWlwWFd5Y0h4NnNaV01FdkdtejgySmp1NmdDYXoxTURXWlB6TTFjQ2FKb082?=
+ =?utf-8?B?S2xIZWF3Y3dwc25UV3hiaXdyTHUySG5NeEJTRmZZdFFmN1AyNmVCNFduSUwv?=
+ =?utf-8?B?K2o4dW9YRmJvU2dXSWx1T2FVdXROd3VWUWJVbXhyRjJTQ1piWUg4NWVKcDdY?=
+ =?utf-8?B?bENuTWJlaDllY1hUNjFrZ0dYRXFmbVFieWU2YzVhK2pmVHRLeEhKaGlsbllk?=
+ =?utf-8?B?UnFXNjFQQ3dXempvcFpUQkVIRmEzNlA4aG4wYW5pYVg2QnJub3BobG82WU9B?=
+ =?utf-8?B?enBKWnR2WWRMR1pwU1BjcnFCMHdMSXN4M2tpckhyelVFNitQNWFNSisydHFh?=
+ =?utf-8?B?cDJMNnp5MzN2TG9mSWt6TEF4VzJCSFNrZUlHWVJXUnJ2KzBXZkpqeEhtRDlC?=
+ =?utf-8?B?aXRzYjU0cjdrN3VOQmJnZytxRkg4bW5QSVV4RWpoalZjUFJkd2djQ3BsaTNR?=
+ =?utf-8?B?S3ZmNDJZOFd5T0NCbnRnN2M4TDdBPT0=?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97a2d69a-d8c6-4f97-02af-08dad137d936
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 11:58:22.5198
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03059821-effb-4c08-0371-08dad12f9e1d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000B074.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6557
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MvYjNf4HeQyxSO3SKZOx3B+IO/KuUkn7qL3fEeUdsjux6nPikAxgq7OaJnsHGhrfPLq6SQIb1ub0Pa2hFSpcXSobkqIgnH62qHRGiWnos+A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR08MB5416
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -101,87 +127,71 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-+Wolfram,
+Hi Michael,
 
-On 11/28/22 11:51, carsten.haitzler@foss.arm.com wrote:
-> CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
+On 11/14/22 16:57, Michael Grzeschik wrote:
+> On Sun, Oct 23, 2022 at 11:51:21PM +0200, Michael Grzeschik wrote:
+>> There is no need for the i2c driver to have functional bus recovery to
+>> probe successfully. We patch this by only adding bus_recovery_info only
+>> if we get usable pinctrl data.
 > 
-> 
-> From: Carsten Haitzler <carsten.haitzler@arm.com>
-> 
-> Commit "i2c: cadence: Add standard bus recovery support" breaks for i2c
-> devices that have no pinctrl defined. There is no requirement for this
-> to exist in the DT. This has worked perfectly well without this before in
-> at least 1 real usage case on hardware (Mali Komeda DPU, Cadence i2c to
-> talk to a tda99xx phy). Adding the requirement to have pinctrl set up in
-> the device tree (or otherwise be found) is a regression where the whole
-> i2c device is lost entirely (in this case dropping entire devices which
-> then leads to the drm display stack unable to find the phy for display
-> output, thus having no drm display device and so on down the chain).
-> 
-> This converts the above commit to an enhancement if pinctrl can be found
-> for the i2c device, providing a timeout on read with recovery, but if not,
-> do what used to be done rather than a fatal loss of a device.
-> 
-> This restores the mentioned display devices to their working state again.
-> 
-> Fixes: 58b924241d0a ("i2c: cadence: Add standard bus recovery support")
-> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
-> ---
-> Note: This issue was discovered during the porting of the linux kernel
-> on Morello [1].
-> 
-> [1] https://git.morello-project.org/morello/kernel/linux
-> ---
->   drivers/i2c/busses/i2c-cadence.c | 12 ++++++++----
->   1 file changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-> index fe0cd205502d..09acd2d399d5 100644
-> --- a/drivers/i2c/busses/i2c-cadence.c
-> +++ b/drivers/i2c/busses/i2c-cadence.c
-> @@ -852,7 +852,8 @@ static int cdns_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
->                                           CDNS_I2C_POLL_US, CDNS_I2C_TIMEOUT_US);
->          if (ret) {
->                  ret = -EAGAIN;
-> -               i2c_recover_bus(adap);
-> +               if (id->adap.bus_recovery_info)
-> +                       i2c_recover_bus(adap);
->                  goto out;
->          }
-> 
-> @@ -1263,9 +1264,13 @@ static int cdns_i2c_probe(struct platform_device *pdev)
-> 
->          id->rinfo.pinctrl = devm_pinctrl_get(&pdev->dev);
->          if (IS_ERR(id->rinfo.pinctrl)) {
-> +               int err = PTR_ERR(id->rinfo.pinctrl);
-> +
->                  dev_info(&pdev->dev, "can't get pinctrl, bus recovery not supported\n");
-> -               return PTR_ERR(id->rinfo.pinctrl);
-> -       }
-> +               if (err != -ENODEV)
-> +                       return err;
-> +       } else
-> +               id->adap.bus_recovery_info = &id->rinfo;
-> 
->          id->membase = devm_platform_get_and_ioremap_resource(pdev, 0, &r_mem);
->          if (IS_ERR(id->membase))
-> @@ -1283,7 +1288,6 @@ static int cdns_i2c_probe(struct platform_device *pdev)
->          id->adap.retries = 3;           /* Default retry value. */
->          id->adap.algo_data = id;
->          id->adap.dev.parent = &pdev->dev;
-> -       id->adap.bus_recovery_info = &id->rinfo;
->          init_completion(&id->xfer_done);
->          snprintf(id->adap.name, sizeof(id->adap.name),
->                   "Cadence I2C at %08lx", (unsigned long)r_mem->start);
-> --
-> 2.32.0
-> 
+> Gentle Ping!
 
-Acked-by: Michal Simek <michal.simek@amd.com>
+Thanks for your efforts. I believe this issue is adressed in a more
+recent patch [0], which seems to be on its way to mainline.
 
-Wolfram: up2you if you want to take it for 6.1. If it is too late I think it 
-should be labeled as stable material for 6.1.
+Best regards,
+Michael
 
-Thanks,
-Michal
+
+[0]
+https://lore.kernel.org/lkml/20221128105158.1536551-1-carsten.haitzler@foss.arm.com/
+
+> 
+>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>> ---
+>> drivers/i2c/busses/i2c-cadence.c | 7 +++----
+>> 1 file changed, 3 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-cadence.c
+>> b/drivers/i2c/busses/i2c-cadence.c
+>> index fe0cd205502de9..cf212b8ffd56af 100644
+>> --- a/drivers/i2c/busses/i2c-cadence.c
+>> +++ b/drivers/i2c/busses/i2c-cadence.c
+>> @@ -1262,10 +1262,10 @@ static int cdns_i2c_probe(struct
+>> platform_device *pdev)
+>>     }
+>>
+>>     id->rinfo.pinctrl = devm_pinctrl_get(&pdev->dev);
+>> -    if (IS_ERR(id->rinfo.pinctrl)) {
+>> +    if (!IS_ERR(id->rinfo.pinctrl))
+>> +        id->adap.bus_recovery_info = &id->rinfo;
+>> +    else
+>>         dev_info(&pdev->dev, "can't get pinctrl, bus recovery not
+>> supported\n");
+>> -        return PTR_ERR(id->rinfo.pinctrl);
+>> -    }
+>>
+>>     id->membase = devm_platform_get_and_ioremap_resource(pdev, 0,
+>> &r_mem);
+>>     if (IS_ERR(id->membase))
+>> @@ -1283,7 +1283,6 @@ static int cdns_i2c_probe(struct platform_device
+>> *pdev)
+>>     id->adap.retries = 3;        /* Default retry value. */
+>>     id->adap.algo_data = id;
+>>     id->adap.dev.parent = &pdev->dev;
+>> -    id->adap.bus_recovery_info = &id->rinfo;
+>>     init_completion(&id->xfer_done);
+>>     snprintf(id->adap.name, sizeof(id->adap.name),
+>>          "Cadence I2C at %08lx", (unsigned long)r_mem->start);
+>> -- 
+>> 2.30.2
+>>
+>>
+>>
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
