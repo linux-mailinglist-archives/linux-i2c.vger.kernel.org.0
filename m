@@ -2,140 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A7E63A120
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Nov 2022 07:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F101863A654
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Nov 2022 11:48:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiK1GYz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Nov 2022 01:24:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
+        id S230050AbiK1KsE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Nov 2022 05:48:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiK1GYx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Nov 2022 01:24:53 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2051.outbound.protection.outlook.com [40.107.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0309DBF72;
-        Sun, 27 Nov 2022 22:24:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P47Gh6LRx7j47qAK/SQfNhs1qvqeUxpINSXARRcyPG+Cfy1HQlxyXSm4RsspQquRnwauLon2UMQqa5KJI3nZbqUD2HL6KZJSG1ugW3v6PyD3rjhhPOTxTn/dPhi6gGxXexwOv8vo9x90heiZ/cNJ8+Q1MIOjrAVtAtKK2YshUFsuEZh1zJEK2Rr6PZlpaDi8r014buwcjhUtC7VPuY3rsXhRnS9px344ebyohuO/5IAXa4mt7bkUrR+C09cG3XEtmJ626dZN55BqCbysjqRk48HfmZr/vD8fhXm+BvG1TvAqB/k9USGgI/XA03VsgibkAVfmegaX4/a7h6GhNV23pw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6yQkhuW34X3igqmtBAfLIrsAd04PH0tu88VfcpDwo0A=;
- b=YVNSErLojSQ6HxpMwfjc+zLcBqmBb5rFFuFz3N5WsIH3L38lBFDctbWYwgvJqeCM9NQY5Sjalctpdai7ratHMFSvU287ST6tX5COjYDA8q6KmtizG+XTrrKysMzJVpLjZqZxK2eAXR9AVTq4heIUAw0EH7wO8Xr3p8TU/pHgFrZcgziJjm3PEd4lVY3df+5/lKDMro73iUdXY1FIrUa1TNdjthVt9W1zi3o3Dq8f1qpLUSfwOkbE7f4+DxAzMgOBmoIH194o2UUsKYZ8Xibv1HK5f5RqyXllkC4tP4Yrea74iXLgoJnMLMF04UX5MOENU3qJQSYogCMljqLS6sno4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6yQkhuW34X3igqmtBAfLIrsAd04PH0tu88VfcpDwo0A=;
- b=o3VRoIrHZrHVZqfG2zzKlVFvRFtADf1TgNYiPSDp2itEpVXTB2pLGMSOFK4hlm53Kw0tMQmfJ9Up1P+11WOYUMteywdQIGf9EnVLN9/3tDEMVOZz0kHN0otlcM4BoEtbXKTI9VDPNxn1z+GazzT/iHL0OWm/79SDoXOK/hGGngc=
-Received: from BY5PR12MB4902.namprd12.prod.outlook.com (2603:10b6:a03:1dd::9)
- by DS7PR12MB6095.namprd12.prod.outlook.com (2603:10b6:8:9c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Mon, 28 Nov
- 2022 06:24:49 +0000
-Received: from BY5PR12MB4902.namprd12.prod.outlook.com
- ([fe80::841d:83c4:9ac:f5be]) by BY5PR12MB4902.namprd12.prod.outlook.com
- ([fe80::841d:83c4:9ac:f5be%3]) with mapi id 15.20.5857.023; Mon, 28 Nov 2022
- 06:24:49 +0000
-Content-Type: multipart/mixed;
-        boundary="_000_BY5PR12MB49026A5C37C25915E6C8A86F81139BY5PR12MB4902namp_"
-From:   "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>
-To:     "carsten.haitzler@foss.arm.com" <carsten.haitzler@foss.arm.com>,
+        with ESMTP id S229976AbiK1KsD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Nov 2022 05:48:03 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31CD67645;
+        Mon, 28 Nov 2022 02:48:01 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D8DE6D6E;
+        Mon, 28 Nov 2022 02:48:07 -0800 (PST)
+Received: from [192.168.99.12] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EB7153F73B;
+        Mon, 28 Nov 2022 02:47:59 -0800 (PST)
+Message-ID: <15170a9f-c600-5700-95ba-4c424b1d2197@foss.arm.com>
+Date:   Mon, 28 Nov 2022 10:47:58 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] i2c: cadence: Fix regression with bus recovery
+To:     "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>,
         "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
         "shubhrajyoti.datta@xilinx.com" <shubhrajyoti.datta@xilinx.com>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
-Subject: RE: [PATCH] i2c: cadence: Fix regression with bus recovery
-Thread-Topic: [PATCH] i2c: cadence: Fix regression with bus recovery
-Thread-Index: AQHZAMREFawCIV1ne0+yz9fOkZyEoq5T4ekA
-Date:   Mon, 28 Nov 2022 06:24:48 +0000
-Message-ID: <BY5PR12MB49026A5C37C25915E6C8A86F81139@BY5PR12MB4902.namprd12.prod.outlook.com>
+Cc:     "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
 References: <20221125115103.674756-1-carsten.haitzler@foss.arm.com>
-In-Reply-To: <20221125115103.674756-1-carsten.haitzler@foss.arm.com>
-Accept-Language: en-US
+ <BY5PR12MB49026A5C37C25915E6C8A86F81139@BY5PR12MB4902.namprd12.prod.outlook.com>
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: <BY5PR12MB49026A5C37C25915E6C8A86F81139@BY5PR12MB4902.namprd12.prod.outlook.com>
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-11-28T06:24:46Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=566218b8-2c67-4e2c-9283-074cd5500913;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BY5PR12MB4902:EE_|DS7PR12MB6095:EE_
-x-ms-office365-filtering-correlation-id: 6ed9990c-870b-4f3d-075f-08dad1094043
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: =?us-ascii?Q?TbTf9vWcgceTi6UGQWeQytusKLX+2S8yWJ/naA9n0lBV19a5Kf9uL8MeSUxV?=
- =?us-ascii?Q?ZJAygJJaGwoZHkVM13mMFcHng2g02n0Jg6sXFvHb5DCC2QWXBx7PvX9sslel?=
- =?us-ascii?Q?BjD9wYGISuZB1G/DEDe64mbc5MKwYUV1kax/texzuDAH6P6nKDaTFkPUpctn?=
- =?us-ascii?Q?5AKVmVkKtZ0rWhVxRZaG4QK1+Jn+KQOjDT0jlPe6XCnJsuz8GbCtzFtRcz0X?=
- =?us-ascii?Q?FecEK9r/8/zg6szCzOOlqOVmfJjNxZAcAVHY0ZvUNE6lAdyB5zzv9r9+kop7?=
- =?us-ascii?Q?whS2VpnjqYBdkLKjdizGsHt3wEOGx6VN3g7Wr3AHo6yx6+yp2yeMF3LN4CM8?=
- =?us-ascii?Q?r68N2NLk84eBcpPF2dO0on0Ppx2pY8KWGGP4H80J9a+KxEH3iV/pXoXKwPFi?=
- =?us-ascii?Q?14wJJ526fwUbpyjRqyA8gJwbdEYbYPi4P2qscTD/DwHH86X+7pY2EVZ7VlmS?=
- =?us-ascii?Q?A7dibgM9bP4y0nhzlHXMIGjNhww1OiDgxVwKtukNDcYuEjlNAf5QD3z6orm6?=
- =?us-ascii?Q?csB0eZwTCg6UmEmhNCjgBCNpEGmF34ZJ9YhACdXEz+DioEpxhUmwAFz3NsOb?=
- =?us-ascii?Q?Nv9WO5ONUYxFbCKn7HrrUExN+Ab9OnkP9NV/OkeAQox9Fo62L2wXW83JHJ5u?=
- =?us-ascii?Q?AzkS4vvl4RFdnGS6LN8Vy/UP54xt40xhSN/BZIDI0e5FXfIRXdPP2BAYnlNq?=
- =?us-ascii?Q?sAQ8Dn3+LWq1Rj4dXKJHcl53R0FnKsMjV/zpXR923kxJ1LNHxxMJG+IlBqdG?=
- =?us-ascii?Q?+gprqyLdHhHAdBdcrH5ckYo22w8WA7uktP4eeGapuerWL4CD/LzGE2iZaNdP?=
- =?us-ascii?Q?masZ5lkztlU+XMMLrbYrlHJhqTQEqvu1b17LvKYJQAU6mBWM+V0IwyWxlCxC?=
- =?us-ascii?Q?+PMZuvHXExcnL54MrZKAfxJTPMXsATVtlseXoAV/XuOJRSRwiraCbcVOM8Zq?=
- =?us-ascii?Q?0HFX1n6il8Tg9xVbSYD0Slq+eW0gBepMyPi0T4zR/Bp78oMjs2Wx9TsxX+Xh?=
- =?us-ascii?Q?/1v/?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4902.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(39860400002)(376002)(396003)(346002)(451199015)(966005)(6506007)(7696005)(83380400001)(86362001)(478600001)(53546011)(45080400002)(71200400001)(316002)(9686003)(26005)(110136005)(52536014)(41300700001)(5660300002)(55016003)(33656002)(38070700005)(2906002)(38100700002)(8676002)(4326008)(64756008)(186003)(8936002)(66446008)(76116006)(66946007)(66556008)(66476007)(122000001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Gx+YC3PP9jQB8qx4sDYICKtfqqr++pAqpedoKuStm5YocNPYICw8ipZQfd7g?=
- =?us-ascii?Q?CBHHCDGoLulgC8wwyGwZ8sgmtFuFqQK80tHuXbgwibOZCtAi7m0euMnFqS68?=
- =?us-ascii?Q?gdRpKRn0IqxEG7GhE2fb9UTFupKnWuC+qT1x1pHGlFStQGwbUpVGCjLCnzre?=
- =?us-ascii?Q?xxg8sjLXLh3RatEZ6SnF5AnPs5HiiqNWjr6TI1bOO7PRK6NOLHMj0qOxhiZb?=
- =?us-ascii?Q?3nwTJiOjvZMFPA/Azj6icmGeXex+Nz4N/39omWGA4hZiYGvpYF/otNlx0JwI?=
- =?us-ascii?Q?KlSaHExGDrjRnB3MIkdWOi6RdivlLRXZ5m8ietlIpIeesr9D2LEG6xbEYV6e?=
- =?us-ascii?Q?3b5eFK171ijWIbYtbtTLcZOPS8XoLd6lT/uxBBAVvFbH++EVXiuXlY79TvAu?=
- =?us-ascii?Q?twZNxxHF5y2g1Dp3VwPch+ywSq9sko6DgV8XIGgCXMxN7xwMpy5BKWO/di67?=
- =?us-ascii?Q?2+pM/gxMfmwzDZZ8SbTrx9Rr9s10pWbXfFqfCVhW3qx5M4ZzcR21edNHAs+9?=
- =?us-ascii?Q?fiJ7jU3/NjVb0qo7ZL6WFDaNyJ9IlBds1L9CPNUXL9NE4e+yuZWbKAfNLAHD?=
- =?us-ascii?Q?KNpIn5E8OBYxpCcfaltwozv/Qa9+DxGHLamLew4D3LOQH5dJz/7tpDWWOHvY?=
- =?us-ascii?Q?TI9rU2FAF2PidpYIKoDOBSGFe/YqNuAsMhJPMs8DGY95K3TOeINh+wWIIKMt?=
- =?us-ascii?Q?IEUDPS1/trHygpRqXVfsDVXDVkssLtiuLzO6AkWSlDFmlul+Kv6l7Ca5pblj?=
- =?us-ascii?Q?Ax59CZ51xVWKbKFq+YjsveiPnWSafrPjcO+b7CLwlNNDPE+8QB+ZsvOqJQ34?=
- =?us-ascii?Q?NUPvWMKEnAnHagUDiiSQCoCH4OiSZw55+Gr/zErIJJNlYbT3gvtg4iESmNjI?=
- =?us-ascii?Q?RVmT169zIXE9PG3E3/C2+xKMYlVEpTxWZQ3AlSo5kygBsvRRVU+CWvoBdr5c?=
- =?us-ascii?Q?dkRbncIE6asQNOvUrLr1tJbO46kNUGGDxlTjkFywpiUVNHokKlo1A4PkK2zW?=
- =?us-ascii?Q?HP3iTeCeYVyyQa/HsW+5YgSeV6bcByR4qqNAUyt9nJWJVTSmhW6Vns2K570l?=
- =?us-ascii?Q?m9Atr9JOkp9ILJKiBIminue/gZEga2adxsxecArCNhez2JIBK2vearDKCMmh?=
- =?us-ascii?Q?7TJJwcz/ZGKBJqR9J9Qw0/BQrmrmuzU0o4EkmiLyKsIwP8y/ME7JanFTrebc?=
- =?us-ascii?Q?1SbgdK1iHObaw5Rayu5tfCZXE8ZG2el3ca9Za60aITcNNESJEvX1nLLkATzD?=
- =?us-ascii?Q?VGoI1WhO7k6demkP3TX2zuq9M4/hBvtHL6lXXsZND/qtI/Wum2eNgLZMzV7N?=
- =?us-ascii?Q?j277oTLLADjJn9uEPLhFjV/ax5WgItori16rGyGGPW2dt2EFYTgMHOBVeNwE?=
- =?us-ascii?Q?rsz1BBbWoF/CUgG4e0mfjsJ9wNpWY2sQZ2phfTSCocL2YktdBj/7C1d8eA9U?=
- =?us-ascii?Q?prvcV4BiBg7D/W3/grRGFdNzOo6VY4lPhKFPoYgNq7dDo7IPejOcI7pHxkxV?=
- =?us-ascii?Q?2f1DJ/IIHc3qSlWgfrfEr6I6DVInVl0I6R6koseCDByPx5LUG2p4DovDgn9j?=
- =?us-ascii?Q?OtDWXzlD57BGyQkDYTE=3D?=
-MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4902.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ed9990c-870b-4f3d-075f-08dad1094043
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Nov 2022 06:24:48.9078
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4F0OSIeU1F14oYRuPiVXBSX82QwQmqmI3fRJdj9xZ0hVbKMeKHaR8AoCn07SZJHLk0I1zqKDx6Y9uCIk+ANTvg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6095
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+From:   Carsten Haitzler <carsten.haitzler@foss.arm.com>
+Organization: Arm Ltd.
+In-Reply-To: <BY5PR12MB49026A5C37C25915E6C8A86F81139@BY5PR12MB4902.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -143,454 +51,117 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---_000_BY5PR12MB49026A5C37C25915E6C8A86F81139BY5PR12MB4902namp_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-[AMD Official Use Only - General]
 
 
-Hi ,
-Thanks for the patch
+On 11/28/22 06:24, Datta, Shubhrajyoti wrote:
+> [AMD Official Use Only - General]
+> 
+> 
+> Hi ,
+> Thanks for the patch
+> 
+>> -----Original Message-----
+>> From: carsten.haitzler@foss.arm.com <carsten.haitzler@foss.arm.com>
+>> Sent: Friday, November 25, 2022 5:21 PM
+>> To: michal.simek@xilinx.com; shubhrajyoti.datta@xilinx.com; linux-arm-
+>> kernel@lists.infradead.org; linux-i2c@vger.kernel.org; linux-
+>> kernel@vger.kernel.org
+>> Cc: torvalds@linux-foundation.org
+>> Subject: [PATCH] i2c: cadence: Fix regression with bus recovery
+>>
+>> CAUTION: This message has originated from an External Source. Please use
+>> proper judgment and caution when opening attachments, clicking links, or
+>> responding to this email.
+>>
+>>
+>> From: Carsten Haitzler <carsten.haitzler@arm.com>
+>>
+>> Commit "i2c: cadence: Add standard bus recovery support" breaks for i2c
+>> devices that have no pinctrl defined. There is no requirement for this to exist
+>> in the DT. This has worked perfectly well without this before in at least 1 real
+>> usage case on hardware (Mali Komeda DPU, Cadence i2c to talk to a tda99xx
+>> phy). Adding the requirement to have pinctrl set up in the device tree (or
+>> otherwise be found) is a regression where the whole i2c device is lost
+>> entirely (in this case dropping entire devices which then leads to the drm
+>> display stack unable to find the phy for display output, thus having no drm
+>> display device and so on down the chain).
+>>
+>> This converts the above commit to an enhancement if pinctrl can be found
+>> for the i2c device, providing a timeout on read with recovery, but if not, do
+>> what used to be done rather than a fatal loss of a device.
+>>
+>> This restores the mentioned display devices to their working state again.
+>>
+>> Fixes: 58b924241d0a ("i2c: cadence: Add standard bus recovery support")
+>> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+>> ---
+>> Note: This issue was discovered during the porting of the linux kernel on
+>> Morello [1].
+>>
+>> [1]
+>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.
+>> morello-
+>> project.org%2Fmorello%2Fkernel%2Flinux&amp;data=05%7C01%7Cshubhraj
+>> yoti.datta%40amd.com%7C651e141296fb497b6c2e08dacedb65ad%7C3dd896
+>> 1fe4884e608e11a82d994e183d%7C0%7C0%7C638049738949855658%7CUnkn
+>> own%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik
+>> 1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=ny08zTdgJKxXC
+>> dwYaCWFS3mwd65LDqFAIYfjao6gO8Y%3D&amp;reserved=0
+>> ---
+>>   drivers/i2c/busses/i2c-cadence.c | 10 +++++-----
+>>   1 file changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-
+>> cadence.c
+>> index fe0cd205502d..40d0cc6bb996 100644
+>> --- a/drivers/i2c/busses/i2c-cadence.c
+>> +++ b/drivers/i2c/busses/i2c-cadence.c
+>> @@ -852,7 +852,8 @@ static int cdns_i2c_master_xfer(struct i2c_adapter
+>> *adap, struct i2c_msg *msgs,
+>>                                           CDNS_I2C_POLL_US, CDNS_I2C_TIMEOUT_US);
+>>          if (ret) {
+>>                  ret = -EAGAIN;
+>> -               i2c_recover_bus(adap);
+>> +               if (id->adap.bus_recovery_info)
+>> +                       i2c_recover_bus(adap);
+>>                  goto out;
+>>          }
+>>
+>> @@ -1262,10 +1263,10 @@ static int cdns_i2c_probe(struct platform_device
+>> *pdev)
+>>          }
+>>
+>>          id->rinfo.pinctrl = devm_pinctrl_get(&pdev->dev);
+>> -       if (IS_ERR(id->rinfo.pinctrl)) {
+>> +       if (IS_ERR(id->rinfo.pinctrl))
+>>                  dev_info(&pdev->dev, "can't get pinctrl, bus recovery not
+>> supported\n");
+>> -               return PTR_ERR(id->rinfo.pinctrl);
+>> -       }
+>> +       else
+>> +               id->adap.bus_recovery_info = &id->rinfo;
+> 
+> May be we could differentiate between  ENODEV and  other errors.
+> As we want to do this for the case when it is not provided.
 
-> -----Original Message-----
-> From: carsten.haitzler@foss.arm.com <carsten.haitzler@foss.arm.com>
-> Sent: Friday, November 25, 2022 5:21 PM
-> To: michal.simek@xilinx.com; shubhrajyoti.datta@xilinx.com; linux-arm-
-> kernel@lists.infradead.org; linux-i2c@vger.kernel.org; linux-
-> kernel@vger.kernel.org
-> Cc: torvalds@linux-foundation.org
-> Subject: [PATCH] i2c: cadence: Fix regression with bus recovery
->=20
-> CAUTION: This message has originated from an External Source. Please use
-> proper judgment and caution when opening attachments, clicking links, or
-> responding to this email.
->=20
->=20
-> From: Carsten Haitzler <carsten.haitzler@arm.com>
->=20
-> Commit "i2c: cadence: Add standard bus recovery support" breaks for i2c
-> devices that have no pinctrl defined. There is no requirement for this to=
- exist
-> in the DT. This has worked perfectly well without this before in at least=
- 1 real
-> usage case on hardware (Mali Komeda DPU, Cadence i2c to talk to a tda99xx
-> phy). Adding the requirement to have pinctrl set up in the device tree (o=
-r
-> otherwise be found) is a regression where the whole i2c device is lost
-> entirely (in this case dropping entire devices which then leads to the dr=
-m
-> display stack unable to find the phy for display output, thus having no d=
-rm
-> display device and so on down the chain).
->=20
-> This converts the above commit to an enhancement if pinctrl can be found
-> for the i2c device, providing a timeout on read with recovery, but if not=
-, do
-> what used to be done rather than a fatal loss of a device.
->=20
-> This restores the mentioned display devices to their working state again.
->=20
-> Fixes: 58b924241d0a ("i2c: cadence: Add standard bus recovery support")
-> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
-> ---
-> Note: This issue was discovered during the porting of the linux kernel on
-> Morello [1].
->=20
-> [1]
-> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgit.
-> morello-
-> project.org%2Fmorello%2Fkernel%2Flinux&amp;data=3D05%7C01%7Cshubhraj
-> yoti.datta%40amd.com%7C651e141296fb497b6c2e08dacedb65ad%7C3dd896
-> 1fe4884e608e11a82d994e183d%7C0%7C0%7C638049738949855658%7CUnkn
-> own%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik
-> 1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3Dny08zTdgJKxXC
-> dwYaCWFS3mwd65LDqFAIYfjao6gO8Y%3D&amp;reserved=3D0
-> ---
->  drivers/i2c/busses/i2c-cadence.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-
-> cadence.c
-> index fe0cd205502d..40d0cc6bb996 100644
-> --- a/drivers/i2c/busses/i2c-cadence.c
-> +++ b/drivers/i2c/busses/i2c-cadence.c
-> @@ -852,7 +852,8 @@ static int cdns_i2c_master_xfer(struct i2c_adapter
-> *adap, struct i2c_msg *msgs,
->                                          CDNS_I2C_POLL_US, CDNS_I2C_TIMEO=
-UT_US);
->         if (ret) {
->                 ret =3D -EAGAIN;
-> -               i2c_recover_bus(adap);
-> +               if (id->adap.bus_recovery_info)
-> +                       i2c_recover_bus(adap);
->                 goto out;
->         }
->=20
-> @@ -1262,10 +1263,10 @@ static int cdns_i2c_probe(struct platform_device
-> *pdev)
->         }
->=20
->         id->rinfo.pinctrl =3D devm_pinctrl_get(&pdev->dev);
-> -       if (IS_ERR(id->rinfo.pinctrl)) {
-> +       if (IS_ERR(id->rinfo.pinctrl))
->                 dev_info(&pdev->dev, "can't get pinctrl, bus recovery not
-> supported\n");
-> -               return PTR_ERR(id->rinfo.pinctrl);
-> -       }
-> +       else
-> +               id->adap.bus_recovery_info =3D &id->rinfo;
+We could, but just keep in mind this patch is essentially restoring 
+behavior on any pinctrl error to previous behavior - so trying to undo 
+the regression as strictly as possible.
 
-May be we could differentiate between  ENODEV and  other errors.
-As we want to do this for the case when it is not provided.
+Certainly checking specifically for ENODEV does fix it for me which is 
+the case of no pinctrl. I'll send a v2.
 
-
->=20
->         id->membase =3D devm_platform_get_and_ioremap_resource(pdev, 0,
-> &r_mem);
->         if (IS_ERR(id->membase))
-> @@ -1283,7 +1284,6 @@ static int cdns_i2c_probe(struct platform_device
-> *pdev)
->         id->adap.retries =3D 3;           /* Default retry value. */
->         id->adap.algo_data =3D id;
->         id->adap.dev.parent =3D &pdev->dev;
-> -       id->adap.bus_recovery_info =3D &id->rinfo;
->         init_completion(&id->xfer_done);
->         snprintf(id->adap.name, sizeof(id->adap.name),
->                  "Cadence I2C at %08lx", (unsigned long)r_mem->start);
-> --
-> 2.32.0
-
---_000_BY5PR12MB49026A5C37C25915E6C8A86F81139BY5PR12MB4902namp_
-Content-Disposition: attachment; filename="winmail.dat"
-Content-Transfer-Encoding: base64
-Content-Type: application/ms-tnef; name="winmail.dat"
-
-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
-EIC/q9BcxfHQgKEEwFy1Xxgw+HQoJgXi91AF8vJv70NiSewARVJS9yMJSyn/78v19g0vDjsH/xKm
-gKH4g+sLSS+gIoeRJ1awCxFcpj+MspvpjUESJ1llybBcXD5unQAMD/EKpLCQMFBU/lIQrw6UGL8H
-OvX2NxBJOe/1//dP+FbxwSYbR/5mEiXfZ/B2IHFhYzCEEXU9sNLz713hdcGW8jAQdGMwS8FHkOBO
-T0RFVkrTcLRQEO5ySfCewKh2QWIBo5JtNP+BsE/EiOZm00ujVqFeIwQx/4ozXYEjDAdvCHtFsDAA
-SOL/CiYEZgsR5eCIMOQwZIFQMG5w+yGBUEhSKAXiFiAw/eioJuTQLsH8PxAvLsUSCc8AxLsQ4nI2
-wTQs2xACH/8DLwQ/BU8tnyCl75HfgFuxyfHQMzsSqS8qYUBdQN1LMGxWsD1ydiB2ZcCjgPlIkCov
-O98gh2XA/eA6cP+zIfHBIIAzXyB4gKGr0Geh/0qxIjELZxxvIH8hjyKc7rn/TCAwYLYhOfDRUwtA
-R0Lk8s86cI9RM08SoHNuq+Djsd5m9yiq4YnxcrB6ixBOXXfQ0EzfUVciaQbsIWTiJdG3wGx4IhYg
-KHGwcrD3ndKQwc+QKTLzR2CW0aVwYxxazkgyLjNW8MnmfQZ9URBYAAAfAEIAAQAAACgAAABEAGEA
-dAB0AGEALAAgAFMAaAB1AGIAaAByAGEAagB5AG8AdABpAAAAHwBlAAEAAAA2AAAAcwBoAHUAYgBo
-AHIAYQBqAHkAbwB0AGkALgBkAGEAdAB0AGEAQABhAG0AZAAuAGMAbwBtAAAAAAAfAGQAAQAAAAoA
-AABTAE0AVABQAAAAAAACAUEAAQAAAIAAAAAAAAAAgSsfpL6jEBmdbgDdAQ9UAgAAAIBEAGEAdAB0
-AGEALAAgAFMAaAB1AGIAaAByAGEAagB5AG8AdABpAAAAUwBNAFQAUAAAAHMAaAB1AGIAaAByAGEA
-agB5AG8AdABpAC4AZABhAHQAdABhAEAAYQBtAGQALgBjAG8AbQAAAB8AAl0BAAAANgAAAHMAaAB1
-AGIAaAByAGEAagB5AG8AdABpAC4AZABhAHQAdABhAEAAYQBtAGQALgBjAG8AbQAAAAAAHwDlXwEA
-AAA+AAAAcwBpAHAAOgBzAGgAdQBiAGgAcgBhAGoAeQBvAHQAaQAuAGQAYQB0AHQAYQBAAGEAbQBk
-AC4AYwBvAG0AAAAAAB8AGgwBAAAAKAAAAEQAYQB0AHQAYQAsACAAUwBoAHUAYgBoAHIAYQBqAHkA
-bwB0AGkAAAAfAB8MAQAAADYAAABzAGgAdQBiAGgAcgBhAGoAeQBvAHQAaQAuAGQAYQB0AHQAYQBA
-AGEAbQBkAC4AYwBvAG0AAAAAAB8AHgwBAAAACgAAAFMATQBUAFAAAAAAAAIBGQwBAAAAgAAAAAAA
-AACBKx+kvqMQGZ1uAN0BD1QCAAAAgEQAYQB0AHQAYQAsACAAUwBoAHUAYgBoAHIAYQBqAHkAbwB0
-AGkAAABTAE0AVABQAAAAcwBoAHUAYgBoAHIAYQBqAHkAbwB0AGkALgBkAGEAdAB0AGEAQABhAG0A
-ZAAuAGMAbwBtAAAAHwABXQEAAAA2AAAAcwBoAHUAYgBoAHIAYQBqAHkAbwB0AGkALgBkAGEAdAB0
-AGEAQABhAG0AZAAuAGMAbwBtAAAAAAALAEA6AQAAAB8AGgABAAAAEgAAAEkAUABNAC4ATgBvAHQA
-ZQAAAAAAAwDxPwkEAAALAEA6AQAAAAMA/T/kBAAAAgELMAEAAAAQAAAA5d17+f5cKkGbfqJXxYWE
-XAMAFwABAAAAQAA5AAC4PB3yAtkBQAAIMI/exB3yAtkBHwA3AAEAAAB2AAAAUgBFADoAIABbAFAA
-QQBUAEMASABdACAAaQAyAGMAOgAgAGMAYQBkAGUAbgBjAGUAOgAgAEYAaQB4ACAAcgBlAGcAcgBl
-AHMAcwBpAG8AbgAgAHcAaQB0AGgAIABiAHUAcwAgAHIAZQBjAG8AdgBlAHIAeQAAAAAAHwA9AAEA
-AAAKAAAAUgBFADoAIAAAAAAAAwDeP59OAAALAAIAAQAAAAsAIwAAAAAAAwAmAAAAAAALACkAAAAA
-AAsAKwAAAAAAAwAuAAAAAAADADYAAAAAAB8AcAABAAAAbgAAAFsAUABBAFQAQwBIAF0AIABpADIA
-YwA6ACAAYwBhAGQAZQBuAGMAZQA6ACAARgBpAHgAIAByAGUAZwByAGUAcwBzAGkAbwBuACAAdwBp
-AHQAaAAgAGIAdQBzACAAcgBlAGMAbwB2AGUAcgB5AAAAAAACAXEAAQAAABsAAAABAdkAxEQVrAIh
-XWd7T7LP186RnISirlPh6QAACwAGDAAAAAAfADUQAQAAAKIAAAA8AEIAWQA1AFAAUgAxADIATQBC
-ADQAOQAwADIANgBBADUAQwAzADcAQwAyADUAOQAxADUARQA2AEMAOABBADgANgBGADgAMQAxADMA
-OQBAAEIAWQA1AFAAUgAxADIATQBCADQAOQAwADIALgBuAGEAbQBwAHIAZAAxADIALgBwAHIAbwBk
-AC4AbwB1AHQAbABvAG8AawAuAGMAbwBtAD4AAAAAAB8AORABAAAAcAAAADwAMgAwADIAMgAxADEA
-MgA1ADEAMQA1ADEAMAAzAC4ANgA3ADQANwA1ADYALQAxAC0AYwBhAHIAcwB0AGUAbgAuAGgAYQBp
-AHQAegBsAGUAcgBAAGYAbwBzAHMALgBhAHIAbQAuAGMAbwBtAD4AAAAfAEIQAQAAAHAAAAA8ADIA
-MAAyADIAMQAxADIANQAxADEANQAxADAAMwAuADYANwA0ADcANQA2AC0AMQAtAGMAYQByAHMAdABl
-AG4ALgBoAGEAaQB0AHoAbABlAHIAQABmAG8AcwBzAC4AYQByAG0ALgBjAG8AbQA+AAAAAwCAEP//
-//8DABMSAAAAAEAABzAr1HMd8gLZAQIBEDABAAAARgAAAAAAAABGmSpVMPeBT6ZiFDetOe4QBwBn
-n5HmjE/HQp2md8pfiFFwAAAAAAELAABnn5HmjE/HQp2md8pfiFFwAACAxhweAAAAAAIBEzABAAAA
-EAAAABWsAiFdZ3tPss/XzpGchKICARQwAQAAAAwAAACaAQAAiRDsnlsAAAADAFszAQAAAAMAWjYA
-AAAAAwBoNg0AAAALAPo2AQAAAB8A2T8BAAAAAAIAAFsAQQBNAEQAIABPAGYAZgBpAGMAaQBhAGwA
-IABVAHMAZQAgAE8AbgBsAHkAIAAtACAARwBlAG4AZQByAGEAbABdAA0ACgANAAoADQAKAEgAaQAg
-ACwADQAKAFQAaABhAG4AawBzACAAZgBvAHIAIAB0AGgAZQAgAHAAYQB0AGMAaAANAAoADQAKAD4A
-IAAtAC0ALQAtAC0ATwByAGkAZwBpAG4AYQBsACAATQBlAHMAcwBhAGcAZQAtAC0ALQAtAC0ADQAK
-AD4AIABGAHIAbwBtADoAIABjAGEAcgBzAHQAZQBuAC4AaABhAGkAdAB6AGwAZQByAEAAZgBvAHMA
-cwAuAGEAcgBtAC4AYwBvAG0AIAA8AGMAYQByAHMAdABlAG4ALgBoAGEAaQB0AHoAbABlAHIAQABm
-AG8AcwBzAC4AYQByAG0ALgBjAG8AbQA+AA0ACgA+ACAAUwBlAG4AdAA6ACAARgByAGkAZABhAHkA
-LAAgAE4AbwB2AGUAbQBiAGUAcgAgADIANQAsACAAMgAwADIAMgAgADUAOgAyADEAIABQAE0ADQAK
-AD4AIABUAG8AOgAgAG0AaQBjAGgAYQBsAC4AcwBpAG0AZQBrAEAAeABpAGwAaQBuAHgALgBjAG8A
-bQA7ACAAcwBoAHUAYgBoAHIAYQBqAHkAbwB0AAAAHwD4PwEAAAAoAAAARABhAHQAdABhACwAIABT
-AGgAdQBiAGgAcgBhAGoAeQBvAHQAaQAAAB8A+j8BAAAAKAAAAEQAYQB0AHQAYQAsACAAUwBoAHUA
-YgBoAHIAYQBqAHkAbwB0AGkAAAAfACJAAQAAAAYAAABFAFgAAAAAAB8AI0ABAAAAAgEAAC8ATwA9
-AEUAWABDAEgAQQBOAEcARQBMAEEAQgBTAC8ATwBVAD0ARQBYAEMASABBAE4ARwBFACAAQQBEAE0A
-SQBOAEkAUwBUAFIAQQBUAEkAVgBFACAARwBSAE8AVQBQACAAKABGAFkARABJAEIATwBIAEYAMgAz
-AFMAUABEAEwAVAApAC8AQwBOAD0AUgBFAEMASQBQAEkARQBOAFQAUwAvAEMATgA9ADIAMQBBAEYA
-NAAyADAANgAzAEUANQAwADQAQQAzADMAQgBFADQANQBEADEANgAxAEQANABDADcAMwAxADUANgAt
-AEQAQQBUAFQAQQAsACAAUwBIAFUAQgAAAAAAHwAkQAEAAAAGAAAARQBYAAAAAAAfACVAAQAAAAIB
-AAAvAE8APQBFAFgAQwBIAEEATgBHAEUATABBAEIAUwAvAE8AVQA9AEUAWABDAEgAQQBOAEcARQAg
-AEEARABNAEkATgBJAFMAVABSAEEAVABJAFYARQAgAEcAUgBPAFUAUAAgACgARgBZAEQASQBCAE8A
-SABGADIAMwBTAFAARABMAFQAKQAvAEMATgA9AFIARQBDAEkAUABJAEUATgBUAFMALwBDAE4APQAy
-ADEAQQBGADQAMgAwADYAMwBFADUAMAA0AEEAMwAzAEIARQA0ADUARAAxADYAMQBEADQAQwA3ADMA
-MQA1ADYALQBEAEEAVABUAEEALAAgAFMASABVAEIAAAAAAB8AMEABAAAAKAAAAEQAYQB0AHQAYQAs
-ACAAUwBoAHUAYgBoAHIAYQBqAHkAbwB0AGkAAAAfADFAAQAAACgAAABEAGEAdAB0AGEALAAgAFMA
-aAB1AGIAaAByAGEAagB5AG8AdABpAAAAHwA4QAEAAAAoAAAARABhAHQAdABhACwAIABTAGgAdQBi
-AGgAcgBhAGoAeQBvAHQAaQAAAB8AOUABAAAAKAAAAEQAYQB0AHQAYQAsACAAUwBoAHUAYgBoAHIA
-YQBqAHkAbwB0AGkAAAADAFlAAAAAAAMAWkAAAAAAAwA3UAEAAAADAAlZAQAAAB8ACl0BAAAANgAA
-AHMAaAB1AGIAaAByAGEAagB5AG8AdABpAC4AZABhAHQAdABhAEAAYQBtAGQALgBjAG8AbQAAAAAA
-HwALXQEAAAA2AAAAcwBoAHUAYgBoAHIAYQBqAHkAbwB0AGkALgBkAGEAdAB0AGEAQABhAG0AZAAu
-AGMAbwBtAAAAAAACARVdAQAAABIAAAACH5bYPYjkYE6OEagtmU4YPQEAAAIBFl0BAAAAEgAAAAIf
-ltg9iORgTo4RqC2ZThg9AQAACwAAgAggBgAAAAAAwAAAAAAAAEYAAAAAFIUAAAAAAAADAACAUONj
-C8yc0BG82wCAX8zOBAEAAAAkAAAASQBuAGQAZQB4AGkAbgBnAEUAcgByAG8AcgBDAG8AZABlAAAA
-GwAAAB8AAIBQ42MLzJzQEbzbAIBfzM4EAQAAACoAAABJAG4AZABlAHgAaQBuAGcARQByAHIAbwBy
-AE0AZQBzAHMAYQBnAGUAAAAAAAEAAABwAAAASQBuAGQAZQB4AGkAbgBnACAAUABlAG4AZABpAG4A
-ZwAgAHcAaABpAGwAZQAgAEIAaQBnAEYAdQBuAG4AZQBsAFAATwBJAEkAcwBVAHAAVABvAEQAYQB0
-AGUAIABpAHMAIABmAGEAbABzAGUALgAAAAsAAIBQ42MLzJzQEbzbAIBfzM4EAQAAACYAAABJAHMA
-UABlAHIAbQBhAG4AZQBuAHQARgBhAGkAbAB1AHIAZQAAAAAAAAAAAAMAAIAIIAYAAAAAAMAAAAAA
-AABGAQAAADIAAABFAHgAYwBoAGEAbgBnAGUAQQBwAHAAbABpAGMAYQB0AGkAbwBuAEYAbABhAGcA
-cwAAAAAAIAAAAB8AAIAfpOszqHouQr57eeGpjlSzAQAAADgAAABDAG8AbgB2AGUAcgBzAGEAdABp
-AG8AbgBJAG4AZABlAHgAVAByAGEAYwBrAGkAbgBnAEUAeAAAAAEAAADmAQAASQBJAD0AWwBDAEkA
-RAA9ADIAMQAwADIAYQBjADEANQAtADYANwA1AGQALQA0AGYANwBiAC0AYgAyAGMAZgAtAGQANwBj
-AGUAOQAxADkAYwA4ADQAYQAyADsASQBEAFgASABFAEEARAA9ADAAMQBEADkAMAAwAEMANAA0ADQA
-OwBJAEQAWABDAE8AVQBOAFQAPQAyAF0AOwBTAEIATQBJAEQAPQAzADsAUwAxAD0APAAyADAAMgAy
-ADEAMQAyADUAMQAxADUAMQAwADMALgA2ADcANAA3ADUANgAtADEALQBjAGEAcgBzAHQAZQBuAC4A
-aABhAGkAdAB6AGwAZQByAEAAZgBvAHMAcwAuAGEAcgBtAC4AYwBvAG0APgA7AFIAVABQAD0ARABp
-AHIAZQBjAHQAQwBoAGkAbABkADsAVABEAE4APQBTAGEAbQBlADsAVABGAFIAPQBOAG8AdABGAG8A
-cgBrAGkAbgBnADsAVgBlAHIAcwBpAG8AbgA9AFYAZQByAHMAaQBvAG4AIAAxADUALgAyADAAIAAo
-AEIAdQBpAGwAZAAgADUAOAA1ADcALgAwACkALAAgAFMAdABhAGcAZQA9AEgAMQA7AFUAUAA9AEQA
-MAA7AEQAUAA9ADEAMAAxAAAAAAAfAACAE4/yQfSDFEGlhO7bWmsL/wEAAAAWAAAAQwBsAGkAZQBu
-AHQASQBuAGYAbwAAAAAAAQAAACoAAABDAGwAaQBlAG4AdAA9AE0AUwBFAHgAYwBoAGEAbgBnAGUA
-UgBQAEMAAAAAAEgAAIBrxT9AMM3FR4b47enjWgIrAQAAABwAAABNAFMASQBQAEwAYQBiAGUAbABH
-AHUAaQBkAAAATjFCQ/QNWEuEvzi+1hcKDwsAAIAIIAYAAAAAAMAAAAAAAABGAAAAAAaFAAAAAAAA
-CwAAgAggBgAAAAAAwAAAAAAAAEYAAAAAA4UAAAAAAAADAACACCAGAAAAAADAAAAAAAAARgAAAAAB
-hQAAAAAAAAIBAIATj/JB9IMUQaWE7ttaawv/AQAAAC4AAABIAGUAYQBkAGUAcgBCAG8AZAB5AEYA
-cgBhAGcAbQBlAG4AdABMAGkAcwB0AAAAAAABAAAANgAAAAEACgAAAAQAAAABAAAAFAAAAAAAAAAA
-AAAARQAAAAAAAAAUAAAAAAAAAGABAAD/////AAAAAAAACwAAgBOP8kH0gxRBpYTu21prC/8BAAAA
-HAAAAEgAYQBzAFEAdQBvAHQAZQBkAFQAZQB4AHQAAAABAAAACwAAgBOP8kH0gxRBpYTu21prC/8B
-AAAAKAAAAEkAcwBRAHUAbwB0AGUAZABUAGUAeAB0AEMAaABhAG4AZwBlAGQAAAABAAAAAgEAgBOP
-8kH0gxRBpYTu21prC/8BAAAAQAAAAEMAbwBuAHYAZQByAHMAYQB0AGkAbwBuAFQAcgBlAGUAUABh
-AHIAZQBuAHQAUgBlAGMAbwByAGQASwBlAHkAAAABAAAALgAAAAAAAABGmSpVMPeBT6ZiFDetOe4Q
-AQBnn5HmjE/HQp2md8pfiFFwAADXI6ZIAAAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAABgAAABt
-AHMAaQBwAF8AbABhAGIAZQBsAHMAAAABAAAACgQAAE0AUwBJAFAAXwBMAGEAYgBlAGwAXwA0ADMA
-NAAyADMAMQA0AGUALQAwAGQAZgA0AC0ANABiADUAOAAtADgANABiAGYALQAzADgAYgBlAGQANgAx
-ADcAMABhADAAZgBfAEUAbgBhAGIAbABlAGQAPQB0AHIAdQBlADsAIABNAFMASQBQAF8ATABhAGIA
-ZQBsAF8ANAAzADQAMgAzADEANABlAC0AMABkAGYANAAtADQAYgA1ADgALQA4ADQAYgBmAC0AMwA4
-AGIAZQBkADYAMQA3ADAAYQAwAGYAXwBTAGUAdABEAGEAdABlAD0AMgAwADIAMgAtADEAMQAtADIA
-OABUADAANgA6ADIANAA6ADQANgBaADsAIABNAFMASQBQAF8ATABhAGIAZQBsAF8ANAAzADQAMgAz
-ADEANABlAC0AMABkAGYANAAtADQAYgA1ADgALQA4ADQAYgBmAC0AMwA4AGIAZQBkADYAMQA3ADAA
-YQAwAGYAXwBNAGUAdABoAG8AZAA9AFMAdABhAG4AZABhAHIAZAA7ACAATQBTAEkAUABfAEwAYQBi
-AGUAbABfADQAMwA0ADIAMwAxADQAZQAtADAAZABmADQALQA0AGIANQA4AC0AOAA0AGIAZgAtADMA
-OABiAGUAZAA2ADEANwAwAGEAMABmAF8ATgBhAG0AZQA9AEcAZQBuAGUAcgBhAGwAOwAgAE0AUwBJ
-AFAAXwBMAGEAYgBlAGwAXwA0ADMANAAyADMAMQA0AGUALQAwAGQAZgA0AC0ANABiADUAOAAtADgA
-NABiAGYALQAzADgAYgBlAGQANgAxADcAMABhADAAZgBfAFMAaQB0AGUASQBkAD0AMwBkAGQAOAA5
-ADYAMQBmAC0AZQA0ADgAOAAtADQAZQA2ADAALQA4AGUAMQAxAC0AYQA4ADIAZAA5ADkANABlADEA
-OAAzAGQAOwAgAE0AUwBJAFAAXwBMAGEAYgBlAGwAXwA0ADMANAAyADMAMQA0AGUALQAwAGQAZgA0
-AC0ANABiADUAOAAtADgANABiAGYALQAzADgAYgBlAGQANgAxADcAMABhADAAZgBfAEEAYwB0AGkA
-bwBuAEkAZAA9ADUANgA2ADIAMQA4AGIAOAAtADIAYwA2ADcALQA0AGUAMgBjAC0AOQAyADgAMwAt
-ADAANwA0AGMAZAA1ADUAMAAwADkAMQAzADsAIABNAFMASQBQAF8ATABhAGIAZQBsAF8ANAAzADQA
-MgAzADEANABlAC0AMABkAGYANAAtADQAYgA1ADgALQA4ADQAYgBmAC0AMwA4AGIAZQBkADYAMQA3
-ADAAYQAwAGYAXwBDAG8AbgB0AGUAbgB0AEIAaQB0AHMAPQAxAAAAAAADAACACCAGAAAAAADAAAAA
-AAAARgAAAAAQhQAAAAAAAAsAAIAIIAYAAAAAAMAAAAAAAABGAAAAAA6FAAAAAAAACwAAgAggBgAA
-AAAAwAAAAAAAAEYAAAAAgoUAAAAAAAADAACACCAGAAAAAADAAAAAAAAARgAAAAAYhQAAAAAAAAIB
-AIAIIAYAAAAAAMAAAAAAAABGAQAAADYAAABJAG4AVAByAGEAbgBzAGkAdABNAGUAcwBzAGEAZwBl
-AEMAbwByAHIAZQBsAGEAdABvAHIAAAAAAAEAAAAQAAAAKIzmL2e/gEuInzlJ7Sd9WB8AAIAIIAYA
-AAAAAMAAAAAAAABGAAAAANiFAAABAAAAEgAAAEkAUABNAC4ATgBvAHQAZQAAAAAAHwAAgCkDAgAA
-AAAAwAAAAAAAAEYBAAAAHgAAAEkAbgBzAHAAZQBjAHQAbwByAEEAaQBwAEkAZAAAAAAAAQAAAEoA
-AABhADIANwA4ADUANAA1AGEALQA5ADUAOQBkAC0ANAAwADcAZQAtAGEAZAA2AGUALQBkADkAYgBi
-AGYAMwAzADYAZABmADQAYgAAAAAAAwANNP0/AAAfAACAhgMCAAAAAADAAAAAAAAARgEAAAAuAAAA
-YQB1AHQAaABlAG4AdABpAGMAYQB0AGkAbwBuAC0AcgBlAHMAdQBsAHQAcwAAAAAAAQAAALIAAABk
-AGsAaQBtAD0AbgBvAG4AZQAgACgAbQBlAHMAcwBhAGcAZQAgAG4AbwB0ACAAcwBpAGcAbgBlAGQA
-KQAgAGgAZQBhAGQAZQByAC4AZAA9AG4AbwBuAGUAOwBkAG0AYQByAGMAPQBuAG8AbgBlACAAYQBj
-AHQAaQBvAG4APQBuAG8AbgBlACAAaABlAGEAZABlAHIALgBmAHIAbwBtAD0AYQBtAGQALgBjAG8A
-bQA7AAAAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAAAeAAAAYQBjAGMAZQBwAHQAbABhAG4AZwB1
-AGEAZwBlAAAAAAABAAAADAAAAGUAbgAtAFUAUwAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAACAA
-AAB4AC0AbQBzAC0AaABhAHMALQBhAHQAdABhAGMAaAAAAAEAAAACAAAAAAAAAB8AAIBrxT9AMM3F
-R4b47enjWgIrAQAAABIAAABNAEkAUABMAGEAYgBlAGwAAAAAAAEAAADMAQAAWwB7ACIAaQBkACIA
-OgAiADQAMwA0ADIAMwAxADQAZQAtADAAZABmADQALQA0AGIANQA4AC0AOAA0AGIAZgAtADMAOABi
-AGUAZAA2ADEANwAwAGEAMABmACIALAAiAHQAaQAiADoAIgAzAGQAZAA4ADkANgAxAGYALQBlADQA
-OAA4AC0ANABlADYAMAAtADgAZQAxADEALQBhADgAMgBkADkAOQA0AGUAMQA4ADMAZAAiACwAIgBw
-AGkAIgA6ACIAMAAwADAAMAAwADAAMAAwAC0AMAAwADAAMAAtADAAMAAwADAALQAwADAAMAAwAC0A
-MAAwADAAMAAwADAAMAAwADAAMAAwADAAIgAsACIAbgBtACIAOgAiAEcAZQBuAGUAcgBhAGwAIgAs
-ACIAYQBjACIAOgAxACwAIgBvAHAAIgA6ADEALAAiAGMAdAAiADoAIgAyADAAMgAyAC0AMQAxAC0A
-MgA4AFQAMAA2ADoAMgA0ADoANAA2AFoAIgAsACIAbQB0ACIAOgAiADAAMAAwADEALQAwADEALQAw
-ADEAVAAwADAAOgAwADAAOgAwADAAIgAsACIAdQBjACIAOgBuAHUAbABsAH0AXQAAAEgAAIAIIAYA
-AAAAAMAAAAAAAABGAQAAACIAAABOAGUAdAB3AG8AcgBrAE0AZQBzAHMAYQBnAGUASQBkAAAAAAAM
-mdluC4c9TwdfCNrRCUBDHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAALgAAAHgALQBtAHMALQBwAHUA
-YgBsAGkAYwB0AHIAYQBmAGYAaQBjAHQAeQBwAGUAAAAAAAEAAAAMAAAARQBtAGEAaQBsAAAAHwAA
-gIYDAgAAAAAAwAAAAAAAAEYBAAAANgAAAHgALQBtAHMALQB0AHIAYQBmAGYAaQBjAHQAeQBwAGUA
-ZABpAGEAZwBuAG8AcwB0AGkAYwAAAAAAAQAAAEgAAABCAFkANQBQAFIAMQAyAE0AQgA0ADkAMAAy
-ADoARQBFAF8AfABEAFMANwBQAFIAMQAyAE0AQgA2ADAAOQA1ADoARQBFAF8AAAAfAACAhgMCAAAA
-AADAAAAAAAAARgEAAABQAAAAeAAtAG0AcwAtAG8AZgBmAGkAYwBlADMANgA1AC0AZgBpAGwAdABl
-AHIAaQBuAGcALQBjAG8AcgByAGUAbABhAHQAaQBvAG4ALQBpAGQAAAABAAAASgAAADYAZQBkADkA
-OQA5ADAAYwAtADgANwAwAGIALQA0AGYAMwBkAC0AMAA3ADUAZgAtADAAOABkAGEAZAAxADAAOQA0
-ADAANAAzAAAAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAAA4AAAAeAAtAG0AcwAtAGUAeABjAGgA
-YQBuAGcAZQAtAHMAZQBuAGQAZQByAGEAZABjAGgAZQBjAGsAAAABAAAABAAAADEAAAAfAACAhgMC
-AAAAAADAAAAAAAAARgEAAAA6AAAAeAAtAG0AcwAtAGUAeABjAGgAYQBuAGcAZQAtAGEAbgB0AGkA
-cwBwAGEAbQAtAHIAZQBsAGEAeQAAAAAAAQAAAAQAAAAwAAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYB
-AAAAKgAAAHgALQBtAGkAYwByAG8AcwBvAGYAdAAtAGEAbgB0AGkAcwBwAGEAbQAAAAAAAQAAAA4A
-AABCAEMATAA6ADAAOwAAAAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAARAAAAHgALQBtAGkAYwBy
-AG8AcwBvAGYAdAAtAGEAbgB0AGkAcwBwAGEAbQAtAG0AZQBzAHMAYQBnAGUALQBpAG4AZgBvAAAA
-AQAAAAIIAABUAGIAVABmADkAdgBXAGMAZwBjAGUAVABpADYAVQBHAFEAVwBlAFEAeQB0AHUAcwBL
-AEwAWAArADIAUwA4AHkAVwBKAC8AbgBhAEEAOQBuADAAbABCAFYAMQA5AGEANQBLAGYAOQB1AEwA
-OABNAGUAUwBVAHgAVgBaAEoAQQB5AGcASgBKAGEARwB3AG8AWgBIAGsAVgBNADEAMwBtAE0ARgBj
-AEgAbgBnADIAZwAwADIAbgAwAEoAZwA2AHMAWABGAHYASABiADUARABDAEMAMgBRAFcAWABCAHgA
-NwBQAHYAWAA5AHMAcwBsAGUAbABCAGoARAA5AHcAWQBHAEkAUwB1AFoAQgAxAEcALwBEAEUARABl
-ADYANABtAGIAYwA1AE0ASwB3AFkAVQBWADEAawBhAHgALwB0AGUAeAB6AHUARABBAEgANgBQADYA
-bgBLAEQAYQBUAEYAawBQAFUAcABjAHQAbgA1AEEASwBWAG0AVgBrAEsAdABaADAAcgBXAGgAVgB4
-AFIAWgBhAEcANABRAEsAMQArAEoAbgArAEsAUQBPAGoARABUADAAagBsAFAAZQA2AFgAQwBuAEoA
-cwB1AHoAOABHAGIAQwB0AHoARgB0AFIAYwB6ADAAWABGAGUAYwBFAEsAOQByAC8AOAAvAHoAZwA2
-AHMAegBDAHoATwBPAGwAcQBPAFYAbQBmAEoAagBOAHgAWgBBAGMAQQBWAEgAWQAwAFoAdgBVAE4A
-RQA2AGwAQQBkAHkAQgA1AHoAegB2ADkAcgA5ACsAawBvAHAANwB3AGgAUwAyAFYAcABuAGoAcQBZ
-AEIAZABrAEwASwBqAGQAaQB6AEcAcwBIAHQAMwB3AEUATwBHAHgANgBWAE4AMwBnADcAVwByADMA
-QQBIAG8ANgB5AHgANgArAHkAcAAyAHkAZQBNAEYAMwBMAE4ANABDAE0AOAByADYAOABOADIATgBM
-AGsAOAA0AGUAQgBjAHAAUABGADIAZABPADAAbwBuADAAUABwAHgAMgBwAFkAOABLAFcARwBHAFAA
-NABIADgAMABKADkAYQArAEsAeABFAEgAMwBpAFYALwBwAFgAbwBYAEsAdwBQAEYAaQAxADQAdwBK
-AEoANQAyADYAZgB3AFUAYgBwAHkAagBSAHEAeQBBADgAZwBKAHcAYgBkAEUAWQBiAFkAUABpADQA
-UAAyAHEAcwBjAFQARAAvAEQAdwBIAEgAOAA2AFgAKwA3AHAAWQAyAEUAVgBaADcAVgBsAG0AUwBB
-ADcAZABpAGIAZwBNADkAYgBQADQAeQAwAG4AaAB6AGwASABYAE0ASQBHAGoATgBoAHcAdwAxAE8A
-aQBEAGcAeABWAHcASwB0AHUAawBOAEQAYwBZAHUARQBqAGwATgBBAGYANQBRAEQAMwB6ADYAbwBy
-AG0ANgBjAHMAQgAwAGUAWgB3AFQAQwBnADYAVQBtAEUAbQBoAE4AQwBqAGcAQgBDAE4AcABFAEcA
-bQBGADMANABaAEoAOQBZAGgAQQBDAGQAWABFAHoAKwBEAGkAbwBFAHAAeABoAFUAbQB3AEEARgB6
-ADMATgBzAE8AYgBOAHYAOQBXAE8ANQBPAE4AVQBZAHgARgBiAEMASwBuADcASAByAHIAVQBFAHgA
-TgArAEEAYgA5AE8AbgBrAFAAOQBOAFYALwBPAGsAZQBBAFEAbwB4ADkARgBvADYAMgBMADIAdwBY
-AFcAOAAzAEoASABKADUAdQBBAHoAawBTADQAdgB2AGwANABSAEYAZABuAEcAUwA2AEwATgA4AFYA
-eQAvAFUAUAA1ADQAeAB0ADQAMAB4AGgAUwBOAC8AQgBaAEkARABJADAAZQA1AEYAWABmAEkAUgBY
-AGQAUABQADIAQgBBAFkAbgBsAE4AcQBzAEEAUQA4AEQAbgAzACsATABXAHEAMQBSAGoANABkAFgA
-SwBKAEgAYwBsADUAMwBSADAARgBuAEsAcwBNAGoAVgAvAHoAcABYAFIAOQAyADMAawB4AEoAMQBM
-AE4ASAB4AHgATQBKAEcAKwBJAGwAQgBxAGQARwArAGcAcAByAHEAeQBMAGQASABoAEgAQQBkAEIA
-ZABjAHIASAA1AGMAawBZAG8AMgAyAHcAOABXAEEANwB1AGsAdABQADQAZQBlAEcAYQBwAHUAZQBy
-AFcATAA0AEMARAAvAEwAegBHAEUAMgBpAFoAYQBOAGQAUABtAGEAcwBaADUAbABrAHoAdABsAFUA
-KwBYAE0ATQBMAHIAYgBZAHIAbABIAEoAaABxAFQAUQBFAHEAdgB1ADEAYgAxADcATAB2AEsAWQBK
-AFEAQQBVADYAbQBCAFcATQArAFYAMABJAHcAeQBXAHgAbABDAHgAQwArAFAATQBaAHUAdgBIAFgA
-RQB4AGMAbgBMADUANABNAHIAWgBLAEEAZgB4AEoAVABQAE0AWABzAEEAVABWAHQAbABzAGUAWABv
-AEEAVgAvAFgAdQBPAEoAUgBTAFIAdwBpAHIAYQBDAGIAYwBWAE8ATQA4AFoAcQAwAEgARgBYADEA
-bgA2AGkAbAA4AFQAZwA5AHgAVgBiAFMAWQBEADAAUwBsAHEAKwBlAFcAMABnAEIAZQBwAE0AeQBQ
-AGkAMABUADQAegBSAC8AQgBwADcAOABvAE0AagBzADIAVwB4ADkAVABzAHgAWAArAFgAaAAvADEA
-dgAvAAAAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAAA4AAAAeAAtAGYAbwByAGUAZgByAG8AbgB0
-AC0AYQBuAHQAaQBzAHAAYQBtAC0AcgBlAHAAbwByAHQAAAABAAAATgQAAEMASQBQADoAMgA1ADUA
-LgAyADUANQAuADIANQA1AC4AMgA1ADUAOwBDAFQAUgBZADoAOwBMAEEATgBHADoAZQBuADsAUwBD
-AEwAOgAxADsAUwBSAFYAOgA7AEkAUABWADoATgBMAEkAOwBTAEYAVgA6AE4AUwBQAE0AOwBIADoA
-QgBZADUAUABSADEAMgBNAEIANAA5ADAAMgAuAG4AYQBtAHAAcgBkADEAMgAuAHAAcgBvAGQALgBv
-AHUAdABsAG8AbwBrAC4AYwBvAG0AOwBQAFQAUgA6ADsAQwBBAFQAOgBOAE8ATgBFADsAUwBGAFMA
-OgAoADEAMwAyADMAMAAwADIAMgApACgANAA2ADMANgAwADAAOQApACgAMQAzADYAMAAwADMAKQAo
-ADMANgA2ADAAMAA0ACkAKAAzADkAOAA2ADAANAAwADAAMAAwADIAKQAoADMANwA2ADAAMAAyACkA
-KAAzADkANgAwADAAMwApACgAMwA0ADYAMAAwADIAKQAoADQANQAxADEAOQA5ADAAMQA1ACkAKAA5
-ADYANgAwADAANQApACgANgA1ADAANgAwADAANwApACgANwA2ADkANgAwADAANQApACgAOAAzADMA
-OAAwADQAMAAwADAAMAAxACkAKAA4ADYAMwA2ADIAMAAwADEAKQAoADQANwA4ADYAMAAwADAAMAAx
-ACkAKAA1ADMANQA0ADYAMAAxADEAKQAoADQANQAwADgAMAA0ADAAMAAwADAAMgApACgANwAxADIA
-MAAwADQAMAAwADAAMAAxACkAKAAzADEANgAwADAAMgApACgAOQA2ADgANgAwADAAMwApACgAMgA2
-ADAAMAA1ACkAKAAxADEAMAAxADMANgAwADAANQApACgANQAyADUAMwA2ADAAMQA0ACkAKAA0ADEA
-MwAwADAANwAwADAAMAAwADEAKQAoADUANgA2ADAAMwAwADAAMAAwADIAKQAoADUANQAwADEANgAw
-ADAAMwApACgAMwAzADYANQA2ADAAMAAyACkAKAAzADgAMAA3ADAANwAwADAAMAAwADUAKQAoADIA
-OQAwADYAMAAwADIAKQAoADMAOAAxADAAMAA3ADAAMAAwADAAMgApACgAOAA2ADcANgAwADAAMgAp
-ACgANAAzADIANgAwADAAOAApACgANgA0ADcANQA2ADAAMAA4ACkAKAAxADgANgAwADAAMwApACgA
-OAA5ADMANgAwADAAMgApACgANgA2ADQANAA2ADAAMAA4ACkAKAA3ADYAMQAxADYAMAAwADYAKQAo
-ADYANgA5ADQANgAwADAANwApACgANgA2ADUANQA2ADAAMAA4ACkAKAA2ADYANAA3ADYAMAAwADcA
-KQAoADEAMgAyADAAMAAwADAAMAAxACkAOwBEAEkAUgA6AE8AVQBUADsAUwBGAFAAOgAxADEAMAAx
-ADsAAAAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAAFwAAAB4AC0AbQBzAC0AZQB4AGMAaABhAG4A
-ZwBlAC0AYQBuAHQAaQBzAHAAYQBtAC0AbQBlAHMAcwBhAGcAZQBkAGEAdABhAC0AYwBoAHUAbgBr
-AGMAbwB1AG4AdAAAAAEAAAAEAAAAMQAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAAEoAAAB4AC0A
-bQBzAC0AZQB4AGMAaABhAG4AZwBlAC0AYQBuAHQAaQBzAHAAYQBtAC0AbQBlAHMAcwBhAGcAZQBk
-AGEAdABhAC0AMAAAAAAAAQAAAFoMAABHAHgAKwBZAEMAMwBQAFAAOQBqAFEAQgA4AHEAeAA0AHMA
-RABZAEkAQwBLAHQAZgBxAHEAcgArACsAcABBAHEAcABlAGQAbwBLAHUAUwB0AG0ANQBZAG8AYwBO
-AFAAWQBJAEMAdwA4AGkAcABaAFEAZgBkADcAZwBDAEIASABIAEMARABHAG8ATAB1AGwAZwBDADgA
-dwB3AHkARwB3AFoAOABzAGcAbQB0AEYAdQBGAHEAUQBLADgAMAB0AEgAdQBYAGIAZwB3AGkAYgBP
-AFoAQwB0AEEAaQA3AG0AMABlAHUATQBuAEYAcQBTADYAOABnAGQAUgBwAEsAUgBuADAASQBxAHgA
-RQBHADcARwBoAEUAMgBmAGIAOQBVAFQARgB1AHAASwBuAFcAdQBDACsAcQBUADEAeAAxAHAASABH
-AGwARgBTAHQAUQBHAHcAYgBVAHAAVgBHAEMAagBMAEMAbgB6AHIAZQB4AHgAZwA4AHMAagBMAFgA
-TABoADMAUgBhAHQARQBaADYAUwBuAEYANQBBAG4AUABzADUASABpAGkAcQBOAFcAagByADYAVABJ
-ADEAYgBPAE8ANwBQAFIASwA2AE4ATwBMAEgATQBqADAAcQBPAHgAaABpAFoAYgAzAG4AdwBUAEoA
-aQBPAGoAdgBaAE0ARgBQAEEALwBBAHoAagA2AGkAYwBtAEcAZQBYAGUAeAArAE4AegA0AE4ALwAz
-ADkAbwBtAFcARwBBADQAaABaAGkAWQBHAHYAcABZAEYALwBvAHQATgBsAHgAMABKAHcASQBLAGwA
-UwBhAEgARQB4AEcARAByAGoAUgBuAEIAMwBNAEkAawBkAFcATwBpADYAUgBkAGkAdgBsAEwAUgBY
-AFoANQBtADgAaQBlAHQAbABJAHAASQBlAGUAcwByADkARAAyAEwARQBHADYAeABiAEUAWQBWADYA
-ZQAzAGIANQBlAEYASwAxADcAMQBpAGoAVwBJAGIAWQB0AGIAdABUAEwAYwBaAE8AUABTADgAWABv
-AEwAZAA2AGwAVAAvAHUAeABCAEIAQQBWAHYARgBiAEgAKwArAEUAVgBYAGkAdQBYAGwAWQA3ADkA
-VAB2AEEAdQB0AHcAWgBOAHgAeABIAEYANQB5ADIAZwAxAEQAcAAzAFYAdwBQAGMAaAArAHkAdwBT
-AHEAOQBzAGsAbwA2AEQAZwBWADgAWABJAEcAZwBDAFgATQB4AE4ANwB4AHcATQBwAHkANQBCAEsA
-VwBPAC8AZABpADYANwAyACsAcABNAC8AZwB4AE0AZgBtAHcAegBEAFoAWgA4AFMAYgBUAHIAeAA5
-AFIAcgA5AHMAMQAwAHAAVwBiAFgAZgBGAHEAZgBDAFYAaABXADMAcQB4ADUATQA0AFoAegBjAFIA
-MgAxAGUAZABOAEgAQQBzACsAOQBmAGkASgA3AGoAVQAzAC8ATgBqAFYAYgAwAHEAbwA3AFoATAA2
-AFcARgBEAGEATgB5AEoAOQBJAGwAQgBkAHMAMQBMADkAQwBQAE4AVQBYAEwAOQBOAEUANABlACsA
-eQB1AFoAVwBiAEsAQQBmAE4ATABBAEgARABLAE4AcABJAG4ANQBFADgATwBCAFkAeABwAEMAYwBm
-AGEAbAB0AHcAbwB6AHYALwBRAGEAOQArAEQAeABHAEgATABhAG0ATABlAHcANABEADMATABPAFEA
-SAA1AGQASgB6AC8ANwB0AHAARABXAFcATwBIAHYAWQBUAEkAOQByAFUAMgBGAEEARgAyAFAAaQBk
-AHAAWQBJAEsAbwBEAE8AQgBTAEcARgBlAC8AWQBxAE4AdQBBAHMATQBoAEoAUABNAHMAOABEAEcA
-WQA5ADUASwAzAFQATwBlAEkATgBoACsAdwBXAEkASQBLAE0AdABJAEUAVQBEAFAAUwAxAC8AdABy
-AEgAeQBnAHAAUgBxAFgAVgBmAHMARABWAFgARABWAGsAcwBzAEwAdABpAHUATAB6AE8ANgBBAGsA
-VwBTAGwARABGAG0AbAB1AGwAKwBLAHYANgBsADcAQwBhADUAcABiAGwAagBBAHgANQA5AEMAWgA1
-ADEAeABWAFcASwBiAEsARgBxACsAWQBqAHMAdgBlAGkAUABuAFcAUwBhAGYAcgBQAGoAYwBPACsA
-YgA3AEMATAB3AGwATgBOAEQAUABFACsAOABRAEIAKwBaAHMAdgBPAHEASgBRADMANABOAFUAUAB2
-AFcATQBLAEUAbgBBAG4ASABhAGcAVQBEAGkAaQBTAFEAQwBvAEMASAA0AE8AaQBTAFoAdwA1ADUA
-KwBHAHIALwB6AEUAcgBJAEoASgBOAGwAWQBiAFQAMwBnAHYAdABnADQAaQBFAFMAbQBOAGoASQBS
-AFYAbQBUADEANgA5AHoASQBYAEUAOQBQAEcAMwBFADMALwBDADIAKwB4AEsATQBZAGwAVgBFAHAA
-VAB4AFcAWgBRADMAQQBsAFMAbwA1AGsAeQBnAEIAcwB2AFIAUgBWAFUAKwBDAFcAdgBvAEIAZABy
-ADUAYwBkAGsAUgBiAG4AYwBJAEUANgBhAHMAUQBOAE8AdgBVAHIATAByADEAdABKAGIATwA0ADYA
-awBOAFUARwBHAEQAeABsAFQAagBrAEYAeQB3AHAAaQBVAFYATgBIAG8AawBLAGwAbwAxAEEANABQ
-AGsASwAyAHoAVwBIAFAAMwBpAFQAZQBDAGUAWQBWAHkAeQBRAGEALwBIAHMAVwArADUAWQBnAFMA
-ZQBWADYAYgBjAEIAeQBSADQAcQBxAE4AQQBVAHkAdAA5AG4ASgBXAEoAVgBUAFMAbQBoAFcANgBW
-AG4AcwAyAEsANQA3ADAAbABtADkAQQB0AHIAOQBKAE8AawBwADkASQBMAEoASwBpAEIASQBtAGkA
-bgB1AGUALwBnAFoARQBnAGEAMgBhAGQAeABzAHgAZQBjAEEAcgBDAE4AaABlAHoAMgBKAEkAQgBL
-ADIAdgBlAGEAcgBEAEsAQwBNAG0AaAA3AFQASgBKAHcAYwB6AC8AWgBHAEsAQgBKAHEAUgA5AEoA
-OQBRAHcAMAAvAEIAUQByAG0AcgBtAHUAegBVADAAbwA0AEUAawBtAGkATAB5AEsAcwBJAHcAUAA4
-AHkALwBNAEUANwBKAGEAbgBGAFQAcgBlAGIAYwAxAFMAYgBnAGQASwAxAGkASABPAGIAYQB3ADUA
-UgBhAHkAdQA1AHQAZgBDAFoAWABFADgAWgBHADIAZQBsADMAYwBhADkAWgBhADYAMABhAEkAVABj
-AE4ATgBFAFMASgBFAHYAWAAxAG4ATABMAGsAQQBUAHoARABWAEcAbwBJADEAVwBoAE8ANwBrADYA
-ZABlAG0AawBQADMAVABYADIAegB1AHEAOQBNADQALwBoAEIAdgB0AEgATAA2AGwAWABYAHMAWgBO
-AEQALwBxAHQASQAvAFcAdQBtADIAZQBOAGcATABaAE0AegBWADcATgBqADIANwA3AG8AVABMAEwA
-QQBEAGoASgBuADkAdQBFAFAATABoAEYAagBWAC8AYQB4ADUAVwBnAEkAdABvAHIAaQAxADYAcgBH
-AHkARwBHAFAAVwAyAGQAdAAyAEUARgBZAFQAZwBNAEgATwBCAFYAZQBOAHcARQByAHMAegAxAEIA
-QgBiAFcAbwBGAC8AQwBVAGcARwA0AGUAMABtAGYAagBzAEoAOQB3AE4AcABXAFkAMgBzAFEAWgAy
-AHAAaABmAFQAUwBDAG8AYwBMADIAWQBrAHQAZABCAGoALwA3AEMAMQBkADgAZQBBADkAVQBwAHIA
-dgBjAFYANABCAGkAQgBnADcARAAvAFcAMwAvAGcAcgBSAEcARgBkAE4AegBPAG8ANgBWAFkANABs
-AFAAaABLAEYAUABvAFkAZwBOAHEANwBkAEQAbwA3AEkAUABlAGoATwBjAEkANwBwAEgAeABrAHgA
-VgAyAGYAMQBEAEoALwBJAEkASABjADMAcQBTAGwAVwBnAGYAcgBmAEUAcgA2AEkANgBEAFYASQBu
-AFYAbAAwAEkANgBSADYAawBvAHMAZQBDAEQAQgB5AFAAeAA1AEwAVQBHADIAcAA0AEQAbwB2AEQA
-ZwBuADkAagBPAHQARABXAFgAegBsAEQANQA3AEIARwB5AFEAawBEAFkAVABFAD0AAAAAAHO5
-
---_000_BY5PR12MB49026A5C37C25915E6C8A86F81139BY5PR12MB4902namp_--
+>>          id->membase = devm_platform_get_and_ioremap_resource(pdev, 0,
+>> &r_mem);
+>>          if (IS_ERR(id->membase))
+>> @@ -1283,7 +1284,6 @@ static int cdns_i2c_probe(struct platform_device
+>> *pdev)
+>>          id->adap.retries = 3;           /* Default retry value. */
+>>          id->adap.algo_data = id;
+>>          id->adap.dev.parent = &pdev->dev;
+>> -       id->adap.bus_recovery_info = &id->rinfo;
+>>          init_completion(&id->xfer_done);
+>>          snprintf(id->adap.name, sizeof(id->adap.name),
+>>                   "Cadence I2C at %08lx", (unsigned long)r_mem->start);
+>> --
+>> 2.32.0
