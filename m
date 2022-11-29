@@ -2,69 +2,112 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF1E63C8DF
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Nov 2022 20:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E43F63CA86
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Nov 2022 22:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237153AbiK2T7t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 29 Nov 2022 14:59:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
+        id S236900AbiK2VhI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 29 Nov 2022 16:37:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237139AbiK2T7s (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 29 Nov 2022 14:59:48 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E9C27B23
-        for <linux-i2c@vger.kernel.org>; Tue, 29 Nov 2022 11:59:47 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id vp12so35175437ejc.8
-        for <linux-i2c@vger.kernel.org>; Tue, 29 Nov 2022 11:59:47 -0800 (PST)
+        with ESMTP id S229512AbiK2VhI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 29 Nov 2022 16:37:08 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F001E5CD38
+        for <linux-i2c@vger.kernel.org>; Tue, 29 Nov 2022 13:37:06 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id ml11so12066924ejb.6
+        for <linux-i2c@vger.kernel.org>; Tue, 29 Nov 2022 13:37:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=kQxcAfqHvb58Fq+PQCA/QJ7nldqCgA1cZrTr8CezUG8TbyQhMhIBIEvl1YdQHGLvY8
-         iX26a4ghJKsn2QidgBhSJu2aC/biwcSa3OtaRp/FGqhCcW/VqTy2TdLSY7tB3ih2IOQb
-         PGbjSS1AVDj/Whbr7dc2T3QcOW+dGU2vCoC6pO3rAyETIe3zLXh3BLuns9IcMnWnvKDc
-         ISyzXgZKjmwwVilaGSc0p4ZOOJAUKHh31VGpcRW0iB48DuvSOi75utW0ZAi5b0JTJEJp
-         KR0KwduSlImaQs5D/7Yin2NkSxFijKPfCGunzNXE1GYsoDK08iKmWiRSNWY63hR8aFHo
-         Px8w==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pWF9gOd/OY/hKO0R1X+AR0OfRDJ2mDFKtPhWMv/Y0Hg=;
+        b=C3cqCKNZvB+oxs2Z7PiDFvl3m4uH+qKJOwduAl71kmF3MfYto97m5S60Fz47UIGVVE
+         kTnLFuPBp8XqzvmLdO2DhSNSd+/QRot4t0KXV7WJ9AAzeTkf/suAR3qs6xkayDF5L3T2
+         b8ycGwfFGvOZxsfqaidTxUR3UbGtV59MiZFj4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=75DxvIHmqw03UuI12PFmlQAq5ANpPJY9MLcOOacGrlPJ2JguokZSXiAPckB4FOYXyW
-         mSvb/P4Vhi8HiNLaFD9pWt9Ltn5iTjQmKvriiR3tw79DVIL6VXj4W+4GV/FTSclo+nu2
-         0qRPF0gr1gOsBpzsfUiTqP8y0zldc2K2cWb7cIJD9K3/lGUr4ujKwE71xf5np3q5c4Y6
-         pl8LjYX1bQr7voj4UwhUAoY2L4sRgbGsfAf/0NeKlXYXaQslUiqgqaFtkCvEJIsNkXzm
-         EgXP35WxD2zQsqP61FNVUVmYT4cEMrneGMA0B8eFpD56e7GmhB29TfTYj8IDYpVqIeZv
-         zoRA==
-X-Gm-Message-State: ANoB5pkbk7TLTiXvzeaK5pg4PMR/Xx+yZIfKxzDrE/yx0l7hw0SznJOV
-        R42MKGQTaNy9yS/O3uXVGKMdFKe3JERKJOxcxMA=
-X-Google-Smtp-Source: AA0mqf4pYzWDuEEFN7SJagouAE2SufEDgwnxXCx3VCMNklx2jS/4jVkrU69gyz2n6nocQ7FgvvrpxhQsAMnyTQbXxtc=
-X-Received: by 2002:a17:906:a107:b0:77f:9082:73c7 with SMTP id
- t7-20020a170906a10700b0077f908273c7mr32670943ejy.517.1669751986329; Tue, 29
- Nov 2022 11:59:46 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pWF9gOd/OY/hKO0R1X+AR0OfRDJ2mDFKtPhWMv/Y0Hg=;
+        b=dbTKe0riZa272hU9H2vJX180dBHUk/sDlU/VBg241XWx6PnNQ6wK4pTfU05trsEB6z
+         aGGqQ8JBfb/vuFHVkU5wNh2PIk1FVrtERE73JOseyAoDVxwP+UR7bFddfQ8AhpPWiuao
+         JdjEbP7WT/GkVBu3fbK18cz5S1HaXqJ8XJYI9tj1Kuc/DO5NeekWRiIlZ9811Ua6i+2Z
+         QfQIFTZhQPAUUpYdzYVZUkTgpuOFBtgSsSVfAZvNQijd4AWq3VaQl3Qry8MBDJ1zTSXk
+         gNc1rmY5BYm/Q3tGJcDNeI2Grd3q1J9YJre04FQcZYFx/q0pS27aox46tXJhkV9t06m+
+         SpAQ==
+X-Gm-Message-State: ANoB5pk602CgNV03vKTeJFJSAOPjHzlTSUsduASOHZbboPRiivqJ6pua
+        6lgOA93bJwe2XGPebAjTyeRJCZjV1gPaLeJp
+X-Google-Smtp-Source: AA0mqf4GV7nku/q/Ai9YH87sjpBOCP+zTeTD5u07Bdfb7hc7JPjBUUwDYZA5a64+igOnnH1UJvd7cQ==
+X-Received: by 2002:a17:906:d7ad:b0:7bc:e98e:2d50 with SMTP id pk13-20020a170906d7ad00b007bce98e2d50mr19832726ejb.743.1669757825067;
+        Tue, 29 Nov 2022 13:37:05 -0800 (PST)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id p23-20020a17090635d700b00780b1979adesm6600090ejb.218.2022.11.29.13.37.02
+        for <linux-i2c@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 13:37:03 -0800 (PST)
+Received: by mail-wr1-f41.google.com with SMTP id bx10so12110546wrb.0
+        for <linux-i2c@vger.kernel.org>; Tue, 29 Nov 2022 13:37:02 -0800 (PST)
+X-Received: by 2002:adf:fd89:0:b0:242:1f81:7034 with SMTP id
+ d9-20020adffd89000000b002421f817034mr4218482wrr.617.1669757822248; Tue, 29
+ Nov 2022 13:37:02 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a17:906:9f02:b0:7b2:71f8:d968 with HTTP; Tue, 29 Nov 2022
- 11:59:45 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <kojofofone00@gmail.com>
-Date:   Tue, 29 Nov 2022 19:59:45 +0000
-Message-ID: <CA+5DqwAsXYad_=4NQ3EJhQ1TOKUbCkSh89_qwiJ3t-QESmAL1A@mail.gmail.com>
-Subject: hi
-To:     undisclosed-recipients:;
+References: <20221118224540.619276-1-uwe@kleine-koenig.org> <20221118224540.619276-37-uwe@kleine-koenig.org>
+In-Reply-To: <20221118224540.619276-37-uwe@kleine-koenig.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 29 Nov 2022 13:36:50 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=VFuDRpkGPazE+xqwAj=0J8GO4EDU_fu+W72E+HQchLsQ@mail.gmail.com>
+Message-ID: <CAD=FV=VFuDRpkGPazE+xqwAj=0J8GO4EDU_fu+W72E+HQchLsQ@mail.gmail.com>
+Subject: Re: [PATCH 036/606] drm/bridge: ti-sn65dsi86: Convert to i2c's .probe_new()
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+Hi,
+
+On Fri, Nov 18, 2022 at 2:46 PM Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.or=
+g> wrote:
+>
+> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+>
+> The probe function doesn't make use of the i2c_device_id * parameter so i=
+t
+> can be trivially converted.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+As per request in the cover letter (and no countermands in the replies
+to the cover), I'm landing this myself. Pushed to
+drm-misc/drm-misc-next with my review and Laurent's.
+
+de86815b3730 drm/bridge: ti-sn65dsi86: Convert to i2c's .probe_new()
