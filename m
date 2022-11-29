@@ -2,36 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF12863BA04
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Nov 2022 07:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5788563BA2F
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Nov 2022 08:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbiK2G4X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 29 Nov 2022 01:56:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38134 "EHLO
+        id S229833AbiK2HEf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 29 Nov 2022 02:04:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiK2G4W (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 29 Nov 2022 01:56:22 -0500
+        with ESMTP id S229832AbiK2HE1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 29 Nov 2022 02:04:27 -0500
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC57651324;
-        Mon, 28 Nov 2022 22:56:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3B77554D2;
+        Mon, 28 Nov 2022 23:04:16 -0800 (PST)
 Received: from loongson.cn (unknown [117.133.84.114])
-        by gateway (Coremail) with SMTP id _____8AxSukSrYVjzvYBAA--.1511S3;
-        Tue, 29 Nov 2022 14:56:18 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8AxhfDvroVjqPcBAA--.4637S3;
+        Tue, 29 Nov 2022 15:04:15 +0800 (CST)
 Received: from [192.168.1.7] (unknown [117.133.84.114])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxmFcPrYVj4AweAA--.58004S3;
-        Tue, 29 Nov 2022 14:56:15 +0800 (CST)
-Message-ID: <2e10ae64-3c91-ccf8-a970-eb6e3371b948@loongson.cn>
-Date:   Tue, 29 Nov 2022 14:56:14 +0800
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_eHsroVjMg8eAA--.10184S3;
+        Tue, 29 Nov 2022 15:04:13 +0800 (CST)
+Message-ID: <a7eb1e30-3b12-eae9-12ca-e62c66bfac31@loongson.cn>
+Date:   Tue, 29 Nov 2022 15:04:12 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: i2c: add loongson i2c
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+Subject: Re: [PATCH v2 1/2] i2c: loongson: add bus driver for the loongson i2c
+ controller
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Jean Delvare <jdelvare@suse.de>,
@@ -45,33 +45,33 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>
 References: <20221128130025.23184-1-zhuyinbo@loongson.cn>
- <20221128130025.23184-2-zhuyinbo@loongson.cn>
- <9cc53272-6828-91b5-30a9-384168a9f94f@linaro.org>
- <4920a652-cc08-6602-7886-80b86a619d0a@loongson.cn>
-In-Reply-To: <4920a652-cc08-6602-7886-80b86a619d0a@loongson.cn>
+ <Y4S/dh9lztpOHxkD@smile.fi.intel.com>
+ <ee52f463-f54c-70cb-5a31-5748f26f40bc@linaro.org>
+ <Y4TFFPWrd7KPAsh+@smile.fi.intel.com>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+In-Reply-To: <Y4TFFPWrd7KPAsh+@smile.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxmFcPrYVj4AweAA--.58004S3
+X-CM-TRANSID: AQAAf8Dx_eHsroVjMg8eAA--.10184S3
 X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7Zw4xKrWxZF48Xw4DWrykZrb_yoW8tw43pF
-        1xCFs8CFyUtF1xWrZrKFyUGry5Zr18AwnrXr47XF1UCryDKw1aqr12gr1q934DZr4xWFy7
-        XrySgw429ws8ArJanT9S1TB71UUUUb7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI
-        0_Jw0_GFyl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCj
-        c4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr1j6F4UJwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU0TrW5UUUUU==
+X-Coremail-Antispam: 1Uk129KBjvdXoWrKr48Zr1fWF15GryDuFWrGrg_yoW3Xrb_ur
+        WjyrnrCr4xJr4xG3W0y34Yq39Iq34jqw15AryfZ3y7Jr13C3s2vayjkwn3ZasxJr4kJFsF
+        9rn0q3y5urZFqjkaLaAFLSUrUUUUOb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
+        07CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
+        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS14v26r1q6r43M2AIxVAIcxkEcVAq
+        07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7
+        xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Y
+        z7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxV
+        WUtVW8ZwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8Jr0_Cr1UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUIdWrDUUUU
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,73 +81,24 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
-在 2022/11/29 7:51, Yinbo Zhu 写道:
+在 2022/11/28 22:26, Andy Shevchenko 写道:
+> On Mon, Nov 28, 2022 at 03:12:54PM +0100, Krzysztof Kozlowski wrote:
+>> On 28/11/2022 15:02, Andy Shevchenko wrote:
+>>> On Mon, Nov 28, 2022 at 09:00:24PM +0800, Yinbo Zhu wrote:
+> ...
 >
-> 在 2022/11/28 22:11, Krzysztof Kozlowski 写道:
->> On 28/11/2022 14:00, Yinbo Zhu wrote:
->>> Add the Loongson platform i2c binding with DT schema format using
->>> json-schema.
->>>
->>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>> Reviewed-by: Rob Herring <robh@kernel.org>
->>> ---
->>> Change in v2:
->>>         1. Removed the "#address-cells" and "#size-cells" in requied.
->>>         2. Add the reviewed-by information.
->>>
->>>   .../bindings/i2c/loongson,ls-i2c.yaml         | 47 
->>> +++++++++++++++++++
->>>   MAINTAINERS                                   |  1 +
->>>   2 files changed, 48 insertions(+)
->>>   create mode 100644 
->>> Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
->>>
->>> diff --git 
->>> a/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml 
->>> b/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
->>> new file mode 100644
->>> index 000000000000..0e4aee9146f3
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
->>> @@ -0,0 +1,47 @@
->>> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/i2c/loongson,ls-i2c.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Loongson I2C controller
->>> +
->>> +maintainers:
->>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->>> +
->>> +allOf:
->>> +  - $ref: /schemas/i2c/i2c-controller.yaml#
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - loongson,ls2k-i2c
->>> +      - loongson,ls7a-i2c
->> Why do we have the same bindings twice, with different people and file
->> names?
+>>> It seems you ignored some of my comments...
+>>> I stopped here, please check what was given against v1 and try again.
+>> I propose to wait with wasting more time on reviews because you might do
+>> the same work twice:
 >>
->> https://lore.kernel.org/all/57339e73b6c0bfe446e19a7f55a48b7ca640b9ec.1669359515.git.zhoubinbin@loongson.cn/ 
->>
->>
->> Best regards,
->> Krzysztof
->
-> Inthe previous internal discussion, I was assigned to go to upstream 
-> for i2c, but I
->
-> don't know why other people are also working on the patch. I will go to
->
-> internal communication.
+>> https://lore.kernel.org/all/822356908305580d601e5b3e424371ed7f220b85.1669359515.git.zhoubinbin@loongson.cn/
+> I see, thank for the pointer!
 
 Hi
 
-please follow zhoubinbin's loongson i2c series patch.
+Please ignore my i2c patch and help continue review zhoubinbin's 
+loongson i2c series patch.
 
 I will not cover it.
 
@@ -156,4 +107,5 @@ Thanks,
 
 Yinbo.
 
+>
 
