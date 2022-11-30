@@ -2,112 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E43F63CA86
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Nov 2022 22:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA39963CEFB
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Nov 2022 06:59:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236900AbiK2VhI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 29 Nov 2022 16:37:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
+        id S233820AbiK3F7F (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 30 Nov 2022 00:59:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiK2VhI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 29 Nov 2022 16:37:08 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F001E5CD38
-        for <linux-i2c@vger.kernel.org>; Tue, 29 Nov 2022 13:37:06 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id ml11so12066924ejb.6
-        for <linux-i2c@vger.kernel.org>; Tue, 29 Nov 2022 13:37:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pWF9gOd/OY/hKO0R1X+AR0OfRDJ2mDFKtPhWMv/Y0Hg=;
-        b=C3cqCKNZvB+oxs2Z7PiDFvl3m4uH+qKJOwduAl71kmF3MfYto97m5S60Fz47UIGVVE
-         kTnLFuPBp8XqzvmLdO2DhSNSd+/QRot4t0KXV7WJ9AAzeTkf/suAR3qs6xkayDF5L3T2
-         b8ycGwfFGvOZxsfqaidTxUR3UbGtV59MiZFj4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pWF9gOd/OY/hKO0R1X+AR0OfRDJ2mDFKtPhWMv/Y0Hg=;
-        b=dbTKe0riZa272hU9H2vJX180dBHUk/sDlU/VBg241XWx6PnNQ6wK4pTfU05trsEB6z
-         aGGqQ8JBfb/vuFHVkU5wNh2PIk1FVrtERE73JOseyAoDVxwP+UR7bFddfQ8AhpPWiuao
-         JdjEbP7WT/GkVBu3fbK18cz5S1HaXqJ8XJYI9tj1Kuc/DO5NeekWRiIlZ9811Ua6i+2Z
-         QfQIFTZhQPAUUpYdzYVZUkTgpuOFBtgSsSVfAZvNQijd4AWq3VaQl3Qry8MBDJ1zTSXk
-         gNc1rmY5BYm/Q3tGJcDNeI2Grd3q1J9YJre04FQcZYFx/q0pS27aox46tXJhkV9t06m+
-         SpAQ==
-X-Gm-Message-State: ANoB5pk602CgNV03vKTeJFJSAOPjHzlTSUsduASOHZbboPRiivqJ6pua
-        6lgOA93bJwe2XGPebAjTyeRJCZjV1gPaLeJp
-X-Google-Smtp-Source: AA0mqf4GV7nku/q/Ai9YH87sjpBOCP+zTeTD5u07Bdfb7hc7JPjBUUwDYZA5a64+igOnnH1UJvd7cQ==
-X-Received: by 2002:a17:906:d7ad:b0:7bc:e98e:2d50 with SMTP id pk13-20020a170906d7ad00b007bce98e2d50mr19832726ejb.743.1669757825067;
-        Tue, 29 Nov 2022 13:37:05 -0800 (PST)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id p23-20020a17090635d700b00780b1979adesm6600090ejb.218.2022.11.29.13.37.02
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 13:37:03 -0800 (PST)
-Received: by mail-wr1-f41.google.com with SMTP id bx10so12110546wrb.0
-        for <linux-i2c@vger.kernel.org>; Tue, 29 Nov 2022 13:37:02 -0800 (PST)
-X-Received: by 2002:adf:fd89:0:b0:242:1f81:7034 with SMTP id
- d9-20020adffd89000000b002421f817034mr4218482wrr.617.1669757822248; Tue, 29
- Nov 2022 13:37:02 -0800 (PST)
+        with ESMTP id S232960AbiK3F6s (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 30 Nov 2022 00:58:48 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8302D31EDA;
+        Tue, 29 Nov 2022 21:58:45 -0800 (PST)
+Received: from loongson.cn (unknown [112.20.109.110])
+        by gateway (Coremail) with SMTP id _____8Dx++oU8YZj5kcCAA--.5281S3;
+        Wed, 30 Nov 2022 13:58:44 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.20.109.110])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxTuAR8YZjnUwiAA--.19574S2;
+        Wed, 30 Nov 2022 13:58:42 +0800 (CST)
+From:   Binbin Zhou <zhoubinbin@loongson.cn>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Cc:     loongarch@lists.linux.dev, devicetree@vger.kernel.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH V4 0/5] i2c: ls2x: Add support for the Loongson-2K/LS7A I2C controller
+Date:   Wed, 30 Nov 2022 13:55:50 +0800
+Message-Id: <cover.1669777792.git.zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20221118224540.619276-1-uwe@kleine-koenig.org> <20221118224540.619276-37-uwe@kleine-koenig.org>
-In-Reply-To: <20221118224540.619276-37-uwe@kleine-koenig.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 29 Nov 2022 13:36:50 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VFuDRpkGPazE+xqwAj=0J8GO4EDU_fu+W72E+HQchLsQ@mail.gmail.com>
-Message-ID: <CAD=FV=VFuDRpkGPazE+xqwAj=0J8GO4EDU_fu+W72E+HQchLsQ@mail.gmail.com>
-Subject: Re: [PATCH 036/606] drm/bridge: ti-sn65dsi86: Convert to i2c's .probe_new()
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxTuAR8YZjnUwiAA--.19574S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7ur1DWw47XF4DtF4UZrW3trb_yoW8ur43pa
+        1a939Iyr1UtF17tF1fJa4xuryrursxJ3yDWFsrGw1DuFW5C34UJ3y5KFWY9rnrCry5GrWj
+        qr98KF42kFyqyrJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
+        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4U
+        YxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Hi all:
 
-On Fri, Nov 18, 2022 at 2:46 PM Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.or=
-g> wrote:
->
-> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
->
-> The probe function doesn't make use of the i2c_device_id * parameter so i=
-t
-> can be trivially converted.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+This patch series adds support for the I2C module found on various
+Loongson systems with the Loongson-2K SoC or the Loongson LS7A bridge chip.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+For now, the I2C driver is suitable for DT-based or ACPI-based systems.
 
-As per request in the cover letter (and no countermands in the replies
-to the cover), I'm landing this myself. Pushed to
-drm-misc/drm-misc-next with my review and Laurent's.
+I have tested on Loongson-3A5000LA+LS7A1000/LS7A2000, Loongson-2K1000LA
+and Loongson-2K0500.
 
-de86815b3730 drm/bridge: ti-sn65dsi86: Convert to i2c's .probe_new()
+Thanks.
+
+Changes since V3:
+- Addressed all review comments from v3
+  - Change the changelog text to make it clearer (1/5);
+  - Fix some minor bugs, such as formatting issues (2/5);
+  - Fix some formatting issues, such as dropping quotes and checking with
+    dt_binding_check (3/5);
+  - Deep refactoring of code for clarity (4/5).
+     Details: https://lore.kernel.org/all/Y4S2cnlAm3YYvZ8E@smile.fi.intel.com/
+
+Thanks to all for their suggestions.
+
+Changes since V2:
+- Addressed all review comments from v2
+  - Drop of_match_ptr() in i2c-gpio to avoid potential unused warnings
+    (1/5);
+  - Introduce i2c_gpio_get_props() function as the generic interface
+    to get i2c-gpio props from DT or ACPI table (2/5);
+  - Refact ls2x i2c code, similar to removing excessive goto tags (4/5).
+
+Thanks to Andy and Mika for their suggestions.
+
+Changes since V1:
+- Remove the function of getting the static i2c bus number from ACPI "_UID";
+- Fix build warning from kernel test robot.
+
+Binbin Zhou (5):
+  i2c: gpio: Fix potential unused warning for 'i2c_gpio_dt_ids'
+  i2c: gpio: Add support on ACPI-based system
+  dt-bindings: i2c: add bindings for Loongson LS2X I2C
+  i2c: ls2x: Add driver for Loongson-2K/LS7A I2C controller
+  LoongArch: Enable LS2X I2C in loongson3_defconfig
+
+ .../bindings/i2c/loongson,ls2x-i2c.yaml       |  49 +++
+ arch/loongarch/configs/loongson3_defconfig    |   1 +
+ drivers/i2c/busses/Kconfig                    |  11 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-gpio.c                 |  30 +-
+ drivers/i2c/busses/i2c-ls2x.c                 | 402 ++++++++++++++++++
+ 6 files changed, 482 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/i2c/loongson,ls2x-i2c.yaml
+ create mode 100644 drivers/i2c/busses/i2c-ls2x.c
+
+-- 
+2.31.1
+
