@@ -2,115 +2,122 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A087463D716
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Nov 2022 14:47:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2952863E204
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Nov 2022 21:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbiK3Nru (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 30 Nov 2022 08:47:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
+        id S230103AbiK3U36 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 30 Nov 2022 15:29:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiK3Nrt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 30 Nov 2022 08:47:49 -0500
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7473D26FB;
-        Wed, 30 Nov 2022 05:47:39 -0800 (PST)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-142b72a728fso20989942fac.9;
-        Wed, 30 Nov 2022 05:47:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=seGCIQpV/gpvjnLqrRAttrUZC/KeZw23Ao+wHzN0Wd8=;
-        b=QKs703g/nLQMORPP5WpzS51TIfVNikmCQwxNQrn8lC93fkOaeYImR4M5lrckDEQW1L
-         lfvAbHLxOMOIFAJRVrKSTbwn2h5PxgxsWcExTJhvc/zrxYsLozHmLQzC6fxZo0MojfvJ
-         T2+Stfs4pdZaL/V+TPaeTBhd1FwtB9LDU2BCdXaNOSRKLmr7d5iu8VxYjLH/4DUScwOk
-         VQ9k2TRWUOSiUf1hEArya2A+rNln4w2wMdG/eSBOI8uTPAVHt2woS4DUfhsWlJpl4MDF
-         WsF8fA6n0bI9QejMEsUPzB52vlRyigZpKIiKP5JgOCOZdtpXwAt8x333RMIlI251p5i6
-         Maig==
-X-Gm-Message-State: ANoB5pnfqxehtP50532XAnj64tsOGuLTa7688gF/zlOzotbeeqiFrSmu
-        bJAtRjv5yGZKxWoe27z5xw==
-X-Google-Smtp-Source: AA0mqf6bSZBKUGp5+4gpBC4spVxEYTFL+jIgIXJoRus4aB5OZONHshtpPMdps+k6DfC1a9bbxlbGNA==
-X-Received: by 2002:a05:6870:6984:b0:13b:254d:6500 with SMTP id my4-20020a056870698400b0013b254d6500mr35322161oab.229.1669816058951;
-        Wed, 30 Nov 2022 05:47:38 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r34-20020a056870e9a200b0013b1301ce42sm1152916oao.47.2022.11.30.05.47.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 05:47:38 -0800 (PST)
-Received: (nullmailer pid 1848611 invoked by uid 1000);
-        Wed, 30 Nov 2022 13:47:34 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
+        with ESMTP id S230126AbiK3U3z (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 30 Nov 2022 15:29:55 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354E55444A;
+        Wed, 30 Nov 2022 12:29:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669840194; x=1701376194;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QT9+fo27gKUEyimelEguX5qkYfHdbTN2YbgB47Q5LRU=;
+  b=IGonezhu7fP6AbZvRu+eSLpqrSgWLT1id1hHCNsiyU9WDkWV/4QQJBav
+   hcwftTwrRjRgm85yLgmrx7q/fo3BLShRCYuoGNP1Een0K8Y2jtwFQ6lxc
+   Sq5pTJDwrcgk7LoLPH83I38YPM9b4tNEU82kvyOZ2aBO3+vT6/5OyhY3n
+   Vrt0cq3iTKwAeXuZDpuRD2rIUxJjQN1SAj+exLfhi7F2pjvrRg5W23KSf
+   CA4r5Timz0JM0Gt/Lhevkr206GvBkMK2jVv7uxhzJcBNsmoEO/lIpCQof
+   FzpuFjpQilwyDytbmDDziDfL8lonpxt9bOJEEkAcwu0djoenQQp9Qia6J
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="315531258"
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="315531258"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 12:29:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="622022043"
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="622022043"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 30 Nov 2022 12:29:50 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p0TiF-002Sw2-2I;
+        Wed, 30 Nov 2022 22:29:47 +0200
+Date:   Wed, 30 Nov 2022 22:29:47 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Binbin Zhou <zhoubinbin@loongson.cn>
-Cc:     WANG Xuerui <kernel@xen0n.name>, Wolfram Sang <wsa@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jianmin Lv <lvjianmin@loongson.cn>, linux-i2c@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        loongarch@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+Cc:     Wolfram Sang <wsa@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-In-Reply-To:  =?utf-8?q?=3C8503ed054d5b4984b5d6e18891767cace2d36a31=2E166977?=
- =?utf-8?q?7792=2Egit=2Ezhoubinbin=40loongson=2Ecn=3E?=
-References: <cover.1669777792.git.zhoubinbin@loongson.cn>  =?utf-8?q?=3C8503?=
- =?utf-8?q?ed054d5b4984b5d6e18891767cace2d36a31=2E1669777792=2Egit=2Ezhoubin?=
- =?utf-8?q?bin=40loongson=2Ecn=3E?=
-Message-Id: <166981596682.1846552.1915746875446058794.robh@kernel.org>
-Subject: Re: [PATCH V4 3/5] dt-bindings: i2c: add bindings for Loongson LS2X I2C
-Date:   Wed, 30 Nov 2022 07:47:34 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, loongarch@lists.linux.dev,
+        devicetree@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+Subject: Re: [PATCH V4 1/5] i2c: gpio: Fix potential unused warning for
+ 'i2c_gpio_dt_ids'
+Message-ID: <Y4e9O33vB1d6sNeR@smile.fi.intel.com>
+References: <cover.1669777792.git.zhoubinbin@loongson.cn>
+ <fda9f8bc2477a3a49bd57ea219f88b4199c2163e.1669777792.git.zhoubinbin@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fda9f8bc2477a3a49bd57ea219f88b4199c2163e.1669777792.git.zhoubinbin@loongson.cn>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Wed, Nov 30, 2022 at 01:55:51PM +0800, Binbin Zhou wrote:
+> Dropping a matching #ifdef check along with dropping of_match_ptr()
+> is just a cleanup, while dropping of_match_ptr() that has no
+> corresponding #ifdef fixes an actual warning.
 
-On Wed, 30 Nov 2022 13:55:53 +0800, Binbin Zhou wrote:
-> Add Loongson LS2X I2C controller binding with DT schema format using
-> json-schema.
-> 
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
 > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
 > ---
->  .../bindings/i2c/loongson,ls2x-i2c.yaml       | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/loongson,ls2x-i2c.yaml
+>  drivers/i2c/busses/i2c-gpio.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-gpio.c b/drivers/i2c/busses/i2c-gpio.c
+> index b1985c1667e1..0e4385a9bcf7 100644
+> --- a/drivers/i2c/busses/i2c-gpio.c
+> +++ b/drivers/i2c/busses/i2c-gpio.c
+> @@ -482,19 +482,17 @@ static int i2c_gpio_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -#if defined(CONFIG_OF)
+>  static const struct of_device_id i2c_gpio_dt_ids[] = {
+>  	{ .compatible = "i2c-gpio", },
+>  	{ /* sentinel */ }
+>  };
+>  
+>  MODULE_DEVICE_TABLE(of, i2c_gpio_dt_ids);
+> -#endif
+>  
+>  static struct platform_driver i2c_gpio_driver = {
+>  	.driver		= {
+>  		.name	= "i2c-gpio",
+> -		.of_match_table	= of_match_ptr(i2c_gpio_dt_ids),
+> +		.of_match_table	= i2c_gpio_dt_ids,
+>  	},
+>  	.probe		= i2c_gpio_probe,
+>  	.remove		= i2c_gpio_remove,
+> -- 
+> 2.31.1
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+-- 
+With Best Regards,
+Andy Shevchenko
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/i2c/loongson,ls2x-i2c.example.dts:25.30-31 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/i2c/loongson,ls2x-i2c.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1492: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/8503ed054d5b4984b5d6e18891767cace2d36a31.1669777792.git.zhoubinbin@loongson.cn
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
 
