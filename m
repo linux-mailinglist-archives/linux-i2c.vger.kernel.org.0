@@ -2,94 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E47B63F7A3
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Dec 2022 19:43:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B151E63FAC0
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Dec 2022 23:42:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiLASn0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 1 Dec 2022 13:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41164 "EHLO
+        id S231575AbiLAWmq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 1 Dec 2022 17:42:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbiLASnZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Dec 2022 13:43:25 -0500
+        with ESMTP id S231578AbiLAWmV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Dec 2022 17:42:21 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293C9934C2;
-        Thu,  1 Dec 2022 10:43:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F236FC4CEC;
+        Thu,  1 Dec 2022 14:42:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC797620B3;
-        Thu,  1 Dec 2022 18:43:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 208F8C433D6;
-        Thu,  1 Dec 2022 18:43:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669920204;
-        bh=p4GYPrcLemfL1H4zQdK4YSafqKxYl8uzcCcsuNR5Mug=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E5FF620E0;
+        Thu,  1 Dec 2022 22:42:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9948FC433C1;
+        Thu,  1 Dec 2022 22:42:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669934525;
+        bh=ILDcuQPQ0P6LMEU7XozooiCZHpPcni+OPJtYOt+KBG4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a2BoPen065qBe8Og5canw6L1zfhJNTp7AhJG9KCJ6kiqz0PbaFOGVhFTqYEHLQC/3
-         txrNOo/kDMMWMmzGqvPwfOzgrz6vwm2Q1DicWoYbq+xwADN5A7BOVkCSHc8BU+fkbm
-         ahiTJmpUWGq4d9z7eAd6F7xiHvrsPEH9AaFENflI=
-Date:   Thu, 1 Dec 2022 19:43:20 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
- const *
-Message-ID: <Y4j1yPD4Ypze7jx5@kroah.com>
-References: <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
- <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
- <Y34zyzdbRUdyOSkA@casper.infradead.org>
- <Y34+V2bCDdqujBDk@kroah.com>
- <Y35JfNJDppRp5bLX@ziepe.ca>
- <Y35R+/eQJYI7VaDS@kroah.com>
- <Y35YlI93UBuTfgYy@ziepe.ca>
- <Y35dMIaNYSE0Cykd@casper.infradead.org>
- <Y35enjI+dhhqiG3B@ziepe.ca>
- <Y35ftyYlE8FX8xQO@casper.infradead.org>
+        b=FszLgQkBcN9W/NkjDzWYuKNu27IopkZoOdP+ZBsktfd27eOfxAv6BqAg3QuURnacL
+         Nlivka3FvL1FCtJWJn8OQfnKWJQ7UvXxtBFNH5RCV368as6TV6yE2ly2Uhutz7AHjz
+         2c1wALiAu0Bs4ax1zQW5D5yC6gTG02MGU5b8pfjNIHYsS3zvIUKZxb6BbMkbNE6wn6
+         3B/vgSv+SQptkcum5hRD/y+W87bQX5V/4fALeNVzi7W27FTb6zZpSTDfKCYwfRz6NI
+         3rk7kfxEvHwoguTEveHwEafoLmJ8eO3TYHXcg+O+eK2gULkzvuW4FGptVTB73kAB56
+         DOSSDUynv2ExA==
+Date:   Thu, 1 Dec 2022 23:42:02 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     carsten.haitzler@foss.arm.com
+Cc:     michal.simek@xilinx.com, shubhrajyoti.datta@xilinx.com,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: cadence: Fix regression with bus recovery
+Message-ID: <Y4kturekuvluszoq@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        carsten.haitzler@foss.arm.com, michal.simek@xilinx.com,
+        shubhrajyoti.datta@xilinx.com, linux-arm-kernel@lists.infradead.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221128105158.1536551-1-carsten.haitzler@foss.arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="guh+gwQS+Eh/KDBC"
 Content-Disposition: inline
-In-Reply-To: <Y35ftyYlE8FX8xQO@casper.infradead.org>
+In-Reply-To: <20221128105158.1536551-1-carsten.haitzler@foss.arm.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -99,35 +58,62 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 06:00:23PM +0000, Matthew Wilcox wrote:
-> On Wed, Nov 23, 2022 at 01:55:42PM -0400, Jason Gunthorpe wrote:
-> > On Wed, Nov 23, 2022 at 05:49:36PM +0000, Matthew Wilcox wrote:
-> > > On Wed, Nov 23, 2022 at 01:29:56PM -0400, Jason Gunthorpe wrote:
-> > > > #define generic_container_of(in_type, in, out_type, out_member) \
-> > > > 	_Generic(in,                                        \
-> > > >                   const in_type *: ((const out_type *)container_of(in, out_type, out_member)),   \
-> > > >                   in_type *: ((out_type *)container_of(in, out_type, out_member)) \
-> > > > 		  )
-> > > 
-> > > There's a neat trick I found in seqlock.h:
-> > > 
-> > > #define generic_container_of(in_t, in, out_t, m)			\
-> > > 	_Generic(*(in),							\
-> > > 		const in_t: ((const out_t *)container_of(in, out_t, m)), \
-> > > 		in_t: ((out_t *)container_of(in, out_type, m))	\
-> > > 	)
-> > >
-> > > and now it fits in 80 columns ;-)
-> > 
-> > Aside from less letters, is their another benifit to using *(in) ?
-> 
-> I don't think so.  It just looks nicer to me than putting the star in
-> each case.  If I'd thought of it, I would have done it to page_folio(),
-> but I won't change it now.
 
-Ah, but your trick will not work, that blows up and will not build.  The
-original one from Jason here does work.  _Generic is tricky...
+--guh+gwQS+Eh/KDBC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-thanks,
+On Mon, Nov 28, 2022 at 10:51:58AM +0000, carsten.haitzler@foss.arm.com wro=
+te:
+> From: Carsten Haitzler <carsten.haitzler@arm.com>
+>=20
+> Commit "i2c: cadence: Add standard bus recovery support" breaks for i2c
+> devices that have no pinctrl defined. There is no requirement for this
+> to exist in the DT. This has worked perfectly well without this before in
+> at least 1 real usage case on hardware (Mali Komeda DPU, Cadence i2c to
+> talk to a tda99xx phy). Adding the requirement to have pinctrl set up in
+> the device tree (or otherwise be found) is a regression where the whole
+> i2c device is lost entirely (in this case dropping entire devices which
+> then leads to the drm display stack unable to find the phy for display
+> output, thus having no drm display device and so on down the chain).
+>=20
+> This converts the above commit to an enhancement if pinctrl can be found
+> for the i2c device, providing a timeout on read with recovery, but if not,
+> do what used to be done rather than a fatal loss of a device.
+>=20
+> This restores the mentioned display devices to their working state again.
+>=20
+> Fixes: 58b924241d0a ("i2c: cadence: Add standard bus recovery support")
+> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
 
-greg k-h
+Fixed this checkpatch check:
+
+CHECK: Unbalanced braces around else statement
+#55: FILE: drivers/i2c/busses/i2c-cadence.c:1272:
++	} else
+
+and applied to for-current, thanks!
+
+
+--guh+gwQS+Eh/KDBC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmOJLbYACgkQFA3kzBSg
+KbaFHg/+NOUmAhWQClMmII+ahnTIiIwOV8w1yaU6ZYq2BUyFQfQ1Eh5N4wSfoeCH
+Zp8g1zWV2MLznhdXNcLVkFQWFvshcoMFA2TXjnCA/R1psxixa+Dj0WO2e+1jGUd0
+U4/MZJeqgc5sqJj4tmomgNWql/npgKt9UzUU8etJm6YGumYzdj1dMDgTVSu7gayA
+xKJyZ1VZjxHOb4Rnzpk/62uEX4lATgWxcgArttjY9o/PdZjfQ/xDeQd+UnqzGaHF
+18mDZiSeUeO7sstpEAmP4O/tj3jJBQqPHxiJnxjwljrYqEF5mYHhpxKjKNaAgfWD
+EjgOqELccLSPCPnNuhnZ9bmYtZNkO820x+jIRDuOuJauQwNUVgAPjSta/dwDKE53
+bNyVucCQM8uXDCa/xGIlzRcdbQFiDEtWH+zwNej7GTb7bcP/KFBaeWxYPjgU4mbJ
+zViw2I8tz52ormzThKKuZ7Uc9JOZeXfkLEFd9mUY9xLV+sP9QSRGkjRmYIDYkt3+
+irA+JkBOknqEPqgU96EPeiTr6yq+lUPkzl4NIEL41i4qugpGl+bXW0ODbtmwr8n4
+TVUfNAnbIXGWwiCaGIOni0jCGLdsUMwovuKBrTHpyIWyJx292rGmAdu8ASeiTapo
+14osGlpuh1y9xGADTbgVt97Z0qxZP47QHaDW5zkKKxeGBYnjesk=
+=zXXy
+-----END PGP SIGNATURE-----
+
+--guh+gwQS+Eh/KDBC--
