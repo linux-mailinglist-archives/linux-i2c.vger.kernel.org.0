@@ -2,52 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F32663E823
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Dec 2022 04:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E60CC63E83D
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Dec 2022 04:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbiLADDJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 30 Nov 2022 22:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
+        id S229580AbiLADOa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 30 Nov 2022 22:14:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiLADDI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 30 Nov 2022 22:03:08 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B901C165BF;
-        Wed, 30 Nov 2022 19:03:07 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        with ESMTP id S229515AbiLADOa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 30 Nov 2022 22:14:30 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8885B851;
+        Wed, 30 Nov 2022 19:14:28 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NN1962Zzdz8QrkZ;
-        Thu,  1 Dec 2022 11:03:06 +0800 (CST)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NN1QC2yNbz4xVnf;
+        Thu,  1 Dec 2022 11:14:27 +0800 (CST)
 Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl1.zte.com.cn with SMTP id 2B132vl0040902;
-        Thu, 1 Dec 2022 11:02:57 +0800 (+08)
+        by mse-fl2.zte.com.cn with SMTP id 2B13EGCL064526;
+        Thu, 1 Dec 2022 11:14:16 +0800 (+08)
         (envelope-from ye.xingchen@zte.com.cn)
 Received: from mapi (xaxapp01[null])
         by mapi (Zmail) with MAPI id mid31;
-        Thu, 1 Dec 2022 11:02:58 +0800 (CST)
-Date:   Thu, 1 Dec 2022 11:02:58 +0800 (CST)
-X-Zmail-TransId: 2af9638819624952e6b0
+        Thu, 1 Dec 2022 11:14:17 +0800 (CST)
+Date:   Thu, 1 Dec 2022 11:14:17 +0800 (CST)
+X-Zmail-TransId: 2af963881c094624a661
 X-Mailer: Zmail v1.0
-Message-ID: <202212011102587309217@zte.com.cn>
+Message-ID: <202212011114175709557@zte.com.cn>
 Mime-Version: 1.0
 From:   <ye.xingchen@zte.com.cn>
 To:     <jikos@kernel.org>
 Cc:     <benjamin.tissoires@redhat.com>, <michael.zaidman@gmail.com>,
         <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-i2c@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBISUQ6IHVzZSBzeXNmc19lbWl0KCkgdG8gaW5zdGVhZCBvZiBzY25wcmludGYoKQ==?=
+Subject: =?UTF-8?B?W1BBVENIIHYyXSBISUQ6IHVzZSBzeXNmc19lbWl0KCkgdG8gaW5zdGVhZCBvZiBzY25wcmludGYoKQ==?=
 Content-Type: text/plain;
         charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2B132vl0040902
+X-MAIL: mse-fl2.zte.com.cn 2B13EGCL064526
 X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 6388196A.001 by FangMail milter!
-X-FangMail-Envelope: 1669863786/4NN1962Zzdz8QrkZ/6388196A.001/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63881C13.000 by FangMail milter!
+X-FangMail-Envelope: 1669864467/4NN1QC2yNbz4xVnf/63881C13.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
 X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6388196A.001/4NN1962Zzdz8QrkZ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Fangmail-MID-QID: 63881C13.000/4NN1QC2yNbz4xVnf
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,11 +60,16 @@ Replace the open-code with sysfs_emit() to simplify the code.
 
 Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- drivers/hid/hid-core.c   | 2 +-
- drivers/hid/hid-cp2112.c | 2 +-
- drivers/hid/hid-ft260.c  | 4 ++--
- drivers/hid/hid-gt683r.c | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
+v1 -> v2
+Add the rest in drivers/hid/ with the same changes.
+ drivers/hid/hid-core.c           | 2 +-
+ drivers/hid/hid-cp2112.c         | 2 +-
+ drivers/hid/hid-ft260.c          | 4 ++--
+ drivers/hid/hid-gt683r.c         | 2 +-
+ drivers/hid/hid-lg4ff.c          | 6 +++---
+ drivers/hid/hid-logitech-hidpp.c | 2 +-
+ drivers/hid/wacom_sys.c          | 4 ++--
+ 7 files changed, 11 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
 index b973df3b825d..ae1ecb21121a 100644
@@ -127,5 +132,71 @@ index 29ccb0accfba..fa453de406b9 100644
  }
 
  static ssize_t mode_store(struct device *dev,
+diff --git a/drivers/hid/hid-lg4ff.c b/drivers/hid/hid-lg4ff.c
+index e3fcf1353fb3..07f3cf175060 100644
+--- a/drivers/hid/hid-lg4ff.c
++++ b/drivers/hid/hid-lg4ff.c
+@@ -956,7 +956,7 @@ static ssize_t lg4ff_combine_show(struct device *dev, struct device_attribute *a
+ 		return 0;
+ 	}
+
+-	count = scnprintf(buf, PAGE_SIZE, "%u\n", entry->wdata.combine);
++	count = sysfs_emit(buf, "%u\n", entry->wdata.combine);
+ 	return count;
+ }
+
+@@ -1009,7 +1009,7 @@ static ssize_t lg4ff_range_show(struct device *dev, struct device_attribute *att
+ 		return 0;
+ 	}
+
+-	count = scnprintf(buf, PAGE_SIZE, "%u\n", entry->wdata.range);
++	count = sysfs_emit(buf, "%u\n", entry->wdata.range);
+ 	return count;
+ }
+
+@@ -1073,7 +1073,7 @@ static ssize_t lg4ff_real_id_show(struct device *dev, struct device_attribute *a
+ 		return 0;
+ 	}
+
+-	count = scnprintf(buf, PAGE_SIZE, "%s: %s\n", entry->wdata.real_tag, entry->wdata.real_name);
++	count = sysfs_emit(buf, "%s: %s\n", entry->wdata.real_tag, entry->wdata.real_name);
+ 	return count;
+ }
+
+diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+index 9afbc68bf063..38ba30f72c8c 100644
+--- a/drivers/hid/hid-logitech-hidpp.c
++++ b/drivers/hid/hid-logitech-hidpp.c
+@@ -2506,7 +2506,7 @@ static ssize_t hidpp_ff_range_show(struct device *dev, struct device_attribute *
+ 	struct input_dev *idev = hidinput->input;
+ 	struct hidpp_ff_private_data *data = idev->ff->private;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", data->range);
++	return sysfs_emit(buf, "%u\n", data->range);
+ }
+
+ static ssize_t hidpp_ff_range_store(struct device *dev, struct device_attribute *attr, const char *buf, size_t count)
+diff --git a/drivers/hid/wacom_sys.c b/drivers/hid/wacom_sys.c
+index 634263e4556b..00556a045e51 100644
+--- a/drivers/hid/wacom_sys.c
++++ b/drivers/hid/wacom_sys.c
+@@ -1058,7 +1058,7 @@ static ssize_t wacom_led##SET_ID##_select_show(struct device *dev,	\
+ {									\
+ 	struct hid_device *hdev = to_hid_device(dev);\
+ 	struct wacom *wacom = hid_get_drvdata(hdev);			\
+-	return scnprintf(buf, PAGE_SIZE, "%d\n",			\
++	return sysfs_emit(buf, "%d\n",			\
+ 			 wacom->led.groups[SET_ID].select);		\
+ }									\
+ static DEVICE_ATTR(status_led##SET_ID##_select, DEV_ATTR_RW_PERM,	\
+@@ -1102,7 +1102,7 @@ static ssize_t wacom_##name##_luminance_show(struct device *dev,	\
+ 	struct device_attribute *attr, char *buf)			\
+ {									\
+ 	struct wacom *wacom = dev_get_drvdata(dev);			\
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", wacom->led.field);	\
++	return sysfs_emit(buf, "%d\n", wacom->led.field);	\
+ }									\
+ static DEVICE_ATTR(name##_luminance, DEV_ATTR_RW_PERM,			\
+ 		   wacom_##name##_luminance_show,			\
 -- 
 2.25.1
