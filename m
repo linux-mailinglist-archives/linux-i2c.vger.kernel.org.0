@@ -2,142 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE53640226
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Dec 2022 09:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 637C16402C1
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 Dec 2022 09:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232917AbiLBIbl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 2 Dec 2022 03:31:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
+        id S232919AbiLBI7o (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 2 Dec 2022 03:59:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232738AbiLBI37 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 2 Dec 2022 03:29:59 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9697860B66;
-        Fri,  2 Dec 2022 00:29:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669969786; x=1701505786;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=4tZ8P1rjFZqQdEDu1Entw+Faj29DY+fm4wogYriUb4s=;
-  b=Jdt8OOBFCU2iBd2rV6fjNUU1WhsCSQfugO5vi918dZQOBVDmUURee7kF
-   wy4DNQmulxM9x2mekJdHFLN6ZLJc91iOJz7qwS3qFjUgjUujIKaGnQboA
-   0b1nADg7T/1N2kz+QR31RJem6yAOD9cxhO7pHMPmOM1+adtqmoLK55QvU
-   Tq4jJ0nBdNViYr7fKzjgIPgqe3LRl95LOeif7HKCBeZd9ZOCClCQdeZru
-   xiC3dKvU0NIdH8g9k13TV7JVkXB7WZ9Xiu8hwQ9UmCMZine8eaPBRayq/
-   cbqZA2psQ5Lrurx4B3yQwAHqcrtyA8sLt9uCX2Xl4/IASLIsn7Ry5L5PL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="317764272"
-X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="317764272"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 00:29:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="973832094"
-X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="973832094"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Dec 2022 00:29:24 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p11QA-003HNL-05;
-        Fri, 02 Dec 2022 10:29:22 +0200
-Date:   Fri, 2 Dec 2022 10:29:21 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Binbin Zhou <zhoubinbin@loongson.cn>
-Cc:     Wolfram Sang <wsa@kernel.org>,
+        with ESMTP id S232768AbiLBI7Y (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 2 Dec 2022 03:59:24 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889CEC056E
+        for <linux-i2c@vger.kernel.org>; Fri,  2 Dec 2022 00:57:21 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id bp15so6382671lfb.13
+        for <linux-i2c@vger.kernel.org>; Fri, 02 Dec 2022 00:57:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D1Y1b1DxJndmlcP2TtAAGXqukfYf06t/03mEiH61oCo=;
+        b=ZJJnSTiMuqYLv0z5n8maXBJ3U2fjsGdj0JtL5Qj2map3+OFZaZSeKWo2JF3js2KiNL
+         MVU6yaCCjWlXUQjy5VPmGswXwat1uph/scGRIeS6Ly3DuIAGIrMa1522lR+YeJ8c/RP3
+         TZM7peM5ECZmldAuntzGDsyJ6bL/JNdk8iNv27w7boZ9RF67Fy+cqqRB7AsvZgzBZC7r
+         0CyTmwkaqOzvsiv57dENaBCSe6Eak3Ylt4sChS8VkjKzVp/977MnU1JAQ9UsOMDIj6Ed
+         rCtj8JZgNXBTigrttSRWFWnL4qj1j2WyE+k4+JBGgIPFsyiln6+TOQw/dNClNP6X8DPg
+         vuRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=D1Y1b1DxJndmlcP2TtAAGXqukfYf06t/03mEiH61oCo=;
+        b=s+0+RjX9UI2cUXDqAmcDSlkfF4+FPyyWq/UpqdyWg1jrZwRdjsCJRxA8sZ2+DJ6Gbe
+         yJ6D5rE+Monjz/cAkC6kNgfR86VMyHafMhYjj8TdCCtMduUEWqolxzrt8gV7/YcKwnmL
+         d5SFJg0kbNjqs0+vhAxXBEBcZbAu0/Dqv42bJF2XHK+qc1kzJsLgsrCOGQRkshNaocb1
+         SxJK7w3yUx8h7oGjObsRPSGrFm90l2ye5fxqLEcMXUkZ+OIujRo5chJgWqDOVp0VmYS5
+         qpx/eZdzdbWTMqDg9eoKKO3JQIpLythdbUx99GSMNx7zVPRB0aKsZYtX/JNnzcpoaL+O
+         awZg==
+X-Gm-Message-State: ANoB5pk0nElOt88HMPSm8Yje7R3OOHv6dhQeuM4uiob7FdNmfJalTS/7
+        W+WBcGySjvfGnr2kYytrfhx7qA==
+X-Google-Smtp-Source: AA0mqf6HWQeioeGsGimOHKenGW2HpUjso7U03/yTVxlUQtgq5k5p+CBmmrs1EKEBfs+L5AeIMGzJkw==
+X-Received: by 2002:ac2:4f05:0:b0:497:aa48:8fe7 with SMTP id k5-20020ac24f05000000b00497aa488fe7mr26482008lfr.612.1669971439873;
+        Fri, 02 Dec 2022 00:57:19 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id t9-20020a19dc09000000b004b4b5bd8d02sm945276lfg.78.2022.12.02.00.57.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 00:57:18 -0800 (PST)
+Message-ID: <a8f14b30-dd4f-b5be-ba1b-a8e19f045206@linaro.org>
+Date:   Fri, 2 Dec 2022 09:57:17 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH V4 3/5] dt-bindings: i2c: add bindings for Loongson LS2X
+ I2C
+Content-Language: en-US
+To:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Wolfram Sang <wsa@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, loongarch@lists.linux.dev,
-        devicetree@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>, Arnd Bergmann <arnd@arndb.de>,
+        linux-i2c@vger.kernel.org
+Cc:     loongarch@lists.linux.dev, devicetree@vger.kernel.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jianmin Lv <lvjianmin@loongson.cn>
-Subject: Re: [PATCH V4 4/5] i2c: ls2x: Add driver for Loongson-2K/LS7A I2C
- controller
-Message-ID: <Y4m3Ycs88nOk5zs9@smile.fi.intel.com>
 References: <cover.1669777792.git.zhoubinbin@loongson.cn>
- <f6cc2dbe5cd190031ab4f772d1cf250934288546.1669777792.git.zhoubinbin@loongson.cn>
- <Y4e/6KewuHjAluSZ@smile.fi.intel.com>
- <f0060385-644a-847e-48cf-865c12b96473@loongson.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f0060385-644a-847e-48cf-865c12b96473@loongson.cn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+ <8503ed054d5b4984b5d6e18891767cace2d36a31.1669777792.git.zhoubinbin@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <8503ed054d5b4984b5d6e18891767cace2d36a31.1669777792.git.zhoubinbin@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 11:22:19AM +0800, Binbin Zhou wrote:
-> 在 2022/12/1 04:41, Andy Shevchenko 写道:
-> > On Wed, Nov 30, 2022 at 01:56:20PM +0800, Binbin Zhou wrote:
+On 30/11/2022 06:55, Binbin Zhou wrote:
+> Add Loongson LS2X I2C controller binding with DT schema format using
+> json-schema.
 
-...
+Subject: drop second, redundant "bindings".
 
-> > > +	for (retry = 0; retry < adap->retries; retry++) {
-> > > +		ret = ls2x_i2c_doxfer(adap, msgs, num);
-> > > +		if (ret != -EAGAIN)
-> > > +			return ret;
-> > > +
-> > > +		dev_dbg(priv->dev, "Retrying transmission (%d)\n", retry);
-> > > +		udelay(100);
-> > Why atomic? This long (esp. atomic) delay must be explained.
 > 
-> The modification records for this part of the source code are no longer
-> traceable.
-> 
-> Communicating with colleagues offline, I learned that this part of the code
-> first appeared on Linux 2.6.36, which was done to circumvent the problem of
-> probable failure to scan the device for i2c devices on some boards.
-> 
-> How about I add a comment here to explain the reason for this?
+> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> ---
 
-Yes, that's what we want, and not what you said above. I.o.w. the comment like
-"reason is unknown" is not accepted.
+With above:
 
-Can you be more specific about the boards and why do you still need this delay?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-And also why is it atomic?
-
-> > > +	}
-
-...
-
-> > > +	r = devm_request_irq(dev, irq, ls2x_i2c_irq_handler,
-> > > +				IRQF_SHARED, "ls2x-i2c", priv);
-> > Indentation.
-> 
-> Do you mean  "IRQF_SHARE"  should be aligned to "dev"  ?
-
-Yes.
-
-...
-
-> > > +static const struct dev_pm_ops ls2x_i2c_pm_ops = {
-> > > +	SET_SYSTEM_SLEEP_PM_OPS(ls2x_i2c_suspend, ls2x_i2c_resume)
-> > > +};
-> > Use corresponding DEFINE_ macro.
-> 
-> ok.
-> 
-> I will use
-> 
-> "static DEFINE_SIMPLE_DEV_PM_OPS(ls2x_i2c_pm_ops, ls2x_i2c_suspend,
-> ls2x_i2c_resume);"  corresponding to  ".pm     = pm_ptr(&ls2x_i2c_pm_ops),"
-
-Shouldn't be pm_sleep_ptr()?
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Best regards,
+Krzysztof
 
