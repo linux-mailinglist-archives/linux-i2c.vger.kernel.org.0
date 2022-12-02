@@ -2,33 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31DE63FEBA
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Dec 2022 04:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE53640226
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 Dec 2022 09:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbiLBDW1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 1 Dec 2022 22:22:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34352 "EHLO
+        id S232917AbiLBIbl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 2 Dec 2022 03:31:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbiLBDWY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Dec 2022 22:22:24 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B07AD78E4;
-        Thu,  1 Dec 2022 19:22:22 -0800 (PST)
-Received: from loongson.cn (unknown [112.20.109.110])
-        by gateway (Coremail) with SMTP id _____8Cx7+ttb4lj3rUCAA--.6515S3;
-        Fri, 02 Dec 2022 11:22:21 +0800 (CST)
-Received: from [0.0.0.0] (unknown [112.20.109.110])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxb+Jrb4ljcAwkAA--.23837S3;
-        Fri, 02 Dec 2022 11:22:20 +0800 (CST)
-Message-ID: <f0060385-644a-847e-48cf-865c12b96473@loongson.cn>
-Date:   Fri, 2 Dec 2022 11:22:19 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-From:   Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: Re: [PATCH V4 4/5] i2c: ls2x: Add driver for Loongson-2K/LS7A I2C
- controller
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        with ESMTP id S232738AbiLBI37 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 2 Dec 2022 03:29:59 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9697860B66;
+        Fri,  2 Dec 2022 00:29:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669969786; x=1701505786;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=4tZ8P1rjFZqQdEDu1Entw+Faj29DY+fm4wogYriUb4s=;
+  b=Jdt8OOBFCU2iBd2rV6fjNUU1WhsCSQfugO5vi918dZQOBVDmUURee7kF
+   wy4DNQmulxM9x2mekJdHFLN6ZLJc91iOJz7qwS3qFjUgjUujIKaGnQboA
+   0b1nADg7T/1N2kz+QR31RJem6yAOD9cxhO7pHMPmOM1+adtqmoLK55QvU
+   Tq4jJ0nBdNViYr7fKzjgIPgqe3LRl95LOeif7HKCBeZd9ZOCClCQdeZru
+   xiC3dKvU0NIdH8g9k13TV7JVkXB7WZ9Xiu8hwQ9UmCMZine8eaPBRayq/
+   cbqZA2psQ5Lrurx4B3yQwAHqcrtyA8sLt9uCX2Xl4/IASLIsn7Ry5L5PL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="317764272"
+X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
+   d="scan'208";a="317764272"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 00:29:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="973832094"
+X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
+   d="scan'208";a="973832094"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Dec 2022 00:29:24 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p11QA-003HNL-05;
+        Fri, 02 Dec 2022 10:29:22 +0200
+Date:   Fri, 2 Dec 2022 10:29:21 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Binbin Zhou <zhoubinbin@loongson.cn>
 Cc:     Wolfram Sang <wsa@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
@@ -38,196 +54,90 @@ Cc:     Wolfram Sang <wsa@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jianmin Lv <lvjianmin@loongson.cn>
+Subject: Re: [PATCH V4 4/5] i2c: ls2x: Add driver for Loongson-2K/LS7A I2C
+ controller
+Message-ID: <Y4m3Ycs88nOk5zs9@smile.fi.intel.com>
 References: <cover.1669777792.git.zhoubinbin@loongson.cn>
  <f6cc2dbe5cd190031ab4f772d1cf250934288546.1669777792.git.zhoubinbin@loongson.cn>
  <Y4e/6KewuHjAluSZ@smile.fi.intel.com>
-In-Reply-To: <Y4e/6KewuHjAluSZ@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <f0060385-644a-847e-48cf-865c12b96473@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cxb+Jrb4ljcAwkAA--.23837S3
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxJF43KrW7Xw4UJr48Jw1fWFg_yoWrtryDpF
-        W8JFyrKryqqr10gw4kAr1DCFy2vrZ3Jw4jqa1rZ3WxZr1qkr1Ivr4Iqr1j9r48WFW8Jr48
-        Ar4jyry5ur90qFJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <f0060385-644a-847e-48cf-865c12b96473@loongson.cn>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andy:
+On Fri, Dec 02, 2022 at 11:22:19AM +0800, Binbin Zhou wrote:
+> 在 2022/12/1 04:41, Andy Shevchenko 写道:
+> > On Wed, Nov 30, 2022 at 01:56:20PM +0800, Binbin Zhou wrote:
 
-在 2022/12/1 04:41, Andy Shevchenko 写道:
-> On Wed, Nov 30, 2022 at 01:56:20PM +0800, Binbin Zhou wrote:
->> This I2C module is integrated into the Loongson-2K SoCs and Loongson
->> LS7A bridge chip.
-> Looks like some of my comments were not addressed. Are you sure
-> you have read the previous reviews carefully?
->
-> ...
->
->> +static int ls2x_i2c_xfer(struct i2c_adapter *adap,
->> +			struct i2c_msg *msgs, int num)
->> +{
->> +	int ret, retry;
->> +	struct ls2x_i2c_priv *priv = i2c_get_adapdata(adap);
->> +
->> +	for (retry = 0; retry < adap->retries; retry++) {
->> +		ret = ls2x_i2c_doxfer(adap, msgs, num);
->> +		if (ret != -EAGAIN)
->> +			return ret;
->> +
->> +		dev_dbg(priv->dev, "Retrying transmission (%d)\n", retry);
->> +		udelay(100);
-> Why atomic? This long (esp. atomic) delay must be explained.
+...
 
-The modification records for this part of the source code are no longer 
-traceable.
+> > > +	for (retry = 0; retry < adap->retries; retry++) {
+> > > +		ret = ls2x_i2c_doxfer(adap, msgs, num);
+> > > +		if (ret != -EAGAIN)
+> > > +			return ret;
+> > > +
+> > > +		dev_dbg(priv->dev, "Retrying transmission (%d)\n", retry);
+> > > +		udelay(100);
+> > Why atomic? This long (esp. atomic) delay must be explained.
+> 
+> The modification records for this part of the source code are no longer
+> traceable.
+> 
+> Communicating with colleagues offline, I learned that this part of the code
+> first appeared on Linux 2.6.36, which was done to circumvent the problem of
+> probable failure to scan the device for i2c devices on some boards.
+> 
+> How about I add a comment here to explain the reason for this?
 
-Communicating with colleagues offline, I learned that this part of the 
-code first appeared on Linux 2.6.36, which was done to circumvent the 
-problem of probable failure to scan the device for i2c devices on some 
-boards.
+Yes, that's what we want, and not what you said above. I.o.w. the comment like
+"reason is unknown" is not accepted.
 
-How about I add a comment here to explain the reason for this?
+Can you be more specific about the boards and why do you still need this delay?
 
+And also why is it atomic?
 
->> +	}
->> +
->> +	return -EREMOTEIO;
->> +}
-> ...
->
->> +static void ls2x_i2c_reginit(struct ls2x_i2c_priv *priv)
->> +{
->> +	u8 data;
->> +
->> +	/* Enable operations about frequency divider register */
->> +	data = readb(priv->base + I2C_LS2X_CTR);
->> +	writeb(data & ~0x80, priv->base + I2C_LS2X_CTR);
-> Magic number.
->
->> +	ls2x_i2c_adjust_bus_speed(priv);
->> +
->> +	/* Set to normal I2C operating mode and enable interrupts */
->> +	data = readb(priv->base + I2C_LS2X_CTR);
->> +	writeb(data | 0xe0, priv->base + I2C_LS2X_CTR);
-> Ditto.
+> > > +	}
 
-OK.. I will use the macro to define the corresponding bit.
+...
 
-@@ -48,6 +48,11 @@
-  #define LS2X_SR_TIP            BIT(1)
-  #define LS2X_SR_IF             BIT(0)
+> > > +	r = devm_request_irq(dev, irq, ls2x_i2c_irq_handler,
+> > > +				IRQF_SHARED, "ls2x-i2c", priv);
+> > Indentation.
+> 
+> Do you mean  "IRQF_SHARE"  should be aligned to "dev"  ?
 
-+/* Control Register Bit */
-+#define LS2X_CTR_EN             BIT(7) /* 0: Frequency setting operation */
-+#define LS2X_CTR_IEN            BIT(6) /* Enable i2c interrupt */
-+#define LS2X_CTR_MST            BIT(5) /* 0 = Slave 1 = Master */
-+
-  #define LS2X_I2C_MAX_RETRIES   5
+Yes.
 
-  struct ls2x_i2c_priv {
-@@ -266,13 +271,14 @@ static void ls2x_i2c_reginit(struct ls2x_i2c_priv 
-*priv)
+...
 
-         /* Enable operations about frequency divider register */
-         data = readb(priv->base + I2C_LS2X_CTR);
--       writeb(data & ~0x80, priv->base + I2C_LS2X_CTR);
-+       writeb(data & ~LS2X_CTR_EN, priv->base + I2C_LS2X_CTR);
+> > > +static const struct dev_pm_ops ls2x_i2c_pm_ops = {
+> > > +	SET_SYSTEM_SLEEP_PM_OPS(ls2x_i2c_suspend, ls2x_i2c_resume)
+> > > +};
+> > Use corresponding DEFINE_ macro.
+> 
+> ok.
+> 
+> I will use
+> 
+> "static DEFINE_SIMPLE_DEV_PM_OPS(ls2x_i2c_pm_ops, ls2x_i2c_suspend,
+> ls2x_i2c_resume);"  corresponding to  ".pm     = pm_ptr(&ls2x_i2c_pm_ops),"
 
-         ls2x_i2c_adjust_bus_speed(priv);
-
-         /* Set to normal I2C operating mode and enable interrupts */
-         data = readb(priv->base + I2C_LS2X_CTR);
--       writeb(data | 0xe0, priv->base + I2C_LS2X_CTR);
-+       writeb(data | LS2X_CTR_EN | LS2X_CTR_IEN | LS2X_CTR_MST,
-+                       priv->base + I2C_LS2X_CTR);
+Shouldn't be pm_sleep_ptr()?
 
 
->> +}
-> ...
->
->> +	r = devm_request_irq(dev, irq, ls2x_i2c_irq_handler,
->> +				IRQF_SHARED, "ls2x-i2c", priv);
-> Indentation.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Do you mean  "IRQF_SHARE"  should be aligned to "dev"  ?
-
-
->> +	if (r < 0)
->> +		return dev_err_probe(dev, r, "Unable to request irq %d\n", irq);
-> ...
->
->> +	adap->dev.of_node = pdev->dev.of_node;
-> Why is this needed?
->
->> +	device_set_node(&adap->dev, dev_fwnode(dev));
-> ...
->
->> +	/* i2c device drivers may be active on return from add_adapter() */
->> +	r = i2c_add_adapter(adap);
-> Why not use devm_ variant of this?
->
->> +	if (r)
->> +		return dev_err_probe(dev, r, "Failure adding adapter\n");
-> ...
->
->> +static int ls2x_i2c_suspend(struct device *dev)
->> +{
->> +	struct platform_device *pdev = to_platform_device(dev);
->> +	struct ls2x_i2c_priv *priv = platform_get_drvdata(pdev);
-> Can't you use dev_get_drvdata() directly? Why?
->
->> +
->> +	priv->suspended = 1;
->> +
->> +	return 0;
->> +}
->> +
->> +static int ls2x_i2c_resume(struct device *dev)
->> +{
->> +	struct platform_device *pdev = to_platform_device(dev);
->> +	struct ls2x_i2c_priv *priv = platform_get_drvdata(pdev);
-> Ditto.
->
->> +	priv->suspended = 0;
->> +	ls2x_i2c_reginit(priv);
->> +
->> +	return 0;
->> +}
-> ...
->
->> +static const struct dev_pm_ops ls2x_i2c_pm_ops = {
->> +	SET_SYSTEM_SLEEP_PM_OPS(ls2x_i2c_suspend, ls2x_i2c_resume)
->> +};
-> Use corresponding DEFINE_ macro.
-
-ok.
-
-I will use
-
-"static DEFINE_SIMPLE_DEV_PM_OPS(ls2x_i2c_pm_ops, ls2x_i2c_suspend, 
-ls2x_i2c_resume);"  corresponding to  ".pm     = pm_ptr(&ls2x_i2c_pm_ops),"
-
-
-Thanks.
-
-Binbin
 
