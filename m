@@ -2,71 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6A7642181
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Dec 2022 03:24:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3868A6424A5
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Dec 2022 09:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiLECYB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 4 Dec 2022 21:24:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
+        id S232107AbiLEIcD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Dec 2022 03:32:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbiLECX7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 4 Dec 2022 21:23:59 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1B1912093;
-        Sun,  4 Dec 2022 18:23:56 -0800 (PST)
-Received: from loongson.cn (unknown [112.20.109.110])
-        by gateway (Coremail) with SMTP id _____8BxXes7Vo1jhi4DAA--.7608S3;
-        Mon, 05 Dec 2022 10:23:55 +0800 (CST)
-Received: from [0.0.0.0] (unknown [112.20.109.110])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxLuI4Vo1j17MlAA--.27729S3;
-        Mon, 05 Dec 2022 10:23:54 +0800 (CST)
-Message-ID: <1c07ce92-cd17-8d6a-05d1-d6ea8cc39b56@loongson.cn>
-Date:   Mon, 5 Dec 2022 10:23:52 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-From:   Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: Re: [PATCH V4 4/5] i2c: ls2x: Add driver for Loongson-2K/LS7A I2C
- controller
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, loongarch@lists.linux.dev,
-        devicetree@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>, Arnd Bergmann <arnd@arndb.de>,
+        with ESMTP id S232109AbiLEIbx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Dec 2022 03:31:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7FF165AC;
+        Mon,  5 Dec 2022 00:31:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7807B60F98;
+        Mon,  5 Dec 2022 08:31:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A5B9C433C1;
+        Mon,  5 Dec 2022 08:31:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670229111;
+        bh=gGSFOcfNvIV7dfWy0rhiZJ0qWM2tN+SZKzTXbj86API=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=VwIKVCG/B7HF4RtURKTESKI/7meSx5I98Km8CZ+IVlqr6g4CJEd20ZyPf3yFcXllC
+         oMJlZ4HTMdai9xjxHVnhT4e1Hj28r/1vjv6lz+iOaGcwzXTqP/kpS6k6DWEDFAn5TL
+         zDCpT/XqXh6nT/DY4JOsP+OK82Sy6YkjnFpC2aof4GFeE1vGrWpZISbQNeiOu2Zw94
+         PKAhzKu2nw1oKXXwXrjWxT610MYb/2tdS16853Ilao9MYWu1OHrg0Oa3EwJeZR/Rna
+         IWLH6KefPWqc0ArcoYdOPZXPhrvMTS9dTo4soVMzCjPImb2trs4pppArzkCbVcZrp+
+         sYqqUuLCIKWxw==
+Date:   Mon, 5 Dec 2022 09:31:49 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>
-References: <cover.1669777792.git.zhoubinbin@loongson.cn>
- <f6cc2dbe5cd190031ab4f772d1cf250934288546.1669777792.git.zhoubinbin@loongson.cn>
- <Y4e/6KewuHjAluSZ@smile.fi.intel.com>
- <f0060385-644a-847e-48cf-865c12b96473@loongson.cn>
- <Y4m3Ycs88nOk5zs9@smile.fi.intel.com>
-In-Reply-To: <Y4m3Ycs88nOk5zs9@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxLuI4Vo1j17MlAA--.27729S3
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7KrW8JF18ur18Gw47Jw43ZFb_yoW8tFy7pF
-        WfJFyYkF4kXF1I9rn2vw15u3Z0y398Jr47Zr4rGw1kCF909wn3Ar48tr1j9r1xWrWxJFW8
-        ZFW5KrW5Gr95ZaDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/6] soc: qcom: add support for the I2C Master Hub
+Message-ID: <Y42sdXiCIpj2iaag@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v3-0-f6a20dc9996e@linaro.org>
+ <Y4kvcXTdwImZpaU1@shikoro>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="degf3DG1u90+YJbA"
+Content-Disposition: inline
+In-Reply-To: <Y4kvcXTdwImZpaU1@shikoro>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,73 +70,60 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
-在 2022/12/2 16:29, Andy Shevchenko 写道:
-> On Fri, Dec 02, 2022 at 11:22:19AM +0800, Binbin Zhou wrote:
->> 在 2022/12/1 04:41, Andy Shevchenko 写道:
->>> On Wed, Nov 30, 2022 at 01:56:20PM +0800, Binbin Zhou wrote:
-> ...
->
->>>> +	for (retry = 0; retry < adap->retries; retry++) {
->>>> +		ret = ls2x_i2c_doxfer(adap, msgs, num);
->>>> +		if (ret != -EAGAIN)
->>>> +			return ret;
->>>> +
->>>> +		dev_dbg(priv->dev, "Retrying transmission (%d)\n", retry);
->>>> +		udelay(100);
->>> Why atomic? This long (esp. atomic) delay must be explained.
->> The modification records for this part of the source code are no longer
->> traceable.
->>
->> Communicating with colleagues offline, I learned that this part of the code
->> first appeared on Linux 2.6.36, which was done to circumvent the problem of
->> probable failure to scan the device for i2c devices on some boards.
->>
->> How about I add a comment here to explain the reason for this?
-> Yes, that's what we want, and not what you said above. I.o.w. the comment like
-> "reason is unknown" is not accepted.
->
-> Can you be more specific about the boards and why do you still need this delay?
->
-> And also why is it atomic?
+--degf3DG1u90+YJbA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Dec 01, 2022 at 11:49:21PM +0100, Wolfram Sang wrote:
+> On Tue, Nov 29, 2022 at 03:47:00PM +0100, Neil Armstrong wrote:
+> > The I2C Master Hub is a stripped down version of the GENI Serial Engine
+> > QUP Wrapper Controller but only supporting I2C serial engines without
+> > DMA support.
+> >=20
+> > The I2C Master Hub only supports a variant of the I2C serial engine wit=
+h:
+> > - a separate "core" clock
+> > - no DMA support
+> > - non discoverable fixed FIFO size
+> >=20
+> > Since DMA isn't supported, the wrapper doesn't need the Master AHB clock
+> > and the iommus property neither.
+> >=20
+> > This patchset adds the bindings changes to the QUPv3 wrapper and I2C se=
+rial
+> > element bindings to reflect the different resources requirements.
+> >=20
+> > In order to reuse the QUPv3 wrapper and I2C serial element driver suppo=
+rt,
+> > the I2C Master Hub requirements are expressed in new desc structs passed
+> > as device match data.
+>=20
+> Is everyone fine if I take all this via the I2C tree?
+
+I did this now.
+
+All applied to for-next, thanks!
 
 
-As we expected, the driver is geared towards Loongosn-2K and Loongson 
-LS7A bridge chips, some of the older hardware still in use has scan 
-failure issues and we expect to keep that part as compatible.
+--degf3DG1u90+YJbA
+Content-Type: application/pgp-signature; name="signature.asc"
 
-"Atomic" may not be necessary, It is expected to try a few more times 
-when the scan device fails. Also, I think the corresponding part of the 
-s3c2410 may have been referenced in the beginning.
+-----BEGIN PGP SIGNATURE-----
 
-I will try to drop the loop part to do the relevant i2c read/write tests.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmONrHEACgkQFA3kzBSg
+KbYwTw/8CFbsKahOCnxRWkz2eWDHdMItDVRlO7LmZc4fIQFl2pDH9iJ3otVoI7wf
+SaD2xUd3pnIAg3Ji0a6RibgTLTmqnEIS+XWdjtcuYlNAiN6jbJi/WZFLU0mPXrjh
+MJpC3++LlvkMB8vrR/rUuTZK/sPqzToNyD413FsQIh7vmyrO1DKEyRMgW6kVvT5f
+NiJHZMXirCHH5+KnKi+078gfu33untxT9m+Aqv7g3IUl9epkmgKk0mDNtQIbg5kD
+ogeyhfsidUTLk1ySvnpGW+TvvvYSTX6teJHwoDy54ua2eZkWxfKDbpAa2M8VSbbo
+q0zWrswOmN1S6MnDBor2oRZQdKNyWoZliO2co4S+nZiDg2iDMctfHJZbE6ePs/eX
+qXqs2c6DSXvdaKN8HajybpX2gxED+QAXGgRcTFaVKIxVkETjydDUSl28mAMR/4tP
+UXPhOhWF0G/B6lpxj7n38KOMUUup9MBMzyhED/dM0Rg0nQPnRJL6uSLtFvRS7QCL
+aWTgU5sehJV4ABIxkOQYU+SjuWNwlG/VnFr/ufLVJLNV+pzgGRi9bM3icrKiHSbV
+epCatGPUfnXw3svjTNd1OGcwIhm9YtEPZzN+UxnA4dVl69mJxVpbF1ud34c/E2YB
+TD6KnQMhlqPpSskAUmkbgKFZztGlZqy6TWdFJtqLWd9+jUjcLZ0=
+=6Gcb
+-----END PGP SIGNATURE-----
 
-
-Thanks.
-
-Binbin
-
->>>> +	}
-> ...
->
->>>> +	r = devm_request_irq(dev, irq, ls2x_i2c_irq_handler,
->>>> +				IRQF_SHARED, "ls2x-i2c", priv);
->>> Indentation.
->> Do you mean  "IRQF_SHARE"  should be aligned to "dev"  ?
-> Yes.
->
-> ...
->
->>>> +static const struct dev_pm_ops ls2x_i2c_pm_ops = {
->>>> +	SET_SYSTEM_SLEEP_PM_OPS(ls2x_i2c_suspend, ls2x_i2c_resume)
->>>> +};
->>> Use corresponding DEFINE_ macro.
->> ok.
->>
->> I will use
->>
->> "static DEFINE_SIMPLE_DEV_PM_OPS(ls2x_i2c_pm_ops, ls2x_i2c_suspend,
->> ls2x_i2c_resume);"  corresponding to  ".pm     = pm_ptr(&ls2x_i2c_pm_ops),"
-> Shouldn't be pm_sleep_ptr()?
->
->
-
+--degf3DG1u90+YJbA--
