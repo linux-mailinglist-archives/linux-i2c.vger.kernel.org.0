@@ -2,103 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69129642C54
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Dec 2022 16:56:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C34642D9C
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Dec 2022 17:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231928AbiLEP4z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Dec 2022 10:56:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S232831AbiLEQuS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Dec 2022 11:50:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiLEP4w (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Dec 2022 10:56:52 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C27213E92
-        for <linux-i2c@vger.kernel.org>; Mon,  5 Dec 2022 07:56:52 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p2Dpi-00011Z-NZ; Mon, 05 Dec 2022 16:56:42 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p2Dpf-002VLp-O6; Mon, 05 Dec 2022 16:56:40 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p2Dpf-002oje-K2; Mon, 05 Dec 2022 16:56:39 +0100
-Date:   Mon, 5 Dec 2022 16:56:39 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 047/606] i2c: mux: pca9541: Convert to i2c's .probe_new()
-Message-ID: <20221205155639.4dgyoiafmmn5xehp@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-48-uwe@kleine-koenig.org>
- <Y4296PEnzgtNyAo6@ninjato>
+        with ESMTP id S232358AbiLEQtr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Dec 2022 11:49:47 -0500
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C723021805
+        for <linux-i2c@vger.kernel.org>; Mon,  5 Dec 2022 08:49:04 -0800 (PST)
+Received: by mail-wm1-x344.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so12200715wma.1
+        for <linux-i2c@vger.kernel.org>; Mon, 05 Dec 2022 08:49:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=Z2wBWagY9UnEZ+M5YPDdGkg6nVUsQfYS1BhjpcwGEao2GhG01+Mm/qvV+1fKOq1lbu
+         EFS78qR+UGfEwXQVt6IRXk6jTGT8mo+KAwwjj0fZxBmjE1jztugOoJP4/rka0x6XFhxu
+         W6iUCvsIDO6eHcdCHFvdIDlIVpJCsES5SD3xSnapoHClZmLcHlXbjXoeix+TX99ab7ry
+         BqOOHDFzUlmJeyU3OvUitATOsPkFA0DOczbi/Afsjm9NHI/YtApk72ny0qjFhFTXO+XP
+         yKXAtBeMHMlIwSKvmuRpEfOfWiK9b959mo8P7Fx64Ot+uHxQXUUrd10S+RG2s/yWLOX2
+         BSUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=zBy1WOzqTWo667HsIdOQdc2ghtq3Sli8ZHJXLU2WkGbvpKTeE8neOuXcvi6JBSrNkI
+         zsX+Y+I4fptzichombcpDsZo/WYU8WDLTW72Yv3EWSPD3aPt0LVadk2/jNxuIJRBiD+E
+         8zaZkwyhGHhsjx0Ym+zEGM5jiNbJ0GOedcAPAWQantbCGsYndtOrhdOotTdxUP2nryIM
+         uAjayv0+gP78Ca6Q4OIoUi/mHgoQRr9ug78Rhofl8cpqwdTJwJ8TSPZrNVwQ//tmJk73
+         caKVWCHjq6stlnhdGp1ZzXBdlamtr4RXsIEdyk+BTo4VuSj7z7wyxK45/bNePjZVIuR7
+         s93A==
+X-Gm-Message-State: ANoB5pkjSRJKjNjL4Ax8ehLU2uV1JD/DVPtayD1jhESC2/92+qsBcI3f
+        Aik843K2QXlDGyJYMO4vObRREVPCEXjpXOIw/TQ=
+X-Google-Smtp-Source: AA0mqf6LlThRqxALxahU+d5CDCL5XgA0Iri4oQFEx6hETTBFBZxUw9iI5CXyM5b3WvWotoaM22oBvK+CwFtVO/zgxX4=
+X-Received: by 2002:a7b:c8d0:0:b0:3cf:ca91:7094 with SMTP id
+ f16-20020a7bc8d0000000b003cfca917094mr60628535wml.24.1670258943314; Mon, 05
+ Dec 2022 08:49:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ucoddo5mjexf4xpk"
-Content-Disposition: inline
-In-Reply-To: <Y4296PEnzgtNyAo6@ninjato>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6000:5c1:0:0:0:0 with HTTP; Mon, 5 Dec 2022 08:49:02
+ -0800 (PST)
+Reply-To: phmanu14@hotmail.com
+From:   Philip Manul <zagbamdjala@gmail.com>
+Date:   Mon, 5 Dec 2022 08:49:02 -0800
+Message-ID: <CAPCnorG0wZz4L65xmUUzHEvxvuhrsq0nQnSPJqno3Ah89AhSwA@mail.gmail.com>
+Subject: REP:
+To:     in <in@proposal.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
---ucoddo5mjexf4xpk
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Dec 05, 2022 at 10:46:16AM +0100, Wolfram Sang wrote:
-> On Fri, Nov 18, 2022 at 11:36:21PM +0100, Uwe Kleine-K=F6nig wrote:
-> > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> >=20
-> > The probe function doesn't make use of the i2c_device_id * parameter so=
- it
-> > can be trivially converted.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
->=20
-> Found an older patch doing the same, but still thanks!
-
-Yeah, sorry for the duplicates. I started on mainline instead of next +
-my patchstack when creating this series.
-
-Thanks for picking these up
-Uwe
-
 --=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ucoddo5mjexf4xpk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOOFLQACgkQwfwUeK3K
-7AnKKwf+LhM5BfMzD9oZF6YPSQv53xEbXW0QpUnyDugIGUxa4hRvNfqMXBHPWKGv
-sAjM215hlWhdC/d1tAmf1Pr/Xer3W6LWsGU+1hReP/xqetBV6tYVBLFrgCCJuvGf
-KapQZXY2l0RIDsEPdGdMdKUTXho5FOk6jQnSEUkXnbxtMnclOr2Gjgs8J/ocibK/
-IWHZAxNTw+rFp19hSv5+rm4jnu8MBc+7tdsXabrQ8ptbBxYsRUduaCRKQmVG0Cep
-6oSqpCUa+dITqJ+C4Uybq8hQHHtvBeelVZA9/J6v+knK7TW4jzSsAlV/b8F7BExF
-S7RBwelxYwrzg3/7KCgcsiIHVCCN3A==
-=Gy7X
------END PGP SIGNATURE-----
-
---ucoddo5mjexf4xpk--
+Guten tag,
+Mein Name ist Philip Manul. Ich bin von Beruf Rechtsanwalt. Ich habe
+einen verstorbenen Kunden, der zuf=C3=A4llig denselben Namen mit Ihnen
+teilt. Ich habe alle Papierdokumente in meinem Besitz. Ihr Verwandter,
+mein verstorbener Kunde, hat hier in meinem Land einen nicht
+beanspruchten Fonds zur=C3=BCckgelassen. Ich warte auf Ihre Antwort zum
+Verfahren.
+Philip Manul.
