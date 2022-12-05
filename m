@@ -2,61 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D7F64261E
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Dec 2022 10:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA30D642644
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Dec 2022 11:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbiLEJvp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Dec 2022 04:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
+        id S230235AbiLEKB4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Dec 2022 05:01:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbiLEJvN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Dec 2022 04:51:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DBA192BB;
-        Mon,  5 Dec 2022 01:51:12 -0800 (PST)
+        with ESMTP id S230012AbiLEKBy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Dec 2022 05:01:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF2EEE04;
+        Mon,  5 Dec 2022 02:01:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FE2860F60;
-        Mon,  5 Dec 2022 09:51:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 527DFC433D6;
-        Mon,  5 Dec 2022 09:51:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82724B80D8A;
+        Mon,  5 Dec 2022 10:01:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEEE9C433D6;
+        Mon,  5 Dec 2022 10:01:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670233871;
-        bh=ffapI+LGOzZ7Rcb4+XP7ILKCeRPuTyUmvKy3VD13zZg=;
+        s=k20201202; t=1670234511;
+        bh=JzpFDEjrQFvjOi2I0p/4SK+qj9QDFZJNMZL7IvIyZ+k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ozeZlQDUZsfVO7b2d9o/kepxbfCv/ya0tboR80GzkSUja/HRVHwuCIZoXoMbhGTwC
-         jHkSph3UlErq1CWREPI9iTlZ6iApdwuxDuc7L+K0hTjmL9lYicteNC7bWU57mdfNJM
-         GC3YanVzJQGLEjHXUK2p/Lj6cVDrGJJQg85wKBwNdq3iTbr9BohoFfpNU9ln6zpvu+
-         Z8HdQ1M9XFgt/TBTjEvPNRaUr8E5LJdlCjNW12LeIdFGyx/6yyhHdDeADt/Y56HHcB
-         famYfAIL6QZRtVcytcllGV15SDblr4J5vzffjAC8usRFGEcJn9bbvz16MmaEZ5G7zo
-         o+l1ArgH484wg==
-Date:   Mon, 5 Dec 2022 10:51:09 +0100
+        b=s1XSEisnYeBkj9lpqoXuvM0I8fTReUG9gMb+HWuYURInEoJkg8hOj5jk1tmKw9j54
+         qfuliLepr4XO0kgXXrTPdbRAzHTCmUP0V47Fno2sX2ENbfBSOu/6keB6HSEiA3/CkY
+         VG0/kiX3MassJ3HUCn87NanxqCta1yFnd1va6QKBMYslDeupVnKbMq+iO0xk8eOOi9
+         bEy1kkEiKS+HsINl3fFMog90GN+ZTgWUrTATdB+wnKMnpcgdax8jZ+CZ0TXaEfrzLh
+         SQH74AGk1uErAwGTN98zLPlJ1Rxq+Cb3Ie71yvr4ZJvQHsxSggk1ryNZM7LIoxoVEA
+         DoWLs68vSeapg==
+Date:   Mon, 5 Dec 2022 11:01:48 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 045/606] i2c: slave-eeprom: Convert to i2c's .probe_new()
-Message-ID: <Y42/DaOqq1yrTxbc@ninjato>
+To:     Hui Tang <tanghui20@huawei.com>
+Cc:     linux-i2c@vger.kernel.org, linux@roeck-us.net, bence98@sch.bme.hu,
+        linux-kernel@vger.kernel.org, weiyongjun1@huawei.com,
+        yusongping@huawei.com
+Subject: Re: [PATCH] i2c-pxa2xx: fix missing pci_disable_device() on error in
+ ce4100_i2c_probe
+Message-ID: <Y43BjGqsk+u/Nb+C@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-46-uwe@kleine-koenig.org>
+        Hui Tang <tanghui20@huawei.com>, linux-i2c@vger.kernel.org,
+        linux@roeck-us.net, bence98@sch.bme.hu,
+        linux-kernel@vger.kernel.org, weiyongjun1@huawei.com,
+        yusongping@huawei.com
+References: <20221114092540.247891-1-tanghui20@huawei.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4959fioAu7NJK4pi"
+        protocol="application/pgp-signature"; boundary="nPhuWi1wxt0t7EzF"
 Content-Disposition: inline
-In-Reply-To: <20221118224540.619276-46-uwe@kleine-koenig.org>
+In-Reply-To: <20221114092540.247891-1-tanghui20@huawei.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -67,40 +61,47 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---4959fioAu7NJK4pi
-Content-Type: text/plain; charset=utf-8
+--nPhuWi1wxt0t7EzF
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 18, 2022 at 11:36:19PM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+On Mon, Nov 14, 2022 at 05:25:40PM +0800, Hui Tang wrote:
+> Using pcim_enable_device() to avoid missing pci_disable_device().
 >=20
-> .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> that explicitly in the probe function.
->=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> Fixes: 7e94dd154e934 ("i2c-pxa2xx: Add PCI support for PXA I2C controller=
+")
+> Signed-off-by: Hui Tang <tanghui20@huawei.com>
 
-Applied to for-next, thanks!
+Fixed the subject to "i2c: pxa-pci:" and fixed this checkpatch warning:
+
+WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<titl=
+e line>")' - ie: 'Fixes: 7e94dd154e93 ("i2c-pxa2xx: Add PCI support for PXA=
+ I2C controller")'
+#3:=20
+Fixes: 7e94dd154e934 ("i2c-pxa2xx: Add PCI support for PXA I2C controller")
+
+Please do that in the future. After all that, applied to for-next, thanks!
 
 
---4959fioAu7NJK4pi
+--nPhuWi1wxt0t7EzF
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmONvw0ACgkQFA3kzBSg
-KbZ4XRAAin5cGGMVPByJwseTxzNfA93CQpEtvB1uB2vfpWftxE7p24vISmsG4l3U
-pAyyJFLUKCAb3F6B/XU7w+GL8x9kdEILRk69CtzCV5yHAZhix1Xa+7F7uXnsec2Z
-RJFFjUQk4BFtQbW4lmQptyTJUHNm7NVGViQBFHhEsW/NjGe3pO9ttuBuuVunhU55
-HhLeSCNrrv3A4mNnfP8awIaql2K71TbeGEm2v78Dv4EAVqM+eSNhsrmPPd6l1ZGE
-n8S13ZqmxJT++rVXad62uakDCgpHB1bRbxCvR6p6KhHEwqC/1lGq7U8GliA1yCLq
-5dX6fvveIq2qejUAXaiosVJIT26WHs046GndRn08xUet+d8luiGuV3oBG5vsin4a
-RhlJlQ1hFX3tAMANJCBYTRrA8XMgWJ1wy3sdOjvxkZZ1SH2zyQEPOAujuakCUkWL
-x4W4z1dFDAeo7sefUSfa+1qeQZEi5N8uxjwDRkeLIvy/s1F8VcJs7fB/MfSWzadV
-vkYXxFn853PtdCE3iiSKybtvz+kJ109JcdgbydG80Rn6HVFsOpHMS7V7J7TwERBW
-0VmwhDCLaMo0KXsHF6gFyY0cCeAl+lFzPh113HbDuqurOhACi/nMXWop08XOJF14
-UPmuC9mTv3cLXsOdxn433KiBmclDphMmvBbbP1zuuisGENxDagY=
-=rKk0
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmONwYgACgkQFA3kzBSg
+KbbnNw//czGgLmhbY/RlYuNU83wTfRkheJRUsZDI2tiahuzOe47VBAIo0mFmL1+j
+Jkd2UIWt6b0XIl5wSYXa+4oI4xO+7IQf3xtcC92P8EQP0/pqFIhekKwgZu57nqX3
+YSf/ECv1hj0YHlbUWoRMbsK3vx8F57sQ+RP1Q0GJK5LBul1jNlRZbxb+/7CMDClZ
+bCbT5YSIrd6izVLjgyEtDHnLKYVjIPMsx3MUQPbByeBS/4dzyOSWp19skH0Mppmj
+F9wwN4/EJ7TJ3ymqeSCVIETQh5O+BxYO6gz/ha/hl9nO8K/Xt3E2NysrUmxbaHy7
+zXMjGHXdFI5KB0p1+iU1dlglcbJ9aay2FOzldDnNFxuIJkX33EHzblql5MZWBaFK
+9Kc8PEhTVlndQtrjyqXxV797vlLerNxaubttMVZMhv+WOk5UpfMy/nXECUEgzGRz
+6JE1lQSRKSXnKE2Q8VNraeHlcnbQaKsuq5gx02QV9sf5sIpMyOioVXR0dmTJHPv4
+1w9IV6xC8Pi9bKe3l/NBhxwI4APF51y48+K62IzpoSbeEgAkPv6CH/fQ7IWbNGWV
+xO/oljClb1hkSTPFq4R2Mj1xyzSOsX5AuobihaXoxvybeZ8UPIl+dbyqTL6L9F1A
+S37wHTj7Rb0EceHDHB7FNLOlSISrDe35oGRNKX0t/E/ikjHxkj0=
+=sQB6
 -----END PGP SIGNATURE-----
 
---4959fioAu7NJK4pi--
+--nPhuWi1wxt0t7EzF--
