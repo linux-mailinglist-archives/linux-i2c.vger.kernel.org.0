@@ -2,82 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCEE6424D3
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Dec 2022 09:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40176642529
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Dec 2022 09:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbiLEIkT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Dec 2022 03:40:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
+        id S232255AbiLEI4P (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Dec 2022 03:56:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbiLEIkS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Dec 2022 03:40:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC1ADF43;
-        Mon,  5 Dec 2022 00:40:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 678FA60FC8;
-        Mon,  5 Dec 2022 08:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4693EC433D6;
-        Mon,  5 Dec 2022 08:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670229616;
-        bh=FnGsUFy5sYWAfmF2yzspb8rioGnomy2eD9q3k4siupc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LxlvvCoQn9Yw37WvFvN6nEpWCOyjzPSt/NiWGp0+Ux90+dSHb2BpdHfZ2Tatlnp0Q
-         EZElfk2w9ovBwKfKV8kk1o0l+QZrVZhL3BZch4zvplwqXO/ms3Dn4/BBO0/IESs2xj
-         uxquQ56riHfX4JK+cwXoR81ByQcJmvIKxVD2POgsTDMsRRNeay8/rwalRshZH2QiZs
-         uwp6tp/3bkChisigYT0R6zw7dCzWdV9YaNmqYjAwvsNCCDeWSjbdAnDLoP5BTgoGGK
-         VkBPVOciHg3sKnKCLw/Pgi19BW8LKJ7Fl2boQYKfaeHseccSkqDDtVSjrYm63ki/B3
-         f0mqVyjSZt3KA==
-Date:   Mon, 5 Dec 2022 09:40:13 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        William Zhang <william.zhang@broadcom.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] i2c: loongson: add bus driver for the loongson
- i2c controller
-Message-ID: <Y42ubaVQclaTA7Eh@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        William Zhang <william.zhang@broadcom.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221128130025.23184-1-zhuyinbo@loongson.cn>
+        with ESMTP id S232259AbiLEIzj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Dec 2022 03:55:39 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA4F617E26;
+        Mon,  5 Dec 2022 00:54:34 -0800 (PST)
+Received: from loongson.cn (unknown [112.20.109.110])
+        by gateway (Coremail) with SMTP id _____8BxnuvJsY1jHjwDAA--.7771S3;
+        Mon, 05 Dec 2022 16:54:33 +0800 (CST)
+Received: from [0.0.0.0] (unknown [112.20.109.110])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXuDHsY1jqdolAA--.27108S3;
+        Mon, 05 Dec 2022 16:54:31 +0800 (CST)
+Message-ID: <250be32a-adc1-832c-c10d-38d99d23f647@loongson.cn>
+Date:   Mon, 5 Dec 2022 16:54:30 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ae0viO7PKLMg849Y"
-Content-Disposition: inline
-In-Reply-To: <20221128130025.23184-1-zhuyinbo@loongson.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH V4 4/5] i2c: ls2x: Add driver for Loongson-2K/LS7A I2C
+ controller
+To:     Wolfram Sang <wsa@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, loongarch@lists.linux.dev,
+        devicetree@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+References: <cover.1669777792.git.zhoubinbin@loongson.cn>
+ <f6cc2dbe5cd190031ab4f772d1cf250934288546.1669777792.git.zhoubinbin@loongson.cn>
+ <Y42uBT34H6alb4O9@ninjato>
+From:   Binbin Zhou <zhoubinbin@loongson.cn>
+In-Reply-To: <Y42uBT34H6alb4O9@ninjato>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxXuDHsY1jqdolAA--.27108S3
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrZF1ktrWrJFyfKFWkGF4kJFb_yoWDKrXEkF
+        yIyw1kArn5AF1xKa10gryfArn0g34jq395u3Z0qrWxu347tw1rtr48GryfCF1SvrZ7XFs0
+        9a18Jws2kryS9jkaLaAFLSUrUUUU8b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
+        07kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
+        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
+        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
+        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
+        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUxYiiDUUUU
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,53 +72,42 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---ae0viO7PKLMg849Y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+在 2022/12/5 16:38, Wolfram Sang 写道:
+> On Wed, Nov 30, 2022 at 01:56:20PM +0800, Binbin Zhou wrote:
+>> This I2C module is integrated into the Loongson-2K SoCs and Loongson
+>> LS7A bridge chip.
+>>
+>> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> There are currently two people submitting a driver for this hardware.
+> This is the other driver:
+>
+> https://lore.kernel.org/all/20221128130025.23184-1-zhuyinbo@loongson.cn/
+>
+> Can you guys please decide which one is "better" or combine the two to
+> make a better one?
 
-On Mon, Nov 28, 2022 at 09:00:24PM +0800, Yinbo Zhu wrote:
-> This bus driver supports the Loongson i2c hardware controller in the
-> Loongson platforms and supports to use DTS and ACPI framework to
-> register i2c adapter device resources.
->=20
-> The Loongson i2c controller supports operating frequencty is 50MHZ
-> and supports the maximum transmission rate is 400kbps.
->=20
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+Hi Wolfram:
 
-There are currently two people submitting a driver for this hardware.
-This is the other driver:
+When Krzysztof found out about this, Yinbo and I had negotiated offline 
+that I would follow up on this series of patchset submissions,
 
-https://lore.kernel.org/all/f6cc2dbe5cd190031ab4f772d1cf250934288546.166977=
-7792.git.zhoubinbin@loongson.cn/
+and this was Yinbo's previous response:
 
-Can you guys please decide which one is "better" or combine the two to
-make a better one?
+https://lore.kernel.org/all/2e10ae64-3c91-ccf8-a970-eb6e3371b948@loongson.cn/ 
+<https://lore.kernel.org/all/2e10ae64-3c91-ccf8-a970-eb6e3371b948@loongson.cn/>
 
-Thanks,
+Here is my previous response:
 
-   Wolfram
+https://lore.kernel.org/all/57496a84-52b3-db97-f0b9-1477de84eb1e@loongson.cn/
+
+Thanks.
+
+Binbin
 
 
---ae0viO7PKLMg849Y
-Content-Type: application/pgp-signature; name="signature.asc"
+>
+> Thanks,
+>
+>     Wolfram
+>
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmONrm0ACgkQFA3kzBSg
-KbYizxAAsxQb5yyGCMIeSopmZK+v8I/skPq/XvnFG61ON5mkTQ5cDyRu1bKpt+qz
-3Ym0xhdmrStCJLXqGN2SeNoWhV/Kw0tcgxH/bz7Fg2AZWMUuhqFUQTynOPJpC99b
-Uwvj4pxlsxOJubjzGY2HfbX+WibtjkE4GWRRUHLcZtuDcA9FN3m1vssGhu5mLU5i
-5rSw22CiYi+Bnu5Ra4Pq4AgvJoVUINGaEgoA5jnrbkPkP+qEzUh/dxJaK6SdqCmh
-DETgGL+IfzZnVcaka3wR00Aoz5JVTUXnm19QMOq+veuLCcaoFMI3rUk61xAVyulg
-np9gM5Ud1bClA1sN/imZmFrh/fdRUE9ZK8MPny0vj6kYi/rLzTzQs4gwGBbswE8V
-+AXTTJzMYvZs5u2o4eWCHC2JoWYkmWUO84dPpi/LL5gSCKgEvk3CYbZfUT5b0+jo
-gB+2TXwBUUW6AEESsdrkHO4GveODbXfeoQBEx6jotCrydWet7mfvRaz/DKWmS00m
-7nhdxkqrzLiAeDq/p3UNgy4fqDm3NlnnUwJUslj2ZHfLL4GNz7AvKAfjIyVJqBWM
-MpwFBoqypHxBBucpPgPVJ43dxY+55OZ89T3/FhVfgNqi0RSW3BJR1QDa761abgbO
-zmsih5T6iov6gXcTcLw4G7h9e19y91Jspa4bw9ev255ad3oxxag=
-=gBwl
------END PGP SIGNATURE-----
-
---ae0viO7PKLMg849Y--
