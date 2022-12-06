@@ -2,24 +2,24 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB488643BCB
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Dec 2022 04:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24920643BD4
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Dec 2022 04:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233795AbiLFDTz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Dec 2022 22:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43430 "EHLO
+        id S233702AbiLFDUa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Dec 2022 22:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233702AbiLFDTy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Dec 2022 22:19:54 -0500
+        with ESMTP id S232414AbiLFDU2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Dec 2022 22:20:28 -0500
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90B2F22BD2;
-        Mon,  5 Dec 2022 19:19:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB82A222B4;
+        Mon,  5 Dec 2022 19:20:25 -0800 (PST)
 Received: from loongson.cn (unknown [112.20.109.110])
-        by gateway (Coremail) with SMTP id _____8Bx2+rXtI5j0HQDAA--.8086S3;
-        Tue, 06 Dec 2022 11:19:51 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8AxB_H4tI5jDnUDAA--.8080S3;
+        Tue, 06 Dec 2022 11:20:24 +0800 (CST)
 Received: from localhost.localdomain (unknown [112.20.109.110])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axf+DQtI5jzlcmAA--.29287S5;
-        Tue, 06 Dec 2022 11:19:50 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxj+D3tI5jNlgmAA--.28154S2;
+        Tue, 06 Dec 2022 11:20:23 +0800 (CST)
 From:   Binbin Zhou <zhoubinbin@loongson.cn>
 To:     Wolfram Sang <wsa@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
@@ -35,32 +35,32 @@ Cc:     loongarch@lists.linux.dev, devicetree@vger.kernel.org,
         Jianmin Lv <lvjianmin@loongson.cn>,
         Binbin Zhou <zhoubinbin@loongson.cn>
 Subject: [PATCH V5 3/4] i2c: ls2x: Add driver for Loongson-2K/LS7A I2C controller
-Date:   Tue,  6 Dec 2022 11:16:56 +0800
+Date:   Tue,  6 Dec 2022 11:17:36 +0800
 Message-Id: <e088e2ffaef1492adc09b7cdbde0afcea2eeb8b2.1670293176.git.zhoubinbin@loongson.cn>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1670293176.git.zhoubinbin@loongson.cn>
 References: <cover.1670293176.git.zhoubinbin@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axf+DQtI5jzlcmAA--.29287S5
+X-CM-TRANSID: AQAAf8Bxj+D3tI5jNlgmAA--.28154S2
 X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
 X-Coremail-Antispam: 1Uk129KBjvAXoW3CryfKrWfZw4kGw45Jr4fKrg_yoW8Jr18Co
         WxXFs8Xr48J34UC3y0kr12qFW7Z39Y9ry3Kw1fZr97ZFyjyF15tF92kw15G3WIgr45KrWr
-        Zrn3ta1xXF4fA347n29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
+        Zrn3ta1xXF4fA347n29KB7ZKAUJUUUUt529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
         J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
-        UUBSb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
+        UUBqb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
         0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
+        Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
         8EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4U
-        JwAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4
-        CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0E
+        JwAaw2AFwI0_Jw0_GFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4
+        CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Wrv_ZF1lYx0E
         x4A2jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7
-        CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l
-        4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxV
+        CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l
+        4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxV
         WUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAF
-        wI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcI
-        k0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j
-        6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU28nYUUUUU
+        wI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20x
+        vaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8
+        JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUedhLUUUUUU==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
