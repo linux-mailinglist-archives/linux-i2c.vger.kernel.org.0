@@ -2,62 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA85B645B9A
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Dec 2022 14:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FAB064620A
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Dec 2022 21:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiLGN52 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Dec 2022 08:57:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
+        id S229694AbiLGUFQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Dec 2022 15:05:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiLGN5P (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Dec 2022 08:57:15 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E8F5BD50
-        for <linux-i2c@vger.kernel.org>; Wed,  7 Dec 2022 05:57:13 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p2uv4-0007VL-LE; Wed, 07 Dec 2022 14:57:06 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p2uv2-002vut-QL; Wed, 07 Dec 2022 14:57:05 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p2uv2-003I87-Ta; Wed, 07 Dec 2022 14:57:04 +0100
-Date:   Wed, 7 Dec 2022 14:57:04 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Grant Likely <grant.likely@linaro.org>,
-        linux-amlogic@lists.infradead.org, Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH 431/606] mfd: khadas-mcu: Convert to i2c's .probe_new()
-Message-ID: <20221207135704.oxyu2gfm6wrns5t4@pengutronix.de>
-References: <Y3tvypIDVdCYxAVB@google.com>
- <20221121150854.3mwczqtbusawho4m@pengutronix.de>
- <Y3usiUm1K+5xCWhY@google.com>
- <20221206105908.jzcdnast3yw22eel@pengutronix.de>
- <Y49pi54DKsvLOzvb@google.com>
- <20221206163516.i6rzewxts7do75y5@pengutronix.de>
- <Y490W6k4N8iBxLHf@google.com>
- <20221207110007.yfjfiakmh4ma3sfo@pengutronix.de>
- <Y5B3otGG06QCjldc@google.com>
- <Y5CWSZpndGi4mU5e@google.com>
+        with ESMTP id S229752AbiLGUFO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Dec 2022 15:05:14 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFDD6C732
+        for <linux-i2c@vger.kernel.org>; Wed,  7 Dec 2022 12:05:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CB67ACE1FA2
+        for <linux-i2c@vger.kernel.org>; Wed,  7 Dec 2022 20:05:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37612C433C1;
+        Wed,  7 Dec 2022 20:05:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670443509;
+        bh=3UL/IpS+mva6RzkvSKMbS87yIvyMHCLzltqoU5DgxIw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U5CMVg/IsblyR2vEFDIrcZL8Uch0Dvi1iA2+sIeXmtUfc0z1JX0SD1bFGQWcJ80+N
+         Xn+aaU15ogfats9HaXebZe5mpFJQEMxrICMgO42WXOXWNl9cKLbrqy7hIYUKQNyKik
+         I6Nnwxa/B0hxQjv6xvKfKUCR0pFQoS29R2iGnLOB8m6HnqJtwCi6JUBmjjhxbTANRA
+         aCh/nH1jQIH35wJafpXdZTbmUGTrrWNzilJWPJ/eg8l6yQcWR3iHAXgFIPaR6PsPA8
+         oRH+sjEuvL0HpyZyJrKIwFz4JA1IpKUOc9dhXfVA0noc/PY3wHxw+uFa3sgDDitSoT
+         nAlZVJD+FB4xw==
+Date:   Wed, 7 Dec 2022 21:05:05 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Michal Simek <michal.simek@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] i2c: xiic: Make sure to disable clock on .remove()
+Message-ID: <Y5Dx8TunleMwpcNn@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de
+References: <20221019202808.88779-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="444ob3jqs3mc3uhm"
+        protocol="application/pgp-signature"; boundary="7gaQPCGDRnmpfteL"
 Content-Disposition: inline
-In-Reply-To: <Y5CWSZpndGi4mU5e@google.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+In-Reply-To: <20221019202808.88779-1-u.kleine-koenig@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,60 +60,42 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---444ob3jqs3mc3uhm
-Content-Type: text/plain; charset=iso-8859-1
+--7gaQPCGDRnmpfteL
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hello Lee,
-
-On Wed, Dec 07, 2022 at 01:34:01PM +0000, Lee Jones wrote:
-> On Wed, 07 Dec 2022, Lee Jones wrote:
-> > On Wed, 07 Dec 2022, Uwe Kleine-K=F6nig wrote:
-> > > I see you added my commits to your tree now, however there is a probl=
-em:
-> > >=20
-> > >   [...]
-> > >=20
-> > > That means that the commit introducing i2c_client_get_device_id() isn=
-'t
-> > > an ancestor of the commits that make use of the new function. So
-> > > 63909fec136e (which is the first commit making use of the new functio=
-n)
-> > > likely won't compile:
-> > >=20
-> > > 	$ git grep i2c_client_get_device_id 63909fec136e
-> > > 	63909fec136e:drivers/mfd/adp5520.c:     const struct i2c_device_id *=
-id =3D i2c_client_get_device_id(client);
-> > >=20
-> > > Starting with 7281458f4396 everything is fine again, but still this
-> > > hurts a bisection.
-> >=20
-> > Fair point - I'll rebase the my topic branch on top of Wolfram's.
+On Wed, Oct 19, 2022 at 10:28:08PM +0200, Uwe Kleine-K=C3=B6nig wrote:
+> If for whatever reasons pm_runtime_resume_and_get() failed, .remove() is
+> exited early, the clock isn't freed and runtime PM state isn't reset.
 >=20
-> Okay, try now.
+> The right thing to do however is to free all resources that don't need
+> HW access after a problem with runtime PM. Also issue a warning in that
+> case and return 0 to suppress a less helpful warning by the driver core.
+>=20
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-Looks good now, thanks!
+Applied to for-next, thanks!
 
-Uwe
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---444ob3jqs3mc3uhm
+--7gaQPCGDRnmpfteL
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOQm60ACgkQwfwUeK3K
-7AnwYwf7BJNhpOShM+y1sPNPmv1EtCLVMQ5BRS5kTzzqK8U3WDaJ4h+0gqiakqR6
-q/SUJSzkLtGDo3uzt3CxEeUXk++AyWt6izQKjYIRoGGM6/aIEKJGoNvthphjH5C3
-ex7x4QUrSZIApKlQmiHa4yUhogpGjD8p/WJsw6kO6VlIsK4gyn0UVdwP1XuReucA
-mY/MnyLv4X/IE4JFwfKeyxgUmhzKUSi2zl4JuZP0RCNK+uV9ZknKs+9wnqxF1JJ4
-xXr/1Ft9OLfs3dnEmyKyIOCgac5BHQL8jEE6LF10qWxlsX4N6sf9Uv5A3B/rXCLL
-IdHOr0s6H4PFD7LBaA0Mrl3QPcs5Uw==
-=JuPy
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmOQ8e4ACgkQFA3kzBSg
+KbaFSw/8DbpF05k8MsaBQF/2kcWrKwuBoiEmT9rd68TWTm2X3RBGBnklw4QbhOyC
+gOTkOCbbH4U6rnDp1C7w2fzl7Z9Y/2KkkV7kyFkyb/JuWXlYFwDadJs/+/kBkxkJ
+VwKNhwfWqiWPn8Y9kbRQrCGPwf33feiK+4OJg0/44wOE0GLthT5ITh7YTl8U7EeT
+R/AYQPS6i6qjDwGL7HoCCQfmGJqS924Qrw0aXLXcJ2PjE7VRLEdlGNxTLOj/vsvk
+UCC7ItxC+snh6c51a/wEbceSkEDvCY8l2a2k/dtiUzClLeuTYQUtJFFMTtSqSwkd
+xna0eamR96P7231Wc9o0bUd9UAKPZWfywmWBVJfMEfQnF80+c0ujQcBg9jpG6NTZ
+jjkkwgRVnAaivOpQpy+/+7Ww+nrsUWVErWjxjRcCSBQEit9/3wlMkaoo6eaRNMuH
+9KQbQ4r6p7s97FaGoEbri79A570Kbu6Qf9+cbr+c/I/AX5KciaBSpneqd7FkwdRJ
+1peeGNNLrPnUbiCfj03o5iRPHyEPrWtns6upw67yyyB3KZvITc/nb2CGVt6eaZ0f
+wV26UtvTLnC59ma0DJlvmUZOcODqlMCKMIpcbk76sESh5vEoFdqd5aMzC5mV1+kX
+j7cceU67g8M9V687N7AHwEJq3CwmJ9iC0Ov/BgBFc+7wG6+OcVk=
+=7YRD
 -----END PGP SIGNATURE-----
 
---444ob3jqs3mc3uhm--
+--7gaQPCGDRnmpfteL--
