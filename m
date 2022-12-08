@@ -2,133 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEAEC646BCC
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Dec 2022 10:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B637D646C58
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Dec 2022 11:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbiLHJXt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Dec 2022 04:23:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
+        id S229558AbiLHKCo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Dec 2022 05:02:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiLHJXs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Dec 2022 04:23:48 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8875C74E;
-        Thu,  8 Dec 2022 01:23:45 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4ADBE25B;
-        Thu,  8 Dec 2022 10:23:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1670491423;
-        bh=6e3cUNNKs0Mbc6lRI0WlQoFsDq6mdyEYot1UJAoMES8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=viWeAjRfAvQDJgnz5ohqc3JZkl7Q+gk/Z3jJt8aK+WmByB4rXDZUkfs2Sg2ZcCA4E
-         fddgUjJkVmLM9By1Lr+REp0CsPRxZDIQxfz+uEvj73auGnCvKWwy6r4mo73JXaMmSm
-         LmAN/hm7+be8HNS8BQ/HlAqrxUToEAWMkxYNCp2o=
-Message-ID: <e2f8d8f2-dd16-fe2a-8413-ba408672801d@ideasonboard.com>
-Date:   Thu, 8 Dec 2022 11:23:39 +0200
+        with ESMTP id S229479AbiLHKCn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Dec 2022 05:02:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B9511475;
+        Thu,  8 Dec 2022 02:02:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B25AB821EB;
+        Thu,  8 Dec 2022 10:02:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2286C433C1;
+        Thu,  8 Dec 2022 10:02:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670493759;
+        bh=Gy+VgX0A4ENpBxacWi8qufdiwf6E1nyIHkyJFa2kRvo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S1zrO28RXl8xwIP2Ft5ugtlkCew3ye1WFfBtszRmbL9ok+4nuZfBVCEffyrccbCEa
+         CDQwpA55KrzTDhJ0gfDlxtY51ZNsrZnorZVH31dEuPbCibcK7wCBNsbgLN9cJjdkJM
+         DX3LYQnu40eskXmUlUk5F76TqjTU115nYx9nva1Y=
+Date:   Thu, 8 Dec 2022 11:02:36 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>,
+        Daniel Beer <daniel.beer@igorinstitute.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        Michael Zaidman <michael.zaidman@gmail.com>,
+        Christina Quast <contact@christina-quast.de>,
+        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH] hid-ft260: add UART support.
+Message-ID: <Y5G2PBEprjPp3FKR@kroah.com>
+References: <638c51a2.170a0220.3af16.18f8@mx.google.com>
+ <Y4xX7ILXMFHZtJkv@kroah.com>
+ <20221204091247.GA11195@nyquist.nev>
+ <Y4xqyRERBdr8fT7F@kroah.com>
+ <20221205012403.GA14904@nyquist.nev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 3/8] dt-bindings: media: add bindings for TI DS90UB960
-Content-Language: en-US
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     Rob Herring <robh@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        "satish.nagireddy@getcruise.com" <satish.nagireddy@getcruise.com>
-References: <20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com>
- <20221101132032.1542416-4-tomi.valkeinen@ideasonboard.com>
- <20221102172630.GA4140587-robh@kernel.org>
- <6c254d5f-9fa1-b06a-4edb-7e58e4b33101@ideasonboard.com>
- <fb9e9d5e-9c8b-1ce2-5723-efa498d1ba93@fi.rohmeurope.com>
- <8360ac8f-64aa-9edd-a110-903e734739f3@ideasonboard.com>
- <20221111172631.2832ae6c@booty>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20221111172631.2832ae6c@booty>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221205012403.GA14904@nyquist.nev>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Luca,
-
-On 11/11/2022 18:26, Luca Ceresoli wrote:
-> Hello Tomi, Matti, Wolfram,
+On Mon, Dec 05, 2022 at 02:24:03PM +1300, Daniel Beer wrote:
+> On Sun, Dec 04, 2022 at 10:39:21AM +0100, Greg Kroah-Hartman wrote:
+> > > Thanks for reviewing. This device is quite strange -- it presents itself
+> > > as a USB HID, but it provides both an I2C master and a UART. The
+> > > existing driver supports only the I2C functionality currently.
+> > 
+> > Lots of devices are a "fake HID" device as other operating systems make
+> > it easy to write userspace drivers that way.  Linux included.  What
+> > userspace programs are going to want to interact with this device and
+> > what api are they going to use?
 > 
-> On Thu, 3 Nov 2022 14:32:02 +0200
-> Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
+> Hi Greg,
 > 
->> On 03/11/2022 14:13, Vaittinen, Matti wrote:
->>> On 11/3/22 13:50, Tomi Valkeinen wrote:
->>>> Hi Rob,
->>>>
->>>> On 02/11/2022 19:26, Rob Herring wrote:
->>>>> On Tue, Nov 01, 2022 at 03:20:27PM +0200, Tomi Valkeinen wrote:
->>>>>> +
->>>>>> +  i2c-alias-pool:
->>>>>
->>>>> Something common or could be? If not, then needs a vendor prefix.
->>>>
->>>> I'll have to think about this. It is related to the i2c-atr, so I think
->>>> it might be a common thing.
->>>
->>> I'd say this should be common. Where the i2c-atr properties should live
->>> is another question though. If the I2C-atr stays as a genericly usable
->>> component - then these bindings should be in a file that can be
->>> referenced by other I2C-atr users (like the UB960 here).
->>
->> Yep. All the links, link, serializer and alias nodes/properties are new
->> things here, and I guess these could be used by other deser-ser systems.
->> That said, I don't have any experience with other systems.
+> The application I'm looking at uses it as a debug console, so personally
+> I'd like to be able to use it with picocom and other terminal programs.
 > 
-> The i2c-alias-pool was discussed during the RFC,v2 review [1] and it
-> was agreed that it should be generic. The same principle should apply
-> to the other ATR properties.
+> > > > > --- a/include/uapi/linux/major.h
+> > > > > +++ b/include/uapi/linux/major.h
+> > > > > @@ -175,4 +175,6 @@
+> > > > >  #define BLOCK_EXT_MAJOR		259
+> > > > >  #define SCSI_OSD_MAJOR		260	/* open-osd's OSD scsi device */
+> > > > >  
+> > > > > +#define FT260_MAJOR		261
+> > > > 
+> > > > A whole new major for just a single tty port?  Please no, use dynamic
+> > > > majors if you have to, or better yet, tie into the usb-serial
+> > > > implementation (this is a USB device, right?) and then you don't have to
+> > > > mess with this at all.
+> > > 
+> > > As far as I understand it, I don't think usb-serial is usable, due to
+> > > the fact that this is already an HID driver.
+> > 
+> > That should not be a restriction at all.  You are adding a tty device to
+> > this driver, no reason you can't interact with usb-serial instead.  That
+> > way you share the correct userspace tty name and major/minor numbers and
+> > all userspace tools should "just work" as they know that name and how to
+> > interact with it already.
+> > 
+> > Try doing that instead of your own "raw" tty device please.
 > 
-> That said, at some point it was also decided that the alias pool should
-> just be ditched in favor of an automatic selection of an unused address
-> by the i2c core [2] [3]. Maybe that idea has changed, definitely some
-> i2c core things needed to be omdified for it to happen, but overall I'm
-> still convinced automatic assignment without a pool was a good idea.
+> Maybe I've misunderstood something. The reason I thought usb-serial was
+> unusable in this instance was that I couldn't see a way to create a port
+> except via usb-serial's own probe function (otherwise, the API looked
+> fine).
+> 
+> I don't know whether I'm looking at a serial or an I2C interface until
+> after it's already been probed by HID core, I have a struct hid_device
+> and I've asked what type of interface it is via an HID feature report.
+> This can't be determined otherwise, because strapping pins affect the
+> presentation of interfaces.
+> 
+> At that point, I (currently) call uart_add_one_port. I might have missed
+> it, but I didn't see anything analogous in the usb-serial API. Am I
+> going about this the wrong way?
 
-Yes, the serializer and the remote peripheral i2c aliases can be 
-dynamically reserved at runtime, so the i2c-alias-pool and the i2c-alias 
-are, in that sense, not needed.
+I thought that this could be done, but I might be wrong.  Johan, any
+ideas?
 
-I haven't looked at this in depth yet, but reading the references you 
-gave, it sounds like it's not quite clear what addresses are available 
-and what are not.
+thanks,
 
-On the other hand, is dynamic i2c address reservation something that the 
-users expect to happen? All i2c devices I have used have always had a 
-fixed address in the DT, even if at times the devices may support 
-choosing between a few different addresses.
-
-Keeping with that tradition, would it be best to just use fixed i2c 
-aliases, defined in the DT, for the serializers and the remote 
-peripherals? In the current series this is already the case for 
-serializers (with i2c-alias property), but we could do something similar 
-for the remote peripherals.
-
-  Tomi
-
+greg k-h
