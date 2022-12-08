@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A5B646D51
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Dec 2022 11:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 734AA646D53
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Dec 2022 11:43:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiLHKnn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Dec 2022 05:43:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
+        id S230246AbiLHKno (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Dec 2022 05:43:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiLHKnT (ORCPT
+        with ESMTP id S230096AbiLHKnT (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Dec 2022 05:43:19 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89121222;
-        Thu,  8 Dec 2022 02:40:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD9BD4A;
+        Thu,  8 Dec 2022 02:40:27 -0800 (PST)
 Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 893EB25B;
-        Thu,  8 Dec 2022 11:40:22 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EE32B9D9;
+        Thu,  8 Dec 2022 11:40:23 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1670496023;
-        bh=ab3VDBBlRhkk1OCm+eM9aIt0zkYjaGuasNx+kTETGB4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NcuWxdUAooti/wS8UrXxku4R8b30Fb+FkevjbueyMSUXpAN4K+05fGzHheelm+naP
-         ZiGKIEIA+cJuJhCdyXA83ZJLDNRWQwEo/soJmAsO9pWSM+WsM/JJ9+e16sRO4uHBhX
-         ghN+fenSpn6jVQ4kJQOaplqDCZRDcFK4JPrR/JYw=
+        s=mail; t=1670496025;
+        bh=qqlP9y4CxrbgrpwUUQtSV2m4Q9RgrkWSjW1olrXBJFA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CQkedEqPUuFFPv87Gd/8wD85ZblpiG5JbFMhLP9siK7EJ62KJmi7fMpz1mdGnqrZz
+         2kAWJltrhhHX5saJ8Kssqb/hB7dO1dlU5qS0FObnh+StI6kxHYXQ/6XN3wP4JuBmft
+         vf+lkBlx+mfWiMrqu0Y4nZq5pfeqIyfkI0SlrHE4=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
@@ -45,11 +45,14 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Mike Pagano <mpagano@gentoo.org>,
         =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
         Marek Vasut <marex@denx.de>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v5 0/8] i2c-atr and FPDLink
-Date:   Thu,  8 Dec 2022 12:39:58 +0200
-Message-Id: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v5 1/8] i2c: core: let adapters be notified of client attach/detach
+Date:   Thu,  8 Dec 2022 12:39:59 +0200
+Message-Id: <20221208104006.316606-2-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
+References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -61,71 +64,106 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+From: Luca Ceresoli <luca@lucaceresoli.net>
 
-You can find v4 of the series from:
+An adapter might need to know when a new device is about to be
+added. This will soon bee needed to implement an "I2C address
+translator" (ATR for short), a device that propagates I2C transactions
+with a different slave address (an "alias" address). An ATR driver
+needs to know when a slave is being added to find a suitable alias and
+program the device translation map.
 
-https://lore.kernel.org/all/20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com/
+Add an attach/detach callback pair to allow adapter drivers to be
+notified of clients being added and removed.
 
-You can find a longer introduction of the series in that version's cover
-letter.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+---
+ drivers/i2c/i2c-core-base.c | 18 +++++++++++++++++-
+ include/linux/i2c.h         | 16 ++++++++++++++++
+ 2 files changed, 33 insertions(+), 1 deletion(-)
 
-There has been a lot of changes to the DT bindings and the i2c-atr code in this
-version, but they are all fixes and cleanups, no architectural changes. The
-FPDLink drivers have not been changed, except to reflect the changes in the
-DT.
-
-I will send a diff between v4 and v5 to give a better idea of the changes.
-
-One thing that was discussed a bit but not handled in this version is the
-i2c-pool/i2c-alias topic. I believe we have three options: 1) use fixed
-addresses, defined in DT, 2) get the addresses from an i2c-pool, 3) dynamically
-reserve the addresses at runtime. The current series uses 2).
-
- Tomi
-
-Luca Ceresoli (2):
-  i2c: core: let adapters be notified of client attach/detach
-  i2c: add I2C Address Translator (ATR) support
-
-Tomi Valkeinen (6):
-  dt-bindings: media: add bindings for TI DS90UB913
-  dt-bindings: media: add bindings for TI DS90UB953
-  dt-bindings: media: add bindings for TI DS90UB960
-  media: i2c: add DS90UB960 driver
-  media: i2c: add DS90UB913 driver
-  media: i2c: add DS90UB953 driver
-
- .../bindings/media/i2c/ti,ds90ub913.yaml      |  121 +
- .../bindings/media/i2c/ti,ds90ub953.yaml      |  112 +
- .../bindings/media/i2c/ti,ds90ub960.yaml      |  358 ++
- Documentation/i2c/index.rst                   |    1 +
- Documentation/i2c/muxes/i2c-atr.rst           |   78 +
- MAINTAINERS                                   |    8 +
- drivers/i2c/Kconfig                           |    9 +
- drivers/i2c/Makefile                          |    1 +
- drivers/i2c/i2c-atr.c                         |  503 ++
- drivers/i2c/i2c-core-base.c                   |   18 +-
- drivers/media/i2c/Kconfig                     |   47 +
- drivers/media/i2c/Makefile                    |    3 +
- drivers/media/i2c/ds90ub913.c                 |  892 ++++
- drivers/media/i2c/ds90ub953.c                 | 1607 +++++++
- drivers/media/i2c/ds90ub960.c                 | 4195 +++++++++++++++++
- include/linux/i2c-atr.h                       |   82 +
- include/linux/i2c.h                           |   16 +
- include/media/i2c/ds90ub9xx.h                 |   16 +
- 18 files changed, 8066 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub953.yaml
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
- create mode 100644 Documentation/i2c/muxes/i2c-atr.rst
- create mode 100644 drivers/i2c/i2c-atr.c
- create mode 100644 drivers/media/i2c/ds90ub913.c
- create mode 100644 drivers/media/i2c/ds90ub953.c
- create mode 100644 drivers/media/i2c/ds90ub960.c
- create mode 100644 include/linux/i2c-atr.h
- create mode 100644 include/media/i2c/ds90ub9xx.h
-
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index b4edf10e8fd0..c8bc71b1db82 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -966,15 +966,23 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+ 		}
+ 	}
+ 
++	if (adap->attach_ops &&
++	    adap->attach_ops->attach_client &&
++	    adap->attach_ops->attach_client(adap, info, client) != 0)
++		goto out_remove_swnode;
++
+ 	status = device_register(&client->dev);
+ 	if (status)
+-		goto out_remove_swnode;
++		goto out_detach_client;
+ 
+ 	dev_dbg(&adap->dev, "client [%s] registered with bus id %s\n",
+ 		client->name, dev_name(&client->dev));
+ 
+ 	return client;
+ 
++out_detach_client:
++	if (adap->attach_ops && adap->attach_ops->detach_client)
++		adap->attach_ops->detach_client(adap, client);
+ out_remove_swnode:
+ 	device_remove_software_node(&client->dev);
+ out_err_put_of_node:
+@@ -996,9 +1004,17 @@ EXPORT_SYMBOL_GPL(i2c_new_client_device);
+  */
+ void i2c_unregister_device(struct i2c_client *client)
+ {
++	struct i2c_adapter *adap;
++
+ 	if (IS_ERR_OR_NULL(client))
+ 		return;
+ 
++	adap = client->adapter;
++
++	if (adap->attach_ops &&
++	    adap->attach_ops->detach_client)
++		adap->attach_ops->detach_client(adap, client);
++
+ 	if (client->dev.of_node) {
+ 		of_node_clear_flag(client->dev.of_node, OF_POPULATED);
+ 		of_node_put(client->dev.of_node);
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index f7c49bbdb8a1..9a385b6de388 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -584,6 +584,21 @@ struct i2c_lock_operations {
+ 	void (*unlock_bus)(struct i2c_adapter *adapter, unsigned int flags);
+ };
+ 
++/**
++ * struct i2c_attach_operations - callbacks to notify client attach/detach
++ * @attach_client: Notify of new client being attached
++ * @detach_client: Notify of new client being detached
++ *
++ * Both ops are optional.
++ */
++struct i2c_attach_operations {
++	int  (*attach_client)(struct i2c_adapter *adapter,
++			      const struct i2c_board_info *info,
++			      const struct i2c_client *client);
++	void (*detach_client)(struct i2c_adapter *adapter,
++			      const struct i2c_client *client);
++};
++
+ /**
+  * struct i2c_timings - I2C timing information
+  * @bus_freq_hz: the bus frequency in Hz
+@@ -726,6 +741,7 @@ struct i2c_adapter {
+ 
+ 	/* data fields that are valid for all devices	*/
+ 	const struct i2c_lock_operations *lock_ops;
++	const struct i2c_attach_operations *attach_ops;
+ 	struct rt_mutex bus_lock;
+ 	struct rt_mutex mux_lock;
+ 
 -- 
 2.34.1
 
