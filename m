@@ -2,47 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DDE646F98
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Dec 2022 13:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED362646FB3
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Dec 2022 13:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiLHM07 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Dec 2022 07:26:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
+        id S229695AbiLHMal (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Dec 2022 07:30:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiLHM06 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Dec 2022 07:26:58 -0500
+        with ESMTP id S229468AbiLHMaj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Dec 2022 07:30:39 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988A98658A;
-        Thu,  8 Dec 2022 04:26:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D843C2B185;
+        Thu,  8 Dec 2022 04:30:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670502417; x=1702038417;
+  t=1670502638; x=1702038638;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=spdlWevniBpu51g03nRTe2+ZbrLpWs90S14TUiE7A/M=;
-  b=BfdCLZOca8PNTJTb2V5gKTLkEhylw7PigXyhzUkvbIr8FWZKHtuqZzUv
-   HumHlDAC02rVFjnF/7qbfBnp5Wtr5+1pRyE3kwDBzUB1wGyc/dVelQaOC
-   XNq8LHAGUTTRvkXmOiGKJHu+AeJhK7WZXBJRhl7GKldG3cNyB2TTEvc42
-   /Dc7vwoGikd2D/jqj6/AOlchLVoNEVc8rXspBjF0dz3z6MV8og/SWgCQ2
-   BgL8rz+lK0+WVQpdVN0F4EjdAdSllXaGDhyqlMvvFiadwCQRoHwzM8XAb
-   V8b3xJXsMND0I4UeRiEsNDbMZOl1AZoXuCJkEtd2YqXl0vt8b9gbYTSbM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="318297842"
+  bh=geMWQwl8f3L8TwGLVN0GOzD32/STIXrJqv4HDrTS7ZE=;
+  b=nrZEHigd0HXl6aoFAdunsYiwb+qUJWAfa5jqBMVWvHnhKB2nyeHq2oxQ
+   EV0V58zegRN7BKxhe2jjJyapxnVCaXN81GB+/24QCAUTq2T32hY2Ahewf
+   ZCxHZ7RbBdzmdTT+G/XiMeFAGBfK1Djoj2hjgVs6KMTloZ2GddHyMgVVO
+   gf18BQIOy3X3p3KUjfTjjKtrVUCwpzYeNep+W0Y+6C7To0mcqUtkNSiSW
+   KQWcJjlMh26JkzvULg2QAtSVEpKXi4BlW/Eqdt7vuxP+o15lya2oGh0TB
+   AUVnbY/FiXaNFcCxmbTDTjVPBcs2Vq9oC6LhweIY/5PSY1w0Gxu47p+3O
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="318298662"
 X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="318297842"
+   d="scan'208";a="318298662"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 04:26:56 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 04:30:37 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="821320560"
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="821321712"
 X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="821320560"
+   d="scan'208";a="821321712"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 08 Dec 2022 04:26:50 -0800
+  by orsmga005.jf.intel.com with ESMTP; 08 Dec 2022 04:30:30 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@intel.com>)
-        id 1p3FzD-006KFQ-1i;
-        Thu, 08 Dec 2022 14:26:47 +0200
-Date:   Thu, 8 Dec 2022 14:26:47 +0200
+        id 1p3G2l-006KKW-1a;
+        Thu, 08 Dec 2022 14:30:27 +0200
+Date:   Thu, 8 Dec 2022 14:30:27 +0200
 From:   Andy Shevchenko <andriy.shevchenko@intel.com>
 To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
@@ -63,15 +63,17 @@ Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         Hans Verkuil <hverkuil@xs4all.nl>,
         Mike Pagano <mpagano@gentoo.org>,
         Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-Subject: Re: [PATCH v5 0/8] i2c-atr and FPDLink
-Message-ID: <Y5HYBzZlkTrsdjfX@smile.fi.intel.com>
+        Marek Vasut <marex@denx.de>,
+        Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [PATCH v5 1/8] i2c: core: let adapters be notified of client
+ attach/detach
+Message-ID: <Y5HY4/Ho48KrGFoR@smile.fi.intel.com>
 References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
- <c5eac6a6-f44b-ddd0-d27b-ccbe01498ae9@ideasonboard.com>
+ <20221208104006.316606-2-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c5eac6a6-f44b-ddd0-d27b-ccbe01498ae9@ideasonboard.com>
+In-Reply-To: <20221208104006.316606-2-tomi.valkeinen@ideasonboard.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -83,72 +85,59 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 12:42:13PM +0200, Tomi Valkeinen wrote:
-> On 08/12/2022 12:39, Tomi Valkeinen wrote:
+On Thu, Dec 08, 2022 at 12:39:59PM +0200, Tomi Valkeinen wrote:
+> From: Luca Ceresoli <luca@lucaceresoli.net>
+> 
+> An adapter might need to know when a new device is about to be
+> added. This will soon bee needed to implement an "I2C address
+> translator" (ATR for short), a device that propagates I2C transactions
+> with a different slave address (an "alias" address). An ATR driver
+> needs to know when a slave is being added to find a suitable alias and
+> program the device translation map.
+> 
+> Add an attach/detach callback pair to allow adapter drivers to be
+> notified of clients being added and removed.
 
 ...
 
-> +#include <linux/fwnode.h>
->  #include <linux/i2c-atr.h>
->  #include <linux/i2c.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
-> -#include <linux/of.h>
->  #include <linux/slab.h>
+> +	if (adap->attach_ops &&
+> +	    adap->attach_ops->attach_client &&
+> +	    adap->attach_ops->attach_client(adap, info, client) != 0)
+> +		goto out_remove_swnode;
 
-+ Blank line here?
+With a temporary variable it becomes better
 
-> +#define ATR_MAX_ADAPTERS 99	/* Just a sanity limit */
-> +#define ATR_MAX_SYMLINK_LEN 16	/* Longest name is 10 chars: "channel-99" */
+	... *ops = adap->attach_ops;
 
-...
+	if (ops && ops->attach_client && ops->attach_client(adap, info, client))
 
-> +		u16 *new_buf;
-> +
-> +		new_buf = kmalloc_array(num, sizeof(chan->orig_addrs[0]),
-> +					GFP_KERNEL);
 
-		new_buf = kmalloc_array(num, sizeof(*new_buf), GFP_KERNEL);
+Also notice drop of unneeded ' != 0' part.
 
-?
 
-> +		if (!new_buf)
->  			return -ENOMEM;
+>  	status = device_register(&client->dev);
+>  	if (status)
+> -		goto out_remove_swnode;
+> +		goto out_detach_client;
+>  
+>  	dev_dbg(&adap->dev, "client [%s] registered with bus id %s\n",
+>  		client->name, dev_name(&client->dev));
+>  
+>  	return client;
+>  
+> +out_detach_client:
+> +	if (adap->attach_ops && adap->attach_ops->detach_client)
+> +		adap->attach_ops->detach_client(adap, client);
 
-...
-
->  	struct i2c_atr_cli2alias_pair *c2a;
-> -	u16 alias_id = 0;
-> -	int ret = 0;
-> +	u16 alias_id;
-> +	int ret;
-
-Is it mangled or it's missing blank line here?
-
->  	c2a = kzalloc(sizeof(*c2a), GFP_KERNEL);
->  	if (!c2a)
+In the similar way.
 
 ...
 
->  struct device;
->  struct i2c_atr;
-> +struct fwnode_handle;
+> +	if (adap->attach_ops &&
+> +	    adap->attach_ops->detach_client)
+> +		adap->attach_ops->detach_client(adap, client);
 
-Order?
-
-...
-
->  /**
-> - * Helper to add I2C ATR features to a device driver.
-> + * struct i2c_atr - Represents the I2C ATR instance
->   */
-
-This is incomplete. Have you run kernel doc validator against this file?
-
->  struct i2c_atr {
-
->  };
+In the similar way.
 
 -- 
 With Best Regards,
