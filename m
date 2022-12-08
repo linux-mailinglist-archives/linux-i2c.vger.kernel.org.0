@@ -2,244 +2,133 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD9D646B26
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Dec 2022 09:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEAEC646BCC
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Dec 2022 10:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbiLHIzv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Dec 2022 03:55:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
+        id S230054AbiLHJXt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Dec 2022 04:23:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbiLHIzo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Dec 2022 03:55:44 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0EE053EDC;
-        Thu,  8 Dec 2022 00:55:42 -0800 (PST)
-Received: from loongson.cn (unknown [112.20.108.31])
-        by gateway (Coremail) with SMTP id _____8CxbeuNppFjcBEEAA--.9417S3;
-        Thu, 08 Dec 2022 16:55:41 +0800 (CST)
-Received: from [0.0.0.0] (unknown [112.20.108.31])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx5VaLppFjodknAA--.13869S3;
-        Thu, 08 Dec 2022 16:55:40 +0800 (CST)
-Message-ID: <7bc31b2d-6687-5823-6950-cdedb8105db5@loongson.cn>
-Date:   Thu, 8 Dec 2022 16:55:39 +0800
+        with ESMTP id S230048AbiLHJXs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Dec 2022 04:23:48 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8875C74E;
+        Thu,  8 Dec 2022 01:23:45 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4ADBE25B;
+        Thu,  8 Dec 2022 10:23:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1670491423;
+        bh=6e3cUNNKs0Mbc6lRI0WlQoFsDq6mdyEYot1UJAoMES8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=viWeAjRfAvQDJgnz5ohqc3JZkl7Q+gk/Z3jJt8aK+WmByB4rXDZUkfs2Sg2ZcCA4E
+         fddgUjJkVmLM9By1Lr+REp0CsPRxZDIQxfz+uEvj73auGnCvKWwy6r4mo73JXaMmSm
+         LmAN/hm7+be8HNS8BQ/HlAqrxUToEAWMkxYNCp2o=
+Message-ID: <e2f8d8f2-dd16-fe2a-8413-ba408672801d@ideasonboard.com>
+Date:   Thu, 8 Dec 2022 11:23:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-From:   Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: Re: [PATCH V5 3/4] i2c: ls2x: Add driver for Loongson-2K/LS7A I2C
- controller
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, loongarch@lists.linux.dev,
-        devicetree@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>, Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>
-References: <cover.1670293176.git.zhoubinbin@loongson.cn>
- <e088e2ffaef1492adc09b7cdbde0afcea2eeb8b2.1670293176.git.zhoubinbin@loongson.cn>
- <Y49ei1fpEawXvGQB@smile.fi.intel.com>
-In-Reply-To: <Y49ei1fpEawXvGQB@smile.fi.intel.com>
+Subject: Re: [PATCH v4 3/8] dt-bindings: media: add bindings for TI DS90UB960
+Content-Language: en-US
+To:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     Rob Herring <robh@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        "satish.nagireddy@getcruise.com" <satish.nagireddy@getcruise.com>
+References: <20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com>
+ <20221101132032.1542416-4-tomi.valkeinen@ideasonboard.com>
+ <20221102172630.GA4140587-robh@kernel.org>
+ <6c254d5f-9fa1-b06a-4edb-7e58e4b33101@ideasonboard.com>
+ <fb9e9d5e-9c8b-1ce2-5723-efa498d1ba93@fi.rohmeurope.com>
+ <8360ac8f-64aa-9edd-a110-903e734739f3@ideasonboard.com>
+ <20221111172631.2832ae6c@booty>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20221111172631.2832ae6c@booty>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx5VaLppFjodknAA--.13869S3
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3Xr4xAw1fur13KrykuFyrtFb_yoW7Ary3pa
-        y8AF48KrWjqr10qr4DJr1UC347Zrs5J34UJr18Jay7A3ZxCr1vqryrXr409F48Gr4kWrsr
-        Aw4Dtr15ua4YvFDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bq8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
-        jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCa
-        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
-        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-        aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcbAwUUUUU
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andy:
+Hi Luca,
 
-在 2022/12/6 23:23, Andy Shevchenko 写道:
-> On Tue, Dec 06, 2022 at 11:16:56AM +0800, Binbin Zhou wrote:
->> This I2C module is integrated into the Loongson-2K SoCs and Loongson
->> LS7A bridge chip.
-> Much better, thanks!
->
-> ...
->
->> +/*
->> + * The I2C controller has a fixed I2C bus frequency by default, but to
->> + * be compatible with more client devices, we can obtain the set I2C
->> + * bus frequency from ACPI or FDT.
->> + */
->> +static void ls2x_i2c_adjust_bus_speed(struct ls2x_i2c_priv *priv)
->> +{
->> +	u16 val = 0x12c; /* Default value of I2C divider latch register */
-> Besides comment better to be placed on top of the commented line, the value
-> is better to have its own definition where you place the comment and elaborate
-> what it means in practice (The clock frequency is changed?  Bus speed is
-> different?)
+On 11/11/2022 18:26, Luca Ceresoli wrote:
+> Hello Tomi, Matti, Wolfram,
+> 
+> On Thu, 3 Nov 2022 14:32:02 +0200
+> Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
+> 
+>> On 03/11/2022 14:13, Vaittinen, Matti wrote:
+>>> On 11/3/22 13:50, Tomi Valkeinen wrote:
+>>>> Hi Rob,
+>>>>
+>>>> On 02/11/2022 19:26, Rob Herring wrote:
+>>>>> On Tue, Nov 01, 2022 at 03:20:27PM +0200, Tomi Valkeinen wrote:
+>>>>>> +
+>>>>>> +  i2c-alias-pool:
+>>>>>
+>>>>> Something common or could be? If not, then needs a vendor prefix.
+>>>>
+>>>> I'll have to think about this. It is related to the i2c-atr, so I think
+>>>> it might be a common thing.
+>>>
+>>> I'd say this should be common. Where the i2c-atr properties should live
+>>> is another question though. If the I2C-atr stays as a genericly usable
+>>> component - then these bindings should be in a file that can be
+>>> referenced by other I2C-atr users (like the UB960 here).
+>>
+>> Yep. All the links, link, serializer and alias nodes/properties are new
+>> things here, and I guess these could be used by other deser-ser systems.
+>> That said, I don't have any experience with other systems.
+> 
+> The i2c-alias-pool was discussed during the RFC,v2 review [1] and it
+> was agreed that it should be generic. The same principle should apply
+> to the other ATR properties.
+> 
+> That said, at some point it was also decided that the alias pool should
+> just be ditched in favor of an automatic selection of an unused address
+> by the i2c core [2] [3]. Maybe that idea has changed, definitely some
+> i2c core things needed to be omdified for it to happen, but overall I'm
+> still convinced automatic assignment without a pool was a good idea.
 
-Ok, I'll put this comment on a separate line.
+Yes, the serializer and the remote peripheral i2c aliases can be 
+dynamically reserved at runtime, so the i2c-alias-pool and the i2c-alias 
+are, in that sense, not needed.
 
-The LS2X I2C supports STANDARD_MODE and FAST_MODE, so the maximum bus 
-frequency is 400kHz.
-"0x12c" is our empirical value after experimentation and represents 33KHz.
+I haven't looked at this in depth yet, but reading the references you 
+gave, it sounds like it's not quite clear what addresses are available 
+and what are not.
 
-Also, I think the better way is:
+On the other hand, is dynamic i2c address reservation something that the 
+users expect to happen? All i2c devices I have used have always had a 
+fixed address in the DT, even if at times the devices may support 
+choosing between a few different addresses.
 
-@@ -53,6 +53,15 @@
-  #define LS2X_CTR_IEN           BIT(6) /* Enable i2c interrupt */
-  #define LS2X_CTR_MST           BIT(5) /* 0: Slave mode 1: Master mode */
+Keeping with that tradition, would it be best to just use fixed i2c 
+aliases, defined in the DT, for the serializers and the remote 
+peripherals? In the current series this is already the case for 
+serializers (with i2c-alias property), but we could do something similar 
+for the remote peripherals.
 
-+/* The PCLK clock frequency input from the LPB bus */
-+#define LS2X_I2C_PCLK_FREQ     (50 * HZ_PER_MHZ)
-+/*
-+ * The LS2X I2C controller supports standard mode and fast mode,
-+ * so the maximum bus frequency is 400kHz.
-+ * The '33KHz' is our empirical value after experimentation.
-+ */
-+#define LS2X_I2C_FREQ_STD      (33 * HZ_PER_KHZ)
-+
-  struct ls2x_i2c_priv {
-         struct i2c_adapter      adapter;
-         struct device           *dev;
-@@ -231,17 +240,19 @@ static irqreturn_t ls2x_i2c_irq_handler(int 
-this_irq, void *dev_id)
-   */
-  static void ls2x_i2c_adjust_bus_speed(struct ls2x_i2c_priv *priv)
-  {
--       u16 val = 0x12c; /* Default value of I2C divider latch register */
-         struct i2c_timings *t = &priv->i2c_t;
-         u32 acpi_speed = i2c_acpi_find_bus_speed(priv->dev);
-
-         i2c_parse_fw_timings(priv->dev, t, false);
-
-         if (acpi_speed || t->bus_freq_hz)
--               val = 10 * HZ_PER_MHZ / max(t->bus_freq_hz, acpi_speed) - 1;
-+               t->bus_freq_hz = max(t->bus_freq_hz, acpi_speed);
-+       else
-+               t->bus_freq_hz = LS2X_I2C_FREQ_STD;
-
--       /* Set LS2X I2C frequency */
--       writel(val, priv->base + I2C_LS2X_PRER_LO);
-+       /* Calculate and set LS2X I2C frequency */
-+       writel((LS2X_I2C_PCLK_FREQ / (5 * t->bus_freq_hz) - 1),
-+              priv->base + I2C_LS2X_PRER_LO);
-  }
-
->> +	struct i2c_timings *t = &priv->i2c_t;
->> +	u32 acpi_speed = i2c_acpi_find_bus_speed(priv->dev);
->> +
->> +	i2c_parse_fw_timings(priv->dev, t, false);
->> +
->> +	if (acpi_speed || t->bus_freq_hz)
->> +		val = 10 * HZ_PER_MHZ / max(t->bus_freq_hz, acpi_speed) - 1;
->> +
->> +	/* Set LS2X I2C frequency */
->> +	writel(val, priv->base + I2C_LS2X_PRER_LO);
->> +}
-> ...
->
->> +	writeb(data | LS2X_CTR_EN | LS2X_CTR_IEN | LS2X_CTR_MST,
->> +			priv->base + I2C_LS2X_CTR);
-> Wrong indentation.
->
-> ...
->
->> +	r = devm_request_irq(dev, irq, ls2x_i2c_irq_handler,
->> +			     IRQF_SHARED, "ls2x-i2c", priv);
->> +	if (r < 0)
->> +		return dev_err_probe(dev, r, "Unable to request irq %d\n", irq);
-> You requested IRQ without filling all data structures. Is it fine? Have you
-> checked that with CONFIG_DEBUG_SHIRQ being enabled?
-
-Sorry, I don't quite understand what you mean by "without filling all 
-data structures", I need call ls2x_i2c_reginit(priv) before it ?
-
-I see that other i2c drivers request interrupts at about the same time 
-as I do.
-
-I tested it with CONFIG_DEBUG_SHIRQ and no exceptions were reported.
-
-
-> ...
->
->> +	r = devm_i2c_add_adapter(dev, adap);
->> +	if (r)
->> +		return dev_err_probe(dev, r, "Failure adding adapter\n");
->> +
->> +	return 0;
->> +}
-> Looking at the above...
->
->> +static int ls2x_i2c_remove(struct platform_device *pdev)
->> +{
->> +	struct ls2x_i2c_priv *priv = platform_get_drvdata(pdev);
->> +
->> +	i2c_del_adapter(&priv->adapter);
-> ...are you sure this is correct?
-
-When we use devm_i2c_add_adapter(), the adapter will be auto deleted on 
-driver detach.
-
-So I just drop the ls2x_i2c_remove() ?
-
->> +	return 0;
->> +}
-> ...
->
->> +static int ls2x_i2c_suspend(struct device *dev)
->> +{
->> +	struct ls2x_i2c_priv *priv = dev_get_drvdata(dev);
->> +	priv->suspended = 1;
-> No protection needed?
-
-Actually this variable is not used elsewhere, maybe it is useless, I 
-will try to remove it and add some necessary actions in the 
-suspend/rusume callbacks, such as disable i2c interrupts, to ensure 
-integrity.
-
-
->> +	return 0;
->> +}
->> +
->> +static int ls2x_i2c_resume(struct device *dev)
->> +{
->> +	struct ls2x_i2c_priv *priv = dev_get_drvdata(dev);
->> +	priv->suspended = 0;
-> Ditto.
->
->> +	ls2x_i2c_reginit(priv);
->> +	return 0;
->> +}
-> ...
->
->> +MODULE_ALIAS("platform:ls2x-i2c");
-> Why is this required?
-
-I just referred to other drivers before, and now the MODULE_DEVICE_TABLE 
-already creates proper alias for platform driver.
-
-I will drop it.
-
-Thanks.
-
-Binbin
+  Tomi
 
