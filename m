@@ -2,172 +2,215 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1425648213
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Dec 2022 13:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D624D648246
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Dec 2022 13:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiLIMAw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Dec 2022 07:00:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
+        id S229554AbiLIMQ0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 9 Dec 2022 07:16:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiLIMAs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Dec 2022 07:00:48 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB2831375
-        for <linux-i2c@vger.kernel.org>; Fri,  9 Dec 2022 04:00:38 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id x22so10949895ejs.11
-        for <linux-i2c@vger.kernel.org>; Fri, 09 Dec 2022 04:00:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CCwzWMPdgO9Dcc0FuYTNg8nT6gaYsC62geOPdirkTlQ=;
-        b=blV6eki9f/dE3yt8k9vQjmYbdmKqtjXhWL8aRDi0+PTy9DZ7PoASn6Hb4YDawt6/Pq
-         TOTWkNyJ1bQ0LXeAOKmZsgrohPEAxg4I9Vxq8Iql4MCfOpzd9bk59Kg8A1l2aCabzc1i
-         Pwb8zUD5pTagBDWz9wlqw8be8RXHOe4ntLhBEh7HXgPppKgizTPX68btz3fJ69iSfJef
-         zAFAyKFjvCY4s0mBfuw+77i/sj6ivMcyXsKkk5Q+7miuQY1uqqYMcxvazgbad3gQhSeN
-         osKwSC1CYREx2mikz7Rsbjiro/V/gVq1uBZVJYbtUMGcexuFEHFb/xJK0jJPCO1YVyoF
-         GpZg==
+        with ESMTP id S229865AbiLIMQZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Dec 2022 07:16:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D124A5B0
+        for <linux-i2c@vger.kernel.org>; Fri,  9 Dec 2022 04:15:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670588125;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BtgQ7WbWz1/dygP/4Q3Y766uFdX//7j3uN4Cs1hiL7M=;
+        b=hySjvmUmNVWCIKWCNnf2xb5EVURxGjRIs5yl2QFpPLI0yo2PJhW21N98p9BF31s89/ZnX/
+        8pOxoTQXsKyKKTMw9dsgKjzdTrnB0CUr5OPnZpAvXJ8CkMfTX4TbexyGnXNSJHWRHbVlM+
+        i4mGjTqfAEFrSEQvgbEC7ZrI4Sm6bfM=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-622-mGd5gCqdM3mOnuXuL2kkcQ-1; Fri, 09 Dec 2022 07:15:24 -0500
+X-MC-Unique: mGd5gCqdM3mOnuXuL2kkcQ-1
+Received: by mail-ej1-f69.google.com with SMTP id oz34-20020a1709077da200b007adc8d68e90so2988293ejc.11
+        for <linux-i2c@vger.kernel.org>; Fri, 09 Dec 2022 04:15:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CCwzWMPdgO9Dcc0FuYTNg8nT6gaYsC62geOPdirkTlQ=;
-        b=EM1AlwZI2mjcr7pF8bLwm9FLXOVqq3qQW+nGOW+12oPKnDg78+OWqpVMFP97bC8+hX
-         k8tJyJ3BPEDsUathU/OP5SP7kUv3uQIkHViKCIdxcGcL62Ur2AHAK4WYt0Q48yaCX8p1
-         KdCpcyElSA6s0kTfYRrLc5MCkV+sj7AH8+PQFJDBM6i54m0aexUzLj5QLeUXrP8VPoau
-         BzBDzIsa+sZPiTW7UkrmgA2udysTY6YpIHW/IP2FdtpDSbDZRQbYUoSP/OvK9ddq+zGp
-         9Tr9anKmGG2fAID9Bf111OF15lMjwjZ9bAkdofUXqpOLOtJ2ij6gMFyT/TFb+ReJRqB0
-         hdoA==
-X-Gm-Message-State: ANoB5pnzHGgwJO8OvXNEqCOmnjVbMPWWvpqZYaY2uOiTQVxn0b68gcig
-        t6JY7Gql4xzhSG1KZQ2nadHlfQ==
-X-Google-Smtp-Source: AA0mqf7P1uuFrcKToZQL1Qs7OSMRUELHntqUphTx86r+y9eGx8OMntNtg5Twtz4wxSVo6DNFFYUZgg==
-X-Received: by 2002:a17:906:4907:b0:7c0:d4fa:3151 with SMTP id b7-20020a170906490700b007c0d4fa3151mr4765674ejq.17.1670587236522;
-        Fri, 09 Dec 2022 04:00:36 -0800 (PST)
-Received: from prec5560.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
-        by smtp.gmail.com with ESMTPSA id o23-20020a170906861700b007c0a7286c0asm489597ejx.58.2022.12.09.04.00.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 04:00:35 -0800 (PST)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Grant Likely <grant.likely@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>
-Cc:     Robert Foss <robert.foss@linaro.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-spi@vger.kernel.org, kernel@pengutronix.de,
-        Purism Kernel Team <kernel@puri.sm>,
-        linux-rpi-kernel@lists.infradead.org, linux-leds@vger.kernel.org,
-        linux-actions@lists.infradead.org, netdev@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-staging@lists.linux.dev, chrome-platform@lists.linux.dev,
-        linux-crypto@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linuxppc-dev@lists.ozlabs.org, patches@opensource.cirrus.com,
-        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: (subset) [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-Date:   Fri,  9 Dec 2022 13:00:14 +0100
-Message-Id: <167058708567.1651663.18170722235132459286.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BtgQ7WbWz1/dygP/4Q3Y766uFdX//7j3uN4Cs1hiL7M=;
+        b=8GeUYl8IUMBCkF+6Sjzd6jUb5cpMH5OxbyXiztR67en3+6WDiXyJkGhUHcSbtjPC50
+         d4eVbWc7EBI3ykij3uLAZk3lWwtwyBJBtefwzjhaIs295TtvlAoQBrOjo3kutop2ZiAP
+         tHS8q7XMWSol7CzLVBXMUH8Gg/R49/3/T8lCwqwpM6MJIo8VHR1I1dvfNlPA+QiYskX/
+         jWE0kVZPwdfeswL0E6m8oesNlishq3ZG0CGJd3za8yk9zSLIuRkNemFUV9iYrhgsA4t1
+         Vd3VUw1p6GC7zvFl1xNm6yzm/exezcPWPBJbga960++fLQbFLImlORed0Gxut339AIog
+         F5LQ==
+X-Gm-Message-State: ANoB5pnF9RVMu+rq8J3mEvPutDg2x6GfC99GJVvFuq6YXylIuthYXFiB
+        UqLpy/tOkxC7OEp3OXHs/xqXloHZK+0PCxPu87AQuTww27HcHsrYLghlKHx6guLY59ijkq5iMzJ
+        j4hfpTCSAVD4k3Bry7YyW
+X-Received: by 2002:a05:6402:1002:b0:467:9384:a7aa with SMTP id c2-20020a056402100200b004679384a7aamr5155781edu.15.1670588123399;
+        Fri, 09 Dec 2022 04:15:23 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4RRYy2HgbHVKh12Vfe0a9mMIpHtpM3J9HE/UTuFWgQs5mNOeVUx5s++T0sq0ZD4BHoDdHokw==
+X-Received: by 2002:a05:6402:1002:b0:467:9384:a7aa with SMTP id c2-20020a056402100200b004679384a7aamr5155766edu.15.1670588123176;
+        Fri, 09 Dec 2022 04:15:23 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id ky2-20020a170907778200b0073d796a1043sm482155ejc.123.2022.12.09.04.15.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Dec 2022 04:15:22 -0800 (PST)
+Message-ID: <e9d113fb-5cd1-d93d-3d8f-fa9c1e55a8e2@redhat.com>
+Date:   Fri, 9 Dec 2022 13:15:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] i2c: designware: Fix unbalanced suspended flag
+Content-Language: en-US, nl
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>, wsa@kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, jsd@semihalf.com
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20221209114034.18025-1-rf@opensource.cirrus.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221209114034.18025-1-rf@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 18 Nov 2022 23:35:34 +0100, Uwe Kleine-König wrote:
-> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type") from 2016 there is a "temporary" alternative probe
-> callback for i2c drivers.
+Hi Richard,
+
+On 12/9/22 12:40, Richard Fitzgerald wrote:
+> Ensure that i2c_mark_adapter_suspended() is always balanced by a call to
+> i2c_mark_adapter_resumed().
 > 
-> This series completes all drivers to this new callback (unless I missed
-> something). It's based on current next/master.
-> A part of the patches depend on commit 662233731d66 ("i2c: core:
-> Introduce i2c_client_get_device_id helper function"), there is a branch that
-> you can pull into your tree to get it:
+> Don't set DPM_FLAG_MAY_SKIP_RESUME to skip system early_resume stage if the
+> driver was runtime-suspended. Instead, always call dw_i2c_plat_resume() and
+> use pm_runtime_suspended() to determine whether we need to power up the
+> hardware.
 > 
-> [...]
+> The unbalanced suspended flag was introduced by
+> commit c57813b8b288 ("i2c: designware: Lock the adapter while setting the
+> suspended flag")
+> 
+> Before that commit, the system and runtime PM used the same functions. The
+> DPM_FLAG_MAY_SKIP_RESUME was used to skip the system resume if the driver
+> had been in runtime-suspend. If system resume was skipped, the suspended
+> flag would be cleared by the next runtime resume. The check of the
+> suspended flag was _after_ the call to pm_runtime_get_sync() in
+> i2c_dw_xfer(). So either a system resume or a runtime resume would clear
+> the flag before it was checked.
+> 
+> Having introduced the unbalanced suspended flag with that commit, a further
+> commit 80704a84a9f8
+> ("i2c: designware: Use the i2c_mark_adapter_suspended/resumed() helpers")
+> 
+> changed from using a local suspended flag to using the
+> i2c_mark_adapter_suspended/resumed() functions. These use a flag that is
+> checked by I2C core code before issuing the transfer to the bus driver, so
+> there was no opportunity for the bus driver to runtime resume itself before
+> the flag check.
+> 
+> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> Fixes: c57813b8b288 ("i2c: designware: Lock the adapter while setting the suspended flag")
 
-Applied all patches that build.
+It is not entirely clear to me where the unbalance you claim to see comes
+from? When runtime-suspended SMART_SUSPEND should keep it suspended at which point
+the system suspend callback will never run ?
 
-Patches excluded:
- - ps8622
- - ti-sn65dsi83
- - adv7511
+Are you sure that you are not maybe seeing a suspend/resume ordering issue?
 
-Repo: https://cgit.freedesktop.org/drm/drm-misc/
+Did you add printk messages to the suspend/resume callbacks of
+i2c-designware-platdrv.c which show the system suspend callback
+being called but not the system resume one ?
 
-
-[014/606] drm/bridge: adv7511: Convert to i2c's .probe_new()
-          (no commit info)
-[015/606] drm/bridge/analogix/anx6345: Convert to i2c's .probe_new()
-          (no commit info)
-[016/606] drm/bridge/analogix/anx78xx: Convert to i2c's .probe_new()
-          (no commit info)
-[017/606] drm/bridge: anx7625: Convert to i2c's .probe_new()
-          (no commit info)
-[018/606] drm/bridge: icn6211: Convert to i2c's .probe_new()
-          (no commit info)
-[019/606] drm/bridge: chrontel-ch7033: Convert to i2c's .probe_new()
-          commit: 8dc6de280f01c0f7b8d40435736f3c975368ad70
-[020/606] drm/bridge: it6505: Convert to i2c's .probe_new()
-          (no commit info)
-[021/606] drm/bridge: it66121: Convert to i2c's .probe_new()
-          (no commit info)
-[022/606] drm/bridge: lt8912b: Convert to i2c's .probe_new()
-          (no commit info)
-[023/606] drm/bridge: lt9211: Convert to i2c's .probe_new()
-          (no commit info)
-[024/606] drm/bridge: lt9611: Convert to i2c's .probe_new()
-          (no commit info)
-[025/606] drm/bridge: lt9611uxc: Convert to i2c's .probe_new()
-          (no commit info)
-[026/606] drm/bridge: megachips: Convert to i2c's .probe_new()
-          (no commit info)
-[027/606] drm/bridge: nxp-ptn3460: Convert to i2c's .probe_new()
-          (no commit info)
-[028/606] drm/bridge: parade-ps8622: Convert to i2c's .probe_new()
-          (no commit info)
-[029/606] drm/bridge: sii902x: Convert to i2c's .probe_new()
-          (no commit info)
-[030/606] drm/bridge: sii9234: Convert to i2c's .probe_new()
-          (no commit info)
-[031/606] drm/bridge: sii8620: Convert to i2c's .probe_new()
-          (no commit info)
-[032/606] drm/bridge: tc358767: Convert to i2c's .probe_new()
-          (no commit info)
-[033/606] drm/bridge: tc358768: Convert to i2c's .probe_new()
-          (no commit info)
-[034/606] drm/bridge/tc358775: Convert to i2c's .probe_new()
-          (no commit info)
-[035/606] drm/bridge: ti-sn65dsi83: Convert to i2c's .probe_new()
-          (no commit info)
-[037/606] drm/bridge: tfp410: Convert to i2c's .probe_new()
-          (no commit info)
+I guess that is possible with DPM_FLAG_MAY_SKIP_RESUME, but
+since we also use SMART_SUSPEND I would expect the system-suspend
+callback to also always be skipped for runtime-suspended controllers.
 
 
 
-rob
+
+
+
+
+> ---
+> Apologies if you get this message multiple times. I'm having trouble
+> with my SMTP server.
+> ---
+>  drivers/i2c/busses/i2c-designware-platdrv.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+> index ba043b547393..d805b8c7e797 100644
+> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> @@ -351,13 +351,11 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+>  
+>  	if (dev->flags & ACCESS_NO_IRQ_SUSPEND) {
+>  		dev_pm_set_driver_flags(&pdev->dev,
+> -					DPM_FLAG_SMART_PREPARE |
+> -					DPM_FLAG_MAY_SKIP_RESUME);
+> +					DPM_FLAG_SMART_PREPARE);
+>  	} else {
+>  		dev_pm_set_driver_flags(&pdev->dev,
+>  					DPM_FLAG_SMART_PREPARE |
+> -					DPM_FLAG_SMART_SUSPEND |
+> -					DPM_FLAG_MAY_SKIP_RESUME);
+> +					DPM_FLAG_SMART_SUSPEND);
+>  	}
+>  
+>  	device_enable_async_suspend(&pdev->dev);
+> @@ -475,7 +473,9 @@ static int __maybe_unused dw_i2c_plat_resume(struct device *dev)
+>  {
+>  	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
+>  
+> -	dw_i2c_plat_runtime_resume(dev);
+> +	if (!pm_runtime_suspended(dev))
+> +		dw_i2c_plat_runtime_resume(dev);
+> +
+
+I'm afraid that this is always going to run now, before this callback gets
+called drivers/base/power/main.c: device_resume_noirq() does:
+
+        skip_resume = dev_pm_skip_resume(dev);
+
+        if (skip_resume)
+                pm_runtime_set_suspended(dev);
+        else if (dev_pm_skip_suspend(dev))
+                pm_runtime_set_active(dev);
+
+Where skip_resume now is false since you dropped the
+DPM_FLAG_MAY_SKIP_RESUME flag and dev_pm_skip_suspend(dev)
+will return true (see below) for runtime-suspended controllers,
+so they will be marked active here. and then your
+!pm_runtime_suspended(dev) will always be false.
+
+Did you add a printk to both the if + else paths
+and have you ever seen the controller not get
+resumed with this test added ?
+
+Regards,
+
+Hans
+
+
+
+
+bool dev_pm_skip_suspend(struct device *dev)
+{
+        return dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND) &&
+                pm_runtime_status_suspended(dev);
+}
+
+
+
+
+>  	i2c_mark_adapter_resumed(&i_dev->adapter);
+>  
+>  	return 0;
 
