@@ -2,80 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C217664BB90
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Dec 2022 19:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C8C64BC05
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Dec 2022 19:33:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236501AbiLMSHT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Dec 2022 13:07:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
+        id S236370AbiLMSdP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Dec 2022 13:33:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236414AbiLMSG7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Dec 2022 13:06:59 -0500
+        with ESMTP id S236227AbiLMSdN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Dec 2022 13:33:13 -0500
 Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C747248C3
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Dec 2022 10:06:47 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id 1so6251879lfz.4
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Dec 2022 10:06:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC44E22520
+        for <linux-i2c@vger.kernel.org>; Tue, 13 Dec 2022 10:33:11 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id bp15so6318211lfb.13
+        for <linux-i2c@vger.kernel.org>; Tue, 13 Dec 2022 10:33:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ADpodWKXROZu/3D+Zxer6l8IxEoAVXT4LlWfeI8NjbI=;
-        b=QMwjkoir1ul5Xka1V9XDto/QZCV7qWabFkeYDzEs08Sz4QgXBTb4jSc9cV1CPDuyLV
-         vY2O+dpeDflpgh5YtGadK9EZq5ssrGI35o0sEMYYG/0GMWeTaIB9I+IRC6FFsjYeHbBP
-         q+bxHCtxCkgYU8XEjq4KswgR53edjv9dX8uI35aE8H+vfsqepB4WatzI3mMUidU3S45F
-         /fH195BOCSnIN3we/1EfobW1JA5DnqCHAIiTbWSitLaqqy6XJwuUZy9v4/BBFx504nd/
-         8Y2dGs5+idsYlxw5SjuAdIQunN607EQ00Gzk7p0AkawzRInKtShLO6VTe8ohqJxFsDDx
-         ETbg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GJ5jI0G4hX1A08XO49d5+/bf9foafrkt0On/sCJEiuI=;
+        b=NfSwsj6XvoFxdC/s4diqxFkK2YNi3BX95XD5jRwysWJvH3h/5IIZ84QEa4LZH6Mqbr
+         6JIw81N3A94mZD4zT2VhIjKbm1ieNnS+klB525lr7jc5yT4BpboI+nUCAkbaUdS2OpeK
+         1igp3rHVAzAbwCcL8bZTu3Q07hvB5odntYLjjMZF4Zx0S1b3IjDxqaQake8666uyoDdP
+         TXwoUrZklmyxluTZ9z4gOcWGLDhQgvOFenPo4A3GaT2hwM1keV4mDZM80FoHYG28Ebj6
+         GU71MghU2XMUGgjGg4qQ+SZkcs6iPwlfuiKUVdLCdHzJ97Mfkd0bWhPCLsvZbaQIylAb
+         qxGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ADpodWKXROZu/3D+Zxer6l8IxEoAVXT4LlWfeI8NjbI=;
-        b=5sn1e9PmwS3kzaRYfbrfFJ4HeUJptjWZJUZaUyK66rojDUtjCO7BX0ENiSwsn8lJpp
-         MLwLfRb4TDdmpPxWkWjI2J58pmppKqgFBvyIl61m9l98kLMmbFmtsTDBZZFklqzjQwFD
-         vo8lGcVzESgSNfB7zXH1DBZ5aUZFEhrmULVHt+zLIdncMhubnMPKDRowh/9nZ92BZ51O
-         95hzUaws1lGA4WeBTMqn2uigzcVZGTPKR0whG6IVlsrrKtK3AmFlhsNiH4yOaqn5bRO/
-         MWYE25zUhYCQJrEJHHDMV9lfwfcqt5R3Rk2VgIvXVkcY1A5YO0yYF3yUYCaM3yNebpJU
-         JL0A==
-X-Gm-Message-State: ANoB5plkw1tI8TXbKJ+8Adeyj/XatdfmQ3HbhewprjuQK815bZ55onC8
-        0rJQUc/NhnBC9iPACnKV4VkKQQ==
-X-Google-Smtp-Source: AA0mqf7sUGungFI5a/97OKrQx5IbqK4ZIfMYj93YgT+DCO0eJ3Yh2Ot1uIneRrVv+5l1e8oxTpvp+g==
-X-Received: by 2002:a05:6512:15a7:b0:4b6:e494:a98d with SMTP id bp39-20020a05651215a700b004b6e494a98dmr4223840lfb.44.1670954806151;
-        Tue, 13 Dec 2022 10:06:46 -0800 (PST)
-Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id v10-20020ac2560a000000b00497aa190523sm454543lfd.248.2022.12.13.10.06.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 10:06:45 -0800 (PST)
-Message-ID: <1a950cde-6713-a14e-f899-3450dbad5312@linaro.org>
-Date:   Tue, 13 Dec 2022 19:06:44 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 1/4] dt-bindings: i2c: qcom,i2c-cci: Fall back to common
- compatibles
-Content-Language: en-US
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GJ5jI0G4hX1A08XO49d5+/bf9foafrkt0On/sCJEiuI=;
+        b=SbRw1+yPW8FLM14FFYAt6H87PXiZaautK+CIQ6qaPHwzblxTbr4sHZCr+wkjhhq9G7
+         bkR757Wy3nk3EjQIgy/8VHCyAjaFsztCTdmvCbE47As8rdYbMBSLn+wiAsg+1eo3CRta
+         kvlqq0hkst8O0JnRk7z+rwM2FQZR16YsX0V5jjzwarRkWzm1K75V+w8xbGJeyaMAwt8i
+         mE2BD8yjELOlYL5/8g9FO+QXjyvxnsz+/FTgWUzjdVTBJLk2ppWhVogIT2Bb4w9Pv+Yv
+         QcC5pp9CrIVOiF3CKcCRmkw5oJPTM0bBe5TyqrEUG/vCQ5BsrDHXHYwkupl4qjpDGFop
+         uA+A==
+X-Gm-Message-State: ANoB5pkaH7aQHxrLpPP+kq7Z/ZhSaVFL5TKiHmNvdtqNYgZJnS25LS5U
+        gEPKRgrA6xTxmeOJqHUai1xhKg==
+X-Google-Smtp-Source: AA0mqf5PosCgjZuIMDn413vUNIRDY6kkEVRGUNZYkcg0aJE90noLrihl+JuV0j8tLeB9BwK18weaWw==
+X-Received: by 2002:ac2:52b9:0:b0:4b5:83ba:8c55 with SMTP id r25-20020ac252b9000000b004b583ba8c55mr5363905lfm.8.1670956390178;
+        Tue, 13 Dec 2022 10:33:10 -0800 (PST)
+Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
+        by smtp.gmail.com with ESMTPSA id t10-20020a056512208a00b004b501497b6fsm465963lfr.148.2022.12.13.10.33.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 10:33:08 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
 Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Loic Poulain <loic.poulain@linaro.org>,
         Robert Foss <robert.foss@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221213115628.105149-1-konrad.dybcio@linaro.org>
- <b8be66e0-f987-b3ec-b78e-5be8bf54b05e@linaro.org>
- <b289a9c5-54de-5ca4-b247-90751be05fa9@linaro.org>
-In-Reply-To: <b289a9c5-54de-5ca4-b247-90751be05fa9@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH v2 1/6] dt-bindings: i2c: qcom,i2c-cci: Fall back to common compatibles
+Date:   Tue, 13 Dec 2022 19:33:00 +0100
+Message-Id: <20221213183305.544644-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,53 +74,98 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Almost every compatible string in the CCI driver is a duplicate. Adjust
+the bindings to include a common (first-soc-implementing-vX) compatible
+to remove the need to keep adding superfluous compatible strings.
 
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Changes in v2:
+- make sure the actual patch contests are tested..
+- resolve errors
 
-On 13.12.2022 18:01, Konrad Dybcio wrote:
-> 
-> 
-> On 13.12.2022 17:58, Krzysztof Kozlowski wrote:
->> On 13/12/2022 12:56, Konrad Dybcio wrote:
->>> Almost every compatible string in the CCI driver is a duplicate. Adjust
->>> the bindings to include a common (first-soc-implementing-vX) compatible
->>> to remove the need to keep adding superfluous compatible strings.
->>>
->>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>> ---
->>>  .../devicetree/bindings/i2c/qcom,i2c-cci.yaml | 25 +++++++++++++------
->>>  1 file changed, 17 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
->>> index cf9f8fda595f..65cf7860a9a0 100644
->>> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
->>> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
->>> @@ -12,14 +12,23 @@ maintainers:
->>>  
->>>  properties:
->>>    compatible:
->>> -    enum:
->>> -      - qcom,msm8226-cci
->>> -      - qcom,msm8916-cci
->>> -      - qcom,msm8974-cci
->>> -      - qcom,msm8996-cci
->>> -      - qcom,sdm845-cci
->>> -      - qcom,sm8250-cci
->>> -      - qcom,sm8450-cci
->>> +    oneOf:
->>
->> Except missing test,
-> Hm? I tested this locally with dt_binding_check and it passed..
-Eh, looks like I didn't hit save before running it or something,
-I see it now, sorry bout that..
+ .../devicetree/bindings/i2c/qcom,i2c-cci.yaml | 47 ++++++++++++-------
+ 1 file changed, 30 insertions(+), 17 deletions(-)
 
-Konrad
-> 
-> how about also adding a comment to the driver, that
->> list of compatibles should not grow when not needed?
-> Sure.
-> 
-> Konrad
->>
->> Best regards,
->> Krzysztof
->>
+diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+index cf9f8fda595f..87e414f0c39c 100644
+--- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
++++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+@@ -12,14 +12,23 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    enum:
+-      - qcom,msm8226-cci
+-      - qcom,msm8916-cci
+-      - qcom,msm8974-cci
+-      - qcom,msm8996-cci
+-      - qcom,sdm845-cci
+-      - qcom,sm8250-cci
+-      - qcom,sm8450-cci
++    oneOf:
++      - enum:
++          - qcom,msm8226-cci
++          - qcom,msm8974-cci
++          - qcom,msm8996-cci
++
++      - items:
++          - enum:
++              - qcom,msm8916-cci
++          - const: qcom,msm8226-cci # CCI v1
++
++      - items:
++          - enum:
++              - qcom,sdm845-cci
++              - qcom,sm8250-cci
++              - qcom,sm8450-cci
++          - const: qcom,msm8996-cci # CCI v2
+ 
+   "#address-cells":
+     const: 1
+@@ -88,10 +97,12 @@ allOf:
+   - if:
+       properties:
+         compatible:
+-          contains:
+-            enum:
+-              - qcom,msm8226-cci
+-              - qcom,msm8974-cci
++          oneOf:
++            - contains:
++                enum:
++                  - qcom,msm8974-cci
++
++            - const: qcom,msm8226-cci
+     then:
+       properties:
+         clocks:
+@@ -105,10 +116,12 @@ allOf:
+   - if:
+       properties:
+         compatible:
+-          contains:
+-            enum:
+-              - qcom,msm8916-cci
+-              - qcom,msm8996-cci
++          oneOf:
++            - contains:
++                enum:
++                  - qcom,msm8916-cci
++
++            - const: qcom,msm8996-cci
+     then:
+       properties:
+         clocks:
+@@ -169,7 +182,7 @@ examples:
+ 
+     cci@ac4a000 {
+         reg = <0x0ac4a000 0x4000>;
+-        compatible = "qcom,sdm845-cci";
++        compatible = "qcom,sdm845-cci", "qcom,msm8996-cci";
+         #address-cells = <1>;
+         #size-cells = <0>;
+ 
+-- 
+2.39.0
+
