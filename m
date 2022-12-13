@@ -2,34 +2,34 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADDE964B6CA
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Dec 2022 15:06:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A1164B74D
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Dec 2022 15:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234740AbiLMOGa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Dec 2022 09:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34630 "EHLO
+        id S234404AbiLMO0E (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Dec 2022 09:26:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235834AbiLMOGT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Dec 2022 09:06:19 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39F31FCFE;
-        Tue, 13 Dec 2022 06:06:17 -0800 (PST)
+        with ESMTP id S230061AbiLMO0D (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Dec 2022 09:26:03 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852F411C1C;
+        Tue, 13 Dec 2022 06:26:01 -0800 (PST)
 Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 15CB67C5;
-        Tue, 13 Dec 2022 15:06:13 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DE8FC7C5;
+        Tue, 13 Dec 2022 15:25:48 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1670940375;
-        bh=ZX6f3ElcUf5tnDJBnNmvyXVrtUifiBOjqC4Kt3PZk1Q=;
+        s=mail; t=1670941558;
+        bh=y6alB7XsPNlf71CeYriPi+VSoAIpXnaeIDC4C5kwU0c=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BgKTPzIEzNi3CEgzHZUdT5nrX5t+Mxh88UaPzGNFwczdRUPp+mWzvTkkCsGiv+13O
-         deCFyAJ84R7x1lZDzPRU+1MRvpaE4G1mzlZJ43B5mFoUhZGxXwbntWe08h1kTjrr6N
-         aki9bUYSlLnOvoaX1nLCDY4MefETpqrnmyI4PBTc=
-Message-ID: <c22ff1c6-704f-affc-93a7-e2080c58c53d@ideasonboard.com>
-Date:   Tue, 13 Dec 2022 16:06:11 +0200
+        b=f8kZgNHlkdcseP0gMb7WjCUISWUODSxN9rOa+f8Sp+zwImbzQORMdxPaqIYfW2FTX
+         rlnX+SxHf4McM1zCyq11ifytHmyCDuxhPI7hkTulZGRPyBU6imTf97vNLy1iXn78Qh
+         +YrVzO0/m3+U3rMgJKLDtqFSwwc0BbjBSQE2UADU=
+Message-ID: <99372b9d-2050-2040-6b29-a1939c2e0c95@ideasonboard.com>
+Date:   Tue, 13 Dec 2022 16:25:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v5 4/8] dt-bindings: media: add bindings for TI DS90UB953
+Subject: Re: [PATCH v5 5/8] dt-bindings: media: add bindings for TI DS90UB960
 Content-Language: en-US
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
@@ -52,10 +52,10 @@ Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
         Marek Vasut <marex@denx.de>
 References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
- <20221208104006.316606-5-tomi.valkeinen@ideasonboard.com>
- <Y5YUoEWmHsUT8zgf@pendragon.ideasonboard.com>
+ <20221208104006.316606-6-tomi.valkeinen@ideasonboard.com>
+ <Y5YaMpbj1WTTIp3B@pendragon.ideasonboard.com>
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <Y5YUoEWmHsUT8zgf@pendragon.ideasonboard.com>
+In-Reply-To: <Y5YaMpbj1WTTIp3B@pendragon.ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,168 +67,253 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 11/12/2022 19:34, Laurent Pinchart wrote:
+On 11/12/2022 19:58, Laurent Pinchart wrote:
 > Hi Tomi,
 > 
 > Thank you for the patch.
 > 
-> On Thu, Dec 08, 2022 at 12:40:02PM +0200, Tomi Valkeinen wrote:
->> Add DT bindings for TI DS90UB953 FPDLink-3 Serializer.
+> On Thu, Dec 08, 2022 at 12:40:03PM +0200, Tomi Valkeinen wrote:
+>> Add DT bindings for TI DS90UB960 FPDLink-3 Deserializer.
 >>
 >> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 >> ---
->>   .../bindings/media/i2c/ti,ds90ub953.yaml      | 112 ++++++++++++++++++
->>   1 file changed, 112 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub953.yaml
+>>   .../bindings/media/i2c/ti,ds90ub960.yaml      | 358 ++++++++++++++++++
+>>   1 file changed, 358 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
 >>
->> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953.yaml
+>> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
 >> new file mode 100644
->> index 000000000000..fd7d25d93e2c
+>> index 000000000000..d8b5e219d420
 >> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953.yaml
->> @@ -0,0 +1,112 @@
+>> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+>> @@ -0,0 +1,358 @@
 >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 >> +%YAML 1.2
 >> +---
->> +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub953.yaml#
+>> +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub960.yaml#
 >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 >> +
->> +title: Texas Instruments DS90UB953 FPD-Link 3 Serializer
+>> +title: Texas Instruments DS90UB9XX Family FPD-Link Deserializer Hubs
 >> +
 >> +maintainers:
 >> +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 >> +
 >> +description:
->> +  The TI DS90UB953 is an FPD-Link 3 video serializer for MIPI CSI-2.
+>> +  The TI DS90UB9XX devices are FPD-Link video deserializers with I2C and GPIO
+>> +  forwarding.
 >> +
 >> +properties:
 >> +  compatible:
 >> +    enum:
->> +      - ti,ds90ub953-q1
->> +      - ti,ds90ub971-q1
+>> +      - ti,ds90ub960-q1
+>> +      - ti,ds90ub9702-q1
 >> +
->> +  '#gpio-cells':
->> +    const: 2
+>> +  reg:
+>> +    maxItems: 1
+>> +    description:
+>> +      i2c addresses for the deserializer and the serializers
 > 
-> I would add a description here, to tell what the cells correspond to. In
-> particular, the first cell selects the GPIO_* pin number, it would be
-> nice to document that its value should be in the range [0, 3].
+> s/i2c/I2C/
 > 
-> Same comment for patch 3/8 (DS90UB913 bindings). There you could also
-> mention that GPO2 and the output clock are mutually exclusive.
+> Same below.
+> 
+> A bit more details would be nice, for instance the order in which
+> addresses should be specified should be documented. The example below
+> has one address only, so it's quite unclear. Or is this a left-over,
+> from before the i2c-alias-pool ?
 
-Yep. I have added this for ub913:
-       First cell is the GPO pin number, second cell is the flags. The 
-GPO pin
-       number must be in range of [0, 3]. Note that GPOs 2 and 3 are not
-       available in external oscillator mode.
-
-and this for ub953:
-       First cell is the GPIO pin number, second cell is the flags. The 
-GPIO pin
-       number must be in range of [0, 3].
+That's a left over, but not related to i2c-alias-pool but the i2c-alias 
+for the serializers. It already says above 'maxItems: 1', so now it only 
+contains the deserializer address. I'll drop the desc.
 
 >> +
->> +  gpio-controller: true
+>> +  clocks:
+>> +    maxItems: 1
+>> +    description:
+>> +      Reference clock connected to the REFCLK pin.
 >> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: refclk
+>> +
+>> +  powerdown-gpios:
+>> +    maxItems: 1
+>> +    description:
+>> +      Specifier for the GPIO connected to the PDB pin.
+>> +
+>> +  i2c-alias-pool:
+>> +    $ref: /schemas/types.yaml#/definitions/uint16-array
+>> +    description:
+>> +      i2c alias pool is a pool of i2c addresses on the main i2c bus that can be
+>> +      used to access the remote peripherals. The addresses must be available,
+>> +      not used by any other peripheral. Each remote peripheral is assigned an
+>> +      alias from the pool, and transactions to that address will be forwarded
+>> +      to the remote peripheral, with the address translated to the remote
+>> +      peripheral's real address.
 > 
-> No need for clocks and clock-names for the reference input clock ? Or is
-> this because you support sync mode only for now ?
+> As this property is optional, should you describe what happens when it's
+> not specified ?
+> 
+> I would also indicate that the pool doesn't cover the serializers, only
+> the devices behind them.
 
-Right, I don't have the clock on my hw, but it's probably better to add 
-it to the binding already.
+Yep, I'll clarify these.
 
->> +  '#clock-cells':
->> +    const: 0
+>> +
+>> +  links:
+>> +    type: object
+>> +    additionalProperties: false
+>> +
+>> +    properties:
+>> +      '#address-cells':
+>> +        const: 1
+>> +
+>> +      '#size-cells':
+>> +        const: 0
+>> +
+>> +      ti,manual-strobe:
+>> +        type: boolean
+>> +        description:
+>> +          Enable manual strobe position and EQ level
+>> +
+>> +    patternProperties:
+>> +      '^link@[0-9a-f]+$':
+> 
+> There can be up to 4 links only, right ? I would then use
+> 
+>        '^link@[0-3]$':
+
+Yes, I'll change that.
+
+>> +        type: object
+>> +        additionalProperties: false
+>> +        properties:
+>> +          reg:
+>> +            description: The link number
+>> +            maxItems: 1
+>> +
+>> +          i2c-alias:
+>> +            description:
+>> +              The i2c address used for the serializer. Transactions to this
+>> +              address on the i2c bus where the deserializer resides are
+>> +              forwarded to the serializer.
+>> +
+>> +          ti,rx-mode:
+>> +            $ref: /schemas/types.yaml#/definitions/uint32
+>> +            enum:
+>> +              - 0 # RAW10
+>> +              - 1 # RAW12 HF
+>> +              - 2 # RAW12 LF
+>> +              - 3 # CSI2 SYNC
+>> +              - 4 # CSI2 NON-SYNC
+>> +            description: FPD-Link Input Mode
+> 
+> Are there use cases for controlling this dynamically (in particular the
+> sync/non-sync modes) ? Is there anything that could be queried at
+> runtime from the serializers instead of being specified in DT ?
+
+We need a link to the serializer before we can query anything from the 
+serializer. To have a link, we need the mode... So, as I mentioned in 
+the other reply, we could define these in some way in the serializer's 
+properties instead of here, but I'm not sure if that's a good change.
+
+The driver can change the mode at runtime (say, from sync to non-sync 
+mode, if the HW supports that). But I think this property should reflect 
+the HW strapped configuration of the serializer.
+
+> Same question for the parameters below. Additionally, are there any
+> parameters that need to be identical for all links ?
+
+The same answer to the cdr-mode. No need to be identical.
+
+The strobe-pos and eq-level are unrelated to this topic.
+
+>> +
+>> +          ti,cdr-mode:
+>> +            $ref: /schemas/types.yaml#/definitions/uint32
+>> +            enum:
+>> +              - 0 # FPD3
+>> +              - 1 # FPD4
+>> +            description: FPD-Link CDR Mode
+>> +
+>> +          ti,strobe-pos:
+>> +            $ref: /schemas/types.yaml#/definitions/int32
+>> +            minimum: -13
+>> +            maximum: 13
+>> +            description: Manual strobe position
+>> +
+>> +          ti,eq-level:
+>> +            $ref: /schemas/types.yaml#/definitions/uint32
+>> +            maximum: 14
+>> +            description: Manual EQ level
+>> +
+>> +          serializer:
+>> +            type: object
+>> +            description: FPD-Link Serializer node
+>> +
+>> +        required:
+>> +          - reg
+>> +          - i2c-alias
+>> +          - ti,rx-mode
+>> +          - serializer
 >> +
 >> +  ports:
 >> +    $ref: /schemas/graph.yaml#/properties/ports
 >> +
 >> +    properties:
 >> +      port@0:
+>> +        $ref: /schemas/graph.yaml#/properties/port
+>> +        unevaluatedProperties: false
+>> +        description: FPD-Link input 0
+>> +
+>> +      port@1:
+>> +        $ref: /schemas/graph.yaml#/properties/port
+>> +        unevaluatedProperties: false
+>> +        description: FPD-Link input 1
+>> +
+>> +      port@2:
+>> +        $ref: /schemas/graph.yaml#/properties/port
+>> +        unevaluatedProperties: false
+>> +        description: FPD-Link input 2
+>> +
+>> +      port@3:
+>> +        $ref: /schemas/graph.yaml#/properties/port
+>> +        unevaluatedProperties: false
+>> +        description: FPD-Link input 3
+>> +
+>> +      port@4:
 >> +        $ref: /schemas/graph.yaml#/$defs/port-base
 >> +        unevaluatedProperties: false
->> +        description: CSI-2 input port
+>> +        description: CSI-2 Output 0
 >> +
 >> +        properties:
 >> +          endpoint:
 >> +            $ref: /schemas/media/video-interfaces.yaml#
 >> +            unevaluatedProperties: false
-> 
-> Should the data-lanes property be required for the CSI-2 input ?
-
-Yes.
-
 >> +
->> +      port@1:
->> +        $ref: /schemas/graph.yaml#/properties/port
+>> +            properties:
+>> +              data-lanes:
+>> +                minItems: 1
+>> +                maxItems: 4
+>> +
+>> +      port@5:
+>> +        $ref: /schemas/graph.yaml#/$defs/port-base
 >> +        unevaluatedProperties: false
->> +        description: FPD-Link 3 output port
+>> +        description: CSI-2 Output 1
 >> +
->> +  i2c:
->> +    $ref: /schemas/i2c/i2c-controller.yaml#
->> +    unevaluatedProperties: false
+>> +        properties:
+>> +          endpoint:
+>> +            $ref: /schemas/media/video-interfaces.yaml#
+>> +            unevaluatedProperties: false
 >> +
->> +required:
->> +  - compatible
->> +  - '#gpio-cells'
->> +  - gpio-controller
->> +  - '#clock-cells'
->> +  - ports
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/gpio/gpio.h>
->> +
->> +    serializer {
->> +      compatible = "ti,ds90ub953-q1";
->> +
->> +      gpio-controller;
->> +      #gpio-cells = <2>;
->> +
->> +      #clock-cells = <0>;
->> +
->> +      ports {
->> +        #address-cells = <1>;
->> +        #size-cells = <0>;
->> +
->> +        port@0 {
->> +          reg = <0>;
->> +          ub953_in: endpoint {
->> +            clock-lanes = <0>;
->> +            data-lanes = <1 2 3 4>;
->> +            remote-endpoint = <&sensor_out>;
->> +          };
->> +        };
->> +
->> +        port@1 {
->> +          reg = <1>;
->> +          endpoint {
->> +            remote-endpoint = <&deser_fpd_in>;
->> +          };
->> +        };
->> +      };
->> +
->> +      i2c {
->> +        #address-cells = <1>;
->> +        #size-cells = <0>;
->> +
->> +        sensor@1a {
->> +          compatible = "sony,imx274";
->> +          reg = <0x1a>;
->> +
->> +          reset-gpios = <&serializer 0 GPIO_ACTIVE_LOW>;
+>> +            properties:
+>> +              data-lanes:
+>> +                minItems: 1
+>> +                maxItems: 4
 > 
-> Maybe add
-> 
->            clocks = <&serializer>;
-> 	  clock-names = "inck";
-> 
-> to showcase the clock connection ?
+> The ports should be mandatory, shouldn't they ?
 
-Yes, that's a good idea.
+Did you mean data-lanes? Yes, data-lanes should be mandatory.
 
   Tomi
 
