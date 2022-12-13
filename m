@@ -2,94 +2,124 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B567B64B12C
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Dec 2022 09:29:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD8364B491
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Dec 2022 12:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234873AbiLMI3z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Dec 2022 03:29:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46026 "EHLO
+        id S235397AbiLML5P (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Dec 2022 06:57:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234878AbiLMI3e (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Dec 2022 03:29:34 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B50481F2EB;
-        Tue, 13 Dec 2022 00:27:24 -0800 (PST)
-Received: from loongson.cn (unknown [112.20.108.31])
-        by gateway (Coremail) with SMTP id _____8CxrutJN5hj7jQFAA--.12182S3;
-        Tue, 13 Dec 2022 16:26:49 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.20.108.31])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxiFdHN5hjxtEtAA--.28300S2;
-        Tue, 13 Dec 2022 16:26:48 +0800 (CST)
-From:   Binbin Zhou <zhoubinbin@loongson.cn>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org
-Cc:     loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        with ESMTP id S235495AbiLML4f (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Dec 2022 06:56:35 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F49F265E
+        for <linux-i2c@vger.kernel.org>; Tue, 13 Dec 2022 03:56:33 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id v11so3011720ljk.12
+        for <linux-i2c@vger.kernel.org>; Tue, 13 Dec 2022 03:56:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7WSa5YG1jZqcHIsQqtvI5oWLoQrCTutP6LxjZjnHFZc=;
+        b=iCOyGQ2kbacZcy43TpWKZ+7380PIwooK2kzfhDsH2/44Lvy3wn8YS9XwtmvVotm/l6
+         NrGV4DwlUZmD2+NGYFTRGwnwrxt21PY2l8nFHTJTxm9dGxptcKdWYWKYXY7OYB2LdMiP
+         frYWQjFzldLXR80Klearv7+W1glUcOArqG7ZdZtBqoKvrucimDxG05RLiC6ZaPdsv4ug
+         zZ7DT23OxkVX0kQ72YFbwU1uyOnKMDaR/++yv239/+2uJbFrVjFqUMvjdF9UxcpvRo9k
+         F0EHXRNQa6NEOOOeuZnHcHfJdolcL2ScZjZN+6rnkfz613nyE1OkoTZkS37HVu6vvacs
+         JEdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7WSa5YG1jZqcHIsQqtvI5oWLoQrCTutP6LxjZjnHFZc=;
+        b=6D6QS4WA+X5DGHRV2Y7MIkCF5b+OxP+VmrUnTXm3GCWkWdvACwwKchhVFQUns/4lg5
+         6lYpmu6jmVp6d2/q2XiVau4lTPYqq4swpW3YxqhCqmzGmuByLBgb1z69Ge/Krrdbsv7J
+         EQGrxDlxn8Q8eCziLZYrxlHdMCDToLo9X99T2dNtS8RChMAHezHQRoy7qdvkcOylvaOq
+         tt45HFY+kg3KYebZcW+MS7yowdKwVlZDvWA+6bXprzamO8b+bwSqFOcpUYSxLahPoPxa
+         Qf+rkL5Ag0Ws1oEUODizQEBO6ZPzhAVKjOeYrhj8bG+6McF0QON+HGZju9YHM/I/h5qb
+         vwSw==
+X-Gm-Message-State: ANoB5plJKnm6bX1Wv5KEsVYOuUX7pLASxHX+fkl4iC/XqvkkW3c2UwHF
+        Xi/nxKU+VO7o9LhS4h70jhG/oA==
+X-Google-Smtp-Source: AA0mqf6ChXZfr6yeU+E61wLJwlKqL2Pk9XG9Z7kOZivDCk4SZpS8RfDvaC6Gc5ABVG2j5hA0TKBlTA==
+X-Received: by 2002:a2e:b4ab:0:b0:27a:25f:b274 with SMTP id q11-20020a2eb4ab000000b0027a025fb274mr4392242ljm.42.1670932591705;
+        Tue, 13 Dec 2022 03:56:31 -0800 (PST)
+Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
+        by smtp.gmail.com with ESMTPSA id 8-20020a2eb948000000b0026daf4fc0f7sm234573ljs.92.2022.12.13.03.56.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 03:56:31 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH V6 4/4] LoongArch: Enable LS2X I2C in loongson3_defconfig
-Date:   Tue, 13 Dec 2022 16:27:22 +0800
-Message-Id: <480d1d5a32a452271a8dd761550e0a1c58d31302.1670897253.git.zhoubinbin@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1670897253.git.zhoubinbin@loongson.cn>
-References: <cover.1670897253.git.zhoubinbin@loongson.cn>
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] dt-bindings: i2c: qcom,i2c-cci: Fall back to common compatibles
+Date:   Tue, 13 Dec 2022 12:56:25 +0100
+Message-Id: <20221213115628.105149-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxiFdHN5hjxtEtAA--.28300S2
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7Jry5XrWkuF48uF15Ww1fXrb_yoWxKFX_JF
-        y7Kw1kWr48JFZ7W3WIqw4rGw4DA3W7X3WFkr17Zw1xX3Waqr13JrWDAw17C3Z0ga4DWr43
-        ZaykJF9F9r18tjkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        u7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26rWY6Fy7McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
-        Aaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
-        O2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
-        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
-        Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj4
-        0_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8
-        JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0XdjtUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This is now supported, enable for Loongson-3 systems.
-Other systems are unaffected.
+Almost every compatible string in the CCI driver is a duplicate. Adjust
+the bindings to include a common (first-soc-implementing-vX) compatible
+to remove the need to keep adding superfluous compatible strings.
 
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/loongarch/configs/loongson3_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ .../devicetree/bindings/i2c/qcom,i2c-cci.yaml | 25 +++++++++++++------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
 
-diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-index cb52774c80e8..5677c4f8576e 100644
---- a/arch/loongarch/configs/loongson3_defconfig
-+++ b/arch/loongarch/configs/loongson3_defconfig
-@@ -602,6 +602,7 @@ CONFIG_HW_RANDOM_VIRTIO=m
- CONFIG_I2C_CHARDEV=y
- CONFIG_I2C_PIIX4=y
- CONFIG_I2C_GPIO=y
-+CONFIG_I2C_LS2X=y
- CONFIG_SPI=y
- CONFIG_GPIO_SYSFS=y
- CONFIG_GPIO_LOONGSON=y
+diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+index cf9f8fda595f..65cf7860a9a0 100644
+--- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
++++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+@@ -12,14 +12,23 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    enum:
+-      - qcom,msm8226-cci
+-      - qcom,msm8916-cci
+-      - qcom,msm8974-cci
+-      - qcom,msm8996-cci
+-      - qcom,sdm845-cci
+-      - qcom,sm8250-cci
+-      - qcom,sm8450-cci
++    oneOf:
++      - enum:
++          - qcom,msm8226-cci
++          - qcom,msm8974-cci
++          - qcom,msm8996-cci
++
++      - items:
++          - enum:
++              - qcom,msm8916-cci
++          - const: qcom,msm8226-cci # CCI v1
++
++      - items:
++          - enum:
++              - qcom,sdm845-cci
++              - qcom,sm8250-cci
++              - qcom,sm8450-cci
++          - const: qcom,msm8996-cci # CCI v2
+ 
+   "#address-cells":
+     const: 1
 -- 
-2.31.1
+2.39.0
 
