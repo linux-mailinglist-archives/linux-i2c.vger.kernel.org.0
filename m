@@ -2,56 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE29964B79F
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Dec 2022 15:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0C5464B7A5
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Dec 2022 15:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236011AbiLMOnJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Dec 2022 09:43:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59336 "EHLO
+        id S235590AbiLMOpk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Dec 2022 09:45:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236020AbiLMOm4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Dec 2022 09:42:56 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90BA10CF;
-        Tue, 13 Dec 2022 06:42:49 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="305785596"
-X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
-   d="scan'208";a="305785596"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 06:42:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="648578038"
-X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
-   d="scan'208";a="648578038"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 13 Dec 2022 06:42:45 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@kernel.org>)
-        id 1p56UU-009KBd-2t;
-        Tue, 13 Dec 2022 16:42:42 +0200
-Date:   Tue, 13 Dec 2022 16:42:42 +0200
-From:   Andy Shevchenko <andy@kernel.org>
-To:     Binbin Zhou <zhoubinbin@loongson.cn>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, loongarch@lists.linux.dev,
-        devicetree@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>, Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>
-Subject: Re: [PATCH V6 1/4] i2c: gpio: Add support on ACPI-based system
-Message-ID: <Y5iPYiZJP4A26NMm@smile.fi.intel.com>
-References: <cover.1670897253.git.zhoubinbin@loongson.cn>
- <de51467e355b4bae2f8aa18f833f30f9fe50de12.1670897253.git.zhoubinbin@loongson.cn>
+        with ESMTP id S235523AbiLMOpj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Dec 2022 09:45:39 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E821E48;
+        Tue, 13 Dec 2022 06:45:37 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDCc10g013804;
+        Tue, 13 Dec 2022 08:45:26 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=gYFfCadETKCKRRriGuMXvg8ILVl93d82IhYujyff2jE=;
+ b=gEJv29UF/dj70QMqINnNoAYl09vHDeeGYjz+oRIuy4WMPeddQecOpmVH2R48QA4U68Cl
+ pAVexzOdpfvlRT7vojp71s1+2Db+Z+mKh9bP5JN0zys6a2/4M9Smm4iezcW69UT7rKr8
+ 3Ec136Hd5fEG+fPYR5Wp5/mnpBJivce13xaXNV7/kVoi77meEyExvniC94ZsYnCU/LPs
+ YzxaL/k1oT/YLh2x2VyyxAGieCNpI3xf6m0gtnVOASTSezebvEPHUHOe8lV6GR0va6Tb
+ wUE9H/ii/N+he0vBFH35mIPfdEL9HDQC/PwUHdK7PwFyo3kTTa+vjTKoLXxysLGvGt4D mw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3mcrd63c06-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 08:45:26 -0600
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Tue, 13 Dec
+ 2022 08:45:23 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
+ Transport; Tue, 13 Dec 2022 08:45:23 -0600
+Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.111])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 03750477;
+        Tue, 13 Dec 2022 14:45:24 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
+        <wsa@kernel.org>
+CC:     <hdegoede@redhat.com>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH v2] i2c: designware: Fix unbalanced suspended flag
+Date:   Tue, 13 Dec 2022 14:45:24 +0000
+Message-ID: <20221213144524.368297-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de51467e355b4bae2f8aa18f833f30f9fe50de12.1670897253.git.zhoubinbin@loongson.cn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: yH8y5efmS_NuXyzqj4zBBj574k4k-sVL
+X-Proofpoint-ORIG-GUID: yH8y5efmS_NuXyzqj4zBBj574k4k-sVL
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,99 +67,107 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 04:26:55PM +0800, Binbin Zhou wrote:
-> Add support for the ACPI-based device registration, so that the driver
-> can be also enabled through ACPI table.
+Ensure that i2c_mark_adapter_suspended() is always balanced by a call to
+i2c_mark_adapter_resumed().
 
-LGTM now,
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
+dw_i2c_plat_resume() must always be called, so that
+i2c_mark_adapter_resumed() is called. This is not compatible with
+DPM_FLAG_MAY_SKIP_RESUME.
 
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> ---
->  drivers/i2c/busses/i2c-gpio.c | 28 ++++++++++++++++++----------
->  1 file changed, 18 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-gpio.c b/drivers/i2c/busses/i2c-gpio.c
-> index 0e4385a9bcf7..680936234ef8 100644
-> --- a/drivers/i2c/busses/i2c-gpio.c
-> +++ b/drivers/i2c/busses/i2c-gpio.c
-> @@ -13,9 +13,9 @@
->  #include <linux/init.h>
->  #include <linux/interrupt.h>
->  #include <linux/module.h>
-> -#include <linux/of.h>
->  #include <linux/platform_data/i2c-gpio.h>
->  #include <linux/platform_device.h>
-> +#include <linux/property.h>
->  #include <linux/slab.h>
->  
->  struct i2c_gpio_private_data {
-> @@ -300,22 +300,23 @@ static inline void i2c_gpio_fault_injector_init(struct platform_device *pdev) {}
->  static inline void i2c_gpio_fault_injector_exit(struct platform_device *pdev) {}
->  #endif /* CONFIG_I2C_GPIO_FAULT_INJECTOR*/
->  
-> -static void of_i2c_gpio_get_props(struct device_node *np,
-> -				  struct i2c_gpio_platform_data *pdata)
-> +/* Get i2c-gpio properties from DT or ACPI table */
-> +static void i2c_gpio_get_properties(struct device *dev,
-> +				     struct i2c_gpio_platform_data *pdata)
->  {
->  	u32 reg;
->  
-> -	of_property_read_u32(np, "i2c-gpio,delay-us", &pdata->udelay);
-> +	device_property_read_u32(dev, "i2c-gpio,delay-us", &pdata->udelay);
->  
-> -	if (!of_property_read_u32(np, "i2c-gpio,timeout-ms", &reg))
-> +	if (!device_property_read_u32(dev, "i2c-gpio,timeout-ms", &reg))
->  		pdata->timeout = msecs_to_jiffies(reg);
->  
->  	pdata->sda_is_open_drain =
-> -		of_property_read_bool(np, "i2c-gpio,sda-open-drain");
-> +		device_property_read_bool(dev, "i2c-gpio,sda-open-drain");
->  	pdata->scl_is_open_drain =
-> -		of_property_read_bool(np, "i2c-gpio,scl-open-drain");
-> +		device_property_read_bool(dev, "i2c-gpio,scl-open-drain");
->  	pdata->scl_is_output_only =
-> -		of_property_read_bool(np, "i2c-gpio,scl-output-only");
-> +		device_property_read_bool(dev, "i2c-gpio,scl-output-only");
->  }
->  
->  static struct gpio_desc *i2c_gpio_get_desc(struct device *dev,
-> @@ -373,8 +374,8 @@ static int i2c_gpio_probe(struct platform_device *pdev)
->  	bit_data = &priv->bit_data;
->  	pdata = &priv->pdata;
->  
-> -	if (np) {
-> -		of_i2c_gpio_get_props(np, pdata);
-> +	if (dev_fwnode(dev)) {
-> +		i2c_gpio_get_properties(dev, pdata);
->  	} else {
->  		/*
->  		 * If all platform data settings are zero it is OK
-> @@ -489,10 +490,17 @@ static const struct of_device_id i2c_gpio_dt_ids[] = {
->  
->  MODULE_DEVICE_TABLE(of, i2c_gpio_dt_ids);
->  
-> +static const struct acpi_device_id i2c_gpio_acpi_match[] = {
-> +	{ "LOON0005" }, /* LoongArch */
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(acpi, i2c_gpio_acpi_match);
-> +
->  static struct platform_driver i2c_gpio_driver = {
->  	.driver		= {
->  		.name	= "i2c-gpio",
->  		.of_match_table	= i2c_gpio_dt_ids,
-> +		.acpi_match_table = i2c_gpio_acpi_match,
->  	},
->  	.probe		= i2c_gpio_probe,
->  	.remove		= i2c_gpio_remove,
-> -- 
-> 2.31.1
-> 
+The pairing of pm_runtime_force_suspend() and pm_runtime_force_resume()
+can replace this. If nothing is using the driver, and it is not currently
+suspended, it will be put into runtime-suspend and will be left in
+runtime-suspend during the system resume.
 
+pm_runtime_force_suspend() is not compatible with DPM_FLAG_SMART_SUSPEND
+so this must also be removed. DPM_FLAG_SMART_SUSPEND will set the device
+back to pm_runtime_active() during resume_noirq if it cannot skip resume.
+This would lead to the inconsistent state where the driver runtime_suspend
+has been called (by force_suspend()) but it is marked active (by PM core).
+
+The unbalanced suspended flag was introduced by
+commit c57813b8b288 ("i2c: designware: Lock the adapter while setting the
+suspended flag")
+
+Before that commit, the system and runtime PM used the same functions. The
+DPM_FLAG_MAY_SKIP_RESUME was used to skip the system resume if the driver
+had been in runtime-suspend. If system resume was skipped, the suspended
+flag would be cleared by the next runtime resume. The check of the
+suspended flag was _after_ the call to pm_runtime_get_sync() in
+i2c_dw_xfer(). So either a system resume or a runtime resume would clear
+the flag before it was checked.
+
+Having introduced the unbalanced suspended flag with that commit, a further
+commit 80704a84a9f8 ("i2c: designware: Use the
+i2c_mark_adapter_suspended/resumed() helpers")
+
+changed from using a local suspended flag to using the
+i2c_mark_adapter_suspended/resumed() functions. These use a flag that is
+checked by I2C core code before issuing the transfer to the bus driver, so
+there was no opportunity for the bus driver to runtime resume itself before
+the flag check.
+
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+Fixes: c57813b8b288 ("i2c: designware: Lock the adapter while setting the suspended flag")
+---
+ drivers/i2c/busses/i2c-designware-platdrv.c | 26 ++++++++++-----------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index ba043b547393..590503e56bd0 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -349,17 +349,7 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+ 	adap->dev.of_node = pdev->dev.of_node;
+ 	adap->nr = -1;
+ 
+-	if (dev->flags & ACCESS_NO_IRQ_SUSPEND) {
+-		dev_pm_set_driver_flags(&pdev->dev,
+-					DPM_FLAG_SMART_PREPARE |
+-					DPM_FLAG_MAY_SKIP_RESUME);
+-	} else {
+-		dev_pm_set_driver_flags(&pdev->dev,
+-					DPM_FLAG_SMART_PREPARE |
+-					DPM_FLAG_SMART_SUSPEND |
+-					DPM_FLAG_MAY_SKIP_RESUME);
+-	}
+-
++	dev_pm_set_driver_flags(&pdev->dev, DPM_FLAG_SMART_PREPARE);
+ 	device_enable_async_suspend(&pdev->dev);
+ 
+ 	/* The code below assumes runtime PM to be disabled. */
+@@ -453,10 +443,15 @@ static int dw_i2c_plat_runtime_suspend(struct device *dev)
+ static int __maybe_unused dw_i2c_plat_suspend(struct device *dev)
+ {
+ 	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
++	int ret;
++
++	ret = pm_runtime_force_suspend(dev);
++	if (ret)
++		return ret;
+ 
+ 	i2c_mark_adapter_suspended(&i_dev->adapter);
+ 
+-	return dw_i2c_plat_runtime_suspend(dev);
++	return 0;
+ }
+ 
+ static int dw_i2c_plat_runtime_resume(struct device *dev)
+@@ -474,8 +469,13 @@ static int dw_i2c_plat_runtime_resume(struct device *dev)
+ static int __maybe_unused dw_i2c_plat_resume(struct device *dev)
+ {
+ 	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
++	int ret;
++
++	/* Resume if pm_runtime_force_suspend() suspended. */
++	ret = pm_runtime_force_resume(dev);
++	if (ret)
++		return ret;
+ 
+-	dw_i2c_plat_runtime_resume(dev);
+ 	i2c_mark_adapter_resumed(&i_dev->adapter);
+ 
+ 	return 0;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.30.2
 
