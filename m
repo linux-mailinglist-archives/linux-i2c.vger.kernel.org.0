@@ -2,117 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A738964BD42
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Dec 2022 20:28:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A0564C389
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Dec 2022 06:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235640AbiLMT2c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Dec 2022 14:28:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
+        id S229974AbiLNFgt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Dec 2022 00:36:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236509AbiLMT2a (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Dec 2022 14:28:30 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7D724085
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Dec 2022 11:28:28 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id p36so6603146lfa.12
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Dec 2022 11:28:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CFrcfOUYi3nTn96rxqRBPL4KLleaoJ4XIQjtuefCT10=;
-        b=TN7k30kv0Hol7Qz25R2Jzy0vyNTkSZ8Ib87jLudvkEa0UCRlC/Wz0z9xV1BeEGrJWN
-         hqECeJYUzyTDS3pIJcT/nz7TxoXmmo1aYgJA9S5Ldp2dTjBbPHp3CmWzPtB2S8uWxRLO
-         LcOucSYV9vHVxOkApgicHo99v3AbNmCIFKoaKWmuZek07GgjFI6PIvaMNQxSIvT7CENS
-         zgPV4N/mhYrBoRgKOH6hT44hWMNsKcJVvjT90N+eD+I1YStbRHEeT1Qbb41F5867Eirb
-         BaCB7FGqfVXJ/AW/5brdLk5rPwwCIyEDaiLJPiMrkOgGigDmpFEdbm9BRQ60TSkaPb7K
-         +kUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CFrcfOUYi3nTn96rxqRBPL4KLleaoJ4XIQjtuefCT10=;
-        b=uz5utfUjnaaWAhX2cRX21MTNJpz93pdzuKAf5mLxGuNuU8tl5GSNbikSdG+khThUlX
-         Mryr5JYWhcl6ISYfCcQJfSXBbklcuhodMVCJIB6Des4Cn+/Ykr/EQl9uzgBQXJjvhyJ5
-         SjXWSmad62u5hFjcn3M2hAajOp0X8cP+Sb+7A95ID7+/UuwJTNnFWgLgt8kfVzW6JlDJ
-         /b4/DffFN53CcapXwomQiP8UvBR3Wzc0dn65f6FixqSEJRLrW6Vv5LptkdPyCVD7nEA4
-         tgml3H8b8rtiPIEcPe8uZS2o3ZieAbUkTSa8OikfO4wo4tQVDjk0rejxUeXgGgNCApEv
-         DLAw==
-X-Gm-Message-State: ANoB5pnnYHVXt+1LnqDW92WYDCOssUUKrB+WaozwJ1NOcZQI1EEfNPOn
-        UKKUycllrdDmMXjW9xnzhhBZhQ==
-X-Google-Smtp-Source: AA0mqf6rsUdXU64xn6m0QEWHsRnUq/TALCX5FjMIBfN4toCN9uU3ct9+4W/DM0TYi1Le4odI4jKaGw==
-X-Received: by 2002:ac2:4154:0:b0:4a4:86ff:9562 with SMTP id c20-20020ac24154000000b004a486ff9562mr5361647lfi.38.1670959706958;
-        Tue, 13 Dec 2022 11:28:26 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id g27-20020a2ea4bb000000b002797e41e1bdsm377107ljm.86.2022.12.13.11.28.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 11:28:26 -0800 (PST)
-Message-ID: <c1a2634e-8917-e70a-ca7a-61363dea62de@linaro.org>
-Date:   Tue, 13 Dec 2022 20:28:25 +0100
+        with ESMTP id S229446AbiLNFgs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Dec 2022 00:36:48 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6AB15A2A;
+        Tue, 13 Dec 2022 21:36:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670996207; x=1702532207;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pMAN2skTgm3pv4t9bp9i7xoIv6IlYAxA6BqR2zB9vBw=;
+  b=bBE/w+ErG5Y8TaytpRTwZ0xi9qq0qx2KDmMgJFfVXoXBNrtDdPFADo/f
+   2kFPpnL8cmBgnL1i8NGgGWS12l2IJ0CaSpWeuDeyqFJZBV+bHkpBS6hdI
+   Wk1PEGrrB0gvZjvYi/FAAzPBTCJK45t9Fpvjzd1F2d4gb8riJ8/opeTUr
+   lF/OAAKEPZOBjTVm7ket6bN29kfBaEanrrh/0bl70JaNeyfxb87oSBjE0
+   JlHsPZ3foIZYcD+5Ym6CfSofokLVXhZQDC9u5GOsp1v44rT9Ft0XgUXtt
+   82SYzWv+gN/KvA/n0poJPGbc0TljyOQ8FKSsmh2+C99cBSq8H2zCJ0HxL
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="315955570"
+X-IronPort-AV: E=Sophos;i="5.96,243,1665471600"; 
+   d="scan'208";a="315955570"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 21:36:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="648865042"
+X-IronPort-AV: E=Sophos;i="5.96,243,1665471600"; 
+   d="scan'208";a="648865042"
+Received: from conghui.sh.intel.com (HELO localhost) ([10.239.146.182])
+  by orsmga002.jf.intel.com with ESMTP; 13 Dec 2022 21:36:42 -0800
+From:   Conghui <conghui.chen@intel.com>
+To:     wsa@kernel.org, mst@redhat.com, asowang@redhat.com,
+        viresh.kumar@linaro.org
+Cc:     linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Conghui <conghui.chen@intel.com>,
+        Jian Jun Chen <jian.jun.chen@intel.com>
+Subject: [PATCH] MAINTAINERS: Update maintainer list for virtio i2c
+Date:   Wed, 14 Dec 2022 13:36:31 +0800
+Message-Id: <20221214053631.3225164-1-conghui.chen@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 1/6] dt-bindings: i2c: qcom,i2c-cci: Fall back to
- common compatibles
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221213183305.544644-1-konrad.dybcio@linaro.org>
- <91e0e86c-480b-41a4-e4d5-21d59199e430@linaro.org>
- <96fd8fc1-96ba-2efe-f6ae-5786131d9c94@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <96fd8fc1-96ba-2efe-f6ae-5786131d9c94@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 13/12/2022 20:20, Konrad Dybcio wrote:
-> 
->>
->>>      then:
->>>        properties:
->>>          clocks:
->>> @@ -105,10 +116,12 @@ allOf:
->>>    - if:
->>>        properties:
->>>          compatible:
->>> -          contains:
->>> -            enum:
->>> -              - qcom,msm8916-cci
->>> -              - qcom,msm8996-cci
->>> +          oneOf:
->>> +            - contains:
->>> +                enum:
->>> +                  - qcom,msm8916-cci
->>> +
->>> +            - const: qcom,msm8996-cci
->>
->> The same comment.
-> e.g. the 845 example contains 8996 but does not fall in this category,
-> reverting this change causes errors.
+This updates the maintainer for virtio i2c drvier
 
-Ah, I see, indeed. Looks reasonable:
+Signed-off-by: Conghui <conghui.chen@intel.com>
+Acked-by: Jian Jun Chen <jian.jun.chen@intel.com>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a8c8f6b42436..44747f4641a6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -21920,7 +21920,7 @@ F:	include/uapi/linux/virtio_snd.h
+ F:	sound/virtio/*
+ 
+ VIRTIO I2C DRIVER
+-M:	Conghui Chen <conghui.chen@intel.com>
++M:	Jian Jun Chen <jian.jun.chen@intel.com>
+ M:	Viresh Kumar <viresh.kumar@linaro.org>
+ L:	linux-i2c@vger.kernel.org
+ L:	virtualization@lists.linux-foundation.org
+-- 
+2.25.1
 
