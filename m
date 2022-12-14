@@ -2,117 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DEDE64C6F8
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Dec 2022 11:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CDA64C713
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Dec 2022 11:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237674AbiLNKUq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Dec 2022 05:20:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
+        id S237866AbiLNK1W (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Dec 2022 05:27:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237645AbiLNKUm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Dec 2022 05:20:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E9414D1F;
-        Wed, 14 Dec 2022 02:20:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8DF4AB8172C;
-        Wed, 14 Dec 2022 10:20:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 064DBC433D2;
-        Wed, 14 Dec 2022 10:20:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671013239;
-        bh=cMUFvzdF/SdFZnd5UFrx0zQ0EoQivvDMwDvS/2E4Vfo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aycZdjMsq7XiJNYlhdvzvOaElYtQU7bIytNisyHKHfUxu0s1dVhrLdWyLf7ZhFv5a
-         a7Z0aa3boxhHmpcjQNvkK1hFDKBRPv8W2P2t0AKpLWov4dMR7X+ecxkElUmcte9cP6
-         CUXsrHaIbCBRicyXJGIHXgKxKQAlikqD8noilUp3y+3h5oBlUJf0Xk/3JYOmn8MALL
-         qWiUV+CHmlZBQ5ieorMW2t4BtPF+/Im4LvOLEgomuyVc9QsD8Jexkxkyd568L1uvf/
-         Bs4AFAZtsgYoi2zVL81B/UaDgNL/d4zmJPyNHnppEIg1rjCDHG7lZL/OlORuRX3LlB
-         tTGYdctBN7POw==
-Date:   Wed, 14 Dec 2022 11:20:34 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     mst@redhat.com, asowang@redhat.com,
-        Conghui <conghui.chen@intel.com>, linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Jian Jun Chen <jian.jun.chen@intel.com>
-Subject: Re: [PATCH] MAINTAINERS: Update maintainer list for virtio i2c
-Message-ID: <Y5mjcuCRP45ynJis@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>, mst@redhat.com,
-        asowang@redhat.com, Conghui <conghui.chen@intel.com>,
-        linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Jian Jun Chen <jian.jun.chen@intel.com>
-References: <20221214053631.3225164-1-conghui.chen@intel.com>
- <20221214063107.fazrfq3n26hw4ndl@vireshk-i7>
+        with ESMTP id S229662AbiLNK1V (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Dec 2022 05:27:21 -0500
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D3C1CB33;
+        Wed, 14 Dec 2022 02:27:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1671013641; x=1702549641;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1cznQI0aG8Ae2+yWtqv5UxrgHIiBQCMhbfbLMCPY70I=;
+  b=MGxsKR0cEQa90F3ndfIfG1WrOlJTa+w0JzG5DibeNZ8otUtYzjAB1dU7
+   +pRK462EQryZWVE0ZYyZ+TJgMKvtdzlNYuV5Y/Cdc2sXN1VXQMhh9c2we
+   NzMt8ynBWe/X8GiSV30FBC62dpI5bunx0mKBsfRIZ0gapdW9B5nWZZNeo
+   U=;
+X-IronPort-AV: E=Sophos;i="5.96,244,1665446400"; 
+   d="scan'208";a="273343457"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-54a853e6.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 10:27:18 +0000
+Received: from EX13D25EUA004.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1a-m6i4x-54a853e6.us-east-1.amazon.com (Postfix) with ESMTPS id 4D17042788;
+        Wed, 14 Dec 2022 10:27:16 +0000 (UTC)
+Received: from EX19D019EUA002.ant.amazon.com (10.252.50.84) by
+ EX13D25EUA004.ant.amazon.com (10.43.165.12) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Wed, 14 Dec 2022 10:27:15 +0000
+Received: from dev-dsk-hhhawa-1b-84e0d7ff.eu-west-1.amazon.com (10.43.161.114)
+ by EX19D019EUA002.ant.amazon.com (10.252.50.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.20; Wed, 14 Dec 2022 10:27:11 +0000
+From:   Hanna Hawa <hhhawa@amazon.com>
+To:     <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
+        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <farbere@amazon.com>, <itamark@amazon.com>, <hhhawa@amazon.com>
+Subject: [PATCH 1/1] i2c: designware: add pinctrl for recovery info as an option
+Date:   Wed, 14 Dec 2022 10:27:07 +0000
+Message-ID: <20221214102707.60018-1-hhhawa@amazon.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="OI2D2tNcAW6qK5VE"
-Content-Disposition: inline
-In-Reply-To: <20221214063107.fazrfq3n26hw4ndl@vireshk-i7>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.161.114]
+X-ClientProxiedBy: EX13D31UWC001.ant.amazon.com (10.43.162.152) To
+ EX19D019EUA002.ant.amazon.com (10.252.50.84)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+The current implementation of designware recovery mechanism fit for
+specific device (Intel / Altera Cyclone V SOC) which have two separated
+"wired" GPIOs to the i2c bus via the SOC FPGA for the i2c recovery.
 
---OI2D2tNcAW6qK5VE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This change add ability to get the pinctrl for the i2c recovery in order
+to switch between pin configuration (I2C and GPIO functionality) if the
+pinctrl exists.
 
-Hi Viresh,
+Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
+---
+ drivers/i2c/busses/i2c-designware-master.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-> I understand that it is okay to pass the maintainership, within the
-> company, for platform specific parts from one person to another, since
-> they have the best knowledge of the code and are the only one
-> interested in maintaining it too.
->=20
-> But what is the rule for generic drivers like this one ?
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index dc3c5a15a95b..478318b1d35f 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -17,6 +17,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
++#include <linux/pinctrl/consumer.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
+@@ -832,6 +833,14 @@ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
+ 	struct i2c_adapter *adap = &dev->adapter;
+ 	struct gpio_desc *gpio;
+ 
++	rinfo->pinctrl = devm_pinctrl_get(dev->dev);
++	if (IS_ERR(rinfo->pinctrl)) {
++		if (PTR_ERR(rinfo->pinctrl) == -EPROBE_DEFER)
++			return -EPROBE_DEFER;
++		rinfo->pinctrl = NULL;
++		dev_dbg(dev->dev, "can't get pinctrl for i2c recovery\n");
++	}
++
+ 	gpio = devm_gpiod_get_optional(dev->dev, "scl", GPIOD_OUT_HIGH);
+ 	if (IS_ERR_OR_NULL(gpio))
+ 		return PTR_ERR_OR_ZERO(gpio);
+-- 
+2.38.1
 
-Dunno if this is really a rule, but if a maintainer steps out and makes
-sure there is someone to pick up the work, this is more than welcome.
-Way better than a stale entry in the MAINTAINERS file.
-
-I mean, it does not limit the chance to have further maintainers, for
-example. I believe in meritocracy here. Those who do and collaborate,
-shall get responsibility. If not, then not. We can fix this, too, if
-needed.
-
-What is the reason for your question?
-
-All the best,
-
-   Wolfram
-
-
---OI2D2tNcAW6qK5VE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIyBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmOZo24ACgkQFA3kzBSg
-KbbM9A/3bFT2aF50TuVky2pvvulpZ2yDFxu64+b00PQNkjwC6+PWUVJp+k05OjfP
-BgL7cPHl+1p8+VEVLSJcMXtYTToCOaOV2UTm2f+M4MUoI/DgzWhyouz+3LBFrQJh
-6eu2zAU1VO+FYMhILSzeqpck+6L6k1vZDq5sLa/Kz+jiFbVbvZsj0Y747Bj2L/Ul
-G1ysStKXSuhOvbgTthC1j36D1uy4DA5+PPXadbRhIcsI9N2REwZW/XgmrTmeFJJi
-qWV0scCxeCX5iF5vCD/IgmmFUGbKDUZltIK2KS9d3dI2ZXqsBkzxRTEWzbRaNUt6
-tO9YOHypb5majOsoMSPuflKDFTxexXpSasxm3f9flUBGTorxe4+Vis2UvZ1mNyWj
-xEFQkBVPSi5tYWeUG2NGSEi3vLNaTBkJB6L5Hhf01pHtda4FLdrDTGYM3MEjG9oP
-4AAk7/nLmyP3l1Mjqh5mC5n6IxRh5jtpsXZrQRvwK/lPxu4JZbbPGGMMcOyaEAzq
-9IF1MuJI9o8jIR3+m+O9Ry8/vR+DjN5GgvIa9U0XBMvxbVI8NEjs/2Kebd5WCqNf
-YPDimxB3KkauPe6MxjAfDwmlQMNrKlf73PWXqVxvNd2d4r92HXXAFCShN5hEYjrB
-TY1OdBN/AjWTJnRWU9BrCBwUlfrUV3/MdSB0sv3Y7qk0nPQuWw==
-=uuEC
------END PGP SIGNATURE-----
-
---OI2D2tNcAW6qK5VE--
