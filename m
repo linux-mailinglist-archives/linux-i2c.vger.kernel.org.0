@@ -2,108 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FAF64C3C9
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Dec 2022 07:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FFA264C3E4
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Dec 2022 07:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237260AbiLNGbQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Dec 2022 01:31:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55262 "EHLO
+        id S237180AbiLNGgz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Dec 2022 01:36:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237152AbiLNGbM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Dec 2022 01:31:12 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591F527CED
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Dec 2022 22:31:11 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id 79so1332440pgf.11
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Dec 2022 22:31:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HQixYPUGx3dNHQMvwFeapmdpykALcgOAixIE0qar/eQ=;
-        b=hObCXhW5iEBR2JFX/mOosGX4M4dNVoaPDKLQuYphAMJR2iH1N0ZyLeowQm8rX0Tp6p
-         NEQqrI4Pkpj2tITzrxE1la/qkpmrpXzeqiB6D4LWqaCOMG2dn7yXC9JCDb4VW5yCWqQ9
-         zynVEqWHHjV3Lu/urILjfNimtEABgHwDj6CJ9YsZxRIGUhMh48PgHPCPTKdcf/I8MQf1
-         jwyoWmnci25Q6vx59fvkTEZdf5PRZ2Q6T8CNWfLTPaHj2y21FgZnVH5RMZpf71qzWE2w
-         tif9t28PD/Aef+evFGr+dfo5S7DF0rruRHoG1VZ+UN6W6kzOGElYgoFEsCr5Kx3qtIrQ
-         oXKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HQixYPUGx3dNHQMvwFeapmdpykALcgOAixIE0qar/eQ=;
-        b=EwHWTyqL5pTZkGlwqX0iNAkFjdlJ3MvDh4byCGk6h9tr9msUPTa8SEPie/i0f3ueVg
-         cdjjG0TUpPgd5YFiQKRwflQzZD7iEGHRm+7bRSitI59oxkDygA8uButnd3IDONcKL8hU
-         qYUD9so+dNE+IX2DWpqcDTem0b9ZnBJSAE3VVNFOjYLCto365MfFLNcShrP97kGfJke0
-         6NvM1yrKFTfcp6cowpNfFjfj82tRRD3LSxFQgf0QpnTjOpDpkssRqIjQE0ibnQsGiNEv
-         SDYjPG90EquJG5ijqTKo8vOlBFv4M8PDUcv7VXSZGz27uBX7dI3y8+jsqFCTOR19mBaF
-         GMKQ==
-X-Gm-Message-State: ANoB5pl7uyr8EhQEenSF/DFj9F1KyN6TsbXQMjZkibLKFYQYy5vNLMm0
-        uU4f8lTGnHZmbfbHWPAHu9FEdg==
-X-Google-Smtp-Source: AA0mqf70gvWGruQzLDmnl4KVdvtPjvp7ABTpAaEQSwPuOQ6LDXC2rUoVyUX0jd6/rE8xHeazM6qp3Q==
-X-Received: by 2002:aa7:8f2d:0:b0:576:8027:a2fc with SMTP id y13-20020aa78f2d000000b005768027a2fcmr23462513pfr.12.1670999470608;
-        Tue, 13 Dec 2022 22:31:10 -0800 (PST)
-Received: from localhost ([122.172.87.149])
-        by smtp.gmail.com with ESMTPSA id f5-20020aa79685000000b0057726bd7335sm8632515pfk.121.2022.12.13.22.31.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 22:31:09 -0800 (PST)
-Date:   Wed, 14 Dec 2022 12:01:07 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     wsa@kernel.org
-Cc:     mst@redhat.com, asowang@redhat.com,
-        Conghui <conghui.chen@intel.com>, linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Jian Jun Chen <jian.jun.chen@intel.com>
-Subject: Re: [PATCH] MAINTAINERS: Update maintainer list for virtio i2c
-Message-ID: <20221214063107.fazrfq3n26hw4ndl@vireshk-i7>
-References: <20221214053631.3225164-1-conghui.chen@intel.com>
+        with ESMTP id S229540AbiLNGgy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Dec 2022 01:36:54 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EF11D66C;
+        Tue, 13 Dec 2022 22:36:53 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3894B4A7;
+        Wed, 14 Dec 2022 07:36:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1670999811;
+        bh=pqZLJjSLZAKxhBkbCIz4ymcYgzML4TSQQaUHOIzQK9c=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=stcPsomhROJ0IEAxFOqvYJcwyKvlwiSHYq63GqfXtMEoGIyb6+92BaLTJNZbXU/CA
+         26Xk9yrjqHeJP3crOTBCTIKMzfXUAu3JuY7qmEv7qVlSLId8AgwkvMfyaHFhPasYPE
+         yYNS0g7Bqg77U0SFtLaNatxSca2qXYlR7vixmksg=
+Message-ID: <7ddd576f-6e8a-7581-178c-2e8575227811@ideasonboard.com>
+Date:   Wed, 14 Dec 2022 08:36:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221214053631.3225164-1-conghui.chen@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v5 7/8] media: i2c: add DS90UB913 driver
+Content-Language: en-US
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
+ <20221208104006.316606-8-tomi.valkeinen@ideasonboard.com>
+ <Y5YiazDtaxtLJyL0@pendragon.ideasonboard.com>
+ <4d349785-ca37-d930-db3c-2581bba9fde0@ideasonboard.com>
+In-Reply-To: <4d349785-ca37-d930-db3c-2581bba9fde0@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 14-12-22, 13:36, Conghui wrote:
-> This updates the maintainer for virtio i2c drvier
+On 14/12/2022 08:29, Tomi Valkeinen wrote:
+
+>> wondering if the struct device of the DS90UB913 could be passed instead
+>> of the port, to avoid passing the port throught
+>> ds90ub9xx_platform_data.
 > 
-> Signed-off-by: Conghui <conghui.chen@intel.com>
-> Acked-by: Jian Jun Chen <jian.jun.chen@intel.com>
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a8c8f6b42436..44747f4641a6 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21920,7 +21920,7 @@ F:	include/uapi/linux/virtio_snd.h
->  F:	sound/virtio/*
->  
->  VIRTIO I2C DRIVER
-> -M:	Conghui Chen <conghui.chen@intel.com>
-> +M:	Jian Jun Chen <jian.jun.chen@intel.com>
->  M:	Viresh Kumar <viresh.kumar@linaro.org>
->  L:	linux-i2c@vger.kernel.org
->  L:	virtualization@lists.linux-foundation.org
+> Interesting thought. That would limit the number of remote i2c busses to 
+> one, though. Not a problem for FPD-Link, but I wonder if that's assuming 
+> too much for the future users. Then again, this is an in-kernel API so 
+> we could extend it later if needed. So I'll try this out and see if I 
+> hit any issues.
 
-Wolfram,
+Right, so the issue with this one would be that it would prevent a 
+single device uses. E.g. a single chip which acts as an ATR (similar to 
+i2c-mux chips), i.e. it contains both the main and the remote i2c busses.
 
-I understand that it is okay to pass the maintainership, within the
-company, for platform specific parts from one person to another, since
-they have the best knowledge of the code and are the only one
-interested in maintaining it too.
+  Tomi
 
-But what is the rule for generic drivers like this one ?
-
--- 
-viresh
