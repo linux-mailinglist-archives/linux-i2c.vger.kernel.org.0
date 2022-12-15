@@ -2,140 +2,302 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8642A64DDD2
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Dec 2022 16:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B7764E005
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Dec 2022 18:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiLOPaF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 15 Dec 2022 10:30:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
+        id S229825AbiLORxe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 15 Dec 2022 12:53:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiLOPaE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 15 Dec 2022 10:30:04 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D711706E;
-        Thu, 15 Dec 2022 07:30:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671118203; x=1702654203;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=9I9dS8c034MSDg9tfftG+xXCC+6/p97CGRGk/kyHm3c=;
-  b=JrjzWUGGM4H3ECJ81o7If1YxmEf6s0BwTh/TdtrVlMFbL7eyCy6za7bz
-   e4Mh0p4pKvzb94M3gB4mDMW980UNWE69zhCwT6McjlI2kZmxPaWF/NAq3
-   +eBk2ZIOgMKsSD2OKFeCvApGXdwfMcFmxR3tOAi8Isem4VkS1RqE9wNs5
-   pFbtVpLps8uEBadhFJc26ELz6Hojis+heBsbSkP+BzwX6UkmFmis0Cozr
-   KwZxamH7OrEwiZk0Q3ZVHOE1Bh/T+YvHCXG+7pfNtt97H/EtSxsDZg1cd
-   arM+qCbs8yGVLplk145W207DX8jBXnCHT2dDz0jTZzaFoMlVbVP2fXOld
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="345791514"
-X-IronPort-AV: E=Sophos;i="5.96,247,1665471600"; 
-   d="scan'208";a="345791514"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 07:22:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="642955361"
-X-IronPort-AV: E=Sophos;i="5.96,247,1665471600"; 
-   d="scan'208";a="642955361"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 15 Dec 2022 07:22:11 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p5q3l-00AOIm-2R;
-        Thu, 15 Dec 2022 17:22:09 +0200
-Date:   Thu, 15 Dec 2022 17:22:09 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     "Hawa, Hanna" <hhhawa@amazon.com>, Wolfram Sang <wsa@kernel.org>,
-        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
-        jsd@semihalf.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dwmw@amazon.co.uk, benh@amazon.com,
-        ronenk@amazon.com, talel@amazon.com, jonnyc@amazon.com,
-        hanochu@amazon.com, farbere@amazon.com, itamark@amazon.com
-Subject: Re: [PATCH v2 1/1] i2c: designware: set pinctrl recovery information
- from device pinctrl
-Message-ID: <Y5s7ofYGaec8+zIA@smile.fi.intel.com>
-References: <20221214142725.23881-1-hhhawa@amazon.com>
- <Y5n1U1lYbcbJ5U1k@smile.fi.intel.com>
- <efa9171f-98ac-f518-e59e-f6c4d7d3d4e6@amazon.com>
- <Y5r2pZhe17dVBMme@smile.fi.intel.com>
- <CACRpkdbawj+Wg2D75MdZavcfyjRa2JRAvqROnNLVH7oMcZTdMg@mail.gmail.com>
+        with ESMTP id S229544AbiLORxd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 15 Dec 2022 12:53:33 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CD7220FF;
+        Thu, 15 Dec 2022 09:53:30 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p5sQC-0003bG-9B; Thu, 15 Dec 2022 18:53:28 +0100
+Message-ID: <338128fa-69dc-1eaa-3a18-c94565ec8380@leemhuis.info>
+Date:   Thu, 15 Dec 2022 18:53:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdbawj+Wg2D75MdZavcfyjRa2JRAvqROnNLVH7oMcZTdMg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: Regression: at24 eeprom writing times out on sama5d3
+Content-Language: en-US, de-DE
+To:     Peter Rosin <peda@axentia.se>, Codrin.Ciubotariu@microchip.com,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     kamel.bouhara@bootlin.com, alexandre.belloni@bootlin.com,
+        wsa@kernel.org, Ludovic.Desroches@microchip.com,
+        robh+dt@kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <074b39c5-55fc-2bc1-072d-aef1070e284d@axentia.se>
+ <2bb4868b-90ab-887e-bf13-9de8b79231bd@microchip.com>
+ <38dedc92-62a2-7365-6fda-95d6404be749@axentia.se>
+ <3503471d-2d5e-572b-39e7-d715a909749d@axentia.se>
+ <5800be99-3569-6edd-5c71-9e6f1498dc3b@leemhuis.info>
+ <2fcfa811-ce5c-9fc8-9837-753299794560@axentia.se>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <2fcfa811-ce5c-9fc8-9837-753299794560@axentia.se>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1671126811;2c6dbd8c;
+X-HE-SMSGID: 1p5sQC-0003bG-9B
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 03:06:13PM +0100, Linus Walleij wrote:
-> On Thu, Dec 15, 2022 at 11:28 AM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Thu, Dec 15, 2022 at 10:15:35AM +0200, Hawa, Hanna wrote:
-> > > On 12/14/2022 6:09 PM, Andy Shevchenko wrote:
+Hi, this is your Linux kernel regression tracker.
 
-...
-
-> > > > > +     if (dev->dev->pins && dev->dev->pins->p)
-> > > > > +             rinfo->pinctrl = dev->dev->pins->p;
-> > > > Hmm... I don't see how this field is being used.
-> > > > Can you elaborate?
-> > >
-> > > This field is used in i2c_generic_scl_recovery(), if it's not NULL then the
-> > > flow will set the state to GPIO before running the recovery mechanism.
-> > >         if (bri->pinctrl)
-> > >                 pinctrl_select_state(bri->pinctrl, bri->pins_gpio);
-> >
-> > OK, but why that function doesn't use the dev->pins->p if it's defined?
-> > (As a fallback when rinfo->pinctrl is NULL.)
+On 08.09.22 15:59, Peter Rosin wrote:
+> Hi!
 > 
-> I don't understand the context of these things so can't say much
-> about it.
-
-Main question here is that, is it possible that GPIOs that back up I²C bus are
-on the different pin control device that the bus pins themselves?
-
-And while writing above I think it may be the case if we use additional
-GPIO pins over the I²C bus for purpose of recovery. In such case the pin control
-device can be different.
-
-At the same time, the fallback option might still work, in case the pinctrl not
-overridden and I²C bus has backed GPIO function (on SCL/SDA).
-
-...
-
-> > > I saw that that the change failed in complication for SPARC architecture, as
-> > > the pins field is wraparound with CONFIG_PINCTRL in device struct. I though
-> > > on two options to solve the compilation error, first by adding wraparound of
-> > > CONFIG_PINCTRL when accessing the pins field. And the second option is to
-> > > add get function in pinctrl/devinfo.h file, which return the pins field, or
-> > > NULL in case the PINCTRL is not defined. Which option you think we can go
-> > > with?
-> >
-> > Getter with a stub sounds better to me, so you won't access some device core
-> > fields.
-> >
-> > Linus, what do you think about all these (including previous paragraph)?
+> 2022-09-08 at 14:06, Thorsten Leemhuis wrote:
+>> Hi, this is your Linux kernel regression tracker. Top-posting for once,
+>> to make this easily accessible to everyone.
+>>
+>> Peter, Codrin, could you help me out here please: I still have the
+>> regression report from Peter that started this thread in the list of
+>> tracked issues. From Peter's last msg quoted below it seems the thread
+>> just faded out without the regression being fixed. Or was it? If not:
+>> what can we do to finally get this resolved?
 > 
-> A getter may be a good solution, it depends, it can also be pushed
-> somewhere local in the designware i2c driver can it not?
+> No, it is not resolved that I know of. We are only writing during
+> production, but are working around it by verifying and looping back.
+> Sometimes it takes surprisingly long for the loop to finish, but
+> it's not a huge deal. But it is of course not completely satisfying
+> either...
+> 
+> Reading is never a problem, so post-production behavior is sane.
 
-Yeah, but my point in the above paragraph that it uses the generic recovery
-mechanism which may (or may not?) utilise the same pin control as I²C bus
-sitting on).
+I still have this regression that Peter reported in late July on my
+list. :-(
 
-> I am thinking that the rest of the code that is using that field is
-> certainly not going to work without pinctrl either.
+Codrin (and maybe Wolfram), could you provide a update please? Afaics
+this is the state of things (please correct me if I'm wrong!): In an
+earlier mail
+(https://lore.kernel.org/lkml/38dedc92-62a2-7365-6fda-95d6404be749@axentia.se/
+) of this thread Peter stated that the following patch set Codrin posted
+mid 2021 helped:
+https://lore.kernel.org/all/20210727111554.1338832-1-codrin.ciubotariu@microchip.com/
 
--- 
-With Best Regards,
-Andy Shevchenko
+There where a few review comments from Wolfram, but looks like then
+things stalled. Can we somehow get this rolling again to finally get
+this regression fixed?
 
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
+
+>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>>
+>> P.S.: As the Linux kernel's regression tracker I deal with a lot of
+>> reports and sometimes miss something important when writing mails like
+>> this. If that's the case here, don't hesitate to tell me in a public
+>> reply, it's in everyone's interest to set the public record straight.
+>>
+>> On 30.06.22 09:44, Peter Rosin wrote:
+>>> 2022-06-10 at 22:51, Peter Rosin wrote:
+>>>> 2022-06-10 at 09:35, Codrin.Ciubotariu@microchip.com wrote:
+>>>>> On 09.06.2022 17:28, Peter Rosin wrote:
+>>>>>>
+>>>>>> I have not actually bisected this issue but reverting the effects of
+>>>>>> patch a4bd8da893a3 ("ARM: dts: at91: sama5d3: add i2c gpio pinctrl")
+>>>>>> makes the problem go away.
+>>>>>>
+>>>>>> I.e. I need something like this in my dts
+>>>>>>
+>>>>>> &i2c2 {
+>>>>>>          status = "okay";
+>>>>>>
+>>>>>>          pinctrl-names = "default";
+>>>>>>          /delete-property/ pinctrl-1;
+>>>>>>          /delete-property/ sda-gpios;
+>>>>>>          /delete-property/ scl-gpios;
+>>>>>>
+>>>>>>          eeprom@50 {
+>>>>>>                  compatible = "st,24c64", "atmel,24c64";
+>>>>>>                  reg = <0x50>;
+>>>>>>                  wp-gpios = <&filter_gpio 7 GPIO_ACTIVE_HIGH>;
+>>>>>>          };
+>>>>>> };
+>>>>>>
+>>>>>> for multi-page eeprom writes to not time out (a page is 32 bytes on this
+>>>>>> eeprom).
+>>>>>>
+>>>>>> For reference, the current defaults for this SoC/I2C-bus, that I modify,
+>>>>>> are:
+>>>>>>
+>>>>>>          pinctrl-names = "default", "gpio";
+>>>>>>          pinctrl-0 = <&pinctrl_i2c2>;
+>>>>>>          pinctrl-1 = <&pinctrl_i2c2_gpio>;
+>>>>>>          sda-gpios = <&pioA 18 GPIO_ACTIVE_HIGH>;
+>>>>>>          scl-gpios = <&pioA 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>>>>>>
+>>>>>> I suspect that the underlying reason is that the bus recovery takes
+>>>>>> too long and that the at24 eeprom driver gives up prematurely. I doubt
+>>>>>> that this is chip specific, but I don't know that.
+>>>>>>
+>>>>>> I can work around the issue in user space with by writing in 4 byte
+>>>>>> chunks, like so
+>>>>>>
+>>>>>> dd if=source.file of=/sys/bus/i2c/devices/2-0050/eeprom obs=4
+>>>>>>
+>>>>>> but that is really ugly and gets slow too, about 20 seconds to program
+>>>>>> the full 8kB eeprom. With the above in my dts it takes a second or
+>>>>>> so (a bit more with dynamic debug active).
+>>>>>>
+>>>>>>
+>>>>>> If I run
+>>>>>>
+>>>>>> dd if=source.file of=/sys/bus/i2c/devices/2-0050/eeprom
+>>>>>>
+>>>>>> with a source.file of 8kB and the upstream dts properties in place, I can
+>>>>>> collect the following debug output from at24, i2c-core and i2c-at91:
+>>>>>>
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@0 --> 0 (-23170)
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@32 --> -121 (-23169)
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@32 --> 0 (-23168)
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@64 --> -121 (-23168)
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@64 --> 0 (-23167)
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -121 (-23167)
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: controller timed out
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -110 (-23155)
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: controller timed out
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -110 (-23143)
+>>>>>>
+>>>>>> And then there is no more action. I.e. only a couple of 32 byte pages
+>>>>>> are written.
+>>>>>>
+>>>>>> With the above mentioned dts override in place I instead get this, which is
+>>>>>> a lot more sensible:
+>>>>>>
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@0 --> 0 (753629)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@32 --> -121 (753629)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@32 --> 0 (753630)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@64 --> -121 (753630)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@64 --> 0 (753631)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@96 --> -121 (753631)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@96 --> 0 (753632)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@128 --> -121 (753632)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@128 --> 0 (753633)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@160 --> -121 (753633)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@160 --> 0 (753634)
+>>>>>> ... snip ...
+>>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8128 --> -121 (753883)
+>>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8128 --> 0 (753884)
+>>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8160 --> -121 (753884)
+>>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8160 --> 0 (753885)
+>>>>>
+>>>>> could you please apply this patch-set [1] and let us know if it 
+>>>>> addresses your issue?
+>>>>>
+>>>>> Thanks and best regards,
+>>>>> Codrin
+>>>>>
+>>>>> https://patchwork.ozlabs.org/project/linux-i2c/list/?series=255408
+>>>>
+>>>> That series does indeed help! I'll reply with a tested-by etc on the
+>>>> first two patches, I can't test patch 3/3 with my sama5d3 board...
+>>>>
+>>>> Thank you very much!
+>>>
+>>> Since replying to the actual patches do not work for me, I'm writing here
+>>> instead. Sorry about that. As stated above, it /seems/ to work much better
+>>> with these patches. But I fooled myself and there is still some remaining
+>>> trouble. It is not uncommon that the second (32-byte) page in the eeprom
+>>> is not written correctly for whatever reason. I do not know why it's
+>>> always the second page that gets corrupted, but this is a bad problem since
+>>> the failure is completely silent.
+>>>
+>>> Cheers,
+>>> Peter
+>>
+>> #regzbot poke
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+#regzbot poke
