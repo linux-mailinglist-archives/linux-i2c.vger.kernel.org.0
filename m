@@ -2,49 +2,161 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B7764E005
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Dec 2022 18:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C350864E14C
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Dec 2022 19:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbiLORxe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 15 Dec 2022 12:53:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
+        id S230111AbiLOSua (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 15 Dec 2022 13:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiLORxd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 15 Dec 2022 12:53:33 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CD7220FF;
-        Thu, 15 Dec 2022 09:53:30 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p5sQC-0003bG-9B; Thu, 15 Dec 2022 18:53:28 +0100
-Message-ID: <338128fa-69dc-1eaa-3a18-c94565ec8380@leemhuis.info>
-Date:   Thu, 15 Dec 2022 18:53:27 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
+        with ESMTP id S229797AbiLOSu3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 15 Dec 2022 13:50:29 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4424123BF1;
+        Thu, 15 Dec 2022 10:50:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1671130227; x=1702666227;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=GAhIbEYpi0xOmede6yPwSpGJIEg0il5lwZsV5akgQqc=;
+  b=cil8oqaBLo6MVXxcwYpCD1tCn9hmAchhp4bWH2x/Da4+KscD+50Ca8NB
+   aQoWkM4GQhHE6GlInpo9ror4/JC9ckaenvyzzbdNPEAKD/0W0H36lpJOQ
+   M34ka5PMpEjH0i98mo/BLiIIGm/maG2fqo/gA6FNtFwYsAW1HStfF2UFV
+   h1VLB32Tzg7ysipoIj4nKH8mn0AmeF7t62gUo3p/no7rDhQ8tGnNyEc5u
+   3Ozk2P+khC9TDRYyvDqhkH74EaV70M4/b/8SCOvGfIkUvxAcBEG6xnxbl
+   8OYZYh2Rn/H5dzx/y8Kpj8Fty5eDnL4DCUWSCywW63lFgKye1Y/Ckij25
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
+   d="scan'208";a="188382994"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Dec 2022 11:50:26 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 15 Dec 2022 11:50:19 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Thu, 15 Dec 2022 11:50:19 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ioJN4OMZ5T6q45zAN37DopVWeFpdaA6FTtH4pyXBo38AJDLPkqwL8CoHNuOEFAIA/3uv98Zx/hH3w3qrDtYMYAG8QUzHW10jneavlfeQnsJv1PT3KLLtChYTV83Ho590SDpl8CzLqMgnHHkGHoWRJSvRlS7rhLNsB1CnsC1PqXVw+MvkyoRfEiVwhx0Kro1QdxqKGVCJlbAQwLAplUhKHqeFoIDkfNFM1KQ3vhc/3SQoGGVKRyutfstGrCjfe0lTEx7y9Foy4c428YrJBryz4M/OCFs7BmewlqRydaynI78+1sJ6sK1HMpzrFYKFKyYpypi7AoTHkqIdLWnPQEqXag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GAhIbEYpi0xOmede6yPwSpGJIEg0il5lwZsV5akgQqc=;
+ b=TCyM9x9sKOeWZARi50li1QlqtqKms2hHm5K7G1y1rV1/dW6iVZ4AWVyuo+12I3rPA9ijZV9iT77xczz/IMLHRhrcrJ/Y/coFRpnOFUDWNtgongcpP5ub31iwVFn8P36fw2dms3gx1nMbDGhQrAcrtXFuQKJ18eyT/IQ7WUeo+UZxoRxTEsyF0cUNyh8XGybCKKdI28S4FvGMpOK/Hjy+Q2iWXyAbAvfNfnr7QFt5szkkxwFty8MNBI+RudMPyu1MMhRbn/R3Kox6IRVD50q+EnYYLNIcfzKsrP/xmsSYRx/iTke4nE45QWMWPpqmS4j1LMukUpn41bfpzH2blYYRGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GAhIbEYpi0xOmede6yPwSpGJIEg0il5lwZsV5akgQqc=;
+ b=Ynp+5xaWFZuIEE9rp7MBmKfuLNocWwZdCD+/YHGdP25DBDeF00NL18TZRguRmJ36cX9p3AgV7FwdeLGmP1PhG2xFf6pYiJs9bfoAQTugDC+o8pemE4b4xhg+IjxumycQqQDEFjH5D4xMqaYXwjy/leH6AP5zBRE8G5dtO+iiZtQ=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by BL1PR11MB5541.namprd11.prod.outlook.com (2603:10b6:208:31f::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12; Thu, 15 Dec
+ 2022 18:50:17 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::3758:fd2d:5bd1:9758]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::3758:fd2d:5bd1:9758%7]) with mapi id 15.20.5924.011; Thu, 15 Dec 2022
+ 18:50:17 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <regressions@leemhuis.info>, <peda@axentia.se>,
+        <Codrin.Ciubotariu@microchip.com>, <Nicolas.Ferre@microchip.com>,
+        <wsa@kernel.org>
+CC:     <kamel.bouhara@bootlin.com>, <linux-i2c@vger.kernel.org>,
+        <alexandre.belloni@bootlin.com>, <Ludovic.Desroches@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <robh+dt@kernel.org>,
+        <regressions@lists.linux.dev>, <linux-kernel@vger.kernel.org>
 Subject: Re: Regression: at24 eeprom writing times out on sama5d3
-Content-Language: en-US, de-DE
-To:     Peter Rosin <peda@axentia.se>, Codrin.Ciubotariu@microchip.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     kamel.bouhara@bootlin.com, alexandre.belloni@bootlin.com,
-        wsa@kernel.org, Ludovic.Desroches@microchip.com,
-        robh+dt@kernel.org,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Thread-Topic: Regression: at24 eeprom writing times out on sama5d3
+Thread-Index: AQHYw3tp03wBsLUalkur2KxlbCQAA63Vj18AgJpF7oCAAA/gAA==
+Date:   Thu, 15 Dec 2022 18:50:17 +0000
+Message-ID: <d9f307f6-7d88-f88d-d619-8786b71eff0b@microchip.com>
 References: <074b39c5-55fc-2bc1-072d-aef1070e284d@axentia.se>
  <2bb4868b-90ab-887e-bf13-9de8b79231bd@microchip.com>
  <38dedc92-62a2-7365-6fda-95d6404be749@axentia.se>
  <3503471d-2d5e-572b-39e7-d715a909749d@axentia.se>
  <5800be99-3569-6edd-5c71-9e6f1498dc3b@leemhuis.info>
  <2fcfa811-ce5c-9fc8-9837-753299794560@axentia.se>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <2fcfa811-ce5c-9fc8-9837-753299794560@axentia.se>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1671126811;2c6dbd8c;
-X-HE-SMSGID: 1p5sQC-0003bG-9B
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+ <338128fa-69dc-1eaa-3a18-c94565ec8380@leemhuis.info>
+In-Reply-To: <338128fa-69dc-1eaa-3a18-c94565ec8380@leemhuis.info>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CO1PR11MB5154:EE_|BL1PR11MB5541:EE_
+x-ms-office365-filtering-correlation-id: 03ed8525-25cc-4d46-4d5f-08dadecd357c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tt963lHw8GBVW9AnSWm4PgnjU9FuuNZ/Mp8CjAFS2krIcNWl7FeSsoT2fl9deaAoIbkvL4r3zG3MVKexRnwNbbhR42imRlhqg1BC9OdBznnyw7PzNgAaeTVn/tDRYk2TQWGM3pp2WhafSqu++uXZKw0ixjD6iSegVTdPLsMOZccIyENJ8DJRSWfoj2uTCQH93/nsqEkgFJ4JGIfTufT3vJHJHPik6ShErn/TpSGWSNnCxU5b/2HK2XLNyj9Z6cagir3fbSSJrHtoU6G3CGnmSt+M98+VFXNFcvJhJeSSZURV3hxE4CLeFAPAWzNTZl8H4gxRdPYa28vT42XfeZetNF4BxMnzrrdCFBsEpAE7FusnYXLUUqdMHvHyYlMTSxAZrqf8J93mlD8y9HiILkY4KMbdvJwW9LyI3SpcpsmpLS5BGt0TWMh7kYKTCLZQfrbjgUvGd/8jvDQkhnI90PiFnh7hA/yrV1LTFggKxVAfmKlEiyZOF7Z6K+CIgEC64Q08Lno693j7XMM3TLWRAnqbaQYvvJMtddF/KztJYZq44gY8bFZ6xpqjB57AltsOqRrXi8WzQEOKuRkVTXNM/PJmLxaCgmmTB8x6/C/I4TnPXWYp8YhD0R2NKhlLCkWWxDS+FlpBV+L9GEceI63w8E3+DnUjBfVQZ6cArvanYyL6RhtPhC2lyvVL0OkwfaAKMUWDXiziCYuzdinISyYFUzJzyYcs3TUMgQhPT0gXCuZMZXWqduMKgqT4tbhREAfxllVf8ZAdoC3uHHpMUdHkbsHo+pkV2+YlEV+CbadvWRIJkkXYo4HuUn4nXFW1pPhDNVxOVC/VsmWSeA6uZLULdagfLA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(136003)(39860400002)(376002)(396003)(366004)(451199015)(83380400001)(86362001)(31696002)(122000001)(38070700005)(30864003)(2906002)(5660300002)(8936002)(41300700001)(7416002)(4326008)(6506007)(186003)(26005)(2616005)(64756008)(6512007)(316002)(76116006)(91956017)(66476007)(66446008)(66946007)(66556008)(8676002)(53546011)(71200400001)(54906003)(31686004)(966005)(110136005)(478600001)(6486002)(38100700002)(66899015)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RXNraVY3UFcrMXVUUGVIZGZQcUljdExLM1lKUS9uR1NvaXUyKzRXb1p0TGlp?=
+ =?utf-8?B?bk1RVUpSYXlPRDBsWTJVNEJTTFVaRE9BeVJ2WS9yeUpkNXVHWjdPQnY4VHpW?=
+ =?utf-8?B?MXlxcGVJc1F5dGRjRGNBclU2V1p4MFJ1TGhMWXhwYitWRmdYOTJGYXQ1VU43?=
+ =?utf-8?B?Nmk1V3p1dmZtK0JMa3VPOUlLWmszSXlwMmRZWjV4TDc0M2dtV2twWnNqZGkv?=
+ =?utf-8?B?azRKeXNVQTc2bFFDL015cFdpejVtcHFzaFdVVUtYbEFKVVl6aXRvZzJySGM2?=
+ =?utf-8?B?WlFnYSsyYWFnR1hnMDBLZkwxbEpWT2FoNHF5NHUyVERUbDNvdURTNmhkK1VO?=
+ =?utf-8?B?SnEzWlpkOUIrckFPOVdpSm9kSWkxR2htRXQwSVBGMjlNdUpRblVJcDNHMXZl?=
+ =?utf-8?B?M1h3c29PcGlGZFVnSTh5cVVDRE1oOFMrajRQbU8zYzY3cTNyMXZVUUc2K1ZX?=
+ =?utf-8?B?VStwVWkwZjJwbzQrc3VSL1dDV1R6bmhxTUx0aGNrY2l6RE1rZlU5NlA4bXpF?=
+ =?utf-8?B?TFFHcGloWWoyZjdjSkpFMUd1d0NXdzBLUjBzRGppQklUZTVFS0p1Yk05MXdz?=
+ =?utf-8?B?bWNVUE0vQnRUQ0pRbi93ZlNSYnF5ZE4rbUFncWJYQkZhdGlOT3k3V0xWVTNV?=
+ =?utf-8?B?WTJkbGVVVExKMVhIMloyazJSakh6VGNoUWEvYkNiNGJWY3ZkQ1JGTTNCdVhE?=
+ =?utf-8?B?am4wY3FNcUppVG1yMU1NRmFvQWhLcG53Qzl3UVZhWkdlSWNkVUtnU2VQZm82?=
+ =?utf-8?B?ZjJMRmt6aVZja1BqMzJIYzVNY1BYR0E0Ry95Y0NkSWhETys1bDZud0pjeW5u?=
+ =?utf-8?B?NUlBWjVSREp3WkJJMlNEM00zMUhXM3ZrdUpGbERDS2dMNG5qRTcxWTRFSno2?=
+ =?utf-8?B?cWNYSDM3dDZXaWpxTzhqeStFdEUxeEY1bm9mbHF6UUNIb3YwYUpmRXBnR0Jr?=
+ =?utf-8?B?NFpuYkRucmEyWk9RakFVbTlVWldEVTEzVW9Vamd5aVpxb3llSHV4clNMWmY3?=
+ =?utf-8?B?U3pnWGRwckd6bkFXL1h3V0M3aEdWMEVwVkFTY29pRktQckd0b1V4elNvVWpz?=
+ =?utf-8?B?MU44KzdaRWpsUmZZMmtHTklVM3JCZGQ3d3IyNHNqSXBnSWZTQVY1TTNQVzg1?=
+ =?utf-8?B?eDZjcW1meEtvNklxZjVISTB0cG9haXlrODJNK0Q1OUo3c3U3blRJYkc1UFpP?=
+ =?utf-8?B?d3Yzb0lyRnVacWtkbHNPYTVFT3NlZjAzMFFqVk5mbXRhUmxnKzRweUhVdjJp?=
+ =?utf-8?B?dlp4WVlnK2tTME9CeTVDVDd2bFZFMVFLTThuYmk4bElvY09yNXdaa2h1N2RU?=
+ =?utf-8?B?c2JyanQ4bW51M01tOG1yU3hhTWxmM0IyRDhBUDVHREZ4T1E4cXkwdTJRc01C?=
+ =?utf-8?B?L2JicUFDSVo2UG4zVTk2M3ZESjhQdzB6WkZXY3FEZnM3YU40SjhNZGg1Sk10?=
+ =?utf-8?B?K1FZaUhtSDJTVUV2TVVuaCtVRHlHaTZZeHdITnVpYnZ0NFJWMU50bHZzNldH?=
+ =?utf-8?B?UG40MzBDNDh5TjhxWjFRdHRrc0lTU1FocThPV1hBRWV4T082TGUyNHlUYU9U?=
+ =?utf-8?B?VVg4dzNVc3N3T3ZVM3FDMVl5Z2d2VGxKUnVrVHpQNk1wY1hFWCtTd0RoTnVZ?=
+ =?utf-8?B?Z1ZMcGJXTStGMkt5TWx1Wkl4RndvL2tSYU9VTXcrWnZZWDQ4RGlJL0FXdGho?=
+ =?utf-8?B?aWZCZDgzN2FNTlZDKzYvb0IvVjg1eDJVNE5xY2F6NXBzeFZVQUl4S21VMGZQ?=
+ =?utf-8?B?MWgwaUVRRVRCRi9qdkJCQWVKTVJveXlsMlN3M1doVFJVeUhLTGREZHdocVMw?=
+ =?utf-8?B?SzNjSjNoOGk3L0phUVBVQlZENVJCdjdFbkRYNUZjVGROV2VocVlxTERTTDhV?=
+ =?utf-8?B?UXJKeUUvbDRDOXJoUmtHMlJhUFFvK0FkOGtEUmlIZmdCdWRiR1h2eHFpOFNq?=
+ =?utf-8?B?UCtMdHdUZFN6bmNzTzVCTnJNcTdWaFVTeWZNVyttcjAwRVBFM24zU2xHUDFr?=
+ =?utf-8?B?enpYTjNrTmlDTCtHUmx1Y0Nuc1lNWjBMaXlBaFJZYlNEVFN5ZFlyNTYyLzRu?=
+ =?utf-8?B?a05CbmZSU2t3WUlGR2p3N0Q0MXlnZ1ByMWJpUWZVUGhQZXZhVHpUU2RSUlUy?=
+ =?utf-8?Q?hO3HPrm2Ea3KCiKRSvR8m9nFU?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <90D4B060239B44478D672603361E681D@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 03ed8525-25cc-4d46-4d5f-08dadecd357c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2022 18:50:17.2722
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lE5ZYxA3tdkWuzB5xZow3NomX2dQtIRHVd/A71kveAY31+nAzHt+0SrcOPIgkwk5wCDGI1AY7Ov0qMiV+wmdhF4ZpL2wB2STOHWgzB/SkiI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5541
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,252 +164,260 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
-
-On 08.09.22 15:59, Peter Rosin wrote:
-> Hi!
-> 
-> 2022-09-08 at 14:06, Thorsten Leemhuis wrote:
->> Hi, this is your Linux kernel regression tracker. Top-posting for once,
->> to make this easily accessible to everyone.
->>
->> Peter, Codrin, could you help me out here please: I still have the
->> regression report from Peter that started this thread in the list of
->> tracked issues. From Peter's last msg quoted below it seems the thread
->> just faded out without the regression being fixed. Or was it? If not:
->> what can we do to finally get this resolved?
-> 
-> No, it is not resolved that I know of. We are only writing during
-> production, but are working around it by verifying and looping back.
-> Sometimes it takes surprisingly long for the loop to finish, but
-> it's not a huge deal. But it is of course not completely satisfying
-> either...
-> 
-> Reading is never a problem, so post-production behavior is sane.
-
-I still have this regression that Peter reported in late July on my
-list. :-(
-
-Codrin (and maybe Wolfram), could you provide a update please? Afaics
-this is the state of things (please correct me if I'm wrong!): In an
-earlier mail
-(https://lore.kernel.org/lkml/38dedc92-62a2-7365-6fda-95d6404be749@axentia.se/
-) of this thread Peter stated that the following patch set Codrin posted
-mid 2021 helped:
-https://lore.kernel.org/all/20210727111554.1338832-1-codrin.ciubotariu@microchip.com/
-
-There where a few review comments from Wolfram, but looks like then
-things stalled. Can we somehow get this rolling again to finally get
-this regression fixed?
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
-
->> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->>
->> P.S.: As the Linux kernel's regression tracker I deal with a lot of
->> reports and sometimes miss something important when writing mails like
->> this. If that's the case here, don't hesitate to tell me in a public
->> reply, it's in everyone's interest to set the public record straight.
->>
->> On 30.06.22 09:44, Peter Rosin wrote:
->>> 2022-06-10 at 22:51, Peter Rosin wrote:
->>>> 2022-06-10 at 09:35, Codrin.Ciubotariu@microchip.com wrote:
->>>>> On 09.06.2022 17:28, Peter Rosin wrote:
->>>>>>
->>>>>> I have not actually bisected this issue but reverting the effects of
->>>>>> patch a4bd8da893a3 ("ARM: dts: at91: sama5d3: add i2c gpio pinctrl")
->>>>>> makes the problem go away.
->>>>>>
->>>>>> I.e. I need something like this in my dts
->>>>>>
->>>>>> &i2c2 {
->>>>>>          status = "okay";
->>>>>>
->>>>>>          pinctrl-names = "default";
->>>>>>          /delete-property/ pinctrl-1;
->>>>>>          /delete-property/ sda-gpios;
->>>>>>          /delete-property/ scl-gpios;
->>>>>>
->>>>>>          eeprom@50 {
->>>>>>                  compatible = "st,24c64", "atmel,24c64";
->>>>>>                  reg = <0x50>;
->>>>>>                  wp-gpios = <&filter_gpio 7 GPIO_ACTIVE_HIGH>;
->>>>>>          };
->>>>>> };
->>>>>>
->>>>>> for multi-page eeprom writes to not time out (a page is 32 bytes on this
->>>>>> eeprom).
->>>>>>
->>>>>> For reference, the current defaults for this SoC/I2C-bus, that I modify,
->>>>>> are:
->>>>>>
->>>>>>          pinctrl-names = "default", "gpio";
->>>>>>          pinctrl-0 = <&pinctrl_i2c2>;
->>>>>>          pinctrl-1 = <&pinctrl_i2c2_gpio>;
->>>>>>          sda-gpios = <&pioA 18 GPIO_ACTIVE_HIGH>;
->>>>>>          scl-gpios = <&pioA 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
->>>>>>
->>>>>> I suspect that the underlying reason is that the bus recovery takes
->>>>>> too long and that the at24 eeprom driver gives up prematurely. I doubt
->>>>>> that this is chip specific, but I don't know that.
->>>>>>
->>>>>> I can work around the issue in user space with by writing in 4 byte
->>>>>> chunks, like so
->>>>>>
->>>>>> dd if=source.file of=/sys/bus/i2c/devices/2-0050/eeprom obs=4
->>>>>>
->>>>>> but that is really ugly and gets slow too, about 20 seconds to program
->>>>>> the full 8kB eeprom. With the above in my dts it takes a second or
->>>>>> so (a bit more with dynamic debug active).
->>>>>>
->>>>>>
->>>>>> If I run
->>>>>>
->>>>>> dd if=source.file of=/sys/bus/i2c/devices/2-0050/eeprom
->>>>>>
->>>>>> with a source.file of 8kB and the upstream dts properties in place, I can
->>>>>> collect the following debug output from at24, i2c-core and i2c-at91:
->>>>>>
->>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
->>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@0 --> 0 (-23170)
->>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
->>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
->>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@32 --> -121 (-23169)
->>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
->>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@32 --> 0 (-23168)
->>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
->>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
->>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@64 --> -121 (-23168)
->>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
->>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@64 --> 0 (-23167)
->>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
->>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
->>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -121 (-23167)
->>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: controller timed out
->>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
->>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -110 (-23155)
->>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: controller timed out
->>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
->>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -110 (-23143)
->>>>>>
->>>>>> And then there is no more action. I.e. only a couple of 32 byte pages
->>>>>> are written.
->>>>>>
->>>>>> With the above mentioned dts override in place I instead get this, which is
->>>>>> a lot more sensible:
->>>>>>
->>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
->>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@0 --> 0 (753629)
->>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
->>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@32 --> -121 (753629)
->>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
->>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@32 --> 0 (753630)
->>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
->>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@64 --> -121 (753630)
->>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
->>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@64 --> 0 (753631)
->>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
->>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@96 --> -121 (753631)
->>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
->>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@96 --> 0 (753632)
->>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
->>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@128 --> -121 (753632)
->>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
->>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@128 --> 0 (753633)
->>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
->>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@160 --> -121 (753633)
->>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
->>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@160 --> 0 (753634)
->>>>>> ... snip ...
->>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: received nack
->>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8128 --> -121 (753883)
->>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer complete
->>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8128 --> 0 (753884)
->>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: received nack
->>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8160 --> -121 (753884)
->>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
->>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
->>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer complete
->>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8160 --> 0 (753885)
->>>>>
->>>>> could you please apply this patch-set [1] and let us know if it 
->>>>> addresses your issue?
->>>>>
->>>>> Thanks and best regards,
->>>>> Codrin
->>>>>
->>>>> https://patchwork.ozlabs.org/project/linux-i2c/list/?series=255408
->>>>
->>>> That series does indeed help! I'll reply with a tested-by etc on the
->>>> first two patches, I can't test patch 3/3 with my sama5d3 board...
->>>>
->>>> Thank you very much!
->>>
->>> Since replying to the actual patches do not work for me, I'm writing here
->>> instead. Sorry about that. As stated above, it /seems/ to work much better
->>> with these patches. But I fooled myself and there is still some remaining
->>> trouble. It is not uncommon that the second (32-byte) page in the eeprom
->>> is not written correctly for whatever reason. I do not know why it's
->>> always the second page that gets corrupted, but this is a bad problem since
->>> the failure is completely silent.
->>>
->>> Cheers,
->>> Peter
->>
->> #regzbot poke
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
-#regzbot poke
+K0NDIE5pY29sYXMNCg0KT24gMTUvMTIvMjAyMiAxNzo1MywgVGhvcnN0ZW4gTGVlbWh1aXMgd3Jv
+dGU6DQo+IEVYVEVSTkFMIEVNQUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2ht
+ZW50cyB1bmxlc3MgeW91IGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZQ0KPiANCj4gSGksIHRoaXMg
+aXMgeW91ciBMaW51eCBrZXJuZWwgcmVncmVzc2lvbiB0cmFja2VyLg0KPiANCj4gT24gMDguMDku
+MjIgMTU6NTksIFBldGVyIFJvc2luIHdyb3RlOg0KPj4gSGkhDQo+Pg0KPj4gMjAyMi0wOS0wOCBh
+dCAxNDowNiwgVGhvcnN0ZW4gTGVlbWh1aXMgd3JvdGU6DQo+Pj4gSGksIHRoaXMgaXMgeW91ciBM
+aW51eCBrZXJuZWwgcmVncmVzc2lvbiB0cmFja2VyLiBUb3AtcG9zdGluZyBmb3Igb25jZSwNCj4+
+PiB0byBtYWtlIHRoaXMgZWFzaWx5IGFjY2Vzc2libGUgdG8gZXZlcnlvbmUuDQo+Pj4NCj4+PiBQ
+ZXRlciwgQ29kcmluLCBjb3VsZCB5b3UgaGVscCBtZSBvdXQgaGVyZSBwbGVhc2U6IEkgc3RpbGwg
+aGF2ZSB0aGUNCj4+PiByZWdyZXNzaW9uIHJlcG9ydCBmcm9tIFBldGVyIHRoYXQgc3RhcnRlZCB0
+aGlzIHRocmVhZCBpbiB0aGUgbGlzdCBvZg0KPj4+IHRyYWNrZWQgaXNzdWVzLiBGcm9tIFBldGVy
+J3MgbGFzdCBtc2cgcXVvdGVkIGJlbG93IGl0IHNlZW1zIHRoZSB0aHJlYWQNCj4+PiBqdXN0IGZh
+ZGVkIG91dCB3aXRob3V0IHRoZSByZWdyZXNzaW9uIGJlaW5nIGZpeGVkLiBPciB3YXMgaXQ/IElm
+IG5vdDoNCj4+PiB3aGF0IGNhbiB3ZSBkbyB0byBmaW5hbGx5IGdldCB0aGlzIHJlc29sdmVkPw0K
+Pj4NCj4+IE5vLCBpdCBpcyBub3QgcmVzb2x2ZWQgdGhhdCBJIGtub3cgb2YuIFdlIGFyZSBvbmx5
+IHdyaXRpbmcgZHVyaW5nDQo+PiBwcm9kdWN0aW9uLCBidXQgYXJlIHdvcmtpbmcgYXJvdW5kIGl0
+IGJ5IHZlcmlmeWluZyBhbmQgbG9vcGluZyBiYWNrLg0KPj4gU29tZXRpbWVzIGl0IHRha2VzIHN1
+cnByaXNpbmdseSBsb25nIGZvciB0aGUgbG9vcCB0byBmaW5pc2gsIGJ1dA0KPj4gaXQncyBub3Qg
+YSBodWdlIGRlYWwuIEJ1dCBpdCBpcyBvZiBjb3Vyc2Ugbm90IGNvbXBsZXRlbHkgc2F0aXNmeWlu
+Zw0KPj4gZWl0aGVyLi4uDQo+Pg0KPj4gUmVhZGluZyBpcyBuZXZlciBhIHByb2JsZW0sIHNvIHBv
+c3QtcHJvZHVjdGlvbiBiZWhhdmlvciBpcyBzYW5lLg0KPiANCj4gSSBzdGlsbCBoYXZlIHRoaXMg
+cmVncmVzc2lvbiB0aGF0IFBldGVyIHJlcG9ydGVkIGluIGxhdGUgSnVseSBvbiBteQ0KPiBsaXN0
+LiA6LSgNCj4gDQo+IENvZHJpbiAoYW5kIG1heWJlIFdvbGZyYW0pLCBjb3VsZCB5b3UgcHJvdmlk
+ZSBhIHVwZGF0ZSBwbGVhc2U/IEFmYWljcw0KPiB0aGlzIGlzIHRoZSBzdGF0ZSBvZiB0aGluZ3Mg
+KHBsZWFzZSBjb3JyZWN0IG1lIGlmIEknbSB3cm9uZyEpOiBJbiBhbg0KPiBlYXJsaWVyIG1haWwN
+Cj4gKGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvMzhkZWRjOTItNjJhMi03MzY1LTZmZGEt
+OTVkNjQwNGJlNzQ5QGF4ZW50aWEuc2UvDQo+ICkgb2YgdGhpcyB0aHJlYWQgUGV0ZXIgc3RhdGVk
+IHRoYXQgdGhlIGZvbGxvd2luZyBwYXRjaCBzZXQgQ29kcmluIHBvc3RlZA0KPiBtaWQgMjAyMSBo
+ZWxwZWQ6DQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8yMDIxMDcyNzExMTU1NC4xMzM4
+ODMyLTEtY29kcmluLmNpdWJvdGFyaXVAbWljcm9jaGlwLmNvbS8NCg0KSUlSQyAoYW5kIEkgbWF5
+IHdlbGwgYmUgd3JvbmcgYXMgaXQgaXMgbm90IG15IG5lY2sgb2YgdGhlIHdvb2RzKSBDb2RyaW4g
+aXMNCm5vIGxvbmdlciBhdCBNaWNyb2NoaXAuIE5pY29sYXMsIGRvIHlvdSBrbm93IHdobyBoYXMg
+dGFrZW4gb3ZlciB0aGlzIGRyaXZlcj8NCg0KVGhhbmtzLA0KQ29ub3IuDQoNCj4gDQo+IFRoZXJl
+IHdoZXJlIGEgZmV3IHJldmlldyBjb21tZW50cyBmcm9tIFdvbGZyYW0sIGJ1dCBsb29rcyBsaWtl
+IHRoZW4NCj4gdGhpbmdzIHN0YWxsZWQuIENhbiB3ZSBzb21laG93IGdldCB0aGlzIHJvbGxpbmcg
+YWdhaW4gdG8gZmluYWxseSBnZXQNCj4gdGhpcyByZWdyZXNzaW9uIGZpeGVkPw0KPiANCj4gQ2lh
+bywgVGhvcnN0ZW4gKHdlYXJpbmcgaGlzICd0aGUgTGludXgga2VybmVsJ3MgcmVncmVzc2lvbiB0
+cmFja2VyJyBoYXQpDQo+IA0KPiBQLlMuOiBBcyB0aGUgTGludXgga2VybmVsJ3MgcmVncmVzc2lv
+biB0cmFja2VyIEkgZGVhbCB3aXRoIGEgbG90IG9mDQo+IHJlcG9ydHMgYW5kIHNvbWV0aW1lcyBt
+aXNzIHNvbWV0aGluZyBpbXBvcnRhbnQgd2hlbiB3cml0aW5nIG1haWxzIGxpa2UNCj4gdGhpcy4g
+SWYgdGhhdCdzIHRoZSBjYXNlIGhlcmUsIGRvbid0IGhlc2l0YXRlIHRvIHRlbGwgbWUgaW4gYSBw
+dWJsaWMNCj4gcmVwbHksIGl0J3MgaW4gZXZlcnlvbmUncyBpbnRlcmVzdCB0byBzZXQgdGhlIHB1
+YmxpYyByZWNvcmQgc3RyYWlnaHQuDQo+IA0KPj4+IENpYW8sIFRob3JzdGVuICh3ZWFyaW5nIGhp
+cyAndGhlIExpbnV4IGtlcm5lbCdzIHJlZ3Jlc3Npb24gdHJhY2tlcicgaGF0KQ0KPj4+DQo+Pj4g
+UC5TLjogQXMgdGhlIExpbnV4IGtlcm5lbCdzIHJlZ3Jlc3Npb24gdHJhY2tlciBJIGRlYWwgd2l0
+aCBhIGxvdCBvZg0KPj4+IHJlcG9ydHMgYW5kIHNvbWV0aW1lcyBtaXNzIHNvbWV0aGluZyBpbXBv
+cnRhbnQgd2hlbiB3cml0aW5nIG1haWxzIGxpa2UNCj4+PiB0aGlzLiBJZiB0aGF0J3MgdGhlIGNh
+c2UgaGVyZSwgZG9uJ3QgaGVzaXRhdGUgdG8gdGVsbCBtZSBpbiBhIHB1YmxpYw0KPj4+IHJlcGx5
+LCBpdCdzIGluIGV2ZXJ5b25lJ3MgaW50ZXJlc3QgdG8gc2V0IHRoZSBwdWJsaWMgcmVjb3JkIHN0
+cmFpZ2h0Lg0KPj4+DQo+Pj4gT24gMzAuMDYuMjIgMDk6NDQsIFBldGVyIFJvc2luIHdyb3RlOg0K
+Pj4+PiAyMDIyLTA2LTEwIGF0IDIyOjUxLCBQZXRlciBSb3NpbiB3cm90ZToNCj4+Pj4+IDIwMjIt
+MDYtMTAgYXQgMDk6MzUsIENvZHJpbi5DaXVib3Rhcml1QG1pY3JvY2hpcC5jb20gd3JvdGU6DQo+
+Pj4+Pj4gT24gMDkuMDYuMjAyMiAxNzoyOCwgUGV0ZXIgUm9zaW4gd3JvdGU6DQo+Pj4+Pj4+DQo+
+Pj4+Pj4+IEkgaGF2ZSBub3QgYWN0dWFsbHkgYmlzZWN0ZWQgdGhpcyBpc3N1ZSBidXQgcmV2ZXJ0
+aW5nIHRoZSBlZmZlY3RzIG9mDQo+Pj4+Pj4+IHBhdGNoIGE0YmQ4ZGE4OTNhMyAoIkFSTTogZHRz
+OiBhdDkxOiBzYW1hNWQzOiBhZGQgaTJjIGdwaW8gcGluY3RybCIpDQo+Pj4+Pj4+IG1ha2VzIHRo
+ZSBwcm9ibGVtIGdvIGF3YXkuDQo+Pj4+Pj4+DQo+Pj4+Pj4+IEkuZS4gSSBuZWVkIHNvbWV0aGlu
+ZyBsaWtlIHRoaXMgaW4gbXkgZHRzDQo+Pj4+Pj4+DQo+Pj4+Pj4+ICZpMmMyIHsNCj4+Pj4+Pj4g
+ICAgICAgICAgIHN0YXR1cyA9ICJva2F5IjsNCj4+Pj4+Pj4NCj4+Pj4+Pj4gICAgICAgICAgIHBp
+bmN0cmwtbmFtZXMgPSAiZGVmYXVsdCI7DQo+Pj4+Pj4+ICAgICAgICAgICAvZGVsZXRlLXByb3Bl
+cnR5LyBwaW5jdHJsLTE7DQo+Pj4+Pj4+ICAgICAgICAgICAvZGVsZXRlLXByb3BlcnR5LyBzZGEt
+Z3Bpb3M7DQo+Pj4+Pj4+ICAgICAgICAgICAvZGVsZXRlLXByb3BlcnR5LyBzY2wtZ3Bpb3M7DQo+
+Pj4+Pj4+DQo+Pj4+Pj4+ICAgICAgICAgICBlZXByb21ANTAgew0KPj4+Pj4+PiAgICAgICAgICAg
+ICAgICAgICBjb21wYXRpYmxlID0gInN0LDI0YzY0IiwgImF0bWVsLDI0YzY0IjsNCj4+Pj4+Pj4g
+ICAgICAgICAgICAgICAgICAgcmVnID0gPDB4NTA+Ow0KPj4+Pj4+PiAgICAgICAgICAgICAgICAg
+ICB3cC1ncGlvcyA9IDwmZmlsdGVyX2dwaW8gNyBHUElPX0FDVElWRV9ISUdIPjsNCj4+Pj4+Pj4g
+ICAgICAgICAgIH07DQo+Pj4+Pj4+IH07DQo+Pj4+Pj4+DQo+Pj4+Pj4+IGZvciBtdWx0aS1wYWdl
+IGVlcHJvbSB3cml0ZXMgdG8gbm90IHRpbWUgb3V0IChhIHBhZ2UgaXMgMzIgYnl0ZXMgb24gdGhp
+cw0KPj4+Pj4+PiBlZXByb20pLg0KPj4+Pj4+Pg0KPj4+Pj4+PiBGb3IgcmVmZXJlbmNlLCB0aGUg
+Y3VycmVudCBkZWZhdWx0cyBmb3IgdGhpcyBTb0MvSTJDLWJ1cywgdGhhdCBJIG1vZGlmeSwNCj4+
+Pj4+Pj4gYXJlOg0KPj4+Pj4+Pg0KPj4+Pj4+PiAgICAgICAgICAgcGluY3RybC1uYW1lcyA9ICJk
+ZWZhdWx0IiwgImdwaW8iOw0KPj4+Pj4+PiAgICAgICAgICAgcGluY3RybC0wID0gPCZwaW5jdHJs
+X2kyYzI+Ow0KPj4+Pj4+PiAgICAgICAgICAgcGluY3RybC0xID0gPCZwaW5jdHJsX2kyYzJfZ3Bp
+bz47DQo+Pj4+Pj4+ICAgICAgICAgICBzZGEtZ3Bpb3MgPSA8JnBpb0EgMTggR1BJT19BQ1RJVkVf
+SElHSD47DQo+Pj4+Pj4+ICAgICAgICAgICBzY2wtZ3Bpb3MgPSA8JnBpb0EgMTkgKEdQSU9fQUNU
+SVZFX0hJR0ggfCBHUElPX09QRU5fRFJBSU4pPjsNCj4+Pj4+Pj4NCj4+Pj4+Pj4gSSBzdXNwZWN0
+IHRoYXQgdGhlIHVuZGVybHlpbmcgcmVhc29uIGlzIHRoYXQgdGhlIGJ1cyByZWNvdmVyeSB0YWtl
+cw0KPj4+Pj4+PiB0b28gbG9uZyBhbmQgdGhhdCB0aGUgYXQyNCBlZXByb20gZHJpdmVyIGdpdmVz
+IHVwIHByZW1hdHVyZWx5LiBJIGRvdWJ0DQo+Pj4+Pj4+IHRoYXQgdGhpcyBpcyBjaGlwIHNwZWNp
+ZmljLCBidXQgSSBkb24ndCBrbm93IHRoYXQuDQo+Pj4+Pj4+DQo+Pj4+Pj4+IEkgY2FuIHdvcmsg
+YXJvdW5kIHRoZSBpc3N1ZSBpbiB1c2VyIHNwYWNlIHdpdGggYnkgd3JpdGluZyBpbiA0IGJ5dGUN
+Cj4+Pj4+Pj4gY2h1bmtzLCBsaWtlIHNvDQo+Pj4+Pj4+DQo+Pj4+Pj4+IGRkIGlmPXNvdXJjZS5m
+aWxlIG9mPS9zeXMvYnVzL2kyYy9kZXZpY2VzLzItMDA1MC9lZXByb20gb2JzPTQNCj4+Pj4+Pj4N
+Cj4+Pj4+Pj4gYnV0IHRoYXQgaXMgcmVhbGx5IHVnbHkgYW5kIGdldHMgc2xvdyB0b28sIGFib3V0
+IDIwIHNlY29uZHMgdG8gcHJvZ3JhbQ0KPj4+Pj4+PiB0aGUgZnVsbCA4a0IgZWVwcm9tLiBXaXRo
+IHRoZSBhYm92ZSBpbiBteSBkdHMgaXQgdGFrZXMgYSBzZWNvbmQgb3INCj4+Pj4+Pj4gc28gKGEg
+Yml0IG1vcmUgd2l0aCBkeW5hbWljIGRlYnVnIGFjdGl2ZSkuDQo+Pj4+Pj4+DQo+Pj4+Pj4+DQo+
+Pj4+Pj4+IElmIEkgcnVuDQo+Pj4+Pj4+DQo+Pj4+Pj4+IGRkIGlmPXNvdXJjZS5maWxlIG9mPS9z
+eXMvYnVzL2kyYy9kZXZpY2VzLzItMDA1MC9lZXByb20NCj4+Pj4+Pj4NCj4+Pj4+Pj4gd2l0aCBh
+IHNvdXJjZS5maWxlIG9mIDhrQiBhbmQgdGhlIHVwc3RyZWFtIGR0cyBwcm9wZXJ0aWVzIGluIHBs
+YWNlLCBJIGNhbg0KPj4+Pj4+PiBjb2xsZWN0IHRoZSBmb2xsb3dpbmcgZGVidWcgb3V0cHV0IGZy
+b20gYXQyNCwgaTJjLWNvcmUgYW5kIGkyYy1hdDkxOg0KPj4+Pj4+Pg0KPj4+Pj4+PiBKdW4gIDkg
+MTU6NTY6MzQgbWUyMCBrZXJuZWw6IGkyYyBpMmMtMjogYXQ5MV94ZmVyOiBwcm9jZXNzaW5nIDEg
+bWVzc2FnZXM6DQo+Pj4+Pj4+IEp1biAgOSAxNTo1NjozNCBtZTIwIGtlcm5lbDogYXQ5MV9pMmMg
+ZjgwMWMwMDAuaTJjOiB0cmFuc2Zlcjogd3JpdGUgMzQgYnl0ZXMuDQo+Pj4+Pj4+IEp1biAgOSAx
+NTo1NjozNCBtZTIwIGtlcm5lbDogYXQ5MV9pMmMgZjgwMWMwMDAuaTJjOiB0cmFuc2ZlciBjb21w
+bGV0ZQ0KPj4+Pj4+PiBKdW4gIDkgMTU6NTY6MzQgbWUyMCBrZXJuZWw6IGF0MjQgMi0wMDUwOiB3
+cml0ZSAzMkAwIC0tPiAwICgtMjMxNzApDQo+Pj4+Pj4+IEp1biAgOSAxNTo1NjozNCBtZTIwIGtl
+cm5lbDogaTJjIGkyYy0yOiBhdDkxX3hmZXI6IHByb2Nlc3NpbmcgMSBtZXNzYWdlczoNCj4+Pj4+
+Pj4gSnVuICA5IDE1OjU2OjM0IG1lMjAga2VybmVsOiBhdDkxX2kyYyBmODAxYzAwMC5pMmM6IHRy
+YW5zZmVyOiB3cml0ZSAzNCBieXRlcy4NCj4+Pj4+Pj4gSnVuICA5IDE1OjU2OjM0IG1lMjAga2Vy
+bmVsOiBhdDkxX2kyYyBmODAxYzAwMC5pMmM6IHJlY2VpdmVkIG5hY2sNCj4+Pj4+Pj4gSnVuICA5
+IDE1OjU2OjM0IG1lMjAga2VybmVsOiBpMmMgaTJjLTI6IFRyeWluZyBpMmMgYnVzIHJlY292ZXJ5
+DQo+Pj4+Pj4+IEp1biAgOSAxNTo1NjozNCBtZTIwIGtlcm5lbDogYXQyNCAyLTAwNTA6IHdyaXRl
+IDMyQDMyIC0tPiAtMTIxICgtMjMxNjkpDQo+Pj4+Pj4+IEp1biAgOSAxNTo1NjozNCBtZTIwIGtl
+cm5lbDogaTJjIGkyYy0yOiBhdDkxX3hmZXI6IHByb2Nlc3NpbmcgMSBtZXNzYWdlczoNCj4+Pj4+
+Pj4gSnVuICA5IDE1OjU2OjM0IG1lMjAga2VybmVsOiBhdDkxX2kyYyBmODAxYzAwMC5pMmM6IHRy
+YW5zZmVyOiB3cml0ZSAzNCBieXRlcy4NCj4+Pj4+Pj4gSnVuICA5IDE1OjU2OjM0IG1lMjAga2Vy
+bmVsOiBhdDkxX2kyYyBmODAxYzAwMC5pMmM6IHRyYW5zZmVyIGNvbXBsZXRlDQo+Pj4+Pj4+IEp1
+biAgOSAxNTo1NjozNCBtZTIwIGtlcm5lbDogYXQyNCAyLTAwNTA6IHdyaXRlIDMyQDMyIC0tPiAw
+ICgtMjMxNjgpDQo+Pj4+Pj4+IEp1biAgOSAxNTo1NjozNCBtZTIwIGtlcm5lbDogaTJjIGkyYy0y
+OiBhdDkxX3hmZXI6IHByb2Nlc3NpbmcgMSBtZXNzYWdlczoNCj4+Pj4+Pj4gSnVuICA5IDE1OjU2
+OjM0IG1lMjAga2VybmVsOiBhdDkxX2kyYyBmODAxYzAwMC5pMmM6IHRyYW5zZmVyOiB3cml0ZSAz
+NCBieXRlcy4NCj4+Pj4+Pj4gSnVuICA5IDE1OjU2OjM0IG1lMjAga2VybmVsOiBhdDkxX2kyYyBm
+ODAxYzAwMC5pMmM6IHJlY2VpdmVkIG5hY2sNCj4+Pj4+Pj4gSnVuICA5IDE1OjU2OjM0IG1lMjAg
+a2VybmVsOiBpMmMgaTJjLTI6IFRyeWluZyBpMmMgYnVzIHJlY292ZXJ5DQo+Pj4+Pj4+IEp1biAg
+OSAxNTo1NjozNCBtZTIwIGtlcm5lbDogYXQyNCAyLTAwNTA6IHdyaXRlIDMyQDY0IC0tPiAtMTIx
+ICgtMjMxNjgpDQo+Pj4+Pj4+IEp1biAgOSAxNTo1NjozNCBtZTIwIGtlcm5lbDogaTJjIGkyYy0y
+OiBhdDkxX3hmZXI6IHByb2Nlc3NpbmcgMSBtZXNzYWdlczoNCj4+Pj4+Pj4gSnVuICA5IDE1OjU2
+OjM0IG1lMjAga2VybmVsOiBhdDkxX2kyYyBmODAxYzAwMC5pMmM6IHRyYW5zZmVyOiB3cml0ZSAz
+NCBieXRlcy4NCj4+Pj4+Pj4gSnVuICA5IDE1OjU2OjM0IG1lMjAga2VybmVsOiBhdDkxX2kyYyBm
+ODAxYzAwMC5pMmM6IHRyYW5zZmVyIGNvbXBsZXRlDQo+Pj4+Pj4+IEp1biAgOSAxNTo1NjozNCBt
+ZTIwIGtlcm5lbDogYXQyNCAyLTAwNTA6IHdyaXRlIDMyQDY0IC0tPiAwICgtMjMxNjcpDQo+Pj4+
+Pj4+IEp1biAgOSAxNTo1NjozNCBtZTIwIGtlcm5lbDogaTJjIGkyYy0yOiBhdDkxX3hmZXI6IHBy
+b2Nlc3NpbmcgMSBtZXNzYWdlczoNCj4+Pj4+Pj4gSnVuICA5IDE1OjU2OjM0IG1lMjAga2VybmVs
+OiBhdDkxX2kyYyBmODAxYzAwMC5pMmM6IHRyYW5zZmVyOiB3cml0ZSAzNCBieXRlcy4NCj4+Pj4+
+Pj4gSnVuICA5IDE1OjU2OjM0IG1lMjAga2VybmVsOiBhdDkxX2kyYyBmODAxYzAwMC5pMmM6IHJl
+Y2VpdmVkIG5hY2sNCj4+Pj4+Pj4gSnVuICA5IDE1OjU2OjM0IG1lMjAga2VybmVsOiBpMmMgaTJj
+LTI6IFRyeWluZyBpMmMgYnVzIHJlY292ZXJ5DQo+Pj4+Pj4+IEp1biAgOSAxNTo1NjozNCBtZTIw
+IGtlcm5lbDogYXQyNCAyLTAwNTA6IHdyaXRlIDMyQDk2IC0tPiAtMTIxICgtMjMxNjcpDQo+Pj4+
+Pj4+IEp1biAgOSAxNTo1NjozNCBtZTIwIGtlcm5lbDogaTJjIGkyYy0yOiBhdDkxX3hmZXI6IHBy
+b2Nlc3NpbmcgMSBtZXNzYWdlczoNCj4+Pj4+Pj4gSnVuICA5IDE1OjU2OjM0IG1lMjAga2VybmVs
+OiBhdDkxX2kyYyBmODAxYzAwMC5pMmM6IHRyYW5zZmVyOiB3cml0ZSAzNCBieXRlcy4NCj4+Pj4+
+Pj4gSnVuICA5IDE1OjU2OjM0IG1lMjAga2VybmVsOiBhdDkxX2kyYyBmODAxYzAwMC5pMmM6IGNv
+bnRyb2xsZXIgdGltZWQgb3V0DQo+Pj4+Pj4+IEp1biAgOSAxNTo1NjozNCBtZTIwIGtlcm5lbDog
+aTJjIGkyYy0yOiBUcnlpbmcgaTJjIGJ1cyByZWNvdmVyeQ0KPj4+Pj4+PiBKdW4gIDkgMTU6NTY6
+MzQgbWUyMCBrZXJuZWw6IGF0MjQgMi0wMDUwOiB3cml0ZSAzMkA5NiAtLT4gLTExMCAoLTIzMTU1
+KQ0KPj4+Pj4+PiBKdW4gIDkgMTU6NTY6MzQgbWUyMCBrZXJuZWw6IGkyYyBpMmMtMjogYXQ5MV94
+ZmVyOiBwcm9jZXNzaW5nIDEgbWVzc2FnZXM6DQo+Pj4+Pj4+IEp1biAgOSAxNTo1NjozNCBtZTIw
+IGtlcm5lbDogYXQ5MV9pMmMgZjgwMWMwMDAuaTJjOiB0cmFuc2Zlcjogd3JpdGUgMzQgYnl0ZXMu
+DQo+Pj4+Pj4+IEp1biAgOSAxNTo1NjozNCBtZTIwIGtlcm5lbDogYXQ5MV9pMmMgZjgwMWMwMDAu
+aTJjOiBjb250cm9sbGVyIHRpbWVkIG91dA0KPj4+Pj4+PiBKdW4gIDkgMTU6NTY6MzQgbWUyMCBr
+ZXJuZWw6IGkyYyBpMmMtMjogVHJ5aW5nIGkyYyBidXMgcmVjb3ZlcnkNCj4+Pj4+Pj4gSnVuICA5
+IDE1OjU2OjM0IG1lMjAga2VybmVsOiBhdDI0IDItMDA1MDogd3JpdGUgMzJAOTYgLS0+IC0xMTAg
+KC0yMzE0MykNCj4+Pj4+Pj4NCj4+Pj4+Pj4gQW5kIHRoZW4gdGhlcmUgaXMgbm8gbW9yZSBhY3Rp
+b24uIEkuZS4gb25seSBhIGNvdXBsZSBvZiAzMiBieXRlIHBhZ2VzDQo+Pj4+Pj4+IGFyZSB3cml0
+dGVuLg0KPj4+Pj4+Pg0KPj4+Pj4+PiBXaXRoIHRoZSBhYm92ZSBtZW50aW9uZWQgZHRzIG92ZXJy
+aWRlIGluIHBsYWNlIEkgaW5zdGVhZCBnZXQgdGhpcywgd2hpY2ggaXMNCj4+Pj4+Pj4gYSBsb3Qg
+bW9yZSBzZW5zaWJsZToNCj4+Pj4+Pj4NCj4+Pj4+Pj4gSnVuICA5IDE1OjQ4OjUzIG1lMjAga2Vy
+bmVsOiBpMmMgaTJjLTI6IGF0OTFfeGZlcjogcHJvY2Vzc2luZyAxIG1lc3NhZ2VzOg0KPj4+Pj4+
+PiBKdW4gIDkgMTU6NDg6NTMgbWUyMCBrZXJuZWw6IGF0OTFfaTJjIGY4MDFjMDAwLmkyYzogdHJh
+bnNmZXI6IHdyaXRlIDM0IGJ5dGVzLg0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6NTMgbWUyMCBrZXJu
+ZWw6IGF0OTFfaTJjIGY4MDFjMDAwLmkyYzogdHJhbnNmZXIgY29tcGxldGUNCj4+Pj4+Pj4gSnVu
+ICA5IDE1OjQ4OjUzIG1lMjAga2VybmVsOiBhdDI0IDItMDA1MDogd3JpdGUgMzJAMCAtLT4gMCAo
+NzUzNjI5KQ0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6NTMgbWUyMCBrZXJuZWw6IGkyYyBpMmMtMjog
+YXQ5MV94ZmVyOiBwcm9jZXNzaW5nIDEgbWVzc2FnZXM6DQo+Pj4+Pj4+IEp1biAgOSAxNTo0ODo1
+MyBtZTIwIGtlcm5lbDogYXQ5MV9pMmMgZjgwMWMwMDAuaTJjOiB0cmFuc2Zlcjogd3JpdGUgMzQg
+Ynl0ZXMuDQo+Pj4+Pj4+IEp1biAgOSAxNTo0ODo1MyBtZTIwIGtlcm5lbDogYXQ5MV9pMmMgZjgw
+MWMwMDAuaTJjOiByZWNlaXZlZCBuYWNrDQo+Pj4+Pj4+IEp1biAgOSAxNTo0ODo1MyBtZTIwIGtl
+cm5lbDogYXQyNCAyLTAwNTA6IHdyaXRlIDMyQDMyIC0tPiAtMTIxICg3NTM2MjkpDQo+Pj4+Pj4+
+IEp1biAgOSAxNTo0ODo1MyBtZTIwIGtlcm5lbDogaTJjIGkyYy0yOiBhdDkxX3hmZXI6IHByb2Nl
+c3NpbmcgMSBtZXNzYWdlczoNCj4+Pj4+Pj4gSnVuICA5IDE1OjQ4OjUzIG1lMjAga2VybmVsOiBh
+dDkxX2kyYyBmODAxYzAwMC5pMmM6IHRyYW5zZmVyOiB3cml0ZSAzNCBieXRlcy4NCj4+Pj4+Pj4g
+SnVuICA5IDE1OjQ4OjUzIG1lMjAga2VybmVsOiBhdDkxX2kyYyBmODAxYzAwMC5pMmM6IHRyYW5z
+ZmVyIGNvbXBsZXRlDQo+Pj4+Pj4+IEp1biAgOSAxNTo0ODo1MyBtZTIwIGtlcm5lbDogYXQyNCAy
+LTAwNTA6IHdyaXRlIDMyQDMyIC0tPiAwICg3NTM2MzApDQo+Pj4+Pj4+IEp1biAgOSAxNTo0ODo1
+MyBtZTIwIGtlcm5lbDogaTJjIGkyYy0yOiBhdDkxX3hmZXI6IHByb2Nlc3NpbmcgMSBtZXNzYWdl
+czoNCj4+Pj4+Pj4gSnVuICA5IDE1OjQ4OjUzIG1lMjAga2VybmVsOiBhdDkxX2kyYyBmODAxYzAw
+MC5pMmM6IHRyYW5zZmVyOiB3cml0ZSAzNCBieXRlcy4NCj4+Pj4+Pj4gSnVuICA5IDE1OjQ4OjUz
+IG1lMjAga2VybmVsOiBhdDkxX2kyYyBmODAxYzAwMC5pMmM6IHJlY2VpdmVkIG5hY2sNCj4+Pj4+
+Pj4gSnVuICA5IDE1OjQ4OjUzIG1lMjAga2VybmVsOiBhdDI0IDItMDA1MDogd3JpdGUgMzJANjQg
+LS0+IC0xMjEgKDc1MzYzMCkNCj4+Pj4+Pj4gSnVuICA5IDE1OjQ4OjUzIG1lMjAga2VybmVsOiBp
+MmMgaTJjLTI6IGF0OTFfeGZlcjogcHJvY2Vzc2luZyAxIG1lc3NhZ2VzOg0KPj4+Pj4+PiBKdW4g
+IDkgMTU6NDg6NTMgbWUyMCBrZXJuZWw6IGF0OTFfaTJjIGY4MDFjMDAwLmkyYzogdHJhbnNmZXI6
+IHdyaXRlIDM0IGJ5dGVzLg0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6NTMgbWUyMCBrZXJuZWw6IGF0
+OTFfaTJjIGY4MDFjMDAwLmkyYzogdHJhbnNmZXIgY29tcGxldGUNCj4+Pj4+Pj4gSnVuICA5IDE1
+OjQ4OjUzIG1lMjAga2VybmVsOiBhdDI0IDItMDA1MDogd3JpdGUgMzJANjQgLS0+IDAgKDc1MzYz
+MSkNCj4+Pj4+Pj4gSnVuICA5IDE1OjQ4OjUzIG1lMjAga2VybmVsOiBpMmMgaTJjLTI6IGF0OTFf
+eGZlcjogcHJvY2Vzc2luZyAxIG1lc3NhZ2VzOg0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6NTMgbWUy
+MCBrZXJuZWw6IGF0OTFfaTJjIGY4MDFjMDAwLmkyYzogdHJhbnNmZXI6IHdyaXRlIDM0IGJ5dGVz
+Lg0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6NTMgbWUyMCBrZXJuZWw6IGF0OTFfaTJjIGY4MDFjMDAw
+LmkyYzogcmVjZWl2ZWQgbmFjaw0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6NTMgbWUyMCBrZXJuZWw6
+IGF0MjQgMi0wMDUwOiB3cml0ZSAzMkA5NiAtLT4gLTEyMSAoNzUzNjMxKQ0KPj4+Pj4+PiBKdW4g
+IDkgMTU6NDg6NTMgbWUyMCBrZXJuZWw6IGkyYyBpMmMtMjogYXQ5MV94ZmVyOiBwcm9jZXNzaW5n
+IDEgbWVzc2FnZXM6DQo+Pj4+Pj4+IEp1biAgOSAxNTo0ODo1MyBtZTIwIGtlcm5lbDogYXQ5MV9p
+MmMgZjgwMWMwMDAuaTJjOiB0cmFuc2Zlcjogd3JpdGUgMzQgYnl0ZXMuDQo+Pj4+Pj4+IEp1biAg
+OSAxNTo0ODo1MyBtZTIwIGtlcm5lbDogYXQ5MV9pMmMgZjgwMWMwMDAuaTJjOiB0cmFuc2ZlciBj
+b21wbGV0ZQ0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6NTMgbWUyMCBrZXJuZWw6IGF0MjQgMi0wMDUw
+OiB3cml0ZSAzMkA5NiAtLT4gMCAoNzUzNjMyKQ0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6NTMgbWUy
+MCBrZXJuZWw6IGkyYyBpMmMtMjogYXQ5MV94ZmVyOiBwcm9jZXNzaW5nIDEgbWVzc2FnZXM6DQo+
+Pj4+Pj4+IEp1biAgOSAxNTo0ODo1MyBtZTIwIGtlcm5lbDogYXQ5MV9pMmMgZjgwMWMwMDAuaTJj
+OiB0cmFuc2Zlcjogd3JpdGUgMzQgYnl0ZXMuDQo+Pj4+Pj4+IEp1biAgOSAxNTo0ODo1MyBtZTIw
+IGtlcm5lbDogYXQ5MV9pMmMgZjgwMWMwMDAuaTJjOiByZWNlaXZlZCBuYWNrDQo+Pj4+Pj4+IEp1
+biAgOSAxNTo0ODo1MyBtZTIwIGtlcm5lbDogYXQyNCAyLTAwNTA6IHdyaXRlIDMyQDEyOCAtLT4g
+LTEyMSAoNzUzNjMyKQ0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6NTMgbWUyMCBrZXJuZWw6IGkyYyBp
+MmMtMjogYXQ5MV94ZmVyOiBwcm9jZXNzaW5nIDEgbWVzc2FnZXM6DQo+Pj4+Pj4+IEp1biAgOSAx
+NTo0ODo1MyBtZTIwIGtlcm5lbDogYXQ5MV9pMmMgZjgwMWMwMDAuaTJjOiB0cmFuc2Zlcjogd3Jp
+dGUgMzQgYnl0ZXMuDQo+Pj4+Pj4+IEp1biAgOSAxNTo0ODo1MyBtZTIwIGtlcm5lbDogYXQ5MV9p
+MmMgZjgwMWMwMDAuaTJjOiB0cmFuc2ZlciBjb21wbGV0ZQ0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6
+NTMgbWUyMCBrZXJuZWw6IGF0MjQgMi0wMDUwOiB3cml0ZSAzMkAxMjggLS0+IDAgKDc1MzYzMykN
+Cj4+Pj4+Pj4gSnVuICA5IDE1OjQ4OjUzIG1lMjAga2VybmVsOiBpMmMgaTJjLTI6IGF0OTFfeGZl
+cjogcHJvY2Vzc2luZyAxIG1lc3NhZ2VzOg0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6NTMgbWUyMCBr
+ZXJuZWw6IGF0OTFfaTJjIGY4MDFjMDAwLmkyYzogdHJhbnNmZXI6IHdyaXRlIDM0IGJ5dGVzLg0K
+Pj4+Pj4+PiBKdW4gIDkgMTU6NDg6NTMgbWUyMCBrZXJuZWw6IGF0OTFfaTJjIGY4MDFjMDAwLmky
+YzogcmVjZWl2ZWQgbmFjaw0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6NTMgbWUyMCBrZXJuZWw6IGF0
+MjQgMi0wMDUwOiB3cml0ZSAzMkAxNjAgLS0+IC0xMjEgKDc1MzYzMykNCj4+Pj4+Pj4gSnVuICA5
+IDE1OjQ4OjUzIG1lMjAga2VybmVsOiBpMmMgaTJjLTI6IGF0OTFfeGZlcjogcHJvY2Vzc2luZyAx
+IG1lc3NhZ2VzOg0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6NTMgbWUyMCBrZXJuZWw6IGF0OTFfaTJj
+IGY4MDFjMDAwLmkyYzogdHJhbnNmZXI6IHdyaXRlIDM0IGJ5dGVzLg0KPj4+Pj4+PiBKdW4gIDkg
+MTU6NDg6NTMgbWUyMCBrZXJuZWw6IGF0OTFfaTJjIGY4MDFjMDAwLmkyYzogdHJhbnNmZXIgY29t
+cGxldGUNCj4+Pj4+Pj4gSnVuICA5IDE1OjQ4OjUzIG1lMjAga2VybmVsOiBhdDI0IDItMDA1MDog
+d3JpdGUgMzJAMTYwIC0tPiAwICg3NTM2MzQpDQo+Pj4+Pj4+IC4uLiBzbmlwIC4uLg0KPj4+Pj4+
+PiBKdW4gIDkgMTU6NDg6NTUgbWUyMCBrZXJuZWw6IGkyYyBpMmMtMjogYXQ5MV94ZmVyOiBwcm9j
+ZXNzaW5nIDEgbWVzc2FnZXM6DQo+Pj4+Pj4+IEp1biAgOSAxNTo0ODo1NSBtZTIwIGtlcm5lbDog
+YXQ5MV9pMmMgZjgwMWMwMDAuaTJjOiB0cmFuc2Zlcjogd3JpdGUgMzQgYnl0ZXMuDQo+Pj4+Pj4+
+IEp1biAgOSAxNTo0ODo1NSBtZTIwIGtlcm5lbDogYXQ5MV9pMmMgZjgwMWMwMDAuaTJjOiByZWNl
+aXZlZCBuYWNrDQo+Pj4+Pj4+IEp1biAgOSAxNTo0ODo1NSBtZTIwIGtlcm5lbDogYXQyNCAyLTAw
+NTA6IHdyaXRlIDMyQDgxMjggLS0+IC0xMjEgKDc1Mzg4MykNCj4+Pj4+Pj4gSnVuICA5IDE1OjQ4
+OjU1IG1lMjAga2VybmVsOiBpMmMgaTJjLTI6IGF0OTFfeGZlcjogcHJvY2Vzc2luZyAxIG1lc3Nh
+Z2VzOg0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6NTUgbWUyMCBrZXJuZWw6IGF0OTFfaTJjIGY4MDFj
+MDAwLmkyYzogdHJhbnNmZXI6IHdyaXRlIDM0IGJ5dGVzLg0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6
+NTUgbWUyMCBrZXJuZWw6IGF0OTFfaTJjIGY4MDFjMDAwLmkyYzogdHJhbnNmZXIgY29tcGxldGUN
+Cj4+Pj4+Pj4gSnVuICA5IDE1OjQ4OjU1IG1lMjAga2VybmVsOiBhdDI0IDItMDA1MDogd3JpdGUg
+MzJAODEyOCAtLT4gMCAoNzUzODg0KQ0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6NTUgbWUyMCBrZXJu
+ZWw6IGkyYyBpMmMtMjogYXQ5MV94ZmVyOiBwcm9jZXNzaW5nIDEgbWVzc2FnZXM6DQo+Pj4+Pj4+
+IEp1biAgOSAxNTo0ODo1NSBtZTIwIGtlcm5lbDogYXQ5MV9pMmMgZjgwMWMwMDAuaTJjOiB0cmFu
+c2Zlcjogd3JpdGUgMzQgYnl0ZXMuDQo+Pj4+Pj4+IEp1biAgOSAxNTo0ODo1NSBtZTIwIGtlcm5l
+bDogYXQ5MV9pMmMgZjgwMWMwMDAuaTJjOiByZWNlaXZlZCBuYWNrDQo+Pj4+Pj4+IEp1biAgOSAx
+NTo0ODo1NSBtZTIwIGtlcm5lbDogYXQyNCAyLTAwNTA6IHdyaXRlIDMyQDgxNjAgLS0+IC0xMjEg
+KDc1Mzg4NCkNCj4+Pj4+Pj4gSnVuICA5IDE1OjQ4OjU1IG1lMjAga2VybmVsOiBpMmMgaTJjLTI6
+IGF0OTFfeGZlcjogcHJvY2Vzc2luZyAxIG1lc3NhZ2VzOg0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6
+NTUgbWUyMCBrZXJuZWw6IGF0OTFfaTJjIGY4MDFjMDAwLmkyYzogdHJhbnNmZXI6IHdyaXRlIDM0
+IGJ5dGVzLg0KPj4+Pj4+PiBKdW4gIDkgMTU6NDg6NTUgbWUyMCBrZXJuZWw6IGF0OTFfaTJjIGY4
+MDFjMDAwLmkyYzogdHJhbnNmZXIgY29tcGxldGUNCj4+Pj4+Pj4gSnVuICA5IDE1OjQ4OjU1IG1l
+MjAga2VybmVsOiBhdDI0IDItMDA1MDogd3JpdGUgMzJAODE2MCAtLT4gMCAoNzUzODg1KQ0KPj4+
+Pj4+DQo+Pj4+Pj4gY291bGQgeW91IHBsZWFzZSBhcHBseSB0aGlzIHBhdGNoLXNldCBbMV0gYW5k
+IGxldCB1cyBrbm93IGlmIGl0DQo+Pj4+Pj4gYWRkcmVzc2VzIHlvdXIgaXNzdWU/DQo+Pj4+Pj4N
+Cj4+Pj4+PiBUaGFua3MgYW5kIGJlc3QgcmVnYXJkcywNCj4+Pj4+PiBDb2RyaW4NCj4+Pj4+Pg0K
+Pj4+Pj4+IGh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9saW51eC1pMmMvbGlz
+dC8/c2VyaWVzPTI1NTQwOA0KPj4+Pj4NCj4+Pj4+IFRoYXQgc2VyaWVzIGRvZXMgaW5kZWVkIGhl
+bHAhIEknbGwgcmVwbHkgd2l0aCBhIHRlc3RlZC1ieSBldGMgb24gdGhlDQo+Pj4+PiBmaXJzdCB0
+d28gcGF0Y2hlcywgSSBjYW4ndCB0ZXN0IHBhdGNoIDMvMyB3aXRoIG15IHNhbWE1ZDMgYm9hcmQu
+Li4NCj4+Pj4+DQo+Pj4+PiBUaGFuayB5b3UgdmVyeSBtdWNoIQ0KPj4+Pg0KPj4+PiBTaW5jZSBy
+ZXBseWluZyB0byB0aGUgYWN0dWFsIHBhdGNoZXMgZG8gbm90IHdvcmsgZm9yIG1lLCBJJ20gd3Jp
+dGluZyBoZXJlDQo+Pj4+IGluc3RlYWQuIFNvcnJ5IGFib3V0IHRoYXQuIEFzIHN0YXRlZCBhYm92
+ZSwgaXQgL3NlZW1zLyB0byB3b3JrIG11Y2ggYmV0dGVyDQo+Pj4+IHdpdGggdGhlc2UgcGF0Y2hl
+cy4gQnV0IEkgZm9vbGVkIG15c2VsZiBhbmQgdGhlcmUgaXMgc3RpbGwgc29tZSByZW1haW5pbmcN
+Cj4+Pj4gdHJvdWJsZS4gSXQgaXMgbm90IHVuY29tbW9uIHRoYXQgdGhlIHNlY29uZCAoMzItYnl0
+ZSkgcGFnZSBpbiB0aGUgZWVwcm9tDQo+Pj4+IGlzIG5vdCB3cml0dGVuIGNvcnJlY3RseSBmb3Ig
+d2hhdGV2ZXIgcmVhc29uLiBJIGRvIG5vdCBrbm93IHdoeSBpdCdzDQo+Pj4+IGFsd2F5cyB0aGUg
+c2Vjb25kIHBhZ2UgdGhhdCBnZXRzIGNvcnJ1cHRlZCwgYnV0IHRoaXMgaXMgYSBiYWQgcHJvYmxl
+bSBzaW5jZQ0KPj4+PiB0aGUgZmFpbHVyZSBpcyBjb21wbGV0ZWx5IHNpbGVudC4NCj4+Pj4NCj4+
+Pj4gQ2hlZXJzLA0KPj4+PiBQZXRlcg0KPj4+DQo+Pj4gI3JlZ3pib3QgcG9rZQ0KPj4NCj4+IF9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQo+PiBsaW51eC1h
+cm0ta2VybmVsIG1haWxpbmcgbGlzdA0KPj4gbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRl
+YWQub3JnDQo+PiBodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xp
+bnV4LWFybS1rZXJuZWwNCj4gDQo+ICNyZWd6Ym90IHBva2UNCg0K
