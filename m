@@ -2,70 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7F964F84B
-	for <lists+linux-i2c@lfdr.de>; Sat, 17 Dec 2022 09:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F17DB64F84A
+	for <lists+linux-i2c@lfdr.de>; Sat, 17 Dec 2022 09:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbiLQIkt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 17 Dec 2022 03:40:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
+        id S229537AbiLQIks (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 17 Dec 2022 03:40:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiLQIkq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 17 Dec 2022 03:40:46 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0D710A1
-        for <linux-i2c@vger.kernel.org>; Sat, 17 Dec 2022 00:40:43 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id o5-20020a05600c510500b003d21f02fbaaso5539486wms.4
+        with ESMTP id S229580AbiLQIkp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 17 Dec 2022 03:40:45 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2696621AD
+        for <linux-i2c@vger.kernel.org>; Sat, 17 Dec 2022 00:40:44 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so5561383wmb.2
         for <linux-i2c@vger.kernel.org>; Sat, 17 Dec 2022 00:40:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=3GDLBFkuJFXSyonrm8eFgXAmB+1o4E8vQUhTBk/hGWM=;
-        b=l7eCYGq1xVMxw26VmtXZKCZAS94QkPgQnoAhLrW3CgT1AultN8Wt2/aKnA+ehb11OU
-         WLMkflZT0A7A+DMGCOd1rZf/5f/2eRBNRXbBCPx1XRQgY0Z94MgSHn6RR/99cq6l4fLw
-         QXjRaqXEdlDHUTxerL9Q6a4TUKQtt1EGMyUdE4xSWclpVH+vd1APv053uoBjohH0MoiC
-         cgOkicgoQ+K8nBWiDzeBaBLCHnwBZNYGAtl+OYhJ2GL9asl3ClJcaDqFNdcnO/knnKqI
-         P8NkirGueYaGAWllERSl6/stGwtfwbdqJEkXxdY7cOhXN8IXBWKzYyL92vOLUpEgT0jJ
-         uRTQ==
+        bh=+HOfUGsqT26zopCRPAzvwC7XygXVY/3a++s71BCQzio=;
+        b=BWULXxnRpN5SvnDBXNXJSh5BCRyi4dEfGeYI4UCYgCBgBBfuOh+e8yuj0pnpIfQqf7
+         FBajHYHAYqColpoAqgyva1M5vEY2OWeM7GqsJYpobGQybbuALEUQvFIxvNBHw3VUCaGK
+         QDARyBhGzQDOZttMlu80ItLQIjaTQjVavKwVEWo6ZeiKE1jpaVXlJN+cqvTxukzCsg20
+         2ggF7X6GKlEp+pFX0A/Q28WkT9KmUPyJsZLCn8pKWauyacvlMAb7JwSRUr+uP2GMkLUA
+         r4Yk1psf+xg1ZwdxSeESA2VavaViZfvOhGt1TkOH/h2fNLD8PrIGv2MwQCbZ8JHsyLO5
+         IbhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3GDLBFkuJFXSyonrm8eFgXAmB+1o4E8vQUhTBk/hGWM=;
-        b=M1NoCOOHUjyFz3MrhA+9fZDDN7vvVSnKGiFBQfyJkD2J4fjaRZyWdl77IlR9ne4Z2o
-         zckG6ODAXGYZDqvyTjMQfEAPE0kymrPBbXdRfY61a25qlRwLXewW+UsXmsR69gPcVNrP
-         qcygdM0D06ttyhvh3IGb5e/vDm1znCrSBaSIx9+f38koKSLRiQbCBeQloSZs1x3NFxPf
-         FUTyPJtPHFnhmLgBQMypvQQWrrkKzJny3i2VvfgnkJdW99j9OUvoaujF2yut9HSQVl8p
-         Q9qLF2Be93bX/QOU0oe4k71I2yjkWcRkJ0aQn+tjNdcaZ74EyCsV3WGDw/pcBFXKBR8F
-         Gykw==
-X-Gm-Message-State: ANoB5plW1BjZMkK4bksbJMrM4U5ZHbb/9+zgzvHk+2Fwvt1VJwagmzCE
-        oOaU8qjHR+75SDjtCd6tBYLyDsXWwnk=
-X-Google-Smtp-Source: AA0mqf4AYPPOHK/dPboT9y2c43U/Xt+tiwOifheHQ4XsjUGNDt1lDOVnEZWJtD6vd2K07HAIgHQ7DA==
-X-Received: by 2002:a05:600c:554b:b0:3d2:1761:3742 with SMTP id iz11-20020a05600c554b00b003d217613742mr21936429wmb.15.1671266441492;
-        Sat, 17 Dec 2022 00:40:41 -0800 (PST)
+        bh=+HOfUGsqT26zopCRPAzvwC7XygXVY/3a++s71BCQzio=;
+        b=Oj9wV55oaAG7/SDjXRTIYFJgI4foIW+Dyp0/BLXVR/upye8OF9qEtcAFfVTRzPhcCm
+         QMuU2e+t+UZ/yeDnF8cNORsrtZrMKAaNmQ7a6Qq9U0udTRhQBXwmjl0pbWee1KenKadG
+         7upnyU1cmdJTcnhGSc/h91wafZuv9jAGyPC4sw7+aWmQno7umpL4vf1lAlEl2aKt9fSO
+         3wPiTkNM5XYAE0JW7d3//ltH/V2wl4aWQ2sNfQDfSVeQANeGw2zpcicNRDnVrrn8YOte
+         SnyP1EC2wLg+VXE4xN1iaSTkd6+QXi9+dtbMhEHlghzeCcgtHbJmV63zSYQKBhtc7XaM
+         aDtw==
+X-Gm-Message-State: ANoB5pn3Y94aTYOATWZ2V9wwpaIzMnhXnAoIM2eQevdKbGVeXlYEC53a
+        GESnyk0e0Km7IonMzKihqToFoTB5zCY=
+X-Google-Smtp-Source: AA0mqf4Rdx1LB8L0TUuaiLi/YgYe9WvGoyVMZoV9XAq1BIzYo6yzT07fKOg6dWVszBYcge8jO7LQ+Q==
+X-Received: by 2002:a1c:7303:0:b0:3cf:a258:971 with SMTP id d3-20020a1c7303000000b003cfa2580971mr37544247wmb.41.1671266442455;
+        Sat, 17 Dec 2022 00:40:42 -0800 (PST)
 Received: from ?IPV6:2a01:c22:7af7:5300:8868:b389:215f:d1? (dynamic-2a01-0c22-7af7-5300-8868-b389-215f-00d1.c22.pool.telefonica.de. [2a01:c22:7af7:5300:8868:b389:215f:d1])
-        by smtp.googlemail.com with ESMTPSA id o3-20020a05600c4fc300b003cfbbd54178sm24538588wmq.2.2022.12.17.00.40.40
+        by smtp.googlemail.com with ESMTPSA id o3-20020a05600c4fc300b003cfbbd54178sm24538660wmq.2.2022.12.17.00.40.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Dec 2022 00:40:41 -0800 (PST)
-Message-ID: <06d01cd1-fc17-48d5-476f-7bce031d0ac1@gmail.com>
-Date:   Fri, 16 Dec 2022 22:36:07 +0100
+        Sat, 17 Dec 2022 00:40:42 -0800 (PST)
+Message-ID: <cc9b2a1c-1233-d3d3-cdec-f125b0d68cf8@gmail.com>
+Date:   Fri, 16 Dec 2022 22:37:00 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH 4/8] i2c: i801: enable FEATURE_IRQ and
- FEATURE_I2C_BLOCK_READ on all chip versions
+Subject: Re: [PATCH 5/8] i2c: i801: add helper i801_set_hstadd()
 Content-Language: en-US
 To:     Jean Delvare <jdelvare@suse.de>
 Cc:     linux-i2c@vger.kernel.org
 References: <4125f9ce-ce5f-fbcf-7d6f-9bc586ac43e0@gmail.com>
- <1f81a126-11b4-aa22-1e2c-9824e0ad730c@gmail.com>
- <20220607162442.7b618cca@endymion.delvare>
- <20220613190841.653709e7@endymion.delvare>
- <20220614145952.0df9661a@endymion.delvare>
+ <e07379b5-609c-fd2b-3e66-f79c984c3a55@gmail.com>
+ <20220609155326.30147f58@endymion.delvare>
 From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <20220614145952.0df9661a@endymion.delvare>
+In-Reply-To: <20220609155326.30147f58@endymion.delvare>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
@@ -79,118 +76,149 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 14.06.2022 14:59, Jean Delvare wrote:
+On 09.06.2022 15:53, Jean Delvare wrote:
 > Hi Heiner,
 > 
-> On Mon, 13 Jun 2022 19:08:41 +0200, Jean Delvare wrote:
->> I was able to resurrect my Sony Vaio GR214EP laptop to test this patch
->> on an Intel 82801CAM (ICH3-M) chipset. And as I suspected, it does not
->> work. I get the following error in the kernel log:
+> On Fri, 15 Apr 2022 18:57:21 +0200, Heiner Kallweit wrote:
+>> Factor out setting SMBHSTADD to a helper. The current code makes the
+>> assumption that constant I2C_SMBUS_READ has bit 0 set, that's not ideal.
+> 
+> This isn't an "assumption". The values of I2C_SMBUS_WRITE and
+> I2C_SMBUS_READ were chosen to match the bit position and values in the
+> I2C protocol. Maybe it should have been made clearer by defining them
+> as hexadecimal values instead of decimal values. Nevertheless, I find
+> it unfortunate to not use this fact to optimize the code, see below.
+> 
+>> Therefore let the new helper explicitly check for I2C_SMBUS_READ.
 >>
->> [13563.411101] i801_smbus 0000:00:1f.3: SMBus using PCI interrupt
->> [13565.434712] irq 9: nobody cared (try booting with the "irqpoll" option)
+>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+>> ---
+>>  drivers/i2c/busses/i2c-i801.c | 41 ++++++++++++++++++-----------------
+>>  1 file changed, 21 insertions(+), 20 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+>> index a9737f14d..bf77f8640 100644
+>> --- a/drivers/i2c/busses/i2c-i801.c
+>> +++ b/drivers/i2c/busses/i2c-i801.c
+>> @@ -771,6 +771,14 @@ static int i801_block_transaction(struct i801_priv *priv, union i2c_smbus_data *
+>>  	return result;
+>>  }
+>>  
+>> +static void i801_set_hstadd(struct i801_priv *priv, u8 addr, char read_write)
+>> +{
+>> +	addr <<= 1;
+>> +	if (read_write == I2C_SMBUS_READ)
+>> +		addr |= 0x01;
+>> +	outb_p(addr, SMBHSTADD(priv));
 > 
-> And now it's all coming back to me. The reason why we did not enable
-> interrupts on chipsets older than the ICH5 is because they lack bit
-> INTS in PCI register PCISTS. When the IRQ line is shared, we don't know
-> whether the interrupt was caused by our device or by another device.
-> Specifically, the following piece of code fails (it returns IRQ_NONE
-> unconditionally):
+> This can be written:
 > 
-> static irqreturn_t i801_isr(int irq, void *dev_id)
-> {
-> 	(...)
-> 	/* Confirm this is our interrupt */
-> 	pci_read_config_word(priv->pci_dev, PCI_STATUS, &pcists);
-> 	if (!(pcists & PCI_STATUS_INTERRUPT))
-> 		return IRQ_NONE;
+> 	outb_p((addr << 1) | read_write, SMBHSTADD(priv));
 > 
-> I tried replacing the code above by a check on SMBHSTSTS instead:
+> Net result -48 bytes of (x86_64) binary code. That's basically what the
+> original code was doing, minus the useless masking.
 > 
-> 	status = inb_p(SMBHSTSTS(priv));
-> 	if (!(status & STATUS_FLAGS))
-> 		return IRQ_NONE;
+OK
+
+>> +}
+>> +
+>>  /* Return negative errno on error. */
+>>  static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+>>  		       unsigned short flags, char read_write, u8 command,
+>> @@ -795,28 +803,24 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+>>  
+>>  	switch (size) {
+>>  	case I2C_SMBUS_QUICK:
+>> -		outb_p(((addr & 0x7f) << 1) | (read_write & 0x01),
+>> -		       SMBHSTADD(priv));
+>> +		i801_set_hstadd(priv, addr, read_write);
+>>  		xact = I801_QUICK;
+>>  		break;
+>>  	case I2C_SMBUS_BYTE:
+>> -		outb_p(((addr & 0x7f) << 1) | (read_write & 0x01),
+>> -		       SMBHSTADD(priv));
+>> +		i801_set_hstadd(priv, addr, read_write);
+>>  		if (read_write == I2C_SMBUS_WRITE)
+>>  			outb_p(command, SMBHSTCMD(priv));
+>>  		xact = I801_BYTE;
+>>  		break;
+>>  	case I2C_SMBUS_BYTE_DATA:
+>> -		outb_p(((addr & 0x7f) << 1) | (read_write & 0x01),
+>> -		       SMBHSTADD(priv));
+>> +		i801_set_hstadd(priv, addr, read_write);
+>>  		outb_p(command, SMBHSTCMD(priv));
+>>  		if (read_write == I2C_SMBUS_WRITE)
+>>  			outb_p(data->byte, SMBHSTDAT0(priv));
+>>  		xact = I801_BYTE_DATA;
+>>  		break;
+>>  	case I2C_SMBUS_WORD_DATA:
+>> -		outb_p(((addr & 0x7f) << 1) | (read_write & 0x01),
+>> -		       SMBHSTADD(priv));
+>> +		i801_set_hstadd(priv, addr, read_write);
+>>  		outb_p(command, SMBHSTCMD(priv));
+>>  		if (read_write == I2C_SMBUS_WRITE) {
+>>  			outb_p(data->word & 0xff, SMBHSTDAT0(priv));
+>> @@ -825,7 +829,7 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+>>  		xact = I801_WORD_DATA;
+>>  		break;
+>>  	case I2C_SMBUS_PROC_CALL:
+>> -		outb_p((addr & 0x7f) << 1, SMBHSTADD(priv));
+>> +		i801_set_hstadd(priv, addr, I2C_SMBUS_WRITE);
+>>  		outb_p(command, SMBHSTCMD(priv));
+>>  		outb_p(data->word & 0xff, SMBHSTDAT0(priv));
+>>  		outb_p((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
+>> @@ -833,8 +837,7 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+>>  		read_write = I2C_SMBUS_READ;
+>>  		break;
+>>  	case I2C_SMBUS_BLOCK_DATA:
+>> -		outb_p(((addr & 0x7f) << 1) | (read_write & 0x01),
+>> -		       SMBHSTADD(priv));
+>> +		i801_set_hstadd(priv, addr, read_write);
+>>  		outb_p(command, SMBHSTCMD(priv));
+>>  		block = 1;
+>>  		break;
+>> @@ -845,10 +848,11 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+>>  		 * However if SPD Write Disable is set (Lynx Point and later),
+>>  		 * the read will fail if we don't set the R/#W bit.
+>>  		 */
+>> -		outb_p(((addr & 0x7f) << 1) |
+>> -		       ((priv->original_hstcfg & SMBHSTCFG_SPD_WD) ?
+>> -			(read_write & 0x01) : 0),
+>> -		       SMBHSTADD(priv));
+>> +		if (priv->original_hstcfg & SMBHSTCFG_SPD_WD)
+>> +			i801_set_hstadd(priv, addr, read_write);
+>> +		else
+>> +			i801_set_hstadd(priv, addr, I2C_SMBUS_WRITE);
 > 
-> It seems to work, however my testing is limited and I don't know how
-> reliable that would be if the other devices sharing the interrupt line
-> were used heavily at the same time (the laptop is idling in text mode
-> at the moment so the fact that the interrupt line is heavily shared
-> does not really get exercised).
+> Preserving the use of the ternary operator makes the generated binary
+> smaller once again:
 > 
-> Then I loaded the driver with interrupts disabled
-> (disable_features=0x10) to see if I2C block read was working. It is NOT
-> working, as can be seen from the following dumps from the memory SPD
-> EEPROM:
+> 		i801_set_hstadd(priv, addr,
+> 				(priv->original_hstcfg & SMBHSTCFG_SPD_WD) ?
+> 				read_write : I2C_SMBUS_WRITE);
 > 
-> linux-w6i1:/home/jdelvare/src/i2c-i801 # i2cdump -y 4 0x50 b
->      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-> 00: 80 08 04 0d 09 02 40 00 01 75 54 00 82 10 00 01    ??????@.?uT.??.?
-> 10: 8f 04 06 01 01 00 0e a0 60 00 00 14 0f 14 2c 20    ?????.??`..???, 
-> 20: 15 08 15 08 00 00 00 00 00 00 00 00 00 00 00 00    ????............
-> 30: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 12 b9    ..............??
-> 40: 7f da 00 00 00 00 00 00 53 53 50 31 33 33 2d 30    ??......SSP133-0
-> 50: 36 34 33 32 33 4a 00 00 00 00 00 00 00 01 02 00    64323J.......??.
-> 60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
-> 70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 64 cd    ..............d?
-> 80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-> 90: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-> a0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-> b0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-> c0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-> d0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-> e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-> f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+> Net result -11 bytes of (x86_64) binary code.
 > 
-> linux-w6i1:/home/jdelvare/src/i2c-i801 # i2cdump -y 4 0x50 i
->      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-> 00: 08 04 0d 09 02 40 00 01 75 54 00 82 10 00 01 8f    ?????@.?uT.??.??
-> 10: 04 06 01 01 00 0e a0 60 00 00 14 0f 14 2c 20 15    ????.??`..???, ?
-> 20: 08 04 0d 09 02 40 00 01 75 54 00 82 10 00 01 8f    ?????@.?uT.??.??
-> 30: 04 06 01 01 00 0e a0 60 00 00 14 0f 14 2c 20 15    ????.??`..???, ?
-> 40: 08 04 0d 09 02 40 00 01 75 54 00 82 10 00 01 8f    ?????@.?uT.??.??
-> 50: 04 06 01 01 00 0e a0 60 00 00 14 0f 14 2c 20 15    ????.??`..???, ?
-> 60: 08 04 0d 09 02 40 00 01 75 54 00 82 10 00 01 8f    ?????@.?uT.??.??
-> 70: 04 06 01 01 00 0e a0 60 00 00 14 0f 14 2c 20 15    ????.??`..???, ?
-> 80: 08 04 0d 09 02 40 00 01 75 54 00 82 10 00 01 8f    ?????@.?uT.??.??
-> 90: 04 06 01 01 00 0e a0 60 00 00 14 0f 14 2c 20 15    ????.??`..???, ?
-> a0: 08 04 0d 09 02 40 00 01 75 54 00 82 10 00 01 8f    ?????@.?uT.??.??
-> b0: 04 06 01 01 00 0e a0 60 00 00 14 0f 14 2c 20 15    ????.??`..???, ?
-> c0: 08 04 0d 09 02 40 00 01 75 54 00 82 10 00 01 8f    ?????@.?uT.??.??
-> d0: 04 06 01 01 00 0e a0 60 00 00 14 0f 14 2c 20 15    ????.??`..???, ?
-> e0: 08 04 0d 09 02 40 00 01 75 54 00 82 10 00 01 8f    ?????@.?uT.??.??
-> f0: 04 06 01 01 00 0e a0 60 00 00 14 0f 14 2c 20 15    ????.??`..???, ?
+OK
+
+>> +
+>>  		if (read_write == I2C_SMBUS_READ) {
+>>  			/* NB: page 240 of ICH5 datasheet also shows
+>>  			 * that DATA1 is the cmd field when reading */
+>> @@ -858,11 +862,8 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+>>  		block = 1;
+>>  		break;
+>>  	case I2C_SMBUS_BLOCK_PROC_CALL:
+>> -		/*
+>> -		 * Bit 0 of the slave address register always indicate a write
+>> -		 * command.
+>> -		 */
+>> -		outb_p((addr & 0x7f) << 1, SMBHSTADD(priv));
+>> +		/* Needs to be flagged as write transaction */
+>> +		i801_set_hstadd(priv, addr, I2C_SMBUS_WRITE);
+>>  		outb_p(command, SMBHSTCMD(priv));
+>>  		block = 1;
+>>  		break;
 > 
-> As you can see, the requested offset of the I2C block read (0x00, then
-> 0x20, then 0x40 etc.) is being ignored, and instead every I2C block
-> read starts at EEPROM offset 0x01.
 > 
-> If you compare the datasheets of the ICH5 (Intel doc 252516-001) and
-> ICH3-M (Intel doc 290716-001), section "I2C Read", you will see that
-> the description of the command is different. The format described for
-> the ICH5 (table 114 in the datasheet) does match what the Linux i2c
-> stack calls an I2C block read, while the format described for the
-> ICH3-M (table 5-87 in the datasheet) does NOT. Apparently the original
-> implementation was aimed at specific devices using 10-bit I2C
-> addressing. As no other SMBus host device implemented that, we did not
-> even allocate an SMBus command constant to it (and the fact that Intel
-> changed the format in later hardware iterations proves that this was the
-> right thing to do).
-> 
-> Looking at the ICH3-M implementation of the "I2C Block Read" transfer,
-> I feel very lucky that I did not trash my memory SPD EEPROM while
-> running the command. Because the format really starts with a WRITE of 2
-> bytes to the EEPROM before reading from it.
-> 
-> So at least the I2C block read part of the patch is never going to
-> work. The interrupt part could work if we change the test as described
-> above, however I would question the relevance of making that change
-> considering that it is no longer the obvious clean-up you originally
-> proposed, and would then impact recent hardware too. I would hate to
-> introduce a regression for the sole purpose of enabling interrupts on
-> 20-year old hardware which I doubt many people are still using.
-> 
-> I am available to perform any test you want me to on this old laptop.
-> As long as it runs...
-> 
-Thanks for testing! So I'll drop this patch from the series.
 
