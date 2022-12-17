@@ -2,68 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8BA64FB34
-	for <lists+linux-i2c@lfdr.de>; Sat, 17 Dec 2022 18:22:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5294C64FB35
+	for <lists+linux-i2c@lfdr.de>; Sat, 17 Dec 2022 18:22:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiLQRWG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 17 Dec 2022 12:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
+        id S229537AbiLQRWH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 17 Dec 2022 12:22:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiLQRWF (ORCPT
+        with ESMTP id S229730AbiLQRWF (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Sat, 17 Dec 2022 12:22:05 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6713BEE2E
-        for <linux-i2c@vger.kernel.org>; Sat, 17 Dec 2022 09:22:03 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id bg10so3849565wmb.1
-        for <linux-i2c@vger.kernel.org>; Sat, 17 Dec 2022 09:22:03 -0800 (PST)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D71FADD
+        for <linux-i2c@vger.kernel.org>; Sat, 17 Dec 2022 09:22:04 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id h16so5185998wrz.12
+        for <linux-i2c@vger.kernel.org>; Sat, 17 Dec 2022 09:22:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=MfasWIS4q6GvWx5f6Sq+YcT8Re6vVzqiuwp9qDtmjhI=;
-        b=ljTtWNlRSoWIfLnqb8dnyR0sU+f3nJ0yJSfZmbJQdCMofqRSFgxgPuRFHIPMPc9SK3
-         ODqlFsB1eMz/AsT1kaVZ2TBcUVbyuthA+jTQV22NFh3K0fCBttqfVlT/vkBqkawMQ7YE
-         P5ci884b5e4hyxN18ZPT1D2mNiRZPBlZXEFH4oilVQkxU4cGzzxtz+Uqm9jGdRZ2K43s
-         w/R9Z+EpT834am2FZzcIg9pqkYIDjkxILZ0iJDURMLSUVZZPsBR0XxALJuDoHiD42S4T
-         rYUWt17H/3k3sE4eibaybFj/SskRecT+mPWlK8i8mSkVSiY1MmOhQNrirTYODp9XZGez
-         Yrdg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J/HcfCqYcxJMHbAOcAjELp8fA8svV504O1OhkRwDbE4=;
+        b=cdhYFNMkxMLJTvj0KqB+H4W46k2odIroi0yiLuhkLqVvZ/9W3sD35tvdICibQWBOXD
+         VLEtYboqJulW/FGkjkbbdxOHaW5ra7bKXNLHQqvbgBGT1trnn5EPohviRzG/FFqHp8io
+         dEtVOaH/gRxfjwZeZWiLT2uyBgRjh+yx+/NePe68UfTQEvrXciXwXjXHtWp2Zh4myYrj
+         M/yPMrZh76uftQogBae4XwHhWNbKCumoeWhLizPJNdka/Zews/1N75Z6Veg2zoYW223b
+         HRpO4MmUfU9aNRTdxjkWhBnvhfwfpcVK0xeQ5iWzg+ggP+lRsVeTA6eplgFbNlwKYorB
+         ysdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MfasWIS4q6GvWx5f6Sq+YcT8Re6vVzqiuwp9qDtmjhI=;
-        b=OQ9c56AJJW9wePM5d5ekXL4C1ev/E+MPBfgYp0NPNjwH57xc2vozMQURPQMbAWg0AE
-         t/2PPgKBiI1YRt3rL3tEkcnIpxUd1ScAPxgpcrhu16FjJASHcdb1T/1OO5R2UGcYMare
-         hljIYqdv/Tfc4f+/sR8VOe9p2pgk4JfXDC2XQ3SaWyDGvqchrS16W3iHs79KwDGwSarc
-         gsuDimwzuNKQzX2xMSbUQTcPFecvLuwcw5jk/ZZlhCf4i5fNBu2oUPLiDGa5eik+Mc6p
-         j4E8C2qpnH5w869z+gCVDCMnxQ9Ovq3BvMn1H92bH7Te7QEdWzeYQ/rDnVMQIBSEEaYd
-         Mo1A==
-X-Gm-Message-State: ANoB5pkoC7kuC0AJM4/UioTr/am2OLmuO4dmaUNJrOiTtzbcQiBGxICM
-        1XcfJrzxndqfItYMhtzWhpkSLDOEUrA=
-X-Google-Smtp-Source: AA0mqf5fS74HM36fznhBUWkyNLnyLejsJxy2ZGI2VH5xI/jua85z7DLBCoU0iUcxmbo2JD+ugdJ8cg==
-X-Received: by 2002:a05:600c:1c23:b0:3d2:2f48:9443 with SMTP id j35-20020a05600c1c2300b003d22f489443mr15190415wms.15.1671297721805;
-        Sat, 17 Dec 2022 09:22:01 -0800 (PST)
+        bh=J/HcfCqYcxJMHbAOcAjELp8fA8svV504O1OhkRwDbE4=;
+        b=mij1BUykzq87745v219m9p9BGC0BvEoTCg0np2AAnRAL/Eergi6pV8u4BlEc4WZiNk
+         E07z0lzGgyX0KGQaKZNBtsjy/zpgbe9+jAWixuTlmUwh9yeN8fBIYLxTeLbYvA3WhISW
+         bL2Mio1vKIAzX74XfAzXaFVsFu0/yBZ6FouwriAaXdplFuEgBLu4SF+j6fd2KZzE63dL
+         lRxycpuubEsuGFajmOEdWS3lp61KYtKGpSKuNsH/MqQDvdE+qM+9kBSdBpRcDHKUSRXv
+         G3agBdFOFl4dJoYtS2cdV534muIWFNgqIr14vcibyVKLEqPrRNRqcrVoX/JBaKRjsUwe
+         bFIA==
+X-Gm-Message-State: ANoB5pnl1vSFmDt4p2qGTuZF09X0OBN8J5k3eNiyVLqcuiws4vtS2HGo
+        Fq3EQ0QTKFmVh0Bwt5Cke04K/285jOE=
+X-Google-Smtp-Source: AA0mqf6Vm+El6ESXwNufBDsuUL5goye7cnViugdGCzEnKgHnnTLfZhQqIhFuDh9cIdYU6blDaRzNQA==
+X-Received: by 2002:a5d:4c43:0:b0:242:290c:34e8 with SMTP id n3-20020a5d4c43000000b00242290c34e8mr23343867wrt.31.1671297722724;
+        Sat, 17 Dec 2022 09:22:02 -0800 (PST)
 Received: from ?IPV6:2a01:c22:7af7:5300:8868:b389:215f:d1? (dynamic-2a01-0c22-7af7-5300-8868-b389-215f-00d1.c22.pool.telefonica.de. [2a01:c22:7af7:5300:8868:b389:215f:d1])
-        by smtp.googlemail.com with ESMTPSA id f24-20020a1c6a18000000b003b95ed78275sm6355101wmc.20.2022.12.17.09.22.01
+        by smtp.googlemail.com with ESMTPSA id x13-20020a5d6b4d000000b00241ce5d605dsm5407718wrw.110.2022.12.17.09.22.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Dec 2022 09:22:01 -0800 (PST)
-Message-ID: <fc2988f8-fe75-d1bc-75b0-6f7014fbd074@gmail.com>
-Date:   Sat, 17 Dec 2022 18:07:39 +0100
+        Sat, 17 Dec 2022 09:22:02 -0800 (PST)
+Message-ID: <97cc53c9-040b-df62-ab29-77cea7913ae1@gmail.com>
+Date:   Sat, 17 Dec 2022 18:21:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH 6/8] i2c: i801: add i801_single_transaction(),
- complementing i801_block_transaction()
+Subject: Re: [PATCH 8/8] i2c: i801: call i801_check_post() from i801_access()
+Content-Language: en-US
 To:     Jean Delvare <jdelvare@suse.de>
 Cc:     linux-i2c@vger.kernel.org
 References: <4125f9ce-ce5f-fbcf-7d6f-9bc586ac43e0@gmail.com>
- <eba39e4d-fb5f-c9d3-0d51-001f8d584d51@gmail.com>
- <20220610130324.1ab2725d@endymion.delvare>
-Content-Language: en-US
-In-Reply-To: <20220610130324.1ab2725d@endymion.delvare>
+ <9103e680-6436-42a3-d4be-39edf851aaf9@gmail.com>
+ <20220610163110.28d50ae6@endymion.delvare>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+In-Reply-To: <20220610163110.28d50ae6@endymion.delvare>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,215 +75,45 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 10.06.2022 13:03, Jean Delvare wrote:
+On 10.06.2022 16:31, Jean Delvare wrote:
 > Hi Heiner,
 > 
-> On Fri, 15 Apr 2022 18:58:03 +0200, Heiner Kallweit wrote:
->> This patch factors out non-block pre/post processing to a new function
->> i801_single_transaction(), complementing existing function
->> i801_block_transaction(). This makes i801_access() better readable.
-> 
-> I like the idea, but I have objections about some implementation
-> details, see below.
-> 
+> On Fri, 15 Apr 2022 18:59:46 +0200, Heiner Kallweit wrote:
+>> Avoid code duplication by calling i801_check_post() from i801_access().
+>>
 >> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 >> ---
->>  drivers/i2c/busses/i2c-i801.c | 95 +++++++++++++++++++++--------------
->>  1 file changed, 58 insertions(+), 37 deletions(-)
->>
+>>  drivers/i2c/busses/i2c-i801.c | 20 +++++++++-----------
+>>  1 file changed, 9 insertions(+), 11 deletions(-)
+> 
+> Overall I like the idea. I only have one question to make sure I'm not
+> missing something.
+> 
 >> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
->> index bf77f8640..8c2245f38 100644
+>> index 9061333f2..ecec7a3a8 100644
 >> --- a/drivers/i2c/busses/i2c-i801.c
 >> +++ b/drivers/i2c/busses/i2c-i801.c
->> @@ -771,6 +771,62 @@ static int i801_block_transaction(struct i801_priv *priv, union i2c_smbus_data *
->>  	return result;
->>  }
->>  
->> +/* Single transaction function */
+>> @@ -432,7 +432,7 @@ static int i801_wait_intr(struct i801_priv *priv)
+>>  		busy = status & SMBHSTSTS_HOST_BUSY;
+>>  		status &= STATUS_ERROR_FLAGS | SMBHSTSTS_INTR;
+>>  		if (!busy && status)
+>> -			return status;
+>> +			return status & STATUS_ERROR_FLAGS;
+>>  	} while (time_is_after_eq_jiffies(timeout));
 > 
-> The term "single transaction" is a bit misleading. Block transactions
-> are also single transactions, in the sense that there's one start
-> condition at the beginning and one stop condition at the end. I'd
-> rather call non-block transactions "single value transactions" or
-> "simple transactions".
+> Do I understand correctly that this change isn't really related to the
+> rest of the patch, and could have been done independently?
 > 
-OK
-
->> +static int i801_single_transaction(struct i801_priv *priv, union i2c_smbus_data *data,
->> +				   char read_write, int command)
->> +{
->> +	int xact, ret;
->> +
->> +	switch (command) {
->> +	case I2C_SMBUS_QUICK:
->> +		xact = I801_QUICK;
->> +		break;
->> +	case I2C_SMBUS_BYTE:
->> +                xact = I801_BYTE;
->> +                break;
+> You are filtering out SMBHSTSTS_INTR simply because i801_check_post()
+> will never check it anyway, right? If so, I wonder if that's really
+> something we want to do, as ultimately this adds code with no
+> functional benefit just to be "cleaner". But please correct me if I'm
+> wrong.
 > 
-> Previous 2 lines are indented with spaces instead of tabs.
-> 
-OK
-
->> +	case I2C_SMBUS_BYTE_DATA:
->> +		if (read_write == I2C_SMBUS_WRITE)
->> +			outb_p(data->byte, SMBHSTDAT0(priv));
->> +		xact = I801_BYTE_DATA;
->> +		break;
->> +	case I2C_SMBUS_WORD_DATA:
->> +		if (read_write == I2C_SMBUS_WRITE) {
->> +			outb_p(data->word & 0xff, SMBHSTDAT0(priv));
->> +			outb_p((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
->> +		}
->> +		xact = I801_WORD_DATA;
->> +		break;
->> +	case I2C_SMBUS_PROC_CALL:
->> +		outb_p(data->word & 0xff, SMBHSTDAT0(priv));
->> +		outb_p((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
->> +		xact = I801_PROC_CALL;
->> +		break;
->> +	default:
->> +		return -EOPNOTSUPP;
-> 
-> That's never going to happen.
-> 
-> Generally speaking, I'm worried about having the same switch/case
-> construct here that we already have in i801_access. Looks to me like we
-> are doing half of the work here and the other half there and I fail to
-> see the rationale for splitting the work like that. I mean, I see how
-> it solves the asymmetry between the block and non-block code paths, but
-> the result doesn't look appealing. From a performance perspective it's
-> questionable too.
-> 
-> What prevents us from doing all the work on either side? Maybe we
-> should move more code into i801_single_transaction (possibly in a
-> subsequent patch)?
-> 
-Makes sense. Ill add this in v2.
-
->> +	}
->> +
->> +	ret = i801_transaction(priv, xact);
->> +
-> 
-> Traditionally no blank line here.
-> 
-OK
-
->> +	if (ret || read_write == I2C_SMBUS_WRITE)
->> +		return ret;
->> +
->> +	switch (command) {
->> +	case I2C_SMBUS_BYTE:
->> +	case I2C_SMBUS_BYTE_DATA:
->> +		data->byte = inb_p(SMBHSTDAT0(priv));
->> +		break;
->> +	case I2C_SMBUS_WORD_DATA:
->> +	case I2C_SMBUS_PROC_CALL:
->> +		data->word = inb_p(SMBHSTDAT0(priv)) +
->> +			     (inb_p(SMBHSTDAT1(priv)) << 8);
->> +		break;
->> +	default:
->> +		break;
-> 
-> Default case is not needed.
-> 
-OK
-
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->>  static void i801_set_hstadd(struct i801_priv *priv, u8 addr, char read_write)
->>  {
->>  	addr <<= 1;
->> @@ -784,9 +840,7 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
->>  		       unsigned short flags, char read_write, u8 command,
->>  		       int size, union i2c_smbus_data *data)
->>  {
->> -	int hwpec;
->> -	int block = 0;
->> -	int ret, xact;
->> +	int hwpec, ret, block = 0;
->>  	struct i801_priv *priv = i2c_get_adapdata(adap);
->>  
->>  	mutex_lock(&priv->acpi_lock);
->> @@ -804,36 +858,23 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
->>  	switch (size) {
->>  	case I2C_SMBUS_QUICK:
->>  		i801_set_hstadd(priv, addr, read_write);
->> -		xact = I801_QUICK;
->>  		break;
->>  	case I2C_SMBUS_BYTE:
->>  		i801_set_hstadd(priv, addr, read_write);
->>  		if (read_write == I2C_SMBUS_WRITE)
->>  			outb_p(command, SMBHSTCMD(priv));
->> -		xact = I801_BYTE;
->>  		break;
->>  	case I2C_SMBUS_BYTE_DATA:
->>  		i801_set_hstadd(priv, addr, read_write);
->>  		outb_p(command, SMBHSTCMD(priv));
->> -		if (read_write == I2C_SMBUS_WRITE)
->> -			outb_p(data->byte, SMBHSTDAT0(priv));
->> -		xact = I801_BYTE_DATA;
->>  		break;
->>  	case I2C_SMBUS_WORD_DATA:
->>  		i801_set_hstadd(priv, addr, read_write);
->>  		outb_p(command, SMBHSTCMD(priv));
->> -		if (read_write == I2C_SMBUS_WRITE) {
->> -			outb_p(data->word & 0xff, SMBHSTDAT0(priv));
->> -			outb_p((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
->> -		}
->> -		xact = I801_WORD_DATA;
->>  		break;
->>  	case I2C_SMBUS_PROC_CALL:
->>  		i801_set_hstadd(priv, addr, I2C_SMBUS_WRITE);
->>  		outb_p(command, SMBHSTCMD(priv));
->> -		outb_p(data->word & 0xff, SMBHSTDAT0(priv));
->> -		outb_p((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
->> -		xact = I801_PROC_CALL;
->>  		read_write = I2C_SMBUS_READ;
->>  		break;
->>  	case I2C_SMBUS_BLOCK_DATA:
->> @@ -883,7 +924,7 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
->>  	if (block)
->>  		ret = i801_block_transaction(priv, data, read_write, size);
->>  	else
->> -		ret = i801_transaction(priv, xact);
->> +		ret = i801_single_transaction(priv, data, read_write, size);
->>  
->>  	/* Some BIOSes don't like it when PEC is enabled at reboot or resume
->>  	   time, so we forcibly disable it after every transaction. Turn off
->> @@ -891,26 +932,6 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
->>  	if (hwpec || block)
->>  		outb_p(inb_p(SMBAUXCTL(priv)) &
->>  		       ~(SMBAUXCTL_CRC | SMBAUXCTL_E32B), SMBAUXCTL(priv));
->> -
->> -	if (block)
->> -		goto out;
->> -	if (ret)
->> -		goto out;
->> -	if ((read_write == I2C_SMBUS_WRITE) || (xact == I801_QUICK))
->> -		goto out;
->> -
->> -	switch (xact) {
->> -	case I801_BYTE:	/* Result put in SMBHSTDAT0 */
->> -	case I801_BYTE_DATA:
->> -		data->byte = inb_p(SMBHSTDAT0(priv));
->> -		break;
->> -	case I801_WORD_DATA:
->> -	case I801_PROC_CALL:
->> -		data->word = inb_p(SMBHSTDAT0(priv)) +
->> -			     (inb_p(SMBHSTDAT1(priv)) << 8);
->> -		break;
->> -	}
->> -
->>  out:
->>  	/*
->>  	 * Unlock the SMBus device for use by BIOS/ACPI,
-> 
-> 
-
+Reason is that in few places we check whether return value of
+i801_wait_intr() is zero, this would fail if not filtering out SMBHSTSTS_INTR.
+Example:
+i801_transaction() returns the return value of i801_wait_intr() now.
+And in i801_block_transaction_by_block() we check whether return value of
+i801_transaction() is zero.
 
