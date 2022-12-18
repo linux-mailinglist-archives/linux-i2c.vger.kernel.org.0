@@ -2,118 +2,155 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5294C64FB35
-	for <lists+linux-i2c@lfdr.de>; Sat, 17 Dec 2022 18:22:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA82650573
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Dec 2022 00:02:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiLQRWH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 17 Dec 2022 12:22:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
+        id S230216AbiLRXCR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 18 Dec 2022 18:02:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiLQRWF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 17 Dec 2022 12:22:05 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D71FADD
-        for <linux-i2c@vger.kernel.org>; Sat, 17 Dec 2022 09:22:04 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id h16so5185998wrz.12
-        for <linux-i2c@vger.kernel.org>; Sat, 17 Dec 2022 09:22:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J/HcfCqYcxJMHbAOcAjELp8fA8svV504O1OhkRwDbE4=;
-        b=cdhYFNMkxMLJTvj0KqB+H4W46k2odIroi0yiLuhkLqVvZ/9W3sD35tvdICibQWBOXD
-         VLEtYboqJulW/FGkjkbbdxOHaW5ra7bKXNLHQqvbgBGT1trnn5EPohviRzG/FFqHp8io
-         dEtVOaH/gRxfjwZeZWiLT2uyBgRjh+yx+/NePe68UfTQEvrXciXwXjXHtWp2Zh4myYrj
-         M/yPMrZh76uftQogBae4XwHhWNbKCumoeWhLizPJNdka/Zews/1N75Z6Veg2zoYW223b
-         HRpO4MmUfU9aNRTdxjkWhBnvhfwfpcVK0xeQ5iWzg+ggP+lRsVeTA6eplgFbNlwKYorB
-         ysdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J/HcfCqYcxJMHbAOcAjELp8fA8svV504O1OhkRwDbE4=;
-        b=mij1BUykzq87745v219m9p9BGC0BvEoTCg0np2AAnRAL/Eergi6pV8u4BlEc4WZiNk
-         E07z0lzGgyX0KGQaKZNBtsjy/zpgbe9+jAWixuTlmUwh9yeN8fBIYLxTeLbYvA3WhISW
-         bL2Mio1vKIAzX74XfAzXaFVsFu0/yBZ6FouwriAaXdplFuEgBLu4SF+j6fd2KZzE63dL
-         lRxycpuubEsuGFajmOEdWS3lp61KYtKGpSKuNsH/MqQDvdE+qM+9kBSdBpRcDHKUSRXv
-         G3agBdFOFl4dJoYtS2cdV534muIWFNgqIr14vcibyVKLEqPrRNRqcrVoX/JBaKRjsUwe
-         bFIA==
-X-Gm-Message-State: ANoB5pnl1vSFmDt4p2qGTuZF09X0OBN8J5k3eNiyVLqcuiws4vtS2HGo
-        Fq3EQ0QTKFmVh0Bwt5Cke04K/285jOE=
-X-Google-Smtp-Source: AA0mqf6Vm+El6ESXwNufBDsuUL5goye7cnViugdGCzEnKgHnnTLfZhQqIhFuDh9cIdYU6blDaRzNQA==
-X-Received: by 2002:a5d:4c43:0:b0:242:290c:34e8 with SMTP id n3-20020a5d4c43000000b00242290c34e8mr23343867wrt.31.1671297722724;
-        Sat, 17 Dec 2022 09:22:02 -0800 (PST)
-Received: from ?IPV6:2a01:c22:7af7:5300:8868:b389:215f:d1? (dynamic-2a01-0c22-7af7-5300-8868-b389-215f-00d1.c22.pool.telefonica.de. [2a01:c22:7af7:5300:8868:b389:215f:d1])
-        by smtp.googlemail.com with ESMTPSA id x13-20020a5d6b4d000000b00241ce5d605dsm5407718wrw.110.2022.12.17.09.22.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Dec 2022 09:22:02 -0800 (PST)
-Message-ID: <97cc53c9-040b-df62-ab29-77cea7913ae1@gmail.com>
-Date:   Sat, 17 Dec 2022 18:21:56 +0100
+        with ESMTP id S229537AbiLRXCQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 18 Dec 2022 18:02:16 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A907B7FC;
+        Sun, 18 Dec 2022 15:02:13 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6E12122A65;
+        Sun, 18 Dec 2022 23:02:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1671404531; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zBrDkYqFp6p27/TglK5V7Cygf9kzupTGxvWxDhgrlxk=;
+        b=xKYCOfNCgoqg4fduOoJAiTsBkEtryAUAl8tbuof5Q3hQLrOPvCZ6y3H6t433FsQalEZbc1
+        Du7Gp5Jr4oIsGuj9q/BUTnlen27xJ6uV8mb3N7XSm2U5RbNFyiO5dSsiKD3Xbq/3o6cDNu
+        VLM7FHma0VvXKZHqxVIwmfiVetRdraY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1671404531;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zBrDkYqFp6p27/TglK5V7Cygf9kzupTGxvWxDhgrlxk=;
+        b=fOCHHfEUmsjznApZj/9WpKi2q8cpd+F+hswSHNEH8mTu8sbW1zFon/Y4MKuU7PhcadpyrF
+        5NfalOICgteanqAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 294D1138FD;
+        Sun, 18 Dec 2022 23:02:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fxxNCPObn2MFPQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Sun, 18 Dec 2022 23:02:11 +0000
+Date:   Mon, 19 Dec 2022 00:02:09 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Alex Henrie <alexh@vpitech.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        David Oberhollenzer <david.oberhollenzer@sigma-star.at>,
+        Ettore Chimenti <ek5.chimenti@gmail.com>
+Subject: Re: [PATCH v3] i2c: i801: Safely share SMBus with BIOS/ACPI
+Message-ID: <20221219000209.1b8fb6f5@endymion.delvare>
+In-Reply-To: <10a724cf-fa2b-a0fb-6737-b456238d0385@marcan.st>
+References: <20210626054113.246309-1-marcan@marcan.st>
+        <20221215152641.39164ca3@endymion.delvare>
+        <10a724cf-fa2b-a0fb-6737-b456238d0385@marcan.st>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 8/8] i2c: i801: call i801_check_post() from i801_access()
-Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     linux-i2c@vger.kernel.org
-References: <4125f9ce-ce5f-fbcf-7d6f-9bc586ac43e0@gmail.com>
- <9103e680-6436-42a3-d4be-39edf851aaf9@gmail.com>
- <20220610163110.28d50ae6@endymion.delvare>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <20220610163110.28d50ae6@endymion.delvare>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 10.06.2022 16:31, Jean Delvare wrote:
-> Hi Heiner,
+On Sat, 17 Dec 2022 22:28:25 +0900, Hector Martin wrote:
+> On 15/12/2022 23.26, Jean Delvare wrote:
+> > Question: why do you check that the first action of ACPI AML is to
+> > acquire the hardware lock *only* if that action was attempted while the
+> > Linux side was performing a transfer? That event is quite unlikely to
+> > happen. Can't we perform that test unconditionally the very first time
+> > i801_acpi_io_handler() is called? Unless the i2c-i801 driver gets> initialized in the middle of an ACPI-side SMBus transfer [...]  
 > 
-> On Fri, 15 Apr 2022 18:59:46 +0200, Heiner Kallweit wrote:
->> Avoid code duplication by calling i801_check_post() from i801_access().
->>
->> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
->> ---
->>  drivers/i2c/busses/i2c-i801.c | 20 +++++++++-----------
->>  1 file changed, 9 insertions(+), 11 deletions(-)
+> I wonder if there's some way to close this race? This doesn't sound all
+> that unlikely (consider: ACPI backlight is also a module, device init
+> happens in parallel, so we could well end up probing i2c-i801 in the
+> middle of an ACPI SMBus transfer more often than you'd expect at boot time).
 > 
-> Overall I like the idea. I only have one question to make sure I'm not
-> missing something.
+> How about this: instead of checking for the lock access on the *first*
+> call to i801_acpi_io_handler, we add an acpi_must_lock flag. This is
+> initially false, but it is set on completion of every Linux-side i2c
+> transfer, and cleared once we see ACPI take the lock properly. The ACPI
+> handler then checks it and expects a lock access if it is true.
 > 
->> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
->> index 9061333f2..ecec7a3a8 100644
->> --- a/drivers/i2c/busses/i2c-i801.c
->> +++ b/drivers/i2c/busses/i2c-i801.c
->> @@ -432,7 +432,7 @@ static int i801_wait_intr(struct i801_priv *priv)
->>  		busy = status & SMBHSTSTS_HOST_BUSY;
->>  		status &= STATUS_ERROR_FLAGS | SMBHSTSTS_INTR;
->>  		if (!busy && status)
->> -			return status;
->> +			return status & STATUS_ERROR_FLAGS;
->>  	} while (time_is_after_eq_jiffies(timeout));
+> So as soon as Linux does an i2c transfer, we expect ACPI to be taking
+> the lock next time it touches the hardware, and we know to bail on the
+> Linux side in the future if it does not.
 > 
-> Do I understand correctly that this change isn't really related to the
-> rest of the patch, and could have been done independently?
-> 
-> You are filtering out SMBHSTSTS_INTR simply because i801_check_post()
-> will never check it anyway, right? If so, I wonder if that's really
-> something we want to do, as ultimately this adds code with no
-> functional benefit just to be "cleaner". But please correct me if I'm
-> wrong.
-> 
-Reason is that in few places we check whether return value of
-i801_wait_intr() is zero, this would fail if not filtering out SMBHSTSTS_INTR.
-Example:
-i801_transaction() returns the return value of i801_wait_intr() now.
-And in i801_block_transaction_by_block() we check whether return value of
-i801_transaction() is zero.
+> * If the i2c driver probes in the middle of a well-behaved ACPI SMBus
+> transfer, nothing bad happens, since if we try to do a Linux-side
+> transfer it will block on the lock until ACPI is done. Further ACPI
+> SMBus transfers after a Linux transfer will pass the locking check.
+> * If the driver probes in the middle of a misbehaved ACPI transfer but
+> is otherwise idle, nothing happens until the first Linux transfer, then
+> the next ACPI access after that will have us bail and disable driver access.
+> * If we probe *and* try to make a transfer all in the middle of a
+> misbehaved ACPI transfer, then we are going to step on its toes and
+> break it, but at least we will notice as soon as the Linux side is done
+> (or possibly failed due to the collision) and ACPI tries to touch the
+> controller again, so we will get out of its way in the future and
+> there's at least a chance it will recover for future accesses.
 
+I see what you want to do and I think it should work.
+
+> Further closing that last edge case to avoid ever conflicting with
+> broken ACPI implementations would require some sort of mechanism to know
+> whether ACPI AML started running an i2c transfer method before the
+> i2c-i801 driver loaded, which might be too intrusive a change to be wrth
+> it for such a corner case. Though maybe there's an easy way? If there's
+> something like a global AML lock we could just have the probe sequence be:
+> 
+> 1. Register the ACPI IO handler
+> 2. Take the AML lock
+> 3. Set acpi_must_lock = true
+> 4. Release the AML lock
+> 5. Finally register the i2c controller
+> 
+> That makes sure we serialize on any ongoing ACPI shenanigans at probe
+> time and allows us to truly check that the first access from ACPI after
+> that is a lock, before Linux has a chance to do anything itself. But I
+> don't know off the top of my head whether there is such a lock.
+
+I don't think there is, but that would be a question for the ACPI list.
+Anyway, for it to be useful, it would have a to be a high-level lock
+(taken before starting an ACPI-side SMBus transfer, released after the
+ACPI-side SMBus transfer has been fully processes). If it is taken for
+every I/O, or even if it isn't held while waiting for the transfer to
+complete, it won't solve the problem. And I suspect that if such a
+high-level lock existed, we would have been using it in the first place
+to guarantee exclusive access to the SMBus controller.
+
+The most important thing is to get exclusive access to work properly
+for well-behaved ACPI implementations. I know that the Linux driver
+hasn't been a good citizen with the hardware lock until you partially
+fixed that 1.5 year ago, but I hope that other operating systems did
+that earlier, which would have encouraged well-behaved ACPI
+implementations. So hopefully misbehaving ACPI implementations aren't
+many on recent systems.
+
+-- 
+Jean Delvare
+SUSE L3 Support
