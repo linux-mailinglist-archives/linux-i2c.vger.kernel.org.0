@@ -2,121 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A846650984
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Dec 2022 10:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E43BF65098D
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Dec 2022 10:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbiLSJtC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 19 Dec 2022 04:49:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53196 "EHLO
+        id S231530AbiLSJuf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 19 Dec 2022 04:50:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiLSJtC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Dec 2022 04:49:02 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CACA198;
-        Mon, 19 Dec 2022 01:49:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671443341; x=1702979341;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tgB/eer+Nn8UbItkoP+8n6tFDvBmvw2POlYQ41/VwAc=;
-  b=SPqQaMoo2xMlIlH8npgQlyZdjQ4IeGIe4kaSeOTuLzFqbjNNG5csTSpL
-   hF3PiXuvdIYfvSF55h+KnahCpsIz7E+2hCBKfTC+/5wsmiVrr2gCRJTE7
-   hNAD2gANyT0u28QPHw6zub78LS5QTgWEbq3QKEhnCfUr3VDxEDLHwRxga
-   4Uyz2bGuF2ARvXinq7vLqshpmaKaarn18JqV85HLPCtG2T4lSwoin4HCO
-   m/AgVWO+CXkk3xeoHzKZdxO7OpaEAOY7bOpzz0v0ddjnz+eDhjmgEcdQY
-   DBm7ggmqKUbFRZWSg+8Bfa8f3n1sHYcIBADiImgZ0OgxhCi4KZ/mjO5Ac
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="298986885"
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="298986885"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 01:49:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="681165056"
-X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="681165056"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 19 Dec 2022 01:48:54 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1p7ClP-00CE3g-1S;
-        Mon, 19 Dec 2022 11:48:51 +0200
-Date:   Mon, 19 Dec 2022 11:48:51 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-Subject: Re: [PATCH v5 1/8] i2c: core: let adapters be notified of client
- attach/detach
-Message-ID: <Y6Azg9GJ/ntUlS+P@smile.fi.intel.com>
-References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
- <20221208104006.316606-2-tomi.valkeinen@ideasonboard.com>
- <Y5YLi2md2571NQrY@pendragon.ideasonboard.com>
- <20221219095143.4b49b447@booty>
+        with ESMTP id S231292AbiLSJua (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Dec 2022 04:50:30 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2ECDE93;
+        Mon, 19 Dec 2022 01:50:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Qe7yKR1ChZDZ9TsUe6VNFqq5kfeSxg/qVme0hW2SCSU=; b=Bcn8bHUumGkTbQxMhqxU0EmM+b
+        6HvD1SaePnHHCpWpEBEVkEbwEqVSR/0bOxJnAqhUchbOqVQr55Bqu8P48qT5dsyUEghtyx/abkUOh
+        /4x7u077RCVfwha58wRcO2NEZg8mKWHdTVIJPcjUAqIgIEmeVdZ3ksVN7gA4YIUAIEnb4w6f2Bgqb
+        Iv4aPjKDcNJvIHbPw5fsOXHVZLPeE2AvCdlgSM1T2C0wClniDt/Ncfh3202Bi/CcFSKEokSrcANrx
+        MPvJ1s8G4e77oPtGmAJFmlOTBgEsoLtec6rU1iHmWqyhuorYama15jf1RxjdGeynBtaKwcf5s5ETk
+        BonW9Jvw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35778)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1p7Cms-00005u-79; Mon, 19 Dec 2022 09:50:23 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1p7Cmp-0004Wu-Pw; Mon, 19 Dec 2022 09:50:19 +0000
+Date:   Mon, 19 Dec 2022 09:50:19 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Paolo Abeni <pabeni@redhat.com>, Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH RFC v2 0/2] Add I2C fwnode lookup/get interfaces
+Message-ID: <Y6Az235wsnRWFYWA@shell.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221219095143.4b49b447@booty>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 09:51:43AM +0100, Luca Ceresoli wrote:
-> On Sun, 11 Dec 2022 18:55:39 +0200
-> Laurent Pinchart <laurent.pinchart@ideasonboard.com> wrote:
-> > On Thu, Dec 08, 2022 at 12:39:59PM +0200, Tomi Valkeinen wrote:
+Hi,
 
-...
+This RFC series is intended for the next merge window, but we will need
+to decide how to merge it as it is split across two subsystems. These
+patches have been generated against the net-next, since patch 2 depends
+on a recently merged patch in that tree (which is now in mainline.)
 
-> > This may be a stupid question, but couldn't you instead use the
-> > BUS_NOTIFY_ADD_DEVICE and BUS_NOTIFY_DEL_DEVICE bus notifiers ?
-> 
-> I'm not sure they would be the correct tool for this task. Bus
-> notifiers inform about new events on the 'struct bus_type, i.e. any
-> event on the global i2c bus type. In the i2c world this means being
-> notified about new _adapters_, which is exactly what
-> drivers/i2c/i2c-dev.c does.
-> 
-> Here, however, we need to be informed about new _clients_ being added
-> under a specific adapter.
+Currently, the SFP code attempts to work out what kind of fwnode we
+found when looking up the I2C bus for the SFP cage, converts the fwnode
+to the appropriate firmware specific representation to then call the
+appropriate I2C layer function. This is inefficient, since the device
+model provides a way to locate items on a bus_type by fwnode.
 
-This is for example exactly what ACPI integration in I2C framework does. But...
+In order to reduce this complexity, this series adds fwnode interfaces
+to the I2C subsystem to allow I2C adapters to be looked up. I also
+accidentally also converted the I2C clients to also be looked up, so
+I've left that in patch 1 if people think that could be useful - if
+not, I'll remove it.
 
-> I'm not sure whether the bus notifiers can
-> inform about new clients in addition of new adapters, but they at least
-> seem unable to provide per-adapter notification.
+We could also convert the of_* functions to be inline in i2c.h and
+remove the stub of_* functions and exports.
 
-...personally I don't like notifiers, they looks like overkill for this task.
+Do we want these to live in i2c-core-fwnode.c ? I don't see a Kconfig
+symbol that indicates whether we want fwnode support, and I know there
+are people looking to use software nodes to lookup the SFP I2C bus
+(which is why the manual firmware-specific code in sfp.c is a problem.)
 
-> Does that seem correct?
+Thanks!
+
+v2: updated patch 1 with docbook comments.
+
+ drivers/i2c/i2c-core-acpi.c | 13 +-----
+ drivers/i2c/i2c-core-base.c | 98 +++++++++++++++++++++++++++++++++++++++++++++
+ drivers/i2c/i2c-core-of.c   | 51 ++---------------------
+ drivers/net/phy/sfp.c       | 13 +-----
+ include/linux/i2c.h         |  9 +++++
+ 5 files changed, 112 insertions(+), 72 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
