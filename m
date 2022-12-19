@@ -2,186 +2,176 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83B8650AC6
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Dec 2022 12:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81779650B97
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Dec 2022 13:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231378AbiLSLgM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 19 Dec 2022 06:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39578 "EHLO
+        id S232076AbiLSM3m (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 19 Dec 2022 07:29:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiLSLgL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Dec 2022 06:36:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8462A8
-        for <linux-i2c@vger.kernel.org>; Mon, 19 Dec 2022 03:35:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671449721;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/PTY5ap1jIE3gvJxbvgJcqBaMT685uN+MISB0lKtLQ8=;
-        b=VUrWc+h1072c7YbWFPD4smI/eTyvDruRgwqdU4dibUy1lPgym6OLtLE5A08ZU4vOk8PX0b
-        +HxccoeQF3K2UOBbFAdb4PR6owlzjqzW6dvXdXmD4Sgh5/uWnEMW8ETijX6v1ROsCUF3Xs
-        Sxb0mIf7hrprgOI0yC9DMET6Cq0rj1U=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-102-61KfFB2cPQCDJnsk6bTlGw-1; Mon, 19 Dec 2022 06:35:19 -0500
-X-MC-Unique: 61KfFB2cPQCDJnsk6bTlGw-1
-Received: by mail-ej1-f72.google.com with SMTP id sg39-20020a170907a42700b007c19b10a747so5968989ejc.11
-        for <linux-i2c@vger.kernel.org>; Mon, 19 Dec 2022 03:35:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/PTY5ap1jIE3gvJxbvgJcqBaMT685uN+MISB0lKtLQ8=;
-        b=XOJfFpX/6jcpXl8+F5JLwRar6Tf/lb0sx94d3AEks+Gv2OGzQf6l7vPbRh9DXMQMd9
-         TtcFAAH6kqeb+GIDl9dG40auC3OEKbiXj3PeMCyIYbbYyHs1XQO7KxPMp1aLpqZZ6Ay2
-         ZLc3rMUC1PlxWp5DXQBNKvStpO1h+oGN9whd5kLX1GS+Pz83STSesm/sNbwE2sHRsm0R
-         bQvgJEarQ50dM5FjFuZ6LppbAiHfg/75VpBB+KRtBSZnWQqoM2nrCR635Y9BuXbAjnxZ
-         Ust79zM6QrOYUYD4u2Ou+j0K05nO9SZVw6+IOdT5homkOhjAxuatxgaGeuvTDoO8QsXl
-         n81w==
-X-Gm-Message-State: ANoB5pl/ZyHme4oDxswU7+DLJlQF6goKkVRm1TJmxLonK5qlEIxSA7ZZ
-        POsWVZ4baeuQ9MwijQVJK6BCG/mWynskGWlDWF+y4iDCPbvkNeDNeeEKMihSIfUDVjUaHDC+shY
-        tHnqip7lRE0IIYfUgW76y
-X-Received: by 2002:a17:907:11c8:b0:7c0:beee:2f06 with SMTP id va8-20020a17090711c800b007c0beee2f06mr33252789ejb.52.1671449718194;
-        Mon, 19 Dec 2022 03:35:18 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6UrtfVi46Vgo8hEJYXLZ3rQPBNC7zQlw75rudldjlafEzJeNYwGGIkfH5NpPHe4WU6gpB7Vg==
-X-Received: by 2002:a17:907:11c8:b0:7c0:beee:2f06 with SMTP id va8-20020a17090711c800b007c0beee2f06mr33252780ejb.52.1671449717970;
-        Mon, 19 Dec 2022 03:35:17 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id 20-20020a170906311400b0073d81b0882asm4288633ejx.7.2022.12.19.03.35.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 03:35:17 -0800 (PST)
-Message-ID: <491f2a01-c2ae-8508-effb-dfd89bfe22a1@redhat.com>
-Date:   Mon, 19 Dec 2022 12:35:16 +0100
+        with ESMTP id S232154AbiLSM24 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Dec 2022 07:28:56 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBA1A10FD7;
+        Mon, 19 Dec 2022 04:28:13 -0800 (PST)
+Received: from loongson.cn (unknown [112.20.108.31])
+        by gateway (Coremail) with SMTP id _____8BxyujbWKBjo_4GAA--.7342S3;
+        Mon, 19 Dec 2022 20:28:11 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.20.108.31])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxtOXYWKBjtOIEAA--.21337S2;
+        Mon, 19 Dec 2022 20:28:09 +0800 (CST)
+From:   Binbin Zhou <zhoubinbin@loongson.cn>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Cc:     loongarch@lists.linux.dev, devicetree@vger.kernel.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH V7 0/4] i2c: ls2x: Add support for the Loongson-2K/LS7A I2C controller
+Date:   Mon, 19 Dec 2022 20:28:30 +0800
+Message-Id: <cover.1671451604.git.zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3] i2c: designware: Fix unbalanced suspended flag
-Content-Language: en-US, nl
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>,
-        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, jsd@semihalf.com, wsa@kernel.org
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-References: <20221219112019.882092-1-rf@opensource.cirrus.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221219112019.882092-1-rf@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxtOXYWKBjtOIEAA--.21337S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxXrW3uw4UXryDtw4UZr1DZFb_yoWrGry8p3
+        y5u398Kr1qyr17KFn3J3WruFyF9ws3Gayjgr47Kwnxua1DC34UZw4fKa4a9rnrCr98GrWj
+        qrZ0g3W5uFyDArJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
+        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4U
+        YxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Hi all:
 
-On 12/19/22 12:20, Richard Fitzgerald wrote:
-> Ensure that i2c_mark_adapter_suspended() is always balanced by a call to
-> i2c_mark_adapter_resumed().
-> 
-> dw_i2c_plat_resume() must always be called, so that
-> i2c_mark_adapter_resumed() is called. This is not compatible with
-> DPM_FLAG_MAY_SKIP_RESUME, so remove the flag.
-> 
-> Since the controller is always resumed on system resume the
-> dw_i2c_plat_complete() callback is redundant and has been removed.
-> 
-> The unbalanced suspended flag was introduced by
-> commit c57813b8b288 ("i2c: designware: Lock the adapter while setting the
-> suspended flag")
-> 
-> Before that commit, the system and runtime PM used the same functions. The
-> DPM_FLAG_MAY_SKIP_RESUME was used to skip the system resume if the driver
-> had been in runtime-suspend. If system resume was skipped, the suspended
-> flag would be cleared by the next runtime resume. The check of the
-> suspended flag was _after_ the call to pm_runtime_get_sync() in
-> i2c_dw_xfer(). So either a system resume or a runtime resume would clear
-> the flag before it was checked.
-> 
-> Having introduced the unbalanced suspended flag with that commit, a further
-> commit 80704a84a9f8 ("i2c: designware: Use the
-> i2c_mark_adapter_suspended/resumed() helpers")
-> 
-> changed from using a local suspended flag to using the
-> i2c_mark_adapter_suspended/resumed() functions. These use a flag that is
-> checked by I2C core code before issuing the transfer to the bus driver, so
-> there was no opportunity for the bus driver to runtime resume itself before
-> the flag check.
-> 
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-> Fixes: c57813b8b288 ("i2c: designware: Lock the adapter while setting the suspended flag")
+This patch series adds support for the I2C module found on various
+Loongson systems with the Loongson-2K SoC or the Loongson LS7A bridge chip.
 
-Thanks, patch looks good to me:
+For now, the I2C driver is suitable for DT-based or ACPI-based systems.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+I have tested on Loongson-3A5000LA+LS7A1000/LS7A2000, Loongson-2K1000LA
+and Loongson-2K0500.
 
-Regards,
+Thanks.
 
-Hans
+Changes since V6:
+- patch (1/4)
+  - Add Reviewed-by tag.
+- patch (3/4)
+  - GPL-2.0 -> GPL-2.0-only;
+  - Add property.h;
+  - writew() should be used to operate I2C_LS2X_PRER, and drop the
+    suffix of I2C_LS2X_PRER_LO/I2C_LS2X_PRER_HI;
+  - Drop ls2x_i2c_priv->dev, for it can be completely replaced by
+    'adapter.dev.parent';
+  - Reasonable return value handling in ls2x_i2c_xfer_one();
+  - Dropping the I2C_M_STOP flag judgment, the stop parameter of
+    ls2x_i2c_xfer_one() represents the last msg;
+  - Add comments for subsys_initcall();
+  - Code formatting, such as dropping unnecessary blank lines.
 
+Changes since V5:
+- patch (1/4)
+  - Add property.h.
+- patch (3/4)
+  - Put the ls2x_i2c_reginit() in front of irq requst;
+  - Refact ls2x_i2c_adjust_bus_speed: discard the magic value of
+    the divider register and LS2X_I2C_FREQ_STD is used to calculate
+    the frequency;
+  - Drop useless parameters: priv->suspended, and also disable I2C
+    interrupts during suspend;
+  - Drop ls2x_i2c_remove(), for the adapter will be auto deleted on
+    driver detach;
+  - Drop MODULE_ALIAS;
+  - Code formatting, such as alignment.
 
+Thanks Andy for your comments.
 
-> ---
->  drivers/i2c/busses/i2c-designware-platdrv.c | 20 ++------------------
->  1 file changed, 2 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-> index ba043b547393..74182db03a88 100644
-> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
-> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-> @@ -351,13 +351,11 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
->  
->  	if (dev->flags & ACCESS_NO_IRQ_SUSPEND) {
->  		dev_pm_set_driver_flags(&pdev->dev,
-> -					DPM_FLAG_SMART_PREPARE |
-> -					DPM_FLAG_MAY_SKIP_RESUME);
-> +					DPM_FLAG_SMART_PREPARE);
->  	} else {
->  		dev_pm_set_driver_flags(&pdev->dev,
->  					DPM_FLAG_SMART_PREPARE |
-> -					DPM_FLAG_SMART_SUSPEND |
-> -					DPM_FLAG_MAY_SKIP_RESUME);
-> +					DPM_FLAG_SMART_SUSPEND);
->  	}
->  
->  	device_enable_async_suspend(&pdev->dev);
-> @@ -419,21 +417,8 @@ static int dw_i2c_plat_prepare(struct device *dev)
->  	 */
->  	return !has_acpi_companion(dev);
->  }
-> -
-> -static void dw_i2c_plat_complete(struct device *dev)
-> -{
-> -	/*
-> -	 * The device can only be in runtime suspend at this point if it has not
-> -	 * been resumed throughout the ending system suspend/resume cycle, so if
-> -	 * the platform firmware might mess up with it, request the runtime PM
-> -	 * framework to resume it.
-> -	 */
-> -	if (pm_runtime_suspended(dev) && pm_resume_via_firmware())
-> -		pm_request_resume(dev);
-> -}
->  #else
->  #define dw_i2c_plat_prepare	NULL
-> -#define dw_i2c_plat_complete	NULL
->  #endif
->  
->  #ifdef CONFIG_PM
-> @@ -483,7 +468,6 @@ static int __maybe_unused dw_i2c_plat_resume(struct device *dev)
->  
->  static const struct dev_pm_ops dw_i2c_dev_pm_ops = {
->  	.prepare = dw_i2c_plat_prepare,
-> -	.complete = dw_i2c_plat_complete,
->  	SET_LATE_SYSTEM_SLEEP_PM_OPS(dw_i2c_plat_suspend, dw_i2c_plat_resume)
->  	SET_RUNTIME_PM_OPS(dw_i2c_plat_runtime_suspend, dw_i2c_plat_runtime_resume, NULL)
->  };
+Changes since V4:
+- patch (1/4)
+  - Drop unneeded headers: of.h;
+  - xxx_props -> xxx_properties.
+- patch (2/4)
+  - Add interrupt headers to fix syntax error found by Rob.
+- patch (3/4)
+  - Drop atmoic loop in ls2x_i2c_master_xfer(), I have tested it on the
+    appropriate environment with no problems;
+  - Define the corresponding bits in I2C_LS2X_CTR to avoid magic
+    numbers;
+  - dev_get_drvdata() is used to get ls2x_i2c_priv() in
+    ls2x_i2c_suspend();
+  - i2c_add_adapter() -> devm_i2c_add_adapter();
+  - SET_SYSTEM_SLEEP_PM_OPS() -> DEFINE_RUNTIME_DEV_PM_OPS();
+  - Code formatting, such as alignment.
+
+    Details: https://lore.kernel.org/all/Y4e%2F6KewuHjAluSZ@smile.fi.intel.com/
+
+Changes since V3:
+- Addressed all review comments from v3
+  - Change the changelog text to make it clearer (1/5);
+  - Fix some minor bugs, such as formatting issues (2/5);
+  - Fix some formatting issues (3/5);
+  - Deep refactoring of code for clarity (4/5).
+     Details: https://lore.kernel.org/all/Y4S2cnlAm3YYvZ8E@smile.fi.intel.com/
+
+Thanks to all for their suggestions.
+
+Changes since V2:
+- Addressed all review comments from v2
+  - Drop of_match_ptr() in i2c-gpio to avoid potential unused warnings
+    (1/5);
+  - Introduce i2c_gpio_get_props() function as the generic interface
+    to get i2c-gpio props from DT or ACPI table (2/5);
+  - Refact ls2x i2c code, similar to removing excessive goto tags (4/5).
+
+Thanks to Andy and Mika for their suggestions.
+
+Changes since V1:
+- Remove the function of getting the static i2c bus number from ACPI "_UID";
+- Fix build warning from kernel test robot.
+
+Binbin Zhou (4):
+  i2c: gpio: Add support on ACPI-based system
+  dt-bindings: i2c: add Loongson LS2X I2C controller
+  i2c: ls2x: Add driver for Loongson-2K/LS7A I2C controller
+  LoongArch: Enable LS2X I2C in loongson3_defconfig
+
+ .../bindings/i2c/loongson,ls2x-i2c.yaml       |  51 +++
+ arch/loongarch/configs/loongson3_defconfig    |   1 +
+ drivers/i2c/busses/Kconfig                    |  11 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-gpio.c                 |  28 +-
+ drivers/i2c/busses/i2c-ls2x.c                 | 369 ++++++++++++++++++
+ 6 files changed, 451 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/i2c/loongson,ls2x-i2c.yaml
+ create mode 100644 drivers/i2c/busses/i2c-ls2x.c
+
+-- 
+2.31.1
 
