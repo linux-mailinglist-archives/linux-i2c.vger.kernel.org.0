@@ -2,162 +2,165 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E19DD650C51
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Dec 2022 14:02:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B728D650C61
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Dec 2022 14:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231292AbiLSNCY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 19 Dec 2022 08:02:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
+        id S231531AbiLSNEZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 19 Dec 2022 08:04:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbiLSNCW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Dec 2022 08:02:22 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A03FD0C;
-        Mon, 19 Dec 2022 05:02:21 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJ7sR6q005806;
-        Mon, 19 Dec 2022 07:01:47 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=RsDUjqcyl0e7SVM4Mcf1dx9SVITxVBoD1dr7weRpKvI=;
- b=Tn0r2dQn4j8TZLPXBwTBAflOGg9uMmA+h8yJJqm5DVH7WP2tIeiqIQZTSIc5pogcslVG
- e061GhsjqC3SfSG86mswvV2i4+guVu9KAKsldToWxUt8vYGkGj/Hlm/h6t9Enlivt+KK
- wvIQBAVgIbWKSiHg/qTisxWyDcDC+crwJNUzNKTfsLo50oM7844zdpkfRm3yvgYy3v1D
- /g+Xa3monHSbnDaY3ihktPplvtqD3WnVEpgo4QV+Qy8WyUa0t1dn7rmigU/oQbOkGea5
- dp0ZXmQey2QmCvg4HjU3dWRDgDwtCmYw2L2IKIqIXy6U6aN0jd7/GPUZrk4UcYwPH8jm 2Q== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3mhb2ttbjq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Dec 2022 07:01:47 -0600
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Mon, 19 Dec
- 2022 07:01:45 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.20 via Frontend Transport; Mon, 19 Dec 2022 07:01:45 -0600
-Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.111])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8048011CC;
-        Mon, 19 Dec 2022 13:01:45 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <jarkko.nikula@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
-        <wsa@kernel.org>
-CC:     <hdegoede@redhat.com>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH v4] i2c: designware: Fix unbalanced suspended flag
-Date:   Mon, 19 Dec 2022 13:01:45 +0000
-Message-ID: <20221219130145.883309-1-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S231158AbiLSNEY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Dec 2022 08:04:24 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E911151;
+        Mon, 19 Dec 2022 05:04:23 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="299019040"
+X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
+   d="scan'208";a="299019040"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 05:04:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="774922088"
+X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
+   d="scan'208";a="774922088"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 19 Dec 2022 05:04:09 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andy@kernel.org>)
+        id 1p7FoM-00CISa-1q;
+        Mon, 19 Dec 2022 15:04:06 +0200
+Date:   Mon, 19 Dec 2022 15:04:06 +0200
+From:   Andy Shevchenko <andy@kernel.org>
+To:     Binbin Zhou <zhoubinbin@loongson.cn>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, loongarch@lists.linux.dev,
+        devicetree@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+Subject: Re: [PATCH V7 3/4] i2c: ls2x: Add driver for Loongson-2K/LS7A I2C
+ controller
+Message-ID: <Y6BhRsPAU30Dqbdv@smile.fi.intel.com>
+References: <cover.1671451604.git.zhoubinbin@loongson.cn>
+ <d44eb07245020431f98fd08e0c05b6926fb31b24.1671451604.git.zhoubinbin@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: cnwms7r3xqZceF0Duc1Y5-hBkhh2oDS5
-X-Proofpoint-GUID: cnwms7r3xqZceF0Duc1Y5-hBkhh2oDS5
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d44eb07245020431f98fd08e0c05b6926fb31b24.1671451604.git.zhoubinbin@loongson.cn>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Ensure that i2c_mark_adapter_suspended() is always balanced by a call to
-i2c_mark_adapter_resumed().
+On Mon, Dec 19, 2022 at 08:28:33PM +0800, Binbin Zhou wrote:
+> This I2C module is integrated into the Loongson-2K SoCs and Loongson
+> LS7A bridge chip.
 
-dw_i2c_plat_resume() must always be called, so that
-i2c_mark_adapter_resumed() is called. This is not compatible with
-DPM_FLAG_MAY_SKIP_RESUME, so remove the flag.
+Almost there, see my comments below (note, you have ~1w of time before this
+can be applied anyway, so take you time for carefully addressing comments,
+(re-)testing, etc.).
 
-Since the controller is always resumed on system resume the
-dw_i2c_plat_complete() callback is redundant and has been removed.
+...
 
-The unbalanced suspended flag was introduced by commit c57813b8b288
-("i2c: designware: Lock the adapter while setting the suspended flag")
+> @@ -888,6 +888,17 @@ config I2C_OWL
+>  	  Say Y here if you want to use the I2C bus controller on
+>  	  the Actions Semiconductor Owl SoC's.
+>  
+> +config I2C_LS2X
 
-Before that commit, the system and runtime PM used the same functions. The
-DPM_FLAG_MAY_SKIP_RESUME was used to skip the system resume if the driver
-had been in runtime-suspend. If system resume was skipped, the suspended
-flag would be cleared by the next runtime resume. The check of the
-suspended flag was _after_ the call to pm_runtime_get_sync() in
-i2c_dw_xfer(). So either a system resume or a runtime resume would clear
-the flag before it was checked.
+I believe in Latin alphabet L goes before O...
 
-Having introduced the unbalanced suspended flag with that commit, a further
-commit 80704a84a9f8
-("i2c: designware: Use the i2c_mark_adapter_suspended/resumed() helpers")
+> +	tristate "Loongson LS2X I2C adapter"
+> +	depends on MACH_LOONGSON64 || COMPILE_TEST
+> +	help
+> +	  If you say yes to this option, support will be included for the
+> +	  I2C interface on the Loongson-2K SoCs and Loongson LS7A bridge
+> +	  chip.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called i2c-ls2x.
+> +
+>  config I2C_PASEMI
+>  	tristate "PA Semi SMBus interface"
+>  	depends on PPC_PASEMI && PCI
 
-changed from using a local suspended flag to using the
-i2c_mark_adapter_suspended/resumed() functions. These use a flag that is
-checked by I2C core code before issuing the transfer to the bus driver, so
-there was no opportunity for the bus driver to runtime resume itself before
-the flag check.
+...
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-Fixes: c57813b8b288 ("i2c: designware: Lock the adapter while setting the suspended flag")
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
----
-Changes from v3:
-- Fixed wrapping in commit description. No code changes
----
- drivers/i2c/busses/i2c-designware-platdrv.c | 20 ++------------------
- 1 file changed, 2 insertions(+), 18 deletions(-)
+>  obj-$(CONFIG_I2C_MXS)		+= i2c-mxs.o
+>  obj-$(CONFIG_I2C_NOMADIK)	+= i2c-nomadik.o
+>  obj-$(CONFIG_I2C_NPCM)		+= i2c-npcm7xx.o
+> +obj-$(CONFIG_I2C_LS2X)		+= i2c-ls2x.o
 
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index ba043b547393..74182db03a88 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -351,13 +351,11 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
- 
- 	if (dev->flags & ACCESS_NO_IRQ_SUSPEND) {
- 		dev_pm_set_driver_flags(&pdev->dev,
--					DPM_FLAG_SMART_PREPARE |
--					DPM_FLAG_MAY_SKIP_RESUME);
-+					DPM_FLAG_SMART_PREPARE);
- 	} else {
- 		dev_pm_set_driver_flags(&pdev->dev,
- 					DPM_FLAG_SMART_PREPARE |
--					DPM_FLAG_SMART_SUSPEND |
--					DPM_FLAG_MAY_SKIP_RESUME);
-+					DPM_FLAG_SMART_SUSPEND);
- 	}
- 
- 	device_enable_async_suspend(&pdev->dev);
-@@ -419,21 +417,8 @@ static int dw_i2c_plat_prepare(struct device *dev)
- 	 */
- 	return !has_acpi_companion(dev);
- }
--
--static void dw_i2c_plat_complete(struct device *dev)
--{
--	/*
--	 * The device can only be in runtime suspend at this point if it has not
--	 * been resumed throughout the ending system suspend/resume cycle, so if
--	 * the platform firmware might mess up with it, request the runtime PM
--	 * framework to resume it.
--	 */
--	if (pm_runtime_suspended(dev) && pm_resume_via_firmware())
--		pm_request_resume(dev);
--}
- #else
- #define dw_i2c_plat_prepare	NULL
--#define dw_i2c_plat_complete	NULL
- #endif
- 
- #ifdef CONFIG_PM
-@@ -483,7 +468,6 @@ static int __maybe_unused dw_i2c_plat_resume(struct device *dev)
- 
- static const struct dev_pm_ops dw_i2c_dev_pm_ops = {
- 	.prepare = dw_i2c_plat_prepare,
--	.complete = dw_i2c_plat_complete,
- 	SET_LATE_SYSTEM_SLEEP_PM_OPS(dw_i2c_plat_suspend, dw_i2c_plat_resume)
- 	SET_RUNTIME_PM_OPS(dw_i2c_plat_runtime_suspend, dw_i2c_plat_runtime_resume, NULL)
- };
+...and even before n and m.
+
+>  obj-$(CONFIG_I2C_OCORES)	+= i2c-ocores.o
+>  obj-$(CONFIG_I2C_OMAP)		+= i2c-omap.o
+>  obj-$(CONFIG_I2C_OWL)		+= i2c-owl.o
+
+...
+
+> +static int ls2x_i2c_xfer_one(struct i2c_adapter *adap,
+> +			     struct i2c_msg *msg, bool stop)
+> +{
+> +	int ret;
+> +	bool is_read = msg->flags & I2C_M_RD;
+> +	struct ls2x_i2c_priv *priv = i2c_get_adapdata(adap);
+> +
+> +	/* Contains steps to send start condition and address */
+> +	ret = ls2x_i2c_start(adap, msg);
+> +	if (!ret) {
+> +		if (is_read)
+> +			ret = ls2x_i2c_rx(adap, msg->buf, msg->len);
+> +		else
+> +			ret = ls2x_i2c_tx(adap, msg->buf, msg->len);
+
+> +		if (!ret && stop)
+> +			ret = ls2x_i2c_stop(adap);
+
+So, we will send stop here...
+
+> +	}
+
+> +	if (ret == -ENXIO)
+> +		ls2x_i2c_stop(adap);
+
+...and if it fails, we send it again here. Is it okay?
+
+> +	else if (ret < 0)
+> +		ls2x_i2c_init(priv);
+> +
+> +	return ret;
+> +}
+
+...
+
+> +		ret = ls2x_i2c_xfer_one(adap, msg, msg == (emsg - 1));
+
+Too many parentheses, isn't it?
+
+> +		if (ret)
+> +			return ret;
+
+...
+
+> +	r = devm_request_irq(dev, irq, ls2x_i2c_isr, IRQF_SHARED, "ls2x-i2c",
+> +			     priv);
+
+Everywhere else you use 'ret', why is 'r' here?
+
+> +	if (r < 0)
+> +		return dev_err_probe(dev, r, "Unable to request irq %d\n", irq);
+
 -- 
-2.30.2
+With Best Regards,
+Andy Shevchenko
+
 
