@@ -2,162 +2,112 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B728D650C61
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Dec 2022 14:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A08E0650C78
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Dec 2022 14:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbiLSNEZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 19 Dec 2022 08:04:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
+        id S229598AbiLSNLG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 19 Dec 2022 08:11:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbiLSNEY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Dec 2022 08:04:24 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E911151;
-        Mon, 19 Dec 2022 05:04:23 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="299019040"
+        with ESMTP id S231712AbiLSNLD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Dec 2022 08:11:03 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483428FE7;
+        Mon, 19 Dec 2022 05:11:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671455462; x=1702991462;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cfu7nn7qs6yDdiRgwGy1GBfso8mGEh+ivNzLv4Ej808=;
+  b=f+Sba0MMNn2rCv5/8OWnvycXOb0PMHYXrQP5LC5aAhHKoXrKRHeHB4nr
+   3OVHaPg90bgTNpnBP+8XFlKr8dsL8frlMHcK7ROVlcWJih4w+EGg4VmTF
+   T60QQ4gksMMgFQhtL8yHhTVf2dUSKQwami9qZ5ASZXG4L2WqWgN1XWADA
+   wupJLtns8Ba89aGwDRgkoK7zbBNUOCj6hcP1krq8jW10sTH5qgg2bFEjG
+   waaqX8W+BkvaVEdeNsiTkWzkPTCKJuWlqJvAZzF1ffE78bjGfDAPD72a5
+   A2YR5G9rRb7YqzYhpupeyEmnNSjm9qaQNNyh0Mf4UjMBbZ7lEzU+C6dDn
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="316980323"
 X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="299019040"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 05:04:13 -0800
+   d="scan'208";a="316980323"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 05:11:01 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="774922088"
+X-IronPort-AV: E=McAfee;i="6500,9779,10565"; a="719105753"
 X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="774922088"
+   d="scan'208";a="719105753"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 19 Dec 2022 05:04:09 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 19 Dec 2022 05:10:59 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@kernel.org>)
-        id 1p7FoM-00CISa-1q;
-        Mon, 19 Dec 2022 15:04:06 +0200
-Date:   Mon, 19 Dec 2022 15:04:06 +0200
-From:   Andy Shevchenko <andy@kernel.org>
-To:     Binbin Zhou <zhoubinbin@loongson.cn>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, loongarch@lists.linux.dev,
-        devicetree@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>, Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>
-Subject: Re: [PATCH V7 3/4] i2c: ls2x: Add driver for Loongson-2K/LS7A I2C
- controller
-Message-ID: <Y6BhRsPAU30Dqbdv@smile.fi.intel.com>
-References: <cover.1671451604.git.zhoubinbin@loongson.cn>
- <d44eb07245020431f98fd08e0c05b6926fb31b24.1671451604.git.zhoubinbin@loongson.cn>
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p7Fuz-00CIa0-2w;
+        Mon, 19 Dec 2022 15:10:57 +0200
+Date:   Mon, 19 Dec 2022 15:10:57 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        jsd@semihalf.com, wsa@kernel.org, hdegoede@redhat.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+Subject: Re: [PATCH v4] i2c: designware: Fix unbalanced suspended flag
+Message-ID: <Y6Bi4Q9xyPd2Tc6k@smile.fi.intel.com>
+References: <20221219130145.883309-1-rf@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d44eb07245020431f98fd08e0c05b6926fb31b24.1671451604.git.zhoubinbin@loongson.cn>
+In-Reply-To: <20221219130145.883309-1-rf@opensource.cirrus.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 08:28:33PM +0800, Binbin Zhou wrote:
-> This I2C module is integrated into the Loongson-2K SoCs and Loongson
-> LS7A bridge chip.
+On Mon, Dec 19, 2022 at 01:01:45PM +0000, Richard Fitzgerald wrote:
+> Ensure that i2c_mark_adapter_suspended() is always balanced by a call to
+> i2c_mark_adapter_resumed().
+> 
+> dw_i2c_plat_resume() must always be called, so that
+> i2c_mark_adapter_resumed() is called. This is not compatible with
+> DPM_FLAG_MAY_SKIP_RESUME, so remove the flag.
+> 
+> Since the controller is always resumed on system resume the
+> dw_i2c_plat_complete() callback is redundant and has been removed.
+> 
+> The unbalanced suspended flag was introduced by commit c57813b8b288
+> ("i2c: designware: Lock the adapter while setting the suspended flag")
+> 
+> Before that commit, the system and runtime PM used the same functions. The
+> DPM_FLAG_MAY_SKIP_RESUME was used to skip the system resume if the driver
+> had been in runtime-suspend. If system resume was skipped, the suspended
+> flag would be cleared by the next runtime resume. The check of the
+> suspended flag was _after_ the call to pm_runtime_get_sync() in
+> i2c_dw_xfer(). So either a system resume or a runtime resume would clear
+> the flag before it was checked.
+> 
+> Having introduced the unbalanced suspended flag with that commit, a further
+> commit 80704a84a9f8
+> ("i2c: designware: Use the i2c_mark_adapter_suspended/resumed() helpers")
 
-Almost there, see my comments below (note, you have ~1w of time before this
-can be applied anyway, so take you time for carefully addressing comments,
-(re-)testing, etc.).
+This is still unwrapped propertly, but no need to resend, it so minor, really.
+Just a hint for the future submissions.
 
-...
-
-> @@ -888,6 +888,17 @@ config I2C_OWL
->  	  Say Y here if you want to use the I2C bus controller on
->  	  the Actions Semiconductor Owl SoC's.
->  
-> +config I2C_LS2X
-
-I believe in Latin alphabet L goes before O...
-
-> +	tristate "Loongson LS2X I2C adapter"
-> +	depends on MACH_LOONGSON64 || COMPILE_TEST
-> +	help
-> +	  If you say yes to this option, support will be included for the
-> +	  I2C interface on the Loongson-2K SoCs and Loongson LS7A bridge
-> +	  chip.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called i2c-ls2x.
-> +
->  config I2C_PASEMI
->  	tristate "PA Semi SMBus interface"
->  	depends on PPC_PASEMI && PCI
-
-...
-
->  obj-$(CONFIG_I2C_MXS)		+= i2c-mxs.o
->  obj-$(CONFIG_I2C_NOMADIK)	+= i2c-nomadik.o
->  obj-$(CONFIG_I2C_NPCM)		+= i2c-npcm7xx.o
-> +obj-$(CONFIG_I2C_LS2X)		+= i2c-ls2x.o
-
-...and even before n and m.
-
->  obj-$(CONFIG_I2C_OCORES)	+= i2c-ocores.o
->  obj-$(CONFIG_I2C_OMAP)		+= i2c-omap.o
->  obj-$(CONFIG_I2C_OWL)		+= i2c-owl.o
+> changed from using a local suspended flag to using the
+> i2c_mark_adapter_suspended/resumed() functions. These use a flag that is
+> checked by I2C core code before issuing the transfer to the bus driver, so
+> there was no opportunity for the bus driver to runtime resume itself before
+> the flag check.
 
 ...
 
-> +static int ls2x_i2c_xfer_one(struct i2c_adapter *adap,
-> +			     struct i2c_msg *msg, bool stop)
-> +{
-> +	int ret;
-> +	bool is_read = msg->flags & I2C_M_RD;
-> +	struct ls2x_i2c_priv *priv = i2c_get_adapdata(adap);
-> +
-> +	/* Contains steps to send start condition and address */
-> +	ret = ls2x_i2c_start(adap, msg);
-> +	if (!ret) {
-> +		if (is_read)
-> +			ret = ls2x_i2c_rx(adap, msg->buf, msg->len);
-> +		else
-> +			ret = ls2x_i2c_tx(adap, msg->buf, msg->len);
+> ---
+> Changes from v3:
+> - Fixed wrapping in commit description. No code changes
 
-> +		if (!ret && stop)
-> +			ret = ls2x_i2c_stop(adap);
-
-So, we will send stop here...
-
-> +	}
-
-> +	if (ret == -ENXIO)
-> +		ls2x_i2c_stop(adap);
-
-...and if it fails, we send it again here. Is it okay?
-
-> +	else if (ret < 0)
-> +		ls2x_i2c_init(priv);
-> +
-> +	return ret;
-> +}
-
-...
-
-> +		ret = ls2x_i2c_xfer_one(adap, msg, msg == (emsg - 1));
-
-Too many parentheses, isn't it?
-
-> +		if (ret)
-> +			return ret;
-
-...
-
-> +	r = devm_request_irq(dev, irq, ls2x_i2c_isr, IRQF_SHARED, "ls2x-i2c",
-> +			     priv);
-
-Everywhere else you use 'ret', why is 'r' here?
-
-> +	if (r < 0)
-> +		return dev_err_probe(dev, r, "Unable to request irq %d\n", irq);
+Thank you, but see the above :-)
 
 -- 
 With Best Regards,
