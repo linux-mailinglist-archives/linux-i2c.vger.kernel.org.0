@@ -2,88 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE8D654910
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Dec 2022 00:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82023654917
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Dec 2022 00:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbiLVXAR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 22 Dec 2022 18:00:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
+        id S230298AbiLVXFM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 22 Dec 2022 18:05:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiLVXAQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Dec 2022 18:00:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5C828709
-        for <linux-i2c@vger.kernel.org>; Thu, 22 Dec 2022 14:59:27 -0800 (PST)
+        with ESMTP id S229997AbiLVXFL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Dec 2022 18:05:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC11E26AE6
+        for <linux-i2c@vger.kernel.org>; Thu, 22 Dec 2022 15:04:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671749966;
+        s=mimecast20190719; t=1671750264;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
         bh=DDeshYsFzsV86X1KOSZ/3pdcOk+Tna6Uckljdyy2RF8=;
-        b=NSulKjFv8Libqglfdbep6XF4/3P+yp7iESdwYW8hp5XSv6MkAh4c5EPsOTw0Hb1bHwQVjt
-        AFyYYF3WKBVbHqyGSdZiq08vgIaGTT9uaIWuSnshM6D68DRf1rxHnbm7lyptLH0yYtzGAB
-        xK0+DCzrLYpD3ZizTknZfHcRUtiCWWE=
+        b=WSqvKAVbI3uaJkb+t4+8xpP6kTbNoaOvkuvw/qxGOZH+FZEqyi9JnJDLZXWZExVJIhjlGe
+        MT0b9eeJhehzmkOsCxslwH0ytP7eedhtHMtKGFajXUPw+LGUS4mMNqv49SBvsVk9nZx0bs
+        TuTK+HNAg3YcAIq9bKeRu/Bt3fncly4=
 Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
  [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-473-gY-N4RvxOyOuMe--rvm-Rg-1; Thu, 22 Dec 2022 17:59:25 -0500
-X-MC-Unique: gY-N4RvxOyOuMe--rvm-Rg-1
-Received: by mail-wm1-f70.google.com with SMTP id r67-20020a1c4446000000b003d09b0fbf54so2919460wma.3
-        for <linux-i2c@vger.kernel.org>; Thu, 22 Dec 2022 14:59:24 -0800 (PST)
+ us-mta-392-7G855yuyPJ6vVhGQpfukdw-1; Thu, 22 Dec 2022 18:04:22 -0500
+X-MC-Unique: 7G855yuyPJ6vVhGQpfukdw-1
+Received: by mail-wm1-f70.google.com with SMTP id h126-20020a1c2184000000b003d96bdce12fso518066wmh.9
+        for <linux-i2c@vger.kernel.org>; Thu, 22 Dec 2022 15:04:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
         bh=DDeshYsFzsV86X1KOSZ/3pdcOk+Tna6Uckljdyy2RF8=;
-        b=DVZMXlbk2nM4A5XiS/c+6O9M7+dC0mcykK4FlSxZsm76NHzTNZGgMbOUJV4vCYU8tX
-         U60FtGn6jzQy9N00n2f0FVwgyN/Q2BeCDfStk5d7zJVff/M4/nmWYYJSIKkoJgjFyhp/
-         +Yi3xa9/89oBGIeKAiCMpdfp9vEm6f+EL2XUF1A0z9YOtWqV8FP06c7TG4YuKPcGHpM6
-         /2TvUIpalb9UywjAXgGheyEIWnGlWkNgmn4d20EXJfVaTwbOX1Q1qOtihN94rxMkkcoI
-         w5JbVfjErFoJTU26/ZWDqtpKhA5ORZ3Lle+bHZ3oopuY/j5oe+6JoeUTkDoiEgNpUW+k
-         6CLg==
-X-Gm-Message-State: AFqh2kqYG2gmLrLe207AxdqZQJDRDKh8tW1I+D1fhNvHYg1Ec2UA85JN
-        PsmfAcedWj1d+MtBk9bkDoQa/Y1MTUo4l3F+gO2jZGSFbVPdugy21bEOYaM6YpLkakAf0mwz4cm
-        RptbDyo75povvAZdu/w82
-X-Received: by 2002:a05:600c:3482:b0:3d3:4f56:62e1 with SMTP id a2-20020a05600c348200b003d34f5662e1mr5299599wmq.27.1671749964092;
-        Thu, 22 Dec 2022 14:59:24 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsF9bhqDxJgYpNS3h0h7UKxGFrWcXBtywt7wPqI0gGeUoCpT/c1pS/cwz/9gvjfUEjOVWDuOQ==
-X-Received: by 2002:a05:600c:3482:b0:3d3:4f56:62e1 with SMTP id a2-20020a05600c348200b003d34f5662e1mr5299580wmq.27.1671749963929;
-        Thu, 22 Dec 2022 14:59:23 -0800 (PST)
+        b=PuMvKMjy6YXspOD5Dx0P0MQl1jWCd4g5MDmkLfY/AcZOGLHu0Y8piS3qz7hECN6ypb
+         xzJnQCxGbK76MZR36ygW1wXlYn55gFr06TaeWtzwC/HhXPy+6qL6j1DuPtIy6oRuHyKt
+         gIP62YeRDVGUdkkcNm6cz6hEjEZ1nLhGIV6kT0nYOTPl/awRURjCMZrrQ3BKGSpN0HN1
+         6EJLGeFtECJpsQKoutOoutnjCh+ZoKsN4LuOQLrNfWAf/GaVQZa5AprVzpNLy+LjxINc
+         IT/j4uL7f4mbHRc6zIMRXLIK1q3/wT81pi2PplNPJmR3XLgf7xxnGGGt5vjr3ujaQCgw
+         MfrA==
+X-Gm-Message-State: AFqh2kpQA+La/CotD7IAi/WtKIHQzxfTAuHNFrX1pJOpb3ApVliJTUXk
+        esPuELb20ZfqRTq64vrkhifE8F+jd7yt+WawNC8DvX1chgMwqklqYx+RWlh5RW55TDp8uZceytc
+        N9WKn/mzHfpI3t2owXKW6
+X-Received: by 2002:a7b:c4c8:0:b0:3d3:5a4a:9101 with SMTP id g8-20020a7bc4c8000000b003d35a4a9101mr8400360wmk.23.1671750261779;
+        Thu, 22 Dec 2022 15:04:21 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsRpCTqsnPlNZ+CYl+PJ8WJe4hBMc4zpUYGpFfR67OxQ/mL0PszQFuVVcvkMXe0Yey2+OQkhQ==
+X-Received: by 2002:a7b:c4c8:0:b0:3d3:5a4a:9101 with SMTP id g8-20020a7bc4c8000000b003d35a4a9101mr8400338wmk.23.1671750261555;
+        Thu, 22 Dec 2022 15:04:21 -0800 (PST)
 Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id bh12-20020a05600c3d0c00b003cfa81e2eb4sm2396380wmb.38.2022.12.22.14.59.22
+        by smtp.gmail.com with ESMTPSA id n36-20020a05600c3ba400b003b49bd61b19sm7757852wms.15.2022.12.22.15.04.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 14:59:23 -0800 (PST)
-Message-ID: <82c1db2f-293e-96e3-405e-b0a7ae5ffade@redhat.com>
-Date:   Thu, 22 Dec 2022 23:59:22 +0100
+        Thu, 22 Dec 2022 15:04:20 -0800 (PST)
+Message-ID: <4407048b-0bcb-ad46-4267-079a9c5baa90@redhat.com>
+Date:   Fri, 23 Dec 2022 00:04:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH 043/606] drm/panel: raspberrypi-touchscreen: Convert to
- i2c's .probe_new()
+Subject: Re: [PATCH 042/606] drm/panel: olimex-lcd-olinuxino: Convert to i2c's
+ .probe_new()
 Content-Language: en-US
 To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>,
         Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
+        Stefan Mavrodiev <stefan@olimex.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>
+        Daniel Vetter <daniel@ffwll.ch>
 Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org
+        Sam Ravnborg <sam@ravnborg.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-44-uwe@kleine-koenig.org>
+ <20221118224540.619276-43-uwe@kleine-koenig.org>
 From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221118224540.619276-44-uwe@kleine-koenig.org>
+In-Reply-To: <20221118224540.619276-43-uwe@kleine-koenig.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
