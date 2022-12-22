@@ -2,129 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 855CE654855
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Dec 2022 23:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE8D654910
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Dec 2022 00:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbiLVWW7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 22 Dec 2022 17:22:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
+        id S229745AbiLVXAR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 22 Dec 2022 18:00:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiLVWW6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Dec 2022 17:22:58 -0500
+        with ESMTP id S229603AbiLVXAQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Dec 2022 18:00:16 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4795F27CDF
-        for <linux-i2c@vger.kernel.org>; Thu, 22 Dec 2022 14:22:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5C828709
+        for <linux-i2c@vger.kernel.org>; Thu, 22 Dec 2022 14:59:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671747741;
+        s=mimecast20190719; t=1671749966;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rJEghjc//bUeirJO3BVHy7SfdNAruAMz/OF8PYUtCm8=;
-        b=RNkceL74ws9oEes6GzfJH5n2ZgpYdmHpZcpZsCSLwV2RQDHgEUtE8m/W28Xx9s0w2UwC4G
-        P77yTUDddhobEnwpRcHuhzEvBIGm71o//OutfKdUYXMFmsSAUAJTAPRXQsEtLoLqQn2/l0
-        2hVnXe3F+x3butDuAtz0hDzh43p3JXs=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=DDeshYsFzsV86X1KOSZ/3pdcOk+Tna6Uckljdyy2RF8=;
+        b=NSulKjFv8Libqglfdbep6XF4/3P+yp7iESdwYW8hp5XSv6MkAh4c5EPsOTw0Hb1bHwQVjt
+        AFyYYF3WKBVbHqyGSdZiq08vgIaGTT9uaIWuSnshM6D68DRf1rxHnbm7lyptLH0yYtzGAB
+        xK0+DCzrLYpD3ZizTknZfHcRUtiCWWE=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-629-s8jQfW4wPMSBY3oUej9BkA-1; Thu, 22 Dec 2022 17:22:20 -0500
-X-MC-Unique: s8jQfW4wPMSBY3oUej9BkA-1
-Received: by mail-wr1-f69.google.com with SMTP id q16-20020adfab10000000b00271460582b6so667748wrc.5
-        for <linux-i2c@vger.kernel.org>; Thu, 22 Dec 2022 14:22:20 -0800 (PST)
+ us-mta-473-gY-N4RvxOyOuMe--rvm-Rg-1; Thu, 22 Dec 2022 17:59:25 -0500
+X-MC-Unique: gY-N4RvxOyOuMe--rvm-Rg-1
+Received: by mail-wm1-f70.google.com with SMTP id r67-20020a1c4446000000b003d09b0fbf54so2919460wma.3
+        for <linux-i2c@vger.kernel.org>; Thu, 22 Dec 2022 14:59:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rJEghjc//bUeirJO3BVHy7SfdNAruAMz/OF8PYUtCm8=;
-        b=FHbcM/PFCH/6qkrYuc0hHaEtkmImOpYqZU0mjW2QIdRC8ENbjEc7dehRWOvSbZNbGs
-         pL7OuMVnsrElA/mbtrT/Uyz20kcgjGbKxuqYcWZ/Lk8HsGN89CDZekymG4rpXftU20cc
-         b7wvAeYMZyeNOYC8i3GZYIfQfr5IUJPp21BmNugTGsr9kug8fb0rpARqrTlokIm8gAip
-         23Gzl0+D/Q+1527SODn2qa4xDr3lLwX7JZxvSd+bD8DDXtT23cfOUinQvL9+YgVwWYwE
-         QLWIxusJyds3L/GQKILt+Tl/RPZGawHwGbUwMwAMc8zgTMlL1//rnjWarakAsvkR6ILl
-         udzw==
-X-Gm-Message-State: AFqh2kpvTESRPuwFW2XfIiwsONEzMBfgTMkB1S7GdxB+2YUmGrT2827N
-        WtjMxQBEbIU4Sk5TdUfEFuWRptx6V/m8r+xS9Wb60gGJrS33iJU5ci06gIR0C+iHbjo7hl2eQ3y
-        8ErY3u57pw5n/w6LM/+cS
-X-Received: by 2002:adf:f2cd:0:b0:242:29fc:ad51 with SMTP id d13-20020adff2cd000000b0024229fcad51mr8268071wrp.20.1671747739182;
-        Thu, 22 Dec 2022 14:22:19 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXv9To1v5Iv9TiwO8kmYC/5NHNtZZRcyqV34bOlzRZgspniUuLr0DE8wZ3mzxPXLDhw/Fztolw==
-X-Received: by 2002:adf:f2cd:0:b0:242:29fc:ad51 with SMTP id d13-20020adff2cd000000b0024229fcad51mr8268051wrp.20.1671747738899;
-        Thu, 22 Dec 2022 14:22:18 -0800 (PST)
+        bh=DDeshYsFzsV86X1KOSZ/3pdcOk+Tna6Uckljdyy2RF8=;
+        b=DVZMXlbk2nM4A5XiS/c+6O9M7+dC0mcykK4FlSxZsm76NHzTNZGgMbOUJV4vCYU8tX
+         U60FtGn6jzQy9N00n2f0FVwgyN/Q2BeCDfStk5d7zJVff/M4/nmWYYJSIKkoJgjFyhp/
+         +Yi3xa9/89oBGIeKAiCMpdfp9vEm6f+EL2XUF1A0z9YOtWqV8FP06c7TG4YuKPcGHpM6
+         /2TvUIpalb9UywjAXgGheyEIWnGlWkNgmn4d20EXJfVaTwbOX1Q1qOtihN94rxMkkcoI
+         w5JbVfjErFoJTU26/ZWDqtpKhA5ORZ3Lle+bHZ3oopuY/j5oe+6JoeUTkDoiEgNpUW+k
+         6CLg==
+X-Gm-Message-State: AFqh2kqYG2gmLrLe207AxdqZQJDRDKh8tW1I+D1fhNvHYg1Ec2UA85JN
+        PsmfAcedWj1d+MtBk9bkDoQa/Y1MTUo4l3F+gO2jZGSFbVPdugy21bEOYaM6YpLkakAf0mwz4cm
+        RptbDyo75povvAZdu/w82
+X-Received: by 2002:a05:600c:3482:b0:3d3:4f56:62e1 with SMTP id a2-20020a05600c348200b003d34f5662e1mr5299599wmq.27.1671749964092;
+        Thu, 22 Dec 2022 14:59:24 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsF9bhqDxJgYpNS3h0h7UKxGFrWcXBtywt7wPqI0gGeUoCpT/c1pS/cwz/9gvjfUEjOVWDuOQ==
+X-Received: by 2002:a05:600c:3482:b0:3d3:4f56:62e1 with SMTP id a2-20020a05600c348200b003d34f5662e1mr5299580wmq.27.1671749963929;
+        Thu, 22 Dec 2022 14:59:23 -0800 (PST)
 Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id u11-20020a5d514b000000b0022cdeba3f83sm1496111wrt.84.2022.12.22.14.22.17
+        by smtp.gmail.com with ESMTPSA id bh12-20020a05600c3d0c00b003cfa81e2eb4sm2396380wmb.38.2022.12.22.14.59.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 14:22:18 -0800 (PST)
-Message-ID: <d45f52c1-1fe7-3210-25d2-259e3c07b5db@redhat.com>
-Date:   Thu, 22 Dec 2022 23:22:17 +0100
+        Thu, 22 Dec 2022 14:59:23 -0800 (PST)
+Message-ID: <82c1db2f-293e-96e3-405e-b0a7ae5ffade@redhat.com>
+Date:   Thu, 22 Dec 2022 23:59:22 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH 038/606] drm/i2c/ch7006: Convert to i2c's .probe_new()
+Subject: Re: [PATCH 043/606] drm/panel: raspberrypi-touchscreen: Convert to
+ i2c's .probe_new()
 Content-Language: en-US
 To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>,
         Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
         David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Ajay Gupta <ajayg@nvidia.com>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+        Daniel Vetter <daniel@ffwll.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-39-uwe@kleine-koenig.org>
+ <20221118224540.619276-44-uwe@kleine-koenig.org>
 From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221118224540.619276-39-uwe@kleine-koenig.org>
+In-Reply-To: <20221118224540.619276-44-uwe@kleine-koenig.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello Uwe,
-
 On 11/18/22 23:36, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> 
 > The probe function doesn't make use of the i2c_device_id * parameter so it
 > can be trivially converted.
 > 
 > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > ---
->  drivers/gpu/drm/i2c/ch7006_drv.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i2c/ch7006_drv.c b/drivers/gpu/drm/i2c/ch7006_drv.c
-> index 578b738859b9..e0476a5bf84c 100644
-> --- a/drivers/gpu/drm/i2c/ch7006_drv.c
-> +++ b/drivers/gpu/drm/i2c/ch7006_drv.c
-> @@ -386,7 +386,7 @@ static const struct drm_encoder_slave_funcs ch7006_encoder_funcs = {
->  
->  /* I2C driver functions */
->  
-> -static int ch7006_probe(struct i2c_client *client, const struct i2c_device_id *id)
-> +static int ch7006_probe(struct i2c_client *client)
->  {
->  	uint8_t addr = CH7006_VERSION_ID;
->  	uint8_t val;
-> @@ -495,7 +495,7 @@ static const struct dev_pm_ops ch7006_pm_ops = {
->  
->  static struct drm_i2c_encoder_driver ch7006_driver = {
->  	.i2c_driver = {
-> -		.probe = ch7006_probe,
-> +		.probe_new = ch7006_probe,
->  		.remove = ch7006_remove,
->  
->  		.driver = {
-
-Looks good to me.
 
 Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
