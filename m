@@ -2,110 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B44946537D5
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Dec 2022 21:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A4A65440A
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Dec 2022 16:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234883AbiLUUw2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 21 Dec 2022 15:52:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40204 "EHLO
+        id S235596AbiLVPOc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 22 Dec 2022 10:14:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234806AbiLUUwQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Dec 2022 15:52:16 -0500
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C646A218AF;
-        Wed, 21 Dec 2022 12:52:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1671655935; x=1703191935;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QZ7rWYK2CKwOEagvxBjviYv+AnRa/cMCIpiy/dlt5s4=;
-  b=Ir/aIIQFx1pCaqN3ekH+5b/qDRdtupV6MF6usIQAzAalRiy9If+Sw4wD
-   MGDwnXf2x9+XOdbjgc0pkVB8RUruwEmZoqciCVZOajGZI9HEj/u5PZ+mw
-   FVi8NE+j7mR1XC/en3DF/j7rPpHjwUf2uRB6UXy+0sXzQDEvk6vjtf9pZ
-   k=;
-X-IronPort-AV: E=Sophos;i="5.96,263,1665446400"; 
-   d="scan'208";a="281548083"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-dc7c3f8b.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 20:52:14 +0000
-Received: from EX13D42EUA004.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2c-m6i4x-dc7c3f8b.us-west-2.amazon.com (Postfix) with ESMTPS id 90592A1238;
-        Wed, 21 Dec 2022 20:52:12 +0000 (UTC)
-Received: from EX19D019EUA002.ant.amazon.com (10.252.50.84) by
- EX13D42EUA004.ant.amazon.com (10.43.165.34) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Wed, 21 Dec 2022 20:52:10 +0000
-Received: from dev-dsk-hhhawa-1b-84e0d7ff.eu-west-1.amazon.com (10.43.162.134)
- by EX19D019EUA002.ant.amazon.com (10.252.50.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.20; Wed, 21 Dec 2022 20:52:06 +0000
-From:   Hanna Hawa <hhhawa@amazon.com>
-To:     <wsa@kernel.org>, <linus.walleij@linaro.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>
-CC:     <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
-        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <farbere@amazon.com>, <itamark@amazon.com>, <hhhawa@amazon.com>
-Subject: [PATCH v4 2/2] i2c: Set i2c pinctrl recovery info from it's device pinctrl
-Date:   Wed, 21 Dec 2022 20:51:16 +0000
-Message-ID: <20221221205116.73941-3-hhhawa@amazon.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221221205116.73941-1-hhhawa@amazon.com>
-References: <20221221205116.73941-1-hhhawa@amazon.com>
+        with ESMTP id S235335AbiLVPOV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Dec 2022 10:14:21 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A759424F2F;
+        Thu, 22 Dec 2022 07:14:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671722060; x=1703258060;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gyODYh2bF0u1w4lb06K7uWpgiRl7PFX7XVgYO3KlnoI=;
+  b=Ef8pahAoZ6c2PyxVzwX8UzIgpAk1GalnhH08P5zhFRJXVVYw++2e13Lq
+   zn7vOpzjVdRcoeJUHLohXDA1FpJB1XfTzxtDq0m7YKTmniB2hte4zqsC/
+   HooB0rtZbJ9tgTC+CQLkyh4AD8FaQuase9jMJRxEllwdOCoKFZp6aOQox
+   2F3kwutNOechoUzmcnJ5kr6vTIuHkcE+9oSWp4w7Y8VW8mIbjXN+E+Sep
+   ORSwjCIQbq17mf4PhlInXFw0RM4Xt+1gFSgggKUy91k4LaLv/9xPzJtEo
+   bU/KTFzj2/OKqWrfrdkrQuMdKhTxCekneeQQnP+h4ZGHv2f60916GeSvI
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="300489202"
+X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
+   d="scan'208";a="300489202"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 07:14:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="651806882"
+X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
+   d="scan'208";a="651806882"
+Received: from mylly.fi.intel.com (HELO [10.237.72.179]) ([10.237.72.179])
+  by orsmga002.jf.intel.com with ESMTP; 22 Dec 2022 07:14:15 -0800
+Message-ID: <9c663363-49a0-da2f-508b-dbf3906b4d61@linux.intel.com>
+Date:   Thu, 22 Dec 2022 17:14:14 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.162.134]
-X-ClientProxiedBy: EX13D28UWC004.ant.amazon.com (10.43.162.24) To
- EX19D019EUA002.ant.amazon.com (10.252.50.84)
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.5.1
+Subject: Re: [PATCH v5 1/1] i2c: designware: use casting of u64 in clock
+ multiplication to avoid overflow
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hanna Hawa <hhhawa@amazon.com>
+Cc:     wsa@kernel.org, mika.westerberg@linux.intel.com, jsd@semihalf.com,
+        linus.walleij@linaro.org, ben-linux@fluff.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dwmw@amazon.co.uk, benh@amazon.com, ronenk@amazon.com,
+        talel@amazon.com, jonnyc@amazon.com, hanochu@amazon.com,
+        farbere@amazon.com, itamark@amazon.com, lareine@amazon.com
+References: <20221221195900.23276-1-hhhawa@amazon.com>
+ <Y6NnkDwD9UUQ8Ro/@smile.fi.intel.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <Y6NnkDwD9UUQ8Ro/@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Currently the i2c subsystem rely on the controller device tree to
-initialize the pinctrl recovery information, part of the drivers does
-not set this field (rinfo->pinctrl), for example i2c designware driver.
-
-The pins information is saved part of the device structure before probe
-and it's done on pinctrl_bind_pins().
-
-Make the i2c init recovery to get the device pins if it's not
-initialized by the driver from the device pins.
-
-Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
----
- drivers/i2c/i2c-core-base.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 7539b0740351..8c5f76c43dc8 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -34,6 +34,7 @@
- #include <linux/of.h>
- #include <linux/of_irq.h>
- #include <linux/pinctrl/consumer.h>
-+#include <linux/pinctrl/devinfo.h>
- #include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
- #include <linux/pm_wakeirq.h>
-@@ -282,7 +283,10 @@ static void i2c_gpio_init_pinctrl_recovery(struct i2c_adapter *adap)
- {
- 	struct i2c_bus_recovery_info *bri = adap->bus_recovery_info;
- 	struct device *dev = &adap->dev;
--	struct pinctrl *p = bri->pinctrl;
-+	struct pinctrl *p;
-+
-+	bri->pinctrl = bri->pinctrl ?: dev_pinctrl(dev->parent);
-+	p = bri->pinctrl;
- 
- 	/*
- 	 * we can't change states without pinctrl, so remove the states if
--- 
-2.38.1
-
+On 12/21/22 22:07, Andy Shevchenko wrote:
+> On Wed, Dec 21, 2022 at 07:59:00PM +0000, Hanna Hawa wrote:
+>> From: Lareine Khawaly <lareine@amazon.com>
+>>
+>> In functions i2c_dw_scl_lcnt() and i2c_dw_scl_hcnt() may have overflow
+>> by depending on the values of the given parameters including the ic_clk.
+>> For example in our use case where ic_clk is larger than one million,
+>> multiplication of ic_clk * 4700 will result in 32 bit overflow.
+>>
+>> Add cast of u64 to the calculation to avoid multiplication overflow, and
+>> use the corresponding define for divide.
+> 
+> Perfect, thank you!
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
