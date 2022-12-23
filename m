@@ -2,94 +2,116 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35768654DFA
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Dec 2022 10:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FFB8654F7E
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Dec 2022 12:13:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235866AbiLWJA5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 23 Dec 2022 04:00:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
+        id S230147AbiLWLNm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 23 Dec 2022 06:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235818AbiLWJA4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Dec 2022 04:00:56 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6CA8178B5;
-        Fri, 23 Dec 2022 01:00:54 -0800 (PST)
-Received: from loongson.cn (unknown [112.20.108.31])
-        by gateway (Coremail) with SMTP id _____8CxKelFbqVjeA0IAA--.14644S3;
-        Fri, 23 Dec 2022 17:00:53 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.20.108.31])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXL5EbqVjET4JAA--.4282S2;
-        Fri, 23 Dec 2022 17:00:52 +0800 (CST)
-From:   Binbin Zhou <zhoubinbin@loongson.cn>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org
-Cc:     loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH V8 4/4] LoongArch: Enable LS2X I2C in loongson3_defconfig
-Date:   Fri, 23 Dec 2022 17:01:15 +0800
-Message-Id: <485512df54a8554770b3782665adaa22eff9e036.1671688961.git.zhoubinbin@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1671688961.git.zhoubinbin@loongson.cn>
-References: <cover.1671688961.git.zhoubinbin@loongson.cn>
+        with ESMTP id S230106AbiLWLNl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Dec 2022 06:13:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF0533E;
+        Fri, 23 Dec 2022 03:13:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4109B61F1F;
+        Fri, 23 Dec 2022 11:13:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86546C433EF;
+        Fri, 23 Dec 2022 11:13:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671794018;
+        bh=6k6qPOMW3plUmLr9uKjqG2VachpkpHPBQRLd+3OwQss=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Khjxud6QJi8oVSJXQBZmrqMYL9NAC+3GSwrI48dwsPyr+fbgwyg0MOaaAz+BAluLG
+         PRlhI2p2WZfMf3vB4xCAMfw8LhtQSXuT83ggO7UsneOEbGkHcla0M5+A7FLYijZLH0
+         45GFDDWnXZ4Hn3TahkVpRQeQ78zDybWLTOIEcCqgMAET1mr8HI5weIX4AyAY2JVHaT
+         WTH7JfdjK8bcC5kT5nzIN1/C7jF+Plk+T81oLw+3CQs/NhS4K0B7kKkVOb+QbQK/ho
+         SvgzbEzCSljlg3XBEmMB7AvC8TAit6WydPd9AnTB33qCr3OlOmJMXsSyerykOZLnYI
+         0f4Z2Wp+0HoHA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p8g0V-00050v-5Q; Fri, 23 Dec 2022 12:14:31 +0100
+Date:   Fri, 23 Dec 2022 12:14:31 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Daniel Beer <daniel.beer@igorinstitute.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        Michael Zaidman <michael.zaidman@gmail.com>,
+        Christina Quast <contact@christina-quast.de>,
+        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH] hid-ft260: add UART support.
+Message-ID: <Y6WNl6+ySy8zcSyg@hovoldconsulting.com>
+References: <638c51a2.170a0220.3af16.18f8@mx.google.com>
+ <Y4xX7ILXMFHZtJkv@kroah.com>
+ <20221204091247.GA11195@nyquist.nev>
+ <Y4xqyRERBdr8fT7F@kroah.com>
+ <20221205012403.GA14904@nyquist.nev>
+ <Y5G2PBEprjPp3FKR@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxXL5EbqVjET4JAA--.4282S2
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7Jry5XrWkuF48uF15Ww1fXrb_yoWxKFX_JF
-        y7Kw1kWr48JFZ7W3WIqw4rGw4DA3W7X3WFkr17Zw1xX3Waqr13JrWDAw17C3Z0ga4DWr43
-        ZaykJF9F9r18tjkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        C7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
-        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWrXVW3AwAv7VC2z280
-        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4
-        kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
-        1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj
-        6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
-        YxBIdaVFxhVjvjDU0xZFpf9x07jfHUhUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5G2PBEprjPp3FKR@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This is now supported, enable for Loongson-3 systems.
-Other systems are unaffected.
+On Thu, Dec 08, 2022 at 11:02:36AM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Dec 05, 2022 at 02:24:03PM +1300, Daniel Beer wrote:
+> > On Sun, Dec 04, 2022 at 10:39:21AM +0100, Greg Kroah-Hartman wrote:
+> > > > Thanks for reviewing. This device is quite strange -- it presents itself
+> > > > as a USB HID, but it provides both an I2C master and a UART. The
+> > > > existing driver supports only the I2C functionality currently.
 
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
----
- arch/loongarch/configs/loongson3_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+> > > > > A whole new major for just a single tty port?  Please no, use dynamic
+> > > > > majors if you have to, or better yet, tie into the usb-serial
+> > > > > implementation (this is a USB device, right?) and then you don't have to
+> > > > > mess with this at all.
+> > > > 
+> > > > As far as I understand it, I don't think usb-serial is usable, due to
+> > > > the fact that this is already an HID driver.
+> > > 
+> > > That should not be a restriction at all.  You are adding a tty device to
+> > > this driver, no reason you can't interact with usb-serial instead.  That
+> > > way you share the correct userspace tty name and major/minor numbers and
+> > > all userspace tools should "just work" as they know that name and how to
+> > > interact with it already.
+> > > 
+> > > Try doing that instead of your own "raw" tty device please.
+> > 
+> > Maybe I've misunderstood something. The reason I thought usb-serial was
+> > unusable in this instance was that I couldn't see a way to create a port
+> > except via usb-serial's own probe function (otherwise, the API looked
+> > fine).
+> > 
+> > I don't know whether I'm looking at a serial or an I2C interface until
+> > after it's already been probed by HID core, I have a struct hid_device
+> > and I've asked what type of interface it is via an HID feature report.
+> > This can't be determined otherwise, because strapping pins affect the
+> > presentation of interfaces.
+> > 
+> > At that point, I (currently) call uart_add_one_port. I might have missed
+> > it, but I didn't see anything analogous in the usb-serial API. Am I
+> > going about this the wrong way?
+> 
+> I thought that this could be done, but I might be wrong.  Johan, any
+> ideas?
 
-diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-index cb52774c80e8..5677c4f8576e 100644
---- a/arch/loongarch/configs/loongson3_defconfig
-+++ b/arch/loongarch/configs/loongson3_defconfig
-@@ -602,6 +602,7 @@ CONFIG_HW_RANDOM_VIRTIO=m
- CONFIG_I2C_CHARDEV=y
- CONFIG_I2C_PIIX4=y
- CONFIG_I2C_GPIO=y
-+CONFIG_I2C_LS2X=y
- CONFIG_SPI=y
- CONFIG_GPIO_SYSFS=y
- CONFIG_GPIO_LOONGSON=y
--- 
-2.31.1
+It seems to me like this should be implemented as a new tty driver as
+neither USB-serial or serial (core) is a good fit for such a HID device.
 
+So this appears to be right approach in general:
+
+	https://lore.kernel.org/all/20221207220617.116082-1-contact@christina-quast.de/
+
+Johan
