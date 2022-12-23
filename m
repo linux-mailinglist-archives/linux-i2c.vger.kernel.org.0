@@ -2,409 +2,190 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6C2654D9C
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Dec 2022 09:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 797E0654DF2
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Dec 2022 10:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236021AbiLWIkC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 23 Dec 2022 03:40:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
+        id S235452AbiLWJAi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 23 Dec 2022 04:00:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235834AbiLWIkA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Dec 2022 03:40:00 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B54935798
-        for <linux-i2c@vger.kernel.org>; Fri, 23 Dec 2022 00:39:59 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1p8daf-0008Ux-EH; Fri, 23 Dec 2022 09:39:41 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1p8dae-0007N9-FC; Fri, 23 Dec 2022 09:39:40 +0100
-Date:   Fri, 23 Dec 2022 09:39:40 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     aisheng.dong@nxp.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, ping.bai@nxp.com, linus.walleij@linaro.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: pinctrl: imx8m: Integrate duplicated i.MX
- 8M schemas
-Message-ID: <20221223083940.cqjs6mvatnhsxvvx@pengutronix.de>
-References: <20221223030708.91459-1-peng.fan@oss.nxp.com>
+        with ESMTP id S235035AbiLWJAh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Dec 2022 04:00:37 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 146D6357BC;
+        Fri, 23 Dec 2022 01:00:34 -0800 (PST)
+Received: from loongson.cn (unknown [112.20.108.31])
+        by gateway (Coremail) with SMTP id _____8Bx1vAxbqVjJQ0IAA--.17901S3;
+        Fri, 23 Dec 2022 17:00:33 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.20.108.31])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxzr4ubqVjuz0JAA--.14684S2;
+        Fri, 23 Dec 2022 17:00:31 +0800 (CST)
+From:   Binbin Zhou <zhoubinbin@loongson.cn>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Cc:     loongarch@lists.linux.dev, devicetree@vger.kernel.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH V8 0/4] i2c: ls2x: Add support for the Loongson-2K/LS7A I2C controller
+Date:   Fri, 23 Dec 2022 17:00:48 +0800
+Message-Id: <cover.1671688961.git.zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221223030708.91459-1-peng.fan@oss.nxp.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Bxzr4ubqVjuz0JAA--.14684S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxXrW3uw4UXr4xWry3tw13Arb_yoWrCFy5pa
+        98u398Kr4qyr17KFn3JF1ruFyFgws3Gayjgr47Gw13uanrWr18Aw4fKa4a9r17Cr98GFWj
+        qFZ0gFn0kFyDArJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
+        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
+        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4
+        kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
+        1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
+        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I
+        6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr
+        0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIY
+        CTnIWIevJa73UjIFyTuYvjxUcbAwUUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Peng,
+Hi all:
 
-On 22-12-23, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> The i.MX8MM/N/P/Q IOMUXC schemas are basically the same, it does not to
-> have four schemas for almost the same binding.
+This patch series adds support for the I2C module found on various
+Loongson systems with the Loongson-2K SoC or the Loongson LS7A bridge chip.
 
-Nice, just two nits see below.
+For now, the I2C driver is suitable for DT-based or ACPI-based systems.
 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  ...mm-pinctrl.yaml => fsl,imx8m-pinctrl.yaml} | 16 ++--
->  .../bindings/pinctrl/fsl,imx8mn-pinctrl.yaml  | 84 -------------------
->  .../bindings/pinctrl/fsl,imx8mp-pinctrl.yaml  | 84 -------------------
->  .../bindings/pinctrl/fsl,imx8mq-pinctrl.yaml  | 84 -------------------
->  4 files changed, 10 insertions(+), 258 deletions(-)
->  rename Documentation/devicetree/bindings/pinctrl/{fsl,imx8mm-pinctrl.yaml => fsl,imx8m-pinctrl.yaml} (82%)
->  delete mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,imx8mn-pinctrl.yaml
->  delete mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,imx8mp-pinctrl.yaml
->  delete mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,imx8mq-pinctrl.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/fsl,imx8mm-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/fsl,imx8m-pinctrl.yaml
-> similarity index 82%
-> rename from Documentation/devicetree/bindings/pinctrl/fsl,imx8mm-pinctrl.yaml
-> rename to Documentation/devicetree/bindings/pinctrl/fsl,imx8m-pinctrl.yaml
-> index 6717f163390b..949d962a97b4 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/fsl,imx8mm-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/fsl,imx8m-pinctrl.yaml
-> @@ -1,13 +1,13 @@
->  # SPDX-License-Identifier: GPL-2.0
->  %YAML 1.2
->  ---
-> -$id: http://devicetree.org/schemas/pinctrl/fsl,imx8mm-pinctrl.yaml#
-> +$id: http://devicetree.org/schemas/pinctrl/fsl,imx8m-pinctrl.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Freescale IMX8MM IOMUX Controller
-> +title: Freescale IMX8M IOMUX Controller
->  
->  maintainers:
-> -  - Anson Huang <Anson.Huang@nxp.com>
-> +  - Peng Fan <peng.fan@nxp.com>
->  
->  description:
->    Please refer to fsl,imx-pinctrl.txt and pinctrl-bindings.txt in this directory
-> @@ -15,7 +15,11 @@ description:
->  
->  properties:
->    compatible:
-> -    const: fsl,imx8mm-iomuxc
-> +    enum:
-> +      - fsl,imx8mm-iomuxc
-> +      - fsl,imx8mn-iomuxc
-> +      - fsl,imx8mp-iomuxc
-> +      - fsl,imx8mq-iomuxc
->  
->    reg:
->      maxItems: 1
-> @@ -34,9 +38,9 @@ patternProperties:
->            each entry consists of 6 integers and represents the mux and config
->            setting for one pin. The first 5 integers <mux_reg conf_reg input_reg
->            mux_val input_val> are specified using a PIN_FUNC_ID macro, which can
-> -          be found in <arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h>. The last
-> +          be found in <arch/arm64/boot/dts/freescale/imx8m[m,n,p,q]-pinfunc.h>. The last
->            integer CONFIG is the pad setting value like pull-up on this pin. Please
-> -          refer to i.MX8M Mini Reference Manual for detailed CONFIG settings.
-> +          refer to i.MX8M Quad/Mini/Nano/Plus  Reference Manual for detailed CONFIG settings.
-						 ^
-				 duplicated whitespace and the line
-				 looks rather long. Are these 80chars?
+I have tested on Loongson-3A5000LA+LS7A1000/LS7A2000, Loongson-2K1000LA
+and Loongson-2K0500.
 
-Regards,
-  Marco
+Thanks.
 
+Changes since V7:
+- patch (3/4)
+  - I2C_LS2X should be added to the Kconfig/Makefile in Latin
+    alphabetical order;
+  - To avoid repeated type conversions, 'struct ls2x_i2c_priv *priv'
+    replaces 'struct i2c_adapter *adap' as the function parameter,
+    e.g. ls2x_i2c_start();
+  - Refactor ls2x_i2c_stop() with readb_poll_timeout(), mainly with
+    LS2X_SR_BUSY to indicate the status (success/timeout) of the stop
+    command;
+  - Remove extra parentheses;
+  - For consistency, the variable 'r' in ls2x_i2c_probe() is renamed to
+    'ret'.
 
->          $ref: /schemas/types.yaml#/definitions/uint32-matrix
->          items:
->            items:
-> diff --git a/Documentation/devicetree/bindings/pinctrl/fsl,imx8mn-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/fsl,imx8mn-pinctrl.yaml
-> deleted file mode 100644
-> index b1cdbb56d4e4..000000000000
-> --- a/Documentation/devicetree/bindings/pinctrl/fsl,imx8mn-pinctrl.yaml
-> +++ /dev/null
-> @@ -1,84 +0,0 @@
-> -# SPDX-License-Identifier: GPL-2.0
-> -%YAML 1.2
-> ----
-> -$id: http://devicetree.org/schemas/pinctrl/fsl,imx8mn-pinctrl.yaml#
-> -$schema: http://devicetree.org/meta-schemas/core.yaml#
-> -
-> -title: Freescale IMX8MN IOMUX Controller
-> -
-> -maintainers:
-> -  - Anson Huang <Anson.Huang@nxp.com>
-> -
-> -description:
-> -  Please refer to fsl,imx-pinctrl.txt and pinctrl-bindings.txt in this directory
-> -  for common binding part and usage.
-> -
-> -properties:
-> -  compatible:
-> -    const: fsl,imx8mn-iomuxc
-> -
-> -  reg:
-> -    maxItems: 1
-> -
-> -# Client device subnode's properties
-> -patternProperties:
-> -  'grp$':
-> -    type: object
-> -    description:
-> -      Pinctrl node's client devices use subnodes for desired pin configuration.
-> -      Client device subnodes use below standard properties.
-> -
-> -    properties:
-> -      fsl,pins:
-> -        description:
-> -          each entry consists of 6 integers and represents the mux and config
-> -          setting for one pin. The first 5 integers <mux_reg conf_reg input_reg
-> -          mux_val input_val> are specified using a PIN_FUNC_ID macro, which can
-> -          be found in <arch/arm64/boot/dts/freescale/imx8mn-pinfunc.h>. The last
-> -          integer CONFIG is the pad setting value like pull-up on this pin. Please
-> -          refer to i.MX8M Nano Reference Manual for detailed CONFIG settings.
-> -        $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> -        items:
-> -          items:
-> -            - description: |
-> -                "mux_reg" indicates the offset of mux register.
-> -            - description: |
-> -                "conf_reg" indicates the offset of pad configuration register.
-> -            - description: |
-> -                "input_reg" indicates the offset of select input register.
-> -            - description: |
-> -                "mux_val" indicates the mux value to be applied.
-> -            - description: |
-> -                "input_val" indicates the select input value to be applied.
-> -            - description: |
-> -                "pad_setting" indicates the pad configuration value to be applied.
-> -
-> -    required:
-> -      - fsl,pins
-> -
-> -    additionalProperties: false
-> -
-> -allOf:
-> -  - $ref: "pinctrl.yaml#"
-> -
-> -required:
-> -  - compatible
-> -  - reg
-> -
-> -additionalProperties: false
-> -
-> -examples:
-> -  # Pinmux controller node
-> -  - |
-> -    iomuxc: pinctrl@30330000 {
-> -        compatible = "fsl,imx8mn-iomuxc";
-> -        reg = <0x30330000 0x10000>;
-> -
-> -        pinctrl_uart2: uart2grp {
-> -            fsl,pins =
-> -                <0x23C 0x4A4 0x4FC 0x0 0x0	0x140>,
-> -                <0x240 0x4A8 0x000 0x0 0x0	0x140>;
-> -        };
-> -    };
-> -
-> -...
-> diff --git a/Documentation/devicetree/bindings/pinctrl/fsl,imx8mp-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/fsl,imx8mp-pinctrl.yaml
-> deleted file mode 100644
-> index 4eed3a4e153a..000000000000
-> --- a/Documentation/devicetree/bindings/pinctrl/fsl,imx8mp-pinctrl.yaml
-> +++ /dev/null
-> @@ -1,84 +0,0 @@
-> -# SPDX-License-Identifier: GPL-2.0
-> -%YAML 1.2
-> ----
-> -$id: http://devicetree.org/schemas/pinctrl/fsl,imx8mp-pinctrl.yaml#
-> -$schema: http://devicetree.org/meta-schemas/core.yaml#
-> -
-> -title: Freescale IMX8MP IOMUX Controller
-> -
-> -maintainers:
-> -  - Anson Huang <Anson.Huang@nxp.com>
-> -
-> -description:
-> -  Please refer to fsl,imx-pinctrl.txt and pinctrl-bindings.txt in this directory
-> -  for common binding part and usage.
-> -
-> -properties:
-> -  compatible:
-> -    const: fsl,imx8mp-iomuxc
-> -
-> -  reg:
-> -    maxItems: 1
-> -
-> -# Client device subnode's properties
-> -patternProperties:
-> -  'grp$':
-> -    type: object
-> -    description:
-> -      Pinctrl node's client devices use subnodes for desired pin configuration.
-> -      Client device subnodes use below standard properties.
-> -
-> -    properties:
-> -      fsl,pins:
-> -        description:
-> -          each entry consists of 6 integers and represents the mux and config
-> -          setting for one pin. The first 5 integers <mux_reg conf_reg input_reg
-> -          mux_val input_val> are specified using a PIN_FUNC_ID macro, which can
-> -          be found in <arch/arm64/boot/dts/freescale/imx8mp-pinfunc.h>. The last
-> -          integer CONFIG is the pad setting value like pull-up on this pin. Please
-> -          refer to i.MX8M Plus Reference Manual for detailed CONFIG settings.
-> -        $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> -        items:
-> -          items:
-> -            - description: |
-> -                "mux_reg" indicates the offset of mux register.
-> -            - description: |
-> -                "conf_reg" indicates the offset of pad configuration register.
-> -            - description: |
-> -                "input_reg" indicates the offset of select input register.
-> -            - description: |
-> -                "mux_val" indicates the mux value to be applied.
-> -            - description: |
-> -                "input_val" indicates the select input value to be applied.
-> -            - description: |
-> -                "pad_setting" indicates the pad configuration value to be applied.
-> -
-> -    required:
-> -      - fsl,pins
-> -
-> -    additionalProperties: false
-> -
-> -allOf:
-> -  - $ref: "pinctrl.yaml#"
-> -
-> -required:
-> -  - compatible
-> -  - reg
-> -
-> -additionalProperties: false
-> -
-> -examples:
-> -  # Pinmux controller node
-> -  - |
-> -    iomuxc: pinctrl@30330000 {
-> -        compatible = "fsl,imx8mp-iomuxc";
-> -        reg = <0x30330000 0x10000>;
-> -
-> -        pinctrl_uart2: uart2grp {
-> -            fsl,pins =
-> -                <0x228 0x488 0x5F0 0x0 0x6	0x49>,
-> -                <0x228 0x488 0x000 0x0 0x0	0x49>;
-> -        };
-> -    };
-> -
-> -...
-> diff --git a/Documentation/devicetree/bindings/pinctrl/fsl,imx8mq-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/fsl,imx8mq-pinctrl.yaml
-> deleted file mode 100644
-> index d4a8ea5551a5..000000000000
-> --- a/Documentation/devicetree/bindings/pinctrl/fsl,imx8mq-pinctrl.yaml
-> +++ /dev/null
-> @@ -1,84 +0,0 @@
-> -# SPDX-License-Identifier: GPL-2.0
-> -%YAML 1.2
-> ----
-> -$id: http://devicetree.org/schemas/pinctrl/fsl,imx8mq-pinctrl.yaml#
-> -$schema: http://devicetree.org/meta-schemas/core.yaml#
-> -
-> -title: Freescale IMX8MQ IOMUX Controller
-> -
-> -maintainers:
-> -  - Anson Huang <Anson.Huang@nxp.com>
-> -
-> -description:
-> -  Please refer to fsl,imx-pinctrl.txt and pinctrl-bindings.txt in this directory
-> -  for common binding part and usage.
-> -
-> -properties:
-> -  compatible:
-> -    const: fsl,imx8mq-iomuxc
-> -
-> -  reg:
-> -    maxItems: 1
-> -
-> -# Client device subnode's properties
-> -patternProperties:
-> -  'grp$':
-> -    type: object
-> -    description:
-> -      Pinctrl node's client devices use subnodes for desired pin configuration.
-> -      Client device subnodes use below standard properties.
-> -
-> -    properties:
-> -      fsl,pins:
-> -        description:
-> -          each entry consists of 6 integers and represents the mux and config
-> -          setting for one pin. The first 5 integers <mux_reg conf_reg input_reg
-> -          mux_val input_val> are specified using a PIN_FUNC_ID macro, which can
-> -          be found in <arch/arm64/boot/dts/freescale/imx8mq-pinfunc.h>. The last
-> -          integer CONFIG is the pad setting value like pull-up on this pin. Please
-> -          refer to i.MX8M Quad Reference Manual for detailed CONFIG settings.
-> -        $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> -        items:
-> -          items:
-> -            - description: |
-> -                "mux_reg" indicates the offset of mux register.
-> -            - description: |
-> -                "conf_reg" indicates the offset of pad configuration register.
-> -            - description: |
-> -                "input_reg" indicates the offset of select input register.
-> -            - description: |
-> -                "mux_val" indicates the mux value to be applied.
-> -            - description: |
-> -                "input_val" indicates the select input value to be applied.
-> -            - description: |
-> -                "pad_setting" indicates the pad configuration value to be applied.
-> -
-> -    required:
-> -      - fsl,pins
-> -
-> -    additionalProperties: false
-> -
-> -allOf:
-> -  - $ref: "pinctrl.yaml#"
-> -
-> -required:
-> -  - compatible
-> -  - reg
-> -
-> -additionalProperties: false
-> -
-> -examples:
-> -  # Pinmux controller node
-> -  - |
-> -    iomuxc: pinctrl@30330000 {
-> -        compatible = "fsl,imx8mq-iomuxc";
-> -        reg = <0x30330000 0x10000>;
-> -
-> -        pinctrl_uart1: uart1grp {
-> -            fsl,pins =
-> -                <0x234 0x49C 0x4F4 0x0 0x0	0x49>,
-> -                <0x238 0x4A0 0x4F4 0x0 0x0	0x49>;
-> -        };
-> -    };
-> -
-> -...
-> -- 
-> 2.37.1
-> 
-> 
-> 
+Changes since V6:
+- patch (1/4)
+  - Add Reviewed-by tag.
+- patch (3/4)
+  - GPL-2.0 -> GPL-2.0-only;
+  - Add property.h;
+  - writew() should be used to operate I2C_LS2X_PRER, and drop the
+    suffix of I2C_LS2X_PRER_LO/I2C_LS2X_PRER_HI;
+  - Drop ls2x_i2c_priv->dev, for it can be completely replaced by
+    'adapter.dev.parent';
+  - Reasonable return value handling in ls2x_i2c_xfer_one();
+  - Dropping the I2C_M_STOP flag judgment, the stop parameter of
+    ls2x_i2c_xfer_one() represents the last msg;
+  - Add comments for subsys_initcall();
+  - Code formatting, such as dropping unnecessary blank lines.
+
+Changes since V5:
+- patch (1/4)
+  - Add property.h.
+- patch (3/4)
+  - Put the ls2x_i2c_reginit() in front of irq requst;
+  - Refact ls2x_i2c_adjust_bus_speed: discard the magic value of
+    the divider register and LS2X_I2C_FREQ_STD is used to calculate
+    the frequency;
+  - Drop useless parameters: priv->suspended, and also disable I2C
+    interrupts during suspend;
+  - Drop ls2x_i2c_remove(), for the adapter will be auto deleted on
+    driver detach;
+  - Drop MODULE_ALIAS;
+  - Code formatting, such as alignment.
+
+Thanks Andy for your comments.
+
+Changes since V4:
+- patch (1/4)
+  - Drop unneeded headers: of.h;
+  - xxx_props -> xxx_properties.
+- patch (2/4)
+  - Add interrupt headers to fix syntax error found by Rob.
+- patch (3/4)
+  - Drop atmoic loop in ls2x_i2c_master_xfer(), I have tested it on the
+    appropriate environment with no problems;
+  - Define the corresponding bits in I2C_LS2X_CTR to avoid magic
+    numbers;
+  - dev_get_drvdata() is used to get ls2x_i2c_priv() in
+    ls2x_i2c_suspend();
+  - i2c_add_adapter() -> devm_i2c_add_adapter();
+  - SET_SYSTEM_SLEEP_PM_OPS() -> DEFINE_RUNTIME_DEV_PM_OPS();
+  - Code formatting, such as alignment.
+
+    Details: https://lore.kernel.org/all/Y4e%2F6KewuHjAluSZ@smile.fi.intel.com/
+
+Changes since V3:
+- Addressed all review comments from v3
+  - Change the changelog text to make it clearer (1/5);
+  - Fix some minor bugs, such as formatting issues (2/5);
+  - Fix some formatting issues (3/5);
+  - Deep refactoring of code for clarity (4/5).
+     Details: https://lore.kernel.org/all/Y4S2cnlAm3YYvZ8E@smile.fi.intel.com/
+
+Thanks to all for their suggestions.
+
+Changes since V2:
+- Addressed all review comments from v2
+  - Drop of_match_ptr() in i2c-gpio to avoid potential unused warnings
+    (1/5);
+  - Introduce i2c_gpio_get_props() function as the generic interface
+    to get i2c-gpio props from DT or ACPI table (2/5);
+  - Refact ls2x i2c code, similar to removing excessive goto tags (4/5).
+
+Thanks to Andy and Mika for their suggestions.
+
+Changes since V1:
+- Remove the function of getting the static i2c bus number from ACPI "_UID";
+- Fix build warning from kernel test robot.
+
+Binbin Zhou (4):
+  i2c: gpio: Add support on ACPI-based system
+  dt-bindings: i2c: add Loongson LS2X I2C controller
+  i2c: ls2x: Add driver for Loongson-2K/LS7A I2C controller
+  LoongArch: Enable LS2X I2C in loongson3_defconfig
+
+ .../bindings/i2c/loongson,ls2x-i2c.yaml       |  51 +++
+ arch/loongarch/configs/loongson3_defconfig    |   1 +
+ drivers/i2c/busses/Kconfig                    |  11 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-gpio.c                 |  28 +-
+ drivers/i2c/busses/i2c-ls2x.c                 | 366 ++++++++++++++++++
+ 6 files changed, 448 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/i2c/loongson,ls2x-i2c.yaml
+ create mode 100644 drivers/i2c/busses/i2c-ls2x.c
+
+-- 
+2.31.1
+
