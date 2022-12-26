@@ -2,178 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F23B65644A
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Dec 2022 18:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A2A656575
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Dec 2022 23:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiLZRBT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Dec 2022 12:01:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
+        id S232425AbiLZWhZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Dec 2022 17:37:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiLZRBS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Dec 2022 12:01:18 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45600C2B;
-        Mon, 26 Dec 2022 09:01:17 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2A2A0A1C;
-        Mon, 26 Dec 2022 18:01:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672074075;
-        bh=irlftFZ6CQR1KhY24DKXhiPsC4bMOa8WIpYTJayoAko=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UwbNYJNX9mUQw62WXtxT7GocsxtkWmIttmo9rMCNgN3YbY3abYEM8CZb2E9XpkLFi
-         M6C7YpKJs/gWFrjk137hF75hdYg4j37D0bBoObHOdyuGj1sGMlaXO/nuv2bdnZzbED
-         Mk3La9FZVU1h65y+mCwkLyzsX17UDfYvazEcJTus=
-Date:   Mon, 26 Dec 2022 19:01:11 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-Subject: Re: [PATCH v5 7/8] media: i2c: add DS90UB913 driver
-Message-ID: <Y6nTV16me9aQL3iT@pendragon.ideasonboard.com>
-References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
- <20221208104006.316606-8-tomi.valkeinen@ideasonboard.com>
- <Y5YiazDtaxtLJyL0@pendragon.ideasonboard.com>
- <4d349785-ca37-d930-db3c-2581bba9fde0@ideasonboard.com>
+        with ESMTP id S232420AbiLZWgV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Dec 2022 17:36:21 -0500
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8985F54;
+        Mon, 26 Dec 2022 14:36:14 -0800 (PST)
+Received: by mail-oi1-f180.google.com with SMTP id o66so11150390oia.6;
+        Mon, 26 Dec 2022 14:36:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AGjdttmcgkKOVEh+yLpPFWCyfTxrmdMALVwDhA4tbxk=;
+        b=q5YWFPJBfhAQiVNLSyXpu/t+RYP99z/WDuUvLrW0ONbEnFyQ4oxYONr6fXQsxonr35
+         ZlR9om3xxCVYQuDLTeqeWUNADtfLXsYabe6yg+0vMfc6GxGqRoxgP6qR3Ohl5wbP6yp0
+         EpjEIZrbKFL0xQitX4OM8ayOV/ClWDSy0V6tvANslNfEUgiN7uI0p6xGyu700z+QN4iR
+         8Fi1tWZ/O5PvImDXeZykJja2bnXwFLp5gnMirOZY5V1UVd3si59k0IWQAP5dhQn9jhUL
+         3KrM8/NBNxQDDxxwiVnyHSaaEk5k6nPj7xF+9ejW5kwSKvIB0eCkmH4m/YSZqCRPN6nl
+         FY6w==
+X-Gm-Message-State: AFqh2koGYfyJZP1YO4PX+peAJSI1T4Cs5P2yZNQcR6Ygd5X8F7Vks9Jo
+        SY8rGd0V35Zb2GJ6sEC5eQ==
+X-Google-Smtp-Source: AMrXdXsMw29uTavPyGsPxjWjy3/8ibqE9mMs5+r+xOX45/xNrSglsye61N2mME7UKlhGFVpLdDQUfA==
+X-Received: by 2002:aca:1b0a:0:b0:35e:6f1d:eda9 with SMTP id b10-20020aca1b0a000000b0035e6f1deda9mr13253583oib.53.1672094174044;
+        Mon, 26 Dec 2022 14:36:14 -0800 (PST)
+Received: from robh_at_kernel.org ([2605:ef80:80e8:2792:eb0e:539f:f657:547b])
+        by smtp.gmail.com with ESMTPSA id bk10-20020a0568081a0a00b0035c422bb303sm5264522oib.19.2022.12.26.14.36.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Dec 2022 14:36:13 -0800 (PST)
+Received: (nullmailer pid 42527 invoked by uid 1000);
+        Mon, 26 Dec 2022 18:53:03 -0000
+Date:   Mon, 26 Dec 2022 12:53:03 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     aisheng.dong@nxp.com, ping.bai@nxp.com, linus.walleij@linaro.org,
+        linux-imx@nxp.com, s.hauer@pengutronix.de,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        shawnguo@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-i2c@vger.kernel.org, festevam@gmail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: pinctrl: imx8m: Integrate duplicated i.MX
+ 8M schemas
+Message-ID: <167208078314.42480.9171070887547759021.robh@kernel.org>
+References: <20221223030708.91459-1-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4d349785-ca37-d930-db3c-2581bba9fde0@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221223030708.91459-1-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Tomi,
 
-On Wed, Dec 14, 2022 at 08:29:48AM +0200, Tomi Valkeinen wrote:
-> On 11/12/2022 20:33, Laurent Pinchart wrote:
-> > On Thu, Dec 08, 2022 at 12:40:05PM +0200, Tomi Valkeinen wrote:
-> >> Add driver for TI DS90UB913 FPDLink-3 Serializer.
-> >>
-> >> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> >> ---
-> >>   drivers/media/i2c/Kconfig     |  13 +
-> >>   drivers/media/i2c/Makefile    |   2 +-
-> >>   drivers/media/i2c/ds90ub913.c | 892 ++++++++++++++++++++++++++++++++++
-> >>   3 files changed, 906 insertions(+), 1 deletion(-)
-> >>   create mode 100644 drivers/media/i2c/ds90ub913.c
-
-[snip]
-
-> >> diff --git a/drivers/media/i2c/ds90ub913.c b/drivers/media/i2c/ds90ub913.c
-> >> new file mode 100644
-> >> index 000000000000..6001a622e622
-> >> --- /dev/null
-> >> +++ b/drivers/media/i2c/ds90ub913.c
-> >> @@ -0,0 +1,892 @@
-
-[snip]
-
-> >> +static int ub913_notify_bound(struct v4l2_async_notifier *notifier,
-> >> +			      struct v4l2_subdev *source_subdev,
-> >> +			      struct v4l2_async_subdev *asd)
-> >> +{
-> >> +	struct ub913_data *priv = sd_to_ub913(notifier->sd);
-> >> +	struct device *dev = &priv->client->dev;
-> >> +	unsigned int src_pad;
-> >> +	int ret;
-> >> +
-> >> +	dev_dbg(dev, "Bind %s\n", source_subdev->name);
-> > 
-> > I'd drop this message.
+On Fri, 23 Dec 2022 11:07:08 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> Why is that? Do we get this easily from the v4l2 core? These debug 
-> prints in the bind/unbind process have been valuable for me.
-
-Because debug messages are not meant to be a tracing infrastructure, and
-because, if we want to keep this message, it would be best handled in
-the v4l2-async core instead of being duplicated across drivers. Same for
-the messages at the end of the function.
-
-> >> +
-> >> +	ret = media_entity_get_fwnode_pad(&source_subdev->entity,
-> >> +					  source_subdev->fwnode,
-> >> +					  MEDIA_PAD_FL_SOURCE);
-> >> +	if (ret < 0) {
-> >> +		dev_err(dev, "Failed to find pad for %s\n",
-> >> +			source_subdev->name);
-> >> +		return ret;
-> >> +	}
-> >> +
-> >> +	priv->source_sd = source_subdev;
-> >> +	src_pad = ret;
-> >> +
-> >> +	ret = media_create_pad_link(&source_subdev->entity, src_pad,
-> >> +				    &priv->sd.entity, 0,
-> > 
-> > 				    &priv->sd.entity, UB913_PAD_SINK,
+> The i.MX8MM/N/P/Q IOMUXC schemas are basically the same, it does not to
+> have four schemas for almost the same binding.
 > 
-> Yep.
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  ...mm-pinctrl.yaml => fsl,imx8m-pinctrl.yaml} | 16 ++--
+>  .../bindings/pinctrl/fsl,imx8mn-pinctrl.yaml  | 84 -------------------
+>  .../bindings/pinctrl/fsl,imx8mp-pinctrl.yaml  | 84 -------------------
+>  .../bindings/pinctrl/fsl,imx8mq-pinctrl.yaml  | 84 -------------------
+>  4 files changed, 10 insertions(+), 258 deletions(-)
+>  rename Documentation/devicetree/bindings/pinctrl/{fsl,imx8mm-pinctrl.yaml => fsl,imx8m-pinctrl.yaml} (82%)
+>  delete mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,imx8mn-pinctrl.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,imx8mp-pinctrl.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,imx8mq-pinctrl.yaml
 > 
-> >> +				    MEDIA_LNK_FL_ENABLED |
-> >> +				    MEDIA_LNK_FL_IMMUTABLE);
-> >> +	if (ret) {
-> >> +		dev_err(dev, "Unable to link %s:%u -> %s:0\n",
-> >> +			source_subdev->name, src_pad, priv->sd.name);
-> >> +		return ret;
-> >> +	}
-> >> +
-> >> +	dev_dbg(dev, "Bound %s:%u\n", source_subdev->name, src_pad);
-> >> +
-> >> +	dev_dbg(dev, "All subdevs bound\n");
-> > 
-> > I'd drop this message.
-> > 
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +static void ub913_notify_unbind(struct v4l2_async_notifier *notifier,
-> >> +				struct v4l2_subdev *source_subdev,
-> >> +				struct v4l2_async_subdev *asd)
-> >> +{
-> >> +	struct ub913_data *priv = sd_to_ub913(notifier->sd);
-> >> +	struct device *dev = &priv->client->dev;
-> >> +
-> >> +	dev_dbg(dev, "Unbind %s\n", source_subdev->name);
-> >> +}
-> > 
-> > This is a no-op so you can drop it.
-> 
-> This has been useful for development, but, yes, perhaps it's time to 
-> drop it.
-> 
-> >> +
-> >> +static const struct v4l2_async_notifier_operations ub913_notify_ops = {
-> >> +	.bound = ub913_notify_bound,
-> >> +	.unbind = ub913_notify_unbind,
-> >> +};
 
-[snip]
-
--- 
-Regards,
-
-Laurent Pinchart
+Acked-by: Rob Herring <robh@kernel.org>
