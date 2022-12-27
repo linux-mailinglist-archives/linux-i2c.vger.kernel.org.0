@@ -2,113 +2,134 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1819C656E86
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Dec 2022 21:09:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67116657023
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Dec 2022 22:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbiL0UJz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 27 Dec 2022 15:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
+        id S229665AbiL0V5Z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 27 Dec 2022 16:57:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiL0UJy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 27 Dec 2022 15:09:54 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECEA1C9;
-        Tue, 27 Dec 2022 12:09:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672171792; x=1703707792;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3sBZGyq73ZD2hku2pLOI+6amo8ZCX9wNt+AZ72j6k9o=;
-  b=QhyHeC07prThXtod2ewQVSUELuXWeWuHAuZVsZAPsikchOTuyFnOhiQG
-   pU4TsPTjlvOHhm4vmQjyAvUZ46Ne0/mQNA4U6hIdf/lKweja34NfF0cQ3
-   ZOMPxzaFOcH4Mas9nRlkptkf2nPTnldZtRn0KsGmSAXDDHdPiHywEfjOn
-   hmY4IhJskrrbS1GPxmQtutgP430t07PTxddXh6BRM+Evyp6wBIvwzIH3F
-   qEnD6QE1TvM4sEbzMigDaQ2brVR6yirYohfOlX3TUgCpIHrmiAK+zfMzh
-   WFbQ5oioa2POw+fqwg0QhQo8FyXKclt7HDjxRlNhi613pZmQ8dBBMf3y2
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="318428997"
+        with ESMTP id S229533AbiL0V5Y (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 27 Dec 2022 16:57:24 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073F4C758;
+        Tue, 27 Dec 2022 13:57:22 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="407027847"
 X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="318428997"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 12:09:52 -0800
+   d="scan'208";a="407027847"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 13:57:22 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="716423485"
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="721609669"
 X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="716423485"
+   d="scan'208";a="721609669"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Dec 2022 12:09:47 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 27 Dec 2022 13:57:19 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1pAGGe-000DiC-0K;
-        Tue, 27 Dec 2022 22:09:44 +0200
-Date:   Tue, 27 Dec 2022 22:09:43 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        (envelope-from <andy@kernel.org>)
+        id 1pAHwj-000H8E-0y;
+        Tue, 27 Dec 2022 23:57:17 +0200
+Date:   Tue, 27 Dec 2022 23:57:17 +0200
+From:   Andy Shevchenko <andy@kernel.org>
+To:     Binbin Zhou <zhoubinbin@loongson.cn>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, loongarch@lists.linux.dev,
+        devicetree@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-Subject: Re: [PATCH v5 7/8] media: i2c: add DS90UB913 driver
-Message-ID: <Y6tRB6DckOKWYHTv@smile.fi.intel.com>
-References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
- <20221208104006.316606-8-tomi.valkeinen@ideasonboard.com>
- <Y5YiazDtaxtLJyL0@pendragon.ideasonboard.com>
- <4d349785-ca37-d930-db3c-2581bba9fde0@ideasonboard.com>
- <Y6nTV16me9aQL3iT@pendragon.ideasonboard.com>
+        Jianmin Lv <lvjianmin@loongson.cn>
+Subject: Re: [PATCH V8 3/4] i2c: ls2x: Add driver for Loongson-2K/LS7A I2C
+ controller
+Message-ID: <Y6tqPenv3NBEl9qD@smile.fi.intel.com>
+References: <cover.1671688961.git.zhoubinbin@loongson.cn>
+ <9d3e4997519fd9ecebae6fd241148cc22d3fe04f.1671688961.git.zhoubinbin@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y6nTV16me9aQL3iT@pendragon.ideasonboard.com>
+In-Reply-To: <9d3e4997519fd9ecebae6fd241148cc22d3fe04f.1671688961.git.zhoubinbin@loongson.cn>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Dec 26, 2022 at 07:01:11PM +0200, Laurent Pinchart wrote:
-> On Wed, Dec 14, 2022 at 08:29:48AM +0200, Tomi Valkeinen wrote:
-> > On 11/12/2022 20:33, Laurent Pinchart wrote:
-> > > On Thu, Dec 08, 2022 at 12:40:05PM +0200, Tomi Valkeinen wrote:
+On Fri, Dec 23, 2022 at 05:00:51PM +0800, Binbin Zhou wrote:
+> This I2C module is integrated into the Loongson-2K SoCs and Loongson
+> LS7A bridge chip.
 
 ...
 
-> > >> +	dev_dbg(dev, "Bind %s\n", source_subdev->name);
-> > > 
-> > > I'd drop this message.
+> +static int ls2x_i2c_xfer_one(struct ls2x_i2c_priv *priv,
+> +			     struct i2c_msg *msg, bool stop)
+> +{
+> +	int ret;
+> +	bool is_read = msg->flags & I2C_M_RD;
+> +
+> +	/* Contains steps to send start condition and address */
+> +	ret = ls2x_i2c_start(priv, msg);
+> +	if (!ret) {
+> +		if (is_read)
+> +			ret = ls2x_i2c_rx(priv, msg->buf, msg->len);
+> +		else
+> +			ret = ls2x_i2c_tx(priv, msg->buf, msg->len);
+> +
+> +		if (!ret && stop)
+> +			ret = ls2x_i2c_stop(priv);
+> +	}
+> +
+> +	if (ret == -ENXIO)
+> +		ls2x_i2c_stop(priv);
+> +	else if (ret < 0)
+> +		ls2x_i2c_init(priv);
+> +
+> +	return ret;
+> +}
 
-+1 here.
+Still this code is odd from reader's perspective. It's in particular not clear
+if the stop can be called twice in a row. I recommend to split it to two
+functions and then do something like
 
-> > Why is that? Do we get this easily from the v4l2 core? These debug 
-> > prints in the bind/unbind process have been valuable for me.
-> 
-> Because debug messages are not meant to be a tracing infrastructure, and
-> because, if we want to keep this message, it would be best handled in
-> the v4l2-async core instead of being duplicated across drivers. Same for
-> the messages at the end of the function.
+_read_one()
+{
+	ret = start();
+	if (ret)
+		goto _stop; // Do we really need this?
 
-I don't think v4l2 needs debug prints. If we consider the above case, the
-ftrace already provides that. If we consider something specific to v4l2 to
-trace only critical parts, then trace events should be implemented.
+		ret = rx();
+		if (ret)
+			goto _stop; // Do we need this?
+
+		/* By setting this call the stop */
+		if (stop)
+			ret = -ENXIO;
+
+	out_send_stop:
+		if (ret == ...)
+			return _stop();
+		// I don't like above, so this error checking/setting parts
+		// also can be rethought and refactored accordingly
+
+		return ret;
+}
+
+
+	if (is_read)
+		ret = _read_one();
+	else
+		ret = _write_one();
+
+	if (ret)
+		_init();
+
+	return ret;
+
 
 -- 
 With Best Regards,
