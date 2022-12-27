@@ -2,122 +2,137 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF856567CE
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Dec 2022 08:22:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EDD9656E83
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Dec 2022 21:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiL0HW5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 27 Dec 2022 02:22:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
+        id S229904AbiL0UIA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 27 Dec 2022 15:08:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbiL0HWr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 27 Dec 2022 02:22:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6422323E
-        for <linux-i2c@vger.kernel.org>; Mon, 26 Dec 2022 23:22:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672125726;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zfKUWZq7lCvM5zpq0a3YtNlAumoZQidpl8RqW6Hsass=;
-        b=FFeHzEZulJS3zPQuwYaPqJGlX2QfHZ24K787gv7Q+ntjVP6olsEJ0/dDFS2P6S71aTgC4Q
-        K2s4ngu4chq5zQwPiFmQ9sGfRI4CUJPHWSksFVqmJ5QJfr/qDpOyJgk9qDtC2uVdmN055c
-        zHmJVnPftnOaf/QoY8bSoJhns96nFn0=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-270-bzYypFyIOeijCjK4KfaddQ-1; Tue, 27 Dec 2022 02:22:04 -0500
-X-MC-Unique: bzYypFyIOeijCjK4KfaddQ-1
-Received: by mail-wr1-f70.google.com with SMTP id h10-20020adfaa8a000000b0024208cf285eso1690327wrc.22
-        for <linux-i2c@vger.kernel.org>; Mon, 26 Dec 2022 23:22:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zfKUWZq7lCvM5zpq0a3YtNlAumoZQidpl8RqW6Hsass=;
-        b=t1fhmnyk1L72F1h7tHoyroal05xzobj0WB02ErAQ40ktGH03EL4bpgFRR+2q4aV2sK
-         5Zm8T/kVS9qNgpoLWxy0g8oOJUSM9hViRXVHz7HAT8QoNaTlual+m/j+dbGLa+tZzkEJ
-         pQhXqd2W7dZwXRz47xj/+Z7ofyVpkHjfTWu/f90VQ80iIMUwdGhLz98xOlETst3EJodt
-         go+bXQyxUxq8VeOfQN3y2/q6CE5cEk0jq6oD3bczVMa9ktJpFmhWTrt4DuONhXpUrZKk
-         jm9Bdr9GsUazwaZm3nSnXnxqiQBMYjQ294DqOAix+a6rmpP0qlmSvIS/PwrR7TdkhDHM
-         KxFw==
-X-Gm-Message-State: AFqh2kpJ2sSjLW7qi3ZrkiQEXhVQaHPWI8fjh6x7PWrzFsSYC+fqkT7P
-        gOWOhhJsrXXAOexsMMcJoZjOekDXquvAMGeb/9R4G9ZCeABV33h2JhmDoi+IVmduKbpp/tr5ziM
-        u6x9NGdz4XaJvgGNdstpM
-X-Received: by 2002:a05:600c:1e11:b0:3d2:26e1:bd45 with SMTP id ay17-20020a05600c1e1100b003d226e1bd45mr18912019wmb.29.1672125723570;
-        Mon, 26 Dec 2022 23:22:03 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtwhWF3hOB+CfPMNbqAWtPqmXhnEhLYXElqDaRnAVfaIXYN2fR1+P4H6eVMgRzb2KIsN1XyWg==
-X-Received: by 2002:a05:600c:1e11:b0:3d2:26e1:bd45 with SMTP id ay17-20020a05600c1e1100b003d226e1bd45mr18912007wmb.29.1672125723386;
-        Mon, 26 Dec 2022 23:22:03 -0800 (PST)
-Received: from redhat.com ([2.52.151.85])
-        by smtp.gmail.com with ESMTPSA id y24-20020a05600c365800b003cf894dbc4fsm16018925wmq.25.2022.12.26.23.22.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Dec 2022 23:22:03 -0800 (PST)
-Date:   Tue, 27 Dec 2022 02:21:59 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     "Chen, Jian Jun" <jian.jun.chen@intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>, asowang@redhat.com,
-        Conghui <conghui.chen@intel.com>, linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Update maintainer list for virtio i2c
-Message-ID: <20221227022149-mutt-send-email-mst@kernel.org>
-References: <20221214053631.3225164-1-conghui.chen@intel.com>
- <20221214063107.fazrfq3n26hw4ndl@vireshk-i7>
- <Y5mjcuCRP45ynJis@shikoro>
- <20221214065856-mutt-send-email-mst@kernel.org>
- <fd9bc91a-8afe-9dac-7d1f-2e57e658d2d7@intel.com>
+        with ESMTP id S229488AbiL0UH7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 27 Dec 2022 15:07:59 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1301C9;
+        Tue, 27 Dec 2022 12:07:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672171677; x=1703707677;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Gg2AQb1KnbSVrP3AF/cIh3eWxSHnE8y345OXW+33f/0=;
+  b=Qnex1ckGBdan6R00P2dpC/RYhUbf9fYqUabwtCW57jAW8wg94ECiz2ST
+   i6eUY/yvJezNlPIJMcEs2OgcvULgDENpvdDZrYbks4F3JdWrcGK5qqihv
+   9SfwjzWsV+fsUkTUhqTarnh2Zo2KCym4wj+0NkLPXidpnXHka2Phfk8BO
+   pvWt/dFG2gTU1xgxJD+tfBrKkfKZjyScb2hhKl/9PxcJw8DxcCFDdMG2S
+   qnfnOP0V0Cbo77ZtwB3ZoXIG4xrwAVtAmrTT40e2o2aRr/tOcI/dvpkto
+   hherbKXZYYZbDkzJjN435QXVdTOmsKPSVsTGVW/Is2hyJyuPZaTZqX82Y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="318428778"
+X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
+   d="scan'208";a="318428778"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 12:07:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="683713877"
+X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
+   d="scan'208";a="683713877"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 27 Dec 2022 12:07:52 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pAGEm-000DfF-2L;
+        Tue, 27 Dec 2022 22:07:48 +0200
+Date:   Tue, 27 Dec 2022 22:07:48 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [PATCH v5 1/8] i2c: core: let adapters be notified of client
+ attach/detach
+Message-ID: <Y6tQlDZ//8xhwfNu@smile.fi.intel.com>
+References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
+ <20221208104006.316606-2-tomi.valkeinen@ideasonboard.com>
+ <Y5YLi2md2571NQrY@pendragon.ideasonboard.com>
+ <20221219095143.4b49b447@booty>
+ <Y6Azg9GJ/ntUlS+P@smile.fi.intel.com>
+ <Y6nRzXGm6ccvE6VM@pendragon.ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fd9bc91a-8afe-9dac-7d1f-2e57e658d2d7@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y6nRzXGm6ccvE6VM@pendragon.ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 12:05:09PM +0800, Chen, Jian Jun wrote:
-> 
-> On 12/14/2022 20:00, Michael S. Tsirkin wrote:
-> > On Wed, Dec 14, 2022 at 11:20:34AM +0100, Wolfram Sang wrote:
-> > > Hi Viresh,
-> > > 
-> > > > I understand that it is okay to pass the maintainership, within the
-> > > > company, for platform specific parts from one person to another, since
-> > > > they have the best knowledge of the code and are the only one
-> > > > interested in maintaining it too.
-> > > > 
-> > > > But what is the rule for generic drivers like this one ?
-> > > Dunno if this is really a rule, but if a maintainer steps out and makes
-> > > sure there is someone to pick up the work, this is more than welcome.
-> > > Way better than a stale entry in the MAINTAINERS file.
-> > > 
-> > > I mean, it does not limit the chance to have further maintainers, for
-> > > example. I believe in meritocracy here. Those who do and collaborate,
-> > > shall get responsibility.
-> > Exactly. I'd like to see Jian Jun Chen do and collaborate first.
-> 
-> Hi Michael,
-> 
-> Sure, I will start to collaborate first.
+On Mon, Dec 26, 2022 at 06:54:37PM +0200, Laurent Pinchart wrote:
+> On Mon, Dec 19, 2022 at 11:48:51AM +0200, Andy Shevchenko wrote:
+> > On Mon, Dec 19, 2022 at 09:51:43AM +0100, Luca Ceresoli wrote:
+> > > On Sun, 11 Dec 2022 18:55:39 +0200 Laurent Pinchart wrote:
+> > > > On Thu, Dec 08, 2022 at 12:39:59PM +0200, Tomi Valkeinen wrote:
 
-Great!
+...
 
-> > > If not, then not. We can fix this, too, if
-> > > needed.
+> > > > This may be a stupid question, but couldn't you instead use the
+> > > > BUS_NOTIFY_ADD_DEVICE and BUS_NOTIFY_DEL_DEVICE bus notifiers ?
 > > > 
-> > > What is the reason for your question?
+> > > I'm not sure they would be the correct tool for this task. Bus
+> > > notifiers inform about new events on the 'struct bus_type, i.e. any
+> > > event on the global i2c bus type. In the i2c world this means being
+> > > notified about new _adapters_, which is exactly what
+> > > drivers/i2c/i2c-dev.c does.
 > > > 
-> > > All the best,
-> > > 
-> > >     Wolfram
-> > > 
+> > > Here, however, we need to be informed about new _clients_ being added
+> > > under a specific adapter.
 > > 
+> > This is for example exactly what ACPI integration in I2C framework does. But...
+> > 
+> > > I'm not sure whether the bus notifiers can
+> > > inform about new clients in addition of new adapters, but they at least
+> > > seem unable to provide per-adapter notification.
+> > 
+> > ...personally I don't like notifiers, they looks like overkill for this task.
+> 
+> But isn't this patch essentially implementing a custom notification
+> system ? If we need notifiers, why would it be better to add an ad-hoc
+> API for I2C instead of using bus notifiers ?
+
+Notifiers (as implemented in the Linux kernel) have some drawbacks IIUC.
+For example, it's not easy to pass the data over it. Another example is
+the context (you wouldn't know when the notifier be called and if it can
+hold some locks or not).
+
+That said, each case should be discussed individually despite the generic
+approach being present (i.o.w. do not consider notifiers as a silver
+bullet in _any_ notification scheme).
+
+> > > Does that seem correct?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
