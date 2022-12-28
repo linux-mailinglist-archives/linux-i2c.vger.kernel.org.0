@@ -2,109 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10C44657A43
-	for <lists+linux-i2c@lfdr.de>; Wed, 28 Dec 2022 16:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B38F06583FF
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 Dec 2022 17:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233679AbiL1PJj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 28 Dec 2022 10:09:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
+        id S233488AbiL1Qxy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 28 Dec 2022 11:53:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233712AbiL1PJb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 28 Dec 2022 10:09:31 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0EF13E3D;
-        Wed, 28 Dec 2022 07:09:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672240160; x=1703776160;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fdP0nh1OD1wvErCaU7T6b8HwCVcBr17oElrYcEN5+No=;
-  b=chOzYeWml2pigiNoXhR7iH18hvNjoPDmysXlUMSONwzkwBhveK8pZCJu
-   beMMk+a8U1tLMv9XmvbrauN2mfiJVrl1v8jNZ0l3j1mejJcvB+uRKZr2c
-   44Xpmpl3F8p0eJswfu2kw4Rx8XfvtBCTRraz4as3CzD+3A3ZQ/DuDW+mb
-   GBP0FAMjOu3uLOlgKU9YMElbqoqJS2dv3zo4ymRUZ/97j/MMYKl8AqseF
-   0uKZcOMmRWr6im/lUn9hburCDF7d1fwK6UpCUJNKgdkM/qq2O8SL4jlrw
-   MTwpn7QZ4/V5IzL9k5QomUt0luJ7b74dz0qBG+A3ZBA6UP/weriUTOany
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="385309686"
-X-IronPort-AV: E=Sophos;i="5.96,281,1665471600"; 
-   d="scan'208";a="385309686"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2022 07:09:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="603359287"
-X-IronPort-AV: E=Sophos;i="5.96,281,1665471600"; 
-   d="scan'208";a="603359287"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 28 Dec 2022 07:09:15 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pAY3O-000gDi-0l;
-        Wed, 28 Dec 2022 17:09:14 +0200
-Date:   Wed, 28 Dec 2022 17:09:13 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hanna Hawa <hhhawa@amazon.com>
-Cc:     wsa@kernel.org, linus.walleij@linaro.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, dwmw@amazon.co.uk, benh@amazon.com,
-        ronenk@amazon.com, talel@amazon.com, jonnyc@amazon.com,
-        hanochu@amazon.com, farbere@amazon.com, itamark@amazon.com
-Subject: Re: [PATCH v4 2/2] i2c: Set i2c pinctrl recovery info from it's
- device pinctrl
-Message-ID: <Y6xcGWK7ghrQIjL/@smile.fi.intel.com>
-References: <20221221205116.73941-1-hhhawa@amazon.com>
- <20221221205116.73941-3-hhhawa@amazon.com>
+        with ESMTP id S235259AbiL1QxL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 28 Dec 2022 11:53:11 -0500
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2E61B1C9;
+        Wed, 28 Dec 2022 08:48:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1672246114; x=1703782114;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oV5KmD1JqWhMOcg/v2h5Ej3qrgiz0SurJdCHTs0jtjY=;
+  b=BCiAsO08ZJIsq9j3aOjMSEBunCfnOhnMFZQrg6X6ncwYVrfPbMykZdQh
+   1KuzF++KH9+VjdNNWqIjCqLe2Wu+udQ8e1tLG5LTDM2A3ChJ0K5QfM4lw
+   VfW7fa04AU+UEoqJsk1BOQh4G5tE8iQmXRyBn0zsleqNjWHz21QVmGSG4
+   o=;
+X-IronPort-AV: E=Sophos;i="5.96,281,1665446400"; 
+   d="scan'208";a="1087586436"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-b404fda3.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2022 16:48:33 +0000
+Received: from EX13D48EUA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-m6i4x-b404fda3.us-east-1.amazon.com (Postfix) with ESMTPS id 130FA84BA3;
+        Wed, 28 Dec 2022 16:48:30 +0000 (UTC)
+Received: from EX19D019EUA002.ant.amazon.com (10.252.50.84) by
+ EX13D48EUA001.ant.amazon.com (10.43.165.83) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Wed, 28 Dec 2022 16:48:29 +0000
+Received: from dev-dsk-hhhawa-1b-84e0d7ff.eu-west-1.amazon.com (10.43.162.56)
+ by EX19D019EUA002.ant.amazon.com (10.252.50.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.20; Wed, 28 Dec 2022 16:48:25 +0000
+From:   Hanna Hawa <hhhawa@amazon.com>
+To:     <andriy.shevchenko@linux.intel.com>, <wsa@kernel.org>,
+        <linus.walleij@linaro.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
+CC:     <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
+        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <farbere@amazon.com>, <itamark@amazon.com>, <hhhawa@amazon.com>,
+        "kernel test robot" <lkp@intel.com>
+Subject: [PATCH v5 0/2] i2c: Set i2c pinctrl recovery info from it's device pinctrl
+Date:   Wed, 28 Dec 2022 16:48:11 +0000
+Message-ID: <20221228164813.67964-1-hhhawa@amazon.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221221205116.73941-3-hhhawa@amazon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.162.56]
+X-ClientProxiedBy: EX13D45UWA001.ant.amazon.com (10.43.160.91) To
+ EX19D019EUA002.ant.amazon.com (10.252.50.84)
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 08:51:16PM +0000, Hanna Hawa wrote:
-> Currently the i2c subsystem rely on the controller device tree to
-> initialize the pinctrl recovery information, part of the drivers does
-> not set this field (rinfo->pinctrl), for example i2c designware driver.
+This series include two changes:
+1. Adding new API to get the device pinctrl information when it's
+initialized before device probed.
+2. Make the i2c init recovery to get the device pins if it's not
+initialized by the driver from the device pins.
 
-DesignWare
+Change Log v4->v5:
+- Fix include misplaced
+- Update variable set order to reduce one line
+- Add Reviewed-by: Andy Shevchenko
 
-> The pins information is saved part of the device structure before probe
-> and it's done on pinctrl_bind_pins().
-> 
-> Make the i2c init recovery to get the device pins if it's not
-> initialized by the driver from the device pins.
+Change Log v3->v4:
+- Split the change into 2 commits
+- Add cover letter and remove change log from commit message
+- Fix compilation failure when CONFIG_PINCTRL is not defined
+Reported-by: kernel test robot <lkp@intel.com>
 
-...
+Change Log v2->v3:
+- Add API to get the device pinctrl
+- Make the i2c init recovery to get the device pins
 
-> -	struct pinctrl *p = bri->pinctrl;
-> +	struct pinctrl *p;
-> +
-> +	bri->pinctrl = bri->pinctrl ?: dev_pinctrl(dev->parent);
-> +	p = bri->pinctrl;
+Change Log v1->v2:
+- set the rinfo->pinctrl to dev->pins->p instead calling
+  devm_pinctrl_get()
 
-What about
+Hanna Hawa (2):
+  pinctrl: Add an API to get the pinctrl pins if initialized
+  i2c: Set i2c pinctrl recovery info from it's device pinctrl
 
-	struct pinctrl *p = bri->pinctrl ?: dev_pinctrl(dev->parent);
-
-	bri->pinctrl = p;
-
-?
-
-Seems like one line of code less.
-
-Either way,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+ drivers/i2c/i2c-core-base.c     |  5 ++++-
+ include/linux/pinctrl/devinfo.h | 15 +++++++++++++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.38.1
 
