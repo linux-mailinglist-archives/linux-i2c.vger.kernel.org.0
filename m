@@ -2,39 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E2FF659ADC
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Dec 2022 18:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96363659AF4
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Dec 2022 18:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235204AbiL3RK1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 30 Dec 2022 12:10:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
+        id S235069AbiL3RZ3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 30 Dec 2022 12:25:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235347AbiL3RKR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Dec 2022 12:10:17 -0500
-Received: from smtp-out-06.comm2000.it (smtp-out-06.comm2000.it [212.97.32.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1519183B9;
-        Fri, 30 Dec 2022 09:10:09 -0800 (PST)
-Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: francesco@dolcini.it)
-        by smtp-out-06.comm2000.it (Postfix) with ESMTPSA id E200E561636;
-        Fri, 30 Dec 2022 18:10:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
-        s=mailsrv; t=1672420207;
-        bh=CwPdwECEa0lZNbWx3u+AEjaZwD0ypB8MrNfUb6Wyo5s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=1Zm7EhgCaNt3T60FHS5zJkYJs4HxKkkhT/o4YWTxIJwhFfFduky6yrFxgxU8TueY+
-         9pduKkFVBjm0JgSo4xILrpcy3KETkGY6PyP3B6aFc9TXH8dmQUY3MV62uZ0DXrRVAm
-         +i1CNyd23RgVVxVcrWae6IkmFBAdELPFC6n+r0Uk8wnIvBOys0CobJuPQ8MAorCgFL
-         CFcojwGlzuTmennb6Ro+APlaQFUapB4LkeAJ+qDb3JOZ+STzjWn5W7/N2vVKRNTM1T
-         /86fEkXkCdg6OMgwY4IpBv62gMKNOW/Lk0ZkZugBs3kk/rnlBLKD/Nn4N0mD/OsRc1
-         tj46nN5ZvrKRg==
-Date:   Fri, 30 Dec 2022 18:09:57 +0100
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
+        with ESMTP id S231518AbiL3RZ2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Dec 2022 12:25:28 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC83FD08
+        for <linux-i2c@vger.kernel.org>; Fri, 30 Dec 2022 09:25:27 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pBJ86-00067i-8P; Fri, 30 Dec 2022 18:25:14 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pBJ83-0004m5-TT; Fri, 30 Dec 2022 18:25:11 +0100
+Date:   Fri, 30 Dec 2022 18:25:11 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Francesco Dolcini <francesco@dolcini.it>
 Cc:     Primoz Fiser <primoz.fiser@norik.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
@@ -44,10 +36,9 @@ Cc:     Primoz Fiser <primoz.fiser@norik.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        francesco.dolcini@toradex.com, wsa@kernel.org,
-        Francesco Dolcini <francesco@dolcini.it>
+        francesco.dolcini@toradex.com, wsa@kernel.org
 Subject: Re: [PATCH] i2c: imx: increase retries on arbitration loss
-Message-ID: <Y68bZXhv2gJsF74O@francesco-nb.int.toradex.com>
+Message-ID: <20221230172511.GB14776@pengutronix.de>
 References: <20221216094518.bevkg5buzu7iybfh@pengutronix.de>
  <bb4882a9-8be6-5255-6256-aa1253362e59@norik.com>
  <20221216110227.GA12327@pengutronix.de>
@@ -59,19 +50,28 @@ References: <20221216094518.bevkg5buzu7iybfh@pengutronix.de>
  <20221230161209.GA14776@pengutronix.de>
  <Y68WGcdQNQkD0vfa@francesco-nb.int.toradex.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <Y68WGcdQNQkD0vfa@francesco-nb.int.toradex.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 05:47:42PM +0100, Francesco Dolcini wrote:
+On Fri, Dec 30, 2022 at 05:47:21PM +0100, Francesco Dolcini wrote:
 > On Fri, Dec 30, 2022 at 05:12:09PM +0100, Oleksij Rempel wrote:
 > > On Fri, Dec 30, 2022 at 03:40:58PM +0100, Francesco Dolcini wrote:
 > > > +Wolfram
@@ -171,17 +171,23 @@ On Fri, Dec 30, 2022 at 05:47:42PM +0100, Francesco Dolcini wrote:
 >                 if (for_busy && (temp & I2SR_IBB)) {
 > 
 
-Just a small addition, the tegra i2c driver is interesting.
-It returns EAGAIN only when an arbitration error is detected on multi master
-node, otherwise it tries the bus recovery procedure.
+Hm, good question.
 
-	/* start recovery upon arbitration loss in single master mode */
-	if (i2c_dev->msg_err == I2C_ERR_ARBITRATION_LOST) {
-		if (!i2c_dev->multimaster_mode)
-			return i2c_recover_bus(&i2c_dev->adapter);
+> In addition to that is there any valid use case of the i2c retry
+> mechanism?
+> Is possible for an I2C controller to report anything that can
+> be recovered with a retry?
 
-		return -EAGAIN;
-	}
+In case of multimaster bus, except of noise and signal level issues, we
+would have a simple conflict between masters. In this case, we should
+retry. Potentially, every master should use randomized pause before
+retrying (at last it is done by some other protocol using shared
+medium).
 
-Francesco
-
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
