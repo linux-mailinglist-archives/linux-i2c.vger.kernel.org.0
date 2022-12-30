@@ -2,192 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96363659AF4
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Dec 2022 18:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F952659EE7
+	for <lists+linux-i2c@lfdr.de>; Sat, 31 Dec 2022 00:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235069AbiL3RZ3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 30 Dec 2022 12:25:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
+        id S235661AbiL3Xyd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 30 Dec 2022 18:54:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbiL3RZ2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Dec 2022 12:25:28 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC83FD08
-        for <linux-i2c@vger.kernel.org>; Fri, 30 Dec 2022 09:25:27 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pBJ86-00067i-8P; Fri, 30 Dec 2022 18:25:14 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pBJ83-0004m5-TT; Fri, 30 Dec 2022 18:25:11 +0100
-Date:   Fri, 30 Dec 2022 18:25:11 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Francesco Dolcini <francesco@dolcini.it>
-Cc:     Primoz Fiser <primoz.fiser@norik.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        upstream@lists.phytec.de, Marco Felsch <m.felsch@pengutronix.de>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        francesco.dolcini@toradex.com, wsa@kernel.org
-Subject: Re: [PATCH] i2c: imx: increase retries on arbitration loss
-Message-ID: <20221230172511.GB14776@pengutronix.de>
-References: <20221216094518.bevkg5buzu7iybfh@pengutronix.de>
- <bb4882a9-8be6-5255-6256-aa1253362e59@norik.com>
- <20221216110227.GA12327@pengutronix.de>
- <20221216111308.wckibotr5d3q6ree@pengutronix.de>
- <5c2e0531-e7c3-1b37-35ed-c8e9795a0d18@norik.com>
- <Y5xpt6J01Boec6Xr@francesco-nb.int.toradex.com>
- <41991ce2-3e88-5afc-6def-6e718d624768@norik.com>
- <Y674eoNsHtAeG7IP@francesco-nb.int.toradex.com>
- <20221230161209.GA14776@pengutronix.de>
- <Y68WGcdQNQkD0vfa@francesco-nb.int.toradex.com>
+        with ESMTP id S235810AbiL3Xyb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Dec 2022 18:54:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0FB1DF3A;
+        Fri, 30 Dec 2022 15:54:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D20CB81DD1;
+        Fri, 30 Dec 2022 23:54:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2B42C433EF;
+        Fri, 30 Dec 2022 23:54:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672444468;
+        bh=AAPK9XSQHHgh0qvLsmwiNWwN3eQnjJuKKP4MZDTbj6g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UuxdVp1TFYOFWUP4ThNtYfaaIBiK0coESQmd9YRUqc4iWtVRe6M+D0vkJdtQrf8lG
+         WKpJQ8w8cWBeTPwCAkEt8zCGDwamexfXUQQ0QssNmz+DbY9iVauvmx0Bs72m1V2vBG
+         1pVxRDqjQ4YsxIHA+U+tX+gB1qIm32P92zb3E2P1ZWVAMftSBeUkt2jxaXGOe6KMYq
+         TO2an/gvcHSYNISexDi3mTWd+S/UJ7zfaFk489f6XLep4dS48n/K4EBs+Ow+xZBVXh
+         bmyetuH2SCiI/GJJcRPt54/GIpxmlkthjbk7np/FRlrjp1W90VTfyxX37h5Cl30/FD
+         OhzGvrzYqoYhQ==
+Date:   Fri, 30 Dec 2022 23:54:25 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Huewe <peterhuewe@gmx.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH 001/606] tpm: st33zp24: Convert to Convert to i2c's
+ .probe_new()
+Message-ID: <Y696MSvhEUWlHSoK@kernel.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-2-uwe@kleine-koenig.org>
+ <20221216090904.qlekgvtpriijmvay@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Y68WGcdQNQkD0vfa@francesco-nb.int.toradex.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221216090904.qlekgvtpriijmvay@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 05:47:21PM +0100, Francesco Dolcini wrote:
-> On Fri, Dec 30, 2022 at 05:12:09PM +0100, Oleksij Rempel wrote:
-> > On Fri, Dec 30, 2022 at 03:40:58PM +0100, Francesco Dolcini wrote:
-> > > +Wolfram
-> > > 
-> > > On Wed, Dec 28, 2022 at 09:01:46AM +0100, Primoz Fiser wrote:
-> > > > On 16. 12. 22 13:51, Francesco Dolcini wrote:
-> > > > > On Fri, Dec 16, 2022 at 01:23:29PM +0100, Primoz Fiser wrote:
-> > > > > > The only solid point in the thread seems to be that in that case we are not
-> > > > > > covering up the potential i2c hardware issues?
-> > > > > 
-> > > > > I believe that in this case we should just have a warning in the kernel.
-> > > > > The retry potentially work-around a transient issue and we do not hide any hardware
-> > > > > issue at the same time. It seems an easy win-win solution.
-> > > > 
-> > > > I would agree about throwing a warning message in retry case.
-> > > > 
-> > > > Not sure how would it affect other i2c bus drivers using retries > 0.
-> > > > Retries might be pretty rare with i2c-imx but some other drivers set this to
-> > > > 5 for example. At least using _ratelimited printk is a must using this
-> > > > approach.
-> > > 
-> > > Wolfram, Uwe, Oleksij
-> > > 
-> > > Would it be acceptable to have a warning when we have I2C retries, and
-> > > with that in place enabling retries on the imx driver?
-> > > 
-> > > It exists hardware that requires this to work correctly,
-> > 
-> > Well, this is persistent confusion in this monolog. It will not make it
-> > correctly.
-> > 
-> > > and at a
-> > > minimum setting the retry count from user space is not going to solve
-> > > potential issues during initial driver probe.
-> > 
-> > I assume it is not clear from programmer point of view. Lets try other way:
-> > 
-> > - The I2C slave could not correctly interpret the data on SDA because the SDA
-> >   high or low-level voltages do not reach its appropriate input
-> >   thresholds.
-> > 
-> > This means:
-> > 
-> > You have this:
-> > 
-> >     /-\    /-\ ----- 2.5Vcc
-> > ___/   \__/   \___
-> > 
-> > Instead of this:
-> > 
-> >      /-\     /-\ ----- 3.3Vcc
-> >     /  \    /   \
-> > ___/    \__/     \___
-> > 
-> > This is bad, because master or slave will not be able to interpret the pick level
-> > correctly. It may see some times 0 instead of 1. This means, what ever we are
-> > writing we are to the slave or reading from the slave is potentially corrupt
-> > and only __sometimes__ the master was able to detect it. 
-> > 
-> > - The I2C slave missed an SCL cycle because the SCL high or low-level voltages
-> >   do not reach its appropriate input thresholds.
-> > 
-> > This means, the bus frequency is too high for current configured or physical PCB
-> > designed. So, you will have different kind of corruptions and some times they
-> > will be detected. 
-> > 
-> > - The I2C slave accidently interpreted a spike etc. as an SCL cycle.
-> > 
-> > This means the noise level is to high. The driver strange should be increased
-> > or PCB redesign should be made. May be there are more options. If not done,
-> > data corruption can be expected.
-> > 
-> > None of this issue can be "fixed" by retries or made more "robust".
-> > Doing more retries means: we do what ever we do until the system was not able to
-> > detect the error.
-> 
-> Hello Oleksij,
-> thanks for the detailed explanation, appreciated.
-> 
-> Given that is it correct that the i2c imx driver return EAGAIN in such a
-> case (arbitration error)? You made it crystal clear that there is no
-> such thing as try again for this error, I would be inclined to prepare a
-> patch to fix this.
-> 
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index cf5bacf3a488..a2a581c8ae07 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -492,7 +492,7 @@ static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy, bool a
->                 /* check for arbitration lost */
->                 if (temp & I2SR_IAL) {
->                         i2c_imx_clear_irq(i2c_imx, I2SR_IAL);
-> -                       return -EAGAIN;
-> +                       return -EIO;
->                 }
-> 
->                 if (for_busy && (temp & I2SR_IBB)) {
-> 
+I picked it now.
 
-Hm, good question.
+BR, Jarkko
 
-> In addition to that is there any valid use case of the i2c retry
-> mechanism?
-> Is possible for an I2C controller to report anything that can
-> be recovered with a retry?
+On Fri, Dec 16, 2022 at 10:09:04AM +0100, Uwe Kleine-König wrote:
+> Hello,
+> 
+> while rebasing my series onto today's next I noticed the Subject being
+> broken:
+> 
+> 	$Subject ~= s/Convert to //
+> 
+> Apart from that I wonder who feels responsible to apply this patch (and
+> the other tpm patches in this series). They got an Ack by Jarkko, but
+> didn't appear in next.
+> 
+> The plan for this series is not to apply to a single tree, but let the
+> subsystem maintainers take their patches. I'd be happy if you consider
+> them for the next merge window.
+> 
+> Should I resend the tpm patches (with the subject fixed) once v6.2-rc1
+> is published?
+> 
+> Note that 662233731d66 ("i2c: core: Introduce i2c_client_get_device_id
+> helper function") is already in Linus' tree, so if your tree is new
+> enough (say v6.2-rc1 then) you don't need to care for this dependency.
+> 
+> Best regards and thanks
+> Uwe
+> 
+> -- 
+> Pengutronix e.K.                           | Uwe Kleine-König            |
+> Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-In case of multimaster bus, except of noise and signal level issues, we
-would have a simple conflict between masters. In this case, we should
-retry. Potentially, every master should use randomized pause before
-retrying (at last it is done by some other protocol using shared
-medium).
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
