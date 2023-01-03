@@ -2,102 +2,195 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBE965B5DD
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 Jan 2023 18:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E765465BB0C
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Jan 2023 08:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232151AbjABR3f (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 2 Jan 2023 12:29:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
+        id S236865AbjACHAu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 3 Jan 2023 02:00:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232796AbjABR3e (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 Jan 2023 12:29:34 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A2919F
-        for <linux-i2c@vger.kernel.org>; Mon,  2 Jan 2023 09:29:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672680574; x=1704216574;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WFCCMx8FvNAGXuSRcuCSuaBNBjgj22vg2q/AhwDPIWU=;
-  b=j4hNTjaHPCfXgkgxP0B7cYoiXc1h0dj3Qw9mObFOnPVXmhO+FEkVdKRH
-   NoEbNogVknduqE5h6woOOXrx8Leg+K0hKwQk7eoeXT+wBHOP7Ld+cIoeK
-   +U9F4UX7d2jJakfPVHDIJuGLP5v2g7Li7UZXISbC7E3JoGCJ5hGmlAUZi
-   6/V7MLoxtKWPqKmXD5+t2twb+6e5xt2jS7xmoW3cboebYnI82msEmo0FI
-   9GdhAZ+dpnlowo7TO0qPt2KmQWewltmPuXafAI0jbmZmQnuc0pPRMW8MS
-   3Hj1h5i8emg6GM2XJWD72n+COCswspXBzYfosDD1AxxGMOKuqg6c0/6wN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="319219353"
-X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
-   d="scan'208";a="319219353"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 09:29:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="647957060"
-X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
-   d="scan'208";a="647957060"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 02 Jan 2023 09:29:31 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pCOcr-003WaQ-2Z;
-        Mon, 02 Jan 2023 19:29:29 +0200
-Date:   Mon, 2 Jan 2023 19:29:29 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-Cc:     jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
-        jsd@semihalf.com, linux-i2c@vger.kernel.org, Rajesh1.Kumar@amd.com,
-        Sanath S <Sanath.S@amd.com>
-Subject: Re: [PATCH] i2c: designware-pci: Add new PCI IDs for AMD NAVI GPU
-Message-ID: <Y7MUeRqYJ6peB3eh@smile.fi.intel.com>
-References: <20230102170955.1750734-1-Basavaraj.Natikar@amd.com>
+        with ESMTP id S236876AbjACHAq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 3 Jan 2023 02:00:46 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDAE6DE86;
+        Mon,  2 Jan 2023 23:00:42 -0800 (PST)
+Received: from loongson.cn (unknown [112.20.108.31])
+        by gateway (Coremail) with SMTP id _____8Dx_+uZ0rNjZxEKAA--.21960S3;
+        Tue, 03 Jan 2023 15:00:41 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.20.108.31])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxTuSV0rNjSb0SAA--.59328S2;
+        Tue, 03 Jan 2023 15:00:38 +0800 (CST)
+From:   Binbin Zhou <zhoubinbin@loongson.cn>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Cc:     loongarch@lists.linux.dev, devicetree@vger.kernel.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH V9 0/4] i2c: ls2x: Add support for the Loongson-2K/LS7A I2C controller
+Date:   Tue,  3 Jan 2023 15:00:44 +0800
+Message-Id: <cover.1672714138.git.zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230102170955.1750734-1-Basavaraj.Natikar@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxTuSV0rNjSb0SAA--.59328S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxXrW3uw4UXr4xWry3tw13Arb_yoWrZFy7pa
+        98u398Kr4qyr17KFn3JF1ruFyrWws3Jayjgr47Kw13WanrWr18Aw4fKa4a9r17Cr98GFWj
+        qFZ0gFn8CF9rArJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
+        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4U
+        YxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 10:39:55PM +0530, Basavaraj Natikar wrote:
-> Add additional supported PCI IDs for latest AMD NAVI GPU card which
-> has an integrated Type-C controller and designware I2C with PCI
-> interface.
+Hi all:
 
-Obviously looks correct from the code and style perspectives.
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+This patch series adds support for the I2C module found on various
+Loongson systems with the Loongson-2K SoC or the Loongson LS7A bridge chip.
 
-> Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-> Tested-by: Sanath S <Sanath.S@amd.com>
-> ---
->  drivers/i2c/busses/i2c-designware-pcidrv.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-> index e499f96506c5..782fe1ef3ca1 100644
-> --- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-> +++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-> @@ -396,6 +396,8 @@ static const struct pci_device_id i2_designware_pci_ids[] = {
->  	{ PCI_VDEVICE(ATI,  0x73a4), navi_amd },
->  	{ PCI_VDEVICE(ATI,  0x73e4), navi_amd },
->  	{ PCI_VDEVICE(ATI,  0x73c4), navi_amd },
-> +	{ PCI_VDEVICE(ATI,  0x7444), navi_amd },
-> +	{ PCI_VDEVICE(ATI,  0x7464), navi_amd },
->  	{ 0,}
->  };
->  MODULE_DEVICE_TABLE(pci, i2_designware_pci_ids);
-> -- 
-> 2.25.1
-> 
+For now, the I2C driver is suitable for DT-based or ACPI-based systems.
+
+I have tested on Loongson-3A5000LA+LS7A1000/LS7A2000, Loongson-2K1000LA
+and Loongson-2K0500.
+
+Thanks.
+
+Changes since V8:
+- patch (3/4)
+  - Refactor the error handling process of the ls2x_i2c_xfer_one();
+  - Split comment and code.
+
+Changes since V7:
+- patch (3/4)
+  - I2C_LS2X should be added to the Kconfig/Makefile in Latin
+    alphabetical order.
+  - To avoid repeated type conversions, 'struct ls2x_i2c_priv *priv'
+    replaces 'struct i2c_adapter *adap' as a function parameter, e.g.
+    ls2x_i2c_start();
+  - Refactor ls2x_i2c_stop() with readb_poll_timeout(), mainly with
+    LS2X_SR_BUSY to indicate the status (success/timeout) of the stop
+    command;
+  - Remove extra parentheses;
+  - For consistency, the variable 'r' in ls2x_i2c_probe() is renamed to
+    'ret'.
+
+Changes since V6:
+- patch (1/4)
+  - Add Reviewed-by tag.
+- patch (3/4)
+  - GPL-2.0 -> GPL-2.0-only;
+  - Add property.h;
+  - writew() should be used to operate I2C_LS2X_PRER, and drop the
+    suffix of I2C_LS2X_PRER_LO/I2C_LS2X_PRER_HI;
+  - Drop ls2x_i2c_priv->dev, for it can be completely replaced by
+    'adapter.dev.parent';
+  - Reasonable return value handling in ls2x_i2c_xfer_one();
+  - Dropping the I2C_M_STOP flag judgment, the stop parameter of
+    ls2x_i2c_xfer_one() represents the last msg;
+  - Add comments for subsys_initcall();
+  - Code formatting, such as dropping unnecessary blank lines.
+
+Changes since V5:
+- patch (1/4)
+  - Add property.h.
+- patch (3/4)
+  - Put the ls2x_i2c_reginit() in front of irq requst;
+  - Refact ls2x_i2c_adjust_bus_speed: discard the magic value of
+    the divider register and LS2X_I2C_FREQ_STD is used to calculate
+    the frequency;
+  - Drop useless parameters: priv->suspended, and also disable I2C
+    interrupts during suspend;
+  - Drop ls2x_i2c_remove(), for the adapter will be auto deleted on
+    driver detach;
+  - Drop MODULE_ALIAS;
+  - Code formatting, such as alignment.
+
+Thanks Andy for your comments.
+
+Changes since V4:
+- patch (1/4)
+  - Drop unneeded headers: of.h;
+  - xxx_props -> xxx_properties.
+- patch (2/4)
+  - Add interrupt headers to fix syntax error found by Rob.
+- patch (3/4)
+  - Drop atmoic loop in ls2x_i2c_master_xfer(), I have tested it on the
+    appropriate environment with no problems;
+  - Define the corresponding bits in I2C_LS2X_CTR to avoid magic
+    numbers;
+  - dev_get_drvdata() is used to get ls2x_i2c_priv() in
+    ls2x_i2c_suspend();
+  - i2c_add_adapter() -> devm_i2c_add_adapter();
+  - SET_SYSTEM_SLEEP_PM_OPS() -> DEFINE_RUNTIME_DEV_PM_OPS();
+  - Code formatting, such as alignment.
+
+    Details: https://lore.kernel.org/all/Y4e%2F6KewuHjAluSZ@smile.fi.intel.com/
+
+Changes since V3:
+- Addressed all review comments from v3
+  - Change the changelog text to make it clearer (1/5);
+  - Fix some minor bugs, such as formatting issues (2/5);
+  - Fix some formatting issues (3/5);
+  - Deep refactoring of code for clarity (4/5).
+     Details: https://lore.kernel.org/all/Y4S2cnlAm3YYvZ8E@smile.fi.intel.com/
+
+Thanks to all for their suggestions.
+
+Changes since V2:
+- Addressed all review comments from v2
+  - Drop of_match_ptr() in i2c-gpio to avoid potential unused warnings
+    (1/5);
+  - Introduce i2c_gpio_get_props() function as the generic interface
+    to get i2c-gpio props from DT or ACPI table (2/5);
+  - Refact ls2x i2c code, similar to removing excessive goto tags (4/5).
+
+Thanks to Andy and Mika for their suggestions.
+
+Changes since V1:
+- Remove the function of getting the static i2c bus number from ACPI "_UID";
+- Fix build warning from kernel test robot.
+
+Binbin Zhou (4):
+  i2c: gpio: Add support on ACPI-based system
+  dt-bindings: i2c: add Loongson LS2X I2C controller
+  i2c: ls2x: Add driver for Loongson-2K/LS7A I2C controller
+  LoongArch: Enable LS2X I2C in loongson3_defconfig
+
+ .../bindings/i2c/loongson,ls2x-i2c.yaml       |  51 +++
+ arch/loongarch/configs/loongson3_defconfig    |   1 +
+ drivers/i2c/busses/Kconfig                    |  11 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-gpio.c                 |  28 +-
+ drivers/i2c/busses/i2c-ls2x.c                 | 381 ++++++++++++++++++
+ 6 files changed, 463 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/i2c/loongson,ls2x-i2c.yaml
+ create mode 100644 drivers/i2c/busses/i2c-ls2x.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.31.1
 
