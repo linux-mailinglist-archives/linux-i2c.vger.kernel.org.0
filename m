@@ -2,54 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165EC660EDA
-	for <lists+linux-i2c@lfdr.de>; Sat,  7 Jan 2023 13:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD081660F00
+	for <lists+linux-i2c@lfdr.de>; Sat,  7 Jan 2023 14:10:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbjAGMiY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 7 Jan 2023 07:38:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
+        id S229695AbjAGNKc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 7 Jan 2023 08:10:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjAGMiX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 7 Jan 2023 07:38:23 -0500
-X-Greylist: delayed 311 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 07 Jan 2023 04:38:21 PST
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935D1669B7
-        for <linux-i2c@vger.kernel.org>; Sat,  7 Jan 2023 04:38:21 -0800 (PST)
-Received: from stefanw-SCHENKER ([37.4.248.41]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MIxFi-1pU1L41Ija-00KTC1; Sat, 07 Jan 2023 13:32:52 +0100
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        with ESMTP id S230384AbjAGNKc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 7 Jan 2023 08:10:32 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A3357938
+        for <linux-i2c@vger.kernel.org>; Sat,  7 Jan 2023 05:10:31 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id f3so2953388pgc.2
+        for <linux-i2c@vger.kernel.org>; Sat, 07 Jan 2023 05:10:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=v9A1byRQmre4GrmttCcN4I0zGqTUMV07g3QNFSHLt3I=;
+        b=nmh+m0JPzNAPlkB1OWzmhQIJLL60+wkDSc+wLP7BPAx2bQTUhOI/Nx3gitRffLHmSw
+         5Pel9Bs9jHxC54ZjZVKu5fkk187xNcUESu2xpqG5iFZfso4Mm7xDiPygAgthxu/QqadS
+         gh2pQWNm0ICKJBe53B1mq/31cJlHPHd898MQNiv7FfDE3BQ+Mid6x5fFovnE0ptgNh1c
+         ON51ECUoRv2ajksTYFzxJwNS0LBUKza/c/Su7cz/vd2kvkomA56A1kWSy4W4coFWH28t
+         mcxjZQYYXNuoPiwJciflUx9zblDdle7+k9GDwLKlBCfPaYSoXyUGihrzGSB0k6hOtcUb
+         klLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v9A1byRQmre4GrmttCcN4I0zGqTUMV07g3QNFSHLt3I=;
+        b=7u5e+I9YdK/w4tmrwv9hUqVvExxRq5TExDlPejTRz5OpLQKKpngflpV0uo+PXo7Npm
+         CbkfG/wuqu6k222qBKZB+iW1N9TvuxNKwbwSRfX4GM3tLAZbAKW+/uYM5DdewSuYL20i
+         a9yzKsEYV5NccUEn2abM/UbrySfNlCIL4Si/r3X28Jko4bmesUPsmFx74mLNdk285OG/
+         2egw6KyrWrueXDGJOIcvYCpZ58zjH4AT9FkG3oUaCXd5UMyxFOIdoXjrZc4ZxuSgX6pz
+         D2JmQDoN9a9d7fT8O0a3oWGCkWUCERHEsvN6Yc2Jct3mn6kg6mMToHIxLhEsLnBaYZS6
+         bhJA==
+X-Gm-Message-State: AFqh2kqrXAW86upfs1cutHLUWEJI42fuMvno5rfYfhTsho4yQdoQIC0A
+        7hMPFQJTVGPpPf8G/CMmcLSXUeAQ3hMkUbcBRosNRCxX
+X-Google-Smtp-Source: AMrXdXup8SYLNnTebJepzMcp17uKZ8B1sGEwa3GMN/gthFa1JcpQcBj2dL/ozzPwLRFFfBTIFwPL+yIAI/hHSILKPaU=
+X-Received: by 2002:a63:154c:0:b0:4ad:7773:fd02 with SMTP id
+ 12-20020a63154c000000b004ad7773fd02mr129883pgv.603.1673097030795; Sat, 07 Jan
+ 2023 05:10:30 -0800 (PST)
+MIME-Version: 1.0
+References: <20230107123229.4218-1-stefan.wahren@i2se.com>
+In-Reply-To: <20230107123229.4218-1-stefan.wahren@i2se.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Sat, 7 Jan 2023 10:10:18 -0300
+Message-ID: <CAOMZO5AFM5NmmNoybD0C-n+dVPjqYGTn0cP7N8MSJameXZS1nA@mail.gmail.com>
+Subject: Re: [PATCH] i2c: mxs: suppress probe-deferral error message
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     NXP Linux Team <linux-imx@nxp.com>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH] i2c: mxs: suppress probe-deferral error message
-Date:   Sat,  7 Jan 2023 13:32:29 +0100
-Message-Id: <20230107123229.4218-1-stefan.wahren@i2se.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:1JFncqfJNBelAj2BLAtOGL4WUV2LcV+V0yMpxY1xS4rxd8ABoRL
- 7eCzydnTcFNjq2eU9DTonwTPyHRc9xv0Tca0Oo6XtFos3SPQfJcCwYSQDz9d8tkEPh4Lgwr
- PprWSksWWPFDZxeZi5dIgZHo6/a6norkQg4nU4m/FyYWBMnXJBtrftcf6L6mFNNQklz/QDv
- n2oV/3Ao4Gd6DvqLqGsSA==
-UI-OutboundReport: notjunk:1;M01:P0:tn8hCM74haU=;vXYM7o2IWYqnimuUZ92Y7EQrifx
- uFgW9ALaSYciBDw9Hnfd0L9VjhSfSOADrpUMpDPc509HuCUDByHq1MbNixwRyUzGx13589+q7
- fGHTjiw2z1sjjNNZzqUVXai6kL5VzL2vn/m3PhQiR6hwdJ3fhk7kNBCnEWqPZKWl9xQoSLmbT
- Z4QcFIzC55UclLqa761y03ruqhKuYrgWHuEhMM4Jfg/85gIGGOgnLZ6xaVJGdtV/vlDP4mi5L
- RcpDgYcnVLcl05ccqAi9aOCIsWaNxggWOO7pB4XREZITEkt74YHLbpmYQTPSTWwi+KYNexHkS
- FEx4ITGjQv/hhVCqZUHmbHPUgY5A+crsFQpAXvlHDjAwEFrpKoobQWs44OmivhUMTdC9RqbT8
- 2M1HC12Vktvb2OCgSbreptpTZACS6UjIRVnQAfZ+/dHIKucHJdR4tBcKGabHlc/NVzrNCewv6
- fhU7EmgYQCQJ3KFXE9NRYPkGPDSsB31s/UTtEGRoLy4Q1aFgtEDqrnbJhyoMbr7REpk4Z1ewN
- FCqg6861oYyDzTdbNhNMGk/Nz/wT7/Z4aBT9tvst5GrqSzCvlW6MXsxX8ShdvJlj/OLTRvqd7
- A1rXtHXvku5qn/x64Qww1bcZJ97NUBXyZeP0NATRfL7Rmbfx7wsbIj4JArFEpHadjIYlRW9fX
- 4tiYntFmUZi3r4teCMo2JINp9BkgTJRzRJfBNgzymw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,35 +70,19 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-During boot of I2SE Duckbill the kernel log contains a
-confusing error:
+Hi Stefan,
 
-  Failed to request dma
+On Sat, Jan 7, 2023 at 9:32 AM Stefan Wahren <stefan.wahren@i2se.com> wrote:
+>
+> During boot of I2SE Duckbill the kernel log contains a
+> confusing error:
+>
+>   Failed to request dma
+>
+> This is caused by i2c-mxs tries to request a not yet available DMA
+> channel (-EPROBE_DEFER). So suppress this message by using
+> dev_err_probe().
+>
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 
-This is caused by i2c-mxs tries to request a not yet available DMA
-channel (-EPROBE_DEFER). So suppress this message by using
-dev_err_probe().
-
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
----
- drivers/i2c/busses/i2c-mxs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-mxs.c b/drivers/i2c/busses/i2c-mxs.c
-index 5af5cffc444e..d113bed79545 100644
---- a/drivers/i2c/busses/i2c-mxs.c
-+++ b/drivers/i2c/busses/i2c-mxs.c
-@@ -826,8 +826,8 @@ static int mxs_i2c_probe(struct platform_device *pdev)
- 	/* Setup the DMA */
- 	i2c->dmach = dma_request_chan(dev, "rx-tx");
- 	if (IS_ERR(i2c->dmach)) {
--		dev_err(dev, "Failed to request dma\n");
--		return PTR_ERR(i2c->dmach);
-+		return dev_err_probe(dev, PTR_ERR(i2c->dmach),
-+				     "Failed to request dma\n");
- 	}
- 
- 	platform_set_drvdata(pdev, i2c);
--- 
-2.34.1
-
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
