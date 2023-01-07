@@ -2,114 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBD5660611
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Jan 2023 18:56:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 165EC660EDA
+	for <lists+linux-i2c@lfdr.de>; Sat,  7 Jan 2023 13:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbjAFR4v (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 6 Jan 2023 12:56:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46114 "EHLO
+        id S231749AbjAGMiY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 7 Jan 2023 07:38:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235050AbjAFR4g (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Jan 2023 12:56:36 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577188061D
-        for <linux-i2c@vger.kernel.org>; Fri,  6 Jan 2023 09:56:34 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pDqx4-0001Et-NZ; Fri, 06 Jan 2023 18:56:22 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pDqx0-004FtV-BZ; Fri, 06 Jan 2023 18:56:18 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pDqwz-00AihF-Fm; Fri, 06 Jan 2023 18:56:17 +0100
-Date:   Fri, 6 Jan 2023 18:56:17 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Grant Likely <grant.likely@linaro.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH 001/606] tpm: st33zp24: Convert to Convert to i2c's
- .probe_new()
-Message-ID: <20230106175617.d3tlyb4lfdv34pvw@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-2-uwe@kleine-koenig.org>
- <20221216090904.qlekgvtpriijmvay@pengutronix.de>
- <Y696MSvhEUWlHSoK@kernel.org>
+        with ESMTP id S229656AbjAGMiX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 7 Jan 2023 07:38:23 -0500
+X-Greylist: delayed 311 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 07 Jan 2023 04:38:21 PST
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935D1669B7
+        for <linux-i2c@vger.kernel.org>; Sat,  7 Jan 2023 04:38:21 -0800 (PST)
+Received: from stefanw-SCHENKER ([37.4.248.41]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MIxFi-1pU1L41Ija-00KTC1; Sat, 07 Jan 2023 13:32:52 +0100
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     NXP Linux Team <linux-imx@nxp.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH] i2c: mxs: suppress probe-deferral error message
+Date:   Sat,  7 Jan 2023 13:32:29 +0100
+Message-Id: <20230107123229.4218-1-stefan.wahren@i2se.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cxrh6k27i7zhw6ts"
-Content-Disposition: inline
-In-Reply-To: <Y696MSvhEUWlHSoK@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:1JFncqfJNBelAj2BLAtOGL4WUV2LcV+V0yMpxY1xS4rxd8ABoRL
+ 7eCzydnTcFNjq2eU9DTonwTPyHRc9xv0Tca0Oo6XtFos3SPQfJcCwYSQDz9d8tkEPh4Lgwr
+ PprWSksWWPFDZxeZi5dIgZHo6/a6norkQg4nU4m/FyYWBMnXJBtrftcf6L6mFNNQklz/QDv
+ n2oV/3Ao4Gd6DvqLqGsSA==
+UI-OutboundReport: notjunk:1;M01:P0:tn8hCM74haU=;vXYM7o2IWYqnimuUZ92Y7EQrifx
+ uFgW9ALaSYciBDw9Hnfd0L9VjhSfSOADrpUMpDPc509HuCUDByHq1MbNixwRyUzGx13589+q7
+ fGHTjiw2z1sjjNNZzqUVXai6kL5VzL2vn/m3PhQiR6hwdJ3fhk7kNBCnEWqPZKWl9xQoSLmbT
+ Z4QcFIzC55UclLqa761y03ruqhKuYrgWHuEhMM4Jfg/85gIGGOgnLZ6xaVJGdtV/vlDP4mi5L
+ RcpDgYcnVLcl05ccqAi9aOCIsWaNxggWOO7pB4XREZITEkt74YHLbpmYQTPSTWwi+KYNexHkS
+ FEx4ITGjQv/hhVCqZUHmbHPUgY5A+crsFQpAXvlHDjAwEFrpKoobQWs44OmivhUMTdC9RqbT8
+ 2M1HC12Vktvb2OCgSbreptpTZACS6UjIRVnQAfZ+/dHIKucHJdR4tBcKGabHlc/NVzrNCewv6
+ fhU7EmgYQCQJ3KFXE9NRYPkGPDSsB31s/UTtEGRoLy4Q1aFgtEDqrnbJhyoMbr7REpk4Z1ewN
+ FCqg6861oYyDzTdbNhNMGk/Nz/wT7/Z4aBT9tvst5GrqSzCvlW6MXsxX8ShdvJlj/OLTRvqd7
+ A1rXtHXvku5qn/x64Qww1bcZJ97NUBXyZeP0NATRfL7Rmbfx7wsbIj4JArFEpHadjIYlRW9fX
+ 4tiYntFmUZi3r4teCMo2JINp9BkgTJRzRJfBNgzymw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+During boot of I2SE Duckbill the kernel log contains a
+confusing error:
 
---cxrh6k27i7zhw6ts
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  Failed to request dma
 
-Hello Jarkko,
+This is caused by i2c-mxs tries to request a not yet available DMA
+channel (-EPROBE_DEFER). So suppress this message by using
+dev_err_probe().
 
-On Fri, Dec 30, 2022 at 11:54:25PM +0000, Jarkko Sakkinen wrote:
-> I picked it now.
->=20
-> BR, Jarkko
->=20
-> On Fri, Dec 16, 2022 at 10:09:04AM +0100, Uwe Kleine-K=F6nig wrote:
-> > while rebasing my series onto today's next I noticed the Subject being
-> > broken:
-> >=20
-> > 	$Subject ~=3D s/Convert to //
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+---
+ drivers/i2c/busses/i2c-mxs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I see you picked this patch, but you didn't drop the duplicated "Convert
-to " :-\
+diff --git a/drivers/i2c/busses/i2c-mxs.c b/drivers/i2c/busses/i2c-mxs.c
+index 5af5cffc444e..d113bed79545 100644
+--- a/drivers/i2c/busses/i2c-mxs.c
++++ b/drivers/i2c/busses/i2c-mxs.c
+@@ -826,8 +826,8 @@ static int mxs_i2c_probe(struct platform_device *pdev)
+ 	/* Setup the DMA */
+ 	i2c->dmach = dma_request_chan(dev, "rx-tx");
+ 	if (IS_ERR(i2c->dmach)) {
+-		dev_err(dev, "Failed to request dma\n");
+-		return PTR_ERR(i2c->dmach);
++		return dev_err_probe(dev, PTR_ERR(i2c->dmach),
++				     "Failed to request dma\n");
+ 	}
+ 
+ 	platform_set_drvdata(pdev, i2c);
+-- 
+2.34.1
 
-Also you didn't pick patches #2 - #5 which are tpm related, too.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---cxrh6k27i7zhw6ts
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmO4YL4ACgkQwfwUeK3K
-7Am5tAf8CcRnHBDsafIlP1LKrJdQcpJRhuW3vxmMWFQcjzZRYgQsba9ScKPERriX
-QDrX4MnJV4E5zvQiFDj9VMDVnkfSW3ovKIZ5s7DkIU73p3xElLMXEDlMzwisrUev
-Uj/sbJDXF6ALt7xclf07xLPnQ8h3HH5NBZKR2pygldLjzMiPBM5AiJT+EqB1eoNu
-DB/Ajl8zjD9MpCpTXswjIeNSsSauZxdIqBOrEkk9kf7h+Ztp7yh70KwgmMhaZEfW
-DKObRqBmi9kmb8BRlDT+bU2jRV1hSNj2RtHW8TVVU9CbiecSQw523vWwW7pgo2ms
-YX+s+JekGtpjs2GvITci0O8rw+vjbg==
-=5CRE
------END PGP SIGNATURE-----
-
---cxrh6k27i7zhw6ts--
