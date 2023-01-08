@@ -2,102 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E6A661446
-	for <lists+linux-i2c@lfdr.de>; Sun,  8 Jan 2023 10:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 621356614C0
+	for <lists+linux-i2c@lfdr.de>; Sun,  8 Jan 2023 12:29:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232364AbjAHJZK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 8 Jan 2023 04:25:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
+        id S229673AbjAHL3p (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 8 Jan 2023 06:29:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjAHJZJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 8 Jan 2023 04:25:09 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFF4101CB;
-        Sun,  8 Jan 2023 01:25:06 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 88EB36CF;
-        Sun,  8 Jan 2023 10:25:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673169903;
-        bh=sJs7Ppbi3G3hierAzEkA9g+MrKJHmMhM9EkUX5dPlbo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=COiQYSvTDJ4eI66dEg8pn830E3GipuNZ9pv5wWRYbwyFD6o59MmCRcAeT/a51d951
-         ZeEzxCPdLVEmnto3g3C+0boWZ1uFQrlrjlq7Ij3km5HZOCRklTBEe+ii0ARPAhI5+x
-         mnFpgElC0+Uab2/r/m3spRX/L+X316krgOCFRyAc=
-Message-ID: <90bc0464-fa49-bd57-5460-d7d2a4bb6b65@ideasonboard.com>
-Date:   Sun, 8 Jan 2023 11:24:59 +0200
+        with ESMTP id S233196AbjAHL3m (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 8 Jan 2023 06:29:42 -0500
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23366D2D0
+        for <linux-i2c@vger.kernel.org>; Sun,  8 Jan 2023 03:29:41 -0800 (PST)
+Received: by mail-ej1-x641.google.com with SMTP id lc27so4217340ejc.1
+        for <linux-i2c@vger.kernel.org>; Sun, 08 Jan 2023 03:29:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HcpM41K3Tg/Gq2Sy2fOw39ukTQf5X/VzmfsS+yU67xU=;
+        b=qKooUu0cR0Q6Kb35Lml+i1nctcRKDXBFIEuTWecR2oAg5gpt8iWCWrVTzR/d0ltIz+
+         N3v4mI+Id5n22IQcOsRNrs3LfLqdT/HvxkxuThnBBMHey7FRBoM71zAIiDMTHnSgpN5Z
+         x3kiNifkBHa67aksnuVhN0ViIH4omkoEA1V/MRsaIxBjjHuMlU8Etutr9d/g3k0VBqS+
+         Gvcs1w6Oyb+6hjEoSfAoX0iu6yv8bOv93HJHe2b0EXqway2L9PMP8z4v5codhy5CVb8Z
+         gUWDwMgHqJCe7GMUzyDwpcS2znrsiSd/kh+kobYvXrnptX2TmVNEgI44vAZpnc1lh6J9
+         XwZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HcpM41K3Tg/Gq2Sy2fOw39ukTQf5X/VzmfsS+yU67xU=;
+        b=XK9JJcbgMpVA/Biqc3rRL8uwpXE28tSm48ta42d6K2lRC9P6gnLrEwIvk7ohrySR9r
+         JFT8VOLhWeiwa1PyYwJAYKnUHedQjRcT8VLSzK1qvkthjbHZiAwatbBTNduPXqP1AsXc
+         eYomiiymO272HwNC+qRlosHraRIl/2+39qUm7JEClyTn4LXk4gyK0gbhNUtKemftg8X9
+         6XUXE0TXcLp1jM6u+bxDm3A2T/B5Xt7tvHbpXZWbP9Nk2Bo+SkbGrzFOKW3npRusQGWT
+         DL/tojNdJdHO7wj1D/9am3ZykgDE+MhtonRx0HmwZRs5dow0YTSN8JNgn7R9ZmJkiHlC
+         R9vw==
+X-Gm-Message-State: AFqh2kp1lqcqYjfUmsLp7UNYl97BXCaTuiv2ewBa/g7/7G+K6sODqWL2
+        4VRBeMaLcKn4ZRPVZo5HSVSzgD08DDDarlNOeBI=
+X-Google-Smtp-Source: AMrXdXv8qNP079N8Ljgdg1YxgYDV453aDSNxK9LIR74YsJCiaWn938eOuW+3voCWEBes5so6o/csZ9cDSEO/Bl+oL2k=
+X-Received: by 2002:a17:906:8381:b0:7c1:57e7:e45a with SMTP id
+ p1-20020a170906838100b007c157e7e45amr3219427ejx.548.1673177379128; Sun, 08
+ Jan 2023 03:29:39 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 1/8] i2c: core: let adapters be notified of client
- attach/detach
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-References: <20230105140307.272052-1-tomi.valkeinen@ideasonboard.com>
- <20230105140307.272052-2-tomi.valkeinen@ideasonboard.com>
- <Y7o0zn9WdsLr15r9@pendragon.ideasonboard.com>
-Content-Language: en-US
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <Y7o0zn9WdsLr15r9@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a17:906:eca7:b0:7c0:dfb2:c37b with HTTP; Sun, 8 Jan 2023
+ 03:29:38 -0800 (PST)
+Reply-To: muhammadabdulrahma999@gmail.com
+From:   muhammad <nnannacollins2019@gmail.com>
+Date:   Sun, 8 Jan 2023 03:29:38 -0800
+Message-ID: <CAPQqOC03wuphQb6NMCpfv7tZrur=MdFAiO_zctdzRwH0PfHa1Q@mail.gmail.com>
+Subject: Re:Re:Inquiry about your products.!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_50,DEAR_SOMETHING,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:641 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5129]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [nnannacollins2019[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [nnannacollins2019[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [muhammadabdulrahma999[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  2.0 DEAR_SOMETHING BODY: Contains 'Dear (something)'
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 08/01/2023 05:13, Laurent Pinchart wrote:
-> Hi Tomi,
-> 
-> Thank you for the patch.
-> 
-> On Thu, Jan 05, 2023 at 04:03:00PM +0200, Tomi Valkeinen wrote:
->> From: Luca Ceresoli <luca@lucaceresoli.net>
->>
->> An adapter might need to know when a new device is about to be
->> added. This will soon bee needed to implement an "I2C address
->> translator" (ATR for short), a device that propagates I2C transactions
->> with a different slave address (an "alias" address). An ATR driver
->> needs to know when a slave is being added to find a suitable alias and
->> program the device translation map.
->>
->> Add an attach/detach callback pair to allow adapter drivers to be
->> notified of clients being added and removed.
-> 
-> I've asked in the review of v6 if we could instead use the
-> BUS_NOTIFY_ADD_DEVICE and BUS_NOTIFY_DEL_DEVICE bus notifiers. There's
-> been a follow up discussion with Andy, but no reply from you AFAICS.
-> Have you given this a try ? It's not a mandatory requirement, but if it
-> can't be done (or shouldn't be done), I'd like to know why.
+Dear Sir/Madam,
 
-Sorry, I meant to mention this in the cover letter, but forgot:
+An open Tender for the supply of your company products to (Doha,
+Qatar). Urgently furnish us in full details about the standard of your
+product. We will appreciate it more if you give us with Details:
+Specification and Catalogs or Price list via Email.To avoid making a
+wrong choice of products before placing an order for it.
 
-I haven't looked at the bus notifiers yet, but will have a look. I 
-wanted to send a new revision due to the large amount of changes already 
-done.
+Terms of payment:An upfront payment of 80% (T/T) will be made to your
+account for production,While 20% will be paid before shipment.
 
-  Tomi
-
+Thanks and Regards
