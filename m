@@ -2,38 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51C366227B
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Jan 2023 11:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEDA6623D3
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Jan 2023 12:07:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234753AbjAIKH5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 9 Jan 2023 05:07:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54382 "EHLO
+        id S234699AbjAILHS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 9 Jan 2023 06:07:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236390AbjAIKHl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 9 Jan 2023 05:07:41 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8EF175B0;
-        Mon,  9 Jan 2023 02:07:11 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AA65D6CF;
-        Mon,  9 Jan 2023 11:07:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673258829;
-        bh=MA3UIeIy29qHR4bO6RNUu05XnWNHU0OutnZKv3QwVwk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pjjjSCYSC8uDx+DkgNqThr6Ug7pgA+5GZd4RkvCh9ec2wiQgyWQA4/a53wez6N9ys
-         NZKrsnL6YAfGmjqIC0qDDDJDUKaPMZVratlChAJGRwSrqgoBc7/wTf5ZZGhoWRz8KH
-         xmQwm/HA9bllA23+ouY1hwQW3mw2mu1adHMqieTo=
-Date:   Mon, 9 Jan 2023 12:07:06 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        with ESMTP id S230455AbjAILHR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 9 Jan 2023 06:07:17 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBC5D2FE;
+        Mon,  9 Jan 2023 03:07:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673262436; x=1704798436;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PivH5brPCWV4adR16b5UTRwScK+2Zd+P4HCP3dlhWB4=;
+  b=T2nM4If83mlWPLwdH8Ishd5MpehT5UDHG8DCxIzWpfm+GDGc+BfNjcst
+   k5Af3fVJswJD/l3QIoWYpjfzXGVzPLho0soIjGfkkKnSz4XVYqYA+tgRk
+   Fm5idxEwKZIcIqRzAl/fmBGafvbYD2fioLsChTAtOFaXYVjwiEW3/3CXq
+   5em/k/gQZyDb9ZFBYiHwdlt+BhqyKrte8XQeNQF49ZX29YmYrRld/oc9U
+   g4L8dVpkNwLm4RK7LvCjrNk1/6x/an3aNMQ4Bmqf5oaJwIaYuWE9yvIsM
+   eiIiqSCbdUCBAJzcD++lKRwbwzQ/6h3zJMzTO8yd/gq2+kGUGv2S0Ir5p
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="324856032"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="324856032"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 03:07:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="780652007"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="780652007"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 09 Jan 2023 03:07:09 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pEpze-006MFL-1N;
+        Mon, 09 Jan 2023 13:07:06 +0200
+Date:   Mon, 9 Jan 2023 13:07:06 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
         Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
         Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Peter Rosin <peda@axentia.se>,
@@ -45,306 +63,165 @@ Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         Hans Verkuil <hverkuil@xs4all.nl>,
         Mike Pagano <mpagano@gentoo.org>,
         Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v6 5/8] dt-bindings: media: add TI DS90UB960 FPD-Link III
- Deserializer
-Message-ID: <Y7vnSnQAh2nS9vXx@pendragon.ideasonboard.com>
+        Marek Vasut <marex@denx.de>
+Subject: Re: [PATCH v6 7/8] media: i2c: add DS90UB913 driver
+Message-ID: <Y7v1Wrma/Ev8KEzy@smile.fi.intel.com>
 References: <20230105140307.272052-1-tomi.valkeinen@ideasonboard.com>
- <20230105140307.272052-6-tomi.valkeinen@ideasonboard.com>
- <Y7o3QEq9utV8nswA@pendragon.ideasonboard.com>
- <a3857c78-c221-176f-b862-a0435b301c67@ideasonboard.com>
- <Y7vZzg6YyC2IaUso@pendragon.ideasonboard.com>
- <65e3ca66-a4ba-db9b-3640-c90a7bdee61b@ideasonboard.com>
+ <20230105140307.272052-8-tomi.valkeinen@ideasonboard.com>
+ <Y7pBSq49dL8Fzxsc@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <65e3ca66-a4ba-db9b-3640-c90a7bdee61b@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y7pBSq49dL8Fzxsc@pendragon.ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 11:53:22AM +0200, Tomi Valkeinen wrote:
-> On 09/01/2023 11:09, Laurent Pinchart wrote:
-> > On Mon, Jan 09, 2023 at 10:30:13AM +0200, Tomi Valkeinen wrote:
-> >> On 08/01/2023 05:23, Laurent Pinchart wrote:
-> >>> Hi Tomi,
-> >>>
-> >>> Thank you for the patch.
-> >>>
-> >>> On Thu, Jan 05, 2023 at 04:03:04PM +0200, Tomi Valkeinen wrote:
-> >>>> Add DT bindings for TI DS90UB960 FPD-Link III Deserializer.
-> >>>>
-> >>>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> >>>> Reviewed-by: Rob Herring <robh@kernel.org>
-> >>>> ---
-> >>>>    .../bindings/media/i2c/ti,ds90ub960.yaml      | 402 ++++++++++++++++++
-> >>>>    1 file changed, 402 insertions(+)
-> >>>>    create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
-> >>>>
-> >>>> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
-> >>>> new file mode 100644
-> >>>> index 000000000000..664799ae55be
-> >>>> --- /dev/null
-> >>>> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
-> >>>> @@ -0,0 +1,402 @@
-> >>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >>>> +%YAML 1.2
-> >>>> +---
-> >>>> +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub960.yaml#
-> >>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>>> +
-> >>>> +title: Texas Instruments DS90UB9XX Family FPD-Link Deserializer Hubs
-> >>>> +
-> >>>> +maintainers:
-> >>>> +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> >>>> +
-> >>>> +description:
-> >>>> +  The TI DS90UB9XX devices are FPD-Link video deserializers with I2C and GPIO
-> >>>> +  forwarding.
-> >>>> +
-> >>>> +properties:
-> >>>> +  compatible:
-> >>>> +    enum:
-> >>>> +      - ti,ds90ub960-q1
-> >>>> +      - ti,ds90ub9702-q1
-> >>>> +
-> >>>> +  reg:
-> >>>> +    maxItems: 1
-> >>>> +
-> >>>> +  clocks:
-> >>>> +    maxItems: 1
-> >>>> +    description:
-> >>>> +      Reference clock connected to the REFCLK pin.
-> >>>> +
-> >>>> +  clock-names:
-> >>>> +    items:
-> >>>> +      - const: refclk
-> >>>> +
-> >>>> +  powerdown-gpios:
-> >>>> +    maxItems: 1
-> >>>> +    description:
-> >>>> +      Specifier for the GPIO connected to the PDB pin.
-> >>>> +
-> >>>> +  i2c-alias-pool:
-> >>>> +    $ref: /schemas/types.yaml#/definitions/uint16-array
-> >>>> +    description:
-> >>>> +      I2C alias pool is a pool of I2C addresses on the main I2C bus that can be
-> >>>> +      used to access the remote peripherals on the serializer's I2C bus. The
-> >>>> +      addresses must be available, not used by any other peripheral. Each
-> >>>> +      remote peripheral is assigned an alias from the pool, and transactions to
-> >>>> +      that address will be forwarded to the remote peripheral, with the address
-> >>>> +      translated to the remote peripheral's real address. This property is not
-> >>>> +      needed if there are no I2C addressable remote peripherals.
-> >>>> +
-> >>>> +  links:
-> >>>> +    type: object
-> >>>> +    additionalProperties: false
-> >>>> +
-> >>>> +    properties:
-> >>>> +      '#address-cells':
-> >>>> +        const: 1
-> >>>> +
-> >>>> +      '#size-cells':
-> >>>> +        const: 0
-> >>>> +
-> >>>> +      ti,manual-strobe:
-> >>>> +        type: boolean
-> >>>> +        description:
-> >>>> +          Enable manual strobe position and EQ level
-> >>>> +
-> >>>> +    patternProperties:
-> >>>> +      '^link@[0-3]$':
-> >>>> +        type: object
-> >>>> +        additionalProperties: false
-> >>>> +        properties:
-> >>>> +          reg:
-> >>>> +            description: The link number
-> >>>> +            maxItems: 1
-> >>>> +
-> >>>> +          i2c-alias:
-> >>>> +            description:
-> >>>> +              The I2C address used for the serializer. Transactions to this
-> >>>> +              address on the I2C bus where the deserializer resides are
-> >>>> +              forwarded to the serializer.
-> >>>> +
-> >>>> +          ti,rx-mode:
-> >>>> +            $ref: /schemas/types.yaml#/definitions/uint32
-> >>>> +            enum:
-> >>>> +              - 0 # RAW10
-> >>>> +              - 1 # RAW12 HF
-> >>>> +              - 2 # RAW12 LF
-> >>>> +              - 3 # CSI2 SYNC
-> >>>> +              - 4 # CSI2 NON-SYNC
-> >>>> +            description:
-> >>>> +              FPD-Link Input Mode. This should reflect the hardware and the
-> >>>> +              default mode of the connected camera module.
-> >>>
-> >>> As the remote device may not be a camera, I'd write "of the connected
-> >>> device" or "of the connected serializer".
-> >>
-> >> I was trying to include the sensor also in the "camera module", as the
-> >> sensor's "normal" pixel cloud would affect RAW modes (HF/LF). Perhaps
-> >> "connected device" covers this.
-> >>
-> >>>> +
-> >>>> +          ti,cdr-mode:
-> >>>> +            $ref: /schemas/types.yaml#/definitions/uint32
-> >>>> +            enum:
-> >>>> +              - 0 # FPD-Link III
-> >>>> +              - 1 # FPD-Link IV
-> >>>> +            description:
-> >>>> +              FPD-Link CDR Mode. This should reflect the hardware and the
-> >>>> +              default mode of the connected camera module.
-> >>>> +
-> >>>> +          ti,strobe-pos:
-> >>>> +            $ref: /schemas/types.yaml#/definitions/int32
-> >>>> +            minimum: -13
-> >>>> +            maximum: 13
-> >>>> +            description: Manual strobe position
-> >>>> +
-> >>>> +          ti,eq-level:
-> >>>> +            $ref: /schemas/types.yaml#/definitions/uint32
-> >>>> +            maximum: 14
-> >>>> +            description: Manual EQ level
-> >>>> +
-> >>>> +          serializer:
-> >>>> +            type: object
-> >>>> +            description: FPD-Link Serializer node
-> >>>> +
-> >>>> +        required:
-> >>>> +          - reg
-> >>>> +          - i2c-alias
-> >>>> +          - ti,rx-mode
-> >>>> +          - serializer
-> >>>> +
-> >>>> +  ports:
-> >>>> +    $ref: /schemas/graph.yaml#/properties/ports
-> >>>> +
-> >>>> +    properties:
-> >>>> +      port@0:
-> >>>> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> >>>> +        unevaluatedProperties: false
-> >>>> +        description: FPD-Link input 0
-> >>>> +
-> >>>> +        properties:
-> >>>> +          endpoint:
-> >>>> +            $ref: /schemas/media/video-interfaces.yaml#
-> >>>> +            unevaluatedProperties: false
-> >>>> +            description:
-> >>>> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-> >>>> +              hsync-active and vsync-active must be defined.
-> >>>> +
-> >>>> +      port@1:
-> >>>> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> >>>> +        unevaluatedProperties: false
-> >>>> +        description: FPD-Link input 1
-> >>>> +
-> >>>> +        properties:
-> >>>> +          endpoint:
-> >>>> +            $ref: /schemas/media/video-interfaces.yaml#
-> >>>> +            unevaluatedProperties: false
-> >>>> +            description:
-> >>>> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-> >>>> +              hsync-active and vsync-active must be defined.
-> >>>> +
-> >>>> +      port@2:
-> >>>> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> >>>> +        unevaluatedProperties: false
-> >>>> +        description: FPD-Link input 2
-> >>>> +
-> >>>> +        properties:
-> >>>> +          endpoint:
-> >>>> +            $ref: /schemas/media/video-interfaces.yaml#
-> >>>> +            unevaluatedProperties: false
-> >>>> +            description:
-> >>>> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-> >>>> +              hsync-active and vsync-active must be defined.
-> >>>> +
-> >>>> +      port@3:
-> >>>> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> >>>> +        unevaluatedProperties: false
-> >>>> +        description: FPD-Link input 3
-> >>>> +
-> >>>> +        properties:
-> >>>> +          endpoint:
-> >>>> +            $ref: /schemas/media/video-interfaces.yaml#
-> >>>> +            unevaluatedProperties: false
-> >>>> +            description:
-> >>>> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-> >>>> +              hsync-active and vsync-active must be defined.
-> >>>> +
-> >>>> +      port@4:
-> >>>> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> >>>> +        unevaluatedProperties: false
-> >>>> +        description: CSI-2 Output 0
-> >>>> +
-> >>>> +        properties:
-> >>>> +          endpoint:
-> >>>> +            $ref: /schemas/media/video-interfaces.yaml#
-> >>>> +            unevaluatedProperties: false
-> >>>> +
-> >>>> +            properties:
-> >>>> +              data-lanes:
-> >>>> +                minItems: 1
-> >>>> +                maxItems: 4
-> >>>> +
-> >>>> +            required:
-> >>>> +              - data-lanes
-> >>>> +
-> >>>> +      port@5:
-> >>>> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> >>>> +        unevaluatedProperties: false
-> >>>> +        description: CSI-2 Output 1
-> >>>> +
-> >>>> +        properties:
-> >>>> +          endpoint:
-> >>>> +            $ref: /schemas/media/video-interfaces.yaml#
-> >>>> +            unevaluatedProperties: false
-> >>>> +
-> >>>> +            properties:
-> >>>> +              data-lanes:
-> >>>> +                minItems: 1
-> >>>> +                maxItems: 4
-> >>>> +
-> >>>> +            required:
-> >>>> +              - data-lanes
-> >>>
-> >>> I think you need
-> >>>
-> >>>       required:
-> >>>         - port@0
-> >>>         - port@1
-> >>>         - port@2
-> >>>         - port@3
-> >>>         - port@4
-> >>>         - port@5
-> >>
-> >> Is that needed? I think often some of the ports are unused (e.g. the
-> >> example in this yaml file). Is it customary to still require empty port
-> >> nodes in the DT?
-> > 
-> > Ports are an intrinsic property of a device, they don't depend on the
-> > device integration in the system. In this case, the UB960 has four
-> > FPD-Link inputs and two CSI-2 outputs, that's a property of the chip.
-> > They don't have to be connected to anything on the board, so endpooints
-> > are optional.
-> 
-> Yes, but why do they have to be required? A missing port node implies 
-> that it's not used, doesn't it? I don't mind much, it just feels a bit 
-> extra to add multiple almost empty "port@X { reg = <X>; };" style nodes 
-> to the dts file.
+On Sun, Jan 08, 2023 at 06:06:34AM +0200, Laurent Pinchart wrote:
+> On Thu, Jan 05, 2023 at 04:03:06PM +0200, Tomi Valkeinen wrote:
 
-Lots of them are in .dtsi files, so it's not that bad. The main reasons I
-push for making ports mandatory are uniformity (lots of bindings do so,
-albeit some because I wrote them or asked for changes during review
-:-)), and simplified port handling on the driver side. 
+...
+
+> > +	scnprintf(priv->gpio_chip_name, sizeof(priv->gpio_chip_name), "%s",
+> > +		  dev_name(dev));
+> 
+> I think you can use strscpy().
+
+Actually I'm not sure we even need that variable. What is the lifetime of
+the dev and gc? I believe they are the same or gc's one is shorter, hence
+dev_name() can be used directly, no?
+
+...
+
+> > +	gc->of_node = priv->client->dev.of_node;
+
+We don't have of_node anymore in gc. And if the parent device is set, you can
+drop this line (it will work with older and newer kernels. Otherwise, use
+fwnode.
+
+...
+
+> > +	ret = gpiochip_add_data(gc, priv);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to add GPIOs: %d\n", ret);
+
+> > +		return ret;
+> > +	}
+> > +
+> > +	return 0;
+
+return ret;
+
+...
+
+> > +	ep_node = of_graph_get_endpoint_by_regs(dev->of_node, 0, 0);
+
+Why this can't be fwnode_handle from day 1?
+
+> > +	if (!ep_node) {
+> > +		dev_err(dev, "No graph endpoint\n");
+> > +		return -ENODEV;
+> > +	}
+
+...
+
+> > +	ep_np = of_graph_get_endpoint_by_regs(np, 0, 0);
+> > +	if (!ep_np) {
+> > +		dev_err(dev, "OF: no endpoint\n");
+> > +		return -ENOENT;
+> > +	}
+
+Ditto.
+
+> > +	ret = of_property_read_u32(ep_np, "pclk-sample", &priv->pclk_polarity);
+> > +
+> > +	of_node_put(ep_np);
+
+Ditto.
+
+...
+
+> > +		return ret;
+> > +	}
+> > +
+> > +	return 0;
+
+return ret;
+
+...
+
+> > +	priv->plat_data = dev_get_platdata(&client->dev);
+> > +	if (!priv->plat_data) {
+> > +		dev_err(dev, "Platform data missing\n");
+> > +		return -ENODEV;
+
+	return dev_err_probe(...); ?
+
+> > +	}
+
+...
+
+> > +	priv->regmap = devm_regmap_init_i2c(client, &ub913_regmap_config);
+> > +	if (IS_ERR(priv->regmap)) {
+> > +		dev_err(dev, "Failed to init regmap\n");
+> > +		return PTR_ERR(priv->regmap);
+
+Ditto?
+
+> > +	}
+
+...
+
+> > +#ifdef CONFIG_OF
+> 
+> The driver depends on CONFIG_OF so I would drop this, as well as the
+> of_match_ptr().
+
+Even if there is no OF dependency, these ugly ifdeffery with of_match_ptr()
+are error prone (compilation wise).
+
+...
+
+> > +static const struct of_device_id ub913_dt_ids[] = {
+> > +	{ .compatible = "ti,ds90ub913a-q1", },
+
+Inner comma is not needed.
+
+> > +	{}
+> > +};
+
+...
+
+> > +static struct i2c_driver ds90ub913_driver = {
+> > +	.probe_new	= ub913_probe,
+> > +	.remove		= ub913_remove,
+> > +	.id_table	= ub913_id,
+> > +	.driver = {
+> > +		.name	= "ds90ub913a",
+
+> > +		.owner = THIS_MODULE,
+
+This is something like for 5+ years is not needed, as the below macro sets it
+for you.
+
+> > +		.of_match_table = of_match_ptr(ub913_dt_ids),
+> > +	},
+> > +};
+
+> > +
+
+Redundant blank line.
+
+> > +module_i2c_driver(ds90ub913_driver);
 
 -- 
-Regards,
+With Best Regards,
+Andy Shevchenko
 
-Laurent Pinchart
+
