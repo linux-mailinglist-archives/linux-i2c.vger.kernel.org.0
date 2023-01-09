@@ -2,131 +2,231 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C37662528
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Jan 2023 13:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D0E662661
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Jan 2023 14:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237115AbjAIMMQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 9 Jan 2023 07:12:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
+        id S236830AbjAINCf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 9 Jan 2023 08:02:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237134AbjAIMLn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 9 Jan 2023 07:11:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43ACFA;
-        Mon,  9 Jan 2023 04:11:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31EA6B80D9C;
-        Mon,  9 Jan 2023 12:11:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7765DC433D2;
-        Mon,  9 Jan 2023 12:11:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673266299;
-        bh=Unf0gzP83EJpypS4KgHmajl2Qxt7LUxaefchvEPy7dQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s+9Kz1KTSPaQ8yrXIlkkFUAxjzxoFKL9Ye8RyYnP/80dqogZbemgyg6+Fwgv8ZfsD
-         KXY23nMv0B+2K9TAeBH3Bybs6vNB2XLt39Y8K6fdvV6C3TnLpTSKMSlie85HrvDFso
-         +QWKuj+d07j569TSNOJOg8LaBB8UnwRMRbBA7eb7F+9HMHppkibSvN9v5Wm8T9SLSi
-         0jK80XnNZMR98n/qsnDAPcjmDX5xqUosHxU4EjswfH12PGTH/hhbhrB+65f8qVR7Kw
-         b7da8hp/k5c4ix4j5lSCs9VI51+rSO8jtq+v4esuKEsr7Dl3GFifVGuDOMngWiGkSI
-         u79eDc0f0SwnQ==
-Date:   Mon, 9 Jan 2023 13:11:37 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, jsd@semihalf.com,
-        hdegoede@redhat.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-Subject: Re: [PATCH v4] i2c: designware: Fix unbalanced suspended flag
-Message-ID: <Y7wEeb5sVPnfcBOh@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, jsd@semihalf.com,
-        hdegoede@redhat.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-References: <20221219130145.883309-1-rf@opensource.cirrus.com>
+        with ESMTP id S233331AbjAINCM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 9 Jan 2023 08:02:12 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A991758A;
+        Mon,  9 Jan 2023 04:59:21 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 601AE6CF;
+        Mon,  9 Jan 2023 13:59:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1673269145;
+        bh=b5YGXWGHoxTUNR2lz6oATrp9StnnDmiege+b+Kt/YnM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KrH5T+bybl6PE8El4Qq1rEpTueK/bkk15n6q/dYt+2CCW0oOYqStD7LHyJcRbxi6G
+         37+ZbEVMVSqdYp6qu+ZipXAK+VAB6FQ1ZIg+OKLPORNMFGVf2ZAJA/cD8WQF6/+7NP
+         eAcl919tiZ4bUQDh7hlGbfP4FMT9mgdx8LhGVyPU=
+Message-ID: <5173a16a-83c5-5cfe-f6ce-03e1c90e8790@ideasonboard.com>
+Date:   Mon, 9 Jan 2023 14:59:01 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wrXYatYmwDYYMlSh"
-Content-Disposition: inline
-In-Reply-To: <20221219130145.883309-1-rf@opensource.cirrus.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v6 7/8] media: i2c: add DS90UB913 driver
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+References: <20230105140307.272052-1-tomi.valkeinen@ideasonboard.com>
+ <20230105140307.272052-8-tomi.valkeinen@ideasonboard.com>
+ <Y7pBSq49dL8Fzxsc@pendragon.ideasonboard.com>
+ <Y7v1Wrma/Ev8KEzy@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y7v1Wrma/Ev8KEzy@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 09/01/2023 13:07, Andy Shevchenko wrote:
+> On Sun, Jan 08, 2023 at 06:06:34AM +0200, Laurent Pinchart wrote:
+>> On Thu, Jan 05, 2023 at 04:03:06PM +0200, Tomi Valkeinen wrote:
+> 
+> ...
+> 
+>>> +	scnprintf(priv->gpio_chip_name, sizeof(priv->gpio_chip_name), "%s",
+>>> +		  dev_name(dev));
+>>
+>> I think you can use strscpy().
+> 
+> Actually I'm not sure we even need that variable. What is the lifetime of
+> the dev and gc? I believe they are the same or gc's one is shorter, hence
+> dev_name() can be used directly, no?
 
---wrXYatYmwDYYMlSh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I think this is a valid point, no need for the extra variable afaics.
 
-On Mon, Dec 19, 2022 at 01:01:45PM +0000, Richard Fitzgerald wrote:
-> Ensure that i2c_mark_adapter_suspended() is always balanced by a call to
-> i2c_mark_adapter_resumed().
->=20
-> dw_i2c_plat_resume() must always be called, so that
-> i2c_mark_adapter_resumed() is called. This is not compatible with
-> DPM_FLAG_MAY_SKIP_RESUME, so remove the flag.
->=20
-> Since the controller is always resumed on system resume the
-> dw_i2c_plat_complete() callback is redundant and has been removed.
->=20
-> The unbalanced suspended flag was introduced by commit c57813b8b288
-> ("i2c: designware: Lock the adapter while setting the suspended flag")
->=20
-> Before that commit, the system and runtime PM used the same functions. The
-> DPM_FLAG_MAY_SKIP_RESUME was used to skip the system resume if the driver
-> had been in runtime-suspend. If system resume was skipped, the suspended
-> flag would be cleared by the next runtime resume. The check of the
-> suspended flag was _after_ the call to pm_runtime_get_sync() in
-> i2c_dw_xfer(). So either a system resume or a runtime resume would clear
-> the flag before it was checked.
->=20
-> Having introduced the unbalanced suspended flag with that commit, a furth=
-er
-> commit 80704a84a9f8
-> ("i2c: designware: Use the i2c_mark_adapter_suspended/resumed() helpers")
->=20
-> changed from using a local suspended flag to using the
-> i2c_mark_adapter_suspended/resumed() functions. These use a flag that is
-> checked by I2C core code before issuing the transfer to the bus driver, so
-> there was no opportunity for the bus driver to runtime resume itself befo=
-re
-> the flag check.
->=20
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-> Fixes: c57813b8b288 ("i2c: designware: Lock the adapter while setting the=
- suspended flag")
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> ...
+> 
+>>> +	gc->of_node = priv->client->dev.of_node;
+> 
+> We don't have of_node anymore in gc. And if the parent device is set, you can
+> drop this line (it will work with older and newer kernels. Otherwise, use
+> fwnode.
 
-Applied to for-current, thanks!
+What do you mean "we don't have of_node anymore"?
 
+> ...
+> 
+>>> +	ret = gpiochip_add_data(gc, priv);
+>>> +	if (ret) {
+>>> +		dev_err(dev, "Failed to add GPIOs: %d\n", ret);
+> 
+>>> +		return ret;
+>>> +	}
+>>> +
+>>> +	return 0;
+> 
+> return ret;
 
---wrXYatYmwDYYMlSh
-Content-Type: application/pgp-signature; name="signature.asc"
+I'm not a fan of that style. I like my error handling ifs to return the 
+error inside the if block, and a successful function ends in a "return 0".
 
------BEGIN PGP SIGNATURE-----
+> ...
+> 
+>>> +	ep_node = of_graph_get_endpoint_by_regs(dev->of_node, 0, 0);
+> 
+> Why this can't be fwnode_handle from day 1?
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmO8BHkACgkQFA3kzBSg
-KbaFZA/+NDWCeEaTI3RC0yZAjIunJWul2UysSCvoSK7i79m1npf3IAvSpiICKyot
-mUrs+gNXRE7JtwpnTElBvUKlX3AI5P9Vz8haOOd6D0K9Hn03+RksIbE669uN7Kji
-My7cfj7uoNvXd4JcMe7cs0JDwTz1V+RjknpyIYfzbXBsAxleIaodf9oTuiIAVIA6
-LvCO4oV85R1nMt/anfGO2d8RkMp8GWJQXVT2uujA0E/5fRijiHpA9X+lYUg5rdOU
-kyjSzjN12MHYVTUrj5G7De+VYAL+zku89PzEYG4ZYO0FZkfemaHepy8a7rO37nz5
-CC52GWMO9e3YqBHj1yYQsNM/TTsZEKojyFYZwlIYZ+JsdgrJOGSg9yQ6BJF97ERP
-pWnIqtts8bd11iMFiFnFOwt3670VI0xiwnqCxHb09LNsSmeSbg1YnthEL8v1Z2OB
-TpTj5FcZj5IyrYWgy90NRjeHhrCRrzDY3kn0/F0HG4wceOZt5JH2E7dzzYWvREob
-YyhwNEp9qNvQOGt10qs86ib5AerncmJaCf766OQVaAl0i/Mwpr2Qn27CFxYWM9UC
-KL0BMID/MUMP2BLY5sHnYmhoSD+qsTtIF3sQsDzSaGIsyaoWulTzVEDZ2eBKv3pX
-UGAF13iW/1JpPMlb/wJkgjn2PVm5FGNoOdA+nGS8ldQIb0ZXbf8=
-=iDks
------END PGP SIGNATURE-----
+I guess it can. It's an old driver and there has been no need to convert 
+to fwnode, so we're still using OF.
 
---wrXYatYmwDYYMlSh--
+>>> +	if (!ep_node) {
+>>> +		dev_err(dev, "No graph endpoint\n");
+>>> +		return -ENODEV;
+>>> +	}
+> 
+> ...
+> 
+>>> +	ep_np = of_graph_get_endpoint_by_regs(np, 0, 0);
+>>> +	if (!ep_np) {
+>>> +		dev_err(dev, "OF: no endpoint\n");
+>>> +		return -ENOENT;
+>>> +	}
+> 
+> Ditto.
+> 
+>>> +	ret = of_property_read_u32(ep_np, "pclk-sample", &priv->pclk_polarity);
+>>> +
+>>> +	of_node_put(ep_np);
+> 
+> Ditto.
+> 
+> ...
+> 
+>>> +		return ret;
+>>> +	}
+>>> +
+>>> +	return 0;
+> 
+> return ret;
+> 
+> ...
+> 
+>>> +	priv->plat_data = dev_get_platdata(&client->dev);
+>>> +	if (!priv->plat_data) {
+>>> +		dev_err(dev, "Platform data missing\n");
+>>> +		return -ENODEV;
+> 
+> 	return dev_err_probe(...); ?
+
+Isn't the idea with dev_err_probe to use it where -EPROBE_DEFER might be 
+the error? That's not the case here.
+
+Buuut reading the relevant docs a bit more shows that it's actually 
+recommended to be used in this kind of cases too, so you're right.
+
+>>> +	}
+> 
+> ...
+> 
+>>> +	priv->regmap = devm_regmap_init_i2c(client, &ub913_regmap_config);
+>>> +	if (IS_ERR(priv->regmap)) {
+>>> +		dev_err(dev, "Failed to init regmap\n");
+>>> +		return PTR_ERR(priv->regmap);
+> 
+> Ditto?
+>
+>>> +	}
+> 
+> ...
+> 
+>>> +#ifdef CONFIG_OF
+>>
+>> The driver depends on CONFIG_OF so I would drop this, as well as the
+>> of_match_ptr().
+> 
+> Even if there is no OF dependency, these ugly ifdeffery with of_match_ptr()
+> are error prone (compilation wise).
+> 
+> ...
+> 
+>>> +static const struct of_device_id ub913_dt_ids[] = {
+>>> +	{ .compatible = "ti,ds90ub913a-q1", },
+> 
+> Inner comma is not needed.
+
+Ok.
+
+> 
+>>> +	{}
+>>> +};
+> 
+> ...
+> 
+>>> +static struct i2c_driver ds90ub913_driver = {
+>>> +	.probe_new	= ub913_probe,
+>>> +	.remove		= ub913_remove,
+>>> +	.id_table	= ub913_id,
+>>> +	.driver = {
+>>> +		.name	= "ds90ub913a",
+> 
+>>> +		.owner = THIS_MODULE,
+> 
+> This is something like for 5+ years is not needed, as the below macro sets it
+> for you.
+
+Ok.
+
+>>> +		.of_match_table = of_match_ptr(ub913_dt_ids),
+>>> +	},
+>>> +};
+> 
+>>> +
+> 
+> Redundant blank line.
+> 
+>>> +module_i2c_driver(ds90ub913_driver);
+> 
+
+  Tomi
+
