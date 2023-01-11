@@ -2,161 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DFD66582C
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Jan 2023 10:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD0E665837
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Jan 2023 10:55:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbjAKJyS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 11 Jan 2023 04:54:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51600 "EHLO
+        id S238625AbjAKJzc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 Jan 2023 04:55:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235993AbjAKJxo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Jan 2023 04:53:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3A5D109;
-        Wed, 11 Jan 2023 01:51:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9221EB81B76;
-        Wed, 11 Jan 2023 09:51:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54F6DC433F1;
-        Wed, 11 Jan 2023 09:51:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673430685;
-        bh=z0ZYgHqL1YLvYl+ue5zNy1KMy+u3shk6BmiAvHiQZSA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xZGcZ5JDRrdXTJbt9tLPDzh24ToBaCeG04aIrg63SxaV0mqioT6pGZXGHiVeh9ZOU
-         sO0JuLfJTFUVrJVMPgoU9Fwio7tkoa1uh4VeY/xzIKAbqvAAsfPDw+kuuk3E42lxBv
-         sJ9yu85to26aoTWWeVLBJDsI3mtwYFGQ3RchmYyA=
-Date:   Wed, 11 Jan 2023 10:51:22 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Len Brown <lenb@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
- const *
-Message-ID: <Y76GmvOD9KxSuD7o@kroah.com>
-References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
- <20221123122523.1332370-3-gregkh@linuxfoundation.org>
- <CAJZ5v0gqD_TW3iGLAiH=us1B0-JLGtv2VGTJjQwiWxCmris9ag@mail.gmail.com>
+        with ESMTP id S238588AbjAKJzA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Jan 2023 04:55:00 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19E111C27
+        for <linux-i2c@vger.kernel.org>; Wed, 11 Jan 2023 01:52:09 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pFXln-0000dV-R2; Wed, 11 Jan 2023 10:51:43 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pFXlm-005GmE-Vb; Wed, 11 Jan 2023 10:51:42 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pFXlm-00BvnM-As; Wed, 11 Jan 2023 10:51:42 +0100
+Date:   Wed, 11 Jan 2023 10:51:42 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        linux-gpio@vger.kernel.org,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Grant Likely <grant.likely@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH 510/606] pinctrl: mcp23s08: Convert to i2c's .probe_new()
+Message-ID: <20230111095142.2i36vjytm6wthntl@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-511-uwe@kleine-koenig.org>
+ <CACRpkdaViC8T5qFRW+=+rGST=nr9beQJqTP7d42OoYUnhPhqig@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hvyl6ihtxdsh2466"
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gqD_TW3iGLAiH=us1B0-JLGtv2VGTJjQwiWxCmris9ag@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CACRpkdaViC8T5qFRW+=+rGST=nr9beQJqTP7d42OoYUnhPhqig@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 01:38:05PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Nov 23, 2022 at 1:25 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > The uevent() callback in struct device_type should not be modifying the
-> > device that is passed into it, so mark it as a const * and propagate the
-> > function signature changes out into all relevant subsystems that use
-> > this callback.
-> >
-> > Cc: Jens Axboe <axboe@kernel.dk>
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Cc: Len Brown <lenb@kernel.org>
-> > Cc: Stefan Richter <stefanr@s5r6.in-berlin.de>
-> > Cc: Wolfram Sang <wsa@kernel.org>
-> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > Cc: Sean Young <sean@mess.org>
-> > Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: Frank Rowand <frowand.list@gmail.com>
-> > Cc: Maximilian Luz <luzmaximilian@gmail.com>
-> > Cc: Hans de Goede <hdegoede@redhat.com>
-> > Cc: Mark Gross <markgross@kernel.org>
-> > Cc: Vinod Koul <vkoul@kernel.org>
-> > Cc: Bard Liao <yung-chuan.liao@linux.intel.com>
-> > Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> > Cc: Sanyog Kale <sanyog.r.kale@intel.com>
-> > Cc: Andreas Noever <andreas.noever@gmail.com>
-> > Cc: Michael Jamet <michael.jamet@intel.com>
-> > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Cc: Yehezkel Bernat <YehezkelShB@gmail.com>
-> > Cc: Jiri Slaby <jirislaby@kernel.org>
-> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-> > Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-> > Cc: Chaitanya Kulkarni <kch@nvidia.com>
-> > Cc: Ming Lei <ming.lei@redhat.com>
-> > Cc: Jilin Yuan <yuanjilin@cdjrlc.com>
-> > Cc: Alan Stern <stern@rowland.harvard.edu>
-> > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Ira Weiny <ira.weiny@intel.com>
-> > Cc: Dan Williams <dan.j.williams@intel.com>
-> > Cc: Won Chung <wonchung@google.com>
-> > Cc: alsa-devel@alsa-project.org
-> > Cc: devicetree@vger.kernel.org
-> > Cc: linux-acpi@vger.kernel.org
-> > Cc: linux-block@vger.kernel.org
-> > Cc: linux-i2c@vger.kernel.org
-> > Cc: linux-i3c@lists.infradead.org
-> > Cc: linux-input@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: linux-media@vger.kernel.org
-> > Cc: linux-serial@vger.kernel.org
-> > Cc: linux-usb@vger.kernel.org
-> > Cc: linux1394-devel@lists.sourceforge.net
-> > Cc: platform-driver-x86@vger.kernel.org
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> (which my ACPI maintainer hat on).
 
-thanks for the review, I'll add it to the v2 patch.
+--hvyl6ihtxdsh2466
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-greg k-h
+Hello Linus,
+
+On Tue, Jan 10, 2023 at 09:01:04AM +0100, Linus Walleij wrote:
+> On Fri, Nov 18, 2022 at 11:48 PM Uwe Kleine-K=F6nig <uwe@kleine-koenig.or=
+g> wrote:
+>=20
+> > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> >
+> > .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> > that explicitly in the probe function.
+> >
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> Patch applied!
+
+Thanks. Is there a reason you picked #510 but not #511 other than having
+missed there is a 2nd pinctrl patch in my series?
+
+If it's only that
+
+	b4 am -P 511 -s -l CACRpkdaViC8T5qFRW+=3D+rGST=3Dnr9beQJqTP7d42OoYUnhPhqig=
+@mail.gmail.com
+
+is your friend.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--hvyl6ihtxdsh2466
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmO+hqsACgkQwfwUeK3K
+7AlHnwf/TbGJWR2hDoaYrpK6CTPARmRCm5WNQtzAFNu2siduND/0E9n8wiML+9nR
+J9N+0xdzITnMueybK+FiEoWjLxkV3qtqRqT17lgSfa2fRHilvOJpt5AnAy/yCYyh
++qN9cNwmykvCIz8vOfK/3UxwCYqtwByyeY9aSYk9prC2xl3LvOXTnWyGr+unijSN
+axTWsK4hrqFfdSD6EN6C3Jv5SeZObZgNinEyavYRlqRaQh5ZM5SStgjfAnMgxFbK
+WNeWVIMpuY1VHpD7/QiemKWL0HdB7c/mJsV8SLrYSKi3vtgFz8NENfYhW0BdBMa5
+UXHv12L3pB5VA/eeV/bSDfFGvs210Q==
+=uONG
+-----END PGP SIGNATURE-----
+
+--hvyl6ihtxdsh2466--
