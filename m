@@ -2,118 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCDD666D67
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Jan 2023 10:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 059A7666DEA
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Jan 2023 10:17:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239982AbjALJGp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 12 Jan 2023 04:06:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
+        id S231389AbjALJRa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 12 Jan 2023 04:17:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239966AbjALJGN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Jan 2023 04:06:13 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB6943A03
-        for <linux-i2c@vger.kernel.org>; Thu, 12 Jan 2023 01:01:12 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id d66so5954455vsd.9
-        for <linux-i2c@vger.kernel.org>; Thu, 12 Jan 2023 01:01:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=N5Gv/lkMhRvVTTzKOnvOJgbWmrD30nth3OhwfwhuF0c=;
-        b=rgyOuGyIKW8ztIWxndMNGNuxo2ku5Up56NMfudn60ePDqw4IWf9z8QhQGGfe8stiNf
-         k7u6I5JyOE0W/rGj1Rr4uw3B9xIg9V0helQJ2queK/+SSwphzXnuKEcESlVQgFEdiAsD
-         TFy6+O3nrWght+Nyz+lowkLFaGmIcnzQ0O2WcRCnpLX8QQXnye8FCU3I1ZwkA7Zb7Jj3
-         nqo+WSGU0xfHPxP+JE+cPpQ8r8hvunUPbybetXaxd2XTmeOtMSwfA8FfL95reG6G8X1o
-         FGfEeBCWguiHezJDFgiID4GjtkkIZn2wPzw9mbELn7SdOLMvl1u+ZD4Yuo/7uR1nQkRh
-         TOMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N5Gv/lkMhRvVTTzKOnvOJgbWmrD30nth3OhwfwhuF0c=;
-        b=MvwRsgMy2qw8mR7ba20/+8mdMiFse/0mknd0hSdCMtDgXIvGD+6Pg/pM1FxfoHfqZX
-         6QKJVIcPptjxaJQRh0YMYqYgczpYKjYQMkuKzyAiXXgD8E5J0I8BMzbDQgAxy3nsF6zx
-         dhpVEWgiKthphsxwVYOOY/cjCDsdcjuB3BE3GcYd+cUEgsx/VE2IEBrBCCzcLZFxBAnZ
-         yX3APRi7xSPztQ1xrW3rXU0jRX3jQMWwMkFL+Um74kcNJ9RpOOo1B1HR5IvS3snnI7cz
-         YJYItlW5bNhkO33MJoPq+fnHE1bxg5Xi66vI4xgmmuWKnIK5Kl4sKgmjexctL5RhBwVC
-         Hgwg==
-X-Gm-Message-State: AFqh2kop1hBGE7XIINLC5GUh2bTxWOdoLvWffAp84Wy64WIA9mA5lYcz
-        bo+/cPdlwGhU9vHMNHhaE6cAG5XVMs6DKSFgVqQGqI5b604EYg==
-X-Google-Smtp-Source: AMrXdXuKrMjZzazH/V8044nUHDbfstac7kmyFgkTM2ptq6li+V+WfJ7w5YPk4bHZAsEyrEMAgFPMgntxF6o9ghBI2tk=
-X-Received: by 2002:a67:df8c:0:b0:3c5:1ac1:bf38 with SMTP id
- x12-20020a67df8c000000b003c51ac1bf38mr10977120vsk.78.1673514071171; Thu, 12
- Jan 2023 01:01:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20221229160045.535778-1-brgl@bgdev.pl>
-In-Reply-To: <20221229160045.535778-1-brgl@bgdev.pl>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 12 Jan 2023 10:01:00 +0100
-Message-ID: <CAMRc=MfhVVN+W0Th8jdzTBHu6reFNpkm_cst3jMQZij0bDD=jQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] i2c: fortify the subsystem against user-space
- induced deadlocks
-To:     Wolfram Sang <wsa@kernel.org>
+        with ESMTP id S240024AbjALJQx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Jan 2023 04:16:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C08654D91;
+        Thu, 12 Jan 2023 01:09:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB727B81D93;
+        Thu, 12 Jan 2023 09:09:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 215B6C433D2;
+        Thu, 12 Jan 2023 09:09:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673514565;
+        bh=Go8OUlNc3WMdaAhoIRqEwx+/G8bzkIBolQ4hnEZqi84=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TU2GmYj38X4wYrBwsgT6zKE2KtuPPo1nVsRkAL6NjiWidYnBFBNYt3hZtZMbNk7jc
+         355AOvWtsEkjsnj5bZMMUqe/xHUenJCPuWYOekFQJvUD0pDB42bzFxvJMY3rPF92Qk
+         b/ULqSCgmJ4sb9Noy7cgpxM1FO6TU8Z0ycDS0DUB8yZxscmWyXnMxWpnmukyGNHblT
+         0o6W5o+GoWpXIx6zamNIStio+xXf86gMUD7GZakwFj/S6P4wM0BhJD508xPOmcb8P6
+         CnSSXF0gAOwBU59C1/yLOpOPJdvJquiweFhC7i80/idFyKKqnGgWu+TdrS52uhs2d7
+         tNGlqn1K2mVww==
+Date:   Thu, 12 Jan 2023 10:09:22 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 0/2] i2c: fortify the subsystem against user-space
+ induced deadlocks
+Message-ID: <Y7/OQiJCFzgnMnaG@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20221229160045.535778-1-brgl@bgdev.pl>
+ <CAMRc=MfhVVN+W0Th8jdzTBHu6reFNpkm_cst3jMQZij0bDD=jQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rTcZkrIOar0qQDYF"
+Content-Disposition: inline
+In-Reply-To: <CAMRc=MfhVVN+W0Th8jdzTBHu6reFNpkm_cst3jMQZij0bDD=jQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 5:00 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->
-> Several subsystems in the kernel that export device files to user-space
-> suffer from a bug where keeping an open file descriptor associated with
-> this device file, unbinding the device from its driver and then calling
-> any of the supported system calls on that file descriptor will result in
-> either a crash or - as is the case with i2c - a deadlock.
->
-> This behavior has been blamed on extensive usage of device resource
-> management interfaces but it seems that devres has nothing to do with it,
-> the problem would be the same whether using devres or freeing resources
-> in .remove() that should survive the driver detach.
->
-> Many subsystems already deal with this by implementing some kind of flags
-> in the character device data together with locking preventing the
-> user-space from dropping the subsystem data from under the open device.
->
-> In i2c the deadlock comes from the fact that the function unregistering
-> the adapter waits for a completion which will not be passed until all
-> references to the character device are dropped.
->
-> The first patch in this series is just a tweak of return values of the
-> notifier callback. The second addresses the deadlock problem in a way
-> similar to how we fixed this issue in the GPIO subystem. Details are in
-> the commit message.
->
-> v1 -> v2:
-> - keep the device release callback and use it to free the IDR number
-> - rebase on top of v6.2-rc1
->
-> Bartosz Golaszewski (2):
->   i2c: dev: fix notifier return values
->   i2c: dev: don't allow user-space to deadlock the kernel
->
->  drivers/i2c/i2c-core-base.c |  26 ++-------
->  drivers/i2c/i2c-dev.c       | 112 +++++++++++++++++++++++++++++-------
->  include/linux/i2c.h         |   2 -
->  3 files changed, 96 insertions(+), 44 deletions(-)
->
-> --
-> 2.37.2
->
 
-Hi Wolfram,
+--rTcZkrIOar0qQDYF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-It's been two weeks without any comments on this series and over a
-month since v1 so let me send a gentle ping on this.
+Hi Bart,
 
-Bart
+> It's been two weeks without any comments on this series and over a
+> month since v1 so let me send a gentle ping on this.
+
+This series has a priority for the next merge window. I love it!
+However, patch 2 is difficult to review because I need to dive in deeply
+into the topic. Hopes are that I can do this next week.
+
+Thanks and happy hacking,
+
+   Wolfram
+
+
+--rTcZkrIOar0qQDYF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmO/zkIACgkQFA3kzBSg
+KbaS6A/+N2T3z0zQrtJz7yqsYu1oQJhkokjev29EmQ2/LNauGTZv2S8XU2R9+2Cv
+U1usyeBc+pEjZj3LwRiShp3Yjzbv3wmsW63Vz5Dcu07zLw09YDBnidBYwr/4JYun
+QpxykBRYDghNNKpBW9xTXXn4y4Y5PRA1pnVvU9xHl22OYSP7DXxTSuF7AncVJGH/
+wulEt3SgE02NdD8tJ4/k/taOmgaUvIAe98f1LYWsIMHA3iZBJTfov7W2SvlUDz+b
+gYiQ6q6gWAQJshzGajoKGYO6nnd97BZN8LAdmKfnT7ZeVpsWt5ZvfE0sZTqhEw83
+hLsA17rmu7UI8zQyPVpQzzO5nrQSonEkTy3b6PcbLv6sTb86F87YqXZICZ2Vm7mG
+BLOkAvMDaMoC7ngeg9EemIPr2Iciuf1aLAAftdR9GkgFLKo1+9C1KtGmgNZr22if
+Ba+PuULwU+FyU46E3vDPK3qmsgJ7bqF/15x2TWGvLsU03hpB77yVy+vw0PALI/U0
+weExlSsiX1D9fd50CLwoHTyX/Scw4bS/rVeyWBLEIUkBKmqAlL13/Q/m3pgGLOSL
+SNkL3SyMMLMliHQPwMGyrOibrwUPUKwOtgs2AB0KX8909Tl5i54ehQ75U+bMvaKF
+LuMk1yL9Ia0LWSQ+jh7i5vwQM5Un5IAV/5StmbMKfodgRtR4asA=
+=m0i0
+-----END PGP SIGNATURE-----
+
+--rTcZkrIOar0qQDYF--
