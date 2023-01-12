@@ -2,687 +2,168 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74569667190
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Jan 2023 13:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 663A7667297
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Jan 2023 13:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235142AbjALMEk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 12 Jan 2023 07:04:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38546 "EHLO
+        id S229819AbjALMv1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 12 Jan 2023 07:51:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjALMDw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Jan 2023 07:03:52 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1271F18E1D;
-        Thu, 12 Jan 2023 03:58:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673524710; x=1705060710;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fdZR2d98/iYrGEqZXV6e7SW+75h27l74f19UtobG2zU=;
-  b=bEuiaLEfpgEYXBfyadxOX7cFWbDDkAQbMb4n65zPUchWbHLWkOKmapxV
-   9H4ZjNQc38Dii66EM95TM0rqLOvFUHZ/VQE/a38qjfgQBQZIL50HXYSW4
-   AVNd6RQQloC9H6Q/+ypwP4zSS4gJQ1jOfUvlHqKWHdvWzeouMmAxFBb0n
-   QL48hKmuKGaqDgytFjP/wlfsHUh4APuX3heKq1sArtrlrfSeSIPOl3u1Z
-   1AteUKfI1dwGWUWXM0PUWPyONg/0xQTUbhIUtbg3ZdL26aLnIm12/GzCX
-   CZ6pPDuag6wOqj0ZPPBeiwR7wxl7KvLNSBJZ77F9r/EGxR4HQYHaGqAUB
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="386000916"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="386000916"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 03:58:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="800177263"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="800177263"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 12 Jan 2023 03:58:16 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 12 Jan 2023 13:58:15 +0200
-Date:   Thu, 12 Jan 2023 13:58:15 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Len Brown <lenb@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Young <sean@mess.org>, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH v2 05/16] driver core: make struct device_type.uevent()
- take a const *
-Message-ID: <Y7/1163Ahkesgqp0@kuha.fi.intel.com>
-References: <20230111113018.459199-1-gregkh@linuxfoundation.org>
- <20230111113018.459199-6-gregkh@linuxfoundation.org>
+        with ESMTP id S230041AbjALMvO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Jan 2023 07:51:14 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53534EC8F;
+        Thu, 12 Jan 2023 04:51:11 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pFx2x-0003Hd-VR; Thu, 12 Jan 2023 13:51:08 +0100
+Message-ID: <8c3fd22a-9a11-216c-891f-969475745d20@leemhuis.info>
+Date:   Thu, 12 Jan 2023 13:51:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230111113018.459199-6-gregkh@linuxfoundation.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US, de-DE
+From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Cc:     Georg <g.wenzel@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: =?UTF-8?Q?=5bRegression=5d_Bug=c2=a0216913_-_i2c_not_working_after_?=
+ =?UTF-8?Q?hibernation_=28i2c=5fdesignware=29?=
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1673527871;1168e515;
+X-HE-SMSGID: 1pFx2x-0003Hd-VR
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 12:30:07PM +0100, Greg Kroah-Hartman wrote:
-> The uevent() callback in struct device_type should not be modifying the
-> device that is passed into it, so mark it as a const * and propagate the
-> function signature changes out into all relevant subsystems that use
-> this callback.
+Hi, this is your Linux kernel regression tracker.
+
+I noticed a regression report in bugzilla.kernel.org that sounds a lot
+like it's a regression (it's not totally clear). As many (most?) kernel
+developer don't keep an eye on it, I decided to forward it by mail.
+Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216913 :
+
+>  Georg 2023-01-11 12:59:15 UTC
 > 
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: Stefan Richter <stefanr@s5r6.in-berlin.de>
-> Cc: Wolfram Sang <wsa@kernel.org>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Sean Young <sean@mess.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: Maximilian Luz <luzmaximilian@gmail.com>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Mark Gross <markgross@kernel.org>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Bard Liao <yung-chuan.liao@linux.intel.com>
-> Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Cc: Sanyog Kale <sanyog.r.kale@intel.com>
-> Cc: Andreas Noever <andreas.noever@gmail.com>
-> Cc: Michael Jamet <michael.jamet@intel.com>
-> Cc: Yehezkel Bernat <YehezkelShB@gmail.com>
-> Cc: Jiri Slaby <jirislaby@kernel.org>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-> Cc: Chaitanya Kulkarni <kch@nvidia.com>
-> Cc: Ming Lei <ming.lei@redhat.com>
-> Cc: Jilin Yuan <yuanjilin@cdjrlc.com>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Won Chung <wonchung@google.com>
-> Cc: alsa-devel@alsa-project.org
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-acpi@vger.kernel.org
-> Cc: linux-block@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-i3c@lists.infradead.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: linux-serial@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux1394-devel@lists.sourceforge.net
-> Cc: platform-driver-x86@vger.kernel.org
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com> # for Thunderbolt
-> Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  block/partitions/core.c                   |  4 ++--
->  drivers/acpi/device_sysfs.c               |  8 ++++----
->  drivers/acpi/internal.h                   |  2 +-
->  drivers/firewire/core-device.c            |  8 ++++----
->  drivers/gpu/drm/display/drm_dp_aux_bus.c  |  2 +-
->  drivers/i2c/i2c-core-base.c               |  4 ++--
->  drivers/i3c/device.c                      |  2 +-
->  drivers/i3c/master.c                      |  4 ++--
->  drivers/input/input.c                     | 16 ++++++++--------
->  drivers/media/rc/rc-main.c                |  2 +-
->  drivers/platform/surface/aggregator/bus.c |  4 ++--
->  drivers/soundwire/bus_type.c              |  4 ++--
->  drivers/thunderbolt/switch.c              |  4 ++--
->  drivers/thunderbolt/tb.h                  |  2 +-
->  drivers/thunderbolt/xdomain.c             |  6 +++---
->  drivers/tty/serdev/core.c                 |  2 +-
->  drivers/usb/core/message.c                |  8 ++++----
->  drivers/usb/core/usb.c                    |  4 ++--
->  drivers/usb/phy/phy.c                     |  6 +++---
->  drivers/usb/roles/class.c                 |  3 +--
->  drivers/usb/typec/class.c                 |  2 +-
->  include/linux/acpi.h                      |  4 ++--
->  include/linux/device.h                    |  2 +-
->  include/linux/i3c/device.h                |  2 +-
->  include/linux/soundwire/sdw_type.h        |  2 +-
->  25 files changed, 53 insertions(+), 54 deletions(-)
+> Hi guys,
+> on my Lenovo Yoga 7 Gen 7 (14ARB7) with Ryzen CPU, the i2c bus stops working after hibernation.
 > 
-> diff --git a/block/partitions/core.c b/block/partitions/core.c
-> index b8112f52d388..7b8ef6296abd 100644
-> --- a/block/partitions/core.c
-> +++ b/block/partitions/core.c
-> @@ -254,9 +254,9 @@ static void part_release(struct device *dev)
->  	iput(dev_to_bdev(dev)->bd_inode);
->  }
->  
-> -static int part_uevent(struct device *dev, struct kobj_uevent_env *env)
-> +static int part_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  {
-> -	struct block_device *part = dev_to_bdev(dev);
-> +	const struct block_device *part = dev_to_bdev(dev);
->  
->  	add_uevent_var(env, "PARTN=%u", part->bd_partno);
->  	if (part->bd_meta_info && part->bd_meta_info->volname[0])
-> diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
-> index 120873dad2cc..daff2c0c5c52 100644
-> --- a/drivers/acpi/device_sysfs.c
-> +++ b/drivers/acpi/device_sysfs.c
-> @@ -133,7 +133,7 @@ static void acpi_hide_nondev_subnodes(struct acpi_device_data *data)
->   *         -EINVAL: output error
->   *         -ENOMEM: output is truncated
->   */
-> -static int create_pnp_modalias(struct acpi_device *acpi_dev, char *modalias,
-> +static int create_pnp_modalias(const struct acpi_device *acpi_dev, char *modalias,
->  			       int size)
->  {
->  	int len;
-> @@ -191,7 +191,7 @@ static int create_pnp_modalias(struct acpi_device *acpi_dev, char *modalias,
->   * only be called for devices having ACPI_DT_NAMESPACE_HID in their list of
->   * ACPI/PNP IDs.
->   */
-> -static int create_of_modalias(struct acpi_device *acpi_dev, char *modalias,
-> +static int create_of_modalias(const struct acpi_device *acpi_dev, char *modalias,
->  			      int size)
->  {
->  	struct acpi_buffer buf = { ACPI_ALLOCATE_BUFFER };
-> @@ -239,7 +239,7 @@ static int create_of_modalias(struct acpi_device *acpi_dev, char *modalias,
->  	return len;
->  }
->  
-> -int __acpi_device_uevent_modalias(struct acpi_device *adev,
-> +int __acpi_device_uevent_modalias(const struct acpi_device *adev,
->  				  struct kobj_uevent_env *env)
->  {
->  	int len;
-> @@ -277,7 +277,7 @@ int __acpi_device_uevent_modalias(struct acpi_device *adev,
->   * Because other buses do not support ACPI HIDs & CIDs, e.g. for a device with
->   * hid:IBM0001 and cid:ACPI0001 you get: "acpi:IBM0001:ACPI0001".
->   */
-> -int acpi_device_uevent_modalias(struct device *dev, struct kobj_uevent_env *env)
-> +int acpi_device_uevent_modalias(const struct device *dev, struct kobj_uevent_env *env)
->  {
->  	return __acpi_device_uevent_modalias(acpi_companion_match(dev), env);
->  }
-> diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
-> index ec584442fb29..06ad497067ac 100644
-> --- a/drivers/acpi/internal.h
-> +++ b/drivers/acpi/internal.h
-> @@ -120,7 +120,7 @@ int acpi_bus_register_early_device(int type);
->                       Device Matching and Notification
->     -------------------------------------------------------------------------- */
->  struct acpi_device *acpi_companion_match(const struct device *dev);
-> -int __acpi_device_uevent_modalias(struct acpi_device *adev,
-> +int __acpi_device_uevent_modalias(const struct acpi_device *adev,
->  				  struct kobj_uevent_env *env);
->  
->  /* --------------------------------------------------------------------------
-> diff --git a/drivers/firewire/core-device.c b/drivers/firewire/core-device.c
-> index adddd8c45d0c..aa597cda0d88 100644
-> --- a/drivers/firewire/core-device.c
-> +++ b/drivers/firewire/core-device.c
-> @@ -133,7 +133,7 @@ static void get_ids(const u32 *directory, int *id)
->  	}
->  }
->  
-> -static void get_modalias_ids(struct fw_unit *unit, int *id)
-> +static void get_modalias_ids(const struct fw_unit *unit, int *id)
->  {
->  	get_ids(&fw_parent_device(unit)->config_rom[5], id);
->  	get_ids(unit->directory, id);
-> @@ -195,7 +195,7 @@ static void fw_unit_remove(struct device *dev)
->  	driver->remove(fw_unit(dev));
->  }
->  
-> -static int get_modalias(struct fw_unit *unit, char *buffer, size_t buffer_size)
-> +static int get_modalias(const struct fw_unit *unit, char *buffer, size_t buffer_size)
->  {
->  	int id[] = {0, 0, 0, 0};
->  
-> @@ -206,9 +206,9 @@ static int get_modalias(struct fw_unit *unit, char *buffer, size_t buffer_size)
->  			id[0], id[1], id[2], id[3]);
->  }
->  
-> -static int fw_unit_uevent(struct device *dev, struct kobj_uevent_env *env)
-> +static int fw_unit_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  {
-> -	struct fw_unit *unit = fw_unit(dev);
-> +	const struct fw_unit *unit = fw_unit(dev);
->  	char modalias[64];
->  
->  	get_modalias(unit, modalias, sizeof(modalias));
-> diff --git a/drivers/gpu/drm/display/drm_dp_aux_bus.c b/drivers/gpu/drm/display/drm_dp_aux_bus.c
-> index e31a0261c53e..8a165be1a821 100644
-> --- a/drivers/gpu/drm/display/drm_dp_aux_bus.c
-> +++ b/drivers/gpu/drm/display/drm_dp_aux_bus.c
-> @@ -161,7 +161,7 @@ static void dp_aux_ep_dev_release(struct device *dev)
->  	kfree(aux_ep_with_data);
->  }
->  
-> -static int dp_aux_ep_dev_modalias(struct device *dev, struct kobj_uevent_env *env)
-> +static int dp_aux_ep_dev_modalias(const struct device *dev, struct kobj_uevent_env *env)
->  {
->  	return of_device_uevent_modalias(dev, env);
->  }
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index 087e480b624c..51b78a52ab7f 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -136,9 +136,9 @@ static int i2c_device_match(struct device *dev, struct device_driver *drv)
->  	return 0;
->  }
->  
-> -static int i2c_device_uevent(struct device *dev, struct kobj_uevent_env *env)
-> +static int i2c_device_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  {
-> -	struct i2c_client *client = to_i2c_client(dev);
-> +	const struct i2c_client *client = to_i2c_client(dev);
->  	int rc;
->  
->  	rc = of_device_uevent_modalias(dev, env);
-> diff --git a/drivers/i3c/device.c b/drivers/i3c/device.c
-> index d111499061b2..1a6a8703dbc3 100644
-> --- a/drivers/i3c/device.c
-> +++ b/drivers/i3c/device.c
-> @@ -78,7 +78,7 @@ EXPORT_SYMBOL_GPL(i3c_device_do_setdasa);
->   *
->   * Retrieve I3C dev info.
->   */
-> -void i3c_device_get_info(struct i3c_device *dev,
-> +void i3c_device_get_info(const struct i3c_device *dev,
->  			 struct i3c_device_info *info)
->  {
->  	if (!info)
-> diff --git a/drivers/i3c/master.c b/drivers/i3c/master.c
-> index d7e6f6c99aea..7a60e1c5e587 100644
-> --- a/drivers/i3c/master.c
-> +++ b/drivers/i3c/master.c
-> @@ -273,9 +273,9 @@ static struct attribute *i3c_device_attrs[] = {
+> Jan 11 10:02:50 yoga kernel: PM: hibernation: hibernation exit
+> Jan 11 10:02:50 yoga kernel: ------------[ cut here ]------------
+> Jan 11 10:02:50 yoga kernel: i2c i2c-3: Transfer while suspended
+> Jan 11 10:02:50 yoga kernel: WARNING: CPU: 4 PID: 2905 at drivers/i2c/i2c-core.h:54 __i2c_smbus_xfer+0x3e7/0x400 [i2c_core]
+> Jan 11 10:02:50 yoga kernel: Modules linked in: uvcvideo
+> videobuf2_vmalloc videobuf2_memops videobuf2_v4l2 videodev
+> videobuf2_common btusb btrtl btbcm btintel btmtk snd_ctl_led joydev
+> wacom usbhid hid_multitouch snd_hda_codec_realtek snd_soc_acp6x_mach
+> snd_acp6x_pdm_dma snd_soc_dmic amdgpu snd_hda_codec_generic i2c_hid_acpi
+> drm_ttm_helper i2c_hid ttm snd_pci_ps snd_rpl_pci_acp6x snd_acp_pci
+> snd_hda_codec_hdmi gpu_sched i2c_algo_bit drm_buddy snd_pci_acp6x
+> drm_display_helper snd_hda_intel mt7921e snd_pci_acp5x snd_intel_dspcfg
+> drm_kms_helper mt7921_common snd_hda_codec syscopyarea snd_rn_pci_acp3x
+> sysfillrect mt76_connac_lib snd_hwdep snd_acp_config nls_cp437 sysimgblt
+> snd_soc_acpi snd_hda_core mt76 snd_pci_acp3x ideapad_laptop
+> platform_profile tpm_crb tpm_tis tpm_tis_core tpm
+> i2c_designware_platform acpi_tad i2c_designware_core serio_raw
+> sch_fq_codel drm i2c_dev i2c_core efivarfs
+> Jan 11 10:02:50 yoga kernel: CPU: 4 PID: 2905 Comm: i2cset Not tainted 6.2.0-rc3-x86_64+ #52
+> Jan 11 10:02:50 yoga kernel: Hardware name: LENOVO 82QF/LNVNB161216, BIOS K5CN35WW 09/23/2022
+> Jan 11 10:02:50 yoga kernel: RIP: 0010:__i2c_smbus_xfer+0x3e7/0x400 [i2c_core]
+> Jan 11 10:02:50 yoga kernel: Code: 8b a7 c0 00 00 00 4d 85 e4 75 04 4c 8b 67 70 48 8d 7d 70 e8 bb a6 83 e1 4c 89 e2 48 89 c6 48 c7 c7 10 1b 01 a0 e8 3f f2 ee e1 <0f> 0b 41 bc 94 ff ff ff e9 72 fd ff ff 66 66 2e 0f 1f 84 00 00 00
+> Jan 11 10:02:50 yoga kernel: RSP: 0018:ffffc90006d5fda0 EFLAGS: 00010286
+> Jan 11 10:02:50 yoga kernel: RAX: 0000000000000000 RBX: 0000000000000048 RCX: 0000000000000027
+> Jan 11 10:02:50 yoga kernel: RDX: ffff888761d17408 RSI: 0000000000000001 RDI: ffff888761d17400
+> Jan 11 10:02:50 yoga kernel: RBP: ffff8881056160e8 R08: ffffffff82b1eb28 R09: 00000000ffffdfff
+> Jan 11 10:02:50 yoga kernel: R10: ffffffff82a3eb40 R11: ffffffff82aeeb40 R12: ffff8881039ba518
+> Jan 11 10:02:50 yoga kernel: R13: 0000000000000000 R14: 0000000000000002 R15: 0000000000000002
+> Jan 11 10:02:50 yoga kernel: FS:  00007f61e5d84740(0000) GS:ffff888761d00000(0000) knlGS:0000000000000000
+> Jan 11 10:02:50 yoga kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> Jan 11 10:02:50 yoga kernel: CR2: 00007f61e5de03a5 CR3: 00000002f91de000 CR4: 0000000000750ee0
+> Jan 11 10:02:50 yoga kernel: PKRU: 55555554
+> Jan 11 10:02:50 yoga kernel: Call Trace:
+> Jan 11 10:02:50 yoga kernel:  <TASK>
+> Jan 11 10:02:50 yoga kernel:  ? do_filp_open+0xb1/0x160
+> Jan 11 10:02:50 yoga kernel:  i2c_smbus_xfer+0x7a/0x120 [i2c_core]
+> Jan 11 10:02:50 yoga kernel:  i2cdev_ioctl_smbus+0x181/0x240 [i2c_dev]
+> Jan 11 10:02:50 yoga kernel:  i2cdev_ioctl+0x1a2/0x2c0 [i2c_dev]
+> Jan 11 10:02:50 yoga kernel:  __x64_sys_ioctl+0xab/0xe0
+> Jan 11 10:02:50 yoga kernel:  ? exit_to_user_mode_prepare+0x39/0x130
+> Jan 11 10:02:50 yoga kernel:  do_syscall_64+0x43/0x90
+> Jan 11 10:02:50 yoga kernel:  entry_SYSCALL_64_after_hwframe+0x4b/0xb5
+> Jan 11 10:02:50 yoga kernel: RIP: 0033:0x7f61e5e7c26b
+> Jan 11 10:02:50 yoga kernel: Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <41> 89 c0 3d 00 f0 ff ff 77 1b 48 8b 44 24 18 64 48 2b 04 25 28 00
+> Jan 11 10:02:50 yoga kernel: RSP: 002b:00007ffdcc04a860 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> Jan 11 10:02:50 yoga kernel: RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f61e5e7c26b
+> Jan 11 10:02:50 yoga kernel: RDX: 00007ffdcc04a8c0 RSI: 0000000000000720 RDI: 0000000000000003
+> Jan 11 10:02:50 yoga kernel: RBP: 0000000000000000 R08: 00007ffdcc04a8f0 R09: 00007ffdcc04a780
+> Jan 11 10:02:50 yoga kernel: R10: fffffffffffffd09 R11: 0000000000000246 R12: 0000000000000000
+> Jan 11 10:02:50 yoga kernel: R13: 0000000000000003 R14: 0000000000000048 R15: 00007ffdcc04a980
+> Jan 11 10:02:50 yoga kernel:  </TASK>
+> Jan 11 10:02:50 yoga kernel: ---[ end trace 0000000000000000 ]---
+> 
+> 
+> And the return of i2cget or i2cset is a simple "Error: Read failed" or "Error: Write failed".
+> 
+> [reply] [−] Comment 1 Georg 2023-01-11 17:16:56 UTC
+> 
+> I checked some files and found something.
+> This solution works for me.
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+> index ba043b547393..289879c56a0c 100644
+> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> @@ -484,7 +484,7 @@ static int __maybe_unused dw_i2c_plat_resume(struct device *dev)
+>  static const struct dev_pm_ops dw_i2c_dev_pm_ops = {
+>         .prepare = dw_i2c_plat_prepare,
+>         .complete = dw_i2c_plat_complete,
+> -       SET_LATE_SYSTEM_SLEEP_PM_OPS(dw_i2c_plat_suspend, dw_i2c_plat_resume)
+> +       SET_SYSTEM_SLEEP_PM_OPS(dw_i2c_plat_suspend, dw_i2c_plat_resume)
+>         SET_RUNTIME_PM_OPS(dw_i2c_plat_runtime_suspend, dw_i2c_plat_runtime_resume, NULL)
 >  };
->  ATTRIBUTE_GROUPS(i3c_device);
->  
-> -static int i3c_device_uevent(struct device *dev, struct kobj_uevent_env *env)
-> +static int i3c_device_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  {
-> -	struct i3c_device *i3cdev = dev_to_i3cdev(dev);
-> +	const struct i3c_device *i3cdev = dev_to_i3cdev(dev);
->  	struct i3c_device_info devinfo;
->  	u16 manuf, part, ext;
->  
-> diff --git a/drivers/input/input.c b/drivers/input/input.c
-> index ca2e3dd7188b..0336e799d713 100644
-> --- a/drivers/input/input.c
-> +++ b/drivers/input/input.c
-> @@ -1372,7 +1372,7 @@ INPUT_DEV_STRING_ATTR_SHOW(phys);
->  INPUT_DEV_STRING_ATTR_SHOW(uniq);
->  
->  static int input_print_modalias_bits(char *buf, int size,
-> -				     char name, unsigned long *bm,
-> +				     char name, const unsigned long *bm,
->  				     unsigned int min_bit, unsigned int max_bit)
->  {
->  	int len = 0, i;
-> @@ -1384,7 +1384,7 @@ static int input_print_modalias_bits(char *buf, int size,
->  	return len;
->  }
->  
-> -static int input_print_modalias(char *buf, int size, struct input_dev *id,
-> +static int input_print_modalias(char *buf, int size, const struct input_dev *id,
->  				int add_cr)
->  {
->  	int len;
-> @@ -1432,7 +1432,7 @@ static ssize_t input_dev_show_modalias(struct device *dev,
->  }
->  static DEVICE_ATTR(modalias, S_IRUGO, input_dev_show_modalias, NULL);
->  
-> -static int input_print_bitmap(char *buf, int buf_size, unsigned long *bitmap,
-> +static int input_print_bitmap(char *buf, int buf_size, const unsigned long *bitmap,
->  			      int max, int add_cr);
->  
->  static ssize_t input_dev_show_properties(struct device *dev,
-> @@ -1524,7 +1524,7 @@ static const struct attribute_group input_dev_id_attr_group = {
->  	.attrs	= input_dev_id_attrs,
->  };
->  
-> -static int input_print_bitmap(char *buf, int buf_size, unsigned long *bitmap,
-> +static int input_print_bitmap(char *buf, int buf_size, const unsigned long *bitmap,
->  			      int max, int add_cr)
->  {
->  	int i;
-> @@ -1621,7 +1621,7 @@ static void input_dev_release(struct device *device)
->   * device bitfields.
->   */
->  static int input_add_uevent_bm_var(struct kobj_uevent_env *env,
-> -				   const char *name, unsigned long *bitmap, int max)
-> +				   const char *name, const unsigned long *bitmap, int max)
->  {
->  	int len;
->  
-> @@ -1639,7 +1639,7 @@ static int input_add_uevent_bm_var(struct kobj_uevent_env *env,
->  }
->  
->  static int input_add_uevent_modalias_var(struct kobj_uevent_env *env,
-> -					 struct input_dev *dev)
-> +					 const struct input_dev *dev)
->  {
->  	int len;
->  
-> @@ -1677,9 +1677,9 @@ static int input_add_uevent_modalias_var(struct kobj_uevent_env *env,
->  			return err;					\
->  	} while (0)
->  
-> -static int input_dev_uevent(struct device *device, struct kobj_uevent_env *env)
-> +static int input_dev_uevent(const struct device *device, struct kobj_uevent_env *env)
->  {
-> -	struct input_dev *dev = to_input_dev(device);
-> +	const struct input_dev *dev = to_input_dev(device);
->  
->  	INPUT_ADD_HOTPLUG_VAR("PRODUCT=%x/%x/%x/%x",
->  				dev->id.bustype, dev->id.vendor,
-> diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
-> index 527d9324742b..6bdad6341844 100644
-> --- a/drivers/media/rc/rc-main.c
-> +++ b/drivers/media/rc/rc-main.c
-> @@ -1614,7 +1614,7 @@ static void rc_dev_release(struct device *device)
->  	kfree(dev);
->  }
->  
-> -static int rc_dev_uevent(struct device *device, struct kobj_uevent_env *env)
-> +static int rc_dev_uevent(const struct device *device, struct kobj_uevent_env *env)
->  {
->  	struct rc_dev *dev = to_rc_dev(device);
->  	int ret = 0;
-> diff --git a/drivers/platform/surface/aggregator/bus.c b/drivers/platform/surface/aggregator/bus.c
-> index de539938896e..407eb55050a6 100644
-> --- a/drivers/platform/surface/aggregator/bus.c
-> +++ b/drivers/platform/surface/aggregator/bus.c
-> @@ -35,9 +35,9 @@ static struct attribute *ssam_device_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(ssam_device);
->  
-> -static int ssam_device_uevent(struct device *dev, struct kobj_uevent_env *env)
-> +static int ssam_device_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  {
-> -	struct ssam_device *sdev = to_ssam_device(dev);
-> +	const struct ssam_device *sdev = to_ssam_device(dev);
->  
->  	return add_uevent_var(env, "MODALIAS=ssam:d%02Xc%02Xt%02Xi%02Xf%02X",
->  			      sdev->uid.domain, sdev->uid.category,
-> diff --git a/drivers/soundwire/bus_type.c b/drivers/soundwire/bus_type.c
-> index 04b3529f8929..26c9a0a85d49 100644
-> --- a/drivers/soundwire/bus_type.c
-> +++ b/drivers/soundwire/bus_type.c
-> @@ -58,9 +58,9 @@ int sdw_slave_modalias(const struct sdw_slave *slave, char *buf, size_t size)
->  			slave->id.sdw_version, slave->id.class_id);
->  }
->  
-> -int sdw_slave_uevent(struct device *dev, struct kobj_uevent_env *env)
-> +int sdw_slave_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  {
-> -	struct sdw_slave *slave = dev_to_sdw_dev(dev);
-> +	const struct sdw_slave *slave = dev_to_sdw_dev(dev);
->  	char modalias[32];
->  
->  	sdw_slave_modalias(slave, modalias, sizeof(modalias));
-> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> index 363d712aa364..cb6c304c445e 100644
-> --- a/drivers/thunderbolt/switch.c
-> +++ b/drivers/thunderbolt/switch.c
-> @@ -2176,9 +2176,9 @@ static void tb_switch_release(struct device *dev)
->  	kfree(sw);
->  }
->  
-> -static int tb_switch_uevent(struct device *dev, struct kobj_uevent_env *env)
-> +static int tb_switch_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  {
-> -	struct tb_switch *sw = tb_to_switch(dev);
-> +	const struct tb_switch *sw = tb_to_switch(dev);
->  	const char *type;
->  
->  	if (sw->config.thunderbolt_version == USB4_VERSION_1_0) {
-> diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-> index f9786976f5ec..909da0a98134 100644
-> --- a/drivers/thunderbolt/tb.h
-> +++ b/drivers/thunderbolt/tb.h
-> @@ -815,7 +815,7 @@ static inline bool tb_is_switch(const struct device *dev)
->  	return dev->type == &tb_switch_type;
->  }
->  
-> -static inline struct tb_switch *tb_to_switch(struct device *dev)
-> +static inline struct tb_switch *tb_to_switch(const struct device *dev)
->  {
->  	if (tb_is_switch(dev))
->  		return container_of(dev, struct tb_switch, dev);
-> diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
-> index cfa83486c9da..7bf1e360b04c 100644
-> --- a/drivers/thunderbolt/xdomain.c
-> +++ b/drivers/thunderbolt/xdomain.c
-> @@ -881,7 +881,7 @@ static ssize_t key_show(struct device *dev, struct device_attribute *attr,
->  }
->  static DEVICE_ATTR_RO(key);
->  
-> -static int get_modalias(struct tb_service *svc, char *buf, size_t size)
-> +static int get_modalias(const struct tb_service *svc, char *buf, size_t size)
->  {
->  	return snprintf(buf, size, "tbsvc:k%sp%08Xv%08Xr%08X", svc->key,
->  			svc->prtcid, svc->prtcvers, svc->prtcrevs);
-> @@ -953,9 +953,9 @@ static const struct attribute_group *tb_service_attr_groups[] = {
->  	NULL,
->  };
->  
-> -static int tb_service_uevent(struct device *dev, struct kobj_uevent_env *env)
-> +static int tb_service_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  {
-> -	struct tb_service *svc = container_of(dev, struct tb_service, dev);
-> +	const struct tb_service *svc = container_of_const(dev, struct tb_service, dev);
->  	char modalias[64];
->  
->  	get_modalias(svc, modalias, sizeof(modalias));
-> diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
-> index 0180e1e4e75d..aa80de3a8194 100644
-> --- a/drivers/tty/serdev/core.c
-> +++ b/drivers/tty/serdev/core.c
-> @@ -42,7 +42,7 @@ static struct attribute *serdev_device_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(serdev_device);
->  
-> -static int serdev_device_uevent(struct device *dev, struct kobj_uevent_env *env)
-> +static int serdev_device_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  {
->  	int rc;
->  
-> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-> index 127fac1af676..cc404bb7e8f7 100644
-> --- a/drivers/usb/core/message.c
-> +++ b/drivers/usb/core/message.c
-> @@ -1819,11 +1819,11 @@ void usb_authorize_interface(struct usb_interface *intf)
->  	}
->  }
->  
-> -static int usb_if_uevent(struct device *dev, struct kobj_uevent_env *env)
-> +static int usb_if_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  {
-> -	struct usb_device *usb_dev;
-> -	struct usb_interface *intf;
-> -	struct usb_host_interface *alt;
-> +	const struct usb_device *usb_dev;
-> +	const struct usb_interface *intf;
-> +	const struct usb_host_interface *alt;
->  
->  	intf = to_usb_interface(dev);
->  	usb_dev = interface_to_usbdev(intf);
-> diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-> index 11b15d7b357a..8527c06b65e6 100644
-> --- a/drivers/usb/core/usb.c
-> +++ b/drivers/usb/core/usb.c
-> @@ -423,9 +423,9 @@ static void usb_release_dev(struct device *dev)
->  	kfree(udev);
->  }
->  
-> -static int usb_dev_uevent(struct device *dev, struct kobj_uevent_env *env)
-> +static int usb_dev_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  {
-> -	struct usb_device *usb_dev;
-> +	const struct usb_device *usb_dev;
->  
->  	usb_dev = to_usb_device(dev);
->  
-> diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c
-> index 1b24492bb4e5..4b468bde19cf 100644
-> --- a/drivers/usb/phy/phy.c
-> +++ b/drivers/usb/phy/phy.c
-> @@ -80,7 +80,7 @@ static struct usb_phy *__of_usb_find_phy(struct device_node *node)
->  	return ERR_PTR(-EPROBE_DEFER);
->  }
->  
-> -static struct usb_phy *__device_to_usb_phy(struct device *dev)
-> +static struct usb_phy *__device_to_usb_phy(const struct device *dev)
->  {
->  	struct usb_phy *usb_phy;
->  
-> @@ -145,9 +145,9 @@ static void usb_phy_notify_charger_work(struct work_struct *work)
->  	kobject_uevent(&usb_phy->dev->kobj, KOBJ_CHANGE);
->  }
->  
-> -static int usb_phy_uevent(struct device *dev, struct kobj_uevent_env *env)
-> +static int usb_phy_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  {
-> -	struct usb_phy *usb_phy;
-> +	const struct usb_phy *usb_phy;
->  	char uchger_state[50] = { 0 };
->  	char uchger_type[50] = { 0 };
->  	unsigned long flags;
-> diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-> index eacb46ec2ab3..56814ef80c24 100644
-> --- a/drivers/usb/roles/class.c
-> +++ b/drivers/usb/roles/class.c
-> @@ -274,8 +274,7 @@ static const struct attribute_group *usb_role_switch_groups[] = {
->  	NULL,
->  };
->  
-> -static int
-> -usb_role_switch_uevent(struct device *dev, struct kobj_uevent_env *env)
-> +static int usb_role_switch_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  {
->  	int ret;
->  
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 5897905cb4f0..a89d8fd3f46c 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -1737,7 +1737,7 @@ static const struct attribute_group *typec_groups[] = {
->  	NULL
->  };
->  
-> -static int typec_uevent(struct device *dev, struct kobj_uevent_env *env)
-> +static int typec_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  {
->  	int ret;
->  
-> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> index 5e6a876e17ba..564b62f13bd0 100644
-> --- a/include/linux/acpi.h
-> +++ b/include/linux/acpi.h
-> @@ -723,7 +723,7 @@ const struct acpi_device_id *acpi_match_device(const struct acpi_device_id *ids,
->  const void *acpi_device_get_match_data(const struct device *dev);
->  extern bool acpi_driver_match_device(struct device *dev,
->  				     const struct device_driver *drv);
-> -int acpi_device_uevent_modalias(struct device *, struct kobj_uevent_env *);
-> +int acpi_device_uevent_modalias(const struct device *, struct kobj_uevent_env *);
->  int acpi_device_modalias(struct device *, char *, int);
->  
->  struct platform_device *acpi_create_platform_device(struct acpi_device *,
-> @@ -958,7 +958,7 @@ static inline union acpi_object *acpi_evaluate_dsm(acpi_handle handle,
->  	return NULL;
->  }
->  
-> -static inline int acpi_device_uevent_modalias(struct device *dev,
-> +static inline int acpi_device_uevent_modalias(const struct device *dev,
->  				struct kobj_uevent_env *env)
->  {
->  	return -ENODEV;
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 44e3acae7b36..dad0614aad96 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -88,7 +88,7 @@ int subsys_virtual_register(struct bus_type *subsys,
->  struct device_type {
->  	const char *name;
->  	const struct attribute_group **groups;
-> -	int (*uevent)(struct device *dev, struct kobj_uevent_env *env);
-> +	int (*uevent)(const struct device *dev, struct kobj_uevent_env *env);
->  	char *(*devnode)(struct device *dev, umode_t *mode,
->  			 kuid_t *uid, kgid_t *gid);
->  	void (*release)(struct device *dev);
-> diff --git a/include/linux/i3c/device.h b/include/linux/i3c/device.h
-> index 68b558929aec..ce115ef08fec 100644
-> --- a/include/linux/i3c/device.h
-> +++ b/include/linux/i3c/device.h
-> @@ -303,7 +303,7 @@ int i3c_device_do_priv_xfers(struct i3c_device *dev,
->  
->  int i3c_device_do_setdasa(struct i3c_device *dev);
->  
-> -void i3c_device_get_info(struct i3c_device *dev, struct i3c_device_info *info);
-> +void i3c_device_get_info(const struct i3c_device *dev, struct i3c_device_info *info);
->  
->  struct i3c_ibi_payload {
->  	unsigned int len;
-> diff --git a/include/linux/soundwire/sdw_type.h b/include/linux/soundwire/sdw_type.h
-> index 52eb66cd11bc..d8c27f1e5559 100644
-> --- a/include/linux/soundwire/sdw_type.h
-> +++ b/include/linux/soundwire/sdw_type.h
-> @@ -21,7 +21,7 @@ static inline int is_sdw_slave(const struct device *dev)
->  int __sdw_register_driver(struct sdw_driver *drv, struct module *owner);
->  void sdw_unregister_driver(struct sdw_driver *drv);
->  
-> -int sdw_slave_uevent(struct device *dev, struct kobj_uevent_env *env);
-> +int sdw_slave_uevent(const struct device *dev, struct kobj_uevent_env *env);
->  
->  /**
->   * module_sdw_driver() - Helper macro for registering a Soundwire driver
-> -- 
-> 2.39.0
+> 
 
--- 
-heikki
+See the ticket for more details.
+
+Side note: while briefly investigating, I noticed a patch that might or
+might not be related:
+
+Richard Fitzgerald -- i2c: designware: Fix unbalanced suspended flag
+https://lore.kernel.org/all/20221219130145.883309-1-rf@opensource.cirrus.com/
+
+Therefore CCing Richard. Sorry if this is something totally different.
+
+BTW, let me use this mail to also add the report to the list of tracked
+regressions to ensure it's doesn't fall through the cracks:
+
+#regzbot introduced: v6.0..v6.1
+https://bugzilla.kernel.org/show_bug.cgi?id=216913
+#regzbot title: i2c: i2c_designware: i2c not working after hibernation
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+this thread sees some discussion). See page linked in footer for details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
