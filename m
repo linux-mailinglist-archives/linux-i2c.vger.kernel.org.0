@@ -2,125 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3325866A26E
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jan 2023 19:59:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D305766A427
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jan 2023 21:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbjAMS7w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 13 Jan 2023 13:59:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56408 "EHLO
+        id S230018AbjAMUgU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 13 Jan 2023 15:36:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjAMS7v (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 Jan 2023 13:59:51 -0500
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB41551F1
-        for <linux-i2c@vger.kernel.org>; Fri, 13 Jan 2023 10:59:50 -0800 (PST)
-Received: by mail-oo1-xc35.google.com with SMTP id h3-20020a4aa283000000b004ead187bd6eso5772273ool.5
-        for <linux-i2c@vger.kernel.org>; Fri, 13 Jan 2023 10:59:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bTIDomgS8mXkDJCvxm5Zm+LjWmMOagP4MCI8VhlfZ4M=;
-        b=PS9bts8WEYUdHc2dq03MseWIdo5SmkGasWJ1IHK/82VNd2x1nauvFpnIRKJHReewV4
-         qHgmemCtG+n4JzEug1j/TkXXGr7XuvlNF4IBzbNfnN6lagwFrOKhEymKlD3N/LDBaGvv
-         sKYDqBaLKXsSv5VTvSWrpB1Ro6mV2B1zSTvwS3WrXPPhGJgdWKpIwnEsYL1x49CphPxG
-         SL4YOgYdR5jGUY39ZZius3Ig7i4WfTYOC67k8Vh1lto4GbCgV9uKa97KEalM5EmLMGPn
-         3yGQHE93+pmLVFjd1TlIZLJrfjBmFeNgyn5vD6/2wKe8LZIYKJC7joRnrftdzonfyS0K
-         +t4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bTIDomgS8mXkDJCvxm5Zm+LjWmMOagP4MCI8VhlfZ4M=;
-        b=yPb3TDV75hPp0Dk8iUt/nwJVtoWO/bbizKaRfkmZKwVjn355j6PZfSUOFGkzrQTHvn
-         Ji+7HLk625bo1FKTln5HeOViGpWaFm5yfokVfXVz70cr5rhclpVM7KaUNoc/Gt10Zd02
-         7nOB7bfce8y8gqsGlEDlsWtnrq/s5o1mV2xKUVkS4d1HccPmdBkbDgEbbNdCpLlpSLDt
-         asAa+DWLdhfcBkNaDj6pIuG6rW20pIGgdVKCxC18PHSqHYETosFZUfZdYs/Clth7EIF2
-         Fo89zSNm59NtG03KxVFhhFjTUZbvEgYC0YHKwvnNlQateVLzfajtpEoPLd+seqKK+sHz
-         z6Vg==
-X-Gm-Message-State: AFqh2kqqQrPD4Gkp2RhOm1XpRfcIiSWkDflBS+DyY5IKzotNlfbytvqj
-        bfipuViFL8HzYSpb+h7Ju6WjDg==
-X-Google-Smtp-Source: AMrXdXvaOiO0G10Az4EGLc64Vx6N+KrZr3PuLGXv0M+M3iF7lrA3WUc8R2fIq6AYtp8ZC6Mk4E9lCQ==
-X-Received: by 2002:a4a:c594:0:b0:4e7:5d43:a654 with SMTP id x20-20020a4ac594000000b004e75d43a654mr22358114oop.0.1673636389556;
-        Fri, 13 Jan 2023 10:59:49 -0800 (PST)
-Received: from [192.168.86.224] ([136.62.38.22])
-        by smtp.gmail.com with ESMTPSA id bc31-20020a056820169f00b0049f8b4b2095sm10111163oob.44.2023.01.13.10.59.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 10:59:48 -0800 (PST)
-Message-ID: <6891afb6-4190-6a52-0319-745b3f138d97@landley.net>
-Date:   Fri, 13 Jan 2023 13:11:56 -0600
+        with ESMTP id S229684AbjAMUgS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 Jan 2023 15:36:18 -0500
+X-Greylist: delayed 4177 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 13 Jan 2023 12:35:59 PST
+Received: from mail.dmbarone.com (mail.dmbarone.com [5.181.144.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3061B1D7;
+        Fri, 13 Jan 2023 12:35:57 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.dmbarone.com (Postfix) with ESMTP id A6A2A2A56DC;
+        Fri, 13 Jan 2023 15:25:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dmbarone.com; s=mail;
+        t=1673623549; bh=QIjTgWBPcZMVeqZovj8WAOWgI9bu1lFe9hdim3iQkyQ=;
+        h=Subject:To:From:Date:Reply-To:From;
+        b=aZlCZBThkmHI4RIfhijFhrDQnHCy/Xl7TNfW0/j1wX1qfdzwVqggHO2ETrOVEE9ox
+         5L9Zof05uKP8fn6Oz6SAqdZjOLEzkW1bNmIudiM3C/JGSJCfDMVpscJUw2BQ8k1IWV
+         kGfvZ5LRxhdcH3yPO1sXVrBpL67PNHP6E0ARFzgY=
+X-Virus-Scanned: Debian amavisd-new at ispdmbarone.kubeitalia.it
+Received: from mail.dmbarone.com ([127.0.0.1])
+        by localhost (ispdmbarone.kubeitalia.it [127.0.0.1]) (amavisd-new, port 10026)
+        with LMTP id 77yDe_Wyf_gF; Fri, 13 Jan 2023 15:25:49 +0000 (UTC)
+Received: from [172.20.10.6] (unknown [129.205.124.225])
+        (Authenticated sender: admin@dmbarone.com)
+        by mail.dmbarone.com (Postfix) with ESMTPSA id B337E2A544D;
+        Fri, 13 Jan 2023 15:25:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dmbarone.com; s=mail;
+        t=1673623549; bh=QIjTgWBPcZMVeqZovj8WAOWgI9bu1lFe9hdim3iQkyQ=;
+        h=Subject:To:From:Date:Reply-To:From;
+        b=aZlCZBThkmHI4RIfhijFhrDQnHCy/Xl7TNfW0/j1wX1qfdzwVqggHO2ETrOVEE9ox
+         5L9Zof05uKP8fn6Oz6SAqdZjOLEzkW1bNmIudiM3C/JGSJCfDMVpscJUw2BQ8k1IWV
+         kGfvZ5LRxhdcH3yPO1sXVrBpL67PNHP6E0ARFzgY=
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: remove arch/sh
-Content-Language: en-US
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <CAMuHMdUcnP6a9Ch5=_CMPq-io-YWK5pshkOT2nZmP1hvNcwBAg@mail.gmail.com>
- <142532fb-5997-bdc1-0811-a80ae33f4ba4@physik.fu-berlin.de>
-From:   Rob Landley <rob@landley.net>
-In-Reply-To: <142532fb-5997-bdc1-0811-a80ae33f4ba4@physik.fu-berlin.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Wohlt=C3=A4tigkeit!!?=
+To:     Recipients <admi@dmbarone.com>
+From:   <admi@dmbarone.com>
+Date:   Fri, 13 Jan 2023 16:25:49 +0100
+Reply-To: theresasteven225@gmail.com
+X-Antivirus: Avast (VPS 230113-2, 1/13/2023), Outbound message
+X-Antivirus-Status: Clean
+Message-Id: <20230113152549.A6A2A2A56DC@mail.dmbarone.com>
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_SBL,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.9291]
+        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
+        *      [129.205.124.225 listed in zen.spamhaus.org]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [5.181.144.66 listed in bl.score.senderscore.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [theresasteven225[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 1/13/23 02:52, John Paul Adrian Glaubitz wrote:
-> Hi Geert!
-> 
-> On 1/13/23 09:26, Geert Uytterhoeven wrote:
->> Indeed.  The main issue is not the lack of people sending patches and
->> fixes, but those patches never being applied by the maintainers.
->> Perhaps someone is willing to stand up to take over maintainership?
-> 
-> I actually would be willing to do it but I'm a bit hesitant as I'm not 100%
-> sure my skills are sufficient. Maybe if someone can assist me?
+Eine Spende wurde an Sie get=E4tigt, antworten Sie f=FCr weitere Einzelheit=
+en.
 
-My skills aren't sufficient and I dunno how much time I have, but I can
-certainly assist. I test sh4 regularlyish and it's in the list of architectures
-I ship binaries and tiny VM images for, just refreshed tuesday:
+Gr=FC=DFe
+Theresia Steven
 
-https://landley.net/toybox/downloads/binaries/0.8.9/
-https://landley.net/toybox/downloads/binaries/mkroot/0.8.9/
-
-(The sh2eb isn't a VM, it's a physical board I have here...)
-
-There is definitely interest in this architecture. I'm aware Rich hasn't been
-the most responsive maintainer. (I'm told he's on vacation with his family at
-the moment, according to the text I got about this issue from the J-core
-hardware guys in Japan.)
-
-The main reason we haven't converted everything to device tree is we only have
-access to test hardware for a subset of the boards. Pruning the list of
-supported boards and converting the rest to device tree might make sense. We can
-always add/convert boards back later...
-
-Rob
+-- 
+This email has been checked for viruses by Avast antivirus software.
+www.avast.com
