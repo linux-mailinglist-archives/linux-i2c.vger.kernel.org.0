@@ -2,29 +2,29 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5433C668FA9
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jan 2023 08:55:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD64E668FFF
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jan 2023 09:04:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238124AbjAMHzQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 13 Jan 2023 02:55:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
+        id S240704AbjAMIEB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 13 Jan 2023 03:04:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236402AbjAMHzJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 Jan 2023 02:55:09 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48ED26878B;
-        Thu, 12 Jan 2023 23:55:08 -0800 (PST)
+        with ESMTP id S240570AbjAMIDZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 Jan 2023 03:03:25 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CDE25E2;
+        Fri, 13 Jan 2023 00:01:06 -0800 (PST)
 Received: from pendragon.ideasonboard.com (85-76-5-15-nat.elisa-mobile.fi [85.76.5.15])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2DBD14D4;
-        Fri, 13 Jan 2023 08:55:05 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 64BE84D4;
+        Fri, 13 Jan 2023 09:01:03 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673596505;
-        bh=vRdyiqF+PpWa7HcHfhCtuslDgXVXt8V4AOIdljF1BQo=;
+        s=mail; t=1673596863;
+        bh=cznkdyRGPN+MgO59A5w6zSqYoDDyC4/o8zwGoYFpT/4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MplxUnHw8ErIF7LyxmuN/+OcdYTL+KHEXJob0ft2ezOhqAVYE3m8P/x5TGmDxunAX
-         hNGSu2Rfv8w4h3WiaTzkK6SyygY+7vdn0jtGh9flpoxnn8uBnWmrnoDsTJWb5wUuXu
-         ajDTUWUaMexyxBvmwaL7WwO3/s2maPmjOdQvt9qo=
-Date:   Fri, 13 Jan 2023 09:55:04 +0200
+        b=X3sDjCHvncH8nOCQqph3lRWmzA+o7ZBGUupBaWsIqvlyia+dSiapzD4cCl/9rmiPJ
+         B4jr8NUwZemj7FrJVUMSVm/jr/syT5jAqqHnHz/VIkiEeZojpijB4wyQF8mSckYAYI
+         I5Uhh6NRqZJYChzv/4ySxybQmm9DouIDL6rp5RZU=
+Date:   Fri, 13 Jan 2023 10:01:02 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
@@ -43,15 +43,14 @@ Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
         linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-sh@vger.kernel.org
-Subject: Re: [PATCH 01/22] gpu/drm: remove the shmobile drm driver
-Message-ID: <Y8EOWGVmwEElKGE4@pendragon.ideasonboard.com>
+Subject: Re: [PATCH 20/22] media: remove sh_vou
+Message-ID: <Y8EPvllOwhODRUiP@pendragon.ideasonboard.com>
 References: <20230113062339.1909087-1-hch@lst.de>
- <20230113062339.1909087-2-hch@lst.de>
- <Y8EMZ0GI5rtor9xr@pendragon.ideasonboard.com>
+ <20230113062339.1909087-21-hch@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y8EMZ0GI5rtor9xr@pendragon.ideasonboard.com>
+In-Reply-To: <20230113062339.1909087-21-hch@lst.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -61,79 +60,26 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 09:46:49AM +0200, Laurent Pinchart wrote:
-> Hi Christoph,
+Hi Christoph,
+
+Thank you for the patch.
+
+On Fri, Jan 13, 2023 at 07:23:37AM +0100, Christoph Hellwig wrote:
+> Now that arch/sh is removed this driver is dead code.
 > 
-> Thank you for the patch.
-> 
-> On Fri, Jan 13, 2023 at 07:23:18AM +0100, Christoph Hellwig wrote:
-> > This driver depends on ARM && ARCH_SHMOBILE, but ARCH_SHMOBILE can only be
-> > set for each/sh, making the driver dead code except for the COMPILE_TEST
-> > case.
-> > 
-> > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> 
-> No objection from me.
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  drivers/media/platform/renesas/Kconfig  |    9 -
+>  drivers/media/platform/renesas/Makefile |    1 -
+>  drivers/media/platform/renesas/sh_vou.c | 1375 -----------------------
 
-To expand a little bit on this, ARCH_SHMOBILE used to be set for the
-ARM-based shmobile SoCs too, until
+You can also emove include/media/drv-intf/sh_vou.sh. With that, and the
+corresponding MAINTAINERS entry dropped,
 
-commit 08e735233ea29b17bfec8e4cb302e799d9f920b8
-Author: Geert Uytterhoeven <geert+renesas@glider.be>
-Date:   Tue Aug 28 17:10:10 2018 +0200
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-    ARM: shmobile: Remove the ARCH_SHMOBILE Kconfig symbol
-
-    All drivers for Renesas ARM SoCs have gained proper ARCH_RENESAS
-    platform dependencies.  Hence finish the conversion from ARCH_SHMOBILE
-    to ARCH_RENESAS for Renesas 32-bit ARM SoCs, as started by commit
-    9b5ba0df4ea4f940 ("ARM: shmobile: Introduce ARCH_RENESAS").
-
-    Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-    Acked-by: Arnd Bergmann <arnd@arndb.de>
-    Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
-
-merged in v4.20. The DRM shmobile driver's Kconfig entry wasn't updated,
-making it dead code indeed.
-
-I haven't tested this driver in ages, hence my lack of objection, but
-someone may want to keep it for the pre-R-Car ARM SoCs.
-
-Also, I just noticed that you forgot to update the MAINTAINERS file in
-this patch to drop the drivers/gpu/drm/shmobile/ entry.
-
-> > ---
-> >  drivers/gpu/drm/Kconfig                       |   2 -
-> >  drivers/gpu/drm/Makefile                      |   1 -
-> >  drivers/gpu/drm/shmobile/Kconfig              |  12 -
-> >  drivers/gpu/drm/shmobile/Makefile             |   8 -
-> >  .../gpu/drm/shmobile/shmob_drm_backlight.c    |  82 ---
-> >  .../gpu/drm/shmobile/shmob_drm_backlight.h    |  19 -
-> >  drivers/gpu/drm/shmobile/shmob_drm_crtc.c     | 683 ------------------
-> >  drivers/gpu/drm/shmobile/shmob_drm_crtc.h     |  55 --
-> >  drivers/gpu/drm/shmobile/shmob_drm_drv.c      | 303 --------
-> >  drivers/gpu/drm/shmobile/shmob_drm_drv.h      |  42 --
-> >  drivers/gpu/drm/shmobile/shmob_drm_kms.c      | 150 ----
-> >  drivers/gpu/drm/shmobile/shmob_drm_kms.h      |  29 -
-> >  drivers/gpu/drm/shmobile/shmob_drm_plane.c    | 261 -------
-> >  drivers/gpu/drm/shmobile/shmob_drm_plane.h    |  19 -
-> >  drivers/gpu/drm/shmobile/shmob_drm_regs.h     | 310 --------
-> >  15 files changed, 1976 deletions(-)
-> >  delete mode 100644 drivers/gpu/drm/shmobile/Kconfig
-> >  delete mode 100644 drivers/gpu/drm/shmobile/Makefile
-> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_backlight.c
-> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_backlight.h
-> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_crtc.c
-> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_crtc.h
-> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_drv.c
-> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_drv.h
-> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_kms.c
-> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_kms.h
-> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_plane.c
-> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_plane.h
-> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_regs.h
+>  3 files changed, 1385 deletions(-)
+>  delete mode 100644 drivers/media/platform/renesas/sh_vou.c
 
 -- 
 Regards,
