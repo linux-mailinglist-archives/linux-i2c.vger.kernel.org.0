@@ -2,126 +2,127 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C2F66CDA7
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jan 2023 18:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 166CE66CE39
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jan 2023 19:03:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235028AbjAPRiB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 16 Jan 2023 12:38:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
+        id S233348AbjAPSDV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 16 Jan 2023 13:03:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235030AbjAPRhb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 Jan 2023 12:37:31 -0500
-Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2AD4994C
-        for <linux-i2c@vger.kernel.org>; Mon, 16 Jan 2023 09:14:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=w1LUSCVWZ7Syw8u6ThTn2S4HX4oh/KBC7LmySmtfZBs=; b=Pt6HE/8a3K9tADKFcne9enQp8C
-        7A+NwiewtuVlb+Zab8ACTQiPx7HuVpuQrE7H7dfKrVsyy9CF9onefAf3yUxmELxoupY5YUcfGigka
-        /rKpQoPrpV6gC5HPpBLE82bMA8K1o/4qUYqFfM0VpWQrTTVuDx+l5OcbjwGnVCEIwHOxFQnkVS0Fu
-        AbjRy64W3EMxJlpZh2sqSDi5rCdhiok0XRtBZsaQMMx7p8w0VkqHamuW6n/zDbE/ROwOq60aEtCxk
-        zkcEKQXy0PNu189BdXsAcDga6YEOHUoGCsPvmgRV33l3DP8xU/oZr/ICT3UQZwZf9kXYNdo9vHPtH
-        KY2RmwEg==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lars@metafoo.de>)
-        id 1pHT3t-0000P7-Hz; Mon, 16 Jan 2023 18:14:21 +0100
-Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b]
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1pHT3t-000RHP-6s; Mon, 16 Jan 2023 18:14:21 +0100
-Message-ID: <7fc8ed1d-c28d-1c0b-bce7-de75872f4ea2@metafoo.de>
-Date:   Mon, 16 Jan 2023 09:14:18 -0800
+        with ESMTP id S232168AbjAPSCq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 Jan 2023 13:02:46 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E284279B4;
+        Mon, 16 Jan 2023 09:48:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673891296; x=1705427296;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=TNgX0mCKMCl8fMMol+o+7jJ7FmDZK6TmzIACPGFpF3U=;
+  b=KDR7LYGf4oSJFO5wBYvtH5i1U9WcypcD43JTqC5R9YGc59wOuWv8BhN4
+   nxcAyQpvuxQtjqr8vLQalrCScPvoPLpu4MYDNbY6W0zZI5RNIwgQMlljR
+   KqsrOLC1vLoDZfrSe1fQmYUglyK3nU6r57rcBlEpqAcEYs0JOHvmBbjvM
+   upNE/aAEq99TKdfD9YVnEEl/pw4N10EdjCQ6wEgqndksSMZpHheAVdX1h
+   6UeGRA2rH0hryso3Q2Rt5u8k+sTC3iJbf0CLRB8tuoLVD5qb6gYQaq5mw
+   zwEFhA/1JdnI+tvGM9p50k9iNGpRROcA8KoIG9mfLGnfTQ7eQZ2uGNeoG
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="312366869"
+X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
+   d="scan'208";a="312366869"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 09:48:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="659114269"
+X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
+   d="scan'208";a="659114269"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 16 Jan 2023 09:48:12 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pHTac-00ACas-0G;
+        Mon, 16 Jan 2023 19:48:10 +0200
+Date:   Mon, 16 Jan 2023 19:48:09 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "jarkko.nikula@linux.intel.com" <jarkko.nikula@linux.intel.com>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "rrangel@chromium.org" <rrangel@chromium.org>,
+        "upstream@semihalf.com" <upstream@semihalf.com>,
+        "M K, Muralidhara" <Muralidhara.MK@amd.com>,
+        "Chatradhi, Naveen Krishna" <NaveenKrishna.Chatradhi@amd.com>,
+        "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+Subject: Re: [PATCH -next 1/2] i2c: designware: Switch from using MMIO access
+ to SMN access
+Message-ID: <Y8WN2ZTnnVDgVlZB@smile.fi.intel.com>
+References: <c0c8bdce-26a0-ad3f-749b-7585d947608b@redhat.com>
+ <YyxrdpUyc+kp48kX@zn.tnic>
+ <33d5cc27-474b-fdec-a6b0-84ac16f7d386@redhat.com>
+ <CAOtMz3M=BTZUTRMHWGULwMDWmGdOzHKo=UcZeg3sP8_ndVYk2g@mail.gmail.com>
+ <YzG657ZFeEvLd6hm@zn.tnic>
+ <CAOtMz3MWnmdMbw_CKxBKVt=TJpLNJuZUzpxvnDi+QnigaLozLA@mail.gmail.com>
+ <Y7v2j92Ol6dL3FLE@zn.tnic>
+ <CAOtMz3PG4nku-O7dh+1U_DA05HAmQboTqwUQkCkrXQLV9bFjPw@mail.gmail.com>
+ <Y8VFVmhqP8dpqZcQ@smile.fi.intel.com>
+ <MN0PR12MB6101E79DA61CB0154C4819B2E2C19@MN0PR12MB6101.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 5/5] i2c: cadence: Remove unnecessary register reads
-Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>, Wolfram Sang <wsa@kernel.org>
-Cc:     Michal Simek <michal.simek@xilinx.com>,
-        Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
-        linux-i2c@vger.kernel.org
-References: <20230107211814.1179438-1-lars@metafoo.de>
- <20230107211814.1179438-6-lars@metafoo.de>
- <1086bd44-fc57-8a68-a418-1154828729b2@amd.com>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-In-Reply-To: <1086bd44-fc57-8a68-a418-1154828729b2@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26783/Mon Jan 16 09:28:30 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <MN0PR12MB6101E79DA61CB0154C4819B2E2C19@MN0PR12MB6101.namprd12.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 1/16/23 06:58, Michal Simek wrote:
->
->
-> On 1/7/23 22:18, Lars-Peter Clausen wrote:
->>
->> In the `cdns_i2c_mrecv()` function the CTRL register of the Cadence I2C
->> controller is written and read back multiple times. The register 
->> value does
->> not change on its own. So it is possible to remember the just written 
->> value
->> instead of reading it back from the hardware.
->>
->> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
->> ---
->>   drivers/i2c/busses/i2c-cadence.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-cadence.c 
->> b/drivers/i2c/busses/i2c-cadence.c
->> index bec50bfe7aad..93c6d0822468 100644
->> --- a/drivers/i2c/busses/i2c-cadence.c
->> +++ b/drivers/i2c/busses/i2c-cadence.c
->> @@ -613,7 +613,7 @@ static void cdns_i2c_mrecv(struct cdns_i2c *id)
->>
->>          /* Determine hold_clear based on number of bytes to receive 
->> and hold flag */
->>          if (!id->bus_hold_flag && id->recv_count <= 
->> CDNS_I2C_FIFO_DEPTH) {
->> -               if (cdns_i2c_readreg(CDNS_I2C_CR_OFFSET) & 
->> CDNS_I2C_CR_HOLD) {
->> +               if (ctrl_reg & CDNS_I2C_CR_HOLD) {
->>                          hold_clear = true;
->>                          if (id->quirks & CDNS_I2C_BROKEN_HOLD_BIT)
->>                                  irq_save = true;
->> @@ -624,7 +624,7 @@ static void cdns_i2c_mrecv(struct cdns_i2c *id)
->>          addr &= CDNS_I2C_ADDR_MASK;
->>
->>          if (hold_clear) {
->> -               ctrl_reg = cdns_i2c_readreg(CDNS_I2C_CR_OFFSET) & 
->> ~CDNS_I2C_CR_HOLD;
->> +               ctrl_reg &= ~CDNS_I2C_CR_HOLD;
->>                  /*
->>                   * In case of Xilinx Zynq SOC, clear the HOLD bit 
->> before transfer size
->>                   * register reaches '0'. This is an IP bug which 
->> causes transfer size
->> -- 
->> 2.30.2
->>
->
-> Logically this is fine but that additional read on CR register ensures 
-> that IP receive previous writes. The code itself is related to bug on 
-> Zynq SoC and that two additional readbacks can actually do something.
->
-> I think this should be properly tested on zynq to ensure that it 
-> doesn't break anything.
->
-> Shubhrajyoti: Can you please make sure that it is tested on Zynq?
-Maybe it is better to drop the patch then if it is used to enforce 
-ordering in the hardware. But I guess we should add a comment to explain 
-this.
+On Mon, Jan 16, 2023 at 04:22:09PM +0000, Limonciello, Mario wrote:
+> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Sent: Monday, January 16, 2023 06:39
+> > To: Jan Dąbroś <jsd@semihalf.com>
+> > On Mon, Jan 16, 2023 at 11:19:00AM +0100, Jan Dąbroś wrote:
+
+> > > > Make init_amd_nbs() arch_initcall_sync() so that it executes after PCI
+> > init.
+> > >
+> > > I described earlier in this thread why such option is not working -
+> > > let me quote myself:
+> > >
+> > > It's not enough for running init_amd_nbs() to have only
+> > > pci_arch_init() done. We need the pci bus to be created and registered
+> > > with all devices found on the bus. We are traversing through them and
+> > > trying to find northbridge VID/DID. Due to the above, we need to run
+> > > init_amd_nbs() only after acpi_scan_init() that is invoked from
+> > > acpi_init() which is registered as subsys_initcall. That's why the
+> > > trick with switching init_amd_nbs() to arch_initcall_sync will not
+> > > work.
+> > >
+> > > We have a kind of chicken-and-egg problem here. Or is there something I
+> > missed?
+> > >
+> > > I wonder if there is upstreamable option to control order of the
+> > > drivers' init by forcing link order?
+> > 
+> > But what exactly do you need from North Bridge? Is it only its existence or
+> > do you need to have fully instantiated PCI device (if so, why?)?
+> 
+> There is a need to be able to write and read PCI config space.
+
+So, it's available even on early stages, are there some specifics why it can't
+be done using the respective APIs?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
