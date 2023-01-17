@@ -2,105 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8957A66E1AB
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Jan 2023 16:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D24666E5A6
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Jan 2023 19:11:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232705AbjAQPI6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Jan 2023 10:08:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
+        id S231348AbjAQSKv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Jan 2023 13:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232699AbjAQPI5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Jan 2023 10:08:57 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5803D0AF
-        for <linux-i2c@vger.kernel.org>; Tue, 17 Jan 2023 07:08:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673968137; x=1705504137;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5IPO6lTNa3LxPrn56MYIKAvi0cFwnJ1vFqh/6brjNf8=;
-  b=i1+8S+O5C6bEn9l8BB6Ob4vGnVqAcZtgFyl2fPY5SQN8EZ/7np+hV7bB
-   0pBvXq7gAYH9kvtWTT5faVXxv8cKvLMgSrS5ycOQDvOUZXd1+rZJqpu4j
-   0hLN0PqWQKTgPqMxYUugXd5TSIJZ3dYO864KCxheovxV5JrgKjZKnaN74
-   E4Hd3A6f00ExYxjBIAjbbO60QRLWF/u4Gn88n1Wj+uUrK9uNsRpTD31vi
-   0tw+ZV1rfb3kX3PuEgEeshQo5os5wyrDYdkzhqisyA1RkNrYR3w+1GO4U
-   gWNGQXIkJhbdBM86rvjQFzx0hT2UM6cjwrZAA+OLjDTSRulfCmbjhg2Xl
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="304401802"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="304401802"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 07:08:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="691617223"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="691617223"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 17 Jan 2023 07:08:20 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pHnZS-00Ad1c-1r;
-        Tue, 17 Jan 2023 17:08:18 +0200
-Date:   Tue, 17 Jan 2023 17:08:18 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: designware: add a new bit check for IC_CON
- control
-Message-ID: <Y8a54u1ipywtTIlH@smile.fi.intel.com>
-References: <20230117122801.1605176-1-Shyam-sundar.S-k@amd.com>
+        with ESMTP id S232578AbjAQSIk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Jan 2023 13:08:40 -0500
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84F1B4B19D;
+        Tue, 17 Jan 2023 09:50:45 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.97,224,1669042800"; 
+   d="scan'208";a="146635877"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 18 Jan 2023 02:50:44 +0900
+Received: from mulinux.example.org (unknown [10.226.92.158])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id D7917407177B;
+        Wed, 18 Jan 2023 02:50:39 +0900 (JST)
+From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [RESEND PATCH v2 1/2] dt-bindings: i2c: renesas,rzv2m: Fix SoC specific string
+Date:   Tue, 17 Jan 2023 17:50:17 +0000
+Message-Id: <20230117175017.21239-1-fabrizio.castro.jz@renesas.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230117122801.1605176-1-Shyam-sundar.S-k@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 05:58:01PM +0530, Shyam Sundar S K wrote:
-> On some AMD platforms, based on the new designware datasheet,
-> BIOS sets the BIT(11) within the IC_CON register to advertise
-> the "bus clear feature capability".
-> 
-> AMD/Designware datasheet says:
-> 
-> Bit(11) BUS_CLEAR_FEATURE_CTRL. Read-write,Volatile. Reset: 0.
-> Description: In Master mode:
-> - 1'b1: Bus Clear Feature is enabled.
-> - 1'b0: Bus Clear Feature is Disabled.
-> In Slave mode, this register bit is not applicable.
-> 
-> On AMD platform designs:
-> 1. BIOS programs the BUS_CLEAR_FEATURE_CTRL and enables the detection
-> of SCL/SDA stuck low.
-> 2. Whenever the stuck low is detected, the SMU FW shall do the bus
-> recovery procedure.
-> 
-> Currently, the way in which the "master_cfg" is built in the driver, it
-> overrides the BUS_CLEAR_FEATURE_CTRL advertised by BIOS and the SMU FW
-> cannot initiate the bus recovery if the stuck low is detected.
-> 
-> Hence add a check in i2c_dw_configure_master() that if the BIOS
-> advertises the bus clear feature, let driver not ignore it and
-> adapt accordingly.
+The preferred form for Renesas' compatible strings is:
+"<vendor>,<family>-<module>"
 
-...
+Somehow the compatible string for the r9a09g011 I2C IP was upstreamed
+as renesas,i2c-r9a09g011 instead of renesas,r9a09g011-i2c, which
+is really confusing, especially considering the generic fallback
+is renesas,rzv2m-i2c.
 
-> +	ic_con = ioread32(dev->base + DW_IC_CON);
+The first user of renesas,i2c-r9a09g011 in the kernel is not yet in
+a kernel release, it will be in v6.1, therefore it can still be
+fixed in v6.1.
+Even if we don't fix it before v6.2, I don't think there is any
+harm in making such a change.
 
-Any particular reason why regmap_read() can't be used?
+s/renesas,i2c-r9a09g011/renesas,r9a09g011-i2c/g for consistency.
 
+Fixes: ba7a4d15e2c4 ("dt-bindings: i2c: Document RZ/V2M I2C controller")
+Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml b/Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
+index c46378efc123..92e899905ef8 100644
+--- a/Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
++++ b/Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
+@@ -16,7 +16,7 @@ properties:
+   compatible:
+     items:
+       - enum:
+-          - renesas,i2c-r9a09g011  # RZ/V2M
++          - renesas,r9a09g011-i2c  # RZ/V2M
+       - const: renesas,rzv2m-i2c
+ 
+   reg:
+@@ -66,7 +66,7 @@ examples:
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+ 
+     i2c0: i2c@a4030000 {
+-        compatible = "renesas,i2c-r9a09g011", "renesas,rzv2m-i2c";
++        compatible = "renesas,r9a09g011-i2c", "renesas,rzv2m-i2c";
+         reg = <0xa4030000 0x80>;
+         interrupts = <GIC_SPI 232 IRQ_TYPE_EDGE_RISING>,
+                      <GIC_SPI 236 IRQ_TYPE_EDGE_RISING>;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
