@@ -2,122 +2,175 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2097F66D892
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Jan 2023 09:49:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1976A66D8A8
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Jan 2023 09:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235999AbjAQIts (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Jan 2023 03:49:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S236255AbjAQIuH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Jan 2023 03:50:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235898AbjAQItr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Jan 2023 03:49:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1195FE396;
-        Tue, 17 Jan 2023 00:49:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C60E8B811F3;
-        Tue, 17 Jan 2023 08:49:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A511C433EF;
-        Tue, 17 Jan 2023 08:49:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673945382;
-        bh=t4WLIU04MNmLbqVeO6FrbfGvJwh92/6Ee1gfmuH0qNY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ScYx9hhyFijdBZhqGz3Z2T6Dfoj34Su56v/582u6Px4VGM6GdlyE7bTf1fDR2R+19
-         yZMWLhkxUWC3wZXPkn1SxRfqLD9lA6O9OdtDr3qzd2Fts5PMPErxGSLebz4Zi5raYY
-         kx5k1Tg+cvFktXZI/KYTSX2n2f1x6+kPlZql9hkf8nwJXB6npM9R+HoIq3eHxtolhR
-         hvI7wwq8xO1PYnNWlRnf8jZBx0R7WVXgqR/QhRG53/Z1g0z7iXfvnxEFPrlER83kyH
-         wLkXWRWOX//QX3Dka7dKQvUtdd83xUJkg/fuuffBKfBRW+ph7yV5O/KkVnhqzoXIYj
-         2Fjbi87GnhGFQ==
-Date:   Tue, 17 Jan 2023 09:49:39 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     netdev@vger.kernel.org
-Cc:     linux-i2c@vger.kernel.org,
-        Russell King <rmk+kernel@armlinux.org.uk>
-Subject: [PULL REQUEST] i2c-fwnode-api-2023017 for netdev
-Message-ID: <Y8ZhI4g0wsvpjokd@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, netdev@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Russell King <rmk+kernel@armlinux.org.uk>
+        with ESMTP id S236241AbjAQIt6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Jan 2023 03:49:58 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92FE1E9C1
+        for <linux-i2c@vger.kernel.org>; Tue, 17 Jan 2023 00:49:55 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so975787wmq.0
+        for <linux-i2c@vger.kernel.org>; Tue, 17 Jan 2023 00:49:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UgoXPu1A6G8aOhAjG7a8w9p9zygyaf4s9I2TGoeTltI=;
+        b=br0AnOeqEeTM0zui1xtg65KTyJzkss2Hnbj0igYV+z0AGaL3ZPigHUjl7LH+iLh9s1
+         UOB99NxhPyHnEsOZVigJagAIQdCNDM2VGavpVH2lMZ3z+yD6qwJEyMoveeDWBxbUqK1F
+         ZKd6b348eIeht3C4jJGN/IKf7ngNYLfIvhM+kYHnXHC3NiJwyEm8Fr6ePhAtv0EJDw9+
+         0lLq1byDElzyt9jUJUycc2iMsgzJFGfmU80f3gJS/4PvmB58O80F1a2Pi/2l5im6rhd8
+         MA+/y6l65ytx5H5LPYhF4dATSTXFK61F+/PKAoEaAe0AOW9chItrcYys7vlS4nVfIBrg
+         pn4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UgoXPu1A6G8aOhAjG7a8w9p9zygyaf4s9I2TGoeTltI=;
+        b=s4epMSUBkxgkvUOrIqKKqFJPiGKBzjSJc3P2qZArwN8IxtpBjnYjDWuYqGTttjDNBB
+         XdAwHeq12L6K1Gp0impDGBRmkT1xaJZHsIR3St8TqJIZ7vD/Q2wSU1wzDTGFD2x7sVTz
+         To9azhpvjquOPG8uIi1tPyViJRkDJx1agUOJYJ8wScTUcZN91vNQ2fHVEoyAx8EAvsmv
+         Y3RSOXKS339eW12d5BD3+2RSQ12xPIZE23wkJanDz/8rD5HzEHgVpTIiYfYNXfFAMHJn
+         hQegFdGoM488YFazNaH+Dq8qCbpWwCSfrAg6n3l8GT1F33e2gsxyjUWy161kR0F9JpgP
+         q8Aw==
+X-Gm-Message-State: AFqh2krZtUvgY8SUUPCAJSl6W9DxzrJr75AJS9eeEcGoq9UBl5uHRjgN
+        zWUpIY7YLVtGq0peSGEmw6I7kGAxJcfsFeh9
+X-Google-Smtp-Source: AMrXdXuDwjuQIJ9bVydfzGqKXubMAUmMY5yYYHElltf5Pc0ST63jYYv8z3loNVA4Fd2I2eGFzTk8WQ==
+X-Received: by 2002:a05:600c:4928:b0:3da:909f:1f6b with SMTP id f40-20020a05600c492800b003da909f1f6bmr2465111wmp.1.1673945394216;
+        Tue, 17 Jan 2023 00:49:54 -0800 (PST)
+Received: from [127.0.1.1] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id i14-20020a05600c354e00b003d1d5a83b2esm45040928wmq.35.2023.01.17.00.49.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 00:49:53 -0800 (PST)
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Tue, 17 Jan 2023 09:49:40 +0100
+Subject: [PATCH 2/4] arm64: dts: mediatek: add i2c support for mt8365 SoC
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4C1artG1BI8z3fwk"
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20221122-mt8365-i2c-support-v1-2-4aeb7c54c67b@baylibre.com>
+References: <20221122-mt8365-i2c-support-v1-0-4aeb7c54c67b@baylibre.com>
+In-Reply-To: <20221122-mt8365-i2c-support-v1-0-4aeb7c54c67b@baylibre.com>
+To:     Rob Herring <robh+dt@kernel.org>, Qii Wang <qii.wang@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org
+X-Mailer: b4 0.10.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2508; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=pLPRl4jPAYZIqf1fe/JXLH5pg1d46bBPCeqWhQgjHKU=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBjxmEucJi1q1NdT5HmNXnp5kIxA1c+e049A9ok+evg
+ 5QXuV6uJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCY8ZhLgAKCRArRkmdfjHURVrmD/
+ 4gskZjdw09f2tZ7bUHTkY/CVV7XUZSvc78gwOs2ISy6/sqNimRoXdAbaoO1qZEnZA8x73UFSv2cnNi
+ +5FANiQKHS47maGYzC2OIaMnxsmhy8KvLsvsmgt45YoEb8t0LW5Erq8eYEWlB0qW4XzcfMloK2DZBo
+ NkTlDS65SDy2FvvGJOyhmSXS0RGUzjnFz2AXv9ATc30Ne3VCoWdMn8t4kdESqovn4qWcxpAspbEX9S
+ /vb/CeAquacvmUw90GvgcmZ7lOYWMlir36wYnHRrvpkEEwkhT9ibp4fRljjS9AHD9HvsJBV8aBvlJr
+ nq9BkyYFSpmpnJhvDrmDiYlPjJ/uLM8urevXr95JSLe9hL03WuS/NcVgft99n081xCJ6da44ERbDrN
+ MwcIeb0Qp78Guz6iICSbmkr0IChMmfZTeSm06oWPL63yLAzA2IbFCqIbe0H0a9CEW8c6k3VVMZAF7X
+ 5AhvgKdFJyHKaKlHpkl98w02jfFPRIKSKve0BN3Do0GwmfgicJSDded41vqU9vJ6gMPOvWe7wqVqsg
+ Jllv4HfdHSwJFNwsONhbi+jbEPMzxFIFHdxK7A5GyS23UawCdMu9yeth4hWlSN7TO0zd4otLV69q52
+ VqcBsbxU2S3VwSZLVsv5piHR5MIGFrontdbYQKgIiU5nwWCzvRK2LU7+0sfw==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+There are four I2C master channels in MT8365 with a same HW architecture.
 
---4C1artG1BI8z3fwk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+---
+ arch/arm64/boot/dts/mediatek/mt8365.dtsi | 60 ++++++++++++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-Hi,
+diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+index a32f2b7507be..3c2819bd32af 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8365.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+@@ -282,6 +282,66 @@ pwm: pwm@11006000 {
+ 			clock-names = "top", "main", "pwm1", "pwm2", "pwm3";
+ 		};
+ 
++		i2c0: i2c@11007000 {
++			compatible = "mediatek,mt8365-i2c",
++				     "mediatek,mt8168-i2c";
++			reg = <0 0x11007000 0 0xa0>,
++			      <0 0x11000080 0 0x80>;
++			interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_LOW>;
++			clock-div = <1>;
++			clocks = <&infracfg CLK_IFR_I2C0_AXI>,
++				 <&infracfg CLK_IFR_AP_DMA>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
++		i2c1: i2c@11008000 {
++			compatible = "mediatek,mt8365-i2c",
++				     "mediatek,mt8168-i2c";
++			reg = <0 0x11008000 0 0xa0>,
++			      <0 0x11000100 0 0x80>;
++			interrupts = <GIC_SPI 29 IRQ_TYPE_LEVEL_LOW>;
++			clock-div = <1>;
++			clocks = <&infracfg CLK_IFR_I2C1_AXI>,
++				 <&infracfg CLK_IFR_AP_DMA>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
++		i2c2: i2c@11009000 {
++			compatible = "mediatek,mt8365-i2c",
++				     "mediatek,mt8168-i2c";
++			reg = <0 0x11009000 0 0xa0>,
++			      <0 0x11000180 0 0x80>;
++			interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_LOW>;
++			clock-div = <1>;
++			clocks = <&infracfg CLK_IFR_I2C2_AXI>,
++				 <&infracfg CLK_IFR_AP_DMA>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
++		i2c3: i2c@1100f000 {
++			compatible = "mediatek,mt8365-i2c",
++				     "mediatek,mt8168-i2c";
++			reg = <0 0x1100f000 0 0xa0>,
++			      <0 0x11000200 0 0x80>;
++			interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_LOW>;
++			clock-div = <1>;
++			clocks = <&infracfg CLK_IFR_I2C3_AXI>,
++				 <&infracfg CLK_IFR_AP_DMA>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
+ 		spi: spi@1100a000 {
+ 			compatible = "mediatek,mt8365-spi", "mediatek,mt7622-spi";
+ 			reg = <0 0x1100a000 0 0x100>;
 
-here is an immtuable branch from I2C requested by Russell King. This
-allows him to rework SFP code further.
-
-Please pull.
-
-   Wolfram
-
-
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git/ tags/i2c-fwnode-api-2023017
-
-for you to fetch changes up to 373c612d72461ddaea223592df31e62c934aae61:
-
-  i2c: add fwnode APIs (2023-01-17 09:29:59 +0100)
-
-----------------------------------------------------------------
-Immutable branch adding fwnode API to the I2C core
-
-----------------------------------------------------------------
-Russell King (Oracle) (1):
-      i2c: add fwnode APIs
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Mika Westerberg (1):
-      (Rev.) i2c: add fwnode APIs
-
- drivers/i2c/i2c-core-acpi.c | 13 +-----
- drivers/i2c/i2c-core-base.c | 98 +++++++++++++++++++++++++++++++++++++++++++++
- drivers/i2c/i2c-core-of.c   | 66 ------------------------------
- include/linux/i2c.h         | 24 +++++++++--
- 4 files changed, 120 insertions(+), 81 deletions(-)
-
---4C1artG1BI8z3fwk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPGYSMACgkQFA3kzBSg
-KbYh9g//XjxOIRW/U9FKMyqPhvFcgUkWeYhyQLtASTXHudKocwdQld6zosWpZd/q
-aVV6GduB7dqwSbLxyJVWQiZJ6F24LuU/wVp/HCLa1TBCNc2jnYZgSHkuSUjrsYaq
-YfI5IdEHAUjpzcDc6ulxErnxFf3+60+CUtoYdmt4U9ZK63QlDd50g6PPhfYcos36
-+hW6z+1HBaIgjBcY4s3IDUZgH5AeyaeuIwheMQO+MpG/7cLLlZafiZKH793sNxsg
-Giv8DSu1MKxxSFJAMbn1PXDdL3gufLbzNjW4IDYtT6GcFq/2fcucJL9gHYGxvYPe
-bkDh2BeS9f6FjsaZAmoAYSx0HgjwUvYGJ/GMg28NJGKQ6wI3ZocffJ10STnqCcBO
-wWd7DvsQjh/vBK4Pp2LPetG6ceGdV/30B4Nd0qBKy2fALMCoTy0+R6FpQEOzx9MU
-ybUzFhpvsrFa//jvErHVjjoVibbI5zg6az3A88RKVyFagGz1L9kz0F681TJyGWy2
-CuztJJ0/OXbpWfO13Dw/1rj68uwjdcENIup7iGlP0zFLC0glB+2J6R1qKxwk0NkG
-IxnJ4fvmQrB0+u4mbPBOySwPnANYq1wuMFSA5QnWUJnBXI4y7HPbiYgd0E39pUpT
-y22gyH1cn1MGgYqicFBJqncD+1lkQ8d2gSVRBrSpD/ODnGNTgXw=
-=PEgT
------END PGP SIGNATURE-----
-
---4C1artG1BI8z3fwk--
+-- 
+b4 0.10.1
