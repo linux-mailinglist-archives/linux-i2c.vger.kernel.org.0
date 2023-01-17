@@ -2,199 +2,142 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E649366E76B
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Jan 2023 21:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A5266E779
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Jan 2023 21:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbjAQUHb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Jan 2023 15:07:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
+        id S234634AbjAQUKK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Jan 2023 15:10:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbjAQUFS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Jan 2023 15:05:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8406D3A591;
-        Tue, 17 Jan 2023 10:57:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F4088614E3;
-        Tue, 17 Jan 2023 18:57:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1216DC433D2;
-        Tue, 17 Jan 2023 18:57:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673981826;
-        bh=G9tSeRpjSWF6i+zuXxtGGep/zPeWLfIpxu1vq3NYTSw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kqaA/u2CAenJkPgq8HUh/VteJ2RhY8jAxb6PqZ+OT7C6FASNC8rHWo9d255gjpWtc
-         sAJeI620rk8JVh89g4LO5AxBy/kmri/7o3TQ3c6kzhpRFM2VjuQQuEJDgMGV5pjGXc
-         90456W+imT2BXbUF9bhEcnXJWlg74mwYrL2FWU4bKAv7b88FF9uX6phzbcHHQCwFIT
-         74yWZSdslLpB8l5yb0v7V2UqKlNPDd6YcZpj3aqyqS47fRFbH5Z8wqjCHPdfyiT4Re
-         LSRUC1Msgdlr7NQyp7LGW9YqD0mfu4u5HFBo8d6K1NfeVyK0xZ11ehIwk6lWkKroy/
-         92/9Az23uADcQ==
-Date:   Tue, 17 Jan 2023 19:57:03 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v2 2/2] i2c: dev: don't allow user-space to deadlock the
- kernel
-Message-ID: <Y8bvf9k2K62EscEo@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20221229160045.535778-1-brgl@bgdev.pl>
- <20221229160045.535778-3-brgl@bgdev.pl>
+        with ESMTP id S234525AbjAQUHS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Jan 2023 15:07:18 -0500
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB934520E
+        for <linux-i2c@vger.kernel.org>; Tue, 17 Jan 2023 11:01:24 -0800 (PST)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-15f64f2791dso2691146fac.7
+        for <linux-i2c@vger.kernel.org>; Tue, 17 Jan 2023 11:01:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OgaymgAXi9Z6g6pYwBOzM02/P477EqWitgDVTE3LFbU=;
+        b=7UFMvbpKkJyjWVLlq6ctk0nXiLL3RrLgvGqk+/g8pD0wAzMEFNodkoMNXxSPAzvJye
+         T4nqVDpRCF5Pkw4fe0ROrd1BjE8DZbycDcUSRlgnihtqJaZkkqELJ7TzEZYyPHojRNxM
+         MBh6YZCgcmJgLXwboxe3bvrjmez4qHhfCRIxGuc2G0+QOOJ/eKT38XBZ7MfSSmNLVm7z
+         gDt6C3Ymsnj+eKLcMZ0dj5q2KFKnZutgcY/1C6+IgeLmT5DwAU4QsUhG6TCQdnlD6nEb
+         fYtWfawIuB6wYahQA/cq89ISwAR2GZXbrrCFpCVxRJqHc9Mn337ID3jg/QgfKjbyHIu6
+         BObQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OgaymgAXi9Z6g6pYwBOzM02/P477EqWitgDVTE3LFbU=;
+        b=ku+k2VsraCQuouHAQu94pJLVKDaWM95o+VmoWzBD0Mc/BGY5LLaxJKeHqFlpsFa7op
+         YoLKr8V41S1CzYvuoGynrRbIalyAolxJdZALkBi5MI5otPqmnxnwoG0YwuwGg3UQWuWz
+         9kksFwjApy85xlv4OmvusBvdLsQJ2mjVkS6QwWKtQyYIqtPRsUk8t7n0U2Ou8mhFtFqi
+         5v9eYyK1eZawpGPnPaSgBPukMIETfca+Yl9i/bIXVRdHM/il56p3u+ke68Ou0ha2NHN4
+         Zdg7LLn08N4FbhZdKRpV7uClbOafjlVDwN0eLLeuo8KlLkIuG4nnBWcBxRtAFE6QZJSJ
+         Ob2w==
+X-Gm-Message-State: AFqh2kpVjdrg4+dNOD2ODxRQAdJPf30rSHp7me6xkzrZjsHM9GDmcv1X
+        264G6SFpPcuQHAlqb9U4W47qGw==
+X-Google-Smtp-Source: AMrXdXsgzCxMhqm+bb3il7EsJjEv0NbGPCzT1qf9VREFYRxVllxrk/YEzaFAyrBdtefAaDgGfnk/UQ==
+X-Received: by 2002:a05:6870:c190:b0:15e:cfca:b312 with SMTP id h16-20020a056870c19000b0015ecfcab312mr2807015oad.52.1673982083592;
+        Tue, 17 Jan 2023 11:01:23 -0800 (PST)
+Received: from [192.168.86.224] ([136.62.38.22])
+        by smtp.gmail.com with ESMTPSA id r18-20020a05687080d200b0012763819bcasm16664335oab.50.2023.01.17.11.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 11:01:22 -0800 (PST)
+Message-ID: <9325a949-8d19-435a-50bd-9ebe0a432012@landley.net>
+Date:   Tue, 17 Jan 2023 13:13:38 -0600
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="X/UsmnCClaapha46"
-Content-Disposition: inline
-In-Reply-To: <20221229160045.535778-3-brgl@bgdev.pl>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: remove arch/sh
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+ <20230116071306.GA15848@lst.de>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <20230116071306.GA15848@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 1/16/23 01:13, Christoph Hellwig wrote:
+> On Fri, Jan 13, 2023 at 09:09:52AM +0100, John Paul Adrian Glaubitz wrote:
+>> I'm still maintaining and using this port in Debian.
+>>
+>> It's a bit disappointing that people keep hammering on it. It works fine for me.
+> 
+> What platforms do you (or your users) use it on?
 
---X/UsmnCClaapha46
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+3 j-core boards, two sh4 boards (the sh7760 one I patched the kernel of), and an
+sh4 emulator.
 
-Hi Bartosz,
+I have multiple j-core systems (sh2 compatible with extensions, nommu, 3
+different kinds of boards running it here). There's an existing mmu version of
+j-core that's sh3 flavored but they want to redo it so it hasn't been publicly
+released yet, I have yet to get that to run Linux because the mmu code would
+need adapting, but the most recent customer projects were on the existing nommu
+SOC, as was last year's ASIC work via sky130.
 
-> If we open an i2c character device and then unbind the underlying i2c
-> adapter (either by unbinding it manually via sysfs or - for a real-life
-> example - when unplugging a USB device with an i2c adaper), the kernel
-> thread calling i2c_del_adapter() will become blocked waiting for the
-> completion that only completes once all references to the character
-> device get dropped.
->=20
-> In order to fix that, we introduce a couple changes. They need to be
-> part of a single commit in order to preserve bisectability. First, drop
-> the dev_release completion. That removes the risk of a deadlock but
-> we now need to protect the character device structures against NULL
-> pointer dereferences. To that end introduce an rw semaphore. It will
-> protect the dummy i2c_client structure against dropping the adapter from
-> under it. It will be taken for reading by all file_operations callbacks
-> and for writing by the notifier's unbind handler. This way we don't
-> prohibit the syscalls that don't get in each other's way from running
-> concurrently but the adapter will not be unbound before all syscalls
-> return.
->=20
-> Finally: upon being notified about an unbind event for the i2c adapter,
-> we take the lock for writing and set the adapter pointer in the character
-> device's structure to NULL. This "numbs down" the device - it still exists
-> but is no longer functional. Meanwhile every syscall callback checks that
-> pointer after taking the lock but before executing any code that requires
-> it. If it's NULL, we return an error to user-space.
->=20
-> This way we can safely open an i2c device from user-space, unbind the
-> device without triggering a deadlock and any subsequent system-call for
-> the file descriptor associated with the removed adapter will gracefully
-> fail.
->=20
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+My physical sh4 boards are a Johnson Controls N40 (sh7760 chipset) and the
+little blue one is... sh4a I think? (It can run the same userspace, I haven't
+replaced that board's kernel since I got it, I think it's the type Glaubitz is
+using? It's mostly in case he had an issue I couldn't reproduce on different
+hardware, or if I spill something on my N40.)
 
-First of all, thank you for tackling this problem. It was long overdue
-and I really appreciate that you took the initiative to get it solved.
+I also have a physical sh2 board on the shelf which I haven't touched in years
+(used to comparison test during j2 development, and then the j2 boards replaced it).
 
-Here are some review comments already. I'd like to do some more testing.
-So far, everything works nicely. Also, I'd like to invite more people to
-have a look at this code. We really don't want to have a regression
-here, so more eyes are very welcome.
+I'm lazy and mostly test each new sh4 build under qemu -M r2d because it's
+really convenient: neither of my physical boards boot from SD card so replacing
+the kernel requires reflashing soldered in flash. (They'll net mount userspace
+but I haven't gotten either bootloader to net-boot a kernel.)
 
+I include sh4 in the my mkroot builds each toybox release, I have a ~300 line
+bash script that builds bootable toybox systems for a dozen-ish architectures,
+including building a kernel configured to run under qemu:
 
-> @@ -1713,25 +1715,7 @@ void i2c_del_adapter(struct i2c_adapter *adap)
-> =20
->  	i2c_host_notify_irq_teardown(adap);
-> =20
-> -	/* wait until all references to the device are gone
-> -	 *
-> -	 * FIXME: This is old code and should ideally be replaced by an
-> -	 * alternative which results in decoupling the lifetime of the struct
-> -	 * device from the i2c_adapter, like spi or netdev do. Any solution
-> -	 * should be thoroughly tested with DEBUG_KOBJECT_RELEASE enabled!
+  https://github.com/landley/toybox/blob/master/scripts/mkroot.sh
 
-Have you done this? Debugging with DEBUG_KOBJECT_RELEASE enabled?
+And I ship the resulting bootable system images, most recent release is at:
 
-> -	 */
-> -	init_completion(&adap->dev_released);
->  	device_unregister(&adap->dev);
-> -	wait_for_completion(&adap->dev_released);
+  https://landley.net/toybox/downloads/binaries/mkroot/0.8.9/
 
-So, this is basically the key change. I think you handled the userspace
-part via i2c-dev well. I don't have proof yet, but my gut feeling
-wonders if this is complete. Aren't there maybe sysfs-references as
-well. I need to check.
+As described at:
 
-> -
-> -	/* free bus id */
-> -	mutex_lock(&core_lock);
-> -	idr_remove(&i2c_adapter_idr, adap->nr);
-> -	mutex_unlock(&core_lock);
-> -
-> -	/* Clear the device structure in case this adapter is ever going to be
-> -	   added again */
-> -	memset(&adap->dev, 0, sizeof(adap->dev));
+  http://landley.net/toybox/faq.html#mkroot
 
-Any reason you didn't add this to release function above? Reading the
-introducing commit, the old drivers needings this still exist IMO.
-(Yes, they should be converted to use the i2c-mux subsystem, but I don't
-think someone will do this)
+Various people in Japan have more hardware, but I haven't made it physically
+back there since 2020. (My residency card expired during the pandemic.)
 
-> @@ -44,8 +45,14 @@ struct i2c_dev {
->  	struct i2c_adapter *adap;
->  	struct device dev;
->  	struct cdev cdev;
-> +	struct rw_semaphore sem;
-
-I'd like to name it 'rwsem' so it is always super-clear what it is.
-
->  };
-> =20
-> +static inline struct i2c_dev *to_i2c_dev(struct inode *ino)
-
-I'd also prefer a more specific 'inode_to_i2c_dev' function name.
-Personally, I'd also name the argument 'inode' but I'll leave that to
-you.
-
-> +{
-> +	return container_of(ino->i_cdev, struct i2c_dev, cdev);
-> +}
-
-=2E..
-
-Doesn't the function 'name_show()' also need protection? It dereferences
-i2c_dev->adap.
-
-So much for now,
-
-   Wolfram
-
-
---X/UsmnCClaapha46
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPG73sACgkQFA3kzBSg
-KbauKA/+P+G7QieucmYlIvLJCy0GYf+XfAxJFptxcRGu8NuWp5l7eYNXHDoVQiL3
-kym6GXU+7uMrsppjiGhuBFc9cXE8xtFAyboIXmJjWhlUUOAiOsYpWQA8GdbnnR/W
-t7C8AVIW97bj7/R58KBZf43KRlOhMOSe7X6QL771ztSpXL6IQTW7pB0+YMZcdI84
-7tWMyl8vH3+e2FRpvygucVcAldnMh4b8jymWbWUJ9SD9fi1kolfdhffyyuRTRM7+
-RqsQ7Uvq1thwQDikMQ1RWAsK7PR59HIiCni+esg0Cnkbnc8bdk4Tgk1PMxjKyt7E
-2kfhl12h4NxAWXSDVCerRd5wZq6anwNSGLeJmyWKl1bNTyQAyXiLjpGK2WhQmNtR
-sM1KKMqvf8bDSYVrpz5cVX2vgBM4FqbQvvKtAm9xVyz1UgU08d4IvSOAKxXdwD/G
-1rOoFqch1rL2VdibomcWC/yiEMtgp8XbQB60rmiAA4i9lPqJxOWWY7MpTMYvLVYB
-99YQ//ALPbYMizQ/+8yvWOzhHTMdnLEFl980bwUhSpO/KajKKiOBXPWoaKnHOCZ6
-xNPIoucLVN969JaId2vThtZyBrFmtA1Gm/WpGt1OBlVKUEWoPMUPJ800ETQm5Izs
-eBpwJO7Jq/B3ee7AYCopB88YCjnU458cKtZV1Uot3fjT4FtOW0M=
-=c3wR
------END PGP SIGNATURE-----
-
---X/UsmnCClaapha46--
+Rob
