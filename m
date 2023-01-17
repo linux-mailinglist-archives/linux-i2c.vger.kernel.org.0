@@ -2,147 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53EEB670A85
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Jan 2023 23:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E29B666E9C1
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Jan 2023 22:58:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjAQWBV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Jan 2023 17:01:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
+        id S229575AbjAQV6b (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Jan 2023 16:58:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjAQV7m (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Jan 2023 16:59:42 -0500
-Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2343C2A3;
-        Tue, 17 Jan 2023 12:26:42 -0800 (PST)
-Received: by mail-vs1-f49.google.com with SMTP id v127so29141213vsb.12;
-        Tue, 17 Jan 2023 12:26:42 -0800 (PST)
+        with ESMTP id S229707AbjAQV5T (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Jan 2023 16:57:19 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1943542DDC;
+        Tue, 17 Jan 2023 12:34:47 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id kt14so19305466ejc.3;
+        Tue, 17 Jan 2023 12:34:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6lc4VaJLAvuEtHfl2rD1jPE4f8tuwKTBgnejphTOXUQ=;
+        b=mRyKI2JkPtnpMXw9D7sqrpbj38NJE3CW1qcB8CzGKUFEyhG8Sh0/npHhqNmpi9vjtX
+         l3qPWTGwnqMnzvc1sIt6AJyk6GjNWrNmL0lg19/wuxIWUg3cm73j8VNg3fXOlVdV/TdY
+         Rf1qw2ZJ4tadHqg2LokTQiU336cVMVVJcB8o1GZqIFEmLxhcWsdkqJLT3iABNVwbcV5d
+         tOxlziXkre6a+prdtacrD2ARyhEbAG88QLRZ7KzBcC1hDQjn2TDkbcl32/M1G+Fe6J6M
+         FUg/9K9uAR57IwP1OX/VQXqFuLMu7t6A1pDd/I432A3Vyx64yVcXgjC6JN9Bsex+BrZr
+         1ztA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7rC0mNjXax5vqLz2OAo+EH0y+cJfjyIAm7sm9u5PvgQ=;
-        b=Yr9F31/7vLwBOZRKZ1DOhx7lv+07U9yCPU3kfK3htjNZou2RGjuLkdqwCn8yKk9eF3
-         GnyyMHiW3JgbPuw6+FCnbxXOm2pXbKR74ChWnRn/hHl+9by/VHS5XtgOFtV5OVc06ddw
-         LnzBWPfOsBT9fqwpqly0JUq8dnwIcMSuesyYy1KvIo27t7NfN87fYlhZwyNhgxs4TcFk
-         9BF4fB6bXw5YhS8+79SPrAO36Q1UAWE6lQ/eDxVYm9AGrYBuapnXFFs/g4Y/d3/65nEM
-         cNY+emfDCxLCn/w9cVLEEICPn6d8+Q4pdwHu1n/gCrT2Kr8MUafwGrFjLQWyaGQ2cHdv
-         bY8g==
-X-Gm-Message-State: AFqh2kqzy6dBVKRzPngOGJhrF0YAVXXu3mDkVZ//3HfOKs6E0G/PoFSo
-        ZhqezYlyMbvP27SJixa4hW2wxfnjUsABHg==
-X-Google-Smtp-Source: AMrXdXv8xG+OngFJXkL1EyBOzdj+k3Oc3D+zm5NnPdBiJa4B+CPjVzuCM17G+lAG+3CcyHApPWniCQ==
-X-Received: by 2002:a67:c116:0:b0:3b1:23bb:3087 with SMTP id d22-20020a67c116000000b003b123bb3087mr2147820vsj.26.1673987201149;
-        Tue, 17 Jan 2023 12:26:41 -0800 (PST)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id q22-20020a05620a2a5600b0070638ad5986sm7355016qkp.85.2023.01.17.12.26.39
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6lc4VaJLAvuEtHfl2rD1jPE4f8tuwKTBgnejphTOXUQ=;
+        b=0ATv9loQrODRiYevQ+/0K7RQhPYckcyv/MCD+Prt9G4+mfx9dB9BXPbuEG6/EcWdSf
+         g7rsovFooskPm9RY4LEXCQwnpWE+/A1jirT9I4Es8ZbE8SPbYIc0Ks1qzxiukpTgHi+Z
+         n9e6daEIHU6ulm5AmhaoAZqBgZd1Xxirk9YDmGaQsusG8k6FTH4ow5vCarHBqrulQf4Q
+         lAPwDNlbUUFMoXQffj4BoG3ORM+oq9BMcD6zD9lnxlRUQo6v4dauYjRJe9QJXf3Q+a5z
+         viP1MoGsuQfHCL1FcNkRxalpb0JA8dJVT6TwI7lOXFdLhGSRVoD/oSK0c1C7TQO5BdH1
+         b6Pg==
+X-Gm-Message-State: AFqh2kpI3hVJTOuHgoCEb7D8XLSHIr7Gtk7+SQEKx/SfowVmVNsRFAL1
+        9ZnMKZy3koGMrzIp4efZKqnzQJFRe2g=
+X-Google-Smtp-Source: AMrXdXs/xlziqN0dvRwkiF02V9asrBCGA9MOHc2E+7DTtCGq05sZuluClUf4cJ39cngzMhMn8wWBwA==
+X-Received: by 2002:a17:906:848e:b0:7c4:fa17:7202 with SMTP id m14-20020a170906848e00b007c4fa177202mr4234545ejx.33.1673987685401;
+        Tue, 17 Jan 2023 12:34:45 -0800 (PST)
+Received: from ?IPV6:2a01:c22:7346:8100:11fa:3b53:e36a:9e73? (dynamic-2a01-0c22-7346-8100-11fa-3b53-e36a-9e73.c22.pool.telefonica.de. [2a01:c22:7346:8100:11fa:3b53:e36a:9e73])
+        by smtp.googlemail.com with ESMTPSA id gk8-20020a17090790c800b0084d35ffbc20sm12555382ejb.68.2023.01.17.12.34.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 12:26:40 -0800 (PST)
-Received: by mail-yb1-f176.google.com with SMTP id o75so35606650yba.2;
-        Tue, 17 Jan 2023 12:26:39 -0800 (PST)
-X-Received: by 2002:a25:9012:0:b0:7b8:a0b8:f7ec with SMTP id
- s18-20020a259012000000b007b8a0b8f7ecmr707665ybl.36.1673987199250; Tue, 17 Jan
- 2023 12:26:39 -0800 (PST)
+        Tue, 17 Jan 2023 12:34:43 -0800 (PST)
+Message-ID: <57666b4f-4c12-7feb-caf1-5bd38908bfc7@gmail.com>
+Date:   Tue, 17 Jan 2023 21:34:37 +0100
 MIME-Version: 1.0
-References: <20230113062339.1909087-1-hch@lst.de> <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de> <9325a949-8d19-435a-50bd-9ebe0a432012@landley.net>
-In-Reply-To: <9325a949-8d19-435a-50bd-9ebe0a432012@landley.net>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 17 Jan 2023 21:26:27 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUJm5QvzH8hvqwvn9O6qSbzNOapabjw5nh9DJd0F55Zdg@mail.gmail.com>
-Message-ID: <CAMuHMdUJm5QvzH8hvqwvn9O6qSbzNOapabjw5nh9DJd0F55Zdg@mail.gmail.com>
-Subject: Re: remove arch/sh
-To:     Rob Landley <rob@landley.net>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH v4 0/3] i2c: gpio: support write-only sda
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>
+Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Rob,
+There are slave devices that understand I2C but have read-only SDA and
+SCL. Examples are FD650 7-segment LED controller and its derivatives.
+Typical board designs don't even have a pull-up for both pins.
+Therefore add properties for not using open-drain. For write-only SCL
+we have a property already, add one for write-only SDA.
 
-On Tue, Jan 17, 2023 at 8:01 PM Rob Landley <rob@landley.net> wrote:
-> On 1/16/23 01:13, Christoph Hellwig wrote:
-> > On Fri, Jan 13, 2023 at 09:09:52AM +0100, John Paul Adrian Glaubitz wrote:
-> >> I'm still maintaining and using this port in Debian.
-> >>
-> >> It's a bit disappointing that people keep hammering on it. It works fine for me.
-> >
-> > What platforms do you (or your users) use it on?
->
-> 3 j-core boards, two sh4 boards (the sh7760 one I patched the kernel of), and an
-> sh4 emulator.
->
-> I have multiple j-core systems (sh2 compatible with extensions, nommu, 3
-> different kinds of boards running it here). There's an existing mmu version of
-> j-core that's sh3 flavored but they want to redo it so it hasn't been publicly
-> released yet, I have yet to get that to run Linux because the mmu code would
-> need adapting, but the most recent customer projects were on the existing nommu
-> SOC, as was last year's ASIC work via sky130.
+v2:
+- improve commit message for patch 1
 
-J4 still vaporware?
+v3:
+- patch 2: check for adap->getsda in readbytes()
+- patch 2: align warning message level for info on missing getscl/getsda
+- patch 3: improve description of attribute sda_is_output_only
 
-> My physical sh4 boards are a Johnson Controls N40 (sh7760 chipset) and the
-> little blue one is... sh4a I think? (It can run the same userspace, I haven't
-> replaced that board's kernel since I got it, I think it's the type Glaubitz is
-> using? It's mostly in case he had an issue I couldn't reproduce on different
-> hardware, or if I spill something on my N40.)
->
-> I also have a physical sh2 board on the shelf which I haven't touched in years
-> (used to comparison test during j2 development, and then the j2 boards replaced it).
->
-> I'm lazy and mostly test each new sh4 build under qemu -M r2d because it's
-> really convenient: neither of my physical boards boot from SD card so replacing
-> the kernel requires reflashing soldered in flash. (They'll net mount userspace
-> but I haven't gotten either bootloader to net-boot a kernel.)
+v4:
+- patch 1: add no-pullup properties
+- patch 2: handle SDA and SCL independently
+- patch 2: properly handle case that SDA is NULL but SCL not
+- patch 3: handle new no-pullup attributes
 
-On my landisk (with boots from CompactFLASH), I boot the original 2.6.22
-kernel, and use kexec to boot-test each and every renesas-drivers
-release.  Note that this requires both the original 2.6.22 kernel
-and matching kexec-tools.  Apparently both upstreamed kernel and
-kexec-tools support for SH are different, and incompatible with each
-other, so you cannot kexec from a contemporary kernel.
-I tried working my way up from 2.6.22, but gave up around 2.6.29.
-Probably I should do this with r2d and qemu instead ;-)
+Heiner Kallweit (3):
+  dt-bindings: i2c-gpio: Add properties for dealing with write-only SDA/SCL w/o pullup
+  i2c: algo: bit: allow getsda to be NULL
+  i2c: gpio: support write-only sda/scl w/o pull-up
 
-Both r2d and landisk are SH7751.
+ .../devicetree/bindings/i2c/i2c-gpio.yaml     | 16 ++++
+ drivers/i2c/algos/i2c-algo-bit.c              | 77 +++++++++----------
+ drivers/i2c/busses/i2c-gpio.c                 | 13 +++-
+ include/linux/platform_data/i2c-gpio.h        |  9 +++
+ 4 files changed, 70 insertions(+), 45 deletions(-)
 
-Probably SH7722/'23'24 (e.g. Migo-R and Ecovec boards) are also
-worth keeping.  Most on-SoC blocks have drivers with DT support,
-as they are shared with ARM.  So the hardest part is clock and
-interrupt-controller support.
-Unfortunately I no longer have access to the (remote) Migo-R.
+-- 
+2.39.0
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
