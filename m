@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A06671D62
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Jan 2023 14:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E31A671D6C
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Jan 2023 14:17:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbjARNQ5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 18 Jan 2023 08:16:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
+        id S229651AbjARNR0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 18 Jan 2023 08:17:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjARNQY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 Jan 2023 08:16:24 -0500
+        with ESMTP id S229666AbjARNQa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 Jan 2023 08:16:30 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B56994C82;
-        Wed, 18 Jan 2023 04:41:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A10BDA8FA;
+        Wed, 18 Jan 2023 04:41:15 -0800 (PST)
 Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 82D1D1B5C;
-        Wed, 18 Jan 2023 13:40:58 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0AB491BD2;
+        Wed, 18 Jan 2023 13:40:59 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674045659;
-        bh=TyApQ6qpr4eiku+THwel+cmwld8/fczSmL0rhfymuCk=;
+        s=mail; t=1674045661;
+        bh=H5byX9BR3izXApOzFQA8+xqAPcha46UtXqsX7Usjt0I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HQW2+uJGZ5R3dDguBZtT/+9bIqyI85nEGlu7wOCa21cp3tYiIv6bMtVugo6zr08Co
-         fbPdM4AbYZGFX9Wj1Zzp+MLOvEmhN+c8DpkgLajRIJhwD2SYki3GvkvGKY6kcDTa6k
-         SPsBrveZNL0nUiDEUtHAcjxR1IXe9WFx/jL2COTM=
+        b=b0iW5joPzWZ2G4eSRywHxDgZ4SiK4Nd+Scbhl621aI4kWc4rwoQnWWgOFceydhgzS
+         iURaCI12NgsYsMxj1SgyPRsf/2nNQ8kdKGbftt5/afKmR+Rw8kWE6BUetgHN4DDW02
+         9u5yAlGaIALT1ROn4fn2O5kSOxK4FCZ//Y1w813A=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
@@ -48,9 +48,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v7 2/7] dt-bindings: media: add TI DS90UB913 FPD-Link III Serializer
-Date:   Wed, 18 Jan 2023 14:40:26 +0200
-Message-Id: <20230118124031.788940-3-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v7 3/7] dt-bindings: media: add TI DS90UB953 FPD-Link III Serializer
+Date:   Wed, 18 Jan 2023 14:40:27 +0200
+Message-Id: <20230118124031.788940-4-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
 References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
@@ -65,47 +65,47 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add DT bindings for TI DS90UB913 FPD-Link III Serializer.
+Add DT bindings for TI DS90UB953 FPD-Link III Serializer.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../bindings/media/i2c/ti,ds90ub913.yaml      | 133 ++++++++++++++++++
- 1 file changed, 133 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
+ .../bindings/media/i2c/ti,ds90ub953.yaml      | 134 ++++++++++++++++++
+ 1 file changed, 134 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub953.yaml
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
+diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953.yaml
 new file mode 100644
-index 000000000000..f6612bb0f667
+index 000000000000..2030366994d1
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
-@@ -0,0 +1,133 @@
++++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953.yaml
+@@ -0,0 +1,134 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub913.yaml#
++$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub953.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Texas Instruments DS90UB913 FPD-Link III Serializer
++title: Texas Instruments DS90UB953 FPD-Link III Serializer
 +
 +maintainers:
 +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 +
 +description:
-+  The TI DS90UB913 is an FPD-Link III video serializer for parallel video.
++  The TI DS90UB953 is an FPD-Link III video serializer for MIPI CSI-2.
 +
 +properties:
 +  compatible:
 +    enum:
-+      - ti,ds90ub913a-q1
++      - ti,ds90ub953-q1
++      - ti,ds90ub971-q1
 +
 +  '#gpio-cells':
 +    const: 2
 +    description:
-+      First cell is the GPO pin number, second cell is the flags. The GPO pin
-+      number must be in range of [0, 3]. Note that GPOs 2 and 3 are not
-+      available in external oscillator mode.
++      First cell is the GPIO pin number, second cell is the flags. The GPIO pin
++      number must be in range of [0, 3].
 +
 +  gpio-controller: true
 +
@@ -128,7 +128,7 @@ index 000000000000..f6612bb0f667
 +      port@0:
 +        $ref: /schemas/graph.yaml#/$defs/port-base
 +        unevaluatedProperties: false
-+        description: Parallel input port
++        description: CSI-2 input port
 +
 +        properties:
 +          endpoint:
@@ -136,7 +136,7 @@ index 000000000000..f6612bb0f667
 +            unevaluatedProperties: false
 +
 +            required:
-+              - pclk-sample
++              - data-lanes
 +
 +      port@1:
 +        $ref: /schemas/graph.yaml#/properties/port
@@ -165,13 +165,10 @@ index 000000000000..f6612bb0f667
 +    #include <dt-bindings/gpio/gpio.h>
 +
 +    serializer {
-+      compatible = "ti,ds90ub913a-q1";
++      compatible = "ti,ds90ub953-q1";
 +
 +      gpio-controller;
 +      #gpio-cells = <2>;
-+
-+      clocks = <&clk_cam_48M>;
-+      clock-names = "clkin";
 +
 +      #clock-cells = <0>;
 +
@@ -181,9 +178,10 @@ index 000000000000..f6612bb0f667
 +
 +        port@0 {
 +          reg = <0>;
-+          ub913_in: endpoint {
++          ub953_in: endpoint {
++            clock-lanes = <0>;
++            data-lanes = <1 2 3 4>;
 +            remote-endpoint = <&sensor_out>;
-+            pclk-sample = <1>;
 +          };
 +        };
 +
@@ -199,15 +197,18 @@ index 000000000000..f6612bb0f667
 +        #address-cells = <1>;
 +        #size-cells = <0>;
 +
-+        sensor@48 {
-+          compatible = "aptina,mt9v111";
-+          reg = <0x48>;
++        sensor@1a {
++          compatible = "sony,imx274";
++          reg = <0x1a>;
 +
-+          clocks = <&fixed_clock>;
++          reset-gpios = <&serializer 0 GPIO_ACTIVE_LOW>;
++
++          clocks = <&serializer>;
++          clock-names = "inck";
 +
 +          port {
 +            sensor_out: endpoint {
-+              remote-endpoint = <&ub913_in>;
++              remote-endpoint = <&ub953_in>;
 +            };
 +          };
 +        };
