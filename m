@@ -2,35 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0330673986
-	for <lists+linux-i2c@lfdr.de>; Thu, 19 Jan 2023 14:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C71086739D8
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Jan 2023 14:20:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjASNI7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 19 Jan 2023 08:08:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
+        id S231327AbjASNUa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 19 Jan 2023 08:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbjASNIR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 19 Jan 2023 08:08:17 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB476F31C;
-        Thu, 19 Jan 2023 05:08:14 -0800 (PST)
+        with ESMTP id S231148AbjASNUF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 19 Jan 2023 08:20:05 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010935CE64;
+        Thu, 19 Jan 2023 05:19:19 -0800 (PST)
 Received: from booty (unknown [77.244.183.192])
         (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9CF01240009;
-        Thu, 19 Jan 2023 13:08:07 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id F12681BF205;
+        Thu, 19 Jan 2023 13:19:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674133693;
+        t=1674134357;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6K4yWU5zXNS7rCMC7inDbg1ZXzG9ovvZLrR75ufoQvs=;
-        b=p1E6NcsRU1W0Q0HQ/H2HNG9ep5qr+90vE2r0nUiZcx0IhICgyYKGqJcD/HMTXSN1y1O0Tz
-        YCTzRFOS7YbGmnNHWQEA7GO2lVex60A1Rbcdql4h73FvFWH8V/ASi6EqKYZzhADUfv8bRw
-        I2pJywhld9/55+6dHRkqUKty6zPXmPAzRh/LeN5JBm7lFSU/TUAi7ft2ZkZESeTq+APqUV
-        oRM1zHrmUJVjBWSjhSdWxvpJ4JrVCrEv4b8YQIknX+p8TNGoLifgGR14dbVp79UMZlc7M9
-        rTqThGWemBbw2UwRrib6Oq2r9Bocnud1/l/z4QvmI1A6Y9vDwYveUrOjP5nYFA==
-Date:   Thu, 19 Jan 2023 14:08:06 +0100
+        bh=q8pOiSqHpljeGPJE7VLy887atVfOgK9uVlRZiZMg1f4=;
+        b=YHoDW21VNayHw1DlffyMTBOwJcj4G0mt5e7B9im/wuEToEhfLAvw6x37fc7Pr6KLV286pG
+        Zyx6yv11+50ygEMDgIFEVzsa0WHWmVtFuITN5dzdYod8qSysbhP6Gv/Y37TL3E/uix/MiB
+        9bjIWReO+Z4sZXPGP9E7BKmY7yFGGv0MIZgZSZaYHdRVpBrSKeoKpkO5Qb0kw/51GwnrS6
+        q2enMHr1aNmPNUatl2quMGqLQVBgA9plJart749jKtky5jqUxDSAMSxDIAVsKtJL42kFOT
+        he2RmN00DnEp2Z3T3iaht+UrVZvkcnzHQqBiH2P8d90YGKXSUyjbDsOWqtIf9g==
+Date:   Thu, 19 Jan 2023 14:19:12 +0100
 From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
 To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
@@ -51,145 +51,98 @@ Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
         Hans Verkuil <hverkuil@xs4all.nl>,
         Mike Pagano <mpagano@gentoo.org>,
         Krzysztof =?UTF-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-Subject: Re: [PATCH v7 1/7] i2c: add I2C Address Translator (ATR) support
-Message-ID: <20230119140806.6b926cad@booty>
-In-Reply-To: <ddbf82d0-155f-9189-44df-1f796c028b53@ideasonboard.com>
+        Marek Vasut <marex@denx.de>
+Subject: Re: [PATCH v7 0/7] i2c-atr and FPDLink
+Message-ID: <20230119141912.7ad2997a@booty>
+In-Reply-To: <024c8127-5109-3ea5-efa0-8c0a8763e8b3@ideasonboard.com>
 References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
-        <20230118124031.788940-2-tomi.valkeinen@ideasonboard.com>
-        <Y8gA+cz9m7PaEhfP@smile.fi.intel.com>
-        <20230118181753.7a325953@booty>
-        <Y8gu4mlXUlyiFKZD@smile.fi.intel.com>
-        <20230119092115.02cbbab3@booty>
-        <ddbf82d0-155f-9189-44df-1f796c028b53@ideasonboard.com>
+        <Y8gX0krXayfOa4Hi@smile.fi.intel.com>
+        <bd6d6cc0-4e70-fa31-4b5e-e6bcddf62d36@ideasonboard.com>
+        <Y8gvu/E5EoPqo8J1@smile.fi.intel.com>
+        <20230119094358.010bc826@booty>
+        <024c8127-5109-3ea5-efa0-8c0a8763e8b3@ideasonboard.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Tomi, Andy,
+Hi Tomi,
 
-On Thu, 19 Jan 2023 14:39:09 +0200
+On Thu, 19 Jan 2023 14:40:24 +0200
 Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
 
-> On 19/01/2023 10:21, Luca Ceresoli wrote:
+> On 19/01/2023 10:43, Luca Ceresoli wrote:
 > > Hi Andy,
 > > 
-> > On Wed, 18 Jan 2023 19:39:46 +0200
+> > On Wed, 18 Jan 2023 19:43:23 +0200
 > > Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
 > >   
-> >> On Wed, Jan 18, 2023 at 06:17:53PM +0100, Luca Ceresoli wrote:  
-> >>> On Wed, 18 Jan 2023 16:23:53 +0200
-> >>> Andy Shevchenko <andriy.shevchenko@intel.com> wrote:  
-> >>
-> >> ...
-> >>  
-> >>>>> +A typical example follows.
-> >>>>> +
-> >>>>> +Topology::
-> >>>>> +
-> >>>>> +                      Slave X @ 0x10
-> >>>>> +              .-----.   |
-> >>>>> +  .-----.     |     |---+---- B
-> >>>>> +  | CPU |--A--| ATR |
-> >>>>> +  `-----'     |     |---+---- C
-> >>>>> +              `-----'   |
-> >>>>> +                      Slave Y @ 0x10
-> >>>>> +
-> >>>>> +Alias table:
-> >>>>> +
-> >>>>> +.. table::
-> >>>>> +
-> >>>>> +   ======   =====
-> >>>>> +   Client   Alias
-> >>>>> +   ======   =====
-> >>>>> +   X        0x20
-> >>>>> +   Y        0x30
-> >>>>> +   ======   =====
-> >>>>> +
-> >>>>> +Transaction:
-> >>>>> +
-> >>>>> + - Slave X driver sends a transaction (on adapter B), slave address 0x10
-> >>>>> + - ATR driver rewrites messages with address 0x20, forwards to adapter A
-> >>>>> + - Physical I2C transaction on bus A, slave address 0x20
-> >>>>> + - ATR chip propagates transaction on bus B with address translated to 0x10
-> >>>>> + - Slave X chip replies on bus B
-> >>>>> + - ATR chip forwards reply on bus A
-> >>>>> + - ATR driver rewrites messages with address 0x10
-> >>>>> + - Slave X driver gets back the msgs[], with reply and address 0x10  
+> >> On Wed, Jan 18, 2023 at 07:28:20PM +0200, Tomi Valkeinen wrote:  
+> >>> On 18/01/2023 18:01, Andy Shevchenko wrote:  
+> >>>> On Wed, Jan 18, 2023 at 02:40:24PM +0200, Tomi Valkeinen wrote:  
+> >>>>> Hi,
+> >>>>>
+> >>>>> You can find the v6 from:
+> >>>>>
+> >>>>> https://lore.kernel.org/all/20230105140307.272052-1-tomi.valkeinen@ideasonboard.com/
+> >>>>>
+> >>>>> Main changes:
+> >>>>>
+> >>>>> * i2c-atr: Use bus notifier. This allows us to drop the patch that adds
+> >>>>>     the attach_client/detach_client callbacks. On the downside, it removes
+> >>>>>     the option for error handling if the translation setup fails, and also
+> >>>>>     doesn't provide us the pointer to the i2c_board_info. I belive both
+> >>>>>     are acceptable downsides.
+> >>>>>
+> >>>>> * Use fwnode in the fpdlink drivers instead of OF
+> >>>>>
+> >>>>> * Addressed all the review comments (I hope)
+> >>>>>
+> >>>>> * Lots of cosmetic or minor fixes which I came up while doing the fwnode
+> >>>>>     change  
 > >>>>
-> >>>> I'm not sure I got the real / virtual status of the adapters. Are the B and C
-> >>>> virtual ones, while A is the real?  
+> >>>> I believe my comments to the first driver applies to the next two, so please
+> >>>> address them whenever you are agree / it's possible / it makes sense.
+> >>>>
+> >>>> About ATR implementation. We have the i2c bus (Linux representation of
+> >>>> the driver model) and i2c_adapter and i2c_client objects there. Can't we
+> >>>> have an i2c_client_aliased in similar way and be transparent with users?  
+> >>  
+> >>> Can you clarify what you mean here?
 > >>>
-> >>> Let me reply, as I wrote these docs back at the times and thus I feel
-> >>> guilty in case that's unclear. :)
-> >>>
-> >>> I don't like the word "virtual" in this situation. A, B and C are all
-> >>> physical busses, made of copper and run by electrons on PCBs. B and C
-> >>> are the "remote" or "downstream" busses (w.r.t. the CPU), where the i2c
-> >>> devices are and where transactions happen using the address that the
-> >>> chip responds to. A is the "local" or "upstream" bus that is driven
-> >>> directly by the CPU (*) and where address aliases are used. Using
-> >>> aliases there is necessary because using address 0x10 would be
-> >>> ambiguous as there are two 0x10 chips out there.
-> >>>
-> >>> (*) There could be more layers of course, but still A is "closer to the
-> >>> CPU than B and C", for the sake of completeness.  
+> >>> The i2c_clients are not aware of the i2c-atr. They are normal i2c clients.
+> >>> The FPD-Link drivers are aware of the ATR, as the FPD-Link hardware contains
+> >>> the ATR support.  
 > >>
-> >> Can the diagram and/or text be updated to elaborate this?  
+> >> Can't that hardware be represented as I2C adapter? In such case the ATR specifics
+> >> can be hidden from the client (drivers).
+> >>
+> >> I'm worrying about code duplication and other things that leak into drivers as
+> >> ATR callbacks.  
 > > 
-> > Let's see whether the text below is better. I haven't changed the
-> > image, I don't think we can do much more in ASCII, but maybe we can
-> > replace it with an SVG [0]?
+> > Which callbacks do you refer to? i2c_atr_ops? I don't think we can do
+> > without the attach/detach_client ones, it's where the driver-specific
+> > implementation is hooked for the generic ATR infra to call it.
 > > 
-> > [0]
-> > https://github.com/lucaceresoli/docs/blob/master/video-serdes-linux/images/i2c-ti.svg
-> > 
-> > A typical example follows.
-> > 
-> > Topology::
-> > 
-> >                        Slave X @ 0x10
-> >                .-----.   |
-> >    .-----.     |     |---+---- B
-> >    | CPU |--A--| ATR |
-> >    `-----'     |     |---+---- C
-> >                `-----'   |
-> >                        Slave Y @ 0x10  
+> > However now I noticed the select/deselect ops are still there. IIRC
+> > they are not used by any driver and in the past the plan was to just
+> > remove them. Tomi, do you think there is a good reason to keep them?  
 > 
-> Slightly beside the point of this discussion, but one thing (I think) I 
-> tried to highlight in some older cover letter was that we don't really 
-> have the above structure. We have something like this (a quick edit, sorry):
-> 
->                              .------.  Slave X @ 0x10
->                  .------.    | FPDS |   |
->      .-----.     | FPDD |-F1-`------'---+---- B
->      | CPU |--A--| ATR  |
->      `-----'     |      |-F2-.------.---+---- C
->                  `------'    | FPDS |   |
->                              `------'  Slave Y @ 0x10
-> 
-> Where FPDD = Deserializer, FPDS = Serializer, F1/F2 = FPD-Link bus 1/2.
-> 
-> So the ATR functionality is in the deserializer, but the actual remote 
-> i2c bus is on the serializer.
+> I thought you had a reason to add them, so I didn't remove them =). I 
+> can drop them.
 
-I'd rather say that the ATF functionality is in the sum of ser+des as
-they really cooperate. But this is kind of philosophical. :) What
-matters is that it's worth mentioning that the "ATR" box is actually an
-abstract visualization of a feature that is provided by two or more
-chips (in the known universe, at least).
+Yes, please drop them.
+
+It's the usual "it looked like a good idea" situation... :)
 
 -- 
 Luca Ceresoli, Bootlin
