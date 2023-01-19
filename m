@@ -2,176 +2,1086 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA36673D00
-	for <lists+linux-i2c@lfdr.de>; Thu, 19 Jan 2023 16:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A35673EC0
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Jan 2023 17:27:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjASPEl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 19 Jan 2023 10:04:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46324 "EHLO
+        id S229689AbjASQ1y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 19 Jan 2023 11:27:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjASPEe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 19 Jan 2023 10:04:34 -0500
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D0F5DC39;
-        Thu, 19 Jan 2023 07:04:20 -0800 (PST)
-Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30JEQNas029658;
-        Thu, 19 Jan 2023 15:03:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=pps0720;
- bh=tKMhP6/gpGCDlmbqusJlm7zd0+p2fQ5A4lVRSanR7XU=;
- b=cDGeeSSBQQVp8utZY6s3W1thAIvAw/y4xMvo+WM0eTXt5huo+9xoRl9zSpyKTFu2ctqG
- DpvTN88IgxEV3Q+hHr7Ge79D6Dp1NqnQSwlny9AW3c30kTXoEYunsAnKHlyPOKM7H4e3
- VgAF3ON1PC//Ov/kdKRD/DnDWuvRAZEGFLVOQ35MOQTps+bjhAovfJ6pJYZbrpif1qgh
- nA6Zgn7bnVrhwbbep+i6ODISkSEzagFPkNp+iw5PRoJG5ZZ0U5feCB98y+iiGk4mRgqZ
- dX11bP+IFoEZ3ElpLfFHTt03NjkuF5VaEvd9i9Z649SoqJjxuW33yREFpYzkyWEKFpL1 WQ== 
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3n73w5t73s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 15:03:56 +0000
-Received: from p1wg14924.americas.hpqcorp.net (unknown [10.119.18.113])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 63C6F301B5;
-        Thu, 19 Jan 2023 15:03:55 +0000 (UTC)
-Received: from p1wg14925.americas.hpqcorp.net (10.119.18.114) by
- p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Thu, 19 Jan 2023 03:03:55 -1200
-Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
- p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
- via Frontend Transport; Thu, 19 Jan 2023 03:03:55 -1200
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Thu, 19 Jan 2023 03:03:54 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ClQ6uvqkmO65YaCQxqsF+jUjXDF1IyPq74ADW3C1woJQfVOKwqXz5ekDv2xfDBSJq28C5lA5l23lvSY+r0H3PvXIgZDoeE7au6g7XmRN5M3VQnAupAD7euGdu4TnaJ2Hb/R0ASiNzPcLktHfqOF18s/y3yBFTPr1mVp9Q4VfZ3SI8pd6DgSDVRPZeJO2OZXLA7bTPxkEiZO0Qptmm5HqNWjjoPr6otPS2q8PRHytZJCWiOx5d7riNveyS20goZgZ1jMmQyo0zqC0cnhLcuY4l3sokgLGbYjDJ5fZsFYkxPsy7ifVP2xuKoCTtpwbKJ3VEamoOw6zr3GXH7hQ0KuySw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tKMhP6/gpGCDlmbqusJlm7zd0+p2fQ5A4lVRSanR7XU=;
- b=eSkFC477Xug4hCgsfio+ZEnZWU3O7N2AD+ly+Yx5rBjYp+VWySziTOIdjVUGBVUaDLbrC3cNasYLGB3jexqvHa4D7ORpf5dmvcPnTrcVJU0oFX7t37/sTusrW1yd543XSsf67nSNY+NZLWxQQvrf6oSTZhk9o305Q4glEYTVzkv+KiK7rJ1XMIK6Qhc1+nuIpwQcBek6ILl3B0b6LxBS5+ORRD8GT3R/ns8C87LTiFmGSo1bc5CCeXz7Z8XHF+8J7ecX8AYXw2wjDFWkS51lNBuCAIxEmVVJxAcFuI+eWKTBk/Ev7onTxDil5KPHEu8nk4rId02gvB5JFqyTNLGLRA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::10) by
- PH7PR84MB1653.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:150::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Thu, 19 Jan
- 2023 15:03:51 +0000
-Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::de12:a5c2:5c71:6b87]) by DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::de12:a5c2:5c71:6b87%7]) with mapi id 15.20.6002.024; Thu, 19 Jan 2023
- 15:03:50 +0000
-From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
-To:     Lee Jones <lee@kernel.org>
-CC:     "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 0/5] ARM: Add GXP I2C Support
-Thread-Topic: [PATCH v2 0/5] ARM: Add GXP I2C Support
-Thread-Index: AQHZKrTXNpoJhpgmhkqmb9sGeizDM66lzkQA//+mNYA=
-Date:   Thu, 19 Jan 2023 15:03:50 +0000
-Message-ID: <899B72A1-4084-4221-800D-EF28B99F497D@hpe.com>
-References: <20230117204439.76841-1-nick.hawkins@hpe.com>
- <Y8lSyJWm+JAQw3AW@google.com>
-In-Reply-To: <Y8lSyJWm+JAQw3AW@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Microsoft-MacOutlook/16.69.23010700
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR84MB1927:EE_|PH7PR84MB1653:EE_
-x-ms-office365-filtering-correlation-id: 4f02868e-f6d6-40cf-7e3e-08dafa2e5fb6
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: b8xEog+snb+93Fqk8m2GvEPfJIkulHeTQkyELILjlnIefImPWsygSR4ma36Qf2HzHRsQ38NjQB5FJEn/v7l+qEe+Uva/QQOJzXbZ0ClEFVP/bHzV3wAGyiJei352B71+iKbtpBra/KcMLYM6l49+jbNvUk8IHmjnN0AWlYRw72kWt/WnX5jbfgewOQlO1dBUIIeyWXeqHGHATTkrdejTpHoSxA/SEdIVXmJ2dmuVVmOEON+qNADH5Gfhh/HNYFyDb5l3lpCJiDpEVURFAkqko3S6QxiBk6YeGS7JYNKTMERd15n8GWNXZgCDXFTil7ZGW6H2ycno9uc0yzDy5eilKTurHhd9wP6Mf/ZOGchx4PyWzpe9mahmXT7oAzlE+38cNNuMglNsM7FHPWmZKhQrQzWsx9Ey0JFQ/rv4ctwgtWoouaOTFZcQ76B6m4gYaF+ex5cwkqpatVFgjHuPZfUvdhW22jK2RpXKM89fPUpKlkw9swnRwEPqseJ8B1HEN+j7lUktLdTgH+1Yw2pdCQoOGyahe9j+InlwfT/jPK1krl5XP5GP9+i5r/6uJ2UB064jbaM5UbTebVFDc/JR+MX444lo93YleOjbqKXt7St3q2+cwdUwe4OFVEwC07j8iJBBvmH5KwO3Rt8EGC6Umrpggo2sYdbkIaU1oywGotNeNA7QERg4tbcLf32Q+uDNaFI0prwFxz5CV2Mlx5PAAxog/34WcfZ9zLDdLSYL89TFpxw=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(396003)(346002)(376002)(136003)(366004)(451199015)(86362001)(2616005)(4326008)(66946007)(66476007)(76116006)(186003)(66446008)(558084003)(8676002)(64756008)(6512007)(66556008)(6916009)(41300700001)(33656002)(8936002)(91956017)(36756003)(82960400001)(5660300002)(38100700002)(478600001)(54906003)(316002)(2906002)(71200400001)(6506007)(38070700005)(6486002)(122000001)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eDQ1emJDejcwUmg3dEY2TEFVOWtwNCtKYTNoSzZnMHk2alpGaWhubUhSellO?=
- =?utf-8?B?YmdMSDZrWHJUaTFnaVd3QlAreUhDSDZjb3UxZXlzQWtacXF1WlozYnFiRk1q?=
- =?utf-8?B?dENlbzBXM0VmSEdrMUUyOU0xazhvWTVvOVIwYmdnZUhMQk8zaWpuS3NJVW1L?=
- =?utf-8?B?S2llYVNWVU50eGdqZnN2YnlqQkVmRGlCWUJZcWgvOVpjRVlSZmdUcFpMUDNp?=
- =?utf-8?B?cUc3NFdPWG11WGRkWWMwV1Q1Nkl4VkYwZVc4M0k5M21iN09TOGlOVG9lT1Nz?=
- =?utf-8?B?U3NnYllZSWhKSk9VZVU5VUpxempiVVFGUEpOWVNJU3pzNWZ2aDZtcTdXbU9S?=
- =?utf-8?B?ZmRmSWpISFd0TnZBckI1U2ZrQ3NhaXJzZ1R0bjNHc05OY1VSbzBFSjdSOS9x?=
- =?utf-8?B?cUpXdjQ4T1U2R1BDVkgxNXZqYnpoNk1wMDV5TlljRDBSVUxzUm1WMUpyckJp?=
- =?utf-8?B?bVZBaDdPUHRINGNvTUlJcW5CNU5vUG43TjJrOGhoVmp2cjZ1Q2lzNTRJME56?=
- =?utf-8?B?V0NzZmdFTmlLSXd1N052NDhuam92NXlwZUVZOEFTUk94MmxseE8zSjc4VnFT?=
- =?utf-8?B?M3dEem8vdjFVaU5LYXg1dGZNZE9JZ1dKTWV2Wm55UlZIVkF1VlJ3dnVGNDF6?=
- =?utf-8?B?ZWhNNzZYT0VLK2N3dGFueEZCalNVQVY1dFlQM3l0YzdtMDJhV01JNmVMNFBU?=
- =?utf-8?B?aHN4Z01ja1k0MEgzSko2VDNjNFptUWJ3bzZvMm0xbnZ3T29TcGw0eFEySi92?=
- =?utf-8?B?MTJDc040UGdaODNneG8rRlRsVnZFT29NVjBxbjhFQm5xOUZaejZWTTF2N2I5?=
- =?utf-8?B?cWRPVXlWYTQ2ajBpd2VOdWo2YVBmMmcwTmtGN3NnUjJFQ1VaT2txUGc4b29N?=
- =?utf-8?B?MXdoVHNTcldka1pDL3Q5cThESWFkeWFXNkpOaFhXRkpFUXc2b0cvTDd2ZzVm?=
- =?utf-8?B?WXAvRzBHaE9od2lScmIzZ3NqRTYxOGZBQXNiRDkvTmEzSjZhelRWR0R6S2JN?=
- =?utf-8?B?N1daeEloSFo5OFBDV1h5ZGhqTVZobzlNTGdUS3BoV3FIQzcxZmR4K1ViR3lh?=
- =?utf-8?B?ZU9LdjJxNmxyZGJFZFhlMk9GT1ZKcU4wT3IvNGNYL0lBVm0vV1F4YlNQUHNE?=
- =?utf-8?B?Qzd1ZWxaUHFwbDdtOGFYQzVOeitKaDhuZGlQdjEzS1hxYm1NQStuOWRKbVlw?=
- =?utf-8?B?US92cWkrVGhObXNpUWF6OEVFSGxYV3luS2IzRC9TUGp2cmdJOEFHcnJJMnNP?=
- =?utf-8?B?a05FL3VKWEczd1dJYmppQXZGQXhFUHNCVDhqSk4xNVpVL0srNmwvY3JYZ3dY?=
- =?utf-8?B?TjBFdFFYemd6a1llU0w1SUtDYkFEaTZqcVhoTlFFOWU0TmZtaDVSQUtReXdN?=
- =?utf-8?B?ZGROU3NTSENpR0htQ3JyLzduVkl2cnFxV0xTWUF0RndBOXQweEdRQ0xkMDFu?=
- =?utf-8?B?NGJLZGtuVmVrWkZsTHlGVFZnaWtEeGFodis3R1B1ZjVHUHZZN0NHTkpVb1NP?=
- =?utf-8?B?bUJaMXlRU1pDVms2VlZGcGZVaEkwZFcxRWttaG4xeE1jSFJHTzlXK3dOM3hN?=
- =?utf-8?B?RE9WYWoya2N2NW9CN29JalRReG1MTWlWZW9VWktXMVV6MStrNkJFazA1ZE0y?=
- =?utf-8?B?THRQZFJCWldDZ3QzYlMxRExOSUU4OHdLK3A1Mi9BYW04TkVPYnlzWUhGOGVt?=
- =?utf-8?B?T3k3WWxtc1JxWmFmRG51RFFXUlI5TWNKczg3ajdkMUNQR2dwUFNjRWUrZFp5?=
- =?utf-8?B?YUZ4NGdlN2VFZnBRWU11R2E1aXhwV1VUdkE3cFQ2K1phYVMvY0d6czVQNWhQ?=
- =?utf-8?B?VjFXV1ZTUGNKVzU5U2ZZeDg5RGh0L1RNNUxvR2lTVXFOcFp2UTBnSXJLZEhx?=
- =?utf-8?B?Nk0zVW9GQnhlOG9aNy9ra01kUUJlakxwMEh2MXhzVXcwc20vbDZjbmZCcmpz?=
- =?utf-8?B?OUxwN3g5Ym9CMVl6NklGVjFmM0xjZ05yQXJ4OUZ3eFJRTDF2KzVMbXJGYnNG?=
- =?utf-8?B?aCtWazJZL1J6RkVPYWNRVUNtWURPSWczSm9LMDBGcTdqODlybjRIN21hSFlF?=
- =?utf-8?B?ZVBQVlJlYzEveGIvemM4cC9jV3BndmpkRlpzeDZDY0ZoUmJmL1J2R3grOVBo?=
- =?utf-8?B?NUpkSHRVR29NbG5qaFdXZnZLOWZZL0x4ZWNrWmgvaTJzR2hCUFFhQzdKd09j?=
- =?utf-8?B?M1E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7B4CFDD096CD9F46ABF1C0021F404685@NAMPRD84.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        with ESMTP id S230255AbjASQ1l (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 19 Jan 2023 11:27:41 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F733241D9;
+        Thu, 19 Jan 2023 08:27:37 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 750E17EC;
+        Thu, 19 Jan 2023 17:27:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674145655;
+        bh=o9BiE7TBqZp0Hc/8ywqR39pj3oIuZr3rF5GoaR0hT2M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dCChR7CrT/ZMjoNd84dAx03DLLigcEJ/trmS3qA9ttPlV7v/E7i4GAG+rTICLCLek
+         fW1hrGXt1OeAdIi3xkerpylH6genhDBMCJaSWIqI+OHz2aD8jcHmjGy4pg3XyHtVFS
+         1pJlsuG0cWaMq1PVuc62WOtw9g8PPjRZm5zL05dY=
+Message-ID: <aba49d82-c76f-7ff2-751c-d1be7b8f3bca@ideasonboard.com>
+Date:   Thu, 19 Jan 2023 18:27:31 +0200
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4f02868e-f6d6-40cf-7e3e-08dafa2e5fb6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2023 15:03:50.7269
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jRRRSCGgCzl8t7L6DhtLVoAj6s5AObXvAQMZgaTDo+5mgLPxBWsfbB+TOcchf1xTo/D+iTnk1OIsOuyCuv6v+g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR84MB1653
-X-OriginatorOrg: hpe.com
-X-Proofpoint-ORIG-GUID: SAtYpYLxAma4nKY80iE8JSblfwJy6YRq
-X-Proofpoint-GUID: SAtYpYLxAma4nKY80iE8JSblfwJy6YRq
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-19_09,2023-01-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=551 spamscore=0 malwarescore=0 mlxscore=0 bulkscore=0
- phishscore=0 clxscore=1015 priorityscore=1501 adultscore=0
- lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301190120
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 5/7] media: i2c: add DS90UB960 driver
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
+ <20230118124031.788940-6-tomi.valkeinen@ideasonboard.com>
+ <Y8gUuqLBXsXQoNUC@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y8gUuqLBXsXQoNUC@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-PiBOb3QgdHJ5aW5nIHRvIGJlIHJ1ZGUsIGJ1dCB3aHkgaGF2ZSB5b3Ugc2VudCB0aGlzIHRvIG1l
-Pw0KDQpBcG9sb2dpZXMuIFRoaXMgd2FzIGluIGVycm9yLg0KDQpUaGFua3MsDQoNCi1OaWNrIEhh
-d2tpbnMNCg0K
+Hi Andy,
+
+Thanks for the thorough review!
+
+On 18/01/2023 17:48, Andy Shevchenko wrote:
+> On Wed, Jan 18, 2023 at 02:40:29PM +0200, Tomi Valkeinen wrote:
+>> Add driver for TI DS90UB960 FPD-Link III Deserializer.
+> 
+> ...
+> 
+>> +#define UB960_MIN_AEQ_STROBE_POS -7
+> 
+> I believe it might need parentheses due to theoretical possibilities to be used
+> in the expression.
+
+Hmm, for my education, in which kind of expressions this could cause an 
+issue?
+
+> ...
+> 
+>> +#define UB960_MIN_MANUAL_STROBE_POS -(7 + 6)
+> 
+> Ditto.
+> 
+> ...
+> 
+>> +	ret = regmap_read(priv->regmap, reg, &v);
+>> +	if (ret)
+>> +		dev_err(dev, "%s: cannot read register 0x%02x (%d)!\n",
+>> +			__func__, reg, ret);
+> 
+> Not sure how this messages are useful and esp. parameters, since regmap has
+> already trace events. Maybe it's possible to narrow regmap traces to the
+> dedicated functions?
+
+I have found the error prints useful on multiple occasions. If something 
+goes wrong, I'd rather see it immediately. And isn't tracing and error 
+printing quite different things? What is your concern here, or rather, 
+what would you suggest instead of the above?
+
+>> +	else
+>> +		*val = v;
+> 
+> ...
+> 
+>> +	if (priv->current_read_rxport == nport &&
+>> +	    priv->current_write_rxport_mask == BIT(nport))
+>> +		return 0;
+>> +
+>> +	ret = regmap_write(priv->regmap, UB960_SR_FPD3_PORT_SEL,
+>> +			   (nport << 4) | (1 << nport));
+> 
+> Any reason why not BIT() here, while above and below it's being used?
+
+No reason.
+
+>> +	if (ret) {
+>> +		dev_err(dev, "%s: cannot select rxport %d (%d)!\n", __func__,
+>> +			nport, ret);
+>> +		return ret;
+>> +	}
+> 
+>> +	priv->current_read_rxport = nport;
+>> +	priv->current_write_rxport_mask = BIT(nport);
+>> +
+>> +	return 0;
+>> +}
+> 
+> ...
+> 
+>> +static int _ub960_csiport_select(struct ub960_data *priv, u8 nport)
+>> +{
+> 
+> Same comment as above.
+> 
+>> +}
+> 
+> ...
+> 
+>> +out:
+> 
+> out_unlock: ?
+
+I'll change it, but often if there's only one label, I think just 
+err/out is fine.
+
+>> +	mutex_unlock(&priv->reg_lock);
+>> +
+>> +	return ret;
+> 
+> Also in some cases you are using 'else' (as 'if (ret) ... else') in some goto
+> approach. Can it be unified?
+
+Sure.
+
+> ...
+> 
+>> +	v &= ~mask;
+>> +	v |= val;
+> 
+> Usual pattern we use is
+> 
+> 	v = (v & ~mask) | (val & mask);
+> 
+> But can you use regmap_update_bits()? And why not?
+
+I don't see why not. No idea why I open-coded it.
+
+> ...
+> 
+>> +	ret = fwnode_property_count_u32(ep_fwnode, "data-lanes");
+>> +	if (ret <= 0) {
+>> +		dev_err(dev, "tx%u: failed to parse 'data-lanes': %d\n", nport,
+>> +			ret);
+> 
+> Message is not consistent with the case ret == 0.
+
+Yep.
+
+>> +		goto err_free_txport;
+>> +	}
+> 
+> ...
+> 
+>> +	if (ret != 1) {
+>> +		dev_err(dev,
+>> +			"tx%u: 'link-frequencies' must contain a single frequency: %d\n",
+>> +			nport, ret);
+>> +		goto err_free_txport;
+>> +	}
+> 
+> Shouldn't be here.
+> As Rob Herring told at least once that driver must not replace DT validator.
+
+Ok. Hmm, looks like link-frequencies is not even in the binding doc. 
+I'll add it.
+
+> ...
+> 
+>> +	if (priv->tx_data_rate != 1600000000 &&
+>> +	    priv->tx_data_rate != 1200000000 &&
+>> +	    priv->tx_data_rate != 800000000 &&
+>> +	    priv->tx_data_rate != 400000000) {
+>> +		dev_err(dev, "tx%u: invalid 'link-frequencies' value\n", nport);
+>> +		return -EINVAL;
+>> +	}
+> 
+> Ditto.
+
+Is that an important thing to restrict in the DT? I'd rather handle 
+these in the driver. There may well be HW revisions/versions or tricks 
+not documented in the public docs to use other data rates. And, while 
+this is not quite clear to me, the input refclk might also affect the 
+exact data rate.
+
+With a quick glance, I don't see any other binding defining the data 
+rates. I didn't see any of them even limiting the number of items.
+
+> ...
+> 
+>> +	dev_dbg(dev, "tx%u: nominal data rate: %u", nport, priv->tx_data_rate);
+> 
+> All these kind of debugging are needed for production?
+
+Production meaning upstream kernel? Hard to say. I find all kinds of 
+debugging prints useful.
+
+> ...
+> 
+>> +static void ub960_csi_handle_events(struct ub960_data *priv, u8 nport)
+>> +{
+>> +	struct device *dev = &priv->client->dev;
+>> +	u8 csi_tx_isr;
+>> +	int ret;
+> 
+>> +	ret = ub960_csiport_read(priv, nport, UB960_TR_CSI_TX_ISR, &csi_tx_isr);
+>> +
+> 
+> Redundant blank line.
+
+Yep.
+
+>> +	if (!ret) {
+> 
+> What's wrong with the positive and traditional check, i.e.
+> 
+> 	if (ret)
+> 		return;
+> 
+> ?
+
+Nothing, just a different style. I can change it.
+
+>> +		if (csi_tx_isr & UB960_TR_CSI_TX_ISR_IS_CSI_SYNC_ERROR)
+>> +			dev_warn(dev, "TX%u: CSI_SYNC_ERROR\n", nport);
+>> +
+>> +		if (csi_tx_isr & UB960_TR_CSI_TX_ISR_IS_CSI_PASS_ERROR)
+>> +			dev_warn(dev, "TX%u: CSI_PASS_ERROR\n", nport);
+>> +	}
+>> +}
+> 
+> ...
+> 
+>> +/* -----------------------------------------------------------------------------
+>> + * RX ports
+>> + */
+> 
+> Multi-line comment is not in the style.
+
+True. Interesting that checkpatch didn't complain.
+
+> ...
+> 
+>> +	for (nport = 0; nport < priv->hw_data->num_rxports; ++nport) {
+> 
+> Post-increment is good enough, no? Ditto for other places.
+
+Sure. Pre-increment is good enough too, right? It's a simpler operation, 
+although obviously they both compile into the same code. I usually use 
+pre-increment when there's no particular reason to pick either one, 
+although it also depends on how it looks.
+
+> Esp. taking into account that some of them are using actually
+> post-inc. Why this difference?
+
+Possibly a different person has written that particular piece of code, 
+or maybe a copy paste from somewhere.
+
+I'm personally fine with seeing both post and pre increments in code.
+
+>> +		struct ub960_rxport *rxport = priv->rxports[nport];
+>> +
+>> +		if (!rxport || !rxport->vpoc)
+>> +			continue;
+>> +
+>> +		ret = regulator_enable(rxport->vpoc);
+>> +		if (ret)
+>> +			goto err_disable_vpocs;
+>> +	}
+> 
+> ...
+> 
+>> +err_disable_vpocs:
+>> +	for (; nport > 0; --nport) {
+> 
+> 	while (nport--) {
+
+Yes, that's better.
+
+>> +		struct ub960_rxport *rxport = priv->rxports[nport - 1];
+>> +
+>> +		if (!rxport || !rxport->vpoc)
+>> +			continue;
+>> +
+>> +		regulator_disable(rxport->vpoc);
+>> +	}
+> 
+> ...
+> 
+>> +	if (WARN_ON(strobe_pos < UB960_MIN_MANUAL_STROBE_POS ||
+>> +		    strobe_pos > UB960_MAX_MANUAL_STROBE_POS))
+>> +		return;
+> 
+> Always be careful about WARN*() APIs because with a little trick they may
+> become equivalent to BUG() which is a beast that nobody likes. I.o.w.
+> you have to have justify why this is needed and can't be replaced with
+> dev_*() or analogue.
+> 
+> Same for the other places with WARN*().
+
+Valid point. I think most of them here are in cases that really 
+shouldn't happen. But if they do happen, I'd like to see a big loud 
+shout about it. The above is not a best example of this, and I think I 
+can just drop the above warns, but, e.g. handling the default case for 
+"switch (rxport->rx_mode)" (which shouldn't happen), I'd prefer to have 
+a big yell in place rather than return silently or print a "normal" 
+error print.
+
+Obviously WARN is not a good one if it can be toggled to become a BUG.
+
+So... I think I'll just drop most of them and probably convert the rest 
+(two, actually) to dev_errs.
+
+> ...
+> 
+>> +	if (strobe_pos < -7)
+>> +		clk_delay = abs(strobe_pos) - 6;
+>> +	else if (strobe_pos > 7)
+>> +		data_delay = strobe_pos - 6;
+>> +	else if (strobe_pos < 0)
+>> +		clk_delay = abs(strobe_pos) | UB960_IR_RX_ANA_STROBE_SET_CLK_NO_EXTRA_DELAY;
+>> +	else if (strobe_pos > 0)
+>> +		data_delay = strobe_pos | UB960_IR_RX_ANA_STROBE_SET_DATA_NO_EXTRA_DELAY;
+> 
+> I'm wondering if clamp_t()/clamp_val() can be utilised here... And maybe in other
+> places in the driver.
+
+Hmm, I'm not sure how.
+
+> ...
+> 
+>> +	ub960_write(priv, UB960_XR_SFILTER_CFG,
+> 
+>> +		    ((u8)strobe_min << UB960_XR_SFILTER_CFG_SFILTER_MIN_SHIFT) |
+>> +		    ((u8)strobe_max << UB960_XR_SFILTER_CFG_SFILTER_MAX_SHIFT));
+> 
+> Why castings are needed?
+
+I don't think they strictly are, but it highlights that the variables, 
+which are signed, are now >= 0, and are used as unsigned.
+
+> ...
+> 
+>> +	*eq_level = (v & 0x7) + ((v >> 3) & 0x7);
+> 
+> GENMASK()?
+
+I'll add defines for these bit fields.
+
+> 
+>> +	if (eq_level <= 7) {
+>> +		eq_stage_1_select_value = eq_level;
+>> +		eq_stage_2_select_value = 0;
+>> +	} else {
+>> +		eq_stage_1_select_value = 7;
+>> +		eq_stage_2_select_value = eq_level - 7;
+> 
+> A lot of magic 7 in the code. Are they all of the same semantic? Are they can
+> be converted to use a macro (including respective MIN/MAX macros)?
+
+It's related to how the value has to be encoded into the register. We 
+keep the equalization level in a simple variable, but need to write it 
+like this into the register. I'm not sure what I would call the magic 7 
+here.
+
+Then for the strobe position, we use a logical signed value between -7 
+and 7, so we have to +7 when writing that to a register. Except when 
+using a manual strobe position, where the range is -13 to 13 (7+6, 
+that's the 6 in ub960_rxport_set_strobe_pos()).
+
+It's rather confusing, in my opinion, but I think defines may just make 
+this more confusing. The magic numbers used should always be very close 
+to the registers in question, so if you know how the HW works wrt. 
+strobe & eq, they should be "clear". I'll try to come up with defines 
+that make this clearer, but no promises.
+
+> ...
+> 
+>> +	WARN_ON(eq_stage_1_select_value > 7);
+>> +	WARN_ON(eq_stage_2_select_value > 7);
+> 
+> Why WARN()?
+
+I'll drop. I think these were development time helpers long time back.
+
+> ...
+> 
+>> +	ub960_rxport_read(priv, nport, UB960_RR_AEQ_BYPASS, &v);
+>> +
+>> +	v &= ~(UB960_RR_AEQ_BYPASS_EQ_STAGE1_VALUE_MASK |
+>> +	       UB960_RR_AEQ_BYPASS_EQ_STAGE2_VALUE_MASK);
+>> +	v |= eq_stage_1_select_value << UB960_RR_AEQ_BYPASS_EQ_STAGE1_VALUE_SHIFT;
+>> +	v |= eq_stage_2_select_value << UB960_RR_AEQ_BYPASS_EQ_STAGE2_VALUE_SHIFT;
+>> +	v |= UB960_RR_AEQ_BYPASS_ENABLE; /* Enable AEQ Bypass */
+>> +
+>> +	ub960_rxport_write(priv, nport, UB960_RR_AEQ_BYPASS, v);
+> 
+> Can't you provide ub960_rxport_update_bits() ?
+
+I could, but I think it's worse:
+
+ub960_rxport_update_bits(priv, nport, UB960_RR_AEQ_BYPASS,
+	UB960_RR_AEQ_BYPASS_EQ_STAGE1_VALUE_MASK |
+		UB960_RR_AEQ_BYPASS_EQ_STAGE2_VALUE_MASK |
+		UB960_RR_AEQ_BYPASS_ENABLE,
+	(eq_stage_1_select_value
+	 << UB960_RR_AEQ_BYPASS_EQ_STAGE1_VALUE_SHIFT) |
+		(eq_stage_2_select_value
+		 << UB960_RR_AEQ_BYPASS_EQ_STAGE2_VALUE_SHIFT) |
+		UB960_RR_AEQ_BYPASS_ENABLE /* Enable AEQ Bypass */
+);
+
+Indenting it differently, I think it's still worse:
+
+ub960_rxport_update_bits(priv, nport, UB960_RR_AEQ_BYPASS,
+	UB960_RR_AEQ_BYPASS_EQ_STAGE1_VALUE_MASK |
+	UB960_RR_AEQ_BYPASS_EQ_STAGE2_VALUE_MASK |
+	UB960_RR_AEQ_BYPASS_ENABLE,
+	(eq_stage_1_select_value << UB960_RR_AEQ_BYPASS_EQ_STAGE1_VALUE_SHIFT) |
+	(eq_stage_2_select_value << UB960_RR_AEQ_BYPASS_EQ_STAGE2_VALUE_SHIFT) |
+	UB960_RR_AEQ_BYPASS_ENABLE /* Enable AEQ Bypass */
+);
+
+> ...
+> 
+>> +	ret = ub960_rxport_read(priv, nport, UB960_RR_RX_PAR_ERR_HI, &v1);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = ub960_rxport_read(priv, nport, UB960_RR_RX_PAR_ERR_LO, &v2);
+>> +	if (ret)
+>> +		return ret;
+> 
+> Can this be read at once as BE16/LE16 value?
+> Or if the stream of bytes, you can use le/be16_to_cpu().
+
+I'm not sure, possibly. But is it worth it? I'd need to add new helper 
+functions to read such a value.
+
+>> +	parity_errors = (v1 << 8) | v2;
+> 
+> ...
+> 
+>> +	errors = (rx_port_sts1 & 0x2c) || (rx_port_sts2 & 0x20) ||
+>> +		 (bcc_sts & 0x3f) || (csi_rx_sts & 0xf) || csi_err_cnt ||
+> 
+> BIT()? GENMASK()?
+
+I'll add defines for the error masks (those are bit masks of error bits 
+in the registers).
+
+> At bare minimum this needs a good comment to explain all these magics.
+> 
+>> +		 parity_errors;
+> 
+> ...
+> 
+>> +	*ok = !errors;
+> 
+> How this is different to the something like returning 1 here (and 0 above)?
+> You may save some code by dropping redundant parameter.
+
+Return value 1 means there was an error when reading the register 
+values. 0 means we read the values, and "ok" contains a summary (ok or 
+not) of the link's status.
+
+>> +	return 0;
+> 
+> ...
+> 
+>> +	while (time_before(jiffies, timeout)) {
+>> +		missing = 0;
+>> +
+>> +		for_each_set_bit(nport, &port_mask,
+>> +				 priv->hw_data->num_rxports) {
+>> +			struct ub960_rxport *rxport = priv->rxports[nport];
+>> +			bool ok;
+>> +
+>> +			if (!rxport)
+>> +				continue;
+>> +
+>> +			ret = ub960_rxport_link_ok(priv, nport, &ok);
+>> +			if (ret)
+>> +				return ret;
+>> +
+>> +			if (!ok || !(link_ok_mask & BIT(nport)))
+>> +				missing++;
+>> +
+>> +			if (ok)
+>> +				link_ok_mask |= BIT(nport);
+>> +			else
+>> +				link_ok_mask &= ~BIT(nport);
+>> +		}
+>> +
+>> +		loops++;
+>> +
+>> +		if (missing == 0)
+>> +			break;
+>> +
+>> +		msleep(50);
+>> +	}
+> 
+> You can wrap the body into readx_poll_timeout() from iopoll.h.
+
+Hmm... How would I do that? With some kind of helper structs to wrap the 
+input and output parameters? Sounds very messy, but maybe I'm missing 
+something.
+
+> ...
+> 
+>> +		ub960_rxport_read(priv, nport, UB960_RR_RX_FREQ_HIGH, &v1);
+>> +		ub960_rxport_read(priv, nport, UB960_RR_RX_FREQ_LOW, &v2);
+> 
+> Same Q, can these be unified to some kind of bulk read?
+
+Perhaps, but again, I don't see the value for creating a bulk read 
+helper function for these few cases.
+
+> ...
+> 
+>> +		dev_dbg(dev, "\trx%u: locked, SP: %d, EQ: %u, freq %u Hz\n",
+>> +			nport, strobe_pos, eq_level,
+>> +			v1 * 1000000 + v2 * 1000000 / 256);
+> 
+> Even this will be simpler with above suggestion.
+
+Hmm... How is that?
+
+> ...
+> 
+>> +static int ub960_rxport_add_serializers(struct ub960_data *priv)
+>> +{
+>> +	unsigned int nport;
+>> +	int ret;
+>> +
+>> +	for (nport = 0; nport < priv->hw_data->num_rxports; ++nport) {
+> 
+> Post-inc?
+
+I still like pre-inc =).
+
+I see there's a mix os post and pre incs in the code. I'll align those 
+when I encounter them, but I don't think it's worth the effort to 
+methodically go through all of them to change them use the same style.
+
+>> +		struct ub960_rxport *rxport = priv->rxports[nport];
+>> +
+>> +		if (!rxport)
+>> +			continue;
+>> +
+>> +		ret = ub960_rxport_add_serializer(priv, nport);
+>> +		if (ret)
+>> +			goto err_remove_sers;
+>> +	}
+>> +
+>> +	return 0;
+>> +
+>> +err_remove_sers:
+>> +	for (; nport > 0; --nport) {
+> 
+> 	while(nport--)
+> 
+> (and drop those -1:s below)
+
+Yes, that cleans this up nicely.
+
+>> +		struct ub960_rxport *rxport = priv->rxports[nport - 1];
+>> +
+>> +		if (!rxport)
+>> +			continue;
+>> +
+>> +		rxport = priv->rxports[nport - 1];
+>> +		if (!rxport)
+>> +			continue;
+>> +
+>> +		ub960_rxport_remove_serializer(priv, nport - 1);
+>> +	}
+>> +
+>> +	return ret;
+>> +}
+> 
+> ...
+> 
+>> +	if (priv->tx_data_rate == 1600000000)
+> 
+> Easy to make a mistake, perhaps something from units.h / time.h can be used?
+
+Hmm, time.h? What's in there.
+
+I don't like the HZ_PER_MHZ too much. But I'll add this, which I 
+recently added to a Renesas driver:
+
+#define MHZ(v) ((u32)((v) * 1000000U))
+
+I like it, as e.g. MHZ(1.6) works and (I think) is quite clear. Here 
+it's MHZ(1600), of course.
+
+>> +		csi_ctl |= UB960_TR_CSI_CTL_CSI_CAL_EN;
+> 
+> ...
+> 
+>> +	switch (priv->tx_data_rate) {
+>> +	case 1600000000:
+>> +	default:
+>> +		speed_select = 0;
+>> +		pll_div = 0x10;
+>> +		break;
+>> +	case 1200000000:
+>> +		speed_select = 1;
+>> +		break;
+>> +	case 800000000:
+>> +		speed_select = 2;
+>> +		pll_div = 0x10;
+>> +		break;
+>> +	case 400000000:
+>> +		speed_select = 3;
+>> +		pll_div = 0x10;
+>> +		break;
+>> +	}
+> 
+> Ditto, but maybe defines for them?
+> 
+> ...
+> 
+>> +	switch (rxport->rx_mode) {
+>> +	default:
+>> +		WARN_ON(true);
+>> +		fallthrough;
+> 
+> Maybe you can drop default completely and rely on compiler to produce a
+> warning?
+
+I've dropped the default, but I had to add cases for the RAW12 modes 
+(which are not supported at the moment).
+
+>> +	case RXPORT_MODE_RAW10:
+>> +		/*
+>> +		 * RAW10_8BIT_CTL = 0b11 : 8-bit processing using lower 8 bits
+>> +		 * 0b10 : 8-bit processing using upper 8 bits
+>> +		 */
+>> +		ub960_rxport_update_bits(priv, nport, UB960_RR_PORT_CONFIG2,
+>> +					 0x3 << 6, 0x2 << 6);
+>> +
+>> +		break;
+>> +
+>> +	case RXPORT_MODE_CSI2_SYNC:
+>> +	case RXPORT_MODE_CSI2_ASYNC:
+>> +
+>> +		break;
+>> +	}
+> 
+> ...
+> 
+>> +	u8 cur_vc[UB960_MAX_TX_NPORTS] = { 0 };
+> 
+> 0 is not needed.
+
+Yep.
+
+> ...
+> 
+>> +	for (i = 0; i < routing->num_routes; ++i) {
+>> +		struct v4l2_subdev_route *route = &routing->routes[i];
+>> +		unsigned int rx, tx;
+>> +
+>> +		rx = ub960_pad_to_port(priv, route->sink_pad);
+> 
+>> +
+> 
+> Redundant blank line.
+
+Yep.
+
+>> +		if (BIT(rx) & handled_mask)
+>> +			continue;
+>> +
+>> +		tx = ub960_pad_to_port(priv, route->source_pad);
+>> +
+>> +		vc[rx] = cur_vc[tx]++;
+>> +		handled_mask |= BIT(rx);
+>> +	}
+> 
+> ...
+> 
+>> +		if (rx_data[nport].tx_port == 1)
+>> +			fwd_ctl |= BIT(nport); /* forward to TX1 */
+>> +		else
+>> +			fwd_ctl &= ~BIT(nport); /* forward to TX0 */
+> 
+> This and many other similar places can be replaced by __assign_bit()
+> if the lvalue is type of unsigned long or can be made that type.
+
+It is u8, as it is written to a 8 bit register. It could be made 
+unsigned long, but... I'd rather use u8 when we are dealing with 8 bits 
+of data.
+
+> ...
+> 
+>> +static void ub960_update_streaming_status(struct ub960_data *priv)
+>> +{
+>> +	unsigned int i;
+> 
+>> +	bool streaming = false;
+> 
+> Redundant
+> >> +	for (i = 0; i < UB960_MAX_NPORTS; ++i) {
+>> +		if (priv->stream_enable_mask[i]) {
+>> +			streaming = true;
+>> +			break;
+>> +		}
+>> +	}
+> 
+>> +	priv->streaming = streaming;
+> 
+> 	priv->streaming = i < UB960_MAX_NPORTS;
+
+Yes, that's a bit simpler.
+
+>> +}
+> 
+> ...
+> 
+>> +				for (; nport > 0; --nport) {
+> 
+> 				while (nport--)
+
+Yep.
+
+>> +					if (pad_stream_masks[nport - 1] == 0)
+>> +						continue;
+>> +
+>> +					ub960_disable_streams(
+>> +						sd, state,
+>> +						priv->hw_data->num_rxports +
+>> +							nport - 1,
+>> +						pad_stream_masks[nport - 1]);
+>> +				}
+> 
+> ...
+> 
+>> +	char id[7];
+> 
+> u8?
+> 
+>> +	for (unsigned int i = 0; i < 6; ++i)
+>> +		ub960_read(priv, UB960_SR_FPD3_RX_ID(i), &id[i]);
+>> +	id[6] = 0;
+> 
+> If it's only for printing, the 0 is not needed...
+> 
+>> +	dev_info(dev, "ID '%s'\n", id);
+> 
+> ...as you may put it as
+> 
+> 	dev_info(dev, "ID: '%.*s'\n", (int)sizeof(id), id);
+> 
+> (I wrote from the top of my head, maybe not compilable as is).
+
+And you think that is clearer? =) I have to disagree.
+
+> ...
+> 
+>> +static irqreturn_t ub960_handle_events(int irq, void *arg)
+>> +{
+>> +	struct ub960_data *priv = arg;
+>> +	unsigned int i;
+>> +	u8 int_sts;
+>> +	int ret;
+> 
+>> +	ret = ub960_read(priv, UB960_SR_INTERRUPT_STS, &int_sts);
+> 
+>> +
+> 
+> Redundant blank line. I guess you may decrease your code by ~2.5% by removing
+> such unneeded blank lines here and there.
+
+I only found a few of these, which I have fixed.
+
+>> +	if (!ret && int_sts) {
+> 
+> 	if (ret)
+> 		return ...
+> 
+> 	if (!int_sts)
+> 		return IRQ_NONE; // No?
+
+Yes, I think that's correct. I wonder what to return in the (ret) case. 
+Probably also IRQ_NONE, as we don't know if the interrupt was for us.
+
+>> +		u8 fwd_sts;
+>> +
+>> +		dev_dbg(&priv->client->dev, "INTERRUPT_STS %x\n", int_sts);
+>> +
+>> +		ub960_read(priv, UB960_SR_FWD_STS, &fwd_sts);
+>> +
+>> +		dev_dbg(&priv->client->dev, "FWD_STS %#02x\n", fwd_sts);
+>> +
+>> +		for (i = 0; i < priv->hw_data->num_txports; ++i) {
+>> +			if (int_sts & UB960_SR_INTERRUPT_STS_IS_CSI_TX(i))
+>> +				ub960_csi_handle_events(priv, i);
+>> +		}
+>> +
+>> +		for (i = 0; i < priv->hw_data->num_rxports; i++) {
+>> +			if (!priv->rxports[i])
+>> +				continue;
+>> +
+>> +			if (int_sts & UB960_SR_INTERRUPT_STS_IS_RX(i))
+>> +				ub960_rxport_handle_events(priv, i);
+>> +		}
+>> +	}
+> 
+>> +	return IRQ_HANDLED;
+>> +}
+> 
+> ...
+> 
+>> +	if (cdr_mode > RXPORT_CDR_LAST) {
+>> +		dev_err(dev, "rx%u: bad 'ti,cdr-mode' %u\n", nport, cdr_mode);
+>> +		return -EINVAL;
+>> +	}
+> 
+> No DT validation if it's not used in (memory) allocation.
+
+I'm not quite fine with dropping all these DT checks. If the user 
+happens to provide a DT with illegal values, the end results can be odd 
+and the reason quite difficult to figure out. Isn't it much better to 
+have a few extra checks in the driver?
+
+> ...
+> 
+>> +	ret = fwnode_property_read_u32(link_fwnode, "ti,strobe-pos",
+>> +				       &strobe_pos);
+>> +	if (ret) {
+>> +		if (ret != -EINVAL) {
+>> +			dev_err(dev,
+>> +				"rx%u: failed to read 'ti,strobe-pos': %d\n",
+>> +				nport, ret);
+>> +			return ret;
+>> +		}
+>> +	} else if (strobe_pos < UB960_MIN_MANUAL_STROBE_POS ||
+>> +		   strobe_pos > UB960_MAX_MANUAL_STROBE_POS) {
+>> +		dev_err(dev, "rx%u: illegal 'strobe-pos' value: %d\n", nport,
+>> +			strobe_pos);
+>> +	} else {
+>> +		// NOTE: ignored unless global manual strobe pos is set
+> 
+> Style?
+
+Oops...
+
+>> +		rxport->eq.strobe_pos = strobe_pos;
+>> +		if (!priv->strobe.manual)
+>> +			dev_warn(dev,
+>> +				 "rx%u: 'ti,strobe-pos' ignored as 'ti,manual-strobe' not set\n",
+>> +				 nport);
+>> +	}
+> 
+> This and below looks a bit different to the above in the same function. Perhaps
+> these can be refactored to be less LoCs.
+
+Hmm what did you have in mind?
+
+>> +	ret = fwnode_property_read_u32(link_fwnode, "ti,eq-level", &eq_level);
+>> +	if (ret) {
+>> +		if (ret != -EINVAL) {
+>> +			dev_err(dev, "rx%u: failed to read 'ti,eq-level': %d\n",
+>> +				nport, ret);
+>> +			return ret;
+>> +		}
+>> +	} else if (eq_level > UB960_MAX_EQ_LEVEL) {
+>> +		dev_err(dev, "rx%u: illegal 'ti,eq-level' value: %d\n", nport,
+>> +			eq_level);
+>> +	} else {
+>> +		rxport->eq.manual_eq = true;
+>> +		rxport->eq.manual.eq_level = eq_level;
+>> +	}
+>> +
+>> +	ret = fwnode_property_read_u32(link_fwnode, "i2c-alias",
+>> +				       &ser_i2c_alias);
+>> +	if (ret) {
+>> +		dev_err(dev, "rx%u: failed to read 'i2c-alias': %d\n", nport,
+>> +			ret);
+>> +		return ret;
+>> +	}
+> 
+> ...
+> 
+>> +static struct fwnode_handle *
+>> +ub960_fwnode_get_link_by_regs(struct fwnode_handle *links_fwnode,
+>> +			      unsigned int nport)
+>> +{
+>> +	struct fwnode_handle *link_fwnode;
+>> +	int ret;
+>> +
+>> +	fwnode_for_each_child_node(links_fwnode, link_fwnode) {
+>> +		u32 link_num;
+>> +
+>> +		if (strncmp(fwnode_get_name(link_fwnode), "link@", 5) != 0)
+>> +			continue;
+> 
+> str_has_prefix()
+
+I knew there must be a function for this, but didn't find it =).
+
+>> +
+>> +		ret = fwnode_property_read_u32(link_fwnode, "reg", &link_num);
+>> +		if (ret)
+> 
+> Refcount imbalance.
+
+Yep.
+
+>> +			return NULL;
+>> +
+>> +		if (nport == link_num) {
+>> +			fwnode_handle_put(link_fwnode);
+>> +			return link_fwnode;
+>> +		}
+>> +	}
+>> +
+>> +	return NULL;
+>> +}
+> 
+> ...
+> 
+>> +		asd = v4l2_async_nf_add_fwnode(&priv->notifier,
+>> +					       rxport->source_ep_fwnode,
+>> +					       struct ub960_asd);
+>> +		if (IS_ERR(asd)) {
+>> +			dev_err(dev, "Failed to add subdev for source %u: %ld",
+> 
+> %pe ?
+
+Yep.
+
+>> +				i, PTR_ERR(asd));
+>> +			v4l2_async_nf_cleanup(&priv->notifier);
+>> +			return PTR_ERR(asd);
+>> +		}
+> 
+> ...
+> 
+>> +err_pd_gpio:
+>> +	if (priv->pd_gpio)
+> 
+> Dup test.
+
+What do you mean dup? You mean gpiod_set_value_cansleep can be called 
+with gpio = NULL? The docs don't say this, but I guess that is the case.
+
+>> +		gpiod_set_value_cansleep(priv->pd_gpio, 1);
+> 
+> ...
+> 
+>> +	if (priv->pd_gpio)
+>> +		gpiod_set_value_cansleep(priv->pd_gpio, 1);
+> 
+> Ditto.
+> 
+> ...
+> 
+>> +	priv->hw_data = of_device_get_match_data(dev);
+> 
+> Why of_ out of the blue?!
+
+Hmm... How do I get the data in a generic way? I'll have to study this a 
+bit.
+
+>> +	if (!priv->hw_data)
+>> +		return -ENODEV;
+> 
+> ...
+> 
+>> +	priv->current_indirect_target = 0xff;
+>> +	priv->current_read_rxport = 0xff;
+>> +	priv->current_write_rxport_mask = 0xff;
+>> +	priv->current_read_csiport = 0xff;
+>> +	priv->current_write_csiport_mask = 0xff;
+> 
+> GENMASK()
+
+These are not masks, but invalid values. We set these to an invalid 
+value (0xff) so that when a reg access function next time checks if we 
+are already targeting, e.g. a particular rxport, it will always opt to 
+select the rxport by writing to the approriate registers.
+
+> ...
+> 
+>> +	ub960_rxport_wait_locks(priv, 0xf, NULL);
+> 
+> Ditto?
+
+Yep.
+
+> ...
+> 
+>> +static const struct i2c_device_id ub960_id[] = {
+>> +	{ "ds90ub960-q1", 0 },
+>> +	{ "ds90ub9702-q1", 0 },
+> 
+> Why driver data is different to OF case?
+
+I have just never used these so I've missed it. As I said, I need to 
+look at this and figure out how to get the data correctly in all the cases.
+
+>> +	{}
+>> +};
+>> +MODULE_DEVICE_TABLE(i2c, ub960_id);
+>> +
+>> +static const struct of_device_id ub960_dt_ids[] = {
+>> +	{ .compatible = "ti,ds90ub960-q1", .data = &ds90ub960_hw },
+>> +	{ .compatible = "ti,ds90ub9702-q1", .data = &ds90ub9702_hw },
+>> +	{}
+>> +};
+>> +MODULE_DEVICE_TABLE(of, ub960_dt_ids);
+> 
+>> +static struct i2c_driver ds90ub960_driver = {
+>> +	.probe_new	= ub960_probe,
+>> +	.remove		= ub960_remove,
+>> +	.id_table	= ub960_id,
+>> +	.driver = {
+>> +		.name	= "ds90ub960",
+> 
+>> +		.owner = THIS_MODULE,
+> 
+> Set by macro from the beginning of its, macro, existence.
+
+Ok.
+
+>> +		.of_match_table = ub960_dt_ids,
+>> +	},
+>> +};
+> 
+> ...
+> 
+>> +struct ds90ub9xx_platform_data {
+>> +	u32 port;
+>> +	struct i2c_atr *atr;
+>> +	unsigned long bc_rate;
+> 
+> Not sure why we need this to be public except, probably, atr...
+
+The port and atr are used by the serializers, for atr. The bc_rate is 
+used by the serializers to figure out the clocking (they may use the 
+FPD-Link's frequency internally).
+
+  Tomi
+
