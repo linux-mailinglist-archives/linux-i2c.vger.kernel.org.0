@@ -2,97 +2,112 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D242674934
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jan 2023 03:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B82B674ACB
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jan 2023 05:36:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229447AbjATCKM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 19 Jan 2023 21:10:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34694 "EHLO
+        id S230180AbjATEgX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 19 Jan 2023 23:36:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjATCKL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 19 Jan 2023 21:10:11 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEB626B5;
-        Thu, 19 Jan 2023 18:10:10 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id CFAD25C0045;
-        Thu, 19 Jan 2023 21:10:07 -0500 (EST)
-Received: from imap50 ([10.202.2.100])
-  by compute6.internal (MEProxy); Thu, 19 Jan 2023 21:10:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674180607; x=1674267007; bh=pnns9lOh0+
-        GIdk6jiwVH0+nJnurmy6WQSI2jQ7YKUHE=; b=RtvdCubr/5zbN6z4f11I+/dx0h
-        cE9T/jhovRak6vKBLpnbET178ecRA6JBVxpC3M1wcq0VYeOfsxlFyIysqMvNi6u7
-        hi1zmb7U40dcpIeT5jRSA6x9MIA1tT/7senzJdttTEiq/7zcshqznVaB2biJdtOi
-        tcALXd+hVgRzg9pSwP1q1rWtILjCYbGG3O8ArETqXjvxDxHg01hGTLpaUbKNncO0
-        mbwOwrurZ2Knx2Drhwih7riU/ZF2VRNYVDJyNUA+0kmelr2RwTG/91U15P0Y4dwg
-        rVavxeAn7uWpKoDRaGloi0XBCVuLerlaNe+hehRDO/G8snWWK7xkqWLP7exA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674180607; x=1674267007; bh=pnns9lOh0+GIdk6jiwVH0+nJnurm
-        y6WQSI2jQ7YKUHE=; b=jmXdcuw1So6AdCt0QM5o0UMBMZ6lJVXsk1P2RqB5uWJB
-        iS/q/7teKVKsxaf7ltLapeDQPQ/cm3YJPVGn/4tXwaRzeyDK2iPcH5EhKVzb8mdT
-        F0avdag1JDCYjV+M5SnPdzxFS7igio/hc/0UXqZfNGR5sw5o0BykOKfKJ7KFMahh
-        oveHStpsr/v8Xlvt/KksS2vjYn2Exzfd56lEUionTIryQb1tWZJlmjqbtz+P7cse
-        R+o0o2nhMlYBOJW1fQaxXhEprft4GqRCNUB6odoC8wrST6ITDBR6reOUPCwVwC/F
-        oNIVrcUreZUtx6hz5x6FNOo9Ya7g2wO1ZXWurXbA9Q==
-X-ME-Sender: <xms:_vfJY74skrozPaNqFM06HFI83YyNE3mS7_Lu02aucCOb0mCogLRmuA>
-    <xme:_vfJYw7djQ-ap10FZU1kFjeWovDgszTjU0P9h2Xc5tA85IxI-TyMn4DVYudcu_Yk8
-    g5NqQJ5L9FfUl94HA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduuddggeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
-    frrghtthgvrhhnpeekvdekjeekgfejudffteetgeejkeetteduvedtffdtledutdfhheev
-    feetkeeiteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrnhgurhgvfiesrghjrdhiugdrrghu
-X-ME-Proxy: <xmx:_vfJYycLSviNEoJStpLaTBLS0fsqQDwIuKIlb6frvV1sh_UEcZ2X6A>
-    <xmx:_vfJY8I1Y5wNMmb5Faq82aVsN_qVyZkZRxdDfNsk9Xq0cNt64oIReg>
-    <xmx:_vfJY_Lzpb8YUiFhPmyFyVUDb82gopNuzQAM3qa8-jjF6_Y00-_PNQ>
-    <xmx:__fJY389_LTzCQhSMVZ5A4831SAzl_eHHBMgIf1KVdMQ_g-QiNdvzw>
-Feedback-ID: idfb84289:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id DA8DC1700090; Thu, 19 Jan 2023 21:10:06 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <f5423719-6d12-407a-85e6-896fe97c723c@app.fastmail.com>
-In-Reply-To: <202301191715319948743@zte.com.cn>
-References: <202301191715319948743@zte.com.cn>
-Date:   Fri, 20 Jan 2023 12:39:46 +1030
-From:   "Andrew Jeffery" <andrew@aj.id.au>
-To:     ye.xingchen@zte.com.cn, brendan.higgins@linux.dev
-Cc:     "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
-        "Joel Stanley" <joel@jms.id.au>, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: aspeed: Use devm_platform_get_and_ioremap_resource()
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229973AbjATEgC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 19 Jan 2023 23:36:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705E3BCE00;
+        Thu, 19 Jan 2023 20:34:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42380B82485;
+        Thu, 19 Jan 2023 14:25:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75C97C433D2;
+        Thu, 19 Jan 2023 14:25:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674138317;
+        bh=DOwhtS4jE7pYqDk0EUsW0L6K6Omzw1zbVbFWpn/2xH0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DYHW/AHnm5CgG8wG0DFV9sxNV63AtfcEDCq2VQcjXyzfVLfC2GBQ2Co+oV/bwa4BS
+         RjkR7vSk1NsDek0YKGlUaQusQFpsxv4XtrX2pmHqtTK2GVgCMUSpU06vlAOW/In8MC
+         X0cFueOfUdA8CYH8Cxgi3BQHdG/6LIdnwU3KTECmgHGcAlYmywiUppGVQD2qYnPDm1
+         yHkKWR75sKDaKUWU4uZZw5zavEa/m/IOBLihr5jiyy+Kj4eBNiUGwOzlwgjTbkt+T8
+         42c+W2p8W4TvgV/d5oRmD2ac2BJCuHnpVQjz79n/k4IkJXjiofs3NzealJhVWEfnZC
+         UzKnCX+IiQ7qg==
+Date:   Thu, 19 Jan 2023 14:25:12 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     nick.hawkins@hpe.com
+Cc:     verdun@hpe.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 0/5] ARM: Add GXP I2C Support
+Message-ID: <Y8lSyJWm+JAQw3AW@google.com>
+References: <20230117204439.76841-1-nick.hawkins@hpe.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230117204439.76841-1-nick.hawkins@hpe.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, 17 Jan 2023, nick.hawkins@hpe.com wrote:
 
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> The GXP SoC supports 10 I2C engines. Each I2C engine is completely
+> independent and can function both as an I2C master and I2C slave. The
+> I2C master can operate in a multi master environment. The engines support
+> a scalable speed from 8kHZ to 1.5 Mhz.
+> 
+> ---
+> 
+> Changes since v1:
+>  *Removed yaml documentation of hpe,gxp-sysreg as it has been
+>   applied to syscon.yaml
+>  *Made i2cX a generic node name i2c in dts file
+>  *Added status field to the dtsi and the dts for i2c bus
+>  *Removed unnecessary size-cells and address-cells from yaml
+>  *Removed phandle from hpe,sysreg-phandle
+>  *Changed hpe,i2c-max-bus-freq to clock-frequency
+>  *Removed rogue tab in structure definition
+>  *Removed use of __iomem *base local variables as it was
+>   unnecessary
+>  *Switched #if IS_ENABLED() -> if (IS_ENABLED()) inside
+>   functions
+>  *Removed use of pr_* functions
+>  *Removed informational prints in register and unregister
+>   functions
+>  *Removed print from interrupt handler
+>  *Removed informational prints from probe function
+>  *Switched dev_err -> dev_err_probe in probe function
+>  *Used the respective helper for mapping the resource to
+>   __iomem
+> 
+> Nick Hawkins (5):
+>   i2c: hpe: Add GXP SoC I2C Controller
+>   dt-bindings: i2c: Add hpe,gxp-i2c
+>   ARM: dts: hpe: Add I2C Topology
+>   ARM: multi_v7_defconfig: add gxp i2c module
+>   MAINTAINERS: Add HPE GXP I2C Support
+> 
+>  .../devicetree/bindings/i2c/hpe,gxp-i2c.yaml  |  54 ++
+>  MAINTAINERS                                   |   2 +
+>  arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      | 109 ++++
+>  arch/arm/boot/dts/hpe-gxp.dtsi                | 125 ++++
+>  arch/arm/configs/multi_v7_defconfig           |   1 +
+>  drivers/i2c/busses/Kconfig                    |   7 +
+>  drivers/i2c/busses/Makefile                   |   1 +
+>  drivers/i2c/busses/i2c-gxp.c                  | 609 ++++++++++++++++++
+>  8 files changed, 908 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
+>  create mode 100644 drivers/i2c/busses/i2c-gxp.c
 
-On Thu, 19 Jan 2023, at 19:45, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
->
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
->
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+Not trying to be rude, but why have you sent this to me?
 
-Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
+-- 
+Lee Jones [李琼斯]
