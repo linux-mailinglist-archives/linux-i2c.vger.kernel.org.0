@@ -2,29 +2,29 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2BE6747C9
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jan 2023 01:03:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D03F674813
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jan 2023 01:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjATAD4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 19 Jan 2023 19:03:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
+        id S229463AbjATAea (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 19 Jan 2023 19:34:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjATADf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 19 Jan 2023 19:03:35 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698B69FDD9;
-        Thu, 19 Jan 2023 16:03:10 -0800 (PST)
+        with ESMTP id S229437AbjATAe3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 19 Jan 2023 19:34:29 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF94A13A;
+        Thu, 19 Jan 2023 16:34:24 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3331F514;
-        Fri, 20 Jan 2023 01:03:08 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 141EE514;
+        Fri, 20 Jan 2023 01:34:22 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674172988;
-        bh=cCdflPhr2b8X6MlEPd9fyoAZeUGJrc6I0OOVPXaO37k=;
+        s=mail; t=1674174862;
+        bh=8//lRG0Ygyz4YQc7Aa58LWBuY0dGPdGHz8MXQjzHgCA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MJhqmXOMN00nUtL32sX4VVVaYtBzWS5xMZN5bFiKIV985p96vXbGjoxOQyUTPXX1t
-         S2wP+uzvF5dpVhX8Xj7IJXjW7Ke0yHF0jcLnUmpeQy1SeAM1cWp+chKKP3crlCRpSx
-         pv8WZlJHBXrw6+BFmdCWztzsbIdQ2UlCoetetnyI=
-Date:   Fri, 20 Jan 2023 02:03:05 +0200
+        b=Ir85CxRFP2t9GyHUwRJVMH/gZMeSJdCsAn6UueOgdSGMhxqGNdro5Sl6JKkhMedyI
+         yPdZsQ1HRgnrnL3DZAclMBcVGBaDNwgelUBbtH9AdfO4gHzraQlx7y7PpV6WqRZNWB
+         D8BP5fGdMMNrpv79DEhhkowIjvYCOw25OAWKoyCs=
+Date:   Fri, 20 Jan 2023 02:34:19 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
@@ -46,14 +46,14 @@ Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         Mike Pagano <mpagano@gentoo.org>,
         Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
         Marek Vasut <marex@denx.de>
-Subject: Re: [PATCH v7 6/7] media: i2c: add DS90UB913 driver
-Message-ID: <Y8naOd/CmmlYBw2x@pendragon.ideasonboard.com>
+Subject: Re: [PATCH v7 7/7] media: i2c: add DS90UB953 driver
+Message-ID: <Y8nhi6N2vTYJ+Vfh@pendragon.ideasonboard.com>
 References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
- <20230118124031.788940-7-tomi.valkeinen@ideasonboard.com>
+ <20230118124031.788940-8-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230118124031.788940-7-tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20230118124031.788940-8-tomi.valkeinen@ideasonboard.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -67,27 +67,27 @@ Hi Tomi,
 
 Thank you for the patch.
 
-On Wed, Jan 18, 2023 at 02:40:30PM +0200, Tomi Valkeinen wrote:
-> Add driver for TI DS90UB913 FPD-Link III Serializer.
+On Wed, Jan 18, 2023 at 02:40:31PM +0200, Tomi Valkeinen wrote:
+> Add driver for TI DS90UB953 FPD-Link III Serializer.
 > 
 > Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 > ---
->  drivers/media/i2c/Kconfig     |  13 +
->  drivers/media/i2c/Makefile    |   1 +
->  drivers/media/i2c/ds90ub913.c | 848 ++++++++++++++++++++++++++++++++++
->  3 files changed, 862 insertions(+)
->  create mode 100644 drivers/media/i2c/ds90ub913.c
+>  drivers/media/i2c/Kconfig     |   13 +
+>  drivers/media/i2c/Makefile    |    1 +
+>  drivers/media/i2c/ds90ub953.c | 1576 +++++++++++++++++++++++++++++++++
+>  3 files changed, 1590 insertions(+)
+>  create mode 100644 drivers/media/i2c/ds90ub953.c
 > 
 > diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> index dc1c7c80dc1c..e0a1c2a5f3bf 100644
+> index e0a1c2a5f3bf..0590312ec751 100644
 > --- a/drivers/media/i2c/Kconfig
 > +++ b/drivers/media/i2c/Kconfig
-> @@ -1601,6 +1601,19 @@ endmenu
+> @@ -1614,6 +1614,19 @@ config VIDEO_DS90UB913
+>  	  Device driver for the Texas Instruments DS90UB913
+>  	  FPD-Link III Serializer.
 >  
->  menu "Video serializers and deserializers"
->  
-> +config VIDEO_DS90UB913
-> +	tristate "TI DS90UB913 FPD-Link III Serializer"
+> +config VIDEO_DS90UB953
+> +	tristate "TI FPD-Link III/IV CSI-2 Serializers"
 > +	depends on OF && I2C && VIDEO_DEV
 > +	select I2C_ATR
 > +	select MEDIA_CONTROLLER
@@ -96,31 +96,31 @@ On Wed, Jan 18, 2023 at 02:40:30PM +0200, Tomi Valkeinen wrote:
 > +	select V4L2_FWNODE
 > +	select VIDEO_V4L2_SUBDEV_API
 > +	help
-> +	  Device driver for the Texas Instruments DS90UB913
-> +	  FPD-Link III Serializer.
+> +	  Device driver for the Texas Instruments DS90UB953
+> +	  FPD-Link III Serializer and DS90UB971 FPD-Link IV Serializer.
 > +
 >  config VIDEO_DS90UB960
 >  	tristate "TI FPD-Link III/IV Deserializers"
 >  	depends on OF && I2C && VIDEO_DEV
 > diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-> index 4cd680f3b953..c4875ec8c3b9 100644
+> index c4875ec8c3b9..efd5f717a5f7 100644
 > --- a/drivers/media/i2c/Makefile
 > +++ b/drivers/media/i2c/Makefile
-> @@ -142,4 +142,5 @@ obj-$(CONFIG_VIDEO_VPX3220) += vpx3220.o
->  obj-$(CONFIG_VIDEO_VS6624) += vs6624.o
+> @@ -143,4 +143,5 @@ obj-$(CONFIG_VIDEO_VS6624) += vs6624.o
 >  obj-$(CONFIG_VIDEO_WM8739) += wm8739.o
 >  obj-$(CONFIG_VIDEO_WM8775) += wm8775.o
-> +obj-$(CONFIG_VIDEO_DS90UB913)	+= ds90ub913.o
+>  obj-$(CONFIG_VIDEO_DS90UB913)	+= ds90ub913.o
+> +obj-$(CONFIG_VIDEO_DS90UB953)	+= ds90ub953.o
 >  obj-$(CONFIG_VIDEO_DS90UB960)	+= ds90ub960.o
-> diff --git a/drivers/media/i2c/ds90ub913.c b/drivers/media/i2c/ds90ub913.c
+> diff --git a/drivers/media/i2c/ds90ub953.c b/drivers/media/i2c/ds90ub953.c
 > new file mode 100644
-> index 000000000000..befa78128a9a
+> index 000000000000..ec33e16da3d1
 > --- /dev/null
-> +++ b/drivers/media/i2c/ds90ub913.c
-> @@ -0,0 +1,848 @@
+> +++ b/drivers/media/i2c/ds90ub953.c
+> @@ -0,0 +1,1576 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Driver for the Texas Instruments DS90UB913 video serializer
+> + * Driver for the Texas Instruments DS90UB953 video serializer
 > + *
 > + * Based on a driver from Luca Ceresoli <luca@lucaceresoli.net>
 > + *
@@ -136,56 +136,131 @@ On Wed, Jan 18, 2023 at 02:40:30PM +0200, Tomi Valkeinen wrote:
 > +#include <linux/i2c-atr.h>
 > +#include <linux/i2c.h>
 > +#include <linux/kernel.h>
+> +#include <linux/math64.h>
 > +#include <linux/module.h>
+> +#include <linux/of_device.h>
 > +#include <linux/property.h>
+> +#include <linux/rational.h>
 > +#include <linux/regmap.h>
 > +
 > +#include <media/i2c/ds90ub9xx.h>
+> +#include <media/v4l2-ctrls.h>
+> +#include <media/v4l2-event.h>
 > +#include <media/v4l2-subdev.h>
 > +
-> +#define UB913_PAD_SINK			0
-> +#define UB913_PAD_SOURCE		1
+> +#define UB953_PAD_SINK			0
+> +#define UB953_PAD_SOURCE		1
 > +
-> +/*
-> + * UB913 has 4 gpios, but gpios 3 and 4 are reserved for external oscillator
-> + * mode. Thus we only support 2 gpios for now.
-> + */
-> +#define UB913_NUM_GPIOS			2
+> +#define UB953_NUM_GPIOS			4
 > +
-> +#define UB913_REG_RESET_CTL			0x01
-> +#define UB913_REG_RESET_CTL_DIGITAL_RESET_1	BIT(1)
-> +#define UB913_REG_RESET_CTL_DIGITAL_RESET_0	BIT(0)
+> +#define UB953_REG_RESET_CTL			0x01
+> +#define UB953_REG_RESET_CTL_DIGITAL_RESET_1	BIT(1)
+> +#define UB953_REG_RESET_CTL_DIGITAL_RESET_0	BIT(0)
 > +
-> +#define UB913_REG_GENERAL_CFG			0x03
-> +#define UB913_REG_GENERAL_CFG_CRC_ERR_RESET	BIT(5)
-> +#define UB913_REG_GENERAL_CFG_PCLK_RISING	BIT(0)
+> +#define UB953_REG_GENERAL_CFG			0x02
+> +#define UB953_REG_GENERAL_CFG_CONT_CLK		BIT(6)
+> +#define UB953_REG_GENERAL_CFG_CSI_LANE_SEL_SHIFT	4
+> +#define UB953_REG_GENERAL_CFG_CSI_LANE_SEL_MASK	GENMASK(5, 4)
+> +#define UB953_REG_GENERAL_CFG_CRC_TX_GEN_ENABLE	BIT(1)
+> +#define UB953_REG_GENERAL_CFG_I2C_STRAP_MODE	BIT(0)
 > +
-> +#define UB913_REG_MODE_SEL			0x05
-> +#define UB913_REG_MODE_SEL_MODE_OVERRIDE	BIT(5)
-> +#define UB913_REG_MODE_SEL_MODE_UP_TO_DATE	BIT(4)
-> +#define UB913_REG_MODE_SEL_MODE_MASK		GENMASK(3, 0)
+> +#define UB953_REG_MODE_SEL			0x03
+> +#define UB953_REG_MODE_SEL_MODE_DONE		BIT(3)
+> +#define UB953_REG_MODE_SEL_MODE_OVERRIDE	BIT(4)
+> +#define UB953_REG_MODE_SEL_MODE_MASK		GENMASK(2, 0)
 > +
-> +#define UB913_REG_CRC_ERRORS_LSB		0x0a
-> +#define UB913_REG_CRC_ERRORS_MSB		0x0b
+> +#define UB953_REG_CLKOUT_CTRL0			0x06
+> +#define UB953_REG_CLKOUT_CTRL1			0x07
 > +
-> +#define UB913_REG_GENERAL_STATUS		0x0c
+> +#define UB953_REG_SCL_HIGH_TIME			0x0B
+> +#define UB953_REG_SCL_LOW_TIME			0x0C
+
+You have a mix of uppercase and lowercase hex constants, please
+standardize on one of them. In the media subsystem we usually go for
+lowercase.
+
 > +
-> +#define UB913_REG_GPIO_CFG(n)			(0x0d + (n))
-> +#define UB913_REG_GPIO_CFG_ENABLE(n)		BIT(0 + (n) * 4)
-> +#define UB913_REG_GPIO_CFG_DIR_INPUT(n)		BIT(1 + (n) * 4)
-> +#define UB913_REG_GPIO_CFG_REMOTE_EN(n)		BIT(2 + (n) * 4)
-> +#define UB913_REG_GPIO_CFG_OUT_VAL(n)		BIT(3 + (n) * 4)
-> +#define UB913_REG_GPIO_CFG_MASK(n)		(0xf << ((n) * 4))
+> +#define UB953_REG_LOCAL_GPIO_DATA		0x0d
+> +#define UB953_REG_LOCAL_GPIO_DATA_GPIO_RMTEN(n)		BIT(4 + (n))
+> +#define UB953_REG_LOCAL_GPIO_DATA_GPIO_OUT_SRC(n)	BIT(0 + (n))
 > +
-> +#define UB913_REG_SCL_HIGH_TIME			0x11
-> +#define UB913_REG_SCL_LOW_TIME			0x12
+> +#define UB953_REG_GPIO_INPUT_CTRL		0x0e
+> +#define UB953_REG_GPIO_INPUT_CTRL_OUT_EN(n)	BIT(4 + (n))
+> +#define UB953_REG_GPIO_INPUT_CTRL_INPUT_EN(n)	BIT(0 + (n))
 > +
-> +#define UB913_REG_PLL_OVR			0x35
+> +#define UB953_REG_REV_MASK_ID			0x50
+> +#define UB953_REG_GENERAL_STATUS		0x52
 > +
-> +struct ub913_data {
+> +#define UB953_REG_GPIO_PIN_STS			0x53
+> +#define UB953_REG_GPIO_PIN_STS_GPIO_STS(n)	BIT(0 + (n))
+> +
+> +#define UB953_REG_BIST_ERR_CNT			0x54
+> +#define UB953_REG_CRC_ERR_CNT1			0x55
+> +#define UB953_REG_CRC_ERR_CNT2			0x56
+> +
+> +#define UB953_REG_CSI_ERR_CNT			0x5c
+> +#define UB953_REG_CSI_ERR_STATUS		0x5D
+> +#define UB953_REG_CSI_ERR_DLANE01		0x5E
+> +#define UB953_REG_CSI_ERR_DLANE23		0x5F
+> +#define UB953_REG_CSI_ERR_CLK_LANE		0x60
+> +#define UB953_REG_CSI_PKT_HDR_VC_ID		0x61
+> +#define UB953_REG_PKT_HDR_WC_LSB		0x62
+> +#define UB953_REG_PKT_HDR_WC_MSB		0x63
+> +#define UB953_REG_CSI_ECC			0x64
+> +
+> +#define UB953_REG_IND_ACC_CTL			0xb0
+> +#define UB953_REG_IND_ACC_ADDR			0xb1
+> +#define UB953_REG_IND_ACC_DATA			0xb2
+> +
+> +#define UB953_REG_FPD3_RX_ID(n)			(0xf0 + (n))
+> +
+> +/* Indirect register blocks */
+> +#define UB953_IND_TARGET_PAT_GEN		0x00
+> +#define UB953_IND_TARGET_FPD3_TX		0x01
+> +#define UB953_IND_TARGET_DIE_ID			0x02
+> +
+> +#define UB953_IND_PGEN_CTL			0x01
+> +#define UB953_IND_PGEN_CTL_PGEN_ENABLE		BIT(0)
+> +#define UB953_IND_PGEN_CFG			0x02
+> +#define UB953_IND_PGEN_CSI_DI			0x03
+> +#define UB953_IND_PGEN_LINE_SIZE1		0x04
+> +#define UB953_IND_PGEN_LINE_SIZE0		0x05
+> +#define UB953_IND_PGEN_BAR_SIZE1		0x06
+> +#define UB953_IND_PGEN_BAR_SIZE0		0x07
+> +#define UB953_IND_PGEN_ACT_LPF1			0x08
+> +#define UB953_IND_PGEN_ACT_LPF0			0x09
+> +#define UB953_IND_PGEN_TOT_LPF1			0x0A
+> +#define UB953_IND_PGEN_TOT_LPF0			0x0B
+> +#define UB953_IND_PGEN_LINE_PD1			0x0C
+> +#define UB953_IND_PGEN_LINE_PD0			0x0D
+> +#define UB953_IND_PGEN_VBP			0x0E
+> +#define UB953_IND_PGEN_VFP			0x0F
+> +#define UB953_IND_PGEN_COLOR(n)			(0x10 + (n)) /* n <= 15 */
+> +
+> +/* Note: Only sync mode supported for now */
+> +enum ub953_mode {
+> +	/* FPD-Link III CSI-2 synchronous mode */
+> +	UB953_MODE_SYNC,
+> +	/* FPD-Link III CSI-2 non-synchronous mode, external ref clock */
+> +	UB953_MODE_NONSYNC_EXT,
+> +	/* FPD-Link III CSI-2 non-synchronous mode, internal ref clock */
+> +	UB953_MODE_NONSYNC_INT,
+> +	/* FPD-Link III DVP mode */
+> +	UB953_MODE_DVP,
+> +};
+> +
+> +struct ub953_hw_data {
+> +	const char *model;
+> +	bool is_ub971;
+> +};
+> +
+> +struct ub953_data {
+> +	const struct ub953_hw_data	*hw_data;
+> +
 > +	struct i2c_client	*client;
 > +	struct regmap		*regmap;
-> +	struct clk		*clkin;
+> +
+> +	u32			num_data_lanes;
 > +
 > +	struct gpio_chip	gpio_chip;
 > +
@@ -197,44 +272,199 @@ On Wed, Jan 18, 2023 at 02:40:30PM +0200, Tomi Valkeinen wrote:
 > +	struct v4l2_subdev	*source_sd;
 > +	u16			source_sd_pad;
 > +
+> +	struct v4l2_ctrl_handler   ctrl_handler;
+> +
 > +	u64			enabled_source_streams;
 > +
-> +	struct clk_hw		*clkout_clk_hw;
+> +	/* lock for register access */
+> +	struct mutex		reg_lock;
+> +
+> +	u8			current_indirect_target;
+> +
+> +	struct clk_hw		clkout_clk_hw;
+> +
+> +	enum ub953_mode		mode;
 > +
 > +	struct ds90ub9xx_platform_data *plat_data;
-> +
-> +	u32			pclk_polarity;
+
+const.
+
 > +};
 > +
-> +static inline struct ub913_data *sd_to_ub913(struct v4l2_subdev *sd)
+> +static inline struct ub953_data *sd_to_ub953(struct v4l2_subdev *sd)
 > +{
-> +	return container_of(sd, struct ub913_data, sd);
+> +	return container_of(sd, struct ub953_data, sd);
 > +}
 > +
-> +static int ub913_read(const struct ub913_data *priv, u8 reg, u8 *val)
+> +/*
+> + * HW Access
+> + */
+> +
+> +static int ub953_read(struct ub953_data *priv, u8 reg, u8 *val)
 > +{
 > +	unsigned int v;
 > +	int ret;
 > +
-> +	ret = regmap_read(priv->regmap, reg, &v);
-> +	if (ret < 0) {
-> +		dev_err(&priv->client->dev,
-> +			"Cannot read register 0x%02x: %d!\n", reg, ret);
-> +		return ret;
-> +	}
+> +	mutex_lock(&priv->reg_lock);
 > +
-> +	*val = v;
-> +	return 0;
+> +	ret = regmap_read(priv->regmap, reg, &v);
+> +	if (ret)
+> +		dev_err(&priv->client->dev, "Cannot read register 0x%02x: %d\n",
+> +			reg, ret);
+> +	else
+> +		*val = v;
+> +
+> +	mutex_unlock(&priv->reg_lock);
+> +
+> +	return ret;
 > +}
 > +
-> +static int ub913_write(const struct ub913_data *priv, u8 reg, u8 val)
+> +static int ub953_write(struct ub953_data *priv, u8 reg, u8 val)
 > +{
 > +	int ret;
 > +
+> +	mutex_lock(&priv->reg_lock);
+> +
 > +	ret = regmap_write(priv->regmap, reg, val);
-> +	if (ret < 0)
+> +	if (ret)
 > +		dev_err(&priv->client->dev,
-> +			"Cannot write register 0x%02x: %d!\n", reg, ret);
+> +			"Cannot write register 0x%02x: %d\n", reg, ret);
+> +
+> +	mutex_unlock(&priv->reg_lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int _ub953_select_ind_reg_block(struct ub953_data *priv, u8 block)
+
+Is the leading _ needed ?
+
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	int ret;
+> +
+> +	if (priv->current_indirect_target == block)
+> +		return 0;
+> +
+> +	ret = regmap_write(priv->regmap, UB953_REG_IND_ACC_CTL, block << 2);
+> +	if (ret) {
+> +		dev_err(dev, "%s: cannot select indirect target %u (%d)\n",
+> +			__func__, block, ret);
+> +		return ret;
+> +	}
+> +
+> +	priv->current_indirect_target = block;
+> +
+> +	return 0;
+> +}
+> +
+> +__maybe_unused static int ub953_read_ind(struct ub953_data *priv, u8 block,
+> +					 u8 reg, u8 *val)
+
+I'd still prefer dropping this function, but I won't insist.
+
+> +{
+> +	unsigned int v;
+> +	int ret;
+> +
+> +	mutex_lock(&priv->reg_lock);
+> +
+> +	ret = _ub953_select_ind_reg_block(priv, block);
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = regmap_write(priv->regmap, UB953_REG_IND_ACC_ADDR, reg);
+> +	if (ret) {
+> +		dev_err(&priv->client->dev,
+> +			"Write to IND_ACC_ADDR failed when reading %u:%x02x: %d\n",
+> +			block, reg, ret);
+> +		goto out;
+> +	}
+
+Would it make sense to cache the address as you do with
+current_indirect_block, and skip this write if the address is correct
+already ? If the device implements auto-increment of the address (I
+haven't checked), this could save quite a few I2C writes.
+
+> +
+> +	ret = regmap_read(priv->regmap, UB953_REG_IND_ACC_DATA, &v);
+> +	if (ret) {
+> +		dev_err(&priv->client->dev,
+> +			"Write to IND_ACC_DATA failed when reading %u:%x02x: %d\n",
+> +			block, reg, ret);
+> +		goto out;
+> +	}
+> +
+> +	*val = v;
+> +
+> +out:
+> +	mutex_unlock(&priv->reg_lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int ub953_write_ind(struct ub953_data *priv, u8 block, u8 reg, u8 val)
+> +{
+> +	int ret;
+> +
+> +	mutex_lock(&priv->reg_lock);
+> +
+> +	ret = _ub953_select_ind_reg_block(priv, block);
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = regmap_write(priv->regmap, UB953_REG_IND_ACC_ADDR, reg);
+> +	if (ret) {
+> +		dev_err(&priv->client->dev,
+> +			"Write to IND_ACC_ADDR failed when writing %u:%x02x: %d\n",
+> +			block, reg, ret);
+> +		goto out;
+> +	}
+> +
+> +	ret = regmap_write(priv->regmap, UB953_REG_IND_ACC_DATA, val);
+> +	if (ret) {
+> +		dev_err(&priv->client->dev,
+> +			"Write to IND_ACC_DATA failed when writing %u:%x02x\n: %d\n",
+> +			block, reg, ret);
+> +	}
+> +
+> +out:
+> +	mutex_unlock(&priv->reg_lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int ub953_write_ind16(struct ub953_data *priv, u8 block, u8 reg, u16 val)
+> +{
+> +	int ret;
+> +
+> +	mutex_lock(&priv->reg_lock);
+> +
+> +	ret = _ub953_select_ind_reg_block(priv, block);
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = regmap_write(priv->regmap, UB953_REG_IND_ACC_ADDR, reg);
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = regmap_write(priv->regmap, UB953_REG_IND_ACC_DATA, val >> 8);
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = regmap_write(priv->regmap, UB953_REG_IND_ACC_ADDR, reg + 1);
+> +	if (ret)
+> +		goto out;
+
+Does the device auto-increment the address ? If so you could skip this.
+
+> +
+> +	ret = regmap_write(priv->regmap, UB953_REG_IND_ACC_DATA, val & 0xff);
+> +	if (ret)
+> +		goto out;
+> +
+> +out:
+> +	mutex_unlock(&priv->reg_lock);
 > +
 > +	return ret;
 > +}
@@ -242,41 +472,79 @@ On Wed, Jan 18, 2023 at 02:40:30PM +0200, Tomi Valkeinen wrote:
 > +/*
 > + * GPIO chip
 > + */
-> +static int ub913_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
+> +static int ub953_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
 > +{
-> +	return GPIO_LINE_DIRECTION_OUT;
+> +	struct ub953_data *priv = gpiochip_get_data(gc);
+> +	int ret;
+> +	u8 v;
+> +
+> +	ret = ub953_read(priv, UB953_REG_GPIO_INPUT_CTRL, &v);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (v & UB953_REG_GPIO_INPUT_CTRL_INPUT_EN(offset))
+> +		return GPIO_LINE_DIRECTION_IN;
+> +	else
+> +		return GPIO_LINE_DIRECTION_OUT;
 > +}
 > +
-> +static int ub913_gpio_direction_out(struct gpio_chip *gc, unsigned int offset,
+> +static int ub953_gpio_direction_in(struct gpio_chip *gc, unsigned int offset)
+> +{
+> +	struct ub953_data *priv = gpiochip_get_data(gc);
+> +
+> +	return regmap_update_bits(priv->regmap, UB953_REG_GPIO_INPUT_CTRL,
+> +				  UB953_REG_GPIO_INPUT_CTRL_INPUT_EN(offset) |
+> +					  UB953_REG_GPIO_INPUT_CTRL_OUT_EN(offset),
+
+Weird indentation.
+
+> +				  UB953_REG_GPIO_INPUT_CTRL_INPUT_EN(offset));
+> +}
+> +
+> +static int ub953_gpio_direction_out(struct gpio_chip *gc, unsigned int offset,
 > +				    int value)
 > +{
-> +	struct ub913_data *priv = gpiochip_get_data(gc);
-> +	unsigned int reg_idx = offset / 2;
-> +	unsigned int field_idx = offset % 2;
+> +	struct ub953_data *priv = gpiochip_get_data(gc);
+> +	int ret;
 > +
-> +	return regmap_update_bits(priv->regmap, UB913_REG_GPIO_CFG(reg_idx),
-> +				  UB913_REG_GPIO_CFG_MASK(field_idx),
-> +				  UB913_REG_GPIO_CFG_ENABLE(field_idx) |
-> +					  (value ? UB913_REG_GPIO_CFG_OUT_VAL(field_idx) :
-> +						   0));
-
-I find the indentation weird, I would have written
-
-	return regmap_update_bits(priv->regmap, UB913_REG_GPIO_CFG(reg_idx),
-				  UB913_REG_GPIO_CFG_MASK(field_idx),
-				  UB913_REG_GPIO_CFG_ENABLE(field_idx) |
-				  (value ? UB913_REG_GPIO_CFG_OUT_VAL(field_idx) : 0));
-
-Your call.
-
+> +	ret = regmap_update_bits(priv->regmap, UB953_REG_LOCAL_GPIO_DATA,
+> +				 UB953_REG_LOCAL_GPIO_DATA_GPIO_OUT_SRC(offset),
+> +				 value ? UB953_REG_LOCAL_GPIO_DATA_GPIO_OUT_SRC(offset) :
+> +					 0);
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	return regmap_update_bits(priv->regmap, UB953_REG_GPIO_INPUT_CTRL,
+> +				  UB953_REG_GPIO_INPUT_CTRL_INPUT_EN(offset) |
+> +					  UB953_REG_GPIO_INPUT_CTRL_OUT_EN(offset),
+> +				  UB953_REG_GPIO_INPUT_CTRL_OUT_EN(offset));
 > +}
 > +
-> +static void ub913_gpio_set(struct gpio_chip *gc, unsigned int offset, int value)
+> +static int ub953_gpio_get(struct gpio_chip *gc, unsigned int offset)
 > +{
-> +	ub913_gpio_direction_out(gc, offset, value);
+> +	struct ub953_data *priv = gpiochip_get_data(gc);
+> +	int ret;
+> +	u8 v;
+> +
+> +	ret = ub953_read(priv, UB953_REG_GPIO_PIN_STS, &v);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return !!(v & UB953_REG_GPIO_PIN_STS_GPIO_STS(offset));
 > +}
 > +
-> +static int ub913_gpio_of_xlate(struct gpio_chip *gc,
+> +static void ub953_gpio_set(struct gpio_chip *gc, unsigned int offset, int value)
+> +{
+> +	struct ub953_data *priv = gpiochip_get_data(gc);
+> +
+> +	regmap_update_bits(priv->regmap, UB953_REG_LOCAL_GPIO_DATA,
+> +			   UB953_REG_LOCAL_GPIO_DATA_GPIO_OUT_SRC(offset),
+> +			   value ? UB953_REG_LOCAL_GPIO_DATA_GPIO_OUT_SRC(offset) :
+> +				   0);
+> +}
+> +
+> +static int ub953_gpio_of_xlate(struct gpio_chip *gc,
 > +			       const struct of_phandle_args *gpiospec,
 > +			       u32 *flags)
 > +{
@@ -286,25 +554,28 @@ Your call.
 > +	return gpiospec->args[0];
 > +}
 > +
-> +static int ub913_gpiochip_probe(struct ub913_data *priv)
+> +static int ub953_gpiochip_probe(struct ub953_data *priv)
 > +{
 > +	struct device *dev = &priv->client->dev;
 > +	struct gpio_chip *gc = &priv->gpio_chip;
 > +	int ret;
 > +
-> +	/* Initialize GPIOs 0 and 1 to local control, tri-state */
-> +	ub913_write(priv, UB913_REG_GPIO_CFG(0), 0);
+> +	/* Set all GPIOs to local input mode */
+> +	ub953_write(priv, UB953_REG_LOCAL_GPIO_DATA, 0);
+> +	ub953_write(priv, UB953_REG_GPIO_INPUT_CTRL, 0xf);
 > +
 > +	gc->label = dev_name(dev);
 > +	gc->parent = dev;
 > +	gc->owner = THIS_MODULE;
 > +	gc->base = -1;
 > +	gc->can_sleep = true;
-> +	gc->ngpio = UB913_NUM_GPIOS;
-> +	gc->get_direction = ub913_gpio_get_direction;
-> +	gc->direction_output = ub913_gpio_direction_out;
-> +	gc->set = ub913_gpio_set;
-> +	gc->of_xlate = ub913_gpio_of_xlate;
+> +	gc->ngpio = UB953_NUM_GPIOS;
+> +	gc->get_direction = ub953_gpio_get_direction;
+> +	gc->direction_input = ub953_gpio_direction_in;
+> +	gc->direction_output = ub953_gpio_direction_out;
+> +	gc->get = ub953_gpio_get;
+> +	gc->set = ub953_gpio_set;
+> +	gc->of_xlate = ub953_gpio_of_xlate;
 > +	gc->of_gpio_n_cells = 2;
 > +
 > +	ret = gpiochip_add_data(gc, priv);
@@ -316,75 +587,23 @@ Your call.
 > +	return 0;
 > +}
 > +
-> +static void ub913_gpiochip_remove(struct ub913_data *priv)
+> +static void ub953_gpiochip_remove(struct ub953_data *priv)
 > +{
 > +	gpiochip_remove(&priv->gpio_chip);
 > +}
-> +
-> +static const struct regmap_config ub913_regmap_config = {
-> +	.name = "ds90ub913",
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.reg_format_endian = REGMAP_ENDIAN_DEFAULT,
-> +	.val_format_endian = REGMAP_ENDIAN_DEFAULT,
-> +};
 > +
 > +/*
 > + * V4L2
 > + */
 > +
-> +static int ub913_enable_streams(struct v4l2_subdev *sd,
-> +				struct v4l2_subdev_state *state, u32 pad,
-> +				u64 streams_mask)
-> +{
-> +	struct ub913_data *priv = sd_to_ub913(sd);
-> +	u64 sink_streams;
-> +	int ret;
-> +
-> +	sink_streams = v4l2_subdev_state_xlate_streams(state, UB913_PAD_SOURCE,
-> +						       UB913_PAD_SINK,
-> +						       &streams_mask);
-> +
-> +	ret = v4l2_subdev_enable_streams(priv->source_sd, priv->source_sd_pad,
-> +					 sink_streams);
-> +	if (ret)
-> +		return ret;
-> +
-> +	priv->enabled_source_streams |= streams_mask;
-> +
-> +	return 0;
-> +}
-> +
-> +static int ub913_disable_streams(struct v4l2_subdev *sd,
-> +				 struct v4l2_subdev_state *state, u32 pad,
-> +				 u64 streams_mask)
-> +{
-> +	struct ub913_data *priv = sd_to_ub913(sd);
-> +	u64 sink_streams;
-> +	int ret;
-> +
-> +	sink_streams = v4l2_subdev_state_xlate_streams(state, UB913_PAD_SOURCE,
-> +						       UB913_PAD_SINK,
-> +						       &streams_mask);
-> +
-> +	ret = v4l2_subdev_disable_streams(priv->source_sd, priv->source_sd_pad,
-> +					  sink_streams);
-> +	if (ret)
-> +		return ret;
-> +
-> +	priv->enabled_source_streams &= ~streams_mask;
-> +
-> +	return 0;
-> +}
-> +
-> +static int _ub913_set_routing(struct v4l2_subdev *sd,
+> +static int _ub953_set_routing(struct v4l2_subdev *sd,
 > +			      struct v4l2_subdev_state *state,
 > +			      struct v4l2_subdev_krouting *routing)
 > +{
 > +	static const struct v4l2_mbus_framefmt format = {
 > +		.width = 640,
 > +		.height = 480,
-> +		.code = MEDIA_BUS_FMT_UYVY8_2X8,
+> +		.code = MEDIA_BUS_FMT_UYVY8_1X16,
 > +		.field = V4L2_FIELD_NONE,
 > +		.colorspace = V4L2_COLORSPACE_SRGB,
 > +		.ycbcr_enc = V4L2_YCBCR_ENC_601,
@@ -413,30 +632,30 @@ Your call.
 > +	return 0;
 > +}
 > +
-> +static int ub913_set_routing(struct v4l2_subdev *sd,
+> +static int ub953_set_routing(struct v4l2_subdev *sd,
 > +			     struct v4l2_subdev_state *state,
 > +			     enum v4l2_subdev_format_whence which,
 > +			     struct v4l2_subdev_krouting *routing)
 > +{
-> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +	struct ub953_data *priv = sd_to_ub953(sd);
 > +
 > +	if (which == V4L2_SUBDEV_FORMAT_ACTIVE && priv->enabled_source_streams)
 > +		return -EBUSY;
 > +
-> +	return _ub913_set_routing(sd, state, routing);
+> +	return _ub953_set_routing(sd, state, routing);
 > +}
 > +
-> +static int ub913_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
+> +static int ub953_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
 > +				struct v4l2_mbus_frame_desc *fd)
 > +{
-> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +	struct ub953_data *priv = sd_to_ub953(sd);
 > +	const struct v4l2_subdev_krouting *routing;
 > +	struct v4l2_mbus_frame_desc source_fd;
 > +	struct v4l2_subdev_route *route;
 > +	struct v4l2_subdev_state *state;
 > +	int ret;
 > +
-> +	if (pad != UB913_PAD_SOURCE)
+> +	if (pad != UB953_PAD_SOURCE)
 > +		return -EINVAL;
 > +
 > +	ret = v4l2_subdev_call(priv->source_sd, pad, get_frame_desc,
@@ -446,24 +665,34 @@ Your call.
 > +
 > +	memset(fd, 0, sizeof(*fd));
 > +
-> +	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_PARALLEL;
+> +	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_CSI2;
 > +
 > +	state = v4l2_subdev_lock_and_get_active_state(sd);
 > +
 > +	routing = &state->routing;
 > +
 > +	for_each_active_route(routing, route) {
+
+I'd write
+
+	for_each_active_route(&state->routing, route) {
+
+and drop the routing local variable.
+
+> +		struct v4l2_mbus_frame_desc_entry *source_entry = NULL;
 > +		unsigned int i;
 > +
 > +		if (route->source_pad != pad)
 > +			continue;
 > +
 > +		for (i = 0; i < source_fd.num_entries; ++i) {
-> +			if (source_fd.entry[i].stream == route->sink_stream)
+> +			if (source_fd.entry[i].stream == route->sink_stream) {
+> +				source_entry = &source_fd.entry[i];
 > +				break;
+> +			}
 > +		}
 > +
-> +		if (i == source_fd.num_entries) {
+> +		if (!source_entry) {
 > +			dev_err(&priv->client->dev,
 > +				"Failed to find stream from source frame desc\n");
 > +			ret = -EPIPE;
@@ -471,10 +700,13 @@ Your call.
 > +		}
 > +
 > +		fd->entry[fd->num_entries].stream = route->source_stream;
-> +		fd->entry[fd->num_entries].flags = source_fd.entry[i].flags;
-> +		fd->entry[fd->num_entries].length = source_fd.entry[i].length;
-> +		fd->entry[fd->num_entries].pixelcode =
-> +			source_fd.entry[i].pixelcode;
+> +		fd->entry[fd->num_entries].flags = source_entry->flags;
+> +		fd->entry[fd->num_entries].length = source_entry->length;
+> +		fd->entry[fd->num_entries].pixelcode = source_entry->pixelcode;
+> +		fd->entry[fd->num_entries].bus.csi2.vc =
+> +			source_entry->bus.csi2.vc;
+> +		fd->entry[fd->num_entries].bus.csi2.dt =
+> +			source_entry->bus.csi2.dt;
 > +
 > +		fd->num_entries++;
 > +	}
@@ -485,11 +717,11 @@ Your call.
 > +	return ret;
 > +}
 > +
-> +static int ub913_set_fmt(struct v4l2_subdev *sd,
+> +static int ub953_set_fmt(struct v4l2_subdev *sd,
 > +			 struct v4l2_subdev_state *state,
 > +			 struct v4l2_subdev_format *format)
 > +{
-> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +	struct ub953_data *priv = sd_to_ub953(sd);
 > +	struct v4l2_mbus_framefmt *fmt;
 > +
 > +	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE &&
@@ -497,7 +729,7 @@ Your call.
 > +		return -EBUSY;
 > +
 > +	/* No transcoding, source and sink formats must match. */
-> +	if (format->pad == UB913_PAD_SOURCE)
+> +	if (format->pad == UB953_PAD_SOURCE)
 > +		return v4l2_subdev_get_fmt(sd, state, format);
 > +
 > +	/* Set sink format */
@@ -519,14 +751,14 @@ Your call.
 > +	return 0;
 > +}
 > +
-> +static int ub913_init_cfg(struct v4l2_subdev *sd,
+> +static int ub953_init_cfg(struct v4l2_subdev *sd,
 > +			  struct v4l2_subdev_state *state)
 > +{
 > +	struct v4l2_subdev_route routes[] = {
 > +		{
-> +			.sink_pad = UB913_PAD_SINK,
+> +			.sink_pad = UB953_PAD_SINK,
 > +			.sink_stream = 0,
-> +			.source_pad = UB913_PAD_SOURCE,
+> +			.source_pad = UB953_PAD_SOURCE,
 > +			.source_stream = 0,
 > +			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
 > +		},
@@ -537,65 +769,268 @@ Your call.
 > +		.routes = routes,
 > +	};
 > +
-> +	return _ub913_set_routing(sd, state, &routing);
+> +	return _ub953_set_routing(sd, state, &routing);
 > +}
 > +
-> +static int ub913_log_status(struct v4l2_subdev *sd)
+> +static int ub953_log_status(struct v4l2_subdev *sd)
 > +{
-> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +	struct ub953_data *priv = sd_to_ub953(sd);
 > +	struct device *dev = &priv->client->dev;
-> +	u8 v, v1, v2;
+> +	u8 v = 0, v1 = 0, v2 = 0;
+> +	unsigned int i;
+> +	char id[7];
+> +	u8 gpio_local_data;
+> +	u8 gpio_input_ctrl;
+> +	u8 gpio_pin_sts;
 > +
-> +	ub913_read(priv, UB913_REG_MODE_SEL, &v);
-> +	dev_info(dev, "MODE_SEL %#02x\n", v);
+> +	for (i = 0; i < 6; ++i)
+> +		ub953_read(priv, UB953_REG_FPD3_RX_ID(i), &id[i]);
+> +	id[6] = 0;
 > +
-> +	ub913_read(priv, UB913_REG_CRC_ERRORS_LSB, &v1);
-> +	ub913_read(priv, UB913_REG_CRC_ERRORS_MSB, &v2);
-> +	dev_info(dev, "CRC errors %u\n", v1 | (v2 << 8));
+> +	dev_info(dev, "ID '%s'\n", id);
 > +
-> +	/* clear CRC errors */
-> +	ub913_read(priv, UB913_REG_GENERAL_CFG, &v);
-> +	ub913_write(priv, UB913_REG_GENERAL_CFG,
-> +		    v | UB913_REG_GENERAL_CFG_CRC_ERR_RESET);
-> +	ub913_write(priv, UB913_REG_GENERAL_CFG, v);
-> +
-> +	ub913_read(priv, UB913_REG_GENERAL_STATUS, &v);
+> +	ub953_read(priv, UB953_REG_GENERAL_STATUS, &v);
 > +	dev_info(dev, "GENERAL_STATUS %#02x\n", v);
 > +
-> +	ub913_read(priv, UB913_REG_PLL_OVR, &v);
-> +	dev_info(dev, "PLL_OVR %#02x\n", v);
+> +	ub953_read(priv, UB953_REG_CRC_ERR_CNT1, &v1);
+> +	ub953_read(priv, UB953_REG_CRC_ERR_CNT2, &v2);
+> +	dev_info(dev, "CRC error count %u\n", v1 | (v2 << 8));
+> +
+> +	ub953_read(priv, UB953_REG_CSI_ERR_CNT, &v);
+> +	dev_info(dev, "CSI error count %u\n", v);
+> +
+> +	ub953_read(priv, UB953_REG_CSI_ERR_STATUS, &v);
+> +	dev_info(dev, "CSI_ERR_STATUS %#02x\n", v);
+> +
+> +	ub953_read(priv, UB953_REG_CSI_ERR_DLANE01, &v);
+> +	dev_info(dev, "CSI_ERR_DLANE01 %#02x\n", v);
+> +
+> +	ub953_read(priv, UB953_REG_CSI_ERR_DLANE23, &v);
+> +	dev_info(dev, "CSI_ERR_DLANE23 %#02x\n", v);
+> +
+> +	ub953_read(priv, UB953_REG_CSI_ERR_CLK_LANE, &v);
+> +	dev_info(dev, "CSI_ERR_CLK_LANE %#02x\n", v);
+> +
+> +	ub953_read(priv, UB953_REG_CSI_PKT_HDR_VC_ID, &v);
+> +	dev_info(dev, "CSI packet header VC %u ID %u\n", v >> 6, v & 0x3f);
+> +
+> +	ub953_read(priv, UB953_REG_PKT_HDR_WC_LSB, &v1);
+> +	ub953_read(priv, UB953_REG_PKT_HDR_WC_MSB, &v2);
+> +	dev_info(dev, "CSI packet header WC %u\n", (v2 << 8) | v1);
+> +
+> +	ub953_read(priv, UB953_REG_CSI_ECC, &v);
+> +	dev_info(dev, "CSI ECC %#02x\n", v);
+> +
+> +	ub953_read(priv, UB953_REG_LOCAL_GPIO_DATA, &gpio_local_data);
+> +	ub953_read(priv, UB953_REG_GPIO_INPUT_CTRL, &gpio_input_ctrl);
+> +	ub953_read(priv, UB953_REG_GPIO_PIN_STS, &gpio_pin_sts);
+> +
+> +	for (i = 0; i < UB953_NUM_GPIOS; ++i) {
+> +		dev_info(dev,
+> +			 "GPIO%u: remote: %u is_input: %u is_output: %u val: %u sts: %u\n",
+> +			 i,
+> +			 !!(gpio_local_data & UB953_REG_LOCAL_GPIO_DATA_GPIO_RMTEN(i)),
+> +			 !!(gpio_input_ctrl & UB953_REG_GPIO_INPUT_CTRL_INPUT_EN(i)),
+> +			 !!(gpio_input_ctrl & UB953_REG_GPIO_INPUT_CTRL_OUT_EN(i)),
+> +			 !!(gpio_local_data & UB953_REG_LOCAL_GPIO_DATA_GPIO_OUT_SRC(i)),
+> +			 !!(gpio_pin_sts & UB953_REG_GPIO_PIN_STS_GPIO_STS(i)));
+> +	}
 > +
 > +	return 0;
 > +}
 > +
-> +static const struct v4l2_subdev_core_ops ub913_subdev_core_ops = {
-> +	.log_status = ub913_log_status,
-> +};
+> +static int ub953_enable_streams(struct v4l2_subdev *sd,
+> +				struct v4l2_subdev_state *state, u32 pad,
+> +				u64 streams_mask)
+> +{
+> +	struct ub953_data *priv = sd_to_ub953(sd);
+> +	u64 sink_streams;
+> +	int ret;
 > +
-> +static const struct v4l2_subdev_pad_ops ub913_pad_ops = {
-> +	.enable_streams = ub913_enable_streams,
-> +	.disable_streams = ub913_disable_streams,
-> +	.set_routing = ub913_set_routing,
-> +	.get_frame_desc = ub913_get_frame_desc,
+> +	sink_streams = v4l2_subdev_state_xlate_streams(state, UB953_PAD_SOURCE,
+> +						       UB953_PAD_SINK,
+> +						       &streams_mask);
+> +
+> +	ret = v4l2_subdev_enable_streams(priv->source_sd, priv->source_sd_pad,
+> +					 sink_streams);
+> +	if (ret)
+> +		return ret;
+> +
+> +	priv->enabled_source_streams |= streams_mask;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub953_disable_streams(struct v4l2_subdev *sd,
+> +				 struct v4l2_subdev_state *state, u32 pad,
+> +				 u64 streams_mask)
+> +{
+> +	struct ub953_data *priv = sd_to_ub953(sd);
+> +	u64 sink_streams;
+> +	int ret;
+> +
+> +	sink_streams = v4l2_subdev_state_xlate_streams(state, UB953_PAD_SOURCE,
+> +						       UB953_PAD_SINK,
+> +						       &streams_mask);
+> +
+> +	ret = v4l2_subdev_disable_streams(priv->source_sd, priv->source_sd_pad,
+> +					  sink_streams);
+> +	if (ret)
+> +		return ret;
+> +
+> +	priv->enabled_source_streams &= ~streams_mask;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_subdev_pad_ops ub953_pad_ops = {
+> +	.enable_streams = ub953_enable_streams,
+> +	.disable_streams = ub953_disable_streams,
+> +	.set_routing = ub953_set_routing,
+> +	.get_frame_desc = ub953_get_frame_desc,
 > +	.get_fmt = v4l2_subdev_get_fmt,
-> +	.set_fmt = ub913_set_fmt,
-> +	.init_cfg = ub913_init_cfg,
+> +	.set_fmt = ub953_set_fmt,
+> +	.init_cfg = ub953_init_cfg,
 > +};
 > +
-> +static const struct v4l2_subdev_ops ub913_subdev_ops = {
-> +	.core = &ub913_subdev_core_ops,
-> +	.pad = &ub913_pad_ops,
+> +static const struct v4l2_subdev_core_ops ub953_subdev_core_ops = {
+> +	.log_status = ub953_log_status,
+> +	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
+> +	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
 > +};
 > +
-> +static const struct media_entity_operations ub913_entity_ops = {
+> +static const struct v4l2_subdev_ops ub953_subdev_ops = {
+> +	.core = &ub953_subdev_core_ops,
+> +	.pad = &ub953_pad_ops,
+> +};
+> +
+> +static const struct media_entity_operations ub953_entity_ops = {
 > +	.link_validate = v4l2_subdev_link_validate,
 > +};
 > +
-> +static int ub913_notify_bound(struct v4l2_async_notifier *notifier,
+> +enum {
+> +	TEST_PATTERN_DISABLED = 0,
+> +	TEST_PATTERN_V_COLOR_BARS_1,
+> +	TEST_PATTERN_V_COLOR_BARS_2,
+> +	TEST_PATTERN_V_COLOR_BARS_4,
+> +	TEST_PATTERN_V_COLOR_BARS_8,
+> +};
+> +
+> +static const char *const ub953_tpg_qmenu[] = {
+> +	"Disabled",
+> +	"1 vertical color bar",
+> +	"2 vertical color bars",
+> +	"4 vertical color bars",
+> +	"8 vertical color bars",
+> +};
+> +
+> +static int ub953_enable_tpg(struct ub953_data *priv, int tpg_num)
+> +{
+> +	struct v4l2_subdev *sd = &priv->sd;
+> +	struct v4l2_subdev_state *state;
+> +	struct v4l2_mbus_framefmt *fmt;
+> +	u8 vbp, vfp;
+> +	u16 blank_lines;
+> +	u16 width;
+> +	u16 height;
+> +
+> +	u16 bytespp = 2; /* For MEDIA_BUS_FMT_UYVY8_1X16 */
+> +	u8 cbars_idx = tpg_num - TEST_PATTERN_V_COLOR_BARS_1;
+> +	u8 num_cbars = 1 << cbars_idx;
+> +
+> +	u16 line_size; /* Line size [bytes] */
+> +	u16 bar_size; /* cbar size [bytes] */
+> +	u16 act_lpf; /* active lines/frame */
+> +	u16 tot_lpf; /* tot lines/frame */
+> +	u16 line_pd; /* Line period in 10-ns units */
+> +
+> +	u16 fps = 30;
+> +
+> +	vbp = 33;
+> +	vfp = 10;
+> +	blank_lines = vbp + vfp + 2; /* total blanking lines */
+> +
+> +	state = v4l2_subdev_get_locked_active_state(sd);
+> +
+> +	if (state->routing.num_routes != 1)
+> +		return -EINVAL;
+> +
+> +	fmt = v4l2_subdev_state_get_stream_format(state, UB953_PAD_SOURCE, 0);
+> +	if (!fmt)
+> +		return -EINVAL;
+> +
+> +	if (fmt->code != MEDIA_BUS_FMT_UYVY8_1X16)
+> +		return -EINVAL;
+> +
+> +	width = fmt->width;
+> +	height = fmt->height;
+> +
+> +	line_size = width * bytespp;
+> +	bar_size = line_size / num_cbars;
+> +	act_lpf = height;
+> +	tot_lpf = act_lpf + blank_lines;
+> +	line_pd = 100000000 / fps / tot_lpf;
+> +
+> +	ub953_write_ind(priv, UB953_IND_TARGET_PAT_GEN, UB953_IND_PGEN_CTL,
+> +			UB953_IND_PGEN_CTL_PGEN_ENABLE);
+> +
+> +	/* YUV422 8bit: 2 bytes/block, CSI-2 data type 0x1e */
+> +	ub953_write_ind(priv, UB953_IND_TARGET_PAT_GEN, UB953_IND_PGEN_CFG,
+> +			cbars_idx << 4 | 0x2);
+> +	ub953_write_ind(priv, UB953_IND_TARGET_PAT_GEN, UB953_IND_PGEN_CSI_DI,
+> +			0x1e);
+> +
+> +	ub953_write_ind16(priv, UB953_IND_TARGET_PAT_GEN,
+> +			  UB953_IND_PGEN_LINE_SIZE1, line_size);
+> +	ub953_write_ind16(priv, UB953_IND_TARGET_PAT_GEN,
+> +			  UB953_IND_PGEN_BAR_SIZE1, bar_size);
+> +	ub953_write_ind16(priv, UB953_IND_TARGET_PAT_GEN,
+> +			  UB953_IND_PGEN_ACT_LPF1, act_lpf);
+> +	ub953_write_ind16(priv, UB953_IND_TARGET_PAT_GEN,
+> +			  UB953_IND_PGEN_TOT_LPF1, tot_lpf);
+> +	ub953_write_ind16(priv, UB953_IND_TARGET_PAT_GEN,
+> +			  UB953_IND_PGEN_LINE_PD1, line_pd);
+> +	ub953_write_ind(priv, UB953_IND_TARGET_PAT_GEN, UB953_IND_PGEN_VBP,
+> +			vbp);
+> +	ub953_write_ind(priv, UB953_IND_TARGET_PAT_GEN, UB953_IND_PGEN_VFP,
+> +			vfp);
+> +
+> +	return 0;
+> +}
+> +
+> +static void ub953_disable_tpg(struct ub953_data *priv)
+> +{
+> +	ub953_write_ind(priv, UB953_IND_TARGET_PAT_GEN, UB953_IND_PGEN_CTL,
+> +			0x0);
+> +}
+> +
+> +static int ub953_s_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +	struct ub953_data *priv =
+> +		container_of(ctrl->handler, struct ub953_data, ctrl_handler);
+> +	int ret = 0;
+> +
+> +	switch (ctrl->id) {
+> +	case V4L2_CID_TEST_PATTERN:
+> +		if (ctrl->val == 0)
+> +			ub953_disable_tpg(priv);
+> +		else
+> +			ret = ub953_enable_tpg(priv, ctrl->val);
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct v4l2_ctrl_ops ub953_ctrl_ops = {
+> +	.s_ctrl = ub953_s_ctrl,
+> +};
+> +
+> +static int ub953_notify_bound(struct v4l2_async_notifier *notifier,
 > +			      struct v4l2_subdev *source_subdev,
 > +			      struct v4l2_async_subdev *asd)
 > +{
-> +	struct ub913_data *priv = sd_to_ub913(notifier->sd);
+> +	struct ub953_data *priv = sd_to_ub953(notifier->sd);
 > +	struct device *dev = &priv->client->dev;
 > +	int ret;
 > +
@@ -612,12 +1047,9 @@ Your call.
 > +	priv->source_sd_pad = ret;
 > +
 > +	ret = media_create_pad_link(&source_subdev->entity, priv->source_sd_pad,
-> +				    &priv->sd.entity, UB913_PAD_SINK,
+> +				    &priv->sd.entity, 0,
 > +				    MEDIA_LNK_FL_ENABLED |
 > +					    MEDIA_LNK_FL_IMMUTABLE);
-
-Weird indentation again. It was fine in the previous version :-)
-
 > +	if (ret) {
 > +		dev_err(dev, "Unable to link %s:%u -> %s:0\n",
 > +			source_subdev->name, priv->source_sd_pad,
@@ -628,11 +1060,11 @@ Weird indentation again. It was fine in the previous version :-)
 > +	return 0;
 > +}
 > +
-> +static const struct v4l2_async_notifier_operations ub913_notify_ops = {
-> +	.bound = ub913_notify_bound,
+> +static const struct v4l2_async_notifier_operations ub953_notify_ops = {
+> +	.bound = ub953_notify_bound,
 > +};
 > +
-> +static int ub913_v4l2_notifier_register(struct ub913_data *priv)
+> +static int ub953_v4l2_notifier_register(struct ub953_data *priv)
 > +{
 > +	struct device *dev = &priv->client->dev;
 > +	struct v4l2_async_subdev *asd;
@@ -640,7 +1072,7 @@ Weird indentation again. It was fine in the previous version :-)
 > +	int ret;
 > +
 > +	ep_fwnode = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev),
-> +						    UB913_PAD_SINK, 0, 0);
+> +						    UB953_PAD_SINK, 0, 0);
 > +	if (!ep_fwnode) {
 > +		dev_err(dev, "No graph endpoint\n");
 > +		return -ENODEV;
@@ -659,7 +1091,7 @@ Weird indentation again. It was fine in the previous version :-)
 > +		return PTR_ERR(asd);
 > +	}
 > +
-> +	priv->notifier.ops = &ub913_notify_ops;
+> +	priv->notifier.ops = &ub953_notify_ops;
 > +
 > +	ret = v4l2_async_subdev_nf_register(&priv->sd, &priv->notifier);
 > +	if (ret) {
@@ -671,33 +1103,280 @@ Weird indentation again. It was fine in the previous version :-)
 > +	return 0;
 > +}
 > +
-> +static void ub913_v4l2_nf_unregister(struct ub913_data *priv)
+> +static void ub953_v4l2_notifier_unregister(struct ub953_data *priv)
 > +{
 > +	v4l2_async_nf_unregister(&priv->notifier);
 > +	v4l2_async_nf_cleanup(&priv->notifier);
 > +}
 > +
-> +static int ub913_register_clkout(struct ub913_data *priv)
+> +/*
+> + * Probing
+> + */
+> +
+> +static int ub953_i2c_master_init(struct ub953_data *priv)
 > +{
-> +	struct device *dev = &priv->client->dev;
-> +	const char *name;
+> +	/* i2c fast mode */
+> +	u32 ref = 26250000;
+> +	u32 scl_high = 915; /* ns */
+> +	u32 scl_low = 1641; /* ns */
 > +	int ret;
 > +
-> +	name = kasprintf(GFP_KERNEL, "ds90ub913.%s.clk_out", dev_name(dev));
-> +	if (!name)
+> +	scl_high = div64_u64((u64)scl_high * ref, 1000000000) - 5;
+> +	scl_low = div64_u64((u64)scl_low * ref, 1000000000) - 5;
+> +
+> +	ret = ub953_write(priv, UB953_REG_SCL_HIGH_TIME, scl_high);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ub953_write(priv, UB953_REG_SCL_LOW_TIME, scl_low);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static u64 ub953_get_fc_rate(struct ub953_data *priv)
+> +{
+> +	if (priv->mode != UB953_MODE_SYNC) {
+> +		/* Not supported */
+> +		return 0;
+> +	}
+> +
+> +	if (priv->hw_data->is_ub971)
+> +		return priv->plat_data->bc_rate * 160ull;
+> +	else
+> +		return priv->plat_data->bc_rate / 2 * 160ull;
+> +}
+> +
+> +static unsigned long ub953_calc_clkout_ub953(struct ub953_data *priv,
+> +					     unsigned long target, u64 fc,
+> +					     u8 *hs_div, u8 *m, u8 *n)
+> +{
+> +	/*
+> +	 * We always use 4 as a pre-divider (HS_CLK_DIV = 2).
+> +	 *
+> +	 * According to the datasheet:
+> +	 * - "HS_CLK_DIV typically should be set to either 16, 8, or 4 (default)."
+> +	 * - "if it is not possible to have an integer ratio of N/M, it is best to
+> +	 *    select a smaller value for HS_CLK_DIV.
+> +	 *
+> +	 * For above reasons the default HS_CLK_DIV seems the best in the average
+> +	 * case. Use always that value to keep the code simple.
+> +	 */
+> +	static const unsigned long hs_clk_div = 4;
+> +
+> +	u64 fc_divided;
+> +	unsigned long mul, div;
+> +	unsigned long res;
+> +
+> +	/* clkout = fc / hs_clk_div * m / n */
+> +
+> +	fc_divided = div_u64(fc, hs_clk_div);
+> +
+> +	rational_best_approximation(target, fc_divided, (1 << 5) - 1,
+> +				    (1 << 8) - 1, &mul, &div);
+> +
+> +	res = div_u64(fc_divided * mul, div);
+> +
+> +	*hs_div = hs_clk_div;
+> +	*m = mul;
+> +	*n = div;
+> +
+> +	return res;
+> +}
+> +
+> +static unsigned long ub953_calc_clkout_ub971(struct ub953_data *priv,
+> +					     unsigned long target, u64 fc,
+> +					     u8 *m, u8 *n)
+> +{
+> +	u64 fc_divided;
+> +	unsigned long mul, div;
+> +	unsigned long res;
+> +
+> +	/* clkout = fc * m / (8 * n) */
+> +
+> +	fc_divided = div_u64(fc, 8);
+> +
+> +	rational_best_approximation(target, fc_divided, (1 << 5) - 1,
+> +				    (1 << 8) - 1, &mul, &div);
+> +
+> +	res = div_u64(fc_divided * mul, div);
+> +
+> +	*m = mul;
+> +	*n = div;
+> +
+> +	return res;
+> +}
+> +
+> +static unsigned long ub953_clkout_recalc_rate(struct clk_hw *hw,
+> +					      unsigned long parent_rate)
+> +{
+> +	struct ub953_data *priv = container_of(hw, struct ub953_data, clkout_clk_hw);
+> +	struct device *dev = &priv->client->dev;
+> +	u8 ctrl0, ctrl1;
+> +	u32 mul, div;
+> +	u64 fc_rate;
+> +	u32 hs_clk_div;
+> +	u64 rate;
+> +	int ret;
+> +
+> +	ret = ub953_read(priv, UB953_REG_CLKOUT_CTRL0, &ctrl0);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to read CLKOUT_CTRL0: %d\n", ret);
+> +		return 0;
+> +	}
+> +
+> +	ret = ub953_read(priv, UB953_REG_CLKOUT_CTRL1, &ctrl1);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to read CLKOUT_CTRL1: %d\n", ret);
+> +		return 0;
+> +	}
+> +
+> +	fc_rate = ub953_get_fc_rate(priv);
+> +
+> +	if (priv->hw_data->is_ub971) {
+> +		mul = ctrl0 & 0x1f;
+> +		div = ctrl1;
+> +
+> +		if (div == 0)
+> +			return 0;
+> +
+> +		rate = div_u64(fc_rate * mul, 8 * div);
+> +
+> +		dev_dbg(dev, "clkout: fc rate %llu, mul %u, div %u = %llu\n",
+> +			fc_rate, mul, div, rate);
+> +	} else {
+> +		mul = ctrl0 & 0x1f;
+> +		hs_clk_div = 1 << (ctrl0 >> 5);
+> +		div = ctrl1;
+> +
+> +		if (div == 0)
+> +			return 0;
+> +
+> +		rate = div_u64(div_u64(fc_rate, hs_clk_div) * mul, div);
+> +
+> +		dev_dbg(dev,
+> +			"clkout: fc rate %llu, hs_clk_div %u, mul %u, div %u = %llu\n",
+> +			fc_rate, hs_clk_div, mul, div, rate);
+> +	}
+> +
+> +	return rate;
+> +}
+> +
+> +static long ub953_clkout_round_rate(struct clk_hw *hw, unsigned long rate,
+> +				    unsigned long *parent_rate)
+> +{
+> +	struct ub953_data *priv = container_of(hw, struct ub953_data, clkout_clk_hw);
+> +	struct device *dev = &priv->client->dev;
+> +	unsigned long res;
+> +	u64 fc_rate;
+> +	u8 hs_div, m, n;
+> +
+> +	fc_rate = ub953_get_fc_rate(priv);
+> +
+> +	if (priv->hw_data->is_ub971) {
+> +		res = ub953_calc_clkout_ub971(priv, rate, fc_rate, &m, &n);
+> +
+> +		dev_dbg(dev, "%s %llu * %u / (8 * %u) = %lu (requested %lu)",
+> +			__func__, fc_rate, m, n, res, rate);
+> +	} else {
+> +		res = ub953_calc_clkout_ub953(priv, rate, fc_rate, &hs_div, &m, &n);
+> +
+> +		dev_dbg(dev, "%s %llu / %u * %u / %u = %lu (requested %lu)",
+> +			__func__, fc_rate, hs_div, m, n, res, rate);
+> +	}
+> +
+> +	return res;
+> +}
+> +
+> +static int ub953_clkout_set_rate(struct clk_hw *hw, unsigned long rate,
+> +				 unsigned long parent_rate)
+> +{
+> +	struct ub953_data *priv = container_of(hw, struct ub953_data, clkout_clk_hw);
+> +	u64 fc_rate;
+> +	u8 hs_div, m, n;
+> +	unsigned long res;
+> +
+> +	fc_rate = ub953_get_fc_rate(priv);
+> +
+> +	if (priv->hw_data->is_ub971) {
+> +		res = ub953_calc_clkout_ub971(priv, rate, fc_rate, &m, &n);
+> +
+> +		ub953_write(priv, UB953_REG_CLKOUT_CTRL0, m);
+> +		ub953_write(priv, UB953_REG_CLKOUT_CTRL1, n);
+> +	} else {
+> +		res = ub953_calc_clkout_ub953(priv, rate, fc_rate, &hs_div, &m, &n);
+> +
+> +		ub953_write(priv, UB953_REG_CLKOUT_CTRL0, (__ffs(hs_div) << 5) | m);
+> +		ub953_write(priv, UB953_REG_CLKOUT_CTRL1, n);
+> +	}
+> +
+> +	dev_dbg(&priv->client->dev, "%s %lu (requested %lu)\n", __func__, res,
+> +		rate);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct clk_ops ub953_clkout_ops = {
+> +	.recalc_rate	= ub953_clkout_recalc_rate,
+> +	.round_rate	= ub953_clkout_round_rate,
+> +	.set_rate	= ub953_clkout_set_rate,
+> +};
+> +
+> +static void ub953_init_clkout_ub953(struct ub953_data *priv)
+> +{
+> +	u64 fc_rate;
+> +	u8 hs_div, m, n;
+> +
+> +	fc_rate = ub953_get_fc_rate(priv);
+> +
+> +	ub953_calc_clkout_ub953(priv, 25000000, fc_rate, &hs_div, &m, &n);
+> +
+> +	ub953_write(priv, UB953_REG_CLKOUT_CTRL0, (__ffs(hs_div) << 5) | m);
+> +	ub953_write(priv, UB953_REG_CLKOUT_CTRL1, n);
+> +}
+> +
+> +static void ub953_init_clkout_ub971(struct ub953_data *priv)
+> +{
+> +	u64 fc_rate;
+> +	u8 m, n;
+> +
+> +	fc_rate = ub953_get_fc_rate(priv);
+> +
+> +	ub953_calc_clkout_ub971(priv, 25000000, fc_rate, &m, &n);
+> +
+> +	ub953_write(priv, UB953_REG_CLKOUT_CTRL0, m);
+> +	ub953_write(priv, UB953_REG_CLKOUT_CTRL1, n);
+> +}
+> +
+> +static int ub953_register_clkout(struct ub953_data *priv)
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	const struct clk_init_data init = {
+> +		.name = kasprintf(GFP_KERNEL, "ds90%s.%s.clk_out",
+> +				  priv->hw_data->model, dev_name(dev)),
+> +		.ops = &ub953_clkout_ops,
+> +	};
+> +	int ret;
+> +
+> +	if (!init.name)
 > +		return -ENOMEM;
 > +
-> +	priv->clkout_clk_hw = devm_clk_hw_register_fixed_factor(dev, name,
-> +		__clk_get_name(priv->clkin), 0, 1, 2);
+> +	/* Initialize clkout to 25MHz by default */
+> +	if (priv->hw_data->is_ub971)
+> +		ub953_init_clkout_ub971(priv);
+> +	else
+> +		ub953_init_clkout_ub953(priv);
 > +
-> +	kfree(name);
+> +	priv->clkout_clk_hw.init = &init;
 > +
-> +	if (IS_ERR(priv->clkout_clk_hw))
-> +		return dev_err_probe(dev, PTR_ERR(priv->clkout_clk_hw),
-> +				     "Cannot register clkout hw\n");
+> +	ret = devm_clk_hw_register(dev, &priv->clkout_clk_hw);
+> +	kfree(init.name);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Cannot register clock HW\n");
 > +
 > +	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get,
-> +					  priv->clkout_clk_hw);
+> +					  &priv->clkout_clk_hw);
 > +	if (ret)
 > +		return dev_err_probe(dev, ret,
 > +				     "Cannot add OF clock provider\n");
@@ -705,31 +1384,7 @@ Weird indentation again. It was fine in the previous version :-)
 > +	return 0;
 > +}
 > +
-> +static int ub913_i2c_master_init(struct ub913_data *priv)
-> +{
-> +	/* i2c fast mode */
-> +	u32 scl_high = 600 + 300; /* high period + rise time, ns */
-> +	u32 scl_low = 1300 + 300; /* low period + fall time, ns */
-> +	unsigned long ref;
-> +	int ret;
-> +
-> +	ref = clk_get_rate(priv->clkin) / 2;
-> +
-> +	scl_high = div64_u64((u64)scl_high * ref, 1000000000);
-> +	scl_low = div64_u64((u64)scl_low * ref, 1000000000);
-> +
-> +	ret = ub913_write(priv, UB913_REG_SCL_HIGH_TIME, scl_high);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ub913_write(priv, UB913_REG_SCL_LOW_TIME, scl_low);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +static int ub913_add_i2c_adapter(struct ub913_data *priv)
+> +static int ub953_add_i2c_adapter(struct ub953_data *priv)
 > +{
 > +	struct device *dev = &priv->client->dev;
 > +	struct fwnode_handle *i2c_handle;
@@ -750,106 +1405,185 @@ Weird indentation again. It was fine in the previous version :-)
 > +	return 0;
 > +}
 > +
-> +static int ub913_parse_dt(struct ub913_data *priv)
+> +static const struct regmap_config ub953_regmap_config = {
+> +	.name = "ds90ub953",
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.reg_format_endian = REGMAP_ENDIAN_DEFAULT,
+> +	.val_format_endian = REGMAP_ENDIAN_DEFAULT,
+> +};
+> +
+> +static int ub953_parse_dt(struct ub953_data *priv)
 > +{
 > +	struct device *dev = &priv->client->dev;
 > +	struct fwnode_handle *ep_fwnode;
 > +	int ret;
 > +
 > +	ep_fwnode = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev),
-> +						    UB913_PAD_SINK, 0, 0);
+> +						    UB953_PAD_SINK, 0, 0);
 > +	if (!ep_fwnode) {
-> +		dev_err(dev, "No sink endpoint\n");
+> +		dev_err(dev, "OF: no endpoint\n");
+
+dev_err_probe() ? Same below.
+
 > +		return -ENOENT;
 > +	}
 > +
-> +	ret = fwnode_property_read_u32(ep_fwnode, "pclk-sample",
-> +				       &priv->pclk_polarity);
+> +	ret = fwnode_property_count_u32(ep_fwnode, "data-lanes");
 > +
 > +	fwnode_handle_put(ep_fwnode);
 > +
-> +	if (ret) {
-> +		dev_err(dev, "OF: failed to parse pclk-sample: %d\n", ret);
+> +	if (ret <= 0) {
+> +		dev_err(dev, "failed to parse property 'data-lanes': %d\n",
+> +			ret);
 > +		return ret;
 > +	}
 > +
+> +	if (ret != 1 && ret != 2 && ret != 4) {
+> +		dev_err(dev, "bad number of data-lanes: %d\n", ret);
+> +		return -EINVAL;
+> +	}
+> +
+> +	priv->num_data_lanes = ret;
+> +
 > +	return 0;
 > +}
 > +
-> +static int ub913_hw_init(struct ub913_data *priv)
+> +static int ub953_hw_init(struct ub953_data *priv)
 > +{
 > +	struct device *dev = &priv->client->dev;
 > +	bool mode_override;
-> +	u8 mode;
 > +	int ret;
 > +	u8 v;
 > +
-> +	ret = ub913_read(priv, UB913_REG_MODE_SEL, &v);
+> +	ret = ub953_read(priv, UB953_REG_MODE_SEL, &v);
 > +	if (ret)
 > +		return ret;
 > +
-> +	if (!(v & UB913_REG_MODE_SEL_MODE_UP_TO_DATE))
+> +	if (!(v & UB953_REG_MODE_SEL_MODE_DONE))
+> +		return dev_err_probe(dev, -EIO, "Mode value not stabilized\n");
+> +
+> +	mode_override = v & UB953_REG_MODE_SEL_MODE_OVERRIDE;
+> +
+> +	switch (v & UB953_REG_MODE_SEL_MODE_MASK) {
+> +	case 0:
+> +		priv->mode = UB953_MODE_SYNC;
+> +		break;
+> +	case 2:
+> +		priv->mode = UB953_MODE_NONSYNC_EXT;
+> +		break;
+> +	case 3:
+> +		priv->mode = UB953_MODE_NONSYNC_INT;
+> +		break;
+> +	case 5:
+> +		priv->mode = UB953_MODE_DVP;
+> +		break;
+> +	default:
+> +		return dev_err_probe(dev, -EIO,
+> +				     "Illegal mode in mode register\n");
+
+s/Illegal/Invalid/
+
+Nobody will come to arrest you if this happens :-)
+
+> +	}
+> +
+> +	dev_dbg(dev, "mode from %s: %#x\n", mode_override ? "reg" : "strap",
+> +		priv->mode);
+> +
+> +	if (priv->mode != UB953_MODE_SYNC)
 > +		return dev_err_probe(dev, -ENODEV,
-> +				     "Mode value not stabilized\n");
+> +				     "Only synchronous mode supported\n");
 > +
-> +	mode_override = v & UB913_REG_MODE_SEL_MODE_OVERRIDE;
-> +	mode = v & UB913_REG_MODE_SEL_MODE_MASK;
-> +
-> +	dev_dbg(dev, "mode from %s: %#x\n",
-> +		mode_override ? "reg" : "deserializer", mode);
-> +
-> +	ret = ub913_i2c_master_init(priv);
+> +	ret = ub953_read(priv, UB953_REG_REV_MASK_ID, &v);
 > +	if (ret)
-> +		return dev_err_probe(dev, ret, "i2c master init failed\n");
+> +		return dev_err_probe(dev, ret, "Failed to read revision");
 > +
-> +	ub913_read(priv, UB913_REG_GENERAL_CFG, &v);
-> +	v &= ~UB913_REG_GENERAL_CFG_PCLK_RISING;
-> +	v |= priv->pclk_polarity ? UB913_REG_GENERAL_CFG_PCLK_RISING : 0;
-> +	ub913_write(priv, UB913_REG_GENERAL_CFG, v);
+> +	dev_info(dev, "Found %s rev/mask %#04x\n", priv->hw_data->model, v);
+> +
+> +	ret = ub953_read(priv, UB953_REG_GENERAL_CFG, &v);
+> +	if (ret)
+> +		return ret;
+> +
+> +	dev_dbg(dev, "i2c strap setting %s V\n",
+> +		(v & UB953_REG_GENERAL_CFG_I2C_STRAP_MODE) ? "1.8" : "3.3");
+> +
+> +	ret = ub953_i2c_master_init(priv);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "i2c init failed\n");
+> +
+> +	ub953_write(priv, UB953_REG_GENERAL_CFG,
+> +		    UB953_REG_GENERAL_CFG_CONT_CLK |
+> +		    ((priv->num_data_lanes - 1) << UB953_REG_GENERAL_CFG_CSI_LANE_SEL_SHIFT) |
+> +		    UB953_REG_GENERAL_CFG_CRC_TX_GEN_ENABLE);
 > +
 > +	return 0;
 > +}
 > +
-> +static int ub913_subdev_init(struct ub913_data *priv)
+> +static int ub953_subdev_init(struct ub953_data *priv)
 > +{
 > +	struct device *dev = &priv->client->dev;
 > +	int ret;
 > +
-> +	v4l2_i2c_subdev_init(&priv->sd, priv->client, &ub913_subdev_ops);
-> +	priv->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_STREAMS;
+> +	v4l2_i2c_subdev_init(&priv->sd, priv->client, &ub953_subdev_ops);
+> +
+> +	v4l2_ctrl_handler_init(&priv->ctrl_handler,
+> +			       ARRAY_SIZE(ub953_tpg_qmenu) - 1);
+
+The last argument to v4l2_ctrl_handler_init() should be the number of
+controls you will create, so 1.
+
+> +	priv->sd.ctrl_handler = &priv->ctrl_handler;
+> +
+> +	v4l2_ctrl_new_std_menu_items(&priv->ctrl_handler, &ub953_ctrl_ops,
+> +				     V4L2_CID_TEST_PATTERN,
+> +				     ARRAY_SIZE(ub953_tpg_qmenu) - 1, 0, 0,
+> +				     ub953_tpg_qmenu);
+> +
+> +	if (priv->ctrl_handler.error)
+> +		return dev_err_probe(dev, priv->ctrl_handler.error,
+> +				     "Failed to set up v4l2 controls\n");
+
+You need to goto err_remove_ctrls.
+
+> +
+> +	priv->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+> +			  V4L2_SUBDEV_FL_HAS_EVENTS | V4L2_SUBDEV_FL_STREAMS;
 > +	priv->sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
-> +	priv->sd.entity.ops = &ub913_entity_ops;
+> +	priv->sd.entity.ops = &ub953_entity_ops;
 > +
 > +	priv->pads[0].flags = MEDIA_PAD_FL_SINK;
 > +	priv->pads[1].flags = MEDIA_PAD_FL_SOURCE;
 > +
 > +	ret = media_entity_pads_init(&priv->sd.entity, 2, priv->pads);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to init pads\n");
+> +	if (ret) {
+> +		dev_err_probe(dev, ret, "Failed to init pads\n");
+> +		goto err_remove_ctrls;
+> +	}
 > +
 > +	priv->sd.fwnode = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev),
-> +							  UB913_PAD_SOURCE, 0,
+> +							  UB953_PAD_SOURCE, 0,
 > +							  0);
-> +
 > +	if (!priv->sd.fwnode) {
 > +		ret = -ENODEV;
 > +		dev_err_probe(dev, ret, "Missing TX endpoint\n");
 > +		goto err_entity_cleanup;
 > +	}
 > +
+> +	priv->sd.state_lock = priv->sd.ctrl_handler->lock;
+> +
 > +	ret = v4l2_subdev_init_finalize(&priv->sd);
 > +	if (ret)
 > +		goto err_entity_cleanup;
 
-You're leaking priv->sd.fwnode here, you need to call
-fwnode_handle_put() in the error path.
+You're leaking prev->sd.fwnode. Same in ub953_subdev_uninit().
 
 > +
-> +	ret = ub913_v4l2_notifier_register(priv);
+> +	ret = ub953_v4l2_notifier_register(priv);
 > +	if (ret) {
 > +		dev_err_probe(dev, ret,
 > +			      "v4l2 subdev notifier register failed\n");
-> +		goto err_subdev_cleanup;
+> +		goto err_free_state;
 > +	}
 > +
 > +	ret = v4l2_async_register_subdev(&priv->sd);
@@ -861,30 +1595,30 @@ fwnode_handle_put() in the error path.
 > +	return 0;
 > +
 > +err_unreg_notif:
-> +	ub913_v4l2_nf_unregister(priv);
-> +err_subdev_cleanup:
+> +	ub953_v4l2_notifier_unregister(priv);
+> +err_free_state:
 > +	v4l2_subdev_cleanup(&priv->sd);
 > +err_entity_cleanup:
 > +	media_entity_cleanup(&priv->sd.entity);
+> +err_remove_ctrls:
+> +	v4l2_ctrl_handler_free(&priv->ctrl_handler);
 > +
 > +	return ret;
 > +}
 > +
-> +static void ub913_subdev_uninit(struct ub913_data *priv)
+> +static void ub953_subdev_uninit(struct ub953_data *priv)
 > +{
 > +	v4l2_async_unregister_subdev(&priv->sd);
-> +	ub913_v4l2_nf_unregister(priv);
+> +	ub953_v4l2_notifier_unregister(priv);
 > +	v4l2_subdev_cleanup(&priv->sd);
 > +	media_entity_cleanup(&priv->sd.entity);
-
-Missing fwnode_handle_put() here too.
-
+> +	v4l2_ctrl_handler_free(&priv->ctrl_handler);
 > +}
 > +
-> +static int ub913_probe(struct i2c_client *client)
+> +static int ub953_probe(struct i2c_client *client)
 > +{
 > +	struct device *dev = &client->dev;
-> +	struct ub913_data *priv;
+> +	struct ub953_data *priv;
 > +	int ret;
 > +
 > +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
@@ -893,52 +1627,59 @@ Missing fwnode_handle_put() here too.
 > +
 > +	priv->client = client;
 > +
+> +	priv->hw_data = of_device_get_match_data(dev);
+> +	if (!priv->hw_data)
+> +		return -ENODEV;
+
+Can this happen ?
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> +
 > +	priv->plat_data = dev_get_platdata(&client->dev);
 > +	if (!priv->plat_data)
 > +		return dev_err_probe(dev, -ENODEV, "Platform data missing\n");
 > +
-> +	priv->regmap = devm_regmap_init_i2c(client, &ub913_regmap_config);
-> +	if (IS_ERR(priv->regmap))
-> +		return dev_err_probe(dev, PTR_ERR(priv->regmap),
-> +				     "Failed to init regmap\n");
+> +	mutex_init(&priv->reg_lock);
 > +
 > +	/*
-> +	 * ub913 can also work without ext clock, but that is not supported by
-> +	 * the driver yet
-
-s/yet/yet./
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
+> +	 * Initialize to invalid values so that the first reg writes will
+> +	 * configure the target.
 > +	 */
-> +	priv->clkin = devm_clk_get(dev, "clkin");
-> +	if (IS_ERR(priv->clkin))
-> +		return dev_err_probe(dev, PTR_ERR(priv->clkin),
-> +				     "Cannot get CLKIN\n");
+> +	priv->current_indirect_target = 0xff;
 > +
-> +	ret = ub913_parse_dt(priv);
+> +	priv->regmap = devm_regmap_init_i2c(client, &ub953_regmap_config);
+> +	if (IS_ERR(priv->regmap)) {
+> +		ret = PTR_ERR(priv->regmap);
+> +		dev_err_probe(dev, ret, "Failed to init regmap\n");
+> +		goto err_mutex_destroy;
+> +	}
+> +
+> +	ret = ub953_parse_dt(priv);
 > +	if (ret)
-> +		return ret;
+> +		goto err_mutex_destroy;
 > +
-> +	ret = ub913_hw_init(priv);
+> +	ret = ub953_hw_init(priv);
 > +	if (ret)
-> +		return ret;
+> +		goto err_mutex_destroy;
 > +
-> +	ret = ub913_gpiochip_probe(priv);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to init gpiochip\n");
+> +	ret = ub953_gpiochip_probe(priv);
+> +	if (ret) {
+> +		dev_err_probe(dev, ret, "Failed to init gpiochip\n");
+> +		goto err_mutex_destroy;
+> +	}
 > +
-> +	ret = ub913_register_clkout(priv);
+> +	ret = ub953_register_clkout(priv);
 > +	if (ret) {
 > +		dev_err_probe(dev, ret, "Failed to register clkout\n");
 > +		goto err_gpiochip_remove;
 > +	}
 > +
-> +	ret = ub913_subdev_init(priv);
+> +	ret = ub953_subdev_init(priv);
 > +	if (ret)
 > +		goto err_gpiochip_remove;
 > +
-> +	ret = ub913_add_i2c_adapter(priv);
+> +	ret = ub953_add_i2c_adapter(priv);
 > +	if (ret) {
 > +		dev_err_probe(dev, ret, "failed to add remote i2c adapter\n");
 > +		goto err_subdev_uninit;
@@ -947,47 +1688,65 @@ Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > +	return 0;
 > +
 > +err_subdev_uninit:
-> +	ub913_subdev_uninit(priv);
+> +	ub953_subdev_uninit(priv);
 > +err_gpiochip_remove:
-> +	ub913_gpiochip_remove(priv);
+> +	ub953_gpiochip_remove(priv);
+> +err_mutex_destroy:
+> +	mutex_destroy(&priv->reg_lock);
 > +
 > +	return ret;
 > +}
 > +
-> +static void ub913_remove(struct i2c_client *client)
+> +static void ub953_remove(struct i2c_client *client)
 > +{
 > +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +	struct ub953_data *priv = sd_to_ub953(sd);
 > +
 > +	i2c_atr_del_adapter(priv->plat_data->atr, priv->plat_data->port);
 > +
-> +	ub913_subdev_uninit(priv);
+> +	ub953_subdev_uninit(priv);
 > +
-> +	ub913_gpiochip_remove(priv);
+> +	ub953_gpiochip_remove(priv);
+> +	mutex_destroy(&priv->reg_lock);
 > +}
 > +
-> +static const struct i2c_device_id ub913_id[] = { { "ds90ub913a-q1", 0 }, {} };
-> +MODULE_DEVICE_TABLE(i2c, ub913_id);
+> +static const struct ub953_hw_data ds90ub953_hw = {
+> +	.model = "ub953",
+> +};
 > +
-> +static const struct of_device_id ub913_dt_ids[] = {
-> +	{ .compatible = "ti,ds90ub913a-q1" },
+> +static const struct ub953_hw_data ds90ub971_hw = {
+> +	.model = "ub971",
+> +	.is_ub971 = true,
+> +};
+> +
+> +static const struct i2c_device_id ub953_id[] = {
+> +	{ "ds90ub953-q1", 0 },
+> +	{ "ds90ub971-q1", 0 },
 > +	{}
 > +};
-> +MODULE_DEVICE_TABLE(of, ub913_dt_ids);
+> +MODULE_DEVICE_TABLE(i2c, ub953_id);
 > +
-> +static struct i2c_driver ds90ub913_driver = {
-> +	.probe_new	= ub913_probe,
-> +	.remove		= ub913_remove,
-> +	.id_table	= ub913_id,
+> +static const struct of_device_id ub953_dt_ids[] = {
+> +	{ .compatible = "ti,ds90ub953-q1", .data = &ds90ub953_hw },
+> +	{ .compatible = "ti,ds90ub971-q1", .data = &ds90ub971_hw },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, ub953_dt_ids);
+> +
+> +static struct i2c_driver ds90ub953_driver = {
+> +	.probe_new	= ub953_probe,
+> +	.remove		= ub953_remove,
+> +	.id_table	= ub953_id,
 > +	.driver = {
-> +		.name	= "ds90ub913a",
-> +		.of_match_table = ub913_dt_ids,
+> +		.name	= "ds90ub953",
+> +		.owner = THIS_MODULE,
+> +		.of_match_table = ub953_dt_ids,
 > +	},
 > +};
-> +module_i2c_driver(ds90ub913_driver);
+> +module_i2c_driver(ds90ub953_driver);
 > +
 > +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("Texas Instruments DS90UB913 FPD-Link III Serializer Driver");
+> +MODULE_DESCRIPTION("Texas Instruments FPD-Link III/IV CSI-2 Serializers Driver");
 > +MODULE_AUTHOR("Luca Ceresoli <luca@lucaceresoli.net>");
 > +MODULE_AUTHOR("Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>");
 > +MODULE_IMPORT_NS(I2C_ATR);
