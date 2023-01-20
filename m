@@ -2,55 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39760675964
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jan 2023 17:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F4CE67596C
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jan 2023 17:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjATQAO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 20 Jan 2023 11:00:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
+        id S230039AbjATQBK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 20 Jan 2023 11:01:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjATQAN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Jan 2023 11:00:13 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2945E522;
-        Fri, 20 Jan 2023 08:00:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674230412; x=1705766412;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WRsyLGOahjzjt6kpSNh9GKMvG+H+i5eITtoKdM1H0Zk=;
-  b=EE3gOSkkR3ardASQQfhOrYpPbphD88W4DAPjVsWFPl1m2cDgazcRvH5p
-   wAMcqZ5/AT0/BWUJjCA/g0B+/ucRXFkS+ejUCX5RBBbhvOS6cvmbGs+Pc
-   YcbMDl5fJFQYOFmQ4l+s77ELBKHmQPOgUwnduvzeRitvyxhiXapfT4poZ
-   PcRxkDDC0D6ZQuo7RqMZMOyKBFXRCer3e2H+v2Ur+Hl4VWP24xhYG3zHB
-   LJefgzHpslfg3CwedhEyNoQH/6UlegLiBo9TorqHfle0Z7UouPWY0q1SG
-   k+yhr2FPHCxBUglHW0i+uh4sT/lpUcMOlljQ0sp36SPCfmP156yXA6B5T
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="313495260"
-X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
-   d="scan'208";a="313495260"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 08:00:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="749380190"
-X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
-   d="scan'208";a="749380190"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Jan 2023 08:00:05 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1pItoA-00CIej-1G;
-        Fri, 20 Jan 2023 18:00:02 +0200
-Date:   Fri, 20 Jan 2023 18:00:02 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        with ESMTP id S229742AbjATQBJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Jan 2023 11:01:09 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AE5457F2;
+        Fri, 20 Jan 2023 08:01:04 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BCC39514;
+        Fri, 20 Jan 2023 17:01:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674230463;
+        bh=dCrbUtIysS0XtsI7KvoCttFCbXL8nRcxzGx23S0+PbA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IRCKfrm9rY+7rQDZSOdmDMcXslFWoPjaU1FleNjwutSytLkMmzUOgW2i6EWVN/sUz
+         Gs8FOlmrD/0CCl/NMCH4uQpFFrPky57j2QRo8cGu4bkIrD6c9XJpUJ44beZo/vXqzE
+         fqx2lCOYm6KyA88MxCoYLOQGVfIw3e3G11NVMazo=
+Message-ID: <430b7f94-fb54-c4dc-8b11-a1d5c27edee0@ideasonboard.com>
+Date:   Fri, 20 Jan 2023 18:00:58 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 1/7] i2c: add I2C Address Translator (ATR) support
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
         Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
         Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -62,71 +49,57 @@ Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Shawn Tu <shawnx.tu@intel.com>,
         Hans Verkuil <hverkuil@xs4all.nl>,
         Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-Subject: Re: [PATCH v7 0/7] i2c-atr and FPDLink
-Message-ID: <Y8q6ggmOsygyVdTT@smile.fi.intel.com>
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Luca Ceresoli <luca@lucaceresoli.net>
 References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
- <Y8gX0krXayfOa4Hi@smile.fi.intel.com>
- <bd6d6cc0-4e70-fa31-4b5e-e6bcddf62d36@ideasonboard.com>
- <Y8gvu/E5EoPqo8J1@smile.fi.intel.com>
- <20230119094358.010bc826@booty>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119094358.010bc826@booty>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+ <20230118124031.788940-2-tomi.valkeinen@ideasonboard.com>
+ <Y8gA+cz9m7PaEhfP@smile.fi.intel.com>
+ <31562353-0794-8ad4-d609-3c117dd28d46@ideasonboard.com>
+ <Y8q6JsDD7c0QCOq5@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y8q6JsDD7c0QCOq5@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 09:43:58AM +0100, Luca Ceresoli wrote:
-> On Wed, 18 Jan 2023 19:43:23 +0200
-> Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
-> > On Wed, Jan 18, 2023 at 07:28:20PM +0200, Tomi Valkeinen wrote:
-> > > On 18/01/2023 18:01, Andy Shevchenko wrote:  
-> > > > On Wed, Jan 18, 2023 at 02:40:24PM +0200, Tomi Valkeinen wrote:  
-
-...
-
-> > > Can you clarify what you mean here?
-> > > 
-> > > The i2c_clients are not aware of the i2c-atr. They are normal i2c clients.
-> > > The FPD-Link drivers are aware of the ATR, as the FPD-Link hardware contains
-> > > the ATR support.  
-> > 
-> > Can't that hardware be represented as I2C adapter? In such case the ATR specifics
-> > can be hidden from the client (drivers).
-> > 
-> > I'm worrying about code duplication and other things that leak into drivers as
-> > ATR callbacks.
+On 20/01/2023 17:58, Andy Shevchenko wrote:
+> On Thu, Jan 19, 2023 at 12:01:33PM +0200, Tomi Valkeinen wrote:
+>> On 18/01/2023 16:23, Andy Shevchenko wrote:
+>>> On Wed, Jan 18, 2023 at 02:40:25PM +0200, Tomi Valkeinen wrote:
 > 
-> Which callbacks do you refer to? i2c_atr_ops? I don't think we can do
-> without the attach/detach_client ones, it's where the driver-specific
-> implementation is hooked for the generic ATR infra to call it.
+> ...
 > 
-> However now I noticed the select/deselect ops are still there. IIRC
-> they are not used by any driver and in the past the plan was to just
-> remove them. Tomi, do you think there is a good reason to keep them?
+>>>> +	/* Ensure we have enough room to save the original addresses */
+>>>> +	if (unlikely(chan->orig_addrs_size < num)) {
+>>>> +		u16 *new_buf;
+>>>> +
+>>>> +		new_buf = kmalloc_array(num, sizeof(*new_buf), GFP_KERNEL);
+>>>
+>>> I remember that I asked why we don't use krealloc_array() here... Perhaps
+>>> that we don't need to copy the old mapping table? Can we put a short comment
+>>> to clarify this in the code?
+>>
+>> Yes, we don't care about the old data, we just require the buffer to be
+>> large enough.
+>>
+>> I'm not sure what kind of comment you want here. Isn't this a common idiom,
+>> where you have a buffer for temporary data, but you might need to resize at
+>> some point if you need a larger one?
 > 
-> > It might be that I didn't get how hw exactly functioning on this
-> > level and why we need those callbacks.
+> Then why not krealloc_array()? That's the question I want to see the answer for
+> in the comments:
 > 
-> As far as "how hw exactly works", in case you haven't seen that, the
-> best explanation I was able to give is in my ELCE 2019 talk, at minute
-> ~22. It's a 2-3 minute watch. The slides have pointers to other talks
-> and discussion.
+> 	/* We don't care about old data, hence no realloc() */
 
-Probably I have missed the URL in the discussion, care to resend?
+Ok, I'll add that.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
+  Tomi
 
