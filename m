@@ -2,55 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D788667511C
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jan 2023 10:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD4D675120
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jan 2023 10:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjATJaX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 20 Jan 2023 04:30:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49984 "EHLO
+        id S230498AbjATJai (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 20 Jan 2023 04:30:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbjATJaV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Jan 2023 04:30:21 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E109A316C;
-        Fri, 20 Jan 2023 01:29:56 -0800 (PST)
+        with ESMTP id S230513AbjATJaf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Jan 2023 04:30:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E61D7;
+        Fri, 20 Jan 2023 01:30:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 44980CE26E0;
-        Fri, 20 Jan 2023 09:29:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1F75C433EF;
-        Fri, 20 Jan 2023 09:29:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AEB41B8213C;
+        Fri, 20 Jan 2023 09:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EA7AC433EF;
+        Fri, 20 Jan 2023 09:30:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674206955;
-        bh=brDlj3Fbi7upMkdhiJd32zzx8QN9gAkdfZZv5Lf1Gjo=;
+        s=k20201202; t=1674207010;
+        bh=3DGw974Ahkba0oy/LMgZ7J8Bjyw0AKlwWbBOCvdlK3I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W8j4vr4NyGHU0KDJCAMomXPRTzRsjAiZTqQWD6Pg/q4KJtPMNiiHpkTK+jnoLpOkN
-         RSuOb4UKU0XMvTOBt9Y3e0k3Xzr6Ulmuu/QGAyRY5tO/J/BWT3pC8ogKmyyiA9t0t7
-         93Ejw+NCYdBFUZcQZR8ublOTOx6Ok46g1ejvIP41mRxyAdRz392B6uQfrLS2RLa91d
-         GMkrM7DuGoSoB9qgNpnU1gxWIiU2HbY4KcvyzmZtBcK1GFT5wdmcYRR4Q3z+Vpxd32
-         aFhcLft3d+09gntu8uqh8Dkk0Bmir6ZVgLnCd8oJeWXO201CvuGPyOruleKDefPJir
-         SsiFlCMoPqc/g==
-Date:   Fri, 20 Jan 2023 10:29:12 +0100
+        b=RrkrLsnKIYiawEAy1z1b12/edSRztop6/uzh8LaTZQIOqLjSqkC30QjesdF/xpbfn
+         J5tZ9Yya5t447JigCmqlZtPstDhjH7EFCLgFuH2lMWKmiaVEMBAfrpXAB/Neuyks3u
+         L6xP+Rjoy47l73p9fniLdw/0MU1j8DnNlZGq4rySQriHwncHdoOxQIW1/Zg/J2JKss
+         7isIRjeULMkXwyAcxLEI4Qdo1Aa8hwQyV1H45Pwh6e4ES3ig67TmM3t0WZDKjgoxKs
+         SkPhBQc1VcZlxY2JHRYEdTmZ2KBM6BpEArCFtzuuaGEM3qYPvHPuXYpXgtsg17bB2o
+         RNj4eZ6+1LJvQ==
+Date:   Fri, 20 Jan 2023 10:30:07 +0100
 From:   Wolfram Sang <wsa@kernel.org>
 To:     ye.xingchen@zte.com.cn
-Cc:     brendan.higgins@linux.dev, benh@kernel.crashing.org,
-        joel@jms.id.au, andrew@aj.id.au, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: aspeed: Use devm_platform_get_and_ioremap_resource()
-Message-ID: <Y8pe6PWZQ4TVHlqi@ninjato>
+Cc:     f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, stefan.wahren@i2se.com,
+        eric@anholt.net, christophe.jaillet@wanadoo.fr,
+        linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: bcm2835: Use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <Y8pfHwL8C0Bc1PCx@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, ye.xingchen@zte.com.cn,
-        brendan.higgins@linux.dev, benh@kernel.crashing.org, joel@jms.id.au,
-        andrew@aj.id.au, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <202301191715319948743@zte.com.cn>
+        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, stefan.wahren@i2se.com,
+        eric@anholt.net, christophe.jaillet@wanadoo.fr,
+        linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <202301191718471268817@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7B4quZu9JV9hqI/T"
+        protocol="application/pgp-signature"; boundary="0BfSqijbPncFMAKs"
 Content-Disposition: inline
-In-Reply-To: <202301191715319948743@zte.com.cn>
+In-Reply-To: <202301191718471268817@zte.com.cn>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,12 +64,12 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---7B4quZu9JV9hqI/T
+--0BfSqijbPncFMAKs
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 19, 2023 at 05:15:31PM +0800, ye.xingchen@zte.com.cn wrote:
+On Thu, Jan 19, 2023 at 05:18:47PM +0800, ye.xingchen@zte.com.cn wrote:
 > From: ye xingchen <ye.xingchen@zte.com.cn>
 >=20
 > Convert platform_get_resource(), devm_ioremap_resource() to a single
@@ -78,24 +81,24 @@ On Thu, Jan 19, 2023 at 05:15:31PM +0800, ye.xingchen@zte.com.cn wrote:
 Applied to for-next, thanks!
 
 
---7B4quZu9JV9hqI/T
+--0BfSqijbPncFMAKs
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPKXugACgkQFA3kzBSg
-KbbyJw//XiPV3HIZdzP6F3LPYW27GANPJVSQz0jiB9jz7JrumN/9nsWScOx8T15z
-RtNzubE0tYP2sq8HxytaRfnjrw7g0paQQqm82vXGlqpCbMRduiZK3RDY3GCuMEuD
-tgGMYR1wcY6gv7vYUcfR4eegbRaCaDG327a60lNI7ec2pgBT2sEWbwrmoDlXn9FL
-putgoKAGFCoVXq3FgiyKcfNwb78K7EBRcWuIowhMMI1Jv/ZS0PWuWcSFa1UTLnoL
-q41vgTgsCNJJBMIkp/ewXUK4r8DXdXN73nR7Ld8El6+su4RcRGSwEOJUiWjq6sxV
-w9dy8E2Wrp3jgNvQV4jXFi17XKmos3ueH289nvUKRodwa7GWZLoGl1X+DQa8Ctg+
-mqGcsDSs6VAnMHO34tVGHE1rZr2VogxXPO8PI2AddNRUO1Drko5reMPxezzM+LUN
-u6oT5v/Siml9Nl4b6mzgGQF02BCuZT7sJp1xaA27a6mqPXqT6NaG8bNz6bZqWd4k
-D6KbIRgO7oRgLY3HMXzmXHn/TQfAoEcMcCMjxCsNnCD2YnOzJLOOiJR8AjL0mH2H
-IXAKFDh51pBhDPXWjSbzGpr0osZAPoF0jRgFa3NoFQtBu8eFTVkTctPKY4OUDM/7
-wR56ThbF3BhDp5L0SuuZGO5vFK8fMQu9IxLX9D+uuzf7SZq15X0=
-=AWQ7
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPKXx8ACgkQFA3kzBSg
+Kba5kRAApY30AlA/i3XsSPcSLVAr/SYL4Kmp4RHEjQd1xghO5QDzFKPw5+CqhlQh
+oSDpm7tNh2fK18GAyclLk1sMne8NIm4ZQkD5TcxeIO1WQNat0PWOTMDDepnAK7n1
+WxL8dt7Ki43Edam6ebGp60TxzNKVBpnNR1LHu0MOeQs+7rMvBsYtLGmiJR6xH/CS
+uIMs5EzgCtKgSg90EHlfpL/VLmFfM3GaKcOoRk8OuaWUk8UMM+CpngO5y5hY6EKm
+GHj25rnCQat1U5g/f5BUewgWMpgGSRgY/PhGOmFg053SAvpJWjwSKmPmHo0nl424
+ofGG8sLDSdOx5I5T06Fj4omiqNF9v7fdZgv9rIaVUM6hS/LsklIn7RLNyxv0g0V3
+RY66bCwMu16Dj/qSOxKHQ5mWvdI4NfkuQwlqU50WLzLVxPP+c/7+k9esI6I1oZOr
+RdXpnFDuiOlXOtOmFQlqCQr6N9Jk4mvlnbW6p90J9iIBmfrPur9k2ZvOGCWR25jL
+ggd/jcplNPIgewzk8NViT7C/w17A6FKBoz4lAK4qdna/5rY4jcOwCM9g2nKNelPX
+ss7WEaZVpvIM1lBI+N3NzBzr7F1PTEcl32LG7gsNmXMP9C8/gUQ3mloZGQnBlsWZ
+/XZ0A4u4tkSwDXiyhdS39adjLOtYAoCTFktO7a/gOj11eX0g7n8=
+=9Flm
 -----END PGP SIGNATURE-----
 
---7B4quZu9JV9hqI/T--
+--0BfSqijbPncFMAKs--
