@@ -2,107 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A26F967526B
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jan 2023 11:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4241675328
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jan 2023 12:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjATK2G (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 20 Jan 2023 05:28:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40128 "EHLO
+        id S229944AbjATLMe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 20 Jan 2023 06:12:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjATK2E (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Jan 2023 05:28:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7298B93CA;
-        Fri, 20 Jan 2023 02:27:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4EE8B821CF;
-        Fri, 20 Jan 2023 10:27:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CFD0C433EF;
-        Fri, 20 Jan 2023 10:27:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674210450;
-        bh=g9fHvGuKc9Aiv0vKYSqchcTH68QrPJkZUTrlFpYc4Yw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UpNhzkGfjhfx3M4uiOQHCbIirQfnH4CjTD87fBBLO+qMGQyF9qxI6wSXaNZFNYFiO
-         QXoxUL/b956E/5mUBj2a4DtOwoOjMlREfkSnGKnb5DrlgWVWtWhanDUYnwUkHL9lmr
-         lJkM5u4mVxPglTtsgvva/SKDVZdo08ATFGzbvR//WG71XRUAn0TnrQQ5z8Ai2X7K1M
-         kHR+EY2Daf/wlzuHwjEkkBrXh8dOZQa4Gy54fq4qKTf4MKpcdhPEkgpxJaC03EfizN
-         BTElY09be62Q6TZMUu17hKrvVFXXzYzYhpkpIUNHLgvPX5SNcfRiU7TUCAMgrM7d5v
-         q0P43X698T8bw==
-Date:   Fri, 20 Jan 2023 11:27:27 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Peter Rosin <peda@axentia.se>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v5 0/3] i2c: gpio: support write-only sda
-Message-ID: <Y8psjzVeuZ+hOwMo@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Peter Rosin <peda@axentia.se>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <6f4b54d9-ab6d-a4d4-5142-27c89e03c6d2@gmail.com>
+        with ESMTP id S229966AbjATLMb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Jan 2023 06:12:31 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F540B4E31
+        for <linux-i2c@vger.kernel.org>; Fri, 20 Jan 2023 03:12:29 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id hw16so12990369ejc.10
+        for <linux-i2c@vger.kernel.org>; Fri, 20 Jan 2023 03:12:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FUNnBMHo4V/m1/iebYt9qbsuAZO+R7zPmq+6nrO1qh0=;
+        b=cNRbRedeHdO39FShA6LTqR7IJduMzEJgbqDann74gwZjhlDGfsd4+Eyk9HeWc8kxtk
+         m3NwCX+05bAl/9FQC6WI4Fpg32wSkvHkBrAesVpSVK+LkR/0kulzecI8NXTomNvgYB7O
+         YjUCpCy25UPGECw4DNw93m9SUgOSSGY30AgN2sN6tvERNvm0kYhfmMZ1KVo138Y2dVib
+         bLXZK7duSkg7I+ouq6wgS0wVNb1Cfw0ciOdP5+lYE/RT5ZC/6w3j/BxAUcQ40KN0mQ+l
+         /+ZTS33eLdszOnEbl9x554yXW7Kby4EZXbqU1RhyRJnbrKu8T1k/ZnM1FC6Fu1lA2V0e
+         zpDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FUNnBMHo4V/m1/iebYt9qbsuAZO+R7zPmq+6nrO1qh0=;
+        b=6PMLqy4qReJTvZ8q1utIxw64f4W3ybLsx3hzzOz4415oMXqrqicnKRzzY7R+poDflH
+         m1plqb8Hvb/6Mho7vCZuWzMMSV8pAaZQX+R0dpwmMhANvmdLIY+CHZIa4nnG+T0W8maO
+         tpunZROJnTFDsui84CcHHWi28O4sUceMdFZna6Ssr51hJj1GELSXZ6sQMbw+h5s/1Aqo
+         ehnkNS/toWVHO5qSwXIOL7ewfuPTxrOCGXm63yFJhrqf9oLGomdZpw/wyfCj5doKoCdX
+         lxV9g1QKgk97NnTY9+VaeCRBgrMvL3G2WcU6wxB3/U9gJCGTFjhZYlFBF6sHrsrwPFHI
+         Msvg==
+X-Gm-Message-State: AFqh2kq+8cgsnmhnc0Iu0VIQvRpKacm33f2oQ9+bjL2aMJOxeK2BGuej
+        6PHAN1NCw9fRz64cybO1egk5mw==
+X-Google-Smtp-Source: AMrXdXtxRHs8EROx8v8cTkrUK2UuWtAUEX39Cl8wdExkrWY6Yi3IgIQpsY6He/UyCt9HDPg8/slNJg==
+X-Received: by 2002:a17:907:629c:b0:86e:9345:e701 with SMTP id nd28-20020a170907629c00b0086e9345e701mr20614184ejc.2.1674213145134;
+        Fri, 20 Jan 2023 03:12:25 -0800 (PST)
+Received: from [172.16.220.87] (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id du1-20020a17090772c100b0084bfd56fb3bsm17667492ejc.162.2023.01.20.03.12.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 03:12:24 -0800 (PST)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+Date:   Fri, 20 Jan 2023 12:11:53 +0100
+Subject: [PATCH 1/4] dt-bindings: i2c: qcom-cci: Document SM6350 compatible
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mYzw8xEELUo2S/kl"
-Content-Disposition: inline
-In-Reply-To: <6f4b54d9-ab6d-a4d4-5142-27c89e03c6d2@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221213-sm6350-cci-v1-1-e5d0c36e0c4f@fairphone.com>
+References: <20221213-sm6350-cci-v1-0-e5d0c36e0c4f@fairphone.com>
+In-Reply-To: <20221213-sm6350-cci-v1-0-e5d0c36e0c4f@fairphone.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>
+X-Mailer: b4 0.11.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Document the compatible for the CCI block found on SM6350 SoC.
 
---mYzw8xEELUo2S/kl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+---
+ Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Hi Heiner,
+diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+index 87e414f0c39c..ec79b7270437 100644
+--- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
++++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+@@ -26,6 +26,7 @@ properties:
+       - items:
+           - enum:
+               - qcom,sdm845-cci
++              - qcom,sm6350-cci
+               - qcom,sm8250-cci
+               - qcom,sm8450-cci
+           - const: qcom,msm8996-cci # CCI v2
+@@ -139,6 +140,7 @@ allOf:
+           contains:
+             enum:
+               - qcom,sdm845-cci
++              - qcom,sm6350-cci
+     then:
+       properties:
+         clocks:
 
-On Wed, Jan 18, 2023 at 10:49:48PM +0100, Heiner Kallweit wrote:
-> There are slave devices that understand I2C but have read-only SDA and
-> SCL. Examples are FD650 7-segment LED controller and its derivatives.
-> Typical board designs don't even have a pull-up for both pins.
-> Therefore add properties for not using open-drain. For write-only SCL
-> we have a property already, add one for write-only SDA.
-
-The code looks good to me. I am just waiting for an ack on the bindings.
-Thanks a lot for keeping at it!
-
-All the best,
-
-   Wolfram
-
-
---mYzw8xEELUo2S/kl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPKbIwACgkQFA3kzBSg
-KbYghg/+Ju0UdyGOZ+6jj5+DcIvbVgiBO/59M+mMfD9P7w/Dv+QBILxPV3qrxaXt
-rlqm+wjYEppOt4AlZAmpPemQxgbtiDN+gTIJs1mYsIu/yHb5gMRUNGPSZWAp7KZE
-mVFxwup0CRQVJkLbHpF/F1zFUJ6Kf0LRjfp5m6APAEup/HUk3fNWuyRWOjG7vXXc
-Qk5W7UDIi7H5pi3/2UEPfaonSgtpfQNgFP0HnBNgM4CJdDZiGbGZILNrTjKTsyjO
-wiav9DA4nT2k6FyvjCxjvZoko+KXLEgbKvxARF9wQUtKsGQf9KWz0ddJ3EYF8LLA
-UULpRFjlBVIvEw51nquFT+xVxOrH3c7YyQGJijKVgByRE49C5w3V8sUZrKISU67j
-ebj2CFK8U6T3Fqb9ZQU49OS6gNnrD4EuW9ZM/lqtgTpeaNEErlR8OsAReVQYQ7/Q
-77s7DqS6sfsrajt+pKelifSMN/JVZGZAHduZYTEJoJDjGi0sQE75/SCi7vCZOeM5
-+7GV4m8VvWn+nbzM6PQ1n3d9A8tcSngBta5vboju0pwhPyS4uYG3CLMRRo5ZMe5b
-/o7t5xNYwLreshlWduTp2oJnM4Y57Uw47/NvbEuoj4DtVlTl+D2+ykUzJbXVqqmn
-mjSdL08xezgD0yb3ZiNvBNymSnnK4YMx0RaGyISYii4uSitlcbw=
-=J/XE
------END PGP SIGNATURE-----
-
---mYzw8xEELUo2S/kl--
+-- 
+2.39.1
