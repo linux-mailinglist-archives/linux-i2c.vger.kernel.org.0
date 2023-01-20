@@ -2,92 +2,187 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92810675FDC
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jan 2023 23:00:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E02676128
+	for <lists+linux-i2c@lfdr.de>; Sat, 21 Jan 2023 00:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjATWAb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 20 Jan 2023 17:00:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
+        id S229597AbjATXDh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 20 Jan 2023 18:03:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjATWAa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Jan 2023 17:00:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA28F81988;
-        Fri, 20 Jan 2023 14:00:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49360B82A89;
-        Fri, 20 Jan 2023 22:00:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71090C4339B;
-        Fri, 20 Jan 2023 22:00:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674252026;
-        bh=By4+wnFOmO9TMaanbIqfOWU4AfMzOHH61k0H3Sw32qM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MgwgAR3zHuMa9eD2fpqe8ruSNglll1MsLtSdaqDKlSSmSf6kUgaOu3fVXBXmHzhVA
-         4O9bIdGAHYqttTBF4hNbUopWqXumnxKvX7KrEuWJiSrDmrIAp/xQ7r1ofJCYuaVaxI
-         0mye2Q8DS87TjietT9qC7TsKC/L1j5utNy4i0I3LbSIMQML6Fh++CjzKwPWVn/oMV+
-         RjEV4UJtlCJSZL+lqgfBB8jARpvFTUxZeuVTDOSXB5kQ+dY5n6dL6ov1xI7NAoyleX
-         AuU2UG7D6x5lj6D83kYnlOb3kOOrx3w+6OOFeskPml5F14JvZBZ2ds9BpV5qz59T8M
-         WzFbqlYIzivWg==
-Date:   Fri, 20 Jan 2023 22:00:23 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Grant Likely <grant.likely@linaro.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH 001/606] tpm: st33zp24: Convert to Convert to i2c's
- .probe_new()
-Message-ID: <Y8sO93QxH+lUPBtf@kernel.org>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-2-uwe@kleine-koenig.org>
- <20221216090904.qlekgvtpriijmvay@pengutronix.de>
- <Y696MSvhEUWlHSoK@kernel.org>
- <20230106175617.d3tlyb4lfdv34pvw@pengutronix.de>
+        with ESMTP id S229556AbjATXDg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Jan 2023 18:03:36 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216BE5E504;
+        Fri, 20 Jan 2023 15:03:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674255815; x=1705791815;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f+Y2d5WifdWH1iAgu4lhYlkNGFsn/bMB3NVjAbTRvn0=;
+  b=c0qpu9ktofRaL9dRv0HKrtozxNS9pspsmJNjWaSOx8gNbtG4TnOAylAa
+   D/V3WyJp6grDPudpeSIGpG0ujB/fBp/xPeWS0ESEPtJgBTil4MKYFWI5r
+   nU7YP/dGzHbJfIBy+Bj1dqEbQJKNglboVprG5Y4DUVRT+HO7KylR9rJjM
+   PkcrjlmDGFuZBgioZakvb7oUdOIH41gbAFTF0Y17NZLOmMqD6ys8yFP5S
+   Pg1HAerlImgostrIgkKG86deodXtX/GJl++CEWT7Az3PSaxyj0Uzi7nM5
+   HwKQQS7x6+xd3uqIl9bAHxW0LUg+7rDrPYUV54VAV61MM9vESQpNjdkKm
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="309293551"
+X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
+   d="scan'208";a="309293551"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 15:03:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="834573078"
+X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
+   d="scan'208";a="834573078"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 20 Jan 2023 15:03:31 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pJ0Py-00034u-1a;
+        Fri, 20 Jan 2023 23:03:30 +0000
+Date:   Sat, 21 Jan 2023 07:02:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     nick.hawkins@hpe.com, verdun@hpe.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au,
+        linux@armlinux.org.uk, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v3 1/5] i2c: hpe: Add GXP SoC I2C Controller
+Message-ID: <202301210607.KSWIWehq-lkp@intel.com>
+References: <20230120190159.23459-2-nick.hawkins@hpe.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230106175617.d3tlyb4lfdv34pvw@pengutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230120190159.23459-2-nick.hawkins@hpe.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 06:56:17PM +0100, Uwe Kleine-König wrote:
-> Hello Jarkko,
-> 
-> On Fri, Dec 30, 2022 at 11:54:25PM +0000, Jarkko Sakkinen wrote:
-> > I picked it now.
-> > 
-> > BR, Jarkko
-> > 
-> > On Fri, Dec 16, 2022 at 10:09:04AM +0100, Uwe Kleine-König wrote:
-> > > while rebasing my series onto today's next I noticed the Subject being
-> > > broken:
-> > > 
-> > > 	$Subject ~= s/Convert to //
-> 
-> I see you picked this patch, but you didn't drop the duplicated "Convert
-> to " :-\
-> 
-> Also you didn't pick patches #2 - #5 which are tpm related, too.
+Hi,
 
-Should be good now.
+I love your patch! Perhaps something to improve:
 
-BR, Jarkko
+[auto build test WARNING on wsa/i2c/for-next]
+[also build test WARNING on robh/for-next linus/master v6.2-rc4 next-20230120]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/nick-hawkins-hpe-com/i2c-hpe-Add-GXP-SoC-I2C-Controller/20230121-030628
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+patch link:    https://lore.kernel.org/r/20230120190159.23459-2-nick.hawkins%40hpe.com
+patch subject: [PATCH v3 1/5] i2c: hpe: Add GXP SoC I2C Controller
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230121/202301210607.KSWIWehq-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/944feebf5cf838fc72fae192e832e5fc96d1cad9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review nick-hawkins-hpe-com/i2c-hpe-Add-GXP-SoC-I2C-Controller/20230121-030628
+        git checkout 944feebf5cf838fc72fae192e832e5fc96d1cad9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/i2c/busses/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/i2c/busses/i2c-gxp.c: In function 'gxp_i2c_probe':
+>> drivers/i2c/busses/i2c-gxp.c:533:28: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     533 |         drvdata->engine = ((u32)drvdata->base & 0xf00) >> 8;
+         |                            ^
+
+
+vim +533 drivers/i2c/busses/i2c-gxp.c
+
+   499	
+   500	static int gxp_i2c_probe(struct platform_device *pdev)
+   501	{
+   502		struct gxp_i2c_drvdata *drvdata;
+   503		int rc;
+   504		struct i2c_adapter *adapter;
+   505	
+   506		if (!i2c_global_init_done) {
+   507			i2cg_map = syscon_regmap_lookup_by_phandle(pdev->dev.of_node,
+   508								   "hpe,sysreg");
+   509			if (IS_ERR(i2cg_map)) {
+   510				return dev_err_probe(&pdev->dev, IS_ERR(i2cg_map),
+   511						     "failed to map i2cg_handle\n");
+   512			}
+   513	
+   514			/* Disable interrupt */
+   515			regmap_update_bits(i2cg_map, GXP_I2CINTEN, 0x00000FFF, 0);
+   516			i2c_global_init_done = true;
+   517		}
+   518	
+   519		drvdata = devm_kzalloc(&pdev->dev, sizeof(*drvdata),
+   520				       GFP_KERNEL);
+   521		if (!drvdata)
+   522			return -ENOMEM;
+   523	
+   524		platform_set_drvdata(pdev, drvdata);
+   525		drvdata->dev = &pdev->dev;
+   526		init_completion(&drvdata->completion);
+   527	
+   528		drvdata->base = devm_platform_ioremap_resource(pdev, 0);
+   529		if (IS_ERR(drvdata->base))
+   530			return PTR_ERR(drvdata->base);
+   531	
+   532		/* Use physical memory address to determine which I2C engine this is. */
+ > 533		drvdata->engine = ((u32)drvdata->base & 0xf00) >> 8;
+   534	
+   535		if (drvdata->engine >= GXP_MAX_I2C_ENGINE) {
+   536			return dev_err_probe(&pdev->dev, -EINVAL, "i2c engine% is unsupported\n",
+   537				drvdata->engine);
+   538		}
+   539	
+   540		rc = platform_get_irq(pdev, 0);
+   541		if (rc < 0)
+   542			return rc;
+   543	
+   544		drvdata->irq = rc;
+   545		rc = devm_request_irq(&pdev->dev, drvdata->irq, gxp_i2c_irq_handler,
+   546				      IRQF_SHARED, gxp_i2c_name[drvdata->engine], drvdata);
+   547		if (rc < 0)
+   548			return dev_err_probe(&pdev->dev, rc, "irq request failed\n");
+   549	
+   550		i2c_parse_fw_timings(&pdev->dev, &drvdata->t, true);
+   551	
+   552		gxp_i2c_init(drvdata);
+   553	
+   554		/* Enable interrupt */
+   555		regmap_update_bits(i2cg_map, GXP_I2CINTEN, BIT(drvdata->engine),
+   556				   BIT(drvdata->engine));
+   557	
+   558		adapter = &drvdata->adapter;
+   559		i2c_set_adapdata(adapter, drvdata);
+   560	
+   561		adapter->owner = THIS_MODULE;
+   562		strscpy(adapter->name, "HPE GXP I2C adapter", sizeof(adapter->name));
+   563		adapter->algo = &gxp_i2c_algo;
+   564		adapter->dev.parent = &pdev->dev;
+   565		adapter->dev.of_node = pdev->dev.of_node;
+   566	
+   567		rc = i2c_add_adapter(adapter);
+   568		if (rc)
+   569			return dev_err_probe(&pdev->dev, rc, "i2c add adapter failed\n");
+   570	
+   571		return 0;
+   572	}
+   573	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
