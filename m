@@ -2,29 +2,29 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA87674728
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jan 2023 00:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2BE6747C9
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jan 2023 01:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjASXY5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 19 Jan 2023 18:24:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
+        id S229794AbjATAD4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 19 Jan 2023 19:03:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjASXY4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 19 Jan 2023 18:24:56 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88263392B6;
-        Thu, 19 Jan 2023 15:24:37 -0800 (PST)
+        with ESMTP id S229822AbjATADf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 19 Jan 2023 19:03:35 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698B69FDD9;
+        Thu, 19 Jan 2023 16:03:10 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C9749514;
-        Fri, 20 Jan 2023 00:24:34 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3331F514;
+        Fri, 20 Jan 2023 01:03:08 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674170675;
-        bh=D/CJsDjy/R+NMpXdK/50LjkKzRk6WC0ZdiaCrgXo/N8=;
+        s=mail; t=1674172988;
+        bh=cCdflPhr2b8X6MlEPd9fyoAZeUGJrc6I0OOVPXaO37k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gaPrWL7ih4F4w+K7+tRVbd9g60r7JVDLNnW3nNAmYLXauOB4QgZwGCc0zPX/bIMSg
-         rmkEX7/GV/qrL2Q85lnplb/kX1bXJ2yT4gB0ZvO6cud5s+J/bb0dRm09ERmURVL9YV
-         vuWPElWJb0Q0KLAsy2m4QprPUtvJEFgSaMXapNDc=
-Date:   Fri, 20 Jan 2023 01:24:32 +0200
+        b=MJhqmXOMN00nUtL32sX4VVVaYtBzWS5xMZN5bFiKIV985p96vXbGjoxOQyUTPXX1t
+         S2wP+uzvF5dpVhX8Xj7IJXjW7Ke0yHF0jcLnUmpeQy1SeAM1cWp+chKKP3crlCRpSx
+         pv8WZlJHBXrw6+BFmdCWztzsbIdQ2UlCoetetnyI=
+Date:   Fri, 20 Jan 2023 02:03:05 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
@@ -45,16 +45,15 @@ Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         Hans Verkuil <hverkuil@xs4all.nl>,
         Mike Pagano <mpagano@gentoo.org>,
         Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v7 4/7] dt-bindings: media: add TI DS90UB960 FPD-Link III
- Deserializer
-Message-ID: <Y8nRMK8GJ+vLCS+H@pendragon.ideasonboard.com>
+        Marek Vasut <marex@denx.de>
+Subject: Re: [PATCH v7 6/7] media: i2c: add DS90UB913 driver
+Message-ID: <Y8naOd/CmmlYBw2x@pendragon.ideasonboard.com>
 References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
- <20230118124031.788940-5-tomi.valkeinen@ideasonboard.com>
+ <20230118124031.788940-7-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230118124031.788940-5-tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20230118124031.788940-7-tomi.valkeinen@ideasonboard.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -68,453 +67,930 @@ Hi Tomi,
 
 Thank you for the patch.
 
-On Wed, Jan 18, 2023 at 02:40:28PM +0200, Tomi Valkeinen wrote:
-> Add DT bindings for TI DS90UB960 FPD-Link III Deserializer.
+On Wed, Jan 18, 2023 at 02:40:30PM +0200, Tomi Valkeinen wrote:
+> Add driver for TI DS90UB913 FPD-Link III Serializer.
 > 
 > Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
 > ---
->  .../bindings/media/i2c/ti,ds90ub960.yaml      | 425 ++++++++++++++++++
->  1 file changed, 425 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+>  drivers/media/i2c/Kconfig     |  13 +
+>  drivers/media/i2c/Makefile    |   1 +
+>  drivers/media/i2c/ds90ub913.c | 848 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 862 insertions(+)
+>  create mode 100644 drivers/media/i2c/ds90ub913.c
 > 
-> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> index dc1c7c80dc1c..e0a1c2a5f3bf 100644
+> --- a/drivers/media/i2c/Kconfig
+> +++ b/drivers/media/i2c/Kconfig
+> @@ -1601,6 +1601,19 @@ endmenu
+>  
+>  menu "Video serializers and deserializers"
+>  
+> +config VIDEO_DS90UB913
+> +	tristate "TI DS90UB913 FPD-Link III Serializer"
+> +	depends on OF && I2C && VIDEO_DEV
+> +	select I2C_ATR
+> +	select MEDIA_CONTROLLER
+> +	select OF_GPIO
+> +	select REGMAP_I2C
+> +	select V4L2_FWNODE
+> +	select VIDEO_V4L2_SUBDEV_API
+> +	help
+> +	  Device driver for the Texas Instruments DS90UB913
+> +	  FPD-Link III Serializer.
+> +
+>  config VIDEO_DS90UB960
+>  	tristate "TI FPD-Link III/IV Deserializers"
+>  	depends on OF && I2C && VIDEO_DEV
+> diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
+> index 4cd680f3b953..c4875ec8c3b9 100644
+> --- a/drivers/media/i2c/Makefile
+> +++ b/drivers/media/i2c/Makefile
+> @@ -142,4 +142,5 @@ obj-$(CONFIG_VIDEO_VPX3220) += vpx3220.o
+>  obj-$(CONFIG_VIDEO_VS6624) += vs6624.o
+>  obj-$(CONFIG_VIDEO_WM8739) += wm8739.o
+>  obj-$(CONFIG_VIDEO_WM8775) += wm8775.o
+> +obj-$(CONFIG_VIDEO_DS90UB913)	+= ds90ub913.o
+>  obj-$(CONFIG_VIDEO_DS90UB960)	+= ds90ub960.o
+> diff --git a/drivers/media/i2c/ds90ub913.c b/drivers/media/i2c/ds90ub913.c
 > new file mode 100644
-> index 000000000000..1ba22450cdba
+> index 000000000000..befa78128a9a
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
-> @@ -0,0 +1,425 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub960.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +++ b/drivers/media/i2c/ds90ub913.c
+> @@ -0,0 +1,848 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Driver for the Texas Instruments DS90UB913 video serializer
+> + *
+> + * Based on a driver from Luca Ceresoli <luca@lucaceresoli.net>
+> + *
+> + * Copyright (c) 2019 Luca Ceresoli <luca@lucaceresoli.net>
+> + * Copyright (c) 2023 Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> + */
 > +
-> +title: Texas Instruments DS90UB9XX Family FPD-Link Deserializer Hubs
+> +#include <linux/clk-provider.h>
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/fwnode.h>
+> +#include <linux/gpio/driver.h>
+> +#include <linux/i2c-atr.h>
+> +#include <linux/i2c.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/property.h>
+> +#include <linux/regmap.h>
 > +
-> +maintainers:
-> +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> +#include <media/i2c/ds90ub9xx.h>
+> +#include <media/v4l2-subdev.h>
 > +
-> +description:
-> +  The TI DS90UB9XX devices are FPD-Link video deserializers with I2C and GPIO
-> +  forwarding.
+> +#define UB913_PAD_SINK			0
+> +#define UB913_PAD_SOURCE		1
 > +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,ds90ub960-q1
-> +      - ti,ds90ub9702-q1
+> +/*
+> + * UB913 has 4 gpios, but gpios 3 and 4 are reserved for external oscillator
+> + * mode. Thus we only support 2 gpios for now.
+> + */
+> +#define UB913_NUM_GPIOS			2
 > +
-> +  reg:
-> +    maxItems: 1
+> +#define UB913_REG_RESET_CTL			0x01
+> +#define UB913_REG_RESET_CTL_DIGITAL_RESET_1	BIT(1)
+> +#define UB913_REG_RESET_CTL_DIGITAL_RESET_0	BIT(0)
 > +
-> +  clocks:
-> +    maxItems: 1
-> +    description:
-> +      Reference clock connected to the REFCLK pin.
+> +#define UB913_REG_GENERAL_CFG			0x03
+> +#define UB913_REG_GENERAL_CFG_CRC_ERR_RESET	BIT(5)
+> +#define UB913_REG_GENERAL_CFG_PCLK_RISING	BIT(0)
 > +
-> +  clock-names:
-> +    items:
-> +      - const: refclk
+> +#define UB913_REG_MODE_SEL			0x05
+> +#define UB913_REG_MODE_SEL_MODE_OVERRIDE	BIT(5)
+> +#define UB913_REG_MODE_SEL_MODE_UP_TO_DATE	BIT(4)
+> +#define UB913_REG_MODE_SEL_MODE_MASK		GENMASK(3, 0)
 > +
-> +  powerdown-gpios:
-> +    maxItems: 1
-> +    description:
-> +      Specifier for the GPIO connected to the PDB pin.
+> +#define UB913_REG_CRC_ERRORS_LSB		0x0a
+> +#define UB913_REG_CRC_ERRORS_MSB		0x0b
 > +
-> +  i2c-alias-pool:
-> +    $ref: /schemas/types.yaml#/definitions/uint16-array
-> +    description:
-> +      I2C alias pool is a pool of I2C addresses on the main I2C bus that can be
-> +      used to access the remote peripherals on the serializer's I2C bus. The
-> +      addresses must be available, not used by any other peripheral. Each
-> +      remote peripheral is assigned an alias from the pool, and transactions to
-> +      that address will be forwarded to the remote peripheral, with the address
-> +      translated to the remote peripheral's real address. This property is not
-> +      needed if there are no I2C addressable remote peripherals.
+> +#define UB913_REG_GENERAL_STATUS		0x0c
 > +
-> +  links:
-> +    type: object
-> +    additionalProperties: false
+> +#define UB913_REG_GPIO_CFG(n)			(0x0d + (n))
+> +#define UB913_REG_GPIO_CFG_ENABLE(n)		BIT(0 + (n) * 4)
+> +#define UB913_REG_GPIO_CFG_DIR_INPUT(n)		BIT(1 + (n) * 4)
+> +#define UB913_REG_GPIO_CFG_REMOTE_EN(n)		BIT(2 + (n) * 4)
+> +#define UB913_REG_GPIO_CFG_OUT_VAL(n)		BIT(3 + (n) * 4)
+> +#define UB913_REG_GPIO_CFG_MASK(n)		(0xf << ((n) * 4))
 > +
-> +    properties:
-> +      '#address-cells':
-> +        const: 1
+> +#define UB913_REG_SCL_HIGH_TIME			0x11
+> +#define UB913_REG_SCL_LOW_TIME			0x12
 > +
-> +      '#size-cells':
-> +        const: 0
+> +#define UB913_REG_PLL_OVR			0x35
 > +
-> +      ti,manual-strobe:
-> +        type: boolean
-> +        description:
-> +          Enable manual strobe position and EQ level
+> +struct ub913_data {
+> +	struct i2c_client	*client;
+> +	struct regmap		*regmap;
+> +	struct clk		*clkin;
 > +
-> +    patternProperties:
-> +      '^link@[0-3]$':
-> +        type: object
-> +        additionalProperties: false
-> +        properties:
-> +          reg:
-> +            description: The link number
-> +            maxItems: 1
+> +	struct gpio_chip	gpio_chip;
 > +
-> +          i2c-alias:
-> +            description:
-> +              The I2C address used for the serializer. Transactions to this
-> +              address on the I2C bus where the deserializer resides are
-> +              forwarded to the serializer.
+> +	struct v4l2_subdev	sd;
+> +	struct media_pad	pads[2];
 > +
-> +          ti,rx-mode:
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            enum:
-> +              - 0 # RAW10
-> +              - 1 # RAW12 HF
-> +              - 2 # RAW12 LF
-> +              - 3 # CSI2 SYNC
-> +              - 4 # CSI2 NON-SYNC
-> +            description:
-> +              FPD-Link Input Mode. This should reflect the hardware and the
-> +              default mode of the connected device.
+> +	struct v4l2_async_notifier	notifier;
 > +
-> +          ti,cdr-mode:
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            enum:
-> +              - 0 # FPD-Link III
-> +              - 1 # FPD-Link IV
-> +            description:
-> +              FPD-Link CDR Mode. This should reflect the hardware and the
-> +              default mode of the connected device.
+> +	struct v4l2_subdev	*source_sd;
+> +	u16			source_sd_pad;
 > +
-> +          ti,strobe-pos:
-> +            $ref: /schemas/types.yaml#/definitions/int32
-> +            minimum: -13
-> +            maximum: 13
-> +            description: Manual strobe position
+> +	u64			enabled_source_streams;
 > +
-> +          ti,eq-level:
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            maximum: 14
-> +            description: Manual EQ level
+> +	struct clk_hw		*clkout_clk_hw;
 > +
-> +          serializer:
-> +            type: object
-> +            description: FPD-Link Serializer node
+> +	struct ds90ub9xx_platform_data *plat_data;
 > +
-> +        required:
-> +          - reg
-> +          - i2c-alias
-> +          - ti,rx-mode
-> +          - serializer
+> +	u32			pclk_polarity;
+> +};
 > +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
+> +static inline struct ub913_data *sd_to_ub913(struct v4l2_subdev *sd)
+> +{
+> +	return container_of(sd, struct ub913_data, sd);
+> +}
 > +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: FPD-Link input 0
+> +static int ub913_read(const struct ub913_data *priv, u8 reg, u8 *val)
+> +{
+> +	unsigned int v;
+> +	int ret;
 > +
-> +        properties:
-> +          endpoint:
-> +            $ref: /schemas/media/video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +            description:
-> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-> +              hsync-active and vsync-active must be defined.
+> +	ret = regmap_read(priv->regmap, reg, &v);
+> +	if (ret < 0) {
+> +		dev_err(&priv->client->dev,
+> +			"Cannot read register 0x%02x: %d!\n", reg, ret);
+> +		return ret;
+> +	}
 > +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: FPD-Link input 1
+> +	*val = v;
+> +	return 0;
+> +}
 > +
-> +        properties:
-> +          endpoint:
-> +            $ref: /schemas/media/video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +            description:
-> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-> +              hsync-active and vsync-active must be defined.
+> +static int ub913_write(const struct ub913_data *priv, u8 reg, u8 val)
+> +{
+> +	int ret;
 > +
-> +      port@2:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: FPD-Link input 2
+> +	ret = regmap_write(priv->regmap, reg, val);
+> +	if (ret < 0)
+> +		dev_err(&priv->client->dev,
+> +			"Cannot write register 0x%02x: %d!\n", reg, ret);
 > +
-> +        properties:
-> +          endpoint:
-> +            $ref: /schemas/media/video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +            description:
-> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-> +              hsync-active and vsync-active must be defined.
+> +	return ret;
+> +}
 > +
-> +      port@3:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: FPD-Link input 3
+> +/*
+> + * GPIO chip
+> + */
+> +static int ub913_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
+> +{
+> +	return GPIO_LINE_DIRECTION_OUT;
+> +}
 > +
-> +        properties:
-> +          endpoint:
-> +            $ref: /schemas/media/video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +            description:
-> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-> +              hsync-active and vsync-active must be defined.
+> +static int ub913_gpio_direction_out(struct gpio_chip *gc, unsigned int offset,
+> +				    int value)
+> +{
+> +	struct ub913_data *priv = gpiochip_get_data(gc);
+> +	unsigned int reg_idx = offset / 2;
+> +	unsigned int field_idx = offset % 2;
 > +
-> +      port@4:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: CSI-2 Output 0
-> +
-> +        properties:
-> +          endpoint:
-> +            $ref: /schemas/media/video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +            properties:
-> +              data-lanes:
-> +                minItems: 1
-> +                maxItems: 4
-> +
-> +            required:
-> +              - data-lanes
-> +
-> +      port@5:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: CSI-2 Output 1
-> +
-> +        properties:
-> +          endpoint:
-> +            $ref: /schemas/media/video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +            properties:
-> +              data-lanes:
-> +                minItems: 1
-> +                maxItems: 4
-> +
-> +            required:
-> +              - data-lanes
-> +
-> +    required:
-> +      - port@0
-> +      - port@1
-> +      - port@2
-> +      - port@3
-> +      - port@4
-> +      - port@5
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - ports
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    i2c {
-> +      clock-frequency = <400000>;
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      deser@3d {
-> +        compatible = "ti,ds90ub960-q1";
-> +        reg = <0x3d>;
-> +
-> +        clock-names = "refclk";
-> +        clocks = <&fixed_clock>;
-> +
-> +        powerdown-gpios = <&pca9555 7 GPIO_ACTIVE_LOW>;
-> +
-> +        i2c-alias-pool = /bits/ 16 <0x4a 0x4b 0x4c 0x4d 0x4e 0x4f>;
-> +
-> +        ports {
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +
-> +          /* Port 0, Camera 0 */
-> +          port@0 {
-> +            reg = <0>;
-> +
-> +            ub960_fpd3_1_in: endpoint {
-> +              remote-endpoint = <&ub953_1_out>;
-> +            };
-> +          };
-> +
-> +          /* Port 1, Camera 1 */
-> +          port@1 {
-> +            reg = <1>;
-> +
-> +            ub960_fpd3_2_in: endpoint {
-> +              remote-endpoint = <&ub913_2_out>;
-> +              hsync-active = <0>;
-> +              vsync-active = <1>;
-> +            };
-> +          };
-> +
-> +          /* Port 2, unused */
+> +	return regmap_update_bits(priv->regmap, UB913_REG_GPIO_CFG(reg_idx),
+> +				  UB913_REG_GPIO_CFG_MASK(field_idx),
+> +				  UB913_REG_GPIO_CFG_ENABLE(field_idx) |
+> +					  (value ? UB913_REG_GPIO_CFG_OUT_VAL(field_idx) :
+> +						   0));
 
-Minor comment. I'd write "unconnected" instead of "unused" (same below).
-Either way,
+I find the indentation weird, I would have written
+
+	return regmap_update_bits(priv->regmap, UB913_REG_GPIO_CFG(reg_idx),
+				  UB913_REG_GPIO_CFG_MASK(field_idx),
+				  UB913_REG_GPIO_CFG_ENABLE(field_idx) |
+				  (value ? UB913_REG_GPIO_CFG_OUT_VAL(field_idx) : 0));
+
+Your call.
+
+> +}
+> +
+> +static void ub913_gpio_set(struct gpio_chip *gc, unsigned int offset, int value)
+> +{
+> +	ub913_gpio_direction_out(gc, offset, value);
+> +}
+> +
+> +static int ub913_gpio_of_xlate(struct gpio_chip *gc,
+> +			       const struct of_phandle_args *gpiospec,
+> +			       u32 *flags)
+> +{
+> +	if (flags)
+> +		*flags = gpiospec->args[1];
+> +
+> +	return gpiospec->args[0];
+> +}
+> +
+> +static int ub913_gpiochip_probe(struct ub913_data *priv)
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	struct gpio_chip *gc = &priv->gpio_chip;
+> +	int ret;
+> +
+> +	/* Initialize GPIOs 0 and 1 to local control, tri-state */
+> +	ub913_write(priv, UB913_REG_GPIO_CFG(0), 0);
+> +
+> +	gc->label = dev_name(dev);
+> +	gc->parent = dev;
+> +	gc->owner = THIS_MODULE;
+> +	gc->base = -1;
+> +	gc->can_sleep = true;
+> +	gc->ngpio = UB913_NUM_GPIOS;
+> +	gc->get_direction = ub913_gpio_get_direction;
+> +	gc->direction_output = ub913_gpio_direction_out;
+> +	gc->set = ub913_gpio_set;
+> +	gc->of_xlate = ub913_gpio_of_xlate;
+> +	gc->of_gpio_n_cells = 2;
+> +
+> +	ret = gpiochip_add_data(gc, priv);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to add GPIOs: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void ub913_gpiochip_remove(struct ub913_data *priv)
+> +{
+> +	gpiochip_remove(&priv->gpio_chip);
+> +}
+> +
+> +static const struct regmap_config ub913_regmap_config = {
+> +	.name = "ds90ub913",
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.reg_format_endian = REGMAP_ENDIAN_DEFAULT,
+> +	.val_format_endian = REGMAP_ENDIAN_DEFAULT,
+> +};
+> +
+> +/*
+> + * V4L2
+> + */
+> +
+> +static int ub913_enable_streams(struct v4l2_subdev *sd,
+> +				struct v4l2_subdev_state *state, u32 pad,
+> +				u64 streams_mask)
+> +{
+> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +	u64 sink_streams;
+> +	int ret;
+> +
+> +	sink_streams = v4l2_subdev_state_xlate_streams(state, UB913_PAD_SOURCE,
+> +						       UB913_PAD_SINK,
+> +						       &streams_mask);
+> +
+> +	ret = v4l2_subdev_enable_streams(priv->source_sd, priv->source_sd_pad,
+> +					 sink_streams);
+> +	if (ret)
+> +		return ret;
+> +
+> +	priv->enabled_source_streams |= streams_mask;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub913_disable_streams(struct v4l2_subdev *sd,
+> +				 struct v4l2_subdev_state *state, u32 pad,
+> +				 u64 streams_mask)
+> +{
+> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +	u64 sink_streams;
+> +	int ret;
+> +
+> +	sink_streams = v4l2_subdev_state_xlate_streams(state, UB913_PAD_SOURCE,
+> +						       UB913_PAD_SINK,
+> +						       &streams_mask);
+> +
+> +	ret = v4l2_subdev_disable_streams(priv->source_sd, priv->source_sd_pad,
+> +					  sink_streams);
+> +	if (ret)
+> +		return ret;
+> +
+> +	priv->enabled_source_streams &= ~streams_mask;
+> +
+> +	return 0;
+> +}
+> +
+> +static int _ub913_set_routing(struct v4l2_subdev *sd,
+> +			      struct v4l2_subdev_state *state,
+> +			      struct v4l2_subdev_krouting *routing)
+> +{
+> +	static const struct v4l2_mbus_framefmt format = {
+> +		.width = 640,
+> +		.height = 480,
+> +		.code = MEDIA_BUS_FMT_UYVY8_2X8,
+> +		.field = V4L2_FIELD_NONE,
+> +		.colorspace = V4L2_COLORSPACE_SRGB,
+> +		.ycbcr_enc = V4L2_YCBCR_ENC_601,
+> +		.quantization = V4L2_QUANTIZATION_LIM_RANGE,
+> +		.xfer_func = V4L2_XFER_FUNC_SRGB,
+> +	};
+> +	int ret;
+> +
+> +	/*
+> +	 * Note: we can only support up to V4L2_FRAME_DESC_ENTRY_MAX, until
+> +	 * frame desc is made dynamically allocated.
+> +	 */
+> +
+> +	if (routing->num_routes > V4L2_FRAME_DESC_ENTRY_MAX)
+> +		return -EINVAL;
+> +
+> +	ret = v4l2_subdev_routing_validate(sd, routing,
+> +					   V4L2_SUBDEV_ROUTING_ONLY_1_TO_1);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = v4l2_subdev_set_routing_with_fmt(sd, state, routing, &format);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub913_set_routing(struct v4l2_subdev *sd,
+> +			     struct v4l2_subdev_state *state,
+> +			     enum v4l2_subdev_format_whence which,
+> +			     struct v4l2_subdev_krouting *routing)
+> +{
+> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +
+> +	if (which == V4L2_SUBDEV_FORMAT_ACTIVE && priv->enabled_source_streams)
+> +		return -EBUSY;
+> +
+> +	return _ub913_set_routing(sd, state, routing);
+> +}
+> +
+> +static int ub913_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
+> +				struct v4l2_mbus_frame_desc *fd)
+> +{
+> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +	const struct v4l2_subdev_krouting *routing;
+> +	struct v4l2_mbus_frame_desc source_fd;
+> +	struct v4l2_subdev_route *route;
+> +	struct v4l2_subdev_state *state;
+> +	int ret;
+> +
+> +	if (pad != UB913_PAD_SOURCE)
+> +		return -EINVAL;
+> +
+> +	ret = v4l2_subdev_call(priv->source_sd, pad, get_frame_desc,
+> +			       priv->source_sd_pad, &source_fd);
+> +	if (ret)
+> +		return ret;
+> +
+> +	memset(fd, 0, sizeof(*fd));
+> +
+> +	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_PARALLEL;
+> +
+> +	state = v4l2_subdev_lock_and_get_active_state(sd);
+> +
+> +	routing = &state->routing;
+> +
+> +	for_each_active_route(routing, route) {
+> +		unsigned int i;
+> +
+> +		if (route->source_pad != pad)
+> +			continue;
+> +
+> +		for (i = 0; i < source_fd.num_entries; ++i) {
+> +			if (source_fd.entry[i].stream == route->sink_stream)
+> +				break;
+> +		}
+> +
+> +		if (i == source_fd.num_entries) {
+> +			dev_err(&priv->client->dev,
+> +				"Failed to find stream from source frame desc\n");
+> +			ret = -EPIPE;
+> +			goto out;
+> +		}
+> +
+> +		fd->entry[fd->num_entries].stream = route->source_stream;
+> +		fd->entry[fd->num_entries].flags = source_fd.entry[i].flags;
+> +		fd->entry[fd->num_entries].length = source_fd.entry[i].length;
+> +		fd->entry[fd->num_entries].pixelcode =
+> +			source_fd.entry[i].pixelcode;
+> +
+> +		fd->num_entries++;
+> +	}
+> +
+> +out:
+> +	v4l2_subdev_unlock_state(state);
+> +
+> +	return ret;
+> +}
+> +
+> +static int ub913_set_fmt(struct v4l2_subdev *sd,
+> +			 struct v4l2_subdev_state *state,
+> +			 struct v4l2_subdev_format *format)
+> +{
+> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +	struct v4l2_mbus_framefmt *fmt;
+> +
+> +	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE &&
+> +	    priv->enabled_source_streams)
+> +		return -EBUSY;
+> +
+> +	/* No transcoding, source and sink formats must match. */
+> +	if (format->pad == UB913_PAD_SOURCE)
+> +		return v4l2_subdev_get_fmt(sd, state, format);
+> +
+> +	/* Set sink format */
+> +	fmt = v4l2_subdev_state_get_stream_format(state, format->pad,
+> +						  format->stream);
+> +	if (!fmt)
+> +		return -EINVAL;
+> +
+> +	*fmt = format->format;
+> +
+> +	/* Propagate to source format */
+> +	fmt = v4l2_subdev_state_get_opposite_stream_format(state, format->pad,
+> +							   format->stream);
+> +	if (!fmt)
+> +		return -EINVAL;
+> +
+> +	*fmt = format->format;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub913_init_cfg(struct v4l2_subdev *sd,
+> +			  struct v4l2_subdev_state *state)
+> +{
+> +	struct v4l2_subdev_route routes[] = {
+> +		{
+> +			.sink_pad = UB913_PAD_SINK,
+> +			.sink_stream = 0,
+> +			.source_pad = UB913_PAD_SOURCE,
+> +			.source_stream = 0,
+> +			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
+> +		},
+> +	};
+> +
+> +	struct v4l2_subdev_krouting routing = {
+> +		.num_routes = ARRAY_SIZE(routes),
+> +		.routes = routes,
+> +	};
+> +
+> +	return _ub913_set_routing(sd, state, &routing);
+> +}
+> +
+> +static int ub913_log_status(struct v4l2_subdev *sd)
+> +{
+> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +	struct device *dev = &priv->client->dev;
+> +	u8 v, v1, v2;
+> +
+> +	ub913_read(priv, UB913_REG_MODE_SEL, &v);
+> +	dev_info(dev, "MODE_SEL %#02x\n", v);
+> +
+> +	ub913_read(priv, UB913_REG_CRC_ERRORS_LSB, &v1);
+> +	ub913_read(priv, UB913_REG_CRC_ERRORS_MSB, &v2);
+> +	dev_info(dev, "CRC errors %u\n", v1 | (v2 << 8));
+> +
+> +	/* clear CRC errors */
+> +	ub913_read(priv, UB913_REG_GENERAL_CFG, &v);
+> +	ub913_write(priv, UB913_REG_GENERAL_CFG,
+> +		    v | UB913_REG_GENERAL_CFG_CRC_ERR_RESET);
+> +	ub913_write(priv, UB913_REG_GENERAL_CFG, v);
+> +
+> +	ub913_read(priv, UB913_REG_GENERAL_STATUS, &v);
+> +	dev_info(dev, "GENERAL_STATUS %#02x\n", v);
+> +
+> +	ub913_read(priv, UB913_REG_PLL_OVR, &v);
+> +	dev_info(dev, "PLL_OVR %#02x\n", v);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_subdev_core_ops ub913_subdev_core_ops = {
+> +	.log_status = ub913_log_status,
+> +};
+> +
+> +static const struct v4l2_subdev_pad_ops ub913_pad_ops = {
+> +	.enable_streams = ub913_enable_streams,
+> +	.disable_streams = ub913_disable_streams,
+> +	.set_routing = ub913_set_routing,
+> +	.get_frame_desc = ub913_get_frame_desc,
+> +	.get_fmt = v4l2_subdev_get_fmt,
+> +	.set_fmt = ub913_set_fmt,
+> +	.init_cfg = ub913_init_cfg,
+> +};
+> +
+> +static const struct v4l2_subdev_ops ub913_subdev_ops = {
+> +	.core = &ub913_subdev_core_ops,
+> +	.pad = &ub913_pad_ops,
+> +};
+> +
+> +static const struct media_entity_operations ub913_entity_ops = {
+> +	.link_validate = v4l2_subdev_link_validate,
+> +};
+> +
+> +static int ub913_notify_bound(struct v4l2_async_notifier *notifier,
+> +			      struct v4l2_subdev *source_subdev,
+> +			      struct v4l2_async_subdev *asd)
+> +{
+> +	struct ub913_data *priv = sd_to_ub913(notifier->sd);
+> +	struct device *dev = &priv->client->dev;
+> +	int ret;
+> +
+> +	ret = media_entity_get_fwnode_pad(&source_subdev->entity,
+> +					  source_subdev->fwnode,
+> +					  MEDIA_PAD_FL_SOURCE);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Failed to find pad for %s\n",
+> +			source_subdev->name);
+> +		return ret;
+> +	}
+> +
+> +	priv->source_sd = source_subdev;
+> +	priv->source_sd_pad = ret;
+> +
+> +	ret = media_create_pad_link(&source_subdev->entity, priv->source_sd_pad,
+> +				    &priv->sd.entity, UB913_PAD_SINK,
+> +				    MEDIA_LNK_FL_ENABLED |
+> +					    MEDIA_LNK_FL_IMMUTABLE);
+
+Weird indentation again. It was fine in the previous version :-)
+
+> +	if (ret) {
+> +		dev_err(dev, "Unable to link %s:%u -> %s:0\n",
+> +			source_subdev->name, priv->source_sd_pad,
+> +			priv->sd.name);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_async_notifier_operations ub913_notify_ops = {
+> +	.bound = ub913_notify_bound,
+> +};
+> +
+> +static int ub913_v4l2_notifier_register(struct ub913_data *priv)
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	struct v4l2_async_subdev *asd;
+> +	struct fwnode_handle *ep_fwnode;
+> +	int ret;
+> +
+> +	ep_fwnode = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev),
+> +						    UB913_PAD_SINK, 0, 0);
+> +	if (!ep_fwnode) {
+> +		dev_err(dev, "No graph endpoint\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	v4l2_async_nf_init(&priv->notifier);
+> +
+> +	asd = v4l2_async_nf_add_fwnode_remote(&priv->notifier, ep_fwnode,
+> +					      struct v4l2_async_subdev);
+> +
+> +	fwnode_handle_put(ep_fwnode);
+> +
+> +	if (IS_ERR(asd)) {
+> +		dev_err(dev, "Failed to add subdev: %ld", PTR_ERR(asd));
+> +		v4l2_async_nf_cleanup(&priv->notifier);
+> +		return PTR_ERR(asd);
+> +	}
+> +
+> +	priv->notifier.ops = &ub913_notify_ops;
+> +
+> +	ret = v4l2_async_subdev_nf_register(&priv->sd, &priv->notifier);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to register subdev_notifier");
+> +		v4l2_async_nf_cleanup(&priv->notifier);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void ub913_v4l2_nf_unregister(struct ub913_data *priv)
+> +{
+> +	v4l2_async_nf_unregister(&priv->notifier);
+> +	v4l2_async_nf_cleanup(&priv->notifier);
+> +}
+> +
+> +static int ub913_register_clkout(struct ub913_data *priv)
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	const char *name;
+> +	int ret;
+> +
+> +	name = kasprintf(GFP_KERNEL, "ds90ub913.%s.clk_out", dev_name(dev));
+> +	if (!name)
+> +		return -ENOMEM;
+> +
+> +	priv->clkout_clk_hw = devm_clk_hw_register_fixed_factor(dev, name,
+> +		__clk_get_name(priv->clkin), 0, 1, 2);
+> +
+> +	kfree(name);
+> +
+> +	if (IS_ERR(priv->clkout_clk_hw))
+> +		return dev_err_probe(dev, PTR_ERR(priv->clkout_clk_hw),
+> +				     "Cannot register clkout hw\n");
+> +
+> +	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get,
+> +					  priv->clkout_clk_hw);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret,
+> +				     "Cannot add OF clock provider\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub913_i2c_master_init(struct ub913_data *priv)
+> +{
+> +	/* i2c fast mode */
+> +	u32 scl_high = 600 + 300; /* high period + rise time, ns */
+> +	u32 scl_low = 1300 + 300; /* low period + fall time, ns */
+> +	unsigned long ref;
+> +	int ret;
+> +
+> +	ref = clk_get_rate(priv->clkin) / 2;
+> +
+> +	scl_high = div64_u64((u64)scl_high * ref, 1000000000);
+> +	scl_low = div64_u64((u64)scl_low * ref, 1000000000);
+> +
+> +	ret = ub913_write(priv, UB913_REG_SCL_HIGH_TIME, scl_high);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ub913_write(priv, UB913_REG_SCL_LOW_TIME, scl_low);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub913_add_i2c_adapter(struct ub913_data *priv)
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	struct fwnode_handle *i2c_handle;
+> +	int ret;
+> +
+> +	i2c_handle = device_get_named_child_node(dev, "i2c");
+> +	if (!i2c_handle)
+> +		return 0;
+> +
+> +	ret = i2c_atr_add_adapter(priv->plat_data->atr, priv->plat_data->port,
+> +				  i2c_handle);
+> +
+> +	fwnode_handle_put(i2c_handle);
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub913_parse_dt(struct ub913_data *priv)
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	struct fwnode_handle *ep_fwnode;
+> +	int ret;
+> +
+> +	ep_fwnode = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev),
+> +						    UB913_PAD_SINK, 0, 0);
+> +	if (!ep_fwnode) {
+> +		dev_err(dev, "No sink endpoint\n");
+> +		return -ENOENT;
+> +	}
+> +
+> +	ret = fwnode_property_read_u32(ep_fwnode, "pclk-sample",
+> +				       &priv->pclk_polarity);
+> +
+> +	fwnode_handle_put(ep_fwnode);
+> +
+> +	if (ret) {
+> +		dev_err(dev, "OF: failed to parse pclk-sample: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub913_hw_init(struct ub913_data *priv)
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	bool mode_override;
+> +	u8 mode;
+> +	int ret;
+> +	u8 v;
+> +
+> +	ret = ub913_read(priv, UB913_REG_MODE_SEL, &v);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (!(v & UB913_REG_MODE_SEL_MODE_UP_TO_DATE))
+> +		return dev_err_probe(dev, -ENODEV,
+> +				     "Mode value not stabilized\n");
+> +
+> +	mode_override = v & UB913_REG_MODE_SEL_MODE_OVERRIDE;
+> +	mode = v & UB913_REG_MODE_SEL_MODE_MASK;
+> +
+> +	dev_dbg(dev, "mode from %s: %#x\n",
+> +		mode_override ? "reg" : "deserializer", mode);
+> +
+> +	ret = ub913_i2c_master_init(priv);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "i2c master init failed\n");
+> +
+> +	ub913_read(priv, UB913_REG_GENERAL_CFG, &v);
+> +	v &= ~UB913_REG_GENERAL_CFG_PCLK_RISING;
+> +	v |= priv->pclk_polarity ? UB913_REG_GENERAL_CFG_PCLK_RISING : 0;
+> +	ub913_write(priv, UB913_REG_GENERAL_CFG, v);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub913_subdev_init(struct ub913_data *priv)
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	int ret;
+> +
+> +	v4l2_i2c_subdev_init(&priv->sd, priv->client, &ub913_subdev_ops);
+> +	priv->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_STREAMS;
+> +	priv->sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
+> +	priv->sd.entity.ops = &ub913_entity_ops;
+> +
+> +	priv->pads[0].flags = MEDIA_PAD_FL_SINK;
+> +	priv->pads[1].flags = MEDIA_PAD_FL_SOURCE;
+> +
+> +	ret = media_entity_pads_init(&priv->sd.entity, 2, priv->pads);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to init pads\n");
+> +
+> +	priv->sd.fwnode = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev),
+> +							  UB913_PAD_SOURCE, 0,
+> +							  0);
+> +
+> +	if (!priv->sd.fwnode) {
+> +		ret = -ENODEV;
+> +		dev_err_probe(dev, ret, "Missing TX endpoint\n");
+> +		goto err_entity_cleanup;
+> +	}
+> +
+> +	ret = v4l2_subdev_init_finalize(&priv->sd);
+> +	if (ret)
+> +		goto err_entity_cleanup;
+
+You're leaking priv->sd.fwnode here, you need to call
+fwnode_handle_put() in the error path.
+
+> +
+> +	ret = ub913_v4l2_notifier_register(priv);
+> +	if (ret) {
+> +		dev_err_probe(dev, ret,
+> +			      "v4l2 subdev notifier register failed\n");
+> +		goto err_subdev_cleanup;
+> +	}
+> +
+> +	ret = v4l2_async_register_subdev(&priv->sd);
+> +	if (ret) {
+> +		dev_err_probe(dev, ret, "v4l2_async_register_subdev error\n");
+> +		goto err_unreg_notif;
+> +	}
+> +
+> +	return 0;
+> +
+> +err_unreg_notif:
+> +	ub913_v4l2_nf_unregister(priv);
+> +err_subdev_cleanup:
+> +	v4l2_subdev_cleanup(&priv->sd);
+> +err_entity_cleanup:
+> +	media_entity_cleanup(&priv->sd.entity);
+> +
+> +	return ret;
+> +}
+> +
+> +static void ub913_subdev_uninit(struct ub913_data *priv)
+> +{
+> +	v4l2_async_unregister_subdev(&priv->sd);
+> +	ub913_v4l2_nf_unregister(priv);
+> +	v4l2_subdev_cleanup(&priv->sd);
+> +	media_entity_cleanup(&priv->sd.entity);
+
+Missing fwnode_handle_put() here too.
+
+> +}
+> +
+> +static int ub913_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct ub913_data *priv;
+> +	int ret;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->client = client;
+> +
+> +	priv->plat_data = dev_get_platdata(&client->dev);
+> +	if (!priv->plat_data)
+> +		return dev_err_probe(dev, -ENODEV, "Platform data missing\n");
+> +
+> +	priv->regmap = devm_regmap_init_i2c(client, &ub913_regmap_config);
+> +	if (IS_ERR(priv->regmap))
+> +		return dev_err_probe(dev, PTR_ERR(priv->regmap),
+> +				     "Failed to init regmap\n");
+> +
+> +	/*
+> +	 * ub913 can also work without ext clock, but that is not supported by
+> +	 * the driver yet
+
+s/yet/yet./
 
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-> +          port@2 {
-> +            reg = <2>;
-> +          };
+> +	 */
+> +	priv->clkin = devm_clk_get(dev, "clkin");
+> +	if (IS_ERR(priv->clkin))
+> +		return dev_err_probe(dev, PTR_ERR(priv->clkin),
+> +				     "Cannot get CLKIN\n");
 > +
-> +          /* Port 3, unused */
-> +          port@3 {
-> +            reg = <3>;
-> +          };
+> +	ret = ub913_parse_dt(priv);
+> +	if (ret)
+> +		return ret;
 > +
-> +          /* Port 4, CSI-2 TX */
-> +          port@4 {
-> +            reg = <4>;
-> +            ds90ub960_0_csi_out: endpoint {
-> +              data-lanes = <1 2 3 4>;
-> +              link-frequencies = /bits/ 64 <800000000>;
-> +              remote-endpoint = <&csi2_phy0>;
-> +            };
-> +          };
+> +	ret = ub913_hw_init(priv);
+> +	if (ret)
+> +		return ret;
 > +
-> +          /* Port 5, unused */
-> +          port@5 {
-> +            reg = <5>;
-> +          };
-> +        };
+> +	ret = ub913_gpiochip_probe(priv);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to init gpiochip\n");
 > +
-> +        links {
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
+> +	ret = ub913_register_clkout(priv);
+> +	if (ret) {
+> +		dev_err_probe(dev, ret, "Failed to register clkout\n");
+> +		goto err_gpiochip_remove;
+> +	}
 > +
-> +          /* Link 0 has DS90UB953 serializer and IMX274 sensor */
+> +	ret = ub913_subdev_init(priv);
+> +	if (ret)
+> +		goto err_gpiochip_remove;
 > +
-> +          link@0 {
-> +            reg = <0>;
-> +            i2c-alias = <0x44>;
+> +	ret = ub913_add_i2c_adapter(priv);
+> +	if (ret) {
+> +		dev_err_probe(dev, ret, "failed to add remote i2c adapter\n");
+> +		goto err_subdev_uninit;
+> +	}
 > +
-> +            ti,rx-mode = <3>;
+> +	return 0;
 > +
-> +            serializer1: serializer {
-> +              compatible = "ti,ds90ub953-q1";
+> +err_subdev_uninit:
+> +	ub913_subdev_uninit(priv);
+> +err_gpiochip_remove:
+> +	ub913_gpiochip_remove(priv);
 > +
-> +              gpio-controller;
-> +              #gpio-cells = <2>;
+> +	return ret;
+> +}
 > +
-> +              #clock-cells = <0>;
+> +static void ub913_remove(struct i2c_client *client)
+> +{
+> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> +	struct ub913_data *priv = sd_to_ub913(sd);
 > +
-> +              ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
+> +	i2c_atr_del_adapter(priv->plat_data->atr, priv->plat_data->port);
 > +
-> +                port@0 {
-> +                  reg = <0>;
-> +                  ub953_1_in: endpoint {
-> +                    data-lanes = <1 2 3 4>;
-> +                    remote-endpoint = <&sensor_1_out>;
-> +                  };
-> +                };
+> +	ub913_subdev_uninit(priv);
 > +
-> +                port@1 {
-> +                  reg = <1>;
+> +	ub913_gpiochip_remove(priv);
+> +}
 > +
-> +                  ub953_1_out: endpoint {
-> +                    remote-endpoint = <&ub960_fpd3_1_in>;
-> +                  };
-> +                };
-> +              };
+> +static const struct i2c_device_id ub913_id[] = { { "ds90ub913a-q1", 0 }, {} };
+> +MODULE_DEVICE_TABLE(i2c, ub913_id);
 > +
-> +              i2c {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
+> +static const struct of_device_id ub913_dt_ids[] = {
+> +	{ .compatible = "ti,ds90ub913a-q1" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, ub913_dt_ids);
 > +
-> +                sensor@1a {
-> +                  compatible = "sony,imx274";
-> +                  reg = <0x1a>;
+> +static struct i2c_driver ds90ub913_driver = {
+> +	.probe_new	= ub913_probe,
+> +	.remove		= ub913_remove,
+> +	.id_table	= ub913_id,
+> +	.driver = {
+> +		.name	= "ds90ub913a",
+> +		.of_match_table = ub913_dt_ids,
+> +	},
+> +};
+> +module_i2c_driver(ds90ub913_driver);
 > +
-> +                  reset-gpios = <&serializer1 0 GPIO_ACTIVE_LOW>;
-> +
-> +                  port {
-> +                    sensor_1_out: endpoint {
-> +                      remote-endpoint = <&ub953_1_in>;
-> +                    };
-> +                  };
-> +                };
-> +              };
-> +            };
-> +          };  /* End of link@0 */
-> +
-> +          /* Link 1 has DS90UB913 serializer and MT9V111 sensor */
-> +
-> +          link@1 {
-> +            reg = <1>;
-> +            i2c-alias = <0x45>;
-> +
-> +            ti,rx-mode = <0>;
-> +
-> +            serializer2: serializer {
-> +              compatible = "ti,ds90ub913a-q1";
-> +
-> +              gpio-controller;
-> +              #gpio-cells = <2>;
-> +
-> +              clocks = <&clk_cam_48M>;
-> +              clock-names = "clkin";
-> +
-> +              #clock-cells = <0>;
-> +
-> +              ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                port@0 {
-> +                  reg = <0>;
-> +                  ub913_2_in: endpoint {
-> +                    remote-endpoint = <&sensor_2_out>;
-> +                    pclk-sample = <1>;
-> +                  };
-> +                };
-> +
-> +                port@1 {
-> +                  reg = <1>;
-> +
-> +                  ub913_2_out: endpoint {
-> +                    remote-endpoint = <&ub960_fpd3_2_in>;
-> +                  };
-> +                };
-> +              };
-> +
-> +              i2c {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                sensor@48 {
-> +                  compatible = "aptina,mt9v111";
-> +                  reg = <0x48>;
-> +
-> +                  clocks = <&serializer2>;
-> +
-> +                  port {
-> +                    sensor_2_out: endpoint {
-> +                      remote-endpoint = <&ub913_2_in>;
-> +                    };
-> +                  };
-> +                };
-> +              };
-> +            };
-> +          }; /* End of link@1 */
-> +        };
-> +      };
-> +    };
-> +...
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("Texas Instruments DS90UB913 FPD-Link III Serializer Driver");
+> +MODULE_AUTHOR("Luca Ceresoli <luca@lucaceresoli.net>");
+> +MODULE_AUTHOR("Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>");
+> +MODULE_IMPORT_NS(I2C_ATR);
 
 -- 
 Regards,
