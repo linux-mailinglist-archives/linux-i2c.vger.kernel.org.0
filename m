@@ -2,187 +2,161 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E02676128
-	for <lists+linux-i2c@lfdr.de>; Sat, 21 Jan 2023 00:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53883676740
+	for <lists+linux-i2c@lfdr.de>; Sat, 21 Jan 2023 16:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjATXDh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 20 Jan 2023 18:03:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
+        id S229706AbjAUPkP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 21 Jan 2023 10:40:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjATXDg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Jan 2023 18:03:36 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216BE5E504;
-        Fri, 20 Jan 2023 15:03:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674255815; x=1705791815;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=f+Y2d5WifdWH1iAgu4lhYlkNGFsn/bMB3NVjAbTRvn0=;
-  b=c0qpu9ktofRaL9dRv0HKrtozxNS9pspsmJNjWaSOx8gNbtG4TnOAylAa
-   D/V3WyJp6grDPudpeSIGpG0ujB/fBp/xPeWS0ESEPtJgBTil4MKYFWI5r
-   nU7YP/dGzHbJfIBy+Bj1dqEbQJKNglboVprG5Y4DUVRT+HO7KylR9rJjM
-   PkcrjlmDGFuZBgioZakvb7oUdOIH41gbAFTF0Y17NZLOmMqD6ys8yFP5S
-   Pg1HAerlImgostrIgkKG86deodXtX/GJl++CEWT7Az3PSaxyj0Uzi7nM5
-   HwKQQS7x6+xd3uqIl9bAHxW0LUg+7rDrPYUV54VAV61MM9vESQpNjdkKm
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="309293551"
-X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
-   d="scan'208";a="309293551"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 15:03:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="834573078"
-X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
-   d="scan'208";a="834573078"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 20 Jan 2023 15:03:31 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pJ0Py-00034u-1a;
-        Fri, 20 Jan 2023 23:03:30 +0000
-Date:   Sat, 21 Jan 2023 07:02:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     nick.hawkins@hpe.com, verdun@hpe.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au,
-        linux@armlinux.org.uk, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v3 1/5] i2c: hpe: Add GXP SoC I2C Controller
-Message-ID: <202301210607.KSWIWehq-lkp@intel.com>
-References: <20230120190159.23459-2-nick.hawkins@hpe.com>
+        with ESMTP id S229493AbjAUPkO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 Jan 2023 10:40:14 -0500
+X-Greylist: delayed 398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 21 Jan 2023 07:40:09 PST
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5A06596
+        for <linux-i2c@vger.kernel.org>; Sat, 21 Jan 2023 07:40:09 -0800 (PST)
+Received: (wp-smtpd smtp.tlen.pl 5118 invoked from network); 21 Jan 2023 16:33:26 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1674315207; bh=j49fyTZuXHFI6X5P9xxO+FvrjtQNHDDAy2/hQSULGl8=;
+          h=From:To:Cc:Subject;
+          b=Te4mBrd9zzBmuxQoTEYCBZ+3J0rXDODpLtirBnYNci72Qrujyrqc80rcm4c5RlZYA
+           kV+NrDmI6LxKUTDaI1MwM2E0juY6Xt6jruF7f5UCbqiTeaTXdurZzEkPVHlQ9oOEo9
+           S5PMtWkq31bQb6axIkxzTIlH9Hz1o7cWSVZPHItc=
+Received: from aafi207.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.138.207])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <linux-kernel@vger.kernel.org>; 21 Jan 2023 16:33:26 +0100
+From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jean Delvare <jdelvare@suse.de>
+Subject: [PATCH v3 RESEND] acpi,pci: warn about duplicate IRQ routing entries returned from _PRT
+Date:   Sat, 21 Jan 2023 16:33:14 +0100
+Message-Id: <20230121153314.6109-1-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120190159.23459-2-nick.hawkins@hpe.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: eb4a1e9ec8bdc6ebb59f01f5815b9b5f
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 000000A [oSNk]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+On some platforms, the ACPI _PRT function returns duplicate interrupt
+routing entries. Linux uses the first matching entry, but sometimes the
+second matching entry contains the correct interrupt vector.
 
-I love your patch! Perhaps something to improve:
+Print an error to dmesg if duplicate interrupt routing entries are
+present, so that we could check how many models are affected.
 
-[auto build test WARNING on wsa/i2c/for-next]
-[also build test WARNING on robh/for-next linus/master v6.2-rc4 next-20230120]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This happens on a Dell Latitude E6500 laptop with the i2c-i801 Intel
+SMBus controller. This controller was nonfunctional unless its interrupt
+usage was disabled (using the "disable_features=0x10" module parameter).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/nick-hawkins-hpe-com/i2c-hpe-Add-GXP-SoC-I2C-Controller/20230121-030628
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-patch link:    https://lore.kernel.org/r/20230120190159.23459-2-nick.hawkins%40hpe.com
-patch subject: [PATCH v3 1/5] i2c: hpe: Add GXP SoC I2C Controller
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230121/202301210607.KSWIWehq-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/944feebf5cf838fc72fae192e832e5fc96d1cad9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review nick-hawkins-hpe-com/i2c-hpe-Add-GXP-SoC-I2C-Controller/20230121-030628
-        git checkout 944feebf5cf838fc72fae192e832e5fc96d1cad9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/i2c/busses/
+After investigation, it turned out that the driver was using an
+incorrect interrupt vector: in lspci output for this device there was:
+        Interrupt: pin B routed to IRQ 19
+but after running i2cdetect (without using any i2c-i801 module
+parameters) the following was logged to dmesg:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+        [...]
+        i801_smbus 0000:00:1f.3: Timeout waiting for interrupt!
+        i801_smbus 0000:00:1f.3: Transaction timeout
+        i801_smbus 0000:00:1f.3: Timeout waiting for interrupt!
+        i801_smbus 0000:00:1f.3: Transaction timeout
+        irq 17: nobody cared (try booting with the "irqpoll" option)
 
-All warnings (new ones prefixed by >>):
+Existence of duplicate entries in a table returned by the _PRT method
+was confirmed by disassembling the ACPI DSDT table.
 
-   drivers/i2c/busses/i2c-gxp.c: In function 'gxp_i2c_probe':
->> drivers/i2c/busses/i2c-gxp.c:533:28: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-     533 |         drvdata->engine = ((u32)drvdata->base & 0xf00) >> 8;
-         |                            ^
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Jean Delvare <jdelvare@suse.com>
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Tested-by: Jean Delvare <jdelvare@suse.de>
 
+--
+v2: - add a newline at the end of the kernel log message,
+    - replace: "if (match == NULL)" -> "if (!match)"
+    - patch description tweaks.
+v3: - fix C style issues pointed by Jean Delvare,
+    - switch severity from warning to error.
+v3 RESEND: retested on top of v6.2-rc4
 
-vim +533 drivers/i2c/busses/i2c-gxp.c
+To consider: should we print a warning or an error in case of duplicate
+entries? This may be not serious enough to disturb the user with an
+error message at boot. On the other hand, hardware vendors should see
+it and the kernel uses this logging severity in similar cases.
+---
+ drivers/acpi/pci_irq.c | 26 +++++++++++++++++++++++---
+ 1 file changed, 23 insertions(+), 3 deletions(-)
 
-   499	
-   500	static int gxp_i2c_probe(struct platform_device *pdev)
-   501	{
-   502		struct gxp_i2c_drvdata *drvdata;
-   503		int rc;
-   504		struct i2c_adapter *adapter;
-   505	
-   506		if (!i2c_global_init_done) {
-   507			i2cg_map = syscon_regmap_lookup_by_phandle(pdev->dev.of_node,
-   508								   "hpe,sysreg");
-   509			if (IS_ERR(i2cg_map)) {
-   510				return dev_err_probe(&pdev->dev, IS_ERR(i2cg_map),
-   511						     "failed to map i2cg_handle\n");
-   512			}
-   513	
-   514			/* Disable interrupt */
-   515			regmap_update_bits(i2cg_map, GXP_I2CINTEN, 0x00000FFF, 0);
-   516			i2c_global_init_done = true;
-   517		}
-   518	
-   519		drvdata = devm_kzalloc(&pdev->dev, sizeof(*drvdata),
-   520				       GFP_KERNEL);
-   521		if (!drvdata)
-   522			return -ENOMEM;
-   523	
-   524		platform_set_drvdata(pdev, drvdata);
-   525		drvdata->dev = &pdev->dev;
-   526		init_completion(&drvdata->completion);
-   527	
-   528		drvdata->base = devm_platform_ioremap_resource(pdev, 0);
-   529		if (IS_ERR(drvdata->base))
-   530			return PTR_ERR(drvdata->base);
-   531	
-   532		/* Use physical memory address to determine which I2C engine this is. */
- > 533		drvdata->engine = ((u32)drvdata->base & 0xf00) >> 8;
-   534	
-   535		if (drvdata->engine >= GXP_MAX_I2C_ENGINE) {
-   536			return dev_err_probe(&pdev->dev, -EINVAL, "i2c engine% is unsupported\n",
-   537				drvdata->engine);
-   538		}
-   539	
-   540		rc = platform_get_irq(pdev, 0);
-   541		if (rc < 0)
-   542			return rc;
-   543	
-   544		drvdata->irq = rc;
-   545		rc = devm_request_irq(&pdev->dev, drvdata->irq, gxp_i2c_irq_handler,
-   546				      IRQF_SHARED, gxp_i2c_name[drvdata->engine], drvdata);
-   547		if (rc < 0)
-   548			return dev_err_probe(&pdev->dev, rc, "irq request failed\n");
-   549	
-   550		i2c_parse_fw_timings(&pdev->dev, &drvdata->t, true);
-   551	
-   552		gxp_i2c_init(drvdata);
-   553	
-   554		/* Enable interrupt */
-   555		regmap_update_bits(i2cg_map, GXP_I2CINTEN, BIT(drvdata->engine),
-   556				   BIT(drvdata->engine));
-   557	
-   558		adapter = &drvdata->adapter;
-   559		i2c_set_adapdata(adapter, drvdata);
-   560	
-   561		adapter->owner = THIS_MODULE;
-   562		strscpy(adapter->name, "HPE GXP I2C adapter", sizeof(adapter->name));
-   563		adapter->algo = &gxp_i2c_algo;
-   564		adapter->dev.parent = &pdev->dev;
-   565		adapter->dev.of_node = pdev->dev.of_node;
-   566	
-   567		rc = i2c_add_adapter(adapter);
-   568		if (rc)
-   569			return dev_err_probe(&pdev->dev, rc, "i2c add adapter failed\n");
-   570	
-   571		return 0;
-   572	}
-   573	
+diff --git a/drivers/acpi/pci_irq.c b/drivers/acpi/pci_irq.c
+index ff30ceca2203..28fcae93cc24 100644
+--- a/drivers/acpi/pci_irq.c
++++ b/drivers/acpi/pci_irq.c
+@@ -203,6 +203,8 @@ static int acpi_pci_irq_find_prt_entry(struct pci_dev *dev,
+ 	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+ 	struct acpi_pci_routing_table *entry;
+ 	acpi_handle handle = NULL;
++	struct acpi_prt_entry *match = NULL;
++	const char *match_int_source = NULL;
+ 
+ 	if (dev->bus->bridge)
+ 		handle = ACPI_HANDLE(dev->bus->bridge);
+@@ -219,13 +221,31 @@ static int acpi_pci_irq_find_prt_entry(struct pci_dev *dev,
+ 
+ 	entry = buffer.pointer;
+ 	while (entry && (entry->length > 0)) {
+-		if (!acpi_pci_irq_check_entry(handle, dev, pin,
+-						 entry, entry_ptr))
+-			break;
++		struct acpi_prt_entry *curr;
++
++		if (!acpi_pci_irq_check_entry(handle, dev, pin, entry, &curr)) {
++			if (!match) {
++				match = curr;
++				match_int_source = entry->source;
++			} else {
++				pr_err(FW_BUG
++				       "ACPI _PRT returned duplicate IRQ routing entries for device %04x:%02x:%02x[INT%c]: %s[%d] and %s[%d]\n",
++				       curr->id.segment, curr->id.bus, curr->id.device,
++				       pin_name(curr->pin),
++				       match_int_source, match->index,
++				       entry->source, curr->index);
++				/* We use the first matching entry nonetheless,
++				 * for compatibility with older kernels.
++				 */
++			}
++		}
++
+ 		entry = (struct acpi_pci_routing_table *)
+ 		    ((unsigned long)entry + entry->length);
+ 	}
+ 
++	*entry_ptr = match;
++
+ 	kfree(buffer.pointer);
+ 	return 0;
+ }
 
+base-commit: 5dc4c995db9eb45f6373a956eb1f69460e69e6d4
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.25.1
+
