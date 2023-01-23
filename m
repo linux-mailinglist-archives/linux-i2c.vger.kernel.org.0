@@ -2,36 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7EF678AA9
-	for <lists+linux-i2c@lfdr.de>; Mon, 23 Jan 2023 23:20:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5945C678AAB
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Jan 2023 23:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233041AbjAWWUb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 23 Jan 2023 17:20:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
+        id S233013AbjAWWVq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 23 Jan 2023 17:21:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233024AbjAWWUa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 23 Jan 2023 17:20:30 -0500
+        with ESMTP id S231501AbjAWWVp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 23 Jan 2023 17:21:45 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C26EEFA8;
-        Mon, 23 Jan 2023 14:20:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2F6EFA8;
+        Mon, 23 Jan 2023 14:21:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9D34610A5;
-        Mon, 23 Jan 2023 22:20:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DF9CC433EF;
-        Mon, 23 Jan 2023 22:20:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD37C610A3;
+        Mon, 23 Jan 2023 22:21:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9876DC433D2;
+        Mon, 23 Jan 2023 22:21:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674512428;
-        bh=vE9vDG1lgmM0W+FImycOAxYy202gVBcM4X1KoK+6dtE=;
+        s=k20201202; t=1674512504;
+        bh=5pNowrepl2Bk3buosCjxux1jEQssWQZ3moduo0N2YcQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JgSL4h+R0ju6Nsb3bNzUcg9aFQiQ/dyCymo8/3nNJnTKxp6U3DHiCnPkZmMkvCFzJ
-         IeNZu39HDOHu6qZ5oriYwrbBwJjOjINuVHtAuLgltIeys4BfTkDP1Oy1PesTAnNQDx
-         sFAJAvWs4uihRNoRQQ1AO2rASwVK1a9vkb6SXnALIMa2aKdP8mwEOhOkaTO2XoMXzQ
-         i1hAQBWDBoQILm4XqWvB63/6eA4/sclFtPl9Ojj7HZusRnzodMDubAsENt5WaGbSHd
-         Xe4i33AnOl5TIk7anPrpG1iACratOFTQQZ70Zshug1MrUxLpZkuxNp8AsDB2raREIc
-         EeNDUknRLPYjg==
-Date:   Mon, 23 Jan 2023 23:20:24 +0100
+        b=anwJLJwOMFPB9n1nAjV+3+UF+piqtQ06TgwUhQJWuwq4vpshYJ+ZtTh6AoZInTNeZ
+         L7dtOfftMaiz68yjgOEnzOcPazzND3D4yyjMMAbhimnIYDP5HlAS6tWC4U9cFogTSq
+         FqQZwYY5qRte8CjohmwnMfAbcBcux7dmtJ5o5+yk10o6XjKDfYFXPMtB2DufLWBUd1
+         Siel2WTc0tLs0P3KGLP+Cs7A8EKJdXh2RvFBBoC00u2KKhQS4QPf2xggUt4SQ4DvuY
+         NfinuWWoCT99vrnMV/+HQBrQbVhriEZ2pUKFtpxme105c5jvU5dU5O9iCFqslS2WNP
+         tVUayPvC8lYbA==
+Date:   Mon, 23 Jan 2023 23:21:40 +0100
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Heiner Kallweit <hkallweit1@gmail.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -39,8 +39,8 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Peter Rosin <peda@axentia.se>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v5 2/3] i2c: algo: bit: allow getsda to be NULL
-Message-ID: <Y88IKGn+bngfPuWl@shikoro>
+Subject: Re: [PATCH v5 3/3] i2c: gpio: support write-only sda/scl w/o pull-up
+Message-ID: <Y88IdIeNKa6UiCFc@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -49,12 +49,12 @@ Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
 References: <6f4b54d9-ab6d-a4d4-5142-27c89e03c6d2@gmail.com>
- <83ab7926-2db3-ef60-8356-53bc517a22a8@gmail.com>
+ <7eea145d-d5a7-052c-e458-18f3b842c2ec@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VJv/kkNYJrWBqEU3"
+        protocol="application/pgp-signature"; boundary="LQJfnu/JnbPQR1bP"
 Content-Disposition: inline
-In-Reply-To: <83ab7926-2db3-ef60-8356-53bc517a22a8@gmail.com>
+In-Reply-To: <7eea145d-d5a7-052c-e458-18f3b842c2ec@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,37 +65,56 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---VJv/kkNYJrWBqEU3
+--LQJfnu/JnbPQR1bP
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 18, 2023 at 10:54:03PM +0100, Heiner Kallweit wrote:
-> This is in preparation of supporting write-only SDA in i2c-gpio.
+On Wed, Jan 18, 2023 at 10:55:12PM +0100, Heiner Kallweit wrote:
+> There are slave devices that understand I2C but have read-only SDA and
+> SCL. Examples are FD650 7-segment LED controller and its derivatives.
+> Typical board designs don't even have a pull-up for both pins.
+> Handle the new attributes for write-only SDA and missing pull-up on
+> SDA/SCL.
+>=20
+> For either pin the open-drain and has-no-pullup properties are
+> mutually-exclusive, what is documented in the DT property documentation.
+> We don't add an extra warning here because the open-drain properties
+> are marked deprecated anyway.
 >=20
 > Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
 Applied to for-next, thanks!
 
+> +	pdata->sda_is_output_only =3D
+> +		of_property_read_bool(np, "i2c-gpio,sda-output-only");
+> +	pdata->sda_has_no_pullup =3D
+> +		of_property_read_bool(np, "i2c-gpio,sda-has-no-pullup");
+> +	pdata->scl_has_no_pullup =3D
+> +		of_property_read_bool(np, "i2c-gpio,scl-has-no-pullup");
 
---VJv/kkNYJrWBqEU3
+I converted these to device_property_read_bool() because of 7b6e9dc7e42d
+("i2c: gpio: Add support on ACPI-based system") which is in my for-next.
+
+
+--LQJfnu/JnbPQR1bP
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPPCCgACgkQFA3kzBSg
-KbaQzQ/+LpEOIDSpjFZOHcxunzDd86YaO0INBHoUbZnkZWu+wa0x1P7/UkJvWJRE
-NPQthtKj6m8zNjHCbL4qC/7GRPBhDx2vD9EzPN/u3EdsLEH15OdSLtC7ruoAPWT5
-FMMQg9i355SJZYIBpkR1qFf//xm40lV45NHsQCD7bKJwdvRNTUv+kJuvHnlPUKHP
-hknpsv1NCA//z5pDb1K7NsG+7NkO5rnesz4LibBVzwiYrxYUsaUeCH9qdcSAXPIt
-DtZ4EFF2OZOyeMn40OknHodZLFWscVdoNt7mKDjG/G6SA+dpqDTE/RR84hBrGbAO
-x9c1ensV7LODeuMwcXzju/BqGWL+GlHA6e2wViOvHEoeu4583mZ8ilXObKywroif
-2RZhGF+UnXa9COy9mcTWoE0KYXo9MQbIPNNOVSsHfXiCACIxsYkIpg+hAcaBAav+
-7muQ0TSd0xgiXEI9mArWMDkmhNGsw6MfXK/My9camTmhlPlK8bU1OTFJT7TNeE7x
-UNKbZnEmW5xz1sBA+VJbJbMWscmByJgnHDAc5zHZ9g4oWyiH6dVD4qHnyBFszar8
-G/2v0uA0ETRtzjELIGfiZk3TYr8pLMPoeEpd7mUScihEgBqNRrqDDlIOOecUyajb
-kLkouafVBY+C+94zS4Hebml6jjdFJLD4uLntn1lqElaHaubYpfU=
-=9qjN
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPPCHQACgkQFA3kzBSg
+KbYFIA/+MWdSqmFYPu9rjNdJmjoyr4o4NTmo9opV4SMu39hF3iLTVNqpVeLC0/vF
+ajHzyRzjVVAbCj9nVqexTqIhAzy7kps4+MLU0zvQZHI7k4c1ywL1n3QLCWTrNhXv
+VjfvuB25pqR5Pfetjnl63LEmn6m8tjHls3ckjMSPWImkmSvg4Tqpm5QmMEpb77tz
+PhojsJO2eKwqA2/a3ze9t5PPojKi/4o6d9WEYwN/3fMsQPCXrADvlsSJv1LNQbap
+myn8xshCRiJ/yNnLIyOW1vOeJbKqPhpNW33C0UHVH8NfielbNJd89egY3VCdDigr
+a4+CnE0TvRwEx2LnThCdlnu0yS3pv1h8CBwdyWJn6OVSgDUv39vGTgCeiyQQs8c6
+c3fReEo3KnHiX3Rq1ZfWQ5CX3TytNOrjUXWfLE1Ggt2RNL1N3dZTDiFM+DY42fNh
+9wo7pYmMjC9IzRENolKofAKljrqYtOMB8Z8+W7MyABqvFV5aS62SN1e+MMNnUlJ2
+wdILnQKN8KDjdfY+Wo0OrOnv2OXuEPeVfY3mQXI5PLdhJVhjZkscWh3LmqYqMO/v
+tttGC4dJ4lm/6t5rluY2Bp4UAnxxfmVBj6PGiEjw5I2TdtecoIfTorQJZf8acdY+
+sNUwe3I68Z8Q4l8hJG0l19fboM5B68i/AooiJpYnStAd3TOLrsE=
+=/h1z
 -----END PGP SIGNATURE-----
 
---VJv/kkNYJrWBqEU3--
+--LQJfnu/JnbPQR1bP--
