@@ -2,97 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B425E679833
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Jan 2023 13:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB366798A2
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Jan 2023 13:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232999AbjAXMkO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Jan 2023 07:40:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
+        id S229705AbjAXMzh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Jan 2023 07:55:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232547AbjAXMkO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Jan 2023 07:40:14 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A40526847
-        for <linux-i2c@vger.kernel.org>; Tue, 24 Jan 2023 04:40:13 -0800 (PST)
+        with ESMTP id S229892AbjAXMzf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Jan 2023 07:55:35 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D6440BFC
+        for <linux-i2c@vger.kernel.org>; Tue, 24 Jan 2023 04:55:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674564013; x=1706100013;
+  t=1674564914; x=1706100914;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=LP8sLQtm7hVoqWl7Apd2cvpEHRCmUm021zJLAh8uxMM=;
-  b=LUqx2GQuUzGLR5SkqAaaUcquVzXnmO+bHdMOpdFUX/wBiV7BXeNc84vs
-   1NdMx3a6HT7G2xlXbA2hfdMIQexaruajy82xcTwFfLfKRu1zuY+F31ZrB
-   C6hSx8iSF+D1Gz4SxjUR1dywCf2qiisSIvQoLGjS1rJHiGEE4QYWbKsRo
-   XVJAFlXxGdyvET+HpTdFCk4AoesA8g5ob/tfU7h6Et3M9GTraT71IusYs
-   p9L50pNh/G51X3mp9kbcVN2lNkfl3yrDrT/sBy8/1GBbWrXJa9TD+t0SC
-   WaFKU/3YBI/LDlXMJOoSwRRgvLJ/ZkQ6wPCGXBxWtSD/80daZ1Eh4IQ8l
+  bh=+G0vjzFBFFPrlu4XTKULv2Dzj2pvw0FAZrN7nxbalY4=;
+  b=Ov7c2p5zUW3doC4WTJkOlrajEm4VjU5XJb4QOyRPbcBgF1exte16QQ0D
+   QJsffVaLVLnB9U7xcWU4Lo5m47G5+q0+otcN5nu8fDZtisQ3brxB4edv7
+   pUxE3xJ4u1uUEmcMcM5u8l5CKFd2BMJ1N59KScZSK9SKgUZCzyACk9u5r
+   48l1Ep+g1JoLmFV9XKT3LdlGRaWQeAuMMAxWte6MGfIsd67Ige9sklGcu
+   XQ5Z6c4T5zYHvT4qzWBjNLUUzbVlGG6UihMD7t+OV8djOGkuykTOft1DU
+   LMLFj7pmTgceSKp33L6A8cxQHl2NoAbWlNj9jQOTehNZChBjJGJsTG6sd
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="390788182"
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="327544763"
 X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="390788182"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 04:40:12 -0800
+   d="scan'208";a="327544763"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 04:54:54 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="786078102"
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="770303557"
 X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="786078102"
+   d="scan'208";a="770303557"
 Received: from mylly.fi.intel.com (HELO [10.237.72.143]) ([10.237.72.143])
-  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2023 04:40:11 -0800
-Message-ID: <27e53599-61be-7ae1-d41d-6e7eff4d4c51@linux.intel.com>
-Date:   Tue, 24 Jan 2023 14:40:10 +0200
+  by fmsmga002.fm.intel.com with ESMTP; 24 Jan 2023 04:54:52 -0800
+Message-ID: <e32d5647-530c-80d0-e7e5-a92e5f5a82dd@linux.intel.com>
+Date:   Tue, 24 Jan 2023 14:54:52 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.6.0
-Subject: Re: [PATCH v4] i2c: designware: add a new bit check for IC_CON
- control
+Subject: Re: [PATCH v1] i2c: designware: Change from u32 to unsigned int for
+ regmap_read() calls
+Content-Language: en-US
 To:     Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Jan Dabros <jsd@semihalf.com>
 Cc:     linux-i2c@vger.kernel.org
-References: <20230124111127.1348054-1-Shyam-sundar.S-k@amd.com>
-Content-Language: en-US
+References: <20230124114732.1387997-1-Shyam-sundar.S-k@amd.com>
 From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20230124111127.1348054-1-Shyam-sundar.S-k@amd.com>
+In-Reply-To: <20230124114732.1387997-1-Shyam-sundar.S-k@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 1/24/23 13:11, Shyam Sundar S K wrote:
-> On some AMD platforms, based on the new designware datasheet,
-> BIOS sets the BIT(11) within the IC_CON register to advertise
-> the "bus clear feature capability".
+On 1/24/23 13:47, Shyam Sundar S K wrote:
+> regmap_read() API signature expects the caller to send "unsigned int"
+> type to return back the read value, but there are some occurrences of 'u32'
+> across i2c-designware-* files.
 > 
-> AMD/Designware datasheet says:
+> Change them to match the regmap_read() signature.
 > 
-> Bit(11) BUS_CLEAR_FEATURE_CTRL. Read-write,Volatile. Reset: 0.
-> Description: In Master mode:
-> - 1'b1: Bus Clear Feature is enabled.
-> - 1'b0: Bus Clear Feature is Disabled.
-> In Slave mode, this register bit is not applicable.
-> 
-> On AMD platform designs:
-> 1. BIOS programs the BUS_CLEAR_FEATURE_CTRL and enables the detection
-> of SCL/SDA stuck low.
-> 2. Whenever the stuck low is detected, the SMU FW shall do the bus
-> recovery procedure.
-> 
-> Currently, the way in which the "master_cfg" is built in the driver, it
-> overrides the BUS_CLEAR_FEATURE_CTRL advertised by BIOS and the SMU FW
-> cannot initiate the bus recovery if the stuck low is detected.
-> 
-> Hence add a check in i2c_dw_probe_master() that if the BIOS
-> advertises the bus clear feature, let driver not ignore it and
-> adapt accordingly.
-> 
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > Signed-off-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
 > ---
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+>   drivers/i2c/busses/i2c-designware-common.c | 11 ++++++-----
+>   drivers/i2c/busses/i2c-designware-core.h   |  2 +-
+>   drivers/i2c/busses/i2c-designware-master.c | 13 +++++++------
+>   drivers/i2c/busses/i2c-designware-slave.c  |  4 ++--
+>   4 files changed, 16 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+> index a3240ece55b2..ae808e91b17f 100644
+> --- a/drivers/i2c/busses/i2c-designware-common.c
+> +++ b/drivers/i2c/busses/i2c-designware-common.c
+> @@ -388,7 +388,7 @@ u32 i2c_dw_scl_lcnt(u32 ic_clk, u32 tLOW, u32 tf, int offset)
+>   
+>   int i2c_dw_set_sda_hold(struct dw_i2c_dev *dev)
+>   {
+> -	u32 reg;
+> +	unsigned int reg;
+>   	int ret;
+>   
+Hmm.. I'm not sure about these. We know registers are 32-bit and change 
+to unsigned int is a step being more ambiguous. I'm wearing my old 
+embedded developer hat who likes to see explicit types when dealing with HW.
+
+Andy: what was your rationale to propose changing u32 to unsigned int in 
+another i2c-designware patch? Has gcc started complaining if 
+regmap_read() is used with u32 type?
