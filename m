@@ -2,94 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE25D67964A
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Jan 2023 12:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D29D6796B4
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Jan 2023 12:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233319AbjAXLMe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Jan 2023 06:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
+        id S234121AbjAXLda (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Jan 2023 06:33:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbjAXLM3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Jan 2023 06:12:29 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7695B9B
-        for <linux-i2c@vger.kernel.org>; Tue, 24 Jan 2023 03:12:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674558748; x=1706094748;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qgAXhdzb2Ch0OrOqvHa/kjSZXVgGy1t274JBpDFkCig=;
-  b=SrPs3WkhCVBfOq37q3KxCYetSgVVhpZrHaigC1/7ZI6wNZppuhUXjMAB
-   bdfMWYZ4MNi3gi0Z6qHRveJ6tBA4oO6r4DyjSpDwY7X3xZyTONHTqQ2eH
-   U6P51O1J/VHCc/ZiL+5lyl+swQxfKsvla/JdLYeYJG/nQzBYYSoAgwCKt
-   nWMfWAinTmy/pNMm+GJCunfiwgapnPUpZymtZefS5axu8Ghnplx/mSb4X
-   wT9dPEeYFs0e6lMpvGBXuQks2VcV1v+ImsZkx8X9RVbGzDk5WMTaHfKL8
-   6i9HSFie5XKaf3XVr40wG1H6rPe7mZIDL+elOahSAvYFM4xmqQ6+/hqWN
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="353543867"
-X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="353543867"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 03:12:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="694298682"
-X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="694298682"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 24 Jan 2023 03:12:27 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pKHE2-00EJ7t-0i;
-        Tue, 24 Jan 2023 13:12:26 +0200
-Date:   Tue, 24 Jan 2023 13:12:25 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: designware: add a new bit check for IC_CON
- control
-Message-ID: <Y8+9GUwyl1UO6reY@smile.fi.intel.com>
-References: <20230124100650.1327656-1-Shyam-sundar.S-k@amd.com>
- <Y8+ymCM3nQ0/b6sH@smile.fi.intel.com>
- <Y8+y73EH84nSGDO/@smile.fi.intel.com>
- <a0d42cac-b39a-f59c-950f-94bcb660472a@amd.com>
+        with ESMTP id S234119AbjAXLd3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Jan 2023 06:33:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7377A9025;
+        Tue, 24 Jan 2023 03:33:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1037460F36;
+        Tue, 24 Jan 2023 11:33:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D5EAC4339B;
+        Tue, 24 Jan 2023 11:33:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674560006;
+        bh=pqiKu2iFX77RIfIfiJ+5aMwkbCrMMguxTgKU4tKjUc0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jgG/iA+3jct6fX618SdC2isOsZjWZm850pXEIc4qvAxt/n0eIhCt6KTmRo3zzkL8o
+         hJkC9ifX5nG04CmUdkrMj8X1xdCdF9QBCGwpLig5drRUU0hEvDtyZZeHVNHUjPf6Ui
+         ibhw6WnPMN4ao6NtsT/Pf/bt39cm5j6kbF4T9ZIZZ12xPDOgfJwMv70aUfZ+eAmPav
+         chhJQw+fSLdYqvAmIxK7WfQBAv8yGvwjiGZ398QLL5DSxhhMfeQVeAglmzqCHSyIIx
+         1YhxJcQoS7U/O+Z7t0X7McA+2/AIYxmpvUnWfRHPu7tzCWyIuLzJHSzpzhdFVIa3KI
+         EvkegYMtxhCZA==
+Message-ID: <c15b377a-a07e-c43e-55f2-c0f6dd8cd75f@kernel.org>
+Date:   Tue, 24 Jan 2023 12:33:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a0d42cac-b39a-f59c-950f-94bcb660472a@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH V3 7/9] dt-bindings: i2c: xiic: Add 'xlnx,axi-iic-2.1' to
+Content-Language: en-US
+To:     Manikanta Guntupalli <manikanta.guntupalli@amd.com>,
+        michal.simek@xilinx.com, michal.simek@amd.com,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     git@amd.com, srinivas.goud@amd.com, shubhrajyoti.datta@amd.com,
+        manion05gk@gmail.com,
+        Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+References: <1674536682-25278-1-git-send-email-manikanta.guntupalli@amd.com>
+ <1674536682-25278-8-git-send-email-manikanta.guntupalli@amd.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <1674536682-25278-8-git-send-email-manikanta.guntupalli@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 04:03:55PM +0530, Shyam Sundar S K wrote:
-> On 1/24/2023 3:59 PM, Andy Shevchenko wrote:
-> > On Tue, Jan 24, 2023 at 12:27:37PM +0200, Andy Shevchenko wrote:
-> >> On Tue, Jan 24, 2023 at 03:36:50PM +0530, Shyam Sundar S K wrote:
+On 24/01/2023 06:04, Manikanta Guntupalli wrote:
 
-...
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-> >>> +	u32 ic_con;
-> > 
-> > One more nit-pick:
-> > 
-> > 	unsigned int ic_con;
+You missed several entries, so this also will mean patch won't get tested.
+
+
+> From: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
 > 
-> is u32 not typedef of unsigned int?
+> compatible
 
-You should not care about implementation details. You call an API that uses
-unsigned int, why not using the correct type from the beginning?
+Messed up subject and commit msg.
 
-> > to be same as regmap_read() uses.
+> 
+> Added the xilinx I2C new version 'xlnx,axi-iic-2.1' string to compatible
+> Added clock-frequency as optional property.
+> 
+> Signed-off-by: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+> Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
+> Acked-by: Michal Simek <michal.simek@amd.com>
+> ---
+>  .../devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml       | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml b/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
+> index 8d241a703d85..42488a67260c 100644
+> --- a/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
+> @@ -14,7 +14,9 @@ allOf:
+>  
+>  properties:
+>    compatible:
+> -    const: xlnx,xps-iic-2.00.a
+> +    enum:
+> +      - xlnx,xps-iic-2.00.a
+> +      - xlnx,axi-iic-2.1
+>  
+>    reg:
+>      maxItems: 1
+> @@ -36,6 +38,9 @@ required:
+>    - interrupts
+>    - clocks
+>  
+> +optional:
+> +  - clock-frequency
 
--- 
-With Best Regards,
-Andy Shevchenko
+Nope. Just test your bindings...
 
+Does not look like you tested the bindings. Please run `make
+dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
+
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+
+Best regards,
+Krzysztof
 
