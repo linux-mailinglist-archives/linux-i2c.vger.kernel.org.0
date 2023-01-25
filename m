@@ -2,67 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93EC967B9CF
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Jan 2023 19:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 601FB67B9C8
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Jan 2023 19:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235607AbjAYSrM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 25 Jan 2023 13:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
+        id S235174AbjAYSrG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 25 Jan 2023 13:47:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235400AbjAYSrH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 25 Jan 2023 13:47:07 -0500
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C84C5B595;
-        Wed, 25 Jan 2023 10:47:06 -0800 (PST)
-Received: from pps.filterd (m0150244.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PIbl6a004596;
+        with ESMTP id S235146AbjAYSrF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 25 Jan 2023 13:47:05 -0500
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6131A5AB45;
+        Wed, 25 Jan 2023 10:47:04 -0800 (PST)
+Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PIAgCE022262;
         Wed, 25 Jan 2023 18:46:45 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id : in-reply-to : references : mime-version; s=pps0720;
- bh=n6E5Pwizgz6wzPbcddDl9uPT4LbCzpGaS1glkpucmyI=;
- b=nLrh/bucrhSeEPpApPneEFmztiE6K6Ta6mdjEBXW9GscHjcSTc4Xm9hQ1dIAsheRFKsD
- 6KoV+Rx21wqMKi7R2QEi65k4Y31z6yHXlnAfnPA4Lt6qQI48jVB5P5mPdU8bG30gVw8R
- RjVx4R3nFZaR0qr5DTPaoaFBK2YDBgNpCtRHEr6O63dEylRPPdtJwdbDTClhh6WRKvSr
- QIFbsNFLvpJ3nwKlHSLa4S/gehA94QYsViey5UzlqfBophCa8Wz2LNr6tJZEO7Qp1GHc
- 2zc3WYIa64PjjsZfM1Wqkx25l9CQly9Ygd+IsIwC+WZ7HAOV+Z1DUaTnnR6SWEsdeYzs 5A== 
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3nb9v682rt-1
+ date : message-id : in-reply-to : references; s=pps0720;
+ bh=zUv5cGxhVVveNiC1A11McLiomC1Eyx/71fL2STxGZds=;
+ b=LorROGLrI7V3hyiV07/AgLaILL7StXXK9T21L4nk0yX9Qx/pjLD/95+r9e7btqcfqbrr
+ nHjbnRUr3bFWMT4FyulkKWxOxp6C0t9QdGxbk+JToq5bmrXjKAmAkRpXGlQGXnuAZhcu
+ v5DlvViTiejiQJ6fTa4d5+WWctglKvrNfk9o1lSt9dB3xzRu0mHm8rVX0gBB5iQ1G0NF
+ JrqxoCMzWAP26wWTxW+gXaotFIxqzmemdxZvrKhP/2DTYiUGSQ1wWUTATTwH+0V3E54n
+ FD8g3JA8uG20FosNJF+do49Fbi3Y3cP7mpwBHsmDbz+z0KJGh29gdcRyNWXDiRm510Zq 5A== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3nb7m8hpsj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Wed, 25 Jan 2023 18:46:45 +0000
 Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 6E9F213198;
+        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id DD5D6807EF8;
         Wed, 25 Jan 2023 18:46:44 +0000 (UTC)
 Received: from hpe.com (unknown [16.231.227.36])
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id EB09C807E37;
-        Wed, 25 Jan 2023 18:46:43 +0000 (UTC)
+        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 69492808DBD;
+        Wed, 25 Jan 2023 18:46:44 +0000 (UTC)
 From:   nick.hawkins@hpe.com
 To:     verdun@hpe.com, nick.hawkins@hpe.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         joel@jms.id.au
-Subject: [PATCH v4 2/5] dt-bindings: i2c: Add hpe,gxp-i2c
-Date:   Wed, 25 Jan 2023 12:44:35 -0600
-Message-Id: <20230125184438.28483-3-nick.hawkins@hpe.com>
+Subject: [PATCH v4 3/5] ARM: dts: hpe: Add I2C Topology
+Date:   Wed, 25 Jan 2023 12:44:36 -0600
+Message-Id: <20230125184438.28483-4-nick.hawkins@hpe.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230125184438.28483-1-nick.hawkins@hpe.com>
 References: <20230125184438.28483-1-nick.hawkins@hpe.com>
-X-Proofpoint-ORIG-GUID: EPGXs413IDLSsGvEFsacG81uWEaccF6h
-X-Proofpoint-GUID: EPGXs413IDLSsGvEFsacG81uWEaccF6h
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: SH2EhfnQskDmXth1OHRTl9HLlIxlf5UN
+X-Proofpoint-ORIG-GUID: SH2EhfnQskDmXth1OHRTl9HLlIxlf5UN
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-25_12,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 mlxlogscore=999
- adultscore=0 suspectscore=0 spamscore=0 malwarescore=0 phishscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301250166
+ definitions=2023-01-25_11,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ lowpriorityscore=0 clxscore=1015 malwarescore=0 mlxscore=0 phishscore=0
+ mlxlogscore=735 spamscore=0 suspectscore=0 priorityscore=1501 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301250165
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -74,93 +72,278 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Nick Hawkins <nick.hawkins@hpe.com>
 
-Document compatibility string to support I2C controller
-in GXP.
+Add 9 I2C Engines, 2 MUXs, and a EEPROM to the device tree.
 
 Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 
 ---
-v4:
- *Provide even greater description with the use
-  of Phandle
- *Reorder properties so they match the required
-  order
-v3:
- *Provide better description with use of Phandle
-v2:
- *Removed uneccessary size-cells and address-cells
- *Removed phandle from hpe,sysreg-phandle
- *Changed hpe,i2c-max-bus-freq to clock-frequency
----
- .../devicetree/bindings/i2c/hpe,gxp-i2c.yaml  | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
 
-diff --git a/Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml b/Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
-new file mode 100644
-index 000000000000..6604dcd47251
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i2c/hpe,gxp-i2c.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+v4:
+ *No change
+v3:
+ *No change
+v2:
+ *Made i2cX a generic node name i2c in the dts
+ *Added status field to dtsi and dts for i2c bus
+---
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts | 109 ++++++++++++++++++++
+ arch/arm/boot/dts/hpe-gxp.dtsi           | 125 +++++++++++++++++++++++
+ 2 files changed, 234 insertions(+)
+
+diff --git a/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+index 3a7382ce40ef..1f2547fe9ae3 100644
+--- a/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
++++ b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+@@ -23,4 +23,113 @@
+ 		device_type = "memory";
+ 		reg = <0x40000000 0x20000000>;
+ 	};
 +
-+title: HPE GXP SoC I2C Controller
++	i2cmux@4 {
++		compatible = "i2c-mux-reg";
++		i2c-parent = <&i2c4>;
++		reg = <0xd1000074 0x1>;
++		#address-cells = <1>;
++		#size-cells = <0>;
 +
-+maintainers:
-+  - Nick Hawkins <nick.hawkins@hpe.com>
++		i2c@1 {
++			reg = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
 +
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
++		i2c@3 {
++			reg = <3>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
 +
-+properties:
-+  compatible:
-+    const: hpe,gxp-i2c
++		i2c@4 {
++			reg = <4>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++	};
 +
-+  reg:
-+    maxItems: 1
++	i2cmux@6 {
++		compatible = "i2c-mux-reg";
++		i2c-parent = <&i2c6>;
++		reg = <0xd1000076 0x1>;
++		#address-cells = <1>;
++		#size-cells = <0>;
 +
-+  interrupts:
-+    maxItems: 1
++		i2c@1 {
++			reg = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
 +
-+  clock-frequency:
-+    default: 100000
++		i2c@2 {
++			reg = <2>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
 +
-+  hpe,sysreg:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      Phandle to the global status and enable interrupt registers shared
-+      between each I2C engine controller instance. It enables the I2C
-+      engine controller to act as both a master or slave by being able to
-+      arm and respond to interrupts from its engine. Each bit in the
-+      registers represent the respective bit position.
++		i2c@3 {
++			reg = <3>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
 +
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
++		i2c@4 {
++			reg = <4>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
 +
-+unevaluatedProperties: false
++		i2c@5 {
++			reg = <5>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++	};
++};
 +
-+examples:
-+  - |
-+    i2c@2600 {
-+        compatible = "hpe,gxp-i2c";
-+        reg = <0x2500 0x70>;
-+        interrupts = <9>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        hpe,sysreg = <&sysreg_system_controller>;
-+        clock-frequency = <10000>;
++&i2c0 {
++	status = "okay";
++};
 +
-+        eeprom@50 {
-+            compatible = "atmel,24c128";
-+            reg = <0x50>;
-+        };
-+    };
++&i2c1 {
++	status = "okay";
++};
++
++&i2c2 {
++	status = "okay";
++	eeprom@50 {
++		compatible = "atmel,24c02";
++		pagesize = <8>;
++		reg = <0x50>;
++	};
++};
++
++&i2c3 {
++	status = "okay";
++};
++
++&i2c4 {
++	status = "okay";
++};
++
++&i2c5 {
++	status = "okay";
++};
++
++&i2c6 {
++	status = "okay";
++};
++
++&i2c7 {
++	status = "okay";
++};
++
++&i2c8 {
++	status = "okay";
++};
++
++&i2c9 {
++	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/hpe-gxp.dtsi b/arch/arm/boot/dts/hpe-gxp.dtsi
+index cf735b3c4f35..3bc071149bae 100644
+--- a/arch/arm/boot/dts/hpe-gxp.dtsi
++++ b/arch/arm/boot/dts/hpe-gxp.dtsi
+@@ -122,6 +122,131 @@
+ 				interrupts = <6>;
+ 				interrupt-parent = <&vic0>;
+ 			};
++
++			sysreg_system_controller: syscon@f8 {
++				compatible = "hpe,gxp-sysreg", "syscon";
++				reg = <0xf8 0x8>;
++			};
++
++			i2c0: i2c@2000 {
++				compatible = "hpe,gxp-i2c";
++				reg = <0x2000 0x70>;
++				interrupts = <9>;
++				interrupt-parent = <&vic0>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++				hpe,sysreg = <&sysreg_system_controller>;
++				clock-frequency = <100000>;
++			};
++
++			i2c1: i2c@2100 {
++				compatible = "hpe,gxp-i2c";
++				reg = <0x2100 0x70>;
++				interrupts = <9>;
++				interrupt-parent = <&vic0>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++				hpe,sysreg = <&sysreg_system_controller>;
++				clock-frequency = <100000>;
++			};
++
++			i2c2: i2c@2200 {
++				compatible = "hpe,gxp-i2c";
++				reg = <0x2200 0x70>;
++				interrupts = <9>;
++				interrupt-parent = <&vic0>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++				hpe,sysreg = <&sysreg_system_controller>;
++				clock-frequency = <100000>;
++			};
++
++			i2c3: i2c@2300 {
++				compatible = "hpe,gxp-i2c";
++				reg = <0x2300 0x70>;
++				interrupts = <9>;
++				interrupt-parent = <&vic0>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++				hpe,sysreg = <&sysreg_system_controller>;
++				clock-frequency = <100000>;
++			};
++
++			i2c4: i2c@2400 {
++				compatible = "hpe,gxp-i2c";
++				reg = <0x2400 0x70>;
++				interrupts = <9>;
++				interrupt-parent = <&vic0>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++				hpe,sysreg = <&sysreg_system_controller>;
++				clock-frequency = <100000>;
++			};
++
++			i2c5: i2c@2500 {
++				compatible = "hpe,gxp-i2c";
++				reg = <0x2500 0x70>;
++				interrupts = <9>;
++				interrupt-parent = <&vic0>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++				hpe,sysreg = <&sysreg_system_controller>;
++				clock-frequency = <100000>;
++			};
++
++			i2c6: i2c@2600 {
++				compatible = "hpe,gxp-i2c";
++				reg = <0x2600 0x70>;
++				interrupts = <9>;
++				interrupt-parent = <&vic0>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++				hpe,sysreg = <&sysreg_system_controller>;
++				clock-frequency = <100000>;
++			};
++
++			i2c7: i2c@2700 {
++				compatible = "hpe,gxp-i2c";
++				reg = <0x2700 0x70>;
++				interrupts = <9>;
++				interrupt-parent = <&vic0>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++				hpe,sysreg = <&sysreg_system_controller>;
++				clock-frequency = <100000>;
++			};
++
++			i2c8: i2c@2800 {
++				compatible = "hpe,gxp-i2c";
++				reg = <0x2800 0x70>;
++				interrupts = <9>;
++				interrupt-parent = <&vic0>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++				hpe,sysreg = <&sysreg_system_controller>;
++				clock-frequency = <100000>;
++			};
++
++			i2c9: i2c@2900 {
++				compatible = "hpe,gxp-i2c";
++				reg = <0x2900 0x70>;
++				interrupts = <9>;
++				interrupt-parent = <&vic0>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++				hpe,sysreg = <&sysreg_system_controller>;
++				clock-frequency = <100000>;
++			};
+ 		};
+ 	};
+ };
 -- 
 2.17.1
 
