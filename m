@@ -2,97 +2,215 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D6D67B390
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Jan 2023 14:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A5967B518
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Jan 2023 15:50:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235279AbjAYNkl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 25 Jan 2023 08:40:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
+        id S235777AbjAYOuH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 25 Jan 2023 09:50:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjAYNkk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 25 Jan 2023 08:40:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1683F4DCD4;
-        Wed, 25 Jan 2023 05:40:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C59E3B81714;
-        Wed, 25 Jan 2023 13:40:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D69C433D2;
-        Wed, 25 Jan 2023 13:40:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674654036;
-        bh=Gsm6wMIJG6DsBaQdU2Cp1zJXJXZ3h6uadDA4nB+UVeE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qpdcFE7g3exQiUIbzkrhP1o2DZlB4IJBV1ixsJtWVPla5DlgsuPBM7tRSGlA5cvcO
-         Iw5APg3ziFp2BvuyjtYU/zV8oNUW0d9/T24IuKnXl7q/l4kA0fIYBEWPGnFkMq3tL5
-         R3DJx1mZGslDyB54/JDVWpGUaxRPE0N6M4DtVjp4ndPfMzljVFVZGStFIy4Jg6zMeD
-         HdK3UjxSIcuRvdwTXzGDR4XG0vufIdYYU1CTE73GUWEvd9pR02UqT+mRNWiyWgfd6z
-         smD13AwrtXRN097kV7TxZ89cX0voK/4t6jSnhFqIRThpL7VmXsVOO+Nha5951Psp8F
-         MlMR+q9iZ4ogA==
-Date:   Wed, 25 Jan 2023 14:40:33 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH resend 0/2] i2c/extcon: intel-cht-wc: Lenovo Yoga Tab 3
- Pro YT3-X90F support
-Message-ID: <Y9ExUbiHOgbHOBie@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>
-References: <20230125111209.18343-1-hdegoede@redhat.com>
- <Y9Et7nlUmiiPrFUQ@ninjato>
- <383fda33-143d-9e8e-1f7d-080931ae4496@redhat.com>
+        with ESMTP id S235046AbjAYOuG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 25 Jan 2023 09:50:06 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A3953565;
+        Wed, 25 Jan 2023 06:50:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674658205; x=1706194205;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6jf1bNTrhj6D0nCykWgjt9rnuHcE/6UtVJUKNcFDub4=;
+  b=kZ6JtyojOSdIjw5b4UobTGjDXm/SisAPqW9KI6NPtO5CXAqPa7HCnHjQ
+   rZ4trpb6ihXDLjNkkXA6LbIOgCmqSAv57K9AiWTp89XH8sZl40wtpR6ke
+   8igZl5lY500NnukikEG6YbZ8LwqHkt601zrEDksLeAgUuCxpJp3RzQ5af
+   JzipEsPfRsfz5KxzyIiIAkSajw4l42odV+rJG4SBhvUSm6VLFnNOmBBeu
+   9lh8HwKS/DIdl8dHYseYelzEibh88k6r9RdjK+CyxXvgqcSVQnz+wowVm
+   KF5V2rziIVHkIqBcKIHFFTJWQohSPpl2avpF0roGq8NIaTXIfRF83AmCD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="310143251"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="310143251"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 06:50:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="725874957"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="725874957"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 25 Jan 2023 06:49:59 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pKh64-00Etdz-1w;
+        Wed, 25 Jan 2023 16:49:56 +0200
+Date:   Wed, 25 Jan 2023 16:49:56 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+Subject: Re: [PATCH v7 5/7] media: i2c: add DS90UB960 driver
+Message-ID: <Y9FBlMl4b3l1zVck@smile.fi.intel.com>
+References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
+ <20230118124031.788940-6-tomi.valkeinen@ideasonboard.com>
+ <Y8gUuqLBXsXQoNUC@smile.fi.intel.com>
+ <aba49d82-c76f-7ff2-751c-d1be7b8f3bca@ideasonboard.com>
+ <Y8rFh6zO7Hp9mLxE@smile.fi.intel.com>
+ <4286abe2-f23f-d4c9-ef18-f351af7a3a8b@ideasonboard.com>
+ <Y9EcRlooHwIjOqiZ@smile.fi.intel.com>
+ <cad92dbb-43ef-fa8c-1962-13c4a8578899@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Vk1n9/8R0IEAM9f6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <383fda33-143d-9e8e-1f7d-080931ae4496@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cad92dbb-43ef-fa8c-1962-13c4a8578899@ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Wed, Jan 25, 2023 at 03:33:35PM +0200, Tomi Valkeinen wrote:
+> On 25/01/2023 14:10, Andy Shevchenko wrote:
+> > On Wed, Jan 25, 2023 at 01:15:34PM +0200, Tomi Valkeinen wrote:
+> > > On 20/01/2023 18:47, Andy Shevchenko wrote:
 
---Vk1n9/8R0IEAM9f6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+...
+
+> > > > > > > +	ret = fwnode_property_read_u32(link_fwnode, "ti,eq-level", &eq_level);
+> > > > > > > +	if (ret) {
+> > > > > > > +		if (ret != -EINVAL) {
+> > > > > > > +			dev_err(dev, "rx%u: failed to read 'ti,eq-level': %d\n",
+> > > > > > > +				nport, ret);
+> > > > > > > +			return ret;
+> > > > > > > +		}
+> > > > 
+> > > > This seems like trying to handle special cases, if you want it to be optional,
+> > > > why not ignoring all errors?
+> > > 
+> > > I don't follow. Why would we ignore all errors even if the property is
+> > > optional? If there's a failure in reading the property, or checking if it
+> > > exists or not, surely that's an actual error to be handled, not to be
+> > > ignored?
+> > 
+> > What the problem to ignore them?
+> 
+> Well, probably nothing will explode if we just ignore them. But... Why would
+> we ignore them?
+> 
+> > But if you are really pedantic about it, perhaps the proper way is to add
+> > 
+> > fwnode_property_*_optional()
+> > 
+> > APIs to the set where you take default and return 0 in case default had been
+> > used for the absent property.
+> 
+> Perhaps, but I don't have a default value here.
+
+It's impossible. You have one. 0 is also can be default.
+
+> In any case, I'm not quite sure what you are arguing here. Is it just that
+> you don't think the error check is necessary and should be dropped?
+
+Yes, I do not see the value of these complex error checking.
+Dropping that makes it KISS. I.o.w. why do we care about errors
+if the property is optional? Make it mandatory otherwise.
+
+> > > > > > > +	} else if (eq_level > UB960_MAX_EQ_LEVEL) {
+> > > > > > > +		dev_err(dev, "rx%u: illegal 'ti,eq-level' value: %d\n", nport,
+> > > > > > > +			eq_level);
+> > > > 
+> > > > This part is a validation of DT again, but we discussed above this.
+> > > > 
+> > > > > > > +	} else {
+> > > > > > > +		rxport->eq.manual_eq = true;
+> > > > > > > +		rxport->eq.manual.eq_level = eq_level;
+> > > > > > > +	}
+> > 
+> > ...
+> > 
+> > > > > > > +struct ds90ub9xx_platform_data {
+> > > > > > > +	u32 port;
+> > > > > > > +	struct i2c_atr *atr;
+> > > > > > > +	unsigned long bc_rate;
+> > > > > > 
+> > > > > > Not sure why we need this to be public except, probably, atr...
+> > > > > 
+> > > > > The port and atr are used by the serializers, for atr. The bc_rate is used
+> > > > > by the serializers to figure out the clocking (they may use the FPD-Link's
+> > > > > frequency internally).
+> > > > 
+> > > > The plain numbers can be passed as device properties. That's why the question
+> > > > about platform data. Platform data in general is discouraged to be used in a
+> > > > new code.
+> > > 
+> > > Device properties, as in, coming from DT?
+> > 
+> >  From anywhere.
+> > 
+> > > The port could be in the DT, but
+> > > the others are not hardware properties.
+> > 
+> > Why do we need them? For example, bc_rate.
+> 
+> The atr pointer is needed so that the serializers (ub913, ub953) can add
+> their i2c adapter to the deserializer's i2c-atr. The port is also needed for
+> that.
+> 
+> The bc rate (back-channel rate) is the FPD-Link back-channel rate which the
+> serializers use for various functionalities. At the moment only the ub953
+> uses it for calculating an output clock rate.
+> 
+> The bc-rate could be implemented using the clock framework, even if it's not
+> quite a plain clock. I had that code at some point, but it felt a bit off
+> and as we needed the pdata for the ATR, I added the bc-rate there.
+
+And I don't see why it is not a property of the device.
+
+> > > Yes, I don't like using platform data. We need some way to pass information
+> > > between the drivers.
+> > 
+> > Device properties allow that and targeting to remove the legacy platform data
+> > in zillions of the drivers.
+> 
+> Do you have any pointers to guide me into the right direction? I couldn't
+> find anything with some grepping and googling.
+> 
+> If you mean "device properties" as in ACPI, and so similar to DT properties,
+> aren't those hardware properties? Only the port here is about the hardware.
+
+About hardware, or PCB, or as quirks for missing DT/ACPI/any FW properties,
+like clock rates.
+
+The Linux kernel layer for that is called software nodes. The rough
+approximation to see where and how it's being used can be achieved
+by grepping for specific macros:
+
+	git grep -lw PROPERTY_ENTRY_.*
+
+E.g. arch/arm/mach-tegra/board-paz00.c tegra_paz00_wifikill_init()
+implementation.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-> Wolfram, may I/we have your ack for merging the small i2c change
-> through the MFD tree?
-
-Patch 1 already has my ack :)
-
-
---Vk1n9/8R0IEAM9f6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPRMVEACgkQFA3kzBSg
-KbbH6RAAs0UIiogXMSrliwrf42w7e7vSDtTjYRGut6rURlsnOH+JsLnnDZ5OAcTd
-+93KooyX3leUDXbGdHbj/Tv4eITsn+XeTgfqtyZvLqrdLwgb0fHI8XbKMDU51Bu9
-LM0Ohrx8zrUYGsa/MDW9WD49lf2LSviPPIsYWXnD484/swhw+iS86nIZ1M6U5O5E
-uQJM9/dBx9QTr9wOozM5+Qzk4lxsOHUAOeYicYAdBVssIjbPUaaafurrLKz+JvM7
-h030Co9u/1x/qZBCk78pBLkvokf/jnt7ZT1pYD4LQD6MKOItBWa2/YzXWUh7wRnm
-+H1vlk4ctHTg3w1Q5igGqrXKpbNqInOd3eyxpYKe8TzfPu65RcnMen8BMOAl/7mN
-D/dOT6G0OIMELz/k3i6RDoKWaWcsHmlPmNm1h0sQGMAKadm0BRST+FnDMFR1p0A1
-N3Y10a2empJkAY9w1mfVZ9T03LRoLlB3oe8c36olqv34oKZmr5wJOCae62hfE/eo
-cuJvppcBIfomXeszr+C8w/QokSqrZle5NE5FNWNXDTei7OpffyhMrtzPxjcyEAqA
-DX79dz5/Uyaje9tZnAIYmPsX8+z0Ph9WTwiSvM4SylC/hXVMRjylU5jQGDwziZKv
-QlY4aIvv1NSUAQhkpTHhVgHNRz9oi+fcAhAXALVjEKkBHhiC/Fo=
-=1oFK
------END PGP SIGNATURE-----
-
---Vk1n9/8R0IEAM9f6--
