@@ -2,44 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225BE67B0ED
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Jan 2023 12:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E87767B168
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Jan 2023 12:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235535AbjAYLQj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 25 Jan 2023 06:16:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
+        id S235406AbjAYLet (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 25 Jan 2023 06:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235211AbjAYLQK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 25 Jan 2023 06:16:10 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373C45829C;
-        Wed, 25 Jan 2023 03:15:40 -0800 (PST)
+        with ESMTP id S235688AbjAYLed (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 25 Jan 2023 06:34:33 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F838E;
+        Wed, 25 Jan 2023 03:34:32 -0800 (PST)
 Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9E0E76E0;
-        Wed, 25 Jan 2023 12:15:36 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D6AD26E0;
+        Wed, 25 Jan 2023 12:34:27 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674645337;
-        bh=qdVJ9fmCVTvr/pJW1ryRSDikxU7DjfofE9pKPThXWT0=;
+        s=mail; t=1674646469;
+        bh=7h8gV3yROK10RMIraRxPOa8yE19c0tpUmSaniy7cNbI=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=sfXE0Ac2AeclD3GWU1Hz/WPOi3SUtpKLkT27/7HNfgVyoJlV5Rh+CHFyF7qWdA/VG
-         zCDfAk2Zswdu66Nptb6xllk9tGwUTm/xFV9dIuP0tC+muvFPyu8Y5CWr7It1ycgZmd
-         uYh1DvTxgASEDythevlbY2asIx5yWtE+uI7IfG7g=
-Message-ID: <4286abe2-f23f-d4c9-ef18-f351af7a3a8b@ideasonboard.com>
-Date:   Wed, 25 Jan 2023 13:15:34 +0200
+        b=AIKjvsYuq+yp2jYzws9CkAi5YnUeSPQvSH57bvW85payAjSQWQmthNo3+GL1M1Hkf
+         mNvH9iscZmWmUrl+bJrcFeP3C3hx7BBKDRlSJr8rDGohi1A2M7Eod+G+cQpktT1uYe
+         TFgAYti4YF7v0gUqKQbEg7nVvbm1a1B4XkP36n0s=
+Message-ID: <a59ea457-58df-0058-ddaf-c605e5432864@ideasonboard.com>
+Date:   Wed, 25 Jan 2023 13:34:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v7 5/7] media: i2c: add DS90UB960 driver
+Subject: Re: [PATCH v8 5/7] media: i2c: add DS90UB960 driver
 Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
         Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
         Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Peter Rosin <peda@axentia.se>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -50,14 +50,17 @@ Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         Hans Verkuil <hverkuil@xs4all.nl>,
         Mike Pagano <mpagano@gentoo.org>,
         =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
- <20230118124031.788940-6-tomi.valkeinen@ideasonboard.com>
- <Y8gUuqLBXsXQoNUC@smile.fi.intel.com>
- <aba49d82-c76f-7ff2-751c-d1be7b8f3bca@ideasonboard.com>
- <Y8rFh6zO7Hp9mLxE@smile.fi.intel.com>
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+References: <20230120153417.1156207-1-tomi.valkeinen@ideasonboard.com>
+ <20230120153417.1156207-6-tomi.valkeinen@ideasonboard.com>
+ <Y88EhodG7b+oSvtE@pendragon.ideasonboard.com>
+ <beaebec6-4ec5-8041-5f70-a974ae417a78@ideasonboard.com>
+ <Y9AjFcsQQZqZBhAb@pendragon.ideasonboard.com>
+ <ead8904b-0e17-81e7-98a8-19e4abfdf281@ideasonboard.com>
+ <Y9EAw+PUwZJFH+NO@pendragon.ideasonboard.com>
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <Y8rFh6zO7Hp9mLxE@smile.fi.intel.com>
+In-Reply-To: <Y9EAw+PUwZJFH+NO@pendragon.ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,492 +72,165 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andy,
-
-On 20/01/2023 18:47, Andy Shevchenko wrote:
-
->>> Esp. taking into account that some of them are using actually
->>> post-inc. Why this difference?
+On 25/01/2023 12:13, Laurent Pinchart wrote:
+> Hi Tomi,
+> 
+> On Wed, Jan 25, 2023 at 09:39:57AM +0200, Tomi Valkeinen wrote:
+>> On 24/01/2023 20:27, Laurent Pinchart wrote:
 >>
->> Possibly a different person has written that particular piece of code, or
->> maybe a copy paste from somewhere.
->>
->> I'm personally fine with seeing both post and pre increments in code.
-> 
-> I'm not :-), if it's not required by the code. Pre-increment always puzzles
-> me: Is here anything I have to pay an additional attention to?
-
-That is interesting, as to me pre-increment is the simpler, more obvious 
-case. It's just:
-
-v = v + 1
-v
-
-Whereas post-increment is:
-
-temp = v
-v = v + 1
-temp
-
-In any case, we're side-tracking here, I think =).
-
->>>> +		struct ub960_rxport *rxport = priv->rxports[nport];
->>>> +
->>>> +		if (!rxport || !rxport->vpoc)
->>>> +			continue;
->>>> +
->>>> +		ret = regulator_enable(rxport->vpoc);
->>>> +		if (ret)
->>>> +			goto err_disable_vpocs;
->>>> +	}
-> 
-> ...
-> 
->>>> +	if (WARN_ON(strobe_pos < UB960_MIN_MANUAL_STROBE_POS ||
->>>> +		    strobe_pos > UB960_MAX_MANUAL_STROBE_POS))
->>>> +		return;
+>>>>>> +	} else if (ret < 0) {
+>>>>>> +		dev_err(dev, "rx%u: failed to read 'ti,cdr-mode': %d\n", nport,
+>>>>>
+>>>>> If you moved the "ti,cdr-mode" to an argument, printed with %s, the same
+>>>>> format string would be used for the other properties below, and should
+>>>>> thus be de-duplicated by the compiler.
+>>>>
+>>>> I'm not quite sure if this is a sensible optimization or not, but I did
+>>>> it so that I introduce:
+>>>>
+>>>> const char *read_err_str = "rx%u: failed to read '%s': %d\n";
 >>>
->>> Always be careful about WARN*() APIs because with a little trick they may
->>> become equivalent to BUG() which is a beast that nobody likes. I.o.w.
->>> you have to have justify why this is needed and can't be replaced with
->>> dev_*() or analogue.
+>>> static
 >>>
->>> Same for the other places with WARN*().
->>
->> Valid point. I think most of them here are in cases that really shouldn't
->> happen. But if they do happen, I'd like to see a big loud shout about it.
-> 
-> ...if you have time to catch it. Read about "panic_on_warn".
-
-Reading about WARNs on coding-style.rst, it very much sounds like the 
-WARNs in the driver were fine: they were in places that are never 
-supposed to happen. However, I have already dropped them, and I'm fine 
-keeping it that way.
-
->> The above is not a best example of this, and I think I can just drop the
->> above warns, but, e.g. handling the default case for "switch
->> (rxport->rx_mode)" (which shouldn't happen), I'd prefer to have a big yell
->> in place rather than return silently or print a "normal" error print.
->>
->> Obviously WARN is not a good one if it can be toggled to become a BUG.
->>
->> So... I think I'll just drop most of them and probably convert the rest
->> (two, actually) to dev_errs.
-> 
-> ...
-> 
->>>> +	if (strobe_pos < -7)
->>>> +		clk_delay = abs(strobe_pos) - 6;
->>>> +	else if (strobe_pos > 7)
->>>> +		data_delay = strobe_pos - 6;
->>>> +	else if (strobe_pos < 0)
->>>> +		clk_delay = abs(strobe_pos) | UB960_IR_RX_ANA_STROBE_SET_CLK_NO_EXTRA_DELAY;
->>>> +	else if (strobe_pos > 0)
->>>> +		data_delay = strobe_pos | UB960_IR_RX_ANA_STROBE_SET_DATA_NO_EXTRA_DELAY;
+>>>> and then use that in the function, which makes the lines much shorter
+>>>> and, I think, a bit more readable.
 >>>
->>> I'm wondering if clamp_t()/clamp_val() can be utilised here... And maybe in other
->>> places in the driver.
+>>> If you use the same string literal multiple times, the compiler should
+>>> de-duplicate it automatically, so you don't have to create a variable
+>>> manually.
 >>
->> Hmm, I'm not sure how.
+>> Yes, but I think this looked better, as it made the code look less
+>> cluttered, and the point is more obvious. Otherwise, looking at the
+>> code, seeing dev_dbg(dev, "Foo %s\n", "bar"); looks pretty weird.
 > 
-> I can't suggest you, because it's magic to me what is going on, e.g. for
-> the strobe_pos < -7 case, and why abs(strobe_pos) - 6 wouldn't overflow
-> the bit field or whatever that uses it.
-
-Ah, I see, you were thinking of ensuring the input parameters are in 
-range. I thought you meant to somehow optimize the "algorithm" above 
-with clamps.
-
-I don't think clamps are needed, the input parameters should always be 
-in range, as they are validated when reading the DT.
-
-> ...
+> I find
 > 
->>>> +	if (eq_level <= 7) {
->>>> +		eq_stage_1_select_value = eq_level;
->>>> +		eq_stage_2_select_value = 0;
->>>> +	} else {
->>>> +		eq_stage_1_select_value = 7;
->>>> +		eq_stage_2_select_value = eq_level - 7;
+> 	dev_dbg(dev, read_err_str, port, "ti,cdr-mode", ret);
+> 
+> less readable as I then have to look up the read_err_str string to
+> understand that line. I also wonder, in that case, if the compiler can
+> still warn if the format string doesn't match the argument types.
+
+That's a good point, it doesn't.
+
+>>>>>> +static void ub960_notify_unbind(struct v4l2_async_notifier *notifier,
+>>>>>> +				struct v4l2_subdev *subdev,
+>>>>>> +				struct v4l2_async_subdev *asd)
+>>>>>> +{
+>>>>>> +	struct ub960_rxport *rxport = to_ub960_asd(asd)->rxport;
+>>>>>> +
+>>>>>> +	rxport->source_sd = NULL;
+>>>>>
+>>>>> Does this serve any purpose ? If not, I'd drop the unbind handler.
+>>>>
+>>>> It makes sure we don't access the source subdev after it has been
+>>>> unbound. I don't see much harm with this function, but can catch cleanup
+>>>> errors.
 >>>
->>> A lot of magic 7 in the code. Are they all of the same semantic? Are they can
->>> be converted to use a macro (including respective MIN/MAX macros)?
+>>> Do you mean we'll crash on a NULL pointer dereference instead of
+>>> accessing freed memory if this happens ? I suppose it's marginally
+>>> better :-)
 >>
->> It's related to how the value has to be encoded into the register. We keep
->> the equalization level in a simple variable, but need to write it like this
->> into the register. I'm not sure what I would call the magic 7 here.
+>> Generally speaking I think it's significantly better. Accessing freed
+>> memory might go unnoticed for a long time, and might not cause any
+>> errors or cause randomly some minor errors. Here we might not even be
+>> accessing freed memory, as the source sd is probably still there, so
+>> KASAN wouldn't catch it.
 >>
->> Then for the strobe position, we use a logical signed value between -7 and
->> 7, so we have to +7 when writing that to a register. Except when using a
->> manual strobe position, where the range is -13 to 13 (7+6, that's the 6 in
->> ub960_rxport_set_strobe_pos()).
+>> In this particular case it might not matter that much. The source_sd is
+>> only used when starting streaming, so the chances are quite small that
+>> we'd end up there after the unbind.
 >>
->> It's rather confusing, in my opinion, but I think defines may just make this
->> more confusing. The magic numbers used should always be very close to the
->> registers in question, so if you know how the HW works wrt. strobe & eq,
->> they should be "clear". I'll try to come up with defines that make this
->> clearer, but no promises.
+>> Still, I think it's a very good practice to NULL the pointers when
+>> they're no longer valid.
 > 
-> Obviously I disagree on the fact that it's more confusing. Consider that 7
-> and 7. How do I know that their semantics is the same or different? With
-> the name assigned it's differentiated by the name used.
-
-I have added defines for these now.
-
-> ...
+> Fine with me.
 > 
->>>> +	ub960_rxport_read(priv, nport, UB960_RR_AEQ_BYPASS, &v);
->>>> +
->>>> +	v &= ~(UB960_RR_AEQ_BYPASS_EQ_STAGE1_VALUE_MASK |
->>>> +	       UB960_RR_AEQ_BYPASS_EQ_STAGE2_VALUE_MASK);
->>>> +	v |= eq_stage_1_select_value << UB960_RR_AEQ_BYPASS_EQ_STAGE1_VALUE_SHIFT;
->>>> +	v |= eq_stage_2_select_value << UB960_RR_AEQ_BYPASS_EQ_STAGE2_VALUE_SHIFT;
->>>> +	v |= UB960_RR_AEQ_BYPASS_ENABLE; /* Enable AEQ Bypass */
->>>> +
->>>> +	ub960_rxport_write(priv, nport, UB960_RR_AEQ_BYPASS, v);
+>>>>>> +}
 >>>
->>> Can't you provide ub960_rxport_update_bits() ?
->>
->> I could, but I think it's worse:
->>
->> ub960_rxport_update_bits(priv, nport, UB960_RR_AEQ_BYPASS,
->> 	UB960_RR_AEQ_BYPASS_EQ_STAGE1_VALUE_MASK |
->> 		UB960_RR_AEQ_BYPASS_EQ_STAGE2_VALUE_MASK |
->> 		UB960_RR_AEQ_BYPASS_ENABLE,
->> 	(eq_stage_1_select_value
->> 	 << UB960_RR_AEQ_BYPASS_EQ_STAGE1_VALUE_SHIFT) |
->> 		(eq_stage_2_select_value
->> 		 << UB960_RR_AEQ_BYPASS_EQ_STAGE2_VALUE_SHIFT) |
->> 		UB960_RR_AEQ_BYPASS_ENABLE /* Enable AEQ Bypass */
->> );
->>
->> Indenting it differently, I think it's still worse:
->>
->> ub960_rxport_update_bits(priv, nport, UB960_RR_AEQ_BYPASS,
->> 	UB960_RR_AEQ_BYPASS_EQ_STAGE1_VALUE_MASK |
->> 	UB960_RR_AEQ_BYPASS_EQ_STAGE2_VALUE_MASK |
->> 	UB960_RR_AEQ_BYPASS_ENABLE,
->> 	(eq_stage_1_select_value << UB960_RR_AEQ_BYPASS_EQ_STAGE1_VALUE_SHIFT) |
->> 	(eq_stage_2_select_value << UB960_RR_AEQ_BYPASS_EQ_STAGE2_VALUE_SHIFT) |
->> 	UB960_RR_AEQ_BYPASS_ENABLE /* Enable AEQ Bypass */
->> );
-> 
-> You can always use temporary variables to make code better to read.
-> But it's up to you. Usually the R-M-W <--> vs. U is about locking or
-> serialisation and handling it in a separate code is better.
-> 
-> ...
-> 
->>>> +	ret = ub960_rxport_read(priv, nport, UB960_RR_RX_PAR_ERR_HI, &v1);
->>>> +	if (ret)
->>>> +		return ret;
->>>> +
->>>> +	ret = ub960_rxport_read(priv, nport, UB960_RR_RX_PAR_ERR_LO, &v2);
->>>> +	if (ret)
->>>> +		return ret;
+>>> [snip]
 >>>
->>> Can this be read at once as BE16/LE16 value?
->>> Or if the stream of bytes, you can use le/be16_to_cpu().
+>>>>>> +static int ub960_create_subdev(struct ub960_data *priv)
+>>>>>> +{
+>>>>>> +	struct device *dev = &priv->client->dev;
+>>>>>> +	unsigned int i;
+>>>>>> +	int ret;
+>>>>>> +
+>>>>>> +	v4l2_i2c_subdev_init(&priv->sd, priv->client, &ub960_subdev_ops);
+>>>>>
+>>>>> A blank line would be nice.
+>>>>
+>>>> Ok.
+>>>>
+>>>>>> +	v4l2_ctrl_handler_init(&priv->ctrl_handler, 1);
+>>>>>
+>>>>> You create two controls.
+>>>>
+>>>> Yep. Although I dropped TPG, so only one again.
+>>>>
+>>>>>> +	priv->sd.ctrl_handler = &priv->ctrl_handler;
+>>>>>> +
+>>>>>> +	v4l2_ctrl_new_std_menu_items(&priv->ctrl_handler, &ub960_ctrl_ops,
+>>>>>> +				     V4L2_CID_TEST_PATTERN,
+>>>>>> +				     ARRAY_SIZE(ub960_tpg_qmenu) - 1, 0, 0,
+>>>>>> +				     ub960_tpg_qmenu);
+>>>>>> +
+>>>>>> +	v4l2_ctrl_new_int_menu(&priv->ctrl_handler, NULL, V4L2_CID_LINK_FREQ,
+>>>>>> +			       ARRAY_SIZE(priv->tx_link_freq) - 1, 0,
+>>>>>> +			       priv->tx_link_freq);
+>>>>>> +
+>>>>>> +	if (priv->ctrl_handler.error) {
+>>>>>> +		ret = priv->ctrl_handler.error;
+>>>>>> +		goto err_free_ctrl;
+>>>>>> +	}
+>>>>>> +
+>>>>>> +	priv->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+>>>>>> +			  V4L2_SUBDEV_FL_HAS_EVENTS | V4L2_SUBDEV_FL_STREAMS;
+>>>>>> +	priv->sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
+>>>>>> +	priv->sd.entity.ops = &ub960_entity_ops;
+>>>>>> +
+>>>>>> +	for (i = 0; i < priv->hw_data->num_rxports + priv->hw_data->num_txports; i++) {
+>>>>>> +		priv->pads[i].flags = ub960_pad_is_sink(priv, i) ?
+>>>>>> +					      MEDIA_PAD_FL_SINK :
+>>>>>> +					      MEDIA_PAD_FL_SOURCE;
+>>>>>> +	}
+>>>>>> +
+>>>>>> +	ret = media_entity_pads_init(&priv->sd.entity,
+>>>>>> +				     priv->hw_data->num_rxports +
+>>>>>> +					     priv->hw_data->num_txports,
+>>>>>
+>>>>> :-(
+>>>>
+>>>> I don't have strong opinion on this, but don't you find it a bit
+>>>> confusing if a single argument spans multiple lines but without any indent?
+>>>>
+>>>> With a quick look, this looks like a call with 4 arguments:
+>>>>
+>>>> ret = media_entity_pads_init(&priv->sd.entity,
+>>>> 			     priv->hw_data->num_rxports +
+>>>> 			     priv->hw_data->num_txports,
+>>>> 			     priv->pads);
+>>>
+>>> I suppose I'm used to it, so it appears more readable to me. It's also
+>>> the style used through most of the kernel. There's of course always the
+>>> option of storing the result of the computation in a local variable.
 >>
->> I'm not sure, possibly. But is it worth it? I'd need to add new helper
->> functions to read such a value.
+>> I'll be happy to indent like that if someone tells me how to configure
+>> clang-format to do that =). I didn't figure it out.
 > 
-> I think it worth it to show exactly what is provided by the hardware
-> and how we handle it (endianess wise).
-> 
->>>> +	parity_errors = (v1 << 8) | v2;
-> 
-> ...
-> 
->>>> +	*ok = !errors;
->>>
->>> How this is different to the something like returning 1 here (and 0 above)?
->>> You may save some code by dropping redundant parameter.
->>
->> Return value 1 means there was an error when reading the register values. 0
->> means we read the values, and "ok" contains a summary (ok or not) of the
->> link's status.
-> 
-> I was expecting that error is negative, no?
+> Setting ContinuationIndentWidth to 0 "fixes" it, but I suspect it may
+> have other side effects.
 
-Ah, sorry. I meant the return value is negative if there was an error.
+Yes, it creates some funny indenting, like:
 
-Yes, the "ok" value could be returned as 0 or 1. But I don't usually 
-like combining the error code and the return value, it just makes 
-messier code.
+ret =
+func(......);
 
->>>> +	return 0;
-> 
-> ...
-> 
->>>> +	while (time_before(jiffies, timeout)) {
->>>> +		missing = 0;
->>>> +
->>>> +		for_each_set_bit(nport, &port_mask,
->>>> +				 priv->hw_data->num_rxports) {
->>>> +			struct ub960_rxport *rxport = priv->rxports[nport];
->>>> +			bool ok;
->>>> +
->>>> +			if (!rxport)
->>>> +				continue;
->>>> +
->>>> +			ret = ub960_rxport_link_ok(priv, nport, &ok);
->>>> +			if (ret)
->>>> +				return ret;
->>>> +
->>>> +			if (!ok || !(link_ok_mask & BIT(nport)))
->>>> +				missing++;
->>>> +
->>>> +			if (ok)
->>>> +				link_ok_mask |= BIT(nport);
->>>> +			else
->>>> +				link_ok_mask &= ~BIT(nport);
->>>> +		}
->>>> +
->>>> +		loops++;
->>>> +
->>>> +		if (missing == 0)
->>>> +			break;
->>>> +
->>>> +		msleep(50);
->>>> +	}
->>>
->>> You can wrap the body into readx_poll_timeout() from iopoll.h.
->>
->> Hmm... How would I do that? With some kind of helper structs to wrap the
->> input and output parameters? Sounds very messy, but maybe I'm missing
->> something.
-> 
-> It's me who added extra 'x', what I meant is read_poll_timeout(). It
-> accepts variadic arguments, i.o.w. any function with any arguments can
-> be provided.
+> This being said, running clang-format on this file gives me a diffstat
+> of 450 insertions(+), 365 deletions(-), so I don't think you can rely on
+> it blindly...
 
-I see. Yes, I see how it would be used. read_poll_timeout() uses 
-sleep_range, though, and we're sleeping more than the recommended limit 
-of 20ms. It's also slightly messy, as we need to keep some state 
-(link_ok_mask, loops is optional).
-
-> ...
-> 
->>>> +		ub960_rxport_read(priv, nport, UB960_RR_RX_FREQ_HIGH, &v1);
->>>> +		ub960_rxport_read(priv, nport, UB960_RR_RX_FREQ_LOW, &v2);
->>>
->>> Same Q, can these be unified to some kind of bulk read?
->>
->> Perhaps, but again, I don't see the value for creating a bulk read helper
->> function for these few cases.
-> 
-> OK.
-> 
-> ...
-> 
->>>> +		dev_dbg(dev, "\trx%u: locked, SP: %d, EQ: %u, freq %u Hz\n",
->>>> +			nport, strobe_pos, eq_level,
->>>> +			v1 * 1000000 + v2 * 1000000 / 256);
->>>
->>> Even this will be simpler with above suggestion.
->>
->> Hmm... How is that?
-> 
-> 		dev_dbg(dev, "\trx%u: locked, SP: %d, EQ: %u, freq %u Hz\n",
-> 			nport, strobe_pos, eq_level, v * 1000000 / 256);
-> 
-> See?
-
-Ah, of course, 256 is 1 << 8. The HW documentation just said that the 
-high byte is the MHz part and the low byte is the fractional part in 
-1/256, and I went with that without thinking about it.
-
-This has the small complication that it overflows 32 bit variables, so I 
-need to use 64 bit.
-
-I have added 16 bit register access functions.
-
-> ...
-> 
->>>> +	for (nport = 0; nport < priv->hw_data->num_rxports; ++nport) {
->>>
->>> Post-inc?
->>
->> I still like pre-inc =).
->>
->> I see there's a mix os post and pre incs in the code. I'll align those when
->> I encounter them, but I don't think it's worth the effort to methodically go
->> through all of them to change them use the same style.
-> 
-> Kernel uses post-inc is an idiom for loops:
-> 
-> $ git grep -n -w '[_a-z0-9]\+++' | wc -l
-> 148693
-> 
-> $ git grep -n -w ' ++[a-z0-9_]\+' | wc -l
-> 8701
-> 
-> So, non-standard pattern needs to be explained.
-> 
->>>> +	}
-> 
-> ...
-> 
->>>> +	for (unsigned int i = 0; i < 6; ++i)
->>>> +		ub960_read(priv, UB960_SR_FPD3_RX_ID(i), &id[i]);
->>>> +	id[6] = 0;
->>>
->>> If it's only for printing, the 0 is not needed...
->>>
->>>> +	dev_info(dev, "ID '%s'\n", id);
->>>
->>> ...as you may put it as
->>>
->>> 	dev_info(dev, "ID: '%.*s'\n", (int)sizeof(id), id);
->>>
->>> (I wrote from the top of my head, maybe not compilable as is).
->>
->> And you think that is clearer? =)
-> 
-> To me, yes. Maybe because I'm familiar with that.
-> 
->> I have to disagree.
-> 
-> Your right :-)
-> 
-> ...
-> 
->> I'm not quite fine with dropping all these DT checks. If the user happens to
->> provide a DT with illegal values, the end results can be odd and the reason
->> quite difficult to figure out. Isn't it much better to have a few extra
->> checks in the driver?
-> 
-> As I said above, ask Rob, if he is fine with that I will have no objections.
-> 
-> ...
-> 
->>>> +		rxport->eq.strobe_pos = strobe_pos;
->>>> +		if (!priv->strobe.manual)
->>>> +			dev_warn(dev,
->>>> +				 "rx%u: 'ti,strobe-pos' ignored as 'ti,manual-strobe' not set\n",
->>>> +				 nport);
->>>> +	}
->>>
->>> This and below looks a bit different to the above in the same function. Perhaps
->>> these can be refactored to be less LoCs.
->>
->> Hmm what did you have in mind?
->>
->>>> +	ret = fwnode_property_read_u32(link_fwnode, "ti,eq-level", &eq_level);
->>>> +	if (ret) {
->>>> +		if (ret != -EINVAL) {
->>>> +			dev_err(dev, "rx%u: failed to read 'ti,eq-level': %d\n",
->>>> +				nport, ret);
->>>> +			return ret;
->>>> +		}
-> 
-> This seems like trying to handle special cases, if you want it to be optional,
-> why not ignoring all errors?
-
-I don't follow. Why would we ignore all errors even if the property is 
-optional? If there's a failure in reading the property, or checking if 
-it exists or not, surely that's an actual error to be handled, not to be 
-ignored?
-
->>>> +	} else if (eq_level > UB960_MAX_EQ_LEVEL) {
->>>> +		dev_err(dev, "rx%u: illegal 'ti,eq-level' value: %d\n", nport,
->>>> +			eq_level);
-> 
-> This part is a validation of DT again, but we discussed above this.
-> 
->>>> +	} else {
->>>> +		rxport->eq.manual_eq = true;
->>>> +		rxport->eq.manual.eq_level = eq_level;
->>>> +	}
-> 
-> ...
-> 
->>>> +err_pd_gpio:
->>>> +	if (priv->pd_gpio)
->>>
->>> Dup test.
->>
->> What do you mean dup? You mean gpiod_set_value_cansleep can be called with
->> gpio = NULL? The docs don't say this, but I guess that is the case.
-> 
-> Yes. This is the idea of having _optional() GPIO APIs.
-> 
->>>> +		gpiod_set_value_cansleep(priv->pd_gpio, 1);
-> 
-> ...
-> 
->>>> +	if (priv->pd_gpio)
->>>> +		gpiod_set_value_cansleep(priv->pd_gpio, 1);
-> 
-> Ditto.
-> 
-> ...
-> 
->>>> +	priv->hw_data = of_device_get_match_data(dev);
->>>
->>> Why of_ out of the blue?!
->>
->> Hmm... How do I get the data in a generic way? I'll have to study this a
->> bit.
-> 
-> Just drop of_ :-)
-> 
-> 	priv->hw_data = device_get_match_data(dev);
-> 
->>>> +	if (!priv->hw_data)
->>>> +		return -ENODEV;
-> 
-> ...
-> 
->>>> +	priv->current_indirect_target = 0xff;
->>>> +	priv->current_read_rxport = 0xff;
->>>> +	priv->current_write_rxport_mask = 0xff;
->>>> +	priv->current_read_csiport = 0xff;
->>>> +	priv->current_write_csiport_mask = 0xff;
->>>
->>> GENMASK()
->>
->> These are not masks, but invalid values. We set these to an invalid value
->> (0xff) so that when a reg access function next time checks if we are already
->> targeting, e.g. a particular rxport, it will always opt to select the rxport
->> by writing to the approriate registers.
-> 
-> Then define with respective name?
-
-I think the comment just above these should be enough:
-
-  * Initialize these to invalid values so that the first reg writes will
-  * configure the target.
-
-We're just initializing the fields to an unused value and the value has 
-no other meaning, and is not used anywhere else. We could as well 
-initialize to 0, and use +1 in the relevant code to avoid 0 being a 
-valid value.
-
-> ...
-> 
->>>> +struct ds90ub9xx_platform_data {
->>>> +	u32 port;
->>>> +	struct i2c_atr *atr;
->>>> +	unsigned long bc_rate;
->>>
->>> Not sure why we need this to be public except, probably, atr...
->>
->> The port and atr are used by the serializers, for atr. The bc_rate is used
->> by the serializers to figure out the clocking (they may use the FPD-Link's
->> frequency internally).
-> 
-> The plain numbers can be passed as device properties. That's why the question
-> about platform data. Platform data in general is discouraged to be used in a
-> new code.
-
-Device properties, as in, coming from DT? The port could be in the DT, 
-but the others are not hardware properties.
-
-Yes, I don't like using platform data. We need some way to pass 
-information between the drivers. Maybe a custom FPD-Link bus could do 
-that, but that's then going into totally new directions.
+True, although I the bulk of those are with the #defines and structs.
 
   Tomi
 
