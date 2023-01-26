@@ -2,40 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7EE867D612
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jan 2023 21:18:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C4D67D676
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jan 2023 21:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjAZUS4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 26 Jan 2023 15:18:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
+        id S231488AbjAZUd1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 26 Jan 2023 15:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjAZUSw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Jan 2023 15:18:52 -0500
+        with ESMTP id S229486AbjAZUd0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Jan 2023 15:33:26 -0500
 Received: from out-mx.sasg.de (out-mx.sasg.de [95.142.65.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E80E3A840
-        for <linux-i2c@vger.kernel.org>; Thu, 26 Jan 2023 12:18:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380A9233E9
+        for <linux-i2c@vger.kernel.org>; Thu, 26 Jan 2023 12:33:23 -0800 (PST)
 Received: from exch2012.heineopto.de (unknown [217.239.128.75])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by out-mx.sasg.de (Postfix) with ESMTPS id ED1FC20473;
-        Thu, 26 Jan 2023 21:18:47 +0100 (CET)
+        by out-mx.sasg.de (Postfix) with ESMTPS id 793AA20473;
+        Thu, 26 Jan 2023 21:33:22 +0100 (CET)
 Received: from exch2012.heineopto.de (10.80.0.10) by exch2012.heineopto.de
  (10.80.0.10) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.2375.34; Thu, 26
- Jan 2023 21:18:42 +0100
+ Jan 2023 21:33:22 +0100
 Received: from exch2012.heineopto.de ([fe80::29f7:554e:2485:f599]) by
  exch2012.heineopto.de ([fe80::29f7:554e:2485:f599%12]) with mapi id
- 15.01.2375.034; Thu, 26 Jan 2023 21:18:42 +0100
+ 15.01.2375.034; Thu, 26 Jan 2023 21:33:22 +0100
 From:   <RRademacher@heine.com>
 To:     <laurent.pinchart@ideasonboard.com>
 CC:     <linux-i2c@vger.kernel.org>
 Subject: AW: #Extern_Re: question about devicetree entry pca954x
 Thread-Topic: #Extern_Re: question about devicetree entry pca954x
-Thread-Index: AQHZMaf4pAvJYJLXN06F6qaGLQ2Y/66w7dQAgAAvzxI=
-Date:   Thu, 26 Jan 2023 20:18:42 +0000
-Message-ID: <234d0cd7383d4bad8aeda4f22feef575@heine.com>
-References: <6c4c41f6cac34573b2c5ab14cb0ba27e@heine.com>,<Y9LBNnW1Vx9pIy5r@pendragon.ideasonboard.com>
-In-Reply-To: <Y9LBNnW1Vx9pIy5r@pendragon.ideasonboard.com>
+Thread-Index: AQHZMaf4pAvJYJLXN06F6qaGLQ2Y/66w7dQAgAAvzxKAAAjPZQ==
+Date:   Thu, 26 Jan 2023 20:33:22 +0000
+Message-ID: <ca5f86514fc54f7a92dba756a301564d@heine.com>
+References: <6c4c41f6cac34573b2c5ab14cb0ba27e@heine.com>,<Y9LBNnW1Vx9pIy5r@pendragon.ideasonboard.com>,<234d0cd7383d4bad8aeda4f22feef575@heine.com>
+In-Reply-To: <234d0cd7383d4bad8aeda4f22feef575@heine.com>
 Accept-Language: de-DE, en-US
 Content-Language: de-DE
 X-MS-Has-Attach: 
@@ -52,6 +52,29 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Mr. Pinchart,
+
+i have to correct myself:
+the first call of handle_nested_interrupt happens already before pca954x_probe. i added some more DBGMSGs
+
+[    2.869856] [DBGMSG] handle_nested_irq :irq = 0xdf
+[    2.869858] [DBGMSG] handle_nested_irq :action = 0x7ba41100
+[    2.874477] [DBGMSG] handle_nested_irq :irqd_irq_disabled(&desc->irq_data): false
+[    2.874479] [DBGMSG] handle_nested_irq :(unlikely(!action || irqd_irq_disabled(&desc->irq_data))): false
+[    2.874501] [DBGMSG] handle_nested_irq :action->irq:df | action->dev_id:0x7ba64810
+[    6.373737] [DBGMSG] pca954x_probe :enter fxn
+[    6.973918] [DBGMSG] pca954x_probe :leave fxn
+
+
+Regards,
+Ralf
+
+Von: Rademacher Ralf
+Gesendet: Donnerstag, 26. Januar 2023 21:18
+An: Laurent Pinchart
+Cc: linux-i2c@vger.kernel.org
+Betreff: AW: #Extern_Re: question about devicetree entry pca954x
+    
 
 
 
@@ -63,7 +86,7 @@ Gesendet: Donnerstag, 26. Januar 2023 19:06
 An: Rademacher Ralf
 Cc: linux-i2c@vger.kernel.org
 Betreff: #Extern_Re: question about devicetree entry pca954x
-    
+    
 Warnung: Achtung - Diese E-Mail stammt von einer externen Quelle. Seien Sie vorsichtig mit Links und Anhängen.
 
 Warning: Attention - This e-mail is from an external source. Be careful with links and attachments.
@@ -187,7 +210,7 @@ during pca954x driver probe, there is the following output:
 [    2.869858] [DBGMSG] handle_nested_irq :action = 0x7ba41100
 [    2.874477] [DBGMSG] handle_nested_irq :irqd_irq_disabled(&desc->irq_data): false
 [    2.874479] [DBGMSG] handle_nested_irq :(unlikely(!action || irqd_irq_disabled(&desc->irq_data))): false
-[    2.874501] [DBGMSG] handle_nested_irq :action->irq:df | action->dev_id:0x7ba64810 
+[    2.874501] [DBGMSG] handle_nested_irq :action->irq:df | action->dev_id:0x7ba64810
 
 when a apds sends the interrupt signal to the pca954x, this happens:
 
@@ -208,4 +231,4 @@ Ralf Rademacher
 Regards,
 
 Laurent Pinchart
-    
+        
