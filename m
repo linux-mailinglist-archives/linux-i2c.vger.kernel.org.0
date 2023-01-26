@@ -2,110 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C6C67C6A7
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jan 2023 10:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60D8067C86C
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jan 2023 11:21:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236664AbjAZJLW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 Jan 2023 04:11:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54274 "EHLO
+        id S237149AbjAZKV4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 Jan 2023 05:21:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236296AbjAZJLW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Jan 2023 04:11:22 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D3C3EC40
-        for <linux-i2c@vger.kernel.org>; Thu, 26 Jan 2023 01:11:19 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id t10so1296907vsr.3
-        for <linux-i2c@vger.kernel.org>; Thu, 26 Jan 2023 01:11:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8SNsEiTCGlF2kxvhKH3RS9fyCJmlnEC5RQ9QnmfE1VQ=;
-        b=RmdA+GKDIbOYkibt2Hs4G/Ajp6ngHqBedoH0v8wYpYr62SYcuuUjvA1Af4C/sSWOFW
-         +eLQIS9ahzM9XXkbLXbZFO0Slwmhmr8Bccdvrq8b5ruN5kOUTnAPDK/w2GsXGVLICGFX
-         l5Qutisu7Y1gjSH8l8zb3pdAchm8arCRQ1wG0gUyOFHYnzeno3EBkbsjip3EsHVb5UeX
-         SH+k2cboFgvYIvg7+LQ/jeSyNmbK6vpUv+gzWMP5cQfZPXLvcqcN0x5405dB1u5iQqkN
-         WQHISYPBySBW2eMmHz3ZZ5RBmTNQVVr5oWP1Jvt5JwMkNzc2QQGYyAnIWxY1RCYCercO
-         EuUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8SNsEiTCGlF2kxvhKH3RS9fyCJmlnEC5RQ9QnmfE1VQ=;
-        b=wN+BMKACFpmZC69uxM3ZuuDQJLugApIOyUtdDdENU2h7uLoapHWxQ1115Dx+8o2mrO
-         jzEzf+cNLlGKKfrj2UhI/voh/vpfDZNA7eJdXeFHZ6E9rtf1lEBUd8NNyq6wC5C9fXF0
-         H1D58uFZ5BD8wn7P5ddJPKF6ef4Mu0T+ff1WTdldAZavBGSUQdb6hJroJVURD5Rrob08
-         cSuhVOgq4uBsRXO5+f2SyOG/tbJTW529Xo/P7hV51IfPZgguBe9KDcRCHYlVB2eTj1Ra
-         uW2U/B5Z9R17jiBP7anuIKgi2KRwXC7C7dwrwjl89iO1domN9naVzgWqaLBXjPrnHBWv
-         9Upw==
-X-Gm-Message-State: AFqh2koBhi96IE3xjChm2UXvUBK4kHUZz33O1+CNZEkRuCI1ZlnHs1bZ
-        8XllOiPtIQl3QTUX+tfOIWgxnl1myrxFcj8mbKhRMw==
-X-Google-Smtp-Source: AMrXdXtwW1E/r8kShMxieiJt2HZn9ZtIcNFEbyz4hLe6tsg1Wy08G9QeNw++duG4V/VAU3KXoaGXwvIkdWYo4NPyE8Y=
-X-Received: by 2002:a05:6102:3e08:b0:3c5:1ac1:bf38 with SMTP id
- j8-20020a0561023e0800b003c51ac1bf38mr5288497vsv.78.1674724278436; Thu, 26 Jan
- 2023 01:11:18 -0800 (PST)
+        with ESMTP id S237103AbjAZKVj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Jan 2023 05:21:39 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B49CA5EE;
+        Thu, 26 Jan 2023 02:21:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674728477; x=1706264477;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/Wdj5n8WybsZYtkV2jOsasrUUhnq8i1MgcmZSnWSJSg=;
+  b=FyiHZ00AmlV5cMXIVuXLnwRdxqk23SJon6/e8tKZ4jsvncTIYqhj0Bmh
+   Cse5ZiTgtXV5BZn0/9us917oyeiXkTNuygyxvvvEN9JLBpEHQmWeab40z
+   R6wuh1/DOr5/qwlVxx76NNSp5b+NR19c7G8dFSjbk2aD9Q80NBwnxWN+l
+   jsheza8XPogUUS0LpcntvzDCGkaGNedUidC1ad+Pt0J7FfMYfgGuW2r4b
+   F3LkKM2M/MLEZWQl09mNLbfZc5gJFVRhI9n+LbDONNFK9B23gLYTKNBBg
+   22+FS5ANsl5KSISvtQKPTBsKCbCVa8L27mNF6VYEQ0aQKe6h0ZLTLOFY5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="328861727"
+X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
+   d="scan'208";a="328861727"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 02:21:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="662804905"
+X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
+   d="scan'208";a="662804905"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 26 Jan 2023 02:21:09 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pKzNS-00FKzV-1t;
+        Thu, 26 Jan 2023 12:21:06 +0200
+Date:   Thu, 26 Jan 2023 12:21:06 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+Subject: Re: [PATCH v7 5/7] media: i2c: add DS90UB960 driver
+Message-ID: <Y9JUEv66Gze8FjMZ@smile.fi.intel.com>
+References: <Y8gUuqLBXsXQoNUC@smile.fi.intel.com>
+ <aba49d82-c76f-7ff2-751c-d1be7b8f3bca@ideasonboard.com>
+ <Y8rFh6zO7Hp9mLxE@smile.fi.intel.com>
+ <4286abe2-f23f-d4c9-ef18-f351af7a3a8b@ideasonboard.com>
+ <Y9EcRlooHwIjOqiZ@smile.fi.intel.com>
+ <cad92dbb-43ef-fa8c-1962-13c4a8578899@ideasonboard.com>
+ <Y9FBlMl4b3l1zVck@smile.fi.intel.com>
+ <5d208710-f284-e6e9-18dc-f5ef63a9ea44@ideasonboard.com>
+ <Y9FKcoVlgUWR4rhn@smile.fi.intel.com>
+ <04a82b08-524f-8d03-ac47-73d826907fc3@ideasonboard.com>
 MIME-Version: 1.0
-References: <20230118134940.240102-1-brgl@bgdev.pl> <Y9DpbChLZfDONHPz@ninjato> <Y9GpL9RBNM8H2ZSL@shikoro>
-In-Reply-To: <Y9GpL9RBNM8H2ZSL@shikoro>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 26 Jan 2023 10:11:07 +0100
-Message-ID: <CAMRc=McHowkYJBckM1eikcrBUoXXZN+OkozA-dNXZc1Zgd+Kfw@mail.gmail.com>
-Subject: Re: [PATCH v3] i2c: dev: don't allow user-space to deadlock the kernel
-To:     Wolfram Sang <wsa@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URI_DOTEDU
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <04a82b08-524f-8d03-ac47-73d826907fc3@ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 11:12 PM Wolfram Sang <wsa@kernel.org> wrote:
->
->
-> > So, this code handled all my stress-testing well so far. I'll try to
-> > think of some more ideas until this evening, but likely I will apply it
-> > later. Nonetheless, more review eyes are still welcome!
->
-> Ah yes, I now recalled why I had the gut feeling that this solution is
-> not complete. See this mail thread from 2015:
->
-> https://lkml.iu.edu/hypermail/linux/kernel/1501.2/01700.html
->
-> There are still drivers using i2c_del_adapter()+kfree(), so removing the
-> completion could cause use-after-free there, or?
->
+On Thu, Jan 26, 2023 at 10:41:47AM +0200, Tomi Valkeinen wrote:
+> On 25/01/2023 17:27, Andy Shevchenko wrote:
 
-Ugh, what a mess... I was mostly focused on the character device side
-of it but now I realized the true extent of the problem.
+...
 
-It's not like there are just *some* odd drivers that delete the
-adapter struct at .remove() - it's literally all of them one way or
-another.
+> > But I probably don't understand the ATR structure and what exactly we need to
+> > pass to it, perhaps it also can be replaced with properties (note, that we have
+> > some interesting ones that called references, which is an alternative to DT
+> > phandle).
+> 
+> Well, maybe this needs a Linux bus implementation. I'm not that familiar
+> with implementing a bus, but I think that would make it easier to share data
+> between the deserializer and the serializer. A bus sounds a bit like an
+> overkill for a 1-to-1 connection, used by a few drivers, but maybe it
+> wouldn't be too much code.
 
-It's all because the adapter struct really should be allocated by
-i2c_add_adapter() and bus drivers should only really provide some
-structure containing the adapter description for the subsystem the
-lifetime of which would not affect the adapter itself. This way the
-adapter (embedding struct device) would be freed by device type's
-.release() like we do over in the GPIO subsystem. Instead the adapter
-struct is allocated by drivers at .probe() meaning it will get dropped
-at .remove().
+Have you looked at auxiliary bus (appeared a few releases ago in kernel)?
 
-I wonder how many more subsystems do that. No wonder people blame
-devres for these user-space device node crashes...
+-- 
+With Best Regards,
+Andy Shevchenko
 
-I don't have a good solution. I've been thinking about it for an hour
-and every solution requires sweeping changes across the entire
-subsystem. Or else we'd introduce a parallel solution that would do
-the right thing and wait in perpetuity until all drivers convert -
-like with i2e probe_new() which is after all much simpler.
 
-Anyway, that's all I've got. We probably need to drop this change and
-live with what we have now.
-
-Bart
