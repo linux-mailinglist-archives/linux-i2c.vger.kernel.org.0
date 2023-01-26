@@ -2,91 +2,152 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1171667D060
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jan 2023 16:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E1967D3BE
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jan 2023 19:06:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbjAZPj1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 Jan 2023 10:39:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
+        id S230205AbjAZSG5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 Jan 2023 13:06:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbjAZPjZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Jan 2023 10:39:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49B130FB
-        for <linux-i2c@vger.kernel.org>; Thu, 26 Jan 2023 07:38:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674747522;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gTlx+ZJI3PJxitcVm9qA10Txnp7uT/xLZJT2ZCukiFM=;
-        b=Xu5RZqPCtS+TFpAwddfzjDaEe7Gci/nG2ETH69FOhiyhlXeLJKgF9qYbVg/ysIJI+MxWS5
-        MKKvQIaAPuHKpDga9OirXSgdJcxgkG+GNWPP+LXpbFUzgNmaVUiVQnstkuvG0pznO2qQO5
-        gnE6xN9cbpmYrlaxlSRrXY8TWJ4Tcgo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-562-6EewG4jDPfq4MmZW3aAVJg-1; Thu, 26 Jan 2023 10:38:37 -0500
-X-MC-Unique: 6EewG4jDPfq4MmZW3aAVJg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 457003806639;
-        Thu, 26 Jan 2023 15:38:37 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.39.192.43])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3CEB6C15BA0;
-        Thu, 26 Jan 2023 15:38:36 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 resend 3/3] extcon: intel-cht-wc: Add support for Lenovo Yoga Tab 3 Pro YT3-X90F
-Date:   Thu, 26 Jan 2023 16:38:23 +0100
-Message-Id: <20230126153823.22146-4-hdegoede@redhat.com>
-In-Reply-To: <20230126153823.22146-1-hdegoede@redhat.com>
-References: <20230126153823.22146-1-hdegoede@redhat.com>
+        with ESMTP id S229641AbjAZSG5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Jan 2023 13:06:57 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403CF23D83
+        for <linux-i2c@vger.kernel.org>; Thu, 26 Jan 2023 10:06:56 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 27110975;
+        Thu, 26 Jan 2023 19:06:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674756414;
+        bh=AK5yBVehLJnEdWBBhtUAWEwRSlRLu9T3pmG7LXxnG8s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hlyGRZMxL+4lTvQUu8KAJqAHmWmZkNq0z7zpXUKFxkhqXI1EvLFMSOsSL9yfz5zWk
+         bdgygRc1PC4Q1WDEslAGBSf+C9tAJ00qyMvQqbUnCJ6QyiTe1lGuw4vXZ/tF7woFuN
+         RRCMkAUFmXOrqbx8179EnlTzV55HQHQkCakwL3AE=
+Date:   Thu, 26 Jan 2023 20:06:46 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     RRademacher@heine.com
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: question about devicetree entry pca954x
+Message-ID: <Y9LBNnW1Vx9pIy5r@pendragon.ideasonboard.com>
+References: <6c4c41f6cac34573b2c5ab14cb0ba27e@heine.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6c4c41f6cac34573b2c5ab14cb0ba27e@heine.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The Lenovo Yoga Tab 3 Pro YT3-X90F needs the same handling as
-the Lenovo Yogabook models. That is it needs the extcon code to:
+Hello,
 
-1. Control the Vbus regulator and USB-role-switch for the micro-USB
-   port's host/device mode switching.
-2. Register a power_supply device so that the charger-chip driver can
-   see what sort of charger (SDP/CDP/DCP) is connected.
+On Thu, Jan 26, 2023 at 05:05:47PM +0000, RRademacher@heine.com wrote:
+> Hello Mr. Pinchart,
+> 
+> you are listed as maintainer in the i2c-mux-pca954x.yaml file.
+> 
+>  
+> May I ask if you could take a few minutes and have a look at the following
+> problem, if you can spot a bug in the second DT snippet?
+> 
+> Because on the internet you can only find examples where devices are used
+> behind the pca954x which do not use an interrupt.
+> 
+>  
+> 
+> Let me tell you about the problem.
+> 
+> At our old device we had implemented this, which worked perfect:
+> 
+>  
+> &i2c4 {
+>     pinctrl-names = "default","gpio";
+>     pinctrl-0 = <&pinctrl_i2c4>;
+>     pinctrl-1 = <&pinctrl_i2c4_gpio>;
+>     sda-gpios = <&gpio5 21 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>     scl-gpios = <&gpio5 20 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>     clock-frequency = <400000>;
+>     status = "okay";
+> 
+>     touchscreen@26 {
+>         compatible = "ilitek,ili2117";
+>         reg = <0x26>;
+>         pinctrl-names = "default";
+>         pinctrl-0 = <&pinctrl_ili2117_62>;
+>         interrupt-parent = <&gpio2>;
+>         interrupts = <7 IRQ_TYPE_EDGE_RISING>;
+>         reset-gpios = <&pca9554_interface 0 GPIO_ACTIVE_LOW>;
+>     };
+> 
+>         proximity@39 {
+>                 compatible = "avago,apds9960";
+>                 reg = <0x39>;
+>                 pinctrl-names = "default";
+>                 pinctrl-0 = <&pinctrl_apds9960_39>;
+>                 interrupt-parent = <&gpio2>;
+>                 interrupts = <6 IRQ_TYPE_EDGE_RISING>;
+>         };
+> .....
+>  
+> 
+> Then we want more proximity sensors in this device, that we decided to add the
+> PCA9544A.
+> 
+> &i2c4 {
+> .....
+>  
+>     i2c4_mux_apds: i2c4-mux-pca9544@70 {
+>         compatible = "nxp,pca9544";
+>         #address-cells = <1>;
+>         #size-cells = <0>;
+>         reg = <0x70>;
+>         interrupt-parent = <&gpio2>;
+>         interrupt-controller;
+>         pinctrl-names = "default";
+>         pinctrl-0 = <&pinctrl_pca9544a_70>;
+>         interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
+> 
+>         i2c@0 {
+>             #address-cells = <1>;
+>             #size-cells = <0>;
+>             reg = <0>;
+> 
+>             proximity@39 {
+>                 compatible = "avago,apds9960";
+>                 reg = <0x39>;
+>                 interrupts = <0 IRQ_TYPE_EDGE_FALLING>;
+>                 interrupt-parent = <&i2c4_mux_apds>;
+>                 };
+>         };
+> 
+>  
+>  
+> Both drivers (pca954x and apds9960) request threaded irqs in their probe
+> function, but it does not work together. Although the apds9960 also gets one
+> assigned, when the handle_nested_irq function is called (After everything has
+> been initialized. However, this seems to be the second call to this function!
+> First call seems to be inside the initialization phase.) the irq seems to be
+> disabled. And thus the processing does not start.
+> 
+> I think that the problem is in my devicetree entry, that the soc doesn't really
+> know how to handle the interrupt of the apds9960.
 
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/extcon/extcon-intel-cht-wc.c | 1 +
- 1 file changed, 1 insertion(+)
+How are interrupts connected at the hardware level ? Is the APDS9960
+interrupt connected to the INT0 pin of the PCA9544 ?
 
-diff --git a/drivers/extcon/extcon-intel-cht-wc.c b/drivers/extcon/extcon-intel-cht-wc.c
-index 89a6449e3f4a..2c55f06ba699 100644
---- a/drivers/extcon/extcon-intel-cht-wc.c
-+++ b/drivers/extcon/extcon-intel-cht-wc.c
-@@ -537,6 +537,7 @@ static int cht_wc_extcon_probe(struct platform_device *pdev)
- 		cht_wc_extcon_set_5v_boost(ext, false);
- 		break;
- 	case INTEL_CHT_WC_LENOVO_YOGABOOK1:
-+	case INTEL_CHT_WC_LENOVO_YT3_X90:
- 		/* Do this first, as it may very well return -EPROBE_DEFER. */
- 		ret = cht_wc_extcon_get_role_sw_and_regulator(ext);
- 		if (ret)
+You have switched from IRQ_TYPE_EDGE_RISING to IRQ_TYPE_EDGE_FALLING for
+the APDS9960, is that intentional ?
+
+Is there any message printed to the kernel log around the time where
+either driver is probed, or when the APDS9960 interrupt is supposed to
+occur, that may indicate a problem ?
+
 -- 
-2.39.0
+Regards,
 
+Laurent Pinchart
