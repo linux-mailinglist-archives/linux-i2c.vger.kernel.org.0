@@ -2,86 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC85D67E659
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jan 2023 14:16:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 526B467E66A
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jan 2023 14:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234666AbjA0NQJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 27 Jan 2023 08:16:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
+        id S234680AbjA0NSv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Jan 2023 08:18:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234674AbjA0NPt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Jan 2023 08:15:49 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3DA790A1
-        for <linux-i2c@vger.kernel.org>; Fri, 27 Jan 2023 05:15:23 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id rl14so13672735ejb.2
-        for <linux-i2c@vger.kernel.org>; Fri, 27 Jan 2023 05:15:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iHkUhEVRPMP3NveU+Wy0L7G6Q4+mtQgaqKDo2k8993M=;
-        b=yLDFHcNqI5yLZb1QoRHjrTt6MuHLALVachw3IoxqeeuZWsaSh63leWZE2HNSO4AaDR
-         aIozyK8o906ffIyqf17f9Bl93k/ARLoMcc2WV85yy4mejc5Dg+otNSN1SqbmpWsooDpL
-         KkdKJaaSFSRi/aIml5oSzP8XeZVZROWS4iH9yC4HoOI5rwiq0bR/IHeTtmlVmhCx7YkS
-         LP/jOR/VnOpIy+H2+FtMDjNfi91Xh6yrVZHIiby0vyEAok8SG1JzrX+JjLdUesqs9K5e
-         AuZrWON6VodqpKSUXIHiWqz8pa/R3Zm8No6OA2D26aDShjLwTctPbzjEUXG607zDVD4l
-         Ying==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iHkUhEVRPMP3NveU+Wy0L7G6Q4+mtQgaqKDo2k8993M=;
-        b=MREtOFw/A2XIo/RXmalyaLJ8iZu15xHf7bOEC32yafHMOII9Aihc3lXyiJ3xOSwikr
-         N3VlJcu4WVyen2aJ1AT87lIttTyiEl+upiWPfQ5CbTLw0YSOVMxlN7R2+b0mDWO+cf85
-         sHuP0yRnYKgdXgucIHFlpKiyy5oytTOf1aFX4Qa9wlITMT3nYdhGEkiWEpS7QWoJu3NR
-         83cLjN0tQAhK29kw6rt4U0zhv949kQsBfSI77GKO5zNNgY5DXH/Bp3GovNyTmP6cpHca
-         8tNLouFxXgjXAlTg2/WZdOI9k1hgKrIsDD2jxqc1zb/j7HzbAg5SuFKFapUgQxgVbCbd
-         4BPQ==
-X-Gm-Message-State: AFqh2kolzxYcDc84jjbenUHXqDnwbGR01xpRSCi5dhT/TTwXH2EmzXbT
-        oltjVcQDMfR2cczap09OPcLzRA==
-X-Google-Smtp-Source: AMrXdXvWc8OAEpLOHe9XuMSWvT5rx+JxUq/A7uaYRzNur3jexY/O8PIr0uipN0gLgNDzL/+xQFUdWg==
-X-Received: by 2002:a17:907:a68a:b0:7c1:4d35:a143 with SMTP id vv10-20020a170907a68a00b007c14d35a143mr59338645ejc.3.1674825298693;
-        Fri, 27 Jan 2023 05:14:58 -0800 (PST)
-Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
-        by smtp.gmail.com with ESMTPSA id u25-20020a170906069900b0086dee4e5555sm2223289ejb.87.2023.01.27.05.14.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 05:14:58 -0800 (PST)
-Message-ID: <10a23abc-837b-4f7c-0332-e0b318f49b9d@linaro.org>
-Date:   Fri, 27 Jan 2023 14:14:56 +0100
+        with ESMTP id S234740AbjA0NSe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Jan 2023 08:18:34 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2382BEDB
+        for <linux-i2c@vger.kernel.org>; Fri, 27 Jan 2023 05:18:02 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pLOc8-0005NA-Go; Fri, 27 Jan 2023 14:17:56 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pLOc8-000nON-Mw; Fri, 27 Jan 2023 14:17:55 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pLOc6-00GIml-MS; Fri, 27 Jan 2023 14:17:54 +0100
+Date:   Fri, 27 Jan 2023 14:17:51 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel@pengutronix.de,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+        Grant Likely <grant.likely@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH 571/606] serial: sc16is7xx: Convert to i2c's .probe_new()
+Message-ID: <20230127131751.gupnp7l6wyrutpmw@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-572-uwe@kleine-koenig.org>
+ <536ac08e-bdbd-b4d6-8309-8f6763f8db12@kernel.org>
+ <20221121070757.cqiybt5uk4qiczmr@pengutronix.de>
+ <0bfea903-5efd-a76d-5944-16a2c9362adb@kernel.org>
+ <20221123080912.lbmfgnco67psdu27@pengutronix.de>
+ <20230127101025.evefhpwpfikahd3k@pengutronix.de>
+ <Y9O5cMnC+uKrPToz@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2 2/4] arm64: dts: qcom: sm6350: Add camera clock
- controller
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221213-sm6350-cci-v2-0-15c2c14c34bb@fairphone.com>
- <20221213-sm6350-cci-v2-2-15c2c14c34bb@fairphone.com>
- <e5ff49d4-45c7-8c4a-d624-d8f7cc9ce2cb@linaro.org>
- <CQ0I4ONEI6J4.3KWS1KBE7RTKD@otso>
- <3ae863df-3260-4863-d88f-da4d3f442174@linaro.org>
- <CQ2ZDQKO11XZ.HA5CXLK5MTFB@otso>
- <2989138a-8f4b-50a0-3e90-98b6785f2690@linaro.org>
- <CQ2ZY0W1M4F5.32SLTSYMILGOS@otso>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CQ2ZY0W1M4F5.32SLTSYMILGOS@otso>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="46nfdfxvgk3lrnx2"
+Content-Disposition: inline
+In-Reply-To: <Y9O5cMnC+uKrPToz@kroah.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,57 +65,84 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
+--46nfdfxvgk3lrnx2
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 27.01.2023 14:11, Luca Weiss wrote:
-> On Fri Jan 27, 2023 at 1:49 PM CET, Bryan O'Donoghue wrote:
->> On 27/01/2023 12:45, Luca Weiss wrote:
->>> Can I reference <&camcc TITAN_TOP_GDSC> from itself? I know that having
->>> it on is required to turn on at least some clocks (maybe all clocks).
->>> But from what I understand how power domains are normally handled, the
->>> driver core enables them before the driver is probed, so self
->>> referencing wouldn't work.
->>>
->>> And at least no other SoC upstream references TITAN_TOP_GDSC in camcc.
->>>
->>> Regards
->>> Luca
->>
->> Doh I meant to say a power-domain to an mmcx a la
->>
->> power-domains = <&rpmhpd SM8250_MMCX>;
->> required-opps = <&rpmhpd_opp_low_svs>;
->>
->> TITAN_TOP should be in your cci and camss dt nodes.
-> 
-> Okay, that makes more sense.
-> 
-> What I don't quite understand is why sm8250 only has MMCX listed there
-> since downstream has both vdd_mx-supply = <&VDD_MX_LEVEL> and
-> vdd_mm-supply = <&VDD_MMCX_LEVEL> and both "supplies" are used for
-> different clocks using .vdd_class
-> 
-> But back to sm6350, downstream has vdd_mx-supply = <&VDD_MX_LEVEL> and
-> vdd_cx-supply = <&VDD_CX_LEVEL> and like sm8250 uses cx and mx for
-> different clocks.
-> Not sure if I should add both, and I guess mainline also currently
-> doesn't use higher ops for the power domain when higher clock rate is
-> needed, from what I understand?
-Basically if you don't need to power any of these power rails to
-have access to the clock controller, you don't need any of them.
+Hello Greg,
 
-What you will need to do however, is make sure that they are scaled with
-child devices then.. but that's no bueno since they all need TITAN_GDSC.
-That's why Bryan suggests leaving a vote on a power rail in the clock
-controller, so that if no other votes are present (as improbable as
-that may be), you will still be able to get the clocks going.
+On Fri, Jan 27, 2023 at 12:45:52PM +0100, Greg Kroah-Hartman wrote:
+> On Fri, Jan 27, 2023 at 11:10:25AM +0100, Uwe Kleine-K=F6nig wrote:
+> > On Wed, Nov 23, 2022 at 09:09:12AM +0100, Uwe Kleine-K=F6nig wrote:
+> > > On Wed, Nov 23, 2022 at 07:36:52AM +0100, Jiri Slaby wrote:
+> > > > BTW is this a performance issue? I.e. does it slow down the boot?
+> > >=20
+> > > I don't know the start motivation for Lee (who triggered the conversi=
+on
+> > > in b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back
+> > > type")).
+> > > Looking at the git history, he created 1e98dcd77970 ("mfd: 88pm860x:
+> > > Move over to new I2C device .probe() call") converting a driver that
+> > > doesn't benefit immensely. The lookup is more expensive for drivers w=
+ith
+> > > big .id_table, the converted driver has only one entry.
+> > >=20
+> > > I think in the end is a mixture between:
+> > >=20
+> > >  - A big part of the drivers doesn't benefit from the lookup.
+> > >  - For most other busses the probe function only gets a device parame=
+ter
+> > >    and no id (spi, platform, i3c). There are counter examples though:
+> > >    amba, usb. Didn't check further.
+> >=20
+> > The discussion somehow ended here without a real result.
+> >=20
+> > As of today's next master there are only 9 drivers left using .probe().
+> > So I'd like to stop this discussion and ask to apply the conversion for
+> > the sc16is7xx driver to be able to complete the conversion.
+> >=20
+> > My plan is to drop the .probe callback as it is today after the next
+> > merge window. So I ask the serial maintainers to either take the patch
+> > under discussion for the next merge window or accept that the conversion
+> > is done together with the patch that drops .probe() that probably will
+> > go in via the i2c tree.
+>=20
+> I don't see the patch anymore,
 
-That OTOH will require you to add power management support (PM ops)
-to the clock controller, as otherwise you can say goodbye to battery
-life..
+If you want to take a look:
 
-Konrad
-> 
->>
->> ---
->> bod
-> 
+	b4 am 20221118224540.619276-572-uwe@kleine-koenig.org
+
+or
+
+	https://lore.kernel.org/lkml/20221118224540.619276-572-uwe@kleine-koenig.o=
+rg
+
+> so I have no objection for it going through the i2c tree.
+
+Can I interpret that as an Ack? :-)
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--46nfdfxvgk3lrnx2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPTzvwACgkQwfwUeK3K
+7AkAwgf9Fx60NOgH3yW2FQbiLJACN/TBhnZ4fdN5jAMHVI3MxreW97xJW3JlbVbf
+3zVac3iG0qOhmkhHAMRRROkE6/mS+GdrmBtmautpT9KcZRCUY0Y7XWiYkB6gO/Vq
+SUwHSRtfjCAXln8NtDRmVBVGp7KYRHy+Iz+QbqZxk2jeGOZ8YpLZi99SVl1ggGaP
+eRdjsttemW4Uilcx/e9wy1HsFBp7Qlrsx6uv6bwvo7MHkNQLKbRaTLl1ph7Kfzm9
+4aP8fc6KZ3OW+ChlcSsJFk8xa+HuSpyKJyQiOQ8rKz8RGaQQc/igVPeF1wnxnbxM
+dQtiiQ9clCYa12LheOzWMsRkTEeR/w==
+=EQP+
+-----END PGP SIGNATURE-----
+
+--46nfdfxvgk3lrnx2--
