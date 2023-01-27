@@ -2,233 +2,366 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C4D67D676
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jan 2023 21:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C9767DD98
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jan 2023 07:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbjAZUd1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 26 Jan 2023 15:33:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42748 "EHLO
+        id S232109AbjA0Gkf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Jan 2023 01:40:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjAZUd0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Jan 2023 15:33:26 -0500
-Received: from out-mx.sasg.de (out-mx.sasg.de [95.142.65.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380A9233E9
-        for <linux-i2c@vger.kernel.org>; Thu, 26 Jan 2023 12:33:23 -0800 (PST)
-Received: from exch2012.heineopto.de (unknown [217.239.128.75])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by out-mx.sasg.de (Postfix) with ESMTPS id 793AA20473;
-        Thu, 26 Jan 2023 21:33:22 +0100 (CET)
-Received: from exch2012.heineopto.de (10.80.0.10) by exch2012.heineopto.de
- (10.80.0.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.2375.34; Thu, 26
- Jan 2023 21:33:22 +0100
-Received: from exch2012.heineopto.de ([fe80::29f7:554e:2485:f599]) by
- exch2012.heineopto.de ([fe80::29f7:554e:2485:f599%12]) with mapi id
- 15.01.2375.034; Thu, 26 Jan 2023 21:33:22 +0100
-From:   <RRademacher@heine.com>
-To:     <laurent.pinchart@ideasonboard.com>
-CC:     <linux-i2c@vger.kernel.org>
-Subject: AW: #Extern_Re: question about devicetree entry pca954x
-Thread-Topic: #Extern_Re: question about devicetree entry pca954x
-Thread-Index: AQHZMaf4pAvJYJLXN06F6qaGLQ2Y/66w7dQAgAAvzxKAAAjPZQ==
-Date:   Thu, 26 Jan 2023 20:33:22 +0000
-Message-ID: <ca5f86514fc54f7a92dba756a301564d@heine.com>
-References: <6c4c41f6cac34573b2c5ab14cb0ba27e@heine.com>,<Y9LBNnW1Vx9pIy5r@pendragon.ideasonboard.com>,<234d0cd7383d4bad8aeda4f22feef575@heine.com>
-In-Reply-To: <234d0cd7383d4bad8aeda4f22feef575@heine.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [91.137.63.64]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        with ESMTP id S231904AbjA0GkX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Jan 2023 01:40:23 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC6069B26;
+        Thu, 26 Jan 2023 22:40:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=u92ZIG8NeiReqULUpJ3dTyWf+uSNhJCKYYthA6vycZI=; b=BHL2yK0mIJr+KABpOGeA+u3Rl4
+        B7i2Rbbg1zsJ5XUcinksH8hUB+n5okYbng9loY48Tjyofjk8OiUG4xkeaXAWl27DOJNOXqOxncMab
+        MYR6RasB+6kB7NBxI5Ptdqc1xJnRvtvJMJgoTVl3e6o9pKE2P3FDcHqx+Z9F/gvv9fPUr/g6wVmk2
+        9Dc/EI24A/yOAoVs8mO3i8ly6BVPoqaTkISl0X1f71XCb1dbLyrGH9wWZnJIw2IzLOYM27mAEX1GD
+        Se8srjkBYH4HkNZB0oYO6bGYGUHrSz2Oe6l41n4L6/KLtiiYAz/bal9B0+Qc6rEeLWb2YaS+NqC6y
+        f2ChDZSQ==;
+Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pLIPB-00DM0u-Dt; Fri, 27 Jan 2023 06:40:09 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Len Brown <len.brown@intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Mark Brown <broonie@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, alsa-devel@alsa-project.org,
+        coresight@lists.linaro.org, bpf@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, isdn4linux@listserv.isdn4linux.de,
+        keyrings@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-sgx@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-mm@kvack.org,
+        openrisc@lists.librecores.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org
+Subject: [PATCH 00/35] Documentation: correct lots of spelling errors (series 1)
+Date:   Thu, 26 Jan 2023 22:39:30 -0800
+Message-Id: <20230127064005.1558-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Mr. Pinchart,
+Correct many spelling errors in Documentation/ as reported by codespell.
 
-i have to correct myself:
-the first call of handle_nested_interrupt happens already before pca954x_probe. i added some more DBGMSGs
+Maintainers of specific kernel subsystems are only Cc-ed on their
+respective patches, not the entire series. [if all goes well]
 
-[    2.869856] [DBGMSG] handle_nested_irq :irq = 0xdf
-[    2.869858] [DBGMSG] handle_nested_irq :action = 0x7ba41100
-[    2.874477] [DBGMSG] handle_nested_irq :irqd_irq_disabled(&desc->irq_data): false
-[    2.874479] [DBGMSG] handle_nested_irq :(unlikely(!action || irqd_irq_disabled(&desc->irq_data))): false
-[    2.874501] [DBGMSG] handle_nested_irq :action->irq:df | action->dev_id:0x7ba64810
-[    6.373737] [DBGMSG] pca954x_probe :enter fxn
-[    6.973918] [DBGMSG] pca954x_probe :leave fxn
+These patches are based on linux-next-20230125.
 
 
-Regards,
-Ralf
+ [PATCH 01/35] Documentation: arm64: correct spelling
+ [PATCH 02/35] Documentation: arm: correct spelling
+ [PATCH 03/35] Documentation: block: correct spelling
+ [PATCH 04/35] Documentation: bpf: correct spelling
+ [PATCH 05/35] Documentation: core-api: correct spelling
+ [PATCH 06/35] Documentation: fault-injection: correct spelling
+ [PATCH 07/35] Documentation: fb: correct spelling
+ [PATCH 08/35] Documentation: features: correct spelling
+ [PATCH 09/35] Documentation: firmware-guide/acpi: correct spelling
+ [PATCH 10/35] Documentation: hid: correct spelling
+ [PATCH 11/35] Documentation: i2c: correct spelling
+ [PATCH 12/35] Documentation: input: correct spelling
+ [PATCH 13/35] Documentation: isdn: correct spelling
+ [PATCH 14/35] Documentation: leds: correct spelling
+ [PATCH 15/35] Documentation: litmus-tests: correct spelling
+ [PATCH 16/35] Documentation: livepatch: correct spelling
+ [PATCH 17/35] Documentation: locking: correct spelling
+ [PATCH 18/35] Documentation: mm: correct spelling
+ [PATCH 19/35] Documentation: openrisc: correct spelling
+ [PATCH 20/35] Documentation: PCI: correct spelling
+ [PATCH 21/35] Documentation: powerpc: correct spelling
+ [PATCH 22/35] Documentation: power: correct spelling
+ [PATCH 23/35] Documentation: s390: correct spelling
+ [PATCH 24/35] Documentation: scheduler: correct spelling
+ [PATCH 25/35] Documentation: security: correct spelling
+ [PATCH 26/35] Documentation: sound: correct spelling
+ [PATCH 27/35] Documentation: spi: correct spelling
+ [PATCH 28/35] Documentation: target: correct spelling
+ [PATCH 29/35] Documentation: timers: correct spelling
+ [PATCH 30/35] Documentation: tools/rtla: correct spelling
+ [PATCH 31/35] Documentation: trace: correct spelling
+ [PATCH 32/35] Documentation: usb: correct spelling
+ [PATCH 33/35] Documentation: w1: correct spelling
+ [PATCH 34/35] Documentation: x86: correct spelling
+ [PATCH 35/35] Documentation: xtensa: correct spelling
 
-Von: Rademacher Ralf
-Gesendet: Donnerstag, 26. Januar 2023 21:18
-An: Laurent Pinchart
+
+ Documentation/PCI/endpoint/pci-vntb-howto.rst                    |    2 -
+ Documentation/PCI/msi-howto.rst                                  |    2 -
+ Documentation/arm/arm.rst                                        |    2 -
+ Documentation/arm/ixp4xx.rst                                     |    4 +-
+ Documentation/arm/keystone/knav-qmss.rst                         |    2 -
+ Documentation/arm/stm32/stm32-dma-mdma-chaining.rst              |    6 +--
+ Documentation/arm/sunxi/clocks.rst                               |    2 -
+ Documentation/arm/swp_emulation.rst                              |    2 -
+ Documentation/arm/tcm.rst                                        |    2 -
+ Documentation/arm/vlocks.rst                                     |    2 -
+ Documentation/arm64/booting.rst                                  |    2 -
+ Documentation/arm64/elf_hwcaps.rst                               |    2 -
+ Documentation/arm64/sve.rst                                      |    4 +-
+ Documentation/block/data-integrity.rst                           |    2 -
+ Documentation/bpf/libbpf/libbpf_naming_convention.rst            |    6 +--
+ Documentation/bpf/map_xskmap.rst                                 |    2 -
+ Documentation/bpf/ringbuf.rst                                    |    4 +-
+ Documentation/bpf/verifier.rst                                   |    2 -
+ Documentation/core-api/packing.rst                               |    2 -
+ Documentation/core-api/padata.rst                                |    2 -
+ Documentation/fault-injection/fault-injection.rst                |    2 -
+ Documentation/fb/sm712fb.rst                                     |    2 -
+ Documentation/fb/sstfb.rst                                       |    2 -
+ Documentation/features/core/thread-info-in-task/arch-support.txt |    2 -
+ Documentation/firmware-guide/acpi/acpi-lid.rst                   |    2 -
+ Documentation/firmware-guide/acpi/namespace.rst                  |    2 -
+ Documentation/hid/hid-alps.rst                                   |    2 -
+ Documentation/hid/hid-bpf.rst                                    |    2 -
+ Documentation/hid/hiddev.rst                                     |    2 -
+ Documentation/hid/hidraw.rst                                     |    2 -
+ Documentation/hid/intel-ish-hid.rst                              |    2 -
+ Documentation/i2c/gpio-fault-injection.rst                       |    2 -
+ Documentation/i2c/smbus-protocol.rst                             |    2 -
+ Documentation/input/devices/iforce-protocol.rst                  |    2 -
+ Documentation/input/multi-touch-protocol.rst                     |    2 -
+ Documentation/isdn/interface_capi.rst                            |    2 -
+ Documentation/isdn/m_isdn.rst                                    |    2 -
+ Documentation/leds/leds-qcom-lpg.rst                             |    4 +-
+ Documentation/litmus-tests/README                                |    2 -
+ Documentation/livepatch/reliable-stacktrace.rst                  |    2 -
+ Documentation/locking/lockdep-design.rst                         |    4 +-
+ Documentation/locking/locktorture.rst                            |    2 -
+ Documentation/locking/locktypes.rst                              |    2 -
+ Documentation/locking/preempt-locking.rst                        |    2 -
+ Documentation/mm/hmm.rst                                         |    4 +-
+ Documentation/mm/hwpoison.rst                                    |    2 -
+ Documentation/openrisc/openrisc_port.rst                         |    4 +-
+ Documentation/power/suspend-and-interrupts.rst                   |    2 -
+ Documentation/powerpc/kasan.txt                                  |    2 -
+ Documentation/powerpc/papr_hcalls.rst                            |    2 -
+ Documentation/powerpc/qe_firmware.rst                            |    4 +-
+ Documentation/powerpc/vas-api.rst                                |    4 +-
+ Documentation/s390/pci.rst                                       |    4 +-
+ Documentation/s390/vfio-ccw.rst                                  |    2 -
+ Documentation/scheduler/sched-bwc.rst                            |    2 -
+ Documentation/scheduler/sched-energy.rst                         |    4 +-
+ Documentation/security/digsig.rst                                |    4 +-
+ Documentation/security/keys/core.rst                             |    2 -
+ Documentation/security/secrets/coco.rst                          |    2 -
+ Documentation/sound/alsa-configuration.rst                       |    8 ++--
+ Documentation/sound/cards/audigy-mixer.rst                       |    2 -
+ Documentation/sound/cards/maya44.rst                             |    2 -
+ Documentation/sound/cards/sb-live-mixer.rst                      |    2 -
+ Documentation/sound/designs/jack-controls.rst                    |    2 -
+ Documentation/sound/designs/seq-oss.rst                          |    2 -
+ Documentation/sound/hd-audio/notes.rst                           |    2 -
+ Documentation/spi/pxa2xx.rst                                     |   12 +++---
+ Documentation/spi/spi-lm70llp.rst                                |    2 -
+ Documentation/spi/spi-summary.rst                                |    2 -
+ Documentation/target/tcmu-design.rst                             |    2 -
+ Documentation/timers/hrtimers.rst                                |    2 -
+ Documentation/tools/rtla/rtla-timerlat-top.rst                   |    2 -
+ Documentation/trace/coresight/coresight-etm4x-reference.rst      |    2 -
+ Documentation/trace/events.rst                                   |    6 +--
+ Documentation/trace/fprobe.rst                                   |    2 -
+ Documentation/trace/ftrace-uses.rst                              |    2 -
+ Documentation/trace/hwlat_detector.rst                           |    2 -
+ Documentation/trace/rv/runtime-verification.rst                  |    2 -
+ Documentation/trace/uprobetracer.rst                             |    2 -
+ Documentation/usb/chipidea.rst                                   |   19 +++++-----
+ Documentation/usb/gadget-testing.rst                             |    2 -
+ Documentation/usb/mass-storage.rst                               |    2 -
+ Documentation/w1/w1-netlink.rst                                  |    2 -
+ Documentation/x86/boot.rst                                       |    2 -
+ Documentation/x86/buslock.rst                                    |    2 -
+ Documentation/x86/mds.rst                                        |    2 -
+ Documentation/x86/resctrl.rst                                    |    2 -
+ Documentation/x86/sgx.rst                                        |    2 -
+ Documentation/xtensa/atomctl.rst                                 |    2 -
+ 89 files changed, 124 insertions(+), 123 deletions(-)
+
+
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Vladimir Oltean <olteanv@gmail.com>
+Cc: Steffen Klassert <steffen.klassert@secunet.com>
+Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc: Akinobu Mita <akinobu.mita@gmail.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Wolfram Sang <wsa@kernel.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Henrik Rydberg <rydberg@bitmath.org>
+Cc: Karsten Keil <isdn@linux-pingi.de>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Lee Jones <lee@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Miroslav Benes <mbenes@suse.cz>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: J√©r√¥me Glisse <jglisse@redhat.com>
+Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc: Miaohe Lin <linmiaohe@huawei.com>
+Cc: Jonas Bonn <jonas@southpole.se>
+Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+Cc: Stafford Horne <shorne@gmail.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Len Brown <len.brown@intel.com>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Paul Moore <paul@paul-moore.com>
+Cc: James Morris <jmorris@namei.org>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: Evgeniy Polyakov <zbr@ioremap.net>
+Cc: Fenghua Yu <fenghua.yu@intel.com>
+Cc: Reinette Chatre <reinette.chatre@intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+
+Cc: alsa-devel@alsa-project.org
+Cc: coresight@lists.linaro.org
+Cc: bpf@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: isdn4linux@listserv.isdn4linux.de
+Cc: keyrings@vger.kernel.org
+Cc: linux-acpi@vger.kernel.org
+Cc: linux-block@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-fbdev@vger.kernel.org
 Cc: linux-i2c@vger.kernel.org
-Betreff: AW: #Extern_Re: question about devicetree entry pca954x
-†   
-
-
-
-
-
-
-Von: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Gesendet: Donnerstag, 26. Januar 2023 19:06
-An: Rademacher Ralf
-Cc: linux-i2c@vger.kernel.org
-Betreff: #Extern_Re: question about devicetree entry pca954x
-††† 
-Warnung: Achtung - Diese E-Mail stammt von einer externen Quelle. Seien Sie vorsichtig mit Links und Anh‰ngen.
-
-Warning: Attention - This e-mail is from an external source. Be careful with links and attachments.
-
-Hello,
-
-On Thu, Jan 26, 2023 at 05:05:47PM +0000, RRademacher@heine.com wrote:
-> Hello Mr. Pinchart,
->
-> you are listed as maintainer in the i2c-mux-pca954x.yaml file.
->
->
-> May I ask if you could take a few minutes and have a look at the following
-> problem, if you can spot a bug in the second DT snippet?
->
-> Because on the internet you can only find examples where devices are used
-> behind the pca954x which do not use an interrupt.
->
->
->
-> Let me tell you about the problem.
->
-> At our old device we had implemented this, which worked perfect:
->
->
-> &i2c4 {
->†††† pinctrl-names = "default","gpio";
->†††† pinctrl-0 = <&pinctrl_i2c4>;
->†††† pinctrl-1 = <&pinctrl_i2c4_gpio>;
->†††† sda-gpios = <&gpio5 21 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
->†††† scl-gpios = <&gpio5 20 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
->†††† clock-frequency = <400000>;
->†††† status = "okay";
->
->†††† touchscreen@26 {
->†††††††† compatible = "ilitek,ili2117";
->†††††††† reg = <0x26>;
->†††††††† pinctrl-names = "default";
->†††††††† pinctrl-0 = <&pinctrl_ili2117_62>;
->†††††††† interrupt-parent = <&gpio2>;
->†††††††† interrupts = <7 IRQ_TYPE_EDGE_RISING>;
->†††††††† reset-gpios = <&pca9554_interface 0 GPIO_ACTIVE_LOW>;
->†††† };
->
->†††††††† proximity@39 {
->†††††††††††††††† compatible = "avago,apds9960";
->†††††††††††††††† reg = <0x39>;
->†††††††††††††††† pinctrl-names = "default";
->†††††††††††††††† pinctrl-0 = <&pinctrl_apds9960_39>;
->†††††††††††††††† interrupt-parent = <&gpio2>;
->†††††††††††††††† interrupts = <6 IRQ_TYPE_EDGE_RISING>;
->†††††††† };
-> .....
->
->
-> Then we want more proximity sensors in this device, that we decided to add the
-> PCA9544A.
->
-> &i2c4 {
-> .....
->
->†††† i2c4_mux_apds: i2c4-mux-pca9544@70 {
->†††††††† compatible = "nxp,pca9544";
->†††††††† #address-cells = <1>;
->†††††††† #size-cells = <0>;
->†††††††† reg = <0x70>;
->†††††††† interrupt-parent = <&gpio2>;
->†††††††† interrupt-controller;
->†††††††† pinctrl-names = "default";
->†††††††† pinctrl-0 = <&pinctrl_pca9544a_70>;
->†††††††† interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
->
->†††††††† i2c@0 {
->†††††††††††† #address-cells = <1>;
->†††††††††††† #size-cells = <0>;
->†††††††††††† reg = <0>;
->
->†††††††††††† proximity@39 {
->†††††††††††††††† compatible = "avago,apds9960";
->†††††††††††††††† reg = <0x39>;
->†††††††††††††††† interrupts = <0 IRQ_TYPE_EDGE_FALLING>;
->†††††††††††††††† interrupt-parent = <&i2c4_mux_apds>;
->†††††††††††††††† };
->†††††††† };
->
->
->
-> Both drivers (pca954x and apds9960) request threaded irqs in their probe
-> function, but it does not work together. Although the apds9960 also gets one
-> assigned, when the handle_nested_irq function is called (After everything has
-> been initialized. However, this seems to be the second call to this function!
-> First call seems to be inside the initialization phase.) the irq seems to be
-> disabled. And thus the processing does not start.
->
-> I think that the problem is in my devicetree entry, that the soc doesn't really
-> know how to handle the interrupt of the apds9960.
-
-How are interrupts connected at the hardware level ? Is the APDS9960
-interrupt connected to the INT0 pin of the PCA9544 ?
-
-Yes, it is.
-
-
-
-You have switched from IRQ_TYPE_EDGE_RISING to IRQ_TYPE_EDGE_FALLING for
-the APDS9960, is that intentional ?
-
-Yes, I assumed this is correct, because APDS9960 datasheet tells me that: "Interrupt open drain (active low)". So i thought i have to detect the falling edge, not the rising edge.
-The same in the datasheet of PCA9544A, there are 4 active low interrupt inputs.
-
-
-
-Is there any message printed to the kernel log around the time where
-either driver is probed, or when the APDS9960 interrupt is supposed to
-occur, that may indicate a problem ?
-
-I have inserted some DBGMSGs into the functions handle_nested_irq and in the pca954x_probe.
-during pca954x driver probe, there is the following output:
-
-[††† 2.869856] [DBGMSG] handle_nested_irq :irq = 0xdf
-[††† 2.869858] [DBGMSG] handle_nested_irq :action = 0x7ba41100
-[††† 2.874477] [DBGMSG] handle_nested_irq :irqd_irq_disabled(&desc->irq_data): false
-[††† 2.874479] [DBGMSG] handle_nested_irq :(unlikely(!action || irqd_irq_disabled(&desc->irq_data))): false
-[††† 2.874501] [DBGMSG] handle_nested_irq :action->irq:df | action->dev_id:0x7ba64810
-
-when a apds sends the interrupt signal to the pca954x, this happens:
-
-[ 9336.607055] [DBGMSG] pca954x_irq_handler :pca954x_irq_handler starts
-[ 9336.607908] [DBGMSG] pca954x_irq_handler :i2c_smbus_read::retval=14
-[ 9336.613255] [DBGMSG] pca954x_irq_handler :i=0 | bit: 4 is set in register
-[ 9336.619539] [DBGMSG] pca954x_irq_handler :irq= 0x65 // child_irq =0xe7
-[ 9336.619542] [DBGMSG] handle_nested_irq :irq = 0xe7
-[ 9336.632516] [DBGMSG] handle_nested_irq :action = 0x0
-[ 9336.632519] [DBGMSG] handle_nested_irq :irqd_irq_disabled(&desc->irq_data):true
-[ 9336.632521] [DBGMSG] handle_nested_irq :(unlikely(!action || irqd_irq_disabled(&desc->irq_data))):true
-[ 9336.632523] [DBGMSG] handle_nested_irq :goto out_unlock
-
-Regards,
-Ralf Rademacher
-
---
-Regards,
-
-Laurent Pinchart
-†††     
+Cc: linux-input@vger.kernel.org
+Cc: linux-leds@vger.kernel.org
+Cc: linux-pci@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-scsi@vger.kernel.org
+Cc: linux-sgx@vger.kernel.org
+Cc: linux-spi@vger.kernel.org
+Cc: linux-trace-devel@vger.kernel.org
+Cc: linux-trace-kernel@vger.kernel.org
+Cc: live-patching@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: target-devel@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: openrisc@lists.librecores.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-xtensa@linux-xtensa.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: x86@kernel.org
