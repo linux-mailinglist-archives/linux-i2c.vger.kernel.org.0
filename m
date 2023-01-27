@@ -2,147 +2,118 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526B467E66A
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jan 2023 14:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C52C67E722
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jan 2023 14:55:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234680AbjA0NSv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 27 Jan 2023 08:18:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
+        id S233225AbjA0NzA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Jan 2023 08:55:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234740AbjA0NSe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Jan 2023 08:18:34 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2382BEDB
-        for <linux-i2c@vger.kernel.org>; Fri, 27 Jan 2023 05:18:02 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pLOc8-0005NA-Go; Fri, 27 Jan 2023 14:17:56 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pLOc8-000nON-Mw; Fri, 27 Jan 2023 14:17:55 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pLOc6-00GIml-MS; Fri, 27 Jan 2023 14:17:54 +0100
-Date:   Fri, 27 Jan 2023 14:17:51 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@pengutronix.de,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
-        Grant Likely <grant.likely@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH 571/606] serial: sc16is7xx: Convert to i2c's .probe_new()
-Message-ID: <20230127131751.gupnp7l6wyrutpmw@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-572-uwe@kleine-koenig.org>
- <536ac08e-bdbd-b4d6-8309-8f6763f8db12@kernel.org>
- <20221121070757.cqiybt5uk4qiczmr@pengutronix.de>
- <0bfea903-5efd-a76d-5944-16a2c9362adb@kernel.org>
- <20221123080912.lbmfgnco67psdu27@pengutronix.de>
- <20230127101025.evefhpwpfikahd3k@pengutronix.de>
- <Y9O5cMnC+uKrPToz@kroah.com>
+        with ESMTP id S231710AbjA0Ny7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Jan 2023 08:54:59 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FFE1F4BF
+        for <linux-i2c@vger.kernel.org>; Fri, 27 Jan 2023 05:54:57 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id d14so5030593wrr.9
+        for <linux-i2c@vger.kernel.org>; Fri, 27 Jan 2023 05:54:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nexus-software-ie.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AvWGdXV/thMosfYPTWfHg4iggB9oYYlKgsQ4IGe6GwM=;
+        b=zJTsB5rxzOcR/IQYI9B8TxrquxjCdAbnkHrTFD8HEyhKVAeUU0jRRpKo5Onkmgw+8f
+         LecJidjIYiWCZ5uOeBhO+LrbIofHOyJjGmRONA5EbKaB3OvpeGJsni6GpV9RPj2X2zJK
+         zmf41T0tUELAUdLRqRexXHiVBwbFmp+pp9i1m3klI4+GhOLbQFnpqtIGLeXAOwZnEFWg
+         V4hxqgs5YYzT5o1wU+W2H01NRiD0I76vFvd87pbAjZV/+Qp5eda/WReQe3ykkQc92Hx1
+         2y9mI+x+37TnvknkQiiRR5+x4FpS22rkz7euvU4biICD3IIgIVLmqAMv700+7+8k7qx3
+         vO8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AvWGdXV/thMosfYPTWfHg4iggB9oYYlKgsQ4IGe6GwM=;
+        b=oMK/lfoUdWg6BcrngfCmFttjYUs0u+eIeh6yvybWXlUFRjRLh2ZOTiJVThAGKMlONH
+         yU/bZf1YKI6uNRbd7HHBXKVmZsfdhAWeyVwucQBtCUWw2DJPDEi27mYowckrVLSizNZm
+         /0C/1VHq4FDfS1996GknW3wBQJZpTrcvIMtJg+5TcK+qjE/NLgPAatFcpZybxjlSWc6F
+         WDfODi28T/DS+5xM4XXEb/oS7CQvbg/HHG2JATp3AHPAR4/A8qANUKuPzPF3mT+9uzIE
+         UOUNSdrFyA7Tac0eNzHnWUN+JrskVMW/5IJaJju1eqMyh8cPeTJmRyE4qyTWJZKPMht0
+         iAow==
+X-Gm-Message-State: AO0yUKUPaEfarh4x3NSUGN8s5eFboRBRN0Z6qRARz6AX1lTKpLei2d6r
+        gzDsblUEpqDvj1YLRxdPBu6Ye4XGiHWBk/Qh
+X-Google-Smtp-Source: AK7set/VMRyDDltG22cGu8ihRDW1/IpQliCrs2cHrRkWoMH5gk2TrOoECuH9qH4INUYj9vpys2Hgew==
+X-Received: by 2002:a5d:4988:0:b0:2bf:b3e9:d338 with SMTP id r8-20020a5d4988000000b002bfb3e9d338mr11210015wrq.31.1674827696348;
+        Fri, 27 Jan 2023 05:54:56 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id s5-20020a5d5105000000b002bdfcd8c77csm4073373wrt.101.2023.01.27.05.54.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 05:54:55 -0800 (PST)
+Message-ID: <951e4459-6d98-f083-1dd9-fc0b12e53c96@nexus-software.ie>
+Date:   Fri, 27 Jan 2023 13:54:54 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="46nfdfxvgk3lrnx2"
-Content-Disposition: inline
-In-Reply-To: <Y9O5cMnC+uKrPToz@kroah.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 2/4] arm64: dts: qcom: sm6350: Add camera clock
+ controller
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221213-sm6350-cci-v2-0-15c2c14c34bb@fairphone.com>
+ <20221213-sm6350-cci-v2-2-15c2c14c34bb@fairphone.com>
+ <e5ff49d4-45c7-8c4a-d624-d8f7cc9ce2cb@linaro.org>
+ <CQ0I4ONEI6J4.3KWS1KBE7RTKD@otso>
+ <3ae863df-3260-4863-d88f-da4d3f442174@linaro.org>
+ <CQ2ZDQKO11XZ.HA5CXLK5MTFB@otso>
+ <2989138a-8f4b-50a0-3e90-98b6785f2690@linaro.org>
+ <CQ2ZY0W1M4F5.32SLTSYMILGOS@otso>
+From:   Bryan O'Donoghue <pure.logic@nexus-software.ie>
+In-Reply-To: <CQ2ZY0W1M4F5.32SLTSYMILGOS@otso>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 27/01/2023 13:11, Luca Weiss wrote:
+>> Doh I meant to say a power-domain to an mmcx a la
+>>
+>> power-domains = <&rpmhpd SM8250_MMCX>;
+>> required-opps = <&rpmhpd_opp_low_svs>;
+>>
+>> TITAN_TOP should be in your cci and camss dt nodes.
+> Okay, that makes more sense.
+> 
+> What I don't quite understand is why sm8250 only has MMCX listed there
+> since downstream has both vdd_mx-supply = <&VDD_MX_LEVEL> and
+> vdd_mm-supply = <&VDD_MMCX_LEVEL> and both "supplies" are used for
+> different clocks using .vdd_class
 
---46nfdfxvgk3lrnx2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+power-domains = <&rpmhpd SM8250_MMCX>; == MMCX_LEVEL required for camcc
+power-domains = <&camcc TITAN_TOP_GDSC>; required for cci/camss
 
-Hello Greg,
+now that you ask the question about MX_LEVEL you're making me doubt we 
+have a 100% complete representation upstream TB perfectly honest, 
+warrants a deep dive..
 
-On Fri, Jan 27, 2023 at 12:45:52PM +0100, Greg Kroah-Hartman wrote:
-> On Fri, Jan 27, 2023 at 11:10:25AM +0100, Uwe Kleine-K=F6nig wrote:
-> > On Wed, Nov 23, 2022 at 09:09:12AM +0100, Uwe Kleine-K=F6nig wrote:
-> > > On Wed, Nov 23, 2022 at 07:36:52AM +0100, Jiri Slaby wrote:
-> > > > BTW is this a performance issue? I.e. does it slow down the boot?
-> > >=20
-> > > I don't know the start motivation for Lee (who triggered the conversi=
-on
-> > > in b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back
-> > > type")).
-> > > Looking at the git history, he created 1e98dcd77970 ("mfd: 88pm860x:
-> > > Move over to new I2C device .probe() call") converting a driver that
-> > > doesn't benefit immensely. The lookup is more expensive for drivers w=
-ith
-> > > big .id_table, the converted driver has only one entry.
-> > >=20
-> > > I think in the end is a mixture between:
-> > >=20
-> > >  - A big part of the drivers doesn't benefit from the lookup.
-> > >  - For most other busses the probe function only gets a device parame=
-ter
-> > >    and no id (spi, platform, i3c). There are counter examples though:
-> > >    amba, usb. Didn't check further.
-> >=20
-> > The discussion somehow ended here without a real result.
-> >=20
-> > As of today's next master there are only 9 drivers left using .probe().
-> > So I'd like to stop this discussion and ask to apply the conversion for
-> > the sc16is7xx driver to be able to complete the conversion.
-> >=20
-> > My plan is to drop the .probe callback as it is today after the next
-> > merge window. So I ask the serial maintainers to either take the patch
-> > under discussion for the next merge window or accept that the conversion
-> > is done together with the patch that drops .probe() that probably will
-> > go in via the i2c tree.
->=20
-> I don't see the patch anymore,
+I just remember that on 8250 we tripped over MMCX not being switched on 
+when - display I think was switched off.
 
-If you want to take a look:
+---
+bod
 
-	b4 am 20221118224540.619276-572-uwe@kleine-koenig.org
-
-or
-
-	https://lore.kernel.org/lkml/20221118224540.619276-572-uwe@kleine-koenig.o=
-rg
-
-> so I have no objection for it going through the i2c tree.
-
-Can I interpret that as an Ack? :-)
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---46nfdfxvgk3lrnx2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPTzvwACgkQwfwUeK3K
-7AkAwgf9Fx60NOgH3yW2FQbiLJACN/TBhnZ4fdN5jAMHVI3MxreW97xJW3JlbVbf
-3zVac3iG0qOhmkhHAMRRROkE6/mS+GdrmBtmautpT9KcZRCUY0Y7XWiYkB6gO/Vq
-SUwHSRtfjCAXln8NtDRmVBVGp7KYRHy+Iz+QbqZxk2jeGOZ8YpLZi99SVl1ggGaP
-eRdjsttemW4Uilcx/e9wy1HsFBp7Qlrsx6uv6bwvo7MHkNQLKbRaTLl1ph7Kfzm9
-4aP8fc6KZ3OW+ChlcSsJFk8xa+HuSpyKJyQiOQ8rKz8RGaQQc/igVPeF1wnxnbxM
-dQtiiQ9clCYa12LheOzWMsRkTEeR/w==
-=EQP+
------END PGP SIGNATURE-----
-
---46nfdfxvgk3lrnx2--
