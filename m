@@ -2,130 +2,128 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815AC67FAC0
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Jan 2023 21:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B5167FADF
+	for <lists+linux-i2c@lfdr.de>; Sat, 28 Jan 2023 21:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234726AbjA1URO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 28 Jan 2023 15:17:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        id S234891AbjA1UaZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 28 Jan 2023 15:30:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233641AbjA1URN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 28 Jan 2023 15:17:13 -0500
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B4222A05
-        for <linux-i2c@vger.kernel.org>; Sat, 28 Jan 2023 12:17:11 -0800 (PST)
-Received: by mail-vs1-xe29.google.com with SMTP id h19so6913150vsv.13
-        for <linux-i2c@vger.kernel.org>; Sat, 28 Jan 2023 12:17:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ujPYE2Tccn6z3KxKUSVhZWB/6ljcy0NrewFRgFoChRo=;
-        b=OprqN0tx8wVI0V3qkOPsfCk+TgRj4XRwP377LsUdYaPie+9r1YUA3OhqdBzWpcCIQ0
-         ihvniywd5JiP/94exqCcTJ4tUyMWklmAIdoyTxCUWDZgiixTeSDeUhGmDUfdjSL3eep6
-         w+DUa304GLUWsW+mBD4zB1mIQS0DQQYR8lplj2dyNdmEkgkVK2yM6085cjU9FfSFtiUX
-         H42LLNRCnpfZcISX0QCQCmul4i2cTHC3nZ3yeYHROB0xx6cZveCPEnr58bkvq8HbspYm
-         h8WWdOQ/2iZCP6Qf9z/j5KGFJD/YNKHkXQ/SVo3ptHP6+dKatbl5SQuM8DZvKf+aSxVi
-         Nmng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ujPYE2Tccn6z3KxKUSVhZWB/6ljcy0NrewFRgFoChRo=;
-        b=kURoSp0j8MlhTb7hPi60bEi4ADQI+dl7NgGS+3uat/lIk18K4OVci0AMF156M+r2jk
-         vk2pq9OFdConL1zQhJ5m5ZC5ixKmGdgXhqB5VDvQ3BDYV0EkAQ/gD8UZfcFjz+b7Ks+8
-         gw1JnZHt9y6krY3HkndR8oLv96zj0ggu4PtZT4fD7bjnjOy6uPziu5cXmqf/e4jcJOoU
-         IcWiC4ANYiy/Avf2BEP9rKAVWSDSFWRvw+URyMhrkjAHpavT3LWeCn612cktHZXX1UcI
-         zRQsZmX/HTd7hyirg1mdoKc2FGLARpns1TMDaadVtgY0C/S0ZbDEmrr9C6/LR9t241GH
-         n5Aw==
-X-Gm-Message-State: AFqh2kojp18YV5io1Fu3KKs+N+Z3XadmvY8asCx/r9YVk1EmccsCrDry
-        o/HFFeoBc5Jf+rO0HJsfNzQCXY8VeyYZwz4TkWCp3w==
-X-Google-Smtp-Source: AMrXdXtfMFBNvTu/RyaSLqA4XiaTJ9U0TVR2L3t9kB5IuOmJdCycFBX0CXDRuI8QLigLuXoDnERskNv4dB/TLI5FNh8=
-X-Received: by 2002:a05:6102:3e08:b0:3c5:1ac1:bf38 with SMTP id
- j8-20020a0561023e0800b003c51ac1bf38mr6700388vsv.78.1674937030730; Sat, 28 Jan
- 2023 12:17:10 -0800 (PST)
+        with ESMTP id S233816AbjA1UaV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 28 Jan 2023 15:30:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E9E1C305;
+        Sat, 28 Jan 2023 12:30:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F85DB80BEC;
+        Sat, 28 Jan 2023 20:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AA46EC4339C;
+        Sat, 28 Jan 2023 20:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674937816;
+        bh=NyfyYmvHuYCep7B9YHaipGsiO9fFZKxd2hw/3QQJwqQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=LEOdKD+xVK+ChdUeMYF7EWUBmGq14I7a4s4JCxsX0Z2pbDfy98ZnOQg9LaM70RuVC
+         9xRu4+lF+DVHmBGVHpWV6C3DKQnB6htlyuiQ1J3mBpVE0Cta4vW2RE/BXmcJavx0so
+         NpT9ZM/k0gp3REittQZbOAE5Pu2nnNW4ZzWWewKaFAFD3E6WwCsC+zOFh5CoV4HfQe
+         lQLG294nW9w5VbGq5Yt6s9D6T/oia27mZXgUwJMw43HV8z7gJz+N1dbAJrJr5rDjld
+         W58/LuDYy+LQisFZsbodjJ+lGQoGjrCfyPfOcghY/B7T6gUkoFPJyIGFHljP3NeW1j
+         sFiy6/39HdTbA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 76D09E52504;
+        Sat, 28 Jan 2023 20:30:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230118134940.240102-1-brgl@bgdev.pl> <Y9DpbChLZfDONHPz@ninjato>
- <Y9GpL9RBNM8H2ZSL@shikoro> <CAMRc=McHowkYJBckM1eikcrBUoXXZN+OkozA-dNXZc1Zgd+Kfw@mail.gmail.com>
- <Y9VxQCu95HfGnWNe@ninjato>
-In-Reply-To: <Y9VxQCu95HfGnWNe@ninjato>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Sat, 28 Jan 2023 21:16:59 +0100
-Message-ID: <CAMRc=MdyLfai3svyfQ2=0M4HqhWQHa1tr-xCWBrk5rECQNizwg@mail.gmail.com>
-Subject: Re: [PATCH v3] i2c: dev: don't allow user-space to deadlock the kernel
-To:     Wolfram Sang <wsa@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URI_DOTEDU
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 00/35] Documentation: correct lots of spelling errors (series
+ 1)
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167493781647.31903.18128774325127042067.git-patchwork-notify@kernel.org>
+Date:   Sat, 28 Jan 2023 20:30:16 +0000
+References: <20230127064005.1558-1-rdunlap@infradead.org>
+In-Reply-To: <20230127064005.1558-1-rdunlap@infradead.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
+        catalin.marinas@arm.com, will@kernel.org, linux@armlinux.org.uk,
+        axboe@kernel.dk, andrii@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, olteanv@gmail.com,
+        steffen.klassert@secunet.com, daniel.m.jordan@oracle.com,
+        akinobu.mita@gmail.com, deller@gmx.de, rafael@kernel.org,
+        jikos@kernel.org, benjamin.tissoires@redhat.com,
+        srinivas.pandruvada@linux.intel.com, wsa@kernel.org,
+        dmitry.torokhov@gmail.com, rydberg@bitmath.org,
+        isdn@linux-pingi.de, pavel@ucw.cz, lee@kernel.org,
+        jpoimboe@kernel.org, mbenes@suse.cz, pmladek@suse.com,
+        peterz@infradead.org, mingo@redhat.com, jglisse@redhat.com,
+        naoya.horiguchi@nec.com, linmiaohe@huawei.com, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        bhelgaas@google.com, lpieralisi@kernel.org, maz@kernel.org,
+        mpe@ellerman.id.au, len.brown@intel.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dhowells@redhat.com, jarkko@kernel.org,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        perex@perex.cz, tiwai@suse.com, broonie@kernel.org,
+        martin.petersen@oracle.com, bristot@kernel.org,
+        rostedt@goodmis.org, gregkh@linuxfoundation.org,
+        mhiramat@kernel.org, mathieu.poirier@linaro.org,
+        suzuki.poulose@arm.com, zbr@ioremap.net, fenghua.yu@intel.com,
+        reinette.chatre@intel.com, tglx@linutronix.de, bp@alien8.de,
+        chris@zankel.net, jcmvbkbc@gmail.com, alsa-devel@alsa-project.org,
+        coresight@lists.linaro.org, bpf@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, isdn4linux@listserv.isdn4linux.de,
+        keyrings@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-sgx@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-mm@kvack.org,
+        openrisc@lists.librecores.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 8:02 PM Wolfram Sang <wsa@kernel.org> wrote:
->
-> Hi Bartosz,
->
-> > > https://lkml.iu.edu/hypermail/linux/kernel/1501.2/01700.html
-> > >
-> > > There are still drivers using i2c_del_adapter()+kfree(), so removing the
-> > > completion could cause use-after-free there, or?
-> > >
-> >
-> > Ugh, what a mess... I was mostly focused on the character device side
-> > of it but now I realized the true extent of the problem.
->
-> Still, thanks for trying. Really!
->
-> > It's all because the adapter struct really should be allocated by
-> > i2c_add_adapter() and bus drivers should only really provide some
-> > structure containing the adapter description for the subsystem the
-> > lifetime of which would not affect the adapter itself. This way the
-> > adapter (embedding struct device) would be freed by device type's
-> > .release() like we do over in the GPIO subsystem. Instead the adapter
-> > struct is allocated by drivers at .probe() meaning it will get dropped
-> > at .remove().
->
-> Or, like SPI does, use controller_alloc() which initializes the parts
-> needed by the core, returns to the driver which needs to setup the
-> private data, and finally calls controller_register().
->
+Hello:
 
-If we could add a helper like struct *i2c_adapter_get_device(struct
-i2c_adapter *adap) and convert all users who access adap.dev directly
-to using it instead in a sweeping change across the subsystem - that
-would already be a huge improvement as this would allow us to later
-move struct device memory into the subsystem and free it in .release()
-and not allow provider drivers to free it at .remove(). Something to
-consider. Let me know if that's an interesting option.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-> > I don't have a good solution. I've been thinking about it for an hour
-> > and every solution requires sweeping changes across the entire
-> > subsystem. Or else we'd introduce a parallel solution that would do
-> > the right thing and wait in perpetuity until all drivers convert -
-> > like with i2e probe_new() which is after all much simpler.
->
-> Thank you for spending time on another solution. "Perpetuity" is a good
-> word to put it :/
->
-> > Anyway, that's all I've got. We probably need to drop this change and
-> > live with what we have now.
->
-> I am curious to see if this finding will make it into your FOSDEM talk.
-> Looking already forward to it!
->
+On Thu, 26 Jan 2023 22:39:30 -0800 you wrote:
+> Correct many spelling errors in Documentation/ as reported by codespell.
+> 
+> Maintainers of specific kernel subsystems are only Cc-ed on their
+> respective patches, not the entire series. [if all goes well]
+> 
+> These patches are based on linux-next-20230125.
+> 
+> [...]
 
-Ha! Yeah, definitely. I went down that rabbit hole a while ago and am
-bothered by the amount of latent bugs I'm finding. I sent some patches
-for GPIO and SPI (and this one for I2C). See you there, I guess?
+Here is the summary with links:
+  - [04/35] Documentation: bpf: correct spelling
+    https://git.kernel.org/bpf/bpf-next/c/1d3cab43f4c7
+  - [05/35] Documentation: core-api: correct spelling
+    (no matching commit)
+  - [13/35] Documentation: isdn: correct spelling
+    (no matching commit)
 
-> Happy hacking,
->
->    Wolfram
->
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Bart
+
