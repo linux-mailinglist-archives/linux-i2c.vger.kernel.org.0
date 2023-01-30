@@ -2,130 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23BC681510
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Jan 2023 16:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1216815A8
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Jan 2023 16:56:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236811AbjA3PdA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 30 Jan 2023 10:33:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45726 "EHLO
+        id S235868AbjA3P4e convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Mon, 30 Jan 2023 10:56:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236320AbjA3Pc7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 Jan 2023 10:32:59 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880B5BBA4
-        for <linux-i2c@vger.kernel.org>; Mon, 30 Jan 2023 07:32:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1675092777; x=1706628777;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YXkQPJ4Fwf72eWcx4a6gkKFeKJ2We9s1nTw8/musS0w=;
-  b=V53BRhShWp4gf+utFqmaAxoGyjDjw5iNsh1/VU0orMTM5L9eFaZ8kN2U
-   9jZmy+xj+9ywjrDQ1epQLrETAKw7YTRJI1fcbYOGDipTc2N1TfKt/gxll
-   Xjl7G/UAOTSLsAGPUSVsJhX3rdj7A1VlQR2ix7nGWnTY/8jTrRHb9j9lt
-   86iOiiU2US7sZaDNNUE4TU0KK3tSs2NMcSWKY3LmT3+6egP577N07+5TP
-   BLtcEc7VDee/mtrOjosx4Uk2nvjlaidMsY6dYirSzYH/40ljc2m/+XHl7
-   tKr2iRGjWh+TU46I+ZfLd3GlAAIeg/g09RpiOZNoHLaf9ryTeKUXOytSL
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,258,1669071600"; 
-   d="scan'208";a="28747102"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 30 Jan 2023 16:32:53 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 30 Jan 2023 16:32:53 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Mon, 30 Jan 2023 16:32:53 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1675092773; x=1706628773;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YXkQPJ4Fwf72eWcx4a6gkKFeKJ2We9s1nTw8/musS0w=;
-  b=CNz6HSvQa3xdE6hN3Ef1Zu3RPMyQwTYZ19vnEDqYnCOYb37h9ZN/4wm3
-   4EAv3Xs7N4JUsGWkK0HhSMgyx1xMd+V8VW2XoAttQgyfIUsiuOK7cx5MT
-   6wNRMtv609jBV87BL+4VqVUwgCKHJSgAkZUjbz5xKbAWKWyIaTM2wXXlC
-   Ct8KCAr8BpcvN6MQFbhknC8D1QyyXhWEfZoXA0LLrRoobYqx6txZ/Hau4
-   GS5sYXKFRRys5rDt3eP5rxlJTLoBVdrZdLVQCnXMa1diMTtkRZvI3zxbJ
-   6aK4pkLDwa+ofWYsE+jscCn6HCUkTGnphe9Tl8Lm9bVEjRuagwR/sqQJq
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,258,1669071600"; 
-   d="scan'208";a="28747101"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 30 Jan 2023 16:32:52 +0100
-Received: from steina-w.tq-net.de (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 41AA6280072;
-        Mon, 30 Jan 2023 16:32:52 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 2/2] i2c: imx-lpi2c: check only for enabled interrupt flags
-Date:   Mon, 30 Jan 2023 16:32:47 +0100
-Message-Id: <20230130153247.445027-2-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230130153247.445027-1-alexander.stein@ew.tq-group.com>
-References: <20230130153247.445027-1-alexander.stein@ew.tq-group.com>
+        with ESMTP id S235425AbjA3P4e (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 Jan 2023 10:56:34 -0500
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4747681;
+        Mon, 30 Jan 2023 07:56:33 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id y11so11397144edd.6;
+        Mon, 30 Jan 2023 07:56:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BAlScTTB+tf94CjxUdf3KOUl7WlYYBCqK07CBgYdTI8=;
+        b=ima4yoZoR52dH2tEKWqixAU3VVcx6+h2wyjZfZxYE2HLbR7JlO2LygbtqxeFP+9Bwa
+         KboAFQGY5qpsQS8kTfqk6L4fpzJjN9hBp98KDR5dChzsGOYVq09cEDfzOIyzVC6K1eSw
+         0d2BfV07THO8zaxQVQTop+2bb81pe6XnGeb8o8idTDq5RSOY2c0N7p+iym1lAPQFv/2d
+         3yw0GTMrNEw4i5QPn9sW+0bJk5tsdpeTthgBByu5q4RqmrhdhyWJPtXvqal0PVoIemxH
+         JgoIuZpD777/rwQk751KKZE1F9QuBsuLyCla7EsrJ/A5dHi19tzyDbDlu6E5QiC3gK3k
+         xG8w==
+X-Gm-Message-State: AO0yUKVWAfve68Uz5h3Uz27/MV3I1QHRu9mDwTke/H0q819X3zyB4xkO
+        PwvU08fBD/1CV2f3SVgHAhmsxl3VD+tIPjqTXbU=
+X-Google-Smtp-Source: AK7set+x11XhQLwP/KmmbuzdkOHLUax+QGv7eHJdJ3G4vNxvaXcrsnv/OpSTe2BPmMKFPySbylH35DWmIjNRPRYTfVE=
+X-Received: by 2002:a05:6402:1bd9:b0:4a2:223c:b96b with SMTP id
+ ch25-20020a0564021bd900b004a2223cb96bmr2586995edb.49.1675094191585; Mon, 30
+ Jan 2023 07:56:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <0113ca60-acf2-f4db-3230-959e9bb15726@o2.pl> <20230123214414.GA987407@bhelgaas>
+In-Reply-To: <20230123214414.GA987407@bhelgaas>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 30 Jan 2023 16:56:20 +0100
+Message-ID: <CAJZ5v0hTXAdM5oC_5cFF0pZU5QKaaqcsY4rADXJhAkAa0s=4Kw@mail.gmail.com>
+Subject: Re: [PATCH v3 RESEND] acpi,pci: warn about duplicate IRQ routing
+ entries returned from _PRT
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jean Delvare <jdelvare@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-When reading from I2C, the Tx watermark is set to 0. Unfortunately the
-TDF (transmit data flag) is enabled when Tx FIFO entries is equal or less
-than watermark. So it is set in every case, hence the reset default of 1.
-This results in the MSR_RDF _and_ MSR_TDF flags to be set thus trying
-to send Tx data on a read message.
-Mask the IRQ status to filter for wanted flags only.
+On Mon, Jan 23, 2023 at 10:44 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Mon, Jan 23, 2023 at 10:00:43PM +0100, Mateusz Jończyk wrote:
+> > W dniu 23.01.2023 o 21:33, Bjorn Helgaas pisze:
+> > > On Sat, Jan 21, 2023 at 04:33:14PM +0100, Mateusz Jończyk wrote:
+> > >> On some platforms, the ACPI _PRT function returns duplicate interrupt
+> > >> routing entries. Linux uses the first matching entry, but sometimes the
+> > >> second matching entry contains the correct interrupt vector.
+> > >>
+> > >> Print an error to dmesg if duplicate interrupt routing entries are
+> > >> present, so that we could check how many models are affected.
+> > >
+> > > It shouldn't be too hard to use qemu to figure out whether Windows
+> > > uses the last matching entry, i.e., treating _PRT entries as
+> > > assignments.  If so, maybe Linux could just do the same.
+> > >
+> > > Is anybody up for that?
+> >
+> > The hardware in question has a working Windows XP installation,
+> > and I could in theory check which interrupt vector it uses - but
+> > I think that such reverse engineering is forbidden by Windows' EULA.
+>
+> I'm not talking about any sort of disassembly or anything like that;
+> just that we can observe what Windows does given the _PRT contents.
+> You've already figured out that on your particular hardware, the _PRT
+> has two entries, and Linux uses the first one while Windows uses the
+> second one, right?
+>
+> On qemu, we have control over the BIOS and can easily update _PRT to
+> whatever we want, and then we could boot Windows and see what it uses.
+> But I guess maybe that wouldn't tell us anything more than what you
+> already discovered.
+>
+> So my inclination would be to make Linux use the last matching entry.
 
-Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
-To be honest I'm wondering why this didn't occur to somebody else before.
-The behaviour also matches the downstream kernel which does
+But it would be able to log a diagnostic message anyway IMO.
 
-> if (temp & MSR_RDF)
->	lpi2c_imx_read_rxfifo(lpi2c_imx);
-> else if (temp & MSR_TDF)
->	lpi2c_imx_write_txfifo(lpi2c_imx);
-
-avoiding handling both Rx and Tx events.
-
- drivers/i2c/busses/i2c-imx-lpi2c.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
-index c6d0225246e6..a49b14d52a98 100644
---- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-+++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-@@ -505,10 +505,14 @@ static int lpi2c_imx_xfer(struct i2c_adapter *adapter,
- static irqreturn_t lpi2c_imx_isr(int irq, void *dev_id)
- {
- 	struct lpi2c_imx_struct *lpi2c_imx = dev_id;
-+	unsigned int enabled;
- 	unsigned int temp;
- 
-+	enabled = readl(lpi2c_imx->base + LPI2C_MIER);
-+
- 	lpi2c_imx_intctrl(lpi2c_imx, 0);
- 	temp = readl(lpi2c_imx->base + LPI2C_MSR);
-+	temp &= enabled;
- 
- 	if (temp & MSR_RDF)
- 		lpi2c_imx_read_rxfifo(lpi2c_imx);
--- 
-2.34.1
-
+So maybe two steps can be taken here, (1) adding the message printout
+(this patch) and (2) changing the behavior?
