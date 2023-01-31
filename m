@@ -2,95 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AC7682CB4
-	for <lists+linux-i2c@lfdr.de>; Tue, 31 Jan 2023 13:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ABA4683012
+	for <lists+linux-i2c@lfdr.de>; Tue, 31 Jan 2023 16:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbjAaMhg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 31 Jan 2023 07:37:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
+        id S232157AbjAaPAF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 31 Jan 2023 10:00:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbjAaMhe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 Jan 2023 07:37:34 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72DA44DCE8;
-        Tue, 31 Jan 2023 04:37:28 -0800 (PST)
-Received: from loongson.cn (unknown [112.20.108.204])
-        by gateway (Coremail) with SMTP id _____8DxzOqHC9ljpIkKAA--.21700S3;
-        Tue, 31 Jan 2023 20:37:27 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.20.108.204])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxWL2BC9ljNH4lAA--.8399S5;
-        Tue, 31 Jan 2023 20:37:26 +0800 (CST)
-From:   Binbin Zhou <zhoubinbin@loongson.cn>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org
-Cc:     loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>,
+        with ESMTP id S232552AbjAaO7w (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 Jan 2023 09:59:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CFA12F14;
+        Tue, 31 Jan 2023 06:59:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 551066155A;
+        Tue, 31 Jan 2023 14:59:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2636C433EF;
+        Tue, 31 Jan 2023 14:59:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675177189;
+        bh=avgIJFoAwkVyXw+pmuHPyUQL4/YLW9nDIp6h6euGxg8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UivCP61bV6rgGaNkjexinG1ZNf3njFV1J5iAUvxVnpDSQvLflB827Ja43v3wR41oz
+         gvVhZjBjCpZIt7tW89F6pg0pflywVYVjA9B0rLZjuIIULi6EpgYkwfaXKXwgT2RcHR
+         /AaWe8Hgg34BSrCHFatj6qMgBGEZgktQxw+cIv+MyiPvRk0Z5TUxiz3+swrkHz0XY6
+         ZCwk5V3insS80p0ThHLIj+NPaioZzaVjJSxf/MZIHEF5S7bSuoQcxjHB0tIgZK3nEN
+         RAE6HNwHGCbALuEyK/Atw+zsV9nhVt8DG457jpMfgMBKrLTQgtetSWhuCbDaqZsUBe
+         25ufjY+trmcuA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Sanath S <Sanath.S@amd.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Peibao Liu <liupeibao@loongson.cn>,
-        Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH V11 3/3] LoongArch: Enable LS2X I2C in loongson3_defconfig
-Date:   Tue, 31 Jan 2023 20:37:32 +0800
-Message-Id: <b6c2968999e42697f64f1b0b917bc38780d2dbb9.1675167975.git.zhoubinbin@loongson.cn>
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 01/20] i2c: designware-pci: Add new PCI IDs for AMD NAVI GPU
+Date:   Tue, 31 Jan 2023 09:59:27 -0500
+Message-Id: <20230131145946.1249850-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <cover.1675167975.git.zhoubinbin@loongson.cn>
-References: <cover.1675167975.git.zhoubinbin@loongson.cn>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxWL2BC9ljNH4lAA--.8399S5
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7Jry5XrWkuF48uF15Ww1fXrb_yoWxKFX_JF
-        y7Kw1kWr48JFZ7W3WIqw4rGw4DA3W7X3WFkr17Zw1xX3Waqr13JrWDAw17C3Z0ga4DWr43
-        ZaykJF9F9r18tjkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        W7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
-        xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS
-        14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv
-        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2
-        AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_
-        Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
-        CTnIWIevJa73UjIFyTuYvjxU4YLvDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This is now supported, enable for Loongson-3 systems. Other systems are
-unaffected.
+From: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
 
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+[ Upstream commit 2ece0930ac5662bccce0ba4c59b84c98d2437200 ]
+
+Add additional supported PCI IDs for latest AMD NAVI GPU card which
+has an integrated Type-C controller and designware I2C with PCI
+interface.
+
+Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Tested-by: Sanath S <Sanath.S@amd.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/loongarch/configs/loongson3_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/i2c/busses/i2c-designware-pcidrv.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-index cb52774c80e8..5677c4f8576e 100644
---- a/arch/loongarch/configs/loongson3_defconfig
-+++ b/arch/loongarch/configs/loongson3_defconfig
-@@ -602,6 +602,7 @@ CONFIG_HW_RANDOM_VIRTIO=m
- CONFIG_I2C_CHARDEV=y
- CONFIG_I2C_PIIX4=y
- CONFIG_I2C_GPIO=y
-+CONFIG_I2C_LS2X=y
- CONFIG_SPI=y
- CONFIG_GPIO_SYSFS=y
- CONFIG_GPIO_LOONGSON=y
+diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+index e499f96506c5..782fe1ef3ca1 100644
+--- a/drivers/i2c/busses/i2c-designware-pcidrv.c
++++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+@@ -396,6 +396,8 @@ static const struct pci_device_id i2_designware_pci_ids[] = {
+ 	{ PCI_VDEVICE(ATI,  0x73a4), navi_amd },
+ 	{ PCI_VDEVICE(ATI,  0x73e4), navi_amd },
+ 	{ PCI_VDEVICE(ATI,  0x73c4), navi_amd },
++	{ PCI_VDEVICE(ATI,  0x7444), navi_amd },
++	{ PCI_VDEVICE(ATI,  0x7464), navi_amd },
+ 	{ 0,}
+ };
+ MODULE_DEVICE_TABLE(pci, i2_designware_pci_ids);
 -- 
 2.39.0
 
