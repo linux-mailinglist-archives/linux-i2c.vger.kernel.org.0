@@ -2,122 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CA7681CA4
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Jan 2023 22:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6530368266C
+	for <lists+linux-i2c@lfdr.de>; Tue, 31 Jan 2023 09:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjA3VYV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 30 Jan 2023 16:24:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
+        id S231202AbjAaIdP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 31 Jan 2023 03:33:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbjA3VYV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 Jan 2023 16:24:21 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F365A32E5A
-        for <linux-i2c@vger.kernel.org>; Mon, 30 Jan 2023 13:24:19 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id m14so11992348wrg.13
-        for <linux-i2c@vger.kernel.org>; Mon, 30 Jan 2023 13:24:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zl5iGEcz9aZDt6Lh/wp7RRqGX1an8DgFS9AaZhOg4w0=;
-        b=kOIYy9LKVaBORkHm1h0+yPuY/72dBULlSAL6LmQyZs089RTMnd48F0r98ab7NrVVL7
-         xyiE+EgV3IvqQN1eOJeXyPWSyOmUDD5cNr0d88YXccEUBjG2VBOIM1ekcin31dol0qJ7
-         KswauNP7/gVamvnidFIsCdtzh0wmprbVh0kIK8nm6LWnhhd5yW1/mls1FRA7uHCtMmk9
-         EIoDke36PbX4uj1C4KjRJ9ed1u8bbUYlAyb8Mry8KV3uXioDqb910wB09L3PBWWqki7Q
-         DMr5kBisjSv35fcRA5x44EmA8F4S3dgzWv7r/JianfY2NcnGFF205D/oY3Dnfl9Wp5WX
-         dfSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zl5iGEcz9aZDt6Lh/wp7RRqGX1an8DgFS9AaZhOg4w0=;
-        b=R6EAGl/IKidGWOtf80zU88njlh12ZskJr99AQEmO1Vk7yrDKIpNXq4VRP/G9EGC4+Y
-         tHsPs3iwdG6rWOZmROsdl1vEmt9UVowpiO5kMOe4ToFSPysilhdXNx9Kw68W1XCEhfmV
-         UI858zjwRvLO4oRWXH8Yq20vf15IKdc18CHHLEudBANJI/tnoPJh4mxjvxDVmFveabkL
-         sfWJ4Veqs31Nqwp8wOBozt0geGXrq72f3zVpyrNj4OMG1uMcdou1d1Z4di70OWMJhnXv
-         50udjzESC85BUvWVLHWHvauRCWFNgyTJfY0ojZXymGy9zbD7MvakoLWpYYII3Gob4krt
-         olVg==
-X-Gm-Message-State: AO0yUKVvxrQsrLfO1eZ6MI3ddweIJBo6XK8l8YRHzyQl2bn2eOJd5s6k
-        VSuuS4cDMmG+hP8vjPKaCeOzPD7UfFc=
-X-Google-Smtp-Source: AK7set/a/Gh84ge5rqGV2/oWF8rJy+rM4WT5GnO+2VSo3jx6Mke/PUKKrx5uuSw+/uSUijzsLCjphw==
-X-Received: by 2002:a05:6000:11ce:b0:2bf:bd69:234b with SMTP id i14-20020a05600011ce00b002bfbd69234bmr15622098wrx.32.1675113858447;
-        Mon, 30 Jan 2023 13:24:18 -0800 (PST)
-Received: from ?IPV6:2a01:c23:c074:7400:d941:3cb5:fa86:8ec8? (dynamic-2a01-0c23-c074-7400-d941-3cb5-fa86-8ec8.c23.pool.telefonica.de. [2a01:c23:c074:7400:d941:3cb5:fa86:8ec8])
-        by smtp.googlemail.com with ESMTPSA id j5-20020adff005000000b002bddd75a83fsm12607573wro.8.2023.01.30.13.24.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 13:24:18 -0800 (PST)
-Message-ID: <7cf0ba9d-ffdf-bb8b-6011-5bc77ebdcec2@gmail.com>
-Date:   Mon, 30 Jan 2023 22:24:07 +0100
+        with ESMTP id S231214AbjAaIdK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 Jan 2023 03:33:10 -0500
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59222234E7
+        for <linux-i2c@vger.kernel.org>; Tue, 31 Jan 2023 00:33:09 -0800 (PST)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id 05D7D83947; Tue, 31 Jan 2023 08:31:51 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1675153988; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=aW8ytEu+8zl8GUAHV4pas90kzyuOo2pqpNmVusKnf+4OwdsDdF6zLHgfS93h5rdTM
+         bfccuAo70L9Ex7KIqXi3Uj+8rw0CnwuN2t1O+sEgcMyMC/WQXP84RmR3L8WkvhDIKZ
+         dU8HtcfsSV1hh4BPToNb55LMXhrkjMMPUmtj16BekjmXm4IFR932pEGb0nrMyEh7m5
+         35ODZXhNPcVAt65wMlo48k3HmdAu6wDZKdfW3QMGFYRhBc7HUrwuDuaW5GgmxkZh4s
+         UAa61SNZW+ilCtc+3aHiV7HxWf+lob1QDqxBtV7NHT8aXf5YzAh8m3h7dLCeLI/PRU
+         9V0EsAci1JBzg==
+Received: by mail.lokoho.com for <linux-i2c@vger.kernel.org>; Tue, 31 Jan 2023 08:30:34 GMT
+Message-ID: <20230131074501-0.1.3q.w0pf.0.b5l56l9t4r@lokoho.com>
+Date:   Tue, 31 Jan 2023 08:30:34 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-i2c@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: [PATCH 2/2] i2c: core: extend use case for dflt addr in
- i2c_new_ancillary_device
-Content-Language: en-US
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <600080c4-a19f-7ab6-394f-c742179da00f@gmail.com>
-In-Reply-To: <600080c4-a19f-7ab6-394f-c742179da00f@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Interpret default_addr 0 in a way that the caller doesn't want a default.
-Note: i2c_new_dummy_device() would fail anyway, but it would leave an ugly
-error message complaining about invalid address 0.
+Dzie=C5=84 dobry,
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- drivers/i2c/i2c-core-base.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 315ecd960..6ff245ef1 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -1146,7 +1146,8 @@ static u32 i2c_prepare_ancillary_device(struct i2c_client *client,
-  * and create the associated device
-  * @client: Handle to the primary client
-  * @name: Handle to specify which secondary address to get
-- * @default_addr: Used as a fallback if no secondary address was specified
-+ * @default_addr: Used as a fallback if no secondary address was specified.
-+ *                Don't try to fall back if default_addr is zero.
-  * Context: can sleep
-  *
-  * I2C clients can be composed of multiple I2C slaves bound together in a single
-@@ -1169,6 +1170,9 @@ struct i2c_client *i2c_new_ancillary_device(struct i2c_client *client,
- {
- 	u32 addr = i2c_prepare_ancillary_device(client, name, default_addr);
- 
-+	if (!addr && !default_addr)
-+		return ERR_PTR(-ENOENT);
-+
- 	return i2c_new_dummy_device(client->adapter, addr);
- }
- EXPORT_SYMBOL_GPL(i2c_new_ancillary_device);
-@@ -1179,6 +1183,9 @@ struct i2c_client *devm_i2c_new_ancillary_device(struct i2c_client *client,
- {
- 	u32 addr = i2c_prepare_ancillary_device(client, name, default_addr);
- 
-+	if (!addr && !default_addr)
-+		return ERR_PTR(-ENOENT);
-+
- 	return devm_i2c_new_dummy_device(&client->dev, client->adapter, addr);
- }
- EXPORT_SYMBOL_GPL(devm_i2c_new_ancillary_device);
--- 
-2.39.1
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
 
+Pozdrawiam
+Adam Charachuta
