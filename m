@@ -2,148 +2,208 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F83682C7A
-	for <lists+linux-i2c@lfdr.de>; Tue, 31 Jan 2023 13:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE347682CAF
+	for <lists+linux-i2c@lfdr.de>; Tue, 31 Jan 2023 13:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjAaMWl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 31 Jan 2023 07:22:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
+        id S231431AbjAaMhg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 31 Jan 2023 07:37:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjAaMWk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 Jan 2023 07:22:40 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2084.outbound.protection.outlook.com [40.107.220.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E78193C6;
-        Tue, 31 Jan 2023 04:22:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q0PTAigQZ35hlPQMjm1QP/Ql0G3r71jtCUFvaFG3z3yoBtRQ9WWT5isk0fhhZdtdZvUuhfL06Hv9SptY1xm8txAOgxmBWwpGkI+3DYCRCcBFy3fKCOITVsKZKF+WjGrkrz2itgzrK7YVqHQDKi3c8nXq/usiki8AwodoYkw9J2qlv/oMrwJU91SggDa0HjxH+HVUl2QA3WBLb6ur2t8/BzZ2lq7YQfmy+SDa10qG6eXTJ3GjoLyMf1vvTaebzYHELimVWRop3xbH9S4Fiw+mq4in47MMtZvmCik/B7ZUgA5blkmldtQoAeeZzFF53NbZ8oWJ1o8c+PrllyLbYz5UcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XvhRF9ZqipWgKg5Lg5VFzlow8eGQVKErpvz1koUNOb4=;
- b=BWfsdl/OMGsfzC+3JpDL70qkQEd4pZtuw6Pu6RQSKXrRpi4iXryPEM1BblhPBwPCqxQnBzI6ItPdKuoG+gzROKpKMs2kl8Mm/PNNtdkMldZyGiqrOaGPRAoxxT+GFno11ZpWKsBceLdWvep1+u4F4ViEiEaigZflvL9O+kSe/AGzJVFvu15FKP5XZIR8XeKEs250v/Z7wJRZ1MmwM4oKS3v8ZRgAjgYwIUNdFEMKEvb9+Vupezq4TuSLIJ87BUKURGs5YNeB25maHEG/V0g0RZnq8q+RdfzBk5GR1dbPo+QQPSmXghKLZJhQOjpleKlKVtefNNVPlQo0YnvdCu1/wg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=zte.com.cn smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XvhRF9ZqipWgKg5Lg5VFzlow8eGQVKErpvz1koUNOb4=;
- b=uf43MFDmlCwDL0OJ1Uqyd2b1LpAxOffnS+CVEcGDWtN0B+hfPd5Rg9TFYn3cnyqok3SvkkOt5o/yMA1sAQwIb5XoWFziNd9yaD8F9pbCx3/aYyPk8e3w5DA/w6rPuEnQKGp+tjsm5bGMbxDd/KJOovukpFPMSAMnK31I0ofjZqY=
-Received: from DM6PR02CA0044.namprd02.prod.outlook.com (2603:10b6:5:177::21)
- by CH2PR12MB4956.namprd12.prod.outlook.com (2603:10b6:610:69::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38; Tue, 31 Jan
- 2023 12:22:36 +0000
-Received: from DS1PEPF0000B075.namprd05.prod.outlook.com
- (2603:10b6:5:177:cafe::78) by DM6PR02CA0044.outlook.office365.com
- (2603:10b6:5:177::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38 via Frontend
- Transport; Tue, 31 Jan 2023 12:22:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS1PEPF0000B075.mail.protection.outlook.com (10.167.17.6) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6064.17 via Frontend Transport; Tue, 31 Jan 2023 12:22:35 +0000
-Received: from [10.254.241.50] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 31 Jan
- 2023 06:22:32 -0600
-Message-ID: <8e4ec3a1-e0ac-ad7a-3414-6e213451e276@amd.com>
-Date:   Tue, 31 Jan 2023 13:22:04 +0100
+        with ESMTP id S231224AbjAaMhd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 Jan 2023 07:37:33 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6BDD4B483;
+        Tue, 31 Jan 2023 04:37:25 -0800 (PST)
+Received: from loongson.cn (unknown [112.20.108.204])
+        by gateway (Coremail) with SMTP id _____8AxX+uEC9ljjIkKAA--.21685S3;
+        Tue, 31 Jan 2023 20:37:24 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.20.108.204])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxWL2BC9ljNH4lAA--.8399S2;
+        Tue, 31 Jan 2023 20:37:22 +0800 (CST)
+From:   Binbin Zhou <zhoubinbin@loongson.cn>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Cc:     loongarch@lists.linux.dev, devicetree@vger.kernel.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Peibao Liu <liupeibao@loongson.cn>,
+        Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH V11 0/3] i2c: ls2x: Add support for the Loongson-2K/LS7A I2C controller
+Date:   Tue, 31 Jan 2023 20:37:29 +0800
+Message-Id: <cover.1675167975.git.zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] i2c: xiic: Use devm_platform_get_and_ioremap_resource()
-Content-Language: en-US
-To:     <ye.xingchen@zte.com.cn>, <michal.simek@xilinx.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <202301281453121890132@zte.com.cn>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <202301281453121890132@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000B075:EE_|CH2PR12MB4956:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2000c410-d00f-4c6f-b02e-08db0385d58a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HxaqzKkVTs8fMogUJzeWVq/72lTbeIlNksWgXN2TeoifoX5lA93wH8Ocqslqwd0tuQ90pl3b+UCWaMAk35e9slnRv1k179ducNuMqXU1XsJ90GrvPKFUnQv1aUmuzWYSMHLHds9mNqYesNuEG5HoTmR2lkz0Y7xP1sfyabISXjAAVRXylcYKJ7KKNqfkJT8q7zVn69Dujwb1EY11fv5q/hzgZo5EeyPPjH0QOLmHbZRGGPBP1Yxzatl3KQmmC9GUOPh4Q5f8z71cS5k2X0QlRpOnVAsDXz37d8TKIwN3bNxG4JdRBub5QNC7W/LtSr1gdV2bwIikIvUSgyCbH1p7xfn7F7HR/PfEtYtaByjEY0meMGLIMYNDqirnItdUG6SYtVNl3lDOeXRBGNX75tqiANbRx9qz5zveOduxjHkBwg9p7krtqlJuIpFLnFHpLJQY5xxvK/f4rlcTqmhnBxRVEemwO25kqmCe9rIgKSdJF5938EnG9T2aiNzPfYBip+pbPhs9XQb7bGE1/jjc1tvj6I18hZFA/HAigx+xXHepgjG+ONaHzeJ2WJvDZg56CcmKYxItPYyle9+yJT+6EDk+7aNN0tjVg10/G51G3fR+uVrTUNlxvGBxwV5xZJC1CD0p9Ozq4eQnI4LFpllJM1M19DnbJIEtsxB2mYZk54eelkb7vsP5Row7ukImiTWpOPsRt1pqbroCbwZ1BZJyYHRymRebwt4SltU36DnW0pyHxQpKvLuU4nmyUwN9Hfix3NMU4N5+xDFs/imHAAQ98YVf6w==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(396003)(346002)(376002)(451199018)(36840700001)(46966006)(40470700004)(2616005)(81166007)(82740400003)(40480700001)(110136005)(5660300002)(36860700001)(31696002)(54906003)(86362001)(44832011)(16576012)(82310400005)(316002)(8936002)(356005)(41300700001)(40460700003)(36756003)(83380400001)(2906002)(336012)(426003)(47076005)(53546011)(8676002)(4326008)(70586007)(478600001)(26005)(186003)(70206006)(6666004)(31686004)(16526019)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 12:22:35.0601
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2000c410-d00f-4c6f-b02e-08db0385d58a
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000B075.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4956
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxWL2BC9ljNH4lAA--.8399S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxXrW3uw4UXr1DJr13Gry3Jwb_yoWrtw15pa
+        98u398Kr4DJr17GF93JF1ruFyF9an3Jayjgr43Kw13WanrWr18Aw4fKa429r17CrZ8Gayj
+        qFZ0gFs8uFyDArJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
+        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
+        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4
+        kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
+        1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
+        Wlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I
+        6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr
+        0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIY
+        CTnIWIevJa73UjIFyTuYvjxU4SoGDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi all:
 
+This patch series adds support for the I2C module found on various
+Loongson systems with the Loongson-2K SoC or the Loongson LS7A bridge chip.
 
-On 1/28/23 07:53, ye.xingchen@zte.com.cn wrote:
-> 
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-> 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+For now, the I2C driver is suitable for DT-based or ACPI-based systems.
 
-note: in my part of world name is starting with upper letter
+I have tested on Loongson-3A5000LA+LS7A1000/LS7A2000, Loongson-2K1000LA
+and Loongson-2K0500.
 
-> ---
->   drivers/i2c/busses/i2c-xiic.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-> index bee5a2ef1f22..5114888f2916 100644
-> --- a/drivers/i2c/busses/i2c-xiic.c
-> +++ b/drivers/i2c/busses/i2c-xiic.c
-> @@ -752,7 +752,6 @@ static int xiic_i2c_probe(struct platform_device *pdev)
->   {
->          struct xiic_i2c *i2c;
->          struct xiic_i2c_platform_data *pdata;
-> -       struct resource *res;
->          int ret, irq;
->          u8 i;
->          u32 sr;
-> @@ -761,8 +760,7 @@ static int xiic_i2c_probe(struct platform_device *pdev)
->          if (!i2c)
->                  return -ENOMEM;
-> 
-> -       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -       i2c->base = devm_ioremap_resource(&pdev->dev, res);
-> +       i2c->base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
->          if (IS_ERR(i2c->base))
->                  return PTR_ERR(i2c->base);
-> 
-> --
-> 2.25.1
+Thanks.
 
-Reviewed-by: Michal Simek <michal.simek@amd.com>
+Changes since V10:
+- Drop patch #1 "i2c: gpio: Add support on ACPI-based system",
+  since it has been applied yet.
+- patch(2/3)
+  - module_platform_driver() replaces subsys_initcall().
 
-Thanks,
-Michal
+Changes since V9:
+- patch (1/4)
+  - dev->of_node replaced by dev_fwnode() in i2c_gpio_probe();
+  - Add device_set_node();
+  - Add Tested-by tag.
+- patch (3/4)
+  - Add Reviewed-by tag.
+
+Changes since V8:
+- patch (3/4)
+  - Refactor the error handling process of the ls2x_i2c_xfer_one();
+  - Split comment and code.
+
+Changes since V7:
+- patch (3/4)
+  - I2C_LS2X should be added to the Kconfig/Makefile in Latin
+    alphabetical order.
+  - To avoid repeated type conversions, 'struct ls2x_i2c_priv *priv'
+    replaces 'struct i2c_adapter *adap' as a function parameter, e.g.
+    ls2x_i2c_start();
+  - Refactor ls2x_i2c_stop() with readb_poll_timeout(), mainly with
+    LS2X_SR_BUSY to indicate the status (success/timeout) of the stop
+    command;
+  - Remove extra parentheses;
+  - For consistency, the variable 'r' in ls2x_i2c_probe() is renamed to
+    'ret'.
+
+Changes since V6:
+- patch (1/4)
+  - Add Reviewed-by tag.
+- patch (3/4)
+  - GPL-2.0 -> GPL-2.0-only;
+  - Add property.h;
+  - writew() should be used to operate I2C_LS2X_PRER, and drop the
+    suffix of I2C_LS2X_PRER_LO/I2C_LS2X_PRER_HI;
+  - Drop ls2x_i2c_priv->dev, for it can be completely replaced by
+    'adapter.dev.parent';
+  - Reasonable return value handling in ls2x_i2c_xfer_one();
+  - Dropping the I2C_M_STOP flag judgment, the stop parameter of
+    ls2x_i2c_xfer_one() represents the last msg;
+  - Add comments for subsys_initcall();
+  - Code formatting, such as dropping unnecessary blank lines.
+
+Changes since V5:
+- patch (1/4)
+  - Add property.h.
+- patch (3/4)
+  - Put the ls2x_i2c_reginit() in front of irq requst;
+  - Refact ls2x_i2c_adjust_bus_speed: discard the magic value of
+    the divider register and LS2X_I2C_FREQ_STD is used to calculate
+    the frequency;
+  - Drop useless parameters: priv->suspended, and also disable I2C
+    interrupts during suspend;
+  - Drop ls2x_i2c_remove(), for the adapter will be auto deleted on
+    driver detach;
+  - Drop MODULE_ALIAS;
+  - Code formatting, such as alignment.
+
+Thanks Andy for your comments.
+
+Changes since V4:
+- patch (1/4)
+  - Drop unneeded headers: of.h;
+  - xxx_props -> xxx_properties.
+- patch (2/4)
+  - Add interrupt headers to fix syntax error found by Rob.
+- patch (3/4)
+  - Drop atmoic loop in ls2x_i2c_master_xfer(), I have tested it on the
+    appropriate environment with no problems;
+  - Define the corresponding bits in I2C_LS2X_CTR to avoid magic
+    numbers;
+  - dev_get_drvdata() is used to get ls2x_i2c_priv() in
+    ls2x_i2c_suspend();
+  - i2c_add_adapter() -> devm_i2c_add_adapter();
+  - SET_SYSTEM_SLEEP_PM_OPS() -> DEFINE_RUNTIME_DEV_PM_OPS();
+  - Code formatting, such as alignment.
+
+    Details: https://lore.kernel.org/all/Y4e%2F6KewuHjAluSZ@smile.fi.intel.com/
+
+Changes since V3:
+- Addressed all review comments from v3
+  - Change the changelog text to make it clearer (1/5);
+  - Fix some minor bugs, such as formatting issues (2/5);
+  - Fix some formatting issues (3/5);
+  - Deep refactoring of code for clarity (4/5).
+     Details: https://lore.kernel.org/all/Y4S2cnlAm3YYvZ8E@smile.fi.intel.com/
+
+Thanks to all for their suggestions.
+
+Changes since V2:
+- Addressed all review comments from v2
+  - Drop of_match_ptr() in i2c-gpio to avoid potential unused warnings
+    (1/5);
+  - Introduce i2c_gpio_get_props() function as the generic interface
+    to get i2c-gpio props from DT or ACPI table (2/5);
+  - Refact ls2x i2c code, similar to removing excessive goto tags (4/5).
+
+Thanks to Andy and Mika for their suggestions.
+
+Changes since V1:
+- Remove the function of getting the static i2c bus number from ACPI "_UID";
+- Fix build warning from kernel test robot.
+
+Binbin Zhou (3):
+  dt-bindings: i2c: Add Loongson LS2X I2C controller
+  i2c: ls2x: Add driver for Loongson-2K/LS7A I2C controller
+  LoongArch: Enable LS2X I2C in loongson3_defconfig
+
+ .../bindings/i2c/loongson,ls2x-i2c.yaml       |  51 +++
+ arch/loongarch/configs/loongson3_defconfig    |   1 +
+ drivers/i2c/busses/Kconfig                    |  11 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-ls2x.c                 | 370 ++++++++++++++++++
+ 5 files changed, 434 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/loongson,ls2x-i2c.yaml
+ create mode 100644 drivers/i2c/busses/i2c-ls2x.c
+
+-- 
+2.39.0
+
