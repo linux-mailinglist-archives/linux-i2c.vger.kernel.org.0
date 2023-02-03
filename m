@@ -2,71 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A459068924C
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Feb 2023 09:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8821689493
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Feb 2023 11:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbjBCIat (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 3 Feb 2023 03:30:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
+        id S229698AbjBCKA4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Feb 2023 05:00:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjBCIar (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Feb 2023 03:30:47 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380503D0B7;
-        Fri,  3 Feb 2023 00:30:44 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 494A367373; Fri,  3 Feb 2023 09:30:38 +0100 (CET)
-Date:   Fri, 3 Feb 2023 09:30:37 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Subject: Re: remove arch/sh
-Message-ID: <20230203083037.GA30738@lst.de>
-References: <20230113062339.1909087-1-hch@lst.de> <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de> <20230116071306.GA15848@lst.de> <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de> <20230203071423.GA24833@lst.de> <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
+        with ESMTP id S233029AbjBCKAz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Feb 2023 05:00:55 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 691149A819;
+        Fri,  3 Feb 2023 02:00:52 -0800 (PST)
+Received: from loongson.cn (unknown [112.20.108.204])
+        by gateway (Coremail) with SMTP id _____8Cx+elT29xjl2UNAA--.26905S3;
+        Fri, 03 Feb 2023 18:00:51 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.20.108.204])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxK75Q29xjuZkoAA--.13472S2;
+        Fri, 03 Feb 2023 18:00:49 +0800 (CST)
+From:   Binbin Zhou <zhoubinbin@loongson.cn>
+To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH] MAINTAINERS: Add entry for the Loongson LS2X I2C driver
+Date:   Fri,  3 Feb 2023 18:00:02 +0800
+Message-Id: <20230203100002.248482-1-zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxK75Q29xjuZkoAA--.13472S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrZFyxZry7GF47KrWxuw1fCrg_yoW3CFX_Z3
+        W7Ga97Wr18JFn3K3y0vFn5Ary5Za1IgF1rZ3Zrtw4fAa4Ut3sxtryDXwn7Cw1UAr43uFs0
+        gayxGryI9r17WjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        b7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AI
+        xVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64
+        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm
+        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I
+        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
+        GVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
+        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0
+        rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r
+        4UYxBIdaVFxhVjvjDU0xZFpf9x07UWHqcUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 09:24:46AM +0100, John Paul Adrian Glaubitz wrote:
-> Since this is my very first time stepping up as a kernel maintainer, I was hoping
-> to get some pointers on what to do to make this happen.
-> 
-> So far, we have set up a new kernel tree and I have set up a local development and
-> test environment for SH kernels using my SH7785LCR board as the target platform.
-> 
-> Do I just need to send a patch asking to change the corresponding entry in the
-> MAINTAINERS file?
+Add myself as maintainer of the Loongson LS2X I2C driver.
 
-I'm not sure a there is a document, but:
+Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+---
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- - add the MAINTAINERS change to your tree
- - ask Stephen to get your tree included in linux-next
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 123216b76534..27b1654aa421 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12180,6 +12180,13 @@ F:	drivers/*/*loongarch*
+ F:	Documentation/loongarch/
+ F:	Documentation/translations/zh_CN/loongarch/
+ 
++LOONGSON LS2X I2C DRIVER
++M:	Binbin Zhou <zhoubinbin@loongson.cn>
++L:	linux-i2c@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/i2c/loongson,ls2x-i2c.yaml
++F:	drivers/i2c/busses/i2c-ls2x.c
++
+ LOONGSON-2 SOC SERIES GUTS DRIVER
+ M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+ L:	loongarch@lists.linux.dev
+-- 
+2.39.0
 
-then eventually send a pull request to Linus with all of that.  Make
-sure it's been in linux-next for a while.
