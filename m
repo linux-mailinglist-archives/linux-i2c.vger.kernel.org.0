@@ -2,25 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F552689055
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Feb 2023 08:17:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37EC26890C3
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Feb 2023 08:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232166AbjBCHPy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 3 Feb 2023 02:15:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37340 "EHLO
+        id S232294AbjBCHZW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Feb 2023 02:25:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbjBCHPx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Feb 2023 02:15:53 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE9192190;
-        Thu,  2 Feb 2023 23:15:45 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id DB51E68C4E; Fri,  3 Feb 2023 08:15:42 +0100 (CET)
-Date:   Fri, 3 Feb 2023 08:15:42 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        with ESMTP id S232056AbjBCHZV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Feb 2023 02:25:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0ABA8C1E8;
+        Thu,  2 Feb 2023 23:25:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B4BE61DB8;
+        Fri,  3 Feb 2023 07:25:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B9EAC433D2;
+        Fri,  3 Feb 2023 07:25:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675409118;
+        bh=w/73Uc/n5KxsufzX5CddSnsJWhi8Tl5rHcWOUj980gE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KvD8eTpjLOtWB+UEaur78gdbkDk2uNg4iTyG7EduGBBQeFYYfDMJR0zI5M46iGXgI
+         B/g60xlZj15BQnrefnVhdWcwV0eYwBhVI1fWaHKJRFJ022Eb8m0gihPo6B9goL/ROM
+         S4BKuWCyK0zSKt6MO3m0b0jgs8LUO3Xke14ThSpk=
+Date:   Fri, 3 Feb 2023 08:25:15 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
         Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
@@ -37,24 +48,32 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-sh@vger.kernel.org
 Subject: Re: [PATCH 02/22] usb: remove the dead USB_OHCI_SH option
-Message-ID: <20230203071542.GC24833@lst.de>
-References: <20230113062339.1909087-1-hch@lst.de> <20230113062339.1909087-3-hch@lst.de> <Y8EEbCP6PRMzWP5y@kroah.com>
+Message-ID: <Y9y221RalpLWJE0S@kroah.com>
+References: <20230113062339.1909087-1-hch@lst.de>
+ <20230113062339.1909087-3-hch@lst.de>
+ <Y8EEbCP6PRMzWP5y@kroah.com>
+ <20230203071542.GC24833@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8EEbCP6PRMzWP5y@kroah.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230203071542.GC24833@lst.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 08:12:44AM +0100, Greg Kroah-Hartman wrote:
-> Do you want all of these to go through a single tree, or can they go
-> through the different driver subsystem trees?
+On Fri, Feb 03, 2023 at 08:15:42AM +0100, Christoph Hellwig wrote:
+> On Fri, Jan 13, 2023 at 08:12:44AM +0100, Greg Kroah-Hartman wrote:
+> > Do you want all of these to go through a single tree, or can they go
+> > through the different driver subsystem trees?
+> 
+> Looks like the big removal isn't going in for this merge winodw,
+> so can you queue this patch up after all Greg?
 
-Looks like the big removal isn't going in for this merge winodw,
-so can you queue this patch up after all Greg?
+Sure, I'll go apply it right now, thanks.
+
+greg k-h
