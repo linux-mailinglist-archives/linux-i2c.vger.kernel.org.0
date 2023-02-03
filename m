@@ -2,123 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0DE689700
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Feb 2023 11:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7006897EC
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Feb 2023 12:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbjBCKhI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Fri, 3 Feb 2023 05:37:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
+        id S231614AbjBCLlG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Feb 2023 06:41:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbjBCKhG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Feb 2023 05:37:06 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3158412F22;
-        Fri,  3 Feb 2023 02:36:48 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pNtQu-0005LU-Pm; Fri, 03 Feb 2023 11:36:40 +0100
-Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pNtQu-000Qu4-EY; Fri, 03 Feb 2023 11:36:40 +0100
-Message-ID: <1c4be6be8aa9f69af71c967b4cc0b77344d374de.camel@physik.fu-berlin.de>
-Subject: Re: remove arch/sh
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Date:   Fri, 03 Feb 2023 11:36:35 +0100
-In-Reply-To: <CAMuHMdUitVfW088YOmqYm4kwbKwkwb22fAakHcu6boxv7dXDfQ@mail.gmail.com>
-References: <20230113062339.1909087-1-hch@lst.de>
-         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
-         <20230116071306.GA15848@lst.de>
-         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
-         <20230203071423.GA24833@lst.de>
-         <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
-         <20230203083037.GA30738@lst.de>
-         <d10fe31b2af6cf4e03618f38ca9d3ca5c72601ed.camel@physik.fu-berlin.de>
-         <CAMuHMdUitVfW088YOmqYm4kwbKwkwb22fAakHcu6boxv7dXDfQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 
+        with ESMTP id S230134AbjBCLlG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Feb 2023 06:41:06 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA2B9B6FB;
+        Fri,  3 Feb 2023 03:41:05 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id lu11so14607300ejb.3;
+        Fri, 03 Feb 2023 03:41:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4OpfCD/nYdWbkzAMhGA6hgTs89Fl0cSbPYWaIPLMsm4=;
+        b=dsN7o1iwFoCKPfA0laC1qZhAUvPRDHEks1m0+39QRirq+/7iaIrjHsSDizvgGnDZ9L
+         kbCZnoMYpyOaSJGNbJLGeiiAptWvorFWQUbF3b2Kq2TqsM6rQouF3B9ILeMosmhBFif2
+         +pf06Ho+F9NJuIOgoGOPQRgqYB8fE/7dAcEsiyEFIBVSkyFayRTZzXgIZ0HcBWpdR+h7
+         fln9eEZluS8ig4tkIPIQa8RHfH5MPlSlyczyptcuZtt3+J7H+WH26T/j2VQHP7cowkV6
+         D9QonUGaIgmqS3+xyQ6AS+in9UPsoEoNIGF3COyfB9kngdWLNisSXRPSXMlrUGf4Z1ZU
+         vX2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4OpfCD/nYdWbkzAMhGA6hgTs89Fl0cSbPYWaIPLMsm4=;
+        b=VtoyN6bg++AstJ6hsbHegqOMMvDW9qNjVhyC9degQAFijpLLR9RSD96SWaurjQtYf0
+         jDiMwyn9RnUKmhKNZbijTfBqSnKX/51DYvFhk0ZDZ4LXLmeGgN9Qfg1phzWf954J4Vll
+         AaYtuZJJunaRUild11AzCdERwSUSJiE8hX1nUX7xx0Xai9RPRbrHDqPGoqxKYRK6pivc
+         Dnxh+j043Znq+wLGBKUuXC02pJa44/8gs65O0Bgno/bbcLk4WnD2M/JOZgzuFFUXYeAt
+         NDW+SC5WwLN8jX6Zgj6S/AOYsvuunAbO2TOFWNpgKJ7FlUnm28ywv27QBl86+dmjxq10
+         abNA==
+X-Gm-Message-State: AO0yUKUpaKLmPAbko4MCFfleZM6A7oglY5CjtmL4V77lM4RZQO2OHZF8
+        AkSXxH+AVVbDyIC+0CptCHY+lB46AOCwDZebQBw=
+X-Google-Smtp-Source: AK7set+y2wUtK/2KjhH2aoRvSw8s86PnaVFsAwkyCF0LLubxZmD5HOVAsUVA2eqx+ktrLDtbAowSynJem3PgpDUkTcY=
+X-Received: by 2002:a17:907:2391:b0:87f:5802:fd72 with SMTP id
+ vf17-20020a170907239100b0087f5802fd72mr2899883ejb.237.1675424463623; Fri, 03
+ Feb 2023 03:41:03 -0800 (PST)
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.100
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1675167975.git.zhoubinbin@loongson.cn> <c6d7ee649e73536c62f665d11b0504029bd5613a.1675167975.git.zhoubinbin@loongson.cn>
+ <Y9wqcWHBO9y/xKfO@ninjato>
+In-Reply-To: <Y9wqcWHBO9y/xKfO@ninjato>
+From:   Binbin Zhou <zhoubb.aaron@gmail.com>
+Date:   Fri, 3 Feb 2023 19:40:51 +0800
+Message-ID: <CAMpQs4++P2yBG-+FH_DhNvWgd9ynhWSuYmaod=Z0j8eQJ3ResA@mail.gmail.com>
+Subject: Re: [PATCH V11 2/3] i2c: ls2x: Add driver for Loongson-2K/LS7A I2C controller
+To:     Wolfram Sang <wsa@kernel.org>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, loongarch@lists.linux.dev,
+        devicetree@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Peibao Liu <liupeibao@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Geert!
+On Fri, Feb 3, 2023 at 5:26 AM Wolfram Sang <wsa@kernel.org> wrote:
+>
+> On Tue, Jan 31, 2023 at 08:37:31PM +0800, Binbin Zhou wrote:
+> > This I2C module is integrated into the Loongson-2K SoCs and Loongson
+> > LS7A bridge chip.
+> >
+> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> > Reviewed-by: Andy Shevchenko <andy@kernel.org>
+>
+> Applied to for-next, thank you and all the reviewers!
+>
+> If you like to maintain the driver, please send an addition to the
+> MAINTAINERS file in a seperate patch. That would be great!
+>
 
-On Fri, 2023-02-03 at 11:33 +0100, Geert Uytterhoeven wrote:
-> Hi Adrian,
-> 
-> On Fri, Feb 3, 2023 at 11:29 AM John Paul Adrian Glaubitz
-> <glaubitz@physik.fu-berlin.de> wrote:
-> > On Fri, 2023-02-03 at 09:30 +0100, Christoph Hellwig wrote:
-> > > On Fri, Feb 03, 2023 at 09:24:46AM +0100, John Paul Adrian Glaubitz wrote:
-> > > > Since this is my very first time stepping up as a kernel maintainer, I was hoping
-> > > > to get some pointers on what to do to make this happen.
-> > > > 
-> > > > So far, we have set up a new kernel tree and I have set up a local development and
-> > > > test environment for SH kernels using my SH7785LCR board as the target platform.
-> > > > 
-> > > > Do I just need to send a patch asking to change the corresponding entry in the
-> > > > MAINTAINERS file?
-> > > 
-> > > I'm not sure a there is a document, but:
-> > > 
-> > >  - add the MAINTAINERS change to your tree
-> > >  - ask Stephen to get your tree included in linux-next
-> > > 
-> > > then eventually send a pull request to Linus with all of that.  Make
-> > > sure it's been in linux-next for a while.
-> > 
-> > OK, thanks for the pointers! Will try to get this done by next week.
-> > 
-> > We're still discussing among SuperH developer community whether there will be a second
-> > maintainer, so please bear with us a few more days. I will collect patches in the
-> > meantime.
-> 
-> Thanks a lot!
-> 
-> If you need any help with process, setup, ... don't hesitate to ask
-> (on e.g. #renesas-soc on Libera).
+Of course, I'd like to do that, and the patch is coming.
 
-Thanks a lot! I've got some real-life tasks to do today, but I will join later today.
-
-And I will ask questions ;-).
-
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Thanks.
+Binbin
