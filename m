@@ -2,88 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFDC868A9F6
-	for <lists+linux-i2c@lfdr.de>; Sat,  4 Feb 2023 14:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BFE68ADA2
+	for <lists+linux-i2c@lfdr.de>; Sun,  5 Feb 2023 01:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjBDNTl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 4 Feb 2023 08:19:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
+        id S231162AbjBEAkw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 4 Feb 2023 19:40:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233466AbjBDNTk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 4 Feb 2023 08:19:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9932E808;
-        Sat,  4 Feb 2023 05:19:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE6B660B40;
-        Sat,  4 Feb 2023 13:19:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6E5AC433D2;
-        Sat,  4 Feb 2023 13:19:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675516778;
-        bh=kTH6dxHxYcZYenOQQ3u8iRjJX6qruICKizskH77l8wk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ASUHn1J+d1Ef2+Uk4YkHgncIfkNZGQoLri/0cNeQhFEcvvFi0pfZ/ZWrxQIN5kvI/
-         iEh3tXF64CxQKxt4NJ77gBgW/Zf1dNBMNtJaywHqbR538zMomOeeMqmTPoEx7kNopy
-         j/HgcYQ5UjTFDGpK6TztEE3uOyl/7KRnkYrEMawiDTh7VUX3LzjMrFZfMCFerbygcB
-         q5Owc7zzi1j1igh558zma6uc8MXqebkPolc4UsnWqg8Ww3BHQibOYzxB211CX0TTLN
-         XySTxIxhDMTVaYJAiLGqeO/HF97h7ApIRln2tqww64UKKnooKt1soPrZ76K74gPftR
-         46O+37LulDdQQ==
-Date:   Sat, 4 Feb 2023 13:19:17 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Immutable branch between MFD, Extcon and I2C due for the
- v6.3 merge window
-Message-ID: <Y95bVYc0dXOkJoGd@google.com>
-References: <20230126153823.22146-1-hdegoede@redhat.com>
+        with ESMTP id S229865AbjBEAkv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 4 Feb 2023 19:40:51 -0500
+X-Greylist: delayed 2057 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 04 Feb 2023 16:40:49 PST
+Received: from mail.peterfykh.hu (mail.peterfykh.hu [84.206.67.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5390722DC4;
+        Sat,  4 Feb 2023 16:40:49 -0800 (PST)
+Received: from mail.peterfykh.hu (localhost [127.0.0.1])
+        by mail.peterfykh.hu (Postfix) with ESMTP id A56A0E4A;
+        Sun,  5 Feb 2023 00:54:48 +0100 (CET)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230126153823.22146-1-hdegoede@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Sun, 05 Feb 2023 00:54:48 +0100
+From:   Charles <elek.istvan@peterfykh.hu>
+To:     undisclosed-recipients:;
+Subject: Hallo gelukkige vriend
+Reply-To: Charlesjackson@bahnhof.se
+Mail-Reply-To: Charlesjackson@bahnhof.se
+Message-ID: <0e67907da1a23cdb784933842673aae7@peterfykh.hu>
+X-Sender: elek.istvan@peterfykh.hu
+User-Agent: Roundcube Webmail/1.2.3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=peterfykh.hu; s=mail; t=1675554898; bh=vWAw+kwYJZVrDc3bw6PniQEp4YrGaPvgKo3xn+t5bOo=; h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Subject:Reply-To:Message-ID; b=R0p32v7dR1CaVERA5hPXJgsME5wiYzsIs/ncEo6UHSMXmgRU5G2xAYppsVoJQg7QERJX5gC32QGhcw/mruHOM+Ggv5hRh1pBrfmEmnzaWPzj/WuOI5l91UdiARPcS7jeejjCa+SLPfw0BdhL4md3P/rFADd8nAofLLfhhrKe/F4=
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Enjoy!
+Hallo gelukkige vriend,
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+Hallo mijn gelukkige vriend, ik ben de heer Charles W. Jackson Jr., de 
+megawinnaar van $ 344,6 miljoen in de Mega Millions Jackpot, ik doneer 
+aan 5 willekeurige individuen, als je deze e-mail ontvangt, is je e-mail 
+geselecteerd na een draaibal . Ik heb het grootste deel van mijn 
+vermogen verdeeld over een aantal goede doelen en organisaties. Ik heb 
+vrijwillig besloten om de som van $ 3 miljoen USD aan jou of je 
+organisatie te doneren als een van de geselecteerde 5, je kunt mijn 
+winst verifiëren via de onderstaande YouTube-pagina.
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/ib-mfd-extcon-i2c-v6.3
+BEKIJK MIJ HIER: https://www.youtube.com/watch?v=0MUR8QEIMQI
 
-for you to fetch changes up to 783422d00d7d8f7725dc781fcd3cfcaae13595e5:
 
-  extcon: intel-cht-wc: Add support for Lenovo Yoga Tab 3 Pro YT3-X90F (2023-02-04 13:05:42 +0000)
+Deze donatie van $ 3 miljoen USD is gedaan om u in staat te stellen uw 
+persoonlijke problemen te versterken en genereus de hand te reiken aan 
+de minst bevoorrechte, verweesde en liefdadigheidsorganisaties in uw 
+gemeenschap.
+Wat voor mij het belangrijkste is, is dat u de gedoneerde fondsen op de 
+beste manier toewijst die u, uw familie, vrienden ten goede komt en om 
+de behoeftigen in uw directe gemeenschap te helpen.
 
-----------------------------------------------------------------
-Immutable branch between MFD, Extcon and I2C due for the v6.3 merge window
 
-----------------------------------------------------------------
-Hans de Goede (3):
-      mfd: intel_soc_pmic_chtwc: Add Lenovo Yoga Tab 3 X90F to intel_cht_wc_models
-      i2c: cht-wc: Add charger-chip info for the Lenovo Yoga Tab 3 YT3-X90F
-      extcon: intel-cht-wc: Add support for Lenovo Yoga Tab 3 Pro YT3-X90F
+DIT IS JE DONATIECODE: DON207152
 
- drivers/extcon/extcon-intel-cht-wc.c |  1 +
- drivers/i2c/busses/i2c-cht-wc.c      | 46 ++++++++++++++++++++++++++++++++++++
- drivers/mfd/intel_soc_pmic_chtwc.c   |  8 +++++++
- include/linux/mfd/intel_soc_pmic.h   |  1 +
- 4 files changed, 56 insertions(+)
 
--- 
-Lee Jones [李琼斯]
+Stuur je DONATIECODE naar deze e-mail door simpelweg zo snel mogelijk op 
+antwoord op dit bericht te klikken, zodat we de donatieprocedure snel 
+kunnen afronden.
+
+E-mailadres contact: charlesjacksonj1@gmail.com
+
+
+Ik hoop u en uw gezin dit jaar gelukkig te maken.
+
+
+Groeten,
+
+Charles W.Jackson Jr
