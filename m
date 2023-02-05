@@ -2,107 +2,131 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990DF68B299
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Feb 2023 00:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0416A68B2A5
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Feb 2023 00:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjBEXCW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 5 Feb 2023 18:02:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
+        id S229590AbjBEXJI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 5 Feb 2023 18:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBEXCV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 5 Feb 2023 18:02:21 -0500
-Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4865C17CF6;
-        Sun,  5 Feb 2023 15:02:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-        s=default2002; h=Content-Transfer-Encoding:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=4Qpo2CTM+yuWhPjOv3A/eGJDp6pSMrUD8pl15abP4Bg=; b=Sf6JkC422imGlgWqMTYFGFGtXb
-        +OjEL5SWf7qVIrDhVZqEq/WRbFcKB+0cEL+8yNI+D6z+0oF1bwyOxAnOJkiXOaRXp7u/kSyXSRRkI
-        7NSAiahFn1a5wuwr1gPq8clrPECM87dTlE2a5sQNamhR7gif/vMqfBC9TublWp7pelUac6O5nDwAT
-        ylhfIFGSjJu2QCRQRPuzz/qXWXz4KsJzBJMMM6kHhhXuTk6tLlivygtiYSyha1sxE6fUlwx5ewzZa
-        bMTDwBDcB9MFw9LGj0MIa5Neg/PnNI0ligEmByW6/b7a0SQJNzk5VboHBF4EhiRp5P2MBuIH+qUd4
-        DDF4Boow==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lars@metafoo.de>)
-        id 1pOo1a-000A5Y-GE; Mon, 06 Feb 2023 00:02:18 +0100
-Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b] (helo=lars-desktop.lan)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1pOo1Z-000WgB-V9; Mon, 06 Feb 2023 00:02:18 +0100
-From:   Lars-Peter Clausen <lars@metafoo.de>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Michal Simek <michal.simek@amd.com>,
-        Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH 2/2] dt-bindings: i2c: cadence: Document `cdns,fifo-depth` property
-Date:   Sun,  5 Feb 2023 15:02:08 -0800
-Message-Id: <20230205230208.58355-2-lars@metafoo.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230205230208.58355-1-lars@metafoo.de>
-References: <20230205230208.58355-1-lars@metafoo.de>
+        with ESMTP id S229478AbjBEXJH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 5 Feb 2023 18:09:07 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1062F17CF5;
+        Sun,  5 Feb 2023 15:09:05 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P94p10kzhz4x1f;
+        Mon,  6 Feb 2023 10:08:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675638543;
+        bh=pNXUawnaU3qfDTxBKpmXsJPpQ4kMgE5LZAjUfYaVNaQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZnYADCx5yiYMn3pkGOedm0t/sNMIjkMYLf/dBTxabGoodLOZTSPJETPuFDge/Cde4
+         aIRPsac6jVpl6zYzM5s0sf9qZ8PH7w9zSC17MHdHR3/1Prai5iUUUHvsKOEj2nhHO3
+         Cblnv6/K2AhBj4YkTU2WIyVtn11Iyu9muX3ILcAHxEldyx9xBhSO4GKxKXmaTccHeU
+         yYw5esGxcNGOWPs8dnxojmNjd9fFKZA9h2nPmfY09YsEtc/xrY2g/H5zDiLVhBoJXQ
+         OF2qL+X7Qm4pEDL2kEKjgtpjAAAz7yUq4t9yOAfwzn4aDqbJ6ZpjiHa3qtmhjT39nt
+         0JnygHWxXhFVw==
+Date:   Mon, 6 Feb 2023 10:08:55 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Subject: Re: remove arch/sh
+Message-ID: <20230206100856.603a0f8f@canb.auug.org.au>
+In-Reply-To: <20230203083037.GA30738@lst.de>
+References: <20230113062339.1909087-1-hch@lst.de>
+        <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+        <20230116071306.GA15848@lst.de>
+        <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+        <20230203071423.GA24833@lst.de>
+        <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
+        <20230203083037.GA30738@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26803/Sun Feb  5 09:39:28 2023)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/9=gZIOzZKIZz.T3XwOWz_99";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The depth of the FIFO of the Cadence I2C controller IP is a synthesis
-configuration parameter. Different instances of the IP can have different
-values. For correct operation software needs to be aware of the size of the
-FIFO.
+--Sig_/9=gZIOzZKIZz.T3XwOWz_99
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Add the documentation for the devicetree property that describes the FIFO
-depth of the IP core.
+Hi,
 
-The default value of 16 is for backwards compatibility reasons with
-existing hardware descriptions where this property is not specified and
-software has assumed that the FIFO depth is 16.
+On Fri, 3 Feb 2023 09:30:37 +0100 Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Fri, Feb 03, 2023 at 09:24:46AM +0100, John Paul Adrian Glaubitz wrote:
+> > Since this is my very first time stepping up as a kernel maintainer, I =
+was hoping
+> > to get some pointers on what to do to make this happen.
+> >=20
+> > So far, we have set up a new kernel tree and I have set up a local deve=
+lopment and
+> > test environment for SH kernels using my SH7785LCR board as the target =
+platform.
+> >=20
+> > Do I just need to send a patch asking to change the corresponding entry=
+ in the
+> > MAINTAINERS file? =20
+>=20
+> I'm not sure a there is a document, but:
+>=20
+>  - add the MAINTAINERS change to your tree
+>  - ask Stephen to get your tree included in linux-next
 
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
----
- Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
+And by "Stephen", Christoph means me.  When you are ready, please send
+me a request to include your tree/branch in linux-next (usually the
+branch is called something like "for-next" or just "next") telling me
+the git URL, and the contacts I should send email to if there are
+conflicts/build issues with the branch.  I will then fetch the branch
+every time I create a new linux-next release (most work days), so all
+you need to do is update that branch each time you are ready to publish
+more commits.
 
-diff --git a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-index 2e95cda7262a..3daa2fa73257 100644
---- a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-+++ b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-@@ -38,6 +38,12 @@ properties:
-     description: |
-       Input clock name.
- 
-+  cdns,fifo-depth:
-+    description:
-+      Size of the data FIFO in words.
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    default: 16
-+
- required:
-   - compatible
-   - reg
-@@ -57,4 +63,6 @@ examples:
-         clock-frequency = <400000>;
-         #address-cells = <1>;
-         #size-cells = <0>;
-+
-+        cdns,fifo-depth = <8>;
-     };
--- 
-2.30.2
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/9=gZIOzZKIZz.T3XwOWz_99
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPgNwgACgkQAVBC80lX
+0GzQVAgAjy+Ruo0rndMBlq3LUsn3e3WM6k7+dwjW7y5KrWBUtO9yrheMEypNr12O
+byLw07yy1/H56vz7bZJN3IaFDMrx7kFxU2Rfi4K2lkrd5y7hRGFHFbyG9KACdTVo
+d4yMastrzpa4sqz6druszU7GDQnWEFS8+bdy18sKOXOIF2A4/bCfyPcwbu6WcX9U
+PWBzYOIqYThwk1BW+po7wuq+KMZW0337iVEob5zS9qRotE98YCs2zc5AjSg1XQx3
+SWMIA+zrNKOlxUJ9BUoeDAQUoe6UJjekpz9o0j9q/w1DDNKl9mXQ5q+JvpuzrtGj
+5u71j4opYj+PidkCy3HMoXj2z0tlFw==
+=TRVa
+-----END PGP SIGNATURE-----
+
+--Sig_/9=gZIOzZKIZz.T3XwOWz_99--
