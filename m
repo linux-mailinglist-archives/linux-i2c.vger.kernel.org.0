@@ -2,126 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A36C68C1DD
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Feb 2023 16:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C10568C233
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Feb 2023 16:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjBFPla (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Feb 2023 10:41:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
+        id S229943AbjBFPvM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Feb 2023 10:51:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjBFPlH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Feb 2023 10:41:07 -0500
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581F4227A6
-        for <linux-i2c@vger.kernel.org>; Mon,  6 Feb 2023 07:40:16 -0800 (PST)
-Received: by mail-ua1-x934.google.com with SMTP id g13so952709uan.7
-        for <linux-i2c@vger.kernel.org>; Mon, 06 Feb 2023 07:40:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bpkauG+rgx7W7DFN0SYxYtweC2kO2oK5ojBoQErRjTA=;
-        b=CJmjo4Zedug8tgemoAR1Z9q6U/IwIlpNwMIBoUa5k76WDDaWZCcgzLdgbSPg4zCstT
-         2F00oXh/jSbYtmcNCCP/y3M4UtzkzHRDdnA/600T9p+jECf5JcHm7Res5u5wCeBT5HbY
-         IvGcBPjlAOPd9zlIB/7gMkctWhkNszY7n+/gbkufGIfAwuqZ6L6mzKt5jz/YemKoZmos
-         MoRImvgKoprmqCEOXi23JdgM/8V7GFaqEjpqtEnZLTllj2mU2oDkGU+8HyBpHMgfAfOe
-         ieHVd4k4s77qw+IA1cU7Yr29+Uv6fCtMUYBeoom8EQUvP2ivmvS8DAC2OXs059XJRhl6
-         +v+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bpkauG+rgx7W7DFN0SYxYtweC2kO2oK5ojBoQErRjTA=;
-        b=3qlyCQNsntA2kHz3AP4TXw82Tkph5CRmI/lKYb6pya8fvwD0dTf2g/MM7KZzM9ahKG
-         uuYM4nfdYHIjysvbT1NPlcZHDJBjr0Cg2JHede/i0IDq89kXYIsEjeyRT+5+GHn3CfHN
-         xXNVeFkVElXLnjGW7gfvd1YcOnCeC5tWqiB44OPW/hBQqm9DBgJVY0EwAlSG7/Wg87d+
-         OGd+hBprmJH03c1uF+YoXofx1oZ+NtroAnWuRRBCxqyjQRTcfDTMkpMGIjIdXsIsgoHM
-         BPeybOPKlZp7GXRwgWtqmuFlxMerikw1Lg40/ca3fdkupKJgnEDSRDioXC/SPzQNKDKl
-         BF/Q==
-X-Gm-Message-State: AO0yUKUQ5Uq8324B7jMXIsIKi1jhimH65x6CW9gp+S+Xypm7mgURrcdu
-        8S+4Y8tYHG7pZR6VAeH9nho1CGYgO4l4UHRC7x0VRA==
-X-Google-Smtp-Source: AK7set9lz31x3q1eRkFASaS5TaQzAhGeLPxObyJKNUQBhR5rCgh8Zz6r6jvUT/ADOybgPBub1exrHldvNio3+vAY3dQ=
-X-Received: by 2002:ab0:134c:0:b0:419:5b8b:4cda with SMTP id
- h12-20020ab0134c000000b004195b8b4cdamr3026669uae.8.1675697947673; Mon, 06 Feb
- 2023 07:39:07 -0800 (PST)
-MIME-Version: 1.0
-References: <20230118134940.240102-1-brgl@bgdev.pl> <20230206152849.aygz4hlnpo5azx75@pengutronix.de>
-In-Reply-To: <20230206152849.aygz4hlnpo5azx75@pengutronix.de>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 6 Feb 2023 16:38:56 +0100
-Message-ID: <CAMRc=MerMK+jHcm_qDDZQFrLAKpXkfoUfmwJvKqHS-wP=EahVg@mail.gmail.com>
-Subject: Re: [PATCH v3] i2c: dev: don't allow user-space to deadlock the kernel
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        with ESMTP id S230042AbjBFPvL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Feb 2023 10:51:11 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F1A6589
+        for <linux-i2c@vger.kernel.org>; Mon,  6 Feb 2023 07:51:10 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pP3ls-0001ay-Nv; Mon, 06 Feb 2023 16:51:08 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pP3lq-0035nw-RB; Mon, 06 Feb 2023 16:51:08 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pP3lr-001KRz-2k; Mon, 06 Feb 2023 16:51:07 +0100
+Date:   Mon, 6 Feb 2023 16:51:07 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3] i2c: dev: don't allow user-space to deadlock the
+ kernel
+Message-ID: <20230206155107.qwf5tbrqsbvv4hln@pengutronix.de>
+References: <20230118134940.240102-1-brgl@bgdev.pl>
+ <Y9DpbChLZfDONHPz@ninjato>
+ <Y9GpL9RBNM8H2ZSL@shikoro>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ol763elobegcycbx"
+Content-Disposition: inline
+In-Reply-To: <Y9GpL9RBNM8H2ZSL@shikoro>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 4:28 PM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> Hello,
->
-> On Wed, Jan 18, 2023 at 02:49:40PM +0100, Bartosz Golaszewski wrote:
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> > If we open an i2c character device and then unbind the underlying i2c
-> > adapter (either by unbinding it manually via sysfs or - for a real-life
-> > example - when unplugging a USB device with an i2c adaper), the kernel
-> > thread calling i2c_del_adapter() will become blocked waiting for the
-> > completion that only completes once all references to the character
-> > device get dropped.
->
-> Is this bad?
->
-> > In order to fix that, we introduce a couple changes. They need to be
-> > part of a single commit in order to preserve bisectability. First, drop
-> > the dev_release completion. That removes the risk of a deadlock but
-> > we now need to protect the character device structures against NULL
-> > pointer dereferences. To that end introduce an rw semaphore. It will
-> > protect the dummy i2c_client structure against dropping the adapter fro=
-m
-> > under it. It will be taken for reading by all file_operations callbacks
-> > and for writing by the notifier's unbind handler. This way we don't
-> > prohibit the syscalls that don't get in each other's way from running
-> > concurrently but the adapter will not be unbound before all syscalls
-> > return.
-> >
-> > Finally: upon being notified about an unbind event for the i2c adapter,
-> > we take the lock for writing and set the adapter pointer in the charact=
-er
-> > device's structure to NULL. This "numbs down" the device - it still exi=
-sts
-> > but is no longer functional. Meanwhile every syscall callback checks th=
-at
-> > pointer after taking the lock but before executing any code that requir=
-es
-> > it. If it's NULL, we return an error to user-space.
-> >
-> > This way we can safely open an i2c device from user-space, unbind the
-> > device without triggering a deadlock and any subsequent system-call for
-> > the file descriptor associated with the removed adapter will gracefully
-> > fail.
-> >
-> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->
-> @Bartosz, is that the patch you talked about on FOSDEM? I thought
-> Wolfram had some concerns but I thought they were unaddressed still.
-> What am I missing?
 
-Hi Uwe, yes, this patch was dropped, I can see the rest of the
-discussion on the list, have you got the rest of the email too?
+--ol763elobegcycbx
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Bart
+Hello,
+
+ah, this is the mail I missed before.
+
+On Wed, Jan 25, 2023 at 11:11:59PM +0100, Wolfram Sang wrote:
+>=20
+> > So, this code handled all my stress-testing well so far. I'll try to
+> > think of some more ideas until this evening, but likely I will apply it
+> > later. Nonetheless, more review eyes are still welcome!
+>=20
+> Ah yes, I now recalled why I had the gut feeling that this solution is
+> not complete. See this mail thread from 2015:
+>=20
+> https://lkml.iu.edu/hypermail/linux/kernel/1501.2/01700.html
+>=20
+> There are still drivers using i2c_del_adapter()+kfree(), so removing the
+> completion could cause use-after-free there, or?
+
+There is also a strange construct in spi that I understand at one point
+in time, but I failed to swap it in quickly. It's about commit
+794aaf01444d4e765e2b067cba01cc69c1c68ed9. I think there should be a
+nicer solution than to track if the controller was allocated using devm,
+but I don't remember the details. But before addressing the i2c problem
+it might be worth to invest some time into that spi issue to not make
+the same mistake for i2c.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--ol763elobegcycbx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPhId4ACgkQwfwUeK3K
+7AmVZAgAl3Faq9I+XvDqrdflU2pn5514NuWK8YOXY2AZDQ6EWYK9+qv/U1nf6+cS
+rvmqPv/0yoQ/MGcVOPY1dFnPMCRyjgt/dC75VYP0qBOFaJ4xm/xvHKV9QTmsDLhN
++vkwKMAUZkKW/MbIL+rjril1w+GuFhrFp0RoCM4NXF3t+Jo0XwRn3JE/lwvSBL+c
+0SS1w1LykId2Wo6tTSqP9U54OnCc0QiYJ5WyjD+HXmAB0oWx6ZOvx27zNr+0HPSn
+XcTyDTPiBgu8ssss4xyWMGqTGvaBtv2P3nncO8GZsC0ejpWYVd63aJTngB1zwY00
+ugxdHWQpnYOIpiPbE9PipLyu3PEHBQ==
+=quCD
+-----END PGP SIGNATURE-----
+
+--ol763elobegcycbx--
