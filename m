@@ -2,108 +2,164 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B6868C554
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Feb 2023 19:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B74F68C593
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Feb 2023 19:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjBFSB0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Feb 2023 13:01:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57298 "EHLO
+        id S230076AbjBFSRw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Feb 2023 13:17:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjBFSBZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Feb 2023 13:01:25 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0B52BF35
-        for <linux-i2c@vger.kernel.org>; Mon,  6 Feb 2023 10:01:23 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id k6so13563254vsk.1
-        for <linux-i2c@vger.kernel.org>; Mon, 06 Feb 2023 10:01:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AovKaYugu50S/f2B978nfmPElm2qMfvoOhokNIP847U=;
-        b=Ops+BJewCRfpBNkWE2t9Nd5h3no2SfuN3xwaX1TPK17nLkUHjJ3d6qCUhmeR6TLOvl
-         KA54u85d7dGY47W0sc1bbgfNIoJdTUXmNTtAPVGRmpeebPedSU5vbnPrvFGWrjDsGQj6
-         51RKB7l7V3IkE4HUiCwKYm54PVbKp4yKd2nrVDaYfVQfZ76abEKE7a57EH6YHOwAA1oK
-         Blh1XWA+FDzOHH5AYRImKlyKFzaQYVx1YS/A7rkygkrXiQzufHKC//xyDzr8/sNqtStU
-         YOBsUyQ6ODVeEnwY8aR3gy0QByrfgxsVbH4vO1bM3hyfrLYrLp5QKSdBosSKs8Z+YY5o
-         hYtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AovKaYugu50S/f2B978nfmPElm2qMfvoOhokNIP847U=;
-        b=70K3X8I5/sC7QY1igb00fEhoLMmr97WZQpmv6J5cRBG/3xO37RDISFkWsOYGulSXoj
-         x9lvX/90ynK0oewAaCXbPr05Qga/nnDVd9qEwx/uVNlyn2SB2dkA7TB0fRJ+TbMzD0ST
-         4czDFdvaGQsiDXYHZpliQI9M4GIXPIKn/gSe58bHfpvMvGHCde1OlUFG62yIACOSPqtr
-         u/en928plmw/LJ4j/cZgTMCgJtMWsX5/5U/RPReshv247m40q3LYBP6t/c+UovJWjlLD
-         3oGsUlkdmZBPUp03tOWIZAFVrSOsjWGXAIWbMoSd2m5+xQ4Foqgn5sqtdqnhEuBcxY+p
-         lxWA==
-X-Gm-Message-State: AO0yUKV9Bxh5cvbk+//ucvO+L54QryIWFL8QsAgAPlrNGroFXCaGd5T4
-        6BKm6LPf5o0uztHCRQaInEUnwYvI1zhuR9MazRrs1w==
-X-Google-Smtp-Source: AK7set+9Li15tr3aRCwXnHOJLd/UXJaDEEQSZ2h6RaR4pJm9jBZirB4qGtMmATBxRr5/jYOOz8wpY/MDTGP5DA9dKGk=
-X-Received: by 2002:a67:c908:0:b0:408:6a8f:d1c6 with SMTP id
- w8-20020a67c908000000b004086a8fd1c6mr97061vsk.73.1675706482791; Mon, 06 Feb
- 2023 10:01:22 -0800 (PST)
+        with ESMTP id S230088AbjBFSRu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Feb 2023 13:17:50 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50E922A37;
+        Mon,  6 Feb 2023 10:17:44 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 316Dw1Mr003538;
+        Mon, 6 Feb 2023 18:17:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=dJJ13g6rj+xIrq0T3eUEIbV10GxuSSR5Gcak2Juy/lM=;
+ b=XtQxUCLz6Y3AyjDUMsjJ1ieYJ2KdSaDxIulaEFH/QGB/1BDDVbTGFvu+MyFGgXqd3317
+ +xNLSS1PvD+e09Y3jKpiWxOmkvCb2Ev0IECUyt+BlHOPjOvQzPUHzfsT+ZQwf5VkLpX7
+ iEorYsQCNOeZAbupmHVEdJTDI/rI5+0fVjqGhvh7vx79GJALjqK0xOzYwswhQc3/w/4s
+ JnWDniGmAmD1y0DCOC2kSGQDSPVVTYyLaDy95RraLHg2bWHDxpqbxB/rTPDywqM130Re
+ /tPne3FMszTdgHZrnqA5toXJQSeZXdYB86jKm+fypK3AqDmv0az5REO2E2TqfeAS0i/E Sw== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nheb0vdak-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Feb 2023 18:17:40 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 316IHdfF011629
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 6 Feb 2023 18:17:39 GMT
+Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
+ 10:17:39 -0800
+Message-ID: <298c709e-5873-7aa8-3c00-b1a0ddc5c436@quicinc.com>
+Date:   Mon, 6 Feb 2023 10:17:39 -0800
 MIME-Version: 1.0
-References: <20230118134940.240102-1-brgl@bgdev.pl> <Y9DpbChLZfDONHPz@ninjato>
- <Y9GpL9RBNM8H2ZSL@shikoro> <20230206155107.qwf5tbrqsbvv4hln@pengutronix.de>
-In-Reply-To: <20230206155107.qwf5tbrqsbvv4hln@pengutronix.de>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 6 Feb 2023 19:01:11 +0100
-Message-ID: <CAMRc=Mdz_+_MDJAjkXWa2P8FM8i6XPMAVQ-xTUtZDXfD-RBo_w@mail.gmail.com>
-Subject: Re: [PATCH v3] i2c: dev: don't allow user-space to deadlock the kernel
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URI_DOTEDU
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] soc: qcom: geni-se: Move qcom-geni-se.h to
+ linux/soc/qcom/geni-se.h
+Content-Language: en-US
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+CC:     Visweswara Tanuku <quic_vtanuku@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>
+References: <20230203210133.3552796-1-quic_eberman@quicinc.com>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <20230203210133.3552796-1-quic_eberman@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: UDYBliO-YNogq6ZqeomTMFdH1cyj3V5s
+X-Proofpoint-GUID: UDYBliO-YNogq6ZqeomTMFdH1cyj3V5s
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ priorityscore=1501 malwarescore=0 bulkscore=0 mlxscore=0 suspectscore=0
+ mlxlogscore=999 adultscore=0 phishscore=0 clxscore=1015 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302060158
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 4:51 PM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> Hello,
->
-> ah, this is the mail I missed before.
->
-> On Wed, Jan 25, 2023 at 11:11:59PM +0100, Wolfram Sang wrote:
-> >
-> > > So, this code handled all my stress-testing well so far. I'll try to
-> > > think of some more ideas until this evening, but likely I will apply =
-it
-> > > later. Nonetheless, more review eyes are still welcome!
-> >
-> > Ah yes, I now recalled why I had the gut feeling that this solution is
-> > not complete. See this mail thread from 2015:
-> >
-> > https://lkml.iu.edu/hypermail/linux/kernel/1501.2/01700.html
-> >
-> > There are still drivers using i2c_del_adapter()+kfree(), so removing th=
-e
-> > completion could cause use-after-free there, or?
->
-> There is also a strange construct in spi that I understand at one point
-> in time, but I failed to swap it in quickly. It's about commit
-> 794aaf01444d4e765e2b067cba01cc69c1c68ed9. I think there should be a
-> nicer solution than to track if the controller was allocated using devm,
-> but I don't remember the details. But before addressing the i2c problem
-> it might be worth to invest some time into that spi issue to not make
-> the same mistake for i2c.
->
 
-Yeah, I've seen these constructs before elsewhere... Sadly, we have
-workarounds upon workarounds within workarounds chased by other
-workarounds due to this issue.
 
-Bart
+On 2/3/2023 1:01 PM, Elliot Berman wrote:
+> Move include/linux/qcom-geni-se.h to include/linux/soc/qcom/geni-se.h.
+> This removes 1 of a few remaining Qualcomm-specific headers into a more
+> approciate subdirectory under include/.
+
+Need to s/approciate/appropriate/ (Thanks Mukesh!)
+
+> 
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+>   drivers/i2c/busses/i2c-qcom-geni.c                   | 2 +-
+>   drivers/soc/qcom/qcom-geni-se.c                      | 2 +-
+>   drivers/spi/spi-geni-qcom.c                          | 2 +-
+>   drivers/tty/serial/qcom_geni_serial.c                | 2 +-
+>   include/linux/{qcom-geni-se.h => soc/qcom/geni-se.h} | 0
+>   5 files changed, 4 insertions(+), 4 deletions(-)
+>   rename include/linux/{qcom-geni-se.h => soc/qcom/geni-se.h} (100%)
+> 
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> index fd70794bfcee..80d586b0be7a 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> @@ -14,7 +14,7 @@
+>   #include <linux/of.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/pm_runtime.h>
+> -#include <linux/qcom-geni-se.h>
+> +#include <linux/soc/qcom/geni-se.h>
+>   #include <linux/spinlock.h>
+>   
+>   #define SE_I2C_TX_TRANS_LEN		0x26c
+> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+> index f0475b93ca73..795a2e1d59b3 100644
+> --- a/drivers/soc/qcom/qcom-geni-se.c
+> +++ b/drivers/soc/qcom/qcom-geni-se.c
+> @@ -14,7 +14,7 @@
+>   #include <linux/of_platform.h>
+>   #include <linux/pinctrl/consumer.h>
+>   #include <linux/platform_device.h>
+> -#include <linux/qcom-geni-se.h>
+> +#include <linux/soc/qcom/geni-se.h>
+>   
+>   /**
+>    * DOC: Overview
+> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+> index 4e83cc5b445d..e05e40a49294 100644
+> --- a/drivers/spi/spi-geni-qcom.c
+> +++ b/drivers/spi/spi-geni-qcom.c
+> @@ -12,7 +12,7 @@
+>   #include <linux/platform_device.h>
+>   #include <linux/pm_opp.h>
+>   #include <linux/pm_runtime.h>
+> -#include <linux/qcom-geni-se.h>
+> +#include <linux/soc/qcom/geni-se.h>
+>   #include <linux/spi/spi.h>
+>   #include <linux/spinlock.h>
+>   
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> index b487823f0e61..52f3a0184577 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -16,7 +16,7 @@
+>   #include <linux/platform_device.h>
+>   #include <linux/pm_runtime.h>
+>   #include <linux/pm_wakeirq.h>
+> -#include <linux/qcom-geni-se.h>
+> +#include <linux/soc/qcom/geni-se.h>
+>   #include <linux/serial.h>
+>   #include <linux/serial_core.h>
+>   #include <linux/slab.h>
+> diff --git a/include/linux/qcom-geni-se.h b/include/linux/soc/qcom/geni-se.h
+> similarity index 100%
+> rename from include/linux/qcom-geni-se.h
+> rename to include/linux/soc/qcom/geni-se.h
+> 
+> base-commit: 3866989ec2c319341e2cf69ec6116269b634a271
