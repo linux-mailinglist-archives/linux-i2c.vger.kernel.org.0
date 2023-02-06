@@ -2,135 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CAF768C5F6
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Feb 2023 19:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA9D68C856
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Feb 2023 22:13:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjBFSjl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Feb 2023 13:39:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
+        id S229739AbjBFVNJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Feb 2023 16:13:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjBFSjk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Feb 2023 13:39:40 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BDC2ED64
-        for <linux-i2c@vger.kernel.org>; Mon,  6 Feb 2023 10:39:33 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pP6Op-0006cv-QR; Mon, 06 Feb 2023 19:39:31 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pP6On-0037UJ-VE; Mon, 06 Feb 2023 19:39:31 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pP6Oo-001MHG-8Z; Mon, 06 Feb 2023 19:39:30 +0100
-Date:   Mon, 6 Feb 2023 19:39:30 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v3] i2c: dev: don't allow user-space to deadlock the
- kernel
-Message-ID: <20230206183930.sipw62it7xmx6nkt@pengutronix.de>
-References: <20230118134940.240102-1-brgl@bgdev.pl>
- <Y9DpbChLZfDONHPz@ninjato>
- <Y9GpL9RBNM8H2ZSL@shikoro>
- <20230206155107.qwf5tbrqsbvv4hln@pengutronix.de>
- <CAMRc=Mdz_+_MDJAjkXWa2P8FM8i6XPMAVQ-xTUtZDXfD-RBo_w@mail.gmail.com>
+        with ESMTP id S230093AbjBFVNI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Feb 2023 16:13:08 -0500
+X-Greylist: delayed 563 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Feb 2023 13:13:07 PST
+Received: from qs51p00im-qukt01072701.me.com (qs51p00im-qukt01072701.me.com [17.57.155.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FAE6181
+        for <linux-i2c@vger.kernel.org>; Mon,  6 Feb 2023 13:13:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1675717423; bh=nDqcwgYfwv4lTDUs/q+Zq23g/jcLqlPNBpJQ3yHg2Q8=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=NkoYjk58L0yG9WuovJ3Pml7hfE1S+S3YHTS2jANnfYOXuhs9Os/Q+xhbWbyG5m8K5
+         f8zvBWmnz9W9s0jF31rS0ov8ItRNA6EH45q6luWyZumMgppbJsehwgbjEXg+B8afUO
+         C1q8BWOtX1IJsRKdSAAbS5ejM9tFsgmvgqvO7+EDyQZzI3MQgGoVftjvZVIKDPHydN
+         U9hx2mJX1nNrD4HzMZgvjR1dJyNPqilMvjR7q5s03H42woEuJN+lpxES/NepLHicUa
+         gFlEQ5WXBK80Rtzq+KfL/NoxnkEKNv9n5iRim0lzeg/ig9V1NKzrqZ6rK4dlZcGdyZ
+         5qJmGngQnfGvw==
+Received: from localhost (qs51p00im-dlb-asmtp-mailmevip.me.com [17.57.155.28])
+        by qs51p00im-qukt01072701.me.com (Postfix) with ESMTPSA id 62B1315C0702;
+        Mon,  6 Feb 2023 21:03:42 +0000 (UTC)
+From:   Alain Volmat <avolmat@me.com>
+To:     Patrice Chotard <patrice.chotard@foss.st.com>
+Cc:     Alain Volmat <avolmat@me.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: st: use pm_sleep_ptr to avoid ifdef CONFIG_PM_SLEEP
+Date:   Mon,  6 Feb 2023 22:03:23 +0100
+Message-Id: <20230206210324.65508-1-avolmat@me.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qc7dorfog3znw3nz"
-Content-Disposition: inline
-In-Reply-To: <CAMRc=Mdz_+_MDJAjkXWa2P8FM8i6XPMAVQ-xTUtZDXfD-RBo_w@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: bffMchFZif8_wUljSr6IvtqqwQ6FZjLq
+X-Proofpoint-GUID: bffMchFZif8_wUljSr6IvtqqwQ6FZjLq
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.572,17.0.605.474.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-01-11=5F01:2022-01-11=5F01,2020-02-14=5F11,2020-01-23?=
+ =?UTF-8?Q?=5F02_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1011 bulkscore=0
+ mlxlogscore=963 phishscore=0 spamscore=0 mlxscore=0 malwarescore=0
+ adultscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2302060182
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Rely on pm_sleep_ptr when setting the pm ops and get rid
+of the ifdef CONFIG_PM_SLEEP around suspend/resume functions.
 
---qc7dorfog3znw3nz
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Alain Volmat <avolmat@me.com>
+---
+ drivers/i2c/busses/i2c-st.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-Hello Bartosz,
+diff --git a/drivers/i2c/busses/i2c-st.c b/drivers/i2c/busses/i2c-st.c
+index 88482316d22a..f823913b75a6 100644
+--- a/drivers/i2c/busses/i2c-st.c
++++ b/drivers/i2c/busses/i2c-st.c
+@@ -740,7 +740,6 @@ static int st_i2c_xfer(struct i2c_adapter *i2c_adap,
+ 	return (ret < 0) ? ret : i;
+ }
+ 
+-#ifdef CONFIG_PM_SLEEP
+ static int st_i2c_suspend(struct device *dev)
+ {
+ 	struct st_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+@@ -762,11 +761,7 @@ static int st_i2c_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-static SIMPLE_DEV_PM_OPS(st_i2c_pm, st_i2c_suspend, st_i2c_resume);
+-#define ST_I2C_PM	(&st_i2c_pm)
+-#else
+-#define ST_I2C_PM	NULL
+-#endif
++static DEFINE_SIMPLE_DEV_PM_OPS(st_i2c_pm, st_i2c_suspend, st_i2c_resume);
+ 
+ static u32 st_i2c_func(struct i2c_adapter *adap)
+ {
+@@ -901,7 +896,7 @@ static struct platform_driver st_i2c_driver = {
+ 	.driver = {
+ 		.name = "st-i2c",
+ 		.of_match_table = st_i2c_match,
+-		.pm = ST_I2C_PM,
++		.pm = pm_sleep_ptr(&st_i2c_pm),
+ 	},
+ 	.probe = st_i2c_probe,
+ 	.remove = st_i2c_remove,
+-- 
+2.34.1
 
-On Mon, Feb 06, 2023 at 07:01:11PM +0100, Bartosz Golaszewski wrote:
-> On Mon, Feb 6, 2023 at 4:51 PM Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> >
-> > Hello,
-> >
-> > ah, this is the mail I missed before.
-> >
-> > On Wed, Jan 25, 2023 at 11:11:59PM +0100, Wolfram Sang wrote:
-> > >
-> > > > So, this code handled all my stress-testing well so far. I'll try to
-> > > > think of some more ideas until this evening, but likely I will appl=
-y it
-> > > > later. Nonetheless, more review eyes are still welcome!
-> > >
-> > > Ah yes, I now recalled why I had the gut feeling that this solution is
-> > > not complete. See this mail thread from 2015:
-> > >
-> > > https://lkml.iu.edu/hypermail/linux/kernel/1501.2/01700.html
-> > >
-> > > There are still drivers using i2c_del_adapter()+kfree(), so removing =
-the
-> > > completion could cause use-after-free there, or?
-> >
-> > There is also a strange construct in spi that I understand at one point
-> > in time, but I failed to swap it in quickly. It's about commit
-> > 794aaf01444d4e765e2b067cba01cc69c1c68ed9. I think there should be a
-> > nicer solution than to track if the controller was allocated using devm,
-> > but I don't remember the details. But before addressing the i2c problem
-> > it might be worth to invest some time into that spi issue to not make
-> > the same mistake for i2c.
->=20
-> Yeah, I've seen these constructs before elsewhere... Sadly, we have
-> workarounds upon workarounds within workarounds chased by other
-> workarounds due to this issue.
-
-Another pointer: Some time ago I did to the counter framework what would
-be needed here for i2c. See
-https://lore.kernel.org/all/20211230150300.72196-1-u.kleine-koenig@pengutro=
-nix.de/.
-This was applied in commit f2ee4759fb700b32a1bd830960fe86bf6bdfd0ab and
-its parents.
-
-Maybe it can serve as a template for i2c.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---qc7dorfog3znw3nz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPhSV8ACgkQwfwUeK3K
-7Aka2QgAn+gAHTQ5MLO3HpHfAiBq1stJZADDOy6EEM/kmPrdLuHMcH7LAXOSGgu5
-IUEBWnfWTaTHKRbtjyd7CVJ5cXH/6+XQ2qBY+SKC9Kj2Eao5VP3ouhqGKtQD3ezf
-NWYAXPaeY9vIiNIW6drt5LRYnnbdAiMZDal/5hbnw2DyK69sOq61ovQoJJcAhMvt
-1QIRfN8P6JEGmT91f+/vbw23KpGl7dVpVBPMMvCOoet2iWHt8EKxSiCLQAonC0mg
-jb+Xid9GYeXuBY0JApBFR4yMbpt7NBOs3oAWyw0y6x0DRLMSR1O0VPQMb67UHTME
-XJtcZ8RTqNVL+zNiuXza677zjlfdRg==
-=eUGB
------END PGP SIGNATURE-----
-
---qc7dorfog3znw3nz--
