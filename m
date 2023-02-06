@@ -2,111 +2,128 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C10568C233
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Feb 2023 16:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BF568C3F9
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Feb 2023 17:58:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbjBFPvM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Feb 2023 10:51:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
+        id S230352AbjBFQ6m (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Feb 2023 11:58:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbjBFPvL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Feb 2023 10:51:11 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F1A6589
-        for <linux-i2c@vger.kernel.org>; Mon,  6 Feb 2023 07:51:10 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pP3ls-0001ay-Nv; Mon, 06 Feb 2023 16:51:08 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pP3lq-0035nw-RB; Mon, 06 Feb 2023 16:51:08 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pP3lr-001KRz-2k; Mon, 06 Feb 2023 16:51:07 +0100
-Date:   Mon, 6 Feb 2023 16:51:07 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Wolfram Sang <wsa@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v3] i2c: dev: don't allow user-space to deadlock the
- kernel
-Message-ID: <20230206155107.qwf5tbrqsbvv4hln@pengutronix.de>
-References: <20230118134940.240102-1-brgl@bgdev.pl>
- <Y9DpbChLZfDONHPz@ninjato>
- <Y9GpL9RBNM8H2ZSL@shikoro>
+        with ESMTP id S230280AbjBFQ6j (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Feb 2023 11:58:39 -0500
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37E629419;
+        Mon,  6 Feb 2023 08:58:38 -0800 (PST)
+Received: by mail-oi1-f180.google.com with SMTP id p185so10290108oif.2;
+        Mon, 06 Feb 2023 08:58:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d5HsWLvQOuHFKzGWoHB2eju1CyQHrR5+UaXJ/E9U2eU=;
+        b=VCT6O3mYqXZFeIokTsDMwk9q872Bz0pRtvtHiyaw7LEFA+l+G4psyERMpNPm56jK/M
+         p5+vEgbdKPOng6kQhgcb//jdSYvIfOMZzrsvkEQ7c0apfAi4vLO2SXWT5898qW3IliXt
+         Uv7pF6BKvjAL1n7Xfk+cKAZQPZIa6UGFsH0aY+/v9VmXVXJM48Cpkmd3in/7zMylsJc+
+         gIcIv0BvtDBBdUiggT8BDRq3Rt1+S1aQuJRqIP2TaMMbOxLiY0dFhUUN/djpvlPWNsfh
+         fWGnwhfaepf/umpCW7C3WGWqsYRq/SRtDS7u8t49soJF7ZILz2V67Lb2cFuBdCBeN7ql
+         1HwA==
+X-Gm-Message-State: AO0yUKUAEym3DVyNJA+JIO3rXNTRecNsee8Ppphqn676fdNBoiF0Yymq
+        yo3NBuHzyg71d/f4Bmz8bg==
+X-Google-Smtp-Source: AK7set9nRPAIxHlnzSBT2PS1eSMOfZARnW082uMttgb0GupUOnsY2r4h+qvGUhNDO3WfoyVyRoJ1JA==
+X-Received: by 2002:a05:6808:1448:b0:378:5a94:8b22 with SMTP id x8-20020a056808144800b003785a948b22mr12326300oiv.47.1675702717513;
+        Mon, 06 Feb 2023 08:58:37 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b10-20020aca220a000000b0037ac16ea874sm4354964oic.10.2023.02.06.08.58.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 08:58:37 -0800 (PST)
+Received: (nullmailer pid 223060 invoked by uid 1000);
+        Mon, 06 Feb 2023 16:58:36 -0000
+Date:   Mon, 6 Feb 2023 10:58:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Lars-Peter Clausen <lars@metafoo.de>
+Cc:     Wolfram Sang <wsa@kernel.org>, Michal Simek <michal.simek@amd.com>,
+        Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] dt-bindings: i2c: cadence: Document
+ `cdns,fifo-depth` property
+Message-ID: <20230206165836.GA216424-robh@kernel.org>
+References: <20230205230208.58355-1-lars@metafoo.de>
+ <20230205230208.58355-2-lars@metafoo.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ol763elobegcycbx"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9GpL9RBNM8H2ZSL@shikoro>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230205230208.58355-2-lars@metafoo.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Sun, Feb 05, 2023 at 03:02:08PM -0800, Lars-Peter Clausen wrote:
+> The depth of the FIFO of the Cadence I2C controller IP is a synthesis
+> configuration parameter. Different instances of the IP can have different
+> values. For correct operation software needs to be aware of the size of the
+> FIFO.
+> 
+> Add the documentation for the devicetree property that describes the FIFO
+> depth of the IP core.
+> 
+> The default value of 16 is for backwards compatibility reasons with
+> existing hardware descriptions where this property is not specified and
+> software has assumed that the FIFO depth is 16.
+> 
+> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+> ---
+>  Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
+> index 2e95cda7262a..3daa2fa73257 100644
+> --- a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
+> @@ -38,6 +38,12 @@ properties:
+>      description: |
+>        Input clock name.
+>  
+> +  cdns,fifo-depth:
 
---ol763elobegcycbx
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+We already have:
 
-Hello,
+fifo-size
+rx-fifo-size
+tx-fifo-size
+fifo-depth
+tx-fifo-depth
+rx-fifo-depth
 
-ah, this is the mail I missed before.
+And we have cdns,fifo-depth too (among other vendor specific ones), but 
+pick a non-vendor specific one.
 
-On Wed, Jan 25, 2023 at 11:11:59PM +0100, Wolfram Sang wrote:
->=20
-> > So, this code handled all my stress-testing well so far. I'll try to
-> > think of some more ideas until this evening, but likely I will apply it
-> > later. Nonetheless, more review eyes are still welcome!
->=20
-> Ah yes, I now recalled why I had the gut feeling that this solution is
-> not complete. See this mail thread from 2015:
->=20
-> https://lkml.iu.edu/hypermail/linux/kernel/1501.2/01700.html
->=20
-> There are still drivers using i2c_del_adapter()+kfree(), so removing the
-> completion could cause use-after-free there, or?
 
-There is also a strange construct in spi that I understand at one point
-in time, but I failed to swap it in quickly. It's about commit
-794aaf01444d4e765e2b067cba01cc69c1c68ed9. I think there should be a
-nicer solution than to track if the controller was allocated using devm,
-but I don't remember the details. But before addressing the i2c problem
-it might be worth to invest some time into that spi issue to not make
-the same mistake for i2c.
+> +    description:
+> +      Size of the data FIFO in words.
 
-Best regards
-Uwe
+What's the word size? Use bytes.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ol763elobegcycbx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPhId4ACgkQwfwUeK3K
-7AmVZAgAl3Faq9I+XvDqrdflU2pn5514NuWK8YOXY2AZDQ6EWYK9+qv/U1nf6+cS
-rvmqPv/0yoQ/MGcVOPY1dFnPMCRyjgt/dC75VYP0qBOFaJ4xm/xvHKV9QTmsDLhN
-+vkwKMAUZkKW/MbIL+rjril1w+GuFhrFp0RoCM4NXF3t+Jo0XwRn3JE/lwvSBL+c
-0SS1w1LykId2Wo6tTSqP9U54OnCc0QiYJ5WyjD+HXmAB0oWx6ZOvx27zNr+0HPSn
-XcTyDTPiBgu8ssss4xyWMGqTGvaBtv2P3nncO8GZsC0ejpWYVd63aJTngB1zwY00
-ugxdHWQpnYOIpiPbE9PipLyu3PEHBQ==
-=quCD
------END PGP SIGNATURE-----
-
---ol763elobegcycbx--
+> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    default: 16
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -57,4 +63,6 @@ examples:
+>          clock-frequency = <400000>;
+>          #address-cells = <1>;
+>          #size-cells = <0>;
+> +
+> +        cdns,fifo-depth = <8>;
+>      };
+> -- 
+> 2.30.2
+> 
