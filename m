@@ -2,103 +2,113 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA9D68C856
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Feb 2023 22:13:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA57868D08E
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Feb 2023 08:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjBFVNJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Feb 2023 16:13:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
+        id S229607AbjBGHZU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Feb 2023 02:25:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjBFVNI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Feb 2023 16:13:08 -0500
-X-Greylist: delayed 563 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Feb 2023 13:13:07 PST
-Received: from qs51p00im-qukt01072701.me.com (qs51p00im-qukt01072701.me.com [17.57.155.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FAE6181
-        for <linux-i2c@vger.kernel.org>; Mon,  6 Feb 2023 13:13:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1675717423; bh=nDqcwgYfwv4lTDUs/q+Zq23g/jcLqlPNBpJQ3yHg2Q8=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=NkoYjk58L0yG9WuovJ3Pml7hfE1S+S3YHTS2jANnfYOXuhs9Os/Q+xhbWbyG5m8K5
-         f8zvBWmnz9W9s0jF31rS0ov8ItRNA6EH45q6luWyZumMgppbJsehwgbjEXg+B8afUO
-         C1q8BWOtX1IJsRKdSAAbS5ejM9tFsgmvgqvO7+EDyQZzI3MQgGoVftjvZVIKDPHydN
-         U9hx2mJX1nNrD4HzMZgvjR1dJyNPqilMvjR7q5s03H42woEuJN+lpxES/NepLHicUa
-         gFlEQ5WXBK80Rtzq+KfL/NoxnkEKNv9n5iRim0lzeg/ig9V1NKzrqZ6rK4dlZcGdyZ
-         5qJmGngQnfGvw==
-Received: from localhost (qs51p00im-dlb-asmtp-mailmevip.me.com [17.57.155.28])
-        by qs51p00im-qukt01072701.me.com (Postfix) with ESMTPSA id 62B1315C0702;
-        Mon,  6 Feb 2023 21:03:42 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Patrice Chotard <patrice.chotard@foss.st.com>
-Cc:     Alain Volmat <avolmat@me.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: st: use pm_sleep_ptr to avoid ifdef CONFIG_PM_SLEEP
-Date:   Mon,  6 Feb 2023 22:03:23 +0100
-Message-Id: <20230206210324.65508-1-avolmat@me.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229738AbjBGHZT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Feb 2023 02:25:19 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284C22ED62;
+        Mon,  6 Feb 2023 23:25:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675754718; x=1707290718;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wIhE4o9BjRTaPYx3WM+PdzIPTyiOBr12rvLi9TUQ5Xs=;
+  b=GP2dV8ZQ4VL3hJpT9P1kDPN4siAZNOu5o2sUeNwQSrZvwx8YEGLwSusF
+   iz+WXMEWu3fJFuTMlFeNCh85r0XZbazOu6wSDurK2KMqodYt8dYqoQN4j
+   GOIv1xpLIr+Sq1Nxuk0m9vIF3LS8mpVgJIUbUKfJLcAK3u+0V1v7bcBde
+   8mt4BFpyW/UZ3YaqJMUfi44lHxjPGRTbxBRlh3cXscHDZjjwDeSLL0lkv
+   NNOgtHv/doL8e6I4/WScWpiPq+2hJheTyYCs6Y+wDElYXxaakG3uGQQ9P
+   zVOzCnfalPsxmqMYTcIR6bYjobsSeDUMh3M3GbEEfFzWYAkbngFomntVh
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="309763433"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="309763433"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 23:25:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="809418436"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="809418436"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 06 Feb 2023 23:25:02 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 294D61C5; Tue,  7 Feb 2023 09:25:40 +0200 (EET)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: [RFC] i2c: core: Do not enable wakeup by default
+Date:   Tue,  7 Feb 2023 09:25:40 +0200
+Message-Id: <20230207072540.27226-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: bffMchFZif8_wUljSr6IvtqqwQ6FZjLq
-X-Proofpoint-GUID: bffMchFZif8_wUljSr6IvtqqwQ6FZjLq
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.572,17.0.605.474.0000000_definitions?=
- =?UTF-8?Q?=3D2022-01-11=5F01:2022-01-11=5F01,2020-02-14=5F11,2020-01-23?=
- =?UTF-8?Q?=5F02_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1011 bulkscore=0
- mlxlogscore=963 phishscore=0 spamscore=0 mlxscore=0 malwarescore=0
- adultscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2302060182
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Rely on pm_sleep_ptr when setting the pm ops and get rid
-of the ifdef CONFIG_PM_SLEEP around suspend/resume functions.
+After commit b38f2d5d9615 ("i2c: acpi: Use ACPI wake capability bit to
+set wake_irq") the I2C core has been setting I2C_CLIENT_WAKE for ACPI
+devices if they announce to be wake capable in their device description.
+However, on certain systems where audio codec has been connected through
+I2C this causes system suspend to wake up immediately because power to
+the codec is turned off which pulls the interrupt line "low" triggering
+wake up.
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
+Possible reason why the interrupt is marked as wake capable is that some
+codecs apparently support "Wake on Voice" or similar functionality.
+
+In any case, I don't think we should be enabling wakeup by default on
+all I2C devices that are wake capable. According to device_init_wakeup()
+documentation most devices should leave it disabled, with exceptions on
+devices such as keyboards, power buttons etc. Userspace can enable
+wakeup as needed by writing to device "power/wakeup" attribute.
+
+Reported-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/i2c/busses/i2c-st.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+Hi,
 
-diff --git a/drivers/i2c/busses/i2c-st.c b/drivers/i2c/busses/i2c-st.c
-index 88482316d22a..f823913b75a6 100644
---- a/drivers/i2c/busses/i2c-st.c
-+++ b/drivers/i2c/busses/i2c-st.c
-@@ -740,7 +740,6 @@ static int st_i2c_xfer(struct i2c_adapter *i2c_adap,
- 	return (ret < 0) ? ret : i;
- }
+Sending this as RFC because I'm not too familiar with the usage of
+I2C_CLIENT_WAKE and whether this is something that is expected behaviour
+in users of I2C devices. On ACPI side I think this is the correct thing
+to do at least.
+
+ drivers/i2c/i2c-core-base.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 087e480b624c..7046549bdae7 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -527,7 +527,7 @@ static int i2c_device_probe(struct device *dev)
+ 			goto put_sync_adapter;
+ 		}
  
--#ifdef CONFIG_PM_SLEEP
- static int st_i2c_suspend(struct device *dev)
- {
- 	struct st_i2c_dev *i2c_dev = dev_get_drvdata(dev);
-@@ -762,11 +761,7 @@ static int st_i2c_resume(struct device *dev)
- 	return 0;
- }
+-		device_init_wakeup(&client->dev, true);
++		device_init_wakeup(&client->dev, false);
  
--static SIMPLE_DEV_PM_OPS(st_i2c_pm, st_i2c_suspend, st_i2c_resume);
--#define ST_I2C_PM	(&st_i2c_pm)
--#else
--#define ST_I2C_PM	NULL
--#endif
-+static DEFINE_SIMPLE_DEV_PM_OPS(st_i2c_pm, st_i2c_suspend, st_i2c_resume);
- 
- static u32 st_i2c_func(struct i2c_adapter *adap)
- {
-@@ -901,7 +896,7 @@ static struct platform_driver st_i2c_driver = {
- 	.driver = {
- 		.name = "st-i2c",
- 		.of_match_table = st_i2c_match,
--		.pm = ST_I2C_PM,
-+		.pm = pm_sleep_ptr(&st_i2c_pm),
- 	},
- 	.probe = st_i2c_probe,
- 	.remove = st_i2c_remove,
+ 		if (wakeirq > 0 && wakeirq != client->irq)
+ 			status = dev_pm_set_dedicated_wake_irq(dev, wakeirq);
 -- 
-2.34.1
+2.39.1
 
