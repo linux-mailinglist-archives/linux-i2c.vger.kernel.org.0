@@ -2,313 +2,163 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2115868DA40
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Feb 2023 15:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA07968DE03
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Feb 2023 17:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbjBGOPH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Feb 2023 09:15:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
+        id S230149AbjBGQeL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Feb 2023 11:34:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232343AbjBGOO5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Feb 2023 09:14:57 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFA96A51;
-        Tue,  7 Feb 2023 06:14:55 -0800 (PST)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 317ArBxI023356;
-        Tue, 7 Feb 2023 15:12:28 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=bRPLjENYLm4EkeQxpcXBxnDMwaCRtrrOyJyCcEKFKwM=;
- b=v+r2Y+dW5qpe2evs4+p2Rph0HUeYJkhrIakAtRF4fJW7pf/iMoA2BrjUcXOgAS4O+JMl
- IXKV7Hp74w1KJP0PvEekg8P/i3SR3P0AwBgPlA+9ojsAnk0s7LDy3CWyXOWlKcwqqPfu
- wPE7CdTQ6u+DTonaxS8J7QYwU2uD3eROQ4b0UVJqA3TaS3QYgy35kLMkIT8d6Z2toWJ5
- tMeMMxNPT8PXIpemJJgIQyZVYQ9Vv2xTMUAyQ8CNlfu2WPa6wKy9p9vIs1O/gAb/LlqC
- 1+7jKtxsEn7AYZrcWlego6inAn0ozOi+IQs8ea9RiHb5iRVStFIyQmQyADvaliPIL6nK lw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3nhfk72dkh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 15:12:28 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 763D6100034;
-        Tue,  7 Feb 2023 15:12:27 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 48EEA21B516;
-        Tue,  7 Feb 2023 15:12:27 +0100 (CET)
-Received: from [10.201.20.249] (10.201.20.249) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Tue, 7 Feb
- 2023 15:12:24 +0100
-Message-ID: <d6c659d8-2e5c-cb60-d950-685c4ba319e2@foss.st.com>
-Date:   Tue, 7 Feb 2023 15:12:23 +0100
+        with ESMTP id S229878AbjBGQeK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Feb 2023 11:34:10 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E359B3864A
+        for <linux-i2c@vger.kernel.org>; Tue,  7 Feb 2023 08:34:08 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id f15-20020a17090ac28f00b00230a32f0c9eso8009894pjt.4
+        for <linux-i2c@vger.kernel.org>; Tue, 07 Feb 2023 08:34:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=feOVtnjSZjGmTAyYmWKNjD+1i+clfm4gUti33NkjnFE=;
+        b=QWndu82h99RLtpJE9U+c0/bTDJlFJzKzM9JyXRGUS5IxQpxbGwsN1vxTOHqvZJgLEs
+         ZFgO/NcQhPCf4iyRAzJcyseyWcbFbXElxJP/Lo7c4kKzQ0RAhkmvY/TXB74x0sqsWGnu
+         AEiEbXoigy7Mzf9i749C+j1vAy6do/vGGRcJI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=feOVtnjSZjGmTAyYmWKNjD+1i+clfm4gUti33NkjnFE=;
+        b=aaLlkaV5xMtpwYMUz+mQM1awCbneC9nU+05TsVSTg97lCfbq1UO5ugx0mrVHrQXb5Y
+         mHsflGvhpy1XA8duoNnGLK1Ut9OlQJ3gy5smXsm1tgfg/cWPl9kwxIGll2J3QG3Hkvgi
+         QCwrAzPkE5ocp3YTGh+fks90zcJRWrntmiWL9N5Ss4EM44JPCwc3oVsGCzslUeTncMib
+         9pGTUa8dgPHHvUrOoniSA2RoPiI704mhoROFe8ryIXh58dnbEhICfT/bu9QgIGwru8D8
+         yjmsBZqNoILx/wVYD6nXPmjwDUlDe60hfChpUKKB0m5qlE6XJ12WDbsMcU8wXkeahHHx
+         kKqA==
+X-Gm-Message-State: AO0yUKVEcPgCeCnRC3N8Wd+F1b02a1mWJECUoJjMDaLxUS+bQxksL/AV
+        9i0qskE275IGPAqislEnfIUSdK/FzyKmwugU
+X-Google-Smtp-Source: AK7set/5Btmj7tcO/Pfh7XhVTeOX1fBctbYubJfCiIeH3Mt3CMa9BUp0D97sSq05wEF3HuaYQdKsZg==
+X-Received: by 2002:a17:902:e5c7:b0:196:86c2:ee60 with SMTP id u7-20020a170902e5c700b0019686c2ee60mr4132272plf.15.1675787648244;
+        Tue, 07 Feb 2023 08:34:08 -0800 (PST)
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com. [209.85.215.172])
+        by smtp.gmail.com with ESMTPSA id a7-20020a170902710700b00196048cc113sm9075682pll.126.2023.02.07.08.34.07
+        for <linux-i2c@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 08:34:07 -0800 (PST)
+Received: by mail-pg1-f172.google.com with SMTP id 141so10859625pgc.0
+        for <linux-i2c@vger.kernel.org>; Tue, 07 Feb 2023 08:34:07 -0800 (PST)
+X-Received: by 2002:a63:7250:0:b0:499:7f08:40c3 with SMTP id
+ c16-20020a637250000000b004997f0840c3mr772244pgn.80.1675787646796; Tue, 07 Feb
+ 2023 08:34:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 4/6] bus: stm32_sys_bus: add support for STM32MP15 and
- STM32MP13 system bus
-Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>
-CC:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
-        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
-        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <ulf.hansson@linaro.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <linux-crypto@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Loic PALLARDY <loic.pallardy@st.com>
-References: <20230127164040.1047583-1-gatien.chevallier@foss.st.com>
- <20230127164040.1047583-5-gatien.chevallier@foss.st.com>
- <20230128161217.0e79436e@jic23-huawei>
-From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-In-Reply-To: <20230128161217.0e79436e@jic23-huawei>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.20.249]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-07_05,2023-02-06_03,2022-06-22_01
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230207072540.27226-1-mika.westerberg@linux.intel.com>
+In-Reply-To: <20230207072540.27226-1-mika.westerberg@linux.intel.com>
+From:   Raul Rangel <rrangel@chromium.org>
+Date:   Tue, 7 Feb 2023 09:33:55 -0700
+X-Gmail-Original-Message-ID: <CAHQZ30Bzn1Lxy+Y2gCcFTmzWzwnxqUZAHAjSh67Pz=WweaKHkg@mail.gmail.com>
+Message-ID: <CAHQZ30Bzn1Lxy+Y2gCcFTmzWzwnxqUZAHAjSh67Pz=WweaKHkg@mail.gmail.com>
+Subject: Re: [RFC] i2c: core: Do not enable wakeup by default
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?B?QW1hZGV1c3ogU8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
+        "Limonciello, Mario" <mario.limonciello@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Jonathan,
+Sorry, resending in plain text mode.
 
-On 1/28/23 17:12, Jonathan Cameron wrote:
-> On Fri, 27 Jan 2023 17:40:38 +0100
-> Gatien Chevallier <gatien.chevallier@foss.st.com> wrote:
-> 
->> This driver is checking the access rights of the different
->> peripherals connected to the system bus. If access is denied,
->> the associated device tree node is skipped so the platform bus
->> does not probe it.
->>
->> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
->> Signed-off-by: Loic PALLARDY <loic.pallardy@st.com>
-> 
-> Hi Gatien,
-> 
-> A few comments inline,
-> 
-> Thanks,
-> 
-> Jonathan
-> 
->> diff --git a/drivers/bus/stm32_sys_bus.c b/drivers/bus/stm32_sys_bus.c
->> new file mode 100644
->> index 000000000000..c12926466bae
->> --- /dev/null
->> +++ b/drivers/bus/stm32_sys_bus.c
->> @@ -0,0 +1,168 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Copyright (C) 2023, STMicroelectronics - All Rights Reserved
->> + */
->> +
->> +#include <linux/bitfield.h>
->> +#include <linux/bits.h>
->> +#include <linux/device.h>
->> +#include <linux/err.h>
->> +#include <linux/io.h>
->> +#include <linux/init.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/of.h>
->> +#include <linux/of_platform.h>
->> +#include <linux/platform_device.h>
->> +
->> +/* ETZPC peripheral as firewall bus */
->> +/* ETZPC registers */
->> +#define ETZPC_DECPROT			0x10
->> +
->> +/* ETZPC miscellaneous */
->> +#define ETZPC_PROT_MASK			GENMASK(1, 0)
->> +#define ETZPC_PROT_A7NS			0x3
->> +#define ETZPC_DECPROT_SHIFT		1
-> 
-> This define makes the code harder to read.  What we care about is
-> the number of bits in the register divided by number of entries.
-> (which is 2) hence the shift by 1. See below for more on this.
-> 
-> 
->> +
->> +#define IDS_PER_DECPROT_REGS		16
-> 
->> +#define STM32MP15_ETZPC_ENTRIES		96
->> +#define STM32MP13_ETZPC_ENTRIES		64
-> 
-> These defines just make the code harder to check.
-> They aren't magic numbers, but rather just telling us how many
-> entries there are, so I would just put them in the structures directly.
-> Their use make it clear what they are without needing to give them a name.
-> 
+On Tue, Feb 7, 2023 at 12:25 AM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> After commit b38f2d5d9615 ("i2c: acpi: Use ACPI wake capability bit to
+> set wake_irq") the I2C core has been setting I2C_CLIENT_WAKE for ACPI
+> devices if they announce to be wake capable in their device description.
+> However, on certain systems where audio codec has been connected through
+> I2C this causes system suspend to wake up immediately because power to
+> the codec is turned off which pulls the interrupt line "low" triggering
+> wake up.
+>
+> Possible reason why the interrupt is marked as wake capable is that some
+> codecs apparently support "Wake on Voice" or similar functionality.
 
-Honestly, I'd rather read the hardware configuration registers to get 
-this information instead of differentiating MP13/15. Would you agree on 
-that?
+That's generally a bug in the ACPI tables. The wake bit shouldn't be
+set if the power domain for the device is powered off on suspend. The
+best thing is to fix the ACPI tables, but if you can't, then you can
+set the ignore_wake flag for the device:
+https://github.com/torvalds/linux/blob/master/drivers/gpio/gpiolib-acpi.c#L=
+31.
+If that works we can add a quirk for the device:
+https://github.com/torvalds/linux/blob/master/drivers/gpio/gpiolib-acpi.c#L=
+1633.
 
-> 
->> +struct stm32_sys_bus_match_data {
-> 
-> Comment on naming of this below.
-> 
->> +	unsigned int max_entries;
->> +};
->> +
-> 
-> +static int stm32_etzpc_get_access(struct sys_bus_data *pdata, struct device_node *np)
-> +{
-> +	int err;
-> +	u32 offset, reg_offset, sec_val, id;
-> +
-> +	err = stm32_sys_bus_get_periph_id(pdata, np, &id);
-> +	if (err)
-> +		return err;
-> +
-> +	/* Check access configuration, 16 peripherals per register */
-> +	reg_offset = ETZPC_DECPROT + 0x4 * (id / IDS_PER_DECPROT_REGS);
-> +	offset = (id % IDS_PER_DECPROT_REGS) << ETZPC_DECPROT_SHIFT;
-> 
-> Use of defines in here is actively unhelpful when it comes to review. I would suggest letting
-> the maths be self explanatory (even if it's more code).
-> 
-> 	offset = (id % IDS_PER_DECPROT_REGS) * (sizeof(u32) * BITS_PER_BYTE / IDS_PER_DECPROT_REGS);
-> 
-> Or if you prefer have a define of
-> 
-> #define DECPROT_BITS_PER_ID (sizeof(u32) * BITS_PER_BYTE / IDS_PER_DECPROT_REGS)
-> 
-> and
-> 	offset = (id % IDS_PER_DECPROT_REGS) * DECPROT_BITS_PER_ID;
-> 
+>
+> In any case, I don't think we should be enabling wakeup by default on
+> all I2C devices that are wake capable. According to device_init_wakeup()
+> documentation most devices should leave it disabled, with exceptions on
+> devices such as keyboards, power buttons etc. Userspace can enable
+> wakeup as needed by writing to device "power/wakeup" attribute.
 
-Ok I'll rework this for better understanding. Your suggestion seems fine
+Enabling wake by default was an unintended side-effect. I didn't catch
+this when I wrote the patch :/ It's been exposing all the incorrect
+ACPI configurations for better or worse. Mario pushed a patch up
+earlier to disable thes Wake GPIOs when using S3:
+https://github.com/torvalds/linux/commit/d63f11c02b8d3e54bdb65d8c309f73b7f4=
+74aec4.
+Are you having problems with S3 or S0iX?
 
-> +
-> +	/* Verify peripheral is non-secure and attributed to cortex A7 */
-> +	sec_val = (readl(pdata->sys_bus_base + reg_offset) >> offset) & ETZPC_PROT_MASK;
-> +	if (sec_val != ETZPC_PROT_A7NS) {
-> +		dev_dbg(pdata->dev, "Invalid bus configuration: reg_offset %#x, value %d\n",
-> +			reg_offset, sec_val);
-> +		return -EACCES;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> ...
-> 
->> +static int stm32_sys_bus_probe(struct platform_device *pdev)
->> +{
->> +	struct sys_bus_data *pdata;
->> +	void __iomem *mmio;
->> +	struct device_node *np = pdev->dev.of_node;
-> 
-> I'd be consistent. You use dev_of_node() accessor elsewhere, so should
-> use it here as well >> +
->> +	pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
->> +	if (!pdata)
->> +		return -ENOMEM;
->> +
->> +	mmio = devm_platform_ioremap_resource(pdev, 0);
->> +	if (IS_ERR(mmio))
->> +		return PTR_ERR(mmio);
->> +
->> +	pdata->sys_bus_base = mmio;
->> +	pdata->pconf = of_device_get_match_data(&pdev->dev);
->> +	pdata->dev = &pdev->dev;
->> +
->> +	platform_set_drvdata(pdev, pdata);
-> 
-> Does this get used? I can't immediately spot where but maybe I just
-> missed it.
-> 
+>
+> Reported-by: Amadeusz S=C5=82awi=C5=84ski <amadeuszx.slawinski@linux.inte=
+l.com>
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> ---
+> Hi,
+>
+> Sending this as RFC because I'm not too familiar with the usage of
+> I2C_CLIENT_WAKE and whether this is something that is expected behaviour
+> in users of I2C devices. On ACPI side I think this is the correct thing
+> to do at least.
+>
+>  drivers/i2c/i2c-core-base.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index 087e480b624c..7046549bdae7 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -527,7 +527,7 @@ static int i2c_device_probe(struct device *dev)
+>                         goto put_sync_adapter;
+>                 }
+>
+> -               device_init_wakeup(&client->dev, true);
+> +               device_init_wakeup(&client->dev, false);
 
-Not for now :)
+This would be a change in behavior for Device Tree. Maybe you can
+declare a `bool enable_wake =3D true`, then in the ACPI branch
+(https://github.com/torvalds/linux/blob/master/drivers/i2c/i2c-core-base.c#=
+L495)
+set `enable_wake =3D false`. This would keep wakes enabled by default on
+device tree and disabled for ACPI. This matches the original behavior
+before my patch.
 
->> +
->> +	stm32_sys_bus_populate(pdata);
->> +
->> +	/* Populate all available nodes */
->> +	return of_platform_populate(np, NULL, NULL, &pdev->dev);
-> 
-> As np only used here, I'd not bother with the local variable in this function.
-> 
-
-Agreed
-
->> +}
->> +
->> +static const struct stm32_sys_bus_match_data stm32mp15_sys_bus_data = {
-> 
-> Naming a structure after where it comes from is a little unusual and
-> confusion when a given call gets it from somewhere else.
-> 
-> I'd expect it to be named after what sort of thing it contains.
-> stm32_sys_bus_info or something like that.
-> 
-
-Then, this shall be removed thanks to the read to hardware registers.
-
->> +	.max_entries = STM32MP15_ETZPC_ENTRIES,
->> +};
->> +
->> +static const struct stm32_sys_bus_match_data stm32mp13_sys_bus_data = {
->> +	.max_entries = STM32MP13_ETZPC_ENTRIES,
->> +};
->> +
->> +static const struct of_device_id stm32_sys_bus_of_match[] = {
->> +	{ .compatible = "st,stm32mp15-sys-bus", .data = &stm32mp15_sys_bus_data },
->> +	{ .compatible = "st,stm32mp13-sys-bus", .data = &stm32mp13_sys_bus_data },
-> 
-> Alphabetical order usually preferred when there isn't a strong reason for
-> another choice.
-> 
-
-I second that
-
->> +	{}
->> +};
->> +MODULE_DEVICE_TABLE(of, stm32_sys_bus_of_match);
->> +
->> +static struct platform_driver stm32_sys_bus_driver = {
->> +	.probe  = stm32_sys_bus_probe,
->> +	.driver = {
->> +		.name = "stm32-sys-bus",
->> +		.of_match_table = stm32_sys_bus_of_match,
->> +	},
->> +};
->> +
->> +static int __init stm32_sys_bus_init(void)
->> +{
->> +	return platform_driver_register(&stm32_sys_bus_driver);
->> +}
->> +arch_initcall(stm32_sys_bus_init);
->> +
-> 
-> Unwanted trailing blank line.
-> 
-
-Good spot, thanks
-
-> 
-
-Best regards,
-Gatien
+>
+>                 if (wakeirq > 0 && wakeirq !=3D client->irq)
+>                         status =3D dev_pm_set_dedicated_wake_irq(dev, wak=
+eirq);
+> --
+> 2.39.1
+>
