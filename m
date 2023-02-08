@@ -2,274 +2,231 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 703BC68F29D
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Feb 2023 16:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDCF68F2A1
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Feb 2023 16:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbjBHP5a convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 8 Feb 2023 10:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43214 "EHLO
+        id S229663AbjBHP7i (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Feb 2023 10:59:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbjBHP5E (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Feb 2023 10:57:04 -0500
-Received: from out-mx.sasg.de (out-mx.sasg.de [95.142.65.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7537D4B75B
-        for <linux-i2c@vger.kernel.org>; Wed,  8 Feb 2023 07:56:34 -0800 (PST)
-Received: from exch2012.heineopto.de (unknown [217.239.128.75])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by out-mx.sasg.de (Postfix) with ESMTPS id 3FBCD20473;
-        Wed,  8 Feb 2023 16:56:16 +0100 (CET)
-Received: from exch2012.heineopto.de (fd00:0:0:1080::10) by
- exch2012.heineopto.de (fd00:0:0:1080::10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id
- 15.1.2375.34; Wed, 8 Feb 2023 16:56:15 +0100
-Received: from exch2012.heineopto.de ([fe80::29f7:554e:2485:f599]) by
- exch2012.heineopto.de ([fe80::29f7:554e:2485:f599%12]) with mapi id
- 15.01.2375.034; Wed, 8 Feb 2023 16:56:15 +0100
-From:   <RRademacher@heine.com>
-To:     <laurent.pinchart@ideasonboard.com>
-CC:     <linux-i2c@vger.kernel.org>
-Subject: AW: #Extern_Re: question about devicetree entry pca954x
-Thread-Topic: #Extern_Re: question about devicetree entry pca954x
-Thread-Index: AQHZMaf4pAvJYJLXN06F6qaGLQ2Y/66w7dQAgAAvzxKAAAjPZYATr6v1
-Date:   Wed, 8 Feb 2023 15:56:15 +0000
-Message-ID: <21db1f24116f4796be6c5468db1e8e9a@heine.com>
-References: <6c4c41f6cac34573b2c5ab14cb0ba27e@heine.com>,<Y9LBNnW1Vx9pIy5r@pendragon.ideasonboard.com>,<234d0cd7383d4bad8aeda4f22feef575@heine.com>,<ca5f86514fc54f7a92dba756a301564d@heine.com>
-In-Reply-To: <ca5f86514fc54f7a92dba756a301564d@heine.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [91.137.63.64]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        with ESMTP id S231304AbjBHP7P (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Feb 2023 10:59:15 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A64449E
+        for <linux-i2c@vger.kernel.org>; Wed,  8 Feb 2023 07:59:14 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id g13so14969055ple.10
+        for <linux-i2c@vger.kernel.org>; Wed, 08 Feb 2023 07:59:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0k9BhvDBfk1/HCHLk4elktrqCZfSX23y0QKS642mqcw=;
+        b=Q50bnAvx45vdXksl5QMGoBw+DmtuCNaMtHdynV1F2sp47H37W/LvsX5ne8lz7gyLC6
+         /DPrLU3oyJzlfLFd5ANO41PGQagNhAdn6wRp9ArqIFYxMgZ5XaVprzGPhD1XJ/S7DwED
+         Oy2aibvtMHgrayX8dRR2o7GDEIiU5SjxrZ92E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0k9BhvDBfk1/HCHLk4elktrqCZfSX23y0QKS642mqcw=;
+        b=mqCrryRSK+0zZjomSXTbO2OtNThdAtRXBQhpYRFQTzk/6pFukFpfqH43e1YlY6UzbW
+         +jzRn4MzkLTI7wsp57GDrnGjtwjcCP9ty+uTF6fL6EoteuBi5fGuU68crlq2HaEjp2L0
+         xu0fG1DfrKsqiDYOYv7eQPJ9yVgYfrjbyOwdkBwZXXqb9qBIzy4LpWYt1NgwE9N0AlEg
+         cWiess1i20e4w6JgCjMWK66+dod07/p8/UBCKcRE8Tk476YOak6l8+2aacwL46Kd2Tht
+         pRslFGL7zl7B0sOO8mXSm6ZQFdoRtvCMaXvQHVaxkByTbzWXIzmRwS8LqgwZ1ZNXvULH
+         42Yg==
+X-Gm-Message-State: AO0yUKVgzffuyZ+h1guGelruv6CasIMIgtLE9eFoG5ftJhKM3Hd9qVUS
+        0ML+gubXKVS1i8kRTDmQrx9GT0oknlmCG6HD
+X-Google-Smtp-Source: AK7set+cmA9FbA4r1BQTkM5mvAaHJBZCnP30LJY7kF2i0BRkzUGBdoz9PThkRCk83LEl8JqrtW2dgg==
+X-Received: by 2002:a17:90b:2242:b0:230:d6a8:a9e9 with SMTP id hk2-20020a17090b224200b00230d6a8a9e9mr8878911pjb.48.1675871953352;
+        Wed, 08 Feb 2023 07:59:13 -0800 (PST)
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com. [209.85.216.42])
+        by smtp.gmail.com with ESMTPSA id a8-20020a17090a688800b00229f74a4323sm1737397pjd.34.2023.02.08.07.59.12
+        for <linux-i2c@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 07:59:12 -0800 (PST)
+Received: by mail-pj1-f42.google.com with SMTP id m2-20020a17090a414200b00231173c006fso2185180pjg.5
+        for <linux-i2c@vger.kernel.org>; Wed, 08 Feb 2023 07:59:12 -0800 (PST)
+X-Received: by 2002:a17:90a:8d17:b0:22c:19bd:c905 with SMTP id
+ c23-20020a17090a8d1700b0022c19bdc905mr907492pjo.10.1675871951706; Wed, 08 Feb
+ 2023 07:59:11 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230207072540.27226-1-mika.westerberg@linux.intel.com>
+ <CAHQZ30Bzn1Lxy+Y2gCcFTmzWzwnxqUZAHAjSh67Pz=WweaKHkg@mail.gmail.com>
+ <Y+NH9pjbFfmijHF+@black.fi.intel.com> <b429918f-fe63-2897-8ade-d17fe2e3646f@linux.intel.com>
+In-Reply-To: <b429918f-fe63-2897-8ade-d17fe2e3646f@linux.intel.com>
+From:   Raul Rangel <rrangel@chromium.org>
+Date:   Wed, 8 Feb 2023 08:58:59 -0700
+X-Gmail-Original-Message-ID: <CAHQZ30C=_aS+FefChYZFAG4vNbFZofh=wpP2mBGbfW1JTD3D_A@mail.gmail.com>
+Message-ID: <CAHQZ30C=_aS+FefChYZFAG4vNbFZofh=wpP2mBGbfW1JTD3D_A@mail.gmail.com>
+Subject: Re: [RFC] i2c: core: Do not enable wakeup by default
+To:     =?UTF-8?B?QW1hZGV1c3ogU8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
+        "Limonciello, Mario" <mario.limonciello@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello Mr. Pinchart,
-
-following on from our previous conversation, I have since observed the following.
-
-The first call of handle_nested_interrupt() during startup was a result of another driver and had nothing to do with the problem. i used dump_stack() to find the callee.
-
-For the problem, the current debug output reduces to the following: 
-
-[   28.830817] [DBGMSG] pca954x_irq_handler :entering pca954x_irq_handler
-[   28.831363] [DBGMSG] pca954x_irq_handler :i2c_smbus_read::retval=14
-[   28.837918] [DBGMSG] pca954x_irq_handler :i=0 | bit: 4 isset in register = true
-[   28.837921] [DBGMSG] pca954x_irq_handler :irq= 0x65 // child_irq =0xe7
-[   28.851527] [DBGMSG] handle_nested_irq :entering handle_nested_irq
-[   28.851542] Call trace:
-[   28.851555]  dump_backtrace+0x0/0x178
-[   28.851561]  show_stack+0x24/0x30
-[   28.889839]  dump_stack+0xb4/0x114
-[   28.893245]  handle_nested_irq+0x44/0x23c
-[   28.897258]  pca954x_irq_handler+0xf4/0x138 [i2c_mux_pca954x]
-[   28.903006]  irq_thread_fn+0x30/0xa0
-[   28.906581]  irq_thread+0x150/0x248
-[   28.910068]  kthread+0x140/0x160
-[   28.913297]  ret_from_fork+0x10/0x1c
-[   28.916901] [DBGMSG] handle_nested_irq :irq: 0xe7
-[   28.916905] [DBGMSG] handle_nested_irq :irq_desc->name: (null)
-[   28.921447] [DBGMSG] handle_nested_irq :irq_desc->parent_irq: 0x0
-
-Do you have any idea what the problem could be? 
-I have no idea about, why the interrupt is disabled and why the action of the threaded interrupt is null
-Is it possible that I have forgotten something in the DeviceTree entry?
-
-Best
-Ralf
-
-
-Von: Rademacher Ralf
-Gesendet: Donnerstag, 26. Januar 2023 21:33
-An: Laurent Pinchart
-Cc: linux-i2c@vger.kernel.org
-Betreff: AW: #Extern_Re: question about devicetree entry pca954x
-    
-Mr. Pinchart,
-
-i have to correct myself:
-the first call of handle_nested_interrupt happens already before pca954x_probe. i added some more DBGMSGs
-
-[    2.869856] [DBGMSG] handle_nested_irq :irq = 0xdf
-[    2.869858] [DBGMSG] handle_nested_irq :action = 0x7ba41100
-[    2.874477] [DBGMSG] handle_nested_irq :irqd_irq_disabled(&desc->irq_data): false
-[    2.874479] [DBGMSG] handle_nested_irq :(unlikely(!action || irqd_irq_disabled(&desc->irq_data))): false
-[    2.874501] [DBGMSG] handle_nested_irq :action->irq:df | action->dev_id:0x7ba64810
-[    6.373737] [DBGMSG] pca954x_probe :enter fxn
-[    6.973918] [DBGMSG] pca954x_probe :leave fxn
-
-
-Regards,
-Ralf
-
-Von: Rademacher Ralf
-Gesendet: Donnerstag, 26. Januar 2023 21:18
-An: Laurent Pinchart
-Cc: linux-i2c@vger.kernel.org
-Betreff: AW: #Extern_Re: question about devicetree entry pca954x
-    
-
-
-
-
-
-
-Von: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Gesendet: Donnerstag, 26. Januar 2023 19:06
-An: Rademacher Ralf
-Cc: linux-i2c@vger.kernel.org
-Betreff: #Extern_Re: question about devicetree entry pca954x
-    
-Warnung: Achtung - Diese E-Mail stammt von einer externen Quelle. Seien Sie vorsichtig mit Links und Anhängen.
-
-Warning: Attention - This e-mail is from an external source. Be careful with links and attachments.
-
-Hello,
-
-On Thu, Jan 26, 2023 at 05:05:47PM +0000, RRademacher@heine.com wrote:
-> Hello Mr. Pinchart,
+On Wed, Feb 8, 2023 at 1:28 AM Amadeusz S=C5=82awi=C5=84ski
+<amadeuszx.slawinski@linux.intel.com> wrote:
 >
-> you are listed as maintainer in the i2c-mux-pca954x.yaml file.
+> On 2/8/2023 7:57 AM, Mika Westerberg wrote:
+> > Hi,
+> >
+> > On Tue, Feb 07, 2023 at 09:33:55AM -0700, Raul Rangel wrote:
+> >> Sorry, resending in plain text mode.
+> >>
+> >> On Tue, Feb 7, 2023 at 12:25 AM Mika Westerberg
+> >> <mika.westerberg@linux.intel.com> wrote:
+> >>>
+> >>> After commit b38f2d5d9615 ("i2c: acpi: Use ACPI wake capability bit t=
+o
+> >>> set wake_irq") the I2C core has been setting I2C_CLIENT_WAKE for ACPI
+> >>> devices if they announce to be wake capable in their device descripti=
+on.
+> >>> However, on certain systems where audio codec has been connected thro=
+ugh
+> >>> I2C this causes system suspend to wake up immediately because power t=
+o
+> >>> the codec is turned off which pulls the interrupt line "low" triggeri=
+ng
+> >>> wake up.
+> >>>
+> >>> Possible reason why the interrupt is marked as wake capable is that s=
+ome
+> >>> codecs apparently support "Wake on Voice" or similar functionality.
+> >>
+> >> That's generally a bug in the ACPI tables. The wake bit shouldn't be
+> >> set if the power domain for the device is powered off on suspend. The
+> >> best thing is to fix the ACPI tables, but if you can't, then you can
+> >> set the ignore_wake flag for the device:
+> >> https://github.com/torvalds/linux/blob/master/drivers/gpio/gpiolib-acp=
+i.c#L31.
+> >> If that works we can add a quirk for the device:
+> >> https://github.com/torvalds/linux/blob/master/drivers/gpio/gpiolib-acp=
+i.c#L1633.
 >
->
-> May I ask if you could take a few minutes and have a look at the following
-> problem, if you can spot a bug in the second DT snippet?
->
-> Because on the internet you can only find examples where devices are used
-> behind the pca954x which do not use an interrupt.
->
->
->
-> Let me tell you about the problem.
->
-> At our old device we had implemented this, which worked perfect:
->
->
-> &i2c4 {
->     pinctrl-names = "default","gpio";
->     pinctrl-0 = <&pinctrl_i2c4>;
->     pinctrl-1 = <&pinctrl_i2c4_gpio>;
->     sda-gpios = <&gpio5 21 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
->     scl-gpios = <&gpio5 20 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
->     clock-frequency = <400000>;
->     status = "okay";
->
->     touchscreen@26 {
->         compatible = "ilitek,ili2117";
->         reg = <0x26>;
->         pinctrl-names = "default";
->         pinctrl-0 = <&pinctrl_ili2117_62>;
->         interrupt-parent = <&gpio2>;
->         interrupts = <7 IRQ_TYPE_EDGE_RISING>;
->         reset-gpios = <&pca9554_interface 0 GPIO_ACTIVE_LOW>;
->     };
->
->         proximity@39 {
->                 compatible = "avago,apds9960";
->                 reg = <0x39>;
->                 pinctrl-names = "default";
->                 pinctrl-0 = <&pinctrl_apds9960_39>;
->                 interrupt-parent = <&gpio2>;
->                 interrupts = <6 IRQ_TYPE_EDGE_RISING>;
->         };
-> .....
->
->
-> Then we want more proximity sensors in this device, that we decided to add the
-> PCA9544A.
->
-> &i2c4 {
-> .....
->
->     i2c4_mux_apds: i2c4-mux-pca9544@70 {
->         compatible = "nxp,pca9544";
->         #address-cells = <1>;
->         #size-cells = <0>;
->         reg = <0x70>;
->         interrupt-parent = <&gpio2>;
->         interrupt-controller;
->         pinctrl-names = "default";
->         pinctrl-0 = <&pinctrl_pca9544a_70>;
->         interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
->
->         i2c@0 {
->             #address-cells = <1>;
->             #size-cells = <0>;
->             reg = <0>;
->
->             proximity@39 {
->                 compatible = "avago,apds9960";
->                 reg = <0x39>;
->                 interrupts = <0 IRQ_TYPE_EDGE_FALLING>;
->                 interrupt-parent = <&i2c4_mux_apds>;
->                 };
->         };
->
->
->
-> Both drivers (pca954x and apds9960) request threaded irqs in their probe
-> function, but it does not work together. Although the apds9960 also gets one
-> assigned, when the handle_nested_irq function is called (After everything has
-> been initialized. However, this seems to be the second call to this function!
-> First call seems to be inside the initialization phase.) the irq seems to be
-> disabled. And thus the processing does not start.
->
-> I think that the problem is in my devicetree entry, that the soc doesn't really
-> know how to handle the interrupt of the apds9960.
 
-How are interrupts connected at the hardware level ? Is the APDS9960
-interrupt connected to the INT0 pin of the PCA9544 ?
+> I've seen this one already and also tried to use it, but it didn't work.
+> Also when I was reading code I wasn't really convinced that it is linked
+> to i2c in any straightforward way. I mean i2c decides in different
+> places that it has wake support (I even added some prints to make sure
+> ;). The code you pointed out decides in
+> https://github.com/torvalds/linux/blob/master/drivers/gpio/gpiolib-acpi.c=
+#L387
+> but i2c code seems to decide in
+> https://github.com/torvalds/linux/blob/master/drivers/i2c/i2c-core-acpi.c=
+#L176
+> where it just checks if irq flags has wake_capable flag set. When I
+> looked at it previously I was pretty sure it comes straight from BIOS
+> and passes the quirk code you mentioned, still I may have missed somethin=
+g.
 
-Yes, it is.
+You also need the following patch
+https://github.com/torvalds/linux/commit/0e3b175f079247f0d40d2ab695999c309d=
+3a7498,
+otherwise the ignore flag only applies to _AEI GPIOs.
 
+>
+> >
+> > I think (hope) these systems are not yet available for public so there
+> > is a chance that the tables can still be fixed, without need to add any
+> > quirks.
+> >
+> > @Amadeusz, @Cezary, if that's the case I suggest filing a bug against
+> > the BIOS.
+> >
+>
+> Well, I tried custom DSDT and had problems, but I just remembered that I
+> probably need to pass "revision+1" in file, so kernel sees it as a newer
+> version, let me try again. Is it enough to replace "ExclusiveAndWake"
+> with "Exclusive"?
+>
+> >>> In any case, I don't think we should be enabling wakeup by default on
+> >>> all I2C devices that are wake capable. According to device_init_wakeu=
+p()
+> >>> documentation most devices should leave it disabled, with exceptions =
+on
+> >>> devices such as keyboards, power buttons etc. Userspace can enable
+> >>> wakeup as needed by writing to device "power/wakeup" attribute.
+> >>
+> >> Enabling wake by default was an unintended side-effect. I didn't catch
+> >> this when I wrote the patch :/ It's been exposing all the incorrect
+> >> ACPI configurations for better or worse. Mario pushed a patch up
+> >> earlier to disable thes Wake GPIOs when using S3:
+> >> https://github.com/torvalds/linux/commit/d63f11c02b8d3e54bdb65d8c309f7=
+3b7f474aec4.
+> >> Are you having problems with S3 or S0iX?
+> >
+> > I think this case is S0ix.
+>
+> We test both cases in our setups.
 
+IMO if a device needs to support wake from S3 the ACPI table needs to
+define a _PRW and define the proper power resources to keep the device
+functional during S3.
 
-You have switched from IRQ_TYPE_EDGE_RISING to IRQ_TYPE_EDGE_FALLING for
-the APDS9960, is that intentional ?
-
-Yes, I assumed this is correct, because APDS9960 datasheet tells me that: "Interrupt open drain (active low)". So i thought i have to detect the falling edge, not the rising edge.
-The same in the datasheet of PCA9544A, there are 4 active low interrupt inputs.
-
-
-
-Is there any message printed to the kernel log around the time where
-either driver is probed, or when the APDS9960 interrupt is supposed to
-occur, that may indicate a problem ?
-
-I have inserted some DBGMSGs into the functions handle_nested_irq and in the pca954x_probe.
-during pca954x driver probe, there is the following output:
-
-[    2.869856] [DBGMSG] handle_nested_irq :irq = 0xdf
-[    2.869858] [DBGMSG] handle_nested_irq :action = 0x7ba41100
-[    2.874477] [DBGMSG] handle_nested_irq :irqd_irq_disabled(&desc->irq_data): false
-[    2.874479] [DBGMSG] handle_nested_irq :(unlikely(!action || irqd_irq_disabled(&desc->irq_data))): false
-[    2.874501] [DBGMSG] handle_nested_irq :action->irq:df | action->dev_id:0x7ba64810
-
-when a apds sends the interrupt signal to the pca954x, this happens:
-
-[ 9336.607055] [DBGMSG] pca954x_irq_handler :pca954x_irq_handler starts
-[ 9336.607908] [DBGMSG] pca954x_irq_handler :i2c_smbus_read::retval=14
-[ 9336.613255] [DBGMSG] pca954x_irq_handler :i=0 | bit: 4 is set in register
-[ 9336.619539] [DBGMSG] pca954x_irq_handler :irq= 0x65 // child_irq =0xe7
-[ 9336.619542] [DBGMSG] handle_nested_irq :irq = 0xe7
-[ 9336.632516] [DBGMSG] handle_nested_irq :action = 0x0
-[ 9336.632519] [DBGMSG] handle_nested_irq :irqd_irq_disabled(&desc->irq_data):true
-[ 9336.632521] [DBGMSG] handle_nested_irq :(unlikely(!action || irqd_irq_disabled(&desc->irq_data))):true
-[ 9336.632523] [DBGMSG] handle_nested_irq :goto out_unlock
-
-Regards,
-Ralf Rademacher
-
---
-Regards,
-
-Laurent Pinchart
-            
+>
+> >
+> >>> Reported-by: Amadeusz S=C5=82awi=C5=84ski <amadeuszx.slawinski@linux.=
+intel.com>
+> >>> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> >>> ---
+> >>> Hi,
+> >>>
+> >>> Sending this as RFC because I'm not too familiar with the usage of
+> >>> I2C_CLIENT_WAKE and whether this is something that is expected behavi=
+our
+> >>> in users of I2C devices. On ACPI side I think this is the correct thi=
+ng
+> >>> to do at least.
+> >>>
+> >>>   drivers/i2c/i2c-core-base.c | 2 +-
+> >>>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.=
+c
+> >>> index 087e480b624c..7046549bdae7 100644
+> >>> --- a/drivers/i2c/i2c-core-base.c
+> >>> +++ b/drivers/i2c/i2c-core-base.c
+> >>> @@ -527,7 +527,7 @@ static int i2c_device_probe(struct device *dev)
+> >>>                          goto put_sync_adapter;
+> >>>                  }
+> >>>
+> >>> -               device_init_wakeup(&client->dev, true);
+> >>> +               device_init_wakeup(&client->dev, false);
+> >>
+> >> This would be a change in behavior for Device Tree. Maybe you can
+> >> declare a `bool enable_wake =3D true`, then in the ACPI branch
+> >> (https://github.com/torvalds/linux/blob/master/drivers/i2c/i2c-core-ba=
+se.c#L495)
+> >> set `enable_wake =3D false`. This would keep wakes enabled by default =
+on
+> >> device tree and disabled for ACPI. This matches the original behavior
+> >> before my patch.
+> >
+> > I don't think it's a good idea to make the behaviour different. Drivers
+> > in general do not need to know whether the device was enumerated on ACP=
+I
+> > or DT or whatnot. Same goes for users who should expect similar
+> > behaviour on the same device.
+> >
+> > I wonder what is the reason why I2C bus does this for all wake capable
+> > devices in the first place? Typically it should be up to the user to
+> > enable them not the opposite.
+>
