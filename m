@@ -2,63 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A93C690B74
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Feb 2023 15:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 093C9691375
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Feb 2023 23:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbjBIOPR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 9 Feb 2023 09:15:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42564 "EHLO
+        id S230364AbjBIWic (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Feb 2023 17:38:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjBIOPQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Feb 2023 09:15:16 -0500
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC6723877;
-        Thu,  9 Feb 2023 06:15:11 -0800 (PST)
-Received: by mail-ej1-f48.google.com with SMTP id p26so6661943ejx.13;
-        Thu, 09 Feb 2023 06:15:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IUa2bENByFDfZVeOJ9KaNSIGYgOZAahuAApUIydZsoU=;
-        b=sMK9n1n5xiRrQ0GpmG8F158mPPOq2qbbVkAZ+GnP9Gr4Ucz7tC8EJS+Ab3qPUcVETk
-         x7a0F53rIKGpTumoJ0I5E82YPzMwuAs1S2wUMrMVkOPRy4IqHG4MvWjjLd4sV62rqx6l
-         4h4VfQbJYJ/MQHSct8IniHd/d6xcy76ysx9WLOuZW05Jf2XicIz+O2MchBbQo+I11/F9
-         fUXi7O9QpnmJz5sWk3EcXzc9Jtm3rKJOKKHaUBFBZ19qmprcUjFuudYva/mBZaTkysIV
-         unexV6hIlf85lFJyRM57ZWdxnf+jCuz9wvwDUF+K7NvIEluTn2nBWiVccESMQVCxoGLG
-         IK7Q==
-X-Gm-Message-State: AO0yUKWd7W90f1XaHpVvemQ5uNlyGGOjZWiUTrmKtTX2QeiNpbhZT/Zg
-        7hMZFm8qOqqjPzHZ/FWs0mv30UOfNuIg1A1yNYg=
-X-Google-Smtp-Source: AK7set+k1vcGKnsGlNW8IXT/Kn9j/PHNlMs2Hrko2cQ3ZKTnf2qHwdNq8mz4GG4BOp+5D6CcIczpnegVH7CkbrIFKVM=
-X-Received: by 2002:a17:906:d9d0:b0:8af:2abd:63ec with SMTP id
- qk16-20020a170906d9d000b008af2abd63ecmr560296ejb.5.1675952109432; Thu, 09 Feb
- 2023 06:15:09 -0800 (PST)
-MIME-Version: 1.0
-References: <20230207072540.27226-1-mika.westerberg@linux.intel.com>
- <CAHQZ30Bzn1Lxy+Y2gCcFTmzWzwnxqUZAHAjSh67Pz=WweaKHkg@mail.gmail.com>
- <Y+NH9pjbFfmijHF+@black.fi.intel.com> <b429918f-fe63-2897-8ade-d17fe2e3646f@linux.intel.com>
- <CAHQZ30C=_aS+FefChYZFAG4vNbFZofh=wpP2mBGbfW1JTD3D_A@mail.gmail.com>
-In-Reply-To: <CAHQZ30C=_aS+FefChYZFAG4vNbFZofh=wpP2mBGbfW1JTD3D_A@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 9 Feb 2023 15:14:55 +0100
-Message-ID: <CAJZ5v0j5DC9Kt6BhVaj9di4BmjjTXMkvT_oa7WBMJ5RFsdzGgg@mail.gmail.com>
-Subject: Re: [RFC] i2c: core: Do not enable wakeup by default
-To:     Raul Rangel <rrangel@chromium.org>
-Cc:     =?UTF-8?B?QW1hZGV1c3ogU8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>,
+        with ESMTP id S229602AbjBIWic (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Feb 2023 17:38:32 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2055.outbound.protection.outlook.com [40.107.223.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233B856EDE;
+        Thu,  9 Feb 2023 14:38:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=neC5cJov89mLNNSwpqs/RQo9M584zz5Hoy8m2ZsLhIEeDlB+2Lpy+zm9pMIHISGZ0ceUYLXkTwAK2iOe9yaNd89HUHm8jH8vfcQC+pvydaWVF4CV1atA9GKD3XeXzIhk86LFii//O4iGYg/ihofY80JMXifKyU5qsNgNUJPjGMhC2iaeqqqIjImSZeOAzB0VBEBjtxpMqNWqtYZF1IvkURkxrH/mjbAGxZTs5s6F9GdIzl8yYF+NeI67lNHDmGoIMQm6CZY0ubuLEJLqYtJQzyLcv+6msgQl3gmaw0rhz7WZCtWubjE7up/riK9sKoXBQS1+dJWYCzdu5J7vTcGL2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=10cxf3AOQcl4E54/idE065bFMSUnOF6E4tfd704wH0o=;
+ b=SlG4Tv/mrLDxK4D9rcMRDXJGmKbpUVb8zW12m/LrZz1UfEsUP2vzoioBgHIqyBwdfCtrZdn8S5I4jYAL8A/T6uXLcGcv+y0301neqYuWjbmmnvO9a+c3pt0pjozw4TRZ8GMQEh82ce9+GaFdHUIWnDENcs54iN+vc5u5DxzMPvcJq2HDhbDDjBQBy/+TwxvdaQ126wpaY5N7t6118VLfv9gropJhmyy0XzsBLCHaJmFX2U/X1vh7BwGxt8VaO0NAYjHIqFWHZtIHtvuaJDZVUydcA2r7RKiA1ud+Q1gEm7gyzU7uvWwa56ul3UR5U2mX0VQmypDPkDNMgKXof2S8pQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=semihalf.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=10cxf3AOQcl4E54/idE065bFMSUnOF6E4tfd704wH0o=;
+ b=B9elWmjPxrjuAPrpfkVmOxgDE2g57kJLaTzfVpIWEu7NP//ak/oeP/lckaAVapcr6xjUUwdHGvYuzRfr7mgyn0KKtYez6S+/N+tCnOoMXNxceqtDdlprdYy4pzlqvWCCjuSqQ6H+IOc9pF/NvDTU/dBVq+DtonIgbdDEX+y/w/Y=
+Received: from DS7PR06CA0047.namprd06.prod.outlook.com (2603:10b6:8:54::27) by
+ BL1PR12MB5945.namprd12.prod.outlook.com (2603:10b6:208:398::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.36; Thu, 9 Feb
+ 2023 22:38:29 +0000
+Received: from DM6NAM11FT038.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:54:cafe::57) by DS7PR06CA0047.outlook.office365.com
+ (2603:10b6:8:54::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17 via Frontend
+ Transport; Thu, 9 Feb 2023 22:38:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT038.mail.protection.outlook.com (10.13.173.137) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6086.19 via Frontend Transport; Thu, 9 Feb 2023 22:38:28 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 9 Feb
+ 2023 16:38:27 -0600
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     =?UTF-8?q?Jan=20D=C4=85bro=C5=9B?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Thomas Rijo-john <Rijo-john.Thomas@amd.com>,
+        "Lendacky Thomas" <Thomas.Lendacky@amd.com>,
+        <herbert@gondor.apana.org.au>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
-        "Limonciello, Mario" <mario.limonciello@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        <kvm@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        <op-tee@lists.trustedfirmware.org>
+Subject: [PATCH 0/6] Export platform features from ccp driver
+Date:   Thu, 9 Feb 2023 16:38:02 -0600
+Message-ID: <20230209223811.4993-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT038:EE_|BL1PR12MB5945:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1eee4d7d-12e4-4562-ebca-08db0aee5d3d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vfWtBKbxq1+8a4ud44IBfExgbcMQEBz8rusddVlnfa57XubF9hTjAjliDw76LFWnEifWGajZVaEOziz0MQYR02vldom3ju1J0qOzmPBDJ8Zv5ZbkKdmROMB7S4jC4W1uG7C0tL0G9s7aKXcZc30o+1tyJOQ9II1JadyzHrxu0qXLxLOwkRjABvxZcVyNau9o2E1Q1b5o4BN/EYRA2Bnca9lz3QTsE37pjPqy5ZFXGzh4V7Bzi/Y4iOdyoYqQeIYMQOzSACLMD0gl/BHZAg0oRthjp46ic0VTDu+SnY5Tm7Ps6DyR7I+WrXq36W6ioOyDRwmTT23r0WKUZbkHqLYB3zgvDNGo9Ch3kLG8poZVHW1+lQ5LbPAiRwfYZnX0Yxg2QRVZ8LTL0Ckizv7yYg9JCR9jgQ9tDpeBeOhl9fC1j5kc/jXxf/824hHkgFsPlkAXfk5GNP3M8z6UsuIox91s7bUdenimYUn+5qrlsyr9cNdBheEq/5yr48iE0w6sHGsAdbwRtCGCNRRMp+aSK2E3atK4nUApf5/oYvZ8B3Ywk3ZT8pfW6JopJ/rSq5tncXhC3RsMK7/p+K0XdV5H1ALTFXY8DC7meD9DmY8F7doeRuC5apjA5tG2RQzYzVRqXA2oEtXWMv54SLu3VVJj05oJd/jimFO6aBlm9argVgf49I31yJweAiWJtjKNSG1mJS4nQFAEa+3LLDP11N7k8Ub7sCOa/c84ecfn7OCpms+z1J2kmyjxKtCQBZqNJCzHPtax
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(136003)(39860400002)(346002)(451199018)(36840700001)(40470700004)(46966006)(426003)(26005)(1076003)(86362001)(6666004)(186003)(36756003)(16526019)(83380400001)(336012)(7696005)(47076005)(70206006)(54906003)(316002)(110136005)(70586007)(8676002)(82310400005)(41300700001)(40480700001)(8936002)(2616005)(36860700001)(4326008)(44832011)(7416002)(921005)(2906002)(40460700003)(356005)(5660300002)(81166007)(82740400003)(478600001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 22:38:28.5109
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1eee4d7d-12e4-4562-ebca-08db0aee5d3d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT038.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5945
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,107 +107,50 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Feb 8, 2023 at 4:59 PM Raul Rangel <rrangel@chromium.org> wrote:
->
-> On Wed, Feb 8, 2023 at 1:28 AM Amadeusz Sławiński
-> <amadeuszx.slawinski@linux.intel.com> wrote:
-> >
-> > On 2/8/2023 7:57 AM, Mika Westerberg wrote:
-> > > Hi,
-> > >
-> > > On Tue, Feb 07, 2023 at 09:33:55AM -0700, Raul Rangel wrote:
-> > >> Sorry, resending in plain text mode.
-> > >>
-> > >> On Tue, Feb 7, 2023 at 12:25 AM Mika Westerberg
-> > >> <mika.westerberg@linux.intel.com> wrote:
-> > >>>
-> > >>> After commit b38f2d5d9615 ("i2c: acpi: Use ACPI wake capability bit to
-> > >>> set wake_irq") the I2C core has been setting I2C_CLIENT_WAKE for ACPI
-> > >>> devices if they announce to be wake capable in their device description.
-> > >>> However, on certain systems where audio codec has been connected through
-> > >>> I2C this causes system suspend to wake up immediately because power to
-> > >>> the codec is turned off which pulls the interrupt line "low" triggering
-> > >>> wake up.
-> > >>>
-> > >>> Possible reason why the interrupt is marked as wake capable is that some
-> > >>> codecs apparently support "Wake on Voice" or similar functionality.
-> > >>
-> > >> That's generally a bug in the ACPI tables. The wake bit shouldn't be
-> > >> set if the power domain for the device is powered off on suspend. The
-> > >> best thing is to fix the ACPI tables, but if you can't, then you can
-> > >> set the ignore_wake flag for the device:
-> > >> https://github.com/torvalds/linux/blob/master/drivers/gpio/gpiolib-acpi.c#L31.
-> > >> If that works we can add a quirk for the device:
-> > >> https://github.com/torvalds/linux/blob/master/drivers/gpio/gpiolib-acpi.c#L1633.
-> >
->
-> > I've seen this one already and also tried to use it, but it didn't work.
-> > Also when I was reading code I wasn't really convinced that it is linked
-> > to i2c in any straightforward way. I mean i2c decides in different
-> > places that it has wake support (I even added some prints to make sure
-> > ;). The code you pointed out decides in
-> > https://github.com/torvalds/linux/blob/master/drivers/gpio/gpiolib-acpi.c#L387
-> > but i2c code seems to decide in
-> > https://github.com/torvalds/linux/blob/master/drivers/i2c/i2c-core-acpi.c#L176
-> > where it just checks if irq flags has wake_capable flag set. When I
-> > looked at it previously I was pretty sure it comes straight from BIOS
-> > and passes the quirk code you mentioned, still I may have missed something.
->
-> You also need the following patch
-> https://github.com/torvalds/linux/commit/0e3b175f079247f0d40d2ab695999c309d3a7498,
-> otherwise the ignore flag only applies to _AEI GPIOs.
->
-> >
-> > >
-> > > I think (hope) these systems are not yet available for public so there
-> > > is a chance that the tables can still be fixed, without need to add any
-> > > quirks.
-> > >
-> > > @Amadeusz, @Cezary, if that's the case I suggest filing a bug against
-> > > the BIOS.
-> > >
-> >
-> > Well, I tried custom DSDT and had problems, but I just remembered that I
-> > probably need to pass "revision+1" in file, so kernel sees it as a newer
-> > version, let me try again. Is it enough to replace "ExclusiveAndWake"
-> > with "Exclusive"?
-> >
-> > >>> In any case, I don't think we should be enabling wakeup by default on
-> > >>> all I2C devices that are wake capable. According to device_init_wakeup()
-> > >>> documentation most devices should leave it disabled, with exceptions on
-> > >>> devices such as keyboards, power buttons etc. Userspace can enable
-> > >>> wakeup as needed by writing to device "power/wakeup" attribute.
-> > >>
-> > >> Enabling wake by default was an unintended side-effect. I didn't catch
-> > >> this when I wrote the patch :/ It's been exposing all the incorrect
-> > >> ACPI configurations for better or worse. Mario pushed a patch up
-> > >> earlier to disable thes Wake GPIOs when using S3:
-> > >> https://github.com/torvalds/linux/commit/d63f11c02b8d3e54bdb65d8c309f73b7f474aec4.
-> > >> Are you having problems with S3 or S0iX?
-> > >
-> > > I think this case is S0ix.
-> >
-> > We test both cases in our setups.
->
-> IMO if a device needs to support wake from S3 the ACPI table needs to
-> define a _PRW and define the proper power resources to keep the device
-> functional during S3.
+The i2c-designware-amdpsp driver communicates with a platform
+features mailbox provided by the PSP.  The address used for
+communication is discovered via a non-architecturally
+guaranteed mechanism.
 
-Yes, it should, but there's more to it than this.
+To better scale, export a feature for communication with platform
+features directly from the ccp driver.
 
-First of all, the interrupt in question needs to be enabled prior to
-S3 entry.  That will happen if device_may_wakeup() is true for the
-given device AFAICS.
+Mario Limonciello (6):
+  crypto: ccp: Drop TEE support for IRQ handler
+  crypto: ccp: Add a header for multiple drivers to use `__psp_pa`
+  crypto: ccp: Move some PSP mailbox bit definitions into common header
+  crypto: ccp: Add support for an interface for platform features
+  crypto: ccp: Enable platform access interface on client PSP parts
+  i2c: designware: Use PCI PSP driver for communication
 
-Second, the device should be in a suitable power state which _S3W is
-about.  That should also happen via ACPI PM.
+ arch/x86/kvm/svm/sev.c                      |   1 +
+ drivers/crypto/ccp/Makefile                 |   3 +-
+ drivers/crypto/ccp/platform-access.c        | 166 ++++++++++++++++++++
+ drivers/crypto/ccp/platform-access.h        |  34 ++++
+ drivers/crypto/ccp/psp-dev.c                |  32 ++--
+ drivers/crypto/ccp/psp-dev.h                |  11 +-
+ drivers/crypto/ccp/sev-dev.c                |  16 +-
+ drivers/crypto/ccp/sev-dev.h                |   2 +-
+ drivers/crypto/ccp/sp-dev.h                 |   7 +
+ drivers/crypto/ccp/sp-pci.c                 |   7 +
+ drivers/crypto/ccp/tee-dev.c                |  17 +-
+ drivers/i2c/busses/Kconfig                  |   2 +-
+ drivers/i2c/busses/i2c-designware-amdpsp.c  | 149 +-----------------
+ drivers/i2c/busses/i2c-designware-core.h    |   1 -
+ drivers/i2c/busses/i2c-designware-platdrv.c |   1 -
+ drivers/tee/amdtee/call.c                   |   2 +-
+ drivers/tee/amdtee/shm_pool.c               |   2 +-
+ include/linux/psp-platform-access.h         |  50 ++++++
+ include/linux/psp-sev.h                     |   8 -
+ include/linux/psp.h                         |  26 +++
+ 20 files changed, 340 insertions(+), 197 deletions(-)
+ create mode 100644 drivers/crypto/ccp/platform-access.c
+ create mode 100644 drivers/crypto/ccp/platform-access.h
+ create mode 100644 include/linux/psp-platform-access.h
+ create mode 100644 include/linux/psp.h
 
-Next, _PRW should return the list of power resources that need to be
-_ON prior to S3 entry for the device to be able to wake the system.
 
-However, _PRW also provides the information on which sleep states the
-system can be woken up from by the given device and S3 need not be one
-of them.
+base-commit: c7410b425de40e9b163eef781e1bdacf1bf2962e
+-- 
+2.34.1
 
-The kernel will not prevent S3 from being entered if that is the case,
-so it doesn't follow the spec literally in that respect.
