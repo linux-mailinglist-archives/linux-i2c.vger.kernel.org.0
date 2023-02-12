@@ -2,60 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D88C693A1E
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Feb 2023 22:02:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9E9693A20
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Feb 2023 22:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjBLVCr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 12 Feb 2023 16:02:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51652 "EHLO
+        id S229677AbjBLVEf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 12 Feb 2023 16:04:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjBLVCq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 12 Feb 2023 16:02:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C51F75E;
-        Sun, 12 Feb 2023 13:02:45 -0800 (PST)
+        with ESMTP id S229649AbjBLVEe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 12 Feb 2023 16:04:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688051AB;
+        Sun, 12 Feb 2023 13:04:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1FBEB80D2F;
-        Sun, 12 Feb 2023 21:02:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6892C433D2;
-        Sun, 12 Feb 2023 21:02:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A419CB80C2C;
+        Sun, 12 Feb 2023 21:04:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1856C433D2;
+        Sun, 12 Feb 2023 21:04:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676235762;
-        bh=usYk7tvBKwSordnriT3ugmrMWJteA6rsGLzPjt/RMiY=;
+        s=k20201202; t=1676235870;
+        bh=MBaZW6ftlbRh7fpFjFjtVfKm2Z6GvDeyDUGMpCPL7rg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WbOyv/q/Cx7dAjwnKoNofXQ2CVEkSxJefCMS60026aP8dLIbOJ0SvPpNQ2oYnKQJf
-         pK0G2A7IhOtPQT4RrvO1dHL0x2xqgnSY3OdE3W5cGpG+JgCeNsFiYzgKUaTEPjeVeL
-         4atEDSw5838xoctRnXUieJSifztfusn5WqmNTIfJ99FG0pWbX2IpZB0pPo6AQg/GtH
-         GtKjhzWn5CewR4hUF10800EgJHCoy9M1Fz2Az7DVPjh934IxQkuzQt2YGekuzX6zjM
-         nXxYHKXOwiLlgJl220KoHfaiHyGpkjRTBIREXb/Xb72q+I/DWcQWv1Onn2ZoQ9Qvhd
-         isI5EeGKPuIgA==
-Date:   Sun, 12 Feb 2023 22:02:34 +0100
+        b=ADrL7jgm85xkVfpu1dGdXGx1pwphmSqgDHriEJNOxZlXdB5j+MUeTEZ8kuZU5gZfK
+         6D0ACL5pxcGuhx1dAteh2of94MZCpvABPiSwYTmLQGTxoTqnHtEy6O6aOhLpX1CeGn
+         sYGHq6lonHnagXRPvNxlaL4BnzLuK31CtyZGiELYhZxItXn78HFDVEs3R0XcCZ3ySk
+         IBQrhXAQ+bRD+YKWkFXXtkXewfOUUUfBMYP75X4hPYFJR5dakdZIc4uNbRjRZQfy3p
+         8NM82bHeq8vasRSwdyUgmEtJun5dXgfdXlkGHn51aQyqs5NyqstGN3jkdQ+ghPkc0a
+         ts5+ma/k33cmQ==
+Date:   Sun, 12 Feb 2023 22:04:26 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: i2c: uniphier: Add resets property
-Message-ID: <Y+lT6koqmmcFKwJi@shikoro>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Raul Rangel <rrangel@chromium.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
+        "Limonciello, Mario" <mario.limonciello@amd.com>
+Subject: Re: [RFC] i2c: core: Do not enable wakeup by default
+Message-ID: <Y+lUWpUnjmtp4FuV@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230209014340.17979-1-hayashi.kunihiko@socionext.com>
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= <amadeuszx.slawinski@linux.intel.com>,
+        Raul Rangel <rrangel@chromium.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
+        "Limonciello, Mario" <mario.limonciello@amd.com>
+References: <20230207072540.27226-1-mika.westerberg@linux.intel.com>
+ <CAHQZ30Bzn1Lxy+Y2gCcFTmzWzwnxqUZAHAjSh67Pz=WweaKHkg@mail.gmail.com>
+ <Y+NH9pjbFfmijHF+@black.fi.intel.com>
+ <b429918f-fe63-2897-8ade-d17fe2e3646f@linux.intel.com>
+ <Y+Nrhq9l6CIPjL7Z@black.fi.intel.com>
+ <eadeb808-1925-164e-3e78-0f14c4f2bdc4@linux.intel.com>
+ <Y+S6Wz5P/dMG8I8g@black.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cjIa4s1PpX9tiHRV"
+        protocol="application/pgp-signature"; boundary="H8ylRI22g+LmjiJH"
 Content-Disposition: inline
-In-Reply-To: <20230209014340.17979-1-hayashi.kunihiko@socionext.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <Y+S6Wz5P/dMG8I8g@black.fi.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,38 +75,34 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---cjIa4s1PpX9tiHRV
+--H8ylRI22g+LmjiJH
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Feb 09, 2023 at 10:43:40AM +0900, Kunihiko Hayashi wrote:
-> UniPhier I2C controller allows reset control support.
-> Add resets property to the controller as optional.
->=20
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-
-Applied to for-next, thanks!
 
 
---cjIa4s1PpX9tiHRV
+> Okay good to know, then I think we can forget this patch.
+
+Based on this comment, I marked the patch as "Rejected".
+
+
+--H8ylRI22g+LmjiJH
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPpU+YACgkQFA3kzBSg
-Kbb7HBAAskT9SQbvdblAJJsbIro4PwN1u1hKfLPxLvCryepDYd07qx6YpHu3lr7E
-5PGHh+8pdQ7sRAqL10lTYVe2CfNp/3nsenM1/8nDCXB3HVnh+lf87Rjnjqx9kHYI
-55qFR7nacqK3xT/oVra8gq4oOVKSp1HJ972+GLqxQY3nuEuxres+AQjgnZhb8VP7
-ecSPNDON0XvXxnmdAFbpNJD0Fe/cEBdqW5Fyr8zGagvcHW/RxqgKDkgJYhwh3pS+
-RoHopSvadYiNTaKbrKbqCxdv5I3v17iuyaGZmOBfyc2n8rzBjFzOcH+ieZlPoLz3
-iyOM/6a89ZrSO1lBbSuczvD8hIovs2J8+ardJ9JwkZyaiFXM/F7gIsT+CJuVNaqS
-8UqiaOOe4SoHyvvqUuFT5Dkbl+24mw/kNt5sOTgHnB+hLf4AL1hxz+qPAMOriiDa
-g/Hfha2sU1n8yWPX1HV5hp0tKb5A/6aqF9/GSasYn7tszhIMmFdgvN43lGuMh60Y
-fHj6IK7TToeD1ApeH3yDrOO0bHzesQK88YXkiB+SBJkmKztSwAR+NmOdqeNHwgLC
-WOUUvjY79LH/BXopi+VjmnQCI/f/kgjhHeHxFU3FEP+FbfU8TlIr5oCbYf01kGw0
-mLbARqyk8IHoolktilqUhJvnz1r4Ue9QHp2CSC8TQpieaYMCdl0=
-=YxVO
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPpVFoACgkQFA3kzBSg
+KbZOKA/+PhgSgP4+RuIoM1yVTeTZv2B4N0O2mkAYQso9ont3pAfwxnSI9DCPT9vz
+YJNBUCALUR3C5JdyZlVKXgiLKvHH4e7tbS1rvdWQiQjJ+0RRFvYt1Lr/DeTWRi6U
+ZIHk324FlNVPDR4n0O5AyZxjTuajOpBP07fvHgMlRcDQ7f4wMJQW+TWoXe68BKQc
+G3Yzlu8l/f8wFBNyjQhJ0YgsdPh9V7pf09Aa37K0ciJJkPkuM+NYH2uL1Jl+ziae
+n0OKa+ggh15rqTKLHZtHJL+l4ajUZG+CyhBWzrrAFd9pOeK4iJCPnpgfK1bNgZkM
+F4srUry22YhNY3o7HguTYywJZ97PErh4TVktjO+DFLGvwnDurjUklGi65CfZ4l/k
+f22pqY/FfG3Sn9uvF91wVAscyvPpPvBUigDmWqVbcs3dk4FjjXpuxzQC50mt514Q
+m9h1XTXZM/bHTCRMBrMg11ZHM1jU4beE6nzMkQxGBpMHu4t+VZFg3ypFGs8Jr9GT
+Brbn+4kNAk0Y0azowi+gKZPGN4Pw+B6jymdKucJqKKFfVBo7XUVscxON34oTKyu7
+GPkWsyZaohpSVYg1cyZrcaATWaceh1wahJlTxGK48K3kOhqJke3SWG8lJHPmLjXU
+csKadspGTexRC5wLmj9I4RiMKnbWkIPzBiULn0WDkQGuOL1SaW4=
+=G2jA
 -----END PGP SIGNATURE-----
 
---cjIa4s1PpX9tiHRV--
+--H8ylRI22g+LmjiJH--
