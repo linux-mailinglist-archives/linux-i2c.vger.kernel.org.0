@@ -2,76 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F75693818
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Feb 2023 16:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BB069386D
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Feb 2023 17:20:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjBLPlo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 12 Feb 2023 10:41:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
+        id S229496AbjBLQUp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 12 Feb 2023 11:20:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjBLPlh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 12 Feb 2023 10:41:37 -0500
-Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BE01285A;
-        Sun, 12 Feb 2023 07:41:36 -0800 (PST)
-Received: from robin.home.jannau.net (p579ad32f.dip0.t-ipconnect.de [87.154.211.47])
-        by soltyk.jannau.net (Postfix) with ESMTPSA id B048926F783;
-        Sun, 12 Feb 2023 16:41:34 +0100 (CET)
-From:   Janne Grunau <j@jannau.net>
-To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        with ESMTP id S229692AbjBLQUo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 12 Feb 2023 11:20:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6F911EA0;
+        Sun, 12 Feb 2023 08:20:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3DCB0B80C2C;
+        Sun, 12 Feb 2023 16:20:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43ED0C433EF;
+        Sun, 12 Feb 2023 16:20:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676218832;
+        bh=8c5ZE6wso1sJzAexSJLkIIxBqt9QGbBE23FLS8hkIhk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MRu6kci35NM7pkS3wIjl4HLQYbPUGybMY8UUgiOlUs4XDI/inlal4p3CPd6pNiUAM
+         I4rMRxRVv85R44J1NfI3P494gCKdH7BGb/jcfcvm1KhCC6RfkGcWsC9Dkr1JEWS2zX
+         k6DR5zqDzoFTX0bl8NlF4PVCF4J13oZaDjsrn++3yw+t3uyOqCfg1Aaj63EbOzr4FD
+         wKt4q8+/CPL2J4c4QFyFmgZ9MBFRp2v7wITovYNmmxzPUEHy4qCheHNNrP8O71n5Fb
+         4YfkfXCU8/W5q+VDC/VCMf5h4i1itJB047QJ5mn9AeGuEy304aBGwz8BtVtf2GLi6o
+         9ZwuonChVZQ1A==
+Date:   Sun, 12 Feb 2023 17:20:23 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Janne Grunau <j@jannau.net>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Kettenis <kettenis@openbsd.org>
-Cc:     asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH 12/17] dt-bindings: i2c: apple,i2c: Add apple,t8112-i2c compatible
-Date:   Sun, 12 Feb 2023 16:41:22 +0100
-Message-Id: <20230202-asahi-t8112-dt-v1-12-cb5442d1c229@jannau.net>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230202-asahi-t8112-dt-v1-0-cb5442d1c229@jannau.net>
+        Mark Kettenis <kettenis@openbsd.org>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 12/17] dt-bindings: i2c: apple,i2c: Add apple,t8112-i2c
+ compatible
+Message-ID: <Y+kRx0SKDO7aadnX@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Janne Grunau <j@jannau.net>, Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Kettenis <kettenis@openbsd.org>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
 References: <20230202-asahi-t8112-dt-v1-0-cb5442d1c229@jannau.net>
+ <20230202-asahi-t8112-dt-v1-12-cb5442d1c229@jannau.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=888; i=j@jannau.net; h=from:subject:message-id; bh=GaccuGqSFZ+kRH1Vtme6IeBfNnC5UeTcePpsKodussA=; b=owGbwMvMwCG2UNrmdq9+ahrjabUkhuSX7CfcDDwtBNkLGA7LdU/+K5KvWZi6g13v7cR/0Yzzl l7q6fbuKGVhEONgkBVTZEnSftnBsLpGMab2QRjMHFYmkCEMXJwCMJFJBxkZFsq0uJh8ERItj1YR bpnWkviPIfb5bKtdcrvXvT0zffpZAYb/CT27l/M9W+WeeYWz+9M926mSka6PTk99PHXN20tmG/1 5eQA=
-X-Developer-Key: i=j@jannau.net; a=openpgp; fpr=8B336A6BE4E5695E89B8532B81E806F586338419
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ST6dBu1VamLAYVH7"
+Content-Disposition: inline
+In-Reply-To: <20230202-asahi-t8112-dt-v1-12-cb5442d1c229@jannau.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This block on the Apple M2 is compatible with the existing driver so
-just add the per-SoC compatible.
 
-Signed-off-by: Janne Grunau <j@jannau.net>
+--ST6dBu1VamLAYVH7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
----
-This trivial dt-bindings update should be merged through the asahi-soc
-tree to ensure validation of the Apple M2 (t8112) devicetrees in this
-series.
----
- Documentation/devicetree/bindings/i2c/apple,i2c.yaml | 1 +
- 1 file changed, 1 insertion(+)
+On Sun, Feb 12, 2023 at 04:41:22PM +0100, Janne Grunau wrote:
+> This block on the Apple M2 is compatible with the existing driver so
+> just add the per-SoC compatible.
+>=20
+> Signed-off-by: Janne Grunau <j@jannau.net>
+>=20
 
-diff --git a/Documentation/devicetree/bindings/i2c/apple,i2c.yaml b/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-index 4ac61fec90e2..3f0e94189f2d 100644
---- a/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-@@ -23,6 +23,7 @@ properties:
-     items:
-       - enum:
-           - apple,t8103-i2c
-+          - apple,t8112-i2c
-           - apple,t6000-i2c
-       - const: apple,i2c
- 
+Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
 
--- 
-2.39.1
 
+--ST6dBu1VamLAYVH7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPpEcYACgkQFA3kzBSg
+KbbkDg/+M0Ppq/ZZ/28h8ANuPUws9poi5kn4SvSpZN7feKgWRKAjLRaq1jrdwT9W
+z9C7Jh3AatgXFe1a8vG/jAE9aqnmgBrj1Sf+Q5SIn40AarUh7M6SgXsvlqup0BdU
+ArmcEVc+JLSYS+UdsEvLzENePuG05LvjSP233F3DN1mhnXBz4GqiXS7cxukC+rYe
+FxFToPUq/c+6kmOZjao7GJNinnSYbSrn2zVtttl+pzzOJWCj2ryRvhoaU4E5rE1q
+SkDEHtX43R2kRgqx7lT0nnpiJ4C+RrRzY18BmRzpSZT9BkLOVjBkvvC+py5ieP4x
+qVPwMTB8J6eIjvb0bVRfZe9x35v3b3bsYEv7mSNZHAUevzl1TnX86v+k65fFkU61
+ZQlwiVFkQIc6SlYx2I/cczLTtPGfaIsoDlp9/EFgSXTjlOupdkpzyYmCoFM8nvmX
+Pfj0FnXrJYZXqSBDm638iL8LUvg5u9QU0Y8uxBuTKeFVPZWqYt+cnHyruXaySsjf
+qI8ryCIeb9WBzeqgc0/3kspotqf9phtQzPhGg31xaYvGfaFrkOtu06xoOX+UjO6Z
+3Snh84ZtaCm1DY8uY0LtPdVmPSbf5thDrDn26usRkAikPFhlRCxYfiLbSZ8MIO/E
+rIfzDwPNAMuhVW0X32bbDlCC4+LAtnKEOEObw6ZiKXEsZ+Jw5Z8=
+=4LS4
+-----END PGP SIGNATURE-----
+
+--ST6dBu1VamLAYVH7--
