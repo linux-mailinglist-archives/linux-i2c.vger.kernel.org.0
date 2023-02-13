@@ -2,97 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419E1693A38
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Feb 2023 22:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C506F694138
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Feb 2023 10:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjBLVO3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 12 Feb 2023 16:14:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
+        id S230174AbjBMJcH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 13 Feb 2023 04:32:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjBLVO3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 12 Feb 2023 16:14:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5C2A254;
-        Sun, 12 Feb 2023 13:14:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2994B80DA0;
-        Sun, 12 Feb 2023 21:14:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4639C433EF;
-        Sun, 12 Feb 2023 21:14:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676236465;
-        bh=I188z32N+WIDJgWGIzK2pS6xx1UvPFQePimfGPEMjBs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gaC/2Ma8RZDfm5sRSF2OSsGHXB8flfgJuAPpV9bnvurx88WY6+NFZmTiXR/SSrU2V
-         Co2kIMz/wRGercmP55GiN+vThmkBV0aIfbI7DWTj7D8Tzm6uwsCKn2+x5wr9w+NCSQ
-         eJlbWXSJwcbJ8hPE0GOmNBWpGOIStZV/vskI6EvdlNirDNYPewWGv3B/Z5nDI4y3i9
-         p2pHqEyOpAbNb5ohlF2DuVGtXstfUTOCmVPCwWs2HQEgb5Znc10VPcUKCE5QLAaVLL
-         p9BGakhWhHGTXV1lBSSQ9KzvzGM44nnCizSnfnbklVcW3pCoriTY4nkMv3PbcpMHCD
-         j+AX1Q2y8ci9w==
-Date:   Sun, 12 Feb 2023 22:14:22 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     ye.xingchen@zte.com.cn
-Cc:     michal.simek@xilinx.com, linux-arm-kernel@lists.infradead.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: xiic: Use devm_platform_get_and_ioremap_resource()
-Message-ID: <Y+lWrijnACGg3/Mo@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, ye.xingchen@zte.com.cn,
-        michal.simek@xilinx.com, linux-arm-kernel@lists.infradead.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <202301281453121890132@zte.com.cn>
+        with ESMTP id S230310AbjBMJbk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Feb 2023 04:31:40 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B15515CA1
+        for <linux-i2c@vger.kernel.org>; Mon, 13 Feb 2023 01:30:04 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id 136so549202ybf.9
+        for <linux-i2c@vger.kernel.org>; Mon, 13 Feb 2023 01:30:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fbCnS9qQOyU9623tJsn2QphhHvRbvyNNBbtC5U5z6J8=;
+        b=odroHUcqkgcojn02dHabgYmZH3VY11+Urwb7RTpZ5NyCwDhI/MTiKdbotFjm2yzYBU
+         8OVdx6KfYdT00gJY07OXJkj5tDo2fHRtR+a7ued0jN3bZjGm+bvqgGLd2iKkD+Iyce8Q
+         j3UKTikpP5Tr49t/XOxZMhip5nxQnPvBV/Aj+VN9liszJnJDp6b5SOxTtEwF4hq/IH9A
+         iTxmrUxzY2043+mlhVViU0qc/BSBZ5JBJW1Ni/MGuyGemOydRaaNQTwow0qHI/+vMRwN
+         NtmQh1SF6nuLSPa2nfc+jJJ+N1VVk9gWT59iCdto60h8O6dnTth3+yLTJGNK5mnJnfDo
+         M1Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fbCnS9qQOyU9623tJsn2QphhHvRbvyNNBbtC5U5z6J8=;
+        b=n+crNXFHZen0bQPbBQBp14R6T7Jslb3ICpf67v93UvT0uqXksyHOejuazQqRZoqPyY
+         kLMWIdNvXWbdS/QRiZTZKqvp+0yDbk22ScRIPpFz5iTwGAinozxby38njTs2cWui2di1
+         qJ74E3qMh8Y1SG/36yUxyf7b2AJdVtRdQy9qlmhJ3m0BJl02H/Quu9ADVSqbple7d5NH
+         wKlsnr9HdVq7AsbZUSQeDzVvcEmRJ+CJtYSNmmE8cSvrsa6o2TPRIz4lSs8Uvs3a+5Tj
+         s+VGJlVbgP1qNVHhb9OQH6w1JJIv5uqFmFB27v0eW8L7IgisxdRV339C9DDyyOCae1vY
+         7ecQ==
+X-Gm-Message-State: AO0yUKUwVOzQ2rwfoAA5umQ8GfByYMojYb12jGpAWh8/6TWoMUCHTTi1
+        XCk7WVqnd2AKK2IXhoMCmb2adWFenPFaaxm5izhyzA==
+X-Google-Smtp-Source: AK7set/Q/aym+udxSJIugldGIX6aULPrP69cxHciJd6Aja2+B3PO2NjOVa2H35aSpgMPo6/GConlmtxbwpwEyp0a2LI=
+X-Received: by 2002:a25:8e81:0:b0:8f7:f072:720d with SMTP id
+ q1-20020a258e81000000b008f7f072720dmr1045699ybl.426.1676280600037; Mon, 13
+ Feb 2023 01:30:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ta/r8DwciCrDGg78"
-Content-Disposition: inline
-In-Reply-To: <202301281453121890132@zte.com.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <b151531d-c9fc-cafa-4e46-e213a9892247@microchip.com>
+ <CACRpkdbK8A9X4nCZEc53-wXU0Vgkc53j_r5rLQiSeoNbmvm8sg@mail.gmail.com> <961a2164-640a-86b5-980f-73668eb161e4@microchip.com>
+In-Reply-To: <961a2164-640a-86b5-980f-73668eb161e4@microchip.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 13 Feb 2023 10:29:48 +0100
+Message-ID: <CACRpkdaKYN9eRtuOhBBp_50sR71AQvNSKtjAR1RZPhaKYhfJVw@mail.gmail.com>
+Subject: Re: I2c GPIO Recovery with pinctrl strict mode
+To:     Ryan.Wanner@microchip.com
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, alexandre.belloni@bootlin.com,
+        Ludovic.Desroches@microchip.com, Nicolas.Ferre@microchip.com,
+        Claudiu.Beznea@microchip.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, Feb 10, 2023 at 4:21 PM <Ryan.Wanner@microchip.com> wrote:
 
---ta/r8DwciCrDGg78
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> I am trying to enable .strict in the Atmel pinctrl driver, and that is
+> what is causing my issues.
 
-On Sat, Jan 28, 2023 at 02:53:12PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
->=20
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
->=20
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+Strictly speaking (ha!) that flag is for when you *cannot* use a pin
+in GPIO mode at the same time as another mode.
 
-Could you kindly rebase this to i2c/for-next or i2c/for-mergewindow? An
-earlier series for xiic has been applied there. Thanks!
+Example: if you use the pin in I2C mode, then reading the GPIO
+input register will *not* reflect the value on the electrical line,
+because it has been decoupled physically. Then .strict should
+be true.
 
+The strict mode was not intended for policy, i.e. stopping kernel
+developers from doing wrong things. They have enough tools to
+do wrong things anyway, one more or less doesn't matter.
 
---ta/r8DwciCrDGg78
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPpVq4ACgkQFA3kzBSg
-KbagIBAAth9RzObTd6wfFr+VSdDusxRXYRuWut2c/6VXOtD4lv3r1DRpfs6+P40r
-cMksNjRleD+6Lu4BR26mhCgte8Cw9xl83lgrht67D0B+kcyBoe6Ozd0TUcASocoT
-xghSgGKyJQ9o8TKOzePOUblTbcYz1UIO/C3wb05KKtfjsPEqb6gVlV+M1gW6nsvL
-gp5JNqYrToGVzItGJwyYulOGUcuVNLtg/aqtZoybcxscvemYA+f6xkS0aHS6umw3
-CCbD5IVrR4qhbRm/HbwoF5W/udazipbnZp6q+szCXKGI+mvbfDF6MDawtToXUYT9
-pfsdHyU/bfIqZ4/4jUmgEtppnZvjXuLJVvFNaYlLyj7wibl7OWnWZ39GwQIxzJMt
-NjkQV62kNthbbuhKjRAiVI7hgIVv1E5TvpumRqrQvqlxCRo4cKPScZRE5B1BZJ+/
-Lqn0CXsuM584I3Id3ltNMKaRhnH2uvctpGdqkBIURW5pZOWpKowTGdXrplqH1itw
-pvfPsmJhjdkO1gkzlefdcLyrVR5qMxP56Cacu3Qh1R4qBT/rhPFqbuLeDw9qY7dx
-6/57vyvc1gKYsnWLVh4P1kJH62e8I4q5Sfp3gBvrajQjZauyP3vcnzXrwLcSCnz5
-NW7OLviFc9b26Acg+/tp3yzNoRpU2LfzUhGbE9ZO7xe45bEKMYs=
-=3cFn
------END PGP SIGNATURE-----
-
---ta/r8DwciCrDGg78--
+Yours,
+Linus Walleij
