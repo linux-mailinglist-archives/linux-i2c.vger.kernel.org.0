@@ -2,179 +2,346 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A87698480
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Feb 2023 20:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E55AE698500
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Feb 2023 20:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjBOT05 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Feb 2023 14:26:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
+        id S229723AbjBOTyE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Feb 2023 14:54:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjBOT0z (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Feb 2023 14:26:55 -0500
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D86A3E631;
-        Wed, 15 Feb 2023 11:26:53 -0800 (PST)
-Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31FJP7wV023883;
-        Wed, 15 Feb 2023 19:26:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pps0720;
- bh=JxXiIpydVFe/4pUnoyWY7IO7VlHQXqCybYUKtZQJMtw=;
- b=luOCT52D0qIiNj3CtlYe/33NKJwGbCZ7kOSadi2kVsAjhXSR/eaNX9zGE6lktfjQ2oB7
- mJS0MEt1kZfmMXqWaUVW8JCQyaoQxnDGcYOVEmtaOL+ps9njKsuYp5oXzjAlJk0KV88f
- bmkbTR6Uo+qMniznfRM/1YrazAptBwYOKLmOx5GclPEZi3B6Dop9/yr/SPFS0cApG0uM
- WtWFrHWVYoqFVBD4trgIePodY1p5bAUzQVr8VM7WM5aUpm5oxN2+SkTH4JETzTPxtvTQ
- N50ubIqijcZSdv35KPZ4BCFitWb3qUufzzA3nKH3ZUgWyASCPNpepLVNMbRYKJpeZgUV YA== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3ns5h980bd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Feb 2023 19:26:23 +0000
-Received: from p1wg14924.americas.hpqcorp.net (unknown [10.119.18.113])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id A7F6D800345;
-        Wed, 15 Feb 2023 19:26:22 +0000 (UTC)
-Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
- p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 15 Feb 2023 07:26:02 -1200
-Received: from p1wg14919.americas.hpqcorp.net (16.230.19.122) by
- p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36
- via Frontend Transport; Wed, 15 Feb 2023 07:26:02 -1200
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.122) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 15 Feb 2023 07:26:02 -1200
+        with ESMTP id S229771AbjBOTyB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Feb 2023 14:54:01 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2054.outbound.protection.outlook.com [40.107.243.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF18D10FE
+        for <linux-i2c@vger.kernel.org>; Wed, 15 Feb 2023 11:53:58 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NObF4lBw6etffIXOI3Qn+11Wh3lQB8mFqHRpktpIypa30XWyO5l6welCyE+dQbbeEd8J9K1Wk3AlUlx3nGkJyH98RAN31evyrwE0W3Mt8sanBurZrNkwcFuuxmktvmLI9Au3yfMT+OvEJkxRVMnV1Kdzcod644D2yctgr+guS4q0YEJGyFb9UnMjeO5QbX3oeypnmg7f7ELAad3JWd26IIq6BrxhLf7j7tiQrVdlsQJSUEse5QsbQg3rTvsb35FM10JV0CrnoEO0waNx8NkzQcxtdrSByCP3ClhkedoWDwSsXO/Q0Z84CLgBJ4mPAlFfHi4xuMzxtTc+LL5guOj41Q==
+ b=AuEIuBSYrkf2wBAATHAm6TfpycoWGufttkWzxT3anpOIIaY2DOeiv9e1hqh23mgtKDYyXaiZhx3r85lU9HgIn8NpwtPV8/JUE5uuB+jxhbKZOo1h0VCEWLaBbYwz9ow2IiNvvap2S5dny+TMKDYSjlaO4X9eiGNQF5OEJvNozO19ihQNWRhh7Yf708LbMElJ9bwqcp+haEgJQ0Jue1kj1f/LtEIVohoZQUnbzgPsaX5kQCwa77qlnfLNmJleLQQJyV3R3tPLKZ+5zUd5p788QvFa1r0KZqNKokJBRayXepXLpvsjhOWFIFPQ+R52ruVoaWExWxiSuAftLQrromG7Qw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JxXiIpydVFe/4pUnoyWY7IO7VlHQXqCybYUKtZQJMtw=;
- b=jwYbf+evTuvqGMIYVe8eT3kq/0ou62jBRHnI+lLLtYjwoFWF90zU9sUke5pFVCGkpLSUqoZhWSepB8MFA7DAr2ieFiTSctQaZjXlLdap2MHpoweExRwoMeM2BeiZjhWaSlg9QXDXSNBWotwhLoORDLfone+F38E5uWGR5SG8YLhhBwQa3jOvvLd5CLIIS7Bznk0IpTEhMkt34a2jDuxPGPhyH8TPaLUUBSIEwrqzeO7WbPoKcXIR9jox40Uwmj7OU48XS5TCAC1z3m6EVFzIsMla0IyNKvs7XSOBfRsfarQAVf2U992YIOvXK9b2kwCruHaoRbqRLgN7tge2xUscJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::10) by
- SJ0PR84MB1410.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:430::15) with
+ bh=MIsKl1QCKWCxPJTcfNaQ2JqdM98t9TMwEwaAylIxaFo=;
+ b=lQ0Bg9O0kcAVdIijUDEUCL6AITG73aGOI5ZggleaL7oC30+vj/Hz53QZ/Y3oesVygDQbtIFlbGGuqX1ISZl0a8UvSit9dqm6bgF56kZ74wpZn46Noo8Hy+Ja0yjWzewD5TX6OxZaupHWd1e6/1yfPijxaBNV/TmcPgMhLGLL/vloObA9GzsxkLZtw/kUv0zYJ9KwrOItNax25TCEQOSgamu5HJbVWLIShXjCpZklh95s3Vxt3p6qXkPk0kaNVlMraI+fnOrkDM/LdKbJHeUWp7lGclE6vJGKpe2rgPXqQhFE4H3nP9cdVGcQDzRmMkaAksQUssR6Hf/7IsYNOw646A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=axentia.se smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MIsKl1QCKWCxPJTcfNaQ2JqdM98t9TMwEwaAylIxaFo=;
+ b=AxVJAGOvUl/4Fx/P7byk6hlv2c8R+Frj2jaWHQmwYEwsceR/Eum4MVUzeCPy5gb0wsrl7VTAtCYNjO5TGz8wXdcqiB4KOK+XwNAkZQ2HfNa5WjoAsUf+786w/d9ze3sniD7itLos10bTv1pRTKytCztHm+JkK+cYiEdHUOEXjVkrerqcPw92q+VmAuaczBY1O2o5BectklBybuyWJXencqvJ/pKDgukkMmAvAyzoQ9X6U7Rn1feHFp0xJW7CeNz6hHcHwJYbjapE4SxmwgE05pb1uPmdNVopRUm8/Tz08n79mINCZdwSvfdBpESDSrfaChLH4+Yuswy9cC3JOLSseg==
+Received: from DS7PR07CA0013.namprd07.prod.outlook.com (2603:10b6:5:3af::19)
+ by SJ1PR12MB6098.namprd12.prod.outlook.com (2603:10b6:a03:45f::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Wed, 15 Feb
- 2023 19:26:01 +0000
-Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::de12:a5c2:5c71:6b87]) by DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::de12:a5c2:5c71:6b87%7]) with mapi id 15.20.6086.026; Wed, 15 Feb 2023
- 19:26:01 +0000
-From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
-To:     Wolfram Sang <wsa@kernel.org>
-CC:     "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "joel@jms.id.au" <joel@jms.id.au>
-Subject: RE: [PATCH v4 5/5] MAINTAINERS: Add HPE GXP I2C Support
-Thread-Topic: [PATCH v4 5/5] MAINTAINERS: Add HPE GXP I2C Support
-Thread-Index: AQHZMO1xKLe5o9gXTUe1qZvV6dkcF660LYmAgA+JHgCADLBDMA==
-Date:   Wed, 15 Feb 2023 19:26:00 +0000
-Message-ID: <DM4PR84MB1927BBB411A7F2B0ADF0F21088A39@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
-References: <20230125184438.28483-1-nick.hawkins@hpe.com>
- <20230125184438.28483-6-nick.hawkins@hpe.com> <Y9VrnQxiFjVqtybb@ninjato>
- <6B334EA9-3E6D-4B40-8C55-A539C504439C@hpe.com>
-In-Reply-To: <6B334EA9-3E6D-4B40-8C55-A539C504439C@hpe.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR84MB1927:EE_|SJ0PR84MB1410:EE_
-x-ms-office365-filtering-correlation-id: 65234381-20cc-4421-a083-08db0f8a78c8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: uyO866KrpZBkgE27ZsAhMtRnCtDuykvTCRNc+4sb97jYkmQuDQ9LFrGSCcU0MDKdkMEmDPzf2bIbOpcQ1hPusn4G7/z3SzyGfEmg+hJDkyBptoP/1GfubeMkR5OGzpyZ3JafwTf1l+ZEzuELq+JXYXJv8TmaqCbuJfBFBItYscNiWKo7yefaKSEYorXHq+v3gIlZY+jmPwOPEZbsfr/oIPiJoCwWS/n2ddiryINz5jJKWXlxDQOco8/0g6floBB2/wOSqjlX0Q+dNtAZUp7KkxgrSRcjYhpcfMK+VRBPxavp9cp/AqQbSiMIEr/mrFB7LcuKQUwUKs4rbw5egL9lEJP3I0xG+Ha7vddpdpybY6ODL8mkfiLtArHi7Edx4kV8F2Q7wBGJafJYK3SS36HLiwZxXI3I+3eKv/lAOYe5IS7KF6skmyHvYBV77hzWthx2rh8F2bj7/bmda2XaH78IAt5jaoFLBQ0OHXls5Lf8woBruEvnm2f1qw/6NrUoZok7rbrZnRuGFQz/3Eojvyy35xCBmyZQskp2fnOu7K4SVl0izqllVsBNtmt25yRdTUIcqtflTAnDyJ10sHfFnKTjjgtvTmAD+Vsh0O0jdKkng2c0MAHZOqptaa2BtZ6ztkZvWvXXgAeK33BJfMWWZ9x+pHz5qbukZRwKRCQCwF9QlX6pZxnWlLUKop3Me6iQyRFO4sGlGDTMyMxGO6A3Dzv/iw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(376002)(136003)(346002)(366004)(39860400002)(396003)(451199018)(6916009)(478600001)(64756008)(66446008)(66476007)(41300700001)(86362001)(8936002)(38070700005)(316002)(82960400001)(8676002)(66946007)(4326008)(54906003)(76116006)(66556008)(122000001)(38100700002)(7696005)(186003)(33656002)(5660300002)(55236004)(52536014)(4744005)(26005)(6506007)(9686003)(55016003)(71200400001)(83380400001)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aHZueExNa3FERXZzZ1FwUWI0aXRob2JkWjNvekpjUkxlM1hBQ0o4a2o2NVVL?=
- =?utf-8?B?bFJNYmhZaUNkUHhlaUtFc3hFZEFRZldrVWhTckFzYm5sVFdGckdLalBZcy8z?=
- =?utf-8?B?a2Rlek5OUG9IOWNwRzlaZnV1ckZhdGFpNGcrczdzb05yTVpJR1ZTRk1oNXNp?=
- =?utf-8?B?OGxzdDZiR1hQSGhBemRZeC9maGx3aE56VllKQXc5Tjk0SkgvS0ZOMkVmMWdY?=
- =?utf-8?B?ZDlNVEw2Y09tK0wxZktvOUpOL3NrOHRsTzV4OWJmNHE1enpKZ05WR0pKUlpH?=
- =?utf-8?B?YWdXaDVLN3V4TUpFdGVXOXlFQlcyQVNYaUQ3UDAzTnBDS0h3S1RrY0d4cThm?=
- =?utf-8?B?cTlBMGMzOHRiU3U4R1JpQ1huTElzeS9YQnFuZFh0eUVCUm9PYlBDL1QvckZK?=
- =?utf-8?B?M1hGRmZPU2c0OGVqTWd5YnIvdFpWOFR6ZElaVEtvaC9CZHlHb0cvZDZKTWp2?=
- =?utf-8?B?bUhzcFFabWpTRUFEVkVXanoraWwwUUhKSEI5TGdUTk16bXNGN29CeEFlYjQr?=
- =?utf-8?B?SEdXRFA5bXVTQ3o2QkY2cGhPZW5SWjRsY2wxemphQUJIRDR5N05PT1J2ZTBw?=
- =?utf-8?B?MEJiUXNIMWhxNUwwa2xHaGZIRHhjRExORkc5WG1kLzhTV2hXWXFtcm5xcUcw?=
- =?utf-8?B?cDlsZU0xZTFHV2Z3TVNVWmFuTWFhOVZ2MUdmOWpwSmFvSmZrSEd4Mk0xcFYx?=
- =?utf-8?B?QTBhZE0rL21CQkRWY29XRUtZRkxvZ0VCNFRhN2JPT3ppaEdTY1kvamRLTVBB?=
- =?utf-8?B?UExVeG1oWFZLQ3JOVDdiZzFyaE9tQ0Z6dTdGMjlHUnkzYnpIdXlqejdGVHZE?=
- =?utf-8?B?VDNiVUpDODc5SUljYTQ2Q0g1bHVpbHVhT3dMSzBDNnZEclFKV3lWbWhZNkNv?=
- =?utf-8?B?eWFWMlRieWM3dHJoUkwvR0xieEVGVmFocGp4NnNlTFhGL2lJSXZ0aXdmR0kw?=
- =?utf-8?B?VFZINEhQWEVwaEdkY0NNSnVYT2hkV3F1dmRzbTZkcHdMMndiak5TYVdtZk9I?=
- =?utf-8?B?QTNEclRxbHMxWUdWaVB6dFhRd2d5Vm9mSks5ZnRzYmRqY0VIblJXQ1VrNGNS?=
- =?utf-8?B?d2tFOGxna1A0Mkc2QktkYWs2bFVqWllicHI2c1MyMnhzeko5ME53cHpRT0dm?=
- =?utf-8?B?bDI1cXNianVYZUhCK3RQakpRNnNwZlQ1Q3Q3Q2Rzc3ZBaXFBU05OQjFydStw?=
- =?utf-8?B?cUdZNmRvQ0RnMXdDNllZeTM1dFMxZ1ZDdU54S0QzVkNJdjRoWDQ4OGI4bWs3?=
- =?utf-8?B?YkxFUWZ4S0UzSklodElMSm80anZHbU8zMVVhREZTeVkxR1pSR1NUQjBZVmdm?=
- =?utf-8?B?KzZtcmwxUEJkZHUxMkRQeG15NlVtREVCV0tzdkhqdkt5V20zbDVJMHhSalFn?=
- =?utf-8?B?QzkrenpsS1VoOWVsSWNadGdNMXo0ZXVSakxBdS9JNy80MGRXNHVJRnQ2NzJl?=
- =?utf-8?B?YVNwTkl6WWk4djBOVW92RFJaNzNlUjFxRXVGWDBTWVVxZEpFWWNuL2ttZURs?=
- =?utf-8?B?ejErQ1hnMU8zV2VrVEdZMVZISUNJRjVrVjdGaE1ucTArSFd2RXdHdUhBVUVN?=
- =?utf-8?B?VWxHNmdsY2lWSVh1OGdaczJRUnhHOFM2bWVSdzJMZkIvVlpBK2VucmpqdHBt?=
- =?utf-8?B?QmxWV1g4K0Q5V3RTMGtFZ3NCT0JvQXNHdVc1Z0lmWnJ3QzYvUXFBUlZocVda?=
- =?utf-8?B?eklUMSt0RlRwRnlsWStQNm5IZmZvd0FTcG1JWVRaNmtwUytOZ2IzMm5IMnF6?=
- =?utf-8?B?U1RsQTNLQThQUnJoSnc2dFErOGJaVXlJa3d1djlFZ0NyUFd3TU9nZi9hcTl3?=
- =?utf-8?B?MWdMajRNYnUwRXk0NW0waEplWC9razI1MHVLNGE5WGFvOVNXT2VsUlVvV0Ux?=
- =?utf-8?B?WkdCcVJ5SzFHbXZZQm84QXRyUXdEL2daamVoVnlBYTVtUkdFVHM0bVEzUk80?=
- =?utf-8?B?cDdvaWZBWUNXRmk5MFZCU2VjOXIzazhBTjdMREszT09uVjRtWStNY3hSc0k1?=
- =?utf-8?B?ZkxXNWNlNWZpbEJmOUwyMmtsaDBhNXhmVVpSS3YyYWdZM01lRjBOOFVNMm82?=
- =?utf-8?B?bHNNVE11ek5KWmJQQk5YeG0yZktrM3BRbjFpZ0EyUEMrS1o3U2pybnc4S0pF?=
- =?utf-8?Q?9Z8PHlIFE+ujwjiPPgbDOSVLQ?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ 2023 19:53:56 +0000
+Received: from DM6NAM11FT068.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3af:cafe::2d) by DS7PR07CA0013.outlook.office365.com
+ (2603:10b6:5:3af::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26 via Frontend
+ Transport; Wed, 15 Feb 2023 19:53:55 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM6NAM11FT068.mail.protection.outlook.com (10.13.173.67) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6111.12 via Frontend Transport; Wed, 15 Feb 2023 19:53:55 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 15 Feb
+ 2023 11:53:43 -0800
+Received: from r-build-bsp-02.mtr.labs.mlnx (10.126.231.37) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 15 Feb 2023 11:53:42 -0800
+From:   Vadim Pasternak <vadimp@nvidia.com>
+To:     <peda@axentia.se>, <wsa@the-dreams.de>
+CC:     <linux-i2c@vger.kernel.org>, Vadim Pasternak <vadimp@nvidia.com>
+Subject: [PATCH i2c-next 1/1] i2c: mux: Add register map based mux driver
+Date:   Wed, 15 Feb 2023 21:53:22 +0200
+Message-ID: <20230215195322.21955-1-vadimp@nvidia.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65234381-20cc-4421-a083-08db0f8a78c8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2023 19:26:00.8905
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT068:EE_|SJ1PR12MB6098:EE_
+X-MS-Office365-Filtering-Correlation-Id: 459a7e55-22ff-4e1e-5a81-08db0f8e5f03
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mo3jJfrKRpLgZgaHh2wvqeia5PKf0dfHTi8Lq8Qjh8NukmSxWAg7jksPPJnTdVlUd02PQvj87Tz87VVr9paTozYmD78pxS8wQ0s/Ew9jRwEfOuC0w+ugn6voQo9pk1cjOpdn2/X0W4nTUU67TM3A5EjQBxtQvwWqe6jlEIxoDFrPOVlt2BjUxW36+2eUsTC/09E0WrBh/K+BjJi8nPh2NjEh/jaBYF2d698dOmy51B8GGltpxAo0icIhi3uTlpGgvgM5asuS3XtfzX7QDY70UgeN/4MSTbUBohBie8JkoeBC+NN5Vw6o9VqYR/zJ6ts9O1EswGjP/plQzqbSHpBweeWoPj5yPW4sJOI1I+eodChMOremQlOnfLv/wZ5eMSuMTg+EcUNtKp+ff8OWf5dlCX7/DOzm41Rm3gDoAi8FcgIt5l94hG0FM9hd+PZh7KGAT/2vrxTvL88p4EA1BSQDFy2HP7qHvKdc4P3xtrw7wYu/XzJKwdg261wczExYBreRPNnW+3UrcLgrslLLMLUBmrBYlINShDZdgiFhzzGTIUxtpsdpeQDfUzpOYd5bv3VFh11xyQ2rQ07LQ9U8GQ1y1wXcRzy0y1dBTL4zkT1opTj6oMeBx0coWZYPVXL7Q6Pj3DtJcqJh7EQmWBo+F/ysHIB+Z/uQFErkRfP/IPIs1rmpFc6+tgCanqf5xoIy8awIClSTq9SgUehd0xv9hrLWCg==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39860400002)(376002)(346002)(451199018)(36840700001)(46966006)(40470700004)(426003)(2616005)(336012)(47076005)(478600001)(316002)(82740400003)(5660300002)(16526019)(40460700003)(2906002)(82310400005)(1076003)(36756003)(26005)(36860700001)(186003)(4326008)(8676002)(356005)(70586007)(8936002)(70206006)(7636003)(41300700001)(110136005)(83380400001)(54906003)(6666004)(107886003)(86362001)(40480700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 19:53:55.5478
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WCMg1j879ZUKT9dlyPtrcxtdJoEVIxBAt1k+1X1sjFU/m49pdbH8DNRmPaz5jxBrss0UYLOcOM83XuGV5U8vNA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1410
-X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: u2OqL9Gou_Z-1PQR2-WoAOnF8W8TRQkh
-X-Proofpoint-ORIG-GUID: u2OqL9Gou_Z-1PQR2-WoAOnF8W8TRQkh
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-15_10,2023-02-15_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 mlxscore=0 bulkscore=0 malwarescore=0 spamscore=0
- clxscore=1015 priorityscore=1501 impostorscore=0 phishscore=0
- mlxlogscore=659 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302150171
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 459a7e55-22ff-4e1e-5a81-08db0f8e5f03
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT068.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6098
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-DQo+ID4gTGV0IG1lIGtub3cgaWYgSSBzaG91bGQgcGljayB0aGlzIGluc3RlYWQuIFdpbGwgcmV2
-aWV3IHRoZSBkcml2ZXIgaW4gdGhlDQo+ID4gbmV4dCBkYXlzLg0KDQo+IFBsZWFzZSBpbmNsdWRl
-IGl0LiBUaGVyZSBtYXkgYmUgd2FybmluZ3MgZ2VuZXJhdGVkIGlmIE1BSU5UQUlORVJTDQpkb2Vz
-IG5vdCBsaXN0IHRoZSBmaWxlcyBhdCB0aGUgdGltZSBvZiB5b3VyIGNvbW1pdC4NCg0KPiBUaGFu
-ayB5b3UsDQoNCj4gLU5pY2sgSGF3a2lucw0KDQpHcmVldGluZ3MgV29sZnJhbSwNCg0KSnVzdCBh
-IGdlbnRsZSByZW1pbmRlciBvbiB0aGlzIHJldmlldy4NCg0KVGhhbmsgeW91IGZvciB5b3VyIHRp
-bWUsDQoNCi1OaWNrIEhhd2tpbnMNCg==
+Add 'regmap' mux driver to allow virtual bus switching by setting a
+single selector register.
+The 'regmap' is supposed to be passed to driver within a platform data
+by parent platform driver.
+
+Motivation is to support indirect access to register space where
+selector register is located.
+For example, Lattice FPGA LFD2NX-40 device, being connected through
+PCIe bus provides SPI or LPC bus logic through PCIe-to-SPI or
+PCIe-to-LPC bridging. Thus, FPGA operates a as host controller and
+some slave devices can be connected to it. For example:
+- CPU (PCIe) -> FPGA (PCIe-to-SPI bridge) -> CPLD or another FPGA.
+- CPU (PCIe) -> FPGA (PCIe-to-LPC bridge) -> CPLD or another FPGA.
+Where 1-st FPGA connected to PCIe is located on carrier board, while
+2-nd programming logic device is located on some switch board and
+cannot be connected to CPU PCIe root complex.
+
+In case mux selector register is located within the 2-nd device, SPI or
+LPC transactions are sent indirectly through pre-defined protocol.
+
+To support such protocol reg_read()/reg_write() callbacks are provided
+to 'regmap' object and these callback implements required indirect
+access.
+
+For example, flow in reg_write() will be as following:
+- Verify there is no pending transactions.
+- Set address in PCIe register space.
+- Set data to be written in PCIe register space.
+- Activate write operation in PCIe register space.
+- LPC or SPI write transaction is performed.
+
+Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
+---
+ drivers/i2c/muxes/Kconfig                    |  12 ++
+ drivers/i2c/muxes/Makefile                   |   1 +
+ drivers/i2c/muxes/i2c-mux-regmap.c           | 123 +++++++++++++++++++
+ include/linux/platform_data/i2c-mux-regmap.h |  34 +++++
+ 4 files changed, 170 insertions(+)
+ create mode 100644 drivers/i2c/muxes/i2c-mux-regmap.c
+ create mode 100644 include/linux/platform_data/i2c-mux-regmap.h
+
+diff --git a/drivers/i2c/muxes/Kconfig b/drivers/i2c/muxes/Kconfig
+index ea838dbae32e..af2dbacdda57 100644
+--- a/drivers/i2c/muxes/Kconfig
++++ b/drivers/i2c/muxes/Kconfig
+@@ -119,4 +119,16 @@ config I2C_MUX_MLXCPLD
+ 	  This driver can also be built as a module.  If so, the module
+ 	  will be called i2c-mux-mlxcpld.
+ 
++config I2C_MUX_REGMAP
++	tristate "Register map based I2C multiplexer"
++	depends on REGMAP
++	help
++	  If you say yes to this option, support will be included for a
++	  register map based I2C multiplexer. This driver provides access to
++	  I2C busses connected through a MUX, which is controlled
++	  by a single register through the regmap.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called i2c-mux-regmap.
++
+ endmenu
+diff --git a/drivers/i2c/muxes/Makefile b/drivers/i2c/muxes/Makefile
+index 6d9d865e8518..092dca428a75 100644
+--- a/drivers/i2c/muxes/Makefile
++++ b/drivers/i2c/muxes/Makefile
+@@ -14,5 +14,6 @@ obj-$(CONFIG_I2C_MUX_PCA9541)	+= i2c-mux-pca9541.o
+ obj-$(CONFIG_I2C_MUX_PCA954x)	+= i2c-mux-pca954x.o
+ obj-$(CONFIG_I2C_MUX_PINCTRL)	+= i2c-mux-pinctrl.o
+ obj-$(CONFIG_I2C_MUX_REG)	+= i2c-mux-reg.o
++obj-$(CONFIG_I2C_MUX_REGMAP)	+= i2c-mux-regmap.o
+ 
+ ccflags-$(CONFIG_I2C_DEBUG_BUS) := -DDEBUG
+diff --git a/drivers/i2c/muxes/i2c-mux-regmap.c b/drivers/i2c/muxes/i2c-mux-regmap.c
+new file mode 100644
+index 000000000000..e155c039a90e
+--- /dev/null
++++ b/drivers/i2c/muxes/i2c-mux-regmap.c
+@@ -0,0 +1,123 @@
++// SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0
++/*
++ * Regmap i2c mux driver
++ *
++ * Copyright (C) 2023 Nvidia Technologies Ltd.
++ */
++
++#include <linux/device.h>
++#include <linux/i2c.h>
++#include <linux/i2c-mux.h>
++#include <linux/io.h>
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/platform_data/i2c-mux-regmap.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++#include <linux/slab.h>
++
++/* i2c_mux_regmap - mux control structure:
++ * @last_val - last selected register value or -1 if mux deselected;
++ * @pdata: platform data;
++ */
++struct i2c_mux_regmap {
++	int last_val;
++	struct i2c_mux_regmap_platform_data pdata;
++};
++
++static int i2c_mux_regmap_select_chan(struct i2c_mux_core *muxc, u32 chan)
++{
++	struct i2c_mux_regmap *mux = i2c_mux_priv(muxc);
++	int err = 0;
++
++	/* Only select the channel if its different from the last channel */
++	if (mux->last_val != chan) {
++		err = regmap_write(mux->pdata.regmap, mux->pdata.sel_reg_addr, chan);
++		mux->last_val = err < 0 ? -1 : chan;
++	}
++
++	return err;
++}
++
++static int i2c_mux_regmap_deselect(struct i2c_mux_core *muxc, u32 chan)
++{
++	struct i2c_mux_regmap *mux = i2c_mux_priv(muxc);
++
++	/* Deselect active channel */
++	mux->last_val = -1;
++
++	return regmap_write(mux->pdata.regmap, mux->pdata.sel_reg_addr, 0);
++}
++
++/* Probe/reomove functions */
++static int i2c_mux_regmap_probe(struct platform_device *pdev)
++{
++	struct i2c_mux_regmap_platform_data *pdata = dev_get_platdata(&pdev->dev);
++	struct i2c_mux_regmap *mux;
++	struct i2c_adapter *parent;
++	struct i2c_mux_core *muxc;
++	int num, err;
++
++	if (!pdata)
++		return -EINVAL;
++
++	mux = devm_kzalloc(&pdev->dev, sizeof(*mux), GFP_KERNEL);
++	if (!mux)
++		return -ENOMEM;
++
++	memcpy(&mux->pdata, pdata, sizeof(*pdata));
++	parent = i2c_get_adapter(mux->pdata.parent);
++	if (!parent)
++		return -EPROBE_DEFER;
++
++	muxc = i2c_mux_alloc(parent, &pdev->dev, pdata->num_adaps, sizeof(*mux), 0,
++			     i2c_mux_regmap_select_chan, i2c_mux_regmap_deselect);
++	if (!muxc)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, muxc);
++	muxc->priv = mux;
++	mux->last_val = -1; /* force the first selection */
++
++	/* Create an adapter for each channel. */
++	for (num = 0; num < pdata->num_adaps; num++) {
++		err = i2c_mux_add_adapter(muxc, 0, pdata->chan_ids[num], 0);
++		if (err)
++			goto err_i2c_mux_add_adapter;
++	}
++
++	/* Notify caller when all channels' adapters are created. */
++	if (pdata->completion_notify)
++		pdata->completion_notify(pdata->handle, muxc->parent, muxc->adapter);
++
++	return 0;
++
++err_i2c_mux_add_adapter:
++	i2c_mux_del_adapters(muxc);
++	return err;
++}
++
++static int i2c_mux_regmap_remove(struct platform_device *pdev)
++{
++	struct i2c_mux_core *muxc = platform_get_drvdata(pdev);
++
++	i2c_mux_del_adapters(muxc);
++	i2c_put_adapter(muxc->parent);
++
++	return 0;
++}
++
++static struct platform_driver i2c_mux_regmap_driver = {
++	.driver = {
++		.name = "i2c-mux-regmap",
++	},
++	.probe = i2c_mux_regmap_probe,
++	.remove = i2c_mux_regmap_remove,
++};
++
++module_platform_driver(i2c_mux_regmap_driver);
++
++MODULE_AUTHOR("Vadim Pasternak (vadimp@nvidia.com)");
++MODULE_DESCRIPTION("Regmap I2C multiplexer driver");
++MODULE_LICENSE("Dual BSD/GPL");
++MODULE_ALIAS("platform:i2c-mux-regmap");
+diff --git a/include/linux/platform_data/i2c-mux-regmap.h b/include/linux/platform_data/i2c-mux-regmap.h
+new file mode 100644
+index 000000000000..a06614e5edd2
+--- /dev/null
++++ b/include/linux/platform_data/i2c-mux-regmap.h
+@@ -0,0 +1,34 @@
++/* SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0 */
++/*
++ * Regmap i2c mux driver
++ *
++ * Copyright (C) 2023 Nvidia Technologies Ltd.
++ */
++
++#ifndef __LINUX_PLATFORM_DATA_I2C_MUX_REGMAP_H
++#define __LINUX_PLATFORM_DATA_I2C_MUX_REGMAP_H
++
++/**
++ * struct i2c_mux_regmap_platform_data - Platform-dependent data for i2c-mux-regmap
++ * @regmap: register map of parent device;
++ * @parent: Parent I2C bus adapter number
++ * @chan_ids - channels array
++ * @num_adaps - number of adapters
++ * @sel_reg_addr - mux select register offset in CPLD space
++ * @reg_size: register size in bytes
++ * @handle: handle to be passed by callback
++ * @completion_notify: callback to notify when all the adapters are created
++ */
++struct i2c_mux_regmap_platform_data {
++	void *regmap;
++	int parent;
++	const unsigned int *chan_ids;
++	int num_adaps;
++	int sel_reg_addr;
++	u8 reg_size;
++	void *handle;
++	int (*completion_notify)(void *handle, struct i2c_adapter *parent,
++				 struct i2c_adapter *adapters[]);
++};
++
++#endif	/* __LINUX_PLATFORM_DATA_I2C_MUX_REGMAP_H */
+-- 
+2.20.1
+
