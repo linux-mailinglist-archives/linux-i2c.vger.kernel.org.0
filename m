@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F426996A6
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Feb 2023 15:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0CE6996AA
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Feb 2023 15:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjBPOIN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Feb 2023 09:08:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42672 "EHLO
+        id S229891AbjBPOIP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Feb 2023 09:08:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjBPOIM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Feb 2023 09:08:12 -0500
+        with ESMTP id S229883AbjBPOIO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Feb 2023 09:08:14 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3638C2CC41;
-        Thu, 16 Feb 2023 06:08:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF5A3B86A;
+        Thu, 16 Feb 2023 06:08:12 -0800 (PST)
 Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0664498C;
-        Thu, 16 Feb 2023 15:08:04 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7221315D2;
+        Thu, 16 Feb 2023 15:08:06 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1676556486;
-        bh=TbPvGI7NZtIJIpon+x4zlSgixLL32JJXXqY12n8FdQ4=;
+        s=mail; t=1676556487;
+        bh=TyApQ6qpr4eiku+THwel+cmwld8/fczSmL0rhfymuCk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z4KYURzg/DQTs/pplAPB/blO1j8IUej13ysnasZSxhZtlCmIMYe/v5cp2LKiEvwqr
-         fe42FG7z0DIJNiDhumph+C6YMI3EW1XMR1+WkwrWVmJx/QQ4j2WbIaOUYIE0zJpcUx
-         t4uTb6wDAdnV+0KJTFn8s9Do4kQ7JgG7fhIsb1NY=
+        b=uW0Pa0mqg2jFPpIr4WpUEaUcDt2ix2zXnfIEJTGu7L6ZoFB2YWXd5hNmLbxhUkLdK
+         lkCifZly4HUPm2vw34zL/9zlt/n8Vs28482FJKn5JHD0PFQAOPMzF4uGG0216de888
+         BewgXwm0xvmPuf5SGTnNRqRp39KpK8ntaKj7K034=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
@@ -46,10 +46,12 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
         Marek Vasut <marex@denx.de>,
         Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v9 2/8] media: subdev: Split V4L2_SUBDEV_ROUTING_NO_STREAM_MIX
-Date:   Thu, 16 Feb 2023 16:07:41 +0200
-Message-Id: <20230216140747.445477-3-tomi.valkeinen@ideasonboard.com>
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v9 3/8] dt-bindings: media: add TI DS90UB913 FPD-Link III Serializer
+Date:   Thu, 16 Feb 2023 16:07:42 +0200
+Message-Id: <20230216140747.445477-4-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230216140747.445477-1-tomi.valkeinen@ideasonboard.com>
 References: <20230216140747.445477-1-tomi.valkeinen@ideasonboard.com>
@@ -64,106 +66,155 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-V4L2_SUBDEV_ROUTING_NO_STREAM_MIX routing validation flag means that all
-routes from a sink pad must go to the same source pad and all routes
-going to the same source pad must originate from the same sink pad.
-
-This does not cover all use cases. For example, if a device routes
-all streams from a single sink pad to any of the source pads, but
-streams from multiple sink pads can go to the same source pad, the
-current flag is too restrictive.
-
-Split the flag into two parts, V4L2_SUBDEV_ROUTING_NO_SINK_STREAM_MIX
-and V4L2_SUBDEV_ROUTING_NO_SOURCE_STREAM_MIX, which add the restriction
-only on one side of the device. Together they mean the same as
-V4L2_SUBDEV_ROUTING_NO_STREAM_MIX.
+Add DT bindings for TI DS90UB913 FPD-Link III Serializer.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c | 17 +++++++++++++----
- include/media/v4l2-subdev.h           | 16 +++++++++++++---
- 2 files changed, 26 insertions(+), 7 deletions(-)
+ .../bindings/media/i2c/ti,ds90ub913.yaml      | 133 ++++++++++++++++++
+ 1 file changed, 133 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
 
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index dd3c2d86f96e..e513b859a7df 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -1661,10 +1661,11 @@ int v4l2_subdev_routing_validate(struct v4l2_subdev *sd,
- 		}
- 
- 		/*
--		 * V4L2_SUBDEV_ROUTING_NO_STREAM_MIX: Streams on the same pad
--		 * may not be routed to streams on different pads.
-+		 * V4L2_SUBDEV_ROUTING_NO_SINK_STREAM_MIX: Streams on the same
-+		 * sink pad may not be routed to streams on different source
-+		 * pads.
- 		 */
--		if (disallow & V4L2_SUBDEV_ROUTING_NO_STREAM_MIX) {
-+		if (disallow & V4L2_SUBDEV_ROUTING_NO_SINK_STREAM_MIX) {
- 			if (remote_pads[route->sink_pad] != U32_MAX &&
- 			    remote_pads[route->sink_pad] != route->source_pad) {
- 				dev_dbg(sd->dev,
-@@ -1673,6 +1674,15 @@ int v4l2_subdev_routing_validate(struct v4l2_subdev *sd,
- 				goto out;
- 			}
- 
-+			remote_pads[route->sink_pad] = route->source_pad;
-+		}
+diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
+new file mode 100644
+index 000000000000..f6612bb0f667
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
+@@ -0,0 +1,133 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub913.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+		/*
-+		 * V4L2_SUBDEV_ROUTING_NO_SOURCE_STREAM_MIX: Streams on the same
-+		 * source pad may not be routed to streams on different sink
-+		 * pads.
-+		 */
-+		if (disallow & V4L2_SUBDEV_ROUTING_NO_SOURCE_STREAM_MIX) {
- 			if (remote_pads[route->source_pad] != U32_MAX &&
- 			    remote_pads[route->source_pad] != route->sink_pad) {
- 				dev_dbg(sd->dev,
-@@ -1681,7 +1691,6 @@ int v4l2_subdev_routing_validate(struct v4l2_subdev *sd,
- 				goto out;
- 			}
- 
--			remote_pads[route->sink_pad] = route->source_pad;
- 			remote_pads[route->source_pad] = route->sink_pad;
- 		}
- 
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index 6a77aa9bb1da..f11103122e53 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -1638,19 +1638,29 @@ u64 v4l2_subdev_state_xlate_streams(const struct v4l2_subdev_state *state,
-  * @V4L2_SUBDEV_ROUTING_NO_N_TO_1:
-  *	multiple input streams may not be routed to the same output stream
-  *	(stream merging)
-- * @V4L2_SUBDEV_ROUTING_NO_STREAM_MIX:
-- *	streams on the same pad may not be routed to streams on different pads
-+ * @V4L2_SUBDEV_ROUTING_NO_SINK_STREAM_MIX:
-+ *	streams on the same sink pad may not be routed to streams on different
-+ *	source pads
-+ * @V4L2_SUBDEV_ROUTING_NO_SOURCE_STREAM_MIX:
-+ *	streams on the same source pad may not be routed to streams on different
-+ *	sink pads
-  * @V4L2_SUBDEV_ROUTING_ONLY_1_TO_1:
-  *	only non-overlapping 1-to-1 stream routing is allowed (a combination of
-  *	@V4L2_SUBDEV_ROUTING_NO_1_TO_N and @V4L2_SUBDEV_ROUTING_NO_N_TO_1)
-+ * @V4L2_SUBDEV_ROUTING_NO_STREAM_MIX:
-+ *	streams on the same pad may not be routed to streams on different pads
-  */
- enum v4l2_subdev_routing_restriction {
- 	V4L2_SUBDEV_ROUTING_NO_1_TO_N = BIT(0),
- 	V4L2_SUBDEV_ROUTING_NO_N_TO_1 = BIT(1),
--	V4L2_SUBDEV_ROUTING_NO_STREAM_MIX = BIT(2),
-+	V4L2_SUBDEV_ROUTING_NO_SINK_STREAM_MIX = BIT(2),
-+	V4L2_SUBDEV_ROUTING_NO_SOURCE_STREAM_MIX = BIT(3),
- 	V4L2_SUBDEV_ROUTING_ONLY_1_TO_1 =
- 		V4L2_SUBDEV_ROUTING_NO_1_TO_N |
- 		V4L2_SUBDEV_ROUTING_NO_N_TO_1,
-+	V4L2_SUBDEV_ROUTING_NO_STREAM_MIX =
-+		V4L2_SUBDEV_ROUTING_NO_SINK_STREAM_MIX |
-+		V4L2_SUBDEV_ROUTING_NO_SOURCE_STREAM_MIX,
- };
- 
- /**
++title: Texas Instruments DS90UB913 FPD-Link III Serializer
++
++maintainers:
++  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
++
++description:
++  The TI DS90UB913 is an FPD-Link III video serializer for parallel video.
++
++properties:
++  compatible:
++    enum:
++      - ti,ds90ub913a-q1
++
++  '#gpio-cells':
++    const: 2
++    description:
++      First cell is the GPO pin number, second cell is the flags. The GPO pin
++      number must be in range of [0, 3]. Note that GPOs 2 and 3 are not
++      available in external oscillator mode.
++
++  gpio-controller: true
++
++  clocks:
++    maxItems: 1
++    description:
++      Reference clock connected to the CLKIN pin.
++
++  clock-names:
++    items:
++      - const: clkin
++
++  '#clock-cells':
++    const: 0
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description: Parallel input port
++
++        properties:
++          endpoint:
++            $ref: /schemas/media/video-interfaces.yaml#
++            unevaluatedProperties: false
++
++            required:
++              - pclk-sample
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        unevaluatedProperties: false
++        description: FPD-Link III output port
++
++    required:
++      - port@0
++      - port@1
++
++  i2c:
++    $ref: /schemas/i2c/i2c-controller.yaml#
++    unevaluatedProperties: false
++
++required:
++  - compatible
++  - '#gpio-cells'
++  - gpio-controller
++  - '#clock-cells'
++  - ports
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    serializer {
++      compatible = "ti,ds90ub913a-q1";
++
++      gpio-controller;
++      #gpio-cells = <2>;
++
++      clocks = <&clk_cam_48M>;
++      clock-names = "clkin";
++
++      #clock-cells = <0>;
++
++      ports {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        port@0 {
++          reg = <0>;
++          ub913_in: endpoint {
++            remote-endpoint = <&sensor_out>;
++            pclk-sample = <1>;
++          };
++        };
++
++        port@1 {
++          reg = <1>;
++          endpoint {
++            remote-endpoint = <&deser_fpd_in>;
++          };
++        };
++      };
++
++      i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        sensor@48 {
++          compatible = "aptina,mt9v111";
++          reg = <0x48>;
++
++          clocks = <&fixed_clock>;
++
++          port {
++            sensor_out: endpoint {
++              remote-endpoint = <&ub913_in>;
++            };
++          };
++        };
++      };
++    };
++...
 -- 
 2.34.1
 
