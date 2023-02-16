@@ -2,59 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F42699981
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Feb 2023 17:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30EDF699989
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Feb 2023 17:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjBPQLV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Feb 2023 11:11:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40734 "EHLO
+        id S229683AbjBPQMQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Feb 2023 11:12:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjBPQLV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Feb 2023 11:11:21 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBA64D609
-        for <linux-i2c@vger.kernel.org>; Thu, 16 Feb 2023 08:11:19 -0800 (PST)
+        with ESMTP id S229538AbjBPQMP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Feb 2023 11:12:15 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DAF4E5F4
+        for <linux-i2c@vger.kernel.org>; Thu, 16 Feb 2023 08:12:14 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 93806228CA;
-        Thu, 16 Feb 2023 16:11:18 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 644F4225E4;
+        Thu, 16 Feb 2023 16:12:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1676563878; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1676563933; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=THOn3H8qYKgLlnsk1QaYhIy82EceKIWcCoN2IM9s5hM=;
-        b=o5vX++y4c1Fl99OpNtGrAs+GicyOofUk8BuyXJ931564yEQgHOohuJfUrrtABtqCGLJeUN
-        MpD9X9GzFJLAaqUZl6bMh0iPSlj7LihISiZhLEB/ihui8e9Nd386YzysCZdcPuXk7Uh6H4
-        icNVnTTG17m7x7DZ6XFqVCMKUF1zxrA=
+        bh=w6tzIpDWz8qkgUV6HzZNltoG6JpfJBywBNzNTpQWztw=;
+        b=sjK009iEmC8aqAT9qTLf2yuHhEZcbEiB7kMFPS9xD3qd4o+OJhPjpUTQ7T9Nra4AByEQ2a
+        dTQ96jToA4HdmvTKx2dn7Nuu3bYi6eCIG0PMyVdCA5rEMX24wacrHCZix57il6ASJoZI1U
+        xe2duiFL8DH05yKdz/lLjalVMUIpjwE=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1676563878;
+        s=susede2_ed25519; t=1676563933;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=THOn3H8qYKgLlnsk1QaYhIy82EceKIWcCoN2IM9s5hM=;
-        b=jp/7deCtuQB7Ao9heaudpy5gO6Xk7Ao5GdYH9XlqPcVuMvd1V9s3KiwH3tWP93Qamlcx8P
-        me+YiLq0D8G71nAg==
+        bh=w6tzIpDWz8qkgUV6HzZNltoG6JpfJBywBNzNTpQWztw=;
+        b=NQz8PLmw7EkWl5kOjzD4ZBvBEMIN4/WpMUV5ReUu0FjdFioeoWzfatBFh1J0tk0TyCo69Z
+        jZPwNQx78SgoFjCg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6EC33131FD;
-        Thu, 16 Feb 2023 16:11:18 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 44DA8131FD;
+        Thu, 16 Feb 2023 16:12:13 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id yTSQGaZV7mPmJQAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Thu, 16 Feb 2023 16:11:18 +0000
-Date:   Thu, 16 Feb 2023 17:11:17 +0100
+        id O7ElD91V7mMwJgAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Thu, 16 Feb 2023 16:12:13 +0000
+Date:   Thu, 16 Feb 2023 17:12:12 +0100
 From:   Jean Delvare <jdelvare@suse.de>
 To:     Linux I2C <linux-i2c@vger.kernel.org>
 Cc:     Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH v3 2/6] i2c: i801: Handle SMBAUXCTL_E32B in
- i801_block_transaction_by_block only
-Message-ID: <20230216171117.03d94f66@endymion.delvare>
+Subject: [PATCH v3 3/6] i2c: i801: Centralize configuring non-block commands
+ in i801_simple_transaction
+Message-ID: <20230216171212.77c74d39@endymion.delvare>
 In-Reply-To: <20230216170830.206f0bb9@endymion.delvare>
 References: <20230216170830.206f0bb9@endymion.delvare>
 Organization: SUSE Linux
@@ -73,73 +73,107 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Heiner Kallweit <hkallweit1@gmail.com>
 
-Currently we touch SMBAUXCTL even if not needed. That's the case for block
-commands that don't use block buffer mode, either because block buffer
-mode isn't available or because it's not supported for the respective
-command (e.g. I2C block transfer). Improve this by setting/resetting
-SMBAUXCTL_E32B in i801_block_transaction_by_block() only.
-
-Small downside is that we now access SMBAUXCTL twice for transactions
-that use PEC and block buffer mode. But this should a rather rare case
-and the impact is negligible.
+Currently configuring command register settings is distributed over multiple
+functions. At first centralize this for non-block commands in
+i801_simple_transaction().
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 Reviewed-by: Jean Delvare <jdelvare@suse.de>
 ---
 Changes since v2:
- * Typo fixed in description
+ * Typos fixed in description
 
- drivers/i2c/busses/i2c-i801.c | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 31 ++++++++++++++-----------------
+ 1 file changed, 14 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index d934d410b..d7182f7c8 100644
+index d7182f7c8..0d49e9587 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -511,19 +511,23 @@ static int i801_block_transaction_by_block(struct i801_priv *priv,
+@@ -738,35 +738,47 @@ static void i801_set_hstadd(struct i801_priv *priv, u8 addr, char read_write)
  
- 	status = i801_transaction(priv, xact);
- 	if (status)
--		return status;
-+		goto out;
+ /* Single value transaction function */
+ static int i801_simple_transaction(struct i801_priv *priv, union i2c_smbus_data *data,
+-				   char read_write, int command)
++				   u8 addr, u8 hstcmd, char read_write, int command)
+ {
+ 	int xact, ret;
  
- 	if (read_write == I2C_SMBUS_READ ||
- 	    command == I2C_SMBUS_BLOCK_PROC_CALL) {
- 		len = inb_p(SMBHSTDAT0(priv));
--		if (len < 1 || len > I2C_SMBUS_BLOCK_MAX)
--			return -EPROTO;
-+		if (len < 1 || len > I2C_SMBUS_BLOCK_MAX) {
-+			status = -EPROTO;
-+			goto out;
-+		}
- 
- 		data->block[0] = len;
- 		for (i = 0; i < len; i++)
- 			data->block[i + 1] = inb_p(SMBBLKDAT(priv));
+ 	switch (command) {
+ 	case I2C_SMBUS_QUICK:
++		i801_set_hstadd(priv, addr, read_write);
+ 		xact = I801_QUICK;
+ 		break;
+ 	case I2C_SMBUS_BYTE:
++		i801_set_hstadd(priv, addr, read_write);
++		if (read_write == I2C_SMBUS_WRITE)
++			outb_p(hstcmd, SMBHSTCMD(priv));
+ 		xact = I801_BYTE;
+ 		break;
+ 	case I2C_SMBUS_BYTE_DATA:
++		i801_set_hstadd(priv, addr, read_write);
+ 		if (read_write == I2C_SMBUS_WRITE)
+ 			outb_p(data->byte, SMBHSTDAT0(priv));
++		outb_p(hstcmd, SMBHSTCMD(priv));
+ 		xact = I801_BYTE_DATA;
+ 		break;
+ 	case I2C_SMBUS_WORD_DATA:
++		i801_set_hstadd(priv, addr, read_write);
+ 		if (read_write == I2C_SMBUS_WRITE) {
+ 			outb_p(data->word & 0xff, SMBHSTDAT0(priv));
+ 			outb_p((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
+ 		}
++		outb_p(hstcmd, SMBHSTCMD(priv));
+ 		xact = I801_WORD_DATA;
+ 		break;
+ 	case I2C_SMBUS_PROC_CALL:
++		i801_set_hstadd(priv, addr, I2C_SMBUS_WRITE);
+ 		outb_p(data->word & 0xff, SMBHSTDAT0(priv));
+ 		outb_p((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
++		outb_p(hstcmd, SMBHSTCMD(priv));
++		read_write = I2C_SMBUS_READ;
+ 		xact = I801_PROC_CALL;
+ 		break;
+ 	default:
++		pci_err(priv->pci_dev, "Unsupported transaction %d\n", command);
+ 		return -EOPNOTSUPP;
  	}
--	return 0;
-+out:
-+	outb_p(inb_p(SMBAUXCTL(priv)) & ~SMBAUXCTL_E32B, SMBAUXCTL(priv));
-+	return status;
- }
  
- static void i801_isr_byte_done(struct i801_priv *priv)
-@@ -921,11 +925,10 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
- 		ret = i801_simple_transaction(priv, data, read_write, size);
+@@ -857,25 +869,10 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+ 
+ 	switch (size) {
+ 	case I2C_SMBUS_QUICK:
+-		i801_set_hstadd(priv, addr, read_write);
+-		break;
+ 	case I2C_SMBUS_BYTE:
+-		i801_set_hstadd(priv, addr, read_write);
+-		if (read_write == I2C_SMBUS_WRITE)
+-			outb_p(command, SMBHSTCMD(priv));
+-		break;
+ 	case I2C_SMBUS_BYTE_DATA:
+-		i801_set_hstadd(priv, addr, read_write);
+-		outb_p(command, SMBHSTCMD(priv));
+-		break;
+ 	case I2C_SMBUS_WORD_DATA:
+-		i801_set_hstadd(priv, addr, read_write);
+-		outb_p(command, SMBHSTCMD(priv));
+-		break;
+ 	case I2C_SMBUS_PROC_CALL:
+-		i801_set_hstadd(priv, addr, I2C_SMBUS_WRITE);
+-		outb_p(command, SMBHSTCMD(priv));
+-		read_write = I2C_SMBUS_READ;
+ 		break;
+ 	case I2C_SMBUS_BLOCK_DATA:
+ 		i801_set_hstadd(priv, addr, read_write);
+@@ -922,7 +919,7 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+ 	if (block)
+ 		ret = i801_block_transaction(priv, data, read_write, size);
+ 	else
+-		ret = i801_simple_transaction(priv, data, read_write, size);
++		ret = i801_simple_transaction(priv, data, addr, command, read_write, size);
  
  	/* Some BIOSes don't like it when PEC is enabled at reboot or resume
--	   time, so we forcibly disable it after every transaction. Turn off
--	   E32B for the same reason. */
--	if (hwpec || block)
--		outb_p(inb_p(SMBAUXCTL(priv)) &
--		       ~(SMBAUXCTL_CRC | SMBAUXCTL_E32B), SMBAUXCTL(priv));
-+	 * time, so we forcibly disable it after every transaction.
-+	 */
-+	if (hwpec)
-+		outb_p(inb_p(SMBAUXCTL(priv)) & ~SMBAUXCTL_CRC, SMBAUXCTL(priv));
- out:
- 	/*
- 	 * Unlock the SMBus device for use by BIOS/ACPI,
+ 	 * time, so we forcibly disable it after every transaction.
 -- 
 2.39.0
 
