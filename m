@@ -2,56 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5416769B4E3
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Feb 2023 22:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B47E69B4E4
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Feb 2023 22:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjBQVlI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 Feb 2023 16:41:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
+        id S229759AbjBQVlc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Feb 2023 16:41:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjBQVlH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Feb 2023 16:41:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEB664B17
-        for <linux-i2c@vger.kernel.org>; Fri, 17 Feb 2023 13:41:07 -0800 (PST)
+        with ESMTP id S229622AbjBQVlb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Feb 2023 16:41:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F239160F8B
+        for <linux-i2c@vger.kernel.org>; Fri, 17 Feb 2023 13:41:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA54662043
-        for <linux-i2c@vger.kernel.org>; Fri, 17 Feb 2023 21:41:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92EF2C433EF;
-        Fri, 17 Feb 2023 21:41:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82EB7B82D9A
+        for <linux-i2c@vger.kernel.org>; Fri, 17 Feb 2023 21:41:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95A3AC433D2;
+        Fri, 17 Feb 2023 21:41:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676670066;
-        bh=yAF77rNup5zQbym3zbWRWXnaFHAtCz0vsWdVaPSbTSY=;
+        s=k20201202; t=1676670088;
+        bh=JNMilZGyW/6h+9HWYzeoWY5htGJEMkShvO+4uLTYJsA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iMIkra2sChoIT8JkOXf/LI+w7Bwj9sOJcrfSdrihCmuGP4X3L5e8A8+ONmkqMEgAb
-         mURgZJozFo7h/aWHctEweYkDX6pOnBGFhfPiLB+kvfOAv+x3VyOIdxef48J6ikxHCa
-         gUanVv/cAHlqvt9f1kWCgUHtqNLurzj4Mhzjw4FPnWdJlkX67inmaUNwr7KSp9Of6L
-         zVm570Pcrt3O6B3JSOAXrB+HpsxMH9LZ/4rJQB002kAqgb1oHYQREebezH6/toIsTJ
-         wqsFeFWYiNR+s/Rp6SDnKUF9T10uHulws7j9kjf0LKUNjfV2fMP8F7JnE3tWh2oamE
-         Eq5KPZn8GqvGQ==
-Date:   Fri, 17 Feb 2023 22:41:02 +0100
+        b=RCDTLlkfLHqv1POv5KzYgc8S0BUBtHFoovAq0j8Ek/2XUl9vDAvFt517MPLomU3NW
+         br66x3YVujbax5i1Z5kzXwYamfZn7uP+mLOMr/Im83xk/MsLT7mpT5XGwPHTCoTryL
+         917stLG+Kx+VhXauKKW9pjkRL8vZd0ouErmUXYnH13UdmCRxlozc2k/am+460VoAjD
+         eDz2MqkQ80NJnkOrodMBOn7WN4B8R31NRAbSNI6rJgjbqpQvxespOoPa6du7KWRdvz
+         0ntWR8d8Lrz+z+xzU6KOsuGu3pAe3dfNb2rwAEaBE3mupb1ZSrz9tAPUTu+MgZk76V
+         E03aOitEFOloQ==
+Date:   Fri, 17 Feb 2023 22:41:24 +0100
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Jean Delvare <jdelvare@suse.de>
 Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
         Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v3 4/6] i2c: i801: Centralize configuring block commands
- in i801_block_transaction
-Message-ID: <Y+/0bodGa9RRewGi@shikoro>
+Subject: Re: [PATCH v3 5/6] i2c: i801: Call i801_check_pre() from
+ i801_access()
+Message-ID: <Y+/0hOmObotN9Nvu@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Jean Delvare <jdelvare@suse.de>,
         Linux I2C <linux-i2c@vger.kernel.org>,
         Heiner Kallweit <hkallweit1@gmail.com>
 References: <20230216170830.206f0bb9@endymion.delvare>
- <20230216171416.608045a0@endymion.delvare>
+ <20230216171451.2e87b061@endymion.delvare>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="s8dNVLHseAmWrWHS"
+        protocol="application/pgp-signature"; boundary="ImtqRv6FePDydU+E"
 Content-Disposition: inline
-In-Reply-To: <20230216171416.608045a0@endymion.delvare>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230216171451.2e87b061@endymion.delvare>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,16 +60,16 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---s8dNVLHseAmWrWHS
+--ImtqRv6FePDydU+E
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 16, 2023 at 05:14:16PM +0100, Jean Delvare wrote:
+On Thu, Feb 16, 2023 at 05:14:51PM +0100, Jean Delvare wrote:
 > From: Heiner Kallweit <hkallweit1@gmail.com>
 >=20
-> Similar to what was done for non-block commands, centralize block
-> command register settings in i801_block_transaction().
+> This avoids code duplication, in a next step we'll call
+> i801_check_post() from i801_transaction() as well.
 >=20
 > Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 > Reviewed-by: Jean Delvare <jdelvare@suse.de>
@@ -77,24 +77,24 @@ On Thu, Feb 16, 2023 at 05:14:16PM +0100, Jean Delvare wrote:
 Applied to for-next, thanks!
 
 
---s8dNVLHseAmWrWHS
+--ImtqRv6FePDydU+E
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPv9G4ACgkQFA3kzBSg
-KbYmMhAAqhV9ih4J4On9hwkkWNxW0ciP//OCxjTn6G6HIZEz7rWPbbMtw/ttiF5r
-5kvJMeH3xEbPo7E4ClTWmPzDHFJLRZ+vRpXBIWBqfArGhLo0sANkheJV/7ugHe4C
-hQpmFq8MHInX/zCwiuVbAC9/RXoAc6vb2UXEuHBLHpRjk7zAfuIQK9LEHnHCzSsK
-I3+jFFqMPyX+D8O2HzMZyguBYygSdrZigykHPEI0ugguSQKAJo7IzGl1dQ7TMSd3
-9C9rY//yOyeMeTXCVPiLCYnXVhu13N9bV5KY415N6yv3bhMWPdjsF3LKDcPoxDj9
-Ee6tCX0lduuxAv8YcPCitJWsRgb9kgvp4dPqXvO9Zjj50OmKdHmUNlqM1N09Fwup
-XLm8nyP0cuN76cwQhj/eMkJCIp+9/OrM4zJWK0jRKMMAsPUfpiTEi2M8YMWQ5iqd
-eSJ57exHDDuXnFEl7RUV4raeimKXcMYGA375xVNySzz5vs6ZdII5PmfUge0EgBmb
-Sc0+PdMthCr0gRS/0oVk8jMsoY6WJaRH9l8idaSgOVJeEpdiL/dWw/bwPoZQ8bVD
-dff7JgV7AmyXZzSUkAW+B01Z2TIH52ggqWbQs+OIEc2xGGZU+GwFR+vSpMCZtjw7
-I/yxyEwCRaKWO4W3MVAQfGzTCkBaTW5UFoKnRn2qyD7/KDnBTV4=
-=wv++
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPv9IQACgkQFA3kzBSg
+KbaGFw//esv9txVytKfwe4JohDeB0602Mh8gZvwc44f1wYlF5PAE1W86maxwOBID
+g+UvEmqE5fCs7H6hKLMTxD4+4pmUMym7jR0G6I3EAm1nZx6KrGj/mqPSD+G2Rnt2
+bFqCXIFvaeuyXIsNVKGzMSVqfPtCTuAEGNHgl8hrjhRCF9WjEgMkumv2qMY9USHv
+PjwuCZ568+WS80WMRC1JJHx7OrlX0QCeaR0RuhuLe3qjzpxmlJC9VSr/g/yKhbBN
+8igxbhfXFb5XbdDWiOt3XhTNpC66oDsTZSz+jSeaFYb4oQ2ofwxyn/yV+KoJ/51U
+SCIOdkE7tAA6v11ur/Pa2C1VSBVQwk2ceMTVb0HtIEhbjyPmH13qrSyk5UfdG2M4
+Q4LEzkQDQ5v3LLmVolGgiNZicMnXYHZfuPkNR8LSrzzx0bxVteD6NEYRddYuniE4
+1BEm5GMZLQyv97AuothdXfp9H/4Z9QjLGw8EYGZc6FWmaoz/s7N/+9bV5hJKQERO
+VNLDJ0poqte9jgmJknDt1Bqc2JPLeV0wes2GxOsdIwUbBPgEyn+nC33KOwJpsAOX
+EY9hvEv+HhNTdz4Kl266BrYVAygtJJtEtw5X64NzcB4kt5VyxBlIJ6Cf8SKVp5oy
+yeUMqCJIueQHO8H58AjUZ0CJ6gB8AhT7wuG7DolkxQSinkB+p/w=
+=yJKt
 -----END PGP SIGNATURE-----
 
---s8dNVLHseAmWrWHS--
+--ImtqRv6FePDydU+E--
