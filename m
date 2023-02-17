@@ -2,56 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB19969B50B
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Feb 2023 22:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 647A769B545
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Feb 2023 23:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjBQVqp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 Feb 2023 16:46:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
+        id S229541AbjBQWIi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Feb 2023 17:08:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjBQVqo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Feb 2023 16:46:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF3965696;
-        Fri, 17 Feb 2023 13:46:27 -0800 (PST)
+        with ESMTP id S229659AbjBQWIh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Feb 2023 17:08:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E4863BDF;
+        Fri, 17 Feb 2023 14:08:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9F3FB82B45;
-        Fri, 17 Feb 2023 21:46:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 290C0C433D2;
-        Fri, 17 Feb 2023 21:46:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8608461349;
+        Fri, 17 Feb 2023 22:08:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 604C5C433EF;
+        Fri, 17 Feb 2023 22:08:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676670384;
-        bh=RawpE5mpSU8yc2/xySzrtzYpZhoqwKb/hsTWXduMG7E=;
+        s=k20201202; t=1676671716;
+        bh=Xbda1OXgKnV+klepby0tkD+9nTNOKlwNq7a9ZioG46k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rCI5bC8B2vVqPBRSHcw4jEhqiAl8MuRKSwjXVBMXAI59BYggIz/UBeEoGg9hwyXPm
-         D948Zu1uubn6SCGCggpVTYDzy+MLOt1NtzXbO1sfLhS38bYOSQLVd9t86DB/mssjo8
-         GqClz+wWN09ca8wJGxB6oiOIVZU7SrnHbkkREJf7Kp7+OCYXQ4o3Q/Eb4YTOkKHnm2
-         MdpxeaHk9ECYbgMH4lcNcqnuIL/tkFC57pLO0ShIEBnnJEF7hQqagMUXtNlWtW5iNi
-         D454qIFZJ6rpQDrnwPhvG889xlnJzM0yZnoOQR3wz5FHkBhGUlVS6h7Zw6mdBGPU5x
-         BH2cVIvPr9lBA==
-Date:   Fri, 17 Feb 2023 22:46:21 +0100
+        b=s+Zp0wvqNx0G2fwh9RRKgtEIIdu2l04WmJAkzuCbTIkCH6izplRTBSycN0T2xfzp5
+         gMcbOZynOpet0/x4NgpB1ja6Ru4KA9RT524mkIofUII6iirar/l+FBKTMqWEKDAO7F
+         8LfU9JNkXSd5gr4QS6T8165ckxoTOA6lwXIqJeg3vmua8Ehe3xEeYqED1Ya3phLLsi
+         whJbfDBVCXUV2UGsMyRzvk+HqwHB7Pk6fDtMiWEYA3A6xCb0bWLCTt5VA7ragpim4M
+         yGHqJ9HwTPV72TtNyFj57d3AOtis+iTxe0uN1HmYMzMz8ME9unXBput38pMLUc55Jv
+         a4Bhr5MnRk5lg==
+Date:   Fri, 17 Feb 2023 23:08:32 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: xiic: Remove some dead code
-Message-ID: <Y+/1rR0wGc5E70O0@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-References: <9d36938de98dc491425a51a9c07367dd9e448e60.1676457464.git.christophe.jaillet@wanadoo.fr>
+To:     nick.hawkins@hpe.com
+Cc:     verdun@hpe.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 1/5] i2c: hpe: Add GXP SoC I2C Controller
+Message-ID: <Y+/64OlWnV8f0GOL@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, nick.hawkins@hpe.com,
+        verdun@hpe.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230217155054.99757-1-nick.hawkins@hpe.com>
+ <20230217155054.99757-2-nick.hawkins@hpe.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="T2k9SWCaMMVdEf0J"
+        protocol="application/pgp-signature"; boundary="kcqR8OLOiCis4cLy"
 Content-Disposition: inline
-In-Reply-To: <9d36938de98dc491425a51a9c07367dd9e448e60.1676457464.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230217155054.99757-2-nick.hawkins@hpe.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,37 +62,48 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---T2k9SWCaMMVdEf0J
+--kcqR8OLOiCis4cLy
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 15, 2023 at 11:38:07AM +0100, Christophe JAILLET wrote:
-> wait_for_completion_timeout() never returns negative value.
+On Fri, Feb 17, 2023 at 09:50:50AM -0600, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
 >=20
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> The GXP SoC supports 10 I2C engines. Each I2C engine is completely
+> independent and can function both as an I2C master and I2C slave. The
+> I2C master can operate in a multi master environment. The engines support
+> a scalable speed from 8kHZ to 1.5 Mhz.
+>=20
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+>=20
+
+Thank you for adding the #defines, it makes the code much easier to
+understand. I noticed one thing to fix, but I will send an incremental
+patch for it.
 
 Applied to for-next, thanks!
 
 
---T2k9SWCaMMVdEf0J
+--kcqR8OLOiCis4cLy
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPv9a0ACgkQFA3kzBSg
-KbbTURAAtZEbY4eI2SEy24N++zA3qqGZIwvkgw4Ikkf1l10zUxrX6VhfdMGAcjGH
-PjlW4RwXvcBhOOsc13ZQp7jf9dOuozh99jt8MUW0irG8XfdUyF1oZCWIF4+zslzX
-NaH6Ft+4OHylNkzLj1V0GJ1kb6GOYpCmn4NWrwSc4c7c7aJQDIUM3f/M5bY2/f0x
-icx+iqsyOz6FXVhWm8F8PeaM+Y9vn9JGAiZkK4reyFylxILt0/uXgxGMnHfXjVgh
-G01oP2JoBAIPqLkJkNy5NKZkMR/PshVYHTxJ/pUB2Jam6nqao8c+wDbGPkqmyBwq
-4aRC1olkGhj1n+t5qyaW/RjXqPS5HL7FCtScLIkP39kjP3iGSBC62ZTKQEFQVyZQ
-Unj1AUuy+DNhvGDU1AHST/XM2reNrFkTvE4BsyRxrHYXdjFnf9nwXMh4tZOw8mS/
-9jFysdo6NwPx6agfFMPwttykD7QFnJnfKIq3SxDe91k2hV4xIkLwhwW5UtR5nmW+
-F9kICYnqkwmFodz755UzNIhiqHLhA1qMMZ6wjc24NP+OIEQX2FhKr7nQqvncnhVg
-9ZKsdEP8fKUcQsa8GcjEcHLGhcbs6Kq43k9lx2W5KQcbNDW7T9gL46YayLAPt5cB
-6COH4gYn+O11cAX6jGYx2MX+aeslMCWJgi+9EJhIs7iq2UPOsg4=
-=oyIq
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPv+uAACgkQFA3kzBSg
+KbamBg/+K556Vq6DNYht3Ziw8Lm/9cOi1/Z51cMfrlyjdHj7ceKQJv2jqUvbNyfG
+QTvnp2FIf4eG1jXgYdTSHR//E0FdQdK3+85uEagGJ+lShBR09PNUh681Kk6RVHuD
+ymbXKbTsZuDCXoq7Ia7EoO3iKEQRoPdXuRkEeHNG4VrtXRTXIMM8ef03dum+u+g6
+H9YnbV+pZffA1DUp3nsXiuLLNKbjU3dQmuYvD2ir69trXfVEKXo9K1ZIdXA3nGgp
+4Y/N4hYmRz/Sw1o7tMi0ZXgVzCC/SVNSAIj64gqocSDIoQf124A35OfvjORi/XFA
++MW9M43TwS0W8fFOkp9lh4zq2XbkEMjNl489LGVOkDqyWnHtfzgdNBRhLHadYPip
+AkCaeqWNnmO7NzFQltrS2A4FkFMdFWoYbSeNe6rUwqDelS4OvljdxhZc/eJVgJRk
+Z3TWoXe4hvVBZTC/me49RG8Im3i+hz1DWGrAWAZdn5kOiSUEUqxm4sxd8ITi07bG
+22ZRneoz8JrGHfc4Lmm7pPelUqvGQKsFUo3jLC5weLVXc5pDlxb4tvqFyO32cMB3
+dHoNbSBLzBk4qjXb+ewrJQsya4DjPx63HHifi3y4rMCEjKdYLyqQmY4b9T4yt8De
+vvugqCEvqhBEg9adEJ4TQ3kaf/99/hnuhQ0e1EKV6ATxL/Dt/C8=
+=WoRI
 -----END PGP SIGNATURE-----
 
---T2k9SWCaMMVdEf0J--
+--kcqR8OLOiCis4cLy--
