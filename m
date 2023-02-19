@@ -2,42 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE41269C1EE
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 Feb 2023 19:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FEF69C1F2
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 Feb 2023 19:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbjBSSbz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 19 Feb 2023 13:31:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
+        id S230505AbjBSScH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 19 Feb 2023 13:32:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbjBSSby (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 19 Feb 2023 13:31:54 -0500
+        with ESMTP id S230457AbjBSScG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 19 Feb 2023 13:32:06 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DCA144A4;
-        Sun, 19 Feb 2023 10:31:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12C7144AA;
+        Sun, 19 Feb 2023 10:31:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676831494; x=1708367494;
+  t=1676831499; x=1708367499;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Xv5XRoOsL+OSHn/lPMRUnz4BRLoczdhA6I89TnXIPWw=;
-  b=Vr4rh8YwFnXPgSsWfh/gKcC6CWjklsrn62ktrBWcZO2fvtqz39E8vgiR
-   BSpbjjZZp6ooYunnrlTk2z8de3sR/7rfMrhCeCNQ2ZMm+/ees1OB2gwD1
-   XMBvfOTXJlWQvdjPtpInJSJ4mhumu5BJGf/tEXKn3c6GKGpIim2NByRiW
-   0WZ4RTrpBLI8fkMquXf1fsuvgY6RqR5VANaPi2soesXxDFjG4o4xkzG8a
-   hLUQNEx8cRkZ4EZ9RgmLY73KISuGAfz85jLvtna5ymHcAbLxxcUSY/obx
-   d9vJiFRTENLkbBeLKhWkzce2DLdDxJj+0l/GmA9B5b7pBiJvmoEdqPSVc
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="333634454"
+  bh=MuDWHktXuMQtl9tyba8PkydXGCwKdCqnQHi2l1LrgwM=;
+  b=Wr8VR3jlpxxDKpGYeoPOKHd4fkhh3LgwGt9UIshndFJrqY/z/Nm1O66B
+   URU6W5g/n62/r51qvYfv7Hb87YJ8eb5IP03kfaY2APuWqQkpHorp/uqi4
+   YvvNkYoWCTWuGgjMJu6BAYK9H/DDItloQz6S33hcijmovvefTB28U6iU+
+   tkeg6ssJs3Bej0utKk8eK1T4YOCZjHXAz4oFV3m8Pr7fnVBQJcTH66eKX
+   R+rCqukPVaVs9DseXNBfydZAiPdy4OtETBZn6SOoJNS6mrJZ+gf8a+Whu
+   2uAOvGz8m9P2fb1SfMtlg6bYYbeZCo7d2Fs6T1wB5HDBknpICyUxFIbXW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="333634482"
 X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
-   d="scan'208";a="333634454"
+   d="scan'208";a="333634482"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 10:31:34 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 10:31:39 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="845107201"
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="845107206"
 X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
-   d="scan'208";a="845107201"
+   d="scan'208";a="845107206"
 Received: from ye-nuc7i7dnhe.sh.intel.com ([10.239.154.52])
-  by orsmga005.jf.intel.com with ESMTP; 19 Feb 2023 10:31:28 -0800
+  by orsmga005.jf.intel.com with ESMTP; 19 Feb 2023 10:31:35 -0800
 From:   Ye Xiang <xiang.ye@intel.com>
 To:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
         Tyrone Ting <kfting@nuvoton.com>,
@@ -50,9 +50,9 @@ Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
         andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
         zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com,
         Ye Xiang <xiang.ye@intel.com>
-Subject: [PATCH 4/5] spi: Add support for Intel LJCA USB SPI driver
-Date:   Mon, 20 Feb 2023 02:30:58 +0800
-Message-Id: <20230219183059.1029525-5-xiang.ye@intel.com>
+Subject: [PATCH 5/5] Documentation: Add ABI doc for attributes of LJCA device
+Date:   Mon, 20 Feb 2023 02:30:59 +0800
+Message-Id: <20230219183059.1029525-6-xiang.ye@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230219183059.1029525-1-xiang.ye@intel.com>
 References: <20230219183059.1029525-1-xiang.ye@intel.com>
@@ -68,349 +68,42 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This patch implements the SPI function of Intel USB-I2C/GPIO/SPI adapter
-device named "La Jolla Cove Adapter" (LJCA). It communicate with LJCA
-SPI module with specific protocol through interfaces exported by LJCA USB
-driver.
+Add sysfs attributes Documentation entries for LJCA device
 
 Signed-off-by: Ye Xiang <xiang.ye@intel.com>
 ---
- drivers/spi/Kconfig    |  10 ++
- drivers/spi/Makefile   |   1 +
- drivers/spi/spi-ljca.c | 291 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 302 insertions(+)
- create mode 100644 drivers/spi/spi-ljca.c
+ .../ABI/testing/sysfs-bus-usb-devices-ljca    | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 3b1c0878bb85..2eaae4d27255 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -396,6 +396,16 @@ config SPI_HISI_SFC_V3XX
- 	  This enables support for HiSilicon v3xx SPI NOR flash controller
- 	  found in hi16xx chipsets.
- 
-+config SPI_LJCA
-+	tristate "Intel La Jolla Cove Adapter SPI support"
-+	depends on MFD_LJCA
-+	help
-+	  Select this option to enable SPI driver for the Intel
-+	  La Jolla Cove Adapter (LJCA) board.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called spi-ljca.
-+
- config SPI_NXP_FLEXSPI
- 	tristate "NXP Flex SPI controller"
- 	depends on ARCH_LAYERSCAPE || HAS_IOMEM
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index be9ba40ef8d0..871a088294cb 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -68,6 +68,7 @@ obj-$(CONFIG_SPI_INTEL_PCI)		+= spi-intel-pci.o
- obj-$(CONFIG_SPI_INTEL_PLATFORM)	+= spi-intel-platform.o
- obj-$(CONFIG_SPI_LANTIQ_SSC)		+= spi-lantiq-ssc.o
- obj-$(CONFIG_SPI_JCORE)			+= spi-jcore.o
-+obj-$(CONFIG_SPI_LJCA) 			+= spi-ljca.o
- obj-$(CONFIG_SPI_LM70_LLP)		+= spi-lm70llp.o
- obj-$(CONFIG_SPI_LP8841_RTC)		+= spi-lp8841-rtc.o
- obj-$(CONFIG_SPI_MESON_SPICC)		+= spi-meson-spicc.o
-diff --git a/drivers/spi/spi-ljca.c b/drivers/spi/spi-ljca.c
+diff --git a/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca b/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
 new file mode 100644
-index 000000000000..d55c30954bb7
+index 000000000000..ae270c02b66c
 --- /dev/null
-+++ b/drivers/spi/spi-ljca.c
-@@ -0,0 +1,291 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Intel La Jolla Cove Adapter USB-SPI driver
-+ *
-+ * Copyright (c) 2023, Intel Corporation.
-+ */
++++ b/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
+@@ -0,0 +1,22 @@
++What:		/sys/bus/usb/.../version
++Date:		July 2023
++KernelVersion:	6.4
++Contact:	Ye Xiang <xiang.ye@intel.com>
++Description:
++		Provides the current firmware version of LJCA device.
++		The format is Major.Minor.Patch.Build, where
++		Major, Minor, Patch, and Build are decimal numbers.
++		For example: 1.0.0.256
 +
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+#include <linux/dev_printk.h>
-+#include <linux/mfd/ljca.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/spi/spi.h>
-+
-+/* SPI commands */
-+enum ljca_spi_cmd {
-+	LJCA_SPI_INIT = 1,
-+	LJCA_SPI_READ,
-+	LJCA_SPI_WRITE,
-+	LJCA_SPI_WRITEREAD,
-+	LJCA_SPI_DEINIT,
-+};
-+
-+#define LJCA_SPI_BUS_MAX_HZ 48000000
-+enum {
-+	LJCA_SPI_BUS_SPEED_24M,
-+	LJCA_SPI_BUS_SPEED_12M,
-+	LJCA_SPI_BUS_SPEED_8M,
-+	LJCA_SPI_BUS_SPEED_6M,
-+	LJCA_SPI_BUS_SPEED_4_8M, /*4.8MHz*/
-+	LJCA_SPI_BUS_SPEED_MIN = LJCA_SPI_BUS_SPEED_4_8M,
-+};
-+
-+enum {
-+	LJCA_SPI_CLOCK_LOW_POLARITY,
-+	LJCA_SPI_CLOCK_HIGH_POLARITY,
-+};
-+
-+enum {
-+	LJCA_SPI_CLOCK_FIRST_PHASE,
-+	LJCA_SPI_CLOCK_SECOND_PHASE,
-+};
-+
-+#define LJCA_SPI_BUF_SIZE	60
-+#define LJCA_SPI_MAX_XFER_SIZE	(LJCA_SPI_BUF_SIZE - sizeof(struct spi_xfer_packet))
-+
-+#define LJCA_SPI_CLK_MODE_POLARITY	BIT(0)
-+#define LJCA_SPI_CLK_MODE_PHASE		BIT(1)
-+
-+struct spi_init_packet {
-+	u8 index;
-+	u8 speed;
-+	u8 mode;
-+} __packed;
-+
-+#define LJCA_SPI_XFER_INDICATOR_ID	GENMASK(5, 0)
-+#define LJCA_SPI_XFER_INDICATOR_CMPL	BIT(6)
-+#define LJCA_SPI_XFER_INDICATOR_INDEX	BIT(7)
-+
-+struct spi_xfer_packet {
-+	u8 indicator;
-+	s8 len;
-+	u8 data[];
-+} __packed;
-+
-+struct ljca_spi_dev {
-+	struct platform_device *pdev;
-+	struct spi_controller *controller;
-+	struct ljca_spi_info *spi_info;
-+	u8 speed;
-+	u8 mode;
-+
-+	u8 obuf[LJCA_SPI_BUF_SIZE];
-+	u8 ibuf[LJCA_SPI_BUF_SIZE];
-+};
-+
-+static int ljca_spi_read_write(struct ljca_spi_dev *ljca_spi, const u8 *w_data, u8 *r_data, int len,
-+			       int id, int complete, int cmd)
-+{
-+	struct spi_xfer_packet *w_packet = (struct spi_xfer_packet *)ljca_spi->obuf;
-+	struct spi_xfer_packet *r_packet = (struct spi_xfer_packet *)ljca_spi->ibuf;
-+	unsigned int ibuf_len = LJCA_SPI_BUF_SIZE;
-+	int ret;
-+
-+	w_packet->indicator = FIELD_PREP(LJCA_SPI_XFER_INDICATOR_ID, id) |
-+			      FIELD_PREP(LJCA_SPI_XFER_INDICATOR_CMPL, complete) |
-+			      FIELD_PREP(LJCA_SPI_XFER_INDICATOR_INDEX,
-+					 ljca_spi->spi_info->id);
-+
-+	if (cmd == LJCA_SPI_READ) {
-+		w_packet->len = sizeof(u16);
-+		*(u16 *)&w_packet->data[0] = len;
-+	} else {
-+		w_packet->len = len;
-+		memcpy(w_packet->data, w_data, len);
-+	}
-+
-+	ret = ljca_transfer(ljca_spi->spi_info->ljca, cmd, w_packet,
-+			    struct_size(w_packet, data, w_packet->len), r_packet, &ibuf_len);
-+	if (ret)
-+		return ret;
-+
-+	if (ibuf_len < sizeof(*r_packet) || r_packet->len <= 0)
-+		return -EIO;
-+
-+	if (r_data)
-+		memcpy(r_data, r_packet->data, r_packet->len);
-+
-+	return 0;
-+}
-+
-+static int ljca_spi_init(struct ljca_spi_dev *ljca_spi, u8 div, u8 mode)
-+{
-+	struct spi_init_packet w_packet = {};
-+	int ret;
-+
-+	if (ljca_spi->mode == mode && ljca_spi->speed == div)
-+		return 0;
-+
-+	w_packet.mode = FIELD_PREP(LJCA_SPI_CLK_MODE_POLARITY,
-+				   (mode & SPI_CPOL) ? LJCA_SPI_CLOCK_HIGH_POLARITY :
-+						       LJCA_SPI_CLOCK_LOW_POLARITY) |
-+			FIELD_PREP(LJCA_SPI_CLK_MODE_PHASE,
-+				   (mode & SPI_CPHA) ? LJCA_SPI_CLOCK_SECOND_PHASE :
-+						       LJCA_SPI_CLOCK_FIRST_PHASE);
-+
-+	w_packet.index = ljca_spi->spi_info->id;
-+	w_packet.speed = div;
-+	ret = ljca_transfer(ljca_spi->spi_info->ljca, LJCA_SPI_INIT, &w_packet,
-+			    sizeof(w_packet), NULL, NULL);
-+	if (ret)
-+		return ret;
-+
-+	ljca_spi->mode = mode;
-+	ljca_spi->speed = div;
-+	return 0;
-+}
-+
-+static int ljca_spi_deinit(struct ljca_spi_dev *ljca_spi)
-+{
-+	struct spi_init_packet w_packet = {};
-+
-+	w_packet.index = ljca_spi->spi_info->id;
-+	return ljca_transfer(ljca_spi->spi_info->ljca, LJCA_SPI_DEINIT, &w_packet, sizeof(w_packet),
-+			     NULL, NULL);
-+}
-+
-+static int ljca_spi_transfer(struct ljca_spi_dev *ljca_spi, const u8 *tx_data,
-+			     u8 *rx_data, u16 len)
-+{
-+	int ret;
-+	int remaining = len;
-+	int offset = 0;
-+	int cur_len;
-+	int complete;
-+	int i;
-+	int cmd;
-+
-+	if (tx_data && rx_data)
-+		cmd = LJCA_SPI_WRITEREAD;
-+	else if (tx_data)
-+		cmd = LJCA_SPI_WRITE;
-+	else if (rx_data)
-+		cmd = LJCA_SPI_READ;
-+	else
-+		return -EINVAL;
-+
-+	for (i = 0; remaining > 0; i++) {
-+		cur_len = min_t(unsigned int, remaining, LJCA_SPI_MAX_XFER_SIZE);
-+		complete = (cur_len == remaining);
-+
-+		ret = ljca_spi_read_write(ljca_spi,
-+					  tx_data ? tx_data + offset : NULL,
-+					  rx_data ? rx_data + offset : NULL,
-+					  cur_len, i, complete, cmd);
-+		if (ret)
-+			return ret;
-+
-+		offset += cur_len;
-+		remaining -= cur_len;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ljca_spi_transfer_one(struct spi_controller *controller, struct spi_device *spi,
-+				 struct spi_transfer *xfer)
-+{
-+	struct ljca_spi_dev *ljca_spi = spi_controller_get_devdata(controller);
-+	int ret;
-+	u8 div;
-+
-+	div = min_t(u8, LJCA_SPI_BUS_SPEED_MIN,
-+		    DIV_ROUND_UP(controller->max_speed_hz, xfer->speed_hz) / 2 - 1);
-+	ret = ljca_spi_init(ljca_spi, div, spi->mode);
-+	if (ret) {
-+		dev_err(&ljca_spi->pdev->dev, "cannot initialize transfer ret %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = ljca_spi_transfer(ljca_spi, xfer->tx_buf, xfer->rx_buf, xfer->len);
-+	if (ret)
-+		dev_err(&ljca_spi->pdev->dev, "ljca spi transfer failed!\n");
-+
-+	return ret;
-+}
-+
-+static int ljca_spi_probe(struct platform_device *pdev)
-+{
-+	struct spi_controller *controller;
-+	struct ljca_spi_dev *ljca_spi;
-+	int ret;
-+
-+	controller = devm_spi_alloc_master(&pdev->dev, sizeof(*ljca_spi));
-+	if (!controller)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, controller);
-+	ljca_spi = spi_controller_get_devdata(controller);
-+
-+	ljca_spi->spi_info = dev_get_platdata(&pdev->dev);
-+	ljca_spi->controller = controller;
-+	ljca_spi->pdev = pdev;
-+	device_set_node(&ljca_spi->controller->dev, dev_fwnode(&pdev->dev));
-+
-+	controller->bus_num = -1;
-+	controller->mode_bits = SPI_CPHA | SPI_CPOL;
-+	controller->transfer_one = ljca_spi_transfer_one;
-+	controller->auto_runtime_pm = false;
-+	controller->max_speed_hz = LJCA_SPI_BUS_MAX_HZ;
-+
-+	ret = spi_register_controller(controller);
-+	if (ret)
-+		dev_err(&pdev->dev, "Failed to register controller\n");
-+
-+	return ret;
-+}
-+
-+static int ljca_spi_dev_remove(struct platform_device *pdev)
-+{
-+	struct spi_controller *controller = platform_get_drvdata(pdev);
-+	struct ljca_spi_dev *ljca_spi = spi_controller_get_devdata(controller);
-+
-+	spi_unregister_controller(controller);
-+	ljca_spi_deinit(ljca_spi);
-+	return 0;
-+}
-+
-+static int ljca_spi_dev_suspend(struct device *dev)
-+{
-+	struct spi_controller *controller = dev_get_drvdata(dev);
-+
-+	return spi_controller_suspend(controller);
-+}
-+
-+static int ljca_spi_dev_resume(struct device *dev)
-+{
-+	struct spi_controller *controller = dev_get_drvdata(dev);
-+
-+	return spi_controller_resume(controller);
-+}
-+
-+static const struct dev_pm_ops ljca_spi_pm = {
-+	SYSTEM_SLEEP_PM_OPS(ljca_spi_dev_suspend, ljca_spi_dev_resume)
-+};
-+
-+#define LJCA_SPI_DRV_NAME "ljca-spi"
-+static const struct platform_device_id ljca_spi_id[] = {
-+	{ LJCA_SPI_DRV_NAME, 0 },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(platform, ljca_spi_id);
-+
-+static struct platform_driver spi_ljca_driver = {
-+	.driver = {
-+		.name	= LJCA_SPI_DRV_NAME,
-+		.pm	= &ljca_spi_pm,
-+	},
-+	.probe		= ljca_spi_probe,
-+	.remove		= ljca_spi_dev_remove,
-+};
-+
-+module_platform_driver(spi_ljca_driver);
-+
-+MODULE_AUTHOR("Ye Xiang <xiang.ye@intel.com>");
-+MODULE_AUTHOR("Wang Zhifeng <zhifeng.wang@intel.com>");
-+MODULE_AUTHOR("Zhang Lixu <lixu.zhang@intel.com>");
-+MODULE_DESCRIPTION("Intel La Jolla Cove Adapter USB-SPI driver");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(LJCA);
++What:		/sys/bus/usb/.../cmd
++Date:		July 2023
++KernelVersion:	6.4
++Contact:	Ye Xiang <xiang.ye@intel.com>
++Description:
++		Commands supported by LJCA device.
++		When read, it will return valid commands.
++		When write with a command, it will execute the command.
++		Valid commands are [dfu, reset, debug]
++		dfu:	Force LJCA device to enter DFU mode.
++		reset:	Trigger soft reset for LJCA device.
++		debug:	Enable debug logging.
 -- 
 2.34.1
 
