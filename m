@@ -2,47 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D2469C3DB
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Feb 2023 02:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BFE569C47D
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Feb 2023 04:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjBTBB7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 19 Feb 2023 20:01:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
+        id S229950AbjBTD0I (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 19 Feb 2023 22:26:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjBTBB6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 19 Feb 2023 20:01:58 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE06AD52C;
-        Sun, 19 Feb 2023 17:01:57 -0800 (PST)
+        with ESMTP id S229642AbjBTD0H (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 19 Feb 2023 22:26:07 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCCAC165;
+        Sun, 19 Feb 2023 19:26:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676854917; x=1708390917;
+  t=1676863563; x=1708399563;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ZzntQ3V7u7adDDspP52ftt0OsOPYSqFBr5Qb62NUZuE=;
-  b=ExNTsluAk+QWn0XkIbDp4JqGUYLRGbVryu7Zyh148tE66e9xEBBSDef0
-   KYM239QKcQGwVDWjTCyk60Q/N9pOFwQZhUAlucvV4Ylb6wng+hYniMqmx
-   J0UJMraZxqlMNaSMbdXramWuxls1DdOn2TFF+CtB85NXCM7izeFNjYWQI
-   9bux+cJ8a2JNrqXwFk6tdU9F52ORrEDOpPhJ9TlU0iR0aV19oISLIaFXt
-   N1FCDpi7JtK7hfbamBDta6LlHZnaamWY1dhysyUqSy+jQUdulYjGE4OiZ
-   wK2s4nEks1jbOEJbCxve0jqPpMX38L1ov4+qm+M/Nu8uXrwKfvdHeGYh8
+  bh=/FKG+kLC7zN9Z05qh2Wi25UR5M4uashZ0aGzWIvhyNY=;
+  b=DpxFErmVZRXzDIzQqAzIjEdwBgSEsiNWrt3HNB/6ZGfj9yO+kp1Z11Qr
+   fNK74xvZLFaFQd1ZL0xUlvYPE6n8QQ+53zbQ1fubIq3UkY+OivrX4pt/m
+   p8CNhEGLGUVPfQmrwujB3jUEdNGFMej7gNaRTSMgZvEzP/p1rHca133vC
+   MpFu+F7IlUonYRb8JsIrbpAjxLlVddFJOHPXqZk2sFzRjoKvMD3S+mh0s
+   bzowvM+5IZ6RvGHX1ITdv0t7+GoZxmob5PPnxWzIQ8aRAMlDJKiw2xJcZ
+   ZcPriKZ/iulytUm3uUiVNQFsdnHtlsOoKnSWzzv6j6bOsBqc22FqsOGB0
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="359763573"
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="316028654"
 X-IronPort-AV: E=Sophos;i="5.97,311,1669104000"; 
-   d="scan'208";a="359763573"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 17:01:57 -0800
+   d="scan'208";a="316028654"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 19:26:02 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="795012209"
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="664489510"
 X-IronPort-AV: E=Sophos;i="5.97,311,1669104000"; 
-   d="scan'208";a="795012209"
+   d="scan'208";a="664489510"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 19 Feb 2023 17:01:52 -0800
+  by orsmga007.jf.intel.com with ESMTP; 19 Feb 2023 19:25:57 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pTuYx-000DWR-1Y;
-        Mon, 20 Feb 2023 01:01:51 +0000
-Date:   Mon, 20 Feb 2023 09:00:54 +0800
+        id 1pTwoO-000DdN-2d;
+        Mon, 20 Feb 2023 03:25:56 +0000
+Date:   Mon, 20 Feb 2023 11:25:45 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Ye Xiang <xiang.ye@intel.com>, Lee Jones <lee@kernel.org>,
         Wolfram Sang <wsa-dev@sang-engineering.com>,
@@ -57,16 +57,15 @@ Cc:     oe-kbuild-all@lists.linux.dev, srinivas.pandruvada@intel.com,
         sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
         wentong.wu@intel.com, lixu.zhang@intel.com,
         Ye Xiang <xiang.ye@intel.com>
-Subject: Re: [PATCH 2/5] gpio: Add support for Intel LJCA USB GPIO driver
-Message-ID: <202302200820.aUaMtEFR-lkp@intel.com>
-References: <20230219183059.1029525-3-xiang.ye@intel.com>
+Subject: Re: [PATCH 4/5] spi: Add support for Intel LJCA USB SPI driver
+Message-ID: <202302201128.XeS2tn5i-lkp@intel.com>
+References: <20230219183059.1029525-5-xiang.ye@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230219183059.1029525-3-xiang.ye@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <20230219183059.1029525-5-xiang.ye@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,48 +78,48 @@ Hi Ye,
 Thank you for the patch! Perhaps something to improve:
 
 [auto build test WARNING on lee-mfd/for-mfd-next]
-[also build test WARNING on lee-mfd/for-mfd-fixes wsa/i2c/for-next broonie-spi/for-next linus/master v6.2-rc8]
+[also build test WARNING on lee-mfd/for-mfd-fixes wsa/i2c/for-next broonie-spi/for-next linus/master v6.2]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Ye-Xiang/mfd-Add-support-for-Intel-LJCA-device/20230220-023253
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-patch link:    https://lore.kernel.org/r/20230219183059.1029525-3-xiang.ye%40intel.com
-patch subject: [PATCH 2/5] gpio: Add support for Intel LJCA USB GPIO driver
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230220/202302200820.aUaMtEFR-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20230219183059.1029525-5-xiang.ye%40intel.com
+patch subject: [PATCH 4/5] spi: Add support for Intel LJCA USB SPI driver
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230220/202302201128.XeS2tn5i-lkp@intel.com/config)
 compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
 reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/ddd4f4ee32eff2fd7cb9933efdc8966d58894160
+        # https://github.com/intel-lab-lkp/linux/commit/6fbec44daa135bd057079083efafd579c710467e
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Ye-Xiang/mfd-Add-support-for-Intel-LJCA-device/20230220-023253
-        git checkout ddd4f4ee32eff2fd7cb9933efdc8966d58894160
+        git checkout 6fbec44daa135bd057079083efafd579c710467e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpio/
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/spi/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302200820.aUaMtEFR-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302201128.XeS2tn5i-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpio/gpio-ljca.c:436:40: warning: 'ljca_gpio_id' defined but not used [-Wunused-const-variable=]
-     436 | static const struct platform_device_id ljca_gpio_id[] = {
-         |                                        ^~~~~~~~~~~~
+>> drivers/spi/spi-ljca.c:269:40: warning: 'ljca_spi_id' defined but not used [-Wunused-const-variable=]
+     269 | static const struct platform_device_id ljca_spi_id[] = {
+         |                                        ^~~~~~~~~~~
 
 
-vim +/ljca_gpio_id +436 drivers/gpio/gpio-ljca.c
+vim +/ljca_spi_id +269 drivers/spi/spi-ljca.c
 
-   434	
-   435	#define LJCA_GPIO_DRV_NAME "ljca-gpio"
- > 436	static const struct platform_device_id ljca_gpio_id[] = {
-   437		{ LJCA_GPIO_DRV_NAME, 0 },
-   438		{ /* sentinel */ }
-   439	};
-   440	MODULE_DEVICE_TABLE(platform, ljca_gpio_id);
-   441	
+   267	
+   268	#define LJCA_SPI_DRV_NAME "ljca-spi"
+ > 269	static const struct platform_device_id ljca_spi_id[] = {
+   270		{ LJCA_SPI_DRV_NAME, 0 },
+   271		{ /* sentinel */ }
+   272	};
+   273	MODULE_DEVICE_TABLE(platform, ljca_spi_id);
+   274	
 
 -- 
 0-DAY CI Kernel Test Service
