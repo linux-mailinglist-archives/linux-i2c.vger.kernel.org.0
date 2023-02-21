@@ -2,44 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578F169E154
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Feb 2023 14:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F70469E157
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Feb 2023 14:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234045AbjBUNcn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 21 Feb 2023 08:32:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
+        id S234087AbjBUNco (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 21 Feb 2023 08:32:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233863AbjBUNck (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 Feb 2023 08:32:40 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8307A29146;
-        Tue, 21 Feb 2023 05:32:33 -0800 (PST)
+        with ESMTP id S234057AbjBUNcm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 Feb 2023 08:32:42 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31C429150;
+        Tue, 21 Feb 2023 05:32:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676986353; x=1708522353;
+  t=1676986361; x=1708522361;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=gAs7mmCUMTX3mc/WGDDKZyUzsOVaQDT07IZYG1MzAGI=;
-  b=TrU6pYmM8FfBW2VuPud+pk/QZsysvTks1MJpl1Oy/Ll+pswcJy7z9tzR
-   R+W2tbLyV0bIuZzEIRvASrYbnCYpjJtTnZEsaj6GZXLat7YnZQrQLXwl0
-   a1H1+JHJuWIxsBTEC0wKra0nZbwEZTUxdN4msVXgJxZLrMMHIWv0iL2g4
-   Fc0bZCjarZQpJ9aVUREkkqeUNxdYTGIV1qgYlafdmPxKfXnbdXE2kXD1S
-   25UGhWPP0HZbQTxpd2xxoG0QFDokvLrF+k2TySZoIkdRxoNRcpNyb6YCP
-   5GOgc9uGcQf+WbEs7789JgwOMzU4WqZno6hngGLmtB4WqHgrRUc6DLxKS
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="360101507"
+  bh=Ee5vJWxgBPi4uTSSHpnEtUYgGXBnSq9he55KJd+y654=;
+  b=bk/axOm/sZ9uBJ/1oteEbxeC/D//y5mXrOPcQ0NyQKrdtVKj2P4IrgW4
+   GTy8qVWZ0iyE6YUHkMxbm6E3pqeSJV755fw9qs1NfYxgNRxukFuCL1t8p
+   DLVskihJT1YFN4oaWvFFeQAkBLMVPmr8YkpivrtDRr6USPvi9wiET0+Vm
+   Uk5hk3p3Z76xvgqg5tVDrSM1zYJ7k9AQTeWeOqPRczgweA07/oY/g/OH/
+   zTIpjb5y1X2FhfjYyMaHDKvC6+RQeHTzvCoz11CK5dKut50QHlcajCUn1
+   6LXFkWfxDrg6VfIWjxTrxRgg10VIdvg3z7mFKLt+KQEFIk4qgeHtyEdA9
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="333990938"
 X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="360101507"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 05:32:33 -0800
+   d="scan'208";a="333990938"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 05:32:31 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="671656027"
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="649178422"
 X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="671656027"
+   d="scan'208";a="649178422"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 21 Feb 2023 05:32:29 -0800
+  by orsmga006.jf.intel.com with ESMTP; 21 Feb 2023 05:32:28 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id EBD06367; Tue, 21 Feb 2023 15:33:09 +0200 (EET)
+        id F184E354; Tue, 21 Feb 2023 15:33:09 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
@@ -50,13 +50,14 @@ Cc:     Robin van der Gracht <robin@protonic.nl>,
         Miguel Ojeda <ojeda@kernel.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v1 2/3] auxdisplay: ht16k33: Make use of device_get_match_data()
-Date:   Tue, 21 Feb 2023 15:33:06 +0200
-Message-Id: <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 3/3] i2c: Unexport i2c_of_match_device()
+Date:   Tue, 21 Feb 2023 15:33:07 +0200
+Message-Id: <20230221133307.20287-4-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
 References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -68,75 +69,79 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Switching to use device_get_match_data() helps getting of
-i2c_of_match_device() API.
+i2c_of_match_device() is not used anymore outside of I²C framework,
+unexport it.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/auxdisplay/ht16k33.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/i2c/i2c-core-of.c |  1 -
+ drivers/i2c/i2c-core.h    |  9 +++++++++
+ include/linux/i2c.h       | 11 -----------
+ 3 files changed, 9 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/auxdisplay/ht16k33.c b/drivers/auxdisplay/ht16k33.c
-index 02425991c159..8e2fd2291ea4 100644
---- a/drivers/auxdisplay/ht16k33.c
-+++ b/drivers/auxdisplay/ht16k33.c
-@@ -60,7 +60,8 @@
- #define HT16K33_FB_SIZE		(HT16K33_MATRIX_LED_MAX_COLS * BYTES_PER_ROW)
+diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+index bce6b796e04c..29102c882635 100644
+--- a/drivers/i2c/i2c-core-of.c
++++ b/drivers/i2c/i2c-core-of.c
+@@ -157,7 +157,6 @@ const struct of_device_id
  
- enum display_type {
--	DISP_MATRIX = 0,
-+	DISP_UNKNOWN = 0,
-+	DISP_MATRIX,
- 	DISP_QUAD_7SEG,
- 	DISP_QUAD_14SEG,
- };
-@@ -675,6 +676,7 @@ static int ht16k33_seg_probe(struct device *dev, struct ht16k33_priv *priv,
- 		return err;
+ 	return i2c_of_match_device_sysfs(matches, client);
+ }
+-EXPORT_SYMBOL_GPL(i2c_of_match_device);
  
- 	switch (priv->type) {
-+	default:
- 	case DISP_MATRIX:
- 		/* not handled here */
- 		err = -EINVAL;
-@@ -713,7 +715,6 @@ static int ht16k33_seg_probe(struct device *dev, struct ht16k33_priv *priv,
- static int ht16k33_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
--	const struct of_device_id *id;
- 	struct ht16k33_priv *priv;
- 	uint32_t dft_brightness;
- 	int err;
-@@ -728,9 +729,8 @@ static int ht16k33_probe(struct i2c_client *client)
- 		return -ENOMEM;
+ #if IS_ENABLED(CONFIG_OF_DYNAMIC)
+ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
+diff --git a/drivers/i2c/i2c-core.h b/drivers/i2c/i2c-core.h
+index 1247e6e6e975..3e22a0645e2f 100644
+--- a/drivers/i2c/i2c-core.h
++++ b/drivers/i2c/i2c-core.h
+@@ -82,8 +82,17 @@ static inline void i2c_acpi_remove_space_handler(struct i2c_adapter *adapter) {
  
- 	priv->client = client;
--	id = i2c_of_match_device(dev->driver->of_match_table, client);
--	if (id)
--		priv->type = (uintptr_t)id->data;
-+	priv->type = (uintptr_t)device_get_match_data(dev);
+ #ifdef CONFIG_OF
+ void of_i2c_register_devices(struct i2c_adapter *adap);
++const struct of_device_id *i2c_of_match_device(const struct of_device_id *matches,
++					       struct i2c_client *client);
 +
- 	i2c_set_clientdata(client, priv);
+ #else
+ static inline void of_i2c_register_devices(struct i2c_adapter *adap) { }
++static inline
++const struct of_device_id *i2c_of_match_device(const struct of_device_id *matches,
++					       struct i2c_client *client)
++{
++	return NULL;
++}
+ #endif
+ extern struct notifier_block i2c_of_notifier;
  
- 	err = ht16k33_initialize(priv);
-@@ -771,6 +771,9 @@ static int ht16k33_probe(struct i2c_client *client)
- 		/* Segment Display */
- 		err = ht16k33_seg_probe(dev, priv, dft_brightness);
- 		break;
-+	default:
-+		/* Unknown display; enumerated via user space? */
-+		err = 0;
- 	}
- 	return err;
- }
-@@ -795,6 +798,8 @@ static void ht16k33_remove(struct i2c_client *client)
- 		device_remove_file(&client->dev, &dev_attr_map_seg7);
- 		device_remove_file(&client->dev, &dev_attr_map_seg14);
- 		break;
-+	default:
-+		break;
- 	}
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 500404d85141..17b2cbb40a55 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -993,10 +993,6 @@ static inline struct i2c_adapter *of_get_i2c_adapter_by_node(struct device_node
+ 	return i2c_get_adapter_by_fwnode(of_fwnode_handle(node));
  }
  
+-const struct of_device_id
+-*i2c_of_match_device(const struct of_device_id *matches,
+-		     struct i2c_client *client);
+-
+ int of_i2c_get_board_info(struct device *dev, struct device_node *node,
+ 			  struct i2c_board_info *info);
+ 
+@@ -1017,13 +1013,6 @@ static inline struct i2c_adapter *of_get_i2c_adapter_by_node(struct device_node
+ 	return NULL;
+ }
+ 
+-static inline const struct of_device_id
+-*i2c_of_match_device(const struct of_device_id *matches,
+-		     struct i2c_client *client)
+-{
+-	return NULL;
+-}
+-
+ static inline int of_i2c_get_board_info(struct device *dev,
+ 					struct device_node *node,
+ 					struct i2c_board_info *info)
 -- 
 2.39.1
 
