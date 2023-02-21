@@ -2,67 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4A969E182
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Feb 2023 14:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C401E69E1BE
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Feb 2023 14:53:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233865AbjBUNkR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 21 Feb 2023 08:40:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
+        id S233620AbjBUNxs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 21 Feb 2023 08:53:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234111AbjBUNkO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 Feb 2023 08:40:14 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC60298E5;
-        Tue, 21 Feb 2023 05:40:10 -0800 (PST)
+        with ESMTP id S234138AbjBUNxp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 Feb 2023 08:53:45 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC2C30D8;
+        Tue, 21 Feb 2023 05:53:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676986810; x=1708522810;
+  t=1676987623; x=1708523623;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Fcsp3vX50fP7S4No3pb7xRBH3g335DQpVHo+94NekhA=;
-  b=NqJcoaSrYxkhnv7zG5g3l/rurpbPdgd8bfrvO5JHR5Nf9KCsEXy3e539
-   TzH0IzX7RiCC8/82jmC4vnucIT1N3R2/7TcjZ/NiVi+4AFDILG9tyzQqw
-   zsMMqGojWW3zq94vmTfDnwftpzQfXDVG6D6d2A58GevS2aAey4/aInJaW
-   cl5u062pFO7w6+yklAkYSNgVVEK3cSxUd1QMFrCbrnqXVEI2HrGmvS3+u
-   P2LD7zqbaFs+CYk3h/zJwNaBVkaAvKNLZeolNhdU1zb4uyKkGgA42rasx
-   KXCbKF4JQRX8v8ZOsSMdqXmmqj4U1KHfnfiCCyn9ONqQFL6dRwa1T45hz
+   mime-version:in-reply-to;
+  bh=+eRDC691oir3wn0epCnaH+FpHq/QnxwHp1Fu+GKbieU=;
+  b=n8UWTeEXAxr7MbRj/nquCJTs4Q2jrQ8MIawoOwub+I+vhZvwFA5MpPUn
+   dwSfWgPKNQbq1YrR0g6p6e6OkOoDCURaSgYtW6BW3yRzjOzN5t9JRiz32
+   LhNdAk1hBsyKTPeYers5ZNuJfpYn6n3iFYhyQ8xtd3osmHV8+qUEtFtn6
+   zM+bywgWOGgcaLf5nLtOgtXZ5GxbOsBfbT9z2K8kthDrvtAe0yE6XBXAl
+   9XQI2tpuY3XeH0e1q0/kseKOAdg4Rm5ohL432jjrYojjdgJSzoT8styQy
+   vo3ngdJZDJxDrdtnd3oIQ+PcZUEk8xlQSEDNJXXhH5pNPrOIwFQBuHnR5
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="360103267"
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="320765317"
 X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="360103267"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 05:40:09 -0800
+   d="scan'208";a="320765317"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 05:53:43 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="671657877"
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="814514299"
 X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="671657877"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 21 Feb 2023 05:40:06 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pUSsG-009yFq-09;
-        Tue, 21 Feb 2023 15:40:04 +0200
-Date:   Tue, 21 Feb 2023 15:40:03 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+   d="scan'208";a="814514299"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 21 Feb 2023 05:53:38 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Feb 2023 15:53:38 +0200
+Date:   Tue, 21 Feb 2023 15:53:37 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
         Raul E Rangel <rrangel@chromium.org>,
         Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     Robin van der Gracht <robin@protonic.nl>,
+        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
+        Robin van der Gracht <robin@protonic.nl>,
         Miguel Ojeda <ojeda@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 2/3] auxdisplay: ht16k33: Make use of
+Subject: Re: [PATCH v1 1/3] usb: typec: stusb160x: Make use of
  device_get_match_data()
-Message-ID: <Y/TJs+Arban0ats8@smile.fi.intel.com>
+Message-ID: <Y/TM4UihoGI/5Q71@kuha.fi.intel.com>
 References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
- <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
+ <20230221133307.20287-2-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20230221133307.20287-2-andriy.shevchenko@linux.intel.com>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
@@ -73,27 +68,54 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 03:33:06PM +0200, Andy Shevchenko wrote:
+On Tue, Feb 21, 2023 at 03:33:05PM +0200, Andy Shevchenko wrote:
 > Switching to use device_get_match_data() helps getting of
 > i2c_of_match_device() API.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-...
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> -	id = i2c_of_match_device(dev->driver->of_match_table, client);
-> -	if (id)
-> -		priv->type = (uintptr_t)id->data;
-> +	priv->type = (uintptr_t)device_get_match_data(dev);
+> ---
+>  drivers/usb/typec/stusb160x.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/stusb160x.c b/drivers/usb/typec/stusb160x.c
+> index 494b371151e0..70d9f68d99c9 100644
+> --- a/drivers/usb/typec/stusb160x.c
+> +++ b/drivers/usb/typec/stusb160x.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> +#include <linux/property.h>
+>  #include <linux/regmap.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/usb/role.h>
+> @@ -633,9 +634,8 @@ MODULE_DEVICE_TABLE(of, stusb160x_of_match);
+>  
+>  static int stusb160x_probe(struct i2c_client *client)
+>  {
+> +	const struct regmap_config *regmap_config;
+>  	struct stusb160x *chip;
+> -	const struct of_device_id *match;
+> -	struct regmap_config *regmap_config;
+>  	struct fwnode_handle *fwnode;
+>  	int ret;
+>  
+> @@ -645,8 +645,8 @@ static int stusb160x_probe(struct i2c_client *client)
+>  
+>  	i2c_set_clientdata(client, chip);
+>  
+> -	match = i2c_of_match_device(stusb160x_of_match, client);
+> -	regmap_config = (struct regmap_config *)match->data;
+> +	regmap_config = device_get_match_data(&client->dev);
+> +
+>  	chip->regmap = devm_regmap_init_i2c(client, regmap_config);
+>  	if (IS_ERR(chip->regmap)) {
+>  		ret = PTR_ERR(chip->regmap);
 
-Looking closer the I²C ID table should provide DISP_MATRIX to keep default and
-this needs to be not dropped.
-
-So, the question is what to do with unknown type then, return -EINVAL from
-probe()?
-
-P.S. I would like to collect other comments anyway, so I will send a v2 later.
+thanks,
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+heikki
