@@ -2,113 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843536A07D2
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Feb 2023 12:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3186A0B32
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Feb 2023 14:51:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjBWLzD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 23 Feb 2023 06:55:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53778 "EHLO
+        id S234272AbjBWNvG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 23 Feb 2023 08:51:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234106AbjBWLyj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Feb 2023 06:54:39 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7EE54A04
-        for <linux-i2c@vger.kernel.org>; Thu, 23 Feb 2023 03:54:21 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 83BE05D0CC;
-        Thu, 23 Feb 2023 11:54:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1677153260; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4YP8F7a177Ox7LZktDXCuj6IZVeQ5ddwwppkpR2DcUo=;
-        b=CpDOWShwDtqcbwDbAO3pJICDuhK540lTS1xJ45mWV2AHVSkq3cO95ti1XAhU4ck+ChWrKo
-        6rTwKqdgl/iXCeNbCI0154jxsgOx2KnM7KEamVzDcFXTdRA+zBzEV0zDF0+JhC/8ydVHpw
-        pIZ5kKPj8+g9NpPsJ4jOwGiptLDjuT4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1677153260;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4YP8F7a177Ox7LZktDXCuj6IZVeQ5ddwwppkpR2DcUo=;
-        b=T9a5URqjwixeDYak9IPcdtZIwK2Pj0Xc/7R2UqjdfbUNbDK6UGDorLedUGuWMrn2wWIEMz
-        06cd1w13kFeqXKBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5D65313928;
-        Thu, 23 Feb 2023 11:54:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id quHUFOxT92OTPAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Thu, 23 Feb 2023 11:54:20 +0000
-Date:   Thu, 23 Feb 2023 12:54:19 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, "Poeche, Uwe" <uwe.poeche@siemens.com>
-Subject: Re: [PATCH i2c-tools] i2cdetect: only use "newer" I2C_FUNC_* flags
- if they exist
-Message-ID: <20230223125419.06a5cfc5@endymion.delvare>
-In-Reply-To: <20230220140830.74180-1-wsa+renesas@sang-engineering.com>
-References: <20230220140830.74180-1-wsa+renesas@sang-engineering.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+        with ESMTP id S233982AbjBWNvG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Feb 2023 08:51:06 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092227EC0;
+        Thu, 23 Feb 2023 05:51:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677160262; x=1708696262;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2w/ft2HJvRrUdnaYI1aiuLNFv2Yrx5GoyFaH1kPWhsI=;
+  b=jbjRfuOdrxHl6YULYnmUMOLcy2U8zdj1yHvxDVvSO2G/rcqsE2lp+HgB
+   8E0tTXYkr8N5kD/t+U8+gvAvF6vZAugR8+67XupFnpWkEPHLBQdf4Ykw1
+   xakd1S+lCv3sW5sxVB0zGyByUs7MgnbfsuWCFhO/Mm8KpevhBKY5MGeCL
+   iI9Af7eGEs1MfeefNAN9JNOvBZQUj4z+OnB9wS+WMXdKjlSHlkTPm3cAm
+   WVLWvJ23hGbOoh5GFzm38Ddjo5o5XE3nOM/1k6SuOwp8LSoDku9Ov6osv
+   OzFVwZNvRRUdsbl/b+du35yL1D0RQiI4TpZZQDKqQwjoJh3przSPeYLIx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="312842994"
+X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
+   d="scan'208";a="312842994"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 05:51:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="672480967"
+X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
+   d="scan'208";a="672480967"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 23 Feb 2023 05:50:58 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pVBzs-00AyeI-2n;
+        Thu, 23 Feb 2023 15:50:56 +0200
+Date:   Thu, 23 Feb 2023 15:50:56 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v1 0/3] i2c: stop using i2c_of_match_device()
+Message-ID: <Y/dvQGz5SSxAjUZ2@smile.fi.intel.com>
+References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 20 Feb 2023 15:08:29 +0100, Wolfram Sang wrote:
-> This allows i2cdetect to be compiled for older kernels.
-> 
-> Reported-by: "Poeche, Uwe" <uwe.poeche@siemens.com>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
-> 
-> Jean, do you mind these #ifdefs in the code?
-> 
->  tools/i2cdetect.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/i2cdetect.c b/tools/i2cdetect.c
-> index 5ab4ea4..2d4d3b4 100644
-> --- a/tools/i2cdetect.c
-> +++ b/tools/i2cdetect.c
-> @@ -160,12 +160,16 @@ static const struct func all_func[] = {
->  	  .name = "I2C Block Write" },
->  	{ .value = I2C_FUNC_SMBUS_READ_I2C_BLOCK,
->  	  .name = "I2C Block Read" },
-> +#if defined(I2C_FUNC_SMBUS_HOST_NOTIFY)
->  	{ .value = I2C_FUNC_SMBUS_HOST_NOTIFY,
->  	  .name = "SMBus Host Notify" },
-> +#endif
->  	{ .value = I2C_FUNC_10BIT_ADDR,
->  	  .name = "10-bit addressing" },
-> +#if defined(I2C_FUNC_SLAVE)
->  	{ .value = I2C_FUNC_SLAVE,
->  	  .name = "Target mode" },
-> +#endif
->  	{ .value = 0, .name = "" }
->  };
->  
+On Tue, Feb 21, 2023 at 03:33:04PM +0200, Andy Shevchenko wrote:
+> i2c_of_match_device() is used by core and a couple of drivers.
+> Instead, convert those drivers to use device_get_match_data()
+> and unexport i2c_of_match_device().
 
-No objection.
-
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+After a good discussion and reading a bit deeper some code,
+self-NAK for this series. We seems need to be more smart.
 
 -- 
-Jean Delvare
-SUSE L3 Support
+With Best Regards,
+Andy Shevchenko
+
+
