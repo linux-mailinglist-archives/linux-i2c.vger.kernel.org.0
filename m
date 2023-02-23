@@ -2,200 +2,217 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C456A03B2
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Feb 2023 09:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679F36A0463
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Feb 2023 10:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233495AbjBWIUH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 23 Feb 2023 03:20:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46174 "EHLO
+        id S233811AbjBWJDY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 23 Feb 2023 04:03:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233499AbjBWIUF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Feb 2023 03:20:05 -0500
-Received: from smtp15.bhosted.nl (smtp15.bhosted.nl [IPv6:2a02:9e0:8000::26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6769A498B5
-        for <linux-i2c@vger.kernel.org>; Thu, 23 Feb 2023 00:20:02 -0800 (PST)
+        with ESMTP id S233799AbjBWJDX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Feb 2023 04:03:23 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442F24FA95;
+        Thu, 23 Feb 2023 01:03:21 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id f13so39103348edz.6;
+        Thu, 23 Feb 2023 01:03:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=message-id:references:in-reply-to:reply-to:subject:cc:to:from:date:
-         content-transfer-encoding:content-type:mime-version:from;
-        bh=dq7QMb++ghVX0hglhWq4dxVA8wD/izUizUd3XT6OvEQ=;
-        b=COePPPmzUH4UN8knj1wE6FQ/2gp1MKJCXCF0Lzur9usYXiub/r14j88rymCi3gB3Z1I5Ed4ymU25B
-         HT9OPbbBn9J9BrvjjQMQ63tc6b8nZLLO6q8cAC2yzah4EQLYUGHMcenVgq0t2XiQzWCX8R4i9nzqi8
-         sj7YI7D6p8UYrYfGqjbtsmtrcWxJ3PpGPa82ZUXtpunsC3xZfPLet6qmMJWP+w2Ea6I8Y8xd8bHelO
-         0zt9yZeEyHffIi5HiC6fIECpL7LgHHgPIf8iFuYdIF4MECtDW1cRRyt5ByjlHXtOL/SQF09FqSXdRM
-         Z8XLfW+Ty5Tw9ceWESDcQeNN123c+jw==
-X-MSG-ID: dbf9e1f2-b352-11ed-8fb4-0050569d3a82
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Thu, 23 Feb 2023 09:19:57 +0100
-From:   Robin van der Gracht <robin@protonic.nl>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TD+8GeanCE/x70uegO9U5MTQbLl+734GZzOwj0hQ4pc=;
+        b=mBD1BQ37iIDR7JWXX/OlXKvNa8NVaHt1sKz+6t6eagPmuzwSpIqozkFoQL9xibTUeN
+         3fC98PAzmuSCFN4uVDugWglgh9ZFCbprkbnk/HgZzNcPy5Huhtt0QJWw1RPYKXXur4cK
+         +HAym9Bz/wfblPBHSOhXPxjJuaX78FsDr+BYgJtMDtKxHNZE7gfIAvlE2nSR6CXR+wwc
+         Mv+2mycXUCH3tu7Ybl2pKGWT1+cIJj6ZrSYn9k7mCzXsqPeJjQs1COycHwtlzYY4Ra6b
+         sXB0vmOmHGpThhwfR4G96Dcq6EU0tq+PKyatlmxBBpDd+4aVumxQQH/rX8+lPgn+9Hu6
+         dlHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TD+8GeanCE/x70uegO9U5MTQbLl+734GZzOwj0hQ4pc=;
+        b=0e+NX9NGqvBKLWRgerkCH0ydggIExM1uuuEw5Z06skOvTML6kd3mUjvlI9gDkHnN9w
+         JstECEQkbPHasjH+KpkfhpaxyVsiUnb0ko8X7FMclx2NEFWML6TJqlpcM3eXHuuzBd5z
+         17lTZggcxy557WXEIg3kIERd+XZCnCTaXo6RC2LB35sp/uwEHbzrh/uq0L6uye8bokq7
+         zp3GcqhZ4deJdAcLY/D+UHTQ7y6EA5E2w5Xaf+Y19xHyxHkPGHJ0F8jEY57fMJEht19g
+         RIJz2a3B4bMxPW5MqVKWt95d57uUG66AekO4WFp3jrGJS7OfrdDZvC1u2RG1nBTZADQT
+         oPmg==
+X-Gm-Message-State: AO0yUKWQkBBHApuTZ9NgZ3THKdbUj5s8bZ87WbBhRKDoURJSXOAEs1T0
+        U/aVsJ+ioGIe+SNbc0Q/3NA=
+X-Google-Smtp-Source: AK7set86PvyMLRzK9dDTPURDEy4nuoWHHr4XakacxhoLyoAJkDCWB6Fov3n50dy0+RO0ic4uWzJuwg==
+X-Received: by 2002:aa7:d74a:0:b0:4ad:7481:c2fe with SMTP id a10-20020aa7d74a000000b004ad7481c2femr9298095eds.22.1677142999215;
+        Thu, 23 Feb 2023 01:03:19 -0800 (PST)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id n27-20020a50935b000000b0049ef70a2894sm4139786eda.38.2023.02.23.01.03.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 01:03:18 -0800 (PST)
+Date:   Thu, 23 Feb 2023 10:03:16 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     christian.koenig@amd.com, digetx@gmail.com, jonathanh@nvidia.com,
+        ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        sumit.semwal@linaro.org, wsa@kernel.org, robh+dt@kernel.org,
         devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] auxdisplay: ht16k33: Make use of
- device_get_match_data()
-Organization: Protonic Holland
-Reply-To: robin@protonic.nl
-Mail-Reply-To: robin@protonic.nl
-In-Reply-To: <Y/ZOyGo8X7r258EC@smile.fi.intel.com>
-References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
- <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
- <Y/TJs+Arban0ats8@smile.fi.intel.com>
- <be203dfd290e67c8ce74d11c5c9478a4@protonic.nl>
- <Y/UD3HWNy8uKYShC@smile.fi.intel.com>
- <0235f0fed989a8b027db720663699f5d@protonic.nl>
- <Y/ZKdN4nuHcL4DgE@smile.fi.intel.com> <Y/ZOyGo8X7r258EC@smile.fi.intel.com>
-Message-ID: <e49fa56881c28901ae951742efbd7dad@protonic.nl>
-X-Sender: robin@protonic.nl
-User-Agent: Roundcube Webmail/1.3.1 
+Subject: Re: [PATCH v2] i2c: tegra: Share same DMA channel for Rx and Tx
+Message-ID: <Y/cr1EKI7R6rtg+O@orome>
+References: <20230222102759.23165-1-akhilrajeev@nvidia.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="HaVAMW8fbvrZJ5yn"
+Content-Disposition: inline
+In-Reply-To: <20230222102759.23165-1-akhilrajeev@nvidia.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 2023-02-22 18:20, Andy Shevchenko wrote:
-> + Cc: OF bindings people for the mess with the IDs.
-> 
-> On Wed, Feb 22, 2023 at 07:01:40PM +0200, Andy Shevchenko wrote:
->> On Wed, Feb 22, 2023 at 05:46:00PM +0100, Robin van der Gracht wrote:
->> > On 2023-02-21 18:48, Andy Shevchenko wrote:
->> > > On Tue, Feb 21, 2023 at 05:10:00PM +0100, Robin van der Gracht wrote:
->> > > > On 2023-02-21 14:40, Andy Shevchenko wrote:
->> > > > > On Tue, Feb 21, 2023 at 03:33:06PM +0200, Andy Shevchenko wrote:
-> 
-> ...
-> 
->> > > > > > -	id = i2c_of_match_device(dev->driver->of_match_table, client);
->> > > > > > -	if (id)
->> > > > > > -		priv->type = (uintptr_t)id->data;
->> > > > > > +	priv->type = (uintptr_t)device_get_match_data(dev);
->> > > > >
->> > > > > Looking closer the I²C ID table should provide DISP_MATRIX to keep
->> > > > > default and
->> 
->> > > > > this needs to be not dropped.
->> 
->> ^^^^^ (1)
->> 
->> > > > > So, the question is what to do with unknown type then, return -EINVAL
->> > > > > from probe()?
->> > > >
->> > > > If you leave out your addition of the DISP_UNKNOWN type, the default
->> > > > type
->> > > > will be DISP_MATRIX if no match is found, which is as it is now.
->> > > >
->> > > > In that case the following change should suffice:
->> > > >
->> > > > @@ -713,7 +715,6 @@ static int ht16k33_seg_probe(struct device *dev,
->> > > > struct
->> > > > ht16k33_priv *priv,
->> > > >  static int ht16k33_probe(struct i2c_client *client)
->> > > >  {
->> > > >      struct device *dev = &client->dev;
->> > > > -    const struct of_device_id *id;
->> > > >      struct ht16k33_priv *priv;
->> > > >      uint32_t dft_brightness;
->> > > >      int err;
->> > > > @@ -728,9 +729,8 @@ static int ht16k33_probe(struct i2c_client
->> > > > *client)
->> > > >          return -ENOMEM;
->> > > >
->> > > >      priv->client = client;
->> > > > -    id = i2c_of_match_device(dev->driver->of_match_table, client);
->> > > > -    if (id)
->> > > > -        priv->type = (uintptr_t)id->data;
->> > > > +    priv->type = (uintptr_t)device_get_match_data(dev);
->> > > > +
->> > > >      i2c_set_clientdata(client, priv);
->> > > >
->> > > >      err = ht16k33_initialize(priv);
->> > > >
->> > > > Or do you think falling back to DISP_MATRIX if no match is found is
->> > > > wrong?
->> > >
->> > > First of all, the I²C ID table should actually use DISP_MATRIX.
->> > >
->> > > Second, there are two points:
->> > >
->> > > - It would be nice to check if the OF ID table doesn't provide a setting
->> > >   (shouldn't we try I²C ID table and then, if still nothing, bail out?)
->> > >
->> > > - The I²C ID table can be extended in the future with another entry
->> > > which
->> > >   may want to have different default
->> >
->> > For my understanding, please correct me if I'm wrong;
->> >
->> > For all methods of instantiation during ht16k33 probe, i2c_of_match_device()
->> > matches the compatible strings in the OF ID table due to a call to
->> > i2c_of_match_device_sysfs().
->> >
->> > device_get_match_data() only matches the compatible strings in the OF ID
->> > table for devicetree instantiation because of_match_device() won't match
->> > is there is no actual of_node.
->> 
->> That's half-true. On ACPI based platforms we may have no of_node and 
->> match
->> against OF ID table.
->> 
->> > So with only device_get_match_data() and a non devicetree instantiation,
->> > priv->type will always be (uintptr_t)NULL = 0 = DISP_MATRIX.
->> 
->> Yes.
->> 
->> > Which effectively breaks i.e. user-space instantiation for other display
->> > types which now do work due to i2c_of_match_device().
->> > (so my suggestion above is not sufficient).
->> >
->> > Are you proposing extending and searching the I2C ID table to work around
->> > that?
->> 
->> See (1) above. This is the downside I have noticed after sending this 
->> series.
->> So, the I²C ID table match has to be restored, but the above mentioned 
->> issues
->> with existing table are not gone, hence they need to be addressed in 
->> the next
->> version.
-> 
-> I see now what you mean. So, we have even more issues in this driver:
-> - I²C table is not in sync with all devices supported
-> - the OF ID table seems has something really badly formed for adafruit
->   (just a number after a comma)
-> 
-> The latter shows how broken it is. The I²C ID table mechanism is used 
-> as
-> a backward compatibility to the OF. Unfortunately, user space may not 
-> provide
-> the data except in form of DT overlays, so for the legacy enumeration 
-> we
-> have only device name, which is a set of 4 digits for adafruit case.
-> 
-> Now imagine if by some reason we will get adafruit2 (you name it) with
-> the same schema. How I²C framework can understand that you meant 
-> adafruit
-> and not adafruit2? Or did I miss something?
 
-I agree.
+--HaVAMW8fbvrZJ5yn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I've added Geert Uytterhoeven to the CC. He added support for the 
-adafruit
-segment displays. Maybe he has a comment on this.
+On Wed, Feb 22, 2023 at 03:57:59PM +0530, Akhil R wrote:
+> Allocate only one DMA channel for I2C and share it for both Tx and Rx.
+> Since I2C supports only half duplex, there is no impact on perf with
+> this.
+>=20
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+> v1->v2: Remove WARN_ON for DMA channel mismatch. There is only one
+> channel in use with this change.
+>=20
+>  drivers/i2c/busses/i2c-tegra.c | 54 ++++++++++------------------------
+>  1 file changed, 15 insertions(+), 39 deletions(-)
 
-Kind regards,
-Robin van der Gracht
+I'm a little confused by this. All device trees already list the very
+same reference for both TX and RX DMA channels in the I2C nodes, so
+these channels are already effectively shared, aren't they?
+
+So all this does is to get rid of the duplicated pointer? In practice,
+is the DMA channel pointer going to point to the exact same memory or
+are these separate objects that happen to point to the same hardware
+resource?
+
+In either case, I think the commit message should clarify that. Also, a
+few minor nits below...
+
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegr=
+a.c
+> index 6aab84c8d22b..f52b835f1700 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -248,8 +248,7 @@ struct tegra_i2c_hw_feature {
+>   * @msg_read: indicates that the transfer is a read access
+>   * @timings: i2c timings information like bus frequency
+>   * @multimaster_mode: indicates that I2C controller is in multi-master m=
+ode
+> - * @tx_dma_chan: DMA transmit channel
+> - * @rx_dma_chan: DMA receive channel
+> + * @dma_chan: DMA channel
+>   * @dma_phys: handle to DMA resources
+>   * @dma_buf: pointer to allocated DMA buffer
+>   * @dma_buf_size: DMA buffer size
+> @@ -281,8 +280,7 @@ struct tegra_i2c_dev {
+>  	u8 *msg_buf;
+> =20
+>  	struct completion dma_complete;
+> -	struct dma_chan *tx_dma_chan;
+> -	struct dma_chan *rx_dma_chan;
+> +	struct dma_chan *dma_chan;
+>  	unsigned int dma_buf_size;
+>  	struct device *dma_dev;
+>  	dma_addr_t dma_phys;
+> @@ -398,7 +396,7 @@ static int tegra_i2c_dma_submit(struct tegra_i2c_dev =
+*i2c_dev, size_t len)
+>  	reinit_completion(&i2c_dev->dma_complete);
+> =20
+>  	dir =3D i2c_dev->msg_read ? DMA_DEV_TO_MEM : DMA_MEM_TO_DEV;
+> -	chan =3D i2c_dev->msg_read ? i2c_dev->rx_dma_chan : i2c_dev->tx_dma_cha=
+n;
+> +	chan =3D i2c_dev->dma_chan;
+
+Is there any point in keeping around the local variable? It doesn't
+serve any purpose anymore.
+
+> =20
+>  	dma_desc =3D dmaengine_prep_slave_single(chan, i2c_dev->dma_phys,
+>  					       len, dir, DMA_PREP_INTERRUPT |
+> @@ -426,14 +424,9 @@ static void tegra_i2c_release_dma(struct tegra_i2c_d=
+ev *i2c_dev)
+>  		i2c_dev->dma_buf =3D NULL;
+>  	}
+> =20
+> -	if (i2c_dev->tx_dma_chan) {
+> -		dma_release_channel(i2c_dev->tx_dma_chan);
+> -		i2c_dev->tx_dma_chan =3D NULL;
+> -	}
+> -
+> -	if (i2c_dev->rx_dma_chan) {
+> -		dma_release_channel(i2c_dev->rx_dma_chan);
+> -		i2c_dev->rx_dma_chan =3D NULL;
+> +	if (i2c_dev->dma_chan) {
+> +		dma_release_channel(i2c_dev->dma_chan);
+> +		i2c_dev->dma_chan =3D NULL;
+>  	}
+>  }
+> =20
+> @@ -457,25 +450,18 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev =
+*i2c_dev)
+>  		return 0;
+>  	}
+> =20
+> -	chan =3D dma_request_chan(i2c_dev->dev, "rx");
+> -	if (IS_ERR(chan)) {
+> -		err =3D PTR_ERR(chan);
+> -		goto err_out;
+> -	}
+> -
+> -	i2c_dev->rx_dma_chan =3D chan;
+> -
+> +	/* The same channel will be used for both Rx and Tx.
+> +	 * Keeping the name as tx for backward compatibility with
+> +	 * existing devicetrees.
+> +	 */
+
+Block comments should have the starting /* on a line of its own. Also,
+s/Rx/RX/ and s/Tx/TX/ for consistency. Looks like you also used "Rx" and
+"Tx" in the commit message. The driver uses "RX" and "TX" elsewhere, so
+better switch to that in both this comment and the commit message.
+
+Also, perhaps quote the "tx" reference above to highlight that it's the
+literal string in DT that you're referring to.
+
+Thierry
+
+--HaVAMW8fbvrZJ5yn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmP3K9IACgkQ3SOs138+
+s6GUoxAAudDGSGiO3PEE4ksIGRgrtEcXb9K/XuoFrT8ULh2NOTqG8JmhnNWwYeER
+UrujHgnAP3o0OKiv1VBmygpiNawKSccuf3ztFr3ZsiFiobbscutexweT1hbXviWs
+H7+FMfA1x7H1vbRQl6wP1/HMXQwbqWPZFd1AGGwaJaOtkLr4l83Tr3K2GZ074tI+
+Zspl7vc29lHhgOuQ7T2eYeJVDRkHG7ikE55ROJVyp+ZlV+nbvGXnInmOj4Vfg0Is
+0YHobXhgJ97rBi5RXbZS+fRFGZyJpsGedk1WvzaZ8lTpHVYHSRw3Ozav/Yygl6WQ
+JpY+XEIxLBV1fIhhZpaINulc59K4oHh4tQrlZDIQP/xjgA6IJpflfFz6LVSZBOta
+fQ8r2GIpq0RrOdWR1EyyIHw+BUH3yT0SaavCdkoOtjV70PHEByCGBYvF2EWvfONw
+M//DXdV10RzKpuaNO1CkaKcDWn+0umeyHn3aBW9OzMksPHoui4yP5ud8fSyzxx2d
+CwIn6eZwT5cXujN5/AKeZcNzr4zdw4MyDi2+/NifGv42kSl1Ji5CldWKwJxTWRGF
+yrmndC7ZxzOtZvdRV/iSyBdSVlt4MxXnwFle6ovqJrgjV5t+oEROaPFhFfaCbPZD
+Ej2AUVdjj1WMWNvqsBBifDPb97jrjIRHQcM+eMsq9/DLzKroN90=
+=kWnv
+-----END PGP SIGNATURE-----
+
+--HaVAMW8fbvrZJ5yn--
