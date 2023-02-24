@@ -2,56 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033596A1A8E
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Feb 2023 11:48:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 729366A1AA4
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Feb 2023 11:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjBXKsY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Feb 2023 05:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S229841AbjBXKxn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 24 Feb 2023 05:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjBXKsX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Feb 2023 05:48:23 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4218B12BFD
-        for <linux-i2c@vger.kernel.org>; Fri, 24 Feb 2023 02:48:22 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id t15so13568361wrz.7
-        for <linux-i2c@vger.kernel.org>; Fri, 24 Feb 2023 02:48:22 -0800 (PST)
+        with ESMTP id S230148AbjBXKxX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Feb 2023 05:53:23 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3765653E
+        for <linux-i2c@vger.kernel.org>; Fri, 24 Feb 2023 02:53:21 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id p26so11108934wmc.4
+        for <linux-i2c@vger.kernel.org>; Fri, 24 Feb 2023 02:53:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HR0UWQKqPA3ewcsqzjhlOUtNlnfP6392kIgsSTEs7d8=;
-        b=mFDonIVCSZ0rdWjYufm4eMvD1LnS53ToUl9EKyG7g8JO+Rw3SGGn2yjcH2XfVaI4jd
-         XzYd933WnqWkKbOdDS9KEv4CdiagfLwwrTWFvUemRchLFrPChk2lmOAUY2VhL1HdsCrG
-         iyBVb2K6+rbHWzjs0OjUtW2I84AZoHuiLNFxCVtCTJT77XWJPqsuv1GQeZpyPpp6Iy15
-         l4MxJO+qfAmeD2MrXBiFD0dE0PejaR2H1f2M1GvTZ3+FqENUgZji00S4Se19dBrE4lYI
-         DTkPhWeqLQAaaHHt0l1em42bfTMhEHBDeoAFM6vzL2aupPc8clHQmmJjWYSJ9asXu3ZY
-         FMqg==
+        bh=znlB4r6XgBnVvoPNdtfBl1Kal49FRfFG/+7iFF5NYGM=;
+        b=CahmQVC0rEX2m1jIBvE6lKSxFcwQU1naGbPwl5uJTZm/xt3OVS5j+dFDUEAE5bI47D
+         y7OTTOaRAVxAKM9Xc3WS0vgDoD/4QOvQZbmgi1+3CSkfBn5PCTxvhYxZinzQjHjkcSwH
+         vrZzACVqhT1DZBwONy84w3W6wIMbfNenvSdCOUy80uEhX7AxuFey85ZNEqb217X16kgu
+         snf2uDewRFFP4pp8CMj7t3sQddZx7XlxFfryOIbFMRIZUIVXpnNXbLGcpd+nIEC94N1i
+         cMaSmABnB0x+SYcjEiGRpfSjdC4/r+dxeC67BrywGgLvNYKhPCAng9bk+onkcJguS/Zj
+         HEfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HR0UWQKqPA3ewcsqzjhlOUtNlnfP6392kIgsSTEs7d8=;
-        b=Gelcr8zB3aa+u5X4ysiSaSr2lvZ72ztoB3acDGQAxleoOaEbqj0ueK8MeFRVXo8y/9
-         QVO/7ewRp+Ya1fpjiFSZuxXOt3zb5wRqqW8yK0THZRCBajaO955lDnhCBF3TFqnFaEIu
-         hcXklHWYKBUAHpKtUV06bc3fb9P2v6GjzhAGGJJdjQe1cA4Lfet8NcNAEzHpT9XZRYjF
-         9N2yCMN0or99bbZ8jy4rOPfL1ZLPjvw8FH4koPL8Rr1WJOQwLJnrt+qpeyMnQobWYn7c
-         VFpZ3NqmuGIVL0TpphjZvzuzIWtzMqNgvQXrUC4k0CzfJqxBd9yZpyeYuIolSDIRRoLr
-         z/YA==
-X-Gm-Message-State: AO0yUKUSmo5149ZgqmSkKwGKsL0KKj09losnxfDtuewOiDkD5EheLFQ4
-        ldMzjpoFcLhRTQSSik/8TrdQ3cuk7/0yb8yDe6T8GA==
-X-Google-Smtp-Source: AK7set+t2ZMXxJdkymq/f433ab9d1M38NcOpbgsjxwuHP9yBszDXCzcxLzuD8X8eMuxSDUIbKIbUnFuGPUkJsIOSTvs=
-X-Received: by 2002:a5d:59a9:0:b0:2c7:e48:8ca4 with SMTP id
- p9-20020a5d59a9000000b002c70e488ca4mr1099157wrr.2.1677235700730; Fri, 24 Feb
- 2023 02:48:20 -0800 (PST)
+        bh=znlB4r6XgBnVvoPNdtfBl1Kal49FRfFG/+7iFF5NYGM=;
+        b=cjU9njQoXFPR5jbp/SoIv7JbBY/WMgHZymPLeA8Fz+0Dnrq6+R9ywF7LE1cM4Jd2pd
+         hge61H2OxxuO0tLHZLPEyY4RTyLSHG3TIK4EF6lQPLY32k01NZ3TzKLja66Grxp6HaR0
+         MfrKe8psI9JYI77RiIGcZp8rAJtvd1sbSi95ygJ78YPTEQJ+jdpQv4Evq5zokrTsrZZ5
+         5b6AD3Rm+OW3tX85qYFhRYzTNfA1t57dulXrA8duG54OoYUW52Xyf42zQv/uT+yJMx9Z
+         5doASmX/VW+kqx8w6w3wMhA16fcQrrWhmnYVj7IMf6NyiOToOBijA02Q7tPUStpnnoAN
+         NPvg==
+X-Gm-Message-State: AO0yUKXHS+e1wg3hxvIFMM0BzLU3YmFc4xg6V8kuP58h+q92TNEgFMdE
+        guQdYOC0sFwee9Lv1aRnR/mrxM3kbvM+gC7tFtunPA==
+X-Google-Smtp-Source: AK7set+zOA8EjyMhKkZVWtfwPH0x6BD+VAP4kHCLJYaqtwjn3LBX11LdH2RvdSQmmQorzU2SLOOhUBwb1opCmFKAC98=
+X-Received: by 2002:a05:600c:3ba7:b0:3e2:98f:1d76 with SMTP id
+ n39-20020a05600c3ba700b003e2098f1d76mr1152618wms.8.1677236000306; Fri, 24 Feb
+ 2023 02:53:20 -0800 (PST)
 MIME-Version: 1.0
-References: <20230219183059.1029525-1-xiang.ye@intel.com> <20230219183059.1029525-3-xiang.ye@intel.com>
-In-Reply-To: <20230219183059.1029525-3-xiang.ye@intel.com>
+References: <20230219183059.1029525-1-xiang.ye@intel.com> <20230219183059.1029525-6-xiang.ye@intel.com>
+In-Reply-To: <20230219183059.1029525-6-xiang.ye@intel.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 24 Feb 2023 11:48:08 +0100
-Message-ID: <CACRpkdYdDE+B=SF+kAuQBiwUi31y_xELLXuDK+9G+rqD9MQBGg@mail.gmail.com>
-Subject: Re: [PATCH 2/5] gpio: Add support for Intel LJCA USB GPIO driver
+Date:   Fri, 24 Feb 2023 11:53:08 +0100
+Message-ID: <CACRpkdbAve++nA0zwHvOm3fy0t9J9g0fR_FO71TTv=TwM6CJYA@mail.gmail.com>
+Subject: Re: [PATCH 5/5] Documentation: Add ABI doc for attributes of LJCA device
 To:     Ye Xiang <xiang.ye@intel.com>
 Cc:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
         Tyrone Ting <kfting@nuvoton.com>,
@@ -77,52 +77,39 @@ Hi Ye,
 
 thanks for your patch!
 
-I think your colleague Andy Shevchenko will provide the most detailed
-and deep feedback, but here are some things I spotted immediately:
-
 On Sun, Feb 19, 2023 at 7:31 PM Ye Xiang <xiang.ye@intel.com> wrote:
 
-> This patch implements the GPIO function of Intel USB-I2C/GPIO/SPI adapter
-> device named "La Jolla Cove Adapter" (LJCA). It communicate with LJCA
-> GPIO module with specific protocol through interfaces exported by LJCA USB
-> driver.
+> Add sysfs attributes Documentation entries for LJCA device
 >
 > Signed-off-by: Ye Xiang <xiang.ye@intel.com>
 (...)
+> +What:          /sys/bus/usb/.../cmd
+> +Date:          July 2023
+> +KernelVersion: 6.4
+> +Contact:       Ye Xiang <xiang.ye@intel.com>
+> +Description:
+> +               Commands supported by LJCA device.
+> +               When read, it will return valid commands.
+> +               When write with a command, it will execute the command.
+> +               Valid commands are [dfu, reset, debug]
+> +               dfu:    Force LJCA device to enter DFU mode.
+> +               reset:  Trigger soft reset for LJCA device.
+> +               debug:  Enable debug logging.
 
-> +config GPIO_LJCA
-> +       tristate "INTEL La Jolla Cove Adapter GPIO support"
-> +       depends on MFD_LJCA
+Given that there are kernel drivers for this device, it looks pretty
+dangerous to make it possible for userspace to reset the device?
 
-I would add
+But maybe it will re-enumerate when you do this so all drivers
+unload cleanly and then re-probe?
 
-   default MFD_LJCA
+I guess the DFU mode will use the USB standard class for updating
+the firmware?
 
-so if you activate the MFD you get this subdriver by default
-as module or built-in depending on what the MFD is built
-as.
+Perhaps a short blurb on the use case for each string could be
+helpful, like "echo dfu to this file so as to put the device into
+DFU mode so the firmware can be updated".
 
-(Same goes for the other subdrivers I guess)
-
-In addition you need:
-
-select GPIOLIB_IRQCHIP
-
-since you use this facility.
-
-> +static struct irq_chip ljca_gpio_irqchip = {
-
-static const ...
-
-> +       .name = "ljca-irq",
-> +       .irq_mask = ljca_irq_mask,
-> +       .irq_unmask = ljca_irq_unmask,
-> +       .irq_set_type = ljca_irq_set_type,
-> +       .irq_bus_lock = ljca_irq_bus_lock,
-> +       .irq_bus_sync_unlock = ljca_irq_bus_unlock,
-> +       .flags = IRQCHIP_IMMUTABLE,
-> +       GPIOCHIP_IRQ_RESOURCE_HELPERS,
-> +};
+Is the idea that e.g. fwupdmgr should provide a front-end for this?
 
 Yours,
 Linus Walleij
