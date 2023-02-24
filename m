@@ -2,123 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4F26A1BCD
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Feb 2023 13:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D246A1E76
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Feb 2023 16:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjBXMGR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Feb 2023 07:06:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
+        id S229541AbjBXPXg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 24 Feb 2023 10:23:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjBXMGQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Feb 2023 07:06:16 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BFC65330
-        for <linux-i2c@vger.kernel.org>; Fri, 24 Feb 2023 04:06:14 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pVWq4-0000eR-TY; Fri, 24 Feb 2023 13:06:12 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pVWq3-007B05-2n; Fri, 24 Feb 2023 13:06:12 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pVWq3-006EZD-7M; Fri, 24 Feb 2023 13:06:11 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     kernel@pengutronix.de, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 9/9] i2c: Convert drivers to new .probe() callback
-Date:   Fri, 24 Feb 2023 13:06:00 +0100
-Message-Id: <20230224120600.1681685-10-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230224120600.1681685-1-u.kleine-koenig@pengutronix.de>
-References: <20230224120600.1681685-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S229600AbjBXPXg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Feb 2023 10:23:36 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E6A4ECE;
+        Fri, 24 Feb 2023 07:23:22 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id u6so7541562ilk.12;
+        Fri, 24 Feb 2023 07:23:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=rZy/qweW4zcxQmO4VUVX7hmf2axyqzaYFYbkuQOeJXc=;
+        b=AQxMYv3BZ5p+LQYVbqkVebvPggo55MHonBy7g4jfOc1nQ0O4EH2DbRvDEwkutFmsgH
+         FK+q0oNbS/JbXDqe4ZPvwy7J8l/ThOL4YpgkrZ9AYz2fJBA9LvPGpR+pJiWUMPXtIknA
+         eXabhYl+4gAsD5ewwvi2F4zs40J7NAcRyk8S+W+O3GMUbC3SSd5ktBO/VTffmPulzdjA
+         WoMn/5ilqo5P/smoyY4dbRq5qhKq6cxtEtFT7TI72N5E2mZznZzV6fLV/Wdd7xLVWKYW
+         MiT3ZEtPVH6Qkh7SAbD2pYZW2pMr+7dZzRj9Z1tyQ8iscWeq6kORb2UV0NS9s++dSJAn
+         9V8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rZy/qweW4zcxQmO4VUVX7hmf2axyqzaYFYbkuQOeJXc=;
+        b=OrYYBDkTjk+jJ8Sh2e5GH92t7OaWZhP23yyiIIWrrwWCzxu244QwCLiEgTCJNK7eLu
+         pmNYnF2kCj4MoMI2GuSk8FR22V+/zF/XOTnWLYAiXRe1Vup4SbhUnGoN7tUDziAPFERG
+         1I9+hZQD4E+16UICDpbIF9+Tev47Ax73LoLWp0I4xo0qb5HQLWxr+zid4YorKmxVau8w
+         dv9ju2k5BFd3EVofWg5zCKjkC4XmUrcmOoxDEMU9pHrkWma5LG5mjRNVSRmGSPtoUK4Y
+         EEnQt6cc6H+K0ujk4EY1Q38Kebh2veRb8wdPnuv1iaMCGcoVEwhlAy7WybK3cQHE30dX
+         ihNw==
+X-Gm-Message-State: AO0yUKXR2pOvDbMbqvB0lcmEoMUQD+nE+2ckNOTCvpLTlf0lg3PWCINB
+        R26bth+uHcL6GD4m7QlVSFxqaanlXKQ=
+X-Google-Smtp-Source: AK7set/cciAX4U5TlcM778Z+6ttD77O8PBGjMZOAalDZI/1OZbtlTxUg+715LdzoRNNVUuu2TQSAOg==
+X-Received: by 2002:a05:6e02:1bce:b0:315:7354:955d with SMTP id x14-20020a056e021bce00b003157354955dmr15312433ilv.10.1677252201305;
+        Fri, 24 Feb 2023 07:23:21 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t18-20020a92d152000000b003170014ee5bsm1367117ilg.21.2023.02.24.07.23.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Feb 2023 07:23:20 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d02984bb-e3fc-7411-41b8-9d1113c0aa69@roeck-us.net>
+Date:   Fri, 24 Feb 2023 07:23:19 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2320; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=8cexTMV14qFlDVuIXD7jYIZgWUBN5i6f1Hvt7C9j40g=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBj+KgiKyLe6sNlsuZiFmGT83SWbvpE+de+Dztv1 qKkLYWIl5eJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY/ioIgAKCRDB/BR4rcrs CR6qB/94FBVBPf+3KRfvfUbSDM6suyp+EVRroDASxcnN0Z774uBmKRE/pZgYshSSaswCHhKbjMB j1A1xI2hIyKYKptGGUKF7rtcG12KbqTz1GwxWO393ybbdyPsJ8wX4EAlkLIfXbduT3KdJCeO1po pA2EHsbqQmADgwlYC8VwwySVUZ7kwy/8T209s99QyefUW09oiHqi17RXy1hppm/m4FGD/lrZ0Gc /pJ2t1/J2Sdcol6vhr6yiX7vMwp3GZB0N6gSOk7wuS+oS/P8gRWu+0c5HRuQ9FIGlKzDlP2VNKj cQOE7dzelvl5omBeJM3kagwYiDvXrrM9X1cu6lSh5nj974fi
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 8/9] i2c: mux: Convert all drivers to new .probe()
+ callback
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     kernel@pengutronix.de,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230224120600.1681685-1-u.kleine-koenig@pengutronix.de>
+ <20230224120600.1681685-9-u.kleine-koenig@pengutronix.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230224120600.1681685-9-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Now that .probe() was changed not to get the id parameter, drivers can
-be converted back to that with the eventual goal to drop .probe_new().
+On 2/24/23 04:05, Uwe Kleine-König wrote:
+> Now that .probe() was changed not to get the id parameter, drivers can
+> be converted back to that with the eventual goal to drop .probe_new().
+> 
+> Implement that for the i2c mux drivers.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Implement that for the i2c drivers that are part of the i2c core.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/i2c/i2c-core-base.c      | 2 +-
- drivers/i2c/i2c-slave-eeprom.c   | 2 +-
- drivers/i2c/i2c-slave-testunit.c | 2 +-
- drivers/i2c/i2c-smbus.c          | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 1fbe16221085..1e38bdaf6ec1 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -1018,7 +1018,7 @@ static int dummy_probe(struct i2c_client *client)
- 
- static struct i2c_driver dummy_driver = {
- 	.driver.name	= "dummy",
--	.probe_new	= dummy_probe,
-+	.probe		= dummy_probe,
- 	.id_table	= dummy_id,
- };
- 
-diff --git a/drivers/i2c/i2c-slave-eeprom.c b/drivers/i2c/i2c-slave-eeprom.c
-index 5f25f23c4ff8..5946c0d0aef9 100644
---- a/drivers/i2c/i2c-slave-eeprom.c
-+++ b/drivers/i2c/i2c-slave-eeprom.c
-@@ -207,7 +207,7 @@ static struct i2c_driver i2c_slave_eeprom_driver = {
- 	.driver = {
- 		.name = "i2c-slave-eeprom",
- 	},
--	.probe_new = i2c_slave_eeprom_probe,
-+	.probe = i2c_slave_eeprom_probe,
- 	.remove = i2c_slave_eeprom_remove,
- 	.id_table = i2c_slave_eeprom_id,
- };
-diff --git a/drivers/i2c/i2c-slave-testunit.c b/drivers/i2c/i2c-slave-testunit.c
-index 75ee7ebdb614..a49642bbae4b 100644
---- a/drivers/i2c/i2c-slave-testunit.c
-+++ b/drivers/i2c/i2c-slave-testunit.c
-@@ -171,7 +171,7 @@ static struct i2c_driver i2c_slave_testunit_driver = {
- 	.driver = {
- 		.name = "i2c-slave-testunit",
- 	},
--	.probe_new = i2c_slave_testunit_probe,
-+	.probe = i2c_slave_testunit_probe,
- 	.remove = i2c_slave_testunit_remove,
- 	.id_table = i2c_slave_testunit_id,
- };
-diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-index cd19546d31fc..138c3f5e0093 100644
---- a/drivers/i2c/i2c-smbus.c
-+++ b/drivers/i2c/i2c-smbus.c
-@@ -169,7 +169,7 @@ static struct i2c_driver smbalert_driver = {
- 	.driver = {
- 		.name	= "smbus_alert",
- 	},
--	.probe_new	= smbalert_probe,
-+	.probe		= smbalert_probe,
- 	.remove		= smbalert_remove,
- 	.id_table	= smbalert_ids,
- };
--- 
-2.39.1
+> ---
+>   drivers/i2c/muxes/i2c-mux-ltc4306.c | 2 +-
+>   drivers/i2c/muxes/i2c-mux-pca9541.c | 2 +-
+>   drivers/i2c/muxes/i2c-mux-pca954x.c | 2 +-
+>   3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/i2c/muxes/i2c-mux-ltc4306.c b/drivers/i2c/muxes/i2c-mux-ltc4306.c
+> index 70835825083f..5a03031519be 100644
+> --- a/drivers/i2c/muxes/i2c-mux-ltc4306.c
+> +++ b/drivers/i2c/muxes/i2c-mux-ltc4306.c
+> @@ -306,7 +306,7 @@ static struct i2c_driver ltc4306_driver = {
+>   		.name	= "ltc4306",
+>   		.of_match_table = of_match_ptr(ltc4306_of_match),
+>   	},
+> -	.probe_new	= ltc4306_probe,
+> +	.probe		= ltc4306_probe,
+>   	.remove		= ltc4306_remove,
+>   	.id_table	= ltc4306_id,
+>   };
+> diff --git a/drivers/i2c/muxes/i2c-mux-pca9541.c b/drivers/i2c/muxes/i2c-mux-pca9541.c
+> index 09d1d9e67e31..ce0fb69249a8 100644
+> --- a/drivers/i2c/muxes/i2c-mux-pca9541.c
+> +++ b/drivers/i2c/muxes/i2c-mux-pca9541.c
+> @@ -336,7 +336,7 @@ static struct i2c_driver pca9541_driver = {
+>   		   .name = "pca9541",
+>   		   .of_match_table = of_match_ptr(pca9541_of_match),
+>   		   },
+> -	.probe_new = pca9541_probe,
+> +	.probe = pca9541_probe,
+>   	.remove = pca9541_remove,
+>   	.id_table = pca9541_id,
+>   };
+> diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> index 3639e6d7304c..0ccee2ae5720 100644
+> --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
+> +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> @@ -554,7 +554,7 @@ static struct i2c_driver pca954x_driver = {
+>   		.pm	= &pca954x_pm,
+>   		.of_match_table = pca954x_of_match,
+>   	},
+> -	.probe_new	= pca954x_probe,
+> +	.probe		= pca954x_probe,
+>   	.remove		= pca954x_remove,
+>   	.id_table	= pca954x_id,
+>   };
 
