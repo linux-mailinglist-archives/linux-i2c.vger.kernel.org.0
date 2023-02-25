@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9BB6A2A53
-	for <lists+linux-i2c@lfdr.de>; Sat, 25 Feb 2023 15:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99CCD6A2A63
+	for <lists+linux-i2c@lfdr.de>; Sat, 25 Feb 2023 16:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbjBYOpb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Sat, 25 Feb 2023 09:45:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48420 "EHLO
+        id S229495AbjBYPGg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Sat, 25 Feb 2023 10:06:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBYOpa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 25 Feb 2023 09:45:30 -0500
+        with ESMTP id S229482AbjBYPGf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 25 Feb 2023 10:06:35 -0500
 Received: from out-mx.sasg.de (out-mx.sasg.de [95.142.65.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97877144A1
-        for <linux-i2c@vger.kernel.org>; Sat, 25 Feb 2023 06:45:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7469E15143
+        for <linux-i2c@vger.kernel.org>; Sat, 25 Feb 2023 07:06:31 -0800 (PST)
 Received: from exch2012.heineopto.de (unknown [217.239.128.75])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by out-mx.sasg.de (Postfix) with ESMTPS id B7D28201BC;
-        Sat, 25 Feb 2023 15:45:24 +0100 (CET)
+        by out-mx.sasg.de (Postfix) with ESMTPS id 558D622BE8;
+        Sat, 25 Feb 2023 16:06:29 +0100 (CET)
 Received: from exch2012.heineopto.de (fd00:0:0:1080::10) by
  exch2012.heineopto.de (fd00:0:0:1080::10) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id
- 15.1.2375.34; Sat, 25 Feb 2023 15:45:24 +0100
+ 15.1.2375.34; Sat, 25 Feb 2023 16:06:28 +0100
 Received: from exch2012.heineopto.de ([fe80::29f7:554e:2485:f599]) by
  exch2012.heineopto.de ([fe80::29f7:554e:2485:f599%12]) with mapi id
- 15.01.2375.034; Sat, 25 Feb 2023 15:45:24 +0100
+ 15.01.2375.034; Sat, 25 Feb 2023 16:06:28 +0100
 From:   <RRademacher@heine.com>
 To:     <laurent.pinchart@ideasonboard.com>
 CC:     <linux-i2c@vger.kernel.org>
@@ -33,11 +33,11 @@ Subject: AW: #Extern_Re: AW: #Extern_Re: question about devicetree entry
  pca954x
 Thread-Topic: #Extern_Re: AW: #Extern_Re: question about devicetree entry
  pca954x
-Thread-Index: AQHZP938pAvJYJLXN06F6qaGLQ2Y/67X8gp6gAfa6Aw=
-Date:   Sat, 25 Feb 2023 14:45:24 +0000
-Message-ID: <030eab78ecd24ec182936de7ec7cecd5@heine.com>
-References: <5ced6dab439e4aeda60632de47bd5243@heine.com>,<25aadbcbf9d94211a585768efd666311@heine.com>
-In-Reply-To: <25aadbcbf9d94211a585768efd666311@heine.com>
+Thread-Index: AQHZP938pAvJYJLXN06F6qaGLQ2Y/67X8gp6gAfa6AyAAAaBLA==
+Date:   Sat, 25 Feb 2023 15:06:28 +0000
+Message-ID: <2c0c35184a8249cd8e0ceef0a6e80ce0@heine.com>
+References: <5ced6dab439e4aeda60632de47bd5243@heine.com>,<25aadbcbf9d94211a585768efd666311@heine.com>,<030eab78ecd24ec182936de7ec7cecd5@heine.com>
+In-Reply-To: <030eab78ecd24ec182936de7ec7cecd5@heine.com>
 Accept-Language: de-DE, en-US
 Content-Language: de-DE
 X-MS-Has-Attach: 
@@ -54,9 +54,22 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+I accidentally included an incorrect comment in the previous email. (at the line, beginning with [  68.300127] [DBGMSG] irq_find_mapping :-> using domain @0000000059dfe323
+
+The comment in the line is wrong, because the domain address originates from the mapping of the hwirq at pca954x multiplexed inputs.
+
+Regards
+Ralf
+________________________________________
+Von: Rademacher Ralf
+Gesendet: Samstag, 25. Februar 2023 15:45:24
+An: Laurent Pinchart
+Cc: linux-i2c@vger.kernel.org
+Betreff: AW: #Extern_Re: AW: #Extern_Re: question about devicetree entry pca954x
+
 Dear Mr. Pinchart,
 
-I have now generated more debug output in the hope that this will help to further narrow down the problem. See attached Logs. 
+I have now generated more debug output in the hope that this will help to further narrow down the problem. See attached Logs.
 The last lines of DBGMSGs are commented "<<---- comment....."
 
 Thanks in advance.
@@ -155,28 +168,28 @@ APDS9960 (Sensor 3)
 IRQ was generated at the second sensor
 
 [   68.221782] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq] is returned
-[   68.221788] [DBGMSG] irq_find_mapping :hwirq: 0x6					<<---- korrekt Pin @SOC was detected
-[   68.229103] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq]: 0x63		<<---- korrect IRQ determinded (pca954x)
-[   68.233809] [DBGMSG] irq_find_mapping :-> using domain @00000000d8881a92		<<---- same pointer as pca954x, APDS9960 (sensor 1-3)
+[   68.221788] [DBGMSG] irq_find_mapping :hwirq: 0x6                                    <<---- korrekt Pin @SOC was detected
+[   68.229103] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq]: 0x63            <<---- korrect IRQ determinded (pca954x)
+[   68.233809] [DBGMSG] irq_find_mapping :-> using domain @00000000d8881a92             <<---- same pointer as pca954x, APDS9960 (sensor 1-3)
 [   68.247618] [DBGMSG] irq_thread_fn :enter fxn
 [   68.247622] [DBGMSG] irq_thread_fn :action->handler: 0x10167F50
 [   68.252005] [DBGMSG] irq_thread_fn :action->thread_fn: 0x10DC0950
 [   68.257949] [DBGMSG] irq_thread_fn :action->flags: 0x2082
 [   68.264057] [DBGMSG] irq_thread_fn :action->name: pca954x
 [   68.269462] [DBGMSG] irq_thread_fn :action->dev_id: 0x67A9D8F8
-[   68.274867] [DBGMSG] pca954x_irq_handler :entering pca954x_irq_handler		<<---- entering correct handler (pca954x)
+[   68.274867] [DBGMSG] pca954x_irq_handler :entering pca954x_irq_handler               <<---- entering correct handler (pca954x)
 [   68.281554] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq] is returned
-[   68.288099] [DBGMSG] irq_find_mapping :hwirq: 0x1					<<---- correct pin at pca954x is determined, where second sensors INT signal is attached to
-[   68.295415] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq]: 0xDF		<<---- I DONT UNDERSTAND, WHERE THIS IRQ COME FROM. 0xDE, 0xDF and 0xE0 is not listed under /proc/irq or /proc/interrupts
-[   68.300127] [DBGMSG] irq_find_mapping :-> using domain @0000000059dfe323		<<---- I DONT UNDERSTAND, WHERE THIS DOMAIN-ADDRESS COME FROM
+[   68.288099] [DBGMSG] irq_find_mapping :hwirq: 0x1                                    <<---- correct pin at pca954x is determined, where second sensors INT signal is attached to
+[   68.295415] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq]: 0xDF            <<---- I DONT UNDERSTAND, WHERE THIS IRQ COME FROM. 0xDE, 0xDF and 0xE0 is not listed under /proc/irq or /proc/interrupts
+[   68.300127] [DBGMSG] irq_find_mapping :-> using domain @0000000059dfe323             <<---- I DONT UNDERSTAND, WHERE THIS DOMAIN-ADDRESS COME FROM
 [   68.313621] [DBGMSG] handle_nested_irq :entering handle_nested_irq
-[   68.313623] [DBGMSG] handle_nested_irq :irq: 0xDF					<<---- NOW HANDLE_NESTED_IRQ HAS DETERMINED A IRQ WHICH IS UNKNOWN TO ME
-[   68.319811] [DBGMSG] handle_nested_irq :irq_desc->name: null				<<---- THATS WHY ALL FOLLOWING VARIABLES ARE WRONG AND INVALID
-[   68.324527] [DBGMSG] handle_nested_irq :irq_desc->parent_irq: 0x00			<<---- SAME HERE
-[   68.330202] [DBGMSG] handle_nested_irq :action: false or null			<<---- SAME HERE
-[   68.336380] [DBGMSG] handle_nested_irq :irqd_irq_disabled: true			<<---- CHECK FAILS AS RESULT
-[   68.342122] [DBGMSG] handle_nested_irq :result of (unlikely(!action || irqd_irq_disabled(&desc->irq_data))) : true	<<---- FALSE CONDITION IS USED
-[   68.348037] [DBGMSG] handle_nested_irq :goto out_unlock				<<---- IRQ IS NOT HANDLED, BECAUSE apds9960_interrupt_handler WAS NOT TRIGGERED
+[   68.313623] [DBGMSG] handle_nested_irq :irq: 0xDF                                    <<---- NOW HANDLE_NESTED_IRQ HAS DETERMINED A IRQ WHICH IS UNKNOWN TO ME
+[   68.319811] [DBGMSG] handle_nested_irq :irq_desc->name: null                         <<---- THATS WHY ALL FOLLOWING VARIABLES ARE WRONG AND INVALID
+[   68.324527] [DBGMSG] handle_nested_irq :irq_desc->parent_irq: 0x00                   <<---- SAME HERE
+[   68.330202] [DBGMSG] handle_nested_irq :action: false or null                        <<---- SAME HERE
+[   68.336380] [DBGMSG] handle_nested_irq :irqd_irq_disabled: true                      <<---- CHECK FAILS AS RESULT
+[   68.342122] [DBGMSG] handle_nested_irq :result of (unlikely(!action || irqd_irq_disabled(&desc->irq_data))) : true   <<---- FALSE CONDITION IS USED
+[   68.348037] [DBGMSG] handle_nested_irq :goto out_unlock                              <<---- IRQ IS NOT HANDLED, BECAUSE apds9960_interrupt_handler WAS NOT TRIGGERED
 [   68.358391] [DBGMSG] handle_nested_irq :leaving handle_nested_irq
 [   68.363620] [DBGMSG] pca954x_irq_handler :leaving pca954x_irq_handler
 
