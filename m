@@ -2,74 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C699A6A2692
-	for <lists+linux-i2c@lfdr.de>; Sat, 25 Feb 2023 02:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA336A2A2A
+	for <lists+linux-i2c@lfdr.de>; Sat, 25 Feb 2023 15:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjBYBh6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Feb 2023 20:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37000 "EHLO
+        id S229478AbjBYOBT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 25 Feb 2023 09:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbjBYBh6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Feb 2023 20:37:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E54EB41;
-        Fri, 24 Feb 2023 17:37:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63C7BB81D74;
-        Sat, 25 Feb 2023 01:37:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2187CC433A4;
-        Sat, 25 Feb 2023 01:37:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677289074;
-        bh=v9MdzpeAjMEEPkLripOmcFPHLnqS+F9I05ZPn37sOhc=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=uIxZmaS7KGcH1VeJgtZPnXGgOUKraIVsbvPzW/DAopyfmZY3HIvUxGegiNUIhFhFj
-         Lk+I83M7Mi2AgzRx9ePJe4ymjfW4QuBVyKERagV/2BWoJ5lcEvKxnwGNYcNJtWmqhW
-         aixM4RgZuaFtC+Wt1G4loJvEDrABayEHBV7nrUSTKhTXLXcISQOCyRWuIytR4YO+4B
-         0bDhW/UEzc2hnHQRHO9tSIh7TdZz/AK+nGrNmYhS49PloMrxmu8OdFsAnE/Ga5lxC2
-         LTwy66AlbxgoVfxOW8AYh6PpV1kKrAskli875q4UY1YozvpD1OTwVStUf4Ve8EIIYY
-         iySyn0eQOUnDA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0F94AC43151;
-        Sat, 25 Feb 2023 01:37:54 +0000 (UTC)
-Subject: Re: [PULL REQUEST] i2c-for-6.3-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y/esAfKcQpM77Gql@sai>
-References: <Y/esAfKcQpM77Gql@sai>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y/esAfKcQpM77Gql@sai>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.3-rc1
-X-PR-Tracked-Commit-Id: e8444bb9fd77f153adcc263eab28e3c2bc1cf540
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 008128cd5948bd3589a9c300e426af4d834029bb
-Message-Id: <167728907406.28954.1102156334079437629.pr-tracker-bot@kernel.org>
-Date:   Sat, 25 Feb 2023 01:37:54 +0000
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229379AbjBYOBT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 25 Feb 2023 09:01:19 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942E917CD2;
+        Sat, 25 Feb 2023 06:01:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677333678; x=1708869678;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GLhdLw+oFWOLlJlG8A53g2nXQ0av44AQE7yKJKyYA+4=;
+  b=NgBPKZ5l/+zdEdx1kdMqfeglOhxt/eAzezyj+c72sitvcaULbpTAvM93
+   he6iinbpsNULC4DpB8m4s5c4etogwRa9ckLIEDECUcDl4sTOYGSO5ccUq
+   cCcNcBuPIzP7xmIDkZ1YUtBN82nAcPVCYeIOl43H+uloL7XehthKnWZAk
+   NbkeSEiuJJwj7rMHBa8nLt2ZGC1gak2bT6TOeP3/81VktGadl+rO5SAn1
+   1542v3ef11Ul3OgWkHn4eMG8d23F3Ms6C5buw5okdUkXNR4nizmIuzyvB
+   LEsXu6MNJfkKE9p0Q5DwzpGtnFDVSNNLdHQwdwRbA5aGfIcsQuJwGVeK2
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="314053383"
+X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
+   d="scan'208";a="314053383"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 06:01:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="918740157"
+X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
+   d="scan'208";a="918740157"
+Received: from ye-nuc7i7dnhe.sh.intel.com ([10.239.154.52])
+  by fmsmga006.fm.intel.com with ESMTP; 25 Feb 2023 06:01:14 -0800
+From:   Ye Xiang <xiang.ye@intel.com>
+To:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com,
+        Ye Xiang <xiang.ye@intel.com>
+Subject: [PATCH v2 0/5] Add Intel LJCA device driver
+Date:   Sat, 25 Feb 2023 22:01:13 +0800
+Message-Id: <20230225140118.2037220-1-xiang.ye@intel.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pull request you sent on Thu, 23 Feb 2023 19:10:09 +0100:
+Add driver for Intel La Jolla Cove Adapter (LJCA) device.
+This is a USB-GPIO, USB-I2C and USB-SPI device. We add 4
+drivers to support this device: a USB driver, a GPIO chip
+driver, a I2C controller driver and a SPI controller driver.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.3-rc1
+---
+v2:
+ - ljca: remove reset command.
+ - gpio/spi/i2c: add `default MFD_LJCA` in Kconfig.
+ - gpio: add "select GPIOLIB_IRQCHIP" in Kconfig.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/008128cd5948bd3589a9c300e426af4d834029bb
+Ye Xiang (5):
+  mfd: Add support for Intel LJCA device
+  gpio: Add support for Intel LJCA USB GPIO driver
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
+  Documentation: Add ABI doc for attributes of LJCA device
 
-Thank you!
+ .../ABI/testing/sysfs-bus-usb-devices-ljca    |  22 +
+ drivers/gpio/Kconfig                          |  12 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-ljca.c                      | 454 ++++++++
+ drivers/i2c/busses/Kconfig                    |  11 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-ljca.c                 | 357 +++++++
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/ljca.c                            | 969 ++++++++++++++++++
+ drivers/spi/Kconfig                           |  11 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-ljca.c                        | 291 ++++++
+ include/linux/mfd/ljca.h                      |  95 ++
+ 14 files changed, 2239 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
+ create mode 100644 drivers/gpio/gpio-ljca.c
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/mfd/ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 include/linux/mfd/ljca.h
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.34.1
+
