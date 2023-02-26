@@ -2,142 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3C86A2EB2
-	for <lists+linux-i2c@lfdr.de>; Sun, 26 Feb 2023 08:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63EDB6A34B2
+	for <lists+linux-i2c@lfdr.de>; Sun, 26 Feb 2023 23:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjBZHE2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 26 Feb 2023 02:04:28 -0500
+        id S229738AbjBZW2R (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 26 Feb 2023 17:28:17 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBZHE1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 26 Feb 2023 02:04:27 -0500
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A80E06D;
-        Sat, 25 Feb 2023 23:04:25 -0800 (PST)
-Received: from sparky.lan (unknown [159.196.93.152])
-        by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 1BD3A2022A;
-        Sun, 26 Feb 2023 15:04:17 +0800 (AWST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=codeconstruct.com.au; s=2022a; t=1677395063;
-        bh=Y7NTv+s/hWLeamtCbWmhn/7LKRoNqR/n38OfE9hBxlM=;
-        h=Subject:From:To:Date:In-Reply-To:References;
-        b=eRUwOOoHuKdrRpkN6k32TqeYuPJ2qpo8OHbVCzKlNi0EcrDheEyrUr7y8e7GJXNED
-         PQwzOSmmsOInezLa2c5lLpi0j0qRe3tda/GrHsp2InsAdUhXEerdjAFXxWoH3gbzHx
-         dDYrnKPJZbqCtAng1kR86tfWvHG2oOa/oQ++PKP+19xVZuawP0azjT98V5dNiTSadq
-         8v3A5ynMhOdk7FvEZgoSv2pABRqqkeW8E9fVYdE31uRXt2MdT0XYrVjXoNgBFxY/g5
-         m8O0EWEC04qfEIQ3kBcIl0LGlDNYvh+ThCamAIPZWrpyTkS307I3ZcU/ECJeppcfGd
-         6BwTzPiVu4NkQ==
-Message-ID: <8999ef4a57b035a81b086d8732d119638d46968c.camel@codeconstruct.com.au>
-Subject: Re: [PATCH v6 1/2] dt-bindings: i2c: aspeed: support for
- AST2600-i2cv2
-From:   Jeremy Kerr <jk@codeconstruct.com.au>
-To:     Ryan Chen <ryan_chen@aspeedtech.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Date:   Sun, 26 Feb 2023 15:04:16 +0800
-In-Reply-To: <20230226031321.3126756-2-ryan_chen@aspeedtech.com>
-References: <20230226031321.3126756-1-ryan_chen@aspeedtech.com>
-         <20230226031321.3126756-2-ryan_chen@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-1 
+        with ESMTP id S229516AbjBZW2Q (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 26 Feb 2023 17:28:16 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887541817E
+        for <linux-i2c@vger.kernel.org>; Sun, 26 Feb 2023 14:27:46 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pWPU0-0000v4-Cx; Sun, 26 Feb 2023 23:27:04 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pWPTv-000UbL-A7; Sun, 26 Feb 2023 23:26:59 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pWPTu-000YPc-Ii; Sun, 26 Feb 2023 23:26:58 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Ajay Gupta <ajayg@nvidia.com>,
+        Peter Senna Tschudin <peter.senna@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        linux-mtd@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, Evgeniy Polyakov <zbr@ioremap.net>,
+        Crt Mori <cmo@melexis.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Peter Rosin <peda@axentia.se>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH v2 0/9] i2c: Switch .probe() to not take an id parameter
+Date:   Sun, 26 Feb 2023 23:26:45 +0100
+Message-Id: <20230226222654.1741900-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1991; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=EenKKdT6RETFmVGwF2CrYShLqN5ZYnH65OR4Oth2DhU=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBj+9yIsuD2BffFtVmTLqMLW9+LGg9CrL1S9JEyp A8isju5DgGJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY/vciAAKCRDB/BR4rcrs CVArCACf5Exs+Q2fpw9bhFprBhf8Jn0zdE1HAJWqKw9geHnrqn2c77H0nb4l6za7xknleFOdFjl vT1oJ/Hil7ZZHfjj0Q02CEsZqvCUoh/T4UAse77L1aYyUPrZ0RZsOyTquharTxDIKLoriggp8O7 oibgm8zSD2bY1eFXyPkExlGm+6FBBRW8p3Smjl0DhgJHra46+W71KaqBmYkG1IBl5lrINIPfwRv 3ktxNmDCAgv/OMRMRji9mRAtfbTNBB8fvk22YGZXKc7/Ja9bBtoyWYo0UPM2LwcfDAfOnqJXu0d 8S7iE11b92EW7g3eeBkHU339ye95YJ2KDZ7wmHd7p+WkiVWd
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Ryan,
+Hello,
 
-> --- a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-> @@ -49,6 +49,25 @@ properties:
-> =C2=A0=C2=A0=C2=A0=C2=A0 description:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 states that there is another master =
-active on this bus
-> =C2=A0
-> +=C2=A0 aspeed,timeout:
-> +=C2=A0=C2=A0=C2=A0 type: boolean
-> +=C2=A0=C2=A0=C2=A0 description: I2C bus timeout enable for master/slave =
-mode
-> +
-> +=C2=A0 aspeed,xfer-mode:
-> +=C2=A0=C2=A0=C2=A0 description: |
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 I2C bus transfer mode selection.
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - "byte": I2C bus byte transfer mode.
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - "buffered": I2C bus buffer register tra=
-nsfer mode.
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - "dma": I2C bus dma transfer mode (defau=
-lt)
-> +=C2=A0=C2=A0=C2=A0 items:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 enum: [byte, buffered, dma]
-> +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> +=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/definitions/non-unique-str=
-ing-array
+this is v2 of the series. I send it a bit earlier than I planned to do that
+initially because I failed to send v1 completely to the linux-i2c list.
 
-There are still unresolved questions about this xfer-mode property from
-previous submissions of this binding. We don't yet have a justification
-on why the mode configuration is needed in the device tree rather than
-something that is specified in a driver implementation.
+Changes since (implicit) v1:
+ - Added Acks for patches #5, #6 and #8
+ - Fixed kernel doc as pointed out by Luca Ceresoli (patch #7)
+ - Send all patches to linux-i2c mailing list
+ - Rebased to current Linus' tree.
+   This reduces the list of prerequisite patches to two.
 
-By now, I think we well understand what the modes are, and how a driver
-implementation might configure them, but none of that has (so far)
-provided sufficient rationale on why this belongs in the device tree.
+I updated
 
-The previous threads had a couple of pending discussions, following up on
-those here:
+	https://git.pengutronix.de/git/ukl/linux i2c-probe-new
 
-A) You mentioned in [1] that the DMA controller is shared between all i3c
-devices, does that have any consequence on which modes individual
-devices might want to choose?
+accordingly.
 
-B) You implied in [2] that the different transfer modes might be related
-to whether there are other masters present on the bus, but the logic
-behind that is not clear.
+Best regards
+Uwe
 
-C) In [3] you mentioned that there might be some DRAM savings by using a
-particular mode.
+Uwe Kleine-König (9):
+  misc: ad525x_dpot-i2c: Convert to i2c's .probe_new()
+  mtd: maps: pismo: Convert to i2c's .probe_new()
+  serial: sc16is7xx: Convert to i2c's .probe_new()
+  w1: ds2482: Convert to i2c's .probe_new()
+  media: i2c: ov5695: convert to i2c's .probe_new()
+  media: i2c: ov2685: convert to i2c's .probe_new()
+  i2c: Switch .probe() to not take an id parameter
+  i2c: mux: Convert all drivers to new .probe() callback
+  i2c: Convert drivers to new .probe() callback
 
-and, most importantly:
-
-D) unanswered from [4] and [5]: what are the hardware-specified reasons
-why a DT author would chose one mode over another?
-
-If you can write this out in some format like:
-
- - in hardware situation X, you should use DMA mode
- - in hardware situation Y, you should use byte mode
- - [...]
-
-that might help us to understand where this configuration belongs, or
-what a reasonable DT representation should look like, or even if
-existing DT schema can already provide the information required to
-decide.
-
-Cheers,
+ drivers/i2c/i2c-core-base.c         | 13 +++----------
+ drivers/i2c/i2c-slave-eeprom.c      |  2 +-
+ drivers/i2c/i2c-slave-testunit.c    |  2 +-
+ drivers/i2c/i2c-smbus.c             |  2 +-
+ drivers/i2c/muxes/i2c-mux-ltc4306.c |  2 +-
+ drivers/i2c/muxes/i2c-mux-pca9541.c |  2 +-
+ drivers/i2c/muxes/i2c-mux-pca954x.c |  2 +-
+ drivers/media/i2c/ov2685.c          |  5 ++---
+ drivers/media/i2c/ov5695.c          |  5 ++---
+ drivers/misc/ad525x_dpot-i2c.c      |  6 +++---
+ drivers/mtd/maps/pismo.c            |  5 ++---
+ drivers/tty/serial/sc16is7xx.c      |  6 +++---
+ drivers/w1/masters/ds2482.c         |  5 ++---
+ include/linux/i2c.h                 | 18 +++++++++++-------
+ 14 files changed, 34 insertions(+), 41 deletions(-)
 
 
-Jeremy
+base-commit: f3a2439f20d918930cc4ae8f76fe1c1afd26958f
+prerequisite-patch-id: 256857b4eee79540b271b8d4899b9ba0aa3c4c27
+prerequisite-patch-id: bb49c9c71311ac1f1056c562f20f26aa356c95a6
+-- 
+2.39.1
 
-[1]: https://lists.ozlabs.org/pipermail/linux-aspeed/2023-February/009876.h=
-tml
-[2]: https://lists.ozlabs.org/pipermail/linux-aspeed/2023-February/009892.h=
-tml
-[3]: https://lists.ozlabs.org/pipermail/linux-aspeed/2023-February/009880.h=
-tml
-[4]: https://lists.ozlabs.org/pipermail/linux-aspeed/2023-February/009871.h=
-tml
-[5]: https://lists.ozlabs.org/pipermail/linux-aspeed/2023-February/009884.h=
-tml
