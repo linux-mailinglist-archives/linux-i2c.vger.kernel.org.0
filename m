@@ -2,43 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210096A3FA8
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Feb 2023 11:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C76A46A3FAB
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Feb 2023 11:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjB0KrG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Feb 2023 05:47:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52712 "EHLO
+        id S229676AbjB0KsC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Feb 2023 05:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjB0KrF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Feb 2023 05:47:05 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2060e.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eab::60e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACC11E9F1
-        for <linux-i2c@vger.kernel.org>; Mon, 27 Feb 2023 02:47:04 -0800 (PST)
+        with ESMTP id S229660AbjB0KsC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Feb 2023 05:48:02 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2041.outbound.protection.outlook.com [40.107.244.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4257869B
+        for <linux-i2c@vger.kernel.org>; Mon, 27 Feb 2023 02:48:00 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e3USm9uI+fbE2bc09/uJXifY6C8KYN3rkL66BR+1YBIUCGJWgqY/CzjJmSI+VjzeRFuetQUyXqfK5xk3Vp1+NtRdxPrBLjPBIyj94E7Yl8nSomLqDqCGxDuu2mN8ChLnft11I+3+XvrceOlqlSgLFLYqJohoAXQT6p9zZFc/OhyE4y11LOh19D6mbQaTGisn4NlurcCsFGWMsDQwbzCTU7TyLMGwB1N2BoXYK17DJjUWvzgZ/ZRCLlI77Mvb5KhU9ENiKSWE8tO3jtKt1M5XCwIHx4S7N+DMKcz1OZCxfzK07G+si4pAW4hGPok8jC09e/60HHDSwiUMFer6LjR7Jg==
+ b=P98auleKp2+ymnePVaaEQZnWEMvFZk9mvUxczXEofHZwQpFbDHk1WpL1N+PhtGdsMUWTqWEVjhCH5cjnVwAtvzuDxWBnXZjmhQI4oOqTlEYfOZ73Dsxyu0HOVK0GpjcBgPDmtpnLFkf3+NDsuw6WwIsdKZquMaj4ZSxfUb4qnFC3d4v8w+tfKdGaMgkYHQh3jLMpDyrNm+1dG2K8YW39C7m3bbX7U5j5rEfiKmEOU7H3cduwWWWqHISunKFYm2j52GyoGrZqAGV/SQu3pPHrJh+HnerZc3yMSM0m+xNDke2nPgIA9JDmhePQuAQUH6V2QHn8sljGXN7CndKlxMdt6w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iRhMwqXEj1byM5FEavQgCJYi4dMr01p38qJb7CKznuo=;
- b=k9jrOOIUuke0EO2YPqeTic/lZTKpC7fbgLQ3HkLtpH/1ogiZoH7n/tsdfgnj9OT9fmLSfH2jm8HqwHgeLJvk/T7DOssK9Z1cAx36uycToyIdMxV6jJql23eRKeuMMUgK54mtUGwP0LmjFUqwODECbQVufmdPgfq4Zph+dBkVm0Ttm/XaLDn3k73egdp7iOyDeBMPRPOi+b5NRIgd7QAXLzYae8RAPRvGNumLCWnPl8T9ZWP/eZ46mlOxb0a1YoA1vQp0NaRKpR995Rv900SCoTx8kPSssHKWbxaEN+JZ7A3NxU4YEwhBlKZZRL8S0x3IMBKMwqAaqYVIH6sWJ/i4Aw==
+ bh=HyiWA8TDiuM/H11oRFXQWcE4bqIkpysTSO6sIgrhGVg=;
+ b=UvpEEV6ha8gjUUX2WcRY8md4NmK24D6Y6fogQ9TI1deb0Q6tPZjUQE4FlSQcVB1BqLm8GOd8ePhM28UlrtMQRr/a5HETHrgjiOr2f1YuRXOBTKGgKFxhX1HfM9/31RvMJV8wwuXhbpyV3dLAxurmAC5SWigWvBYIaf51QwQ0DQqx4M9gw8esfQbfCy5Ah1nM+BK/Jbi6PJ3keT8djBk0QYHWaHgioXLHrQoBtaU7HsgkJ8PyAEio/13qojqHGVSG/2rTLyUkbq7Jv4ULT16GCLGkjSqIyLhhwIyC2BLfWzuylv6F+ArYHncl9e8y+DUWJMMxP8ZQ+fOWHGCB566IuQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=metafoo.de smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iRhMwqXEj1byM5FEavQgCJYi4dMr01p38qJb7CKznuo=;
- b=A1YggEg3Z/XwNjMOu9MMHJec5Kd9OIMYa2nRW7iT4jlIei6aJXz9vgi2kRsq+WafMrfp89YkNXgYFoCiKx275nOjD8Imer3hmQ/GTFxiVB+8BZQQudX0SI/eX2gyDCLpS/R8J/+qU0dXsljCRlDo+BPX8bL8nbZtcysSZs4eAGU=
-Received: from CY5PR10CA0021.namprd10.prod.outlook.com (2603:10b6:930:1c::25)
- by IA0PR12MB8695.namprd12.prod.outlook.com (2603:10b6:208:485::8) with
+ bh=HyiWA8TDiuM/H11oRFXQWcE4bqIkpysTSO6sIgrhGVg=;
+ b=u930uNeQUvgHDEOMtRWnq1QxvInGogaV7Z8eC0fOT0ce5DeqX7gSUnDdIJXsZ4Y1GUvtHZfJsw6t3bLQk6y8NatdGATomPXGzEW/Zt16v1Qs7p0llwIPcT9yJFNfnus7IIkhAetdrVhx3ZO498HidFmZ2bTB0LehQwEW0BKCg+k=
+Received: from CY8PR11CA0043.namprd11.prod.outlook.com (2603:10b6:930:4a::18)
+ by CY8PR12MB7754.namprd12.prod.outlook.com (2603:10b6:930:86::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.26; Mon, 27 Feb
- 2023 10:47:01 +0000
-Received: from CY4PEPF0000C980.namprd02.prod.outlook.com
- (2603:10b6:930:1c:cafe::58) by CY5PR10CA0021.outlook.office365.com
- (2603:10b6:930:1c::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29; Mon, 27 Feb
+ 2023 10:47:58 +0000
+Received: from CY4PEPF0000C982.namprd02.prod.outlook.com
+ (2603:10b6:930:4a:cafe::c3) by CY8PR11CA0043.outlook.office365.com
+ (2603:10b6:930:4a::18) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29 via Frontend
- Transport; Mon, 27 Feb 2023 10:47:01 +0000
+ Transport; Mon, 27 Feb 2023 10:47:58 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -46,55 +46,58 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000C980.mail.protection.outlook.com (10.167.241.200) with Microsoft
+ CY4PEPF0000C982.mail.protection.outlook.com (10.167.241.196) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6156.12 via Frontend Transport; Mon, 27 Feb 2023 10:47:00 +0000
+ 15.20.6156.12 via Frontend Transport; Mon, 27 Feb 2023 10:47:58 +0000
 Received: from [10.254.241.51] (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 27 Feb
- 2023 04:46:58 -0600
-Message-ID: <81a4fd58-ea26-2460-267e-32a91eb37d90@amd.com>
-Date:   Mon, 27 Feb 2023 11:46:55 +0100
+ 2023 04:47:55 -0600
+Message-ID: <59b09614-a4c7-837c-61fd-22db0b13fa67@amd.com>
+Date:   Mon, 27 Feb 2023 11:47:53 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 4/5] i2c: cadence: Remove always false ternary operator
+Subject: Re: [PATCH 5/5] i2c: cadence: Remove unnecessary register reads
 Content-Language: en-US
 To:     Lars-Peter Clausen <lars@metafoo.de>, Wolfram Sang <wsa@kernel.org>
 CC:     Michal Simek <michal.simek@xilinx.com>,
         Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
         <linux-i2c@vger.kernel.org>
 References: <20230107211814.1179438-1-lars@metafoo.de>
- <20230107211814.1179438-5-lars@metafoo.de>
+ <20230107211814.1179438-6-lars@metafoo.de>
+ <1086bd44-fc57-8a68-a418-1154828729b2@amd.com>
+ <7fc8ed1d-c28d-1c0b-bce7-de75872f4ea2@metafoo.de>
 From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <20230107211814.1179438-5-lars@metafoo.de>
+In-Reply-To: <7fc8ed1d-c28d-1c0b-bce7-de75872f4ea2@metafoo.de>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Originating-IP: [10.180.168.240]
 X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000C980:EE_|IA0PR12MB8695:EE_
-X-MS-Office365-Filtering-Correlation-Id: 083dcbe8-bbf4-4ad4-671d-08db18aff4d0
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000C982:EE_|CY8PR12MB7754:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4fc85e2d-780b-4dfd-6261-08db18b0171b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TVqzxD028M6XImuvFXbVPVyRkiqokJSLO06y832oz8bRe8lvc/0rKwyvvEsQmUfsKwrVtJ4OcyrVpY+I64uurvB0bTUyZRQpenM6N2tXgzHRpA575B5QMrDt6+5WdlBacIB0vGhUcNiqIz+aexpbxljFEgEXGNTeNKLkmJiylRBkF+CPPBgrxWGU3/9lkcBQW0+u8Bi1k12C+i7m4V0z37Lc3vTw9EIoXVxgL8+J17NpKOvaDyI8CNkCkoV8tDz538nOMZVoC80dH3m+VtgVD3BHksG98qEc33tienWePykr53XTRt/Uy5U+hJaa5cTF4ag/GbiplvCnOvD26UdyrGf9Syf0f8Ak2hOlGGzmOuvhXUafp4gvca+KZ3WKGSpyroUvHE5slIIc0N1xwH5yP7Qc/t8zaZVKsyKuqSxrmN9ANykU0bto3k1XEnOgLaP54jX9koNB1OgsBXW8aF/HP/dBtXVnlEYd4LbBKr6GNWO+0pTkxrmEsPCR30mLANVTyhlZP1K5JxVAcJT9Wlt6at34B2I7wrB8wsAvfXHpHJcubGCMkj0B5HrRadD05aTvVw7dKZ6t9w2iUXEN9Igntt3yAnCDG0Kfpn/GqdSiz3MUEMgZapQwor4S8qYvO+K4n2dsfR3w3EMpekXbrivqnDOdlSRmYvsOPntTxTuA7oAYU0zignmVWVlUyzGBRMDSgjJ7lqOyoKE7yplIimSj/wft5UuOqpwi8BADmOTBQvM3qZU0J9vciOOigQNHiRNvti0+i5WhAKfSH4hVatGihA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(136003)(396003)(346002)(451199018)(40470700004)(46966006)(36840700001)(40460700003)(16526019)(186003)(336012)(82740400003)(2906002)(81166007)(356005)(83380400001)(8676002)(70206006)(70586007)(426003)(4326008)(8936002)(44832011)(5660300002)(41300700001)(36860700001)(40480700001)(26005)(47076005)(478600001)(53546011)(2616005)(6666004)(54906003)(16576012)(36756003)(110136005)(86362001)(82310400005)(31696002)(316002)(31686004)(43740500002)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: y7LXBad7BSoowlgAv5FWI5yL5JLaGPEVckFLRfgLnTV0upkMGf72y14ab+Qaa0LFBDIMpgZ5WhmwGCTcc8Yx7Sbi99QTzTLMmrq0WgFlEXB8ntUUf0GzWsyN97PQ5C85qiTuhbnM5bdpimz1zfSnB5LaraX5IzYTMEpiI0xNSH9jR+0F7zyhs6Xzl62huOeqYni1tscDoO9mQDoB/BSPOFiS0jCTQ/STKu2zc0kdY65FHcLxHUEaJtKd/uSXEx0wC0g8ST+n/RFBXnzU/T0l55a1T4pdgyC4ZjYTRLhuRnwx1eAoL0ZKi63EbeXsMmbhOS8qDFMGV8I7a2mc0gmsXTQhG3Rr/kgUTkfOeZDJf6c0oQNXQwZB/Cn/Tmy8ON76L0PsCUS93gcxxTubYarwrnwydXizmbyC6aDbykTZXRah255edvM8mRuQZi2vOb+TZ11Xgzfwo7JdgAuFLDOHmG38Y0XROuwtsomBoGEoGUt1VafkjXJrDPJge7slcuZXfYFqTRmBjZlCmxq4cNB0kvWZzDjIy8cvgQg57ns/bKxDXwKuLOoMcHuERWxB5ldppCMzWbvDfScoqAVFAXalyZGV2lQLuJLyffYQ+ZTqsYHQajkt7ZfxMbIXbOFnMvZbasMVHDF717uS/PtJvlq5l4BGK0xg3d963EmuyU7BL5QP2i7bkrq7ayAfa0cFXx9qEkNfE87sH23PxPwSlUc3dRpupc0c2bjZI3ZwD9zlKLlwfIQxTEHxLcG9Rv7/aDm3H9IyMOd4GC0nCGuzAU879g==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(136003)(396003)(39860400002)(451199018)(40470700004)(46966006)(36840700001)(110136005)(81166007)(54906003)(8936002)(16576012)(316002)(82740400003)(336012)(16526019)(36756003)(8676002)(186003)(26005)(53546011)(478600001)(40460700003)(356005)(44832011)(86362001)(2906002)(31696002)(40480700001)(2616005)(5660300002)(82310400005)(70206006)(70586007)(4326008)(83380400001)(31686004)(426003)(41300700001)(36860700001)(47076005)(36900700001)(43740500002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2023 10:47:00.7605
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2023 10:47:58.2945
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 083dcbe8-bbf4-4ad4-671d-08db18aff4d0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4fc85e2d-780b-4dfd-6261-08db18b0171b
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C980.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C982.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8695
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7754
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -103,46 +106,64 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 
 
-On 1/7/23 22:18, Lars-Peter Clausen wrote:
-> CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
-> 
-> 
-> When selecting the clock dividers the Cadence I2C driver skips settings
-> where the resulting I2C bus frequency is larger than the requested
-> frequency.
-> 
-> If the resulting frequency is lower it will compute the error to actual
-> frequency. When calculating the difference it also handles the case where
-> the resulting frequency is larger.
-> 
-> Since the resulting frequency is always smaller or equal the computation of
-> the error can be simplified by only considering this case.
-> 
-> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-> ---
->   drivers/i2c/busses/i2c-cadence.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-> index b5d22e7282c2..bec50bfe7aad 100644
-> --- a/drivers/i2c/busses/i2c-cadence.c
-> +++ b/drivers/i2c/busses/i2c-cadence.c
-> @@ -1030,8 +1030,7 @@ static int cdns_i2c_calc_divs(unsigned long *f, unsigned long input_clk,
->                  if (actual_fscl > fscl)
->                          continue;
-> 
-> -               current_error = ((actual_fscl > fscl) ? (actual_fscl - fscl) :
-> -                                                       (fscl - actual_fscl));
-> +               current_error = fscl - actual_fscl;
-> 
->                  if (last_error > current_error) {
->                          calc_div_a = div_a;
-> --
-> 2.30.2
-> 
+On 1/16/23 18:14, Lars-Peter Clausen wrote:
+> On 1/16/23 06:58, Michal Simek wrote:
+>>
+>>
+>> On 1/7/23 22:18, Lars-Peter Clausen wrote:
+>>>
+>>> In the `cdns_i2c_mrecv()` function the CTRL register of the Cadence I2C
+>>> controller is written and read back multiple times. The register value does
+>>> not change on its own. So it is possible to remember the just written value
+>>> instead of reading it back from the hardware.
+>>>
+>>> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+>>> ---
+>>>   drivers/i2c/busses/i2c-cadence.c | 4 ++--
+>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+>>> index bec50bfe7aad..93c6d0822468 100644
+>>> --- a/drivers/i2c/busses/i2c-cadence.c
+>>> +++ b/drivers/i2c/busses/i2c-cadence.c
+>>> @@ -613,7 +613,7 @@ static void cdns_i2c_mrecv(struct cdns_i2c *id)
+>>>
+>>>          /* Determine hold_clear based on number of bytes to receive and hold 
+>>> flag */
+>>>          if (!id->bus_hold_flag && id->recv_count <= CDNS_I2C_FIFO_DEPTH) {
+>>> -               if (cdns_i2c_readreg(CDNS_I2C_CR_OFFSET) & CDNS_I2C_CR_HOLD) {
+>>> +               if (ctrl_reg & CDNS_I2C_CR_HOLD) {
+>>>                          hold_clear = true;
+>>>                          if (id->quirks & CDNS_I2C_BROKEN_HOLD_BIT)
+>>>                                  irq_save = true;
+>>> @@ -624,7 +624,7 @@ static void cdns_i2c_mrecv(struct cdns_i2c *id)
+>>>          addr &= CDNS_I2C_ADDR_MASK;
+>>>
+>>>          if (hold_clear) {
+>>> -               ctrl_reg = cdns_i2c_readreg(CDNS_I2C_CR_OFFSET) & 
+>>> ~CDNS_I2C_CR_HOLD;
+>>> +               ctrl_reg &= ~CDNS_I2C_CR_HOLD;
+>>>                  /*
+>>>                   * In case of Xilinx Zynq SOC, clear the HOLD bit before 
+>>> transfer size
+>>>                   * register reaches '0'. This is an IP bug which causes 
+>>> transfer size
+>>> -- 
+>>> 2.30.2
+>>>
+>>
+>> Logically this is fine but that additional read on CR register ensures that IP 
+>> receive previous writes. The code itself is related to bug on Zynq SoC and 
+>> that two additional readbacks can actually do something.
+>>
+>> I think this should be properly tested on zynq to ensure that it doesn't break 
+>> anything.
+>>
+>> Shubhrajyoti: Can you please make sure that it is tested on Zynq?
+> Maybe it is better to drop the patch then if it is used to enforce ordering in 
+> the hardware. But I guess we should add a comment to explain this.
 
-Mani has tested it that's why
-Acked-by: Michal Simek <michal.simek@amd.com>
+Mani has tested it and he can't see any issue that's why I am fine both ways.
 
 Thanks,
 Michal
