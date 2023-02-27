@@ -2,175 +2,558 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9DB6A461A
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Feb 2023 16:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB57B6A4736
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Feb 2023 17:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjB0Pai (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Feb 2023 10:30:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
+        id S230005AbjB0QmO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Feb 2023 11:42:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjB0Pae (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Feb 2023 10:30:34 -0500
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC6A2311B;
-        Mon, 27 Feb 2023 07:30:32 -0800 (PST)
-Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31RF5PqE014106;
-        Mon, 27 Feb 2023 15:30:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=pps0720;
- bh=QmXtMT0pl+gbgcimoPq/D85HV0a9v1loaI8mu/urdLA=;
- b=Nie2Oxwtc2nhwGPZqf4Aj69YWRHQCdXU30q2viMRyq8I00F0qifJNQgwpe+UpLAR+mHN
- h5a9XpwNduJ1Hnsw1TwcK3PwevOKgEs13pduZJYxX/GVDFmFU1T1ud1LEqDDOqxt/8+7
- 7Du8mQpB6dDO3k8ySD2cV83+hwtcBhoWxxM7/7cRNtDLsRgyJH4AWfmLaGRtL6dbeCUQ
- IBuuqu9i47jyfCstePR7chJPP0OttX2LfcBflRUL0iUkThNXNTWYPfNajS5/CQvU35CP
- PW7NK++kzOXWH2jFhwCHCDRnEyc+C2unuYc9IjSptgDbyCp0cTQkzNHYnG0dOO9cfF12 cw== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3p0xuugbat-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 15:30:16 +0000
-Received: from p1wg14924.americas.hpqcorp.net (unknown [10.119.18.113])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id DCBFF80035C;
-        Mon, 27 Feb 2023 15:30:14 +0000 (UTC)
-Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
- p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 27 Feb 2023 03:30:09 -1200
-Received: from p1wg14924.americas.hpqcorp.net (10.119.18.113) by
- p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 27 Feb 2023 03:30:09 -1200
-Received: from p1wg14919.americas.hpqcorp.net (16.230.19.122) by
- p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36
- via Frontend Transport; Mon, 27 Feb 2023 03:30:09 -1200
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.122) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 27 Feb 2023 03:30:08 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TnZ/a9N21AHnKItR9FTmlf8COFUK9w+XlSiVWViAW1OWTp7YqUpWBjDLkO/Jg9epoS/CQ985tKILZsABf9sXX9YVjYWrMvzM8XuSR//2XulnD+yE0wJABepDrNrhcU0479cnKvyuO4EO00KjvxRLgBaA+drsnQBpJ35yTiN0iLda2NauRJb+BPdcnjUziGIIQsCp0gqF07UqnTeVkSAAXD6WTi7CgflvnX40CgwyR1AzqzowY7Z+iOgcxKLEJdebYwt9EH4+qRmK9tbGDORNwEqhWNZsDowOZj1UL/C6Kc3xAPsBQeNtba+oQksazQ5L/TYtiriTuIkGd1E/eYHEPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QmXtMT0pl+gbgcimoPq/D85HV0a9v1loaI8mu/urdLA=;
- b=UyPvRlwAVDIMdmcEeeGmQ24a65Da13NAwkxLtO3QuN2dyB+HyERJqWMmQKGvtKCDcv19fv5AMbIs9mO0t3fvD7C0X7sepjVeqmQkUOaKvgYlaCPd3lf4kpg1sQyiQ176CXuEHXJemUbjsran6cTi/6zTjpHph4rev9AjExXO8sD/GU5jaghvDuiiEhbxkofk93MPD0/ckuQLbVRTU1lxSakloLjuOWTuATM/I+IcGRv59bEcgwtZKTQ5P06IJWIEw/izE0re6AWHG6BAspdJW2TfT9ADcoISAOYffhLXYXqz/qxInrI1iE9HcgVAASli/FiRPf20Df1fStdvasM82Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::10) by
- SJ0PR84MB1386.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:430::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6134.28; Mon, 27 Feb 2023 15:30:07 +0000
-Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::ee74:bb9a:75ba:71d3]) by DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::ee74:bb9a:75ba:71d3%7]) with mapi id 15.20.6134.029; Mon, 27 Feb 2023
- 15:30:07 +0000
-From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
-To:     Dan Carpenter <error27@gmail.com>
-CC:     Joel Stanley <joel@jms.id.au>, Wolfram Sang <wsa@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
-Subject: Re: [PATCH] i2c: gxp: fix an error code in probe
-Thread-Topic: [PATCH] i2c: gxp: fix an error code in probe
-Thread-Index: AQHZSpM8niLXQca85UaxcksNQTSQv67ihwAA
-Date:   Mon, 27 Feb 2023 15:30:07 +0000
-Message-ID: <58B3E913-D162-4672-90C2-66462F0468BD@hpe.com>
-References: <Y/yAqRlSTN5VygUy@kili>
-In-Reply-To: <Y/yAqRlSTN5VygUy@kili>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Microsoft-MacOutlook/16.70.23021201
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR84MB1927:EE_|SJ0PR84MB1386:EE_
-x-ms-office365-filtering-correlation-id: 375685ed-41cb-4ec3-ae9f-08db18d78191
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EVCVBrXFhf1R1NS0Ui2985OZQMW7Wa4U/1cgtfnjBupynSQ0VLdBKdO0mSyK8jaVHm/LnTM+L4JXG/phO73BNQgn41yYy0hphcGQU5KZsgKKiViyz6ngnlOvSnyoD5MAS4FoiHwd5IoYs43HSGk/e1xi8Ui5uoiTgSRf3K/mDjhk0IK6ptkskx8qD4eCVQTr+D41AoFig1W9bGHyop6xTXnw4Xhyrfw6L22ojOH42CSSwP3tUifdsELINdbTPY4s3kxEHpyvR2RNJRpgdfYEoT+sZjZAptB5TS88LpVrFvOjsm30sk5JK27RFnAZqnhOCbKGsfe6QKUnSFm3fDepmbyQBMYS/8cMBgbU066hSL+U85gFuPWu19fHouy+4v6S7A0PvON8ETYyQVScM2lJq1NBZ5UJPZrtnk+u+cXyOOjYt8KANoRHJHaRGYBL6IRDKEERbOQtxOM+8v3IDy4pG0gh30vCL+MyDSYLTVUqyxL0JVrpZUOitR3JU/pu/4pF+8GpNqxcqOzMmDSdVU79oA4hW+IR5DHknu2zihBpy4YG9C2AsgE51n3j1i2OHe9CXhL5pIMB8XW05UIB2TvrKs2KvVlFcJBs3P6RZrTwgW5GNfA4fqvdXqadRjq8SFrbRvDJG4f7ohW2bGiJiQdsgkPo2fpf6+aUumN6QLVEqNwTbEfn4EOeQad46jGw76SK20b8RwmK37acw3cu0s1XkS7nAagt04+rgvoCSlijp98=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(136003)(39860400002)(396003)(366004)(376002)(346002)(451199018)(558084003)(33656002)(54906003)(36756003)(316002)(6486002)(478600001)(5660300002)(71200400001)(2906002)(8936002)(91956017)(64756008)(66476007)(76116006)(66946007)(66446008)(66556008)(6916009)(8676002)(4326008)(41300700001)(122000001)(82960400001)(86362001)(186003)(2616005)(6506007)(6512007)(38070700005)(38100700002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UGdKWUZYbWN3cjIvckJuNEx2cUhsMWd3WlRyMjl3dzhvUDFyQzZ5TVd3Qlhx?=
- =?utf-8?B?a0dEWFhubHVGWjdJcTNKVmtmSnFwTEJCclBmSnY1ZDVjOWpTaWNBaHlJWEQ2?=
- =?utf-8?B?K0JXZHBiTGt1d1VCcFRBUDJ6L1VQdHVVU0VDcU9mcHQ5NkZ0OVE0WHN4QlE3?=
- =?utf-8?B?VnRrWS9JeEN2dmpWa2tJcHFNOVVMZXdsY2FnTnBNcWh6dnd4UzdFY05nMmto?=
- =?utf-8?B?SWo5MHo3c0UrWXlhZzlJUjF3cU1kcnFoMEd4VS9mQzAyL0xka1ZKeFRnTGtr?=
- =?utf-8?B?dHByelFHcWhLUGpGY1ArbnRqYlBUTUo0TkZNTkxZaFVjRDJzUkM3eEp0d1Iw?=
- =?utf-8?B?WUJLZWRFZE04RGVoV0J5RmxtYUhiSGpaaTROVDlrMXAvY3RUeHdkcE5TM3Fq?=
- =?utf-8?B?U0dXUExsbTJFNElTVjdQdVBuZ3dJVGNwUVhtZlBCMGw0bkNOTTlKbjhyUXZP?=
- =?utf-8?B?T1BTSyttMXJJUWpJUG5HQk5VSUZMUjYzQllTWHBhTy9DZEtXNjgwenpFU3Nj?=
- =?utf-8?B?K0c4S0hPbEtuMDlqRUk2STZhOWs5Yy9oYmxnZXl0ci9ZeFpzSTVaT2ZYK1Er?=
- =?utf-8?B?Y1NQMmphTnZTQzMyc2djRXVaTkkrM0VPOW5yZlN1TXUvUVZzMUVLQW4vUGFW?=
- =?utf-8?B?bEpYb1BrOWNHZ0MvOXAyZlFRQmFvRDZhZk1ERTRzeHZndWxoTVBjU21CcFdS?=
- =?utf-8?B?WGJVNzV3RnNDMG44Y3paN20wdlpCL05JRHMyU0tBR1dDZlNsdzYvVWZjU0Q1?=
- =?utf-8?B?OEczVWdRNWlUaWpLempjcGVWd3Z0cklYTElud21JaVdKS200OUZERkF4NGVo?=
- =?utf-8?B?OWlCU2NJU3NmZWROTXhhRTRTNVhidFMvejhEcVUrUllrVzA4bWxhMUxGNXZ0?=
- =?utf-8?B?RmtZWUNBblhXaStnc2dqTUx5Mzk2Vm1SY1pSa1VJZndnSmcrQ3FqTDU5NW01?=
- =?utf-8?B?aWdzenJaZWdIMndpenBGRStuQmkySWtEVXp4cXNEVjdQcmxLNnNFTG56SURB?=
- =?utf-8?B?a3JuOGNNUnpveTdWZkd0NUp1VjB1Rk9leHNLY1RDTytTSWxRNUg1VHJjeTdr?=
- =?utf-8?B?V2E2MkpoWTFaWXNybkNPN1gzeU4xcG1WTldhQldLQmJMaHdnQmY4aVpreXNa?=
- =?utf-8?B?azl4dFhIVlc4Y0VPbzJLN1AyTzBFelJrNDByYjM0T3VzcmE4WXlRMHBBOW53?=
- =?utf-8?B?UTRDdmpnbkRHMmVCTGxicjJzZ2JielFlZ0J4cUZ1Ky9Sc0tlVVNuVHVURUxp?=
- =?utf-8?B?cStQSVVKV285dFVDeEZMK1ZlWllOaGFOZnVLdkxFUFh5WkJsYnp3bDRwckQ2?=
- =?utf-8?B?QkFLelZXWEFiREdieExqSFJPNmRMZ3pmY0MvajFSdlFXenU1ZU5zcERpcWNP?=
- =?utf-8?B?b1pQZkxoNlNxRGVnVERiZlk5QVg4c3FwMitIckhmbFUvMHVKUHhiRjE3UFRK?=
- =?utf-8?B?dzlobzRzVHRNQ2lZa3lRdGZ1OWJQRVhhL1BxTE4wdTVWN0JrNXlkWFhvV1g2?=
- =?utf-8?B?SUphRCtKR254aWNHUnhIZUtKbEUyTzc4QlV2ZkJQOXlzZW1ORVN2bElBdFNu?=
- =?utf-8?B?N0JqRTJMUkJEUG1ldWtweVd1NDREQXZDZUdQZzRRWlo2bjlLNFZMZHR4TVFX?=
- =?utf-8?B?eS9XWEFmWmR6TmRaOTc1ejRZZWJIUXZOT0djNXhPdy9hMTNWM0hIc1lpU2xL?=
- =?utf-8?B?cjgwamJwSE03UUVoTk1LbThTMEZNeXdXeXV2b0RQSjl3VFhxWFFQaXNWU1l1?=
- =?utf-8?B?L3JEV1BENWdWSERhbzNhZTMxT1dEejMyMEJGUDAvUklWNERUTC91R3lnQzlk?=
- =?utf-8?B?M3Rja3Q3VlhpeEpGenNCTWNxUzNCYzQ5OHFxLzVzSTRRcTFXZGR2V3gzbHA4?=
- =?utf-8?B?UWE0VUMvU0d4TTdaRzZoVUJwc1J0ZmcvMFpoc0pTNjlFZFB3b1EybG14NHFs?=
- =?utf-8?B?dXR2MEJjRnVsRWlkVUQvaE0vZXlNdmhNUjdneDY1TDVQeVFQcGUxOUJKanNL?=
- =?utf-8?B?d2czTXhGZ3ZKaytQdWM4VngxU21NRjJWOUdPR1crZ0N0UTk0UGZZSzlQTmpY?=
- =?utf-8?B?ci9NZ3V4Nkw5NXJDQzRZSURhU2k3UmQrYm85czNhYWVxS1QwNXNQMnJFUFpj?=
- =?utf-8?B?c04yS2ZvUDZBNDVvSWxnbDNTVzhzQWNiZFM0VXFkbW9lNEM0R2M2WHAwYXNV?=
- =?utf-8?B?aHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <34124F8D969A0344ACCAC4E78E9FF69B@NAMPRD84.PROD.OUTLOOK.COM>
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 375685ed-41cb-4ec3-ae9f-08db18d78191
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Feb 2023 15:30:07.3275
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LA42epotivc35uRmzoAMd8egm6ZqVH+pTweAun61yWIgr+a/nT//ps16mlmv5fSHLVKUbBa30V6CJhmm+Rllug==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1386
-X-OriginatorOrg: hpe.com
-X-Proofpoint-ORIG-GUID: y-GxqDqSX3vm7JmTSMMV0evNXLECGe38
-X-Proofpoint-GUID: y-GxqDqSX3vm7JmTSMMV0evNXLECGe38
-Content-Transfer-Encoding: base64
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S230078AbjB0QmM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Feb 2023 11:42:12 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200DA233EC
+        for <linux-i2c@vger.kernel.org>; Mon, 27 Feb 2023 08:42:08 -0800 (PST)
+Received: from pendragon.ideasonboard.com (85-76-46-30-nat.elisa-mobile.fi [85.76.46.30])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 23590B6C;
+        Mon, 27 Feb 2023 17:42:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1677516127;
+        bh=n48DgGXQYorzW2ovKzjHApMp4DHahSq9nzv5Fv6z8Hk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D9C7EuMHYkBDbzTo3Y0ozN54m+BQ9WvY2szfg7O5M4jCafXXA7DwizBCKDFJRHwy3
+         GWtE3hwHv9ByRxqV3HkqQ3lZYWI6iRAMPizrYAzY8bCzR8AIEDKN+QUW48JOkUvWF6
+         gBQdCzIbiJn72SC5WxOpG+r+pYrtwvVFnUnL+EBk=
+Date:   Mon, 27 Feb 2023 18:42:05 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     RRademacher@heine.com
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: AW: #Extern_Re: AW: #Extern_Re: question about devicetree entry
+ pca954x
+Message-ID: <Y/zdXVp2pkl6wa3y@pendragon.ideasonboard.com>
+References: <5ced6dab439e4aeda60632de47bd5243@heine.com>
+ <25aadbcbf9d94211a585768efd666311@heine.com>
+ <030eab78ecd24ec182936de7ec7cecd5@heine.com>
+ <2c0c35184a8249cd8e0ceef0a6e80ce0@heine.com>
 MIME-Version: 1.0
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-27_10,2023-02-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- impostorscore=0 suspectscore=0 priorityscore=1501 lowpriorityscore=0
- clxscore=1011 mlxscore=0 spamscore=0 adultscore=0 bulkscore=0
- mlxlogscore=445 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302270117
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2c0c35184a8249cd8e0ceef0a6e80ce0@heine.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-PiBUaGlzIGlzIHBhc3NpbmcgSVNfRVJSKCkgaW5zdGVhZCBvZiBQVFJfRVJSKCkgc28gaW5zdGVh
-ZCBvZiBhbiBlcnJvcg0KPiBjb2RlIGl0IHByaW50cyBhbmQgcmV0dXJucyB0aGUgbnVtYmVyIDEu
-DQoNCg0KPiBGaXhlczogNGE1NWVkNmY4OWY1ICgiaTJjOiBBZGQgR1hQIFNvQyBJMkMgQ29udHJv
-bGxlciIpDQo+IFNpZ25lZC1vZmYtYnk6IERhbiBDYXJwZW50ZXIgPGVycm9yMjdAZ21haWwuY29t
-IDxtYWlsdG86ZXJyb3IyN0BnbWFpbC5jb20+Pg0KDQpMb29rcyBnb29kIHRvIG1lLg0KDQpSZXZp
-ZXdlZC1ieTogTmljayBIYXdraW5zIDxuaWNrLmhhd2tpbnNAaHBlLmNvbT4NCg0KDQoNCg==
+Hello,
+
+Sorry for the late response, I have been fairly busy (and travelling)
+lately.
+
+I'm afraid I can't help you interpret the logs. The Linux kernel IRQ
+handling infrastructure isn't something I regularly deal with, I would
+thus need to study the code in details, and likely reproduce the
+problem on your hardware, in order to debug it.
+
+If someone with fresher knowledge on this topic is reading this e-mail
+thread they may be able to provide help, but I'm afraid I can't do more
+in my spare time.
+
+On Sat, Feb 25, 2023 at 03:06:28PM +0000, RRademacher@heine.com wrote:
+> I accidentally included an incorrect comment in the previous email.
+> (at the line, beginning with [  68.300127] [DBGMSG] irq_find_mapping
+> :-> using domain @0000000059dfe323
+> 
+> The comment in the line is wrong, because the domain address
+> originates from the mapping of the hwirq at pca954x multiplexed
+> inputs.
+> 
+> Regards
+> Ralf
+> ________________________________________
+> Von: Rademacher Ralf
+> Gesendet: Samstag, 25. Februar 2023 15:45:24
+> An: Laurent Pinchart
+> Cc: linux-i2c@vger.kernel.org
+> Betreff: AW: #Extern_Re: AW: #Extern_Re: question about devicetree entry pca954x
+> 
+> Dear Mr. Pinchart,
+> 
+> I have now generated more debug output in the hope that this will help to further narrow down the problem. See attached Logs.
+> The last lines of DBGMSGs are commented "<<---- comment....."
+> 
+> Thanks in advance.
+> 
+> Regards,
+> Ralf Rademacher
+> 
+> ---------------------------LOG EXCERPT DOWN HERE--------------------------------
+> 
+> I2C Bus
+> 
+> [    5.130661] [DBGMSG] request_threaded_irq :action->handler: 0x10DBA3F8
+> [    5.130664] [DBGMSG] request_threaded_irq :action->thread_fn: 0x0
+> [    5.137199] [DBGMSG] request_threaded_irq :action->flags: 0x4080
+> [    5.143311] [DBGMSG] request_threaded_irq :action->name: 30a50000.i2c
+> [    5.149328] [DBGMSG] request_threaded_irq :action->dev_id: 0x67AB2080
+> [    5.155803] [DBGMSG] request_threaded_irq :leaving fxn the normal way
+> 
+> PCA9544A
+> 
+> [    5.169785] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq] is returned
+> [    5.169788] [DBGMSG] irq_find_mapping :hwirq: 0x6
+> [    5.177110] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq]: 0x63
+> [    5.181825] [DBGMSG] irq_find_mapping :-> using domain @00000000d8881a92
+> [    5.195331] [DBGMSG] pca954x_probe :entering pca954x_probe
+> [    5.201139] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq] is returned
+> [    5.201141] [DBGMSG] irq_find_mapping :hwirq: 0x0
+> [    5.208461] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq]: 0x0
+> [    5.213171] [DBGMSG] irq_find_mapping :-> using domain @0000000059dfe323
+> [    5.226625] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq] is returned
+> [    5.226629] [DBGMSG] irq_find_mapping :hwirq: 0x1
+> [    5.233945] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq]: 0x0
+> [    5.238657] [DBGMSG] irq_find_mapping :-> using domain @0000000059dfe323
+> [    5.253205] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq] is returned
+> [    5.253214] [DBGMSG] irq_find_mapping :hwirq: 0x2
+> [    5.260621] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq]: 0x0
+> [    5.265360] [DBGMSG] irq_find_mapping :-> using domain @0000000059dfe323
+> [    5.278843] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq] is returned
+> [    5.278845] [DBGMSG] irq_find_mapping :hwirq: 0x3
+> [    5.286176] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq]: 0x0
+> [    5.290904] [DBGMSG] irq_find_mapping :-> using domain @0000000059dfe323
+> 
+> APDS9960 (Sensor 1)
+> 
+> [    5.308440] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq] is returned
+> [    5.308442] [DBGMSG] irq_find_mapping :hwirq: 0x0
+> [    5.315776] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq]: 0x5D
+> [    5.320510] [DBGMSG] irq_find_mapping :-> using domain @00000000d8881a92
+> [    5.334083] [DBGMSG] apds9960_probe :enter apds probe
+> [    6.096343] [DBGMSG] request_threaded_irq :action->handler: 0x10167F50
+> [    6.101438] [DBGMSG] request_threaded_irq :action->thread_fn: 0x10F5F404
+> [    6.107990] [DBGMSG] request_threaded_irq :action->flags: 0x2082
+> [    6.114708] [DBGMSG] request_threaded_irq :action->name: apds9960_event
+> [    6.120736] [DBGMSG] request_threaded_irq :action->dev_id: 0x67AB3800
+> [    6.127397] [DBGMSG] setup_irq_thread :enter fxn
+> [    6.136793] [DBGMSG] request_threaded_irq :leaving fxn the normal way
+> [    6.137148] [DBGMSG] irq_thread :enter fxn
+> [    6.141451] [DBGMSG] apds9960_probe :client->irq: 0x5D / interrupt_handler_fxn: 0x10F5F404
+> 
+> APDS9960 (Sensor 2)
+> 
+> [    6.169614] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq] is returned
+> [    6.169616] [DBGMSG] irq_find_mapping :hwirq: 0x1
+> [    6.176983] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq]: 0x5E
+> [    6.181721] [DBGMSG] irq_find_mapping :-> using domain @00000000d8881a92
+> [    6.195365] [DBGMSG] apds9960_probe :enter apds probe
+> [    6.524923] [DBGMSG] request_threaded_irq :action->handler: 0x10167F50
+> [    6.530004] [DBGMSG] request_threaded_irq :action->thread_fn: 0x10F5F404
+> [    6.536558] [DBGMSG] request_threaded_irq :action->flags: 0x2082
+> [    6.543280] [DBGMSG] request_threaded_irq :action->name: apds9960_event
+> [    6.549309] [DBGMSG] request_threaded_irq :action->dev_id: 0x67AB4800
+> [    6.555964] [DBGMSG] setup_irq_thread :enter fxn
+> [    6.565125] [DBGMSG] request_threaded_irq :leaving fxn the normal way
+> [    6.565502] [DBGMSG] irq_thread :enter fxn
+> [    6.569770] [DBGMSG] apds9960_probe :client->irq: 0x5E / interrupt_handler_fxn: 0x10F5F404
+> 
+> APDS9960 (Sensor 3)
+> 
+> [    6.597743] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq] is returned
+> [    6.597745] [DBGMSG] irq_find_mapping :hwirq: 0x2
+> [    6.605093] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq]: 0x5F
+> [    6.609827] [DBGMSG] irq_find_mapping :-> using domain @00000000d8881a92
+> [    6.623459] [DBGMSG] apds9960_probe :enter apds probe
+> [    7.580221] [DBGMSG] request_threaded_irq :action->handler: 0x10167F50
+> [    7.585311] [DBGMSG] request_threaded_irq :action->thread_fn: 0x10F5F404
+> [    7.591861] [DBGMSG] request_threaded_irq :action->flags: 0x2082
+> [    7.598579] [DBGMSG] request_threaded_irq :action->name: apds9960_event
+> [    7.604609] [DBGMSG] request_threaded_irq :action->dev_id: 0x67AB5800
+> [    7.611261] [DBGMSG] setup_irq_thread :enter fxn
+> [    7.620473] [DBGMSG] request_threaded_irq :leaving fxn the normal way
+> [    7.620833] [DBGMSG] irq_thread :enter fxn
+> [    7.625131] [DBGMSG] apds9960_probe :client->irq: 0x5F / interrupt_handler_fxn: 0x10F5F404
+> 
+> 
+> 
+> IRQ was generated at the second sensor
+> 
+> [   68.221782] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq] is returned
+> [   68.221788] [DBGMSG] irq_find_mapping :hwirq: 0x6                                    <<---- korrekt Pin @SOC was detected
+> [   68.229103] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq]: 0x63            <<---- korrect IRQ determinded (pca954x)
+> [   68.233809] [DBGMSG] irq_find_mapping :-> using domain @00000000d8881a92             <<---- same pointer as pca954x, APDS9960 (sensor 1-3)
+> [   68.247618] [DBGMSG] irq_thread_fn :enter fxn
+> [   68.247622] [DBGMSG] irq_thread_fn :action->handler: 0x10167F50
+> [   68.252005] [DBGMSG] irq_thread_fn :action->thread_fn: 0x10DC0950
+> [   68.257949] [DBGMSG] irq_thread_fn :action->flags: 0x2082
+> [   68.264057] [DBGMSG] irq_thread_fn :action->name: pca954x
+> [   68.269462] [DBGMSG] irq_thread_fn :action->dev_id: 0x67A9D8F8
+> [   68.274867] [DBGMSG] pca954x_irq_handler :entering pca954x_irq_handler               <<---- entering correct handler (pca954x)
+> [   68.281554] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq] is returned
+> [   68.288099] [DBGMSG] irq_find_mapping :hwirq: 0x1                                    <<---- correct pin at pca954x is determined, where second sensors INT signal is attached to
+> [   68.295415] [DBGMSG] irq_find_mapping :domain->linear_revmap[hwirq]: 0xDF            <<---- I DONT UNDERSTAND, WHERE THIS IRQ COME FROM. 0xDE, 0xDF and 0xE0 is not listed under /proc/irq or /proc/interrupts
+> [   68.300127] [DBGMSG] irq_find_mapping :-> using domain @0000000059dfe323             <<---- I DONT UNDERSTAND, WHERE THIS DOMAIN-ADDRESS COME FROM
+> [   68.313621] [DBGMSG] handle_nested_irq :entering handle_nested_irq
+> [   68.313623] [DBGMSG] handle_nested_irq :irq: 0xDF                                    <<---- NOW HANDLE_NESTED_IRQ HAS DETERMINED A IRQ WHICH IS UNKNOWN TO ME
+> [   68.319811] [DBGMSG] handle_nested_irq :irq_desc->name: null                         <<---- THATS WHY ALL FOLLOWING VARIABLES ARE WRONG AND INVALID
+> [   68.324527] [DBGMSG] handle_nested_irq :irq_desc->parent_irq: 0x00                   <<---- SAME HERE
+> [   68.330202] [DBGMSG] handle_nested_irq :action: false or null                        <<---- SAME HERE
+> [   68.336380] [DBGMSG] handle_nested_irq :irqd_irq_disabled: true                      <<---- CHECK FAILS AS RESULT
+> [   68.342122] [DBGMSG] handle_nested_irq :result of (unlikely(!action || irqd_irq_disabled(&desc->irq_data))) : true   <<---- FALSE CONDITION IS USED
+> [   68.348037] [DBGMSG] handle_nested_irq :goto out_unlock                              <<---- IRQ IS NOT HANDLED, BECAUSE apds9960_interrupt_handler WAS NOT TRIGGERED
+> [   68.358391] [DBGMSG] handle_nested_irq :leaving handle_nested_irq
+> [   68.363620] [DBGMSG] pca954x_irq_handler :leaving pca954x_irq_handler
+> 
+> 
+> 
+> root@testsystem:~# cat /proc/interrupts
+>            CPU0       CPU1       CPU2       CPU3
+> 
+>  93:          0          0          0          0  gpio-mxc   0 Edge      apds9960_event
+>  94:          0          0          0          0  gpio-mxc   0 Edge      apds9960_event
+>  95:          0          0          0          0  gpio-mxc   0 Edge      apds9960_event
+>  99:          1          0          0          0  gpio-mxc   6 Edge      pca954x
+> 
+> 
+> ________________________________________
+> Von: Rademacher Ralf
+> Gesendet: Montag, 20. Februar 2023 15:42
+> An: Laurent Pinchart
+> Cc: linux-i2c@vger.kernel.org
+> Betreff: AW: #Extern_Re: AW: #Extern_Re: question about devicetree entry pca954x
+> 
+> Dear Mr. Pinchart,
+> 
+> 
+> if you need any more debug output I can try to generate some more. You just have to say what you need. I am unfortunately still stuck with this problem so far.
+> 
+> 
+> Regards,
+> 
+> 
+> Ralf Rademacher
+> 
+> ________________________________
+> Von: Rademacher Ralf
+> Gesendet: Montag, 13. Februar 2023 20:04:24
+> An: Laurent Pinchart
+> Cc: linux-i2c@vger.kernel.org
+> Betreff: AW: #Extern_Re: AW: #Extern_Re: question about devicetree entry pca954x
+> 
+> Hello Mr. Pinchart,
+> 
+> i attached new generated kernellog lines, hoping these snippets contain the data you need.
+> I separated the lines a bit to make the DBGMSGs stand out from the other content. Only lines related to the two drivers or chip.c are included.
+> Down below there is a snipped from /proc/interrupts.
+> 
+> [    6.888610] bus: 'i2c': add driver pca954x
+> [    6.888676] bus: 'i2c': driver_probe_device: matched device 3-0070 with driver pca954x
+> [    6.888686] bus: 'i2c': really_probe: probing driver pca954x with device 3-0070
+> [    6.888775] pca954x 3-0070: no init pinctrl state
+> [    6.888784] pca954x 3-0070: no sleep pinctrl state
+> [    6.888787] pca954x 3-0070: no idle pinctrl state
+> 
+> [    6.888829] [DBGMSG] pca954x_probe :entering pca954x_probe
+> 
+> [    6.888836] pca954x 3-0070: GPIO lookup for consumer reset
+> [    6.888839] pca954x 3-0070: using device tree for GPIO lookup
+> [    6.888853] of_get_named_gpiod_flags: can't parse 'reset-gpios' property of node '/soc@0/bus@30800000/
+> i2c@30a50000/i2c4-mux-pca9544@70[0]'
+> [    6.888861] of_get_named_gpiod_flags: can't parse 'reset-gpio' property of node '/soc@0/bus@30800000/i
+> 2c@30a50000/i2c4-mux-pca9544@70[0]'
+> [    6.888866] pca954x 3-0070: using lookup tables for GPIO lookup
+> [    6.888870] pca954x 3-0070: No GPIO consumer reset found
+> 
+> [    6.908207] device: 'i2c-4': device_add
+> [    6.908240] bus: 'i2c': add device i2c-4
+> [    6.908278] PM: Adding info for i2c:i2c-4
+> [    6.908291] device: 'i2c-4': device_add
+> [    6.908331] PM: Adding info for No Bus:i2c-4
+> [    6.911389] device: '4-0039': device_add
+> [    6.945282] bus: 'i2c': add device 4-0039
+> [    7.069423] PM: Adding info for i2c:4-0039
+> [    7.121093] i2c i2c-3: Added multiplexed i2c bus 4
+> [    7.121162] device: 'i2c-5': device_add
+> [    7.122267] bus: 'i2c': add device i2c-5
+> [    7.122327] PM: Adding info for i2c:i2c-5
+> [    7.122381] device: 'i2c-5': device_add
+> [    7.122501] PM: Adding info for No Bus:i2c-5
+> [    7.123477] device: '5-0039': device_add
+> [    7.123543] bus: 'i2c': add device 5-0039
+> [    7.123666] PM: Adding info for i2c:5-0039
+> [    7.126408] i2c i2c-3: Added multiplexed i2c bus 5
+> [    7.182032] device: 'i2c-6': device_add
+> [    7.187695] bus: 'i2c': add device i2c-6
+> [    7.187766] device: 'i2c-6': device_add
+> [    7.189430] device: '6-0039': device_add
+> [    7.189473] bus: 'i2c': add device 6-0039
+> [    7.189503] PM: Adding info for i2c:6-0039
+> [    7.193883] i2c i2c-3: Added multiplexed i2c bus 6
+> [    7.199087] device: 'i2c-7': device_add
+> [    7.199286] bus: 'i2c': add device i2c-7
+> [    7.199307] PM: Adding info for i2c:i2c-7
+> [    7.199328] device: 'i2c-7': device_add
+> [    7.199361] PM: Adding info for No Bus:i2c-7
+> [    7.199586] i2c i2c-3: Added multiplexed i2c bus 7
+> [    7.211760] pca954x 3-0070: registered 4 multiplexed busses for I2C mux pca9544
+> 
+> [    7.222122] [DBGMSG] pca954x_probe :leaving pca954x_probe
+> 
+> [    7.222138] driver: 'pca954x': driver_bound: bound to device '3-0070'
+> [    7.291190] bus: 'i2c': really_probe: bound device 3-0070 to driver pca954x
+> [    7.403877] bus: 'i2c': add driver apds9960
+> [    7.417379] bus: 'i2c': driver_probe_device: matched device 4-0039 with driver apds9960
+> [    7.422911] bus: 'i2c': really_probe: probing driver apds9960 with device 4-0039
+> [    7.422941] apds9960 4-0039: no pinctrl handle
+> 
+> [    7.422990] [DBGMSG] apds9960_probe :enter apds probe
+> [    7.743904] [DBGMSG] apds9960_probe :client->irq: 0x5F / interrupt_handler_fxn: 0x92D0B3C
+> 
+> [    7.744063] device: 'iio:device0': device_add
+> [    7.752407] bus: 'iio': add device iio:device0
+> [    7.752431] PM: Adding info for iio:iio:device0
+> [    7.752573] driver: 'apds9960': driver_bound: bound to device '4-0039'
+> [    7.752580] devices_kset: Moving 4-0039 to end of list
+> [    7.752584] PM: Moving i2c:4-0039 to end of list
+> [    7.752588] devices_kset: Moving iio:device0 to end of list
+> [    7.752591] PM: Moving iio:iio:device0 to end of list
+> 
+> [   58.703133] [DBGMSG] pca954x_irq_handler :entering pca954x_irq_handler
+> [   58.703975] [DBGMSG] pca954x_irq_handler :i2c_smbus_read::retval=0x14
+> [   58.710540] [DBGMSG] pca954x_irq_handler :i=0x0 | bit: 0x4 isset in register = true
+> [   58.710543] [DBGMSG] pca954x_irq_handler :irq= 0x65 / child_irq =0xE7
+> [   58.724634] [DBGMSG] handle_nested_irq :entering handle_nested_irq
+> [   58.724637] [DBGMSG] handle_nested_irq :irq: 0xE7
+> [   58.724640] [DBGMSG] handle_nested_irq :irq_desc->name: null
+> [   58.724642] [DBGMSG] handle_nested_irq :irq_desc->parent_irq: 0x00
+> [   58.724645] [DBGMSG] handle_nested_irq :irqd_irq_disabled: true
+> [   58.724645] [DBGMSG] handle_nested_irq :action: false or null
+> [   58.724647] [DBGMSG] handle_nested_irq :result of (unlikely(!action || irqd_irq_disabled(&desc->irq_data))) : true
+> [   58.724649] [DBGMSG] handle_nested_irq :goto out_unlock
+> [   58.724651] [DBGMSG] handle_nested_irq :leaving handler
+> [   58.724654] [DBGMSG] pca954x_irq_handler :leaving pca954x_irq_handler
+> 
+> 
+> 
+> 
+> root@testsystem:~# cat /proc/interrupts
+>            CPU0       CPU1       CPU2       CPU3
+> 
+>  95:          0          0          0          0  gpio-mxc   0 Edge      apds9960_event
+> 101:          1          0          0          0  gpio-mxc   6 Edge      pca954x
+> 
+> 
+> Regards,
+> Ralf Rademacher
+> 
+> 
+> Von: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Gesendet: Freitag, 10. Februar 2023 11:57
+> An: Rademacher Ralf
+> Cc: linux-i2c@vger.kernel.org
+> Betreff: #Extern_Re: AW: #Extern_Re: question about devicetree entry pca954x
+> 
+> Warnung: Achtung - Diese E-Mail stammt von einer externen Quelle. Seien Sie vorsichtig mit Links und Anhängen.
+> 
+> Warning: Attention - This e-mail is from an external source. Be careful with links and attachments.
+> 
+> Hello,
+> 
+> I'm sorry for the late reply, I've been very busy lately.
+> 
+> On Wed, Feb 08, 2023 at 03:56:15PM +0000, RRademacher@heine.com wrote:
+> > Hello Mr. Pinchart,
+> >
+> > following on from our previous conversation, I have since observed the
+> > following.
+> >
+> > The first call of handle_nested_interrupt() during startup was a
+> > result of another driver and had nothing to do with the problem. i
+> > used dump_stack() to find the callee.
+> 
+> OK, that makes sense.
+> 
+> > For the problem, the current debug output reduces to the following:
+> >
+> > [   28.830817] [DBGMSG] pca954x_irq_handler :entering pca954x_irq_handler
+> > [   28.831363] [DBGMSG] pca954x_irq_handler :i2c_smbus_read::retval=14
+> > [   28.837918] [DBGMSG] pca954x_irq_handler :i=0 | bit: 4 isset in register = true
+> > [   28.837921] [DBGMSG] pca954x_irq_handler :irq= 0x65 // child_irq =0xe7
+> > [   28.851527] [DBGMSG] handle_nested_irq :entering handle_nested_irq
+> > [   28.851542] Call trace:
+> > [   28.851555]  dump_backtrace+0x0/0x178
+> > [   28.851561]  show_stack+0x24/0x30
+> > [   28.889839]  dump_stack+0xb4/0x114
+> > [   28.893245]  handle_nested_irq+0x44/0x23c
+> > [   28.897258]  pca954x_irq_handler+0xf4/0x138 [i2c_mux_pca954x]
+> > [   28.903006]  irq_thread_fn+0x30/0xa0
+> > [   28.906581]  irq_thread+0x150/0x248
+> > [   28.910068]  kthread+0x140/0x160
+> > [   28.913297]  ret_from_fork+0x10/0x1c
+> > [   28.916901] [DBGMSG] handle_nested_irq :irq: 0xe7
+> > [   28.916905] [DBGMSG] handle_nested_irq :irq_desc->name: (null)
+> > [   28.921447] [DBGMSG] handle_nested_irq :irq_desc->parent_irq: 0x0
+> >
+> > Do you have any idea what the problem could be?
+> > I have no idea about, why the interrupt is disabled and why the action of the threaded interrupt is null
+> > Is it possible that I have forgotten something in the DeviceTree entry?
+> 
+> Nothing immediately strikes me as wrong in your device tree.
+> 
+> Could you share the output of `cat /proc/interrupts` ? If the IRQ
+> numbers listed in the log above (0x65 and 0xe7) have changed, please
+> also share the new log, I want to correlate those numbers to
+> /proc/interrupt entries.
+> 
+> > On Donnerstag, 26. Januar 2023 21:33, Rademacher Ralf wrote:
+> > >
+> > > Mr. Pinchart,
+> > >
+> > > i have to correct myself:
+> > > the first call of handle_nested_interrupt happens already before
+> > > pca954x_probe. i added some more DBGMSGs
+> > >
+> > > [    2.869856] [DBGMSG] handle_nested_irq :irq = 0xdf
+> > > [    2.869858] [DBGMSG] handle_nested_irq :action = 0x7ba41100
+> > > [    2.874477] [DBGMSG] handle_nested_irq :irqd_irq_disabled(&desc->irq_data): false
+> > > [    2.874479] [DBGMSG] handle_nested_irq :(unlikely(!action || irqd_irq_disabled(&desc->irq_data))): false
+> > > [    2.874501] [DBGMSG] handle_nested_irq :action->irq:df | action->dev_id:0x7ba64810
+> > > [    6.373737] [DBGMSG] pca954x_probe :enter fxn
+> > > [    6.973918] [DBGMSG] pca954x_probe :leave fxn
+> > >
+> > > On Donnerstag, 26. Januar 2023 21:18, Rademacher Ralf wrote:
+> > > > On Donnerstag, 26. Januar 2023 19:06, Laurent Pinchart wrote:
+> > > > > On Thu, Jan 26, 2023 at 05:05:47PM +0000, RRademacher@heine.com wrote:
+> > > > > > Hello Mr. Pinchart,
+> > > > > >
+> > > > > > you are listed as maintainer in the i2c-mux-pca954x.yaml file.
+> > > > > >
+> > > > > > May I ask if you could take a few minutes and have a look at the following
+> > > > > > problem, if you can spot a bug in the second DT snippet?
+> > > > > >
+> > > > > > Because on the internet you can only find examples where devices are used
+> > > > > > behind the pca954x which do not use an interrupt.
+> > > > > >
+> > > > > > Let me tell you about the problem.
+> > > > > >
+> > > > > > At our old device we had implemented this, which worked perfect:
+> > > > > >
+> > > > > >
+> > > > > > &i2c4 {
+> > > > > >     pinctrl-names = "default","gpio";
+> > > > > >     pinctrl-0 = <&pinctrl_i2c4>;
+> > > > > >     pinctrl-1 = <&pinctrl_i2c4_gpio>;
+> > > > > >     sda-gpios = <&gpio5 21 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> > > > > >     scl-gpios = <&gpio5 20 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> > > > > >     clock-frequency = <400000>;
+> > > > > >     status = "okay";
+> > > > > >
+> > > > > >     touchscreen@26 {
+> > > > > >         compatible = "ilitek,ili2117";
+> > > > > >         reg = <0x26>;
+> > > > > >         pinctrl-names = "default";
+> > > > > >         pinctrl-0 = <&pinctrl_ili2117_62>;
+> > > > > >         interrupt-parent = <&gpio2>;
+> > > > > >         interrupts = <7 IRQ_TYPE_EDGE_RISING>;
+> > > > > >         reset-gpios = <&pca9554_interface 0 GPIO_ACTIVE_LOW>;
+> > > > > >     };
+> > > > > >
+> > > > > >         proximity@39 {
+> > > > > >                 compatible = "avago,apds9960";
+> > > > > >                 reg = <0x39>;
+> > > > > >                 pinctrl-names = "default";
+> > > > > >                 pinctrl-0 = <&pinctrl_apds9960_39>;
+> > > > > >                 interrupt-parent = <&gpio2>;
+> > > > > >                 interrupts = <6 IRQ_TYPE_EDGE_RISING>;
+> > > > > >         };
+> > > > > > .....
+> > > > > >
+> > > > > >
+> > > > > > Then we want more proximity sensors in this device, that we decided to add the
+> > > > > > PCA9544A.
+> > > > > >
+> > > > > > &i2c4 {
+> > > > > > .....
+> > > > > >
+> > > > > >     i2c4_mux_apds: i2c4-mux-pca9544@70 {
+> > > > > >         compatible = "nxp,pca9544";
+> > > > > >         #address-cells = <1>;
+> > > > > >         #size-cells = <0>;
+> > > > > >         reg = <0x70>;
+> > > > > >         interrupt-parent = <&gpio2>;
+> > > > > >         interrupt-controller;
+> > > > > >         pinctrl-names = "default";
+> > > > > >         pinctrl-0 = <&pinctrl_pca9544a_70>;
+> > > > > >         interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
+> > > > > >
+> > > > > >         i2c@0 {
+> > > > > >             #address-cells = <1>;
+> > > > > >             #size-cells = <0>;
+> > > > > >             reg = <0>;
+> > > > > >
+> > > > > >             proximity@39 {
+> > > > > >                 compatible = "avago,apds9960";
+> > > > > >                 reg = <0x39>;
+> > > > > >                 interrupts = <0 IRQ_TYPE_EDGE_FALLING>;
+> > > > > >                 interrupt-parent = <&i2c4_mux_apds>;
+> > > > > >             };
+> > > > > >         };
+> > > > > >
+> > > > > >
+> > > > > >
+> > > > > > Both drivers (pca954x and apds9960) request threaded irqs in their probe
+> > > > > > function, but it does not work together. Although the apds9960 also gets one
+> > > > > > assigned, when the handle_nested_irq function is called (After everything has
+> > > > > > been initialized. However, this seems to be the second call to this function!
+> > > > > > First call seems to be inside the initialization phase.) the irq seems to be
+> > > > > > disabled. And thus the processing does not start.
+> > > > > >
+> > > > > > I think that the problem is in my devicetree entry, that the soc doesn't really
+> > > > > > know how to handle the interrupt of the apds9960.
+> > > > >
+> > > > > How are interrupts connected at the hardware level ? Is the APDS9960
+> > > > > interrupt connected to the INT0 pin of the PCA9544 ?
+> > > >
+> > > > Yes, it is.
+> > > >
+> > > > > You have switched from IRQ_TYPE_EDGE_RISING to IRQ_TYPE_EDGE_FALLING for
+> > > > > the APDS9960, is that intentional ?
+> > > >
+> > > > Yes, I assumed this is correct, because APDS9960 datasheet tells me
+> > > > that: "Interrupt open drain (active low)". So i thought i have to
+> > > > detect the falling edge, not the rising edge. The same in the
+> > > > datasheet of PCA9544A, there are 4 active low interrupt inputs.
+> > > >
+> > > > > Is there any message printed to the kernel log around the time where
+> > > > > either driver is probed, or when the APDS9960 interrupt is supposed to
+> > > > > occur, that may indicate a problem ?
+> > > >
+> > > > I have inserted some DBGMSGs into the functions handle_nested_irq
+> > > > and in the pca954x_probe. during pca954x driver probe, there is the
+> > > > following output:
+> > > >
+> > > > [    2.869856] [DBGMSG] handle_nested_irq :irq = 0xdf
+> > > > [    2.869858] [DBGMSG] handle_nested_irq :action = 0x7ba41100
+> > > > [    2.874477] [DBGMSG] handle_nested_irq :irqd_irq_disabled(&desc->irq_data): false
+> > > > [    2.874479] [DBGMSG] handle_nested_irq :(unlikely(!action || irqd_irq_disabled(&desc->irq_data))): false
+> > > > [    2.874501] [DBGMSG] handle_nested_irq :action->irq:df | action->dev_id:0x7ba64810
+> > > >
+> > > > when a apds sends the interrupt signal to the pca954x, this happens:
+> > > >
+> > > > [ 9336.607055] [DBGMSG] pca954x_irq_handler :pca954x_irq_handler starts
+> > > > [ 9336.607908] [DBGMSG] pca954x_irq_handler :i2c_smbus_read::retval=14
+> > > > [ 9336.613255] [DBGMSG] pca954x_irq_handler :i=0 | bit: 4 is set in register
+> > > > [ 9336.619539] [DBGMSG] pca954x_irq_handler :irq= 0x65 // child_irq =0xe7
+> > > > [ 9336.619542] [DBGMSG] handle_nested_irq :irq = 0xe7
+> > > > [ 9336.632516] [DBGMSG] handle_nested_irq :action = 0x0
+> > > > [ 9336.632519] [DBGMSG] handle_nested_irq :irqd_irq_disabled(&desc->irq_data):true
+> > > > [ 9336.632521] [DBGMSG] handle_nested_irq :(unlikely(!action || irqd_irq_disabled(&desc->irq_data))):true
+> > > > [ 9336.632523] [DBGMSG] handle_nested_irq :goto out_unlock
+
+-- 
+Regards,
+
+Laurent Pinchart
