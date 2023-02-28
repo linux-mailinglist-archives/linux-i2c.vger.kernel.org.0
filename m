@@ -2,100 +2,113 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1353A6A548C
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Feb 2023 09:39:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB2F6A56E6
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Feb 2023 11:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjB1IjL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Feb 2023 03:39:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        id S229688AbjB1KjY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Feb 2023 05:39:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjB1IjK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Feb 2023 03:39:10 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26C5F760
-        for <linux-i2c@vger.kernel.org>; Tue, 28 Feb 2023 00:39:08 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 48E455C025D;
-        Tue, 28 Feb 2023 03:39:08 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 28 Feb 2023 03:39:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1677573548; x=1677659948; bh=2GC7m7ynma
-        ETUAb1Ik6X03v+DzIkaZEnOTkHqYHWiW8=; b=P6XqKuKsj5pIBN9hjCmPO9PR+1
-        3e+pnY+pvz4Mx05Mf7yKVW8j1tswGXz5RoUYkCDsrZbvShj6F5a3JmtIiKhUjaZS
-        O+2Z2DKCnatBYcXBlgS11YHZr3jjwguWukOUE5bIhcVQdjW5ZN6FUTgH98o1H+ZQ
-        izaujrPEeZItej7iyYPblT+Csk9Kr1vzzKQfjVzCYvYbb11StQ2zh5lAKg63zIJO
-        Z3WFgimR0mj01axAZhEQSHkg8tOnYNfhf2UaKrEwGJvoHELyX/SuO5rC/vUBWwDX
-        GtU3Z5z/D59gkEPUQ5JBlNZocOkg0RpykZym/Pq5V2/Cgp5pxYNPS9P6mqjw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1677573548; x=1677659948; bh=2GC7m7ynmaETUAb1Ik6X03v+DzIk
-        aZEnOTkHqYHWiW8=; b=da7RXHgSYHskmQtkANQkf4Ujb6ltpZVoa+SVYodZEt9O
-        doqnu/p7lbO5fHV6ekg3G+eem2ibwckB5ZVSqC7xmPqZxwfD2H26TzlJPUR4X7G0
-        eOskq34xbGFU1gDL47QZ6uaVbi5l5W0gN9e4XsctxP8KOrMawiCz11UwNnr/XNXR
-        pH9sspVK2aNWHfEjz6rgv+gilCcEnii/C2CWJutF6DkP6+x2lr4Cq3cIcYp8HoGN
-        O7+uiH7kQUKUM2anZjAwSBqA5X4kEmltDy7qJoh6qYxBl5PYfXlrW0ZcUd8Rl04q
-        RWI9nuQpkUHp8jwne90DLaHwK4o3gc1cQgyWZ2lb+w==
-X-ME-Sender: <xms:q739Y4gqha1YiGbqQG4ACnBziUCMHVVI5EaICO5QytW8UNEPwmEbyw>
-    <xme:q739YxBoP_PNCyO9Y8VSaj3YYQ7PpmYTZVNQG6OCpdp7fpp9CcIZqyTcvDTPpwVOC
-    9rjGbHis-Rgh-IGvLE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeluddguddvudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
-    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:rL39YwEHnk8yr1G0FOJI8VymzN3VK5tweMCd40dtj7EnXMFIloJhWQ>
-    <xmx:rL39Y5RNY3i1us0F140VfxZSRvR3ARp2OzUaTaZ5CBrPeN8A5BCpsQ>
-    <xmx:rL39Y1zErpJllLXJFfj5-22EB6S8z3WfIbPoAny6T29XQmrEBNWZ3A>
-    <xmx:rL39Y2r3tm_wHDkqKxn0QadVP4lBhB_gJknbubdJzZ_Mgwknrfj-cA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id DC2F4B60086; Tue, 28 Feb 2023 03:39:07 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <dd6984e0-38f4-40d0-a7ac-bea312d4d68a@app.fastmail.com>
-In-Reply-To: <20230227233318.120415-1-bgray@linux.ibm.com>
-References: <20230227233318.120415-1-bgray@linux.ibm.com>
-Date:   Tue, 28 Feb 2023 09:38:47 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Benjamin Gray" <bgray@linux.ibm.com>, linux-i2c@vger.kernel.org
-Cc:     "Sven Peter" <sven@svenpeter.dev>,
-        "Michael Ellerman" <mpe@ellerman.id.au>
-Subject: Re: [PATCH v2 1/2] i2c: Disable I2C_APPLE when I2C_PASEMI is a builtin
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229652AbjB1KjX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Feb 2023 05:39:23 -0500
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA89902D;
+        Tue, 28 Feb 2023 02:39:22 -0800 (PST)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id A02D061CC40F9;
+        Tue, 28 Feb 2023 11:39:20 +0100 (CET)
+Message-ID: <47ed190e-ebae-fdc6-f46a-f42a36fb6f26@molgen.mpg.de>
+Date:   Tue, 28 Feb 2023 11:39:20 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: Accelerometer lis3lv02d is present on SMBus but its address is
+ unknown, skipping registration
+Content-Language: en-US
+To:     Wolfram Sang <wsa@kernel.org>
+References: <97708c11-ac85-fb62-2c8e-d37739ca826f@molgen.mpg.de>
+ <Y/0EIRsycj8EWjrz@ninjato>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, Dell.Client.Kernel@dell.com,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <Y/0EIRsycj8EWjrz@ninjato>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Feb 28, 2023, at 00:33, Benjamin Gray wrote:
-> The ppc64le_allmodconfig sets I2C_PASEMI=y and leaves COMPILE_TEST to
-> default to y and I2C_APPLE to default to m, running into a known
-> incompatible configuration that breaks the build [1]. Specifically,
-> a common dependency (i2c-pasemi-core.o in this case) cannot be used by
-> both builtin and module consumers.
->
-> Disable I2C_APPLE when I2C_PASEMI is a builtin to prevent this.
->
-> [1]: https://lore.kernel.org/all/202112061809.XT99aPrf-lkp@intel.com
->
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
+Dear Wolfram,
 
-Looks good to me,
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Thank you for your prompt reply.
+
+Am 27.02.23 um 20:27 schrieb Wolfram Sang:
+
+>> What can a user do about this? It looks like the I2C addresses need to be
+>> added to `dell_lis3lv02d_devices[]` in `drivers/i2c/busses/i2c-i801.c`.
+> 
+> Complain to Dell about the missing address ;)
+
+I will. (As “Laptop system certified with Ubuntu“ [1], I was hoping that 
+Canonical would have solved that with Dell already.)
+
+> Until then:
+> 
+>> [   20.631866] i801_smbus 0000:00:1f.4: SPD Write Disable is set
+> 
+> # cd /sys/bus/pci/drivers/i801_smbus/0000\:00\:1f.4
+> # ls -d i2c-?
+> 
+> The last digit of the printout is the bus number. Then:
+> 
+> # modprobe i2c-dev
+> # i2cdetect <bus_number>
+> 
+> And post the output here.
+
+     $ cd /sys/bus/pci/drivers/i801_smbus/0000:00:1f.4
+     $ ls -d i2c-?
+     i2c-6
+     $ sudo i2cdetect 6
+     WARNING! This program can confuse your I2C bus, cause data loss and 
+worse!
+     I will probe file /dev/i2c-6.
+     I will probe address range 0x08-0x77.
+     Continue? [Y/n] Y
+          0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+     00:                         08 -- -- -- -- -- -- --
+     10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+     20: -- -- -- -- -- -- -- -- -- 29 -- -- -- -- -- --
+     30: 30 -- -- -- -- 35 UU UU -- -- -- -- -- -- -- --
+     40: -- -- -- -- 44 -- -- -- -- -- -- -- -- -- -- --
+     50: UU -- 52 -- -- -- -- -- -- -- -- -- -- -- -- --
+     60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+     70: -- -- -- -- -- -- -- --
+
+> If you are brave and see that the address 0x1d or 0x29 are printed in
+> your output, you could try adding an entry to the array you already
+> mentioned above with the address you found. It may be safer to do
+> some sanity checking before, though.
+
+So, 29 shows up in the dump. Let’s see if I am going to find the time to 
+build a Linux kernel. (I couldn’t find a module parameter to force 
+loading at a specific address.)
+
+
+Kind regards,
+
+Paul
+
+
+[1]: https://ubuntu.com/certified/201902-26859
