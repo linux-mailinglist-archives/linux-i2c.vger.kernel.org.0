@@ -2,107 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C89146A575D
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Feb 2023 12:00:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 398CB6A61A8
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Feb 2023 22:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjB1LAo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Feb 2023 06:00:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51010 "EHLO
+        id S230157AbjB1VmM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Feb 2023 16:42:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjB1LAn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Feb 2023 06:00:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7030310A8C;
-        Tue, 28 Feb 2023 03:00:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S230153AbjB1Vl7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Feb 2023 16:41:59 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D23137721
+        for <linux-i2c@vger.kernel.org>; Tue, 28 Feb 2023 13:39:12 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31SLBYtg010066;
+        Tue, 28 Feb 2023 21:38:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=vVS00Tiu6FIln2gNm8ULlFBk1C6mTSgIZmUN9e1SqZU=;
+ b=rurB6fvXH0TeBLWP/Y/hB+Ltt69xide69MXl3HtxiI9TbtAlJNaVCjW3Z0k3ITR0yRBz
+ A8k/e5Pif1I0y9MYpEh073pZ2GtNt9BzKtrwBmVnaS0IZJqYVrpe+tiI3s0StbTIVFpu
+ eVkB0zvQO5gCed/0Bil3AH85vKLNsk7jB9tWec+aOyaxwQbpiLnN53AI+Hty4emjQAz4
+ gOhMPkue2/NE4kugaIoChZPmwKj/fkDNziY22CVb1XSUY73lokEGmmfChFb6mF2sR28E
+ V+k9AepQx4GIKJkPm78OeDWj6NMYotAo8RITTaxlLqtbtjsTEk8h6dZdr0ogBhMskw1l Mg== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p1sad0ndg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 21:38:07 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31SKaaKw013020;
+        Tue, 28 Feb 2023 21:38:05 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3nybcq3m99-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 21:38:05 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31SLc3rv23855466
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Feb 2023 21:38:03 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1C73320043;
+        Tue, 28 Feb 2023 21:38:03 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 914BC20040;
+        Tue, 28 Feb 2023 21:38:02 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 28 Feb 2023 21:38:02 +0000 (GMT)
+Received: from [10.61.2.107] (haven.au.ibm.com [9.192.254.114])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2DF2FB80D3B;
-        Tue, 28 Feb 2023 11:00:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9312CC433D2;
-        Tue, 28 Feb 2023 11:00:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677582035;
-        bh=rEAtiDSRCtKX9bKqB93LYzcQBdQZdJEx+f5yqqdCG6c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ELUk+FAlpQlzUn2NKo8cS1Rd6QZ6HqsqgYwVMvMMLXsnxIv+VKMm0lS5r5tsFaQym
-         T3iiy8k4a88ZScWm8aF5h4D0plZAERsZnsz0POjhscdk+8fcla6+G7Cwo/2vEiKiiL
-         T+9kThK0Zc/si6evVbsj+/WlS8gf57lpe7QYwt3+weR62nJgVL2diUFeMQjorY1DeC
-         LJk+jaYXSTHZaqxwGZQc2xtWrfXFf5buYHIyEavgnJRI9Nb8/u20RllnX8ltOhzYMV
-         ne2ou/4jvUteW4oK9iNpg/LYubTLm3ZQ972CGItpry8I19XQd5IBp/3t+ofI+OuLyu
-         lhWyeMIovVmwA==
-Date:   Tue, 28 Feb 2023 12:00:32 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, Dell.Client.Kernel@dell.com,
-        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-Subject: Re: Accelerometer lis3lv02d is present on SMBus but its address is
- unknown, skipping registration
-Message-ID: <Y/3e0JsMmX6hlNHI@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, Dell.Client.Kernel@dell.com,
-        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-References: <97708c11-ac85-fb62-2c8e-d37739ca826f@molgen.mpg.de>
- <Y/0EIRsycj8EWjrz@ninjato>
- <47ed190e-ebae-fdc6-f46a-f42a36fb6f26@molgen.mpg.de>
- <Y/3cYL0s1Ul9fgR+@ninjato>
- <1669a3d8-1d19-e91b-8f6e-36f5037fff47@molgen.mpg.de>
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 085FE60409;
+        Wed,  1 Mar 2023 08:37:55 +1100 (AEDT)
+Message-ID: <f46474aed9f6e06c444c5c53b7545b9ee7ef9604.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 2/2] i2c: Build I2C_PASEMI with COMPILE_TEST
+From:   Benjamin Gray <bgray@linux.ibm.com>
+To:     kernel test robot <lkp@intel.com>, linux-i2c@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, arnd@arndb.de,
+        Sven Peter <sven@svenpeter.dev>, mpe@ellerman.id.au
+Date:   Wed, 01 Mar 2023 08:37:54 +1100
+In-Reply-To: <202302281135.KsarHDzl-lkp@intel.com>
+References: <20230227233318.120415-2-bgray@linux.ibm.com>
+         <202302281135.KsarHDzl-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ELwBC1d5Q9ON43ep"
-Content-Disposition: inline
-In-Reply-To: <1669a3d8-1d19-e91b-8f6e-36f5037fff47@molgen.mpg.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 0m9uPqAI9YcqbKzvwxoy5dm0YFpk_Jvd
+X-Proofpoint-ORIG-GUID: 0m9uPqAI9YcqbKzvwxoy5dm0YFpk_Jvd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-02-28_17,2023-02-28_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ lowpriorityscore=0 impostorscore=0 priorityscore=1501 clxscore=1011
+ adultscore=0 bulkscore=0 mlxscore=0 spamscore=0 mlxlogscore=532
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302280176
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
---ELwBC1d5Q9ON43ep
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hi Paul,
-
-
-> It does. After your command, Linux logs:
-
-Cool!
-
-> I can cook up a patch, if you want.
-
-Yes, please.
-
-Happy hacking,
-
-   Wolfram
-
-
---ELwBC1d5Q9ON43ep
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmP93s8ACgkQFA3kzBSg
-KbZe8BAAn17IxDc57DWELBUGUE/uK/f2CfM6478p0bBXhzrg0kU3KGP/MpYCGfaY
-OxFi+skC2qjJgepjAZzyZya7ZV7SKS7Z2lSUfa8rup6F3WXgA//yC7Jobl3TM1iD
-zb3Sd9EnB4fWqTfyDyqmgwiJFWwd0N6CXuPCFNBfh/bwBZeBidr5OcbPNYo89rQ1
-qYL8LxTNahYhAvXrgvCg+N3FmvUaopc2sZWsa8gjml4sI23LVaHyvsmA+W9UEZb2
-hi84c26F787zVB78yRdV8+ko+Y3Rw4+iTZAZSxyuT9FE70cpZwu5Caux//yXuKKF
-KIj/cyyF58+aiJe1A9Kze1XzrvW3A88CPjwoF0PZOiFjRNgeXenTaQfKL1NPMlbF
-q5rLBxUE648xoMBVi4/KG/CYnTzlGOrb0z5OmXTej+wD6SvilP5gC8t/xg20Xsoz
-QKHcgUDhPLoagDnc6P8uCjUtiGnvvRfBFpp9KnPPNn1vCRr2R/grV2eF8IZEerWq
-ydFI4P79I3V9H7JfkNwOxfDW4UEPuOvGdTsT3UyQrpBwvJs8zO5YZXY1OuPH50zF
-Vc0u81zvZ/BNQ3CZXqBggdLInoxffQ77GBPAFHpBZwV3TQu746lfA9i1oxPwhl1b
-I92Ljjorey0KQsG0tj0MdtKjd/Pz9gKRkUDtkeEU9oKZz232VLI=
-=u5lo
------END PGP SIGNATURE-----
-
---ELwBC1d5Q9ON43ep--
+Heh, that's what I get for only trying the defconfig. This patch was
+just a possible bonus though, only the first one is important.
