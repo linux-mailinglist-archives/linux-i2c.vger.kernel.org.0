@@ -2,399 +2,189 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27AF6A77E8
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 Mar 2023 00:45:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4106A80AE
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 Mar 2023 12:06:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbjCAXp1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 1 Mar 2023 18:45:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S229567AbjCBLGZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 2 Mar 2023 06:06:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjCAXp0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Mar 2023 18:45:26 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43ECB2333A;
-        Wed,  1 Mar 2023 15:44:57 -0800 (PST)
-Received: from mercury (unknown [185.254.75.29])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 011E566023A1;
-        Wed,  1 Mar 2023 23:43:53 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677714233;
-        bh=F+cZ+xDuekZhvpQI6VN6wkOdiaibL0XhB6hG3ryOj8E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dzCs/Tm9RSF8obSF20Si7kicthqzvDNKc0LEyZ/LT3XbIHWQZIVgfzN4ExOkzO8NJ
-         lWUfgMqSTjI9TkKkd040M1hY1jQDw4TxO6favlO1RPjGjfCPWRRLqk6aOslCKf6e3o
-         i2+/FqlsKmBk8NuTMrgB4hdqMg33alpN0gwEz7wtzNDNAFKJpjmnTvhJyVSnpSKzuu
-         hu4bn5l4fnOEMFIDMpShkAoNaJjXy1lU+1fV6CpYhB896ljnVwaJD69yd3bwEmZgek
-         kaBy3VsggBld0JJRhg8GtDkJJpjlysSQxCTVEJqJJXotG5InA+EG6D1sq97Kf2wxxz
-         gsB3GMOtnNeLQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 30A9D1061E59; Thu,  2 Mar 2023 00:43:50 +0100 (CET)
-Date:   Thu, 2 Mar 2023 00:43:50 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Kalle Valo <kvalo@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
-Message-ID: <4c4b6904-69b8-4e33-9c35-a5a6a855528d@mercury.local>
-References: <20230228215433.3944508-1-robh@kernel.org>
+        with ESMTP id S229639AbjCBLGY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Mar 2023 06:06:24 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EDA359F
+        for <linux-i2c@vger.kernel.org>; Thu,  2 Mar 2023 03:06:21 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id j19-20020a05600c191300b003eb3e1eb0caso1439448wmq.1
+        for <linux-i2c@vger.kernel.org>; Thu, 02 Mar 2023 03:06:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677755180;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Fc0NUL8aZVF36uSuCoHUJGbBHmKYD5AQJVrnkB+o5kY=;
+        b=LEu/VQWASEgtOL+bHG/q4ahfq0VyxjUfrySCPH9q50o1GoMq+D1NyQi2gNA9Kh8kdu
+         9dQJ3rtPib239cHTKFxuOCpja6+sepJHPgBbKYV1cvN5F98BMZKc5gugafYuul0XzKgW
+         xZCSLk3EiM3omtsIV8ZJMEPPlQi8/0mx8w2j8ZRd9KIwmYUMWczXUi+rn0cqDWIabuIs
+         tHWHKKKChtpYnm6+r8anOTANq0TGh8hsM8FuV0Ds1m/rchvrd1yxSUK55Quana/eBSnw
+         Kdg5cRPlEEDb/0s2CkgPILs7jOqHD/VyWm83gC69NO+qlBR0YNGClJVjMTgn29E/cEIq
+         7mSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677755180;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fc0NUL8aZVF36uSuCoHUJGbBHmKYD5AQJVrnkB+o5kY=;
+        b=bl1/xKdhQax0U2CXes13CZM6xUdAOs1uVP39pI+6TWtiEYwOxry/ge97lG06OTEI/U
+         YcdbgOwVzGcJiBzndc6XNbJ6yfzFvWqFQzCNYr9gsKUVEndNjuBfhJcQgOYXMl/NvQIT
+         YyzPDHN/whk4lHLxGK5kMf+buc/cxFDgQuXDWXWwzsTZwKt8PD6NPIZ5RJAsH46K9kMu
+         58Iq0IqX1OzSlff/C8WVHh44ucdxNtnQmGV83dIdq056xDMUFpnPY1Q3yNoCn3NQ88R5
+         rbWH67890Ba6G+mH4oaGzQ4xmv1UIJg1uOqwpTvVzkULGzsDwVZzwxVgjvnVfoCjtx1z
+         UWqQ==
+X-Gm-Message-State: AO0yUKWKCpto3ocbQ6BV0PphHyFlXkx4XCYx3e5+OifdwtBzU0gT3KVR
+        8PohcQtyVrTENZ7VIByaMgs=
+X-Google-Smtp-Source: AK7set+A407OmsmqQ2oAyvjmKZv3Z1k8Lq3jnP52mi3BQ5vXB02nLcATfJxpvEjaaq8JCZhcQD4Wsg==
+X-Received: by 2002:a05:600c:4da4:b0:3ea:e554:7808 with SMTP id v36-20020a05600c4da400b003eae5547808mr7685123wmp.19.1677755179789;
+        Thu, 02 Mar 2023 03:06:19 -0800 (PST)
+Received: from [192.168.79.191] ([151.48.121.118])
+        by smtp.gmail.com with ESMTPSA id c10-20020a5d4f0a000000b002c54911f50bsm15095062wru.84.2023.03.02.03.06.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 03:06:19 -0800 (PST)
+Message-ID: <4d06ffe5-3ff6-241e-b35b-794c075f288e@gmail.com>
+Date:   Thu, 2 Mar 2023 12:06:18 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iicycb2qvy4rthvm"
-Content-Disposition: inline
-In-Reply-To: <20230228215433.3944508-1-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] i2c: imx-lpi2c: clean rx/tx buffers upon new message
+Content-Language: en-US
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+References: <20230130153247.445027-1-alexander.stein@ew.tq-group.com>
+From:   Emanuele Ghidoli <ghidoliemanuele@gmail.com>
+In-Reply-To: <20230130153247.445027-1-alexander.stein@ew.tq-group.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
---iicycb2qvy4rthvm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Tue, Feb 28, 2023 at 03:54:33PM -0600, Rob Herring wrote:
-> SPI and I2C bus node names are expected to be "spi" or "i2c",
-> respectively, with nothing else, a unit-address, or a '-N' index. A
-> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
-> cases. Mostly scripted with the following commands:
->=20
-> git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's=
-/i2c[0-9] {/i2c {/'
-> git grep -l '\sspi[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's=
-/spi[0-9] {/spi {/'
->=20
-> With this, a few errors in examples were exposed and fixed.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On 30/01/2023 16:32, Alexander Stein wrote:
+> When start sending a new message clear the Rx & Tx buffer pointers in
+> order to avoid using stale pointers.
+> 
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 > ---
+> I noticed an ambigous stack corruption once my rtc-pcf85063 driver probes.
+> 
+> [    2.695684] Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: pcf85063_rtc_read_time+0x10/0x100
+> [    2.706669] CPU: 1 PID: 63 Comm: kworker/u8:2 Not tainted 6.2.0-rc6-next-20230130+ #1185 ca067559321ae817c063baccdba80d328f10f73
+> [    2.718331] Hardware name: TQ-Systems i.MX8QXP TQMa8XQP on MBa8Xx (DT)
+> [    2.724866] Workqueue: events_unbound deferred_probe_work_func
+> [    2.730712] Call trace:
+> [    2.733161]  dump_backtrace+0x9c/0x11c
+> [    2.736914]  show_stack+0x14/0x1c
+> [    2.740232]  dump_stack_lvl+0x5c/0x78
+> [    2.743907]  dump_stack+0x14/0x1c
+> [    2.747225]  panic+0x34c/0x39c
+> [    2.750283]  __ktime_get_real_seconds+0x0/0xc
+> [    2.754653]  pcf85063_ioctl+0x0/0xf0
+> [    2.758232]  __rtc_read_time+0x44/0x114
+> [    2.762081]  __rtc_read_alarm+0x258/0x460
+> [    2.766095]  __devm_rtc_register_device+0x174/0x2b4
+> [    2.770986]  pcf85063_probe+0x258/0x4d4
+> [    2.774825]  i2c_device_probe+0x100/0x33c
+> 
+> The backtrace did not indicate the actual cause of it. Checking the code the
+> RTC driver seemed to be ok, so it has to be in the i2c bus driver.
+> At some point I noticed that I see both Rx and Tx interrupts at the same time,
+> which is odd. Also both rx_buf and tx_buf was set simultaneously. Clearly
+> a bug to me.
+> Clearing the buffer pointers upon each new i2c message triggered a NULL
+> pointer dereference:
+> 
+> [    2.694923] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000001
+> [    2.703730] Mem abort info:
+> [    2.706525]   ESR = 0x0000000096000004
+> [    2.710278]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [    2.715595]   SET = 0, FnV = 0
+> [    2.718653]   EA = 0, S1PTW = 0
+> [    2.721798]   FSC = 0x04: level 0 translation fault
+> [    2.726680] Data abort info:
+> [    2.729556]   ISV = 0, ISS = 0x00000004
+> [    2.733387]   CM = 0, WnR = 0
+> [    2.736358] [0000000000000001] user address but active_mm is swapper
+> [    2.742719] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+> [    2.748990] Modules linked in:
+> [    2.752051] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.2.0-rc6-next-20230130+ #1184 44a8abebca6bfabc93e20ac52bce
+> 47da7f92cec1
+> [    2.763368] Hardware name: TQ-Systems i.MX8QXP TQMa8XQP on MBa8Xx (DT)
+> [    2.769902] pstate: 800000c5 (Nzcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    2.776868] pc : lpi2c_imx_write_txfifo+0x44/0xb0
+> [    2.781585] lr : lpi2c_imx_isr+0x60/0x8c
+> [    2.785512] sp : ffff800008003ef0
+> [    2.788831] x29: ffff800008003ef0 x28: ffff8000099c1ec0 x27: 00000000bfe632c8
+> [    2.795980] x26: 0000000000000000 x25: ffff800009b935ed x24: ffff800009a4d4c0
+> [    2.803130] x23: ffff00000365e800 x22: 0000000000000128 x21: 0000000000000000
+> [    2.810280] x20: ffff0000033f4080 x19: 0000000003000103 x18: 0000000000000000
+> [    2.817430] x17: ffff80003688a000 x16: ffff800008000000 x15: 0000000000000000
+> [    2.824579] x14: 0000000000000000 x13: ffff8000099d1db8 x12: 0000000000000000
+> [    2.831729] x11: ffff800009503180 x10: 0000000000000a80 x9 : ffff8000099b3d20
+> [    2.838879] x8 : ffff8000099c29a0 x7 : 00000000000000c0 x6 : ffff000002838028
+> [    2.846029] x5 : 0000000000000002 x4 : 0000000000000000 x3 : 0000000000000000
+> [    2.849626] imx-scu system-controller: RPC send msg timeout
+> [    2.853178] x2 : ffff800009c88060 x1 : 0000000000000001 x0 : ffff0000033f4080
+> [    2.858764]  enet1: failed to power off resource 252 ret -110
+> [    2.865897] Call trace:
+> [    2.865901]  lpi2c_imx_write_txfifo+0x44/0xb0
+> [    2.878443]  __handle_irq_event_percpu+0x5c/0x188
+> [    2.883151]  handle_irq_event+0x48/0xb0
+> 
+> $ ./scripts/faddr2line build_arm64/vmlinux lpi2c_imx_write_txfifo+0x44/0xb0
+> lpi2c_imx_write_txfifo+0x44/0xb0:
+> lpi2c_imx_write_txfifo at drivers/i2c/busses/i2c-imx-lpi2c.c:364
+> 
+> This now clearly pinpoints the wrong access which previously corrupted the
+> stack. The error leading to this wrong access is addressed in the
+> following patch.
+> 
+>   drivers/i2c/busses/i2c-imx-lpi2c.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> index 188f2a36d2fd..c6d0225246e6 100644
+> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> @@ -463,6 +463,8 @@ static int lpi2c_imx_xfer(struct i2c_adapter *adapter,
+>   		if (num == 1 && msgs[0].len == 0)
+>   			goto stop;
+>   
+> +		lpi2c_imx->rx_buf = NULL;
+> +		lpi2c_imx->tx_buf = NULL;
+>   		lpi2c_imx->delivered = 0;
+>   		lpi2c_imx->msglen = msgs[i].len;
+>   		init_completion(&lpi2c_imx->complete);
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com> # for power-s=
-upply
+Hello,
+I have same problem with rtc-ds1307 driver and NXP imx8x (using ic2-imx-lpi2c.c bus driver).
+I do not have the full stack trace but I'm sure is very similar:
+[   10.750015] Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: ds1307_get_time+0x2a4/0x2c4 [rtc_ds1307]
 
--- Sebastian
+Your patches are fixing this too and they seem good to me.
+About the [2/2] patch your approach sound better to me than the downstream approach.
 
-=2E..
+Emanuele Ghidoli
 
->  .../devicetree/bindings/power/supply/bq2415x.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq24190.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq24257.yaml |  4 ++--
->  .../devicetree/bindings/power/supply/bq24735.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq2515x.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq25890.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq25980.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq27xxx.yaml | 15 ++++++++-------
->  .../bindings/power/supply/lltc,ltc294x.yaml       |  2 +-
->  .../bindings/power/supply/ltc4162-l.yaml          |  2 +-
->  .../bindings/power/supply/maxim,max14656.yaml     |  2 +-
->  .../bindings/power/supply/maxim,max17040.yaml     |  4 ++--
->  .../bindings/power/supply/maxim,max17042.yaml     |  2 +-
->  .../bindings/power/supply/richtek,rt9455.yaml     |  2 +-
->  .../bindings/power/supply/ti,lp8727.yaml          |  2 +-
 
-=2E..
 
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq2415x.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq2415x.yaml
-> index f7287ffd4b12..13822346e708 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq2415x.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq2415x.yaml
-> @@ -77,7 +77,7 @@ additionalProperties: false
-> =20
->  examples:
->    - |
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq24190.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
-> index 001c0ffb408d..d3ebc9de8c0b 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq24190.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
-> @@ -75,7 +75,7 @@ examples:
->        charge-term-current-microamp =3D <128000>;
->      };
-> =20
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq24257.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq24257.yaml
-> index cc45939d385b..eb064bbf876c 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq24257.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq24257.yaml
-> @@ -84,7 +84,7 @@ examples:
->    - |
->      #include <dt-bindings/gpio/gpio.h>
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> @@ -104,7 +104,7 @@ examples:
->    - |
->      #include <dt-bindings/gpio/gpio.h>
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq24735.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq24735.yaml
-> index 388ee16f8a1e..af41e7ccd784 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq24735.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq24735.yaml
-> @@ -77,7 +77,7 @@ examples:
->    - |
->      #include <dt-bindings/gpio/gpio.h>
-> =20
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> index 1a1b240034ef..845822c87f2a 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> @@ -73,7 +73,7 @@ examples:
->        constant-charge-voltage-max-microvolt =3D <4000000>;
->      };
->      #include <dt-bindings/gpio/gpio.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq25890.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq25890.yaml
-> index dae27e93af09..0ad302ab2bcc 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq25890.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq25890.yaml
-> @@ -102,7 +102,7 @@ unevaluatedProperties: false
->  examples:
->    - |
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq25980.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> index b687b8bcd705..b70ce8d7f86c 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> @@ -95,7 +95,7 @@ examples:
->      };
->      #include <dt-bindings/gpio/gpio.h>
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
-> index 347d4433adc5..309ea33b5b25 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
-> @@ -75,15 +75,16 @@ additionalProperties: false
-> =20
->  examples:
->    - |
-> -    i2c0 {
-> +    bat: battery {
-> +      compatible =3D "simple-battery";
-> +      voltage-min-design-microvolt =3D <3200000>;
-> +      energy-full-design-microwatt-hours =3D <5290000>;
-> +      charge-full-design-microamp-hours =3D <1430000>;
-> +    };
-> +
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> -      bat: battery {
-> -        compatible =3D "simple-battery";
-> -        voltage-min-design-microvolt =3D <3200000>;
-> -        energy-full-design-microwatt-hours =3D <5290000>;
-> -        charge-full-design-microamp-hours =3D <1430000>;
-> -      };
-> =20
->        bq27510g3: fuel-gauge@55 {
->          compatible =3D "ti,bq27510g3";
-> diff --git a/Documentation/devicetree/bindings/power/supply/lltc,ltc294x.=
-yaml b/Documentation/devicetree/bindings/power/supply/lltc,ltc294x.yaml
-> index 774582cd3a2c..e68a97cb49fe 100644
-> --- a/Documentation/devicetree/bindings/power/supply/lltc,ltc294x.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/lltc,ltc294x.yaml
-> @@ -54,7 +54,7 @@ additionalProperties: false
-> =20
->  examples:
->    - |
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
->        battery@64 {
-> diff --git a/Documentation/devicetree/bindings/power/supply/ltc4162-l.yam=
-l b/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
-> index cfffaeef8b09..29d536541152 100644
-> --- a/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
-> @@ -54,7 +54,7 @@ additionalProperties: false
-> =20
->  examples:
->    - |
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
->        charger: battery-charger@68 {
-> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max1465=
-6.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max14656.yaml
-> index 711066b8cdb9..b444b799848e 100644
-> --- a/Documentation/devicetree/bindings/power/supply/maxim,max14656.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max14656.yaml
-> @@ -32,7 +32,7 @@ additionalProperties: false
->  examples:
->    - |
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max1704=
-0.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max17040.yaml
-> index 3a529326ecbd..2627cd3eed83 100644
-> --- a/Documentation/devicetree/bindings/power/supply/maxim,max17040.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max17040.yaml
-> @@ -68,7 +68,7 @@ unevaluatedProperties: false
-> =20
->  examples:
->    - |
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> @@ -82,7 +82,7 @@ examples:
->      };
->    - |
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max1704=
-2.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
-> index 64a0edb7bc47..085e2504d0dc 100644
-> --- a/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
-> @@ -69,7 +69,7 @@ additionalProperties: false
-> =20
->  examples:
->    - |
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt945=
-5.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9455.yaml
-> index 27bebc1757ba..07e38be39f1b 100644
-> --- a/Documentation/devicetree/bindings/power/supply/richtek,rt9455.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9455.yaml
-> @@ -68,7 +68,7 @@ additionalProperties: false
->  examples:
->    - |
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/ti,lp8727.yam=
-l b/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> index ce6fbdba8f6b..3a9e4310b433 100644
-> --- a/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> @@ -61,7 +61,7 @@ additionalProperties: false
->  examples:
->    - |
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
 
-=2E..
-
---iicycb2qvy4rthvm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmP/4zIACgkQ2O7X88g7
-+pqxgBAAj3F4gb6RlI0Z6x4ZQhCWN+DLukelA2aUhkYhJyBC2UXCy5KWL1cNzB6P
-Y/hjl2FRmX0zNrcfRZ8kPynFwBHGbqcob8mgiAmOxCCFjczYKEIBMDbV3dZ6RDPA
-gz2uAVm2ioYkgXNjee6TC9knDQ34wmmkR1MwV2u7V4YVH/Xvxu164dQE1ZAeMs8I
-dXJByJltLKNqRQtOQabhGSP3+6//tZ3Cu/b+Zmdk+f+r+VTvvsWH+rJlxLKJbiE3
-znCN7kp3Ty1yvzd8PgM+MDt0o4mXlnfcfX5Vb+PtVTwMMJVtHvCFDYZL2Z71mwQr
-8R49nVhm4pkHMpI5nZz/eYXmrsU/hpRBSVbLhd+oSNI76YqPpm/+xGWKF5JZgMIm
-YAxRZjxs45EP2ST8nMa7/SYXygYCp9qekwcN39+IV2LSgRkjo1Iz+qJn5sOXvYMb
-dJ/q0IGA8cWQ4lG3LNzwAVkfQMzfw8OFFxbTVxDFDVBM/mAHr06M86TGcLyGEYxa
-r5YDSv8596Ep4y67xHrdzXCLASbYgQANlOBoNkX/ZMm3YcCGXsHSl/DQdGw5KSEr
-4zeoAsdANn6jGsLJurLrMFXTXcKMUEk9vHjE+N+bEjBxrMFQ9QyIk9d5MlCdp1Tn
-ptHuPPrunQ82d7+YC/fRCc28y/rDpEOlrFfdXej3Z3IJIkLQusE=
-=cMEP
------END PGP SIGNATURE-----
-
---iicycb2qvy4rthvm--
