@@ -2,205 +2,196 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0648D6A89B4
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 Mar 2023 20:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 620586A919B
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Mar 2023 08:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjCBToQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 2 Mar 2023 14:44:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
+        id S229494AbjCCHVY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Mar 2023 02:21:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjCBToB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Mar 2023 14:44:01 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2046.outbound.protection.outlook.com [40.107.100.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9BB584B8;
-        Thu,  2 Mar 2023 11:43:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J4HrOXTl0D8eihcw95PZIcwE23Rr1+i/B2JFbBXkvGcwAwmQo+zwm3xgx06JkYEzAe+eylF2TkBRzHykGBF1wfYL4a9AB1RSQ5M/2VFhXsJ4mLKNNh6/sbynNRzxrEdqIaMv6+B+Ffu1Uw8Fo5aAwtCDwxBtx/HhSRTinh9aPeOY5FJl5LxhQ7mmpbVQxVi4FaKxXQ0dgSg+yfpwOPz0k1Awa2sSIiKV3qI9oqzqdcWV3Hfzo2uT/K9SwkpG84dIOwuJb9LZbK0V1SBknWQd+o1pBBpnmPhTAHlZtRuWbNBOdgQUncNk8BdP5o4qoQTDe9PMTxzCT9O9NV7mXPOtog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mV6W8dCtl0WJCeAfW2OSslHKfOWhp8MIE/OqwaR2uB4=;
- b=AmXd0fZ2gRk0JlIzL2ASQ2jXux8h9zKtMhRGVkH8PFBKiJ0MClzfcS85T3xkm5R+9dY+p0Bq5/N333fdMUNoB1wefp/Aa+a2IT0eWiNpmueWrR7GRclZaDxfmv1Y1Ax7h+MOC+OXmC5sBgxPdTiytIMN8dm0fX/GMZ0+A1ceqZ0xrX4dmYC3cgrjIjpvBbDIcr+4NxWH0gR5S7grAeCafrVf/niSEbVM+yNopR1gUW77uDDmEvl5J7rZLb96DzfpOSTenAF6g8hb96WcSYIiwyP05DvEB6fp4/V3wY1liEpnz1GmtRvFCWmuk8Ga7lEN399wR5OWaEpOjCCh2YdUyg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=semihalf.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mV6W8dCtl0WJCeAfW2OSslHKfOWhp8MIE/OqwaR2uB4=;
- b=WyaumRzD4lK6v9GkZGUJWCrheFL/w/iGIcb0rsRCOhvm6j56Idf8a2VBRcVG60FhUyxxkGs8PALS8nE1cFDa4QS9tLdNfo6hc+Emjn2W0kZoDWYTTaAdbOZ4WJl1XAA2ILxoZ6Q/flUU+gcoXCWoYI73YeDh23mKfJaxer7sQ1w=
-Received: from BN9PR03CA0436.namprd03.prod.outlook.com (2603:10b6:408:113::21)
- by CH0PR12MB5106.namprd12.prod.outlook.com (2603:10b6:610:bd::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Thu, 2 Mar
- 2023 19:43:23 +0000
-Received: from BN8NAM11FT069.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:113:cafe::96) by BN9PR03CA0436.outlook.office365.com
- (2603:10b6:408:113::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19 via Frontend
- Transport; Thu, 2 Mar 2023 19:43:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT069.mail.protection.outlook.com (10.13.176.152) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6156.20 via Frontend Transport; Thu, 2 Mar 2023 19:43:23 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 2 Mar
- 2023 13:43:22 -0600
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     =?UTF-8?q?Jan=20D=C4=85bro=C5=9B?= <jsd@semihalf.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        <Rijo-john.Thomas@amd.com>, <Thomas.Lendacky@amd.com>,
-        <herbert@gondor.apana.org.au>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-CC:     Mario Limonciello <mario.limonciello@amd.com>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 8/9] i2c: designware: Add doorbell support for Skyrim
-Date:   Thu, 2 Mar 2023 13:42:31 -0600
-Message-ID: <20230302194235.1724-9-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230302194235.1724-1-mario.limonciello@amd.com>
-References: <20230302194235.1724-1-mario.limonciello@amd.com>
+        with ESMTP id S229445AbjCCHVX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Mar 2023 02:21:23 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FBD1ABDC
+        for <linux-i2c@vger.kernel.org>; Thu,  2 Mar 2023 23:21:22 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id j3so990995wms.2
+        for <linux-i2c@vger.kernel.org>; Thu, 02 Mar 2023 23:21:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677828080;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8MQLVyHbfVOZYN6zgY31RljZHbRaUH4TgGRwTrnUsjA=;
+        b=MRq6hi5C3EXEvpoJjzPv6IRieUXz9WXIOhmrPK0fTIwjiWPku0pu1Zqz3YEVg3qDUH
+         r2f81HPXk3FaFmT9MCMJt8zK2fg2LmOLuSPaAXXA61mqCrmDxysy9fIGeitC6mEzWKfb
+         6ano6exepaFDM/AQ2a7SNTT0g2Oga2SUy9QqoDjvTW9/h1pnYzGFRXmPS06lCKrfoy1/
+         HaGJ+Xcwc9ehzFH3e2GxTuhrd7oiIeKizka3ttLVERWKo2yh1Rw1GtsnCZ5w683I/VdV
+         psa2D7BVx9O08Ws29EvRzZ7O2cujcwaXbgkVFCETscLq9Zjk2vRqh7DS+/d3tccbG3BC
+         Ew7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677828080;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8MQLVyHbfVOZYN6zgY31RljZHbRaUH4TgGRwTrnUsjA=;
+        b=MTwLoovLoBzHEW8fe8aJ5tvmjcK9jAKNCJtkcQbYg5fY0HMqT05oXnRNdOMcCjW5Q+
+         a8u4CcqGkR1mIBciuBDQzmgdWuXf5ZQO/VjdjP4omPoAqjPEs2axTa3lBX12hXekVMCG
+         q/BCBFgAycdtqgAKk/vClgieMMHYtax8GEhCpmPH5o7tg4A/tpyPWQWvOney/6k+8Prs
+         xN1gjLR7BWrdKyAMwsbcWOizUAm8d+VHm7+wVD4mBGq/RicUfHguFAb6c/kKoA0SHBxz
+         h1nCcF6touPd8jNnNdDgrYQkdEGQQfDwRxBtZXk75uLkqSUWvFC8HiIR9mcv8AIGLgp0
+         u/RA==
+X-Gm-Message-State: AO0yUKUZUklp4UflB03zwMbgAa3l56CenNV6h7JifQ4kJGMmeRqLJduT
+        MsLo3oOUXS3+urRQyodK2ipR8Ti8AOVdf3Cg
+X-Google-Smtp-Source: AK7set8le86b49aQEZy5Egu60tyNJaZNg5q59rusaHtzi2919J0ZiStUS0YWz86W2LCUhTSEjo24fQ==
+X-Received: by 2002:a05:600c:1547:b0:3eb:3104:efe7 with SMTP id f7-20020a05600c154700b003eb3104efe7mr743374wmg.23.1677828080330;
+        Thu, 02 Mar 2023 23:21:20 -0800 (PST)
+Received: from [192.168.79.191] ([151.48.121.118])
+        by smtp.gmail.com with ESMTPSA id j22-20020a05600c485600b003e203681b26sm1532429wmo.29.2023.03.02.23.21.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 23:21:20 -0800 (PST)
+Message-ID: <4e87d4dc-dd42-5720-0f41-6c1191e26ae9@gmail.com>
+Date:   Fri, 3 Mar 2023 08:21:19 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] i2c: imx-lpi2c: clean rx/tx buffers upon new message
+Content-Language: en-US
+From:   Emanuele Ghidoli <ghidoliemanuele@gmail.com>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+References: <20230130153247.445027-1-alexander.stein@ew.tq-group.com>
+ <4d06ffe5-3ff6-241e-b35b-794c075f288e@gmail.com>
+In-Reply-To: <4d06ffe5-3ff6-241e-b35b-794c075f288e@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT069:EE_|CH0PR12MB5106:EE_
-X-MS-Office365-Filtering-Correlation-Id: f90d00c8-f778-413b-05dd-08db1b56628d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lpkD/MTIc10noIyEMUAWHXKdzv0EVtPgK+VAdkJuSCQpU8HuHXyicoBKl0mAwNWRLacqgHEck8gdzsa46w+CnsvHk+RBSEz8XDMOEJx6NM8PMaNMwhp+l30Fpwm7+tllcFV/Y2a0Vx00FFURF3Ymk7zYJqd5Urd4Kw97Hncn+b58CS35Kc8LGfvSvhik/QD9MePgESLzIR1BHUcQLOkwGYjqZTniu5VZ5X1wfdlP8JZXGfELlt6/RuvGBH918ZUi/tlh5JmEf1inlEHPkI/UjoNvyiGAqKdkg8Lqve4eZCS5N5eE3wvCytwQp1478Tmhtk6vnuCYO8KX99Z0noIH/u/Wx2DJmqqbX+p3DPCEWDB/4IibDJOczZnuKBR6BTeFICT3H8qA35TtdP6xefsxTiDbFhGDO6m/jUBDLyRvOQMXzOVVhMMZGgPhQwjdlyFUp3LnB+usfwecKC4shzsGRghOth0hOtN8obDRDaBkIWDGp3IjkBQ5i2zLBERCCGhvcltpu7Lt/6HPZiEGwUuK7CAsza4Jl0Io/W7XqBtLWsZRwRQBuI49wWljLJ5xkQ6DyGN6V88+WrN8Q0WmnaU0F+w9qTkITY/G8sHfOuclwPFp1NttzhBjl9+rirjnvjhX8Y6rGL1efcEDNS07AOPfgGF+vnbfKKSKdxxVKsJxJYWDrV5Bz94HPcuUSJdyYfOr8lsjwNqCpGOoDnSu1XNlTpGjv6UyL69UwCSrk8wY3nA=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(376002)(396003)(39860400002)(451199018)(46966006)(36840700001)(40470700004)(36756003)(40480700001)(6666004)(7696005)(86362001)(8936002)(5660300002)(4326008)(8676002)(41300700001)(356005)(2906002)(36860700001)(82740400003)(81166007)(966005)(478600001)(316002)(54906003)(70586007)(70206006)(82310400005)(44832011)(110136005)(426003)(83380400001)(47076005)(336012)(2616005)(40460700003)(16526019)(186003)(26005)(1076003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2023 19:43:23.7135
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f90d00c8-f778-413b-05dd-08db1b56628d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT069.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5106
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Skyrim doesn't use the platform feature mailbox for communication
-for I2C arbitration, it relies upon ringing a doorbell.
+On 02/03/2023 12:06, Emanuele Ghidoli wrote:
+> On 30/01/2023 16:32, Alexander Stein wrote:
+>> When start sending a new message clear the Rx & Tx buffer pointers in
+>> order to avoid using stale pointers.
+>>
+>> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+>> ---
+>> I noticed an ambigous stack corruption once my rtc-pcf85063 driver probes.
+>>
+>> [    2.695684] Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: pcf85063_rtc_read_time+0x10/0x100
+>> [    2.706669] CPU: 1 PID: 63 Comm: kworker/u8:2 Not tainted 6.2.0-rc6-next-20230130+ #1185 ca067559321ae817c063baccdba80d328f10f73
+>> [    2.718331] Hardware name: TQ-Systems i.MX8QXP TQMa8XQP on MBa8Xx (DT)
+>> [    2.724866] Workqueue: events_unbound deferred_probe_work_func
+>> [    2.730712] Call trace:
+>> [    2.733161]  dump_backtrace+0x9c/0x11c
+>> [    2.736914]  show_stack+0x14/0x1c
+>> [    2.740232]  dump_stack_lvl+0x5c/0x78
+>> [    2.743907]  dump_stack+0x14/0x1c
+>> [    2.747225]  panic+0x34c/0x39c
+>> [    2.750283]  __ktime_get_real_seconds+0x0/0xc
+>> [    2.754653]  pcf85063_ioctl+0x0/0xf0
+>> [    2.758232]  __rtc_read_time+0x44/0x114
+>> [    2.762081]  __rtc_read_alarm+0x258/0x460
+>> [    2.766095]  __devm_rtc_register_device+0x174/0x2b4
+>> [    2.770986]  pcf85063_probe+0x258/0x4d4
+>> [    2.774825]  i2c_device_probe+0x100/0x33c
+>>
+>> The backtrace did not indicate the actual cause of it. Checking the code the
+>> RTC driver seemed to be ok, so it has to be in the i2c bus driver.
+>> At some point I noticed that I see both Rx and Tx interrupts at the same time,
+>> which is odd. Also both rx_buf and tx_buf was set simultaneously. Clearly
+>> a bug to me.
+>> Clearing the buffer pointers upon each new i2c message triggered a NULL
+>> pointer dereference:
+>>
+>> [    2.694923] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000001
+>> [    2.703730] Mem abort info:
+>> [    2.706525]   ESR = 0x0000000096000004
+>> [    2.710278]   EC = 0x25: DABT (current EL), IL = 32 bits
+>> [    2.715595]   SET = 0, FnV = 0
+>> [    2.718653]   EA = 0, S1PTW = 0
+>> [    2.721798]   FSC = 0x04: level 0 translation fault
+>> [    2.726680] Data abort info:
+>> [    2.729556]   ISV = 0, ISS = 0x00000004
+>> [    2.733387]   CM = 0, WnR = 0
+>> [    2.736358] [0000000000000001] user address but active_mm is swapper
+>> [    2.742719] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+>> [    2.748990] Modules linked in:
+>> [    2.752051] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.2.0-rc6-next-20230130+ #1184 44a8abebca6bfabc93e20ac52bce
+>> 47da7f92cec1
+>> [    2.763368] Hardware name: TQ-Systems i.MX8QXP TQMa8XQP on MBa8Xx (DT)
+>> [    2.769902] pstate: 800000c5 (Nzcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>> [    2.776868] pc : lpi2c_imx_write_txfifo+0x44/0xb0
+>> [    2.781585] lr : lpi2c_imx_isr+0x60/0x8c
+>> [    2.785512] sp : ffff800008003ef0
+>> [    2.788831] x29: ffff800008003ef0 x28: ffff8000099c1ec0 x27: 00000000bfe632c8
+>> [    2.795980] x26: 0000000000000000 x25: ffff800009b935ed x24: ffff800009a4d4c0
+>> [    2.803130] x23: ffff00000365e800 x22: 0000000000000128 x21: 0000000000000000
+>> [    2.810280] x20: ffff0000033f4080 x19: 0000000003000103 x18: 0000000000000000
+>> [    2.817430] x17: ffff80003688a000 x16: ffff800008000000 x15: 0000000000000000
+>> [    2.824579] x14: 0000000000000000 x13: ffff8000099d1db8 x12: 0000000000000000
+>> [    2.831729] x11: ffff800009503180 x10: 0000000000000a80 x9 : ffff8000099b3d20
+>> [    2.838879] x8 : ffff8000099c29a0 x7 : 00000000000000c0 x6 : ffff000002838028
+>> [    2.846029] x5 : 0000000000000002 x4 : 0000000000000000 x3 : 0000000000000000
+>> [    2.849626] imx-scu system-controller: RPC send msg timeout
+>> [    2.853178] x2 : ffff800009c88060 x1 : 0000000000000001 x0 : ffff0000033f4080
+>> [    2.858764]  enet1: failed to power off resource 252 ret -110
+>> [    2.865897] Call trace:
+>> [    2.865901]  lpi2c_imx_write_txfifo+0x44/0xb0
+>> [    2.878443]  __handle_irq_event_percpu+0x5c/0x188
+>> [    2.883151]  handle_irq_event+0x48/0xb0
+>>
+>> $ ./scripts/faddr2line build_arm64/vmlinux lpi2c_imx_write_txfifo+0x44/0xb0
+>> lpi2c_imx_write_txfifo+0x44/0xb0:
+>> lpi2c_imx_write_txfifo at drivers/i2c/busses/i2c-imx-lpi2c.c:364
+>>
+>> This now clearly pinpoints the wrong access which previously corrupted the
+>> stack. The error leading to this wrong access is addressed in the
+>> following patch.
+>>
+>>   drivers/i2c/busses/i2c-imx-lpi2c.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
+>> index 188f2a36d2fd..c6d0225246e6 100644
+>> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
+>> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+>> @@ -463,6 +463,8 @@ static int lpi2c_imx_xfer(struct i2c_adapter *adapter,
+>>           if (num == 1 && msgs[0].len == 0)
+>>               goto stop;
+>> +        lpi2c_imx->rx_buf = NULL;
+>> +        lpi2c_imx->tx_buf = NULL;
+>>           lpi2c_imx->delivered = 0;
+>>           lpi2c_imx->msglen = msgs[i].len;
+>>           init_completion(&lpi2c_imx->complete);
+> 
+> Hello,
+> I have same problem with rtc-ds1307 driver and NXP imx8x (using ic2-imx-lpi2c.c bus driver).
+> I do not have the full stack trace but I'm sure is very similar:
+> [   10.750015] Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: ds1307_get_time+0x2a4/0x2c4 [rtc_ds1307]
+> 
+> Your patches are fixing this too and they seem good to me.
+> About the [2/2] patch your approach sound better to me than the downstream approach.
+> 
+> Emanuele Ghidoli
+> 
+> 
+> 
+> 
+Hello,
+maybe it is worth to tag also with "Fixes:"... I do not know if it was here from the first commit introducing the driver.
 
-Add a new ACPI ID to use for Skyrim and when that ID is detected
-use the doorbell instead.
+Best regards,
 
-Link: https://lore.kernel.org/linux-i2c/20220916131854.687371-3-jsd@semihalf.com/
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v1->v2:
- * New patch
-Note: This ACPI ID hasn't currently been reserved, but as Skyrim runs coreboot
-it should be easy enough to modify the BIOS and test it out.
-If this approach works and has general agreement it can be reserved.
----
- drivers/i2c/busses/i2c-designware-amdpsp.c  | 29 ++++++++++++++-------
- drivers/i2c/busses/i2c-designware-platdrv.c |  1 +
- 2 files changed, 20 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
-index 105584abcf8f..e1a4d3002c80 100644
---- a/drivers/i2c/busses/i2c-designware-amdpsp.c
-+++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-@@ -73,34 +73,44 @@ static int psp_send_check_i2c_req(struct psp_i2c_req *req)
- 	return check_i2c_req_sts(req);
- }
- 
--static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
-+static int psp_send_i2c_req_amdi0019(enum psp_i2c_req_type i2c_req_type)
- {
- 	struct psp_i2c_req *req;
--	unsigned long start;
- 	int status, ret;
- 
- 	/* Allocate command-response buffer */
- 	req = kzalloc(sizeof(*req), GFP_KERNEL);
- 	if (!req)
- 		return -ENOMEM;
--
- 	req->hdr.payload_size = sizeof(*req);
- 	req->type = i2c_req_type;
--
--	start = jiffies;
- 	ret = read_poll_timeout(psp_send_check_i2c_req, status,
- 				(status != -EBUSY),
- 				PSP_I2C_REQ_RETRY_DELAY_US,
- 				PSP_I2C_REQ_RETRY_CNT * PSP_I2C_REQ_RETRY_DELAY_US,
- 				0, req);
--	if (ret) {
-+	kfree(req);
-+
-+	if (ret)
- 		dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C bus\n",
- 			(i2c_req_type == PSP_I2C_REQ_ACQUIRE) ?
- 			"release" : "acquire");
--		goto cleanup;
--	}
- 
--	ret = status;
-+	return ret ? ret : status;
-+}
-+
-+static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
-+{
-+	const char *hid = acpi_device_hid(ACPI_COMPANION(psp_i2c_dev));
-+	unsigned long start = jiffies;
-+	int ret;
-+
-+	/* Use doorbell for Skyrim and mailbox for Cezanne */
-+	if (!strcmp(hid, "AMDI0020"))
-+		ret = psp_ring_platform_doorbell(i2c_req_type);
-+	else
-+		ret = psp_send_i2c_req_amdi0019(i2c_req_type);
-+
- 	if (ret) {
- 		dev_err(psp_i2c_dev, "PSP communication error\n");
- 		goto cleanup;
-@@ -115,7 +125,6 @@ static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
- 		psp_i2c_mbox_fail = true;
- 	}
- 
--	kfree(req);
- 	return ret;
- }
- 
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index 89ad88c54754..5ca71bda9ac2 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -51,6 +51,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] = {
- 	{ "AMD0010", ACCESS_INTR_MASK },
- 	{ "AMDI0010", ACCESS_INTR_MASK },
- 	{ "AMDI0019", ACCESS_INTR_MASK | ARBITRATION_SEMAPHORE },
-+	{ "AMDI0020", ACCESS_INTR_MASK | ARBITRATION_SEMAPHORE },
- 	{ "AMDI0510", 0 },
- 	{ "APMC0D0F", 0 },
- 	{ "HISI02A1", 0 },
--- 
-2.34.1
-
+Emanuele
