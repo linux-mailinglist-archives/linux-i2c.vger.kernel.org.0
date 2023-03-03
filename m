@@ -2,57 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED856AA053
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Mar 2023 20:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E006AA05B
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Mar 2023 20:56:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjCCTue (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 3 Mar 2023 14:50:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
+        id S230495AbjCCT4s (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Mar 2023 14:56:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231336AbjCCTud (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Mar 2023 14:50:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D16584BD;
-        Fri,  3 Mar 2023 11:50:32 -0800 (PST)
+        with ESMTP id S230482AbjCCT4s (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Mar 2023 14:56:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BA26153E
+        for <linux-i2c@vger.kernel.org>; Fri,  3 Mar 2023 11:56:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5451618C5;
-        Fri,  3 Mar 2023 19:50:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B697C433EF;
-        Fri,  3 Mar 2023 19:50:30 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8B16ACE2257
+        for <linux-i2c@vger.kernel.org>; Fri,  3 Mar 2023 19:56:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A89EC433D2;
+        Fri,  3 Mar 2023 19:56:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677873031;
-        bh=skvuE4TTFMibNLUPAu/zv3xd+K2m+Il1wb3nlXTkHeY=;
+        s=k20201202; t=1677873403;
+        bh=JQo1jIrE3xyU6N5VDTj7I+kSMwlFq6cXXpqrsdd2gZ0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Suf9n9hjoabhuFHaocnG9Dqqe++PL3etBXpWXEqC5zKHL+mmM5/tnA9fyTU+Ywa83
-         OM6Tsd2mWMF1sGfiykLgYL9JX7Dt+JgEa18EZ22XwaDxEoHNKEsNL/JL6zQA4utAdG
-         sLFm6ihDby8lGjd6xKO3JIXQLGnocu9OKCmWiprC0JNrLqh+aNB1ShVsDstXq2zx4i
-         L13nvndTU2VJYwqKOBXwIWlvcqccw76itmSN+xbjE+d2sd+eZ08VNvEivWE/3bJ/EQ
-         skO8m3G9tRuieHcto3C6mY0muMlV3bHXhju8wrYG6EVNhZRLTARpySB2yRjOLjj5YE
-         y4Q13rYm5H+Xg==
-Date:   Fri, 3 Mar 2023 20:50:21 +0100
+        b=grRb9WvyWB6k3iMS7SoRIWc5V/mGjwbw+6SYKjKX6/vtlNDfW8B9IDmUxsYhJmlbA
+         IxzwOj0e/Q+lkBgqPVaTTQGGFglu13KgOj/sxMhZJ3bWp9fR2B1PohC8RWHHv/NesI
+         BK+5yyhxi3qR6dZHSLAxpLzRGRVFti86KFKn+oyd/V6i1PNYlf929uMDXgEjzI+sOz
+         qUYtwfRDbhtZUfBerBFoeUOCE6xyH7u3F+Uo1szNKa3bd+z0m3dP15LjPxSQV3lTQ4
+         x/jdMHLLIhOXeA4GAeYKPY44ZKDKfU6w2MV+4kkRnuSHTx3sv2Jwxf2YAM5jLy7DcL
+         SOc73xAKQBLIQ==
+Date:   Fri, 3 Mar 2023 20:56:39 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: i2c: include all I2C bindings in the I2C
- entry
-Message-ID: <ZAJPfaY5NxxS6v3R@shikoro>
+To:     Benjamin Gray <bgray@linux.ibm.com>
+Cc:     linux-i2c@vger.kernel.org, arnd@arndb.de,
+        Sven Peter <sven@svenpeter.dev>, mpe@ellerman.id.au
+Subject: Re: [PATCH v2 1/2] i2c: Disable I2C_APPLE when I2C_PASEMI is a
+ builtin
+Message-ID: <ZAJQ90AAzCg83ot/@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230303082530.11878-1-krzysztof.kozlowski@linaro.org>
+        Benjamin Gray <bgray@linux.ibm.com>, linux-i2c@vger.kernel.org,
+        arnd@arndb.de, Sven Peter <sven@svenpeter.dev>, mpe@ellerman.id.au
+References: <20230227233318.120415-1-bgray@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5UzlFTmsW+OHxgRE"
+        protocol="application/pgp-signature"; boundary="QmIATQ1h8zIEbdS/"
 Content-Disposition: inline
-In-Reply-To: <20230303082530.11878-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230227233318.120415-1-bgray@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,35 +58,46 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---5UzlFTmsW+OHxgRE
+--QmIATQ1h8zIEbdS/
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Feb 28, 2023 at 10:33:17AM +1100, Benjamin Gray wrote:
+> The ppc64le_allmodconfig sets I2C_PASEMI=3Dy and leaves COMPILE_TEST to
+> default to y and I2C_APPLE to default to m, running into a known
+> incompatible configuration that breaks the build [1]. Specifically,
+> a common dependency (i2c-pasemi-core.o in this case) cannot be used by
+> both builtin and module consumers.
+>=20
+> Disable I2C_APPLE when I2C_PASEMI is a builtin to prevent this.
+>=20
+> [1]: https://lore.kernel.org/all/202112061809.XT99aPrf-lkp@intel.com
+>=20
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
+
+Applied to for-current, thanks!
 
 
-> +F:	Documentation/devicetree/bindings/i2c/
-
-This entry is already present a tad later in "I2C SUBSYSTEM HOST
-DRIVERS".
-
-
---5UzlFTmsW+OHxgRE
+--QmIATQ1h8zIEbdS/
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQCT3kACgkQFA3kzBSg
-KbZyeg/9HGgtVwIZ5hdzbIgeB3QeobXF7+D3WmIwb6HGn/A+IC153BZRnTp2veVp
-LG3lMgnC8woz31XGgW0MMBllQXvKNEnRnEDNpdAmMiUOoL/cvWZf0U9YU5lpCP6p
-x4AYE6IHHD6A5Q7qnAs0it2KQ4s8DkQxWv930zQN2QUtn4C2hBgHkEiQpulHBWMz
-BLc15pQDDSW+OAdCDikVo8nGQow80D0CTltKvbUAF05gJWK2jNDHyQXiZOrvF3sa
-STfsUy6Hrh439948Kzth+j27x5FBzIBJZ/7vEAFNC5KOL6PQL4jygOO+O9ggbUWG
-miYO7X2bFABxjPFlAAPMzmwusx91+3vxtIulEzfA8+NflEbb12UwS1p0MAfoV0mo
-r+6Jn8KvHzl6vRW3VU6Bo0I+kKB4XIo41KpkhEDJCxBwpfUpv60ww3UZTgLS9u3D
-ci+wD30V9F14Ti2cVwTt4y8L6QRecNldN4UfUMGJwXdlVWWXBiA06txboT9F1qAc
-13RFg/OdeD7VsHaXI9B8bwQAvRPv0OBE5FHuYVEQGONyINCeQpR197l6K7M1PJfi
-MKFxKnp99hluWmHBq8lrtb789es94eNRmL3Yet34l7BOtK0M8dYLbJXTwBudMLmi
-WR9PkVvlSLgokZ7qR6wulYhJ0KI24M954tgWJjIWDIHgPpQP0BY=
-=dxxo
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQCUPcACgkQFA3kzBSg
+KbZwrQ/5AVTObPe5EoOtQvaCVPwxMs0YnZpui3zJwOzX4spKEKW1ZTmoA68xokDb
+6QrUsz1jrrJd/qlO3443Px2zetvxvIbdPoCF10rnpBMbs/QGRGF0PFfxkRbyrL0I
+ApJHH2HrgufOWCZph3t36PNUei8wHs+pRg5Ab2SR3mIvL2Jp061e3BzK7l2AAqmh
+nVsJsqh13i3MQYVHZ9xuzwOMAMIUe3gBuAkKc61Ji9R5KOS7um1/BTt/jDtnDyfn
+3vs1nsvqBxdnHTcW1MkFQxaPXnjJ6yVvI/5YNYz7Hsg4+59OJ4waYlaXMmu64p3b
+V1AfJBdsI+jfRtRwzBV+AOfaL75JRg6ibxeZEd0eoYDtmk9eW55ub7GpALqCNMBA
+e6GM5QE5DPXUsxdBpdRItxuT2H/slh/m5UjtNa3D97AwJ+BRyS0b9CtE9Z83otA7
+VgXCL0MFPAwX97peIr5jyDNj8PItuhAqcjEK9HrUPgxsKF2IlE8/dyR8mpHdNODf
+2f7Kmv+DBKsolRkb69UlnHPzVWMGs2v7VP0tD6AcCSiCdZfbbQb6l0dfKQYzZMU9
+OOep7cA5FSH0kwDtGO/bDpEtcHD8HwZxcXKPv6w7u8iDIDdxPlBDiO9K6CqLRV8e
+VyohUqzBfzKF+pUAhyuoMaifBYKAE1ESEK2MzNhBrjJurC2L0XI=
+=YDHz
 -----END PGP SIGNATURE-----
 
---5UzlFTmsW+OHxgRE--
+--QmIATQ1h8zIEbdS/--
