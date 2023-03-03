@@ -2,92 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9076A9571
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Mar 2023 11:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB416A96E7
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Mar 2023 13:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbjCCKlQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 3 Mar 2023 05:41:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
+        id S229734AbjCCMAQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Mar 2023 07:00:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjCCKlP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Mar 2023 05:41:15 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C43F5B5FB
-        for <linux-i2c@vger.kernel.org>; Fri,  3 Mar 2023 02:41:14 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id g3so8570079eda.1
-        for <linux-i2c@vger.kernel.org>; Fri, 03 Mar 2023 02:41:13 -0800 (PST)
+        with ESMTP id S229968AbjCCMAP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Mar 2023 07:00:15 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C2018ABF
+        for <linux-i2c@vger.kernel.org>; Fri,  3 Mar 2023 04:00:13 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id bg11so1577513oib.5
+        for <linux-i2c@vger.kernel.org>; Fri, 03 Mar 2023 04:00:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677840072;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=31h/TwxZjU/eMNkRy/rigOc9LyijsM9RaRbj/TNatWw=;
-        b=RneMdVVxbNNSPFOHB77lOxGVrt/PUKwP6dvfi+tbBSBSfTte9prWv75nUpwupLK7Rf
-         0Vao/jruRP+Xo9s0I2nuTlDGMWdOEx5fWxmgOnULxsJbAlhm4MeNgf+kfqV3FuI3n5zK
-         zh7VJVwLXI5GynBeI8u37shHs25x/3OmO7XYGVbp31/CsMVJQmDt0nDSZ0k/GJJ8dF4+
-         Rxd9Shpb11nXqU3ybmK7ms3vkCx4xIM7zWuqAbIIQYAFlhpmpre0IVXokvhkWNnGG1CC
-         wkc7ylHyf5bOyVDVGbCNSL5V1oCrK7nRkCL8VA0UIHxJ4GijtdqMfRkUjg3PRQnoImYW
-         euLQ==
+        d=semihalf.com; s=google; t=1677844813;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5nL802DEo8Vlj8yoMgQ/ErBx26N3r9TcbStYj6srrkE=;
+        b=PHWLqjRg0nhXfP4Er/6XPTd0g+OMA/yEQAfVHrl+Zb8ZDfBt3C+IBcHwjMwU33E2r2
+         LbV5mufvs1vw1r/uNKTW3R+UqKbGXyKxySX3tt3sgaUW16pMbAKRawse60rz1dmcgypL
+         zwTo1/PaWdvTe8m41aSW7fwzWSW6uU50WF/AJjkDr6EWCHITZSq+0KyX129vlq9aCFUr
+         Zc9744UZFHDMaO7s51dRJ67BSeMEjTq6yIWh0FBZqB8/sS+z/4keFXjYFQfE1/Dn/w0E
+         l0RsPH5eLSO0SvXfjiv++OixLtpAdHsFLxwByTs4Z4aKzMEHydVmr7qyLk9vEd5D5T3+
+         k/zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677840072;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=31h/TwxZjU/eMNkRy/rigOc9LyijsM9RaRbj/TNatWw=;
-        b=IFwco2EpcTVVp4m1yy4AEvFrIaKjrI3sEboDQIEjA04Jy+9bFto3ihf12dsfkgJnXV
-         SBp39S7D0GqNO6bQQnwL0+GRFhCY5GGDCESo/teb9dsY/oG2gGOK/udjcF/RMQHnW3iv
-         j1zycl/7UVK8JBmK2yt0nofwEPVAhNH9MXk5GPKQiVSrUd0ucIJb5EfXsKO+aFb/f3DE
-         6o7KtOybS2+ZqQ2PeKzhJWXGo2oCRefIayT0EQpG13/Re6Y+1C++wbY9Rav5/cQ50yMg
-         6ce9FFiZWAvrufbF54cY8H1dGuTmZGm5JlVn8a1JcZTESXnywxT9rGj5ztX+Y1kPCUWU
-         rrTg==
-X-Gm-Message-State: AO0yUKU7Zu8cCoEfCmniEvi39dFdDbHSyHFU8BTDbuS8fWZRHVOBYlMI
-        V6tt5weqJMFryAOrEnFrAgOUow==
-X-Google-Smtp-Source: AK7set+zg5l3kKUqXGX5P2+Qlj6Wbf352Qt7wJxSDI79UVtGhmmuEmG+SQ9Y+M41PXMeJgs90bP6/g==
-X-Received: by 2002:a17:907:7e82:b0:8f4:6efd:833f with SMTP id qb2-20020a1709077e8200b008f46efd833fmr1422247ejc.3.1677840072585;
-        Fri, 03 Mar 2023 02:41:12 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id u25-20020a50a419000000b004bd6e3ed196sm980103edb.86.2023.03.03.02.41.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 02:41:12 -0800 (PST)
-Message-ID: <c5cf6e0a-05dc-dff7-6218-df0984d1ba47@linaro.org>
-Date:   Fri, 3 Mar 2023 11:41:10 +0100
+        d=1e100.net; s=20210112; t=1677844813;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5nL802DEo8Vlj8yoMgQ/ErBx26N3r9TcbStYj6srrkE=;
+        b=ruFrOtq6YJNerEYdKbS/XKaXPMWgx9LWP4oeOm5DPQqgNeP/du9WLMhxSzM3ybngRL
+         cNZH1WAdw6I51utpXVc2qHXFbHJVDeabi1CY0Mlg7Dwcv3CRsj0B37BwfmuFVK4lwgAt
+         gqwz3SGvaH6GlupfeTRraQYLg7cTruHOV/xwIv2U4VGkc7FmAnAaFFzywF2mf2Afixze
+         64Js4DGkjKVu7/u40iVHlmZO4gUzgacpkLsLOiQWfZeAoQnuz4jCixu2xcLP26LXgSuf
+         tR9Tx7rqcr98Ca8kfYDHL9aedInpyMkRzgSr1oaCAoKQjkRdu/p9aUNOhTCccns3xSZr
+         Fm5w==
+X-Gm-Message-State: AO0yUKW82NYKk+y2DIqIzRlY3496hmvSYobS9TXm869WjmU/7UhwbyL8
+        19Pp7+kFZ6X70WzZyMMkpo8S3JfAEheo8ERBmsX2ZulK+uEcow==
+X-Google-Smtp-Source: AK7set9rSLagXYcQ1dDs85sy097wF1UMooi/Ls1MtAokFSFWKEklD/Q4NLf5UCk5w2ApF3WJypbs7252d4ofBUCofdE=
+X-Received: by 2002:aca:230d:0:b0:383:d3ae:2ef4 with SMTP id
+ e13-20020aca230d000000b00383d3ae2ef4mr431443oie.8.1677844813085; Fri, 03 Mar
+ 2023 04:00:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v6 1/2] dt-bindings: i2c: aspeed: support for
- AST2600-i2cv2
-Content-Language: en-US
-To:     Ryan Chen <ryan_chen@aspeedtech.com>, Wolfram Sang <wsa@kernel.org>
-Cc:     Joel Stanley <joel@jms.id.au>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <20230226031321.3126756-1-ryan_chen@aspeedtech.com>
- <20230226031321.3126756-2-ryan_chen@aspeedtech.com>
- <53090449-58c9-bc03-56df-aa8ae93c0c26@linaro.org>
- <SEZPR06MB52699DEB2255EB54F35C2A59F2AD9@SEZPR06MB5269.apcprd06.prod.outlook.com>
- <fc20a2d1-e2f9-c22b-dcdf-153cb527eea8@linaro.org>
- <SEZPR06MB526902637624A97D7DFB8523F2B39@SEZPR06MB5269.apcprd06.prod.outlook.com>
- <c41ee6b5-ddb4-1253-de54-a295b3bab2cc@linaro.org>
- <SEZPR06MB5269E7B8785B3CB56A63A916F2B39@SEZPR06MB5269.apcprd06.prod.outlook.com>
- <a3615fe7-aa2a-53e9-2732-ba4512b9369d@linaro.org>
- <SEZPR06MB5269E7B070B239F8E349C427F2B39@SEZPR06MB5269.apcprd06.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <SEZPR06MB5269E7B070B239F8E349C427F2B39@SEZPR06MB5269.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230302194235.1724-1-mario.limonciello@amd.com> <20230302194235.1724-9-mario.limonciello@amd.com>
+In-Reply-To: <20230302194235.1724-9-mario.limonciello@amd.com>
+From:   Grzegorz Bernacki <gjb@semihalf.com>
+Date:   Fri, 3 Mar 2023 13:00:02 +0100
+Message-ID: <CAA2Cew5YyufrBZqAA4A5R=1vf_dn=c3ftwziTjzFSm8S5LJZGg@mail.gmail.com>
+Subject: Re: [PATCH v2 8/9] i2c: designware: Add doorbell support for Skyrim
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>,
+        Rijo-john.Thomas@amd.com, Thomas.Lendacky@amd.com,
+        herbert@gondor.apana.org.au,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,66 +72,126 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 03/03/2023 11:16, Ryan Chen wrote:
->>>>>>> aspeed,timout properites:
->>>>>>> For example I2C controller as slave mode, and suddenly
->> disconnected.
->>>>>>> Slave state machine will keep waiting for master clock in for
->>>>>>> rx/tx
->>>> transmit.
->>>>>>> So it need timeout setting to enable timeout unlock controller state.
->>>>>>> And in another side. In Master side also need avoid suddenly slave
->>>>>> miss(un-plug), Master will timeout and release the SDA/SCL.
->>>>>>>
->>>>>>> Do you mean add those description into ore aspeed,timout
->>>>>>> properites
->>>>>> description?
->>>>>>
->>>>>> You are describing here one particular feature you want to enable
->>>>>> in the driver which looks non-scalable and more difficult to
->> configure/use.
->>>>>> What I was looking for is to describe the actual configuration you have
->> (e.g.
->>>>>> multi-master) which leads to enable or disable such feature in your
->>>> hardware.
->>>>>> Especially that bool value does not scale later to actual timeout
->>>>>> values in time (ms)...
->>>>>>
->>>>>> I don't know I2C that much, but I wonder - why this should be
->>>>>> specific to Aspeed I2C and no other I2C controllers implement it?
->>>>>> IOW, this looks quite generic and every I2C controller should have
->>>>>> it. Adding it specific to Aspeed suggests that either we miss a
->>>>>> generic property or this should not be in DT at all (because no one
->>>>>> else has
->>>> it...).
->>>>>>
->>>>>> Also I wonder, why you wouldn't enable timeout always...
->>>>>>
->>>>>> +Cc Wolfram,
->>>>>> Maybe you know whether bool "timeout" property for one controller
->>>>>> makes sense? Why we do not have it for all controllers?
->>>>>>
->>>>> Because, i2c bus didn’t specific timeout.
->>>>> But SMBus defines a clock low time-out, TIMEOUT of 35 ms.
->>>>>
->>>>> It have definition in SMBus specification.
->>>>> http://smbus.org/specs/SMBus_3_1_20180319.pdf
->>>>> You can check Page 18, Note3 that have timeout description.
->>>>
->>>> Then you have already property for this - "smbus"?
->>> To be a property "smbus", that would be a big topic, I saw fsl i2c
->>> also have this.
->>> https://github.com/torvalds/linux/blob/master/Documentation/devicetree
->>> /bindings/i2c/i2c-mpc.yaml#L43-L47
->>> So, I just think the "timeout" property.
->>
->> Yeah and this is the only place. It also differs because it allows actual
->> timeout values.
-> Thanks, So can I still keep the property "aspeed,timeout" here?
-> It is the only place. 
+Hi Mario,
 
-No, because none of my concerns above are addressed.
+I am not sure if adding a new ACPI ID is a good idea. Actually we are
+talking about the same devices. The only difference is in the
+communication protocol between PSP and CPU. This could be easily
+detected at runtime by checking cpu id. There is no need to introduce
+a new id and create dependency on the FW version.
 
-Best regards,
-Krzysztof
+thanks,
+greg
 
+czw., 2 mar 2023 o 20:43 Mario Limonciello <mario.limonciello@amd.com>
+napisa=C5=82(a):
+>
+> Skyrim doesn't use the platform feature mailbox for communication
+> for I2C arbitration, it relies upon ringing a doorbell.
+>
+> Add a new ACPI ID to use for Skyrim and when that ID is detected
+> use the doorbell instead.
+>
+> Link: https://lore.kernel.org/linux-i2c/20220916131854.687371-3-jsd@semih=
+alf.com/
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v1->v2:
+>  * New patch
+> Note: This ACPI ID hasn't currently been reserved, but as Skyrim runs cor=
+eboot
+> it should be easy enough to modify the BIOS and test it out.
+> If this approach works and has general agreement it can be reserved.
+> ---
+>  drivers/i2c/busses/i2c-designware-amdpsp.c  | 29 ++++++++++++++-------
+>  drivers/i2c/busses/i2c-designware-platdrv.c |  1 +
+>  2 files changed, 20 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/bus=
+ses/i2c-designware-amdpsp.c
+> index 105584abcf8f..e1a4d3002c80 100644
+> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
+> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> @@ -73,34 +73,44 @@ static int psp_send_check_i2c_req(struct psp_i2c_req =
+*req)
+>         return check_i2c_req_sts(req);
+>  }
+>
+> -static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
+> +static int psp_send_i2c_req_amdi0019(enum psp_i2c_req_type i2c_req_type)
+>  {
+>         struct psp_i2c_req *req;
+> -       unsigned long start;
+>         int status, ret;
+>
+>         /* Allocate command-response buffer */
+>         req =3D kzalloc(sizeof(*req), GFP_KERNEL);
+>         if (!req)
+>                 return -ENOMEM;
+> -
+>         req->hdr.payload_size =3D sizeof(*req);
+>         req->type =3D i2c_req_type;
+> -
+> -       start =3D jiffies;
+>         ret =3D read_poll_timeout(psp_send_check_i2c_req, status,
+>                                 (status !=3D -EBUSY),
+>                                 PSP_I2C_REQ_RETRY_DELAY_US,
+>                                 PSP_I2C_REQ_RETRY_CNT * PSP_I2C_REQ_RETRY=
+_DELAY_US,
+>                                 0, req);
+> -       if (ret) {
+> +       kfree(req);
+> +
+> +       if (ret)
+>                 dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C=
+ bus\n",
+>                         (i2c_req_type =3D=3D PSP_I2C_REQ_ACQUIRE) ?
+>                         "release" : "acquire");
+> -               goto cleanup;
+> -       }
+>
+> -       ret =3D status;
+> +       return ret ? ret : status;
+> +}
+> +
+> +static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
+> +{
+> +       const char *hid =3D acpi_device_hid(ACPI_COMPANION(psp_i2c_dev));
+> +       unsigned long start =3D jiffies;
+> +       int ret;
+> +
+> +       /* Use doorbell for Skyrim and mailbox for Cezanne */
+> +       if (!strcmp(hid, "AMDI0020"))
+> +               ret =3D psp_ring_platform_doorbell(i2c_req_type);
+> +       else
+> +               ret =3D psp_send_i2c_req_amdi0019(i2c_req_type);
+> +
+>         if (ret) {
+>                 dev_err(psp_i2c_dev, "PSP communication error\n");
+>                 goto cleanup;
+> @@ -115,7 +125,6 @@ static int psp_send_i2c_req(enum psp_i2c_req_type i2c=
+_req_type)
+>                 psp_i2c_mbox_fail =3D true;
+>         }
+>
+> -       kfree(req);
+>         return ret;
+>  }
+>
+> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/bu=
+sses/i2c-designware-platdrv.c
+> index 89ad88c54754..5ca71bda9ac2 100644
+> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> @@ -51,6 +51,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] =
+=3D {
+>         { "AMD0010", ACCESS_INTR_MASK },
+>         { "AMDI0010", ACCESS_INTR_MASK },
+>         { "AMDI0019", ACCESS_INTR_MASK | ARBITRATION_SEMAPHORE },
+> +       { "AMDI0020", ACCESS_INTR_MASK | ARBITRATION_SEMAPHORE },
+>         { "AMDI0510", 0 },
+>         { "APMC0D0F", 0 },
+>         { "HISI02A1", 0 },
+> --
+> 2.34.1
+>
