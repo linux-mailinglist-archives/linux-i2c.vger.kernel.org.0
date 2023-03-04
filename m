@@ -2,59 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89EAC6AACBD
-	for <lists+linux-i2c@lfdr.de>; Sat,  4 Mar 2023 22:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F876AACBE
+	for <lists+linux-i2c@lfdr.de>; Sat,  4 Mar 2023 22:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjCDViB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 4 Mar 2023 16:38:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
+        id S229563AbjCDViD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 4 Mar 2023 16:38:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjCDViA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 4 Mar 2023 16:38:00 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC7E4C03
-        for <linux-i2c@vger.kernel.org>; Sat,  4 Mar 2023 13:37:59 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id cy23so23705644edb.12
-        for <linux-i2c@vger.kernel.org>; Sat, 04 Mar 2023 13:37:59 -0800 (PST)
+        with ESMTP id S229564AbjCDViC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 4 Mar 2023 16:38:02 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3A3903F
+        for <linux-i2c@vger.kernel.org>; Sat,  4 Mar 2023 13:38:01 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id g3so23938920eda.1
+        for <linux-i2c@vger.kernel.org>; Sat, 04 Mar 2023 13:38:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=OkQOVstgTG2CpAyTsVjx/RO70rZF+cGmOO7FygJ4qqY=;
-        b=mqldZ5sWRfFuofF8HN6XF9THjiW4GbehVBDhp/ieRfE/pPrKtm316dMLOxQZuCr+4P
-         PZzYfgi/ccTVVKz4yP+Fk3T32fNhre/g299V6xqenJeIjp2LRamX+GSSdWGftGialE1m
-         jzvd4usFaJUg89pIK02E1u6DhYCbqrkSccXci9+0Mr+dAQy6cC8c6M/zLfTgovcvi418
-         XBX40gSxcUlqtKaVsBSaMguKU8jsfFv1GhMpYy0HRvYwNw7qF7VWCs7gZQH+DRceSPZ5
-         lk32cmGNR26uxxCHFE9zd1UksAuNjO+QBhStXT/41oZpC8qZ8XZz8mbd4h8a0V9Ysa4U
-         tSSw==
+        bh=hU5NrdF3UUoPMnrdKfubL7fnXLHwpbAzws99DuquZq8=;
+        b=NuG6XR1nMI60feDYc2oupuzd7vR2i0YJ/49Z7RdnIDAFhJUjdLoQmrhDcvuhTtjHvl
+         sR4zAf6xiJP6rtsD6Ysl/nyfhpwD9hQuGnxeZVnWwKsSXL8UCgU4QMDHAyNPgOPPBm0G
+         4byEo+g3yB23vY9z3d1b8W+Dpn5apHT5hz+SXcRXUffSouYlQERV6R68zXe+QahgpC1z
+         xZutFl/gEtFrdKkAd077QWL4JcfEKdVvzww1T3catrQbMoQLtnCm9JeUiAfRnUh5mjRj
+         2WwEUL5oUyro+KOI3/i3ItxeJyFhr5hXWcmiVHpdZjGIc4HoWRfB71SiSPT+mLBUabM8
+         p/ZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OkQOVstgTG2CpAyTsVjx/RO70rZF+cGmOO7FygJ4qqY=;
-        b=DxMgT5hXhAgWCwrwna6697RMYIXpmPsfgWFshw/FJPl2b+gc9au8IlJQpEmGwIah1L
-         +Hr3Q0iXGzpQIyK1Uw+SVkka0DNHHIThuvPgsk94lHVCNJQCgLaDIldDLaniLxemvzrO
-         lrCQN6jrhfq+K2pXS5ePWRFTrYCkRjQD44V1ZWgk8E/ZaTyWcm9Vlr4G8Ao1UrSYFV7G
-         JiaxUvXq+OrdbsO1rl3fUwfFdROaiBJg1mAxyk3CCcpL/KXat4flXc/LGxePHb6orZGk
-         b7OSUxfU4em5RPCSdwmFBuUds08bLm6QWukeuUQm/zbTqkmoHJKvrFT/ervx8LdBbA1q
-         iSug==
-X-Gm-Message-State: AO0yUKXaA8E5S/JxufCODdiuw1lIsr22u3jREbWcLF1gg3ifC0RDdceN
-        217jn5YdOFcII7fQ5pOtq0s=
-X-Google-Smtp-Source: AK7set9d5qzLbCu+rAsO3noC5AUV9xmMJuZPovVesDl+3OqwfYnZU+mmM9n6GFc1VSuB9C8rhkwFTg==
-X-Received: by 2002:a17:907:86a6:b0:84d:3403:f4f2 with SMTP id qa38-20020a17090786a600b0084d3403f4f2mr7844561ejc.62.1677965877634;
-        Sat, 04 Mar 2023 13:37:57 -0800 (PST)
+        bh=hU5NrdF3UUoPMnrdKfubL7fnXLHwpbAzws99DuquZq8=;
+        b=F04o1d7h42M5P4nGWQx8V44KoIWcSuUtNNRGuPn6ZybWEN4PZvI6z9eUoHExjY72r8
+         VTxl69k8agyhSRpjBmrPc6nU/OD2UKpgxQo5b7alcEDKntj3Q3GtbIKvL25aca8HLS3f
+         3BmmlIVA5iSsW+QO3loCJ0th08xddmXDRVE5jm+KVqr5117H9Ud6fpd7Sxfud5VVqnsx
+         4LhxUpbqO5jFtknY0d6IJ2Lp+KOYYaNaVHnfzWL1S5kv2kY7oONCh2pNwb+GDmlmk0Px
+         LlS16Qe85FVoiFdEi9LvFrhP22ZbxD+EvqPF032PbcL+0J+MJmMt5LlENZ7IMMOtkkK7
+         BDQg==
+X-Gm-Message-State: AO0yUKXf9DmKJcytIomC6r5vdvyKqLfNVgTBjFKdgyABPqYIzGsoM4ej
+        lwr7TfUsjlLC6EFcufQisw/d2EhzT5o=
+X-Google-Smtp-Source: AK7set+/dNrOOPcUDkT7g6XJe2IWBZxTIS1xE4qz7zoMv3bNBt/I9CBrfeBAVbXV3fMei8FmoeVRFw==
+X-Received: by 2002:a17:907:6eab:b0:7c0:efb9:bc0e with SMTP id sh43-20020a1709076eab00b007c0efb9bc0emr7881516ejc.62.1677965879742;
+        Sat, 04 Mar 2023 13:37:59 -0800 (PST)
 Received: from ?IPV6:2a01:c22:72de:8e00:a559:93c8:8a72:3308? (dynamic-2a01-0c22-72de-8e00-a559-93c8-8a72-3308.c22.pool.telefonica.de. [2a01:c22:72de:8e00:a559:93c8:8a72:3308])
-        by smtp.googlemail.com with ESMTPSA id se9-20020a170906ce4900b008dd3956c2e3sm2452778ejb.183.2023.03.04.13.37.56
+        by smtp.googlemail.com with ESMTPSA id si7-20020a170906cec700b008e68d2c11d8sm2447601ejb.218.2023.03.04.13.37.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Mar 2023 13:37:56 -0800 (PST)
-Message-ID: <6686b692-0caf-734e-18cd-7879810b29cd@gmail.com>
-Date:   Sat, 4 Mar 2023 22:36:34 +0100
+        Sat, 04 Mar 2023 13:37:58 -0800 (PST)
+Message-ID: <1de49847-bb13-38b1-2820-15a7aa0fcb9a@gmail.com>
+Date:   Sat, 4 Mar 2023 22:37:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: [PATCH 3/4] i2c: i801: Improve i801_block_transaction_byte_by_byte
+Subject: [PATCH 4/4] i2c: i801: Switch to new macro DEFINE_SIMPLE_DEV_PM_OPS
 Content-Language: en-US
 From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Jean Delvare <jdelvare@suse.com>
@@ -73,34 +73,46 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Here we don't have to write SMBHSTCNT in each iteration of the loop.
-Bit SMBHSTCNT_START is internally cleared immediately, therefore
-we don't have to touch the value of SMBHSTCNT until the last byte.
+By using the newer macro DEFINE_SIMPLE_DEV_PM_OPS we can get rid
+of the conditional compiling.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/busses/i2c-i801.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 7641bd0ac..e1350a8cc 100644
+index e1350a8cc..bd2349768 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -677,11 +677,11 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
- 	for (i = 1; i <= len; i++) {
- 		if (i == len && read_write == I2C_SMBUS_READ)
- 			smbcmd |= SMBHSTCNT_LAST_BYTE;
--		outb_p(smbcmd, SMBHSTCNT(priv));
+@@ -1800,7 +1800,6 @@ static void i801_shutdown(struct pci_dev *dev)
+ 	pci_write_config_byte(dev, SMBHSTCFG, priv->original_hstcfg);
+ }
  
- 		if (i == 1)
--			outb_p(inb(SMBHSTCNT(priv)) | SMBHSTCNT_START,
--			       SMBHSTCNT(priv));
-+			outb_p(smbcmd | SMBHSTCNT_START, SMBHSTCNT(priv));
-+		else if (smbcmd & SMBHSTCNT_LAST_BYTE)
-+			outb_p(smbcmd, SMBHSTCNT(priv));
+-#ifdef CONFIG_PM_SLEEP
+ static int i801_suspend(struct device *dev)
+ {
+ 	struct i801_priv *priv = dev_get_drvdata(dev);
+@@ -1821,9 +1820,8 @@ static int i801_resume(struct device *dev)
  
- 		status = i801_wait_byte_done(priv);
- 		if (status)
+ 	return 0;
+ }
+-#endif
+ 
+-static SIMPLE_DEV_PM_OPS(i801_pm_ops, i801_suspend, i801_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(i801_pm_ops, i801_suspend, i801_resume);
+ 
+ static struct pci_driver i801_driver = {
+ 	.name		= DRV_NAME,
+@@ -1832,7 +1830,7 @@ static struct pci_driver i801_driver = {
+ 	.remove		= i801_remove,
+ 	.shutdown	= i801_shutdown,
+ 	.driver		= {
+-		.pm	= &i801_pm_ops,
++		.pm	= pm_sleep_ptr(&i801_pm_ops),
+ 		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+ 	},
+ };
 -- 
 2.39.2
 
