@@ -2,69 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650CF6ABE57
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Mar 2023 12:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A825A6ABF05
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Mar 2023 13:04:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjCFLhm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Mar 2023 06:37:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55720 "EHLO
+        id S230105AbjCFMEl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Mar 2023 07:04:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjCFLhl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Mar 2023 06:37:41 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23C028D24;
-        Mon,  6 Mar 2023 03:37:39 -0800 (PST)
+        with ESMTP id S229998AbjCFMEf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Mar 2023 07:04:35 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEE120695;
+        Mon,  6 Mar 2023 04:04:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678102659; x=1709638659;
+  t=1678104274; x=1709640274;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=QC/BDLv62Qyo3q2kdtORu01ceJMJmAMax/5M3imOBgA=;
-  b=Qvcm6taPz6m/SUo2hfFOL6NWJH5qwIzZAWTPY9VeQW0bJb9a0J/uyPGi
-   Jjs31icBfewEXBy6eDbF4NFoZLoT3fuiGzyWYER+qjj+1S09fczK6uC6g
-   lM2Br7TYH9cc8iaDUBehjsv0KOi7ON072MvOkGaXpIRBKNZs95FRjyGTx
-   Bwa5YGwCynk4xM5698qhtckMpWnz75eEi/8645x4ghatRTtqNE7aIjyq0
-   MNwezRaZ2MHMKU6HqVHuTWrEdrPVhG4Xh8Y01cZ4+i5J6XHdbrQrL+2Ic
-   U5UdTrRFz7WyIGiDPDgV5oyY+YIM5usVHaVxjko+0RRduAG+k+Xos0zag
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="333006416"
+   mime-version:in-reply-to;
+  bh=CVxITIz/taDItviqkNdDZC22Ok+YGY38badLQU0qG5s=;
+  b=hXVf9TtNwY/Mam+8yBZcr6fPeCxqTS99hh4G3d76GRx7n/6I/tVVcjGf
+   5qtX31jN7TNFz7EWiKW+8P7OWDdBn6i0lGDRyrI6Pjh2mCK0Lx/3t8NsQ
+   /zpqt5qAKpvWZGHRHgx9MoCbOsGdC8SgjUjHG5MWUlznDK40s7+EOfRUB
+   esJtmqls6QHMGLKpQeKVE9dDmlT522K8I7Z7S9McKWSPx+gB1pfkGrQLL
+   rWKrIAt3M1CeHScopxDnKymUi2srluV7xPowqnAEtOt4Ovj++WlViFstI
+   4bducyPTN2BbT5ZnDxARQsSod1jNTNbElXd3T+Yg6zUoLx6rre2C1GhMC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="398118377"
 X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="333006416"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 03:37:39 -0800
+   d="scan'208";a="398118377"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 04:04:33 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="626129905"
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="740301743"
 X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="626129905"
+   d="scan'208";a="740301743"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 06 Mar 2023 03:37:36 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 06 Mar 2023 04:04:30 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pZ99q-00GKLB-0y;
-        Mon, 06 Mar 2023 13:37:34 +0200
-Date:   Mon, 6 Mar 2023 13:37:33 +0200
+        id 1pZ9Zs-00GKz4-28;
+        Mon, 06 Mar 2023 14:04:28 +0200
+Date:   Mon, 6 Mar 2023 14:04:28 +0200
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     Grzegorz Bernacki <gjb@semihalf.com>,
-        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
-        "Thomas, Rijo-john" <Rijo-john.Thomas@amd.com>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>, Rijo-john.Thomas@amd.com,
+        Thomas.Lendacky@amd.com, herbert@gondor.apana.org.au,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 8/9] i2c: designware: Add doorbell support for Skyrim
-Message-ID: <ZAXQffqGWJLm8vFQ@smile.fi.intel.com>
-References: <20230302194235.1724-1-mario.limonciello@amd.com>
- <20230302194235.1724-9-mario.limonciello@amd.com>
- <CAA2Cew5YyufrBZqAA4A5R=1vf_dn=c3ftwziTjzFSm8S5LJZGg@mail.gmail.com>
- <MN0PR12MB61010A9EEBEC94330A7E9702E2B39@MN0PR12MB6101.namprd12.prod.outlook.com>
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 9/9] i2c: designware: Add support for AMDI0020 ACPI ID
+Message-ID: <ZAXWzMFBjo57UUa+@smile.fi.intel.com>
+References: <20230303165050.2918-1-mario.limonciello@amd.com>
+ <20230303165050.2918-10-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <MN0PR12MB61010A9EEBEC94330A7E9702E2B39@MN0PR12MB6101.namprd12.prod.outlook.com>
+In-Reply-To: <20230303165050.2918-10-mario.limonciello@amd.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -75,35 +69,60 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 03:00:55PM +0000, Limonciello, Mario wrote:
-> > -----Original Message-----
-> > From: Grzegorz Bernacki <gjb@semihalf.com>
-> > Sent: Friday, March 3, 2023 06:00
+On Fri, Mar 03, 2023 at 10:50:47AM -0600, Mario Limonciello wrote:
+> Cezanne and Skyrim have the same PSP hardware but use a different
+> protocol to negotiate I2C arbitration. To disambiguate this going
+> forward introduce a new ACPI ID to represent the protocol that utilizes
+> a doorbell.
 
-> > I am not sure if adding a new ACPI ID is a good idea. Actually we are
-> > talking about the same devices. The only difference is in the
-> > communication protocol between PSP and CPU. This could be easily
-> > detected at runtime by checking cpu id. There is no need to introduce
-> > a new id and create dependency on the FW version.
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v2->v3:
+>  * Split from earlier patch to standalone
+> ---
+>  drivers/i2c/busses/i2c-designware-amdpsp.c  | 5 +++--
+>  drivers/i2c/busses/i2c-designware-platdrv.c | 1 +
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 > 
-> An ACPI ID seems more scalable to me to represent the difference in protocol.
-> Otherwise what happens when the follow on to Skyrim comes?  Do you add
-> a new ID/case to the code?  If it was an ACPI ID then it's a one line change
-> in the firmware to represent this.
+> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> index 2c671973010d..44b8432458b0 100644
+> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
+> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> @@ -101,11 +101,12 @@ static int psp_send_i2c_req_amdi0019(enum psp_i2c_req_type i2c_req_type)
+>  
+>  static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
+>  {
+> +	const char *hid = acpi_device_hid(ACPI_COMPANION(psp_i2c_dev));
+>  	unsigned long start = jiffies;
+>  	int ret;
+>  
+> -	/* Use doorbell for Skyrim and mailbox for Cezanne */
+> -	if (boot_cpu_data.x86 == 25 && boot_cpu_data.x86_model == 80)
+
+Ah, in this form it's getting better than I thought!
+
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> +	/* Use doorbell for AMDI0020 and mailbox for AMDI0019 */
+> +	if (!strcmp(hid, "AMDI0019"))
+>  		ret = psp_send_i2c_req_amdi0019(i2c_req_type);
+>  	else
+>  		ret = psp_ring_platform_doorbell(i2c_req_type);
+> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+> index 89ad88c54754..5ca71bda9ac2 100644
+> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> @@ -51,6 +51,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] = {
+>  	{ "AMD0010", ACCESS_INTR_MASK },
+>  	{ "AMDI0010", ACCESS_INTR_MASK },
+>  	{ "AMDI0019", ACCESS_INTR_MASK | ARBITRATION_SEMAPHORE },
+> +	{ "AMDI0020", ACCESS_INTR_MASK | ARBITRATION_SEMAPHORE },
+>  	{ "AMDI0510", 0 },
+>  	{ "APMC0D0F", 0 },
+>  	{ "HISI02A1", 0 },
+> -- 
+> 2.34.1
 > 
-> What I'll do for v3 is do with a CPU ID in this patch, and then introduce an ACPI
-> ID in a new patch.  You can test it without the ACPI ID, and when it's working
-> patch the BIOS with the new ID and see if that continues to work.
-
-I don't think we need this complexity.
-
-Please, use just an ACPI ID and that's it. For testing one may apply additional
-(HACK) patch(es).
-
-As telling from my experience, to distinguish such things via CPU ID is a bad
-idea. Yes, we (used?) to have a PITA (find yourself what this stands for :)
-times with the (mixed) approach. So, no, please don't add CPU ID into the I²C
-platform driver (keyword: platform).
 
 -- 
 With Best Regards,
