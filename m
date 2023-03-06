@@ -2,88 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817CB6AC3C9
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Mar 2023 15:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B45C66AC3AD
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Mar 2023 15:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbjCFOte (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Mar 2023 09:49:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
+        id S231287AbjCFOqX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Mar 2023 09:46:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbjCFOtc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Mar 2023 09:49:32 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219CE2736
-        for <linux-i2c@vger.kernel.org>; Mon,  6 Mar 2023 06:49:11 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id bo22so9977416pjb.4
-        for <linux-i2c@vger.kernel.org>; Mon, 06 Mar 2023 06:49:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678114143;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=p4Vf/GiLha2pSMEvHIjTJV0zZlY5SiXWt3VfrpMrw9Y=;
-        b=Ie2D1rH3uU6Nxu3I4xgmVQfmN9AQMA3FIQ3f7FIpgkWhFLNxwof56JqSateLTDBRkS
-         fZMUMYBQyimoR3EqcTL9dVwTBu6qt1wGfQld9HoutXGKYMDfI4XZiZJzn283Vt5076if
-         gG7vwbotbfpzxzNkFdO9YicOBmPWttyKHJCt/9ljU6qszLUN52G4l1thj22F1y10Opgq
-         PYPPFpmqyj+v+lh2bl4kfgT3EZwPKo2U8HiTj7STP2emoD6WVrmSHLw5GUrjSeYBF6Ls
-         rFWhT5HnyzJ31O2hL7/yBBhEtgKD7iDiT1qx8WNUsvLHnA1KiaKcKWdunO4h3CKwVJcf
-         8sJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678114143;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p4Vf/GiLha2pSMEvHIjTJV0zZlY5SiXWt3VfrpMrw9Y=;
-        b=759+P+uxK4mDhOuHJEGN1qlgVevo2qaUy6eqDklsCf251o2IagPd4b0iOkWNjwsQ7E
-         /iwcDVgiVjqN1wPVd5zKr/MbCs0jnTqZK/Hdr2BNejMD9HeVdW6mGkuxmJNqgmWRbjeZ
-         T9PlJCm6DoCbloBFEVn2vc0r9nLWcREiW8KQK88sKK29ptmbFGxs3bJmiAL2B61+RFF1
-         OSUn1Qzyksq/w+u+ek7xbnotUBULOG/r5xNAxdFXdoJ4RogwtCSJ0rGjFI9hMMk8hUbZ
-         Qyh0HHEgs6Mw6wmSJf1z+2IjR5WDu5VLlRQKtoCu4xoCLOOEVkSL8W1+AvjDdSSLhkqY
-         VUtA==
-X-Gm-Message-State: AO0yUKU2C7uZEYnw2vBFmiwnh9AsWOZTnzVoHh7IRO5+Iz4OETGmPwV5
-        hrXC2Gy9M8lq9zm/CY1mE4VlOSAnokhetNT/JTKqOgcqRWwYk4x1
-X-Google-Smtp-Source: AK7set/n8BLSpbkCEy3a4qm95upY/2HMv3F6GdIP+lCqGyyMSVbkr0y4BuVYE7xyzvcDBhJP5Fr9x0ECyU/7lNdQ1Dc=
-X-Received: by 2002:a5b:647:0:b0:932:8dcd:3a13 with SMTP id
- o7-20020a5b0647000000b009328dcd3a13mr6562490ybq.5.1678112538925; Mon, 06 Mar
- 2023 06:22:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20230228065618.2686550-1-xiang.ye@intel.com> <20230228065618.2686550-3-xiang.ye@intel.com>
-In-Reply-To: <20230228065618.2686550-3-xiang.ye@intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 6 Mar 2023 15:22:07 +0100
-Message-ID: <CACRpkdZ4iiN-zeJautqk==kcUh1cRdyrhmeACEBppPYdJwA=Xw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] gpio: Add support for Intel LJCA USB GPIO driver
-To:     Ye Xiang <xiang.ye@intel.com>
-Cc:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, srinivas.pandruvada@intel.com,
-        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
-        wentong.wu@intel.com, lixu.zhang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S231190AbjCFOqG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Mar 2023 09:46:06 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC50D2E82E;
+        Mon,  6 Mar 2023 06:45:47 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326Dhvrw008525;
+        Mon, 6 Mar 2023 14:45:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=nXxBYvYmKxouMcZlkVJQl/q1L/EByDXUxEAwhrEUQUQ=;
+ b=hblBiYtYJwFsffDcBNpxEbGD6da685ozODZUHTyf/q5QR+TU3TfWGoXEfrnOHbnKh/SJ
+ nFzFLpGm/CBwMXGBjUE3KMIbxy5q4T6lVB0xbxiUD2xBw08QIfKiDCgKAHrzwMpkX8I3
+ 9Pz1mUPAGU0+HPEbWVtTsmhoftS4i4ciNp2ZX2LDi8VbuHcO62YWM96fsrIs+okw7QEq
+ 2zxSJK958GeTPG8YALvMyl2HBauIFnIDsvzwncnu/dPNyEPhblMHa04mEiPvGEfrCOyF
+ XQoxzMjIQHIre5uOlwkwY2Hg79QsTQD1+x+VX7RYw9sFpfGb8rYPUx5m1OQpfzLLRm2a 4g== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p419d50au-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 14:45:29 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 326EjOON014501;
+        Mon, 6 Mar 2023 14:45:24 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3p4fft5hxu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 06 Mar 2023 14:45:24 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326EjOji014495;
+        Mon, 6 Mar 2023 14:45:24 GMT
+Received: from mdalam-linux.qualcomm.com (mdalam-linux.qualcomm.com [10.201.2.71])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 326EjOKM014494;
+        Mon, 06 Mar 2023 14:45:24 +0000
+Received: by mdalam-linux.qualcomm.com (Postfix, from userid 466583)
+        id 291C312010CA; Mon,  6 Mar 2023 20:15:23 +0530 (IST)
+From:   Md Sadre Alam <quic_mdalam@quicinc.com>
+To:     loic.poulain@linaro.org, rfoss@kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     quic_sjaganat@quicinc.com, quic_srichara@quicinc.com,
+        quic_varada@quicinc.com, quic_mdalam@quicinc.com
+Subject: [PATCH 3/5] i2c: qcom-cci:Use devm_platform_get_and_ioremap_resource()
+Date:   Mon,  6 Mar 2023 20:15:22 +0530
+Message-Id: <20230306144522.15699-1-quic_mdalam@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: tEIPnkK23uXSScqfu_5DGPFAF-EPwQYy
+X-Proofpoint-GUID: tEIPnkK23uXSScqfu_5DGPFAF-EPwQYy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_08,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ phishscore=0 malwarescore=0 impostorscore=0 priorityscore=1501
+ clxscore=1011 suspectscore=0 mlxlogscore=749 adultscore=0 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303060130
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 7:56 AM Ye Xiang <xiang.ye@intel.com> wrote:
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-> This patch implements the GPIO function of Intel USB-I2C/GPIO/SPI adapter
-> device named "La Jolla Cove Adapter" (LJCA). It communicate with LJCA
-> GPIO module with specific protocol through interfaces exported by LJCA USB
-> driver.
->
-> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
+Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+---
+ drivers/i2c/busses/i2c-qcom-cci.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Check my comments on v4, with those addressed:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
+index 01358472680c..ed70bc1e4926 100644
+--- a/drivers/i2c/busses/i2c-qcom-cci.c
++++ b/drivers/i2c/busses/i2c-qcom-cci.c
+@@ -581,8 +581,7 @@ static int cci_probe(struct platform_device *pdev)
+ 
+ 	/* Memory */
+ 
+-	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	cci->base = devm_ioremap_resource(dev, r);
++	cci->base = devm_platform_get_and_ioremap_resource(pdev, 0, &r);
+ 	if (IS_ERR(cci->base))
+ 		return PTR_ERR(cci->base);
+ 
+-- 
+2.17.1
 
-Yours,
-Linus Walleij
