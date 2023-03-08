@@ -2,145 +2,152 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2D96B0F8E
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Mar 2023 18:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1941F6B1212
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Mar 2023 20:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjCHRBT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 8 Mar 2023 12:01:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
+        id S229632AbjCHTdy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Mar 2023 14:33:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbjCHRAA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Mar 2023 12:00:00 -0500
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC0361AA3;
-        Wed,  8 Mar 2023 08:58:43 -0800 (PST)
-Received: by mail-qt1-f170.google.com with SMTP id l18so18805356qtp.1;
-        Wed, 08 Mar 2023 08:58:43 -0800 (PST)
+        with ESMTP id S229654AbjCHTdv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Mar 2023 14:33:51 -0500
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA11867D9
+        for <linux-i2c@vger.kernel.org>; Wed,  8 Mar 2023 11:33:48 -0800 (PST)
+Received: by mail-vs1-xe2b.google.com with SMTP id d20so16387031vsf.11
+        for <linux-i2c@vger.kernel.org>; Wed, 08 Mar 2023 11:33:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678304028;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=elaSW8jK4c19wV80MgoUgZ3YhWwQARYHu+N4OavZYdI=;
+        b=ZT7fEl+nYdAmg9IvsK09c/PS7bt1DvEk5pFH+d6EEBhGoTZvpc1KA7FFuDrDjTsc8a
+         fAA2ZrH4gbwIrF+co/Stl8dTn4GhKT+0FBNAo88O+aWv1TYipAaJ5YLMq2igiwmto7W9
+         XWG7+ERZqapGkOs21b1AWRBw4kcJ1aZuvmvNj8tfZuxqbk0YbDjMDMDEX92ewIUzYTSh
+         e1t3ZIyyly8r237SQDQJRfxVPu3h61N7SBpIbmX7ZrfnFYAF/0F/WWBp6VFcU3ORaCM3
+         4oK1SmkHjQeXY6VXDFuwsFOrmdG+I2VR6d1B3Mt+TNGKvFBRZ9yauHdY3E9IzZLsWSx/
+         vgfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678294718;
+        d=1e100.net; s=20210112; t=1678304028;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AQsveLed2uZniCZtaVm8H3zBhAU22fyIRDp2q5iffd8=;
-        b=6aLTXylBXyFht9jsh0uavCijXIq9bwPnofsTdMlEoBOOrlbaaq/Ic/xeMSilLjzEg7
-         it7BXr8utCMAPb1EnHcX6v9S4bmBZkKW/dCtDR0PPD7cmAs376UwUiCqZuHeGeDJ6U36
-         38TfFjSralp/a/Z40Z+lhXxAPO6i52xJUPyP1n0tEmbMKrYBT7xB2Cs5R/18qkGUanYP
-         zZNzG3aBpZA1OyvErG/N2YAsfYxNlI3y1tWbVn+/lyMlBl+fycciSMUg9sluqMHCY+hl
-         H4Q8XOhIEDlEMJoHTP35VVn29AI+EX84agnos90mrp9xwBkzodcB+MLQoRyT4sOEqRK/
-         NYWg==
-X-Gm-Message-State: AO0yUKUKmdnsFjDtf4TdkL/E6zmPVjKIO/wnnUaS2pIoDUk0fcsXloMK
-        CvA4jhiw+txtOw9jpUYLbNj6MPQFH/mtUEdA
-X-Google-Smtp-Source: AK7set/20lW9SnZOz06nVVAQ9zNkyyWySB8FgT8/zkyow7pInko7jEIFi1R61ADW/PUEjUUn17aNxw==
-X-Received: by 2002:a05:622a:14e:b0:3bc:ff12:e5e5 with SMTP id v14-20020a05622a014e00b003bcff12e5e5mr30896198qtw.17.1678294717852;
-        Wed, 08 Mar 2023 08:58:37 -0800 (PST)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id b1-20020ac84f01000000b003bb8c60cdf1sm11862343qte.78.2023.03.08.08.58.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 08:58:37 -0800 (PST)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-536c2a1cc07so315666977b3.5;
-        Wed, 08 Mar 2023 08:58:36 -0800 (PST)
-X-Received: by 2002:a81:4428:0:b0:533:8b3a:d732 with SMTP id
- r40-20020a814428000000b005338b3ad732mr11495878ywa.4.1678294716640; Wed, 08
- Mar 2023 08:58:36 -0800 (PST)
+        bh=elaSW8jK4c19wV80MgoUgZ3YhWwQARYHu+N4OavZYdI=;
+        b=z3o6mnaXzba7Cy83qRY/2lAtq+cvOgiIFoWgU7mBW3crAdubOQl0Ep0GzDfNXbb0Kq
+         pC5k6vSV1rdAsrAVbKMV2wKVTzc9Ey2BWbTOGQVrsu0kQWrF7G5GR+g3mlJhJuYanbgR
+         AHlrSGb8INvZQ85riBX6hPTSZl5Q+rT6d0FwB22HJqAmHcXNLyVhcyzdjlJIAmXjLjaY
+         dopT7eQf+W+lCCP1RYhPFNGzuJ8zr+lc9OA9mRuUqNFEf6BJquLqJadZvDzL/h9WTXlB
+         M3hhdJOlulYnC9ZOTTkoPnK+zJEqheDoEjSUeATp+AgHwpVPouul3ZkCv5JjMuQs7EwA
+         jJVg==
+X-Gm-Message-State: AO0yUKWvOhmYXCz2JWs2h7ZvbaOTava5GY7nY+yDVbalc44nBpuUfSJh
+        v4+T9STu3nHFvNIH2fqdsaz0LKVoBSWs+rR6v0xZ/w==
+X-Google-Smtp-Source: AK7set//ZSmUJFzt7Xok9V0kaTPUAwP+t2ISSQ76Tcf33SidVGnU7PJ9KopuOK39cqAnuwfnhNU07V2i5mPO1ddZW5A=
+X-Received: by 2002:a67:f406:0:b0:414:48a5:473f with SMTP id
+ p6-20020a67f406000000b0041448a5473fmr12895848vsn.0.1678304027775; Wed, 08 Mar
+ 2023 11:33:47 -0800 (PST)
 MIME-Version: 1.0
 References: <20221229160045.535778-1-brgl@bgdev.pl> <20221229160045.535778-2-brgl@bgdev.pl>
-In-Reply-To: <20221229160045.535778-2-brgl@bgdev.pl>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 8 Mar 2023 17:58:25 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWBQaB2caVB9vKQoqE0r6jAqOidMRmsCXxyixEm+HWPdw@mail.gmail.com>
-Message-ID: <CAMuHMdWBQaB2caVB9vKQoqE0r6jAqOidMRmsCXxyixEm+HWPdw@mail.gmail.com>
+ <CAMuHMdWBQaB2caVB9vKQoqE0r6jAqOidMRmsCXxyixEm+HWPdw@mail.gmail.com>
+In-Reply-To: <CAMuHMdWBQaB2caVB9vKQoqE0r6jAqOidMRmsCXxyixEm+HWPdw@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 8 Mar 2023 20:33:36 +0100
+Message-ID: <CAMRc=McHiMXHzeg_B3zEw74yzNcw48jWEDcZRcvPNZ51XiS0kg@mail.gmail.com>
 Subject: Re: [PATCH v2 1/2] i2c: dev: fix notifier return values
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Bartosz,
-
-On Thu, Dec 29, 2022 at 5:12 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Wed, Mar 8, 2023 at 5:58=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68k=
+.org> wrote:
 >
-> We have a set of return values that notifier callbacks can return. They
-> should not return 0, error codes or anything other than those predefined
-> values. Make the i2c character device's callback return NOTIFY_DONE or
-> NOTIFY_OK depending on the situation.
+> Hi Bartosz,
 >
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-
-Thanks for your patch, which is now commit cddf70d0bce71c2a ("i2c:
-dev: fix notifier return values") in v6.3-rc1.
-
-On SH/R-Mobile platforms, this leads to missing /dev/i2c-* entries.
-On R-Car Gen4, they are still present, as all I2C adapters are
-initialized after i2cdev.
-
-> --- a/drivers/i2c/i2c-dev.c
-> +++ b/drivers/i2c/i2c-dev.c
-> @@ -653,12 +653,12 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
->         int res;
+> On Thu, Dec 29, 2022 at 5:12=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.p=
+l> wrote:
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >
+> > We have a set of return values that notifier callbacks can return. They
+> > should not return 0, error codes or anything other than those predefine=
+d
+> > values. Make the i2c character device's callback return NOTIFY_DONE or
+> > NOTIFY_OK depending on the situation.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 >
->         if (dev->type != &i2c_adapter_type)
-> -               return 0;
-> +               return NOTIFY_DONE;
->         adap = to_i2c_adapter(dev);
+> Thanks for your patch, which is now commit cddf70d0bce71c2a ("i2c:
+> dev: fix notifier return values") in v6.3-rc1.
 >
->         i2c_dev = get_free_i2c_dev(adap);
->         if (IS_ERR(i2c_dev))
-> -               return PTR_ERR(i2c_dev);
-> +               return NOTIFY_DONE;
+> On SH/R-Mobile platforms, this leads to missing /dev/i2c-* entries.
+> On R-Car Gen4, they are still present, as all I2C adapters are
+> initialized after i2cdev.
 >
->         cdev_init(&i2c_dev->cdev, &i2cdev_fops);
->         i2c_dev->cdev.owner = THIS_MODULE;
-> @@ -678,11 +678,11 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
->                 goto err_put_i2c_dev;
+> > --- a/drivers/i2c/i2c-dev.c
+> > +++ b/drivers/i2c/i2c-dev.c
+> > @@ -653,12 +653,12 @@ static int i2cdev_attach_adapter(struct device *d=
+ev, void *dummy)
+> >         int res;
+> >
+> >         if (dev->type !=3D &i2c_adapter_type)
+> > -               return 0;
+> > +               return NOTIFY_DONE;
+> >         adap =3D to_i2c_adapter(dev);
+> >
+> >         i2c_dev =3D get_free_i2c_dev(adap);
+> >         if (IS_ERR(i2c_dev))
+> > -               return PTR_ERR(i2c_dev);
+> > +               return NOTIFY_DONE;
+> >
+> >         cdev_init(&i2c_dev->cdev, &i2cdev_fops);
+> >         i2c_dev->cdev.owner =3D THIS_MODULE;
+> > @@ -678,11 +678,11 @@ static int i2cdev_attach_adapter(struct device *d=
+ev, void *dummy)
+> >                 goto err_put_i2c_dev;
+> >
+> >         pr_debug("adapter [%s] registered as minor %d\n", adap->name, a=
+dap->nr);
+> > -       return 0;
+> > +       return NOTIFY_OK;
 >
->         pr_debug("adapter [%s] registered as minor %d\n", adap->name, adap->nr);
-> -       return 0;
-> +       return NOTIFY_OK;
+> Unfortunately i2cdev_{at,de}tach_adapter() are not only used as
+> notifiers (called from i2cdev_notifier_call()), but also called from
+> i2c_dev_init():
+>
+>         /* Bind to already existing adapters right away */
+>         i2c_for_each_dev(NULL, i2cdev_attach_adapter);
+>
+> and i2c_dev_exit():
+>
+>         i2c_for_each_dev(NULL, i2cdev_detach_adapter);
+>
+> As soon i2c_dev_{at,de}tach_adapter() returns a non-zero
+> value (e.g. NOTIFY_OK), {i2c,bus}_for_each_dev() aborts
+> processing.
+>
+> In i2c_dev_init(), this leads to a failure in registering any
+> already existing i2c adapters after the first one, causing missing
+> /dev/i2c-* entries.
+>
+> In i2c_dev_exit(), this leads to a failure unregistering any but the
+> first i2c adapter.
+>
+> As there is no one-to-one mapping from error codes to notify codes,
+> I think this cannot just be handled inside i2cdev_notifier_call() :-(
+>
 
-Unfortunately i2cdev_{at,de}tach_adapter() are not only used as
-notifiers (called from i2cdev_notifier_call()), but also called from
-i2c_dev_init():
+Would wrapping i2c_a/detach_adapter() in a notifier callback work? So
+that SH can call it directly while notifiers would call it indirectly
+through the wrapper?
 
-        /* Bind to already existing adapters right away */
-        i2c_for_each_dev(NULL, i2cdev_attach_adapter);
-
-and i2c_dev_exit():
-
-        i2c_for_each_dev(NULL, i2cdev_detach_adapter);
-
-As soon i2c_dev_{at,de}tach_adapter() returns a non-zero
-value (e.g. NOTIFY_OK), {i2c,bus}_for_each_dev() aborts
-processing.
-
-In i2c_dev_init(), this leads to a failure in registering any
-already existing i2c adapters after the first one, causing missing
-/dev/i2c-* entries.
-
-In i2c_dev_exit(), this leads to a failure unregistering any but the
-first i2c adapter.
-
-As there is no one-to-one mapping from error codes to notify codes,
-I think this cannot just be handled inside i2cdev_notifier_call() :-(
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Bart
