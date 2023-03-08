@@ -2,233 +2,145 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027866B0AA5
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Mar 2023 15:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2D96B0F8E
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Mar 2023 18:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbjCHOM1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Mar 2023 09:12:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
+        id S229546AbjCHRBT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 8 Mar 2023 12:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232210AbjCHOLz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Mar 2023 09:11:55 -0500
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E621C5A18B;
-        Wed,  8 Mar 2023 06:11:07 -0800 (PST)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-17711f56136so3904840fac.12;
-        Wed, 08 Mar 2023 06:11:07 -0800 (PST)
+        with ESMTP id S230290AbjCHRAA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Mar 2023 12:00:00 -0500
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC0361AA3;
+        Wed,  8 Mar 2023 08:58:43 -0800 (PST)
+Received: by mail-qt1-f170.google.com with SMTP id l18so18805356qtp.1;
+        Wed, 08 Mar 2023 08:58:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678284654;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BG0LVvFn1C/Da2Gc5O3YD8isCIsXrAwtxSQEVgE87AI=;
-        b=RuXhJut4bN5ftmAJRq/9tiPeccWmierAJ/UbTICusRzkQoNjOG8YL+iO6w9GSVNIuM
-         MPtwwCiEy+25yUZFLSJsd3hKagE0EjYwuuHWlDHqKe5tzf12n1eJ8OjJtouxIvAr3QC7
-         88GZUJLP+OkfWqJCL7HTpUXun+wYZU/uG+o3MEAa5LXcru31ZdoY7MX5vzll1Rv8Dzct
-         zAzR5KnmZc84jvww4EXmvexiilrLMwn6PYBZvDlTfaWgpNgoc0KZZ7lol0aCX4VVNSwg
-         cZ+eAEv1WLNX71i5WEP4zviOzQlZyshApKdpJpw7tMGOzzPVduiQ+NL3jgxyN0jZAyhZ
-         ubGA==
-X-Gm-Message-State: AO0yUKXuLLm7p33VFPZHs4Jkv2fwt77YSwXkDWEog9cgBmjuS5E4ggJk
-        14ELtuV8z/AxECVO1tdDZw==
-X-Google-Smtp-Source: AK7set/cT2sp1M7e47IzQCQD2W8xtmPnZuAp+jI6K0s2N6oikhajQ93ypk71x4/YPZM2+Kr1qDFxTg==
-X-Received: by 2002:a05:6871:b11:b0:176:3849:4e96 with SMTP id fq17-20020a0568710b1100b0017638494e96mr10140723oab.13.1678284654485;
-        Wed, 08 Mar 2023 06:10:54 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f8-20020a9d2c08000000b00690dc5d9b9esm6498673otb.6.2023.03.08.06.10.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 06:10:54 -0800 (PST)
-Received: (nullmailer pid 2719199 invoked by uid 1000);
-        Wed, 08 Mar 2023 14:10:52 -0000
-Date:   Wed, 8 Mar 2023 08:10:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        devicetree@vger.kernel.org, linux-wireless@vger.kernel.org,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        linux-leds@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Lee Jones <lee@kernel.org>, Kalle Valo <kvalo@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        alsa-devel@alsa-project.org, netdev@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, linux-can@vger.kernel.org,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Benson Leung <bleung@chromium.org>, linux-i2c@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>
-Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
-Message-ID: <167828463126.2715010.4541489267949266802.robh@kernel.org>
-References: <20230228215433.3944508-1-robh@kernel.org>
+        d=1e100.net; s=20210112; t=1678294718;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AQsveLed2uZniCZtaVm8H3zBhAU22fyIRDp2q5iffd8=;
+        b=6aLTXylBXyFht9jsh0uavCijXIq9bwPnofsTdMlEoBOOrlbaaq/Ic/xeMSilLjzEg7
+         it7BXr8utCMAPb1EnHcX6v9S4bmBZkKW/dCtDR0PPD7cmAs376UwUiCqZuHeGeDJ6U36
+         38TfFjSralp/a/Z40Z+lhXxAPO6i52xJUPyP1n0tEmbMKrYBT7xB2Cs5R/18qkGUanYP
+         zZNzG3aBpZA1OyvErG/N2YAsfYxNlI3y1tWbVn+/lyMlBl+fycciSMUg9sluqMHCY+hl
+         H4Q8XOhIEDlEMJoHTP35VVn29AI+EX84agnos90mrp9xwBkzodcB+MLQoRyT4sOEqRK/
+         NYWg==
+X-Gm-Message-State: AO0yUKUKmdnsFjDtf4TdkL/E6zmPVjKIO/wnnUaS2pIoDUk0fcsXloMK
+        CvA4jhiw+txtOw9jpUYLbNj6MPQFH/mtUEdA
+X-Google-Smtp-Source: AK7set/20lW9SnZOz06nVVAQ9zNkyyWySB8FgT8/zkyow7pInko7jEIFi1R61ADW/PUEjUUn17aNxw==
+X-Received: by 2002:a05:622a:14e:b0:3bc:ff12:e5e5 with SMTP id v14-20020a05622a014e00b003bcff12e5e5mr30896198qtw.17.1678294717852;
+        Wed, 08 Mar 2023 08:58:37 -0800 (PST)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id b1-20020ac84f01000000b003bb8c60cdf1sm11862343qte.78.2023.03.08.08.58.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 08:58:37 -0800 (PST)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-536c2a1cc07so315666977b3.5;
+        Wed, 08 Mar 2023 08:58:36 -0800 (PST)
+X-Received: by 2002:a81:4428:0:b0:533:8b3a:d732 with SMTP id
+ r40-20020a814428000000b005338b3ad732mr11495878ywa.4.1678294716640; Wed, 08
+ Mar 2023 08:58:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228215433.3944508-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221229160045.535778-1-brgl@bgdev.pl> <20221229160045.535778-2-brgl@bgdev.pl>
+In-Reply-To: <20221229160045.535778-2-brgl@bgdev.pl>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 8 Mar 2023 17:58:25 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWBQaB2caVB9vKQoqE0r6jAqOidMRmsCXxyixEm+HWPdw@mail.gmail.com>
+Message-ID: <CAMuHMdWBQaB2caVB9vKQoqE0r6jAqOidMRmsCXxyixEm+HWPdw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] i2c: dev: fix notifier return values
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Bartosz,
 
-On Tue, 28 Feb 2023 15:54:33 -0600, Rob Herring wrote:
-> SPI and I2C bus node names are expected to be "spi" or "i2c",
-> respectively, with nothing else, a unit-address, or a '-N' index. A
-> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
-> cases. Mostly scripted with the following commands:
-> 
-> git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's/i2c[0-9] {/i2c {/'
-> git grep -l '\sspi[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's/spi[0-9] {/spi {/'
-> 
-> With this, a few errors in examples were exposed and fixed.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Cc: Robert Foss <rfoss@kernel.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
-> Cc: Chanwoo Choi <cw00.choi@samsung.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Lee Jones <lee@kernel.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-can@vger.kernel.org
-> Cc: linux-wireless@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-usb@vger.kernel.org
-> ---
->  .../bindings/auxdisplay/holtek,ht16k33.yaml       |  2 +-
->  .../bindings/chrome/google,cros-ec-typec.yaml     |  2 +-
->  .../chrome/google,cros-kbd-led-backlight.yaml     |  2 +-
->  .../devicetree/bindings/clock/ti,lmk04832.yaml    |  2 +-
->  .../bindings/display/bridge/analogix,anx7625.yaml |  2 +-
->  .../bindings/display/bridge/anx6345.yaml          |  2 +-
->  .../bindings/display/bridge/lontium,lt8912b.yaml  |  2 +-
->  .../bindings/display/bridge/nxp,ptn3460.yaml      |  2 +-
->  .../bindings/display/bridge/ps8640.yaml           |  2 +-
->  .../bindings/display/bridge/sil,sii9234.yaml      |  2 +-
->  .../bindings/display/bridge/ti,dlpc3433.yaml      |  2 +-
->  .../bindings/display/bridge/toshiba,tc358762.yaml |  2 +-
->  .../bindings/display/bridge/toshiba,tc358768.yaml |  2 +-
->  .../bindings/display/panel/nec,nl8048hl11.yaml    |  2 +-
->  .../bindings/display/solomon,ssd1307fb.yaml       |  4 ++--
->  .../devicetree/bindings/eeprom/at25.yaml          |  2 +-
->  .../bindings/extcon/extcon-usbc-cros-ec.yaml      |  2 +-
->  .../bindings/extcon/extcon-usbc-tusb320.yaml      |  2 +-
->  .../devicetree/bindings/gpio/gpio-pca9570.yaml    |  2 +-
->  .../devicetree/bindings/gpio/gpio-pca95xx.yaml    |  8 ++++----
->  .../bindings/i2c/google,cros-ec-i2c-tunnel.yaml   |  2 +-
->  .../bindings/leds/cznic,turris-omnia-leds.yaml    |  2 +-
->  .../devicetree/bindings/leds/issi,is31fl319x.yaml |  2 +-
->  .../devicetree/bindings/leds/leds-aw2013.yaml     |  2 +-
->  .../devicetree/bindings/leds/leds-rt4505.yaml     |  2 +-
->  .../devicetree/bindings/leds/ti,tca6507.yaml      |  2 +-
->  .../bindings/media/i2c/aptina,mt9p031.yaml        |  2 +-
->  .../bindings/media/i2c/aptina,mt9v111.yaml        |  2 +-
->  .../devicetree/bindings/media/i2c/imx219.yaml     |  2 +-
->  .../devicetree/bindings/media/i2c/imx258.yaml     |  4 ++--
->  .../devicetree/bindings/media/i2c/mipi-ccs.yaml   |  2 +-
->  .../bindings/media/i2c/ovti,ov5648.yaml           |  2 +-
->  .../bindings/media/i2c/ovti,ov772x.yaml           |  2 +-
->  .../bindings/media/i2c/ovti,ov8865.yaml           |  2 +-
->  .../bindings/media/i2c/ovti,ov9282.yaml           |  2 +-
->  .../bindings/media/i2c/rda,rda5807.yaml           |  2 +-
->  .../bindings/media/i2c/sony,imx214.yaml           |  2 +-
->  .../bindings/media/i2c/sony,imx274.yaml           |  2 +-
->  .../bindings/media/i2c/sony,imx334.yaml           |  2 +-
->  .../bindings/media/i2c/sony,imx335.yaml           |  2 +-
->  .../bindings/media/i2c/sony,imx412.yaml           |  2 +-
->  .../devicetree/bindings/mfd/actions,atc260x.yaml  |  2 +-
->  .../devicetree/bindings/mfd/google,cros-ec.yaml   |  6 +++---
->  .../devicetree/bindings/mfd/ti,tps65086.yaml      |  2 +-
->  .../devicetree/bindings/mfd/x-powers,axp152.yaml  |  4 ++--
->  .../devicetree/bindings/net/asix,ax88796c.yaml    |  2 +-
->  .../bindings/net/can/microchip,mcp251xfd.yaml     |  2 +-
->  .../bindings/net/dsa/microchip,ksz.yaml           |  2 +-
->  .../bindings/net/nfc/samsung,s3fwrn5.yaml         |  2 +-
->  .../bindings/net/vertexcom-mse102x.yaml           |  2 +-
->  .../bindings/net/wireless/ti,wlcore.yaml          | 10 ++++++++--
->  .../devicetree/bindings/pinctrl/pinmux-node.yaml  |  2 +-
->  .../bindings/pinctrl/starfive,jh7100-pinctrl.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq2415x.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq24190.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq24257.yaml |  4 ++--
->  .../devicetree/bindings/power/supply/bq24735.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq2515x.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq25890.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq25980.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq27xxx.yaml | 15 ++++++++-------
->  .../bindings/power/supply/lltc,ltc294x.yaml       |  2 +-
->  .../bindings/power/supply/ltc4162-l.yaml          |  2 +-
->  .../bindings/power/supply/maxim,max14656.yaml     |  2 +-
->  .../bindings/power/supply/maxim,max17040.yaml     |  4 ++--
->  .../bindings/power/supply/maxim,max17042.yaml     |  2 +-
->  .../bindings/power/supply/richtek,rt9455.yaml     |  2 +-
->  .../bindings/power/supply/ti,lp8727.yaml          |  2 +-
->  .../bindings/regulator/active-semi,act8865.yaml   |  2 +-
->  .../regulator/google,cros-ec-regulator.yaml       |  2 +-
->  .../bindings/regulator/nxp,pf8x00-regulator.yaml  |  2 +-
->  .../devicetree/bindings/sound/everest,es8316.yaml |  2 +-
->  .../devicetree/bindings/sound/tas2562.yaml        |  2 +-
->  .../devicetree/bindings/sound/tas2770.yaml        |  2 +-
->  .../devicetree/bindings/sound/tas27xx.yaml        |  2 +-
->  .../devicetree/bindings/sound/tas5805m.yaml       |  2 +-
->  .../devicetree/bindings/sound/tlv320adcx140.yaml  |  2 +-
->  .../devicetree/bindings/sound/zl38060.yaml        |  2 +-
->  .../devicetree/bindings/usb/maxim,max33359.yaml   |  2 +-
->  .../bindings/usb/maxim,max3420-udc.yaml           |  2 +-
->  .../bindings/usb/mediatek,mt6360-tcpc.yaml        |  2 +-
->  .../devicetree/bindings/usb/richtek,rt1711h.yaml  |  2 +-
->  .../devicetree/bindings/usb/richtek,rt1719.yaml   |  2 +-
->  .../devicetree/bindings/usb/st,stusb160x.yaml     |  2 +-
->  .../devicetree/bindings/usb/ti,hd3ss3220.yaml     |  2 +-
->  .../devicetree/bindings/usb/ti,tps6598x.yaml      |  2 +-
->  86 files changed, 110 insertions(+), 103 deletions(-)
-> 
+On Thu, Dec 29, 2022 at 5:12 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>
+> We have a set of return values that notifier callbacks can return. They
+> should not return 0, error codes or anything other than those predefined
+> values. Make the i2c character device's callback return NOTIFY_DONE or
+> NOTIFY_OK depending on the situation.
+>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Applied, thanks!
+Thanks for your patch, which is now commit cddf70d0bce71c2a ("i2c:
+dev: fix notifier return values") in v6.3-rc1.
 
+On SH/R-Mobile platforms, this leads to missing /dev/i2c-* entries.
+On R-Car Gen4, they are still present, as all I2C adapters are
+initialized after i2cdev.
+
+> --- a/drivers/i2c/i2c-dev.c
+> +++ b/drivers/i2c/i2c-dev.c
+> @@ -653,12 +653,12 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
+>         int res;
+>
+>         if (dev->type != &i2c_adapter_type)
+> -               return 0;
+> +               return NOTIFY_DONE;
+>         adap = to_i2c_adapter(dev);
+>
+>         i2c_dev = get_free_i2c_dev(adap);
+>         if (IS_ERR(i2c_dev))
+> -               return PTR_ERR(i2c_dev);
+> +               return NOTIFY_DONE;
+>
+>         cdev_init(&i2c_dev->cdev, &i2cdev_fops);
+>         i2c_dev->cdev.owner = THIS_MODULE;
+> @@ -678,11 +678,11 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
+>                 goto err_put_i2c_dev;
+>
+>         pr_debug("adapter [%s] registered as minor %d\n", adap->name, adap->nr);
+> -       return 0;
+> +       return NOTIFY_OK;
+
+Unfortunately i2cdev_{at,de}tach_adapter() are not only used as
+notifiers (called from i2cdev_notifier_call()), but also called from
+i2c_dev_init():
+
+        /* Bind to already existing adapters right away */
+        i2c_for_each_dev(NULL, i2cdev_attach_adapter);
+
+and i2c_dev_exit():
+
+        i2c_for_each_dev(NULL, i2cdev_detach_adapter);
+
+As soon i2c_dev_{at,de}tach_adapter() returns a non-zero
+value (e.g. NOTIFY_OK), {i2c,bus}_for_each_dev() aborts
+processing.
+
+In i2c_dev_init(), this leads to a failure in registering any
+already existing i2c adapters after the first one, causing missing
+/dev/i2c-* entries.
+
+In i2c_dev_exit(), this leads to a failure unregistering any but the
+first i2c adapter.
+
+As there is no one-to-one mapping from error codes to notify codes,
+I think this cannot just be handled inside i2cdev_notifier_call() :-(
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
