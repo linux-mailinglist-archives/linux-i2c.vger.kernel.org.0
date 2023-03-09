@@ -2,40 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14846B25AE
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Mar 2023 14:43:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1B06B25AD
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Mar 2023 14:43:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbjCINn0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S229799AbjCINn0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Thu, 9 Mar 2023 08:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbjCINnO (ORCPT
+        with ESMTP id S231180AbjCINnO (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Mar 2023 08:43:14 -0500
-Received: from mta-65-225.siemens.flowmailer.net (mta-65-225.siemens.flowmailer.net [185.136.65.225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10531CBE7
+Received: from mta-65-227.siemens.flowmailer.net (mta-65-227.siemens.flowmailer.net [185.136.65.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D531CBDE
         for <linux-i2c@vger.kernel.org>; Thu,  9 Mar 2023 05:43:09 -0800 (PST)
-Received: by mta-65-225.siemens.flowmailer.net with ESMTPSA id 202303091343061f1f673d7c34af0d72
+Received: by mta-65-227.siemens.flowmailer.net with ESMTPSA id 20230309134307516dd8917006ba3e51
         for <linux-i2c@vger.kernel.org>;
-        Thu, 09 Mar 2023 14:43:06 +0100
+        Thu, 09 Mar 2023 14:43:07 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
  d=siemens.com; i=alexander.sverdlin@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
- bh=LWWKSwja5zpZiSyAbqGvPA3W0gLM9JY5S2eHp533JBM=;
- b=Nb4H6nKWf5vNXd8NWPi/hVRmqfXPnDDgQ2IE8j8xcJpvFWkAeqEuOTqBkLyf/irAEMHwFp
- IlAX383PnSPfy3MkxMlvvwFK589VAzVepM5sL2zJmn4KITmd4vNhE18h3uwvvDVZHlyeTyw2
- BiRd8tfUQFI/w6XlNTpfT4YnHIIxE=;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=UQZfmTw8anwYHEBrYuWkse2wWoqzOfrc6q+tv8EIDV4=;
+ b=g7iZv/iTaJVogc4Nf6yf1DtBz/eMZqEhchpVjfnhwmkRXijUi4y1wLCRWIh7zY9VGlJ0RS
+ 3YQw2Wb3L5VeU3FnR3qc4zNcxuv/LOI8bXhENkSQw7N+Slni+ZgCffj/xY2o7lM2VQWSNrge
+ 64S5IzVUWTLbtNGK1ON/DXRE/uVq4=;
 From:   "A. Sverdlin" <alexander.sverdlin@siemens.com>
 To:     NXP Linux Team <linux-imx@nxp.com>
 Cc:     Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, Dong Aisheng <aisheng.dong@nxp.com>,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: lpi2c: cache peripheral clock rate
-Date:   Thu,  9 Mar 2023 14:43:01 +0100
-Message-Id: <20230309134302.74940-1-alexander.sverdlin@siemens.com>
+Subject: [PATCH v2] tty: serial: fsl_lpuart: fix race on RX DMA shutdown
+Date:   Thu,  9 Mar 2023 14:43:02 +0100
+Message-Id: <20230309134302.74940-2-alexander.sverdlin@siemens.com>
+In-Reply-To: <20230309134302.74940-1-alexander.sverdlin@siemens.com>
+References: <20230309134302.74940-1-alexander.sverdlin@siemens.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Flowmailer-Platform: Siemens
@@ -52,257 +56,102 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 
-One of the reasons to do it is to save some CPU cycles on cpu_freq_get()
-under mutex. The second reason if the (false-positive) lockdep splat caused
-by the recursive feature of the "prepare_lock" (one clock instance is I2C
-peripheral clock and another is pcf85063 RTC as clock provider):
+From time to time DMA completion can come in the middle of DMA shutdown:
 
-======================================================
-WARNING: possible circular locking dependency detected
-5.15.71+... #1 Tainted: G           O
-------------------------------------------------------
-fs-value/2332 is trying to acquire lock:
-ffff8000096cae08 (prepare_lock){+.+.}-{3:3}, at: clk_prepare_lock+0x50/0xb0
+<process ctx>:				<IRQ>:
+lpuart32_shutdown()
+  lpuart_dma_shutdown()
+    del_timer_sync()
+					lpuart_dma_rx_complete()
+					  lpuart_copy_rx_to_tty()
+					    mod_timer()
+    lpuart_dma_rx_free()
 
-but task is already holding lock:
-ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at: i2c_adapter_lock_bus+0x2c/0x3c
+When the timer fires a bit later, sport->dma_rx_desc is NULL:
 
-which lock already depends on the new lock.
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (i2c_register_adapter){+.+.}-{3:3}:
-       lock_acquire+0x68/0x8c
-       rt_mutex_lock_nested+0x88/0xe0
-       i2c_adapter_lock_bus+0x2c/0x3c
-       i2c_transfer+0x58/0x130
-       regmap_i2c_read+0x64/0xb0
-       _regmap_raw_read+0x114/0x440
-       _regmap_bus_read+0x4c/0x84
-       _regmap_read+0x6c/0x270
-       regmap_read+0x54/0x80
-       pcf85063_probe+0xec/0x4cc
-       i2c_device_probe+0x10c/0x350
-       really_probe+0xc4/0x470
-       __driver_probe_device+0x11c/0x190
-       driver_probe_device+0x48/0x110
-       __device_attach_driver+0xc4/0x160
-       bus_for_each_drv+0x80/0xe0
-       __device_attach+0xb0/0x1f0
-       device_initial_probe+0x1c/0x2c
-       bus_probe_device+0xa4/0xb0
-       device_add+0x398/0x8ac
-       device_register+0x28/0x40
-       i2c_new_client_device+0x144/0x290
-       of_i2c_register_devices+0x18c/0x230
-       i2c_register_adapter+0x1dc/0x6b0
-       __i2c_add_numbered_adapter+0x68/0xbc
-       i2c_add_adapter+0xb0/0xe0
-       lpi2c_imx_probe+0x354/0x5e0
-       platform_probe+0x70/0xec
-       really_probe+0xc4/0x470
-       __driver_probe_device+0x11c/0x190
-       driver_probe_device+0x48/0x110
-       __device_attach_driver+0xc4/0x160
-       bus_for_each_drv+0x80/0xe0
-       __device_attach+0xb0/0x1f0
-       device_initial_probe+0x1c/0x2c
-       bus_probe_device+0xa4/0xb0
-       deferred_probe_work_func+0xa0/0xfc
-       process_one_work+0x2ac/0x6f4
-       worker_thread+0x7c/0x47c
-       kthread+0x150/0x16c
-       ret_from_fork+0x10/0x20
-
--> #1 (rtc_pcf85063:560:(&config->regmap)->lock){+.+.}-{3:3}:
-       lock_acquire+0x68/0x8c
-       __mutex_lock+0x9c/0x4d0
-       mutex_lock_nested+0x48/0x5c
-       regmap_lock_mutex+0x1c/0x30
-       regmap_read+0x44/0x80
-       pcf85063_clkout_recalc_rate+0x34/0x80
-       __clk_register+0x520/0x880
-       devm_clk_register+0x64/0xc4
-       pcf85063_probe+0x24c/0x4cc
-       i2c_device_probe+0x10c/0x350
-       really_probe+0xc4/0x470
-       __driver_probe_device+0x11c/0x190
-       driver_probe_device+0x48/0x110
-       __device_attach_driver+0xc4/0x160
-       bus_for_each_drv+0x80/0xe0
-       __device_attach+0xb0/0x1f0
-       device_initial_probe+0x1c/0x2c
-       bus_probe_device+0xa4/0xb0
-       device_add+0x398/0x8ac
-       device_register+0x28/0x40
-       i2c_new_client_device+0x144/0x290
-       of_i2c_register_devices+0x18c/0x230
-       i2c_register_adapter+0x1dc/0x6b0
-       __i2c_add_numbered_adapter+0x68/0xbc
-       i2c_add_adapter+0xb0/0xe0
-       lpi2c_imx_probe+0x354/0x5e0
-       platform_probe+0x70/0xec
-       really_probe+0xc4/0x470
-       __driver_probe_device+0x11c/0x190
-       driver_probe_device+0x48/0x110
-       __device_attach_driver+0xc4/0x160
-       bus_for_each_drv+0x80/0xe0
-       __device_attach+0xb0/0x1f0
-       device_initial_probe+0x1c/0x2c
-       bus_probe_device+0xa4/0xb0
-       deferred_probe_work_func+0xa0/0xfc
-       process_one_work+0x2ac/0x6f4
-       worker_thread+0x7c/0x47c
-       kthread+0x150/0x16c
-       ret_from_fork+0x10/0x20
-
--> #0 (prepare_lock){+.+.}-{3:3}:
-       __lock_acquire+0x1298/0x20d0
-       lock_acquire.part.0+0xf0/0x250
-       lock_acquire+0x68/0x8c
-       __mutex_lock+0x9c/0x4d0
-       mutex_lock_nested+0x48/0x5c
-       clk_prepare_lock+0x50/0xb0
-       clk_get_rate+0x28/0x80
-       lpi2c_imx_xfer+0xb0/0xa9c
-       __i2c_transfer+0x174/0xa80
-       i2c_transfer+0x68/0x130
-       regmap_i2c_read+0x64/0xb0
-       _regmap_raw_read+0x114/0x440
-       regmap_raw_read+0x19c/0x28c
-       regmap_bulk_read+0x1b8/0x244
-       at24_read+0x14c/0x2c4
-       nvmem_reg_read+0x2c/0x54
-       bin_attr_nvmem_read+0x8c/0xbc
-       sysfs_kf_bin_read+0x74/0x94
-       kernfs_fop_read_iter+0xb0/0x1d0
-       new_sync_read+0xf0/0x184
-       vfs_read+0x154/0x1f0
-       ksys_read+0x70/0x100
-       __arm64_sys_read+0x24/0x30
-       invoke_syscall+0x50/0x120
-       el0_svc_common.constprop.0+0x68/0x124
-       do_el0_svc+0x30/0x9c
-       el0_svc+0x54/0x110
-       el0t_64_sync_handler+0xa4/0x130
-       el0t_64_sync+0x1a0/0x1a4
-
-other info that might help us debug this:
-
-Chain exists of:
-  prepare_lock --> rtc_pcf85063:560:(&config->regmap)->lock --> i2c_register_adapter
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(i2c_register_adapter);
-                               lock(rtc_pcf85063:560:(&config->regmap)->lock);
-                               lock(i2c_register_adapter);
-  lock(prepare_lock);
-
- *** DEADLOCK ***
-
-4 locks held by .../2332:
- #0: ffff0000146eb288 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_read_iter+0x74/0x1d0
- #1: ffff000010fe4400 (kn->active#72){.+.+}-{0:0}, at: kernfs_fop_read_iter+0x7c/0x1d0
- #2: ffff0000110168e8 (&at24->lock){+.+.}-{3:3}, at: at24_read+0x8c/0x2c4
- #3: ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at: i2c_adapter_lock_bus+0x2c/0x3c
-
-stack backtrace:
-CPU: 1 PID: 2332 Comm: ... Tainted: G           O      5.15.71+... #1
-Hardware name: ... (DT)
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000004
+pc : lpuart_copy_rx_to_tty+0xcc/0x5bc
+lr : lpuart_timer_func+0x1c/0x2c
 Call trace:
- dump_backtrace+0x0/0x1d4
- show_stack+0x20/0x2c
- dump_stack_lvl+0x8c/0xb8
- dump_stack+0x18/0x34
- print_circular_bug+0x1f8/0x200
- check_noncircular+0x130/0x144
- __lock_acquire+0x1298/0x20d0
- lock_acquire.part.0+0xf0/0x250
- lock_acquire+0x68/0x8c
- __mutex_lock+0x9c/0x4d0
- mutex_lock_nested+0x48/0x5c
- clk_prepare_lock+0x50/0xb0
- clk_get_rate+0x28/0x80
- lpi2c_imx_xfer+0xb0/0xa9c
- __i2c_transfer+0x174/0xa80
- i2c_transfer+0x68/0x130
- regmap_i2c_read+0x64/0xb0
- _regmap_raw_read+0x114/0x440
- regmap_raw_read+0x19c/0x28c
- regmap_bulk_read+0x1b8/0x244
- at24_read+0x14c/0x2c4
- nvmem_reg_read+0x2c/0x54
- bin_attr_nvmem_read+0x8c/0xbc
- sysfs_kf_bin_read+0x74/0x94
- kernfs_fop_read_iter+0xb0/0x1d0
- new_sync_read+0xf0/0x184
- vfs_read+0x154/0x1f0
- ksys_read+0x70/0x100
- __arm64_sys_read+0x24/0x30
- invoke_syscall+0x50/0x120
- el0_svc_common.constprop.0+0x68/0x124
- do_el0_svc+0x30/0x9c
- el0_svc+0x54/0x110
- el0t_64_sync_handler+0xa4/0x130
- el0t_64_sync+0x1a0/0x1a4
+ lpuart_copy_rx_to_tty
+ lpuart_timer_func
+ call_timer_fn
+ __run_timers.part.0
+ run_timer_softirq
+ __do_softirq
+ __irq_exit_rcu
+ irq_exit
+ handle_domain_irq
+ gic_handle_irq
+ call_on_irq_stack
+ do_interrupt_handler
+ ...
 
-Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
+To fix this fold del_timer_sync() into lpuart_dma_rx_free() after
+dmaengine_terminate_sync() to make sure timer will not be re-started in
+lpuart_copy_rx_to_tty() <= lpuart_dma_rx_complete().
+
+Fixes: 4a8588a1cf86 ("serial: fsl_lpuart: delete timer on shutdown")
 Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 ---
- drivers/i2c/busses/i2c-imx-lpi2c.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/tty/serial/fsl_lpuart.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
-index 188f2a36d2fd6..cf36f12b85573 100644
---- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-+++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-@@ -100,6 +100,7 @@ struct lpi2c_imx_struct {
- 	__u8			*rx_buf;
- 	__u8			*tx_buf;
- 	struct completion	complete;
-+	unsigned int		rate_per;
- 	unsigned int		msglen;
- 	unsigned int		delivered;
- 	unsigned int		block_data;
-@@ -202,20 +203,19 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct *lpi2c_imx)
- static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
+Changelog:
+v2: added "Fixes:" tag
+
+diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+index e945f41b93d43..47c267ee22e04 100644
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -1354,6 +1354,7 @@ static void lpuart_dma_rx_free(struct uart_port *port)
+ 	struct dma_chan *chan = sport->dma_rx_chan;
+ 
+ 	dmaengine_terminate_sync(chan);
++	del_timer_sync(&sport->lpuart_timer);
+ 	dma_unmap_sg(chan->device->dev, &sport->rx_sgl, 1, DMA_FROM_DEVICE);
+ 	kfree(sport->rx_ring.buf);
+ 	sport->rx_ring.tail = 0;
+@@ -1813,7 +1814,6 @@ static int lpuart32_startup(struct uart_port *port)
+ static void lpuart_dma_shutdown(struct lpuart_port *sport)
  {
- 	u8 prescale, filt, sethold, clkhi, clklo, datavd;
--	unsigned int clk_rate, clk_cycle;
-+	unsigned int clk_cycle;
- 	enum lpi2c_imx_pincfg pincfg;
- 	unsigned int temp;
+ 	if (sport->lpuart_dma_rx_use) {
+-		del_timer_sync(&sport->lpuart_timer);
+ 		lpuart_dma_rx_free(&sport->port);
+ 		sport->lpuart_dma_rx_use = false;
+ 	}
+@@ -1973,10 +1973,8 @@ lpuart_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	 * Since timer function acqures sport->port.lock, need to stop before
+ 	 * acquring same lock because otherwise del_timer_sync() can deadlock.
+ 	 */
+-	if (old && sport->lpuart_dma_rx_use) {
+-		del_timer_sync(&sport->lpuart_timer);
++	if (old && sport->lpuart_dma_rx_use)
+ 		lpuart_dma_rx_free(&sport->port);
+-	}
  
- 	lpi2c_imx_set_mode(lpi2c_imx);
+ 	spin_lock_irqsave(&sport->port.lock, flags);
  
--	clk_rate = clk_get_rate(lpi2c_imx->clks[0].clk);
- 	if (lpi2c_imx->mode == HS || lpi2c_imx->mode == ULTRA_FAST)
- 		filt = 0;
- 	else
- 		filt = 2;
+@@ -2210,10 +2208,8 @@ lpuart32_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	 * Since timer function acqures sport->port.lock, need to stop before
+ 	 * acquring same lock because otherwise del_timer_sync() can deadlock.
+ 	 */
+-	if (old && sport->lpuart_dma_rx_use) {
+-		del_timer_sync(&sport->lpuart_timer);
++	if (old && sport->lpuart_dma_rx_use)
+ 		lpuart_dma_rx_free(&sport->port);
+-	}
  
- 	for (prescale = 0; prescale <= 7; prescale++) {
--		clk_cycle = clk_rate / ((1 << prescale) * lpi2c_imx->bitrate)
-+		clk_cycle = lpi2c_imx->rate_per / ((1 << prescale) * lpi2c_imx->bitrate)
- 			    - 3 - (filt >> 1);
- 		clkhi = (clk_cycle + I2C_CLK_RATIO) / (I2C_CLK_RATIO + 1);
- 		clklo = clk_cycle - clkhi;
-@@ -588,6 +588,12 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
+ 	spin_lock_irqsave(&sport->port.lock, flags);
  
-+	lpi2c_imx->rate_per = clk_get_rate(lpi2c_imx->clks[0].clk);
-+	if (!lpi2c_imx->rate_per) {
-+		dev_err(&pdev->dev, "can't get I2C peripheral clock rate\n");
-+		return -EINVAL;
-+	}
-+
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
- 	pm_runtime_use_autosuspend(&pdev->dev);
- 	pm_runtime_get_noresume(&pdev->dev);
+@@ -3014,7 +3010,6 @@ static int lpuart_suspend(struct device *dev)
+ 			 * cannot resume as expected, hence gracefully release the
+ 			 * Rx DMA path before suspend and start Rx DMA path on resume.
+ 			 */
+-			del_timer_sync(&sport->lpuart_timer);
+ 			lpuart_dma_rx_free(&sport->port);
+ 
+ 			/* Disable Rx DMA to use UART port as wakeup source */
 -- 
 2.34.1
 
