@@ -2,33 +2,33 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263E06B1CEB
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Mar 2023 08:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D95A6B1CF9
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Mar 2023 08:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbjCIHwK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Mar 2023 02:52:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56554 "EHLO
+        id S230193AbjCIHxp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Mar 2023 02:53:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjCIHvu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Mar 2023 02:51:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEE62B9DF;
-        Wed,  8 Mar 2023 23:50:24 -0800 (PST)
+        with ESMTP id S230248AbjCIHxV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Mar 2023 02:53:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058761B57E;
+        Wed,  8 Mar 2023 23:52:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8202A61A5C;
-        Thu,  9 Mar 2023 07:49:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50DB2C433EF;
-        Thu,  9 Mar 2023 07:49:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 897B561A5C;
+        Thu,  9 Mar 2023 07:52:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 607E7C4339B;
+        Thu,  9 Mar 2023 07:52:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678348176;
-        bh=j43Kdz7FrZlQoUq7oQqRGTx4xGidoyi/zGWD0kHgqGs=;
+        s=korg; t=1678348347;
+        bh=rt/evWsxMPEyg16HAMZfcM0/9RSG53O+3iv4l9BJwEA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cNvJk8fl6t2PZgjF5XIVmZHSUv9hzmnw5OOHuF3t0HfUpxl5V/FmpEsFPvAlRGxPK
-         pN3oURUnBxecm1yKNdHh9frEw1qDQYYa5CUrrUZVUwtIevd7m4MooWxsxd7kxM2lNm
-         vdTkfHvqyQ7+gC9VCvvoujQh39jPAtEUa0GFc0WU=
-Date:   Thu, 9 Mar 2023 08:49:33 +0100
+        b=Aor2EstCjVBa8Ryyd/MhYkKGxGYCKPn+oobVHgtJolMvYNqcD3TCbffPVNbEQSYq1
+         /0AONv/1wKgrqYaFd6kr/S/rZKiB4FgIDt/hGNrC3rgJHOyBpCDm4WvhITvy/mVcVL
+         LEwmD763aw7H2rquGKF+2kIELrKPdW4AwnolmRr0=
+Date:   Thu, 9 Mar 2023 08:52:24 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Ye Xiang <xiang.ye@intel.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -44,15 +44,15 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
         zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
 Subject: Re: [PATCH v4 1/5] mfd: Add support for Intel LJCA device
-Message-ID: <ZAmPjfH6rA0pbiUa@kroah.com>
+Message-ID: <ZAmQOIh/71rY4Pa4@kroah.com>
 References: <20230309071100.2856899-1-xiang.ye@intel.com>
  <20230309071100.2856899-2-xiang.ye@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20230309071100.2856899-2-xiang.ye@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,14 +61,53 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Thu, Mar 09, 2023 at 03:10:56PM +0800, Ye Xiang wrote:
-> This patch implements the USB part of Intel USB-I2C/GPIO/SPI adapter
-> device named "La Jolla Cove Adapter" (LJCA).
+> +static int ljca_mng_get_version(struct ljca_stub *stub, char *buf)
+> +{
+> +	struct fw_version version = {};
+> +	unsigned int len = sizeof(version);
+> +	int ret;
+> +
+> +	ret = ljca_stub_write(stub, LJCA_MNG_GET_VERSION, NULL, 0, &version, &len, true,
+> +			      LJCA_USB_WRITE_ACK_TIMEOUT_MS);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (len != sizeof(version)) {
+> +		dev_err(&stub->intf->dev, "get version failed, len:%d\n", len);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return sysfs_emit(buf, "%d.%d.%d.%d\n", version.major, version.minor,
+> +			  le16_to_cpu(version.patch), le16_to_cpu(version.build));
+> +}
 
-Then why is this called "mfd" in the subject line?
+You have sysfs files, yet no Documentation/ABI/ entries?  That's not
+allowed, you know this :(
 
->  include/linux/mfd/ljca.h  |  95 ++++
+> +static ssize_t cmd_store(struct device *dev, struct device_attribute *attr, const char *buf,
+> +			 size_t count)
+> +{
+> +	struct usb_interface *intf = to_usb_interface(dev);
+> +	struct ljca_dev *ljca_dev = usb_get_intfdata(intf);
+> +	struct ljca_stub *mng_stub = ljca_stub_find(ljca_dev, LJCA_MNG_STUB);
+> +	struct ljca_stub *diag_stub = ljca_stub_find(ljca_dev, LJCA_DIAG_STUB);
+> +
+> +	if (sysfs_streq(buf, "dfu"))
+> +		ljca_mng_set_dfu_mode(mng_stub);
+> +	else if (sysfs_streq(buf, "debug"))
+> +		ljca_diag_set_trace_level(diag_stub, 3);
 
-Why is this .h file in the mfd directory?
+Sorry, but no, you can't do this in a sysfs file.
+
+> +
+> +	return count;
+> +}
+> +
+> +static ssize_t cmd_show(struct device *dev, struct device_attribute *attr, char *buf)
+> +{
+> +	return sysfs_emit(buf, "%s\n", "supported cmd: [dfu, debug]");
+
+sysfs files do not show "help text".
 
 thanks,
 
