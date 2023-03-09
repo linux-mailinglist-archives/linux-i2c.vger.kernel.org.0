@@ -2,111 +2,154 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 768216B1C1B
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Mar 2023 08:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB376B1C97
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Mar 2023 08:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjCIHLx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Mar 2023 02:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
+        id S230030AbjCIHp7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Mar 2023 02:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjCIHLv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Mar 2023 02:11:51 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A92C083C;
-        Wed,  8 Mar 2023 23:11:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678345910; x=1709881910;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BP2bXE/lj12e2qlD1IN4mt1PlpUOPgNqQR5Qy9flS0M=;
-  b=gE9QNbSywiaf8HwwOi1MR8S66fnHA+x6SZobYN+z4FesBATRNNUneGJx
-   OU495hd2p3XCUHWwL+HZy9Exiw3dGvWJnNU9tkiIH/SvwB+zztW1B63tU
-   ybJI1w7qtE2QfT3eu1wyKO8OJnqnkyeKqtIKgY509ppOdwzKNY+MZHY8A
-   y4tXMOnFSm6FYlwHAaZbZNZ4Ad87ByVcHTD/UmACEIjsbTt1UVCzzB5HN
-   l8RphImPgHvy1p2qz1vSeuqsWUQvFhCLYIKme/U++LruA2B74kl/fAzQb
-   BmgrEU10ONySXZ0LvhmHoN3Z0pqjX+k3wQtJEK8Ggy3ftu5iPNZTNBJo5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="316767835"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="316767835"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 23:11:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="923126491"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="923126491"
-Received: from ye-nuc7i7dnhe.sh.intel.com ([10.239.154.52])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Mar 2023 23:11:43 -0800
-From:   Ye Xiang <xiang.ye@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org
-Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com,
-        Ye Xiang <xiang.ye@intel.com>
-Subject: [PATCH v4 5/5] Documentation: Add ABI doc for attributes of LJCA device
-Date:   Thu,  9 Mar 2023 15:11:00 +0800
-Message-Id: <20230309071100.2856899-6-xiang.ye@intel.com>
+        with ESMTP id S229907AbjCIHp5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Mar 2023 02:45:57 -0500
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C2FDCA70
+        for <linux-i2c@vger.kernel.org>; Wed,  8 Mar 2023 23:45:50 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:614d:21b0:703:d0f9])
+        by laurent.telenet-ops.be with bizsmtp
+        id W7ln2900G3mNwr4017lnNV; Thu, 09 Mar 2023 08:45:48 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1paAxd-00BJiF-3S;
+        Thu, 09 Mar 2023 08:45:47 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1paAyB-00Fxln-Kt;
+        Thu, 09 Mar 2023 08:45:47 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] i2c: dev: Fix bus callback return values
+Date:   Thu,  9 Mar 2023 08:45:46 +0100
+Message-Id: <03a8cd13af352c4d990bc70b72df4915b9fa2874.1678347776.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230309071100.2856899-1-xiang.ye@intel.com>
-References: <20230309071100.2856899-1-xiang.ye@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add sysfs attributes Documentation entries for LJCA device
+The i2cdev_{at,de}tach_adapter() callbacks are used for two purposes:
+  1. As notifier callbacks, when (un)registering I2C adapters created or
+     destroyed after i2c_dev_init(),
+  2. As bus iterator callbacks, for registering already existing
+     adapters from i2c_dev_init(), and for cleanup.
 
-Signed-off-by: Ye Xiang <xiang.ye@intel.com>
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Unfortunately both use cases expect different return values: the former
+expects NOTIFY_* return codes, while the latter expects zero or error
+codes, and aborts in case of error.
+
+Hence in case 2, as soon as i2cdev_{at,de}tach_adapter() returns
+(non-zero) NOTIFY_OK, the bus iterator aborts.  This causes (a) only the
+first already existing adapter to be registered, leading to missing
+/dev/i2c-* entries, and (b) a failure to unregister all but the first
+I2C adapter during cleanup.
+
+Fix this by introducing separate callbacks for the bus iterator,
+wrapping the notifier functions, and always returning succes.
+Any errors inside these callback functions are unlikely to happen, and
+are fatal anyway.
+
+Fixes: cddf70d0bce71c2a ("i2c: dev: fix notifier return values")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- .../ABI/testing/sysfs-bus-usb-devices-ljca    | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
+Seen on r8a7740/armadillo and r8a73a4/ape6evm, where the i2c-shmobile
+adapters are probed before i2c_dev_init().
+Not seen on r8a779g0/white-hawk, where all I2C adapters are probed after
+i2c_dev_init().
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca b/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
-new file mode 100644
-index 000000000000..e12fe78ae58b
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
-@@ -0,0 +1,22 @@
-+What:		/sys/bus/usb/.../version
-+Date:		July 2023
-+KernelVersion:	6.4
-+Contact:	Ye Xiang <xiang.ye@intel.com>
-+Description:
-+		Provides the current firmware version of LJCA device.
-+		The format is Major.Minor.Patch.Build, where
-+		Major, Minor, Patch, and Build are decimal numbers.
-+		For example: 1.0.0.256
+ drivers/i2c/i2c-dev.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
+index 107623c4cc14aaf9..95a0b63ac560cf33 100644
+--- a/drivers/i2c/i2c-dev.c
++++ b/drivers/i2c/i2c-dev.c
+@@ -646,7 +646,7 @@ static void i2cdev_dev_release(struct device *dev)
+ 	kfree(i2c_dev);
+ }
+ 
+-static int i2cdev_attach_adapter(struct device *dev, void *dummy)
++static int i2cdev_attach_adapter(struct device *dev)
+ {
+ 	struct i2c_adapter *adap;
+ 	struct i2c_dev *i2c_dev;
+@@ -685,7 +685,7 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
+ 	return NOTIFY_DONE;
+ }
+ 
+-static int i2cdev_detach_adapter(struct device *dev, void *dummy)
++static int i2cdev_detach_adapter(struct device *dev)
+ {
+ 	struct i2c_adapter *adap;
+ 	struct i2c_dev *i2c_dev;
+@@ -711,9 +711,9 @@ static int i2cdev_notifier_call(struct notifier_block *nb, unsigned long action,
+ 
+ 	switch (action) {
+ 	case BUS_NOTIFY_ADD_DEVICE:
+-		return i2cdev_attach_adapter(dev, NULL);
++		return i2cdev_attach_adapter(dev);
+ 	case BUS_NOTIFY_DEL_DEVICE:
+-		return i2cdev_detach_adapter(dev, NULL);
++		return i2cdev_detach_adapter(dev);
+ 	}
+ 
+ 	return NOTIFY_DONE;
+@@ -725,6 +725,18 @@ static struct notifier_block i2cdev_notifier = {
+ 
+ /* ------------------------------------------------------------------------- */
+ 
++static int __init i2c_dev_attach_adapter(struct device *dev, void *dummy)
++{
++	i2cdev_attach_adapter(dev);
++	return 0;
++}
 +
-+What:		/sys/bus/usb/.../cmd
-+Date:		July 2023
-+KernelVersion:	6.4
-+Contact:	Ye Xiang <xiang.ye@intel.com>
-+Description:
-+		Commands supported by LJCA device.
-+		When read, it will return valid commands.
-+		When write with a command, it will execute the command.
-+		Valid commands are [dfu, debug]
-+		- Writing "dfu" to this file so as to put the device into
-+		DFU mode so the firmware can be updated.
-+		- Writing "debug" to this file to enable debug logging.
++static int __exit i2c_dev_detach_adapter(struct device *dev, void *dummy)
++{
++	i2cdev_detach_adapter(dev);
++	return 0;
++}
++
+ /*
+  * module load/unload record keeping
+  */
+@@ -752,7 +764,7 @@ static int __init i2c_dev_init(void)
+ 		goto out_unreg_class;
+ 
+ 	/* Bind to already existing adapters right away */
+-	i2c_for_each_dev(NULL, i2cdev_attach_adapter);
++	i2c_for_each_dev(NULL, i2c_dev_attach_adapter);
+ 
+ 	return 0;
+ 
+@@ -768,7 +780,7 @@ static int __init i2c_dev_init(void)
+ static void __exit i2c_dev_exit(void)
+ {
+ 	bus_unregister_notifier(&i2c_bus_type, &i2cdev_notifier);
+-	i2c_for_each_dev(NULL, i2cdev_detach_adapter);
++	i2c_for_each_dev(NULL, i2c_dev_detach_adapter);
+ 	class_destroy(i2c_dev_class);
+ 	unregister_chrdev_region(MKDEV(I2C_MAJOR, 0), I2C_MINORS);
+ }
 -- 
 2.34.1
 
