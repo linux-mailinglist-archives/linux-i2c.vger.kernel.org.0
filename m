@@ -2,56 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F39C16B2F57
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Mar 2023 22:11:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A73126B2F5B
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Mar 2023 22:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbjCIVLd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Mar 2023 16:11:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42490 "EHLO
+        id S230243AbjCIVMX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Mar 2023 16:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjCIVLc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Mar 2023 16:11:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEFFF98C5;
-        Thu,  9 Mar 2023 13:11:31 -0800 (PST)
+        with ESMTP id S229620AbjCIVMW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Mar 2023 16:12:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B831BAFA;
+        Thu,  9 Mar 2023 13:12:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 882EB61CDA;
-        Thu,  9 Mar 2023 21:11:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C976C433EF;
-        Thu,  9 Mar 2023 21:11:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 664D2B81F49;
+        Thu,  9 Mar 2023 21:12:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78835C433EF;
+        Thu,  9 Mar 2023 21:12:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678396290;
-        bh=u4VqRJso8zH9qZKSmQOFBu/jiHn2fWd7l/mQCOcDGRI=;
+        s=k20201202; t=1678396338;
+        bh=emwxev2joapuzWTO2f23F5wjNsgEZTMzeCLrmUxz/FA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NuVhvpAgu7tqzGGtbpm3/DtGd6GsIW8NrjN1FsryzF6gm98vc2jyiQ7wBqRQ1SjbD
-         jXrI5dREBb8MCrykCafukdkb3m6RobUTjxZOC0AMEf6Ym3v7Hr8r0VZFE749JC3r4S
-         VDswzwiyrP3eIbkTktFJbYGxN0okLBuHb7Wxp6f78c/UKNg1saDqvvTCgI1UUzzyEh
-         s7D44VLmZsulM3eXGlbTWkBvYpi8m7I5iJ4CFf+fcoCc9HJ+X225tjkV6NfEoLVPG6
-         RRRr8N1Gsdc+ijBUGoKnk5Ws6nDxFOcx+f+IIC8jNBfY/IgvJWkV1euLohS4IkFL7x
-         souPbaFP81V/Q==
-Date:   Thu, 9 Mar 2023 22:11:24 +0100
+        b=Ob7Um5kAO7CzU59lJLPrYGoOplTDNcR1lqQU6UxANZX9ZLaHjs1EfDbjrwnu09o/c
+         Wm5lYIveSHn1KFBMxBeyi8AZQGIk13uJLqbG7V7Eof+vJj2mHctYJXq4AK9H8X5SvN
+         ZqoaVo4tAn9TST3j1CBWn6jgp4gnysyEbQY7xOTWMLAJk5t/xn9LatMfFQHxFzcZHn
+         YjFTc/G2ZjTevT1WhTPnrYsBoERCVMcvJSj3Wc/zioP6B6aSSvW+OHj1G2xaFEP6/9
+         NCpIynDWFmsi+fyf4NIHY99HQ8alW5INj0MiIWZunHeVRzOTYrt6itTVnSMi10vzGA
+         FYGj3lkobq3ew==
+Date:   Thu, 9 Mar 2023 22:12:14 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: dev: Fix bus callback return values
-Message-ID: <ZApLfPnPdJkCIQYt@shikoro>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Ajay Gupta <ajayg@nvidia.com>,
+        Peter Senna Tschudin <peter.senna@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        linux-mtd@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, Evgeniy Polyakov <zbr@ioremap.net>,
+        Crt Mori <cmo@melexis.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Peter Rosin <peda@axentia.se>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH v2 0/9] i2c: Switch .probe() to not take an id parameter
+Message-ID: <ZApLrpD9Op59FgnB@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <03a8cd13af352c4d990bc70b72df4915b9fa2874.1678347776.git.geert+renesas@glider.be>
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Ajay Gupta <ajayg@nvidia.com>,
+        Peter Senna Tschudin <peter.senna@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        linux-mtd@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, Evgeniy Polyakov <zbr@ioremap.net>,
+        Crt Mori <cmo@melexis.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Peter Rosin <peda@axentia.se>, Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>
+References: <20230226222654.1741900-1-u.kleine-koenig@pengutronix.de>
+ <20230303220856.ebloz7kjw7sskxym@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Dpj+1m9Hb2Yj+lH9"
+        protocol="application/pgp-signature"; boundary="11BnIObYxkIk2nlY"
 Content-Disposition: inline
-In-Reply-To: <03a8cd13af352c4d990bc70b72df4915b9fa2874.1678347776.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230303220856.ebloz7kjw7sskxym@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,57 +100,34 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Dpj+1m9Hb2Yj+lH9
+--11BnIObYxkIk2nlY
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Mar 09, 2023 at 08:45:46AM +0100, Geert Uytterhoeven wrote:
-> The i2cdev_{at,de}tach_adapter() callbacks are used for two purposes:
->   1. As notifier callbacks, when (un)registering I2C adapters created or
->      destroyed after i2c_dev_init(),
->   2. As bus iterator callbacks, for registering already existing
->      adapters from i2c_dev_init(), and for cleanup.
->=20
-> Unfortunately both use cases expect different return values: the former
-> expects NOTIFY_* return codes, while the latter expects zero or error
-> codes, and aborts in case of error.
->=20
-> Hence in case 2, as soon as i2cdev_{at,de}tach_adapter() returns
-> (non-zero) NOTIFY_OK, the bus iterator aborts.  This causes (a) only the
-> first already existing adapter to be registered, leading to missing
-> /dev/i2c-* entries, and (b) a failure to unregister all but the first
-> I2C adapter during cleanup.
->=20
-> Fix this by introducing separate callbacks for the bus iterator,
-> wrapping the notifier functions, and always returning succes.
-> Any errors inside these callback functions are unlikely to happen, and
-> are fatal anyway.
->=20
-> Fixes: cddf70d0bce71c2a ("i2c: dev: fix notifier return values")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Applied to for-current, thanks!
 
 
---Dpj+1m9Hb2Yj+lH9
+> So this series is ready to be applied once Linus cuts -rc1.
+
+I applied it to for-current now and plan to have it in -rc2. Thank you!
+
+
+--11BnIObYxkIk2nlY
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQKS3gACgkQFA3kzBSg
-KbaEIw/8Di3Rnwk9g5nCq/XtZ1EpQ5ZmJKofFSVI5+Ye7N65+W881Eq5XisTv+x5
-cG7LPYn5XN+/vzDsmc80h9gERx/yQH3Rjkry+2doE1SRdYGdMsN2qBtaZXzZDr7V
-oY2A4PC7FYKTjhUh1PRK0LahWDxeofsNBA4jfp0sinAAeirSGbrSuN0PvAFSvrMs
-duRJTN/nlPvCPiYZQqMqhST2fXueCjqpsEgQ4keRhwntVhNIvhRz4JomZntSbLyP
-Co5QR0YNZcWpdC3qT1fLnN+5o2dEda2w5JXYvP8NrxA1dCb9ZiyChQrr8RfejYQQ
-Rf3CHnJSUHl9H5yuzzMZ3NUpQFxmv3i48lHV08myDW9UNdcvdWRIu7zMZhBzi0uX
-WouSPsqEBJwQW3YmqWh3Hxo5pxVbmHk4rAanq6tdQU8y0jhQ/OsOKgM6g5I6UUAe
-FrQD3cnTN4qkL6jpTC3SXMzHxhOvNHjIDIMYCx8ZXlTHGjMR8DgV+eVyv1R0Dit3
-hfFZ6it52H/st7Z5HBxuEc5jTbunrvLbz9gwF1eAgNOAywxddgLa12IjsaMowWl9
-NjkdAZrlTiSks9i1PpkRrxUsaHWYfR3WikaFdqIwSLno38B0vSPCbwBhbth032jP
-csdsfO2ZdXnmL7MiGZhEecffCJPdpdM7+0dDvpuMQE89iZ1dfT0=
-=6t5G
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQKS64ACgkQFA3kzBSg
+KbZPuw/5AdHfkTRDnxz7iP/injeW9ZuXdUyU2WNYPhKG7gjBIddIl62rm7/IEca7
+p3URnVMb58tnKqvQ8waKpNu/SdPTrtQ/Xp35h3lBN9z2hvybGDjHztUar08DijrQ
+EU2K76NS83pZ2vQ0S4NRk3JQdGJVXmYs04hz3XBe9Fk61l+XgOaXjDfVMRYQdAHs
+KvjbHB+fCKrRY4pTYO/+3rah9NGj7Igm6bxWs8bwqqSHL7O95xan/NyDFSj6ast7
+5otOpDeFE90FeYuvJVhaDThUTf65ko6szMFT7tHRIYo2VPitA28I/Vq2/wei9e1K
+d8hwgwd5X73mVLAWK6zYsLN2hyjna6/O/6+AaUSjYzHoKlOHCqjMhfllzCTmqrBc
+tbxj4kw5uhH315V+S1wjdpQ/cCYqQQU1c1Lugrkgm/pAdFiyz9PxDap9ovxO5whY
+cElHujAXXDjCHU/wVB8rGCjJMlwpr1/mWOrmt7AcWCLUsK7CvuQjqgvDkZ7XuoRJ
+4PylU8+/MH+06JGUusE/bdCc1tR/lm1ZPWu0OVWTTdgvuWQ6fqT9xveERYleRl/M
+SEUbzagdMe1OqVzEFNoymReVc4Ds8n3IvyltPkR4w4rwSAdWLtoRCXmlf/L6WrBj
+SK0w5ZBTZKGdORg7eil1rxWED6YrQaAFOM9GnyCKapCPtM0zp+w=
+=wGSr
 -----END PGP SIGNATURE-----
 
---Dpj+1m9Hb2Yj+lH9--
+--11BnIObYxkIk2nlY--
