@@ -2,120 +2,208 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C576B471E
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Mar 2023 15:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1FC6B4BC9
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Mar 2023 16:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233070AbjCJOs6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 10 Mar 2023 09:48:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
+        id S230460AbjCJP6S (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 10 Mar 2023 10:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233054AbjCJOrg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Mar 2023 09:47:36 -0500
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D920122CFD;
-        Fri, 10 Mar 2023 06:47:20 -0800 (PST)
-Received: by mail-oi1-f171.google.com with SMTP id bi17so4404516oib.3;
-        Fri, 10 Mar 2023 06:47:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678459636;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ka6j+AgA2RvHVAeCG1VhdJNgY4FfjdR69Jx9JHYwZhg=;
-        b=w8TGocdIZCTyMZCLDafig57t1wBUXSSUvEulxa/nlsdW8hyMX8Z/7k1HhUThS+tsBS
-         GN74MUBRD7b3lj5jO9nIvlm3i6pJXjrRDpvRB7hfcd7Duq9BEHHEbda9+2JKnwZwBaQ0
-         VhCKEh1tUqIt64f7+Dv3K1wc3E65WRGUmEKKfBNSMpzxAioZSZpbVVOEWBBbAVJTI8Rx
-         1UAtA/mt9voXtjOmR0FSnEufMGSxecnJBqfUukRumdfZ4cFidUvGWSPzlHz9nt+jqsmf
-         lZjLs+6eRh+ZgC+az295syeWa6qCB1k0Tmmu9grGvmXxPKYxl/lBIMyIcPnapTKwHQVA
-         ydxg==
-X-Gm-Message-State: AO0yUKXjWPkAusqJMlGHuAQ0AOyfk9pd7uC8Plr+YR1Chn7+3j3MmPw5
-        6Opz1DZZxXe3pSDRQnP91JzF6AQKeQ==
-X-Google-Smtp-Source: AK7set8TvC0VECuhekh0dMNgsgsQFHZqqlEa6RM1vSnKJe/vWFQIrYIcuTUldEWpst2SMO5u3Smlfg==
-X-Received: by 2002:a05:6808:e8f:b0:383:b38f:74f9 with SMTP id k15-20020a0568080e8f00b00383b38f74f9mr1132785oil.17.1678459635957;
-        Fri, 10 Mar 2023 06:47:15 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n22-20020a4ae1d6000000b005253a5cc3cfsm865351oot.29.2023.03.10.06.47.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 06:47:15 -0800 (PST)
-Received: (nullmailer pid 1542639 invoked by uid 1000);
-        Fri, 10 Mar 2023 14:47:07 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: Use of_property_read_bool() for boolean properties
-Date:   Fri, 10 Mar 2023 08:47:07 -0600
-Message-Id: <20230310144707.1542595-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S230437AbjCJP5l (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Mar 2023 10:57:41 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2046.outbound.protection.outlook.com [40.107.220.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C138D7A95;
+        Fri, 10 Mar 2023 07:52:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NUpqxIv4McvKpUxm9zVSwc2BkQ/zQa/5ahbkXoZTnJ/Zqp3ailXDdQiN1l7uG+wcePABDoRujrmH9xkqIZzAWVIUhcMmJmC8+4fhx543/O96ODPBydIPJz81xt3jCbE+HFVlKpmlrN+BgU75Z1KGvhdOfoHRr6/YN3gOsjh4E22gjPn7kL4JqigabH0MhMhovmvvSyZIBf3nZUJrurazlZN5HbrR4EoKcJFJakTG1kGHYEC009oWcqrAnb2kWN8NlOd6o+Lzqbey6bz3poTlBI78V/SdJa9Z1xpTUObCQlgN2YEeac8efwJEa3XEdtjBjcMb0HOp8q1AW+Q2hIMgUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Jtn5xgU92dXdxPrVv6HgqsyKhfJIQsak61N/j4HyXhc=;
+ b=jaKXl+acReDivHmlndUSH0qe2JfTpHXxvy3hvyf9zUSXwxw1vlQzvjgswGiL+UoQECY4hH+tpL7DVxy2PVWzzOb2O6pQcUjLVJDpiZhIzx/bp0ZG3HZFPrYOijbEYA2Pb7Dyh/iPxqM8fLFzI1jfOobmvhfBOHeOlMfPVdBeNTBBDt4s/uaLTzfA7GvkpZM/229c/eyvz19FpcFbismdMn3w7ZbgXMWbvHK+A3wR0E3JQ8YypjjFwo0OULnr/yzaI+Vd6yPKz4SNBgkuDJ0bCu4wu1wRr92DN90O+QhyvuxUa5SFWxhSLw+Rwqaa5CPRD3/sH5eVCooZqFJV8IAEfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Jtn5xgU92dXdxPrVv6HgqsyKhfJIQsak61N/j4HyXhc=;
+ b=Lm9U/4jceYFczvP5kzPCrmwp2DISnNXSaI22BWxbPH1xysJnqrpIpSxQEbo4IpaKXJN9yqOWkVo8fVJsIbuS6rl5Sy/1nLnQRJns93bqb+12VyetfEEu12vi2iFKtjcnT5kpsLkn6KVIigKjzQ3U8eYyYKE6YEcDmHNvr8QMm+H5y9iUZBd4cLGkOhUdJcWDaK2b8Zg5tRk4qT/8XzRGo9fJjFK64/0ZTPlVpYCNs5Ssc7SR18NQ1kL9IZQBIni7wlgD1bHRnMax63Y5WK0ko2O1Kpdak5UZ2gZirymAl+k+vgim5HCEXRea6mQJ8667Bf1R5nc0I70cFSsBjVN40g==
+Received: from BN9PR03CA0132.namprd03.prod.outlook.com (2603:10b6:408:fe::17)
+ by DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
+ 2023 15:52:45 +0000
+Received: from BN8NAM11FT007.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:fe:cafe::b0) by BN9PR03CA0132.outlook.office365.com
+ (2603:10b6:408:fe::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19 via Frontend
+ Transport; Fri, 10 Mar 2023 15:52:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT007.mail.protection.outlook.com (10.13.177.109) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.19 via Frontend Transport; Fri, 10 Mar 2023 15:52:45 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 10 Mar 2023
+ 07:52:34 -0800
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 10 Mar
+ 2023 07:52:34 -0800
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.986.5 via Frontend
+ Transport; Fri, 10 Mar 2023 07:52:30 -0800
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     <christian.koenig@amd.com>, <digetx@gmail.com>,
+        <jonathanh@nvidia.com>, <ldewangan@nvidia.com>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <sumit.semwal@linaro.org>,
+        <thierry.reding@gmail.com>, <wsa@kernel.org>
+CC:     <akhilrajeev@nvidia.com>
+Subject: [PATCH] i2c: tegra: Fix PEC support for SMBUS block read
+Date:   Fri, 10 Mar 2023 21:22:17 +0530
+Message-ID: <20230310155217.11993-1-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT007:EE_|DM4PR12MB6280:EE_
+X-MS-Office365-Filtering-Correlation-Id: d1df0166-a831-4063-9eba-08db217f7dc5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gNDygaGFIIQp+ZVuVN56MgE5JCcxX2g5Y6RSRyLK2XEYWjtBKTOpo2AT9+Wt9vtYh6UQgiAMK7jGrdkBZ0nVvDP2zBuKOGZiDtk+HWUIFda+x2vQww0gSAkQvZJU5SanGNUT49AEbakTg/tfB2CBbLjofqOH/mQSWlZbW8oskK2l+yilqu+Fs+W2UjOv+bkXob3j8NjxBKkVlbP/CDk+hnnJMPP7XsCl0jGPFXBKtef9ViRGe6/qIoE1TkcOAIhjzcFrSOsmr4CojR2JyKUS/D9W912dF7HX1SgbWh9hTGvA244y0gA306IjsiNy3uS/HQ/JERv5MEJA92KrLus1KiIUbZUpXclEw1jsOy4m96waX1enE9Uvcyf3ycKlVmeTvP5jqrQqnO962qkKY5o/8d3xi/qoXNmWBZjizvNrmudtwW+uDY+/FEIY3N7r61zH+0K0PzvTk0Mhi0N27YZcKODBr00b1gh844gKEOGpBkRvgWkwCL/LCM8XhBJc7BXvjTHuXabtmCNdyZlo4u1XaNEA/1DAWYaKa9Ks8WLiRntahrPJujy+BHqZ6bExjyAYhQh40EBpLIAGA4L1b9hV2PN2oU2Z4eIqbVQ+uTFfeox1Af/fp7cnL/nqnv5UuM95wBxFo1Iq1MQjzc2B8O4LWLZ+bRt+yy/r7sp6GnOoVpII24QARTyKLYLZ2zD+09JWPNgM+xrNGhzraRz/JRJlCQyJBhiR9VPpw+LrgBVKPq9sHrYlbH47wJPE9APZuJGR9cYiCE0dOSDtLwIhNsrZssa7mdyUwcNO2PlmkYmCXQLkcwW6d4N+rG5ze9+G5TYF
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(396003)(136003)(346002)(451199018)(40470700004)(46966006)(36840700001)(47076005)(426003)(336012)(110136005)(40460700003)(36756003)(356005)(86362001)(83380400001)(7636003)(82740400003)(36860700001)(26005)(1076003)(82310400005)(186003)(6666004)(2616005)(316002)(7696005)(5660300002)(478600001)(921005)(40480700001)(107886003)(4326008)(8936002)(2906002)(70206006)(8676002)(41300700001)(70586007)(2101003)(83996005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 15:52:45.5692
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1df0166-a831-4063-9eba-08db217f7dc5
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT007.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6280
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-It is preferred to use typed property access functions (i.e.
-of_property_read_<type> functions) rather than low-level
-of_get_property/of_find_property functions for reading properties.
-Convert reading boolean properties to to of_property_read_bool().
+Update the msg->len value correctly for SMBUS block read. The discrepancy
+went unnoticed as msg->len is used in SMBUS transfers only when a PEC
+byte is added.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
+Fixes: d7583c8a5748 ("i2c: tegra: Add SMBus block read function")
+Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
 ---
- drivers/i2c/busses/i2c-mpc.c | 2 +-
- drivers/i2c/busses/i2c-pxa.c | 6 ++----
- drivers/i2c/i2c-core-of.c    | 2 +-
- 3 files changed, 4 insertions(+), 6 deletions(-)
+ drivers/i2c/busses/i2c-tegra.c | 37 +++++++++++++++++++++++-----------
+ 1 file changed, 25 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
-index 81ac92bb4f6f..bec0c5dc20d1 100644
---- a/drivers/i2c/busses/i2c-mpc.c
-+++ b/drivers/i2c/busses/i2c-mpc.c
-@@ -842,7 +842,7 @@ static int fsl_i2c_probe(struct platform_device *op)
- 		data->setup(op->dev.of_node, i2c, clock);
- 	} else {
- 		/* Backwards compatibility */
--		if (of_get_property(op->dev.of_node, "dfsrr", NULL))
-+		if (of_property_read_bool(op->dev.of_node, "dfsrr"))
- 			mpc_i2c_setup_8xxx(op->dev.of_node, i2c, clock);
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index 6aab84c8d22b..75250a46cf71 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -279,6 +279,7 @@ struct tegra_i2c_dev {
+ 	size_t msg_buf_remaining;
+ 	int msg_err;
+ 	u8 *msg_buf;
++	__u16 msg_len;
+ 
+ 	struct completion dma_complete;
+ 	struct dma_chan *tx_dma_chan;
+@@ -1169,7 +1170,7 @@ static void tegra_i2c_push_packet_header(struct tegra_i2c_dev *i2c_dev,
+ 	else
+ 		i2c_writel(i2c_dev, packet_header, I2C_TX_FIFO);
+ 
+-	packet_header = msg->len - 1;
++	packet_header = i2c_dev->msg_len - 1;
+ 
+ 	if (i2c_dev->dma_mode && !i2c_dev->msg_read)
+ 		*dma_buf++ = packet_header;
+@@ -1242,20 +1243,32 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 		return err;
+ 
+ 	i2c_dev->msg_buf = msg->buf;
++	i2c_dev->msg_len = msg->len;
+ 
+-	/* The condition true implies smbus block read and len is already read */
+-	if (msg->flags & I2C_M_RECV_LEN && end_state != MSG_END_CONTINUE)
+-		i2c_dev->msg_buf = msg->buf + 1;
+-
+-	i2c_dev->msg_buf_remaining = msg->len;
+ 	i2c_dev->msg_err = I2C_ERR_NONE;
+ 	i2c_dev->msg_read = !!(msg->flags & I2C_M_RD);
+ 	reinit_completion(&i2c_dev->msg_complete);
+ 
++	/* *
++	 * For SMBUS block read command, read only 1 byte in the first transfer.
++	 * Adjust that 1 byte for the next transfer in the msg buffer and msg
++	 * length.
++	 */
++	if (msg->flags & I2C_M_RECV_LEN) {
++		if (end_state == MSG_END_CONTINUE) {
++			i2c_dev->msg_len = 1;
++		} else {
++			i2c_dev->msg_buf += 1;
++			i2c_dev->msg_len -= 1;
++		}
++	}
++
++	i2c_dev->msg_buf_remaining = i2c_dev->msg_len;
++
+ 	if (i2c_dev->msg_read)
+-		xfer_size = msg->len;
++		xfer_size = i2c_dev->msg_len;
+ 	else
+-		xfer_size = msg->len + I2C_PACKET_HEADER_SIZE;
++		xfer_size = i2c_dev->msg_len + I2C_PACKET_HEADER_SIZE;
+ 
+ 	xfer_size = ALIGN(xfer_size, BYTES_PER_FIFO_WORD);
+ 
+@@ -1295,7 +1308,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 	if (!i2c_dev->msg_read) {
+ 		if (i2c_dev->dma_mode) {
+ 			memcpy(i2c_dev->dma_buf + I2C_PACKET_HEADER_SIZE,
+-			       msg->buf, msg->len);
++			       msg->buf, i2c_dev->msg_len);
+ 
+ 			dma_sync_single_for_device(i2c_dev->dma_dev,
+ 						   i2c_dev->dma_phys,
+@@ -1352,7 +1365,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 						i2c_dev->dma_phys,
+ 						xfer_size, DMA_FROM_DEVICE);
+ 
+-			memcpy(i2c_dev->msg_buf, i2c_dev->dma_buf, msg->len);
++			memcpy(i2c_dev->msg_buf, i2c_dev->dma_buf, i2c_dev->msg_len);
+ 		}
  	}
  
-diff --git a/drivers/i2c/busses/i2c-pxa.c b/drivers/i2c/busses/i2c-pxa.c
-index b605b6e43cb9..f9fa5308556b 100644
---- a/drivers/i2c/busses/i2c-pxa.c
-+++ b/drivers/i2c/busses/i2c-pxa.c
-@@ -1261,10 +1261,8 @@ static int i2c_pxa_probe_dt(struct platform_device *pdev, struct pxa_i2c *i2c,
- 	/* For device tree we always use the dynamic or alias-assigned ID */
- 	i2c->adap.nr = -1;
- 
--	if (of_get_property(np, "mrvl,i2c-polling", NULL))
--		i2c->use_pio = 1;
--	if (of_get_property(np, "mrvl,i2c-fast-mode", NULL))
--		i2c->fast_mode = 1;
-+	i2c->use_pio = of_property_read_bool(np, "mrvl,i2c-polling");
-+	i2c->fast_mode = of_property_read_bool(np, "mrvl,i2c-fast-mode");
- 
- 	*i2c_types = (enum pxa_i2c_types)(of_id->data);
- 
-diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-index bce6b796e04c..aa93467784c2 100644
---- a/drivers/i2c/i2c-core-of.c
-+++ b/drivers/i2c/i2c-core-of.c
-@@ -55,7 +55,7 @@ int of_i2c_get_board_info(struct device *dev, struct device_node *node,
- 	if (of_property_read_bool(node, "host-notify"))
- 		info->flags |= I2C_CLIENT_HOST_NOTIFY;
- 
--	if (of_get_property(node, "wakeup-source", NULL))
-+	if (of_property_read_bool(node, "wakeup-source"))
- 		info->flags |= I2C_CLIENT_WAKE;
- 
- 	return 0;
+@@ -1408,8 +1421,8 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+ 			ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], MSG_END_CONTINUE);
+ 			if (ret)
+ 				break;
+-			/* Set the read byte as msg len */
+-			msgs[i].len = msgs[i].buf[0];
++			/* Set the msg length from first byte */
++			msgs[i].len += msgs[i].buf[0];
+ 			dev_dbg(i2c_dev->dev, "reading %d bytes\n", msgs[i].len);
+ 		}
+ 		ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], end_type);
 -- 
-2.39.2
+2.17.1
 
