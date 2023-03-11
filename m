@@ -2,53 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D906B5B0D
-	for <lists+linux-i2c@lfdr.de>; Sat, 11 Mar 2023 12:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BD26B5B10
+	for <lists+linux-i2c@lfdr.de>; Sat, 11 Mar 2023 12:20:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjCKLUl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 11 Mar 2023 06:20:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
+        id S230071AbjCKLUn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 11 Mar 2023 06:20:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjCKLTv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 11 Mar 2023 06:19:51 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDD8B5AAA
-        for <linux-i2c@vger.kernel.org>; Sat, 11 Mar 2023 03:17:08 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id g10so1875172eda.1
-        for <linux-i2c@vger.kernel.org>; Sat, 11 Mar 2023 03:17:08 -0800 (PST)
+        with ESMTP id S230455AbjCKLTx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 11 Mar 2023 06:19:53 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B199720D0A
+        for <linux-i2c@vger.kernel.org>; Sat, 11 Mar 2023 03:17:09 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id g10so1875268eda.1
+        for <linux-i2c@vger.kernel.org>; Sat, 11 Mar 2023 03:17:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678533422;
+        d=linaro.org; s=google; t=1678533423;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PQMu1OBGcFAt/9oWZHzoRm8MXiI9ypYZwvYh5dmA858=;
-        b=ghNsLS5SpFOkMhJwbC4XS8uoD5BFbmT7NzIgtfULzPzTvyI6QOO4HG8pFT6C5UGUat
-         mPQjoT0+sT0CMzL6ME0C9Y7HgaZfd5r5Xw4O7S9SIWwXUXfVZTxxRURXoBMwbLdb9gGa
-         HDdJT2S0B0Au5ZAlepE+GieSNxYU1miaru7gYjFtSzq0r4EAOOeYmyvSqOnuvYq3AZ+P
-         cDsUDnxd/3IbWY4dvOjVfnM5uW1UsHGO4HjnbrWw78+Q4BG/Mgpam7LHpxHdbtD4Qg0u
-         6gMJzi0QokME5X3W0CknQVOhtzGKD1hmJ+bkvWUYiErUyxxO33PDCAakK4egTqj6Vg1i
-         5RYg==
+        bh=XeJqWZmIWIQYf/vyLenHeQ0JsQ8pjtOGtaM4WzEFmbc=;
+        b=K4PlKgk6vphG7B8A+tKgwgLYu/eve2VtLYCEGfkUgVLwaOgCPb7AYrJKKgc58vohjO
+         rzTftPa2ZxcY1mI64stQAL5MZ+JQPxTaEr1Y9AxaQYrbXROSwSQp5n05Z9wTPZYRFpmx
+         Bx3zHVIcTIzCEjsajZ9GXEVo76iXFDZjOIW2qT5m5hbGmWcJdF+q6Sc+llFTkWrO6/9V
+         duhkPfdmrunbmk+l25R3ueAi1TwDW72GfXGvCgamBE9c2PG9Rg1A0BPHsQOdMTqKJ21u
+         X5qwUSuCcnDZb4uy/0MbHeF50kr+hbPu17toFAd8eu2Mm/u8Rj3Fbv+gwMYWmhA/wgTN
+         7xSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678533422;
+        d=1e100.net; s=20210112; t=1678533423;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PQMu1OBGcFAt/9oWZHzoRm8MXiI9ypYZwvYh5dmA858=;
-        b=YtrNi/UJ+PtAUzw/Bji9gnKcpXm0Pip+NkA7S8MU91iXuWWMJgHYWq+L9OmeNuxcKY
-         JjdqgVRAYcWIUj5//fdpzIjPEdAyW/eqfZVBo1ESY2amxor8roY/k/vwJ5hfqP6JdvFk
-         0b+xOQzB6VRqSGgRDondr6ZVY3qLo5EOoR1pB5Erxrucd7NCCIFZ/R/JcWRcJiMkpDMB
-         YMJHDSLSUD9X3mu1/YRHond3Ge6SkPZeGz8WUu2OFywuMgHL/Ixq78FlMCAl9jN5EEpf
-         H5L0CE9/mt99gHGhG7bDpnDMt9ddR5jbJdo+c3K9jfkYCfdPm60m1kPA4X1B2kXTytNv
-         oHYQ==
-X-Gm-Message-State: AO0yUKV239nGUeq+5uIYhEm+2lD90ek9WtUKjgjyC4BAF/jO8lSIf3t4
-        7yLL9lTTmdCYjLrbSeaKKXA9vg==
-X-Google-Smtp-Source: AK7set9fN9lhkzsTcd/hCm+YqcO1tpXtDV/ErKyu7Dxn7TQH6PWFP0BxhlriXHSFNitMA1yqiFIQRQ==
-X-Received: by 2002:a17:906:1ed1:b0:8e9:6f9f:7c2d with SMTP id m17-20020a1709061ed100b008e96f9f7c2dmr4914227ejj.35.1678533422221;
-        Sat, 11 Mar 2023 03:17:02 -0800 (PST)
+        bh=XeJqWZmIWIQYf/vyLenHeQ0JsQ8pjtOGtaM4WzEFmbc=;
+        b=qCDzIeYnJDHiNIlS0SR+6worB/CkA+5Mt7BbdhM0uLfm51HMzxCtoMpz5w1WUsesCz
+         hS6aJRn+Y37sgdeCbH2ASM6j2eD6DASJQReOqZMzl6b/B9VlJxkTQ15AeaXuO8mlCRNo
+         imXdZ+jO8xtZJRDxPC7ggshIiBxP9qcxNinuP0wS30xf3oj9P1ZGh8sxXPZHfI6qTvn3
+         s5T/2zb+vVQRXOz74QEMj0LE4f390+JvIID0Id/njnN1qDTvcpjopdsN2Phgb+mYuXs+
+         mVDId4kMhaL0H1ZSpTk8PkVu4UGf9NJwfhFv1uhk0IczKqNlk/VnhyY0nVoLNcTd+OzV
+         PbqA==
+X-Gm-Message-State: AO0yUKXruAsVOBSIox5Ry16UP6+KmNa2oSqK8dxe70UoJyMM7DsrZrLB
+        E4Rw5UkZp4sSLkIeucDxkTBfsA==
+X-Google-Smtp-Source: AK7set9OSxnoFK3vtZqGbIpUURfI1SqkV0jUsrsq7RgkKMadcVINTomgv4XfMX5TfGl07OS2xYV+hA==
+X-Received: by 2002:a17:906:b88c:b0:8cf:fda0:5b9b with SMTP id hb12-20020a170906b88c00b008cffda05b9bmr5146168ejb.22.1678533423260;
+        Sat, 11 Mar 2023 03:17:03 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:fa97:2d7c:bdd7:e1b])
-        by smtp.gmail.com with ESMTPSA id mp27-20020a1709071b1b00b008d398a4e687sm973975ejc.158.2023.03.11.03.17.01
+        by smtp.gmail.com with ESMTPSA id mp27-20020a1709071b1b00b008d398a4e687sm973975ejc.158.2023.03.11.03.17.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 03:17:01 -0800 (PST)
+        Sat, 11 Mar 2023 03:17:02 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Benson Leung <bleung@chromium.org>,
         Guenter Roeck <groeck@chromium.org>,
@@ -65,9 +65,9 @@ To:     Benson Leung <bleung@chromium.org>,
         linux-mediatek@lists.infradead.org,
         linux-actions@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/5] i2c: owl: drop of_match_ptr for ID table
-Date:   Sat, 11 Mar 2023 12:16:55 +0100
-Message-Id: <20230311111658.251951-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 3/5] i2c: xiic: hide OF related data for COMPILE_TEST
+Date:   Sat, 11 Mar 2023 12:16:56 +0100
+Message-Id: <20230311111658.251951-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230311111658.251951-1-krzysztof.kozlowski@linaro.org>
 References: <20230311111658.251951-1-krzysztof.kozlowski@linaro.org>
@@ -84,30 +84,33 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The driver can match only via the DT table so the table should be always
-used and the of_match_ptr does not have any sense (this also allows ACPI
-matching via PRP0001, even though it might not be relevant here).
+The driver can be compile tested with !CONFIG_OF making certain data
+unused:
 
-  drivers/i2c/busses/i2c-owl.c:510:34: error: ‘owl_i2c_of_match’ defined but not used [-Werror=unused-const-variable=]
+  drivers/i2c/busses/i2c-xiic.c:1202:39: error: ‘xiic_2_00’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/i2c/busses/i2c-owl.c | 2 +-
+ drivers/i2c/busses/i2c-xiic.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-owl.c b/drivers/i2c/busses/i2c-owl.c
-index 98882fe4e965..99ddd8894964 100644
---- a/drivers/i2c/busses/i2c-owl.c
-+++ b/drivers/i2c/busses/i2c-owl.c
-@@ -519,7 +519,7 @@ static struct platform_driver owl_i2c_driver = {
- 	.probe		= owl_i2c_probe,
- 	.driver		= {
- 		.name	= "owl-i2c",
--		.of_match_table = of_match_ptr(owl_i2c_of_match),
-+		.of_match_table = owl_i2c_of_match,
- 		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
- 	},
+diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
+index dbb792fc197e..806b447055fb 100644
+--- a/drivers/i2c/busses/i2c-xiic.c
++++ b/drivers/i2c/busses/i2c-xiic.c
+@@ -1199,11 +1199,11 @@ static const struct i2c_adapter xiic_adapter = {
+ 	.algo = &xiic_algorithm,
  };
+ 
++#if defined(CONFIG_OF)
+ static const struct xiic_version_data xiic_2_00 = {
+ 	.quirks = DYNAMIC_MODE_READ_BROKEN_BIT,
+ };
+ 
+-#if defined(CONFIG_OF)
+ static const struct of_device_id xiic_of_match[] = {
+ 	{ .compatible = "xlnx,xps-iic-2.00.a", .data = &xiic_2_00 },
+ 	{ .compatible = "xlnx,axi-iic-2.1", },
 -- 
 2.34.1
 
