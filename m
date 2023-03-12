@@ -2,105 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674306B6AFC
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Mar 2023 21:20:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A706B6C94
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Mar 2023 00:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbjCLUUO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 12 Mar 2023 16:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53458 "EHLO
+        id S229578AbjCLXgq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 12 Mar 2023 19:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjCLUUM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 12 Mar 2023 16:20:12 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BFC2ED64
-        for <linux-i2c@vger.kernel.org>; Sun, 12 Mar 2023 13:20:10 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9AA9A2C05FE;
-        Mon, 13 Mar 2023 09:20:08 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1678652408;
-        bh=uUF/1pble7F539MwsUkR85V+kpulh5teeVs3SK26iik=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=mVnwgfh5mEStD1ms6N9kGxK+/yGTGYoF6LJqR94FRC7Kg72d3O1bWKVX+Fy+ioBIi
-         d7kE08Y5e/IDtzyECe22/dwFDfaxKOdpnrayB5/28O4f99/5aQVmxgO51O4THRbLM0
-         d+19sUTjlFYOC65AHpcyiTCtixKbzgSHx2oCYEog4c7BGIrVUTNa5SAI20IqfNfyC/
-         qSvy1S/JeQUvaW2avgm3Q3fGIk9lr2ulyYtd2kvgsNaPqCBHbBhWl5+q/oa9Fz9gJz
-         Z6Fkcdkh/jB72fxEZRK2R/FNvEyjKGL6qcEcTH2W4EITlj/HRShiTDVAqokvgD580i
-         /w5A7Ii50gNhQ==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B640e33f80001>; Mon, 13 Mar 2023 09:20:08 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.47; Mon, 13 Mar 2023 09:20:08 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.047; Mon, 13 Mar 2023 09:20:08 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Andi Shyti <andi.shyti@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-Subject: Re: [PATCH v2 2/2] i2c: mpc: Use i2c-scl-clk-low-timeout-ms i2c
- property
-Thread-Topic: [PATCH v2 2/2] i2c: mpc: Use i2c-scl-clk-low-timeout-ms i2c
- property
-Thread-Index: AQHZVPLSDhbvKPyNJUy5rboXnTrOMK72vD+A
-Date:   Sun, 12 Mar 2023 20:20:07 +0000
-Message-ID: <5c90f0d3-3085-e71a-3277-99ab2d694fcd@alliedtelesis.co.nz>
-References: <20230312145546.262492-1-andi.shyti@kernel.org>
- <20230312145546.262492-3-andi.shyti@kernel.org>
-In-Reply-To: <20230312145546.262492-3-andi.shyti@kernel.org>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <915834EA617A70429216594E14688EA4@atlnz.lc>
-Content-Transfer-Encoding: base64
+        with ESMTP id S229437AbjCLXgp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 12 Mar 2023 19:36:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38337298F1;
+        Sun, 12 Mar 2023 16:36:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA88EB80D65;
+        Sun, 12 Mar 2023 23:36:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2F45C433EF;
+        Sun, 12 Mar 2023 23:36:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678664201;
+        bh=AfguMXV3wShDapxuddDUc/QN7LO/Tpvnjh3XCp7WNHA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LCKOaW0VKSlJsBj2xi4Mvq4DfO1euPd1SddYnfYB68ETOSYnh/FV+twiGUJoM2Via
+         ynf5QVNZZbAE+7fXy08tCa52TrvvrBScw+bg7ZIde7Yp7KOGRgD3tDeJJOwmatk1l0
+         Dh3BnF20/iu87Y+pMDbVCh6sAY/18tDlzPWTwR7R5OiAKS3mSGJCg6GrRQ+4p9G4fm
+         7x/9Ep/PNBAxazQ4krCCf+yuaaevvo95w2sC3qOKwto+B083EysXNXNPg5CqhNdtVn
+         c9i02/u69JVKyz40oVq5Sb6Og91srpX/hFY7jhHjzAhtXOGLM9m0HiKutchOo1qbWB
+         zSb95utvcYneg==
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Ryan Chen <ryan_chen@aspeedtech.com>,
+        Andi Shyti <andi.shyti@kernel.org>
+Subject: [PATCH v3 0/3] Add the clock stretching i2c property
+Date:   Mon, 13 Mar 2023 00:36:10 +0100
+Message-Id: <20230312233613.303408-1-andi.shyti@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=GdlpYjfL c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=k__wU0fu6RkA:10 a=VwQbUJbxAAAA:8 a=qz-aMfjk3hbnPCHNPXAA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-DQpPbiAxMy8wMy8yMyAwMzo1NSwgQW5kaSBTaHl0aSB3cm90ZToNCj4gImZzbCx0aW1lb3V0IiBp
-cyBtYXJrZWQgYXMgZGVwcmVjYXRlZCBhbmQgcmVwbGFjZWQgYnkgdGhlDQo+ICJpMmMtc2NsLWNs
-ay1sb3ctdGltZW91dC1tcyIgaTJjIHByb3BlcnR5Lg0KPg0KPiBVc2UgdGhpcyBsYXR0ZXIgYW5k
-LCBpbiBjYXNlIGl0IGlzIG1pc3NpbmcsIGZvciBiYWNrDQo+IGNvbXBhdGliaWxpdHksIGNoZWNr
-IHdoZXRoZXIgd2Ugc3RpbGwgaGF2ZSAiZnNsLHRpbWVvdXQiIGRlZmluZWQuDQo+DQo+IFNpZ25l
-ZC1vZmYtYnk6IEFuZGkgU2h5dGkgPGFuZGkuc2h5dGlAa2VybmVsLm9yZz4NCj4gLS0tDQo+ICAg
-ZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tcGMuYyB8IDExICsrKysrKysrKystDQo+ICAgMSBmaWxl
-IGNoYW5nZWQsIDEwIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4NCj4gZGlmZiAtLWdp
-dCBhL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXBjLmMgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJj
-LW1wYy5jDQo+IGluZGV4IDgxYWM5MmJiNGY2Zi4uZmU2Mjc5YTM1M2M2IDEwMDY0NA0KPiAtLS0g
-YS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW1wYy5jDQo+ICsrKyBiL2RyaXZlcnMvaTJjL2J1c3Nl
-cy9pMmMtbXBjLmMNCj4gQEAgLTg0Niw3ICs4NDYsMTYgQEAgc3RhdGljIGludCBmc2xfaTJjX3By
-b2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKm9wKQ0KPiAgIAkJCW1wY19pMmNfc2V0dXBfOHh4
-eChvcC0+ZGV2Lm9mX25vZGUsIGkyYywgY2xvY2spOw0KPiAgIAl9DQo+ICAgDQo+IC0JcHJvcCA9
-IG9mX2dldF9wcm9wZXJ0eShvcC0+ZGV2Lm9mX25vZGUsICJmc2wsdGltZW91dCIsICZwbGVuKTsN
-Cj4gKwlwcm9wID0gb2ZfZ2V0X3Byb3BlcnR5KG9wLT5kZXYub2Zfbm9kZSwNCj4gKwkJCSAgICAg
-ICAiaTJjLXNjbC1jbGstbG93LXRpbWVvdXQtbXMiLCAmcGxlbik7DQo+ICsNCj4gKwkvKg0KPiAr
-CSAqIGVuc3VyaW5nIGJhY2sgY29tcGF0aWJpbGl0eSBhcw0KPiArCSAqICJmc2wsdGltZW91dCIg
-aXMgbWFya2VkIGFzIGRlcHJlY2F0ZWQNCj4gKwkgKi8NCj4gKwlpZiAoIXByb3ApDQo+ICsJCXBy
-b3AgPSBvZl9nZXRfcHJvcGVydHkob3AtPmRldi5vZl9ub2RlLCAiZnNsLHRpbWVvdXQiLCAmcGxl
-bik7DQo+ICsNCj4gICAJaWYgKHByb3AgJiYgcGxlbiA9PSBzaXplb2YodTMyKSkgew0KPiAgIAkJ
-bXBjX29wcy50aW1lb3V0ID0gKnByb3AgKiBIWiAvIDEwMDAwMDA7DQo+ICAgCQlpZiAobXBjX29w
-cy50aW1lb3V0IDwgNSkNCg0KV2hpbGUgeW91J3JlIGhlcmUgaXQgbWlnaHQgbWFrZSBzZW5zZSB0
-byBjbGVhbiB0aGlzIHVwIHRvIHVzZSANCm9mX3Byb3BlcnR5X3JlYWRfdTMyKCkuDQoNCldpdGgg
-b3Igd2l0aG91dCB0aGF0IGFkZGl0aW9uYWwgY2xlYW51cDoNCg0KUmV2aWV3ZWQtYnk6IENocmlz
-IFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCg==
+Hello,
+
+fter a discussion between Krzysztof and Ryan[1], it has become
+apparent that the i2c binding is lacking the definition of a
+property that needs to be added at a more generic level. This
+property is also used by the mpc i2c controller, which has been
+updated in the second patch.
+
+The DTS schema change has been sent as github pull reqest[2].
+
+Thanks Krzysztof and Chris for the reviews.
+
+Thank you,
+Andi
+
+[1] https://lore.kernel.org/all/c41ee6b5-ddb4-1253-de54-a295b3bab2cc@linaro.org/
+[2] https://github.com/devicetree-org/dt-schema/pull/102
+
+Changelog
+=========
+v2 -> v3:
+ - Chris recommended to use of_property_read_u32() instead of
+   of_get_property(). Because there were two use of it I added
+   the suggested cleanup in a separate patch.
+ - Added Chris r-b in patch 3.
+
+v1 -> v2:
+ - Removed the binding patch and send through a different channel
+ - To ensure back compatibility, which was broken in v1, the
+   legacy "fsl,timeout" has not been removed and marked as
+   deprecated. In the driver the that property is checked anyway
+   as a fallback in case the main i2c-scl-clk-low-timeout-ms is
+   missing.
+
+Andi Shyti (3):
+  dt-bindings: i2c: mpc: Mark "fsl,timeout" as deprecated
+  i2c: mpc: Use of_property_read_u32 instead of of_get_property
+  i2c: mpc: Use i2c-scl-clk-low-timeout-ms i2c property
+
+ .../devicetree/bindings/i2c/i2c-mpc.yaml      |  3 +-
+ drivers/i2c/busses/i2c-mpc.c                  | 35 ++++++++++++-------
+ 2 files changed, 25 insertions(+), 13 deletions(-)
+
+-- 
+2.39.2
+
