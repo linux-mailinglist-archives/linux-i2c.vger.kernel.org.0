@@ -2,42 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6016B6A76
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Mar 2023 20:05:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5594C6B6A7D
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Mar 2023 20:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbjCLTF3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 12 Mar 2023 15:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50526 "EHLO
+        id S231236AbjCLTFr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 12 Mar 2023 15:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjCLTF1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 12 Mar 2023 15:05:27 -0400
+        with ESMTP id S230502AbjCLTFn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 12 Mar 2023 15:05:43 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3312B26CEC;
-        Sun, 12 Mar 2023 12:05:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1EE2F78B;
+        Sun, 12 Mar 2023 12:05:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678647907; x=1710183907;
+  t=1678647914; x=1710183914;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=nGjcU+2sCrq3eC6pvyJE9aauJeQX9Q2FSNIfGsLTH+Q=;
-  b=Bx1FkkZlt2O+GT9GMXTLUZrjKgvhrBjMBX1nGRhCDVm5F43dyql/PFWy
-   wQ5S8PTumvkEDQSXgr4HJWtXFc+t8qyVtHQQK6ILD7xUn5yLKshFmo7oR
-   8jBtugpmZ/qmQmpBGxqvPF0CExikzFBV8NEJss3LyXV/izcmfraBSazcH
-   XIspNlkTfqAkcn+uXqIH2cJcJXIMxumQTAgicmjNh8DRCxhZ+P4Up9RC1
-   MG38N0+DHHo8Niehbi7ehbstq/6dU8AboHPzzN5+PfF1NLMvMdbfYzRGZ
-   8gRd510PLL+Oj+kUmL+vwm2ELMiYRc+V4LO7bVjYRmHdXG20PYXI0SZ6R
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="338568355"
+  bh=QXGlwNJXBO3cK7psi6haWm/PHl5fBxXuuJll7CoYF+4=;
+  b=nKgrWL2NPIdhTWZZ6YOhjInvBRcfGoADS0ec7VYxEUCl3N2tYjJ3M/Qe
+   ikaSF9MAzbUJIbTvkugaO6twZcUQ74U7A+jw/hzDlQ3UY1v2Y9syDC3x2
+   QoCf4Ur7kiMVSW3fvPV/ryfmzCZwkhxSSn4L3fGkeS1wObt/oMpnDGt7G
+   jHdHxKOGBAIMuCpX5ubNGVNB6eoSlw/c86Rm6zol4oJJIW25OouxaZSHu
+   cB0RGvveSl43hcLEpifS2Y5ytx5DosGU5Gc/fVtl117tkX/ZyNlgsXwLN
+   7hrmiVuYi9M6nRurTkQ9i74OtHLvnMzlDKUIyo6TuP8ztGnRupFw03VTi
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="338568370"
 X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="338568355"
+   d="scan'208";a="338568370"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 12:05:06 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 12:05:13 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="655749352"
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="655749371"
 X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="655749352"
+   d="scan'208";a="655749371"
 Received: from ye-nuc7i7dnhe.sh.intel.com ([10.239.154.52])
-  by orsmga006.jf.intel.com with ESMTP; 12 Mar 2023 12:05:01 -0700
+  by orsmga006.jf.intel.com with ESMTP; 12 Mar 2023 12:05:07 -0700
 From:   Ye Xiang <xiang.ye@intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -53,9 +53,9 @@ Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
         andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
         zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com,
         Ye Xiang <xiang.ye@intel.com>
-Subject: [PATCH v5 3/5] i2c: Add support for Intel LJCA USB I2C driver
-Date:   Mon, 13 Mar 2023 03:04:33 +0800
-Message-Id: <20230312190435.3568212-4-xiang.ye@intel.com>
+Subject: [PATCH v5 4/5] spi: Add support for Intel LJCA USB SPI driver
+Date:   Mon, 13 Mar 2023 03:04:34 +0800
+Message-Id: <20230312190435.3568212-5-xiang.ye@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230312190435.3568212-1-xiang.ye@intel.com>
 References: <20230312190435.3568212-1-xiang.ye@intel.com>
@@ -71,63 +71,63 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This patch implements the I2C function of Intel USB-I2C/GPIO/SPI adapter
+This patch implements the SPI function of Intel USB-I2C/GPIO/SPI adapter
 device named "La Jolla Cove Adapter" (LJCA). It communicate with LJCA
-I2c module with specific protocol through interfaces exported by LJCA USB
+SPI module with specific protocol through interfaces exported by LJCA USB
 driver.
 
 Signed-off-by: Ye Xiang <xiang.ye@intel.com>
 Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/i2c/busses/Kconfig    |  11 ++
- drivers/i2c/busses/Makefile   |   1 +
- drivers/i2c/busses/i2c-ljca.c | 355 ++++++++++++++++++++++++++++++++++
- 3 files changed, 367 insertions(+)
- create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ drivers/spi/Kconfig    |  11 ++
+ drivers/spi/Makefile   |   1 +
+ drivers/spi/spi-ljca.c | 293 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 305 insertions(+)
+ create mode 100644 drivers/spi/spi-ljca.c
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 25eb4e8fd22f..37fed62797a9 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -1261,6 +1261,17 @@ config I2C_DLN2
- 	 This driver can also be built as a module.  If so, the module
- 	 will be called i2c-dln2.
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index 47bbba04fe3a..c3de4e20531f 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -404,6 +404,17 @@ config SPI_HISI_SFC_V3XX
+ 	  This enables support for HiSilicon v3xx SPI NOR flash controller
+ 	  found in hi16xx chipsets.
  
-+config I2C_LJCA
-+	tristate "I2C functionality of Intel La Jolla Cove Adapter"
++config SPI_LJCA
++	tristate "Intel La Jolla Cove Adapter SPI support"
 +	depends on USB_LJCA
 +	default USB_LJCA
 +	help
-+	  If you say yes to this option, I2C functionality support of Intel
-+	  La Jolla Cove Adapter (LJCA) will be included.
++	  Select this option to enable SPI driver for the Intel
++	  La Jolla Cove Adapter (LJCA) board.
 +
-+	  This driver can also be built as a module.  If so, the module
-+	  will be called i2c-ljca.
++	  This driver can also be built as a module. If so, the module
++	  will be called spi-ljca.
 +
- config I2C_CP2615
- 	tristate "Silicon Labs CP2615 USB sound card and I2C adapter"
- 	depends on USB
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index af56fe2c75c0..4af5b06ef288 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -133,6 +133,7 @@ obj-$(CONFIG_I2C_GXP)		+= i2c-gxp.o
- # External I2C/SMBus adapter drivers
- obj-$(CONFIG_I2C_DIOLAN_U2C)	+= i2c-diolan-u2c.o
- obj-$(CONFIG_I2C_DLN2)		+= i2c-dln2.o
-+obj-$(CONFIG_I2C_LJCA) 		+= i2c-ljca.o
- obj-$(CONFIG_I2C_CP2615) += i2c-cp2615.o
- obj-$(CONFIG_I2C_PARPORT)	+= i2c-parport.o
- obj-$(CONFIG_I2C_PCI1XXXX)	+= i2c-mchp-pci1xxxx.o
-diff --git a/drivers/i2c/busses/i2c-ljca.c b/drivers/i2c/busses/i2c-ljca.c
+ config SPI_NXP_FLEXSPI
+ 	tristate "NXP Flex SPI controller"
+ 	depends on ARCH_LAYERSCAPE || HAS_IOMEM
+diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+index d87cf75bee6a..0d0cc1b0fb9b 100644
+--- a/drivers/spi/Makefile
++++ b/drivers/spi/Makefile
+@@ -69,6 +69,7 @@ obj-$(CONFIG_SPI_INTEL_PCI)		+= spi-intel-pci.o
+ obj-$(CONFIG_SPI_INTEL_PLATFORM)	+= spi-intel-platform.o
+ obj-$(CONFIG_SPI_LANTIQ_SSC)		+= spi-lantiq-ssc.o
+ obj-$(CONFIG_SPI_JCORE)			+= spi-jcore.o
++obj-$(CONFIG_SPI_LJCA) 			+= spi-ljca.o
+ obj-$(CONFIG_SPI_LM70_LLP)		+= spi-lm70llp.o
+ obj-$(CONFIG_SPI_LP8841_RTC)		+= spi-lp8841-rtc.o
+ obj-$(CONFIG_SPI_MESON_SPICC)		+= spi-meson-spicc.o
+diff --git a/drivers/spi/spi-ljca.c b/drivers/spi/spi-ljca.c
 new file mode 100644
-index 000000000000..01c2ad9fa228
+index 000000000000..73534a4910d2
 --- /dev/null
-+++ b/drivers/i2c/busses/i2c-ljca.c
-@@ -0,0 +1,355 @@
++++ b/drivers/spi/spi-ljca.c
+@@ -0,0 +1,293 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * Intel La Jolla Cove Adapter USB-I2C driver
++ * Intel La Jolla Cove Adapter USB-SPI driver
 + *
 + * Copyright (c) 2023, Intel Corporation.
 + */
@@ -135,349 +135,287 @@ index 000000000000..01c2ad9fa228
 +#include <linux/bitfield.h>
 +#include <linux/bits.h>
 +#include <linux/dev_printk.h>
-+#include <linux/i2c.h>
 +#include <linux/module.h>
 +#include <linux/platform_device.h>
++#include <linux/spi/spi.h>
 +#include <linux/usb/ljca.h>
 +
-+/* I2C commands */
-+enum ljca_i2c_cmd {
-+	LJCA_I2C_INIT = 1,
-+	LJCA_I2C_XFER,
-+	LJCA_I2C_START,
-+	LJCA_I2C_STOP,
-+	LJCA_I2C_READ,
-+	LJCA_I2C_WRITE,
++/* SPI commands */
++enum ljca_spi_cmd {
++	LJCA_SPI_INIT = 1,
++	LJCA_SPI_READ,
++	LJCA_SPI_WRITE,
++	LJCA_SPI_WRITEREAD,
++	LJCA_SPI_DEINIT,
 +};
 +
-+enum ljca_xfer_type {
-+	LJCA_I2C_READ_XFER_TYPE,
-+	LJCA_I2C_WRITE_XFER_TYPE,
++#define LJCA_SPI_BUS_MAX_HZ 48000000
++enum {
++	LJCA_SPI_BUS_SPEED_24M,
++	LJCA_SPI_BUS_SPEED_12M,
++	LJCA_SPI_BUS_SPEED_8M,
++	LJCA_SPI_BUS_SPEED_6M,
++	LJCA_SPI_BUS_SPEED_4_8M, /*4.8MHz*/
++	LJCA_SPI_BUS_SPEED_MIN = LJCA_SPI_BUS_SPEED_4_8M,
 +};
 +
-+/* I2C r/w Flags */
-+#define LJCA_I2C_SLAVE_TRANSFER_WRITE	(0)
-+#define LJCA_I2C_SLAVE_TRANSFER_READ	(1)
++enum {
++	LJCA_SPI_CLOCK_LOW_POLARITY,
++	LJCA_SPI_CLOCK_HIGH_POLARITY,
++};
 +
-+/* I2C init flags */
-+#define LJCA_I2C_INIT_FLAG_MODE			BIT(0)
-+#define LJCA_I2C_INIT_FLAG_MODE_POLLING		FIELD_PREP(LJCA_I2C_INIT_FLAG_MODE, 0)
-+#define LJCA_I2C_INIT_FLAG_MODE_INTERRUPT	FIELD_PREP(LJCA_I2C_INIT_FLAG_MODE, 1)
++enum {
++	LJCA_SPI_CLOCK_FIRST_PHASE,
++	LJCA_SPI_CLOCK_SECOND_PHASE,
++};
 +
-+#define LJCA_I2C_INIT_FLAG_ADDR_16BIT	BIT(0)
++#define LJCA_SPI_BUF_SIZE	60
++#define LJCA_SPI_MAX_XFER_SIZE	(LJCA_SPI_BUF_SIZE - sizeof(struct spi_xfer_packet))
 +
-+#define LJCA_I2C_INIT_FLAG_FREQ		GENMASK(2, 1)
-+#define LJCA_I2C_INIT_FLAG_FREQ_100K	FIELD_PREP(LJCA_I2C_INIT_FLAG_FREQ, 0)
-+#define LJCA_I2C_INIT_FLAG_FREQ_400K	FIELD_PREP(LJCA_I2C_INIT_FLAG_FREQ, 1)
-+#define LJCA_I2C_INIT_FLAG_FREQ_1M	FIELD_PREP(LJCA_I2C_INIT_FLAG_FREQ, 2)
++#define LJCA_SPI_CLK_MODE_POLARITY	BIT(0)
++#define LJCA_SPI_CLK_MODE_PHASE		BIT(1)
 +
-+/* I2C Transfer */
-+struct i2c_xfer {
-+	u8 id;
-+	u8 slave;
-+	u16 flag; /* speed, 8/16bit addr, addr increase, etc */
-+	u16 addr;
-+	u16 len;
++struct spi_init_packet {
++	u8 index;
++	u8 speed;
++	u8 mode;
++} __packed;
++
++#define LJCA_SPI_XFER_INDICATOR_ID	GENMASK(5, 0)
++#define LJCA_SPI_XFER_INDICATOR_CMPL	BIT(6)
++#define LJCA_SPI_XFER_INDICATOR_INDEX	BIT(7)
++
++struct spi_xfer_packet {
++	u8 indicator;
++	s8 len;
 +	u8 data[];
 +} __packed;
 +
-+/* I2C raw commands: Init/Start/Read/Write/Stop */
-+struct i2c_rw_packet {
-+	u8 id;
-+	__le16 len;
-+	u8 data[];
-+} __packed;
-+
-+#define LJCA_I2C_BUF_SIZE	60
-+#define LJCA_I2C_MAX_XFER_SIZE	(LJCA_I2C_BUF_SIZE - sizeof(struct i2c_rw_packet))
-+
-+struct ljca_i2c_dev {
++struct ljca_spi_dev {
 +	struct platform_device *pdev;
-+	struct ljca_i2c_info *i2c_info;
-+	struct i2c_adapter adap;
++	struct spi_controller *controller;
++	struct ljca_spi_info *spi_info;
++	u8 speed;
++	u8 mode;
 +
-+	u8 obuf[LJCA_I2C_BUF_SIZE];
-+	u8 ibuf[LJCA_I2C_BUF_SIZE];
++	u8 obuf[LJCA_SPI_BUF_SIZE];
++	u8 ibuf[LJCA_SPI_BUF_SIZE];
 +};
 +
-+static u8 ljca_i2c_format_slave_addr(u8 slave_addr, u8 type)
++static int ljca_spi_read_write(struct ljca_spi_dev *ljca_spi, const u8 *w_data, u8 *r_data, int len,
++			       int id, int complete, int cmd)
 +{
-+	return (slave_addr << 1) | (type == LJCA_I2C_READ_XFER_TYPE) ?
-+		       LJCA_I2C_SLAVE_TRANSFER_READ :
-+		       LJCA_I2C_SLAVE_TRANSFER_WRITE;
-+}
-+
-+static int ljca_i2c_init(struct ljca_i2c_dev *ljca_i2c, u8 id)
-+{
-+	struct i2c_rw_packet *w_packet = (struct i2c_rw_packet *)ljca_i2c->obuf;
-+
-+	memset(w_packet, 0, sizeof(*w_packet));
-+	w_packet->id = id;
-+	w_packet->data[0] = LJCA_I2C_INIT_FLAG_FREQ_400K;
-+	w_packet->len = cpu_to_le16(sizeof(*w_packet->data));
-+
-+	return ljca_transfer(ljca_i2c->i2c_info->ljca, LJCA_I2C_INIT, w_packet,
-+			     struct_size(w_packet, data, 1), NULL, NULL);
-+}
-+
-+static int ljca_i2c_start(struct ljca_i2c_dev *ljca_i2c, u8 slave_addr, enum ljca_xfer_type type)
-+{
-+	struct i2c_rw_packet *w_packet = (struct i2c_rw_packet *)ljca_i2c->obuf;
-+	struct i2c_rw_packet *r_packet = (struct i2c_rw_packet *)ljca_i2c->ibuf;
-+	unsigned int ibuf_len = LJCA_I2C_BUF_SIZE;
++	struct spi_xfer_packet *w_packet = (struct spi_xfer_packet *)ljca_spi->obuf;
++	struct spi_xfer_packet *r_packet = (struct spi_xfer_packet *)ljca_spi->ibuf;
++	unsigned int ibuf_len = LJCA_SPI_BUF_SIZE;
 +	int ret;
-+	s16 rp_len;
 +
-+	memset(w_packet, 0, sizeof(*w_packet));
-+	w_packet->id = ljca_i2c->i2c_info->id;
-+	w_packet->data[0] = ljca_i2c_format_slave_addr(slave_addr, type);
-+	w_packet->len = cpu_to_le16(sizeof(*w_packet->data));
++	w_packet->indicator = FIELD_PREP(LJCA_SPI_XFER_INDICATOR_ID, id) |
++			      FIELD_PREP(LJCA_SPI_XFER_INDICATOR_CMPL, complete) |
++			      FIELD_PREP(LJCA_SPI_XFER_INDICATOR_INDEX,
++					 ljca_spi->spi_info->id);
 +
-+	ret = ljca_transfer(ljca_i2c->i2c_info->ljca, LJCA_I2C_START, w_packet,
-+			    struct_size(w_packet, data, 1), r_packet, &ibuf_len);
++	if (cmd == LJCA_SPI_READ) {
++		w_packet->len = sizeof(u16);
++		*(__le16 *)&w_packet->data[0] = cpu_to_le16(len);
++	} else {
++		w_packet->len = len;
++		memcpy(w_packet->data, w_data, len);
++	}
++
++	ret = ljca_transfer(ljca_spi->spi_info->ljca, cmd, w_packet,
++			    struct_size(w_packet, data, w_packet->len), r_packet, &ibuf_len);
 +	if (ret)
 +		return ret;
 +
-+	if (ibuf_len < sizeof(*r_packet))
++	if (ibuf_len < sizeof(*r_packet) || r_packet->len <= 0)
 +		return -EIO;
 +
-+	rp_len = le16_to_cpu(r_packet->len);
-+	if (rp_len < 0 || r_packet->id != w_packet->id) {
-+		dev_err(&ljca_i2c->adap.dev, "i2c start failed len:%d id:%d %d\n", rp_len,
-+			r_packet->id, w_packet->id);
-+		return -EIO;
-+	}
++	if (r_data)
++		memcpy(r_data, r_packet->data, r_packet->len);
 +
 +	return 0;
 +}
 +
-+static int ljca_i2c_stop(struct ljca_i2c_dev *ljca_i2c, u8 slave_addr)
++static int ljca_spi_init(struct ljca_spi_dev *ljca_spi, u8 div, u8 mode)
 +{
-+	struct i2c_rw_packet *w_packet = (struct i2c_rw_packet *)ljca_i2c->obuf;
-+	struct i2c_rw_packet *r_packet = (struct i2c_rw_packet *)ljca_i2c->ibuf;
-+	unsigned int ibuf_len = LJCA_I2C_BUF_SIZE;
++	struct spi_init_packet w_packet = {};
 +	int ret;
-+	s16 rp_len;
 +
-+	memset(w_packet, 0, sizeof(*w_packet));
-+	w_packet->id = ljca_i2c->i2c_info->id;
-+	w_packet->data[0] = 0;
-+	w_packet->len = cpu_to_le16(sizeof(*w_packet->data));
++	if (ljca_spi->mode == mode && ljca_spi->speed == div)
++		return 0;
 +
-+	ret = ljca_transfer(ljca_i2c->i2c_info->ljca, LJCA_I2C_STOP, w_packet,
-+			    struct_size(w_packet, data, 1), r_packet, &ibuf_len);
++	w_packet.mode = FIELD_PREP(LJCA_SPI_CLK_MODE_POLARITY,
++				   (mode & SPI_CPOL) ? LJCA_SPI_CLOCK_HIGH_POLARITY :
++						       LJCA_SPI_CLOCK_LOW_POLARITY) |
++			FIELD_PREP(LJCA_SPI_CLK_MODE_PHASE,
++				   (mode & SPI_CPHA) ? LJCA_SPI_CLOCK_SECOND_PHASE :
++						       LJCA_SPI_CLOCK_FIRST_PHASE);
++
++	w_packet.index = ljca_spi->spi_info->id;
++	w_packet.speed = div;
++	ret = ljca_transfer(ljca_spi->spi_info->ljca, LJCA_SPI_INIT, &w_packet,
++			    sizeof(w_packet), NULL, NULL);
 +	if (ret)
 +		return ret;
 +
-+	if (ibuf_len < sizeof(*r_packet))
-+		return -EIO;
-+
-+	rp_len = le16_to_cpu(r_packet->len);
-+	if (rp_len < 0 || r_packet->id != w_packet->id) {
-+		dev_err(&ljca_i2c->adap.dev, "i2c stop failed len:%d id:%d %d\n", rp_len,
-+			r_packet->id, w_packet->id);
-+		return -EIO;
-+	}
++	ljca_spi->mode = mode;
++	ljca_spi->speed = div;
 +
 +	return 0;
 +}
 +
-+static int ljca_i2c_pure_read(struct ljca_i2c_dev *ljca_i2c, u8 *data, u8 len)
++static int ljca_spi_deinit(struct ljca_spi_dev *ljca_spi)
 +{
-+	struct i2c_rw_packet *w_packet = (struct i2c_rw_packet *)ljca_i2c->obuf;
-+	struct i2c_rw_packet *r_packet = (struct i2c_rw_packet *)ljca_i2c->ibuf;
-+	unsigned int ibuf_len = LJCA_I2C_BUF_SIZE;
-+	int ret;
-+	s16 rp_len;
++	struct spi_init_packet w_packet = {};
 +
-+	if (len > LJCA_I2C_MAX_XFER_SIZE)
-+		return -EINVAL;
-+
-+	memset(w_packet, 0, sizeof(*w_packet));
-+	w_packet->id = ljca_i2c->i2c_info->id;
-+	w_packet->len = cpu_to_le16(len);
-+	w_packet->data[0] = 0;
-+
-+	ret = ljca_transfer(ljca_i2c->i2c_info->ljca, LJCA_I2C_READ, w_packet,
-+			    struct_size(w_packet, data, 1), r_packet, &ibuf_len);
-+	if (ret)
-+		return ret;
-+
-+	if (ibuf_len < sizeof(*r_packet))
-+		return -EIO;
-+
-+	rp_len = le16_to_cpu(r_packet->len);
-+	if (rp_len != len || r_packet->id != w_packet->id) {
-+		dev_err(&ljca_i2c->adap.dev, "i2c raw read failed len:%d id:%d %d\n", rp_len,
-+			r_packet->id, w_packet->id);
-+		return -EIO;
-+	}
-+
-+	memcpy(data, r_packet->data, len);
-+
-+	return 0;
++	w_packet.index = ljca_spi->spi_info->id;
++	return ljca_transfer(ljca_spi->spi_info->ljca, LJCA_SPI_DEINIT, &w_packet, sizeof(w_packet),
++			     NULL, NULL);
 +}
 +
-+static int ljca_i2c_read(struct ljca_i2c_dev *ljca_i2c, u8 slave_addr, u8 *data,
-+			 u8 len)
++static inline int ljca_spi_transfer(struct ljca_spi_dev *ljca_spi, const u8 *tx_data, u8 *rx_data,
++				    u16 len)
 +{
++	int remaining = len;
++	int offset = 0;
++	int cur_len;
++	int complete;
++	int i;
++	int cmd;
 +	int ret;
 +
-+	ret = ljca_i2c_start(ljca_i2c, slave_addr, LJCA_I2C_READ_XFER_TYPE);
-+	if (ret)
-+		goto out_stop;
-+
-+	ret = ljca_i2c_pure_read(ljca_i2c, data, len);
-+
-+out_stop:
-+	ljca_i2c_stop(ljca_i2c, slave_addr);
-+
-+	return ret;
-+}
-+
-+static int ljca_i2c_pure_write(struct ljca_i2c_dev *ljca_i2c, u8 *data, u8 len)
-+{
-+	struct i2c_rw_packet *w_packet = (struct i2c_rw_packet *)ljca_i2c->obuf;
-+	struct i2c_rw_packet *r_packet = (struct i2c_rw_packet *)ljca_i2c->ibuf;
-+	unsigned int ibuf_len = LJCA_I2C_BUF_SIZE;
-+	s16 rplen;
-+	int ret;
-+
-+	if (len > LJCA_I2C_MAX_XFER_SIZE)
++	if (tx_data && rx_data)
++		cmd = LJCA_SPI_WRITEREAD;
++	else if (tx_data)
++		cmd = LJCA_SPI_WRITE;
++	else if (rx_data)
++		cmd = LJCA_SPI_READ;
++	else
 +		return -EINVAL;
 +
-+	memset(w_packet, 0, sizeof(*w_packet));
-+	w_packet->id = ljca_i2c->i2c_info->id;
-+	w_packet->len = cpu_to_le16(len);
-+	memcpy(w_packet->data, data, len);
++	for (i = 0; remaining > 0; i++) {
++		cur_len = min_t(unsigned int, remaining, LJCA_SPI_MAX_XFER_SIZE);
++		complete = (cur_len == remaining);
 +
-+	ret = ljca_transfer(ljca_i2c->i2c_info->ljca, LJCA_I2C_WRITE, w_packet,
-+			    struct_size(w_packet, data, len), r_packet, &ibuf_len);
-+	if (ret)
-+		return ret;
-+
-+	if (ibuf_len < sizeof(*r_packet))
-+		return -EIO;
-+
-+	rplen = le16_to_cpu(r_packet->len);
-+	if (rplen != len || r_packet->id != w_packet->id) {
-+		dev_err(&ljca_i2c->adap.dev, "i2c write failed len:%d id:%d/%d\n", rplen,
-+			r_packet->id, w_packet->id);
-+		return -EIO;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ljca_i2c_write(struct ljca_i2c_dev *ljca_i2c, u8 slave_addr, u8 *data, u8 len)
-+{
-+	int ret;
-+
-+	if (!data)
-+		return -EINVAL;
-+
-+	ret = ljca_i2c_start(ljca_i2c, slave_addr, LJCA_I2C_WRITE_XFER_TYPE);
-+	if (ret)
-+		goto out_stop;
-+
-+	ret = ljca_i2c_pure_write(ljca_i2c, data, len);
-+
-+out_stop:
-+	ljca_i2c_stop(ljca_i2c, slave_addr);
-+
-+	return ret;
-+}
-+
-+static int ljca_i2c_xfer(struct i2c_adapter *adapter, struct i2c_msg *msg, int num)
-+{
-+	struct ljca_i2c_dev *ljca_i2c;
-+	struct i2c_msg *cur_msg;
-+	int i, ret;
-+
-+	ljca_i2c = i2c_get_adapdata(adapter);
-+	if (!ljca_i2c)
-+		return -EINVAL;
-+
-+	for (i = 0; i < num; i++) {
-+		cur_msg = &msg[i];
-+		if (cur_msg->flags & I2C_M_RD)
-+			ret = ljca_i2c_read(ljca_i2c, cur_msg->addr, cur_msg->buf, cur_msg->len);
-+		else
-+			ret = ljca_i2c_write(ljca_i2c, cur_msg->addr, cur_msg->buf, cur_msg->len);
-+
++		ret = ljca_spi_read_write(ljca_spi,
++					  tx_data ? tx_data + offset : NULL,
++					  rx_data ? rx_data + offset : NULL,
++					  cur_len, i, complete, cmd);
 +		if (ret)
 +			return ret;
++
++		offset += cur_len;
++		remaining -= cur_len;
 +	}
 +
-+	return num;
++	return 0;
 +}
 +
-+static u32 ljca_i2c_func(struct i2c_adapter *adap)
++static int ljca_spi_transfer_one(struct spi_controller *controller, struct spi_device *spi,
++				 struct spi_transfer *xfer)
 +{
-+	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
++	struct ljca_spi_dev *ljca_spi = spi_controller_get_devdata(controller);
++	int ret;
++	u8 div;
++
++	div = min_t(u8, LJCA_SPI_BUS_SPEED_MIN,
++		    DIV_ROUND_UP(controller->max_speed_hz, xfer->speed_hz) / 2 - 1);
++	ret = ljca_spi_init(ljca_spi, div, spi->mode);
++	if (ret) {
++		dev_err(&ljca_spi->pdev->dev, "cannot initialize transfer ret %d\n", ret);
++		return ret;
++	}
++
++	ret = ljca_spi_transfer(ljca_spi, xfer->tx_buf, xfer->rx_buf, xfer->len);
++	if (ret)
++		dev_err(&ljca_spi->pdev->dev, "ljca spi transfer failed!\n");
++
++	return ret;
 +}
 +
-+static const struct i2c_adapter_quirks ljca_i2c_quirks = {
-+	.max_read_len = LJCA_I2C_MAX_XFER_SIZE,
-+	.max_write_len = LJCA_I2C_MAX_XFER_SIZE,
-+};
-+
-+static const struct i2c_algorithm ljca_i2c_algo = {
-+	.master_xfer = ljca_i2c_xfer,
-+	.functionality = ljca_i2c_func,
-+};
-+
-+static int ljca_i2c_probe(struct platform_device *pdev)
++static int ljca_spi_probe(struct platform_device *pdev)
 +{
-+	struct ljca_i2c_dev *ljca_i2c;
++	struct spi_controller *controller;
++	struct ljca_spi_dev *ljca_spi;
 +	int ret;
 +
-+	ljca_i2c = devm_kzalloc(&pdev->dev, sizeof(*ljca_i2c), GFP_KERNEL);
-+	if (!ljca_i2c)
++	controller = devm_spi_alloc_master(&pdev->dev, sizeof(*ljca_spi));
++	if (!controller)
 +		return -ENOMEM;
 +
-+	ljca_i2c->pdev = pdev;
-+	ljca_i2c->i2c_info = dev_get_platdata(&pdev->dev);
-+	ljca_i2c->adap.owner = THIS_MODULE;
-+	ljca_i2c->adap.class = I2C_CLASS_HWMON;
-+	ljca_i2c->adap.algo = &ljca_i2c_algo;
-+	ljca_i2c->adap.quirks = &ljca_i2c_quirks;
-+	ljca_i2c->adap.dev.parent = &pdev->dev;
-+	device_set_node(&ljca_i2c->adap.dev, dev_fwnode(&pdev->dev));
-+	i2c_set_adapdata(&ljca_i2c->adap, ljca_i2c);
-+	snprintf(ljca_i2c->adap.name, sizeof(ljca_i2c->adap.name), "%s-%s-%d",
-+		 dev_name(&pdev->dev), dev_name(pdev->dev.parent),
-+		 ljca_i2c->i2c_info->id);
++	platform_set_drvdata(pdev, controller);
++	ljca_spi = spi_controller_get_devdata(controller);
 +
-+	platform_set_drvdata(pdev, ljca_i2c);
++	ljca_spi->spi_info = dev_get_platdata(&pdev->dev);
++	ljca_spi->controller = controller;
++	ljca_spi->pdev = pdev;
++	device_set_node(&ljca_spi->controller->dev, dev_fwnode(&pdev->dev));
 +
-+	ret = ljca_i2c_init(ljca_i2c, ljca_i2c->i2c_info->id);
-+	if (ret) {
-+		dev_err(&pdev->dev, "i2c init failed id:%d\n", ljca_i2c->i2c_info->id);
-+		return -EIO;
-+	}
++	controller->bus_num = -1;
++	controller->mode_bits = SPI_CPHA | SPI_CPOL;
++	controller->transfer_one = ljca_spi_transfer_one;
++	controller->auto_runtime_pm = false;
++	controller->max_speed_hz = LJCA_SPI_BUS_MAX_HZ;
 +
-+	return devm_i2c_add_adapter(&pdev->dev, &ljca_i2c->adap);
++	ret = spi_register_controller(controller);
++	if (ret)
++		dev_err(&pdev->dev, "Failed to register controller\n");
++
++	return ret;
 +}
 +
-+#define LJCA_I2C_DRV_NAME "ljca-i2c"
-+static const struct platform_device_id ljca_i2c_id[] = {
-+	{ LJCA_I2C_DRV_NAME, 0 },
++static int ljca_spi_dev_remove(struct platform_device *pdev)
++{
++	struct spi_controller *controller = platform_get_drvdata(pdev);
++	struct ljca_spi_dev *ljca_spi = spi_controller_get_devdata(controller);
++
++	spi_unregister_controller(controller);
++	ljca_spi_deinit(ljca_spi);
++
++	return 0;
++}
++
++static int ljca_spi_dev_suspend(struct device *dev)
++{
++	struct spi_controller *controller = dev_get_drvdata(dev);
++
++	return spi_controller_suspend(controller);
++}
++
++static int ljca_spi_dev_resume(struct device *dev)
++{
++	struct spi_controller *controller = dev_get_drvdata(dev);
++
++	return spi_controller_resume(controller);
++}
++
++static const struct dev_pm_ops ljca_spi_pm = {
++	SYSTEM_SLEEP_PM_OPS(ljca_spi_dev_suspend, ljca_spi_dev_resume)
++};
++
++#define LJCA_SPI_DRV_NAME "ljca-spi"
++static const struct platform_device_id ljca_spi_id[] = {
++	{ LJCA_SPI_DRV_NAME, 0 },
 +	{ /* sentinel */ }
 +};
-+MODULE_DEVICE_TABLE(platform, ljca_i2c_id);
++MODULE_DEVICE_TABLE(platform, ljca_spi_id);
 +
-+static struct platform_driver ljca_i2c_driver = {
-+	.driver.name = LJCA_I2C_DRV_NAME,
-+	.probe = ljca_i2c_probe,
++static struct platform_driver spi_ljca_driver = {
++	.driver = {
++		.name	= LJCA_SPI_DRV_NAME,
++		.pm	= &ljca_spi_pm,
++	},
++	.probe		= ljca_spi_probe,
++	.remove		= ljca_spi_dev_remove,
 +};
 +
-+module_platform_driver(ljca_i2c_driver);
++module_platform_driver(spi_ljca_driver);
 +
 +MODULE_AUTHOR("Ye Xiang <xiang.ye@intel.com>");
 +MODULE_AUTHOR("Wang Zhifeng <zhifeng.wang@intel.com>");
 +MODULE_AUTHOR("Zhang Lixu <lixu.zhang@intel.com>");
-+MODULE_DESCRIPTION("Intel La Jolla Cove Adapter USB-I2C driver");
++MODULE_DESCRIPTION("Intel La Jolla Cove Adapter USB-SPI driver");
 +MODULE_LICENSE("GPL");
 +MODULE_IMPORT_NS(LJCA);
 -- 
