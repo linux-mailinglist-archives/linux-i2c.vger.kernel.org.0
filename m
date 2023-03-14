@@ -2,108 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2E46B970D
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Mar 2023 14:58:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2556B9765
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Mar 2023 15:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232623AbjCNN6n (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 14 Mar 2023 09:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
+        id S230502AbjCNOLH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 14 Mar 2023 10:11:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbjCNN6X (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Mar 2023 09:58:23 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226EC32E53;
-        Tue, 14 Mar 2023 06:57:45 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id bg11so11846267oib.5;
-        Tue, 14 Mar 2023 06:57:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678802261;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HDBnljpxfT2quGn/YLnb1AUpqlWKLru8pfMKw5zC3kQ=;
-        b=ZQITKVeevPj8lK6V/B/QQi27WX2vAFfKwIZRQED+Iu95UCxtMBvOpWzPhSfqiBdews
-         damBX5MAsrLA0W1ZqsiDv1tMzmQEV38sOS8Zh6RCGTo0rSJ7WWqi/oVePQBPUbHroi5j
-         pJq+2sjzjDyPI9hybUReIGxInzsWmLNd96wSs8CZkeFdwaJNQoU6Dv1tgW3IDQTSabGX
-         nsrBwRPHdZ5h5DPUKDU+jt5vdsVJUrHhCa1BM5rXkfsMISEtw5Xg9EwyZBHTRVUYj38U
-         7HX/jEJ9eLIrxMxeXeRyVfkMZGnsfcqigC9HIaLzXZkEs9PI13ZfgcY1XPFkfUoX1/FC
-         mKzg==
+        with ESMTP id S232602AbjCNOKw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Mar 2023 10:10:52 -0400
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492989FBDD;
+        Tue, 14 Mar 2023 07:10:46 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id f14so6450664iow.5;
+        Tue, 14 Mar 2023 07:10:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678802261;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HDBnljpxfT2quGn/YLnb1AUpqlWKLru8pfMKw5zC3kQ=;
-        b=p02lU3dYCi+2iORShNV5lj08zSyvq1ltS86gLBpV7/kD185HZmey5CpO5EqWtZ3/oG
-         Owsqlqeh7OWSQacBDFTP5puNlsiJwzmNILOc9kTeL14xL20mzQuhxOfokIlwPuLW+agD
-         EyfiCiTlXRifH5xbAdSOK3JmsqA45I2NpsA6uQw2GPO/PFCvCsBgfLeqztAdMbUp76H9
-         BQHlMB6yC+iFmxRs7/c9Ru1zXb9dHUnzgSUfFgF9kSmzBgzyamF79GGNtkX082/Vzf1B
-         cl38kTRm9W/rV5tA0kebpz9+s8+TLt6HB2z0yMpm2azHU4n2awyHE4D3fWevg67kDtRo
-         d5Zw==
-X-Gm-Message-State: AO0yUKU0HWmhh9sS4qGpHGshG3JZywNvPWiCoU7GZcrmO8sNm3VW/dnv
-        SSCVXi36dmKGuji96YyOyOHC+YCWNul4Cw==
-X-Google-Smtp-Source: AK7set8NjQlQJgr2LgPXTK1TxUxQDEDLIo/EXLD8zldhhqcXwnTxo4E/QAxkMfvVfw6lxprsZF0XTw==
-X-Received: by 2002:a05:6808:b2a:b0:360:cb13:e78a with SMTP id t10-20020a0568080b2a00b00360cb13e78amr17272760oij.58.1678802261675;
-        Tue, 14 Mar 2023 06:57:41 -0700 (PDT)
-Received: from chcpu13.cse.ust.hk (191host119.mobilenet.cse.ust.hk. [143.89.191.119])
-        by smtp.gmail.com with ESMTPSA id t26-20020a0568080b3a00b0037d7c3cfac7sm986481oij.15.2023.03.14.06.57.39
+        d=1e100.net; s=20210112; t=1678803045;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KPNzf+HQqdCHDIm57ke58vX4Ge6Far2yuTyMjYWrrg8=;
+        b=EgnPdKxiPNAz2yT1kP/ptS/cguAi9KECytbPns2HHHehwXDgtbDLWui/I4apR23QXp
+         3xAblLXrI3Yhozed9tJzbB+xnV+bm0nWYKgQOVfUVmN7Aq09ervme2H4TWzeim3F19sX
+         ZGtL0Lmva2dlTXWZLg7+SIFKZ259PsthZsg+7t+ErFeOJYhR9hueiJLzQ0uJxWBvr+v8
+         HkYfP5Q2skbpzNow1t0C6MS2OoYt9J75MLiaP2QplLY5IPC92Vo1bIzX16PPrJUI6+QT
+         gb0ZbWMSIk1Rph55PuZp+RBml9rVWap0G2nKmYWNbZfef4ENv0cP4kMF0adibQjpYdeD
+         isVw==
+X-Gm-Message-State: AO0yUKV9DLYBFpVYMgREsrXvwctJi/2zWWoaZwX9QmySh2r/6Z8U+L8k
+        bpqaSvKKwap4rSORaMFo0Q==
+X-Google-Smtp-Source: AK7set/ocHiedGVn3EYKa+oI9LdcoqYevEqv/MuedJEJn4ARvKcoiOUJNoQKDEkorOs6HTOylwSY5w==
+X-Received: by 2002:a6b:d216:0:b0:74c:9235:8753 with SMTP id q22-20020a6bd216000000b0074c92358753mr19035122iob.13.1678803045491;
+        Tue, 14 Mar 2023 07:10:45 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id s14-20020a6bd30e000000b00734ac8a5ef7sm833864iob.25.2023.03.14.07.10.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 06:57:40 -0700 (PDT)
-From:   Wei Chen <harperchen1110@gmail.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Wei Chen <harperchen1110@gmail.com>
-Subject: [PATCH] i2c: xgene-slimpro: Fix out-of-bounds bug in xgene_slimpro_i2c_xfer()
-Date:   Tue, 14 Mar 2023 13:57:34 +0000
-Message-Id: <20230314135734.2792944-1-harperchen1110@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
+        Tue, 14 Mar 2023 07:10:43 -0700 (PDT)
+Received: (nullmailer pid 83779 invoked by uid 1000);
+        Tue, 14 Mar 2023 14:10:19 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, Ryan Chen <ryan_chen@aspeedtech.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <20230312233613.303408-2-andi.shyti@kernel.org>
+References: <20230312233613.303408-1-andi.shyti@kernel.org>
+ <20230312233613.303408-2-andi.shyti@kernel.org>
+Message-Id: <167880254331.25515.17901856481962486896.robh@kernel.org>
+Subject: Re: [PATCH v3 1/3] dt-bindings: i2c: mpc: Mark "fsl,timeout" as
+ deprecated
+Date:   Tue, 14 Mar 2023 09:10:19 -0500
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The data->block[0] variable comes from user and is a number between
-0-255. Without proper check, the variable may be very large to cause
-an out-of-bounds when performing memcpy in slimpro_i2c_blkwr.
 
-Fix this bug by checking the value of data->block[0].
+On Mon, 13 Mar 2023 00:36:11 +0100, Andi Shyti wrote:
+> Now we have the i2c-scl-clk-low-timeout-ms property defined in
+> the i2c schema.
+> 
+> Mark "fsl,timeout" as deprecated and update the example.
+> 
+> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c-mpc.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
 
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
----
- drivers/i2c/busses/i2c-xgene-slimpro.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/drivers/i2c/busses/i2c-xgene-slimpro.c b/drivers/i2c/busses/i2c-xgene-slimpro.c
-index 63259b3ea5ab..bc9a3e7e0c96 100644
---- a/drivers/i2c/busses/i2c-xgene-slimpro.c
-+++ b/drivers/i2c/busses/i2c-xgene-slimpro.c
-@@ -391,6 +391,10 @@ static int xgene_slimpro_i2c_xfer(struct i2c_adapter *adap, u16 addr,
- 						&data->block[0]);
- 
- 		} else {
-+
-+			if (data->block[0] + 1 > I2C_SMBUS_BLOCK_MAX)
-+				return -EINVAL;
-+
- 			ret = slimpro_i2c_blkwr(ctx, addr, command,
- 						SMBUS_CMD_LEN,
- 						SLIMPRO_IIC_SMB_PROTOCOL,
-@@ -408,6 +412,10 @@ static int xgene_slimpro_i2c_xfer(struct i2c_adapter *adap, u16 addr,
- 						IIC_SMB_WITHOUT_DATA_LEN,
- 						&data->block[1]);
- 		} else {
-+
-+			if (data->block[0] > I2C_SMBUS_BLOCK_MAX)
-+				return -EINVAL;
-+
- 			ret = slimpro_i2c_blkwr(ctx, addr, command,
- 						SMBUS_CMD_LEN,
- 						SLIMPRO_IIC_I2C_PROTOCOL,
--- 
-2.25.1
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-mpc.example.dtb: i2c@3100: Unevaluated properties are not allowed ('i2c-scl-clk-low-timeout-ms' was unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-mpc.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230312233613.303408-2-andi.shyti@kernel.org
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
