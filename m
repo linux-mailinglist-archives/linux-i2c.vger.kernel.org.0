@@ -2,100 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 524276B9A77
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Mar 2023 16:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 095B26B9A9A
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Mar 2023 17:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbjCNP6N (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 14 Mar 2023 11:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
+        id S229675AbjCNQEx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 14 Mar 2023 12:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbjCNP6M (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Mar 2023 11:58:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777D17FD47;
-        Tue, 14 Mar 2023 08:58:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED00F61812;
-        Tue, 14 Mar 2023 15:58:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BD7DC433D2;
-        Tue, 14 Mar 2023 15:58:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678809488;
-        bh=BgMk4i31f2UPRQv6nUIFJd7c91enlTxExm1X254lxPc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AKyt1qoJTB4gsbjLZHxEDHowQQtn436EZrP2hV50t/0NiSHeZUsNOHTtPT58FoLCg
-         uYmZxD99oz2/I+Uu6Jveue1B+vDhrS89M+g73W6skf926NhAZGfMU/Uze6f6kH7JlU
-         IEK7W2XKqiImCcJui4fw/phleUqYfxvMYqumhlx27uc1WkvY/xdV1ppTrCUT3T2Cft
-         JJ4/I6FoFJBW4OwRzVFBjaWdgKFHLc5k1Y1SqpGPZNVEW3kR7UM89zYrXNYmvmKOAj
-         i8EUsx7Ncvd+ChjA6L3xzRRoT0aqytkAZM0M7UIgzi8gGlrV1/jzXVV4gRNWew6PWL
-         GqXuih9vP9rpA==
-Date:   Tue, 14 Mar 2023 16:57:59 +0100
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Wei Chen <harperchen1110@gmail.com>
-Cc:     Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: xgene-slimpro: Fix out-of-bounds bug in
- xgene_slimpro_i2c_xfer()
-Message-ID: <20230314155759.ej2gax7r4ek7itmh@intel.intel>
-References: <20230314135734.2792944-1-harperchen1110@gmail.com>
- <20230314141036.lnwvpputzfcyeiyz@intel.intel>
- <CAO4mrfefBKL2exRrCOzVXXzzNXFhJhHOfciJZpiAdyyC_0msxQ@mail.gmail.com>
+        with ESMTP id S230297AbjCNQEj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Mar 2023 12:04:39 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4D853290;
+        Tue, 14 Mar 2023 09:04:29 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id p13-20020a9d744d000000b0069438f0db7eso8678579otk.3;
+        Tue, 14 Mar 2023 09:04:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678809868;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0V1xObPOu1sKOo+zU+U91XCBQL6wMo8D/re2Ep+Sd8c=;
+        b=Nd1h0JZpPla3jCeVZ1zmfgs/A5lsBso9dx3o9uaMBnU7ovfuVL4Btpd4Jjb9KTw5yJ
+         aiyrdBxue+cetazW9tJbrvTYC1pCiPbT1wnAfD9bagmSmWtwXCEFiIUEJ97LkjQ6HUA8
+         U3Z9z8cRe7Dh48GsbaEDxvFmJh9RtsbLLjl0bRxi5jgC6I0nlU4ArWhzEmPNpJc5AUb4
+         g0g4OvOY63wcQRomcoYP/ttsMIEREcU3jQCqu4mjIwuCF9CQp8+Wt/Fu+91KrV717RkQ
+         h/hmzJ7hinywYxt1QICr9++nEECZ/N19KxG18Hsu7/q1E1zZodX5OWMAv3fO+BPOQ+oL
+         FInw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678809868;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0V1xObPOu1sKOo+zU+U91XCBQL6wMo8D/re2Ep+Sd8c=;
+        b=NtvMVuTnJk84kUL0ByRs2rFJuBqQIwaWcBZtzPPljs859pFxwTyU8zRCMwDigLfBE1
+         gJnFCM21ts+/jltPxK8L5HpEy9cwBBJVxw4kRzU287P+/GtWc5RQKaRhsyD6oPqxqkFp
+         8AZqQFcGFzNSedD25YB6o3eWd9lQ5NPjTJopRW3jiOY8BGoCd8+05TxaS+gTVNjoRj5u
+         fS32s2GKPBFiM0VWMKJsl/LpM635xiHFFwVeYq76qB8/0kI8q0KQUqjPFWGnQcpeRaNR
+         F95bnH/1Y78j9DxbpvLrQJZ9bqCJByS+XN59NwAtGO8A+ZwerPFtjB4v9BgscbYU4Vbp
+         /UhA==
+X-Gm-Message-State: AO0yUKVtWQGcTQrAO5v3gjRpCwObJdzZxwMv9EMwyWNEWeTN+K4oeMl5
+        1cVWcPwApiS8QPotUATDTu4=
+X-Google-Smtp-Source: AK7set94TsrHo854JTD8IoFkuuoEcNBJlUmrlBDp9qrrNBZXdGOkUyGEG1VV/8LCaCCYvf1OIp+mIA==
+X-Received: by 2002:a05:6830:6504:b0:699:221e:b07d with SMTP id cm4-20020a056830650400b00699221eb07dmr347642otb.11.1678809868351;
+        Tue, 14 Mar 2023 09:04:28 -0700 (PDT)
+Received: from chcpu13.cse.ust.hk (191host119.mobilenet.cse.ust.hk. [143.89.191.119])
+        by smtp.gmail.com with ESMTPSA id q5-20020a4a3005000000b0051a6cb524b6sm1194392oof.2.2023.03.14.09.04.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 09:04:28 -0700 (PDT)
+From:   Wei Chen <harperchen1110@gmail.com>
+To:     andi.shyti@kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Wei Chen <harperchen1110@gmail.com>
+Subject: [PATCH v3] i2c: xgene-slimpro: Fix out-of-bounds bug in xgene_slimpro_i2c_xfer()
+Date:   Tue, 14 Mar 2023 16:04:16 +0000
+Message-Id: <20230314160416.2813398-1-harperchen1110@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAO4mrfefBKL2exRrCOzVXXzzNXFhJhHOfciJZpiAdyyC_0msxQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wei,
+The data->block[0] variable comes from user and is a number between
+0-255. Without proper check, the variable may be very large to cause
+an out-of-bounds when performing memcpy in slimpro_i2c_blkwr.
 
-On Tue, Mar 14, 2023 at 11:43:41PM +0800, Wei Chen wrote:
-> The data->block[0] variable comes from user and is a number between
-> 0-255. Without a proper check, the variable may be very large to cause
-> an out-of-bounds when performing memcpy in slimpro_i2c_blkwr.
-> 
-> Fix this bug by checking the value of writelen.
-> 
-> Signed-off-by: Wei Chen <harperchen1110@gmail.com>
-
-I forgot to check earlier, can you also add:
+Fix this bug by checking the value of writelen.
 
 Fixes: f6505fbabc42 ("i2c: add SLIMpro I2C device driver on APM X-Gene platform")
-Cc: stable@vger.kernel.org
+Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+---
+Changes in v2:
+ - Put length check inside slimpro_i2c_blkwr
+Changes in v3:
+ - Correct the format of patch
 
-> ---
-> Changes in v2:
->  - Put length check inside slimpro_i2c_blkwr
-> 
-> drivers/i2c/busses/i2c-xgene-slimpro.c | 3 +++
-> 1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-xgene-slimpro.c
-> b/drivers/i2c/busses/i2c-xgene-slimpro.c
-> index bc9a3e7e0c96..0f7263e2276a 100644
-> --- a/drivers/i2c/busses/i2c-xgene-slimpro.c
-> +++ b/drivers/i2c/busses/i2c-xgene-slimpro.c
-> @@ -308,6 +308,9 @@ static int slimpro_i2c_blkwr(struct
-> slimpro_i2c_dev *ctx, u32 chip,
-> u32 msg[3];
-> int rc;
-> + if (writelen > I2C_SMBUS_BLOCK_MAX)
-> + return -EINVAL;
-> +
+ drivers/i2c/busses/i2c-xgene-slimpro.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-There is something odd looking here. Can you please fix the
-formatting and leave one blank line from the variable declaration
-and the 'if (...'.
+diff --git a/drivers/i2c/busses/i2c-xgene-slimpro.c b/drivers/i2c/busses/i2c-xgene-slimpro.c
+index bc9a3e7e0c96..0f7263e2276a 100644
+--- a/drivers/i2c/busses/i2c-xgene-slimpro.c
++++ b/drivers/i2c/busses/i2c-xgene-slimpro.c
+@@ -308,6 +308,9 @@ static int slimpro_i2c_blkwr(struct slimpro_i2c_dev *ctx, u32 chip,
+ 	u32 msg[3];
+ 	int rc;
+ 
++	if (writelen > I2C_SMBUS_BLOCK_MAX)
++		return -EINVAL;
++
+ 	memcpy(ctx->dma_buffer, data, writelen);
+ 	paddr = dma_map_single(ctx->dev, ctx->dma_buffer, writelen,
+ 			       DMA_TO_DEVICE);
+-- 
+2.25.1
 
-Remember, please, to run checkpatch.pl before sending the patch.
-
-Andi
