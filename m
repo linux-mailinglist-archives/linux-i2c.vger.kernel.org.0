@@ -2,149 +2,152 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC256B8BF8
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Mar 2023 08:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3FD16B8C64
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Mar 2023 09:03:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbjCNHdY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 14 Mar 2023 03:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
+        id S229977AbjCNIDs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 14 Mar 2023 04:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjCNHdX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Mar 2023 03:33:23 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6966985361;
-        Tue, 14 Mar 2023 00:33:22 -0700 (PDT)
+        with ESMTP id S229540AbjCNIDr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Mar 2023 04:03:47 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AEA199E6;
+        Tue, 14 Mar 2023 01:03:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678779202; x=1710315202;
+  t=1678781024; x=1710317024;
   h=date:from:to:cc:subject:message-id:references:
    in-reply-to:mime-version;
-  bh=cAmo1UF6QfQzG5634js2rNPbuOK/r+eu4wJnP1ArGI0=;
-  b=GLtw5PA6V0ogs1CQi7j45cG4CGvi6sI8aO+X+bt4FGqK01xA4BecVRzR
-   OLbiWkL2DDsKdHg7nmwlb2NU/t2nBke0qga+nclAeuBmt4PO81TMMNcLU
-   o3rxKWcrx/uJAsaa4ZX+IskO4da9iZEUWoRPr7TwuzhCophh+4MozXxms
-   Lt/mHWTFYZDWqUmX4DSYzQ6Q8inI5hyduPdo1oRY/vhBE+Bqq14jLDNPy
-   cdXBT+aVno2Z6Ii+DunlZwZ5Ekj+sTxx5KKWXJgkDz1VmZH/VGxSc7Rui
-   5ctzKLeBV58b6YmEa4OopgL8QBIRW+MrNjWAuXcnQj5F9nTYzDyXgAa2P
+  bh=Pe0EQEcTbScG7XzS4dh8w7MBOTEaFtzQQBZYaouDxxQ=;
+  b=Q7oL8cydyyXXT0OaTTsU4eaIPCNLGIjP7iqSnFHGc+/PPMhrdAVnY1JV
+   Oc+NCku7VJyD07MvXTG3rembaOZ+kpQ3x2QgCXLoEYcnSNaHyU+ec268Y
+   pV+91UUPNW9gVUzR3DPuTh7m1Eqp/9A25E4pD+p62SW+GoVr63q2rhNwy
+   z6Ajh6BS8qbW3PMOwPHgN8+tAE476YOQBAqO7BEUKzlGendH+g8T4pzD8
+   mRLLNkiIK031+ajKQUiT7RMj6DYfXqBiJd1OKBwApkdP0bB9XoJYOebfa
+   WlEi9W/G/uDQ+PwTuvo7jds6cNCUX81QvfIzYcJtc0slV4jBoqwox0zd1
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="325718227"
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="365022926"
 X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="325718227"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 00:33:21 -0700
+   d="scan'208";a="365022926"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 01:03:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="924819785"
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="709184768"
 X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="924819785"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga006.fm.intel.com with ESMTP; 14 Mar 2023 00:33:21 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+   d="scan'208";a="709184768"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga008.jf.intel.com with ESMTP; 14 Mar 2023 01:03:36 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 14 Mar 2023 00:33:21 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ 15.1.2507.21; Tue, 14 Mar 2023 01:03:35 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Tue, 14 Mar 2023 00:33:21 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.45) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ 15.1.2507.21; Tue, 14 Mar 2023 01:03:35 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Tue, 14 Mar 2023 01:03:35 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.176)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Tue, 14 Mar 2023 00:33:21 -0700
+ 15.1.2507.21; Tue, 14 Mar 2023 01:03:35 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HdchKpYKlEGsQr/rGSirtcWp7fXJI7xSl84oMQzMv4coqQxfMQ993BDVBqp1vhDY4HIWf1f2a6prHKzq/r2UyUbraLY5nO3CL64IgZvS15YIAIuqFnP9nh42HajhY5Yp5cgxIwYcEwnBgiKxlUq/g1sZNX1Ys0T3j0PPZyndS3FGPEnxIsJjvLNU0x8RndQGoGOMhxZOibon8ArgRnWc4HzueZYS65Mk7aoTBbrRhwJI7/yyAR1xN2zuv4/bxp/ThYmZbUyyk7YULaz0cUgh1D2M18rAbm0B7OTXaC11kNmMZEUm2u6V92PR4VzaFMayWgULaMHjvISD96ZviDNIaQ==
+ b=NK0aS6dTe5D2Izw4mB0z8J5QZpizyLM9e/akNWZVTAGq8UlrsrZjveyB+tqLL75TlEy9WK8E/jluYd9d4b4Wf+Xob0xYJVrMD1tsGjMqJMZgllPFsnUK2xNZhXazOv3Ub3KK7CvItTLZXzbwu2tFu/ytS1dpKP643QAlIGF+U5mZ4LjdDwFHiw+pw0VLi16y/ZzsqDOWXIV+LXDbGNuR7xxf7lC8d3N+D1bE0JVuPQW8ZKrTnfPxAfb4sJ/bH5/b62FqpZsbuaYYUdwee1xZRe0t2Zx/zDpq+zJnXIaAxtRtR1VrCA1BWeo/etVa8IkI41ExBgyZsPq4BOB+Ug5nzQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RM8oRqXf/mktuA9hn45HBsEk91wya5FPVZ5tpje5Vpg=;
- b=QBTA/I8XC7AT+HxVoRw/+GV+7Mr2W8jFwucs4IvsyQ6XcCWSp+BHOYmlQmc+rXQVYl3z99njpqu67rKhDSkNF0M/JpVW7xYn6Jp7jUz3LpXPJbAoOyCW9FBEBOZHdAPq1Xe5Zm4yZu77mNb9rNKTg/88P4ZI4u9F1E5R3crAD+twGB+UkS88M5/wwfuy+cCjHP83VN2eszj4iBCo5rPsHQBoy/erDoTa9bcZHBxUCky+L54qPVYUxI8nok1cepuEihC+89um7OBgxf0mOWqMmph2O58eesp6UhLO8+s40+qGZuT64VNU56JCNubgYkYK5D5nzcKQXj8+htFm0jKDSA==
+ bh=HBb/aNVPXhY7j99xppCcxIhytaaAuUK7lgh5eCmyzMU=;
+ b=PtDVyiThL88hnH0Bp9LoFlpT/C95z4ozuOU93xUSRNjCouY4lVxZbVums0x8YdXcQuWNzrvbdGhbFBzrhi6GJ313qhsF1uzOho1ZAQhTAcRPvjslxO5bYBUORT2+4ychht1TbhWkNg8qH3EpaSjhfypqkAAyBGCWfsR+1WqPwcxpVreTyduYXGK8KKB7+Cs+60x1iPI9VmfRs7knXrGiwVt7hM4CdXoHdETJ0penlOr+OsXeVVX1wRmbGYGIAdPPUhwhCW9dVk3XnLjBgzYvrS3jyL1vwr+3gnh8vxfOBWHTWVCEn5I1vkLTuXszk/X4NfKTwVBF8mq9hQD1yYJ7kA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from DM5PR11MB1418.namprd11.prod.outlook.com (2603:10b6:3:8::9) by
- MW3PR11MB4697.namprd11.prod.outlook.com (2603:10b6:303:2c::15) with Microsoft
+ DS0PR11MB6327.namprd11.prod.outlook.com (2603:10b6:8:d1::21) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.26; Tue, 14 Mar 2023 07:33:18 +0000
+ 15.20.6178.24; Tue, 14 Mar 2023 08:03:33 +0000
 Received: from DM5PR11MB1418.namprd11.prod.outlook.com
  ([fe80::7ef8:2573:5a1b:c9f1]) by DM5PR11MB1418.namprd11.prod.outlook.com
  ([fe80::7ef8:2573:5a1b:c9f1%6]) with mapi id 15.20.6178.024; Tue, 14 Mar 2023
- 07:33:18 +0000
-Date:   Tue, 14 Mar 2023 15:33:10 +0800
+ 08:03:33 +0000
+Date:   Tue, 14 Mar 2023 16:03:26 +0800
 From:   "Ye, Xiang" <xiang.ye@intel.com>
-To:     Andi Shyti <andi.shyti@kernel.org>
+To:     Lee Jones <lee@kernel.org>
 CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
         Tyrone Ting <kfting@nuvoton.com>,
         Mark Brown <broonie@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        <linux-usb@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <srinivas.pandruvada@intel.com>,
-        <heikki.krogerus@linux.intel.com>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>, <linux-usb@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <srinivas.pandruvada@intel.com>, <heikki.krogerus@linux.intel.com>,
         <andriy.shevchenko@linux.intel.com>,
         <sakari.ailus@linux.intel.com>, <zhifeng.wang@intel.com>,
         <wentong.wu@intel.com>, <lixu.zhang@intel.com>
 Subject: Re: [PATCH v5 1/5] usb: Add support for Intel LJCA device
-Message-ID: <ZBAjNlv+NbC2Le0v@ye-NUC7i7DNHE>
+Message-ID: <ZBAqTqZEDz/vAwVC@ye-NUC7i7DNHE>
 References: <20230312190435.3568212-1-xiang.ye@intel.com>
  <20230312190435.3568212-2-xiang.ye@intel.com>
- <20230313162146.eag5z6micbpczbt2@intel.intel>
+ <20230313170341.GV9667@google.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230313162146.eag5z6micbpczbt2@intel.intel>
-X-ClientProxiedBy: SG2P153CA0008.APCP153.PROD.OUTLOOK.COM (2603:1096::18) To
- DM5PR11MB1418.namprd11.prod.outlook.com (2603:10b6:3:8::9)
+In-Reply-To: <20230313170341.GV9667@google.com>
+X-ClientProxiedBy: SG2P153CA0039.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::8)
+ To DM5PR11MB1418.namprd11.prod.outlook.com (2603:10b6:3:8::9)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR11MB1418:EE_|MW3PR11MB4697:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9509212d-0001-45d0-b4ee-08db245e6128
+X-MS-TrafficTypeDiagnostic: DM5PR11MB1418:EE_|DS0PR11MB6327:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1f95eb48-1a7e-4b66-1f88-08db24629ac6
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zI8jcTncAoj2uLWLej9zEbv9D8AIvZqaMtvZ6RYCUPeCntQqlKPL/O63FcQGMCg1hIYTzFKLDy0D2mXzEjbygcremdkbWPnZJiDMX6b4oaYNIsTHGYn4OuCKC9d9etXLXsI4v1YODrSdZkCrsRv0/kSQle9mzGcvLzYhDVKxg2xDTFaXiqbgZK6j0spC/wj9/qSykY9UWw4N3ZxCvK85dkQehsEdXzKwPrH/i5pRriLWm46iI8zZXdsgrGglTMhAZ9k7bvb/F7ub08uOwtoFS+AZWJfEBLyX1gJ9nvM4VTfcCFkBfIXJNZSoSBebRpM7cGoZvJkY+XCmb6vvPfBkRK46dSWgJs0XD9UkQUlfQxbm7FeV4KZGhulblhrmqOBndMMaJ7GJmfwwaunVSwQ4Bkw7gPI7pMmJKBkPgPhRK6co5Q0Ghjr/AKO/6qeTz/2dEEVivbZW7q98TPe3juJXOxT+h3DnqdeadZ2ja8BJOqQqUZCXlGt8LD6Xc3tj9AfQErD2tIlEajIpeDoiC0XBY7fdYTkl0Fn+lPYnsCK53+hFfyImvhgc2qN59pNmEapbM5td9zlbNhiwNvtl5+nBYF1AftqRHwIZvAHB1u1DQyvsuBjdBeeyu0bC/SYPmSIQiqp5/mdI9U7iAQ4OwF1BjY5w3AgDczezKZaDpWaVVXoWf4A59mZqH144wJUdBtjI
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1418.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(366004)(136003)(39860400002)(396003)(346002)(376002)(451199018)(6666004)(54906003)(316002)(38100700002)(86362001)(82960400001)(186003)(6512007)(6506007)(26005)(9686003)(33716001)(7416002)(5660300002)(6486002)(478600001)(41300700001)(8936002)(2906002)(66946007)(66556008)(66476007)(8676002)(6916009)(4326008)(67856001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: w5kPSmJtRuparsMOIt8AykcieNG/PPu6zh6K9dnENaA1SUiJeus5Tx+REsl6iHFLKxXy9NnoSjlMEMJsK4R+kaf4Q7zS+bxD8tBZyAq4wgnQSDvbrYmBEops4jg9kxMQETQYTZnyjQS8QtFuO3PBeIJPomI1dRh++MFKLlsMi8xAnejzoyJTDMBTIKvzZqPxgIKG9jwiY1vRwCUdG2nCAtyklIzlTZ3R7Bw3Yds/mE/qpHFLCd6y3onici7lc0IsnmZ7gL93Aty7b1fC93endweCKVwTQp/HZOSD0Q2i+6WjA8Gnj3mDPFYkNrwlC/B2S6ycI6msYMMycESQ6BTTZjGesiG2e9anm8SKIM2v55i6WzA7Sd3x2dyuc4mslY2aLH0fhgHiAIO87x3a5SEvLn/wxRrWN+dRt89umZA24BnUFhTm0bNVsqWrkHgS7W1ci3g6lDOQ89ZcZlelD78GkZHdEniAH1AezBJfPQUu8KAkIOA6iYW7T67GpPKEn/qyOyqwJ8TWM1/4PUGB0wHLgG9nBxgA30fNxT9pv/Gyj03n0I5zDQ3iF5HipxkM4hCS57utAjYwqJJq+4Xlho9Ize0f/s5UpfasQHMRZ4s7afFNuxRJ0bBagxnqWgqqx9z67aH/Bll3MzkDc93D4bRTNw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1418.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(346002)(396003)(376002)(136003)(39860400002)(366004)(451199018)(33716001)(86362001)(6916009)(9686003)(7416002)(41300700001)(6512007)(26005)(6506007)(5660300002)(4326008)(186003)(8936002)(316002)(54906003)(478600001)(6486002)(8676002)(66556008)(66476007)(66946007)(82960400001)(38100700002)(6666004)(2906002)(83380400001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZziNnyjBfRlqT3kXYB+j+vRnM1CBS6ZzSnP9AR0+tWQYE43s8PXuZ9fvVWhN?=
- =?us-ascii?Q?vXnIPkOkoabVFFqJpySLSGukaQ6opBzuSXWi04s8X1LPRVGTioI5RTy53w1Q?=
- =?us-ascii?Q?bYgGkNiYqUN6KcJpX1U0vxMfRzCL7LVTl71t1qSpg9/jcQOILhsWbZ/Ni5vZ?=
- =?us-ascii?Q?dblzuLdhkCMpOsZDVyAiE0P4ZmogPWagHnBnaBhsSwntdRCoZf/dZyHLh6G2?=
- =?us-ascii?Q?q7kR3UWUZrkOI/O3IfyfGesx+H2NzExFQX8MRuq5v9hdNxD3mcNjERoqli7x?=
- =?us-ascii?Q?glVaybYUhEo08t1rz3Bu9nsFVMm+eS4Q761ay0m8cwOrWSaNPZZjXP8bEOkm?=
- =?us-ascii?Q?6atx7l0xz5RdgZwdzQeWaR7NSY2FlolRfbSlaKw3TR62ShDsVrYCpJa/V+r0?=
- =?us-ascii?Q?zG513HaqLpFrElw8Edtr3bvz2gJ4uVAnK32lUEAn7BoYXCzmtirURhJyW3i/?=
- =?us-ascii?Q?gNr76YaIfl3BywgKyFeSqrgrcibB94dGi8jwI1v4Nz0TPKHMV/Zum5+2B9zL?=
- =?us-ascii?Q?f3T/WSHqTAUzKAfwwj5sKGTd7F3SFtQJXVxp+6WS0iCRnNam63j422zw7bFj?=
- =?us-ascii?Q?keBPqRcXfiJ5Eqblz+5DVq9tp+pWVKaKF1hwCjpNAkNLh6qSVc441GO1tTr3?=
- =?us-ascii?Q?/EHzhUbrc8mqv8AFUx7PvSDgxSoPXbc9p6+mf+U5H+Dd6P7pZy4qF4SAvFIR?=
- =?us-ascii?Q?2ewWG61y/5+BHCrYoEI1Q8yWabuILn1FfArZ7jdVQdJpd68/aTMFc9E3GD1B?=
- =?us-ascii?Q?bBEojVey8Cqu10BrfL/Emd7k9hWe3HrBDjLYRZH/uQEIlhXNuzzaJSqKKNeZ?=
- =?us-ascii?Q?5816RXfGNHZt3JpVEDUdlF/eG8KE0FgwXmJT5mlamPwxwxcqaMwQ+Yz9sgXR?=
- =?us-ascii?Q?s0l0U/YECN7F62HIosUqoudlyIlSP1kQJTPYfs8gPADk/bT765+Zo50LaMxe?=
- =?us-ascii?Q?KJgSlC6lW2pwyfx7ItVm39MXcvMmyUNZfKap7Zb997ata2L5CPAeqIE2xXoC?=
- =?us-ascii?Q?XN7l6knkWj7yFaBINHmj9rVeHtrkrcdyrWRhGqE0EL6nvrzPXNQ0a+q1HfnE?=
- =?us-ascii?Q?Nqy9Yx+T6MTw1TF4XvQkA598aIbDmp7I/iN0zV02uiCU5bxVXHTFB1veGV9S?=
- =?us-ascii?Q?vgJd48X2LyvbFtEco9YJrVOdx/m+K3T3i0+M/D6sb32tp9waeJ+1EE91RlV5?=
- =?us-ascii?Q?4F5S6QL64PWk6rAUDeOdwDBnhuFz/djDzygvsfA2DNXaA/Iemtwq1RNLJI1w?=
- =?us-ascii?Q?+0nmaHIWweEOv9szebMprjtRkGOuFlhf9WhLiCeJF17acyxYJetskdts60eH?=
- =?us-ascii?Q?aRs+59XKiR838Ca+n1WwAElDeobqY3CnIOlrIxzRhOAizbgm8/dQkC4M1RmE?=
- =?us-ascii?Q?zepfB83Y0a7XUcYOBdSBW53GHcOeS0Sz8OD5RVizwhzl7krFu5C327Kpra3V?=
- =?us-ascii?Q?qnYTVRurSdVqUPLo8YOmoCMSMfpbWkkev5Qh7NBEjeMrk5jsmJm1RXRH1MEW?=
- =?us-ascii?Q?sGkkW3E+g/oZgpWagmujGjT91JJwnjsvWTxxRmHQ2IMY6n6c3Bdg2/3uEyOt?=
- =?us-ascii?Q?Q5p6X3AgpVZ+XBiRAg//k34bB+dCAPMHzOQH3P38?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9509212d-0001-45d0-b4ee-08db245e6128
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?O/SBsFPj/0rGIK164l45Op8bwZyf00vuxv/+LUVIlm/nOhS5QRpTW2iZIogi?=
+ =?us-ascii?Q?3pUhZQ04+LmMltdpULyoSdHWlRL5FB3pTukrDRUrfAh20NvDI6Vv4gI8ns6Z?=
+ =?us-ascii?Q?hwGIkj6CTxpsV9lizh03dF7UD6l514VDFRsGX7m4AdsXFa62eGLxglR9WJA7?=
+ =?us-ascii?Q?Cd9n7VoMeJnt9U7Q+ntXD/v+7hHIZF+h877ekNTFS3UHQnBCGjJyylfi1FPR?=
+ =?us-ascii?Q?T9c/EGclZhXXeREtboUjBTWdgSao7wvuWK14YKJTxr8cUXK4bc29b9YcRtii?=
+ =?us-ascii?Q?x+lRvvFFz71EpLUZFK1X4svTrpLWYa2Ld/YqRt+I1imtlVBF2JOo4g95bRQC?=
+ =?us-ascii?Q?2XSf/CCGRYxlDU2faKh62R6MNSKDwMoSpQ3n2vmn6cxZ3Q/Azxb4hO6i/I/w?=
+ =?us-ascii?Q?GaPigimuIjgQ+X7yEdt7DSkgOd2hiO3VXqBxZ+9ZHy1LRwlxTObWUsPjoSiS?=
+ =?us-ascii?Q?34Z/7U6S1FEKgXMz7DrhLkvQZ3spEmuen/H/mCpkrGLdgp1TWwD0wer0Oa1J?=
+ =?us-ascii?Q?HqggrWqeqpl5IxEZyVMGe8MILnXZJVxk+pFa2lXbY3ggk3DjEO8BECB/+QGo?=
+ =?us-ascii?Q?L3VmmHR3snUTe2NPK/9a7DdYN8A9gPJ1mgBsgnWo4zNzzabpI9lIPOLWiuzT?=
+ =?us-ascii?Q?mFmJpVEIabQPcfbxWHZDRMDpI8XfPl0o/mpu6HVEJf6ZM6XYENhcwPtm6Q2B?=
+ =?us-ascii?Q?1SGFNF813PFgQgU955R3/Vy2V5zM1ks3WSQwWspZS0un6NekEaALqE520V63?=
+ =?us-ascii?Q?6vQGNkPcwXecESc0msbKw/Fn0Hb6RSCSXfo7SJxGe4SrrBr6bfhgp/0K+xbK?=
+ =?us-ascii?Q?bkD1xx9Y2LsC4WuUBA94j2/FcGyiwlKMLsuIZVnaNDYz2CqFobAj48grymTD?=
+ =?us-ascii?Q?U5w+fqsMPC8h00AVDeC5+TG9ZDDhCnOIHzTDEbr4Dv33/RmtNed4TXgQwVV0?=
+ =?us-ascii?Q?mX5uE9Y0cSitOk080PRV7V0gSMZYY39+WYpZMWTfBpnX7mEBGChcjXdvsNHf?=
+ =?us-ascii?Q?lE5xduPNTWkPUMOGFnMdSZMIMA51EjpE2pRZft5DbuvnBlMNiFCY2XqeC/zu?=
+ =?us-ascii?Q?vApLHWgVs2V+yILmAVCx1Ri+NDZ4fOKguC3KichOqsMqhak0f/pF7gUzs31O?=
+ =?us-ascii?Q?e9vWyTSqnn59DSDkPp/2BwT90QJNx6v+0zRuG6TvNiy6hSWRM4z6o0mhjGrU?=
+ =?us-ascii?Q?uiL1NhqpC/LiNg/HjGCMEiDMvTcYr4pIVouHEYnOiHDq9GMwGSduraars1JW?=
+ =?us-ascii?Q?w1Q4e7fqvbt2VJ8/1mmqKff/wzCFO2kWESfB/a69X/isy17ZzXVMdcHJ4h2+?=
+ =?us-ascii?Q?Vh+8ZuWsfgEwBeehdOwPtSnWsSv/ITS/mYkrP2gsafKhhU4hxK0tLPEnr2Mg?=
+ =?us-ascii?Q?qNLznjK2x5DKg6ekxMeQ1S7BVBuzERRafg9VcLrgrYhkg4zfc5HbwnI2viK4?=
+ =?us-ascii?Q?qDjkRKs2poKPsF64BG07/q6i5hPVopHQLNTkyxKkAjyFK9Yhbu36v9Ocm7ce?=
+ =?us-ascii?Q?NAk6o8Y6Nq2Urv1fU4nJ+fXpj0Y9DD/0q4xpXsqsmBms9NogWgG6IZC9fWKC?=
+ =?us-ascii?Q?jhAQyPMc9scrzl4OkzJmTSH4r8TJV7tkpz21PNoE?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1f95eb48-1a7e-4b66-1f88-08db24629ac6
 X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1418.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 07:33:18.1296
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 08:03:32.8877
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dXa3O73yDUFhkWpgv2IVIYSx5+IOchDo/zvy3hl40zNCuT/dakTo6JFTOIeiMygaAKaQJo8CjdLE7I9p5IM+3g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4697
+X-MS-Exchange-CrossTenant-UserPrincipalName: pf0T4zGJeiRXGqereDYVcSOnAhFLiJYwWR9flqylUQEHvvqnEeDAf+gN7gmz6ng6iQPyaQSMSnJ1LHprBvSzew==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6327
 X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -156,119 +159,139 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andi,
+Hi Lee,
 
 Thanks for the review.
-On Mon, Mar 13, 2023 at 05:21:46PM +0100, Andi Shyti wrote:
-> Hi Ye,
+On Mon, Mar 13, 2023 at 05:03:41PM +0000, Lee Jones wrote:
+> On Mon, 13 Mar 2023, Ye Xiang wrote:
 > 
-> On top of what Greg has already said, few things from my side
-> through the lines.
-> 
-> [...]
-> 
-> > +static int ljca_mng_link(struct ljca_dev *dev, struct ljca_stub *stub)
-> > +{
-> > +	int ret;
+> > This patch implements the USB part of Intel USB-I2C/GPIO/SPI adapter
+> > device named "La Jolla Cove Adapter" (LJCA).
+> >
+> > The communication between the various LJCA module drivers and the
+> > hardware will be muxed/demuxed by this driver. The sub-module of
+> > LJCA can use ljca_transfer() to issue a transfer between host
+> > and hardware.
+> >
+> > Each sub-module of LJCA device is identified by type field within
+> > the LJCA message header.
+> >
+> > The minimum code in ASL that covers this board is
+> > Scope (\_SB.PCI0.DWC3.RHUB.HS01)
+> >     {
+> >         Device (GPIO)
+> >         {
+> >             Name (_ADR, Zero)
+> >             Name (_STA, 0x0F)
+> >         }
+> >
+> >         Device (I2C)
+> >         {
+> >             Name (_ADR, One)
+> >             Name (_STA, 0x0F)
+> >         }
+> >
+> >         Device (SPI)
+> >         {
+> >             Name (_ADR, 0x02)
+> >             Name (_STA, 0x0F)
+> >         }
+> >     }
+> >
+> > Signed-off-by: Ye Xiang <xiang.ye@intel.com>
+> > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > ---
+> >  drivers/usb/misc/Kconfig  |  13 +
+> >  drivers/usb/misc/Makefile |   1 +
+> >  drivers/usb/misc/ljca.c   | 998 ++++++++++++++++++++++++++++++++++++++
+> >  include/linux/usb/ljca.h  |  95 ++++
+> >  4 files changed, 1107 insertions(+)
+> >  create mode 100644 drivers/usb/misc/ljca.c
+> >  create mode 100644 include/linux/usb/ljca.h
+> >
+> > diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+> > index a5f7652db7da..59ec120c26d4 100644
+> > --- a/drivers/usb/misc/Kconfig
+> > +++ b/drivers/usb/misc/Kconfig
+> > @@ -273,6 +273,19 @@ config USB_LINK_LAYER_TEST
+> >  	  Layer Test Device. Say Y only when you want to conduct USB Super Speed
+> >  	  Link Layer Test for host controllers.
+> >
+> > +config USB_LJCA
+> > +	tristate "Intel La Jolla Cove Adapter support"
+> > +	select MFD_CORE
+> > +	depends on USB
+> > +	help
+> > +	  This adds support for Intel La Jolla Cove USB-I2C/SPI/GPIO
+> > +	  Master Adapter (LJCA). Additional drivers such as I2C_LJCA,
+> > +	  GPIO_LJCA and SPI_LJCA must be enabled in order to use the
+> > +	  functionality of the device.
 > > +
-> > +	ret = ljca_mng_reset_handshake(stub);
-> > +	if (ret)
-> > +		return ret;
+> > +	  This driver can also be built as a module. If so, the module
+> > +	  will be called ljca.
 > > +
-> > +	/* try to enum all the stubs */
-> > +	ljca_mng_enum_gpio(stub);
-> > +	ljca_mng_enum_i2c(stub);
-> > +	ljca_mng_enum_spi(stub);
-> 
-> We are ignoring here the return value. So either make the
-> whole function call chain to be void or please check the return
-> values here.
-Ok, got it.
-> 
-> [...]
-> 
-> > +static ssize_t ljca_enable_dfu_store(struct device *dev, struct device_attribute *attr,
-> > +				     const char *buf, size_t count)
-> > +{
-> > +	struct usb_interface *intf = to_usb_interface(dev);
-> > +	struct ljca_dev *ljca_dev = usb_get_intfdata(intf);
-> > +	struct ljca_stub *mng_stub = ljca_stub_find(ljca_dev, LJCA_MNG_STUB);
-> > +	bool enable;
-> > +	int ret;
+> >  config USB_CHAOSKEY
+> >  	tristate "ChaosKey random number generator driver support"
+> >  	depends on HW_RANDOM
+> > diff --git a/drivers/usb/misc/Makefile b/drivers/usb/misc/Makefile
+> > index 93581baec3a8..6f6adfbe17e0 100644
+> > --- a/drivers/usb/misc/Makefile
+> > +++ b/drivers/usb/misc/Makefile
+> > @@ -29,6 +29,7 @@ obj-$(CONFIG_USB_HUB_USB251XB)		+= usb251xb.o
+> >  obj-$(CONFIG_USB_HSIC_USB3503)		+= usb3503.o
+> >  obj-$(CONFIG_USB_HSIC_USB4604)		+= usb4604.o
+> >  obj-$(CONFIG_USB_CHAOSKEY)		+= chaoskey.o
+> > +obj-$(CONFIG_USB_LJCA)			+= ljca.o
+> >
+> >  obj-$(CONFIG_USB_SISUSBVGA)		+= sisusbvga/
+> >  obj-$(CONFIG_USB_LINK_LAYER_TEST)	+= lvstest.o
+> > diff --git a/drivers/usb/misc/ljca.c b/drivers/usb/misc/ljca.c
+> > new file mode 100644
+> > index 000000000000..ab98deaf0074
+> > --- /dev/null
+> > +++ b/drivers/usb/misc/ljca.c
+> > @@ -0,0 +1,998 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Intel La Jolla Cove Adapter USB driver
+> > + *
+> > + * Copyright (c) 2023, Intel Corporation.
+> > + */
 > > +
-> > +	ret = kstrtobool(buf, &enable);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	if (enable) {
-> > +		ret = ljca_mng_set_dfu_mode(mng_stub);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
+> > +#include <linux/dev_printk.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/mfd/core.h>
 > 
-> What is the DFU mode?
-> Is it an operational mode?
-> Do we enter and exit from it?
-> Does the device leave this mode on its own?
-> What if I write twice in a raw enable?
-> Can I check if I am in DFU mode or not?
+> Please don't use the MFD API outside of drivers/mfd.
 > 
-> Would you mind adding some comments here?
-DFU mode is used for updating LJCA device Firmware.
-We have a Documentation/ABI/testing/sysfs-bus-usb-devices-ljca in patch
-5 of this patch series. It has information about the entry. Maybe it
-should be go after this patch (patch 2/5).
+> If you wish to use the API, please do.
 > 
-> > +
-> > +	return count;
-> > +}
-> > +static DEVICE_ATTR_WO(ljca_enable_dfu);
-> > +
-> > +static ssize_t ljca_trace_level_store(struct device *dev, struct device_attribute *attr,
-> > +				      const char *buf, size_t count)
-> > +{
-> > +	struct usb_interface *intf = to_usb_interface(dev);
-> > +	struct ljca_dev *ljca_dev = usb_get_intfdata(intf);
-> > +	struct ljca_stub *diag_stub = ljca_stub_find(ljca_dev, LJCA_DIAG_STUB);
-> > +	u8 level;
-> > +	int ret;
-> > +
-> > +	if (kstrtou8(buf, 0, &level))
-> > +		return -EINVAL;
-> > +
-> > +	ret = ljca_diag_set_trace_level(diag_stub, level);
-> > +	if (ret)
-> > +		return ret;
-> 
-> do we need any range check for the levels? What happens if I do:
-> 
-> echo "I am too cool" > /sys/.../ljca_trace_level
-> 
-> As there were questions here, would you mind adding some comments
-> so that the next reader won't make the same questions?
-We have a patch (patch 5 of this series) adding some Documentation/ABI/
-entries to specify the correct value for each entry.
+> Strip out (only) the MFD parts and move them into drivers/mfd.
+I have no idea about how to split MFD parts out from this driver
+currently. The MFD part just have mfd cells filling and the call
+mfd_add_hotplug_devices to register mfd devices. How to module them
+as an independent driver?
+Would you give some hints or recommendations?
+
+And I am a little comfused about where this USB device driver should
+be put to (drivers/mfd or drivers/usb).
+
+As far as I know, where a driver should be put is based on what
+it provides. This driver just do some urb package transfer to provides
+multi-functions, such as GPIO function, I2C function, SPI function.
+so it should be under drivers/mfd folder. Please correct me, if
+something is wrong. Thanks
 
 > 
-> > +
-> > +	return count;
-> > +}
-> > +static DEVICE_ATTR_WO(ljca_trace_level);
-> 
-> [...]
-> 
-> > +static int ljca_probe(struct usb_interface *intf, const struct usb_device_id *id)
-> > +{
-> > +	struct ljca_dev *dev;
-> > +	struct usb_endpoint_descriptor *bulk_in, *bulk_out;
-> > +	int ret;
-> > +
-> > +	/* allocate memory for our device state and initialize it */
-> > +	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-> 
-> devm_kzalloc()
-Got it. Thanks.
-
+> > +#include <linux/module.h>
+> > +#include <linux/mod_devicetable.h>
+> > +#include <linux/mutex.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/types.h>
+> > +#include <linux/usb.h>
+> > +#include <linux/usb/ljca.h>
+>
 --
 Thanks
 Ye Xiang
