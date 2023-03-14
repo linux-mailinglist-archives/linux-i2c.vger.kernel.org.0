@@ -2,112 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC55C6B9A6A
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Mar 2023 16:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 524276B9A77
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Mar 2023 16:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbjCNPxc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 14 Mar 2023 11:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
+        id S231284AbjCNP6N (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 14 Mar 2023 11:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjCNPxb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Mar 2023 11:53:31 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A467B109;
-        Tue, 14 Mar 2023 08:53:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678809183; x=1710345183;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TbG9kxbBuRazw+lkPlts7eEQOkz3o6LrN3ByWSVtvhQ=;
-  b=miw/jxYuxluW7GiX74csc9uOAUk2HoiS4H4JpzBmzivUKraRLgW0DU1l
-   dr7JV0G3b6fxpwZTadc8fh+4+yfbzucbopvl1y3jXZhHLOzjLDldlEqtU
-   pSyKBQ6/zYth7Rhc8/XsZHuiD1myfpBnaGzaybkOaXr36XyLuQR6siLGw
-   MvHnnlEWmk+CCSahkM1lu9JnXQun4fnS3S/ORX0V79QpD226GW8fxix5z
-   RSwT91ZmPDU4L+PVk73vIwhfje1GTFdFiNKWRDbPUAm1zzRCz2sFs2C0+
-   wZJnLFD2hJuQTVwgYe/ePC8Nd9gXyvhOS58wXI6t41+xiCS2vYLV86gYL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="400050736"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="400050736"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 08:53:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="672397601"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="672397601"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 14 Mar 2023 08:52:55 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pc6xJ-003Iei-0i;
-        Tue, 14 Mar 2023 17:52:53 +0200
-Date:   Tue, 14 Mar 2023 17:52:52 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Ye, Xiang" <xiang.ye@intel.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Lee Jones <lee@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v5 1/5] usb: Add support for Intel LJCA device
-Message-ID: <ZBCYVNmoo2EdDY90@smile.fi.intel.com>
-References: <20230312190435.3568212-1-xiang.ye@intel.com>
- <20230312190435.3568212-2-xiang.ye@intel.com>
- <20230313170341.GV9667@google.com>
- <ZBAqTqZEDz/vAwVC@ye-NUC7i7DNHE>
- <ZBAyKQwnQ8fxHRuU@kuha.fi.intel.com>
- <ZBCU5h/A2woJLtvT@ye-NUC7i7DNHE>
+        with ESMTP id S230176AbjCNP6M (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Mar 2023 11:58:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777D17FD47;
+        Tue, 14 Mar 2023 08:58:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED00F61812;
+        Tue, 14 Mar 2023 15:58:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BD7DC433D2;
+        Tue, 14 Mar 2023 15:58:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678809488;
+        bh=BgMk4i31f2UPRQv6nUIFJd7c91enlTxExm1X254lxPc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AKyt1qoJTB4gsbjLZHxEDHowQQtn436EZrP2hV50t/0NiSHeZUsNOHTtPT58FoLCg
+         uYmZxD99oz2/I+Uu6Jveue1B+vDhrS89M+g73W6skf926NhAZGfMU/Uze6f6kH7JlU
+         IEK7W2XKqiImCcJui4fw/phleUqYfxvMYqumhlx27uc1WkvY/xdV1ppTrCUT3T2Cft
+         JJ4/I6FoFJBW4OwRzVFBjaWdgKFHLc5k1Y1SqpGPZNVEW3kR7UM89zYrXNYmvmKOAj
+         i8EUsx7Ncvd+ChjA6L3xzRRoT0aqytkAZM0M7UIgzi8gGlrV1/jzXVV4gRNWew6PWL
+         GqXuih9vP9rpA==
+Date:   Tue, 14 Mar 2023 16:57:59 +0100
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Wei Chen <harperchen1110@gmail.com>
+Cc:     Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: xgene-slimpro: Fix out-of-bounds bug in
+ xgene_slimpro_i2c_xfer()
+Message-ID: <20230314155759.ej2gax7r4ek7itmh@intel.intel>
+References: <20230314135734.2792944-1-harperchen1110@gmail.com>
+ <20230314141036.lnwvpputzfcyeiyz@intel.intel>
+ <CAO4mrfefBKL2exRrCOzVXXzzNXFhJhHOfciJZpiAdyyC_0msxQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZBCU5h/A2woJLtvT@ye-NUC7i7DNHE>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAO4mrfefBKL2exRrCOzVXXzzNXFhJhHOfciJZpiAdyyC_0msxQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 11:38:14PM +0800, Ye, Xiang wrote:
-> On Tue, Mar 14, 2023 at 10:36:57AM +0200, Heikki Krogerus wrote:
-> > On Tue, Mar 14, 2023 at 04:03:26PM +0800, Ye, Xiang wrote:
+Hi Wei,
 
-...
-
-> > You don't really seem to get any benefit from MFD. Perhaps it would be
-> > more appropriate and clear if you just registered auxiliary devices in
-> > this driver. Check drivers/base/auxiliary.c.
-> Yes, it should be a work. I have a question.
-> MFD provides the ACPI binding for sub-devices through
-> struct mfd_cell_acpi_match. But I didn't see this in drivers/base/auxiliary.c.
-> If using auxiliary bus to implement the LJCA sub-devices, we need to do
-> the sub-devices acpi binding manually in ljca.c.
+On Tue, Mar 14, 2023 at 11:43:41PM +0800, Wei Chen wrote:
+> The data->block[0] variable comes from user and is a number between
+> 0-255. Without a proper check, the variable may be very large to cause
+> an out-of-bounds when performing memcpy in slimpro_i2c_blkwr.
 > 
-> Something Like:
-> adr = LJCA_ACPI_MATCH_GPIO
-> adev = acpi_find_child_device(parent, adr, false);
-> ACPI_COMPANION_SET(&pdev->dev, adev ?: parent);
+> Fix this bug by checking the value of writelen.
 > 
-> Is that acceptable?
+> Signed-off-by: Wei Chen <harperchen1110@gmail.com>
 
-Maybe you can implement this on the level of auxiliary bus.
+I forgot to check earlier, can you also add:
 
+Fixes: f6505fbabc42 ("i2c: add SLIMpro I2C device driver on APM X-Gene platform")
+Cc: stable@vger.kernel.org
 
--- 
-With Best Regards,
-Andy Shevchenko
+> ---
+> Changes in v2:
+>  - Put length check inside slimpro_i2c_blkwr
+> 
+> drivers/i2c/busses/i2c-xgene-slimpro.c | 3 +++
+> 1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-xgene-slimpro.c
+> b/drivers/i2c/busses/i2c-xgene-slimpro.c
+> index bc9a3e7e0c96..0f7263e2276a 100644
+> --- a/drivers/i2c/busses/i2c-xgene-slimpro.c
+> +++ b/drivers/i2c/busses/i2c-xgene-slimpro.c
+> @@ -308,6 +308,9 @@ static int slimpro_i2c_blkwr(struct
+> slimpro_i2c_dev *ctx, u32 chip,
+> u32 msg[3];
+> int rc;
+> + if (writelen > I2C_SMBUS_BLOCK_MAX)
+> + return -EINVAL;
+> +
 
+There is something odd looking here. Can you please fix the
+formatting and leave one blank line from the variable declaration
+and the 'if (...'.
 
+Remember, please, to run checkpatch.pl before sending the patch.
+
+Andi
