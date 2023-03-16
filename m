@@ -2,57 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB356BD92A
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Mar 2023 20:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E87E46BD958
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Mar 2023 20:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbjCPT3l (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Mar 2023 15:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
+        id S230341AbjCPTgY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Mar 2023 15:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbjCPT3j (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Mar 2023 15:29:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52298093B
-        for <linux-i2c@vger.kernel.org>; Thu, 16 Mar 2023 12:29:37 -0700 (PDT)
+        with ESMTP id S230323AbjCPTgW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Mar 2023 15:36:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DB65A926
+        for <linux-i2c@vger.kernel.org>; Thu, 16 Mar 2023 12:36:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 599C8620F1
-        for <linux-i2c@vger.kernel.org>; Thu, 16 Mar 2023 19:29:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48780C433D2;
-        Thu, 16 Mar 2023 19:29:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3BDE5B82338
+        for <linux-i2c@vger.kernel.org>; Thu, 16 Mar 2023 19:36:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ADF7C4339C;
+        Thu, 16 Mar 2023 19:36:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678994976;
-        bh=+rpae27puJL35u4doHYNedSQrB3DV/YNHkjxrlxDN8s=;
+        s=k20201202; t=1678995378;
+        bh=Gbg34C1e6ySpeBZcNxptQ01nIvJla2CCEzLTOQvpPrg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jfu7/8bjmjd6oQxKA7zrTmN6N6m5eTkiKPjvVp7VgxrzqoJ5jP2i82Vd5eiuURi0p
-         QTRZaKcLT8slyp+MEusmmFWPWNcX+ZR1IcZX6u0eN6xqM4L9oMzpFb9lGOWb+2Pt5t
-         EmH8wfmWHE8uNPvAWnTWD79PVGeiXfjfko5UEjPwIe8l8VQxYh5w4XDLyRFusu7vKs
-         G6a2NWVlQMLmjfACadXQK/NB6E9N6C6pK0HEhGKpsaEjr0p7RAfr0lisHmeF04x1AY
-         SWau9ANrP11SccZOwPNNyr2BF6Cbu4yE3gJn91R5ZAHmkxFemcQ0xk0IusIOZAi3/T
-         m7WAwGAAU7IOQ==
-Date:   Thu, 16 Mar 2023 20:29:33 +0100
+        b=vKNUQcg4Qq9+gWBI2/pIAkaPWP6omGQCpk0A72qLrp8+lz2XrDdNgqHTsO+WaFHas
+         DCA014iFxhEKKEgvdLsSBh0hIL7cbNEy5NjWvlVVPb4FvKSUTcPoFph79qNLAS0UcK
+         smp5BY8ZYH3BJDrshrGJ5ICp7KasWc6Gdcucb5AOk1AwrVJgcPvcRMOfA94e5gfSbw
+         vvBBfr0Vm1Xzve6WF2zSVKk8nevBye/ILgcdBI586if1yD5zm0WhBKyO7BMIOQHU60
+         SQdQcbqOtfwYb1gI5wK/lp40nJYquM4pwnc+fQqlCjk2+Fagc6sOwAMyj1zUS3RsL+
+         TdGF8TjVxi/2Q==
+Date:   Thu, 16 Mar 2023 20:36:15 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Lars-Peter Clausen <lars@metafoo.de>
-Cc:     Michal Simek <michal.simek@xilinx.com>,
-        Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 5/5] i2c: cadence: Remove unnecessary register reads
-Message-ID: <ZBNuHahnC4XBbaoL@shikoro>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/2] i2c: imx-lpi2c: clean rx/tx buffers upon new message
+Message-ID: <ZBNvr19oT1MzYkT5@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
-        linux-i2c@vger.kernel.org
-References: <20230107211814.1179438-1-lars@metafoo.de>
- <20230107211814.1179438-6-lars@metafoo.de>
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230130153247.445027-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3XK6eob4zpMBj8G9"
+        protocol="application/pgp-signature"; boundary="XBG9+mEWNPrO30WL"
 Content-Disposition: inline
-In-Reply-To: <20230107211814.1179438-6-lars@metafoo.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230130153247.445027-1-alexander.stein@ew.tq-group.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,42 +68,38 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---3XK6eob4zpMBj8G9
+--XBG9+mEWNPrO30WL
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jan 07, 2023 at 01:18:14PM -0800, Lars-Peter Clausen wrote:
-> In the `cdns_i2c_mrecv()` function the CTRL register of the Cadence I2C
-> controller is written and read back multiple times. The register value do=
-es
-> not change on its own. So it is possible to remember the just written val=
-ue
-> instead of reading it back from the hardware.
+On Mon, Jan 30, 2023 at 04:32:46PM +0100, Alexander Stein wrote:
+> When start sending a new message clear the Rx & Tx buffer pointers in
+> order to avoid using stale pointers.
 >=20
-> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 
-Applied to for-next, thanks!
+Applied to for-current, thanks!
 
 
---3XK6eob4zpMBj8G9
+--XBG9+mEWNPrO30WL
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQTbh0ACgkQFA3kzBSg
-KbZD9Q//XHqHF4CWToG5+tH0Kyg4m77R4HqlpCfbSfP1z1Dgy3CWqFZXvNLkmUoJ
-k8N+B6uX0ydMKCSh1ghE0p0HVYuwJd0v6K1Ha7t42QhdrGfOjAeOWFj218UocNa6
-3Di6UH0bVSmqUHWiUbdQm+dhUcXe9WUEnFj4/cXLcECU8k51JXwUPCUrnKKd4Y6b
-POEfchExc07tqvH4m+h0MkEaJKLmh1JX3jq+eWjDnyJ27YQEqJ6S25rK7nRWueFN
-W01DP2A2Cc7HtKbx8xmTm/xuZCKSkBNZa48kM76ZOvGq3A8/Vu72viqt6l+R1BSB
-S8Xz12csPADTYQet6HeUtYZ8Yk9C5t66H8hlho7I69fAzH9j1zX3ZJfISjl3JJnv
-AY32/ht+3zNLJMZ3FTjpSrxZCIJpDGS+qiXVEbTZ+SuVvGzK7YmC7G242S+yjYlq
-cyE0TjzJ0fAUmLC6x3IZD0eVWLWqshq/hHJhWmoXGrN8ZhMnWD8C1shM0q5GugDW
-lsnvJ75bv1SEoOP+kNFIkkR4uy6PEi92YYmdhujqzXcsbScXAjnodOxUKyhTGQdC
-a9qfKTrCqti/Qh2ePD2Fss5NVehTQPY8bv2FM+rhyQ/rotcABM39IvtWVzGO6y2y
-N4s9r7TDBoTBcam/fdB91IstIask6var2duUc2fnQKiJvCbMS30=
-=vMS5
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQTb6sACgkQFA3kzBSg
+KbaNOA/9EqS7ZItfx9mZrAYdvKuC/cV6HXP/fYMpSGXCBA5+G0idsQ7cbHHOPCpN
+XsXFUm4WxMyfrh4F1SxZahNrxMShVzN6ueM+c7bZH3Es1cQ4cvJfYn+MMmxvEC3X
+BH3jYhpfBOs8PVLkkUtWkqvS2000d3jfrl0eKQR5Ie4yqhNZCtz2SKXz8+RYvcqx
+KBDLE0s9ihnIxk8ahWvHDv6l8dp6/TDL7L6i+JiVoalY+NxXEgDR+S3aMVRCn0kp
+qjNKSJ2+oWmyu7EyWQvwn+Pf5L3muleBdm2/U+E1btRwwrj0bFT4vf8IJ/R13nmc
+qaHK6nbqArvOQz93/+wbLYTkwBB9bSSjB7uM5D8IeKMSo+DHQeQ81I/Bs/8LQ9PY
+CQzqPkIzNZ4j7eYqN/PQNytSn0uaNzx0+4iDrVJSurDG4IGwY+fW5/LS6S6UC9B3
+qyg074Wy5qcoxtU1VRR/iSZ52BcSvaitoYkY25ZPr3NgqiPi8kzhovD2ZR7ZN64L
+J3y0SqKtJYteoau73/GaXMWm0Si7thUdpvRscbyqf+VjtPPSk/Og3drQfk4mJIA4
+tehj4zaExY8VgV68lktdSBV1laNt0HBi/0wB1q7K9iYpHVsl43hHU3hwcRBIJ6/3
+47JBZvZ8HO2nwd1qCJNCgHDgNYt7uWyiJg+n9r3tk07fR34y2Mw=
+=cXz/
 -----END PGP SIGNATURE-----
 
---3XK6eob4zpMBj8G9--
+--XBG9+mEWNPrO30WL--
