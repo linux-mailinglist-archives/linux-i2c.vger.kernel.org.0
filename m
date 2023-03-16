@@ -2,77 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B526BD8CA
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Mar 2023 20:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3146BD8D7
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Mar 2023 20:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjCPTTF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Mar 2023 15:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39492 "EHLO
+        id S230039AbjCPTUW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Mar 2023 15:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjCPTTC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Mar 2023 15:19:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA19E4863;
-        Thu, 16 Mar 2023 12:18:20 -0700 (PDT)
+        with ESMTP id S229707AbjCPTUV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Mar 2023 15:20:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749C5115;
+        Thu, 16 Mar 2023 12:20:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 207BC620F7;
-        Thu, 16 Mar 2023 19:18:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1D0DC433D2;
-        Thu, 16 Mar 2023 19:18:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1986EB82290;
+        Thu, 16 Mar 2023 19:20:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58085C433A0;
+        Thu, 16 Mar 2023 19:20:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678994298;
-        bh=U6/3MAM8lEWJuAQad1Q+TVX2oTsNcl0STc3k5xy9Klg=;
+        s=k20201202; t=1678994411;
+        bh=l++fa3PUwdYAtmiufnCYsRMEq/GkUCqb0EEUpvF/gVs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lka3LA3zNxRuOKAFjjixGSIQqsYiL+s0wuBpCboYGUB+hn39p7r+N9ZHBasxkdnyb
-         4JSSvT96btScmpf0WgeEX29S62/0B301LF49slJPT5Z0XJEhHOrzXTm1hOQ03rtDP/
-         XbzEMb5/S1Rx3gdNkhmMaZ+5U/zWhgPN6skkB8J79ghJkpmb1htrW7LAOPrDYW5Ewc
-         uPHZPuIYSC8ya9qx8xt1HMHWoK3sd4uhVWfW0MtgXlmhOG+gwTy1XznsCAwW1V79lk
-         vMJix/0BhIo+9Dkjd2gLc+Kf36QBHmsmh4vWdWXtquzrQJWBE/zF5SdrR0PfkLyFod
-         QvYWz9NCaDZqw==
-Date:   Thu, 16 Mar 2023 20:18:15 +0100
+        b=Kl7xaSe7m5m7E6AoKD9F54Gtb6HlVx4Px3DA2/gds23umZzR5up9P629IXqHzemIF
+         WUIQUkBbnNbpxJjDQUFyoAFVA6DcJo3IsIm8tjPqx8MxK1ILnPntLj7lkuV5jPZRBL
+         6XSH1cP7F+1UWN3U5h5hEebnndifhUj0zNkIw1kVZJxjSPe3v5fz7IMjmwUmkF7D2L
+         VCBor2GD4SSdHSyQsguUfL5f395v2g6cGNsjAxKiageKVZQv6rHS0DMsdonWYkuS1q
+         jGpWJAZODT9NXUySE5iMorHo4JPopOUvQEAdumKke1FmUV+LMk6Jwlsdv5w7bvENyb
+         6H1Es/O87mO0A==
+Date:   Thu, 16 Mar 2023 20:20:08 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     linux-riscv@lists.infradead.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-clk@vger.kernel.org, Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Daire McNamara <daire.mcnamara@microchip.com>
-Subject: Re: [PATCH v1 2/5] i2c: microchip-core: convert
- SOC_MICROCHIP_POLARFIRE to ARCH_MICROCHIP_POLARFIRE
-Message-ID: <ZBNrd5ww9YD3xQTS@shikoro>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: Use of_property_read_bool() for boolean properties
+Message-ID: <ZBNr6L44obs2j6yH@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Conor Dooley <conor@kernel.org>, linux-riscv@lists.infradead.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-clk@vger.kernel.org, Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Daire McNamara <daire.mcnamara@microchip.com>
-References: <20230309204452.969574-1-conor@kernel.org>
- <20230309204452.969574-3-conor@kernel.org>
+        Rob Herring <robh@kernel.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230310144707.1542595-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TIODK/DyJw5FNTCf"
+        protocol="application/pgp-signature"; boundary="Pk3mxALnv1mSgk92"
 Content-Disposition: inline
-In-Reply-To: <20230309204452.969574-3-conor@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230310144707.1542595-1-robh@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,41 +60,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---TIODK/DyJw5FNTCf
+--Pk3mxALnv1mSgk92
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 09, 2023 at 08:44:49PM +0000, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Fri, Mar 10, 2023 at 08:47:07AM -0600, Rob Herring wrote:
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties.
+> Convert reading boolean properties to to of_property_read_bool().
 >=20
-> As part of converting RISC-V SOC_FOO symbols to ARCH_FOO to match the
-> use of such symbols on other architectures, convert the Microchip FPGA
-> i2c drivers to use the new symbol.
->=20
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
 Applied to for-next, thanks!
 
 
---TIODK/DyJw5FNTCf
+--Pk3mxALnv1mSgk92
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQTa3YACgkQFA3kzBSg
-KbZWQRAArPUHPGdzaDCWZYxs1RoufYMPW3mLcn2mvcWqFmxkR89/yXReohhpb09D
-99smcOSUtpAXFkzmCoCc4KlsUQDmUqG8Zy8dJ70//YEbx1IZddE8OkDOu2WwMToX
-WY3AQ7Xkfa3Ror25SeitAVTnpP3XnFTR/jPl4d6Vz7ug5vGIcleqJRs5AOShZfdH
-nDRdXQfayeVeWfjA/zSp4XM4ahx5ZaLAyqyOQEUmx2IZDJGcaUZXc4K2SeHoeJ9e
-KYrhY+SHfwTSqNoPB7bUUfrz11Ub6use6WHLLZPMGUYzkuHyhpkFUxAInoZPpVgd
-dhpTUodP5iZHalX4Z2ZFCX1ciYuowOQN5fr5dFZBBM87cxE9OMd/eaGC3dVMe98U
-LqAmJzWg1+E38GswGLZdgRWtuhSwMxvSGm5bRxlZlyoOdBXEFlTjOB1WAKGyduzs
-raLno/7NRrdQvPzV9/DVXNQQ4ERA5hInN6Ax1bhqApMNouaxsTqv8leU+AVFL+Tg
-JVU1OFGedAfBYFHySpAEO3AeNV1hWKBMkccjWZHMwExC86r3dGFfc4KYo8/OEM//
-/yjIwK1DuOLfH7CoM/F/wsK4Ga8XmuIg7z1/34m5Z7iKfsz30zmlDxHHKeMLm5RF
-XoBHu7Mq3A0osybzaKLJWmXXYW9G3/kIIeXGZhQNoCb999t+8+I=
-=WGcd
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQTa+gACgkQFA3kzBSg
+KbZEIRAAiY5q8NNW1uGSRtF6Ba+jrjXR9aY5ELiahc8e861yL37Kvj4eme5YUjfr
++t8NJI7IvfqIM1oLex4xzKZcga9XZz3cnEYrxEKwaqg6awy+DeQRXtX25ccJSo4v
+DBUdvSz78u2k7ivwNW0R5Ek5ICIFoo56JBhLPwoy24KcCwWiKp9HC9W5w48uRp7m
+ypU6tI+mbX62YonlwyNp5uwfT79eFv28d9IIpIMmrLl10ta5Fgg+yeWUM54uIhAo
+s2vi02fUezcGzwdk1X0NZNGrTwsgarvljeTZpjj1dUEeOdl0sm/cW/EG+3q/Q2tO
+dMKQvIjOCnDDpNXoMmaj2wXL4X356BmKC/eaNmyySZ6sYJLsnba/bzDwc0H6YmpW
+VopakHBi4pQcgu++Z6DYWf6BuyMM+RSXKIN94OqJpPT6QnzCUBIctPj6qTGZBebK
+MFwwnNc+u8dT1zudMNgjFOK8IgNjWQWe7MYDi/DqJFtPbtcNEHJxzqgnGHRnxnJM
+Hbvn8Ak6QhCctLZ92URkSSo4ajzA62yfCaE/cLpUlFtze1EJG5gnCCGjFaRPPyvm
+XO4xKFJa4RuFLbKAlroScPP1Gd++kW5dowafF9CfzVGuMFjUjBTGSgNQZ+dHb0P7
+kfEWj+madEhjZdR4MjP5SNahoAiGjhDy4OiwxE4Hr7zmcm9p1KI=
+=rZwH
 -----END PGP SIGNATURE-----
 
---TIODK/DyJw5FNTCf--
+--Pk3mxALnv1mSgk92--
