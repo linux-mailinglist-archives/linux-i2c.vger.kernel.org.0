@@ -2,111 +2,146 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507786BE588
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Mar 2023 10:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A95DF6BE6D4
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Mar 2023 11:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbjCQJ0b (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 Mar 2023 05:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37882 "EHLO
+        id S229643AbjCQKdj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Mar 2023 06:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbjCQJ02 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Mar 2023 05:26:28 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D311811159
-        for <linux-i2c@vger.kernel.org>; Fri, 17 Mar 2023 02:26:24 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id er8so6123144edb.0
-        for <linux-i2c@vger.kernel.org>; Fri, 17 Mar 2023 02:26:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679045183;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dS1ViTo7YXyoHaesprxlUZ73a5LNDAZaMI4/y98OGuE=;
-        b=tyy1h+/Rm73cWzgEe1RM3BtxotuK6dKfzT1mKLI4UP2oyUQUP4x+WLCi7NAplS54Tb
-         n74zCjRqOOEZENLO0BRqMkVmy29sD0/pztmylHrQSYGlKkU+p8rHnyRqtKz4f2l9UgbI
-         Ixd5CEwtb6SyMdJ7YAKTLAggVpn3O62mCgRkseNRODAXHqaizsPvBiGYeKySM3Inmogk
-         DTO8qjUvvCi8ZVmSmAzO1ApPPleLxA1auE+zNNaq1fVHzI+5UrX3gqDXk6yfMC9rom98
-         jj7sG0ryeYKPNHPM5Za+GXpXi2DrIEo9Bm9wVxGKfvbkCjYeScDUau3WQrB9xxVr7LuI
-         GQ3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679045183;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dS1ViTo7YXyoHaesprxlUZ73a5LNDAZaMI4/y98OGuE=;
-        b=irDCK3GyS8cgyrkP4/5RwDQhcLkUdwJJDLuGXEqGbHKqgZ6yj8XESa8BrzD4Q15/Ig
-         I9W0sEi1SiQT/1WugLV7JXj0KP8GKy/3/4yuK2a2Xq5xd/3bBd/Bgmnxmu3YKFTKEA4j
-         dwtAeebDSKk7xsygSmzLafM5b4asw0te2q4J/lvpbpLY+NylST00JsA7hbUBengmkYPo
-         31Ra8g06O/ENUepj0RPWTp8eTYWAh3KZ3jHzChuhXUlXGmBrSHoYkZ892CHft8lAqWts
-         JAA/vqaPdGCNggxPUvc9ktlpMc8N/Hvs1+bqZkf6rqTIP/Zl9UtyROBsqhsmlekaPF31
-         Lxxg==
-X-Gm-Message-State: AO0yUKW5+yS1/1WdJZno9BIa8E1+yv9srLSttqkHM+F8GpgAem55cVZZ
-        zD0/HhG0HzQ30I1buu5Wn+NOTg==
-X-Google-Smtp-Source: AK7set9xWJGf4X02U+zMuBYCf/KV6yHt7pRADOs3M3LCzDMMcohMQJRFroGQ2jAbyqSumn9pK8pf9A==
-X-Received: by 2002:a05:6402:1057:b0:4fa:96fd:797b with SMTP id e23-20020a056402105700b004fa96fd797bmr2268033edu.6.1679045183373;
-        Fri, 17 Mar 2023 02:26:23 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:848a:1971:93e0:b465? ([2a02:810d:15c0:828:848a:1971:93e0:b465])
-        by smtp.gmail.com with ESMTPSA id i4-20020a170906850400b0093018c7c07dsm746241ejx.82.2023.03.17.02.26.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 02:26:22 -0700 (PDT)
-Message-ID: <5a8fa13b-d9f7-aca8-3898-51d6e53fa78a@linaro.org>
-Date:   Fri, 17 Mar 2023 10:26:21 +0100
+        with ESMTP id S229932AbjCQKdg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Mar 2023 06:33:36 -0400
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13B92A992
+        for <linux-i2c@vger.kernel.org>; Fri, 17 Mar 2023 03:33:32 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.187.55])
+        by laurent.telenet-ops.be with bizsmtp
+        id ZNZM290071C8whw01NZMKx; Fri, 17 Mar 2023 11:33:31 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pd7O5-00CXwE-E0;
+        Fri, 17 Mar 2023 11:33:21 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pd7Oi-00FFZ4-Tm;
+        Fri, 17 Mar 2023 11:33:20 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Saravana Kannan <saravanak@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH/RFC] treewide: Fix instantiation of devices in DT overlay
+Date:   Fri, 17 Mar 2023 11:33:18 +0100
+Message-Id: <328e557aaee9d3f5f1bcaf2b8ac2de0e04c4fbb8.1679049188.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v5 3/3] i2c: mpc: Use i2c-scl-clk-low-timeout-us i2c
- property
-Content-Language: en-US
-To:     Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-References: <20230314215612.23741-4-andi.shyti@kernel.org>
- <20230314221614.24205-1-andi.shyti@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230314221614.24205-1-andi.shyti@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 14/03/2023 23:16, Andi Shyti wrote:
-> "fsl,timeout" is marked as deprecated and replaced by the
-> "i2c-scl-clk-low-timeout-us" i2c property.
-> 
-> Use this latter and, in case it is missing, for back
-> compatibility, check whether we still have "fsl,timeout" defined.
-> 
-> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
-> Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Tested-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> Hi,
-> 
-> this should be the only patch where I forgot an 'ms'.
-> It should be fixed now.
-> 
-> Thanks, Chris.
-> 
-> V4 -> v5
->  - replace /ms/us/ in the commit subject and in the comment.
-> 
+When loading a DT overlay that creates a device, the device is not
+instantiated, unless the DT overlay is unloaded and reloaded again.
 
-Please send entire new v5, because this messes with our
-threading/reviewing and our tools.
+Saravana explains:
+  Basically for all overlays (I hope the function is only used for
+  overlays) we assume all nodes are NOT devices until they actually
+  get added as a device. Don't review the code, it's not meant to be :)
 
+Based on a hacky patch by Saravana Kannan, which covered only platform
+and spi devices.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
+Link: https://lore.kernel.org/all/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=rWYnkCZ6z5bGX-wj4w@mail.gmail.com
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+Marked RFC as Saravana said this is an ugly hack.
+Still, this is a regression in v6.3-rc1 that should be fixed.
+---
+ drivers/bus/imx-weim.c    | 1 +
+ drivers/i2c/i2c-core-of.c | 1 +
+ drivers/of/dynamic.c      | 1 +
+ drivers/of/platform.c     | 1 +
+ drivers/spi/spi.c         | 1 +
+ 5 files changed, 5 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+index 2a6b4f676458612e..71d8807170fa9f29 100644
+--- a/drivers/bus/imx-weim.c
++++ b/drivers/bus/imx-weim.c
+@@ -329,6 +329,7 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
+ 				 "Failed to setup timing for '%pOF'\n", rd->dn);
+ 
+ 		if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
++			rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 			if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
+ 				dev_err(&pdev->dev,
+ 					"Failed to create child device '%pOF'\n",
+diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+index bce6b796e04c2ca0..79a0d47010ba0b20 100644
+--- a/drivers/i2c/i2c-core-of.c
++++ b/drivers/i2c/i2c-core-of.c
+@@ -178,6 +178,7 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
+ 			return NOTIFY_OK;
+ 		}
+ 
++		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 		client = of_i2c_register_device(adap, rd->dn);
+ 		if (IS_ERR(client)) {
+ 			dev_err(&adap->dev, "failed to create client for '%pOF'\n",
+diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+index 07d93753b12f5f4d..e311d406b1705306 100644
+--- a/drivers/of/dynamic.c
++++ b/drivers/of/dynamic.c
+@@ -226,6 +226,7 @@ static void __of_attach_node(struct device_node *np)
+ 	np->sibling = np->parent->child;
+ 	np->parent->child = np;
+ 	of_node_clear_flag(np, OF_DETACHED);
++	np->fwnode.flags |= FWNODE_FLAG_NOT_DEVICE;
+ }
+ 
+ /**
+diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+index b2bd2e783445dd78..17c92cbfb62ee3ef 100644
+--- a/drivers/of/platform.c
++++ b/drivers/of/platform.c
+@@ -737,6 +737,7 @@ static int of_platform_notify(struct notifier_block *nb,
+ 		if (of_node_check_flag(rd->dn, OF_POPULATED))
+ 			return NOTIFY_OK;
+ 
++		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 		/* pdev_parent may be NULL when no bus platform device */
+ 		pdev_parent = of_find_device_by_node(rd->dn->parent);
+ 		pdev = of_platform_device_create(rd->dn, NULL,
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 1a65f96fe2aff591..7bd053a32fad1a3c 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -4480,6 +4480,7 @@ static int of_spi_notify(struct notifier_block *nb, unsigned long action,
+ 			return NOTIFY_OK;
+ 		}
+ 
++		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 		spi = of_register_spi_device(ctlr, rd->dn);
+ 		put_device(&ctlr->dev);
+ 
+-- 
+2.34.1
 
