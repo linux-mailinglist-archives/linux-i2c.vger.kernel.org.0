@@ -2,83 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB676BDA69
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Mar 2023 21:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07DA66BDF92
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Mar 2023 04:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbjCPUwG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Mar 2023 16:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
+        id S229638AbjCQD0Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Mar 2023 23:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbjCPUwD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Mar 2023 16:52:03 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B678C81C;
-        Thu, 16 Mar 2023 13:51:59 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id f14so1391117iow.5;
-        Thu, 16 Mar 2023 13:51:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678999919;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=USqbbFii7jNdVFtJqwWg+qxI6tE7ioWlREjqm5MeAwg=;
-        b=omc2Iw7a5gtTo4gPwASm+3+YCBW7jlnwdYK8YPNjDbbbzKOWA/8VqaNq1k2jctW+dL
-         37PLzRSs06ltU149bhEXwh/HWzead3OPqloKfAdo2B7WfqNMJ4pouzcEH0TnUHDJuGbt
-         5mXldFQTpDQsMLvJP+K35kU8nLyQOnFwde1OTAIBn0oXWydQHt99kwhbALOjLDwH+oCB
-         vxExh7OY1DVyPJxz4H9B7X+xq4PmBLis0vQTzYhJt26idz5r0q6qJCCicmXsKjLrbVNw
-         vr0Zb5IRhB69RLOaVhDbkhOhHM8tbE9YxbvVg6HHCZl/rgMHvGqkT9oKtH4JprjDJy0G
-         t/gg==
-X-Gm-Message-State: AO0yUKXbs/JiLRbHKVln60IbrEH0lm7+AHQYXkjfQtzzbitWyHEOz7gL
-        hbQf0KuqolTsPPLiRp4U2w==
-X-Google-Smtp-Source: AK7set+nOOWMzdvfw3rm9r4fETLp8LXP+qClueMPkiTtMG1eFj2e7hyUnqocf9KKJL6LrVUfNP+G5w==
-X-Received: by 2002:a05:6602:314d:b0:729:d10b:d1f6 with SMTP id m13-20020a056602314d00b00729d10bd1f6mr356384ioy.0.1678999918707;
-        Thu, 16 Mar 2023 13:51:58 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id 185-20020a021dc2000000b0038a06a14b37sm87783jaj.103.2023.03.16.13.51.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 13:51:58 -0700 (PDT)
-Received: (nullmailer pid 3858697 invoked by uid 1000);
-        Thu, 16 Mar 2023 20:51:56 -0000
-Date:   Thu, 16 Mar 2023 15:51:56 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, Ryan Chen <ryan_chen@aspeedtech.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v4 1/3] dt-bindings: i2c: mpc: Mark "fsl,timeout" as
- deprecated
-Message-ID: <167899991607.3858644.5017644334578617372.robh@kernel.org>
-References: <20230314215612.23741-1-andi.shyti@kernel.org>
- <20230314215612.23741-2-andi.shyti@kernel.org>
+        with ESMTP id S229556AbjCQD0X (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Mar 2023 23:26:23 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8198C3A878;
+        Thu, 16 Mar 2023 20:26:21 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pd0jC-005aoj-JQ; Fri, 17 Mar 2023 11:26:03 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 17 Mar 2023 11:26:02 +0800
+Date:   Fri, 17 Mar 2023 11:26:02 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>, Rijo-john.Thomas@amd.com,
+        Thomas.Lendacky@amd.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Felix.Held@amd.com,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
+Subject: Re: [PATCH v4 0/8] Export platform features from ccp driver
+Message-ID: <ZBPdypC1EBbQ1lDR@gondor.apana.org.au>
+References: <20230310211954.2490-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230314215612.23741-2-andi.shyti@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230310211954.2490-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
-On Tue, 14 Mar 2023 22:56:10 +0100, Andi Shyti wrote:
-> Now we have the i2c-scl-clk-low-timeout-us property defined in
-> the i2c schema.
+On Fri, Mar 10, 2023 at 03:19:43PM -0600, Mario Limonciello wrote:
+> The i2c-designware-amdpsp driver communicates with a platform
+> features mailbox provided by the PSP.  The address used for
+> communication is discovered via a non-architecturally
+> guaranteed mechanism.
 > 
-> Mark "fsl,timeout" as deprecated and update the example.
+> To better scale, export a feature for communication with platform
+> features directly from the ccp driver.
 > 
-> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-mpc.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> v3->v4
+>  Drop the ACPI ID as result of confirmation with internal team.
+>  Future platforms should use doorbell, so will treat Cezanne as quirk
+>  and assume doorbell going forward.
 > 
+> Mario Limonciello (8):
+>   crypto: ccp: Drop TEE support for IRQ handler
+>   crypto: ccp: Add a header for multiple drivers to use `__psp_pa`
+>   crypto: ccp: Move some PSP mailbox bit definitions into common header
+>   crypto: ccp: Add support for an interface for platform features
+>   crypto: ccp: Enable platform access interface on client PSP parts
+>   i2c: designware: Use PCI PSP driver for communication
+>   crypto: ccp: Add support for ringing a platform doorbell
+>   i2c: designware: Add doorbell support for Skyrim
+> 
+>  arch/x86/kvm/svm/sev.c                      |   1 +
+>  drivers/crypto/ccp/Makefile                 |   3 +-
+>  drivers/crypto/ccp/platform-access.c        | 232 ++++++++++++++++++++
+>  drivers/crypto/ccp/platform-access.h        |  35 +++
+>  drivers/crypto/ccp/psp-dev.c                |  32 +--
+>  drivers/crypto/ccp/psp-dev.h                |  11 +-
+>  drivers/crypto/ccp/sev-dev.c                |  16 +-
+>  drivers/crypto/ccp/sev-dev.h                |   2 +-
+>  drivers/crypto/ccp/sp-dev.h                 |  10 +
+>  drivers/crypto/ccp/sp-pci.c                 |   9 +
+>  drivers/crypto/ccp/tee-dev.c                |  17 +-
+>  drivers/i2c/busses/Kconfig                  |   2 +-
+>  drivers/i2c/busses/i2c-designware-amdpsp.c  | 188 ++++------------
+>  drivers/i2c/busses/i2c-designware-core.h    |   1 -
+>  drivers/i2c/busses/i2c-designware-platdrv.c |   1 -
+>  drivers/tee/amdtee/call.c                   |   2 +-
+>  drivers/tee/amdtee/shm_pool.c               |   2 +-
+>  include/linux/psp-platform-access.h         |  65 ++++++
+>  include/linux/psp-sev.h                     |   8 -
+>  include/linux/psp.h                         |  29 +++
+>  20 files changed, 461 insertions(+), 205 deletions(-)
+>  create mode 100644 drivers/crypto/ccp/platform-access.c
+>  create mode 100644 drivers/crypto/ccp/platform-access.h
+>  create mode 100644 include/linux/psp-platform-access.h
+>  create mode 100644 include/linux/psp.h
+> 
+> -- 
+> 2.34.1
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-
+Patches 1-5 and 7 applied.  Thanks.
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
