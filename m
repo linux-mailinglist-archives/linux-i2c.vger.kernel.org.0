@@ -2,98 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8AFA6BEA8A
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Mar 2023 15:00:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D9F6BEBE8
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Mar 2023 15:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjCQOAu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 Mar 2023 10:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
+        id S230185AbjCQO4S (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Mar 2023 10:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjCQOAt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Mar 2023 10:00:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3A92A987;
-        Fri, 17 Mar 2023 07:00:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33EFC622B9;
-        Fri, 17 Mar 2023 14:00:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4756C433D2;
-        Fri, 17 Mar 2023 14:00:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679061646;
-        bh=teYKQCLEQB1BV7xTB+zUafR6l5vnPTcQ4NZAklBTbk0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZdQX6BHbnSflCBe5KdO94L2I2j0cCKC6ki459UNxtieLjsJtcsbOcfIAtAS4Zqfv5
-         6E80DRSo2eCzK6d6fDkWrrOxQcZ/mDU89vKr82WqoopzhIL7uQ+MuPPt9SDd9yvRQY
-         joOFMXOzVy7A9ANxK3zLf46WwtpC9wK/gkV8lKRAnzj6Ax01G/PbgtrR/95XFMswv8
-         G++O7UBhsClpB/Z5yPE39SD2nPiEMlyUBGQWoPkW/JZTuGiuWiTewJHgQm+Aj3PT21
-         MsAuO0fGDMNESG3vYWZnzNmM9rohqbnro25YxGofQMidInPzYMBqzXrtluJHkvWdGf
-         SU2uJ0x6BqAnQ==
-Date:   Fri, 17 Mar 2023 15:00:43 +0100
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>,
+        with ESMTP id S230163AbjCQO4R (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Mar 2023 10:56:17 -0400
+Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C1D3524E;
+        Fri, 17 Mar 2023 07:55:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
+        s=default2002; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+        Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References;
+        bh=N8AQvUD4CkJRTp9l4/aTKO2hzAyj5DrZ3kdV7fLxNxU=; b=Aj5FldAmifl1mnpVGpPCDwuFRa
+        anpISlwySB74lEODIJG7A5DJW8RUNoWrutqOXvG5JvnZFDHXeOZ0qwUNzT5Np9gt2LDUWkbsY9AWj
+        icogAE5MWHO0Knav31rtjqYAzs+6GZB7n63CY3JlJCspUP3Q0L2rSrNjPNKP1ehWLOCxVph/agfMd
+        tGGkiz2fOZ9rC5W2bnyS5u+Ua+2kc1J/XxkkgFyPFVocAkcYhF2/JstTI9DK+EOgv9VW0OdnI3IQH
+        M0ZIGT4EukgYNUBT8Hp07WTWZqqmQEQisXpaiaU3OCgMbPwl8wpr36bY+D/+Gx4fJDQhPjM+P5y1O
+        6YlEPfpQ==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <lars@metafoo.de>)
+        id 1pdBUX-000LQ7-P0; Fri, 17 Mar 2023 15:55:37 +0100
+Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b] (helo=lars-desktop.lan)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lars@metafoo.de>)
+        id 1pdBUX-000E4A-7C; Fri, 17 Mar 2023 15:55:37 +0100
+From:   Lars-Peter Clausen <lars@metafoo.de>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Michal Simek <michal.simek@amd.com>,
+        Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-Subject: Re: [PATCH v5 3/3] i2c: mpc: Use i2c-scl-clk-low-timeout-us i2c
- property
-Message-ID: <20230317140043.jnlmghbnvol2kxrz@intel.intel>
-References: <20230314215612.23741-4-andi.shyti@kernel.org>
- <20230314221614.24205-1-andi.shyti@kernel.org>
- <5a8fa13b-d9f7-aca8-3898-51d6e53fa78a@linaro.org>
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: [PATCH v2 1/3] dt-bindings: i2c: cadence: Document `fifo-depth` property
+Date:   Fri, 17 Mar 2023 07:54:39 -0700
+Message-Id: <20230317145441.156880-1-lars@metafoo.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5a8fa13b-d9f7-aca8-3898-51d6e53fa78a@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: lars@metafoo.de
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26846/Fri Mar 17 08:22:57 2023)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Krzysztof,
+The depth of the FIFO of the Cadence I2C controller IP is a synthesis
+configuration parameter. Different instances of the IP can have different
+values. For correct operation software needs to be aware of the size of the
+FIFO.
 
-On Fri, Mar 17, 2023 at 10:26:21AM +0100, Krzysztof Kozlowski wrote:
-> On 14/03/2023 23:16, Andi Shyti wrote:
-> > "fsl,timeout" is marked as deprecated and replaced by the
-> > "i2c-scl-clk-low-timeout-us" i2c property.
-> > 
-> > Use this latter and, in case it is missing, for back
-> > compatibility, check whether we still have "fsl,timeout" defined.
-> > 
-> > Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
-> > Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> > Tested-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> > ---
-> > Hi,
-> > 
-> > this should be the only patch where I forgot an 'ms'.
-> > It should be fixed now.
-> > 
-> > Thanks, Chris.
-> > 
-> > V4 -> v5
-> >  - replace /ms/us/ in the commit subject and in the comment.
-> > 
-> 
-> Please send entire new v5, because this messes with our
-> threading/reviewing and our tools.
+Add the documentation for the devicetree property that describes the FIFO
+depth of the IP core.
 
-ah... tools!
+The default value of 16 is for backwards compatibility reasons with
+existing hardware descriptions where this property is not specified and
+software has assumed that the FIFO depth is 16.
 
-Sure... will do!
+Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+---
+Changes since v1:
+ * Remove quotes around "/schemas/types.yaml#/definitions/uint32"
+ * Add `enum` describing valid values
+ * Use `fifo-depth` instead of `cdns,fifo-depth`
+ * Use `bytes` instead of `words` for the property unit
+---
+ Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
+index 2e95cda7262a..2401d1e19916 100644
+--- a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
++++ b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
+@@ -38,6 +38,13 @@ properties:
+     description: |
+       Input clock name.
+ 
++  fifo-depth:
++    description:
++      Size of the data FIFO in bytes.
++    $ref: /schemas/types.yaml#/definitions/uint32
++    default: 16
++    enum: [2, 4, 8, 16, 32, 64, 128, 256]
++
+ required:
+   - compatible
+   - reg
+@@ -57,4 +64,5 @@ examples:
+         clock-frequency = <400000>;
+         #address-cells = <1>;
+         #size-cells = <0>;
++        fifo-depth = <8>;
+     };
+-- 
+2.30.2
 
-Thanks!
-
-Andi
