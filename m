@@ -2,183 +2,237 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 084426C0E6F
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Mar 2023 11:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 240D76C1195
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Mar 2023 13:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbjCTKOS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 20 Mar 2023 06:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51940 "EHLO
+        id S230259AbjCTMMl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 20 Mar 2023 08:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjCTKOO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 Mar 2023 06:14:14 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2087.outbound.protection.outlook.com [40.107.93.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917E3113E9;
-        Mon, 20 Mar 2023 03:14:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hsRlD2fCm7M6LwWjs70vxOg3sMuCeJxBv8usXMlx3QWm9tP0q0jDyXWaBn8jiKvj80Wp9J57gulY2lB7zuDMjwQDyuJJiRYk1GV+Aw5bROy6KU/0d5ids2EB5IVn3wuR0q8wHCmVLXady7n6iavgR7v5cHZiP37OG3s0f1GzJdeOYTrALzD3qD8a7Ch/tl+qYRAKkdwkzniVsvrZ6kHsoikuyqL8tNcqMWAAo0dkVN9yUytW9Einm1yfTiSbnDQHYleHLrTxTlcB+u1bc+loUFzuz8Wi4GlLzsIp1GTx6WvPEBnJ76gRU8GRcWQiVKWWybKoO9wBBvDUI5S3v96eJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=93iLprizLRek1nIUtq8/PFwp69bPnJ+Ncd4kymMDxak=;
- b=k4GcxkFqMtRrbYcf6K4vd/REtcaQuBW7MvCTmZLk6whwOHmrBsQmAyGnR7pHtxSP6IY1sFp0Mlm0Hg0nLnGEvBAJunlFH8rUX0qYYmWdGxT7hLDmuJKlczu8Qx2OoJuI5uEgvCU7dhpPN9PNKiyxcgml9C75zGv0G8rp3vKSmR+25zCxvPUXe/CUAnTBvMC0CpjrSvgGQDboEczf7Ftay2uwcMxU9vSMirg5ehhOB0tr8reTM+61V8yhXS+/oHDL74v29cP4x3kmb2bV8Ocz58ZZkpW8X4tPEHE5eTUwD8HqwAdAU808wHvVt3L6SvJgAjWEBJlVX0l6KfNXrdu9HQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=93iLprizLRek1nIUtq8/PFwp69bPnJ+Ncd4kymMDxak=;
- b=WK77j/tcXLeRhFwUkaRoKdUTPP2xdENrhKQM50oZRUc5rfpGAXii9dwPek0x+LqvIc9zlh9DroSB28x2A0OF8660F1UVQ/NCsbiRqREa6RwDKiSDB/Fm5Bi4+T0QrDHxoblo25tXxJhaTS58Zpb6WTY4oLOrdc+vmWAGL7vzOYo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com (2603:10b6:a03:a5::28)
- by CH0PR12MB8530.namprd12.prod.outlook.com (2603:10b6:610:188::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
- 2023 10:14:09 +0000
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::4d07:7f52:c833:9603]) by BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::4d07:7f52:c833:9603%6]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
- 10:14:09 +0000
-Message-ID: <0f0453e7-f717-9a86-5c2a-a15d41f0e2ac@amd.com>
-Date:   Mon, 20 Mar 2023 11:13:56 +0100
+        with ESMTP id S230049AbjCTMMl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 Mar 2023 08:12:41 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E989D9036;
+        Mon, 20 Mar 2023 05:12:38 -0700 (PDT)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 35A3AA25;
+        Mon, 20 Mar 2023 13:12:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1679314356;
+        bh=g9jYK9DPWNQVOtuPPK1BkPbDDKt4goUNff8cdNmOCbo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mS5e/Y9b6Gf7jl9X34sGX0ftdcAG8Kwbmt2UBPnBAQM3NAOjLyF1KvDP7s8/ydVbt
+         8ZcUMoe2HmdA1KKfRjOU3ML//iyd+VIFfN3yKp49RTOOFicakayvMXADo9+hLrZJwf
+         ZseWcEFatN3CVkq6nYNU5f/2IL0sEUfpP9xxC7RM=
+Message-ID: <a21fcab7-aa80-0228-7bd3-236fb4203d36@ideasonboard.com>
+Date:   Mon, 20 Mar 2023 14:12:32 +0200
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: i2c: cadence: Document `fifo-depth`
- property
+Subject: Re: [PATCH v10 1/8] i2c: add I2C Address Translator (ATR) support
 Content-Language: en-US
-To:     Lars-Peter Clausen <lars@metafoo.de>, Wolfram Sang <wsa@kernel.org>
-Cc:     Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
+To:     Luca Ceresoli <luca.ceresoli@bootlin.com>, zzam@gentoo.org
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230317145441.156880-1-lars@metafoo.de>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <20230317145441.156880-1-lars@metafoo.de>
+        Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>
+References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
+ <20230222132907.594690-2-tomi.valkeinen@ideasonboard.com>
+ <70323408-b823-1f1a-0202-434e6243b2af@gentoo.org>
+ <20230320092830.0431d042@booty>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20230320092830.0431d042@booty>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR0901CA0098.eurprd09.prod.outlook.com
- (2603:10a6:800:7e::24) To BYAPR12MB4758.namprd12.prod.outlook.com
- (2603:10b6:a03:a5::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4758:EE_|CH0PR12MB8530:EE_
-X-MS-Office365-Filtering-Correlation-Id: c8d90b17-eb0f-4e72-5204-08db292bd842
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nDH7FyE4TnmfaoLwsLwWpoStNPAlfn4NvoJji0u5iggpO7LWX44r1OoFSZBasC64r/mxyPLUDg85j/Ne6QbDNm4IqItyVJj6hgkRSWVp2dqx5qljk2sJF8RP9o51NM72923DO4WzcuXuxgkGwzR453Ccc/ketsRV0QdDiK1zGMeaors4umUHInd2WT2Qu6F5ff/KdTTG+TPGX5a9IkcPz/1jaqA9Mkrul0bMaHQHvlvfQeWn+F8WOFwEaVC7iVmAK1jFGhTFRpNmf7Kzw1h/NyswH/Ti757LcxUcvzxmdz7fx8xnSdZz1fCnEQ8PIz8X5I3SgCIiW5Ik11MtPsiaMe7jBfJGieCGtNxlIB8y6j/RPFF8en6PYsgCk5SkqV/TGmbaQRxywP6i8RGJi/5nUbwv1FL6TW+dpiCOqkHNhyW0IdiHXrfsbB3O9LlWmqEwDDdsNc2p6dsqBPgwv6mruXBYU1hWoKInBpXqvxmrpdTMQULiJR0kt0S3cKkKdgXsKGO9Ld1GGIb+BVz/e3RM0GfsfJs/9pJCsyXm6j5/hkTHtEmRgox8n/zbjVuW4CftdXtciXCe9sJxMaWburJctzoBosW632JstPEqDPiHaouLPOAsKsln79StBi4tBtyMhvt08oYqkDlxvzLiPtDurOHClvsod6utAlFtqEkTT/s3qPvbX8YRPyDMsbazL0oe/VrraK8RClXqkDp9GEVaD7paTjWi6qDKsF8oMe9+ATDuZNS5yOJomhaCvC5RgzLS
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4758.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(396003)(376002)(366004)(39860400002)(451199018)(2616005)(186003)(6486002)(4326008)(53546011)(478600001)(83380400001)(6666004)(54906003)(316002)(110136005)(66946007)(66556008)(66476007)(6506007)(26005)(6512007)(31686004)(8676002)(41300700001)(8936002)(5660300002)(44832011)(38100700002)(2906002)(86362001)(36756003)(31696002)(81973001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N1ZKQmZ0eTVsQ244dnQzT2h5aytPbTRCWTN4K3VPU05Cd2hpNk1ZMmpQbmRY?=
- =?utf-8?B?RzE3blZ0OGxleERESzd4cEtnZldBbWdpOHpzSTRySGlkVGIzcGZNUS94ZHZj?=
- =?utf-8?B?TTQ2aDdZdkErdmVSZWVtZlVJOWJBTTBhcHp4ZW5GQk1TNHRqclJZSmovU2pX?=
- =?utf-8?B?RHlUUWZqSWtpdWtYMHI5Y2ZtcVV6c0tvU0d3V3NlTkZLcjNuMlNQSjMzODdX?=
- =?utf-8?B?YWZWYnNwcjhCdkp5WFp1RkFyZVZaaXNaMkJvUnJPWVdoUjZPWFNTTVhFV0R5?=
- =?utf-8?B?cDB1KzJhK2xteEZqK29KTGFBRk1PTHN5bTZ1R0V1OHdkQytyVXFETGFOMnJj?=
- =?utf-8?B?ZWg1RkpJK1haalMxamV3TWs5L3lKdzNqWjZ4MGE3TFhJcElDYUtEbmI2U2Nq?=
- =?utf-8?B?dVhpK2kxdllwbFVZWk1EQzk5MHcvOWlyMUZpS2Z1b2dmeGt2WVd0ZGExOVRi?=
- =?utf-8?B?WXNJQTlETTZHTnFRMTduVWc3eTJrcE1xZGllNERCWENrOSt0MGVTcFlsOGt0?=
- =?utf-8?B?SGN1SXMwYUZkTUVkbnFDbHAzVTJwQ0RsOU1PdzRjN1YzYXZnbURLbklrZytD?=
- =?utf-8?B?cXZHc1pIcUpiL2pDYVFjY1VKSU0rM21kQVlwVit2U0FnKzRlQ204WWRUMVpp?=
- =?utf-8?B?dXU0TE1UUFBvdzZSWi92QWM1Z2dRMm5TcGJSNVljUFBER1duczgrU1U5Mmht?=
- =?utf-8?B?Ylp0eEE0Nlk4QjNBd3g5T0JISW1GQ3lnNWw0ZkpiaTZnRUxJOHd4N2VWQmRK?=
- =?utf-8?B?OVgwTlpVaUIva1pBL2J2KzNlaStzV05MeFU0SGhhZmJLUWJwUWJXc0xQMzE3?=
- =?utf-8?B?U1NMNkVGN0EwbjhYbVFKbHgzeXNFM3NsZ2dJNDF1eGl4a0lzUU8vVEt0TFFJ?=
- =?utf-8?B?S3gzZGZUWW4va3JsWStTRnVCcThudUNUdkJ3NFVXb3hnMFhOby93YlREakpG?=
- =?utf-8?B?Qk15T1oyYVRMeEQ2VTlZSmhOR2FSLzlZOVVZTjFxV3N4UHdhUzZUc1VSUWs1?=
- =?utf-8?B?NWI0WEVQMWt0MWxETTQwdVk2ZlBuSy9KNC8vb3I0bkt3NS8zMG5GRGFLMjlj?=
- =?utf-8?B?cGM2bFVFVXk5Ync4eHZndktSdUU4OTdraEZCdGI3eURNVythRkdjbnROa0Rm?=
- =?utf-8?B?OXJkSlJQRU5uWXYweHJSR294RXpDNmhONzdWYUNJY2RMU1B1WFYxSkluTnBE?=
- =?utf-8?B?dEJ4VWJyQW1wMHZacC9VZlpkcXlac0xLS3NCWTNaU3YvTnhDVXJUTGNPb0Fm?=
- =?utf-8?B?KzhLUGVvaEMrcHY5OStlcytjSklKNy8yb2VqYXNXZ1ExTzBIaU1mRkhLdUx5?=
- =?utf-8?B?VHd1RHVXQzBJNHdRekRXN1hJQUw1UzZYWmRPR0lER1p1VlBud2lWQjhKYlhr?=
- =?utf-8?B?U0x0T2s2MGZhRE5SVk1QUlRnSU1rODNEOURtQVFkalVZRGNwQTBXZTJCWU1h?=
- =?utf-8?B?NjhqbDcyWHM2UmNFbTlKbGhmUTRkOGhqWjlBaldoWHpRT0hzK2h5d0l4Z3I1?=
- =?utf-8?B?MjRoQ3BXR3h2TzBkY3BjS2EzdjE0SHdKT2lUT001VWJXbERlc3RPa0pjQko1?=
- =?utf-8?B?Zk5FYmNWVnlYY0FYM3czeWcxR1lOV3AySmNBbDBnSjE3dlNHM2FaVE9Fdmph?=
- =?utf-8?B?R2F1V3YrWm0rZmd2OW5ETkw2Vld1VmFoaGt6L2VvYjluV1VrTnhRakNGVlBH?=
- =?utf-8?B?RHNlY0NzVmU1UnpkZjc5Rnh1K1N4d2M0SE1RUjFlMWdkdGQ2Q3ZjMElLMGll?=
- =?utf-8?B?TWczdGZvVlROQmpBaXNWTTBibTRCUTF3MkZUMi9IbExON1J1bCtOaUpjR1dN?=
- =?utf-8?B?UXgxc0I4N2xBT3dVNzNsaWMwcXlwRXczbmhRQTAweEZjRW5rR1FhZGhoTDk0?=
- =?utf-8?B?VDgreEEvVXlLcVBESDZTSmZCbmlFK3BxNkZ6UzNuTXdUeThocHA5UGNsbjVO?=
- =?utf-8?B?dmFUZmptRTBseDNYODF6SUdjUGl1RHdJUFhJM0RzczhZc0o3N1Zac013SEtm?=
- =?utf-8?B?Y3E5VVYxMUxkNkNidjYrMGxaaFl1OEdyRWxZN2F0dWxVdVhwZVRhSU9ueCtZ?=
- =?utf-8?B?ZDEvRzFBakw2emdRbmZJRERWTEdHT0lCb3Y2alpuWW5ackxjVk9nWkVucU5j?=
- =?utf-8?Q?8jlnnZB9iM18Qwv6m84BCO8sS?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c8d90b17-eb0f-4e72-5204-08db292bd842
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4758.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 10:14:09.2552
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LFQFCDCVhdU9aNCb6ihDQuusPja1B5AmV+IRoWV2qVpj4wrlUZxuHB7j1V0uwRM3
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB8530
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
-
-On 3/17/23 15:54, Lars-Peter Clausen wrote:
-> The depth of the FIFO of the Cadence I2C controller IP is a synthesis
-> configuration parameter. Different instances of the IP can have different
-> values. For correct operation software needs to be aware of the size of the
-> FIFO.
+On 20/03/2023 10:28, Luca Ceresoli wrote:
+> Hello Matthias,
 > 
-> Add the documentation for the devicetree property that describes the FIFO
-> depth of the IP core.
+> thanks for the in-depth review!
 > 
-> The default value of 16 is for backwards compatibility reasons with
-> existing hardware descriptions where this property is not specified and
-> software has assumed that the FIFO depth is 16.
+> On Mon, 20 Mar 2023 07:34:34 +0100
+> zzam@gentoo.org wrote:
 > 
-> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-> ---
-> Changes since v1:
->   * Remove quotes around "/schemas/types.yaml#/definitions/uint32"
->   * Add `enum` describing valid values
->   * Use `fifo-depth` instead of `cdns,fifo-depth`
->   * Use `bytes` instead of `words` for the property unit
-> ---
->   Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml | 8 ++++++++
->   1 file changed, 8 insertions(+)
+>> Some inline comments below.
+>>
+>> Regards
+>> Matthias
+>>
+>> Am 22.02.23 um 14:29 schrieb Tomi Valkeinen:
+>>> From: Luca Ceresoli <luca@lucaceresoli.net>
+>>>
+>>> An ATR is a device that looks similar to an i2c-mux: it has an I2C
+>>> slave "upstream" port and N master "downstream" ports, and forwards
+>>> transactions from upstream to the appropriate downstream port. But it
+>>> is different in that the forwarded transaction has a different slave
+>>> address. The address used on the upstream bus is called the "alias"
+>>> and is (potentially) different from the physical slave address of the
+>>> downstream chip.
+>>>
+>>> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
+>>> implementing ATR features in a device driver. The helper takes care or
+>>> adapter creation/destruction and translates addresses at each transaction.
+>>>
+>>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+>>> ---
+>>>    Documentation/i2c/index.rst         |   1 +
+>>>    Documentation/i2c/muxes/i2c-atr.rst |  97 +++++
+>>>    MAINTAINERS                         |   8 +
+>>>    drivers/i2c/Kconfig                 |   9 +
+>>>    drivers/i2c/Makefile                |   1 +
+>>>    drivers/i2c/i2c-atr.c               | 548 ++++++++++++++++++++++++++++
+>>>    include/linux/i2c-atr.h             | 116 ++++++
+>>>    7 files changed, 780 insertions(+)
+>>>    create mode 100644 Documentation/i2c/muxes/i2c-atr.rst
+>>>    create mode 100644 drivers/i2c/i2c-atr.c
+>>>    create mode 100644 include/linux/i2c-atr.h
+>>>    
+>> [...]
+>>> diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
+>>> new file mode 100644
+>>> index 000000000000..5ab890b83670
+>>> --- /dev/null
+>>> +++ b/drivers/i2c/i2c-atr.c
+>>> @@ -0,0 +1,548 @@
+>> [...]
+>>> +
+>>> +/*
+>>> + * Replace all message addresses with their aliases, saving the original
+>>> + * addresses.
+>>> + *
+>>> + * This function is internal for use in i2c_atr_master_xfer(). It must be
+>>> + * followed by i2c_atr_unmap_msgs() to restore the original addresses.
+>>> + */
+>>> +static int i2c_atr_map_msgs(struct i2c_atr_chan *chan, struct i2c_msg *msgs,
+>>> +			    int num)
+>>> +{
+>>> +	struct i2c_atr *atr = chan->atr;
+>>> +	static struct i2c_atr_cli2alias_pair *c2a;
+>>> +	int i;
+>>> +
+>>> +	/* Ensure we have enough room to save the original addresses */
+>>> +	if (unlikely(chan->orig_addrs_size < num)) {
+>>> +		u16 *new_buf;
+>>> +
+>>> +		/* We don't care about old data, hence no realloc() */
+>>> +		new_buf = kmalloc_array(num, sizeof(*new_buf), GFP_KERNEL);
+>>> +		if (!new_buf)
+>>> +			return -ENOMEM;
+>>> +
+>>> +		kfree(chan->orig_addrs);
+>>> +		chan->orig_addrs = new_buf;
+>>> +		chan->orig_addrs_size = num;
+>>> +	}
+>>> +
+>>> +	for (i = 0; i < num; i++) {
+>>> +		chan->orig_addrs[i] = msgs[i].addr;
+>>> +
+>>> +		c2a = i2c_atr_find_mapping_by_addr(&chan->alias_list,
+>>> +						   msgs[i].addr);
+>>> +		if (!c2a) {
+>>> +			dev_err(atr->dev, "client 0x%02x not mapped!\n",
+>>> +				msgs[i].addr);
+>>> +			return -ENXIO;
+>> I miss the roll-back of previously modified msgs[].addr values.
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-> index 2e95cda7262a..2401d1e19916 100644
-> --- a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-> @@ -38,6 +38,13 @@ properties:
->       description: |
->         Input clock name.
->   
-> +  fifo-depth:
-> +    description:
-> +      Size of the data FIFO in bytes.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    default: 16
-> +    enum: [2, 4, 8, 16, 32, 64, 128, 256]
-> +
->   required:
->     - compatible
->     - reg
-> @@ -57,4 +64,5 @@ examples:
->           clock-frequency = <400000>;
->           #address-cells = <1>;
->           #size-cells = <0>;
-> +        fifo-depth = <8>;
->       };
+> Indeed you have a point. There is a subtle error in case all of the
+> following happen in a single i2c_atr_master_xfer() call:
+> 
+>   * there are 2+ messages, having different addresses
+>   * msg[0] is mapped correctly
+>   * msg[n] (n > 0) fails mapping
+> 
+> It's very unlikely, but in this case we'd get back to the caller with
+> an error and modified addresses for the first n messages. Which in turn
+> is unlikely to create any problems, but it could.
+> 
+> Tomi, do you agree?
+> 
+> This looks like a simple solution:
+> 
+>     if (!c2a) {
+> +    i2c_atr_unmap_msgs(chan, msgs, i);
+>       ...
+>     }
 
+Wouldn't that possibly restore the address from orig_addrs[x] also for 
+messages we haven't handled yet?
 
-Acked-by: Michal Simek <michal.simek@amd.com>
+I think a simple
 
-Thanks,
-Michal
+while (i--)
+	msgs[i].addr = chan->orig_addrs[i];
+
+should do here. It is also, perhaps, a bit more clear this way, as you 
+can see the assignments to msgs[i].addr nearby, and the rollback here 
+with the above code. Instead of seeing a call to an unmap function, 
+having to go and see what exactly it will do.
+
+> While there, maybe switching to dev_err_probe would make code cleaner.
+
+The while loop above has to be done after the print, if we use the same 
+i variable in both. dev_err_probe could still be used, but... I don't 
+know if it's worth trying to push it in.
+
+>>> +/*
+>>> + * Restore all message address aliases with the original addresses. This
+>>> + * function is internal for use in i2c_atr_master_xfer().
+>>> + *
+>>> + * @see i2c_atr_map_msgs()
+>>> + */
+>>> +static void i2c_atr_unmap_msgs(struct i2c_atr_chan *chan, struct i2c_msg *msgs,
+>>> +			       int num)
+>>> +{
+>>> +	int i;
+>>> +
+>>> +	for (i = 0; i < num; i++)
+>>> +		msgs[i].addr = chan->orig_addrs[i];
+>> Does this code needs null and size checks for orig_addrs/orig_addrs_size
+>> to protect from oopses?
+>> This cannot happen now as i2c_atr_master_xfer returns early when
+>> i2c_atr_map_msgs fails.
+> 
+> The map/unmap functions are really a part of i2c_atr_master_xfer() that
+> has been extracted for code readability, as the comments say, and I
+> can't think of a different use for them. So I think this code is OK as
+> is.
+> 
+> However a small comment might help future readers, especially in case
+> code will change and these functions gain new use cases.
+> E.g.
+> 
+>     This function is internal for use in i2c_atr_master_xfer()
+> +  and for this reason it needs no null and size checks on orig_addr.
+>     It must be followed by i2c_atr_unmap_msgs() to restore the original addresses.
+
+I can add a comment. as Luca said, it's an internal helper function, I 
+don't think we need to check the parameters there for cases which can't 
+happen.
+
+  Tomi
+
