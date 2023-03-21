@@ -2,71 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C98D6C36EA
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Mar 2023 17:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A966C3BAB
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Mar 2023 21:22:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjCUQ10 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 21 Mar 2023 12:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
+        id S230233AbjCUUV6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 21 Mar 2023 16:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjCUQ1Z (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 Mar 2023 12:27:25 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965E846099;
-        Tue, 21 Mar 2023 09:27:13 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id c18so18552259qte.5;
-        Tue, 21 Mar 2023 09:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679416032;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bWItCEGK6khz5+cq2aChgbY6kgyAqOoNV2Ytyqot+Vs=;
-        b=FNtohfhtxSZvVpqqzY72Cp+HY9Kpexhj6+Gkb/85IHjdXmTSdq83nZyL69pl1feNlZ
-         Ox34bIJ4oDpn3wn7Sp8vov50ID7VufAPS620zGc/iRtluVvPFi2t5T0wbIdQ3OhTtirX
-         Z6+aOv633+HgR/wL2MY4r+xcy7jCXM2sk7Ows0MJeyfQTkqx4b2coq+Fpi7zFHSbxz+f
-         RULW6aL8rKl73KT4gFRNbrbklrAuixMXNkX3qRNNmtKKCwugjxL7TbYai8e8/OBsfBnV
-         dwnYvxu3reKHic0bo4XDgRLxixS3ib1fCFNAUpsD6mrJwdGbddcWflRqIFtKd0rmW7aJ
-         zE+A==
+        with ESMTP id S230231AbjCUUVy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 Mar 2023 16:21:54 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99620F954;
+        Tue, 21 Mar 2023 13:21:07 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-177b78067ffso17439034fac.7;
+        Tue, 21 Mar 2023 13:21:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679416032;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bWItCEGK6khz5+cq2aChgbY6kgyAqOoNV2Ytyqot+Vs=;
-        b=NXCeK8jxWOFzv8CNS/cnjOl03K9SAF5XIYxzLFlH2Rpop4O1MHKh11a4fWSuhEHtWn
-         myqyKk4+7YuBl57T1t2KOXHeCbv+/uACxu5H8AbUvNJZ+HPTFSVuJ5UuvYux8lCSAp1c
-         k04csaDs1xFZErWNPizWsqRJ3omfOSkC2RPcbvtrxDDBem8+EBwS1gg5wcUNZ+UTdWBy
-         CJ8wM6ulDg/7yuidoUqKWozsHiXjXDQ41l490LVb7YCzO6UJxIJMmuQexef4hU9iF9WG
-         57KvCNYNMum8BdKo9Zj5851Hu+GGBbKH4I6QkHzbTfPAYh6LE+9St2hhyJKrbTCgeieJ
-         CDAA==
-X-Gm-Message-State: AO0yUKV11+0V6RYl6FD+QxB1pc4B3BkefyKt+y87gEm0noutcQgyuUXL
-        fj1m22ttZ1lzAg3hfGYZpRvqaSc/aDs=
-X-Google-Smtp-Source: AK7set+AXBqUGKxjyRYI1M909bkOFeWTq7pmlBghLp8uVYfmremXh3d5YGWtNHaHTLUssNIBSVW/Ew==
-X-Received: by 2002:ac8:5f4d:0:b0:3b8:6ae9:b10d with SMTP id y13-20020ac85f4d000000b003b86ae9b10dmr804759qta.2.1679416032509;
-        Tue, 21 Mar 2023 09:27:12 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id h2-20020ac85682000000b003e388264753sm357387qta.65.2023.03.21.09.27.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 09:27:12 -0700 (PDT)
-Message-ID: <044a2033-3398-0836-6b54-798d62fcb84c@gmail.com>
-Date:   Tue, 21 Mar 2023 09:27:07 -0700
+        d=1e100.net; s=20210112; t=1679430046;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tr/mEOP1gdo0kbIX9o5TsA3+wuyEzE6FJfZm+mWcOCU=;
+        b=lGL9qFpf1QkcZ9XKAsFhfQNzPxYYnahi7HjqZh6LHz9m73iQHoVB0vfJePWoAEXUV0
+         onleX3Wxhs7LkSTivUdFpZsX0rRVNcpRjo+F6o30cmERohby0WrqYRYcSiOOq6SH9IMI
+         eOe0opCc2g4DqxhycrKslQsHd8VTsnbxVreu7+0fsTIkEGbu9q9Si4p0t9E819Elwt0B
+         6soKAP7S/9nQQS4hAD4e7+57TPume1tEqaiIEmZNtCyC5maBE4pTFe5lPZmfFuz8Hd05
+         pjq8b2ynraTMO4X/2o7/EItIxP9Zwxp5A8Pqkxq/x+qHT+73DKwSXxYZCtTbWYrsP4rd
+         jiNg==
+X-Gm-Message-State: AO0yUKVQ9MmPtkwlV+hSdhMUURtRJvJBEqUNE9pgE92IE/ghbvv4AduR
+        EX9gXA1gj5gU0O7KFKLVffy8W3uIAA==
+X-Google-Smtp-Source: AK7set+ny0Rr0P23G6ruMJs7scXjUPRL5tb83IAMn90YZgf2owqjpvtOuI0IARblE82e9uM8ITUepQ==
+X-Received: by 2002:a05:6870:d20a:b0:177:a9e8:72bf with SMTP id g10-20020a056870d20a00b00177a9e872bfmr187604oac.10.1679430046366;
+        Tue, 21 Mar 2023 13:20:46 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id e13-20020a056830200d00b0069dbc293196sm5521607otp.32.2023.03.21.13.20.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 13:20:46 -0700 (PDT)
+Received: (nullmailer pid 1499691 invoked by uid 1000);
+        Tue, 21 Mar 2023 20:20:45 -0000
+Date:   Tue, 21 Mar 2023 15:20:45 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Lars-Peter Clausen <lars@metafoo.de>
+Cc:     devicetree@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michal Simek <michal.simek@amd.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: i2c: cadence: Document `fifo-depth`
+ property
+Message-ID: <167943004465.1499409.2418312435112481551.robh@kernel.org>
+References: <20230317145441.156880-1-lars@metafoo.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] i2c: brcmstb: use devm_platform_ioremap_resource_byname()
-Content-Language: en-US
-To:     ye.xingchen@zte.com.cn, kdasu.kdev@gmail.com
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <202303211944063761253@zte.com.cn>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <202303211944063761253@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230317145441.156880-1-lars@metafoo.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,16 +67,31 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 3/21/23 04:44, ye.xingchen@zte.com.cn wrote:
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
-> 
-> Convert platform_get_resource_byname(),devm_ioremap_resource() to a single
-> call to devm_platform_ioremap_resource_byname(), as this is exactly what
-> this function does.
-> 
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+On Fri, 17 Mar 2023 07:54:39 -0700, Lars-Peter Clausen wrote:
+> The depth of the FIFO of the Cadence I2C controller IP is a synthesis
+> configuration parameter. Different instances of the IP can have different
+> values. For correct operation software needs to be aware of the size of the
+> FIFO.
+> 
+> Add the documentation for the devicetree property that describes the FIFO
+> depth of the IP core.
+> 
+> The default value of 16 is for backwards compatibility reasons with
+> existing hardware descriptions where this property is not specified and
+> software has assumed that the FIFO depth is 16.
+> 
+> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+> ---
+> Changes since v1:
+>  * Remove quotes around "/schemas/types.yaml#/definitions/uint32"
+>  * Add `enum` describing valid values
+>  * Use `fifo-depth` instead of `cdns,fifo-depth`
+>  * Use `bytes` instead of `words` for the property unit
+> ---
+>  Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
 
