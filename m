@@ -2,254 +2,193 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0186C6C705D
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Mar 2023 19:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A67046C706A
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Mar 2023 19:44:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbjCWSkW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 23 Mar 2023 14:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S231226AbjCWSo3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 23 Mar 2023 14:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjCWSkV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Mar 2023 14:40:21 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C761A19F12
-        for <linux-i2c@vger.kernel.org>; Thu, 23 Mar 2023 11:40:19 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so2964837pjt.5
-        for <linux-i2c@vger.kernel.org>; Thu, 23 Mar 2023 11:40:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679596819;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dc8t5la/S7SGwbqv/1OxMvtkFBHHlif98Df3jcSZzQk=;
-        b=OB2JolwMzeoHAbSUZXKopfoWmwARaGq4piT0qielQgnlD99zuyJuuartOvZ1bQy6bk
-         26wiVoB0tComv/4PXE3fRSXpRYvSAK8LOXXwrDpOOiNt+upjl0ZlMJdkljKdtJdMo8p8
-         Ooj+ZrUfhbh/4O/PnAZOdqW6pvM2sg4ZBquFJ9aLpYOoysNGCi0pc2kX82iDUy383VNV
-         ePXzDSYzgTzAAebznckJHy6HdzF8F7sn2VztbCnqwvm/p+r9jLKH36IiYJwHgn9dOX7J
-         PNUqfhDg6c7egkJ2YtFwimU71WiEgVUvXfvOxbpbo86Qh+uUO/E1bGQt6utCxnw+uL02
-         hDew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679596819;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dc8t5la/S7SGwbqv/1OxMvtkFBHHlif98Df3jcSZzQk=;
-        b=B5lwRdVmZ0+w9Eo3s3SKeRBTvcD+X3W/vrNf+19qkgj6XEBpbmKcpm/kUd4MTTTLl+
-         NgApD4L8Cc0HuR0iKZVlLrjS4/vCbgzRK5fGhC4YjoVVpezkysSe1iPehIR3UCNdKaLM
-         lsHc5KqSGuGoZsw6COO/7iywID8j0tqLd6qQK1Il2cWG/8GwOeOyEQ/8ycwzmXVGNTWq
-         vHRo/OlrcsKj2no11CBMrDhvs0HyggP96pM6xYYaJm0ELbyWKzH9XluI36U3cDTxaWOc
-         GCBxEi02eqPxuL3E9EZdM+H54iUldYEbwNiVcRj0+s3QEUT1ubavyCmdZSN4COgSu1nt
-         uK9A==
-X-Gm-Message-State: AO0yUKUCOhZgmXevmBVJhQ8BWTptqcAotSk9EJCw+mUAA/pF3SP1qRTe
-        xpqMITKY+roPy8tRhhXRh1JHQzquyLTssfn7M0u64Q==
-X-Google-Smtp-Source: AK7set8GTpjYj8eDq8ynIFChjo3qsZvvDfnt1sgQBbe8GDAGmFUzkI3oJLZHCiNHHCqkTN3OP5x4od1Wm1tFnHeRTf4=
-X-Received: by 2002:a17:902:a607:b0:1a0:763d:6c2a with SMTP id
- u7-20020a170902a60700b001a0763d6c2amr2826208plq.10.1679596819029; Thu, 23 Mar
- 2023 11:40:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <328e557aaee9d3f5f1bcaf2b8ac2de0e04c4fbb8.1679049188.git.geert+renesas@glider.be>
- <CAGETcx_oYrhjo0C3zJ57gt7HGuiY_=9xEq+TvQU8R5zW6OiQCw@mail.gmail.com>
-In-Reply-To: <CAGETcx_oYrhjo0C3zJ57gt7HGuiY_=9xEq+TvQU8R5zW6OiQCw@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 23 Mar 2023 11:39:42 -0700
-Message-ID: <CAGETcx9=LENzJUVorEKpoeMChFZHO-=M2jHBQmOo+x1ez9=b5A@mail.gmail.com>
-Subject: Re: [PATCH/RFC] treewide: Fix instantiation of devices in DT overlay
-To:     geert+renesas@glider.be
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
+        with ESMTP id S229739AbjCWSo1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Mar 2023 14:44:27 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B8FFF08;
+        Thu, 23 Mar 2023 11:44:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679597066; x=1711133066;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=8USGPqYqLAceTKRm5yIx/FvVwyWB76zyzgXWkX5VjRE=;
+  b=QVG9UUn3oW/Sh7g6rJrT6pnbbTU3aOGKeMlZ1e23V6To1dRUHssr15/X
+   V781Tm0N7cF658VDtesKmG8N0AlK1Uw1EddcVicwYwkGDrMu56iB6zxKH
+   vqNeHHgqYuGGL+4lyTHrkAIvO4LG0sidhlA2/qNnr+T0NLpsAlkUp+2/B
+   jhwFhVR6wxPp2Qn14ninp20RyRpodmf5MMamj8CtEujDTeRVPNWxHnF0h
+   L5AjyLnFef2QQ1AS77Yv3CnOsc9aUoRBeIMr8hUyleDSgtFRC7/GP9Tdg
+   Lmg7mtzLVEJfvL+KXai4FknIgBHwpoqlg6jt18cCuDcd6D/S7sKMAn5/2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="367328659"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="367328659"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 11:44:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="751601839"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="751601839"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga004.fm.intel.com with ESMTP; 23 Mar 2023 11:44:26 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 23 Mar 2023 11:44:25 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 23 Mar 2023 11:44:25 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 23 Mar 2023 11:44:25 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.177)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 23 Mar 2023 11:44:25 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E90v8at+hbHkkcqCBPmQrOBYW6HjkfJInhRYPORDpDHIGevR63hm+8dP0abvn3BaIbU0pg6Yu2nQVTiLgAFs0c16/sMOMvbxFrkjc+w3eK8+4RCE8P84Z+mmYfikl+hVOJjA95WUvAngkr/nyl/iWPudjTHBrj+oo90EmksujRxp/n9qZtP2yi17/bgeTGF3Z0D+B46Qk4HFL0fQMo76dOi+cPkiXfx0do6VVIEeWrg8r1c1HT5zylxTIodaJ5ECRbubmdhkEhrpse1Efs2IV0PErFQsHPGsWXl75H/RC20JdomvsIxel8exfggd7HCh5VLv5bHEPsRL/IsQxqnN2w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/nSaL7ZjJK8TXzpR+ZzcJsMXtrrhM8g0H99pzVtnaeQ=;
+ b=MQC20pCOltdpR365LwAxH5XMo9GtQGF3CS//NBt6o4fj161i2FVslp2j/0zZ8k4siHgY3sCFnMP/Yy7Nn3eA3Pc8d+h4laChKgHLg0d836U01WpIkNjWfbv/pwL8EpiLBm2BdWXMnhSHW/oZ9WKQBH6mXVGjItWkIjO8oliqcdGz9sQ3SN7foB0XvuqM2meodu4wRNPuRJDAi7p812D/K1w4Z4PHDanfkH5VH+oEO6zxGERwHtmoKmJI94DFeFy13KvNFPKY6RZ2wTnTBWbIO+siJFU2q0hnm6HAJzUSOmA0GHucw1vPh1PqEzAHT+VuzrKORHh4WbcJ3D0g2SjVhg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM5PR11MB1418.namprd11.prod.outlook.com (2603:10b6:3:8::9) by
+ DM8PR11MB5591.namprd11.prod.outlook.com (2603:10b6:8:38::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.38; Thu, 23 Mar 2023 18:44:24 +0000
+Received: from DM5PR11MB1418.namprd11.prod.outlook.com
+ ([fe80::7ef8:2573:5a1b:c9f1]) by DM5PR11MB1418.namprd11.prod.outlook.com
+ ([fe80::7ef8:2573:5a1b:c9f1%6]) with mapi id 15.20.6178.038; Thu, 23 Mar 2023
+ 18:44:23 +0000
+Date:   Fri, 24 Mar 2023 02:44:20 +0800
+From:   "Ye, Xiang" <xiang.ye@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Lee Jones" <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
         Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Android Kernel Team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        <linux-usb@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <srinivas.pandruvada@intel.com>,
+        <heikki.krogerus@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <sakari.ailus@linux.intel.com>, <zhifeng.wang@intel.com>,
+        <wentong.wu@intel.com>, <lixu.zhang@intel.com>
+Subject: Re: [PATCH v6 1/6] usb: Add support for Intel LJCA device
+Message-ID: <ZByeBLrNIX8cWO4u@ye-NUC7i7DNHE>
+References: <20230323172113.1231050-1-xiang.ye@intel.com>
+ <20230323172113.1231050-2-xiang.ye@intel.com>
+ <ZByU4tbhkhnF4kMw@kroah.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZByU4tbhkhnF4kMw@kroah.com>
+X-ClientProxiedBy: SG2P153CA0010.APCP153.PROD.OUTLOOK.COM (2603:1096::20) To
+ DM5PR11MB1418.namprd11.prod.outlook.com (2603:10b6:3:8::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR11MB1418:EE_|DM8PR11MB5591:EE_
+X-MS-Office365-Filtering-Correlation-Id: c1adc6a3-9787-4dc9-1b90-08db2bce9f10
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Pz7dM0rjpO5j8KKub4ZYFgLwXzLkiJQdAkk5ZC/tPj9lJsQ+0OX80RwSHQG6ComZrZh8gLjCSbUuDBaJj4z2WC4nuVTop2z+bYow2xyFfiqXTvyumToCX+7+UXgoODrewB+VBmEdRlowHFtds0K4jAgKdDTeRZI2j8JiuYtrzWZMXySPAuQsE9iU4Mgd6JwU5ondPrDyJpJtBmKN0lRI3pHjSFx/aOIADKnYQK9+zjhS5wdjHaqjoBjQ6aC1MeoFUvyse5smxCbIJChBikkty9+uoWpu+Pkp6FAz+sVMfOmF/w5VzkIZ/Xa5YeMe0c4JIPN6na/K+dvqwkOtvpD3M43esMvv9QiNH9k+K6YsmpSKSESt+iWYJ3tkdTHP9GPozgu3hDK3S8h5g1WHpucZrh4VOf3SR4bDpVs+ePi397SAooPeeSc6gqCxY3+9edVvlWrDBe/bHeEXRqHen3+vvRRsF7+itPY0g7FJfaeR4NL+upLC0qmm/v4SY5jV5qztZi8L3vaHnDVKjSOJx6IEhk87ySHVpmE2ejljDxIO1jIwStTq5IwJFy5Tblh4sBgJUEO2CiNHv5STZTC3z8C6gcJ3OQ841OeZLtuAPLOozRWemKNP4mwZ6SNoB51JSrhXK35sBFhdXFrDZLdu6WvUqw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1418.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(39860400002)(366004)(396003)(376002)(136003)(346002)(451199018)(8936002)(66946007)(66476007)(66556008)(41300700001)(4326008)(6916009)(8676002)(86362001)(38100700002)(6512007)(6506007)(9686003)(26005)(83380400001)(186003)(33716001)(316002)(478600001)(6486002)(54906003)(5660300002)(82960400001)(2906002)(7416002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dNY93k/dWlNJ677rj7NcecpT4eLqMTmFssYStQB+GKUyuV6yVCkIgH0Mqs7V?=
+ =?us-ascii?Q?7yfvIJxbTx7JL2ZyHf5m84u5hNiS03ewvJXFBHPBeSGGaaA7H8cjfjjiiREM?=
+ =?us-ascii?Q?Jpl65ULUlToAUtZI+STkmyH7XyrFYirXbFTsTdBFkd/6JDZ0K9PrHiKBazmR?=
+ =?us-ascii?Q?ACg9+pUtDlGfcC96Xz0sVLXvpD1JKRcwOq364LmtWLe59JE/50HTfuTmQbLu?=
+ =?us-ascii?Q?j9LFVT49ae0QGBSTXzEUl/MCSuRFxCQLozPxoCGrl/ebRhfHSvZFFa4rmKor?=
+ =?us-ascii?Q?i4zVIKHy3qoT8s0yCT/eGUBkh/Qvodf7YtreA2S3XeFUW+OnJNoF7RiJMSj7?=
+ =?us-ascii?Q?jWcAxVSlVqL1EcReWWZ4YVHapC77s1ndyuwRbsWn8bVCXxPAqVdetunkNrLL?=
+ =?us-ascii?Q?U6FgjOv0eMDC3SSLeANBm34j+QQY4RKKEnQxTPhSmvHZeUTcWjF9C5393JA7?=
+ =?us-ascii?Q?dkiDJJxDRNHh42e/e5kTDpnIYWxTtXLzyfz9ND9DT/kphh1m6t4vG1j9UXYN?=
+ =?us-ascii?Q?7NgRVwiRcOimu+TtsRQKJrWBtu8xJE9+YTEB82wT2PpEm4Wjcb8tRxM9VNlE?=
+ =?us-ascii?Q?H0+IQ6aL/mOMlwJ3TW9rKxC5MBMjveR2HAbJDwC/VLtRlAbQuX+N8gy6bhPy?=
+ =?us-ascii?Q?Y2bE6TVbZrGqg+I5ihhivLeiQ5OOF6CpSm2t1EG1Zz5zqI4jqyMiM0u/RMWK?=
+ =?us-ascii?Q?Nxxiaoo3FK9omIGJ49AbBvY8uONb9q8jrTgBdqHMXc/V/VRyzUfU87q2QOZ7?=
+ =?us-ascii?Q?N7PH9cZIsmgsMAj47SPuK+cJwSSpSu0BCGWY0B61rqE1rTy8D8bKbzjZUX/k?=
+ =?us-ascii?Q?x09IOPBgFf4RXkmJhJws9EvUScnLoCiW4hD36n9Q3GTTui3CnppjfEj9N/tm?=
+ =?us-ascii?Q?egpv7be7xZ6wKqkUE22F/xYaPqxc3p2MK1iqnzBld5w8lNjatTvQTkyv467w?=
+ =?us-ascii?Q?/Ho0J+VMV9uzmGdav9wkpfku2sG3ht+cQ/goiqoF/9rM3Cw2k2w2EWG8aW5H?=
+ =?us-ascii?Q?oJWFHjaRwWA1qBWqWtgbyaoQhkemoZ0cP1JqfydMYQGG6GNSzOuVBS8I0R81?=
+ =?us-ascii?Q?dMdMBQOC7vWUOXWn1BAnovKo+yfvqIoq/2C+z7fzfR+XShR9BdpoZn8r0GdD?=
+ =?us-ascii?Q?Sy4DoY+MSoyn2e9e/oQN07VtB5GKZhzWAEXSG3eoQVFpdwq811Ms1NUiWtan?=
+ =?us-ascii?Q?/FSvvwgZ1IaGZQPCf8nAY9PcPQCVlQmgo+g5FngJrP+1qeDEW5Bd9B34RCEH?=
+ =?us-ascii?Q?Sss29oz7huGvIJRZoZP2qjfJN5MsHWXktYe8ww3bNnKvuBRfrqFlx2GkXy0/?=
+ =?us-ascii?Q?sgIYy+8M1RkghiApR5bvOUyHH9NBFpeu+jP5rduXVzOOk6IyiQTFoT5OlgLA?=
+ =?us-ascii?Q?Rou6WgIZybZryoBZc0UF5fmqehFq0nHRmfUMqdo+o28RQnr0314Fj8cC9ZAG?=
+ =?us-ascii?Q?V14RzBu5p2WWg+OwqiS+aO1zPOXhtiq+8vBqZdmN6BeWkmkujkCLvfY76UM0?=
+ =?us-ascii?Q?C7HJQEEyj47xpEYCbUxMNMgRsFTubZ7IuJyh1dp8EwcyTr3UfItSnv00ca+F?=
+ =?us-ascii?Q?61RE34QYr7XPMHrJC71e8IMXAVxm+BD+YyxpnkZk?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1adc6a3-9787-4dc9-1b90-08db2bce9f10
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1418.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 18:44:23.8072
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YMXamm3s8fPNk5oD/lchWQHwnnKDGugvGAYbrGR3YTpZ3pIZxfBsT+jF6+YR2IXVKsy8LTUhEMCGJI5tIsnWXg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5591
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 5:36=E2=80=AFPM Saravana Kannan <saravanak@google.c=
-om> wrote:
->
-> On Fri, Mar 17, 2023 at 3:33=E2=80=AFAM Geert Uytterhoeven
-> <geert+renesas@glider.be> wrote:
-> >
-> > When loading a DT overlay that creates a device, the device is not
-> > instantiated, unless the DT overlay is unloaded and reloaded again.
-> >
-> > Saravana explains:
-> >   Basically for all overlays (I hope the function is only used for
-> >   overlays) we assume all nodes are NOT devices until they actually
-> >   get added as a device. Don't review the code, it's not meant to be :)
-> >
-> > Based on a hacky patch by Saravana Kannan, which covered only platform
-> > and spi devices.
-> >
-> > Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
-> > Link: https://lore.kernel.org/all/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=3DrW=
-YnkCZ6z5bGX-wj4w@mail.gmail.com
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
-> > Marked RFC as Saravana said this is an ugly hack.
-> > Still, this is a regression in v6.3-rc1 that should be fixed.
->
-> Thanks for making sure this isn't forgotten.
->
-> I thought about this a bit more and I've decided what I gave earlier
-> isn't really too much of a hack. The other option is to handle the
-> clearing of the flag at the driver core level, but we incur these
-> additional instructions for all devices instead of just the overlay
-> case. But the benefit is that if more busses add overlay support in
-> the future, they won't need to remember to clear the flag in those
-> instances too. But they'll probably start off by looking at the
-> existing platform bus case, so they'll get it right.
->
-> I'll continue the pondering next week and maybe test it on my device
-> to make sure it's not doing anything weird for non-overlay cases.
->
+Hi Greg,
 
-Geert,
+Thanks for your review.
+On Thu, Mar 23, 2023 at 07:05:22PM +0100, Greg Kroah-Hartman wrote:
+> On Fri, Mar 24, 2023 at 01:21:08AM +0800, Ye Xiang wrote:
+> > +config USB_LJCA
+> > +	tristate "Intel La Jolla Cove Adapter support"
+> > +	select AUXILIARY_BUS
+> > +	depends on USB
+> > +	help
+> > +	  This adds support for Intel La Jolla Cove USB-I2C/SPI/GPIO
+> > +	  Master Adapter (LJCA). Additional drivers such as I2C_LJCA,
+> > +	  GPIO_LJCA and SPI_LJCA must be enabled in order to use the
+> > +	  functionality of the device.
+> > +
+> > +	  This driver can also be built as a module. If so, the module
+> > +	  will be called ljca.
+> 
+> That's a very generic name for a USB driver, why not "usb_ljca"?
+Thanks for the suggestion. Will adopt it on next version.
+> 
+> > +struct ljca_dev {
+> > +	struct usb_device *udev;
+> 
+> You didn't remove this like you said you would :(
+Sorry. I just stopped using it, but I forgot to delete it in struct ljca_dev.
+The udev field is unused in this driver now. I will definitely delete
+it on next version.
 
-I think we should stick with the original style of fix I suggested.
-So, basically your patch set. Are you planning on sending a non-RFC or
-do you want me to do it?
+--
+Thanks
+Ye Xiang
 
--Saravana
-
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -3611,6 +3611,15 @@ int device_add(struct device *dev)
->          */
->         if (dev->fwnode && !dev->fwnode->dev) {
->                 dev->fwnode->dev =3D dev;
-> +               /*
-> +                * If a fwnode was initially marked as not a device, but =
-we
-> +                * clearly have a device added for it that can probe, the=
-n clear
-> +                * the flag so fw_devlink will continue linking consumers=
- to
-> +                * this device. This code path is really expected to run =
-only
-> +                * for DT overlays.
-> +                */
-> +               if (dev->bus)
-> +                       dev->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE
->                 fw_devlink_link_device(dev);
->         }
->
-> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
-> index 07d93753b12f..f715b59d9bf3 100644
-> --- a/drivers/of/dynamic.c
-> +++ b/drivers/of/dynamic.c
-> @@ -226,6 +226,11 @@ static void __of_attach_node(struct device_node *np)
->         np->sibling =3D np->parent->child;
->         np->parent->child =3D np;
->         of_node_clear_flag(np, OF_DETACHED);
-> +       /*
-> +        * Ask fw_devlink to assume any new node is not a device. Driver =
-core
-> +        * will clear this flag if the assumption turns out to be wrong.
-> +        */
-> +       np->fwnode.flags |=3D FWNODE_FLAG_NOT_DEVICE;
->  }
->
->
->
->
-> > ---
-> >  drivers/bus/imx-weim.c    | 1 +
-> >  drivers/i2c/i2c-core-of.c | 1 +
-> >  drivers/of/dynamic.c      | 1 +
-> >  drivers/of/platform.c     | 1 +
-> >  drivers/spi/spi.c         | 1 +
-> >  5 files changed, 5 insertions(+)
-> >
-> > diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
-> > index 2a6b4f676458612e..71d8807170fa9f29 100644
-> > --- a/drivers/bus/imx-weim.c
-> > +++ b/drivers/bus/imx-weim.c
-> > @@ -329,6 +329,7 @@ static int of_weim_notify(struct notifier_block *nb=
-, unsigned long action,
-> >                                  "Failed to setup timing for '%pOF'\n",=
- rd->dn);
-> >
-> >                 if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
-> > +                       rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVI=
-CE;
-> >                         if (!of_platform_device_create(rd->dn, NULL, &p=
-dev->dev)) {
-> >                                 dev_err(&pdev->dev,
-> >                                         "Failed to create child device =
-'%pOF'\n",
-> > diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-> > index bce6b796e04c2ca0..79a0d47010ba0b20 100644
-> > --- a/drivers/i2c/i2c-core-of.c
-> > +++ b/drivers/i2c/i2c-core-of.c
-> > @@ -178,6 +178,7 @@ static int of_i2c_notify(struct notifier_block *nb,=
- unsigned long action,
-> >                         return NOTIFY_OK;
-> >                 }
-> >
-> > +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
-> >                 client =3D of_i2c_register_device(adap, rd->dn);
-> >                 if (IS_ERR(client)) {
-> >                         dev_err(&adap->dev, "failed to create client fo=
-r '%pOF'\n",
-> > diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
-> > index 07d93753b12f5f4d..e311d406b1705306 100644
-> > --- a/drivers/of/dynamic.c
-> > +++ b/drivers/of/dynamic.c
-> > @@ -226,6 +226,7 @@ static void __of_attach_node(struct device_node *np=
-)
-> >         np->sibling =3D np->parent->child;
-> >         np->parent->child =3D np;
-> >         of_node_clear_flag(np, OF_DETACHED);
-> > +       np->fwnode.flags |=3D FWNODE_FLAG_NOT_DEVICE;
-> >  }
-> >
-> >  /**
-> > diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> > index b2bd2e783445dd78..17c92cbfb62ee3ef 100644
-> > --- a/drivers/of/platform.c
-> > +++ b/drivers/of/platform.c
-> > @@ -737,6 +737,7 @@ static int of_platform_notify(struct notifier_block=
- *nb,
-> >                 if (of_node_check_flag(rd->dn, OF_POPULATED))
-> >                         return NOTIFY_OK;
-> >
-> > +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
-> >                 /* pdev_parent may be NULL when no bus platform device =
-*/
-> >                 pdev_parent =3D of_find_device_by_node(rd->dn->parent);
-> >                 pdev =3D of_platform_device_create(rd->dn, NULL,
-> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> > index 1a65f96fe2aff591..7bd053a32fad1a3c 100644
-> > --- a/drivers/spi/spi.c
-> > +++ b/drivers/spi/spi.c
-> > @@ -4480,6 +4480,7 @@ static int of_spi_notify(struct notifier_block *n=
-b, unsigned long action,
-> >                         return NOTIFY_OK;
-> >                 }
-> >
-> > +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
-> >                 spi =3D of_register_spi_device(ctlr, rd->dn);
-> >                 put_device(&ctlr->dev);
-> >
-> > --
-> > 2.34.1
-> >
