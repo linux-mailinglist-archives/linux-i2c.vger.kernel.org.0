@@ -2,117 +2,123 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7416C60DA
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Mar 2023 08:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20CA36C6100
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Mar 2023 08:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbjCWHcm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 23 Mar 2023 03:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
+        id S229589AbjCWHo7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 23 Mar 2023 03:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbjCWHcd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Mar 2023 03:32:33 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6550B1E5EC
-        for <linux-i2c@vger.kernel.org>; Thu, 23 Mar 2023 00:32:29 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id o12so82612832edb.9
-        for <linux-i2c@vger.kernel.org>; Thu, 23 Mar 2023 00:32:29 -0700 (PDT)
+        with ESMTP id S230457AbjCWHo6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Mar 2023 03:44:58 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141BF19F2F
+        for <linux-i2c@vger.kernel.org>; Thu, 23 Mar 2023 00:44:56 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id eg48so82615411edb.13
+        for <linux-i2c@vger.kernel.org>; Thu, 23 Mar 2023 00:44:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679556748;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5krubHHgKYJDCf8X0UvJA7y8q2NbVKxEV7FY/oHuAps=;
-        b=w3awquQKTHeWDx/yCfCfHfdrLUAb+7cmTUbCxlDsTXtHqnC/KTdLvanL3T8U7h9Hn+
-         T2KyJY5oy1yPQyU6mzgUZh1CzH88VAPkqy8k2SW2SwKq45G6DggQbSFKp7id0BSjS8Rp
-         VoHzkI+PUoz4dQKhOTIWOYjtIUHmYVlbCNMKTKatuW6HXvZvM2uiVdheYJwhuBaoVv6r
-         XUFm0HfHybe27otwo9wNuL61H0cKrxmMAqzuTsillUtZ3oANbuyNtcnMhqKcUnzq/u1/
-         nw9/mhXmeh0zZJ/KOLNvHLyQee+sIyAd8AbaOqnSeke6JK3XQ1qUndFUTGYQb65Q7Z6P
-         x2gg==
+        d=9elements.com; s=google; t=1679557494;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4R+XqDwitKzHSbNlWfSFxubfsoLnWPASyL0OVykMXvo=;
+        b=bLw1bDQORi+pc5ri62XUS3TVHspZGiw0+3x56SaqahrTKl/kDZd/H4qmzgOqZHOGuw
+         pG+OE3uUV+bg5Y76eOglqWU1LLuBQ7NZTHcErsQ1vWtA/tRXjT1q57XDZ2RgArXFqrJZ
+         69NnMa2ALasJgQ1Vxg+PXKuqpYZQE+UKggUUVsdGFHPLvtKnRkgDTaSlZyNchq+AdraD
+         KptCHij1Ni+jN+GXgApMutwAqd6+g1BLumCFOmY6AZqyujLRhDzr0+l7lHa+zHdPjtsR
+         iUqnrHsJ44UtkyLrX5orwsfW8A/G6PDCoIh4UUZ4H/YSKn/NNn4A4gSb5B4KpDriwxWI
+         stdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679556748;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5krubHHgKYJDCf8X0UvJA7y8q2NbVKxEV7FY/oHuAps=;
-        b=zHlnCzGRQ2oCjbXkOtw22VAAavhP+1rjjBEnDYQK6HhO3YWGNP7gFB7baFSnmo+fOn
-         UvGbSqUSOy6J0iMwbHFwfWF3Tb9p3Aat1l8PL309/1+MwODAr/CgCZhelc6Hik/4ydTU
-         CDeFvLbAsglP3ah8N2YyaV30iUoCwUeaH2HA/NnV8YDG8cTSG6rlA2B54muuTN4TjeHx
-         oOG7xE7NasrSyq39itL4JgSaG9pPuDgMNi6PvS0mh2T4ctSYbMlB+pepBE4STErY0l7M
-         ijLsa/KhH5MAMRfV6E5GJOymdQrt+LWowF9TwS2+g5eJmeMiT3izNTqgRg2+8c+TrcIt
-         0yUA==
-X-Gm-Message-State: AO0yUKVgidwQE2Czqv3vk6F8YDWlccwTFxwUB3P7r4z09FvtXcxYtUrD
-        G1vvjCUS/tzVsCzzz2wzQbJotg==
-X-Google-Smtp-Source: AK7set/JB2xOMNVpHVZoowg3tmnBogfsihGn8UMB3eRY9FKEh8TiRmePaafNm/r4PfEQeqBy+Y5BPA==
-X-Received: by 2002:a17:906:1152:b0:930:c417:1ad2 with SMTP id i18-20020a170906115200b00930c4171ad2mr9679120eja.65.1679556747895;
-        Thu, 23 Mar 2023 00:32:27 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a665:ed1e:3966:c991? ([2a02:810d:15c0:828:a665:ed1e:3966:c991])
-        by smtp.gmail.com with ESMTPSA id v19-20020a1709067d9300b008cff300cf47sm8240016ejo.72.2023.03.23.00.32.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 00:32:27 -0700 (PDT)
-Message-ID: <8fe6ee60-b8e8-e2d1-881d-544e12a7325b@linaro.org>
-Date:   Thu, 23 Mar 2023 08:32:26 +0100
+        d=1e100.net; s=20210112; t=1679557494;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4R+XqDwitKzHSbNlWfSFxubfsoLnWPASyL0OVykMXvo=;
+        b=OCNq/lcsS0+KosxEPsR3u6Sd03OZJHYihiFieZugW6xNLqI7B/dvyxKH/4Nj+iW9mV
+         oc/NmIJHAAFCRCTeZyH7bGsQGPd4EKbgiknKYMqzRo5Cw1uYbRCZfPfHLVcrzRhU35ZJ
+         3kBbxCym9CfT4LCS2vpNp5PkpqTd2JzzD7E7BFsbeSZQAkPw82K8QJEhlwjPJj8a2vVB
+         hZf1kwVJ2YR1sPBDEv+COgtdObJqpxPeH7rJ6p/Xr64Xp5XNVPU3RoU4KbczWBrr7G7F
+         0XptCHyk5ujKYYfBAN1q1steEIwEyAFDDYC5uGq31u4joRVDmqYnRJvy3MkSbgJpAGhx
+         HqNw==
+X-Gm-Message-State: AO0yUKXDvJphYeKACX2LOA3LQkCeVnQZpzAwkZaChKN0f5r2L67bD3br
+        2u79VPKtPBDG+wn/t/HU5mIoyQ==
+X-Google-Smtp-Source: AK7set93K2HThaxkUBaSz2h8xuqo8oQShPcZGfa8uP9rLFxOoJs0TMYTve5JnGY5LDkSKUpsBfrtKg==
+X-Received: by 2002:a17:906:46d7:b0:930:7164:e8e5 with SMTP id k23-20020a17090646d700b009307164e8e5mr8300809ejs.38.1679557494534;
+        Thu, 23 Mar 2023 00:44:54 -0700 (PDT)
+Received: from fedora.. (ip-095-222-150-251.um34.pools.vodafone-ip.de. [95.222.150.251])
+        by smtp.gmail.com with ESMTPSA id g1-20020a1709061c8100b0092669fb4ba1sm8255405ejh.130.2023.03.23.00.44.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 00:44:54 -0700 (PDT)
+From:   Patrick Rudolph <patrick.rudolph@9elements.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v10 0/4] Add support for Maxim MAX735x/MAX736x variants
+Date:   Thu, 23 Mar 2023 08:44:15 +0100
+Message-Id: <20230323074419.2494609-1-patrick.rudolph@9elements.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] dt-bindings: i2c: Drop unneeded quotes
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Peter Rosin <peda@axentia.se>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20230322173530.3971676-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230322173530.3971676-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 22/03/2023 18:35, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml | 4 ++--
->  Documentation/devicetree/bindings/i2c/apple,i2c.yaml          | 4 ++--
->  Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml  | 2 +-
->  Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml     | 4 ++--
->  Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml       | 4 ++--
->  Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml | 4 ++--
->  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml       | 2 +-
->  .../devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml          | 4 ++--
->  8 files changed, 14 insertions(+), 14 deletions(-)
-> 
+v10:
+- Small updates to dt-bindings
+- Make vdd-supply optional
+- Drop MAX7357 enhanced mode configuration
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+v9:
+- Fix 'then' not aligned with 'if' in dt-bindings
+- Split enhanced mode configuration into separate patch
+- Add MAX7357/MAX7358 register definitions
+- Rename config register defines
+- Update comments and explain non default config being applied on MAX7357
+- Check for I2C_FUNC_SMBUS_WRITE_BYTE_DATA functionality
 
-Best regards,
-Krzysztof
+v8:
+- Move allOf in dt-binding and use double negation
+
+v7:
+- Reworked the commit message, comments and renamed a struct
+  field. No functional change.
+
+v6:
+- Fix typo in dt-bindings
+
+v5:
+- Remove optional and make vdd-supply mandatory
+
+v4:
+- Add missing maxitems dt-bindings property
+
+v3:
+- Merge dt-bindings into i2c-mux-pca954x.yaml
+
+v2:
+- Move dt-bindings to separate file
+- Added support for MAX736x as they are very similar
+- Fixed an issue found by kernel test robot
+- Dropped max735x property and custom IRQ check
+- Added MAX7357 config register defines instead of magic values
+- Renamed vcc-supply to vdd-supply
+
+Patrick Rudolph (4):
+  dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
+  i2c: muxes: pca954x: Add MAX735x/MAX736x support
+  i2c: muxes: pca954x: Add regulator support
+  i2c: muxes: pca954x: Configure MAX7357 in enhanced mode
+
+ .../bindings/i2c/i2c-mux-pca954x.yaml         |  43 +++++-
+ drivers/i2c/muxes/Kconfig                     |   6 +-
+ drivers/i2c/muxes/i2c-mux-pca954x.c           | 141 +++++++++++++++++-
+ 3 files changed, 175 insertions(+), 15 deletions(-)
+
+-- 
+2.39.1
 
