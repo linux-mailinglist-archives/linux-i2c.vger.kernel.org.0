@@ -2,115 +2,133 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFA46C6A3C
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Mar 2023 14:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EFE16C6E8E
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Mar 2023 18:21:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbjCWN7I (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 23 Mar 2023 09:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
+        id S229796AbjCWRVK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 23 Mar 2023 13:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbjCWN6x (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Mar 2023 09:58:53 -0400
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA419EC7E;
-        Thu, 23 Mar 2023 06:58:47 -0700 (PDT)
-Received: by mail-ot1-f54.google.com with SMTP id d22-20020a9d5e16000000b0069b5252ced7so12141507oti.13;
-        Thu, 23 Mar 2023 06:58:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679579927;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iftv/UVVJj/lSHrLqdwit449ySjt+SsZDKPn5SnNnGk=;
-        b=4HfNYiNIZS1avMpt3YUTkTkJNPuf67o2/xVxhmvRkYfnBAwmOfGwvVVZbOfUIB6ThQ
-         ijsTXfXL8vOrepXI9dpvS/7CvOTj4ueFo4mbmCQfFgHvMq3vu5r5jgxy6N5wPIzS/JWi
-         ZQH/+7V5jTMGpclJotKveqXnAuD1Gfz6Aoj/MEkBgnEoguFQJXED1/qCeND2Pa5NO/xn
-         xhKG4J/h/LPX4R/jhRXKUufqILLK3oylmy1QJkl0VISrykmefQtiWNGHDNr2+jnrqJL4
-         b9ZO9Fk2yDAwzcRscJRGHTvrthkzDXtDLz+em2++0XSBDUM7bZT5ZOhTokA1idyc6xi+
-         2USA==
-X-Gm-Message-State: AO0yUKU+xrr2d6s6Tjzchvr26IZR5TbkdxTgmmMhkg+iyvfzjU9QkrT1
-        INHneUtnEH85FJeT6uLwAGlR1uCorw==
-X-Google-Smtp-Source: AK7set+Mmtab+QowtbtUIs0AkQgw44ebIs/y/ueeb1Uidwvrh0fuWUUGHnR6wTLtq4V1opvclJ4LbQ==
-X-Received: by 2002:a9d:7b46:0:b0:69f:9036:bec9 with SMTP id f6-20020a9d7b46000000b0069f9036bec9mr3449148oto.30.1679579926956;
-        Thu, 23 Mar 2023 06:58:46 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p24-20020a9d6958000000b0069f0794861asm6258216oto.63.2023.03.23.06.58.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 06:58:46 -0700 (PDT)
-Received: (nullmailer pid 3103744 invoked by uid 1000);
-        Thu, 23 Mar 2023 13:58:37 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S229508AbjCWRVK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Mar 2023 13:21:10 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D22926866;
+        Thu, 23 Mar 2023 10:21:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679592069; x=1711128069;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=F8VEs+gAoTbNxRMLbfeYtBj/ROtGxGe7/N+1j6jckaw=;
+  b=b/ucdEI/q5ecmvInal7rOQKhySCMnA4cP7VjA4lyMa3iP7W6R+LkVH7o
+   LttSaiMVTlmEoV13e4rDuisPqtm5X/i7rW4mdnhTFqBh63wZL6cx8ZkYS
+   dZvGqCBAADrOALgVaYJog1neTe9sU0mzIf/opw7o1bo0iKMee4xtliV8c
+   pYkw6GfxSXqkM93eeCGv7XBIfoUpAiVr8OFQZm5duh0kcr745eMoMcXTA
+   UlHGoOFxik5wRXnv/eA5Az34u2HsyaqEghVLsgxfboBF5noEENBiuyM1U
+   g4EEqnJJXYlmQHITL2YsQuQ/Vt+gvOL9d3kRDEjy3qrzYhj3oC4WhnYK9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="425840143"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="425840143"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 10:21:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="712748266"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="712748266"
+Received: from ye-nuc7i7dnhe.sh.intel.com ([10.239.154.52])
+  by orsmga008.jf.intel.com with ESMTP; 23 Mar 2023 10:21:03 -0700
+From:   Ye Xiang <xiang.ye@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com,
+        Ye Xiang <xiang.ye@intel.com>
+Subject: [PATCH v6 0/6] Add Intel LJCA device driver
+Date:   Fri, 24 Mar 2023 01:21:07 +0800
+Message-Id: <20230323172113.1231050-1-xiang.ye@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     linux-i2c@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20230323115356.2602042-2-patrick.rudolph@9elements.com>
-References: <20230323115356.2602042-1-patrick.rudolph@9elements.com>
- <20230323115356.2602042-2-patrick.rudolph@9elements.com>
-Message-Id: <167957963187.3095349.11637520534710691125.robh@kernel.org>
-Subject: Re: [PATCH v10 1/3] dt-bindings: i2c: Add Maxim MAX735x/MAX736x
- variants
-Date:   Thu, 23 Mar 2023 08:58:37 -0500
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Add driver for Intel La Jolla Cove Adapter (LJCA) device.
+This is a USB-GPIO, USB-I2C and USB-SPI device. We add 4
+drivers to support this device: a USB driver, a GPIO chip
+driver, a I2C controller driver and a SPI controller driver.
 
-On Thu, 23 Mar 2023 12:53:53 +0100, Patrick Rudolph wrote:
-> Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
-> chips. The functionality will be provided by the exisintg pca954x driver.
-> 
-> While on it make the interrupts support conditionally as not all of the
-> existing chips have interrupts.
-> 
-> For chips that are powered off by default add an optional regulator
-> called vdd-supply.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> ---
->  .../bindings/i2c/i2c-mux-pca954x.yaml         | 43 ++++++++++++++++---
->  1 file changed, 38 insertions(+), 5 deletions(-)
-> 
+---
+v6:
+ - ljca: split LJCA USB driver into two commits: USB part and API part.
+ - gpio/i2c/spi: use auxiliary bus for sub-module device enumeration instead of MFD.
+ - move document patch for LJCA sysfs entry to the 3th patch of this patch series.
+ - ljca: fix potential race condition when wait response timeout.
+ - ljca: use devm_kzalloc to malloc ljca device struct. 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+v5:
+ - move ljca.h from drivers/include/mfd to drivers/include/usb.
+ - ljca: fix a potential memory leak issue.
+ - add a blank line before return to adust to kernel code style.
+ - ljca: sysfs: split "cmd" to "ljca_dfu" and "ljca_trace_level".
 
-yamllint warnings/errors:
+v4:
+ - move ljca.c from drivers/mfd to drivers/usb/misc folder.
+ - fix index warning in sysfs-bus-devices-ljca.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.example.dtb: i2c-mux@74: interrupts: False schema does not allow [[17, 8]]
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.example.dtb: i2c-mux@74: #interrupt-cells: False schema does not allow [[2]]
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.example.dtb: i2c-mux@74: interrupt-controller: False schema does not allow True
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+v3:
+ - spi: make ljca_spi_transfer inline and fix an endian issue.
 
-doc reference errors (make refcheckdocs):
+v2:
+ - ljca: remove reset command.
+ - gpio/spi/i2c: add `default MFD_LJCA` in Kconfig.
+ - gpio: add "select GPIOLIB_IRQCHIP" in Kconfig.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230323115356.2602042-2-patrick.rudolph@9elements.com
+Ye Xiang (6):
+  usb: Add support for Intel LJCA device
+  usb: ljca: Add transport interfaces for sub-module drivers
+  Documentation: Add ABI doc for attributes of LJCA device
+  gpio: Add support for Intel LJCA USB GPIO driver
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+ .../ABI/testing/sysfs-bus-usb-devices-ljca    |   36 +
+ drivers/gpio/Kconfig                          |   12 +
+ drivers/gpio/Makefile                         |    1 +
+ drivers/gpio/gpio-ljca.c                      |  458 ++++++++
+ drivers/i2c/busses/Kconfig                    |   11 +
+ drivers/i2c/busses/Makefile                   |    1 +
+ drivers/i2c/busses/i2c-ljca.c                 |  355 ++++++
+ drivers/spi/Kconfig                           |   11 +
+ drivers/spi/Makefile                          |    1 +
+ drivers/spi/spi-ljca.c                        |  289 +++++
+ drivers/usb/misc/Kconfig                      |   13 +
+ drivers/usb/misc/Makefile                     |    1 +
+ drivers/usb/misc/ljca.c                       | 1012 +++++++++++++++++
+ include/linux/usb/ljca.h                      |   95 ++
+ 14 files changed, 2296 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
+ create mode 100644 drivers/gpio/gpio-ljca.c
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 drivers/usb/misc/ljca.c
+ create mode 100644 include/linux/usb/ljca.h
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+-- 
+2.34.1
 
