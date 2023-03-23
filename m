@@ -2,82 +2,113 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA646C6FEE
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Mar 2023 19:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF896C704F
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Mar 2023 19:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbjCWSFe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 23 Mar 2023 14:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
+        id S231445AbjCWSet (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 23 Mar 2023 14:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjCWSFd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Mar 2023 14:05:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A463DA270;
-        Thu, 23 Mar 2023 11:05:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2888E6284F;
-        Thu, 23 Mar 2023 18:05:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3B43C433D2;
-        Thu, 23 Mar 2023 18:05:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679594730;
-        bh=0865JfiFypru3FJc8vbsQvn4GQFZBP1qlUEDcWCh/Yo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OKs6VHVlxFd3kssyCa5WNZh9bqaD/EUq+z3FJehHT9Sk6YUwbBMf7LWnHIpcaAZ6B
-         XA92fwloEDTSnzwb0ry4iBWzHLPTitwI6Hoy/2hS+t9UPG8VHYM2HIURbcu/taKksj
-         KORCAzG7IAsoFSb4UOJyTAwGqQUjQA5WTda5zDaA=
-Date:   Thu, 23 Mar 2023 19:05:22 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ye Xiang <xiang.ye@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v6 1/6] usb: Add support for Intel LJCA device
-Message-ID: <ZByU4tbhkhnF4kMw@kroah.com>
-References: <20230323172113.1231050-1-xiang.ye@intel.com>
- <20230323172113.1231050-2-xiang.ye@intel.com>
+        with ESMTP id S231273AbjCWSep (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Mar 2023 14:34:45 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4D510AA5;
+        Thu, 23 Mar 2023 11:34:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679596482; x=1711132482;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LGy7Q84BjzZMuq5uOO+dWdMwnplCocPGQbI8I2BPrDE=;
+  b=dwLmymK1tYu+MCnyJfUc5XP93yQHGAPFNhhPqgqdnS8Y38SPwSsyTJxk
+   uaUNyExln5z608zgqFXMU8oJ6eUA/mZM/X6WrNkBVx2cx/dlVsBJ4HxCq
+   HZCh9fB6Y9urUA8+kfGNouISSiSQcVgG/CofzkA59Se8U2+PMUHO2J1nX
+   cbFfE5Gv0sYAIXHjxx1A7oIUN/sDME3tYYNdU/ae8Jz8H1Nsz3MybBV5e
+   rKHulSCe3YDydlhSZjg7V3+HEeLxhAsYpHWl78y8k6VoXUyl049w38pFi
+   YVsFGvLeLnM9Y7LdBHa3mSl3TL95FTExaxVUOhTGWQlExRsm3geCMiJq1
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="323448768"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="323448768"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 11:34:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="712774241"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="712774241"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 23 Mar 2023 11:34:39 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfPlm-000EcS-2D;
+        Thu, 23 Mar 2023 18:34:38 +0000
+Date:   Fri, 24 Mar 2023 02:34:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Mark Hasemeyer <markhas@chromium.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 3/4] i2c: designware: Use PCI PSP driver for
+ communication
+Message-ID: <202303240224.PvBra327-lkp@intel.com>
+References: <20230322210227.464-4-mario.limonciello@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230323172113.1231050-2-xiang.ye@intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230322210227.464-4-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 01:21:08AM +0800, Ye Xiang wrote:
-> +config USB_LJCA
-> +	tristate "Intel La Jolla Cove Adapter support"
-> +	select AUXILIARY_BUS
-> +	depends on USB
-> +	help
-> +	  This adds support for Intel La Jolla Cove USB-I2C/SPI/GPIO
-> +	  Master Adapter (LJCA). Additional drivers such as I2C_LJCA,
-> +	  GPIO_LJCA and SPI_LJCA must be enabled in order to use the
-> +	  functionality of the device.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called ljca.
+Hi Mario,
 
-That's a very generic name for a USB driver, why not "usb_ljca"?
+Thank you for the patch! Yet something to improve:
 
-> +struct ljca_dev {
-> +	struct usb_device *udev;
+[auto build test ERROR on e6af5c0c4d32a27e04a56f29aad587e03ff427f1]
 
-You didn't remove this like you said you would :(
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/crypto-ccp-Bump-up-doorbell-debug-messages-to-error/20230323-050710
+base:   e6af5c0c4d32a27e04a56f29aad587e03ff427f1
+patch link:    https://lore.kernel.org/r/20230322210227.464-4-mario.limonciello%40amd.com
+patch subject: [PATCH v6 3/4] i2c: designware: Use PCI PSP driver for communication
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230324/202303240224.PvBra327-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/addff0f32acff3a5278cbbf6fffc9054ecb03e2f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mario-Limonciello/crypto-ccp-Bump-up-doorbell-debug-messages-to-error/20230323-050710
+        git checkout addff0f32acff3a5278cbbf6fffc9054ecb03e2f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303240224.PvBra327-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> aarch64-linux-ld: Unexpected GOT/PLT entries detected!
+>> aarch64-linux-ld: Unexpected run-time procedure linkages detected!
+   aarch64-linux-ld: drivers/i2c/busses/i2c-designware-amdpsp.o: in function `psp_send_i2c_req':
+   i2c-designware-amdpsp.c:(.text+0xe0): undefined reference to `psp_send_platform_access_msg'
+   aarch64-linux-ld: i2c-designware-amdpsp.c:(.text+0x16c): undefined reference to `psp_send_platform_access_msg'
+   aarch64-linux-ld: drivers/i2c/busses/i2c-designware-amdpsp.o: in function `i2c_dw_amdpsp_probe_lock_support':
+   i2c-designware-amdpsp.c:(.text+0xad4): undefined reference to `psp_check_platform_access_status'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
