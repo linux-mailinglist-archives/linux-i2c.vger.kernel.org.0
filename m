@@ -2,121 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5484B6C8409
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Mar 2023 18:57:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4627A6C86F5
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Mar 2023 21:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbjCXR5o (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Mar 2023 13:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
+        id S232102AbjCXUkg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 24 Mar 2023 16:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbjCXR5Q (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Mar 2023 13:57:16 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DA21A676;
-        Fri, 24 Mar 2023 10:56:51 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id ED4C1660314D;
-        Fri, 24 Mar 2023 17:55:15 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679680516;
-        bh=ucKptTRH40q7Kj2bw2zloSjqxJ0pG6yGrjzKJ5KlYwU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LIjMWrqwnVcNAjzP9NTGnicJB7V6hTe+Bk/eVKIt2JjVk21uvSkTKMOW+pWVoVdDn
-         qoPq/ScuJlq7jGnFB5zGEKtUTNI9bRQbzaq+gCzmoG9brHRxSYSw7A+pbIVlCM1vgR
-         itgJNPt+pYx/WOlLLDtc9ZOJtzSyogF2HYzrg23BpgT0oRUjm5ZHOKxiK8fQlJHSCF
-         RRcoWsdhiVljHKShYfJF8iyqbHUKgixnoCWiYN1FTsBNYEbBpBXtw1GrvWEIZ9Ko6x
-         3T+xoOoFMgh6P2plUIVKMMgoOhnorkoze3x+g/hGboDNnCc2qX2a0jPkdPksqWjDP3
-         ztFz8mKr/wIVA==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     matthias.bgg@gmail.com
-Cc:     qii.wang@mediatek.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jassisinghbrar@gmail.com,
-        houlong.wei@mediatek.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v1 18/18] arm64: dts: mediatek: mt6795-xperia-m5: Add NXP PN547 NFC on I2C3
-Date:   Fri, 24 Mar 2023 18:54:56 +0100
-Message-Id: <20230324175456.219954-19-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230324175456.219954-1-angelogioacchino.delregno@collabora.com>
-References: <20230324175456.219954-1-angelogioacchino.delregno@collabora.com>
+        with ESMTP id S231889AbjCXUkf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Mar 2023 16:40:35 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1541E288;
+        Fri, 24 Mar 2023 13:40:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679690434; x=1711226434;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QIZyQqD0ZTQusCHo6ZU0wikQoizemeejriUuniYY2Z0=;
+  b=aa0+YkE9yReWxlsjvFfvN7Vy1T9eu4EY5J1InF7Enrt+4lTkimL6XF9q
+   cUB+s0qYxYsyq6J1WwIsO3TcxIZCU00ataimD6pHoIC73qGk9D5oA8y1c
+   izGx8u7ALW9JgmFEt/gx4/sgf8Lfq4wVW1VBJ6AWdd9MyB3AiHfaQRN/+
+   EDLlV17ltQLg9LUwX3Qm+AJgk1A0UkPDvvgxxHB6Na/9ZxaV6C6/TSaU8
+   SBIydRyQ1ylRv86olgpBbQMrq/WnALoQmdUXMh/bX3Y5UpAWZ3GY8MRu0
+   tQZP4jy5NBgFLdXnhqmDzwBDNQ3VANGyPxwKk5NrNmiAUfL/RGgVRTIYt
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="337385982"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="337385982"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 13:40:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="826389054"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="826389054"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Mar 2023 13:40:32 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfoD9-000Fdj-2B;
+        Fri, 24 Mar 2023 20:40:31 +0000
+Date:   Sat, 25 Mar 2023 04:40:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Mark Hasemeyer <markhas@chromium.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 4/4] i2c: designware: Add doorbell support for
+ Mendocino
+Message-ID: <202303250445.xSF29gIw-lkp@intel.com>
+References: <20230322210227.464-5-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322210227.464-5-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add support for the NXP PN547 NFC chip found on this smartphone and
-configure its pins.
+Hi Mario,
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- .../dts/mediatek/mt6795-sony-xperia-m5.dts    | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Thank you for the patch! Yet something to improve:
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts b/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
-index bff0760cc1c8..8f00232e7348 100644
---- a/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
-@@ -5,6 +5,7 @@
-  */
- 
- /dts-v1/;
-+#include <dt-bindings/gpio/gpio.h>
- #include "mt6795.dtsi"
- 
- / {
-@@ -112,6 +113,16 @@ magnetometer@0x12 {
- 		reg = <0x12>;
- 	};
- 
-+	pn547: nfc@28 {
-+		compatible = "nxp,pn544-i2c";
-+		reg = <0x28>;
-+		interrupts-extended = <&pio 3 IRQ_TYPE_EDGE_RISING>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&nfc_pins>;
-+		enable-gpios = <&pio 149 GPIO_ACTIVE_HIGH>;
-+		firmware-gpios = <&pio 94 GPIO_ACTIVE_HIGH>;
-+	};
-+
- 	proximity@48 {
- 		compatible = "sensortek,stk3310";
- 		reg = <0x48>;
-@@ -122,6 +133,19 @@ proximity@48 {
- };
- 
- &pio {
-+	nfc_pins: nfc-pins {
-+		pins-irq {
-+			pinmux = <PINMUX_GPIO3__FUNC_GPIO3>;
-+			bias-pull-down;
-+			input-enable;
-+		};
-+
-+		pins-fw-ven {
-+			pinmux = <PINMUX_GPIO94__FUNC_GPIO94>,
-+				 <PINMUX_GPIO149__FUNC_GPIO149>;
-+		};
-+	};
-+
- 	ts_pins: touchscreen-pins {
- 		pins-irq {
- 			pinmux = <PINMUX_GPIO6__FUNC_GPIO6>;
+[auto build test ERROR on e6af5c0c4d32a27e04a56f29aad587e03ff427f1]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/crypto-ccp-Bump-up-doorbell-debug-messages-to-error/20230323-050710
+base:   e6af5c0c4d32a27e04a56f29aad587e03ff427f1
+patch link:    https://lore.kernel.org/r/20230322210227.464-5-mario.limonciello%40amd.com
+patch subject: [PATCH v6 4/4] i2c: designware: Add doorbell support for Mendocino
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230325/202303250445.xSF29gIw-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/9056f37ee3c0bd46052df6b3fb08c0ad951752a4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mario-Limonciello/crypto-ccp-Bump-up-doorbell-debug-messages-to-error/20230323-050710
+        git checkout 9056f37ee3c0bd46052df6b3fb08c0ad951752a4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303250445.xSF29gIw-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   ld: drivers/i2c/busses/i2c-designware-amdpsp.o: in function `psp_send_i2c_req_mendocino':
+>> i2c-designware-amdpsp.c:(.text+0x12): undefined reference to `psp_ring_platform_doorbell'
+   ld: drivers/i2c/busses/i2c-designware-amdpsp.o: in function `psp_send_i2c_req_cezanne':
+   i2c-designware-amdpsp.c:(.text+0x67): undefined reference to `psp_send_platform_access_msg'
+   ld: drivers/i2c/busses/i2c-designware-amdpsp.o: in function `i2c_dw_amdpsp_probe_lock_support':
+   i2c-designware-amdpsp.c:(.text+0x497): undefined reference to `psp_check_platform_access_status'
+
 -- 
-2.40.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
