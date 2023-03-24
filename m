@@ -2,110 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC9B6C75F1
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Mar 2023 03:36:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A286C7868
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Mar 2023 08:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231695AbjCXCgB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 23 Mar 2023 22:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
+        id S229681AbjCXHHC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 24 Mar 2023 03:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCXCgA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Mar 2023 22:36:00 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D29215543;
-        Thu, 23 Mar 2023 19:35:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679625360; x=1711161360;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VBF+ycG5fs3k8LlNB8Gn3AJN3rz4Hd33qLkoXX/pOsk=;
-  b=WuOyBEOshqGyeWYUSkcVOaXpwHD55GHGhuQiwVFsqwpkdF1cxT1ZLGU/
-   r4Zud+K9DpeFyvIGqw3CbMuj8OZj4bRTnQNMXXRAUWjMDdJpNLrbtVmNM
-   CIqMItyrLJSEmuoy0YhbCSDUM/Z2ZisTESqdjKSk4RH21JRjzdu+fIBnK
-   cke2yNi1Taay0h/aZCpA8sGeeqxgMW4wv4pFxpF5aGqJsGNBgQ/ovoyqw
-   y7GDD8jgU6FQv6k69AgZC7bNtFLVG/+/iqNc2I2b3GgQSlXsNnQJF0jO9
-   sS2/3/QwCZ83efeGxGj4tkho6s64TeGo3621vSBmQxFN+um5k8z4zXYSK
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="328089340"
-X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
-   d="scan'208";a="328089340"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 19:35:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="746990100"
-X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
-   d="scan'208";a="746990100"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 23 Mar 2023 19:35:55 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pfXHW-000Eui-1J;
-        Fri, 24 Mar 2023 02:35:54 +0000
-Date:   Fri, 24 Mar 2023 10:35:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Mark Hasemeyer <markhas@chromium.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 3/4] i2c: designware: Use PCI PSP driver for
- communication
-Message-ID: <202303241037.WtZWjxfx-lkp@intel.com>
-References: <20230322210227.464-4-mario.limonciello@amd.com>
+        with ESMTP id S229484AbjCXHHB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Mar 2023 03:07:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6925F133;
+        Fri, 24 Mar 2023 00:07:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0FE6CB822B5;
+        Fri, 24 Mar 2023 07:06:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58D20C433D2;
+        Fri, 24 Mar 2023 07:06:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679641617;
+        bh=xa2eNmFWlrxdCJd6KG+ulsuJ2CTY7BiQa67Rp7lKcOA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=EycP0j3JUOQqoZQId36jbba/Z+4akkSb9XDx2Tl+FApgCDLJOzFYTOZrZybNylXKK
+         OjOkHaptusdf88v7abQJU560fbORqLrgzpLs4srecB0Q1c9M+LqeXOvNj3dnGHiqTJ
+         hoFQATO3yUKzx73tlRCxDIrbOuOSQfrxjqlINsrl5b0yQkF1cCp9za7DIt3bD1Ngks
+         AV4y8zs+xyLByqiiN8y9YaptvjpX7JCcPsCFbHN3CqyfvepQfUYUVH+u8wpTc0jZby
+         Poj2mH/9Tsr54HoVmmaHuX1u1arD1zUM6+Kiz5xc9OSCpZgaIA12QzVB2dlvs2UHO3
+         K3DtAsEo59FqA==
+Date:   Fri, 24 Mar 2023 08:06:48 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c-for-6.3-rc4
+Message-ID: <ZB1MCGRYs+W1cwG8@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="UhYuCbGSzcaRCueC"
 Content-Disposition: inline
-In-Reply-To: <20230322210227.464-4-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Mario,
 
-Thank you for the patch! Yet something to improve:
+--UhYuCbGSzcaRCueC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[auto build test ERROR on e6af5c0c4d32a27e04a56f29aad587e03ff427f1]
+The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/crypto-ccp-Bump-up-doorbell-debug-messages-to-error/20230323-050710
-base:   e6af5c0c4d32a27e04a56f29aad587e03ff427f1
-patch link:    https://lore.kernel.org/r/20230322210227.464-4-mario.limonciello%40amd.com
-patch subject: [PATCH v6 3/4] i2c: designware: Use PCI PSP driver for communication
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230324/202303241037.WtZWjxfx-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/addff0f32acff3a5278cbbf6fffc9054ecb03e2f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mario-Limonciello/crypto-ccp-Bump-up-doorbell-debug-messages-to-error/20230323-050710
-        git checkout addff0f32acff3a5278cbbf6fffc9054ecb03e2f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303241037.WtZWjxfx-lkp@intel.com/
+are available in the Git repository at:
 
-All errors (new ones prefixed by >>):
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.3-rc4
 
-   ld: drivers/i2c/busses/i2c-designware-amdpsp.o: in function `psp_send_i2c_req':
->> i2c-designware-amdpsp.c:(.text+0x77): undefined reference to `psp_send_platform_access_msg'
-   ld: i2c-designware-amdpsp.c:(.text+0xbb): undefined reference to `psp_send_platform_access_msg'
-   ld: drivers/i2c/busses/i2c-designware-amdpsp.o: in function `i2c_dw_amdpsp_probe_lock_support':
->> i2c-designware-amdpsp.c:(.text+0x400): undefined reference to `psp_check_platform_access_status'
+for you to fetch changes up to 92fbb6d1296f81f41f65effd7f5f8c0f74943d15:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+  i2c: xgene-slimpro: Fix out-of-bounds bug in xgene_slimpro_i2c_xfer() (2023-03-16 21:15:43 +0100)
+
+----------------------------------------------------------------
+A set of regular driver fixes
+
+----------------------------------------------------------------
+Alexander Stein (2):
+      i2c: imx-lpi2c: clean rx/tx buffers upon new message
+      i2c: imx-lpi2c: check only for enabled interrupt flags
+
+Matthias Schiffer (1):
+      i2c: mxs: ensure that DMA buffers are safe for DMA
+
+Wei Chen (1):
+      i2c: xgene-slimpro: Fix out-of-bounds bug in xgene_slimpro_i2c_xfer()
+
+Yicong Yang (2):
+      i2c: hisi: Avoid redundant interrupts
+      i2c: hisi: Only use the completion interrupt to finish the transfer
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andi Shyti (1):
+      (Rev.) i2c: xgene-slimpro: Fix out-of-bounds bug in xgene_slimpro_i2c_xfer()
+
+Emanuele Ghidoli (2):
+      (Test) i2c: imx-lpi2c: check only for enabled interrupt flags
+      (Test) i2c: imx-lpi2c: clean rx/tx buffers upon new message
+
+ drivers/i2c/busses/i2c-hisi.c          | 13 ++++++++++++-
+ drivers/i2c/busses/i2c-imx-lpi2c.c     |  6 ++++++
+ drivers/i2c/busses/i2c-mxs.c           | 18 +++++++++++++-----
+ drivers/i2c/busses/i2c-xgene-slimpro.c |  3 +++
+ 4 files changed, 34 insertions(+), 6 deletions(-)
+
+--UhYuCbGSzcaRCueC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQdTAgACgkQFA3kzBSg
+KbZsyQ//R3FvRapjAT3CSJbgsRoQFr+TEusUI9DenVgmvzBykQQdgs+mjHK67xVp
+8ycjOhlHYNZN1adDAJjFnlFFGIW1dICxJLkV1A6MOLxbdERVHUuA4ajio3Pxvbcp
+b5oELGkw27JF5WpiHprj/70tcq2AuA/rG/ECvoRx5Xsjpk09P2dA+nEEOpxU58Ff
+Sg2o77fDbtO9OqA2VKSTw6qG08ud2BBw7K7nW2alX7NcfSs4+l1u1Tyipdr5+8Ki
+a+06HSI/dforBhWU9m551wK+OrYBdLlIFb8QnS3pxT9rrZ6Br3qQhPSJfIhgWfhf
+inhCmRzIaYR9k+hQTzpnSzeIQZ76hp98cs8EsU4eRYAGOiMcNOQ3oOO1Qf5mgLdY
+dt2GWKm2eESVvPXa0pi6nA11f1dWh67mEWhVSLSsCLiLyIM0aJCo7+k5FE1rJhnC
+so+WGZHJW3ul6a0gCdPCBXM8892PcDswogTwaj2YCRbtGDmdqL1Bfk47JIU3zOBl
+jvUfuwmsE0kRTugIvT1a14eyBWV5L2RXM9SYuCCeJQcI0ZB4f1csObfOyVIhnuS/
+aQ1wcle3upMGhypb9k476jbDj8IfO7zUgdcWsk1bqLGo+eTXSj4onzFfa9Per+sd
+JDxAS7+sKvPLasKcl6YjKzQspe0iRn43Y97SaTe86kDUOnZXUnE=
+=Ofkh
+-----END PGP SIGNATURE-----
+
+--UhYuCbGSzcaRCueC--
