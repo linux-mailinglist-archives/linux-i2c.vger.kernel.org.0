@@ -2,35 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8426C83D9
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Mar 2023 18:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9026C83E2
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Mar 2023 18:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbjCXR4B (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Mar 2023 13:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
+        id S231852AbjCXR4c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 24 Mar 2023 13:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbjCXRz6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Mar 2023 13:55:58 -0400
+        with ESMTP id S231860AbjCXR4W (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Mar 2023 13:56:22 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A576B1A676;
-        Fri, 24 Mar 2023 10:55:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2841ADF6;
+        Fri, 24 Mar 2023 10:55:58 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B8C23660312F;
-        Fri, 24 Mar 2023 17:55:03 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9891D6603132;
+        Fri, 24 Mar 2023 17:55:04 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679680504;
-        bh=K0Zn+1zJOvMiVcMPpFQWTebyCIuwNTPLMAYftcNlQPQ=;
+        s=mail; t=1679680505;
+        bh=+C19HY45yz9Sl0OrylkeSlqeTXjPBT2+I9ZB7T/mxXQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H0QTPx+iyIn435vWHAlLMr468WsGxAnYdsdmi47ETRYuK1LkfRrX5A6+G8NRmK8rf
-         npzjmmyuClzcIORD6vKXpKfjWIVvCdQPGCc00n7sDi7X0zTAdkfghZFFnyNaJiuRmu
-         kA1n836ZmRtxbXLGPwjq/wt+7kQvL9j5vHs1Wgup/6MTybPrG7VeHn+ZEWAs81XTq+
-         QyyiLZpLOmPLaWD2lzbi1VcKl7fkDEAnIxfP2cW95S0pwTpXX0Sp4NmuSaRUHsKNk7
-         BB7/bd1of1Bvv8hjkLgNX/koHH8FKzwySysSzq4wGwaOQekPaqxRBPZL1Kwhux+4f4
-         tVSpxn5Kx3LSw==
+        b=mUyYmZkjPt15oypSkEsngDvZ/RDWtpwT5TLj3nZMFoVqYB8jeT/iiBLY6FSU6OZdn
+         sjm0jptoppCrpZoXxxlnSnL+GAlcox4Htxi/O0x7mW0l+HqiWow9G9+PkLnZXx/i3x
+         Csc6ViAtkayXowL6BhJVgcNYkn2O3a7ez5qt19rsz3TQXVcvw4TS6Osd3/Or1soxDf
+         kB/IFYh3CZX3hpm2OFo4GcAkOKe1n1vCSSklvwYdR3JTuGiSJUHShBoKIIDlx0zyrU
+         iYHIk93ZltXcbI76Xl+68CvJ8J8DRPn3nsR7/PA1WbnjmMIOx4ClC4SgAemIGn7M1M
+         +qPxtKdSsGsdw==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -43,9 +43,9 @@ Cc:     qii.wang@mediatek.com, robh+dt@kernel.org,
         phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v1 04/18] dt-bindings: i2c: i2c-mt65xx: Add compatible for MT6795 Helio X10
-Date:   Fri, 24 Mar 2023 18:54:42 +0100
-Message-Id: <20230324175456.219954-5-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v1 05/18] arm64: dts: mediatek: mt6795: Add nodes for I2C controllers
+Date:   Fri, 24 Mar 2023 18:54:43 +0100
+Message-Id: <20230324175456.219954-6-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230324175456.219954-1-angelogioacchino.delregno@collabora.com>
 References: <20230324175456.219954-1-angelogioacchino.delregno@collabora.com>
@@ -60,29 +60,85 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The MT6795 SoC uses the same I2C controller parameters as MT8173:
-add a new compatible string for it.
+Add all four I2C controller nodes but keep them in disabled state as
+usage is board-dependant.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt6795.dtsi | 60 ++++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
-index 72ae2e01cf22..685da4df688d 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
-+++ b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
-@@ -45,6 +45,10 @@ properties:
-           - enum:
-               - mediatek,mt8365-i2c
-           - const: mediatek,mt8168-i2c
-+      - items:
-+          - enum:
-+              - mediatek,mt6795-i2c
-+          - const: mediatek,mt8173-i2c
-       - items:
-           - enum:
-               - mediatek,mt8195-i2c
+diff --git a/arch/arm64/boot/dts/mediatek/mt6795.dtsi b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
+index 26d640e1bfb6..ceb6fc948d8a 100644
+--- a/arch/arm64/boot/dts/mediatek/mt6795.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
+@@ -445,6 +445,66 @@ uart3: serial@11005000 {
+ 			status = "disabled";
+ 		};
+ 
++		i2c0: i2c@11007000 {
++			compatible = "mediatek,mt6795-i2c", "mediatek,mt8173-i2c";
++			reg = <0 0x11007000 0 0x70>, <0 0x11000100 0 0x80>;
++			interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_LOW>;
++			clock-div = <16>;
++			clocks = <&pericfg CLK_PERI_I2C0>, <&pericfg CLK_PERI_AP_DMA>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
++		i2c1: i2c@11008000 {
++			compatible = "mediatek,mt6795-i2c", "mediatek,mt8173-i2c";
++			reg = <0 0x11008000 0 0x70>, <0 0x11000180 0 0x80>;
++			interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_LOW>;
++			clock-div = <16>;
++			clocks = <&pericfg CLK_PERI_I2C1>, <&pericfg CLK_PERI_AP_DMA>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
++		i2c2: i2c@11009000 {
++			compatible = "mediatek,mt6795-i2c", "mediatek,mt8173-i2c";
++			reg = <0 0x11009000 0 0x70>, <0 0x11000200 0 0x80>;
++			interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_LOW>;
++			clock-div = <16>;
++			clocks = <&pericfg CLK_PERI_I2C2>, <&pericfg CLK_PERI_AP_DMA>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
++		i2c3: i2c@11010000 {
++			compatible = "mediatek,mt6795-i2c", "mediatek,mt8173-i2c";
++			reg = <0 0x11010000 0 0x70>, <0 0x11000280 0 0x80>;
++			interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_LOW>;
++			clock-div = <16>;
++			clocks = <&pericfg CLK_PERI_I2C3>, <&pericfg CLK_PERI_AP_DMA>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
++		i2c4: i2c@11011000 {
++			compatible = "mediatek,mt6795-i2c", "mediatek,mt8173-i2c";
++			reg = <0 0x11011000 0 0x70>, <0 0x11000300 0 0x80>;
++			interrupts = <GIC_SPI 88 IRQ_TYPE_LEVEL_LOW>;
++			clock-div = <16>;
++			clocks = <&pericfg CLK_PERI_I2C4>, <&pericfg CLK_PERI_AP_DMA>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
+ 		mmc0: mmc@11230000 {
+ 			compatible = "mediatek,mt6795-mmc";
+ 			reg = <0 0x11230000 0 0x1000>;
 -- 
 2.40.0
 
