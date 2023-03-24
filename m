@@ -2,129 +2,148 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A286C7868
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Mar 2023 08:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 923626C7B69
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Mar 2023 10:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjCXHHC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Mar 2023 03:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49388 "EHLO
+        id S231269AbjCXJa6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 24 Mar 2023 05:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCXHHB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Mar 2023 03:07:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6925F133;
-        Fri, 24 Mar 2023 00:07:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FE6CB822B5;
-        Fri, 24 Mar 2023 07:06:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58D20C433D2;
-        Fri, 24 Mar 2023 07:06:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679641617;
-        bh=xa2eNmFWlrxdCJd6KG+ulsuJ2CTY7BiQa67Rp7lKcOA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EycP0j3JUOQqoZQId36jbba/Z+4akkSb9XDx2Tl+FApgCDLJOzFYTOZrZybNylXKK
-         OjOkHaptusdf88v7abQJU560fbORqLrgzpLs4srecB0Q1c9M+LqeXOvNj3dnGHiqTJ
-         hoFQATO3yUKzx73tlRCxDIrbOuOSQfrxjqlINsrl5b0yQkF1cCp9za7DIt3bD1Ngks
-         AV4y8zs+xyLByqiiN8y9YaptvjpX7JCcPsCFbHN3CqyfvepQfUYUVH+u8wpTc0jZby
-         Poj2mH/9Tsr54HoVmmaHuX1u1arD1zUM6+Kiz5xc9OSCpZgaIA12QzVB2dlvs2UHO3
-         K3DtAsEo59FqA==
-Date:   Fri, 24 Mar 2023 08:06:48 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c-for-6.3-rc4
-Message-ID: <ZB1MCGRYs+W1cwG8@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
+        with ESMTP id S230061AbjCXJa5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Mar 2023 05:30:57 -0400
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B910323851
+        for <linux-i2c@vger.kernel.org>; Fri, 24 Mar 2023 02:30:53 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.187.55])
+        by michel.telenet-ops.be with bizsmtp
+        id c9Wh290031C8whw069Whz3; Fri, 24 Mar 2023 10:30:50 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pfdkD-00EQQI-Tm;
+        Fri, 24 Mar 2023 10:30:41 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pfdkv-00CQVy-0d;
+        Fri, 24 Mar 2023 10:30:41 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v2] treewide: Fix instantiation of devices in DT overlays
+Date:   Fri, 24 Mar 2023 10:30:39 +0100
+Message-Id: <240155f20aae47e9f7461e2b7416120ba6238886.1679650087.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UhYuCbGSzcaRCueC"
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.4 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+When loading a DT overlay that creates a device, the device is not
+instantiated, unless the DT overlay is unloaded and reloaded again.
 
---UhYuCbGSzcaRCueC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Saravana explains:
+  Basically for all overlays (I hope the function is only used for
+  overlays) we assume all nodes are NOT devices until they actually
+  get added as a device.
 
-The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
+Based on a patch by Saravana Kannan, which covered only platform and spi
+devices.
 
-  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
+Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
+Link: https://lore.kernel.org/r/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=rWYnkCZ6z5bGX-wj4w@mail.gmail.com
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Mark Brown <broonie@kernel.org>
+---
+v2:
+  - Add Acked-by,
+  - Drop RFC.
+---
+ drivers/bus/imx-weim.c    | 1 +
+ drivers/i2c/i2c-core-of.c | 1 +
+ drivers/of/dynamic.c      | 1 +
+ drivers/of/platform.c     | 1 +
+ drivers/spi/spi.c         | 1 +
+ 5 files changed, 5 insertions(+)
 
-are available in the Git repository at:
+diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+index 36d42484142aede2..898e23a4231400fa 100644
+--- a/drivers/bus/imx-weim.c
++++ b/drivers/bus/imx-weim.c
+@@ -329,6 +329,7 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
+ 				 "Failed to setup timing for '%pOF'\n", rd->dn);
+ 
+ 		if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
++			rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 			if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
+ 				dev_err(&pdev->dev,
+ 					"Failed to create child device '%pOF'\n",
+diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+index aa93467784c29c89..303f9003562eed3d 100644
+--- a/drivers/i2c/i2c-core-of.c
++++ b/drivers/i2c/i2c-core-of.c
+@@ -178,6 +178,7 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
+ 			return NOTIFY_OK;
+ 		}
+ 
++		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 		client = of_i2c_register_device(adap, rd->dn);
+ 		if (IS_ERR(client)) {
+ 			dev_err(&adap->dev, "failed to create client for '%pOF'\n",
+diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+index 07d93753b12f5f4d..e311d406b1705306 100644
+--- a/drivers/of/dynamic.c
++++ b/drivers/of/dynamic.c
+@@ -226,6 +226,7 @@ static void __of_attach_node(struct device_node *np)
+ 	np->sibling = np->parent->child;
+ 	np->parent->child = np;
+ 	of_node_clear_flag(np, OF_DETACHED);
++	np->fwnode.flags |= FWNODE_FLAG_NOT_DEVICE;
+ }
+ 
+ /**
+diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+index b2bd2e783445dd78..17c92cbfb62ee3ef 100644
+--- a/drivers/of/platform.c
++++ b/drivers/of/platform.c
+@@ -737,6 +737,7 @@ static int of_platform_notify(struct notifier_block *nb,
+ 		if (of_node_check_flag(rd->dn, OF_POPULATED))
+ 			return NOTIFY_OK;
+ 
++		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 		/* pdev_parent may be NULL when no bus platform device */
+ 		pdev_parent = of_find_device_by_node(rd->dn->parent);
+ 		pdev = of_platform_device_create(rd->dn, NULL,
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 8e8af148b1dc371e..66ac67580d2a473b 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -4527,6 +4527,7 @@ static int of_spi_notify(struct notifier_block *nb, unsigned long action,
+ 			return NOTIFY_OK;
+ 		}
+ 
++		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 		spi = of_register_spi_device(ctlr, rd->dn);
+ 		put_device(&ctlr->dev);
+ 
+-- 
+2.34.1
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.3-rc4
-
-for you to fetch changes up to 92fbb6d1296f81f41f65effd7f5f8c0f74943d15:
-
-  i2c: xgene-slimpro: Fix out-of-bounds bug in xgene_slimpro_i2c_xfer() (2023-03-16 21:15:43 +0100)
-
-----------------------------------------------------------------
-A set of regular driver fixes
-
-----------------------------------------------------------------
-Alexander Stein (2):
-      i2c: imx-lpi2c: clean rx/tx buffers upon new message
-      i2c: imx-lpi2c: check only for enabled interrupt flags
-
-Matthias Schiffer (1):
-      i2c: mxs: ensure that DMA buffers are safe for DMA
-
-Wei Chen (1):
-      i2c: xgene-slimpro: Fix out-of-bounds bug in xgene_slimpro_i2c_xfer()
-
-Yicong Yang (2):
-      i2c: hisi: Avoid redundant interrupts
-      i2c: hisi: Only use the completion interrupt to finish the transfer
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Andi Shyti (1):
-      (Rev.) i2c: xgene-slimpro: Fix out-of-bounds bug in xgene_slimpro_i2c_xfer()
-
-Emanuele Ghidoli (2):
-      (Test) i2c: imx-lpi2c: check only for enabled interrupt flags
-      (Test) i2c: imx-lpi2c: clean rx/tx buffers upon new message
-
- drivers/i2c/busses/i2c-hisi.c          | 13 ++++++++++++-
- drivers/i2c/busses/i2c-imx-lpi2c.c     |  6 ++++++
- drivers/i2c/busses/i2c-mxs.c           | 18 +++++++++++++-----
- drivers/i2c/busses/i2c-xgene-slimpro.c |  3 +++
- 4 files changed, 34 insertions(+), 6 deletions(-)
-
---UhYuCbGSzcaRCueC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQdTAgACgkQFA3kzBSg
-KbZsyQ//R3FvRapjAT3CSJbgsRoQFr+TEusUI9DenVgmvzBykQQdgs+mjHK67xVp
-8ycjOhlHYNZN1adDAJjFnlFFGIW1dICxJLkV1A6MOLxbdERVHUuA4ajio3Pxvbcp
-b5oELGkw27JF5WpiHprj/70tcq2AuA/rG/ECvoRx5Xsjpk09P2dA+nEEOpxU58Ff
-Sg2o77fDbtO9OqA2VKSTw6qG08ud2BBw7K7nW2alX7NcfSs4+l1u1Tyipdr5+8Ki
-a+06HSI/dforBhWU9m551wK+OrYBdLlIFb8QnS3pxT9rrZ6Br3qQhPSJfIhgWfhf
-inhCmRzIaYR9k+hQTzpnSzeIQZ76hp98cs8EsU4eRYAGOiMcNOQ3oOO1Qf5mgLdY
-dt2GWKm2eESVvPXa0pi6nA11f1dWh67mEWhVSLSsCLiLyIM0aJCo7+k5FE1rJhnC
-so+WGZHJW3ul6a0gCdPCBXM8892PcDswogTwaj2YCRbtGDmdqL1Bfk47JIU3zOBl
-jvUfuwmsE0kRTugIvT1a14eyBWV5L2RXM9SYuCCeJQcI0ZB4f1csObfOyVIhnuS/
-aQ1wcle3upMGhypb9k476jbDj8IfO7zUgdcWsk1bqLGo+eTXSj4onzFfa9Per+sd
-JDxAS7+sKvPLasKcl6YjKzQspe0iRn43Y97SaTe86kDUOnZXUnE=
-=Ofkh
------END PGP SIGNATURE-----
-
---UhYuCbGSzcaRCueC--
