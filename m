@@ -2,35 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9026C83E2
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Mar 2023 18:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FBF66C83F0
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Mar 2023 18:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231852AbjCXR4c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Mar 2023 13:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59860 "EHLO
+        id S232206AbjCXR4y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 24 Mar 2023 13:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbjCXR4W (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Mar 2023 13:56:22 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2841ADF6;
-        Fri, 24 Mar 2023 10:55:58 -0700 (PDT)
+        with ESMTP id S232142AbjCXR4l (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Mar 2023 13:56:41 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433A21A4BA;
+        Fri, 24 Mar 2023 10:56:22 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9891D6603132;
-        Fri, 24 Mar 2023 17:55:04 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 845D96603131;
+        Fri, 24 Mar 2023 17:55:05 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679680505;
-        bh=+C19HY45yz9Sl0OrylkeSlqeTXjPBT2+I9ZB7T/mxXQ=;
+        s=mail; t=1679680506;
+        bh=JgYNzYY/JT/ZxbQnRLMlhIx1cKKvJaqNQPrMZEWb9yg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mUyYmZkjPt15oypSkEsngDvZ/RDWtpwT5TLj3nZMFoVqYB8jeT/iiBLY6FSU6OZdn
-         sjm0jptoppCrpZoXxxlnSnL+GAlcox4Htxi/O0x7mW0l+HqiWow9G9+PkLnZXx/i3x
-         Csc6ViAtkayXowL6BhJVgcNYkn2O3a7ez5qt19rsz3TQXVcvw4TS6Osd3/Or1soxDf
-         kB/IFYh3CZX3hpm2OFo4GcAkOKe1n1vCSSklvwYdR3JTuGiSJUHShBoKIIDlx0zyrU
-         iYHIk93ZltXcbI76Xl+68CvJ8J8DRPn3nsR7/PA1WbnjmMIOx4ClC4SgAemIGn7M1M
-         +qPxtKdSsGsdw==
+        b=GOSa+0CU0oFtU7GYaAHdanaai5ki08N7IqjNt2o708HST2kpjGeyod96NZ1q9JgWU
+         KThCNzCr6LBjhW5gt3eNMreI1cZiR4WbCASz4Bmrt/UsNRDl7U/qCo1g4r4yKtdrn9
+         EqsLirIpqBPH7easvc0Cljh1pUyW89I/BKgHTvHvCNsw6RSuWkSsFQrXgsm+FQSU7J
+         FQAFwI18TjBxasdzEaO9T5KBaT6TkNNfbLJshIcuKGzweposrxrO0QbgLH80HDahZ0
+         34i4ICHZGPKUej7QqNkFDTrejyStZIga91g9VGWtSlePv8Fy+sTMO90gTtUAK1UG3C
+         bDKlZRfjmFveA==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -43,9 +43,9 @@ Cc:     qii.wang@mediatek.com, robh+dt@kernel.org,
         phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v1 05/18] arm64: dts: mediatek: mt6795: Add nodes for I2C controllers
-Date:   Fri, 24 Mar 2023 18:54:43 +0100
-Message-Id: <20230324175456.219954-6-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v1 06/18] arm64: dts: mediatek: mt6795: Add SoC power domains
+Date:   Fri, 24 Mar 2023 18:54:44 +0100
+Message-Id: <20230324175456.219954-7-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230324175456.219954-1-angelogioacchino.delregno@collabora.com>
 References: <20230324175456.219954-1-angelogioacchino.delregno@collabora.com>
@@ -60,85 +60,110 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add all four I2C controller nodes but keep them in disabled state as
-usage is board-dependant.
+Add power domain tree for various hardware blocks on MT6795.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt6795.dtsi | 60 ++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt6795.dtsi | 79 ++++++++++++++++++++++++
+ 1 file changed, 79 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt6795.dtsi b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
-index 26d640e1bfb6..ceb6fc948d8a 100644
+index ceb6fc948d8a..d63efb32e6bb 100644
 --- a/arch/arm64/boot/dts/mediatek/mt6795.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
-@@ -445,6 +445,66 @@ uart3: serial@11005000 {
- 			status = "disabled";
+@@ -8,6 +8,7 @@
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+ #include <dt-bindings/clock/mediatek,mt6795-clk.h>
+ #include <dt-bindings/pinctrl/mt6795-pinfunc.h>
++#include <dt-bindings/power/mt6795-power.h>
+ #include <dt-bindings/reset/mediatek,mt6795-resets.h>
+ 
+ / {
+@@ -264,6 +265,84 @@ pericfg: syscon@10003000 {
+ 			#reset-cells = <1>;
  		};
  
-+		i2c0: i2c@11007000 {
-+			compatible = "mediatek,mt6795-i2c", "mediatek,mt8173-i2c";
-+			reg = <0 0x11007000 0 0x70>, <0 0x11000100 0 0x80>;
-+			interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_LOW>;
-+			clock-div = <16>;
-+			clocks = <&pericfg CLK_PERI_I2C0>, <&pericfg CLK_PERI_AP_DMA>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
++		scpsys: syscon@10006000 {
++			compatible = "syscon", "simple-mfd";
++			reg = <0 0x10006000 0 0x1000>;
++			#power-domain-cells = <1>;
++
++			/* System Power Manager */
++			spm: power-controller {
++				compatible = "mediatek,mt6795-power-controller";
++				#address-cells = <1>;
++				#size-cells = <0>;
++				#power-domain-cells = <1>;
++
++				/* power domains of the SoC */
++				power-domain@MT6795_POWER_DOMAIN_VDEC {
++					reg = <MT6795_POWER_DOMAIN_VDEC>;
++					clocks = <&topckgen CLK_TOP_MM_SEL>;
++					clock-names = "mm";
++					#power-domain-cells = <0>;
++				};
++				power-domain@MT6795_POWER_DOMAIN_VENC {
++					reg = <MT6795_POWER_DOMAIN_VENC>;
++					clocks = <&topckgen CLK_TOP_MM_SEL>,
++						 <&topckgen CLK_TOP_VENC_SEL>;
++					clock-names = "mm", "venc";
++					#power-domain-cells = <0>;
++				};
++				power-domain@MT6795_POWER_DOMAIN_ISP {
++					reg = <MT6795_POWER_DOMAIN_ISP>;
++					clocks = <&topckgen CLK_TOP_MM_SEL>;
++					clock-names = "mm";
++					#power-domain-cells = <0>;
++				};
++
++				power-domain@MT6795_POWER_DOMAIN_MM {
++					reg = <MT6795_POWER_DOMAIN_MM>;
++					clocks = <&topckgen CLK_TOP_MM_SEL>;
++					clock-names = "mm";
++					#power-domain-cells = <0>;
++					mediatek,infracfg = <&infracfg>;
++				};
++
++				power-domain@MT6795_POWER_DOMAIN_MJC {
++					reg = <MT6795_POWER_DOMAIN_MJC>;
++					clocks = <&topckgen CLK_TOP_MM_SEL>,
++						 <&topckgen CLK_TOP_MJC_SEL>;
++					clock-names = "mm", "mjc";
++					#power-domain-cells = <0>;
++				};
++
++				power-domain@MT6795_POWER_DOMAIN_AUDIO {
++					reg = <MT6795_POWER_DOMAIN_AUDIO>;
++					#power-domain-cells = <0>;
++				};
++
++				mfg_async: power-domain@MT6795_POWER_DOMAIN_MFG_ASYNC {
++					reg = <MT6795_POWER_DOMAIN_MFG_ASYNC>;
++					clocks = <&clk26m>;
++					clock-names = "mfg";
++					#address-cells = <1>;
++					#size-cells = <0>;
++					#power-domain-cells = <1>;
++
++					power-domain@MT6795_POWER_DOMAIN_MFG_2D {
++						reg = <MT6795_POWER_DOMAIN_MFG_2D>;
++						#address-cells = <1>;
++						#size-cells = <0>;
++						#power-domain-cells = <1>;
++
++						power-domain@MT6795_POWER_DOMAIN_MFG {
++							reg = <MT6795_POWER_DOMAIN_MFG>;
++							#power-domain-cells = <0>;
++							mediatek,infracfg = <&infracfg>;
++						};
++					};
++				};
++			};
 +		};
 +
-+		i2c1: i2c@11008000 {
-+			compatible = "mediatek,mt6795-i2c", "mediatek,mt8173-i2c";
-+			reg = <0 0x11008000 0 0x70>, <0 0x11000180 0 0x80>;
-+			interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_LOW>;
-+			clock-div = <16>;
-+			clocks = <&pericfg CLK_PERI_I2C1>, <&pericfg CLK_PERI_AP_DMA>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c2: i2c@11009000 {
-+			compatible = "mediatek,mt6795-i2c", "mediatek,mt8173-i2c";
-+			reg = <0 0x11009000 0 0x70>, <0 0x11000200 0 0x80>;
-+			interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_LOW>;
-+			clock-div = <16>;
-+			clocks = <&pericfg CLK_PERI_I2C2>, <&pericfg CLK_PERI_AP_DMA>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c3: i2c@11010000 {
-+			compatible = "mediatek,mt6795-i2c", "mediatek,mt8173-i2c";
-+			reg = <0 0x11010000 0 0x70>, <0 0x11000280 0 0x80>;
-+			interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_LOW>;
-+			clock-div = <16>;
-+			clocks = <&pericfg CLK_PERI_I2C3>, <&pericfg CLK_PERI_AP_DMA>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c4: i2c@11011000 {
-+			compatible = "mediatek,mt6795-i2c", "mediatek,mt8173-i2c";
-+			reg = <0 0x11011000 0 0x70>, <0 0x11000300 0 0x80>;
-+			interrupts = <GIC_SPI 88 IRQ_TYPE_LEVEL_LOW>;
-+			clock-div = <16>;
-+			clocks = <&pericfg CLK_PERI_I2C4>, <&pericfg CLK_PERI_AP_DMA>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
- 		mmc0: mmc@11230000 {
- 			compatible = "mediatek,mt6795-mmc";
- 			reg = <0 0x11230000 0 0x1000>;
+ 		pio: pinctrl@10005000 {
+ 			compatible = "mediatek,mt6795-pinctrl";
+ 			reg = <0 0x10005000 0 0x1000>, <0 0x1000b000 0 0x1000>;
 -- 
 2.40.0
 
