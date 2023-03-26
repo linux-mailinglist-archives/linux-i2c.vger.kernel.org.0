@@ -2,36 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A8826C95E1
-	for <lists+linux-i2c@lfdr.de>; Sun, 26 Mar 2023 17:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2EA6C9617
+	for <lists+linux-i2c@lfdr.de>; Sun, 26 Mar 2023 17:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjCZPCd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 26 Mar 2023 11:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
+        id S232495AbjCZPSb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 26 Mar 2023 11:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCZPCc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 26 Mar 2023 11:02:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAE3213F;
-        Sun, 26 Mar 2023 08:02:31 -0700 (PDT)
+        with ESMTP id S229573AbjCZPSa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 26 Mar 2023 11:18:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587A43A9A;
+        Sun, 26 Mar 2023 08:18:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63BDBB80CA7;
-        Sun, 26 Mar 2023 15:02:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E9C1C433EF;
-        Sun, 26 Mar 2023 15:02:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE8B860EF4;
+        Sun, 26 Mar 2023 15:18:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A22AC433D2;
+        Sun, 26 Mar 2023 15:18:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679842949;
-        bh=dAwvdcQMLX/kWoENcNEUlS6j4GfV4F+aixjK1o/KG2c=;
+        s=k20201202; t=1679843908;
+        bh=dRkbT8k8JB54wN8VkwpYOPGFzgXukJhwGApsL5yVy9o=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SbLh6N52ir1TPrCLXQAX49pYULRuQwiAduLhNvemmudEBnqU8dTkmn6UNeYMiGiTj
-         37TA0apD+tYxDxiL6JJwvLQANkmLoGNEDDhbiPWTcqEEayUsLl/ulWg0ee4o2GF2LF
-         6UYPEXLfQJpbtFOsSMfQv/Y94ixQY2lR4LdLfzaizWDBYTQyfSLk4X7kJg+nU4JMTs
-         8QKluaXKXJH6CK8BlaeGBC6T2pw3l91NB/nDYjoyT+uQMZXTpBH/Fjnf8TOmbEc6Ie
-         Ks2f1g2u5QK7Lzl+uV6X/P2+CLCkGu8icfz9T3Z3J2sgvl7DlsYKeRWV4ePviPzdFo
-         99H0AAKFvtDEQ==
-Date:   Sun, 26 Mar 2023 17:02:25 +0200
+        b=Ov+xIDwSXwTRXWLvbjMQFoPbc9q+DEtq1iNSymFSye3vh46PJ8xXeNz4/afDbfUNU
+         C6Uwkc6tcmuuYzk++JcQkfrNNrcv0xGPG4wyUyBlpkHVCkseKzIPIFnZnhAw9ARIJC
+         bYBl6UO26nQY4KjYnVYrqiT3/jnpBjnmBf+3DLCwNA5NZCvRRn6nEgYYSVYCUfgwH9
+         Ny+X8Y3fwJGtIYPUafe3UmLYgbyupH1BBy8o90WImg/qsWfYQNnnmJ56khaNYSl5FO
+         /CXLzqvyj/u/g2A8yugn2M9cavNlrazLb8Bbs763MBtEyo2S38Q2/2wygBaM0b2tyG
+         G7YFAIiDu8akA==
+Date:   Sun, 26 Mar 2023 17:18:23 +0200
 From:   Andi Shyti <andi.shyti@kernel.org>
 To:     Ye Xiang <xiang.ye@intel.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -47,16 +47,17 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
         andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
         zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v6 1/6] usb: Add support for Intel LJCA device
-Message-ID: <20230326150225.p5m4fxcwmhwdmtd3@intel.intel>
+Subject: Re: [PATCH v6 2/6] usb: ljca: Add transport interfaces for
+ sub-module drivers
+Message-ID: <20230326151823.vrmboykkzwhfbmpz@intel.intel>
 References: <20230323172113.1231050-1-xiang.ye@intel.com>
- <20230323172113.1231050-2-xiang.ye@intel.com>
+ <20230323172113.1231050-3-xiang.ye@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230323172113.1231050-2-xiang.ye@intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+In-Reply-To: <20230323172113.1231050-3-xiang.ye@intel.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,22 +67,46 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi Ye,
 
-> +static void ljca_read_complete(struct urb *urb)
-> +{
-> +	struct ljca_msg *header = urb->transfer_buffer;
-> +	struct ljca_dev *dev = urb->context;
-> +	int len = urb->actual_length;
-> +	int ret;
-> +
-> +	WARN_ON_ONCE(!dev);
-> +	WARN_ON_ONCE(!header);
+On Fri, Mar 24, 2023 at 01:21:09AM +0800, Ye Xiang wrote:
+> This patch adds the transport interfaces for various LJCA
 
-WARN_* macros should be used when we can recover from that
-condition, while we are running straight to a NULL pointer
-dereference.
+please, here and in the other patches, keep using the imperative
+form, as in the subject.
 
-If !dev or !header is not a warning but a "bug", so either you
-make sure we don't go ahead or remove the check.
+> sub-module drivers to communicate with LJCA hardware. The
+> sub-module of LJCA can use ljca_transfer() to issue a transfer
+> between host and hardware. And ljca_register_event_cb is exported
+> to LJCA sub-module drivers for hardware event subscription.
+> 
+> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
+> ---
+>  drivers/usb/misc/ljca.c  | 47 ++++++++++++++++++++++++++++
+>  include/linux/usb/ljca.h | 66 ++++++++++++++++++++++++++++++++++++++++
 
-The rest looks fairly good,
+Why havne't you added this in the previous patch?
+
+>  2 files changed, 113 insertions(+)
+
+[...]
+
+> +/**
+> + * typedef ljca_event_cb_t - event callback function signature
+> + *
+> + * @context: the execution context of who registered this callback
+> + * @cmd: the command from device for this event
+> + * @evt_data: the event data payload
+> + * @len: the event data payload length
+> + *
+> + * The callback function is called in interrupt context and the data payload is
+> + * only valid during the call. If the user needs later access of the data, it
+> + * must copy it.
+> + */
+> +typedef void (*ljca_event_cb_t)(void *context, u8 cmd, const void *evt_data, int len);
+
+I'm not very enthusiastic about this typedef here. Is it
+providing a real improvement? As far as I can see it's used only
+in one occasion.
+
+I don't have a strong opinion on this, though.
+
 Andi
