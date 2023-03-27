@@ -2,145 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FD36C9DEC
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Mar 2023 10:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 157806C9E24
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Mar 2023 10:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233283AbjC0Id5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Mar 2023 04:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46976 "EHLO
+        id S233297AbjC0Iks (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Mar 2023 04:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233247AbjC0Idg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Mar 2023 04:33:36 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC7572A9
-        for <linux-i2c@vger.kernel.org>; Mon, 27 Mar 2023 01:29:20 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id l27so7770190wrb.2
-        for <linux-i2c@vger.kernel.org>; Mon, 27 Mar 2023 01:29:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679905688;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MXySEw6VHHY4T8YUjW6WkiV2MVpH/15AZY9UsR+ehZA=;
-        b=PbdSxxfQSvfmaNR7ESQq4AVpCFq0z3EGuqRUt3geaqXZOFOFXUOZZzFLW5n8xnavtD
-         Mh1diY4TEudKvid5kklpGG3yIRWbYS+s5zDaZbi2aNaDDvoR5YApIy+pCrOIokNLFirm
-         PCIL8lrhFucIMvan7yh8S7XTYbp8zlk54oLfTmiZi+Fjxy9Wqx/FvaE7pBn8UIMWzExN
-         EkUAJlTY1nbw+IIUrnPthHgaLGNLnV/X0b6670ApH12mF7eAsnT97WZEdm4dGnqT86em
-         TA2pM/k8WaY4OjTtBDie0wneYvJxktADEZR2AX6LO16VjgLtkb3BTbr1zdx8O4rT6xie
-         t7HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679905688;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MXySEw6VHHY4T8YUjW6WkiV2MVpH/15AZY9UsR+ehZA=;
-        b=OTY9rbX+L+To04fYFSUt79hFisfDhylQlFlAaw0PeydWw971DTh9Jat35hgGCM1OYb
-         44ix1nw6QBVlPeIDokzFu/rDh9x13GHnND5MRqr4XP2ywhBQYwhvRK20fHmrEOIPY3JW
-         muPKsalxOKOaFePFkahmRQ1zT21nFQrlOPckXOYPwtqXZJztQqsgjQlELUylS3QhFWKK
-         Uo39hRRTpZW0XWyPWa0cgqkaWP/ogILcCJ2cn9R8VnMbNTzd/qeJobd1NxFEXluWkUZx
-         n1vLG47DQBPOYuk0akHaI/ZW81ifz2pHQEQk2WW2U3jptu+QarXddqcX6t96ShGoD/Xp
-         I2Ww==
-X-Gm-Message-State: AAQBX9cwBYILa9I1c3xbigcMXWDZ41DWbvGVU9RdzNCmgUn/Wgl7wDen
-        gHXK2nIMGsgpwHeXqIQT+4goDg==
-X-Google-Smtp-Source: AKy350ZPTGuHLzmCMgOTOYYL6zs44rzYzlU2HkPczYjzD9B7PvW6Z5Y1kyB+NTTXcTXgglVUth5Dhg==
-X-Received: by 2002:a5d:4e90:0:b0:2ce:a85d:5319 with SMTP id e16-20020a5d4e90000000b002cea85d5319mr9830086wru.39.1679905688659;
-        Mon, 27 Mar 2023 01:28:08 -0700 (PDT)
-Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.googlemail.com with ESMTPSA id p5-20020adfce05000000b002d64fcb362dsm19192398wrn.111.2023.03.27.01.28.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 01:28:08 -0700 (PDT)
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Mon, 27 Mar 2023 10:27:58 +0200
-Subject: [PATCH v5 2/2] arm64: dts: mediatek: enable i2c0 for mt8365-evk
- board
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221122-mt8365-i2c-support-v5-2-6e4f3b54937f@baylibre.com>
-References: <20221122-mt8365-i2c-support-v5-0-6e4f3b54937f@baylibre.com>
-In-Reply-To: <20221122-mt8365-i2c-support-v5-0-6e4f3b54937f@baylibre.com>
-To:     Qii Wang <qii.wang@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        with ESMTP id S233066AbjC0Ikd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Mar 2023 04:40:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7972E9;
+        Mon, 27 Mar 2023 01:36:54 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8D1D96601F5E;
+        Mon, 27 Mar 2023 09:36:52 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679906213;
+        bh=ubB9ozQrHtmRAC/h3ra8X8vZIkv037PoS7C0Tn1POaQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Hq+VWeyIHZac38b5D8jvwU8JFH3CHhnwWviZEWONgG6Uruu8oMv1HfRHoPOpRYmSz
+         i+PWmyfzx78Pv68NqDyXOZGWRoSMDui9gyPlzE0YSZOgmOxzfFMTNe7fBiKVZRFjIC
+         P4KKZMkXf2pMROJHkheZoy0t3ay+OhA5lN7/UMDKo/7z54oztM8OxH3f2Z2G3jM/6U
+         V7Q12gZ0cBhjpW0dg23RiEEBuVK4e7pgWvI3DrEHPtEhy4ithm3thRSAHVWynr4BYe
+         v8m+fVHbRzgua6cxa2FOj8Ip0fYPvVlDaVwKXzIqtPztyllYm5cgKw5lmFXns+HQdV
+         YtK4cQH34us8A==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     matthias.bgg@gmail.com
+Cc:     qii.wang@mediatek.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jassisinghbrar@gmail.com,
+        houlong.wei@mediatek.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Alexandre Mergnat <amergnat@baylibre.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1247; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=vLQRmdlf8w5DsX+xgQD+R1WqZbSZSTtE1/ylilkoFi8=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkIVOV650DOqclHY8dCbK7OCEAXd7LbFA4eAKp8KZJ
- HXoB5c2JAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZCFTlQAKCRArRkmdfjHURZ2iD/
- 92hVpCiu0r88n6RohOPfuJYD4yr16TvX7ZAA3Vs6/nH427wt0ZbJjhWa8tPhBNWDQmb2pXcFKMpJE6
- ZajYoJwnnT1gG32M0RQ+PY29O4nVhoGIoMJjvXB55zb0ywt6ZqUSkMPwKRTNd0xG9OQ/Mhi9HKn+6Z
- OaATkPoVOovlf50O7rzZZRoY/v6phi2R1uCvVqh76M/7zTVUHBvXKXS6wy+3Wznlo8IymQj7a85J7H
- 0rGNNLaRO5xWoICjtYcCXz+3dhIWGHHFtyNeTHkr65uHnG2u4sk4kpDbg38o1tZ01WVO/ht2it5A/H
- LM/MuM0SLaiewdI79eO3bU/dvRjROm6ceQ037QN3tM+YOULWL+cIzSHahiPGunvTEZQa7Y65NFnv9k
- ZvyDAa0yZ6ANuZuViPeJazPwM1F0lNnNjeuy6MUwhSQbh2sJ/LFbHl1IzGuMJTjNkbhKey/EaIL6Xa
- f2Bf+bxsGjA3dsJScYIydGuDub+synek7xflQWdimmtl+yJjU75cRit/Xu3Ya0E4NtZJy74sKDSoC9
- YnE6sD09o6fT/lfERGbHAXOVWSMzoHz/TL5Xfs8a4pAfZ+HNoBLV9oaqOhYUbxWNT6UsB/twxfwcyq
- MkyCm9UYc75RoCQoDhnr4P6MCVFBhI9Y3okd162qrDlakKLHeJUZLhOpPp4g==
-X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
- fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 00/17] MT6795 Helio X10 and Sony Xperia M5: DT step 2!
+Date:   Mon, 27 Mar 2023 10:36:30 +0200
+Message-Id: <20230327083647.22017-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Enable the I2C0 bus provides communication with:
-- The integrated RT9466 Switching Battery Charger.
-- The integrated MT6691 LP4X buck for VDDQ.
-- The integrated MT6691 LP4X buck for VDD2.
-- The pin header, to plug external I2C devices.
+Changes in v2:
+ - Squashed the addition of mediatek,mt6795-gce.h header with the
+   commit adding the MT6795 GCE compatible.
 
-Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
----
- arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+This series further enhances the support for the MT6795 Helio X10 SoC
+and the Sony Xperia M5 smartphone.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-index 4683704ea235..35cb142004a4 100644
---- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-@@ -87,6 +87,13 @@ optee_reserved: optee@43200000 {
- 	};
- };
- 
-+&i2c0 {
-+	clock-frequency = <100000>;
-+	pinctrl-0 = <&i2c0_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
- &pio {
- 	gpio_keys: gpio-keys-pins {
- 		pins {
-@@ -96,6 +103,15 @@ pins {
- 		};
- 	};
- 
-+	i2c0_pins: i2c0-pins {
-+		pins {
-+			bias-pull-up;
-+			mediatek,pull-up-adv = <3>;
-+			pinmux = <MT8365_PIN_57_SDA0__FUNC_SDA0_0>,
-+				 <MT8365_PIN_58_SCL0__FUNC_SCL0_0>;
-+		};
-+	};
-+
- 	uart0_pins: uart0-pins {
- 		pins {
- 			pinmux = <MT8365_PIN_35_URXD0__FUNC_URXD0>,
+In particular, for the SoC support, this adds:
+ - Frequency Hopping support
+ - I2C controllers
+ - Power domains
+ - IOMMU support and LARBs
+ - GCE/CMDQ Mailbox
+ - VDECSYS and VENCSYS clocks
+ - MMSYS support
+
+...and, on the Xperia M5 smartphone, this adds:
+ - Frequency Hopping with Spread Spectrum for MAINPLL, MPLL, MSDCPLL
+ - Touchscreen support (Synaptics S2726, fw id: 1898977, RMI4 protocol)
+ - Accelerometer
+ - Magnetometer
+ - Proximity sensor
+ - NFC support
+
+...all of which was successfully tested on the Xperia M5 smartphone.
+
+This series depends on [1] for the MMSYS support.
+
+Plan for step 3 is to push upstream full display support, which does
+already work on my custom tree ;-)
+
+[1]: https://lore.kernel.org/all/20230309102618.114157-1-angelogioacchino.delregno@collabora.com/
+
+Cheers!
+
+AngeloGioacchino Del Regno (17):
+  arm64: dts: mediatek: mt6795: Add Frequency Hopping Controller node
+  arm64: dts: mediatek: mt6795: Add apmixedsys syscon node
+  arm64: dts: mediatek: mt6795: xperia-m5: Enable Frequency Hopping
+  dt-bindings: i2c: i2c-mt65xx: Add compatible for MT6795 Helio X10
+  arm64: dts: mediatek: mt6795: Add nodes for I2C controllers
+  arm64: dts: mediatek: mt6795: Add SoC power domains
+  dt-bindings: mailbox: mediatek,gce-mailbox: Add support for MT6795
+  arm64: dts: mediatek: mt6795: Add support for the CMDQ/GCE mailbox
+  arm64: dts: mediatek: mt6795: Add MMSYS node for multimedia clocks
+  arm64: dts: mediatek: mt6795: Add VDECSYS and VENCSYS clocks
+  arm64: dts: mediatek: mt6795: Add support for IOMMU and LARBs
+  arm64: dts: mediatek: mt6795-xperia-m5: Enable I2C 0-3 busses
+  arm64: dts: mediatek: mt6795-xperia-m5: Add Synaptics RMI4 Touchscreen
+  arm64: dts: mediatek: mt6795-xperia-m5: Add Bosch BMA255 Accelerometer
+  arm64: dts: mediatek: mt6795-xperia-m5: Add Bosch BMM050 Magnetometer
+  arm64: dts: mediatek: mt6795-xperia-m5: Add Sensortek STK3310
+    Proximity
+  arm64: dts: mediatek: mt6795-xperia-m5: Add NXP PN547 NFC on I2C3
+
+ .../devicetree/bindings/i2c/i2c-mt65xx.yaml   |   4 +
+ .../mailbox/mediatek,gce-mailbox.yaml         |  20 +-
+ .../dts/mediatek/mt6795-sony-xperia-m5.dts    | 166 ++++++++++++
+ arch/arm64/boot/dts/mediatek/mt6795.dtsi      | 245 ++++++++++++++++++
+ include/dt-bindings/gce/mediatek,mt6795-gce.h | 123 +++++++++
+ 5 files changed, 550 insertions(+), 8 deletions(-)
+ create mode 100644 include/dt-bindings/gce/mediatek,mt6795-gce.h
 
 -- 
-2.25.1
+2.40.0
 
