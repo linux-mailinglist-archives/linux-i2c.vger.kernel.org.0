@@ -2,121 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6DC26C9F58
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Mar 2023 11:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D61AD6C9F2D
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Mar 2023 11:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjC0J2P (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Mar 2023 05:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
+        id S233169AbjC0JQ2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Mar 2023 05:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232716AbjC0J2O (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Mar 2023 05:28:14 -0400
-X-Greylist: delayed 1811 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Mar 2023 02:28:09 PDT
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935E02707;
-        Mon, 27 Mar 2023 02:28:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
-         references;
-        bh=HcWg8teO8lRj5+fkRN/aU7d/uNN4yhTheMQkiD4xApM=;
-        b=KQ+S8jrBgKzWq5ysztQlVTE5vhmb8TDKsiJ4AO73EnQOimsNUYphLd5V2nwURWxND6CVI5o5OJ9i4
-         f5sPMyiqKaCSqOcaAlGJrttb8tGs3UU2qMTHoyTcRxw5c6aXIsf2Wyyn9buSofhf0WU1+uIKXSaO4V
-         PeHpQBWTSNaxq3G+jjpvXhw9rq5aV5521JIOi4v7FZhMcgT40Z9kjWtsWstNIL1jMO7vD6Lfm6fFFS
-         Nb9kiqeFKsoXPWBWOzx8mVoDn5qU4be6cb0TLPkmE7656dxzQe/oqJjPYiCCnOtZGpUtsoN5ItMSx3
-         7XgmsZelFzdYD08AsLEA9CtHvQfb1Xg==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.17.2.1477, Stamp: 3], Multi: [Enabled, t: (0.000008,0.010549)], BW: [Enabled, t: (0.000023,0.000001)], RTDA: [Enabled, t: (0.088525), Hit: No, Details: v2.49.0; Id: 15.zxpjd.1gsh4j5iu.3nlts; mclb], total: 0(700)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from h-e2.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Mon, 27 Mar 2023 11:57:39 +0300
-Date:   Mon, 27 Mar 2023 11:54:01 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] treewide: Fix instantiation of devices in DT overlays
-Message-ID: <20230327085401.pgnira5btzbgehb3@h-e2.ddg>
-References: <240155f20aae47e9f7461e2b7416120ba6238886.1679650087.git.geert+renesas@glider.be>
- <20230327030213.GJ3364759@dragon>
+        with ESMTP id S233158AbjC0JQ0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Mar 2023 05:16:26 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDB34239
+        for <linux-i2c@vger.kernel.org>; Mon, 27 Mar 2023 02:16:24 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id l14so5124366pfc.11
+        for <linux-i2c@vger.kernel.org>; Mon, 27 Mar 2023 02:16:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679908584;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HgMR0rh/4y7PUWkgjC5D1ZLTIu4Xe0fvcNc/5RhdQ/Y=;
+        b=Tf3VlODMFHBHv+1/ruZ9mzU/s9xIJ5lj6UCtpOOF778BZ/hXE+m/y0NHp81l/I16wo
+         oSAK6z22iwfXLjtc9TRRJQVTiDcM6BXDptxMtOy6Ke/gCW6MxAfjBv0eShsgq3aKheLz
+         0IcqfsS5oquDJ/S5Zl2Bv2yNsNxhCMu7FKhS/TiZeEJkZXZhi18Fg0K/aX19BKYKUgcf
+         ucN3OHRwIIbMbw3Em0Zo7WY27nut/4i3Jf+oFVg4mBSNl/fpwfEvy/Bn63oSpMtC29fI
+         QEu02R6/UIVLj8wRit6d3xl3MGuI/+uxUxAJ91/OHRcIZP660R5XrQGJI95AL67XZPH/
+         St+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679908584;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HgMR0rh/4y7PUWkgjC5D1ZLTIu4Xe0fvcNc/5RhdQ/Y=;
+        b=RwPpHG/YcFm2ID2FGoGuEuiPMaUnF/4P4zLA+lbgN0GmqcF0nK6dXYxOen46G7CXKE
+         f3gmsrNKornzQ6Ua9XBGdplyYFixoGBbzJGm9mmp0cBEzaKMraaDypXnrMquG0FnNmkS
+         sKW/CYM7q8/iJoQbbquk716k6kasxwNTBjQMebqSMRWU4b7/FghFmmtVRGbqbgnVs17v
+         5Z1cnPToFlfhF1BqTLqBcju2FAL2ocpHkDkrTrHPHF7hJCRW0p5gwt5EWNLfwQHaoQVc
+         som6fv/ZXX6LtbBZC3ztO7FAQDyUviDiS7Xud1XTZa3q8gskuXpepoxkwGsHjjvkeH1m
+         4C1Q==
+X-Gm-Message-State: AAQBX9e55e71yNPQAVdkVmeIk3pR0eG6PnLG05BVVY4fa6B8/F5gsttF
+        Sb4RCrU3NW0m/R43whd2WcEBYXuGL9QjyD/UtLk=
+X-Google-Smtp-Source: AKy350b+2BjvoaB0h1h5RqdVuPNI4IheZ03EvkSuB5OrSam0bFfwHf6zKvERWVTVaMsqRMllge4H6b00STs3LUq8pUY=
+X-Received: by 2002:a05:6a00:2d27:b0:627:e677:bc54 with SMTP id
+ fa39-20020a056a002d2700b00627e677bc54mr5637021pfb.5.1679908583864; Mon, 27
+ Mar 2023 02:16:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327030213.GJ3364759@dragon>
+Received: by 2002:a05:7300:3db:b0:9f:d19a:fd79 with HTTP; Mon, 27 Mar 2023
+ 02:16:23 -0700 (PDT)
+Reply-To: annamalgorzata587@gmail.com
+From:   "Leszczynska Anna Malgorzata." <mrsstewartprisca@gmail.com>
+Date:   Mon, 27 Mar 2023 02:16:23 -0700
+Message-ID: <CAFoYun0pOf7h6MXemKOxx_VJ9qat6_H9Si4pXTKnow3m+j_=JA@mail.gmail.com>
+Subject: Mrs. Leszczynska Anna Malgorzata.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=ADVANCE_FEE_5_NEW,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:433 listed in]
+        [list.dnswl.org]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrsstewartprisca[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [annamalgorzata587[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.8 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi, Shawn!
+-- 
+I am Mrs. Leszczynska Anna Malgorzatafrom Germany . Presently admitted
+ in one of the hospitals here in Ivory Coast.
 
-On Mon, Mar 27, 2023 at 11:02:13AM +0800, Shawn Guo wrote:
-> + Ivan
-> 
-> On Fri, Mar 24, 2023 at 10:30:39AM +0100, Geert Uytterhoeven wrote:
-> > When loading a DT overlay that creates a device, the device is not
-> > instantiated, unless the DT overlay is unloaded and reloaded again.
-> > 
-> > Saravana explains:
-> >   Basically for all overlays (I hope the function is only used for
-> >   overlays) we assume all nodes are NOT devices until they actually
-> >   get added as a device.
-> > 
-> > Based on a patch by Saravana Kannan, which covered only platform and spi
-> > devices.
-> > 
-> > Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
-> > Link: https://lore.kernel.org/r/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=rWYnkCZ6z5bGX-wj4w@mail.gmail.com
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > Acked-by: Mark Brown <broonie@kernel.org>
-> > ---
-> > v2:
-> >   - Add Acked-by,
-> >   - Drop RFC.
-> > ---
-> >  drivers/bus/imx-weim.c    | 1 +
-> >  drivers/i2c/i2c-core-of.c | 1 +
-> >  drivers/of/dynamic.c      | 1 +
-> >  drivers/of/platform.c     | 1 +
-> >  drivers/spi/spi.c         | 1 +
-> >  5 files changed, 5 insertions(+)
-> > 
-> > diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
-> > index 36d42484142aede2..898e23a4231400fa 100644
-> > --- a/drivers/bus/imx-weim.c
-> > +++ b/drivers/bus/imx-weim.c
-> > @@ -329,6 +329,7 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
-> >  				 "Failed to setup timing for '%pOF'\n", rd->dn);
-> >  
-> >  		if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
-> > +			rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
-> >  			if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
-> >  				dev_err(&pdev->dev,
-> >  					"Failed to create child device '%pOF'\n",
-> 
-> Ivan, so you were aware of that the device is not instantiated before
-> this change?
-> 
+I and my late husband do not have any child that is why I am donating
+this money to you having known my condition that I will join my late
+husband soonest.
 
-I was not aware of that, thanks for warning me.
-Will test in the near future.
+I wish to donate towards education and the less privileged I ask for
+your assistance. I am suffering from colon cancer I have some few
+weeks to live according to my doctor.
 
+The money should be used for this purpose.
+Motherless babies
+Children orphaned by aids.
+Destitute children
+Widows and Widowers.
+Children who cannot afford education.
+
+My husband stressed the importance of education and the less
+privileged I feel that this is what he would have wanted me to do with
+the money that he left for charity.
+
+These services bring so much joy to the kids. Together we are
+transforming lives and building brighter futures - but without you, it
+just would not be possible.
+
+Sincerely,
+
+Mrs. Leszczynska Anna Malgorzata.
