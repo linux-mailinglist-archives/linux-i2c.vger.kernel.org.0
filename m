@@ -2,149 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8296CA6A6
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Mar 2023 15:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FED66CA844
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Mar 2023 16:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232799AbjC0N6k (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Mar 2023 09:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
+        id S232659AbjC0Oy7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Mar 2023 10:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbjC0N6b (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Mar 2023 09:58:31 -0400
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127893C00;
-        Mon, 27 Mar 2023 06:58:31 -0700 (PDT)
-Received: by mail-ua1-x933.google.com with SMTP id r7so6422635uaj.2;
-        Mon, 27 Mar 2023 06:58:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679925510;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sJi9k0SusRoBJX6bd5XD9Ah+7FRBbKHs2NSnZLEQwl0=;
-        b=focFGVZKHAYnSHwxsLeQfvbDZEaTLOe1a92lQloTQNCzqL0KziKQqfumOQid1ngq1m
-         DPLBOccNhN1hVYHkj6kkRABsonQ7SvmLVsRZ/qlO8wVZLgNyQdB66P40BmhdwFJmwTYG
-         WaQgY3aGPrLlY2DISHPTQgBlqHSLrlbuY9ZG5zhxMOHzOqre/iLhI/jjdFqWoCPsl9iZ
-         a7OVWIYsgd1Xq8PWR655+4ClZveczP64UB4wl6Ifo/aoYwtkkVeWckK9CECKUo0H7vn1
-         eLYT7SYdIA2y3btczc/C1Ijr2BB1ZAPI7EPzluDxZ4eIR05VsUoD5CJbCp0n24CTRNek
-         MOwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679925510;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sJi9k0SusRoBJX6bd5XD9Ah+7FRBbKHs2NSnZLEQwl0=;
-        b=F48fZ6NjXhisHVj2caETCa0PywwX7xUIsjZMHOUyhl2dHt0P/Lf2x4myu8pX2AwS4V
-         /W7J/odH2yTFeC4zCnKDiwoiV+LOGyrTQrehW/X6ieVq2Y9+eE1z8+8xVny42YAybSeQ
-         NcYknq8cxqPnL3j/S6K8TYC7X4Xe7YbZvLvaK6JOrtzsBxeNaVDSSRB1pEVllg2DmZI/
-         TcZTP2Oz1w/WfB2c0Iv120p5MtClASjgeSzqQ2/5zyoOzZnV6+bWbBUtJIUNGqHKY4S3
-         h0SGOQmbdwd4a7vGGCc+YDZITdnF0iJfoL2V4Ud0US6g1dP2Ei4BUumfBucpE6y7Ivf6
-         c66g==
-X-Gm-Message-State: AAQBX9c6hCWHckot5pgQeZHyRLeQLQq7zWa4cArpYlCx/L8w+XwiGGVA
-        X/ewaZs9go/0QK7dgtjkoV4=
-X-Google-Smtp-Source: AKy350ZyIcCs4NoQw4jqpwzxJW41AoFAtKNvyMHb4Ao/416i7Bz9wVzuOXP+8yFQwuuMe4CnC/ZPmw==
-X-Received: by 2002:a1f:6e4a:0:b0:403:23cb:4773 with SMTP id j71-20020a1f6e4a000000b0040323cb4773mr4238755vkc.2.1679925510654;
-        Mon, 27 Mar 2023 06:58:30 -0700 (PDT)
-Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id 135-20020a1f198d000000b004367f3393b8sm2731072vkz.28.2023.03.27.06.58.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 06:58:30 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Mon, 27 Mar 2023 15:57:46 +0200
-Subject: [PATCH v3 4/4] mfd: tps6586x: register restart handler
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230327-tegra-pmic-reboot-v3-4-3c0ee3567e14@skidata.com>
-References: <20230327-tegra-pmic-reboot-v3-0-3c0ee3567e14@skidata.com>
-In-Reply-To: <20230327-tegra-pmic-reboot-v3-0-3c0ee3567e14@skidata.com>
-To:     Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
-        rafael.j.wysocki@intel.com
-Cc:     dmitry.osipenko@collabora.com, jonathanh@nvidia.com,
+        with ESMTP id S229762AbjC0Oyv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Mar 2023 10:54:51 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D713A80;
+        Mon, 27 Mar 2023 07:54:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2B6C4CE122B;
+        Mon, 27 Mar 2023 14:54:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AF56C433EF;
+        Mon, 27 Mar 2023 14:54:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679928886;
+        bh=E4YD9UhzA51aarLNwwe1oXuA4ITF8ovQGB7U2nahqBY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q91KKPRDajS3v4wkummmMfdrSuvEs/r3Dk6cctCJ9s5VmjSo6dySQVes4feFaAr2m
+         XSlNoqyAvQguvXDk7WkSOgwJdKzjI2p0Hr7FEB28N9mwSZ/UpZYMpdfZ/hqfhOp8Bv
+         Lk4RnTT7RVFFlA2oy1QSdXIJqubFo0fTZzXBV5W8ZWQjkrMmSYpRE9jHM2oJIG+nA0
+         wr8bX4kH4zsrLhOhG6h+G+QUPPzJn/WQxyx6mVm8HpdFC9zCy7fDYTiN8zntWxbt9C
+         Pv9QjAy6MylPbpKONfcNLP0eQu9uBXn1ik4RJ30cFNMfcfPcxOuBmqJqAA+j5Fh2a4
+         b6dJlYeD3LS5g==
+Date:   Mon, 27 Mar 2023 16:54:43 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Benjamin Bara <bbara93@gmail.com>
+Cc:     Lee Jones <lee@kernel.org>, rafael.j.wysocki@intel.com,
+        dmitry.osipenko@collabora.com, jonathanh@nvidia.com,
         richard.leitner@linux.dev, treding@nvidia.com,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-tegra@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v3 2/4] i2c: core: run atomic i2c xfer when !preemptible
+Message-ID: <ZCGuMzmS0Lz5WX2/@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Benjamin Bara <bbara93@gmail.com>, Lee Jones <lee@kernel.org>,
+        rafael.j.wysocki@intel.com, dmitry.osipenko@collabora.com,
+        jonathanh@nvidia.com, richard.leitner@linux.dev, treding@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>, stable@vger.kernel.org
+References: <20230327-tegra-pmic-reboot-v3-0-3c0ee3567e14@skidata.com>
+ <20230327-tegra-pmic-reboot-v3-2-3c0ee3567e14@skidata.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mTzm4KGcMhUw6XkC"
+Content-Disposition: inline
+In-Reply-To: <20230327-tegra-pmic-reboot-v3-2-3c0ee3567e14@skidata.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Benjamin Bara <benjamin.bara@skidata.com>
 
-There are a couple of boards which use a tps6586x as
-"ti,system-power-controller", e.g. the tegra20-tamonten.dtsi.
-For these, the only registered restart handler is the warm reboot via
-tegra's PMC. As the bootloader of the tegra20 requires the VDE, it must
-be ensured that VDE is enabled (which is the case after a cold reboot).
-For the "normal reboot", this is basically the case since
-8f0c714ad9be1ef774c98e8819a7a571451cb019.
-However, this workaround is not executed in case of an emergency restart.
-In case of an emergency restart, the system now simply hangs in the
-bootloader, as VDE is not enabled (as not in use).
+--mTzm4KGcMhUw6XkC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The TPS658629-Q1 (unfortunately the only TPS6586x with public data sheet)
-provides a SOFT RST bit in the SUPPLYENE reg to request a (cold) reboot.
-This avoids the hang-up.
 
-Tested on a TPS658640.
+> -	return system_state > SYSTEM_RUNNING && irqs_disabled();
+> +	return system_state > SYSTEM_RUNNING && !preemptible();
 
-Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
----
- drivers/mfd/tps6586x.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+For the !CONFIG_PREEMPT_COUNT case, preemptible() is defined 0. So,
+don't we lose the irqs_disabled() check in that case?
 
-diff --git a/drivers/mfd/tps6586x.c b/drivers/mfd/tps6586x.c
-index 93f1bf440191..c8adf6a08277 100644
---- a/drivers/mfd/tps6586x.c
-+++ b/drivers/mfd/tps6586x.c
-@@ -30,6 +30,7 @@
- #include <linux/mfd/tps6586x.h>
- 
- #define TPS6586X_SUPPLYENE	0x14
-+#define SOFT_RST_BIT		BIT(0)
- #define EXITSLREQ_BIT		BIT(1)
- #define SLEEP_MODE_BIT		BIT(3)
- 
-@@ -470,6 +471,17 @@ static int tps6586x_power_off_handler(struct sys_off_data *data)
- 	return tps6586x_set_bits(tps6586x_dev, TPS6586X_SUPPLYENE, SLEEP_MODE_BIT);
- }
- 
-+static int tps6586x_restart_handler(struct sys_off_data *data)
-+{
-+	struct device *tps6586x_dev = data->cb_data;
-+
-+	/* bring pmic into HARD REBOOT state */
-+	tps6586x_set_bits(tps6586x_dev, TPS6586X_SUPPLYENE, SOFT_RST_BIT);
-+
-+	mdelay(500);
-+	return 0;
-+}
-+
- static void tps6586x_print_version(struct i2c_client *client, int version)
- {
- 	const char *name;
-@@ -570,6 +582,13 @@ static int tps6586x_i2c_probe(struct i2c_client *client)
- 			dev_err(&client->dev, "register power off handler failed: %d\n", ret);
- 			goto err_add_devs;
- 		}
-+
-+		ret = devm_register_restart_handler(&client->dev, &tps6586x_restart_handler,
-+						    &client->dev);
-+		if (ret) {
-+			dev_err(&client->dev, "register restart handler failed: %d\n", ret);
-+			goto err_add_devs;
-+		}
- 	}
- 
- 	return 0;
 
--- 
-2.34.1
+--mTzm4KGcMhUw6XkC
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQhrikACgkQFA3kzBSg
+KbYTSxAAhu1oioVlg3a+6Wpxav9PdJ3/W10uegdGB7fNN1w/1+JXPfbNjO08eHAk
+MBj5qYRYA9syYhNvq0ufRSGLLaGc7YoJnxLphU9Rwx+07ZsZbMdEmzkhHPau2GKM
+fRIWY06kmTJ+ZW4G6XxCeEQklD1xjmKgs5dsmTG9n1Qvfifo7mbf3bgj13zh4+ww
+Wqd031uW8YWwnJ51G/hkJz3VitxTwUKVmTTZY8Ta2rN6MxoXZoavGbylk2urO2ob
+GTDnz6yBxynpNsG/vJuaU0m/ieqKSFlfRGJBGaClWbdzvdd9O4SWE/SHswbZpGJI
+5/Wx18KdPdZaiiSK9Nw61pRj66AqXjRDBsJGT7Wc70Sr1P5VhFXxwhPXjY0/7q8h
+6KfwQhN8UwndhpERxsLz0Mx2y0P9puRz5IPGavk5fReL1NvBEtgTMnKLW2I6g9ZB
+bXpH7kzE1ZTrarqwDkquYR7erZr40e1ZJ5OdIuj3eSNJHcvfI4Ya1oS5SIFi3KMz
+U4y3mQhQJ6XL/l7K7PDDhuMWSDdj2aovJVwFKoZEaU41A+x85BK5h/4MHDTdkqdb
+8km1QMmMDAXTNfcMqiz4kmMLW6zkWY/lvXYe1iQAoHyXDjsu6ItJL0sEeg845uDr
+A0U6sECmTV47Gn8cX5FzcMWDsVAjFGAcOnJ/JrjGOld0b3WzIA0=
+=CNU/
+-----END PGP SIGNATURE-----
+
+--mTzm4KGcMhUw6XkC--
