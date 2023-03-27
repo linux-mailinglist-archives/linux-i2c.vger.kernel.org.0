@@ -2,35 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 740816C9E37
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Mar 2023 10:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015A36C9E2C
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Mar 2023 10:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232851AbjC0Ik5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Mar 2023 04:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57208 "EHLO
+        id S233403AbjC0Ikz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Mar 2023 04:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232496AbjC0Ikh (ORCPT
+        with ESMTP id S233160AbjC0Ikh (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Mar 2023 04:40:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C03D6A49;
-        Mon, 27 Mar 2023 01:37:08 -0700 (PDT)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204C44221;
+        Mon, 27 Mar 2023 01:37:09 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 232D866030E3;
-        Mon, 27 Mar 2023 09:37:06 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 17CD3660313C;
+        Mon, 27 Mar 2023 09:37:07 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679906226;
-        bh=M2x6XrfKatUDNCzi+SX1mFtgO/Okir8+l/Hd5u8MM30=;
+        s=mail; t=1679906227;
+        bh=/T9WmBbua2oCTw4GMfNhun8IUtdf0uXbZIh9+7jUzSk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Euip6vBAt7XX/ExWE42LBSSpfsCWwWShcG+34Ee+U7pCYfVKBkIrHcLALBlWY888J
-         d/IIyUO8X4IpbPBW2NFW0SxI4K5TqgcEMOkM8o/PctPHE5BwJE/ugrtuLsChD6jcBx
-         by6w10s/Z0xmWYS1MEtW4OF8GzWrEFegVxo2jSpeZS+Gqdi0RAhrtXmBT31ckaMuEr
-         +PTRDKW2DDCGGt34A9X1+IWb+6sDTedWHfqGmYASK32O0ZS5/SIO3kVB5NzIw680WE
-         zcDeB7z9BHEFycJez4hooVXCwWzIMD265Zul0F+j5tFkSfqgKaDPTP3lFhOr89wotd
-         3RbFm3zYGaYBg==
+        b=ZDsHIAK1e7zUj1Sf4asd/mmg6RVoWeec0+v9Duw3DII4USKasTToxblsMfg+5oAsF
+         s3haNXogKx8uNAwV4TAicN+9AZ3NTColuBG9YKlXc6kxXf45HsKptA1E5Lfu17nfKA
+         P3xfdbOGzx4f9uJKpHvuzuzKgELg786lelCwwPgIUz+5Mvnmaabfo2ouD1dFSSNOqG
+         htk89i25gLx4NyBI9eAorikkPDalrZSUG2x8EioNFZWJdX6EgDUfBrFzr1cAoLHmck
+         0TSVpUqZYBZSYvYrXUvtNhhZpJsgtGtDzj0sfbI/61NJrkNOf+ElxdZCsoHM/6J3Em
+         iz5UQ8yURUm8A==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -43,9 +43,9 @@ Cc:     qii.wang@mediatek.com, robh+dt@kernel.org,
         phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2 14/17] arm64: dts: mediatek: mt6795-xperia-m5: Add Bosch BMA255 Accelerometer
-Date:   Mon, 27 Mar 2023 10:36:44 +0200
-Message-Id: <20230327083647.22017-15-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 15/17] arm64: dts: mediatek: mt6795-xperia-m5: Add Bosch BMM050 Magnetometer
+Date:   Mon, 27 Mar 2023 10:36:45 +0200
+Message-Id: <20230327083647.22017-16-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230327083647.22017-1-angelogioacchino.delregno@collabora.com>
 References: <20230327083647.22017-1-angelogioacchino.delregno@collabora.com>
@@ -60,46 +60,32 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add the BMA255 Accelerometer on I2C3 and its pin definitions.
+This smartphone features a Bosch BMM050 Magnetometer on I2C3: enable
+it with the BMM150 binding, as that driver supports BMM050 as well.
+For this sensor, there is no interrupt pin;
+readings were validated in sysfs.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../boot/dts/mediatek/mt6795-sony-xperia-m5.dts   | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts b/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
-index edab90f06a24..54a1f7f306f7 100644
+index 54a1f7f306f7..bda14c74a8af 100644
 --- a/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
 +++ b/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
-@@ -99,6 +99,13 @@ &i2c3 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&i2c3_pins>;
- 	status = "okay";
+@@ -106,6 +106,11 @@ accelerometer@0x10 {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&accel_pins>;
+ 	};
 +
-+	accelerometer@0x10 {
-+		compatible = "bosch,bma255";
-+		reg = <0x10>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&accel_pins>;
++	magnetometer@0x12 {
++		compatible = "bosch,bmm150";
++		reg = <0x12>;
 +	};
  };
  
  &pio {
-@@ -115,6 +122,14 @@ pins-rst {
- 		};
- 	};
- 
-+	accel_pins: accelerometer-pins {
-+		pins-irq {
-+			pinmux = <PINMUX_GPIO12__FUNC_GPIO12>;
-+			bias-pull-up;
-+			input-enable;
-+		};
-+	};
-+
- 	i2c0_pins: i2c0-pins {
- 		pins-bus {
- 			pinmux = <PINMUX_GPIO45__FUNC_SDA0>,
 -- 
 2.40.0
 
