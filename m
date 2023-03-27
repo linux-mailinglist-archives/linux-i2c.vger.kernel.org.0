@@ -2,35 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815EB6C9E3F
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Mar 2023 10:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456096C9E41
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Mar 2023 10:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232377AbjC0IlA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Mar 2023 04:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
+        id S233414AbjC0IlC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Mar 2023 04:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232508AbjC0Ikg (ORCPT
+        with ESMTP id S233115AbjC0Ikg (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Mar 2023 04:40:36 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4872688;
-        Mon, 27 Mar 2023 01:37:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EBDF59E0;
+        Mon, 27 Mar 2023 01:37:05 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5601D6602087;
-        Mon, 27 Mar 2023 09:37:02 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4A808660308B;
+        Mon, 27 Mar 2023 09:37:03 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679906223;
-        bh=klZ1wIb0qi8AUCKdFQaQFYLZ3ZlhvULeIjT368zNwRg=;
+        s=mail; t=1679906224;
+        bh=torr26qWRhLp7GlQbJK2hxugth9DFBivC+4DPBvc1uc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oT4am/2rygp9oD0xzETCoBVYy3dYoaJvHb6Xp0G2YKpVtk28BAxPqwiPBXIKdBHCD
-         ImqbXMpYnR8h973p2LoGosh8Z1hYNRIqTM/lZo75wOxVtD+DW78CjsRs4QlzWnaLPf
-         zCAc8qkeumH3mCHnOZKhBSpMMqEtKnbOi1+Zc03RK8dgfOHzVzLDdkA1Wd/nECHfrJ
-         8xKcVuLKJrRxb9tBVkfAvaZklR/eLETcY2mi8WO1ghcxrEZYxdfYbVxOT8JB39Wv0F
-         VES4JXfo7J5jJcAaW/LjeNpFieTvrHRipea7vVsbYqXP+BjFhxn3IkH0PopNptWil1
-         G0mJewBE28nQg==
+        b=Wk0z7cSA+5QH6UO0SEtwj5YV+Q6ghHgeIvbWzRnlrSRVgFuCoA7Jb9SylJQdrTpnX
+         ywbaUylFeF0dTGp5h6RGvzQsR0qj7eo/CHNDszdhZrhVC4Y2noSuOA6InfrTnGIX7h
+         EsoP0ivO2rk42ZBBi0mIJc5ixiUnUxjafIGrxdmPTZ6QesDwJ3J8DB96+CGJo53jEA
+         JksamVJlgMJDbQsnjJMk1njEbDqGsyyAfbYVoZS5PncSU+QZGOG8C7KEq+KKAomlMF
+         fAh2w8keakcSz3ifevBsAs3zBsD17rOoTasMfxyeR/WAMsOBTbp0W00PWaAI62Gz7a
+         UbASQolZxo8Vw==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -43,9 +43,9 @@ Cc:     qii.wang@mediatek.com, robh+dt@kernel.org,
         phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2 10/17] arm64: dts: mediatek: mt6795: Add VDECSYS and VENCSYS clocks
-Date:   Mon, 27 Mar 2023 10:36:40 +0200
-Message-Id: <20230327083647.22017-11-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 11/17] arm64: dts: mediatek: mt6795: Add support for IOMMU and LARBs
+Date:   Mon, 27 Mar 2023 10:36:41 +0200
+Message-Id: <20230327083647.22017-12-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230327083647.22017-1-angelogioacchino.delregno@collabora.com>
 References: <20230327083647.22017-1-angelogioacchino.delregno@collabora.com>
@@ -60,34 +60,98 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In prepration for adding the IOMMUs and LARBs of this SoC, add the
-VDECSYS and VENCSYS clock controller nodes, providing clocks for the
-vcodec stateful decoder and stateful decoder hardware.
+Add nodes for the multimedia IOMMU and its LARBs: this includes all but
+the MJC LARB, which cannot currently be used and will be added later.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt6795.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt6795.dtsi | 59 ++++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt6795.dtsi b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
-index b721971d4e5e..a8b2c4517e79 100644
+index a8b2c4517e79..a580ddb51a0e 100644
 --- a/arch/arm64/boot/dts/mediatek/mt6795.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
-@@ -647,5 +647,17 @@ mmsys: syscon@14000000 {
- 				 <&gce 1 CMDQ_THR_PRIO_HIGHEST>;
- 			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0 0x1000>;
+@@ -390,6 +390,17 @@ systimer: timer@10200670 {
+ 			clock-names = "clk13m";
  		};
-+
-+		vdecsys: clock-controller@16000000 {
-+			compatible = "mediatek,mt6795-vdecsys";
-+			reg = <0 0x16000000 0 0x1000>;
-+			#clock-cells = <1>;
+ 
++		iommu: iommu@10205000 {
++			compatible = "mediatek,mt6795-m4u";
++			reg = <0 0x10205000 0 0x1000>;
++			clocks = <&infracfg CLK_INFRA_M4U>;
++			clock-names = "bclk";
++			interrupts = <GIC_SPI 146 IRQ_TYPE_LEVEL_LOW>;
++			mediatek,larbs = <&larb0 &larb1 &larb2 &larb3>;
++			power-domains = <&spm MT6795_POWER_DOMAIN_MM>;
++			#iommu-cells = <1>;
 +		};
 +
-+		vencsys: clock-controller@18000000 {
-+			compatible = "mediatek,mt6795-vencsys";
-+			reg = <0 0x18000000 0 0x1000>;
-+			#clock-cells = <1>;
+ 		apmixedsys: syscon@10209000 {
+ 			compatible = "mediatek,mt6795-apmixedsys", "syscon";
+ 			reg = <0 0x10209000 0 0x1000>;
+@@ -648,16 +659,64 @@ mmsys: syscon@14000000 {
+ 			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0 0x1000>;
+ 		};
+ 
++		larb0: larb@14021000 {
++			compatible = "mediatek,mt6795-smi-larb";
++			reg = <0 0x14021000 0 0x1000>;
++			clocks = <&mmsys CLK_MM_SMI_COMMON>, <&mmsys CLK_MM_SMI_LARB0>;
++			clock-names = "apb", "smi";
++			mediatek,smi = <&smi_common>;
++			mediatek,larb-id = <0>;
++			power-domains = <&spm MT6795_POWER_DOMAIN_MM>;
++		};
++
++		smi_common: smi@14022000 {
++			compatible = "mediatek,mt6795-smi-common";
++			reg = <0 0x14022000 0 0x1000>;
++			power-domains = <&spm MT6795_POWER_DOMAIN_MM>;
++			clocks = <&infracfg CLK_INFRA_SMI>, <&mmsys CLK_MM_SMI_COMMON>;
++			clock-names = "apb", "smi";
++		};
++
++		larb2: larb@15001000 {
++			compatible = "mediatek,mt6795-smi-larb";
++			reg = <0 0x15001000 0 0x1000>;
++			clocks = <&mmsys CLK_MM_SMI_COMMON>, <&infracfg CLK_INFRA_SMI>;
++			clock-names = "apb", "smi";
++			mediatek,smi = <&smi_common>;
++			mediatek,larb-id = <2>;
++			power-domains = <&spm MT6795_POWER_DOMAIN_ISP>;
++		};
++
+ 		vdecsys: clock-controller@16000000 {
+ 			compatible = "mediatek,mt6795-vdecsys";
+ 			reg = <0 0x16000000 0 0x1000>;
+ 			#clock-cells = <1>;
+ 		};
+ 
++		larb1: larb@16010000 {
++			compatible = "mediatek,mt6795-smi-larb";
++			reg = <0 0x16010000 0 0x1000>;
++			mediatek,smi = <&smi_common>;
++			mediatek,larb-id = <1>;
++			clocks = <&vdecsys CLK_VDEC_CKEN>, <&vdecsys CLK_VDEC_LARB_CKEN>;
++			clock-names = "apb", "smi";
++			power-domains = <&spm MT6795_POWER_DOMAIN_VDEC>;
++		};
++
+ 		vencsys: clock-controller@18000000 {
+ 			compatible = "mediatek,mt6795-vencsys";
+ 			reg = <0 0x18000000 0 0x1000>;
+ 			#clock-cells = <1>;
+ 		};
++
++		larb3: larb@18001000 {
++			compatible = "mediatek,mt6795-smi-larb";
++			reg = <0 0x18001000 0 0x1000>;
++			clocks = <&vencsys CLK_VENC_VENC>, <&vencsys CLK_VENC_LARB>;
++			clock-names = "apb", "smi";
++			mediatek,smi = <&smi_common>;
++			mediatek,larb-id = <3>;
++			power-domains = <&spm MT6795_POWER_DOMAIN_VENC>;
 +		};
  	};
  };
