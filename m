@@ -2,60 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DDF6CA6A0
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Mar 2023 15:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8296CA6A6
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Mar 2023 15:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbjC0N6j (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Mar 2023 09:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
+        id S232799AbjC0N6k (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Mar 2023 09:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232837AbjC0N6a (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Mar 2023 09:58:30 -0400
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4133C00;
-        Mon, 27 Mar 2023 06:58:29 -0700 (PDT)
-Received: by mail-ua1-x931.google.com with SMTP id x33so6384153uaf.12;
-        Mon, 27 Mar 2023 06:58:29 -0700 (PDT)
+        with ESMTP id S232838AbjC0N6b (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Mar 2023 09:58:31 -0400
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127893C00;
+        Mon, 27 Mar 2023 06:58:31 -0700 (PDT)
+Received: by mail-ua1-x933.google.com with SMTP id r7so6422635uaj.2;
+        Mon, 27 Mar 2023 06:58:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679925508;
+        d=gmail.com; s=20210112; t=1679925510;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4y7RHA98qLuFsz3JDJ246X3y2mp8vITzNXl8/trhahM=;
-        b=ZU3Q7yqm3khuYericsbX/ZLFoa+VkYN7jJ/hd2K7a/tsHtQL1wXdWXB5G1SOHvQz0p
-         mLYVkYLSyXIS8rDGZXYxwJLGkOx2FWwpCmfltprEw+BJVa41VN1tx0/6uS3j2CehmlV9
-         /YNhEnEYC+ZyKk615/kc30FXLTu3gS92Lo+uhGTp6so65W4RPVwiURnGi1N4UO3DzMim
-         pof11WsEPbsYXCYDPvvNDMRzC4dY3KZIzyNIXAbaESxPVkOajthID//wzFIYzTJG8B9h
-         6ayWKuZZCF5FgBMumEFXiUkHM/UJ8VZCWL9dDeUp8WN2GbzOS/9++HPj628UJKsxLvr7
-         1iew==
+        bh=sJi9k0SusRoBJX6bd5XD9Ah+7FRBbKHs2NSnZLEQwl0=;
+        b=focFGVZKHAYnSHwxsLeQfvbDZEaTLOe1a92lQloTQNCzqL0KziKQqfumOQid1ngq1m
+         DPLBOccNhN1hVYHkj6kkRABsonQ7SvmLVsRZ/qlO8wVZLgNyQdB66P40BmhdwFJmwTYG
+         WaQgY3aGPrLlY2DISHPTQgBlqHSLrlbuY9ZG5zhxMOHzOqre/iLhI/jjdFqWoCPsl9iZ
+         a7OVWIYsgd1Xq8PWR655+4ClZveczP64UB4wl6Ifo/aoYwtkkVeWckK9CECKUo0H7vn1
+         eLYT7SYdIA2y3btczc/C1Ijr2BB1ZAPI7EPzluDxZ4eIR05VsUoD5CJbCp0n24CTRNek
+         MOwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679925508;
+        d=1e100.net; s=20210112; t=1679925510;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4y7RHA98qLuFsz3JDJ246X3y2mp8vITzNXl8/trhahM=;
-        b=RNtCWPROywZgDxpoQDnRowet/qrA/omuhd7VXbfHOmVW4V5cdx2v9ZnzMF2jK7IOpP
-         XBJIghsqS5JhjySooViXDrEr32BGhd9pZMuAKTYQeMLaKZUN9v9ObQFTMFEcJ2xiFfnY
-         ofC8DhcOiOmHHYRa5V6iJrI4RN7djp3t/KDODgG10xLCMQFzC3ET0vRX6anXb8MWfEfZ
-         YkYAnEzyoSMSdVgBoR2V1oFbb0kasqxpXOrVYOA+NAzrfO0dTfLNqwc2SawJG6orMv+J
-         FPJrgy9HsuBHya3ejkHDwVCfbuRXLkR3riVUy5seBME8CyHSQOyg9PRyIATbjhsj1S//
-         9DHg==
-X-Gm-Message-State: AAQBX9fA+NdCLZhPfOg8SzBcYXf5Ks7ZFL8oGo26R0p0PY6vYbonlDTJ
-        y8PnNiOEKt+KH04wUu/bCQQ=
-X-Google-Smtp-Source: AKy350bTpCZeZBYIJUxgULlpNIJsD9bEqu5L8bcdmiT8ZlfFx9c6w5QGgXyMp057jz2959mDdlOxhA==
-X-Received: by 2002:a05:6122:13b0:b0:435:e8a8:29e0 with SMTP id n16-20020a05612213b000b00435e8a829e0mr4364596vkp.6.1679925508575;
-        Mon, 27 Mar 2023 06:58:28 -0700 (PDT)
+        bh=sJi9k0SusRoBJX6bd5XD9Ah+7FRBbKHs2NSnZLEQwl0=;
+        b=F48fZ6NjXhisHVj2caETCa0PywwX7xUIsjZMHOUyhl2dHt0P/Lf2x4myu8pX2AwS4V
+         /W7J/odH2yTFeC4zCnKDiwoiV+LOGyrTQrehW/X6ieVq2Y9+eE1z8+8xVny42YAybSeQ
+         NcYknq8cxqPnL3j/S6K8TYC7X4Xe7YbZvLvaK6JOrtzsBxeNaVDSSRB1pEVllg2DmZI/
+         TcZTP2Oz1w/WfB2c0Iv120p5MtClASjgeSzqQ2/5zyoOzZnV6+bWbBUtJIUNGqHKY4S3
+         h0SGOQmbdwd4a7vGGCc+YDZITdnF0iJfoL2V4Ud0US6g1dP2Ei4BUumfBucpE6y7Ivf6
+         c66g==
+X-Gm-Message-State: AAQBX9c6hCWHckot5pgQeZHyRLeQLQq7zWa4cArpYlCx/L8w+XwiGGVA
+        X/ewaZs9go/0QK7dgtjkoV4=
+X-Google-Smtp-Source: AKy350ZyIcCs4NoQw4jqpwzxJW41AoFAtKNvyMHb4Ao/416i7Bz9wVzuOXP+8yFQwuuMe4CnC/ZPmw==
+X-Received: by 2002:a1f:6e4a:0:b0:403:23cb:4773 with SMTP id j71-20020a1f6e4a000000b0040323cb4773mr4238755vkc.2.1679925510654;
+        Mon, 27 Mar 2023 06:58:30 -0700 (PDT)
 Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id 135-20020a1f198d000000b004367f3393b8sm2731072vkz.28.2023.03.27.06.58.26
+        by smtp.gmail.com with ESMTPSA id 135-20020a1f198d000000b004367f3393b8sm2731072vkz.28.2023.03.27.06.58.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 06:58:28 -0700 (PDT)
+        Mon, 27 Mar 2023 06:58:30 -0700 (PDT)
 From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Mon, 27 Mar 2023 15:57:45 +0200
-Subject: [PATCH v3 3/4] mfd: tps6586x: use devm-based power off handler
+Date:   Mon, 27 Mar 2023 15:57:46 +0200
+Subject: [PATCH v3 4/4] mfd: tps6586x: register restart handler
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230327-tegra-pmic-reboot-v3-3-3c0ee3567e14@skidata.com>
+Message-Id: <20230327-tegra-pmic-reboot-v3-4-3c0ee3567e14@skidata.com>
 References: <20230327-tegra-pmic-reboot-v3-0-3c0ee3567e14@skidata.com>
 In-Reply-To: <20230327-tegra-pmic-reboot-v3-0-3c0ee3567e14@skidata.com>
 To:     Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
@@ -78,59 +78,67 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Benjamin Bara <benjamin.bara@skidata.com>
 
-Convert the power off handler to a devm-based power off handler.
+There are a couple of boards which use a tps6586x as
+"ti,system-power-controller", e.g. the tegra20-tamonten.dtsi.
+For these, the only registered restart handler is the warm reboot via
+tegra's PMC. As the bootloader of the tegra20 requires the VDE, it must
+be ensured that VDE is enabled (which is the case after a cold reboot).
+For the "normal reboot", this is basically the case since
+8f0c714ad9be1ef774c98e8819a7a571451cb019.
+However, this workaround is not executed in case of an emergency restart.
+In case of an emergency restart, the system now simply hangs in the
+bootloader, as VDE is not enabled (as not in use).
+
+The TPS658629-Q1 (unfortunately the only TPS6586x with public data sheet)
+provides a SOFT RST bit in the SUPPLYENE reg to request a (cold) reboot.
+This avoids the hang-up.
+
+Tested on a TPS658640.
 
 Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 ---
- drivers/mfd/tps6586x.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+ drivers/mfd/tps6586x.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
 diff --git a/drivers/mfd/tps6586x.c b/drivers/mfd/tps6586x.c
-index 2d947f3f606a..93f1bf440191 100644
+index 93f1bf440191..c8adf6a08277 100644
 --- a/drivers/mfd/tps6586x.c
 +++ b/drivers/mfd/tps6586x.c
-@@ -22,6 +22,7 @@
- #include <linux/err.h>
- #include <linux/i2c.h>
- #include <linux/platform_device.h>
-+#include <linux/reboot.h>
- #include <linux/regmap.h>
- #include <linux/of.h>
+@@ -30,6 +30,7 @@
+ #include <linux/mfd/tps6586x.h>
  
-@@ -457,13 +458,16 @@ static const struct regmap_config tps6586x_regmap_config = {
- 	.cache_type = REGCACHE_RBTREE,
- };
+ #define TPS6586X_SUPPLYENE	0x14
++#define SOFT_RST_BIT		BIT(0)
+ #define EXITSLREQ_BIT		BIT(1)
+ #define SLEEP_MODE_BIT		BIT(3)
  
--static struct device *tps6586x_dev;
--static void tps6586x_power_off(void)
-+static int tps6586x_power_off_handler(struct sys_off_data *data)
- {
--	if (tps6586x_clr_bits(tps6586x_dev, TPS6586X_SUPPLYENE, EXITSLREQ_BIT))
--		return;
-+	struct device *tps6586x_dev = data->cb_data;
-+	int ret;
-+
-+	ret = tps6586x_clr_bits(tps6586x_dev, TPS6586X_SUPPLYENE, EXITSLREQ_BIT);
-+	if (ret)
-+		return ret;
- 
--	tps6586x_set_bits(tps6586x_dev, TPS6586X_SUPPLYENE, SLEEP_MODE_BIT);
-+	return tps6586x_set_bits(tps6586x_dev, TPS6586X_SUPPLYENE, SLEEP_MODE_BIT);
+@@ -470,6 +471,17 @@ static int tps6586x_power_off_handler(struct sys_off_data *data)
+ 	return tps6586x_set_bits(tps6586x_dev, TPS6586X_SUPPLYENE, SLEEP_MODE_BIT);
  }
  
++static int tps6586x_restart_handler(struct sys_off_data *data)
++{
++	struct device *tps6586x_dev = data->cb_data;
++
++	/* bring pmic into HARD REBOOT state */
++	tps6586x_set_bits(tps6586x_dev, TPS6586X_SUPPLYENE, SOFT_RST_BIT);
++
++	mdelay(500);
++	return 0;
++}
++
  static void tps6586x_print_version(struct i2c_client *client, int version)
-@@ -559,9 +563,13 @@ static int tps6586x_i2c_probe(struct i2c_client *client)
- 		goto err_add_devs;
- 	}
- 
--	if (pdata->pm_off && !pm_power_off) {
--		tps6586x_dev = &client->dev;
--		pm_power_off = tps6586x_power_off;
-+	if (pdata->pm_off) {
-+		ret = devm_register_power_off_handler(&client->dev, &tps6586x_power_off_handler,
-+						      &client->dev);
+ {
+ 	const char *name;
+@@ -570,6 +582,13 @@ static int tps6586x_i2c_probe(struct i2c_client *client)
+ 			dev_err(&client->dev, "register power off handler failed: %d\n", ret);
+ 			goto err_add_devs;
+ 		}
++
++		ret = devm_register_restart_handler(&client->dev, &tps6586x_restart_handler,
++						    &client->dev);
 +		if (ret) {
-+			dev_err(&client->dev, "register power off handler failed: %d\n", ret);
++			dev_err(&client->dev, "register restart handler failed: %d\n", ret);
 +			goto err_add_devs;
 +		}
  	}
