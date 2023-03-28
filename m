@@ -2,62 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 502116CBBDA
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Mar 2023 12:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621676CBC7E
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Mar 2023 12:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbjC1KFR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Mar 2023 06:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
+        id S231203AbjC1K1Q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Mar 2023 06:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232890AbjC1KFB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Mar 2023 06:05:01 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCC65BBD;
-        Tue, 28 Mar 2023 03:05:00 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229620AbjC1K1P (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Mar 2023 06:27:15 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC767618B;
+        Tue, 28 Mar 2023 03:27:13 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8A867660313B;
-        Tue, 28 Mar 2023 11:04:58 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679997899;
-        bh=4iSxXbSBTVuKdjHaZLko5Y/yilWjU8OEvKfVGbRMxrg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kEksG60bjxqc7rREEJhdtoK7A+pgoEmjvU3lbUpuxhY9yFD0shUKBCam68l4fbp2/
-         yT76hFXBY1lkn3Rq1Jz8X5OfNI68bIUfiwSOHNQxPpibaRjQ+OLJZ3bSylUB5kbnbq
-         OYia2iAqDZ+EYbGEvwK3wP4go1v9i0+jR0btTI0Bx5ibEIs6672a+lKFDmnPAn3lVp
-         Ov9HZ+jTOCiRR6f0rIfhKUoVmKMZaj5msoTKCDxpQYpr5gKc8honcBhIKCfTM8aZHd
-         wHbK87uAHWtPf5SMUZl45w5NLDAteoV2oRd0ll57G1f5Q0QZOrTLgecqM6hbhCmmHK
-         C/OqwQpJ+fgtg==
-Message-ID: <945d8a82-80b3-8ae2-3b2a-7011621ad8d9@collabora.com>
-Date:   Tue, 28 Mar 2023 12:04:55 +0200
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id B85844248B;
+        Tue, 28 Mar 2023 10:27:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1679999231; bh=zT2koom/7W4xUS4Q4Sf76XmaDUMDIN5TnyETV511rOM=;
+        h=Date:Subject:To:Cc:From;
+        b=fDoF7aexA/9AcvnCA66GAgO+W9WNbjW5AWw4xVFwRwX9SZRxm/JPZSkZkNOrLK+c+
+         egHT+pqKAUs0KaLPXW5Tz7oQiNFzxR3gg2KH3rHVq4GJqPIgJ4e2QZcP9v+xl3PYlf
+         Ba09NK6CXwdD0KmVF3zHVZQlCdPYimKf327UbEI5io6hyajxtf/PxTwOk9+0hvnOuj
+         jhudG2tMYp6U/rOZ9iOh2gonmOvIx+5FS6rHEjvAXr4RlOKxQrx8S9uxtxQBithol3
+         l9ursIrP/XS41teW5MAscmRFYEUAeVJ7fiIeAiQ8q+Bpuu+wWcIZvaed1JbJ2CUk2k
+         ZhobpJ87npbHQ==
+Message-ID: <871beead-1cc8-bb94-7c15-0173dfb11e71@marcan.st>
+Date:   Tue, 28 Mar 2023 19:27:02 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v6 2/2] arm64: dts: mediatek: enable i2c0 for mt8365-evk
- board
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Qii Wang <qii.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
+Subject: Re: [PATCH] dt-bindings: i2c: Drop unneeded quotes
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Peter Rosin <peda@axentia.se>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
 Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Rob Herring <robh@kernel.org>
-References: <20221122-mt8365-i2c-support-v6-0-e1009c8afd53@baylibre.com>
- <20221122-mt8365-i2c-support-v6-2-e1009c8afd53@baylibre.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221122-mt8365-i2c-support-v6-2-e1009c8afd53@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+From:   Hector Martin <marcan@marcan.st>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,47 +71,25 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Il 28/03/23 11:04, Alexandre Mergnat ha scritto:
-> Enable the I2C0 bus provides communication with:
-> - The integrated RT9466 Switching Battery Charger.
-> - The integrated MT6691 LP4X buck for VDDQ.
-> - The integrated MT6691 LP4X buck for VDD2.
-> - The pin header, to plug external I2C devices.
+On 23/03/2023 02.35, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
 > 
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->   arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 15 +++++++++++++++
->   1 file changed, 15 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> index 4683704ea235..adc79ba14b33 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> @@ -87,6 +87,13 @@ optee_reserved: optee@43200000 {
->   	};
->   };
->   
-> +&i2c0 {
-> +	clock-frequency = <100000>;
-> +	pinctrl-0 = <&i2c0_pins>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +};
-> +
->   &pio {
->   	gpio_keys: gpio-keys-pins {
->   		pins {
-> @@ -96,6 +103,14 @@ pins {
->   		};
->   	};
->   
-> +	i2c0_pins: i2c0-pins {
-> +		pins {
-> +			bias-pull-up;
+>  Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml | 4 ++--
+>  Documentation/devicetree/bindings/i2c/apple,i2c.yaml          | 4 ++--
+>  Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml  | 2 +-
+>  Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml     | 4 ++--
+>  Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml       | 4 ++--
+>  Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml | 4 ++--
+>  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml       | 2 +-
+>  .../devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml          | 4 ++--
+>  8 files changed, 14 insertions(+), 14 deletions(-)
 
-I prefer seeing pinmux first, any other properties last....
-If Matthias can please fix that while applying...
+For apple:
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Hector Martin <marcan@marcan.st>
 
+- Hector
 
