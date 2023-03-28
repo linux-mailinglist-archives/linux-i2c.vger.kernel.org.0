@@ -2,185 +2,127 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED876CBE0C
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Mar 2023 13:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B096CC03F
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Mar 2023 15:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjC1LtF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Mar 2023 07:49:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
+        id S232707AbjC1NLN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Mar 2023 09:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbjC1LtE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Mar 2023 07:49:04 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F514EE7
-        for <linux-i2c@vger.kernel.org>; Tue, 28 Mar 2023 04:49:03 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id eh3so48389535edb.11
-        for <linux-i2c@vger.kernel.org>; Tue, 28 Mar 2023 04:49:03 -0700 (PDT)
+        with ESMTP id S232775AbjC1NLL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Mar 2023 09:11:11 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C45AF17
+        for <linux-i2c@vger.kernel.org>; Tue, 28 Mar 2023 06:10:49 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-545ce8e77fcso151537637b3.1
+        for <linux-i2c@vger.kernel.org>; Tue, 28 Mar 2023 06:10:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680004142;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+gYkRLzPec9yxMWag3b4xjfGsVDDrPt8d2gXGuiwhyc=;
-        b=BcznN7lkFma/0TZivl0KEICrWqRi9TGqtA9tTzAXu3QKGkxmXRQy0cH4kpcUe2z1vX
-         bf3FLFqPc6dlbK79FiXeAnyr77XeCuI3YLCK+9MQBJgGMncLKrUozLL8eiSxhyqEUrjf
-         4P72EC2tko+O1J2pfvPy7ZR/HddvVf5FSHPXS6DPt9THl5RtsHe1OWjl2m8bnP6NS2c1
-         AZyyjBTU6QMhe/u7OSYAWQQU2rWm0lONPS0cIqnJNSgqjOIHI04omf/OODgeAHvHWOBX
-         hXj16q0gwBjAAsfuDUfUocFZ8ZyYXpOwbgyS3zbT9k/dnSPwHG5n+IUqk1rfJPYYzpLF
-         7Wzw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680009044;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p5yUH2O4hFCVjfaJWgubVrQf+rHb0zN2XaPsX21lAqI=;
+        b=vpa/+dtXjYAGKZeU8wx922IUmAzz10Ey2PwnEv3C6YNXcpfFqDvPP9DAyCYP/Rp6US
+         xopnZ+5Vz+RzGo033bP6o44pPbxUQ9qrXT8ouYCOeR2mmX29fKdZPNQI6JXw5VVtCEbE
+         K2d+jCn3Qr38rlPs7tLJSjq5sKNy+HrzQ8WvMXu1/KBgRyf4B2oc3g/ocJ530XxOA0A0
+         mzHUzru5ARo8f8qnw0hvTNU90vLr2XYzmJdAPqUp4fQ94R85EvyzoH41ISOnWdg8vxGS
+         f18UVQbyZ9MWZ3D3f3WgH4G8oNm9zUEnX5ryw0NdgpkDWURzHPsXfbCjkgo2eYmZhQmT
+         +xCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680004142;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+gYkRLzPec9yxMWag3b4xjfGsVDDrPt8d2gXGuiwhyc=;
-        b=gVBJw4lW0WLnbE4jC8OmMz+40IhruTqw3J/qmTKeqzP/WhySaoPZVYTg3lWk99jTCE
-         HQh+fXKoiO0tRDzJXM5PWgUUZDyfIa1TbKDQ9Imrs/fi0qrJuDtb6Jw8lLI/NaRmMebw
-         Uw2rWMoKEQbvS+/qHzxUnCf1kQjg2C1g5+EEqz/aPnDcK1w2Mgk+VekiKlzwB0y04/ih
-         TpY1a72/hjmTaXKieAX4Lx/nemyd0mrnqz4jH+kssOnaY3GaI+IAGyTmIW85ySjfTCRS
-         yzQ1ZJWfIgKyvrz3rIOQa6MLPiAA2/qZLaV/Ww8BWgK3dxZHhhbRRpX/hyEqzKCUFN3n
-         Yzew==
-X-Gm-Message-State: AAQBX9dq0BuNHbhqdo1RZQ9TG5sGa8rNcOoEOUQlIcKLkd9Z66LVb2KQ
-        FhHMMa0eowuAx5H9SLfmxCh7NwazCLyJtZuVp7k=
-X-Google-Smtp-Source: AKy350bF2c+luO4tOJ29JP8/XWmMZiTM2EJbdUi9zxizj83KcYXCQa4KgOsVqm+2Qp/3W18lnOXdyA==
-X-Received: by 2002:a17:906:ac1:b0:92d:9767:8e0a with SMTP id z1-20020a1709060ac100b0092d97678e0amr13886925ejf.13.1680004141784;
-        Tue, 28 Mar 2023 04:49:01 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
-        by smtp.gmail.com with ESMTPSA id x23-20020a50d617000000b004fa268da13esm15980472edi.56.2023.03.28.04.49.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 04:49:01 -0700 (PDT)
-Message-ID: <13440581-cc57-d47a-4745-c89a729f240b@linaro.org>
-Date:   Tue, 28 Mar 2023 13:49:00 +0200
+        d=1e100.net; s=20210112; t=1680009044;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p5yUH2O4hFCVjfaJWgubVrQf+rHb0zN2XaPsX21lAqI=;
+        b=xOTRQ0CNQcUXsMRBWN+tiUXokl5a+yacYEdezHv0MMtM55Hh7Yn+uZ9O/hsLul8PmE
+         p0G7EtgiVJ7Askep86AO5vnH7LDzYOxLv0u3HH6h8HbyqkQ60NDGLCfYx/3FPGNCljSe
+         FVOfTGFf1hOm0KGTDZI1jWDZjLtCGZ/RtSNiCs0Hf+gX+mbyxuiurRT/WwADcxo37KvX
+         QY4vAnGWA3HQvzUnDLBq/oLUakYMOVo5QvwtMDy+yKgw5rAyjSgHY8GCb9woyWBqUwLv
+         ZiZU98vH0unsrdAPcOFo1lGi4aes5/fdY7zOy9VnoRr1iX0Wjjz2z9F8w56g42M2BhLh
+         yzQw==
+X-Gm-Message-State: AAQBX9cPlL0Cosm6BjQJmgUX/bwvtVTl4q6VO4Nk1ThLerLCPaZ3x+k9
+        AheHlrw9k7JBrU840OOswCA7oS24yYewhw82niqWLQ==
+X-Google-Smtp-Source: AKy350bdKqptsJnHXGuH0PKZyaYDntgiQ0cShdje6zVHnvCC14jNHBYIsZq725pn7qWvX7BedhrW3FtTFjBXS25A3qI=
+X-Received: by 2002:a81:b721:0:b0:545:3f42:2d97 with SMTP id
+ v33-20020a81b721000000b005453f422d97mr6264242ywh.3.1680009044455; Tue, 28 Mar
+ 2023 06:10:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v7 1/2] dt-bindings: i2c: aspeed: support for
- AST2600-i2cv2
-To:     Ryan Chen <ryan_chen@aspeedtech.com>, jk@codeconstruct.com.au,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-i2c@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+References: <20221122-mt8365-i2c-support-v6-0-e1009c8afd53@baylibre.com>
+ <20221122-mt8365-i2c-support-v6-2-e1009c8afd53@baylibre.com> <945d8a82-80b3-8ae2-3b2a-7011621ad8d9@collabora.com>
+In-Reply-To: <945d8a82-80b3-8ae2-3b2a-7011621ad8d9@collabora.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Tue, 28 Mar 2023 15:10:33 +0200
+Message-ID: <CAFGrd9oV9isSmpsT7VZ6VY4VpW4RtNnM4J+t_TbRMwt7t13gRw@mail.gmail.com>
+Subject: Re: [PATCH v6 2/2] arm64: dts: mediatek: enable i2c0 for mt8365-evk board
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Qii Wang <qii.wang@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-aspeed@lists.ozlabs.org
-References: <20230327092524.3916389-1-ryan_chen@aspeedtech.com>
- <20230327092524.3916389-2-ryan_chen@aspeedtech.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230327092524.3916389-2-ryan_chen@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 27/03/2023 11:25, Ryan Chen wrote:
-> Update ASPEED I2C maintainers email.
+Le mar. 28 mars 2023 =C3=A0 12:05, AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> a =C3=A9crit :
+>
+> Il 28/03/23 11:04, Alexandre Mergnat ha scritto:
+> > Enable the I2C0 bus provides communication with:
+> > - The integrated RT9466 Switching Battery Charger.
+> > - The integrated MT6691 LP4X buck for VDDQ.
+> > - The integrated MT6691 LP4X buck for VDD2.
+> > - The pin header, to plug external I2C devices.
+> >
+> > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> > ---
+> >   arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 15 +++++++++++++++
+> >   1 file changed, 15 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/b=
+oot/dts/mediatek/mt8365-evk.dts
+> > index 4683704ea235..adc79ba14b33 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+> > @@ -87,6 +87,13 @@ optee_reserved: optee@43200000 {
+> >       };
+> >   };
+> >
+> > +&i2c0 {
+> > +     clock-frequency =3D <100000>;
+> > +     pinctrl-0 =3D <&i2c0_pins>;
+> > +     pinctrl-names =3D "default";
+> > +     status =3D "okay";
+> > +};
+> > +
+> >   &pio {
+> >       gpio_keys: gpio-keys-pins {
+> >               pins {
+> > @@ -96,6 +103,14 @@ pins {
+> >               };
+> >       };
+> >
+> > +     i2c0_pins: i2c0-pins {
+> > +             pins {
+> > +                     bias-pull-up;
+>
+> I prefer seeing pinmux first, any other properties last....
 
-Everything is an update. Describe what is wrong in original maintainer
-email (e.g. Fix typo in maintainer's name and email).
+Here the pinctrl binding cleanup [1]
 
-> Add ast2600-i2cv2 compatible and aspeed,global-regs, aspeed,enable-dma
-> and description for ast2600-i2cv2.
-> 
-> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
-> ---
->  .../devicetree/bindings/i2c/aspeed,i2c.yaml   | 56 +++++++++++++++++--
->  1 file changed, 52 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-> index f597f73ccd87..00b92c97f432 100644
-> --- a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-> @@ -7,10 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: ASPEED I2C on the AST24XX, AST25XX, and AST26XX SoCs Device Tree Bindings
->  
->  maintainers:
-> -  - Rayn Chen <rayn_chen@aspeedtech.com>
-> -
-> -allOf:
-> -  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +  - Ryan Chen <ryan_chen@aspeedtech.com>
->  
->  properties:
->    compatible:
-> @@ -49,6 +46,25 @@ properties:
->      description:
->        states that there is another master active on this bus
->  
-> +  aspeed,enable-dma:
-> +    type: boolean
-> +    description: |
-> +      I2C bus enable dma mode transfer.
-> +
-> +      ASPEED ast2600 platform equipped with 16 I2C controllers that share a
-> +      single DMA engine. DTS files can specify the data transfer mode to/from
-> +      the device, either DMA or programmed I/O. However, hardware limitations
-> +      may require a DTS to manually allocate which controller can use DMA mode.
-> +      The "aspeed,enable-dma" property allows control of this.
-> +
-> +      In cases where one the hardware design results in a specific
-> +      controller handling a larger amount of data, a DTS would likely
-> +      enable DMA mode for that one controller.
-> +
-> +  aspeed,global-regs:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: The phandle of i2c global register node.
-> +
->  required:
->    - reg
->    - compatible
-> @@ -57,6 +73,26 @@ required:
->  
->  unevaluatedProperties: false
->  
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: aspeed,ast2600-i2cv2
-> +
-> +    then:
-> +      properties:
-> +        reg:
-> +          minItems: 2
-> +      required:
-> +        - aspeed,global-regs
-> +    else:
-> +      properties:
-> +        aspeed,global-regs: false
-> +        aspeed,enable-dma: false
-> +
-> +
->  examples:
->    - |
->      #include <dt-bindings/clock/aspeed-clock.h>
-> @@ -71,3 +107,15 @@ examples:
->        interrupts = <0>;
->        interrupt-parent = <&i2c_ic>;
->      };
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    i2c1: i2c@80 {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      compatible = "aspeed,ast2600-i2cv2";
-> +      reg = <0x80 0x80>, <0xc00 0x20>;
+Regards,
+Alex
 
-Compatible and reg are always first properties in DTS.
-
-> +      interrupts = <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>;
-> +      aspeed,global-regs = <&i2c_global>;
-
-Best regards,
-Krzysztof
-
+[1]: https://lore.kernel.org/all/20230327-cleanup-pinctrl-binding-v1-0-b695=
+e32e4f2e@baylibre.com/
