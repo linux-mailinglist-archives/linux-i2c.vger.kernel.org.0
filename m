@@ -2,36 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CAE6CF2BD
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Mar 2023 21:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD7F6CF2C1
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Mar 2023 21:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjC2TIC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Mar 2023 15:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
+        id S230132AbjC2TIn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Mar 2023 15:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbjC2TIB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Mar 2023 15:08:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B474B1738;
-        Wed, 29 Mar 2023 12:07:57 -0700 (PDT)
+        with ESMTP id S230138AbjC2TIj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Mar 2023 15:08:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E000F49F1;
+        Wed, 29 Mar 2023 12:08:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5AC47B82420;
-        Wed, 29 Mar 2023 19:07:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9887DC4339B;
-        Wed, 29 Mar 2023 19:07:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93777B823F4;
+        Wed, 29 Mar 2023 19:08:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2A89C433D2;
+        Wed, 29 Mar 2023 19:08:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680116875;
-        bh=JWp+u42qJQLTCyx5frrg1Ootes616VsM1p+nVSOjHLg=;
+        s=k20201202; t=1680116909;
+        bh=WQo7TFtijNQFhoJAM3AwfZHRhJM0xXZ+NbBR2qdKp8Q=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nMjky4/jkVuNpMxy+1LAvTgCMdOIiy3sHFX7eFzvtSnTJD5zJYNSH3jg1FZdT9uyy
-         TvxhVy9qiORvyLki5+Fv1ueeBNnXk3m3eMtJqe5Xbl8qHRfNt55m0hErUK6K/sXyLR
-         FAXQMOiPMXJfo2ZMDMsJZrCFkQ6CCv9kdaziuxTMaWfC9aiuhKRIpiQeHKOBnqoJRE
-         C4idY+DYQdUv/84uUEt7FCQJCRafM29AjE/ocEFUBEEeTN++86+VUTrPP1n5a0Beyu
-         tPns9lhNYVV5B8tBPoUJV2v9EVjHOxAYA4ESGl3mcv2A6b6DEEEBuR9Fe4InH3Os64
-         ezXguASn58IhQ==
-Date:   Wed, 29 Mar 2023 21:07:51 +0200
+        b=Htmb89m81hQQ1YjjQApV3FfMLPzw+89o4vUAtGGEgB90ilbdXkajkhguYrFvAE4Dh
+         ZPcL0Y5i/O21nSXdq61tkqTBiCH8g+cjU16Q2/c55FMapXTQOP7uEv2kEM+iBcStLl
+         A+7VVDtmLQjet2Uos/3231+YlhPykKgypDXmj9OppZIkMzqsddvidKS4DX/PrQzgMv
+         88dye+6ZijFwam0nWrI46RosYiuY9eu00CuqBjUrWlMJqpIsTyhO1VcbFvBRDbxWLA
+         dTx63a7tdwZR0XG+x0WqSq68Mox4LQ4xuN5j0Vc0LWv+Vp3n8boQ1a95u4s3pD4WA7
+         77zIVYUhUDdEw==
+Date:   Wed, 29 Mar 2023 21:08:25 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Andi Shyti <andi.shyti@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
@@ -39,9 +39,9 @@ Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Chris Packham <chris.packham@alliedtelesis.co.nz>,
         Ryan Chen <ryan_chen@aspeedtech.com>
-Subject: Re: [PATCH v5 1/3] dt-bindings: i2c: mpc: Mark "fsl,timeout" as
- deprecated
-Message-ID: <ZCSMh9fPruUc9asF@shikoro>
+Subject: Re: [PATCH v5 2/3] i2c: mpc: Use of_property_read_u32 instead of
+ of_get_property
+Message-ID: <ZCSMqVsd51rZe6SU@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -50,14 +50,14 @@ Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Chris Packham <chris.packham@alliedtelesis.co.nz>,
         Ryan Chen <ryan_chen@aspeedtech.com>
 References: <20230317233338.424864-1-andi.shyti@kernel.org>
- <20230317233338.424864-2-andi.shyti@kernel.org>
+ <20230317233338.424864-3-andi.shyti@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="azQnxdkb07RFamvZ"
+        protocol="application/pgp-signature"; boundary="oBOLTajA4eZuuXGf"
 Content-Disposition: inline
-In-Reply-To: <20230317233338.424864-2-andi.shyti@kernel.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+In-Reply-To: <20230317233338.424864-3-andi.shyti@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,41 +66,45 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---azQnxdkb07RFamvZ
+--oBOLTajA4eZuuXGf
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Mar 18, 2023 at 12:33:36AM +0100, Andi Shyti wrote:
-> Now we have the i2c-scl-clk-low-timeout-us property defined in
-> the i2c schema.
+On Sat, Mar 18, 2023 at 12:33:37AM +0100, Andi Shyti wrote:
+> "of_property_read_u32()" is preferred to "of_get_property()" for
+> retreiving u32 from the device tree. Replace it.
 >=20
-> Mark "fsl,timeout" as deprecated and update the example.
->=20
+> Suggested-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Tested-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
-Applied to for-next, thanks!
+Fixed this checkpatch warning:
+
+  WARNING: 'retreiving' may be misspelled - perhaps 'retrieving'?
+
+and applied to for-next, thanks!
 
 
---azQnxdkb07RFamvZ
+--oBOLTajA4eZuuXGf
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQkjIcACgkQFA3kzBSg
-Kbb6Eg//XR+8KBhM/EycKFGeym5+AioFgLfgu7XUw7izhFd2k0o4cFPyNyv8NnTU
-YCHPQpIGtUvlnu+TgdZMHwuWWPSYiBuv+UoH6hJdMAN1HGPbiMZSHV57UsfyL/X/
-IaCnP+VVw1pH5N51S9xRPv0rg83GmDuSbbzzrLV1C1tcK9632L6zRlxrcr6HFq87
-fxg3tj9ZZUXzytO4U1TV91hxsTlgmPwBqdQ4Z5SUppPe4Y7SaGCCqMR1q1Hz312d
-PleJ8UUCEYMzyv3w8SFX5WVuWtBRlbmmSTGLkjS+VdqT40O+hZXzciX5B9oUUUnd
-bNyjoq+g7csKfcuZkpTFZqsScNQvhnzurmwLRc7LoEWoy0sqk1bktedj+cKbw9ju
-d1DrTleSNUjBwaXXOl6PPiwx4SRD/LvrCmkCAP27gx6gSZ0+MvBZ0cUVx0FD6lBq
-TYjoVAOEcXy7hTwmnhTcKu0cjE8q0RWMltWlqOL/CajCGfKBfUrGmd09E8lt293N
-p9+QDV0jrJxqxL6oPMoXbdIEAeqx8RTBb1OX3gbc1pfpgAi4E6SdVSZcfFo68wk3
-5YJoHY8qEIpqiH7IKtNIlPeKf6pY+36zt3r9WY2E1ivQtZXCEeah71g9dkUkQuph
-4Pzsj8dFisTjiLV7oQq0ESQPNiK6LZ+nXGIGKcQwtnnMqDb6Y/g=
-=Rlxx
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQkjKkACgkQFA3kzBSg
+KbY1nw//cDWSS0cJz6qg5hcZ23p4PlKA3lcW2xPIS1m7myWBRSm6FZVDajhL68q5
+Y0HhrMApMSqlsI9itfWxJrEwrPFQTkhK4bBFhmr7YOl/fIFewy8ab+EnMFUB4Oth
+47BbX+7l6cHCizY3D/xgnNYCoUe2nIsFPqwZ2OP8+36Hn4bXkfg8ewBW6v0fVrYK
+52PempM+W80b7SXHDNWtV9KskUeZeTtBUQtkEv5U9DP0i+utxSBBc0NQRfVPcv2i
+N6r1C3gHQmDeRD9A3IwfKHlcCkTfPTUajSKvRIvEOm6+MmcBNWt1xBEjc9Lh8dlp
+SodeLsPOA/jwtCLtDlQS98zaDZcgXu0v425SnEufXCLkNU3jxxTeICw7+r00R/Ph
+EGFWYAd10aTGUcZmR9BmED4x9TULSuM1W9PXXKY8YkxbH44pqrI8CsSrYosCReMw
+pcQxKIHNaPFlWUQCLWGRjwrLBHbkkME5cTRuf7oHUqvjZqYLSRL7L8A43OsWJQsu
+dR7LVav+Owv3NWw2YPLJ8fIDM0FbQFOa8oDNVXWmAjFmh8CKD3DipaZ8y8hxqxEo
+DAr8EraFmtGBU+VEWmCdieNlcnRfG8k6PCgdkL53CUNqeio94USZpxaSGD5va8+H
+jOiBhr0LxSBC9XIzmH4kGew6GQ/YcApmr2c8kjx53Ez097ZcF9c=
+=wqpl
 -----END PGP SIGNATURE-----
 
---azQnxdkb07RFamvZ--
+--oBOLTajA4eZuuXGf--
