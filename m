@@ -2,191 +2,183 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F936CCF32
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Mar 2023 03:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E646CD4CA
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Mar 2023 10:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjC2BHA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Mar 2023 21:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
+        id S229550AbjC2Ihb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Mar 2023 04:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjC2BG7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Mar 2023 21:06:59 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2107.outbound.protection.outlook.com [40.107.215.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B09124
-        for <linux-i2c@vger.kernel.org>; Tue, 28 Mar 2023 18:06:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lCipD4x5+g+d9+qlimD4oe7s6QtMsTj71+435S6Td53mTsT5au2tlB9CFH1GauaJweSNZdAxcynpOqI3DG/aV8u3kFPFZt/y9GGSQxIIXT1zmQLVENHK0XJwoPnjLJAE8M6NtO3ZXZNlBVkQqfXP1Nyp42Xh7HL7i7ZGCfJVwLYHAF2TltvekwKcHYIgciLoYEyZ6MNSKhw6QvQVpoo64sBVmCe7dBl63kWj+XFoJV8BF9bz5RL4Qd6tGQZ6o3DCFfngzYN33fcYltS5hatS3nu6o1nc7NwEicx2aX6/rmaRUUIjzrYiWwUxgIyj27oh/29EHHscbSXQdKn3kLIweQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rq3BBtpzeLOZsTdZyGs+W21sXnJD5rlQC+njWIPH1qM=;
- b=FrsQybN2LxvK82NuDTJC5QBRxPyBE0jLL/XUS+RdIJYIdmMtbbugMRN7b/mgAfB41jbJ0A8Awcf9zzg5r9S43lZ2Ue32/CG5lV6ka7ZFDXPPlfbRYeJr3H1ePz2vA/QR4TCRrPv8PmNobqHIe6zT2Ef5r7JLvgpcregyPLbg9E8cCERuB6K4YiZ5hScMDRoS1dGmQTySGSWJyiKgBagGrqJ+8Yd2TNAifyNcANBSjzc7x9d6ie66jeBgES9SI7FvIZNhZEucLPLutqamPmh2VyDC4GrkMXxbH+lBaZKijuXrGn/b+mWmr/7IAKU2HdHHMRyuCQaG0VCYlMS6h1QaSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rq3BBtpzeLOZsTdZyGs+W21sXnJD5rlQC+njWIPH1qM=;
- b=pjn0Cuv3wySeoPKlb4bgK0L1RYdZlwryMGKFeaiibr/BdZ+ZzV0R8PPtP+1bH27D7f3QGCXIj7X81Iwv6j5WfGvzuGteZq9+MGAxqR/wl5LAgraOswkQdYeRMayIq5RkajFfsvRUEory62si1iFe38h+QESstKgGcZT1W/YBsPPF53HfcIPaKc/iuSERhbNZAxH/e1k7Ws2Ga2YV5JPG3Jit26hR0R9Uyb0ews7m6pkXnu4SImsfegCqFmdleKmL9l7a0vIsbpB6BYvdegpTAydtTlt7g/huu3GlPIct01zdsudz07DGe21/hQQI1NwxtTwbTJUDqpQZ9Sek0N0B6Q==
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by PSAPR06MB4376.apcprd06.prod.outlook.com (2603:1096:301:79::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.35; Wed, 29 Mar
- 2023 01:06:49 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::a3a1:af8e:be1e:437c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::a3a1:af8e:be1e:437c%6]) with mapi id 15.20.6222.033; Wed, 29 Mar 2023
- 01:06:49 +0000
-From:   Ryan Chen <ryan_chen@aspeedtech.com>
-To:     Andi Shyti <andi.shyti@kernel.org>
-CC:     "jk@codeconstruct.com.au" <jk@codeconstruct.com.au>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>
-Subject: RE: [PATCH v7 2/2] i2c: aspeed: support ast2600 i2c new register mode
- driver
-Thread-Topic: [PATCH v7 2/2] i2c: aspeed: support ast2600 i2c new register
- mode driver
-Thread-Index: AQHZYI4UsjVcqSJbI0ySmwJZKivAsa8QLL2AgADGxGA=
-Date:   Wed, 29 Mar 2023 01:06:48 +0000
-Message-ID: <SEZPR06MB52695C237BE0BDD4B5B2BC14F2899@SEZPR06MB5269.apcprd06.prod.outlook.com>
-References: <20230327092524.3916389-1-ryan_chen@aspeedtech.com>
- <20230327092524.3916389-3-ryan_chen@aspeedtech.com>
- <20230328131219.khfd2jz3z4es5bzy@intel.intel>
-In-Reply-To: <20230328131219.khfd2jz3z4es5bzy@intel.intel>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SEZPR06MB5269:EE_|PSAPR06MB4376:EE_
-x-ms-office365-filtering-correlation-id: 15f52457-faf3-4084-9354-08db2ff1dfbc
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6slkgtAuDubVDNNVsvYPMIj0hM8Y66ABMraOThAa4tcIXtLvDqCkNYhiNgMYa/HN4xaqEQjHL4JTGaE1P0JY0ceUWQUHxbUd63ezImly7+R7gFMQdGxX7zKnb+PgXoqiY8Kb9jQg4QGVfhHdFVzh8LT4JUsJI4EmSrNk7ly3W+m06tEH1h6Jv4QAgwV4Hn52slbhgLpiMpgs2wcMi5oKWxhQLATHy5G5z6utIi25IarC99MbXAb8Q1NCjoeVm9yoJXx1u/A8iuxBOiYQzUUD21V8knfxSwwcqw7IiYGsJFphnvJO+j9LZwO4CTS/EaTIMjSJWZY6Ra9Y42Y1B7sS6hXmnCcwFUgle6Fd7AAbIaR2DsfdDH8C1b8Pi9qPjvooqpLpVKVgUZ3AfiiF+rHMC0+np92gGON23sYFA7RikQlgJZFypPL19RxP6LrjkRp1gYZZijiht7V6IrgOmgdxIeCjie04IsKfJEU/V0rkvOL4t/NyjMN86/ogtJmtVO+fyFi1CwHkkdkOn7/YJvEIwp4dr8QqEZJ2pZzEwpeZIH/ieeHWxFp6vP8A5h/ZtHhXgGoKXSlp088xCm4eYQZo3X6McizEYgzCu1MQ/thos6I7mrgttW14KDMu9I6m2IlM
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(136003)(376002)(396003)(39840400004)(366004)(451199021)(2906002)(83380400001)(5660300002)(71200400001)(7416002)(8936002)(41300700001)(52536014)(54906003)(66446008)(64756008)(66556008)(66476007)(4326008)(6916009)(8676002)(316002)(55016003)(478600001)(33656002)(66946007)(76116006)(7696005)(86362001)(186003)(122000001)(53546011)(6506007)(9686003)(26005)(38100700002)(38070700005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?k9Yez9kWaptO1DM0CSw+dcfFmn2vOHC9VB+9YsRQhoL5TAp+re5APowG/0Jo?=
- =?us-ascii?Q?V/Ysi5lt6jZ5OvlrhESscAfjcNsHMunQsDOsrc4udwIXDClA/vdr7l9g3aL/?=
- =?us-ascii?Q?46ThsbT/+DP/ZkuayEnJySRYDHcidrJYT8JsIqIlohgqLskKrdUNTv6hSxOg?=
- =?us-ascii?Q?BX+9WL7+MpB2HhOLpWkDtuXVzD+ng6URN/o4oyP0ax5+gneGZh1oWnbdb44Z?=
- =?us-ascii?Q?FCxarG0AigExGW9DEZ1SlVMV1Qba16jO7GCCsT7b7NbjrMXWx9YzAiYPwKok?=
- =?us-ascii?Q?W2rC91J7fHkzNCi0CtlHqPtfzVcyVYr5cEXjh1SoClZT/UOrFMWdssD4DV6J?=
- =?us-ascii?Q?+mOa3hCF/aFI+cW3Uj04fHQpgkEqYxE9LiUogiuMrSEhaxredjxXJgpF8Fbd?=
- =?us-ascii?Q?BBXUYcjY/H8fZDX/46wH7R960B1FASUHS7vDUVv5YznFTPcpumtzhhXJ6rp+?=
- =?us-ascii?Q?ME4dAqx/aN68JWYHh/jsmIoJhRIkVzv/BR3+CSih9sMmECG993N0Se3938cL?=
- =?us-ascii?Q?IuJmJfinWspmI/YgFFrq0+qWl/UFXOa5C+W9l11xZjOREAgb8a2UnDjp4qij?=
- =?us-ascii?Q?86PWcMdxKluWFaewZL/onKdK8cSz2tv5wYVaRwxUTXu7njfZenaHFQesD8YG?=
- =?us-ascii?Q?uCRs555D5mFe3zE+haiA/1xWyEq4tf65O++O1yIFuv9xQRfdabOg0HKEgoQ8?=
- =?us-ascii?Q?Llvi+EmyAlVQDUWC3OeotjE9teH6Meno5KzCuedjSErKEHyGwEPq3tyeu7e5?=
- =?us-ascii?Q?8lRtn8MGA/8RFiSny8X7opRYCbREywv+dHpqLl68f1d0M9Wjv2Yht2xYzWzv?=
- =?us-ascii?Q?E+eQHP7I49p3neAppRzWajQMhTY9UvvHSV6/Y2GlzIX3g+uVhVQRSVL5GEy8?=
- =?us-ascii?Q?+IDb5iWj0duFlNZFhlJNq48nIsdUAQetRr39ON+bEAKNeROoOvxFEYGG4ePy?=
- =?us-ascii?Q?81/m0DHCwgAAlPBhjaXM6KHYMyGewpACje6m7bhKFNCoAxodQume0ZVv+Q4R?=
- =?us-ascii?Q?Nih746txLf4uvTmK1J7WBEwWTxcTgXQbeLmQfExI12OED0p+4hImmA2rDhEz?=
- =?us-ascii?Q?84s9DfoiofWD9giPuVjMnNNB3IbUVl/X7CKC9dIsY7S23Jl9m7DMdcoLwXN2?=
- =?us-ascii?Q?gHDStbv36pYA6jO23WTF7eUMxR92L3FKddBMYj1xQMygOgBNKLKO44N2olL1?=
- =?us-ascii?Q?YghOXDdF9L5GA1G4iumKFbRfGlEo9kZ7Y99jQlOil7xSujcUzwLBijPkxtiP?=
- =?us-ascii?Q?njBu3F2B/efpou9NzGOQiZ6r+frrxXaLKW/nUjB4nJ4uCm/6QXiWOpVCrGZQ?=
- =?us-ascii?Q?iCou9ayiHbNw5ZnwbiYE9j9GLCptlhAUVfuuhNocDNNWy9lq5bu6a7xe26Xd?=
- =?us-ascii?Q?eKWg5JUrSYPur8sEhsGu++RYv4cqPdAR35l5kINzo99hKCcyCmUsY8/jeHLO?=
- =?us-ascii?Q?xMnLgQNxFY+Ro+CPh1iKUeNWRAGyJvsYG9wB2YJxJfoD3FXNYHHnnIo+Ivou?=
- =?us-ascii?Q?AuYYQ02vrbhRrLg+SWXdtioHPAaBWv20/xUnt9EH+Wcscn3osVoU6iNuT5IU?=
- =?us-ascii?Q?7edpB4XB/EetDCMsJyS2vam/dAHrs9rPyCBnTlmL?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229656AbjC2Ih3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Mar 2023 04:37:29 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB2B4697
+        for <linux-i2c@vger.kernel.org>; Wed, 29 Mar 2023 01:37:17 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-5416698e889so280492977b3.2
+        for <linux-i2c@vger.kernel.org>; Wed, 29 Mar 2023 01:37:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680079036;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fEEjt5KTOiMxdxcRezWpGMm6v+AEsQGVPozQ3NTxWGQ=;
+        b=RyxRU52zrMaY1+rCiw2RsrCGt9/viM3/l3sfw4JQCjh/8bpNfF7lm5FztCSqWhgmdf
+         ssDYQ6iDt8NQablYueMCScBaQNhiokwb0JUI/pUrlXqHvMXCupxNmWWheju/N6FIvc/P
+         HTbInlTEaEK9sK04pzgm1v5UnAqcTGRl7sAr45kkgbFRRvwvsqEnzSyb0A6K9b3q6dKr
+         R/EjzL7WFDTFJv47uBKGwjutYgjEQptSHSmDXIeuDeoqdQXPsE1L5NVsYJX1vvf0/qBm
+         hq8CvAowe7oUE6hVym2BqUo35uDTr+VJ99EVE8AoaIE2TYRC/aNHoX/W6jcj/M0Uqm0Y
+         wQlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680079036;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fEEjt5KTOiMxdxcRezWpGMm6v+AEsQGVPozQ3NTxWGQ=;
+        b=dePw5aYLfCVvUIZXIQwkxio7CPnXCRRQbhN2O9ZSmlHHKZ7oMV27QXmBCGGum6AipY
+         3ER63SOWVdklOy5ypfZWgoY2uGDQwdZUzpKbKKqU8gHvAoo9qM0w+At0sL9c6qq26m6p
+         GXmSe3STYTY8bfX89rZ7BXlmlU36jqC/eZ10798owL3A/UU1wEpXwYbHrLwb4o5uCsxc
+         G608CZhqVsFpojqcn8njv3tBgxV/t5wYQ9BAFs2/jE85shhBPCXNKxbouaTaxJqlYy57
+         X/jshPkEJnejW5AxdACslyxmqCbICkH5R87jkQ4FNq0xy1I1F9JwjdvCLdmUTKVHYAaP
+         rHAw==
+X-Gm-Message-State: AAQBX9cwX3tCJtYspuyXxG7Kf2Hp2l81GbdzTx6MVBenAqYF/20orHtn
+        8sSIINY0MJean50q0FZJ/aQzQN9K+8aunKrQDTMAog==
+X-Google-Smtp-Source: AKy350bwKhACZ5LjWDNs8HRhrB7fLtOYZiPiILPtu5+aF4SvdFnw0KrxlhqAmKxWV8fUa8xzRfUKXoUyKG2s33koCf8=
+X-Received: by 2002:a81:eb02:0:b0:545:883a:544d with SMTP id
+ n2-20020a81eb02000000b00545883a544dmr9195077ywm.9.1680079036640; Wed, 29 Mar
+ 2023 01:37:16 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 15f52457-faf3-4084-9354-08db2ff1dfbc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2023 01:06:49.0175
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: TJxwIO1pyJNOyxVqpoIm1SC+l3IuiKkOs12sBDzFYcFBfYj2rP/gXEgaedPLW80ctsvcxuQBRjWCBcvtHvEvBgRMkSXTXBKPz3NleYXKhWs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4376
+References: <20230325154711.2419569-1-xiang.ye@intel.com> <20230325154711.2419569-5-xiang.ye@intel.com>
+In-Reply-To: <20230325154711.2419569-5-xiang.ye@intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 29 Mar 2023 10:37:05 +0200
+Message-ID: <CACRpkdbDmPpKFVxmn1ntKJWr5_mraKuafuTgJtgBU+39PxEYgg@mail.gmail.com>
+Subject: Re: [PATCH v7 4/6] gpio: Add support for Intel LJCA USB GPIO driver
+To:     Ye Xiang <xiang.ye@intel.com>, Marc Zyngier <maz@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello Andi,
+Hi Ye,
 
-> -----Original Message-----
-> From: Andi Shyti <andi.shyti@kernel.org>
-> Sent: Tuesday, March 28, 2023 9:12 PM
-> To: Ryan Chen <ryan_chen@aspeedtech.com>
-> Cc: jk@codeconstruct.com.au; openbmc@lists.ozlabs.org;
-> linux-arm-kernel@lists.infradead.org; linux-i2c@vger.kernel.org; Rob Herr=
-ing
-> <robh+dt@kernel.org>; Krzysztof Kozlowski
-> <krzysztof.kozlowski+dt@linaro.org>; Joel Stanley <joel@jms.id.au>; Andre=
-w
-> Jeffery <andrew@aj.id.au>; Linus Walleij <linus.walleij@linaro.org>;
-> linux-aspeed@lists.ozlabs.org
-> Subject: Re: [PATCH v7 2/2] i2c: aspeed: support ast2600 i2c new register=
- mode
-> driver
->=20
-> Hi Ryan,
->=20
-> [...]
->=20
-> > +	ret =3D of_property_read_u32(dev->of_node,
-> > +							"i2c-scl-clk-low-timeout-us",
-> > +							&i2c_bus->timeout);
->=20
-> in your v6 patch this was a boolean value. If you need to keep it boolean=
- you
-> have the "i2c-scl-has-clk-low-timeout".
+thanks for your patch!
 
-Thank your remind, I will keep " i2c-scl-clk-low-timeout-us", if property i=
-s empty, will disable it.
-If not, will enable the timeout. It is ok for me.
+On Sat, Mar 25, 2023 at 4:48=E2=80=AFPM Ye Xiang <xiang.ye@intel.com> wrote=
+:
 
->=20
-> > +	if (ret < 0) {
-> > +		i2c_bus->timeout =3D 0;
-> > +	} else {
-> > +		/* i2c timeout counter: use base clk4 1Mhz
-> > +		 * per unit: 1/(1000/4096) =3D 4096us
-> > +		 */
-> > +		i2c_bus->timeout /=3D 4096;
-> > +	}
->=20
-> Can you please run checkpatch.pl before sending the patch?
->=20
-> [...]
->=20
-> > +	dev_info(dev, "%s [%d]: adapter [%d khz] mode [%d]\n",
-> > +		 dev->of_node->name, i2c_bus->adap.nr, i2c_bus->bus_frequency /
-> 1000,
-> > +		 i2c_bus->mode);
-> > +
-> > +	return 0;
-> > +
-> > +	return ret;
->=20
-> can you also please do some cleanups before sending the patch?
-Sorry, will update these two. And send next patch.
+> This patch implements the GPIO function of Intel USB-I2C/GPIO/SPI adapter
+> device named "La Jolla Cove Adapter" (LJCA). It communicate with LJCA
+> GPIO module with specific protocol through interfaces exported by LJCA US=
+B
+> driver.
+>
+> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
 
-Best Regards,
-Ryan.
+Lots of improvements! here are some comments:
+
+> @@ -1253,6 +1253,18 @@ config GPIO_KEMPLD
+>           This driver can also be built as a module. If so, the module wi=
+ll be
+>           called gpio-kempld.
+>
+> +config GPIO_LJCA
+> +       tristate "INTEL La Jolla Cove Adapter GPIO support"
+> +       depends on USB_LJCA
+> +       select GPIOLIB_IRQCHIP
+> +       default USB_LJCA
+> +       help
+> +         Select this option to enable GPIO driver for the INTEL
+> +         La Jolla Cove Adapter (LJCA) board.
+> +
+> +         This driver can also be built as a module. If so, the module
+> +         will be called gpio-ljca.
+
+The GPIO Kconfig has a separate submenu for USB expanders, so
+put this Kconfig in that submenu. This makes the choice come in
+a more logical spot and not appear on configs that don't even
+have USB.
+
+(...)
+> +       DECLARE_BITMAP(unmasked_irqs, LJCA_MAX_GPIO_NUM);
+> +       DECLARE_BITMAP(enabled_irqs, LJCA_MAX_GPIO_NUM);
+> +       DECLARE_BITMAP(reenable_irqs, LJCA_MAX_GPIO_NUM);
+> +       u8 *connect_mode;
+> +       /* mutex to protect irq bus */
+> +       struct mutex irq_lock;
+(...)
+
+With IRQ code like this from a USB callback:
+
+> +static void ljca_gpio_event_cb(void *context, u8 cmd, const void *evt_da=
+ta, int len)
+> +{
+> +       const struct gpio_packet *packet =3D evt_data;
+> +       struct ljca_gpio_dev *ljca_gpio =3D context;
+> +       int i;
+> +       int irq;
+> +
+> +       if (cmd !=3D LJCA_GPIO_INT_EVENT)
+> +               return;
+> +
+> +       for (i =3D 0; i < packet->num; i++) {
+> +               irq =3D irq_find_mapping(ljca_gpio->gc.irq.domain, packet=
+->item[i].index);
+> +               if (!irq) {
+> +                       dev_err(ljca_gpio->gc.parent, "gpio_id %u does no=
+t mapped to IRQ yet\n",
+> +                               packet->item[i].index);
+> +                       return;
+> +               }
+> +
+> +               generic_handle_domain_irq(ljca_gpio->gc.irq.domain, irq);
+> +               set_bit(packet->item[i].index, ljca_gpio->reenable_irqs);
+> +       }
+> +
+> +       schedule_work(&ljca_gpio->work);
+> +}
+
+I don't feel comfortable merging this unless Marc Zyngier has looked at the
+code first, so please CC him on this patch next time.
+
+> +static const struct irq_chip ljca_gpio_irqchip =3D {
+> +       .name =3D "ljca-irq",
+> +       .irq_mask =3D ljca_irq_mask,
+> +       .irq_unmask =3D ljca_irq_unmask,
+> +       .irq_set_type =3D ljca_irq_set_type,
+> +       .irq_bus_lock =3D ljca_irq_bus_lock,
+> +       .irq_bus_sync_unlock =3D ljca_irq_bus_unlock,
+> +       .flags =3D IRQCHIP_IMMUTABLE,
+> +       GPIOCHIP_IRQ_RESOURCE_HELPERS,
+> +};
+
+Thanks for fixing the immutable irq chip!
+
+> +       ljca_gpio->auxdev =3D auxdev;
+> +       ljca_gpio->gc.direction_input =3D ljca_gpio_direction_input;
+> +       ljca_gpio->gc.direction_output =3D ljca_gpio_direction_output;
+
+Can you implement .get_direction()?
+
+It's scanned on probe to determine the initial state of each
+line so it is very nice to have.
+
+Yours,
+Linus Walleij
