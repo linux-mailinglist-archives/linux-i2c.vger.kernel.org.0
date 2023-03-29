@@ -2,53 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAC36CF303
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Mar 2023 21:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4676CF328
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Mar 2023 21:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbjC2TUZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Mar 2023 15:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58218 "EHLO
+        id S230284AbjC2TaC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Mar 2023 15:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjC2TUY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Mar 2023 15:20:24 -0400
+        with ESMTP id S230254AbjC2TaB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Mar 2023 15:30:01 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653D7CD;
-        Wed, 29 Mar 2023 12:20:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3566E134;
+        Wed, 29 Mar 2023 12:30:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CCFC2CE203F;
-        Wed, 29 Mar 2023 19:20:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D720C433EF;
-        Wed, 29 Mar 2023 19:20:19 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A10CCCE2502;
+        Wed, 29 Mar 2023 19:29:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28172C433D2;
+        Wed, 29 Mar 2023 19:29:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680117620;
-        bh=zxUdS6x70bXxHp+LpWOEwRUsuM0jXMnYbrJmytRDx2c=;
+        s=k20201202; t=1680118197;
+        bh=SS/jbk54VmrEOwURrr56BUHIiEK0pT0Kcy1MuoBHTI0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ANeZTHfskWwHRXECZQ1jalC1ZrldxttXyFMXm4KJ/8lJBtXsBhVCbLj1/DiKiM4Tl
-         c4e1HpYmMLaFqL83AJxq1VIs0AS+xjDwUPSgIuRcFEhu1u7pSegHQbJy0PBF7P0paZ
-         L3+Lj9du9Aa7Upbx2DzLsV6hLRkdT+NY2P8W/dLcXGFTK4Pa7phPVGbFLA806I8kf5
-         5diPmV9PthgjDQZzwpB58Ma5n6I7kNEgO5kkJ0Het7P/9DTsbn5gmCV9HS0cHN6bmY
-         ozNJ1+QHJrkLuxF+QltMdCL6DAN/4mDgbYKmePfM+ccwiOoMZ3u+I7i7Hpm0Eu1QpH
-         1e7stoN7dqfjA==
-Date:   Wed, 29 Mar 2023 21:20:17 +0200
+        b=kb/n4qAYhIUyOBdzzpNs4ykgQjGEAVdRdGcvbna374EyEQRq4Fms13V8tlObKv9N+
+         JFzO2KXkJ0PYwdK5PL29w1caHjZsa1sUSotKtthT82S4SSUxpWmT3UvgtEIjYHpDKV
+         Q6jtZlKYvi6E2VVLMP02coNICSqLYhw9H6STwTvz8emV18IqzBmNr7Va4EkVF3s7vi
+         +6KiSdGG1+uH5TiOqmptekIU9tDzTHScpEOlcIHN+qG6r2Bu6fxzwcWi4v+qLF9Rxr
+         j9BQuQW48H/FK5Mseig+6cAkA63RpagAms39dCA8i+S6xlz/nVP3XuTw01sKYbwOpI
+         UJN6D3Nhju5zg==
+Date:   Wed, 29 Mar 2023 21:29:53 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     ye.xingchen@zte.com.cn
-Cc:     kdasu.kdev@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        f.fainelli@gmail.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: brcmstb: use devm_platform_ioremap_resource_byname()
-Message-ID: <ZCSPcaEo5UTNqHsD@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, ye.xingchen@zte.com.cn,
-        kdasu.kdev@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        f.fainelli@gmail.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <202303211944063761253@zte.com.cn>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Peter Rosin <peda@axentia.se>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] dt-bindings: i2c: Drop unneeded quotes
+Message-ID: <ZCSRsWEXIqcV0xC4@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Peter Rosin <peda@axentia.se>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230322173530.3971676-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="U2prXR+fQOg+6R2M"
+        protocol="application/pgp-signature"; boundary="3/7x2pzW7P4Mq4zG"
 Content-Disposition: inline
-In-Reply-To: <202303211944063761253@zte.com.cn>
+In-Reply-To: <20230322173530.3971676-1-robh@kernel.org>
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -59,41 +97,38 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---U2prXR+fQOg+6R2M
+--3/7x2pzW7P4Mq4zG
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 21, 2023 at 07:44:06PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
+On Wed, Mar 22, 2023 at 12:35:29PM -0500, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
 >=20
-> Convert platform_get_resource_byname(),devm_ioremap_resource() to a single
-> call to devm_platform_ioremap_resource_byname(), as this is exactly what
-> this function does.
->=20
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
 Applied to for-next, thanks!
 
 
---U2prXR+fQOg+6R2M
+--3/7x2pzW7P4Mq4zG
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQkj3AACgkQFA3kzBSg
-KbY7cw//bgfY6lokYylgDKF+dtqrjhOlMJ5i4I5LnEqB0kvA/H9fmdviRExgNncx
-7VjA9fS9/LnfawSos3G/0iizTvwv1NLgEPO1yH/tTapA+iOsE0r7jRSLkzstOkNU
-wWHXvbxDHVw5OWi9uTQtP7BXyFyhST6FddO6+tUhtHsdLQDbv2VIiYXBcPE9WM5p
-C8TJSPS5Vwe4sbxyRrmVgTxgraa9JkewOd4p+3DALR/hfTuGvOe4NWVuadkJNthN
-SaGCb0eDyD0Ukh7HXVSC6CXWvVm+drPwuZ/HojZFpKtukJJanjH4B8FXGU8Hp5L9
-atBMDh3mKZ+GLDjCx1DgX4j2Tr6cwglKxuyen18Hkg56OsddWdDdybKn4QxzK4FW
-AD6xLDvVKZ4D6IF/lKLt6UhVeFudG1mFPFsULUPABeun7RYCLyt8SL7DQMwI1n2i
-ACMCQ5R4yiO1NzgjsvRrGIUNKzGWxxikLIbBvmNiAeREugvLjnAkEfDH0/PCHChx
-Ud6SB0WWC3Vquol/mgX4CAhDMcCuo1dutmfJTmt34dt1RHtoAYWWeRaIQ+3tpRdz
-EeXeRA3OLTu2/KnrrF/W1Hjy2lPLNn5J+C1cY/HmxrqsronURQGBqklO25AMiGQ1
-7nti8AtBYRiCEsPalz2g160walS6DbU2fmnQM1cWddJflck7oDs=
-=I62Y
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQkka0ACgkQFA3kzBSg
+KbZ7QQ//TjhlV9gpnzQf1R+my8YacgB2isHXPlTUphtT1RhFuCtww7h9lGyoh2iz
+msnIcykv8xVr+nJ1zkALk9reiZQP7DdXSjVYHsCpd7XZyHXwm4PrfBlhoQi6rkeY
+DUDY8mQ5QpFbhG2bbJDFfelYwkc1fwCW/FLew0P7kRudkeb3OVjQq/ABaWVXHZYY
+lF1SUIZKC+bsfeoidJ2oA3DcQ+jeML1BV81SZwDJ1TIbaQLRdcx37l+OlMwYLMXA
+wOdrZmOH3spf3jWoEEKPH5hO48W4AvMujWAqWiShgcCH8S37g34eXxQ7fUOaQrA5
+CupkQ8LBcNbnzLZjsN0nNFZkDYasCLA/aHsAjhhsU+UvR0KWTrp3VOZkQh/YL6Yv
+BWG8K2DDl986q2YZWHdyoALr9aK/PkvqcxH+Bsgu5kAOOOBjaSmCG80jIGUz99XF
+qwthYFsQbNU0W5D2D1bOCesL0ZXWjYHAob8OD65Jdup6IAcfkFbEsFlhFhtEXurD
+QfHepyLM5x4qENtV7M9bGGGaAZwtgW7qYeQgLTKBPQeXy+ZiW10F5t/3y4lfBJ1U
+KFLGQankiD98qmHEwQpVxS8sWNUUTIg1XQlGnoOiiZDKd3NEYSj+Ivu2gt2mEkJq
+Ra3yRf6q1yETdTaNA2ltFSh0wvup3LOQaEFr84Iq9GXiFPTdNec=
+=95C4
 -----END PGP SIGNATURE-----
 
---U2prXR+fQOg+6R2M--
+--3/7x2pzW7P4Mq4zG--
