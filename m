@@ -2,60 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C89266CF2C3
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Mar 2023 21:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F0C6CF2D4
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Mar 2023 21:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjC2TIv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Mar 2023 15:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
+        id S230171AbjC2TNf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Mar 2023 15:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjC2TIr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Mar 2023 15:08:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066A265A1;
-        Wed, 29 Mar 2023 12:08:47 -0700 (PDT)
+        with ESMTP id S230159AbjC2TNe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Mar 2023 15:13:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC261FC8;
+        Wed, 29 Mar 2023 12:13:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C9C3B823F4;
-        Wed, 29 Mar 2023 19:08:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00FC3C433EF;
-        Wed, 29 Mar 2023 19:08:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CC5B61DD6;
+        Wed, 29 Mar 2023 19:13:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68C32C433D2;
+        Wed, 29 Mar 2023 19:13:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680116924;
-        bh=A4IDqMJGl5AYIYk31Ydlh53Pr0qz6PWFFTBuq+yeYzQ=;
+        s=k20201202; t=1680117213;
+        bh=QLYpAOoTz0vQr0fexdTnCG5E4DHu3UpbMFiYBJ+H8r4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mq7MEMaHjIXDfOeVdj/el5/Le7a3W0xDXQ9YPROC6QOyWy53D9nRFoSAxdhVaj1gC
-         srAUq1EspJYzkIJyor2ync+lr8EP1gnbWW7Nf1PUcAsT8a6xij8KVhmEOkemi7QTFo
-         d1EjiqBfEfopq75+yQRIZG/57yi5LuYhkKwVjteEFpvwSa5kwVr+UtxTqERlMdNafi
-         vHwEeyfaCCSlaLL6QQwKI8aML75p3SPljvECGIm4AU0BTcHvauIK0uRRbEEdO+eflT
-         Z52nZzYIPDndqyejxXkgiCi9foJJMt9wbTTHRiOTEbs/nzCA4BCehvzkxsy5On/W+D
-         1r6EV2eaRLoWw==
-Date:   Wed, 29 Mar 2023 21:08:41 +0200
+        b=MRtbZdfRzjjO8DzvqMRzbGH+3Qd4m0GccLV4Z5v7x+UIll4CTUIzoCVvOio7QlMJW
+         Xgqe/QGhoU9wbXf4V/TAFWj82eglYTkAOSDmwNrL1Oq4O1YkUJCSCAz7YXrRQJ2+eY
+         ywd8oe6VhLYBPe4xcqaGvC3WBLCOQ2us3nCXVOmpciFDzN+RiIR7aKFVB/vmZ5w91I
+         2N+CGdW6gTS1FtfXfEU72JmArCe7wz69PsZVPsas9d+VZykjwh7PiQjOI4zDFQ+Tqs
+         oo3QCIGrov9FcttuzrHjWvyWYSVT8R7J4tLD8Jn3GkQ/UVYqwxsV9Ovv75EaFLYv8g
+         fnWeIWwLf+ixw==
+Date:   Wed, 29 Mar 2023 21:13:29 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-Subject: Re: [PATCH v5 3/3] i2c: mpc: Use i2c-scl-clk-low-timeout-us i2c
- property
-Message-ID: <ZCSMue5X5eknSbUP@shikoro>
+To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v1 i2c-master] i2c: microchip: pci1xxxx: Update Timing
+ registers
+Message-ID: <ZCSN2TRm/gvUU0/T@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-References: <20230317233338.424864-1-andi.shyti@kernel.org>
- <20230317233338.424864-4-andi.shyti@kernel.org>
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, UNGLinuxDriver@microchip.com
+References: <20230320142237.3091224-1-tharunkumar.pasumarthi@microchip.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MbDBiQBNZCb7QcSk"
+        protocol="application/pgp-signature"; boundary="HdNejqNtJeCuZ5Qv"
 Content-Disposition: inline
-In-Reply-To: <20230317233338.424864-4-andi.shyti@kernel.org>
+In-Reply-To: <20230320142237.3091224-1-tharunkumar.pasumarthi@microchip.com>
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -66,44 +59,44 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---MbDBiQBNZCb7QcSk
+--HdNejqNtJeCuZ5Qv
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Mar 18, 2023 at 12:33:38AM +0100, Andi Shyti wrote:
-> "fsl,timeout" is marked as deprecated and replaced by the
-> "i2c-scl-clk-low-timeout-us" i2c property.
+On Mon, Mar 20, 2023 at 07:52:37PM +0530, Tharun Kumar P wrote:
+> Update I2C timing registers based on latest hardware design.
+> This fix does not break functionality of chips with older design and
+> existing users will not be affected.
 >=20
-> Use this latter and, in case it is missing, for back
-> compatibility, check whether we still have "fsl,timeout" defined.
->=20
-> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
-> Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Tested-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Fixes: 361693697249 ("i2c: microchip: pci1xxxx: Add driver for I2C host c=
+ontroller in multifunction endpoint of pci1xxxx switch")
+> Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
 
-Applied to for-next, thanks!
+Applied to for-current, thanks!
+
+Please use "i2c: mchp-pci1xxxx: <desc>" for the subject prefix next
+time.
 
 
---MbDBiQBNZCb7QcSk
+--HdNejqNtJeCuZ5Qv
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQkjLkACgkQFA3kzBSg
-KbbyRA/+LEfiOPgB0L8+ZgIkyh9QNWQRBDJHUMy9u+LKdL5IUclcfflIBnolCKT/
-o5lF0TW/7ToDAVY+j7212sS1dh0ci6At3XkAvoFh2XWW9nk24+emJAN3c/MklnDm
-Q29xcSq+aAcXpn7DLK+Qx2Pe9qROsaU0BbeU2dFiKEi6E8Q0iB9ewxn55zHUcvGG
-N3ddbPdOLL07b4lQLkCQxGLNM4b0GenqOnL6G4xRxZYyWiPRsJw9cQLPWsljNcRP
-677MvTHFyAo2mlejywXvuv2cTXPP32V+O8fwK+AIOVfxxB9Tmo3qt0SfXti4jMZS
-spLLrgfizDBRR9UtY0EoynD6J+p/jrCdRvYqA9T8Dvs/WyVGHO5aLVYvVlSKij3O
-Sd+LNkQI695Omy96T0E8y1XU4AxrPNsbN+NKy1wHNCPo7Ji2RpWZiWPHSXcpm8xj
-wdyHa9i/wzJlCOTu67mc/bgOiH0aZNlUnbXK+WVaPaxwDrhJvUZcDZPF62rr4dJg
-NCB6xOE7ymPykCEclAFxUs9DU75AXPQVxyDm3sC86RXWB8nUNw5qLHWuO6fe11ZA
-tln2FSQkJLdoOgkmiwoH+IxC9/Tpk0htUVx1uynEmKhQCix/ShrBSWD5yvh5lbWj
-gwOmeUh1XWKAdwa2F/pOGe3/o4qjIb7P2V60vt+j2GoK2xQHRnQ=
-=bQ7g
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQkjdkACgkQFA3kzBSg
+KbaqQQ//SnvFW9MblFKSGMH7OUsq5xDw1eWxPKPfXP4P4+KRJQLrRNgXuKCnZYTj
+rPed30mesbqnMBlMqtjWsIrxuVjMIv7y1vOPbJs8+DpgynkBjObBkzFWKQgW8iGx
+dyTEvkao7UWvQQeQk3smty0i15S031+YEsoy7vyDO14T2McQXEx5noObgLwkYiPx
+KXhyksJ++aetNJsXKM5ZF3yFHrwazZ0V+7D5X+S4X8POlrVtdFl+hUH4Jo0rahhc
+uIk30AIypZM5O8ulgxHms2pkicNhk9vLZgVLbrtYynUFQQc0vGy+se1+IB2GrI4+
+RCvSSyT4CIJf15SFdGPZF4vv4aXLnNPaj/jS/VfifFLLbz/1wLBh1l9B8PczdIwc
+PIutQEGHPLuupw+WjIlWuTeRL7JbQrtmjzk6WE54eC3k3VLyySvmwZaXu6PbtLBf
+m2GcGfKgPXU+whaxWD34vSmbfgQASxmIkNvF1kzB6GTGem6BbULGKYx8aL+aSa78
+3Xz5QLmZajbX0wJWCKanUdN4RBn90sT7NndxjxCnkuBmtlLsBa5VR5MFw7+vrLBe
+bsxnsa7nR4ZacK+O7AXWvhlTMsszcl6KBsB7dc0pKqizbYa+uRse4AIGOg8FFcy2
+sU+IUyn0V0nrB2aqzc/F7gX4ft2Lpd/FjD8Whu1s25t6ThMn6h4=
+=Yv9N
 -----END PGP SIGNATURE-----
 
---MbDBiQBNZCb7QcSk--
+--HdNejqNtJeCuZ5Qv--
