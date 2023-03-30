@@ -2,57 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 426066D0237
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Mar 2023 12:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A63A6D0698
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Mar 2023 15:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjC3K4I (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 30 Mar 2023 06:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
+        id S231969AbjC3N0n (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 30 Mar 2023 09:26:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjC3K4H (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 Mar 2023 06:56:07 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7449E9743
-        for <linux-i2c@vger.kernel.org>; Thu, 30 Mar 2023 03:55:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680173735; x=1711709735;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=mrKzmh3Ho684tEceN04B4eLDMGn2BPXCnSRG03/Z9Ek=;
-  b=OIqHOYITeKIvXVgAUq2CeeVBp78fBbrtGEtNlOB3sy8eYN+w+66nu/TU
-   +1dm+CJ1c8Jt1qznUQ3rcFe7CTKjZtV43DaBZRECK8Oej9L0U6LiTnTmT
-   EQjPaeHU8MZwYpizNo/fDIKr/DHOfaju1bzHIsz2k4Ytqzwx5hTpMg630
-   MF8hNKEszArRIegndPSGjYN9ibQBMO0YXU3mUv0PSVVloCLeVqUl+8hIu
-   x+Q3swfMzhkyjy5K+cVonaXLvL/3kPctMKQyH3BbBJw5cU+knGrmHQ+EM
-   CyqllX0JDP6CQ2prI5mpe+AcSJVTpv9RQmjD4Rr4+KlgOMjaQe58qiulQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="329628960"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="329628960"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:55:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="753953688"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="753953688"
-Received: from unknown (HELO mylly.fi.intel.com.) ([10.237.72.51])
-  by fmsmga004.fm.intel.com with ESMTP; 30 Mar 2023 03:55:16 -0700
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Wolfram Sang <wsa@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: [PATCH 2/2] i2c: i801: Add support for Intel Meteor Lake PCH-S
-Date:   Thu, 30 Mar 2023 13:55:02 +0300
-Message-Id: <20230330105502.4100351-2-jarkko.nikula@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230330105502.4100351-1-jarkko.nikula@linux.intel.com>
-References: <20230330105502.4100351-1-jarkko.nikula@linux.intel.com>
+        with ESMTP id S231962AbjC3N0i (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 Mar 2023 09:26:38 -0400
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A74AAD3B
+        for <linux-i2c@vger.kernel.org>; Thu, 30 Mar 2023 06:26:28 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.187.55])
+        by xavier.telenet-ops.be with bizsmtp
+        id edSF2900D1C8whw01dSFSm; Thu, 30 Mar 2023 15:26:25 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1phsHS-00FKfy-71;
+        Thu, 30 Mar 2023 15:26:15 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1phsIB-007ycS-40;
+        Thu, 30 Mar 2023 15:26:15 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v3] treewide: Fix probing of devices in DT overlays
+Date:   Thu, 30 Mar 2023 15:26:13 +0200
+Message-Id: <e1fa546682ea4c8474ff997ab6244c5e11b6f8bc.1680182615.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-0.4 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,71 +58,136 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add SMBus PCI ID on Intel Meteor Lake PCH-S. Also called as Meteor
-Point-S which is used in the code to distinguish from Meteor Lake-S SoC
-but call both as Meteor Lake in documentation and Kconfig.
+When loading a DT overlay that creates a device, the device is not
+probed, unless the DT overlay is unloaded and reloaded again.
 
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+After the recent refactoring to improve fw_devlink, it no longer depends
+on the "compatible" property to identify which device tree nodes will
+become struct devices.   fw_devlink now picks up dangling consumers
+(consumers pointing to descendent device tree nodes of a device that
+aren't converted to child devices) when a device is successfully bound
+to a driver.  See __fw_devlink_pickup_dangling_consumers().
+
+However, during DT overlay, a device's device tree node can have
+sub-nodes added/removed without unbinding/rebinding the driver.  This
+difference in behavior between the normal device instantiation and
+probing flow vs. the DT overlay flow has a bunch of implications that
+are pointed out elsewhere[1].  One of them is that the fw_devlink logic
+to pick up dangling consumers is never exercised.
+
+This patch solves the fw_devlink issue by marking all DT nodes added by
+DT overlays with FWNODE_FLAG_NOT_DEVICE (fwnode that won't become
+device), and by clearing the flag when a struct device is actually
+created for the DT node.  This way, fw_devlink knows not to have
+consumers waiting on these newly added DT nodes, and to propagate the
+dependency to an ancestor DT node that has the corresponding struct
+device.
+
+Based on a patch by Saravana Kannan, which covered only platform and spi
+devices.
+
+[1] https://lore.kernel.org/r/CAGETcx_bkuFaLCiPrAWCPQz+w79ccDp6=9e881qmK=vx3hBMyg@mail.gmail.com
+
+Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
+Link: https://lore.kernel.org/r/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=rWYnkCZ6z5bGX-wj4w@mail.gmail.com
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Mark Brown <broonie@kernel.org>
+Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
 ---
- Documentation/i2c/busses/i2c-i801.rst | 2 +-
- drivers/i2c/busses/Kconfig            | 2 +-
- drivers/i2c/busses/i2c-i801.c         | 3 +++
- 3 files changed, 5 insertions(+), 2 deletions(-)
+v3:
+  - Add Acked-by,
+  - s/instantiate/probe/,
+  - Improve commit description,
+  - Add comment before clearing FWNODE_FLAG_NOT_DEVICE,
 
-diff --git a/Documentation/i2c/busses/i2c-i801.rst b/Documentation/i2c/busses/i2c-i801.rst
-index ab9e850e8fe0..e62a62323f36 100644
---- a/Documentation/i2c/busses/i2c-i801.rst
-+++ b/Documentation/i2c/busses/i2c-i801.rst
-@@ -46,7 +46,7 @@ Supported adapters:
-   * Intel Emmitsburg (PCH)
-   * Intel Alder Lake (PCH)
-   * Intel Raptor Lake (PCH)
--  * Intel Meteor Lake (SOC)
-+  * Intel Meteor Lake (SOC/PCH)
+v2:
+  - Add Acked-by,
+  - Drop RFC.
+---
+ drivers/bus/imx-weim.c    | 6 ++++++
+ drivers/i2c/i2c-core-of.c | 5 +++++
+ drivers/of/dynamic.c      | 1 +
+ drivers/of/platform.c     | 5 +++++
+ drivers/spi/spi.c         | 5 +++++
+ 5 files changed, 22 insertions(+)
+
+diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+index 36d42484142aede2..cf463c1d2102c6fb 100644
+--- a/drivers/bus/imx-weim.c
++++ b/drivers/bus/imx-weim.c
+@@ -329,6 +329,12 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
+ 				 "Failed to setup timing for '%pOF'\n", rd->dn);
  
-    Datasheets: Publicly available at the Intel website
+ 		if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
++			/*
++			 * Clear the flag before adding the device so that
++			 * fw_devlink doesn't skip adding consumers to this
++			 * device.
++			 */
++			rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 			if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
+ 				dev_err(&pdev->dev,
+ 					"Failed to create child device '%pOF'\n",
+diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+index aa93467784c29c89..5c137638689799c8 100644
+--- a/drivers/i2c/i2c-core-of.c
++++ b/drivers/i2c/i2c-core-of.c
+@@ -178,6 +178,11 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
+ 			return NOTIFY_OK;
+ 		}
  
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 9fa4a7bb5c8b..93bb71bdf64d 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -157,7 +157,7 @@ config I2C_I801
- 	    Emmitsburg (PCH)
- 	    Alder Lake (PCH)
- 	    Raptor Lake (PCH)
--	    Meteor Lake (SOC)
-+	    Meteor Lake (SOC/PCH)
++		/*
++		 * Clear the flag before adding the device so that fw_devlink
++		 * doesn't skip adding consumers to this device.
++		 */
++		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 		client = of_i2c_register_device(adap, rd->dn);
+ 		if (IS_ERR(client)) {
+ 			dev_err(&adap->dev, "failed to create client for '%pOF'\n",
+diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+index 07d93753b12f5f4d..e311d406b1705306 100644
+--- a/drivers/of/dynamic.c
++++ b/drivers/of/dynamic.c
+@@ -226,6 +226,7 @@ static void __of_attach_node(struct device_node *np)
+ 	np->sibling = np->parent->child;
+ 	np->parent->child = np;
+ 	of_node_clear_flag(np, OF_DETACHED);
++	np->fwnode.flags |= FWNODE_FLAG_NOT_DEVICE;
+ }
  
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called i2c-i801.
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 8172e2767b25..dca605d8cdc2 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -78,6 +78,7 @@
-  * Raptor Lake-S (PCH)		0x7a23	32	hard	yes	yes	yes
-  * Meteor Lake-P (SOC)		0x7e22	32	hard	yes	yes	yes
-  * Meteor Lake-S (SOC)		0xae22	32	hard	yes	yes	yes
-+ * Meteor Point-S (PCH)		0x7f23	32	hard	yes	yes	yes
-  *
-  * Features supported by this driver:
-  * Software PEC				no
-@@ -234,6 +235,7 @@
- #define PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_S_SMBUS		0x7a23
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS		0x7aa3
- #define PCI_DEVICE_ID_INTEL_METEOR_LAKE_P_SMBUS		0x7e22
-+#define PCI_DEVICE_ID_INTEL_METEOR_POINT_S_SMBUS	0x7f23
- #define PCI_DEVICE_ID_INTEL_METEOR_LAKE_S_SMBUS		0xae22
- #define PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS		0x8c22
- #define PCI_DEVICE_ID_INTEL_WILDCATPOINT_SMBUS		0x8ca2
-@@ -1041,6 +1043,7 @@ static const struct pci_device_id i801_ids[] = {
- 	{ PCI_DEVICE_DATA(INTEL, RAPTOR_LAKE_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
- 	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_P_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
- 	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
-+	{ PCI_DEVICE_DATA(INTEL, METEOR_POINT_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
- 	{ 0, }
- };
+ /**
+diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+index b2bd2e783445dd78..78ae8418744905c9 100644
+--- a/drivers/of/platform.c
++++ b/drivers/of/platform.c
+@@ -737,6 +737,11 @@ static int of_platform_notify(struct notifier_block *nb,
+ 		if (of_node_check_flag(rd->dn, OF_POPULATED))
+ 			return NOTIFY_OK;
+ 
++		/*
++		 * Clear the flag before adding the device so that fw_devlink
++		 * doesn't skip adding consumers to this device.
++		 */
++		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 		/* pdev_parent may be NULL when no bus platform device */
+ 		pdev_parent = of_find_device_by_node(rd->dn->parent);
+ 		pdev = of_platform_device_create(rd->dn, NULL,
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 37a7be6c5a44c8f9..a12420e28640bbd4 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -4504,6 +4504,11 @@ static int of_spi_notify(struct notifier_block *nb, unsigned long action,
+ 			return NOTIFY_OK;
+ 		}
+ 
++		/*
++		 * Clear the flag before adding the device so that fw_devlink
++		 * doesn't skip adding consumers to this device.
++		 */
++		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 		spi = of_register_spi_device(ctlr, rd->dn);
+ 		put_device(&ctlr->dev);
  
 -- 
-2.39.2
+2.34.1
 
