@@ -2,39 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C806D0D52
+	by mail.lfdr.de (Postfix) with ESMTP id C39F46D0D54
 	for <lists+linux-i2c@lfdr.de>; Thu, 30 Mar 2023 20:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjC3SFL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S231552AbjC3SFL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Thu, 30 Mar 2023 14:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjC3SFK (ORCPT
+        with ESMTP id S229995AbjC3SFK (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 Mar 2023 14:05:10 -0400
 Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B92EB5C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E619EB5D;
         Thu, 30 Mar 2023 11:05:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-        s=default2002; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
-        Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References;
-        bh=Rz2AoL7LGg/4iMrao4MT/5InmUnB9nRTmdXgr2Ab1Ok=; b=mV4JKDBX8Zx3bEA950oD0sKCsI
-        sQiI0ieQR6IaQmH0EOsr8VOUNGPBd/BUNyMb5JgYM2bAknI5OXZ3UImDNSUuh+deZ8Y7WHKJ4YWqQ
-        tYLsrYhC6VDcRjNZWLKDver+bYtlsWH1cpWC8M1f3i0TfPuweT36IYOAuXHHmBWwao98G4dRyFVjA
-        7q/1zAW1GSwry/vI/ALiFgiqDK2MgSBIXBOc3TkMC33e5uF7ENPXPEaxcJZt2YbMIeGGYaQ280Ntd
-        X8J8uJUm9Wx/T1AogZOzulPbd2HHzoTass8+b4Z9Y9XfnLBQ0E9VJ1pxexdTRPYqpZv8jYaiKL9Qz
-        eSxUywAA==;
+        s=default2002; h=Content-Transfer-Encoding:MIME-Version:References:
+        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=OD1GRLossTYVkVcV+tE14r5zBCaoYQBNIgKYBXxbTMQ=; b=lAJLdUGQxtvbtwlzUgxQ+wZSOp
+        KsPmkj7Qpxf+Eaw8vVxRiCZaj8Z0i8jMyltZsvLY0Qn+x9h39PZwsvUCQePetoXJzU21MhZjZIgEK
+        tK7qMwVlYPC5qwplFDsvutsGAFtlcS0ChbuGIjtlIfDQLqzbyyCCDf0W2W4NlTr3A+/sShypzN+Lt
+        E3CfSt4UYTN2MTj2skWS93KqkvVOrLX+ml2nIRO51UUzJ6s/XMEQrRnL3PwwMMJW75KForlpKHQFE
+        PcTlvj1QUL3QJbQPmleLWeU3qterfEwVAChyucLjHEcekP5TBUpU9TVA4REsZ5lgp+KbJsFcWtNSH
+        VyKyAEUQ==;
 Received: from sslproxy06.your-server.de ([78.46.172.3])
         by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <lars@metafoo.de>)
-        id 1phwe0-0003Lr-1L; Thu, 30 Mar 2023 20:05:04 +0200
+        id 1phwe1-0003M7-Tz; Thu, 30 Mar 2023 20:05:05 +0200
 Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b] (helo=lars-desktop.lan)
         by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <lars@metafoo.de>)
-        id 1phwdz-0004Kt-FU; Thu, 30 Mar 2023 20:05:03 +0200
+        id 1phwe1-0004Kt-CK; Thu, 30 Mar 2023 20:05:05 +0200
 From:   Lars-Peter Clausen <lars@metafoo.de>
 To:     Wolfram Sang <wsa@kernel.org>
 Cc:     Michal Simek <michal.simek@amd.com>,
@@ -43,10 +43,12 @@ Cc:     Michal Simek <michal.simek@amd.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH 1/2] dt-bindings: i2c: cadence: Document reset property
-Date:   Thu, 30 Mar 2023 11:04:47 -0700
-Message-Id: <20230330180448.269635-1-lars@metafoo.de>
+Subject: [PATCH 2/2] i2c: cadence: Add reset controller support
+Date:   Thu, 30 Mar 2023 11:04:48 -0700
+Message-Id: <20230330180448.269635-2-lars@metafoo.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230330180448.269635-1-lars@metafoo.de>
+References: <20230330180448.269635-1-lars@metafoo.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: lars@metafoo.de
@@ -60,36 +62,112 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The Cadence I2C controller has an external reset that needs to be
-de-asserted before the I2C controller can be accessed.
+The Cadence I2C controller has an external reset signal that needs to be
+de-asserted before the I2C controller can be used.
 
-Document the `resets` devicetree property that can be used to describe how
-the reset signal is connected.
-
-While the reset signal will always be present in hardware the devicetree
-property is kept optional for backwards compatibility with existing systems
-that do not specify the reset property and where the reset signal might not
-be controlled by operating system.
+Add support to the driver to be able to take the peripheral out of reset
+using the reset controller API. The reset is optional in the driver for
+compatibility to systems where the reset managed by the bootloader.
 
 Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
 ---
- Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/i2c/busses/i2c-cadence.c | 26 ++++++++++++++++++++++----
+ 1 file changed, 22 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-index 9187015d9702..76e2b9a10de8 100644
---- a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-+++ b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-@@ -24,6 +24,9 @@ properties:
-   clocks:
-     minItems: 1
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+index 8f61a633c42c..102774ab2497 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -16,6 +16,7 @@
+ #include <linux/of.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/pinctrl/consumer.h>
++#include <linux/reset.h>
  
-+  resets:
-+    maxItems: 1
+ /* Register offsets for the I2C device. */
+ #define CDNS_I2C_CR_OFFSET		0x00 /* Control Register, RW */
+@@ -178,6 +179,7 @@ enum cdns_i2c_slave_state {
+  * @bus_hold_flag:	Flag used in repeated start for clearing HOLD bit
+  * @clk:		Pointer to struct clk
+  * @clk_rate_change_nb:	Notifier block for clock rate changes
++ * @reset:		Reset control for the device
+  * @quirks:		flag for broken hold bit usage in r1p10
+  * @ctrl_reg:		Cached value of the control register.
+  * @ctrl_reg_diva_divb: value of fields DIV_A and DIV_B from CR register
+@@ -204,6 +206,7 @@ struct cdns_i2c {
+ 	unsigned int bus_hold_flag;
+ 	struct clk *clk;
+ 	struct notifier_block clk_rate_change_nb;
++	struct reset_control *reset;
+ 	u32 quirks;
+ 	u32 ctrl_reg;
+ 	struct i2c_bus_recovery_info rinfo;
+@@ -1325,10 +1328,22 @@ static int cdns_i2c_probe(struct platform_device *pdev)
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(id->clk),
+ 				     "input clock not found.\n");
+ 
++	id->reset = devm_reset_control_get_optional_shared(&pdev->dev, NULL);
++	if (IS_ERR(id->reset))
++		return dev_err_probe(&pdev->dev, PTR_ERR(id->reset),
++							 "Failed to request reset.\n");
 +
-   interrupts:
-     maxItems: 1
+ 	ret = clk_prepare_enable(id->clk);
+ 	if (ret)
+ 		dev_err(&pdev->dev, "Unable to enable clock.\n");
  
++	ret = reset_control_deassert(id->reset);
++	if (ret) {
++		dev_err_probe(&pdev->dev, ret,
++					  "Failed to de-assert reset.\n");
++		goto err_clk_dis;
++	}
++
+ 	pm_runtime_set_autosuspend_delay(id->dev, CNDS_I2C_PM_TIMEOUT);
+ 	pm_runtime_use_autosuspend(id->dev);
+ 	pm_runtime_set_active(id->dev);
+@@ -1360,28 +1375,30 @@ static int cdns_i2c_probe(struct platform_device *pdev)
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "invalid SCL clock: %u Hz\n", id->i2c_clk);
+ 		ret = -EINVAL;
+-		goto err_clk_dis;
++		goto err_clk_notifier_unregister;
+ 	}
+ 
+ 	ret = devm_request_irq(&pdev->dev, irq, cdns_i2c_isr, 0,
+ 				 DRIVER_NAME, id);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "cannot get irq %d\n", irq);
+-		goto err_clk_dis;
++		goto err_clk_notifier_unregister;
+ 	}
+ 	cdns_i2c_init(id);
+ 
+ 	ret = i2c_add_adapter(&id->adap);
+ 	if (ret < 0)
+-		goto err_clk_dis;
++		goto err_clk_notifier_unregister;
+ 
+ 	dev_info(&pdev->dev, "%u kHz mmio %08lx irq %d\n",
+ 		 id->i2c_clk / 1000, (unsigned long)r_mem->start, irq);
+ 
+ 	return 0;
+ 
+-err_clk_dis:
++err_clk_notifier_unregister:
+ 	clk_notifier_unregister(id->clk, &id->clk_rate_change_nb);
++	reset_control_assert(id->reset);
++err_clk_dis:
+ 	clk_disable_unprepare(id->clk);
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_set_suspended(&pdev->dev);
+@@ -1406,6 +1423,7 @@ static int cdns_i2c_remove(struct platform_device *pdev)
+ 
+ 	i2c_del_adapter(&id->adap);
+ 	clk_notifier_unregister(id->clk, &id->clk_rate_change_nb);
++	reset_control_assert(id->reset);
+ 	clk_disable_unprepare(id->clk);
+ 
+ 	return 0;
 -- 
 2.30.2
 
