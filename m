@@ -2,82 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9AF6D2677
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 Mar 2023 19:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7B76D28B0
+	for <lists+linux-i2c@lfdr.de>; Fri, 31 Mar 2023 21:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbjCaRLt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 31 Mar 2023 13:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44248 "EHLO
+        id S232007AbjCaTcw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 31 Mar 2023 15:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjCaRLt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 31 Mar 2023 13:11:49 -0400
-Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B80E18831;
-        Fri, 31 Mar 2023 10:11:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=BewKgH0lhl5ITDFQCz5IQ2OB5+ZlHOMt8jydO+KrdZI=; b=amhJfElQ1lROVDhTrG12MMXKX2
-        PNq9+LeJuh4cDPbmTIZ5tEDQ9fEy38GczjGFkIcXTrsSwDR1HA3Jk/pbCx/+gmhWxg/AbpJPytHNF
-        0t05dACFVlZxRq9vsVn1CS84gb8mQeN6JPt2HkwAJD869fwkVnw/vfPtztNuau85f6pykdpEOLzUj
-        dlvRqhBDia6VCe05hQySe0r1AgDgmeYtUMTdzXcdDQOhKNKtXEJo1GVXUPx+pjY9vsZBSUDFm8S9i
-        9cxvlewsDTXBFfTHUnmLJmeTde/SfYRO5dSDE1KWJ7SVdh5IpfTClhVFIFAdZfaV2cC74OH6L7gkp
-        mOKlbuiA==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lars@metafoo.de>)
-        id 1piIHy-000KFW-HF; Fri, 31 Mar 2023 19:11:46 +0200
-Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b]
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1piIHy-00049F-5J; Fri, 31 Mar 2023 19:11:46 +0200
-Message-ID: <292e5efd-1a10-d1e6-0185-1ce113eee233@metafoo.de>
-Date:   Fri, 31 Mar 2023 10:11:43 -0700
+        with ESMTP id S230239AbjCaTcv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 31 Mar 2023 15:32:51 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30C320D92
+        for <linux-i2c@vger.kernel.org>; Fri, 31 Mar 2023 12:32:50 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id r7so16927221uaj.2
+        for <linux-i2c@vger.kernel.org>; Fri, 31 Mar 2023 12:32:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1680291170; x=1682883170;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nkeRp6lZuw2oE9ccSgxZK71jO5cGE2tSZwW3ZkFdEqk=;
+        b=m3IBLZa+ndp/XP6VTlHC0Z0qaCgQPPAZlf+XIYXDNU9Cqt14GgnHX9h8SyocTL72zl
+         oZ78zyghLjaUSzp6dPLwYaswE1pbvBBHdG3DAs/xjAeXA93HB++5vSxviMfe59u6LF05
+         fIuX4t7toS4Orpt04PnldDu+e5eEHmF9IcCzM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680291170; x=1682883170;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nkeRp6lZuw2oE9ccSgxZK71jO5cGE2tSZwW3ZkFdEqk=;
+        b=1vRfHLOhEgQ3yZS4LiPATqnsHHI6CrZMMHOGfF20c8hRy5xWrsOF6sMFy8jUyGuNac
+         3CPcZGhYDzJX3vYq4MPqc94kAOTVYlYD5AqTZTBBHu1LR7ECILPOwel0xA02DqbFthaA
+         5953U69TFqo0E14BEr+aBAabSaxJTQ5YAKplQH2tuQCcvU2xQXm76r3ZF+cHd2KptVi1
+         LXwLGY7qKRwN+nt6Q/47mVP2thyGwXxlcBNFaQx4jz9SZm8L2vVPFB+oAed+/zU2ovnF
+         AIsj319GUoCuYoamom7zHfKoJ1J0aH1NVcr0CjI/7+/T7MuOuLntGghoZdgB4zVwscIP
+         HtLw==
+X-Gm-Message-State: AAQBX9dXg/G4Z76vTfCyzdocTWgKxQJKfbKkbx5I/3/b4Ok9cMj5AAuF
+        JBY3I3UPDjkE9/oN2SwAXQ+KOENiobUynK7ZlZOfNQ==
+X-Google-Smtp-Source: AKy350aCMqdiaR6xYxKSn9tMLRmONsWM64BxlH+LLZQj0/CKeKknzAlNOi5D0DuvNE/izLqlao/Cg8+9jVYy0dWfX5o=
+X-Received: by 2002:ab0:538c:0:b0:765:c202:f704 with SMTP id
+ k12-20020ab0538c000000b00765c202f704mr7489403uaa.2.1680291169938; Fri, 31 Mar
+ 2023 12:32:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: i2c: cadence: Document reset property
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     Michal Simek <michal.simek@amd.com>,
-        Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230330180448.269635-1-lars@metafoo.de>
- <6b997dfa-1377-8d2e-ce4f-3f8f7407e6b4@linaro.org>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-In-Reply-To: <6b997dfa-1377-8d2e-ce4f-3f8f7407e6b4@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26861/Fri Mar 31 09:24:12 2023)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230329220753.7741-1-mario.limonciello@amd.com>
+ <20230329220753.7741-6-mario.limonciello@amd.com> <c298b247-1bdc-340c-ad7d-df3653cc9027@linux.intel.com>
+ <CAOtMz3P5eCLZiQiPDs-iG6EdwLZHsNeEmSpPXFjJXcEBQ=retg@mail.gmail.com> <MN0PR12MB61014694E6D8BCD9E6E7152AE28F9@MN0PR12MB6101.namprd12.prod.outlook.com>
+In-Reply-To: <MN0PR12MB61014694E6D8BCD9E6E7152AE28F9@MN0PR12MB6101.namprd12.prod.outlook.com>
+From:   Mark Hasemeyer <markhas@chromium.org>
+Date:   Fri, 31 Mar 2023 13:32:39 -0600
+Message-ID: <CANg-bXDcYyPSkdOuAX8jWkyjh0chDfyXjGLW=wdZxOgoMdo=ig@mail.gmail.com>
+Subject: Re: [PATCH v7 5/6] i2c: designware: Use PCI PSP driver for communication
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Held, Felix" <Felix.Held@amd.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 3/31/23 02:42, Krzysztof Kozlowski wrote:
-> On 30/03/2023 20:04, Lars-Peter Clausen wrote:
->> The Cadence I2C controller has an external reset that needs to be
->> de-asserted before the I2C controller can be accessed.
->>
->> Document the `resets` devicetree property that can be used to describe how
->> the reset signal is connected.
-> You could add it also to the example to have complete picture (and
-> validate your change).
->
->
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-When I resend with it added to the example, do you want me to keep or 
-drop the acked-by?
+Reviewed-by: Mark Hasemeyer <markhas@chromium.org>
