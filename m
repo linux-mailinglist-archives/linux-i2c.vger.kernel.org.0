@@ -2,58 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8E16D25EA
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 Mar 2023 18:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9AF6D2677
+	for <lists+linux-i2c@lfdr.de>; Fri, 31 Mar 2023 19:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbjCaQn5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 31 Mar 2023 12:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35898 "EHLO
+        id S231721AbjCaRLt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 31 Mar 2023 13:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbjCaQnf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 31 Mar 2023 12:43:35 -0400
+        with ESMTP id S229758AbjCaRLt (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 31 Mar 2023 13:11:49 -0400
 Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7002320DA6;
-        Fri, 31 Mar 2023 09:42:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B80E18831;
+        Fri, 31 Mar 2023 10:11:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
         References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
         Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=xg33sxZuQ2RDlsNvpuyqfRcABGyvjFqfHrPtwUhWZB8=; b=ap9VL4WkE69rdt5PzmNLx1JB/C
-        wxWmbYnxZu41dNbvCmrDo3fGo7/CDkxGcyD9WaIPsKuwRjGLCv1lQSoDhlEoDIYo9gGv80WY+RGno
-        2U53odDf5bNNnJ9OTipIcM4cjVi8BDKilacEdbm96ZUezo9J1qBFNikJvSHABicO4MfTZ0Zt3jmyu
-        e5MR32omZ/2Iw8pW2MixsdYH9YmP/ZUUPxyXrVf//WhJRoutMVi3By+0+3Jz8JDVw3djOizbNS2FY
-        wpY6epaitQpNBL+lB5JWyndKJGCRrPGLIUZyWM0Vm86nkpA6UUnT/F0hNDxEkhyT0C9AR/xTpXjcp
-        5+lF8uWQ==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
+        bh=BewKgH0lhl5ITDFQCz5IQ2OB5+ZlHOMt8jydO+KrdZI=; b=amhJfElQ1lROVDhTrG12MMXKX2
+        PNq9+LeJuh4cDPbmTIZ5tEDQ9fEy38GczjGFkIcXTrsSwDR1HA3Jk/pbCx/+gmhWxg/AbpJPytHNF
+        0t05dACFVlZxRq9vsVn1CS84gb8mQeN6JPt2HkwAJD869fwkVnw/vfPtztNuau85f6pykdpEOLzUj
+        dlvRqhBDia6VCe05hQySe0r1AgDgmeYtUMTdzXcdDQOhKNKtXEJo1GVXUPx+pjY9vsZBSUDFm8S9i
+        9cxvlewsDTXBFfTHUnmLJmeTde/SfYRO5dSDE1KWJ7SVdh5IpfTClhVFIFAdZfaV2cC74OH6L7gkp
+        mOKlbuiA==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
         by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <lars@metafoo.de>)
-        id 1piHpG-000H5h-Nh; Fri, 31 Mar 2023 18:42:06 +0200
+        id 1piIHy-000KFW-HF; Fri, 31 Mar 2023 19:11:46 +0200
 Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b]
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <lars@metafoo.de>)
-        id 1piHpG-000Rew-Bc; Fri, 31 Mar 2023 18:42:06 +0200
-Message-ID: <877b6d75-cd3d-14b4-5e7e-639fa1c8e2d5@metafoo.de>
-Date:   Fri, 31 Mar 2023 09:42:03 -0700
+        id 1piIHy-00049F-5J; Fri, 31 Mar 2023 19:11:46 +0200
+Message-ID: <292e5efd-1a10-d1e6-0185-1ce113eee233@metafoo.de>
+Date:   Fri, 31 Mar 2023 10:11:43 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] i2c: cadence: Add reset controller support
-To:     Michal Simek <michal.simek@amd.com>, Wolfram Sang <wsa@kernel.org>
-Cc:     Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
+Subject: Re: [PATCH 1/2] dt-bindings: i2c: cadence: Document reset property
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     Michal Simek <michal.simek@amd.com>,
+        Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
 References: <20230330180448.269635-1-lars@metafoo.de>
- <20230330180448.269635-2-lars@metafoo.de>
- <1e929c0d-9a3c-1adb-b5de-e953f2cf3795@amd.com>
-Content-Language: en-US
+ <6b997dfa-1377-8d2e-ce4f-3f8f7407e6b4@linaro.org>
 From:   Lars-Peter Clausen <lars@metafoo.de>
-In-Reply-To: <1e929c0d-9a3c-1adb-b5de-e953f2cf3795@amd.com>
+In-Reply-To: <6b997dfa-1377-8d2e-ce4f-3f8f7407e6b4@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Authenticated-Sender: lars@metafoo.de
 X-Virus-Scanned: Clear (ClamAV 0.103.8/26861/Fri Mar 31 09:24:12 2023)
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -65,74 +66,18 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 3/30/23 23:49, Michal Simek wrote:
->
->
-> On 3/30/23 20:04, Lars-Peter Clausen wrote:
->> The Cadence I2C controller has an external reset signal that needs to be
->> de-asserted before the I2C controller can be used.
+On 3/31/23 02:42, Krzysztof Kozlowski wrote:
+> On 30/03/2023 20:04, Lars-Peter Clausen wrote:
+>> The Cadence I2C controller has an external reset that needs to be
+>> de-asserted before the I2C controller can be accessed.
 >>
->> Add support to the driver to be able to take the peripheral out of reset
->> using the reset controller API. The reset is optional in the driver for
->> compatibility to systems where the reset managed by the bootloader.
->>
->> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
->> ---
->>   drivers/i2c/busses/i2c-cadence.c | 26 ++++++++++++++++++++++----
->>   1 file changed, 22 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-cadence.c 
->> b/drivers/i2c/busses/i2c-cadence.c
->> index 8f61a633c42c..102774ab2497 100644
->> --- a/drivers/i2c/busses/i2c-cadence.c
->> +++ b/drivers/i2c/busses/i2c-cadence.c
->> @@ -16,6 +16,7 @@
->>   #include <linux/of.h>
->>   #include <linux/pm_runtime.h>
->>   #include <linux/pinctrl/consumer.h>
->> +#include <linux/reset.h>
->>     /* Register offsets for the I2C device. */
->>   #define CDNS_I2C_CR_OFFSET        0x00 /* Control Register, RW */
->> @@ -178,6 +179,7 @@ enum cdns_i2c_slave_state {
->>    * @bus_hold_flag:    Flag used in repeated start for clearing HOLD 
->> bit
->>    * @clk:        Pointer to struct clk
->>    * @clk_rate_change_nb:    Notifier block for clock rate changes
->> + * @reset:        Reset control for the device
->>    * @quirks:        flag for broken hold bit usage in r1p10
->>    * @ctrl_reg:        Cached value of the control register.
->>    * @ctrl_reg_diva_divb: value of fields DIV_A and DIV_B from CR 
->> register
->> @@ -204,6 +206,7 @@ struct cdns_i2c {
->>       unsigned int bus_hold_flag;
->>       struct clk *clk;
->>       struct notifier_block clk_rate_change_nb;
->> +    struct reset_control *reset;
->>       u32 quirks;
->>       u32 ctrl_reg;
->>       struct i2c_bus_recovery_info rinfo;
->> @@ -1325,10 +1328,22 @@ static int cdns_i2c_probe(struct 
->> platform_device *pdev)
->>           return dev_err_probe(&pdev->dev, PTR_ERR(id->clk),
->>                        "input clock not found.\n");
->>   +    id->reset = devm_reset_control_get_optional_shared(&pdev->dev, 
->> NULL);
->> +    if (IS_ERR(id->reset))
->> +        return dev_err_probe(&pdev->dev, PTR_ERR(id->reset),
->> +                             "Failed to request reset.\n");
+>> Document the `resets` devicetree property that can be used to describe how
+>> the reset signal is connected.
+> You could add it also to the example to have complete picture (and
+> validate your change).
 >
-> incorrect alignment.
 >
->> +
->>       ret = clk_prepare_enable(id->clk);
->>       if (ret)
->>           dev_err(&pdev->dev, "Unable to enable clock.\n");
->>   +    ret = reset_control_deassert(id->reset);
->> +    if (ret) {
->> +        dev_err_probe(&pdev->dev, ret,
->> +                      "Failed to de-assert reset.\n");
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 >
-> incorrect alignment
-Wrong tabstop, that's embarrassing. Will fix.
-
-
+When I resend with it added to the example, do you want me to keep or 
+drop the acked-by?
