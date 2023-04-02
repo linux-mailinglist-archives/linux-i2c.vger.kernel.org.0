@@ -2,69 +2,72 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83366D339B
-	for <lists+linux-i2c@lfdr.de>; Sat,  1 Apr 2023 21:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D34BC6D36D7
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Apr 2023 12:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbjDATim (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 1 Apr 2023 15:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57070 "EHLO
+        id S230382AbjDBKFF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 2 Apr 2023 06:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjDATim (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 1 Apr 2023 15:38:42 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8631B375;
-        Sat,  1 Apr 2023 12:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680377921; x=1711913921;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JNRhm77EnZ2yyKKO3Zo8UK05mChzoj0Un0mQU53BlMc=;
-  b=GOd0RJST68ow3oIbeFeOJHQduhvkEvXV440K2el0vyQvdm28o0Ugwcu/
-   duLgF2Q6xin7gi+Fqx5EDj6KxCOcAFNZpgyfywb7gi7XFPuR0CxxHUyl5
-   2UGJMlTMwFLkPTUJ8bjZxLReZE4zNLgKN2KrYWDZTL1/Yuoidl6aC9T+h
-   /z+jz1xR3rZKeSMkELZjmTi19aSdC5Vj1WKmRBuehQIF+JBSiNluWnULG
-   YIfHv6Spy5aRfQaJGqYCeP7AinfnQB0856/F1W32Blf+wJCER3SC6GoXk
-   JXyhVAB2XTviAEXFr3P8bTBzh6yuVYQ4A7HD193no2Wvi/b/0Z09t4JbC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="406721509"
-X-IronPort-AV: E=Sophos;i="5.98,311,1673942400"; 
-   d="scan'208";a="406721509"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 12:38:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="796523407"
-X-IronPort-AV: E=Sophos;i="5.98,311,1673942400"; 
-   d="scan'208";a="796523407"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Apr 2023 12:38:37 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pih3d-000Mzh-03;
-        Sat, 01 Apr 2023 19:38:37 +0000
-Date:   Sun, 2 Apr 2023 03:38:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Mark Hasemeyer <markhas@chromium.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev, Felix Held <Felix.Held@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 6/6] i2c: designware: Add doorbell support for
- Mendocino
-Message-ID: <202304020338.c4EJ0lmB-lkp@intel.com>
-References: <20230329220753.7741-7-mario.limonciello@amd.com>
+        with ESMTP id S229492AbjDBKFC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 2 Apr 2023 06:05:02 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291C2C7;
+        Sun,  2 Apr 2023 03:05:01 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id i5so106562316eda.0;
+        Sun, 02 Apr 2023 03:05:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680429899;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vON38RePuqLozDLYgddF4MhnfOMXnlOt/UI+1d380Tc=;
+        b=AGf0Nt8d3g3Tjs8UM6Y9oy0kRPOCOY3mhu/4yHnogRcf625IkJ//ZQZA5l5ruJeH7J
+         SGztoIejVOeoCQHRQYU1kIB3AIE7RtuIvcJVGr8GLMAFsFnVNR5wTwmoYGDeeTodMU0a
+         QNmmOschEdAt8dvirRPvk6DpE5YFMgHTalXk3+0PUbrQ70fOQ0dTB4151PXw+l/MyZwI
+         OoWvtXBKMcry5heube3yrkiCQnCffICAhH7bHYxb8jIZzzTFpaLI38joM4doWEgeDkBt
+         +fGlCpnvDOyIXA2xHOw96Ghv4HBZ62dN/J8+XTmj+RmFymXpimBvBdpkLwZsHwCZnKhP
+         5Emg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680429899;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vON38RePuqLozDLYgddF4MhnfOMXnlOt/UI+1d380Tc=;
+        b=AVr7Gqo9MTnTz25CzBRtAaN6tmg9FUYYhoHyxoMdoEEKJGGWm8/pV/+zvDw05OjI1C
+         bLWVG7sa4ecnk5ULsC2IN1YE8GVTldolFY7IZYjOkkNiDBHF7j7wv38wWask0qD1LTjG
+         OEa8E0EVk95c3bpNm4SOtwO4rdnWWDb4FiaPg7nbqyDtFidvoaBe63shUETY8FBRLLkJ
+         yCzmZb4wEZPQvPku5PnaJ1U+teqXpn4pcPr9aVcPrB+r31YWl0bMMSiSfLMDzXRLR5VB
+         cZmkdqplOAb8qBhMC1OYwzig+TidZPiZddBxH3B4EHRXRc9msujgW+OAyEIxEcoosY3n
+         1WeQ==
+X-Gm-Message-State: AAQBX9cNFJqxrCMUMJGlZ4RRLczZ4qKk95r2es3PZJP6sAQ4HeB+qLI+
+        hRL/wAbJ/5Khjo9FJ79F5bfWgo6sbuiZKSnAtvuaqGUv1JQeeg==
+X-Google-Smtp-Source: AKy350bETyU8FCFBHNo7aZNd+kj0kRyOpAWPw1ac3/+7VMBqkj27wnx24V7VJ6rrxW7Kz7QIPmwANFA6TtuBcxCUYTw=
+X-Received: by 2002:a17:906:6a0d:b0:928:6456:729c with SMTP id
+ qw13-20020a1709066a0d00b009286456729cmr16213480ejc.10.1680429899526; Sun, 02
+ Apr 2023 03:04:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329220753.7741-7-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230327-tegra-pmic-reboot-v3-0-3c0ee3567e14@skidata.com>
+ <20230327-tegra-pmic-reboot-v3-2-3c0ee3567e14@skidata.com>
+ <ZCGuMzmS0Lz5WX2/@ninjato> <CAJpcXm6bt100442y8ajz7kR0nF3Gm9PVVwo3EKVBDC4Pmd-7Ag@mail.gmail.com>
+ <ZCSWkhyQjnzByDoR@shikoro>
+In-Reply-To: <ZCSWkhyQjnzByDoR@shikoro>
+From:   Benjamin Bara <bbara93@gmail.com>
+Date:   Sun, 2 Apr 2023 12:04:48 +0200
+Message-ID: <CAJpcXm5eKhQg3JDksGs5fHi-DN+VAJNnuyUKtQGiS2OzTgzyVw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] i2c: core: run atomic i2c xfer when !preemptible
+To:     Wolfram Sang <wsa@kernel.org>, Benjamin Bara <bbara93@gmail.com>,
+        Lee Jones <lee@kernel.org>, rafael.j.wysocki@intel.com,
+        dmitry.osipenko@collabora.com, jonathanh@nvidia.com,
+        richard.leitner@linux.dev, treding@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        stable@vger.kernel.org
+Cc:     peterz@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,41 +75,48 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Mario,
+On Wed, 29 Mar 2023 at 21:50, Wolfram Sang <wsa@kernel.org> wrote:
+> Could you make sure please?
 
-Thank you for the patch! Yet something to improve:
+Sure, I'll try. The check before bae1d3a was:
+in_atomic() || irqs_disabled()
+which boils down to:
+(preempt_count() != 0) || irqs_disabled()
+preemptible() is defined as:
+(preempt_count() == 0 && !irqs_disabled())
 
-[auto build test ERROR on 9117e682b8b79f7b5e2517fd28d42757d3e8b860]
+so this patch should behave the same as pre-v5.2, but with the
+additional system state check. From my point of view, the additional
+value of the in_atomic() check was that it activated atomic i2c xfers
+when preemption is disabled, like in the case of panic(). So reverting
+that commit would also re-activate atomic i2c transfers during emergency
+restarts. However, I think considering the system state makes sense
+here.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/crypto-ccp-Drop-extra-doorbell-checks/20230330-060959
-base:   9117e682b8b79f7b5e2517fd28d42757d3e8b860
-patch link:    https://lore.kernel.org/r/20230329220753.7741-7-mario.limonciello%40amd.com
-patch subject: [PATCH v7 6/6] i2c: designware: Add doorbell support for Mendocino
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230402/202304020338.c4EJ0lmB-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/9696fd5743f2be39fab0ac256fad8dd9eae9930d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mario-Limonciello/crypto-ccp-Drop-extra-doorbell-checks/20230330-060959
-        git checkout 9696fd5743f2be39fab0ac256fad8dd9eae9930d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+From my understanding, non-atomic i2c transfers require enabled IRQs,
+but atomic i2c transfers do not have any "requirements". So the
+irqs_disabled() check is not here to ensure that the following atomic
+i2c transfer works correctly, but to use non-atomic i2c xfer as
+long/often as possible.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304020338.c4EJ0lmB-lkp@intel.com/
+Unfortunately, I am not sure yet about !CONFIG_PREEMPTION. I looked into
+some i2c-bus implementations which implement both, atomic and
+non-atomic. As far as I saw, the basic difference is that the non-atomic
+variants usually utilize the DMA and then call a variant of
+wait_for_completion(), like in i2c_imx_dma_write() [1]. However, the
+documentation of wait_for_completion [2] states that:
+"wait_for_completion() and its variants are only safe in process context
+(as they can sleep) but not (...) [if] preemption is disabled".
+Therefore, I am not quite sure yet if !CONFIG_PREEMPTION uses the
+non-atomic variant at all or if this case is handled differently.
 
-All errors (new ones prefixed by >>):
+> Asking Peter Zijlstra might be a good idea.
+> He helped me with the current implementation.
 
-   ld: drivers/i2c/busses/i2c-designware-amdpsp.o: in function `psp_send_i2c_req_doorbell':
->> i2c-designware-amdpsp.c:(.text+0x12): undefined reference to `psp_ring_platform_doorbell'
-   ld: drivers/i2c/busses/i2c-designware-amdpsp.o: in function `psp_send_i2c_req_cezanne':
-   i2c-designware-amdpsp.c:(.text+0x67): undefined reference to `psp_send_platform_access_msg'
-   ld: drivers/i2c/busses/i2c-designware-amdpsp.o: in function `i2c_dw_amdpsp_probe_lock_support':
-   i2c-designware-amdpsp.c:(.text+0x49d): undefined reference to `psp_check_platform_access_status'
+Thanks for the hint! I wrote an extra email to him and added him to CC.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks & best regards,
+Benjamin
+
+[1] drivers/i2c/busses/i2c-imx.c
+[2] https://www.kernel.org/doc/Documentation/scheduler/completion.txt
