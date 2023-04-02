@@ -2,109 +2,120 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF156D3771
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Apr 2023 12:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2EFD6D395C
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Apr 2023 19:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbjDBKzl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 2 Apr 2023 06:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        id S230478AbjDBRIy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 2 Apr 2023 13:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbjDBKzl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 2 Apr 2023 06:55:41 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920431BF5B
-        for <linux-i2c@vger.kernel.org>; Sun,  2 Apr 2023 03:55:37 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pivMt-0008SR-K8; Sun, 02 Apr 2023 12:55:27 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pivMr-008Qop-Gi; Sun, 02 Apr 2023 12:55:25 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pivMq-009wlK-S2; Sun, 02 Apr 2023 12:55:24 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, Vignesh R <vigneshr@ti.com>
-Cc:     linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
-        kernel@pengtronix.de, "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH] i2c: omap: Don't do pm_runtime_resume in .remove()
-Date:   Sun,  2 Apr 2023 12:55:18 +0200
-Message-Id: <20230402105518.2512541-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S230200AbjDBRIw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 2 Apr 2023 13:08:52 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA42B46A;
+        Sun,  2 Apr 2023 10:08:51 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id u11-20020a05600c19cb00b003edcc414997so16741174wmq.3;
+        Sun, 02 Apr 2023 10:08:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680455329;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qsJ97AzAinqmYulQ9uVcLwa3ToVHlFCND7bl1BMrRiU=;
+        b=YHNxsnJJ4c5c+8fCLqRjsHMs8tmEZHQ1w2ViHHGFaniGDy3caW4L474GMekT/yDMAp
+         HNpLsnUDef4DYgY2EjmHZa1S8iK42qMP0qxu+LY+Nj0hvf1Kzkm/WOqjVveCyJGWQ6tO
+         TQnqxsn/3DlfOxmdVY2EEgo6MM5bVzVdEq/nLIbCHat7Lk1JwznFRW7LzNrXR8Qh2H/8
+         b4iHjFYYO9iS1cPGCM0GR0z4s/KHHrBTlkbw91nqBr6T+ljCcWaEmM4DmFMpXVwdiVLf
+         rYuMQO5vBNeXRNbzTvcuTU3vup2h+YsxCtpG92MBHJlyTJ9GmvkkqGsUZ72gnEHP8LVd
+         NIOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680455329;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qsJ97AzAinqmYulQ9uVcLwa3ToVHlFCND7bl1BMrRiU=;
+        b=OuTkyXV9HUZZPO4gYz9sLc3bAmEP8WIh0c12f5tDrGiiPSssmgWHHhFKm2kMswqo0W
+         /0WSGC1HhV4YNcxXvZSIhCKc0Q8tQnC5pmfQzI8D+1MrkIu1YNNsF6HasDfhIld4acEc
+         47tyzF6WplhAmNobjdCsKAZqy98TPP+fRavZVFIUcqsD7GyzYOhgpMijEi29Q0Adj72v
+         FvBbvGzqz0UsK1Q1Zhvco5jCOpfNby8ag4WIC+8BNcvXt3Jn5xOYRKGwC5r0k9NJeEOK
+         /hoN2Lq74sGavond0u7f6rMq2CJAbNibtRvphRC+kP29PyWvDkUwRPA09/LqPW0PkCKq
+         Ou1g==
+X-Gm-Message-State: AAQBX9cS9CVUbdQvHOU2SByoczLPP2V5+0qRGZXO+k/Z/8Ejl/ddlGjx
+        gqxZK0mi6FKPTJjSXfR0pAA=
+X-Google-Smtp-Source: AKy350Y8n3sLV835zkLGWD1Asl2o/5OiDqWwy1rdkkLRI7XF1gVqgugu90RkgvcR9WttMJwwPkB95g==
+X-Received: by 2002:a1c:7406:0:b0:3da:2ba4:b97 with SMTP id p6-20020a1c7406000000b003da2ba40b97mr10806342wmc.19.1680455329510;
+        Sun, 02 Apr 2023 10:08:49 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id s15-20020a05600c45cf00b003eb2e33f327sm26654245wmo.2.2023.04.02.10.08.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Apr 2023 10:08:48 -0700 (PDT)
+Message-ID: <eef88552-64cb-b4e7-f443-bf6d7afe3ae2@gmail.com>
+Date:   Sun, 2 Apr 2023 19:08:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1710; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=YuO3xNgH6GPTxtI5VYLq6i5csE6lG+Icg93FwUQ/z2U=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkKV8VIYZQ26aaizqS1BwvhCK5/Koz/UEgHsQBZ 3D8nAnNaW2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZClfFQAKCRCPgPtYfRL+ TtWVB/4nKls0puq1UcPdg0iFBHiiJN03d3ido9512BseMSFyy+lTZ6S8cbRf8w6Fq0BDJa3I3BL 7fymnh8VHHP2ZGwar6q6dRQAHATL1vuqR70KWSPtFCLfqF+gcnDAKgwXOSMrScM1w5Lvewr34kn NklZ2CKwMpsfRkWg8nZ7rhaQ7RCi9eHgmGTJfb8rN/R1eIcJoAIQS/XnIiy93CxP7H5eUUyA/0m +epP7yoBuVofi0/zA9kJtDtvEgAdb5JLi76gBQFmtH6/bZFO6l32r0NzxnCWXNXz9Whp7qO5yB5 1I8S+9EG7GZ3mQZyabfGBbTyT5mZb9fC2/oUacadhs3DjNyD
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 02/17] arm64: dts: mediatek: mt6795: Add apmixedsys
+ syscon node
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     qii.wang@mediatek.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jassisinghbrar@gmail.com,
+        houlong.wei@mediatek.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+References: <20230327083647.22017-1-angelogioacchino.delregno@collabora.com>
+ <20230327083647.22017-3-angelogioacchino.delregno@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230327083647.22017-3-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-One of the first things that the driver's pm_runtime_resume callback
-does is to write zero to the OMAP_I2C_CON_REG register.
-So there is no need to have the device resumed just to write to the
-OMAP_I2C_CON_REG register and the call to pm_runtime_resume_and_get()
-can be dropped.
 
-The intended side effect of this commit is to remove an error path of
-the function resulting in the remove callback returning a mostly ignored
-error code. This prepares changing the prototype of struct
-platform_driver's remove callback to return void.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
-Hello,
+On 27/03/2023 10:36, AngeloGioacchino Del Regno wrote:
+> Add the APMIXEDSYS node, providing a syscon to the APMIXED iospace and
+> also providing PLLs.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt6795.dtsi | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt6795.dtsi b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
+> index 4d2119751572..26d640e1bfb6 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt6795.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
+> @@ -310,6 +310,12 @@ systimer: timer@10200670 {
+>   			clock-names = "clk13m";
+>   		};
+>   
+> +		apmixedsys: syscon@10209000 {
+> +			compatible = "mediatek,mt6795-apmixedsys", "syscon";
 
-I'm not completely sure that the reasing in the commit log is sound.
-There might at least theoretical side effects of the register write
-that are different if the device is fully resumed.
+Looks good although we have the compatible twice, in 
+bindings/clock/mediatek,apmixedsys.yaml and 
+bindings/clock/mediatek,mt6795-sys-clock.yaml
 
-Best regards
-Uwe
+So we should see if we can merge both.
 
- drivers/i2c/busses/i2c-omap.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+Matthias
 
-diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
-index f9ae520aed22..a572f6d994ca 100644
---- a/drivers/i2c/busses/i2c-omap.c
-+++ b/drivers/i2c/busses/i2c-omap.c
-@@ -1522,16 +1522,12 @@ omap_i2c_probe(struct platform_device *pdev)
- static int omap_i2c_remove(struct platform_device *pdev)
- {
- 	struct omap_i2c_dev	*omap = platform_get_drvdata(pdev);
--	int ret;
- 
- 	i2c_del_adapter(&omap->adapter);
--	ret = pm_runtime_resume_and_get(&pdev->dev);
--	if (ret < 0)
--		return ret;
- 
- 	omap_i2c_write_reg(omap, OMAP_I2C_CON_REG, 0);
-+
- 	pm_runtime_dont_use_autosuspend(&pdev->dev);
--	pm_runtime_put_sync(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
- 	return 0;
- }
-
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
--- 
-2.39.2
-
+> +			reg = <0 0x10209000 0 0x1000>;
+> +			#clock-cells = <1>;
+> +		};
+> +
+>   		fhctl: clock-controller@10209f00 {
+>   			compatible = "mediatek,mt6795-fhctl";
+>   			reg = <0 0x10209f00 0 0x100>;
