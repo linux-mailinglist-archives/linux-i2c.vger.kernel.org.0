@@ -2,86 +2,122 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F25016D3D92
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Apr 2023 08:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C826D3E69
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Apr 2023 09:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbjDCGuY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Apr 2023 02:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
+        id S231678AbjDCHuF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Apr 2023 03:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjDCGuX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Apr 2023 02:50:23 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0DE2727;
-        Sun,  2 Apr 2023 23:50:20 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id n14so27338425qta.10;
-        Sun, 02 Apr 2023 23:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680504619;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UY7uVDKavnayiHsQEjZEIVpvQWztlTClif0OZXNLtJQ=;
-        b=YHXAtup2LEtNpxWLo4CQ2SLwadUFQuQOszkc3qRBVI4DoIbAGcRZEs40NdPhwvp7CY
-         EDRpvksBm6tMNFaHqG1EKq/UkFgtAZE70gw9W3Jh64LRGGQkbewJon7Vp/gCl7i1hmmq
-         L3gc2OM/SiAXxFFDTeIB3DNbgb8RI0uvxR+4xHGhogZe36zUKlzWfNAAUw8fSWisT2UL
-         H5bBd379pL9RNS/NOqng6DbLVVBPOmGe5iQI7XOSr4aER+7nMn8Y1VDAvI7WeFYAx7v8
-         YZ9gHrW20FJg3MjcZoeQ9AzPUDu7TDLPEfI9SdxE7tGZYzefLN69VhJq78oWlloQo/UO
-         Yy8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680504619;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UY7uVDKavnayiHsQEjZEIVpvQWztlTClif0OZXNLtJQ=;
-        b=WhuNyT4/imuAIrRVlB7Y3tNf3S7BqDef8Zrjsk3IihdqB/eLhx2HSfXlOrdfO9spIK
-         cpep/82R0jkFAAMgX3sC9X6Iqcwx4veO+TH/HW0Jz8L1SOs7hEjHKYJX/Nqu0npQTNif
-         kV2k7adphNPW5UDDcAbGGVgAQ0ntiDbIBEXPwTRYYmAvFX++gKELOmLrZsQBa5tiTeUl
-         1i0d7dUsg5LHDfJCimKSuu1csHOblCdpmvQ7Dwuxu7AOwYbriZfWpOkmRnVQZEofUAxv
-         m80JMKkcY4p223jaWLZVpnxE2eWd37enxRcSrKLlZLGBkkPTVBnO8lrPtZKEqhDUYsPl
-         KMbw==
-X-Gm-Message-State: AO0yUKVv7Jefl0xG4PW0EMmvDtJk3pVBguKKOvmKi1vS3THtpRLNIfB5
-        7NNoGiE0Yz5wcbKKfDr+tOM=
-X-Google-Smtp-Source: AK7set9M9SUD7QQ3peFVgNl8rJ4f7gXXjOnpkvefFqRWiS+AQHrpCwPjMXzZfPhpBOskHm66i45zcw==
-X-Received: by 2002:a05:622a:1983:b0:3e0:3d65:19d2 with SMTP id u3-20020a05622a198300b003e03d6519d2mr57959747qtc.20.1680504619179;
-        Sun, 02 Apr 2023 23:50:19 -0700 (PDT)
-Received: from PCBABN.skidata.net ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id d70-20020a376849000000b007467a4d8691sm2569782qkc.47.2023.04.02.23.50.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 23:50:18 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-To:     dmitry.osipenko@collabora.com
-Cc:     bbara93@gmail.com, benjamin.bara@skidata.com, jonathanh@nvidia.com,
-        lee@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        rafael.j.wysocki@intel.com, richard.leitner@linux.dev,
-        treding@nvidia.com, wsa@kernel.org
-Subject: Re: [PATCH v3 4/4] mfd: tps6586x: register restart handler
-Date:   Mon,  3 Apr 2023 08:50:13 +0200
-Message-Id: <20230403065013.520339-1-bbara93@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <6abaa803-1639-b949-3af5-05a341f9b459@collabora.com>
-References: <6abaa803-1639-b949-3af5-05a341f9b459@collabora.com>
+        with ESMTP id S231320AbjDCHuE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Apr 2023 03:50:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7E9525B;
+        Mon,  3 Apr 2023 00:49:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36279B81097;
+        Mon,  3 Apr 2023 07:49:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA77AC433EF;
+        Mon,  3 Apr 2023 07:49:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680508185;
+        bh=6mVhMmgCEexVQis9i8ZyD12x70TPYyHdwAxpUEaYpxE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OcRmbfJDmRGAULuMFh2hCZNNXlsWpbyKkVGQpqcvVxW5+T9isUX1vJ2ru4ORrCzXr
+         UR9oxZRp/Z1PPcxn8b20CE8OMVJEX+1Uuwnq8lWnrYLRdZF04Kd0hv8VCi5ZO7iXEw
+         o2zsq/g6kDc3W+S37H1ZxQqcJZj4Y7nnN56yPxFbjtNtD1/D4lI3nPftq6N2LskgID
+         +GMLbreQJvA87H81QwxC6g8JcpsOq9AZgaudl5vMwIzef5i7Kl0fbm3VHSRpLTfxF9
+         OUyrCiRlqzt2oSRjm9/OnjDbCvrXHWYEyAPHxNeHp9JCTzGvHgAESoHZkYX7RlUpYY
+         84fqqV61cNtqg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Wolfram Sang <wsa@kernel.org>, Joel Stanley <joel@jms.id.au>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: gxp: fix build failure without CONFIG_I2C_SLAVE
+Date:   Mon,  3 Apr 2023 09:49:13 +0200
+Message-Id: <20230403074939.3785593-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Thanks for the feedback!
+From: Arnd Bergmann <arnd@arndb.de>
 
-The DS states: "When the reboot request state is set an internal timer TWAIT
-(10ms typ) is started. The reboot request ends when t > TWAIT."
+The gxp_i2c_slave_irq_handler() is hidden in an #ifdef, but the
+caller uses an IS_ENABLED() check:
 
-Therefore, my intention was to wait a little bit before starting the next
-handler in the chain. I can do some tests without the mdelay, but otherwise
-will reduce it to 15ms in the next patch. What do you think about it?
+drivers/i2c/busses/i2c-gxp.c: In function 'gxp_i2c_irq_handler':
+drivers/i2c/busses/i2c-gxp.c:467:29: error: implicit declaration of function 'gxp_i2c_slave_irq_handler'; did you mean 'gxp_i2c_irq_handler'? [-Werror=implicit-function-declaration]
 
-BR,
-Benjamin
+It has to consistently use one method or the other to avoid warnings,
+so move to IS_ENABLED() here for readability and build coverage, and
+move the #ifdef in linux/i2c.h to allow building it as dead code.
+
+Fixes: 4a55ed6f89f5 ("i2c: Add GXP SoC I2C Controller")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/i2c/busses/i2c-gxp.c | 2 --
+ include/linux/i2c.h          | 4 ++--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-gxp.c b/drivers/i2c/busses/i2c-gxp.c
+index d4b55d989a26..8ea3fb5e4c7f 100644
+--- a/drivers/i2c/busses/i2c-gxp.c
++++ b/drivers/i2c/busses/i2c-gxp.c
+@@ -353,7 +353,6 @@ static void gxp_i2c_chk_data_ack(struct gxp_i2c_drvdata *drvdata)
+ 	writew(value, drvdata->base + GXP_I2CMCMD);
+ }
+ 
+-#if IS_ENABLED(CONFIG_I2C_SLAVE)
+ static bool gxp_i2c_slave_irq_handler(struct gxp_i2c_drvdata *drvdata)
+ {
+ 	u8 value;
+@@ -437,7 +436,6 @@ static bool gxp_i2c_slave_irq_handler(struct gxp_i2c_drvdata *drvdata)
+ 
+ 	return true;
+ }
+-#endif
+ 
+ static irqreturn_t gxp_i2c_irq_handler(int irq, void *_drvdata)
+ {
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 5ba89663ea86..13a1ce38cb0c 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -385,7 +385,6 @@ static inline void i2c_set_clientdata(struct i2c_client *client, void *data)
+ 
+ /* I2C slave support */
+ 
+-#if IS_ENABLED(CONFIG_I2C_SLAVE)
+ enum i2c_slave_event {
+ 	I2C_SLAVE_READ_REQUESTED,
+ 	I2C_SLAVE_WRITE_REQUESTED,
+@@ -396,9 +395,10 @@ enum i2c_slave_event {
+ 
+ int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
+ int i2c_slave_unregister(struct i2c_client *client);
+-bool i2c_detect_slave_mode(struct device *dev);
+ int i2c_slave_event(struct i2c_client *client,
+ 		    enum i2c_slave_event event, u8 *val);
++#if IS_ENABLED(CONFIG_I2C_SLAVE)
++bool i2c_detect_slave_mode(struct device *dev);
+ #else
+ static inline bool i2c_detect_slave_mode(struct device *dev) { return false; }
+ #endif
+-- 
+2.39.2
+
