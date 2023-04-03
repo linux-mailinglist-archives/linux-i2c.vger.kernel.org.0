@@ -2,93 +2,134 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E27F6D3B32
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Apr 2023 02:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A3F6D3CFF
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Apr 2023 07:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbjDCAxK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 2 Apr 2023 20:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
+        id S231329AbjDCFtB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Apr 2023 01:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDCAxK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 2 Apr 2023 20:53:10 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A5E83D7;
-        Sun,  2 Apr 2023 17:53:08 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id l18so20588009oic.13;
-        Sun, 02 Apr 2023 17:53:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680483188;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OBu5UaNjkNwzsbUn0TKWijnYuBW78y5XFl9tNfZBjEM=;
-        b=khzDCO8hOm1isewEetnwxLcDol7D0eG3maTtIquV8R5OkcesqMUf729ueUnChIpW9a
-         p3oa5F9Je8RibpDHwwce9z0nodkK3wHxuoxAKgXoqJtOFtcmNKRGqZf6LeMm6dKNJ9VW
-         odilhtryOjsPdeOpeWwwHzS3PkGgW2b2dk97232si4gS+8su+dayUKsO4dD2RcwK/ePc
-         O9d0lmJSF+wN7bImEKVyywknru7kdbWOxm6bEJZHSAcO5NBdMuFQemsgpUGiPSrrXAJn
-         Dlp0z8KLpyaYfbPEbWmt1+kE8cRUKq6Xg2caap+tjg21Hxb1ouLBOyScOdyd8BKAhxsu
-         S2zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680483188;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OBu5UaNjkNwzsbUn0TKWijnYuBW78y5XFl9tNfZBjEM=;
-        b=qORIXlJ4y9PEgPsqKSN4ZZytaI+ERqjyxhcjXnz7wRypzl+WM0rGr50RmkiGnnsuMP
-         HSew6ZecGmTZmJTbfxdMWVGUlRm7x37+fcxtWD3Sc7NKXW8xN1Eyl50r7OhF2Ykx8yC1
-         vhWmlSSrBME3SbGI1AMaJKb7+Pi0lFs/1xM7fpeV5V8zM6Dnua6hm6fyVH7SzNfOb5d+
-         8pLNXsOTRyagWdbO/X3ESHS6C44Tu0q2M/zb3VZT+7nlWP/q7wY3TSNteLm9DbH0gEqV
-         hHyOFy3G/sQZnUwLlHBeC3tohUjEW2BkxOGygAzdZGfPC3bwqw9348vMbedN1Q9fiYNz
-         CKgA==
-X-Gm-Message-State: AO0yUKV4aekDAwaec6e6M/7IeHakZfkPn7NJddKBgi3xgZGbkCshTyjE
-        qUfYhWtikMFIaEaJUeGz33tTju2Sjgc=
-X-Google-Smtp-Source: AK7set/hG9QrSNrJ6GkJhhODkeJF23wltyptxaRbHP4H74dbS7c4+CMqjWJu9VqtQ6HcGYp11zdH6Q==
-X-Received: by 2002:a05:6808:ab0:b0:386:d10c:16fb with SMTP id r16-20020a0568080ab000b00386d10c16fbmr14473206oij.2.1680483188043;
-        Sun, 02 Apr 2023 17:53:08 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w8-20020a056808018800b003896b3269d3sm3297235oic.20.2023.04.02.17.53.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 17:53:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 2 Apr 2023 17:53:05 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Daniel Matyas <daniel.matyas23@gmail.com>
-Cc:     linux-iio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: Creating a driver for MAX31827 temperature switch
-Message-ID: <e294bbdd-999b-4629-9b8d-046ccb834835@roeck-us.net>
-References: <ZCn0KeOQFJclqiAK@daniel-Precision-5530>
+        with ESMTP id S231305AbjDCFtA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Apr 2023 01:49:00 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262AA6E91
+        for <linux-i2c@vger.kernel.org>; Sun,  2 Apr 2023 22:48:59 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pjD3f-0001Mh-T8; Mon, 03 Apr 2023 07:48:47 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pjD3c-008c3N-2w; Mon, 03 Apr 2023 07:48:44 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pjD3b-00A8sQ-Em; Mon, 03 Apr 2023 07:48:43 +0200
+Date:   Mon, 3 Apr 2023 07:48:37 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>, Vignesh R <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de, "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] i2c: omap: Don't do pm_runtime_resume in .remove()
+Message-ID: <20230403054837.6lxyzznzntvw2drg@pengutronix.de>
+References: <20230402105518.2512541-1-u.kleine-koenig@pengutronix.de>
+ <20230402225001.75a32147@aktux>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="elfkugrrzbiqzu5a"
 Content-Disposition: inline
-In-Reply-To: <ZCn0KeOQFJclqiAK@daniel-Precision-5530>
-X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230402225001.75a32147@aktux>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 12:31:21AM +0300, Daniel Matyas wrote:
-> Dear Kernel community,
-> 
-> I am developing an IIO driver for a temperature switch, which communicates through I2C at Analog Devices Inc.
-> 
-> When implementing the event handling for the comparator mode of the device, I faced a problem: I don't know how to differentiate the underTemp event from the overTemp event. To understand better, I suggest you check out the device's data sheet for Address map (page 12), Configuration Register Definition (page 13) and OT/UT Status Bits and ALARM Pin Behavior (page 15) - https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31827-MAX31829.pdf
-> 
-> I had the idea to make 2 channels with the exact same attributes, but with different indexes, so that I can store the overTemp related events on channel 0 and underTemp related events on channel 1. Even so, I don't really feel like this is the right solution. Can anyone give me some advice on this?
-> 
-> Also, I was suggested that I convert my driver from IIO to HWMON. Do you think that this is needed?
-> 
 
-This is a typical hardware monitoring chip, and the driver should be a
-hardware monitoring driver.
+--elfkugrrzbiqzu5a
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Guenter
+Hello Andreas,
 
+On Sun, Apr 02, 2023 at 10:50:01PM +0200, Andreas Kemnade wrote:
+> On Sun,  2 Apr 2023 12:55:18 +0200
+> Uwe Kleine-K=F6nig         <u.kleine-koenig@pengutronix.de> wrote:
+>=20
+> > One of the first things that the driver's pm_runtime_resume callback
+> > does is to write zero to the OMAP_I2C_CON_REG register.
+> > So there is no need to have the device resumed just to write to the
+> > OMAP_I2C_CON_REG register and the call to pm_runtime_resume_and_get()
+> > can be dropped.
+> >=20
+> > The intended side effect of this commit is to remove an error path of
+> > the function resulting in the remove callback returning a mostly ignored
+> > error code. This prepares changing the prototype of struct
+> > platform_driver's remove callback to return void.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> As far as I have understand the code that runtime resume is needed
+> for enabling clocks to access the device
 
-> Yours faithfully,
-> Daniel Matyas
+The only HW access the .remove() callback does is
+
+	omap_i2c_write_reg(omap, OMAP_I2C_CON_REG, 0);
+
+=2E The driver's runtime resume callback looks as follows:
+
+        pinctrl_pm_select_default_state(dev);
+
+        if (!omap->regs)
+                return 0;
+
+        __omap_i2c_init(omap);
+
+and the first thing in in __omap_i2c_init is (also) writing a zero to
+OMAP_I2C_CON_REG.
+
+I wouldn't expect that the pinctrl call is a precondition for the
+register access?! The check for omap->regs is somehow strange, because
+other code locations that do register access just assume that ->regs is
+non-NULL.
+
+So if there is some clk handling necessary before the register access,
+I'm not aware where it's hidden. Is there some bus or omap specific code
+that ensures clk handling?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--elfkugrrzbiqzu5a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQqaLQACgkQj4D7WH0S
+/k49Mwf/Zql8i6hMxha765EKWIpaTDHnoZYJ6ghu9LMtnaPVhmSqaxOzdKY5heqf
+t6Srv5f9Rz92AU9q04CI/DYcSbsGbIaqlnhzPpWVc0YMZl0kR0s7gr6aI6S18blH
+jajN6L4TFz05HHw+rV9J8xKHfvyCRiPn73KCwZ9dOlla80QVMQtL1c2y+BLjxVeL
+zWXLrMwcsdUY4BmSLqqjDu6QGr04tfjQt9Lzr2Eazm0BM60RaZCv5fIEGnS/BXuj
+bB4fpAb0DlTaI3mC8MlJLLhBU1gp0m2NRY6vSLiNQBIr5Vo8rpQu/00uTio4o1em
+iOG0UQE1nvpkOJtVYNtGXyqkAxIqbw==
+=OOEM
+-----END PGP SIGNATURE-----
+
+--elfkugrrzbiqzu5a--
