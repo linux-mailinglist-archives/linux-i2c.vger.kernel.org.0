@@ -2,122 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C826D3E69
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Apr 2023 09:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5336D4C01
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Apr 2023 17:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbjDCHuF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Apr 2023 03:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
+        id S232871AbjDCPeb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Apr 2023 11:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbjDCHuE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Apr 2023 03:50:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7E9525B;
-        Mon,  3 Apr 2023 00:49:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S232870AbjDCPea (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Apr 2023 11:34:30 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756F210F9
+        for <linux-i2c@vger.kernel.org>; Mon,  3 Apr 2023 08:34:29 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36279B81097;
-        Mon,  3 Apr 2023 07:49:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA77AC433EF;
-        Mon,  3 Apr 2023 07:49:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680508185;
-        bh=6mVhMmgCEexVQis9i8ZyD12x70TPYyHdwAxpUEaYpxE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=OcRmbfJDmRGAULuMFh2hCZNNXlsWpbyKkVGQpqcvVxW5+T9isUX1vJ2ru4ORrCzXr
-         UR9oxZRp/Z1PPcxn8b20CE8OMVJEX+1Uuwnq8lWnrYLRdZF04Kd0hv8VCi5ZO7iXEw
-         o2zsq/g6kDc3W+S37H1ZxQqcJZj4Y7nnN56yPxFbjtNtD1/D4lI3nPftq6N2LskgID
-         +GMLbreQJvA87H81QwxC6g8JcpsOq9AZgaudl5vMwIzef5i7Kl0fbm3VHSRpLTfxF9
-         OUyrCiRlqzt2oSRjm9/OnjDbCvrXHWYEyAPHxNeHp9JCTzGvHgAESoHZkYX7RlUpYY
-         84fqqV61cNtqg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Wolfram Sang <wsa@kernel.org>, Joel Stanley <joel@jms.id.au>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: gxp: fix build failure without CONFIG_I2C_SLAVE
-Date:   Mon,  3 Apr 2023 09:49:13 +0200
-Message-Id: <20230403074939.3785593-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1FC0821E88;
+        Mon,  3 Apr 2023 15:34:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1680536068; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aItC/lQiH9pa3kALSaXTNymbXGyBstlUwldTtIaSrC4=;
+        b=UlrvLxJCPj0cy9QxqCIZP8O2uEgxf9u4KNoOruHLD/U3JYWy9qfZ63zlriTfqr4zLAk5Qi
+        Rao2MefVPk0rRx8S8f08ie552Tga0oSJ2aGaR4xAvzkwW/FnajsRHCunTZ7mHq5MKb6PRt
+        tRWHqfV8D7KgXvsMahVlELPGz0kXpxs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1680536068;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aItC/lQiH9pa3kALSaXTNymbXGyBstlUwldTtIaSrC4=;
+        b=eYyOW4Pz6g4qmcs7jqtHhshgcP4Ynh+DlydiDyrFwjgMQ0HlH6Yvz4LO5B/Pcb6f6hbCz8
+        PGKtNDr6yduXBbCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EDD3C1331A;
+        Mon,  3 Apr 2023 15:34:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Bcp4OAPyKmQvQAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Mon, 03 Apr 2023 15:34:27 +0000
+Date:   Mon, 3 Apr 2023 17:34:26 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
+Subject: Re: [PATCH 1/2] i2c: i801: Add support for Intel Meteor Lake-S SoC
+Message-ID: <20230403173426.2cc3af2a@endymion.delvare>
+In-Reply-To: <20230330105502.4100351-1-jarkko.nikula@linux.intel.com>
+References: <20230330105502.4100351-1-jarkko.nikula@linux.intel.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi Jarkko,
 
-The gxp_i2c_slave_irq_handler() is hidden in an #ifdef, but the
-caller uses an IS_ENABLED() check:
+On Thu, 30 Mar 2023 13:55:01 +0300, Jarkko Nikula wrote:
+> Add SMBus PCI ID on Intel Meteor Lake-S SoC South.
+> 
+> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> ---
+>  drivers/i2c/busses/i2c-i801.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index ac5326747c51..8172e2767b25 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -77,6 +77,7 @@
+>   * Alder Lake-M (PCH)		0x54a3	32	hard	yes	yes	yes
+>   * Raptor Lake-S (PCH)		0x7a23	32	hard	yes	yes	yes
+>   * Meteor Lake-P (SOC)		0x7e22	32	hard	yes	yes	yes
+> + * Meteor Lake-S (SOC)		0xae22	32	hard	yes	yes	yes
+>   *
+>   * Features supported by this driver:
+>   * Software PEC				no
+> @@ -233,6 +234,7 @@
+>  #define PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_S_SMBUS		0x7a23
+>  #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS		0x7aa3
+>  #define PCI_DEVICE_ID_INTEL_METEOR_LAKE_P_SMBUS		0x7e22
+> +#define PCI_DEVICE_ID_INTEL_METEOR_LAKE_S_SMBUS		0xae22
+>  #define PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS		0x8c22
+>  #define PCI_DEVICE_ID_INTEL_WILDCATPOINT_SMBUS		0x8ca2
+>  #define PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS		0x8d22
 
-drivers/i2c/busses/i2c-gxp.c: In function 'gxp_i2c_irq_handler':
-drivers/i2c/busses/i2c-gxp.c:467:29: error: implicit declaration of function 'gxp_i2c_slave_irq_handler'; did you mean 'gxp_i2c_irq_handler'? [-Werror=implicit-function-declaration]
+Sorry for nitpicking but since 34b57f40a6a2 ("i2c: i801: sort IDs
+alphabetically") this list is supposed to be sorted by ID.
 
-It has to consistently use one method or the other to avoid warnings,
-so move to IS_ENABLED() here for readability and build coverage, and
-move the #ifdef in linux/i2c.h to allow building it as dead code.
+> @@ -1038,6 +1040,7 @@ static const struct pci_device_id i801_ids[] = {
+>  	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_M_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+>  	{ PCI_DEVICE_DATA(INTEL, RAPTOR_LAKE_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+>  	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_P_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+>  	{ 0, }
+>  };
+>  
 
-Fixes: 4a55ed6f89f5 ("i2c: Add GXP SoC I2C Controller")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/i2c/busses/i2c-gxp.c | 2 --
- include/linux/i2c.h          | 4 ++--
- 2 files changed, 2 insertions(+), 4 deletions(-)
+Other than that, looks good.
 
-diff --git a/drivers/i2c/busses/i2c-gxp.c b/drivers/i2c/busses/i2c-gxp.c
-index d4b55d989a26..8ea3fb5e4c7f 100644
---- a/drivers/i2c/busses/i2c-gxp.c
-+++ b/drivers/i2c/busses/i2c-gxp.c
-@@ -353,7 +353,6 @@ static void gxp_i2c_chk_data_ack(struct gxp_i2c_drvdata *drvdata)
- 	writew(value, drvdata->base + GXP_I2CMCMD);
- }
- 
--#if IS_ENABLED(CONFIG_I2C_SLAVE)
- static bool gxp_i2c_slave_irq_handler(struct gxp_i2c_drvdata *drvdata)
- {
- 	u8 value;
-@@ -437,7 +436,6 @@ static bool gxp_i2c_slave_irq_handler(struct gxp_i2c_drvdata *drvdata)
- 
- 	return true;
- }
--#endif
- 
- static irqreturn_t gxp_i2c_irq_handler(int irq, void *_drvdata)
- {
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 5ba89663ea86..13a1ce38cb0c 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -385,7 +385,6 @@ static inline void i2c_set_clientdata(struct i2c_client *client, void *data)
- 
- /* I2C slave support */
- 
--#if IS_ENABLED(CONFIG_I2C_SLAVE)
- enum i2c_slave_event {
- 	I2C_SLAVE_READ_REQUESTED,
- 	I2C_SLAVE_WRITE_REQUESTED,
-@@ -396,9 +395,10 @@ enum i2c_slave_event {
- 
- int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
- int i2c_slave_unregister(struct i2c_client *client);
--bool i2c_detect_slave_mode(struct device *dev);
- int i2c_slave_event(struct i2c_client *client,
- 		    enum i2c_slave_event event, u8 *val);
-+#if IS_ENABLED(CONFIG_I2C_SLAVE)
-+bool i2c_detect_slave_mode(struct device *dev);
- #else
- static inline bool i2c_detect_slave_mode(struct device *dev) { return false; }
- #endif
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+
 -- 
-2.39.2
-
+Jean Delvare
+SUSE L3 Support
