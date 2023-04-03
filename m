@@ -2,43 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C2B6D5090
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Apr 2023 20:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CEE16D50B0
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Apr 2023 20:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233208AbjDCSc6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Apr 2023 14:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        id S233191AbjDCSfH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Apr 2023 14:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233225AbjDCSct (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Apr 2023 14:32:49 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2087.outbound.protection.outlook.com [40.107.223.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DED212D;
-        Mon,  3 Apr 2023 11:32:45 -0700 (PDT)
+        with ESMTP id S231411AbjDCSfG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Apr 2023 14:35:06 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2061e.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::61e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4886E448A;
+        Mon,  3 Apr 2023 11:34:26 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HbyfaT7S4l4ECuDLMRxWrqBT6loFym+iIUV9htQtdbmm5+aiI0xrgbJOFxgX9lRg7pO/PBR6/PT1euPf3gaNdufGYBcML4p+LXnGoxEZllsuWqFhqEvt3SORiovqr6qMfwYV2HDbeND3itYq3S2eAB8wLcWRv3caTU3GLnKHGcl7fBsss1iqSh3zG3bFtBuLC2GhJJpP9kkxAefzeC424f3WwFeSEtguZnIZXZ+MdovziqG8tTWgniNrnSpqG62HWZvuVn5ppkY8ev6fPbDr9y2f0lh3+hAMTkwaKU204BAxvYFqisWIzTIl6UHwhkXDSKBhYyeD2Grj5fMIMEQaiA==
+ b=InUY9G2ReyTqRks6KRfvXB2yinED/yNCV/phk+rGcBhLrGDIWri40HnD7KkhFVhVe3ihpNfJpUD+PZEeFvPV3zAgahHKgO+fMx88AvraDWokAArBGNDJ/Q2Go7QWtSIiOIUbVDSFuNK95zD9g/GJhnq91U6TVfga2Kto+6JRjmom8f8dknqtXwRH7yxn5eas6hWo2sT9DeS08JXw2DFOtczLklGz8tMjHMSvWhDtYOHdYP9ngHIa6SgFMRKm5l3SkxFFeJ61EWNgMen9N5CwzOgem8IIWscPMW9iT4DyFTG4vIH+fa4JeXmws39zRvIg+tFE+R3jFWmWNHet0dYk3Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IYhIZWbNYqFVNDpfO931gMMWdMwqo+/KUWdkInLKCoE=;
- b=UJS7AwD3BufCONXRS+925Ml/CNxSl6fhFpTDvhQfe4uC0BXMD8sONa5y6UYnqk5qHpltYI4jxeNzF9bZ1jQfuE+Y9dNwWv4nUc5V6D6sx+sCcA4EvYN4OXC6jdyJTEciDtO5RQ3TtIiLtTnWIuBpwCO2Z6as68yH96WBCK1/6RMKG/C8FawJX6pdmOdjcPIKQc4Juuk7HhAmuUL3qv68fi9Ltw2DhpnU7bXNnXW7vVzkAGh5S8fNmsJWQI0s7ayjDul4QKE8EIfdTvvGUQkssJuleW7Nj/gmZy7SkwOt1RnHvLdaGWF0XWBHn4nbsrcAcSc5+Q8W+VmLs/M8GFzUGA==
+ bh=0JG8ZQbgcdWCm1NNm1RDFSg43s1mjeApJXMO1CEXoVs=;
+ b=jFVCgfZlPFvcZsiQ7c4EWGws/H0J7ULg/J6lAoQDssfS6Wlj22132p+CDQmdpOecIZLVQTzADy3AG0X+wblUc9Hpu2DwfKzJsWfui1Ob8QprPUnFD+D8zwBCLsFTv+SQD9AVkpNtnZT+FHf+VkgdBqLaARAWgLSXG86UQlHQD851o3whYUtf8mJQfTXN2nrghKFL5IUlcTZO7aegLMFzmDXHIOpAQwR0fAryTdkiIvzKhfjJT8VpBockEPhSfWK5RIy4t6seBEVcF7PWnyn6rxzSlMAxrFfB8xsJlBAjhcORgcgLM9+C1FdCvUDcM4/RJ8aJavF9yhG52Sy2noGwWw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=gondor.apana.org.au smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IYhIZWbNYqFVNDpfO931gMMWdMwqo+/KUWdkInLKCoE=;
- b=kS32UR7IP3RBjsjk0TuW1vOHEpCMjR3H6nw0y2aene7F74v2u4SRPHbqwjeYnrKSR+sp3LpB3bguPFftLKScVcpnh4Iycdt2OTK/NIrEGic7W+2d0SBmH5OAZ0x2ffZRjjsmuwf77Ki0Ovkpaj/duCBS6iJ89Veir/nB3ySnPpA=
-Received: from BL1PR13CA0200.namprd13.prod.outlook.com (2603:10b6:208:2be::25)
- by PH7PR12MB6612.namprd12.prod.outlook.com (2603:10b6:510:210::14) with
+ bh=0JG8ZQbgcdWCm1NNm1RDFSg43s1mjeApJXMO1CEXoVs=;
+ b=Xp/nOzZZm/bQRhdqvRJP7aAI2nP6WWT3S3xcy7nxZsCHzleAF4DPmX/jqK5rkEHk/LQmqMjbLwbvmicDxP7Imy4KNTqxLlsvmavL1ARouQDsxrPwzf/dyX0EPD7YNiquiz8HGptzNLwnMtMqBsotUrq+B2xEa47FNTmIOqd0ipA=
+Received: from BL1PR13CA0334.namprd13.prod.outlook.com (2603:10b6:208:2c6::9)
+ by SJ2PR12MB8928.namprd12.prod.outlook.com (2603:10b6:a03:53e::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.30; Mon, 3 Apr
- 2023 18:32:42 +0000
-Received: from BL02EPF000108E9.namprd05.prod.outlook.com
- (2603:10b6:208:2be:cafe::be) by BL1PR13CA0200.outlook.office365.com
- (2603:10b6:208:2be::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Mon, 3 Apr
+ 2023 18:34:03 +0000
+Received: from BL02EPF000108EB.namprd05.prod.outlook.com
+ (2603:10b6:208:2c6:cafe::d2) by BL1PR13CA0334.outlook.office365.com
+ (2603:10b6:208:2c6::9) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.26 via Frontend
- Transport; Mon, 3 Apr 2023 18:32:42 +0000
+ Transport; Mon, 3 Apr 2023 18:34:02 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -46,13 +46,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF000108E9.mail.protection.outlook.com (10.167.241.202) with Microsoft
+ BL02EPF000108EB.mail.protection.outlook.com (10.167.241.200) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6178.30 via Frontend Transport; Mon, 3 Apr 2023 18:32:42 +0000
+ 15.20.6178.30 via Frontend Transport; Mon, 3 Apr 2023 18:32:50 +0000
 Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 3 Apr
- 2023 13:32:33 -0500
+ 2023 13:32:34 -0500
 From:   Mario Limonciello <mario.limonciello@amd.com>
 To:     Herbert Xu <herbert@gondor.apana.org.au>,
         Tom Lendacky <thomas.lendacky@amd.com>,
@@ -64,9 +64,9 @@ CC:     Held Felix <Felix.Held@amd.com>, <linux-kernel@vger.kernel.org>,
         Mario Limonciello <mario.limonciello@amd.com>,
         "David S. Miller" <davem@davemloft.net>,
         <linux-crypto@vger.kernel.org>
-Subject: [PATCH v8 2/6] crypto: ccp: Bump up doorbell debug message to error
-Date:   Mon, 3 Apr 2023 13:32:11 -0500
-Message-ID: <20230403183216.3493-3-mario.limonciello@amd.com>
+Subject: [PATCH v8 3/6] crypto: ccp: Return doorbell status code as an argument
+Date:   Mon, 3 Apr 2023 13:32:12 -0500
+Message-ID: <20230403183216.3493-4-mario.limonciello@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230403183216.3493-1-mario.limonciello@amd.com>
 References: <20230403183216.3493-1-mario.limonciello@amd.com>
@@ -78,56 +78,83 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF000108E9:EE_|PH7PR12MB6612:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6ec6830a-b1fd-435f-4552-08db3471cff7
+X-MS-TrafficTypeDiagnostic: BL02EPF000108EB:EE_|SJ2PR12MB8928:EE_
+X-MS-Office365-Filtering-Correlation-Id: d560c404-ac4c-461b-a680-08db3471fda8
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rvKsKyWC/jW/akMtAqCYGVvWQx3SuXp9cyv6kSoetadLOcihTd9UD9SnHXJQkWU439to768kmr4zfnO3uOiIHNOLuonjojNkbJNGf+doziSLjfOBQ+DNaeRclM7QT6K/d/R72PCvL1lewnIxAzXz2wncxlnFckGDteFYAOTD2NitV2tgFkZ5GjXlPDExYwGjyjPv3KpZtZsT/luHlWnlRP+EDRnpOOpX+AShdlk3ohwoLbDWnMlhRCpSS/mAUDCM/e0N+Op7Pk1JLwgv7SO5Gyn/mXseWoBR4+uv+vtIZPTeuGIJ0Fydbd4fyEUn8mtcSzVe1oScibsch8X9iWK9B2mJCli36Xv2Bqkx22JDRK8GLR6KvliV4vnItB3vJWQsavnIIRVqpeobt540dMglnBDEtHIuZSQ0oKMOdFBXTuoINMXqhodysjU1+HQvssbS9mWC71f/nJmvAr9AyfkGNv5zz8zY3b7/tYdqL0mQzdSL4YYWuxnH5slHwxVNSlEgCGrrz3FI59gGZAX4xApXUYdi0xwMmMXVXpzcejiMO5hfNhry77AMe/JZcmMk6x7w00Y1enrgPL8WtX8xE1jESbPZO2APXYJADoXBaKm5Evg04elbmpEy1HGudtuPPQ6U+kzRehj58iaDToCfi8340ay1JSEVi8msTv914tsH6hX+uz0cwPCApjz2aSMbpe2J89OrgAg2UzFF8N75K2hbAt3Pd/gl11zNdcvSAIeGO90=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(39860400002)(376002)(451199021)(36840700001)(40470700004)(46966006)(47076005)(478600001)(2906002)(2616005)(40480700001)(186003)(16526019)(1076003)(6666004)(36756003)(336012)(426003)(83380400001)(7696005)(40460700003)(26005)(356005)(81166007)(4744005)(86362001)(110136005)(316002)(5660300002)(41300700001)(82310400005)(8936002)(4326008)(82740400003)(8676002)(70586007)(70206006)(36860700001)(54906003)(6636002)(44832011)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: wUIiIm2QUlL/ordE2+jHT5jdWeati8XQEn6EOTBH7TG7aiNXJSKjdciEcOj6XjfADbkeCBmkTS2WTpaeRtFenx8N3Iy2rJN0ujMWf8RJ9m5bxwKDoMlcCqRPzX73auZpYRV7+6aeCVGLwN5rT3xhTVKPoguv7Ko3BY3WOQQ/OpqDx8BgTNBWXL35yMMKrVEq4PrTMt95uycsp5FeywOwWHmtnZWBxaiiL188H7RAhEIsWHDp5p84OKM7VQRhFeRhNUdhtNNaw+NszCGPip0a7DddNxeHDEIssOlWvr29fejU1oj049gwctbQktP5Qadncyl+mECnG07Qc6TsrTC4sZm+5sQlRddzzPEbhOHlclJ1a9/LoaBN+zSCk8LXi4WEyUCycH3cCqZTm8UAYQCGo6R2IdKTLIu291BaPq3P4MkczZHGX/YFGRaRrVN79un+1k/D33T9e7b772qouUE9ozBq6zV3VYO1r9o7WV0ZaWsNP+PUimS4zil50kA6ZM6xrhcSDYU0gFveYhcuoiUOSng0uV4/svz4JjqgXcVeMP8cmm0SUkC8iYyDxU3f5MArgoOOHCl5uv+1TXLbW2cA6UHQl1UbqWkwGHNGDGS9Fk1rny0RhYqo9PHWPgP+ph4KhlQz/ge0JOu/cfspbqKGRSlTaGlj2PmHzsyQvLQwZKJn7HulfaYYyILVDyZxTW9SSuBIKYxeRiiikRteq3saueMCOryyHTB/fqGReKmVdE2C7AEjrlDgIOsWWLo3JBd4s9AubjKOgLxN38NaXKwQ2A==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(136003)(396003)(39860400002)(451199021)(36840700001)(40470700004)(46966006)(356005)(5660300002)(81166007)(44832011)(2616005)(82310400005)(47076005)(83380400001)(336012)(110136005)(426003)(54906003)(6636002)(316002)(7696005)(40480700001)(16526019)(186003)(478600001)(6666004)(86362001)(1076003)(26005)(36756003)(82740400003)(40460700003)(36860700001)(4326008)(41300700001)(8676002)(8936002)(70206006)(70586007)(2906002)(36900700001)(134885004);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 18:32:42.7626
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 18:32:50.7810
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ec6830a-b1fd-435f-4552-08db3471cff7
+X-MS-Exchange-CrossTenant-Network-Message-Id: d560c404-ac4c-461b-a680-08db3471fda8
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000108E9.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000108EB.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6612
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8928
 X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This is helpful not just for debugging problems, but also for investigating
-captured logs later on.
+If the doorbell failed to ring we return -EIO, but the caller can't
+determine why it failed.  Pass the reason for the failure in an
+argument for caller to investigate.
 
-Suggested-by: Grzegorz Bernacki <gjb@semihalf.com>
+Suggested-by: Mark Hasemeyer <markhas@chromium.org>
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Reviewed-by: Mark Hasemeyer <markhas@chromium.org>
 Tested-by: Mark Hasemeyer <markhas@chromium.org>
 ---
- drivers/crypto/ccp/platform-access.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/crypto/ccp/platform-access.c | 4 +++-
+ include/linux/psp-platform-access.h  | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/crypto/ccp/platform-access.c b/drivers/crypto/ccp/platform-access.c
-index 1ad3a0a512b1..1cc154a1c6ab 100644
+index 1cc154a1c6ab..48f59ae91692 100644
 --- a/drivers/crypto/ccp/platform-access.c
 +++ b/drivers/crypto/ccp/platform-access.c
-@@ -149,7 +149,7 @@ int psp_ring_platform_doorbell(int msg)
- 	mutex_lock(&pa_dev->doorbell_mutex);
+@@ -132,7 +132,7 @@ int psp_send_platform_access_msg(enum psp_platform_access_msg msg,
+ }
+ EXPORT_SYMBOL_GPL(psp_send_platform_access_msg);
  
- 	if (wait_cmd(cmd)) {
--		dev_dbg(psp->dev, "doorbell command not done processing\n");
-+		dev_err(psp->dev, "doorbell command not done processing\n");
- 		ret = -EBUSY;
+-int psp_ring_platform_doorbell(int msg)
++int psp_ring_platform_doorbell(int msg, u32 *result)
+ {
+ 	struct psp_device *psp = psp_get_master_device();
+ 	struct psp_platform_access_device *pa_dev;
+@@ -164,6 +164,8 @@ int psp_ring_platform_doorbell(int msg)
+ 
+ 	val = FIELD_GET(PSP_CMDRESP_STS, ioread32(cmd));
+ 	if (val) {
++		if (result)
++			*result = val;
+ 		ret = -EIO;
  		goto unlock;
  	}
+diff --git a/include/linux/psp-platform-access.h b/include/linux/psp-platform-access.h
+index 89df4549fada..1b661341d8f3 100644
+--- a/include/linux/psp-platform-access.h
++++ b/include/linux/psp-platform-access.h
+@@ -45,9 +45,9 @@ int psp_send_platform_access_msg(enum psp_platform_access_msg, struct psp_reques
+  *  -%EBUSY:     mailbox in recovery or in use
+  *  -%ENODEV:    driver not bound with PSP device
+  *  -%ETIMEDOUT: request timed out
+- *  -%EIO:       unknown error (see kernel log)
++ *  -%EIO:       error will be stored in result argument
+  */
+-int psp_ring_platform_doorbell(int msg);
++int psp_ring_platform_doorbell(int msg, u32 *result);
+ 
+ /**
+  * psp_check_platform_access_status() - Checks whether platform features is ready
 -- 
 2.34.1
 
