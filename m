@@ -2,121 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5336D4C01
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Apr 2023 17:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 829346D4C3B
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Apr 2023 17:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbjDCPeb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Apr 2023 11:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
+        id S232141AbjDCPoX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Apr 2023 11:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232870AbjDCPea (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Apr 2023 11:34:30 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756F210F9
-        for <linux-i2c@vger.kernel.org>; Mon,  3 Apr 2023 08:34:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S231783AbjDCPoX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Apr 2023 11:44:23 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEBDE8;
+        Mon,  3 Apr 2023 08:44:22 -0700 (PDT)
+Received: from [192.168.2.163] (109-252-124-32.nat.spd-mgts.ru [109.252.124.32])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1FC0821E88;
-        Mon,  3 Apr 2023 15:34:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1680536068; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aItC/lQiH9pa3kALSaXTNymbXGyBstlUwldTtIaSrC4=;
-        b=UlrvLxJCPj0cy9QxqCIZP8O2uEgxf9u4KNoOruHLD/U3JYWy9qfZ63zlriTfqr4zLAk5Qi
-        Rao2MefVPk0rRx8S8f08ie552Tga0oSJ2aGaR4xAvzkwW/FnajsRHCunTZ7mHq5MKb6PRt
-        tRWHqfV8D7KgXvsMahVlELPGz0kXpxs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1680536068;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aItC/lQiH9pa3kALSaXTNymbXGyBstlUwldTtIaSrC4=;
-        b=eYyOW4Pz6g4qmcs7jqtHhshgcP4Ynh+DlydiDyrFwjgMQ0HlH6Yvz4LO5B/Pcb6f6hbCz8
-        PGKtNDr6yduXBbCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EDD3C1331A;
-        Mon,  3 Apr 2023 15:34:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Bcp4OAPyKmQvQAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Mon, 03 Apr 2023 15:34:27 +0000
-Date:   Mon, 3 Apr 2023 17:34:26 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH 1/2] i2c: i801: Add support for Intel Meteor Lake-S SoC
-Message-ID: <20230403173426.2cc3af2a@endymion.delvare>
-In-Reply-To: <20230330105502.4100351-1-jarkko.nikula@linux.intel.com>
-References: <20230330105502.4100351-1-jarkko.nikula@linux.intel.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A99E6660312D;
+        Mon,  3 Apr 2023 16:44:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680536660;
+        bh=h906dX4/iwoBMkK5p++Mkpnuq0YPw75gIWeGHov8PcE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=f7h6y51iyU9x9BJVmQM570DlR1t+AbYsIjlhM/UUKIHEkjwhG6wOnhYpyWYzfDfbx
+         LswAR3pQN1VypwRg1NAyjrKw1dsJfFhbxUqNQGsdbKHImnrsFoF8GBj9a4ze1xjzf+
+         ikn/6tGwqYgt4wo0ezuYyD5qJcAcJ/vH8+nBkR/CblyBav3CqdshxpKe9aMZE9VkmI
+         X1rnTyVohHNlEKXfBPKvYgF4i7WqDddJCvTD1mpOcSwDopAt2C66uyMnmPrW3nje0c
+         20tLWPEaOhzwHskP5QBbGgGhgxiIABeljiPrwu0xg4nG9Kg/aH+xqJLbC09Ys9uomg
+         mR/H5SFIh8a4g==
+Message-ID: <ab4d8e1e-d378-85d2-34aa-404ff178c49f@collabora.com>
+Date:   Mon, 3 Apr 2023 18:44:16 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 4/4] mfd: tps6586x: register restart handler
+Content-Language: en-US
+To:     Benjamin Bara <bbara93@gmail.com>
+Cc:     benjamin.bara@skidata.com, jonathanh@nvidia.com, lee@kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, rafael.j.wysocki@intel.com,
+        richard.leitner@linux.dev, treding@nvidia.com, wsa@kernel.org
+References: <6abaa803-1639-b949-3af5-05a341f9b459@collabora.com>
+ <20230403065013.520339-1-bbara93@gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20230403065013.520339-1-bbara93@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Jarkko,
-
-On Thu, 30 Mar 2023 13:55:01 +0300, Jarkko Nikula wrote:
-> Add SMBus PCI ID on Intel Meteor Lake-S SoC South.
+On 4/3/23 09:50, Benjamin Bara wrote:
+> Thanks for the feedback!
 > 
-> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> ---
->  drivers/i2c/busses/i2c-i801.c | 3 +++
->  1 file changed, 3 insertions(+)
+> The DS states: "When the reboot request state is set an internal timer TWAIT
+> (10ms typ) is started. The reboot request ends when t > TWAIT."
 > 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index ac5326747c51..8172e2767b25 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -77,6 +77,7 @@
->   * Alder Lake-M (PCH)		0x54a3	32	hard	yes	yes	yes
->   * Raptor Lake-S (PCH)		0x7a23	32	hard	yes	yes	yes
->   * Meteor Lake-P (SOC)		0x7e22	32	hard	yes	yes	yes
-> + * Meteor Lake-S (SOC)		0xae22	32	hard	yes	yes	yes
->   *
->   * Features supported by this driver:
->   * Software PEC				no
-> @@ -233,6 +234,7 @@
->  #define PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_S_SMBUS		0x7a23
->  #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS		0x7aa3
->  #define PCI_DEVICE_ID_INTEL_METEOR_LAKE_P_SMBUS		0x7e22
-> +#define PCI_DEVICE_ID_INTEL_METEOR_LAKE_S_SMBUS		0xae22
->  #define PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS		0x8c22
->  #define PCI_DEVICE_ID_INTEL_WILDCATPOINT_SMBUS		0x8ca2
->  #define PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS		0x8d22
+> Therefore, my intention was to wait a little bit before starting the next
+> handler in the chain. I can do some tests without the mdelay, but otherwise
+> will reduce it to 15ms in the next patch. What do you think about it?
 
-Sorry for nitpicking but since 34b57f40a6a2 ("i2c: i801: sort IDs
-alphabetically") this list is supposed to be sorted by ID.
-
-> @@ -1038,6 +1040,7 @@ static const struct pci_device_id i801_ids[] = {
->  	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_M_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
->  	{ PCI_DEVICE_DATA(INTEL, RAPTOR_LAKE_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
->  	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_P_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
-> +	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
->  	{ 0, }
->  };
->  
-
-Other than that, looks good.
-
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Sounds good. Please add a clarifying comment for the delay to the code.
 
 -- 
-Jean Delvare
-SUSE L3 Support
+Best regards,
+Dmitry
+
