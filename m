@@ -2,99 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42FBB6D59A2
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Apr 2023 09:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898536D5A10
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Apr 2023 09:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbjDDHax (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 4 Apr 2023 03:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
+        id S233212AbjDDHz7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 Apr 2023 03:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233962AbjDDHah (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Apr 2023 03:30:37 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AD23AB4
-        for <linux-i2c@vger.kernel.org>; Tue,  4 Apr 2023 00:30:26 -0700 (PDT)
+        with ESMTP id S229960AbjDDHz7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Apr 2023 03:55:59 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263041985
+        for <linux-i2c@vger.kernel.org>; Tue,  4 Apr 2023 00:55:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680593426; x=1712129426;
+  t=1680594958; x=1712130958;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=xbGovW3XUbccCHcDL7wSshsqhpI0jwqYcl/EeuZka8U=;
-  b=hlJuin6bTtvFDwzwmhsOtWZwbnsCh7vCAG6oNqhagrBOeJKCZ2l3t/Sa
-   uxcKyKoKA/ublgY4x1j/6/dUc/C8e1Dhr6g83v/u527pPp3saAuo02Kxn
-   R6D8iTY8wYy5OtDdaC8xp5dogSycTVMysZ2zvId/yjz0vvEco1GFyZznA
-   OeZB5/OdkOj4milk64Me6l0Aj/BkR6OxY0buSO8PtFhmoY6dyMHOtsHOM
-   mAjO5atUdbSupVWmONzzftKr69/QSuR+X65IKB4oiNfj31XcVGgeKZcjc
-   oWb2AeEKMC120V5ZaUHojynjr106p849ivW4NIyaShVsJGGI2HqogchGI
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="322507316"
+  bh=jCYPjxqrB2ZK4ARWliNUxxWpQPAL4rCWtBM/po6Kwuw=;
+  b=lg911vElixuu7tcasLEd0+/eSs1NuEW5PfidsXXrT18MDenVdjL9dP9D
+   pfHvMhMyOxJDjWF7wtwwm5xblF5oAK15NOabAG/1oTC85gyMva/ZbIPBg
+   KPBylH2/bWIqP4VzGYgBJqOTu0/vDXpkjv/qPM+Owty9x7AQH1fKLcGNb
+   0J5lnhEnTrqUqeobXVAexvjm+pEomKtDLvXdsyQfbh8aCz6B+qMlBLrOp
+   yoIqcKq0sRX/xE1/jelJUzwrXLKqdMPeS7gR90/9+kokIdMXToCPUxNbv
+   NcLQGb0dQouNO61tihzixwi6ROrhdw38FizRmspPJfneZdAA7YpTjwszq
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="407177860"
 X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="322507316"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 00:30:26 -0700
+   d="scan'208";a="407177860"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 00:55:57 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="775541456"
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="750836749"
 X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="775541456"
+   d="scan'208";a="750836749"
 Received: from unknown (HELO [10.237.72.51]) ([10.237.72.51])
-  by FMSMGA003.fm.intel.com with ESMTP; 04 Apr 2023 00:30:25 -0700
-Message-ID: <43382258-cd1f-d7c8-2cc7-1869a49e3d10@linux.intel.com>
-Date:   Tue, 4 Apr 2023 10:30:24 +0300
+  by fmsmga008.fm.intel.com with ESMTP; 04 Apr 2023 00:55:56 -0700
+Message-ID: <0046bbc0-27dc-2eb4-eadf-9632a6a0730b@linux.intel.com>
+Date:   Tue, 4 Apr 2023 10:55:55 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] i2c: i801: Add support for Intel Meteor Lake-S SoC
+Subject: Re: [PATCH 2/2] i2c: i801: Add support for Intel Meteor Lake PCH-S
+Content-Language: en-US
 To:     Jean Delvare <jdelvare@suse.de>
 Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
 References: <20230330105502.4100351-1-jarkko.nikula@linux.intel.com>
- <20230403173426.2cc3af2a@endymion.delvare>
-Content-Language: en-US
+ <20230330105502.4100351-2-jarkko.nikula@linux.intel.com>
+ <20230403180357.500a8867@endymion.delvare>
 From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20230403173426.2cc3af2a@endymion.delvare>
+In-Reply-To: <20230403180357.500a8867@endymion.delvare>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 4/3/23 18:34, Jean Delvare wrote:
+On 4/3/23 19:03, Jean Delvare wrote:
 > Hi Jarkko,
 > 
-> On Thu, 30 Mar 2023 13:55:01 +0300, Jarkko Nikula wrote:
->> Add SMBus PCI ID on Intel Meteor Lake-S SoC South.
+> On Thu, 30 Mar 2023 13:55:02 +0300, Jarkko Nikula wrote:
+>> Add SMBus PCI ID on Intel Meteor Lake PCH-S. Also called as Meteor
+>> Point-S which is used in the code to distinguish from Meteor Lake-S SoC
+>> but call both as Meteor Lake in documentation and Kconfig.
 >>
 >> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 >> ---
->>   drivers/i2c/busses/i2c-i801.c | 3 +++
->>   1 file changed, 3 insertions(+)
+>>   Documentation/i2c/busses/i2c-i801.rst | 2 +-
+>>   drivers/i2c/busses/Kconfig            | 2 +-
+>>   drivers/i2c/busses/i2c-i801.c         | 3 +++
+>>   3 files changed, 5 insertions(+), 2 deletions(-)
 >>
->> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
->> index ac5326747c51..8172e2767b25 100644
->> --- a/drivers/i2c/busses/i2c-i801.c
->> +++ b/drivers/i2c/busses/i2c-i801.c
->> @@ -77,6 +77,7 @@
->>    * Alder Lake-M (PCH)		0x54a3	32	hard	yes	yes	yes
->>    * Raptor Lake-S (PCH)		0x7a23	32	hard	yes	yes	yes
->>    * Meteor Lake-P (SOC)		0x7e22	32	hard	yes	yes	yes
->> + * Meteor Lake-S (SOC)		0xae22	32	hard	yes	yes	yes
->>    *
->>    * Features supported by this driver:
->>    * Software PEC				no
->> @@ -233,6 +234,7 @@
->>   #define PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_S_SMBUS		0x7a23
->>   #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS		0x7aa3
->>   #define PCI_DEVICE_ID_INTEL_METEOR_LAKE_P_SMBUS		0x7e22
->> +#define PCI_DEVICE_ID_INTEL_METEOR_LAKE_S_SMBUS		0xae22
->>   #define PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS		0x8c22
->>   #define PCI_DEVICE_ID_INTEL_WILDCATPOINT_SMBUS		0x8ca2
->>   #define PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS		0x8d22
+>> diff --git a/Documentation/i2c/busses/i2c-i801.rst b/Documentation/i2c/busses/i2c-i801.rst
+>> index ab9e850e8fe0..e62a62323f36 100644
+>> --- a/Documentation/i2c/busses/i2c-i801.rst
+>> +++ b/Documentation/i2c/busses/i2c-i801.rst
+>> @@ -46,7 +46,7 @@ Supported adapters:
+>>     * Intel Emmitsburg (PCH)
+>>     * Intel Alder Lake (PCH)
+>>     * Intel Raptor Lake (PCH)
+>> -  * Intel Meteor Lake (SOC)
+>> +  * Intel Meteor Lake (SOC/PCH)
 > 
-> Sorry for nitpicking but since 34b57f40a6a2 ("i2c: i801: sort IDs
-> alphabetically") this list is supposed to be sorted by ID.
+> I'm confused. The patch actually adds support for Meteor Point (S). So
+> shouldn't you add:
+>      * Intel Meteor Point (PCH)
 > 
-Ah, true. Will fix and resend.
+> instead of modifying the existing line?
+> 
+Idea was to follow my earlier commit 80d943ab19e9 ("i2c: i801: 
+Consolidate chipset names in documentation and Kconfig") to use single 
+name for the same family instead of listing all possible variants.
+
+Like here we have already support for Meteor Lake -P SoC and now adding 
+support for Meteor Lake -S that will have both in SoC SMBus and PCH 
+SMBus controllers.
+
+I realized actually Alder Lake (PCH) above may not be correct. True for 
+Alder Lake -S PCH but now thinking -P and -M variants may be actually SoCs.
+
+Confusing, yes I agree :-)
+
