@@ -2,89 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78D946D5048
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Apr 2023 20:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FBB6D59A2
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Apr 2023 09:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbjDCS1j (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Apr 2023 14:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S233699AbjDDHax (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 Apr 2023 03:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbjDCS1h (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Apr 2023 14:27:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B7A2139;
-        Mon,  3 Apr 2023 11:27:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8413461D30;
-        Mon,  3 Apr 2023 18:27:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2B65C433D2;
-        Mon,  3 Apr 2023 18:27:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680546454;
-        bh=WCjt2Jv/YW91V4m2oQrs7DJ0U7kfjPlwg2HS+dwFJMU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qTSuFeV/ddExWkrit1fhvuaqyysRalSl+c5u+xVaLct1OfS8y1W9IX7BqLqlZQjPV
-         4UTtK8W5xMYYR6g7E0aJ81X2NTH9ZMsAp4pYFNcyq9+m9VHtCyJhg25c/a7oLSvx25
-         lfUmJ7JOvNC1s3JB7Egsb0K6n8Rd7nIQyKt00Kp4B3noI+vlm89FVFdFu4SOHh7ZoP
-         zsPLddqwka9U+KlUr83K2A88bpd0Bup5rvNNuScRQdqvy9l9S23yFUnU8979SZ3MzI
-         XvCzo+1l+n2AFXVvguS5lnqUOWqDQRn+DoWXZkWXDaeg/1+oqSOzuzdpuLw7n7iSMU
-         7SQQP8B+rjupA==
-Date:   Mon, 3 Apr 2023 19:42:46 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Daniel Matyas <daniel.matyas23@gmail.com>
-Cc:     linux-iio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: Creating a driver for MAX31827 temperature switch
-Message-ID: <20230403194246.10a56b59@jic23-huawei>
-In-Reply-To: <ZCn0KeOQFJclqiAK@daniel-Precision-5530>
-References: <ZCn0KeOQFJclqiAK@daniel-Precision-5530>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        with ESMTP id S233962AbjDDHah (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Apr 2023 03:30:37 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AD23AB4
+        for <linux-i2c@vger.kernel.org>; Tue,  4 Apr 2023 00:30:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680593426; x=1712129426;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xbGovW3XUbccCHcDL7wSshsqhpI0jwqYcl/EeuZka8U=;
+  b=hlJuin6bTtvFDwzwmhsOtWZwbnsCh7vCAG6oNqhagrBOeJKCZ2l3t/Sa
+   uxcKyKoKA/ublgY4x1j/6/dUc/C8e1Dhr6g83v/u527pPp3saAuo02Kxn
+   R6D8iTY8wYy5OtDdaC8xp5dogSycTVMysZ2zvId/yjz0vvEco1GFyZznA
+   OeZB5/OdkOj4milk64Me6l0Aj/BkR6OxY0buSO8PtFhmoY6dyMHOtsHOM
+   mAjO5atUdbSupVWmONzzftKr69/QSuR+X65IKB4oiNfj31XcVGgeKZcjc
+   oWb2AeEKMC120V5ZaUHojynjr106p849ivW4NIyaShVsJGGI2HqogchGI
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="322507316"
+X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
+   d="scan'208";a="322507316"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 00:30:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="775541456"
+X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
+   d="scan'208";a="775541456"
+Received: from unknown (HELO [10.237.72.51]) ([10.237.72.51])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 Apr 2023 00:30:25 -0700
+Message-ID: <43382258-cd1f-d7c8-2cc7-1869a49e3d10@linux.intel.com>
+Date:   Tue, 4 Apr 2023 10:30:24 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [PATCH 1/2] i2c: i801: Add support for Intel Meteor Lake-S SoC
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
+References: <20230330105502.4100351-1-jarkko.nikula@linux.intel.com>
+ <20230403173426.2cc3af2a@endymion.delvare>
+Content-Language: en-US
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20230403173426.2cc3af2a@endymion.delvare>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 3 Apr 2023 00:31:21 +0300
-Daniel Matyas <daniel.matyas23@gmail.com> wrote:
-
-> Dear Kernel community,
+On 4/3/23 18:34, Jean Delvare wrote:
+> Hi Jarkko,
 > 
-> I am developing an IIO driver for a temperature switch, which communicates through I2C at Analog Devices Inc.
+> On Thu, 30 Mar 2023 13:55:01 +0300, Jarkko Nikula wrote:
+>> Add SMBus PCI ID on Intel Meteor Lake-S SoC South.
+>>
+>> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+>> ---
+>>   drivers/i2c/busses/i2c-i801.c | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+>> index ac5326747c51..8172e2767b25 100644
+>> --- a/drivers/i2c/busses/i2c-i801.c
+>> +++ b/drivers/i2c/busses/i2c-i801.c
+>> @@ -77,6 +77,7 @@
+>>    * Alder Lake-M (PCH)		0x54a3	32	hard	yes	yes	yes
+>>    * Raptor Lake-S (PCH)		0x7a23	32	hard	yes	yes	yes
+>>    * Meteor Lake-P (SOC)		0x7e22	32	hard	yes	yes	yes
+>> + * Meteor Lake-S (SOC)		0xae22	32	hard	yes	yes	yes
+>>    *
+>>    * Features supported by this driver:
+>>    * Software PEC				no
+>> @@ -233,6 +234,7 @@
+>>   #define PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_S_SMBUS		0x7a23
+>>   #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS		0x7aa3
+>>   #define PCI_DEVICE_ID_INTEL_METEOR_LAKE_P_SMBUS		0x7e22
+>> +#define PCI_DEVICE_ID_INTEL_METEOR_LAKE_S_SMBUS		0xae22
+>>   #define PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS		0x8c22
+>>   #define PCI_DEVICE_ID_INTEL_WILDCATPOINT_SMBUS		0x8ca2
+>>   #define PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS		0x8d22
 > 
-> When implementing the event handling for the comparator mode of the device, I faced a problem: I don't know how to differentiate the underTemp event from the overTemp event. To understand better, I suggest you check out the device's data sheet for Address map (page 12), Configuration Register Definition (page 13) and OT/UT Status Bits and ALARM Pin Behavior (page 15) - https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31827-MAX31829.pdf
+> Sorry for nitpicking but since 34b57f40a6a2 ("i2c: i801: sort IDs
+> alphabetically") this list is supposed to be sorted by ID.
 > 
-> I had the idea to make 2 channels with the exact same attributes, but with different indexes, so that I can store the overTemp related events on channel 0 and underTemp related events on channel 1. Even so, I don't really feel like this is the right solution. Can anyone give me some advice on this?
-
-If it's just a question of over and under temp, I'd imagine these map to two
-different directions of IIO event. You can have one channel with RISING and FALLING
-events on it.
-
-e.g.
-https://elixir.bootlin.com/linux/v6.2.9/source/drivers/iio/adc/max1363.c#L451
-
-The place we run into IIO limitations is if you have two events in the same direction
-(warn and critical for example)  When that happens it is almost always a device
-that fits better in hwmon anyway so we've never figured out how to enable this sort
-of thing.  Doesn't seem to apply here though.
-> 
-> Also, I was suggested that I convert my driver from IIO to HWMON. Do you think that this is needed?
-
-No obvious reason why this benefits from being in IIO so I'm agreeing with the others who have
-replied that this looks more suited to hwmon.
-
-Jonathan
-
-
-> 
-> Yours faithfully,
-> Daniel Matyas
-
+Ah, true. Will fix and resend.
