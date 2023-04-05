@@ -2,256 +2,232 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371316D78A4
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Apr 2023 11:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8F56D7C65
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Apr 2023 14:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237415AbjDEJmj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Apr 2023 05:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
+        id S237940AbjDEMZS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Apr 2023 08:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237158AbjDEJmi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Apr 2023 05:42:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CFC5FDA;
-        Wed,  5 Apr 2023 02:42:16 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5D7176603157;
-        Wed,  5 Apr 2023 10:42:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680687735;
-        bh=IlI/HD/mEqG9sNtKAEmcI6+THmyc2fGYI3RrBYbXqiI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NDelzaduVsclA5TmODpf+aOKxitm/7UT5IYFmkNHFQ/NP9c8LMKsTZ+0xvBe/TSg4
-         Y0w17rCrDXxQmQmNCq3MhT0hvmIivCeiDIaSTPZIn1iVaWf5SfqTOZalMGyRGWpIUn
-         FZxI2wa/3e3pUhAqfE4B+7vzdZpnAPOH76d7RE8p0pAPF41ZXtuxKTpuPO5e0ih1Bl
-         dGoDsy6V1+YdEgGmIv53HkTc3QskKyYe3nbtX/pvlVtmTb1BrlTXmEp+Tx1agRkGgU
-         qHg1CVB1/IqBD/1+bU67pE3vqgLwVFpOpw2qhCIbKXfyo1KL5SGmx6i4Kay2gZc8al
-         T7rZG0NkeZwoQ==
-Message-ID: <6a0c9152-8bca-0a19-f924-8149f55f1edd@collabora.com>
-Date:   Wed, 5 Apr 2023 11:42:11 +0200
+        with ESMTP id S238029AbjDEMZM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Apr 2023 08:25:12 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8A44ED5;
+        Wed,  5 Apr 2023 05:25:10 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id er13so99604710edb.9;
+        Wed, 05 Apr 2023 05:25:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680697508;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eN0KM2SNGnRFBfL39VR5jtzq+pk/KVEl4fBYUnILT98=;
+        b=EezTyLnex6GMH9oFHusxqUGKHokqy9J4I7F3zqBectUyLF+0T+FicHRH+qnTui920k
+         nThhS80Eubw1NoMd6N4UjATTz2CL3G4H3IRtXUor2BedlsEpoT3n1GBHfkpc1Iw1J0X8
+         foLtzCHrxTexSH1CKGYSqiexpwDMV4XIbfzUwypv4ZETJRn7jbEzBCCRozsQVDyG1+51
+         6wALaV06AVDuENWzdC1QUqG7cHJ59ajznzT4YHirSfz7Dmv9KhUCMaB0+FcB3xh3xkrT
+         LzZmWY9CLuS9nSHq+RQV15uYoP2K8PYHOTaVHpCkQGWYk0lwHIpQ5CyIHVTkas3fpPKE
+         QwpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680697508;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eN0KM2SNGnRFBfL39VR5jtzq+pk/KVEl4fBYUnILT98=;
+        b=1XcOuVbO/89a4iEUJLTos/cvVbEh883saFc2quV7VXYhb2MTn1DG8v7f4EXpX01RYF
+         NwDMxE9nXPJGQnf6jQutevvIQ26BhgyMUBtMdtgfU8q1Ae54RcWAkx9/tkK00SfqvF0Q
+         5G5XcVfApk5sSyPl01qi37w/BhJuCjdqCX9v4dt9O9nE6Cqj5zmKSab2ERENgAHqhgQ+
+         UOhnqJ8m8kQUonPCY9+r6NAT7sXyz9WyBiz0uc5wxEmTpaNrlitv5Ch4eiPzooNAenVS
+         vpszY1fKOfgaIXns9CzNkhox+oFiwBTWMgZZd12rOFeKzi8Bb8+XsoCbF3g1dLMzpsPm
+         Daag==
+X-Gm-Message-State: AAQBX9fZS9g1uSB2uq842UxkDNrDHbo7EobYQOYkKXpBexJDsFiqeJca
+        g7lbJqNuCLuCojcPiZIt5ZWNPzRIS8E=
+X-Google-Smtp-Source: AKy350aSdbr3vpDow0+juHf6/PZJ060vzts10b+xma7ejACbrR00gB8QyWBGp5p1mgBTQBicMFhv+Q==
+X-Received: by 2002:a17:906:280a:b0:932:a2ce:aac0 with SMTP id r10-20020a170906280a00b00932a2ceaac0mr2430111ejc.62.1680697508255;
+        Wed, 05 Apr 2023 05:25:08 -0700 (PDT)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id y93-20020a50bb66000000b004fb30fc1dabsm7223700ede.96.2023.04.05.05.25.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 05:25:07 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 14:25:06 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     christian.koenig@amd.com, digetx@gmail.com, jonathanh@nvidia.com,
+        ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        sumit.semwal@linaro.org, wsa@kernel.org
+Subject: Re: [PATCH v4 1/2] i2c: tegra: Fix PEC support for SMBUS block read
+Message-ID: <ZC1oovV5CSfzvhd_@orome>
+References: <20230324115924.64218-1-akhilrajeev@nvidia.com>
+ <20230324115924.64218-2-akhilrajeev@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 07/17] dt-bindings: mailbox: mediatek,gce-mailbox: Add
- support for MT6795
-Content-Language: en-US
-To:     matthias.bgg@gmail.com, Jassi Brar <jassisinghbrar@gmail.com>
-Cc:     qii.wang@mediatek.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, houlong.wei@mediatek.com,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Krzysztof Kozlowski <krzk@kernel.org>
-References: <20230327083647.22017-1-angelogioacchino.delregno@collabora.com>
- <20230327083647.22017-8-angelogioacchino.delregno@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230327083647.22017-8-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="E6P1f4+cP4eqQJsW"
+Content-Disposition: inline
+In-Reply-To: <20230324115924.64218-2-akhilrajeev@nvidia.com>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Il 27/03/23 10:36, AngeloGioacchino Del Regno ha scritto:
-> Add a compatible string for the MT6795 Helio X10 SoC using MT8173
-> binding and add a header for the MT6795's GCE mailbox.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+--E6P1f4+cP4eqQJsW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Mar 24, 2023 at 05:29:23PM +0530, Akhil R wrote:
+> Update the msg->len value correctly for SMBUS block read. The discrepancy
+> went unnoticed as msg->len is used in SMBUS transfers only when a PEC
+> byte is added.
+>=20
+> Fixes: d7583c8a5748 ("i2c: tegra: Add SMBus block read function")
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
 > ---
-
-Hello Jassi,
-
-This commit is blocking the entire series and Matthias already picked everything
-but this one for obvious reasons.
-
-Can you please pick this one, or give an ack for Matthias to pick it?
-
-Thanks,
-Angelo
-
->   .../mailbox/mediatek,gce-mailbox.yaml         |  20 +--
->   include/dt-bindings/gce/mediatek,mt6795-gce.h | 123 ++++++++++++++++++
->   2 files changed, 135 insertions(+), 8 deletions(-)
->   create mode 100644 include/dt-bindings/gce/mediatek,mt6795-gce.h
-> 
-> diff --git a/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml
-> index d383b2ab3ce8..cef9d7601398 100644
-> --- a/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml
-> +++ b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml
-> @@ -16,14 +16,18 @@ description:
->   
->   properties:
->     compatible:
-> -    enum:
-> -      - mediatek,mt6779-gce
-> -      - mediatek,mt8173-gce
-> -      - mediatek,mt8183-gce
-> -      - mediatek,mt8186-gce
-> -      - mediatek,mt8188-gce
-> -      - mediatek,mt8192-gce
-> -      - mediatek,mt8195-gce
-> +    oneOf:
-> +      - enum:
-> +          - mediatek,mt6779-gce
-> +          - mediatek,mt8173-gce
-> +          - mediatek,mt8183-gce
-> +          - mediatek,mt8186-gce
-> +          - mediatek,mt8188-gce
-> +          - mediatek,mt8192-gce
-> +          - mediatek,mt8195-gce
-> +      - items:
-> +          - const: mediatek,mt6795-gce
-> +          - const: mediatek,mt8173-gce
->   
->     "#mbox-cells":
->       const: 2
-> diff --git a/include/dt-bindings/gce/mediatek,mt6795-gce.h b/include/dt-bindings/gce/mediatek,mt6795-gce.h
-> new file mode 100644
-> index 000000000000..97d5ba2d2b44
-> --- /dev/null
-> +++ b/include/dt-bindings/gce/mediatek,mt6795-gce.h
-> @@ -0,0 +1,123 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +/*
-> + * Copyright (c) 2023 Collabora Ltd.
-> + * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> + */
-> +#ifndef _DT_BINDINGS_GCE_MT6795_H
-> +#define _DT_BINDINGS_GCE_MT6795_H
+>  drivers/i2c/busses/i2c-tegra.c | 38 +++++++++++++++++++++++-----------
+>  1 file changed, 26 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegr=
+a.c
+> index 6aab84c8d22b..83e74b8baf67 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -245,6 +245,7 @@ struct tegra_i2c_hw_feature {
+>   * @msg_err: error code for completed message
+>   * @msg_buf: pointer to current message data
+>   * @msg_buf_remaining: size of unsent data in the message buffer
+> + * @msg_len: length of message in current transfer
+>   * @msg_read: indicates that the transfer is a read access
+>   * @timings: i2c timings information like bus frequency
+>   * @multimaster_mode: indicates that I2C controller is in multi-master m=
+ode
+> @@ -279,6 +280,7 @@ struct tegra_i2c_dev {
+>  	size_t msg_buf_remaining;
+>  	int msg_err;
+>  	u8 *msg_buf;
+> +	__u16 msg_len;
+> =20
+>  	struct completion dma_complete;
+>  	struct dma_chan *tx_dma_chan;
+> @@ -1169,7 +1171,7 @@ static void tegra_i2c_push_packet_header(struct teg=
+ra_i2c_dev *i2c_dev,
+>  	else
+>  		i2c_writel(i2c_dev, packet_header, I2C_TX_FIFO);
+> =20
+> -	packet_header =3D msg->len - 1;
+> +	packet_header =3D i2c_dev->msg_len - 1;
+> =20
+>  	if (i2c_dev->dma_mode && !i2c_dev->msg_read)
+>  		*dma_buf++ =3D packet_header;
+> @@ -1242,20 +1244,32 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_de=
+v *i2c_dev,
+>  		return err;
+> =20
+>  	i2c_dev->msg_buf =3D msg->buf;
+> +	i2c_dev->msg_len =3D msg->len;
+> =20
+> -	/* The condition true implies smbus block read and len is already read =
+*/
+> -	if (msg->flags & I2C_M_RECV_LEN && end_state !=3D MSG_END_CONTINUE)
+> -		i2c_dev->msg_buf =3D msg->buf + 1;
+> -
+> -	i2c_dev->msg_buf_remaining =3D msg->len;
+>  	i2c_dev->msg_err =3D I2C_ERR_NONE;
+>  	i2c_dev->msg_read =3D !!(msg->flags & I2C_M_RD);
+>  	reinit_completion(&i2c_dev->msg_complete);
+> =20
+> +	/* *
+> +	 * For SMBUS block read command, read only 1 byte in the first transfer.
+> +	 * Adjust that 1 byte for the next transfer in the msg buffer and msg
+> +	 * length.
+> +	 */
+> +	if (msg->flags & I2C_M_RECV_LEN) {
+> +		if (end_state =3D=3D MSG_END_CONTINUE) {
+> +			i2c_dev->msg_len =3D 1;
+> +		} else {
+> +			i2c_dev->msg_buf +=3D 1;
+> +			i2c_dev->msg_len -=3D 1;
+> +		}
+> +	}
 > +
-> +/* GCE HW thread priority */
-> +#define CMDQ_THR_PRIO_LOWEST			0
-> +#define CMDQ_THR_PRIO_NORMAL			1
-> +#define CMDQ_THR_PRIO_NORMAL_2			2
-> +#define CMDQ_THR_PRIO_MEDIUM			3
-> +#define CMDQ_THR_PRIO_MEDIUM_2			4
-> +#define CMDQ_THR_PRIO_HIGH			5
-> +#define CMDQ_THR_PRIO_HIGHER			6
-> +#define CMDQ_THR_PRIO_HIGHEST			7
+> +	i2c_dev->msg_buf_remaining =3D i2c_dev->msg_len;
 > +
-> +/* GCE SUBSYS */
-> +#define SUBSYS_1300XXXX				0
-> +#define SUBSYS_1400XXXX				1
-> +#define SUBSYS_1401XXXX				2
-> +#define SUBSYS_1402XXXX				3
-> +#define SUBSYS_1500XXXX				4
-> +#define SUBSYS_1600XXXX				5
-> +#define SUBSYS_1700XXXX				6
-> +#define SUBSYS_1800XXXX				7
-> +#define SUBSYS_1000XXXX				8
-> +#define SUBSYS_1001XXXX				9
-> +#define SUBSYS_1002XXXX				10
-> +#define SUBSYS_1003XXXX				11
-> +#define SUBSYS_1004XXXX				12
-> +#define SUBSYS_1005XXXX				13
-> +#define SUBSYS_1020XXXX				14
-> +#define SUBSYS_1021XXXX				15
-> +#define SUBSYS_1120XXXX				16
-> +#define SUBSYS_1121XXXX				17
-> +#define SUBSYS_1122XXXX				18
-> +#define SUBSYS_1123XXXX				19
-> +#define SUBSYS_1124XXXX				20
-> +#define SUBSYS_1125XXXX				21
-> +#define SUBSYS_1126XXXX				22
-> +
-> +/* GCE HW EVENT */
-> +#define CMDQ_EVENT_MDP_RDMA0_SOF		0
-> +#define CMDQ_EVENT_MDP_RDMA1_SOF		1
-> +#define CMDQ_EVENT_MDP_DSI0_TE_SOF		2
-> +#define CMDQ_EVENT_MDP_DSI1_TE_SOF		3
-> +#define CMDQ_EVENT_MDP_MVW_SOF			4
-> +#define CMDQ_EVENT_MDP_TDSHP0_SOF		5
-> +#define CMDQ_EVENT_MDP_TDSHP1_SOF		6
-> +#define CMDQ_EVENT_MDP_WDMA_SOF			7
-> +#define CMDQ_EVENT_MDP_WROT0_SOF		8
-> +#define CMDQ_EVENT_MDP_WROT1_SOF		9
-> +#define CMDQ_EVENT_MDP_CROP_SOF			10
-> +#define CMDQ_EVENT_DISP_OVL0_SOF		11
-> +#define CMDQ_EVENT_DISP_OVL1_SOF		12
-> +#define CMDQ_EVENT_DISP_RDMA0_SOF		13
-> +#define CMDQ_EVENT_DISP_RDMA1_SOF		14
-> +#define CMDQ_EVENT_DISP_RDMA2_SOF		15
-> +#define CMDQ_EVENT_DISP_WDMA0_SOF		16
-> +#define CMDQ_EVENT_DISP_WDMA1_SOF		17
-> +#define CMDQ_EVENT_DISP_COLOR0_SOF		18
-> +#define CMDQ_EVENT_DISP_COLOR1_SOF		19
-> +#define CMDQ_EVENT_DISP_AAL_SOF			20
-> +#define CMDQ_EVENT_DISP_GAMMA_SOF		21
-> +#define CMDQ_EVENT_DISP_UFOE_SOF		22
-> +#define CMDQ_EVENT_DISP_PWM0_SOF		23
-> +#define CMDQ_EVENT_DISP_PWM1_SOF		24
-> +#define CMDQ_EVENT_DISP_OD_SOF			25
-> +#define CMDQ_EVENT_MDP_RDMA0_EOF		26
-> +#define CMDQ_EVENT_MDP_RDMA1_EOF		27
-> +#define CMDQ_EVENT_MDP_RSZ0_EOF			28
-> +#define CMDQ_EVENT_MDP_RSZ1_EOF			29
-> +#define CMDQ_EVENT_MDP_RSZ2_EOF			30
-> +#define CMDQ_EVENT_MDP_TDSHP0_EOF		31
-> +#define CMDQ_EVENT_MDP_TDSHP1_EOF		32
-> +#define CMDQ_EVENT_MDP_WDMA_EOF			33
-> +#define CMDQ_EVENT_MDP_WROT0_WRITE_EOF		34
-> +#define CMDQ_EVENT_MDP_WROT0_READ_EOF		35
-> +#define CMDQ_EVENT_MDP_WROT1_WRITE_EOF		36
-> +#define CMDQ_EVENT_MDP_WROT1_READ_EOF		37
-> +#define CMDQ_EVENT_MDP_CROP_EOF			38
-> +#define CMDQ_EVENT_DISP_OVL0_EOF		39
-> +#define CMDQ_EVENT_DISP_OVL1_EOF		40
-> +#define CMDQ_EVENT_DISP_RDMA0_EOF		41
-> +#define CMDQ_EVENT_DISP_RDMA1_EOF		42
-> +#define CMDQ_EVENT_DISP_RDMA2_EOF		43
-> +#define CMDQ_EVENT_DISP_WDMA0_EOF		44
-> +#define CMDQ_EVENT_DISP_WDMA1_EOF		45
-> +#define CMDQ_EVENT_DISP_COLOR0_EOF		46
-> +#define CMDQ_EVENT_DISP_COLOR1_EOF		47
-> +#define CMDQ_EVENT_DISP_AAL_EOF			48
-> +#define CMDQ_EVENT_DISP_GAMMA_EOF		49
-> +#define CMDQ_EVENT_DISP_UFOE_EOF		50
-> +#define CMDQ_EVENT_DISP_DPI0_EOF		51
-> +#define CMDQ_EVENT_MUTEX0_STREAM_EOF		52
-> +#define CMDQ_EVENT_MUTEX1_STREAM_EOF		53
-> +#define CMDQ_EVENT_MUTEX2_STREAM_EOF		54
-> +#define CMDQ_EVENT_MUTEX3_STREAM_EOF		55
-> +#define CMDQ_EVENT_MUTEX4_STREAM_EOF		56
-> +#define CMDQ_EVENT_MUTEX5_STREAM_EOF		57
-> +#define CMDQ_EVENT_MUTEX6_STREAM_EOF		58
-> +#define CMDQ_EVENT_MUTEX7_STREAM_EOF		59
-> +#define CMDQ_EVENT_MUTEX8_STREAM_EOF		60
-> +#define CMDQ_EVENT_MUTEX9_STREAM_EOF		61
-> +#define CMDQ_EVENT_DISP_RDMA0_UNDERRUN		62
-> +#define CMDQ_EVENT_DISP_RDMA1_UNDERRUN		63
-> +#define CMDQ_EVENT_DISP_RDMA2_UNDERRUN		64
-> +#define CMDQ_EVENT_ISP_PASS2_2_EOF		129
-> +#define CMDQ_EVENT_ISP_PASS2_1_EOF		130
-> +#define CMDQ_EVENT_ISP_PASS2_0_EOF		131
-> +#define CMDQ_EVENT_ISP_PASS1_1_EOF		132
-> +#define CMDQ_EVENT_ISP_PASS1_0_EOF		133
-> +#define CMDQ_EVENT_CAMSV_2_PASS1_EOF		134
-> +#define CMDQ_EVENT_CAMSV_1_PASS1_EOF		135
-> +#define CMDQ_EVENT_SENINF_CAM1_2_3_FIFO_FULL	136
-> +#define CMDQ_EVENT_SENINF_CAM0_FIFO_FULL	137
-> +#define CMDQ_EVENT_JPGENC_PASS2_EOF		257
-> +#define CMDQ_EVENT_JPGENC_PASS1_EOF		258
-> +#define CMDQ_EVENT_JPGDEC_EOF			259
-> +
-> +#endif
+>  	if (i2c_dev->msg_read)
+> -		xfer_size =3D msg->len;
+> +		xfer_size =3D i2c_dev->msg_len;
+>  	else
+> -		xfer_size =3D msg->len + I2C_PACKET_HEADER_SIZE;
+> +		xfer_size =3D i2c_dev->msg_len + I2C_PACKET_HEADER_SIZE;
+> =20
+>  	xfer_size =3D ALIGN(xfer_size, BYTES_PER_FIFO_WORD);
+> =20
+> @@ -1295,7 +1309,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev =
+*i2c_dev,
+>  	if (!i2c_dev->msg_read) {
+>  		if (i2c_dev->dma_mode) {
+>  			memcpy(i2c_dev->dma_buf + I2C_PACKET_HEADER_SIZE,
+> -			       msg->buf, msg->len);
+> +			       msg->buf, i2c_dev->msg_len);
+> =20
+>  			dma_sync_single_for_device(i2c_dev->dma_dev,
+>  						   i2c_dev->dma_phys,
+> @@ -1352,7 +1366,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev =
+*i2c_dev,
+>  						i2c_dev->dma_phys,
+>  						xfer_size, DMA_FROM_DEVICE);
+> =20
+> -			memcpy(i2c_dev->msg_buf, i2c_dev->dma_buf, msg->len);
+> +			memcpy(i2c_dev->msg_buf, i2c_dev->dma_buf, i2c_dev->msg_len);
+>  		}
+>  	}
+> =20
+> @@ -1408,8 +1422,8 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap,=
+ struct i2c_msg msgs[],
+>  			ret =3D tegra_i2c_xfer_msg(i2c_dev, &msgs[i], MSG_END_CONTINUE);
+>  			if (ret)
+>  				break;
+> -			/* Set the read byte as msg len */
+> -			msgs[i].len =3D msgs[i].buf[0];
+> +			/* Set the msg length from first byte */
+> +			msgs[i].len +=3D msgs[i].buf[0];
 
--- 
-AngeloGioacchino Del Regno
-Software Engineer
+I'm having trouble understanding why this change is needed. msg->len is
+never changed in tegra_i2c_xfer_msg(), as far as I can tell, so it would
+contain whatever was in it for the previous transfer. But since we want
+to read the message length from the first byte, wouldn't the assignment
+(i.e. the old code) be the right way to do that? If we add the length
+=66rom the first byte, we could potentially be reading more than whan the
+first byte indicated.
 
-Collabora Ltd.
-Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
-Registered in England & Wales, no. 5513718
+What am I missing?
 
+Thierry
+
+--E6P1f4+cP4eqQJsW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQtaJ8ACgkQ3SOs138+
+s6F06w//Xz2CqPMRsPFy2P2HXspREuTXIYZ0ZeLM1F7ydzu3WB40muX/G+PP/W9J
+7/djWI1aOT7/H9vdQ6hl/TqpZjcBvh1gRGTzJrkHKxneBjppZKCbHJhf7kW2HI6h
+/aiS++t4+au9wn+2+hI4FW4Aq56G0w+uXWoZSHSea36zQeJgm7P2+R6KJ4W9Qstr
+2FiilwtjA9hx9ThYhDZ2DDQxW00I3smi5eqbFP28WGDMfpc6jcdVwOlAwm8UkKN0
+LvH5/vWRQ5RXob2tM+rssaMitRj9I6pBCnyB8+ERaiwnKvQNwEIwSppTeuuCb07o
+0uWIgRHyipq9zZCQrPu81Y/opP1dd3TL7dFyh1C4d+IraDTYBnFqzPnpiXwNkZiP
+P1aFS4vm0ZD0xHFcxS3yMDiibYhy/I/I+c0CxSSaf/3iE1FRxv5bLdNsgbp5Bfm9
++kNztTrU8QYzy5vPYjfS9heHoo6PojHJ+pZReMzwHzFXZ06LCfVztkZewZw+3n1/
+I8vMtm6J2Q4WZFivcGyw85/rdl2hCOzvtewQGPRedhsTjyb03+iQpfrsJas26DqN
+hwFWXzRGL0xIGixlVS+8gqAuQDlkdMBhdcjI2FeCIiAUtXPyAUvpiC9oIXCoDqvs
+l4yFRWM4B8sxpud5FsPSp3BNwaBYn6B3VFlSgIj1RS5X1YA5RnU=
+=XiFz
+-----END PGP SIGNATURE-----
+
+--E6P1f4+cP4eqQJsW--
