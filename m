@@ -2,108 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDBF6D75F8
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Apr 2023 09:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 791B66D9210
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Apr 2023 10:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237137AbjDEH46 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Apr 2023 03:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
+        id S234787AbjDFIzU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Apr 2023 04:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237146AbjDEH4v (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Apr 2023 03:56:51 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B92E4C2B
-        for <linux-i2c@vger.kernel.org>; Wed,  5 Apr 2023 00:56:48 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id w9so138963799edc.3
-        for <linux-i2c@vger.kernel.org>; Wed, 05 Apr 2023 00:56:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680681406;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q2eIUIgQam+Znm92t75ub3SSql/5kD/CSnGjaZOIeRE=;
-        b=TbfE/M3KLTLcH5vT2Fre6fZYOYPWvvtxQkGTov6z1yTYm3WWX0o+lTIhTOG+wcSwIr
-         Shh1zY364kogmQhRAc0fmFUnYMo7ZU5Ky8ffXUG3ryGAwkPV8ypCT8eTFfjq9CYDvF34
-         wd9tQF0WuIJQpr3lhmr30HlFr0l1LwFrvYdgr8mH0O6e9FfWr5OPxhkLBM/13q30F9ig
-         EG1EUr+OVaWTOJKmPFrxHNqGlS+65K8SsVkrarg61QTLcPElkQBRwd5OoyrukvetA/wf
-         Vqy9Mst7SvFcranOTqZhNf+dN08TZqf8qZtRsH7Kuac3IsmXwWAy0wOKyifHo22AsbGf
-         ub3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680681406;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q2eIUIgQam+Znm92t75ub3SSql/5kD/CSnGjaZOIeRE=;
-        b=0K8hdasw8Cu20Botkb+H+KpBdJabt9B1wS0ECOdm+aiauj080xSDQZZ5E/ego5yUCP
-         6Xo/vEKisoyD7dJuvnpwyLPEPaKS/9+pQ+9RnZTTvCHHPtxK6ABoG/ZQYPUzQ6KBEGdx
-         rDwccIO4UgIvcHp9HngLpBr05v2pgHmusB9L19QcCz7NoLxiqkxoopp2qamY4AeCZxVO
-         JZ+NtSeGTKEmfSI3+N75nqEOXoyb/OD7uZwzlaQqvV4XagMeRmnUeoi2rIDOVYD9XK+6
-         iEnhzj/OxUgF+eUzA13OziUkn8tiUL+/KKJ+Ps7g533UotWRCIudPoqBYMRVZA5v7WX4
-         b3Rw==
-X-Gm-Message-State: AAQBX9dSOEg6gcb9m7iUDfXVLaSkex+YZNVfMMQpaHsVf4NSzk0pBpJj
-        V10zJKu+ReWMKDRuB7EEJXihOkrVxiok4hvbAVM=
-X-Google-Smtp-Source: AKy350aKLqDIJOBs2+w17/O65tIzNsWo0HsCJMoNyTEOl6/xftBTjTFN3K+wYTFKjUWLGLXPGVtupVTP2HNAQxlPhhQ=
-X-Received: by 2002:a17:906:f8db:b0:92b:ec37:e4b7 with SMTP id
- lh27-20020a170906f8db00b0092bec37e4b7mr1145683ejb.14.1680681406051; Wed, 05
- Apr 2023 00:56:46 -0700 (PDT)
+        with ESMTP id S235291AbjDFIzT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Apr 2023 04:55:19 -0400
+X-Greylist: delayed 87450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Apr 2023 01:55:15 PDT
+Received: from mail.feshiecree.pl (mail.feshiecree.pl [89.40.114.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FE059E0
+        for <linux-i2c@vger.kernel.org>; Thu,  6 Apr 2023 01:55:15 -0700 (PDT)
+Received: by mail.feshiecree.pl (Postfix, from userid 1001)
+        id 4010481F20; Wed,  5 Apr 2023 09:27:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=feshiecree.pl;
+        s=mail; t=1680683261;
+        bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
+        h=Date:From:To:Subject:From;
+        b=vShTBiSs7n7rnfPSmgSqOPkyZIwDD6Y6Eo6Eoen4ed0jE2uq/KLUDBdZ5jrzDM402
+         ml9R4IpZklqOEzBb3f6QY9bkQwollsDDVwHI/Id2yK02Uh2YJNo3koVwOSwaazIn/N
+         i4611b/Hg2aQdrRorKsJpEmk7BEM8qiFxpOe0pPA0vTV8Q9fSAFo8KqDMpnb2qr+6c
+         ctGyN5jh1UW160wgGyjRlkBqQA2i/yrfZ4/hOTDyJTVaBlGLa2RAazNhAO/yQgj0qg
+         yqcAyrnsZuQ/1XrCBm2SuDALdcMrWoKvFM1I7HBLxCxVYvTFxJWxFyCFEnoPkauM7l
+         XQI7M2Cy64YTQ==
+Received: by feshiecree.pl for <linux-i2c@vger.kernel.org>; Wed,  5 Apr 2023 08:27:41 GMT
+Message-ID: <20230405084211-0.1.1u.6hc4.0.pmac0ibs11@feshiecree.pl>
+Date:   Wed,  5 Apr 2023 08:27:41 GMT
+From:   "Krystian Wieczorek" <krystian.wieczorek@feshiecree.pl>
+To:     <linux-i2c@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.feshiecree.pl
 MIME-Version: 1.0
-Received: by 2002:a05:7208:2202:b0:65:e547:3943 with HTTP; Wed, 5 Apr 2023
- 00:56:45 -0700 (PDT)
-Reply-To: tamimbinhamadalthani00@gmail.com
-From:   Tamim Mohammed Taher <cisskhadidiatou890@gmail.com>
-Date:   Wed, 5 Apr 2023 00:56:45 -0700
-Message-ID: <CAAYY=dY1_XALb_mD3qTfxhx_hk9X7aOuccJ_bL2QrungoJAyKA@mail.gmail.com>
-Subject: RE:Saudi Arabia-Inquiry about your products.!!
-To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.9 required=5.0 tests=DEAR_SOMETHING,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:531 listed in]
-        [list.dnswl.org]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [tamimbinhamadalthani00[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [cisskhadidiatou890[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [cisskhadidiatou890[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.7 DEAR_SOMETHING BODY: Contains 'Dear (something)'
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SORBS_DUL,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Dear Sir/Madam,
+Dzie=C5=84 dobry,
+
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
+
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
+
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
 
 
-
-Can you supply your products to  the government of (Saudi Arabia). We
-buy in larger quantity if your company can supply please reply with
-your products detail for more information.
-
-Looking forward to hearing from you.
-
-Thanks and Regards
-
- Mr.Tamim Mohammed Taher
-
-Email:tamimbinhamadalthani00@gmail.com
+Pozdrawiam
+Krystian Wieczorek
