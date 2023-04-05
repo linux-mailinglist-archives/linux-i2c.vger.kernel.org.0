@@ -2,104 +2,229 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595DC6D64C5
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Apr 2023 16:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 234196D7276
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Apr 2023 04:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234566AbjDDOH1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 4 Apr 2023 10:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
+        id S236727AbjDEC3Q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 Apr 2023 22:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234443AbjDDOH0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Apr 2023 10:07:26 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEA75258;
-        Tue,  4 Apr 2023 07:06:54 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id cn12so28255628qtb.8;
-        Tue, 04 Apr 2023 07:06:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680617212;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mqA0aoKLpeVA32vIaHb9r/e2K6aw/oZkyeQELAebYPc=;
-        b=g3xNksrvYH2oPXKSdaktqR4E3st4g35PSLatf6tbVsOsXsDr1Sj1jLwbq1uBmULmIE
-         2bYTxUlI4/FlwuQOYE0GnEbxfUgPo0QQrM+tJctxP1xmdn9uW0jo5wEYy/xCngbBjmBp
-         B9jK6IABFElULF/1P5AZMjQ3RQqhR4a44SVLlnWCkQ62zdFGSCGbVgpB3BwEObhudPD6
-         0LEpddJETCcqlK4wCGZfMkCah4Srx4ZTc4FYPqpuZ892nFiO2UFl7FQYRXr8OzNlNlIJ
-         yAmvVNcKNJ23zojs+Lz5iHwJpJeeNnxjRRJqhIt6+eduGyx5D/r1Pkd3ok5Y7PebCij7
-         Y2TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680617212;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mqA0aoKLpeVA32vIaHb9r/e2K6aw/oZkyeQELAebYPc=;
-        b=Ycwgll4X05++FudvdIktPbWKLoavgCSmZqP7p6859tfItrIKHVqm9ViXaJrJNiAq55
-         DY/w0I2mLTCJXOZkh9LW+Y+VBdqWLrn+QeENtd04crIdJaw5TrvmP1EC47LngSDZWTT9
-         3GtDgdeD2nXN9IBoKFLohx4Jws37zCPG51kuby3TugOncs9h1QlZi853DigYAkOFyk1M
-         kPnUZuulADbjz/OfeBcz+F8HDpuqIm47CHbrfc3PHJJX+CY1ZZVMiJ3GWBVbtVgjEFj3
-         as5c2EYFgp65/3cskLIMYyFP+4od7bsBZ0foXu5yOQUvDYkNtgzFNjM/CP3e3tre/awN
-         zsTA==
-X-Gm-Message-State: AAQBX9fSck+YGIJFHErmVqAo2rS73LmREqAxpmAZv64PneSZYLGED1sD
-        ixifssQ88Lwe+FjEsq6Qe3w=
-X-Google-Smtp-Source: AKy350aH2P68cMEab0T2UXtKUu4U0+HrVNWU2CbCXEjLk+vTfFkCPJ/GrvWomK4of+TgUI297Qjb6A==
-X-Received: by 2002:a05:622a:1313:b0:3d2:7f3b:c691 with SMTP id v19-20020a05622a131300b003d27f3bc691mr3470798qtk.47.1680617211741;
-        Tue, 04 Apr 2023 07:06:51 -0700 (PDT)
-Received: from PCBABN.skidata.net ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id l22-20020ac848d6000000b003bfb0ea8094sm3230398qtr.83.2023.04.04.07.06.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 07:06:51 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-To:     peterz@infradead.org
-Cc:     bbara93@gmail.com, benjamin.bara@skidata.com,
-        dmitry.osipenko@collabora.com, jonathanh@nvidia.com,
-        lee@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        rafael.j.wysocki@intel.com, richard.leitner@linux.dev,
-        stable@vger.kernel.org, treding@nvidia.com, wsa@kernel.org
-Subject: Re: [PATCH v3 2/4] i2c: core: run atomic i2c xfer when !preemptible
-Date:   Tue,  4 Apr 2023 16:06:42 +0200
-Message-Id: <20230404140642.550919-1-bbara93@gmail.com>
+        with ESMTP id S236753AbjDEC3O (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Apr 2023 22:29:14 -0400
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE302E45
+        for <linux-i2c@vger.kernel.org>; Tue,  4 Apr 2023 19:28:44 -0700 (PDT)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 3352DA5B065587;
+        Wed, 5 Apr 2023 10:13:10 +0800 (GMT-8)
+        (envelope-from ryan_chen@aspeedtech.com)
+Received: from aspeedtech.com (192.168.10.13) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 5 Apr
+ 2023 10:28:39 +0800
+From:   Ryan Chen <ryan_chen@aspeedtech.com>
+To:     <jk@codeconstruct.com.au>, <openbmc@lists.ozlabs.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-i2c@vger.kernel.org>, ryan_chen <ryan_chen@aspeedtech.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-aspeed@lists.ozlabs.org>
+Subject: [PATCH v9 0/2] Add ASPEED AST2600 I2Cv2 controller driver
+Date:   Wed, 5 Apr 2023 10:28:23 +0800
+Message-ID: <20230405022825.333246-1-ryan_chen@aspeedtech.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230404082255.GU4253@hirez.programming.kicks-ass.net>
-References: <20230404082255.GU4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.10.13]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 3352DA5B065587
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 4 Apr 2023 at 10:23, Peter Zijlstra <peterz@infradead.org> wrote:
-> You can mostly forget about CONFIG_PREEMPT=n (or more specifically
-> CONFIG_PREMPT_COUNT=n) things that work for PREEMPT typically also work
-> for !PREEMPT.
+This series add AST2600 i2cv2 new register set driver. The i2cv2 driver
+is new register set that have new clock divider option for more
+flexiable generation. And also have separate i2c master and slave register
+set for control.
 
-Thanks for the clarification!
+The legacy register layout is mix master/slave register control together.
+The following is add more detail description about new register layout.
+And new feature set add for register.
 
-> The question here seems to be if i2c_in_atomic_xfer_mode() should have
-> an in_atomic() / !preemptible() check, right? IIUC Wolfram doesn't like
-> it being used outside of extra special cicumstances?
+-Add new clock divider option for more flexible and accurate clock rate
+generation -Add tCKHighMin timing to guarantee SCL high pulse width.
+-Add support dual pool buffer mode, split 32 bytes pool buffer of each
+device into 2 x 16 bytes for Tx and Rx individually.
+-Increase DMA buffer size to 4096 bytes and support byte alignment.
+-Re-define the base address of BUS1 ~ BUS16 and Pool buffer.
+-Re-define registers for separating master and slave mode control.
+-Support 4 individual DMA buffers for master Tx and Rx, slave Tx and Rx.
 
-Sorry for expressing things more complicated than needed.
-Yes, exactly. Wolfram expressed considerations of adding preemptible() as
-check, as the now existing irq_disabled() check is lost with !PREEMPT. I tried
-to clarify that the check seems to be there for "performance reasons" and that
-the check essentially was !preemptible() before v5.2, so nothing should break.
+And following is new register set for package transfer sequence.
+-New Master operation mode:
+ S -> Aw -> P
+ S -> Aw -> TxD -> P
+ S -> Ar -> RxD -> P
+ S -> Aw -> RxD -> Sr -> Ar -> TxD -> P
+-Bus SDA lock auto-release capability for new master DMA command mode.
+-Bus auto timeout for new master/slave DMA mode.
 
-However, what came to my mind during my "research", is that it might make sense
-to handle all i2c transfers atomically when in a post RUNNING state (namely
-HALT, POWER_OFF, RESTART, SUSPEND). The outcome would basically be the same as
-with this patch series applied, but I guess the reasoning behind it would be
-simplified: If in a restart handler, the i2c transfer is atomic, independent of
-current IRQ or preemption state. Currently, the state depends on from where the
-handler is triggered. As you have stated, most of the i2c transfers in the
-mentioned states will just update single bits for power-off/sleep/suspend, so
-IMHO nothing where not using a DMA would matter from a performance point of
-view. But there might be other reasons for not doing so - I guess in this case
-the provided patch is fine (at least from my side).
+The following is two versus register layout.
+Old:
+{I2CD00}: Function Control Register     
+{I2CD04}: Clock and AC Timing Control Register
+{I2CD08}: Clock and AC Timing Control Register
+{I2CD0C}: Interrupt Control Register
+{I2CD10}: Interrupt Status Register 
+{I2CD14}: Command/Status Register   
+{I2CD18}: Slave Device Address Register
+{I2CD1C}: Pool Buffer Control Register
+{I2CD20}: Transmit/Receive Byte Buffer Register
+{I2CD24}: DMA Mode Buffer Address Register
+{I2CD28}: DMA Transfer Length Register
+{I2CD2C}: Original DMA Mode Buffer Address Setting
+{I2CD30}: Original DMA Transfer Length Setting and Final Status
+
+New Register mode
+{I2CC00}: Master/Slave Function Control Register
+{I2CC04}: Master/Slave Clock and AC Timing Control Register
+{I2CC08}: Master/Slave Transmit/Receive Byte Buffer Register
+{I2CC0C}: Master/Slave Pool Buffer Control Register
+{I2CM10}: Master Interrupt Control Register
+{I2CM14}: Master Interrupt Status Register
+{I2CM18}: Master Command/Status Register
+{I2CM1C}: Master DMA Buffer Length Register
+{I2CS20}: Slave~ Interrupt Control Register
+{I2CS24}: Slave~ Interrupt Status Register
+{I2CS28}: Slave~ Command/Status Register
+{I2CS2C}: Slave~ DMA Buffer Length Register
+{I2CM30}: Master DMA Mode Tx Buffer Base Address
+{I2CM34}: Master DMA Mode Rx Buffer Base Address
+{I2CS38}: Slave~ DMA Mode Tx Buffer Base Address
+{I2CS3C}: Slave~ DMA Mode Rx Buffer Base Address
+{I2CS40}: Slave Device Address Register
+{I2CM48}: Master DMA Length Status Register
+{I2CS4C}: Slave  DMA Length Status Register
+{I2CC50}: Current DMA Operating Address Status
+{I2CC54}: Current DMA Operating Length  Status
+
+aspeed,global-regs:
+This global register is needed, global register is setting for
+new clock divide control, and new register set control.
+
+ASPEED SOC chip is server product, i2c bus may have fingerprint
+connect to another board. And also support hotplug.
+The following is board-specific design example.
+Board A                                         Board B
+-------------------------                       ------------------------
+|i2c bus#1(master/slave)  <===fingerprint ===> i2c bus#x (master/slave)|
+|i2c bus#2(master)-> tmp i2c device |          |                       |
+|i2c bus#3(master)-> adc i2c device |          |                       |
+-------------------------                       ------------------------
+
+i2c-scl-clk-low-timeout-us:
+For example I2C controller as slave mode, and suddenly disconnected.
+Slave state machine will keep waiting for master clock in for rx/tx
+transmit. So it need timeout setting to enable timeout unlock controller
+state. And in another side. In Master side also need avoid suddenly
+slave miss(un-plug), Master will timeout and release the SDA/SCL.
+
+aspeed,enable-dma:
+For example The bus#1 have trunk data needed for transfer,
+it can enable bus dma mode transfer, it can reduce cpu utilized.
+Others bus bus#2/3 use defautl buffer mode.
+
+v9:
+-aspeed,i2c.yaml
+ -backoff to v7.
+  -no fix typo in maintainer's name and email. this would be another patch.
+  -no remove address-cells, size-cells, this would be another patch.
+ -use aspeed,enable-dma property instead of aspeed,xfer-mode selection.
+ -fix allOf and else false properties for aspeed,ast2600-i2cv2.
+-i2c-ast2600.c
+ -no change, the same with v8
+
+v8:
+-aspeed,i2c.yaml
+ -modify commit message.
+  -Fix typo in maintainer's name and email.
+ -remove address-cells, size-cells.
+-i2c-ast2600.c
+ -move "i2c timeout counter" comment description before property_read.
+ -remove redundant code "return ret" in probe end.
+
+v7:
+-aspeed,i2c.yaml
+ -Update ASPEED I2C maintainers email.
+ -use aspeed,enable-dma property instead of aspeed,xfer-mode selection.
+ -fix allOf and else false properties for aspeed,ast2600-i2cv2.
+-i2c-ast2600.c
+ -remove aspeed,xfer-mode instead of aspeed,enable-dma mode. buffer mode
+is default.
+ -remove aspeed,timeout instead of i2c-scl-clk-low-timeout-us for
+timeout setting.
+
+v6:
+-remove aspeed,i2cv2.yaml, merge to aspeed,i2c.yaml -add support for
+ i2cv2 properites.
+-i2c-ast2600.c
+ -fix ast2600_i2c_remove ordering.
+ -remove ast2600_i2c_probe goto labels, and add dev_err_probe -remove
+  redundant deb_dbg debug message.
+ -rename gr_regmap -> global_regs
+
+v5:
+-remove ast2600-i2c-global.yaml, i2c-ast2600-global.c.
+-i2c-ast2600.c
+ -remove legacy clock divide, all go for new clock divide.
+ -remove duplicated read isr.
+ -remove no used driver match
+ -fix probe return for each labels return.
+ -global use mfd driver, driver use phandle to regmap read/write.
+-rename aspeed,i2c-ast2600.yaml to aspeed,i2cv2.yaml -remove bus-frequency.
+-add required aspeed,gr
+-add timeout, byte-mode, buff-mode properites.
+
+v4:
+-fix i2c-ast2600.c driver buffer mode use single buffer conflit in
+ master slave mode both enable.
+-fix kmemleak issue when use dma mode.
+-fix typo aspeed,i2c-ast2600.yaml compatible is "aspeed,ast2600-i2c"
+-fix typo aspeed,i2c-ast2600.ymal to aspeed,i2c-ast2600.yaml
+
+v3:
+-fix i2c global clock divide default value.
+-remove i2c slave no used dev_dbg info.
+
+v2:
+-add i2c global ymal file commit.
+-rename file name from new to ast2600.
+ aspeed-i2c-new-global.c -> i2c-ast2600-global.c
+ aspeed-i2c-new-global.h -> i2c-ast2600-global.h
+ i2c-new-aspeed.c -> i2c-ast2600.c
+-rename all driver function name to ast2600.
+
+Ryan Chen (2):
+  dt-bindings: i2c: aspeed: support for AST2600-i2cv2
+  i2c: aspeed: support ast2600 i2c new register mode driver
+
+ .../devicetree/bindings/i2c/aspeed,i2c.yaml   |   52 +-
+ MAINTAINERS                                   |    9 +
+ drivers/i2c/busses/Kconfig                    |   11 +
+ drivers/i2c/busses/Makefile                   |    1 +
+ drivers/i2c/busses/i2c-ast2600.c              | 1602 +++++++++++++++++
+ 5 files changed, 1672 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/i2c/busses/i2c-ast2600.c
+
+-- 
+2.34.1
+
