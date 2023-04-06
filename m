@@ -2,77 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2566D9085
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Apr 2023 09:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7489F6D916B
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Apr 2023 10:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233044AbjDFHgn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Apr 2023 03:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48510 "EHLO
+        id S235849AbjDFIYL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Apr 2023 04:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232896AbjDFHgm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Apr 2023 03:36:42 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC454128
-        for <linux-i2c@vger.kernel.org>; Thu,  6 Apr 2023 00:36:41 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-932072d4c00so123301366b.1
-        for <linux-i2c@vger.kernel.org>; Thu, 06 Apr 2023 00:36:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680766600;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ijq1sQSgXRjCVw0Zbz7ioCZmIB2M5yer8Xo5BpM0JvQ=;
-        b=ohMvTjszXNbfst0u8uh1G4YknBXKl6WA5DNnJ9KiD7zjy3IYj2/5nNpeu6C2Jcq7WF
-         R8xOf8NOq0HB4VKrt6596DB7ZgLmU6+sHk9X2ZjKG2UoTd57j8RJpzFis2hgJA1SutAM
-         yeXKSEuQl/dGFuWQHiy8RG+5Y4K7k9d9C1zU1QpZglQaqQVK7BjqFzprjKAj7gNAk321
-         kUmlWovWOPZlhDt5nvllqNbz7oEnE8OCiDTwn2CkBtOLlPoGMAXby1ZWn2m0wOgA7FXo
-         /GGLof4fm4EdSP/rm/yMYve6xjUh1l2GmxHq13fhSq/Y63Ws6Fo8FHLws1fIpKQMVx9Q
-         yZIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680766600;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ijq1sQSgXRjCVw0Zbz7ioCZmIB2M5yer8Xo5BpM0JvQ=;
-        b=Nn//sL9LPqzzlKSkHLPQsKbEZ8XTtUoMBbSD+XLZV+ulxAlsFaYdLH38S5ECaF2QUx
-         vNYxT0XLufCZs31yoau58mpBIiYeT5b1Ohh2dNmwgD5Ml2jQIIu6wNjD+z8lKiYLZCud
-         ihR9K5z46XZaEfxiPSGYudr4lWwJbWbTZGVn1MYF0okqEEyEOYYVlI7V/UwPo/xypgSs
-         dTYUc53NclN8fmcfoB6RvzkAL9zvofC8xwoaBdp3I/qDMfuNenGKcdjsAQseKtmFdKb+
-         BF1RO5DqCzrOlREQ7FrCHgqt0+YvhW7POpy+cKQ4P/niP1KIpk32kisdNLHhx1wC4Lvs
-         ll6g==
-X-Gm-Message-State: AAQBX9e382WnLGtF9MmiR1D1gDhAMFRyBbSp8e97SHHS3NcD5NZIBv4H
-        TVIC2/uBc1/6ZuNQRrHkLZGP+g==
-X-Google-Smtp-Source: AKy350bk+DZPdYGsRNi+j77n2jK6BivgHWKBNISxMdpVatnWSqCJmwrkgIofxzZ998QwCxJ02zv4WA==
-X-Received: by 2002:aa7:d78b:0:b0:500:2cac:332c with SMTP id s11-20020aa7d78b000000b005002cac332cmr3675247edq.25.1680766600157;
-        Thu, 06 Apr 2023 00:36:40 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id i17-20020a17090671d100b0092973e209f2sm433340ejk.109.2023.04.06.00.36.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 00:36:39 -0700 (PDT)
-Message-ID: <40f1ca77-7f7a-dc51-1137-45664a6ef2a1@linaro.org>
-Date:   Thu, 6 Apr 2023 09:36:38 +0200
+        with ESMTP id S235795AbjDFIYK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Apr 2023 04:24:10 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C417A9A
+        for <linux-i2c@vger.kernel.org>; Thu,  6 Apr 2023 01:24:08 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pkKuT-0006zt-8j; Thu, 06 Apr 2023 10:23:57 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pkKuR-009L2f-71; Thu, 06 Apr 2023 10:23:55 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pkKuQ-00AzQf-G5; Thu, 06 Apr 2023 10:23:54 +0200
+Date:   Thu, 6 Apr 2023 10:23:54 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>, Tony Lindgren <tony@atomide.com>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Vignesh R <vigneshr@ti.com>, linux-omap@vger.kernel.org,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH] i2c: omap: Improve error reporting for problems during
+ .remove()
+Message-ID: <20230406082354.jwchbl5ir6p4gjw7@pengutronix.de>
+References: <20230402105518.2512541-1-u.kleine-koenig@pengutronix.de>
+ <20230402225001.75a32147@aktux>
+ <20230403054837.6lxyzznzntvw2drg@pengutronix.de>
+ <20230403060404.GX7501@atomide.com>
+ <ZC5qUU4JLI9Negyi@sai>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v9 1/2] dt-bindings: i2c: aspeed: support for
- AST2600-i2cv2
-Content-Language: en-US
-To:     Ryan Chen <ryan_chen@aspeedtech.com>, jk@codeconstruct.com.au,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-i2c@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-aspeed@lists.ozlabs.org
-References: <20230405022825.333246-1-ryan_chen@aspeedtech.com>
- <20230405022825.333246-2-ryan_chen@aspeedtech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230405022825.333246-2-ryan_chen@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nsmp2sx53qt2rvps"
+Content-Disposition: inline
+In-Reply-To: <ZC5qUU4JLI9Negyi@sai>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,16 +61,92 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 05/04/2023 04:28, Ryan Chen wrote:
-> Add ast2600-i2cv2 compatible and aspeed,global-regs, aspeed,enable-dma
-> and description for ast2600-i2cv2.
-> 
-> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
-> ---
->  .../devicetree/bindings/i2c/aspeed,i2c.yaml   | 52 +++++++++++++++++--
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+--nsmp2sx53qt2rvps
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+If pm_runtime_get() fails in .remove() the driver used to return the
+error to the driver core. The only effect of this (compared to returning
+zero) is a generic warning that the error value is ignored.
 
+So emit a better warning and return zero to suppress the generic (and
+little helpful) message. Also disable runtime PM in the error case.
+
+This prepares changing platform device remove callbacks to return void.
+
+Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+---
+On Thu, Apr 06, 2023 at 08:44:33AM +0200, Wolfram Sang wrote:
+>=20
+> > > So if there is some clk handling necessary before the register access,
+> > > I'm not aware where it's hidden. Is there some bus or omap specific c=
+ode
+> > > that ensures clk handling?
+> >=20
+> > I think the missing part is that the runtime PM calls in the i2c driver
+> > cause the parent ti-sysc interconnect target module device to get enabl=
+ed
+> > and clocked before accessing the i2c registers.
+>=20
+> So, this patch is not needed?
+
+The patch as is is wrong. For my quest to drop the return value of
+platform driver's remove callbacks, I need this patch instead:
+
+ drivers/i2c/busses/i2c-omap.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
+index f9ae520aed22..2b4e2be51318 100644
+--- a/drivers/i2c/busses/i2c-omap.c
++++ b/drivers/i2c/busses/i2c-omap.c
+@@ -1525,14 +1525,17 @@ static int omap_i2c_remove(struct platform_device *=
+pdev)
+ 	int ret;
+=20
+ 	i2c_del_adapter(&omap->adapter);
+-	ret =3D pm_runtime_resume_and_get(&pdev->dev);
++
++	ret =3D pm_runtime_get_sync(&pdev->dev);
+ 	if (ret < 0)
+-		return ret;
++		dev_err(omap->dev, "Failed to resume hardware, skip disable\n");
++	else
++		omap_i2c_write_reg(omap, OMAP_I2C_CON_REG, 0);
+=20
+-	omap_i2c_write_reg(omap, OMAP_I2C_CON_REG, 0);
+ 	pm_runtime_dont_use_autosuspend(&pdev->dev);
+ 	pm_runtime_put_sync(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
++
+ 	return 0;
+ }
+=20
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+--=20
+2.39.2
+
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--nsmp2sx53qt2rvps
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQugZkACgkQj4D7WH0S
+/k6e1QgAgMnr2q6+pOqsrux2OQmK4cmDqgLRGQhbp6quxKBbs7BiVJcK2NqGKE+8
+YHELGSWPVwNz/Hd6V0YxaBKbFQvPJlSJdVhELTuBiWLQ1pnUkt6DcF5zbxpLw5NT
+1qd8i621AKmq3kWowz/uoz1XqtsFo9jYrLwqj/jutbbIuUcmr3pXY8DRv4x4fb82
++oTUpMjvUyJhsdebnQ3T+NeAdNtobO4Iy73/eBSZedvmMecH3XlRx1Y9ZGiJx4Hb
+DG0+QqVIeWQJawHYVFKSo2DP2w074A1dMI5+dMd/szvn7an7pa/cT6w24iDKFXHd
+9tQji5xY/yCxCt6ZJkpL9v+rwG9iaQ==
+=3J10
+-----END PGP SIGNATURE-----
+
+--nsmp2sx53qt2rvps--
