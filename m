@@ -2,89 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135A36DD596
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Apr 2023 10:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382596DD6A0
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Apr 2023 11:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbjDKIbb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 Apr 2023 04:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
+        id S229744AbjDKJ2t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 Apr 2023 05:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbjDKIb3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Apr 2023 04:31:29 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C48B9B
-        for <linux-i2c@vger.kernel.org>; Tue, 11 Apr 2023 01:31:27 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id d9so6752797wrb.11
-        for <linux-i2c@vger.kernel.org>; Tue, 11 Apr 2023 01:31:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1681201886; x=1683793886;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=221+rJPVRmTBicTd5002DBEZ4voZcS37Ga3RcOPXh88=;
-        b=0uN/cs3jya/FTvzSTyDnjUvs1o+XjEESTIuS+jlgfFdCDnY/fklJET+5dr4RyEtFuY
-         /h7g1vfcxcN0ODtKhx+G4eCJOiPNCSNVEJg36G5u83eB+xJ/TCuISpRj0vbqvzzkUTW2
-         3mvciNxV5LFTPE0eZnspSgllygfpe0g1dnDiFzKFjxik06T2TxBWf4RpPJo7X5XlFax9
-         zeTXmgzWXHRYxpRcOdu4iLRzthG5OoR9ERKNz/TkZRi2RiHIL3A8ecxx+aHDPjw37VPD
-         5zOx2Qfln6QpQffTr1Ql0YlMIZLo5RUWrKisGg/PXzt2DVy/1PvczE2xchdaBIcyL96p
-         RePA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681201886; x=1683793886;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=221+rJPVRmTBicTd5002DBEZ4voZcS37Ga3RcOPXh88=;
-        b=hMTv59yG4QKxLyTnEkBv8kkgd/ijMs9MSx1FwGwXUtie70dqAFZ71BTldl3MW931rn
-         5APF2RwQtXcsTTq4/GES446GCkOEWyLps7z20nUXQQunN1AzBUPOwLB/Q7fIUSwp7QV1
-         Oq5gGXbfeTzsIyAe8f6GG9XVS+C66MY6a54GrQdaLZz4JR3ZrM/1QNWZh6nj3QebWD9Y
-         pAn+KyTWFUvzEvmS4gTmTI5Le7LKpLV2poKF+IarUHIFUrqk2xuJhQmXG+dK41kHIOWV
-         DKcKktAv15ujY9TTd/I/LP/9OMVUrx4suXbWH3JXF0BI+lipJf5WeBNSHfD96+uCTcCl
-         Mm9A==
-X-Gm-Message-State: AAQBX9f1s90M/NGZZb6n/Pb6XXbbyfiR132twqqSaUbMac22ONJ7D+3Y
-        OcFdKxNTP+wMw4oESz5h5eCAmg==
-X-Google-Smtp-Source: AKy350ZVJglFgq9ztOFGuYcic4YegavmAar2H7r8LrUhlD9XQnlViWEJTMf+UJFFQclfvouAtDmnwg==
-X-Received: by 2002:adf:f84f:0:b0:2ef:5066:7bd8 with SMTP id d15-20020adff84f000000b002ef50667bd8mr9648387wrq.43.1681201885845;
-        Tue, 11 Apr 2023 01:31:25 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id d9-20020adfef89000000b002d2f0e23acbsm13963408wro.12.2023.04.11.01.31.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 01:31:25 -0700 (PDT)
-Message-ID: <16cdc84a-a78b-0629-6c87-9056755b0dbf@baylibre.com>
-Date:   Tue, 11 Apr 2023 10:31:24 +0200
+        with ESMTP id S229482AbjDKJ2T (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Apr 2023 05:28:19 -0400
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E6FC3;
+        Tue, 11 Apr 2023 02:28:16 -0700 (PDT)
+X-QQ-mid: bizesmtp91t1681205292txy17sc8
+Received: from wxdbg.localdomain.com ( [183.129.236.74])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 11 Apr 2023 17:28:03 +0800 (CST)
+X-QQ-SSF: 01400000000000H0Z000000A0000000
+X-QQ-FEAT: jXjag1m6xl5p/4UuOm9gjOZlz1oGxrg02oepOJqXg/7lpWHvsZpyeXenMTnAj
+        5uDBcoFBjYtO6NOFM3D9FiukSmIwUp3bfnqSbm+TMT1vlQr3vV/+I6ejTe+muZJL7QlkeiZ
+        q5Sw3kJhw6j8yv15QG/uBU9zSdEZ6JtEnsXELpIo0jRbW7HqG8mDWuIlui6Q37InHoxNbj+
+        AdOGV/XKi/FQnP7KabOAeSTnpqblx38PDZEpYIrc3VrhKS3Iev7/omguP+wFmQKX+y2d0/7
+        T0rssqgoWvO/YZhfLyO8SMWCG8uDhVOWEQBCWfvqHIDnux7CHK2dMPwyBL0GP21ZrgyWVwA
+        Ny9BLw4Hdhc9AtlMJqp3s4rAtF7vnMUl4dCg7a4rpg6zW4WfXg=
+X-QQ-GoodBg: 2
+X-BIZMAIL-ID: 11647374356623900767
+From:   Jiawen Wu <jiawenwu@trustnetic.com>
+To:     netdev@vger.kernel.org, linux@armlinux.org.uk
+Cc:     linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        mengyuanlou@net-swift.com, Jiawen Wu <jiawenwu@trustnetic.com>
+Subject: [PATCH net-next v2 0/6] TXGBE PHYLINK support
+Date:   Tue, 11 Apr 2023 17:27:19 +0800
+Message-Id: <20230411092725.104992-1-jiawenwu@trustnetic.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 2/2] i2c: mediatek: add support for MT7981 SoC
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>, linux-i2c@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Qii Wang <qii.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sam Shih <sam.shih@mediatek.com>
-References: <cover.1680857025.git.daniel@makrotopia.org>
- <7b5c6ba8da51ea6145fb71815a2f65a9e1d341c1.1680857025.git.daniel@makrotopia.org>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <7b5c6ba8da51ea6145fb71815a2f65a9e1d341c1.1680857025.git.daniel@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:trustnetic.com:qybglogicsvr:qybglogicsvr5
+X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 10/04/2023 18:19, Daniel Golle wrote:
-> Add support for the I2C units found in the MediaTek MT7981 and MT7988
-> SoCs. Just like other recent MediaTek I2C units that also uses v3
-> register offsets (which differ from v2 only by OFFSET_SLAVE_ADDR being
-> 0x94 instead of 0x4).
+Implement I2C, SFP, GPIO and PHYLINK to setup TXGBE link and switch link
+rate based on optical module information.
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+v1 -> v2:
+- add comments to indicate GPIO lines
+- add I2C write operation support
+- modify GPIO direction functions
+- rename functions related to PHY interface
+- add condition on interface changing to re-config PCS
+- add to set advertise and fix to get status for 1000BASE-X mode
+- other redundant codes remove
+
+Jiawen Wu (6):
+  net: txgbe: Add software nodes to support phylink
+  net: txgbe: Implement I2C bus master driver
+  net: txgbe: Add SFP module identify
+  net: txgbe: Support GPIO to SFP socket
+  net: txgbe: Implement phylink pcs
+  net: txgbe: Support phylink MAC layer
+
+ drivers/net/ethernet/wangxun/Kconfig          |   5 +
+ drivers/net/ethernet/wangxun/libwx/wx_lib.c   |   3 +-
+ drivers/net/ethernet/wangxun/libwx/wx_type.h  |   3 +
+ drivers/net/ethernet/wangxun/txgbe/Makefile   |   1 +
+ .../ethernet/wangxun/txgbe/txgbe_ethtool.c    |  34 +
+ .../net/ethernet/wangxun/txgbe/txgbe_main.c   |  58 +-
+ .../net/ethernet/wangxun/txgbe/txgbe_phy.c    | 980 ++++++++++++++++++
+ .../net/ethernet/wangxun/txgbe/txgbe_phy.h    |  10 +
+ .../net/ethernet/wangxun/txgbe/txgbe_type.h   | 157 +++
+ 9 files changed, 1219 insertions(+), 32 deletions(-)
+ create mode 100644 drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c
+ create mode 100644 drivers/net/ethernet/wangxun/txgbe/txgbe_phy.h
+
+-- 
+2.27.0
+
