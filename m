@@ -2,98 +2,194 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 952606DD77F
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Apr 2023 12:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C0D6DD809
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Apr 2023 12:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjDKKIx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 Apr 2023 06:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
+        id S229608AbjDKKgP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 Apr 2023 06:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDKKIw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Apr 2023 06:08:52 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804162D67;
-        Tue, 11 Apr 2023 03:08:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681207730; x=1712743730;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=qtxsNuJQDSUF/7fTFYabGmqvbQYKyMolYaV1bWaTZt8=;
-  b=dWDyrjxTPJ8T8itafRhXct8N4DQkGkEKXbzk+8S3iqv3u2ZptHldnTg9
-   Oodc6AsTKL8plGqIjVHiO7hJigad+xAGm/gM3PZGOxX/9IYwY8Bc5liTG
-   1LdJ7BS/U+IFqLtDZ/rlBBnpTMrm48moZrMLbzUrDCKL2dite/ESvufZ9
-   VylL7YlwK3Md8Gz16omu2HczSM7gT0i7awol9oONeRpB8xYCChZKBn58v
-   IBlb3Hfdk1ima4rAk3ZOnNK0yTHzE+7qwEkQj5nUxOX+VQ4KDkrDE00UC
-   WIBiqtkC5Fb6zmhi4tsfBFrzQ6hijxnZIWQORkKESJ8h0m0GxGa/Y2R42
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="341069789"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="341069789"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 03:08:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="721154904"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="721154904"
-Received: from unknown (HELO [10.237.72.51]) ([10.237.72.51])
-  by orsmga001.jf.intel.com with ESMTP; 11 Apr 2023 03:08:47 -0700
-Message-ID: <09dc3146-a1c6-e1a3-c8bd-e9fe547f9b99@linux.intel.com>
-Date:   Tue, 11 Apr 2023 13:08:47 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.0
-Subject: Re: [PATCH net-next v2 2/6] net: txgbe: Implement I2C bus master
- driver
-Content-Language: en-US
-To:     Jiawen Wu <jiawenwu@trustnetic.com>, netdev@vger.kernel.org,
-        linux@armlinux.org.uk
-Cc:     linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        mengyuanlou@net-swift.com
+        with ESMTP id S229451AbjDKKgO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Apr 2023 06:36:14 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25211E54;
+        Tue, 11 Apr 2023 03:36:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=fds3zanNbJi2ddOhpzEhs3eUw9m+0uIWPzFNMVcijHA=; b=TGUwRQySA2i6e4wh1+0ANby90j
+        MMUOaPRheareiXlOtjYpNFZTT82wfvfDPys5EntoqXHgnDiFmgHIPOoOYncdcEx+ucHvf8hIcIH4N
+        nUBBnwKbKyr+2VZ9XliHqHKTV9MhaMszOdZa+NiDu1tPtIBgZzGyoezzVeYxh10Zn+kedhm6q0bYd
+        AML9lfhvXskYgUyUXIzsHGZ9cRy43C0rrVghyvM24CPcYtruw+nTVZ6OLi8uOkUBpR8NBYTz7HW2I
+        OkOFvxkQIHKRKSM5mi/MgUCqVcD9GngR5G/6LdFM1w90sRi+1FaOKtt2i2zFg67CwkpUcDVo6/tkO
+        Ld3tNL7Q==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35792)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pmBM7-0005nD-Oz; Tue, 11 Apr 2023 11:36:07 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pmBM5-00041g-QI; Tue, 11 Apr 2023 11:36:05 +0100
+Date:   Tue, 11 Apr 2023 11:36:05 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Jiawen Wu <jiawenwu@trustnetic.com>
+Cc:     netdev@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-gpio@vger.kernel.org, mengyuanlou@net-swift.com
+Subject: Re: [PATCH net-next v2 5/6] net: txgbe: Implement phylink pcs
+Message-ID: <ZDU4Fe6XVw+I0iGx@shell.armlinux.org.uk>
 References: <20230411092725.104992-1-jiawenwu@trustnetic.com>
- <20230411092725.104992-3-jiawenwu@trustnetic.com>
- <00cf01d96c58$8d3e9130$a7bbb390$@trustnetic.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <00cf01d96c58$8d3e9130$a7bbb390$@trustnetic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+ <20230411092725.104992-6-jiawenwu@trustnetic.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411092725.104992-6-jiawenwu@trustnetic.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi
+On Tue, Apr 11, 2023 at 05:27:24PM +0800, Jiawen Wu wrote:
+> +static void txgbe_set_an37_ability(struct txgbe *txgbe)
+> +{
+> +     u16 val;
+> +
+> +     pcs_write(txgbe, MDIO_MMD_PCS, TXGBE_PCS_DIG_CTRL1,
+> +               TXGBE_PCS_DIG_CTRL1_EN_VSMMD1 |
+> +               TXGBE_PCS_DIG_CTRL1_CLS7_BP |
+> +               TXGBE_PCS_DIG_CTRL1_BYP_PWRUP);
+> +     pcs_write(txgbe, MDIO_MMD_VEND2, TXGBE_MII_AN_CTRL,
+> +               TXGBE_MII_AN_CTRL_MII |
+> +               TXGBE_MII_AN_CTRL_TXCFG |
+> +               TXGBE_MII_AN_CTRL_PCS_MODE(0) |
+> +               TXGBE_MII_AN_CTRL_INTR_EN);
+> +     pcs_write(txgbe, MDIO_MMD_VEND2, TXGBE_MII_DIG_CTRL1,
+> +               TXGBE_MII_DIG_CTRL1_MAC_AUTOSW);
+> +     val = pcs_read(txgbe, MDIO_MMD_VEND2, MDIO_CTRL1);
+> +     val |= BMCR_ANRESTART | BMCR_ANENABLE;
 
-On 4/11/23 12:32, Jiawen Wu wrote:
-> +Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> 
->> -----Original Message-----
->> From: Jiawen Wu <jiawenwu@trustnetic.com>
->> Sent: Tuesday, April 11, 2023 5:27 PM
->> To: netdev@vger.kernel.org; linux@armlinux.org.uk
->> Cc: linux-i2c@vger.kernel.org; linux-gpio@vger.kernel.org;
->> mengyuanlou@net-swift.com; Jiawen Wu <jiawenwu@trustnetic.com>
->> Subject: [PATCH net-next v2 2/6] net: txgbe: Implement I2C bus master
->> driver
->>
->> Implement I2C bus driver to send and receive I2C messages.
->>
->> This I2C license the IP of Synopsys Designware, but without interrupt
->> support on the hardware design. It seems that polling mode needs to be
->> added in Synopsys Designware I2C driver. But currently it can only be
->> driven by this I2C bus master driver.
->>
->> Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
->> ---
->>   drivers/net/ethernet/wangxun/Kconfig          |   1 +
->>   .../net/ethernet/wangxun/txgbe/txgbe_phy.c    | 153
->> ++++++++++++++++++
->>   .../net/ethernet/wangxun/txgbe/txgbe_type.h   |  23 +++
->>   3 files changed, 177 insertions(+)
->>
-Looks like your use case has similarities with the commit 17631e8ca2d3 
-("i2c: designware: Add driver support for AMD NAVI GPU").
+	val |= BMCR_ANENABLE;
+
+> +     pcs_write(txgbe, MDIO_MMD_VEND2, MDIO_CTRL1, val);
+> +}
+
+> +static void txgbe_setup_adv(struct txgbe *txgbe, phy_interface_t interface,
+> +			    const unsigned long *advertising)
+
+Please return an int.
+
+> +{
+> +	int adv;
+> +
+> +	adv = phylink_mii_c22_pcs_encode_advertisement(interface,
+> +						       advertising);
+
+	if (adv < 0)
+		return adv;
+
+> +	if (adv > 0)
+> +		mdiodev_c45_modify(txgbe->mdiodev, MDIO_MMD_VEND2, MII_ADVERTISE,
+> +				   0xffff, adv);
+
+	return mdiodev_c45_modify_changed(txgbe->mdiodev, MDIO_MMD_VEND2,
+					  MII_ADVERTISE, 0xffff, adv);
+
+> +}
+> +
+> +static int txgbe_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
+> +			    phy_interface_t interface,
+> +			    const unsigned long *advertising,
+> +			    bool permit_pause_to_mac)
+> +{
+> +	struct txgbe *txgbe = container_of(pcs, struct txgbe, pcs);
+> +	struct wx *wx = txgbe->wx;
+> +	int ret, val;
+> +
+> +	if (interface == txgbe->interface)
+> +		goto out;
+> +
+> +	/* Wait xpcs power-up good */
+> +	ret = read_poll_timeout(pcs_read, val,
+> +				(val & TXGBE_PCS_DIG_STS_PSEQ_ST) ==
+> +				TXGBE_PCS_DIG_STS_PSEQ_ST_GOOD,
+> +				10000, 1000000, false,
+> +				txgbe, MDIO_MMD_PCS, TXGBE_PCS_DIG_STS);
+> +	if (ret < 0) {
+> +		wx_err(wx, "xpcs power-up timeout.\n");
+> +		return ret;
+> +	}
+> +
+> +	/* Disable xpcs AN-73 */
+> +	pcs_write(txgbe, MDIO_MMD_AN, MDIO_CTRL1, 0);
+> +
+> +	/* Disable PHY MPLLA for eth mode change(after ECO) */
+> +	txgbe_ephy_write(txgbe, TXGBE_SUP_DIG_MPLLA_OVRD_IN_0, 0x243A);
+> +	WX_WRITE_FLUSH(wx);
+> +	usleep_range(1000, 2000);
+> +
+> +	/* Set the eth change_mode bit first in mis_rst register
+> +	 * for corresponding LAN port
+> +	 */
+> +	wr32(wx, TXGBE_MIS_RST, TXGBE_MIS_RST_LAN_ETH_MODE(wx->bus.func));
+> +
+> +	switch (interface) {
+> +	case PHY_INTERFACE_MODE_10GBASER:
+> +		txgbe_pma_config_10gbaser(txgbe);
+> +		break;
+> +	case PHY_INTERFACE_MODE_1000BASEX:
+> +		txgbe_pma_config_1000basex(txgbe);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	pcs_write(txgbe, MDIO_MMD_PCS, TXGBE_PCS_DIG_CTRL1,
+> +		  TXGBE_PCS_DIG_CTRL1_VR_RST | TXGBE_PCS_DIG_CTRL1_EN_VSMMD1);
+> +	/* wait phy initialization done */
+> +	ret = read_poll_timeout(pcs_read, val,
+> +				!(val & TXGBE_PCS_DIG_CTRL1_VR_RST),
+> +				100000, 10000000, false,
+> +				txgbe, MDIO_MMD_PCS, TXGBE_PCS_DIG_CTRL1);
+> +	if (ret < 0)
+> +		wx_err(wx, "PHY initialization timeout.\n");
+> +
+> +	txgbe->interface = interface;
+> +
+> +out:
+> +	if (interface == PHY_INTERFACE_MODE_1000BASEX) {
+> +		txgbe_setup_adv(txgbe, interface, advertising);
+
+		ret = txgbe_setup_adv(txgbe, interface, advertising);
+		if (ret < 0)
+			return ret;
+
+> +		txgbe_set_an37_ability(txgbe);
+> +	}
+> +
+> +	return ret;
+
+... and then this will propagate whether the advertisement has changed,
+which will then cause...
+
+> +static void txgbe_pcs_an_restart(struct phylink_pcs *pcs)
+> +{
+> +	struct txgbe *txgbe = container_of(pcs, struct txgbe, pcs);
+> +
+> +	mdiodev_c45_modify(txgbe->mdiodev, MDIO_MMD_VEND2, MDIO_CTRL1,
+> +			   BMCR_ANRESTART, BMCR_ANRESTART);
+> +}
+
+to be called whenever the advertisement changes (which is why you
+then don't need to do it in txgbe_set_an37_ability().)
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
