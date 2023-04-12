@@ -2,148 +2,140 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96EC66DFB5D
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Apr 2023 18:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 645B66DFBEB
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Apr 2023 18:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjDLQ2x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 12 Apr 2023 12:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
+        id S229831AbjDLQz1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 12 Apr 2023 12:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjDLQ2v (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 12 Apr 2023 12:28:51 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2088.outbound.protection.outlook.com [40.107.94.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C34422F;
-        Wed, 12 Apr 2023 09:28:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nKCqQk+MHVP6oHtE6TKWsCYnPyKCp1OUSY3mdKhqddu2EK0rAZtMDtpdEKluLc9Y9yOfB4jeQbJdoMNim+GsUSJAnuQg9ax3G7O3SZ1NiiplXnrydHEYkEb96N+eDbhuqVKEgLSKJAdCLBerhb8eeaRsMu+M8zwXFH6bHIeZijGv5IIbEa2eJqqKTPqROe0mA/vkeXCw7MJlWiApzutrrbB44W+Bp0HyEyMEdvcPknESaMhHNxpHDrQDF2ott//JBDyYx4wPzDzJprgOR0WI5LUklxjX87Is1bB9aef09648YlBK/0QXVlQH1z/CfJ2Wu2CFnPLABxvB7bqA8B1ELA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dSAxoiUuyfryV8V4Cff5qIItOQN7ZzyIMqH3Uoq84BA=;
- b=OLPRh/rK2zjQ3/eIxRC5t5OuyNSjHndT/nJPS4uC8AxXhWGjDaVOZv1DVIegTUf/6kSEYxMyJ35SoVNua+UzTJIEIdW6dOQ44mBqdtu8X0ZqCclFoKtZGIV9PWucCv+IUux5MpfOi7A2G6UC5b8cMrkB9YxnEZ7mjzTIwVF1kVk4Y6GZTLmXCJj5jIEZDzZfFwJbEfCae5Ay/TOPzHUL5/rInfBCIfn5w0pXjYs+4+r2GBIfRgpbp9PqcuLfYp/5bLgiVXb/a5O9NuNJ5OQGytAMAcaD6UVvRwM+WNnB6MuhiwSyarnQGPjpjWQo0/j8E5k7uEphj2eBM/xQM8miJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dSAxoiUuyfryV8V4Cff5qIItOQN7ZzyIMqH3Uoq84BA=;
- b=QOE4cg49RlYSEcfvcBFiUsvMBA4Z5a9IaPJFmaaMh7bB5nbyVxg3uHmDZ7H1AK6oIcaI80puI82nsvwGRcmKahGm6sBJ1nXkw/aycdP8sUkLZFywEOSgyh8BN+Fcq2TsjZCTHZ9iSaY1cTwNoz9ajlkvn3cKLvkQK/THHWL93fA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by SJ2PR12MB8808.namprd12.prod.outlook.com (2603:10b6:a03:4d0::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.30; Wed, 12 Apr
- 2023 16:28:47 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::f4d:82d0:c8c:bebe]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::f4d:82d0:c8c:bebe%2]) with mapi id 15.20.6277.036; Wed, 12 Apr 2023
- 16:28:47 +0000
-Message-ID: <e53a03cf-71ce-1864-5700-b48e8beb17a6@amd.com>
-Date:   Wed, 12 Apr 2023 11:28:44 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v8 0/6] Use CCP driver to handle PSP I2C arbitration
-Content-Language: en-US
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-References: <20230403183216.3493-1-mario.limonciello@amd.com>
- <ZC5pxORLN+SF/91S@sai> <82ef9505-f8ae-36d0-fdeb-9bfc92aec557@amd.com>
- <ZC+1ufdj8WYixQsM@sai>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>, linux-crypto@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Held Felix <Felix.Held@amd.com>,
-        linux-kernel@vger.kernel.org,
-        Mark Hasemeyer <markhas@chromium.org>,
-        Grzegorz Bernacki <gjb@semihalf.com>
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <ZC+1ufdj8WYixQsM@sai>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MN2PR03CA0016.namprd03.prod.outlook.com
- (2603:10b6:208:23a::21) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        with ESMTP id S229893AbjDLQzZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 12 Apr 2023 12:55:25 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668A576BB;
+        Wed, 12 Apr 2023 09:54:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id F39951F45A;
+        Wed, 12 Apr 2023 16:54:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681318441; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y3oK8+NZ9W31+D3KiPlvgxqacyEsrvj82VuSS/EYUb0=;
+        b=dL/fTtEve1/zyl/crttEQwoPdRlkoZXrnk9ASPBt9fWwXV0OIcH+rd2f/I5tm4CdkQw13X
+        NT5Bn87JEiDdAFdICNpHLDJGV2Uay/KwE6IvnXm5Sr4ZidRVOkuCOytQUih/IgeWFzCdN6
+        k0rvua2D+zmaUFm6Xx9LeYCDpjghmAA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681318441;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y3oK8+NZ9W31+D3KiPlvgxqacyEsrvj82VuSS/EYUb0=;
+        b=cE5MNVsngV6FZv3URVMmQCmc2d3GUAywKfdLspJ5Wtyw5UGVfD/grxkczEimazRLtTSuP4
+        HQrwceeuITHqaIDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C9907132C7;
+        Wed, 12 Apr 2023 16:54:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8Vh7LyjiNmQwWwAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Wed, 12 Apr 2023 16:54:00 +0000
+Date:   Wed, 12 Apr 2023 18:53:58 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <terry.bowman@amd.com>
+Subject: Re: [PATCH] i2c: piix4: Print FCH::PM::S5_RESET_STATUS
+Message-ID: <20230412185358.4d6427ce@endymion.delvare>
+In-Reply-To: <20230407203720.18184-1-yazen.ghannam@amd.com>
+References: <20230407203720.18184-1-yazen.ghannam@amd.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SJ2PR12MB8808:EE_
-X-MS-Office365-Filtering-Correlation-Id: a981588b-62f8-4611-8d3f-08db3b72fd96
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xUcyYZwhcIxm3vIIGD9OWRpDDRRB7/a/ONCBFO35GCs43lfAx68GpAgnRqYdsrXHMHDm3ZL1JlIfRIQUXQ/8o/ZCDrKbXLfnkcaQbUx+JEOhEhxF1yZel0egrJH4Ozmutk6VKH/J3ZbB6yV6mxXx41IPmJb/7hZH9szEy8yCxLKaTAIQ7Lo8PSgoWR8IDzKsmfI2Kt3XY2OROqbF719DooOcdxzlnB9GH0jelKw2zXgYPTStnbaH29wN+TylDc7xa/O+A5dcjUuiBlQRyFN+k5JIoRwKVUpIaiHEYoLvEEpxEFbDIjmoH/zUFKfGwMue2U2y7ozYLbIPmx3KFWn5y/pR8xYWHV6X2TDCjGN/Jsb/SDvyO7GNALvU7O/IbU7xBMZs2ryoNWyjYTuIyaM5cs64Dgez8rNdcinOjbFGhPQXO3ECeTTGALuJfPco6iycncX+BUJuhKdv7g5B0fflO2zAM2Dq/BPxg2E48IMcWL8cc8UbrjjgtThjcaqrOT6JK0va3+RLZHDe1u05TA0oNIXq5cT1GHJdxm93K/W4g4OombYu7o/gz1Z3qPnAjc3E2OOqZqJFYYVYFM+E8I5T4lFuQuyr6vwCvC2EXmy4qZbjaCofQJkfjc/1sWHFyd1ypsZxiJNCYgxQceHjtMCqOA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(366004)(39860400002)(136003)(346002)(451199021)(6916009)(38100700002)(66556008)(5660300002)(6512007)(316002)(2616005)(26005)(6486002)(6506007)(53546011)(6666004)(4744005)(2906002)(7416002)(186003)(36756003)(54906003)(86362001)(478600001)(66946007)(41300700001)(4326008)(66476007)(8676002)(8936002)(31696002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T0JPN25MTnc2TjUwRXk4eUtlT0Y4OVFNREJtVnk1VDJPMGh5V0t2VFA5K3ow?=
- =?utf-8?B?T09adVJ4OTJ2OG5FdXMzbk4ydkY2Y0ZKSTFMS0RzNldiaGozOTNlRDI2cGRQ?=
- =?utf-8?B?MW55dmp0SzJKQm1vQmU2Q0M2eU5ZdVVubFNIYzVQckdCZTJBZzFLY3JYbUV0?=
- =?utf-8?B?MGJ5d0VWcnhKbUc4cjh6NWcyeWxOaEtuQjdDeHJVVHZlMTFNRjJMdHV2V1A1?=
- =?utf-8?B?aTFqUVdlOE44YW5CT1c2dUE1OFFxblVQOXM5Qyt6dzBIaXBxaVp6V05ORTFN?=
- =?utf-8?B?c3dtbzMyR213N2hQT2xjYURLMW5ZZFFPeUhDZGlZMjc4WVkrMEpHSGQ4NzBO?=
- =?utf-8?B?MkIwVVJNR2x5cGZCQnRmbjNMVjJCdFU5eVMwb084VWFyZjhXbnBqNk9YUlAv?=
- =?utf-8?B?eDdWZ2R0aHBlL0ZEd0ZaeFhIVlIxN1FjdHRTK1ltQkNKZFYzY2IvYnZnN1hm?=
- =?utf-8?B?ZGRiTFArcWlmcmpZelBoWm42WWsvaStBRWRGQmI0WHI5Y3R3Y3pkSjhTZC8v?=
- =?utf-8?B?L1BSNjdMWVRSRHIrMDM0UE8zZzNxaSs2U0tZN0p3SkhCb21sUHdrcVVzMjls?=
- =?utf-8?B?blBZU0liWXFMc1BwZmUvNjZFZmlVcmxwbVNZUFhML3BLNW5tb3RvN0dMTjVH?=
- =?utf-8?B?OCtYZFRvV1BDd25hR2EwY3JHRzRJdnRXU0FubmJ3MU9NMWNQOVR3RVNoMTdV?=
- =?utf-8?B?ZFJzWTdod0ZJR3BJdWdSV1NkWHcrenhuMElGZkJ5QVdpNUUxek9IME5rMjY4?=
- =?utf-8?B?a05wRHRQNjl1dkZRbEVyN1drbm5jbzI1YkpWOStVVTQ2bmNSVllaUUx2Tno5?=
- =?utf-8?B?dTBCZlp6cnlaVTlCODdla2hlTURBdVVTSFFpVElWS0xiZko2bEsrNGl2VEU3?=
- =?utf-8?B?L3FQa3k2WWZIN2M2cEFTVC9jU2RveWlOa05kTEM4aGo3Z1RpV3dWWko4QWVM?=
- =?utf-8?B?SjlsTVBEbDZnaFVocXhwbDRlUEJwVTlROUNDejNHK3dteW56TlNtNEE3Y0VQ?=
- =?utf-8?B?U1FqN3ltNk9sNENtdVBST2ZJTDVWUlhJOEo0Vkt4S0trMUZJeW1lMUhvM0xu?=
- =?utf-8?B?WnhqQUFHT0djYmZreWgwaktxOHUxR2xDamYyOG93U241MU1XOFJKOVJwZXhx?=
- =?utf-8?B?M2YxZUJ4VC93WVFLT2NTeVdTSDAvamczbi9Ec1pMdm9VcjJIczdzZXlvWFQw?=
- =?utf-8?B?SVZtMElOS1lvL1dUT1RCUytjMTdCOXJlS05FOEcydm5CUVpCL08yakUxeVht?=
- =?utf-8?B?NGp3aDNTcGZ4dFdoTFdTL0srcmdVV2ZJMDZXS2s2TDUzWHZuSXovdUFsRlFx?=
- =?utf-8?B?UzMxUHFEVmJRMzNBVGt4RW94aE5ZOCs0ak41OEFGUFZJYmFnU2hEZDIyeUVU?=
- =?utf-8?B?cjhhKzdINlBOdXRFeGVEVnEwTmhoZmZOb2JnVkxPbkFHamlBMTE5U0piZW4x?=
- =?utf-8?B?K1VCeU5yOGx3R1VTNUdubjR0QS9tc0NGcnpNaHB2STBsd0tJQkpSckk4SXJE?=
- =?utf-8?B?TGVOSjJsOVd5TmlEcFA4TEFYdVlRRklJbmxJQmZwR1UyNHJqZWZuV3IwODJN?=
- =?utf-8?B?NTNPall2Nkc0NVJWVHFJQk8ydm1laUpUNk41b1ZGbjJ1UHlTMzdwT3c4bWUz?=
- =?utf-8?B?eGd2MEJHTzdpS0ZiNkxQc2VzYXhGVkdrcjBKT01CWCtoSzd4NGVlNWkrZmVK?=
- =?utf-8?B?UjFLUnRlbzY0QWtXMkVOcTJQQzdNRUtqNDFFNStnSEUzR3hjT1FJcVFubVF6?=
- =?utf-8?B?NnJKRzZtVmo2aWVyR2lqekpreUpKVHZvdTRmOGtzdEVGS2JJSjNGRUY1dTBK?=
- =?utf-8?B?OXFTUngxc3o3c0ZJa2VWcm9NenJtdE54T2RQTFFGazBhazdTNlREMmxBVnhl?=
- =?utf-8?B?eis1VnJBanA3RzJ4Z3FZbFpYTlhWSVNleFhodFF2KzRIdmwvQlZMY0Vod3Y1?=
- =?utf-8?B?TVhMVEFuUE9vVWcvMHlVYkRNQ1duVWFCTkNPZk0zSDBEMVRjNkN6VjVkNndj?=
- =?utf-8?B?T2RJSDN5NXE0WGNoOHR6MDF6TnRSaCt6SlpNb05EWndoUXVBdmt3Rnd4MXNr?=
- =?utf-8?B?OEpWNllyWkgrMTB4Q1JHWkViZ3BMUTRsVlNlekV2MmlMWkhPa0pNYVNyMUho?=
- =?utf-8?Q?lAoSAN07n6bFOyl95Tu0gH/45?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a981588b-62f8-4611-8d3f-08db3b72fd96
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 16:28:47.3192
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: C0ytBS75t3qz4Qed7C6q8yyLQJ0kiCsSVJVOoDTj6RF4uGqWKaNgBm7HLyuHGDO0BuFK+N+Ms1yqyvxcSK7i3g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8808
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 4/7/2023 01:18, Wolfram Sang wrote:
-> 
->>> How should this go upstream, i.e. are there dependencies? Shall I pick
->>> the I2C patches or is it better if all goes via the crypto tree?
->>>
->> IMO it's better to go through the crypto tree.  There are dependencies
->> in the crypto part from the earlier series that was merged.
-> 
-> Ok, fine with me. I acked the I2C patches. Thanks for the heads up.
-> 
+Hi Yazen,
 
-Herbert,
+On Fri, 07 Apr 2023 15:37:20 -0500, Yazen Ghannam wrote:
+> The following register contains bits that indicate the cause for the
+> previous reset.
+> 
+>         PMx000000C0 (FCH::PM::S5_RESET_STATUS)
+> 
+> This is helpful for debug, etc., and it only needs to be read once from
+> a single FCH within the system. The register definition is AMD-specific.
+> 
+> Print it when the FCH MMIO space is first mapped. This register is not
+> related to I2C functionality, but read it here to leverage the existing
+> mapping.
+> 
+> Use an "info" log level so that it is printed every boot without requiring
+> the user to enable debug messages. This is beneficial when debugging
+> issues that cause spontaneous reboots and are hard to reproduce.
+> 
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> ---
+>  drivers/i2c/busses/i2c-piix4.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
+> index 809fbd014cd6..043b29f1e33c 100644
+> --- a/drivers/i2c/busses/i2c-piix4.c
+> +++ b/drivers/i2c/busses/i2c-piix4.c
+> @@ -100,6 +100,7 @@
+>  
+>  #define SB800_PIIX4_FCH_PM_ADDR			0xFED80300
+>  #define SB800_PIIX4_FCH_PM_SIZE			8
+> +#define SB800_PIIX4_FCH_PM_S5_RESET_STATUS	0xC0
+>  
+>  /* insmod parameters */
+>  
+> @@ -200,6 +201,9 @@ static int piix4_sb800_region_request(struct device *dev,
+>  
+>  		mmio_cfg->addr = addr;
+>  
+> +		addr += SB800_PIIX4_FCH_PM_S5_RESET_STATUS;
+> +		pr_info_once("S5_RESET_STATUS = 0x%08x", ioread32(addr));
+> +
+>  		return 0;
+>  	}
+>  
 
-Would you mind to queue these up for -next?  I do have some other 
-separate work I will be submitting that is going to layer on top of 
-them, so I'd like to base it off your branch with these landed.
+I'm skeptical. For one thing, the register you read is outside of the
+mapped MMIO area. SB800_PIIX4_FCH_PM_SIZE is 8 which is less than 0xC0.
+
+For another, printing an hexadecimal value which is AMD-specific is not
+going to be really helpful in practice. Is there public documentation
+available to decode the value?
+
+Lastly, I can't see why this should happen in
+piix4_sb800_region_request() which is going to called repeatedly at
+runtime, rather than in piix4_setup_sb800_smba() which is only called
+once when the driver is loaded. If this goes in the i2c-piix4 driver at
+all... sp5100_tco might be more suitable as that driver is at least
+somewhat related to system reset.
+
+Looks like a hack really, and while I understand it is cheap, it would
+seem cleaner to put that code in its own platform/x86 driver. Or
+arch/x86/kernel/quirks.c maybe.
+
+-- 
+Jean Delvare
+SUSE L3 Support
