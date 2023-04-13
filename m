@@ -2,66 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4D66E1289
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Apr 2023 18:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 722D16E1298
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Apr 2023 18:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjDMQlH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 13 Apr 2023 12:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47042 "EHLO
+        id S229615AbjDMQoK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 13 Apr 2023 12:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjDMQlF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Apr 2023 12:41:05 -0400
+        with ESMTP id S229815AbjDMQoJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Apr 2023 12:44:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347E1AD28;
-        Thu, 13 Apr 2023 09:40:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC5093C0;
+        Thu, 13 Apr 2023 09:44:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA66D64015;
-        Thu, 13 Apr 2023 16:40:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF6EAC433D2;
-        Thu, 13 Apr 2023 16:40:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A34E763FF5;
+        Thu, 13 Apr 2023 16:44:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5815AC433EF;
+        Thu, 13 Apr 2023 16:44:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681404058;
-        bh=vGGwL9n4j9XBfhQxXlt7x2mowxQu7Cn68mznFVTPEG4=;
+        s=k20201202; t=1681404248;
+        bh=bZHaxOVvbCI9BInHBeqyKIDI+UQJ67gmJoVEA2sM1IU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q4qbU++oL30gleJ1QlYq4GTotO8Lmvh6YytyVZCcRuR5s3IjDvF3uWhOhIyZLz/Mx
-         wNd7acKvpf6+VIvor+hSln8Y4FrVW9d1nIvQnXbfPBQUxMVCBJ+7QO72f7X0wSJRJu
-         s7BRD23eXgNPfOlzP0GFAVepvej/hRbj2YUmduUwJOEV2xFb0uTTiS1ZGiYljdi/l7
-         YDKnY9pDZEIE6CqO06G9fMrAwli+1ERQOSXOuvSsh2RwjycGzlsV+vIEtDWPJLmdQW
-         WCDJh+XnseI+rFyIqP5h0mmKBGBiM9ZGcMr+4Wvg9rxtIpZo/BX+ARRALfPBV1tS72
-         8G89xntCCgHyg==
-Date:   Thu, 13 Apr 2023 18:40:53 +0200
+        b=UHzt3Jhc26A9YNZnmjWP/XVhPfsth6NUPuea+2VTONzo6/zf+87tFUbbVubtWCUZE
+         vOhKw25L6BDY7wPwF5L9GDswfBhIvvR5X+Vbx/n0EB/jeGjTfvj9cqvVN4DBdftM0i
+         aEkTi+d0qSfRuP19CRT28zUnQFC6z+Kun02QRs398Pbc7nrKJzb7GR8uWmoTlCpyNR
+         PKj98V4XUxMCQF8FTbkMXZeyq705Tbu7BT13zQPtwJGzc86e80pL0wmbE4zldCVxOa
+         tav4B0jH3s6YZu8eLDDDG0oChdbnWsJYgX7vN009yy8hoB7Ax1vDQ+xFXu0Hx2JyHY
+         sLYwHGkrHe1nA==
+Date:   Thu, 13 Apr 2023 18:44:03 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     linux-i2c@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Qii Wang <qii.wang@mediatek.com>,
+To:     Lars-Peter Clausen <lars@metafoo.de>
+Cc:     Michal Simek <michal.simek@amd.com>,
+        Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sam Shih <sam.shih@mediatek.com>
-Subject: Re: [PATCH v3 2/2] i2c: mediatek: add support for MT7981 SoC
-Message-ID: <ZDgwlY2kR9CCRV4h@sai>
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: cadence: Document `resets`
+ property
+Message-ID: <ZDgxU5KeW+APspGe@sai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Daniel Golle <daniel@makrotopia.org>, linux-i2c@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Qii Wang <qii.wang@mediatek.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michal Simek <michal.simek@amd.com>,
+        Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sam Shih <sam.shih@mediatek.com>
-References: <cover.1680857025.git.daniel@makrotopia.org>
- <7b5c6ba8da51ea6145fb71815a2f65a9e1d341c1.1680857025.git.daniel@makrotopia.org>
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230406154834.171577-1-lars@metafoo.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SUToNKZpPJbTqz61"
+        protocol="application/pgp-signature"; boundary="g8NGbeUkU4y6kz5G"
 Content-Disposition: inline
-In-Reply-To: <7b5c6ba8da51ea6145fb71815a2f65a9e1d341c1.1680857025.git.daniel@makrotopia.org>
+In-Reply-To: <20230406154834.171577-1-lars@metafoo.de>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -72,40 +67,49 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---SUToNKZpPJbTqz61
+--g8NGbeUkU4y6kz5G
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 10, 2023 at 05:19:38PM +0100, Daniel Golle wrote:
-> Add support for the I2C units found in the MediaTek MT7981 and MT7988
-> SoCs. Just like other recent MediaTek I2C units that also uses v3
-> register offsets (which differ from v2 only by OFFSET_SLAVE_ADDR being
-> 0x94 instead of 0x4).
+On Thu, Apr 06, 2023 at 08:48:33AM -0700, Lars-Peter Clausen wrote:
+> The Cadence I2C controller has an external reset that needs to be
+> de-asserted before the I2C controller can be accessed.
 >=20
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> Document the `resets` devicetree property that can be used to describe how
+> the reset signal is connected.
+>=20
+> While the reset signal will always be present in hardware the devicetree
+> property is kept optional for backwards compatibility with existing syste=
+ms
+> that do not specify the reset property and where the reset signal might n=
+ot
+> be controlled by operating system.
+>=20
+> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Applied to for-next, thanks!
 
 
---SUToNKZpPJbTqz61
+--g8NGbeUkU4y6kz5G
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ4MJUACgkQFA3kzBSg
-KbZdHBAAjyez1DTIsDARrKzP/UbWCGoQjGTYY7501ZMxXITGsLlJbWBUic04H0Bg
-lQSbfeGUjbr2hE11zUxTyNN05JfrmaLuyHJzRnIyew3h0c1Hvj60Z6o5C1fPKaCY
-SO9Y+q3+vwU93/qitrfsv263+se3N90bjlZy9VBZy8hZqCRkEHRpQtUIoKbqIpds
-FVLazo5j/C/dY9J02Hti+Tdc7VcE8BOynIzRFuNVHD3aKFylPsBkYBllO407OSY1
-VaPWsz9gYUgssfaRx+b68r+Ao/lT6Dsr/lKuUDXHAUqK6gcSl2X+6L6CKSQgnyZ+
-Pfv+kSi/YfZmmiHT2Ym6o1AfO+vBh1tULOqWkkRYrFGy6gnWHxNGqaSUT4qKaJL6
-hHfra1uVuk6jiJbJw8AuAQJV2homfAaiy3IBSN//hkmEon5yAlxZaKdpy4ujX6/l
-QUR7QmJKDzNiqRnh40OrICT5J8LDJaiMwedvM1Ru4yuAz0qhEnANYLbsdvIHMVfR
-QJDP1fX9Pxui8TpZbS3ixThB35WLuz6fG6SntT8jIG6xO636d7LNFhIUVlprHxDn
-gUHMePhVPqcKWSAYSApp1qgSwOJRgcWMAiTMDVYVIFmcWgul66ynlVM0613plwco
-7wzfMvgh2HtW3vT1iCz0WI7E8AcJkiIIGtCSvfWcSVNw4SJTj70=
-=5gZL
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ4MVMACgkQFA3kzBSg
+KbYjYBAAnhEiBtn6Ev+NasvKWBZ7ReJ+2zFO//7Co8yoo69z6PaPrE4PwghlLs+7
+CA9+j27ui/zDzWmIDRBT2IfrzJbgD92qQz3T+UMwnwIH1rCVwU9nc3mRk5WKHKGb
+pQisqAbwuteH7j31NYxRPwBRZK92bUH0bVFY8zrcwxbPjQxdSs7TzSRctoxYEZch
+JusYS+UVE9xg1Uq94eaxQwzUTALNnjrRtVAM/a7iVh9wHlQKcTililFQfTC2ei5N
+m+fmCHbT+GpdhC6gB5ZwRNkxdpIo3jeSLgQW6tFnpvRH9wxc8aDd++cuTmjjpD2k
+BB0ccSSCxcH15tqUyqUbKCH9Q2iyEkhktlwWLd1Jtw6t+55mzUp+LKgvWmRpaG0F
+HJr9GJ18b8Uhp1OXO4S318xLh1Q2//0mzrbASeIzLhSxZZ4Sccs1NA5I81srx3wE
+TcIyjG99y5zTJCe+gGqr9MCU3OTu/A33JvFa+3ajt7oyp8cSH2Pm+8j/tsGhd98g
+X7grNdhVg1RrFlJf5fgJzdrEmUB2DqJgPrBbp8Z6/cZWLRexXMuGXle0DCafxih1
+0dtGa+rZJmhSFzk+dOQI2VTFXzrIreU/HPU+NR8BtBL+LhzLPMnl7ZLJ7V6fw3bU
+IQl8IV81J0hbmf+h/s8BXxnJqwuzzgFLrYomb6ANHwYudylzLkE=
+=A23I
 -----END PGP SIGNATURE-----
 
---SUToNKZpPJbTqz61--
+--g8NGbeUkU4y6kz5G--
