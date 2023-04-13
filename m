@@ -2,182 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEFDD6E0A67
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Apr 2023 11:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E09066E0A63
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Apr 2023 11:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjDMJl7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 13 Apr 2023 05:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34960 "EHLO
+        id S229663AbjDMJkT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 13 Apr 2023 05:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjDMJl7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Apr 2023 05:41:59 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5C610C2;
-        Thu, 13 Apr 2023 02:41:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1681378917; x=1712914917;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GTkgi9DEYv2y6KPQY0Pk1iavkXW4SL1GDX6CwlELQMI=;
-  b=lKpAdEMfw4ASWTAmPIb+9+AQTa6spusmwB8l1K6/TNge1k3+cREXarYV
-   Ptg/6JWyAU4Vc3fKIrrrK4Pku1j2nDSUlRoE5ep89LJL3rYwR9wsL3C5u
-   9w2I00tezldMV4CVP1RaHgmdZtEGp6QXtFlgougQCaPKISla9kJyxN9C3
-   qgwiYNSvNMISuhudh7A48UZco3FDf0glRoeOnwFQgrYftWNCuWlRSMHf+
-   MtVzNjiu2SoShNHFex2afvvXw40nRfOr14g2ozst1AucbwQ6Inz0EbQyN
-   vvwoP73PW7njoe0EMpR81g0x8HEtSH0wexKgHG0l6X9I4ttAQM6zEb3jJ
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,341,1673910000"; 
-   d="scan'208";a="30301482"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 13 Apr 2023 11:41:55 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 13 Apr 2023 11:41:55 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 13 Apr 2023 11:41:55 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1681378915; x=1712914915;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GTkgi9DEYv2y6KPQY0Pk1iavkXW4SL1GDX6CwlELQMI=;
-  b=V/bPdRtF8bE9tV1RLYx7bexUigLICd3rCt9QZCDjwaN28heBW8M9vnex
-   BfZ7qalF4ryANR9dySTLR0OcpwIOfK2CUZJb0ThIJhOiWrH0+pda5qzKq
-   QiXdpk8BZwNZg0MIOhm8Xdm/8ag/sPuPH6ky9BlF7IaY7nHle8+VkxJUt
-   1NNsqCORRVlrT9WweL8ALZF+fs9MLguudRJwVjOHGfRO1ghGHnXtQaerF
-   jgjRJyUkM0X3JuxIvZBwO1OwmxEj1cHMI4mXGcjSO5D5kz+kTByd+S/Z5
-   qlGPsUIiFrV5q1h8c8ZgaQ5zSFBykiXViR5Il72CAYU5FUOyQDgeV40OJ
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,341,1673910000"; 
-   d="scan'208";a="30301481"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 13 Apr 2023 11:41:54 +0200
-Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.49.20])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 6579B280056;
-        Thu, 13 Apr 2023 11:41:54 +0200 (CEST)
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>
-Cc:     Federico Vaga <federico.vaga@cern.ch>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@ew.tq-group.com,
-        Gregor Herburger <gregor.herburger@tq-group.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Subject: [PATCH v2] i2c: ocores: generate stop condition after timeout in polling mode
-Date:   Thu, 13 Apr 2023 11:37:37 +0200
-Message-Id: <20230413093737.15303-1-matthias.schiffer@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229580AbjDMJkS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Apr 2023 05:40:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD9A10C2;
+        Thu, 13 Apr 2023 02:40:15 -0700 (PDT)
+Received: from [192.168.2.164] (109-252-119-170.nat.spd-mgts.ru [109.252.119.170])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5D8F86603207;
+        Thu, 13 Apr 2023 10:40:13 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681378814;
+        bh=j0PvH5Ogecj9RSBYwtl96lu2V0fvpKZWcVehXb8syVI=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=a/abK8QMsJFVk8AOi1GfbnJq5Ma+VVmWJCm8AKtmO7CxiX0E/3ofrm42er5ShhHpx
+         HRHgGMjbjzbWBq6N3KfPjx9IP7KhOdQ0WCWj2C/5L9R3JUzkMJRTPZbhgjomEQ80Bj
+         v0wrAIjBj4AGFNPuXlJbaDQyKlZgzFuYnW9tTA/0j27K8YcZSYxNXCX5EAalsN1QRy
+         Rv9HpvUhL+Vun4Ox7S53tZBDx+YjgHfxr6W24pG1AqyD1aCgREj/0S9kOfzOvN3yP7
+         VX2Kr4aqMxRGwIrRuUF7HZ/dktizKhMiJzvZwQQIYRcSSyNg6pYP3xtmBG4g6nrRwZ
+         HodAM8Bry7qRQ==
+Message-ID: <e4343807-60ad-3f40-7cd5-4acf8bc52bd9@collabora.com>
+Date:   Thu, 13 Apr 2023 12:40:09 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v4 1/2] i2c: tegra: Fix PEC support for SMBUS block read
+Content-Language: en-US
+To:     Akhil R <akhilrajeev@nvidia.com>, christian.koenig@amd.com,
+        digetx@gmail.com, jonathanh@nvidia.com, ldewangan@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, sumit.semwal@linaro.org,
+        thierry.reding@gmail.com, wsa@kernel.org
+References: <20230324115924.64218-1-akhilrajeev@nvidia.com>
+ <20230324115924.64218-2-akhilrajeev@nvidia.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20230324115924.64218-2-akhilrajeev@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Gregor Herburger <gregor.herburger@tq-group.com>
+On 3/24/23 14:59, Akhil R wrote:
+...
+> @@ -279,6 +280,7 @@ struct tegra_i2c_dev {
+>  	size_t msg_buf_remaining;
+>  	int msg_err;
+>  	u8 *msg_buf;
+> +	__u16 msg_len;
 
-In polling mode, no stop condition is generated after a timeout. This
-causes SCL to remain low and thereby block the bus. If this happens
-during a transfer it can cause slaves to misinterpret the subsequent
-transfer and return wrong values.
+__u16 is for UAPI headers, please use unsigned int. Also keep variables
+sorted by string length.
 
-To solve this, pass the ETIMEDOUT error up from ocores_process_polling()
-instead of setting STATE_ERROR directly. The caller is adjusted to call
-ocores_process_timeout() on error both in polling and in IRQ mode, which
-will set STATE_ERROR and generate a stop condition.
+>  	struct completion dma_complete;
+>  	struct dma_chan *tx_dma_chan;
+> @@ -1169,7 +1171,7 @@ static void tegra_i2c_push_packet_header(struct tegra_i2c_dev *i2c_dev,
+>  	else
+>  		i2c_writel(i2c_dev, packet_header, I2C_TX_FIFO);
+>  
+> -	packet_header = msg->len - 1;
+> +	packet_header = i2c_dev->msg_len - 1;
+>  
+>  	if (i2c_dev->dma_mode && !i2c_dev->msg_read)
+>  		*dma_buf++ = packet_header;
+> @@ -1242,20 +1244,32 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+>  		return err;
+>  
+>  	i2c_dev->msg_buf = msg->buf;
+> +	i2c_dev->msg_len = msg->len;
+>  
+> -	/* The condition true implies smbus block read and len is already read */
+> -	if (msg->flags & I2C_M_RECV_LEN && end_state != MSG_END_CONTINUE)
+> -		i2c_dev->msg_buf = msg->buf + 1;
+> -
+> -	i2c_dev->msg_buf_remaining = msg->len;
+>  	i2c_dev->msg_err = I2C_ERR_NONE;
+>  	i2c_dev->msg_read = !!(msg->flags & I2C_M_RD);
+>  	reinit_completion(&i2c_dev->msg_complete);
+>  
+> +	/* *
 
-Fixes: 69c8c0c0efa8 ("i2c: ocores: add polling interface")
-Signed-off-by: Gregor Herburger <gregor.herburger@tq-group.com>
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
----
+Please correct the comment style
 
-v2: style improvements based on feedback from Federico and Andrew. I went
-    with a slightly different solution than Andrew suggested to avoid using
-    the ret variable for two different kinds of returns.
+> +	 * For SMBUS block read command, read only 1 byte in the first transfer.
+> +	 * Adjust that 1 byte for the next transfer in the msg buffer and msg
+> +	 * length.
+> +	 */
 
- drivers/i2c/busses/i2c-ocores.c | 35 ++++++++++++++++++---------------
- 1 file changed, 19 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
-index a0af027db04c1..2e575856c5cd5 100644
---- a/drivers/i2c/busses/i2c-ocores.c
-+++ b/drivers/i2c/busses/i2c-ocores.c
-@@ -342,18 +342,18 @@ static int ocores_poll_wait(struct ocores_i2c *i2c)
-  * ocores_isr(), we just add our polling code around it.
-  *
-  * It can run in atomic context
-+ *
-+ * Return: 0 on success, -ETIMEDOUT on timeout
-  */
--static void ocores_process_polling(struct ocores_i2c *i2c)
-+static int ocores_process_polling(struct ocores_i2c *i2c)
- {
--	while (1) {
--		irqreturn_t ret;
--		int err;
-+	irqreturn_t ret;
-+	int err = 0;
- 
-+	while (1) {
- 		err = ocores_poll_wait(i2c);
--		if (err) {
--			i2c->state = STATE_ERROR;
-+		if (err)
- 			break; /* timeout */
--		}
- 
- 		ret = ocores_isr(-1, i2c);
- 		if (ret == IRQ_NONE)
-@@ -364,13 +364,15 @@ static void ocores_process_polling(struct ocores_i2c *i2c)
- 					break;
- 		}
- 	}
-+
-+	return err;
- }
- 
- static int ocores_xfer_core(struct ocores_i2c *i2c,
- 			    struct i2c_msg *msgs, int num,
- 			    bool polling)
- {
--	int ret;
-+	int ret = 0;
- 	u8 ctrl;
- 
- 	ctrl = oc_getreg(i2c, OCI2C_CONTROL);
-@@ -388,15 +390,16 @@ static int ocores_xfer_core(struct ocores_i2c *i2c,
- 	oc_setreg(i2c, OCI2C_CMD, OCI2C_CMD_START);
- 
- 	if (polling) {
--		ocores_process_polling(i2c);
-+		ret = ocores_process_polling(i2c);
- 	} else {
--		ret = wait_event_timeout(i2c->wait,
--					 (i2c->state == STATE_ERROR) ||
--					 (i2c->state == STATE_DONE), HZ);
--		if (ret == 0) {
--			ocores_process_timeout(i2c);
--			return -ETIMEDOUT;
--		}
-+		if (wait_event_timeout(i2c->wait,
-+				       (i2c->state == STATE_ERROR) ||
-+				       (i2c->state == STATE_DONE), HZ) == 0)
-+			ret = -ETIMEDOUT;
-+	}
-+	if (ret) {
-+		ocores_process_timeout(i2c);
-+		return ret;
- 	}
- 
- 	return (i2c->state == STATE_DONE) ? num : -EIO;
 -- 
-TQ-Systems GmbH | Mühlstraße 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht München, HRB 105018
-Geschäftsführer: Detlef Schneider, Rüdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
+Best regards,
+Dmitry
 
