@@ -2,60 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA96B6E152A
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Apr 2023 21:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E03D66E1569
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Apr 2023 21:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjDMT1y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 13 Apr 2023 15:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S229786AbjDMTvc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 13 Apr 2023 15:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjDMT1x (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Apr 2023 15:27:53 -0400
+        with ESMTP id S229492AbjDMTvb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Apr 2023 15:51:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31E55B9A;
-        Thu, 13 Apr 2023 12:27:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAEF271E;
+        Thu, 13 Apr 2023 12:51:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AA5363D93;
-        Thu, 13 Apr 2023 19:27:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1166AC433EF;
-        Thu, 13 Apr 2023 19:27:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE0A3615B7;
+        Thu, 13 Apr 2023 19:51:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 251F8C433EF;
+        Thu, 13 Apr 2023 19:51:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681414071;
-        bh=b94MZJk9di3vyZrDudjAp4+A7p5kQn0chF+PSIoN2MM=;
+        s=k20201202; t=1681415488;
+        bh=VD3AH8/BOXPv2IMvKmDKEehX7IswoAmODYA+TR627Jo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=REkiwTzrsbIwp9lbm9IIEtnlHfuPLTa1FkgkEF+K5OQmH6vY/83Z8E4qVWRvrm5cS
-         nG2ljqycdJHgdjNy3wXDCv7RzEcNs3Ttbmm5XNKgf6loApfQvJoEJDhBarkA8L2Zbh
-         VuitD+HJojjZS1dVZ7Jtpb1VD605nwcaLWC3T1IhWhhap+GSw2QhGOWDQuV/PHyo0a
-         +tHXolUoSmXtJxHzOChPmvE6LKWLAajdw5x+Zd01XfvMDk3A9WU4UBbOKst+NBI4uN
-         IiroTHlcsqpN8+rBqlDYs0Wncxr4Ax94Zy9E6gTDhd+6Ao25VQ6QLk1ZWnb+yKdMyF
-         5ybujo0izWVjQ==
-Date:   Thu, 13 Apr 2023 21:27:48 +0200
+        b=VCtYT890v2FRNOna+n2kFlQUZGsy0rBa70/M8Fi0623Yy6A8HCCzDldPFgV/ej/xA
+         F1YzJ+Iq1TUbxiDFT+wAZQYKhXSeSDYdq3tkrl+fimUZ0kTr5BryN3l884PPyUGjwt
+         X8cOefnM3db3riLehwMJJ6vV4E/KLhNRL6ikaUoN4tIK/Vdqp/PBwp+6oDrHRc4e/C
+         B/1+1g8M3Z7pWFX4iIjYdKgmVfCM+bMU5z5/iQ5Nu5SPF4CkzTzP1JEpTG1CpKb/Ws
+         GGc3M/KZegRLpXQBISjk4gvp1tRkumWNf7zu5pxa2YVlro/J3OSz5us5R5z+FfF6fz
+         CS5IjwjBxtgUQ==
+Date:   Thu, 13 Apr 2023 21:51:25 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: gxp: fix build failure without CONFIG_I2C_SLAVE
-Message-ID: <ZDhXtDLiTtm2iXGW@sai>
+To:     Benjamin Bara <bbara93@gmail.com>
+Cc:     Lee Jones <lee@kernel.org>, rafael.j.wysocki@intel.com,
+        dmitry.osipenko@collabora.com, peterz@infradead.org,
+        jonathanh@nvidia.com, richard.leitner@linux.dev,
+        treding@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] i2c: core: run atomic i2c xfer when !preemptible
+Message-ID: <ZDhdPbcHFaR+2dhR@sai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>, Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>, Joel Stanley <joel@jms.id.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230403074939.3785593-1-arnd@kernel.org>
+        Benjamin Bara <bbara93@gmail.com>, Lee Jones <lee@kernel.org>,
+        rafael.j.wysocki@intel.com, dmitry.osipenko@collabora.com,
+        peterz@infradead.org, jonathanh@nvidia.com,
+        richard.leitner@linux.dev, treding@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>, stable@vger.kernel.org
+References: <20230327-tegra-pmic-reboot-v4-0-b24af219fb47@skidata.com>
+ <20230327-tegra-pmic-reboot-v4-2-b24af219fb47@skidata.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YSLKM2vUjZb+N5Xo"
+        protocol="application/pgp-signature"; boundary="+d+oo9lOK+g04O7i"
 Content-Disposition: inline
-In-Reply-To: <20230403074939.3785593-1-arnd@kernel.org>
+In-Reply-To: <20230327-tegra-pmic-reboot-v4-2-b24af219fb47@skidata.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,78 +68,69 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---YSLKM2vUjZb+N5Xo
+--+d+oo9lOK+g04O7i
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Arnd,
-
-> The gxp_i2c_slave_irq_handler() is hidden in an #ifdef, but the
-> caller uses an IS_ENABLED() check:
+On Thu, Apr 13, 2023 at 09:46:40AM +0200, Benjamin Bara wrote:
+> From: Benjamin Bara <benjamin.bara@skidata.com>
 >=20
-> drivers/i2c/busses/i2c-gxp.c: In function 'gxp_i2c_irq_handler':
-> drivers/i2c/busses/i2c-gxp.c:467:29: error: implicit declaration of funct=
-ion 'gxp_i2c_slave_irq_handler'; did you mean 'gxp_i2c_irq_handler'? [-Werr=
-or=3Dimplicit-function-declaration]
+> Since bae1d3a05a8b, i2c transfers are non-atomic if preemption is
+> disabled. However, non-atomic i2c transfers require preemption (e.g. in
+> wait_for_completion() while waiting for the DMA).
 >=20
-> It has to consistently use one method or the other to avoid warnings,
-> so move to IS_ENABLED() here for readability and build coverage, and
-> move the #ifdef in linux/i2c.h to allow building it as dead code.
+> panic() calls preempt_disable_notrace() before calling
+> emergency_restart(). Therefore, if an i2c device is used for the
+> restart, the xfer should be atomic. This avoids warnings like:
+>=20
+> [   12.667612] WARNING: CPU: 1 PID: 1 at kernel/rcu/tree_plugin.h:318 rcu=
+_note_context_switch+0x33c/0x6b0
+> [   12.676926] Voluntary context switch within RCU read-side critical sec=
+tion!
+> ...
+> [   12.742376]  schedule_timeout from wait_for_completion_timeout+0x90/0x=
+114
+> [   12.749179]  wait_for_completion_timeout from tegra_i2c_wait_completio=
+n+0x40/0x70
+> ...
+> [   12.994527]  atomic_notifier_call_chain from machine_restart+0x34/0x58
+> [   13.001050]  machine_restart from panic+0x2a8/0x32c
+>=20
+> Use !preemptible() instead, which is basically the same check as
+> pre-v5.2.
+>=20
+> Fixes: bae1d3a05a8b ("i2c: core: remove use of in_atomic()")
+> Cc: stable@vger.kernel.org # v5.2+
+> Suggested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 
-Can't we have a solution which modifies this driver only (maybe by
-defining an empty irq handler for the non-IS_ENABLED part?)? Doesn't
-feel good to touch i2c.h only because of this...
+So, with Peter's input and me checking again:
 
-> -#if IS_ENABLED(CONFIG_I2C_SLAVE)
->  enum i2c_slave_event {
->  	I2C_SLAVE_READ_REQUESTED,
->  	I2C_SLAVE_WRITE_REQUESTED,
-> @@ -396,9 +395,10 @@ enum i2c_slave_event {
-> =20
->  int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_c=
-b);
->  int i2c_slave_unregister(struct i2c_client *client);
+Acked-by: Wolfram Sang <wsa@kernel.org>
 
-=2E.. especially with moving these two prototypes out of the protected
-block. The functions themselves are also protected by the same symbol
-via the Makefile. I'd rather get a build error right away than a linker
-error later if a driver misses to select I2C_SLAVE. Or do I miss
-something?
-
-> -bool i2c_detect_slave_mode(struct device *dev);
->  int i2c_slave_event(struct i2c_client *client,
->  		    enum i2c_slave_event event, u8 *val);
-> +#if IS_ENABLED(CONFIG_I2C_SLAVE)
-> +bool i2c_detect_slave_mode(struct device *dev);
->  #else
->  static inline bool i2c_detect_slave_mode(struct device *dev) { return fa=
-lse; }
->  #endif
-
-All the best,
-
-   Wolfram
+I assume this shall go in via the mfd-tree. Let me know if I should pick
+it instead.
 
 
---YSLKM2vUjZb+N5Xo
+--+d+oo9lOK+g04O7i
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ4V68ACgkQFA3kzBSg
-KbbCbg/+KMqGcmARpv4WTOLrw8dNeL7kGcYB8y8JBS5rZNf6WFS/suaqj5KGTon6
-+4x9oSnNvDzcZIdcgaTuggayelF33q90mKiuctnXd3uRc4bEzfS2sEgdHsOOoDkj
-Qazub13ObNSHM3nzfquGyCOde/wPWNazwdurQYU/EDmCz1uhe32vjZJx8YlW1RwV
-u3VtH3ur2k5g2p50oY677jnTUsw23DY0AhFFRNRFHcTk0SKnb+2we8NzcvRYX0J7
-CgXzjm7xvkJ2vwdwjzbTIcTxbHs9y1pPhwpQVB+xE06t+jk6aYkXPCKx2KWQo5in
-LZD2prPO/L0sqRYZci9AfQSyfe1j4ctihTjRPps/xO0Tdfbh3d7mavL5FtpU/hdH
-zrYyUGJ66kB1hp5NzHXMLyLEAroEPsIIy666z0R3JwAKy0T5/gbEASN3r60io/l7
-l/35pXnj6E4mBQRc7V7OShi+jloZAUhDRBWpq5vnZAXm799hbIMpoYUuqBdt6OhO
-K4ny9xlEczj+6MPJOwTYt5p8bZa5trRTsupm7J0eQifiIiR0IS0ABGkHydq4BrdJ
-3/PDgNcGT6mHVi4vcFOWoFuqciGBUpwiSAAp/S0lKwcjAj1dKYsTEjh1F6cHslCC
-tBBikemwBHscnDmJBQ4Ob4peTNE/EIUtY7P2gCI5NBENg+U8cT8=
-=1Kzt
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ4XT0ACgkQFA3kzBSg
+KbbAJA//f+xXOS04L16X+BQ/HPdV9h08kJltv/KDQ7sfvNd+ALOJslAZbEdgNVKH
+zj96ZFX4u75ZdDH6YiImSGUfXqWoseKZiK4ZvkPaKabsG8uv/uHZIJdYG6qXpD7Q
+b0sg6z6TgvpVSAp0l4n0FgeNQE2KVCZ5WAcjFQx46vcXufyvyycZPUU0Ht37ufZL
+x0kCd04YeX+wnRUp9nH9JNI4frjnR/uqwfTM4MCdnyrX1WXk70J6AMQ/C5UuKfGe
+EYsWRs6cTUyo7vMqLEImkb4XXTZMJqCl+dmC1oP2w8w+Lvm9P7RcwuI0Q1yuKKp/
+1fypvphtyrsqnIzaox57pMgE6Fzh8qVSaC0ZMZWX1fje9PWwFhnBX79RBx6V3OIA
+4NKWEtyB2KeCtEPeimh2d2ZUKg4VHjKuT4gHafLx417s7qjRe2jYLg8VM81rgukC
+Qe36LnTryBcGq7TBBGCVZehnwtnHxiYmGJ5cZtKP+Tp4uFUxD8MN9UQDNoeLnI+L
+mXxpmDptYoxPbJBBSCgvgMcnuW2LAAL9Jjtpt/xestPqgSdQhWQ03KwyrNkFztl/
+h59ULzWc90RQoNG8lK++XEI3jyB5VpAfPE/axAjhUTtS3bxZ1iuGh6Vywn3b3iD/
+M/JlFy5nloZAuabCFKByKf7emEp/Wc36fA0r42RkKQsL7IVSXbc=
+=KAjA
 -----END PGP SIGNATURE-----
 
---YSLKM2vUjZb+N5Xo--
+--+d+oo9lOK+g04O7i--
