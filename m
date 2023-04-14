@@ -2,66 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736D36E22C5
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Apr 2023 14:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDEDA6E22DC
+	for <lists+linux-i2c@lfdr.de>; Fri, 14 Apr 2023 14:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjDNMBX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 14 Apr 2023 08:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
+        id S229636AbjDNMGc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 14 Apr 2023 08:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjDNMBW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Apr 2023 08:01:22 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0D57D90
-        for <linux-i2c@vger.kernel.org>; Fri, 14 Apr 2023 05:01:20 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id h198so25038469ybg.12
-        for <linux-i2c@vger.kernel.org>; Fri, 14 Apr 2023 05:01:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1681473680; x=1684065680;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Su4Rt8dGy/VJoS9Bkn3YputslqAEyC3EV4AY3JIKxaI=;
-        b=TLztoKDV2OtcCMmySsRlm9AuH1jZk7D05KkgA+CH9qoSXAkPe6wGhZllwO+6MbKAaL
-         9YwYUXBc/0tkRS6x4+TPuXXSh30qUlAr8PbQVTzfzcHGiJr27EzWmuRonEy+4RXQmKp0
-         vELthvx4fjiVROv9hFmPLJZj0+EDZ4gLHzxXVXKw1Id3huPC+FeY7+Aj4EOR7kzbUf1i
-         BJd9B8lO52nXGaPGfvxdDm/C7vkCwM9O0QNQbJ9cj8D2t45v3LOCHhGuGc9PfrG1pZW9
-         3RpOITQ8BZtl3vphvi9QmBUOp7KoQucrRJq4cEMS5szeCoewD7SgLD+qbhsAZ4+ltQES
-         iqLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681473680; x=1684065680;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Su4Rt8dGy/VJoS9Bkn3YputslqAEyC3EV4AY3JIKxaI=;
-        b=fxa7q8yo9W0pSWZMnyvehgE8vhG+qZCZwBl+2dOv5Eg7lQ+Kg9A+ihAP2d4+SbqFH/
-         J0oXnM6eSbtlffbMMbnx85LYObBq0d3S7kPgkPOtFrwl3jyz5Qa/dISxmT+jgxJ3UKuJ
-         VHjiQ/eHkH8h+xdBCsAMuGHN8HlTii34ZnFBvkEbRJlqby3HA7uDtAk57EzG7xriOm4f
-         Ffw2zepTeZkGK98RDt1U/RdqOkbGBig3d737U1kpfZqFdYszTR31OYV8lZoVNrfgA3gp
-         erjQ3fM5ecIO19EofKNGrTK3E/iXE2kOVB6rhs/27/AV1/f8Mgik9N2Dad7SKbXwTHE0
-         9U5w==
-X-Gm-Message-State: AAQBX9ewIlTW5srYHyQX4oGsmGMFe/iQ6Qm/JyGsShYAK0y6i+ow3Swy
-        SMYNFkPp2vjFZMCSmVimcLsW3K38yvbCaVkgzik4Vkc+n1yC/7e+49s=
-X-Google-Smtp-Source: AKy350ZtGyDwLdggGWhyIcUinTYIudsC4I7VA1P3iEtwPZlQB7waxS1ov3Dskq7DilcjkDPn69QwS9QBMsILJFIFzH4=
-X-Received: by 2002:a25:ca83:0:b0:b8f:6944:afeb with SMTP id
- a125-20020a25ca83000000b00b8f6944afebmr1718279ybg.3.1681473680022; Fri, 14
- Apr 2023 05:01:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230414110137.401356-1-patrick.rudolph@9elements.com>
- <20230414110137.401356-4-patrick.rudolph@9elements.com> <84a81f6a-4a35-4b30-8a5a-6cb0eba37594@sirena.org.uk>
-In-Reply-To: <84a81f6a-4a35-4b30-8a5a-6cb0eba37594@sirena.org.uk>
-From:   Patrick Rudolph <patrick.rudolph@9elements.com>
-Date:   Fri, 14 Apr 2023 14:01:09 +0200
-Message-ID: <CALNFmy0RwiyLAAd_vOYxY+yhRn7cnP6Xw=okH17OQ75_vQ3BcA@mail.gmail.com>
-Subject: Re: [PATCH v11 3/3] i2c: muxes: pca954x: Add regulator support
-To:     Mark Brown <broonie@kernel.org>
+        with ESMTP id S229871AbjDNMGb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Apr 2023 08:06:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD41AD04;
+        Fri, 14 Apr 2023 05:06:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49D896474A;
+        Fri, 14 Apr 2023 12:06:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C73CC433EF;
+        Fri, 14 Apr 2023 12:06:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681473973;
+        bh=aBs+AS6+f17UAltPdz6po0f/ewoyDusvX93dOe4ixs0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RDzS0C+UzIF8DgtBKzFu+KXNXT9SsCwx/lYuiM4Rk4IN7c3KL9rJfHXn7C0tHeUjH
+         1xwil1Cnc1ckEbmovywwlISt05XZLSLZot7oZJEF4yAN2y7PoM1ki1YkISG1lhvJRj
+         jWs+rnCI2aDGfySGL7KPSiwVMBzQAqjrjYCB02ZNr1FUKr8lyTlYMYer8safXbFK1l
+         6tswb4Q5p6LRo2AD+RlW7VjKB5f8lkZiBxiQ4ihmkUO0YQBmGkde7oTmPkVNyjli+N
+         Lg36Ch6h6UJQg0Lzj3myHnbkh/KtHLXOX/7w7/2UtvZDhw0dUg3xzK8tZ9n/3LITWc
+         2YnHlmMzALdXA==
+Date:   Fri, 14 Apr 2023 13:06:08 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
 Cc:     Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Subject: Re: [PATCH v11 3/3] i2c: muxes: pca954x: Add regulator support
+Message-ID: <59e0bd39-c510-4340-8781-feac1b6b4604@sirena.org.uk>
+References: <20230414110137.401356-1-patrick.rudolph@9elements.com>
+ <20230414110137.401356-4-patrick.rudolph@9elements.com>
+ <84a81f6a-4a35-4b30-8a5a-6cb0eba37594@sirena.org.uk>
+ <CALNFmy0RwiyLAAd_vOYxY+yhRn7cnP6Xw=okH17OQ75_vQ3BcA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zhmouV5ZG4HOBVX6"
+Content-Disposition: inline
+In-Reply-To: <CALNFmy0RwiyLAAd_vOYxY+yhRn7cnP6Xw=okH17OQ75_vQ3BcA@mail.gmail.com>
+X-Cookie: One Bell System - it works.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,22 +58,48 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Mark,
-It was using the normal regulator_get() in the last revision, but
-Sergey requested to make it optional.
-Please advise me what to do here? Who is right?
 
-Regards,
-Patrick
+--zhmouV5ZG4HOBVX6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 14, 2023 at 1:47=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
-te:
->
-> On Fri, Apr 14, 2023 at 01:01:36PM +0200, Patrick Rudolph wrote:
->
-> > +     data->supply =3D devm_regulator_get_optional(dev, "vdd");
-> > +     if (IS_ERR(data->supply)) {
-> > +             ret =3D PTR_ERR(data->supply);
->
-> Unless the device can work without power it should be using a normal
-> regulator_get().
+On Fri, Apr 14, 2023 at 02:01:09PM +0200, Patrick Rudolph wrote:
+
+> It was using the normal regulator_get() in the last revision, but
+> Sergey requested to make it optional.
+> Please advise me what to do here? Who is right?
+
+As I said regulator_get_optional() is strictly for the case where the
+supply may be physically absent and shouldn not be used in any other
+situation.  Using the wrong variant will break error handling.
+
+>=20
+> Regards,
+> Patrick
+>=20
+> On Fri, Apr 14, 2023 at 1:47=E2=80=AFPM Mark Brown <broonie@kernel.org> w=
+rote:
+
+
+Please don't top post, reply in line with needed context.  This allows
+readers to readily follow the flow of conversation and understand what
+you are talking about and also helps ensure that everything in the
+discussion is being addressed.
+
+--zhmouV5ZG4HOBVX6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ5Qa8ACgkQJNaLcl1U
+h9CnTAf/Vfxr7DRparptYBBgAru4eMeWXRRYZtfZ0sh9ogFFhYUJ3mBI8rak60EX
+lx2JOdq6oh7YyQkR8QRG4pKOmKw41zD2iOPrkrs/MegC86ET0gm7AaVW/xcFCRFS
+BtOxqmQofGbMs1FA2DqK27c5TWbz0BkCvABVkO34UZ5K6PeJiJJiIJsC7hl2+5tm
+s5LjC/TE9fxMYiJhL2v3MgWhAu+QcnTHpqonXDxiL6mFTz5tgI47r/4sP01qsUIj
+jaeHReoHlyYheR3d9zxHZNVgmmx9K5ipJ9cAFThe7S5WbZeNeW4wm1r0gBf/UuL1
+YI1pqpYeoAH+PDl/jaQoTkEPcbh+mw==
+=+OOw
+-----END PGP SIGNATURE-----
+
+--zhmouV5ZG4HOBVX6--
