@@ -2,117 +2,212 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 692936E4979
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Apr 2023 15:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B7B6E4B11
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Apr 2023 16:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbjDQNLn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 17 Apr 2023 09:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
+        id S229812AbjDQONj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Apr 2023 10:13:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbjDQNLa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Apr 2023 09:11:30 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6DFBB94;
-        Mon, 17 Apr 2023 06:10:51 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-187f76c50dbso1714372fac.10;
-        Mon, 17 Apr 2023 06:10:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681737030; x=1684329030;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xtZGasXv9C7Ge2QWI6k5UgJ2d5nkIFCB+5qLTT/nVfk=;
-        b=h/Uh5hUEASajduHQd0p1caYizGia0gOSBvzba72bH5cseU++xJpWqZPCupV0AztPzJ
-         zzntzVAsj0HetH6HgQthUEfzlH6Q7ehI9W6tLhSwBr2V3syxxRc/bSnWWANESbITbPPZ
-         UxPZncqNanFssTj2ZMQ4x+/Wt8kOQNT0VZr3vOM8kLEVDxvGCbZ4RoYv+HMlFhZEZG2r
-         FxN7S+Gplz62yh82OZiFaR4rGh3xI6c4VmVdNtuBBJP3eLhRuW+Ttua8mC5uvT0EUcOI
-         t2NH2b+PrcxP+vZu6dGuP1idnIY3VY+IisQIXpKITbMPUnTv7j80RcuX3o6u+FMwkTyO
-         OxEg==
-X-Gm-Message-State: AAQBX9f5APTqc5lJq+Oh/MHAXb60sf2eDNqsxzDEikddZGpfnBjiF+sJ
-        I/v+V7HarD8IdD2w2uo9ig==
-X-Google-Smtp-Source: AKy350Z3w0CjpBv/bSJS7p2s+vYJva0zzvbCznrDfyKOIBrsleV0opbnMsnYoNw0OJfBleJ+sh2bMw==
-X-Received: by 2002:a05:6870:d1c7:b0:187:9c57:90c5 with SMTP id b7-20020a056870d1c700b001879c5790c5mr8732256oac.1.1681737029758;
-        Mon, 17 Apr 2023 06:10:29 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l9-20020a05687014c900b001806f2ac9a6sm4491284oab.47.2023.04.17.06.10.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 06:10:29 -0700 (PDT)
-Received: (nullmailer pid 2588785 invoked by uid 1000);
-        Mon, 17 Apr 2023 13:10:27 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S229667AbjDQONi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Apr 2023 10:13:38 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7241659D1;
+        Mon, 17 Apr 2023 07:13:25 -0700 (PDT)
+Received: from van1shing-pc.localdomain ([10.12.182.0])
+        (user=silver_code@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33HE2EOk002038-33HE2EOl002038
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 17 Apr 2023 22:02:16 +0800
+From:   Wang Zhang <silver_code@hust.edu.cn>
+To:     Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Wang Zhang <silver_code@hust.edu.cn>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] i2c: ocores: use devm_ managed clks
+Date:   Mon, 17 Apr 2023 21:27:14 +0800
+Message-Id: <20230417132714.81627-1-silver_code@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <843fab4d-0fdd-4610-91ed-1d8e9accbd25@lunn.ch>
+References: <843fab4d-0fdd-4610-91ed-1d8e9accbd25@lunn.ch>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Peter Rosin <peda@axentia.se>
-In-Reply-To: <20230417104801.808972-2-patrick.rudolph@9elements.com>
-References: <20230417104801.808972-1-patrick.rudolph@9elements.com>
- <20230417104801.808972-2-patrick.rudolph@9elements.com>
-Message-Id: <168173527787.2535638.15636356972148474152.robh@kernel.org>
-Subject: Re: [PATCH v12 1/4] dt-bindings: i2c: Correct interrupt support
-Date:   Mon, 17 Apr 2023 08:10:27 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: silver_code@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Smatch Warns:
+drivers/i2c/busses/i2c-ocores.c:701 ocores_i2c_probe() warn:
+missing unwind goto?
 
-On Mon, 17 Apr 2023 12:47:57 +0200, Patrick Rudolph wrote:
-> Only some of the PCA954x compatible ICs have interrupt
-> capability, but the binding advertises it on all ICs.
-> 
-> Sync the dt-binding with the driver and only advertise it on:
->  - nxp,pca9542
->  - nxp,pca9543
->  - nxp,pca9544
->  - nxp,pca9545
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> ---
->  .../bindings/i2c/i2c-mux-pca954x.yaml         | 20 ++++++++++++++++++-
->  1 file changed, 19 insertions(+), 1 deletion(-)
-> 
+If any wrong occurs in ocores_i2c_of_probe, the i2c->clk needs to be
+released. But the function returns directly in line 701 without freeing
+the clock. Even though we can fix it by freeing the clock manually if
+platform_get_irq_optional fails, it may not be following the best practice.
+The original code for this driver contains if (IS_ERR()) checks 
+throughout, explicitly allowing the driver to continue loading even if 
+devm_clk_get() fails.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+While it is not entirely clear why the original author implemented this
+behavior, there may have been certain circumstances or issues that were not
+apparent to us. It's possible that they were trying to work around a bug by
+employing an unconventional solution.Using `devm_clk_get_enabled()` rather
+than devm_clk_get() can automatically track the usage of clocks and free
+them when they are no longer needed or an error occurs.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml:66:1: [error] duplication of key "allOf" in mapping (key-duplicates)
+fixing it by changing `ocores_i2c_of_probe` to use `devm_clk_get_enabled()`
+rather than `devm_clk_get()`, changing `goto err_clk' to direct return and
+removing `err_clk`.
 
-dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.example.dts'
-Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml:66:1: found duplicate key "allOf" with value "[]" (original value: "[]")
-make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-./Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml:66:1: found duplicate key "allOf" with value "[]" (original value: "[]")
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml: ignoring, error parsing file
-make: *** [Makefile:1512: dt_binding_check] Error 2
+Signed-off-by: Wang Zhang <silver_code@hust.edu.cn>
+---
+v1->v2: change `ocores_i2c_of_probe` to use `devm_clk_get_enabled()`
+ drivers/i2c/busses/i2c-ocores.c | 62 +++++++++++++--------------------
+ 1 file changed, 24 insertions(+), 38 deletions(-)
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230417104801.808972-2-patrick.rudolph@9elements.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
+index a0af027db04c..1dcb1af1ad13 100644
+--- a/drivers/i2c/busses/i2c-ocores.c
++++ b/drivers/i2c/busses/i2c-ocores.c
+@@ -549,28 +549,24 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
+ 							&clock_frequency);
+ 	i2c->bus_clock_khz = 100;
+ 
+-	i2c->clk = devm_clk_get(&pdev->dev, NULL);
++	i2c->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 
+-	if (!IS_ERR(i2c->clk)) {
+-		int ret = clk_prepare_enable(i2c->clk);
+-
+-		if (ret) {
+-			dev_err(&pdev->dev,
+-				"clk_prepare_enable failed: %d\n", ret);
+-			return ret;
+-		}
+-		i2c->ip_clock_khz = clk_get_rate(i2c->clk) / 1000;
+-		if (clock_frequency_present)
+-			i2c->bus_clock_khz = clock_frequency / 1000;
++	if (IS_ERR(i2c->clk)) {
++		dev_err(&pdev->dev,
++			"devm_clk_get_enabled failed\n");
++		return PTR_ERR(i2c->clk);
+ 	}
+ 
++	i2c->ip_clock_khz = clk_get_rate(i2c->clk) / 1000;
++	if (clock_frequency_present)
++		i2c->bus_clock_khz = clock_frequency / 1000;
++
+ 	if (i2c->ip_clock_khz == 0) {
+ 		if (of_property_read_u32(np, "opencores,ip-clock-frequency",
+ 						&val)) {
+ 			if (!clock_frequency_present) {
+ 				dev_err(&pdev->dev,
+ 					"Missing required parameter 'opencores,ip-clock-frequency'\n");
+-				clk_disable_unprepare(i2c->clk);
+ 				return -ENODEV;
+ 			}
+ 			i2c->ip_clock_khz = clock_frequency / 1000;
+@@ -675,8 +671,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 		default:
+ 			dev_err(&pdev->dev, "Unsupported I/O width (%d)\n",
+ 				i2c->reg_io_width);
+-			ret = -EINVAL;
+-			goto err_clk;
++			return -EINVAL;
+ 		}
+ 	}
+ 
+@@ -707,13 +702,13 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 						   pdev->name, i2c);
+ 		if (ret) {
+ 			dev_err(&pdev->dev, "Cannot claim IRQ\n");
+-			goto err_clk;
++			return ret;
+ 		}
+ 	}
+ 
+ 	ret = ocores_init(&pdev->dev, i2c);
+ 	if (ret)
+-		goto err_clk;
++		return ret;
+ 
+ 	/* hook up driver to tree */
+ 	platform_set_drvdata(pdev, i2c);
+@@ -725,7 +720,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 	/* add i2c adapter to i2c tree */
+ 	ret = i2c_add_adapter(&i2c->adap);
+ 	if (ret)
+-		goto err_clk;
++		return ret;
+ 
+ 	/* add in known devices to the bus */
+ 	if (pdata) {
+@@ -734,10 +729,6 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	return 0;
+-
+-err_clk:
+-	clk_disable_unprepare(i2c->clk);
+-	return ret;
+ }
+ 
+ static int ocores_i2c_remove(struct platform_device *pdev)
+@@ -752,9 +743,6 @@ static int ocores_i2c_remove(struct platform_device *pdev)
+ 	/* remove adapter & data */
+ 	i2c_del_adapter(&i2c->adap);
+ 
+-	if (!IS_ERR(i2c->clk))
+-		clk_disable_unprepare(i2c->clk);
+-
+ 	return 0;
+ }
+ 
+@@ -768,8 +756,7 @@ static int ocores_i2c_suspend(struct device *dev)
+ 	ctrl &= ~(OCI2C_CTRL_EN | OCI2C_CTRL_IEN);
+ 	oc_setreg(i2c, OCI2C_CONTROL, ctrl);
+ 
+-	if (!IS_ERR(i2c->clk))
+-		clk_disable_unprepare(i2c->clk);
++	clk_disable_unprepare(i2c->clk);
+ 	return 0;
+ }
+ 
+@@ -777,19 +764,18 @@ static int ocores_i2c_resume(struct device *dev)
+ {
+ 	struct ocores_i2c *i2c = dev_get_drvdata(dev);
+ 
+-	if (!IS_ERR(i2c->clk)) {
+-		unsigned long rate;
+-		int ret = clk_prepare_enable(i2c->clk);
++	unsigned long rate;
++	int ret = clk_prepare_enable(i2c->clk);
+ 
+-		if (ret) {
+-			dev_err(dev,
+-				"clk_prepare_enable failed: %d\n", ret);
+-			return ret;
+-		}
+-		rate = clk_get_rate(i2c->clk) / 1000;
+-		if (rate)
+-			i2c->ip_clock_khz = rate;
++	if (ret) {
++		dev_err(dev,
++			"clk_prepare_enable failed: %d\n", ret);
++		return ret;
+ 	}
++	rate = clk_get_rate(i2c->clk) / 1000;
++	if (rate)
++		i2c->ip_clock_khz = rate;
++
+ 	return ocores_init(dev, i2c);
+ }
+ 
+-- 
+2.34.1
