@@ -2,45 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9B46E3DEB
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Apr 2023 05:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7416E45A1
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Apr 2023 12:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjDQDRf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 16 Apr 2023 23:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
+        id S230024AbjDQKu0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Apr 2023 06:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjDQDRe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 16 Apr 2023 23:17:34 -0400
-Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97B71FDA;
-        Sun, 16 Apr 2023 20:17:30 -0700 (PDT)
-X-QQ-mid: Yeas43t1681701430t120t13849
-Received: from 7082A6556EBF4E69829842272A565F7C (jiawenwu@trustnetic.com [183.129.236.74])
-X-QQ-SSF: 00400000000000F0FL9000000000000
-From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
-X-BIZMAIL-ID: 17039639388339495222
-To:     "'Wolfram Sang'" <wsa@kernel.org>,
-        "'Jarkko Nikula'" <jarkko.nikula@linux.intel.com>
-Cc:     <netdev@vger.kernel.org>, <linux@armlinux.org.uk>,
-        <linux-i2c@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <mengyuanlou@net-swift.com>
-References: <20230411092725.104992-1-jiawenwu@trustnetic.com> <20230411092725.104992-3-jiawenwu@trustnetic.com> <00cf01d96c58$8d3e9130$a7bbb390$@trustnetic.com> <09dc3146-a1c6-e1a3-c8bd-e9fe547f9b99@linux.intel.com> <ZDgtryRooJdVHCzH@sai> <01ec01d96ec0$f2e10670$d8a31350$@trustnetic.com>
-In-Reply-To: <01ec01d96ec0$f2e10670$d8a31350$@trustnetic.com>
-Subject: RE: [PATCH net-next v2 2/6] net: txgbe: Implement I2C bus master driver
-Date:   Mon, 17 Apr 2023 11:17:07 +0800
-Message-ID: <024701d970db$17335890$459a09b0$@trustnetic.com>
+        with ESMTP id S229456AbjDQKuZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Apr 2023 06:50:25 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D1C4EE6
+        for <linux-i2c@vger.kernel.org>; Mon, 17 Apr 2023 03:49:37 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id kt6so24729188ejb.0
+        for <linux-i2c@vger.kernel.org>; Mon, 17 Apr 2023 03:49:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1681728495; x=1684320495;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XVld+S5St6MGoNtw2Z0Re1+rcHuAmLcad2TIJO7KIg8=;
+        b=Q61PKRtPes2SjXBFvUFdqqmyo9LI/93dt8pcQkm3ztl+2HTsQWzk1lKFpty0toUdJe
+         wbuX3riv2STIwJ0PK4gaktkoD7M0xXhK0HgGmdErakyqZYug4N1l1A4/0mkxJwOwiHbv
+         s7CcQ8wNv9fI12bnWCad1mSPVjCGpCEuUlZnjz8tGWmKKGegCETimwMSl84r+Q8NSRxU
+         jpQ3WNo0N9cRftZ0cDqL29uQJB9qrmQVNJLIXWFTEjAlYl4uGu/AEo7XWs1bQD7BnqrA
+         szXYwibrapMo94yMv5SPfQxkxrlAmhfnuL2znKJATxyC0sWA9eqgAl0S5NE6jbH41gER
+         OUSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681728495; x=1684320495;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XVld+S5St6MGoNtw2Z0Re1+rcHuAmLcad2TIJO7KIg8=;
+        b=Yxoh5QBdwqen0EjTBXx+JO16HwDwMJaYvtwgRuV1GplZKo0hccGnuADaGlx3GLCSKg
+         8znuKCHVh/WYhCJ50xp0KE0t1usKJaQZIonYUufnlRAcLc829ZZnvVfn2ZDZr8/WIzeF
+         mg+jRErgYtUeANPpk7QptmgpiTGgVI0Pu8MDJEDxLH58PByKci4vmeEt2l1qtlGOFpeK
+         qAFkw4Zqm9bPzOIyiPp54Jy88HbZDmW8sSbmUGT+ikztlaw/Y2orOuamcxpA8KttxgxP
+         FedS9uRCZ8ZTDAZ7AT7aw6VlMoSjVmHb1z3I307FL4ORQkfGtRCgQBES+MEUfu1hxxyr
+         m2wQ==
+X-Gm-Message-State: AAQBX9eCLtnrnmBqXrFMwLN8EVPiLNa0FoEYIOXBp6RObSyROyRvYA09
+        TYUv/yTHssuuzdwzOLhuhOZlJw==
+X-Google-Smtp-Source: AKy350aLdlnsMM9T2bJXBaovylQDBAXMxNjpndGEePpxQStukgMlskHsfguoBlY2uIn+xG6LINSktA==
+X-Received: by 2002:a17:906:240d:b0:94e:8556:f01c with SMTP id z13-20020a170906240d00b0094e8556f01cmr6945899eja.57.1681728494971;
+        Mon, 17 Apr 2023 03:48:14 -0700 (PDT)
+Received: from fedora.sec.9e.network (ip-095-222-150-251.um34.pools.vodafone-ip.de. [95.222.150.251])
+        by smtp.gmail.com with ESMTPSA id j25-20020a1709062a1900b0094f614e43d0sm1953842eje.8.2023.04.17.03.48.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 03:48:14 -0700 (PDT)
+From:   Patrick Rudolph <patrick.rudolph@9elements.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-i2c@vger.kernel.org
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v12 0/4] Add support for Maxim MAX735x/MAX736x variants
+Date:   Mon, 17 Apr 2023 12:47:56 +0200
+Message-Id: <20230417104801.808972-1-patrick.rudolph@9elements.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: zh-cn
-Thread-Index: AQJXy8bYFbRwx/PFgpvJPX7PgyT97wJCMZrbAk6D9c4BtpNb5AI7nLSFAlh8gEOt2z+agA==
-X-QQ-SENDSIZE: 520
-Feedback-ID: Yeas:trustnetic.com:qybglogicsvr:qybglogicsvr5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,45 +69,65 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Friday, April 14, 2023 7:05 PM, Jiawen Wu wrote:
-> On Friday, April 14, 2023 12:29 AM, Wolfram Sang wrote:
-> > > > > Implement I2C bus driver to send and receive I2C messages.
-> > > > >
-> > > > > This I2C license the IP of Synopsys Designware, but without interrupt
-> > > > > support on the hardware design. It seems that polling mode needs to be
-> > > > > added in Synopsys Designware I2C driver. But currently it can only be
-> > > > > driven by this I2C bus master driver.
-> > > > >
-> > > > > Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
-> > > > > ---
-> > > > >   drivers/net/ethernet/wangxun/Kconfig          |   1 +
-> > > > >   .../net/ethernet/wangxun/txgbe/txgbe_phy.c    | 153
-> > > > > ++++++++++++++++++
-> > > > >   .../net/ethernet/wangxun/txgbe/txgbe_type.h   |  23 +++
-> > > > >   3 files changed, 177 insertions(+)
-> > > > >
-> > > Looks like your use case has similarities with the commit 17631e8ca2d3
-> > > ("i2c: designware: Add driver support for AMD NAVI GPU").
-> >
-> > Yes, can you please check if you can't use the current i2c designware
-> > driver?
-> 
-> Hi Jarkko & Wolfram,
-> 
-> I read the i2c designware driver code, and found that 'dev->ss_hcnt' can
-> only be obtained by i2c_dw_acpi_configure() or calculated by clock rate.
-> 
-> I don't quite understand how to get the clock rate. I tried to add a software
-> node of clock with property ("clock-frequency", 100000) and referenced by
-> I2C node. But it didn't work.
-> 
-> Can I deliver 'dev->ss_hcnt' via platform data? Or how should I fill in the
-> software node?
-> 
+v12:
+- Add separate patch correcting interrupt support in dt-binding
+- Fix typo in commit message
+- Make vdd-supply non optional
 
-The above question is in the case of platform driver.
+v11:
+- Fix dt-binding example
 
-Moreover, why 'dev->fs_hcnt' and 'dev->fs_lcont' must be set when I use the
-standard mode? Should it be set only if I2C_MAX_FAST_MODE_* ?
+v10:
+- Small updates to dt-bindings
+- Make vdd-supply optional
+- Drop MAX7357 enhanced mode configuration
 
+v9:
+- Fix 'then' not aligned with 'if' in dt-bindings
+- Split enhanced mode configuration into separate patch
+- Add MAX7357/MAX7358 register definitions
+- Rename config register defines
+- Update comments and explain non default config being applied on MAX7357
+- Check for I2C_FUNC_SMBUS_WRITE_BYTE_DATA functionality
+
+v8:
+- Move allOf in dt-binding and use double negation
+
+v7:
+- Reworked the commit message, comments and renamed a struct
+  field. No functional change.
+
+v6:
+- Fix typo in dt-bindings
+
+v5:
+- Remove optional and make vdd-supply mandatory
+
+v4:
+- Add missing maxitems dt-bindings property
+
+v3:
+- Merge dt-bindings into i2c-mux-pca954x.yaml
+
+v2:
+- Move dt-bindings to separate file
+- Added support for MAX736x as they are very similar
+- Fixed an issue found by kernel test robot
+- Dropped max735x property and custom IRQ check
+- Added MAX7357 config register defines instead of magic values
+- Renamed vcc-supply to vdd-supply
+
+Patrick Rudolph (4):
+  dt-bindings: i2c: Correct interrupt support
+  dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
+  i2c: muxes: pca954x: Add MAX735x/MAX736x support
+  i2c: muxes: pca954x: Add regulator support
+
+ .../bindings/i2c/i2c-mux-pca954x.yaml         | 45 ++++++++--
+ drivers/i2c/muxes/Kconfig                     |  6 +-
+ drivers/i2c/muxes/i2c-mux-pca954x.c           | 89 +++++++++++++++++--
+ 3 files changed, 125 insertions(+), 15 deletions(-)
+
+-- 
+2.39.2
 
