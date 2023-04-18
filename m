@@ -2,166 +2,155 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9ED6E5EE9
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Apr 2023 12:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1812F6E5F62
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Apr 2023 13:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbjDRKez (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Apr 2023 06:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58892 "EHLO
+        id S231167AbjDRLKh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Apr 2023 07:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjDRKet (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Apr 2023 06:34:49 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339B119D
-        for <linux-i2c@vger.kernel.org>; Tue, 18 Apr 2023 03:34:44 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a5so15365690ejb.6
-        for <linux-i2c@vger.kernel.org>; Tue, 18 Apr 2023 03:34:44 -0700 (PDT)
+        with ESMTP id S229721AbjDRLKg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Apr 2023 07:10:36 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F479772;
+        Tue, 18 Apr 2023 04:10:25 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id dm2so72244342ejc.8;
+        Tue, 18 Apr 2023 04:10:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1681814082; x=1684406082;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ml1nedlrXgWfNGvpKNjoDJf5JKupI4N1yItZ011XKWE=;
-        b=BON11A64Y1B8bvrfHmnxxqy2xkhp2EHBMOU1eOLDje3/DfAairJHN4KeyE/lqCshf5
-         Lm5TxwIaa5TGjpOTm+cWWJAihOI64Fxmgd1xM+GdUbMMU7FiOApVe8Ec++warn3IBr4z
-         PE+oU0kQYwgWCgLddUjuVIPKdMP4mC1cTvrjMY0xl/r+eLlBbSYg6hCEXOhW39boQIhU
-         19DYMTCe6VtkSGE2jjtOAeFrrLHIrqaBN5mrKyJhRY0KyJVd0QTTxdVxuBBuHzZM5Urr
-         Kw6SHZeEgFFjfOoVISZcpyXAy5snPr68fnhxNFbWs2Wy4xZCPBuZzCGve6PJbODCh21Z
-         qwtA==
+        d=gmail.com; s=20221208; t=1681816224; x=1684408224;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RyCcUDzMN8yvXUqojP7X4CUbHBSUL6H6PF502SlrCvU=;
+        b=i3clYhfGXTuH/0YGvKfLs4rCn4yYRK7wsJI+dLboy0cDl/ZMIZXzq4y/4X5GwMVFS3
+         C47oqNDtrdRY+N7gngATWbayI4YXITzecdxXQ1Ev4TERr2ofTpwhsPreQR54RkmgqHvE
+         NhF+4jBkApjQLUOhlcncsWgRCbyMLeqyH5ZMbdPcVsyJFM42LxYgfZ5tXlXjdGHAUvY5
+         fxQ8gBChBzQ9iBg6aXdgg2fJ0wqqLBOR0nemZT3WwLlBFh2S0riCDiBc7lNRi7qr/ufA
+         Zt4UhGSVCKJoJCbhCOLQSk3u6yTmVxZGklWjJtiOQxMlxiBw39nC4NjrS+wIt4NDktDs
+         OX9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681814082; x=1684406082;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ml1nedlrXgWfNGvpKNjoDJf5JKupI4N1yItZ011XKWE=;
-        b=ZvBk7gEMb2+3jtyNDpr90yXdK8r8jwCeSdYo8GImIoM1EFYJ+CMTGd+xnphRycC7Ry
-         2TYbiq9WHIYcVCv0u6RT7yuNB8yO2DS3fzCy17kY2ZZ1nLoHTHtTwtNXINnpOUZ5+8U6
-         sqYTtvjVUZB5bUJeGCq/59aZZFWIYDzd+4NOkQ3rMxdQS0AZrY41MnJgCi5OxfZO336I
-         spyh0noNFTykobPRyLY8twGZ/zbN0VT2hscjUiN+shfj8wV+lZg9x/Gq4kDDE/rj8wGc
-         OYOWvruHn2tCVwNFz1bOjA5uAwnLedXjUkJf1ahrdIbCoubi3O1zCH7EsRCJ5CLTWBjA
-         dogw==
-X-Gm-Message-State: AAQBX9enq9IDPmiQh+qWV95a+5pwsPrIbewfhIOo1ni9U8BVNqt+lKwy
-        atMPjNAeZkcVlQ4CY0mE26sigA==
-X-Google-Smtp-Source: AKy350bPKU4OdS+klRmOWNR8bkLPj+3uDBrJAHLQi3R7lTVgk8ARhBx107G8MSkeiS6LlAbKBIjdoA==
-X-Received: by 2002:a17:906:4e0b:b0:8f5:8da0:a482 with SMTP id z11-20020a1709064e0b00b008f58da0a482mr10678683eju.25.1681814082708;
-        Tue, 18 Apr 2023 03:34:42 -0700 (PDT)
-Received: from fedora.sec.9e.network (ip-095-222-150-251.um34.pools.vodafone-ip.de. [95.222.150.251])
-        by smtp.gmail.com with ESMTPSA id a12-20020a170906368c00b0094e8de89111sm7787126ejc.201.2023.04.18.03.34.42
+        d=1e100.net; s=20221208; t=1681816224; x=1684408224;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RyCcUDzMN8yvXUqojP7X4CUbHBSUL6H6PF502SlrCvU=;
+        b=CZ0knAdRG8coRNL7ykUq4pjxuQzEBos+LOlmXEVTRgLUVKq1yTnNLpP2G9vMLdp0uZ
+         VJuCTpfbmgY3fom+B+YsOgkGZsaaeQaK5lDS2o0z4zyVkuLs0MKGtaLlNTaiImNq5Io1
+         iYRAd8sP+9DOadzIvqY7kd9LpDarLtHVxBoqHOeyXlE5X8cy3hLgm8f/B7DqJm1RFd/1
+         k8O7DZt54VzDt9VRlka8ma0lM34+H3Tmi/2r964guYuM/0cOe6BbVvQ7vYkg/6+M8pku
+         2Z9oHKZu1jaCOs3qMOXSh3qmIoTbgb85VdEGOVQyMF2rLRjprcovlWekB2Ed8oJ2KSmt
+         ODwA==
+X-Gm-Message-State: AAQBX9dn3nvwPN0M5xNM7rxpoEFfJFPrOA0c+ntH1KDWBwq4VSPNNuOy
+        PIM4pUA6bWTNaklQaoV8JAOMQf0EX9rKJaUH
+X-Google-Smtp-Source: AKy350bHUnR/QzB6QoZVE/6aIJLeTCNbqOgEcX9Zv8ojMOQSgpBfPrH6bYZJuSuzB//n/sqmC/CKaw==
+X-Received: by 2002:a17:906:ae0f:b0:94f:1822:bb33 with SMTP id le15-20020a170906ae0f00b0094f1822bb33mr10064307ejb.22.1681816223698;
+        Tue, 18 Apr 2023 04:10:23 -0700 (PDT)
+Received: from [127.0.1.1] ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id n26-20020a170906379a00b0094eef800850sm5954554ejc.204.2023.04.18.04.10.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 03:34:42 -0700 (PDT)
-From:   Patrick Rudolph <patrick.rudolph@9elements.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v13 4/4] i2c: muxes: pca954x: Add regulator support
-Date:   Tue, 18 Apr 2023 12:34:29 +0200
-Message-Id: <20230418103430.966278-5-patrick.rudolph@9elements.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230418103430.966278-1-patrick.rudolph@9elements.com>
-References: <20230418103430.966278-1-patrick.rudolph@9elements.com>
+        Tue, 18 Apr 2023 04:10:23 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+Subject: [PATCH v5 0/6] mfd: tps6586x: register restart handler
+Date:   Tue, 18 Apr 2023 13:09:59 +0200
+Message-Id: <20230327-tegra-pmic-reboot-v5-0-ab090e03284d@skidata.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAId6PmQC/4WOO27DMBBEr2Kwzhr8SbJd+R6Bi6W8lIiEorEkh
+ BiG7h5SVdIk5cNg3sxLZOJAWVwOL8G0hhzSUqF7O4hxxmUiCPfKQkttpNEDFJoY4RHDCEwupQJ
+ WDZ33J2XROlF7DjOBY1zGuTUj5kLcggeTD1/72PutsucUocxM+HNCai2N7Y7K9qY/DaDAOWQ8m
+ +sUMXwexxSbbA65JH7ux1fTlH99XA1IMKMkMl0/kLLX/BHuWHDXtTOr/ddhq8Npi16rs3d2+O3
+ Ytu0bororXk4BAAA=
+To:     Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
+        rafael.j.wysocki@intel.com
+Cc:     dmitry.osipenko@collabora.com, peterz@infradead.org,
+        jonathanh@nvidia.com, richard.leitner@linux.dev,
+        treding@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        stable@vger.kernel.org
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add a vdd regulator and enable it for boards that have the
-mux powered off by default.
+Hi!
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+The Tegra20 requires an enabled VDE power domain during startup. As the
+VDE is currently not used, it is disabled during runtime.
+Since 8f0c714ad9be, there is a workaround for the "normal restart path"
+which enables the VDE before doing PMC's warm reboot. This workaround is
+not executed in the "emergency restart path", leading to a hang-up
+during start.
+
+This series implements and registers a new pmic-based restart handler
+for boards with tps6586x. This cold reboot ensures that the VDE power
+domain is enabled during startup on tegra20-based boards.
+
+Since bae1d3a05a8b, i2c transfers are non-atomic while preemption is
+disabled (which is e.g. done during panic()). This could lead to
+warnings ("Voluntary context switch within RCU") in i2c-based restart
+handlers during emergency restart. The state of preemption should be
+detected by i2c_in_atomic_xfer_mode() to use atomic i2c xfer when
+required. Beside the new system_state check, the check is the same as
+the one pre v5.2.
+
+v4: https://lore.kernel.org/r/20230327-tegra-pmic-reboot-v4-0-b24af219fb47@skidata.com
+v3: https://lore.kernel.org/r/20230327-tegra-pmic-reboot-v3-0-3c0ee3567e14@skidata.com
+v2: https://lore.kernel.org/all/20230320220345.1463687-1-bbara93@gmail.com/
+system_state: https://lore.kernel.org/all/20230320213230.1459532-1-bbara93@gmail.com/
+v1: https://lore.kernel.org/all/20230316164703.1157813-1-bbara93@gmail.com/
+
+v5:
+- introduce new 3 & 4, therefore 3 -> 5, 4 -> 6
+- 3: provide dev to sys_off handler, if it is known
+- 4: return NOTIFY_DONE from sys_off_notify, to avoid skipping
+- 5: drop Reviewed-by from Dmitry, add poweroff timeout
+- 5,6: return notifier value instead of direct errno from handler
+- 5,6: use new dev field instead of passing dev as cb_data
+- 5,6: increase timeout values based on error observations
+- 6: skip unsupported reboot modes in restart handler
+
+v4:
+- 1,2: add "Fixes" and adapt commit messages
+- 4: reduce delay after requesting the restart (as suggested by Dmitry)
+
+v3:
+- bring system_state back in this series
+- do atomic i2c xfer if not preemptible (as suggested by Dmitry)
+- fix style issues mentioned by Dmitry
+- add cc stable as suggested by Dmitry
+- add explanation why this is needed for Jon
+
+v2:
+- use devm-based restart handler
+- convert the existing power_off handler to a devm-based handler
+- handle system_state in extra series
+
 ---
- drivers/i2c/muxes/i2c-mux-pca954x.c | 28 +++++++++++++++++++++++-----
- 1 file changed, 23 insertions(+), 5 deletions(-)
+Benjamin Bara (6):
+      kernel/reboot: emergency_restart: set correct system_state
+      i2c: core: run atomic i2c xfer when !preemptible
+      kernel/reboot: add device to sys_off_handler
+      kernel/reboot: sys_off_notify: always return NOTIFY_DONE
+      mfd: tps6586x: use devm-based power off handler
+      mfd: tps6586x: register restart handler
 
-diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-index a9195d1547f1..ae98e76e0733 100644
---- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-+++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-@@ -49,6 +49,7 @@
- #include <linux/module.h>
- #include <linux/pm.h>
- #include <linux/property.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <dt-bindings/mux/mux.h>
-@@ -101,6 +102,7 @@ struct pca954x {
- 	struct irq_domain *irq;
- 	unsigned int irq_mask;
- 	raw_spinlock_t lock;
-+	struct regulator *supply;
- };
- 
- /* Provide specs for the MAX735x, PCA954x and PCA984x types we know about */
-@@ -440,6 +442,8 @@ static void pca954x_cleanup(struct i2c_mux_core *muxc)
- 	struct pca954x *data = i2c_mux_priv(muxc);
- 	int c, irq;
- 
-+	regulator_disable(data->supply);
-+
- 	if (data->irq) {
- 		for (c = 0; c < data->chip->nchans; c++) {
- 			irq = irq_find_mapping(data->irq, c);
-@@ -492,10 +496,22 @@ static int pca954x_probe(struct i2c_client *client)
- 	i2c_set_clientdata(client, muxc);
- 	data->client = client;
- 
-+	data->supply = devm_regulator_get(dev, "vdd");
-+	if (IS_ERR(data->supply))
-+		return dev_err_probe(dev, PTR_ERR(data->supply),
-+				"Failed to request regulator\n");
-+
-+	ret = regulator_enable(data->supply);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "Failed to enable vdd supply\n");
-+
- 	/* Reset the mux if a reset GPIO is specified. */
- 	gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
--	if (IS_ERR(gpio))
--		return PTR_ERR(gpio);
-+	if (IS_ERR(gpio)) {
-+		ret = PTR_ERR(gpio);
-+		goto fail_cleanup;
-+	}
- 	if (gpio) {
- 		udelay(1);
- 		gpiod_set_value_cansleep(gpio, 0);
-@@ -512,7 +528,7 @@ static int pca954x_probe(struct i2c_client *client)
- 
- 		ret = i2c_get_device_id(client, &id);
- 		if (ret && ret != -EOPNOTSUPP)
--			return ret;
-+			goto fail_cleanup;
- 
- 		if (!ret &&
- 		    (id.manufacturer_id != data->chip->id.manufacturer_id ||
-@@ -520,7 +536,8 @@ static int pca954x_probe(struct i2c_client *client)
- 			dev_warn(dev, "unexpected device id %03x-%03x-%x\n",
- 				 id.manufacturer_id, id.part_id,
- 				 id.die_revision);
--			return -ENODEV;
-+			ret = -ENODEV;
-+			goto fail_cleanup;
- 		}
- 	}
- 
-@@ -539,7 +556,8 @@ static int pca954x_probe(struct i2c_client *client)
- 	ret = pca954x_init(client, data);
- 	if (ret < 0) {
- 		dev_warn(dev, "probe failed\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto fail_cleanup;
- 	}
- 
- 	ret = pca954x_irq_setup(muxc);
+ drivers/i2c/i2c-core.h |  2 +-
+ drivers/mfd/tps6586x.c | 55 ++++++++++++++++++++++++++++++++++++++++++--------
+ include/linux/reboot.h |  3 +++
+ kernel/reboot.c        | 11 +++++++++-
+ 4 files changed, 61 insertions(+), 10 deletions(-)
+---
+base-commit: 197b6b60ae7bc51dd0814953c562833143b292aa
+change-id: 20230327-tegra-pmic-reboot-4175ff814a4b
+
+Best regards,
 -- 
-2.39.2
+Benjamin Bara <benjamin.bara@skidata.com>
 
