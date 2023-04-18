@@ -2,60 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2452D6E5F6A
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Apr 2023 13:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E076E5F6D
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Apr 2023 13:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbjDRLKv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Apr 2023 07:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
+        id S231309AbjDRLKx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Apr 2023 07:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbjDRLKl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Apr 2023 07:10:41 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903D38A45;
-        Tue, 18 Apr 2023 04:10:27 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id ud9so71931986ejc.7;
-        Tue, 18 Apr 2023 04:10:27 -0700 (PDT)
+        with ESMTP id S231329AbjDRLKn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Apr 2023 07:10:43 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DE27EE5;
+        Tue, 18 Apr 2023 04:10:28 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id u3so20144661ejj.12;
+        Tue, 18 Apr 2023 04:10:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20221208; t=1681816226; x=1684408226;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WbgVQUp/vUincJRkcsp/7lCVaCrW8ZOrNJHo4G9adBQ=;
-        b=WHN88Vc9KjwSakLtGnGRxSGwAb5hfpAeWjrK647q2A6PsNe5izO5GzkcJPGI6sW6uj
-         jB3D7Irqtyf8vjBNUGd/V5iWbc33CbakCySOYjxTRlG2vwGY74x31/Nrsu/rKr9/4xFT
-         92cYgR8Bh9Ety6g/cq9dARHDFOqjXBmeFGqwQdzNsTNwlv44D/61gPvXcw9MEUeIPOBS
-         wmNeAvp4LasaHVBPseGpSDFceiHLT9vSdnbCtPtgmuDbOGE0vV4l0Ns3FXceRcZY8k9u
-         WFml/gABit3ZGZtcXwQK9BvXEA+W1gI15Hf6JETIxj6FWY9QezjNL7mcKmYdE5zXwBEd
-         30ww==
+        bh=bX5R8Ja4/uQ1bZhivXwMqgCiLJVs+CVwud3ONCpJxg4=;
+        b=dEWUK2L/qiMDsvLULfsZ414bpwpYpTDmkHTWlleST4Bklyia1xTBu53xFuzjgyzmBD
+         Rx63//4AOelp6qS8ms7b8XbegUpcKFr8f1Rl1RPaxCcBK/toaVjoAMoojmJRsczndzUx
+         GDZPPOSRAeAKhFCszcWYxfQwYKU2CY+L7EfXaH72qAFdAuRSHl4OwBJYv5DqmTQh7NaT
+         UhVISvzH5ILgN18fJtWr4PJaBNSDdtR+XyKDpvy7rb1TbvE5mO4V0BU+dqV1hfk1HgFw
+         o2syFzneCf5xRlr2aqiF8peZnlIebzPsOWhDiRgcvkadPHN7w+aZHXan0q83MmVtEJbN
+         wJDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1681816226; x=1684408226;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WbgVQUp/vUincJRkcsp/7lCVaCrW8ZOrNJHo4G9adBQ=;
-        b=LE/WloCH2Wq6UpxrwpBwpbVT9GjDzoIQA1LkdBGl3MHIIZoiERHioZI843jkUp7ctp
-         U6QirwDGMN87AX0p//k7Y5E42FT00cwU2Xqsn+UpEOAoD5enL5D8hv9tP/pPXMBKmc8+
-         2s2/BrT04GwS5H6hC24GJ7rN0nVR/qCpdvnQJQwDyH60pFN5EVgUlYs8xL1m7FA7fSR9
-         PYzzycwYW+3d6Kns7WB6OckL1xAxtOtG+PgwwsgOrTuW6cRP9R+4KESQwGF7LyS+OSEE
-         A76zsn4j1wq62XUo4tM6xnmZGwgk7A9kSm6rSRZ2wzmrI1ORcTMU2pat8PSlmzmHQopz
-         0XSA==
-X-Gm-Message-State: AAQBX9doFR5taJzWOrrj5VECH8i9ZUAQGwqTj5h+qi1rD8EBYdXerspc
-        1fa8uNemTJwK/liJSD+VgsC2zsYT3BV/Mr4a
-X-Google-Smtp-Source: AKy350ZuIdjnhggkyP+eOiGXyizYmsnDJvuabPw9yGecpbmmPdEmaRx0JM48/q9ZC1e4KuZrdXMHYA==
-X-Received: by 2002:a17:906:240f:b0:94f:1a11:e08b with SMTP id z15-20020a170906240f00b0094f1a11e08bmr9336774eja.20.1681816225496;
-        Tue, 18 Apr 2023 04:10:25 -0700 (PDT)
+        bh=bX5R8Ja4/uQ1bZhivXwMqgCiLJVs+CVwud3ONCpJxg4=;
+        b=LjV7VqA5ZIdv6855NYpZg3tTT77X8qCvUd8HRwp1lPMh5SzvhQPM23WcO20E79prfV
+         RyN6Y6UGOxV6k6l82Y7cs/Ru7qHb2ogLPdaByrJs/C/GjsdcnPWiqQRDxavDR5IMXR1X
+         uVPAyOdGemlknXIwk5J5Stthb/FnycmP1YC7GwUqe3zAcWaYiJuDxQBslSntom+ZeoiX
+         4NihNoyabokmF39EJp9tmENnscfaYh4XuquWOTDHX6PJmYcg1/CUywkmJ7gAdDktrLUu
+         oM+cJKK0MIcxvHuxMEKUOaM8cxpN4A4AdulU/r4EBAYbvVFjba7AGebaxWxuaDfm625E
+         XUQw==
+X-Gm-Message-State: AAQBX9dkHnA7Y/RJLiQj+Z/HOZk7+DYru7sSzjTRr05QBu8pDIGMO3q+
+        uABic8LIWLHpmKAk2LgAp/FkwME02cvcVxln
+X-Google-Smtp-Source: AKy350ajtZ8vLoqucYqQMFTZaUzvE9MwMljTvcwfiUagc47PMCdndDAPNrFr2Cl7UkFSgr4HIrbePA==
+X-Received: by 2002:a17:907:78cd:b0:94e:5b0b:7bd1 with SMTP id kv13-20020a17090778cd00b0094e5b0b7bd1mr9561393ejc.74.1681816226432;
+        Tue, 18 Apr 2023 04:10:26 -0700 (PDT)
 Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id n26-20020a170906379a00b0094eef800850sm5954554ejc.204.2023.04.18.04.10.24
+        by smtp.gmail.com with ESMTPSA id n26-20020a170906379a00b0094eef800850sm5954554ejc.204.2023.04.18.04.10.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 04:10:25 -0700 (PDT)
+        Tue, 18 Apr 2023 04:10:26 -0700 (PDT)
 From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Tue, 18 Apr 2023 13:10:01 +0200
-Subject: [PATCH v5 2/6] i2c: core: run atomic i2c xfer when !preemptible
+Date:   Tue, 18 Apr 2023 13:10:02 +0200
+Subject: [PATCH v5 3/6] kernel/reboot: add device to sys_off_handler
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230327-tegra-pmic-reboot-v5-2-ab090e03284d@skidata.com>
+Message-Id: <20230327-tegra-pmic-reboot-v5-3-ab090e03284d@skidata.com>
 References: <20230327-tegra-pmic-reboot-v5-0-ab090e03284d@skidata.com>
 In-Reply-To: <20230327-tegra-pmic-reboot-v5-0-ab090e03284d@skidata.com>
 To:     Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
@@ -64,13 +64,13 @@ Cc:     dmitry.osipenko@collabora.com, peterz@infradead.org,
         jonathanh@nvidia.com, richard.leitner@linux.dev,
         treding@nvidia.com, linux-kernel@vger.kernel.org,
         linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        stable@vger.kernel.org
+        Benjamin Bara <benjamin.bara@skidata.com>
 X-Mailer: b4 0.12.2
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,48 +79,63 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Benjamin Bara <benjamin.bara@skidata.com>
 
-Since bae1d3a05a8b, i2c transfers are non-atomic if preemption is
-disabled. However, non-atomic i2c transfers require preemption (e.g. in
-wait_for_completion() while waiting for the DMA).
+If the dev is known (e.g. a devm-based sys_off_handler is used), it can
+be passed to the handler's callback to have it available there.
+Otherwise, cb_data might be set to the dev in most of the cases.
 
-panic() calls preempt_disable_notrace() before calling
-emergency_restart(). Therefore, if an i2c device is used for the
-restart, the xfer should be atomic. This avoids warnings like:
-
-[   12.667612] WARNING: CPU: 1 PID: 1 at kernel/rcu/tree_plugin.h:318 rcu_note_context_switch+0x33c/0x6b0
-[   12.676926] Voluntary context switch within RCU read-side critical section!
-...
-[   12.742376]  schedule_timeout from wait_for_completion_timeout+0x90/0x114
-[   12.749179]  wait_for_completion_timeout from tegra_i2c_wait_completion+0x40/0x70
-...
-[   12.994527]  atomic_notifier_call_chain from machine_restart+0x34/0x58
-[   13.001050]  machine_restart from panic+0x2a8/0x32c
-
-Use !preemptible() instead, which is basically the same check as
-pre-v5.2.
-
-Fixes: bae1d3a05a8b ("i2c: core: remove use of in_atomic()")
-Cc: stable@vger.kernel.org # v5.2+
-Suggested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Acked-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 ---
- drivers/i2c/i2c-core.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/reboot.h | 3 +++
+ kernel/reboot.c        | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/drivers/i2c/i2c-core.h b/drivers/i2c/i2c-core.h
-index 1247e6e6e975..05b8b8dfa9bd 100644
---- a/drivers/i2c/i2c-core.h
-+++ b/drivers/i2c/i2c-core.h
-@@ -29,7 +29,7 @@ int i2c_dev_irq_from_resources(const struct resource *resources,
+diff --git a/include/linux/reboot.h b/include/linux/reboot.h
+index 2b6bb593be5b..c4cc3b89ced1 100644
+--- a/include/linux/reboot.h
++++ b/include/linux/reboot.h
+@@ -129,11 +129,14 @@ enum sys_off_mode {
+  * @cb_data: User's callback data.
+  * @cmd: Command string. Currently used only by the sys-off restart mode,
+  *       NULL otherwise.
++ * @dev: Device of the sys-off handler. Only if known (devm_register_*),
++ *       NULL otherwise.
   */
- static inline bool i2c_in_atomic_xfer_mode(void)
- {
--	return system_state > SYSTEM_RUNNING && irqs_disabled();
-+	return system_state > SYSTEM_RUNNING && !preemptible();
- }
+ struct sys_off_data {
+ 	int mode;
+ 	void *cb_data;
+ 	const char *cmd;
++	struct device *dev;
+ };
  
- static inline int __i2c_lock_bus_helper(struct i2c_adapter *adap)
+ struct sys_off_handler *
+diff --git a/kernel/reboot.c b/kernel/reboot.c
+index 6ebef11c8876..395a0ea3c7a8 100644
+--- a/kernel/reboot.c
++++ b/kernel/reboot.c
+@@ -55,6 +55,7 @@ struct sys_off_handler {
+ 	enum sys_off_mode mode;
+ 	bool blocking;
+ 	void *list;
++	struct device *dev;
+ };
+ 
+ /*
+@@ -324,6 +325,7 @@ static int sys_off_notify(struct notifier_block *nb,
+ 	data.cb_data = handler->cb_data;
+ 	data.mode = mode;
+ 	data.cmd = cmd;
++	data.dev = handler->dev;
+ 
+ 	return handler->sys_off_cb(&data);
+ }
+@@ -511,6 +513,7 @@ int devm_register_sys_off_handler(struct device *dev,
+ 	handler = register_sys_off_handler(mode, priority, callback, cb_data);
+ 	if (IS_ERR(handler))
+ 		return PTR_ERR(handler);
++	handler->dev = dev;
+ 
+ 	return devm_add_action_or_reset(dev, devm_unregister_sys_off_handler,
+ 					handler);
 
 -- 
 2.34.1
