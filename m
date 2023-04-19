@@ -2,142 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733C06E749D
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Apr 2023 10:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E0B6E7512
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Apr 2023 10:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbjDSIGA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Apr 2023 04:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
+        id S232550AbjDSI24 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Apr 2023 04:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbjDSIF7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Apr 2023 04:05:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36D94C3D;
-        Wed, 19 Apr 2023 01:05:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 704F163C3A;
-        Wed, 19 Apr 2023 08:05:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45613C433EF;
-        Wed, 19 Apr 2023 08:05:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681891557;
-        bh=Pmk67VN1KWoYfHH9fjaJIYCfiu0cDeym63+mdBdupLc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cCJZZmOedUDG1K/cSy1AWLOZeG4g9dchhxqqkUkLKke4h6X0efXb0JLcMFgGQK9zj
-         xKj301TGX6JOGQc3d3XNmbncOaA7zMl+Z1FFtJcg7PtcSxYNTfJvWN5saXSatOw8L0
-         cQaFFeJwyy3gDVP3FYSSjx+q8L5UtpQdpeyZEgLNNKYwuSy3rerveY7+2HF8zIzMPQ
-         J/OBwTuhZdHrBhHodhIlGMNelE3DvXcxH0YXX0zhqEABM49kL/uh1tZRMuwBij2Uc3
-         gBm6UJD7dfx/MPmcoEFeSaynqzxz4AK39dodj08oVE443cpy+92Ys6i0SyJV3s75J6
-         ayjuFUiWwO6cQ==
-Date:   Wed, 19 Apr 2023 10:05:54 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Rob Herring <robh@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH v10 5/8] dt-bindings: media: add TI DS90UB960 FPD-Link
- III Deserializer
-Message-ID: <ZD+g4j7jEg2AETNe@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>, Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Rob Herring <robh@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
- <20230222132907.594690-6-tomi.valkeinen@ideasonboard.com>
- <ZD6VwpRya6SGBAt5@shikoro>
- <20230419091336.4e10ba65@booty>
+        with ESMTP id S232553AbjDSI2y (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Apr 2023 04:28:54 -0400
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BBD449D;
+        Wed, 19 Apr 2023 01:28:51 -0700 (PDT)
+X-QQ-mid: bizesmtp68t1681892925t2smjhin
+Received: from wxdbg.localdomain.com ( [183.129.236.74])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 19 Apr 2023 16:28:36 +0800 (CST)
+X-QQ-SSF: 01400000000000I0Z000000A0000000
+X-QQ-FEAT: WMGta2JUicY6lp4BDFyIrDgjxzRSNsmDkIxLnhoZuLy/l8sMUYw3oKtrB+2NX
+        yydpsCaOjRQjvpjWdShw3v3biRVHRLuF1TYZTFHLZRgp+rZ9V1YL+7gnwx0oR0x02leh5G4
+        alkRi+q+Wr9CYvLARKEk1QSQKuuxIURZGHoi/G+6R5rpBUzodHrcvlNWm+PkCV8/+433px4
+        NH9JEgpktjv2CXmyDxrXJD8j8w1P1oEx44a3YuH1ksX1R5uEdFwFnGU5NCEcFzQdrxvxK2D
+        EeegTFWYR/K0UF8ffwD798N3EWlu53QN5OOxrDDMTWC2lxIyOBPBJbIwlAb25e/fasutqTB
+        rtNqO+XTYd2cHHVfUq9EuGMd17xgkSWwZEWTh1wHFfzObQ3+A4qV8Et42ZZAA==
+X-QQ-GoodBg: 2
+X-BIZMAIL-ID: 4162631676512922062
+From:   Jiawen Wu <jiawenwu@trustnetic.com>
+To:     netdev@vger.kernel.org, linux@armlinux.org.uk
+Cc:     linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        olteanv@gmail.com, mengyuanlou@net-swift.com,
+        Jiawen Wu <jiawenwu@trustnetic.com>
+Subject: [PATCH net-next v3 0/8] TXGBE PHYLINK support
+Date:   Wed, 19 Apr 2023 16:27:31 +0800
+Message-Id: <20230419082739.295180-1-jiawenwu@trustnetic.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5uh5ZyA4HcdyiNVD"
-Content-Disposition: inline
-In-Reply-To: <20230419091336.4e10ba65@booty>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:trustnetic.com:qybglogicsvr:qybglogicsvr5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Implement I2C, SFP, GPIO and PHYLINK to setup TXGBE link and switch link
+rate based on optical module information.
 
---5uh5ZyA4HcdyiNVD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Because our I2C and PCS are based on Synopsys Designware IP-core, extend
+the i2c-designware and pcs-xpcs driver to realize our functions.
 
+v2 -> v3:
+- delete own I2C bus master driver, support it in i2c-designware
+- delete own PCS functions, remove pma configuration and 1000BASE-X mode
+- add basic function for 10GBASE-R interface in pcs-xpcs
+- add helper to get txgbe pointer from netdev
 
-> > Why is "i2c-alias-pool" in the drivers binding and not a regular i2c
-> > binding? Same question for the implementation of the alias-pool
-> > handling. Shouldn't this be in the i2c-atr library? I'd think managing
-> > the list of aliases would look all the same in the drivers otherwise?
->=20
-> I think that this _was_ the plan, as it looks obviously cleaner, but
-> then we agreed that we should remove the pool entirely, so I didn't
-> bother moving it.
+v1 -> v2:
+- add comments to indicate GPIO lines
+- add I2C write operation support
+- modify GPIO direction functions
+- rename functions related to PHY interface
+- add condition on interface changing to re-config PCS
+- add to set advertise and fix to get status for 1000BASE-X mode
+- other redundant codes remove
 
-Ah, you mean we agreed on that at the Plumbers BoF? I think we can
-conclude this is obsolete meanwhile. GMSL encodes the target addresses
-in DT. Rob is also fine with the binding here to encode the pool in DT.
-Let's follow that road, I'd say.
+Jiawen Wu (8):
+  net: txgbe: Add software nodes to support phylink
+  i2c: designware: Add driver support for Wangxun 10Gb NIC
+  net: txgbe: Register I2C platform device
+  net: txgbe: Add SFP module identify
+  net: txgbe: Support GPIO to SFP socket
+  net: pcs: Add 10GBASE-R mode for Synopsys Designware XPCS
+  net: txgbe: Implement phylink pcs
+  net: txgbe: Support phylink MAC layer
 
+ drivers/i2c/busses/i2c-designware-common.c    |   4 +
+ drivers/i2c/busses/i2c-designware-core.h      |   1 +
+ drivers/i2c/busses/i2c-designware-master.c    |  91 ++-
+ drivers/i2c/busses/i2c-designware-platdrv.c   |  36 +-
+ drivers/net/ethernet/wangxun/Kconfig          |   6 +
+ drivers/net/ethernet/wangxun/libwx/wx_lib.c   |   3 +-
+ drivers/net/ethernet/wangxun/libwx/wx_type.h  |   3 +
+ drivers/net/ethernet/wangxun/txgbe/Makefile   |   1 +
+ .../ethernet/wangxun/txgbe/txgbe_ethtool.c    |  28 +
+ .../net/ethernet/wangxun/txgbe/txgbe_main.c   |  63 +-
+ .../net/ethernet/wangxun/txgbe/txgbe_phy.c    | 585 ++++++++++++++++++
+ .../net/ethernet/wangxun/txgbe/txgbe_phy.h    |  10 +
+ .../net/ethernet/wangxun/txgbe/txgbe_type.h   |  92 +++
+ drivers/net/pcs/pcs-xpcs.c                    |  58 ++
+ include/linux/pcs/pcs-xpcs.h                  |   1 +
+ include/linux/platform_data/i2c-dw.h          |  15 +
+ 16 files changed, 960 insertions(+), 37 deletions(-)
+ create mode 100644 drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c
+ create mode 100644 drivers/net/ethernet/wangxun/txgbe/txgbe_phy.h
+ create mode 100644 include/linux/platform_data/i2c-dw.h
 
---5uh5ZyA4HcdyiNVD
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.27.0
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ/oN8ACgkQFA3kzBSg
-KbYOVQ//SvRa7pFpZDsYmp4BoiKZFaS1vYbwJiVFgXLFu7s+LqMkohp0KNgRl+YK
-VIhqZcpIR7gp52ikHDp0BinRmDoKLp2j1sAmiPzQJHKOHMWfErdDpzAybKAV/1HW
-0GXCzZeDwOnURHFO8WRwqBn2LFa6HLO1F3Rnp7apuvbqb3JaKDvRdXWpIFsRgITF
-73hVZKOm8bIn8cc3NRAJr6n2PIQVoLOmvcO/WZQIY2ZJZabcB7Z8LAYexHb4OPJp
-qG+IN4JPqhWyKelvbDKIuvpmiNtRmO3RMczBa4MSNSipTpeRYjtJCJXJW8Gvewe8
-dpqU2/1RfTH+vAo0XJ6tI7UPgmb6g1EE9d/lFRQC+t1gKFQzGtIoa+ay9okQUzln
-MZJAOxu2o64uE5mA6HXFpTemhb/7H31kSxKxu1neKMCsY/7o9CRWxMlEe5s/FBmR
-1ieHG7udVNqD+/z5HyiaLOEpdhcqeqEkTTdgEIjeQBEwlkFM1gT5da7sUoLNUy/e
-N0ZvHG9SAejFX9hw6gtv702mUczNQHGCBp/joWRNqU+/dOSSBwYYc+mmISSSj4rh
-MvxoL4dBcn81ZFIScL9RlG4UxmwdYJ0O0CFgLaO9hcosLk0kBUmWO7UlrgD9WWzu
-I7dNoWqXkoPDorW0pimTPu45z5GdZu2T+p93+0cB/xO8GlYvwyo=
-=FA+C
------END PGP SIGNATURE-----
-
---5uh5ZyA4HcdyiNVD--
