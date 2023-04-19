@@ -2,70 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC3F6E7A79
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Apr 2023 15:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4CE6E7B0D
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Apr 2023 15:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233407AbjDSNTp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Apr 2023 09:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
+        id S232129AbjDSNji (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Apr 2023 09:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232553AbjDSNTo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Apr 2023 09:19:44 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAFE146E5;
-        Wed, 19 Apr 2023 06:19:42 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id fy21so38616433ejb.9;
-        Wed, 19 Apr 2023 06:19:42 -0700 (PDT)
+        with ESMTP id S232035AbjDSNjh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Apr 2023 09:39:37 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8538E60;
+        Wed, 19 Apr 2023 06:39:35 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id vc20so26819504ejc.10;
+        Wed, 19 Apr 2023 06:39:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681910381; x=1684502381;
+        d=gmail.com; s=20221208; t=1681911574; x=1684503574;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yagTkb97tOSUXUO/i6exQTb0DLsglQm8kN/R51CoLeM=;
-        b=DbTAYMvEn3V6b4ELhVhXKtZpsyLJCQqOzTlkzgZZ5CKABJ9YHPEQyWnXLNDjrNZA8F
-         OrMeCHM57zL6i9PqJ2EJWMOZXz4C66rRh7RXmfrmD2smi7cef2luVIxsUf8IAViZZMND
-         o+uJ3Yu9eEDiNYsSx+V/B2hEbJqR5cPXKstjgTtNdpO2ggsEod9ulXUc6MPN8ZybCjMx
-         QyPqxjeLFFVI9it6H5Ji/8TOIlvH83VnM48ZJBK3G+t3w4J4oKYUgH9QJVadzQpnQdC0
-         OTXFbDEFvD4hM17FYHU2Tz1Dt0uBMae7u2hom3TcdDCWj7ir44M75U1nYCkkjkTJmZA7
-         3ixQ==
+        bh=tJWbp1tfEuIBgO3KjXBgANNDdus3rVnLPSEwlC3kPi4=;
+        b=POiZ82GaBj5KpeYp1zkRXb3HJFZC59lbpVOn94aKhckb0eBs+KHbzuwkC55U8TaHUM
+         GTAp8/li2tq37vQS5tGB1tlnf5n2iCcc+v5SudC3PYwa8K9I9EcmWUiMgCt/LWxCRZZR
+         ybOkNldslhZQWmKU/gMVyF8PDWd6fG1mBbFw66Kz6AvNxMq7fL8TmhTi3VUVDloxwjQo
+         pa2dO+zkye9e+vGxugROHlBiD3AOsh+SaDyA0f8HkXoPgcQYzB8KjJ9IGtLQk1gkgGta
+         052f5zN/cuaD9TBXNcnSI3I6E7JbxZaLYV6NIXeejHfC9ShYDrm7B0vxHmRr4zVjgAmd
+         zdVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681910381; x=1684502381;
+        d=1e100.net; s=20221208; t=1681911574; x=1684503574;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yagTkb97tOSUXUO/i6exQTb0DLsglQm8kN/R51CoLeM=;
-        b=Fjk1i6dATGdaWhwYLX3YedGrQI/iIz7GwJhS2CqD3DWeXuNVzgMu2WUGThNY33Ne8c
-         TcMv7/Wm1qF5T+H0qxRPvGeemNcZCQDsFzax7RdR5qCAN6aQGHrvEZDNncTtHuJQ3xlJ
-         l9WQwpcqRsUKPQxkCujCz+rMkjZ87EjiGjAgZ+jF4RDOo7oAgboDuth8PHRPZOFqRbXZ
-         xgimZtLteRB1wffEoLlx+cWjeExrX5KGEGpFuRyuusf57Q4OQlBGhRHk8+NgHPJrDxwW
-         CytkWvDLcsQ1nf8ZLI5/Af3YlnAfY8M3NfB0C2tlmKH9entSOU/OkC9fhNADffjGrK9y
-         LzJw==
-X-Gm-Message-State: AAQBX9cSa2YVA5HUkiROydU68s9tr2w3FCI8kU5Nc+Smk/WcXvLqd95n
-        l1/dzFVbhqjFu9GrY1N6Jik=
-X-Google-Smtp-Source: AKy350Z1uvhTYg3923FLT4wTcoOrjylzfF1/2Ek+wyeLeIKqIC+Ry3JHCxOUkJEOK6fuEP3wCzbMoA==
-X-Received: by 2002:a17:907:a2cc:b0:953:603e:e939 with SMTP id re12-20020a170907a2cc00b00953603ee939mr1724194ejc.69.1681910381040;
-        Wed, 19 Apr 2023 06:19:41 -0700 (PDT)
+        bh=tJWbp1tfEuIBgO3KjXBgANNDdus3rVnLPSEwlC3kPi4=;
+        b=cchHKcJI2pWRmfc2/T+VfKg/f+XbjS8GuE16J/c/3VFK2qUQJIeW49z4w1xFkyvDS3
+         xlJJAaKQPua3diva3kouHt1KhUI1sBr+D/bbAZ9R85/6QYgivcwOPM/7cC5V756Z/nrw
+         E24AvO9kZatSMr79+/m4U3zDeV3wAnRJs/H73yZYOS5YFjyF038CP+VKek8S2DeTH36+
+         MFVzb+6nRGE7IudwdtTywNbDBN3YBJA6pnyeA4sT4d0gGZpHuW3S2K7E5ZA88Q0d0xZn
+         oRFAeOZl81r15tfPRlfeUCS8VSxsqZCRwk/dk7PktKqxV0Z39wZO4edqTt/dCJpzDaMI
+         8f2A==
+X-Gm-Message-State: AAQBX9f/L5EAF3LhYvuJ87OY++7y6qkz+5NeZOUWVBroQJWR9TFZz/MG
+        d2n+d0FwFtNYNtg7cswKgxmQ5hDMwbSXsg==
+X-Google-Smtp-Source: AKy350Z3/V908UnVtPmmQpMT4HDcol2ix7w5BeXwbLRUqmzO29i1kEWc6GDZuaNMoZCwiXdAKBna/w==
+X-Received: by 2002:a17:906:dc1:b0:94a:474a:4dd5 with SMTP id p1-20020a1709060dc100b0094a474a4dd5mr14305062eji.9.1681911574271;
+        Wed, 19 Apr 2023 06:39:34 -0700 (PDT)
 Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id j25-20020a1709062a1900b0094f614e43d0sm4911174eje.8.2023.04.19.06.19.40
+        by smtp.gmail.com with ESMTPSA id nc16-20020a1709071c1000b0095004c87676sm2662199ejc.199.2023.04.19.06.39.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 06:19:40 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 16:19:38 +0300
+        Wed, 19 Apr 2023 06:39:33 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 16:39:31 +0300
 From:   Vladimir Oltean <olteanv@gmail.com>
 To:     Jiawen Wu <jiawenwu@trustnetic.com>
 Cc:     netdev@vger.kernel.org, linux@armlinux.org.uk,
         linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        mengyuanlou@net-swift.com, Jose Abreu <Jose.Abreu@synopsys.com>
-Subject: Re: [PATCH net-next v3 6/8] net: pcs: Add 10GBASE-R mode for
- Synopsys Designware XPCS
-Message-ID: <20230419131938.3k4kuqucvuuhxcrc@skbuf>
+        mengyuanlou@net-swift.com
+Subject: Re: [PATCH net-next v3 0/8] TXGBE PHYLINK support
+Message-ID: <20230419133931.mpmjzzolnds4kv6l@skbuf>
 References: <20230419082739.295180-1-jiawenwu@trustnetic.com>
- <20230419082739.295180-1-jiawenwu@trustnetic.com>
- <20230419082739.295180-7-jiawenwu@trustnetic.com>
- <20230419082739.295180-7-jiawenwu@trustnetic.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230419082739.295180-7-jiawenwu@trustnetic.com>
- <20230419082739.295180-7-jiawenwu@trustnetic.com>
+In-Reply-To: <20230419082739.295180-1-jiawenwu@trustnetic.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -76,43 +71,13 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 04:27:37PM +0800, Jiawen Wu wrote:
-> Add basic support for XPCS using 10GBASE-R interface. This mode will
-> be extended to use interrupt, so set pcs.poll false. And avoid soft
-> reset so that the device using this mode is in the default configuration.
+On Wed, Apr 19, 2023 at 04:27:31PM +0800, Jiawen Wu wrote:
+> Implement I2C, SFP, GPIO and PHYLINK to setup TXGBE link and switch link
+> rate based on optical module information.
+> 
+> Because our I2C and PCS are based on Synopsys Designware IP-core, extend
+> the i2c-designware and pcs-xpcs driver to realize our functions.
 
-I'm not clear why the xpcs_soft_reset() call is avoided. Isn't the
-out-of-reset configuration the "default" one?
-
-> +static int xpcs_get_state_10gbaser(struct dw_xpcs *xpcs,
-> +				   struct phylink_link_state *state)
-> +{
-> +	int ret;
-> +
-> +	state->link = false;
-> +
-> +	ret = xpcs_read(xpcs, MDIO_MMD_PCS, MDIO_STAT1);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (ret & MDIO_STAT1_LSTATUS)
-> +		state->link = true;
-> +
-> +	if (state->link) {
-
-It seems pointless to open a new "if" statement when this would have
-sufficed:
-
-	if (ret & MDIO_STAT1_LSTATUS) {
-		state->link = true;
-		state->pause = MLO_PAUSE_TX | MLO_PAUSE_RX;
-		...
-	}
-
-> +		state->pause = MLO_PAUSE_TX | MLO_PAUSE_RX;
-> +		state->duplex = DUPLEX_FULL;
-> +		state->speed = SPEED_10000;
-> +	}
-> +
-> +	return 0;
-> +}
+For next patch versions, please copy the maintainers/reviewers listed
+under "SFF/SFP/SFP+ MODULE SUPPORT", "SOFTWARE NODES AND DEVICE PROPERTIES",
+"ETHERNET PHY LIBRARY".
