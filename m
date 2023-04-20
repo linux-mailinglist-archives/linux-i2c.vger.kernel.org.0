@@ -2,96 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413316E9BE0
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Apr 2023 20:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F14E6E9D3D
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Apr 2023 22:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbjDTSr1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 Apr 2023 14:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
+        id S231987AbjDTUag (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Apr 2023 16:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbjDTSrY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Apr 2023 14:47:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E55C30C5;
-        Thu, 20 Apr 2023 11:47:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 251D664B47;
-        Thu, 20 Apr 2023 18:47:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACA34C433D2;
-        Thu, 20 Apr 2023 18:47:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682016442;
-        bh=gIDrAb2DLZxHW/UfFYvFg8ZkNoELTe4cNyI1YhHhsUc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qc+6ooEQtzPf4HhwXsVsY5wZMyL8TlT4I4maWGru69JSD+ChHQZATlXR2f+XdVQan
-         eobkKFtfxAgi/DnoXUt3pRJerjXWRpc3k2jC2jhV6Kn9Ka757+APzQAuikfZC13LYM
-         zmPdSARFhZC4GX8iKVUTb6ILSy1f/psLW3JeOElO0+c6aBQH1xHYfXIkriUegRURXd
-         6gGkNZfw9f2k0oIQauZteFrauOYWiS1oVzkpQXjKi7jsU0mv9qNce1GdPdBaVXeZc+
-         FCvPX5O/9imZKrZInVHCejqUYHTUdKtIYYRKQy4yrptyeYSpou9z8R1f8/nbSo8hWV
-         njLrbmk4WGM7Q==
-Date:   Thu, 20 Apr 2023 20:47:16 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Rob Herring <robh@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH v10 5/8] dt-bindings: media: add TI DS90UB960 FPD-Link
- III Deserializer
-Message-ID: <ZEGItAqsvNGQm1l+@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>, Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Rob Herring <robh@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
- <20230222132907.594690-6-tomi.valkeinen@ideasonboard.com>
- <ZD6VwpRya6SGBAt5@shikoro>
- <b85a2198-dffd-6c1e-53ea-61bc4d14ce2a@ideasonboard.com>
+        with ESMTP id S232829AbjDTUaC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Apr 2023 16:30:02 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1F77EC2;
+        Thu, 20 Apr 2023 13:29:02 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-187ec6a5504so973745fac.2;
+        Thu, 20 Apr 2023 13:29:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682022536; x=1684614536;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T+n+UehpmOijcFs37eU9VlhyyKc5NwCU3d7QfPvG7ns=;
+        b=Wz/kd1KXtKCVfD2sahZyaVBAYwXdjFYY8cA6HodnQ9qWeCYPFxE4iBfdTmqPT9dT5Q
+         g/8mMc+SwROstWFYfuPCZDKaMmAsuGv+q8I7BecWGP/h8OTtp9r2ZPI0iBuafkwIMDoG
+         bq5OSYK9OpMZZQrqiu8+aKSDhxqukrcMMvQ+Q6FC2jok9kDrgvzWXJFn9JuTrGfzg8i4
+         R4fgj0rBRiwzrrN2sVluq/9iVofBea0wg5QIrcYrb0kcQqIVyxBQQptkRuCLOWgvG5F2
+         /r27kFM0Jejs3CU60yLoHmN3hTUJq3Bvlh00YIEvg0XTEoF/ALL3izFBpOTLIJtbWXiL
+         ljdQ==
+X-Gm-Message-State: AAQBX9c5GbCKWg8Z6etAal6ARiQME2qz+EM5vRXCryNzqMyfRhEQWyW5
+        LTKcoQkCaKqgVi8CEb2xxcdOAN7WMw==
+X-Google-Smtp-Source: AKy350a1bcr41LwfVfG6qIlFziv9ccAqjhBow6+UsPDOWyfId1lmx58YpQaFBNHuf1gAjD6+FSB4SA==
+X-Received: by 2002:a05:6870:61cb:b0:188:fb2:c208 with SMTP id b11-20020a05687061cb00b001880fb2c208mr2056820oah.11.1682022535860;
+        Thu, 20 Apr 2023 13:28:55 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w22-20020a056870a2d600b00172428894e0sm1113473oak.28.2023.04.20.13.28.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 13:28:55 -0700 (PDT)
+Received: (nullmailer pid 3448770 invoked by uid 1000);
+        Thu, 20 Apr 2023 20:28:54 -0000
+Date:   Thu, 20 Apr 2023 15:28:54 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH] dt-bindings: i2c: samsung: Fix 'deprecated' value
+Message-ID: <168202243267.3446630.2282935889963812276.robh@kernel.org>
+References: <20230418150643.1529895-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DLSvPqhBVl0l+K0b"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b85a2198-dffd-6c1e-53ea-61bc4d14ce2a@ideasonboard.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230418150643.1529895-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -99,64 +65,15 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---DLSvPqhBVl0l+K0b
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, 18 Apr 2023 10:06:42 -0500, Rob Herring wrote:
+> 'deprecated' is a boolean type which should have a value of 'false' rather
+> than 'yes'.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/i2c/samsung,s3c2410-i2c.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Hi Tomi,
+Fixed the commit message and applied.
 
-> How does this sound:
->=20
-> - If "i2c-alias-pool" is present in the DT data of the device passed to
-> i2c_atr_new(), i2c_atr_new() will parse the property. i2c-atr.c will expo=
-rt
-> functions to get a new alias and to release a previously reserved alias. =
-The
-> driver can use those functions in attach/detach_client() callbacks. In ot=
-her
-> words, the alias pool management wouldn't be fully automatic inside the
-> i2c-atr, but it would provide helpers for the driver to do the common wor=
-k.
->=20
-> - If "i2c-alias-pool" is not present, i2c-atr.c will behave as it does no=
-w,
-> and expects the driver to manage the aliases.
-
-So, how does a driver manage the aliases without a pool of available
-addresses? I can't imagine another way right now.
-
-In general, your above proposal sounds good to me. With my lack of
-imagination regarding a different alias handling, I could also see that
-i2c-atr already provides the alias to the attach callback. But if you
-teach me another way of alias handling, then I could agree that your
-proposal makes sense as is.
-
-And yes, the "i2c-alias-pool" is definately optional.
-
-Happy hacking,
-
-   Wolfram
-
-
---DLSvPqhBVl0l+K0b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmRBiLAACgkQFA3kzBSg
-KbYJ1A/7BDFTBE8y9ItDYSASswnWFWHIO5wp/eXJwlpgBYacveFxf/APz0H9A34I
-BKLFU2j5vsI4sPZgaJRo9rsju5/wEQlokVgMcOaFXEeiNf6LJ2CtVUrVa7TaBTkX
-zb8eMQ5EmPQwX9d4/XJ/Jc8bPGiLMhQ0SrNW21g3ZVA++ZFzrRqAZQDicPAuT3c8
-li159KDrPg4X5bhIAfOf2zgqr+1eBFQdlY11zDZ5bMBSbJHUb4vjX2Zogtzl7Xx/
-8CziRiUJmSiNtSUTpBACic4X8rbU/rCn5lgr+811389JvnOPZtcmfg1fLqL4Wj9i
-29Wxyc0+mGs8Hg74aDuAn6kpeT7VLzLUuH2EhcrpqY4B8lP2pCKQmMnVt0ZXrdBc
-J24ia/JEQ7+Ua3lqFn4pni7Pk34/juwq0LS2hqF9vKM2r5Z4/KZ5izZxxyU9c3Xe
-FWSRP8xWwA+H7ewtmFPrcGVRV9EVrZj/twpJn8KxvvFdFqJjHYdCUIkkcpuFN3MF
-yo0qVBp4aOvyQkzn+eyRNvFXkL0xGYJxeU1OouuUDMM3k75hUflAN9JUZfrTaMNP
-RPFhsTBcEgELPM7LLJqV9UqSsG/oAbC1eFV9fMoGRzcWNrd21XDb/TfPz11uGM6v
-R0a8dVjmmZU9OJMOcYYp9HebKFHBJrTQZoNE1syC7Kxj6+lg1xc=
-=qWqp
------END PGP SIGNATURE-----
-
---DLSvPqhBVl0l+K0b--
