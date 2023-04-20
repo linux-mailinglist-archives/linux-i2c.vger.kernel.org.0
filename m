@@ -2,74 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1ECF6E9012
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Apr 2023 12:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C04F76E9048
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Apr 2023 12:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234611AbjDTKYk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 Apr 2023 06:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
+        id S234860AbjDTKda (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Apr 2023 06:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234668AbjDTKYJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Apr 2023 06:24:09 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B364C10;
-        Thu, 20 Apr 2023 03:23:10 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1ppRRF-000Yfl-FJ; Thu, 20 Apr 2023 18:22:55 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 20 Apr 2023 18:22:54 +0800
-Date:   Thu, 20 Apr 2023 18:22:54 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 0/2] Use CCP driver to handle PSP I2C arbitration
-Message-ID: <ZEESfpbdwmjWWmYx@gondor.apana.org.au>
-References: <20230414144008.836-1-mario.limonciello@amd.com>
+        with ESMTP id S233961AbjDTKc4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Apr 2023 06:32:56 -0400
+Received: from smtpbg153.qq.com (smtpbg153.qq.com [13.245.218.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D9B768F;
+        Thu, 20 Apr 2023 03:30:18 -0700 (PDT)
+X-QQ-mid: Yeas50t1681986556t830t04060
+Received: from 7082A6556EBF4E69829842272A565F7C (jiawenwu@trustnetic.com [183.129.236.74])
+X-QQ-SSF: 00400000000000F0FM9000000000000
+From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
+X-BIZMAIL-ID: 15567851786989932088
+To:     "'Andrew Lunn'" <andrew@lunn.ch>
+Cc:     <netdev@vger.kernel.org>, <linux@armlinux.org.uk>,
+        <linux-i2c@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <olteanv@gmail.com>, <mengyuanlou@net-swift.com>,
+        "'Jarkko Nikula'" <jarkko.nikula@linux.intel.com>
+References: <20230419082739.295180-1-jiawenwu@trustnetic.com> <20230419082739.295180-3-jiawenwu@trustnetic.com> <ec095b8a-00af-4fb7-be11-f643ea75e924@lunn.ch>
+In-Reply-To: <ec095b8a-00af-4fb7-be11-f643ea75e924@lunn.ch>
+Subject: RE: [PATCH net-next v3 2/8] i2c: designware: Add driver support for Wangxun 10Gb NIC
+Date:   Thu, 20 Apr 2023 18:29:11 +0800
+Message-ID: <03ef01d97372$f2ee26a0$d8ca73e0$@trustnetic.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230414144008.836-1-mario.limonciello@amd.com>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: zh-cn
+Thread-Index: AQILBR3gZkFBC9g1wrfKT5ke1rRywwLGjwA7ApvXcEmupcagcA==
+X-QQ-SENDSIZE: 520
+Feedback-ID: Yeas:trustnetic.com:qybglogicsvr:qybglogicsvr5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 09:40:06AM -0500, Mario Limonciello wrote:
-> The CCP driver now has symbols that can be used by i2c-designware-amdpsp
-> to handle the communication regarding i2c arbitration with the PSP for
-> both Cezanne and Mendocino based designs.
+On Thursday, April 20, 2023 4:58 AM, Andrew Lunn wrote:
+> On Wed, Apr 19, 2023 at 04:27:33PM +0800, Jiawen Wu wrote:
+> > Wangxun 10Gb ethernet chip is connected to Designware I2C, to communicate
+> > with SFP.
+> >
+> > Add platform data to pass IOMEM base address, board flag and other
+> > parameters, since resource address was mapped on ethernet driver.
+> >
+> > The exists IP limitations are dealt as workarounds:
+> > - IP does not support interrupt mode, it works on polling mode.
+> > - I2C cannot read continuously, only one byte can at a time.
 > 
-> Utilize those symbols.
+> Are you really sure about that?
 > 
-> v8->v9:
->  * Drop v8 patches 1-4 as they're merged now
->  * Pick up tags for v8 patches 5-6
->  * Repost to linux-crypto as this needs to merge through crypto tree.
+> It is a major limitation for SFP devices. It means you cannot access
+> the diagnostics, since you need to perform an atomic 2 byte read.
 > 
-> Mario Limonciello (2):
->   i2c: designware: Use PCI PSP driver for communication
->   i2c: designware: Add doorbell support for Mendocino
+> Or maybe i'm understanding you wrong.
 > 
->  drivers/i2c/busses/Kconfig                  |   5 +-
->  drivers/i2c/busses/i2c-designware-amdpsp.c  | 197 +++++---------------
->  drivers/i2c/busses/i2c-designware-core.h    |   1 -
->  drivers/i2c/busses/i2c-designware-platdrv.c |   1 -
->  include/linux/psp-platform-access.h         |   1 +
->  5 files changed, 53 insertions(+), 152 deletions(-)
+>    Andrew
 > 
-> -- 
-> 2.34.1
 
-All applied.  Thanks.
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Maybe I'm a little confused about this. Every time I read a byte info, I have to
+write a 'read command'. It can normally get the information for SFP devices.
+But I'm not sure if this is regular I2C behavior.
+
