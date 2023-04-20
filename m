@@ -2,99 +2,137 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFDC6E95BB
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Apr 2023 15:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4521A6E968A
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Apr 2023 16:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjDTNXC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 Apr 2023 09:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36468 "EHLO
+        id S231814AbjDTODG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Apr 2023 10:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbjDTNXC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Apr 2023 09:23:02 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945F444A5;
-        Thu, 20 Apr 2023 06:22:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=gkhEaE/aNZgpUhGPC4PT/KQVDtc4Y5mYe1VfRfC4FeY=; b=rUpH3kHcTP39AdAOGkVcof9uN9
-        evAfZtKYl3k00DZRI96sx7ibhBf+Dsegq//qaodKdEqyOHb86ngDnyHwGw6uHnTNsxUPT8Xbdrcl7
-        svKhNw57zYPRIYv0tZlqQhCWcLvb435zIFF8HQsgghAb3tqD+dFusg9Kc6wBihOH72Lo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ppUFP-00AnIq-Qd; Thu, 20 Apr 2023 15:22:51 +0200
-Date:   Thu, 20 Apr 2023 15:22:51 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jiawen Wu <jiawenwu@trustnetic.com>
-Cc:     netdev@vger.kernel.org, linux@armlinux.org.uk,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        olteanv@gmail.com, mengyuanlou@net-swift.com,
-        'Jarkko Nikula' <jarkko.nikula@linux.intel.com>
-Subject: Re: [PATCH net-next v3 2/8] i2c: designware: Add driver support for
- Wangxun 10Gb NIC
-Message-ID: <72703dc2-0ee1-41b2-9618-2a3185869cbf@lunn.ch>
-References: <20230419082739.295180-1-jiawenwu@trustnetic.com>
- <20230419082739.295180-3-jiawenwu@trustnetic.com>
- <ec095b8a-00af-4fb7-be11-f643ea75e924@lunn.ch>
- <03ef01d97372$f2ee26a0$d8ca73e0$@trustnetic.com>
+        with ESMTP id S230025AbjDTODF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Apr 2023 10:03:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8821269E;
+        Thu, 20 Apr 2023 07:03:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B25F621C0;
+        Thu, 20 Apr 2023 14:03:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FCF6C433EF;
+        Thu, 20 Apr 2023 14:02:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681999381;
+        bh=CwmiKbG2qMMWKyV7Za5sDQLPEK5nvRLIFuIy31VVq0Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ooVO/sDaTq7Pn7hnyFpx7c4b8EsXpnTqku8MOD11yybFf3BmKwFyfia2d0nTtIGXo
+         eivszhuo/HXIBdnQOroLoRiXwFv+zREVghlr28z6n4Nb2VXCxPPQsvsrgP6cnEQoaa
+         bplrR3Zfd5bDWNXLBu2PdWID0+BfVqt0dEZu4+jHV4p93Qrvoil3qFe4a3aF5A5ciH
+         wGLr1LzJaeO58XqoE3Dase+6wIXrTg3C0m0Dx1+3oyhjBVFjlc8INULQLHad80AuCy
+         d6a4e3Dw216qEw6Rq6AUDfy48jc1d7ZD2m4P5xOLGvZ/O9g+3NOJ5JoJdtnsyb+XUg
+         yaqqS/7FItxDA==
+Date:   Thu, 20 Apr 2023 15:02:56 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Benjamin Bara <bbara93@gmail.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, rafael.j.wysocki@intel.com,
+        dmitry.osipenko@collabora.com, peterz@infradead.org,
+        jonathanh@nvidia.com, richard.leitner@linux.dev,
+        treding@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>
+Subject: Re: [PATCH v5 5/6] mfd: tps6586x: use devm-based power off handler
+Message-ID: <20230420140256.GG996918@google.com>
+References: <20230327-tegra-pmic-reboot-v5-0-ab090e03284d@skidata.com>
+ <20230327-tegra-pmic-reboot-v5-5-ab090e03284d@skidata.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <03ef01d97372$f2ee26a0$d8ca73e0$@trustnetic.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230327-tegra-pmic-reboot-v5-5-ab090e03284d@skidata.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 06:29:11PM +0800, Jiawen Wu wrote:
-> On Thursday, April 20, 2023 4:58 AM, Andrew Lunn wrote:
-> > On Wed, Apr 19, 2023 at 04:27:33PM +0800, Jiawen Wu wrote:
-> > > Wangxun 10Gb ethernet chip is connected to Designware I2C, to communicate
-> > > with SFP.
-> > >
-> > > Add platform data to pass IOMEM base address, board flag and other
-> > > parameters, since resource address was mapped on ethernet driver.
-> > >
-> > > The exists IP limitations are dealt as workarounds:
-> > > - IP does not support interrupt mode, it works on polling mode.
-> > > - I2C cannot read continuously, only one byte can at a time.
-> > 
-> > Are you really sure about that?
-> > 
-> > It is a major limitation for SFP devices. It means you cannot access
-> > the diagnostics, since you need to perform an atomic 2 byte read.
-> > 
-> > Or maybe i'm understanding you wrong.
-> > 
-> >    Andrew
-> > 
+On Tue, 18 Apr 2023, Benjamin Bara wrote:
+
+> From: Benjamin Bara <benjamin.bara@skidata.com>
 > 
-> Maybe I'm a little confused about this. Every time I read a byte info, I have to
-> write a 'read command'. It can normally get the information for SFP devices.
-> But I'm not sure if this is regular I2C behavior.
- 
-I don't know this hardware, so i cannot say what a 'read command'
-actually does. Can you put a bus pirate or similar sort of device on
-the bus and look at the actual I2C signals. Is it performing one I2C
-transaction per byte? If so, that is not good.
+> Convert the power off handler to a devm-based power off handler.
+> 
+> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+> ---
+>  drivers/mfd/tps6586x.c | 29 +++++++++++++++++++++--------
+>  1 file changed, 21 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/mfd/tps6586x.c b/drivers/mfd/tps6586x.c
+> index 2d947f3f606a..226e856e34e0 100644
+> --- a/drivers/mfd/tps6586x.c
+> +++ b/drivers/mfd/tps6586x.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/err.h>
+>  #include <linux/i2c.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/reboot.h>
+>  #include <linux/regmap.h>
+>  #include <linux/of.h>
+>  
+> @@ -457,13 +458,21 @@ static const struct regmap_config tps6586x_regmap_config = {
+>  	.cache_type = REGCACHE_RBTREE,
+>  };
+>  
+> -static struct device *tps6586x_dev;
+> -static void tps6586x_power_off(void)
+> +static int tps6586x_power_off_handler(struct sys_off_data *data)
+>  {
+> -	if (tps6586x_clr_bits(tps6586x_dev, TPS6586X_SUPPLYENE, EXITSLREQ_BIT))
+> -		return;
+> +	int ret;
+> +
+> +	/* bring pmic into SLEEP state. this takes at least 10ms. */
 
-The diagnostic values, things like temperature sensor, voltage sensor,
-received signal power are all 16 bits. You cannot read them using two
-time one byte reads. Say the first read sees a 16bit value of 0x00FF,
-but only reads the first byte. The second read sees a 16bit value of
-0x0100 but only reads the second byte. You end up with 0x0000. When
-you do a multi byte read, the SFP should do an atomic read of the
-sensor, so you would see either 0x00FF, or 0x0100.
+"Put the PMIC into a sleep state. This takes at least 10sm."
 
-If your hardware can only do single byte reads, please make sure the
-I2C framework knows this. The SFP driver should then refuse to access
-the diagnostic parts of the SFP, because your I2C bus master hardware
-is too broken. The rest of the SFP should still work.
+> +	ret = tps6586x_clr_bits(data->dev, TPS6586X_SUPPLYENE, EXITSLREQ_BIT);
+> +	if (ret)
+> +		return notifier_from_errno(ret);
+> +
+> +	ret = tps6586x_set_bits(data->dev, TPS6586X_SUPPLYENE, SLEEP_MODE_BIT);
+> +	if (ret)
+> +		return notifier_from_errno(ret);
+>  
+> -	tps6586x_set_bits(tps6586x_dev, TPS6586X_SUPPLYENE, SLEEP_MODE_BIT);
+> +	mdelay(50);
+> +	return notifier_from_errno(-ETIME);
+>  }
+>  
+>  static void tps6586x_print_version(struct i2c_client *client, int version)
+> @@ -559,9 +568,13 @@ static int tps6586x_i2c_probe(struct i2c_client *client)
+>  		goto err_add_devs;
+>  	}
+>  
+> -	if (pdata->pm_off && !pm_power_off) {
+> -		tps6586x_dev = &client->dev;
+> -		pm_power_off = tps6586x_power_off;
+> +	if (pdata->pm_off) {
+> +		ret = devm_register_power_off_handler(&client->dev, &tps6586x_power_off_handler,
+> +						      NULL);
+> +		if (ret) {
+> +			dev_err(&client->dev, "register power off handler failed: %d\n", ret);
+> +			goto err_add_devs;
+> +		}
+>  	}
+>  
+>  	return 0;
+> 
+> -- 
+> 2.34.1
+> 
 
-	Andrew.
+-- 
+Lee Jones [李琼斯]
