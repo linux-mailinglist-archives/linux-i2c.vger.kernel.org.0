@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E2A6EA828
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Apr 2023 12:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8966EA82D
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Apr 2023 12:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231802AbjDUKTM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Apr 2023 06:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
+        id S231877AbjDUKTb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Apr 2023 06:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjDUKTK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Apr 2023 06:19:10 -0400
+        with ESMTP id S231772AbjDUKTL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Apr 2023 06:19:11 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A280BBB6;
-        Fri, 21 Apr 2023 03:19:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF12C161;
+        Fri, 21 Apr 2023 03:19:09 -0700 (PDT)
 Received: from desky.lan (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AA371127D;
-        Fri, 21 Apr 2023 12:18:55 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A6D072453;
+        Fri, 21 Apr 2023 12:18:57 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1682072337;
-        bh=H5byX9BR3izXApOzFQA8+xqAPcha46UtXqsX7Usjt0I=;
+        s=mail; t=1682072339;
+        bh=C5xQprjhlSCvkqlZKZL9z4akSx5A0uGnxaTe7JFSNsE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sk0bEvfn1DUv4apq5ris/QbtJ5QexUyfL50swjL9oQmQnIFJaFUf5aHWPI/lA9GPq
-         TkgeLcL/E+F+r6/UkikAQ9gb+XW73vXAYSaXkOxkXikRZ1DcuLcAB0NoFhraUqQ/x/
-         YqDoMrNpraYI915Cjp0F0acGTz5g0rJGEtA7PaFY=
+        b=YN5Kfo+7M0z6eyWvOJwq9MPzAjABIDHbbCIsTRpReqTFWgXZCbI0aANU3NKiqUCtX
+         g10jwrw3sJr2PQ6SRgzlt24bXQiDNwpxLRWRM1CTHsgJLpkTCcvQGv9xZ/PJc5/nb/
+         fVidGqU0BoDdWFjTqxOK4g5PDViX/Y4MtYGTj5go=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
@@ -46,11 +46,11 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Marek Vasut <marex@denx.de>,
         Satish Nagireddy <satish.nagireddy@getcruise.com>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v11 3/7] dt-bindings: media: add TI DS90UB953 FPD-Link III Serializer
-Date:   Fri, 21 Apr 2023 13:18:29 +0300
-Message-Id: <20230421101833.345984-4-tomi.valkeinen@ideasonboard.com>
+        Rob Herring <robh@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v11 4/7] dt-bindings: media: add TI DS90UB960 FPD-Link III Deserializer
+Date:   Fri, 21 Apr 2023 13:18:30 +0300
+Message-Id: <20230421101833.345984-5-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230421101833.345984-1-tomi.valkeinen@ideasonboard.com>
 References: <20230421101833.345984-1-tomi.valkeinen@ideasonboard.com>
@@ -66,61 +66,135 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add DT bindings for TI DS90UB953 FPD-Link III Serializer.
+Add DT bindings for TI DS90UB960 FPD-Link III Deserializer.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../bindings/media/i2c/ti,ds90ub953.yaml      | 134 ++++++++++++++++++
- 1 file changed, 134 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub953.yaml
+ .../bindings/media/i2c/ti,ds90ub960.yaml      | 423 ++++++++++++++++++
+ 1 file changed, 423 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953.yaml
+diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
 new file mode 100644
-index 000000000000..2030366994d1
+index 000000000000..1d5362bea09a
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953.yaml
-@@ -0,0 +1,134 @@
++++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+@@ -0,0 +1,423 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub953.yaml#
++$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub960.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Texas Instruments DS90UB953 FPD-Link III Serializer
++title: Texas Instruments DS90UB9XX Family FPD-Link Deserializer Hubs
 +
 +maintainers:
 +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 +
 +description:
-+  The TI DS90UB953 is an FPD-Link III video serializer for MIPI CSI-2.
++  The TI DS90UB9XX devices are FPD-Link video deserializers with I2C and GPIO
++  forwarding.
 +
 +properties:
 +  compatible:
 +    enum:
-+      - ti,ds90ub953-q1
-+      - ti,ds90ub971-q1
++      - ti,ds90ub960-q1
++      - ti,ds90ub9702-q1
 +
-+  '#gpio-cells':
-+    const: 2
-+    description:
-+      First cell is the GPIO pin number, second cell is the flags. The GPIO pin
-+      number must be in range of [0, 3].
-+
-+  gpio-controller: true
++  reg:
++    maxItems: 1
 +
 +  clocks:
 +    maxItems: 1
 +    description:
-+      Reference clock connected to the CLKIN pin.
++      Reference clock connected to the REFCLK pin.
 +
 +  clock-names:
 +    items:
-+      - const: clkin
++      - const: refclk
 +
-+  '#clock-cells':
-+    const: 0
++  powerdown-gpios:
++    maxItems: 1
++    description:
++      Specifier for the GPIO connected to the PDB pin.
++
++  i2c-alias-pool:
++    $ref: /schemas/i2c/i2c-atr.yaml#/properties/i2c-alias-pool
++
++  links:
++    type: object
++    additionalProperties: false
++
++    properties:
++      '#address-cells':
++        const: 1
++
++      '#size-cells':
++        const: 0
++
++      ti,manual-strobe:
++        type: boolean
++        description:
++          Enable manual strobe position and EQ level
++
++    patternProperties:
++      '^link@[0-3]$':
++        type: object
++        additionalProperties: false
++        properties:
++          reg:
++            description: The link number
++            maxItems: 1
++
++          i2c-alias:
++            description:
++              The I2C address used for the serializer. Transactions to this
++              address on the I2C bus where the deserializer resides are
++              forwarded to the serializer.
++
++          ti,rx-mode:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            enum:
++              - 0 # RAW10
++              - 1 # RAW12 HF
++              - 2 # RAW12 LF
++              - 3 # CSI2 SYNC
++              - 4 # CSI2 NON-SYNC
++            description:
++              FPD-Link Input Mode. This should reflect the hardware and the
++              default mode of the connected device.
++
++          ti,cdr-mode:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            enum:
++              - 0 # FPD-Link III
++              - 1 # FPD-Link IV
++            description:
++              FPD-Link CDR Mode. This should reflect the hardware and the
++              default mode of the connected device.
++
++          ti,strobe-pos:
++            $ref: /schemas/types.yaml#/definitions/int32
++            minimum: -13
++            maximum: 13
++            description: Manual strobe position
++
++          ti,eq-level:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            maximum: 14
++            description: Manual EQ level
++
++          serializer:
++            type: object
++            description: FPD-Link Serializer node
++
++        required:
++          - reg
++          - i2c-alias
++          - ti,rx-mode
++          - serializer
 +
 +  ports:
 +    $ref: /schemas/graph.yaml#/properties/ports
@@ -129,34 +203,110 @@ index 000000000000..2030366994d1
 +      port@0:
 +        $ref: /schemas/graph.yaml#/$defs/port-base
 +        unevaluatedProperties: false
-+        description: CSI-2 input port
++        description: FPD-Link input 0
++
++        properties:
++          endpoint:
++            $ref: /schemas/media/video-interfaces.yaml#
++            unevaluatedProperties: false
++            description:
++              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
++              hsync-active and vsync-active must be defined.
++
++      port@1:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description: FPD-Link input 1
++
++        properties:
++          endpoint:
++            $ref: /schemas/media/video-interfaces.yaml#
++            unevaluatedProperties: false
++            description:
++              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
++              hsync-active and vsync-active must be defined.
++
++      port@2:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description: FPD-Link input 2
++
++        properties:
++          endpoint:
++            $ref: /schemas/media/video-interfaces.yaml#
++            unevaluatedProperties: false
++            description:
++              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
++              hsync-active and vsync-active must be defined.
++
++      port@3:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description: FPD-Link input 3
++
++        properties:
++          endpoint:
++            $ref: /schemas/media/video-interfaces.yaml#
++            unevaluatedProperties: false
++            description:
++              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
++              hsync-active and vsync-active must be defined.
++
++      port@4:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description: CSI-2 Output 0
 +
 +        properties:
 +          endpoint:
 +            $ref: /schemas/media/video-interfaces.yaml#
 +            unevaluatedProperties: false
 +
++            properties:
++              data-lanes:
++                minItems: 1
++                maxItems: 4
++              link-frequencies:
++                maxItems: 1
++
 +            required:
 +              - data-lanes
++              - link-frequencies
 +
-+      port@1:
-+        $ref: /schemas/graph.yaml#/properties/port
++      port@5:
++        $ref: /schemas/graph.yaml#/$defs/port-base
 +        unevaluatedProperties: false
-+        description: FPD-Link III output port
++        description: CSI-2 Output 1
++
++        properties:
++          endpoint:
++            $ref: /schemas/media/video-interfaces.yaml#
++            unevaluatedProperties: false
++
++            properties:
++              data-lanes:
++                minItems: 1
++                maxItems: 4
++              link-frequencies:
++                maxItems: 1
++
++            required:
++              - data-lanes
++              - link-frequencies
 +
 +    required:
 +      - port@0
 +      - port@1
-+
-+  i2c:
-+    $ref: /schemas/i2c/i2c-controller.yaml#
-+    unevaluatedProperties: false
++      - port@2
++      - port@3
++      - port@4
++      - port@5
 +
 +required:
 +  - compatible
-+  - '#gpio-cells'
-+  - gpio-controller
-+  - '#clock-cells'
++  - reg
++  - clocks
++  - clock-names
 +  - ports
 +
 +additionalProperties: false
@@ -165,53 +315,192 @@ index 000000000000..2030366994d1
 +  - |
 +    #include <dt-bindings/gpio/gpio.h>
 +
-+    serializer {
-+      compatible = "ti,ds90ub953-q1";
++    i2c {
++      clock-frequency = <400000>;
++      #address-cells = <1>;
++      #size-cells = <0>;
 +
-+      gpio-controller;
-+      #gpio-cells = <2>;
++      deser@3d {
++        compatible = "ti,ds90ub960-q1";
++        reg = <0x3d>;
 +
-+      #clock-cells = <0>;
++        clock-names = "refclk";
++        clocks = <&fixed_clock>;
 +
-+      ports {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
++        powerdown-gpios = <&pca9555 7 GPIO_ACTIVE_LOW>;
 +
-+        port@0 {
-+          reg = <0>;
-+          ub953_in: endpoint {
-+            clock-lanes = <0>;
-+            data-lanes = <1 2 3 4>;
-+            remote-endpoint = <&sensor_out>;
-+          };
-+        };
++        i2c-alias-pool = /bits/ 16 <0x4a 0x4b 0x4c 0x4d 0x4e 0x4f>;
 +
-+        port@1 {
-+          reg = <1>;
-+          endpoint {
-+            remote-endpoint = <&deser_fpd_in>;
-+          };
-+        };
-+      };
++        ports {
++          #address-cells = <1>;
++          #size-cells = <0>;
 +
-+      i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
++          /* Port 0, Camera 0 */
++          port@0 {
++            reg = <0>;
 +
-+        sensor@1a {
-+          compatible = "sony,imx274";
-+          reg = <0x1a>;
-+
-+          reset-gpios = <&serializer 0 GPIO_ACTIVE_LOW>;
-+
-+          clocks = <&serializer>;
-+          clock-names = "inck";
-+
-+          port {
-+            sensor_out: endpoint {
-+              remote-endpoint = <&ub953_in>;
++            ub960_fpd3_1_in: endpoint {
++              remote-endpoint = <&ub953_1_out>;
 +            };
 +          };
++
++          /* Port 1, Camera 1 */
++          port@1 {
++            reg = <1>;
++
++            ub960_fpd3_2_in: endpoint {
++              remote-endpoint = <&ub913_2_out>;
++              hsync-active = <0>;
++              vsync-active = <1>;
++            };
++          };
++
++          /* Port 2, unconnected */
++          port@2 {
++            reg = <2>;
++          };
++
++          /* Port 3, unconnected */
++          port@3 {
++            reg = <3>;
++          };
++
++          /* Port 4, CSI-2 TX */
++          port@4 {
++            reg = <4>;
++            ds90ub960_0_csi_out: endpoint {
++              data-lanes = <1 2 3 4>;
++              link-frequencies = /bits/ 64 <800000000>;
++              remote-endpoint = <&csi2_phy0>;
++            };
++          };
++
++          /* Port 5, unconnected */
++          port@5 {
++            reg = <5>;
++          };
++        };
++
++        links {
++          #address-cells = <1>;
++          #size-cells = <0>;
++
++          /* Link 0 has DS90UB953 serializer and IMX274 sensor */
++
++          link@0 {
++            reg = <0>;
++            i2c-alias = <0x44>;
++
++            ti,rx-mode = <3>;
++
++            serializer1: serializer {
++              compatible = "ti,ds90ub953-q1";
++
++              gpio-controller;
++              #gpio-cells = <2>;
++
++              #clock-cells = <0>;
++
++              ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                port@0 {
++                  reg = <0>;
++                  ub953_1_in: endpoint {
++                    data-lanes = <1 2 3 4>;
++                    remote-endpoint = <&sensor_1_out>;
++                  };
++                };
++
++                port@1 {
++                  reg = <1>;
++
++                  ub953_1_out: endpoint {
++                    remote-endpoint = <&ub960_fpd3_1_in>;
++                  };
++                };
++              };
++
++              i2c {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                sensor@1a {
++                  compatible = "sony,imx274";
++                  reg = <0x1a>;
++
++                  reset-gpios = <&serializer1 0 GPIO_ACTIVE_LOW>;
++
++                  port {
++                    sensor_1_out: endpoint {
++                      remote-endpoint = <&ub953_1_in>;
++                    };
++                  };
++                };
++              };
++            };
++          };  /* End of link@0 */
++
++          /* Link 1 has DS90UB913 serializer and MT9V111 sensor */
++
++          link@1 {
++            reg = <1>;
++            i2c-alias = <0x45>;
++
++            ti,rx-mode = <0>;
++
++            serializer2: serializer {
++              compatible = "ti,ds90ub913a-q1";
++
++              gpio-controller;
++              #gpio-cells = <2>;
++
++              clocks = <&clk_cam_48M>;
++              clock-names = "clkin";
++
++              #clock-cells = <0>;
++
++              ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                port@0 {
++                  reg = <0>;
++                  ub913_2_in: endpoint {
++                    remote-endpoint = <&sensor_2_out>;
++                    pclk-sample = <1>;
++                  };
++                };
++
++                port@1 {
++                  reg = <1>;
++
++                  ub913_2_out: endpoint {
++                    remote-endpoint = <&ub960_fpd3_2_in>;
++                  };
++                };
++              };
++
++              i2c {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                sensor@48 {
++                  compatible = "aptina,mt9v111";
++                  reg = <0x48>;
++
++                  clocks = <&serializer2>;
++
++                  port {
++                    sensor_2_out: endpoint {
++                      remote-endpoint = <&ub913_2_in>;
++                    };
++                  };
++                };
++              };
++            };
++          }; /* End of link@1 */
 +        };
 +      };
 +    };
