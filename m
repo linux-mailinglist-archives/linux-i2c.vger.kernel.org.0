@@ -2,39 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287F46EB92D
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Apr 2023 14:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E74526EBA4E
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Apr 2023 18:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjDVMe0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 22 Apr 2023 08:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54622 "EHLO
+        id S229587AbjDVQ0W (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 22 Apr 2023 12:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjDVMeZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Apr 2023 08:34:25 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87ABA1BE3;
-        Sat, 22 Apr 2023 05:34:23 -0700 (PDT)
-Received: from van1shing-pc.localdomain ([10.12.182.0])
-        (user=silver_code@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33MCWt03018163-33MCWt04018163
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 22 Apr 2023 20:33:03 +0800
-From:   Wang Zhang <silver_code@hust.edu.cn>
-To:     Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Wang Zhang <silver_code@hust.edu.cn>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] i2c: ocores: use devm_ managed clks
-Date:   Sat, 22 Apr 2023 20:32:53 +0800
-Message-Id: <20230422123253.137368-1-silver_code@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <fc8ed989-68e6-4fd4-a818-ae077bf5e6aa@lunn.ch>
-References: <fc8ed989-68e6-4fd4-a818-ae077bf5e6aa@lunn.ch>
+        with ESMTP id S229574AbjDVQ0V (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Apr 2023 12:26:21 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D24A1717;
+        Sat, 22 Apr 2023 09:26:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682180780; x=1713716780;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Wd0xk5nKWuCk5lXjfaeBYT1AZ+9GeuONVnRjp/lX5Oc=;
+  b=hvS0kUayzlpv0S5rckL9PxDalTVKf9WutfM8RpKCH9PnLvnBy4oNG1r4
+   aMeGoW6RHiOXyfb3EhbasmMoEpyna+shwBPmXhUpY979z9c2G8gm/4GWI
+   St24E0rIQApv81hvg1+I2Jfk3Mmu67iOkuznqOH9Ba5osaNqkspIubnIy
+   TBfFvjsdZWq3tFkx3islC11cE9EBUZn8J1hfV7pjrKCLqhOvavdf4Fvgg
+   kXSimgsjnIhgDk5vd03TObvxWq5agiu2v129KosoN0qw6aEsRWU8vEiUO
+   QDqZz0tipd8uHQXGQ17aaKNCtZXcXLPIOgXWZzpui16HmkQT2C0Ib4Q0D
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="335061487"
+X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
+   d="scan'208";a="335061487"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 09:26:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="1022201661"
+X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
+   d="scan'208";a="1022201661"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 22 Apr 2023 09:25:59 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pqG3i-003fwC-07;
+        Sat, 22 Apr 2023 19:25:58 +0300
+Date:   Sat, 22 Apr 2023 19:25:57 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jiawen Wu <jiawenwu@trustnetic.com>
+Cc:     netdev@vger.kernel.org, andrew@lunn.ch, linux@armlinux.org.uk,
+        jarkko.nikula@linux.intel.com, olteanv@gmail.com,
+        hkallweit1@gmail.com, linux-i2c@vger.kernel.org,
+        linux-gpio@vger.kernel.org, mengyuanlou@net-swift.com
+Subject: Re: [PATCH net-next v4 2/8] i2c: designware: Add driver support for
+ Wangxun 10Gb NIC
+Message-ID: <ZEQKlSIIZi9941Bh@smile.fi.intel.com>
+References: <20230422045621.360918-1-jiawenwu@trustnetic.com>
+ <20230422045621.360918-3-jiawenwu@trustnetic.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: silver_code@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230422045621.360918-3-jiawenwu@trustnetic.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,165 +70,70 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-If any wrong occurs in ocores_i2c_of_probe, the i2c->clk needs to be
-released. But the function returns directly in line 701 without freeing
-the clock. Even though we can fix it by freeing the clock manually if
-platform_get_irq_optional fails, it may not be following the best practice.
-The original code for this driver contains if (IS_ERR()) checks
-throughout, explicitly allowing the driver to continue loading even if
-devm_clk_get() fails.
+On Sat, Apr 22, 2023 at 12:56:15PM +0800, Jiawen Wu wrote:
+> Wangxun 10Gb ethernet chip is connected to Designware I2C, to communicate
+> with SFP.
+> 
+> Add platform data to pass IOMEM base address, board flag since resource
+> address was mapped on ethernet driver. Since there is no device tree to
+> get the clock, the parameters hcnt/lcnt are also set by platform data.
+> 
+> The exists IP limitations are dealt as workarounds:
+> - IP does not support interrupt mode, it works on polling mode.
+> - Additionally set FIFO depth address the chip issue.
+> 
+> Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
-While it is not entirely clear why the original author implemented this
-behavior, there may have been certain circumstances or issues that were not
-apparent to us. It's possible that they were trying to work around a bug by
-employing an unconventional solution.Using `devm_clk_get_enabled()` rather
-than devm_clk_get() can automatically track the usage of clocks and free
-them when they are no longer needed or an error occurs.
+Please, use --cc parameter to `git format-patch ...`.
 
-fixing it by changing `ocores_i2c_of_probe` to use
-`devm_clk_get_optional_enabled()` rather than `devm_clk_get()`, changing
-`goto err_clk' to direct return and removing `err_clk`.
+Also for tag block we do not use blank lines.
 
-Signed-off-by: Wang Zhang <silver_code@hust.edu.cn>
----
-v2->v3: use `devm_clk_get_optional_enabled()` to manage clks
-v1->v2: change `ocores_i2c_of_probe` to use `devm_clk_get_enabled()`
----
- drivers/i2c/busses/i2c-ocores.c | 56 +++++++++++++--------------------
- 1 file changed, 22 insertions(+), 34 deletions(-)
+...
 
-diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
-index 2e575856c5cd..0b225177fdd1 100644
---- a/drivers/i2c/busses/i2c-ocores.c
-+++ b/drivers/i2c/busses/i2c-ocores.c
-@@ -552,16 +552,15 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
- 							&clock_frequency);
- 	i2c->bus_clock_khz = 100;
- 
--	i2c->clk = devm_clk_get(&pdev->dev, NULL);
-+	i2c->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
- 
--	if (!IS_ERR(i2c->clk)) {
--		int ret = clk_prepare_enable(i2c->clk);
-+	if (IS_ERR(i2c->clk)) {
-+		dev_err(&pdev->dev,
-+			"devm_clk_get_optional_enabled failed\n");
-+		return PTR_ERR(i2c->clk);
-+	}
- 
--		if (ret) {
--			dev_err(&pdev->dev,
--				"clk_prepare_enable failed: %d\n", ret);
--			return ret;
--		}
-+	if (i2c->clk) {
- 		i2c->ip_clock_khz = clk_get_rate(i2c->clk) / 1000;
- 		if (clock_frequency_present)
- 			i2c->bus_clock_khz = clock_frequency / 1000;
-@@ -573,7 +572,6 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
- 			if (!clock_frequency_present) {
- 				dev_err(&pdev->dev,
- 					"Missing required parameter 'opencores,ip-clock-frequency'\n");
--				clk_disable_unprepare(i2c->clk);
- 				return -ENODEV;
- 			}
- 			i2c->ip_clock_khz = clock_frequency / 1000;
-@@ -678,8 +676,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 		default:
- 			dev_err(&pdev->dev, "Unsupported I/O width (%d)\n",
- 				i2c->reg_io_width);
--			ret = -EINVAL;
--			goto err_clk;
-+			return -EINVAL;
- 		}
- 	}
- 
-@@ -710,13 +707,13 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 						   pdev->name, i2c);
- 		if (ret) {
- 			dev_err(&pdev->dev, "Cannot claim IRQ\n");
--			goto err_clk;
-+			return ret;
- 		}
- 	}
- 
- 	ret = ocores_init(&pdev->dev, i2c);
- 	if (ret)
--		goto err_clk;
-+		return ret;
- 
- 	/* hook up driver to tree */
- 	platform_set_drvdata(pdev, i2c);
-@@ -728,7 +725,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 	/* add i2c adapter to i2c tree */
- 	ret = i2c_add_adapter(&i2c->adap);
- 	if (ret)
--		goto err_clk;
-+		return ret;
- 
- 	/* add in known devices to the bus */
- 	if (pdata) {
-@@ -737,10 +734,6 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 	}
- 
- 	return 0;
--
--err_clk:
--	clk_disable_unprepare(i2c->clk);
--	return ret;
- }
- 
- static int ocores_i2c_remove(struct platform_device *pdev)
-@@ -755,9 +748,6 @@ static int ocores_i2c_remove(struct platform_device *pdev)
- 	/* remove adapter & data */
- 	i2c_del_adapter(&i2c->adap);
- 
--	if (!IS_ERR(i2c->clk))
--		clk_disable_unprepare(i2c->clk);
--
- 	return 0;
- }
- 
-@@ -771,8 +761,7 @@ static int ocores_i2c_suspend(struct device *dev)
- 	ctrl &= ~(OCI2C_CTRL_EN | OCI2C_CTRL_IEN);
- 	oc_setreg(i2c, OCI2C_CONTROL, ctrl);
- 
--	if (!IS_ERR(i2c->clk))
--		clk_disable_unprepare(i2c->clk);
-+	clk_disable_unprepare(i2c->clk);
- 	return 0;
- }
- 
-@@ -780,19 +769,18 @@ static int ocores_i2c_resume(struct device *dev)
- {
- 	struct ocores_i2c *i2c = dev_get_drvdata(dev);
- 
--	if (!IS_ERR(i2c->clk)) {
--		unsigned long rate;
--		int ret = clk_prepare_enable(i2c->clk);
-+	unsigned long rate;
-+	int ret = clk_prepare_enable(i2c->clk);
- 
--		if (ret) {
--			dev_err(dev,
--				"clk_prepare_enable failed: %d\n", ret);
--			return ret;
--		}
--		rate = clk_get_rate(i2c->clk) / 1000;
--		if (rate)
--			i2c->ip_clock_khz = rate;
-+	if (ret) {
-+		dev_err(dev,
-+			"clk_prepare_enable failed: %d\n", ret);
-+		return ret;
- 	}
-+	rate = clk_get_rate(i2c->clk) / 1000;
-+	if (rate)
-+		i2c->ip_clock_khz = rate;
-+
- 	return ocores_init(dev, i2c);
- }
- 
+>  #define MODEL_MSCC_OCELOT			BIT(8)
+>  #define MODEL_BAIKAL_BT1			BIT(9)
+>  #define MODEL_AMD_NAVI_GPU			BIT(10)
+> +#define MODEL_WANGXUN_SP			BIT(11)
+>  #define MODEL_MASK				GENMASK(11, 8)
+
+Yeah, maybe next one will need to transform this from bitfield to plain number.
+
+...
+
+> -static int amd_i2c_adap_quirk(struct dw_i2c_dev *dev)
+> +static int poll_i2c_adap_quirk(struct dw_i2c_dev *dev)
+
+i2c_dw_poll_adap_quirk()
+
+...
+
+> +static bool i2c_is_model_poll(struct dw_i2c_dev *dev)
+
+i2c_dw_is_...
+
+...
+
+> +++ b/include/linux/platform_data/i2c-dw.h
+
+No way we need this in a new code.
+
+> +struct dw_i2c_platform_data {
+> +	void __iomem *base;
+
+You should use regmap.
+
+> +	unsigned int flags;
+> +	unsigned int ss_hcnt;
+> +	unsigned int ss_lcnt;
+> +	unsigned int fs_hcnt;
+> +	unsigned int fs_lcnt;
+
+No, use device properties.
+
+> +};
+
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 
