@@ -2,47 +2,45 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118666EBC6B
-	for <lists+linux-i2c@lfdr.de>; Sun, 23 Apr 2023 04:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA106EBE20
+	for <lists+linux-i2c@lfdr.de>; Sun, 23 Apr 2023 10:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjDWCb7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 22 Apr 2023 22:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
+        id S229759AbjDWI4i (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 23 Apr 2023 04:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjDWCb7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Apr 2023 22:31:59 -0400
-X-Greylist: delayed 77423 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 22 Apr 2023 19:31:53 PDT
-Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3ED1717;
-        Sat, 22 Apr 2023 19:31:52 -0700 (PDT)
-X-QQ-mid: Yeas5t1682217071t196t32057
-Received: from 7082A6556EBF4E69829842272A565F7C (jiawenwu@trustnetic.com [183.129.236.74])
-X-QQ-SSF: 00400000000000F0FM9000000000000
-From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
-X-BIZMAIL-ID: 1302647852042328395
-To:     "'Andy Shevchenko'" <andriy.shevchenko@linux.intel.com>
-Cc:     <netdev@vger.kernel.org>, <andrew@lunn.ch>,
-        <linux@armlinux.org.uk>, <jarkko.nikula@linux.intel.com>,
-        <olteanv@gmail.com>, <hkallweit1@gmail.com>,
-        <linux-i2c@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <mengyuanlou@net-swift.com>
-References: <20230422045621.360918-1-jiawenwu@trustnetic.com> <20230422045621.360918-3-jiawenwu@trustnetic.com> <ZEQKlSIIZi9941Bh@smile.fi.intel.com>
-In-Reply-To: <ZEQKlSIIZi9941Bh@smile.fi.intel.com>
-Subject: RE: [PATCH net-next v4 2/8] i2c: designware: Add driver support for Wangxun 10Gb NIC
-Date:   Sun, 23 Apr 2023 10:31:09 +0800
-Message-ID: <000201d9758b$aa3193a0$fe94bae0$@trustnetic.com>
+        with ESMTP id S229441AbjDWI4h (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 23 Apr 2023 04:56:37 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF5B1BDF;
+        Sun, 23 Apr 2023 01:56:36 -0700 (PDT)
+Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Q428V6nbXzncN2;
+        Sun, 23 Apr 2023 16:52:42 +0800 (CST)
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Sun, 23 Apr 2023 16:56:31 +0800
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+To:     <harperchen1110@gmail.com>
+CC:     <andi.shyti@kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
+        <zhengyejian1@huawei.com>
+Subject: re: [PATCH v4] i2c: xgene-slimpro: Fix out-of-bounds bug in xgene_slimpro_i2c_xfer()
+Date:   Sun, 23 Apr 2023 17:00:08 +0800
+Message-ID: <20230423090008.3189587-1-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230314165421.2823691-1-harperchen1110@gmail.com>
+References: <20230314165421.2823691-1-harperchen1110@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQLYcl6q9PfLE2IPpEOvRSb72esQRAIu4J5yAbvC5R+tGtF3kA==
-Content-Language: zh-cn
-X-QQ-SENDSIZE: 520
-Feedback-ID: Yeas:trustnetic.com:qybglogicsvr:qybglogicsvr5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.61]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500012.china.huawei.com (7.185.36.15)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,36 +48,62 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-> > +++ b/include/linux/platform_data/i2c-dw.h
+> The data->block[0] variable comes from user and is a number between
+> 0-255. Without proper check, the variable may be very large to cause
+> an out-of-bounds when performing memcpy in slimpro_i2c_blkwr.
 > 
-> No way we need this in a new code.
+> Fix this bug by checking the value of writelen.
+> 
+> Fixes: f6505fbabc42 ("i2c: add SLIMpro I2C device driver on APM X-Gene
+> platform")
+> Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+> Cc: stable@vger.kernel.org
+> ---
+> Changes in v2:
+>  - Put length check inside slimpro_i2c_blkwr
+> Changes in v3:
+>  - Correct the format of patch
+> Changes in v4:
+>  - CC stable email address
+> 
+>  drivers/i2c/busses/i2c-xgene-slimpro.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-xgene-slimpro.c
+> b/drivers/i2c/busses/i2c-xgene-slimpro.c
+> index bc9a3e7e0c96..0f7263e2276a 100644
+> --- a/drivers/i2c/busses/i2c-xgene-slimpro.c
+> +++ b/drivers/i2c/busses/i2c-xgene-slimpro.c
+> @@ -308,6 +308,9 @@ static int slimpro_i2c_blkwr(struct slimpro_i2c_dev
+> *ctx, u32 chip,
+> 	u32 msg[3];
+> 	int rc;
+>  
+> +	if (writelen > I2C_SMBUS_BLOCK_MAX)
+> +		return -EINVAL;
+> +
+> 	memcpy(ctx->dma_buffer, data, writelen);
 
-Do I have to rely on OF or ACPI if I need these parameters?
+Hi, I'm not sure if following case is problematic since I'm not familiar
+with i2c :)
 
-> 
-> > +struct dw_i2c_platform_data {
-> > +	void __iomem *base;
-> 
-> You should use regmap.
+See following code path, when data->block[0] == I2C_SMBUS_BLOCK_MAX,
+writelen == I2C_SMBUS_BLOCK_MAX + 1, and there seems no out-of-bounds
+problem when performing memcpy() since the size of 'ctx->dma_buffer' is
+I2C_SMBUS_BLOCK_MAX + 1. However after this patch, this case would fail,
+is this expected?
 
-The resource was mapped on the ethernet driver. How do I map it again
-with I2C offset?
+  xgene_slimpro_i2c_xfer() {
+    case I2C_SMBUS_BLOCK_DATA:
+      ret = slimpro_i2c_blkwr(ctx, ..., data->block[0] + 1, &data->block[0]);
+  }
 
-> 
-> > +	unsigned int flags;
-> > +	unsigned int ss_hcnt;
-> > +	unsigned int ss_lcnt;
-> > +	unsigned int fs_hcnt;
-> > +	unsigned int fs_lcnt;
-> 
-> No, use device properties.
-> 
-> > +};
-> 
-> --
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
-> 
+> 	paddr = dma_map_single(ctx->dev, ctx->dma_buffer, writelen,
+> 			       DMA_TO_DEVICE);
+> -- 
+> 2.25.1
 
+--
+
+Best regards,
+Zheng Yejian
