@@ -2,40 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0961D6EC37B
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Apr 2023 03:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CB46EC3B8
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Apr 2023 04:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjDXBuT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 23 Apr 2023 21:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
+        id S230072AbjDXCjz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 23 Apr 2023 22:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjDXBuS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 23 Apr 2023 21:50:18 -0400
-Received: from smtpbg153.qq.com (smtpbg153.qq.com [13.245.218.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9444E19A;
-        Sun, 23 Apr 2023 18:50:14 -0700 (PDT)
-X-QQ-mid: Yeas51t1682300979t085t31667
+        with ESMTP id S229493AbjDXCjy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 23 Apr 2023 22:39:54 -0400
+Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E22C2126;
+        Sun, 23 Apr 2023 19:39:47 -0700 (PDT)
+X-QQ-mid: Yeas48t1682303951t332t51241
 Received: from 7082A6556EBF4E69829842272A565F7C (jiawenwu@trustnetic.com [183.129.236.74])
 X-QQ-SSF: 00400000000000F0FM9000000000000
 From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
-X-BIZMAIL-ID: 10473020202358225154
-To:     "'Simon Horman'" <simon.horman@corigine.com>
+X-BIZMAIL-ID: 9289920782831295537
+To:     "'Andy Shevchenko'" <andriy.shevchenko@linux.intel.com>,
+        <jarkko.nikula@linux.intel.com>
 Cc:     <netdev@vger.kernel.org>, <andrew@lunn.ch>,
-        <linux@armlinux.org.uk>, <jarkko.nikula@linux.intel.com>,
-        <olteanv@gmail.com>, <andriy.shevchenko@linux.intel.com>,
+        <linux@armlinux.org.uk>, <olteanv@gmail.com>,
         <hkallweit1@gmail.com>, <linux-i2c@vger.kernel.org>,
         <linux-gpio@vger.kernel.org>, <mengyuanlou@net-swift.com>
-References: <20230422045621.360918-1-jiawenwu@trustnetic.com> <20230422045621.360918-9-jiawenwu@trustnetic.com> <ZEWNtepnhsZp/HwW@corigine.com>
-In-Reply-To: <ZEWNtepnhsZp/HwW@corigine.com>
-Subject: RE: [PATCH net-next v4 8/8] net: txgbe: Support phylink MAC layer
-Date:   Mon, 24 Apr 2023 09:49:37 +0800
-Message-ID: <002901d9764f$073e7d10$15bb7730$@trustnetic.com>
+References: <20230422045621.360918-1-jiawenwu@trustnetic.com> <20230422045621.360918-3-jiawenwu@trustnetic.com> <ZEQKlSIIZi9941Bh@smile.fi.intel.com>
+In-Reply-To: <ZEQKlSIIZi9941Bh@smile.fi.intel.com>
+Subject: RE: [PATCH net-next v4 2/8] i2c: designware: Add driver support for Wangxun 10Gb NIC
+Date:   Mon, 24 Apr 2023 10:39:10 +0800
+Message-ID: <003801d97655$f2dc4580$d894d080$@trustnetic.com>
 MIME-Version: 1.0
 Content-Type: text/plain;
         charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQLYcl6q9PfLE2IPpEOvRSb72esQRAGSvu55Ap8o7ditGil7wA==
+Thread-Index: AQLYcl6q9PfLE2IPpEOvRSb72esQRAIu4J5yAbvC5R+tHG5FAA==
 Content-Language: zh-cn
 X-QQ-SENDSIZE: 520
 Feedback-ID: Yeas:trustnetic.com:qybglogicsvr:qybglogicsvr5
@@ -49,48 +49,55 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Monday, April 24, 2023 3:58 AM, Simon Horman wrote:
-> On Sat, Apr 22, 2023 at 12:56:21PM +0800, Jiawen Wu wrote:
-> > Add phylink support to Wangxun 10Gb Ethernet controller for the 10GBASE-R
-> > interface.
-> >
-> > Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
+> > +++ b/include/linux/platform_data/i2c-dw.h
 > 
-> ...
+> No way we need this in a new code.
 > 
-> > +static int txgbe_phylink_init(struct txgbe *txgbe)
-> > +{
-> > +	struct phylink_config *config;
-> > +	struct fwnode_handle *fwnode;
-> > +	struct wx *wx = txgbe->wx;
-> > +	phy_interface_t phy_mode;
-> > +	struct phylink *phylink;
-> > +
-> > +	config = devm_kzalloc(&wx->pdev->dev, sizeof(*config), GFP_KERNEL);
-> > +	if (!config)
-> > +		return -ENOMEM;
-> > +
-> > +	config->dev = &wx->netdev->dev;
-> > +	config->type = PHYLINK_NETDEV;
-> > +	config->mac_capabilities = MAC_10000FD | MAC_1000FD | MAC_SYM_PAUSE | MAC_ASYM_PAUSE;
-> > +	phy_mode = PHY_INTERFACE_MODE_10GBASER;
-> > +	__set_bit(PHY_INTERFACE_MODE_10GBASER, config->supported_interfaces);
-> > +	fwnode = software_node_fwnode(txgbe->nodes.group[SWNODE_PHYLINK]);
-> > +	phylink = phylink_create(config, fwnode, phy_mode, &txgbe_mac_ops);
-> > +	if (IS_ERR(phylink))
-> > +		return PTR_ERR(phylink);
-> > +
-> > +	txgbe->phylink = phylink;
-> > +
-> > +	return 0;
-> > +}
+> > +struct dw_i2c_platform_data {
+> > +	void __iomem *base;
 > 
-> Hi Jiawen,
+> You should use regmap.
 > 
-> txgbe_phylink_init() seems unused.
-> Perhaps it needs to be wired-up somewhere?
+> > +	unsigned int flags;
+> > +	unsigned int ss_hcnt;
+> > +	unsigned int ss_lcnt;
+> > +	unsigned int fs_hcnt;
+> > +	unsigned int fs_lcnt;
+> 
+> No, use device properties.
+> 
+> > +};
+> 
+> --
+> With Best Regards,
+> Andy Shevchenko
 > 
 
-Oops, I forgot to add it to txgbe_init_phy().
+Is it acceptable to add such a function into dw_i2c_plat_probe()?
+Otherwise I really can't find a way to get these parameters without DT and ACPI.
+
++static void i2c_dw_parse_property(struct dw_i2c_dev *dev)
++{
++       if (!is_software_node(dev_fwnode(dev->dev)))
++               return;
++
++       if (!dev->flags)
++               device_property_read_u32(dev->dev, "dw-i2c-flags", &dev->flags);
++
++       device_property_read_u16(dev->dev, "i2c-ss-scl-hcnt", &dev->ss_hcnt);
++       device_property_read_u16(dev->dev, "i2c-ss-scl-lcnt", &dev->ss_lcnt);
++       device_property_read_u16(dev->dev, "i2c-fs-scl-hcnt", &dev->fs_hcnt);
++       device_property_read_u16(dev->dev, "i2c-fs-scl-lcnt", &dev->fs_lcnt);
++
++       if (!dev->ss_hcnt || !dev->ss_lcnt) {
++               dev->ss_hcnt = 6;
++               dev->ss_lcnt = 8;
++       }
++       if (!dev->fs_hcnt || !dev->fs_lcnt) {
++               dev->fs_hcnt = 6;
++               dev->fs_lcnt = 8;
++       }
++}
+
 
 
