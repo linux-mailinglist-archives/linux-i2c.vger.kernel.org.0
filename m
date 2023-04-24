@@ -2,81 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1AE6ED179
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Apr 2023 17:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5981E6ED59F
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Apr 2023 21:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbjDXPgw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Apr 2023 11:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
+        id S232797AbjDXTyf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Apr 2023 15:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231876AbjDXPgt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Apr 2023 11:36:49 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348F13C2D
-        for <linux-i2c@vger.kernel.org>; Mon, 24 Apr 2023 08:36:48 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-b98415ba97aso6004221276.0
-        for <linux-i2c@vger.kernel.org>; Mon, 24 Apr 2023 08:36:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682350607; x=1684942607;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ng7mcmr4QJ6ZL7X9dSXkz6scbTE1whqwn58ZUV1v7fU=;
-        b=KO7dphphuGIGYbTlot2H3fnI8xAb2JxbU/R666z3IptdPShtdA1xIXjMnu2Khu/0H/
-         zEO/bANcE7vwMCM/j8XXjxjweoIbIc4JtQ6cp5g7v8DceAueuC+etaeb1ue1vemI9zl7
-         U23q993GUluk1y5xvlXssaLrVhw72fb5ICQty4MItZjHQjPTAvdjCFV9ZFzzb4WO1ODz
-         xG8G55XoJUs5cLuJ4gnA67XWZSJXWP88CoWFisDVgdt7/23u+HRzeR3YqLgWoqcJwlVC
-         2OkpbJtMRC99/w/XNHOh6aIAUvj+29mZG7R7gVkdqSfoyj59/eDN8rEdbJCosUTEYSLB
-         4ueg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682350607; x=1684942607;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ng7mcmr4QJ6ZL7X9dSXkz6scbTE1whqwn58ZUV1v7fU=;
-        b=LOZp3Onn2GFZn5JBXljN9cpU/lfgqw9R/38s4KsJ35e23+oVf18yAiDy/r8+YsJ7zq
-         GCh5PJkuFnkXUe49aMejNQLHtRVFphc+Xg9V2ry4FiE24ZAVOvF9FGyZZZ0pw012m08v
-         YvY12GadEzZT9GpoNTtfu63dZZvHP7P1eEGlzWDLEhRTIULZ6I7Hbg0hQeteLLXfcMbD
-         TeWbuSBL8rHa4+L/uaxW11IKao+Qkq0LcPjlg8HCxAjm2WOBe5KaJ6GPK1FFWvA/Ajtv
-         A7zAT0dt8vJe3uJQw2NxUKbm5NygumvWVrcbexiTxRqro6GzN63EInjOh2IYaJLRqv0A
-         KN2w==
-X-Gm-Message-State: AAQBX9cbfhvqZsDT49cbdmQiAs2hxTvOmSnTpLIWF7ZV4aZ30ObNKX6d
-        VvFNhck6ZSQSr+iFcAaNCczRnS0CPUSK54fqnWg=
-X-Google-Smtp-Source: AKy350afoBp2AIl9aLPUyl+McHH3D/1YoHhmq/V6msa7zQfk/O59TLXAnVfHUzFBuu+Xwgc01yQ/kC6nhFVOMQeQfjg=
-X-Received: by 2002:a25:d95:0:b0:b98:ddf4:7146 with SMTP id
- 143-20020a250d95000000b00b98ddf47146mr9295287ybn.21.1682350607381; Mon, 24
- Apr 2023 08:36:47 -0700 (PDT)
+        with ESMTP id S232815AbjDXTyc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Apr 2023 15:54:32 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29363619A;
+        Mon, 24 Apr 2023 12:54:30 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33OJs961070569;
+        Mon, 24 Apr 2023 14:54:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682366049;
+        bh=fGh2KtrD4r68N5har2QjJNUa/w/bm+R2RNcbEC38Sxg=;
+        h=From:To:CC:Subject:Date;
+        b=RMA/RvAFyDsrC0r3FDZOkv81/keNPA/y9DcdbAiuKdI2luOz6nhcgbCbJA42RY1E9
+         SXjmtY8xMIl+wSsnLD79MUmVUsRkTDR4ZrpOBwIti0g3laBQyXqpAhOX9twWQccDZI
+         oLsM/frYmYOnAKQbxE98Hss6OXu1aF37ipScv4Io=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33OJs9a0007685
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 24 Apr 2023 14:54:09 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
+ Apr 2023 14:54:09 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 24 Apr 2023 14:54:09 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33OJs9G1044051;
+        Mon, 24 Apr 2023 14:54:09 -0500
+From:   Reid Tonking <reidt@ti.com>
+To:     <tony@atomide.com>, <vigneshr@ti.com>, <aaro.koskinen@iki.fi>,
+        <jmkrzyszt@gmail.com>
+CC:     <linux-omap@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        Reid Tonking <reidt@ti.com>
+Subject: [PATCH] i2c: omap: Fix standard mode false ACK readings
+Date:   Mon, 24 Apr 2023 14:53:44 -0500
+Message-ID: <20230424195344.627861-1-reidt@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a05:7011:c0a4:b0:348:8a48:5054 with HTTP; Mon, 24 Apr 2023
- 08:36:47 -0700 (PDT)
-Reply-To: stephenbord61@yahoo.com
-From:   Stephen Bordeaux <ajojo6946@gmail.com>
-Date:   Mon, 24 Apr 2023 15:36:47 +0000
-Message-ID: <CAPgeixX8_rSpdCXc8o=VxKNVrYmJC9bkZ55mcTfXGeO6y+y3RQ@mail.gmail.com>
-Subject: =?UTF-8?B?WmRyYXbDrW0gYSBkxJtrdWppIHphIG9kcG92xJvEjw==?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Dobr=C3=BD den
+Using standard mode, rare false ACK responses were appearing with
+i2cdetect tool. This was happening due to NACK interrupt triggering
+ISR thread before register access interrupt was ready. Removing the
+NACK interrupt's ability to trigger ISR thread lets register access
+ready interrupt do this instead.
 
-Jsem Stephen Bordeaux, pr=C3=A1vn=C3=AD z=C3=A1stupce z advok=C3=A1tn=C3=AD=
- kancel=C3=A1=C5=99e Bordeaux.
-Kontaktoval jsem v=C3=A1s ohledn=C4=9B poz=C5=AFstalosti fondu zesnul=C3=A9=
-ho Dr. Edwin ve
-v=C3=BD=C5=A1i 8,5 milionu dolar=C5=AF, kter=C3=A9 maj=C3=AD b=C3=BDt repat=
-riov=C3=A1ny na v=C3=A1=C5=A1 =C3=BA=C4=8Det.
-Nav=C3=ADc v t=C3=A9to transakci chci, abyste odpov=C4=9Bd=C4=9Bli d=C5=AFv=
-=C4=9Brn=C4=9B.
+Fixes: 3b2f8f82dad7 ("i2c: omap: switch to threaded IRQ support")
 
-Stephen Bordeaux
+Signed-off-by: Reid Tonking <reidt@ti.com>
+---
+Fixes: LCPD-29949
+
+ drivers/i2c/busses/i2c-omap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
+index f9ae520aed22..7ec252199706 100644
+--- a/drivers/i2c/busses/i2c-omap.c
++++ b/drivers/i2c/busses/i2c-omap.c
+@@ -1058,7 +1058,7 @@ omap_i2c_isr(int irq, void *dev_id)
+ 	u16 stat;
+ 
+ 	stat = omap_i2c_read_reg(omap, OMAP_I2C_STAT_REG);
+-	mask = omap_i2c_read_reg(omap, OMAP_I2C_IE_REG);
++	mask = omap_i2c_read_reg(omap, OMAP_I2C_IE_REG) & ~OMAP_I2C_STAT_NACK;
+ 
+ 	if (stat & mask)
+ 		ret = IRQ_WAKE_THREAD;
+-- 
+2.34.1
+
