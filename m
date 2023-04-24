@@ -2,82 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 691A46ECBC8
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Apr 2023 14:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FBCB6ECC91
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Apr 2023 15:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbjDXMIC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Apr 2023 08:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
+        id S231695AbjDXNGG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Apr 2023 09:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbjDXMIC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Apr 2023 08:08:02 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20171F2;
-        Mon, 24 Apr 2023 05:08:01 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-94f4b911570so627432366b.0;
-        Mon, 24 Apr 2023 05:08:01 -0700 (PDT)
+        with ESMTP id S231445AbjDXNGF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Apr 2023 09:06:05 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574A53AA6
+        for <linux-i2c@vger.kernel.org>; Mon, 24 Apr 2023 06:06:04 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-51b4ef5378bso4592643a12.1
+        for <linux-i2c@vger.kernel.org>; Mon, 24 Apr 2023 06:06:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682338079; x=1684930079;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wmddoLYvCrZv1MC7Bp3ofoIZr5sc+qWYnHRXko8H0X0=;
-        b=eB47Y0UCBp8S8qbwzeSOlc6qVVUEqSWthYWnnlSsAj2vLBGJ3NM9MJxjC8sSXRijrs
-         /g4rnl55w+aXZ8t1HJ/llqzRRB01xCRr3EPvlB+t+PQU//7Mjpq4KU/COmG041ixAeEJ
-         meL4vM9PMead3qBsCfVjF2ZS7sSiCofewFiiT4o6l0TG1ekq4q/glneuijHa/Yd1EgSk
-         MgS8/TUDAzw+0DfHrEdQbFfFT8StwkiapHH426I2bEmwH142SDziKbk2eeYWtlGxHGKZ
-         PyUZrKa0JPDP7GXjhmdNBZ1xcdGpwpBN4LT5vsgGxBUMDS0QoK+wwjSbL6vKP6kfMIX6
-         qqsg==
+        d=gmail.com; s=20221208; t=1682341564; x=1684933564;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=txP0S0HHwklInU5qOy6yuyRoSSntFs/HF3tPpTAhNxk=;
+        b=ZiOlmi/JA9UkHLGg6oRpdcvKibZHJY9+7dPAVPkdTrIxkWZmHPFPhmUEtTOkwH69SO
+         T4YsylJbzGWkGqRYXoCHccpwxTTv3j7uuLQPMxK2cE1zcs6+TA5tUu0zJmS6gBFM6BeA
+         oZb8W0JFFOb/mv2/Wv7Bwfn7Tp9zfSxSQiv3NrQjB/x1RsyxHOx+UXbB0Sjma00i9yAb
+         vjtpDAzPIJKPkd4zERhI4ftEFgRyowCXFHULNml5IFMlPOsRd5jByuvxa3zP3IZYQfMT
+         0q3D7RZj3Mt3gCczn/+3osj/PTNhII8uGnV3S3UcMiUiX6kQbT3Jejl0SHKSX0CswV4C
+         Kzpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682338079; x=1684930079;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wmddoLYvCrZv1MC7Bp3ofoIZr5sc+qWYnHRXko8H0X0=;
-        b=V0JPIS6C299dC94kj2jr/yyiveyP6hpwewRgA1GbP2hNM1DBkC7e1lDjDJRgZfOiJr
-         H4xiA+qM7uShLswPKrdHkIAZ6K+s3KUvvS2HpRo6e+l3qqeAVwfmMrl37fAhUatLYjR4
-         JORCHupk2pn/90euD7J2lbBRA6LWLOoCTjegKs8Cm8g5gWwnzyQ5S7zAQFb1XDzixfD/
-         B5g55s/Wn3wKT8MLnhljhO3nyLDl3BAwZHxF9yIk4sdZKCPLHBZo9ODiDvF7uXjrQnVW
-         xnANDZbnde7OhB7/NJs4W3uoFT2/V/5KEYyoPP1z9UqFCeB3pU6C9jqGL/HaFAN50M1P
-         RmhQ==
-X-Gm-Message-State: AAQBX9dqZI1Jv8ZrIe9p76S+KuBF2fUQa22GlZs0O1A1bK7NVUntNpK4
-        GCFwpBwHGLMrEnnPPR4jTR0=
-X-Google-Smtp-Source: AKy350Y1ZV+uZUzG6NOMeuRU7tZ1ZJbsz59Vwq/vljFPXMuo5gRLms8A8kYR88dLnoG8E55Uj+yAyA==
-X-Received: by 2002:a17:906:8687:b0:94e:e1c7:31b4 with SMTP id g7-20020a170906868700b0094ee1c731b4mr9333679ejx.48.1682338079377;
-        Mon, 24 Apr 2023 05:07:59 -0700 (PDT)
-Received: from PCBABN.skidata.net ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id ho17-20020a1709070e9100b0094edfbd475csm5342630ejc.127.2023.04.24.05.07.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 05:07:59 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-To:     dmitry.osipenko@collabora.com
-Cc:     bbara93@gmail.com, benjamin.bara@skidata.com, jonathanh@nvidia.com,
-        lee@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        peterz@infradead.org, rafael.j.wysocki@intel.com,
-        richard.leitner@linux.dev, treding@nvidia.com, wsa@kernel.org
-Subject: Re: [PATCH v4 3/4] mfd: tps6586x: use devm-based power off handler
-Date:   Mon, 24 Apr 2023 14:07:13 +0200
-Message-Id: <20230424120713.1288281-1-bbara93@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <7213c148-5cf8-c251-b809-c6ff59292cad@collabora.com>
-References: <7213c148-5cf8-c251-b809-c6ff59292cad@collabora.com>
+        d=1e100.net; s=20221208; t=1682341564; x=1684933564;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=txP0S0HHwklInU5qOy6yuyRoSSntFs/HF3tPpTAhNxk=;
+        b=lavBIYxrgB0+y0qm2XaaR7RWJfOpuMbEGvz6VRfSodL1D3Oy1w1FlbC2lnEohVlNT1
+         7DbLJoEorScXwrq69NL7VMk4zgIN+YftcvXnZZY4Glcu9OiXryqoIVWRjAMou8N4B4oS
+         fgktVrpwIIQhdaAOewGvH/taeAMY1hmLCdGEpQRRz5ZHMu9E3SgR66kCgb+9vXk56b03
+         vbQdesvgNpReehypA6jRo3m0F6QiV40AgYEUGaWeuEwiLP8lg3gMdwy6PtB+4hyYxHvk
+         ub8HJlNV6Ycf1aPZ3/EvQr6j/m1UspPBtGwyy6otjS6Uctjw/IZ2LTylSr/GtNeKAhVm
+         8/5A==
+X-Gm-Message-State: AAQBX9dM4sAzDWvnLkVvHFPnyvitYXdEuBuy22e4MY3YAFpDn6tmVes+
+        Rh9CiTyQezdxz1EuyRX4w7td6B2Swmrwzb1Sv88=
+X-Google-Smtp-Source: AKy350aP+Ms7BwaXoIRSGlTQDWxdd077gbh7vXkCU8z2UCJEFSMKpEe4DAriCea6UnMburqG/aglBpKH/LWr9DtxyIE=
+X-Received: by 2002:a17:90b:3cf:b0:237:c209:5b14 with SMTP id
+ go15-20020a17090b03cf00b00237c2095b14mr13352870pjb.22.1682341563737; Mon, 24
+ Apr 2023 06:06:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Received: by 2002:a05:7022:2607:b0:62:57ce:f8bb with HTTP; Mon, 24 Apr 2023
+ 06:06:03 -0700 (PDT)
+Reply-To: georgebrown0004@gmail.com
+From:   george brown <ewill2845@gmail.com>
+Date:   Mon, 24 Apr 2023 15:06:03 +0200
+Message-ID: <CAAQya0YJWcbBqSEoWO0c0gjE8UFv5GRzfZeKaJnWnG6FiUWQYQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 24 Apr 2023 at 12:42, Dmitry Osipenko <dmitry.osipenko@collabora.com> wrote:
-> In general and in case of this driver, it should be more reliable and
-> cleaner to abort the reboot on a error that shall never happen.
+Ahoj
 
-Thanks! Then I will drop my 4/6 of v5 [1].
+Vol=C3=A1m sa George Brown, povolan=C3=ADm som pr=C3=A1vnik. Chcem v=C3=A1m=
+ pon=C3=BAknu=C5=A5
+najbli=C5=BE=C5=A1=C3=AD pr=C3=ADbuzn=C3=BD m=C3=B4jho klienta. Zded=C3=ADt=
+e sumu (8,5 mili=C3=B3na dol=C3=A1rov)
+dol=C3=A1rov, ktor=C3=A9 m=C3=B4j klient nechal v banke pred svojou smr=C5=
+=A5ou.
 
-[1] https://lore.kernel.org/all/20230327-tegra-pmic-reboot-v5-4-ab090e03284d@skidata.com/
+M=C3=B4j klient je ob=C4=8Dan va=C5=A1ej krajiny, ktor=C3=BD zomrel pri aut=
+onehode so
+svojou man=C5=BEelkou
+a jedin=C3=BD syn. Budem ma=C5=A5 n=C3=A1rok na 50 % z celkov=C3=A9ho fondu=
+, zatia=C4=BE =C4=8Do 50 % =C3=A1no
+by=C5=A5 pre teba.
+Pros=C3=ADm, kontaktujte m=C3=B4j s=C3=BAkromn=C3=BD e-mail tu pre viac pod=
+robnost=C3=AD:
+georgebrown0004@gmail.com
+
+Mnohokr=C3=A1t =C4=8Fakujem vopred,
+p=C3=A1n George Brown,
