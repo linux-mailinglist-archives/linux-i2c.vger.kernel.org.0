@@ -2,91 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10FFB6ECA54
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Apr 2023 12:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 557546ECA7A
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Apr 2023 12:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbjDXKcY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Apr 2023 06:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
+        id S229929AbjDXKiw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Apr 2023 06:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbjDXKcC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Apr 2023 06:32:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E527F197;
-        Mon, 24 Apr 2023 03:31:31 -0700 (PDT)
+        with ESMTP id S229522AbjDXKiv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Apr 2023 06:38:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF20B7;
+        Mon, 24 Apr 2023 03:38:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F7EC62039;
-        Mon, 24 Apr 2023 10:31:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D255C433EF;
-        Mon, 24 Apr 2023 10:31:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F2CF61261;
+        Mon, 24 Apr 2023 10:38:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44A03C433EF;
+        Mon, 24 Apr 2023 10:38:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682332290;
-        bh=x7upwBQlHFbyVO10snwIsBPKLyhD5ZgCsg/hqg0Fzws=;
+        s=k20201202; t=1682332730;
+        bh=Ec7qT2CJnK6Y6+hGlVn+L75gseCma+/M4hHB5L8PkM8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YXrXHm4H7y2rbNZv61Li6W13Os9LmazFAJPMufxRuLGrjs1es5kJFqjFOxI3KvnUZ
-         6JCCwP+xT72qWf0xVb9eQNHEb8PE0b1nRF0d5aGlHG/eHeOoJHPagu7IbNsGBB60oq
-         A33Eq31rT3tRkK4SMtjQWBTs4teNK10oZaOGLccYwb74oOSDqPdJJVc3/KFpiMtPup
-         jgd7LRSfZCE93qL4+iAIvUtSGgO/SKIdemo6gZD+W+zwkAvsi7fIFO9sPYTKv8rtTr
-         muODtrdRGAieA9W3kMe6sFHo9WLvQ0pi4tJOGMtePUSYyn44Igy9qgfgvBvfsAVQyH
-         rKhlKVojNBDVw==
-Date:   Mon, 24 Apr 2023 12:31:26 +0200
+        b=SYXMvbrZ5X2RHuJbIlJ4orb0T32s1f7Egq3qCQpduvecihiJQWTWhAfEPOZ8nLLCG
+         J1rwP0myh8X+67s4R93AV0tCAKaUJHn+rCYFg9LoH8sREZrz38O9n+0WVjyxUyv/nE
+         nqoo7IBSoRzcoQFiJy5pvtV5FZyxfPgT5zl5b/BTLJrWvhddKulmnzF0nmNHD2+J2R
+         7v39rHz9qD/gaQAz3cy8XVUuUvJoVcRNRx9eaYCl58hUvQivRnVfudIhGEikbZ279m
+         W9GVfrtRSBgdEVK+255vxv7mzxfu2fnirRmDRZACEOCsFnqTpJD1REVACUX+JkRtr2
+         T2g7zrOCrBDNA==
+Date:   Mon, 24 Apr 2023 12:38:45 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Stanislav Jakubek <stano.jakubek@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v11 1/7] i2c: add I2C Address Translator (ATR) support
-Message-ID: <ZEZafj6j+EurGWJ7@sai>
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: watchdog: brcm,kona-wdt: convert to YAML
+Message-ID: <ZEZcNfSYbhjbyOf0@sai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>, Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20230421101833.345984-1-tomi.valkeinen@ideasonboard.com>
- <20230421101833.345984-2-tomi.valkeinen@ideasonboard.com>
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230423143024.GA10503@standask-GA-A55M-S2HP>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gg+RkDq5qENt1R+b"
+        protocol="application/pgp-signature"; boundary="qjMj8koEHh503b7l"
 Content-Disposition: inline
-In-Reply-To: <20230421101833.345984-2-tomi.valkeinen@ideasonboard.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230423143024.GA10503@standask-GA-A55M-S2HP>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -96,58 +70,38 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---gg+RkDq5qENt1R+b
+--qjMj8koEHh503b7l
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 21, 2023 at 01:18:27PM +0300, Tomi Valkeinen wrote:
-> From: Luca Ceresoli <luca@lucaceresoli.net>
+On Sun, Apr 23, 2023 at 04:30:24PM +0200, Stanislav Jakubek wrote:
+> Convert Broadcom Kona family watchdog timer bindings to DT schema.
 >=20
-> An ATR is a device that looks similar to an i2c-mux: it has an I2C
-> slave "upstream" port and N master "downstream" ports, and forwards
-> transactions from upstream to the appropriate downstream port. But it
-> is different in that the forwarded transaction has a different slave
-> address. The address used on the upstream bus is called the "alias"
-> and is (potentially) different from the physical slave address of the
-> downstream chip.
->=20
-> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
-> implementing ATR features in a device driver. The helper takes care or
-> adapter creation/destruction and translates addresses at each transaction.
->=20
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
 
-This looks good to me. Dunno if the DT folks want the binding as a
-seperate patch, but this is good to go as far as I am concerned.
-Everything else can be fixed incrementally, I think. Also, this can go
-in via the media-tree, there shouldn't be any conflicts.
-
-Acked-by: Wolfram Sang <wsa@kernel.org>
-
-Thanks for keeping at it!
+This went to the i2c list instead of the watchdog list. Please use
+'scripts/get_maintainers.pl' which will help avoiding such issues.
 
 
---gg+RkDq5qENt1R+b
+--qjMj8koEHh503b7l
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmRGWnoACgkQFA3kzBSg
-Kbadfw//Y5SeRe83SMCFfpkidD2u1G3YuWrzp5+GfMLCDyKxRKiziZtnzyRmC9xQ
-rknOTHe9KssAk6mJkoYnm8PHC+7CPjpL6hzu8Z4R3dPnTF9dmvGH2JpDxXCB4KMX
-ksU+S5GlitAoUIprvpeMfSMTUSxaayuJwUtpjMxJ1XjV89WiBFh871ElOZPqLgYs
-/vTVRF1FWle5DZK2TGtlHTM2HKXFxBkFDpyQ2cJOBU5symGs5ZqjgUHNrCc01ydy
-DzWqtoSAVXfGQU0JOglKJB3Ws6bcR29svYZNYVAQJ6jpvPRNiDXP3wdL1/aSIaUo
-AU++kmwLFXYImSAVQcb3rnYI+Ld7ivzNYu9FLHmeN9kmw6upmQqms0wZ6z78y8Xl
-e4E+E1zOli61eEQzm3mzq54SDDo6CmNqetH7D77srWlGl+gMNysB5DKrU1vjnry6
-CXNldRTM6axfuAC9mUVfWQLHny6dQtbnLkOyWWTcJZthW3HhsyVJ3RhfGgGQ+Kth
-Kuw28Uczq7B45lCVoOML4B0lozIj+kHjh7n9f6gFukiBzwlsJhxlhsyp1fG17Bx4
-qd9dHAe1louLLL0NmgTnsp9M1KUf/sYMUrssBTrBOkDT94BLv4GHcd7WvW2SPTvX
-GhLsjgE5ubGMnXv++80IfjNu9EW3egEorgHjAgXJtMBOGRi+3zs=
-=VN/1
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmRGXDUACgkQFA3kzBSg
+KbY0wQ//RvkEv5ZiFJXEG9yFGhLjeLkuCEXJtWi4E2mBzzVBOa+VqgLBP6WY1ksa
+j/jNvXbKIECuz+K6S8+oie1RmgKYqaPdas9CIN3XxbxZUrkhqV2uWnVnzS5YPN+k
+qFF9+JVGGPDTjG6aLJ0mEk2eUxe/EYq5T6n7LPkHlqIcDBS9vJUa574h/DVFUYxZ
+5b2knMz7+ybK/+1F1NRs6a4XFMxY8Z/hDxGARPLRjTGhPV74tD4DTyusmdPWBX+5
+hm7c5lvc6MFT6lSkZIbOoz5duuw7GZjlv3Vm/Rt7r/s+uStHQ/rVaehaJtydSOtl
+KlyK8DcePVosQER18vIcdWWvr/RHd/oVtvKvocWextgPD17T330pAL73f9+EMLbp
+PSqBb1UdPAbKh9SIebGDMUv8YjTqGTvEiwTeQ70mgVJhOb/03j6buTOwS6ku38Mi
+ID7XOseGJJvGUKXghycCveiNEt8pf9AfqO0UMzyLZVTmH4amyhME5Hlpy994p3l0
+KMXxi9hKOybERs16nlAullKNwxge7QknP+oPyKzS8RcaLUAzD/i0FCtxCETihU8E
+Lf85LAtKafggf4uV2W7G/LQxgpvTy0TJetDl5Scvr/LE+mRvD6rRId3lG7n/d/+D
++RqSdBVLzx3aIynNCkH15eTuxXoo3FKknwMd2We4RyqpWzRoTRc=
+=ShE4
 -----END PGP SIGNATURE-----
 
---gg+RkDq5qENt1R+b--
+--qjMj8koEHh503b7l--
