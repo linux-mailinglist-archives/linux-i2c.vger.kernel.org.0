@@ -2,290 +2,152 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595666EC9F7
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Apr 2023 12:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10FFB6ECA54
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Apr 2023 12:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbjDXKO0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Apr 2023 06:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
+        id S231179AbjDXKcY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Apr 2023 06:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbjDXKOX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Apr 2023 06:14:23 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2049.outbound.protection.outlook.com [40.107.117.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519D740C5;
-        Mon, 24 Apr 2023 03:14:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JFGqq6AwlDyo5uSHLmSPNBl0k3aGyOIrZf69Ra7NLKLk8Hpgy9NO7YAz2rmeVCGQqBFSQMLcVAf4k8MTEJqHs9J+8iZ5yGN9vGQOR2yEWiLtUYyRQHvloCUjaW6lzQCuzzPyym9br6uH0vF5pHTj4rKIvKw2rc6c5evfkl6cLvCgMUTr6lRilA/U4LUVJtPgHvGxc7xeFCFAxBGLMYEGIdxL6kDb7bUOoUvDmGEorSnG01Ho6fdBg8IGKQAP3SYDZh5AN/EHDLGnel88S69tcQiS2dFBTCzdxUf/J2RtNeIgcuSPCDFke85ooR6owVIHuyg6ni0oLzb87RgFBTK/GQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Lf7AFk93plJGjm+CcW1hU/4HpFIClbcuMRZi1phwoh8=;
- b=DQqiSL58ZpCatPxlmrVXwnH9uV6I868bxIJbbBZ7qJWwuf0oxbX3T29JUZ3NwOY7uinjPm+aGtpZ6vn3mDOsfJzJt/iLCH0Dh0GrFhNudjgA1cOhRmi9NkvxWVmzs2i1GQarL6uBQAa9+nTSyld9t/+utPNv19DhYxLy2Xf2BfHZQm2OD8qHCD1LXMsHDMHILzKwhyx3zKZdxXllbah03fIzrOCDz/H8D9Thmph1f7LavZyADwQbuTYZ5eIS/oBvjBXvazzF1miWQtHi3mrmDWxtJncN45+nPQcqqMTMFATOrGpucFTBmMmbqT+JY4yt4sMp7LWSY5ajz7GuG7lNhQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
- (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=wiwynn.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Lf7AFk93plJGjm+CcW1hU/4HpFIClbcuMRZi1phwoh8=;
- b=pfHZb8TIA+HwvP49jQVxb6GeKf0VVZqRKkBx63pHovEi3LTLDPLDvSipRoCH51xFjyIcDMHrAOnY67hngK0WdzWg2OTL1/nUQ+v1du0VF/qbcjQSj/ncWqQ+u6JKR9fRKae4t/lWcy8SeGGvStTOp6RdSThOVBR6gp0wWz6Lo9xr0yDKwYCcAoB/Fec0nBuzErZwGPfSvEDzoC2HgR11x4S6hVPKdwb0OU4NoTeJTqfmDhvvx24SnzRznSk3qTmEk3DmaiQPDO+NkgKiuHeq5I7LHG3jybG+AMW0weT5iMicYUyl3Z9riwr+pTUYyz1qrTdsQjgCB+0GZcHtoZTArA==
-Received: from PS2PR01CA0016.apcprd01.prod.exchangelabs.com
- (2603:1096:300:2d::28) by KL1PR04MB6781.apcprd04.prod.outlook.com
- (2603:1096:820:d2::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Mon, 24 Apr
- 2023 10:14:09 +0000
-Received: from PSAAPC01FT059.eop-APC01.prod.protection.outlook.com
- (2603:1096:300:2d:cafe::ea) by PS2PR01CA0016.outlook.office365.com
- (2603:1096:300:2d::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33 via Frontend
- Transport; Mon, 24 Apr 2023 10:14:09 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
- smtp.mailfrom=Wiwynn.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=Wiwynn.com;
-Received-SPF: Fail (protection.outlook.com: domain of Wiwynn.com does not
- designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
- client-ip=211.20.1.79; helo=localhost.localdomain;
-Received: from localhost.localdomain (211.20.1.79) by
- PSAAPC01FT059.mail.protection.outlook.com (10.13.38.139) with Microsoft SMTP
- Server id 15.20.6340.19 via Frontend Transport; Mon, 24 Apr 2023 10:14:08
- +0000
-From:   Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-To:     patrick@stwcx.xyz, Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S231494AbjDXKcC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Apr 2023 06:32:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E527F197;
+        Mon, 24 Apr 2023 03:31:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F7EC62039;
+        Mon, 24 Apr 2023 10:31:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D255C433EF;
+        Mon, 24 Apr 2023 10:31:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682332290;
+        bh=x7upwBQlHFbyVO10snwIsBPKLyhD5ZgCsg/hqg0Fzws=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YXrXHm4H7y2rbNZv61Li6W13Os9LmazFAJPMufxRuLGrjs1es5kJFqjFOxI3KvnUZ
+         6JCCwP+xT72qWf0xVb9eQNHEb8PE0b1nRF0d5aGlHG/eHeOoJHPagu7IbNsGBB60oq
+         A33Eq31rT3tRkK4SMtjQWBTs4teNK10oZaOGLccYwb74oOSDqPdJJVc3/KFpiMtPup
+         jgd7LRSfZCE93qL4+iAIvUtSGgO/SKIdemo6gZD+W+zwkAvsi7fIFO9sPYTKv8rtTr
+         muODtrdRGAieA9W3kMe6sFHo9WLvQ0pi4tJOGMtePUSYyn44Igy9qgfgvBvfsAVQyH
+         rKhlKVojNBDVw==
+Date:   Mon, 24 Apr 2023 12:31:26 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] hwmon: pmbus: Add ltc4286 driver
-Date:   Mon, 24 Apr 2023 18:13:50 +0800
-Message-Id: <20230424101352.28117-3-Delphine_CC_Chiu@Wiwynn.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230424101352.28117-1-Delphine_CC_Chiu@Wiwynn.com>
-References: <20230424101352.28117-1-Delphine_CC_Chiu@Wiwynn.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PSAAPC01FT059:EE_|KL1PR04MB6781:EE_
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v11 1/7] i2c: add I2C Address Translator (ATR) support
+Message-ID: <ZEZafj6j+EurGWJ7@sai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>, Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20230421101833.345984-1-tomi.valkeinen@ideasonboard.com>
+ <20230421101833.345984-2-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: d07d1931-df8e-4df9-8684-08db44aca4d1
-X-MS-Exchange-AtpMessageProperties: SA
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QB9O9xk1/aEsns41emaCDHBxDA7dR9zUftVTYUeXZVbkEESXflqMuIcUgu0Sx+28i3mfOovDylMsKlz8PY84AgCeEJa1zsH6maT9Oxs/oxYFHhaQ26pgYw/2AxFJqhAnKu/qGrz1O7EYPd/EZOhwxIL5TbLtqzz3YHSW2bWdLPyY4gU2DIv0L879siWCDeQRxArop43SE4UYKd8wyfpRFJ0WhQpvPIcZnXL+vP29tjl57jEoB6WDSVlwDhsuaaf2D+tqW8yyE35nvufTTwkcyYqnZG8J8TF/DePAW01PqZQ7bQJ/yqbnMrgEqj5aN30v5DWUCtT2njSHzoq2+nsgeuBJlfWo7K9QSjMS0ItixNy7mc54mpLued66U/HBwZc/xkUFsJ/R2uRPjFXPOI1xi0/wxPQiKM9GztMNce8bmuaiHQLGyU3exrhyPbmw7NGfyqqmVv2zi6MZ9+dgeT3VBrarhaWawK27sBh1u0ZCdJyf6HYVA8u0svtAqeYX5rnJ8+lH9CcQ6HSpLcfVlCxRoo7lrw+KdGKet9GCGV2Tuque3Ga4MPYqSB7u3uQGEu9uPRnVn7yjPvyp6YVAyl92A8uj0xK9HJlLCuXEKsfuFxDnDdgFEi8ejk0IpkRx6afmkVrhUZiE/QZ7KtjVQnC9/u0gvNyawn/t0a0A9ekYTbY=
-X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230028)(6069001)(4636009)(136003)(39860400002)(346002)(396003)(376002)(451199021)(36840700001)(46966006)(81166007)(356005)(82740400003)(336012)(6506007)(6512007)(1076003)(26005)(2616005)(956004)(40480700001)(186003)(83380400001)(66574015)(47076005)(36860700001)(2906002)(8676002)(8936002)(5660300002)(9316004)(36756003)(54906003)(478600001)(6486002)(6666004)(110136005)(316002)(36736006)(4326008)(41300700001)(70206006)(70586007)(86362001)(82310400005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: wiwynn.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2023 10:14:08.7222
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d07d1931-df8e-4df9-8684-08db44aca4d1
-X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
-X-MS-Exchange-CrossTenant-AuthSource: PSAAPC01FT059.eop-APC01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR04MB6781
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gg+RkDq5qENt1R+b"
+Content-Disposition: inline
+In-Reply-To: <20230421101833.345984-2-tomi.valkeinen@ideasonboard.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add support for ltc4286 driver
 
-Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
----
- drivers/hwmon/pmbus/Kconfig   |   9 +++
- drivers/hwmon/pmbus/Makefile  |   1 +
- drivers/hwmon/pmbus/ltc4286.c | 142 ++++++++++++++++++++++++++++++++++
- 3 files changed, 152 insertions(+)
- create mode 100644 drivers/hwmon/pmbus/ltc4286.c
+--gg+RkDq5qENt1R+b
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 59d9a7430499..1230d910d681 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -218,6 +218,15 @@ config SENSORS_LTC3815
- 	  This driver can also be built as a module. If so, the module will
- 	  be called ltc3815.
- 
-+config SENSORS_LTC4286
-+	bool "Linear Technologies LTC4286"
-+	help
-+	  If you say yes here you get hardware monitoring support for Linear
-+	  Technology LTC4286.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called ltc4286.
-+
- config SENSORS_MAX15301
- 	tristate "Maxim MAX15301"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 3ae019916267..540265539580 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -23,6 +23,7 @@ obj-$(CONFIG_SENSORS_LM25066)	+= lm25066.o
- obj-$(CONFIG_SENSORS_LT7182S)	+= lt7182s.o
- obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
- obj-$(CONFIG_SENSORS_LTC3815)	+= ltc3815.o
-+obj-$(CONFIG_SENSORS_LTC4286)	+= ltc4286.o
- obj-$(CONFIG_SENSORS_MAX15301)	+= max15301.o
- obj-$(CONFIG_SENSORS_MAX16064)	+= max16064.o
- obj-$(CONFIG_SENSORS_MAX16601)	+= max16601.o
-diff --git a/drivers/hwmon/pmbus/ltc4286.c b/drivers/hwmon/pmbus/ltc4286.c
-new file mode 100644
-index 000000000000..474f4ec9107c
---- /dev/null
-+++ b/drivers/hwmon/pmbus/ltc4286.c
-@@ -0,0 +1,142 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Hardware monitoring driver for LTC4286 Hot-Swap Controller
-+ *
-+ * Copyright (c) 2023 Linear Technology
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/pmbus.h>
-+#include "pmbus.h"
-+
-+// LTC4286 register
-+#define LTC4286_MFR_CONFIG1 (0xF2)
-+
-+// LTC4286 configuration
-+#define VRANGE_SELECT (1 << 1)
-+
-+#define LTC4286_MFR_ID_SIZE 3
-+
-+enum chips { ltc4286, ltc4287 };
-+
-+static struct pmbus_driver_info ltc4286_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = direct,
-+	.format[PSC_VOLTAGE_OUT] = direct,
-+	.format[PSC_CURRENT_OUT] = direct,
-+	.format[PSC_POWER] = direct,
-+	.format[PSC_TEMPERATURE] = direct,
-+	.m[PSC_VOLTAGE_IN] = 32,
-+	.b[PSC_VOLTAGE_IN] = 0,
-+	.R[PSC_VOLTAGE_IN] = 1,
-+	.m[PSC_VOLTAGE_OUT] = 32,
-+	.b[PSC_VOLTAGE_OUT] = 0,
-+	.R[PSC_VOLTAGE_OUT] = 1,
-+	.m[PSC_CURRENT_OUT] = 1024,
-+	.b[PSC_CURRENT_OUT] = 0,
-+	.R[PSC_CURRENT_OUT] = 3 - 6,
-+	.m[PSC_POWER] = 1,
-+	.b[PSC_POWER] = 0,
-+	.R[PSC_POWER] = 4 - 6,
-+	.m[PSC_TEMPERATURE] = 1,
-+	.b[PSC_TEMPERATURE] = 273.15,
-+	.R[PSC_TEMPERATURE] = 0,
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-+		   PMBUS_HAVE_PIN | PMBUS_HAVE_TEMP,
-+};
-+
-+static int ltc4286_probe(struct i2c_client *client,
-+			 const struct i2c_device_id *id)
-+{
-+	int ret;
-+	u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
-+	struct device *dev = &client->dev;
-+	struct pmbus_driver_info *info;
-+	u32 rsense;
-+
-+	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, block_buffer);
-+	if (ret < 0) {
-+		dev_err(&client->dev, "failed to read manufacturer id\n");
-+		return ret;
-+	}
-+
-+	/* Refer to ltc4286 datasheet page 20
-+	 * the default manufacturer id is LTC
-+	 */
-+	if (ret != LTC4286_MFR_ID_SIZE ||
-+	    strncmp(block_buffer, "LTC", LTC4286_MFR_ID_SIZE)) {
-+		dev_err(&client->dev, "unsupported manufacturer id\n");
-+		return -ENODEV;
-+	}
-+
-+	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, block_buffer);
-+	if (ret < 0) {
-+		dev_err(&client->dev, "failed to read manufacturer model\n");
-+		return ret;
-+	}
-+
-+	ret = of_property_read_u32(client->dev.of_node, "rsense-micro-ohms",
-+				   &rsense);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (rsense == 0)
-+		return -EINVAL;
-+
-+	info = &ltc4286_info;
-+
-+	/* Default of VRANGE_SELECT = 1 */
-+	if (device_property_read_bool(dev, "vrange_select_25p6")) {
-+		/* Setup MFR1 CONFIG register bit 1 VRANGE_SELECT */
-+		ret = i2c_smbus_read_word_data(client, LTC4286_MFR_CONFIG1);
-+		if (ret < 0) {
-+			dev_err(&client->dev,
-+				"failed to read manufacturer configuration one\n");
-+			return ret;
-+		}
-+
-+		ret &= ~VRANGE_SELECT; /* VRANGE_SELECT = 0, 25.6V */
-+		i2c_smbus_write_word_data(client, LTC4286_MFR_CONFIG1, ret);
-+
-+		info->m[PSC_VOLTAGE_IN] = 128;
-+		info->m[PSC_VOLTAGE_OUT] = 128;
-+		info->m[PSC_POWER] = 4 * rsense;
-+	} else {
-+		info->m[PSC_POWER] = rsense;
-+	}
-+
-+	info->m[PSC_CURRENT_OUT] = 1024 * rsense;
-+
-+	return pmbus_do_probe(client, info);
-+}
-+
-+static const struct i2c_device_id ltc4286_id[] = { { "ltc4286", ltc4286 },
-+						   { "ltc4287", ltc4287 },
-+						   {} };
-+MODULE_DEVICE_TABLE(i2c, ltc4286_id);
-+
-+static const struct of_device_id ltc4286_of_match[] = {
-+	{ .compatible = "lltc,ltc4286" },
-+	{ .compatible = "lltc,ltc4287" },
-+	{}
-+};
-+
-+/* This is the driver that will be inserted */
-+static struct i2c_driver ltc4286_driver = {
-+	.driver = {
-+		.name = "ltc4286",
-+		.of_match_table = ltc4286_of_match,
-+	},
-+	.probe = ltc4286_probe,
-+	.id_table = ltc4286_id,
-+};
-+
-+module_i2c_driver(ltc4286_driver);
-+
-+MODULE_AUTHOR("Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>");
-+MODULE_DESCRIPTION("PMBUS driver for LTC4286 and compatibles");
-+MODULE_LICENSE("GPL");
--- 
-2.17.1
+On Fri, Apr 21, 2023 at 01:18:27PM +0300, Tomi Valkeinen wrote:
+> From: Luca Ceresoli <luca@lucaceresoli.net>
+>=20
+> An ATR is a device that looks similar to an i2c-mux: it has an I2C
+> slave "upstream" port and N master "downstream" ports, and forwards
+> transactions from upstream to the appropriate downstream port. But it
+> is different in that the forwarded transaction has a different slave
+> address. The address used on the upstream bus is called the "alias"
+> and is (potentially) different from the physical slave address of the
+> downstream chip.
+>=20
+> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
+> implementing ATR features in a device driver. The helper takes care or
+> adapter creation/destruction and translates addresses at each transaction.
+>=20
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
+This looks good to me. Dunno if the DT folks want the binding as a
+seperate patch, but this is good to go as far as I am concerned.
+Everything else can be fixed incrementally, I think. Also, this can go
+in via the media-tree, there shouldn't be any conflicts.
+
+Acked-by: Wolfram Sang <wsa@kernel.org>
+
+Thanks for keeping at it!
+
+
+--gg+RkDq5qENt1R+b
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmRGWnoACgkQFA3kzBSg
+Kbadfw//Y5SeRe83SMCFfpkidD2u1G3YuWrzp5+GfMLCDyKxRKiziZtnzyRmC9xQ
+rknOTHe9KssAk6mJkoYnm8PHC+7CPjpL6hzu8Z4R3dPnTF9dmvGH2JpDxXCB4KMX
+ksU+S5GlitAoUIprvpeMfSMTUSxaayuJwUtpjMxJ1XjV89WiBFh871ElOZPqLgYs
+/vTVRF1FWle5DZK2TGtlHTM2HKXFxBkFDpyQ2cJOBU5symGs5ZqjgUHNrCc01ydy
+DzWqtoSAVXfGQU0JOglKJB3Ws6bcR29svYZNYVAQJ6jpvPRNiDXP3wdL1/aSIaUo
+AU++kmwLFXYImSAVQcb3rnYI+Ld7ivzNYu9FLHmeN9kmw6upmQqms0wZ6z78y8Xl
+e4E+E1zOli61eEQzm3mzq54SDDo6CmNqetH7D77srWlGl+gMNysB5DKrU1vjnry6
+CXNldRTM6axfuAC9mUVfWQLHny6dQtbnLkOyWWTcJZthW3HhsyVJ3RhfGgGQ+Kth
+Kuw28Uczq7B45lCVoOML4B0lozIj+kHjh7n9f6gFukiBzwlsJhxlhsyp1fG17Bx4
+qd9dHAe1louLLL0NmgTnsp9M1KUf/sYMUrssBTrBOkDT94BLv4GHcd7WvW2SPTvX
+GhLsjgE5ubGMnXv++80IfjNu9EW3egEorgHjAgXJtMBOGRi+3zs=
+=VN/1
+-----END PGP SIGNATURE-----
+
+--gg+RkDq5qENt1R+b--
