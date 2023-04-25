@@ -2,86 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5596EE497
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Apr 2023 17:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6A36EE4FE
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Apr 2023 17:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233950AbjDYPQu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Apr 2023 11:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
+        id S229831AbjDYPvT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Apr 2023 11:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233442AbjDYPQt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Apr 2023 11:16:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D7349CD;
-        Tue, 25 Apr 2023 08:16:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 414F5616C3;
-        Tue, 25 Apr 2023 15:16:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18805C433EF;
-        Tue, 25 Apr 2023 15:16:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682435807;
-        bh=bAXyJ55uGyr4o6x1+TCcIcpy53ynNX5P/NlJkIf4cdM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FHcg7mEafbVu64JRX4tHHh2VqSTTlC5YijN65eYFfHpF9FiaZXlsjgfOXCcUl9R0V
-         gY5OBJ8d8csE7FHsyF02OC7w0Iyfwon0qxpbP1iYmH7YTPqCjYm5tgQEO7MoOO6xa0
-         P2asA+lSeY8q0sfWzh/D6txLFRhP7r9vgIRRTyl46FOLXbvAHi/skk+aYJVfRRnjON
-         0ciF+JbbLwNYKwAYhnCPqfpav07uK3yfH6nUdHDmIc1xO7bpcZQinp+hmhQcPmxHV4
-         iZl8Hn5w3m3wD/3JTj5yUT2OAeAFg/NZpOOajGIZhkSfXTuhhiDf95I3Kl1kzImTCa
-         nZRpnge3NrrGA==
-Date:   Tue, 25 Apr 2023 17:16:44 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
+        with ESMTP id S234452AbjDYPvS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Apr 2023 11:51:18 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D71146A1;
+        Tue, 25 Apr 2023 08:51:17 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33PFp1KH033567;
+        Tue, 25 Apr 2023 10:51:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682437861;
+        bh=SSssMoXAAJxbfWfqbEfPrBoPMvhumLnvZAIjsMtep2I=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=bc+/2HovFNrOKwyIOZx8Hb3FS+uopXM8wRW1PpjUBrMJOBG6pjeD8UyuaOyV3XPNr
+         PCjM1A+0m1QMUHeg7cRVlxXzr8ttKM0CGQxAvxH8GxtMcvwgithLHjHgTTa/F4YXlu
+         vBQa8d0TSc4hDtQrqK4C2d9dOPygXe7qdSooW2Qc=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33PFp1bO028332
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 25 Apr 2023 10:51:01 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 25
+ Apr 2023 10:51:01 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 25 Apr 2023 10:51:01 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33PFp1Ej067247;
+        Tue, 25 Apr 2023 10:51:01 -0500
+Date:   Tue, 25 Apr 2023 10:51:01 -0500
+From:   Reid Tonking <reidt@ti.com>
 To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Jiawen Wu <jiawenwu@trustnetic.com>, netdev@vger.kernel.org,
-        andrew@lunn.ch, linux@armlinux.org.uk,
-        jarkko.nikula@linux.intel.com, olteanv@gmail.com,
-        andriy.shevchenko@linux.intel.com, hkallweit1@gmail.com,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        mengyuanlou@net-swift.com
-Subject: Re: [PATCH net-next v4 3/8] net: txgbe: Register I2C platform device
-Message-ID: <20230425151644.szqnyqvxpdkoqqb3@intel.intel>
-References: <20230422045621.360918-1-jiawenwu@trustnetic.com>
- <20230422045621.360918-4-jiawenwu@trustnetic.com>
- <20230425150619.cj7ed2efnbvjk5mm@intel.intel>
+CC:     <tony@atomide.com>, <vigneshr@ti.com>, <aaro.koskinen@iki.fi>,
+        <jmkrzyszt@gmail.com>, <linux-omap@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: [PATCH] i2c: omap: Fix standard mode false ACK readings
+Message-ID: <20230425155101.qqyvpfjdtqr3tlsh@reidt-t5600.dhcp.ti.com>
+References: <20230424195344.627861-1-reidt@ti.com>
+ <20230425124549.kdvfyvuy4uolvsr2@intel.intel>
+ <20230425145610.j3ljepycclr3i42t@reidt-t5600.dhcp.ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230425150619.cj7ed2efnbvjk5mm@intel.intel>
+In-Reply-To: <20230425145610.j3ljepycclr3i42t@reidt-t5600.dhcp.ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 05:06:19PM +0200, Andi Shyti wrote:
-> Hi Jiawen,
-> 
-> [...]
-> 
-> > +	ret = txgbe_i2c_register(txgbe);
-> > +	if (ret) {
-> > +		wx_err(txgbe->wx, "failed to init i2c interface: %d\n", ret);
-> > +		goto err_unregister_swnode;
-> > +	}
-> > +
-> >  	return 0;
-> > +
-> > +err_unregister_swnode:
-> > +	software_node_unregister_node_group(txgbe->nodes.group);
-> > +
-> > +	return ret;
-> 
-> no need for the goto here... in my opinion it's easier if you put
-> software_node_unregister_node_group() under the if and return
-> ret.
+This is a resend to add stable list to cc as well as linux-i2c list
+which fell off somehow.
 
-please... ignore, I see that there are more goto's added in the
-next patches.
+On 09:56-20230425, Reid Tonking wrote:
+> Hi Andi,
+> 
+> On 14:45-20230425, Andi Shyti wrote:
+> > Hi Reid,
+> > 
+> > On Mon, Apr 24, 2023 at 02:53:44PM -0500, Reid Tonking wrote:
+> > > Using standard mode, rare false ACK responses were appearing with
+> > > i2cdetect tool. This was happening due to NACK interrupt triggering
+> > > ISR thread before register access interrupt was ready. Removing the
+> > > NACK interrupt's ability to trigger ISR thread lets register access
+> > > ready interrupt do this instead.
+> > > 
+> > > Fixes: 3b2f8f82dad7 ("i2c: omap: switch to threaded IRQ support")
+> > > 
+> > > Signed-off-by: Reid Tonking <reidt@ti.com>
+> > 
+> > please don't leave any space between Fixes and SoB.
+> > 
+> > Add also:
+> > 
+> > Cc: <stable@vger.kernel.org> # v3.7+
+> > 
+> > and Cc the stable list.
+> > 
+> > Andi
+> >
+> 
+> Thanks for the feedback, I'll make that change going forward.
+> 
+> -Reid
 
-Andi
+-Reid
