@@ -2,167 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F596EE667
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Apr 2023 19:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891086EE66B
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Apr 2023 19:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234183AbjDYRNw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Apr 2023 13:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58210 "EHLO
+        id S231337AbjDYRPB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Apr 2023 13:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbjDYRNv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Apr 2023 13:13:51 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B73E71;
-        Tue, 25 Apr 2023 10:13:50 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6a5d9853d97so2373749a34.2;
-        Tue, 25 Apr 2023 10:13:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682442829; x=1685034829;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Yzu6w9WOniFz1mjvEavwP3dT0w7oV2bISDbejOiYeZA=;
-        b=b8dsZ8VfXDXdLr7lQncoFnaSADO+PVBY44TKer/wLhyNz1lNXMYFDbGTkDqpX8vI47
-         2vxhAn2h8mOYSBl9WojMJg8Dgk0qmEk32iBGfKL80A1Vduuv8+iBgyokMJef0AclE6wJ
-         XFjhRJbw2gN8v/NJJgx0IgdTcmVM/cehkiDNK5wvnKEHD/7uVQUjZ3/IFNI7bzzSSGn+
-         3eHwDDtN/DpqeC0d8UpbbhizSvnx3yqTT0Ki7fsP6N1kDJpSf8l2/7yfRqXAcOBPEj9f
-         119dyYzqbq6ZjW3rsoOEYRBe7KGlFfAek1ktPW7HZ+4J1e9dv6xZ7tJWegL6WnSQpHcE
-         OR2A==
-X-Gm-Message-State: AAQBX9fnmFa+D4MkhVg9C/3hSTLS4Xm9LiLvK1FabKquP3v/0MTuJ89R
-        mqiIAXNyi7h8dG2NuPFzYg==
-X-Google-Smtp-Source: AKy350Y2kbdxu9Z5by25+Rh6mkLY+QutedR8tWOFNqfj0abmqbfqHg4Rk0DUbGR2ka/sbWFhMUzc3w==
-X-Received: by 2002:aca:2816:0:b0:38e:f0c4:2106 with SMTP id 22-20020aca2816000000b0038ef0c42106mr2332695oix.5.1682442829177;
-        Tue, 25 Apr 2023 10:13:49 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g4-20020a0568080dc400b0038e4c6fb8e0sm5792314oic.58.2023.04.25.10.13.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 10:13:48 -0700 (PDT)
-Received: (nullmailer pid 1966662 invoked by uid 1000);
-        Tue, 25 Apr 2023 17:13:47 -0000
-Date:   Tue, 25 Apr 2023 12:13:47 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v11 1/7] i2c: add I2C Address Translator (ATR) support
-Message-ID: <20230425171347.GB1957523-robh@kernel.org>
-References: <20230421101833.345984-1-tomi.valkeinen@ideasonboard.com>
- <20230421101833.345984-2-tomi.valkeinen@ideasonboard.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421101833.345984-2-tomi.valkeinen@ideasonboard.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S234389AbjDYRO7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Apr 2023 13:14:59 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E383B10EF
+        for <linux-i2c@vger.kernel.org>; Tue, 25 Apr 2023 10:14:58 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 40A6E5C00E9;
+        Tue, 25 Apr 2023 13:14:56 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute5.internal (MEProxy); Tue, 25 Apr 2023 13:14:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        colorremedies.com; h=cc:content-type:content-type:date:date:from
+        :from:in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1682442896; x=
+        1682529296; bh=Ax/7qRn0Qx8jtdyuwMV1REnMpqVuh4tazlH2Hqpev8k=; b=T
+        wopj7m+KIlC5LqZVi6iZittMeya+DwL1q/e9AOeUNY+/f3xYQ9H9SSWUzQiM3AMc
+        wqiQxiX0Ufs5PpcwWjxE9n0Nw6FyatdfzAHvWc7irS19b7gp/Q1d1xjFVIQp6c7Q
+        OM6PcQLfBmpVV9hxPraQhmmZSlBHfWrS0GZt5n4KDtuDYddkhmClxtt59t+o9NlV
+        v1lEmzjnxDw6AETF3kCSm29NhcBebuV2t1Ntjbs7OtiUbSMrvb9f6XrslmTwagXm
+        4jRAUbVpnX2d5DSc9NK5SrN+vFKLqAQIX5jRDspFi3rJwlYLXrEiuohaqcM8WZ1Z
+        XDOq9V34G7nR/hc1cdIXw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1682442896; x=1682529296; bh=Ax/7qRn0Qx8jt
+        dyuwMV1REnMpqVuh4tazlH2Hqpev8k=; b=P/SPJ2K20nbofhr/YRQxx2nKWk4jW
+        pwhvj/NNKkVA91Na+1i9VkBXyTNHQypeD95wdyj55TqhQAePoqwAViTi6QllPujZ
+        t3VUS8TPL6zYHVjfzCag8krRJXV+MFBIAlEF15n5sjizwze1VpglYRfHUkXy/mkY
+        5IuyxUqp0ON4Sv18RoAl8BfBs49h0Q0mmmXr/i2NyYbFORmV1OykPV9f0BoaLldT
+        oRTgQvxSqm8qVJ3xziPcl7OcJAwwqIxD64VQqi7GCbMcfdM8mK1+Mhhzsn6l5tdn
+        K2/JUe3X2rIUpgFf46JEDewsQ2q1QrcRjBuJPDNARykfcHEEss59bvsUw==
+X-ME-Sender: <xms:jwpIZM274pjWXxIcaLUjXlwSurzkIxraYH52cX4KFgM1sIVtzL6CNw>
+    <xme:jwpIZHFANvz3q8kTm_T7ru688F3AGMnuLw5wj56Ika8tZLLf7glB_hEYipwJjFAaZ
+    fYl0KqbgrtnL9bA5-g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeduvddgudduudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfvehh
+    rhhishcuofhurhhphhihfdcuoehlihhsthhssegtohhlohhrrhgvmhgvughivghsrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpeefjeduleekhedvheelvedukeefhfevffelvdeiueeg
+    iefhtdejuedtgedvteekleenucffohhmrghinheprhgvughhrghtrdgtohhmnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheplhhishhtshestgho
+    lhhorhhrvghmvgguihgvshdrtghomh
+X-ME-Proxy: <xmx:kApIZE5Oi35Vo07NKv0X07K3s_bgZkH8pXgKO2Gs6olYrKgvZdopWg>
+    <xmx:kApIZF3XdSLjDyIQ87dhhm-KhQ1IOmzTWWETJHrjI9Gmg0WHO8L7Qw>
+    <xmx:kApIZPEEqvdMtGlxKkWKIHigTSE7nGg2K-2KLnB2irQfsRUvNOAMtg>
+    <xmx:kApIZERfnKgiFk45D3EvrDdfcDRphs8DTQtSngsEespn8nAwAwoh2g>
+Feedback-ID: i06494636:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DD5B21700089; Tue, 25 Apr 2023 13:14:55 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
+Mime-Version: 1.0
+Message-Id: <a08d27b1-6eed-4fba-a3e9-b3b6746c88c3@app.fastmail.com>
+In-Reply-To: <20230425070109.GU66750@black.fi.intel.com>
+References: <47ff45c8-20da-4eac-acad-6d51353f95c6@app.fastmail.com>
+ <ZEdsLw+dJhdHVdEO@sai> <20230425070109.GU66750@black.fi.intel.com>
+Date:   Tue, 25 Apr 2023 13:14:35 -0400
+From:   "Chris Murphy" <lists@colorremedies.com>
+To:     "Mika Westerberg" <mika.westerberg@linux.intel.com>,
+        "Wolfram Sang" <wsa@kernel.org>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        "Jarkko Nikula" <jarkko.nikula@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Subject: Re: intel-lpss 0000:00:15.1: idma64_irq: status=0x0, millions of lines
+ spamming journal
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 01:18:27PM +0300, Tomi Valkeinen wrote:
-> From: Luca Ceresoli <luca@lucaceresoli.net>
-> 
-> An ATR is a device that looks similar to an i2c-mux: it has an I2C
-> slave "upstream" port and N master "downstream" ports, and forwards
-> transactions from upstream to the appropriate downstream port. But it
-> is different in that the forwarded transaction has a different slave
-> address. The address used on the upstream bus is called the "alias"
-> and is (potentially) different from the physical slave address of the
-> downstream chip.
-> 
-> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
-> implementing ATR features in a device driver. The helper takes care or
-> adapter creation/destruction and translates addresses at each transaction.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  .../devicetree/bindings/i2c/i2c-atr.yaml      |  34 +
->  Documentation/i2c/i2c-address-translators.rst |  96 +++
->  Documentation/i2c/index.rst                   |   1 +
->  MAINTAINERS                                   |   8 +
->  drivers/i2c/Kconfig                           |   9 +
->  drivers/i2c/Makefile                          |   1 +
->  drivers/i2c/i2c-atr.c                         | 684 ++++++++++++++++++
->  include/linux/i2c-atr.h                       | 116 +++
->  8 files changed, 949 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-atr.yaml
->  create mode 100644 Documentation/i2c/i2c-address-translators.rst
->  create mode 100644 drivers/i2c/i2c-atr.c
->  create mode 100644 include/linux/i2c-atr.h
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-atr.yaml b/Documentation/devicetree/bindings/i2c/i2c-atr.yaml
-> new file mode 100644
-> index 000000000000..d7f73d98110d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-atr.yaml
-> @@ -0,0 +1,34 @@
-> +# SPDX-License-Identifier: GPL-2.0
 
-Dual license.
 
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/i2c-atr.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Common i2c address translator properties.
+On Tue, Apr 25, 2023, at 3:01 AM, Mika Westerberg wrote:
+> Hi Chris,
+>
+> Would you be able to bisect this to a mainline commit?
 
-Drop hard stop.
+Difficult in the near term.
 
-> +
-> +maintainers:
-> +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> +
-> +description:
-> +  An I2C Address Translator (ATR) is a device with an I2C slave parent
-> +  ("upstream") port and N I2C master child ("downstream") ports, and
-> +  forwards transactions from upstream to the appropriate downstream port
-> +  with a modified slave address. The address used on the parent bus is
-> +  called the "alias" and is (potentially) different from the physical
-> +  slave address of the child bus. Address translation is done by the
-> +  hardware.
-> +
-> +properties:
-> +  i2c-alias-pool:
-> +    $ref: /schemas/types.yaml#/definitions/uint16-array
 
-We do support some flags in the upper 16-bits of I2C addresses. Any of 
-those possibly needed here?
+> At least looking at the changes between v6.3-rc1 and v6.3-rc7 there is
+> virtually nothing to any of these drivers involved. The log itself looks
+> like:
+>
+>        dev_vdbg(idma64->dma.dev, "%s: status=%#x\n", __func__, status);
+>
+> so this should not be enabled at all unless CONFIG_DMADEVICES_VDEBUG is
+> set to y which seems odd in distro kernel.
 
-> +    description:
-> +      I2C alias pool is a pool of I2C addresses on the main I2C bus that can be
-> +      used to access the remote peripherals on the serializer's I2C bus. The
-> +      addresses must be available, not used by any other peripheral. Each
-> +      remote peripheral is assigned an alias from the pool, and transactions to
-> +      that address will be forwarded to the remote peripheral, with the address
-> +      translated to the remote peripheral's real address. This property is not
-> +      needed if there are no I2C addressable remote peripherals.
-> +
-> +additionalProperties: true
-> +...
+$ grep DMADEVICES /boot/config-6.3.0-0.rc2.20230315git6015b1aca1a2.25.fc39.x86_64+debug 
+CONFIG_DMADEVICES=y
+CONFIG_DMADEVICES_DEBUG=y
+# CONFIG_DMADEVICES_VDEBUG is not set
+$ grep DMADEVICES /boot/config-6.3.0-0.rc2.20230317git38e04b3e4240.27.fc39.x86_64+debug 
+CONFIG_DMADEVICES=y
+CONFIG_DMADEVICES_DEBUG=y
+CONFIG_DMADEVICES_VDEBUG=y
 
+It follows the bug, though I'm not sure if this is the true source of the problem?
+
+
+> Also what does /proc/interrupts show for this?
+
+Attached to bug report.
+https://bugzilla-attachments.redhat.com/attachment.cgi?id=1959838
+
+
+
+-- 
+Chris Murphy
